@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.321 2004/03/22 04:03:25 jonas Exp $ */
+/* $Id: session.c,v 1.322 2004/03/22 14:35:40 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -66,7 +66,7 @@ struct file_to_load {
 	int pri;
 	struct cache_entry *ce;
 	unsigned char *target_frame;
-	struct uri *uri;
+	unsigned char *url;
 	struct download stat;
 };
 
@@ -150,7 +150,7 @@ free_files(struct session *ses)
 	abort_files_load(ses, 0);
 	foreach (ftl, ses->more_files) {
 		if (ftl->ce) object_unlock(ftl->ce);
-		if (ftl->uri) done_uri(ftl->uri);
+		if (ftl->url) mem_free(ftl->url);
 		if (ftl->target_frame) mem_free(ftl->target_frame);
 	}
 	free_list(ses->more_files);
@@ -184,7 +184,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 			}
 		}
 
-		url = get_vs_url_copy(&frame->vs);
+		url = memacpy(frame->vs.url, frame->vs.url_len);
 		if (!url) return;
 #if 0
 		/* This seems not to be needed anymore, it looks like this
@@ -205,22 +205,24 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	if (!url) return;
 	pos = extract_fragment(url);
 
-	frame = mem_calloc(1, sizeof(struct frame));
+	/* strlen(url) without + 1 since vs have already reserved one byte. */
+	frame = mem_alloc(sizeof(struct frame) + strlen(url));
 	if (!frame) {
 		mem_free(url);
 		if (pos) mem_free(pos);
 		return;
 	}
+	memset(frame, 0, sizeof(struct frame));
 
 	frame->name = stracpy(name);
-	if (!frame->name
-	    || !init_vs(&frame->vs, url, -1)) {
+	if (!frame->name) {
 		mem_free(frame);
 		mem_free(url);
 		if (pos) mem_free(pos);
 		return;
 	}
 
+	init_vs(&frame->vs, url, -1);
 	if (pos) frame->vs.goto_position = pos;
 
 	add_to_list(loc->frames, frame);
@@ -410,9 +412,9 @@ doc_end_load(struct download *stat, struct session *ses)
 #ifdef CONFIG_GLOBHIST
 	if (stat->conn && stat->pri != PRI_CSS) {
 		unsigned char *title = ses->doc_view->document->title;
-		struct uri *uri = stat->conn->uri;
+		struct uri *uri = &stat->conn->uri;
 		unsigned char *uristring = uri->protocol == PROTOCOL_PROXY
-					 ? uri->data.source : struri(uri);
+					 ? uri->data : struri(*uri);
 
 		add_global_history_item(uristring, title, time(NULL));
 	}
@@ -440,7 +442,7 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 		unsigned char *loading_url = ses->loading_url;
 		unsigned char *target_frame = ses->task.target_frame;
 
-		ses->loading_url = struri(ftl->uri);
+		ses->loading_url = ftl->url;
 		ses->task.target_frame = ftl->target_frame;
 		ses_chktype(ses, &ftl->stat, ftl->ce, 1);
 		ses->loading_url = loading_url;
@@ -477,7 +479,7 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 	}
 
 	foreach (ftl, ses->more_files) {
-		if (!strcmp(struri(ftl->uri), url)) {
+		if (!strcmp(ftl->url, url)) {
 			if (ftl->pri > pri) {
 				ftl->pri = pri;
 				change_connection(&ftl->stat, &ftl->stat, pri, 0);
@@ -489,8 +491,8 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 	ftl = mem_calloc(1, sizeof(struct file_to_load));
 	if (!ftl) return NULL;
 
-	ftl->uri = get_uri(url);
-	if (!ftl->uri) {
+	ftl->url = stracpy(url);
+	if (!ftl->url) {
 		mem_free(ftl);
 		return NULL;
 	}
@@ -542,16 +544,16 @@ process_file_requests(struct session *ses)
 	while (more) {
 		more = 0;
 		foreach (ftl, ses->more_files) {
-			struct uri *referer = NULL;
+			unsigned char *referer = NULL;
 
 			if (ftl->req_sent)
 				continue;
 
 			ftl->req_sent = 1;
 			if (doc_view && doc_view->document)
-				referer = doc_view->document->uri;
+				referer = doc_view->document->url;
 
-			load_url(struri(ftl->uri), referer,
+			load_url(ftl->url, referer,
 				 &ftl->stat, ftl->pri, CACHE_MODE_NORMAL, -1);
 			more = 1;
 		}
@@ -661,7 +663,7 @@ copy_session(struct session *old, struct session *new)
 {
 	if (!have_location(old)) return;
 
-	goto_url(new, get_location_url(cur_loc(old)));
+	goto_url(new, cur_loc(old)->vs.url);
 }
 
 void *
@@ -857,7 +859,7 @@ destroy_session(struct session *ses)
 	free_list(ses->scrn_frames);
 
 	destroy_history(&ses->history);
-	set_session_referrer(ses, NULL);
+	set_referrer(ses, NULL);
 
 	if (ses->loading_url) mem_free(ses->loading_url);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
@@ -867,9 +869,9 @@ destroy_session(struct session *ses)
 
 	foreach (tq, ses->tq) {
 		if (tq->ce) object_unlock(tq->ce);
-		if (tq->uri) {
+		if (tq->url) {
 			change_connection(&tq->download, NULL, PRI_CANCEL, 0);
-			done_uri(tq->uri);
+			mem_free(tq->url);
 		}
 		if (tq->goto_position) mem_free(tq->goto_position);
 		if (tq->prog) mem_free(tq->prog);
@@ -904,18 +906,18 @@ reload(struct session *ses, enum cache_mode cache_mode)
 
 		l->download.data = ses;
 		l->download.end = (void *)doc_end_load;
-		load_url(get_location_url(l), ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
+		load_url(l->vs.url, ses->ref_url, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
-			struct uri *referer = NULL;
+			unsigned char *referer = NULL;
 
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
 
 			if (doc_view && doc_view->document)
-				referer = doc_view->document->uri;
+				referer = doc_view->document->url;
 
-			load_url(struri(ftl->uri), referer,
+			load_url(ftl->url, referer,
 				 &ftl->stat, ftl->pri, cache_mode, -1);
 		}
 	}
@@ -972,41 +974,39 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 {
 	struct location *loc = cur_loc(ses);
 	struct frame *frame;
+	size_t url_len = strlen(url);
 
 	assertm(have_location(ses), "ses_change_frame_url: no location yet");
 	if_assert_failed { return NULL; }
 
 	foreachback (frame, loc->frames) {
-		struct uri *uri;
-
 		if (strcasecmp(frame->name, name)) continue;
 
-		uri = get_uri(url);
-		if (!uri) return NULL;
+		if (url_len > frame->vs.url_len) {
+			struct document_view *doc_view;
+			struct frame *new_frame = frame;
 
-		done_uri(frame->vs.uri);
-		frame->vs.uri = uri;
-		frame->vs.url_len = strlen(url);
+			/* struct view_state reserves 1 byte for url, so
+			 * url_len is sufficient. */
+			new_frame = mem_realloc(frame, sizeof(struct frame) + url_len);
+			if (!new_frame) return NULL;
+
+			new_frame->prev->next = new_frame->next->prev = new_frame;
+
+			foreach (doc_view, ses->scrn_frames)
+				if (doc_view->vs == &frame->vs)
+					doc_view->vs = &new_frame->vs;
+
+			frame = new_frame;
+		}
+		memcpy(frame->vs.url, url, url_len + 1);
+		frame->vs.url_len = url_len;
 
 		return frame;
 	}
 
 	return NULL;
 
-}
-
-void
-set_session_referrer(struct session *ses, struct uri *referrer)
-{
-	if (ses->referrer) done_uri(ses->referrer);
-
-	/* Don't set referrer for file protocol */
-	if (referrer && referrer->protocol != PROTOCOL_FILE) {
-		object_lock(referrer);
-		ses->referrer = referrer;
-	} else {
-		ses->referrer = NULL;
-	}
 }
 
 void
@@ -1066,7 +1066,7 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 	if (!have_location(ses))
 		return NULL;
 
-	here = get_location_url(cur_loc(ses));
+	here = cur_loc(ses)->vs.url;
 	url_len = get_no_post_url_length(here);
 
 	/* Ensure that the url size is not greater than str_size.

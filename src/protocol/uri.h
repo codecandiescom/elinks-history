@@ -1,9 +1,9 @@
-/* $Id: uri.h,v 1.64 2004/03/22 01:18:27 jonas Exp $ */
+/* $Id: uri.h,v 1.65 2004/03/22 14:35:39 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
 
-#include "util/string.h"
+struct string;
 
 #define POST_CHAR 1
 
@@ -31,25 +31,27 @@ struct uri {
 	 * PROTOCOL_USER or an uri string should be composed. */
 	int protocollen;
 
-	struct string user;
-	struct string password;
-	struct string host;
-	struct string port;
+	unsigned char *user;
+	int userlen;
+
+	unsigned char *password;
+	int passwordlen;
+
+	unsigned char *host;
+	int hostlen;
+
+	unsigned char *port;
+	int portlen;
 
 	/* @data can contain both the path and query uri fields.
 	 * It can never be NULL but can have zero length. */
-	struct string data;
+	unsigned char *data;
+	int datalen;
 
 	/* @post can contain some special encoded form data, used internally
 	 * to make form data handling more efficient. The data is marked by
 	 * POST_CHAR in the uri string. */
 	unsigned char *post;
-
-	unsigned int refcount;
-
-#ifdef IPV6
-	unsigned int ipv6:1;
-#endif
 };
 
 
@@ -70,7 +72,7 @@ unsigned char *unparse_uri(struct uri *uri);
 /* Returns the raw zero-terminated URI string the (struct uri) is associated
  * with. Thus, chances are high that it is the original URI received, not any
  * cheap reconstruction. */
-#define struri(uri) ((uri)->protocol_str)
+#define struri(uri) ((uri).protocol_str)
 
 
 enum uri_component {
@@ -82,10 +84,6 @@ enum uri_component {
 	URI_DATA	= (1 << 5),
 	URI_POST	= (1 << 6),
 };
-
-/* A small URI struct cache to increase reusability. */
-struct uri *get_uri(unsigned char *string);
-void done_uri(struct uri *uri);
 
 /* These functions recreate the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for
@@ -110,22 +108,6 @@ unsigned char *get_uri_string(struct uri *uri, enum uri_component components);
  * default port. It is zarro for user protocols. */
 int get_uri_port(struct uri *uri);
 
-/* Functions for extracting the host parts of an URI. */
-static inline unsigned char *
-get_uri_host(struct uri *uri)
-{
-	return string_is_empty(&uri->user)
-		? uri->host.source : uri->user.source;
-}
-
-static inline int
-get_uri_host_length(struct uri *uri, enum uri_component components)
-{
-	return ((components & URI_PORT) && !string_is_empty(&uri->port))
-		? uri->port.source + uri->port.length - get_uri_host(uri)
-		: uri->host.source + uri->host.length - get_uri_host(uri);
-}
-
 
 void encode_uri_string(struct string *, unsigned char *);
 void decode_uri_string(unsigned char *);
@@ -133,7 +115,7 @@ void decode_uri_string(unsigned char *);
 
 /* Returns allocated string containing the biggest possible extension.
  * If url is 'jabadaba.1.foo.gz' the returned extension is '1.foo.gz' */
-unsigned char *get_uri_extension(struct uri *uri);
+unsigned char *get_extension_from_url(unsigned char *url);
 
 
 unsigned char *join_urls(unsigned char *, unsigned char *);

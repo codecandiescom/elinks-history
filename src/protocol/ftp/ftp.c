@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.125 2004/03/21 15:58:51 jonas Exp $ */
+/* $Id: ftp.c,v 1.126 2004/03/22 14:35:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,7 +238,7 @@ ftp_func(struct connection *conn)
 	set_connection_timeout(conn);
 
 	if (!has_keepalive_connection(conn)) {
-		int port = get_uri_port(conn->uri);
+		int port = get_uri_port(&conn->uri);
 
 		make_connection(conn, port, &conn->socket, ftp_login);
 
@@ -280,8 +280,10 @@ ftp_login(struct connection *conn)
 	}
 
 	add_to_string(&cmd, "USER ");
-	if (!string_is_empty(&conn->uri->user)) {
-		add_string_to_string(&cmd, &conn->uri->user);
+	if (conn->uri.userlen) {
+		struct uri *uri = &conn->uri;
+
+		add_bytes_to_string(&cmd, uri->user, uri->userlen);
 	} else {
 		add_to_string(&cmd, "anonymous");
 	}
@@ -382,8 +384,10 @@ ftp_pass(struct connection *conn)
 	}
 
 	add_to_string(&cmd, "PASS ");
-	if (!string_is_empty(&conn->uri->password)) {
-		add_string_to_string(&cmd, &conn->uri->password);
+	if (conn->uri.passwordlen) {
+		struct uri *uri = &conn->uri;
+
+		add_bytes_to_string(&cmd, uri->password, uri->passwordlen);
 	} else {
 		add_to_string(&cmd, get_opt_str("protocol.ftp.anon_passwd"));
 	}
@@ -552,16 +556,16 @@ add_file_cmd_to_str(struct connection *conn)
 		conn->data_socket = data_sock;
 	}
 
-	data = conn->uri->data.source;
+	data = conn->uri.data;
 	if (!data) {
-		INTERNAL("conn->uri->data empty");
+		INTERNAL("conn->uri.data empty");
 		abort_conn_with_state(conn, S_INTERNAL);
 		return NULL;
 	}
 
-	data_end = conn->uri->post;
+	data_end = conn->uri.post;
 	if (!data_end)
-		data_end = data + conn->uri->data.length;
+		data_end = data + conn->uri.datalen;
 
 	if (data == data_end || data_end[-1] == '/') {
 		/* Commands to get directory listing. */
@@ -1156,8 +1160,8 @@ out_of_mem:
 	}
 
 	if (c_i->dir && !conn->from) {
-		unsigned char *path = conn->uri->data.source;
-		int pathlen = conn->uri->data.length;
+		unsigned char *path = conn->uri.data;
+		int pathlen = conn->uri.datalen;
 		struct string string;
 		int url_len = strlen(url);
 

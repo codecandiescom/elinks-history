@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.108 2004/03/21 15:58:50 jonas Exp $ */
+/* $Id: cache.c,v 1.109 2004/03/22 14:35:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,8 +128,9 @@ get_cache_entry(unsigned char *url)
 	ce = mem_calloc(1, sizeof(struct cache_entry));
 	if (!ce) return NULL;
 
-	ce->uri = get_uri(url);
-	if (!ce->uri) {
+	url = stracpy(url);
+	if (!url || !parse_uri(&ce->uri, url)) {
+		if (url) mem_free(url);
 		mem_free(ce);
 		return NULL;
 	}
@@ -142,7 +143,8 @@ get_cache_entry(unsigned char *url)
 
 	add_to_list(cache, ce);
 
-	ce->box_item = add_listbox_item(&cache_browser, struri(ce->uri), ce);
+	ce->box_item = add_listbox_item(&cache_browser, struri(ce->uri),
+					     ce);
 
 	return ce;
 }
@@ -461,7 +463,7 @@ delete_cache_entry(struct cache_entry *ce)
 	del_from_list(ce);
 
 	if (ce->box_item) done_listbox_item(&cache_browser, ce->box_item);
-	if (ce->uri) done_uri(ce->uri);
+	if (struri(ce->uri)) mem_free(struri(ce->uri));
 	if (ce->head) mem_free(ce->head);
 	if (ce->last_modified) mem_free(ce->last_modified);
 	if (ce->redirect) mem_free(ce->redirect);

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.86 2004/03/21 22:57:35 jonas Exp $ */
+/* $Id: renderer.c,v 1.87 2004/03/22 14:35:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,8 +121,7 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 
 	} else if (parse_uri(&test, uri)
 		   && test.protocol != PROTOCOL_UNKNOWN
-		   && (!string_is_empty(&test.data)
-			|| !string_is_empty(&test.host))) {
+		   && (test.datalen || test.hostlen)) {
 		where = memacpy(uri, length);
 	}
 
@@ -413,6 +412,7 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 					  &document->cp_status,
 					  document->options.hard_assume);
 
+	document->title = get_no_post_url(document->url, NULL);
 	document->bgcolor = global_doc_opts->default_bg;
 	document->width = 0;
 

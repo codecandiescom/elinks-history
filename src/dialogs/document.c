@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.77 2004/03/22 03:47:12 jonas Exp $ */
+/* $Id: document.c,v 1.78 2004/03/22 14:35:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,6 @@ static void
 loc_msg(struct terminal *term, struct location *location,
 	struct document_view *doc_view)
 {
-	unsigned char *url = location ? get_location_url(location) : NULL;
 	struct cache_entry *ce;
 	struct string msg;
 
@@ -70,7 +69,8 @@ loc_msg(struct terminal *term, struct location *location,
 	add_to_string(&msg, ": ");
 
 	/* Add the uri with password and post info stripped */
-	add_uri_to_string(&msg, location->vs.uri, ~(URI_PASSWORD | URI_POST));
+	add_string_uri_to_string(&msg, location->vs.url,
+				 ~(URI_PASSWORD | URI_POST));
 
 	/* We don't preserve this in url. */
 	if (location->vs.goto_position) {
@@ -87,7 +87,7 @@ loc_msg(struct terminal *term, struct location *location,
 
 	add_char_to_string(&msg, '\n');
 
-	ce = get_cache_entry(url);
+	ce = get_cache_entry(location->vs.url);
 	if (ce) {
 		unsigned char *a;
 
@@ -151,7 +151,7 @@ loc_msg(struct terminal *term, struct location *location,
 		add_format_to_string(&msg, "\n%s: ",
 				     _("Last visit time", term));
 
-		historyitem = get_global_history_item(url);
+		historyitem = get_global_history_item(location->vs.url);
 
 		if (historyitem) last_visit = ctime(&historyitem->last_visit);
 
@@ -250,7 +250,7 @@ head_msg(struct session *ses)
 		return;
 	}
 
-	ce = get_vs_cache_entry(&cur_loc(ses)->vs);
+	ce = find_in_cache(cur_loc(ses)->vs.url);
 	if (ce && ce->head) {
 		unsigned char *headers = stracpy(ce->head);
 

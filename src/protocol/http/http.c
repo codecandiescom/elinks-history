@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.253 2004/03/22 01:18:29 jonas Exp $ */
+/* $Id: http.c,v 1.254 2004/03/22 14:35:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,7 @@ check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
 
 	for (s = buggy_servers; *s; s++) {
 		if (strstr(server, *s)) {
-			add_blacklist_entry(&uri->host, BL_HTTP10);
+			add_blacklist_entry(uri->host, uri->hostlen, BL_HTTP10);
 			break;
 		}
 	}
@@ -262,7 +262,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 	if (conn->info && !((struct http_connection_info *) conn->info)->close
 	    && (!conn->ssl) /* We won't keep alive ssl connections */
 	    && (!get_opt_int("protocol.http.bugs.post_no_keepalive")
-		|| !conn->uri->post)) {
+		|| !conn->uri.post)) {
 		add_keepalive_connection(conn, HTTP_KEEPALIVE_TIMEOUT);
 	} else {
 		abort_connection(conn);
@@ -278,7 +278,7 @@ http_func(struct connection *conn)
 	set_connection_timeout(conn);
 
 	if (!has_keepalive_connection(conn)) {
-		int p = get_uri_port(conn->uri);
+		int p = get_uri_port(&conn->uri);
 
 		if (p == -1) {
 			abort_conn_with_state(conn, S_INTERNAL);
@@ -299,7 +299,26 @@ proxy_func(struct connection *conn)
 
 static void http_get_header(struct connection *);
 
-#define IS_PROXY_URI(x) ((x)->protocol == PROTOCOL_PROXY)
+static void
+add_uri_host_to_string(struct string *header, struct uri *uri)
+{
+#ifdef IPV6
+	if (memchr(uri->host, ':', uri->hostlen)) {
+		/* IPv6 address */
+		add_char_to_string(header, '[');
+		add_bytes_to_string(header, uri->host, uri->hostlen);
+		add_char_to_string(header, ']');
+	} else
+#endif
+		add_bytes_to_string(header, uri->host, uri->hostlen);
+
+	if (uri->portlen) {
+		add_char_to_string(header, ':');
+		add_bytes_to_string(header, uri->port, uri->portlen);
+	}
+}
+
+#define IS_PROXY_URI(x) ((x).protocol == PROTOCOL_PROXY)
 
 static void
 http_send_header(struct connection *conn)
@@ -318,17 +337,17 @@ http_send_header(struct connection *conn)
 
 	/* Setup the real uri. */
 	if (IS_PROXY_URI(conn->uri)) {
-		assertm(!string_is_empty(&conn->uri->data), "No proxy data");
+		assertm(conn->uri.data, "No proxy data");
 		uri = &real_uri;
-		if (!parse_uri(uri, conn->uri->data.source))
+		if (!parse_uri(uri, conn->uri.data))
 			uri = NULL;
 
 	} else {
-		uri = conn->uri;
+		uri = &conn->uri;
 	}
 
 	/* Sanity check for a host */
-	if (!uri || string_is_empty(&uri->host)) {
+	if (!uri || !uri->host || !*uri->host || !uri->hostlen) {
 		http_end_request(conn, S_BAD_URL, 0);
 		return;
 	}
@@ -341,7 +360,7 @@ http_send_header(struct connection *conn)
 	conn->info = info;
 	info->sent_version.major = 1;
 	info->sent_version.minor = 1;
-	info->bl_flags = get_blacklist_flags(&uri->host);
+	info->bl_flags = get_blacklist_flags(uri->host, uri->hostlen);
 
 	if (info->bl_flags & BL_HTTP10
 	    || get_opt_int("protocol.http.bugs.http10")) {
@@ -372,16 +391,16 @@ http_send_header(struct connection *conn)
 	}
 
 	if (use_connect) {
-		add_uri_to_string(&header, uri, URI_HOST | URI_PORT);
-		if (string_is_empty(&uri->port)) {
+		add_uri_host_to_string(&header, uri);
+		if (!uri->port) {
 			add_char_to_string(&header, ':');
 			add_long_to_string(&header, get_protocol_port(uri->protocol));
 		}
 	} else {
 		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->ssl) {
-			add_url_to_http_string(&header, uri->data.source);
+			add_url_to_http_string(&header, uri->data);
 		} else {
-			add_url_to_http_string(&header, conn->uri->data.source);
+			add_url_to_http_string(&header, conn->uri.data);
 		}
 	}
 
@@ -392,7 +411,7 @@ http_send_header(struct connection *conn)
 	add_to_string(&header, "\r\n");
 
 	add_to_string(&header, "Host: ");
-	add_uri_to_string(&header, uri, URI_HOST | URI_PORT);
+	add_uri_host_to_string(&header, uri);
 	add_to_string(&header, "\r\n");
 
 	optstr = get_opt_str("protocol.http.proxy.user");
@@ -454,9 +473,9 @@ http_send_header(struct connection *conn)
 			break;
 
 		case REFERER_TRUE:
-			if (conn->referrer) {
+			if (conn->ref_url && conn->ref_url[0]) {
 				add_to_string(&header, "Referer: ");
-				add_url_to_http_string(&header, struri(conn->referrer));
+				add_url_to_http_string(&header, conn->ref_url);
 				add_to_string(&header, "\r\n");
 			}
 			break;
@@ -466,14 +485,14 @@ http_send_header(struct connection *conn)
 
 			/* FIXME: IPv6. */
 			add_to_string(&header, "http://");
-			add_uri_to_string(&header, uri, URI_HOST | URI_PORT);
+			add_uri_host_to_string(&header, uri);
 
 			if (!IS_PROXY_URI(conn->uri)
 			    || header.source[header.length - 1] != '/')
 				add_char_to_string(&header, '/');
 
-			if (uri->data.source)
-				add_url_to_http_string(&header, uri->data.source);
+			if (uri->data)
+				add_url_to_http_string(&header, uri->data);
 
 			add_to_string(&header, "\r\n");
 			break;
@@ -1062,23 +1081,26 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	set_connection_timeout(conn);
 
 	/* Setup the real uri. */
-	if (IS_PROXY_URI(conn->uri) && !string_is_empty(&conn->uri->data)) {
+	if (IS_PROXY_URI(conn->uri) && conn->uri.data) {
 		uri = &real_uri;
-		if (!parse_uri(uri, conn->uri->data.source)) {
+		if (!parse_uri(uri, conn->uri.data)) {
 			abort_conn_with_state(conn, S_BAD_URL);
 			return;
 		}
 
 	} else {
-		uri = conn->uri;
+		uri = &conn->uri;
 	}
 
 	if (rb->close == 2) {
-		if (!conn->tries && !string_is_empty(&uri->host)) {
+		if (!conn->tries && uri->host) {
+			unsigned char *hstr = uri->host;
+			int len = uri->hostlen;
+
 			if (info->bl_flags & BL_NO_CHARSET) {
-				del_blacklist_entry(&uri->host, BL_NO_CHARSET);
+				del_blacklist_entry(hstr, len, BL_NO_CHARSET);
 			} else {
-				add_blacklist_entry(&uri->host, BL_NO_CHARSET);
+				add_blacklist_entry(hstr, len, BL_NO_CHARSET);
 				conn->tries = -1;
 			}
 		}
@@ -1386,7 +1408,7 @@ again:
 
 	d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);
 	if (d) {
-		unsigned char *extension = get_uri_extension(uri);
+		unsigned char *extension = get_extension_from_url(struri(*uri));
 		enum stream_encoding file_encoding;
 
 		file_encoding = extension ? guess_encoding(extension) : ENCODING_NONE;

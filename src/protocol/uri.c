@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.102 2004/03/22 04:32:41 jonas Exp $ */
+/* $Id: uri.c,v 1.103 2004/03/22 14:35:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,9 +20,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/file.h"
-#include "util/hash.h"
 #include "util/memory.h"
-#include "util/object.h"
 #include "util/string.h"
 
 int
@@ -78,7 +76,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *prefix_end, *host_end;
 #ifdef IPV6
-	unsigned char *lbracket, *rbracket = NULL;
+	unsigned char *lbracket, *rbracket;
 #endif
 	enum protocol protocol;
 	int known;
@@ -94,12 +92,6 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	/* Check if protocol is known, and retrieve prefix_end. */
 	protocol = known_protocol(uristring, &prefix_end);
 	if (protocol == PROTOCOL_INVALID) return 0;
-
-	set_string_magic(&uri->user);
-	set_string_magic(&uri->password);
-	set_string_magic(&uri->host);
-	set_string_magic(&uri->port);
-	set_string_magic(&uri->data);
 
 	known = (protocol != PROTOCOL_UNKNOWN);
 	uri->protocollen = prefix_end - uristring;
@@ -117,8 +109,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		return 0;
 
 	if (!known || get_protocol_free_syntax(uri->protocol)) {
-		uri->data.source = prefix_end;
-		uri->data.length = strlen(prefix_end);
+		uri->data = prefix_end;
+		uri->datalen = strlen(prefix_end);
 		return 1;
 	}
 
@@ -130,8 +122,10 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (lbracket) {
 		rbracket = strchr(lbracket, ']');
 		/* [address] is handled only inside of hostname part (surprisingly). */
-		if (rbracket && prefix_end + strcspn(prefix_end, "/") >= rbracket)
-			uri->ipv6 = 1;
+		if (rbracket && prefix_end + strcspn(prefix_end, "/") < rbracket)
+			lbracket = rbracket = NULL;
+	} else {
+		rbracket = NULL;
 	}
 #endif
 
@@ -143,19 +137,19 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		unsigned char *user_end = strchr(prefix_end, ':');
 
 		if (!user_end || user_end > host_end) {
-			uri->user.source = prefix_end;
-			uri->user.length = host_end - prefix_end;
+			uri->user = prefix_end;
+			uri->userlen = host_end - prefix_end;
 		} else {
-			uri->user.source = prefix_end;
-			uri->user.length = user_end - prefix_end;
-			uri->password.source = user_end + 1;
-			uri->password.length = host_end - user_end - 1;
+			uri->user = prefix_end;
+			uri->userlen = user_end - prefix_end;
+			uri->password = user_end + 1;
+			uri->passwordlen = host_end - user_end - 1;
 		}
 		prefix_end = host_end + 1;
 	}
 
 #ifdef IPV6
-	if (uri->ipv6)
+	if (rbracket)
 		host_end = rbracket + strcspn(rbracket, ":/?");
 	else
 #endif
@@ -166,7 +160,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		return 0;
 
 #ifdef IPV6
-	if (uri->ipv6) {
+	if (rbracket) {
 		int addrlen = rbracket - lbracket - 1;
 
 		/* Check for valid length.
@@ -178,13 +172,13 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 			"this, it is a security bug!", addrlen, uristring);
 		if_assert_failed return 0;
 
-		uri->host.source = lbracket + 1;
-		uri->host.length = addrlen;
+		uri->host = lbracket + 1;
+		uri->hostlen = addrlen;
 	} else
 #endif
 	{
-		uri->host.source = prefix_end;
-		uri->host.length = host_end - prefix_end;
+		uri->host = prefix_end;
+		uri->hostlen = host_end - prefix_end;
 	}
 
 	if (*host_end == ':') { /* we have port here */
@@ -192,8 +186,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 		host_end++;
 
-		uri->port.source = host_end;
-		uri->port.length = port_end - host_end;
+		uri->port = host_end;
+		uri->portlen = port_end - host_end;
 
 		/* test if port is number */
 		/* TODO: possibly lookup for the service otherwise? --pasky */
@@ -205,8 +199,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (*host_end == '/') host_end++;
 
 	prefix_end = strchr(host_end, POST_CHAR);
-	uri->data.source = host_end;
-	uri->data.length = prefix_end ? (prefix_end - host_end) : strlen(host_end);
+	uri->data = host_end;
+	uri->datalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
 	uri->post = prefix_end ? (prefix_end + 1) : NULL;
 
 	return 1;
@@ -215,7 +209,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 unsigned char *
 unparse_uri(struct uri *uri)
 {
-	unsigned char *uristr = struri(uri);
+	unsigned char *uristr = struri(*uri);
 
 	memset(uri, 0, sizeof(struct uri));
 
@@ -229,11 +223,11 @@ get_uri_port(struct uri *uri)
 {
 	int port = -1;
 
-	if (!string_is_empty(&uri->port)) {
+	if (uri->port && uri->portlen) {
 		int n;
 
 		errno = 0;
-		n = strtol(uri->port.source, NULL, 10);
+		n = strtol(uri->port, NULL, 10);
 		if (!errno && n > 0) port = n;
 	}
 
@@ -259,7 +253,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
  	if (!known || get_protocol_free_syntax(uri->protocol)) {
  		/* Custom or unknown or free-syntax protocol;
  		 * keep the URI untouched. */
-		add_to_string(string, struri(uri));
+		add_to_string(string, struri(*uri));
 
 		return string;
  	}
@@ -273,31 +267,34 @@ add_uri_to_string(struct string *string, struct uri *uri,
 			add_to_string(string, "//");
  	}
 
- 	if (wants(URI_USER) && !string_is_empty(&uri->user)) {
-		add_string_to_string(string, &uri->user);
+ 	if (wants(URI_USER) && uri->userlen) {
+		add_bytes_to_string(string, uri->user, uri->userlen);
 
- 		if (wants(URI_PASSWORD) && !string_is_empty(&uri->password)) {
+ 		if (wants(URI_PASSWORD) && uri->passwordlen) {
 			add_char_to_string(string, ':');
-			add_string_to_string(string, &uri->password);
+			add_bytes_to_string(string, uri->password,
+						    uri->passwordlen);
  		}
 
 		add_char_to_string(string, '@');
  	}
 
- 	if (wants(URI_HOST) && !string_is_empty(&uri->host)) {
+ 	if (wants(URI_HOST) && uri->hostlen) {
 #ifdef IPV6
-		if (uri->ipv6) add_char_to_string(string, '[');
+ 		int brackets = !!memchr(uri->host, ':', uri->hostlen);
+
+		if (brackets) add_char_to_string(string, '[');
 #endif
-		add_string_to_string(string, &uri->host);
+		add_bytes_to_string(string, uri->host, uri->hostlen);
 #ifdef IPV6
-		if (uri->ipv6) add_char_to_string(string, ']');
+		if (brackets) add_char_to_string(string, ']');
 #endif
  	}
 
  	if (wants(URI_PORT)) {
- 		if (!string_is_empty(&uri->port)) {
+ 		if (uri->portlen) {
 			add_char_to_string(string, ':');
-			add_string_to_string(string, &uri->port);
+			add_bytes_to_string(string, uri->port, uri->portlen);
  		}
 #if 0
 		/* We needs to add possibility to only add port if it's
@@ -311,12 +308,11 @@ add_uri_to_string(struct string *string, struct uri *uri,
 #endif
 	}
 
-	if ((wants(URI_DATA) || wants(URI_POST))
-	    && get_protocol_need_slash_after_host(uri->protocol))
+	if (get_protocol_need_slash_after_host(uri->protocol))
 		add_char_to_string(string, '/');
 
-	if (wants(URI_DATA) && !string_is_empty(&uri->data))
-		add_string_to_string(string, &uri->data);
+	if (wants(URI_DATA) && uri->datalen)
+		add_bytes_to_string(string, uri->data, uri->datalen);
 
 	if (wants(URI_POST) && uri->post)
 		add_bytes_to_string(string, uri->post, strlen(uri->post));
@@ -361,13 +357,13 @@ translate_directories(unsigned char *uristring)
 	int lo;
 	struct uri uri;
 
-	if (!parse_uri(&uri, uristring) || !uri.data.source)
+	if (!parse_uri(&uri, uristring) || !uri.data/* || *--url_data != '/'*/)
 		return;
 
 	/* dsep() *hint* *hint* */
 	lo = (uri.protocol == PROTOCOL_FILE);
 
-	path = uri.data.source;
+	path = uri.data;
 	if (!dsep(*path)) path--;
 	src = path;
 	dest = path;
@@ -563,11 +559,11 @@ join_urls(unsigned char *base, unsigned char *rel)
 	}
 
 prx:
-	if (!parse_uri(&uri, base) || !uri.data.source) {
+	if (!parse_uri(&uri, base) || !uri.data) {
 		INTERNAL("bad base url");
 		return NULL;
 	}
-	path = uri.data.source;
+	path = uri.data;
 
 	/* Either is path blank, but we've slash char before, or path is not
 	 * blank, but doesn't start by a slash (if we'd just stay along with
@@ -830,11 +826,11 @@ add_string_uri_filename_to_string(struct string *string, unsigned char *uristrin
 	if (!parse_uri(&uri, uristring))
 		return NULL;
 
-	assert(uri.data.source);
+	assert(uri.data);
 	/* dsep() *hint* *hint* */
 	lo = (uri.protocol == PROTOCOL_FILE);
 
-	for (pos = filename = uri.data.source; *pos && !end_of_dir(*pos); pos++)
+	for (pos = filename = uri.data; *pos && !end_of_dir(*pos); pos++)
 		if (dsep(*pos))
 			filename = pos + 1;
 
@@ -842,14 +838,11 @@ add_string_uri_filename_to_string(struct string *string, unsigned char *uristrin
 }
 
 unsigned char *
-get_uri_extension(struct uri *uri)
+get_extension_from_url(unsigned char *url)
 {
-	int lo = uri->protocol == PROTOCOL_FILE; /* dsep() *hint* *hint* */
-	unsigned char *url = uri->data.source;
+	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
 	unsigned char *extension = NULL;
 	int afterslash = 1;
-
-	assert(url);
 
  	for (; *url && !end_of_dir(*url); url++) {
 		if (!afterslash && !extension && *url == '.') {
@@ -973,95 +966,4 @@ get_no_post_url(unsigned char *url, int *url_len)
 	if (url_len) *url_len = len;
 
 	return memacpy(url, len);
-}
-
-
-/* URI cache */
-
-struct uri_cache_entry {
-	struct uri uri;
-	unsigned char string[1];
-};
-
-struct uri_cache {
-	struct hash *map;
-	unsigned int refcount;
-};
-
-static struct uri_cache uri_cache;
-
-static inline struct uri_cache_entry *
-get_uri_cache_entry(unsigned char *string, int length)
-{
-	struct hash_item *item = get_hash_item(uri_cache.map, string, length);
-	struct uri_cache_entry *entry;
-
-	if (item) return item->value;
-
-	/* Setup a new entry */
-
-	entry = mem_calloc(1, sizeof(struct uri_cache_entry) + length);
-	if (!entry) return NULL;
-
-	object_nolock(&entry->uri);
-	memcpy(&entry->string, string, length);
-	string = entry->string;
-
-	if (!parse_uri(&entry->uri, string)
-	    || !add_hash_item(uri_cache.map, string, length, entry)) {
-		mem_free(entry);
-		return NULL;
-	}
-
-	object_lock(&uri_cache);
-
-	return entry;
-}
-
-struct uri *
-get_uri(unsigned char *string)
-{
-	struct uri_cache_entry *entry;
-
-	if (!is_object_used(&uri_cache)) {
-		uri_cache.map = init_hash(hash_size(3), strhash);
-		if (!uri_cache.map) return NULL;
-	}
-
-	entry = get_uri_cache_entry(string, strlen(string));
-	if (!entry) {
-		if (!is_object_used(&uri_cache))
-			free_hash(uri_cache.map);
-		return NULL;
-	}
-
-	object_lock(&entry->uri);
-
-	return &entry->uri;
-}
-
-void
-done_uri(struct uri *uri)
-{
-	unsigned char *string = struri(uri);
-	int length = strlen(string);
-	struct hash_item *item;
-	struct uri_cache_entry *entry;
-
-	assert(is_object_used(&uri_cache));
-
-	object_unlock(uri);
-	if (is_object_used(uri)) return;
-
-	item = get_hash_item(uri_cache.map, string, length);
-	entry = item ? item->value : NULL;
-
-	assertm(entry, "Releasing unknown URI [%s]", string);
-	del_hash_item(uri_cache.map, item);
-	mem_free(entry);
-
-	/* Last URI frees the cache */
-	object_unlock(&uri_cache);
-	if (!is_object_used(&uri_cache))
-		free_hash(uri_cache.map);
 }

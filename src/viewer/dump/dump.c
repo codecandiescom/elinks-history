@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.91 2004/03/22 04:00:43 jonas Exp $ */
+/* $Id: dump.c,v 1.92 2004/03/22 14:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,15 +101,17 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 {
 	struct document_options o;
 	struct document_view formatted;
-	struct view_state vs;
+	struct view_state *vs;
 
 	if (!ce) return 0;
 
-	memset(&vs, 0, sizeof(struct view_state));
-	memset(&formatted, 0, sizeof(struct document_view));
+	/* No need to add a byte for the \0 to the result of strlen():
+	 * struct view_state has an unsigned char url[1]. -- Miciah */
+	vs = mem_alloc(sizeof(struct view_state) + strlen(get_cache_uri(ce)));
+	if (!vs) return 1;
 
-	if (!init_vs(&vs, get_cache_uri(ce), -1))
-		return 1;
+	memset(vs, 0, sizeof(struct view_state));
+	memset(&formatted, 0, sizeof(struct document_view));
 
 	get_opt_bool("document.browse.links.numbering") =
 		!get_opt_bool_tree(cmdline_options, "no-numbering");
@@ -124,11 +126,14 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	o.plain = 0;
 	o.frames = 0;
 
-	render_document(&vs, &formatted, &o);
+	init_vs(vs, get_cache_uri(ce), -1);
+
+	render_document(vs, &formatted, &o);
 	dump_to_file(formatted.document, fd);
 
 	detach_formatted(&formatted);
-	destroy_vs(&vs);
+	destroy_vs(vs);
+	mem_free(vs);
 
 	return 0;
 }
@@ -250,13 +255,13 @@ dump_end(struct download *status, void *p)
 
 		if (!ce->redirect_get
 		    && ce->valid
-		    && ce->uri->post
 		    && !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
+			unsigned char *pc = ce->uri.post;
 
-			add_to_strn(&u, ce->uri->post);
+			if (pc) add_to_strn(&u, pc);
 		}
 
-		load_url(u, get_cache_uri_struct(ce), status, PRI_MAIN, 0, -1);
+		load_url(u, get_cache_uri(ce), status, PRI_MAIN, 0, -1);
 		mem_free(u);
 		return;
 	}

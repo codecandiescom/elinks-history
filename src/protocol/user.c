@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.59 2004/03/21 15:58:51 jonas Exp $ */
+/* $Id: user.c,v 1.60 2004/03/22 14:35:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,8 +59,6 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 	if (!init_string(&string)) return NULL;
 
 	while (*cmd) {
-		unsigned char *substr = NULL;
-		int sublen = 0;
 		int p;
 
 		for (p = 0; cmd[p] && cmd[p] != '%'; p++);
@@ -73,10 +71,13 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 		cmd++;
 		switch (*cmd) {
 			case 'u':
-				substr = struri(uri);
-				sublen = strlen(struri(uri));
-				break;
+			{
+				unsigned char *url = struri(*uri);
 
+				add_shell_safe_to_string(&string, url,
+							 strlen(url));
+				break;
+			}
 			case 'h':
 				/* TODO	For some user protocols it would be
 				 *	better if substitution of each uri
@@ -87,33 +88,35 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 				 *	protocol handling. */
 				/* It would break a lot of configurations so I
 				 * don't know. --jonas */
-				substr = get_uri_host(uri);
-				sublen = get_uri_host_length(uri, 0);
-				break;
+				if (uri->userlen && uri->hostlen) {
+					int hostlen = uri->host + uri->hostlen - uri->user;
 
+					add_shell_safe_to_string(&string, uri->user,
+								 hostlen);
+				} else if (uri->host) {
+					add_shell_safe_to_string(&string, uri->host,
+								 uri->hostlen);
+				}
+				break;
 			case 'p':
-				substr = uri->port.source;
-				sublen = uri->port.length;
+				if (uri->portlen)
+					add_shell_safe_to_string(&string, uri->port,
+								 uri->portlen);
 				break;
-
 			case 'd':
-				substr = uri->data.source;
-				sublen = uri->data.length;
+				if (uri->datalen)
+					add_shell_safe_to_string(&string, uri->data,
+								 uri->datalen);
 				break;
-
 			case 's':
-				substr = subj;
-				sublen = subj ? strlen(subj) : 0;
+				if (subj)
+					add_shell_safe_to_string(&string, subj,
+								 strlen(subj));
 				break;
-
 			default:
 				add_bytes_to_string(&string, cmd - 1, 2);
 				break;
 		}
-
-		if (substr && sublen)
-			add_shell_safe_to_string(&string, substr, sublen);
-
 		if (*cmd) cmd++;
 	}
 
@@ -172,9 +175,9 @@ user_func(struct session *ses, unsigned char *url)
 		return;
 	}
 
-	if (!string_is_empty(&uri.data)) {
+	if (uri.data && uri.datalen) {
 		/* Some mailto specific stuff follows... */
-		subj = string_strchr(&uri.data, '?');
+		subj = strchr(uri.data, '?');
 		if (subj) {
 			subj++;
 			subj = get_subject_from_query(subj);

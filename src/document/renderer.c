@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.33 2004/03/22 04:51:00 jonas Exp $ */
+/* $Id: renderer.c,v 1.34 2004/03/22 14:35:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,17 +53,17 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	doc_view->vs = vs;
 	doc_view->last_x = doc_view->last_y = -1;
 
-	cache_entry = get_vs_cache_entry(vs);
+	cache_entry = find_in_cache(vs->url);
 	if (!cache_entry) {
-		INTERNAL("document %s to format not found", struri(vs->uri));
+		INTERNAL("document %s to format not found", vs->url);
 		return;
 	}
 
-	document = get_cached_document(struri(vs->uri), options, cache_entry->id_tag);
+	document = get_cached_document(vs->url, options, cache_entry->id_tag);
 	if (!document) {
 		struct fragment *fr;
 
-		document = init_document(vs->uri, cache_entry, options);
+		document = init_document(vs->url, cache_entry, options);
 		if (!document) return;
 
 		shrink_memory(0);
@@ -72,18 +72,13 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		fr = cache_entry->frag.next;
 
 		if (list_empty(cache_entry->frag) || fr->offset || !fr->length) {
-			/* m33p */
+			document->title = get_no_post_url(document->url, NULL);
 
 		} else if (document->options.plain) {
 			render_plain_document(cache_entry, document);
 
 		} else {
 			render_html_document(cache_entry, document);
-		}
-
-		if (!document->title) {
-			/* FIXME: Remove user and password too? --jonas */
-			document->title = get_uri_string(document->uri, ~URI_POST);
 		}
 
 		sort_links(document);

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.28 2004/03/22 03:47:13 jonas Exp $ */
+/* $Id: vs.c,v 1.29 2004/03/22 14:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,6 @@
 #include "document/view.h"
 #include "sched/session.h"
 #include "util/memory.h"
-#include "util/object.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
@@ -22,21 +21,18 @@
 #include "viewer/text/vs.h"
 
 
-struct view_state *
+void
 init_vs(struct view_state *vs, unsigned char *url, int plain)
 {
 	int url_len = strlen(url);
 
-	memset(vs, 0, sizeof(struct view_state));
-
-	vs->uri = get_uri(url);
-	if (!vs->uri) return NULL;
-
+	/* No need to add a byte for the \0 to url_len:
+	 * struct view_state has an unsigned char url[1]. -- Miciah */
+	memset(vs, 0, sizeof(struct view_state) + url_len);
 	vs->current_link = -1;
 	vs->plain = plain;
+	memcpy(vs->url, url, url_len);
 	vs->url_len = url_len;
-
-	return vs;
 }
 
 void
@@ -52,16 +48,22 @@ destroy_vs(struct view_state *vs)
 			mem_free(vs->form_info[i].value);
 
 	if (vs->form_info) mem_free(vs->form_info);
-	if (vs->uri) done_uri(vs->uri);
 }
 
 void
 copy_vs(struct view_state *dst, struct view_state *src)
 {
-	if (dst->uri) done_uri(dst->uri);
- 
 	memcpy(dst, src, sizeof(struct view_state));
-	object_lock(dst->uri);
+
+	/* XXX: Beware @dst should point to a large enough memory space
+	 * to copy @src _and_ @src->url string. If it's not the case
+	 * an overflow will occur inducing a totally unexpected behavior
+	 * and a crash sooner or later.
+	 * I warned you. --Zas */
+	assert(dst->url_len >= src->url_len);
+	if_assert_failed return;
+
+	memcpy(dst->url, src->url, src->url_len + 1);
 
 	dst->goto_position = src->goto_position ?
 			     stracpy(src->goto_position) : NULL;

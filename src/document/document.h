@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.47 2004/03/22 04:51:00 jonas Exp $ */
+/* $Id: document.h,v 1.48 2004/03/22 14:35:38 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -13,7 +13,6 @@ struct form_control;
 struct frameset_desc;
 struct module;
 struct screen_char;
-struct uri;
 
 
 /* Tags are used for ``id''s or anchors in the document referenced by the
@@ -106,7 +105,7 @@ struct document {
 	struct list_head nodes;
 	struct list_head css_imports;
 
-	struct uri *uri;
+	unsigned char *url;
 	unsigned char *title;
 
 	struct frameset_desc *frame_desc;
@@ -139,7 +138,7 @@ struct document {
 /* Initializes a document and its canvas. */
 /* Return NULL on allocation failure. */
 struct document *
-init_document(struct uri *uri, struct cache_entry *cache_entry,
+init_document(unsigned char *uri, struct cache_entry *cache_entry,
 	      struct document_options *options);
 
 /* Releases the document and all its resources. */

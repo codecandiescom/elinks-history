@@ -1,12 +1,10 @@
-/* $Id: mime.h,v 1.10 2004/03/22 01:08:22 jonas Exp $ */
+/* $Id: mime.h,v 1.11 2004/03/22 14:35:39 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
 
 #include "config/options.h"
 #include "modules/module.h"
-
-struct uri;
 
 struct mime_handler {
 	unsigned char *description;
@@ -20,7 +18,7 @@ extern struct module mime_module;
 
 /* Guess content type of the document. Either from the (http) @header or
  * using the @uri (extension). */
-unsigned char *get_content_type(unsigned char *header, struct uri *uri);
+unsigned char *get_content_type(unsigned char *header, unsigned char *uri);
 
 /* Find program to handle mimetype. The @xwin tells about X capabilities. */
 struct mime_handler *

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.100 2004/03/22 03:59:08 jonas Exp $ */
+/* $Id: session.h,v 1.101 2004/03/22 14:35:41 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -16,7 +16,6 @@ struct location;
 struct session_status;
 struct term_event;
 struct terminal;
-struct uri;
 struct window;
 
 /* This is used to pass along the initial session parameters. */
@@ -34,7 +33,7 @@ struct frame {
 	unsigned char *name;
 	int redirect_cnt;
 
-	struct view_state vs;
+	struct view_state vs; /* Must be last. */
 };
 
 /* This is the repeat count being inserted by user so far. It is stored
@@ -55,7 +54,7 @@ struct tq {
 	struct download download;
 	struct cache_entry *ce;
 	struct session *ses;
-	struct uri *uri;
+	unsigned char *url;
 	unsigned char *target_frame;
 	unsigned char *goto_position;
 	unsigned char *prog;
@@ -135,7 +134,7 @@ struct session {
 
 	unsigned char *dn_url;
 
-	struct uri *referrer;
+	unsigned char *ref_url;
 
 	unsigned char *goto_position;
 
@@ -200,7 +199,19 @@ go_unback(struct session *ses)
 #include "util/memory.h"
 #include "util/string.h"
 
-void set_session_referrer(struct session *ses, struct uri *referrer);
+static inline void
+set_referrer(struct session *ses, unsigned char *referrer)
+{
+	if (ses->ref_url) mem_free(ses->ref_url);
+
+	if (referrer) {
+		/* Don't set referrer for file protocol */
+		referrer = strncasecmp("file:", referrer, 5)
+			 ? stracpy(referrer) : NULL;
+	}
+
+	ses->ref_url = referrer;
+}
 
 void print_error_dialog(struct session *, struct download *);
 void print_unknown_protocol_dialog(struct session *);

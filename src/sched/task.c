@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.26 2004/03/22 04:03:25 jonas Exp $ */
+/* $Id: task.c,v 1.27 2004/03/22 14:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ post_yes(struct task *task)
 	ses->task.target_frame = task->target_frame;
 	ses->task.target_location = task->target_location;
 
-	load_url(ses->loading_url, ses->referrer,
+	load_url(ses->loading_url, ses->ref_url,
 		 &ses->loading, task->pri, task->cache_mode, -1);
 }
 
@@ -136,7 +136,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 		ses->task.target_frame = target_frame;
 		ses->task.target_location = target_location;
 
-		load_url(url, ses->referrer, &ses->loading, pri, cache_mode, -1);
+		load_url(url, ses->ref_url, &ses->loading, pri, cache_mode, -1);
 
 		return;
 	}
@@ -191,10 +191,12 @@ x:
 	if (!loaded_in_frame) {
 		len = strlen(ses->loading_url);
 		if (have_location(ses))
-			int_lower_bound(&len, cur_loc(ses)->vs.url_len);
+			int_lower_bound(&len, strlen(cur_loc(ses)->vs.url));
 
-		loc = mem_calloc(1, sizeof(struct location));
+	/* struct view_state reserves one byte, so len is sufficient. */
+		loc = mem_alloc(sizeof(struct location) + len);
 		if (!loc) return NULL;
+		memset(loc, 0, sizeof(struct location));
 		memcpy(&loc->download, &ses->loading, sizeof(struct download));
 	}
 
@@ -223,8 +225,7 @@ x:
 		vs = &frame->vs;
 		if (!loaded_in_frame) {
 			destroy_vs(vs);
-			if (!init_vs(vs, ses->loading_url, vs->plain))
-				return NULL;
+			init_vs(vs, ses->loading_url, vs->plain);
 		}
 
 		if (!loaded_in_frame) {
@@ -242,7 +243,7 @@ x:
 	} else {
 		init_list(loc->frames);
 		vs = &loc->vs;
-		if (!init_vs(vs, ses->loading_url, vs->plain)) return NULL;
+		init_vs(vs, ses->loading_url, vs->plain);
 		add_to_history(&ses->history, loc);
 
 		if (ses->goto_position) {
@@ -335,7 +336,7 @@ do_move(struct session *ses, struct download **stat)
 		else
 			*stat = NULL;
 
-		set_session_referrer(ses, get_cache_uri_struct(ce));
+		set_referrer(ses, get_cache_uri(ce));
 
 		switch (task) {
 		case TASK_NONE:
@@ -457,8 +458,7 @@ static void
 do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
-	unsigned char *u;
-	struct uri *referrer = NULL;
+	unsigned char *u, *referrer = NULL;
 	unsigned char *pos;
 	enum protocol protocol = known_protocol(url, NULL);
 
@@ -510,10 +510,10 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		struct document_view *doc_view = current_frame(ses);
 
 		if (doc_view && doc_view->document)
-			referrer = doc_view->document->uri;
+			referrer = doc_view->document->url;
 	}
 
-	set_session_referrer(ses, referrer);
+	set_referrer(ses, referrer);
 
 	ses_goto(ses, u, target, NULL,
 		 PRI_MAIN, cache_mode, task,

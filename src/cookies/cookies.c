@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.128 2004/03/21 15:39:10 jonas Exp $ */
+/* $Id: cookies.c,v 1.129 2004/03/22 14:35:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,7 +146,7 @@ free_cookie(struct cookie *c)
 
 
 static int
-check_domain_security(unsigned char *domain, struct string *server)
+check_domain_security(unsigned char *domain, unsigned char *server, int server_len)
 {
 	register int i, j;
 	int domain_len;
@@ -159,9 +159,9 @@ check_domain_security(unsigned char *domain, struct string *server)
 
 	/* XXX: Hmm, can't we use strlcasecmp() here? --pasky */
 
-	if (domain_len > server->length) return 0;
+	if (domain_len > server_len) return 0;
 
-	if (!string_strcasecmp(server, domain)) {
+	if (!strncasecmp(domain, server, server_len)) {
 		/* We should probably allow domains which are same as servers.
 		 * --<rono@sentuny.com.au> */
 		/* Mozilla does it as well ;))) and I can't figure out any
@@ -169,8 +169,8 @@ check_domain_security(unsigned char *domain, struct string *server)
 		return 0;
 	}
 
-	for (i = server->length - domain_len, j = 0; domain[j]; i++, j++)
-		if (upcase(server->source[i]) != upcase(domain[j]))
+	for (i = server_len - domain_len, j = 0; domain[j]; i++, j++)
+		if (upcase(server[i]) != upcase(domain[j]))
 			return 0;
 
 	/* Also test if domain is secure enough.. */
@@ -238,9 +238,9 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
-	cookie->server = get_string_copy(&uri->host);
+	cookie->server = memacpy(uri->host, uri->hostlen);
 	cookie->domain = parse_http_header_param(str, "domain");
-	if (!cookie->domain) cookie->domain = get_string_copy(&uri->host);
+	if (!cookie->domain) cookie->domain = memacpy(uri->host, uri->hostlen);
 
 	/* Now check that all is well */
 	if (!cookie->domain
@@ -297,7 +297,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		}
 
 		add_char_to_string(&path, '/');
-		add_string_to_string(&path, &uri->data);
+		add_bytes_to_string(&path, uri->data, uri->datalen);
 
 		cookie->path = path.source;
 		for (path_end = cookie->path; *path_end; path_end++) {
@@ -342,7 +342,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 #ifdef COOKIES_DEBUG
 	{
-		unsigned char *server = memacpy(uri->hoststr, uri->hostlen);
+		unsigned char *server = memacpy(uri->host, uri->hostlen);
 
 		DBG("Got cookie %s = %s from %s (%s), domain %s, "
 		      "expires at %d, secure %d\n", cookie->name,
@@ -352,19 +352,19 @@ set_cookie(struct uri *uri, unsigned char *str)
 	}
 #endif
 
-	if (!check_domain_security(cookie->domain, &uri->host)) {
+	if (!check_domain_security(cookie->domain, uri->host, uri->hostlen)) {
 #ifdef COOKIES_DEBUG
 		DBG("Domain security violated: %s vs %*s", cookie->domain,
-				uri->host.source, uri->host.length);
+				uri->host, uri->hostlen);
 #endif
 		mem_free(cookie->domain);
-		cookie->domain = get_string_copy(&uri->host);
+		cookie->domain = memacpy(uri->host, uri->hostlen);
 	}
 
 	cookie->id = cookie_id++;
 
 	foreach (cs, c_servers) {
-		if (string_strlcasecmp(&uri->host, cs->server, -1))
+		if (strlcasecmp(cs->server, -1, uri->host, uri->hostlen))
 			continue;
 
 		if (cs->accept)	goto ok;
@@ -565,33 +565,28 @@ accept_cookie_dialog(struct session *ses, void *data)
 
 
 static int
-is_in_domain(unsigned char *d, struct string *server)
+is_in_domain(unsigned char *d, unsigned char *s, int sl)
 {
 	int dl = strlen(d);
 
-	if (dl > server->length) return 0;
-	if (dl == server->length)
-		return !string_strcasecmp(server, d);
+	if (dl > sl) return 0;
+	if (dl == sl) return !strncasecmp(d, s, sl);
+	if (s[sl - dl - 1] != '.') return 0;
 
-	if (server->source[server->length - dl - 1] != '.') return 0;
-
-	return !strncasecmp(d, server->source + server->length - dl, dl);
+	return !strncasecmp(d, s + sl - dl, dl);
 }
 
 
 static inline int
-is_path_prefix(unsigned char *prefix, struct string *path)
+is_path_prefix(unsigned char *d, unsigned char *s, int sl)
 {
-	unsigned char *data = path->source - 1;
-	int datalen = path->length + 1;
-	int prefixlen = strlen(prefix);
+	int dl = strlen(d);
 
-	assert(*data == '/');
 	/* TODO: strlcmp()? --pasky */
 
-	if (prefixlen > datalen) return 0;
+	if (dl > sl) return 0;
 
-	return !memcmp(prefix, data, datalen);
+	return !memcmp(d, s, dl);
 }
 
 
@@ -603,15 +598,16 @@ send_cookies(struct uri *uri)
 {
 	struct c_domain *cd;
 	struct cookie *c, *d;
-	struct string *data = NULL;
+	unsigned char *data = NULL;
+	int datalen = uri->datalen + 1;
 	static struct string header;
 
-	if (string_is_empty(&uri->host) || !uri->data.source)
+	if (!uri->host || !uri->data)
 		return NULL;
 
 	foreach (cd, c_domains)
-		if (is_in_domain(cd->domain, &uri->host)) {
-			data = &uri->data;
+		if (is_in_domain(cd->domain, uri->host, uri->hostlen)) {
+			data = uri->data - 1;
 			break;
 		}
 
@@ -620,8 +616,8 @@ send_cookies(struct uri *uri)
 	init_string(&header);
 
 	foreach (c, cookies) {
-		if (!is_in_domain(c->domain, &uri->host)
-		    || !is_path_prefix(c->path, data))
+		if (!is_in_domain(c->domain, uri->host, uri->hostlen)
+		    || !is_path_prefix(c->path, data, datalen))
 			continue;
 
 		if (is_expired(c->expires)) {

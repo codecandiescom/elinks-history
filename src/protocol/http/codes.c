@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.20 2004/03/22 04:15:48 jonas Exp $ */
+/* $Id: codes.c,v 1.21 2004/03/22 14:35:40 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -14,14 +14,12 @@
 #include "cache/cache.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/http/codes.h"
-#include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "sched/task.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/snprintf.h"
-#include "util/object.h"
 #include "viewer/text/view.h"
 
 
@@ -158,7 +156,7 @@ get_http_error_document(struct terminal *term, unsigned char *url, int code)
 
 struct http_error_info {
 	int code;
-	struct uri *uri;
+	unsigned char url[1];
 };
 
 static void
@@ -166,12 +164,11 @@ show_http_error_document(struct session *ses, void *data)
 {
 	struct http_error_info *info = data;
 	struct terminal *term = ses->tab->term;
-	unsigned char *uristring = struri(info->uri);
-	struct cache_entry *cached = find_in_cache(uristring);
-	struct cache_entry *cache = cached ? cached : get_cache_entry(uristring);
+	struct cache_entry *cached = find_in_cache(info->url);
+	struct cache_entry *cache = cached ? cached : get_cache_entry(info->url);
 	unsigned char *str = NULL;
 
-	if (cache) str = get_http_error_document(term, uristring, info->code);
+	if (cache) str = get_http_error_document(term, info->url, info->code);
 
 	if (str) {
 		if (cached) delete_entry_content(cache);
@@ -183,7 +180,6 @@ show_http_error_document(struct session *ses, void *data)
 		draw_formatted(ses, 1);
 	}
 
-	done_uri(info->uri);
 	mem_free(info);
 }
 
@@ -192,15 +188,17 @@ void
 http_error_document(struct connection *conn, int code)
 {
 	struct http_error_info *info;
+	int urllen;
 
-	assert(conn && conn->uri);
+	assert(conn && struri(conn->uri));
 
-	info = mem_calloc(1, sizeof(struct http_error_info));
+	urllen = strlen(struri(conn->uri));
+
+	info = mem_calloc(1, sizeof(struct http_error_info) + urllen);
 	if (!info) return;
 
 	info->code = code;
-	info->uri = conn->uri;
-	object_lock(info->uri);
+	memcpy(info->url, struri(conn->uri), urllen);
 
 	add_questions_entry(show_http_error_document, info);
 }

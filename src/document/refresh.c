@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.16 2004/03/22 01:04:20 jonas Exp $ */
+/* $Id: refresh.c,v 1.17 2004/03/22 14:35:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,10 +70,10 @@ do_document_refresh(void *data)
 	 * sourceforge's download pages) make sure that we do not endlessly
 	 * trigger the download (bug 289). */
 	foreach (type_query, ses->tq)
-		if (!strcasecmp(refresh->url, struri(type_query->uri)))
+		if (!strcasecmp(refresh->url, type_query->url))
 			return;
 
-	if (!strcasecmp(refresh->url, struri(ses->doc_view->document->uri))) {
+	if (!strcasecmp(refresh->url, ses->doc_view->document->url)) {
 		/* If the refreshing is for the current URI, force a reload. */
 		reload(ses, CACHE_MODE_FORCE_RELOAD);
 	} else {

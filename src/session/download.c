@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.220 2004/03/22 01:18:30 jonas Exp $ */
+/* $Id: download.c,v 1.221 2004/03/22 14:35:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ abort_download(struct file_download *file_download, int stop)
 	if (file_download->download.state >= 0)
 		change_connection(&file_download->download, NULL, PRI_CANCEL,
 				  stop);
-	if (file_download->uri) done_uri(file_download->uri);
+	if (file_download->url) mem_free(file_download->url);
 
 	if (file_download->handle != -1) {
 		prealloc_truncate(file_download->handle,
@@ -265,7 +265,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 
 		if (!errmsg) goto abort;
 
-		url = get_uri_string(file_download->uri, ~URI_POST);
+		url = get_no_post_url(file_download->url, NULL);
 
 		if (!url) goto abort;
 
@@ -291,7 +291,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	}
 
 	if (file_download->notify) {
-		unsigned char *url = get_uri_string(file_download->uri, ~URI_POST);
+		unsigned char *url = get_no_post_url(file_download->url, NULL);
 
 		/* This is apparently a little racy. Deleting the box item will
 		 * update the download browser _after_ the notification dialog
@@ -351,27 +351,24 @@ download_data(struct download *download, struct file_download *file_download)
 		if (download->state >= 0)
 			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
-		u = join_urls(struri(file_download->uri), ce->redirect);
+		u = join_urls(file_download->url, ce->redirect);
 		if (!u) break;
 
-		if (!broken_302_redirect
-		    && !ce->redirect_get
-		    && file_download->uri->post) {
-			/* Also add the POST_CHAR */
-			add_to_strn(&u, file_download->uri->post - 1);
+		if (!broken_302_redirect && !ce->redirect_get) {
+			unsigned char *postdata = post_data_start(file_download->url);
+
+			if (postdata) add_to_strn(&u, postdata);
 		}
 
-		done_uri(file_download->uri);
-		file_download->uri = get_uri(u);
-		mem_free(u);
-		if (!file_download->uri) break;
+		mem_free(file_download->url);
 
+		file_download->url = u;
 		file_download->download.state = S_WAIT_REDIR;
 
 		if (file_download->dlg_data)
 			redraw_dialog(file_download->dlg_data, 1);
 
-		load_url(struri(file_download->uri), get_cache_uri_struct(ce), &file_download->download,
+		load_url(file_download->url, get_cache_uri(ce), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 			 download->prg ? download->prg->start : 0);
 
@@ -617,7 +614,7 @@ finish:
 
 
 static unsigned char *
-get_temp_name(struct uri *uri)
+get_temp_name(unsigned char *url)
 {
 	struct string name;
 	unsigned char *extension;
@@ -637,7 +634,7 @@ get_temp_name(struct uri *uri)
 	add_to_string(&name, nm);
 	free(nm);
 
-	extension = get_uri_extension(uri);
+	extension = get_extension_from_url(url);
 	if (extension) {
 		add_char_to_string(&name, '.');
 		add_shell_safe_to_string(&name, extension, strlen(extension));
@@ -721,8 +718,8 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download = mem_calloc(1, sizeof(struct file_download));
 	if (!file_download) goto download_error;
 
-	file_download->uri = get_uri(url);
-	if (!file_download->uri) goto download_error;
+	file_download->url = stracpy(url);
+	if (!file_download->url) goto download_error;
 
 	file_download->file = cmdw_hop->real_file;
 
@@ -739,12 +736,12 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->remotetime = 0;
 
 	add_to_list(downloads, file_download);
-	load_url(url, cmdw_hop->ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
+	load_url(url, cmdw_hop->ses->ref_url, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 		 (resume ? file_download->last_pos : 0));
 
 	if (is_in_downloads_list(file_download))
 		file_download->box_item = add_listbox_item(&download_browser,
-							   struri(file_download->uri),
+							   file_download->url,
 							   file_download);
 
 	display_download(cmdw_hop->ses->tab->term, file_download, cmdw_hop->ses);
@@ -754,7 +751,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 
 download_error:
 	if (file_download) {
-		if (file_download->uri) done_uri(file_download->uri);
+		if (file_download->url) mem_free(file_download->url);
 		mem_free(file_download);
 	}
 	mem_free(cmdw_hop);
@@ -799,7 +796,7 @@ continue_download(void *data, unsigned char *file)
 	struct tq *tq = data;
 	struct codw_hop *codw_hop;
 
-	if (!tq->uri) return;
+	if (!tq->url) return;
 
 	codw_hop = mem_calloc(1, sizeof(struct codw_hop));
 	if (!codw_hop) {
@@ -809,7 +806,7 @@ continue_download(void *data, unsigned char *file)
 
 	if (tq->prog) {
 		/* FIXME: get_temp_name() calls tempnam(). --Zas */
-		file = get_temp_name(tq->uri);
+		file = get_temp_name(tq->url);
 		if (!file) {
 			mem_free(codw_hop);
 			tp_cancel(tq);
@@ -834,7 +831,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	assert(codw_hop);
 	assert(codw_hop->tq);
-	assert(codw_hop->tq->uri);
+	assert(codw_hop->tq->url && *codw_hop->tq->url);
 	assert(codw_hop->tq->ses);
 
 	if (!codw_hop->real_file) goto cancel;
@@ -844,8 +841,8 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	object_nolock(file_download); /* Debugging purpose. */
 
-	file_download->uri = codw_hop->tq->uri;
-	object_lock(file_download->uri);
+	file_download->url = stracpy(codw_hop->tq->url);
+	if (!file_download->url) goto cancel;
 
 	file_download->file = codw_hop->real_file;
 
@@ -870,7 +867,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	if (is_in_downloads_list(file_download))
 		file_download->box_item = add_listbox_item(&download_browser,
-							   struri(file_download->uri),
+							   file_download->url,
 							   file_download);
 
 	display_download(codw_hop->tq->ses->tab->term, file_download, codw_hop->tq->ses);
@@ -883,7 +880,7 @@ cancel:
 	tp_cancel(codw_hop->tq);
 	if (codw_hop->tq->prog && codw_hop->file) mem_free(codw_hop->file);
 	if (file_download) {
-		if (file_download->uri) done_uri(file_download->uri);
+		if (file_download->url) mem_free(file_download->url);
 		mem_free(file_download);
 	}
 	mem_free(codw_hop);
@@ -894,7 +891,7 @@ static void
 tp_free(struct tq *tq)
 {
 	object_unlock(tq->ce);
-	if (tq->uri) done_uri(tq->uri);
+	mem_free(tq->url);
 	if (tq->goto_position) mem_free(tq->goto_position);
 	if (tq->prog) mem_free(tq->prog);
 	if (tq->target_frame) mem_free(tq->target_frame);
@@ -919,7 +916,7 @@ tp_save(struct tq *tq)
 		mem_free(tq->prog);
 		tq->prog = NULL;
 	}
-	query_file(tq->ses, struri(tq->uri), tq, continue_download, tp_cancel, 1);
+	query_file(tq->ses, tq->url, tq, continue_download, tp_cancel, 1);
 }
 
 
@@ -943,7 +940,7 @@ tp_display(struct tq *tq)
 	unsigned char *target_frame = ses->task.target_frame;
 
 	ses->goto_position = tq->goto_position;
-	ses->loading_url = struri(tq->uri);
+	ses->loading_url = tq->url;
 	ses->task.target_frame = tq->target_frame;
 	vs = ses_forward(ses, tq->frame);
 	if (vs) vs->plain = 1;
@@ -992,7 +989,7 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 	if (!content_type) return;
 
 	if (init_string(&filename))
-		add_string_uri_filename_to_string(&filename, struri(tq->uri));
+		add_string_uri_filename_to_string(&filename, tq->url);
 
 	/* @filename.source should be last in the getml()s ! (It terminates the
 	 * pointers list in case of allocation failure.) */
@@ -1070,7 +1067,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	struct mime_handler *handler;
 	struct view_state *vs;
 	struct tq *tq;
-	unsigned char *ctype = get_content_type(ce->head, get_cache_uri_struct(ce));
+	unsigned char *ctype = get_content_type(ce->head, get_cache_uri(ce));
 	int plaintext = 1;
 	int ret = 0;
 	int xwin, i;
@@ -1093,7 +1090,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 		goto plaintext_follow;
 
 	foreach (tq, ses->tq)
-		if (!strcmp(struri(tq->uri), ses->loading_url))
+		if (!strcmp(tq->url, ses->loading_url))
 			goto do_not_follow;
 
 	tq = mem_calloc(1, sizeof(struct tq));
@@ -1101,7 +1098,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	add_to_list(ses->tq, tq);
 	ret = 1;
 
-	tq->uri = get_uri(ses->loading_url);
+	tq->url = stracpy(ses->loading_url);
 	change_connection(loading, &tq->download, PRI_MAIN, 0);
 	loading->state = S_OK;
 

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.14 2003/05/05 13:43:15 zas Exp $ */
+/* $Id: session.h,v 1.15 2003/05/07 10:35:14 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -53,38 +53,44 @@ struct session {
 
 	struct list_head history;
 	struct list_head unhistory;
-	struct window *tab;
-	int id;
-	struct f_data_c *screen;
 	struct list_head scrn_frames;
+	struct list_head more_files;
+
 	struct status loading;
-	enum session_wtd wtd;
+	struct kbdprefix kbdprefix;
+	struct status tq;
+
+	struct window *tab;
+	struct cache_entry *tq_ce;
+	struct f_data_c *screen;
+
 	unsigned char *wtd_target;
 	unsigned char *loading_url;
-	int display_timer;
-	struct list_head more_files;
 	unsigned char *goto_position;
 	unsigned char *imgmap_href_base;
 	unsigned char *imgmap_target_base;
-	struct kbdprefix kbdprefix;
-	int reloadlevel;
-	int redirect_cnt;
-	struct status tq;
 	unsigned char *tq_url;
-	struct cache_entry *tq_ce;
 	unsigned char *tq_goto_position;
 	unsigned char *tq_prog;
-	int tq_prog_flags;
 	unsigned char *dn_url;
 	unsigned char *ref_url;
 	unsigned char *search_word;
 	unsigned char *last_search_word;
+	unsigned char *last_title;
+
+	int id;
+	int display_timer;
+	int reloadlevel;
+	int redirect_cnt;
+	int tq_prog_flags;
 	int search_direction;
 	int exit_query;
 	int visible_tabs_bar;
 	int visible_status_bar;
 	int visible_title_bar;
-	unsigned char *last_title;
+
+	enum session_wtd wtd;
+
 };
 
 extern struct list_head sessions;

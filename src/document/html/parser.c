@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.119 2003/06/09 09:57:13 zas Exp $ */
+/* $Id: parser.c,v 1.120 2003/06/09 10:07:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,11 +172,11 @@ unsigned char *
 get_attr_val(register unsigned char *e, unsigned char *name)
 {
 	unsigned char *n;
-	unsigned char *a = NULL;
-	int l = 0;
+	unsigned char *attr = NULL;
+	int attrlen = 0;
 	int found = 0;
 
-aa:
+again:
 	while (WHITECHAR(*e)) e++;
 	if (!*e || !ATTR_CHAR(*e) || TAG_DELIM(e)) {
 		if (TAG_END_XML(e)) e++;
@@ -188,54 +188,54 @@ aa:
 	found = !*n;
 	while (ATTR_CHAR(*e)) found = 0, e++;
 	while (WHITECHAR(*e)) e++;
-	if (*e != '=') goto ea;
+	if (*e != '=') goto endattr;
 	e++;
 	while (WHITECHAR(*e)) e++;
 	if (!IS_QUOTE(*e)) {
 		while (!WHITECHAR(*e) && !(TAG_DELIM(e))) {
-			if (found) add_chr(a, l, *e);
+			if (found) add_chr(attr, attrlen, *e);
 			e++;
 		}
 	} else {
 		unsigned char quote = *e;
 
-a:
+quoted_value:
 		e++;
 		while (*e != quote) {
 			if (!*e) {
-				if (a) mem_free(a);
+				if (attr) mem_free(attr);
 				return NULL;
 			}
 			if (found && *e != ASCII_CR) {
 				if (*e != ASCII_TAB && *e != ASCII_LF)
-					add_chr(a, l, *e);
+					add_chr(attr, attrlen, *e);
 				else if (!get_attr_val_eat_nl)
-					add_chr(a, l, ' ');
+					add_chr(attr, attrlen, ' ');
 			}
 			e++;
 		}
 		e++;
 		if (*e == quote) {
-			if (found) add_chr(a, l, *e);
-			goto a;
+			if (found) add_chr(attr, attrlen, *e);
+			goto quoted_value;
 		}
 	}
 
-ea:
+endattr:
 	if (found) {
-		add_chr(a, l, 0);
-		if (strchr(a, '&')) {
-			unsigned char *aa = a;
+		add_chr(attr, attrlen, '\0');
+		if (strchr(attr, '&')) {
+			unsigned char *aa = attr;
 
-			a = convert_string(NULL, aa, strlen(aa));
+			attr = convert_string(NULL, aa, strlen(aa));
 			mem_free(aa);
 		}
 
-		set_mem_comment(trim_chars(a, ' ', NULL), name, strlen(name));
-		return a;
+		set_mem_comment(trim_chars(attr, ' ', NULL), name, strlen(name));
+		return attr;
 	}
 
-	goto aa;
+	goto again;
 }
 
 #undef add_chr

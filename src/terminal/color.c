@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.29 2003/09/06 15:44:39 jonas Exp $ */
+/* $Id: color.c,v 1.30 2003/09/06 15:57:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,14 +208,14 @@ extern int dump_pos;
 /* When determining wether to use negative image we make the most significant
  * be least significant. */
 #define CMPCODE(c) (((c) << 1 | (c) >> 2) & TERM_COLOR_MASK)
-#define use_inverse(bg, fg) CMPCODE(TERM_COLOR_FOREGROUND(fg)) < CMPCODE(bg)
+#define use_inverse(bg, fg) CMPCODE(fg & TERM_COLOR_MASK) < CMPCODE(bg)
 
 /* Terminal color encoding: */
 /* Below color pairs are encoded to terminal colors. Both the terminal fore-
  * and background color are a number between 0 and 7. They are stored in an
  * unsigned as specified in the following bit sequence:
  *
- *	0bbb+fff (0 = not used, + = bold, f = foreground, b = background)
+ *	00bbbfff (f = foreground, b = background)
  */
 
 unsigned char
@@ -224,6 +224,8 @@ get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
 {
 	register unsigned char fg;
 	register unsigned char bg;
+
+	assert(attr);
 
 	if (dump_pos) return 0;
 
@@ -236,7 +238,7 @@ get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
 	}
 
 	/* Add various color enhancement based on the attributes. */
-	if (attr) {
+	if (*attr) {
 		if (*attr & SCREEN_ATTR_ITALIC)
 			fg ^= 0x01;
 
@@ -248,12 +250,12 @@ get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
 	if ((d_opt && !d_opt->allow_dark_on_black) || bg == fg) {
 		fg = fg_color[fg][bg];
 
-		if (attr && (fg & SCREEN_ATTR_BOLD)) {
+		if (fg & SCREEN_ATTR_BOLD) {
 			*attr |= SCREEN_ATTR_BOLD;
 		}
 	}
 
-	if (attr && use_inverse(bg, fg)) {
+	if (use_inverse(bg, fg)) {
 		*attr |= SCREEN_ATTR_STANDOUT;
 	}
 

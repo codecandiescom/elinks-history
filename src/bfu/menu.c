@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.165 2004/01/09 10:51:46 miciah Exp $ */
+/* $Id: menu.c,v 1.166 2004/01/09 10:56:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,9 +273,9 @@ draw_menu_left_text(struct terminal *term, unsigned char *text, int len,
 
 
 static inline void
-draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
-		       int x, int y, int width, struct color_pair *color,
-		       int selected)
+draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
+		       int hotkey_pos, int x, int y, int width,
+		       struct color_pair *color, int selected)
 {
 	struct color_pair *hk_color = get_bfu_color(term, "menu.hotkey.normal");
 	struct color_pair *hk_color_sel = get_bfu_color(term, "menu.hotkey.selected");
@@ -288,10 +288,10 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
 	/* For redundant hotkeys highlighting. */
 	int double_hk = 0;
 
-	if (len < 0) len = -len, double_hk = 1;
+	if (hotkey_pos < 0) hotkey_pos = -hotkey_pos, double_hk = 1;
 #endif
 
-	if (!len) return;
+	if (!hotkey_pos) return;
 
 	if (selected) {
 		struct color_pair *tmp = hk_color;
@@ -304,7 +304,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
 	     x < width - 2 + !!hk
 	     && (c = text[x]);
 	     x++) {
-		if (!hk && x == len - 1) {
+		if (!hk && x == hotkey_pos - 1) {
 			hk = 1;
 			continue;
 		}

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.3 2004/04/24 00:57:24 pasky Exp $ */
+/* $Id: parse.c,v 1.4 2004/04/24 01:00:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -566,7 +566,6 @@ void
 parse_html(unsigned char *html, unsigned char *eof,
 	   void *f, unsigned char *head)
 {
-	/* unsigned char *start = html; */
 	unsigned char *lt;
 
 	putsp = -1;
@@ -592,13 +591,6 @@ set_lt:
 		if (isspace(*html) && par_format.align != AL_NONE) {
 			unsigned char *h = html;
 
-#if 0
-			if (putsp == -1) {
-				while (html < eof && isspace(*html)) html++;
-				goto set_lt;
-			}
-			putsp = 0;
-#endif
 			while (h < eof && isspace(*h)) h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
@@ -621,12 +613,10 @@ set_lt:
 
 skip_w:
 			while (html < eof && isspace(*html)) html++;
-			/*putsp = -1;*/
 			goto set_lt;
 
 put_sp:
 			put_chrs(" ", 1, put_chars_f, f);
-			/*putsp = -1;*/
 		}
 
 		if (par_format.align == AL_NONE) {
@@ -654,8 +644,6 @@ next_break:
 		}
 
 		while (*html < ' ') {
-			/*if (putsp == 1) goto put_sp;
-			putsp = 0;*/
 			if (html - lt) put_chrs(lt, html - lt, put_chars_f, f);
 			dotcounter++;
 			html++; lt = html;
@@ -672,16 +660,12 @@ next_break:
 		}
 
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !was_xmp) {
-			/*if (putsp == 1) goto put_sp;
-			putsp = 0;*/
 			put_chrs(lt, html - lt, put_chars_f, f);
 			html = skip_comment(html, eof);
 			goto set_lt;
 		}
 
 		if (*html != '<' || parse_element(html, eof, &name, &namelen, &attr, &end)) {
-			/*if (putsp == 1) goto put_sp;
-			putsp = 0;*/
 			html++;
 			continue;
 		}
@@ -880,7 +864,6 @@ ng:;
 	ln_break(1, line_break_f, f);
 	putsp = -1;
 	position = 0;
-	/*line_breax = 1;*/
 	was_br = 0;
 }
 

@@ -288,4 +288,7 @@ Wojtek Bojdo/l <wojboj@lp.net.pl>
 Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Updated Russian localization
 
-$Id: AUTHORS,v 1.46 2002/04/02 13:46:06 pasky Exp $
+<zimon@niksula.hut.fi>
+	RPM spec file in contrib/
+
+$Id: AUTHORS,v 1.47 2002/04/03 17:32:11 pasky Exp $

@@ -5,15 +5,18 @@ which weren't (possibly yet) for some reason applied. Note that this stuff is
 mostly unmaintained and is not guaranteed to work, apply, compile etc. However,
 if you feel like fixing that, no problem.
 
+Files not listed here have description included in their header.
+
 * links_wps.zip - David Mediavilla <davidme@idecnet.com>
 	Scripts for OS/2 to create Links icon and assign Links as viewer of
 	URLs.
 
 * dummy-js.diff - Jan Bobrowski <jb@mohan.krakow.pl>
 	Handler for few simple javascript functions.
+	[!UPDATEME!]
 
 * hpux-pipe.diff - Stephane Chazelas <Stephane_Chazelas@Yahoo.fr>
 	Fix for arcane (appears to me that everything under HPUX is somewhat
 	arcane ;) handling of pipes in HPUX
 
-$Id: README,v 1.3 2002/02/01 21:46:10 pasky Exp $
+$Id: README,v 1.4 2002/04/03 17:32:12 pasky Exp $

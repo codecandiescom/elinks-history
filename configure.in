@@ -221,13 +221,27 @@ dnl Checks for gpm, optional even if installed.
 dnl ===================================================================
 
 AC_ARG_WITH(gpm, [  --without-gpm           disable gpm (mouse) support],
-	[ if test "$withval" = no; then disable_gpm=yes; fi])
+	[ if test "$withval" = no; then withval=""; disable_gpm=yes; fi])
 AC_MSG_CHECKING([for gpm support])
 
+if test "$withval" = yes; then withval=""; fi
+
 if test -z "$disable_gpm"; then
+	CFLAGS_X="$CFLAGS";
+	LDFLAGS_X="$LDFLAGS";
+	if test -d "$withval"; then
+		CFLAGS="$CFLAGS -I$withval/include";
+		LDFLAGS="$LDFLAGS -L$withval/lib";
+	fi
+
 	AC_CHECK_HEADERS(gpm.h, cf_result=yes, cf_result=no)
 	if test "$cf_result" = yes; then
 		AC_CHECK_LIB(gpm, Gpm_Open)
+	fi
+
+	if test "$cf_result" != yes; then
+		CFLAGS="$CFLAGS_X";
+		LDFLAGS="$LDFLAGS_X";
 	fi
 else
 	AC_MSG_RESULT(no)
@@ -238,13 +252,27 @@ dnl Checks for zlib, optional even if installed.
 dnl ===================================================================
 
 AC_ARG_WITH(zlib, [  --without-zlib          disable zlib support],
-	[ if test "$withval" = no; then disable_zlib=yes; fi])
+	[ if test "$withval" = no; then withval=""; disable_zlib=yes; fi])
 AC_MSG_CHECKING([for zlib support])
 
+if test "$withval" = yes; then withval=""; fi
+
 if test -z "$disable_zlib"; then
+	CFLAGS_X="$CFLAGS";
+	LDFLAGS_X="$LDFLAGS";
+	if test -d "$withval"; then
+		CFLAGS="$CFLAGS -I$withval/include";
+		LDFLAGS="$LDFLAGS -L$withval/lib";
+	fi
+
 	AC_CHECK_HEADERS(zlib.h, cf_result=yes, cf_result=no)
 	if test "$cf_result" = yes; then
 		AC_CHECK_LIB(z, gzdopen)
+	fi
+
+	if test "$cf_result" != yes; then
+		CFLAGS="$CFLAGS_X";
+		LDFLAGS="$LDFLAGS_X";
 	fi
 else
 	AC_MSG_RESULT(no)
@@ -256,16 +284,30 @@ dnl Checks for bzlib, optional even if installed.
 dnl ===================================================================
 
 AC_ARG_WITH(bzlib, [  --without-bzlib         disable bzlib support],
-	[ if test "$withval" = no; then disable_bzlib=yes; fi])
+	[ if test "$withval" = no; then withval=""; disable_bzlib=yes; fi])
 AC_MSG_CHECKING([for bzlib support])
 
+if test "$withval" = yes; then withval=""; fi
+
 if test -z "$disable_bzlib"; then
+	CFLAGS_X="$CFLAGS";
+	LDFLAGS_X="$LDFLAGS";
+	if test -d "$withval"; then
+		CFLAGS="$CFLAGS -I$withval/include";
+		LDFLAGS="$LDFLAGS -L$withval/lib";
+	fi
+
 	# Note that we won't define HAVE_LIBBZ2, altough we will define
 	# HAVE_LIBZ. That's combination of autoconf's weirdness, my laziness
 	# and lack of need for such a thing. Always use HAVE_BZLIB_H. --pasky
 	AC_CHECK_HEADERS(bzlib.h, cf_result=yes, cf_result=no)
 	if test "$cf_result" = yes; then
 		AC_CHECK_LIB(bz2, BZ2_bzReadOpen)
+	fi
+
+	if test "$cf_result" != yes; then
+		CFLAGS="$CFLAGS_X";
+		LDFLAGS="$LDFLAGS_X";
 	fi
 else
 	AC_MSG_RESULT(no)
@@ -275,6 +317,9 @@ fi
 dnl ===================================================================
 dnl XBEL support
 dnl ===================================================================
+
+# TODO: XBEL should be --enable instead of --with, we should have separate
+# --with for expat location. --pasky
 
 AC_ARG_WITH(xbel, [  --without-xbel          disable XBEL bookmarks],
         [ if test "$withval" = no; then disable_xbel=yes; fi])
@@ -360,17 +405,22 @@ dnl Do this the long way, as FreeBSD reportedly needs -L<dir> for
 dnl anything other than /usr/lib, and Lua is very often in /usr/local/lib.
 
 AC_ARG_WITH(lua, [  --without-lua           disable Lua support],
-            [if test "$withval" = no;  then disable_lua=yes; fi])
+            [if test "$withval" = no; then withval=""; disable_lua=yes; fi])
 AC_MSG_CHECKING([for Lua])
+
+if test "$withval" = yes; then withval=""; fi
 
 CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"
 cf_result=no
 
 if test -z "$disable_lua"; then
+	if test ! -d "$withval"; then
+		withval="";
+	fi
 	# It's double here in order to have the piggyswitch hack working
 	# Hack, indeed. Guess why? Yes, it's Debian!
-	for luadir in "" /usr /usr /usr/local /usr/local; do
+	for luadir in "$withval" "$withval" "" /usr /usr /usr/local /usr/local; do
 		if test "$cf_result" = no; then
 			if test "$xyz_piggyswitch" = "cow"; then
 				LIBS="-llua40 -llualib40 -lm $LIBS_X"

@@ -27,21 +27,21 @@
 <h2>What's all this about?</h2>
 
 <p>
-Sometime along the 0.4 prereleases, ELinks replaced the old Links file
+At some time along the 0.4 prereleases, ELinks replaced the old Links file
 configuration system with its own one.  Now, the configuration is stored
-on <cite>elinks.conf</cite>, much more complete and featuring a new
+in <cite>elinks.conf</cite>, much more complete and featuring a new
 syntax.  You can set most options from the <acronym title="User
 Interface">UI</acronym> (so usually there is no need to deal with
 <cite>elinks.conf</cite>), and that used to be true for setting MIME
-handlers and extensions; but now the associations menu is gone, forcing
-you to set the handlers from the configuration file.
+handlers and extensions as well; but now the associations menu is gone
+temporarily, forcing you to set the handlers from the configuration file.
 </p>
 
 <p>
 The comments provided within <cite>elinks.conf</cite> for the MIME
 options are not much helpful, and those options may seem a bit obscure
-or confusing at first.  This document is a basic introduction to setting
-MIME associations on ELinks.  If you want to know how to automatically
+or confusing at first.  This document is a basic introduction to setting of
+MIME associations for ELinks.  If you want to know how to automatically
 launch a program to view some kind of file (like images), then read
 on.  Some basic knowledge of MIME is recommended.
 </p>
@@ -51,17 +51,18 @@ on.  Some basic knowledge of MIME is recommended.
 <p>
 This document was written by <cite>José&nbsp;Luis González
 González</cite> out of despair due to the lack of documentation
-regarding the new way to configure MIME on recent ELinks prereleases.
+regarding the new way to configure MIME in recent ELinks prereleases.
 You may reach him at <a href="mailto:jlg80@mi.madritel.es">
-jlg80@mi.madritel.es</a>.  Suggestions, fixes, and contributions are
-welcome.
+jlg80@mi.madritel.es</a>.  Suggestions, fixes and contributions are
+welcomed.
 </p>
 
 <p>
-I'd like to thank <cite>zas</cite>, who pointed me the syntax for the
-<code>mime.type</code> and <code>mime.handler</code> options.  Thanks
-also to <a href="mailto:pasky@ucw.cz">Petr Baudis</a> for suggesting to
-use the Links to ELinks configuration converter script from
+I'd like to thank <a href="mailto:zas@norz.org">Laurent Monin</cite>,
+who pointed me the syntax for the <code>mime.type</code> and
+<code>mime.handler</code> options.  Thanks also to
+<a href="mailto:pasky@ucw.cz">Petr Baudis</a> for suggesting to
+use the Links to ELinks configuration conversion script from
 <cite>contrib/</cite> and in general for keeping up improving ELinks.
 </p>
 
@@ -74,7 +75,7 @@ If, while browsing with ELinks, you need to display files that it can't
 show (like images or PDF documents), then you will likely want to pass
 them to other programs that are suitable for this task.  While you may
 do it manually (saving the file to disk, running the auxiliar program to
-show it, and then removing the file when finished), ELinks provides a
+show it and then removing the file when finished), ELinks provides a
 method to do this automatically using MIME types.
 </p>
 
@@ -83,15 +84,15 @@ ELinks usually knows what the MIME type is for any file (which is a kind
 of description of its format), thus you only need to specify how to
 manage the MIME types for the files you want to open.  If you don't tell
 ELinks how to manage a given MIME type then it will show you on screen
-the contents of files of that type (as if they were ASCII text), instead
-of calling a external program to show them.
+the contents of the file (as if it was ASCII text) instead
+of calling an external program to show them.
 </p>
 
 <h2>Associating files to MIME types</h2>
 
 <p>
 If the file is fetched from a web server then this web server should
-tell ELinks what its MIME type is, so you should generally don't need to
+tell ELinks what its MIME type is, so you should have generally no need to
 care about it.  However, the web server might send an incorrect type, or
 you may be retrieving it by <acronym title="File Transfer Protocol">FTP
 </acronym> or from your local filesystem, so sometimes ELinks needs to
@@ -99,16 +100,16 @@ guess it.
 </p>
 
 <p>
-The easiest method to guess a MIME type for a file is just look at its
-name trusting it was given the right extension.  ELinks provides for
-this, letting you specify a type for any given extension.
+The easiest method to guess a MIME type for a file is to just look at its
+name trusting it was given the right extension.  ELinks supports this,
+letting you to specify a type for any given extension.
 </p>
 
 <h2>Managing a given MIME type</h2>
 
 <p>
 This usually means specifying programs to open files of this type and
-the conditions in which those programs may be used.  For istance, you
+the conditions in which those programs may be used.  For instance, you
 may want to use <cite>zgv</cite> (a popular svgalib image viewer) when
 you are using the text console, but <cite>xli</cite> (a image viewer for
 X) when running the X window system.
@@ -119,11 +120,11 @@ X) when running the X window system.
 <p>
 Instead of directly attaching a program to a MIME type, ELinks lets you
 associate an abstract <cite>handler</cite> to each type.  Then you can
-specify which programs implement the handler and how they are used.
+specify which programs implement the handler and how are they used.
 </p>
 
 <p>
-For istance, you may create the <code>image_viewer</code> handler and
+For instance, you may create an <code>image_viewer</code> handler and
 assign it to MIME types <cite>image/jpeg</cite>, <cite>image/png</cite>
 and <cite>image/gif</cite>.  Then you would associate to <code>
 image_viewer</code> the programs you would like to use for viewing
@@ -135,7 +136,7 @@ repeating all these details for each MIME type.
 
 <p>
 There are three issues to specify for a handler: the program associated
-to it, whether you want confirmation before using it, and whether you
+to it, whether you want confirmation before using it and whether you
 want the terminal to be blocked while it is being used.
 </p>
 
@@ -145,7 +146,7 @@ in which it gets applied, which is typically either the text console or
 the X window sytem.  So you can specify that you don't want confirmation
 before running the program when running X, and that you want it
 otherwise.  Similarly, when you are attaching a program (name it
-<cite>foo</cite>) to this handler you must tell if its so for X or not
+<cite>foo</cite>) to this handler you must tell if it's for X or not
 (you can attach a second program for the other choice if you want).
 </p>
 
@@ -153,7 +154,7 @@ otherwise.  Similarly, when you are attaching a program (name it
 
 <p>
 You must tell ELinks the exact command for running it (with any options
-you may wish).  In place of the filename you must enter <kbd>%</kbd>.
+you wish).  In place of the filename you must enter <kbd>%</kbd>.
 </p>
 
 <h3>Choosing whether you want confirmation before applying it</h3>
@@ -208,8 +209,8 @@ mime.extension.jpg = "image/jpeg"</samp>.
 <h2>Defining a handler</h2>
 
 <p>
-For each handler you must define three items, specifying for what
-context the value for the item is to be applied.  You must enter <kbd>set
+For each handler you must define three items, specifying in what
+context the value of the item should be applied.  You must enter <kbd>set
 mime.handler.<var>handler-name</var>.<var>item</var>.<var>context</var>
 = <var>value</var></kbd>, replacing <var>handler-name</var> with the
 name for the handler you are defining, <var>item</var> with the item you
@@ -224,9 +225,10 @@ The value for <code>program</code> is a string with the exact command
 you want to be issued to view the file, placing <kbd>%</kbd> were you
 would put the file name.  The values for <code>ask</code> and
 <code>block</code> are either 0 (no) or 1 (yes).  Available contexts
-include <code>unix</code> and <code>unix-xwin</code>, which mean text
-terminal and X respectively.  The latter does not mean you are running
-ELinks from X, just that the <code>DISPLAY</code> variable is set so
+include <code>unix</code> and <code>unix-xwin</code>, which mean UNIX text
+terminal and X respectively (others can be os2, win32, beos, riscos, ...).
+The latter does not mean you are running ELinks from X, just that the
+<code>DISPLAY</code> variable is set so
 that ELinks may run an X program.
 </p>
 
@@ -269,6 +271,10 @@ assign to the MIME type.  E.g. you may want to have <samp>set
 mime.type.image.jpeg = "image_viewer"</samp>.
 </p>
 
+
+<p>
+<tt>$Id: mime.html,v 1.3 2002/11/26 23:14:26 pasky Exp $</tt>
+</p>
 
 </body>
 

@@ -1,9 +1,9 @@
-/* $Id: cookies.h,v 1.3 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: cookies.h,v 1.4 2003/05/04 17:25:52 pasky Exp $ */
 
 #ifndef EL__COOKIES_H
 #define EL__COOKIES_H
 
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 
 int set_cookie(struct terminal *, unsigned char *, unsigned char *);
 void send_cookies(unsigned char **, int *, unsigned char *);

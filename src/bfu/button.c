@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.18 2003/01/03 02:23:53 pasky Exp $ */
+/* $Id: button.c,v 1.19 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,8 +13,8 @@
 #include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/kbd.h"
-#include "lowlevel/terminal.h"
+#include "terminal/kbd.h"
+#include "terminal/terminal.h"
 
 
 void

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.1 2003/05/04 17:24:00 pasky Exp $ */
+/* $Id: terminal.c,v 1.2 2003/05/04 17:25:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,9 +19,9 @@
 /* We don't require this ourselves, but view.h does, and directly including
  * view.h w/o session.h already loaded doesn't work :/. --pasky */
 #include "dialogs/menu.h" /* XXX */
-#include "lowlevel/kbd.h"
+#include "terminal/kbd.h"
 #include "lowlevel/select.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "lowlevel/timer.h"
 #include "sched/session.h"
 #include "util/conv.h"

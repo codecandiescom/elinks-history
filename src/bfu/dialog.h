@@ -1,11 +1,11 @@
-/* $Id: dialog.h,v 1.2 2002/12/20 23:11:20 pasky Exp $ */
+/* $Id: dialog.h,v 1.3 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
 
 #include "bfu/align.h"
 #include "bfu/widget.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "util/memlist.h"
 
 

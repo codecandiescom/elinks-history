@@ -1,11 +1,11 @@
-/* $Id: checkbox.h,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
+/* $Id: checkbox.h,v 1.4 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
 
 #include "bfu/dialog.h"
 #include "bfu/widget.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 
 extern struct widget_ops checkbox_ops;
 

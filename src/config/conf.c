@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.74 2003/04/19 17:36:16 zas Exp $ */
+/* $Id: conf.c,v 1.75 2003/05/04 17:25:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 #include "config/opttypes.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/secsave.h"

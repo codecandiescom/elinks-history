@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.20 2003/05/03 21:42:13 pasky Exp $ */
+/* $Id: download.c,v 1.21 2003/05/04 17:25:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
 #include "document/cache.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "lowlevel/ttime.h"
 #include "protocol/http/date.h"
 #include "protocol/mailcap.h"

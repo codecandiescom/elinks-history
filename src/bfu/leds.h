@@ -1,9 +1,9 @@
-/* $Id: leds.h,v 1.2 2002/07/06 21:53:00 pasky Exp $ */
+/* $Id: leds.h,v 1.3 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
 
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 
 /* TODO: Variable count! */
 #define LEDS_COUNT	5

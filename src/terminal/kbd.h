@@ -1,4 +1,4 @@
-/* $Id: kbd.h,v 1.4 2002/11/30 18:10:30 pasky Exp $ */
+/* $Id: kbd.h,v 1.1 2003/05/04 17:24:00 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_KBD_H
 #define EL__LOWLEVEL_KBD_H

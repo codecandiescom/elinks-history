@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.24 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: edit.c,v 1.25 2003/05/04 17:25:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include "bfu/text.h"
 #include "dialogs/edit.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "sched/session.h"
 #include "util/memory.h"
 #include "util/string.h"

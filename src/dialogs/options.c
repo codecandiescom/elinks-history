@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.57 2003/05/03 01:07:46 pasky Exp $ */
+/* $Id: options.c,v 1.58 2003/05/04 17:25:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include "dialogs/options.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "sched/session.h"
 #include "util/memory.h"
 #include "util/memlist.h"

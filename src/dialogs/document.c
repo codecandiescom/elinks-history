@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.31 2003/01/17 10:54:59 zas Exp $ */
+/* $Id: document.c,v 1.32 2003/05/04 17:25:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "protocol/http/header.h"
 #include "protocol/url.h"
 #include "sched/history.h"

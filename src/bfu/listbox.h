@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.24 2003/04/29 13:18:22 zas Exp $ */
+/* $Id: listbox.h,v 1.25 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -7,7 +7,7 @@
 #include "bfu/dialog.h"
 #include "bfu/menu.h"
 #include "bfu/widget.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "util/lists.h"
 
 

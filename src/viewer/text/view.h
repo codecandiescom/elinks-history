@@ -1,11 +1,11 @@
-/* $Id: view.h,v 1.5 2003/05/03 17:11:49 pasky Exp $ */
+/* $Id: view.h,v 1.6 2003/05/04 17:25:57 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
 
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "sched/location.h"
 #include "sched/session.h"
 

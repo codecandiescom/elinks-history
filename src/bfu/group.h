@@ -1,11 +1,11 @@
-/* $Id: group.h,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
+/* $Id: group.h,v 1.4 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifndef EL__BFU_GROUP_H
 #define EL__BFU_GROUP_H
 
 #include "bfu/dialog.h"
 #include "bfu/widget.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 
 
 void max_group_width(struct terminal *, unsigned char **, struct widget_data *, int, int *);

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.18 2003/05/02 22:16:18 zas Exp $ */
+/* $Id: renderer.h,v 1.19 2003/05/04 17:25:53 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -6,7 +6,7 @@
 #include "intl/charsets.h"
 #include "document/options.h"
 #include "document/html/parser.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "lowlevel/ttime.h"
 #include "sched/session.h"
 #include "util/lists.h"

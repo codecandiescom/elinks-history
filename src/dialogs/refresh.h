@@ -1,9 +1,9 @@
-/* $Id: refresh.h,v 1.4 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: refresh.h,v 1.5 2003/05/04 17:25:53 pasky Exp $ */
 
 #ifndef EL__DIALOGS_REFRESH_H
 #define EL__DIALOGS_REFRESH_H
 
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "sched/session.h"
 
 typedef void (*refresh_handler)(struct terminal *, void *, struct session *);

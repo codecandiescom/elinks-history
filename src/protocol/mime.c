@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.11 2002/12/21 19:00:41 zas Exp $ */
+/* $Id: mime.c,v 1.12 2003/05/04 17:25:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "protocol/http/header.h"
 #include "protocol/mime.h"
 #include "protocol/url.h"

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.72 2003/05/03 00:12:24 pasky Exp $ */
+/* $Id: listbox.c,v 1.73 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,8 +12,8 @@
 #include "bfu/dialog.h"
 #include "bfu/listbox.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/kbd.h"
-#include "lowlevel/terminal.h"
+#include "terminal/kbd.h"
+#include "terminal/terminal.h"
 #include "util/lists.h"
 
 

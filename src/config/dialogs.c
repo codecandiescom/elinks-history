@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.37 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: dialogs.c,v 1.38 2003/05/04 17:25:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,8 +23,8 @@
 #include "config/opttypes.h"
 #include "dialogs/hierbox.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/kbd.h"
-#include "lowlevel/terminal.h"
+#include "terminal/kbd.h"
+#include "terminal/terminal.h"
 #include "sched/session.h"
 #include "util/error.h"
 #include "util/lists.h"

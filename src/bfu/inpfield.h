@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
+/* $Id: inpfield.h,v 1.4 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -7,7 +7,7 @@
 #include "bfu/dialog.h"
 #include "bfu/inphist.h"
 #include "bfu/widget.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "util/memlist.h"
 
 extern struct widget_ops field_ops;

@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.10 2003/04/17 15:03:39 zas Exp $ */
+/* $Id: libintl.h,v 1.11 2003/05/04 17:25:54 pasky Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -16,7 +16,7 @@
 
 #include "config/options.h"
 #include "intl/charsets.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 
 /* TODO: Ideally, we should internally work only in Unicode - then the need for
  * charsets multiplexing would cease. That'll take some work yet, though.

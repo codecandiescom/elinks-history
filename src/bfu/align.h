@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.9 2003/05/03 19:27:02 pasky Exp $ */
+/* $Id: align.h,v 1.10 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -19,7 +19,7 @@ enum format_align {
 
 #include "config/options.h"
 #include "document/html/colors.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "util/string.h"
 
 #define COL(x)	((x)<<8)

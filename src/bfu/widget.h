@@ -1,10 +1,10 @@
-/* $Id: widget.h,v 1.9 2002/10/12 12:44:01 pasky Exp $ */
+/* $Id: widget.h,v 1.10 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
 
 #include "bfu/inphist.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "util/lists.h"
 
 

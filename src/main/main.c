@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.81 2003/05/04 16:58:31 pasky Exp $ */
+/* $Id: main.c,v 1.82 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,10 +48,10 @@
 #include "lowlevel/af_unix.h"
 #include "lowlevel/dns.h"
 #include "lowlevel/home.h"
-#include "lowlevel/kbd.h"
+#include "terminal/kbd.h"
 #include "lowlevel/select.h"
 #include "lowlevel/sysname.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "lowlevel/timer.h"
 #include "lua/core.h"
 #include "lua/hooks.h"

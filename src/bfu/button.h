@@ -1,11 +1,11 @@
-/* $Id: button.h,v 1.5 2002/07/05 00:29:57 pasky Exp $ */
+/* $Id: button.h,v 1.6 2003/05/04 17:25:51 pasky Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
 
 #include "bfu/align.h"
 #include "bfu/widget.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 
 /* Button flags, go into widget.gid */
 #define B_ENTER		1

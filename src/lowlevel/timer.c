@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.2 2002/12/07 20:05:56 pasky Exp $ */
+/* $Id: timer.c,v 1.3 2003/05/04 17:25:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "lowlevel/select.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "lowlevel/timer.h"
 
 

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.8 2003/05/04 16:58:31 pasky Exp $ */
+/* $Id: session.h,v 1.9 2003/05/04 17:25:56 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -10,7 +10,7 @@ struct session;
 #include "document/options.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "sched/sched.h"
 #include "util/lists.h"
 #include "viewer/text/vs.h"

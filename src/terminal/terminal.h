@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.31 2003/05/04 17:11:34 pasky Exp $ */
+/* $Id: terminal.h,v 1.1 2003/05/04 17:24:00 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.13 2003/01/03 02:23:54 pasky Exp $ */
+/* $Id: hierbox.c,v 1.14 2003/05/04 17:25:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,8 +14,8 @@
 #include "bfu/text.h"
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/dialogs.h"
-#include "lowlevel/kbd.h"
-#include "lowlevel/terminal.h"
+#include "terminal/kbd.h"
+#include "terminal/terminal.h"
 #include "intl/gettext/libintl.h"
 
 

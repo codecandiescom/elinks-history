@@ -1,10 +1,10 @@
-/* $Id: dialogs.h,v 1.5 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: dialogs.h,v 1.6 2003/05/04 17:25:52 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
 
 #include "bfu/dialog.h"
-#include "lowlevel/terminal.h"
+#include "terminal/terminal.h"
 #include "sched/session.h"
 
 /* Search memorization */

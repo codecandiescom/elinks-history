@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.34 2002/07/01 15:07:53 pasky Exp $ */
+/* $Id: parser.c,v 1.35 2002/07/03 23:10:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,6 +123,10 @@ unsigned char *_xx_;
 	if ((_xx_ = s, l % ALLOC_GR) || (_xx_ = mem_realloc(s, l + ALLOC_GR))) s = _xx_, s[l++] = c;	\
 	} while (0)
 
+
+/* Eat newlines when loading attribute value? */
+int get_attr_val_eat_nl = 0;
+
 /* Parses html element attributes. */
 /* - e is attr pointer previously get from parse_element,
  * DON'T PASS HERE ANY OTHER VALUE!!!
@@ -164,8 +168,10 @@ a:
 				return NULL;
 			}
 			if (!f && *e != 13) {
-				if (*e != 9 && *e != 10) add_chr(a, l, *e);
-				else add_chr(a, l, ' ');
+				if (*e != 9 && *e != 10)
+					add_chr(a, l, *e);
+				else if (!get_attr_val_eat_nl)
+					add_chr(a, l, ' ');
 			}
 			e++;
 		}
@@ -195,6 +201,17 @@ ea:
 	}
 
 	goto aa;
+}
+
+unsigned char *
+get_url_val(unsigned char *e, unsigned char *name)
+{
+	unsigned char *val;
+
+	get_attr_val_eat_nl = 1;
+	val = get_attr_val(e, name);
+	get_attr_val_eat_nl = 0;
+	return val;
 }
 
 int
@@ -667,7 +684,7 @@ html_a(unsigned char *a)
 {
 	char *href, *name;
 
-	href = get_attr_val(a, "href");
+	href = get_url_val(a, "href");
 	if (href) {
 		char *href_pos = href;
 		char *target;
@@ -777,7 +794,7 @@ html_img(unsigned char *a)
 		} else if (ismap) {
 			al = stracpy("[ISMAP]");
 		} else {
-			unsigned char *src = get_attr_val(a, "src");
+			unsigned char *src = get_url_val(a, "src");
 			int max_real_len;
 			int max_len;
 
@@ -843,7 +860,7 @@ html_img(unsigned char *a)
 		 * extension to the standart. After all, it makes sense. */
 		html_focusable(a);
 
-		if ((s = get_attr_val(a, "src")) || (s = get_attr_val(a, "dynsrc"))) {
+		if ((s = get_url_val(a, "src")) || (s = get_url_val(a, "dynsrc"))) {
 			format.image = join_urls(format.href_base, s);
 			mem_free(s);
 		}
@@ -1082,7 +1099,7 @@ html_td(unsigned char *a)
 void
 html_base(unsigned char *a)
 {
-	char *al = get_attr_val(a, "href");
+	char *al = get_url_val(a, "href");
 
 	if (al) {
 		if (format.href_base) mem_free(format.href_base);
@@ -1491,8 +1508,8 @@ xxx:
 			break;
 		case FC_IMAGE:
 			if (format.image) mem_free(format.image), format.image = NULL;
-			if ((al = get_attr_val(a, "src"))
-			    || (al = get_attr_val(a, "dynsrc"))) {
+			if ((al = get_url_val(a, "src"))
+			    || (al = get_url_val(a, "dynsrc"))) {
 				format.image = join_urls(format.href_base, al);
 				mem_free(al);
 			}
@@ -2061,7 +2078,7 @@ html_iframe(unsigned char *a)
 {
 	unsigned char *name, *url;
 
-	url = get_attr_val(a, "src");
+	url = get_url_val(a, "src");
 	if (!url) return;
 
 	name = get_attr_val(a, "name");
@@ -2090,7 +2107,7 @@ html_frame(unsigned char *a)
 {
 	unsigned char *name, *src, *url;
 
-	src = get_attr_val(a, "src");
+	src = get_url_val(a, "src");
 	if (!src) {
 		url = stracpy("");
 	} else {
@@ -2331,7 +2348,7 @@ html_link(unsigned char *a)
 		mem_free(name);
 	}
 
-	url = get_attr_val(a, "href");
+	url = get_url_val(a, "href");
 	if (!url) return;
 
 	name = get_attr_val(a, "rel");
@@ -2867,7 +2884,7 @@ look_for_tag:
 		goto look_for_link;
 	}
 
-	href = get_attr_val(attr, "href");
+	href = get_url_val(attr, "href");
 	if (!href) {
 		if (label) mem_free(label);
 		mem_free(target);

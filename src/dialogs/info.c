@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.46 2003/06/07 01:45:55 jonas Exp $ */
+/* $Id: info.c,v 1.47 2003/06/07 03:13:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,28 +193,16 @@ void
 memory_inf(struct terminal *term, void *d, struct session *ses)
 {
 	struct refresh *r;
-	char *fmttext;
-	unsigned int message_size;
-	char *message;
+	char *fmttext = _("%ld bytes of memory allocated.", term);
 
-	fmttext = _("%ld bytes of memory allocated.", term);
 	if (!*fmttext) return;
 
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r) return;
 
-	message_size = strlen(fmttext) + 40; /* sufficient ;) */
-	message = mem_alloc(message_size);
-	if (!message) {
-		mem_free(r);
-		return;
-	}
-
-	snprintf(message, message_size, fmttext, mem_amount);
-
-	msg_box(term, getml(message, NULL),
-		N_("Memory info"), AL_CENTER,
-		message,
+	msg_box(term, NULL,
+		N_("Memory info"), AL_CENTER | AL_EXTD_TEXT,
+		msg_text(fmttext, mem_amount),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

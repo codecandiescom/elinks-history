@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.54 2004/09/29 23:25:25 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.55 2004/09/29 23:27:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -473,10 +473,10 @@ static const JSClass document_class = {
 
 enum document_prop { JSP_DOC_REF, JSP_DOC_TITLE, JSP_DOC_URL };
 static const JSPropertySpec document_props[] = {
-	{ "location",	JSP_DOC_URL,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "location",	JSP_DOC_URL,	JSPROP_ENUMERATE },
 	{ "referrer",	JSP_DOC_REF,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "title",	JSP_DOC_TITLE,	JSPROP_ENUMERATE }, /* TODO: Charset? */
-	{ "url",	JSP_DOC_URL,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "url",	JSP_DOC_URL,	JSPROP_ENUMERATE },
 	{ NULL }
 };
 
@@ -548,6 +548,16 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		if (document->title) mem_free(document->title);
 		document->title = stracpy(v.string);
 		break;
+	case JSP_DOC_URL:
+	{
+		/* According to the specs this should be readonly but some
+		 * broken sites still assign to it (i.e.
+		 * http://www.e-handelsfonden.dk/validering.asp?URL=www.polyteknisk.dk).
+		 * So emulate window.location. */
+		JSVAL_REQUIRE(vp, STRING);
+		location_goto(doc_view, v.string);
+		break;
+	}
 	}
 
 	JSVAL_TO_VALUE_END;

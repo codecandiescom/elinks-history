@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.21 2003/07/27 22:54:44 jonas Exp $ */
+/* $Id: link.c,v 1.22 2003/07/27 23:04:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,9 +122,8 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	int xp, yp;
 	int xw, yw;
 	int vx, vy;
-	int f = 0;
 	int i;
-	int q = 0;
+	int cursor_offset = -1;
 
 	assert(t && scr && scr->vs);
 	if_assert_failed return;
@@ -146,18 +145,27 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 		struct form_state *fs;
 
 		case L_LINK:
-		case L_CHECKBOX:
-		case L_BUTTON:
 		case L_SELECT:
 			break;
+
+		case L_CHECKBOX:
+			cursor_offset = 1;
+			break;
+
+		case L_BUTTON:
+			cursor_offset = 2;
+			break;
+
 		case L_FIELD:
 			fs = find_form_state(scr, link->form);
-			if (fs) q = fs->state - fs->vpos;
+			if (fs) cursor_offset = fs->state - fs->vpos;
 			break;
+
 		case L_AREA:
 			fs = find_form_state(scr, link->form);
-			if (fs) q = area_cursor(link->form, fs);
+			if (fs) cursor_offset = area_cursor(link->form, fs);
 			break;
+
 		default:
 			internal("bad link type");
 			return;
@@ -179,11 +187,8 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 				scr->link_bg[i].y = y;
 				scr->link_bg[i].c = co;
 			}
-			if (!f
-				|| (link->type == L_CHECKBOX && i == 1)
-				|| (link->type == L_BUTTON && i == 2)
-				|| ((link->type == L_FIELD ||
-						link->type == L_AREA) && i == q)) {
+
+			if (i == cursor_offset) {
 				int blockable = 0;
 
 				if (link->type != L_FIELD && link->type != L_AREA) {
@@ -194,7 +199,6 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 
 				set_cursor(t, x, y, blockable);
 				set_window_ptr(get_current_tab(t), x, y);
-				f = 1;
 			}
 			set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color << 8);
 		} else scr->link_bg[i].x = scr->link_bg[i].y = scr->link_bg[i].c = -1;

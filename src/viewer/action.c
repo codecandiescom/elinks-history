@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.107 2004/10/10 02:56:34 miciah Exp $ */
+/* $Id: action.c,v 1.108 2004/10/10 03:12:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,17 +76,13 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 typedef enum frame_event_status (*frame_action)(struct session *, struct document_view *, int);
 
 static enum frame_event_status
-do_frame_action(struct session *ses, frame_action action, int magic,
-		int jump_to_link_number)
+do_frame_action(struct session *ses, struct document_view *doc_view,
+		frame_action action, int magic, int jump_to_link_number)
 {
-	struct document_view *doc_view;
-
 	assert(ses && action);
 	if_assert_failed return FRAME_EVENT_OK;
 
 	if (!have_location(ses)) return FRAME_EVENT_OK;
-
-	doc_view = current_frame(ses);
 
 	/* There is a bug for this current_frame() returning NULL for recursive
 	 * framesets unfortunately bugzilla is down ATM so the number is
@@ -197,13 +193,15 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_LINK_DOWNLOAD:
 			if (!get_cmd_opt_int("anonymous"))
-				status = do_frame_action(ses, download_link,
+				status = do_frame_action(ses, doc_view,
+							 download_link,
 							 action, 1);
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
 			if (!get_cmd_opt_int("anonymous"))
-				status = do_frame_action(ses, download_link,
+				status = do_frame_action(ses, doc_view,
+							 download_link,
 							 action, 1);
 			break;
 
@@ -212,11 +210,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW:
-			status = do_frame_action(ses, enter, 0, 1);
+			status = do_frame_action(ses, doc_view, enter, 0, 1);
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW_RELOAD:
-			status = do_frame_action(ses, enter, 1, 1);
+			status = do_frame_action(ses, doc_view, enter, 1, 1);
 			break;
 
 		case ACT_MAIN_EXMODE:
@@ -230,11 +228,13 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_FIND_NEXT:
-			status = do_frame_action(ses, find_next, 1, 0);
+			status = do_frame_action(ses, doc_view,
+						 find_next, 1, 0);
 			break;
 
 		case ACT_MAIN_FIND_NEXT_BACK:
-			status = do_frame_action(ses, find_next, -1, 0);
+			status = do_frame_action(ses, doc_view,
+						 find_next, -1, 0);
 			break;
 
 		case ACT_MAIN_FORGET_CREDENTIALS:
@@ -351,17 +351,20 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
-			status = do_frame_action(ses, pass_uri_to_command,
+			status = do_frame_action(ses, doc_view,
+						 pass_uri_to_command,
 						 PASS_URI_LINK, 0);
 			break;
 
 		case ACT_MAIN_FRAME_EXTERNAL_COMMAND:
-			status = do_frame_action(ses, pass_uri_to_command,
+			status = do_frame_action(ses, doc_view,
+						 pass_uri_to_command,
 						 PASS_URI_FRAME, 0);
 			break;
 
 		case ACT_MAIN_TAB_EXTERNAL_COMMAND:
-			status = do_frame_action(ses, pass_uri_to_command,
+			status = do_frame_action(ses, doc_view,
+						 pass_uri_to_command,
 						 PASS_URI_TAB, 0);
 			break;
 
@@ -391,7 +394,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_RESET_FORM:
-			status = do_frame_action(ses, reset_form, 0, 0);
+			status = do_frame_action(ses, doc_view,
+						 reset_form, 0, 0);
 			break;
 
 		case ACT_MAIN_RESOURCE_INFO:
@@ -400,17 +404,22 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
 			if (!get_cmd_opt_int("anonymous"))
-				status = do_frame_action(ses, download_link, action, 1);
+				status = do_frame_action(ses, doc_view,
+							 download_link,
+							 action, 1);
 			break;
 
 		case ACT_MAIN_SAVE_AS:
 			if (!get_cmd_opt_int("anonymous"))
-				status = do_frame_action(ses, save_as, 0, 0);
+				status = do_frame_action(ses, doc_view,
+							 save_as, 0, 0);
 			break;
 
 		case ACT_MAIN_SAVE_FORMATTED:
 			if (!get_cmd_opt_int("anonymous"))
-				status = do_frame_action(ses, save_formatted_dlg, 0, 0);
+				status = do_frame_action(ses, doc_view,
+							 save_formatted_dlg,
+							 0, 0);
 			break;
 
 		case ACT_MAIN_SAVE_URL_AS:
@@ -424,19 +433,21 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SEARCH:
-			status = do_frame_action(ses, search_dlg, 1, 0);
+			status = do_frame_action(ses, doc_view,
+						 search_dlg, 1, 0);
 			break;
 
 		case ACT_MAIN_SEARCH_BACK:
-			status = do_frame_action(ses, search_dlg, -1, 0);
+			status = do_frame_action(ses, doc_view,
+						 search_dlg, -1, 0);
 			break;
 
 		case ACT_MAIN_SEARCH_TYPEAHEAD:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_LINK:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK:
-			status = do_frame_action(ses, search_typeahead,
-						 action, 0);
+			status = do_frame_action(ses, doc_view,
+						 search_typeahead, action, 0);
 			break;
 
 		case ACT_MAIN_SHOW_TERM_OPTIONS:
@@ -444,11 +455,13 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SUBMIT_FORM:
-			status = do_frame_action(ses, submit_form, 0, 0);
+			status = do_frame_action(ses, doc_view,
+						 submit_form, 0, 0);
 			break;
 
 		case ACT_MAIN_SUBMIT_FORM_RELOAD:
-			status = do_frame_action(ses, submit_form, 1, 0);
+			status = do_frame_action(ses, doc_view,
+						 submit_form, 1, 0);
 			break;
 
 		case ACT_MAIN_TAB_NEXT:
@@ -528,11 +541,13 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_VIEW_IMAGE:
-			status = do_frame_action(ses, view_image, 0, 1);
+			status = do_frame_action(ses, doc_view,
+						 view_image, 0, 1);
 			break;
 
 		case ACT_MAIN_FRAME_MAXIMIZE:
-			status = do_frame_action(ses, set_frame, 0, 0);
+			status = do_frame_action(ses, doc_view,
+						 set_frame, 0, 0);
 			break;
 
 		case ACT_MAIN_MOVE_PAGE_DOWN:
@@ -622,7 +637,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_COPY_CLIPBOARD:
-			status = do_frame_action(ses,
+			status = do_frame_action(ses, doc_view,
 						 copy_current_link_to_clipboard,
 						 0, 1);
 			break;

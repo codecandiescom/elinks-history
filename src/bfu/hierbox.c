@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.149 2004/04/16 16:29:58 zas Exp $ */
+/* $Id: hierbox.c,v 1.150 2004/05/02 09:56:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,16 +346,15 @@ hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 	add_dlg_listbox(dlg, 12, listbox_data);
 
 	for (button = 0; button < browser->buttons_size; button++) {
-		hierbox_button_handler handler = browser->buttons[button].handler;
-		unsigned char *label = browser->buttons[button].label;
+		struct hierbox_browser_button *but = &browser->buttons[button];
 
 		/* Skip buttons that should not be displayed in anonymous mode */
-		if (!browser->buttons[button].anonymous && anonymous) {
+		if (anonymous && !but->anonymous) {
 			anonymous++;
 			continue;
 		}
 
-		add_dlg_button(dlg, B_ENTER, handler, _(label, term), NULL);
+		add_dlg_button(dlg, B_ENTER, but->handler, _(but->label, term), NULL);
 	}
 
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);

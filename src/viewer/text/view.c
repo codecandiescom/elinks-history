@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.81 2003/06/01 11:37:47 miciah Exp $ */
+/* $Id: view.c,v 1.82 2003/06/01 11:53:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2662,7 +2662,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 				ses->kbdprefix.rep_num = 65536;
 
 			ses->kbdprefix.rep = 1;
-			return 1;
+			return 2;
 		}
 
 		if (get_opt_int("document.browse.accesskey.priority") >= 2

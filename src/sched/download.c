@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.2 2003/01/06 21:14:46 pasky Exp $ */
+/* $Id: download.c,v 1.3 2003/01/22 00:49:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -590,35 +590,96 @@ end_store:
 }
 
 
-int
-create_download_file(struct terminal *term, unsigned char *fi,
-		     unsigned char **real_file, int safe, int resume)
+static void
+lookup_unique_name(struct terminal *term, unsigned char *file,
+		void (*callback)(struct terminal *, unsigned char *, void *),
+		void *data)
 {
-	unsigned char *download_dir = get_opt_str("document.download.directory");
-	unsigned char *file;
+	/* TODO: If the file already exists, possibly:
+	 * * inform the user
+	 * * allow to resume the download
+	 * * allow to specify a new name
+	 * * allow to rename the old file
+	 * --pasky */
+	file = get_unique_name(file);
+	callback(term, file, data);
+}
+
+
+static void create_download_file_do(struct terminal *, unsigned char *, void *);
+
+struct cdf_hop {
+	unsigned char **real_file;
+	int safe, resume;
+
+	void (*callback)(struct terminal *, int, void *);
+	void *data;
+};
+
+void
+create_download_file(struct terminal *term, unsigned char *fi,
+		     unsigned char **real_file, int safe, int resume,
+		     void (*callback)(struct terminal *, int, void *),
+		     void *data)
+{
+	struct cdf_hop *cdf_hop = mem_calloc(1, sizeof(struct cdf_hop));
 	unsigned char *wd;
-	int h;
+
+	if (!cdf_hop) {
+		callback(term, -1, data);
+		return;
+	}
+
+	cdf_hop->real_file = real_file;
+	cdf_hop->safe = safe;
+	cdf_hop->resume = resume;
+	cdf_hop->callback = callback;
+	cdf_hop->data = data;
+
+	/* FIXME: The wd bussiness is probably useless here? --pasky */
+	wd = get_cwd();
+	set_cwd(term->cwd);
+
+	if (!get_opt_int("document.download.overwrite") || resume) {
+		/* This never needs asynchronous handling, so... */
+		/* TODO: Merge it to lookup_unique_name() in the future.
+		 * --pasky */
+		unsigned char *file = expand_tilde(fi);
+
+		create_download_file_do(term, file, cdf_hop);
+	} else {
+		/* The tilde will be expanded by get_unique_name() */
+		lookup_unique_name(term, fi, create_download_file_do,
+				   cdf_hop);
+	}
+
+	if (wd) {
+		set_cwd(wd);
+		mem_free(wd);
+	}
+}
+
+static void
+create_download_file_do(struct terminal *term, unsigned char *file, void *data)
+{
+	struct cdf_hop *cdf_hop = data;
+	unsigned char *download_dir = get_opt_str("document.download.directory");
+	unsigned char *wd;
+	int h = -1;
 	int i;
 	int saved_errno;
 #ifdef NO_FILE_SECURITY
 	int sf = 0;
 #else
-	int sf = safe;
+	int sf = cdf_hop->safe;
 #endif
+
+	if (!file) goto finish;
 
 	wd = get_cwd();
 	set_cwd(term->cwd);
 
-	if (!get_opt_int("document.download.overwrite") || resume) {
-		file = expand_tilde(fi);
-	} else {
-		/* The tilde will be expanded by get_unique_name() */
-		file = get_unique_name(fi);
-	}
-
-	if (!file) return -1;
-
-	h = open(file, O_CREAT | O_WRONLY | (sf && !resume ? O_EXCL : 0),
+	h = open(file, O_CREAT | O_WRONLY | (sf && !cdf_hop->resume ? O_EXCL : 0),
 		 sf ? 0600 : 0666);
 	saved_errno = errno; /* Saved in case of ... --Zas */
 
@@ -646,7 +707,7 @@ create_download_file(struct terminal *term, unsigned char *fi,
 	} else {
 		set_bin(h);
 
-		if (!safe) {
+		if (!cdf_hop->safe) {
 			safe_strncpy(download_dir, file, MAX_STR_LEN);
 
 			/* Find the used directory so it's available in history */
@@ -657,11 +718,15 @@ create_download_file(struct terminal *term, unsigned char *fi,
 		}
 	}
 
-	if (real_file)
-		*real_file = file;
+	if (cdf_hop->real_file)
+		*cdf_hop->real_file = file;
 	else
 		mem_free(file);
-	return h;
+
+finish:
+	cdf_hop->callback(term, h, cdf_hop->data);
+	mem_free(cdf_hop);
+	return;
 }
 
 
@@ -740,44 +805,64 @@ subst_file(unsigned char *prog, unsigned char *file)
 	return n;
 }
 
+
+static void common_download_do(struct terminal *, int, void *);
+
+struct cmdw_hop {
+	struct session *ses;
+	unsigned char *real_file;
+	int resume;
+};
+
 static void
 common_download(struct session *ses, unsigned char *file, int resume)
 {
-	struct download *down = NULL;
-	unsigned char *real_file = NULL;
-	int h;
-	unsigned char *url = ses->dn_url;
-	struct stat buf;
+	struct cmdw_hop *cmdw_hop;
 
-	if (!url) return;
+	if (!ses->dn_url) return;
+
+	cmdw_hop = mem_calloc(1, sizeof(struct cmdw_hop));
+	if (!cmdw_hop) return;
+	cmdw_hop->ses = ses;
+	cmdw_hop->resume = resume;
 
 	kill_downloads_to_file(file);
 
-	h = create_download_file(ses->term, file, &real_file, 0, resume);
-	if (h == -1) return;
+	create_download_file(ses->term, file, &cmdw_hop->real_file, 0, resume,
+			common_download_do, cmdw_hop);
+}
+
+static void
+common_download_do(struct terminal *term, int fd, void *data)
+{
+	struct cmdw_hop *cmdw_hop = data;
+	struct download *down = NULL;
+	unsigned char *url = cmdw_hop->ses->dn_url;
+	struct stat buf;
 
 	down = mem_calloc(1, sizeof(struct download));
-	if (!down) return;
+	if (!down) goto error;
 
 	down->url = stracpy(url);
 	if (!down->url) goto error;
 
-	down->file = real_file;
+	down->file = cmdw_hop->real_file;
 
-	if (fstat(h, &buf)) goto error;
+	if (fstat(fd, &buf)) goto error;
 	down->last_pos = (int) buf.st_size;
 
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;
-	down->handle = h;
-	down->ses = ses;
+	down->handle = fd;
+	down->ses = cmdw_hop->ses;
 	down->remotetime = 0;
 
 	add_to_list(downloads, down);
-	load_url(url, ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE,
-		 (resume ? down->last_pos : 0));
-	display_download(ses->term, down, ses);
+	load_url(url, cmdw_hop->ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE,
+		 (cmdw_hop->resume ? down->last_pos : 0));
+	display_download(cmdw_hop->ses->term, down, cmdw_hop->ses);
 
+	mem_free(cmdw_hop);
 	return;
 
 error:
@@ -785,6 +870,7 @@ error:
 		if (down->url) mem_free(down->url);
 		mem_free(down);
 	}
+	mem_free(cmdw_hop);
 }
 
 void
@@ -804,12 +890,18 @@ void tp_cancel(struct session *);
 void tp_free(struct session *);
 
 
+static void continue_download_do(struct terminal *, int, void *);
+
+struct codw_hop {
+	struct session *ses;
+	unsigned char *real_file;
+	unsigned char *file;
+};
+
 static void
 continue_download(struct session *ses, unsigned char *file)
 {
-	struct download *down = NULL;
-	unsigned char *real_file = NULL;
-	int h;
+	struct codw_hop *codw_hop;
 	unsigned char *url = ses->tq_url;
 
 	if (!url) return;
@@ -822,10 +914,23 @@ continue_download(struct session *ses, unsigned char *file)
 		}
 	}
 
+	codw_hop = mem_calloc(1, sizeof(struct codw_hop));
+	if (!codw_hop) return; /* XXX: Something for mem_free()...? --pasky */
+	codw_hop->ses = ses;
+	codw_hop->file = file;
+
 	kill_downloads_to_file(file);
 
-	h = create_download_file(ses->term, file, &real_file, !!ses->tq_prog, 0);
-	if (h == -1) goto cancel;
+	create_download_file(ses->term, file, &codw_hop->real_file,
+			!!ses->tq_prog, 0, continue_download_do, codw_hop);
+}
+
+static void
+continue_download_do(struct terminal *term, int fd, void *data)
+{
+	struct codw_hop *codw_hop = data;
+	struct download *down = NULL;
+	unsigned char *url = codw_hop->ses->tq_url;
 
 	down = mem_calloc(1, sizeof(struct download));
 	if (!down) goto cancel;
@@ -833,36 +938,38 @@ continue_download(struct session *ses, unsigned char *file)
 	down->url = stracpy(url);
 	if (!down->url) goto cancel;
 
-	down->file = real_file;
+	down->file = codw_hop->real_file;
 
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;
 	down->last_pos = 0;
-	down->handle = h;
-	down->ses = ses;
+	down->handle = fd;
+	down->ses = codw_hop->ses;
 
-	if (ses->tq_prog) {
-		down->prog = subst_file(ses->tq_prog, file);
-		mem_free(file);
-		mem_free(ses->tq_prog);
-		ses->tq_prog = NULL;
+	if (codw_hop->ses->tq_prog) {
+		down->prog = subst_file(codw_hop->ses->tq_prog, codw_hop->file);
+		mem_free(codw_hop->file);
+		mem_free(codw_hop->ses->tq_prog);
+		codw_hop->ses->tq_prog = NULL;
 	}
 
-	down->prog_flags = ses->tq_prog_flags;
+	down->prog_flags = codw_hop->ses->tq_prog_flags;
 	add_to_list(downloads, down);
-	change_connection(&ses->tq, &down->stat, PRI_DOWNLOAD, 0);
-	tp_free(ses);
-	display_download(ses->term, down, ses);
+	change_connection(&codw_hop->ses->tq, &down->stat, PRI_DOWNLOAD, 0);
+	tp_free(codw_hop->ses);
+	display_download(codw_hop->ses->term, down, codw_hop->ses);
 
+	mem_free(codw_hop);
 	return;
 
 cancel:
-	tp_cancel(ses);
-	if (ses->tq_prog && file) mem_free(file);
+	tp_cancel(codw_hop->ses);
+	if (codw_hop->ses->tq_prog && codw_hop->file) mem_free(codw_hop->file);
 	if (down) {
 		if (down->url) mem_free(down->url);
 		mem_free(down);
 	}
+	mem_free(codw_hop);
 }
 
 

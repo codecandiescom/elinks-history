@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.13 2003/01/18 23:05:22 pasky Exp $ */
+/* $Id: view.c,v 1.14 2003/01/22 00:49:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3273,22 +3273,29 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 }
 
 void
-save_formatted(struct session *ses, unsigned char *file)
+save_formatted_finish(struct terminal *term, int h, void *data)
 {
-	int h;
-	struct f_data_c *f = current_frame(ses);
+	struct f_data *f_data = data;
 
-	if (!f || !f->f_data) return;
-	h = create_download_file(ses->term, file, NULL, 0, 0);
 	if (h == -1) return;
-	if (dump_to_file(f->f_data, h)) {
-		msg_box(ses->term, NULL,
+	if (dump_to_file(f_data, h)) {
+		msg_box(term, NULL,
 			N_("Save error"), AL_CENTER,
 			N_("Error writing to file"),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
 	}
 	close(h);
+}
+
+void
+save_formatted(struct session *ses, unsigned char *file)
+{
+	struct f_data_c *f = current_frame(ses);
+
+	if (!f || !f->f_data) return;
+	create_download_file(ses->term, file, NULL, 0, 0,
+			     save_formatted_finish, f->f_data);
 }
 
 void

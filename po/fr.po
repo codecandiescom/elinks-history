@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-31 10:20+0100\n"
-"PO-Revision-Date: 2004-12-31 10:21+0100\n"
+"POT-Creation-Date: 2004-12-31 13:20+0100\n"
+"PO-Revision-Date: 2004-12-31 13:21+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -5571,7 +5571,7 @@ msgstr ""
 "Description du gestionnaire spécifique à ce système (par exemple,\n"
 "unix, unix-xwin, ...)."
 
-#: src/mime/backend/default.c:64 src/mime/backend/mailcap.c:104
+#: src/mime/backend/default.c:64 src/mime/backend/mailcap.c:103
 msgid "Ask before opening"
 msgstr "Demander avant ouverture"
 
@@ -5622,7 +5622,7 @@ msgid "Option system"
 msgstr "Système de configuration"
 
 #. name:
-#: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:670
+#: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:669
 msgid "Mailcap"
 msgstr "Mailcap"
 
@@ -5637,41 +5637,39 @@ msgstr "Activer le support de mailcap."
 #: src/mime/backend/mailcap.c:100
 msgid ""
 "Mailcap search path. Colon-separated list of files.\n"
-"Leave as \"\" to use MAILCAP environment variable or\n"
-"built-in defaults instead."
+"Leave as \"\" to use MAILCAP environment variable instead."
 msgstr ""
 "Chemin de recherche pour Mailcap. Liste de fichiers séparés par des "
 "virgules.\n"
-"Mettre la valeur \"\" pour utiliser la variable d'environnement MAILCAP ou\n"
-"les valeurs par défaut."
+"Mettre la valeur \"\" pour utiliser la variable d'environnement MAILCAP."
 
-#: src/mime/backend/mailcap.c:106
+#: src/mime/backend/mailcap.c:105
 msgid "Ask before using the handlers defined by mailcap."
 msgstr "Demander avant d'utiliser les programmes définis par mailcap."
 
-#: src/mime/backend/mailcap.c:108
+#: src/mime/backend/mailcap.c:107
 msgid "Type query string"
 msgstr "Chaîne de demande de type"
 
-#: src/mime/backend/mailcap.c:110
+#: src/mime/backend/mailcap.c:109
 msgid ""
 "Type of description to show in \"what shall I do with this file\"\n"
 "query dialog:\n"
-"0 is show \"mailcap\".\n"
-"1 is show program to be run.\n"
-"2 is show mailcap description field if any; \"mailcap\" otherwise."
+"0 is show \"mailcap\"\n"
+"1 is show program to be run\n"
+"2 is show mailcap description field if any; \"mailcap\" otherwise"
 msgstr ""
 "Type de description à montrer dans le dialogue \"que devons-nous faire avec "
 "ce fichier\"\n"
-"0 montrer \"mailcap\".\n"
-"1 montrer le programme à exécuter.\n"
-"2 montrer le champ de description mailcap si existant; \"mailcap\" sinon."
+"0 montrer \"mailcap\"\n"
+"1 montrer le programme à exécuter\n"
+"2 montrer le champ de description mailcap si existant; \"mailcap\" sinon"
 
-#: src/mime/backend/mailcap.c:116
+#: src/mime/backend/mailcap.c:115
 msgid "Prioritize entries by file"
 msgstr "Ordre de priorité par fichier"
 
-#: src/mime/backend/mailcap.c:118
+#: src/mime/backend/mailcap.c:117
 msgid ""
 "Prioritize entries by the order of the files in the mailcap\n"
 "path. This means that wildcard entries (like: image/*) will\n"
@@ -5682,38 +5680,35 @@ msgstr ""
 "entrées joker (comme: image/*) seront aussi traitées avant\n"
 "le choix du gestionnaire."
 
-#: src/mime/backend/mailcap.c:353
+#: src/mime/backend/mailcap.c:352
 #, c-format
 msgid "Badly formated mailcap entry for type %s in \"%s\" line %d"
 msgstr "Entrée mailcap mal formatée pour le type %s dans \"%s\" ligne %d"
 
 #. name:
-#: src/mime/backend/mimetypes.c:47 src/mime/backend/mimetypes.c:287
+#: src/mime/backend/mimetypes.c:47 src/mime/backend/mimetypes.c:286
 msgid "Mimetypes files"
 msgstr "Fichiers mime.types"
 
 #: src/mime/backend/mimetypes.c:49
 msgid ""
-"Options for the support of mimetypes files. Mimetypes files\n"
-"can be used to find the content type of an URL by looking at the\n"
-"extension of the file name."
+"Options for the support of mime.types files. These files\n"
+"can be used to find the content type of an URL by looking at\n"
+"the extension of the file name."
 msgstr ""
 "Options pour le support des fichiers mime.types. Ces fichiers\n"
 "peuvent être consultés pour trouver le type de contenu associé\n"
-"à une URL en fonction de l'extension de fichier utilisée."
+"à une URL en fonction de l'extension du nom de fichier."
 
 #: src/mime/backend/mimetypes.c:55
 msgid "Enable mime.types support."
 msgstr "Activer le support des fichiers mime.types."
 
 #: src/mime/backend/mimetypes.c:59
-msgid ""
-"Mimetypes search path. Colon-separated list of files.\n"
-"Leave as \"\" to use built-in default instead."
+msgid "The search path for mime.types files. Colon-separated list of files."
 msgstr ""
-"Chemin de recherche pour les fichiers de types mime.\n"
-"Liste de fichiers séparés par des virgules.\n"
-"Mettre \"\" pour utiliser la valeur interne par défaut."
+"Chemin de recherche pour les fichiers mime.types.\n"
+"Liste séparée par des virgules."
 
 #: src/mime/dialogs.c:66
 msgid "Delete extension"
@@ -5938,23 +5933,23 @@ msgstr "Autoriser la lecture des fichiers spéciaux"
 
 #: src/protocol/file/file.c:58
 msgid ""
-"Allow reading from non-regular files? (DANGEROUS - reading\n"
-"/dev/urandom or /dev/zero can ruin your day!)"
+"Whether to allow reading from non-regular files.\n"
+"Note this can be dangerous; reading /dev/urandom or\n"
+"/dev/zero can ruin your day!"
 msgstr ""
-"Autoriser la lecture des fichiers spéciaux ? (DANGEREUX - lire\n"
-"/dev/urandom ou /dev/zero peut ruiner votre journée !)"
+"Autoriser ou non la lecture des fichiers spéciaux.\n"
+"Notez que cela peut être dangereux; lire /dev/urandom\n"
+"ou /dev/zero peut ruiner votre journée !"
 
-#: src/protocol/file/file.c:61
+#: src/protocol/file/file.c:62
 msgid "Show hidden files in directory listing"
 msgstr "Montrer les fichiers cachés"
 
-#: src/protocol/file/file.c:63
+#: src/protocol/file/file.c:64
 msgid ""
-"Show hidden files in directory listing ?\n"
-"If set to false, files with name starting with a dot will be\n"
+"When set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
-"Montrer les fichiers cachés ?\n"
 "Si mis à faux, les fichiers dont le nom commencent par un point\n"
 "seront cachés lors de la visualisation du contenu d'un répertoire\n"
 "local."
@@ -5984,7 +5979,7 @@ msgid "Finger"
 msgstr "Finger"
 
 #. name:
-#: src/protocol/ftp/ftp.c:53 src/protocol/ftp/ftp.c:88
+#: src/protocol/ftp/ftp.c:53 src/protocol/ftp/ftp.c:83
 msgid "FTP"
 msgstr "FTP"
 
@@ -6032,7 +6027,7 @@ msgstr ""
 "Utiliser PASV au lieu de PORT (mode passif contre mode actif, IPv4\n"
 "seulement)."
 
-#: src/protocol/ftp/ftp.c:74 src/protocol/ftp/ftp.c:78
+#: src/protocol/ftp/ftp.c:74
 msgid "Use passive mode (IPv6)"
 msgstr "Utiliser le mode passif (IPv6)"
 
@@ -6041,14 +6036,6 @@ msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
 msgstr ""
 "Utiliser EPSV au lieu de EPRT (mode passif contre mode actif, IPv6\n"
 "seulement)."
-
-#: src/protocol/ftp/ftp.c:80
-msgid ""
-"Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
-"Works only with IPv6 enabled, so nothing interesting for you."
-msgstr ""
-"Utiliser EPSV au lieu de EPRT (mode passif contre mode actif, IPv6\n"
-"seulement donc inutile pour vous)."
 
 #. name:
 #: src/protocol/gopher/gopher.c:47
@@ -7378,48 +7365,3 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1267
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "accept() failed: %d (%s)"
-#~ msgstr "échec de accept(): %d (%s)"
-
-#~ msgid "socket() failed: %d (%s)"
-#~ msgstr "échec de socket(): %d (%s)"
-
-#~ msgid "bind() failed: %d (%s)"
-#~ msgstr "échec de bind(): %d (%s)"
-
-#~ msgid "listen() failed: %d (%s)"
-#~ msgstr "échec de listen(): %d (%s)"
-
-#~ msgid "connect() failed: %d (%s)"
-#~ msgstr "échec de connect(): %d (%s)"
-
-#~ msgid "Border type"
-#~ msgstr "Type de bordure"
-
-#~ msgid "I/O in UTF8"
-#~ msgstr "E/S en UTF8"
-
-#~ msgid "Enable transparency"
-#~ msgstr "Activer la transparence"
-
-#~ msgid "Use underline"
-#~ msgstr "Utiliser le souligné"
-
-#~ msgid "Use ^[[11m"
-#~ msgstr "Utiliser ^[[11m"
-
-#~ msgid "Block the cursor"
-#~ msgstr "Bloquer le curseur"
-
-#~ msgid "Assume the file is HTML"
-#~ msgstr "Considérer le fichier comme HTML"
-
-#~ msgid ""
-#~ "Prevents numbering of links in the -dump output; this was the\n"
-#~ "default behaviour until 0.5pre12.\n"
-#~ "Note that this really affects only -dump, nothing else."
-#~ msgstr ""
-#~ "Supprime la numérotation des liens dans la sortie de -dump; ceci \n"
-#~ "était le fonctionnement par défaut jusqu'à la version 0.5pre12.\n"
-#~ "Notez que cette option ne concerne que -dump et rien d'autre."

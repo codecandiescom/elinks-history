@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.61 2002/12/08 21:01:20 pasky Exp $ */
+/* $Id: menu.c,v 1.62 2002/12/08 22:05:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,7 +380,6 @@ static struct menu_item file_menu12[] = {
 #endif
 #ifdef BOOKMARKS
 	{TEXT(T_BOOKMARKS), "s", TEXT(T_HK_BOOKMARKS), MENU_FUNC menu_bookmark_manager, (void *)0, 0, 0},
-	{TEXT(T_ADD_BOOKMARK), "a", TEXT(T_HK_ADD_BOOKMARK), MENU_FUNC launch_bm_add_doc_dialog, (void *)0, 0, 0},
 #endif
 };
 

@@ -1,3 +1,61 @@
+Fri Nov 26 17:27:00 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser/forms.c:
+
+	Back to previous version. Links numbering should be correct now.  
+
+Fri Nov 26 17:23:45 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/renderer.c:
+
+	Partial revert hidden links change.  
+
+Fri Nov 26 17:16:20 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Fri Nov 26 10:28:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/lists.h:
+
+	Oops. Fix the assert message from last patch. A little reformatting
+	on the side.  
+
+Fri Nov 26 10:26:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, util/lists.h:
+
+	Introduce list_is_singleton() macro with Miciah as the inspirational
+	source.  
+
+Thu Nov 25 23:53:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/options.inc, dialogs/menu.c:
+
+	Use add_shell_quoted_to_string instead of add_shell_safe_to_string 
+	in format_command so that URIs passed to external commands will be 
+	escaped against shell misinterpretation rather than correct browser 
+	interpretation. Add a warning to document.uri_passing._template_ not
+	to escape the URI there.  
+
+Thu Nov 25 23:50:15 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: osdep/osdep.c, util/conv.c, util/conv.h:
+
+	Add |len| parameter to add_shell_quoted_to_string.  
+
+Thu Nov 25 23:24:09 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: osdep/osdep.c, util/conv.c, util/conv.h:
+
+	Factor add_shell_quoted_to_string out from the code for GNU Screen's 
+	clipboard in the generic set_clipboard_text.
+	add_shell_quoted_to_string adds ', the given source string with all
+	occurrences of ' changed to '\'', and another ' to the given
+	destination string.  
+
 Thu Nov 25 22:19:18 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/sched/action.c:

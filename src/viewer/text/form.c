@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.56 2003/11/11 15:29:34 zas Exp $ */
+/* $Id: form.c,v 1.57 2003/11/17 22:17:38 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -624,7 +624,7 @@ again:
 			else goto again;
 		internal("Could not assing boundary");
 
-nb:;
+nb:
 	}
 
 	for (i = 0; i < nbound_ptrs; i++)

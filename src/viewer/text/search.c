@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.112 2003/11/15 19:01:16 kuser Exp $ */
+/* $Id: search.c,v 1.113 2003/11/15 19:05:21 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,6 +573,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 
 	doctmp = doc;
 
+find_next:
 	while (pos < doclen && (s1v[pos].y+ypv < yp-1 || s1v[pos].y+ypv > yy)) pos++;
 	doctmp = &doc[pos];
 	s1 = &s1v[pos];

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.125 2003/07/02 17:02:45 zas Exp $ */
+/* $Id: view.c,v 1.126 2003/07/02 17:13:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -514,25 +514,34 @@ is_in_range(struct f_data *f, int y, int yw, unsigned char *txt,
 
 	assert(f && txt && min && max);
 
-	if (min || max) *min = MAXINT, *max = 0;
+	*min = MAXINT, *max = 0;
 	l = strlen(txt);
-	if (get_range(f, y, yw, l, &s1, &s2)) return 0;
+
+	if (get_range(f, y, yw, l, &s1, &s2))
+		return 0;
+
 	for (; s1 <= s2; s1++) {
 		register int i;
 
-		if (srch_cmp(s1->c, txt[0])) {
-unable_to_handle_kernel_paging_request___oops:
+		if (srch_cmp(s1->c, txt[0]))
 			continue;
-		}
+
 		for (i = 1; i < l; i++)
 			if (srch_cmp(s1[i].c, txt[i]))
-				goto unable_to_handle_kernel_paging_request___oops;
-		if (s1[i].y < y || s1[i].y >= y + yw) continue;
-		if (!min && !max) return 1;
+				continue;
+
+		if (s1[i].y < y || s1[i].y >= y + yw)
+			continue;
+
 		found = 1;
-		for (i = 0; i < l; i++) if (s1[i].n) {
-			if (s1[i].x < *min) *min = s1[i].x;
-			if (s1[i].x + s1[i].n > *max) *max = s1[i].x + s1[i].n;
+
+		for (i = 0; i < l; i++) {
+			if (!s1[i].n) continue;
+
+			if (s1[i].x < *min)
+				*min = s1[i].x;
+			if (s1[i].x + s1[i].n > *max)
+				*max = s1[i].x + s1[i].n;
 		}
 	}
 	return found;

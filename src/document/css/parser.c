@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.130 2004/09/21 09:45:40 pasky Exp $ */
+/* $Id: parser.c,v 1.131 2004/09/21 09:58:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,8 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+/* #define CSS_DEBUG */
 
 
 void

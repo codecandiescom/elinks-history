@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.75 2004/09/21 09:57:21 pasky Exp $ */
+/* $Id: apply.c,v 1.76 2004/09/21 09:58:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,8 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+/* #define CSS_DEBUG */
 
 
 /* TODO: A way to disable CSS completely, PLUS a way to stop various property

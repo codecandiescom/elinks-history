@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-11 07:32+0100\n"
-"PO-Revision-Date: 2003-12-08 20:45+0100\n"
+"PO-Revision-Date: 2003-12-11 11:40+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4137,7 +4137,7 @@ msgstr "~Zpátky"
 
 #: src/dialogs/menu.c:325
 msgid "Go forward"
-msgstr ""
+msgstr "K~upøedu"
 
 #: src/dialogs/menu.c:331 src/dialogs/menu.c:387
 msgid "Bookm~ark document"
@@ -4181,7 +4181,7 @@ msgstr "~Bì¾ na URL"
 
 #: src/dialogs/menu.c:375
 msgid "Go ~forward"
-msgstr ""
+msgstr "~Kupøedu"
 
 #: src/dialogs/menu.c:377
 msgid "~History"
@@ -4200,9 +4200,8 @@ msgid "Save UR~L as"
 msgstr "Ulo¾ ~URL pod jménem"
 
 #: src/dialogs/menu.c:385
-#, fuzzy
 msgid "Sa~ve formatted document"
-msgstr "Ulo¾it zformátovaný dokument"
+msgstr "Ulo¾it zformátovaný ~dokument"
 
 #: src/dialogs/menu.c:393
 msgid "~Kill background connections"
@@ -4570,6 +4569,9 @@ msgid ""
 "If you want to save passwords for this URL, enable it by the \"Toggle saving"
 "\" button."
 msgstr ""
+"Pro tuto URL nemám nic ulo¾eného.\n"
+"Pokud chcete povolit ukládání hesel pro tuto URL, mù¾ete to povolit stiskem"
+"tlaèítka \"Pøepnout ukládání\"."
 
 #: src/formhist/dialogs.c:172
 msgid "Toggle saving"
@@ -5778,17 +5780,8 @@ msgstr "Chyba pøi ukládání"
 msgid "Error writing to file"
 msgstr "Chyba pøi zápisu do souboru"
 
-#~ msgid "Save formatted ~document"
-#~ msgstr "Ulo¾ zformátovaný ~dokument"
-
 #~ msgid "after resume"
 #~ msgstr "po posledním navázání"
-
-#~ msgid "Stop"
-#~ msgstr "Stop"
-
-#~ msgid "Bad signal number: %d"
-#~ msgstr "Chybné èíslo signálu: %d"
 
 #~ msgid "Deleting used folder"
 #~ msgstr "Tuhle slo¾ku teï nìkdo pou¾ívá"
@@ -5804,9 +5797,6 @@ msgstr "Chyba pøi zápisu do souboru"
 
 #~ msgid "Enable LEDs."
 #~ msgstr "Zapnout LED indikátory."
-
-#~ msgid "No downloads"
-#~ msgstr "®ádné downloady"
 
 #~ msgid "Global histor~y"
 #~ msgstr "~Globální historie"
@@ -5858,23 +5848,8 @@ msgstr "Chyba pøi zápisu do souboru"
 #~ msgid "Clear global history?"
 #~ msgstr "Smazat globální historii?"
 
-#~ msgid "No entry."
-#~ msgstr "®ádná polo¾ka."
-
 #~ msgid "%ld more entries."
 #~ msgstr "%ld dal¹ích polo¾ek."
-
-#~ msgid "Cache info"
-#~ msgstr "Info o cachi"
-
-#~ msgid "Cache content: %s"
-#~ msgstr "Obsah cache: %s"
-
-#~ msgid "~Cache info"
-#~ msgstr "Info o ~cachi"
-
-#~ msgid "Overlapping matches"
-#~ msgstr "Pøekrývající se výskyty"
 
 #~ msgid ""
 #~ "Let matches overlap (only relevant to regex search).\n"
@@ -5929,12 +5904,6 @@ msgstr "Chyba pøi zápisu do souboru"
 #~ msgid "Secure open failed"
 #~ msgstr "Bezpeèné otevírání souboru selhalo"
 
-#~ msgid "Unknown event."
-#~ msgstr "Neznámá událost."
-
-#~ msgid "A field"
-#~ msgstr "Pole"
-
 #~ msgid ""
 #~ "\n"
 #~ "\n"
@@ -5957,15 +5926,6 @@ msgstr "Chyba pøi zápisu do souboru"
 #~ "Data/stack = %li KiB\n"
 #~ "Knihovny = %li KiB\n"
 #~ "Dirty stránky = %li KiB"
-
-#~ msgid "Verify the peer's SSL certificate."
-#~ msgstr "Kontrolovat SSL certifikát druhé strany."
-
-#~ msgid "Columns"
-#~ msgstr "Sloupce"
-
-#~ msgid "Rows"
-#~ msgstr "Øádky"
 
 #~ msgid ""
 #~ "Ask if a login form should be saved to file or not.\n"

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.69 2004/06/16 20:08:47 zas Exp $ */
+/* $Id: textarea.c,v 1.70 2004/06/16 20:16:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -519,10 +519,11 @@ yyyy:
 	return FRAME_EVENT_REFRESH;
 }
 
+/* BEGINNING_OF_BUFFER */
 enum frame_event_status
 textarea_op_bob(struct form_state *fs, struct form_control *frm, int rep)
 {
-	unsigned char *position = fs->value + fs->state;
+	unsigned char *position;
 	struct line_info *line;
 	int y;
 
@@ -532,6 +533,8 @@ textarea_op_bob(struct form_state *fs, struct form_control *frm, int rep)
 	line = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
+	position = fs->value + fs->state;
+	
 	for (y = 0; line[y].start; y++) {
 		if (position <= line[y].end) {
 			fs->state -= line[y].start - fs->value;
@@ -550,10 +553,11 @@ x:
 	return FRAME_EVENT_REFRESH;
 }
 
+/* END_OF_BUFFER */
 enum frame_event_status
 textarea_op_eob(struct form_state *fs, struct form_control *frm, int rep)
 {
-	unsigned char *position = fs->value + fs->state;
+	unsigned char *position;
 	struct line_info *line;
 	int y;
 
@@ -563,6 +567,8 @@ textarea_op_eob(struct form_state *fs, struct form_control *frm, int rep)
 	line = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
+	position = fs->value + fs->state;
+	
 	for (y = 0; line[y].start; y++) {
 		if (position <= line[y].end) {
 			for (; line[y].start && line[y + 1].start; y++) {

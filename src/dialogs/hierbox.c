@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.26 2003/09/13 06:55:55 miciah Exp $ */
+/* $Id: hierbox.c,v 1.27 2003/09/25 19:22:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@ recursively_set_expanded(struct listbox_item *box, int expanded)
 }
 
 int
-hierbox_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
+hierbox_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
 {
 	switch (ev->ev) {
 		case EV_KBD:

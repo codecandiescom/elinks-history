@@ -1,3 +1,223 @@
+Mon Mar  4 00:55:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure.in,
+	configure, stamp-h.in:
+	
+	Move dlopen check few lines up so now the output isn't messy
+
+Mon Mar  4 00:54:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	typo compilation fix
+
+Mon Mar  4 00:49:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html_r.c, html_tbl.c, links.h:
+	
+	Improved performance of rendering nested tables (by mikulas, from
+	0.97pre4)
+
+Mon Mar  4 00:37:38 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	Fixed one case where 0 would go to the 'save formatted document'
+	output (by mikulas, from 0.97pre4)
+
+Mon Mar  4 00:34:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	some sanity checks
+
+Mon Mar  4 00:27:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* session.c:
+	
+	enlarged one static string buffer.. (from 0.97pre4)
+
+Mon Mar  4 00:20:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	Do not accept '<' without name as a tag (by mikulas, from 0.97pre4)
+
+Mon Mar  4 00:17:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	Input field is one char larger (by mikulas, from 0.97pre4)
+
+Mon Mar  4 00:15:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* http.c:
+	
+	Always trust 'Content-Length' when communicating with HTTP/1.1
+	server -- work around broken HTTP/1.1 servers that send Connection:
+	close, but keep the connection.
+	
+	By mikulas, from 0.97pre4
+
+Mon Mar  4 00:12:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* http.c, links.h:
+	
+	Report terminal size in User-Agent (by mikulas, from 0.97pre4)
+
+Mon Mar  4 00:09:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in:
+	
+	Test for dlopen in configure (openssl needs it???) (by mikulas,
+	from 0.97pre4)
+
+Mon Mar  4 00:06:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* kbd.c:
+	
+	Fixed ESC timeout (by mikulas, from 0.97pre4)
+
+Mon Mar  4 00:04:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* links.h:
+	
+	Removed LONG_MIN, LONG_MAX because they were undefined on irix (by
+	mikulas, from 0.97pre4)
+
+Mon Mar  4 00:01:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* main.c:
+	
+	-dump doesn't get stuck in redir loops anymore (by mikulas, from
+	0.97pre4)
+
+Sun Mar  3 23:51:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* charsets.c:
+	
+	Handle encoding to utf-8 correctly (by mikulas, from 0.97pre4)
+
+Sun Mar  3 23:46:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* links.h:
+	
+	added #define __EXTENSION__ - hope it helps on SunOS (by mikulas,
+	from 0.97pre4)
+
+Sun Mar  3 23:43:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, language.h, language.inc, intl/index.txt,
+	intl/indonesian.lng:
+	
+	indonesian translation by faizal@mfaizal.net (from 0.97pre4)
+
+Sun Mar  3 23:33:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* language.h, language.inc, intl/finnish.lng, intl/index.txt,
+	AUTHORS:
+	
+	finnish translation by ik@iki.fi (from 0.97pre3)
+
+Sun Mar  3 23:30:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in, AUTHORS, links.h, select.c:
+	
+	compilation fix by mikulas (from 0.97pre3)
+
+Sun Mar  3 23:24:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* ftp.c:
+	
+	add support for color dirs inside ftp
+
+Sun Mar  3 23:16:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, ftp.c, links.h:
+	
+	ftp massive cleanup - tidyup, removed some braindead stuff,
+	varnames expanding,few comments
+
+Sun Mar  3 22:55:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS:
+	
+	blabla
+
+Sun Mar  3 16:56:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* kbd.c, menu.c, os_dep.c:
+	
+	more compilation warning fixes
+
+Sun Mar  3 16:46:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* language.inc, intl/gen-intl:
+	
+	more structures in brackets in arrays ;)
+
+Sun Mar  3 16:46:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* links.h, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
+	configure, configure.in, stamp-h.in:
+	
+	check for arpa/inet.h
+
+Sun Mar  3 16:45:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* kbd.c, menu.c, os_dep.c, sched.c, types.c:
+	
+	silenced some more compiler warnings..
+
+Sun Mar  3 16:30:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	oops - compilation fix
+
+Sun Mar  3 16:22:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in:
+	
+	enabled -Wall for gcc - all compiler warnings
+
+Sun Mar  3 16:22:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure, configure.in, intl/gen-intl:
+	
+	enabled -Wall for gcc - show all warnings
+
+Sun Mar  3 16:21:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c, html.c:
+	
+	silenced compiler warnings
+
+Sun Mar  3 16:16:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* codepage.inc, uni_7b.inc, Unicode/gen-7b, Unicode/gen-cp:
+	
+	enclose array members (structures) into {} - silencing compiler
+	warnings
+
+Sun Mar  3 15:55:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* menu.c:
+	
+	fixed one race condition in httpauth
+
+Sun Mar  3 15:48:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.c, bookmarks.c, charsets.c, default.c, html.c, html_r.c,
+	html_tbl.c, kbdbind.c, links.h, lua.c, os_dep.c, sched.c,
+	session.c, url.c, view.c:
+	
+	tidyup - blank lines, reindentations, few comments, removed unused
+	variables, silenced compiler warnings
+
 Sat Mar  2 15:09:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* language.inc, intl/czech.lng:

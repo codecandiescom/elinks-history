@@ -52,7 +52,6 @@ plural.c: plural.y
 
 install-data-local: $(builddir)/charset.alias all
 	@if test '@USE_INCLUDED_LIBINTL@' = yes; then \
-	  $(mkinstalldirs) $(DESTDIR)$(libdir); \
 	  temp=$(DESTDIR)$(libdir)/t-charset.alias; \
 	  dest=$(DESTDIR)$(libdir)/charset.alias; \
 	  if test -f $(DESTDIR)$(libdir)/charset.alias; then \
@@ -62,6 +61,7 @@ install-data-local: $(builddir)/charset.alias all
 	    rm -f $$temp; \
 	  else \
 	    if test @GLIBC21@ = no; then \
+	      $(mkinstalldirs) $(DESTDIR)$(libdir); \
 	      orig=charset.alias; \
 	      sed -f ref-add.sed $$orig > $$temp; \
 	      $(INSTALL_DATA) $$temp $$dest; \

@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.47 2004/12/19 01:15:22 pasky Exp $ */
+/* $Id: form.h,v 1.48 2004/12/19 16:47:25 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -41,7 +41,7 @@ struct form_state {
 	int state;
 	int vpos;
 	int vypos;
-	
+
 #ifdef CONFIG_ECMASCRIPT
 	/* This holds the ECMAScript object attached to this structure. It can
 	 * be NULL since the object is created on-demand at the first time some

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.71 2003/09/15 20:57:42 jonas Exp $ */
+/* $Id: tables.c,v 1.72 2003/09/15 21:02:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1441,13 +1441,13 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 
 #ifndef DEBUG
-#define H_LINE_X(term, xx, yy) fh[(xx) + 1 + ((term)->x + 2) * (yy)]
-#define V_LINE_X(term, xx, yy) fv[(yy) + 1 + ((term)->y + 2) * (xx)]
+#define H_LINE_X(term, xx, yy) frame[0][(xx) + 1 + ((term)->x + 2) * (yy)]
+#define V_LINE_X(term, xx, yy) frame[1][(yy) + 1 + ((term)->y + 2) * (xx)]
 #else
 #define H_LINE_X(term, xx, yy) (*(xx < -1 || xx > (term)->x + 1 || yy < 0 || yy > (term)->y ? \
-		   	(signed char *) NULL : &fh[(xx) + 1 + ((term)->x + 2) * (yy)]))
+		   	(signed char *) NULL : &frame[0][(xx) + 1 + ((term)->x + 2) * (yy)]))
 #define V_LINE_X(term, xx, yy) (*(xx < 0 || xx > (term)->x || yy < -1 || yy > (term)->y + 1 ? \
-			(signed char *) NULL : &fv[(yy) + 1 + ((term)->y + 2) * (xx)]))
+			(signed char *) NULL : &frame[1][(yy) + 1 + ((term)->y + 2) * (xx)]))
 #endif
 
 #define H_LINE(term, xx, yy) int_max(H_LINE_X(term, (xx), (yy)), 0)
@@ -1490,23 +1490,18 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 static void
 display_table_frames(struct table *t, int x, int y)
 {
-	signed char *fh, *fv;
-	register int i, j;
-	int cx, cy;
-	int fa = 0, fb = 0, fl = 0, fr = 0;
-	int fh_size = (t->x + 2) * (t->y + 1);
-	int fv_size = (t->x + 1) * (t->y + 2);
-
-	fh = fmem_alloc(fh_size);
-	if (!fh) return;
-	memset(fh, -1, fh_size);
-
-	fv = fmem_alloc(fv_size);
-	if (!fv) {
-		fmem_free(fh);
-		return;
-	}
-	memset(fv, -1, fv_size);
+ 	signed char *frame[2];
+  	register int i, j;
+  	int cx, cy;
+  	int fa = 0, fb = 0, fl = 0, fr = 0;
+  	int fh_size = (t->x + 2) * (t->y + 1);
+  	int fv_size = (t->x + 1) * (t->y + 2);
+  
+ 	frame[0] = fmem_alloc(fh_size + fv_size);
+ 	if (!frame[0]) return;
+ 	memset(frame[0], -1, fh_size + fv_size);
+ 
+ 	frame[1] = &frame[0][fh_size];
 
 	if (t->rules == R_NONE) goto cont2;
 
@@ -1620,8 +1615,7 @@ cont2:
 		/*for (cyy = cy1; cyy < cy; cyy++) expand_line(t->p, cyy, cx - 1);*/
 	}
 
-	fmem_free(fh);
-	fmem_free(fv);
+	fmem_free(frame[0]);
 }
 
 void

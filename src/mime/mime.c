@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.3 2003/05/16 22:29:52 zas Exp $ */
+/* $Id: mime.c,v 1.4 2003/05/16 22:38:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,8 +51,8 @@ get_content_type(unsigned char *head, unsigned char *url)
 			if (s) *s = '\0';
 
 			slen = strlen(content_type);
-			while (slen && content_type[--slen - 1] <= ' ') {
-				content_type[--slen] = '\0';
+			while (slen && content_type[--slen] <= ' ') {
+				content_type[slen] = '\0';
 			}
 
 			return content_type;

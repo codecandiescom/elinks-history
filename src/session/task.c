@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.147 2004/12/29 15:04:21 zas Exp $ */
+/* $Id: task.c,v 1.148 2005/01/05 16:54:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -383,9 +383,9 @@ ses_imgmap(struct session *ses)
 	if (get_image_map(cached->head, fragment->data,
 			  fragment->data + fragment->length,
 			  &menu, &ml, ses->loading_uri, ses->task.target_frame,
-			  get_opt_int_tree(ses->tab->term->spec, "charset"),
-			  get_opt_int("document.codepage.assume"),
-			  get_opt_int("document.codepage.force_assumed")))
+			  get_opt_codepage_tree(ses->tab->term->spec, "charset"),
+			  get_opt_codepage("document.codepage.assume"),
+			  get_opt_bool("document.codepage.force_assumed")))
 		return;
 
 	add_empty_window(ses->tab->term, (void (*)(void *)) freeml, ml);

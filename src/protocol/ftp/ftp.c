@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.53 2002/10/12 13:57:12 pasky Exp $ */
+/* $Id: ftp.c,v 1.54 2002/10/12 13:59:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -957,7 +957,7 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 		add_to_str(&str, &strl, tmp);
 	}
 
-	if (!ftp_info->flagtrycwd) {
+	if (ftp_info->sizetype != FTPPARSE_SIZE_UNKNOWN) {
 		snprintf(tmp, 128, "%12lu ",ftp_info->size);
 		add_to_str(&str, &strl, tmp);
 	} else {

@@ -1028,6 +1028,7 @@ dnl ===================================================================
 AC_OUTPUT([ \
  Makefile \
  Unicode/Makefile \
+ config/Makefile \
  contrib/Makefile \
  contrib/elinks.spec \
  contrib/lua/hooks.lua \

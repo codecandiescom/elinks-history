@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.11 2002/05/10 12:46:44 pasky Exp $ */
+/* $Id: error.c,v 1.12 2002/06/15 22:02:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,16 +45,19 @@ struct alloc_header {
 /* Again, this is inherited from old links and I've no idea wtf is it ;). */
 
 void *sp_malloc(size_t);
+void *sp_calloc(size_t, size_t);
 void sp_free(void *);
 void *sp_realloc(void *, size_t);
 
 #define xmalloc sp_malloc
+#define xcalloc sp_calloc
 #define xfree sp_free
 #define xrealloc sp_realloc
 
 #else
 
 #define xmalloc malloc
+#define xcalloc calloc
 #define xfree free
 #define xrealloc realloc
 
@@ -182,6 +185,46 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 	size += L_D_S;
 
 	p = xmalloc(size);
+	if (!p) {
+		error("ERROR: out of memory (malloc returned NULL)\n");
+		return NULL;
+	}
+
+	ah = p;
+	p = (char *)p + L_D_S;
+
+	ah->size = size - L_D_S;
+#ifdef LEAK_DEBUG_LIST
+	ah->file = file;
+	ah->line = line;
+	ah->comment = NULL;
+
+	add_to_list(memory_list, ah);
+#endif
+
+	return p;
+}
+
+void *
+debug_mem_calloc(unsigned char *file, int line, size_t size, size_t eltsize)
+{
+	void *p;
+	struct alloc_header *ah;
+
+	if (!size) return DUMMY;
+
+	/* FIXME: Unfortunately, we can't pass eltsize through to calloc()
+	 * itself, because we add bloat like alloc_header to it, which is
+	 * difficult to be measured in eltsize. Maybe we should round it up to
+	 * next eltsize multiple, but would it be worth the possibly wasted
+	 * space? Someone should make some benchmarks. If you still read this
+	 * comment, it means YOU should help us and do the benchmarks! :)
+	 * Thanks a lot. --pasky */
+
+	mem_amount += size * eltsize;
+	size += L_D_S;
+
+	p = xcalloc(1, size);
 	if (!p) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;

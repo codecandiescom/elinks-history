@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.459 2004/06/24 23:49:11 jonas Exp $ */
+/* $Id: renderer.c,v 1.460 2004/06/25 01:49:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1090,7 +1090,20 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	link_state = get_link_state();
 
 	if (global_doc_opts->num_links_display && link_state == LINK_STATE_NEW) {
-		put_link_number(part);
+		int x_offset = 0;
+
+		/* Don't add link numbers for non accessible links. It seems
+		 * to be caused by the parser putting a space char after stuff
+		 * like <img>-tags or comments wrapped in <a>-tags. See bug 30
+		 * for test case. */
+		while (x_offset < charslen && chars[x_offset] <= ' ')
+			x_offset++;
+
+		/* For pure spaces reset the link state */
+		if (x_offset == charslen)
+			link_state = LINK_STATE_NONE;
+		else
+			put_link_number(part);
 	}
 
 	set_hline(part, chars, charslen, link_state);

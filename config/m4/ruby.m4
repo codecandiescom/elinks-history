@@ -6,12 +6,13 @@ AC_DEFUN([EL_CONFIG_RUBY],
 [
 AC_MSG_CHECKING([for Ruby])
 
-enable_perl="no";
+enable_ruby="no";
 
 EL_SAVE_FLAGS
 
 AC_ARG_ENABLE(ruby,
-	[  --enable-ruby           enable Ruby support], ,
+	[  --enable-ruby           enable Ruby support],
+	[enable_ruby="yes"],
 	[enable_ruby="no"])
 
 AC_MSG_RESULT($enable_ruby)
@@ -65,6 +66,11 @@ if test "$enable_ruby" = "yes"; then
 					LDFLAGS="$rubyldflags $LDFLAGS"
 				fi
 
+				EL_CONFIG(CONFIG_RUBY, [Ruby])
+				LIBS="$RUBY_LIBS $LIBS"
+				CPPFLAGS="$CPPFLAGS $RUBY_CFLAGS"
+				AC_SUBST(RUBY_CFLAGS)
+				AC_SUBST(RUBY_LIBS)
 			else
 				AC_MSG_RESULT(not found, disabling Ruby)
 			fi
@@ -74,13 +80,7 @@ if test "$enable_ruby" = "yes"; then
 	fi
 fi
 
-if test "$cf_result" != "yes"; then
+if test "$enable_ruby" != "yes"; then
 	EL_RESTORE_FLAGS
-else
-	EL_CONFIG(CONFIG_RUBY, [Ruby])
-	LIBS="$RUBY_LIBS $LIBS"
-	CPPFLAGS="$CPPFLAGS $RUBY_CFLAGS"
-	AC_SUBST(RUBY_CFLAGS)
-	AC_SUBST(RUBY_LIBS)
 fi
 ])

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.2 2002/05/23 18:59:21 pasky Exp $ */
+/* $Id: opttypes.c,v 1.3 2002/05/23 19:26:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,8 @@
 #include "protocol/types.h"
 
 
-unsigned char *gen_cmd(struct option *o, unsigned char ***argv, int *argc)
+unsigned char *
+gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	unsigned char *r;
 	if (!*argc) return "Parameter expected";
@@ -58,7 +59,8 @@ exec_cmd(struct option *o, unsigned char ***argv, int *argc)
 }
 
 
-void add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
+void
+add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
 {
 	add_chr_to_str(s, l, '"');
 	while (*q) {
@@ -86,7 +88,8 @@ num_rd(struct option *opt, unsigned char **file)
 	return 1;
 }
 
-void num_wr(struct option *o, unsigned char **s, int *l)
+void
+num_wr(struct option *o, unsigned char **s, int *l)
 {
 	add_knum_to_str(s, l, *((int *) o->ptr));
 }
@@ -123,7 +126,7 @@ str_rd(struct option *opt, unsigned char **file)
 	str++; /* Skip the quote. */
 	*file = str;
 
-	if (str2l >= MAX_STR_LEN) { mem_free(str2); return 0; }
+	if (opt->max && str2l >= opt->max) { mem_free(str2); return 0; }
 
 	mem_free(opt->ptr);
 	opt->ptr = str2;
@@ -131,72 +134,102 @@ str_rd(struct option *opt, unsigned char **file)
 	return 1;
 }
 
-void str_wr(struct option *o, unsigned char **s, int *l)
+void
+str_wr(struct option *o, unsigned char **s, int *l)
 {
-	if (strlen(o->ptr) > o->max - 1) {
+	if (strlen(o->ptr) >= o->max) {
 		unsigned char *s1 = init_str();
 		int l1 = 0;
+
 		add_bytes_to_str(&s1, &l1, o->ptr, o->max - 1);
 		add_quoted_to_str(s, l, s1);
 		mem_free(s1);
+	} else {
+		add_quoted_to_str(s, l, o->ptr);
 	}
-	else add_quoted_to_str(s, l, o->ptr);
 }
+
 
 int
-cp_rd(struct option *o, unsigned char **c)
+cp_rd(struct option *opt, unsigned char **str)
 {
-#if 0
-	unsigned char *tok = get_token(&c);
-	unsigned char *e = NULL;
-	int i;
-	if (!tok) return "Missing argument";
-	/*if (!strcasecmp(c, "none")) i = -1;
-	else */if ((i = get_cp_index(tok)) == -1) e = "Unknown codepage";
-	else *((int *) o->ptr) = i;
-	mem_free(tok);
-	return e;
-#endif
+	void *ptr;
+	int ret;
+
+	/* XXX: We run string parser on this, simulating that this is a string
+	 * option. */
+
+	ptr = opt->ptr;
+	opt->ptr = init_str();
+	ret = str_rd(opt, str);
+	if (!ret) {
+		mem_free(opt->ptr);
+		opt->ptr = ptr;
+		return 0;
+	}
+
+	ret = get_cp_index(opt->ptr);
+	mem_free(opt->ptr);
+	opt->ptr = ptr;
+
+	if (ret < 0) {
+		*((int *) opt->ptr) = ret;
+		return 0;
+	}
+
+	*((int *) opt->ptr) = ret;
+
+	return 1;
 }
 
-void cp_wr(struct option *o, unsigned char **s, int *l)
+void
+cp_wr(struct option *o, unsigned char **s, int *l)
 {
-	unsigned char *n = get_cp_mime_name(*(int *)o->ptr);
-	add_to_str(s, l, n);
+	add_quoted_to_str(s, l, get_cp_mime_name(*((int *) o->ptr)));
 }
+
 
 int
-lang_rd(struct option *o, unsigned char **c)
+lang_rd(struct option *opt, unsigned char **str)
 {
-#if 0
-	int i;
-	unsigned char *tok = get_token(&c);
-	if (!tok) return "Missing argument";
-	for (i = 0; i < n_languages(); i++)
-		if (!(strcasecmp(language_name(i), tok))) {
-			set_language(i);
-			mem_free(tok);
-			return NULL;
+	void *ptr;
+	int ret;
+
+	/* XXX: We run string parser on this, simulating that this is a string
+	 * option. */
+
+	ptr = opt->ptr;
+	opt->ptr = init_str();
+	ret = str_rd(opt, str);
+	if (!ret) {
+		mem_free(opt->ptr);
+		ptr = opt->ptr;
+		return 0;
+	}
+
+	for (ret = 0; ret < n_languages(); ret++)
+		if (!strcasecmp(language_name(ret), opt->ptr)) {
+			mem_free(opt->ptr);
+			opt->ptr = ptr;
+			*((int *) opt->ptr) = ret;
+			set_language(ret);
+			return 1;
 		}
-	mem_free(tok);
-	return "Unknown language";
-#endif
+
+	mem_free(opt->ptr);
+	opt->ptr = ptr;
+
+	*((int *) opt->ptr) = -1;
+
+	return 0;
 }
 
-void lang_wr(struct option *o, unsigned char **s, int *l)
+void
+lang_wr(struct option *o, unsigned char **s, int *l)
 {
 	add_quoted_to_str(s, l, language_name(current_language));
 }
 
-int getnum(unsigned char *s, int *n, int r1, int r2)
-{
-	unsigned char *e;
-	long l = strtol(s, (char **)&e, 10);
-	if (*e || !*s) return -1;
-	if (l < r1 || l >= r2) return -1;
-	*n = (int)l;
-	return 0;
-}
 
 int
 type_rd(struct option *o, unsigned char **c)
@@ -235,8 +268,10 @@ type_rd(struct option *o, unsigned char **c)
 #endif
 }
 
-void type_wr(struct option *o, unsigned char **s, int *l)
+void
+type_wr(struct option *o, unsigned char **s, int *l)
 {
+#if 0
 	struct assoc *a;
 	foreachback(a, assoc) {
 		add_quoted_to_str(s, l, a->label);
@@ -249,7 +284,9 @@ void type_wr(struct option *o, unsigned char **s, int *l)
 		add_to_str(s, l, " ");
 		add_num_to_str(s, l, a->system);
 	}
+#endif
 }
+
 
 int
 ext_rd(struct option *o, unsigned char **c)
@@ -269,15 +306,19 @@ ext_rd(struct option *o, unsigned char **c)
 #endif
 }
 
-void ext_wr(struct option *o, unsigned char **s, int *l)
+void
+ext_wr(struct option *o, unsigned char **s, int *l)
 {
+#if 0
 	struct extension *a;
 	foreachback(a, extensions) {
 		add_quoted_to_str(s, l, a->ext);
 		add_to_str(s, l, " ");
 		add_quoted_to_str(s, l, a->ct);
 	}
+#endif
 }
+
 
 int
 prog_rd(struct option *o, unsigned char **c)
@@ -299,8 +340,10 @@ prog_rd(struct option *o, unsigned char **c)
 #endif
 }
 
-void prog_wr(struct option *o, unsigned char **s, int *l)
+void
+prog_wr(struct option *o, unsigned char **s, int *l)
 {
+#if 0
 	struct protocol_program *a;
 	foreachback(a, *(struct list_head *)o->ptr) {
 		if (!*a->prog) continue;
@@ -308,7 +351,9 @@ void prog_wr(struct option *o, unsigned char **s, int *l)
 		add_to_str(s, l, " ");
 		add_num_to_str(s, l, a->system);
 	}
+#endif
 }
+
 
 /* terminal NAME(str) MODE(0-3) M11_HACK(0-1) BLOCK_CURSOR.RESTRICT_852.COL(0-7) CHARSET(str) [ UTF_8_IO("utf-8") ]*/
 int
@@ -402,8 +447,10 @@ term2_rd(struct option *o, unsigned char **c)
 #endif
 }
 
-void term_wr(struct option *o, unsigned char **s, int *l)
+void
+term_wr(struct option *o, unsigned char **s, int *l)
 {
+#if 0
 	struct term_spec *ts;
 	foreachback(ts, term_specs) {
 		add_quoted_to_str(s, l, ts->term);
@@ -419,10 +466,12 @@ void term_wr(struct option *o, unsigned char **s, int *l)
 			add_to_str(s, l, " utf-8");
 		}
 	}
+#endif
 }
 
+
 int
-color_rd(struct option *o, unsigned char **c)
+color_rd(struct option *opt, unsigned char **file)
 {
 #if 0
 	unsigned char *val = get_token(&c);
@@ -438,6 +487,16 @@ color_rd(struct option *o, unsigned char **c)
 #endif
 }
 
+void
+color_wr(struct option *opt, unsigned char **str, int *len)
+{
+#if 0
+	unsigned char color[7]
+	add_quoted_to_str(str, len, language_name(current_language));
+#endif
+}
+
+
 struct option_type_info option_types[] = {
 	{ bool_cmd, num_rd, num_wr, "[0|1]" },
 	{ gen_cmd, num_rd, num_wr, "<num>" },
@@ -446,10 +505,10 @@ struct option_type_info option_types[] = {
 
 	{ gen_cmd, cp_rd, cp_wr, "<codepage>" },
 	{ gen_cmd, lang_rd, lang_wr, "<language>" },
-	{ NULL, type_rd, type_wr, "" },
-	{ NULL, ext_rd, ext_wr, "" },
-	{ NULL, prog_rd, prog_wr, "" },
-	{ NULL, term_rd, term_wr, "" },
+	{ NULL, type_rd, NULL /*type_wr*/, "" },
+	{ NULL, ext_rd, NULL /*ext_wr*/, "" },
+	{ NULL, prog_rd, NULL /*prog_wr*/, "" },
+	{ NULL, term_rd, NULL /*term_wr*/, "" },
 	{ NULL, term2_rd, NULL, "" },
 	{ NULL, bind_rd, NULL, "" },
 	{ NULL, unbind_rd, NULL, "" },

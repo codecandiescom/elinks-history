@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.12 2004/11/04 09:59:55 zas Exp $ */
+/* $Id: header.c,v 1.13 2004/11/09 12:21:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,54 +113,80 @@
  * name :value
  * name=value
  */
+
+#define LWS(c) ((c) == ' ' || (c) == ASCII_TAB)
+
 unsigned char *
 parse_header(unsigned char *head, unsigned char *item, unsigned char **ptr)
 {
-	unsigned char *pos;
+	unsigned char *pos = head;
 
-	if (!head) return NULL;
+	if (!pos) return NULL;
 
-	for (pos = head; *pos; pos++) {
+	while (*pos) {
+		unsigned char *end, *itempos, *value;
+		int len;
+
 		/* Go for a newline. */
-		if (*pos != '\n') continue;
-
-		pos++;
-
-		/* Start of line now. */
-
-		{
-			unsigned char *itempos;
-
-			for (itempos = item; *itempos && *pos; itempos++, pos++)
-				if (toupper(*itempos) != toupper(*pos))
-					goto cont;
-		}
-
+		while (*pos && *pos != ASCII_LF) pos++;
 		if (!*pos) break;
+		pos++; /* Start of line now. */
 
-		if (pos[0] == ':') {
-			unsigned char *value, *valend;
+		/* Does item match header line ? */
+		for (itempos = item; *itempos && *pos; itempos++, pos++)
+			if (toupper(*itempos) != toupper(*pos))
+				break;
 
-			/* Strip ':' and leading whitespace */
-			do pos++; while (pos[0] == ' ');
+		if (!*pos) break; /* Nothing left to parse. */
+		if (*itempos) continue; /* Do not match. */
 
-			/* Find the end of line/string */
-			for (valend = pos; *valend >= ' '; valend++);
+		/* Be tolerant: we accept headers with
+		 * weird syntax, since most browsers does it
+		 * anyway, ie:
+		 * name value
+		 * name :value
+		 * name = value
+		 * name[TAB]:[TAB]value */
 
-			/* Strip trailing whitespace */
-			while (valend > pos && valend[-1] == ' ') valend--;
+		end = pos;
 
-			value = memacpy(pos, valend - pos);
-			if (!value) goto cont;
+		/* Skip leading whitespaces if any. */
+		while (LWS(*pos)) pos++;
+		if (!*pos) break; /* Nothing left to parse. */
 
-			if (ptr) *ptr = pos;
-			return value;
-		}
+		/* Eat ':' or '=' if any. */
+		if (*pos == ':' || *pos == '=') pos++;
+		if (!*pos) break; /* Nothing left to parse. */
 
-cont:
-		/* We could've hit a newline at this point, so keep the chance
-		 * to check for it in the next iteration. */
-		pos--;
+		/* Skip whitespaces after separator if any. */
+		while (LWS(*pos)) pos++;
+		if (!*pos) break; /* Nothing left to parse. */
+
+		if (pos == end) continue; /* Not an exact match (substring). */
+
+		/* Find the end of line/string.
+		 * We fail on control chars and DEL char. */
+		end = pos;
+		while (*end != ASCII_DEL && (*end > ' ' || LWS(*end))) end++;
+		if (!*end) break; /* No end of line, nothing left to parse. */
+
+		/* Ignore line if we encountered an unexpected char. */
+		if (*end != ASCII_CR && *end != ASCII_LF) continue;
+
+		/* Strip trailing whitespaces. */
+		while (end > pos && LWS(end[-1])) end--;
+
+		len = end - pos;
+		assert(len >= 0);
+		if_assert_failed break;
+
+		if (!len) continue;	/* Empty value. */
+
+		value = memacpy(pos, len);
+		if (!value) break; /* Allocation failure, stop here. */
+
+		if (ptr) *ptr = pos;
+		return value;
 	}
 
 	return NULL;
@@ -197,10 +223,10 @@ parse_header_param(unsigned char *str, unsigned char *name)
 	while (*p && (*p <= ' ' || *p == '=')) p++;
 	if (!*p) return stracpy("");
 
-	while (p[plen] >= ' ' && p[plen] != ';') plen++;
+	while ((p[plen] > ' ' || LWS(p[plen])) && p[plen] != ';') plen++;
 
 	/* Trim ending spaces */
-	while (plen > 0 && p[plen - 1] == ' ') plen--;
+	while (plen > 0 && LWS(p[plen - 1])) plen--;
 
 	return memacpy(p, plen);
 }

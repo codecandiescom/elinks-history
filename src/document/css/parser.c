@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.8 2004/01/18 01:57:33 jonas Exp $ */
+/* $Id: parser.c,v 1.9 2004/01/18 02:28:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,13 +53,15 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 
 	/* Align myself. */
 
+again:
 	skip_whitespace(string);
 
 	/* Extract property name. */
 
 	pos = strcspn(string, ":;");
 	if (string[pos] == ';') {
-		return css_parse_decl(props, string + pos + 1);
+		string += pos + 1;
+		goto again;
 	}
 	if (string[pos] == 0) return;
 
@@ -76,13 +78,7 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 
 	if (!property_info) {
 		/* Unknown property, check the next one. */
-ride_on:
-		pos = strcspn(string, ";");
-		if (string[pos] == ';') {
-			return css_parse_decl(props, string + pos + 1);
-		} else {
-			return;
-		}
+		goto ride_on;
 	}
 
 	/* We might be on track of something, cook up the struct. */
@@ -101,8 +97,9 @@ ride_on:
 
 	/* Maybe we have something else to go yet? */
 
+ride_on:
 	pos = strcspn(string, ";");
-	if (string[pos] == ';') {
-		css_parse_decl(props, string + pos + 1);
-	}
+	i = (string[pos] == ';');
+	string += pos + i;
+	if (*string) goto again;
 }

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.296 2004/11/10 21:22:54 jonas Exp $ */
+/* $Id: uri.c,v 1.297 2004/11/10 21:53:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,6 +310,11 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		host_end++;
 
 	} else if (get_protocol_need_slash_after_host(uri->protocol)) {
+		/* The need for slash after the host component depends on the
+		 * need for a host component. -- The dangerous mind of Jonah */
+		if (!uri->hostlen)
+			return URI_ERRNO_NO_HOST;
+
 		return URI_ERRNO_NO_HOST_SLASH;
 	}
 
@@ -1150,6 +1155,7 @@ parse_uri:
 	}
 	case URI_ERRNO_EMPTY:
 	case URI_ERRNO_IPV6_SECURITY:
+	case URI_ERRNO_NO_HOST:
 	case URI_ERRNO_INVALID_PORT:
 	case URI_ERRNO_INVALID_PORT_RANGE:
 		/* None of these can be handled properly. */

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.354 2004/11/14 13:43:35 jonas Exp $ */
+/* $Id: http.c,v 1.355 2004/11/14 14:21:58 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
+#include "protocol/auth/digest.h"
 #include "protocol/header.h"
 #include "protocol/http/codes.h"
 #include "protocol/http/http.h"
@@ -301,7 +302,8 @@ http_send_header(struct connection *conn)
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
 	struct string header;
-	unsigned char *host_data, *post_data = NULL;
+	unsigned char *post_data = NULL;
+	struct http_auth_basic *entry;
 	struct uri *uri = conn->proxied_uri; /* Set to the real uri */
 	unsigned char *optstr;
 	int use_connect, talking_to_proxy;
@@ -579,12 +581,57 @@ http_send_header(struct connection *conn)
 		add_crlf_to_string(&header);
 	}
 
-	host_data = find_auth(uri);
-	if (host_data) {
-		add_to_string(&header, "Authorization: Basic ");
-		add_to_string(&header, host_data);
-		add_crlf_to_string(&header);
-		mem_free(host_data);
+	entry = find_auth(uri);
+	if (entry) {
+#ifdef CONFIG_SSL
+		if (entry->digest) {
+			unsigned char *cnonce = random_cnonce();
+			unsigned char *ha1 = digest_calc_ha1(entry, cnonce);
+			unsigned char *response = digest_calc_response(entry, ha1, cnonce);
+
+			add_to_string(&header, "Authorization: Digest ");
+			add_to_string(&header, "username=\"");
+			add_to_string(&header, entry->user);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "realm=\"");
+			add_to_string(&header, entry->realm);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "nonce=\"");
+			add_to_string(&header, entry->nonce);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "uri=\"/");
+			add_to_string(&header, entry->uri->data);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "qop=auth, nc=00000001, ");
+			add_to_string(&header, "cnonce=\"");
+			add_to_string(&header, cnonce);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "response=\"");
+			add_to_string(&header, response);
+			add_to_string(&header, "\"");
+			if (entry->opaque) {
+				add_to_string(&header, ", opaque=\"");
+				add_to_string(&header, entry->opaque);
+				add_to_string(&header, "\"");
+			}
+			add_crlf_to_string(&header);
+			mem_free_if(cnonce);
+			mem_free_if(ha1);
+			mem_free_if(response);
+		} else {
+#endif
+			unsigned char *id = straconcat(entry->user,":",entry->password, NULL);
+
+			if (id) {
+				unsigned char *ret = base64_encode(id);
+
+				add_to_string(&header, "Authorization: Basic ");
+				add_to_string(&header, ret);
+				add_crlf_to_string(&header);
+				mem_free_if(ret);
+				mem_free(id);
+			}
+		}
 	}
 
 	if (uri->post) {
@@ -1283,7 +1330,8 @@ again:
 				}
 			}
 #ifdef CONFIG_SSL
-			else if (!strncasecmp(d, "Digest", 6)) {
+			else {
+			if (!strncasecmp(d, "Digest", 6)) {
 				unsigned char *realm = get_header_param(d, "realm");
 				unsigned char *nonce = get_header_param(d, "nonce");
 				unsigned char *opaque = get_header_param(d, "opaque");
@@ -1293,6 +1341,7 @@ again:
 				mem_free_if(nonce);
 				mem_free_if(opaque);
 			}
+		}
 #endif
 			mem_free(d);
 		}

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.60 2003/01/04 21:01:20 pasky Exp $ */
+/* $Id: listbox.c,v 1.61 2003/01/18 23:27:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,7 +317,6 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 		struct listbox_item *root = item;
 		struct listbox_item *child = item;
 		int i;
-		unsigned char str[6] = " |   ";
 
 		for (i = depth - d; i; i--) {
 			child = root;
@@ -326,45 +325,46 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 
 		if (root ? root->child.prev == child
 			 : data->box->items->prev == child)
-			strcpy(str, "     "); /* We were the last branch. */
+			continue; /* We were the last branch. */
 
-		/* TODO: Don't draw this if there's no further child of
-		 * parent in that depth! Links suffers with the same, it
-		 * looks sooo ugly ;-). --pasky */
-		print_text(data->term, data->listbox_item_data->x + d * 5,
-			   data->listbox_item_data->y + data->offset,
-			   5, str, color);
+		set_char(data->term, data->listbox_item_data->x + d * 5 + 1,
+			 data->listbox_item_data->y + data->offset,
+			 color + FRAMES_VLINE);
 	}
 
 	if (depth) {
-		unsigned char str[6] = " |-- ";
+		enum frame_char str[5] =
+			{ 32, FRAMES_RTEE, FRAMES_HLINE, FRAMES_HLINE, 32 };
+		int i;
 
 		if (item->type == BI_LEAF) {
 			if (item->root) {
 				if (item == item->root->child.prev) {
-					str[1] = '`';
+					str[1] = FRAMES_DLCORNER;
 				}
 			} else {
 				if (((struct listbox_data *) item->box->next)->items->next == item) {
-					str[1] = ',';
+					str[1] = FRAMES_ULCORNER;
 				} else if (((struct listbox_data *) item->box->next)->items->prev == item) {
-					str[1] = '`';
+					str[1] = FRAMES_DLCORNER;
 				}
 			}
 		} else {
 			if (item->expanded) {
-				strcpy(str, "[-]- ");
+				str[0] = '['; str[1] = '-'; str[2] = ']';
 			} else {
-				strcpy(str, "[+]- ");
+				str[0] = '['; str[1] = '+'; str[2] = ']';
 			}
 		}
 
 		if (item->marked) str[4] = '*';
 
-		print_text(data->term,
-			   data->listbox_item_data->x + (depth - 1) * 5,
-			   data->listbox_item_data->y + data->offset,
-			   5, str, color);
+		for (i = 0; i < 5; i++) {
+			set_char(data->term,
+				 data->listbox_item_data->x + (depth - 1) * 5 + i,
+				 data->listbox_item_data->y + data->offset,
+				 color + str[i]);
+		}
 	}
 
 	print_text(data->term, data->listbox_item_data->x + depth * 5,

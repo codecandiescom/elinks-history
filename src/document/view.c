@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.33 2002/05/04 09:00:03 pasky Exp $ */
+/* $Id: view.c,v 1.34 2002/05/04 09:14:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2592,9 +2592,18 @@ void send_event(struct session *ses, struct event *ev)
 	ses->kbdprefix.rep = 0;
 }
 
-void send_enter(struct terminal *term, void *xxx, struct session *ses)
+void
+send_enter(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct event ev = { EV_KBD, KBD_ENTER, 0, 0 };
+
+	send_event(ses, &ev);
+}
+
+void
+send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
+{
+	struct event ev = { EV_KBD, KBD_ENTER, KBD_CTRL, 0 };
 
 	send_event(ses, &ev);
 }
@@ -2821,6 +2830,10 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 				    "", TEXT(T_HK_FOLLOW_LINK),
 				    MENU_FUNC send_enter, NULL, 0);
 
+			add_to_menu(&mi, TEXT(T_FOLLOW_LINK_RELOAD),
+				    "", TEXT(T_HK_FOLLOW_LINK_RELOAD),
+				    MENU_FUNC send_enter_reload, NULL, 0);
+
 			if (c)
 				add_to_menu(&mi, TEXT(T_OPEN_IN_NEW_WINDOW),
 					     c - 1 ? ">" : "",
@@ -2856,11 +2869,9 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 				    "", TEXT(T_HK_SUBMIT_FORM),
 				    MENU_FUNC submit_form, NULL, 0);
 
-#if 0
 			add_to_menu(&mi, TEXT(T_SUBMIT_FORM_RELOAD),
 				    "", TEXT(T_HK_SUBMIT_FORM_RELOAD),
 				    MENU_FUNC submit_form_reload, NULL, 0);
-#endif
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW),

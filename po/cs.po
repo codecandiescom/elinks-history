@@ -5,7 +5,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-01-03 03:41+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"

@@ -1,3 +1,23 @@
+Sat May 11 20:26:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/completion.tcsh:
+
+	Completions for tcsh by Jonas Fonesca.  
+
+Sat May 11 20:13:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Fixed displaying of VT-100 frames in UTF-8 I/O mode. Also ^[11m
+	sequence is not sent while in UTF-8 I/O mode. Patch by Ben Sittler.  
+
+Sat May 11 18:33:38 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre7.CVS (yes, versioning scheme is changing a bit; now CVS
+	versions will have version PREV_REL.CVS; stay tuned, more to come) 
+
 Sat May 11 18:32:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

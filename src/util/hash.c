@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.14 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: hash.c,v 1.15 2003/01/20 10:19:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,8 +99,18 @@ get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 			     & hash_mask(hash->width);
 
 	foreach (item, hash->hash[hashval]) {
-		if (keylen == item->keylen && !memcmp(key, item->key, keylen))
-			return item;
+		if (keylen != item->keylen || memcmp(key, item->key, keylen))
+			continue;
+
+		/* The Links people call it MFR... (probably it's this; it was
+		 * somewhere in the JavaScript code ;-). Basically, it can be
+		 * a nice performance enhancement, self-ordering the list by
+		 * popularity of its items. --pasky */
+		if (item != hash->hash[hashval].next) {
+			del_from_list(item);
+			add_to_list(hash->hash[hashval], item);
+		}
+		return item;
 	}
 
 	return NULL;

@@ -104,6 +104,7 @@ AC_DEFUN([EL_CONFIG_DEPENDS],
 			break;
 		fi
 	done
+	AM_CONDITIONAL([$1], test "[$]$1" = yes)
 	AC_MSG_RESULT([$]$1)
 ])
 
@@ -122,6 +123,7 @@ AC_DEFUN([EL_ARG_ENABLE],
 	else
 		$1=no;
 	fi
+	AM_CONDITIONAL([$1], test "[$]$1" = yes)
 	AC_MSG_RESULT([$]$1)
 ])
 
@@ -160,6 +162,7 @@ AC_DEFUN([EL_ARG_DEPEND],
 	else
 		$1=no;
 	fi
+	AM_CONDITIONAL([$1], test "[$]$1" = yes)
 	AC_MSG_RESULT([$]$1)
 ])
 

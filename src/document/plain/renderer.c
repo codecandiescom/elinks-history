@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.47 2003/12/22 02:10:11 jonas Exp $ */
+/* $Id: renderer.c,v 1.48 2003/12/27 22:58:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,6 +206,8 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 	struct screen_char template;
 	struct color_pair colors;
 	int lineno;
+	int was_empty_line = 0;
+	int compress = document->options.plain_compress_empty_lines;
 
 	document->width = 0;
 
@@ -232,6 +234,17 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 			if (step) break;
 		}
 
+		if (compress && step && !width) {
+			if (was_empty_line) {
+				length -= step;
+				source += step;
+				lineno--;
+				continue;
+			}
+			was_empty_line = 1;
+		} else
+			was_empty_line = 0;
+		
 		/* We will touch the supplied source, so better replicate it. */
 		xsource = memacpy(source, width);
 		if (!xsource) continue;

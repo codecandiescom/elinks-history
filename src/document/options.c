@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.38 2003/12/05 15:17:21 jonas Exp $ */
+/* $Id: options.c,v 1.39 2003/12/27 22:58:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,6 +55,7 @@ init_document_options(struct document_options *doo)
 	/* Boolean options. */
 
 	doo->plain_display_links = get_opt_bool("document.plain.display_links");
+	doo->plain_compress_empty_lines = get_opt_bool("document.plain.compress_empty_lines");
 	doo->underline_links = get_opt_bool("document.html.underline_links");
 	doo->wrap_nbsp = get_opt_bool("document.html.wrap_nbsp");
 	doo->use_tabindex = get_opt_bool("document.browse.links.use_tabindex");

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.53 2003/12/26 16:18:54 jonas Exp $ */
+/* $Id: options.inc,v 1.54 2003/12/27 22:58:19 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -553,6 +553,10 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.plain", N_("Display URIs"),
 		"display_links", 0, 0,
 		N_("Display URIs in the document as links.")),
+
+	INIT_OPT_BOOL("document.plain", N_("Compress empty lines"),
+		"compress_empty_lines", 0, 0,
+		N_("Compress successive empty lines to only one in displayed text.")),
 
 	/* Keep options in alphabetical order. */
 

@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.14 2003/07/03 00:28:22 jonas Exp $ */
+/* $Id: protocol.h,v 1.15 2003/07/04 15:01:29 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -42,7 +42,7 @@ int get_protocol_free_syntax(enum protocol protocol);
 int get_protocol_need_slashes(enum protocol protocol);
 int get_protocol_need_slash_after_host(enum protocol protocol);
 
-protocol_handler *get_protocol_handler(unsigned char *url);
+protocol_handler *get_protocol_handler(struct uri *uri);
 protocol_external_handler *get_protocol_external_handler(unsigned char *url);
 
 /* Resolves the given protocol @name to a known protocol or PROTOCOL_UNKOWN */

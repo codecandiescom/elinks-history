@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.62 2003/07/04 14:50:00 jonas Exp $ */
+/* $Id: connection.c,v 1.63 2003/07/04 15:01:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -334,7 +334,7 @@ static struct keepalive_connection *
 init_keepalive_connection(struct connection *c, ttime timeout)
 {
 	struct keepalive_connection *k;
-	protocol_handler *handler = get_protocol_handler(c->url);
+	protocol_handler *handler = get_protocol_handler(&c->uri);
 	int port = get_port(c->url);
 
 	if (port == -1 || !handler) return NULL;
@@ -362,7 +362,7 @@ static struct keepalive_connection *
 get_keepalive_connection(struct connection *c)
 {
 	unsigned char *host;
-	protocol_handler *handler = get_protocol_handler(c->url);
+	protocol_handler *handler = get_protocol_handler(&c->uri);
 	int port;
 	struct keepalive_connection *keepalive_connection;
 
@@ -551,7 +551,7 @@ run_connection(struct connection *c)
 
 	assertm(!c->running, "connection already running");
 
-	func = get_protocol_handler(c->url);
+	func = get_protocol_handler(&c->uri);
 	if (!func) {
 		set_connection_state(c, S_BAD_URL);
 		del_connection(c);

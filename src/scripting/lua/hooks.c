@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.20 2003/09/22 23:07:53 jonas Exp $ */
+/* $Id: hooks.c,v 1.21 2003/09/22 23:19:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,11 +234,11 @@ script_hook_get_proxy(va_list ap)
 static int
 script_hook_quit(va_list ap)
 {
-	if (prepare_lua(NULL))
-		return 0;
+	if (!prepare_lua(NULL)) {
+		lua_dostring(lua_state, "if quit_hook then quit_hook() end");
+		finish_lua();
+	}
 
-	lua_dostring(lua_state, "if quit_hook then quit_hook() end");
-	finish_lua();
 	return 0;
 }
 

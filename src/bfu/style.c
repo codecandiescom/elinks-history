@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.1 2003/08/23 04:33:47 jonas Exp $ */
+/* $Id: style.c,v 1.2 2003/08/23 04:42:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,8 +55,8 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 		return NULL;
 	}
 
-	color->foreground = get_opt_ptr_tree(opt, "text");
-	color->background = get_opt_ptr_tree(opt, "background");
+	color->foreground = get_opt_color_tree(opt, "text");
+	color->background = get_opt_color_tree(opt, "background");
 
 	return color;
 }

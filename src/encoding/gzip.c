@@ -1,5 +1,5 @@
 /* Gzip encoding (ENCODING_GZIP) backend */
-/* $Id: gzip.c,v 1.9 2004/09/29 12:10:54 zas Exp $ */
+/* $Id: gzip.c,v 1.10 2004/10/13 15:18:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ gzip_decode_buffer(unsigned char *data, int len, int *new_len)
 		memset(&stream, 0, sizeof(z_stream));
 
 		/* FIXME: Use inflateInit2() to configure low memory
-		 * usage for ELINKS_SMALL configurations. --jonas */
+		 * usage for CONFIG_SMALL configurations. --jonas */
 		error = inflateInit2(&stream, wbits);
 		if (error != Z_OK) break;
 

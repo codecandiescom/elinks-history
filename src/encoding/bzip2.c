@@ -1,5 +1,5 @@
 /* Bzip2 encoding (ENCODING_BZIP2) backend */
-/* $Id: bzip2.c,v 1.4 2004/09/13 20:04:36 jonas Exp $ */
+/* $Id: bzip2.c,v 1.5 2004/10/13 15:18:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ bzip2_decode(struct stream_encoded *stream, unsigned char *data, int len,
 	return data;
 }
 
-#ifdef ELINKS_SMALL
+#ifdef CONFIG_SMALL
 #define BZIP2_SMALL 1
 #else
 #define BZIP2_SMALL 0

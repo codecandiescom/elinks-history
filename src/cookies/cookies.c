@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.166 2004/11/10 11:06:36 zas Exp $ */
+/* $Id: cookies.c,v 1.167 2004/11/10 11:39:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -418,8 +418,6 @@ set_cookie(struct uri *uri, unsigned char *str)
 	}
 
 	accept_cookie(cookie);
-
-	return;
 }
 
 
@@ -681,10 +679,12 @@ send_cookies(struct uri *uri)
 	if (cookies_dirty && get_cookies_save() && get_cookies_resave())
 		save_cookies();
 
-	if (!header.length)
+	if (!header.length) {
 		done_string(&header);
+		return NULL;
+	}
 
-	return header.length ? &header : NULL;
+	return &header;
 }
 
 static void done_cookies(struct module *module);

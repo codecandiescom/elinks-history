@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.63 2003/11/05 14:23:15 jonas Exp $ */
+/* $Id: dialogs.c,v 1.64 2003/11/05 14:50:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 		return;
 	}
 
-	new = (struct extension *) &dlg->widgets[MIME_WIDGETS_COUNT + 1];
+	new = (struct extension *) &dlg->widgets[MIME_WIDGETS_COUNT];
 	new->ext = ext = (unsigned char *) (new + 1);
 	new->ct = ct = ext + MAX_STR_LEN;
 	new->ext_orig = ext_orig = ct + MAX_STR_LEN;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.282 2003/12/21 14:56:55 zas Exp $ */
+/* $Id: session.c,v 1.283 2003/12/23 12:28:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -971,8 +971,8 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			break;
 		case EV_KBD:
 		case EV_MOUSE:
-			if (!ses) break;
-			send_event(ses, ev);
+			if (ses && ses->tab == get_current_tab(ses->tab->term))
+				send_event(ses, ev);
 			break;
 	}
 }

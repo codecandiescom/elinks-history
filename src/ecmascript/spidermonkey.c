@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.171 2004/12/27 01:16:03 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.172 2004/12/27 10:02:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,6 +357,8 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
+	undef_to_jsval(ctx, vp);
+
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_WIN_CLOSED:
 		/* TODO: It will be a major PITA to implement this properly.
@@ -398,7 +400,6 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 				goto found_parent;
 		}
 		INTERNAL("Cannot find frame %s parent.",doc_view->name);
-		undef_to_jsval(ctx, vp); /* Is this correct ? --Zas */
 		break;
 
 found_parent:
@@ -419,10 +420,8 @@ found_parent:
 		assert(top_view && top_view->vs);
 		if (top_view->vs->ecmascript_fragile)
 			ecmascript_reset_state(top_view->vs);
-		if (!top_view->vs->ecmascript) {
-			undef_to_jsval(ctx, vp); /* Is this correct ? --Zas */
+		if (!top_view->vs->ecmascript)
 			break;
-		}
 		newjsframe = JS_GetGlobalObject(top_view->vs->ecmascript->backend_data);
 
 		/* Keep this unrolled this way. Will have to check document.domain
@@ -433,16 +432,14 @@ found_parent:
 		 * other individual properties in this switch. */
 		if (compare_uri(vs->uri, top_view->vs->uri, URI_HOST))
 			object_to_jsval(ctx, vp, newjsframe);
-		else
+		/* else */
 			/****X*X*X*** SECURITY VIOLATION! RED ALERT, SHIELDS UP! ***X*X*X****\
 			|* (Pasky was apparently looking at the Links2 JS code   .  ___ ^.^ *|
 			\* for too long.)                                        `.(,_,)\o/ */
-			undef_to_jsval(ctx, vp);
 		break;
 	}
 	default:
 		INTERNAL("Invalid ID %d in window_get_property().", JSVAL_TO_INT(id));
-		undef_to_jsval(ctx, vp); /* XXX: needed on error ? --Zas */
 		break;
 	}
 

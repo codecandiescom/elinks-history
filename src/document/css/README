@@ -58,13 +58,3 @@ just css_apply() like mad on various places to make sure the CSS attributes
 are stuffed through HTML engine's throat). These two problems will be solved
 when the HTML engine is converted to work with stylesheets natively (instead
 of format + par_format).
-
-
-			    What Is Gonna Be A FAQ
-
-* Why isn't the CSS support compile-time optional?
-
-Answer: Because I want to eliminate all trivial styling (like html_h*()) and
-substitute it with default stylesheet information, so that this can be
-user-configured. On the other side we might yet reconsider whether we want
-that before 1.0. Maybe we don't.

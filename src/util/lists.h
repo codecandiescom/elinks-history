@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.33 2003/10/26 03:00:19 zas Exp $ */
+/* $Id: lists.h,v 1.34 2003/12/07 11:39:59 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -121,7 +121,9 @@ struct xlist_head {
 #define init_list(x) \
 do { \
 	list_magic_set(x); \
+	do_not_optimize_here_3_x(&(x)); /* antialiasing ;) */ \
 	(x).next = (x).prev = &(x); \
+	do_not_optimize_here_3_x(&(x)); \
 } while (0)
 
 

@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.27 2003/05/24 22:32:53 pasky Exp $ */
+/* $Id: lists.h,v 1.28 2003/06/05 21:54:38 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -16,6 +16,13 @@
 #ifdef DEBUG
 #define LISTDEBUG
 #endif
+
+
+/* Hacks to try to prevent nasty tricks played upon us by namespace-polluting
+ * system headers (like FreeBSD's, all hail BSD!) : */
+#undef LIST_HEAD
+#undef list_head
+#define list_head list_head_namespace_clash
 
 
 #ifndef LISTDEBUG

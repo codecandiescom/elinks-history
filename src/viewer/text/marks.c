@@ -1,5 +1,5 @@
 /* Marks registry */
-/* $Id: marks.c,v 1.10 2004/08/13 20:54:46 jonas Exp $ */
+/* $Id: marks.c,v 1.11 2004/09/26 12:13:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,8 @@ index_from_char(unsigned char mark)
 void
 goto_mark(unsigned char mark, struct view_state *vs)
 {
+	struct ecmascript_interpreter *ecmascript;
+	int ecmascript_fragile;
 	int i;
 
 	if (!is_valid_mark_char(mark))
@@ -83,8 +85,12 @@ goto_mark(unsigned char mark, struct view_state *vs)
 	if (!marks[i] || !compare_uri(marks[i]->uri, vs->uri, 0))
 		return;
 
-	destroy_vs(vs);
+	ecmascript = vs->ecmascript;
+	ecmascript_fragile = vs->ecmascript_fragile;
+	destroy_vs(vs, 0);
 	copy_vs(vs, marks[i]);
+	vs->ecmascript = ecmascript;
+	vs->ecmascript_fragile = ecmascript_fragile;
 }
 
 void
@@ -100,7 +106,7 @@ set_mark(unsigned char mark, struct view_state *mark_vs)
 	assert(is_valid_mark_index(i));
 
 	if (marks[i]) {
-		destroy_vs(marks[i]);
+		destroy_vs(marks[i], 1);
 		mem_free(marks[i]);
 		marks[i] = NULL;
 	}
@@ -122,7 +128,7 @@ free_marks(void)
 	for (i = 0; i < MARKS_SIZE; i++) {
 		assert(is_valid_mark_index(i));
 		if (!marks[i]) continue;
-		destroy_vs(marks[i]);
+		destroy_vs(marks[i], 1);
 		mem_free(marks[i]);
 		marks[i] = NULL;
 	}

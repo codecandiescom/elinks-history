@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.43 2004/09/26 10:03:45 pasky Exp $ */
+/* $Id: vs.c,v 1.44 2004/09/26 12:13:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ init_vs(struct view_state *vs, struct uri *uri, int plain)
 }
 
 void
-destroy_vs(struct view_state *vs)
+destroy_vs(struct view_state *vs, int blast_ecmascript)
 {
 	int i;
 
@@ -47,7 +47,7 @@ destroy_vs(struct view_state *vs)
 	if (vs->uri) done_uri(vs->uri);
 	mem_free_if(vs->form_info);
 #ifdef CONFIG_ECMASCRIPT
-	if (vs->ecmascript)
+	if (blast_ecmascript && vs->ecmascript)
 		ecmascript_put_interpreter(vs->ecmascript);
 #endif
 }

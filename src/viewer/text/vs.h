@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.25 2004/09/26 10:15:33 pasky Exp $ */
+/* $Id: vs.h,v 1.26 2004/09/26 12:13:08 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -38,7 +38,7 @@ struct view_state {
 };
 
 void init_vs(struct view_state *, struct uri *uri, int);
-void destroy_vs(struct view_state *);
+void destroy_vs(struct view_state *, int blast_ecmascript);
 
 void copy_vs(struct view_state *, struct view_state *);
 void check_vs(struct document_view *);

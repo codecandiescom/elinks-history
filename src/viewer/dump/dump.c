@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.142 2004/09/04 11:19:11 jonas Exp $ */
+/* $Id: dump.c,v 1.143 2004/09/26 12:13:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,7 +125,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *cached)
 	dump_to_file(formatted.document, fd);
 
 	detach_formatted(&formatted);
-	destroy_vs(&vs);
+	destroy_vs(&vs, 1);
 }
 
 static unsigned char *

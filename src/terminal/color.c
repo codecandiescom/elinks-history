@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.23 2003/09/03 22:43:44 jonas Exp $ */
+/* $Id: color.c,v 1.24 2003/09/03 23:10:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,7 +199,7 @@ static unsigned char fg_color[16][8] = {
  * and background color are a number between 0 and 7. They are stored in an
  * unsigned as specified in the following bit sequence:
  *
- *	0+bbbfff (0 = not used, + = bold, f = foreground, b = background)
+ *	0bbb+fff (0 = not used, + = bold, f = foreground, b = background)
  */
 
 static inline unsigned char
@@ -208,7 +208,6 @@ encode_color(struct color_pair *pair, enum screen_char_attr attr,
 {
 	register unsigned char fg = find_nearest_color(pair->foreground, fglevel);
 	register unsigned char bg = find_nearest_color(pair->background, bglevel);
-	register unsigned char bold = 0;
 
 	/* Adjusts the foreground color to be more visible. */
 	if (d_opt && !d_opt->allow_dark_on_black) {
@@ -220,32 +219,16 @@ encode_color(struct color_pair *pair, enum screen_char_attr attr,
 		if (attr & SCREEN_ATTR_ITALIC)
 			fg ^= 0x01;
 
-		if (attr & SCREEN_ATTR_BOLD) {
-			bold = SCREEN_ATTR_BOLD;
-			/* This will be undoed few lines below but it is needed
-			 * for the @fg_color lookup. */
-			fg |= 0x08;
-		}
+		if (attr & SCREEN_ATTR_BOLD)
+			fg |= SCREEN_ATTR_BOLD;
 	}
 
 	/* Adjusts the foreground color to be more visible. */
-	if (d_opt && !d_opt->allow_dark_on_black) {
+	if ((d_opt && !d_opt->allow_dark_on_black) || bg == fg) {
 		fg = fg_color[fg][bg];
 	}
 
-	if (fg & ~TERM_COLOR_MASK) {
-		/* If foreground color is not contained within the mask ( it's
-		 * >7 ) we are dealing with a bright (bold) color so mirror
-		 * that. */
-		bold = SCREEN_ATTR_BOLD;
-		fg &= TERM_COLOR_MASK;
-	} else if (bg == fg && !bold) {
-		/* If fg and bg color are the same use white fg color _unless_
-		 * we are dealing with a ``bright'' (bold) color. */
-		bold = SCREEN_ATTR_BOLD;
-	}
-
-	return (bold | (bg << 3) | fg);
+	return (bg << 4 | fg);
 }
 
 unsigned char

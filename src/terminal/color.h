@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.7 2003/09/01 20:16:38 jonas Exp $ */
+/* $Id: color.h,v 1.8 2003/09/03 23:10:32 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -9,7 +9,7 @@
 #define TERM_COLOR_MASK	0x07
 
 #define TERM_COLOR_FOREGROUND(color) (color & TERM_COLOR_MASK)
-#define TERM_COLOR_BACKGROUND(color) ((color >> 3) & TERM_COLOR_MASK)
+#define TERM_COLOR_BACKGROUND(color) ((color >> 4) & TERM_COLOR_MASK)
 
 /* Mixes the two colors to a terminal text color. */
 /* If @allow_dark_on_black is non zero the foreground color will be adjusted. */

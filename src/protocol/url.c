@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.36 2002/11/25 13:21:21 zas Exp $ */
+/* $Id: url.c,v 1.37 2002/11/25 13:28:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,7 +366,7 @@ get_port(unsigned char *url)
 
 	h = get_protocol_name(url);
 	if (h) {
-		get_prot_info(h, &n, NULL, NULL);
+		if (*h) get_prot_info(h, &n, NULL, NULL);
 		mem_free(h);
 	}
 
@@ -380,7 +380,7 @@ void (*get_protocol_handle(unsigned char *url))(struct connection *)
 	unsigned char *p = get_protocol_name(url);
 
 	if (!p) return NULL;
-	get_prot_info(p, NULL, &f, NULL);
+	if (*p) get_prot_info(p, NULL, &f, NULL);
 	mem_free(p);
 
 	return f;
@@ -393,7 +393,7 @@ void (*get_external_protocol_function(unsigned char *url))(struct session *, uns
 	unsigned char *p = get_protocol_name(url);
 
 	if (!p) return NULL;
-	get_prot_info(p, NULL, NULL, &f);
+	if (*p) get_prot_info(p, NULL, NULL, &f);
 	mem_free(p);
 
 	return f;

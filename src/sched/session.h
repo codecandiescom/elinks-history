@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.28 2003/06/11 22:29:56 pasky Exp $ */
+/* $Id: session.h,v 1.29 2003/06/11 22:36:16 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -12,9 +12,11 @@ struct session;
 #include "document/html/renderer.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
+#include "sched/location.h"
 #include "sched/sched.h"
 #include "util/lists.h"
 #include "viewer/text/vs.h"
+
 
 /* This is used to pass along the initial session parameters. */
 struct initial_session_info {
@@ -86,6 +88,13 @@ struct session {
 
 	/* The current document */
 
+	/* This points to the current location info. The recommended way of
+	 * getting this is by calling cur_loc(session). */
+	/* Historical note: this used to be @history.next, but that had to be
+	 * changed in order to generalize and greatly simplify the (un)history
+	 * handling. --pasky */
+	struct location *location;
+
 	struct list_head more_files; /* struct file_to_load */
 
 	struct status loading;
@@ -144,6 +153,10 @@ struct session {
 };
 
 extern struct list_head sessions; /* struct session */
+
+/* This returns a pointer to the current location inside of the given session.
+ * That's nice for encapsulation and alrady paid out once ;-). */
+#define cur_loc(x) ((struct location *) ((x)->history.next))
 
 
 void print_screen_status(struct session *);

@@ -1,4 +1,4 @@
-/* $Id: location.h,v 1.2 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: location.h,v 1.3 2003/06/11 22:36:16 pasky Exp $ */
 
 #ifndef EL__SCHED_LOCATION_H
 #define EL__SCHED_LOCATION_H
@@ -19,8 +19,6 @@ struct location {
 	struct status stat;
 	struct view_state vs; /* has to be last */
 };
-
-#define cur_loc(x) ((struct location *) ((x)->history.next))
 
 
 void copy_location(struct location *, struct location *);

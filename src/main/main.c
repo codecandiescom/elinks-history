@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.153 2003/11/10 22:37:30 zas Exp $ */
+/* $Id: main.c,v 1.154 2003/11/14 20:50:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,9 +247,27 @@ shrink_memory(int whole)
 	garbage_collection(whole);
 }
 
+#if !defined(ELINKS_ROOT_EXEC) && defined(HAVE_GETUID) && defined(HAVE_GETEUID)
+static void
+check_if_root(void)
+{
+	if (!getuid() || !geteuid()) {
+		fprintf(stderr, "%s\n\n"
+				"Permission to run this program as root "
+				"user was disabled at compile time.\n\n",
+				full_static_version);
+		exit(-1);
+	}
+}
+#else
+#define check_if_root()
+#endif
+
 int
 main(int argc, char *argv[])
 {
+	check_if_root();
+
 	path_to_exe = argv[0];
 	ac = argc;
 	av = (unsigned char **)argv;

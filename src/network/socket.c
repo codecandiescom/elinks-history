@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.57 2004/02/01 13:35:29 zas Exp $ */
+/* $Id: socket.c,v 1.58 2004/02/01 15:11:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,6 +258,18 @@ sock_error:
 }
 #endif
 
+static inline int
+check_if_local_address6(struct sockaddr_in6 *addr)
+{
+	return IN6_IS_ADDR_LOOPBACK(&(addr->sin6_addr));
+}
+
+static inline int
+check_if_local_address4(struct sockaddr_in *addr)
+{
+	return (ntohl(addr->sin_addr.s_addr) >> 24) == IN_LOOPBACKNET;
+}
+
 
 void
 dns_found(void *data, int state)
@@ -294,11 +306,10 @@ dns_found(void *data, int state)
 			int local = 0;
 #ifdef IPV6
 			if (addr.sin6_family == AF_INET6)
-				local = IN6_IS_ADDR_LOOPBACK(&(((struct sockaddr_in6 *) &addr)->sin6_addr));
+				local = check_if_local_address6((struct sockaddr_in6 *) &addr);
 			else
 #endif
-				local = (ntohl(((struct sockaddr_in *) &addr)->sin_addr.s_addr) >> 24)
-					== IN_LOOPBACKNET;
+				local = check_if_local_address4((struct sockaddr_in *) &addr);
 
 			/* This forbids connections to anything but local, if option is set. */
 			if (!local) {

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.15 2002/06/17 07:42:31 pasky Exp $ */
+/* $Id: terminal.c,v 1.16 2002/06/19 13:26:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,8 +516,28 @@ test_queue:
 
 		{
 			unsigned char name[MAX_TERM_LEN + 10];
+			int i = 0, badchar = 0;
 
-			sprintf(name, "terminal.%s", term->term);
+			strcpy(name, "terminal.");
+
+			/* We check TERM env. var for sanity, and fallback to
+			 * _template_ if needed. This way we prevent
+			 * elinks.conf potential corruption. */
+			while (term->term[i]) {
+				if (!isA(term->term[i])) {
+					badchar = 1;
+					break;
+				}
+				i++;
+			}
+
+			if (badchar) {
+				error("WARNING: terminal name contains illicit chars.\n");
+				strcat(name, "_template_");
+			} else {
+				strcat(name, term->term);
+			}
+
 			term->spec = get_opt_rec(root_options, name);
 		}
 

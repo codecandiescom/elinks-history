@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.131 2004/06/12 00:16:31 jonas Exp $ */
+/* $Id: uri.h,v 1.132 2004/06/13 14:53:41 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -129,7 +129,7 @@ enum uri_component {
 	URI_BASE		= ~(URI_RARE | URI_FRAGMENT) | URI_POST,
 
 	/* Used in the HTTP Auth code */
-	URI_HTTP_AUTH		= ~(URI_RARE | URI_FRAGMENT),
+	URI_HTTP_AUTH		= ~(URI_RARE | URI_DATA | URI_FRAGMENT),
 
 	/* Used for the value of HTTP "Host" header info */
 	URI_HTTP_HOST		= URI_HOST | URI_PORT,

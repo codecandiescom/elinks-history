@@ -284,9 +284,9 @@ AC_CHECK_FUNCS(fflush fsync)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)
 
-AC_CHECK_FUNCS(setenv, HAVE_SETENV=yes)
-AC_CHECK_FUNCS(getuid, HAVE_GETUID=yes)
-AC_CHECK_FUNCS(geteuid, HAVE_GETEUID=yes)
+AC_CHECK_FUNCS(setenv, CONFIG_SETENV=yes)
+AC_CHECK_FUNCS(getuid, CONFIG_GETUID=yes)
+AC_CHECK_FUNCS(geteuid, CONFIG_GETEUID=yes)
 
 dnl These aren't probably needed now, as they are commented in links.h.
 dnl I've no idea about their historical background, but I keep them here
@@ -409,8 +409,8 @@ dnl ===================================================================
 
 AC_CHECK_HEADERS(expat.h, cf_result=yes, cf_result=no)
 if test "$cf_result" = yes; then
-	AC_CHECK_LIB(expat, XML_ParserCreate, HAVE_EXPAT=yes, HAVE_EXPAT=no)
-	if test "x$HAVE_EXPAT" = xyes; then
+	AC_CHECK_LIB(expat, XML_ParserCreate, CONFIG_EXPAT=yes, CONFIG_EXPAT=no)
+	if test "x$CONFIG_EXPAT" = xyes; then
 		LIBS="$LIBS -lexpat"
 	fi
 fi
@@ -787,14 +787,14 @@ dnl ===================================================================
 dnl Check for IPv6 support and related functions.
 dnl ===================================================================
 
-EL_CHECK_NET_TYPE(struct sockaddr_storage, HAVE_SA_STORAGE, [])
-EL_CHECK_NET_TYPE(struct sockaddr_in6, HAVE_SA_IN6, [#include <netinet/in.h>])
-EL_CHECK_NET_TYPE(struct addrinfo, HAVE_ADDRINFO, [#include <netdb.h>])
+EL_CHECK_NET_TYPE(struct sockaddr_storage, CONFIG_SA_STORAGE, [])
+EL_CHECK_NET_TYPE(struct sockaddr_in6, CONFIG_SA_IN6, [#include <netinet/in.h>])
+EL_CHECK_NET_TYPE(struct addrinfo, CONFIG_ADDRINFO, [#include <netdb.h>])
 
-AC_CHECK_FUNC(getaddrinfo, HAVE_GETADDRINFO=yes, HAVE_GETADDRINFO=no)
-if test "$HAVE_GETADDRINFO" != yes; then
-	AC_CHECK_LIB(inet6, getaddrinfo, HAVE_GETADDRINFO=yes, HAVE_GETADDRINFO=no)
-	if test "$HAVE_GETADDRINFO" = yes; then
+AC_CHECK_FUNC(getaddrinfo, CONFIG_GETADDRINFO=yes, CONFIG_GETADDRINFO=no)
+if test "$CONFIG_GETADDRINFO" != yes; then
+	AC_CHECK_LIB(inet6, getaddrinfo, CONFIG_GETADDRINFO=yes, CONFIG_GETADDRINFO=no)
+	if test "$CONFIG_GETADDRINFO" = yes; then
 		LIBS="$LIBS -linet6"
 	fi
 fi
@@ -822,7 +822,7 @@ dnl ===================================================================
 dnl Backtraces displaying support.
 dnl ===================================================================
 
-AC_CHECK_HEADERS(execinfo.h, HAVE_EXECINFO=yes, HAVE_EXECINFO=no)
+AC_CHECK_HEADERS(execinfo.h, CONFIG_EXECINFO=yes, CONFIG_EXECINFO=no)
 # possible checks for other system-specific means go here
 
 
@@ -830,7 +830,7 @@ dnl ===================================================================
 dnl SMB protocol support.
 dnl ===================================================================
 
-AC_CHECK_PROG(HAVE_SMBCLIENT, smbclient, yes, no)
+AC_CHECK_PROG(CONFIG_SMBCLIENT, smbclient, yes, no)
 
 
 dnl ===================================================================
@@ -850,7 +850,7 @@ EL_ARG_ENABLE(CONFIG_BOOKMARKS, bookmarks, [bookmark support],
 	      [  --disable-bookmarks     disable bookmark support])
 AM_CONDITIONAL(CONFIG_BOOKMARKS, test "$CONFIG_BOOKMARKS" = yes)
 
-EL_ARG_DEPEND(CONFIG_XBEL_BOOKMARKS, xbel, [HAVE_EXPAT=yes], [xbel bookmark support],
+EL_ARG_DEPEND(CONFIG_XBEL_BOOKMARKS, xbel, [CONFIG_EXPAT=yes], [xbel bookmark support],
 	      [  --disable-xbel          disable xbel bookmark support (requires expat)])
 AM_CONDITIONAL(CONFIG_XBEL_BOOKMARKS, test "$CONFIG_XBEL_BOOKMARKS" = yes)
 
@@ -878,7 +878,7 @@ AM_CONDITIONAL(CONFIG_MIMETYPES, test "$CONFIG_MIMETYPES" = yes)
 
 
 EL_ARG_DEPEND(CONFIG_IPV6, ipv6,
-	      [HAVE_SA_STORAGE=yes HAVE_SA_IN6=yes HAVE_ADDRINFO=yes HAVE_GETADDRINFO=yes],
+	      [CONFIG_SA_STORAGE=yes CONFIG_SA_IN6=yes CONFIG_ADDRINFO=yes CONFIG_GETADDRINFO=yes],
 	      [IPv6 support],
 	      [  --disable-ipv6          disable IPv6 support])
 AM_CONDITIONAL(CONFIG_IPV6, test "$CONFIG_IPV6" = yes)
@@ -887,11 +887,11 @@ EL_ARG_ENABLE(CONFIG_URI_REWRITE, uri-rewrite, [URI rewriting support],
 	      [  --disable-uri-rewrite   disable URI rewrite support])
 AM_CONDITIONAL(CONFIG_URI_REWRITE, test "$CONFIG_URI_REWRITE" = yes)
 
-EL_ARG_DEPEND(CONFIG_CGI, cgi, [HAVE_SETENV=yes], [local CGI support],
+EL_ARG_DEPEND(CONFIG_CGI, cgi, [CONFIG_SETENV=yes], [local CGI support],
 	      [  --enable-cgi            enable local CGI support])
 AM_CONDITIONAL(CONFIG_CGI, test "$CONFIG_CGI" = yes)
 
-EL_ARG_DEPEND(CONFIG_SMB, smb, [HAVE_SMBCLIENT=yes], [SMB protocol support],
+EL_ARG_DEPEND(CONFIG_SMB, smb, [CONFIG_SMBCLIENT=yes], [SMB protocol support],
 	      [  --disable-smb           disable SMB protocol support (requires smbclient)])
 AM_CONDITIONAL(CONFIG_SMB, test "$CONFIG_SMB" = yes)
 
@@ -914,11 +914,11 @@ EL_ARG_ENABLE(CONFIG_LEDS, leds, [LEDs support],
 AM_CONDITIONAL(CONFIG_LEDS, test "$CONFIG_LEDS" = yes)
 
 
-EL_ARG_DEPEND(CONFIG_BACKTRACE, backtrace, [HAVE_EXECINFO=yes], [backtrace support],
+EL_ARG_DEPEND(CONFIG_BACKTRACE, backtrace, [CONFIG_EXECINFO=yes], [backtrace support],
 	      [  --disable-backtrace     disable backtrace support])
 AM_CONDITIONAL(CONFIG_BACKTRACE, test "$CONFIG_BACKTRACE" = yes)
 
-EL_ARG_DEPEND(CONFIG_NO_ROOT_EXEC, no-root, [HAVE_GETUID=yes HAVE_GETEUID=yes], [no root exec support],
+EL_ARG_DEPEND(CONFIG_NO_ROOT_EXEC, no-root, [CONFIG_GETUID=yes CONFIG_GETEUID=yes], [no root exec support],
 	      [  --enable-no-root        enable prevention of usage by root])
 AM_CONDITIONAL(CONFIG_NO_ROOT_EXEC, test "$CONFIG_NO_ROOT_EXEC" = yes)
 

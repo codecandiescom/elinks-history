@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-12-16 17:01+0100\n"
-"PO-Revision-Date: 2004-12-16 17:02+0100\n"
+"POT-Creation-Date: 2004-12-17 16:54+0100\n"
+"PO-Revision-Date: 2004-12-17 16:57+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgid "Press space to expand this folder."
 msgstr "Pressez espace pour déployer le dossier."
 
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:458 src/bfu/hierbox.c:638
-#: src/bfu/hierbox.c:938 src/bfu/hierbox.c:964 src/bfu/inpfield.c:69
+#: src/bfu/hierbox.c:945 src/bfu/hierbox.c:974 src/bfu/inpfield.c:69
 #: src/bfu/inpfield.c:80 src/bfu/inpfield.c:100 src/bfu/msgbox.c:173
 #: src/bookmarks/dialogs.c:263 src/bookmarks/dialogs.c:659
 #: src/config/dialogs.c:56 src/config/dialogs.c:101 src/config/dialogs.c:341
@@ -44,8 +44,8 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:516 src/dialogs/menu.c:567
 #: src/dialogs/options.c:172 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:407 src/ecmascript/spidermonkey.c:1224
-#: src/ecmascript/spidermonkey.c:1250 src/formhist/dialogs.c:178
+#: src/ecmascript/spidermonkey.c:428 src/ecmascript/spidermonkey.c:1280
+#: src/ecmascript/spidermonkey.c:1307 src/formhist/dialogs.c:178
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/protocol.c:226 src/protocol/user.c:206
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:368
@@ -54,9 +54,9 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/sched/session.c:759 src/scripting/lua/core.c:395
 #: src/scripting/lua/core.c:476 src/scripting/lua/core.c:593
 #: src/scripting/lua/core.c:717 src/viewer/text/draw.c:67
-#: src/viewer/text/form.c:852 src/viewer/text/search.c:949
-#: src/viewer/text/search.c:1010 src/viewer/text/search.c:1456
-#: src/viewer/text/search.c:1567 src/viewer/text/textarea.c:365
+#: src/viewer/text/form.c:852 src/viewer/text/search.c:953
+#: src/viewer/text/search.c:1014 src/viewer/text/search.c:1460
+#: src/viewer/text/search.c:1571 src/viewer/text/textarea.c:365
 #: src/viewer/text/textarea.c:374 src/viewer/text/view.c:723
 #: src/viewer/text/view.c:1269
 msgid "OK"
@@ -141,20 +141,20 @@ msgstr "Effacer tous les items"
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items ?"
 
-#: src/bfu/hierbox.c:933 src/bfu/hierbox.c:963 src/bookmarks/dialogs.c:444
+#: src/bfu/hierbox.c:940 src/bfu/hierbox.c:973 src/bookmarks/dialogs.c:444
 #: src/cache/dialogs.c:222 src/config/dialogs.c:523 src/config/dialogs.c:945
-#: src/globhist/dialogs.c:230 src/viewer/text/search.c:982
-#: src/viewer/text/search.c:990 src/viewer/text/search.c:1007
-#: src/viewer/text/search.c:1586
+#: src/globhist/dialogs.c:230 src/viewer/text/search.c:986
+#: src/viewer/text/search.c:994 src/viewer/text/search.c:1011
+#: src/viewer/text/search.c:1590
 msgid "Search"
 msgstr "Chercher"
 
-#: src/bfu/hierbox.c:935 src/viewer/text/search.c:983
+#: src/bfu/hierbox.c:942 src/viewer/text/search.c:987
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Chaîne recherchée '%s' introuvable"
 
-#: src/bfu/hierbox.c:963 src/config/dialogs.c:188 src/config/dialogs.c:209
+#: src/bfu/hierbox.c:973 src/config/dialogs.c:188 src/config/dialogs.c:209
 #: src/config/dialogs.c:376 src/config/dialogs.c:497 src/cookies/dialogs.c:137
 #: src/cookies/dialogs.c:349 src/dialogs/edit.c:89 src/dialogs/edit.c:91
 #: src/scripting/lua/core.c:391 src/scripting/lua/core.c:392
@@ -162,7 +162,7 @@ msgstr "Chaîne recherchée '%s' introuvable"
 msgid "Name"
 msgstr "Nom"
 
-#: src/bfu/hierbox.c:964 src/bookmarks/dialogs.c:263
+#: src/bfu/hierbox.c:974 src/bookmarks/dialogs.c:263
 #: src/bookmarks/dialogs.c:659 src/config/dialogs.c:411
 #: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:356
 #: src/dialogs/edit.c:99 src/dialogs/edit.c:102 src/dialogs/menu.c:96
@@ -172,7 +172,7 @@ msgstr "Nom"
 #: src/sched/download.c:1022 src/sched/download.c:1032
 #: src/sched/download.c:1053 src/sched/download.c:1066
 #: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
-#: src/scripting/lua/core.c:717 src/viewer/text/search.c:1568
+#: src/scripting/lua/core.c:717 src/viewer/text/search.c:1572
 #: src/viewer/text/view.c:723
 msgid "Cancel"
 msgstr "Annuler"
@@ -5458,15 +5458,11 @@ msgstr "Temps max. d'exécution"
 msgid "Maximum execution time in seconds for a script."
 msgstr "Temps maximal pour l'exécution d'un script, en secondes."
 
-#: src/ecmascript/spidermonkey.c:404
+#: src/ecmascript/spidermonkey.c:425
 msgid "JavaScript Alert"
 msgstr "Alerte JavaScript"
 
-#: src/ecmascript/spidermonkey.c:1199
-msgid "JavaScript Error"
-msgstr "Erreur Javascript"
-
-#: src/ecmascript/spidermonkey.c:1202
+#: src/ecmascript/spidermonkey.c:1263
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -5483,7 +5479,7 @@ msgstr ""
 "%s\n"
 ".%*s^%*s."
 
-#: src/ecmascript/spidermonkey.c:1214
+#: src/ecmascript/spidermonkey.c:1271
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -5494,20 +5490,28 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/ecmascript/spidermonkey.c:1242
+#: src/ecmascript/spidermonkey.c:1278
+msgid "JavaScript Error"
+msgstr "Erreur Javascript"
+
+#: src/ecmascript/spidermonkey.c:1298
 msgid "JavaScript Emergency"
 msgstr "Urgence JavaScript"
 
-#: src/ecmascript/spidermonkey.c:1244
+#: src/ecmascript/spidermonkey.c:1300
 #, c-format
 msgid ""
 "A script embedded in the current document was running for more than %d "
-"seconds in line. This probably means there is a bug in the script and it "
-"could have halted the whole ELinks. The script execution was interrupted."
+"seconds in line.\n"
+"This probably means there is a bug in the script and it could have halted "
+"the whole ELinks.\n"
+"The script execution was interrupted."
 msgstr ""
 "Un script contenu dans le document courant s'exécute depuis plus de %d "
-"secondes. Cela indique probablement qu'il y a un bogue dans ce script et que "
-"cela aura pu bloquer tout ELinks. L'exécution du script a été interrompue."
+"secondes.\n"
+"Cela indique probablement qu'il y a un bogue dans ce script et que cela "
+"aurait pû bloquer ELinks.\n"
+"L'exécution du script a été interrompue."
 
 #: src/formhist/dialogs.c:66
 msgid "Forms are never saved for this URL."
@@ -7261,150 +7265,150 @@ msgstr "pressez %s pour soumettre à"
 msgid "press %s to post to"
 msgstr "pressez %s pour poster à"
 
-#: src/viewer/text/link.c:1110
+#: src/viewer/text/link.c:1118
 msgid "Display ~usemap"
 msgstr "Afficher ~usemap"
 
-#: src/viewer/text/link.c:1113
+#: src/viewer/text/link.c:1121
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/link.c:1115
+#: src/viewer/text/link.c:1123
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/link.c:1119
+#: src/viewer/text/link.c:1127
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1121
+#: src/viewer/text/link.c:1129
 msgid "Open in new ~tab"
 msgstr "Ouvrir dans un nouvel ongle~t"
 
-#: src/viewer/text/link.c:1123
+#: src/viewer/text/link.c:1131
 msgid "Open in new tab in ~background"
 msgstr "Ouvrir dans un nouvel onglet en arrière-~plan"
 
-#: src/viewer/text/link.c:1128
+#: src/viewer/text/link.c:1136
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/link.c:1131
+#: src/viewer/text/link.c:1139
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:1143 src/viewer/text/link.c:1177
+#: src/viewer/text/link.c:1151 src/viewer/text/link.c:1185
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:1155
+#: src/viewer/text/link.c:1163
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:1161
+#: src/viewer/text/link.c:1169
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:1162
+#: src/viewer/text/link.c:1170
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:1165
+#: src/viewer/text/link.c:1173
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1167
+#: src/viewer/text/link.c:1175
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:1170
+#: src/viewer/text/link.c:1178
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:1175
+#: src/viewer/text/link.c:1183
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:1182
+#: src/viewer/text/link.c:1190
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1192
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:1192
+#: src/viewer/text/link.c:1200
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:1244
+#: src/viewer/text/link.c:1252
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:1249
+#: src/viewer/text/link.c:1257
 msgid "Usemap"
 msgstr "Usemap"
 
-#: src/viewer/text/search.c:975
+#: src/viewer/text/search.c:979
 msgid "Search hit top, continuing at bottom."
 msgstr "La recherche a atteint le haut du document, poursuite à partir du bas."
 
-#: src/viewer/text/search.c:976
+#: src/viewer/text/search.c:980
 msgid "Search hit bottom, continuing at top."
 msgstr "La recherche a atteint le bas du document, poursuite à partir du haut."
 
-#: src/viewer/text/search.c:979
+#: src/viewer/text/search.c:983
 msgid "No previous search"
 msgstr "Aucune clef de recherche"
 
-#: src/viewer/text/search.c:991
+#: src/viewer/text/search.c:995
 #, c-format
 msgid "Could not compile regular expression '%s'"
 msgstr "Ne peut compiler l'expression régulière '%s'"
 
-#: src/viewer/text/search.c:1038
+#: src/viewer/text/search.c:1042
 #, c-format
 msgid "No further matches for '%s'."
 msgstr "Aucune autre correspondance pour '%s'."
 
-#: src/viewer/text/search.c:1040
+#: src/viewer/text/search.c:1044
 #, c-format
 msgid "Could not find a link with the text '%s'."
 msgstr "Ne peut trouver un lien avec le texte '%s'."
 
-#: src/viewer/text/search.c:1042 src/viewer/text/search.c:1452
+#: src/viewer/text/search.c:1046 src/viewer/text/search.c:1456
 msgid "Typeahead"
 msgstr "Préfrappe"
 
-#: src/viewer/text/search.c:1454
+#: src/viewer/text/search.c:1458
 msgid "No links in current document"
 msgstr "Aucun lien dans le document courant"
 
-#: src/viewer/text/search.c:1532
+#: src/viewer/text/search.c:1536
 msgid "Search for text"
 msgstr "Recherche du texte"
 
-#: src/viewer/text/search.c:1561
+#: src/viewer/text/search.c:1565
 msgid "Normal search"
 msgstr "Plein texte"
 
-#: src/viewer/text/search.c:1562
+#: src/viewer/text/search.c:1566
 msgid "Regexp search"
 msgstr "Expression régulière"
 
-#: src/viewer/text/search.c:1563
+#: src/viewer/text/search.c:1567
 msgid "Extended regexp search"
 msgstr "Expression régulière étendue"
 
-#: src/viewer/text/search.c:1564
+#: src/viewer/text/search.c:1568
 msgid "Case sensitive"
 msgstr "Respecter la casse"
 
-#: src/viewer/text/search.c:1565
+#: src/viewer/text/search.c:1569
 msgid "Case insensitive"
 msgstr "Ignorer la casse"
 
-#: src/viewer/text/search.c:1589
+#: src/viewer/text/search.c:1593
 msgid "Search backward"
 msgstr "Chercher en arrière"
 

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.52 2004/02/26 01:02:59 miciah Exp $ */
+/* $Id: status.c,v 1.53 2004/02/26 01:13:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,7 +349,15 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		}
 
 		tab->xpos = xpos;
-		tab->width = actual_tab_width + 1;
+		tab->width = actual_tab_width;
+		if (tab_num == tabs_count - 1) {
+			/* This is the last tab, and is therefore followed
+			 * by a space, not a separator; increment tab->width
+			 * to count that space as part of the tab.
+			 * -- Miciah */
+			tab->width++;
+		}
+
 		xpos += actual_tab_width;
 	}
 }

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.19 2004/01/19 06:29:25 jonas Exp $ */
+/* $Id: scanner.c,v 1.20 2004/01/19 07:05:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,6 +79,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 
 		if (string_end) {
 			string = string_end + 1;
+			token->type = CSS_TOKEN_STRING;
 		} else {
 			token->type = CSS_TOKEN_GARBAGE;
 		}
@@ -92,6 +93,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		} else if (*string == '(') {
 			token->type = CSS_TOKEN_FUNCTION;
 			string++;
+
 		} else {
 			token->type = CSS_TOKEN_IDENTIFIER;
 		}

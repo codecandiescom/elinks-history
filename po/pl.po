@@ -4646,6 +4646,9 @@ msgid ""
 "If you want to save passwords for this URL, enable it by the \"Toggle saving"
 "\" button."
 msgstr ""
+"Brak zapisanej informacji dla tego URL-a.\n"
+"Je¶li chcesz zapisaæ has³a dla tego URL-a, w³±cz to przy pomocy\n"
+"przycisku \"Prze³±cz zapisywanie\"."
 
 #: src/formhist/dialogs.c:172
 msgid "Toggle saving"

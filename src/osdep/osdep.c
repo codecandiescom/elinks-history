@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.45 2003/05/02 11:15:10 zas Exp $ */
+/* $Id: osdep.c,v 1.46 2003/05/02 21:58:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1758,10 +1758,9 @@ exec_new_elinks(struct terminal *term, unsigned char *xterm,
 {
 	unsigned char *str = straconcat(xterm, " ", exe_name, " ", param, NULL);
 
-	if (str) {
-		exec_on_terminal(term, str, "", 2);
-		mem_free(str);
-        }
+	if (!str) return;
+	exec_on_terminal(term, str, "", 2);
+	mem_free(str);
 }
 
 void

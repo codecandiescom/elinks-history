@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.16 2004/12/26 20:14:47 jonas Exp $ */
+/* $Id: libintl.c,v 1.17 2004/12/26 20:26:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,4 +215,4 @@ set_language(int language)
 }
 
 /* See libintl.h for comments.  */
-extern int el_gettext_current_charset = -1;
+int el_gettext_current_charset = -1;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.177 2003/10/21 15:27:06 jonas Exp $ */
+/* $Id: session.c,v 1.178 2003/10/22 11:45:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -602,7 +602,8 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		kill_document_refresh(ses->doc_view->document->refresh);
 	}
 
-	if (!task || !get_opt_int("document.browse.forms.confirm_submit")
+	if (!task
+	    || !get_opt_int("document.browse.forms.confirm_submit")
 	    || !post_char_pos
 	    || (cache_mode == NC_ALWAYS_CACHE && find_in_cache(url, &e)
 		&& !e->incomplete)) {
@@ -696,6 +697,18 @@ do_move(struct session *ses, struct download **stat)
 
 		switch (task) {
 		case TASK_FORWARD:
+		{
+			protocol_external_handler *fn;
+
+			fn = get_protocol_external_handler(u);
+			if (fn) {
+				fn(ses, u);
+				mem_free(u);
+				*stat = NULL;
+				return 0;
+			}
+		}
+			/* Fall through. */
 		case TASK_IMGMAP:
 			{
 			unsigned char *gp = ses->goto_position

@@ -67,7 +67,7 @@ dnl ===================================================================
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
 AC_FUNC_STRFTIME
-AC_CHECK_FUNCS(alarm cfmakeraw chmod herror strcasestr timegm)
+AC_CHECK_FUNCS(alarm cfmakeraw chmod gethostbyaddr herror strcasestr timegm)
 
 dnl These aren't probably needed now, as they are commented in links.h.
 dnl I've no idea about their historical background, but I keep them here

@@ -33,6 +33,9 @@
 /* Define if you have the chmod function.  */
 #undef HAVE_CHMOD
 
+/* Define if you have the gethostbyaddr function.  */
+#undef HAVE_GETHOSTBYADDR
+
 /* Define if you have the getpgid function.  */
 #undef HAVE_GETPGID
 

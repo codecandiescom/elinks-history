@@ -51,8 +51,16 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 	if (getaddrinfo(name, NULL, &hint, &ai) != 0) return -1;
 	
 #else	
-	hostent = gethostbyname(name);
-	if (!hostent) return -1;
+	/* Seems there are problems on Mac, so we first need to try
+	 * gethostbyaddr(). */
+#ifdef HAVE_GETHOSTBYADDR
+	hostent = gethostbyaddr(name, strlen(name), AF_INET);
+	if (!hostent)
+#endif
+	{
+		hostent = gethostbyname(name);
+		if (!hostent) return -1;
+	}
 #endif
 
 #ifdef IPV6

@@ -11,6 +11,9 @@ Adam Harvey <matlhdam@iinet.net.au>
 Alberto García <berto@gpul.org>
 	Galician translation
 
+Aldy Hernandez <aldyh@cygnus.com>
+	MacOS address resolution fix
+
 Alex Antropoff <alex@tirastel.md>
 	'charset' attribute of META element
 
@@ -240,4 +243,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.23 2002/01/30 14:58:40 pasky Exp $
+$Id: AUTHORS,v 1.24 2002/01/30 15:16:06 pasky Exp $

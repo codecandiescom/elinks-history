@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.70 2004/05/29 00:53:48 jonas Exp $ */
+/* $Id: user.c,v 1.71 2004/05/29 18:14:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,8 +148,8 @@ get_subject_from_query(unsigned char *query)
 		subject = query + 8;
 	}
 
-	/* Return subject until next '&'-value, POST_CHAR or end of string */
-	return memacpy(subject, strcspn(subject, "&\001"));
+	/* Return subject until next '&'-value or end of string */
+	return memacpy(subject, strcspn(subject, "&"));
 }
 
 static unsigned char *
@@ -189,7 +189,7 @@ save_form_data_to_file(struct uri *uri)
 void
 user_protocol_handler(struct session *ses, struct uri *uri)
 {
-	unsigned char *subj, *prog;
+	unsigned char *subj = NULL, *prog;
 	unsigned char *formfilename;
 
 	prog = get_user_program(ses->tab->term, struri(uri), uri->protocollen);
@@ -212,13 +212,12 @@ user_protocol_handler(struct session *ses, struct uri *uri)
 
 	if (uri->data && uri->datalen) {
 		/* Some mailto specific stuff follows... */
-		subj = memchr(uri->data, '?', uri->datalen);
-		if (subj) {
-			subj++;
-			subj = get_subject_from_query(subj);
+		unsigned char *query = get_uri_string(uri, URI_QUERY);
+
+		if (query) {
+			subj = get_subject_from_query(query);
+			mem_free(query);
 		}
-	} else {
-		subj = NULL;
 	}
 
 	formfilename = save_form_data_to_file(uri);

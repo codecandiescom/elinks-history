@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.66 2004/05/29 17:36:02 jonas Exp $ */
+/* $Id: cgi.c,v 1.67 2004/05/29 18:15:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,15 +111,16 @@ static int
 set_vars(struct connection *conn, unsigned char *script)
 {
 	unsigned char *post = conn->uri->post;
-	unsigned char *question_mark = strchr(conn->uri->data, '?');
-	unsigned char *query_string = question_mark
-				    ? question_mark + 1 : (unsigned char *) "";
+	unsigned char *query = get_uri_string(conn->uri, URI_QUERY);
 	unsigned char *optstr;
+	int res = setenv("QUERY_STRING", empty_string_or_(query), 1);
+
+	mem_free_if(query);
+	if (res) return -1;
 
 	if (post) {
 		unsigned char *postend = strchr(post, '\n');
 		unsigned char buf[16];
-		int res;
 
 		if (postend) {
 			*postend = '\0';
@@ -130,17 +131,9 @@ set_vars(struct connection *conn, unsigned char *script)
 		}
 		snprintf(buf, 16, "%d", strlen(post) / 2);
 		if (setenv("CONTENT_LENGTH", buf, 1)) return -1;
-		if (setenv("REQUEST_METHOD", "POST", 1)) return -1;
-
-		*post = '\0';
-		res = setenv("QUERY_STRING", query_string, 1);
-		*post = POST_CHAR;
-		if (res) return -1;
-	} else {
-		if (setenv("REQUEST_METHOD", "GET", 1)) return -1;
-		if (setenv("QUERY_STRING", query_string, 1)) return -1;
 	}
 
+	if (setenv("REQUEST_METHOD", post ? "POST" : "GET", 1)) return -1;
 	if (setenv("SERVER_SOFTWARE", "ELinks/" VERSION, 1)) return -1;
 	if (setenv("SERVER_PROTOCOL", "HTTP/1.1", 1)) return -1;
 	/* XXX: Maybe it is better to set this to an empty string? --pasky */

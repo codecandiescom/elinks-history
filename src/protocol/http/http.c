@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.330 2004/09/17 13:08:53 jonas Exp $ */
+/* $Id: http.c,v 1.331 2004/09/22 12:28:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1213,7 +1213,10 @@ again:
 		mem_free_set(&conn->cached->ssl_info, get_ssl_connection_cipher(conn));
 #endif
 
-	if (h == 301 || h == 302 || h == 303 || h == 307) {
+	/* XXX: Is there some reason why NOT to follow the Location header
+	 * for any status? If the server didn't mean it, it wouldn't send
+	 * it, after all...? --pasky */
+	if (h == 201 || h == 301 || h == 302 || h == 303 || h == 307) {
 		d = parse_header(conn->cached->head, "Location", NULL);
 		if (d) {
 			redirect_cache(conn->cached, d, h == 303, -1);

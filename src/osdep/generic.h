@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.22 2004/12/29 14:48:06 zas Exp $ */
+/* $Id: generic.h,v 1.23 2004/12/29 15:09:11 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -95,8 +95,10 @@ safe_write(int fd, const void *buf, size_t count) {
 #define alignof(TYPE) \
     ((int) &((struct { unsigned char dummy1; TYPE dummy2; } *) 0)->dummy2)
 
-/* This structs copying is faster and safer than memcpy(destination, source, sizeof(source)).
- * Please, use this macro instead of memcpy(). */
-#define copy_struct(destination, source) (*(destination) = *(source))
+/* Using this macro to copy structs is both faster and safer than
+ * memcpy(destination, source, sizeof(source)). Please, use this macro instead
+ * of memcpy(). */
+#define copy_struct(destination, source) \
+	do { (*(destination) = *(source)); } while (0)
 
 #endif

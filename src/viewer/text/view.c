@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.115 2003/07/01 20:51:13 zas Exp $ */
+/* $Id: view.c,v 1.116 2003/07/01 20:59:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -762,7 +762,6 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 	int vy = vs->view_pos;
 	struct form_state *fs;
 	struct form_control *frm = l->form;
-	int i, x, y;
 
 	if (!frm) {
 		internal("link %d has no form", (int)(l - f->f_data->links));
@@ -773,9 +772,10 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 	if (!fs) return;
 
 	switch (frm->type) {
-		unsigned char *s;
 		struct line_info *ln, *lnx;
+		unsigned char *s;
 		int sl;
+		register int i, x, y;
 
 		case FC_TEXT:
 		case FC_PASSWORD:
@@ -785,11 +785,12 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			if (fs->state < fs->vpos)
 				fs->vpos = fs->state;
 			if (!l->n) break;
-			x = l->pos[0].x + xp - vx;
+
 			y = l->pos[0].y + yp - vy;
 			if (y >= yp && y < yp + yw) {
 				int len = strlen(fs->value) - fs->vpos;
 
+				x = l->pos[0].x + xp - vx;
 				for (i = 0; i < frm->size; i++, x++) {
 					if (x >= xp && x < xp + xw) {
 						if (fs->value &&

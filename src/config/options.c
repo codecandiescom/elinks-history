@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.435 2004/01/30 19:54:58 jonas Exp $ */
+/* $Id: options.c,v 1.436 2004/02/11 10:12:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ static void free_options_tree(struct list_head *, int recursive);
  * It will emit a message in debug mode only. --Zas */
 
 #define bad_punct(c) (c != ')' && c != '\'' && c != '"' && ispunct(c))
-	
+
 void
 check_caption(unsigned char *caption)
 {

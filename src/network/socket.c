@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.60 2004/02/03 19:20:02 zas Exp $ */
+/* $Id: socket.c,v 1.61 2004/02/11 10:12:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,7 +289,7 @@ check_if_local_address6(struct sockaddr_in6 *addr)
 					break;
 			}
 		}
-		
+
 		freeifaddrs(ifaddrs);
 	}
 
@@ -309,7 +309,7 @@ check_if_local_address4(struct sockaddr_in *addr)
 		for (ifa = ifaddrs; ifa; ifa = ifa->ifa_next) {
 			if (!ifa->ifa_addr)
 				continue;
-		
+
 			if (ifa->ifa_addr->sa_family != AF_INET) continue;
 
 			if (!memcmp(&addr->sin_addr.s_addr,
@@ -319,7 +319,7 @@ check_if_local_address4(struct sockaddr_in *addr)
 					break;
 			}
 		}
-		
+
 		freeifaddrs(ifaddrs);
 	}
 

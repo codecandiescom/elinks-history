@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.45 2004/02/06 13:03:09 jonas Exp $ */
+/* $Id: cmdline.c,v 1.46 2004/02/11 10:12:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -460,7 +460,7 @@ struct option_info cmdline_options_info[] = {
 		N_("Restrict ELinks so that it can only open connections to\n"
 		"local addresses (ie. 127.0.0.1), it will prevent any connection\n"
 		"to distant servers.")),
-	
+
 	INIT_OPT_BOOL("", N_("Autosubmit first form"),
 		"auto-submit", 0, 0,
 		N_("Go and submit the first form you'll stumble upon.")),

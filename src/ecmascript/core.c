@@ -888,7 +888,7 @@ InitContext(JSRuntime *rt, JSObject *glob)
 		*HTMLTableCaptionElement, *HTMLTableColElement, *HTMLTableSectionElement,
 		*HTMLTableRowElement, *HTMLTableCellElement, *HTMLFrameSetElement,
 		*HTMLFrameElement, *HTMLIFrameElement;
-		
+
 	JSContext *cx = JS_NewContext(rt, 8192);
 
 	if (!cx) return NULL;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.240 2003/10/30 01:25:15 jonas Exp $ */
+/* $Id: view.c,v 1.241 2003/10/30 11:22:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,18 +113,18 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 	if_assert_failed return;
 
 	y = yp - 1;
-	for (j = 0; j < fsd->y; j++) {
+	for (j = 0; j < fsd->height; j++) {
 		register int x, i;
-		int height = fsd->f[j * fsd->x].height;
+		int height = fsd->f[j * fsd->width].height;
 
 		x = xp - 1;
-		for (i = 0; i < fsd->x; i++) {
+		for (i = 0; i < fsd->width; i++) {
 			int width = fsd->f[i].width;
 
 			if (i) {
 				draw_area(t, x, y + 1, 1, height, BORDER_SVLINE,
 					  SCREEN_ATTR_FRAME, &colors);
-				if (j == fsd->y - 1)
+				if (j == fsd->height - 1)
 					draw_border_cross(t, x, y + height + 1,
 							  BORDER_X_UP, &colors);
 			} else if (j) {
@@ -136,7 +136,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 			if (j) {
 				draw_area(t, x + 1, y, width, 1, BORDER_SHLINE,
 					  SCREEN_ATTR_FRAME, &colors);
-				if (i == fsd->x - 1 && x + width + 1 < t->x)
+				if (i == fsd->width - 1 && x + width + 1 < t->x)
 					draw_border_cross(t, x + width + 1, y,
 							  BORDER_X_LEFT, &colors);
 			} else if (i) {
@@ -152,13 +152,13 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 	}
 
 	y = yp - 1;
-	for (j = 0; j < fsd->y; j++) {
+	for (j = 0; j < fsd->height; j++) {
 		register int x, i;
-		int pj = j * fsd->x;
+		int pj = j * fsd->width;
 		int height = fsd->f[pj].height;
 
 		x = xp - 1;
-		for (i = 0; i < fsd->x; i++) {
+		for (i = 0; i < fsd->width; i++) {
 			int width = fsd->f[i].width;
 			int p = pj + i;
 

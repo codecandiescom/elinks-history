@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.23 2003/10/30 00:34:33 zas Exp $ */
+/* $Id: frames.c,v 1.24 2003/10/30 11:22:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,14 +37,14 @@ add_frameset_entry(struct frameset_desc *fsd, struct frameset_desc *subframe,
 	 * There may exist a true fix for this... --Zas */
 	/* May the one truly fixing this notify'n'close bug 237 in the
 	 * Bugzilla... --pasky */
-	if (fsd->yp >= fsd->y) return;
+	if (fsd->yp >= fsd->height) return;
 
-	idx = fsd->xp + fsd->yp * fsd->x;
+	idx = fsd->xp + fsd->yp * fsd->width;
 	fsd->f[idx].subframe = subframe;
 	fsd->f[idx].name = name ? stracpy(name) : NULL;
 	fsd->f[idx].url = url ? stracpy(url) : NULL;
 	fsd->xp++;
-	if (fsd->xp >= fsd->x) {
+	if (fsd->xp >= fsd->width) {
 		fsd->xp = 0;
 		fsd->yp++;
 	}
@@ -85,8 +85,8 @@ create_frameset(struct document *document, struct frameset_param *fp)
 	}
 
 	fd->n = size;
-	fd->x = fp->x;
-	fd->y = fp->y;
+	fd->width = fp->x;
+	fd->height = fp->y;
 
 	if (fp->parent)
 		add_frameset_entry(fp->parent, fd, NULL, NULL);
@@ -215,11 +215,11 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 	o.margin = !!o.margin;
 
 	n = 0;
-	for (j = 0; j < fsd->y; j++) {
+	for (j = 0; j < fsd->height; j++) {
 		register int i;
 
 		o.xp = op->xp;
-		for (i = 0; i < fsd->x; i++) {
+		for (i = 0; i < fsd->width; i++) {
 			struct frame_desc *f = &fsd->f[n];
 
 			o.xw = f->width;

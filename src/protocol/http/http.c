@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.305 2004/07/23 14:57:41 zas Exp $ */
+/* $Id: http.c,v 1.306 2004/07/23 15:09:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -828,53 +828,9 @@ read_http_data_done(struct connection *conn)
 }
 
 static void
-read_http_data(struct connection *conn, struct read_buffer *rb)
+read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
-
-	set_connection_timeout(conn);
-
-	if (rb->close == 2) {
-		if (conn->content_encoding && info->length == -1) {
-			/* Flush uncompression first. */
-			info->length = 0;
-		} else {
-			read_http_data_done(conn);
-			return;
-		}
-	}
-
-	if (info->length != LEN_CHUNKED) {
-		unsigned char *data;
-		int data_len;
-		int len = rb->len;
-
-		if (info->length >= 0 && info->length < len) {
-			/* We won't read more than we have to go. */
-			len = info->length;
-		}
-
-		conn->received += len;
-
-		data = uncompress_data(conn, rb->data, len, &data_len);
-
-		if (add_fragment(conn->cached, conn->from, data, data_len) == 1)
-			conn->tries = 0;
-
-		if (data && data != rb->data) mem_free(data);
-
-		conn->from += data_len;
-
-		kill_buffer_data(rb, len);
-
-		if (!info->length && !rb->close) {
-			read_http_data_done(conn);
-			return;
-		}
-
-		read_more_http_data(conn, rb);
-		return;
-	}
 
 	while (1) {
 		/* Chunked. Good luck! */
@@ -989,6 +945,59 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 	}
 
 	read_more_http_data(conn, rb);
+}
+
+static void
+read_http_data(struct connection *conn, struct read_buffer *rb)
+{
+	struct http_connection_info *info = conn->info;
+
+	set_connection_timeout(conn);
+
+	if (rb->close == 2) {
+		if (conn->content_encoding && info->length == -1) {
+			/* Flush uncompression first. */
+			info->length = 0;
+		} else {
+			read_http_data_done(conn);
+			return;
+		}
+	}
+
+	if (info->length != LEN_CHUNKED) {
+		unsigned char *data;
+		int data_len;
+		int len = rb->len;
+
+		if (info->length >= 0 && info->length < len) {
+			/* We won't read more than we have to go. */
+			len = info->length;
+		}
+
+		conn->received += len;
+
+		data = uncompress_data(conn, rb->data, len, &data_len);
+
+		if (add_fragment(conn->cached, conn->from, data, data_len) == 1)
+			conn->tries = 0;
+
+		if (data && data != rb->data) mem_free(data);
+
+		conn->from += data_len;
+
+		kill_buffer_data(rb, len);
+
+		if (!info->length && !rb->close) {
+			read_http_data_done(conn);
+			return;
+		}
+
+		read_more_http_data(conn, rb);
+
+	} else {
+
+		read_chunked_http_data(conn, rb);
+	}
 }
 
 /* Returns offset of the header end, zero if more data is needed, -1 when

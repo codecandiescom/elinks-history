@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.118 2003/12/05 21:37:03 zas Exp $ */
+/* $Id: link.c,v 1.119 2003/12/05 22:01:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -748,20 +748,23 @@ get_current_state(struct session *ses)
 struct link *
 choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 {
-	struct link *l1, *l2, *l;
+	struct link *l1, *l2, *link;
+	int mouse_x, mouse_y;
 	register int i;
 
 	assert(doc_view && doc_view->vs && doc_view->document && ev);
 	if_assert_failed return NULL;
 
+	/* If no link in document, nothing to do. */
+	if (!doc_view->document->nlinks) return NULL;
+
+	/* If mouse is outside document view, no need to go further. */
+	if (ev->x < 0 || ev->x >= doc_view->width) return NULL;
+	if (ev->y < 0 || ev->y >= doc_view->height) return NULL;
+
+	/* Find links candidats. */
 	l1 = doc_view->document->links + doc_view->document->nlinks;
 	l2 = doc_view->document->links;
-
-	if (!doc_view->document->nlinks
-	    || ev->x < 0 || ev->y < 0
-	    || ev->x >= doc_view->width || ev->y >= doc_view->height)
-		return NULL;
-
 	for (i = doc_view->vs->y;
 	     i < doc_view->document->height && i < doc_view->vs->y + doc_view->height;
 	     i++) {
@@ -771,11 +774,14 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 			l2 = doc_view->document->lines2[i];
 	}
 
-	for (l = l1; l <= l2; l++) {
-		for (i = 0; i < l->n; i++)
-			if (l->pos[i].x - doc_view->vs->x == ev->x
-			    && l->pos[i].y - doc_view->vs->y == ev->y)
-				return l;
+	/* Is there a link under mouse cursor ? */
+	mouse_x = ev->x + doc_view->vs->x;
+	mouse_y = ev->y + doc_view->vs->y;
+	for (link = l1; link <= l2; link++) {
+		for (i = 0; i < link->n; i++)
+			if (link->pos[i].x == mouse_x
+			    && link->pos[i].y == mouse_y)
+				return link;
 	}
 
 	return NULL;

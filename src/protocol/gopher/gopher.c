@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.19 2004/10/08 17:19:25 zas Exp $ */
+/* $Id: gopher.c,v 1.20 2004/10/27 15:04:00 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -350,6 +350,9 @@ add_gopher_description(struct string *buffer, enum gopher_entity entity)
 {
 	unsigned char *description = get_gopher_entity_description(entity);
 
+	if (!description)
+		return;
+
 	add_to_string(buffer, "<b>");
 	add_to_string(buffer, description);
 	add_to_string(buffer, "</b> ");
@@ -487,8 +490,9 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 
 		/* Error response from Gopher doesn't deserve to
 		 * be a hyperlink. */
-		if (strlcmp(address.source, address.length,
-			    "gopher://error.host:1/0", -1))
+		if (address.length > 0
+		    && strlcmp(address.source, address.length - 1,
+			       "gopher://error.host:1/", -1))
 			add_gopher_link(buffer, name, address.source);
 		else
 			add_to_string(buffer, name);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.3 2002/04/07 14:06:38 pasky Exp $ */
+/* $Id: download.c,v 1.4 2002/04/16 16:16:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,27 +46,42 @@
 struct list_head downloads = {&downloads, &downloads};
 
 
-int are_there_downloads()
+int
+are_there_downloads()
 {
-	int d = 0;
 	struct download *down;
-	foreach(down, downloads) if (!down->prog) d = 1;
-	return d;
+
+	foreach (down, downloads)
+		if (!down->prog)
+			return 1;
+
+	return 0;
 }
 
-struct session *get_download_ses(struct download *down)
+
+struct session *
+get_download_ses(struct download *down)
 {
 	struct session *ses;
-	foreach(ses, sessions) if (ses == down->ses) return ses;
-	if (!list_empty(sessions)) return sessions.next;
+
+	foreach(ses, sessions)
+		if (ses == down->ses)
+			return ses;
+
+	if (!list_empty(sessions))
+		return sessions.next;
+
 	return NULL;
 }
 
-void abort_download(struct download *down)
+
+void
+abort_download(struct download *down)
 {
 	if (down->win) delete_window(down->win);
 	if (down->ask) delete_window(down->ask);
-	if (down->stat.state >= 0) change_connection(&down->stat, NULL, PRI_CANCEL);
+	if (down->stat.state >= 0)
+		change_connection(&down->stat, NULL, PRI_CANCEL);
 	mem_free(down->url);
 	if (down->handle != -1) close(down->handle);
 	if (down->prog) {
@@ -78,20 +93,28 @@ void abort_download(struct download *down)
 	mem_free(down);
 }
 
-void kill_downloads_to_file(unsigned char *file)
+
+void
+kill_downloads_to_file(unsigned char *file)
 {
 	struct download *down;
 
-	foreach(down, downloads)
-		if (!strcmp(down->file, file))
-			down = down->prev, abort_download(down->next);
+	foreach (down, downloads) {
+		if (!strcmp(down->file, file)) {
+			down = down->prev;
+			abort_download(down->next);
+		}
+	}
 }
+
 
 void
 abort_all_downloads()
 {
-	while (!list_empty(downloads)) abort_download(downloads.next);
+	while (!list_empty(downloads))
+		abort_download(downloads.next);
 }
+
 
 void
 destroy_downloads(struct session *ses)
@@ -106,30 +129,43 @@ destroy_downloads(struct session *ses)
 	}
 }
 
-void undisplay_download(struct download *down)
+
+void
+undisplay_download(struct download *down)
 {
 	if (down->win) delete_window(down->win);
 }
 
-int dlg_abort_download(struct dialog_data *dlg, struct dialog_item_data *di)
+
+int
+dlg_abort_download(struct dialog_data *dlg, struct dialog_item_data *di)
 {
-	register_bottom_half((void (*)(void *))abort_download, dlg->dlg->udata);
+	register_bottom_half((void (*)(void *)) abort_download,
+			     dlg->dlg->udata);
 	return 0;
 }
 
-int dlg_undisplay_download(struct dialog_data *dlg, struct dialog_item_data *di)
+
+int
+dlg_undisplay_download(struct dialog_data *dlg, struct dialog_item_data *di)
 {
-	register_bottom_half((void (*)(void *))undisplay_download, dlg->dlg->udata);
+	register_bottom_half((void (*)(void *)) undisplay_download,
+			     dlg->dlg->udata);
 	return 0;
 }
 
-void download_abort_function(struct dialog_data *dlg)
+
+void
+download_abort_function(struct dialog_data *dlg)
 {
 	struct download *down = dlg->dlg->udata;
+
 	down->win = NULL;
 }
 
-void download_window_function(struct dialog_data *dlg)
+
+void
+download_window_function(struct dialog_data *dlg)
 {
 	struct download *down = dlg->dlg->udata;
 	struct terminal *term = dlg->win->term;
@@ -138,100 +174,170 @@ void download_window_function(struct dialog_data *dlg)
 	int t = 0;
 	unsigned char *m, *u;
 	struct status *stat = &down->stat;
+
 	redraw_below_window(dlg->win);
 	down->win = dlg->win;
+
 	if (stat->state == S_TRANS && stat->prg->elapsed / 100) {
 		int l = 0;
+
 		m = init_str();
+		if (!m) return;
+
 		t = 1;
 		add_to_str(&m, &l, _(TEXT(T_RECEIVED), term));
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, stat->prg->pos);
-		if (stat->prg->size >= 0)
-			add_to_str(&m, &l, " "), add_to_str(&m, &l, _(TEXT(T_OF),term)), add_to_str(&m, &l, " "), add_xnum_to_str(&m, &l, stat->prg->size), add_to_str(&m, &l, " ");
+
+		if (stat->prg->size >= 0) {
+			add_to_str(&m, &l, " ");
+			add_to_str(&m, &l, _(TEXT(T_OF),term));
+			add_to_str(&m, &l, " ");
+			add_xnum_to_str(&m, &l, stat->prg->size);
+			add_to_str(&m, &l, " ");
+		}
 		add_to_str(&m, &l, "\n");
+
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
 			add_to_str(&m, &l, _(TEXT(T_AVERAGE_SPEED), term));
 		else add_to_str(&m, &l, _(TEXT(T_SPEED), term));
+
 		add_to_str(&m, &l, " ");
-		add_xnum_to_str(&m, &l, (longlong)stat->prg->loaded * 10 / (stat->prg->elapsed / 100));
+		add_xnum_to_str(&m, &l, (longlong) stat->prg->loaded * 10
+					/ (stat->prg->elapsed / 100));
 		add_to_str(&m, &l, "/s");
-		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
-			add_to_str(&m, &l, ", "), add_to_str(&m, &l, _(TEXT(T_CURRENT_SPEED), term)), add_to_str(&m, &l, " "),
-			add_xnum_to_str(&m, &l, stat->prg->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000)),
+
+		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+			add_to_str(&m, &l, ", ");
+			add_to_str(&m, &l, _(TEXT(T_CURRENT_SPEED), term));
+			add_to_str(&m, &l, " ");
+			add_xnum_to_str(&m, &l, stat->prg->cur_loaded
+						/ (CURRENT_SPD_SEC *
+						   SPD_DISP_TIME / 1000));
 			add_to_str(&m, &l, "/s");
+		}
+
 		add_to_str(&m, &l, "\n");
 		add_to_str(&m, &l, _(TEXT(T_ELAPSED_TIME), term));
 		add_to_str(&m, &l, " ");
 		add_time_to_str(&m, &l, stat->prg->elapsed);
+
 		if (stat->prg->size >= 0 && stat->prg->loaded > 0) {
 			add_to_str(&m, &l, ", ");
 			add_to_str(&m, &l, _(TEXT(T_ESTIMATED_TIME), term));
 			add_to_str(&m, &l, " ");
-			/*add_time_to_str(&m, &l, stat->prg->elapsed / 1000 * stat->prg->size / stat->prg->loaded * 1000 - stat->prg->elapsed);*/
-			add_time_to_str(&m, &l, (stat->prg->size - stat->prg->pos) / ((longlong)stat->prg->loaded * 10 / (stat->prg->elapsed / 100)) * 1000);
+#if 0
+			add_time_to_str(&m, &l, stat->prg->elapsed
+						/ 1000 * stat->prg->size
+						/ 1000 * stat->prg->loaded
+						- stat->prg->elapsed);
+#endif
+			add_time_to_str(&m, &l, (stat->prg->size - stat->prg->pos)
+				 		/ ((longlong) stat->prg->loaded * 10
+						   / (stat->prg->elapsed / 100))
+						* 1000);
 		}
+
 	} else m = stracpy(_(get_err_msg(stat->state), term));
+
 	if (!m) return;
+
 	u = stracpy(down->url);
-	if (strchr(u, POST_CHAR)) *strchr(u, POST_CHAR) = 0;
+	if (!u) {
+		mem_free(m);
+		return;
+	} else {
+		unsigned char *p = strchr(u, POST_CHAR);
+
+		if (p) *p = '\0';
+	}
+
 	max_text_width(term, u, &max);
 	min_text_width(term, u, &min);
 	max_text_width(term, m, &max);
 	min_text_width(term, m, &min);
 	max_buttons_width(term, dlg->items, dlg->n, &max);
 	min_buttons_width(term, dlg->items, dlg->n, &min);
+
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w < min) w = min;
-	if (w > dlg->win->term->x - 2 * DIALOG_LB) w = dlg->win->term->x - 2 * DIALOG_LB;
+	if (w > dlg->win->term->x - 2 * DIALOG_LB)
+		w = dlg->win->term->x - 2 * DIALOG_LB;
 	if (t && stat->prg->size >= 0) {
 		if (w < DOWN_DLG_MIN) w = DOWN_DLG_MIN;
 	} else {
 		if (w > max) w = max;
 	}
 	if (w < 1) w = 1;
+
 	y = 0;
 	dlg_format_text(NULL, term, u, 0, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+
 	y++;
 	if (t && stat->prg->size >= 0) y += 2;
 	dlg_format_text(NULL, term, m, 0, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+
 	y++;
 	dlg_format_buttons(NULL, term, dlg->items, dlg->n, 0, &y, w, NULL, AL_CENTER);
+
 	dlg->xw = w + 2 * DIALOG_LB;
 	dlg->yw = y + 2 * DIALOG_TB;
+
 	center_dlg(dlg);
 	draw_dlg(dlg);
+
 	y = dlg->y + DIALOG_TB + 1;
 	x = dlg->x + DIALOG_LB;
 	dlg_format_text(term, term, u, x, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+
 	if (t && stat->prg->size >= 0) {
 		unsigned char q[64];
 		int p = w - 6;
+
 		y++;
 		set_only_char(term, x, y, '[');
 		set_only_char(term, x + w - 5, y, ']');
-		fill_area(term, x + 1, y, (int)((longlong)p * (longlong)stat->prg->pos / (longlong)stat->prg->size), 1, COLOR_DIALOG_METER);
-		sprintf(q, "%3d%%", (int)((longlong)100 * (longlong)stat->prg->pos / (longlong)stat->prg->size));
+		fill_area(term, x + 1, y,
+			  (int) ((longlong) p * (longlong) stat->prg->pos
+			         / (longlong) stat->prg->size),
+			  1, COLOR_DIALOG_METER);
+		sprintf(q, "%3d%%",
+			  (int) ((longlong) 100 * (longlong) stat->prg->pos
+			         / (longlong) stat->prg->size));
 		print_text(term, x + w - 4, y, strlen(q), q, COLOR_DIALOG_TEXT);
 		y++;
 	}
+
 	y++;
 	dlg_format_text(term, term, m, x, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+
 	y++;
 	dlg_format_buttons(term, term, dlg->items, dlg->n, x, &y, w, NULL, AL_CENTER);
+
 	mem_free(u);
 	mem_free(m);
 }
 
-void display_download(struct terminal *term, struct download *down, struct session *ses)
+
+void
+display_download(struct terminal *term, struct download *down,
+		 struct session *ses)
 {
 	struct dialog *dlg;
 	struct download *dd;
-	foreach(dd, downloads) if (dd == down) goto found;
+
+	foreach (dd, downloads)
+		if (dd == down)
+			goto found;
 	return;
-	found:
-	if (!(dlg = mem_alloc(sizeof(struct dialog) + 3 * sizeof(struct dialog_item)))) return;
-	memset(dlg, 0, sizeof(struct dialog) + 3 * sizeof(struct dialog_item));
+
+found:
+#define DLG_ALLOC_SIZE sizeof(struct dialog) + 3 * sizeof(struct dialog_item)
+	dlg = mem_alloc(DLG_ALLOC_SIZE);
+	if (!dlg) return;
+	memset(dlg, 0, DLG_ALLOC_SIZE);
+#undef 	DLG_ALLOC_SIZE
+
 	undisplay_download(down);
 	down->ses = ses;
 	dlg->title = TEXT(T_DOWNLOAD);
@@ -239,250 +345,397 @@ void display_download(struct terminal *term, struct download *down, struct sessi
 	dlg->abort = download_abort_function;
 	dlg->udata = down;
 	dlg->align = AL_CENTER;
+
 	dlg->items[0].type = D_BUTTON;
 	dlg->items[0].gid = B_ENTER | B_ESC;
 	dlg->items[0].fn = dlg_undisplay_download;
 	dlg->items[0].text = TEXT(T_BACKGROUND);
+
 	dlg->items[1].type = D_BUTTON;
 	dlg->items[1].gid = 0;
 	dlg->items[1].fn = dlg_abort_download;
 	dlg->items[1].text = TEXT(T_ABORT);
+
 	dlg->items[2].type = D_END;
+
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
 
-void download_data(struct status *stat, struct download *down)
+
+void
+download_data(struct status *stat, struct download *down)
 {
 	struct cache_entry *ce;
 	struct fragment *frag;
-	if (stat->state >= S_WAIT && stat->state < S_TRANS) goto end_store;
-	if (!(ce = stat->ce)) goto end_store;
+
+	if (stat->state >= S_WAIT && stat->state < S_TRANS)
+		goto end_store;
+
+	ce = stat->ce;
+	if (!ce) goto end_store;
+
 	if (ce->last_modified)
-	down->remotetime = parse_http_date(ce->last_modified);
+		down->remotetime = parse_http_date(ce->last_modified);
+
 	if (ce->redirect && down->redirect_cnt++ < MAX_REDIRECTS) {
-		unsigned char *u, *p;
-		if (stat->state >= 0) change_connection(&down->stat, NULL, PRI_CANCEL);
+		unsigned char *u;
+
+		if (stat->state >= 0)
+			change_connection(&down->stat, NULL, PRI_CANCEL);
+
 		u = stracpy(ce->redirect);
-		if (!http_bugs.bug_302_redirect) if (!ce->redirect_get && (p = strchr(down->url, POST_CHAR))) add_to_strn(&u, p);
+		if (!u) return;
+
+		if (!http_bugs.bug_302_redirect && !ce->redirect_get) {
+			unsigned char *p = strchr(down->url, POST_CHAR);
+
+			if (p) add_to_strn(&u, p);
+		}
+
 		mem_free(down->url);
+
 		down->url = u;
 		down->stat.state = S_WAIT_REDIR;
+
 		if (down->win) {
 			struct event ev = { EV_REDRAW, 0, 0, 0 };
+
 			ev.x = down->win->term->x;
 			ev.y = down->win->term->y;
 			down->win->handler(down->win, &ev, 0);
 		}
-		load_url(down->url, ce->url, &down->stat, PRI_DOWNLOAD, NC_CACHE);
+
+		load_url(down->url, ce->url, &down->stat, PRI_DOWNLOAD,
+			 NC_CACHE);
+
 		return;
 	}
-	foreach(frag, ce->frag) if (frag->offset <= down->last_pos && frag->offset + frag->length > down->last_pos) {
-		int w = write(down->handle, frag->data + down->last_pos - frag->offset, frag->length - (down->last_pos - frag->offset));
-		if (w == -1) {
-			detach_connection(stat, down->last_pos);
-			if (!list_empty(sessions)) {
-				unsigned char *msg = stracpy(down->file);
-				unsigned char *emsg = stracpy(strerror(errno));
-				msg_box(get_download_ses(down)->term, getml(msg, emsg, NULL),
-					TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
-					TEXT(T_COULD_NOT_WRITE_TO_FILE), " ", msg, ": ", emsg, NULL,
-					NULL, 1,
-					TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+
+	foreach (frag, ce->frag) {
+		/* TODO: Separate function? --pasky */
+		int remain = down->last_pos - frag->offset;
+
+		if (remain >= 0 && frag->length > remain) {
+			int saved_errno;
+			int w = write(down->handle, frag->data + remain,
+				      frag->length - remain);
+
+			saved_errno = errno; /* Saved in case of ... --Zas */
+			if (w == -1) {
+				detach_connection(stat, down->last_pos);
+				if (!list_empty(sessions)) {
+					unsigned char *msg = stracpy(down->file);
+					unsigned char *emsg = stracpy(strerror(saved_errno));
+
+					if (msg && emsg) {
+						msg_box(get_download_ses(down)->term, getml(msg, emsg, NULL),
+							TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
+							TEXT(T_COULD_NOT_WRITE_TO_FILE),
+							" ", msg, ": ", emsg, NULL,
+							NULL, 1,
+							TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+					} else {
+						if (msg) mem_free(msg);
+						if (emsg) mem_free(emsg);
+					}
+				}
+
+				abort_download(down);
+				return;
 			}
-			abort_download(down);
-			return;
+			down->last_pos += w;
 		}
-		down->last_pos += w;
 	}
+
 	detach_connection(stat, down->last_pos);
-	end_store:;
+
+end_store:
 	if (stat->state < 0) {
 		if (stat->state != S_OK) {
 			unsigned char *t = get_err_msg(stat->state);
+
 			if (t) {
 				unsigned char *tt = stracpy(down->url);
-				if (strchr(tt, POST_CHAR)) *strchr(tt, POST_CHAR) = 0;
-				msg_box(get_download_ses(down)->term, getml(tt, NULL),
-					TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
-					TEXT(T_ERROR_DOWNLOADING), " ", tt, ":\n\n", t, NULL,
-					get_download_ses(down), 1,
-					TEXT(T_CANCEL), NULL, B_ENTER | B_ESC /*,
-					TEXT(T_RETRY), NULL, 0 */ /* !!! FIXME: retry */);
+
+				if (tt) {
+					unsigned char *p = strchr(tt, POST_CHAR);
+					if (p) *p = '\0';
+
+					msg_box(get_download_ses(down)->term, getml(tt, NULL),
+						TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
+						TEXT(T_ERROR_DOWNLOADING), " ",
+						tt, ":\n\n", t, NULL,
+						get_download_ses(down), 1,
+						TEXT(T_CANCEL), NULL, B_ENTER | B_ESC /*,
+						TEXT(T_RETRY), NULL, 0 */ /* FIXME: retry */);
+				}
 			}
+
 		} else {
 			if (down->prog) {
-				close(down->handle), down->handle = -1;
-				exec_on_terminal(get_download_ses(down)->term, down->prog, down->file, !!down->prog_flags);
-				mem_free(down->prog), down->prog = NULL;
+				close(down->handle);
+				down->handle = -1;
+				exec_on_terminal(get_download_ses(down)->term,
+						 down->prog, down->file,
+						 !!down->prog_flags);
+				mem_free(down->prog);
+				down->prog = NULL;
+
 			} else if (down->remotetime && download_utime) {
 				struct utimbuf foo;
+
 				foo.actime = foo.modtime = down->remotetime;
 				utime(down->file, &foo);
 			}
 		}
+
 		abort_download(down);
 		return;
 	}
+
 	if (down->win) {
 		struct event ev = { EV_REDRAW, 0, 0, 0 };
+
 		ev.x = down->win->term->x;
 		ev.y = down->win->term->y;
 		down->win->handler(down->win, &ev, 0);
 	}
 }
 
-int create_download_file(struct terminal *term, unsigned char *fi, int safe)
+
+int
+create_download_file(struct terminal *term, unsigned char *fi, int safe)
 {
 	unsigned char *file = fi;
 	unsigned char *wd;
 	int h;
 	int i;
+	int saved_errno;
 #ifdef NO_FILE_SECURITY
 	int sf = 0;
 #else
 	int sf = safe;
 #endif
+
 	wd = get_cwd();
 	set_cwd(term->cwd);
+
 	if (file[0] == '~' && dir_sep(file[1])) {
 		unsigned char *h = getenv("HOME");
+
 		if (h) {
 			int fl = 0;
-			if ((file = init_str())) {
+
+			file = init_str();
+			if (file) {
 				add_to_str(&file, &fl, h);
 				add_to_str(&file, &fl, fi + 1);
 			}
 		}
 	}
-	h = open(file, O_CREAT|O_WRONLY|O_TRUNC|(sf?O_EXCL:0), sf ? 0600 : 0666);
-	if (wd) set_cwd(wd), mem_free(wd);
+
+	h = open(file, O_CREAT | O_WRONLY | O_TRUNC | (sf ? O_EXCL : 0),
+		 sf ? 0600 : 0666);
+	saved_errno = errno; /* Saved in case of ... --Zas */
+
+
+	if (wd) {
+		set_cwd(wd);
+		mem_free(wd);
+	}
+
 	if (h == -1) {
 		unsigned char *msg = stracpy(file);
-		unsigned char *msge = stracpy(strerror(errno));
-		msg_box(term, getml(msg, msge, NULL),
-			TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
-			TEXT(T_COULD_NOT_CREATE_FILE), " ", msg, ": ", msge, NULL,
-			NULL, 1,
-			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
-		if (file != fi) mem_free(file);
-		return -1;
+		unsigned char *msge = stracpy(strerror(saved_errno));
+
+		if (msg && msge) {
+			msg_box(term, getml(msg, msge, NULL),
+				TEXT(T_DOWNLOAD_ERROR), AL_CENTER | AL_EXTD_TEXT,
+				TEXT(T_COULD_NOT_CREATE_FILE), " ", msg, ": ",
+				msge, NULL,
+				NULL, 1,
+				TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		} else {
+			if (msg) mem_free(msg);
+			if (msge) mem_free(msge);
+		}
+
+		h = -1;
+		goto end;
 	}
+
 	set_bin(h);
-	if (safe) goto x;
-	if (strlen(file) > MAX_STR_LEN) memcpy(download_dir, file, MAX_STR_LEN - 1), download_dir[MAX_STR_LEN - 1] = 0;
-	else strcpy(download_dir, file);
-	for (i = strlen(download_dir) - 1; i >= 0; i--) if (dir_sep(download_dir[i])) {
-		download_dir[i + 1] = 0;
-		goto x;
+
+	if (safe) goto end;
+
+	safe_strncpy(download_dir, file, MAX_STR_LEN);
+
+	for (i = strlen(download_dir) - 1; i >= 0; i--) {
+		if (dir_sep(download_dir[i])) {
+			download_dir[i + 1] = 0;
+			goto end;
+		}
 	}
+
 	download_dir[0] = 0;
-	x:
+
+end:
 	if (file != fi) mem_free(file);
 	return h;
 }
 
-unsigned char *get_temp_name(unsigned char *url)
+
+unsigned char *
+get_temp_name(unsigned char *url)
 {
 	int l, nl;
-	unsigned char *name, *fn, *fnn, *fnnn, *s;
+	unsigned char *name = init_str();
+	unsigned char *fn, *fnn, *fnnn, *s;
 	unsigned char *nm = tempnam(NULL, "links");
-	if (!nm) return NULL;
-	name = init_str();
+
+
+	if (!nm || !name) {
+		if (name) mem_free(name);
+		return NULL;
+	}
+
 	nl = 0;
 	add_to_str(&name, &nl, nm);
 	free(nm);
+
 	get_filename_from_url(url, &fn, &l);
+
 	fnnn = NULL;
-	for (fnn = fn; fnn < fn + l; fnn++) if (*fnn == '.') fnnn = fnn;
-	if (fnnn && (s = memacpy(fnnn, l - (fnnn - fn)))) {
-		check_shell_security(&s);
-		add_to_str(&name, &nl, s);
-		mem_free(s);
+	for (fnn = fn; fnn < fn + l; fnn++)
+		if (*fnn == '.')
+			fnnn = fnn;
+
+	if (fnnn) {
+		s = memacpy(fnnn, l - (fnnn - fn));
+	       	if (s) {
+			check_shell_security(&s);
+			add_to_str(&name, &nl, s);
+			mem_free(s);
+		}
 	}
+
 	return name;
 }
 
-unsigned char *subst_file(unsigned char *prog, unsigned char *file)
+
+unsigned char *
+subst_file(unsigned char *prog, unsigned char *file)
 {
 	unsigned char *n = init_str();
 	int l = 0;
+
+	if (!n) return NULL;
+
 	while (*prog) {
 		int p;
+
 		for (p = 0; prog[p] && prog[p] != '%'; p++);
+
 		add_bytes_to_str(&n, &l, prog, p);
 		prog += p;
+
 		if (*prog == '%') {
 			add_to_str(&n, &l, file);
 			prog++;
 		}
 	}
+
 	return n;
 }
 
-void start_download(struct session *ses, unsigned char *file)
+
+void
+start_download(struct session *ses, unsigned char *file)
 {
 	struct download *down;
 	int h;
 	unsigned char *url = ses->dn_url;
+
 	if (!url) return;
+
 	kill_downloads_to_file(file);
-	if ((h = create_download_file(ses->term, file, 0)) == -1) return;
-	if (!(down = mem_alloc(sizeof(struct download)))) return;
+
+	h = create_download_file(ses->term, file, 0);
+	if (h == -1) return;
+
+	down = mem_alloc(sizeof(struct download));
+	if (!down) return;
 	memset(down, 0, sizeof(struct download));
+
 	down->url = stracpy(url);
-	down->stat.end = (void (*)(struct status *, void *))download_data;
+	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;
 	down->last_pos = 0;
 	down->file = stracpy(file);
 	down->handle = h;
 	down->ses = ses;
 	down->remotetime = 0;
+
 	add_to_list(downloads, down);
 	load_url(url, ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE);
 	display_download(ses->term, down, ses);
 }
 
+
 void tp_cancel(struct session *);
 
 void tp_free(struct session *);
 
-void continue_download(struct session *ses, unsigned char *file)
+
+void
+continue_download(struct session *ses, unsigned char *file)
 {
 	struct download *down;
 	int h;
 	unsigned char *url = ses->tq_url;
+
 	if (!url) return;
+
 	if (ses->tq_prog) {
-		if (!(file = get_temp_name(url))) {
+		file = get_temp_name(url);
+		if (!file) {
 			tp_cancel(ses);
 			return;
 		}
 	}
+
 	kill_downloads_to_file(file);
-	if ((h = create_download_file(ses->term, file, !!ses->tq_prog)) == -1) {
+
+	h = create_download_file(ses->term, file, !!ses->tq_prog);
+	if (h == -1) {
 		tp_cancel(ses);
 		if (ses->tq_prog) mem_free(file);
 		return;
 	}
-	if (!(down = mem_alloc(sizeof(struct download)))) {
+
+	down = mem_alloc(sizeof(struct download));
+	if (!down) {
 		tp_cancel(ses);
 		if (ses->tq_prog) mem_free(file);
 		return;
 	}
 	memset(down, 0, sizeof(struct download));
+
 	down->url = stracpy(url);
-	down->stat.end = (void (*)(struct status *, void *))download_data;
+	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;
 	down->last_pos = 0;
 	down->file = stracpy(file);
 	down->handle = h;
 	down->ses = ses;
+
 	if (ses->tq_prog) {
 		down->prog = subst_file(ses->tq_prog, file);
 		mem_free(file);
 		mem_free(ses->tq_prog);
 		ses->tq_prog = NULL;
 	}
+
 	down->prog_flags = ses->tq_prog_flags;
 	add_to_list(downloads, down);
 	change_connection(&ses->tq, &down->stat, PRI_DOWNLOAD);
@@ -490,65 +743,105 @@ void continue_download(struct session *ses, unsigned char *file)
 	display_download(ses->term, down, ses);
 }
 
-void tp_free(struct session *ses)
+
+void
+tp_free(struct session *ses)
 {
 	ses->tq_ce->refcount--;
 	mem_free(ses->tq_url);
 	ses->tq_url = NULL;
-	if (ses->tq_goto_position) mem_free(ses->tq_goto_position), ses->tq_goto_position = NULL;
+	if (ses->tq_goto_position) {
+		mem_free(ses->tq_goto_position);
+		ses->tq_goto_position = NULL;
+	}
 	ses->tq_ce = NULL;
 }
 
-void tp_cancel(struct session *ses)
+
+void
+tp_cancel(struct session *ses)
 {
 	change_connection(&ses->tq, NULL, PRI_CANCEL);
 	tp_free(ses);
 }
 
-void tp_save(struct session *ses)
+
+void
+tp_save(struct session *ses)
 {
-	if (ses->tq_prog) mem_free(ses->tq_prog), ses->tq_prog = NULL;
+	if (ses->tq_prog) {
+		mem_free(ses->tq_prog);
+		ses->tq_prog = NULL;
+	}
 	query_file(ses, ses->tq_url, continue_download, tp_cancel);
 }
 
-void tp_open(struct session *ses)
+
+void
+tp_open(struct session *ses)
 {
 	continue_download(ses, "");
 }
 
-void tp_display(struct session *ses)	/* !!! FIXME: frames */
+
+void
+tp_display(struct session *ses)	/* !!! FIXME: frames */
 {
 	struct location *l;
-	if (!(l = mem_alloc(sizeof(struct location) + strlen(ses->tq_url)))) return;
+
+	l = mem_alloc(sizeof(struct location) + strlen(ses->tq_url));
+	if (!l) return;
 	memset(l, 0, sizeof(struct location));
+
 	init_list(l->frames);
 	memcpy(&l->stat, &ses->tq, sizeof(struct status));
+
 	init_vs(&l->vs, ses->tq_url);
 	if (ses->tq_goto_position) {
 		l->vs.goto_position = ses->tq_goto_position;
 		ses->tq_goto_position = NULL;
 	}
+
 	add_to_history(ses, l);
-	cur_loc(ses)->stat.end = (void (*)(struct status *, void *))doc_end_load;
+	cur_loc(ses)->stat.end = (void (*)(struct status *, void *))
+				 doc_end_load;
 	cur_loc(ses)->stat.data = ses;
-	if (ses->tq.state >= 0) change_connection(&ses->tq, &cur_loc(ses)->stat, PRI_MAIN);
-	else cur_loc(ses)->stat.state = ses->tq.state;
+
+	if (ses->tq.state >= 0)
+		change_connection(&ses->tq, &cur_loc(ses)->stat, PRI_MAIN);
+	else
+		cur_loc(ses)->stat.state = ses->tq.state;
+
 	cur_loc(ses)->vs.plain = 1;
 	display_timer(ses);
 	tp_free(ses);
 }
 
-void type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct, struct assoc *a)
+
+void
+type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
+	   struct assoc *a)
 {
 	unsigned char *m1;
-	unsigned char *m2;
-	if (ses->tq_prog) mem_free(ses->tq_prog), ses->tq_prog = NULL;
-	if (a) ses->tq_prog = stracpy(a->prog), ses->tq_prog_flags = a->block;
+
+	if (ses->tq_prog) {
+		mem_free(ses->tq_prog);
+		ses->tq_prog = NULL;
+	}
+
+	if (a) {
+		ses->tq_prog = stracpy(a->prog);
+		ses->tq_prog_flags = a->block;
+	}
+
 	if (a && !a->ask) {
 		tp_open(ses);
 		return;
 	}
+
 	m1 = stracpy(ct);
+	if (!m1) return;
+
 	if (!a) {
 		if (!anonymous) {
 			msg_box(ses->term, getml(m1, NULL),
@@ -569,7 +862,18 @@ void type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct, 
 				TEXT(T_CANCEL), tp_cancel, B_ESC);
 		}
 	} else {
-		m2 = stracpy(a->label ? a->label : (unsigned char *)"");
+		unsigned char *m2;
+
+		if (a->label)
+			m2 = stracpy(a->label);
+		else
+			m2 = stracpy("");
+
+		if (!m2) {
+			free(m1);
+			return;
+		}
+
 		if (!anonymous) {
 			msg_box(ses->term, getml(m1, m2, NULL),
 				TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
@@ -595,29 +899,45 @@ void type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct, 
 	}
 }
 
-int ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
+
+int
+ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 {
 	struct assoc *a;
-	unsigned char *ct;
 	int r = 0;
-	if (!(ct = get_content_type(ce->head, ce->url))) goto f;
-	if (!strcasecmp(ct, "text/html")) goto ff;
+	unsigned char *ct = get_content_type(ce->head, ce->url);
+
+	if (!ct) goto end;
+
+	if (!strcasecmp(ct, "text/html")) goto free_ct;
+
 	r = 1;
-	if (!strcasecmp(ct, "text/plain")) goto ff;
-	if (!(a = get_type_assoc(ses->term, ct)) && strlen(ct) >= 4 && !casecmp(ct, "text", 4)) goto ff;
-	if (ses->tq_url) internal("type query to %s already in prgress", ses->tq_url);
+	if (!strcasecmp(ct, "text/plain")) goto free_ct;
+
+	a = get_type_assoc(ses->term, ct);
+	if (!a && strlen(ct) >= 4 && !casecmp(ct, "text", 4)) goto free_ct;
+
+	if (ses->tq_url)
+		internal("Type query to %s already in progress.", ses->tq_url);
+
 	ses->tq_url = stracpy(ses->loading_url);
 	change_connection(&ses->loading, *stat = &ses->tq, PRI_MAIN);
-	(ses->tq_ce = ce)->refcount++;
+
+	ses->tq_ce = ce;
+	ses->tq_ce->refcount++;
+
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
+
 	ses->tq_goto_position = stracpy(ses->goto_position);
 	type_query(ses, ce, ct, a);
 	mem_free(ct);
+
 	return 1;
 
-	ff:
+free_ct:
 	mem_free(ct);
-	f:
+
+end:
 	if (ses->wtd_target && r) *ses->wtd_target = 0;
 	ses_forward(ses);
 	cur_loc(ses)->vs.plain = r;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.176 2004/04/07 22:14:18 jonas Exp $ */
+/* $Id: uri.c,v 1.177 2004/04/08 04:33:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -347,7 +347,7 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 {
 	unsigned char *parse_string = uristring;
 	unsigned char *src, *dest, *path;
-	int lo;
+	int lo, need_slash = 0;
 
 	/* We need to get the real (proxied) URI but lowercase relevant URI
 	 * parts along the way. */
@@ -371,9 +371,12 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 	/* dsep() *hint* *hint* */
 	lo = (uri->protocol == PROTOCOL_FILE);
 
+	if (uri->protocol != PROTOCOL_UNKNOWN)
+		need_slash = get_protocol_need_slash_after_host(uri->protocol);
+
 	/* We want to start at the first slash to also reduce URIs like
 	 * http://host//index.html to http://host/index.html */
-	path = uri->data - !!get_protocol_need_slash_after_host(uri->protocol);
+	path = uri->data - need_slash;
 	dest = src = path;
 
 	/* This loop mangles the URI string by removing directory elevators and

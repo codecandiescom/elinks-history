@@ -1,10 +1,11 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.37 2003/06/14 01:00:42 zas Exp $ */
+/* $Id: charsets.c,v 1.38 2003/06/14 19:37:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <stdlib.h>
 
 #include "elinks.h"
@@ -621,7 +622,8 @@ decode:
 				   || (c[i] == '#')))
 				i++;
 
-			if (c[i] == ';' && i > start) {
+			/* Eat &nbsp &nbsp<foo>. --pasky */
+			if (/* c[i] == ';' */ !isalnum(c[i]) && i > start) {
 				e = get_entity_string(&c[start], i - start,
 	 					      d_opt->cp);
 				if (!e) goto putc;

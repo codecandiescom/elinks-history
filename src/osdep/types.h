@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.7 2004/04/08 02:00:35 jonas Exp $ */
+/* $Id: types.h,v 1.8 2004/09/26 16:09:17 jonas Exp $ */
 
 #ifndef EL__UTIL_TYPES_H
 #define EL__UTIL_TYPES_H
@@ -15,6 +15,22 @@
 
 #ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
+#endif
+
+#ifndef HAVE_UINT16_T
+#if SIZEOF_CHAR == 2
+typedef unsigned char uint16_t;
+#elif SIZEOF_SHORT == 2
+typedef unsigned short uint16_t;
+#elif SIZEOF_INT == 2
+typedef unsigned int uint16_t;
+#elif SIZEOF_LONG == 2
+typedef unsigned long uint16_t;
+#elif defined(HAVE_LONG_LONG) && SIZEOF_LONG_LONG == 2
+typedef unsigned long long uint16_t;
+#else
+#error You have no 16-bit integer type. Get in touch with reality.
+#endif
 #endif
 
 #ifndef HAVE_INT32_T

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.91 2004/11/14 14:28:20 witekfl Exp $ */
+/* $Id: auth.c,v 1.92 2004/11/14 15:39:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,6 @@ struct http_auth_basic *
 find_auth(struct uri *uri)
 {
 	struct http_auth_basic *entry = NULL;
-	unsigned char *id, *ret;
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("find_auth: newurl=%s uri=%p", newurl, uri);
@@ -259,20 +258,7 @@ find_auth(struct uri *uri)
 		return NULL;
 	}
 
-	/* RFC2617 section 2 [Basic Authentication Scheme]
-	 * To receive authorization, the client sends the userid and password,
-	 * separated by a single colon (":") character, within a base64 [7]
-	 * encoded string in the credentials. */
 	return entry;
-#if 0
-	/* Create base64 encoded string. */
-	id = straconcat(entry->user, ":", entry->password, NULL);
-	if (!id) return NULL;
-	ret = base64_encode(id);
-	mem_free(id);
-
-	return ret;
-#endif
 }
 
 /* Delete an entry from auth list. */

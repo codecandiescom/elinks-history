@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.356 2004/11/14 15:16:19 witekfl Exp $ */
+/* $Id: http.c,v 1.357 2004/11/14 15:39:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -622,15 +622,26 @@ http_send_header(struct connection *conn)
 			mem_free_if(response);
 		} else {
 #endif
-			unsigned char *id = straconcat(entry->user,":",entry->password, NULL);
+			/* RFC2617 section 2 [Basic Authentication Scheme]
+			 *
+			 * To receive authorization, the client sends the userid
+			 * and password, separated by a single colon (":")
+			 * character, within a base64 [7] encoded string in the
+			 * credentials. */
+			unsigned char *id;
+
+			/* Create base64 encoded string. */
+			id = straconcat(entry->user, ":" ,entry->password, NULL);
+			if (id) {
+				unsigned char *base64 = base64_encode(id);
+
+				mem_free_set(&id, base64);
+			}
 
 			if (id) {
-				unsigned char *ret = base64_encode(id);
-
 				add_to_string(&header, "Authorization: Basic ");
-				add_to_string(&header, ret);
+				add_to_string(&header, id);
 				add_crlf_to_string(&header);
-				mem_free_if(ret);
 				mem_free(id);
 			}
 		}

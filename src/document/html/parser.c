@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.249 2003/10/31 22:33:50 pasky Exp $ */
+/* $Id: parser.c,v 1.250 2003/11/06 09:45:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,7 +340,7 @@ get_color(unsigned char *a, unsigned char *c, color_t *rgb)
 	unsigned char *at;
 	int r;
 
-	if (!d_opt->color_mode || d_opt->use_document_colours < 1)
+	if (!global_doc_opts->color_mode || global_doc_opts->use_document_colours < 1)
 		return -1;
 
 	at = get_attr_val(a, c);
@@ -355,7 +355,7 @@ get_color(unsigned char *a, unsigned char *c, color_t *rgb)
 int
 get_bgcolor(unsigned char *a, color_t *rgb)
 {
-	if (!d_opt->color_mode || d_opt->use_document_colours < 2)
+	if (!global_doc_opts->color_mode || global_doc_opts->use_document_colours < 2)
 		return -1;
 	return get_color(a, "bgcolor", rgb);
 }
@@ -368,7 +368,7 @@ get_target(unsigned char *a)
 	if (v) {
 		if (!strcasecmp(v, "_self")) {
 			mem_free(v);
-			v = stracpy(d_opt->framename);
+			v = stracpy(global_doc_opts->framename);
 		}
 	}
 
@@ -856,7 +856,7 @@ html_img(unsigned char *a)
 
 	if (!al || !*al) {
 		if (al) mem_free(al);
-		if (!d_opt->images && !format.link) return;
+		if (!global_doc_opts->images && !format.link) return;
 
 		add_brackets = 1;
 
@@ -1152,7 +1152,7 @@ html_pre(unsigned char *a)
 static void
 html_xmp(unsigned char *a)
 {
-	d_opt->plain = 2;
+	global_doc_opts->plain = 2;
 	html_pre(a);
 }
 
@@ -1623,7 +1623,7 @@ xxx:
 	fc->size = get_num(a, "size");
 	if (fc->size == -1) fc->size = HTML_DEFAULT_INPUT_SIZE;
 	fc->size++;
-	if (fc->size > d_opt->width) fc->size = d_opt->width;
+	if (fc->size > global_doc_opts->width) fc->size = global_doc_opts->width;
 	fc->maxlength = get_num(a, "maxlength");
 	if (fc->maxlength == -1) fc->maxlength = MAXINT;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
@@ -2204,12 +2204,12 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (cols <= 0) cols = HTML_DEFAULT_INPUT_SIZE;
 	cols++; /* Add 1 column, other browsers may have different
 		   behavior here (mozilla adds 2) --Zas */
-	if (cols > d_opt->width) cols = d_opt->width;
+	if (cols > global_doc_opts->width) cols = global_doc_opts->width;
 	fc->cols = cols;
 
 	rows = get_num(attr, "rows");
 	if (rows <= 0) rows = 1;
-	if (rows > d_opt->height) rows = d_opt->height;
+	if (rows > global_doc_opts->height) rows = global_doc_opts->height;
 	fc->rows = rows;
 
 	wrap_attr = get_attr_val(attr, "wrap");
@@ -2274,9 +2274,9 @@ html_iframe(unsigned char *a)
 	html_focusable(a);
 
 	if (*name) {
-		put_link_line("IFrame: ", name, url, d_opt->framename);
+		put_link_line("IFrame: ", name, url, global_doc_opts->framename);
 	} else {
-		put_link_line("", "IFrame", url, d_opt->framename);
+		put_link_line("", "IFrame", url, global_doc_opts->framename);
 	}
 
 	mem_free(name);
@@ -2286,7 +2286,7 @@ html_iframe(unsigned char *a)
 static void
 html_noframes(unsigned char *a)
 {
-	if (d_opt->frames) html_skip(a);
+	if (global_doc_opts->frames) html_skip(a);
 }
 
 static void
@@ -2313,7 +2313,7 @@ html_frame(unsigned char *a)
 	}
 	if (!name) return;
 
-	if (!d_opt->frames || !html_top.frameset) {
+	if (!global_doc_opts->frames || !html_top.frameset) {
 		html_focusable(a);
 		put_link_line("Frame: ", name, url, "");
 
@@ -2446,7 +2446,7 @@ html_frameset(unsigned char *a)
 	unsigned char *c, *d;
 	int x, y;
 
-	if (!d_opt->frames || !special_f(ff, SP_USED, NULL)) return;
+	if (!global_doc_opts->frames || !special_f(ff, SP_USED, NULL)) return;
 
 	c = get_attr_val(a, "cols");
 	if (!c) {
@@ -2464,8 +2464,8 @@ html_frameset(unsigned char *a)
 	}
 
 	if (!html_top.frameset) {
-		x = d_opt->width;
-		y = d_opt->height;
+		x = global_doc_opts->width;
+		y = global_doc_opts->height;
 	} else {
 		struct frameset_desc *frameset_desc = html_top.frameset;
 		int offset;
@@ -2761,7 +2761,7 @@ html_link_parse(unsigned char *a, struct hlink *link)
 static void
 html_link(unsigned char *a)
 {
-	int link_display = d_opt->meta_link_display;
+	int link_display = global_doc_opts->meta_link_display;
 	unsigned char *name = NULL;
 	struct hlink link;
 	static unsigned char link_rel_string[] = "Link: ";
@@ -2973,7 +2973,7 @@ process_head(unsigned char *head)
 
 			html_focusable(NULL);
 			url = join_urls(format.href_base, saved_url);
-			put_link_line("Refresh: ", saved_url, url, d_opt->framename);
+			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
 			special_f(ff, SP_REFRESH, seconds, url);
 			mem_free(url);
 			mem_free(saved_url);
@@ -3150,7 +3150,7 @@ next_break:
 			}
 		}
 
-		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !d_opt->plain) {
+		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !global_doc_opts->plain) {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
 			put_chrs(lt, html - lt, put_chars_f, f);
@@ -3158,7 +3158,7 @@ next_break:
 			goto set_lt;
 		}
 
-		if (*html != '<' || d_opt->plain == 1 || parse_element(html, eof, &name, &namelen, &attr, &end)) {
+		if (*html != '<' || global_doc_opts->plain == 1 || parse_element(html, eof, &name, &namelen, &attr, &end)) {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
 			html++;
@@ -3211,7 +3211,7 @@ ng:;
 			if (!inv) {
 				unsigned char *a;
 
-				if (d_opt->plain) {
+				if (global_doc_opts->plain) {
 					put_chrs("<", 1, put_chars_f, f);
 					html = prev_html + 1;
 					break;
@@ -3225,7 +3225,7 @@ ng:;
 					int ali = (par_format.align == AL_NONE);
 					struct par_attrib pa = par_format;
 
-					if (ei->func == html_table && d_opt->tables && table_level < HTML_MAX_TABLE_LEVEL) {
+					if (ei->func == html_table && global_doc_opts->tables && table_level < HTML_MAX_TABLE_LEVEL) {
 						format_table(attr, html, eof, &html, f);
 						ln_break(2, line_break_f, f);
 						goto set_lt;
@@ -3272,8 +3272,8 @@ ng:;
 				int lnb = 0;
 				int xxx = 0;
 
-				if (d_opt->plain) {
-					if (ei->func == html_xmp) d_opt->plain = 0;
+				if (global_doc_opts->plain) {
+					if (ei->func == html_xmp) global_doc_opts->plain = 0;
 					else break;
 				}
 				was_br = 0;

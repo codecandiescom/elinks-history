@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.362 2003/11/05 22:55:08 zas Exp $ */
+/* $Id: renderer.c,v 1.363 2003/11/06 09:45:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,9 +288,9 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 		static enum color_mode color_mode;
 		static enum color_flags color_flags;
 
-		if (d_opt) {
-			color_mode = d_opt->color_mode;
-			color_flags = d_opt->color_flags;
+		if (global_doc_opts) {
+			color_mode = global_doc_opts->color_mode;
+			color_flags = global_doc_opts->color_flags;
 		}
 
 		schar_cache.attr = 0;
@@ -313,14 +313,14 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 		}
 
 		if (link_state != LINK_STATE_NONE
-		    && d_opt->underline_links) {
+		    && global_doc_opts->underline_links) {
 			schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
 		}
 
 		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
 		set_term_color(&schar_cache, &colors, color_flags, color_mode);
 
-		if (d_opt->display_subs) {
+		if (global_doc_opts->display_subs) {
 			static int sub = 0;
 
 			if (format.attr & AT_SUBSCRIPT) {
@@ -336,7 +336,7 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 			}
 		}
 
-		if (d_opt->display_sups) {
+		if (global_doc_opts->display_sups) {
 			static int super = 0;
 
 			if (format.attr & AT_SUPERSCRIPT) {
@@ -964,7 +964,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	link_state = get_link_state();
 
-	if (d_opt->num_links_display && link_state == LINK_STATE_NEW) {
+	if (global_doc_opts->num_links_display && link_state == LINK_STATE_NEW) {
 		put_link_number(part);
 	}
 
@@ -1424,7 +1424,7 @@ format_html(struct cache_entry *ce, struct document *document)
 
 	g_ctrl_num = 0;
 	url = ce->url;
-	d_opt = &document->options;
+	global_doc_opts = &document->options;
 	document->id_tag = ce->id_tag;
 	defrag_entry(ce);
 	fr = ce->frag.next;
@@ -1441,16 +1441,16 @@ format_html(struct cache_entry *ce, struct document *document)
 			 (void (*)(void *)) line_break,
 			 (void *(*)(void *, enum html_special_type, ...)) html_special);
 
-	i = d_opt->plain;
+	i = global_doc_opts->plain;
 	convert_table = get_convert_table(head.source, document->options.cp,
 					  document->options.assume_cp,
 					  &document->cp,
 					  &document->cp_status,
 					  document->options.hard_assume);
 
-	d_opt->plain = 0;
+	global_doc_opts->plain = 0;
 	document->title = convert_string(convert_table, title.source, title.length, CSM_DEFAULT);
-	d_opt->plain = i;
+	global_doc_opts->plain = i;
 	done_string(&title);
 
 	part = format_html_part(start, end, par_format.align,

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.206 2003/11/04 17:11:57 zas Exp $ */
+/* $Id: session.c,v 1.207 2003/11/06 09:46:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ get_stat_msg(struct download *stat, struct terminal *term)
 	return stracpy(get_err_msg(stat->state, term));
 }
 
-extern struct document_options *d_opt;
+extern struct document_options *global_doc_opts;
 
 void
 init_bars_status(struct session *ses, int *tabs_count, struct document_options *doo)

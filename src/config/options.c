@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.397 2003/11/04 17:04:17 zas Exp $ */
+/* $Id: options.c,v 1.398 2003/11/06 09:45:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1047,14 +1047,14 @@ change_hook_html(struct session *ses, struct option *current, struct option *cha
 static int
 change_hook_active_link(struct session *ses, struct option *current, struct option *changed)
 {
-	if (!d_opt) return 0;
+	if (!global_doc_opts) return 0;
 
-	d_opt->active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
-	d_opt->active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
-	d_opt->color_active_link = get_opt_bool("document.browse.links.active_link.enable_color");
-	d_opt->invert_active_link = get_opt_bool("document.browse.links.active_link.invert");
-	d_opt->underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
-	d_opt->bold_active_link = get_opt_bool("document.browse.links.active_link.bold");
+	global_doc_opts->active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
+	global_doc_opts->active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
+	global_doc_opts->color_active_link = get_opt_bool("document.browse.links.active_link.enable_color");
+	global_doc_opts->invert_active_link = get_opt_bool("document.browse.links.active_link.invert");
+	global_doc_opts->underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
+	global_doc_opts->bold_active_link = get_opt_bool("document.browse.links.active_link.bold");
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.33 2003/10/28 12:47:19 jonas Exp $ */
+/* $Id: options.c,v 1.34 2003/11/06 09:45:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #define offsetof(type, ident) ((size_t) &(((type *) 0)->ident))
 #endif
 
-struct document_options *d_opt;
+struct document_options *global_doc_opts;
 
 void
 init_document_options(struct document_options *doo)

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.66 2003/10/29 13:26:45 zas Exp $ */
+/* $Id: charsets.c,v 1.67 2003/11/06 09:46:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -628,7 +628,7 @@ decode:
 			int start = charspos + 1;
 			register int i = start;
 
-			if (d_opt->plain || mode == CSM_FORM) PUTC;
+			if (global_doc_opts->plain || mode == CSM_FORM) PUTC;
 			while (i < charslen
 			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
 				   || (chars[i] >= 'a' && chars[i] <= 'z')
@@ -643,7 +643,7 @@ decode:
 			if ((mode == CSM_DEFAULT || (chars[i] != '&' && chars[i] != '='))
 			    && i > start && !isalnum(chars[i])) {
 				translit = get_entity_string(&chars[start], i - start,
-						      d_opt->cp);
+						      global_doc_opts->cp);
 				if (chars[i] != ';') {
 					/* Eat &nbsp &nbsp<foo> happily, but
 					 * pull back from the character after

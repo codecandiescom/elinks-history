@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.100 2003/11/02 00:10:40 jonas Exp $ */
+/* $Id: link.c,v 1.101 2003/11/06 09:46:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,10 +187,10 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	template = &doc_view->link_bg[link->n].c;
 	template->attr = SCREEN_ATTR_STANDOUT;
 
-	/* We prefer to use the global d_opt since it is kept up to date by
+	/* We prefer to use the global global_doc_opts since it is kept up to date by
 	 * an option change hook. However if it is not available fall back to
 	 * use the options from the viewed document. */
-	doc_opts = (d_opt) ? d_opt : &doc_view->document->options;
+	doc_opts = (global_doc_opts) ? global_doc_opts : &doc_view->document->options;
 
 	color_flags = (doc_opts->color_flags | COLOR_DECREASE_LIGHTNESS);
 

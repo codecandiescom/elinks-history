@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.119 2003/11/05 15:06:39 pasky Exp $ */
+/* $Id: tables.c,v 1.120 2003/11/06 09:45:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -801,7 +801,7 @@ get_cell_widths(struct table *t)
 	int nl = t->p->link_num;
 	register int i, j;
 
-	if (!d_opt->table_order)
+	if (!global_doc_opts->table_order)
 		for (j = 0; j < t->y; j++)
 			for (i = 0; i < t->x; i++) {
 				struct table_cell *c = CELL(t, i, j);
@@ -1336,7 +1336,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 	struct document *document = t->p->document;
 	int yp;
 	int xp = x + (t->border && (t->frame & TABLE_FRAME_LHS));
-	int expand_cols = (d_opt && d_opt->table_expand_cols);
+	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
 
 	for (i = 0; i < t->x; i++) {
 		yp = y + (t->border && (t->frame & TABLE_FRAME_ABOVE));

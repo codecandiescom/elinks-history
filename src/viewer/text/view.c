@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.167 2003/07/27 19:59:27 jonas Exp $ */
+/* $Id: view.c,v 1.168 2003/07/27 21:47:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,27 +200,26 @@ enum xchar_dir {
 	XD_UP
 };
 
-/* TODO: Whitespaces cleanup target. --pasky */
 static void
 set_xchar(struct terminal *t, int x, int y, enum xchar_dir dir)
 {
-       unsigned int c, d;
+	unsigned int c, d;
 
-       assert(t);
+	assert(t);
 	if_assert_failed return;
 
-       if (x < 0 || x >= t->x || y < 0 || y >= t->y) return;
+	if (x < 0 || x >= t->x || y < 0 || y >= t->y) return;
 
-       c = get_char(t, x, y);
-       if (!(c & ATTR_FRAME)) return;
+	c = get_char(t, x, y);
+	if (!(c & ATTR_FRAME)) return;
 
-       c &= 0xff;
-       d = dir>>1;
-       if (c == fr_trans[d][0])
-	       set_only_char(t, x, y, fr_trans[d][1 + (dir & 1)] | ATTR_FRAME);
-       else
-	       if (c == fr_trans[d][2 - (dir & 1)])
-		       set_only_char(t, x, y, fr_trans[d][3] | ATTR_FRAME);
+	c &= 0xff;
+	d = dir>>1;
+	if (c == fr_trans[d][0])
+		set_only_char(t, x, y, fr_trans[d][1 + (dir & 1)] | ATTR_FRAME);
+	else
+		if (c == fr_trans[d][2 - (dir & 1)])
+			set_only_char(t, x, y, fr_trans[d][3] | ATTR_FRAME);
 }
 
 static void
@@ -466,8 +465,7 @@ down(struct session *ses, struct document_view *fd, int a)
 	}
 
 	if (current_link == -1
-	    || !next_in_view(fd, current_link + 1, 1, in_viewy,
-		    	     set_pos_x)) {
+	    || !next_in_view(fd, current_link + 1, 1, in_viewy, set_pos_x)) {
 		page_down(ses, fd, 1);
 	}
 
@@ -495,8 +493,7 @@ up(struct session *ses, struct document_view *fd, int a)
 	}
 
 	if (current_link == -1
-	    || !next_in_view(fd, current_link - 1, -1, in_viewy,
-		    	     set_pos_x)) {
+	    || !next_in_view(fd, current_link - 1, -1, in_viewy, set_pos_x)) {
 		page_up(ses, fd, 1);
 	}
 
@@ -699,7 +696,7 @@ frame_ev(struct session *ses, struct document_view *fd, struct event *ev)
 				break;
 			}
 
-	     		/* XXX: Code duplication of following for mouse */
+			/* XXX: Code duplication of following for mouse */
 			case ACT_SCROLL_UP: scroll(ses, fd, ses->kbdprefix.rep ? -ses->kbdprefix.rep_num : -get_opt_int("document.browse.scroll_step")); break;
 			case ACT_SCROLL_DOWN: scroll(ses, fd, ses->kbdprefix.rep ? ses->kbdprefix.rep_num : get_opt_int("document.browse.scroll_step")); break;
 			case ACT_SCROLL_LEFT: rep_ev(ses, fd, hscroll, -1 - 7 * !ses->kbdprefix.rep); break;

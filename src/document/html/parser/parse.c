@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.78 2004/07/04 13:06:05 jonas Exp $ */
+/* $Id: parse.c,v 1.79 2004/07/04 16:43:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,9 +64,9 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	if (name) *name = e;
 
 	if (*e == '/') next_char();
-	if (!isA(*e)) return -1;
+	if (!isident(*e)) return -1;
 
-	while (isA(*e)) next_char();
+	while (isident(*e)) next_char();
 
 	if (!isspace(*e) && !end_of_tag(*e) && *e != '/' && *e != ':' && *e != '=')
 		return -1;

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.66 2004/07/01 19:32:03 pasky Exp $ */
+/* $Id: event.c,v 1.67 2004/07/04 16:43:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,10 +144,10 @@ check_terminal_name(struct terminal *term, struct terminal_info *info)
 	/* We check TERM env. var for sanity, and fallback to _template_ if
 	 * needed. This way we prevent elinks.conf potential corruption. */
 	for (i = 0; info->name[i]; i++) {
-		if (!isA(info->name[i])) {
-			usrerror(_("Warning: terminal name contains illicit chars.", term));
-			return;
-		}
+		if (isident(info->name[i])) continue;
+
+		usrerror(_("Warning: terminal name contains illicit chars.", term));
+		return;
 	}
 
 	strcpy(name, "terminal.");

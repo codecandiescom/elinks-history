@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.42 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: xbel.c,v 1.43 2004/07/04 16:43:53 jonas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -178,7 +178,7 @@ indentation(struct secure_save_info *ssi, int num)
 static void
 print_xml_entities(struct secure_save_info *ssi, const unsigned char *str)
 {
-#define accept_char(x) (isA((x)) || (x) == ' ' || (x) == '.' \
+#define accept_char(x) (isident((x)) || (x) == ' ' || (x) == '.' \
 				 || (x) == ':' || (x) == ';' \
 				 || (x) == '/' || (x) == '(' \
 				 || (x) == ')' || (x) == '}' \

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.80 2004/07/04 12:15:47 jonas Exp $ */
+/* $Id: kbd.c,v 1.81 2004/07/04 16:43:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,7 +304,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		int i;
 
 		for (i = 0; ts[i] != 0 && i < MAX_TERM_LEN; i++)
-			info.name[i] = isA(ts[i]) ? ts[i] : '-';
+			info.name[i] = isident(ts[i]) ? ts[i] : '-';
 	}
 
 	ts = get_cwd();

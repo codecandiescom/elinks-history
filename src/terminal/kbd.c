@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.52 2004/03/26 18:15:02 zas Exp $ */
+/* $Id: kbd.c,v 1.53 2004/04/02 07:27:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,7 +512,7 @@ has_nul_byte:
 	RD(fg);
 
 	if (!init_string(&path)) goto free_and_return;
-	
+
 	while (1) {
 		RD(ch);
 		if (!ch) break;

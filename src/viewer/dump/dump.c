@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.100 2004/04/01 16:42:43 jonas Exp $ */
+/* $Id: dump.c,v 1.101 2004/04/02 07:27:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,7 +168,7 @@ subst_url(unsigned char *str, unsigned char *url, int length)
 				add_char_to_string(&string, ch);
 				str++;
 			}
-			continue; 
+			continue;
 		} else if (*str != '%') break;
 		str++;
 		switch (*str) {

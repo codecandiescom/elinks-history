@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.131 2004/03/05 10:41:10 witekfl Exp $ */
+/* $Id: conf.c,v 1.132 2004/04/02 07:27:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ parse_unset(struct option *opt_tree, unsigned char **file, int *line,
 	optname = stracpy(optname);
 	if (!optname) return ERROR_NOMEM;
 	**file = bin;
-	
+
 	/* Mirror what we have */
 	if (mirror) add_bytes_to_string(mirror, orig_pos, *file - orig_pos);
 	{
@@ -197,7 +197,7 @@ parse_unset(struct option *opt_tree, unsigned char **file, int *line,
 			if (opt->flags & OPT_ALLOC) delete_option(opt);
 		}
 		else {
-			if (opt->flags & OPT_DELETED) 
+			if (opt->flags & OPT_DELETED)
 				opt->flags |= OPT_WATERMARK;
 			else opt->flags &= ~OPT_WATERMARK;
 		}

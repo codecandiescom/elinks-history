@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.150 2004/03/28 18:37:01 zas Exp $ */
+/* $Id: tables.c,v 1.151 2004/04/02 07:27:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1064,7 +1064,7 @@ get_table_width(struct table *t)
 
 	t->min_t = min + table_frames.left + table_frames.right;
 	t->max_t = max + table_frames.left + table_frames.right;
-	
+
 	assertm(min <= max, "min(%d) > max(%d)", min, max);
 	/* XXX: Recovery path? --pasky */
 }

@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.2 2004/04/01 14:56:09 jonas Exp $ */
+/* $Id: hooks.c,v 1.3 2004/04/02 07:27:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ script_hook_goto_url(va_list ap, void *data)
 	SAVETMPS;
 	PUSHMARK(SP);
 
-	XPUSHs(sv_2mortal(newSVpvn(*url, strlen(*url))));	
+	XPUSHs(sv_2mortal(newSVpvn(*url, strlen(*url))));
 
 	if (!have_location(ses)) {
 		XPUSHs(sv_2mortal(newSV(0)));
@@ -80,7 +80,7 @@ script_hook_follow_url(va_list ap, void *data)
 	SAVETMPS;
 	PUSHMARK(SP);
 
-	XPUSHs(sv_2mortal(newSVpvn(*url, strlen(*url))));	
+	XPUSHs(sv_2mortal(newSVpvn(*url, strlen(*url))));
 	PUTBACK;
 	err = call_pv("follow_url_hook", G_EVAL | G_SCALAR);
 	if (SvTRUE(ERRSV)) err = 0;
@@ -113,7 +113,7 @@ script_hook_pre_format_html(va_list ap, void *data)
 
 	va_arg(ap, struct session *);
 	url = va_arg(ap, unsigned char *);
-	
+
 	if (*html == NULL || *html_len == 0) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
 

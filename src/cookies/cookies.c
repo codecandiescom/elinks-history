@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.77 2003/08/23 10:59:36 zas Exp $ */
+/* $Id: cookies.c,v 1.78 2003/08/25 12:04:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,13 +205,18 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 
 	date = parse_http_header_param(str, "expires");
 	if (date) {
-		cookie->expires = parse_http_date(date);
+		cookie->expires = parse_http_date(date); /* Convert date to seconds. */
 
 		if (cookie->expires) {
-			ttime deadline = time(NULL) + 365*24*3600 /* One year in seconds.*/;
+			int max_age = get_opt_int("cookies.max_age"); /* Max. age in days */
 
-			if (cookie->expires > deadline)
-				cookie->expires = deadline;
+			if (max_age == 0) cookie->expires = 0; /* Always expires at session end. */
+			else if (max_age > 0) {
+				ttime deadline = time(NULL) + max_age*24*3600 /* days->seconds.*/;
+
+				if (cookie->expires > deadline) /* Over-aged cookie ? */
+					cookie->expires = deadline;
+			}
 		}
 
 #if 0

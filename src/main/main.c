@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.234 2005/02/11 20:09:25 jonas Exp $ */
+/* $Id: main.c,v 1.235 2005/03/20 10:20:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -277,9 +277,6 @@ terminate_all_subsystems(void)
 	abort_all_connections();
 
 	if (init_b) {
-#ifdef CONFIG_SCRIPTING
-		trigger_event_name("quit");
-#endif
 		done_url_history();
 		done_search_history();
 #ifdef CONFIG_MARKS
@@ -290,6 +287,9 @@ terminate_all_subsystems(void)
 		done_modules(builtin_modules);
 		done_screen_drivers();
 		done_saved_session_info();
+#ifdef CONFIG_SCRIPTING
+		trigger_event_name("quit");
+#endif
 	}
 
 	shrink_memory(1);

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.20 2004/06/22 22:33:00 zas Exp $ */
+/* $Id: internal.h,v 1.21 2004/06/22 22:42:25 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -44,6 +44,13 @@ struct html_context {
 	unsigned char *last_form_tag;
 	unsigned char *last_form_attr;
 	unsigned char *last_input_tag;
+
+	/* For
+	 * html/parser/parse.c
+	 * html/parser.c
+	 * html/renderer.c
+	 * html/tables.c */
+	int table_level;
 };
 
 extern struct html_context html_context;

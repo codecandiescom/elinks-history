@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.454 2004/06/22 22:33:00 zas Exp $ */
+/* $Id: parser.c,v 1.455 2004/06/22 22:42:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -414,7 +414,7 @@ void
 html_center(unsigned char *a)
 {
 	par_format.align = AL_CENTER;
-	if (!table_level)
+	if (!html_context.table_level)
 		par_format.leftmargin = par_format.rightmargin = 0;
 }
 
@@ -428,7 +428,7 @@ html_linebrk(unsigned char *a)
 		else if (!strcasecmp(al, "right")) par_format.align = AL_RIGHT;
 		else if (!strcasecmp(al, "center")) {
 			par_format.align = AL_CENTER;
-			if (!table_level)
+			if (!html_context.table_level)
 				par_format.leftmargin = par_format.rightmargin = 0;
 		} else if (!strcasecmp(al, "justify")) par_format.align = AL_BLOCK;
 		mem_free(al);
@@ -660,7 +660,7 @@ html_ul(unsigned char *a)
 		mem_free(al);
 	}
 	par_format.leftmargin += 2 + (par_format.list_level > 1);
-	if (!table_level)
+	if (!html_context.table_level)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 
 	par_format.align = AL_LEFT;
@@ -694,7 +694,7 @@ html_ol(unsigned char *a)
 	}
 
 	par_format.leftmargin += (par_format.list_level > 1);
-	if (!table_level)
+	if (!html_context.table_level)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 
 	par_format.align = AL_LEFT;
@@ -801,8 +801,9 @@ html_dd(unsigned char *a)
 {
 	kill_html_stack_until(0, "", "DL", NULL);
 
-	par_format.leftmargin = par_format.dd_margin + (table_level ? 3 : 8);
-	if (!table_level)
+	par_format.leftmargin = par_format.dd_margin
+				+ (html_context.table_level ? 3 : 8);
+	if (!html_context.table_level)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 	par_format.align = AL_LEFT;
 }
@@ -1331,7 +1332,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_top.type = ELEMENT_DONT_KILL;
 
 	html_context.has_link_lines = 0;
-	table_level = 0;
+	html_context.table_level = 0;
 	html_context.last_form_tag = NULL;
 	html_context.last_form_attr = NULL;
 	html_context.last_input_tag = NULL;

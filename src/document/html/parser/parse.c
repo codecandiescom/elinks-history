@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.57 2004/06/22 22:13:50 zas Exp $ */
+/* $Id: parse.c,v 1.58 2004/06/22 22:42:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,7 +573,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	int noupdate = 0;
 
 	html_context.putsp = -1;
-	html_context.line_breax = table_level ? 2 : 1;
+	html_context.line_breax = html_context.table_level ? 2 : 1;
 	html_context.position = 0;
 	html_context.was_br = 0;
 	html_context.was_li = 0;
@@ -756,7 +756,7 @@ start_element(struct element_info *ei,
 	old_format = par_format;
 
 	if (ei->func == html_table && global_doc_opts->tables
-	    && table_level < HTML_MAX_TABLE_LEVEL) {
+	    && html_context.table_level < HTML_MAX_TABLE_LEVEL) {
 		format_table(attr, html, eof, &html, f);
 		ln_break(2, line_break_f, f);
 		return html;

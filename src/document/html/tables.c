@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.183 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: tables.c,v 1.184 2004/06/22 22:42:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,10 +133,6 @@ struct table_frames {
 	unsigned int left:1;
 	unsigned int right:1;
 };
-
-/* Global variables */
-
-int table_level;
 
 static void
 get_table_frames(struct table *table, struct table_frames *result)
@@ -1743,7 +1739,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	int cpd_pass, cpd_width, cpd_last;
 	int margins;
 
-	table_level++;
+	html_context.table_level++;
 	get_bgcolor(attr, &bgcolor);
 	get_bordercolor(attr, &bordercolor);
 
@@ -1967,7 +1963,7 @@ ret2:
 	done_html_parser_state(state);
 
 ret0:
-	table_level--;
+	html_context.table_level--;
 	mem_free_if(fragment_id);
-	if (!table_level) free_table_cache();
+	if (!html_context.table_level) free_table_cache();
 }

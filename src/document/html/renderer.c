@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.450 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: renderer.c,v 1.451 2004/06/22 22:42:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1365,7 +1365,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		struct node *node = mem_alloc(sizeof(struct node));
 
 		if (node) {
-			int node_width = !table_level ? MAXINT : width;
+			int node_width = !html_context.table_level ? MAXINT : width;
 
 			set_box(&node->box, xs, ys, node_width, 1);
 			add_to_list(document->nodes, node);
@@ -1422,7 +1422,7 @@ ret:
 	margin = lm;
 	empty_format = ef;
 
-	if (table_level > 1 && !document && table_cache
+	if (html_context.table_level > 1 && !document && table_cache
 	    && table_cache_entries < MAX_TABLE_CACHE_ENTRIES) {
 		/* Create a new entry. */
 		/* Clear memory to prevent bad key comparaison due to alignment

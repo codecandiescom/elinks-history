@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.57 2004/10/25 20:08:45 zas Exp $ */
+/* $Id: fastfind.c,v 1.58 2004/10/25 20:31:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -424,18 +424,18 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 {
 	int cnt = 0;
 	int pos = 0;
-	int i = 0;
+	int i;
 
 	assert(info);
 	if_assert_failed return;
 
-	for (; i < info->uniq_chars_count; i++) {
+	for (i = 0; i < info->uniq_chars_count; i++) {
 		if (leafset[i].c) continue;
 
 		if (leafset[i].l) {
 			/* There's a leaf leafset, descend to it and recurse */
 			fastfind_node_compress(info->leafsets[leafset[i].l],
-						info);
+					       info);
 		}
 
 		if (leafset[i].l || leafset[i].e) {
@@ -479,9 +479,9 @@ fastfind_index_compress(struct fastfind_info *info)
 
 /* This macro searchs for the key in indexed list */
 #define FF_SEARCH(what) do {							\
-	int i = 0;							\
+	int i;									\
 										\
-	for (; i < key_len; i++) {						\
+	for (i = 0; i < key_len; i++) {						\
 		int lidx, k = what;						\
 										\
 		FF_DBG_iter(info);						\
@@ -531,7 +531,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	info->debug.itertmp = info->debug.iterations;
 #endif
 
-   	FF_DBG_test(info); if (!key) return NULL;
+	FF_DBG_test(info); if (!key) return NULL;
 	FF_DBG_test(info); if (key_len > info->max_key_len) return NULL;
 	FF_DBG_test(info); if (key_len < info->min_key_len) return NULL;
 
@@ -554,12 +554,10 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 
 #undef FF_SEARCH
 
-void
-fastfind_done(struct fastfind_info *info)
-{
-	if (!info) return;
-
 #ifdef DEBUG_FASTFIND
+static void
+FF_DBG_dump_stats(struct fastfind_info *info)
+{
 	fprintf(stderr, "------ FastFind Statistics ------\n");
 	fprintf(stderr, "Comment     : %s\n", info->debug.comment);
 	fprintf(stderr, "Case        : %s\n", info->case_sensitive ? "sensitive" : "insensitive");
@@ -590,7 +588,17 @@ fastfind_done(struct fastfind_info *info)
 		info->debug.total_key_len, (double) info->debug.total_key_len / info->debug.searches,
 		(double) info->debug.total_key_len / info->debug.iterations);
 	fprintf(stderr, "\n");
+}
+#else
+#define FF_DBG_dump_stats(info)
 #endif
+
+void
+fastfind_done(struct fastfind_info *info)
+{
+	if (!info) return;
+
+	FF_DBG_dump_stats(info);
 
 	mem_free_if(info->pointers);
 	mem_free_if(info->keylen_list);

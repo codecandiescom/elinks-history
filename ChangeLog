@@ -1,3 +1,35 @@
+Sat Nov 27 17:53:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/protocol/Makefile.am,
+	src/protocol/auth/Makefile.am, src/protocol/auth/digest.c,
+	src/protocol/http/http.c, src/util/Makefile.am, src/util/md5.c,
+	src/util/md5.h:
+
+	Add built-in MD5 support. Can be tested with --enable-own-libc or
+	when OpenSSL or GNUTLS support is disabled.  
+
+Sat Nov 27 16:03:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	exit_prog(): Minor cleanup of the logics which means that you should
+	never use exit_prog() when really quiting however Ctrl-C correctly
+	uses really_quit_prog(). Use list_is_singleton(terminals) when
+	checking whether to force a quit-dialog when downloads are still in
+	progress.  
+
+Sat Nov 27 01:27:19 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Nov 27 01:12:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/conf.c:
+
+	Slightly improve config file look when rewritten.  
+
 Fri Nov 26 17:27:00 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/document/html/parser/forms.c:
@@ -63,8 +95,8 @@ Thu Nov 25 22:19:18 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 	In the switch in do_action, put back the default: label removed in
 	1.126.  Even tho there are cases for all values of enum main_action, 
 	its callers might get -1 from kbd_action and pass that value, which
-	is enumerated by enum main_action, to do_action. This fixes the bug
-	that prevent alt-[fvltsh] from opening the menus.  
+	is not enumerated by enum main_action, to do_action.  This fixes the
+	bug that prevented alt-[fvltsh] from opening the menus.  
 
 Thu Nov 25 18:01:39 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 

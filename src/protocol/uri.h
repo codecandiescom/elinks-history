@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.103 2004/05/28 21:16:54 jonas Exp $ */
+/* $Id: uri.h,v 1.104 2004/05/28 23:42:45 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -256,6 +256,12 @@ get_uri_hostlen(struct uri *uri, unsigned char *from)
 {
 	return uri->port ? uri->port + uri->portlen - from
 			 : uri->host + uri->hostlen - from;
+}
+
+static inline int
+get_real_uri_length(struct uri *uri)
+{
+	return uri->post ? uri->post - struri(uri) : strlen(struri(uri));
 }
 
 #endif

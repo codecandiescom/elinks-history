@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.29 2004/03/09 12:24:36 jonas Exp $ */
+/* $Id: version.c,v 1.30 2004/04/23 12:27:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,8 +22,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-
-#define ELINKS_VERSION	("ELinks " VERSION_STRING)
 
 static void
 add_module_to_string(struct string *string, struct module *module,
@@ -67,11 +65,13 @@ get_dyn_full_version(struct terminal *term, int more)
 
 	if (!init_string(&string)) return NULL;
 
-	add_to_string(&string, ELINKS_VERSION);
+	add_format_to_string(&string, "ELinks %s", VERSION_STRING);
 	if (more) {
- #if defined(CONFIG_DEBUG) && defined(__DATE__) && defined(__TIME__)
-		add_to_string(&string, " (" __DATE__ " " __TIME__ ")");
- #endif
+#ifdef CONFIG_DEBUG
+		add_to_string(&string, "\n");
+		add_format_to_string(&string, _("Built on %s %s", term),
+					__DATE__, __TIME__);
+#endif
 		add_to_string(&string, "\n\n");
 		add_to_string(&string, _("Text WWW browser", term));
 	}

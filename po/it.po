@@ -116,7 +116,7 @@ msgstr "Modifica bookmark"
 #: src/bookmarks/dialogs.c:407 src/bookmarks/dialogs.c:414
 #: src/bookmarks/dialogs.c:422
 msgid "Delete bookmark"
-msgstr "Cancello bookmark"
+msgstr "Cancellazione bookmark"
 
 #: src/bookmarks/dialogs.c:265
 #, c-format
@@ -164,7 +164,7 @@ msgstr "No"
 #: src/bookmarks/dialogs.c:415
 #, c-format
 msgid "Delete content of folder \"%s\"?"
-msgstr "Cancello il contenuto della cartella \"%s\"?"
+msgstr "Cancellare il contenuto della cartella \"%s\"?"
 
 #: src/bookmarks/dialogs.c:423
 #, c-format
@@ -173,7 +173,7 @@ msgid ""
 "\n"
 "URL: \"%s\""
 msgstr ""
-"Cancello il bookmark \"%s\"?\n"
+"Cancellare il bookmark \"%s\"?\n"
 "\n"
 "URL: \"%s\""
 
@@ -347,7 +347,7 @@ msgstr "Cancella opzione"
 
 #: src/config/dialogs.c:457
 msgid "Cannot delete this option."
-msgstr "Non si può cancellare questa opzione."
+msgstr "Impossibile cancellare questa opzione."
 
 #: src/config/dialogs.c:471
 #, c-format
@@ -515,7 +515,7 @@ msgstr "Segui link corrente"
 
 #: src/config/kbdbind.c:386
 msgid "Follow the current link, forcing reload of the target"
-msgstr "Segui il link corrente, forzando l'aggiornamento del bersaglio"
+msgstr "Segui il link corrente, forzando l'aggiornamento della destinazione"
 
 #: src/config/kbdbind.c:387
 msgid "Open the File menu"
@@ -909,9 +909,6 @@ msgstr ""
 "3 è i cambiamenti alle correnti opzioni sono alterati e le opzioni mancanti\n"
 "    CAMBIATE durante la sessione di ELinks sono aggiunte alla fine del file"
 
-# "Determina cosa succede quando si dice a ELinks di salvare le opzioni:\n"
-# "0 è solo 1 è 2 è il file di configurazione sarà riscritto da zero\n"
-# "3 è FIXME"
 #: src/config/options.c:943
 msgid "Saving style warnings"
 msgstr "Avvertimenti modalità di salvataggio"
@@ -924,8 +921,6 @@ msgstr ""
 "Si tratta di una opzione interna usata per visualizzare un messaggio\n"
 "circa config.saving_style diventato obsoleto. Non si dovrebbe modificare."
 
-# "Si tratta di una opzione interna usata per mostrare un avviso\n"
-# "circa FIXME"
 #: src/config/options.c:948
 msgid "Show template"
 msgstr "Mostra template"
@@ -1230,7 +1225,7 @@ msgid ""
 "1-500 means display target filename with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 msgstr ""
-"Mostra [nomefile puntato] invece di [IMG] come FIXME:\n"
+"Mostra [nomefile puntato] invece di [IMG] come segnaposto per le immagini visibili:\n"
 "-1    significa mostra sempre solo [IMG]\n"
 "0     significa mostra sempre il nome di file completo\n"
 "1-500 significa mostra il nome di file con questa lunghezza massima;\n"
@@ -1313,7 +1308,6 @@ msgid "Number keys select links"
 msgstr "Tasti numerici selezionano i link"
 
 #: src/config/options.c:1150
-#, fuzzy
 msgid ""
 "Number keys select links rather than specify command prefixes. This\n"
 "is a tristate:\n"
@@ -1368,7 +1362,6 @@ msgid "Overlapping matches"
 msgstr "Corrispondenze sovrapposte"
 
 #: src/config/options.c:1175
-#, fuzzy
 msgid ""
 "Let matches overlap (only relevant to regex search).\n"
 "0 means matches should not overlap.\n"
@@ -1774,13 +1767,13 @@ msgstr ""
 "0 è usa sempre le impostazioni predefinite\n"
 "1 è usa i colori del documento, se disponibili, tranne lo sfondo\n"
 "2 è usa i colori del documento, compreso lo sfondo. Questo può\n"
-"    impressionare per la maggior parte dei siti, ma alcuni FIXME"
+"    impressionare per la maggior parte dei siti, ma alcuni siti\n"
+"    appaiono davvero brutti (compreso sfortunatamente slashdot (ma\n"
+"    prova a usare la versione 'plain' e il mondo diventerà immediatamente\n"
+"    un posto più felice in cui vivere). Notare che ovviamente\n"
+"    se lo sfondo non è nero, non ci sarà trasparenza se la si ha\n"
+"    abilitata per il proprio terminale e sul terminale stesso."
 
-# "Usa i colori specificati dal documento:\n"
-# "0 è usa sempre le impostazioni predefinite\n"
-# "1 è usa i colori del documento se disponibili, tranne lo sfondo\n"
-# "2 è usa i colori del documento, incluso lo sfondo. Questo può\n"
-# "  FIXME"
 #. Keep options in alphabetical order.
 #: src/config/options.c:1337
 msgid "Downloading"
@@ -1991,7 +1984,6 @@ msgid "Rendering of html link element"
 msgstr "Rendering dell'elemento HTML 'link'"
 
 #: src/config/options.c:1445
-#, fuzzy
 msgid ""
 "Html link rendering verbosity:\n"
 "0 is nothing\n"
@@ -2026,7 +2018,8 @@ msgstr "Tipo MIME predefinito"
 msgid ""
 "Document MIME-type to assume by default (when we are unable to\n"
 "guess it properly from known information about the document)."
-msgstr "Tipo MIME del documento FIXME"
+msgstr "Tipo MIME del documento da assumere di default (quando non\n"
+"si è in grado di rilevarlo correttamente dalle informazioni sul documento)."
 
 #: src/config/options.c:1468
 msgid "MIME type associations"
@@ -2201,7 +2194,6 @@ msgid "Mimetypes files"
 msgstr "File tipo mime"
 
 #: src/config/options.c:1559
-#, fuzzy
 msgid ""
 "Options for the support of mimetypes files. Mimetypes files\n"
 "can be used to find the content type of an URL by looking at the\n"
@@ -2256,7 +2248,9 @@ msgstr "Non mandare Accept-Charset"
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
-msgstr "L'header Accept-Charset è abbastanza lungo e mandarlo può FIXME"
+msgstr ""
+"L'header Accept-Charset è abbastanza lungo e mandarlo può rivelare\n"
+"bachi in alcuni server raramente usati."
 
 #: src/config/options.c:1594
 msgid "Allow blacklisting"
@@ -2445,7 +2439,7 @@ msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
 msgstr ""
-"Host e numero di porta (host:porta) del proxy FTP, FIXME.\n"
+"Host e numero di porta (host:porta) del proxy FTP, o lasciare vuoto.\n"
 "Se si lascia vuoto, sarà controllata anche la d'ambiente variabile FTP_PROXY."
 
 #: src/config/options.c:1691
@@ -3812,7 +3806,6 @@ msgid "Keys"
 msgstr "Tasti"
 
 #: src/dialogs/info.c:57
-#, fuzzy
 msgid ""
 "ESC      display menu\n"
 "^C, q    quit\n"
@@ -4761,17 +4754,17 @@ msgid "No document"
 msgstr "Nessun documento"
 
 #: src/sched/session.c:635
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Vuoi seguire la redirezione e spedire di dati all'URL %s?"
 
 #: src/sched/session.c:638
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Vuoi spedire i dati all'URL %s?"
 
 #: src/sched/session.c:640
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Vuoi rispedire i dati all'URL %s"
 

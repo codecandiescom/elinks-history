@@ -1,3 +1,555 @@
+Sun Dec 19 23:23:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.10rc2 
+
+Sun Dec 19 23:21:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: cs.po, da.po, de.po, el.po, es.po, et.po, fi.po, fr.po,
+	gl.po, hr.po, hu.po, id.po, is.po, it.po, leet.po, lt.po, nl.po,
+	no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po, sv.po, tr.po,
+	uk.po:
+
+	Sync .po files.  
+
+Sun Dec 19 23:16:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: be.po, bg.po, ca.po:
+
+	Sync .po files.  
+
+Sun Dec 19 22:32:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	If ECMAScript, auto-linkify pair elements which have the onClick
+	property.  
+
+Sun Dec 19 19:28:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Plug another security hole. Let the script look only at frames whose
+	security context (that is, hostname) is same as his.  
+
+Sun Dec 19 18:04:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, document/renderer.c,
+	document/css/css.c, sched/session.c:
+
+	Introduce follow_cached_redirects() and get_redirected_cache_entry()
+	which based on Miciahs MAX_REDIRECT restricted cache redirect
+	looping will chase the list of cache entries to find the resulting
+	one.  
+	
+	Replace potentially bad while (cache->redirect) loops to use 
+	get_redirected_cache_entry() and make check_incomplete_redirects()
+	use follow_cached_redirects() as a backend.  
+
+Sun Dec 19 17:46:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	My explanation of bug 533.  
+
+Sun Dec 19 17:15:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Sun Dec 19 17:09:56 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Dec 19 17:02:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Zas' fix for bug 558 is correct.  
+
+Sun Dec 19 17:01:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in:
+
+	Some hopefully finishing touches of this years elinks(1).  
+
+Sun Dec 19 16:53:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Serve navigator.language only if ENABLE_NLS. Spotted by Apu.  
+
+Sun Dec 19 16:47:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.h:
+
+	Kill trailing whitespaces.  
+
+Sun Dec 19 16:43:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fixed document.cookie accessing leak.  
+
+Sun Dec 19 16:42:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in, src/config/cmdline.c:
+
+	Fix description of -no-home.  
+
+Sun Dec 19 16:23:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: renderer.c, tables.c, parser/stack.c:
+
+	Fix bug 578 (invalid accesses of html_context.part in
+	kill_html_stack_item(), as reported by Apu Nahasapeemapetilon's
+	Valgrind). We must make sure that before done_html_parser*()
+	html_context.part is still alive and correct.  
+
+Sun Dec 19 16:15:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	Fixed showing of checkbox/radio value in get_form_info().  
+
+Sun Dec 19 16:06:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in:
+
+	I never did like that :// entangling. Elaborate more freely about
+	supported protocol and mention even the new ones.  
+
+Sun Dec 19 16:06:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	It's nice not to let any malicious webmaster retrieve any file from
+	client's machine readable by the user. Fixed this tiny security
+	issue by not letting ECMAScript change file inputs' input.value.  
+
+Sun Dec 19 16:05:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Let input.checked value be touched only when input is checkbox or
+	radio. When changing input.value, set fs->state only if it's text,
+	password or file.  
+
+Sun Dec 19 16:03:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	Another fierce attempt to destabilize. Even checkboxes, radios,
+	submits, images, resets, buttons and hiddens have allocated value
+	now. That enables ECMAScript to meaningfully change it.  
+
+Sun Dec 19 15:55:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in:
+
+	Add new options since 23th Dec 2003 ;) and improve the highlighting.  
+
+Sun Dec 19 15:54:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Alphabetize cmdline options. Improve the description of -no-home.  
+
+Sun Dec 19 15:54:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Surprisingly, some people don't compile ECMAScript in.  
+
+Sun Dec 19 14:56:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Fixed current_link_evhook() to always return a value.  
+
+Sun Dec 19 14:50:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	When setting input.value, set fs->state to its length instead of
+	tinkering with vpos and vypos, which will be (hopefully) adjusted
+	automagically.  
+
+Sun Dec 19 14:49:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: ecmascript/ecmascript.c, ecmascript/ecmascript.h,
+	ecmascript/spidermonkey.c, ecmascript/spidermonkey.h,
+	viewer/text/link.c:
+
+	Introduced ecmascript_eval_boolback(), used for event handlers and
+	handled for onClick event evaluation.  
+
+Sun Dec 19 14:37:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/error.c:
+
+	S_NO_JAVASCRIPT -> JavaScript support is not enabled.  
+
+Sun Dec 19 14:31:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Zero vpos and vypos when changing input value.  
+
+Sun Dec 19 14:24:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	mem_free_set() takes an address of the first pointer. Right.  
+
+Sun Dec 19 14:13:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: ecmascript/spidermonkey.c, protocol/http/http.c:
+
+	Only set navigator.language if protocol.http.accept_ui_language.  
+
+Sun Dec 19 13:59:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fixed user-agent string leaking.  
+
+Sun Dec 19 13:53:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	That diabolic thing's full name is Microsoft Internet Explorer.  
+
+Sun Dec 19 13:53:02 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fixed few other tiny mistakes. Did I really make the last compile
+	test so long ago? 
+
+Sun Dec 19 13:50:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Killed another unused variable.  
+
+Sun Dec 19 13:50:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Check explicitly for $no_x value not being yes. I feel better that
+	way. Inspired by ugenn.  
+
+Sun Dec 19 13:49:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Woohoo. Newlines.  
+
+Sun Dec 19 13:47:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Basic implementation of the navigator object.  
+
+Sun Dec 19 13:10:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	input.value is string, not boolean.  
+
+Sun Dec 19 13:09:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Introduced form_elements class, which contains form.elements. Very
+	similar to document.forms. Perhaps we could do with some generic way
+	to handle these collections, we'll need more soon.  
+
+Sun Dec 19 12:32:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, protocol/protocol.c:
+
+	Guard you grill, because the last protocol options is hereby placed
+	in protocol land.  
+
+Sun Dec 19 12:25:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, protocol/protocol.c, protocol/user.c,
+	protocol/user.h:
+
+	Modularaize the User protocol thingy and move options to the new
+	module.  
+
+Sun Dec 19 12:17:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Implemented form.length.  
+
+Sun Dec 19 12:17:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: file/file.c, http/http.c:
+
+	Make HTTP and File option info static.  
+
+Sun Dec 19 12:08:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, protocol/file/file.c:
+
+	Move file options to the file module.  
+
+Sun Dec 19 12:04:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, file/file.c, file/file.h:
+
+	Modularize the file protocol.  
+
+Sun Dec 19 11:42:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fold forms.<moo> resolving code to forms_namedItem() call.  
+
+Sun Dec 19 11:32:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Oops, remove forgottten debug print.  
+
+Sun Dec 19 11:31:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	DARN. Implement value_to_jsval() for JSPT_INT. I was debugging this
+	for half an hour and it just isn't getting converted! 
+
+Sun Dec 19 11:27:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	input.max_length -> input.maxLength 
+
+Sun Dec 19 11:26:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Bah. Define properties of objects form and forms.  
+
+Sun Dec 19 11:26:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Support for document.forms[0], making forms to behave like a real
+	array.  
+
+Sun Dec 19 11:19:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	gcc needs an AI 
+
+Sun Dec 19 11:18:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	Handle srcfs->form_view being NULL in copy_vs() properly. Fixed
+	crashes i.e. on marks.  
+
+Sun Dec 19 11:17:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	Simpliy 
+
+Sun Dec 19 10:41:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Killed evil inlines.  
+
+Sun Dec 19 10:38:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	Predeclare squeezastring() as static.  
+
+Sun Dec 19 10:05:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Make @accept_charset regular normally allocated pointer. Fixed case
+	of failed allocation.  
+
+Sun Dec 19 10:04:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	Introduced squeezastring() which does memacpy(string->source,
+	string->length).  
+
+Sun Dec 19 04:46:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/http/http.c:
+
+	Use memcpy instead of strcpy in init_accept_charset as we already 
+	have the length of the source string.  
+
+Sun Dec 19 02:51:22 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/http/http.c:
+
+	Remove a stale comment that accept_charset is not freed until
+	exit().  
+
+Sun Dec 19 02:49:29 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/http/http.c:
+
+	Reduce indentation in init_accept_charset.  
+
+Sun Dec 19 02:46:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/http/http.c:
+
+	Add a module de-initialisation hook that frees accept_charset.  
+	
+	This should make Valgrind happy--no longer do we 'leak' that one
+	string.  
+
+Sun Dec 19 02:38:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/http/http.c:
+
+	Factor the initialisation of accept_char out from http_send_header 
+	into the new init_accept_charset.  
+
+Sun Dec 19 02:32:01 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/http/http.c:
+
+	Move static unsigned char *accept_char from http_send_header to the
+	global scope.  
+
+Sun Dec 19 02:27:33 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/options.inc, protocol/http/http.c:
+
+	Move HTTP option definitions to the HTTP module.  
+
+Sun Dec 19 02:21:13 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/: protocol.c, http/http.c, http/http.h:
+
+	Give HTTP a struct module.  
+
+Sun Dec 19 02:08:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Remove another old MIME related compatibility alias added 2003-05-06
+	in 0.5pre1.CVS.  
+
+Sun Dec 19 02:04:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	The forms array is numbered from 0, not 1 
+
+Sun Dec 19 01:51:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/ecmascript.c:
+
+	In ecmascript_reset_state(), set all the cached ecmascript objects
+	to NULL too. Fixes crash on Google reload.  
+
+Sun Dec 19 01:47:17 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bookmarks/bookmarks.c, mime/backend/default.c,
+	mime/backend/mimetypes.c, protocol/protocol.c,
+	protocol/finger/finger.c:
+
+	Include modules/module.h.  
+
+Sun Dec 19 01:41:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fixed invalid usage of get_form_object() which would make form to
+	have forms as its parent, not document. Bugzilla now doesn't crash
+	it and the quick search form gets autofocus.  
+
+Sun Dec 19 01:27:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Support for document.forms.<formname>. Bugzilla now gets autofocus
+	on the quick search form. It crashes along the way, but that's life.  
+
+Sun Dec 19 01:24:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Get rid of an extremely suspicious DOUBLE_TO_JSVAL().  
+
+Sun Dec 19 01:20:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Remove old mailcap compatibility aliases added 2003-05-07 during
+	0.5pre0.CVS. Suggested by pasky an Miciah.  
+
+Sun Dec 19 01:15:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/forms.h, document/html/renderer.c,
+	viewer/text/form.c, viewer/text/form.h, viewer/text/vs.c:
+
+	Bind struct form and struct form_view together by form_num instead
+	of direct reference. This makes it waste more time and eliminates
+	some crashing possibilities.  
+
+Sun Dec 19 01:10:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Really fixed that horrible thing which has irritated me since long
+	but I never really got to do it.  
+
+Sun Dec 19 01:01:53 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Call write_bookmarks at the end of bookmark_write_hook.  
+
+Sun Dec 19 00:57:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/cookies/cookies.c, src/protocol/uri.c,
+	src/protocol/uri.h:
+
+	Introduce is_ip_address() that uses inet_pton() as backend.  Use it
+	in is_domain_security_ok() to reject evil plots where the alias
+	127.1 domain-matches 99.54.127.1. Idea from Mozilla.  
+
+Sun Dec 19 00:51:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	Few words on document vs document_view vs view_state.  
+
+Sun Dec 19 00:17:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/forms.h, ecmascript/spidermonkey.c,
+	viewer/text/form.c, viewer/text/form.h, viewer/text/vs.c,
+	viewer/text/vs.h:
+
+	Introduced struct form_view, which is document_view-specific
+	equivalent for struct form. Moved ECMAScript objects to struct
+	form_view and struct form_state.  
+
 Sat Dec 18 23:05:19 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/task.c, test/malicious_uris.html:
@@ -8609,7 +9161,7 @@ Sun Sep 19 17:38:19 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/README:
 
-	$Id$ tag.  
+	$Id: ChangeLog,v 1.933 2004/12/18 23:12:17 jonas Exp $ tag.  
 
 Sun Sep 19 17:35:23 2004  Petr Baudis <pasky@ucw.cz>:
 

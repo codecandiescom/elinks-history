@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.198 2003/09/09 10:52:28 zas Exp $ */
+/* $Id: parser.c,v 1.199 2003/09/09 13:11:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2764,7 +2764,7 @@ html_link(unsigned char *a)
 		if (link.title)
 			add_to_string(&text, link.title);
 		else
-			add_to_string(&text, link.name);
+			add_to_string(&text, name);
 
 		if (link_display == 1) goto only_title;
 

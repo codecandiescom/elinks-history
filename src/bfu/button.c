@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.50 2004/05/03 21:40:29 zas Exp $ */
+/* $Id: button.c,v 1.51 2004/05/07 11:24:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,11 +78,11 @@ dlg_format_buttons(struct terminal *term,
 			int p = x + (align == AL_CENTER ? (w - mw) / 2 : 0);
 
 			for (i = i1; i < i2; i++) {
-				widget_data[i].x = p;
-				widget_data[i].y = *y;
-				widget_data[i].w = strlen(widget_data[i].widget->text)
-						   + BUTTON_LR_LEN;
-				p += widget_data[i].w + BUTTON_HSPACING;
+				set_rect(widget_data[i].dimensions,
+					 p, *y,
+					 strlen(widget_data[i].widget->text) + BUTTON_LR_LEN, 1);
+
+				p += widget_data[i].dimensions.width + BUTTON_HSPACING;
 			}
 		}
 
@@ -97,27 +97,29 @@ display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, in
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
 	int len = strlen(widget_data->widget->text);
-	int x = widget_data->x + BUTTON_LEFT_LEN;
+	int x = widget_data->dimensions.x + BUTTON_LEFT_LEN;
 
 	color = get_bfu_color(term, sel ? "dialog.button-selected"
 					: "dialog.button");
 	if (!color) return;
 
-	draw_text(term, widget_data->x, widget_data->y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
-	draw_text(term, x, widget_data->y, widget_data->widget->text, len, 0, color);
-	draw_text(term, x + len, widget_data->y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);
+	draw_text(term, widget_data->dimensions.x, widget_data->dimensions.y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
+	draw_text(term, x, widget_data->dimensions.y, widget_data->widget->text, len, 0, color);
+	draw_text(term, x + len, widget_data->dimensions.y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);
 
 	if (sel) {
-		set_cursor(term, x, widget_data->y, 0);
-		set_window_ptr(dlg_data->win, widget_data->x, widget_data->y);
+		set_cursor(term, x, widget_data->dimensions.y, 0);
+		set_window_ptr(dlg_data->win, widget_data->dimensions.x, widget_data->dimensions.y);
 	}
 }
 
 static int
 mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, struct term_event *ev)
 {
-	if (check_mouse_wheel(ev) || ev->y != widget_data->y || ev->x < widget_data->x
-	    || ev->x >= widget_data->x + strlen(widget_data->widget->text) + BUTTON_LR_LEN)
+	if (check_mouse_wheel(ev))
+		return EVENT_NOT_PROCESSED;
+
+	if (!is_in_rect(widget_data->dimensions, ev->x, ev->y))
 		return EVENT_NOT_PROCESSED;
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);

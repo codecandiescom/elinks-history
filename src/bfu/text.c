@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.87 2004/04/23 20:44:27 pasky Exp $ */
+/* $Id: text.c,v 1.88 2004/05/07 11:24:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ split_lines(struct widget_data *widget_data, int max_width)
 	if (widget_data->info.text.max_width == max_width) return lines;
 
 	/* We want to recalculate the max line width */
-	widget_data->w = 0;
+	widget_data->dimensions.width = 0;
 
 	for (; *text; text += width) {
 
@@ -99,7 +99,7 @@ split_lines(struct widget_data *widget_data, int max_width)
 			width = 1; /* Infinite loop prevention. */
 		}
 
-		int_lower_bound(&widget_data->w, width);
+		int_lower_bound(&widget_data->dimensions.width, width);
 
 		if (!realloc_lines(&lines, line, line + 1))
 			break;
@@ -170,18 +170,18 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 
 	/* If we are drawing set up the dimensions before setting up the
 	 * scrolling. */
-	widget_data->x = x;
-	widget_data->y = *y;
-	widget_data->h = max_height - 3;
-	if (widget_data->h <= 0) {
-		widget_data->h = 0;
+	widget_data->dimensions.x = x;
+	widget_data->dimensions.y = *y;
+	widget_data->dimensions.height = max_height - 3;
+	if (widget_data->dimensions.height <= 0) {
+		widget_data->dimensions.height = 0;
 		return;
 	}
 
 	/* Can we scroll and do we even have to? */
 	if (widget_data->widget->info.text.is_scrollable
 	    && (widget_data->info.text.max_width != width
-		|| widget_data->h < widget_data->info.text.lines))
+		|| widget_data->dimensions.height < widget_data->info.text.lines))
 	{
 		unsigned char **lines;
 		int current;
@@ -189,15 +189,15 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 
 		/* Ensure that the current split is valid but don't
 		 * split if we don't have to */
-		if (widget_data->w != width
+		if (widget_data->dimensions.width != width
 		    && !split_lines(widget_data, width))
 			return;
 
 		lines = (unsigned char **) widget_data->cdata;
 
 		/* Make maximum number of lines available */
-		visible = int_max(widget_data->info.text.lines - widget_data->h,
-				  widget_data->h);
+		visible = int_max(widget_data->info.text.lines - widget_data->dimensions.height,
+				  widget_data->dimensions.height);
 
 		int_bounds(&widget_data->info.text.current, 0, visible);
 		current = widget_data->info.text.current;
@@ -207,8 +207,8 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 
 		/* Do we have to force a text end ? */
 		visible = widget_data->info.text.lines - current;
-		if (visible > widget_data->h) {
-			int lines_pos = current + widget_data->h;
+		if (visible > widget_data->dimensions.height) {
+			int lines_pos = current + widget_data->dimensions.height;
 
 			saved_pos = lines[lines_pos];
 
@@ -223,7 +223,7 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 		}
 
 		/* Force dialog to be the width of the longest line */
-		if (real_width) int_lower_bound(real_width, widget_data->w);
+		if (real_width) int_lower_bound(real_width, widget_data->dimensions.width);
 
 	} else {
 		/* Always reset @current if we do not need to scroll */
@@ -246,8 +246,8 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 {
 	struct window *win = dlg_data->win;
 	int x = dlg_data->x + dlg_data->width - DIALOG_LEFT_BORDER - 1;
-	int y = widget_data->y;
-	int height = widget_data->h;
+	int y = widget_data->dimensions.y;
+	int height = widget_data->dimensions.height;
 	int scale, current, step;
 	int lines = widget_data->info.text.lines;
 
@@ -261,15 +261,15 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 
 	/* Scale the offset of @current */
 	step = (current + 1) * scale / 100;
-	int_bounds(&step, 0, widget_data->h - 1);
+	int_bounds(&step, 0, widget_data->dimensions.height - 1);
 
 	/* Scale the number of visible lines */
 	height = (height + 1) * scale / 100;
-	int_bounds(&height, 1, int_max(widget_data->h - step, 1));
+	int_bounds(&height, 1, int_max(widget_data->dimensions.height - step, 1));
 
 	/* Ensure we always step to the last position too */
-	if (lines - widget_data->h == current) {
-		step = widget_data->h - height;
+	if (lines - widget_data->dimensions.height == current) {
+		step = widget_data->dimensions.height - height;
 	}
 	y += step;
 
@@ -285,8 +285,8 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 
 	/* Hope this is at least a bit reasonable. Set cursor
 	 * and window pointer to start of the first text line. */
-	set_cursor(win->term, widget_data->x, widget_data->y, 0);
-	set_window_ptr(win, widget_data->x, widget_data->y);
+	set_cursor(win->term, widget_data->dimensions.x, widget_data->dimensions.y, 0);
+	set_window_ptr(win, widget_data->dimensions.x, widget_data->dimensions.y);
 }
 
 static void
@@ -295,25 +295,25 @@ format_and_display_text(struct widget_data *widget_data,
 			int current)
 {
 	struct terminal *term = dlg_data->win->term;
-	int y = widget_data->y;
+	int y = widget_data->dimensions.y;
 	int height = dialog_max_height(term);
 	int lines = widget_data->info.text.lines;
 
 	assert(lines >= 0);
-	assert(widget_data->h >= 0);
+	assert(widget_data->dimensions.height >= 0);
 
-	int_bounds(&current, 0, lines - widget_data->h);
+	int_bounds(&current, 0, lines - widget_data->dimensions.height);
 
 	if (widget_data->info.text.current == current) return;
 
 	widget_data->info.text.current = current;
 
-	draw_area(term, widget_data->x, widget_data->y,
-		  widget_data->w, widget_data->h, ' ', 0,
+	draw_area(term, widget_data->dimensions.x, widget_data->dimensions.y,
+		  widget_data->dimensions.width, widget_data->dimensions.height, ' ', 0,
 		  get_bfu_color(term, "dialog.generic"));
 
 	dlg_format_text(term, widget_data,
-			widget_data->x, &y, widget_data->w, NULL,
+			widget_data->dimensions.x, &y, widget_data->dimensions.width, NULL,
 			height);
 
 	display_text(widget_data, dlg_data, 1);
@@ -338,11 +338,11 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			break;
 
 		case ACT_MAIN_PAGE_UP:
-			current -= widget_data->h;
+			current -= widget_data->dimensions.height;
 			break;
 
 		case ACT_MAIN_PAGE_DOWN:
-			current += widget_data->h;
+			current += widget_data->dimensions.height;
 			break;
 
 		case ACT_MAIN_HOME:
@@ -368,8 +368,8 @@ mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 {
 #ifdef CONFIG_MOUSE
 	int x = dlg_data->x + dlg_data->width - DIALOG_LEFT_BORDER - 1;
-	int y = widget_data->y;
-	int height = widget_data->h;
+	int y = widget_data->dimensions.y;
+	int height = widget_data->dimensions.height;
 	int current = widget_data->info.text.current;
 	int scroller_y = widget_data->info.text.scroller_y;
 	int scroller_height = widget_data->info.text.scroller_height;

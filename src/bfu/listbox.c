@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.144 2004/04/23 20:44:26 pasky Exp $ */
+/* $Id: listbox.c,v 1.145 2004/05/07 11:24:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,11 +30,11 @@ dlg_format_box(struct terminal *term, struct widget_data *widget_data,
 {
 	int min, optimal_h;
 
-	widget_data->x = x;
-	widget_data->y = *y;
-	widget_data->w = w;
+	widget_data->dimensions.x = x;
+	widget_data->dimensions.y = *y;
+	widget_data->dimensions.width = w;
 
-	if (rw) int_bounds(rw, widget_data->w, w);
+	if (rw) int_bounds(rw, widget_data->dimensions.width, w);
 
 	/* Height bussiness follows: */
 
@@ -47,16 +47,16 @@ dlg_format_box(struct terminal *term, struct widget_data *widget_data,
 
 	if (max_height - 3 < min) {
 		/* Big trouble: can't satisfy even the minimum :-(. */
-		widget_data->h = max_height - 3;
+		widget_data->dimensions.height = max_height - 3;
 	} else if (optimal_h < min) {
-		widget_data->h = min;
+		widget_data->dimensions.height = min;
 	} else {
-		widget_data->h = optimal_h;
+		widget_data->dimensions.height = optimal_h;
 	}
 
 	/* DBG("::%d(%d)::%d::%d::", max_y, term?1:2, widget_data->h, *y); */
 
-	(*y) += widget_data->h;
+	(*y) += widget_data->dimensions.height;
 }
 
 
@@ -257,7 +257,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 
 	if (data->dist > 0) {
 		if (data->box->sel_offset
-		    < data->widget_data->h - 1) {
+		    < data->widget_data->dimensions.height - 1) {
 			data->box->sel_offset++;
 		} else {
 			data->box->top =
@@ -331,7 +331,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		text = _(text, data->term);
 
 	len = strlen(text);
-	int_upper_bound(&len, int_max(0, data->widget_data->w - depth * 5));
+	int_upper_bound(&len, int_max(0, data->widget_data->dimensions.width - depth * 5));
 
 	stylename = (item == data->box->sel) ? "menu.selected"
 		  : ((item->marked)	     ? "menu.marked"
@@ -339,7 +339,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 	color = get_bfu_color(data->term, stylename);
 
-	y = data->widget_data->y + data->offset;
+	y = data->widget_data->dimensions.y + data->offset;
 	for (d = 0; d < depth - 1; d++) {
 		struct listbox_item *root = item;
 		struct listbox_item *child = item;
@@ -351,7 +351,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		}
 
 		/* XXX */
-		x = data->widget_data->x + d * 5;
+		x = data->widget_data->dimensions.x + d * 5;
 		draw_text(data->term, x, y, "     ", 5, 0, color);
 
 		if (root ? root->child.prev == child
@@ -388,25 +388,25 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 		if (item->marked) str[4] = '*';
 
-		x = data->widget_data->x + (depth - 1) * 5;
+		x = data->widget_data->dimensions.x + (depth - 1) * 5;
 		for (i = 0; i < 5; i++) {
 			draw_border_char(data->term, x + i, y, str[i], color);
 		}
 	}
 
 	if (data->box->ops && data->box->ops->draw) {
-		int x = data->widget_data->x + depth * 5;
-		int width = data->widget_data->w - depth * 5;
+		int x = data->widget_data->dimensions.x + depth * 5;
+		int width = data->widget_data->dimensions.width - depth * 5;
 
 		data->box->ops->draw(item, data, x, y, width);
 	} else {
-		draw_text(data->term, data->widget_data->x + depth * 5, y,
+		draw_text(data->term, data->widget_data->dimensions.x + depth * 5, y,
 			  text, len, 0, color);
 	}
 
 
 	if (item == data->box->sel) {
-		int x = data->widget_data->x;
+		int x = data->widget_data->dimensions.x;
 
 		/* For blind users: */
 		set_cursor(data->term, x, y, 0);
@@ -427,7 +427,7 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
 	struct listbox_context data;
 	/* Add one to offset to get the actual height of the selected item */
-	int moves = box->sel_offset + 1 - widget_data->h;
+	int moves = box->sel_offset + 1 - widget_data->dimensions.height;
 
 	if (moves > 0) {
 		/* Move selected listbox to visible and update box->top while we're
@@ -439,8 +439,8 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		if (!box->sel) box->sel = box->top;
 	}
 
-	draw_area(term, widget_data->x, widget_data->y,
-		  widget_data->w, widget_data->h, ' ', 0,
+	draw_area(term, widget_data->dimensions.x, widget_data->dimensions.y,
+		  widget_data->dimensions.width, widget_data->dimensions.height, ' ', 0,
 		  get_bfu_color(term, "menu.normal"));
 
 
@@ -458,7 +458,7 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	data.box = box;
 	data.dlg_data = dlg_data;
 
-	traverse_listbox_items_list(box->top, box, widget_data->h,
+	traverse_listbox_items_list(box->top, box, widget_data->dimensions.height,
 				    1, display_listbox_item, &data);
 }
 
@@ -536,10 +536,10 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	if (check_mouse_action(ev, B_UP)) {
 		if (!check_mouse_wheel(ev) &&
-		    (ev->y >= widget_data->y && ev->y < widget_data->y + widget_data->h) &&
-		    (ev->x >= widget_data->x && ev->x <= widget_data->x + widget_data->w)) {
+		    (ev->y >= widget_data->dimensions.y && ev->y < widget_data->dimensions.y + widget_data->dimensions.height) &&
+		    (ev->x >= widget_data->dimensions.x && ev->x <= widget_data->dimensions.x + widget_data->dimensions.width)) {
 			/* Clicked in the box. */
-			int offset = ev->y - widget_data->y;
+			int offset = ev->y - widget_data->dimensions.y;
 
 			box->sel_offset = offset;
 			if (offset)
@@ -550,7 +550,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			else box->sel = box->top;
 
 			if (box->sel && box->sel->type == BI_FOLDER) {
-				int xdepth = widget_data->x + box->sel->depth * 5;
+				int xdepth = widget_data->dimensions.x + box->sel->depth * 5;
 
 			       	if (ev->x >= xdepth && ev->x <= xdepth + 2)
 					box->sel->expanded = !box->sel->expanded;
@@ -597,14 +597,14 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			}
 
 			if (action == ACT_MENU_PAGE_DOWN) {
-				box_sel_move(dlg_item, dlg_item->h / 2);
+				box_sel_move(dlg_item, dlg_item->dimensions.height / 2);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_PAGE_UP) {
-				box_sel_move(dlg_item, -dlg_item->h / 2);
+				box_sel_move(dlg_item, -dlg_item->dimensions.height / 2);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;

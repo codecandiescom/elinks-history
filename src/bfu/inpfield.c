@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.137 2004/05/02 12:45:15 zas Exp $ */
+/* $Id: inpfield.c,v 1.138 2004/05/07 11:24:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,9 +135,9 @@ dlg_format_field(struct terminal *term,
 	if (rw) int_lower_bound(rw, int_min(w, DIALOG_MIN_WIDTH));
 
 	if (term) {
-		widget_data->x = x;
-		widget_data->y = *y;
-		widget_data->w = w;
+		widget_data->dimensions.x = x;
+		widget_data->dimensions.y = *y;
+		widget_data->dimensions.width = w;
 	}
 
 	(*y)++;
@@ -233,33 +233,33 @@ display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	struct color_pair *color;
 
 	int_bounds(&widget_data->info.field.vpos,
-		   widget_data->info.field.cpos - widget_data->w + 1,
+		   widget_data->info.field.cpos - widget_data->dimensions.width + 1,
 		   widget_data->info.field.cpos);
 	int_lower_bound(&widget_data->info.field.vpos, 0);
 
 	color = get_bfu_color(term, "dialog.field");
 	if (color)
-		draw_area(term, widget_data->x, widget_data->y, widget_data->w, 1, ' ', 0, color);
+		draw_area(term, widget_data->dimensions.x, widget_data->dimensions.y, widget_data->dimensions.width, 1, ' ', 0, color);
 
 	color = get_bfu_color(term, "dialog.field-text");
 	if (color) {
 		int len = strlen(widget_data->cdata + widget_data->info.field.vpos);
-		int w = int_min(len, widget_data->w);
+		int w = int_min(len, widget_data->dimensions.width);
 
 		if (!hide) {
-			draw_text(term, widget_data->x, widget_data->y,
+			draw_text(term, widget_data->dimensions.x, widget_data->dimensions.y,
 				  widget_data->cdata + widget_data->info.field.vpos, w,
 				  0, color);
 		} else {
-			draw_area(term, widget_data->x, widget_data->y, w, 1, '*', 0, color);
+			draw_area(term, widget_data->dimensions.x, widget_data->dimensions.y, w, 1, '*', 0, color);
 		}
 	}
 
 	if (sel) {
-		int x = widget_data->x + widget_data->info.field.cpos - widget_data->info.field.vpos;
+		int x = widget_data->dimensions.x + widget_data->info.field.cpos - widget_data->info.field.vpos;
 
-		set_cursor(term, x, widget_data->y, 0);
-		set_window_ptr(dlg_data->win, widget_data->x, widget_data->y);
+		set_cursor(term, x, widget_data->dimensions.y, 0);
+		set_window_ptr(dlg_data->win, widget_data->dimensions.x, widget_data->dimensions.y);
 	}
 }
 
@@ -303,8 +303,8 @@ static int
 mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
-	if (ev->y != widget_data->y || ev->x < widget_data->x
-	    || ev->x >= widget_data->x + widget_data->w
+	if (ev->y != widget_data->dimensions.y || ev->x < widget_data->dimensions.x
+	    || ev->x >= widget_data->dimensions.x + widget_data->dimensions.width
 	    || !widget_has_history(widget_data))
 		return EVENT_NOT_PROCESSED;
 
@@ -328,7 +328,7 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			return EVENT_PROCESSED;
 	}
 
-	widget_data->info.field.cpos = widget_data->info.field.vpos + ev->x - widget_data->x;
+	widget_data->info.field.cpos = widget_data->info.field.vpos + ev->x - widget_data->dimensions.x;
 	int_upper_bound(&widget_data->info.field.cpos, strlen(widget_data->cdata));
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);

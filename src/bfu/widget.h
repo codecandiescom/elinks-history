@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.51 2004/01/20 22:25:37 zas Exp $ */
+/* $Id: widget.h,v 1.52 2004/05/07 11:24:21 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -35,6 +35,7 @@ struct widget_ops {
 	int (*kbd)(struct widget_data *, struct dialog_data *, struct term_event *);
 	void (*select)(struct widget_data *, struct dialog_data *);
 };
+
 
 struct widget {
 	struct widget_ops *ops;
@@ -79,12 +80,33 @@ struct widget {
 	enum widget_type type;
 };
 
+
+struct rect {
+	int x;
+	int y;
+	int width;
+	int height;
+};
+
+#define is_in_rect(rect, x_, y_) ((x_) >= (rect).x && (y_) >= (rect).y	\
+		                  && (x_) < (rect).x + (rect).width	\
+				  && (y_) < (rect).y + (rect).height)
+
+#define set_rect(rect, x_, y_, width_, height_) do { \
+	(rect).x = (x_); \
+	(rect).y = (y_); \
+	(rect).width = (width_); \
+	(rect).height = (height_); \
+} while (0)
+
+#define dbg_show_rect(rect) DBG("x=%i y=%i width=%i height=%i", (rect).x, (rect).y, (rect).width, (rect).height)
+#define dbg_show_xy(x_, y_) DBG("x=%i y=%i", x_, y_)
+
 struct widget_data {
 	struct widget *widget;
 	unsigned char *cdata;
 
-	int x, y;
-	int w, h;
+	struct rect dimensions;
 
 	union {
 		struct {
@@ -141,9 +163,9 @@ void dlg_set_history(struct widget_data *);
 
 #define text_is_scrollable(widget_data) \
 	((widget_data)->widget->info.text.is_scrollable \
-	 && (widget_data)->h > 0 \
+	 && (widget_data)->dimensions.height > 0 \
 	 && (widget_data)->info.text.lines > 0 \
-	 && (widget_data)->h < (widget_data)->info.text.lines)
+	 && (widget_data)->dimensions.height < (widget_data)->info.text.lines)
 
 static inline int
 widget_is_focusable(struct widget_data *widget_data)

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.68 2004/01/30 19:13:29 jonas Exp $ */
+/* $Id: checkbox.c,v 1.69 2004/05/07 11:24:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,8 +27,8 @@ dlg_format_checkbox(struct terminal *term,
 	unsigned char *text = widget_data->widget->text;
 
 	if (term) {
-		widget_data->x = x;
-		widget_data->y = *y;
+		widget_data->dimensions.x = x;
+		widget_data->dimensions.y = *y;
 	}
 
 	if (w <= 4) return;
@@ -55,11 +55,11 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, 
 		text = (!widget_data->widget->info.checkbox.gid) ? "[ ]" : "( )";
 	}
 
-	draw_text(term, widget_data->x,	widget_data->y, text, 3, 0, color);
+	draw_text(term, widget_data->dimensions.x, widget_data->dimensions.y, text, 3, 0, color);
 
 	if (sel) {
-		set_cursor(term, widget_data->x + 1, widget_data->y, 0);
-		set_window_ptr(dlg_data->win, widget_data->x, widget_data->y);
+		set_cursor(term, widget_data->dimensions.x + 1, widget_data->dimensions.y, 0);
+		set_window_ptr(dlg_data->win, widget_data->dimensions.x, widget_data->dimensions.y);
 	}
 }
 
@@ -81,7 +81,9 @@ mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	       struct term_event *ev)
 {
 	if (check_mouse_wheel(ev)
-	    || ev->y != widget_data->y || ev->x < widget_data->x || ev->x >= widget_data->x + 3)
+	    || ev->y != widget_data->dimensions.y
+	    || ev->x < widget_data->dimensions.x
+	    || ev->x >= widget_data->dimensions.x + 3)
 		return EVENT_NOT_PROCESSED;
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = widget_data - dlg_data->widgets_data;

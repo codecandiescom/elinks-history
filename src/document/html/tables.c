@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.289 2004/06/29 10:24:10 jonas Exp $ */
+/* $Id: tables.c,v 1.290 2004/06/29 10:29:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -740,7 +740,7 @@ get_table_heights(struct table *table)
 
 /* FIXME: too long, split it. */
 static void
-display_complicated_table(struct table *table, int x, int y)
+draw_table_cells(struct table *table, int x, int y)
 {
 	int col, row;
 	struct document *document = table->part->document;
@@ -953,7 +953,7 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 }
 
 static void
-display_table_frames(struct table *table, int x, int y)
+draw_table_frames(struct table *table, int x, int y)
 {
 	struct table_frames table_frames;
  	signed char *frame[2];
@@ -1072,7 +1072,7 @@ cont2:
 }
 
 static void
-format_table_bad_html(struct table *table, int x, int y)
+draw_table_bad_html(struct table *table, int x, int y)
 {
 	int i;
 
@@ -1160,9 +1160,9 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	x = get_table_margin(table);
 
-	format_table_bad_html(table, x, part->cy);
-	display_complicated_table(table, x, part->cy);
-	display_table_frames(table, x, part->cy);
+	draw_table_bad_html(table, x, part->cy);
+	draw_table_cells(table, x, part->cy);
+	draw_table_frames(table, x, part->cy);
 
 	part->cy += table->real_height;
 	part->cx = -1;

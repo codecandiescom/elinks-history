@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.47 2004/06/18 09:30:27 zas Exp $ */
+/* $Id: smb.c,v 1.48 2004/06/18 13:40:24 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -343,30 +343,96 @@ print_next:
 				    && line_start[1] == ' '
 				    && line_start[2] != ' ') {
 					int dir = 0;
-					unsigned char *pp;
-					unsigned char *p = line_start + 3;
-					unsigned char *url = p - 1;
+					int may_be_dir = 0;
+					unsigned char *p = line_end2;
+					unsigned char *url = line_start + 2;
 
-					while (p + 2 <= line_end2) {
-						if (p[0] == ' ' && p[1] == ' ')
-							goto is_a_file_entry;
-						p++;
-					}
-					goto print_as_is;
+					/* smbclient list parser
+					 * The boring thing is that output is
+					 * ambiguous in many ways:
+					 * filenames with more than one space,
+					 * etc...
+					 * This bloated code tries to do a not
+					 * so bad job. --Zas */
 
-is_a_file_entry:
-					pp = p;
-					while (pp < line_end2 && *pp == ' ')
-						pp++;
-					while (pp < line_end2 && *pp != ' ') {
-						if (*pp == 'D') {
-							dir = 1;
-							break;
+/* directory                      D        0  Fri May  7 11:23:18 2004 */
+/* filename                             2444  Thu Feb 19 15:52:46 2004 */
+
+					/* Skip end of line */
+					while (p > url && (*p < '0' || *p > '9')) p--;
+					if (p == url) goto print_as_is;
+
+					/* year */
+					while (p > url && *p >= '0' && *p <= '9') p--;
+					if (p == url || *p != ' ') goto print_as_is;
+					while (p > url && *p == ' ') p--;
+
+					/* seconds */
+					while (p > url && *p >= '0' && *p <= '9') p--;
+					if (p == url || *p != ':') goto print_as_is;
+					p--;
+
+					/* minutes */
+					while (p > url && *p >= '0' && *p <= '9') p--;
+					if (p == url || *p != ':') goto print_as_is;
+					p--;
+
+					/* hours */
+					while (p > url && *p >= '0' && *p <= '9') p--;
+					if (p == url || *p != ' ') goto print_as_is;
+					p--;
+
+					/* day as number */
+					while (p > url && *p >= '0' && *p <= '9') p--;
+					while (p > url && *p == ' ') p--;
+					if (p == url) goto print_as_is;
+
+					/* month */
+					while (p > url && *p != ' ') p--;
+					if (p == url || *p != ' ') goto print_as_is;
+					p--;
+
+					/* day name */
+					while (p > url && *p != ' ') p--;
+					if (p == url || *p != ' ') goto print_as_is;
+					while (p > url && *p == ' ') p--;
+
+					/* file size */
+					if (p == url || *p < '0' || *p > '9') goto print_as_is;
+
+					if (*p == '0' && *(p - 1) == ' ') may_be_dir = 1;
+
+					while (p > url && *p >= '0' && *p <= '9') p--;
+					if (p == url) goto print_as_is;
+
+					/* Magic to determine if we have a
+					 * filename or a dirname. Thanks to
+					 * smbclient ambiguous output. */
+					{
+						unsigned char *pp = p;
+
+						while (pp > url && *pp == ' ') pp--;
+
+						if (p - pp <= 8) {
+							while (pp > url
+							       && (*pp == 'D'
+								  || *pp == 'H'
+								  || *pp == 'A'
+								  || *pp == 'S'
+							          || *pp == 'R'
+								  || *pp == 'V')) {
+							        if (*pp == 'D' && may_be_dir)
+									dir = 1;
+								pp--;
+							}
 						}
-						pp++;
+						while (pp > url && *pp == ' ') pp--;
+						p = pp;
 					}
 
-					if (*url == '.' && p - url == 1) goto ignored;
+					/* Don't display '.' directory */
+					if (p == url && *url == '.') goto ignored;
+					p++;
 
 					add_to_string(&page, "  <a href=\"");
 					add_bytes_to_string(&page, url, p - url);

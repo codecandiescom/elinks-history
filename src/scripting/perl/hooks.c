@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.6 2004/04/24 22:22:41 pasky Exp $ */
+/* $Id: hooks.c,v 1.7 2004/04/25 05:58:17 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,122 +25,128 @@
 static enum evhook_status
 script_hook_goto_url(va_list ap, void *data)
 {
-	unsigned char **url = va_arg(ap, unsigned char **);
-	struct session *ses = va_arg(ap, struct session *);
-	unsigned char *new_url = NULL;
-	STRLEN n_a;
-	int err;
-	dSP;
-
-	if (*url == NULL) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
-	ENTER;
-	SAVETMPS;
-	PUSHMARK(SP);
+	{
+		unsigned char **url = va_arg(ap, unsigned char **);
+		struct session *ses = va_arg(ap, struct session *);
+		unsigned char *new_url = NULL;
+		STRLEN n_a;
+		int err;
+		dSP;
 
-	my_XPUSHs(*url, strlen(*url));
+		if (*url == NULL) return EHS_NEXT;
+		ENTER;
+		SAVETMPS;
+		PUSHMARK(SP);
 
-	if (!have_location(ses)) {
-		XPUSHs(sv_2mortal(newSV(0)));
-	} else {
-		unsigned char *uri = struri(cur_loc(ses)->vs.uri);
+		my_XPUSHs(*url, strlen(*url));
 
-		my_XPUSHs(uri, strlen(uri));
-	}
-	PUTBACK;
-	err = call_pv("goto_url_hook", G_EVAL | G_SCALAR);
-	if (SvTRUE(ERRSV)) err = 0;
-	SPAGAIN;
-	if (err == 1) new_url = POPpx;
+		if (!have_location(ses)) {
+			XPUSHs(sv_2mortal(newSV(0)));
+		} else {
+			unsigned char *uri = struri(cur_loc(ses)->vs.uri);
 
-	if (new_url) {
-		unsigned char *n = memacpy(new_url, n_a);
-
-		if (n) {
-			mem_free(*url);
-			*url = n;
+			my_XPUSHs(uri, strlen(uri));
 		}
+		PUTBACK;
+		err = call_pv("goto_url_hook", G_EVAL | G_SCALAR);
+		if (SvTRUE(ERRSV)) err = 0;
+		SPAGAIN;
+		if (err == 1) new_url = POPpx;
+
+		if (new_url) {
+			unsigned char *n = memacpy(new_url, n_a);
+
+			if (n) {
+				mem_free(*url);
+				*url = n;
+			}
+		}
+		PUTBACK;
+		FREETMPS;
+		LEAVE;
 	}
-	PUTBACK;
-	FREETMPS;
-	LEAVE;
 	return EHS_NEXT;
 }
 
 static enum evhook_status
 script_hook_follow_url(va_list ap, void *data)
 {
-	unsigned char **url = va_arg(ap, unsigned char **);
-	unsigned char *new_url = NULL;
-	STRLEN n_a;
-	int err;
-	dSP;
-
-	if (*url == NULL) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
+	{
+		unsigned char **url = va_arg(ap, unsigned char **);
+		unsigned char *new_url = NULL;
+		STRLEN n_a;
+		int err;
+		dSP;
 
-	ENTER;
-	SAVETMPS;
-	PUSHMARK(SP);
+		if (*url == NULL) return EHS_NEXT;
 
-	my_XPUSHs(*url, strlen(*url));
-	PUTBACK;
-	err = call_pv("follow_url_hook", G_EVAL | G_SCALAR);
-	if (SvTRUE(ERRSV)) err = 0;
-	SPAGAIN;
-	if (err == 1) new_url = POPpx;
+		ENTER;
+		SAVETMPS;
+		PUSHMARK(SP);
 
-	if (new_url) {
-		unsigned char *n = memacpy(new_url, n_a);
+		my_XPUSHs(*url, strlen(*url));
+		PUTBACK;
+		err = call_pv("follow_url_hook", G_EVAL | G_SCALAR);
+		if (SvTRUE(ERRSV)) err = 0;
+		SPAGAIN;
+		if (err == 1) new_url = POPpx;
 
-		if (n) {
-			mem_free(*url);
-			*url = n;
+		if (new_url) {
+			unsigned char *n = memacpy(new_url, n_a);
+
+			if (n) {
+				mem_free(*url);
+				*url = n;
+			}
 		}
+		PUTBACK;
+		FREETMPS;
+		LEAVE;
 	}
-	PUTBACK;
-	FREETMPS;
-	LEAVE;
 	return EHS_NEXT;
 }
 
 static enum evhook_status
 script_hook_pre_format_html(va_list ap, void *data)
 {
-	unsigned char **html = va_arg(ap, unsigned char **);
-	int *html_len = va_arg(ap, int *);
-	unsigned char *url;
-	unsigned char *new_html = NULL;
-	struct session *ses;
-	STRLEN n_a;
-	int err;
-	dSP;
-
-	ses = va_arg(ap, struct session *);
-	url = va_arg(ap, unsigned char *);
-
-	if (*html == NULL || *html_len == 0) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
+	{
+		unsigned char **html = va_arg(ap, unsigned char **);
+		int *html_len = va_arg(ap, int *);
+		unsigned char *url;
+		unsigned char *new_html = NULL;
+		struct session *ses;
+		STRLEN n_a;
+		int err;
+		dSP;
 
-	ENTER;
-	SAVETMPS;
-	PUSHMARK(SP);
+		ses = va_arg(ap, struct session *);
+		url = va_arg(ap, unsigned char *);
 
-	my_XPUSHs(url, strlen(url));
-	my_XPUSHs(*html, *html_len);
-	PUTBACK;
-	err = call_pv("pre_format_html_hook", G_EVAL | G_SCALAR);
-	if (SvTRUE(ERRSV)) err = 0;
-	SPAGAIN;
-	if (err == 1) new_html = POPpx;
+		if (*html == NULL || *html_len == 0) return EHS_NEXT;
 
-	if (new_html) {
-		*html_len = n_a;
-		*html = memacpy(new_html, *html_len);
+		ENTER;
+		SAVETMPS;
+		PUSHMARK(SP);
+
+		my_XPUSHs(url, strlen(url));
+		my_XPUSHs(*html, *html_len);
+		PUTBACK;
+		err = call_pv("pre_format_html_hook", G_EVAL | G_SCALAR);
+		if (SvTRUE(ERRSV)) err = 0;
+		SPAGAIN;
+		if (err == 1) new_html = POPpx;
+
+		if (new_html) {
+			*html_len = n_a;
+			*html = memacpy(new_html, *html_len);
+		}
+		PUTBACK;
+		FREETMPS;
+		LEAVE;
 	}
-	PUTBACK;
-	FREETMPS;
-	LEAVE;
 	return EHS_NEXT;
 }
 
@@ -151,35 +157,37 @@ script_hook_pre_format_html(va_list ap, void *data)
 static enum evhook_status
 script_hook_get_proxy(va_list ap, void *data)
 {
-	unsigned char **new_proxy_url = va_arg(ap, unsigned char **);
-	unsigned char *url = va_arg(ap, unsigned char *);
-	unsigned char *new_url = NULL;
-	STRLEN n_a;
-	int err;
-	dSP;
-
-	if (*new_proxy_url == NULL) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
+	{
+		unsigned char **new_proxy_url = va_arg(ap, unsigned char **);
+		unsigned char *url = va_arg(ap, unsigned char *);
+		unsigned char *new_url = NULL;
+		STRLEN n_a;
+		int err;
+		dSP;
 
-	ENTER;
-	SAVETMPS;
-	PUSHMARK(SP);
+		if (*new_proxy_url == NULL) return EHS_NEXT;
 
-	my_XPUSHs(url, strlen(url));
-	PUTBACK;
-	err = call_pv("proxy_for_hook", G_EVAL | G_SCALAR);
-	if (SvTRUE(ERRSV)) err = 0;
-	SPAGAIN;
-	if (err == 1) new_url = POPpx;
+		ENTER;
+		SAVETMPS;
+		PUSHMARK(SP);
 
-	if (new_url) {
-		*new_proxy_url = memacpy(new_url, n_a);
-	} else {
-		*new_proxy_url = NULL;
+		my_XPUSHs(url, strlen(url));
+		PUTBACK;
+		err = call_pv("proxy_for_hook", G_EVAL | G_SCALAR);
+		if (SvTRUE(ERRSV)) err = 0;
+		SPAGAIN;
+		if (err == 1) new_url = POPpx;
+
+		if (new_url) {
+			*new_proxy_url = memacpy(new_url, n_a);
+		} else {
+			*new_proxy_url = NULL;
+		}
+		PUTBACK;
+		FREETMPS;
+		LEAVE;
 	}
-	PUTBACK;
-	FREETMPS;
-	LEAVE;
 	return EHS_NEXT;
 }
 

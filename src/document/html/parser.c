@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.16 2002/04/26 17:07:23 pasky Exp $ */
+/* $Id: parser.c,v 1.17 2002/04/27 13:15:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 
 #include <bfu/align.h>
 #include <bfu/menu.h>
-#include <config/default.h>
+#include <config/options.h>
 #include <config/kbdbind.h>
 #include <document/globhist.h>
 #include <document/session.h>

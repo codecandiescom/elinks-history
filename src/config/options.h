@@ -1,11 +1,10 @@
-/* $Id: default.h,v 1.7 2002/04/26 18:14:08 pasky Exp $ */
+/* $Id: options.h,v 1.1 2002/04/27 13:15:52 pasky Exp $ */
 
-#ifndef EL__CONFIG_DEFAULT_H
-#define EL__CONFIG_DEFAULT_H
+#ifndef EL__CONFIG_OPTIONS_H
+#define EL__CONFIG_OPTIONS_H
 
 #include <document/options.h>
 #include <document/html/colors.h>
-#include <lowlevel/terminal.h>
 
 #define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 
@@ -20,16 +19,10 @@ struct option {
 	unsigned char *desc;
 };
 
-void init_home();
-unsigned char *parse_options(int, unsigned char *[]);
-unsigned char *get_token(unsigned char **line);
-void load_config();
-void write_config(struct terminal *);
-void write_html_config(struct terminal *);
-void end_config();
+extern struct option links_options[];
+extern struct option html_options[];
+extern struct option *all_options[];
 
-int load_url_history();
-int save_url_history();
 
 extern int anonymous;
 extern unsigned char user_agent[];

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.8 2002/04/20 11:34:10 zas Exp $ */
+/* $Id: globhist.c,v 1.9 2002/04/27 13:15:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <config/default.h>
+#include <config/options.h>
 #include <dialogs/globhist.h>
 #include <document/globhist.h>
 #include <util/secsave.h>

@@ -1,9 +1,10 @@
-/* $Id: kbdbind.h,v 1.3 2002/04/19 12:23:20 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.4 2002/04/27 13:15:51 pasky Exp $ */
 
-#ifndef EL__KBDBIND_H
-#define EL__KBDBIND_H
+#ifndef EL__CONFIG_KBDBIND_H
+#define EL__CONFIG_KBDBIND_H
 
-#include "default.h"
+#include <config/options.h>
+#include <lowlevel/terminal.h>
 
 enum keymap {
 	KM_MAIN,

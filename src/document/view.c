@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.26 2002/04/19 12:23:21 pasky Exp $ */
+/* $Id: view.c,v 1.27 2002/04/27 13:15:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@
 #include <dialogs/menu.h>
 #include <bookmarks/dialogs.h>
 #include <cookies/cookies.h>
-#include <config/default.h>
+#include <config/options.h>
 #include <config/kbdbind.h>
 #include <dialogs/globhist.h>
 #include <document/cache.h>

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.2 2002/04/20 09:49:44 zas Exp $ */
+/* $Id: secsave.c,v 1.3 2002/04/27 13:15:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,7 +12,7 @@
 
 #include <links.h>
 
-#include <config/default.h>
+#include <config/options.h>
 #include <util/secsave.h>
 
 
@@ -26,15 +26,15 @@
  * Note: if a file named "filename.tmp" exists, it will be truncated to a size
  * of zero.
  *
- * Subsequent write operations are done using returned secure_save_info
- * FILE * field named fp.
+ * Subsequent write operations are done using returned secure_save_info FILE *
+ * field named fp.
  *
  * If an error is encountered, secure_save_info int field named err is set
  * (automatically if using secure_fp*() functions or by programmer)
  *
  * When secure_close() is called, "filename.tmp" is closed, and if
- * secure_save_info err field has a value of zero, "filename.tmp" is renamed
- * to "filename".
+ * secure_save_info err field has a value of zero, "filename.tmp" is renamed to
+ * "filename".
  *
  * WARNING: since rename() is used, any symlink called "filename" is replaced
  * by a regular file.

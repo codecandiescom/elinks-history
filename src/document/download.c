@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.4 2002/04/16 16:16:07 pasky Exp $ */
+/* $Id: download.c,v 1.5 2002/04/27 13:15:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include <links.h>
 
 #include <bfu/bfu.h>
-#include <config/default.h>
+#include <config/options.h>
 #include <dialogs/menu.h>
 #include <document/cache.h>
 #include <document/download.h>

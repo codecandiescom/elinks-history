@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.7 2002/03/26 17:45:59 pasky Exp $ */
+/* $Id: dns.c,v 1.8 2002/04/27 13:15:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 
 #include <links.h>
 
-#include <config/default.h>
+#include <config/options.h>
 #include <lowlevel/dns.h>
 #include <lowlevel/select.h>
 #include <lowlevel/ttime.h>

@@ -1,3 +1,279 @@
+Fri Jan  9 21:30:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Explode count_menu_size() in 4 functions.  
+
+Fri Jan  9 21:04:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Got rid of @s, and initialize mx to zero.  
+
+Fri Jan  9 20:48:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	count_menu_size() was cleaned and fixed. Next step will be to cache
+	text and rtext widths, as well as display-related infos, it will
+	simplify things a lot (we currently make and remake many useless
+	calculations) 
+
+Fri Jan  9 15:20:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, bfu/menu.c:
+
+	Use constants and make calculations explicit, code simplification,
+	MENU_HOTKEY_SPACE disappears, locally defined macros replace it,
+	improving code clarity.  
+
+Fri Jan  9 14:14:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	...except this little mistake. Fixed segfaults when opening menu
+	thru kbd.  
+
+Fri Jan  9 14:14:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Reverted bogus Miciah' fix, what we did previously was ok...  
+
+Fri Jan  9 14:07:03 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	Fix segfaults resulting from pasky's menu-handler butchering.
+	(@win->data->win is _not_ the same as @win.) 
+
+Fri Jan  9 13:12:12 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	In the XBEL bookmark code, when adding a folder, do not bother to
+	set ->root or ->box_item->type, as add_bookmark does that for us.  
+
+Fri Jan  9 13:07:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/leds.c:
+
+	Itty-bitty whitespace fix.  
+
+Fri Jan  9 12:57:14 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	#undef macros once we're done with them.  
+
+Fri Jan  9 12:38:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Added feature.h. Oops.  
+
+Fri Jan  9 11:08:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Pass @fwd to mainmenu_kbd_handler().  
+
+Fri Jan  9 11:08:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Moved @s from mainmenu_handler() to mainmenu_kbd_handler().  
+
+Fri Jan  9 11:00:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Readded DIST macro, which got chopped most of it off during
+	reindentation.  
+
+Fri Jan  9 10:56:14 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	In draw_menu_left_text_hk, rename the @len parameter to @hotkey_pos.  
+
+Fri Jan  9 10:51:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	Remove an inaccurate comment.  
+
+Fri Jan  9 10:44:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Moved menu/kbd event handling from mainmenu_handler() to
+	mainmenu_(mouse|kbd)_handler().  
+
+Fri Jan  9 10:40:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Blanklines.  
+
+Fri Jan  9 10:39:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Moved menu/kbd event handling from menu_handler() to
+	menu_(mouse|kbd)_handler().  
+
+Fri Jan  9 10:38:37 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	#undef macros once we're done with them.  
+
+Fri Jan  9 10:36:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Remove useless test. Spotted by Miciah.  
+
+Fri Jan  9 10:27:57 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/file/file.c:
+
+	In stat_user and stat_group, don't check for the case where a
+	successful stat(2) call gives a uid or gid of -1. If it ever does,
+	why not humour the system and proceed to use the values it has
+	provided to us? 
+
+Fri Jan  9 10:25:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Use @menu->selected instead of @s. Spotted by Miciah.  
+
+Fri Jan  9 10:22:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Fixed the Jonas' strangeness.  
+
+Fri Jan  9 10:09:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Revert last patch, it was correct. Sorry, Miciah ;).  
+
+Fri Jan  9 09:52:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Start on first main menu item displayed. Suggested by Miciah.  
+
+Fri Jan  9 09:42:25 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Do not give the B_ENTER flag to the 'Do not show anymore' button in
+	the 'Write config success' box.  
+
+Fri Jan  9 09:36:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/tab.c:
+
+	When closing the current tab, switch to the previous tab _first_, so
+	that the next tab doesn't lose its 'unvisited' highlighting.  
+
+Fri Jan  9 09:31:55 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Fix session saving to bookmark tabs from left to right.  
+
+Fri Jan  9 09:27:58 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Remove an obsolete comment.  
+
+Fri Jan  9 09:26:25 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/menu.c:
+
+	Update a comment: s/item_free/flags/ 
+
+Fri Jan  9 09:14:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/tab.c:
+
+	Remove the @link parameter from get_tab_link_url. The parameter only
+	says whether to return NULL or to actually do something, so move
+	that check to the callers.  
+
+Fri Jan  9 07:20:11 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	Include util/ttime.h for ttime.  
+
+Fri Jan  9 01:22:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	I hope this is strange enough.  
+
+Fri Jan  9 01:10:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Remove a few ending action description dots.  
+
+Fri Jan  9 01:08:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Minor cleanup of action listbox initialization. No longer gettext
+	action names but only the descriptions.  
+
+Fri Jan  9 01:06:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Add description to 'none' action.  
+
+Fri Jan  9 00:43:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Don't add listbox for ACT_SCRIPTING_FUNCTION since we hide it anyway
+	and the current generic hierbox handling always unhides all root
+	level boxes.  
+
+Fri Jan  9 00:21:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Fix off by one error, which is really not my fault because we
+	skipped 'none' before.  
+
+Fri Jan  9 00:14:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Alphabetise action_table and keyact enum. Hmm 
+
+Thu Jan  8 23:36:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Fix startup goto dialog. Patch by Zardoz.  
+
+Thu Jan  8 23:26:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, config/options.h, config/options.inc,
+	mime/backend/mailcap.c:
+
+	We only use alias description and captions for commandlines so no
+	need to store them for 'regular' options.  
+
 Thu Jan  8 22:26:04 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* NEWS:

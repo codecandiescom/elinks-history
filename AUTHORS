@@ -28,6 +28,9 @@ Alejandros Diamandidis <adia@egnatia.ee.auth.gr>
 Ami Fischman <usenet@fischman.org>
 	Random fixes, misc minor improvements
 
+Andre Valente <a.valente@netcabo.pt>
+	Download completion notify
+
 Anton Voloshin <vav@isv.ru>
 	Proper encoding of form entries
 
@@ -337,4 +340,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.69 2002/07/05 09:24:36 pasky Exp $
+$Id: AUTHORS,v 1.70 2002/07/09 15:43:46 pasky Exp $

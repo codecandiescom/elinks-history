@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.29 2002/07/05 20:42:13 pasky Exp $ */
+/* $Id: download.c,v 1.30 2002/07/09 15:43:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,6 +151,16 @@ undisplay_download(struct download *down)
 	if (down->win) delete_window(down->win);
 }
 
+
+int
+dlg_set_notify(struct dialog_data *dlg, struct widget_data *di)
+{
+	struct download *down = dlg->dlg->udata;
+
+	down->notify = 1;
+	undisplay_download(down);
+	return 0;
+}
 
 int
 dlg_abort_download(struct dialog_data *dlg, struct widget_data *di)
@@ -367,11 +377,16 @@ found:
 	dlg->items[0].text = TEXT(T_BACKGROUND);
 
 	dlg->items[1].type = D_BUTTON;
-	dlg->items[1].gid = 0;
-	dlg->items[1].fn = dlg_abort_download;
-	dlg->items[1].text = TEXT(T_ABORT);
+	dlg->items[1].gid = B_ENTER | B_ESC;
+	dlg->items[1].fn = dlg_set_notify;
+	dlg->items[1].text = TEXT(T_BACKGROUND_NOTIFY);
 
-	dlg->items[2].type = D_END;
+	dlg->items[2].type = D_BUTTON;
+	dlg->items[2].gid = 0;
+	dlg->items[2].fn = dlg_abort_download;
+	dlg->items[2].text = TEXT(T_ABORT);
+
+	dlg->items[3].type = D_END;
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
@@ -518,11 +533,23 @@ end_store:
 				mem_free(down->prog);
 				down->prog = NULL;
 
-			} else if (down->remotetime && get_opt_int("document.download.set_original_time")) {
-				struct utimbuf foo;
+			} else { 
+				if (down->notify) {
+					unsigned char *url = stracpy(down->url);
 
-				foo.actime = foo.modtime = down->remotetime;
-				utime(down->file, &foo);
+					msg_box(get_download_ses(down)->term, getml(url, NULL),
+						TEXT(T_DOWNLOAD), AL_CENTER | AL_EXTD_TEXT,
+						TEXT(T_DOWNLOAD_COMPLETE), ":\n", url, NULL,
+						get_download_ses(down), 1,
+						TEXT(T_OK), NULL, B_ENTER | B_ESC);
+				}
+
+				if (down->remotetime && get_opt_int("document.download.set_original_time")) {
+					struct utimbuf foo;
+
+					foo.actime = foo.modtime = down->remotetime;
+					utime(down->file, &foo);
+				}
 			}
 		}
 

@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.3 2002/06/17 08:00:15 pasky Exp $ */
+/* $Id: download.h,v 1.4 2002/07/09 15:43:47 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOWNLOAD_H
 #define EL__DOCUMENT_DOWNLOAD_H
@@ -18,6 +18,7 @@ struct download {
 	int last_pos;
 	int handle;
 	int redirect_cnt;
+	int notify;
 	unsigned char *prog;
 	int prog_flags;
 	time_t remotetime;

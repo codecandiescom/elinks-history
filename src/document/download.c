@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.61 2002/12/16 22:47:54 zas Exp $ */
+/* $Id: download.c,v 1.62 2002/12/24 00:05:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -585,10 +585,11 @@ end_store:
 
 
 int
-create_download_file(struct terminal *term, unsigned char *fi, int safe, int resume)
+create_download_file(struct terminal *term, unsigned char *fi,
+		     unsigned char **real_file, int safe, int resume)
 {
 	unsigned char *download_dir = get_opt_str("document.download.directory");
-	unsigned char *file = fi;
+	unsigned char *file;
 	unsigned char *wd;
 	int h;
 	int i;
@@ -603,10 +604,10 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe, int res
 	set_cwd(term->cwd);
 
 	if (!get_opt_int("document.download.overwrite") || resume) {
-		file = expand_tilde(file);
+		file = expand_tilde(fi);
 	} else {
 		/* The tilde will be expanded by get_unique_name() */
-		file = get_unique_name(file);
+		file = get_unique_name(fi);
 	}
 
 	if (!file) return -1;
@@ -650,7 +651,10 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe, int res
 		}
 	}
 
-	if (file != fi) mem_free(file);
+	if (real_file)
+		*real_file = file;
+	else
+		mem_free(file);
 	return h;
 }
 
@@ -734,15 +738,16 @@ static void
 common_download(struct session *ses, unsigned char *file, int resume)
 {
 	struct download *down = NULL;
+	unsigned char *real_file = NULL;
 	int h;
-	struct stat buf;
 	unsigned char *url = ses->dn_url;
+	struct stat buf;
 
 	if (!url) return;
 
 	kill_downloads_to_file(file);
 
-	h = create_download_file(ses->term, file, 0, resume);
+	h = create_download_file(ses->term, file, &real_file, 0, resume);
 	if (h == -1) return;
 
 	down = mem_calloc(1, sizeof(struct download));
@@ -751,8 +756,7 @@ common_download(struct session *ses, unsigned char *file, int resume)
 	down->url = stracpy(url);
 	if (!down->url) goto error;
 
-	down->file = stracpy(file);
-	if (!down->file) goto error;
+	down->file = real_file;
 
 	if (fstat(h, &buf)) goto error;
 	down->last_pos = (int) buf.st_size;
@@ -773,7 +777,6 @@ common_download(struct session *ses, unsigned char *file, int resume)
 error:
 	if (down) {
 		if (down->url) mem_free(down->url);
-		if (down->file) mem_free(down->file);
 		mem_free(down);
 	}
 }
@@ -799,6 +802,7 @@ static void
 continue_download(struct session *ses, unsigned char *file)
 {
 	struct download *down = NULL;
+	unsigned char *real_file = NULL;
 	int h;
 	unsigned char *url = ses->tq_url;
 
@@ -814,7 +818,7 @@ continue_download(struct session *ses, unsigned char *file)
 
 	kill_downloads_to_file(file);
 
-	h = create_download_file(ses->term, file, !!ses->tq_prog, 0);
+	h = create_download_file(ses->term, file, &real_file, !!ses->tq_prog, 0);
 	if (h == -1) goto cancel;
 
 	down = mem_calloc(1, sizeof(struct download));
@@ -823,8 +827,7 @@ continue_download(struct session *ses, unsigned char *file)
 	down->url = stracpy(url);
 	if (!down->url) goto cancel;
 
-	down->file = stracpy(file);
-	if (!down->file) goto cancel;
+	down->file = real_file;
 
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;
@@ -852,7 +855,6 @@ cancel:
 	if (ses->tq_prog && file) mem_free(file);
 	if (down) {
 		if (down->url) mem_free(down->url);
-		if (down->file) mem_free(down->file);
 		mem_free(down);
 	}
 }

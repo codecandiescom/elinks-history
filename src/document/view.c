@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.113 2002/12/20 22:14:51 pasky Exp $ */
+/* $Id: view.c,v 1.114 2002/12/24 00:05:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3274,7 +3274,7 @@ save_formatted(struct session *ses, unsigned char *file)
 	struct f_data_c *f = current_frame(ses);
 
 	if (!f || !f->f_data) return;
-	h = create_download_file(ses->term, file, 0, 0);
+	h = create_download_file(ses->term, file, NULL, 0, 0);
 	if (h == -1) return;
 	if (dump_to_file(f->f_data, h)) {
 		msg_box(ses->term, NULL,

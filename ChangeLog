@@ -1,8 +1,82 @@
+Mon Dec 22 22:55:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: man/man5/elinks.conf.5, tools/help2doc:
+
+	Fix help2tool to properly handle '('s in strings so now the default
+	for http user agent should be correct.  
+
+Mon Dec 22 22:55:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/Makefile.am:
+
+	We should dump the generated manpage back to the srcdir, not
+	builddir.  
+
+Mon Dec 22 22:53:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/Makefile.am:
+
+	Make update-manpages to actually work.  
+
+Mon Dec 22 22:50:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Fix to proper test the $(ELINKS) binary, plus use top_builddir
+	reported by pasky.  
+
+Mon Dec 22 22:40:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/: man1/elinks.1.in, man5/elinks.conf.5:
+
+	Add -conffile descriptiong to elinks.1 and update for user agent
+	string in elinks.conf.5.  
+
+Mon Dec 22 22:00:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/libintl.c:
+
+	I will think out some punishments for those who remove blank lines.
+	Someone may get hurt the next time, zas.  
+
+Mon Dec 22 21:22:01 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Mon Dec 22 21:06:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/options.c, intl/gettext/libintl.c:
+
+	Provide translations for language menu.  
+
+Mon Dec 22 20:39:34 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Mon Dec 22 20:21:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5rc2.CVS 
+
 Mon Dec 22 18:24:36 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:
 
 	0.5rc2 
+
+Mon Dec 22 18:24:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: ru.po, sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
 
 Mon Dec 22 18:23:40 2003  Petr Baudis <pasky@ucw.cz>:
 

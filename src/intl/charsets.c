@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.84 2004/05/06 14:39:04 jonas Exp $ */
+/* $Id: charsets.c,v 1.85 2004/05/15 23:40:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -576,8 +576,9 @@ end:
 }
 
 unsigned char *
-convert_string(struct conv_table *convert_table, unsigned char *chars,
-	       int charslen, enum convert_string_mode mode)
+elinks_convert_string(struct conv_table *convert_table,
+		      unsigned char *chars, int charslen,
+		      enum convert_string_mode mode)
 {
 	unsigned char *buffer;
 	int bufferpos = 0;

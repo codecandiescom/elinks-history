@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.125 2004/09/26 12:13:08 pasky Exp $ */
+/* $Id: task.c,v 1.126 2004/09/28 16:12:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ post_yes(struct task *task)
 
 	abort_preloading(task->ses, 0);
 
-	ses->loading.end = (void (*)(struct download *, void *)) end_load;
+	ses->loading.end = (void (*)(struct download *, void *)) doc_loading_callback;
 	ses->loading.data = task->ses;
 	ses->loading_uri = task->uri; /* XXX: Make the session inherit the URI. */
 
@@ -140,7 +140,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	if (!confirm_submit) {
 		mem_free_if(task);
 
-		ses->loading.end = (void (*)(struct download *, void *)) end_load;
+		ses->loading.end = (void (*)(struct download *, void *)) doc_loading_callback;
 		ses->loading.data = ses;
 		ses->loading_uri = get_uri_reference(uri);
 
@@ -402,11 +402,11 @@ b:
 }
 
 void
-end_load(struct download *stat, struct session *ses)
+loading_callback(struct download *stat, struct session *ses)
 {
 	int d;
 
-	assertm(ses->task.type, "end_load: no ses->task");
+	assertm(ses->task.type, "loading_callback: no ses->task");
 	if_assert_failed return;
 
 	d = do_move(ses, &stat);
@@ -414,13 +414,13 @@ end_load(struct download *stat, struct session *ses)
 	if (d == 2) goto end;
 
 	if (d == 1) {
-		stat->end = (void (*)(struct download *, void *)) doc_end_load;
+		stat->end = (void (*)(struct download *, void *)) doc_loading_callback;
 		display_timer(ses);
 	}
 
 	if (is_in_result_state(stat->state)) {
 		if (ses->task.type) free_task(ses);
-		if (d == 1) doc_end_load(stat, ses);
+		if (d == 1) doc_loading_callback(stat, ses);
 	}
 
 	if (is_in_result_state(stat->state) && stat->state != S_OK) {

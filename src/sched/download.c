@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.321 2004/08/19 10:32:46 miciah Exp $ */
+/* $Id: download.c,v 1.322 2004/09/28 16:12:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -957,7 +957,7 @@ tp_display(struct type_query *type_query)
 
 	if (!type_query->frame) {
 		cur_loc(ses)->download.end = (void (*)(struct download *, void *))
-				     doc_end_load;
+				     doc_loading_callback;
 		cur_loc(ses)->download.data = ses;
 
 		if (type_query->download.state >= 0)

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.27 2004/01/08 02:23:55 jonas Exp $ */
+/* $Id: action.c,v 1.28 2004/01/08 02:34:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,6 +260,12 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			link_menu(term, NULL, ses);
 			break;
 
+		case ACT_LUA_CONSOLE:
+#ifdef HAVE_LUA
+			trigger_event_name("dialog-lua-console", ses);
+#endif
+			break;
+
 		case ACT_MENU:
 			activate_bfu_technology(ses, -1);
 			break;
@@ -307,6 +313,10 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_PREVIOUS_FRAME:
 			next_frame(ses, -1);
 			draw_formatted(ses, 0);
+			break;
+
+		case ACT_QUIT:
+			exit_prog(term, (void *)0, ses);
 			break;
 
 		case ACT_REALLY_QUIT:
@@ -445,7 +455,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_KILL_TO_EOL:
 		case ACT_LEFT:
 		case ACT_JUMP_TO_LINK:
-		case ACT_LUA_CONSOLE:
 		case ACT_MARK_SET:
 		case ACT_MARK_GOTO:
 		case ACT_MARK_ITEM:
@@ -453,7 +462,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_PAGE_DOWN:
 		case ACT_PAGE_UP:
 		case ACT_PASTE_CLIPBOARD:
-		case ACT_QUIT:
 		case ACT_RIGHT:
 		case ACT_SCRIPTING_FUNCTION:
 		case ACT_SCROLL_DOWN:

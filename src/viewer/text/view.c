@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.348 2004/01/08 02:20:37 jonas Exp $ */
+/* $Id: view.c,v 1.349 2004/01/08 02:34:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -896,11 +896,6 @@ send_event(struct session *ses, struct term_event *ev)
 
 		/* TODO: Merge with do_action() */
 		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
-			case ACT_LUA_CONSOLE:
-#ifdef HAVE_LUA
-				trigger_event_name("dialog-lua-console", ses);
-#endif
-				goto x;
 			case ACT_SCRIPTING_FUNCTION:
 #ifdef HAVE_SCRIPTING
 				trigger_event(func_ref, ses);

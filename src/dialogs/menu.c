@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.277 2004/01/07 19:32:35 jonas Exp $ */
+/* $Id: menu.c,v 1.278 2004/01/08 02:34:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -263,7 +263,7 @@ static struct menu_item file_menu22[] = {
 
 static struct menu_item file_menu3[] = {
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("E~xit"), NULL, ACT_QUIT, exit_prog, NULL, 0),
+	INIT_MENU_ACTION(N_("E~xit"), ACT_QUIT),
 	NULL_MENU_ITEM,
 };
 

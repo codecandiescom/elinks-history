@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.23 2004/09/19 20:34:33 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.24 2004/09/19 20:38:49 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -54,9 +54,9 @@ struct css_stylesheet;
 typedef void (*css_stylesheet_importer)(struct css_stylesheet *,
 					unsigned char *url, int urllen);
 
-/* The {struct css_stylesheet} describes all the useful data that was extracted from
- * the CSS source. Currently we don't cache anything other than the default
- * user stylesheet so it can contain stuff from both <style> tags and
+/* The {struct css_stylesheet} describes all the useful data that was extracted
+ * from the CSS source. Currently we don't cache anything other than the
+ * default user stylesheet so it can contain stuff from both <style> tags and
  * @import'ed CSS documents. */
 struct css_stylesheet {
 	/* The import callback function. */
@@ -72,7 +72,8 @@ struct css_stylesheet {
 	int import_level;
 };
 
-#define INIT_CSS_STYLESHEET(css, import) { import, { D_LIST_HEAD(css.selectors) } }
+#define INIT_CSS_STYLESHEET(css, import) \
+	{ import, { D_LIST_HEAD(css.selectors) } }
 
 /* Dynamically allocates a stylesheet. */
 struct css_stylesheet *init_css_stylesheet(css_stylesheet_importer importer);
@@ -82,26 +83,32 @@ struct css_stylesheet *init_css_stylesheet(css_stylesheet_importer importer);
 void mirror_css_stylesheet(struct css_stylesheet *css1,
 			   struct css_stylesheet *css2);
 
-/* Releases all the content of the stylesheet (but not the stylesheet itself). */
+/* Releases all the content of the stylesheet (but not the stylesheet
+ * itself). */
 void done_css_stylesheet(struct css_stylesheet *css);
 
 
-/* Returns a new freshly made selector adding it to the given stylesheet or NULL. */
+/* Returns a new freshly made selector adding it to the given stylesheet
+ * or NULL. */
 struct css_selector *
-get_css_selector(struct css_stylesheet *css, unsigned char *element, int elementlen);
+get_css_selector(struct css_stylesheet *css,
+                 unsigned char *element, int elementlen);
 
 /* Looks up the selector of the element @element and length @elementlen in the
  * stylesheet @css. */
 struct css_selector *
-find_css_selector_by_element(struct css_stylesheet *css, unsigned char *element, int elementlen);
+find_css_selector_by_element(struct css_stylesheet *css,
+                             unsigned char *element, int elementlen);
 
 /* Initialize the selector structure. This is a rather low-level function from
  * your POV. */
 struct css_selector *
-init_css_selector(struct css_stylesheet *css, unsigned char *element, int elementlen);
+init_css_selector(struct css_stylesheet *css,
+                  unsigned char *element, int elementlen);
 
 /* Add all properties from the list to the given @selector. */
-void add_selector_properties(struct css_selector *selector, struct list_head *properties);
+void add_selector_properties(struct css_selector *selector,
+                             struct list_head *properties);
 
 /* Join @sel2 to @sel1, @sel1 taking precedence in all conflicts. */
 void merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2);

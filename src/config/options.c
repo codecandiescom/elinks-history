@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.276 2003/09/30 16:22:06 zas Exp $ */
+/* $Id: options.c,v 1.277 2003/10/03 17:36:13 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2718,6 +2718,12 @@ register_options(void)
 		"base-session", 0, 0, MAXINT, 0,
 		N_("ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it."));
+
+	add_opt_str_tree(cmdline_options, "", N_("Set config dir to given string."),
+		"confdir", 0, "",
+		N_("Set the config dir to the given path. ELinks will read\n"
+		"its config files and writes to it. It is assumed to\n"
+		"be relative to your HOME dir."));
 
 	add_opt_alias_tree(cmdline_options, "", N_("MIME type to assume for documents"),
 		"default-mime-type", 0, "mime.default_type",

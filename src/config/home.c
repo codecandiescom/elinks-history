@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.39 2003/10/03 17:12:59 kuser Exp $ */
+/* $Id: home.c,v 1.40 2003/10/03 17:36:13 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "elinks.h"
 
 #include "main.h"
+#include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "util/memory.h"
@@ -114,6 +115,13 @@ get_home(void)
 	if (!home) return NULL;
 
 	strip_trailing_dir_sep(home);
+
+	home_elinks = test_confdir(home, 
+				   get_opt_str_tree(cmdline_options, "confdir"),
+				   gettext("Commandline options -confdir "
+					   "set to %s, but "
+					   "could not create directory %s."));
+	if (home_elinks) goto end;
 
 	home_elinks = test_confdir(home, getenv("ELINKS_CONFDIR"),
 				   gettext("ELINKS_CONFDIR set to %s, but "

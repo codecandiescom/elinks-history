@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.101 2004/05/26 13:45:52 jonas Exp $ */
+/* $Id: options.h,v 1.102 2004/06/16 05:02:30 miciah Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -180,7 +180,7 @@ extern void checkout_option_values(struct option_resolver *resolvers,
 
 /* Basically, for main hiearchy addressed from root (almost always) you want to
  * use get_opt_type() and add_opt_type(). For command line options, you want to
- * use get_opt_type_tree(cmdline_options). */
+ * use get_opt_type_tree(cmdline_options, "option"). */
 
 extern struct option *get_opt_rec(struct option *, unsigned char *);
 extern struct option *get_opt_rec_real(struct option *, unsigned char *);

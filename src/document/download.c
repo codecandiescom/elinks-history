@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.50 2002/11/26 16:53:58 zas Exp $ */
+/* $Id: download.c,v 1.51 2002/11/26 17:22:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -555,7 +555,7 @@ end_store:
 						get_download_ses(down), 1,
 						TEXT(T_OK), NULL, B_ENTER | B_ESC);
 				}
-	
+
 				if (get_opt_int("document.download.notify_bell") + down->notify >= 2) {
 					beep_terminal(get_download_ses(down)->term);
 				}
@@ -729,7 +729,7 @@ subst_file(unsigned char *prog, unsigned char *file)
 static void
 common_download(struct session *ses, unsigned char *file, int resume)
 {
-	struct download *down;
+	struct download *down = NULL;
 	int h;
 	struct stat buf;
 	unsigned char *url = ses->dn_url;
@@ -744,21 +744,34 @@ common_download(struct session *ses, unsigned char *file, int resume)
 	down = mem_calloc(1, sizeof(struct download));
 	if (!down) return;
 
-	fstat(h, &buf);
-
 	down->url = stracpy(url);
+	if (!down->url) goto error;
+
+	down->file = stracpy(file);
+	if (!down->file) goto error;
+
+	if (fstat(h, &buf)) goto error;
+	down->last_pos = (int) buf.st_size;
+
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;
-	down->last_pos = (int) buf.st_size;
-	down->file = stracpy(file);
 	down->handle = h;
 	down->ses = ses;
 	down->remotetime = 0;
 
 	add_to_list(downloads, down);
 	load_url(url, ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE,
-		 (resume ? (int) buf.st_size : 0));
+		 (resume ? down->last_pos : 0));
 	display_download(ses->term, down, ses);
+
+	return;
+
+error:
+	if (down) {
+		if (down->url) mem_free(down->url);
+		if (down->file) mem_free(down->file);
+		mem_free(down);
+	}
 }
 
 void
@@ -782,7 +795,7 @@ void tp_free(struct session *);
 void
 continue_download(struct session *ses, unsigned char *file)
 {
-	struct download *down;
+	struct download *down = NULL;
 	int h;
 	unsigned char *url = ses->tq_url;
 
@@ -799,24 +812,20 @@ continue_download(struct session *ses, unsigned char *file)
 	kill_downloads_to_file(file);
 
 	h = create_download_file(ses->term, file, !!ses->tq_prog, 0);
-	if (h == -1) {
-		tp_cancel(ses);
-		if (ses->tq_prog) mem_free(file);
-		return;
-	}
+	if (h == -1) goto cancel;
 
 	down = mem_calloc(1, sizeof(struct download));
-	if (!down) {
-		tp_cancel(ses);
-		if (ses->tq_prog) mem_free(file);
-		return;
-	}
+	if (!down) goto cancel;
 
 	down->url = stracpy(url);
+	if (!down->url) goto cancel;
+
+	down->file = stracpy(file);
+	if (!down->file) goto cancel;
+
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;
 	down->last_pos = 0;
-	down->file = stracpy(file);
 	down->handle = h;
 	down->ses = ses;
 
@@ -832,6 +841,17 @@ continue_download(struct session *ses, unsigned char *file)
 	change_connection(&ses->tq, &down->stat, PRI_DOWNLOAD);
 	tp_free(ses);
 	display_download(ses->term, down, ses);
+
+	return;
+
+cancel:
+	tp_cancel(ses);
+	if (ses->tq_prog && file) mem_free(file);
+	if (down) {
+		if (down->url) mem_free(down->url);
+		if (down->file) mem_free(down->file);
+		mem_free(down);
+	}
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.23 2003/05/24 21:35:39 pasky Exp $ */
+/* $Id: lists.h,v 1.24 2003/05/24 21:41:05 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -45,16 +45,19 @@ struct xlist_head {
 };
 #endif
 
+
 #define init_list(x) \
 do { \
+	list_magic_set(x); \
 	(x).next = (x).prev = &(x); \
 } while (0)
 
 
-#define list_empty(x) ((x).next == &(x))
+#define list_empty(x) (list_magic_chkbool(x, "list_empty") && (x).next == &(x))
 
 #define del_from_list(x) \
 do { \
+	list_magic_check(x, "del_from_list"); \
 	do_not_optimize_here(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
@@ -63,6 +66,8 @@ do { \
 
 #define add_at_pos(p,x) \
 do { \
+	list_magic_check(p, "add_at_pos"); \
+	list_magic_set(*(x)); \
 	do_not_optimize_here(p); \
 	(x)->next = (p)->next; \
 	(x)->prev = (p); \
@@ -106,6 +111,7 @@ do { \
 
 #define free_list(l) \
 do { \
+	list_magic_check(&(l), "free_list"); \
 	do_not_optimize_here(&l); \
 	while ((l).next != &(l)) { \
 		struct list_head *a__ = (l).next; \

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.259 2004/08/03 17:08:09 zas Exp $ */
+/* $Id: menu.c,v 1.260 2004/08/03 21:02:03 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -896,9 +896,9 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 	menu->size = count_items(items);
 
 #ifdef ENABLE_NLS
-	clear_hotkeys_cache(items, menu->size, 1);
+	clear_hotkeys_cache(items, 1);
 #endif
-	init_hotkeys(term, items, menu->size, 1);
+	init_hotkeys(term, items, 1);
 	add_window(term, mainmenu_handler, menu);
 
 	if (sel != -1) {

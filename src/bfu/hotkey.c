@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.25 2004/08/03 20:57:39 zas Exp $ */
+/* $Id: hotkey.c,v 1.26 2004/08/03 21:02:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,8 +34,7 @@ find_hotkey_pos(unsigned char *text)
 }
 
 void
-init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
-	     int hotkeys)
+init_hotkeys(struct terminal *term, struct menu_item *items, int hotkeys)
 {
 	struct menu_item *mi;
 
@@ -97,7 +96,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 
 #ifdef ENABLE_NLS
 void
-clear_hotkeys_cache(struct menu_item *items, int ni, int hotkeys)
+clear_hotkeys_cache(struct menu_item *items, int hotkeys)
 {
 	struct menu_item *item;
 
@@ -113,12 +112,12 @@ refresh_hotkeys(struct terminal *term, struct menu *menu)
 {
 #ifdef ENABLE_NLS
  	if (current_language != menu->lang) {
-		clear_hotkeys_cache(menu->items, menu->size, menu->hotkeys);
-		init_hotkeys(term, menu->items, menu->size, menu->hotkeys);
+		clear_hotkeys_cache(menu->items, menu->hotkeys);
+		init_hotkeys(term, menu->items, menu->hotkeys);
 		menu->lang = current_language;
 	}
 #else
-	init_hotkeys(term, menu->items, menu->size, menu->hotkeys);
+	init_hotkeys(term, menu->items, menu->hotkeys);
 #endif
 }
 

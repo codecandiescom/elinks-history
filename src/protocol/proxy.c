@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.21 2004/06/08 14:20:55 jonas Exp $ */
+/* $Id: proxy.c,v 1.22 2004/06/08 14:26:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,4 +145,13 @@ get_proxy_uri(struct uri *uri)
 #endif
 	}
 
+}
+
+struct uri *
+get_proxied_uri(struct uri *uri)
+{
+	if (uri->protocol == PROTOCOL_PROXY)
+		return get_uri(uri->data, URI_BASE);
+
+	return get_composed_uri(uri, URI_BASE);
 }

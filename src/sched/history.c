@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.34 2003/10/23 22:27:18 pasky Exp $ */
+/* $Id: history.c,v 1.35 2003/10/23 22:50:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,7 @@ free_history(struct list_head *history)
 	while (!list_empty(*history)) {
 		struct location *loc = history->next;
 
+		del_from_list(loc);
 		destroy_location(loc);
 	}
 }

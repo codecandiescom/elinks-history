@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.18 2002/05/25 13:46:05 pasky Exp $ */
+/* $Id: types.c,v 1.19 2002/06/10 15:54:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,25 @@ struct list_head telnet_prog = { &telnet_prog, &telnet_prog };
 struct list_head tn3270_prog = { &tn3270_prog, &tn3270_prog };
 
 struct list_head assoc = { &assoc, &assoc };
-struct list_head extensions = { &extensions, &extensions };
+
+
+struct option *
+get_real_opt(unsigned char *base, unsigned char *id)
+{
+	unsigned char *name = mem_alloc(strlen(base) + strlen(id));
+	struct option *opt;
+
+	sprintf(name, "%s.%s", base, id);
+
+	get_opt_rec(root_options, base)->flags &=
+		~OPT_AUTOCREATE;
+	opt = get_opt_rec(root_options, name);
+	get_opt_rec(root_options, base)->flags |=
+		OPT_AUTOCREATE;
+
+	mem_free(name);
+	return opt;
+}
 
 
 tcount
@@ -44,16 +62,6 @@ delete_association(struct assoc *del)
 	mem_free(del->label);
 	mem_free(del->ct);
 	mem_free(del->prog);
-	mem_free(del);
-}
-
-
-void
-delete_extension(struct extension *del)
-{
-	del_from_list(del);
-	mem_free(del->ext);
-	mem_free(del->ct);
 	mem_free(del);
 }
 
@@ -136,7 +144,6 @@ is_in_list_rear(unsigned char *list, unsigned char *str, int l)
 unsigned char *
 get_content_type(unsigned char *head, unsigned char *url)
 {
-	struct extension *ext;
 	struct assoc *a;
 	unsigned char *pos, *extension, *exxt;
 	int ext_len, el, url_len;
@@ -195,9 +202,10 @@ get_content_type(unsigned char *head, unsigned char *url)
 	    (!casecmp(url + url_len - 5, ".html", 4)))
 		return stracpy("text/html");
 
-	foreach(ext, extensions) {
-		if (is_in_list_rear(ext->ext, url, url_len))
-			return stracpy(ext->ct);
+	{
+		struct option *opt = get_real_opt("mime.extension", extension);
+
+		if (opt) return opt->ptr;
 	}
 
 	/* Try to make application/x-extension from it */
@@ -238,7 +246,6 @@ void
 free_types()
 {
 	struct assoc *a;
-	struct extension *e;
 	struct protocol_program *p;
 
 	foreach(a, assoc) {
@@ -247,12 +254,6 @@ free_types()
 		mem_free(a->label);
 	}
 	free_list(assoc);
-
-	foreach(e, extensions) {
-		mem_free(e->ext);
-		mem_free(e->ct);
-	}
-	free_list(extensions);
 
 	foreach(p, mailto_prog)
 		mem_free(p->prog);
@@ -707,73 +708,31 @@ add_ext_fn(struct dialog_data *dlg)
 
 
 void
-update_ext(struct extension *new)
-{
-	struct extension *repl;
-
-	if (!new->ext[0] || !new->ct[0]) return;
-	if (new->cnt) {
-		foreach(repl, extensions) {
-			if (repl->cnt == new->cnt) {
-				mem_free(repl->ext);
-				mem_free(repl->ct);
-				goto replace;
-			}
-		}
-		return;
-	}
-
-	new->cnt = get_assoc_cnt();
-
-	repl = mem_alloc(sizeof(struct extension));
-	if (!repl) return;
-	add_to_list(extensions, repl);
-
-replace:
-	repl->ext = stracpy(new->ext);
-	repl->ct = stracpy(new->ct);
-	repl->cnt = new->cnt;
-}
-
-
-void
 really_del_ext(void *fcp)
 {
-	int fc = (int)fcp;
-	struct extension *del;
-
-	foreach(del, extensions)
-		if (del->cnt == fc)
-			goto ok;
-
-	return;
-
-ok:
-	delete_extension(del);
+	struct option *opt;
+	
+	opt = get_real_opt("mime.extension", (unsigned char *) fcp);
+	if (opt) delete_option(opt);
 }
 
 
 void
 menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 {
+	struct option *opt;
 	unsigned char *str;
 	int strl;
-	int fc = (int)fcp;
-	struct extension *del;
+	
+	opt = get_real_opt("mime.extension", (unsigned char *) fcp);
+	if (!opt) return;
 
-	foreach(del, extensions)
-		if (del->cnt == fc)
-			goto ok;
-
-	return;
-
-ok:
 	str = init_str();
 	if (!str) return;
 	strl = 0;
-	add_to_str(&str, &strl, del->ext);
+	add_to_str(&str, &strl, (unsigned char *) fcp);
 	add_to_str(&str, &strl, " -> ");
-	add_to_str(&str, &strl, del->ct);
+	add_to_str(&str, &strl, (unsigned char *) opt->ptr);
 
 	msg_box(term, getml(str, NULL),
 		TEXT(T_DELETE_EXTENSION), AL_CENTER | AL_EXTD_TEXT,
@@ -784,27 +743,39 @@ ok:
 }
 
 
+struct extension {
+	unsigned char *ext_orig;
+	unsigned char *ext;
+	unsigned char *ct;
+};
+
+void
+really_add_ext(void *fcp)
+{
+	struct extension *ext = (struct extension *) fcp;
+	unsigned char *name = mem_alloc(16 + strlen(ext->ext));
+
+	sprintf(name, "%s.%s", "mime.extension", ext->ext);
+
+	really_del_ext(ext->ext_orig); /* ..or rename ;) */
+	safe_strncpy(get_opt_str(name), ext->ct, MAX_STR_LEN);
+	mem_free(name);
+}
+
 void
 menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	int fc = (int)fcp;
-	struct extension *new, *from;
+	struct option *opt = NULL;
+	struct extension *new;
 	unsigned char *ext;
 	unsigned char *ct;
+	unsigned char *ext_orig;
 	struct dialog *d;
 
-	if (fc) {
-		foreach(from, extensions)
-			if (from->cnt == fc)
-				goto ok;
+	if (fcp) opt = get_real_opt("mime.extension", (unsigned char *) fcp);
 
-		return;
-	}
-	from = NULL;
-
-ok:
 #define DIALOG_MEMSIZE sizeof(struct dialog) + 5 * sizeof(struct dialog_item) \
-		       + sizeof(struct extension) + 2 * MAX_STR_LEN
+		       + sizeof(struct extension) + 3 * MAX_STR_LEN
 
 	d = mem_alloc(DIALOG_MEMSIZE);
 	if (!d) return;
@@ -812,19 +783,20 @@ ok:
 
 #undef DIALOG_MEMSIZE
 
-	new = (struct extension *)&d->items[5];
-	new->ext = ext = (unsigned char *)(new + 1);
+	new = (struct extension *) &d->items[5];
+	new->ext = ext = (unsigned char *) (new + 1);
 	new->ct = ct = ext + MAX_STR_LEN;
+	new->ext_orig = ext_orig = ct + MAX_STR_LEN;
 
-	if (from) {
-		safe_strncpy(ext, from->ext, MAX_STR_LEN - 1);
-		safe_strncpy(ct, from->ct, MAX_STR_LEN - 1);
-		new->cnt = from->cnt;
+	if (opt) {
+		safe_strncpy(ext, (unsigned char *) fcp, MAX_STR_LEN);
+		safe_strncpy(ct, (unsigned char *) opt->ptr, MAX_STR_LEN);
+		safe_strncpy(ext_orig, (unsigned char *) fcp, MAX_STR_LEN);
 	}
 
 	d->title = TEXT(T_EXTENSION);
 	d->fn = add_ext_fn;
-	d->refresh = (void (*)(void *))update_ext;
+	d->refresh = (void (*)(void *)) really_add_ext;
 	d->refresh_data = new;
 
 	d->items[0].type = D_FIELD;
@@ -858,21 +830,25 @@ struct menu_item mi_no_ext[] = {
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 
-
 void
 menu_list_ext(struct terminal *term, void *fn, void *xxx)
 {
-	struct extension *a;
+	struct list_head *opt_tree;
+	struct option *opt;
 	struct menu_item *mi = NULL;
 	int n = 0;
+	
+	opt_tree = (struct list_head *) get_opt_ptr("mime.extension");
 
-	foreachback(a, extensions) {
+	foreachback (opt, *opt_tree) {
+		if (!strcmp(opt->name, "_template_")) continue;
 		if (!mi) {
 			mi = new_menu(7);
 		       	if (!mi) return;
 		}
-		add_to_menu(&mi, stracpy(a->ext), stracpy(a->ct),
-			    "", MENU_FUNC fn, (void *)a->cnt, 0);
+		add_to_menu(&mi, stracpy(opt->name),
+			    stracpy((unsigned char *) opt->ptr),
+			    "", MENU_FUNC fn, opt->name, 0);
 		n++;
 	}
 

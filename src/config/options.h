@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.28 2002/06/09 20:14:37 pasky Exp $ */
+/* $Id: options.h,v 1.29 2002/06/10 15:54:51 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -64,6 +64,7 @@ extern struct list_head *init_options_tree();
 extern void free_options_tree(struct list_head *);
 
 extern struct option *copy_option(struct option *);
+extern void delete_option(struct option *);
 
 /* Shitload of various incredible macro combinations and other unusable garbage
  * follows. Have fun. */

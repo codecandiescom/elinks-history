@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.3 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: edit.c,v 1.4 2002/06/10 15:54:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ do_edit_dialog(struct terminal *term, unsigned char *title,
 #define BM_EDIT_DIALOG_MEMSIZE (sizeof(struct dialog) + \
 		                + (BM_EDIT_DIALOG_FIELDS_NB + 1) \
 				* sizeof(struct dialog_item) \
-				+ sizeof(struct extension) + 2 * MAX_STR_LEN )
+				+ 2 * MAX_STR_LEN )
 
 	unsigned char *name, *url;
 	struct dialog *d;

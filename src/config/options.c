@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.44 2002/06/09 20:14:37 pasky Exp $ */
+/* $Id: options.c,v 1.45 2002/06/10 15:54:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,6 +175,39 @@ add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 	add_opt_rec(tree, path, option);
 }
 
+/* The namespace may start to seem a bit chaotic here; it indeed is, maybe the
+ * function names above should be renamed and only macros should keep their old
+ * short names. */
+/* The simple rule I took as an apologize is that functions which take already
+ * completely filled (struct option *) have long name and functions which take
+ * only option specs have short name. */
+
+void
+free_option(struct option *option)
+{
+	if (option->type == OPT_BOOL ||
+			option->type == OPT_INT ||
+			option->type == OPT_LONG ||
+			option->type == OPT_STRING ||
+			option->type == OPT_CODEPAGE ||
+			option->type == OPT_ALIAS) {
+		mem_free(option->ptr);
+
+	} else if (option->type == OPT_TREE) {
+		free_options_tree((struct list_head *) option->ptr);
+	}
+
+	mem_free(option->name);
+}
+
+void
+delete_option(struct option *option)
+{
+	free_option(option);
+	del_from_list(option);
+	mem_free(option);
+}
+
 struct option *
 copy_option(struct option *template)
 {
@@ -220,22 +253,7 @@ free_options_tree(struct list_head *tree)
 	struct option *option;
 
 	foreach (option, *tree) {
-		if (option->type == OPT_BOOL ||
-		    option->type == OPT_INT ||
-		    option->type == OPT_LONG ||
-		    option->type == OPT_STRING ||
-		    option->type == OPT_CODEPAGE ||
-		    option->type == OPT_ALIAS) {
-			/*debug("free %s", option->name);*/
-			mem_free(option->ptr);
-
-		} else if (option->type == OPT_TREE) {
-			/*debug("-> %s", option->name);*/
-			free_options_tree((struct list_head *) option->ptr);
-			/*debug("<-");*/
-		}
-
-		mem_free(option->name);
+		free_option(option);
 	}
 
 	free_list(*tree);
@@ -696,6 +714,20 @@ register_options()
 
 
 	add_opt_tree("",
+		"mime", 0,
+		"MIME-related options.");
+
+	add_opt_tree("mime",
+		"extension", OPT_AUTOCREATE,
+		"Extension<->MIME-type association.");
+
+	add_opt_string("mime.extension",
+		"_template_", 0, "",
+		"MIME-type matching this file extension.");
+
+
+
+	add_opt_tree("",
 		"protocol", 0,
 		"Protocol specific options.");
 
@@ -821,11 +853,11 @@ register_options()
 
 	add_opt_tree("",
 		"terminal", OPT_AUTOCREATE,
-		"Terminal options");
+		"Terminal options.");
 
 	add_opt_tree("terminal",
 		"_template_", 0,
-		"Options specific to this terminal type");
+		"Options specific to this terminal type.");
 
 	add_opt_int("terminal._template_",
 		"type", 0, 0, 3, 0,
@@ -948,10 +980,6 @@ register_options()
 #if 0
 	add_opt_void("",
 		"association", 0, OPT_MIME_TYPE,
-		NULL);
-
-	add_opt_void("",
-		"extension", 0, OPT_EXTENSION,
 		NULL);
 
 	add_opt_void("",

@@ -1,7 +1,7 @@
-/* $Id: types.h,v 1.3 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: types.h,v 1.4 2002/06/10 15:54:51 pasky Exp $ */
 
-#ifndef EL__TYPES_H
-#define EL__TYPES_H
+#ifndef EL__PROTOCOL_TYPES_H
+#define EL__PROTOCOL_TYPES_H
 
 #include "links.h" /* list_head, tcount */
 #include "lowlevel/terminal.h"
@@ -20,14 +20,6 @@ struct assoc {
 	int system;
 };
 
-struct extension {
-	struct extension *next;
-	struct extension *prev;
-	tcount cnt;
-	unsigned char *ext;
-	unsigned char *ct;
-};
-
 struct protocol_program {
 	struct protocol_program *next;
 	struct protocol_program *prev;
@@ -36,7 +28,6 @@ struct protocol_program {
 };
 
 extern struct list_head assoc;
-extern struct list_head extensions;
 
 extern struct list_head mailto_prog;
 extern struct list_head telnet_prog;
@@ -45,7 +36,6 @@ extern struct list_head tn3270_prog;
 unsigned char *get_content_type(unsigned char *, unsigned char *);
 struct assoc *get_type_assoc(struct terminal *term, unsigned char *);
 void update_assoc(struct assoc *);
-void update_ext(struct extension *);
 void update_prog(struct list_head *, unsigned char *, int);
 unsigned char *get_prog(struct list_head *);
 void free_types();

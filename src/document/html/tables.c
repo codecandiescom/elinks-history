@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.253 2004/06/28 21:42:21 jonas Exp $ */
+/* $Id: tables.c,v 1.254 2004/06/28 22:49:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,7 @@ check_cell_widths(struct table *table)
 }
 #endif
 
-static inline void
+static void
 get_cell_widths(struct table *table)
 {
 	int link_num = table->part->link_num;
@@ -978,7 +978,7 @@ cont2:
 	fmem_free(frame[0]);
 }
 
-static inline int
+static int
 get_bordercolor(unsigned char *a, color_t *rgb)
 {
 	unsigned char *at;

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.3 2004/06/28 20:23:16 jonas Exp $ */
+/* $Id: table.c,v 1.4 2004/06/28 22:49:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@
 #define realloc_bad_html(bad_html, size) \
 	mem_align_alloc(bad_html, size, (size) + 1, struct html_start_end, 0xFF)
 
-static inline void
+static void
 get_align(unsigned char *attr, int *a)
 {
 	unsigned char *al = get_attr_val(attr, "align");
@@ -41,7 +41,7 @@ get_align(unsigned char *attr, int *a)
 	}
 }
 
-static inline void
+static void
 get_valign(unsigned char *attr, int *a)
 {
 	unsigned char *al = get_attr_val(attr, "valign");
@@ -55,7 +55,7 @@ get_valign(unsigned char *attr, int *a)
 	}
 }
 
-static inline void
+static void
 get_column_width(unsigned char *attr, int *width, int sh)
 {
 	unsigned char *al = get_attr_val(attr, "width");

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.518 2005/01/28 14:40:33 jonas Exp $ */
+/* $Id: parser.c,v 1.519 2005/01/28 14:56:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1533,7 +1533,9 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_context.table_level = 0;
 
 #ifdef CONFIG_CSS
-	mirror_css_stylesheet(&default_stylesheet, &html_context.css_styles);
+	if (global_doc_opts->css_enable)
+		mirror_css_stylesheet(&default_stylesheet,
+				      &html_context.css_styles);
 #endif
 }
 
@@ -1541,7 +1543,8 @@ void
 done_html_parser(void)
 {
 #ifdef CONFIG_CSS
-	done_css_stylesheet(&html_context.css_styles);
+	if (global_doc_opts->css_enable)
+		done_css_stylesheet(&html_context.css_styles);
 #endif
 
 	mem_free(html_context.base_target);

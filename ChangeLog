@@ -1,3 +1,47 @@
+Tue May 13 15:48:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Prevention of calloc(0, sizeof(int)) calls.  
+
+Tue May 13 14:29:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/globhist.c:
+
+	Minor tidyup. Fixed write_global_history() to handle properly
+	elinks_home==NULL.  
+
+Tue May 13 13:38:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	Reverted recent save_cookies() change, we don't want to create
+	./cookies randomly when not elinks_home. Instead, do not
+	save_cookies() at all if not elinks_home.  
+
+Tue May 13 13:34:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/common.c:
+
+	Added missing elinks_home check to bookmarks_save(). Moved
+	half-redundant !file_name check in bookmarks_load(), introduced by
+	the previous patch.  
+
+Tue May 13 13:29:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/urlhist.c:
+
+	Added missing elinks_home check to save_url_history(). Fixed double
+	free in load_url_history introduced by the previous patch.  
+
+Tue May 13 12:27:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/backend/common.c, config/conf.c,
+	config/urlhist.c, cookies/cookies.c, globhist/globhist.c:
+
+	Bug 102 is now fixed. elinks_home can be NULL, especially with
+	-no-home option.  
+
 Mon May 12 21:59:48 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/dialogs/info.c:

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.52 2002/06/20 10:11:16 pasky Exp $ */
+/* $Id: options.c,v 1.53 2002/06/20 11:08:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,7 +379,6 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 	printf("Usage: elinks [OPTION]... [URL]\n\n");
 	printf("Options:\n\n");
 
-	/* TODO: Alphabetical order! */
 	foreachback (option, *cmdline_options) {
 
 		if (1 /*option->flags & OPT_CMDLINE*/) {

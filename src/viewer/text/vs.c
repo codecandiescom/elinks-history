@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.22 2003/11/17 02:04:22 miciah Exp $ */
+/* $Id: vs.c,v 1.23 2003/11/18 11:51:52 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,8 +87,7 @@ check_vs(struct document_view *doc_view)
 {
 	struct view_state *vs = doc_view->vs;
 
-	if (vs->current_link >= doc_view->document->nlinks)
-		vs->current_link = doc_view->document->nlinks - 1;
+	int_upper_bound(&vs->current_link, doc_view->document->nlinks - 1);
 
 	if (vs->current_link != -1) {
 		if (!c_in_view(doc_view)) {

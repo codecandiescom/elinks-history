@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.74 2004/07/15 15:20:07 jonas Exp $ */
+/* $Id: document.c,v 1.75 2004/07/16 06:55:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,9 +84,7 @@ free_frameset_desc(struct frameset_desc *frameset_desc)
 void
 done_link_members(struct link *link)
 {
-	unsigned char *name = get_link_name(link);
-
-	mem_free_if(name);
+	mem_free_if(get_link_name(link));
 	mem_free_if(link->where);
 	mem_free_if(link->target);
 	mem_free_if(link->title);

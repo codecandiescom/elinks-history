@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.518 2004/06/24 07:35:34 miciah Exp $ */
+/* $Id: view.c,v 1.519 2004/06/24 11:01:13 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -918,17 +918,22 @@ quit:
 					if (ses->tab->term->windows.next == m) {
 						delete_window(m);
 
-					} else goto x;
+					} else if (doc_view
+						   && get_opt_int("document"
+								  ".browse"
+								  ".accesskey"
+								  ".priority")
+						    <= 0
+						   && try_document_key(ses,
+							   doc_view, ev)) {
+						/* The document ate the key! */
+						refresh_view(ses, doc_view, 0);
+						return;
+					} else {
+						goto x;
+					}
 					ev->y |= ~KBD_ALT;
 				}
-		}
-
-		if (doc_view
-		    && get_opt_int("document.browse.accesskey.priority") <= 0
-		    && try_document_key(ses, doc_view, ev)) {
-			/* The document ate the key! */
-			refresh_view(ses, doc_view, 0);
-			return;
 		}
 	}
 #ifdef CONFIG_MOUSE

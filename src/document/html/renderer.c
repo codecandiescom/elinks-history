@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.67 2003/05/02 15:41:15 zas Exp $ */
+/* $Id: renderer.c,v 1.68 2003/05/02 21:25:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1869,7 +1869,7 @@ html_interpret(struct session *ses)
 	struct view_state *l = NULL;
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
-        int show_tab_bar = get_opt_int("ui.show_tabs_bar");
+        int show_tab_bar = get_opt_int("ui.tabs_bar.show");
 
 	if (!ses->screen) {
 		ses->screen = mem_calloc(1, sizeof(struct f_data_c));

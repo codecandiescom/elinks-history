@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.201 2003/05/02 16:08:03 zas Exp $ */
+/* $Id: options.c,v 1.202 2003/05/02 21:25:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2415,16 +2415,87 @@ register_options()
 		"show_status_bar", 0, 1,
 		N_("Show status bar on the screen."));
 
-	add_opt_bool("ui", N_("Cycle tabs bar"),
-		"cycle_tabs_bar", 0, 1,
-		N_("Cycle at left/right when swapping tabs."));
+	add_opt_tree("ui.colors", N_("Color terminals"),
+		"color", 0,
+		N_("Color settings for color terminal."));
 
-	add_opt_int("ui", N_("Display tabs bar"),
-		"show_tabs_bar",  0, 0, 2, 1,
+
+	/* Tabs bar options */
+	add_opt_tree("ui", N_("Tabs bar"),
+		"tabs_bar", 0,
+		N_("Tabs_bar options and colors."));
+
+	add_opt_int("ui.tabs_bar", N_("Display tabs bar"),
+		"show",  0, 0, 2, 1,
 		N_("Show tabs bar on the screen:\n"
 		   "0 means never.\n"
 		   "1 means only if two or more tabs.\n"
 		   "2 means always."));
+
+	add_opt_bool("ui.tabs_bar", N_("Cycle tabs bar"),
+		"cycle", 0, 1,
+		N_("Cycle at left/right when swapping tabs."));
+
+	add_opt_tree("ui.tabs_bar", N_("Tabs bar colors"),
+		"colors", 0,
+		N_("Tabs_bar colors."));
+
+	add_opt_tree("ui.tabs_bar.colors", N_("Color"),
+		"color", 0,
+		N_("Tabs_bar color mode."));
+
+	add_opt_tree("ui.tabs_bar.colors.color", N_("Unselected"),
+		"normal", 0,
+		N_("Unselected tabs bar item colors."));
+
+	add_opt_color("ui.tabs_bar.colors.color.normal", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.tabs_bar.colors.color.normal", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color."));
+
+	add_opt_tree("ui.tabs_bar.colors.color", N_("Selected"),
+		"selected", 0,
+		N_("Selected tabs bar item colors."));
+
+	add_opt_color("ui.tabs_bar.colors.color.selected", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.tabs_bar.colors.color.selected", N_("Background color"),
+		"background", 0, "green",
+		N_("Default background color."));
+
+	add_opt_tree("ui.tabs_bar.colors", N_("Mono"),
+		"mono", 0,
+		N_("Tabs_bar monochrome only."));
+
+	add_opt_tree("ui.tabs_bar.colors.mono", N_("Unselected"),
+		"normal", 0,
+		N_("Unselected tabs bar item colors."));
+
+	add_opt_color("ui.tabs_bar.colors.mono.normal", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.tabs_bar.colors.mono.normal", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color."));
+
+	add_opt_tree("ui.tabs_bar.colors.mono", N_("Selected"),
+		"selected", 0,
+		N_("Selected tabs bar item colors."));
+
+	add_opt_color("ui.tabs_bar.colors.mono.selected", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.tabs_bar.colors.mono.selected", N_("Background color"),
+		"background", 0, "green",
+		N_("Default background color."));
+	/* End of tabs bar options */
 
 	add_opt_bool("ui", N_("Display title bar"),
 		"show_title_bar", 0, 1,

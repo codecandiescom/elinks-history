@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.63 2003/11/12 08:42:35 miciah Exp $ */
+/* $Id: document.c,v 1.64 2003/11/14 02:06:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,7 +237,7 @@ loc_msg(struct terminal *term, struct location *location,
 #endif
 	}
 
-	msg_box(term, getml(msg.source, NULL), 0,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Info"), AL_LEFT,
 		msg.source,
 		NULL, 1,
@@ -306,7 +306,7 @@ head_msg(struct session *ses)
 
 			if (*headers)
 				/* Headers info message box. */
-				msg_box(ses->tab->term, getml(headers, NULL), 0,
+				msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 					N_("Header info"), AL_LEFT,
 					headers,
 					NULL, 1,

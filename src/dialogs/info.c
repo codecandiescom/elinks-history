@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.72 2003/11/13 17:56:32 jonas Exp $ */
+/* $Id: info.c,v 1.73 2003/11/14 02:06:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@ menu_about(struct terminal *term, void *d, struct session *ses)
 
 	if (!s) return;
 
-	msg_box(term, getml(s, NULL), 0,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("About"), AL_CENTER,
 		s,
 		NULL, 1,
@@ -83,7 +83,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 
 	add_keyactions_to_string(&keys, actions, term);
 
-	msg_box(term, NULL, MSGBOX_NO_INTL | MSGBOX_FREE_TEXT,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Keys"), AL_LEFT,
 		keys.source,
 		NULL, 1,

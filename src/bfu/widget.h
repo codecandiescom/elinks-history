@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.38 2003/11/10 15:08:26 jonas Exp $ */
+/* $Id: widget.h,v 1.39 2003/11/10 15:35:50 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -109,6 +109,6 @@ void dlg_set_history(struct widget_data *);
 					  && (widget_data)->widget->type != WIDGET_TEXT)
 
 #define widget_has_group(widget_data)	((widget_data)->widget->type == WIDGET_CHECKBOX \
-					  ? (widget_data)->widget->info.checkbox.gid : 0)
+					  ? (widget_data)->widget->info.checkbox.gid : -1)
 
 #endif

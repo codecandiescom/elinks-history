@@ -1,3 +1,10 @@
+Tue Dec 17 21:32:27 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* Unicode/7bitrepl.lnx, src/intl/uni_7b.inc:
+
+	Transliterate u-breves as U/u instead of W/w. David Mediavilla won't
+	like me now ;-).  
+
 Tue Dec 17 21:27:20 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* AUTHORS, Unicode/7bitrepl.lnx, src/intl/uni_7b.inc:

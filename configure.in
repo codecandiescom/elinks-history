@@ -64,10 +64,31 @@ dnl ===================================================================
 dnl Macros for various checks. (TODO: Move to m4/)
 dnl ===================================================================
 
+dnl TODO: Make EL_CONFIG* macros assume CONFIG_* defines so it is poosible
+dnl to write EL_CONFIG_DEPENDS(SCRIPTING, [GUILE LUA PERL], [...])
+
 dnl EL_CONFIG(define, what)
 AC_DEFUN([EL_CONFIG], [
 	  $1=yes;
 	  AC_DEFINE($1, 1, [Define if you want $2])])
+
+dnl EL_CONFIG_DEPENDS(define, CONFIG_* dependencies, what)
+AC_DEFUN([EL_CONFIG_DEPENDS],
+[
+	AC_MSG_CHECKING([for $3])
+	$1=no;
+	for dependency in $2; do
+		# Hope this is portable?!? --jonas
+		eval el_config_value=$`echo $dependency`;
+		if test "$el_config_value" = yes; then
+			$1=yes;
+		fi
+	done
+	if test "$1" = yes; then
+		EL_CONFIG($1, [$3])
+	fi
+	AC_MSG_RESULT([$]$1)
+])
 
 dnl EL_DEFINE(define, what)
 AC_DEFUN([EL_DEFINE], [AC_DEFINE($1, 1, [Define if you have $2])])
@@ -398,8 +419,7 @@ if test "$enable_guile" = "yes"; then
 		LIBS="$GUILE_LIBS $LIBS"
 		CFLAGS="$CFLAGS $GUILE_CFLAGS"
 		CPPFLAGS="$CPPFLAGS $GUILE_CFLAGS"
-		AC_DEFINE(CONFIG_GUILE)
-		AC_DEFINE(CONFIG_SCRIPTING)
+		EL_CONFIG(CONFIG_GUILE, [Guile scripting])
 		cat <<EOF
 ***********************************************************************
 The Guile support is incomplete and not so well integrated to ELinks
@@ -455,8 +475,7 @@ fi
 if test "$cf_result" != "yes"; then
 	EL_RESTORE_FLAGS
 else
-	AC_DEFINE(CONFIG_PERL)
-	AC_DEFINE(CONFIG_SCRIPTING)
+	EL_CONFIG(CONFIG_PERL, [Perl scripting])
 fi
 
 AC_SUBST(PERL_LIBS)
@@ -522,8 +541,7 @@ AC_MSG_RESULT($cf_result)
 if test "$cf_result" != yes; then
 	EL_RESTORE_FLAGS
 else
-	AC_DEFINE(CONFIG_LUA)
-	AC_DEFINE(CONFIG_SCRIPTING)
+	EL_CONFIG(CONFIG_LUA, [Lua scripting])
 	AC_CHECK_HEADERS(lauxlib.h)
 	AC_CHECK_FUNCS(lua_pcall)
 fi
@@ -531,6 +549,11 @@ fi
 AC_SUBST(LUA_LIBS)
 AC_SUBST(LUA_CFLAGS)
 
+dnl ===================================================================
+dnl Setup global scripting
+dnl ===================================================================
+
+EL_CONFIG_DEPENDS(CONFIG_SCRIPTING, [CONFIG_GUILE CONFIG_LUA CONFIG_PERL], [scripting support])
 
 dnl ===================================================================
 dnl Check for SSL support.
@@ -610,8 +633,7 @@ else
 		fi
 		EL_RESTORE_FLAGS
 	else
-		AC_DEFINE(CONFIG_OPENSSL)
-		AC_DEFINE(CONFIG_SSL)
+		EL_CONFIG(CONFIG_OPENSSL, [SSL using OpenSSL])
 	fi
 fi
 
@@ -668,14 +690,17 @@ else
 			fi
 			EL_RESTORE_FLAGS
 		else
-			AC_DEFINE(CONFIG_GNUTLS)
-			AC_DEFINE(CONFIG_SSL)
+			EL_CONFIG(CONFIG_GNUTLS, [SSL using GNUTLS])
 		fi
 	fi
 fi
 
 AC_MSG_CHECKING([for GNU TLS])
 AC_MSG_RESULT($cf_result)
+
+dnl Final SSL setup
+
+EL_CONFIG_DEPENDS(CONFIG_SSL, [CONFIG_SSL CONFIG_GNUTLS], [SSL support])
 
 #endif
 

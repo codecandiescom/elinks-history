@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.11 2004/01/18 02:36:31 jonas Exp $ */
+/* $Id: parser.c,v 1.12 2004/01/18 02:40:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,13 +45,13 @@ struct css_property_info css_property_info[] = {
 void
 css_parse_decl(struct list_head *props, unsigned char *string)
 {
-	struct css_property_info *property_info = NULL;
-	struct css_property *prop;
-	int pos, i;
-
 	assert(props && string);
 
 	while (*string) {
+		struct css_property_info *property_info = NULL;
+		struct css_property *prop;
+		int pos, i;
+
 		/* Align myself. */
 
 		skip_whitespace(string);

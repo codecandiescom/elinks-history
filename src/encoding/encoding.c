@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.33 2004/05/29 19:17:02 jonas Exp $ */
+/* $Id: encoding.c,v 1.34 2004/07/03 00:04:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,32 +288,21 @@ read_encoded_file(struct string *filename, struct string *page)
 
 	/* Do all the necessary checks before trying to read the file.
 	 * @state code is used to block further progress. */
-	switch (!fstat(fd, &stt)) {
-	case 0:
+	if (fstat(fd, &stt)) {
 		state = -errno;
-		break;
 
-	default:
-		if (S_ISREG(stt.st_mode)
-		    || is_stdin_pipe(&stt, filename)) {
-			/* All is well */
+	} else if (!S_ISREG(stt.st_mode) && encoding != ENCODING_NONE) {
+		/* We only want to open regular encoded files. */
+		/* Leave @state being the saved errno */
 
-		} else if (encoding != ENCODING_NONE) {
-			/* We only want to open regular encoded files. */
-			/* Leave @state being the saved errno */
-			break;
+	} else if (!S_ISREG(stt.st_mode) && !is_stdin_pipe(&stt, filename)
+	           && !get_opt_int("protocol.file.allow_special_files")) {
+		state = S_FILE_TYPE;
 
-		} else if (!get_opt_int("protocol.file.allow_special_files")) {
-			state = S_FILE_TYPE;
-			break;
-		}
+	} else if (!(stream = open_encoded(fd, encoding))) {
+		state = S_OUT_OF_MEM;
 
-		stream = open_encoded(fd, encoding);
-		if (!stream) {
-			state = S_OUT_OF_MEM;
-			break;
-		}
-
+	} else {
 		state = read_file(stream, stt.st_size, page);
 		close_encoded(stream);
 	}

@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.20 2003/06/20 17:16:56 pasky Exp $ */
+/* $Id: snprintf.c,v 1.21 2003/06/20 17:29:36 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -95,6 +95,9 @@ void dummy_snprintf(void);
 void dummy_snprintf(void) {}
 
 #else /* defined(HAVE_SNPRINTF) && defined(HAVE_VSNPRINTF) && defined(HAVE_C99_VSNPRINTF) */
+
+/* TODO: Don't do all this if we just need to get own snprintf() wrapper to
+ * system-provided vsnprintf(). (What an unlikely case, isn't it?) */
 
 #ifdef HAVE_LONG_DOUBLE
 #define LDOUBLE long double
@@ -809,7 +812,8 @@ elinks_snprintf(char *str, size_t count, const char *fmt, ...)
 	va_list ap;
 
 	va_start(ap, fmt);
-	ret = elinks_vsnprintf(str, count, fmt, ap);
+	/* snprintf.h makes this to expand to the right thing. */
+	ret = vsnprintf(str, count, fmt, ap);
 	va_end(ap);
 
 	return ret;

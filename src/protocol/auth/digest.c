@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.19 2004/11/20 00:26:54 jonas Exp $ */
+/* $Id: digest.c,v 1.20 2004/11/20 00:33:12 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -27,13 +27,14 @@
 #define MD5_DIGEST_LENGTH 16
 #endif
 
+#define MD5_HEX_DIGEST_LENGTH (MD5_DIGEST_LENGTH * 2)
 
 /* taken from RFC 2617 */
 static unsigned char *
 convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1])
 {
 	int i;
-	unsigned char *hex = mem_alloc(MD5_DIGEST_LENGTH * 2 + 1);
+	unsigned char *hex = mem_alloc(MD5_HEX_DIGEST_LENGTH + 1);
 
 	if (!hex) return NULL;
 
@@ -44,7 +45,7 @@ convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1])
 		hex[++j] = hx(bin[i] & 0xf);
 	}
 
-	hex[MD5_DIGEST_LENGTH * 2] = '\0';
+	hex[MD5_HEX_DIGEST_LENGTH] = '\0';
 	return hex;
 }
 
@@ -97,13 +98,13 @@ digest_calc_response(struct auth_entry *entry, struct uri *uri,
 	ha1 = digest_calc_ha1(entry);
 
 	MD5_Init(&MD5Ctx);
-	MD5_Update(&MD5Ctx, ha1, 32);
+	MD5_Update(&MD5Ctx, ha1, MD5_HEX_DIGEST_LENGTH);
 	MD5_Update(&MD5Ctx, ":", 1);
 	MD5_Update(&MD5Ctx, entry->nonce, strlen(entry->nonce));
 	MD5_Update(&MD5Ctx, ":", 1);
 	MD5_Update(&MD5Ctx, "00000001", 8);
 	MD5_Update(&MD5Ctx, ":", 1);
-	MD5_Update(&MD5Ctx, cnonce, strlen(cnonce));
+	MD5_Update(&MD5Ctx, cnonce, MD5_HEX_DIGEST_LENGTH);
 	MD5_Update(&MD5Ctx, ":", 1);
 	MD5_Update(&MD5Ctx, "auth", 4);
 	MD5_Update(&MD5Ctx, ":", 1);
@@ -144,10 +145,10 @@ get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri)
 	add_to_string(&string, "\", ");
 	add_to_string(&string, "qop=auth, nc=00000001, ");
 	add_to_string(&string, "cnonce=\"");
-	add_to_string(&string, cnonce);
+	add_bytes_to_string(&string, cnonce, MD5_HEX_DIGEST_LENGTH);
 	add_to_string(&string, "\", ");
 	add_to_string(&string, "response=\"");
-	add_to_string(&string, response);
+	add_bytes_to_string(&string, response, MD5_HEX_DIGEST_LENGTH);
 	add_to_string(&string, "\"");
 
 	mem_free_if(cnonce);

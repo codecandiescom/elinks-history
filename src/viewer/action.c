@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.92 2004/07/27 22:41:00 jonas Exp $ */
+/* $Id: action.c,v 1.93 2004/08/02 14:57:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,6 +67,7 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 	assert(option->max);
 
 	/* TODO: toggle per document. --Zas */
+	/* TODO: call change hooks. --jonas */
 	option->value.number = (number <= option->max) ? number : option->min;
 
 	draw_formatted(ses, 1);

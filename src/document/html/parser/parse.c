@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.12 2004/04/24 10:35:14 jonas Exp $ */
+/* $Id: parse.c,v 1.13 2004/04/24 11:27:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -718,6 +718,156 @@ ng:;
 }
 
 static void
+start_element(struct element_info *ei,
+              unsigned char *name, int namelen, int endingtag,
+              unsigned char *html, unsigned char *prev_html,
+              unsigned char *eof, unsigned char *attr, void *f)
+{
+	unsigned char *a;
+
+	if (was_xmp) {
+		put_chrs("<", 1, put_chars_f, f);
+		html = prev_html + 1;
+		return;
+	}
+
+	ln_break(ei->linebreak, line_break_f, f);
+
+	if ((a = get_attr_val(attr, "id"))) {
+		special_f(f, SP_TAG, a);
+		mem_free(a);
+	}
+
+	if (html_top.type == ELEMENT_WEAK) {
+		kill_html_stack_item(&html_top);
+	}
+
+	if (!html_top.invisible) {
+		int ali = (par_format.align == AL_NONE);
+		struct par_attrib pa = par_format;
+
+		if (ei->func == html_table && global_doc_opts->tables
+		    && table_level < HTML_MAX_TABLE_LEVEL) {
+			format_table(attr, html, eof, &html, f);
+			ln_break(2, line_break_f, f);
+			return;
+		}
+		if (ei->func == html_select) {
+			if (!do_html_select(attr, html, eof, &html, f))
+				return;
+		}
+		if (ei->func == html_textarea) {
+			do_html_textarea(attr, html, eof, &html, f);
+			return;
+		}
+		if (ei->func == html_style && global_doc_opts->css_enable) {
+			css_parse_stylesheet(&css_styles, html, eof);
+		}
+
+		if (ei->nopair == 2 || ei->nopair == 3) {
+			struct html_element *e;
+
+			if (ei->nopair == 2) {
+				foreach (e, html_stack) {
+					if (e->type < ELEMENT_KILLABLE) break;
+					if (e->linebreak || !ei->linebreak) break;
+				}
+			} else foreach (e, html_stack) {
+				if (e->linebreak && !ei->linebreak) break;
+				if (e->type < ELEMENT_KILLABLE) break;
+				if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
+			}
+			if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
+				while (e->prev != (void *) &html_stack)
+					kill_html_stack_item(e->prev);
+
+				if (e->type > ELEMENT_IMMORTAL)
+					kill_html_stack_item(e);
+			}
+		}
+
+		if (ei->nopair != 1) {
+			html_stack_dup(ELEMENT_KILLABLE);
+			html_top.name = name;
+			html_top.namelen = namelen;
+			html_top.options = attr;
+			html_top.linebreak = ei->linebreak;
+		}
+
+		if (html_top.options && global_doc_opts->css_enable) {
+			/* XXX: We should apply CSS otherwise as well,
+			 * but that'll need some deeper changes in
+			 * order to have options filled etc. Probably
+			 * just calling css_apply() from more places,
+			 * since we usually have nopair set when we
+			 * either (1) rescan on your own from somewhere
+			 * else (2) html_stack_dup() in our own way.
+			 * --pasky */
+			/* Call it now to gain some of the stuff which
+			 * might affect formatting of some elements. */
+			css_apply(&html_top, &css_styles);
+		}
+		if (ei->func) ei->func(attr);
+		if (html_top.options && global_doc_opts->css_enable) {
+			/* Call it now to override default colors of
+			 * the elements. */
+			css_apply(&html_top, &css_styles);
+		}
+
+		if (ei->func != html_br) was_br = 0;
+		if (ali) par_format = pa;
+	}
+}
+
+static void
+end_element(struct element_info *ei,
+            unsigned char *name, int namelen, int endingtag,
+            unsigned char *html, unsigned char *prev_html,
+            unsigned char *eof, unsigned char *attr, void *f)
+{
+	struct html_element *e, *elt;
+	int lnb = 0;
+	int xxx = 0;
+
+	if (was_xmp) {
+		if (ei->func == html_xmp) {
+			was_xmp = 0;
+		} else {
+			return;
+		}
+	}
+
+	was_br = 0;
+	if (ei->nopair == 1 || ei->nopair == 3)
+		return;
+
+	/* dump_html_stack(); */
+	foreach (e, html_stack) {
+		if (e->linebreak && !ei->linebreak) xxx = 1;
+		if (strlcasecmp(e->name, e->namelen, name, namelen)) {
+			if (e->type < ELEMENT_KILLABLE) {
+				break;
+			} else {
+				continue;
+			}
+		}
+		if (xxx) {
+			kill_html_stack_item(e);
+			break;
+		}
+		for (elt = e; elt != (void *) &html_stack; elt = elt->prev)
+			if (elt->linebreak > lnb)
+				lnb = elt->linebreak;
+		ln_break(lnb, line_break_f, f);
+		while (e->prev != (void *) &html_stack)
+			kill_html_stack_item(e->prev);
+		kill_html_stack_item(e);
+		break;
+	}
+	/* dump_html_stack(); */
+}
+
+static void
 process_element(unsigned char *name, int namelen, int endingtag,
                 unsigned char *html, unsigned char *prev_html,
                 unsigned char *eof, unsigned char *attr, void *f)
@@ -748,142 +898,9 @@ process_element(unsigned char *name, int namelen, int endingtag,
 	if (!ei) return;
 
 	if (!endingtag) {
-		unsigned char *a;
-
-		if (was_xmp) {
-			put_chrs("<", 1, put_chars_f, f);
-			html = prev_html + 1;
-			return;
-		}
-
-		ln_break(ei->linebreak, line_break_f, f);
-
-		if ((a = get_attr_val(attr, "id"))) {
-			special_f(f, SP_TAG, a);
-			mem_free(a);
-		}
-
-		if (html_top.type == ELEMENT_WEAK) {
-			kill_html_stack_item(&html_top);
-		}
-
-		if (!html_top.invisible) {
-			int ali = (par_format.align == AL_NONE);
-			struct par_attrib pa = par_format;
-
-			if (ei->func == html_table && global_doc_opts->tables
-			    && table_level < HTML_MAX_TABLE_LEVEL) {
-				format_table(attr, html, eof, &html, f);
-				ln_break(2, line_break_f, f);
-				return;
-			}
-			if (ei->func == html_select) {
-				if (!do_html_select(attr, html, eof, &html, f))
-					return;
-			}
-			if (ei->func == html_textarea) {
-				do_html_textarea(attr, html, eof, &html, f);
-				return;
-			}
-			if (ei->func == html_style && global_doc_opts->css_enable) {
-				css_parse_stylesheet(&css_styles, html, eof);
-			}
-
-			if (ei->nopair == 2 || ei->nopair == 3) {
-				struct html_element *e;
-
-				if (ei->nopair == 2) {
-					foreach (e, html_stack) {
-						if (e->type < ELEMENT_KILLABLE) break;
-						if (e->linebreak || !ei->linebreak) break;
-					}
-				} else foreach (e, html_stack) {
-					if (e->linebreak && !ei->linebreak) break;
-					if (e->type < ELEMENT_KILLABLE) break;
-					if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
-				}
-				if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
-					while (e->prev != (void *) &html_stack)
-						kill_html_stack_item(e->prev);
-
-					if (e->type > ELEMENT_IMMORTAL)
-						kill_html_stack_item(e);
-				}
-			}
-
-			if (ei->nopair != 1) {
-				html_stack_dup(ELEMENT_KILLABLE);
-				html_top.name = name;
-				html_top.namelen = namelen;
-				html_top.options = attr;
-				html_top.linebreak = ei->linebreak;
-			}
-
-			if (html_top.options && global_doc_opts->css_enable) {
-				/* XXX: We should apply CSS otherwise as well,
-				 * but that'll need some deeper changes in
-				 * order to have options filled etc. Probably
-				 * just calling css_apply() from more places,
-				 * since we usually have nopair set when we
-				 * either (1) rescan on your own from somewhere
-				 * else (2) html_stack_dup() in our own way.
-				 * --pasky */
-				/* Call it now to gain some of the stuff which
-				 * might affect formatting of some elements. */
-				css_apply(&html_top, &css_styles);
-			}
-			if (ei->func) ei->func(attr);
-			if (html_top.options && global_doc_opts->css_enable) {
-				/* Call it now to override default colors of
-				 * the elements. */
-				css_apply(&html_top, &css_styles);
-			}
-
-			if (ei->func != html_br) was_br = 0;
-			if (ali) par_format = pa;
-		}
-
+		start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
 	} else {
-		struct html_element *e, *elt;
-		int lnb = 0;
-		int xxx = 0;
-
-		if (was_xmp) {
-			if (ei->func == html_xmp) {
-				was_xmp = 0;
-			} else {
-				return;
-			}
-		}
-
-		was_br = 0;
-		if (ei->nopair == 1 || ei->nopair == 3)
-			return;
-
-		/* dump_html_stack(); */
-		foreach (e, html_stack) {
-			if (e->linebreak && !ei->linebreak) xxx = 1;
-			if (strlcasecmp(e->name, e->namelen, name, namelen)) {
-				if (e->type < ELEMENT_KILLABLE) {
-					break;
-				} else {
-					continue;
-				}
-			}
-			if (xxx) {
-				kill_html_stack_item(e);
-				break;
-			}
-			for (elt = e; elt != (void *) &html_stack; elt = elt->prev)
-				if (elt->linebreak > lnb)
-					lnb = elt->linebreak;
-			ln_break(lnb, line_break_f, f);
-			while (e->prev != (void *) &html_stack)
-				kill_html_stack_item(e->prev);
-			kill_html_stack_item(e);
-			break;
-		}
-		/* dump_html_stack(); */
+		end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
 	}
 }	
 

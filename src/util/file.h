@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.7 2004/03/09 15:24:48 zas Exp $ */
+/* $Id: file.h,v 1.8 2004/04/23 11:44:33 pasky Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
@@ -23,4 +23,5 @@ unsigned char *get_unique_name(unsigned char *fileprefix);
  * @line is free()d. */
 unsigned char *file_read_line(unsigned char *line, size_t *linesize,
 			      FILE *file, int *linenumber);
+
 #endif

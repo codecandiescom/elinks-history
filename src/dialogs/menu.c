@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.100 2003/06/07 15:10:59 pasky Exp $ */
+/* $Id: menu.c,v 1.101 2003/06/07 18:29:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,7 +171,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 
 	abort_loading(ses, 0);
 
-	if (steps > 1) {
+	if (steps > 1 && have_location(ses)) {
 		/* When we go back by multiple steps, we must move the first
 		 * location history at the last time - it denotes the current
 		 * location and some special actions need to be done when
@@ -180,9 +180,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 		 * save the position for it now. */
 		struct location *loc = ses->history.next;
 
-		if ((void *) loc != &ses->history) {
-			loc->unhist_jump = ses->unhistory.next;
-		}
+		loc->unhist_jump = ses->unhistory.next;
 	}
 
 	/* Move all intermediate items to unhistory... */
@@ -190,7 +188,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 	while (steps-- > 1) {
 		struct location *loc = ses->history.next;
 
-		if ((void *) loc == &ses->history) return;
+		if (!have_location(ses)) return;
 
 		/* First item in history/unhistory is something special and
 		 * precious... like... like... the current location? */

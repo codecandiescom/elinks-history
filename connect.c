@@ -134,6 +134,7 @@ void ssl_want_read(struct connection *c)
 		case SSL_ERROR_NONE:
 			c->buffer = NULL;
 			b->func(c);
+			mem_free(b->addr);
 			mem_free(b);
 		case SSL_ERROR_WANT_READ:
 			break;

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.60 2002/11/04 16:57:00 zas Exp $ */
+/* $Id: main.c,v 1.61 2002/11/13 21:11:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,6 +317,10 @@ init()
 	}
 
 	load_config();
+	/* Parse commandline options again, in order to override any config
+	 * file options. */
+	parse_options(ac - 1, av + 1);
+
 	init_b = 1;
 #ifdef USE_LEDS
 	init_leds();
@@ -336,9 +340,6 @@ init()
 #ifdef HAVE_LUA
     	init_lua();
 #endif
-	/* Parse commandline options again, in order to override any config
-	 * file options. */
-	parse_options(ac - 1, av + 1);
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
 	    get_opt_int_tree(cmdline_options, "source")) {

@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.8 2003/10/01 10:33:12 jonas Exp $ */
+/* $Id: event.h,v 1.9 2003/10/01 16:37:17 pasky Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -42,6 +42,16 @@ enum evhook_status {
 
 /* The event hook prototype. Abide. */
 typedef enum evhook_status (*event_hook)(va_list ap, void *data);
+
+/* This is convenience macro for hooks. Not all hooks may use all of their
+ * parameters, but they usually have to fetch all of them. This silences
+ * compiler ranting about unused variables then. It is recommended to run this
+ * upon all the parameters (in case some of the get unused in future) like:
+ *
+ * evhook_use_params(param1 && param2 && param3);
+ *
+ * The compiler is probably going to optimize it away anyway. */
+#define evhook_use_params(x) if (0 && (x)) ;
 
 
 /*** The life of events */

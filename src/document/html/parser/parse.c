@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.44 2004/06/21 13:26:38 jonas Exp $ */
+/* $Id: parse.c,v 1.45 2004/06/21 13:56:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,6 +121,7 @@ end:
 	return 0;
 }
 
+
 #define realloc_chrs(x, l) mem_align_alloc(x, l, (l) + 1, unsigned char, 0xFF)
 
 #define add_chr(s, l, c)						\
@@ -128,7 +129,6 @@ end:
 		if (!realloc_chrs(&(s), l)) return NULL;		\
 		(s)[(l)++] = (c);					\
 	} while (0)
-
 
 unsigned char *
 get_attr_value(register unsigned char *e, unsigned char *name,
@@ -329,6 +329,7 @@ get_width(unsigned char *a, unsigned char *name, int limit_it)
 
 	return width;
 }
+
 
 unsigned char *
 skip_comment(unsigned char *html, unsigned char *eof)

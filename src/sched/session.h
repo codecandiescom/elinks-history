@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.154 2004/06/15 20:03:35 zas Exp $ */
+/* $Id: session.h,v 1.155 2004/06/19 13:57:30 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -90,6 +90,12 @@ struct session_status {
 	unsigned int visited:1;
 };
 
+enum insert_mode {
+	INSERT_MODE_LESS,
+	INSERT_MODE_ON,
+	INSERT_MODE_OFF,
+};
+
 /* This is one of the building stones of ELinks architecture --- this structure
  * carries information about the specific ELinks session. Each tab (thus, at
  * least one per terminal, in the normal case) has own session. Session
@@ -145,11 +151,7 @@ struct session {
 	 * use mode less insertion and we always insert stuff into the text
 	 * input field. When enabled it is possible to switch insertion on and
 	 * off using ACT_EDIT_ENTER and *_CANCEL. */
-	enum {
-		INSERT_MODE_LESS,
-		INSERT_MODE_ON,
-		INSERT_MODE_OFF,
-	} insert_mode;
+	enum insert_mode insert_mode;
 
 	unsigned char *search_word;
 	unsigned char *last_search_word;

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.31 2003/11/18 20:16:46 pasky Exp $ */
+/* $Id: renderer.c,v 1.32 2003/11/18 20:21:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,11 +242,15 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 	set_term_color(&template, &colors, global_doc_opts->color_flags, global_doc_opts->color_mode);
 
 	for (lineno = 0; length > 0; lineno++) {
+		unsigned char *xsource;
 		int width = source + strcspn(source, "\n");
 		int added;
 
-		added = add_document_line(document, lineno, source, width, &template,
+		/* We will touch the supplied source, so better replicate it. */
+		xsource = memacpy(source, width);
+		added = add_document_line(document, lineno, xsource, width, &template,
 					  convert_table);
+		mem_free(xsource);
 
 		if (added) {
 			/* Add (search) nodes on a line by line basis */

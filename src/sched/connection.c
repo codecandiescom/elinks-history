@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.149 2004/04/01 06:06:20 jonas Exp $ */
+/* $Id: connection.c,v 1.150 2004/04/01 06:08:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -766,7 +766,6 @@ int
 load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	 enum connection_priority pri, enum cache_mode cache_mode, int start)
 {
-	unsigned char *url = struri(uri);
 	struct cache_entry *ce = NULL;
 	struct connection *conn;
 	unsigned char *u;
@@ -796,7 +795,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 #endif
 
 	if (cache_mode <= CACHE_MODE_NORMAL
-	    && (ce = find_in_cache(url))
+	    && (ce = find_in_cache(struri(uri)))
 	    && !ce->incomplete) {
 		if (!is_object_used(ce) &&
 		    ((ce->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
@@ -821,7 +820,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		}
 	}
 
-	u = get_proxy(url);
+	u = get_proxy(struri(uri));
 	if (!u) {
 		if (download) download->end(download, download->data);
 		return -1;

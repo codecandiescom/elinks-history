@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.24 2004/01/07 19:18:01 jonas Exp $ */
+/* $Id: menu.h,v 1.25 2004/01/07 19:32:35 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -23,6 +23,6 @@ void do_auth_dialog(struct session *);
 
 void really_exit_prog(struct session *ses);
 void query_exit(struct session *ses);
-void menu_save_url_as(struct terminal *term, void *d, struct session *ses);
+void save_url_as(struct session *ses);
 
 #endif

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.276 2004/01/07 19:18:01 jonas Exp $ */
+/* $Id: menu.c,v 1.277 2004/01/07 19:32:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ menu_url_shortcut(struct terminal *term, void *d, struct session *ses)
 }
 
 void
-menu_save_url_as(struct terminal *term, void *d, struct session *ses)
+save_url_as(struct session *ses)
 {
 	input_field(ses->tab->term, NULL, 1,
 		    N_("Save URL"), N_("Enter URL"),

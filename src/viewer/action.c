@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.16 2004/01/07 19:27:01 jonas Exp $ */
+/* $Id: action.c,v 1.17 2004/01/07 19:32:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,7 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_SAVE_URL_AS:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				menu_save_url_as(term, NULL, ses);
+				save_url_as(ses);
 			break;
 
 		case ACT_SAVE_OPTIONS:

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.25 2004/11/09 01:02:01 jonas Exp $ */
+/* $Id: gopher.c,v 1.26 2004/11/09 01:39:07 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -381,6 +381,24 @@ add_gopher_description(struct string *buffer, enum gopher_entity entity)
 }
 
 static void
+encode_selector_string(struct string *buffer, unsigned char *selector)
+{
+	unsigned char *slashes;
+
+	/* Rather hackishly only convert slashes if there are
+	 * two successive ones. */
+	while ((slashes = strstr(selector, "//"))) {
+		*slashes = 0;
+		encode_uri_string(buffer, selector, 0);
+		encode_uri_string(buffer, "//", 1);
+		*slashes = '/';
+		selector = slashes + 2;
+	}
+
+	encode_uri_string(buffer, selector, 0);
+}
+
+static void
 add_gopher_menu_line(struct string *buffer, unsigned char *line)
 {
 	/* Gopher menu fields */
@@ -509,7 +527,7 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 				host, entity);
 
 			/* Encode selector string */
-			encode_uri_string(&address, selector, 1);
+			encode_selector_string(&address, selector);
 		}
 
 		/* Error response from Gopher doesn't deserve to

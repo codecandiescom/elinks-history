@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.49 2002/05/26 18:54:24 pasky Exp $ */
+/* $Id: view.c,v 1.50 2002/06/07 19:53:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,6 +96,7 @@ void clear_formatted(struct f_data *scr)
 
 		if (l->where) mem_free(l->where);
 		if (l->target) mem_free(l->target);
+		if (l->title) mem_free(l->title);
 		if (l->where_img) mem_free(l->where_img);
 		if (l->pos) mem_free(l->pos);
 	}
@@ -185,6 +186,7 @@ void sort_links(struct f_data *f)
 		if (!link->n) {
 			if (link->where) mem_free(link->where);
 			if (link->target) mem_free(link->target);
+			if (link->title) mem_free(link->title);
 			if (link->where_img) mem_free(link->where_img);
 			if (link->pos) mem_free(link->pos);
 			memmove(link, link + 1, (f->nlinks - i - 1) * sizeof(struct link));
@@ -2929,64 +2931,24 @@ end:
 }
 
 
-/* Print page's title and numbering at window top. */
+/* Return current link's title. Pretty trivial. */
 unsigned char *
-print_current_titlex(struct f_data_c *fd, int w)
+print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
 {
-	int ml = 0, pl = 0;
-	unsigned char *m, *p;
+	struct link *link;
 
-	if (!fd) return NULL;
-
-	w -= 1;
-
-	p = init_str();
-	if (!p) return NULL;
-
-	if (fd->yw < fd->f_data->y) {
-		int pp = 1;
-		int pe = 1;
-
-		if (fd->yw) {
-			pp = (fd->vs->view_pos + fd->yw / 2) / fd->yw + 1;
-			pe = (fd->f_data->y + fd->yw - 1) / fd->yw;
-			if (pp > pe) pp = pe;
-		}
-
-		if (fd->vs->view_pos + fd->yw >= fd->f_data->y)
-			pp = pe;
-		if (fd->f_data->title)
-			add_chr_to_str(&p, &pl, ' ');
-
-		add_to_str(&p, &pl, "(");
-		add_num_to_str(&p, &pl, pp);
-		add_to_str(&p, &pl, "/");
-		add_num_to_str(&p, &pl, pe);
-		add_chr_to_str(&p, &pl, ')');
-	}
-
-	if (!fd->f_data->title) return p;
-
-	m = init_str();
-	if (!m) {
-		mem_free(p);
+	if (!fd || fd->f_data->frame || fd->vs->current_link == -1
+	    || fd->vs->current_link >= fd->f_data->nlinks)
 		return NULL;
-	}
 
-	add_to_str(&m, &ml, fd->f_data->title);
+	link = &fd->f_data->links[fd->vs->current_link];
 
-	if (ml + pl > w - 3) {
-		ml = w - 3 - pl;
-		if (ml < 0) ml = 0;
-		add_to_str(&m, &ml, "...");
+	if (link->title)
+		return stracpy(link->title);
 
-	}
-
-	add_to_str(&m, &ml, p);
-	mem_free(p);
-
-	return m;
+	return NULL;
 }
+
 
 unsigned char *
 print_current_link_do(struct f_data_c *fd, struct terminal *term)
@@ -3144,6 +3106,66 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 unsigned char *print_current_link(struct session *ses)
 {
 	return print_current_link_do(current_frame(ses), ses->term);
+}
+
+
+/* Print page's title and numbering at window top. */
+unsigned char *
+print_current_titlex(struct f_data_c *fd, int w)
+{
+	int ml = 0, pl = 0;
+	unsigned char *m, *p;
+
+	if (!fd) return NULL;
+
+	w -= 1;
+
+	p = init_str();
+	if (!p) return NULL;
+
+	if (fd->yw < fd->f_data->y) {
+		int pp = 1;
+		int pe = 1;
+
+		if (fd->yw) {
+			pp = (fd->vs->view_pos + fd->yw / 2) / fd->yw + 1;
+			pe = (fd->f_data->y + fd->yw - 1) / fd->yw;
+			if (pp > pe) pp = pe;
+		}
+
+		if (fd->vs->view_pos + fd->yw >= fd->f_data->y)
+			pp = pe;
+		if (fd->f_data->title)
+			add_chr_to_str(&p, &pl, ' ');
+
+		add_to_str(&p, &pl, "(");
+		add_num_to_str(&p, &pl, pp);
+		add_to_str(&p, &pl, "/");
+		add_num_to_str(&p, &pl, pe);
+		add_chr_to_str(&p, &pl, ')');
+	}
+
+	if (!fd->f_data->title) return p;
+
+	m = init_str();
+	if (!m) {
+		mem_free(p);
+		return NULL;
+	}
+
+	add_to_str(&m, &ml, fd->f_data->title);
+
+	if (ml + pl > w - 3) {
+		ml = w - 3 - pl;
+		if (ml < 0) ml = 0;
+		add_to_str(&m, &ml, "...");
+
+	}
+
+	add_to_str(&m, &ml, p);
+	mem_free(p);
+
+	return m;
 }
 
 unsigned char *print_current_title(struct session *ses)

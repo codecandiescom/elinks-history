@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.24 2002/05/25 13:46:04 pasky Exp $ */
+/* $Id: renderer.c,v 1.25 2002/06/07 19:53:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -971,6 +971,8 @@ x:;
 		link->accesskey = format.accesskey;
 		link->pos = DUMMY;
 
+		link->title = format.title ? stracpy(format.title) : NULL;
+
 		if (!last_form) {
 			link->type = L_LINK;
 			link->where = stracpy(last_link);
@@ -1501,6 +1503,7 @@ void push_base_format(unsigned char *url, struct document_options *opt)
 	format.fontsize = 3;
 	format.link = format.target = format.image = format.select = NULL;
 	format.form = NULL;
+	format.title = NULL;
 
 	memcpy(&format.fg, &opt->default_fg, sizeof(struct rgb));
 	memcpy(&format.bg, &opt->default_bg, sizeof(struct rgb));

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.25 2002/05/17 21:07:44 pasky Exp $ */
+/* $Id: parser.c,v 1.26 2002/06/07 19:53:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,6 +271,7 @@ void kill_html_stack_item(struct html_element *e)
 	if (e->attr.link) mem_free(e->attr.link);
 	if (e->attr.target) mem_free(e->attr.target);
 	if (e->attr.image) mem_free(e->attr.image);
+	if (e->attr.title) mem_free(e->attr.title);
 	if (e->attr.href_base) mem_free(e->attr.href_base);
 	if (e->attr.target_base) mem_free(e->attr.target_base);
 	if (e->attr.select) mem_free(e->attr.select);
@@ -317,6 +318,7 @@ void html_stack_dup()
 	copy_string(&e->attr.link, ep->attr.link);
 	copy_string(&e->attr.target, ep->attr.target);
 	copy_string(&e->attr.image, ep->attr.image);
+	copy_string(&e->attr.title, ep->attr.title);
 	copy_string(&e->attr.href_base, ep->attr.href_base);
 	copy_string(&e->attr.target_base, ep->attr.target_base);
 	copy_string(&e->attr.select, ep->attr.select);
@@ -324,6 +326,7 @@ void html_stack_dup()
 		if (e->attr.link) set_mem_comment(e->attr.link, e->name, e->namelen);
 		if (e->attr.target) set_mem_comment(e->attr.target, e->name, e->namelen);
 		if (e->attr.image) set_mem_comment(e->attr.image, e->name, e->namelen);
+		if (e->attr.title) set_mem_comment(e->attr.title, e->name, e->namelen);
 		if (e->attr.href_base) set_mem_comment(e->attr.href_base, e->name, e->namelen);
 		if (e->attr.target_base) set_mem_comment(e->attr.target_base, e->name, e->namelen);
 		if (e->attr.select) set_mem_comment(e->attr.select, e->name, e->namelen);
@@ -495,6 +498,7 @@ void put_link_line(unsigned char *prefix, unsigned char *linkname, unsigned char
 	ln_break(1, line_break_f, ff);
 	if (format.link) mem_free(format.link), format.link = NULL;
 	if (format.target) mem_free(format.target), format.target = NULL;
+	if (format.title) mem_free(format.title), format.title = NULL;
 	format.form = NULL;
 	put_chrs(prefix, strlen(prefix), put_chars_f, ff);
 	format.link = join_urls(format.href_base, link);
@@ -577,6 +581,9 @@ void html_a(unsigned char *a)
 		else
 			memcpy(&format.fg, &format.clink, sizeof(struct rgb));
 
+		if (format.title) mem_free(format.title);
+		format.title = get_attr_val(a, "title");
+
 		html_focusable(a);
 
 	} else {
@@ -642,6 +649,7 @@ void html_img(unsigned char *a)
 		else al = stracpy("[IMG]");
 	}
 	if (format.image) mem_free(format.image), format.image = NULL;
+	if (format.title) mem_free(format.title), format.title = NULL;
 	if (al) {
 		unsigned char *s;
 
@@ -654,6 +662,9 @@ void html_img(unsigned char *a)
 			format.image = join_urls(format.href_base, s);
 			mem_free(s);
 		}
+
+		format.title = get_attr_val(a, "title");
+
 		if (ismap) {
 			unsigned char *h;
 			html_stack_dup();
@@ -666,6 +677,7 @@ void html_img(unsigned char *a)
 		if (ismap) kill_html_stack_item(&html_top);
 	}
 	if (format.image) mem_free(format.image), format.image = NULL;
+	if (format.title) mem_free(format.title), format.title = NULL;
 	mem_free(al);
 	if (usemap) kill_html_stack_item(&html_top);
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
@@ -1161,6 +1173,8 @@ void html_input(unsigned char *a)
 	put_chrs(" ", 1, put_chars_f, ff);
 	html_stack_dup();
 	format.form = fc;
+	if (format.title) mem_free(format.title);
+	format.title = get_attr_val(a, "title");
 	switch (fc->type) {
 		case FC_TEXT:
 		case FC_PASSWORD:

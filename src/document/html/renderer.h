@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.8 2002/05/08 13:55:03 pasky Exp $ */
+/* $Id: renderer.h,v 1.9 2002/06/07 19:53:45 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -77,6 +77,7 @@ struct link {
 	unsigned char *where;
 	unsigned char *target;
 	unsigned char *where_img;
+	unsigned char *title;
 	struct form_control *form;
 	unsigned sel_color;
 	int n;

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.5 2002/05/17 17:41:28 pasky Exp $ */
+/* $Id: document.c,v 1.6 2002/06/07 19:53:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,6 +163,15 @@ loc_msg(struct terminal *term, struct location *location,
 	if (a) {
 		add_to_str(&str, &strl, "\n\n");
 		add_to_str(&str, &strl, _(TEXT(T_LINK), term));
+		add_to_str(&str, &strl, ": ");
+		add_to_str(&str, &strl, a);
+		mem_free(a);
+	}
+
+	a = print_current_link_title_do(frame, term);
+	if (a) {
+		add_to_str(&str, &strl, "\n");
+		add_to_str(&str, &strl, _(TEXT(T_LINK_TITLE), term));
 		add_to_str(&str, &strl, ": ");
 		add_to_str(&str, &strl, a);
 		mem_free(a);

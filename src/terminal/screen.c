@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.86 2003/10/01 23:12:07 jonas Exp $ */
+/* $Id: screen.c,v 1.87 2003/10/01 23:24:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,11 +412,12 @@ add_chars16(struct string *image, struct terminal *term,
 
 			if (pos->color == current->color) {
 				/* No update for exact match. */
-				if (pos->data == current->data && pos->attr == current->attr)
+				if (pos->data == current->data
+				    && pos->attr == current->attr)
 					continue;
+
 				/* Else if the color match and the data is ``space''. */
-				if ((pos->data <= 1 || pos->data == ' ') &&
-				    (current->data <= 1 || current->data == ' '))
+				if (pos->data <= ' ' && current->data <= ' ')
 					continue;
 			}
 

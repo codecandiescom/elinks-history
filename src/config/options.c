@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.108 2002/10/12 22:03:30 pasky Exp $ */
+/* $Id: options.c,v 1.109 2002/10/12 22:50:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -941,8 +941,13 @@ register_options()
 #ifdef IPV6
 	add_opt_bool("protocol.ftp",
 		"use_epsv", 0, 0,
-		"** Not yet implemented **\n"
+		"** Not yet implemented properly **\n"
 		"Use EPSV instead of EPRT (passive vs active mode, IPv6 only).");
+#else
+	add_opt_bool("protocol.ftp",
+		"use_epsv", 0, 0,
+		"Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
+		"Works only with IPv6 enabled, so nothing interesting for you.");
 #endif
 	add_opt_tree("protocol.ftp",
 		"proxy", 0,

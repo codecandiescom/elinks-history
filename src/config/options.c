@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.382 2003/10/25 19:27:57 jonas Exp $ */
+/* $Id: options.c,v 1.383 2003/10/25 19:29:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -246,23 +246,20 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 
 	if (tree->flags & OPT_SORT) {
 		struct list_head *cat = tree->value.tree;
+		struct list_head *bcat = &tree->box_item->child;
 		struct option *pos;
 
 		/* The list is empty, just add it there. */
 		if (list_empty(*cat)) {
 			add_to_list(*cat, option);
-			if (abi)
-				add_to_list(tree->box_item->child,
-						option->box_item);
+			if (abi) add_to_list(*bcat, option->box_item);
 
 		/* This fits as the last list entry, add it there. This
 		 * optimizes the most expensive BUT most common case ;-). */
 		} else if (strcmp(((struct option *) cat->prev)->name,
 			   option->name) <= 0) {
 			add_to_list_end(*cat, option);
-			if (abi)
-				add_to_list_end(tree->box_item->child,
-						option->box_item);
+			if (abi) add_to_list_end(*bcat, option->box_item);
 
 		/* Scan the list linearly. This could be probably optimized ie.
 		 * to choose direction based on the first letter or so. */
@@ -274,9 +271,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 				/* The (struct option) add_at_pos() can mess
 				 * up the order so that we add the box_item
 				 * to itself, so better do it first. */
-				if (abi)
-					add_at_pos(pos->prev->box_item,
-							option->box_item);
+				if (abi) add_at_pos(pos->prev->box_item, option->box_item);
 				add_at_pos(pos->prev, option);
 				break;
 			}

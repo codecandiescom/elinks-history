@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.100 2004/09/28 07:35:16 jonas Exp $ */
+/* $Id: renderer.c,v 1.101 2004/09/28 12:49:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,6 @@ add_snippets(struct ecmascript_interpreter *interpreter,
              struct list_head *doc_snippets, struct list_head *queued_snippets)
 {
 	struct string_list_item *doc_current = NULL;
-	struct string_list_item *queue_end = queued_snippets->prev;
 
 #ifdef CONFIG_LEDS
 	if (list_empty(*queued_snippets) && interpreter->vs->doc_view->session)
@@ -65,23 +64,19 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 
 		doc_current = doc_snippets->next;
 		assert(!list_empty(*queued_snippets));
-		while (iterator != queue_end) {
+		while (iterator != (struct string_list_item *) queued_snippets) {
 			assert(!strlcmp(iterator->string.source,
 			                iterator->string.length,
-					doc_current->string.source,
+			                doc_current->string.source,
 			                doc_current->string.length));
-
-			doc_current = doc_current->next;
-			iterator = iterator->next;
-
-			assert(iterator != (struct string_list_item *) queued_snippets);
 			if (doc_current == (struct string_list_item *) doc_snippets) {
 				INTERNAL("add_snippets(): doc_snippets shorter than queued_snippets!");
 				return;
 			}
+
+			doc_current = doc_current->next;
+			iterator = iterator->next;
 		}
-		/* Ok, so that's the end of the queued part. We want the new ones. */
-		doc_current = doc_current->next;
 	}
 
 	assert(doc_current);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.20 2002/05/08 13:55:03 pasky Exp $ */
+/* $Id: parser.c,v 1.21 2002/05/10 17:43:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,15 +49,15 @@ int parse_element(unsigned char *e, unsigned char *eof, unsigned char **name, in
 	if (e < eof && *e == '/') e++;
 	if (e >= eof || !isA(*e)) return -1;
 	while (e < eof && isA(*e)) e++;
-	if (e >= eof || (!WHITECHAR(*e) && *e != '>' && *e != '/' && *e != ':')) return -1;
+	if (e >= eof || (!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/' && *e != ':')) return -1;
 	if (name && namelen) *namelen = e - *name;
 	while (e < eof && (WHITECHAR(*e) || *e == '/' || *e == ':')) e++;
-	if (e >= eof || (!atchr(*e) && *e != '>')) return -1;
+	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) return -1;
 	if (attr) *attr = e;
 	nextattr:
 	while (e < eof && WHITECHAR(*e)) e++;
-	if (e >= eof || (!atchr(*e) && *e != '>')) return -1;
-	if (*e == '>') goto en;
+	if (e >= eof || (!atchr(*e) && *e != '>' && *e != '<')) return -1;
+	if (*e == '>' || *e == '<') goto en;
 	while (e < eof && atchr(*e)) e++;
 	while (e < eof && WHITECHAR(*e)) e++;
 	if (e >= eof) return -1;
@@ -72,18 +72,18 @@ int parse_element(unsigned char *e, unsigned char *eof, unsigned char **name, in
 		while (e < eof && *e != uu && *e /*(WHITECHAR(*e) || *e > ' ')*/) e++;
 		if (e >= eof || *e < ' ') return -1;
 		e++;
-		if (e >= eof /*|| (!WHITECHAR(*e) && *e != uu && *e != '>')*/) return -1;
+		if (e >= eof /*|| (!WHITECHAR(*e) && *e != uu && *e != '>' && *e != '<')*/) return -1;
 		if (*e == uu) goto u;
 	} else {
-		while (e < eof && !WHITECHAR(*e) && *e != '>') e++;
+		while (e < eof && !WHITECHAR(*e) && *e != '>' && *e != '<') e++;
 		if (e >= eof) return -1;
 	}
 	while (e < eof && WHITECHAR(*e)) e++;
 	if (e >= eof) return -1;
 	endattr:
-	if (*e != '>') goto nextattr;
+	if (*e != '>' && *e != '<') goto nextattr;
 	en:
-	if (end) *end = e + 1;
+	if (end) *end = e + (*e == '>');
 	return 0;
 }
 
@@ -101,7 +101,7 @@ unsigned char *get_attr_val(unsigned char *e, unsigned char *name)
 	int f;
 	aa:
 	while (WHITECHAR(*e)) e++;
-	if (*e == '>') return NULL;
+	if (*e == '>' || *e == '<') return NULL;
 	n = name;
 	while (*n && upcase(*e) == upcase(*n)) e++, n++;
 	f = *n;
@@ -111,7 +111,7 @@ unsigned char *get_attr_val(unsigned char *e, unsigned char *name)
 	e++;
 	while (WHITECHAR(*e)) e++;
 	if (!U(*e)) {
-		while (!WHITECHAR(*e) && *e != '>') {
+		while (!WHITECHAR(*e) && *e != '>' && *e != '<') {
 			if (!f) add_chr(a, l, *e);
 			e++;
 		}

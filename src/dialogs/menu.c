@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.379 2004/12/02 16:34:01 zas Exp $ */
+/* $Id: menu.c,v 1.380 2004/12/03 22:51:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -565,7 +565,7 @@ query_file(struct session *ses, struct uri *uri, void *data,
 		input_field(ses->tab->term, NULL, 1,
 			    N_("Download"), N_("Save to file"),
 			    N_("OK"),  N_("Cancel"), data, &file_history,
-			    MAX_STR_LEN, def.source, 0, 0, NULL,
+			    MAX_STR_LEN, def.source, 0, 0, check_nonempty,
 			    (void (*)(void *, unsigned char *)) std,
 			    (void (*)(void *)) cancel);
 	} else {

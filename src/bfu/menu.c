@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.216 2004/04/18 01:27:02 jonas Exp $ */
+/* $Id: menu.c,v 1.217 2004/04/18 01:30:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -624,15 +624,14 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			if ((void *) win->next != &win->term->windows
 			    && win->next->handler == mainmenu_handler) {
 				delete_window_ev(win, ev);
-				goto break2;
+				return;
 			}
 
 			if (action == ACT_MENU_RIGHT)
 				goto enter;
 
 			delete_window(win);
-
-			goto break2;
+			return;
 
 		case ACT_MENU_UP:
 			scroll_menu(menu, -1);
@@ -671,14 +670,14 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			else
 				delete_window_ev(win, NULL);
 
-			goto break2;
+			return;
 
 		default:
 		{
 			if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) ||
 			    ev->y == KBD_ALT) {
 				delete_window_ev(win, ev);
-				goto break2;
+				return;
 			}
 
 			if (ev->x > ' ' && ev->x < 255) {
@@ -698,13 +697,6 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 enter:
 		select_menu(win->term, menu);
 	}
-
-break2:
-	goto break4;
-break3:
-	return;
-break4:
-	goto break3;
 }
 
 static void

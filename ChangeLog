@@ -1,3 +1,10 @@
+Fri Jan 18 08:53:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* url.c, AUTHORS:
+	
+	take @ only before hostname - fix by Ami Fischman
+	<usenet@fischman.org>
+
 Thu Jan 17 20:27:46 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h:

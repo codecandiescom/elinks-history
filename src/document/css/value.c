@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.12 2004/01/17 23:05:53 pasky Exp $ */
+/* $Id: value.c,v 1.13 2004/01/18 14:22:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 #include "util/string.h"
 
 
-typedef int (*css_value_parser_t)(union css_decl_value *value,
+typedef int (*css_value_parser_t)(union css_property_value *value,
 				  unsigned char **string);
 
 
@@ -54,7 +54,7 @@ rgb_component_parser(unsigned char **string, unsigned char terminator)
 }
 
 static int
-css_parse_color_value(union css_decl_value *value, unsigned char **string)
+css_parse_color_value(union css_property_value *value, unsigned char **string)
 {
 	int pos;
 
@@ -91,7 +91,7 @@ css_parse_color_value(union css_decl_value *value, unsigned char **string)
 
 
 static int
-css_parse_font_attribute_value(union css_decl_value *value,
+css_parse_font_attribute_value(union css_property_value *value,
 				unsigned char **string)
 {
 	unsigned char *nstring;
@@ -158,7 +158,7 @@ css_parse_font_attribute_value(union css_decl_value *value,
 
 
 static int
-css_parse_text_align_value(union css_decl_value *value, unsigned char **string)
+css_parse_text_align_value(union css_property_value *value, unsigned char **string)
 {
 	if (!strncasecmp(*string, "left", 4)) {
 		(*string) += 4;
@@ -196,7 +196,7 @@ static css_value_parser_t css_value_parsers[CSS_DV_LAST] = {
 };
 
 int
-css_parse_value(enum css_decl_valtype valtype, union css_decl_value *value,
+css_parse_value(enum css_property_value_type valtype, union css_property_value *value,
 		unsigned char **string)
 {
 	assert(string && value && valtype < CSS_DV_LAST);

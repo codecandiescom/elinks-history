@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.7 2004/01/18 14:18:00 pasky Exp $ */
+/* $Id: property.h,v 1.8 2004/01/18 14:22:08 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -17,7 +17,7 @@ struct css_property {
 	/* Declared property. The enum item name is derived from the property
 	 * name, just uppercase it and tr/-/_/. */
 
-	enum css_decl_property {
+	enum css_property_type {
 		CSS_DP_NONE,
 		CSS_DP_BACKGROUND_COLOR,
 		CSS_DP_COLOR,
@@ -30,14 +30,14 @@ struct css_property {
 	/* Property value. If it is a pointer, it points always to a memory
 	 * to be free()d together with this structure. */
 
-	enum css_decl_valtype {
+	enum css_property_value_type {
 		CSS_DV_NONE,
 		CSS_DV_COLOR,
 		CSS_DV_FONT_ATTRIBUTE,
 		CSS_DV_TEXT_ALIGN,
 		CSS_DV_LAST,
 	} value_type;
-	union css_decl_value {
+	union css_property_value {
 		void *none;
 		color_t color;
 		struct {
@@ -57,12 +57,12 @@ struct css_property {
  * have and what internal type they have. */
 struct css_property_info {
 	unsigned char *name;
-	enum css_decl_property property;
+	enum css_property_type property;
 
 	/* This is the storage type, basically describing what to save to
 	 * css_property.value. Many properties can share the same valtype.
 	 * The value is basically output of the value parser. */
-	enum css_decl_valtype value_type;
+	enum css_property_value_type value_type;
 };
 
 /* This table contains info about all the known CSS properties. */

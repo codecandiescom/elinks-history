@@ -1,4 +1,4 @@
-/* $Id: value.h,v 1.3 2004/01/17 16:36:16 pasky Exp $ */
+/* $Id: value.h,v 1.4 2004/01/18 14:22:08 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_VALUE_H
 #define EL__DOCUMENT_CSS_VALUE_H
@@ -12,7 +12,7 @@
  * converts it to a reasonable {struct css_property}-ready form. */
 /* It returns positive integer upon success, zero upon parse error, and moves
  * the string pointer to the byte after the value end. */
-int css_parse_value(enum css_decl_valtype valtype, union css_decl_value *value,
+int css_parse_value(enum css_property_value_type valtype, union css_property_value *value,
 		    unsigned char **string);
 
 #endif

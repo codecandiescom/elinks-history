@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.25 2004/01/17 21:17:22 pasky Exp $ */
+/* $Id: apply.c,v 1.26 2004/01/18 14:22:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ css_apply_text_align(struct html_element *element, struct css_property *prop)
 	element->parattr.align = prop->value.text_align;
 }
 
-/* XXX: Sort like the css_decl_property */
+/* XXX: Sort like the css_property_type */
 static css_applier_t css_appliers[CSS_DP_LAST] = {
 	/* CSS_DP_NONE */		NULL,
 	/* CSS_DP_BACKGROUND_COLOR */	css_apply_background_color,

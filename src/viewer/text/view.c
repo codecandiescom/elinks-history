@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.162 2003/07/21 23:01:50 jonas Exp $ */
+/* $Id: view.c,v 1.163 2003/07/22 02:44:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1335,7 +1335,7 @@ send_open_in_new_xterm(struct terminal *term,
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = get_link_url(ses, fd, &fd->document->links[fd->vs->current_link]);
-	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_str(). --pasky */
+	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_string(). --pasky */
 	/* if (ses->dn_url) add_session_ring_to_str(&ses->dn_url, &l); */
 	if (ses->dn_url) {
 		unsigned char *enc_url = encode_shell_safe_url(ses->dn_url);

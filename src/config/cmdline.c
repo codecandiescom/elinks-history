@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.36 2004/01/18 00:29:08 pasky Exp $ */
+/* $Id: cmdline.c,v 1.37 2004/01/18 00:56:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/dns.h"
 #include "sched/session.h"
+#include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -414,6 +415,27 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 	return "";
 }
 
+static unsigned char *
+redir_cmd(struct option *option, unsigned char ***argv, int *argc)
+{
+	unsigned char *target;
+
+	/* I can't get any dirtier. --pasky */
+
+	if (!strcmp(option->name, "confdir")) {
+		target = "config-dir";
+	} else if (!strcmp(option->name, "conffile")) {
+		target = "config-file";
+	} else {
+		return gettext("Internal consistency error");
+	}
+
+	option = get_opt_rec(cmdline_options, target);
+	assert(option);
+	option_types[option->type].cmdline(option, argv, argc);
+	return NULL;
+}
+
 
 /**********************************************************************
  Options values
@@ -438,7 +460,7 @@ struct option_info cmdline_options_info[] = {
 		N_("ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it.")),
 
-	INIT_OPT_ALIAS("", "confdir", "config-dir"),
+	INIT_OPT_COMMAND("", NULL, "confdir", 0, redir_cmd, NULL),
 
 	INIT_OPT_STRING("", N_("Name of directory with configuration file"),
 		"config-dir", 0, "",
@@ -447,7 +469,7 @@ struct option_info cmdline_options_info[] = {
 		"a '/' its used as an absolute path. Else it is assumed to\n"
 		"be relative to your HOME dir.")),
 
-	INIT_OPT_ALIAS("", "conffile", "config-file"),
+	INIT_OPT_COMMAND("", NULL, "conffile", 0, redir_cmd, NULL),
 
 	INIT_OPT_STRING("", N_("Name of configuration file"),
 		"config-file", 0, "elinks.conf",

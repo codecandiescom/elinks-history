@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.42 2004/01/16 22:31:44 jonas Exp $ */
+/* $Id: tab.c,v 1.43 2004/01/16 23:49:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,15 +253,7 @@ do_open_in_new_tab(struct terminal *term, struct session *ses,
 
 	info->base_session = ses->id;
 	init_list(info->url_list);
-	if (url) {
-		struct url_list *url_list;
-
-		url_list = mem_alloc(sizeof(struct url_list));
-		if (url_list) {
-			url_list->url = url;
-			add_to_list(info->url_list, url_list);
-		}
-	}
+	if (url) add_to_string_list(&info->url_list, url);
 
 	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
@@ -298,8 +290,5 @@ open_in_new_tab_in_background(struct terminal *term, int link,
 void
 open_url_in_new_tab(struct session *ses, unsigned char *url, int in_background)
 {
-	unsigned char *urlcopy = stracpy(url);
-
-	if (!urlcopy) return;
-	do_open_in_new_tab(ses->tab->term, ses, urlcopy, in_background);
+	do_open_in_new_tab(ses->tab->term, ses, url, in_background);
 }

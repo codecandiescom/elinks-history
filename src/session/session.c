@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.295 2004/01/16 18:21:05 zas Exp $ */
+/* $Id: session.c,v 1.296 2004/01/16 23:49:54 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -652,11 +652,11 @@ void *
 create_session_info(int cp, struct list_head *url_list, int *ll)
 {
 	int l = 0;
-	struct url_list *url;
+	struct string *url;
 	int *i;
 
 	foreach (url, *url_list) {
-		l += strlen(url->url) + 1;
+		l += url->length + 1;
 	}
 	*ll = 2 * sizeof(int) + l;
 
@@ -669,7 +669,7 @@ create_session_info(int cp, struct list_head *url_list, int *ll)
 		unsigned char *start = (unsigned char *)(i + 2);
 
 		foreach (url, *url_list) {
-			start = stpcpy(start, url->url) + 1;
+			start = stpcpy(start, url->source) + 1;
 		}
 	}
 
@@ -700,7 +700,6 @@ decode_session_info(const void *pdata)
 
 		while (url_len) {
 			unsigned char *url;
-			struct url_list *url_list;
 
 			length = strlen(str) + 1;
 
@@ -711,14 +710,7 @@ decode_session_info(const void *pdata)
 			str += length;
 			url_len -= length;
 
-			url_list = mem_alloc(sizeof(struct url_list));
-			if (!url_list) {
-				fmem_free(url);
-				return info;
-			}
-
-			url_list->url = decode_shell_safe_url(url);
-			add_to_list_end(info->url_list, url_list);
+			add_to_string_list(&info->url_list, url);
 			fmem_free(url);
 		}
 	}
@@ -729,12 +721,7 @@ decode_session_info(const void *pdata)
 static void
 free_session_info(struct initial_session_info *info)
 {
-	struct url_list *url;
-
-	foreach (url, info->url_list) {
-		if (url->url) mem_free(url->url);
-	}
-	free_list(info->url_list);
+	free_string_list(&info->url_list);
 	mem_free(info);
 }
 
@@ -774,18 +761,21 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	}
 
 	if (!list_empty(info->url_list)) {
-		struct url_list *url;
-		int flag = 0;
+		struct string *str;
 
-		foreach (url, info->url_list) {
-			if (!flag) {
+		foreach (str, info->url_list) {
+			unsigned char *url = decode_shell_safe_url(str->source);
+
+			if (!url) continue;
+
+			if (str == (void *) info->url_list.next) {
 				/* Open first url. */
-				goto_url(ses, url->url);
-				flag = 1;
+				goto_url(ses, url);
 			} else {
 				/* Open next ones. */
-				open_url_in_new_tab(ses, url->url, 1);
+				open_url_in_new_tab(ses, url, 1);
 			}
+			mem_free(url);
 		}
 
 #ifdef CONFIG_BOOKMARKS

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.91 2004/01/16 18:21:06 zas Exp $ */
+/* $Id: session.h,v 1.92 2004/01/16 23:49:54 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -17,11 +17,6 @@ struct session_status;
 struct term_event;
 struct terminal;
 struct window;
-
-struct url_list {
-	LIST_HEAD(struct url_list);
-	unsigned char *url;
-};
 
 /* This is used to pass along the initial session parameters. */
 struct initial_session_info {

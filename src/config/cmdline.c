@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.34 2004/01/16 20:08:23 jonas Exp $ */
+/* $Id: cmdline.c,v 1.35 2004/01/16 23:49:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include "sched/session.h"
 #include "util/lists.h"
 #include "util/memory.h"
+#include "util/string.h"
 
 static unsigned char *
 _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_head *url_list)
@@ -89,13 +90,7 @@ unknown_option:
 			}
 
 		} else if (url_list) {
-			struct url_list *url = mem_alloc(sizeof(struct url_list));
-
-			if (url) {
-				url->url = argv[-1];
-				add_to_list_end(*url_list, url);
-			}
-
+			add_to_string_list(url_list, argv[-1]);
 			if (!location) location = argv[-1];
 		}
 	}

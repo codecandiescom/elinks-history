@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.161 2004/01/16 20:08:23 jonas Exp $ */
+/* $Id: main.c,v 1.162 2004/01/16 23:49:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ fatal_error:
 end:
 	if (url) mem_free(url);
 
-	free_list(url_list);
+	free_string_list(&url_list);
 }
 
 

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.58 2002/12/22 11:47:08 pasky Exp $ */
+/* $Id: listbox.c,v 1.59 2003/01/04 17:04:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "bfu/dialog.h"
 #include "bfu/listbox.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
 #include "util/lists.h"
@@ -364,7 +365,9 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 
 	print_text(data->term, data->listbox_item_data->x + depth * 5,
 		   data->listbox_item_data->y + data->offset,
-		   len, item->text, color);
+		   len, item->translated ? _(item->text, data->term)
+					 : item->text,
+		   color);
 	if (item == data->box->sel) {
 		/* For blind users: */
 		set_cursor(data->term,
@@ -408,7 +411,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {
-/*		debug("top: %s - (%d) %p\n", box->top->text, box->top->visible, box->top); */
+		/* debug("top: %s - (%d) %p\n", box->top->text, box->top->visible, box->top); */
 		box->top = traverse_listbox_items_list(box->top, 1,
 				1, NULL, NULL);
 		box->sel = box->top;

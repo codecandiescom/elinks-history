@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.21 2002/12/06 22:35:17 pasky Exp $ */
+/* $Id: listbox.h,v 1.22 2003/01/04 17:04:39 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -41,9 +41,10 @@ struct listbox_item {
 	struct listbox_item *root;
 	struct list_head child;
 	enum { BI_LEAF, BI_FOLDER } type;
-	int expanded; /* Only valid if this is a BI_FOLDER */
-	int visible; /* Is this item visible? */
-	int marked;
+	int expanded:1; /* Only valid if this is a BI_FOLDER */
+	int visible:1; /* Is this item visible? */
+	int marked:1;
+	int translated:1; /* Should we call gettext on this text? */
 	int depth;
 
 	/* Run when this item is hilighted */

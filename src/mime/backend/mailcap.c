@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.86 2004/09/04 11:19:11 jonas Exp $ */
+/* $Id: mailcap.c,v 1.87 2004/12/19 01:20:41 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -118,21 +118,6 @@ static struct option_info mailcap_options[] = {
 		N_("Prioritize entries by the order of the files in the mailcap\n"
 		"path. This means that wildcard entries (like: image/*) will\n"
 		"also be checked before deciding the handler.")),
-
-
-	/* Start of mailcap compatibility aliases:
-	 * Added: 2003-05-07, 0.5pre0.CVS.
-	 * Estimated due time: ? */
-	INIT_OPT_TREE("protocol", N_("Mailcap"),
-		"mailcap", 0,
-		N_("Options for mailcap support. (Deprecated. Please use\n"
-		"mime.mailcap instead)")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", "enable", "mime.mailcap.enable"),
-	INIT_OPT_ALIAS("protocol.mailcap", "path", "mime.mailcap.path"),
-	INIT_OPT_ALIAS("protocol.mailcap", "ask", "mime.mailcap.ask"),
-	INIT_OPT_ALIAS("protocol.mailcap", "description", "mime.mailcap.description"),
-	INIT_OPT_ALIAS("protocol.mailcap", "prioritize", "mime.mailcap.prioritize"),
 
 	NULL_OPTION_INFO,
 };

@@ -1,3 +1,152 @@
+Tue Jun  1 07:14:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/uri.c:
+
+	Obfuscate compare_uri(): Substitute boolean operators for some ifs
+	and returns.  
+
+Tue Jun  1 06:57:06 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Remove a TODO for what I jus' done.  
+
+Tue Jun  1 06:40:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Revert, darnit! 
+
+Tue Jun  1 06:35:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Revert the last patch: It is obviously wrong as we call
+	switch_to_tab just prior.  
+
+Tue Jun  1 06:26:37 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	We assert(ses->tab == get_current_tab(ses->tab->term)); in
+	tabwin_func, so, in send_event, use |ses->tab| and |ses| instead of
+	assigning |tab = get_current_tab(ses->tab->term);| and using |tab|
+	and |tab->data|.  
+
+Tue Jun  1 06:23:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Open the tab menu when the user right-clicks the document canvas and
+	no other action is taken (i.e., the user did not click a link).  
+
+Tue Jun  1 06:21:08 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In do_mouse_event, return the result of send_to_frame().  
+
+Tue Jun  1 06:19:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev, return 0 if the mouse event was not handled.  
+
+Tue Jun  1 06:18:19 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Only allow scroll-margins with the left mouse-button.  
+
+Tue Jun  1 05:55:59 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Do not redraw an extra time when the user right- or middle-clicks a
+	link.  
+
+Tue Jun  1 05:31:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Remove a superfluous assignment.  
+
+Tue Jun  1 04:25:06 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In draw_doc, free goto_position whether or not the fragment
+	identifier is found. As it was, freeing only when the fragment
+	identifier was found, there was an endless loop as draw_doc()
+	displayed the 'Missing fragment' box, one clicked 'OK', draw_doc()
+	was called to redraw the document, draw_doc() again tried to find
+	the fragment and, not finding it, displayed the 'Missing Fragment'
+	box, and so on.  
+	
+	(I discovered and explained this problem on IRC after I suggested 
+	that we not free goto_position, remember, Jonas?) 
+
+Tue Jun  1 00:42:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Remove get_no_post_url() and save a stack frame.  
+
+Tue Jun  1 00:39:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Improve the fix for bug 95 by checking if the cached document is
+	incomplete before poping up a message box and now we only free() the
+	goto_position if we are successful like in the old code. And the
+	return is complely absurd so removed.  
+
+Tue Jun  1 00:09:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Compile fix.  
+
+Tue Jun  1 00:03:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Remove get_uri_hostlen(). Miciah doesn't like it.  
+
+Mon May 31 23:56:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.c, protocol/uri.h, sched/connection.c:
+
+	Even use compare_uri() for comparing the port of the
+	keepalive_connection.  Port member can then be removed. The default
+	port case should be covered by the protocol comparison.  
+
+Mon May 31 23:49:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.c, protocol/uri.h, sched/connection.c:
+
+	get_keepalive_connection(): Use compare_uri() for checking
+	keepalive_connection. Note this is a bit more fine grained than
+	before because we only checked password part if uri part was
+	present. This should not be a problem I hope.  
+
+Mon May 31 23:27:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Replace keepalive_connection protocol and host member with URI
+	struct.  
+
+Mon May 31 23:19:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Why do we use protocol_handler for keepalive_connection->protocol.
+	It is not like it will ever change plus just using enum protocol
+	will guard against defining protocol handlers to the same (proxy
+	comes to mind) even though the port number would probably guard
+	against that.  
+
 Mon May 31 17:34:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/connection.c:

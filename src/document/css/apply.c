@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.67 2004/09/20 08:39:29 pasky Exp $ */
+/* $Id: apply.c,v 1.68 2004/09/20 10:02:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ static css_applier_t css_appliers[CSS_PT_LAST] = {
 
 /* This looks for a match in list of selectors. */
 static void
-examine_element(struct css_selector *base, struct list_head *selectors,
+examine_element(struct css_selector *selector, struct list_head *selectors,
                 struct html_element *element)
 {
 	struct css_selector *altsel;

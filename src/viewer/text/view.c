@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.92 2003/06/07 14:40:13 jonas Exp $ */
+/* $Id: view.c,v 1.93 2003/06/07 15:00:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3390,7 +3390,7 @@ save_url(struct session *ses, unsigned char *url)
 				       NULL, NULL, NULL,
 				       S_BAD_URL, PRI_CANCEL, 0 };
 
-		print_error_dialog(ses, &stat, N_("Error"));
+		print_error_dialog(ses, &stat);
 		return;
 	}
 	if (ses->dn_url) mem_free(ses->dn_url);

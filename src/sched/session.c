@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.87 2003/06/07 14:56:07 pasky Exp $ */
+/* $Id: session.c,v 1.88 2003/06/07 15:00:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,14 +323,13 @@ title_set:
 }
 
 void
-print_error_dialog(struct session *ses, struct status *stat,
-		   unsigned char *title)
+print_error_dialog(struct session *ses, struct status *stat)
 {
 	unsigned char *t = get_err_msg(stat->state, ses->tab->term);
 
 	if (!t) return;
 	msg_box(ses->tab->term, NULL, 0,
-		title, AL_CENTER,
+		N_("Error"), AL_CENTER,
 		t,
 		ses, 1,
 		N_("Cancel"), NULL, B_ENTER | B_ESC /*,
@@ -867,7 +866,7 @@ end_load(struct status *stat, struct session *ses)
 		if (d == 1) doc_end_load(stat, ses);
 	}
 	if (stat->state < 0 && stat->state != S_OK && d != 2) {
-		print_error_dialog(ses, stat, N_("Error"));
+		print_error_dialog(ses, stat);
 		 if (!d) reload(ses, NC_CACHE);
 	}
 	check_questions_queue(ses);
@@ -930,7 +929,7 @@ doc_end_load(struct status *stat, struct session *ses)
 		load_frames(ses, ses->screen);
 		process_file_requests(ses);
 		if (stat->state != S_OK)
-			print_error_dialog(ses, stat, N_("Error"));
+			print_error_dialog(ses, stat);
 
 	} else if (ses->display_timer == -1) display_timer(ses);
 
@@ -1403,7 +1402,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 				       NULL, NULL, NULL,
 				       S_BAD_URL, PRI_CANCEL, 0 };
 
-		print_error_dialog(ses, &stat, N_("Error"));
+		print_error_dialog(ses, &stat);
 		goto end;
 	}
 

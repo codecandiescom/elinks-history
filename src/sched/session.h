@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.23 2003/06/07 14:37:17 pasky Exp $ */
+/* $Id: session.h,v 1.24 2003/06/07 15:00:00 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -105,7 +105,7 @@ extern struct list_head sessions;
 
 
 void print_screen_status(struct session *);
-void print_error_dialog(struct session *, struct status *, unsigned char *);
+void print_error_dialog(struct session *, struct status *);
 
 void process_file_requests(struct session *);
 

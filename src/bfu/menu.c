@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.183 2004/01/15 17:02:24 zas Exp $ */
+/* $Id: menu.c,v 1.184 2004/01/15 17:34:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,35 +258,35 @@ count_menu_size(struct terminal *term, struct menu *menu)
 static void
 scroll_menu(struct menu *menu, int d)
 {
-	int c = 0;
 	int w = int_max(1, menu->height - MENU_BORDER_SIZE * 2);
 	int scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
+
+	if (!d) return;
 
 	int_lower_bound(&scr_i, 0);
 	int_lower_bound(&w, 0);
 
-	menu->selected += d;
-
-	if (menu->ni) {
-		menu->selected %= menu->ni;
-		if (menu->selected < 0)
-			menu->selected += menu->ni;
+	if (menu->ni < 1) {
+		menu->selected = -1;
+		menu->view = 0;
+		return;
 	}
 
-	while (1) {
-		if (c++ > menu->ni) {
+	menu->selected += d;
+
+	menu->selected %= menu->ni;
+	if (menu->selected < 0)
+		menu->selected += menu->ni;
+
+	int_bounds(&menu->selected, 0, menu->ni - 1);
+	while (!mi_is_selectable(menu->items[menu->selected])) {
+		menu->selected += d/abs(d);
+
+		if (menu->selected < 0 || menu->selected >= menu->ni) {
 			menu->selected = -1;
 			menu->view = 0;
 			return;
 		}
-
-		int_bounds(&menu->selected, 0, menu->ni - 1);
-
-		if (menu->ni
-		    && mi_is_selectable(menu->items[menu->selected]))
-			break;
-
-		menu->selected += d;
 	}
 
 	int_bounds(&menu->view, menu->selected - w + scr_i + 1, menu->selected - scr_i);

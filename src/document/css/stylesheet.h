@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.29 2004/09/19 21:33:57 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.30 2004/09/19 21:38:49 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -94,8 +94,8 @@ struct css_selector *get_css_selector(struct list_head *selector_list,
                                       enum css_selector_type type,
                                       unsigned char *name, int namelen);
 
-#define get_css_base_selector(stylesheet, name, namelen) \
-	get_css_selector(&stylesheet->selectors, CST_ELEMENT, name, namelen)
+#define get_css_base_selector(stylesheet, type, name, namelen) \
+	get_css_selector(&stylesheet->selectors, type, name, namelen)
 
 /* Looks up the selector of the name @name and length @namelen in the
  * given list of selectors. */
@@ -103,8 +103,8 @@ struct css_selector *find_css_selector(struct list_head *selector_list,
                                        enum css_selector_type type,
                                        unsigned char *name, int namelen);
 
-#define find_css_base_selector(stylesheet, name, namelen) \
-	find_css_selector(&stylesheet->selectors, CST_ELEMENT, name, namelen)
+#define find_css_base_selector(stylesheet, type, name, namelen) \
+	find_css_selector(&stylesheet->selectors, type, name, namelen)
 
 /* Initialize the selector structure. This is a rather low-level function from
  * your POV. */

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.61 2004/09/19 21:33:57 pasky Exp $ */
+/* $Id: apply.c,v 1.62 2004/09/19 21:38:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,8 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 		mem_free(code);
 	}
 
-	altsel = find_css_base_selector(css, element->name, element->namelen);
+	altsel = find_css_base_selector(css, CST_ELEMENT,
+	                                element->name, element->namelen);
 	if (altsel) merge_css_selectors(selector, altsel);
 
 	foreach (property, selector->properties) {

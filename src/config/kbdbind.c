@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.221 2004/06/20 15:10:53 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.222 2004/06/20 16:08:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,12 +448,10 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "cookies-load", ACT_MAIN_COOKIES_LOAD, DACT(N_("Reload cookies file")) },
 	{ "copy-clipboard", ACT_MAIN_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
 	{ "document-info", ACT_MAIN_DOCUMENT_INFO, DACT(N_("Show information about the current page")) },
-	{ "down", ACT_MAIN_DOWN, DACT(N_("Move cursor downwards")) },
 	{ "download", ACT_MAIN_DOWNLOAD, DACT(N_("Download the current link")) },
 	{ "download-image", ACT_MAIN_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
 	{ "download-manager", ACT_MAIN_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
 	{ "edit", ACT_MAIN_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
-	{ "end", ACT_MAIN_END, DACT(N_("Go to the end of the page/line")) },
 	{ "enter", ACT_MAIN_ENTER, DACT(N_("Follow the current link")) },
 	{ "enter-reload", ACT_MAIN_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
 	{ "exmode", ACT_MAIN_EXMODE, DACT(N_("Enter ex-mode (command line)")) },
@@ -468,7 +466,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "goto-url-home", ACT_MAIN_GOTO_URL_HOME, DACT(N_("Go to the homepage")) },
 	{ "header-info", ACT_MAIN_HEADER_INFO, DACT(N_("Show information about the current page HTTP headers")) },
 	{ "history-manager", ACT_MAIN_HISTORY_MANAGER, DACT(N_("Open history manager")) },
-	{ "home", ACT_MAIN_HOME, DACT(N_("Go to the start of the page/line")) },
 	{ "jump-to-link", ACT_MAIN_JUMP_TO_LINK, DACT(N_("Jump to link")) },
 	{ "keybinding-manager", ACT_MAIN_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
 	{ "kill-backgrounded-connections", ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
@@ -485,6 +482,12 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "move-cursor-left", ACT_MAIN_MOVE_CURSOR_LEFT, DACT(N_("Move cursor left")) },
 	{ "move-cursor-right", ACT_MAIN_MOVE_CURSOR_RIGHT, DACT(N_("Move cursor right")) },
 	{ "move-cursor-up", ACT_MAIN_MOVE_CURSOR_UP, DACT(N_("Move cursor up")) },
+	{ "move-document-start", ACT_MAIN_MOVE_DOCUMENT_START, DACT(N_("Move to the start of the document")) },
+	{ "move-document-end", ACT_MAIN_MOVE_DOCUMENT_END, DACT(N_("Move to the end of the document")) },
+	{ "move-link-down", ACT_MAIN_MOVE_LINK_DOWN, DACT(N_("Move downwards one link")) },
+	{ "move-link-up", ACT_MAIN_MOVE_LINK_UP, DACT(N_("Move upwards one link")) },
+	{ "move-page-down", ACT_MAIN_MOVE_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
+	{ "move-page-up", ACT_MAIN_MOVE_PAGE_UP, DACT(N_("Move upwards by a page")) },
 	{ "next-frame", ACT_MAIN_NEXT_FRAME, DACT(N_("Move to the next frame")) },
 	{ "open-link-in-new-tab", ACT_MAIN_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
 	{ "open-link-in-new-tab-in-background", ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open the current link a new tab in background")) },
@@ -494,8 +497,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "open-new-window", ACT_MAIN_OPEN_NEW_WINDOW, DACT(N_("Open a new window")) },
 	{ "open-os-shell", ACT_MAIN_OPEN_OS_SHELL, DACT(N_("Open an OS shell")) },
 	{ "options-manager", ACT_MAIN_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
-	{ "page-down", ACT_MAIN_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
-	{ "page-up", ACT_MAIN_PAGE_UP, DACT(N_("Move upwards by a page")) },
 	{ "pass-uri", ACT_MAIN_PASS_URI, DACT(N_("Pass current URI to external command")) },
 	{ "previous-frame", ACT_MAIN_PREVIOUS_FRAME, DACT(N_("Move to the previous frame")) },
 	{ "quit", ACT_MAIN_QUIT, DACT(N_("Open a quit confirmation dialog box")) },
@@ -539,7 +540,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "toggle-plain-compress-empty-lines", ACT_MAIN_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES, DACT(N_("Toggle plain renderer compression of empty lines")) },
 	{ "toggle-wrap-text", ACT_MAIN_TOGGLE_WRAP_TEXT, DACT(N_("Toggle wrapping of text")) },
 	{ "unback", ACT_MAIN_UNBACK, DACT(N_("Go forward in the unhistory")) },
-	{ "up", ACT_MAIN_UP, DACT(N_("Move cursor upwards")) },
 	{ "view-image", ACT_MAIN_VIEW_IMAGE, DACT(N_("View the current image")) },
 	{ "zoom-frame", ACT_MAIN_ZOOM_FRAME, DACT(N_("Maximize the current frame")) },
 
@@ -718,7 +718,7 @@ struct default_kb {
 };
 
 static struct default_kb default_main_keymap[] = {
-	{ ' ',		 0,		ACT_MAIN_PAGE_DOWN },
+	{ ' ',		 0,		ACT_MAIN_MOVE_PAGE_DOWN },
 	{ '#',		 0,		ACT_MAIN_SEARCH_TYPEAHEAD },
 	{ '%',		 0,		ACT_MAIN_TOGGLE_DOCUMENT_COLORS },
 	{ '*',		 0,		ACT_MAIN_TOGGLE_DISPLAY_IMAGES },
@@ -733,14 +733,14 @@ static struct default_kb default_main_keymap[] = {
 	{ '>',		 KBD_ALT,	ACT_MAIN_TAB_MOVE_RIGHT },
 	{ '?',		 0,		ACT_MAIN_SEARCH_BACK },
 	{ 'A',		 0,		ACT_MAIN_ADD_BOOKMARK_LINK },
-	{ 'A',		 KBD_CTRL,	ACT_MAIN_HOME },
-	{ 'B',		 KBD_CTRL,	ACT_MAIN_PAGE_UP },
+	{ 'A',		 KBD_CTRL,	ACT_MAIN_MOVE_DOCUMENT_START },
+	{ 'B',		 KBD_CTRL,	ACT_MAIN_MOVE_PAGE_UP },
 	{ 'C',		 0,		ACT_MAIN_CACHE_MANAGER },
 	{ 'D',		 0,		ACT_MAIN_DOWNLOAD_MANAGER },
 	{ 'E',		 0,		ACT_MAIN_GOTO_URL_CURRENT_LINK },
-	{ 'E',		 KBD_CTRL,	ACT_MAIN_END },
+	{ 'E',		 KBD_CTRL,	ACT_MAIN_MOVE_DOCUMENT_END },
 	{ 'F',		 0,		ACT_MAIN_FORMHIST_MANAGER },
-	{ 'F',		 KBD_CTRL,	ACT_MAIN_PAGE_DOWN },
+	{ 'F',		 KBD_CTRL,	ACT_MAIN_MOVE_PAGE_DOWN },
 	{ 'G',		 0,		ACT_MAIN_GOTO_URL_CURRENT },
 	{ 'H',		 0,		ACT_MAIN_GOTO_URL_HOME },
 	{ 'K',		 0,		ACT_MAIN_COOKIE_MANAGER },
@@ -760,7 +760,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ']',		 0,		ACT_MAIN_SCROLL_RIGHT },
 	{ '_',		 0,		ACT_MAIN_TOGGLE_CSS },
 	{ 'a',		 0,		ACT_MAIN_ADD_BOOKMARK },
-	{ 'b',		 0,		ACT_MAIN_PAGE_UP },
+	{ 'b',		 0,		ACT_MAIN_MOVE_PAGE_UP },
 	{ 'c',		 0,		ACT_MAIN_TAB_CLOSE },
 	{ 'd',		 0,		ACT_MAIN_DOWNLOAD },
 	{ 'e',		 0,		ACT_MAIN_TAB_MENU },
@@ -785,24 +785,24 @@ static struct default_kb default_main_keymap[] = {
 	{ '|',		 0,		ACT_MAIN_HEADER_INFO },
 	{ '}',		 0,		ACT_MAIN_SCROLL_RIGHT },
 	{ KBD_DEL,	 0,		ACT_MAIN_SCROLL_DOWN },
-	{ KBD_DOWN,	 0,		ACT_MAIN_DOWN },
-	{ KBD_END,	 0,		ACT_MAIN_END },
+	{ KBD_DOWN,	 0,		ACT_MAIN_MOVE_LINK_DOWN },
+	{ KBD_END,	 0,		ACT_MAIN_MOVE_DOCUMENT_END },
 	{ KBD_ENTER,	 0,		ACT_MAIN_ENTER },
 	{ KBD_ENTER,	 KBD_CTRL,	ACT_MAIN_ENTER_RELOAD },
 	{ KBD_ESC,	 0,		ACT_MAIN_MENU },
 	{ KBD_F10,	 0,		ACT_MAIN_FILE_MENU },
 	{ KBD_F9,	 0,		ACT_MAIN_MENU },
-	{ KBD_HOME,	 0,		ACT_MAIN_HOME },
+	{ KBD_HOME,	 0,		ACT_MAIN_MOVE_DOCUMENT_START },
 	{ KBD_INS,	 0,		ACT_MAIN_SCROLL_UP },
 	{ KBD_INS,	 KBD_CTRL,	ACT_MAIN_COPY_CLIPBOARD },
 	{ KBD_LEFT,	 0,		ACT_MAIN_BACK },
-	{ KBD_PAGE_DOWN, 0,		ACT_MAIN_PAGE_DOWN },
-	{ KBD_PAGE_UP,	 0,		ACT_MAIN_PAGE_UP },
+	{ KBD_PAGE_DOWN, 0,		ACT_MAIN_MOVE_PAGE_DOWN },
+	{ KBD_PAGE_UP,	 0,		ACT_MAIN_MOVE_PAGE_UP },
 	{ KBD_RIGHT,	 0,		ACT_MAIN_ENTER },
 	{ KBD_RIGHT,	 KBD_CTRL,	ACT_MAIN_ENTER_RELOAD },
 	{ KBD_TAB,	 0,		ACT_MAIN_NEXT_FRAME },
 	{ KBD_TAB,	 KBD_ALT,	ACT_MAIN_PREVIOUS_FRAME },
-	{ KBD_UP,	 0,		ACT_MAIN_UP },
+	{ KBD_UP,	 0,		ACT_MAIN_MOVE_LINK_UP },
 	{ 0, 0, 0 }
 };
 
@@ -904,6 +904,36 @@ add_default_keybindings(void)
  * Config file tools.
  */
 
+static struct strtonum main_action_aliases[] = {
+	{ "down", ACT_MAIN_MOVE_LINK_DOWN, "move-link-down" },
+	{ "end", ACT_MAIN_MOVE_DOCUMENT_END, "move-document-end" },
+	{ "home", ACT_MAIN_MOVE_DOCUMENT_START, "move-document-start" },
+	{ "page-down", ACT_MAIN_MOVE_PAGE_DOWN, "move-page-down" },
+	{ "page-up", ACT_MAIN_MOVE_PAGE_UP, "move-page-up" },
+	{ "up",	ACT_MAIN_MOVE_LINK_UP, "move-link-up" },
+
+	{ NULL, 0, NULL }
+};
+
+static struct strtonum *action_aliases[KM_MAX] = {
+	main_action_aliases,
+	NULL,
+	NULL,
+};
+
+static int
+get_aliased_action(enum keymap keymap, unsigned char *action)
+{
+	int alias = -1;
+
+	assert(keymap >= 0 && keymap < KM_MAX);
+
+	if (action_aliases[keymap])
+		alias = strtonum(action_aliases[keymap], action);
+
+	return alias < 0 ? read_action(keymap, action) : alias;
+}
+
 /* Return 0 when ok, something strange otherwise. */
 int
 bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
@@ -916,7 +946,7 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 
 	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
 
-	action_ = read_action(keymap_, action);
+	action_ = get_aliased_action(keymap_, action);
 	if (action_ < 0) return 77 / 9 - 5;
 
 	add_keybinding(keymap_, action_, key_, meta_, EVENT_NONE);

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.503 2004/06/20 13:29:39 miciah Exp $ */
+/* $Id: view.c,v 1.504 2004/06/20 16:08:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -825,12 +825,12 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	switch (kbd_action(KM_MAIN, ev, NULL)) {
-		case ACT_MAIN_PAGE_DOWN: page_down(ses, doc_view); break;
-		case ACT_MAIN_PAGE_UP: page_up(ses, doc_view); break;
-		case ACT_MAIN_DOWN: down(ses, doc_view); break;
-		case ACT_MAIN_UP: up(ses, doc_view); break;
-		case ACT_MAIN_HOME: home(ses, doc_view); break;
-		case ACT_MAIN_END: x_end(ses, doc_view); break;
+		case ACT_MAIN_MOVE_PAGE_DOWN: page_down(ses, doc_view); break;
+		case ACT_MAIN_MOVE_PAGE_UP: page_up(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_DOWN: down(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_UP: up(ses, doc_view); break;
+		case ACT_MAIN_MOVE_DOCUMENT_START: home(ses, doc_view); break;
+		case ACT_MAIN_MOVE_DOCUMENT_END: x_end(ses, doc_view); break;
 
 		case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view); break;
 		case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;

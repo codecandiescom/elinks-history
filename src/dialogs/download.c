@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.25 2003/12/26 08:04:59 jonas Exp $ */
+/* $Id: download.c,v 1.26 2003/12/26 08:23:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,25 +111,34 @@ download_progress_bar(struct terminal *term,
 	unsigned char percent[] = "????"; /* Reduce or enlarge at will. */
 	unsigned int percent_len = 0;
 	int progress = (int) ((longlong) 100 * current / total);
-	int barprogress = int_min((width - 2) * progress / 100, width - 2);
 	struct color_pair *meter_color = get_bfu_color(term, "dialog.meter");
+	int barprogress;
 
 	/* Draw the progress meter part "[###    ]" */
-	draw_text(term, x, y, "[", 1, 0, NULL);
-	draw_area(term, x + 1, y, barprogress, 1, ' ', 0, meter_color);
-	draw_text(term, x + width - 1, y, "]", 1, 0, NULL);
-
-	/* On error, will print '?' only, should not occur. */
-	if (!ulongcat(percent, &percent_len, progress, sizeof(percent) - 1, 0)
-	     && percent_len < width - 3) {
-		percent[percent_len++] = '%';
-	} else {
-		percent[0] = '?';
-		percent_len = 1;
+	if (width > 2) {
+		width -= 2;
+		draw_text(term, x++, y, "[", 1, 0, NULL);
+		draw_text(term, x + width, y, "]", 1, 0, NULL);
 	}
 
-	/* Draw the percentage centered in the progress meter */
-	x += (width - percent_len) / 2;
+	barprogress = int_min(width * progress / 100, width);
+	draw_area(term, x, y, barprogress, 1, ' ', 0, meter_color);
+
+	/* On error, will print '?' only, should not occur. */
+	if (width > 1) {
+		int max = int_min(sizeof(percent), width) - 1;
+
+		if (ulongcat(percent, &percent_len, progress, max, 0)) {
+			percent[0] = '?';
+			percent_len = 1;
+		}
+
+		percent[percent_len++] = '%';
+
+		/* Draw the percentage centered in the progress meter */
+		x += (width - percent_len) / 2;
+	}
+
 	draw_text(term, x, y, percent, percent_len, 0, NULL);
 }
 

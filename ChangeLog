@@ -1,3 +1,45 @@
+Fri Nov  5 23:02:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Minor code cleanup.  
+
+Fri Nov  5 15:35:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	fastfind_new_cnode() was renamed compress_node(),
+	fastfind_node_compress() was renamed compress_tree().  
+
+Fri Nov  5 15:31:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Move code from fastfind_node_compress() to new fastfind_new_cnode(),
+	and add number of compressed nodes to debug output.  
+
+Fri Nov  5 06:00:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Factor common code in is_in_range_regex and get_searched_regex out
+	to the new get_search_region_from_search_nodes, which copies the
+	characters from a range of search nodes, adds new-line characters, 
+	and returns the new string.  
+
+Fri Nov  5 03:50:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Remove an obsolete TODO for reporting regex compilation errors.  
+
+Fri Nov  5 03:32:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, protocol/protocol.c,
+	protocol/smb/smb.c, protocol/smb/smb.h:
+
+	Add SMB protocol module.  
+
 Thu Nov  4 21:10:10 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: lowlevel/connect.c, lowlevel/connect.h,

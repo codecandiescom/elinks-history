@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.14 2004/02/13 20:33:31 zas Exp $ */
+/* $Id: color.c,v 1.15 2004/04/29 16:01:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,10 +23,9 @@ struct color_spec {
 };
 
 static struct color_spec color_specs[] = {
+#include "util/color_s.inc"
 #ifndef ELINKS_SMALL
-	#include "util/color.inc"
-#else
-	#include "util/color_s.inc"
+#include "util/color.inc"
 #endif
 	{ NULL,	0}
 };

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.181 2003/07/28 07:33:09 zas Exp $ */
+/* $Id: renderer.c,v 1.182 2003/07/28 17:05:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -335,19 +335,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 			}
 		}
 
-#if 0
-		if (!link->n) {
-			if (link->where) mem_free(link->where);
-			if (link->target) mem_free(link->target);
-			if (link->where_img) mem_free(link->where_img);
-			if (link->pos) mem_free(link->pos);
-			memmove(link, link + 1, (part->document->nlinks - nlink - 1) * sizeof(struct link));
-			part->document->nlinks --;
-			nlink--;
-		}
-#endif
-
-		if (!matched /* && nlink >= 0 */) last_link_to_move = nlink;
+		if (!matched) last_link_to_move = nlink;
 	}
 
 	matched = 0;
@@ -542,6 +530,8 @@ justify_line(struct part *part, int y)
 	if_assert_failed return;
 
 	len = LEN(y);
+	assert(len > 0);
+	if_assert_failed return;
 
 	line = fmem_alloc(len * sizeof(chr));
 	if (!line) return;
@@ -694,7 +684,6 @@ static void
 put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 {
 	unsigned char *buffer;
-	int bufferlen;
 
 	assert(part && chars);
 	if_assert_failed return;
@@ -713,10 +702,10 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	 * hit? Dunno, someone should measure that. --pasky */
 
 	buffer = convert_string(convert_table, chars, charslen);
-	bufferlen = buffer ? strlen(buffer) : 0;
-
-	if (bufferlen) put_chars(part, buffer, bufferlen);
-	if (buffer) mem_free(buffer);
+	if (buffer) {
+		put_chars(part, buffer, strlen(buffer));
+		mem_free(buffer);
+	}
 }
 
 void
@@ -727,7 +716,6 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	static int bg_cache;
 	static int fg_cache;
 	int bg, fg;
-	int i;
 	struct link *link;
 	struct point *pt;
 	int tmp; /* used for temporary results. */
@@ -781,28 +769,16 @@ end_format_change:
 	if (par_format.align != AL_NONE) {
 		while (part->cx > overlap(par_format)
 		       && part->cx > par_format.leftmargin) {
-			int x;
+			int x = split_line(part);
 
-#if 0
-			if (part->cx > part->x) {
-				part->x = part->cx + par_format.rightmargin;
-				if (chars[charslen - 1] == ' ') part->x--;
-			}
-#endif
-			x = split_line(part);
 			if (!x) break;
-
-#if 0
-			if (LEN(part->cy-1) > part->x)
-				part->x = LEN(part->cy-1);
-#endif
-
 			if (part->document)
 				align_line(part, part->cy - 1, 0);
 			nobreak = x - 1;
 		}
 	}
 
+	assert(charslen > 0);
 	part->xa += charslen;
 	tmp = part->xa
 	      - (chars[charslen - 1] == ' ' && par_format.align != AL_NONE)
@@ -813,7 +789,7 @@ end_format_change:
 	return;
 
 process_link:
-	if ((last_link /*|| last_target*/ || last_image || last_form)
+	if ((last_link || last_image || last_form)
 	    && !xstrcmp(format.link, last_link)
 	    && !xstrcmp(format.target, last_target)
 	    && !xstrcmp(format.image, last_image)
@@ -926,6 +902,8 @@ set_link:
 		pt = mem_realloc(link->pos,
 				 (link->n + charslen) * sizeof(struct point));
 		if (pt) {
+			register int i;
+
 			link->pos = pt;
 			for (i = 0; i < charslen; i++) {
 				pt[link->n + i].x = X(part->cx) + i;
@@ -999,7 +977,6 @@ line_break(struct part *part)
 		part->x = part->cx + par_format.rightmargin;
 
 	if (nobreak) {
-		/* if (part->y < part->cy) part->y = part->cy; */
 		nobreak = 0;
 		part->cx = -1;
 		part->xa = 0;
@@ -1008,7 +985,6 @@ line_break(struct part *part)
 
 	if (!part->document || !part->document->data) goto end;
 
-	/* move_links(part, part->cx, part->cy, 0, part->cy + 1); */
 	xpand_lines(part, part->cy + 1);
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
 	    && (POS(part->cx - 1, part->cy) & 0xff) == ' ') {
@@ -1016,7 +992,6 @@ line_break(struct part *part)
 	   	part->cx--;
 	}
 
-	/*if (LEN(part->cy) > part->x) part->x = LEN(part->cy);*/
 	if (part->cx > 0) align_line(part, part->cy, 1);
 
 	for (t = last_tag_for_newline;
@@ -1030,8 +1005,7 @@ end:
 	part->cy++;
 	part->cx = -1;
 	part->xa = 0;
-   	/* if (part->y < part->cy) part->y = part->cy; */
-	memset(part->spaces, 0, part->spaces_len);
+   	memset(part->spaces, 0, part->spaces_len);
 }
 
 static void
@@ -1072,10 +1046,6 @@ html_form_control(struct part *part, struct form_control *fc)
 	if_assert_failed return;
 
 	if (!part->document) {
-#if 0
-		destroy_fc(fc);
-		mem_free(fc);
-#endif
 		add_to_list(part->uf, fc);
 		return;
 	}
@@ -1085,9 +1055,6 @@ html_form_control(struct part *part, struct form_control *fc)
 	/* We don't want to recode hidden fields. */
 	if (fc->type == FC_TEXT || fc->type == FC_PASSWORD ||
 	    fc->type == FC_TEXTAREA) {
-#if 0
-		int i;
-#endif
 		unsigned char *dv = convert_string(convert_table,
 						   fc->default_value,
 						   strlen(fc->default_value));
@@ -1096,16 +1063,6 @@ html_form_control(struct part *part, struct form_control *fc)
 			if (fc->default_value) mem_free(fc->default_value);
 			fc->default_value = dv;
 		}
-
-#if 0
-		for (i = 0; i < fc->nvalues; i++) {
-			dv = convert_string(convert_table, fc->values[i], strlen(fc->values[i]));
-			if (dv) {
-				mem_free(fc->values[i]);
-				fc->values[i] = dv;
-			}
-		}
-#endif
 	}
 
 	add_to_list(part->document->forms, fc);
@@ -1173,7 +1130,6 @@ do_format(char *start, char *end, struct part *part, unsigned char *head)
 		   (void (*)(void *)) html_init,
 		   (void *(*)(void *, int, ...)) html_special,
 		   part, head);
-	/* if ((part->y -= line_breax) < 0) part->y = 0; */
 }
 
 void
@@ -1257,7 +1213,6 @@ format_html_part(unsigned char *start, unsigned char *end,
 			n->xw = !table_level ? MAXINT : width;
 			add_to_list(document->nodes, n);
 		}
-		/*sdbg(document);*/
 
 		last_link_to_move = document->nlinks;
 		last_tag_to_move = (void *)&document->tags;

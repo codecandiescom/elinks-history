@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.50 2003/12/28 02:55:08 zas Exp $ */
+/* $Id: renderer.c,v 1.51 2003/12/28 03:34:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *xsource;
-		int width, added, only_spaces = 1, spaces = 0;
+		int width, added, only_spaces = 1, spaces = 0, was_spaces = 0;
 		int step = 0;
 
 		/* End of line detection.
@@ -239,24 +239,43 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 				step++;
 			if (step) break;
 
-			if (only_spaces) {
-				if (isspace(source[width]))
+			if (isspace(source[width])) {
+				if (only_spaces)
 					spaces++;
 				else
-					only_spaces = 0;
+					was_spaces++;
+			} else {
+				only_spaces = 0;
+				was_spaces = 0;
 			}
 		}
 
-		if (compress && step && only_spaces) {
-			if (was_empty_line) {
+		if (only_spaces && step) {
+			if (compress && was_empty_line) {
+				/* Successive empty lines
+				 * will appear as one. */
 				length -= step + spaces;
 				source += step + spaces;
 				lineno--;
 				continue;
 			}
 			was_empty_line = 1;
-		} else
+
+			/* No need to keep whitespaces
+			* on an empty line. */
+			source += spaces;
+			length -= spaces;
+			width -= spaces;
+
+		} else {
 			was_empty_line = 0;
+
+			if (was_spaces && step) {
+				/* Drop trailing whitespaces. */
+				width -= was_spaces;
+				step += was_spaces;
+			}
+		}
 
 		/* We will touch the supplied source, so better replicate it. */
 		xsource = memacpy(source, width);

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.6 2002/03/18 15:14:54 pasky Exp $ */
+/* $Id: connect.c,v 1.7 2002/03/18 20:12:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@
 #include <lowlevel/connect.h>
 #include <lowlevel/dns.h>
 #include <util/error.h>
-#include <protocol/http/https.h>
+#include <ssl/ssl.h>
 #include <lowlevel/select.h>
 #include <lowlevel/sched.h>
 #include <protocol/url.h>

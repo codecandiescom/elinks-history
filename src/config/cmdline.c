@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.49 2004/03/29 17:42:03 jonas Exp $ */
+/* $Id: cmdline.c,v 1.50 2004/04/02 18:41:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,29 +91,7 @@ unknown_option:
 			}
 
 		} else if (url_list) {
-			unsigned char *expanded = expand_tilde(argv[-1]);
-			unsigned char *url = expanded;
-
-			if (!url || !file_exists(url)) {
-				url = argv[-1];
-
-			} else {
-				unsigned char *cwd = get_cwd();
-				unsigned char *translated = NULL;
-
-				if (cwd) {
-					translated = translate_url(url, cwd);
-					mem_free(cwd);
-				}
-
-				if (translated) {
-					mem_free(expanded);
-					expanded = url = translated;
-				}
-			}
-
-			add_to_string_list(url_list, url, -1);
-			if (expanded) mem_free(expanded);
+			add_to_string_list(url_list, argv[-1], -1);
 		}
 	}
 	return 0;

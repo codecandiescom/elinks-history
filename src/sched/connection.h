@@ -1,11 +1,11 @@
-/* $Id: connection.h,v 1.46 2003/12/01 14:51:33 pasky Exp $ */
+/* $Id: connection.h,v 1.47 2003/12/20 18:48:31 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
 
 #include "cache/cache.h"
+#include "encoding/encoding.h"
 #include "protocol/uri.h"
-#include "util/encoding.h"
 #include "util/lists.h"
 #include "util/ttime.h"
 

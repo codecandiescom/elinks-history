@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.137 2003/12/04 18:05:51 pasky Exp $ */
+/* $Id: file.c,v 1.138 2003/12/20 18:48:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,7 @@
 
 #include "config/options.h"
 #include "cache/cache.h"
+#include "encoding/encoding.h"
 #include "osdep/osdep.h"
 #ifdef ELINKS_LOCAL_CGI
 #include "protocol/file/cgi.h"
@@ -47,7 +48,6 @@
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "util/conv.h"
-#include "util/encoding.h"
 #include "util/memory.h"
 #include "util/string.h"
 

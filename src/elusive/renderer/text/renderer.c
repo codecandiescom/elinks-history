@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.10 2003/01/18 00:36:14 pasky Exp $ */
+/* $Id: renderer.c,v 1.11 2003/01/18 01:00:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,6 +99,19 @@ realloc_line(struct f_data *f_data, int y, int x)
 
 #undef ALIGN
 
+static void
+put_text(struct f_data *frame_data, int x, int y, unsigned char *str, int len)
+{
+	int i;
+
+	realloc_lines(frame_data, y);
+	realloc_line(frame_data, y, x + len);
+
+	for (i = 0; i < len; i++) {
+		frame_data->data[y].d[x + i] = str[i];
+	}
+}
+
 
 /* Now our strategy is really dumb and trivial, we allocate one line
  * per block box ;-). */
@@ -131,20 +144,15 @@ render_box(struct renderer_state *state, struct layout_box *box)
 		case RECT_TEXT:
 			{
 				struct layout_box_text *data = box->data;
-				int i, l = frame_data->data[y].l;
 
-				realloc_line(frame_data, y, l + data->len);
-
-				for (i = 0; i < data->len; i++) {
-					frame_data->data[y].d[i + l] =
-								data->str[i];
-				}
+				put_text(frame_data, frame_data->data[y].l, y,
+					data->str, data->len);
 			}
 			break;
 	}
 	y++;
 
-	foreach (leaf_box, box->leafs) {
+	foreachback (leaf_box, box->leafs) {
 		render_box(state, leaf_box);
 	}
 }

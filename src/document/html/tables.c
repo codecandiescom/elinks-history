@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.148 2004/03/28 18:25:36 zas Exp $ */
+/* $Id: tables.c,v 1.149 2004/03/28 18:29:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,10 +125,10 @@ struct html_start_end {
 };
 
 struct table_frames {
-	int top;
-	int bottom;
-	int left;
-	int right;
+	unsigned int top:1;
+	unsigned int bottom:1;
+	unsigned int left:1;
+	unsigned int right:1;
 };
 
 /* Global variables */

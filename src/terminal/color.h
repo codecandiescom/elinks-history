@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.15 2003/09/08 15:43:33 jonas Exp $ */
+/* $Id: color.h,v 1.16 2003/09/08 15:44:09 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -19,7 +19,7 @@
 #define TERM_COLOR_FOREGROUND(color) (color & TERM_COLOR_MASK)
 #define TERM_COLOR_BACKGROUND(color) ((color >> 4) & TERM_COLOR_MASK)
 
-/* Controls how what color range to use when setting the terminal color. */
+/* Controls what color ranges to use when setting the terminal color. */
 enum color_type {
 	COLOR_DEFAULT = 0,
 	COLOR_LINK,

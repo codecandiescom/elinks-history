@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.5 2002/03/26 17:39:48 pasky Exp $ */
+/* $Id: select.c,v 1.6 2002/03/26 17:43:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #endif
 
 /* This must be here, thanks to BSD. */
+#include <inttypes.h> /* OMG */
 #ifdef HAVE_SYS_SELECT_H
 #include <sys/select.h>
 #endif

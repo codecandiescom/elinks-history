@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.182 2004/12/27 19:23:41 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.183 2004/12/27 19:35:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,8 +215,6 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		 * something yields data. */
 		if (obj) {
 			object_to_jsval(ctx, vp, obj);
-		} else {
-			undef_to_jsval(ctx, vp);
 		}
 		return JS_TRUE;
 	}

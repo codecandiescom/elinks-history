@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.101 2004/08/03 09:18:34 jonas Exp $ */
+/* $Id: connect.c,v 1.102 2004/08/03 09:39:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,13 +97,13 @@ exception(void *data)
 }
 
 void
-make_connection(struct connection *conn, int port,
-		struct connection_socket *socket,
+make_connection(struct connection *conn, struct connection_socket *socket,
 		void (*done)(struct connection *))
 {
 	unsigned char *host = get_uri_string(conn->uri, URI_DNS_HOST);
 	struct conn_info *conn_info;
 	int async;
+	int port = get_uri_port(conn->uri);
 
 	if (!host) {
 		retry_conn_with_state(conn, S_OUT_OF_MEM);

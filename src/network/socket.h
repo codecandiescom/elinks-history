@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.25 2004/08/03 09:18:34 jonas Exp $ */
+/* $Id: socket.h,v 1.26 2004/08/03 09:39:42 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -39,8 +39,7 @@ void close_socket(struct connection *conn, struct connection_socket *socket);
 /* Establish connection with the host in @conn->uri. Storing the socket
  * descriptor in @socket. When the connection has been established the @done
  * callback will be run. */
-void make_connection(struct connection *conn, int port,
-		     struct connection_socket *socket,
+void make_connection(struct connection *conn, struct connection_socket *socket,
 		     void (*done)(struct connection *));
 
 void dns_found(/* struct connection */ void *, int);

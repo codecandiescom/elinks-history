@@ -93,3 +93,6 @@ Specificity
 .			    `-------+---+---+-------'
 .					V
 0					* (universal selector)
+
+
+$Id: README,v 1.11 2004/09/19 17:38:19 pasky Exp $

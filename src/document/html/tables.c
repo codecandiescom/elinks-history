@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.65 2003/08/27 16:03:26 jonas Exp $ */
+/* $Id: tables.c,v 1.66 2003/08/27 16:23:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,12 +59,9 @@ struct table_cell {
 	unsigned char *start;
 	unsigned char *end;
 	color_t bgcolor;
-	int used;
-	int spanned;
 	int mx, my;
 	int align;
 	int valign;
-	int b;
 	int group;
 	int colspan;
 	int rowspan;
@@ -73,6 +70,10 @@ struct table_cell {
 	int x_width;
 	int height;
 	int link_num;
+
+	unsigned int used:1;
+	unsigned int spanned:1;
+	unsigned int b:1;
 };
 
 struct table_column {

@@ -4,13 +4,13 @@
 
 #define YYBISON 1  /* Identify Bison output.  */
 
-#define yyparse __gettextparse
-#define yylex __gettextlex
-#define yyerror __gettexterror
-#define yylval __gettextlval
-#define yychar __gettextchar
-#define yydebug __gettextdebug
-#define yynerrs __gettextnerrs
+#define yyparse gettext__parse
+#define yylex gettext__lex
+#define yyerror gettext__error
+#define yylval gettext__lval
+#define yychar gettext__char
+#define yydebug gettext__debug
+#define yynerrs gettext__nerrs
 #define	EQUOP2	257
 #define	CMPOP2	258
 #define	ADDOP2	259

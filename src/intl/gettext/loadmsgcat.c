@@ -467,7 +467,7 @@ default:
 			   is passed down to the parser.  */
 			plural += 7;
 			args.cp = plural;
-			if (__gettextparse(&args) != 0)
+			if (gettext__parse(&args) != 0)
 				goto no_plural;
 			domain->plural = args.res;
 		}

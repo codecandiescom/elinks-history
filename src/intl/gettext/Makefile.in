@@ -48,7 +48,7 @@ CC = @CC@
 LIBTOOL = @LIBTOOL@
 RANLIB = @RANLIB@
 YACC = @INTLBISON@ -y -d
-YFLAGS = --name-prefix=__gettext
+YFLAGS = --name-prefix=gettext__
 
 DEFS = -DLOCALE_ALIAS_PATH=\"$(aliaspath)\" -DLIBDIR=\"$(libdir)\" @DEFS@
 CPPFLAGS = @CPPFLAGS@

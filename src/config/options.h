@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.72 2003/10/22 21:35:44 jonas Exp $ */
+/* $Id: options.h,v 1.73 2003/10/23 00:39:16 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -194,7 +194,7 @@ do { \
 } while (0)
 
 #define add_opt_codepage_tree(tree, path, capt, name, flags, def, desc) \
-	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, (void *) def, DESC(desc))
+	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, (void *) get_cp_index(def), DESC(desc))
 
 #define add_opt_lang_tree(tree, path, capt, name, flags, desc) \
 	add_opt(tree, path, capt, name, flags, OPT_LANGUAGE, 0, 0, NULL, DESC(desc))

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.2 2003/10/22 23:44:12 jonas Exp $ */
+/* $Id: options.inc,v 1.3 2003/10/23 00:39:16 jonas Exp $ */
 
 /* These function are called from register_options(). */
 
@@ -27,7 +27,7 @@ add_opt_int("bookmarks", N_("File format"),
 	N_("File format for bookmarks (affects both reading and saving):\n"
 	"0 is the default ELinks (Links 0.9x compatible) format\n"
 	"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
-	" (DISABLED)"));
+	"  (DISABLED)"));
 #endif
 
 add_opt_tree("", N_("Configuration system"),
@@ -452,7 +452,7 @@ add_opt_tree("document", N_("Charset"),
 	N_("Charset options."));
 
 add_opt_codepage("document.codepage", N_("Default codepage"),
-	"assume", 0, get_cp_index("ISO-8859-1"),
+	"assume", 0, "ISO-8859-1",
 	N_("Default document codepage."));
 
 add_opt_bool("document.codepage", N_("Ignore charset info from server"),
@@ -558,7 +558,7 @@ add_opt_tree("document", N_("Dump output"),
 	N_("Dump output options."));
 
 add_opt_codepage("document.dump", N_("Codepage"),
-	"codepage", 0, get_cp_index("us-ascii"),
+	"codepage", 0, "us-ascii",
 	N_("Codepage used in dump output."));
 
 add_opt_int("document.dump", N_("Width"),
@@ -1064,7 +1064,7 @@ add_opt_bool("terminal._template_", N_("Use underline"),
 	N_("If we should use underline or enhance the color instead."));
 
 add_opt_codepage("terminal._template_", N_("Codepage"),
-	"charset", 0, get_cp_index("us-ascii"),
+	"charset", 0, "us-ascii",
 	N_("Codepage of charset used for displaying content on terminal."));
 
 /* Keep options in alphabetical order. */

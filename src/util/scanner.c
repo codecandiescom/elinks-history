@@ -1,5 +1,5 @@
 /* A pretty generic scanner */
-/* $Id: scanner.c,v 1.11 2005/02/28 10:07:14 zas Exp $ */
+/* $Id: scanner.c,v 1.12 2005/04/04 12:28:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,6 +125,8 @@ init_scanner_info(struct scanner_info *scanner_info)
 	const struct scan_table_info *info = scanner_info->scan_table_info;
 	int *scan_table = scanner_info->scan_table;
 	int i;
+
+	if (!info) return;
 
 	for (i = 0; info[i].type != SCAN_END; i++) {
 		const union scan_table_data *data = &info[i].data;

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.85 2004/01/08 21:54:08 jonas Exp $ */
+/* $Id: options.inc,v 1.86 2004/01/08 22:00:01 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -239,7 +239,7 @@ struct option_info config_options_info[] = {
 	INIT_OPT_ALIAS("document.browse.links", NULL,
 		"typeahead_wraparound", 0, "document.browse.search.wraparound",
 		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the document.browse.search._wraparound option instead.")),
+		"Please use the document.browse.search.wraparound option instead.")),
 
 	INIT_OPT_ALIAS("document.browse.links", NULL,
 		"typeahead_error", 0, "document.browse.search.show_not_found",

@@ -1,3 +1,85 @@
+Thu Jan 23 19:03:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Fixed various stracpy(NULL) and similiar problems with smart
+	download dialog. Reported by Jonas.  
+
+Thu Jan 23 13:14:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Compilation fix: warning: pointer type mismatch in conditional
+	expression.  
+
+Thu Jan 23 13:07:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Introduced lun_cancel(), fixed possible problems with NULLs in
+	lun_hop file variables.  
+
+Thu Jan 23 13:03:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Fixed problem with garbage showing up in the smart download dialog.  
+
+Thu Jan 23 10:54:40 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jan 23 03:13:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/: config.lua, hooks.lua.in:
+
+	Introduce a possibility to the default lua hooks to see various
+	source files with a highlighted syntax. Patch by witekfl.  
+
+Thu Jan 23 02:47:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, sched/download.c, sched/download.h,
+	viewer/text/view.c:
+
+	Introduced a "File exists" dialog, which asks user whether to
+	overwrite the original file, save to an alternative file or resume
+	the download. It's turned on by document.download.overwrite = 2 (new
+	default). Please test extensively.  
+
+Thu Jan 23 02:47:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.pot mess update.  
+
+Thu Jan 23 02:36:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Unified also direct expand_tilde() to lookup_unique_name().  
+
+Thu Jan 23 02:29:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/Makefile.am:
+
+	Changed order of libraries when linking, can fix compilation. Patch
+	by Fabio.  
+
+Thu Jan 23 02:29:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: protocol/ftp.c, protocol/http/http.c, sched/download.c,
+	sched/sched.c, sched/sched.h:
+
+	Moved one part of the download resuming core (seek()ing in the
+	stream) to much more appropriate place. Introduced
+	remaining_info.seek, which is now only set in the protocol backends
+	and we handle what we need in download_data().  
+
 Wed Jan 22 00:49:18 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: sched/download.c, sched/download.h, viewer/text/view.c:

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.229 2003/12/24 00:30:52 jonas Exp $ */
+/* $Id: http.c,v 1.230 2003/12/26 14:10:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1173,6 +1173,26 @@ http_error:
 		http_end_request(conn, S_OK, 0);
 		return;
 	}
+	if (h == 200 && IS_PROXY_URI(conn->uri)
+	    && uri->protocol == PROTOCOL_HTTPS && !conn->ssl) {
+#ifdef HAVE_SSL
+		if (init_ssl_connection(conn) == S_SSL_ERROR) {
+			abort_conn_with_state(conn, S_SSL_ERROR);
+			return;
+		}
+		conn->conn_info = mem_calloc(1, sizeof(struct conn_info));
+		if (!conn->conn_info) {
+			abort_conn_with_state(conn, S_OUT_OF_MEM);
+			return;
+		}
+		conn->conn_info->func = http_send_header;
+		conn->conn_info->sock = &conn->socket;
+		if (ssl_connect(conn, conn->socket) == -1) return;
+#else
+		abort_conn_with_state(conn, S_NO_SSL);
+#endif
+		return;
+	} 
 
 	conn->cache = get_cache_entry(struri(conn->uri));
 	if (!conn->cache) {
@@ -1395,23 +1415,7 @@ http_error:
 	     && info->close))
 		rb->close = 1;
 
-	if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && !conn->ssl) {
-#ifdef HAVE_SSL
-		if (init_ssl_connection(conn) == S_SSL_ERROR) {
-			abort_conn_with_state(conn, S_SSL_ERROR);
-			return;
-		}
-
-		conn->conn_info = mem_calloc(1, sizeof(struct conn_info));
-		conn->conn_info->func = http_send_header;
-		conn->conn_info->sock = &conn->socket;
-
-		if (ssl_connect(conn, conn->socket) == -1) return;
-#else
-		abort_conn_with_state(conn, S_NO_SSL);
-#endif
-	} else
-		read_http_data(conn, rb);
+	read_http_data(conn, rb);
 }
 
 static void

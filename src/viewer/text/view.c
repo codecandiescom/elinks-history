@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.526 2004/06/26 02:26:41 miciah Exp $ */
+/* $Id: view.c,v 1.527 2004/06/26 02:47:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -485,6 +485,49 @@ try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
 }
 
 static enum frame_event_status
+frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
+		    struct term_event *ev)
+{
+	if (ev->y
+	    || !doc_view->document->options.num_links_key
+	    || (doc_view->document->options.num_links_key == 1
+		&& !doc_view->document->options.num_links_display)) {
+		/* Repeat count.
+		 * ses->kbdprefix.repeat_count is initialized to zero
+		 * the first time by init_session() calloc() call.
+		 * When used, it has to be reset to zero. */
+
+		ses->kbdprefix.repeat_count *= 10;
+		ses->kbdprefix.repeat_count += ev->x - '0';
+
+		/* If too big, just restart from zero, so pressing
+		 * '0' six times or more will reset the count. */
+		if (ses->kbdprefix.repeat_count > 65536)
+			ses->kbdprefix.repeat_count = 0;
+
+		return 2;
+	} else if (ev->x >= '1' && !ev->y) {
+		struct document *document = doc_view->document;
+		int nlinks = document->nlinks, length;
+		unsigned char d[2] = { ev->x, 0 };
+
+		if (!nlinks) return 1;
+
+		for (length = 1; nlinks; nlinks /= 10)
+			length++;
+
+		input_field(ses->tab->term, NULL, 1,
+			    N_("Go to link"), N_("Enter link number"),
+			    N_("OK"), N_("Cancel"), ses, NULL,
+			    length, d, 1, document->nlinks, check_number,
+			    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
+		return 1;
+	}
+
+	return 0;
+}
+
+static enum frame_event_status
 frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	enum frame_event_status status = FRAME_EVENT_REFRESH;
@@ -612,42 +655,20 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 				status = FRAME_EVENT_IGNORED;
 			break;
 		default:
-			if (ev->x >= '0' && ev->x <= '9'
-			    && (ev->y
-				|| !doc_view->document->options.num_links_key
-				|| (doc_view->document->options.num_links_key == 1
-				    && !doc_view->document->options.num_links_display))) {
-				/* Repeat count.
-				 * ses->kbdprefix.repeat_count is initialized to zero
-				 * the first time by init_session() calloc() call.
-				 * When used, it has to be reset to zero. */
+			if (ev->x >= '0' && ev->x <= '9') {
+				switch (frame_ev_kbd_number(ses, doc_view,
+							    ev)) {
+					case 2:
+						return FRAME_EVENT_OK;
+					case 1:
+						ses->kbdprefix.repeat_count = 0;
+						return FRAME_EVENT_REFRESH;
+					default:
+						break;
+				}
+			}
 
-				ses->kbdprefix.repeat_count *= 10;
-				ses->kbdprefix.repeat_count += ev->x - '0';
-
-				/* If too big, just restart from zero, so pressing
-				 * '0' six times or more will reset the count. */
-				if (ses->kbdprefix.repeat_count > 65536)
-					ses->kbdprefix.repeat_count = 0;
-
-				return FRAME_EVENT_OK;
-			} else if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
-				struct document *document = doc_view->document;
-				int nlinks = document->nlinks, length;
-				unsigned char d[2] = { ev->x, 0 };
-
-				if (!nlinks) break;
-
-				for (length = 1; nlinks; nlinks /= 10)
-					length++;
-
-				input_field(ses->tab->term, NULL, 1,
-					    N_("Go to link"), N_("Enter link number"),
-					    N_("OK"), N_("Cancel"), ses, NULL,
-					    length, d, 1, document->nlinks, check_number,
-					    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
-
-			} else if (get_opt_int("document.browse.accesskey.priority") == 1
+			if (get_opt_int("document.browse.accesskey.priority") == 1
 				   && try_document_key(ses, doc_view, ev)) {
 				/* The document ate the key! */
 				status = FRAME_EVENT_REFRESH;

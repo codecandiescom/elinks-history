@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.103 2002/10/01 15:54:20 zas Exp $ */
+/* $Id: options.c,v 1.104 2002/10/01 16:18:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -929,7 +929,7 @@ register_options()
 		"ftp", 0,
 		"FTP specific options.");
 	add_opt_bool("protocol.ftp",
-		"use_pasv", 0, 0,
+		"use_pasv", 0, 1,
 		"Use PASV instead of PORT (passive vs active mode, IPv4 only).");
 #ifdef IPV6
 	add_opt_bool("protocol.ftp",

@@ -363,7 +363,7 @@ Unai Uribarri <unai@telecable.es>
 Varga Balázs <vinnui@broadband.hu>
 	Hungarian translation updates
 
-Witold Filipczyk <juandon@poczta.onet.pl>
+Witold Filipczyk <witekfl@poczta.onet.pl>
 	HTTP code hacking
 	Original decompression (zlib/bzlib) support
 	FTP PASV support
@@ -378,4 +378,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.87 2002/10/01 15:54:20 zas Exp $
+$Id: AUTHORS,v 1.88 2002/10/01 16:18:47 zas Exp $

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.34 2003/05/14 13:08:22 pasky Exp $ */
+/* $Id: conv.c,v 1.35 2003/05/14 15:03:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 {
 	unsigned int start = slen ? *slen : 0;
 	unsigned int nlen = 1; /* '0' is one char, we can't have less. */
-	unsigned int pos = 0; /* starting position of the number */
+	unsigned int pos = start; /* starting position of the number */
 	unsigned long q = number;
 	int ret = 0;
 
@@ -64,10 +64,7 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		nlen = width;
 	}
 
-	if (slen) {
-		*slen += nlen;
-		pos += start;
-	}
+	if (slen) *slen += nlen;
 
 	/* Fill left space with fillchar. */
 	if (fillchar) {

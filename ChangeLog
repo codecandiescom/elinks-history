@@ -1,3 +1,27 @@
+Sun Feb 27 22:56:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	doc_loading_callback(): Minor optimization.  
+
+Sun Feb 27 22:52:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Fix some fuzzy logics.  
+
+Sun Feb 27 22:07:36 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fix for bug 611.  
+
+Sun Feb 27 15:50:13 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	cookies.save is boolean.  
+
 Fri Feb 25 18:40:24 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/finger/finger.h:

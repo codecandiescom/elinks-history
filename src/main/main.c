@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.217 2004/06/24 06:35:32 miciah Exp $ */
+/* $Id: main.c,v 1.218 2004/07/03 11:01:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,6 +70,27 @@ static int ac;
 static unsigned char **av;
 static int init_b = 0;
 
+/* Check if either stdin or stdout are pipes */
+static void
+check_stdio(struct list_head *url_list)
+{
+	/* Should the document be read from stdin? */
+	if (!isatty(STDIN_FILENO)) {
+		if (url_list)
+			add_to_string_list(url_list, "file:///dev/stdin", 17);
+		get_cmd_opt_bool("no-connect") = 1;
+	}
+
+	/* If called for outputting to a pipe without -dump or -source
+	 * specified default to using dump viewer. */
+	if (!isatty(STDOUT_FILENO)) {
+		int *dump = &get_cmd_opt_bool("dump");
+
+		if (!*dump && !get_cmd_opt_bool("source"))
+			*dump = 1;
+	}
+}
+
 static void
 init(void)
 {
@@ -118,20 +139,7 @@ init(void)
 		return;
 	}
 
-	/* Should the document be read from stdin? */
-	if (!isatty(STDIN_FILENO)) {
-		add_to_string_list(&url_list, "file:///dev/stdin", 17);
-		get_cmd_opt_bool("no-connect") = 1;
-	}
-
-	/* If called for outputting to a pipe without -dump or -source
-	 * specified default to using dump viewer. */
-	if (!isatty(STDOUT_FILENO)) {
-		int *dump = &get_cmd_opt_bool("dump");
-
-		if (!*dump && !get_cmd_opt_bool("source"))
-			*dump = 1;
-	}
+	check_stdio(&url_list);
 
 	if (!get_cmd_opt_bool("no-home")) {
 		init_home();
@@ -150,6 +158,9 @@ init(void)
 		/* Parse commandline options again, in order to override any
 		 * config file options. */
 		parse_options(ac - 1, av + 1, NULL);
+		/* ... and re-check stdio, in order to override any command
+		 * line options! >;) */
+		check_stdio(NULL);
 
 		init_b = 1;
 		init_modules(builtin_modules);

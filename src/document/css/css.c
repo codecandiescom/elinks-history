@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.29 2004/01/24 22:52:39 jonas Exp $ */
+/* $Id: css.c,v 1.30 2004/01/24 23:55:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,8 +75,10 @@ import_default_css(void)
 static int
 change_hook_css(struct session *ses, struct option *current, struct option *changed)
 {
-	if (!strcmp(changed->name, "stylesheet"))
+	if (!strcmp(changed->name, "stylesheet")) {
+		/* TODO: We need to update all entries in format cache. --jonas */
 		import_default_css();
+	}
 
 	draw_formatted(ses, 1);
 

@@ -381,6 +381,7 @@ struct translation translation_english [] = {
   T_ENTER_EXPRESSION, "Enter expression",
   T_XDIALOG_TITLE, "User dialog",
   T_XDIALOG_FIELD, "A field",
+  T_NEED_MASTER_TERMINAL, "You can do this only on the master terminal",
   0, NULL
 };
 
@@ -765,6 +766,7 @@ struct translation translation_brazilian_portuguese [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -1149,6 +1151,7 @@ struct translation translation_bulgarian [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -1533,6 +1536,7 @@ struct translation translation_catalan [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -1917,6 +1921,7 @@ struct translation translation_czech [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -2301,6 +2306,7 @@ struct translation translation_estonian [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -2685,6 +2691,7 @@ struct translation translation_french [] = {
   T_ENTER_EXPRESSION, "Entrez une expression",
   T_XDIALOG_TITLE, "Dialogue utilisateur",
   T_XDIALOG_FIELD, "Un champ",
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -3069,6 +3076,7 @@ struct translation translation_galician [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -3453,6 +3461,7 @@ struct translation translation_german [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -3837,6 +3846,7 @@ struct translation translation_greek [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -4221,6 +4231,7 @@ struct translation translation_hungarian [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -4605,6 +4616,7 @@ struct translation translation_icelandic [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -4989,6 +5001,7 @@ struct translation translation_italian [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -5373,6 +5386,7 @@ struct translation translation_lithuanian [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -5757,6 +5771,7 @@ struct translation translation_polish [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -6141,6 +6156,7 @@ struct translation translation_romanian [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -6525,6 +6541,7 @@ struct translation translation_russian [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -6909,6 +6926,7 @@ struct translation translation_slovak [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -7293,6 +7311,7 @@ struct translation translation_spanish [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -7677,6 +7696,7 @@ struct translation translation_swedish [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -8061,6 +8081,7 @@ struct translation translation_turkish [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 
@@ -8445,6 +8466,7 @@ struct translation translation_ukrainian [] = {
   T_ENTER_EXPRESSION, NULL,
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
+  T_NEED_MASTER_TERMINAL, NULL,
   0, NULL
 };
 

@@ -1522,6 +1522,13 @@ void textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 
 		textarea_editor = 1;
 
+	} else if (op == 0 && !term->master) {
+		fn = NULL; fs = NULL;
+
+		msg_box(term, NULL, TEXT(T_ERROR), AL_CENTER,
+			TEXT(T_NEED_MASTER_TERMINAL), NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+
 	} else if (op == 1 && fs) {
 		FILE *taf = fopen(fn, "r+");
 		

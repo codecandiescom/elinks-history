@@ -381,4 +381,5 @@
 #define T_ENTER_EXPRESSION    377	
 #define T_XDIALOG_TITLE    378	
 #define T_XDIALOG_FIELD    379	
-#define T__N_TEXTS    380	
+#define T_NEED_MASTER_TERMINAL    380	
+#define T__N_TEXTS    381	

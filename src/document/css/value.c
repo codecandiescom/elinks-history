@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.52 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: value.c,v 1.53 2004/06/28 11:14:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,7 +219,7 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 		value->text_align = ALIGN_CENTER;
 
 	} else 	if (scanner_token_contains(token, "justify")) {
-		value->text_align = ALIGN_BLOCK;
+		value->text_align = ALIGN_JUSTIFY;
 
 	} else {
 		return 0;

@@ -1,4 +1,4 @@
-/* $Id: style.h,v 1.4 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: style.h,v 1.5 2004/06/28 11:14:19 jonas Exp $ */
 
 #ifndef EL__BFU_STYLE_H
 #define EL__BFU_STYLE_H
@@ -10,7 +10,7 @@ enum format_align {
 	ALIGN_LEFT,
 	ALIGN_CENTER,
 	ALIGN_RIGHT,
-	ALIGN_BLOCK,
+	ALIGN_JUSTIFY,
 	ALIGN_NONE,
 };
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.242 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: tables.c,v 1.243 2004/06/28 11:14:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,7 +166,7 @@ get_align(unsigned char *attr, int align)
 	if (!(strcasecmp(al, "left"))) align = ALIGN_LEFT;
 	else if (!(strcasecmp(al, "right"))) align = ALIGN_RIGHT;
 	else if (!(strcasecmp(al, "center"))) align = ALIGN_CENTER;
-	else if (!(strcasecmp(al, "justify"))) align = ALIGN_BLOCK;
+	else if (!(strcasecmp(al, "justify"))) align = ALIGN_JUSTIFY;
 	else if (!(strcasecmp(al, "char"))) align = ALIGN_RIGHT; /* NOT IMPLEMENTED */
 	mem_free(al);
 
@@ -1830,7 +1830,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	align = par_format.align;
-	if (align == ALIGN_NONE || align == ALIGN_BLOCK) align = ALIGN_LEFT;
+	if (align == ALIGN_NONE || align == ALIGN_JUSTIFY) align = ALIGN_LEFT;
 
 	al = get_attr_val(attr, "align");
 	if (al) {

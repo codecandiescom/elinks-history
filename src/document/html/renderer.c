@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.463 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: renderer.c,v 1.464 2004/06/28 11:14:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -768,7 +768,7 @@ align_line(struct part *part, int y, int last)
 		    par_format.align == ALIGN_NONE)
 		return;
 
-	if (par_format.align == ALIGN_BLOCK) {
+	if (par_format.align == ALIGN_JUSTIFY) {
 		if (!last)
 			justify_line(part, y);
 		return;

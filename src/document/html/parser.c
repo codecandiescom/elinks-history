@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.468 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: parser.c,v 1.469 2004/06/28 11:14:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,7 +428,7 @@ html_linebrk(unsigned char *a)
 			par_format.align = ALIGN_CENTER;
 			if (!html_context.table_level)
 				par_format.leftmargin = par_format.rightmargin = 0;
-		} else if (!strcasecmp(al, "justify")) par_format.align = ALIGN_BLOCK;
+		} else if (!strcasecmp(al, "justify")) par_format.align = ALIGN_JUSTIFY;
 		mem_free(al);
 	}
 }
@@ -488,7 +488,7 @@ html_h(int h, unsigned char *a,
 		case ALIGN_CENTER:
 			par_format.leftmargin = par_format.rightmargin = 0;
 			break;
-		case ALIGN_BLOCK:
+		case ALIGN_JUSTIFY:
 			par_format.leftmargin = par_format.rightmargin = h * 2;
 			break;
 		case ALIGN_NONE:
@@ -562,7 +562,7 @@ html_hr(unsigned char *a)
 	mem_free_set(&format.link, NULL);
 	format.form = NULL;
 	html_linebrk(a);
-	if (par_format.align == ALIGN_BLOCK) par_format.align = ALIGN_CENTER;
+	if (par_format.align == ALIGN_JUSTIFY) par_format.align = ALIGN_CENTER;
 	par_format.leftmargin = par_format.rightmargin = html_context.margin;
 
 	i = get_width(a, "width", 1);

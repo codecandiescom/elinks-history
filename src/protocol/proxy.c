@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.37 2004/07/21 23:48:21 pasky Exp $ */
+/* $Id: proxy.c,v 1.38 2004/07/22 00:00:47 pasky Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -81,7 +81,8 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		return get_composed_uri(uri, URI_BASE);
 	}
 
-	if (uri->protocol == PROTOCOL_HTTP) {
+	switch (uri->protocol) {
+	case PROTOCOL_HTTP:
 		protocol_proxy = get_opt_str("protocol.http.proxy.host");
 		if (!*protocol_proxy) protocol_proxy = getenv("HTTP_PROXY");
 		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("protocol_proxy");
@@ -90,8 +91,9 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 			if (!strncasecmp(protocol_proxy, "http://", 7))
 				protocol_proxy += 7;
 		}
+		break;
 
-	} else if (uri->protocol == PROTOCOL_HTTPS) {
+	case PROTOCOL_HTTPS:
 		protocol_proxy = get_opt_str("protocol.https.proxy.host");
 		if (!*protocol_proxy) protocol_proxy = getenv("HTTPS_PROXY");
 		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("protocol_proxy");
@@ -100,8 +102,9 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 			if (!strncasecmp(protocol_proxy, "http://", 7))
 				protocol_proxy += 7;
 		}
+		break;
 
-	} else if (uri->protocol == PROTOCOL_FTP) {
+	case PROTOCOL_FTP:
 		protocol_proxy = get_opt_str("protocol.ftp.proxy.host");
 		if (!*protocol_proxy) protocol_proxy = getenv("FTP_PROXY");
 		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("protocol_proxy");
@@ -112,6 +115,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 			else if (!strncasecmp(protocol_proxy, "http://", 7))
 				protocol_proxy += 7;
 		}
+		break;
 	}
 
 	if (protocol_proxy && *protocol_proxy) {

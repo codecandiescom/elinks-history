@@ -1,4 +1,4 @@
-/* $Id: table.h,v 1.7 2004/06/29 02:29:39 jonas Exp $ */
+/* $Id: table.h,v 1.8 2004/06/29 03:25:18 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_TABLE_H
 #define EL__DOCUMENT_HTML_PARSER_TABLE_H
@@ -71,6 +71,7 @@ struct table {
 	unsigned char *fragment_id;
 	color_t bgcolor;
 	color_t bordercolor;
+	int align;
 
 	struct table_column *columns;
 	int columns_count; /* Number of columns used. */

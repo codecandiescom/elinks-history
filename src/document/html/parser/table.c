@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.12 2004/06/29 03:23:55 jonas Exp $ */
+/* $Id: table.c,v 1.13 2004/06/29 03:25:18 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -209,6 +209,9 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 		else if (!strcasecmp(al, "all")) table->rules = TABLE_RULE_ALL;
 		mem_free(al);
 	}
+
+	table->align = par_format.align;
+	get_align(attr, &table->align);
 }
 
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.275 2004/06/29 03:07:14 jonas Exp $ */
+/* $Id: tables.c,v 1.276 2004/06/29 03:25:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1086,19 +1086,10 @@ again:
 #endif
 
 	{
-		unsigned char *al;
 		int ww = par_format.width - table->real_width;
-		int align = par_format.align;
+		int align = table->align;
 
 		if (align == ALIGN_NONE || align == ALIGN_JUSTIFY) align = ALIGN_LEFT;
-
-		al = get_attr_val(attr, "align");
-		if (al) {
-			if (!strcasecmp(al, "left")) align = ALIGN_LEFT;
-			else if (!strcasecmp(al, "center")) align = ALIGN_CENTER;
-			else if (!strcasecmp(al, "right")) align = ALIGN_RIGHT;
-			mem_free(al);
-		}
 
 		if (align == ALIGN_CENTER)
 			x = (ww + par_format.leftmargin

@@ -1,3 +1,113 @@
+Thu Dec 30 21:58:33 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Dec 30 20:40:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Thu Dec 30 20:39:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Minor fix.  
+
+Thu Dec 30 20:28:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Revert patch 1.179->1.180, it breaks focus on bugzilla query form.  
+
+Thu Dec 30 20:28:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Normalize multi-state option descriptions and make one more generic.  
+
+Thu Dec 30 20:09:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	The search 'show not found' option is no long typeahead only. Rewrap
+	a long option text.  
+
+Thu Dec 30 13:57:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/introduction.txt:
+
+	14:52 < Neuromancer_> s/does not use/uses/.  
+
+Thu Dec 30 12:57:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/introduction.txt:
+
+	Write about configuration of terminals so I can RTFM cga, who just
+	asked on elinks-users.  
+
+Thu Dec 30 11:35:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/css/stylesheet.c:
+
+	Reduce code redundancy, introducing add_selector_property().  
+
+Thu Dec 30 10:36:00 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated: minor fix.  
+
+Thu Dec 30 10:33:44 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated: typo fix.  
+
+Thu Dec 30 10:31:36 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Dec 30 04:04:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Unfuzz a translation.  
+
+Thu Dec 30 04:00:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Normalize tristate option description.  
+
+Thu Dec 30 03:55:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Thu Dec 30 01:33:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Fix PO-Revision-Data header.  
+
+Thu Dec 30 00:04:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Wed Dec 29 23:28:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
 Wed Dec 29 22:58:25 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.2 2002/07/06 21:53:00 pasky Exp $ */
+/* $Id: leds.c,v 1.3 2002/07/06 22:10:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,8 @@ redraw_leds(void *xxx)
 struct led *
 register_led(int number)
 {
-	if (number >= LEDS_COUNT || leds[number].__used) return NULL;
+	if (number >= LEDS_COUNT || number < 0 || leds[number].__used)
+		return NULL;
 	return &leds[number];
 }
 

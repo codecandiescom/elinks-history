@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.191 2003/10/28 10:12:35 zas Exp $ */
+/* $Id: session.c,v 1.192 2003/10/28 10:17:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1291,13 +1291,10 @@ decode_session_info(const void *pdata)
 	info->base_session = *(data++);
 
 	url_len = *(data++);
-	if (url_len) {
-		unsigned char *url;
+	if (url_len && len >= 2 * sizeof(int) + url_len) {
+		unsigned char *url = fmem_alloc(url_len + 1);
 
-		if (len < 2 * sizeof(int) + url_len) goto url_decoded;
-
-		url = fmem_alloc(url_len + 1);
-		if (!url) goto url_decoded;
+		if (!url) return info;
 
 		memcpy(url, data, url_len);
 		url[url_len] = '\0';
@@ -1306,7 +1303,6 @@ decode_session_info(const void *pdata)
 
 		fmem_free(url);
 	}
-url_decoded:
 
 	return info;
 }

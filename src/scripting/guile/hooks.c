@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.6 2003/09/25 16:00:57 jonas Exp $ */
+/* $Id: hooks.c,v 1.7 2003/09/25 16:08:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,42 +31,37 @@ internal_module(void)
 static int
 script_hook_goto_url(va_list ap)
 {
-	unsigned char **returl = va_arg(ap, unsigned char **);
+	unsigned char **url = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%goto-url-hook");
 	SCM x;
 
-	if (0 && ses);
+	if (!*url[0]) return EHS_NEXT;
 
-	if (!**returl)
-		return 0;
-
-	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*returl));
+	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
 	if (SCM_STRINGP(x)) {
-		*returl = stracpy(SCM_STRING_UCHARS(x));
+		*url = stracpy(SCM_STRING_UCHARS(x));
 	} else {
-		*returl = stracpy("");
+		*url = NULL;
 	}
 
-	return *returl ? 1 : 0;
+	return EHS_LAST;
 }
 
 static int
 script_hook_follow_url(va_list ap)
 {
-	unsigned char **returl = va_arg(ap, unsigned char **);
+	unsigned char **url = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%follow-url-hook");
-	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*returl));
-
-	if (0 && ses);
+	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
 
 	if (SCM_STRINGP(x))
-		*returl = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
+		*url = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
 	else
-		*returl = stracpy("");
+		*url = NULL;
 
-	return *returl ? 1 : 0;
+	return EHS_LAST;
 }
 
 static int

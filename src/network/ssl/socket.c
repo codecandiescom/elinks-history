@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.14 2002/09/12 12:54:34 zas Exp $ */
+/* $Id: socket.c,v 1.15 2002/09/12 21:12:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 
 #include "links.h"
 
+#include "config/options.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/dns.h"
 #include "ssl/connect.h"
@@ -151,6 +152,12 @@ ssl_want_read(struct connection *conn)
 #endif
 		) {
 		case SSL_ERROR_NONE:
+#ifdef HAVE_GNUTLS
+			if (get_opt_bool("connection.ssl.cert_verify"))
+				if (gnutls_certificate_verify_peers(*conn->ssl))
+					goto ssl_error;
+#endif
+
 			conn->conn_info = NULL;
 			b->func(conn);
 			mem_free(b->addr);
@@ -162,10 +169,12 @@ ssl_want_read(struct connection *conn)
 
 		default:
 			conn->no_tsl++;
+ssl_error:
 			retry_conn_with_state(conn, S_SSL_ERROR);
 	}
 #endif
 	return;
+	goto ssl_error; /* XXX */
 }
 
 /* Return -1 on error, 0 or success. */
@@ -190,10 +199,15 @@ ssl_connect(struct connection *conn, int sock)
 #endif
 
 #ifdef HAVE_OPENSSL
+	if (get_opt_bool("connection.ssl.cert_verify"))
+		SSL_set_verify(conn->ssl, SSL_VERIFY_PEER
+					  | SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
+				NULL);
 	ret = SSL_get_error(conn->ssl, SSL_connect(conn->ssl));
 #elif defined(HAVE_GNUTLS)
 	ret = gnutls_handshake(*conn->ssl);
 #endif
+
 	switch (ret) {
 		case SSL_ERROR_WANT_READ:
 		case SSL_ERROR_WANT_READ2:
@@ -203,6 +217,11 @@ ssl_connect(struct connection *conn, int sock)
 			return -1;
 
 		case SSL_ERROR_NONE:
+#ifdef HAVE_GNUTLS
+			if (get_opt_bool("connection.ssl.cert_verify"))
+				if (gnutls_certificate_verify_peers(*conn->ssl))
+					goto ssl_error;
+#endif
 			break;
 
 		default:

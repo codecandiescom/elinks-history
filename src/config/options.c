@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.97 2002/09/04 15:43:22 zas Exp $ */
+/* $Id: options.c,v 1.98 2002/09/12 21:12:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,6 +446,28 @@ register_options()
 	add_opt_tree("",
 		"connection", 0,
 		"Connection options.");
+
+
+	add_opt_tree("connection",
+		"ssl", 0,
+		"SSL options.");
+
+#ifdef HAVE_OPENSSL
+	add_opt_bool("connection.ssl",
+		"cert_verify", 0, 0,
+		"Verify the peer's SSL certificate. Note that this\n"
+		"needs extensive configuration of OpenSSL by the user.");
+#elif defined(HAVE_GNUTLS)
+	add_opt_bool("connection.ssl",
+		"cert_verify", 0, 0,
+		"Verify the peer's SSL certificate. Note that this\n"
+		"probably doesn't work properly at all with GnuTLS.");
+#else
+	add_opt_bool("connection.ssl",
+		"cert_verify", 0, 0,
+		"Verify the peer's SSL certificate.");
+#endif
+
 
 	add_opt_bool("connection",
 		"async_dns", 0, 1,

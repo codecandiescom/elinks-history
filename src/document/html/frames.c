@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.86 2004/09/25 19:51:49 pasky Exp $ */
+/* $Id: frames.c,v 1.87 2004/09/25 19:56:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,7 @@ find_fd(struct session *ses, unsigned char *name,
 }
 
 static struct document_view *
-format_frame(struct session *ses, struct frame_desc *frame,
+format_frame(struct session *ses, struct frame_desc *frame_desc,
 	     struct document_options *o, int depth)
 {
 	struct cache_entry *cached;
@@ -179,10 +179,13 @@ format_frame(struct session *ses, struct frame_desc *frame,
 	struct frame *frame;
 	int plain;
 
-	assert(ses && o);
+	assert(ses && frame_desc && o);
 	if_assert_failed return NULL;
 
 repeat:
+	frame = ses_find_frame(ses, frame_desc->name);
+	if (!frame) return NULL;
+
 	vs = &frame->vs;
 	cached = find_in_cache(vs->uri);
 	if (!cached) return NULL;
@@ -197,11 +200,11 @@ repeat:
 		goto repeat;
 	}
 
-	doc_view = find_fd(ses, frame->name, depth, o->box.x, o->box.y);
+	doc_view = find_fd(ses, frame_desc->name, depth, o->box.x, o->box.y);
 	if (doc_view) {
 		render_document(vs, doc_view, o);
 		assert(doc_view->document);
-		doc_view->document->frame = frame;
+		doc_view->document->frame = frame_desc;
 	}
 	o->plain = plain;
 

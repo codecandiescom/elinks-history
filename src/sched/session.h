@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.145 2004/06/11 13:54:33 jonas Exp $ */
+/* $Id: session.h,v 1.146 2004/06/11 14:02:59 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -195,8 +195,6 @@ struct initial_session_info *decode_session_info(struct terminal *term, int len,
 
 struct initial_session_info *init_session(struct session *ses, struct terminal *term,
 	     struct uri *uri, int in_background);
-
-void tabwin_func(struct window *, struct term_event *, int);
 
 void doc_end_load(struct download *, struct session *);
 

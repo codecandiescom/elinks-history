@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.266 2004/06/26 23:09:38 pasky Exp $ */
+/* $Id: link.c,v 1.267 2004/06/26 23:19:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -531,14 +531,13 @@ next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir
 			/* @backup points to the nearest link from the left
 			 * to the desired position. */
 			struct link *backup = NULL;
-			int take_backup;
 
 			link = document->lines1[y];
 			if (!link) continue;
 
 			/* Go through all the links on line. */
 			for (; link <= document->lines2[y]; link++) {
-				int l_max_x;
+				int l_min_x, l_max_x;
 
 				/* Some links can be totally out of order here,
 				 * ie. in tables or when using tabindex. */
@@ -546,20 +545,20 @@ next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir
 				    || y > link->points[link->npoints - 1].y)
 					continue;
 
-				/* XXX: This (I think) could be rewritten by
-				 * only using get_link_x_bounds() and avoiding
-				 * get_link_x_intersect(), but my mind is too
-				 * twisted to do that now. --pasky */
-
-				if (get_link_x_intersect(link, y, min_x, max_x))
-					goto chose_link;
-
-				/* Consider taking a backup? */
-
-				get_link_x_bounds(link, y, NULL, &l_max_x);
-				take_backup = l_max_x < min_x;
-				if (take_backup || !backup)
+				get_link_x_bounds(link, y, &l_min_x, &l_max_x);
+				if (l_min_x > max_x) {
+					/* This link is too at the right. */
+					if (!backup)
+						backup = link;
+					continue;
+				}
+				if (l_max_x < min_x) {
+					/* This link is too at the left. */
 					backup = link;
+					continue;
+				}
+				/* This link is aligned with the current one. */
+				goto chose_link;
 			}
 
 			if (backup) {

@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.6 2004/01/18 03:01:06 jonas Exp $ */
+/* $Id: property.h,v 1.7 2004/01/18 14:18:00 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -58,6 +58,10 @@ struct css_property {
 struct css_property_info {
 	unsigned char *name;
 	enum css_decl_property property;
+
+	/* This is the storage type, basically describing what to save to
+	 * css_property.value. Many properties can share the same valtype.
+	 * The value is basically output of the value parser. */
 	enum css_decl_valtype value_type;
 };
 

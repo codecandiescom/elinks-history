@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.114 2003/10/30 19:29:23 jonas Exp $ */
+/* $Id: connection.c,v 1.115 2003/11/05 00:40:55 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -677,7 +677,7 @@ try_to_suspend_connection(struct connection *conn, unsigned char *host)
 		if (get_priority(c) <= priority) return -1;
 		if (c->state == S_WAIT) continue;
 		if (c->uri.post && get_priority(c) < PRI_CANCEL) continue;
-		if (host && strlcmp(host, -1, conn->uri.host, conn->uri.hostlen)) continue;
+		if (host && strlcmp(host, -1, c->uri.host, c->uri.hostlen)) continue;
 		suspend_connection(c);
 		return 0;
 	}

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.15 2003/06/06 12:59:54 jonas Exp $ */
+/* $Id: mailcap.c,v 1.16 2003/06/06 16:03:34 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -62,9 +62,8 @@ static inline void
 done_mailcap_entry(struct mailcap_entry *entry)
 {
 	if (!entry) return;
-	if (entry->command)	mem_free(entry->command);
+	if (entry->type) mem_free(entry->type);
 	if (entry->testcommand)	mem_free(entry->testcommand);
-	if (entry->type)	mem_free(entry->type);
 	if (entry->description)	mem_free(entry->description);
 	mem_free(entry);
 }
@@ -78,10 +77,14 @@ init_mailcap_entry(unsigned char *type, unsigned char *command, int priority)
 	struct mailcap_entry *entry;
 	struct hash_item *item;
 	int typelen;
+	int commandlen = strlen(command);
 
-	entry = mem_calloc(1, sizeof(struct mailcap_entry));
+	entry = mem_calloc(1, sizeof(struct mailcap_entry) + commandlen + 1);
 	if (!entry)
 		return NULL;
+
+	entry->command = (unsigned char *)entry + sizeof(struct mailcap_entry);
+	safe_strncpy(entry->command, command, commandlen + 1);
 
 	typelen = strlen(type);
 	entry->type = memacpy(type, typelen);
@@ -90,16 +93,9 @@ init_mailcap_entry(unsigned char *type, unsigned char *command, int priority)
 		return NULL;
 	}
 
-	entry->command = stracpy(command);
-	if (!entry->command) {
-		done_mailcap_entry(entry);
-		return NULL;
-	}
-
 	entry->priority = priority;
 
 	/* Time to get the entry into the mailcap_map */
-
 	/* First check if the type is already checked in */
 	item = get_hash_item(mailcap_map, entry->type, typelen);
 	if (item) {

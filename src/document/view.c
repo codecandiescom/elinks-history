@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.29 2002/04/28 11:49:58 pasky Exp $ */
+/* $Id: view.c,v 1.30 2002/04/29 20:53:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2160,13 +2160,24 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 		fd->f_data->links[fd->vs->current_link].type == L_AREA)
 	    && field_op(ses, fd, &fd->f_data->links[fd->vs->current_link], ev, 0))
 		return 1;
-	if (ev->ev == EV_KBD && ev->x >= '0'+!ses->kbdprefix.rep && ev->x <= '9' && (!fd->f_data->opt.num_links || ev->y)) {
-		if (!ses->kbdprefix.rep) ses->kbdprefix.rep_num = 0;
-		if ((ses->kbdprefix.rep_num = ses->kbdprefix.rep_num * 10 + ev->x - '0') > 65536) ses->kbdprefix.rep_num = 65536;
-		ses->kbdprefix.rep = 1;
-		return 1;
-	}
+
 	if (ev->ev == EV_KBD) {
+		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
+		    && (!fd->f_data->opt.num_links || ev->y)) {
+			/* Repeat count */
+
+			if (!ses->kbdprefix.rep)
+				ses->kbdprefix.rep_num = 0;
+
+			ses->kbdprefix.rep_num = ses->kbdprefix.rep_num * 10
+						 + ev->x - '0';
+			if (ses->kbdprefix.rep_num > 65536)
+				ses->kbdprefix.rep_num = 65536;
+
+			ses->kbdprefix.rep = 1;
+			return 1;
+		}
+
 		if (accesskey_priority >= 2 && try_document_key(ses, fd, ev)) {
 			/* The document ate the key! */
 			return 1;
@@ -2184,10 +2195,13 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 				mem_free(current_link);
 				break;
 			}
+
+	     		/* XXX: Code duplication of following for mouse */
 			case ACT_SCROLL_UP: rep_ev(ses, fd, scroll, -1 - !ses->kbdprefix.rep); break;
 			case ACT_SCROLL_DOWN: rep_ev(ses, fd, scroll, 1 + !ses->kbdprefix.rep); break;
 			case ACT_SCROLL_LEFT: rep_ev(ses, fd, hscroll, -1 - 7 * !ses->kbdprefix.rep); break;
 			case ACT_SCROLL_RIGHT: rep_ev(ses, fd, hscroll, 1 + 7 * !ses->kbdprefix.rep); break;
+
 			case ACT_HOME: rep_ev(ses, fd, home, 0); break;
 			case ACT_END:  rep_ev(ses, fd, x_end, 0); break;
 			case ACT_ENTER: x = enter(ses, fd, 0); break;
@@ -2250,20 +2264,57 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					x = 0;
 				}
 		}
+
 	} else if (ev->ev == EV_MOUSE) {
-		struct link *l = choose_mouse_link(fd, ev);
-		if (l) {
+		struct link *link = choose_mouse_link(fd, ev);
+
+		if (link) {
 			x = 1;
-			fd->vs->current_link = l - fd->f_data->links;
-			if (l->type == L_LINK || l->type == L_BUTTON || l->type == L_CHECKBOX || l->type == L_SELECT) if ((ev->b & BM_ACT) == B_UP) {
+			fd->vs->current_link = link - fd->f_data->links;
+
+			if ((link->type == L_LINK || link->type == L_BUTTON ||
+			     link->type == L_CHECKBOX || link->type == L_SELECT)
+			    && (ev->b & BM_ACT) == B_UP) {
+
 				draw_doc(ses->term, fd, 1);
 				print_screen_status(ses);
 				redraw_from_window(ses->win);
-				if ((ev->b & BM_BUTT) < B_MIDDLE) x = enter(ses, fd, 0);
-				else link_menu(ses->term, NULL, ses);
+
+				if ((ev->b & BM_BUTT) < B_MIDDLE)
+					x = enter(ses, fd, 0);
+				else
+					link_menu(ses->term, NULL, ses);
+			}
+		} else {
+			/* Clicking to the edge of screen (TODO: possibly only
+			 * with certain button?) will make the document scroll
+			 * automagically. */
+
+			/* TODO: Configurable! */
+			int margin = 3;
+
+			/* XXX: This is code duplication with kbd handlers. But
+			 * repeatcount-free here. */
+
+			if (ev->y < margin) {
+				rep_ev(ses, fd, scroll, -2);
+			}
+		        if (ev->y >= fd->yw - margin) {
+				rep_ev(ses, fd, scroll, 2);
+			}
+
+			if (ev->x < margin * 2) {
+				rep_ev(ses, fd, hscroll, -8);
+			}
+		        if (ev->x >= fd->xw - margin * 2) {
+				rep_ev(ses, fd, hscroll, 8);
 			}
 		}
-	} else x = 0;
+
+	} else {
+		x = 0;
+	}
+
 	ses->kbdprefix.rep = 0;
 	return x;
 }

@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.10 2004/06/18 14:59:54 jonas Exp $ */
+/* $Id: stub.c,v 1.11 2004/06/18 15:04:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,9 +188,9 @@ elinks_memrchr(const void *s, int c, size_t n)
 {
 	char *pos = (char *) s;
 
-	while (n >= 0) {
-		if (pos[n] == (char) c)
-			return (void *) &pos[n];
+	while (n > 0) {
+		if (pos[n - 1] == (char) c)
+			return (void *) &pos[n - 1];
 		n--;
 	}
 

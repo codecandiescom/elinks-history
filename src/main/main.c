@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.99 2003/06/14 01:00:42 zas Exp $ */
+/* $Id: main.c,v 1.100 2003/06/14 20:02:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,6 @@
 
 #include "elinks.h"
 
-#include "main.h"
 #ifdef USE_LEDS
 #include "bfu/leds.h"
 #endif
@@ -48,10 +47,10 @@
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "lowlevel/sysname.h"
-#include "terminal/terminal.h"
 #include "lowlevel/timer.h"
 #include "lua/core.h"
 #include "lua/hooks.h"
+#include "main.h"
 #include "protocol/mailcap.h"
 #include "protocol/mime.h"
 #include "protocol/http/auth.h"
@@ -60,11 +59,10 @@
 #include "sched/sched.h"
 #include "sched/session.h"
 #include "ssl/ssl.h"
+#include "terminal/terminal.h"
 #include "util/blacklist.h"
 #include "util/error.h"
-#ifdef USE_FASTFIND
 #include "util/fastfind.h"
-#endif
 #include "util/memdebug.h"
 #include "util/memory.h"
 #include "util/version.h"
@@ -73,9 +71,6 @@
 int terminate = 0;
 enum retval retval = RET_OK;
 unsigned char *path_to_exe;
-#ifdef USE_FASTFIND
-void *ff_info_tags = NULL;
-#endif
 
 static int ac;
 static unsigned char **av;
@@ -264,7 +259,7 @@ terminate_all_subsystems(void)
 
 	shrink_memory(1);
 #ifdef USE_FASTFIND
-	fastfind_terminate(ff_info_tags);
+	fastfind_terminate();
 #endif
 	free_table_cache();
 	free_history_lists();

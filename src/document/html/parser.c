@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.327 2004/01/08 21:26:00 pasky Exp $ */
+/* $Id: parser.c,v 1.328 2004/01/16 18:51:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,7 +341,7 @@ get_color(unsigned char *a, unsigned char *c, color_t *rgb)
 
 	if (global_doc_opts->color_mode == COLOR_MODE_MONO)
 		return -1;
-	
+
 	if (doc_colors_defaults(global_doc_opts))
 		return -1;
 
@@ -359,10 +359,10 @@ get_bgcolor(unsigned char *a, color_t *rgb)
 {
 	if (global_doc_opts->color_mode == COLOR_MODE_MONO)
 		return -1;
-	
+
 	if (!doc_colors_and_bg(global_doc_opts))
 		return -1;
-	
+
 	return get_color(a, "bgcolor", rgb);
 }
 
@@ -3075,12 +3075,12 @@ next_break:
 			dotcounter++;
 			html++; lt = html;
 			if (*html >= ' ' || WHITECHAR(*html) || html >= eof) {
-				unsigned char *dots = mem_alloc(dotcounter);
+				unsigned char *dots = fmem_alloc(dotcounter);
 
 				if (dots) {
 					memset(dots, '.', dotcounter);
 					put_chrs(dots, dotcounter, put_chars_f, f);
-					mem_free(dots);
+					fmem_free(dots);
 				}
 				goto set_lt;
 			}

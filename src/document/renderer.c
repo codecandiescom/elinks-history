@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.119 2004/10/14 12:35:59 jonas Exp $ */
+/* $Id: renderer.c,v 1.120 2004/10/14 12:41:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,8 +125,8 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 		if (*string->source == '^') {
 			/* External reference! */
 
-			unsigned char *url = memacpy((*current)->string.source + 1,
-			                             (*current)->string.length - 1);
+			unsigned char *url = memacpy(string->source + 1,
+			                             string->length - 1);
 			struct uri *uri = url ? get_uri(url, URI_BASE) : NULL;
 			struct cache_entry *cached = uri ? find_in_cache(uri) : NULL;
 			struct fragment *fragment;

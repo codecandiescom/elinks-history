@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.30 2003/05/04 16:52:48 pasky Exp $ */
+/* $Id: terminal.h,v 1.31 2003/05/04 17:11:34 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -134,8 +134,8 @@ int get_tab_number(struct window *window);
 struct window *get_tab_by_number(struct terminal *term, int num);
 void switch_to_tab(struct terminal *term, int num);
 void close_tab(struct terminal *term);
+#define get_root_window(term) get_tab_by_number((term), (term)->current_tab)
 
-struct window *get_root_window(struct terminal *);
 void add_empty_window(struct terminal *, void (*)(void *), void *);
 void redraw_screen(struct terminal *);
 void redraw_all_terminals();

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.300 2003/12/21 16:33:42 jonas Exp $ */
+/* $Id: parser.c,v 1.301 2003/12/21 18:25:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,6 +373,40 @@ get_target(unsigned char *a)
 	return v;
 }
 
+#if 0
+static void
+dump_html_stack()
+{
+	struct html_element *element;
+
+	foreach (element, html_stack) {
+		DBG(":%p:%d:%.*s", element->name, element->namelen,
+				element->namelen, element->name);
+	}
+	WDBG("Did you enjoy it?");
+}
+#endif
+
+static struct html_element *
+search_html_stack(char *name)
+{
+	struct html_element *element;
+
+#if 0
+	dump_html_stack();
+#endif
+	foreach (element, html_stack) {
+		if (element == &html_top)
+			continue; /* skip the top element */
+		if (!element->name || !element->namelen
+		    || strlcasecmp(element->name, element->namelen, name, -1))
+			continue;
+		return element;
+	}
+
+	return NULL;
+}
+
 static void
 kill_html_stack_item(struct html_element *e)
 {
@@ -681,8 +715,6 @@ static struct form form = NULL_STRUCT_FORM;
 static unsigned char *last_form_tag;
 static unsigned char *last_form_attr;
 static unsigned char *last_input_tag;
-
-static int encountered_body;
 
 static void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
@@ -1019,8 +1051,7 @@ html_body(unsigned char *a)
 		e->attr.bg = format.bg;
 	}
 
-	if (!encountered_body) {
-		encountered_body = 1;
+	if (!search_html_stack("BODY")) {
 		special_f(ff, SP_COLOR_LINK_LINES);
 	}
 }
@@ -2482,7 +2513,7 @@ html_frameset(unsigned char *a)
 	unsigned char *cols, *rows;
 	int width, height;
 
-	if (encountered_body || uttered_glyph
+	if (search_html_stack("BODY") || uttered_glyph
 	    || !global_doc_opts->frames || !special_f(ff, SP_USED, NULL))
 		return;
 
@@ -3811,7 +3842,6 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	last_form_tag = NULL;
 	last_form_attr = NULL;
 	last_input_tag = NULL;
-	encountered_body = 0;
 	uttered_glyph = 0;
 }
 

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.59 2003/06/08 14:06:30 pasky Exp $ */
+/* $Id: error.c,v 1.60 2003/06/08 14:11:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,28 +23,6 @@
 #include "util/version.h"
 
 
-#ifdef DEBUG
-void
-force_dump(void)
-{
-	fprintf(stderr,
-		"\n\033[1m%s\033[0m %s\n", "Forcing core dump!",
-	        "Man the Lifeboats! Women and children first!\n");
-	fputs(full_static_version, stderr);
-	fputc('\n', stderr);
-	fflush(stderr);
-	raise(SIGSEGV);
-}
-#endif
-
-
-void
-do_not_optimize_here(void *p)
-{
-	/* stop GCC optimization - avoid bugs in it */
-}
-
-
 static void
 er(int bell, unsigned char *fmt, va_list params)
 {
@@ -53,7 +31,6 @@ er(int bell, unsigned char *fmt, va_list params)
 	fputc('\n', stderr);
 	fflush(stderr);
 }
-
 
 int errline;
 unsigned char *errfile;
@@ -119,6 +96,28 @@ elinks_internal(unsigned char *fmt, ...)
 #ifdef DEBUG
 	force_dump();
 #endif
+}
+
+
+#ifdef DEBUG
+void
+force_dump(void)
+{
+	fprintf(stderr,
+		"\n\033[1m%s\033[0m %s\n", "Forcing core dump!",
+	        "Man the Lifeboats! Women and children first!\n");
+	fputs(full_static_version, stderr);
+	fputc('\n', stderr);
+	fflush(stderr);
+	raise(SIGSEGV);
+}
+#endif
+
+
+void
+do_not_optimize_here(void *p)
+{
+	/* stop GCC optimization - avoid bugs in it */
 }
 
 

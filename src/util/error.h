@@ -1,28 +1,7 @@
-/* $Id: error.h,v 1.22 2003/06/08 14:06:30 pasky Exp $ */
+/* $Id: error.h,v 1.23 2003/06/08 14:11:19 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
-
-
-/* This will print some fancy message, version string and possibly do something
- * else useful. Then, it will dump core. */
-#ifdef DEBUG
-void force_dump(void);
-#endif
-
-
-/* This function does nothing, except making compiler not to optimize certains
- * spots of code --- this is useful when that particular optimization is buggy.
- * So we are just workarounding buggy compilers. */
-/* This function should be always used only in context of compiler version
- * specific macros. */
-void do_not_optimize_here(void *);
-
-#if defined(__GNUC__) && __GNUC__ == 2 && __GNUC_MINOR__ <= 7
-#define do_not_optimize_here_gcc_2_7(x) do_not_optimize_here(x)
-#else
-#define do_not_optimize_here_gcc_2_7(x)
-#endif
 
 
 /* This errfile thing is needed, as we don't have var-arg macros in standart,
@@ -61,6 +40,27 @@ void elinks_internal(unsigned char *, ...);
 #define assert(x) /* We don't do anything in FASTMEM mode. */
 #else
 #define assert(x) do { if (x) internal("assertion " #x " failed!"); } while (0)
+#endif
+
+
+/* This will print some fancy message, version string and possibly do something
+ * else useful. Then, it will dump core. */
+#ifdef DEBUG
+void force_dump(void);
+#endif
+
+
+/* This function does nothing, except making compiler not to optimize certains
+ * spots of code --- this is useful when that particular optimization is buggy.
+ * So we are just workarounding buggy compilers. */
+/* This function should be always used only in context of compiler version
+ * specific macros. */
+void do_not_optimize_here(void *);
+
+#if defined(__GNUC__) && __GNUC__ == 2 && __GNUC_MINOR__ <= 7
+#define do_not_optimize_here_gcc_2_7(x) do_not_optimize_here(x)
+#else
+#define do_not_optimize_here_gcc_2_7(x)
 #endif
 
 

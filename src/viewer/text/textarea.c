@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.73 2004/06/16 20:55:24 zas Exp $ */
+/* $Id: textarea.c,v 1.74 2004/06/16 20:59:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -422,8 +422,9 @@ x:
 enum frame_event_status
 textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 {
+	unsigned char *position;
 	struct line_info *line;
-	int y = 0;
+	int y;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return FRAME_EVENT_OK;
@@ -431,25 +432,30 @@ textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 	line = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
-	while (line[y].start) {
-		if (fs->value + fs->state >= line[y].start &&
-		    fs->value + fs->state < line[y].end + (line[y+1].start != line[y].end)) {
-			if (!y) {
-				mem_free(line);
-				return FRAME_EVENT_IGNORED;
-			}
-			fs->state -= line[y].start - line[y-1].start;
-			int_upper_bound(&fs->state, line[y-1].end - fs->value);
-			if (!rep) goto xx;
-			y = 0;
-		} else {
-			y++;
+	position = fs->value + fs->state;
+
+	for (y = 0; line[y].start; y++) {
+		int wrap;
+
+		if (position < line[y].start) continue;
+
+		wrap = (line[y+1].start == line[y].end);
+		if (position >= line[y].end + !wrap) continue;
+
+		if (!y) {
+			mem_free(line);
+			return FRAME_EVENT_IGNORED;
 		}
+
+		fs->state -= line[y].start - line[y-1].start;
+		int_upper_bound(&fs->state, line[y-1].end - fs->value);
+		if (!rep) goto free_and_return;
+		y = -1; /* repeat */
 	}
 	mem_free(line);
 	return FRAME_EVENT_OK;
 
-xx:
+free_and_return:
 	mem_free(line);
 	return FRAME_EVENT_REFRESH;
 }

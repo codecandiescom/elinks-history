@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.89 2002/08/28 23:20:41 pasky Exp $ */
+/* $Id: options.c,v 1.90 2002/08/28 23:27:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 
 #include "links.h"
 
+#include "config/conf.h"
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "document/html/colors.h"
@@ -304,6 +305,19 @@ unmark_options_tree(struct list_head *tree)
 /**********************************************************************
  Options handlers
 **********************************************************************/
+
+unsigned char *eval_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	if (*argc < 1) return "Parameter expected";
+
+	(*argv)++; (*argc)--;	/* Consume next argument */
+
+	parse_config_file(root_options, "-eval", *(*argv - 1), NULL, NULL);
+
+	fflush(stdout);
+
+	return NULL;
+}
 
 unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
@@ -1639,6 +1653,11 @@ register_options()
 		"dump", 0, 0,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout.");
+
+	add_opt_command_tree(cmdline_options, "",
+		"eval", 0, eval_cmd,
+		"Specify elinks.conf config options on the command-line:\n"
+		"  -eval 'set protocol.file.allow_special_files = 1'");
 
 	add_opt_command_tree(cmdline_options, "",
 		"?", 0, printhelp_cmd,

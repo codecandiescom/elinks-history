@@ -87,6 +87,7 @@ Dakshinamurthy Karra <kd@blr.vsnl.net.in>
 
 David D. Kilzer <ddkilzer@lubricants-oil.com>
 	Part of -no-home support
+	Support for -eval option
 
 David Mediavilla Ezquibela <davidme.forum@bigfoot.com>
 	Spanish translation
@@ -346,4 +347,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.73 2002/08/28 23:20:41 pasky Exp $
+$Id: AUTHORS,v 1.74 2002/08/28 23:27:31 pasky Exp $

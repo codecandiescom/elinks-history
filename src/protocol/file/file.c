@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.61 2003/06/23 00:51:37 jonas Exp $ */
+/* $Id: file.c,v 1.62 2003/06/23 01:49:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -483,6 +483,38 @@ list_directory(DIR *directory, unsigned char *filename, struct file_info *info)
 	return S_OK;
 }
 
+static enum stream_encoding
+try_encoding_extensions(unsigned char *prefixname, int *fd)
+{
+	unsigned char filename[MAX_STR_LEN];
+	int filenamelen = strlen(prefixname);
+	int maxlen = MAX_STR_LEN - filenamelen;
+	unsigned char *filenamepos = filename + filenamelen;
+	int encoding;
+
+	memcpy(filename, prefixname, filenamelen);
+
+	/* No file of that name was found, try some others names. */
+	for (encoding = 1; encoding < ENCODINGS_KNOWN; encoding++) {
+		unsigned char **ext = listext_encoded(encoding);
+
+		while (ext && *ext) {
+			safe_strncpy(filenamepos, *ext, maxlen);
+
+			/* We try with some extensions. */
+			*fd = open(filename, O_RDONLY | O_NOCTTY);
+
+			if (*fd >= 0)
+				/* Ok, found one, use it. */
+				return encoding;
+
+			ext++;
+		}
+	}
+
+	return ENCODING_NONE;
+}
+
 /* FIXME: Many return values aren't checked. And we should split it.
  * --Zas */
 void
@@ -561,37 +593,7 @@ file_func(struct connection *c)
 		int saved_errno = errno;
 
 		if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
-			int enc;
-
-			/* No file of that name was found, try some others names. */
-			for (enc = 1; enc < ENCODINGS_KNOWN; enc++) {
-				unsigned char **ext = listext_encoded(enc);
-
-				while (ext && *ext) {
-					unsigned char *tname = init_str();
-					int tname_len = 0;
-
-					if (!tname) {
-						mem_free(filename);
-						abort_conn_with_state(c, S_OUT_OF_MEM);
-						return;
-					}
-
-					add_to_str(&tname, &tname_len, filename);
-					add_to_str(&tname, &tname_len, *ext);
-
-					/* We try with some extensions. */
-					fd = open(tname, O_RDONLY | O_NOCTTY);
-					mem_free(tname);
-					if (fd >= 0) {
-						/* Ok, found one, use it. */
-						encoding = enc;
-						enc = ENCODINGS_KNOWN;
-						break;
-					}
-					ext++;
-				}
-			}
+			encoding = try_encoding_extensions(filename, &fd);
 		} else if (fd != -1) {
 			encoding = guess_encoding(filename);
 		}

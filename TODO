@@ -53,6 +53,8 @@ existed first.
 	Insert should toggle insert/overwrite mode.
 
 
+These are more long-term goals:
+
 
 	Multiple windows in one console
 
@@ -75,4 +77,4 @@ optionally.
 	CSS (?)
 
 
-$Id: TODO,v 1.24 2002/04/27 22:03:13 pasky Exp $
+$Id: TODO,v 1.25 2002/04/28 13:31:57 pasky Exp $

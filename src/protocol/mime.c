@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.12 2003/05/04 17:25:55 pasky Exp $ */
+/* $Id: mime.c,v 1.13 2003/06/04 17:20:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 {
 	unsigned char *pos, *extension;
 	int ext_len;
+	int lo;
 
 	/* If there's one in header, it's simple.. */
 
@@ -80,24 +81,29 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 	/* Get extension */
 
+	lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
 	extension = NULL;
 	ext_len = 0;
+
+#define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 
 	for (pos = url; *pos && !end_of_dir(*pos); pos++) {
 		if (*pos == '.') {
 			extension = pos + 1;
-		} else if (dir_sep(*pos)) {
+		} else if (dsep(*pos)) {
 			extension = NULL;
 		}
 	}
 
 	if (extension) {
 		while (extension[ext_len]
-		       && !dir_sep(extension[ext_len])
+		       && !dsep(extension[ext_len])
 		       && !end_of_dir(extension[ext_len])) {
 			ext_len++;
 		}
 	}
+
+#undef dsep
 
 	/* Try to make application/x-extension from it */
 

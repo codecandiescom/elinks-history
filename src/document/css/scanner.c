@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.79 2004/01/21 17:40:05 jonas Exp $ */
+/* $Id: scanner.c,v 1.80 2004/01/21 17:49:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,12 +321,13 @@ scan_css_tokens(struct css_scanner *scanner)
 		scan_css_token(scanner, current);
 
 		if (current->type <= CSS_TOKEN_NONE) {
- 			current--;
 			/* Did some one scream for us to end the madness? */
 			if (current->type == CSS_TOKEN_NONE) {
 				scanner->position = NULL;
+				current--;
 				break;
 			}
+ 			current--;
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.189 2005/04/01 09:41:37 zas Exp $ */
+/* $Id: core.c,v 1.190 2005/04/06 09:59:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -824,6 +824,10 @@ lua_console(struct session *ses, unsigned char *expr)
 		if (!err) handle_standard_lua_returns("lua_console_hook");
 	}
 }
+
+/* TODO: Make this a "Scripting console" instead, with a radiobutton below the
+ * inputbox selecting the appropriate scripting backend to use to evaluate the
+ * expression. --pasky */
 
 enum evhook_status
 dialog_lua_console(va_list ap, void *data)

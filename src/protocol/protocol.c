@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.67 2004/08/22 00:54:15 jonas Exp $ */
+/* $Id: protocol.c,v 1.68 2004/08/23 00:29:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,8 +228,6 @@ get_protocol_external_handler(enum protocol protocol)
 	if (protocol == PROTOCOL_USER)
 		return user_protocol_handler;
 
-	/* If both external and regular protocol handler is NULL return
-	 * default handler */
 	if (!protocol_backends[protocol].handler)
 		return generic_external_protocol_handler;
 

@@ -7,6 +7,10 @@
     reusable library (or set of libraries). That's rather a more long-term
     goal, though. However you should keep that in mind when implementing stuff
     and avoid direct calls back to ELinks (except maybe for util/ stuff).
+  * Document source colorization (NOT by converting source to html) (probably
+    by special source code renderer which will just call appropriate parser
+    with some special input and then parser setting a bitmask on each character
+    based on current state).
 
 
 

@@ -13,6 +13,8 @@ for them; dummy javascript support (just an error message)
 
 	Forward/backward history manager
 
+	<include ELusive TODO here ;>
+
 	Rewrite html parser
 
 	CSS support
@@ -52,10 +54,8 @@ current link to external command (?)).
 
 	Copy url to X clipboard (using X selections).
 
-	Document source colorization (by converting source to html).
 
 These are more long-term goals:
-
 
 	EcmaScript (http://home.worldcom.ch/~jmlugrin/fesi/)
 
@@ -74,4 +74,4 @@ optionally.
 	Write some more documentation.. docs, a lot of docs!
 
 
-$Id: TODO,v 1.39 2003/01/02 09:40:17 zas Exp $
+$Id: TODO,v 1.40 2003/01/02 12:28:45 pasky Exp $

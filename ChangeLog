@@ -1,3 +1,64 @@
+Fri Sep  3 19:45:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Revert the down prioritizing of the content type info from the
+	protocol header. It looks like the decoding buffer support will
+	magically be handled by the rendering if it is needed. Reported by
+	Felix on elinks-dev.  
+
+Fri Sep  3 16:09:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	The error handling in the IDN support is not particularly good so
+	fall back to just add the host unprepared.  
+
+Fri Sep  3 15:35:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Mention usage of automake conditionals and -verbose option.  
+
+Fri Sep  3 11:20:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/link.c:
+
+	Improve handling of <object> element.  
+
+Fri Sep  3 11:19:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	get_extension_content_type(): Assert that the extension is useful.  
+
+Fri Sep  3 11:17:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/link.c:
+
+	Fix crash when the <embed> src attribute is empty and a content type
+	lookup is performed. Reported by pasky.  
+
+Fri Sep  3 02:31:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Update polish translator authors adding adamg and mikmach.  
+
+Fri Sep  3 02:14:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/dialogs/info.c:
+
+	Change maintainer. Climb mount Ego and plant my flag in the copying
+	dialog.  
+
+Fri Sep  3 02:10:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	check_uri_file(): Fix restoring of NUL'ed out char. Introduced in my
+	fix for always checking the 3 URI component delimiter chars.  
+
 Thu Sep  2 15:50:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.2 2003/12/01 10:42:33 jonas Exp $ */
+/* $Id: cgi.c,v 1.3 2003/12/01 10:43:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,7 +196,7 @@ execute_cgi(struct connection *conn)
 	if (last_slash) {
 		int res;
 
-		res = test_path(script, last_slash - script - 1);
+		res = test_path(script, last_slash - script);
 		if (res) {
 		/* If script is not in cgi_path and hasn't got extension .cgi: */
 			if (strcasecmp(strchr(script, '\0') - 4, ".cgi")) { 

@@ -1,3 +1,196 @@
+Sat Jun 19 21:27:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	move_cursor(): Only bound x and y when they are not inside the
+	current view.  
+
+Sat Jun 19 21:21:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	move_cursor(): Fix off by one errors in the scrolling mechanism.  
+
+Sat Jun 19 18:41:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Add cursor routing. Altho' it is nothing big patchwise it is
+	hopefully an improvement of usability.  
+
+Sat Jun 19 18:26:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	move_cursor*(): Always use tab position for cursor routing. Much
+	simpler. Minor tidyup that pasky will like ;-).  
+
+Sat Jun 19 18:16:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_current_link(): Fix issue with mode less text-input link
+	drawing when doing cursor routing.  
+
+Sat Jun 19 17:58:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/session.h,
+	viewer/text/link.c, viewer/text/view.c, viewer/text/vs.c:
+
+	Support for cursor routing. It should be fairly complete already
+	altho' we should ofcourse get some feedback from an expert. It is
+	based on patch by Witold Filipczyk, available at [1], which
+	introduces cursor moving actions.  
+	
+	The session struct maintains whether we are doing cursor routing so
+	setting the terminal cursor and window pointer is done correctly.
+	Also, current link is only updated by check_vs() if navigating
+	link-wise.  
+	
+	When in cursor routing mode, the cursor position is maintained in
+	the session tab and restored from it after things like doing the
+	link menu. All cursor updating is done in new move_cursor() function
+	which updates current link when cursor is over one and scrolls when
+	moving outside the view.  
+	
+	[1]
+	
+	http://archive.linuxfromscratch.org/mail-archives/elinks-dev/2003-November/000596.html
+
+Sat Jun 19 17:11:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	draw_doc(): Since it now gets passed the current session use
+	ses->tab when updating the window position.  
+
+Sat Jun 19 16:12:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	join_urls(): Sanitize '//' joined URIS. It apparently has been
+	broken for some time. Even 0.9.1 is affected.  
+
+Sat Jun 19 15:45:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, link.h, view.c:
+
+	choose_mouse_link(): No need to pass term_event just pass x and y
+	values.  
+
+Sat Jun 19 13:57:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.h:
+
+	Move enum insert_mode out of struct session.  
+
+Sat Jun 19 13:42:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: textarea.c, textarea.h:
+
+	Real menu functions don't return anything so make
+	menu_textarea_edit() return void.  
+
+Sat Jun 19 13:21:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_edit(): Only set static state vars on 'startup' (op == 0).  
+
+Sat Jun 19 13:10:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_edit(): Split out saving of the textarea value to file.
+	read_textarea_file() -> load_textarea_file() to better pair it with
+	new function and also possibly indicate that file is destroyed.  
+
+Sat Jun 19 13:02:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_edit(): At start up checks no need to goto free_and_return.  
+
+Sat Jun 19 12:58:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: terminal/terminal.c, viewer/text/form.c,
+	viewer/text/textarea.c, viewer/text/textarea.h:
+
+	textarea_edit(): No need to pass form control.  
+
+Sat Jun 19 12:46:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	textarea_edit(): Split out reading of the modified file.  
+
+Sat Jun 19 12:27:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Add comments.  
+
+Sat Jun 19 12:14:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Rearrange members of itrm struct and add comments.  
+
+Sat Jun 19 12:04:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Add altscreen boolean member to itrm instead of flags.  
+
+Sat Jun 19 12:00:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	itrm.tm -> itrm.timer 
+
+Sat Jun 19 08:39:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	Fix a bug introduced in the last revision: Do not delete the
+	preceding line if the cursor is positioned immediately after a
+	new-line character; only delete that new-line character.  
+
+Sat Jun 19 07:00:18 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	Use the -= operator in textarea_op_bob.  
+
+Sat Jun 19 06:59:36 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	In textarea_op_bob, set an upper bound on |fs->state|, the actual
+	cursor position, rather than |state|, the cached cursor position. 
+	This fixes a bug introduced in revision 1.109 whereby
+	beginning-of-buffer would not go all the way to the first line when
+	the cursor started on a longer line.  
+
+Sat Jun 19 00:13:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Reverted last chunk of zas' 1.33 tidyup, I find the original version
+	more tidy.  
+
+Fri Jun 18 23:53:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/link.c:
+
+	Move put_link_line() to a more appropriate place.  
+
+Fri Jun 18 23:26:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Trivial microtidyup.  
+
 Fri Jun 18 21:24:33 2004  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser/parse.c:

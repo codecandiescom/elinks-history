@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.109 2003/11/11 15:33:45 zas Exp $ */
+/* $Id: listbox.c,v 1.110 2003/11/21 21:27:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "elinks.h"
 
 #include "bfu/dialog.h"
+#include "bfu/hierbox.h"
 #include "bfu/listbox.h"
 #include "bfu/style.h"
 #include "intl/gettext/libintl.h"
@@ -455,19 +456,17 @@ static void
 init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	     struct term_event *ev)
 {
-#if 0
-	/* Freed in bookmark_dialog_abort_handler() */
-	widget_data->cdata = mem_alloc(sizeof(struct listbox_data));
-	if (!widget_data->cdata)
-		return;
+	struct hierbox_browser *browser = dlg_data->dlg->udata2;
+	struct listbox_data *box;
 
-	((struct listbox_data *) widget_data->cdata)->sel = NULL;
-	((struct listbox_data *) widget_data->cdata)->top = NULL;
+	box = mem_calloc(1, sizeof(struct listbox_data));
+	/* FIXME: Cancel the dialog somehow */
+	if (!box) return;
 
-	((struct listbox_data *) widget_data->cdata)->items =
-		mem_alloc(sizeof(struct list_head));
-	init_list(*((struct listbox_data *) widget_data->cdata)->items);
-#endif
+	box->ops = browser->ops;
+	box->items = browser->items;
+	add_to_list(browser->boxes, box);
+	widget_data->widget->data = (void *) box;
 }
 
 static int

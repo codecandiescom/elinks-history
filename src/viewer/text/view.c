@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.532 2004/06/26 03:13:27 miciah Exp $ */
+/* $Id: view.c,v 1.533 2004/06/26 03:14:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -524,6 +524,7 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 			    N_("OK"), N_("Cancel"), ses, NULL,
 			    length, d, 1, document->nlinks, check_number,
 			    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
+
 		return FRAME_EVENT_REFRESH;
 	}
 

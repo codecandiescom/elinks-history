@@ -1,3 +1,66 @@
+Sun May 12 20:28:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* SITES:
+
+	Added locations of PLD RPM packages, kindly provided by Witold
+	Filipczyk.  
+
+Sun May 12 20:27:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Moved check for -ldl before lua check.  
+
+Sun May 12 20:19:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Unicode/.cvsignore, contrib/.cvsignore, intl/.cvsignore,
+	test/.cvsignore:
+
+	.cvsignore for ignoring Makefile.in 
+
+Sun May 12 20:15:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/Makefile.am, dialogs/auth.c, dialogs/auth.h,
+	protocol/http/Makefile.am, protocol/http/auth.c,
+	protocol/http/auth.h, protocol/http/http.c:
+
+	Fixes of httpauth move.  
+
+Sun May 12 16:40:43 2002  Jan Sembera <fis@ji.cz>:
+
+	* src/: main.c, dialogs/Makefile.am, dialogs/auth.c,
+	dialogs/auth.h, dialogs/menu.c, lowlevel/sched.c, lowlevel/sched.h,
+	protocol/http/Makefile.am, protocol/http/auth.c,
+	protocol/http/auth.h:
+
+	- http_auth separation patch (i hope i haven't missed anything) 
+
+Sun May 12 16:18:30 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Tidy up.  
+
+Sun May 12 14:46:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS, src/lowlevel/dns.c:
+
+	The famous DNS bug (connection terminated in lookup state caused
+	catastrophe; broken kill_dns_request()) should be finally fixed now.  
+
+Sun May 12 12:59:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, configure.in, Unicode/Makefile.am,
+	contrib/Makefile.am, intl/Makefile.am, test/Makefile.am:
+
+	Each subdir has own Makefile.am now.  
+
+Sun May 12 06:34:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: LinksOS2Icon.zip, README:
+
+	Links icons for OS/2 in various sizes and color depths.  
+
 Sat May 11 20:26:46 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/completion.tcsh:

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.141 2004/01/30 19:54:59 jonas Exp $ */
+/* $Id: options.c,v 1.142 2004/04/13 22:27:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,18 +47,18 @@ display_codepage(struct terminal *term, void *pcp, struct session *ses)
 void
 charset_list(struct terminal *term, void *xxx, struct session *ses)
 {
-	int i, sel;
+	int i, sel = int_max(0, get_opt_int_tree(term->spec, "charset"));
 	unsigned char *n;
 	struct menu_item *mi = new_menu(FREE_LIST);
 
 	if (!mi) return;
+
 	for (i = 0; (n = get_cp_name(i)); i++) {
 		if (is_cp_special(i)) continue;
 		add_to_menu(&mi, get_cp_name(i), NULL, ACT_MAIN_NONE,
 			    (menu_func) display_codepage, (void *)i, 0);
 	}
-	sel = get_opt_int_tree(term->spec, "charset");
-	if (sel < 0) sel = 0;
+
 	do_menu_selected(term, mi, ses, sel, 0);
 }
 
@@ -189,7 +189,7 @@ void
 menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 {
 #ifdef ENABLE_NLS
-	int i, sel;
+	int i;
 	struct menu_item *mi = new_menu(FREE_LIST);
 
 	if (!mi) return;
@@ -197,8 +197,8 @@ menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 		add_to_menu(&mi, languages[i].name, language_to_iso639(i), ACT_MAIN_NONE,
 			    (menu_func) menu_set_language, (void *)i, 0);
 	}
-	sel = current_language;
-	do_menu_selected(term, mi, ses, sel, 0);
+
+	do_menu_selected(term, mi, ses, current_language, 0);
 #endif
 }
 

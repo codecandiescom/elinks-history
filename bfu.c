@@ -1075,6 +1075,24 @@ int ok_dialog(struct dialog_data *dlg, struct dialog_item_data *di)
 	return i;
 }
 
+/* FIXME? Added to clear fields in bookmarks dialogs, may be broken if used
+ * elsewhere. --Zas */
+int clear_dialog(struct dialog_data *dlg, struct dialog_item_data *di)
+{
+	int i;
+
+	for (i = 0; i < dlg->n; i++) {
+		if (dlg->dlg->items[i].type == D_FIELD ||
+		    dlg->dlg->items[i].type == D_FIELD_PASS) {
+			memset(dlg->items[i].cdata, 0, dlg->dlg->items[i].dlen);
+			dlg->items[i].cpos = 0;
+		}
+	}
+
+	redraw_dialog(dlg);
+	return 0;
+}
+
 void center_dlg(struct dialog_data *dlg)
 {
 	dlg->x = (dlg->win->term->x - dlg->xw) / 2;

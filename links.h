@@ -1702,6 +1702,7 @@ void draw_dlg(struct dialog_data *);
 void display_dlg_item(struct dialog_data *, struct dialog_item_data *, int);
 int ok_dialog(struct dialog_data *, struct dialog_item_data *);
 int cancel_dialog(struct dialog_data *, struct dialog_item_data *);
+int clear_dialog(struct dialog_data *, struct dialog_item_data *);
 void msg_box(struct terminal *, struct memory_list *, unsigned char *, int, /*unsigned char *, void *, int,*/ ...);
 void input_field_fn(struct dialog_data *);
 void input_field(struct terminal *, struct memory_list *, unsigned char *, unsigned char *, unsigned char *, unsigned char *, void *, struct history *, int, unsigned char *, int, int, int (*)(struct dialog_data *, struct dialog_item_data *), void (*)(void *, unsigned char *), void (*)(void *));

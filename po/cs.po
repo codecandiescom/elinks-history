@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-17 09:39+0200\n"
-"PO-Revision-Date: 2003-10-17 18:24+0200\n"
+"PO-Revision-Date: 2003-10-17 23:36+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1309,7 +1309,7 @@ msgstr ""
 #. * for now as it doesn't work.
 #: src/config/options.c:1158
 msgid "Wrap-around links cycling"
-msgstr ""
+msgstr "Zacyklené pøecházení mezi odkazy"
 
 #. 0
 #: src/config/options.c:1160
@@ -2083,6 +2083,9 @@ msgid ""
 "Leave as \"\" to use MAILCAP environment variable or\n"
 "built-in defaults instead."
 msgstr ""
+"Vyhledávací cesta pro soubory mailcap - seznam souborù oddìlených\n"
+"dvojteèkou. Pokud je tato volba prázdná, pou¾ije se promìnná prostøedí\n"
+"MAILCAP, pøípadnì zabudovaná výchozí hodnota."
 
 #: src/config/options.c:1540
 msgid "Ask before using the handlers defined by mailcap."
@@ -2102,6 +2105,12 @@ msgid ""
 "1 is show program to be run.\n"
 "2 is show mailcap description field if any; \"mailcap\" otherwise."
 msgstr ""
+"Typ popisu, který by se mìl zobrazit v dialogu \"copak udìlat s tímto\n"
+"souborem?\":\n"
+"0 znamená ukázat \"mailcap\".\n"
+"1 znamená ukázat program, který by se mìl spustit.\n"
+"2 znamená ukázat popisek polo¾ky v mailcapu, pøípadnì \"mailcap\", pokud\n"
+"  není k dispozici."
 
 #: src/config/options.c:1550
 msgid "Prioritize entries by file"
@@ -2113,10 +2122,13 @@ msgid ""
 "path. This means that wildcard entries (like: image/*) will\n"
 "also be checked before deciding the handler."
 msgstr ""
+"Prioritizovat polo¾ky podle poøadí souborù v cestì pro mailcap. To znamená,\n"
+"¾e hromadné polo¾ky (jako image/*) mù¾ou být pou¾ity, i kdy¾ byla v nìjakém\n"
+"dal¹ím souboru nalezena konkrétní polo¾ka pro daný typ."
 
 #: src/config/options.c:1557 src/util/version.c:104
 msgid "Mimetypes files"
-msgstr "Soubory obsahující asociace pøípon a MIME typù"
+msgstr "Soubory \"mimetypes\""
 
 #: src/config/options.c:1559
 msgid ""
@@ -2124,6 +2136,8 @@ msgid ""
 "can be used to find the content type of an URL by looking at the\n"
 "extension of the file name."
 msgstr ""
+"Nastavení týkající se podpory souborù \"mimetypes\". Tyto soubory se\n"
+"pou¾ívají k nalezení MIME typu daného dokumentu na základì jeho pøípony."
 
 #: src/config/options.c:1565
 msgid "Enable mime.types support."
@@ -2134,6 +2148,9 @@ msgid ""
 "Mimetypes search path. Colon-separated list of files.\n"
 "Leave as \"\" to use built-in default instead."
 msgstr ""
+"Vyhledávací cesta pro soubory \"mimetypes\". Seznam souborù oddìlených\n"
+"dvojteèkou. Pokud je tato volba prázdná, pou¾ije se zabudovaná výchozí\n"
+"hodnota."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1576
@@ -2429,6 +2446,10 @@ msgid ""
 "to open 'filename' with some encoding extension appended\n"
 "(ie. 'filename.gz'); it depends on the supported encodings."
 msgstr ""
+"Pokud je tato volba zapnuta a nelze otevøít soubor 'pøíklad', pokusíme\n"
+"se tento soubor otevøít s nìjakou pøíponou odpovídající urèitému kódování\n"
+"(napøíklad 'pøíklad.gz'); konkrétní pøípony zále¾í na podporovaných\n"
+"kódováních."
 
 #: src/config/options.c:1731
 msgid "Show hidden files in directory listing"
@@ -2567,6 +2588,12 @@ msgid ""
 "2 is Linux, you get double frames and other goodies\n"
 "3 is KOI-8"
 msgstr ""
+"Typ terminálu; zále¾í na nìm pøevá¾nì pøi kreslení rámeèkù a okrajù\n"
+"dialogových oken:\n"
+"0 znamená \"hloupý\" terminál, pou¾ívá se tzv. ASCII art\n"
+"1 znamená terminál VT100, jednoduchý, leè univerzální\n"
+"2 znamená Linuxový terminál, získáte dvojité rámeèky a dal¹í hezké vìci\n"
+"3 znamená KOI-8"
 
 #: src/config/options.c:1826
 msgid "Switch fonts for line drawing"
@@ -2578,6 +2605,9 @@ msgid ""
 "and lines working at the same time. Makes sense only with linux\n"
 "terminal."
 msgstr ""
+"Pøepínat pøi kreslení èar fonty. Díky tomu by mìlo fungovat zároveò\n"
+"kreslení èar a místních znakù. Tato volba má v¹ak smysl pouze pro linuxový\n"
+"terminál."
 
 #: src/config/options.c:1832
 msgid "I/O in UTF8"
@@ -2588,6 +2618,10 @@ msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
+"Pou¾ívat pro terminálový vstup a výstup kódování UTF-8; to umí vyu¾ít\n"
+"správnì nakonfigurované terminály podporující Unicode. Je v¹ak tøeba si\n"
+"uvìdomit, ¾e v souèasnosti je podporována pouze podmno¾ina UTF8 v\n"
+"závislosti na aktuálnì zvoleném kódování terminálu."
 
 #: src/config/options.c:1837 src/dialogs/options.c:134
 msgid "Restrict frames in cp850/852"
@@ -2598,6 +2632,8 @@ msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
 msgstr ""
+"Omezit znaky pou¾ívané pro kreslení èar. Tato volba má smysl pouze pro\n"
+"linuxové terminály pou¾ivající kódování cp850 èi cp852."
 
 #: src/config/options.c:1842
 msgid "Block cursor"
@@ -2609,6 +2645,9 @@ msgid ""
 "This is particularly useful when we have a block cursor,\n"
 "so that inversed text is displayed correctly."
 msgstr ""
+"Pøesunout kurzor po ka¾dém dokreslení obrazovky do pravého dolního rohu.\n"
+"To je zvlá¹tì u¾iteèné, pokud kurzor pøekrývá celou plochu znaku, nebo»\n"
+"takový kurzor mù¾e omezovat èitelnost textu, který by jinak mohl pøekrývat."
 
 #: src/config/options.c:1848
 msgid "Color mode"
@@ -2687,7 +2726,7 @@ msgstr "Li¹ta s hlavním menu."
 
 #: src/config/options.c:1901 src/config/options.c:2296
 msgid "Main menu bar colors."
-msgstr ""
+msgstr "Barvy li¹ty hlavního menu."
 
 #: src/config/options.c:1903
 msgid "Unselected main menu bar item"
@@ -2695,7 +2734,7 @@ msgstr "Nevybraná polo¾ka hlavního menu"
 
 #: src/config/options.c:1905
 msgid "Unselected main menu bar item colors."
-msgstr ""
+msgstr "Barvy nevybrané polo¾ky hlavního menu."
 
 #: src/config/options.c:1915
 msgid "Selected main menu bar item"
@@ -2703,7 +2742,7 @@ msgstr "Vybraná polo¾ka hlavního menu"
 
 #: src/config/options.c:1917
 msgid "Selected main menu bar item colors."
-msgstr ""
+msgstr "Barvy vybrané polo¾ky hlavního menu."
 
 #: src/config/options.c:1927 src/config/options.c:1996
 #: src/config/options.c:2322 src/config/options.c:2391
@@ -2712,7 +2751,7 @@ msgstr "Horká klávesa"
 
 #: src/config/options.c:1929 src/config/options.c:2324
 msgid "Main menu hotkey colors."
-msgstr ""
+msgstr "Barva horké klávesy v hlavním menu."
 
 #: src/config/options.c:1931 src/config/options.c:2000
 #: src/config/options.c:2326 src/config/options.c:2395
@@ -2721,7 +2760,7 @@ msgstr "Nevybraná horká klávesa"
 
 #: src/config/options.c:1933 src/config/options.c:2328
 msgid "Main menu unselected hotkey colors."
-msgstr ""
+msgstr "Barva nevybrané horké klávesy v hlavním menu."
 
 #: src/config/options.c:1935 src/config/options.c:2004
 #: src/config/options.c:2330 src/config/options.c:2399
@@ -2730,23 +2769,23 @@ msgstr "Vybraná horká klávesa"
 
 #: src/config/options.c:1937 src/config/options.c:2332
 msgid "Main menu selected hotkey colors."
-msgstr ""
+msgstr "Barva vybrané horké klávesy v hlavním menu."
 
 #: src/config/options.c:1941 src/config/options.c:2336
 msgid "Main menu unselected hotkey default text color."
-msgstr ""
+msgstr "Výchozí barva textu nevybrané horké klávesy v hlavním menu."
 
 #: src/config/options.c:1945 src/config/options.c:2340
 msgid "Main menu unselected hotkey default background color."
-msgstr ""
+msgstr "Výchozí barva pozadí nevybrané horké klávesy v hlavním menu."
 
 #: src/config/options.c:1949
 msgid "Main menu selected hotkey text color."
-msgstr ""
+msgstr "Výchozí barva textu vybrané horké klávesy v hlavním menu."
 
 #: src/config/options.c:1953 src/config/options.c:2348
 msgid "Main menu selected hotkey default background color."
-msgstr ""
+msgstr "Výchozí barva pozadí vybrané horké klávesy v hlavním menu."
 
 #: src/config/options.c:1956 src/config/options.c:2351
 msgid "Menu bar"
@@ -2754,7 +2793,7 @@ msgstr "Li¹ta s menu"
 
 #: src/config/options.c:1958 src/config/options.c:2353
 msgid "Menu bar colors."
-msgstr ""
+msgstr "Barvy li¹ty s menu."
 
 #: src/config/options.c:1960 src/config/options.c:2355
 msgid "Unselected menu item"
@@ -2762,7 +2801,7 @@ msgstr "Nevybraná polo¾ka menu"
 
 #: src/config/options.c:1962 src/config/options.c:2357
 msgid "Unselected menu item colors."
-msgstr ""
+msgstr "Barvy nevybrané polo¾ky menu."
 
 #: src/config/options.c:1972 src/config/options.c:2367
 msgid "Selected menu item"
@@ -2770,7 +2809,7 @@ msgstr "Vybraná polo¾ka menu"
 
 #: src/config/options.c:1974 src/config/options.c:2369
 msgid "Selected menu item colors."
-msgstr ""
+msgstr "Barvy vybrané polo¾ky menu."
 
 #: src/config/options.c:1984 src/config/options.c:2379
 msgid "Marked menu item"
@@ -2778,35 +2817,35 @@ msgstr "Oznaèená polo¾ka menu"
 
 #: src/config/options.c:1986 src/config/options.c:2381
 msgid "Marked menu item colors."
-msgstr ""
+msgstr "Barvy oznaèené polo¾ky menu."
 
 #: src/config/options.c:1998 src/config/options.c:2393
 msgid "Menu item hotkey colors."
-msgstr ""
+msgstr "Barvy horké klávesy polo¾ky menu."
 
 #: src/config/options.c:2002
 msgid "Menu item unselected hotkey colors."
-msgstr ""
+msgstr "Barvy horké klávesy nevybrané polo¾ky menu."
 
 #: src/config/options.c:2006
 msgid "Menu item selected hotkey colors."
-msgstr ""
+msgstr "Barvy horké klávesy vybrané polo¾ky menu."
 
 #: src/config/options.c:2010
 msgid "Menu item unselected hotkey default text color."
-msgstr ""
+msgstr "Barva textu horké klávesy nevybrané polo¾ky menu."
 
 #: src/config/options.c:2014
 msgid "Menu item unselected hotkey default background color."
-msgstr ""
+msgstr "Barva pozadí horké klávesy nevybrané polo¾ky menu."
 
 #: src/config/options.c:2018
 msgid "Menu item selected hotkey default text color."
-msgstr ""
+msgstr "Barva textu horké klávesy vybrané polo¾ky menu."
 
 #: src/config/options.c:2022
 msgid "Menu item selected hotkey background color."
-msgstr ""
+msgstr "Barva pozadí horké klávesy vybrané polo¾ky menu."
 
 #: src/config/options.c:2024 src/config/options.c:2419
 msgid "Menu frame"
@@ -2814,7 +2853,7 @@ msgstr "Rámeèek menu"
 
 #: src/config/options.c:2026 src/config/options.c:2421
 msgid "Menu frame colors."
-msgstr ""
+msgstr "Barvy rámeèku menu."
 
 #: src/config/options.c:2037 src/config/options.c:2432
 msgid "Dialog"
@@ -2822,7 +2861,7 @@ msgstr "Dialog"
 
 #: src/config/options.c:2039 src/config/options.c:2434
 msgid "Dialog colors."
-msgstr ""
+msgstr "Barvy dialogového okna."
 
 #: src/config/options.c:2041
 msgid "Generic background color"
@@ -2830,7 +2869,7 @@ msgstr "Obecná barva pozadí"
 
 #: src/config/options.c:2043 src/config/options.c:2438
 msgid "Dialog generic background color."
-msgstr ""
+msgstr "Obecná barva pozadí dialogového okna."
 
 #: src/config/options.c:2045 src/config/options.c:2440
 msgid "Frame"
@@ -2838,7 +2877,7 @@ msgstr "Rámeèek"
 
 #: src/config/options.c:2047 src/config/options.c:2442
 msgid "Dialog frame colors."
-msgstr ""
+msgstr "Barva rámeèku dialogového okna."
 
 #: src/config/options.c:2057 src/config/options.c:2452
 #: src/dialogs/document.c:94
@@ -2847,7 +2886,7 @@ msgstr "Titulek"
 
 #: src/config/options.c:2059 src/config/options.c:2454
 msgid "Dialog title colors."
-msgstr ""
+msgstr "Barva titulku dialogového okna."
 
 #: src/config/options.c:2069 src/config/options.c:2464
 msgid "Text"
@@ -2855,7 +2894,7 @@ msgstr "Text"
 
 #: src/config/options.c:2071 src/config/options.c:2466
 msgid "Dialog text colors."
-msgstr ""
+msgstr "Barvy textu dialogového okna."
 
 #: src/config/options.c:2081 src/config/options.c:2476
 #: src/viewer/text/link.c:1013
@@ -2864,7 +2903,7 @@ msgstr "Za¹krtávací ètvereèek"
 
 #: src/config/options.c:2083 src/config/options.c:2478
 msgid "Dialog checkbox colors."
-msgstr ""
+msgstr "Barvy za¹krtávacího ètvereèku."
 
 #: src/config/options.c:2093 src/config/options.c:2488
 msgid "Checkbox label"
@@ -2872,7 +2911,7 @@ msgstr "Popiska za¹krtávacího ètvereèku"
 
 #: src/config/options.c:2095 src/config/options.c:2490
 msgid "Dialog checkbox label colors."
-msgstr ""
+msgstr "Barvy popisky za¹krtávacího ètvereèku."
 
 #: src/config/options.c:2105 src/config/options.c:2500
 msgid "Button"
@@ -2880,7 +2919,7 @@ msgstr "Tlaèítko"
 
 #: src/config/options.c:2107 src/config/options.c:2502
 msgid "Dialog button colors."
-msgstr ""
+msgstr "Barvy tlaèítka."
 
 #: src/config/options.c:2117 src/config/options.c:2512
 msgid "Selected button"
@@ -2888,7 +2927,7 @@ msgstr "Vybrané tlaèítko"
 
 #: src/config/options.c:2119 src/config/options.c:2514
 msgid "Dialog selected button colors."
-msgstr ""
+msgstr "Barvy vybraného tlaèítka."
 
 #: src/config/options.c:2129 src/config/options.c:2524
 #: src/viewer/text/link.c:1019
@@ -2897,7 +2936,7 @@ msgstr "Textové políèko"
 
 #: src/config/options.c:2131
 msgid "Dialog text field colors."
-msgstr ""
+msgstr "Barvy textového políèka."
 
 #: src/config/options.c:2141 src/config/options.c:2536
 msgid "Text field text"
@@ -2905,7 +2944,7 @@ msgstr "Text v textovém políèku"
 
 #: src/config/options.c:2143 src/config/options.c:2538
 msgid "Dialog field text colors."
-msgstr ""
+msgstr "Barvy textu textového políèka."
 
 #: src/config/options.c:2153 src/config/options.c:2548
 msgid "Meter"
@@ -2913,7 +2952,7 @@ msgstr "Teplomìr"
 
 #: src/config/options.c:2155 src/config/options.c:2550
 msgid "Dialog meter colors."
-msgstr ""
+msgstr "Barvy teplomìru dialogového okna."
 
 #: src/config/options.c:2165 src/config/options.c:2560
 msgid "Shadow"
@@ -2921,7 +2960,7 @@ msgstr "Stín"
 
 #: src/config/options.c:2167 src/config/options.c:2562
 msgid "Dialog shadow colors (see ui.shadows option)."
-msgstr ""
+msgstr "Barvy stínu dialogu (viz volba ui.shadows)."
 
 #: src/config/options.c:2177 src/config/options.c:2573
 msgid "Title bar"
@@ -2929,7 +2968,7 @@ msgstr "Li¹ta s titulkem"
 
 #: src/config/options.c:2179 src/config/options.c:2575
 msgid "Title bar colors."
-msgstr ""
+msgstr "Barvy li¹ty s titulkem."
 
 #: src/config/options.c:2181 src/config/options.c:2577
 msgid "Generic title bar"
@@ -2937,7 +2976,7 @@ msgstr "Obecná li¹ta s titulkem"
 
 #: src/config/options.c:2183 src/config/options.c:2579
 msgid "Generic title bar colors."
-msgstr ""
+msgstr "Barvy obecné li¹ty s titulkem."
 
 #: src/config/options.c:2193
 msgid "Title bar text"
@@ -2945,7 +2984,7 @@ msgstr "Text titulku"
 
 #: src/config/options.c:2195 src/config/options.c:2591
 msgid "Title bar text colors."
-msgstr ""
+msgstr "Barvy textu li¹ty s titulkem."
 
 #: src/config/options.c:2206 src/config/options.c:2602
 msgid "Status bar"
@@ -2953,7 +2992,7 @@ msgstr "Stavová li¹ta"
 
 #: src/config/options.c:2208 src/config/options.c:2604
 msgid "Status bar colors."
-msgstr ""
+msgstr "Barvy stavové li¹ty."
 
 #: src/config/options.c:2210 src/config/options.c:2606
 msgid "Generic status bar"
@@ -2961,7 +3000,7 @@ msgstr "Obecná stavová li¹ta"
 
 #: src/config/options.c:2212 src/config/options.c:2608
 msgid "Generic status bar colors."
-msgstr ""
+msgstr "Barvy obecné stavové li¹ty."
 
 #: src/config/options.c:2222 src/config/options.c:2618
 msgid "Status bar text"
@@ -2969,7 +3008,7 @@ msgstr "Text stavové li¹ty"
 
 #: src/config/options.c:2224 src/config/options.c:2620
 msgid "Status bar text colors."
-msgstr ""
+msgstr "Barvy textu stavové li¹ty."
 
 #: src/config/options.c:2235 src/config/options.c:2631
 msgid "Tabs bar"
@@ -2977,7 +3016,7 @@ msgstr "Li¹ta s taby"
 
 #: src/config/options.c:2237 src/config/options.c:2633
 msgid "Tabs bar colors."
-msgstr ""
+msgstr "Barvy li¹ty s taby."
 
 #: src/config/options.c:2239 src/config/options.c:2635
 msgid "Unselected tab"
@@ -2985,7 +3024,7 @@ msgstr "Nevybraný tab"
 
 #: src/config/options.c:2241 src/config/options.c:2637
 msgid "Unselected tab colors."
-msgstr ""
+msgstr "Barvy nevybraného tabu."
 
 #: src/config/options.c:2251
 msgid "Loading tab"
@@ -2993,7 +3032,7 @@ msgstr "Nahrávající se tab"
 
 #: src/config/options.c:2253
 msgid "Tab colors for tabs that are loading in the background."
-msgstr ""
+msgstr "Barvy tabu, který se právì na pozadí nahrává."
 
 #: src/config/options.c:2263 src/config/options.c:2647
 msgid "Selected tab"
@@ -3001,7 +3040,7 @@ msgstr "Vybraný tab"
 
 #: src/config/options.c:2265 src/config/options.c:2649
 msgid "Selected tab colors."
-msgstr ""
+msgstr "Barvy vybraného tabu."
 
 #: src/config/options.c:2275 src/config/options.c:2659
 msgid "Searched strings"
@@ -3009,7 +3048,7 @@ msgstr "Výskyty vyhledávání"
 
 #: src/config/options.c:2277 src/config/options.c:2661
 msgid "Searched string highlight colors."
-msgstr ""
+msgstr "Barva zvýraznìní vyhledaných øetìzcù."
 
 #: src/config/options.c:2289
 msgid "Non-color terminals"
@@ -3017,7 +3056,7 @@ msgstr "Nebarevné terminály"
 
 #: src/config/options.c:2291
 msgid "Color settings for non-color terminal."
-msgstr ""
+msgstr "Nastavení barev pro nebarevné terminály."
 
 #: src/config/options.c:2298
 msgid "Unselected menu bar item"
@@ -3025,7 +3064,7 @@ msgstr "Nevybraná polo¾ka menu"
 
 #: src/config/options.c:2300
 msgid "Unselected menu bar item colors."
-msgstr ""
+msgstr "Barvy nevybrané polo¾ky menu."
 
 #: src/config/options.c:2310
 msgid "Selected menu bar item"
@@ -3033,35 +3072,35 @@ msgstr "Vybraná polo¾ka menu"
 
 #: src/config/options.c:2312
 msgid "Selected menu bar item colors."
-msgstr ""
+msgstr "Barvy vybrané polo¾ky menu."
 
 #: src/config/options.c:2344
 msgid "Main menu selected hotkey default text color."
-msgstr ""
+msgstr "Výchozí barva textu horké klávesy vybrané polo¾ky hlavního menu."
 
 #: src/config/options.c:2397
 msgid "Menu unselected hotkey colors."
-msgstr ""
+msgstr "Barvy nevybrané horké klávesy v menu."
 
 #: src/config/options.c:2401
 msgid "Menu selected hotkey colors."
-msgstr ""
+msgstr "Barvy vybrané horké klávesy v menu."
 
 #: src/config/options.c:2405
 msgid "Menu unselected hotkey default text color."
-msgstr ""
+msgstr "Barva textu nevybrané horké klávesy v menu."
 
 #: src/config/options.c:2409
 msgid "Menu unselected hotkey default background color."
-msgstr ""
+msgstr "Barva pozadí nevybrané horké klávesy v menu."
 
 #: src/config/options.c:2413
 msgid "Menu selected hotkey default text color."
-msgstr ""
+msgstr "Barva textu vybrané horké klávesy v menu."
 
 #: src/config/options.c:2417
 msgid "Menu selected hotkey default background color."
-msgstr ""
+msgstr "Barva pozadí vybrané horké klávesy v menu."
 
 #: src/config/options.c:2436
 msgid "Dialog generic background color"
@@ -3069,7 +3108,7 @@ msgstr "Obecná barva pozadí dialogu"
 
 #: src/config/options.c:2526
 msgid "Dialog field colors."
-msgstr ""
+msgstr "Barvy políèka dialogového okna."
 
 #: src/config/options.c:2589
 msgid "Title text"
@@ -3109,6 +3148,9 @@ msgid ""
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
 "also want to eliminate the wide borders by adjusting setup.h."
 msgstr ""
+"Zdali by mìla dialogová okna vrhat stíny (stíny jsou neprùhledné, jejich\n"
+"barvu si v¹ak mù¾ete upravit volbami ui.colors.*.dialog.shadow). Mo¾ná, ¾e\n"
+"budete také v setup.h chtít zú¾it okraje dialogových oken."
 
 #: src/config/options.c:2695
 msgid "Timer options"
@@ -3175,13 +3217,14 @@ msgstr ""
 
 #: src/config/options.c:2736
 msgid "Wrap-around tabs cycling"
-msgstr ""
+msgstr "Cyklické pøecházení mezi taby"
 
 #: src/config/options.c:2738
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr ""
+"Pøi pøesunu z posledního tabu dále doprava pøeskoèit na první tab a naopak."
 
 #: src/config/options.c:2743 src/config/opttypes.c:447
 msgid "Language"

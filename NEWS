@@ -4,6 +4,7 @@ ELinks-now:
 
 * configurability through feature.h
 * simple <object> element support
+* automatic session saving/restoring support
 
 ELinks-0.9.0:
 

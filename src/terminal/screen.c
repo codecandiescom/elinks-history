@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.139 2004/04/30 13:53:05 zas Exp $ */
+/* $Id: screen.c,v 1.140 2004/04/30 13:56:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -478,7 +478,7 @@ add_char_color(struct string *screen, struct string *seq, unsigned char color)
 
 		++color_len;
 		if (color < 100) {
-			color_pos += 1;
+			++color_pos;
 		} else {
 			++color_len;
 

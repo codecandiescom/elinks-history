@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.115 2003/06/16 15:42:26 pasky Exp $ */
+/* $Id: renderer.c,v 1.116 2003/06/16 16:13:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -391,10 +391,8 @@ split_line_at(struct part *part, register int x)
 	register int tmp;
 
 	if (part->data) {
-#ifdef DEBUG
-		if ((POS(x, part->cy) & 0xff) != ' ')
-			internal("bad split: %c", (char)POS(x, part->cy));
-#endif
+		assertm((POS(x, part->cy) & 0xff) == ' ',
+			"bad split: %c", (char) POS(x, part->cy));
 		move_chars(part, x + 1, part->cy, par_format.leftmargin, part->cy + 1);
 		del_chars(part, x, part->cy);
 	}
@@ -411,10 +409,8 @@ split_line_at(struct part *part, register int x)
 	memset(part->spaces + tmp, 0, x);
 
 	tmp = part->spaces_len - par_format.leftmargin;
-	if (tmp > 0)
-		memmove(part->spaces + par_format.leftmargin, part->spaces, tmp);
-	else	/* Should not occcur. --Zas */
-		internal("part->spl - par_format.leftmargin == %d", tmp);
+	assertm(tmp > 0, "part->spl - par_format.leftmargin == %d", tmp);
+	memmove(part->spaces + par_format.leftmargin, part->spaces, tmp);
 
 	part->cy++;
 

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.68 2003/09/03 21:17:24 jonas Exp $ */
+/* $Id: screen.c,v 1.69 2003/09/03 22:05:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,6 +196,24 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 	}
 }
 
+static int
+screen_driver_change_hook(struct session *ses, struct option *term_spec,
+			  struct option *changed)
+{
+	enum term_mode_type type = get_opt_int_tree(term_spec, "type");
+	struct screen_driver *driver;
+	unsigned char *name = term_spec->name;
+	int len = strlen(name);
+
+	foreach (driver, active_screen_drivers)
+		if (driver->type == type && !memcmp(driver->name, name, len)) {
+			update_screen_driver(driver, term_spec);
+			break;
+		}
+
+	return 0;
+}
+
 static inline struct screen_driver *
 add_screen_driver(enum term_mode_type type, struct terminal *term, int env_len)
 {
@@ -211,6 +229,8 @@ add_screen_driver(enum term_mode_type type, struct terminal *term, int env_len)
 
 	update_screen_driver(driver, term->spec);
 
+	term->spec->change_hook = screen_driver_change_hook;
+
 	return driver;
 }
 
@@ -218,24 +238,18 @@ static inline struct screen_driver *
 get_screen_driver(struct terminal *term)
 {
 	enum term_mode_type type = get_opt_int_tree(term->spec, "type");
-	int env_len = strlen(term->term); 
+	unsigned char *name = term->spec->name;
+	int len = strlen(name); 
 	struct screen_driver *driver;
-
-	/* On startup redraw_screen() is called before is fully initialized
-	 * so wait until we get a ``running'' terminal. */
-	if (env_len == 0) return NULL;
 
 	/* TODO: LRU? ;) */
 	foreach (driver, active_screen_drivers) {
-		if (driver->type == type
-		    && !memcmp(driver->name, term->term, env_len)) {
-			/* TODO: Update via option change_hooks. */
-			update_screen_driver(driver, term->spec);
+		if (driver->type == type && !memcmp(driver->name, name, len)) {
 			return driver;
 		}
 	}
 
-	return add_screen_driver(type, term, env_len);
+	return add_screen_driver(type, term, len);
 }
 
 void

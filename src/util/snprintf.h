@@ -1,4 +1,4 @@
-/* $Id: snprintf.h,v 1.10 2003/06/18 00:55:11 jonas Exp $ */
+/* $Id: snprintf.h,v 1.11 2003/06/21 14:10:27 pasky Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
@@ -40,10 +40,6 @@ int elinks_vsnprintf(char *str, size_t count, const char *fmt, va_list args);
 int elinks_snprintf(char *str, size_t count, const char *fmt, ...);
 #endif
 
-/* TODO Somehow we should provide wrappers for the (v)asprintf() calls
- *	since if they were used together with --enable-debug they would
- *	generate a 'bad alloc header' error if the @ptr value was
- *	mem_free()'d. --jonas */
 
 #ifndef HAVE_VASPRINTF
 #undef vasprintf
@@ -56,5 +52,45 @@ int elinks_vasprintf(char **ptr, const char *format, va_list ap);
 #define asprintf elinks_asprintf
 int elinks_asprintf(char **ptr, const char *format, ...);
 #endif
+
+
+#ifdef _GNU_SOURCE
+
+/* These are wrappers for (v)asprintf() which return the strings allocated by
+ * ELinks' own memory allocation routines, thus it is usable in the context of
+ * standard ELinks memory managment. Just use these if you mem_free() the
+ * string later and use the original ones if you free() the string later. */
+
+#include <stdlib.h>
+#include "util/string.h"
+
+static inline unsigned char *
+vasprintfa(const char *format, va_list ap) {
+	unsigned char *str1, *str2;
+
+	if (vasprintf((char **) &str1, format, ap) < 0)
+		return NULL;
+
+	str2 = stracpy(str1);
+	free(str1);
+
+	return str2;
+}
+
+static inline unsigned char *
+asprintfa(const char *format, ...)
+{
+	unsigned char *str;
+	va_list ap;
+
+	va_start(ap, format);
+	str = vasprintfa(format, ap);
+	va_end(ap);
+
+	return str;
+}
+
+#endif
+
 
 #endif

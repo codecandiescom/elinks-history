@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.33 2003/12/27 14:28:43 jonas Exp $ */
+/* $Id: tab.c,v 1.34 2003/12/27 19:35:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,10 +216,9 @@ close_all_tabs_but_current(struct terminal *term, struct window *current, struct
 
 
 static void
-do_open_in_new_tab(struct terminal *term, struct session *ses, int link,
-	           int in_background)
+do_open_in_new_tab(struct terminal *term, struct session *ses,
+		   unsigned char *url, int in_background)
 {
-	struct document_view *doc_view;
 	struct window *tab;
 	struct initial_session_info *info;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
@@ -236,34 +235,47 @@ do_open_in_new_tab(struct terminal *term, struct session *ses, int link,
 	}
 
 	info->base_session = ses->id;
-
-	while (link) {
-		doc_view = current_frame(ses);
-		if (doc_view) assert(doc_view->vs && doc_view->document);
-		if_assert_failed break;
-
-		if (doc_view && doc_view->vs->current_link != -1)
-			info->url = get_link_url(ses, doc_view,
-					&doc_view->document->links[doc_view->vs->current_link]);
-		else
-			info->url = NULL;
-
-		break;
-	}
+	info->url = url;
 
 	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
 }
 
+static unsigned char *
+get_tab_link_url(struct session *ses, int link)
+{
+	if (link) {
+		struct document_view *doc_view = current_frame(ses);
+
+		if (doc_view) assert(doc_view->vs && doc_view->document);
+		if_assert_failed return NULL;
+
+		if (doc_view && doc_view->vs->current_link != -1)
+			return get_link_url(ses, doc_view,
+				&doc_view->document->links[doc_view->vs->current_link]);
+	}
+
+	return NULL;
+}
+
 void
 open_in_new_tab(struct terminal *term, int link, struct session *ses)
 {
-	do_open_in_new_tab(term, ses, link, 0);
+	do_open_in_new_tab(term, ses, get_tab_link_url(ses, link), 0);
 }
 
 void
 open_in_new_tab_in_background(struct terminal *term, int link,
 			      struct session *ses)
 {
-	do_open_in_new_tab(term, ses, link, 1);
+	do_open_in_new_tab(term, ses, get_tab_link_url(ses, link), 1);
+}
+
+void
+open_url_in_new_tab(struct session *ses, unsigned char *url, int in_background)
+{
+	unsigned char *urlcopy = stracpy(url);
+
+	if (!urlcopy) return;
+	do_open_in_new_tab(ses->tab->term, ses, urlcopy, in_background);
 }

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.128 2003/12/24 15:05:18 jonas Exp $ */
+/* $Id: hierbox.c,v 1.129 2003/12/27 19:35:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "sched/task.h"
+#include "terminal/tab.h"
 #include "terminal/terminal.h"
 
 
@@ -414,24 +415,50 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 
 /* Goto action */
 
+static void
+recursively_goto_listbox(struct session *ses, struct terminal *term,
+			 struct listbox_item *root, struct listbox_data *box)
+{
+	struct listbox_item *item;
+	unsigned char *uri;
+
+	foreach (item, root->child) {
+		if (item->type == BI_FOLDER) {
+			recursively_goto_listbox(ses, term, item, box);
+			continue;
+		}
+
+		uri = box->ops->get_info(item, term, LISTBOX_URI);
+		if (!uri) continue;
+
+		open_url_in_new_tab(ses, uri, 1);
+		mem_free(uri);
+	}
+}
+
 int
 push_hierbox_goto_button(struct dialog_data *dlg_data,
 			 struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct session *ses = dlg_data->dlg->udata;
+	struct terminal *term = dlg_data->win->term;
 	unsigned char *uri;
 
 	/* Do nothing with a folder */
-	/* TODO: Maybe pop up a msg_box() with an error message. --jonas */
-	if (!box->sel || box->sel->type == BI_FOLDER) return 0;
+	if (!box->sel) return 0;
 
-	/* Follow the bookmark */
-	uri = box->ops->get_info(box->sel, dlg_data->win->term, LISTBOX_URI);
-	if (!uri) return 0;
+	if (box->sel->type == BI_FOLDER) {
+		recursively_goto_listbox(ses, term, box->sel, box);
 
-	goto_url(ses, uri);
-	mem_free(uri);
+	} else {
+		/* Follow the bookmark */
+		uri = box->ops->get_info(box->sel, term, LISTBOX_URI);
+		if (!uri) return 0;
+
+		goto_url(ses, uri);
+		mem_free(uri);
+	}
 
 	/* Close the dialog */
 	delete_window(dlg_data->win);

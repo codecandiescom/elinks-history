@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.12 2002/04/01 15:52:41 pasky Exp $ */
+/* $Id: default.c,v 1.13 2002/04/02 17:40:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1151,13 +1151,10 @@ struct option links_options[] = {
 		0, 1, &default_link,
 		"Default link color." },
 
-		/* FIXME - this is not yet implemented */
-#if 0
 	{	"default-vlink", "default_vlink",
 	       	gen_cmd, color_rd, NULL,
 		0, 1, &default_vlink,
 		"Default vlink color." },
-#endif
 
 	{	"download-dir", "download_dir",
 		gen_cmd, str_rd, str_wr,

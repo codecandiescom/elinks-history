@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.13 2002/03/27 23:39:15 pasky Exp $ */
+/* $Id: parser.c,v 1.14 2002/04/02 17:40:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include <bfu/menu.h>
 #include <config/default.h>
 #include <config/kbdbind.h>
+#include <document/globhist.h>
 #include <document/session.h>
 #include <document/view.h>
 #include <document/html/colors.h>
@@ -538,8 +539,12 @@ void html_a(unsigned char *a)
 			if (format.target) mem_free(format.target);
 			format.target = stracpy(format.target_base);
 		}
-		/*format.attr ^= AT_BOLD;*/
-		memcpy(&format.fg, &format.clink, sizeof(struct rgb));
+
+		if (get_global_history_item(format.link, NULL, 0))
+			memcpy(&format.fg, &format.vlink, sizeof(struct rgb));
+		else
+			memcpy(&format.fg, &format.clink, sizeof(struct rgb));
+
 		html_focusable(a);
 	} else kill_html_stack_item(&html_top);
 	if ((al = get_attr_val(a, "name"))) {

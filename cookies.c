@@ -83,56 +83,114 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 {
 	struct cookie *cookie;
 	struct c_server *cs;
-	unsigned char *p, *q, *s, *server, *date, *document;
-	if (accept_cookies == ACCEPT_NONE) return 0;
-	for (p = str; *p != ';' && *p; p++) if (WHITECHAR(*p)) return 0;
-	for (q = str; *q != '='; q++) if (!*q || q >= p) return 0;
-	if (str == q || q + 1 == p) return 0;
-	if (!(cookie = mem_alloc(sizeof(struct cookie)))) return 0;
-	document = get_url_data(url);
+	unsigned char *val_end, *nam_end;
+	unsigned char *server, *document, *date, *secure;
+
+	/* NAME=VALUE; expires=DATE; path=PATH; domain=DOMAIN_NAME; secure */
+	
+	if (accept_cookies == ACCEPT_NONE)
+		return 0;
+
+	/* Seek for ; after VALUE */
+	
+	for (val_end = str; *val_end != ';' && *val_end; val_end++)
+		if (WHITECHAR(*val_end))
+			return 0;
+
+	/* Seek for = between NAME and VALUE */
+	
+	for (nam_end = str; *nam_end != '='; nam_end++)
+		if (!*nam_end || nam_end >= val_end)
+			return 0;
+	
+	if (str == nam_end || nam_end + 1 == val_end)
+		return 0;
+	
+	cookie = mem_alloc(sizeof(struct cookie));
+	if (!cookie)
+		return 0;
+	
 	server = get_host_name(url);
-	cookie->name = memacpy(str, q - str);
-	cookie->value = memacpy(q + 1, p - q - 1);
+	document = get_url_data(url);
+
+	/* Fill main fields */
+	
+	cookie->name = memacpy(str, nam_end - str);
+	cookie->value = memacpy(nam_end + 1, val_end - nam_end - 1);
 	cookie->server = stracpy(server);
+
+	/* Get expiration date */
+	
 	date = parse_header_param(str, "expires");
 	if (date) {
 		cookie->expires = parse_http_date(date);
-		if (! cookie->expires) cookie->expires++; /* no harm and we can use zero then */
+		if (!cookie->expires) {
+			/* We use zero for cookies which expire with
+			 * browser shutdown. */
+			cookie->expires++;
+		}
 		mem_free(date);
-	} else
+
+	} else {
 		cookie->expires = 0;
-	if (!(cookie->path = parse_header_param(str, "path"))) {
-		unsigned char *w;
+	}
+	
+	cookie->path = parse_header_param(str, "path");
+	if (!cookie->path) {
+		unsigned char *path_end;
+		
 		cookie->path = stracpy("/");
 		add_to_strn(&cookie->path, document);
-		for (w = cookie->path; *w; w++) if (end_of_dir(*w)) {
-			*w = 0;
-			break;
-		}
-		for (w = cookie->path + strlen(cookie->path) - 1; w >= cookie->path; w--)
-			if (*w == '/') {
-				w[1] = 0;
+		
+		for (path_end = cookie->path; *path_end; path_end++) {
+			if (end_of_dir(*path_end)) {
+				*path_end = 0;
 				break;
 			}
+		}
+		
+		for (path_end = cookie->path + strlen(cookie->path) - 1;
+		     path_end >= cookie->path; path_end--) {
+			if (*path_end == '/') {
+				path_end[1] = 0;
+				break;
+			}
+		}
+		
 	} else {
-		if (!cookie->path[0] || cookie->path[strlen(cookie->path) - 1] != '/')
+		if (!cookie->path[0]
+		    || cookie->path[strlen(cookie->path) - 1] != '/')
 			add_to_strn(&cookie->path, "/");
+		
 		if (cookie->path[0] != '/') {
 			add_to_strn(&cookie->path, "x");
-			memmove(cookie->path + 1, cookie->path, strlen(cookie->path) - 1);
+			memmove(cookie->path + 1, cookie->path,
+				strlen(cookie->path) - 1);
 			cookie->path[0] = '/';
 		}
 	}
-	if (!(cookie->domain = parse_header_param(str, "domain"))) cookie->domain = stracpy(server);
-	if (cookie->domain[0] == '.') memmove(cookie->domain, cookie->domain + 1, strlen(cookie->domain));
-	if ((s = parse_header_param(str, "secure"))) {
+	
+	cookie->domain = parse_header_param(str, "domain");
+	if (!cookie->domain)
+		cookie->domain = stracpy(server);
+	if (cookie->domain[0] == '.')
+		memmove(cookie->domain, cookie->domain + 1,
+			strlen(cookie->domain));
+	
+	secure = parse_header_param(str, "secure");
+	if (secure) {
 		cookie->secure = 1;
-		mem_free(s);
-	} else cookie->secure = 0;
+		mem_free(secure);
+	} else {
+		cookie->secure = 0;
+	}
+	
 #ifdef COOKIES_DEBUG
 	debug("Got cookie %s = %s from %s, domain %s, expires at %d, secure %d\n",
-	      cookie->name, cookie->value, cookie->server, cookie->domain, cookie->expires, cookie->secure);
+	      cookie->name, cookie->value, cookie->server, cookie->domain,
+	      cookie->expires, cookie->secure);
 #endif
+	
 	if (check_domain_security(server, cookie->domain)) {
 #ifdef COOKIES_DEBUG
 		debug("Domain security violated.");
@@ -140,27 +198,33 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		mem_free(cookie->domain);
 		cookie->domain = stracpy(server);
 	}
+	
 	cookie->id = cookie_id++;
-	foreach (cs, c_servers) if (!strcasecmp(cs->server, server)) {
-		if (cs->accept) {
+	
+	foreach (cs, c_servers) {
+		if (strcasecmp(cs->server, server))
+			continue;
+		
+		if (cs->accept)
 			goto ok;
-		} else {
+
 #ifdef COOKIES_DEBUG
-			debug("Dropped.");
+		debug("Dropped.");
 #endif
-			free_cookie(cookie);
-			mem_free(cookie);
-			mem_free(server);
-			return 0;
-		}
+		free_cookie(cookie);
+		mem_free(cookie);
+		mem_free(server);
+		return 0;
 	}
+	
 	if (accept_cookies != ACCEPT_ALL) {
 		free_cookie(cookie);
 		mem_free(cookie);
 		mem_free(server);
 		return 1;
 	}
-	ok:
+	
+ok:
 	accept_cookie(cookie);
 	mem_free(server);
 	return 0;

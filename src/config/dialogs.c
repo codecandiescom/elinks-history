@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.120 2003/11/21 16:15:06 jonas Exp $ */
+/* $Id: dialogs.c,v 1.121 2003/11/23 17:22:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -378,11 +378,11 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(term, N_("Option manager"),
 			OPTION_MANAGER_ADDSIZE, &option_browser, ses,
 			OPTION_MANAGER_BUTTONS,
-			N_("Info"), push_info_button, B_ENTER, ses,
-			N_("Edit"), push_edit_button, B_ENTER, ses,
-			N_("Add"), push_add_button, B_ENTER, ses,
-			N_("Delete"), push_del_button, B_ENTER, ses,
-			N_("Save"), push_save_button, B_ENTER, ses);
+			N_("Info"), push_info_button, B_ENTER, NULL,
+			N_("Edit"), push_edit_button, B_ENTER, NULL,
+			N_("Add"), push_add_button, B_ENTER, NULL,
+			N_("Delete"), push_del_button, B_ENTER, NULL,
+			N_("Save"), push_save_button, B_ENTER, NULL);
 }
 
 
@@ -536,8 +536,8 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(term, N_("Keybinding manager"),
 			KEYBINDING_MANAGER_ADDSIZE, &keybinding_browser, ses,
 			KEYBINDING_MANAGER_BUTTONS,
-			N_("Add"), push_kbdbind_add_button, B_ENTER, ses,
-			N_("Delete"), push_kbdbind_del_button, B_ENTER, ses,
-			N_("Toggle display"), push_kbdbind_toggle_display_button, B_ENTER, ses,
-			N_("Save"), push_kbdbind_save_button, B_ENTER, ses);
+			N_("Add"), push_kbdbind_add_button, B_ENTER, NULL,
+			N_("Delete"), push_kbdbind_del_button, B_ENTER, NULL,
+			N_("Toggle display"), push_kbdbind_toggle_display_button, B_ENTER, NULL,
+			N_("Save"), push_kbdbind_save_button, B_ENTER, NULL);
 }

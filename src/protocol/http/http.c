@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.183 2003/09/08 15:10:16 zas Exp $ */
+/* $Id: http.c,v 1.184 2003/09/26 21:36:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,7 +316,7 @@ static void
 add_uri_host_to_string(struct string *header, struct uri *uri)
 {
 #ifdef IPV6
-	if (strchr(uri->host, ':') != strrchr(uri->host, ':')) {
+	if (memchr(uri->host, ':', uri->hostlen)) {
 		/* IPv6 address */
 		add_char_to_string(header, '[');
 		add_bytes_to_string(header, uri->host, uri->hostlen);

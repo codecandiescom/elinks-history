@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.311 2004/05/04 01:46:04 jonas Exp $ */
+/* $Id: menu.c,v 1.312 2004/05/24 23:52:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -559,7 +559,7 @@ send_open_in_new_window(struct terminal *term, const struct open_in_new *open,
 {
 	struct document_view *doc_view;
 	struct link *link;
-	unsigned char *url;
+	struct uri *uri;
 
 	assert(term && open && ses);
 	if_assert_failed return;
@@ -570,11 +570,11 @@ send_open_in_new_window(struct terminal *term, const struct open_in_new *open,
 	link = get_current_link(doc_view);
 	if (!link) return;
 
-	url = get_link_url(ses, doc_view, link);
-	if (!url) return;
+	uri = get_link_uri(ses, doc_view, link);
+	if (!uri) return;
 
-	open_url_in_new_window(ses, url, open->env);
-	mem_free(url);
+	open_url_in_new_window(ses, struri(uri), open->env);
+	done_uri(uri);
 }
 
 void

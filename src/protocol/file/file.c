@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.184 2004/12/19 12:08:10 jonas Exp $ */
+/* $Id: file.c,v 1.185 2004/12/19 12:17:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@
 #include "util/string.h"
 
 
-struct option_info file_options[] = {
+static struct option_info file_options[] = {
 	INIT_OPT_TREE("protocol", N_("Local files"),
 		"file", 0,
 		N_("Options specific to local browsing.")),

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.382 2004/12/19 10:05:56 pasky Exp $ */
+/* $Id: http.c,v 1.383 2004/12/19 12:17:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ static struct auth_entry proxy_auth;
 static unsigned char *accept_charset = NULL;
 
 
-struct option_info http_options[] = {
+static struct option_info http_options[] = {
 	INIT_OPT_TREE("protocol", N_("HTTP"),
 		"http", 0,
 		N_("HTTP-specific options.")),

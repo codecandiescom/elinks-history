@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.25 2004/01/18 17:20:12 jonas Exp $ */
+/* $Id: value.c,v 1.26 2004/01/18 17:24:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,8 +241,6 @@ css_parse_value(struct css_property_info *propinfo,
 	if (!token) return 0;
 
 	string = token->string;
-	/* Skip the leading whitespaces. */
-	skip_whitespace(string);
 
 	return propinfo->parser(propinfo, value, &string);
 }

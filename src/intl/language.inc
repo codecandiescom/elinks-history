@@ -12110,15 +12110,15 @@ struct translation translation_ukrainian [] = {
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Бажана мова (список розд╕лених комою ISO-код╕в)"},
   {T_ACCEPT_UI_LANGUAGE, "Використовувати мову ╕нтерфейсу як Accept-Language (невелике зменшення безпеки)"},
-  {T_SSL_CIPHER, NULL},
-  {T_ENCODING, NULL},
-  {T_BOOKMARK_USED, NULL},
-  {T_ELINKS_HOME, NULL},
+  {T_SSL_CIPHER, "Код SSL"},
+  {T_ENCODING, "Кодування"},
+  {T_BOOKMARK_USED, "Вибачте, ця закладинка вже чимось використову╓ться прямо зараз"},
+  {T_ELINKS_HOME, "Домашня стор╕нка Elinks"},
   {T_HK_ELINKS_HOME, NULL},
-  {T_ADD_FOLDER, NULL},
-  {T_FOLDER_NAME, NULL},
-  {T_MOVE, NULL},
-  {T_AFTER_RESUME, NULL},
+  {T_ADD_FOLDER, "Додати папку"},
+  {T_FOLDER_NAME, "╤м'я папки"},
+  {T_MOVE, "Перем╕стити"},
+  {T_AFTER_RESUME, "п╕сля продовження"},
   {0, NULL}
 };
 

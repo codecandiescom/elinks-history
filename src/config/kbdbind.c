@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.10 2002/05/05 16:19:40 zas Exp $ */
+/* $Id: kbdbind.c,v 1.11 2002/05/05 16:43:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,15 +42,16 @@ delete_keybinding(enum keymap km, long x, long y)
 	struct keybinding *kb;
 
 	foreach(kb, keymaps[km]) {
-		if (kb->x == x && kb->y == y) {
+		if (kb->x != x || kb->y != y)
+			continue;
+
 #ifdef HAVE_LUA
-			if (kb->func_ref != LUA_NOREF)
-				lua_unref(lua_state, kb->func_ref);
+		if (kb->func_ref != LUA_NOREF)
+			lua_unref(lua_state, kb->func_ref);
 #endif
-			del_from_list(kb);
-			mem_free(kb);
-			break;
-		}
+		del_from_list(kb);
+		mem_free(kb);
+		break;
 	}
 }
 
@@ -98,12 +99,13 @@ kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
 
 	if (ev->ev == EV_KBD) {
 		foreach(kb, keymaps[kmap]) {
-			if (ev->x == kb->x && ev->y == kb->y) {
-				if (kb->act == ACT_LUA_FUNCTION && func_ref)
-					*func_ref = kb->func_ref;
+			if (ev->x != kb->x || ev->y != kb->y)
+				continue;
 
-				return kb->act;
-			}
+			if (kb->act == ACT_LUA_FUNCTION && func_ref)
+				*func_ref = kb->func_ref;
+
+			return kb->act;
 		}
 	}
 

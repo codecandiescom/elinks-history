@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.10 2004/08/18 20:40:57 jonas Exp $ */
+/* $Id: gopher.c,v 1.11 2004/08/19 14:11:23 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -228,10 +228,10 @@ add_gopher_command(struct connection *conn, struct string *command,
 		if (!query) {
 			done_string(command);
 			/* Display "cover page" */
-			return S_UNKNOWN_PROTOCOL;
 #if 0
 			return init_gopher_cso_cache_entry(conn);
 #endif
+			return S_GOPHER_CSO_ERROR;
 		}
 
 		add_uri_decoded(command, selector, selectorlen, 0);
@@ -669,7 +669,7 @@ read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
 		/* FIXME: Merge CSO support */
 		state = read_gopher_cso_data(conn, rb);
 #endif
-		state = S_UNKNOWN_PROTOCOL;
+		state = S_GOPHER_CSO_ERROR;
 		break;
 
 	case GOPHER_SOUND:
@@ -748,7 +748,7 @@ gopher_protocol_handler(struct connection *conn)
 		 * - FM */
 		if (uri->datalen == 1 && *uri->data == GOPHER_CSO) {
 			/* FIXME: redirect_cache() */
-			end_gopher_connection(conn, S_UNKNOWN_PROTOCOL);
+			end_gopher_connection(conn, S_GOPHER_CSO_ERROR);
 		}
 		break;
 

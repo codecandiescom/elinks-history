@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.31 2004/08/18 20:02:20 jonas Exp $ */
+/* $Id: state.c,v 1.32 2004/08/19 14:11:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,6 +102,10 @@ struct s_msg_dsc {
 	{S_NNTP_NEWS_SERVER,	N_("Unable to handle news: URI because no news server has been\n"
 				"been configured. Either set the option protocol.nntp.server\n"
 				"or set the NNTPSERVER environment variable.")},
+#endif
+
+#ifdef CONFIG_GOPHER
+	{S_GOPHER_CSO_ERROR,	N_("The CSO phone-book protocol is not supported.")},
 #endif
 
 	{0,			NULL}

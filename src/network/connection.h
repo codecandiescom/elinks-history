@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.73 2004/08/18 20:02:19 jonas Exp $ */
+/* $Id: connection.h,v 1.74 2004/08/19 14:11:24 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -96,6 +96,8 @@ enum connection_state {
 
 	S_NNTP_ERROR		= -10800,
 	S_NNTP_NEWS_SERVER	= -10801,
+
+	S_GOPHER_CSO_ERROR	= -10900,
 };
 
 struct remaining_info {

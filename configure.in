@@ -863,7 +863,7 @@ AM_CONDITIONAL(CONFIG_SMALL, test "$CONFIG_SMALL" = yes)
 
 AC_ARG_ENABLE(weehoofooboomookerchoo,
               [
-    Also check out the feature.conf file for more information about features!
+    Also check out the features.conf file for more information about features!
 	      ],
 	      [AC_MSG_ERROR(Are you strange, or what?)])
 

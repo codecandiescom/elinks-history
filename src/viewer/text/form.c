@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.144 2004/06/12 18:06:35 jonas Exp $ */
+/* $Id: form.c,v 1.145 2004/06/12 18:51:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,11 +302,11 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 }
 
 void
-draw_forms(struct terminal *t, struct document_view *doc_view)
+draw_forms(struct terminal *term, struct document_view *doc_view)
 {
 	struct link *l1, *l2;
 
-	assert(t && doc_view);
+	assert(term && doc_view);
 	if_assert_failed return;
 
 	l1 = get_first_link(doc_view);
@@ -332,7 +332,7 @@ draw_forms(struct terminal *t, struct document_view *doc_view)
 					     stracpy(value));
 		}
 #endif /* CONFIG_FORMHIST */
-		draw_form_entry(t, doc_view, l1);
+		draw_form_entry(term, doc_view, l1);
 
 	} while (l1++ < l2);
 }

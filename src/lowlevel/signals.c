@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.22 2004/04/14 02:35:02 jonas Exp $ */
+/* $Id: signals.c,v 1.23 2004/06/12 18:51:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,26 +33,26 @@
 static void unhandle_basic_signals(struct terminal *term);
 
 static void
-sig_terminate(struct terminal *t)
+sig_terminate(struct terminal *term)
 {
-	unhandle_basic_signals(t);
+	unhandle_basic_signals(term);
 	terminate = 1;
 	retval = RET_SIGNAL;
 }
 
 static void
-sig_intr(struct terminal *t)
+sig_intr(struct terminal *term)
 {
-	unhandle_basic_signals(t);
+	unhandle_basic_signals(term);
 
-	if (!t)
+	if (!term)
 		terminate = 1;
 	else
-		register_bottom_half((void (*)(void *))destroy_terminal, t);
+		register_bottom_half((void (*)(void *))destroy_terminal, term);
 }
 
 void
-sig_ctrl_c(struct terminal *t)
+sig_ctrl_c(struct terminal *term)
 {
 	if (!is_blocked()) kbd_ctrl_c();
 }
@@ -63,7 +63,7 @@ sig_ign(void *x)
 }
 
 static void
-sig_tstp(struct terminal *t)
+sig_tstp(struct terminal *term)
 {
 #ifdef SIGSTOP
 	int pid = getpid();
@@ -81,14 +81,14 @@ sig_tstp(struct terminal *t)
 }
 
 static void
-sig_cont(struct terminal *t)
+sig_cont(struct terminal *term)
 {
 	if (!unblock_itrm(0)) resize_terminal();
 }
 
 #ifdef CONFIG_BACKTRACE
 static void
-sig_segv(struct terminal *t)
+sig_segv(struct terminal *term)
 {
 	/* Get some attention. */
 	fputs("\a", stderr); fflush(stderr); sleep(1); fputs("\a\n", stderr);

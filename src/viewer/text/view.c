@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.449 2004/06/09 22:12:28 jonas Exp $ */
+/* $Id: view.c,v 1.450 2004/06/12 18:51:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,14 +89,14 @@ find_tag(struct document *document, unsigned char *name, int namelen)
 }
 
 static void
-draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
+draw_frame_lines(struct terminal *term, struct frameset_desc *frameset_desc,
 		 int xp, int yp)
 {
 	/* Optionalize? */
 	struct color_pair colors = INIT_COLOR_PAIR(0x000000, 0xCCCCCC);
 	register int y, j;
 
-	assert(t && frameset_desc && frameset_desc->frame_desc);
+	assert(term && frameset_desc && frameset_desc->frame_desc);
 	if_assert_failed return;
 
 	y = yp - 1;
@@ -112,14 +112,14 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 				struct box box;
 
 				set_box(&box, x, y + 1, 1, height);
-				draw_box(t, &box, BORDER_SVLINE, SCREEN_ATTR_FRAME, &colors);
+				draw_box(term, &box, BORDER_SVLINE, SCREEN_ATTR_FRAME, &colors);
 
 				if (j == frameset_desc->box.height - 1)
-					draw_border_cross(t, x, y + height + 1,
+					draw_border_cross(term, x, y + height + 1,
 							  BORDER_X_UP, &colors);
 			} else if (j) {
 				if (x >= 0)
-					draw_border_cross(t, x, y,
+					draw_border_cross(term, x, y,
 							  BORDER_X_RIGHT, &colors);
 			}
 
@@ -127,18 +127,18 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 				struct box box;
 
 				set_box(&box, x + 1, y, width, 1);
-				draw_box(t, &box, BORDER_SHLINE, SCREEN_ATTR_FRAME, &colors);
+				draw_box(term, &box, BORDER_SHLINE, SCREEN_ATTR_FRAME, &colors);
 
 				if (i == frameset_desc->box.width - 1
-				    && x + width + 1 < t->width)
-					draw_border_cross(t, x + width + 1, y,
+				    && x + width + 1 < term->width)
+					draw_border_cross(term, x + width + 1, y,
 							  BORDER_X_LEFT, &colors);
 			} else if (i) {
-				draw_border_cross(t, x, y, BORDER_X_DOWN, &colors);
+				draw_border_cross(term, x, y, BORDER_X_DOWN, &colors);
 			}
 
 			if (i && j)
-				draw_border_char(t, x, y, BORDER_SCROSS, &colors);
+				draw_border_char(term, x, y, BORDER_SCROSS, &colors);
 
 			x += width + 1;
 		}
@@ -157,7 +157,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 			int p = pj + i;
 
 			if (frameset_desc->frame_desc[p].subframe) {
-				draw_frame_lines(t, frameset_desc->frame_desc[p].subframe,
+				draw_frame_lines(term, frameset_desc->frame_desc[p].subframe,
 						 x + 1, y + 1);
 			}
 			x += width + 1;

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.59 2004/06/12 18:05:54 zas Exp $ */
+/* $Id: textarea.c,v 1.60 2004/06/12 18:51:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,7 +129,7 @@ area_cursor(struct form_control *frm, struct form_state *fs)
 }
 
 void
-draw_textarea(struct terminal *t, struct form_state *fs,
+draw_textarea(struct terminal *term, struct form_state *fs,
 	      struct document_view *doc_view, struct link *link)
 {
 	struct line_info *ln, *lnx;
@@ -139,7 +139,7 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	int sl, ye;
 	register int x, y;
 
-	assert(t && doc_view && doc_view->document && doc_view->vs && link);
+	assert(term && doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
 	frm = link->form_control;
 	assertm(frm, "link %d has no form", (int)(link - doc_view->document->links));
@@ -173,10 +173,10 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 				if (fs->value &&
 				    i >= -fs->vpos &&
 				    i + fs->vpos < ln->en - ln->st)
-					draw_char_data(t, xi, y,
+					draw_char_data(term, xi, y,
 						       ln->st[i + fs->vpos]);
 				else
-					draw_char_data(t, xi, y, '_');
+					draw_char_data(term, xi, y, '_');
 			}
 		}
 	}
@@ -190,7 +190,7 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 			int xi = x + i;
 
 			if (col_is_in_box(box, xi))
-				draw_char_data(t, xi, y, '_');
+				draw_char_data(term, xi, y, '_');
 		}
 	}
 

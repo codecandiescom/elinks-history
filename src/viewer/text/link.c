@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.193 2004/06/12 18:05:54 zas Exp $ */
+/* $Id: link.c,v 1.194 2004/06/12 18:51:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,7 @@ set_link(struct document_view *doc_view)
 
 
 static void
-draw_link(struct terminal *t, struct document_view *doc_view, int l)
+draw_link(struct terminal *term, struct document_view *doc_view, int l)
 {
 	struct link *link;
 	int xpos, ypos;
@@ -71,7 +71,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	struct document_options *doc_opts;
 	struct color_pair colors;
 
-	assert(t && doc_view && doc_view->vs);
+	assert(term && doc_view && doc_view->vs);
 	if_assert_failed return;
 	assertm(!doc_view->link_bg, "link background not empty");
 	if_assert_failed mem_free(doc_view->link_bg);
@@ -166,15 +166,15 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 		doc_view->link_bg[i].x = x;
 		doc_view->link_bg[i].y = y;
 
-		co = get_char(t, x, y);
+		co = get_char(term, x, y);
 		copy_screen_chars(&doc_view->link_bg[i].c, co, 1);
 
 		if (i == cursor_offset) {
 			int blockable = (!link_is_textinput(link)
 					 && co->color != template->color);
 
-			set_cursor(t, x, y, blockable);
-			set_window_ptr(get_current_tab(t), x, y);
+			set_cursor(term, x, y, blockable);
+			set_window_ptr(get_current_tab(term), x, y);
 		}
 
  		template->data = co->data;

@@ -4,6 +4,7 @@ elinks (0.11.0-0) unstable; urgency=low
   * Install elinks.conf from contrib/
   * Install documentation files about using ELinks from doc/
   * Remove more unrelevant files from contrib/
+  * List docs in elinks.docs file
 
  -- Jonas Fonseca <fonseca@diku.dk>  Sun, 11 Jan 2005 01:42:45 +0100
 

@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# $Id: rules,v 1.7 2005/01/11 03:36:06 jonas Exp $
+# $Id: rules,v 1.8 2005/01/11 08:02:29 jonas Exp $
 # Sample debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 
@@ -72,22 +72,16 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installdebconf	
-	dh_installdocs AUTHORS SITES TODO BUGS
-	dh_installdocs doc/bookmarks.txt doc/exmode.txt doc/index.txt doc/introduction.txt doc/mailcap.txt doc/marks.txt doc/mime.html doc/remote.txt doc/tabs.txt
-	dh_installexamples contrib/
+	dh_installdocs
+	dh_installexamples \
+		-X CVS -X .cvsignore -X Makefile.am -X Makefile.in -X colws.diff \
+		-X elinks.spec -X hooks.lua.in -X links_wps.zip -X wipe-out-ssl \
+		-X LinksOS2Icon.zip contrib/
 
 # remove CVS directories, Makefiles and other useless files (from contrib/)
 # XXX: Keep after installation of directories
-	-find debian/elinks -name CVS -exec rm -rf "{}" \;
-	-find debian/elinks -name .cvsignore -exec rm -rf "{}" \;
 	-find debian/elinks -name "js-*.patch" -exec rm -rf "{}" \;
-	-find debian/elinks -name "Makefile*" -exec rm -rf "{}" \;
-	-find debian/elinks -name "hooks.lua.in*" -exec rm -rf "{}" \;
-	-find debian/elinks -name "elinks.spec*" -exec rm -rf "{}" \;
-	-find debian/elinks -name "wipe-out-ssl*" -exec rm -rf "{}" \;
-	-find debian/elinks -name LinksOS2Icon.zip -exec rm -rf "{}" \;
-	-find debian/elinks -name links_wps.zip -exec rm -rf "{}" \;
-	-find debian/elinks -name colws.diff -exec rm -rf "{}" \;
+	-find debian/elinks -name Makefile -exec rm -rf "{}" \;
 
 	dh_installmime
 	dh_installmenu

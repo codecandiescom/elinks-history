@@ -126,6 +126,12 @@ sub proxy_for_hook
 {
 	my $url = shift;
 
+	# no proxy for local files
+	if ($url =~ '^(file://|(http://|)(localhost|127\.0\.0\.1)(/|:|$))')
+	{
+		return "";
+	}
+
 	return undef;
 }
 

@@ -1,11 +1,9 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.64 2004/04/09 03:10:26 jonas Exp $ */
+/* $Id: cgi.c,v 1.65 2004/05/21 12:04:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_CGI
 
 #include <errno.h>
 #include <stdio.h>
@@ -386,5 +384,3 @@ end2:
 	abort_conn_with_state(conn, state);
 	return 0;
 }
-
-#endif /* CONFIG_CGI */

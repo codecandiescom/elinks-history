@@ -1,3 +1,281 @@
+Tue Nov 11 22:32:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cache/cache.h, protocol/http/http.c, sched/connection.c:
+
+	Reverted the last zas' patch. Exact matches exclusively are
+	hindering readability, efficiency and ease of changing of the enum
+	cache_mode content.  
+
+Tue Nov 11 22:26:04 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/color.c:
+
+	Trigger an internal() error immediately when the invalid mode
+	COLOR_MODES is given to set_term_color().  
+
+Tue Nov 11 22:03:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.h, protocol/http/http.c, sched/connection.c:
+
+	Got rid of CACHE_MODE_CHECK_IF_MODIFIED, and make only exact matches
+	against enum type.  
+
+Tue Nov 11 21:57:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cache/cache.h, sched/connection.c, sched/download.c,
+	sched/history.c, sched/session.c:
+
+	CACHE_MODE_DEFAULT -> CACHE_MODE_NORMAL 
+
+Tue Nov 11 21:47:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.h, lowlevel/connect.c, protocol/http/http.c,
+	sched/connection.c, sched/download.c, sched/history.c,
+	sched/session.c:
+
+	enum cache_mode NC_* -> CACHE_MODE_*.  
+
+Tue Nov 11 21:43:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.h:
+
+	Describe enum cache_mode a little.  
+
+Tue Nov 11 21:25:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Update document width so horizontal scrolling is usable.  
+
+Tue Nov 11 21:13:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Ok so my lousy plain text renderer did not handle tabs. But now it
+	does. Reported by pasky.  
+
+Tue Nov 11 21:00:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Move plain line adding to separate function.  
+
+Tue Nov 11 20:25:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Tue Nov 11 20:23:11 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Tue Nov 11 20:15:13 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Tue Nov 11 20:11:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	document.browse.refresh is now by default enabled.  
+
+Tue Nov 11 19:08:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Fix terminal option dialog.  
+
+Tue Nov 11 17:50:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/document.c:
+
+	Kill document refresh in release_document(), so detach_formatted()
+	will ensure consistency that ses->doc_view->document->refresh is the
+	active refresh. Fixes bug 278.  
+
+Tue Nov 11 17:26:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	Removed the comparing of old and new cache size - do not set @whole
+	if user changed the cache limit, we have no reason to flush the
+	cache. Also removed the raising of cache size limit to the minimal
+	possible cache size at the given time. Basically, we want to shrink
+	on when some of the cache entries now used will be unused, and it's
+	rather confusing behaviour for the user. See mailing list for more
+	reasons.  
+
+Tue Nov 11 15:48:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/conf.c:
+
+	Let compiler warn about untested enum elements in switch(). More
+	error messages for secsave errors.  
+
+Tue Nov 11 15:35:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	Let compiler warn about untested enum elements in switch().  
+
+Tue Nov 11 15:31:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/select.c, bfu/listbox.c:
+
+	Let compiler warn about untested enum elements in switch().  
+
+Tue Nov 11 15:29:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Let compiler warn about untested enum elements in switch(). Handle
+	FC_RESET as FC_SUBMIT in get_succesful_controls(), please check if
+	correct.  
+
+Tue Nov 11 15:25:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Let compiler warn about untested enum elements in switch().  
+
+Tue Nov 11 15:20:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/document.c:
+
+	Let compiler warn about untested enum elements in switch().
+	Inclusion of headers was moved to top of file with others.  
+
+Tue Nov 11 15:12:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Let compiler warns about untested enum elements in switch().  
+
+Tue Nov 11 15:08:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	Let compiler warns about untested enum elements in switch().  
+
+Tue Nov 11 15:05:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Let compiler warns about untested enum elements in switch().  
+
+Tue Nov 11 15:00:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/connection.c:
+
+	Let compiler warns about untested enum elements in switch().  
+
+Tue Nov 11 14:52:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Let compiler warns about untested enum elements in switch().  
+
+Tue Nov 11 14:43:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.c, form.c:
+
+	Let compiler warns about untested enum elements in switch().  
+
+Tue Nov 11 14:39:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: color.c, screen.c:
+
+	Let compiler warns about untested enum elements in switch().  
+
+Tue Nov 11 14:26:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Let compiler emits a warning for unhandled case instead of using
+	runtime assertion. Previous issue should have been detected sooner.  
+
+Tue Nov 11 14:17:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	ui.colors.color.tabs.separator.text default value was changed from
+	red to brown after thorough usability and visibility tests and is
+	actually likely to stay so for some time now ;-).  
+
+Tue Nov 11 14:16:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	An assertion failure triggered by http://bd.ji.cz/ was fixed.
+	WIDGET_FIELD_PASS was forgotten as a possible case.  
+
+Tue Nov 11 13:45:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Only force redrawing when something changed.  
+
+Tue Nov 11 13:38:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	No need for termopt_hop. Allocate checkbox values with the dialogs.  
+
+Tue Nov 11 13:32:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Cleanup and simplify button handlers.  
+
+Tue Nov 11 13:19:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Make terminal option dialog more data driven.  
+
+Tue Nov 11 12:42:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: stub.c, stub.h:
+
+	A few compile fixes for FreeBSD.  
+
+Tue Nov 11 09:13:32 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	Fix a bug introduced two frinking weeks ago in
+	src/scripting/lua/core.c revision 1.100: Text fields are not
+	initialised in xdialogs.  
+
+Tue Nov 11 06:28:52 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	Fix '[' to properly ignore hidden box_items when computing the
+	offset to pass to box_sel_move; now it will not jump past the folder
+	to which it should be jumping.  
+
+Tue Nov 11 00:11:34 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation update.  
+
+Mon Nov 10 23:36:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file.c:
+
+	Fix an issue revealed by linux /proc exploration with ELinks,
+	concerning rendering of unreadable fs links.  
+
 Mon Nov 10 22:57:48 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/bfu/hierbox.c:

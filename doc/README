@@ -1,92 +1,13 @@
-	   Documentation README - Overview of the ELinks documentation	|title|
+			Overview of the ELinks documentation
 
-   There is only limited documentation available for ELinks, sorry. It basically
-   consists of the documents in this directory, the man pages and the {README}
-   and {INSTALL} files in the project's root directory.
+There is only limited documentation available for ELinks, sorry. It basically
+consists of the documents in this directory and the features.conf, README and
+INSTALL files in the project's root directory.
 
-
-   !!! BEFORE YOU CONTINUE READING:
-
-   Note that the DocBookized manual did not happen yet. You can do with a bunch
-of .html and especially .txt (wait, you expect HTML browser to carry its
-documentation around in HTML?) files in this directory. The index.txt file
+The files you will find in this directory are the man pages living in the man/
+directory and a bunch of .html and especially .txt (wait, you expect HTML
+browser to carry its documentation around in HTML?). The index.txt file
 contains the table of contents listing all these files.
 
 
-The directory structure
-
-   In this directory you will find:
-
-   man/									|term|
-
-	The place where the man pages live. They are generated from the DocBook
-	documents found in doc/book/manpages.
-
-   html/								|term|
-
-	Will (in the future) contain processed DocBook documents.  Manual pages
-	and man pages should be already processed.
-
-ELinks DocTool
-
-   Since |DocBook| seems to be a lot of work to get it running on multiple
-   platforms I am investigating going for something simpler. Something that will
-   need only the standard UN*X tools to run, an ELinks doctool. This tool will
-   be build upon some architecture similar to {|help2doc|} currently used for
-   generating |elinks.conf(5)|.
-
-  The format
-
-   The basic format will be something similar to how ELinks renders HTML pages
-   and probably inspired by |AsciiDoc| and |Vim| help files. We can then
-   *easily* distribute the documentation source (_human_readable_ plain text
-   files like this one) with the source. Any user can then:
-
-	% cd doc && make htmldocs
-
-   or similar to generate a desired format. It will support translation to the
-   core formats: HTML and man. Which means it will also be used for the web
-   pages. With possibility to extend it with DocBook later.
-
-  Other uses
-
-   One thing I'd also like to use it for is the option declarations. The current
-   scheme is hard to read and update. Something like:
-
-	= Option =							|code|
-	Name:		tofu.burgers.rock
-	Type:		boolean
-	Value:		1
-	Flags:		0
-	Caption:	They just do
-	Description:
-	   And so on about the tasty stuff.
-	   .
-	   You can also make them with humus.
-
-   or similar that could easily be translated to some {options.inc} file would
-   be much better. This is however far ahead and solely my opinion.
-
-   A Vim |syntax file| is available.
-
-   TODO: The first step will be to translate this document to HTML.
-
-						Jonas Fonseca, 2003-10-11
-
-References								|refs|
-
-   [DocBook]		http://www.docbook.org/
-   [help2doc]		file:book/tools/help2doc
-   [elinks.conf(5)]	file:man/man5/elinks.conf.5
-   [AsciiDoc]		http://www.methods.co.nz/asciidoc/
-   [Vim]		http://www.vim.org/
-   [syntax file]	http://www.nitro.dk/~jonas/elinks/doctool.vim
-
-File Info								|meta|
-
-   Charset:		iso-8859-1
-   Language:		en
-   CVS Id:		$Id: README,v 1.11 2004/12/16 09:31:29 pasky Exp $
-   Copyright:		(c) 2003 Jonas Fonseca and others
-   License:		Licensed under the GNU GPL.
-   vim:			textwidth=80 filetype=doctool
+$Id: README,v 1.12 2004/12/21 13:29:13 jonas Exp $

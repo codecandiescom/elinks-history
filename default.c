@@ -1214,7 +1214,7 @@ struct option links_options[] = {
 	 	0, MAX_STR_LEN, user_agent,
 	        "Change the User Agent. That means identification string, which\n"
 		"is sent to HTTP server, when a document is requested.\n"
-		"If empty, defaults to: Elinks (<version>; <system_id>)" },
+		"If empty, defaults to: Elinks (<version>; <system_id>; <term_size>)" },
 	 
 	{	"version", NULL,
 		version_cmd, NULL, NULL,

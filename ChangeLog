@@ -1,3 +1,62 @@
+Sun Sep  8 20:49:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/globhist/globhist.c:
+
+	Moved trimming of the global history list before allocation of the
+	new history item, based on the patch by Jonas Fonesca
+	<fonesca@diku.dk>. Fixes segfault when the global history is too
+	big.  
+
+Sun Sep  8 20:42:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Trivial - remove one useless check.  
+
+Sun Sep  8 19:43:51 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Referer header is no more sent when fake referer is set but empty.  
+	Minor optimizations concerning redundant get_opt_str() calls.  Minor
+	tidyup.  
+
+Sun Sep  8 19:18:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/spanish.lng, src/intl/language.inc:
+
+	Spanish translation update by David Mediavilla.  
+
+Sun Sep  8 19:13:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/italian.lng, src/intl/language.inc:
+
+	Italian translation update by Fabio.  
+
+Sun Sep  8 19:13:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS:
+
+	casecmp() -> strncasecmp(), use our version only if libc doesn't
+	offer anything. Patch by Fabio Bonelli <fabiobonelli@libero.it>.  
+
+Sun Sep  8 19:12:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/cookies/cookies.c, src/document/download.c,
+	src/document/view.c, src/document/html/parser.c,
+	src/document/html/tables.c, src/lowlevel/sched.c,
+	src/protocol/ftp.c, src/protocol/url.c, src/protocol/http/header.c,
+	src/util/string.c, src/util/string.h:
+
+	casecmp() -> strncasecmp(), use our version only if libc doesn't
+	offer anything.  
+
+Sun Sep  8 18:07:03 2002  Laurent Monin <zas@norz.org>:
+
+	* HACKING:
+
+	Various fixes and additions.  
+
 Sat Sep  7 10:14:40 2002  Laurent Monin <zas@norz.org>:
 
 	* AUTHORS:

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.119 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: task.c,v 1.120 2004/07/21 19:39:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,7 +233,11 @@ x:
 			destroy_vs(vs);
 			init_vs(vs, ses->loading_uri, vs->plain);
 		}
+
 	} else {
+		assert(loc);
+		if_assert_failed return NULL;
+
 		init_list(loc->frames);
 		vs = &loc->vs;
 		init_vs(vs, ses->loading_uri, vs->plain);

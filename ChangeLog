@@ -1,3 +1,24 @@
+Fri Jan 21 19:58:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	A few fixes after discussing the merge with Morten Bo Johansen.  
+
+Fri Jan 21 14:11:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/: lua/hooks.c, perl/hooks.c:
+
+	Fix get-proxy event hooks. @new_proxy_url is initialized to NULL so
+	don't check for that. Instead be defensive and sanity check
+	pointers.  
+
+Fri Jan 21 11:24:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Revert patch 1.184->1.185 (what was its purpose?), it breaks
+	progress display in download dialog. It fixes bug 610.  
+
 Wed Jan 19 14:50:36 2005  Laurent Monin <zas@norz.org>:
 
 	* src/dialogs/document.c:

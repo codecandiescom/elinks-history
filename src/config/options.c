@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.264 2003/08/28 19:43:13 zas Exp $ */
+/* $Id: options.c,v 1.265 2003/08/28 19:48:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1018,11 +1018,11 @@ register_options(void)
 		"2 is accept all cookies"));
 
 	add_opt_int("cookies", N_("Maximum age"),
-		"max_age", 0, -1, 10000, 365,
-		N_("Cookies maximum age\n"
-		"-1  Use cookie's expiration date if any.\n"
-		" 0  Force expiration at session end, ignoring cookie's expiration date.\n"
-		" 1+ Use cookie's expiration date, but limit age to this number of days."));
+		"max_age", 0, -1, 10000, -1,
+		N_("Cookie maximum age (in days):\n"
+		"-1 is use cookie's expiration date if any\n"
+		"0  is force expiration at the end of session, ignoring cookie's expiration date\n"
+		"1+ is use cookie's expiration date, but limit age to the given number of days"));
 
 	add_opt_bool("cookies", N_("Paranoid security"),
 		"paranoid_security", 0, 0,

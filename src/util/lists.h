@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.20 2003/05/24 21:08:18 pasky Exp $ */
+/* $Id: lists.h,v 1.21 2003/05/24 21:15:47 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -20,6 +20,8 @@
 
 
 #ifndef LISTDEBUG
+
+#define list_magic_set(x) /* no magic */
 
 struct list_head {
 	void *next;
@@ -107,7 +109,7 @@ do { \
 #define D_LIST_HEAD(x) &x, &x
 #define INIT_LIST_HEAD(x) struct list_head x = { D_LIST_HEAD(x) }
 #define LIST_HEAD(x) x *next; x *prev
-#define LIST_SET_MAGIC(x)
+#define LIST_SET_MAGIC(x) list_magic_set(*(x))
 
 
 
@@ -119,6 +121,12 @@ do { \
 
 #define LISTMAGIC1 ((void *) 0xdadababa)
 #define LISTMAGIC2 ((void *) 0xd0d0b0b0)
+
+#define list_magic_set(x) \
+do { \
+	(x).magic1 = LISTMAGIC1; \
+	(x).magic2 = LISTMAGIC2; \
+} while (0)
 
 /* I hope #xyz is ANSI C ;-). Or.. oh well, it's just debug :^). --pasky */
 #define list_magic_error(where,what) list_magic_error_(where, #what, __FILE__, __LINE__)
@@ -141,8 +149,7 @@ struct xlist_head {
 
 #define init_list(x) \
 do { \
-	(x).magic1 = LISTMAGIC1; \
-	(x).magic2 = LISTMAGIC2; \
+	list_magic_set(x); \
 	(x).next = (x).prev = &(x); \
 } while (0)
 
@@ -169,13 +176,12 @@ do { \
 do { \
 	if ((p)->magic1 != LISTMAGIC1 || (p)->magic2 != LISTMAGIC2) \
 		list_magic_error("add_at_pos", p); \
+	list_magic_set(*(x)); \
 	do_not_optimize_here(p); \
 	(x)->next = (p)->next; \
 	(x)->prev = (p); \
    	(p)->next = (x); \
    	(x)->next->prev = (x); \
-	(x)->magic1 = LISTMAGIC1; \
-	(x)->magic2 = LISTMAGIC2; \
 	do_not_optimize_here(p); \
 } while (0)
 
@@ -229,7 +235,7 @@ do { \
 #define D_LIST_HEAD(x) LISTMAGIC1, &x, &x, LISTMAGIC2
 #define INIT_LIST_HEAD(x) struct list_head x = { D_LIST_HEAD(x) }
 #define LIST_HEAD(x) void *magic1; x *next; x *prev; void *magic2;
-#define LIST_SET_MAGIC(x) do { x->magic1 = LISTMAGIC1; x->magic2 = LISTMAGIC2 } while (0)
+#define LIST_SET_MAGIC(x) list_magic_set(*(x))
 
 #endif /* LISTDEBUG */
 

@@ -1,3 +1,83 @@
+Fri Jun 13 22:04:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Temporary vars now handles realloc returned values in
+	add_to_pointers + some cleanup.  
+
+Fri Jun 13 21:47:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	void *calloc (size_t nmemb, size_t size)... Order of parameters were
+	inverted .Thanks to Jonas for the report.  
+
+Fri Jun 13 18:38:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/fastfind.c:
+
+	A lot of s/ff_info/info/ .. Improves line length and readability ..
+	atleast for me ;) 
+
+Fri Jun 13 18:12:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/fastfind.c:
+
+	Some small cleanups. Rename member s/searchs/searches/.  
+
+Fri Jun 13 17:54:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: intl/charsets.c, main.c, main.h:
+
+	Use fastfind for entities searching, due to entity cache efficiency,
+	performance gain is minimal, we should make it optionnal.  
+
+Fri Jun 13 17:48:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Case sensitive key match was fixed. Use ff_elt and ff_elt_c for more
+	than 512 keys.  
+
+Fri Jun 13 17:04:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, main.h, setup.h, document/html/parser.c:
+
+	Now fastfind is used by parser.  
+
+Fri Jun 13 17:02:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.h:
+
+	Debug mode is now disabled. Feel free to use it, it will produce
+	statistics about fastfind efficiency.  
+
+Fri Jun 13 16:59:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: Makefile.am, fastfind.c, fastfind.h:
+
+	Zas's Fast Find Algorithm: it will replace bsearch() + strcasecmp()
+	... in parser.c. Please test, comment, improve.  
+
+Fri Jun 13 14:07:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: .cvsignore, config/.cvsignore, manpages/.cvsignore:
+
+	Update files cvs should ignore.  
+
+Fri Jun 13 14:06:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/tools/help2doc:
+
+	Some over escaped chars was trimmed.  
+
+Fri Jun 13 13:34:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Small description change that will make generating elinks.conf
+	easier.  
+
 Thu Jun 12 18:43:28 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/dialogs/menu.c:

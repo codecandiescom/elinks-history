@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.430 2004/06/10 13:35:40 jonas Exp $ */
+/* $Id: session.c,v 1.431 2004/06/10 13:46:55 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -506,38 +506,14 @@ process_file_requests(struct session *ses)
 	stop_recursion = 0;
 }
 
-static struct session *
-create_basic_session(struct window *tab)
-{
-	struct session *ses = mem_calloc(1, sizeof(struct session));
-
-	if (!ses) return NULL;
-
-	create_history(&ses->history);
-	init_list(ses->scrn_frames);
-	init_list(ses->more_files);
-	init_list(ses->type_queries);
-	ses->tab = tab;
-	ses->id = session_id++;
-	ses->task.type = TASK_NONE;
-	ses->display_timer = -1;
-
-#ifdef CONFIG_LEDS
-	init_led_panel(&ses->status.leds);
-	ses->status.ssl_led = register_led(ses, 0);
-#endif
-
-	add_to_list(sessions, ses);
-
-	return ses;
-}
-
 static void
 dialog_goto_url_open_first(void *data)
 {
 	dialog_goto_url((struct session *) data, NULL);
 	first_use = 0;
 }
+
+static struct session *create_basic_session(struct window *tab);
 
 static struct session *
 create_session(struct window *tab)
@@ -598,6 +574,32 @@ create_session(struct window *tab)
 				N_("OK"), NULL, B_ENTER | B_ESC);
 		}
 	}
+
+	return ses;
+}
+
+static struct session *
+create_basic_session(struct window *tab)
+{
+	struct session *ses = mem_calloc(1, sizeof(struct session));
+
+	if (!ses) return NULL;
+
+	create_history(&ses->history);
+	init_list(ses->scrn_frames);
+	init_list(ses->more_files);
+	init_list(ses->type_queries);
+	ses->tab = tab;
+	ses->id = session_id++;
+	ses->task.type = TASK_NONE;
+	ses->display_timer = -1;
+
+#ifdef CONFIG_LEDS
+	init_led_panel(&ses->status.leds);
+	ses->status.ssl_led = register_led(ses, 0);
+#endif
+
+	add_to_list(sessions, ses);
 
 	return ses;
 }

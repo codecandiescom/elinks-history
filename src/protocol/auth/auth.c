@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.90 2004/11/14 11:02:16 witekfl Exp $ */
+/* $Id: auth.c,v 1.91 2004/11/14 14:28:20 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,7 +223,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm, unsigned char *nonce,
  * updated (but not if user/pass is set in dialog). */
 /* It returns a base 64 encoded user + pass suitable to use in Authorization
  * header, or NULL on failure. */
-unsigned char *
+struct http_auth_basic *
 find_auth(struct uri *uri)
 {
 	struct http_auth_basic *entry = NULL;
@@ -263,7 +263,8 @@ find_auth(struct uri *uri)
 	 * To receive authorization, the client sends the userid and password,
 	 * separated by a single colon (":") character, within a base64 [7]
 	 * encoded string in the credentials. */
-
+	return entry;
+#if 0
 	/* Create base64 encoded string. */
 	id = straconcat(entry->user, ":", entry->password, NULL);
 	if (!id) return NULL;
@@ -271,6 +272,7 @@ find_auth(struct uri *uri)
 	mem_free(id);
 
 	return ret;
+#endif
 }
 
 /* Delete an entry from auth list. */

@@ -1,10 +1,12 @@
-/* $Id: auth.h,v 1.22 2004/11/14 11:02:16 witekfl Exp $ */
+/* $Id: auth.h,v 1.23 2004/11/14 14:28:20 witekfl Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
 
 #include "protocol/uri.h"
 #include "util/object.h"
+#include "setup.h"
+#include "util/lists.h"
 
 struct listbox_item;
 
@@ -29,7 +31,7 @@ struct http_auth_basic {
 #define auth_entry_has_userinfo(_entry_) \
 	(*(_entry_)->user || *(_entry_)->password)
 
-unsigned char *find_auth(struct uri *);
+struct http_auth_basic *find_auth(struct uri *);
 struct http_auth_basic *find_auth_entry(struct uri *uri, unsigned char *realm);
 struct http_auth_basic *add_auth_entry(struct uri *, unsigned char *,
 	unsigned char *, unsigned char *, unsigned int);

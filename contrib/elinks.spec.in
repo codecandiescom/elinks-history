@@ -1,6 +1,6 @@
-# This is RPM spec file for ELinks. This file is currently not officially
-# maintained, so the informations here are probably totally obsolete, and you
-# should update them before making a package.
+# To build rpm: rpmbuild -bb elinks.spec
+# Debug version: rpmbuild -bb elinks.spec --debug
+# Console version without X11 dependency: rpmbuild -bb elinks.spec --without x
 #
 # This file was contributed by <zimon@niksula.hut.fi> and
 # <yanek@yankuv.koniec.sk>.
@@ -20,7 +20,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.10 2003/09/28 18:22:42 jonas Exp $
+# $Id: elinks.spec.in,v 1.11 2003/10/02 22:08:02 witekfl Exp $
 
 Summary:	Enhanced version of Links (Lynx-like text WWW browser)
 Name:		elinks
@@ -32,6 +32,14 @@ Packager:	Petr Baudis <pasky@ucw.cz>
 Group:		Applications/Internet
 Source:		http://elinks.or.cz/download/%{name}-%{version}.tar.bz2
 URL:		http://elinks.or.cz/
+BuildRequires:	bzip2-devel
+BuildRequires:	expat-devel
+BuildRequires:	gpm-devel
+BuildRequires:	ncurses-devel
+BuildRequires:	openssl-devel
+BuildRequires:	zlib-devel
+BuildRequires:	/usr/bin/texi2html
+%{!?_without_x:BuildRequires:	XFree86-devel}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-build
 
 %description
@@ -43,34 +51,39 @@ alternative to Links, and to test and tune various new features, but still
 provide good rock-solid releases inside stable branches.
 
 %prep
-%setup
+%setup -q
 
 %build
 
 #
-# if you just checkout the source and make a tarball from it uncomment the following line
+# if you just checkout the source and make a tarball from it uncomment
+# the following line
 #
 # ./autogen.sh
 
-%configure
-make
+%configure \
+%{?debug:	--enable-debug} \
+%{!?debug:	--enable-fastmem} \
+%{?_without_x: --without-x}
+%{__make}
+
+cd doc
+texi2html elinks-lua.texi
+cd ..
 
 %install
-[ "$RPM_BUILD_ROOT" != "/" ] && [ -d $RPM_BUILD_ROOT ] && rm -rf $RPM_BUILD_ROOT;
-make DESTDIR=$RPM_BUILD_ROOT install     
-install -d $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}
-install -d $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/contrib
-install -d $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/conv
-install -d $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/lua
-install -d $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/guile
+rm -rf $RPM_BUILD_ROOT
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/{contrib,conv,lua,guile}
 install \
-	AUTHORS* BUGS* ChangeLog* COPYING* README* SITES* TODO* THANKS* INSTALL* NEWS* \
-	$RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/
+	AUTHORS* BUGS* ChangeLog* COPYING* README* SITES* TODO* THANKS* \
+	INSTALL* NEWS* $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/
 install \
-	contrib/elinks.vim contrib/elinks-vim.diff contrib/keybind*.conf contrib/completion.tcsh \
+	contrib/elinks.vim contrib/elinks-vim.diff contrib/keybind*.conf \
 	$RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/contrib/
 install \
-	contrib/conv/w3m2links.gawk contrib/conv/conf-links2elinks.pl contrib/conv/mailcap.pl contrib/conv/old_to_new_bookmarks.sh \
+	contrib/conv/w3m2links.gawk contrib/conv/conf-links2elinks.pl \
+	contrib/conv/mailcap.pl contrib/conv/old_to_new_bookmarks.sh \
 	$RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/conv/
 install \
 	contrib/lua/elinks-remote contrib/lua/*.lua \
@@ -79,21 +92,28 @@ install \
 	contrib/guile/*scm \
 	$RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/guile/
 install \
-	doc/*.txt doc/*.html doc/*.texi \
+	doc/*.txt doc/*.html \
 	$RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/
 
-%clean
-[ "$RPM_BUILD_ROOT" != "/" ] && [ -d $RPM_BUILD_ROOT ] && rm -rf $RPM_BUILD_ROOT;
+%find_lang %{name}
 
-%files
-%{_bindir}/%{name}
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files -f %{name}.lang
+%defattr(644,root,root,755)
+%attr (755,root,root) %{_bindir}/%{name}
+%dir %{_libdir}/%{name}
 %{_libdir}/%{name}/
-%{_datadir}/locale/*/LC_MESSAGES/%{name}.mo
 %doc %{_defaultdocdir}/%{name}
 %doc %{_mandir}/man?/*
 
 # date +"%a %b %d %Y"
 %changelog
+* Thu Oct 02 2003 Witold Filipczyk <witekfl@pld-linux.org>
+- polished
+- no sanity checks
+
 * Sat Sep 27 2003 darix@irssi.org
 - added license
 - changed BuildRoot to use tmppath variable.

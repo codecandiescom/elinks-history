@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.35 2004/04/02 22:04:04 jonas Exp $ */
+/* $Id: protocol.c,v 1.36 2004/04/04 01:48:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,11 +60,7 @@ static struct protocol_backend *protocol_backends[] = {
 static void
 dummyjs_func(struct session *ses, struct uri *uri)
 {
-	msg_box(ses->tab->term, NULL, 0,
-		N_("Error"), AL_CENTER,
-		N_("JavaScript is currently not supported."),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	print_error_dialog(ses, S_NO_JAVASCRIPT, PRI_CANCEL);
 }
 
 static struct protocol_backend dummyjs_protocol_backend = {

@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.21 2004/04/04 01:40:58 jonas Exp $ */
+/* $Id: error.c,v 1.22 2004/04/04 01:48:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,11 +71,15 @@ struct s_msg_dsc {
 	{S_FTP_PORT,		N_("FTP PORT command failed")},
 	{S_FTP_NO_FILE,		N_("File not found")},
 	{S_FTP_FILE_ERROR,	N_("FTP file error")},
+
 #ifdef HAVE_SSL
 	{S_SSL_ERROR,		N_("SSL error")},
 #else
 	{S_NO_SSL,		N_("This version of ELinks does not contain SSL/TLS support")},
 #endif
+
+	{S_NO_JAVASCRIPT,	N_("JavaScript is currently not supported.")},
+
 	{0,			NULL}
 };
 

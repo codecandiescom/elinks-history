@@ -1,5 +1,5 @@
 /* These routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.10 2003/06/05 16:55:02 pasky Exp $ */
+/* $Id: memlist.c,v 1.11 2003/06/07 09:56:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,6 +122,44 @@ add_to_ml(struct memory_list **ml, ...)
 	while ((q = va_arg(ap, void *))) (*ml)->p[(*ml)->n++] = q;
 	va_end(ap);
 }
+
+#ifdef DEBUG_MEMLIST
+void
+debug_add1_to_ml(unsigned char *file, int line, struct memory_list **ml, void *p)
+#else
+void
+add1_to_ml(struct memory_list **ml, void *p)
+#endif
+{
+	/* None, so just return. */
+	if (!p) {
+#ifdef DEBUG_MEMLIST
+		error("%s:%d add1_to_ml(%p, NULL)", file, line, ml);
+#endif
+		return;
+	}
+
+	if (!*ml) {
+		/* If getml() wasn't called before or returned NULL,
+		 * then we create it. */
+		*ml = mem_alloc(ML_SIZE(1));
+		if (!*ml) return;
+
+		(*ml)->n = 0;
+	} else {
+		/* Enlarge existing ml. */
+		struct memory_list *nml;
+
+		nml = mem_realloc(*ml, ML_SIZE(1 + (*ml)->n));
+		if (!nml) return;
+
+		*ml = nml;
+	}
+
+	/* Set ml with new element and update count. */
+	(*ml)->p[(*ml)->n++] = p;
+}
+
 
 /* Free elements and memory list.
  * It ignores NULL pointers. */

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.76 2004/07/13 15:09:16 jonas Exp $ */
+/* $Id: status.c,v 1.77 2004/07/17 20:22:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -390,7 +390,7 @@ display_title_bar(struct session *ses, struct terminal *term)
 	struct document_view *doc_view;
 	struct document *document;
 	struct string title;
-	unsigned char buf[DEFAULT_TERMINAL_WIDTH];
+	unsigned char buf[40];
 	int buflen = 0;
 	int height;
 	struct box box;

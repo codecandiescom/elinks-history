@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.35 2004/07/03 16:28:02 jonas Exp $ */
+/* $Id: inpfield.h,v 1.36 2004/07/17 20:22:17 pasky Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -51,7 +51,7 @@ void input_field(struct terminal *, struct memory_list *, int, unsigned char *,
 
 /* Input lines */
 
-#define INPUT_LINE_BUFFER_SIZE	DEFAULT_TERMINAL_WIDTH
+#define INPUT_LINE_BUFFER_SIZE	256
 #define INPUT_LINE_WIDGETS	1
 
 enum input_line_code {

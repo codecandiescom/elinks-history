@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.32 2003/12/27 14:27:53 jonas Exp $ */
+/* $Id: tab.c,v 1.33 2003/12/27 14:28:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,7 +198,7 @@ close_all_tabs_but_current(struct terminal *term, struct window *current, struct
 {
 	struct window *tab;
 
-	assert(term && ses);
+	assert(term);
 	if_assert_failed return;
 
 	if (!current) current = get_current_tab(term);

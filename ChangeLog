@@ -1,3 +1,76 @@
+Sun May 23 17:13:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.h, document/html/renderer.c,
+	sched/session.c, viewer/dump/dump.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/link.h, viewer/text/search.c:
+
+	Introduce LINK_MAP link->type. It removes the 'map@' prefix from
+	anything but the document/html parser and renderer. All places that
+	depended on LINK_HYPERTEXT now also depends on LINK_MAP (it should
+	maybe be reviewed more carefull).  
+
+Sun May 23 16:58:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.h, document/html/renderer.c,
+	sched/session.c, viewer/text/form.c, viewer/text/link.c,
+	viewer/text/link.h, viewer/text/search.c:
+
+	Revert LINK_MAP introduction.  
+
+Sun May 23 16:56:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.h, document/html/renderer.c,
+	protocol/uri.c, sched/session.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/link.h, viewer/text/search.c:
+
+	Fix issue concerning uri->ipv6 setup.  
+
+Sun May 23 15:47:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	s/--dump/-dump/ in the description for -no-numbering. We use one
+	dash for all the other descriptions. Reported by by sstar.  
+
+Sun May 23 15:43:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Disable keybinding translation. It is not correct in it's current
+	form. Reported by sstar.  
+
+Sun May 23 14:51:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Distribute the base URL to _all_ members of the HTML stack.
+	Apparently the stack layout has changed. Maybe the unfinished title
+	tag fix did it.  
+
+Sun May 23 14:15:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Limit uri->portlen to 8 bits and use the 8 spare bits to flags such
+	as ipv6.  
+
+Sun May 23 02:39:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, protocol/uri.h, sched/download.c,
+	sched/history.c, sched/session.c, sched/task.c:
+
+	Wrap URI comparing in macro.  
+
+Sun May 23 01:31:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS, configure.in, src/lowlevel/connect.c, src/protocol/proxy.c,
+	src/protocol/uri.c, src/protocol/uri.h:
+
+	Whee .. internationalized domain name is now available. The real
+	magic is done in add_uri_to_string(). Only lowlevel stuff (like DNS
+	queries and proxy assembling) uses it so it is quite simple
+	actually. The proxy stuff is untested (as usual).  
+
 Sat May 22 19:27:51 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: cookies/cookies.c, protocol/date.c, protocol/date.h,

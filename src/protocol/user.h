@@ -1,4 +1,4 @@
-/* $Id: mailto.h,v 1.3 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: user.h,v 1.1 2002/08/06 23:26:31 pasky Exp $ */
 
 #ifndef EL__MAILTO_H
 #define EL__MAILTO_H

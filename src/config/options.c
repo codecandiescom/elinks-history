@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.76 2002/08/06 22:54:17 pasky Exp $ */
+/* $Id: options.c,v 1.77 2002/08/06 23:26:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -894,7 +894,7 @@ register_options()
 		"User protocols options.");
 
 	/* TODO: Only mailto, telnet and tn3270 subtrees are supported now. We
-	 * need to rewrite protocols/mailto.c (and, first, rename it ;)).
+	 * need to rewrite protocols/user.c.
 	 * --pasky */
 
 	/* Basically, it will look like protocol.user.mailto.win32 = "blah" */

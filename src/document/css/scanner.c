@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.93 2004/01/23 20:12:25 jonas Exp $ */
+/* $Id: scanner.c,v 1.94 2004/01/25 02:35:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,6 +76,7 @@ ident2type(unsigned char *ident, unsigned char *end,
 		{ "s",		CSS_TOKEN_TIME,		CSS_TOKEN_DIMENSION },
 
 		{ "rgb",	CSS_TOKEN_RGB,		CSS_TOKEN_FUNCTION },
+		{ "url",	CSS_TOKEN_URL,		CSS_TOKEN_FUNCTION },
 
 		{ "charset",	CSS_TOKEN_CHARSET,	CSS_TOKEN_AT_KEYWORD },
 		{ "font-face",	CSS_TOKEN_FONT_FACE,	CSS_TOKEN_AT_KEYWORD },
@@ -172,11 +173,13 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 				/* If it is not a known function just skip the
 				 * how arg stuff so we don't end up generating
 				 * a lot of useless tokens. */
-				if (type == CSS_TOKEN_FUNCTION) {
+				if (type == CSS_TOKEN_FUNCTION
+				    || type == CSS_TOKEN_URL) {
 					string = function_end;
 				}
 
 				assert(type != CSS_TOKEN_RGB || *string == '(');
+				assert(type != CSS_TOKEN_RGB || *string == ')');
 				assert(type != CSS_TOKEN_FUNCTION || *string == ')');
 			}
 

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.50 2004/01/22 23:48:48 jonas Exp $ */
+/* $Id: scanner.h,v 1.51 2004/01/25 02:35:22 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -45,11 +45,18 @@ enum css_token_type {
 	CSS_TOKEN_HASH,		/* #<name> */
 	CSS_TOKEN_HEX_COLOR,	/* #[0-9a-f]\{3,6} */
 
-	/* Unknown functions contain also args so parsing is easier but for
-	 * known functions we want to generate tokens for every arg and arg
-	 * delimiter ( ',' or ')' ). */
+	/* For all unknown functions we generate on token contain both function name
+	 * and args so scanning/parsing is easier. Besides we already check for
+	 * ending ')'. */
+	/* For known functions where we need several args [like rgb()] we want
+	 * to generate tokens for every arg and arg delimiter ( ',' or ')' ).
+	 * Because url() is a bit triggy: it can contain both <string> and some
+	 * chars that would other wise make the scanner probably choke we also
+	 * include the arg in that token. Besides it will make things like
+	 * 'background' property parsing easier. */
 	CSS_TOKEN_FUNCTION,	/* <ident>(<args>) */
 	CSS_TOKEN_RGB,		/* rgb( */
+	CSS_TOKEN_URL,		/* url(<arg>) */
 
 	/* @-rule symbols */
 	CSS_TOKEN_AT_KEYWORD,	/* @<ident> */

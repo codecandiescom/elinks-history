@@ -2,6 +2,7 @@
 #define SYS_OS2		2
 #define SYS_WIN32	3
 #define SYS_BEOS	4
+#define SYS_RISCOS	5
 
 /* hardcoded limit of 10 OSes in default.c */
 
@@ -11,6 +12,8 @@
 #define WIN32
 #elif defined(__BEOS__)
 #define BEOS
+#elif defined(__riscos__)
+#define RISCOS
 #else
 #define UNIX
 #endif
@@ -107,6 +110,18 @@ int be_write(int, void *, int);
 int be_close(int);
 int be_select(int, struct fd_set *, struct fd_set *, struct fd_set *, struct timeval *);
 int be_getsockopt(int, int, int, void *, int *);
+
+#elif defined(RISCOS)
+
+static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
+#define NEWLINE        "\n"
+#define SYSTEM_ID SYS_RISCOS
+#define SYSTEM_NAME "RISC OS"
+#define DEFAULT_SHELL "gos"
+#define GETSHELL getenv("SHELL")
+#define NO_FG_EXEC
+#define NO_FILE_SECURITY
+#define NO_FORK_ON_EXIT
 
 #endif
 

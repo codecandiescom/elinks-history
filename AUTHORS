@@ -176,6 +176,16 @@ Peter Gervai <grin@tolna.net>
 	Manpage updates
 	Mailcap to links.cfg convertor
 
+Peter Naulls <peter@chocky.org>
+	RISC OS port
+
+Peter Wang <tjaden@alphalink.com.au>
+	Rebindable keys
+	/etc/links.cfg
+	Lua scripting support
+	Unhistory support
+	Support for changing color defaults
+
 Petr Baudis <pasky@ji.cz>
 	Maintains elinks tree (CVS), integrates all reasonable patches
 	and bugfixes. Produces a links-current tarball for user testing.
@@ -187,13 +197,6 @@ Petr Cech <cech@atrey.karlin.mff.cuni.cz>
 Petr Kulhavy <brain@artax.karlin.mff.cuni.cz>
 	Czech translation
 	HTTP referer support
-
-Peter Wang <tjaden@alphalink.com.au>
-	Rebindable keys
-	/etc/links.cfg
-	Lua scripting support
-	Unhistory support
-	Support for changing color defaults
 
 Radovan Stas <radoone@skmi.science.upjs.sk>
 	Slovak translation
@@ -244,4 +247,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.25 2002/02/01 21:46:10 pasky Exp $
+$Id: AUTHORS,v 1.26 2002/02/04 14:13:06 pasky Exp $

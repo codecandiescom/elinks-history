@@ -59,7 +59,7 @@ int get_e(char *env)
 
 /* Terminal size */
 
-#if defined(UNIX) || defined(BEOS)
+#if defined(UNIX) || defined(BEOS) || defined(RISCOS)
 
 void sigwinch(void *s)
 {
@@ -208,7 +208,7 @@ int get_terminal_size(int fd, int *x, int *y)
 
 /* Pipe */
 
-#if defined(UNIX) || defined(BEOS)
+#if defined(UNIX) || defined(BEOS) || defined(RISCOS)
 
 void set_bin(int fd)
 {
@@ -268,11 +268,18 @@ int is_xterm()
 	return 0;
 }
 
+#elif defined(RISCOS)
+
+int is_xterm()
+{
+       return 1;
+}
+
 #endif
 
 tcount resize_count = 0;
 
-#if defined(UNIX) || defined(WIN32) || defined(BEOS)
+#if defined(UNIX) || defined(WIN32) || defined(BEOS) || defined(RISCOS)
 
 #if defined(BEOS) && defined(HAVE_SETPGID)
 
@@ -632,7 +639,7 @@ void *bgpt(struct tdata *t)
 
 #endif
 
-#if defined(UNIX) || defined(OS2)
+#if defined(UNIX) || defined(OS2) || defined(RISCOS)
 
 void terminate_osdep() {}
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.101 2004/05/24 02:30:04 jonas Exp $ */
+/* $Id: form.c,v 1.102 2004/05/25 00:08:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -766,7 +766,10 @@ submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 	if (!link) return;
 
 	url = get_form_url(ses, doc_view, link->form);
-	if (url) goto_link(url, link->target, ses, do_reload, 0);
+	if (url) {
+		goto_link(url, link->target, ses, do_reload, 0);
+		mem_free(url);
+	}
 }
 
 void

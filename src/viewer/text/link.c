@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.173 2004/05/24 23:59:43 jonas Exp $ */
+/* $Id: link.c,v 1.174 2004/05/25 00:08:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -514,10 +514,7 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 		/* TODO: Test reload? */
 		unsigned char *s = stracpy(url);
 
-		if (!s) {
-			mem_free(url);
-			return 1;
-		}
+		if (!s) return 1;
 
 		goto_imgmap(ses, url, s, null_or_stracpy(target));
 
@@ -528,8 +525,6 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 			goto_url_frame(ses, url, target);
 		}
 	}
-
-	mem_free(url);
 
 	return 2;
 }
@@ -555,8 +550,12 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		unsigned char *url = get_link_url(ses, doc_view, link);
 		int is_map = link->type == LINK_MAP;
 
-		if (url)
-			return goto_link(url, link->target, ses, a, is_map);
+		if (url) {
+			int retval = goto_link(url, link->target, ses, a, is_map);
+
+			mem_free(url);
+			return retval;
+		}
 
 	} else if (link_is_textinput(link)) {
 		/* We won't get here if (has_form_submit() ||

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.150 2005/03/02 14:30:05 zas Exp $ */
+/* $Id: task.c,v 1.151 2005/03/02 15:09:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -392,25 +392,31 @@ ses_imgmap(struct session *ses)
 	do_menu(ses->tab->term, menu, ses, 0);
 }
 
-static int
+enum do_move {
+	DO_MOVE_ABORT,
+	DO_MOVE_DISPLAY,
+	DO_MOVE_DONE
+};
+
+static enum do_move
 do_move(struct session *ses, struct download **download_p)
 {
 	struct cache_entry *cached;
 
 	assert(download_p && *download_p);
 	assertm(ses->loading_uri, "no ses->loading_uri");
-	if_assert_failed return 0;
+	if_assert_failed return DO_MOVE_ABORT;
 
 	if (ses->loading_uri->protocol == PROTOCOL_UNKNOWN)
-		return 0;
+		return DO_MOVE_ABORT;
 
 	/* Handling image map needs to scan the source of the loaded document
 	 * so all of it has to be available. */
 	if (ses->task.type == TASK_IMGMAP && is_in_progress_state((*download_p)->state))
-		return 0;
+		return DO_MOVE_ABORT;
 
 	cached = (*download_p)->cached;
-	if (!cached) return 0;
+	if (!cached) return DO_MOVE_ABORT;
 
 	if (cached->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		enum task_type task = ses->task.type;
@@ -422,7 +428,7 @@ do_move(struct session *ses, struct download **download_p)
 			"Redirecting using bad base URI");
 
 		if (cached->redirect->protocol == PROTOCOL_UNKNOWN)
-			return 0;
+			return DO_MOVE_ABORT;
 
 		abort_loading(ses, 0);
 		if (have_location(ses))
@@ -444,22 +450,22 @@ do_move(struct session *ses, struct download **download_p)
 			if (fn) {
 				fn(ses, uri);
 				*download_p = NULL;
-				return 0;
+				return DO_MOVE_ABORT;
 			}
 		}
 			/* Fall through. */
 		case TASK_IMGMAP:
 			ses_goto(ses, cached->redirect, ses->task.target_frame, NULL,
 				 CACHE_MODE_NORMAL, task, 1);
-			return 2;
+			return DO_MOVE_DONE;
 		case TASK_HISTORY:
 			ses_goto(ses, cached->redirect, NULL, ses->task.target_location,
 				 CACHE_MODE_NORMAL, TASK_RELOAD, 1);
-			return 2;
+			return DO_MOVE_DONE;
 		case TASK_RELOAD:
 			ses_goto(ses, cached->redirect, NULL, NULL,
 				 ses->reloadlevel, TASK_RELOAD, 1);
-			return 2;
+			return DO_MOVE_DONE;
 		}
 	}
 
@@ -476,7 +482,7 @@ b:
 			if (setup_download_handler(ses, &ses->loading, cached, 0)) {
 				free_task(ses);
 				reload(ses, CACHE_MODE_NORMAL);
-				return 2;
+				return DO_MOVE_DONE;
 			}
 			break;
 		case TASK_IMGMAP:
@@ -500,7 +506,7 @@ b:
 	}
 
 	free_task(ses);
-	return 1;
+	return DO_MOVE_DISPLAY;
 }
 
 void
@@ -513,21 +519,21 @@ loading_callback(struct download *download, struct session *ses)
 
 	d = do_move(ses, &download);
 	if (!download) return;
-	if (d == 2) goto end;
+	if (d == DO_MOVE_DONE) goto end;
 
-	if (d == 1) {
+	if (d == DO_MOVE_DISPLAY) {
 		download->callback = (void (*)(struct download *, void *)) doc_loading_callback;
 		display_timer(ses);
 	}
 
 	if (is_in_result_state(download->state)) {
 		if (ses->task.type) free_task(ses);
-		if (d == 1) doc_loading_callback(download, ses);
+		if (d == DO_MOVE_DISPLAY) doc_loading_callback(download, ses);
 	}
 
 	if (is_in_result_state(download->state) && download->state != S_OK) {
 		print_error_dialog(ses, download->state, download->pri);
-		if (d == 0) reload(ses, CACHE_MODE_NORMAL);
+		if (d == DO_MOVE_ABORT) reload(ses, CACHE_MODE_NORMAL);
 	}
 
 end:

@@ -1,3 +1,365 @@
+Wed Jul 23 16:21:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre3 
+
+Wed Jul 23 16:19:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Wed Jul 23 16:17:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Do not yell when adding zero chars to string, just return string in
+	add_bytes_to_string() and add_xchar_to_string().  
+
+Wed Jul 23 16:09:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Stricter length assertion, calling add_bytes_to_string(p, c, 0) is a
+	non-sense.  
+
+Wed Jul 23 16:04:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	Attempt to fix strl*cmp() users compilation, reported by Zas.  
+
+Wed Jul 23 16:02:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Added in what location the assertion happenned information to the
+	assert()s. This is how did I mean it, Jonas ;-).  
+
+Wed Jul 23 15:57:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Oops, removed stale @m argument in string_assert().  
+
+Wed Jul 23 15:57:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	string_assertm() -> string_assert() 
+
+Wed Jul 23 15:56:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: string.c, string.h:
+
+	strlcmp() and strlcasecmp() assertoin failures now contain caller
+	coordinates (used string_assertm() instead of assert()).  
+
+Wed Jul 23 15:54:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	In-debug_*() assertion failure messages now have standarized format
+	and contain the name of function they happenned inside.  
+
+Wed Jul 23 15:35:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Optimizations of add_char_to_string() and add_xchar_to_string(),
+	calls to add_bytes_to_string() were removed.  
+
+Wed Jul 23 15:34:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Wed Jul 23 15:32:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/gen_translations_stats.sh:
+
+	Fixed alignment. Annoying fr.po ;-)).  
+
+Wed Jul 23 15:20:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cookies/cookies.c, protocol/file.c, protocol/finger.c,
+	protocol/ftp.c, protocol/uri.c, protocol/uri.h, protocol/user.c,
+	protocol/http/http.c, sched/connection.c:
+
+	Removed hardcoded assumption that the original URI string starts at
+	uri.protocol, introduced struri() instead which encapsulates this
+	fact nicely.  
+
+Wed Jul 23 15:13:47 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jul 23 15:11:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	Rearranged the declarations so that they cluster a little more
+	naturally.  
+
+Wed Jul 23 15:07:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/auth.c:
+
+	Removed superfluous newline from the httpauth dialog box.  
+
+Wed Jul 23 14:49:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Fixed boolean expression in get_uri_string(), making it to actually
+	work ;-).  
+
+Wed Jul 23 14:09:09 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jul 23 14:05:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	It is now allowed to pass zarro @length to add_bytes_to_string().
+	Hah, happiness! ... ;-) 
+
+Wed Jul 23 13:46:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Moved the n1,n2 assert after -1 -> strlen(). Added comment
+	explaining why :-). Idea by Jonas.  
+
+Wed Jul 23 13:08:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Small fix of strncmp -> strlcmp 
+
+Wed Jul 23 13:00:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/blacklist.c:
+
+	Add missing include, reported by Zas.  
+
+Wed Jul 23 12:59:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	strncmp() -> strlcmp() (this is a bugfix).  
+
+Wed Jul 23 12:55:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/auth.c:
+
+	Length checks + strncmp() -> strlcmp().  
+
+Wed Jul 23 12:52:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/auth.c:
+
+	Finish zas' renaming: set_auth_uid -> set_auth_user, set_auth_passwd
+	-> set_auth_password.  
+
+Wed Jul 23 12:51:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/auth.c:
+
+	Reindentation.  
+
+Wed Jul 23 12:49:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/blacklist.c:
+
+	strncasecmp() -> strlcasecmp() (this is a bugfix).  
+
+Wed Jul 23 12:46:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	Use strlcasecmp() instead of length compares + strncasecmp().  
+
+Wed Jul 23 12:32:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: string.c, string.h:
+
+	Introduced strlcmp() and strlcasecmp() string functions which act
+	like str[case]cmp() but on non-zero-terminated strings.  
+
+Wed Jul 23 08:37:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, dialogs/auth.c, protocol/http/auth.c:
+
+	MAX_USER/PASSWD_LEN -> HTTP_AUTH_USER/PASSWORD_MAXLEN.  
+
+Wed Jul 23 08:29:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/auth.c, protocol/http/auth.c, protocol/http/auth.h:
+
+	Struct http_auth_basic field passwd was renamed to password.  
+
+Wed Jul 23 08:21:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/auth.c, protocol/http/auth.c, protocol/http/auth.h:
+
+	Struct http_auth_basic field uid was renamed to user. Note http auth
+	is broken for now, due to some bugs introduced by Jonas at some
+	time.  
+
+Wed Jul 23 03:12:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	One sleepy hacker trying to fix last commit.  
+
+Wed Jul 23 03:07:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Fix bad cs->server lookup. Gracefully spotted by Miciah.  
+
+Wed Jul 23 02:53:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/string.c:
+
+	Add the location information that got lost in the assertion usage.  
+
+Wed Jul 23 02:46:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Synchronize the what-to-do dialog no-open offers message text with
+	the open ones.  
+
+Wed Jul 23 02:43:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Moved the @filename bussiness to upper level in type_query().  
+
+Wed Jul 23 02:28:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	FIXME about @quoted and suspends in tag_attr_val_parse().  
+
+Wed Jul 23 02:28:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Simplification of html reading loop test in tag_attr_val_parse().  
+
+Wed Jul 23 02:11:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	Revert the get_opt_() change. Now it returns void * again.  
+
+Wed Jul 23 02:10:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	More fixing. Give first parameter correct type.  
+
+Wed Jul 23 01:54:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Fix return value of add_string_uri_filename_to_string(). Reported by
+	Jonas.  
+
+Wed Jul 23 01:31:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Ok so I should wait with my bad patches until the "let's go against
+	jonas crew" has gone to sleep. Revert bogus globhist toggling.  
+
+Wed Jul 23 01:25:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/error.c:
+
+	Call elinks_internal() so errfile and errline gets set properly.  
+
+Wed Jul 23 01:04:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.h:
+
+	We only need one #define of add_opt_codepage_tree.  
+
+Wed Jul 23 00:55:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	Revert the changes trying to use union for option values. I don't
+	have the patience to fight the config system monster right now. :( 
+
+Wed Jul 23 00:47:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, protocol/uri.c, protocol/uri.h,
+	sched/download.c:
+
+	get_filename_from_url -> add_string_uri_filename_to_string (these
+	identifiers rule) 
+
+Wed Jul 23 00:30:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	get_filenamepart_from_url() declared but nowhere defined, nowhere
+	used. So blasted off by the merciless monster^W^W^Wme.  
+
+Wed Jul 23 00:11:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Cache toggle value in private variable instead of the option trees.  
+
+Wed Jul 23 00:06:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Sleep for a second after printing out any error message. Making
+	debug() usable ;-).  
+
+Tue Jul 22 23:50:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	add_opt() now takes the union value. Dummy value introduced.  
+
+Tue Jul 22 23:29:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.h:
+
+	Hmm seems we need the union to be unanonymous so moved out.  
+
+Tue Jul 22 23:21:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	Add union @value member to struct option.  
+
+Tue Jul 22 23:09:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	Make get_opt_() only return the option.  
+
 Tue Jul 22 16:16:30 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/util/stub.c:

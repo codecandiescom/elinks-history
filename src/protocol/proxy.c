@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.32 2004/07/20 22:02:37 zas Exp $ */
+/* $Id: proxy.c,v 1.33 2004/07/20 22:04:27 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -72,7 +72,6 @@ proxy_uri(struct uri *uri, unsigned char *proxy)
 static struct uri *
 get_proxy_worker(struct uri *uri, unsigned char *proxy)
 {
-	unsigned char *no_proxy;
 	unsigned char *protocol_proxy = NULL;
 
 	if (proxy) {
@@ -130,14 +129,15 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		}
 	}
 
-	no_proxy = get_opt_str("protocol.no_proxy");
-	if (!*no_proxy) no_proxy = getenv("NO_PROXY");
-	if (!no_proxy || !*no_proxy) no_proxy = getenv("no_proxy");
-
 	if (protocol_proxy) {
+		unsigned char *no_proxy;
 		unsigned char *slash = strchr(protocol_proxy, '/');
 
 		if (slash) *slash = 0;
+
+		no_proxy = get_opt_str("protocol.no_proxy");
+		if (!*no_proxy) no_proxy = getenv("NO_PROXY");
+		if (!no_proxy || !*no_proxy) no_proxy = getenv("no_proxy");
 
 		if (!proxy_probe_no_proxy(uri->host, no_proxy))
 			proxy = protocol_proxy;

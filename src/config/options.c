@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.160 2002/12/18 15:30:45 pasky Exp $ */
+/* $Id: options.c,v 1.161 2002/12/18 21:23:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,7 +251,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 		if (option->box_item) {
 			init_list(option->box_item->child);
 			option->box_item->visible = 1;
-			option->box_item->text = option->name;
+			option->box_item->text = option->capt ? option->capt : option->name;
 			option->box_item->box = &option_boxes;
 			option->box_item->udata = option;
 			option->box_item->type = type == OPT_TREE ? BI_FOLDER : BI_LEAF;
@@ -327,7 +327,7 @@ copy_option(struct option *template)
 	if (option->box_item) {
 		init_list(option->box_item->child);
 		option->box_item->visible = 1;
-		option->box_item->text = option->name;
+		option->box_item->text = option->capt ? option->capt : option->name;
 		option->box_item->box = &option_boxes;
 		option->box_item->udata = option;
 		option->box_item->type = template->box_item
@@ -747,12 +747,11 @@ register_options()
 
 	add_opt_tree("", "Bookmarks",
 		"bookmarks", 0,
-		"Bookmarks options.");
+		"Bookmark options.");
 
 	{
 	unsigned char *bff =
-		"Format of the file with saved bookmarks (matters for both\n"
-		"reading and saving):\n"
+		"File format for bookmarks (affects both reading and saving):\n"
 		"0 is the default ELinks (Links 0.9x compatible) format\n"
 		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 #ifndef HAVE_LIBEXPAT
@@ -782,11 +781,11 @@ register_options()
 		"indentation", 0, 0, 16, 2,
 		"Shift width of one indentation level in the configuration\n"
 		"file. Zero means that no indentation is performed at all\n"
-		"when saving the configuration to a file.");
+		"when saving the configuration.");
 
 	add_opt_int("config", "Saving style",
 		"saving_style", 0, 0, 3, 3,
-		"Determines what happens when you let ELinks to save options:\n"
+		"Determines what happens when you tell ELinks to save options:\n"
 		"0 is only values of current options are altered\n"
 		"1 is values of current options are altered and missing options\n"
 		"     are added at the end of the file\n"
@@ -795,9 +794,9 @@ register_options()
 		"     CHANGED during this ELinks session are added at the end of\n"
 		"     the file");
 
-	add_opt_bool("config", "Warnings for saving style",
+	add_opt_bool("config", "Saving style warnings",
 		"saving_style_w", 0, 0,
-		"This is internal option used when displaying warning about\n"
+		"This is internal option used when displaying a warning about\n"
 		"obsolete config.saving_style. You shouldn't touch it.");
 
 	add_opt_bool("config", "Show template",
@@ -807,7 +806,7 @@ register_options()
 	get_opt_rec(&root_options, "config.show_template")->change_hook = change_hook_stemplate;
 
 
-	add_opt_tree("", "Connection",
+	add_opt_tree("", "Connections",
 		"connection", 0,
 		"Connection options.");
 	get_opt_rec(&root_options, "connection")->change_hook = change_hook_connection;
@@ -818,12 +817,12 @@ register_options()
 		"SSL options.");
 
 #ifdef HAVE_OPENSSL
-	add_opt_bool("connection.ssl", "Certificate verification",
+	add_opt_bool("connection.ssl", "Verify certificates",
 		"cert_verify", 0, 0,
 		"Verify the peer's SSL certificate. Note that this\n"
 		"needs extensive configuration of OpenSSL by the user.");
 #elif defined(HAVE_GNUTLS)
-	add_opt_bool("connection.ssl", "Certificate verification",
+	add_opt_bool("connection.ssl", "Verify certificates",
 		"cert_verify", 0, 0,
 		"Verify the peer's SSL certificate. Note that this\n"
 		"probably doesn't work properly at all with GnuTLS.");
@@ -846,28 +845,28 @@ register_options()
 		"max_connections_to_host", 0, 1, 8, 2,
 		"Maximum number of concurrent connections to a given host.");
 
-	add_opt_int("connection", "Connection attempts",
+	add_opt_int("connection", "Connection retries",
 		"retries", 0, 1, 16, 3,
 		"Number of tries to establish a connection.");
 
 	add_opt_int("connection", "Receive timeout",
 		"receive_timeout", 0, 1, 1800, 120,
-		"Timeout on receive (in seconds).");
+		"Receive timeout (in seconds).");
 
-	add_opt_int("connection", "Timeout on non restartable connections",
+	add_opt_int("connection", "Timeout on non-restartable connections",
 		"unrestartable_receive_timeout", 0, 1, 1800, 600,
-		"Timeout on non restartable connections (in seconds).");
+		"Timeout for non-restartable connections (in seconds).");
 
 
 
-	add_opt_tree("", "Cookie",
+	add_opt_tree("", "Cookies",
 		"cookies", 0,
 		"Cookies options.");
 
 	add_opt_int("cookies", "Accept policy",
 		"accept_policy", 0,
 		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, COOKIES_ACCEPT_ALL,
-		"Mode of accepting cookies:\n"
+		"Cookies accepting policy:\n"
 		"0 is accept no cookies\n"
 		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
 		"2 is accept all cookies");
@@ -876,20 +875,20 @@ register_options()
 		"paranoid_security", 0, 0,
 		"When enabled, we'll require three dots in cookies domain for all\n"
 		"non-international domains (instead of just two dots). Please see\n"
-		"code (cookies.c:check_domain_security()) for further description.");
+		"code (cookies.c:check_domain_security()) for explanation.");
 
 	add_opt_bool("cookies", "Saving",
 		"save", 0, 1,
 		"Load/save cookies from/to disk?");
 
-	add_opt_bool("cookies", "Updating",
+	add_opt_bool("cookies", "Resaving",
 		"resave", 0, 1,
 		"Save cookies after each change in cookies list? No effect when\n"
 		"cookies_save is off.");
 
 	
 
-	add_opt_tree("", "Document",
+	add_opt_tree("", "Documents",
 		"document", 0,
 		"Document options.");
 
@@ -901,65 +900,67 @@ register_options()
 
 	add_opt_tree("document.browse", "Accesskeys",
 		"accesskey", 0,
-		"Options for handling accesskey attribute.");
+		"Options for handling of the accesskey attribute of the active\n"
+		"HTML elements.");
 
 	add_opt_bool("document.browse.accesskey", "Automatic links following",
 		"auto_follow", 0, 0,
-		"Automatically follow link / submit form if appropriate accesskey\n"
-		"is pressed - this is standard behaviour, however dangerous.");
+		"Automatically follow a link or submit a form if appropriate\n"
+		"accesskey is pressed - this is the standard behaviour, but it's\n"
+		"considered dangerous.");
 
 	add_opt_int("document.browse.accesskey", "Accesskey priority",
 		"priority", 0, 0, 2, 1,
 		"Priority of 'accesskey' HTML attribute:\n"
-		"0 is first try all normal bindings and if it fails, check accesskey\n"
-		"1 is first try only frame bindings and if it fails, check accesskey\n"
-		"2 is first check accesskey (that can be dangerous)");
+		"0 is first try all normal bindings; if it fails, check accesskey\n"
+		"1 is first try only frame bindings; if it fails, check accesskey\n"
+		"2 is first check accesskey (this can be dangerous)");
 
 
-	add_opt_tree("document.browse", "Form",
+	add_opt_tree("document.browse", "Forms",
 		"forms", 0,
-		"Options for handling forms interaction.");
+		"Options for handling of the forms interaction.");
 
-	add_opt_bool("document.browse.forms", "Automatic submit form",
+	add_opt_bool("document.browse.forms", "Submit form automatically",
 		"auto_submit", 0, 1,
-		"Automagically submit a form when enter pressed on text field.");
+		"Automagically submit a form when enter is pressed with a text\n"
+		"field selected.");
 
 	add_opt_bool("document.browse.forms", "Confirm submission",
 		"confirm_submit", 0, 1,
 		"Ask for confirmation when submitting a form.");
 
 
-	add_opt_tree("document.browse", "Image",
+	add_opt_tree("document.browse", "Images",
 		"images", 0,
 		"Options for handling of images.");
 
 	add_opt_int("document.browse.images", "Display style for image links",
 		"file_tags", 0, -1, 500, -1,
 		"Display [target filename] instead of [IMG] as visible image tags:\n"
-		"-1 means always display just [IMG]\n"
-		"0 means always display full target filename\n"
-		"1-500 means display target filename of this maximal length;\n"
-		"      if filename is longer, middle part of it\n"
-		"      is stripped and substituted by an asterisk");
+		"-1    means always display just [IMG]\n"
+		"0     means always display full target filename\n"
+		"1-500 means display target filename with this maximal length;\n"
+		"      if it is longer, the middle is substituted by an asterisk");
 
 	add_opt_bool("document.browse.images", "Display image links",
 		"show_as_links", 0, 0,
 		"Display links to images.");
 
 
-	add_opt_tree("document.browse", "Link",
+	add_opt_tree("document.browse", "Links",
 		"links", 0,
 		"Options for handling of links to other documents.");
 
 	add_opt_bool("document.browse.links", "Directory highlighting",
 		"color_dirs", 0, 1,
-		"Highlight links to directories when listing local disk content.");
+		"Highlight links to directories in FTP and local directory listing.");
 
-	add_opt_bool("document.browse.links", "Display links numbered",
+	add_opt_bool("document.browse.links", "Number links",
 		"numbering", 0, 0,
-		"Display links numbered.");
+		"Display numbers next to the links.");
 
-	add_opt_int("document.browse.links", "Number keys select link",
+	add_opt_int("document.browse.links", "Number keys select links",
 		"number_keys_select_link", 0, 0, 2, 1,
 		"Number keys select links rather than specify command prefixes. This\n"
 		"is a tristate:\n"
@@ -969,7 +970,7 @@ register_options()
 
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */
-	add_opt_bool("document.browse.links", "Wrapped around link navigation",
+	add_opt_bool("document.browse.links", "Wrap-around links cycling",
 		"wraparound", /* 0 */ 0, 0,
 		"When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa.");
@@ -984,9 +985,9 @@ register_options()
 		"Size of the virtual margin - when you click inside of that margin,\n"
 		"document scrolls in that direction.");
 
-	add_opt_bool("document.browse", "Table navigation",
+	add_opt_bool("document.browse", "Tables navigation order",
 		"table_move_order", 0, 0,
-		"Move by columns in table.");
+		"Move by columns in table, instead of rows.");
 
 
 
@@ -995,20 +996,20 @@ register_options()
 		"Cache options.");
 	get_opt_rec(&root_options, "document.cache")->change_hook = change_hook_cache;
 
-	add_opt_bool("document.cache", "Ignore cache control",
+	add_opt_bool("document.cache", "Ignore cache-control info from server",
 		"ignore_cache_control", 0, 1,
 		"Ignore Cache-Control and Pragma server headers.\n"
 		"When set, the document is cached even with 'Cache-Control: no-cache'.");
 
-	add_opt_tree("document.cache", "Format",
+	add_opt_tree("document.cache", "Formatted documents",
 		"format", 0,
 		"Format cache options.");
 
-	add_opt_int("document.cache.format", "Size",
+	add_opt_int("document.cache.format", "Number",
 		"size", 0, 0, 256, 5,
 		"Number of cached formatted pages.");
 
-	add_opt_tree("document.cache", "Memory",
+	add_opt_tree("document.cache", "Memory cache",
 		"memory", 0,
 		"Memory cache options.");
 
@@ -1026,7 +1027,7 @@ register_options()
 		"assume", 0, get_cp_index("ISO-8859-1"),
 		"Default document codepage.");
 
-	add_opt_bool("document.codepage", "Ignore server info",
+	add_opt_bool("document.codepage", "Ignore charset info from server",
 		"force_assumed", 0, 0,
 		"Ignore charset info sent by server.");
 
@@ -1050,34 +1051,33 @@ register_options()
 		"link", 0, "#0000ff",
 		"Default link color.");
 
-	add_opt_color("document.colors", "Visited links color",
+	add_opt_color("document.colors", "Visited-link color",
 		"vlink", 0, "#ffff00",
 		"Default visited link color.");
 
 	add_opt_color("document.colors", "Directory color",
 		"dirs", 0, "#ffff00",
-		"Default directories color.\n"
+		"Default directory color.\n"
 	       	"See document.browse.links.color_dirs option.");
 
 	add_opt_bool("document.colors", "Allow dark colors on black background",
 		"allow_dark_on_black", 0, 0,
 		"Allow dark colors on black background.");
 
-	add_opt_bool("document.colors", "Use document colors",
+	add_opt_bool("document.colors", "Use document-specified colors",
 		"use_document_colors", 0, 1,
 		"Use colors specified in document.");
 
 
 
-	add_opt_tree("document", "Download",
+	add_opt_tree("document", "Downloading",
 		"download", 0,
 		"Options regarding files downloading and handling.");
 
-	add_opt_string("document.download", "Default mime type",
+	add_opt_string("document.download", "Default MIME-type",
 		"default_mime_type", 0, "application/octet-stream",
-		"MIME type for a document we should assume by default (when we are\n"
-		"unable to guess it properly from known informations about the\n"
-		"document).");
+		"Document MIME-type to assume by default (when we are unable to\n"
+		"guess it properly from known information about the document).");
 
 	add_opt_string("document.download", "Default download directory",
 		"directory", 0, "./",
@@ -1085,22 +1085,24 @@ register_options()
 
 	add_opt_bool("document.download", "Set original time",
 		"set_original_time", 0, 0,
-		"Set time of downloaded files accordingly to one stored on server.");
+		"Set the timestamp of each downloaded file to the timestamp\n"
+		"stored on the server.");
 
-	add_opt_int("document.download", "Overwrite",
+	add_opt_int("document.download", "Prevent overwriting",
 		"overwrite", 0, 0, 1, 0,
-		"Prevention of overwriting of the local files:\n"
+		"Prevent overwriting the local files:\n"
 		"0 is files will silently be overwritten.\n"
-		"1 is add the suffix .{number} (for example '.1') to the name.");
+		"1 is add a suffix .{number} (for example '.1') to the name.");
 
-	add_opt_int("document.download", "Notify with bell",
+	add_opt_int("document.download", "Notify download completion by bell",
 		"notify_bell", 0, 0, 2, 0,
 		"Audio notification when download is completed:\n"
 		"0 is never.\n"
 		"1 is when background notification is active.\n"
 		"2 is always");
 
-	add_opt_tree("document", "Dump out option",
+
+	add_opt_tree("document", "Dump output",
 		"dump", 0,
 		"Dump output options.");
 
@@ -1110,7 +1112,7 @@ register_options()
 
 	add_opt_int("document.dump", "Width",
 		"width", 0, 40, 512, 80,
-		"Size of screen in characters, when dumping a HTML document.");
+		"Width of screen in characters when dumping a HTML document.");
 
 
 
@@ -1125,7 +1127,7 @@ register_options()
 	/* XXX: Disable global history if -anonymous is given? */
 	add_opt_bool("document.history.global", "Enable",
 		"enable", 0, 1,
-		"Enable global history (\"history of all pages visited\")?");
+		"Enable global history (\"history of all pages visited\").");
 
 	add_opt_int("document.history.global", "Maximum number of entries",
 		"max_items", 0, 1, MAXINT, 1024,
@@ -1145,7 +1147,7 @@ register_options()
 
 	add_opt_tree("document", "HTML rendering",
 		"html", 0,
-		"Options concerning displaying of HTML pages.");
+		"Options concerning the display of HTML pages.");
 	get_opt_rec(&root_options, "document.html")->change_hook = change_hook_html;
 
 	add_opt_bool("document.html", "Display frames",
@@ -1169,14 +1171,16 @@ register_options()
 
 	add_opt_tree("", "MIME",
 		"mime", 0,
-		"MIME-related options.");
+		"MIME-related options (handlers of various MIME types).");
 
 
-	/* Basically, it will look like mime.type.image.gif = "Picture" */
-
-	add_opt_tree("mime", "Associations",
+	add_opt_tree("mime", "MIME type associations",
 		"type", OPT_AUTOCREATE,
-		"Action<->MIME-type association.");
+		"Handler <-> MIME type association. The first sub-tree is the MIME\n"
+		"class while the second sub-tree is the MIME type (ie. image/gif\n"
+		"handler will reside at mime.type.image.gif). Each MIME type option\n"
+		"should contain (case-sensitive) name of the MIME handler (its\n"
+		"properties are stored at mime.handler.<name>).");
 
 	add_opt_tree("mime.type", NULL,
 		"_template_", OPT_AUTOCREATE,
@@ -1191,15 +1195,16 @@ register_options()
 
 	add_opt_tree("mime", "File type handlers",
 		"handler", OPT_AUTOCREATE,
-		"Handler for certain file types.");
+		"Handler for certain MIME types (as specified in mime.type.*).\n"
+		"Each handler usually serves family of MIME types (ie. images).");
 
 	add_opt_tree("mime.handler", NULL,
 		"_template_", OPT_AUTOCREATE,
-		"Handler description for this file type.");
+		"Description of this handler.");
 
 	add_opt_tree("mime.handler._template_", NULL,
 		"_template_", 0,
-		"System-specific handler description.");
+		"System-specific handler description (ie. unix, unix-xwin, ...).");
 
 	add_opt_bool("mime.handler._template_._template_", "Ask before opening",
 		"ask", 0, 1,
@@ -1211,12 +1216,13 @@ register_options()
 
 	add_opt_string("mime.handler._template_._template_", "Program",
 		"program", 0, "",
-		"External viewer for this file type.");
+		"External viewer for this file type. '%' in this string will be\n"
+		"substituted by a file name.");
 
 
 	add_opt_tree("mime", "File extension associations",
 		"extension", OPT_AUTOCREATE,
-		"Extension<->MIME-type association.");
+		"Extension <-> MIME type association.");
 
 	add_opt_string("mime.extension", NULL,
 		"_template_", 0, "",
@@ -1225,16 +1231,16 @@ register_options()
 
 
 
-	add_opt_tree("", "Protocol",
+	add_opt_tree("", "Protocols",
 		"protocol", 0,
 		"Protocol specific options.");
 
 	add_opt_tree("protocol", "HTTP",
 		"http", 0,
-		"HTTP specific options.");
+		"HTTP-specific options.");
 
 
-	add_opt_tree("protocol.http", "Bugs workarounds",
+	add_opt_tree("protocol.http", "Server bug workarounds",
 		"bugs", 0,
 		"Server-side HTTP bugs workarounds.");
 
@@ -1242,13 +1248,15 @@ register_options()
 		"allow_blacklist", 0, 1,
 		"Allow blacklisting of buggy servers.");
 
-	add_opt_bool("protocol.http.bugs", "Broken 302 Redirects",
+	add_opt_bool("protocol.http.bugs", "Broken 302 redirects",
 		"broken_302_redirect", 0, 1,
-		"Broken 302 redirect (violates RFC but compatible with Netscape).");
+		"Broken 302 redirect (violates RFC but compatible with Netscape).\n"
+		"This is a problem for a lot of web discussion boards and the like."
+		"If they will do strange things to you, try to play with this.");
 
 	add_opt_bool("protocol.http.bugs", "No keepalive after POST requests",
 		"post_no_keepalive", 0, 0,
-		"No keepalive connection after POST request.");
+		"Disable keepalive connection after POST request.");
 
 	add_opt_bool("protocol.http.bugs", "Use HTTP/1.0",
 		"http10", 0, 0,
@@ -1259,14 +1267,14 @@ register_options()
 		"proxy", 0,
 		"HTTP proxy configuration.");
 
-	add_opt_string("protocol.http.proxy", "Host and port number",
+	add_opt_string("protocol.http.proxy", "Host and port-number",
 		"host", 0, "",
-		"Host and port number (host:port) of the HTTP proxy, or blank.\n"
+		"Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 		"If it's blank, HTTP_PROXY environment variable is checked as well.");
 
-	add_opt_string("protocol.http.proxy", "User",
+	add_opt_string("protocol.http.proxy", "Username",
 		"user", 0, "",
-		"Proxy authentication user.");
+		"Proxy authentication username.");
 
 	add_opt_string("protocol.http.proxy", "Password",
 		"passwd", 0, "",
@@ -1275,9 +1283,9 @@ register_options()
 
 	add_opt_tree("protocol.http", "Referer sending",
 		"referer", 0,
-		"HTTP referee sending rules.");
+		"HTTP referer sending options.");
 
-	add_opt_int("protocol.http.referer", "Policy mode",
+	add_opt_int("protocol.http.referer", "Policy",
 		"policy", 0,
 		REFERER_NONE, REFERER_TRUE, REFERER_SAME_URL,
 		"Mode of sending HTTP referer:\n"
@@ -1297,9 +1305,12 @@ register_options()
 
 	add_opt_bool("protocol.http", "Use UI language as Accept-Language",
 		"accept_ui_language", 0, 1,
-		"Use the language of the interface as Accept-Language.");
+		"Request localised versions of documents from web-servers (using the\n"
+		"Accept-Language header) using the language you have configured for\n"
+		"ELinks' user-interface. Note that some see this as a potential security\n"
+		"risk because it tells web-masters about your preference in language.");
 
-	add_opt_string("protocol.http", "User agent identification",
+	add_opt_string("protocol.http", "User-agent identification",
 		"user_agent", 0, "ELinks (%v; %s; %t)",
 		"Change the User Agent ID. That means identification string, which\n"
 		"is sent to HTTP server when a document is requested.\n"
@@ -1314,13 +1325,25 @@ register_options()
 		"ftp", 0,
 		"FTP specific options.");
 
+	add_opt_tree("protocol.ftp", "Proxy configuration",
+		"proxy", 0,
+		"FTP proxy configuration.");
+
+	add_opt_string("protocol.ftp.proxy", "Host and port-number",
+		"host", 0, "",
+		"Host and port-number (host:port) of the FTP proxy, or blank.\n"
+		"If it's blank, FTP_PROXY environment variable is checked as well.");
+
+	add_opt_string("protocol.ftp", "Anonymous password",
+		"anon_passwd", 0, "some@host.domain",
+		"FTP anonymous password to be sent.");
+
 	add_opt_bool("protocol.ftp", "Use passive mode (IPv4)",
 		"use_pasv", 0, 1,
 		"Use PASV instead of PORT (passive vs active mode, IPv4 only).");
 #ifdef IPV6
 	add_opt_bool("protocol.ftp", "Use passive mode (IPv6)",
 		"use_epsv", 0, 0,
-		"** Not yet implemented properly **\n"
 		"Use EPSV instead of EPRT (passive vs active mode, IPv6 only).");
 #else
 	add_opt_bool("protocol.ftp", "Use passive mode (IPv6)",
@@ -1328,26 +1351,14 @@ register_options()
 		"Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 		"Works only with IPv6 enabled, so nothing interesting for you.");
 #endif
-	add_opt_tree("protocol.ftp", "Proxy configuration",
-		"proxy", 0,
-		"FTP proxy configuration.");
-
-	add_opt_string("protocol.ftp.proxy", "Host and port number",
-		"host", 0, "",
-		"Host and port number (host:port) of the FTP proxy, or blank.\n"
-		"If it's blank, FTP_PROXY environment variable is checked as well.");
-
-	add_opt_string("protocol.ftp", "Anonymous password",
-		"anon_passwd", 0, "some@host.domain",
-		"FTP anonymous password to be sent.");
 
 
 
-	add_opt_tree("protocol", "File browsing",
+	add_opt_tree("protocol", "Local files",
 		"file", 0,
-		"Options specific for local browsing.");
+		"Options specific to local browsing.");
 
-	add_opt_bool("protocol.file", "Allow special files",
+	add_opt_bool("protocol.file", "Allow reading special files",
 		"allow_special_files", 0, 0,
 		"Allow reading from non-regular files? (DANGEROUS - reading\n"
 		"/dev/urandom or /dev/zero can ruin your day!)");
@@ -1355,13 +1366,15 @@ register_options()
 	add_opt_bool("protocol.file", "Try encoding extensions",
 		"try_encoding_extensions", 0, 1,
 		"When set, if we can't open a file named 'filename', we'll try\n"
-		"to open 'filename' + some encoding extensions.\n"
-		"(ie. 'filename.gz', it depends of supported encoding)");
+		"to open 'filename' + some encoding extensions (ie.\n"
+		"'filename.gz'); it depends on the supported encodings.");
 
 
-	add_opt_tree("protocol", "User protocol",
+	add_opt_tree("protocol", "User protocols",
 		"user", OPT_AUTOCREATE,
-		"User protocols options.");
+		"User protocols. Options in this tree specify external\n"
+		"handlers for the appropriate protocols. Ie.\n"
+		"protocol.user.mailto.unix.");
 
 	/* FIXME: Poorly designed options structure. Ought to be able to specify
 	 * need_slashes, free_form and similar options as well :-(. --pasky */
@@ -1370,11 +1383,12 @@ register_options()
 
 	add_opt_tree("protocol.user", NULL,
 		"_template_", OPT_AUTOCREATE,
-		"System-specific handlers for these protocols.");
+		"Handler (external program) for this protocol. Name the\n"
+		"options in this tree after your system (ie. unix, unix-xwin).");
 
 	add_opt_string("protocol.user._template_", NULL,
 		"_template_", 0, "",
-		"Handler (external program) for this protocol.\n"
+		"Handler (external program) for this protocol and system.\n"
 		"%h in the string means hostname (or email address)\n"
 		"%p in the string means port\n"
 		"%s in the string means subject (?subject=<this>)\n"
@@ -1387,25 +1401,25 @@ register_options()
 
 	add_opt_bool("protocol.mailcap", "Enable",
 		"enable", 0, 1,
-		"Enable or disable mailcap support");
+		"Enable mailcap support.");
 
 	add_opt_string("protocol.mailcap", "Path",
 		"path", 0, "",
-		"Mailcap search path. List of files are colon separated.\n"
-		"Leave as \"\" to use MAILCAP environment or build in\n"
-		"defaults instead.");
+		"Mailcap search path. Colon-separated list of files.\n"
+		"Leave as \"\" to use MAILCAP environment variable or\n"
+		"build-in defaults instead.");
 
 	add_opt_bool("protocol.mailcap", "Ask before opening",
 		"ask", 0, 1,
-		"Whether to perform query when using handlers provided from\n"
-		"mailcap entries.");
+		"Ask before using the handlers defined by mailcap.");
 
-	add_opt_int("protocol.mailcap", "Description style",
+	add_opt_int("protocol.mailcap", "Type query string",
 		"description", 0, 0, 2, 0,
-		"Type of description to show in query dialog\n"
-		"0 is show \"mailcap\"\n"
-		"1 is show program to be run\n"
-		"2 is show mailcap description field if any else like 0");
+		"Type of description to show in \"what shall I do with this file\"\n"
+		"query dialog:\n"
+		"0 is show \"mailcap\".\n"
+		"1 is show program to be run.\n"
+		"2 is show mailcap description field if any; \"mailcap\" otherwise.");
 
 	add_opt_bool("protocol.mailcap", "Prioritize entries by file",
 		"prioritize", 0, 1,
@@ -1414,24 +1428,24 @@ register_options()
 		"also be checked before deciding the handler.");
 
 
-	add_opt_string("protocol", "No proxy domains",
+	add_opt_string("protocol", "No-proxy domains",
 		"no_proxy", 0, "",
 		"Comma separated list of domains for which the proxy (HTTP/FTP)\n"
-		"should be disabled. Optionally, port can be specified for some\n"
+		"should be disabled. Optionally, a port can be specified for some\n"
 		"domains as well. If it's blank, NO_PROXY environment variable is\n"
 	        "checked as well.");
 
 
 
-	add_opt_tree("", "Terminal",
+	add_opt_tree("", "Terminals",
 		"terminal", OPT_AUTOCREATE,
 		"Terminal options.");
 
 	add_opt_tree("terminal", NULL,
 		"_template_", 0,
-		"Options specific to this terminal type.");
+		"Options specific to this terminal type (according to $TERM value).");
 
-	add_opt_int("terminal._template_", "Type",
+	add_opt_int("terminal._template_", "Border type",
 		"type", 0, 0, 3, 0,
 		"Terminal type; matters mostly only when drawing frames and\n"
 		"dialog box borders:\n"
@@ -1440,25 +1454,26 @@ register_options()
 		"2 is Linux, you get double frames and other goodies\n"
 		"3 is KOI-8");
 
-	add_opt_bool("terminal._template_", "Switch font for line drawing",
+	add_opt_bool("terminal._template_", "Switch fonts for line drawing",
 		"m11_hack", 0, 0,
-		"Switch font when drawing lines, enabling both local characters\n"
+		"Switch fonts when drawing lines, enabling both local characters\n"
 		"and lines working at the same time. Makes sense only with linux\n"
 		"terminal.");
 
-	add_opt_bool("terminal._template_", "I/O in UTF8 terminals",
+	add_opt_bool("terminal._template_", "I/O in UTF8",
 		"utf_8_io", 0, 0,
-		"Enable I/O in UTF8 for Unicode terminals.");
+		"Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
+		"only the subset of UTF8 according to terminal codepage is used.");
 
-	add_opt_bool("terminal._template_", "Restrict 852",
+	add_opt_bool("terminal._template_", "Restrict CP852",
 		"restrict_852", 0, 0,
 		"Someone who understands this ... ;)) I'm too lazy to think about this now :P.");
 
 	add_opt_bool("terminal._template_", "Block cursor",
 		"block_cursor", 0, 0,
-		"This means that we always move cursor to bottom right corner\n"
-		"when done drawing. This is particularly useful when we are\n"
-		"using block cursor, as inversed stuff is displayed correctly.");
+		"Move cursor to bottom right corner when done drawing.\n"
+		"This is particularly useful when we have a block cursor,\n"
+		"so that inversed text is displayed correctly.");
 
 	add_opt_bool("terminal._template_", "Use colors",
 		"colors", 0, 0,
@@ -1466,7 +1481,7 @@ register_options()
 
 	add_opt_codepage("terminal._template_", "Codepage",
 		"charset", 0, get_cp_index("us-ascii"),
-		"Codepage of charset used for displaying of content on terminal.");
+		"Codepage of charset used for displaying content on terminal.");
 
 
 
@@ -1677,9 +1692,9 @@ register_options()
 		"background", 0, "green",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Textfield",
+	add_opt_tree("ui.colors.color.dialog", "Text field",
 		"field", 0,
-		"Dialog textfield colors.");
+		"Dialog text field colors.");
 
 	add_opt_color("ui.colors.color.dialog.field", "Text color",
 		"text", 0, "white",
@@ -1689,7 +1704,7 @@ register_options()
 		"background", 0, "blue",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.color.dialog", "Textfield text",
+	add_opt_tree("ui.colors.color.dialog", "Text field text",
 		"field-text", 0,
 		"Dialog field text colors.");
 
@@ -1715,7 +1730,7 @@ register_options()
 
 	add_opt_tree("ui.colors.color.dialog", "Shadow",
 		"shadow", 0,
-		"Dialog shadow colors. You need ui.shadows turned on.");
+		"Dialog shadow colors (see ui.shadows option).");
 
 	add_opt_color("ui.colors.color.dialog.shadow", "Background color",
 		"background", 0, "black",
@@ -1971,7 +1986,7 @@ register_options()
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Textfield",
+	add_opt_tree("ui.colors.mono.dialog", "Text field",
 		"field", 0,
 		"Dialog field colors.");
 
@@ -1983,7 +1998,7 @@ register_options()
 		"background", 0, "black",
 		"Default background color.");
 
-	add_opt_tree("ui.colors.mono.dialog", "Textfield text",
+	add_opt_tree("ui.colors.mono.dialog", "Text field text",
 		"field-text", 0,
 		"Dialog field text colors.");
 
@@ -2009,7 +2024,7 @@ register_options()
 
 	add_opt_tree("ui.colors.mono.dialog", "Shadow",
 		"shadow", 0,
-		"Dialog shadow colors. You need ui.shadows turned on.");
+		"Dialog shadow colors (see ui.shadows option).");
 
 	add_opt_color("ui.colors.mono.dialog.shadow", "Background color",
 		"background", 0, "black",
@@ -2085,10 +2100,10 @@ register_options()
 
 	add_opt_int("ui.dialogs", "Minimal height of listbox widget",
 		"listbox_min_height", 0, 1, 20, 10,
-		"Minimal height of the listbox widget (used ie. for bookmarks\n"
+		"Minimal height of the listbox widget (used e.g. for bookmarks\n"
 		"or global history).");
 
-	add_opt_bool("ui.dialogs", "Shadows",
+	add_opt_bool("ui.dialogs", "Drop shadows",
 		"shadows", 0, 0,
 		"Make dialogs drop shadows (the shadows are solid, you can\n"
 		"adjust their color by ui.colors.*.dialog.shadow). You may\n"
@@ -2118,12 +2133,11 @@ register_options()
 
 	add_opt_int("ui.timer", "Duration",
 		"duration", 0, 1, 86400, 86400,
-		"Length of the inactivity interval. One day should be enough for just\n"
-		"everyone (tm).");
+		"Inactivity timeout. One day should be enough for just everyone (TM).");
 
 	add_opt_string("ui.timer", "Action",
 		"action", 0, "",
-		"Keybinding action to be triggered when timer arrives to zero.");
+		"Key-binding action to be triggered when timer reaches zero.");
 
 
 
@@ -2153,8 +2167,8 @@ register_options()
 
 	add_opt_bool("ui", "Set window title",
 		"window_title", 0, 1,
-		"Whether ELinks window title should be touched if ELinks is\n"
-		"being ran in some windowing environment.");
+		"Whether ELinks window title should be touched when ELinks is\n"
+		"run in a windowing environment.");
 
 
 
@@ -2162,7 +2176,7 @@ register_options()
 	 * Estimated due time: 2003-02-10 */
 	add_opt_alias("", NULL,
 		"config_saving_style", 0, "config.saving_style",
-		"Determines what happens when you let ELinks to save options:\n"
+		"Determines what happens when you tell ELinks to save options:\n"
 		"0 is only values of current options are altered\n"
 		"1 is values of current options are altered and missing options\n"
 		"     are added at the end of the file\n"
@@ -2170,8 +2184,8 @@ register_options()
 
 	add_opt_bool("", "Use secure file saving",
 		"secure_file_saving", 0, 1,
-		"First write data to 'file.tmp', rename to 'file' upon\n"
-		"successful finishing this. Note that this relates only to\n"
+		"First write data to 'file.tmp', then rename to 'file' upon\n"
+		"successfully finishing this. Note that this relates only to\n"
 		"config files, not downloaded files. You may want to disable\n"
 		"it, if you want some config file with some exotic permissions.\n"
 		"Secure file saving is automagically disabled if file is symlink.");
@@ -2182,10 +2196,10 @@ register_options()
 
 	/* Commandline-only options */
 
-	add_opt_bool_tree(&cmdline_options, "", "Restrict to run in anonymous mode",
+	add_opt_bool_tree(&cmdline_options, "", "Restrict to anonymous mode",
 		"anonymous", 0, 0,
 		"Restrict ELinks so that it can run on an anonymous account.\n"
-		"No local file browsing, no downloads. Executing of viewers\n"
+		"No local file browsing, no downloads. Execution of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.");
 
@@ -2238,16 +2252,16 @@ register_options()
 		"Print help on configuration options and exit.");
 #endif
 
-	add_opt_command_tree(&cmdline_options, "", "Make lookup for specified host",
+	add_opt_command_tree(&cmdline_options, "", "Look up specified host",
 		"lookup", 0, lookup_cmd,
-		"Make lookup for specified host.");
+		"Look up specified host.");
 
 	add_opt_bool_tree(&cmdline_options, "", "Run as separate instance",
 		"no-connect", 0, 0,
-		"Run ELinks as a separate instance - instead of connecting to\n"
+		"Run ELinks as a separate instance instead of connecting to an\n"
 		"existing instance. Note that normally no runtime state files\n"
-		"(I mean bookmarks, history and so on) are written to the disk\n"
-		"with this option on - see also -touch-files.");
+		"(bookmarks, history and so on) are written to the disk when\n"
+		"this option is used. See also -touch-files.");
 
 	add_opt_bool_tree(&cmdline_options, "", "Don't use files in ~/.elinks",
 		"no-home", 0, 0,
@@ -2255,19 +2269,20 @@ register_options()
 
 	add_opt_int_tree(&cmdline_options, "", "Connect to session ring with given ID",
 		"session-ring", 0, 0, MAXINT, 0,
-		"ID of session ring this ELinks should connect to. The ELinks\n"
-		"works in so-called session rings, where all instances of ELinks\n"
-		"are interconnected and share same state (cache, bookmarks, cookies\n"
+		"ID of session ring this ELinks session should connect to. ELinks\n"
+		"works in so-called session rings, whereby all instances of ELinks\n"
+		"are interconnected and share state (cache, bookmarks, cookies,\n"
 		"and so on). By default, all ELinks instances connect to session\n"
-		"ring 0. You can change that behaviour by this switch and form as\n"
+		"ring 0. You can change that behaviour with this switch and form as\n"
 		"many session rings as you want. Obviously, if the session-ring with\n"
 	        "this number doesn't exist yet, it's created and this ELinks instance\n"
 		"will become the master instance (that usually doesn't matter for you\n"
-		"as a user much). Note that you usually don't want to use this except\n"
+		"as a user much). Note that you usually don't want to use this unless\n"
 	        "you're a developer and you want to do some testing - if you want the\n"
-		"ELinks instances running each one standalone, rather use -no-connect\n"
-		"commandline option. Also note that normally no runtime state files\n"
-		"are written to the disk with this option on - see also -touch-files.\n");
+		"ELinks instances each running standalone, rather use the -no-connect\n"
+		"command-line option. Also note that normally no runtime state files\n"
+		"are written to the disk when this option is used. See also\n"
+		"-touch-files.\n");
 
 	add_opt_bool_tree(&cmdline_options, "", "Write the source of given URL to stdout",
 		"source", 0, 0,
@@ -2275,18 +2290,18 @@ register_options()
 
 	add_opt_bool_tree(&cmdline_options, "", "Read document from stdin",
 		"stdin", 0, 0,
-		"Open stdin as HTML document - it is fully equivalent to:\n"
+		"Open stdin as an HTML document - this is fully equivalent to:\n"
 		" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
 		"Use whichever suits you more ;-). Note that reading document from\n"
 		"stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 		"know why you would use -source -stdin, though ;-)");
 
 	add_opt_bool_tree(&cmdline_options, "",
-		"Use files in ~/.elinks when run with -no-connect",
+		"Touch files in ~/.elinks when running with -no-connect/-session-ring",
 		"touch-files", 0, 0,
 		"Set to 1 to have runtime state files (bookmarks, history, ...)\n"
-		"changed even when -no-connect is used; has no effect if not used\n"
-		"in connection with the -no-connect commandline option.");
+		"changed even when -no-connect or -session-ring is used; has no\n"
+		"effect if not used in connection with any of these options.");
 
 	add_opt_command_tree(&cmdline_options, "", "Print version information and exit",
 		"version", 0, version_cmd,

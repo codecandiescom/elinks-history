@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.24 2003/05/12 21:23:11 pasky Exp $ */
+/* $Id: conv.c,v 1.25 2003/05/12 21:46:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,26 +269,4 @@ add_htmlesc_str(unsigned char **str, int *strl,
 
 #undef accept_char
 
-}
-
-/* String conversion functions */
-
-/* Trim starting and ending chars from a string.
- * Pointer to the string is passed.
- * WARNING: string is modified.
- * If len != NULL, it is set to length of the new string.
- */
-inline unsigned char *
-trim_chars(unsigned char *s, unsigned char c, int *len)
-{
-	int l = strlen(s);
-	unsigned char *p = s;
-
-	while (*p == c) p++, l--;
-	while (l && p[l - 1] == c) p[--l] = '\0';
-
-	memmove(s, p, l + 1);
-	if (len) *len = l;
-
-	return s;
 }

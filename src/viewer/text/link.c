@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.95 2003/10/30 18:12:46 jonas Exp $ */
+/* $Id: link.c,v 1.96 2003/10/31 01:59:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -691,7 +691,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 		fixup_select_state(frm, fs);
 	}
 
-	draw_doc(ses->tab->term, doc_view, 1);
+	draw_document_view(doc_view, ses->tab->term, 1);
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);
 #if 0

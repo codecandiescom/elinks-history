@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.200 2003/10/30 18:12:46 jonas Exp $ */
+/* $Id: session.c,v 1.201 2003/10/31 01:59:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1396,12 +1396,12 @@ destroy_session(struct session *ses)
 	abort_loading(ses, 0);
 	free_files(ses);
 	if (ses->doc_view) {
-		detach_formatted(ses->doc_view);
+		done_document_view(ses->doc_view);
 		mem_free(ses->doc_view);
 	}
 
 	foreach (doc_view, ses->scrn_frames)
-		detach_formatted(doc_view);
+		done_document_view(doc_view);
 
 	free_list(ses->scrn_frames);
 

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.11 2003/10/31 01:38:12 jonas Exp $ */
+/* $Id: view.h,v 1.12 2003/10/31 01:59:39 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
@@ -31,5 +31,11 @@ struct document_view {
 	int depth;
 	int used;
 };
+
+/* Releases the document view's resources. But doesn't free() the @view. */
+void done_document_view(struct document_view *doc_view);
+
+/* Puts the formatted document on the given terminal's screen. */
+void draw_document_view(struct document_view *doc_view, struct terminal *term, int active);
 
 #endif

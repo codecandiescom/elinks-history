@@ -1,19 +1,13 @@
-/* $Id: view.h,v 1.31 2003/10/29 16:24:33 jonas Exp $ */
+/* $Id: view.h,v 1.32 2003/10/31 01:59:40 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
 
-#include "document/html/frames.h"
+#include "document/view.h"
 #include "sched/session.h"
 #include "terminal/event.h"
 #include "terminal/terminal.h"
 
-
-/* Releases the document view's resources. But doesn't free() the @view. */
-void detach_formatted(struct document_view *doc_view);
-
-/* Puts the formatted document on the given terminal's screen. */
-void draw_doc(struct terminal *t, struct document_view *doc_view, int active);
 
 void draw_formatted(struct session *);
 

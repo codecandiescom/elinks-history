@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.352 2003/10/30 22:57:41 jonas Exp $ */
+/* $Id: renderer.c,v 1.353 2003/10/31 01:59:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "cache/cache.h"
 #include "document/document.h"
 #include "document/options.h"
+#include "document/view.h"
 #include "document/html/frames.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
@@ -1518,7 +1519,7 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 
 	name = document_view->name;
 	document_view->name = NULL;
-	detach_formatted(document_view);
+	done_document_view(document_view);
 
 	document_view->name = name;
 	document_view->link_bg = NULL;
@@ -1603,7 +1604,7 @@ html_interpret(struct session *ses)
 
 		if (doc_view->used) continue;
 
-		detach_formatted(doc_view);
+		done_document_view(doc_view);
 		del_from_list(doc_view);
 		mem_free(doc_view);
 		doc_view = prev_doc_view;

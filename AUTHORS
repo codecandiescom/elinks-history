@@ -190,7 +190,9 @@ Laurent Monin <zas@norz.org>
 	Updated French translation
 	Bookmarks hacking
 	Misc minor improvements
-	Big amount of bugfixes and tidyups
+	Big amount of bugfixes, tidyups and optimizations
+	HTTP Auth fixes
+	Secure file saving
 	Referred as 'Zas' or 'zas' in the code
 
 Lukasz Dobrek <dobrek@student.ifpan.edu.pl>
@@ -279,6 +281,9 @@ Peter Wang <tjaden@alphalink.com.au>
 Petr Baudis <pasky@ji.cz>
 	Maintains elinks tree (CVS), integrates all reasonable patches
 	and bugfixes. Produces a links-current tarball for user testing.
+	New options system
+	BFU colorization
+	DNS hacking
 	http://elinks.or.cz/
 
 Petr Cech <cech@atrey.karlin.mff.cuni.cz>
@@ -360,4 +365,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.79 2002/09/05 17:30:55 pasky Exp $
+$Id: AUTHORS,v 1.80 2002/09/07 10:14:40 zas Exp $

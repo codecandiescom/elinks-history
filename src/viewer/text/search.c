@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.202 2004/02/05 23:19:13 jonas Exp $ */
+/* $Id: search.c,v 1.203 2004/02/06 22:41:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,12 +42,7 @@
 
 #define SEARCH_HISTORY_FILENAME		"searchhist"
 
-static struct input_history search_history = {
-	/* items: */	{ D_LIST_HEAD(search_history.entries) },
-	/* size: */	0,
-	/* dirty: */	0,
-	/* nosave: */	0,
-};
+static INIT_INPUT_HISTORY(search_history);
 
 
 /* FIXME: Add comments!! --Zas */

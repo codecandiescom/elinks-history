@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.39 2004/02/05 12:52:54 pasky Exp $ */
+/* $Id: exmode.c,v 1.40 2004/02/06 22:41:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,12 +37,7 @@
  * config-file commands. */
 
 
-struct input_history exmode_history = {
-	/* items: */	{ D_LIST_HEAD(exmode_history.entries) },
-	/* size: */	0,
-	/* dirty: */	0,
-	/* nosave: */	0,
-};
+INIT_INPUT_HISTORY(exmode_history);
 
 typedef int (*exmode_handler)(struct session *, unsigned char *, unsigned char *);
 

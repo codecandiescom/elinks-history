@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.67 2004/01/05 19:47:33 jonas Exp $ */
+/* $Id: globhist.c,v 1.68 2004/02/06 22:41:05 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -41,12 +41,7 @@
 #define GLOBAL_HISTORY_FILENAME		"globhist"
 
 
-struct input_history global_history = {
-	{ D_LIST_HEAD(global_history.entries) },
-	0,
-	0,
-	0,
-};
+INIT_INPUT_HISTORY(global_history);
 
 
 /* GUI stuff. Declared here because done_global_history() frees it. */

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.287 2004/01/26 18:52:02 jonas Exp $ */
+/* $Id: menu.c,v 1.288 2004/02/06 22:41:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,12 +448,8 @@ dialog_goto_url(struct session *ses, char *url)
 		    NULL);
 }
 
-static struct input_history file_history = {
-	/* items: */	{ D_LIST_HEAD(file_history.entries) },
-	/* size: */	0,
-	/* dirty: */	0,
-	/* nosave: */	0,
-};
+
+static INIT_INPUT_HISTORY(file_history);
 
 void
 query_file(struct session *ses, unsigned char *url, void *data,

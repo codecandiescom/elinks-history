@@ -1,4 +1,4 @@
-/* $Id: timers.h,v 1.6 2005/03/04 18:54:03 zas Exp $ */
+/* $Id: timers.h,v 1.7 2005/03/04 21:14:26 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TIMERS_H
 #define EL__LOWLEVEL_TIMERS_H
@@ -13,7 +13,8 @@
  * That way there is no need of id field in struct timer. --Zas */
 typedef void * timer_id_T;
 
-/* Should always be NULL or you'll have to modify install_timer(). --Zas */
+/* Should always be NULL or you'll have to modify install_timer()
+ * and kill_timer(). --Zas */
 #define TIMER_ID_UNDEF ((timer_id_T) NULL)
 
 int count_timers(void);

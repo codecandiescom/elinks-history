@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.52 2003/06/08 11:38:41 pasky Exp $ */
+/* $Id: error.c,v 1.53 2003/06/08 12:33:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ int errline;
 unsigned char *errfile;
 
 void
-int_error(unsigned char *fmt, ...)
+elinks_internal(unsigned char *fmt, ...)
 {
 	unsigned char errbuf[4096];
 	int size;
@@ -94,7 +94,7 @@ int_error(unsigned char *fmt, ...)
 }
 
 void
-debug_msg(unsigned char *fmt, ...)
+elinks_debug(unsigned char *fmt, ...)
 {
 	unsigned char errbuf[4096];
 	int size;

@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.14 2003/06/08 12:30:27 pasky Exp $ */
+/* $Id: error.h,v 1.15 2003/06/08 12:33:45 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -18,14 +18,14 @@ extern unsigned char *errfile;
 /* @internal(format_string) is used to report fatal errors during the ELinks
  * run. It tries to draw user's attention to the error and dumps core if ELinks
  * is running in the DEBUG mode. */
-#define internal errfile = __FILE__, errline = __LINE__, int_error
-void int_error(unsigned char *, ...);
+#define internal errfile = __FILE__, errline = __LINE__, elinks_internal
+void elinks_internal(unsigned char *, ...);
 
 /* @debug(format_string) is used for printing of debugging information. It
  * should not be used anywhere in the official codebase (although it is often
  * lying there commented out, as it may get handy). */
-#define debug errfile = __FILE__, errline = __LINE__, debug_msg
-void debug_msg(unsigned char *, ...);
+#define debug errfile = __FILE__, errline = __LINE__, elinks_debug
+void elinks_debug(unsigned char *, ...);
 
 
 /* This is our smart assert(). It is basically equivalent to if (x) internal(),

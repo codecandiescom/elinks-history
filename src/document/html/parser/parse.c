@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.66 2004/06/23 12:13:54 jonas Exp $ */
+/* $Id: parse.c,v 1.67 2004/06/24 15:09:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -655,6 +655,27 @@ next_break:
 					goto next_break;
 				}
 				continue;
+
+			} else if (html + 5 < eof && *html == '&') {
+				/* Really nasty hack to make &#13; handling in
+				 * <pre>-tags lynx-compatible. It works around
+				 * the entity handling done in the renderer,
+				 * since checking #13 value there would require
+				 * something along the lines of NBSP_CHAR or
+				 * checking for '\n's in AL_NONE text. */
+				/* See bug 52 and 387 for more info. */
+				int newlines = 0;
+
+				while (html + 5 < eof && !memcmp(html, "&#13;", 5)) {
+					newlines++; 
+					html += 5;
+				}
+
+				if (newlines) {
+					put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
+					ln_break(newlines, html_context.line_break_f, f);
+					continue;
+				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.66 2004/08/21 16:55:08 jonas Exp $ */
+/* $Id: protocol.c,v 1.67 2004/08/22 00:54:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,11 @@ static const struct protocol_backend protocol_backends[] = {
 enum protocol
 get_protocol(unsigned char *name, int namelen)
 {
-	enum protocol protocol, start, end;
+	/* These are really enum protocol values but can take on negative
+	 * values and since 0 <= -1 for enum values it's better to use clean
+	 * integer type. */
+	int start, end;
+	enum protocol protocol;
 
 	/* First check if this isn't some custom (protocol.user) protocol. It
 	 * has higher precedence than builtin handlers. */

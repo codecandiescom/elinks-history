@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.46 2003/06/11 05:45:03 miciah Exp $ */
+/* $Id: core.c,v 1.47 2003/06/11 12:00:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,9 +81,11 @@ l_current_url(LS)
 			memacpy(vs->url, postchar ? postchar - vs->url
 						  : strlen(vs->url));
 
-		lua_pushstring(S, url);
+		if (url) {
+			lua_pushstring(S, url);
 
-		mem_free(url);
+			mem_free(url);
+		}
 	}
 	else
 		lua_pushnil(S);

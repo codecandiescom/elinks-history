@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2004/04/24 00:18:55 pasky Exp $
+## $Id: Makefile.am,v 1.3 2004/04/24 00:57:24 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -12,6 +12,8 @@ include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libhtmlp.a
 libhtmlp_a_SOURCES = \
+ link.c \
+ link.h \
  parse.c \
  parse.h \
  stack.c \

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.5 2004/04/24 00:18:54 pasky Exp $ */
+/* $Id: internal.h,v 1.6 2004/04/24 00:57:24 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -20,7 +20,7 @@ extern void *(*special_f)(void *, enum html_special_type, ...);
 
 void ln_break(int n, void (*line_break)(void *), void *f);
 
-/* For parser/parse.h: */
+/* For parser/parse.c: */
 
 int do_html_select(unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end, void *f);
 void do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end, void *f);
@@ -35,5 +35,14 @@ extern int was_br;
 extern int was_li;
 extern int was_xmp;
 extern struct css_stylesheet css_styles;
+
+/* For parser/link.c: */
+
+extern int has_link_lines;
+
+void html_focusable(unsigned char *a);
+void html_skip(unsigned char *a);
+unsigned char *get_target(unsigned char *a);
+void import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len);
 
 #endif

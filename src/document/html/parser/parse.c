@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.2 2004/04/24 00:38:28 pasky Exp $ */
+/* $Id: parse.c,v 1.3 2004/04/24 00:57:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,8 @@
 
 #include "document/css/apply.h"
 #include "document/css/parser.h"
+#include "document/html/parser/link.h"
+#include "document/html/parser/parse.h"
 #include "document/html/parser/stack.h"
 #include "document/html/parser.h"
 #include "document/html/tables.h"
@@ -360,9 +362,7 @@ skip_comment(unsigned char *html, unsigned char *eof)
 /* These should be exported properly by specific HTML parser modules
  * implementing them. But for now... */
 
-void html_a(unsigned char *);
 void html_address(unsigned char *);
-void html_applet(unsigned char *);
 void html_base(unsigned char *);
 void html_blockquote(unsigned char *);
 void html_body(unsigned char *);
@@ -386,15 +386,11 @@ void html_h5(unsigned char *);
 void html_h6(unsigned char *);
 void html_head(unsigned char *);
 void html_hr(unsigned char *);
-void html_iframe(unsigned char *);
-void html_img(unsigned char *);
 void html_input(unsigned char *);
 void html_italic(unsigned char *);
 void html_li(unsigned char *);
 void html_linebrk(unsigned char *);
-void html_link(unsigned char *);
 void html_noframes(unsigned char *);
-void html_object(unsigned char *);
 void html_ol(unsigned char *);
 void html_option(unsigned char *);
 void html_p(unsigned char *);

@@ -153,11 +153,11 @@ msgstr "Le nombre doit être compris entre %d et %d."
 
 #: src/bfu/inpfield.c:77
 msgid "Bad string"
-msgstr "Mauvaise chaine"
+msgstr "Mauvaise chaîne"
 
 #: src/bfu/inpfield.c:78
 msgid "Empty string not allowed"
-msgstr "Chaine vide non autorisée"
+msgstr "Chaîne vide non autorisée"
 
 #: src/bfu/leds.c:66
 msgid "LEDs"

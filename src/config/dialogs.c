@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.189 2004/07/14 15:02:43 jonas Exp $ */
+/* $Id: dialogs.c,v 1.190 2004/07/14 15:12:50 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -838,7 +838,6 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct listbox_item *item = box->sel;
 	struct kbdbind_add_hop *hop;
-	struct strtonum *strtonum;
 	unsigned char *text;
 
 	if (!item || !item->depth) {
@@ -854,13 +853,22 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 	if (!hop) return 0;
 	hop->term = term;
 
-	if (item->depth == 2)
-		item = item->root;
+	if (item->depth == 2) {
+		struct keybinding *keybinding = item->udata;
 
-	strtonum = item->udata;
-	hop->action = strtonum->num;
-	strtonum = item->root->udata;
-	hop->keymap = strtonum->num;
+		hop->action = keybinding->action;
+		hop->keymap = keybinding->keymap;
+	} else {
+		struct strtonum *strtonum = item->udata;
+
+		hop->action = strtonum->num;
+
+		item = get_keybinding_root(item);
+		if (!item) return 0;
+
+		strtonum = item->udata;
+		hop->keymap = strtonum->num;
+	}
 
 	text = straconcat(_("Action", term), ": ", write_action(hop->keymap, hop->action), "\n",
 			  _("Keymap", term), ": ", write_keymap(hop->keymap), "\n",

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.1 2003/11/10 21:29:30 jonas Exp $ */
+/* $Id: renderer.c,v 1.2 2003/11/11 21:00:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,6 +61,24 @@ realloc_line(struct document *document, int y, int x)
 	return line->d;
 }
 
+static inline int
+add_document_line(struct document *document, int lineno,
+		  unsigned char *source, int width, struct screen_char *template)
+{
+	struct screen_char *pos, *end;
+
+	pos = realloc_line(document, lineno, width);
+	if (!pos) return 0;
+
+	for (end = pos + width; pos < end; pos++, source++) {
+		template->data = (*source < ' ' || *source == ASCII_ESC)
+			? ' ' : *source;
+		copy_screen_chars(pos, template, 1);
+	}
+
+	return width;
+}
+
 static void
 add_document_lines(struct document *document, unsigned char *source)
 {
@@ -82,30 +100,25 @@ add_document_lines(struct document *document, unsigned char *source)
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *lineend = strchr(source, '\n');
 		int width = lineend ? lineend - source: strlen(source);
-		struct node *node = mem_alloc(sizeof(struct node));
-		struct screen_char *pos, *end;
+		int added;
 
-		/* Add (search) nodes on a line by line basis */
-		if (node) {
-			node->x = 0;
-			node->y = lineno;
-			node->height = 1;
-			node->width = width;
-			add_to_list(document->nodes, node);
-		}
+		added = add_document_line(document, lineno, source, width, &template);
 
-		pos = realloc_line(document, lineno, width);
-		if (!pos) continue;
-
-		for (end = pos + width; pos < end; pos++, source++) {
-			template.data = (*source < ' ' || *source == ASCII_ESC)
-					? ' ' : *source;
-			copy_screen_chars(pos, &template, 1);
+		if (added) {
+			/* Add (search) nodes on a line by line basis */
+			struct node *node = mem_alloc(sizeof(struct node));
+			if (node) {
+				node->x = 0;
+				node->y = lineno;
+				node->height = 1;
+				node->width = added;
+				add_to_list(document->nodes, node);
+			}
 		}
 
 		/* Skip the newline too. */
 		length -= width + 1;
-		source += 1;
+		source += width + 1;
 	}
 }
 

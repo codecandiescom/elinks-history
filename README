@@ -15,8 +15,8 @@ mailing list at linuxfromscratch.org.  If you have any feature request or hint
 for developers, please post it at links-discuss mailing list at the same place.
 
 The ELinks site with some basic information is available at
-http://elinks.pld.org.pl/. Please see SITES file for mirrors or other
-recommended sites. If you want even to install ELinks on your computer, see
+http://elinks.or.cz/. Please see SITES file for mirrors or other recommended
+sites. If you want even to install ELinks on your computer, see
 INSTALL file for instructions.
 
 Why not contribute to Links instead? Well, first I made a bunch of patches for
@@ -30,6 +30,12 @@ of konqueror and similiar browser. However, to prevent drastical bloating of the
 code, the development is driven in the course of modularization and separation
 of add-on modules (like cookies, bookmarks, ssl, lua etc).
 
-$Id: README,v 1.8 2002/05/10 22:06:54 pasky Exp $
+If you want to write some patches, please read the HACKING document.
+If you want to add a new language, please read intl/README document.
+If you want to write some documentation, well you're welcomed ;)
+If you want to request features, report bugs, use the mailing list as mentionned
+above, or come and see us on irc.openprojects.net #elinks.
+
+$Id: README,v 1.9 2002/09/12 20:11:24 zas Exp $
 
 vim: textwidth=80

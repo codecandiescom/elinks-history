@@ -60,7 +60,7 @@ Triggered When:
 
 Arguments:
 
- unsigned char **url, struct session *ses
+ unsigned char **url, struct uri *current_uri
 
 Description:
 
@@ -148,4 +148,4 @@ Description:
  Allows a subsystem to do whatever clean up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.8 2004/01/01 19:18:46 miciah Exp $
+$Id: events.txt,v 1.9 2004/06/07 15:58:07 jonas Exp $

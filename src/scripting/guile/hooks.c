@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.26 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: hooks.c,v 1.27 2004/06/07 15:58:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "protocol/uri.h"
 #include "sched/event.h"
 #include "sched/session.h"
 #include "scripting/guile/hooks.h"
@@ -55,11 +56,11 @@ static enum evhook_status
 script_hook_goto_url(va_list ap, void *data)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
-	struct session *ses = va_arg(ap, struct session *);
+	struct uri *current_uri = va_arg(ap, struct uri *);
 	SCM proc;
 	SCM x;
 
-	evhook_use_params(url && ses);
+	evhook_use_params(url && current_uri);
 
 	if (*url == NULL || !*url[0]) return EHS_NEXT;
 

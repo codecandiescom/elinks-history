@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.10 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: hooks.c,v 1.11 2004/06/07 15:58:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
  * to do is explained in doc/events.txt */
 
 static inline void
-do_script_hook_goto_url(struct session *ses, unsigned char **url)
+do_script_hook_goto_url(struct uri *current_uri, unsigned char **url)
 {
 	int count;
 	dSP;	/* Keep in variables declaration block. */
@@ -31,10 +31,10 @@ do_script_hook_goto_url(struct session *ses, unsigned char **url)
 
 	PUSHMARK(SP);
 	my_XPUSHs(*url, strlen(*url));
-	if (!have_location(ses)) {
+	if (!current_uri) {
 		XPUSHs(sv_2mortal(newSV(0)));
 	} else {
-		unsigned char *uri = struri(cur_loc(ses)->vs.uri);
+		unsigned char *uri = struri(current_uri);
 
 		my_XPUSHs(uri, strlen(uri));
 	}
@@ -66,10 +66,10 @@ static enum evhook_status
 script_hook_goto_url(va_list ap, void *data)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
-	struct session *ses = va_arg(ap, struct session *);
+	struct uri *current_uri = va_arg(ap, struct uri *);
 
 	if (my_perl && *url)
-		do_script_hook_goto_url(ses, url);
+		do_script_hook_goto_url(current_uri, url);
 
 	return EHS_NEXT;
 }

@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.25 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: rewrite.c,v 1.26 2004/06/07 15:58:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,7 +304,7 @@ static enum evhook_status
 goto_url_hook(va_list ap, void *data)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
-	struct session *ses = va_arg(ap, struct session *);
+	struct uri *current_uri = va_arg(ap, struct uri *);
 	unsigned char *uu = NULL;
 	unsigned char *arg = "";
 	unsigned char *argstart = *url + strcspn(*url, " :");
@@ -322,10 +322,7 @@ goto_url_hook(va_list ap, void *data)
 		uu = get_uri_rewrite_prefix(URI_REWRITE_DUMB, *url);
 
 	if (uu) {
-		struct uri *uri = have_location(ses)
-				? cur_loc(ses)->vs.uri : NULL;
-
-		uu = rewrite_uri(uu, uri, arg);
+		uu = rewrite_uri(uu, current_uri, arg);
 		if (uu) {
 			mem_free(*url);
 			*url = uu;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.338 2004/10/03 18:01:54 witekfl Exp $ */
+/* $Id: http.c,v 1.339 2004/10/04 13:26:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1248,7 +1248,23 @@ again:
 	if (h == 201 || h == 301 || h == 302 || h == 303 || h == 307) {
 		d = parse_header(conn->cached->head, "Location", NULL);
 		if (d) {
-			redirect_cache(conn->cached, d, h == 303, -1);
+			int use_get_method = (h == 303);
+
+			/* A note from RFC 2616 section 10.3.3:
+			 * RFC 1945 and RFC 2068 specify that the client is not
+			 * allowed to change the method on the redirected
+			 * request. However, most existing user agent
+			 * implementations treat 302 as if it were a 303
+			 * response, performing a GET on the Location
+			 * field-value regardless of the original request
+			 * method. */
+			/* So POST must not be redirected to GET, but some
+			 * BUGGY message boards rely on it :-( */
+	    		if (h == 302
+			    && get_opt_int("protocol.http.bugs.broken_302_redirect"))
+				use_get_method = 1;
+
+			redirect_cache(conn->cached, d, use_get_method, -1);
 			mem_free(d);
 		}
 	}

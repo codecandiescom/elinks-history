@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.183 2004/09/27 02:29:22 pasky Exp $ */
+/* $Id: cache.c,v 1.184 2004/10/04 13:26:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -608,11 +608,13 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
 
 	if (!uristring) return NULL;
 
-	/* According to RFC2068 POST must not be redirected to GET,
-	 * but some BUGGY message boards rely on it :-( */
+	/* Only add the post data if the redirect should not use GET method.
+	 * This is tied to the HTTP handling of the 303 and (if the
+	 * protocol.http.bugs.broken_302_redirect is enabled) the 302 status
+	 * code handling. */
 	if (cached->uri->post
 	    && !cached->redirect_get
-	    && !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
+	    && !get) {
 		/* XXX: Add POST_CHAR and post data assuming URI components
 		 * belong to one string. */
 

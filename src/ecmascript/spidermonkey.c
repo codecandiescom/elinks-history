@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.50 2004/09/27 07:33:09 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.51 2004/09/28 23:28:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -656,11 +656,33 @@ location_toString(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval 
 	return JS_GetProperty(ctx, obj, "href", rval);
 }
 
+struct delayed_goto {
+	/* It might look more convenient to pass doc_view around but it could
+	 * disappear during wild dances inside of frames or so. */
+	struct view_state *vs;
+	struct uri *uri;
+};
+
+static void
+delayed_goto(void *data)
+{
+	struct delayed_goto *deg = data;
+
+	assert(deg);
+	assert(deg->vs->doc_view);
+	goto_uri_frame(deg->vs->doc_view->session, deg->uri,
+	               deg->vs->doc_view->name,
+		       CACHE_MODE_NORMAL);
+	done_uri(deg->uri);
+	mem_free(deg);
+}
+
 static void
 location_goto(struct document_view *doc_view, unsigned char *url)
 {
 	unsigned char *new_abs_url;
 	struct uri *new_uri;
+	struct delayed_goto *deg;
 
 	new_abs_url = join_urls(doc_view->document->uri,
 	                        trim_chars(url, ' ', 0));
@@ -670,9 +692,17 @@ location_goto(struct document_view *doc_view, unsigned char *url)
 	mem_free(new_abs_url);
 	if (!new_uri)
 		return;
-	goto_uri_frame(doc_view->session, new_uri, doc_view->name,
-		       CACHE_MODE_NORMAL);
-	done_uri(new_uri);
+	deg = mem_calloc(1, sizeof(struct delayed_goto));
+	if (!deg) {
+		done_uri(new_uri);
+		return;
+	}
+	assert(doc_view->vs);
+	deg->vs = doc_view->vs;
+	deg->uri = new_uri;
+	/* It does not seem to be very safe inside of frames to
+	 * call goto_uri() right away. */
+	register_bottom_half((void (*)(void *)) delayed_goto, deg);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.118 2004/06/05 21:14:33 jonas Exp $ */
+/* $Id: uri.h,v 1.119 2004/06/07 23:38:54 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -176,9 +176,9 @@ void free_uri_list(struct uri_list *list);
  * and get_user_program() which will treat upper case letters
  * as equivalent to lower case in protocol names. */
 
-/* Register a new URI in the cache. If @length is -1 strlen(@string) is used as
- * the length. */
-struct uri *get_uri(unsigned char *string, int length);
+/* Register a new URI in the cache where @components controls which parts are
+ * added to the returned URI. */
+struct uri *get_uri(unsigned char *string, enum uri_component components);
 
 /* Dereference an URI from the cache */
 void done_uri(struct uri *uri);
@@ -193,7 +193,7 @@ get_uri_reference(struct uri *uri)
 
 #define get_proxied_uri(uri)					\
 	(((uri)->protocol == PROTOCOL_PROXY)			\
-	? get_uri((uri)->data, -1) : get_uri_reference(uri))
+	? get_uri((uri)->data, 0) : get_uri_reference(uri))
 
 #define get_proxy_uri(uri)					\
 	(((uri)->protocol != PROTOCOL_PROXY)			\

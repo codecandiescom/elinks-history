@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.227 2004/06/06 12:34:29 jonas Exp $ */
+/* $Id: uri.c,v 1.228 2004/06/07 23:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -927,7 +927,7 @@ get_composed_uri(struct uri *uri, enum uri_component components)
 	string = get_uri_string(uri, components);
 	if (!string) return NULL;
 
-	uri = get_uri(string, -1);
+	uri = get_uri(string, 0);
 	mem_free(string);
 
 	return uri;
@@ -974,7 +974,7 @@ get_translated_uri(unsigned char *uristring, unsigned char *cwd,
 	if (!uristring) return NULL;
 
 	if (fragment) *fragment = extract_fragment(uristring);
-	uri = get_uri(uristring, -1);
+	uri = get_uri(uristring, 0);
 	mem_free(uristring);
 	if (!uri && fragment) mem_free_set(&*fragment, NULL);
 
@@ -1198,14 +1198,20 @@ get_uri_cache_entry(unsigned char *string, int length)
 }
 
 struct uri *
-get_uri(unsigned char *string, int length)
+get_uri(unsigned char *string, enum uri_component components)
 {
 	struct uri_cache_entry *entry;
 
 	assert(string);
 
-	if (length == -1) length = strlen(string);
-	if (!length) return NULL;
+	if (components) {
+		struct uri uri;
+
+		if (parse_uri(&uri, string) != URI_ERRNO_OK)
+			return NULL;
+
+		return get_composed_uri(&uri, components);
+	}
 
 	if (!is_object_used(&uri_cache)) {
 		uri_cache.map = init_hash(hash_size(3), strhash);
@@ -1213,7 +1219,7 @@ get_uri(unsigned char *string, int length)
 		object_nolock(&uri_cache, "uri_cache");
 	}
 
-	entry = get_uri_cache_entry(string, length);
+	entry = get_uri_cache_entry(string, strlen(string));
 	if (!entry) {
 		if (!is_object_used(&uri_cache))
 			free_hash(uri_cache.map);

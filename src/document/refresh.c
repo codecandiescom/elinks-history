@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.33 2004/05/31 17:16:51 jonas Exp $ */
+/* $Id: refresh.c,v 1.34 2004/06/07 23:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@ init_document_refresh(unsigned char *url, unsigned long seconds)
 	refresh = mem_alloc(sizeof(struct document_refresh));
 	if (!refresh) return NULL;
 
-	refresh->uri = get_uri(url, -1);
+	refresh->uri = get_uri(url, 0);
 	if (!refresh->uri) {
 		mem_free(refresh);
 		return NULL;

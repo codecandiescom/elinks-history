@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.16 2004/05/23 01:31:20 jonas Exp $ */
+/* $Id: proxy.c,v 1.17 2004/06/07 23:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,7 +110,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		if (init_string(&string)
 		    && string_concat(&string, "proxy://", proxy, "/", NULL)
 		    && add_uri_to_string(&string, uri, URI_PROXY)) {
-			uri = get_uri(string.source, -1);
+			uri = get_uri(string.source, 0);
 		} else {
 			uri = NULL;
 		}

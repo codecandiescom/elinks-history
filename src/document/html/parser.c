@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.430 2004/06/06 13:19:04 jonas Exp $ */
+/* $Id: parser.c,v 1.431 2004/06/07 23:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -624,7 +624,7 @@ html_base(unsigned char *a)
 	if (al) {
 		struct html_element *element = html_stack.prev;
 		unsigned char *base = join_urls(element->attr.href_base, al);
-		struct uri *uri = base ? get_uri(base, -1) : NULL;
+		struct uri *uri = base ? get_uri(base, 0) : NULL;
 
 		mem_free(al);
 		mem_free_if(base);

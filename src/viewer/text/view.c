@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.438 2004/06/07 16:36:07 jonas Exp $ */
+/* $Id: view.c,v 1.439 2004/06/07 23:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1039,7 +1039,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 			break;
 
 		case ACT_MAIN_DOWNLOAD_IMAGE:
-			ses->download_uri = get_uri(link->where_img, -1);
+			ses->download_uri = get_uri(link->where_img, 0);
 			break;
 
 		default:

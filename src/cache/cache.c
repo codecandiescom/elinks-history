@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.152 2004/06/07 23:21:02 jonas Exp $ */
+/* $Id: cache.c,v 1.153 2004/06/07 23:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -553,7 +553,7 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
 	}
 
 	if (cached->redirect) done_uri(cached->redirect);
-	cached->redirect = get_uri(uristring, -1);
+	cached->redirect = get_uri(uristring, 0);
 	cached->redirect_get = get;
 	if (incomplete >= 0) cached->incomplete = incomplete;
 

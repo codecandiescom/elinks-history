@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.185 2004/06/04 07:40:11 jonas Exp $ */
+/* $Id: link.c,v 1.186 2004/06/07 23:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,8 +481,8 @@ get_link_uri(struct session *ses, struct document_view *doc_view,
 	switch (link->type) {
 		case LINK_HYPERTEXT:
 		case LINK_MAP:
-			if (link->where) return get_uri(link->where, -1);
-			return get_uri(link->where_img, -1);
+			if (link->where) return get_uri(link->where, 0);
+			return get_uri(link->where_img, 0);
 
 		case LINK_BUTTON:
 		case LINK_FIELD:

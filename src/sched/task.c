@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.96 2004/06/07 15:58:07 jonas Exp $ */
+/* $Id: task.c,v 1.97 2004/06/07 23:38:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -526,7 +526,7 @@ goto_url_frame(struct session *ses, struct uri *uri,
 void
 map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 {
-	struct uri *uri = get_uri(ld->link, -1);
+	struct uri *uri = get_uri(ld->link, 0);
 
 	if (uri) {
 		goto_url_frame(ses, uri, ld->target, CACHE_MODE_NORMAL);

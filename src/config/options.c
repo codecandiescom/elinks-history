@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.158 2002/12/15 00:02:01 jonas Exp $ */
+/* $Id: options.c,v 1.159 2002/12/15 11:32:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -840,9 +840,9 @@ register_options()
 		"max_connections", 0, 1, 16, 10,
 		"Maximum number of concurrent connections.");
 
-	add_opt_int("connection", "Maximum connection per host",
+	add_opt_int("connection", "Maximum connections per host",
 		"max_connections_to_host", 0, 1, 8, 2,
-		"Maximum number of concurrent connection to a given host.");
+		"Maximum number of concurrent connections to a given host.");
 
 	add_opt_int("connection", "Connection attempts",
 		"retries", 0, 1, 16, 3,
@@ -897,16 +897,16 @@ register_options()
 	get_opt_rec(&root_options, "document.browse")->change_hook = change_hook_html;
 
 
-	add_opt_tree("document.browse", "Acceskeys",
+	add_opt_tree("document.browse", "Accesskeys",
 		"accesskey", 0,
 		"Options for handling accesskey attribute.");
 
-	add_opt_bool("document.browse.accesskey", "Automatic follow links",
+	add_opt_bool("document.browse.accesskey", "Automatic links following",
 		"auto_follow", 0, 0,
 		"Automatically follow link / submit form if appropriate accesskey\n"
 		"is pressed - this is standard behaviour, however dangerous.");
 
-	add_opt_int("document.browse.accesskey", "Acceskey priority",
+	add_opt_int("document.browse.accesskey", "Accesskey priority",
 		"priority", 0, 0, 2, 1,
 		"Priority of 'accesskey' HTML attribute:\n"
 		"0 is first try all normal bindings and if it fails, check accesskey\n"
@@ -2196,7 +2196,7 @@ register_options()
 		"ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it.");
 
-	add_opt_bool_tree(&cmdline_options, "", "Write formated version of given URL to stdout",
+	add_opt_bool_tree(&cmdline_options, "", "Write formatted version of given URL to stdout",
 		"dump", 0, 0,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout.");
@@ -2205,7 +2205,7 @@ register_options()
 		"dump-charset", 0, "document.dump.codepage",
 		"Codepage used in dump output.");
 
-	add_opt_alias_tree(&cmdline_options, "", "Width of document formated with -dump",
+	add_opt_alias_tree(&cmdline_options, "", "Width of document formatted with -dump",
 		"dump-width", 0, "document.dump.width",
 		"Width of the dump output.");
 

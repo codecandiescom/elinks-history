@@ -645,7 +645,6 @@ AC_OUTPUT([ \
  contrib/lua/hooks.lua \
  doc/Makefile \
  doc/book/Makefile \
- intl/Makefile \
  po/Makefile.in \
  src/Makefile \
  src/bfu/Makefile \

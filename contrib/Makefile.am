@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.13 2005/03/07 09:44:33 jonas Exp $
+## $Id: Makefile.am,v 1.14 2005/03/25 19:29:38 miciah Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -29,6 +29,7 @@ EXTRA_DIST = \
  lua/bm.lua \
  lua/config.lua \
  lua/elinks-remote \
+ lua/highlight.lua \
  lua/hooks.lua.in \
  lua/md5check.lua \
  lua/remote.lua \

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.220 2004/04/20 23:32:08 jonas Exp $ */
+/* $Id: menu.c,v 1.221 2004/04/20 23:54:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,6 +278,11 @@ scroll_menu(struct menu *menu, int d)
 			return;
 		}
 	}
+
+	/* The rest is not needed for horizontal menus like the mainmenu.
+	 * FIXME: We need a better way to figure out which menus are horizontal and
+	 * which are vertical (normal) --jonas */
+	if (w <= 1) return;
 
 	int_bounds(&menu->first, menu->selected - w + scr_i + 1, menu->selected - scr_i);
 	int_bounds(&menu->first, 0, menu->size - w);
@@ -883,17 +888,13 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 				if (ev->x > L_MAINMENU_SPACE)
 					continue;
 
-				menu->selected--;
-				if (menu->selected < 0)
-					menu->selected = menu->size - 1;
+				scroll_menu(menu, -1);
 
 			} else if (ev->x >= p) {
 				if (ev->x < win->term->width - R_MAINMENU_SPACE)
 					continue;
 
-				menu->selected++;
-				if (menu->selected > menu->size - 1)
-					menu->selected = 0;
+				scroll_menu(menu, 1);
 
 			} else {
 				menu->selected = i;
@@ -928,11 +929,11 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 		return;
 
 	case ACT_MENU_HOME:
-		menu->selected = 0;
+		scroll_menu(menu, -menu->selected);
 		break;
 
 	case ACT_MENU_END:
-		menu->selected = menu->size - 1;
+		scroll_menu(menu, menu->size - menu->selected - 1);
 		break;
 
 	case ACT_MENU_NEXT_ITEM:
@@ -945,13 +946,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 
 	case ACT_MENU_LEFT:
 	case ACT_MENU_RIGHT:
-		menu->selected += (action == ACT_MENU_LEFT ? -1 : 1);
-
-		/* Handle wrap around */
-		if (menu->selected < 0)
-			menu->selected = menu->size - 1;
-		else if (menu->selected >= menu->size)
-			menu->selected = 0;
+		scroll_menu(menu, action == ACT_MENU_LEFT ? -1 : 1);
 		break;
 
 	case ACT_MENU_REDRAW:

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.134 2004/04/05 04:33:59 jonas Exp $ */
+/* $Id: uri.c,v 1.135 2004/04/05 04:44:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -335,6 +335,21 @@ add_string_uri_to_string(struct string *string, unsigned char *uristring,
 	return add_uri_to_string(string, &uri, components);
 }
 
+
+static void
+insert_in_uri(unsigned char **uri, int pos, unsigned char *seq, int seqlen)
+{
+	int urilen = strlen(*uri);
+	unsigned char *string = mem_realloc(*uri, urilen + seqlen + 1);
+
+	if (!string) return;
+
+	memmove(string + pos + seqlen, string + pos, urilen - pos + 1);
+	memcpy(string + pos, seq, seqlen);
+	*uri = string;
+}
+
+
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 
 static void
@@ -600,19 +615,6 @@ prx:
 
 	translate_directories(n);
 	return n;
-}
-
-static void
-insert_in_uri(unsigned char **uri, int pos, unsigned char *seq, int seqlen)
-{
-	int urilen = strlen(*uri);
-	unsigned char *string = mem_realloc(*uri, urilen + seqlen + 1);
-
-	if (!string) return;
-
-	memmove(string + pos + seqlen, string + pos, urilen - pos + 1);
-	memcpy(string + pos, seq, seqlen);
-	*uri = string;
 }
 
 static unsigned char *

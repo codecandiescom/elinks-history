@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.23 2003/09/22 23:49:05 jonas Exp $ */
+/* $Id: hooks.c,v 1.24 2003/09/22 23:52:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,40 +90,32 @@ script_hook_follow_url(va_list ap)
 	unsigned char **returl = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
 	unsigned char *url = va_arg(ap, unsigned char *);
-	int err;
-
-	*returl = NULL;
+	unsigned char *value = NULL;
 
 	lua_getglobal(L, "follow_url_hook");
 	if (lua_isnil(L, -1)) {
 		lua_pop(L, 1);
-		return 0;
+		return str_event_code(returl, NULL);
 	}
 
 	lua_pushstring(L, url);
 
-	if (prepare_lua(ses)) {
-		*returl = stracpy("");
-		return *returl ? 1 : 0;
-	}
-	err = lua_call(L, 1, 1);
-	finish_lua();
-	if (err) {
-		*returl = stracpy("");
-		return *returl ? 1 : 0;
-	}
+	if (!prepare_lua(ses)) {
+		int err = lua_call(L, 1, 1);
 
-	if (lua_isstring(L, -1)) {
-		*returl = stracpy((unsigned char *) lua_tostring(L, -1));
-	} else if (!lua_isnil(L, -1)) {
-		alert_lua_error("follow_url_hook must return a string or nil");
-	} else {
-		*returl = stracpy("");
+		finish_lua();
+		if (err) return str_event_code(returl, NULL);
+
+		if (lua_isstring(L, -1)) {
+			value = stracpy((unsigned char *) lua_tostring(L, -1));
+		} else if (!lua_isnil(L, -1)) {
+			alert_lua_error("follow_url_hook must return a string or nil");
+		}
+
+		lua_pop(L, 1);
 	}
 
-	lua_pop(L, 1);
-
-	return *returl ? 1 : 0;
+	return str_event_code(returl, value);
 }
 
 

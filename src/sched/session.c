@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.152 2003/09/22 23:34:52 jonas Exp $ */
+/* $Id: session.c,v 1.153 2003/09/22 23:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1514,10 +1514,10 @@ goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 
 	set_event_id(follow_url_event_id, "follow-url");
 	trigger_event(follow_url_event_id, &newurl, ses, url);
-	if (newurl) url = newurl;
+	url = newurl;
 #endif
 
-	if (*url) really_goto_url_w(ses, url, target, task, cache_mode);
+	if (url && *url) really_goto_url_w(ses, url, target, task, cache_mode);
 
 #ifdef HAVE_SCRIPTING
 	if (newurl) mem_free(newurl);

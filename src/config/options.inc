@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.34 2003/11/29 04:31:01 jonas Exp $ */
+/* $Id: options.inc,v 1.35 2003/12/01 06:23:46 witekfl Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -707,6 +707,17 @@ struct option_info config_options_info[] = {
 		   "If set to false, files with name starting with a dot will be\n"
 		   "hidden in local directories listing.")),
 
+	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
+		"cgi", 0,
+		N_("Local CGI specific options.")),
+
+	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
+		"policy", 0, 0,
+		N_("Whether to execute local CGI scripts.")),
+	
+	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
+		"path", 0, "",
+		N_("Colon separated list of directories, where CGI scripts are stored.")),
 
 	INIT_OPT_TREE("protocol", N_("User protocols"),
 		"user", OPT_AUTOCREATE,

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.134 2003/11/29 00:53:30 pasky Exp $ */
+/* $Id: file.c,v 1.135 2003/12/01 06:23:46 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +40,7 @@
 #include "config/options.h"
 #include "cache/cache.h"
 #include "osdep/osdep.h"
+#include "protocol/file/cgi.h"
 #include "protocol/file/file.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
@@ -584,6 +585,7 @@ file_func(struct connection *connection)
 		abort_conn_with_state(connection, S_BAD_URL);
 		return;
 	}
+	if (!execute_cgi(connection)) return;
 
 	/* This function works on already simplified file-scheme URI pre-chewed
 	 * by transform_file_url(). By now, the function contains no hostname

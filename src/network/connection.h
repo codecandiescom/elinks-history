@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.42 2003/10/30 17:01:42 pasky Exp $ */
+/* $Id: connection.h,v 1.43 2003/12/01 06:23:46 witekfl Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -67,6 +67,7 @@ enum connection_state {
 
 	S_FILE_TYPE		= -10200,
 	S_FILE_ERROR		= -10201,
+	S_FILE_CGI_BAD_PATH	= -10202,
 
 	S_FTP_ERROR		= -10300,
 	S_FTP_UNAVAIL		= -10301,
@@ -147,6 +148,8 @@ struct connection {
 	int received;
 	int est_length;
 	int timer;
+	int cgi_input[2];
+	int cgi_output[2];
 	int stream_pipes[2];
 
 	unsigned int running:1;

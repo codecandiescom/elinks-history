@@ -1,3 +1,116 @@
+Wed Oct  8 21:10:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Don't send Cache-Control: reload but Cache-Control: no-cache for
+	NC_RELOAD, the Radim's request contained a mistake.  
+
+Wed Oct  8 17:06:47 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update.  
+
+Wed Oct  8 17:01:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Remove dot from confdir caption.  
+
+Wed Oct  8 15:59:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/stub.c:
+
+	Fix elinks_memmove(), cases where n == 0 or src == dst were not
+	handled correctly. May be reported by Stephane CHAZELAS ;) 
+
+Wed Oct  8 14:51:49 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update.  
+
+Wed Oct  8 13:30:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/tools/help2doc:
+
+	Minor simplification needed to make the script run on FreeBSD.  
+
+Wed Oct  8 13:30:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Updated to reflect the current state of options.  
+
+Wed Oct  8 13:07:30 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Oct  8 12:59:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Cleanup and optimization of last patch, now truncated url ends with
+	three dots.  
+
+Wed Oct  8 12:42:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Truncate very long urls in download progress dialog, it prevents
+	progress info to be hidden in such a case.  
+
+Wed Oct  8 12:26:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Make ui.startup_goto_dialog by default enabled. This is probably
+	much easier for the newbies.  
+
+Wed Oct  8 11:08:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/color-model.txt:
+
+	Add header .. fix typo .. add note.  
+
+Wed Oct  8 10:45:31 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/color-model.txt:
+
+	More ideas.  
+
+Wed Oct  8 07:49:13 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/hierbox.c:
+
+	Select the parent item, if there is one, when '[' is pressed on a
+	leaf item or collapsed folder in a listbox.  
+	
+	Warning: Excessive indentation and roundabout code. It took me ages 
+	to figure how to select an arbitrary listbox item; we need a better
+	way.  
+
+Tue Oct  7 23:24:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/color-model.txt:
+
+	Some comments about configuration and tidyup of the example.  
+
+Tue Oct  7 22:34:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/color-model.txt:
+
+	Added vim: textwidth modeliner .. Lots of reformatting .. Added
+	comment about availability .. A few type/grammar fixes.  
+
+Tue Oct  7 22:28:46 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/color-model.txt:
+
+	Some ideas (as is) that may be bad ;).  
+
 Tue Oct  7 22:10:54 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/search.c:

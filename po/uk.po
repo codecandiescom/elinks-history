@@ -5,66 +5,41 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-11 22:37+0100\n"
+"POT-Creation-Date: 2005-03-24 08:55+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dmitry Pinchukov <dpinch@mail.ru>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=koi8-u\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:348
 msgid "Close"
 msgstr "Закрити"
 
 #. | MSGBOX_SCROLLABLE
-#: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/cache/dialogs.c:219
-#: src/config/dialogs.c:516 src/cookies/dialogs.c:421
-#: src/dialogs/document.c:44 src/dialogs/document.c:223
-#: src/dialogs/download.c:476 src/formhist/dialogs.c:212
-#: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
+#: src/bfu/hierbox.c:443 src/bfu/hierbox.c:452 src/dialogs/document.c:44
+#: src/dialogs/document.c:220
 msgid "Info"
 msgstr "╤нформац╕я"
 
-#: src/bfu/hierbox.c:445
+#: src/bfu/hierbox.c:444
 msgid "Press space to expand this folder."
 msgstr ""
 
-#: src/bfu/hierbox.c:447 src/bfu/hierbox.c:458 src/bfu/hierbox.c:638
-#: src/bfu/hierbox.c:945 src/bfu/hierbox.c:974 src/bfu/inpfield.c:69
-#: src/bfu/inpfield.c:80 src/bfu/inpfield.c:100 src/bfu/leds.c:276
-#: src/bfu/msgbox.c:175 src/bookmarks/dialogs.c:263
-#: src/bookmarks/dialogs.c:666 src/config/dialogs.c:56
-#: src/config/dialogs.c:101 src/config/dialogs.c:338 src/config/dialogs.c:407
-#: src/config/dialogs.c:437 src/config/dialogs.c:475 src/config/dialogs.c:495
-#: src/config/dialogs.c:847 src/config/dialogs.c:866 src/config/dialogs.c:908
-#: src/cookies/dialogs.c:356 src/dialogs/document.c:50
-#: src/dialogs/document.c:226 src/dialogs/document.c:297 src/dialogs/edit.c:98
-#: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
-#: src/dialogs/menu.c:97 src/dialogs/menu.c:520 src/dialogs/menu.c:571
-#: src/dialogs/options.c:202 src/dialogs/options.c:282
-#: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1937
-#: src/ecmascript/spidermonkey.c:1963 src/formhist/dialogs.c:179
-#: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
-#: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
-#: src/protocol/user.c:268 src/sched/download.c:229 src/sched/download.c:325
-#: src/sched/download.c:366 src/sched/download.c:505 src/sched/download.c:599
-#: src/sched/error.c:42 src/sched/session.c:239 src/sched/session.c:706
-#: src/sched/session.c:730 src/sched/session.c:747
-#: src/scripting/lua/core.c:395 src/scripting/lua/core.c:476
-#: src/scripting/lua/core.c:593 src/scripting/lua/core.c:717
-#: src/scripting/ruby/core.c:63 src/scripting/ruby/core.c:159
-#: src/scripting/ruby/core.c:215 src/viewer/text/draw.c:67
-#: src/viewer/text/form.c:857 src/viewer/text/search.c:953
-#: src/viewer/text/search.c:1014 src/viewer/text/search.c:1459
-#: src/viewer/text/search.c:1570 src/viewer/text/textarea.c:366
-#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:730
-#: src/viewer/text/view.c:1283
-msgid "OK"
+#: src/bfu/hierbox.c:455 src/bfu/inpfield.c:245 src/bfu/msgbox.c:175
+#: src/bfu/msgbox.c:192 src/config/dialogs.c:56 src/config/dialogs.c:404
+#: src/cookies/dialogs.c:356 src/dialogs/edit.c:98 src/dialogs/info.c:133
+#: src/dialogs/options.c:209 src/dialogs/options.c:289 src/mime/dialogs.c:130
+#: src/protocol/auth/dialogs.c:108 src/protocol/protocol.c:227
+#: src/sched/session.c:737 src/scripting/lua/core.c:395
+#: src/scripting/lua/core.c:476 src/viewer/text/search.c:1562
+#, fuzzy
+msgid "~OK"
 msgstr "Угу"
 
-#: src/bfu/hierbox.c:564
+#: src/bfu/hierbox.c:566
 #, fuzzy, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr ""
@@ -72,7 +47,7 @@ msgstr ""
 "\n"
 "Назва: \"%s\""
 
-#: src/bfu/hierbox.c:565
+#: src/bfu/hierbox.c:567
 #, fuzzy, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr ""
@@ -81,7 +56,7 @@ msgstr ""
 "Назва: \"%s\""
 
 #. cant_delete_folder
-#: src/bfu/hierbox.c:568 src/bookmarks/dialogs.c:124
+#: src/bfu/hierbox.c:570 src/bookmarks/dialogs.c:124
 #, fuzzy, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr ""
@@ -90,7 +65,7 @@ msgstr ""
 "Назва: \"%s\""
 
 #. cant_delete_used_folder
-#: src/bfu/hierbox.c:569 src/bookmarks/dialogs.c:126
+#: src/bfu/hierbox.c:571 src/bookmarks/dialogs.c:126
 #, fuzzy, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr ""
@@ -98,52 +73,54 @@ msgstr ""
 "\n"
 "Назва: \"%s\""
 
-#: src/bfu/hierbox.c:635
+#: src/bfu/hierbox.c:636
 #, fuzzy
 msgid "Delete error"
 msgstr "Видалити закладинку"
 
-#: src/bfu/hierbox.c:731
+#: src/bfu/hierbox.c:730
 #, fuzzy
 msgid "Delete marked items"
 msgstr "Видалити елемент ╕стор╕╖"
 
-#: src/bfu/hierbox.c:732
+#: src/bfu/hierbox.c:731
 #, fuzzy
 msgid "Delete marked items?"
 msgstr "Видалити елемент ╕стор╕╖"
 
-#: src/bfu/hierbox.c:745 src/bfu/hierbox.c:781 src/bfu/hierbox.c:802
-#: src/bfu/hierbox.c:873 src/config/dialogs.c:825 src/dialogs/menu.c:126
-#: src/formhist/formhist.c:457 src/mime/dialogs.c:70 src/sched/task.c:274
+#: src/bfu/hierbox.c:744 src/bfu/hierbox.c:780 src/bfu/hierbox.c:801
+#: src/bfu/hierbox.c:872 src/config/dialogs.c:817 src/dialogs/menu.c:126
+#: src/formhist/formhist.c:457 src/mime/dialogs.c:70 src/sched/task.c:267
 #: src/terminal/tab.c:191 src/terminal/tab.c:227
-msgid "Yes"
+#, fuzzy
+msgid "~Yes"
 msgstr "Так"
 
-#: src/bfu/hierbox.c:746 src/bfu/hierbox.c:782 src/bfu/hierbox.c:803
-#: src/bfu/hierbox.c:874 src/config/dialogs.c:826 src/dialogs/menu.c:127
-#: src/formhist/formhist.c:458 src/mime/dialogs.c:71 src/sched/task.c:275
+#: src/bfu/hierbox.c:745 src/bfu/hierbox.c:781 src/bfu/hierbox.c:802
+#: src/bfu/hierbox.c:873 src/config/dialogs.c:818 src/dialogs/menu.c:127
+#: src/formhist/formhist.c:458 src/mime/dialogs.c:71 src/sched/task.c:268
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
-msgid "No"
+#, fuzzy
+msgid "~No"
 msgstr "Н╕"
 
 #. delete_folder_title
-#: src/bfu/hierbox.c:766 src/bookmarks/dialogs.c:132
+#: src/bfu/hierbox.c:765 src/bookmarks/dialogs.c:132
 #, fuzzy
 msgid "Delete folder"
 msgstr "Видалити закладинку"
 
-#: src/bfu/hierbox.c:767
+#: src/bfu/hierbox.c:766
 #, fuzzy, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Видалити вм╕ст папки \"%s\"?"
 
-#: src/bfu/hierbox.c:784
+#: src/bfu/hierbox.c:783
 #, fuzzy
 msgid "Delete item"
 msgstr "Видалити елемент ╕стор╕╖"
 
-#: src/bfu/hierbox.c:785
+#: src/bfu/hierbox.c:784
 #, fuzzy, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -154,69 +131,64 @@ msgstr ""
 "\n"
 "URL: \"%s\""
 
-#: src/bfu/hierbox.c:842
+#: src/bfu/hierbox.c:841
 #, fuzzy
 msgid "Clear all items"
 msgstr "Очистити повну ╕стор╕ю"
 
-#: src/bfu/hierbox.c:843
+#: src/bfu/hierbox.c:842
 #, fuzzy
 msgid "Do you really want to remove all items?"
 msgstr "Ви д╕йсно бажа╓те вийти з ELinks?"
 
-#: src/bfu/hierbox.c:940 src/bfu/hierbox.c:973 src/bookmarks/dialogs.c:451
-#: src/cache/dialogs.c:222 src/config/dialogs.c:520 src/config/dialogs.c:945
-#: src/globhist/dialogs.c:230 src/viewer/text/search.c:986
-#: src/viewer/text/search.c:994 src/viewer/text/search.c:1011
-#: src/viewer/text/search.c:1589
+#: src/bfu/hierbox.c:939 src/bfu/hierbox.c:970 src/viewer/text/search.c:984
+#: src/viewer/text/search.c:992 src/viewer/text/search.c:1008
+#: src/viewer/text/search.c:1581
 msgid "Search"
 msgstr "Пошук"
 
-#: src/bfu/hierbox.c:942 src/viewer/text/search.c:987
+#: src/bfu/hierbox.c:941 src/viewer/text/search.c:985
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Рядок не знайдено"
 
-#: src/bfu/hierbox.c:973 src/config/dialogs.c:169 src/config/dialogs.c:373
-#: src/config/dialogs.c:494 src/cookies/dialogs.c:35 src/cookies/dialogs.c:350
+#: src/bfu/hierbox.c:970 src/config/dialogs.c:167 src/config/dialogs.c:370
+#: src/config/dialogs.c:486 src/cookies/dialogs.c:35 src/cookies/dialogs.c:350
 #: src/dialogs/edit.c:92 src/dialogs/edit.c:94 src/scripting/lua/core.c:391
 #: src/scripting/lua/core.c:392 src/scripting/lua/core.c:473
 msgid "Name"
 msgstr "╤м'я"
 
-#: src/bfu/hierbox.c:974 src/bookmarks/dialogs.c:263
-#: src/bookmarks/dialogs.c:666 src/config/dialogs.c:408
-#: src/config/dialogs.c:495 src/config/dialogs.c:908 src/cookies/dialogs.c:357
-#: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
-#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
-#: src/dialogs/options.c:283 src/mime/dialogs.c:131
-#: src/protocol/auth/dialogs.c:109 src/sched/download.c:549
-#: src/sched/download.c:1134 src/scripting/lua/core.c:396
-#: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
-#: src/viewer/text/search.c:1571 src/viewer/text/view.c:730
-msgid "Cancel"
-msgstr "Скасувати"
-
-#: src/bfu/inpfield.c:66 src/bfu/inpfield.c:75
+#: src/bfu/inpfield.c:64 src/bfu/inpfield.c:71
 msgid "Bad number"
 msgstr "Неправильне число"
 
-#: src/bfu/inpfield.c:67
+#: src/bfu/inpfield.c:65
 msgid "Number expected in field"
 msgstr "В пол╕ ма╓ бути число"
 
-#: src/bfu/inpfield.c:77
+#: src/bfu/inpfield.c:73
 #, c-format
 msgid "Number should be in the range from %d to %d."
 msgstr ""
 
-#: src/bfu/inpfield.c:97
+#: src/bfu/inpfield.c:91
 msgid "Bad string"
 msgstr "Неправильний рядок"
 
-#: src/bfu/inpfield.c:98
+#: src/bfu/inpfield.c:92
 msgid "Empty string not allowed"
 msgstr "Порожн╕ рядки неприпустим╕"
+
+#: src/bfu/inpfield.c:245 src/config/dialogs.c:405 src/cookies/dialogs.c:357
+#: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/options.c:212
+#: src/dialogs/options.c:290 src/mime/dialogs.c:131
+#: src/protocol/auth/dialogs.c:109 src/sched/download.c:539
+#: src/sched/download.c:1122 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:477 src/viewer/text/search.c:1563
+#, fuzzy
+msgid "~Cancel"
+msgstr "Скасувати"
 
 #: src/bfu/leds.c:73
 #, fuzzy
@@ -227,8 +199,8 @@ msgstr "блоковано"
 msgid "Digital clock in the status bar."
 msgstr ""
 
-#: src/bfu/leds.c:76 src/bfu/leds.c:93 src/config/options.inc:1079
-#: src/config/options.inc:1086 src/ecmascript/ecmascript.c:41
+#: src/bfu/leds.c:76 src/bfu/leds.c:93 src/config/options.inc:1090
+#: src/config/options.inc:1097 src/ecmascript/ecmascript.c:41
 #: src/globhist/globhist.c:64 src/mime/backend/mailcap.c:94
 #: src/mime/backend/mimetypes.c:53 src/ssl/ssl.c:81
 #, fuzzy
@@ -265,11 +237,11 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/bfu/leds.c:262 src/bfu/leds.c:303
+#: src/bfu/leds.c:263 src/bfu/leds.c:302
 msgid "LED indicators"
 msgstr ""
 
-#: src/bfu/leds.c:263
+#: src/bfu/leds.c:264
 msgid ""
 "What the different LEDs indicate:\n"
 "\n"
@@ -279,7 +251,7 @@ msgid ""
 " |||`--- A JavaScript pop-up window was blocked\n"
 " ||`---- A JavaScript error has occured\n"
 " |`----- The state of insert mode for text-input form-fields\n"
-" |       'I' means modeless, 'i' means insert mode is on\n"
+" |       'i' means modeless, 'I' means insert mode is on\n"
 " `------ Whether an SSL connection was used\n"
 "\n"
 "'-' generally indicates that the LED is off."
@@ -308,17 +280,17 @@ msgstr ""
 "read_bookmarks_xbel(): Помилка розбору в %s, рядок %d, стовпчик %d:\n"
 "%s"
 
-#: src/bookmarks/backend/xbel.c:384 src/bookmarks/backend/xbel.c:405
+#: src/bookmarks/backend/xbel.c:391 src/bookmarks/backend/xbel.c:412
 msgid "No title"
 msgstr "Нема╓ назви"
 
-#: src/bookmarks/backend/xbel.c:390
+#: src/bookmarks/backend/xbel.c:397
 #, fuzzy
 msgid "No URL"
 msgstr "Пeрейти до..."
 
 #. name:
-#: src/bookmarks/bookmarks.c:48 src/bookmarks/bookmarks.c:158
+#: src/bookmarks/bookmarks.c:48 src/bookmarks/bookmarks.c:187
 #, fuzzy
 msgid "Bookmarks"
 msgstr "Закладки"
@@ -349,10 +321,23 @@ msgid ""
 msgstr ""
 
 #: src/bookmarks/bookmarks.c:67
+#, fuzzy
+msgid "Save folder state"
+msgstr "╤м'я папки"
+
+#: src/bookmarks/bookmarks.c:69
+msgid ""
+"When saving bookmarks also store whether folders are\n"
+"expanded or not, so the look of the bookmark dialog is\n"
+"kept across ELinks sessions. If disabled all folders will\n"
+"appear unexpanded next time ELinks is run."
+msgstr ""
+
+#: src/bookmarks/bookmarks.c:74
 msgid "Periodic snapshotting"
 msgstr ""
 
-#: src/bookmarks/bookmarks.c:69
+#: src/bookmarks/bookmarks.c:76
 msgid ""
 "Automatically save a snapshot of all tabs periodically.\n"
 "This will periodically bookmark the tabs of each terminal in a separate "
@@ -362,12 +347,12 @@ msgid ""
 "This feature requires bookmark support."
 msgstr ""
 
-#: src/bookmarks/dialogs.c:75 src/config/options.inc:935
-#: src/dialogs/document.c:81 src/globhist/dialogs.c:66
+#: src/bookmarks/dialogs.c:75 src/config/options.inc:942
+#: src/dialogs/document.c:78 src/globhist/dialogs.c:66
 msgid "Title"
 msgstr "Назва"
 
-#: src/bookmarks/dialogs.c:76 src/cache/dialogs.c:65 src/dialogs/document.c:72
+#: src/bookmarks/dialogs.c:76 src/cache/dialogs.c:65 src/dialogs/document.c:69
 #: src/dialogs/edit.c:96 src/formhist/dialogs.c:63 src/globhist/dialogs.c:67
 #: src/protocol/auth/dialogs.c:156 src/scripting/lua/core.c:393
 msgid "URL"
@@ -432,82 +417,97 @@ msgstr "Пошук по закладинках"
 msgid "Do you really want to remove all bookmarks?"
 msgstr "Ви д╕йсно бажа╓те вийти з ELinks?"
 
-#: src/bookmarks/dialogs.c:262 src/bookmarks/dialogs.c:449
+#: src/bookmarks/dialogs.c:275
 msgid "Add folder"
 msgstr "Додати папку"
 
-#: src/bookmarks/dialogs.c:262
+#: src/bookmarks/dialogs.c:275
 msgid "Folder name"
 msgstr "╤м'я папки"
 
-#: src/bookmarks/dialogs.c:307 src/scripting/lua/core.c:387
+#: src/bookmarks/dialogs.c:331 src/scripting/lua/core.c:387
 msgid "Edit bookmark"
 msgstr "Редагувати закладинку"
 
-#: src/bookmarks/dialogs.c:445 src/cache/dialogs.c:220
+#: src/bookmarks/dialogs.c:467 src/cache/dialogs.c:220
 #: src/globhist/dialogs.c:224 src/protocol/auth/dialogs.c:253
-msgid "Goto"
+#, fuzzy
+msgid "~Goto"
 msgstr "Йти"
 
-#: src/bookmarks/dialogs.c:446 src/config/dialogs.c:364
-#: src/config/dialogs.c:432 src/config/dialogs.c:517 src/cookies/dialogs.c:323
+#: src/bookmarks/dialogs.c:468 src/config/dialogs.c:509
 #: src/cookies/dialogs.c:423
-msgid "Edit"
+#, fuzzy
+msgid "~Edit"
 msgstr "Редагувати"
 
-#: src/bookmarks/dialogs.c:447 src/cache/dialogs.c:221
-#: src/config/dialogs.c:519 src/config/dialogs.c:943 src/cookies/dialogs.c:424
-#: src/formhist/dialogs.c:213 src/globhist/dialogs.c:229
-#: src/protocol/auth/dialogs.c:255
-msgid "Delete"
+#: src/bookmarks/dialogs.c:469 src/cache/dialogs.c:221
+#: src/config/dialogs.c:511 src/config/dialogs.c:932 src/cookies/dialogs.c:424
+#: src/dialogs/menu.c:446 src/formhist/dialogs.c:211
+#: src/globhist/dialogs.c:229 src/protocol/auth/dialogs.c:255
+msgid "~Delete"
 msgstr "Стерти"
 
-#: src/bookmarks/dialogs.c:448
-msgid "Move"
-msgstr "Перем╕стити"
-
-#: src/bookmarks/dialogs.c:450 src/config/dialogs.c:518
-#: src/config/dialogs.c:942 src/cookies/dialogs.c:422
-msgid "Add"
+#: src/bookmarks/dialogs.c:470 src/config/dialogs.c:510
+#: src/config/dialogs.c:931 src/cookies/dialogs.c:422 src/dialogs/menu.c:444
+msgid "~Add"
 msgstr "Додати"
 
-#: src/bookmarks/dialogs.c:452 src/cookies/dialogs.c:425
-#: src/dialogs/download.c:482 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
-#: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
+#: src/bookmarks/dialogs.c:471
+#, fuzzy
+msgid "Add se~parator"
+msgstr "╤стор╕я пошук╕в"
+
+#: src/bookmarks/dialogs.c:472
+#, fuzzy
+msgid "Add ~folder"
+msgstr "Додати папку"
+
+#: src/bookmarks/dialogs.c:473
+#, fuzzy
+msgid "~Move"
+msgstr "Перем╕стити"
+
+#: src/bookmarks/dialogs.c:474 src/cache/dialogs.c:222
+#: src/config/dialogs.c:512 src/config/dialogs.c:934 src/dialogs/menu.c:397
+#: src/globhist/dialogs.c:230
+msgid "~Search"
+msgstr "Пошук"
+
+#. This one is too dangerous, so just let user delete
+#. * the bookmarks file if needed. --Zas
+#: src/bookmarks/dialogs.c:478
 msgid "Clear"
 msgstr "Очистити"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
-#: src/config/dialogs.c:946 src/cookies/dialogs.c:426
-#: src/dialogs/options.c:204 src/formhist/dialogs.c:216
-#: src/globhist/dialogs.c:235 src/sched/download.c:1118
+#: src/bookmarks/dialogs.c:481 src/globhist/dialogs.c:235
 msgid "Save"
 msgstr "Зберегти"
 
-#: src/bookmarks/dialogs.c:461
+#: src/bookmarks/dialogs.c:487
 msgid "Bookmark manager"
 msgstr "Робота з закладками"
 
-#: src/bookmarks/dialogs.c:612
+#: src/bookmarks/dialogs.c:605
 msgid "Search bookmarks"
 msgstr "Пошук по закладинках"
 
-#: src/bookmarks/dialogs.c:626
+#: src/bookmarks/dialogs.c:619
 msgid "Add bookmark"
 msgstr "Додати закладинку"
 
-#: src/bookmarks/dialogs.c:657
+#: src/bookmarks/dialogs.c:650
 #, fuzzy
 msgid "Saved session"
 msgstr "Зберегти параметри"
 
-#: src/bookmarks/dialogs.c:665
+#: src/bookmarks/dialogs.c:658
 #, fuzzy
 msgid "Bookmark tabs"
 msgstr "Закладки"
 
-#: src/bookmarks/dialogs.c:665
+#: src/bookmarks/dialogs.c:658
 #, fuzzy
 msgid "Enter folder name"
 msgstr "╤м'я папки"
@@ -521,7 +521,7 @@ msgstr "Пeрейти до..."
 msgid "Redirect"
 msgstr ""
 
-#: src/cache/dialogs.c:85 src/config/options.inc:496 src/dialogs/document.c:92
+#: src/cache/dialogs.c:85 src/config/options.inc:496 src/dialogs/document.c:89
 msgid "Size"
 msgstr "Розм╕р"
 
@@ -534,15 +534,15 @@ msgstr ""
 msgid "Content type"
 msgstr "Тип документу"
 
-#: src/cache/dialogs.c:93 src/dialogs/document.c:137
+#: src/cache/dialogs.c:93 src/dialogs/document.c:134
 msgid "Last modified"
 msgstr "Востанн╓ модиф╕ковано"
 
-#: src/cache/dialogs.c:101 src/dialogs/document.c:119
+#: src/cache/dialogs.c:101 src/dialogs/document.c:116
 msgid "SSL Cipher"
 msgstr "Код SSL"
 
-#: src/cache/dialogs.c:105 src/dialogs/document.c:124
+#: src/cache/dialogs.c:105 src/dialogs/document.c:121
 msgid "Encoding"
 msgstr "Кодування"
 
@@ -550,7 +550,7 @@ msgstr "Кодування"
 msgid "Flags"
 msgstr ""
 
-#: src/cache/dialogs.c:114 src/dialogs/document.c:95
+#: src/cache/dialogs.c:114 src/dialogs/document.c:92
 msgid "incomplete"
 msgstr "не повн╕стю"
 
@@ -607,6 +607,13 @@ msgstr "Видалити закладинку"
 #: src/cache/dialogs.c:196
 msgid "Delete this cache entry?"
 msgstr ""
+
+#: src/cache/dialogs.c:219 src/config/dialogs.c:508 src/cookies/dialogs.c:421
+#: src/dialogs/download.c:472 src/formhist/dialogs.c:210
+#: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
+#, fuzzy
+msgid "~Info"
+msgstr "╤нформац╕я"
 
 #: src/cache/dialogs.c:227
 #, fuzzy
@@ -1040,7 +1047,7 @@ msgid "Options were saved successfully to config file %s."
 msgstr ""
 
 #: src/config/dialogs.c:57
-msgid "Do not show anymore"
+msgid "~Do not show anymore"
 msgstr ""
 
 #: src/config/dialogs.c:63
@@ -1097,51 +1104,55 @@ msgid ""
 "%s"
 msgstr "Не можу записати до файлу конф╕гурац╕╖ %s: %s"
 
-#: src/config/dialogs.c:155
+#: src/config/dialogs.c:153
 #, fuzzy
 msgid "modified"
 msgstr "Дату зм╕нено"
 
-#: src/config/dialogs.c:174
+#: src/config/dialogs.c:172
 msgid "(expand by pressing space)"
 msgstr ""
 
-#: src/config/dialogs.c:177 src/config/dialogs.c:374
-#: src/config/options.inc:744
+#: src/config/dialogs.c:175 src/config/dialogs.c:371
+#: src/config/options.inc:751
 msgid "Type"
 msgstr "Тип"
 
-#: src/config/dialogs.c:202 src/config/dialogs.c:403 src/cookies/dialogs.c:36
+#: src/config/dialogs.c:200 src/config/dialogs.c:400 src/cookies/dialogs.c:36
 #: src/cookies/dialogs.c:351
 msgid "Value"
 msgstr "Значення"
 
-#: src/config/dialogs.c:206
+#: src/config/dialogs.c:204
 msgid ""
 "\n"
 "\n"
 "This value has been changed since you last saved your configuration."
 msgstr ""
 
-#: src/config/dialogs.c:212 src/config/dialogs.c:378
+#: src/config/dialogs.c:210 src/config/dialogs.c:375
 msgid "N/A"
 msgstr "Н/Д"
 
-#: src/config/dialogs.c:214 src/config/dialogs.c:376
+#: src/config/dialogs.c:212 src/config/dialogs.c:373
 msgid "Description"
 msgstr "Опис"
 
-#: src/config/dialogs.c:335 src/protocol/protocol.c:221
-#: src/sched/session.c:236 src/viewer/text/textarea.c:363
-#: src/viewer/text/textarea.c:372
+#: src/config/dialogs.c:333 src/protocol/protocol.c:221
+#: src/sched/session.c:235 src/viewer/text/textarea.c:362
+#: src/viewer/text/textarea.c:369
 msgid "Error"
 msgstr "Помилка"
 
-#: src/config/dialogs.c:336
+#: src/config/dialogs.c:334
 msgid "Bad option value."
 msgstr "Нев╕рне значення параметру."
 
-#: src/config/dialogs.c:433
+#: src/config/dialogs.c:361 src/config/dialogs.c:429 src/cookies/dialogs.c:323
+msgid "Edit"
+msgstr "Редагувати"
+
+#: src/config/dialogs.c:430
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
@@ -1149,70 +1160,67 @@ msgstr ""
 "Цю опц╕ю не можна редагувати. Це значить, що це деяка спец╕альна опц╕я на "
 "кшталт папки - спробуйте натиснути проб╕л, щоб побачити ╖╖ вм╕ст."
 
-#: src/config/dialogs.c:472 src/config/dialogs.c:494
+#: src/config/dialogs.c:466 src/config/dialogs.c:486
 msgid "Add option"
 msgstr "Додати опц╕ю"
 
-#: src/config/dialogs.c:473
+#: src/config/dialogs.c:467
 msgid "Cannot add an option here."
 msgstr "Тут неможливо додати опц╕ю."
 
-#: src/config/dialogs.c:526
+#: src/config/dialogs.c:513 src/config/dialogs.c:935 src/cookies/dialogs.c:426
+#: src/dialogs/options.c:211 src/formhist/dialogs.c:214
+#: src/sched/download.c:1106
+#, fuzzy
+msgid "Sa~ve"
+msgstr "Зберегти"
+
+#: src/config/dialogs.c:518
 #, fuzzy
 msgid "Option manager"
 msgstr "Опц╕╖"
 
-#: src/config/dialogs.c:692 src/config/dialogs.c:900
+#: src/config/dialogs.c:684
 msgid "Keystroke"
 msgstr "Комб╕нац╕я"
 
-#: src/config/dialogs.c:694 src/config/dialogs.c:894
-#: src/config/options.inc:1099
+#: src/config/dialogs.c:686 src/config/options.inc:1110
 msgid "Action"
 msgstr "Д╕я"
 
-#: src/config/dialogs.c:695 src/config/dialogs.c:895
+#: src/config/dialogs.c:687
 msgid "Keymap"
 msgstr "Розкладка"
 
-#: src/config/dialogs.c:819
+#: src/config/dialogs.c:811
 msgid "Keystroke already used"
 msgstr ""
 
-#: src/config/dialogs.c:820
+#: src/config/dialogs.c:812
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
 "Are you sure you want to replace it?"
 msgstr ""
 
-#: src/config/dialogs.c:844 src/config/dialogs.c:863 src/config/dialogs.c:907
+#: src/config/dialogs.c:835 src/config/dialogs.c:852 src/config/dialogs.c:896
 msgid "Add keybinding"
 msgstr "Додати прив'язку клав╕ш"
 
-#: src/config/dialogs.c:845
+#: src/config/dialogs.c:836
 msgid "Invalid keystroke."
 msgstr "Некоректна комб╕нац╕я."
 
-#: src/config/dialogs.c:864
+#: src/config/dialogs.c:853
 msgid "Need to select a keymap."
 msgstr "Потр╕бно вибрати розкладку."
 
-#: src/config/dialogs.c:896
-msgid ""
-"Keystroke should be written in the format: [Prefix-]Key\n"
-"Prefix: Shift, Ctrl, Alt\n"
-"Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
-msgstr ""
-"Комб╕нац╕я ма╓ бути записана в формат╕: [Преф╕кс-]Клав╕ша\n"
-"Преф╕кс: Shift, Ctrl, Alt\n"
-"Клав╕ша: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
-
-#: src/config/dialogs.c:944 src/dialogs/info.c:136 src/globhist/dialogs.c:231
-msgid "Toggle display"
+#: src/config/dialogs.c:933 src/dialogs/info.c:134 src/globhist/dialogs.c:231
+#, fuzzy
+msgid "~Toggle display"
 msgstr "Перемикнути в╕дображення"
 
-#: src/config/dialogs.c:951
+#: src/config/dialogs.c:940
 msgid "Keybinding manager"
 msgstr "Комб╕нац╕╖ клав╕ш"
 
@@ -1922,7 +1930,7 @@ msgid ""
 msgstr ""
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:71
+#: src/config/options.inc:71 src/dialogs/info.c:180
 msgid "Connections"
 msgstr "З'╓днання"
 
@@ -2258,13 +2266,13 @@ msgid "Active link colors."
 msgstr "Назва посилання"
 
 #: src/config/options.inc:266 src/config/options.inc:526
-#: src/config/options.inc:829
+#: src/config/options.inc:836
 #, fuzzy
 msgid "Background color"
 msgstr "На тл╕"
 
 #: src/config/options.inc:268 src/config/options.inc:528
-#: src/config/options.inc:830
+#: src/config/options.inc:837
 #, fuzzy
 msgid "Default background color."
 msgstr "Роз╕рвати з'╓днання на тл╕"
@@ -2278,13 +2286,13 @@ msgstr "Роз╕рвати з'╓днання на тл╕"
 #. The colors and mono tree should be similar but with different default
 #. * values of course so always use the macros below.
 #: src/config/options.inc:270 src/config/options.inc:522
-#: src/config/options.inc:827
+#: src/config/options.inc:834
 #, fuzzy
 msgid "Text color"
 msgstr "Текстова область"
 
 #: src/config/options.inc:272 src/config/options.inc:524
-#: src/config/options.inc:828
+#: src/config/options.inc:835
 msgid "Default text color."
 msgstr ""
 
@@ -2316,8 +2324,8 @@ msgstr "Текстова область"
 msgid "Invert the fore- and background color so the link stands out."
 msgstr ""
 
-#: src/config/options.inc:288 src/config/options.inc:792
-#: src/dialogs/options.c:199
+#: src/config/options.inc:288 src/config/options.inc:799
+#: src/dialogs/options.c:206
 msgid "Underline"
 msgstr ""
 
@@ -2654,7 +2662,7 @@ msgid ""
 "threshold. (Then of course no other documents can be cached.)"
 msgstr ""
 
-#: src/config/options.inc:492
+#: src/config/options.inc:492 src/dialogs/info.c:199
 msgid "Memory cache"
 msgstr "Кеш в пам'ят╕"
 
@@ -2846,8 +2854,8 @@ msgstr ""
 msgid "Dump output options."
 msgstr ""
 
-#: src/config/options.inc:610 src/config/options.inc:796
-#: src/config/opttypes.c:364 src/dialogs/document.c:99
+#: src/config/options.inc:610 src/config/options.inc:803
+#: src/config/opttypes.c:364 src/dialogs/document.c:96
 msgid "Codepage"
 msgstr "Кодова стор╕нка"
 
@@ -3068,22 +3076,34 @@ msgid ""
 "and reducing reliability of this feature."
 msgstr ""
 
+#: src/config/options.inc:732
+msgid "Use fsync(3) with secure file saving"
+msgstr ""
+
+#: src/config/options.inc:734
+msgid ""
+"When using secure file saving, call fsync(3), if the OS\n"
+"supports it, to force the OS immediately to write the data\n"
+"to permanent storage. This is optional for those who wish\n"
+"to avoid excessive disk I/O."
+msgstr ""
+
 #. Keep options in alphabetical order.
-#: src/config/options.inc:736
+#: src/config/options.inc:743
 #, fuzzy
 msgid "Terminals"
 msgstr "Параметри термiналу"
 
-#: src/config/options.inc:738
+#: src/config/options.inc:745
 #, fuzzy
 msgid "Terminal options."
 msgstr "Параметри термiналу"
 
-#: src/config/options.inc:742
+#: src/config/options.inc:749
 msgid "Options specific to this terminal type (according to $TERM value)."
 msgstr ""
 
-#: src/config/options.inc:746
+#: src/config/options.inc:753
 msgid ""
 "Terminal type; matters mostly only when drawing frames and\n"
 "dialog box borders:\n"
@@ -3094,55 +3114,55 @@ msgid ""
 "4 is FreeBSD"
 msgstr ""
 
-#: src/config/options.inc:754 src/dialogs/options.c:195
+#: src/config/options.inc:761 src/dialogs/options.c:202
 msgid "Switch fonts for line drawing"
 msgstr ""
 
-#: src/config/options.inc:756
+#: src/config/options.inc:763
 msgid ""
 "Switch fonts when drawing lines, enabling both local characters\n"
 "and lines working at the same time. Makes sense only with linux\n"
 "terminal."
 msgstr ""
 
-#: src/config/options.inc:760 src/dialogs/options.c:200
+#: src/config/options.inc:767 src/dialogs/options.c:207
 msgid "UTF-8 I/O"
 msgstr "Вв╕д-вив╕д UTF-8"
 
-#: src/config/options.inc:762
+#: src/config/options.inc:769
 msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
 
-#: src/config/options.inc:765 src/dialogs/options.c:196
+#: src/config/options.inc:772 src/dialogs/options.c:203
 msgid "Restrict frames in cp850/852"
 msgstr "Обмежувати рамки з cp850/852"
 
-#: src/config/options.inc:767
+#: src/config/options.inc:774
 msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
 msgstr ""
 
-#: src/config/options.inc:770 src/dialogs/options.c:197
+#: src/config/options.inc:777 src/dialogs/options.c:204
 #, fuzzy
 msgid "Block cursor"
 msgstr "Прямокутний курсор"
 
-#: src/config/options.inc:772
+#: src/config/options.inc:779
 msgid ""
 "Move cursor to bottom right corner when done drawing.\n"
 "This is particularly useful when we have a block cursor,\n"
 "so that inversed text is displayed correctly."
 msgstr ""
 
-#: src/config/options.inc:776
+#: src/config/options.inc:783
 #, fuzzy
 msgid "Color mode"
 msgstr "Кольори"
 
-#: src/config/options.inc:778
+#: src/config/options.inc:785
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -3151,11 +3171,11 @@ msgid ""
 "2 is 256 color mode, uses XTerm RGB codes"
 msgstr ""
 
-#: src/config/options.inc:784 src/dialogs/options.c:198
+#: src/config/options.inc:791 src/dialogs/options.c:205
 msgid "Transparency"
 msgstr ""
 
-#: src/config/options.inc:786
+#: src/config/options.inc:793
 msgid ""
 "If we should not set the background to black. This is particularly\n"
 "useful when we have a terminal (typically in some windowing\n"
@@ -3164,401 +3184,411 @@ msgid ""
 "sense only when colors are enabled."
 msgstr ""
 
-#: src/config/options.inc:794
+#: src/config/options.inc:801
 msgid "If we should use underline or enhance the color instead."
 msgstr ""
 
-#: src/config/options.inc:798
+#: src/config/options.inc:805
 msgid ""
 "Codepage of charset used for displaying content on terminal.\n"
 "'System' stands for a codepage determined by a selected locale."
 msgstr ""
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:805
+#: src/config/options.inc:812
 msgid "User interface"
 msgstr ""
 
-#: src/config/options.inc:807
+#: src/config/options.inc:814
 #, fuzzy
 msgid "User interface options."
 msgstr "Параметри термiналу"
 
-#: src/config/options.inc:811
+#: src/config/options.inc:818
 msgid "Color settings"
 msgstr ""
 
-#: src/config/options.inc:813
+#: src/config/options.inc:820
 msgid "Default user interface color settings."
 msgstr ""
 
-#: src/config/options.inc:840
+#: src/config/options.inc:847
 #, fuzzy
 msgid "Color terminals"
 msgstr "Терм╕нал BeOS"
 
-#: src/config/options.inc:842
+#: src/config/options.inc:849
 msgid "Color settings for color terminal."
 msgstr ""
 
-#: src/config/options.inc:844
+#: src/config/options.inc:851
 msgid "Non-color terminals"
 msgstr ""
 
-#: src/config/options.inc:846
+#: src/config/options.inc:853
 msgid "Color settings for non-color terminal."
 msgstr ""
 
 #. FIXME: obsolete, how to alias them correctly ? --Zas
-#: src/config/options.inc:849
+#: src/config/options.inc:856
 msgid "Main menu bar"
 msgstr ""
 
-#: src/config/options.inc:851
+#: src/config/options.inc:858
 msgid "Main menu bar colors."
 msgstr ""
 
-#: src/config/options.inc:853
+#: src/config/options.inc:860
 msgid "Unselected main menu bar item"
 msgstr ""
 
-#: src/config/options.inc:855
+#: src/config/options.inc:862
 msgid "Unselected main menu bar item colors."
 msgstr ""
 
-#: src/config/options.inc:857
+#: src/config/options.inc:864
 msgid "Selected main menu bar item"
 msgstr ""
 
-#: src/config/options.inc:859
+#: src/config/options.inc:866
 msgid "Selected main menu bar item colors."
 msgstr ""
 
-#: src/config/options.inc:861 src/config/options.inc:890
+#: src/config/options.inc:868 src/config/options.inc:897
 msgid "Hotkey"
 msgstr ""
 
-#: src/config/options.inc:863
+#: src/config/options.inc:870
 msgid "Main menu hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:865 src/config/options.inc:894
+#: src/config/options.inc:872 src/config/options.inc:901
 msgid "Unselected hotkey"
 msgstr ""
 
-#: src/config/options.inc:867
+#: src/config/options.inc:874
 msgid "Main menu unselected hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:869 src/config/options.inc:898
+#: src/config/options.inc:876 src/config/options.inc:905
 #, fuzzy
 msgid "Selected hotkey"
 msgstr "Поле вибору"
 
-#: src/config/options.inc:871
+#: src/config/options.inc:878
 msgid "Main menu selected hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:874
+#: src/config/options.inc:881
 msgid "Menu bar"
 msgstr ""
 
-#: src/config/options.inc:876
+#: src/config/options.inc:883
 msgid "Menu bar colors."
 msgstr ""
 
-#: src/config/options.inc:878
+#: src/config/options.inc:885
 msgid "Unselected menu item"
 msgstr ""
 
-#: src/config/options.inc:880
+#: src/config/options.inc:887
 msgid "Unselected menu item colors."
 msgstr ""
 
-#: src/config/options.inc:882
+#: src/config/options.inc:889
 #, fuzzy
 msgid "Selected menu item"
 msgstr "Поле вибору"
 
-#: src/config/options.inc:884
+#: src/config/options.inc:891
 msgid "Selected menu item colors."
 msgstr ""
 
-#: src/config/options.inc:886
+#: src/config/options.inc:893
 #, fuzzy
 msgid "Marked menu item"
 msgstr "Поле вибору"
 
-#: src/config/options.inc:888
+#: src/config/options.inc:895
 msgid "Marked menu item colors."
 msgstr ""
 
-#: src/config/options.inc:892
+#: src/config/options.inc:899
 msgid "Menu item hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:896
+#: src/config/options.inc:903
 msgid "Menu item unselected hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:900
+#: src/config/options.inc:907
 msgid "Menu item selected hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:902
+#: src/config/options.inc:909
 #, fuzzy
 msgid "Menu frame"
 msgstr "Без рамок"
 
-#: src/config/options.inc:904
+#: src/config/options.inc:911
 msgid "Menu frame colors."
 msgstr ""
 
-#: src/config/options.inc:907
+#: src/config/options.inc:914
 msgid "Dialog"
 msgstr ""
 
-#: src/config/options.inc:909
+#: src/config/options.inc:916
 msgid "Dialog colors."
 msgstr ""
 
-#: src/config/options.inc:919
+#: src/config/options.inc:926
 msgid "Generic"
 msgstr ""
 
-#: src/config/options.inc:921
+#: src/config/options.inc:928
 #, fuzzy
 msgid "Generic dialog colors."
 msgstr "Роз╕рвати з'╓днання на тл╕"
 
-#: src/config/options.inc:923
+#: src/config/options.inc:930
 #, fuzzy
 msgid "Frame"
 msgstr "╕м'я"
 
-#: src/config/options.inc:925
+#: src/config/options.inc:932
 msgid "Dialog frame colors."
 msgstr ""
 
-#: src/config/options.inc:927
+#: src/config/options.inc:934
 #, fuzzy
 msgid "Scrollbar"
 msgstr "Прокрутити вгору"
 
-#: src/config/options.inc:929
+#: src/config/options.inc:936
 msgid "Scrollbar colors."
 msgstr ""
 
-#: src/config/options.inc:931
+#: src/config/options.inc:938
 #, fuzzy
 msgid "Selected scrollbar"
 msgstr "Роз╕рвати з'╓днання на тл╕"
 
-#: src/config/options.inc:933
+#: src/config/options.inc:940
 #, fuzzy
 msgid "Scrollbar selected colors."
 msgstr "Роз╕рвати з'╓днання на тл╕"
 
-#: src/config/options.inc:937
+#: src/config/options.inc:944
 msgid "Dialog title colors."
 msgstr ""
 
-#: src/config/options.inc:939
+#: src/config/options.inc:946
 #, fuzzy
 msgid "Text"
 msgstr "Текстова область"
 
-#: src/config/options.inc:941
+#: src/config/options.inc:948
 msgid "Dialog text colors."
 msgstr ""
 
-#: src/config/options.inc:943 src/viewer/text/form.c:1442
+#: src/config/options.inc:950 src/viewer/text/form.c:1436
 msgid "Checkbox"
 msgstr "Прапорець"
 
-#: src/config/options.inc:945
+#: src/config/options.inc:952
 msgid "Dialog checkbox colors."
 msgstr ""
 
-#: src/config/options.inc:947
+#: src/config/options.inc:954
+#, fuzzy
+msgid "Selected checkbox"
+msgstr "Поле вибору"
+
+#: src/config/options.inc:956
+#, fuzzy
+msgid "Dialog selected checkbox colors."
+msgstr "Роз╕рвати з'╓днання на тл╕"
+
+#: src/config/options.inc:958
 #, fuzzy
 msgid "Checkbox label"
 msgstr "Прапорець"
 
-#: src/config/options.inc:949
+#: src/config/options.inc:960
 msgid "Dialog checkbox label colors."
 msgstr ""
 
-#: src/config/options.inc:951
+#: src/config/options.inc:962
 msgid "Button"
 msgstr ""
 
-#: src/config/options.inc:953 src/config/options.inc:961
+#: src/config/options.inc:964 src/config/options.inc:972
 msgid "Dialog button colors."
 msgstr ""
 
-#: src/config/options.inc:955
+#: src/config/options.inc:966
 msgid "Selected button"
 msgstr ""
 
-#: src/config/options.inc:957 src/config/options.inc:965
+#: src/config/options.inc:968 src/config/options.inc:976
 msgid "Dialog selected button colors."
 msgstr ""
 
-#: src/config/options.inc:959
+#: src/config/options.inc:970
 msgid "Button shortcut"
 msgstr ""
 
-#: src/config/options.inc:963
+#: src/config/options.inc:974
 #, fuzzy
 msgid "Selected button shortcut"
 msgstr "Поле вибору"
 
-#: src/config/options.inc:967 src/viewer/text/form.c:1446
+#: src/config/options.inc:978 src/viewer/text/form.c:1440
 msgid "Text field"
 msgstr "Текстове поле"
 
-#: src/config/options.inc:969
+#: src/config/options.inc:980
 msgid "Dialog text field colors."
 msgstr ""
 
-#: src/config/options.inc:971
+#: src/config/options.inc:982
 #, fuzzy
 msgid "Text field text"
 msgstr "Текстове поле"
 
-#: src/config/options.inc:973
+#: src/config/options.inc:984
 msgid "Dialog field text colors."
 msgstr ""
 
-#: src/config/options.inc:975
+#: src/config/options.inc:986
 msgid "Meter"
 msgstr ""
 
-#: src/config/options.inc:977
+#: src/config/options.inc:988
 msgid "Dialog meter colors."
 msgstr ""
 
-#: src/config/options.inc:979
+#: src/config/options.inc:990
 msgid "Shadow"
 msgstr ""
 
-#: src/config/options.inc:981
+#: src/config/options.inc:992
 msgid "Dialog shadow colors (see ui.shadows option)."
 msgstr ""
 
-#: src/config/options.inc:983
+#: src/config/options.inc:994
 #, fuzzy
 msgid "Title bar"
 msgstr "Назва"
 
-#: src/config/options.inc:985
+#: src/config/options.inc:996
 msgid "Title bar colors."
 msgstr ""
 
-#: src/config/options.inc:987
+#: src/config/options.inc:998
 msgid "Generic title bar"
 msgstr ""
 
-#: src/config/options.inc:989
+#: src/config/options.inc:1000
 msgid "Generic title bar colors."
 msgstr ""
 
-#: src/config/options.inc:991
+#: src/config/options.inc:1002
 msgid "Title bar text"
 msgstr ""
 
-#: src/config/options.inc:993
+#: src/config/options.inc:1004
 msgid "Title bar text colors."
 msgstr ""
 
-#: src/config/options.inc:996
+#: src/config/options.inc:1007
 msgid "Status bar"
 msgstr ""
 
-#: src/config/options.inc:998
+#: src/config/options.inc:1009
 msgid "Status bar colors."
 msgstr ""
 
-#: src/config/options.inc:1000
+#: src/config/options.inc:1011
 msgid "Generic status bar"
 msgstr ""
 
-#: src/config/options.inc:1002
+#: src/config/options.inc:1013
 msgid "Generic status bar colors."
 msgstr ""
 
-#: src/config/options.inc:1004
+#: src/config/options.inc:1015
 #, fuzzy
 msgid "Status bar text"
 msgstr "Пошук тексту"
 
-#: src/config/options.inc:1006
+#: src/config/options.inc:1017
 msgid "Status bar text colors."
 msgstr ""
 
-#: src/config/options.inc:1009
+#: src/config/options.inc:1020
 msgid "Tabs bar"
 msgstr ""
 
-#: src/config/options.inc:1011
+#: src/config/options.inc:1022
 msgid "Tabs bar colors."
 msgstr ""
 
-#: src/config/options.inc:1013
+#: src/config/options.inc:1024
 #, fuzzy
 msgid "Unvisited tab"
 msgstr "Поле вибору"
 
-#: src/config/options.inc:1015
+#: src/config/options.inc:1026
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
 msgstr ""
 
-#: src/config/options.inc:1018
+#: src/config/options.inc:1029
 #, fuzzy
 msgid "Unselected tab"
 msgstr "Поле вибору"
 
-#: src/config/options.inc:1020
+#: src/config/options.inc:1031
 #, fuzzy
 msgid "Unselected tab colors."
 msgstr "Роз╕рвати з'╓днання на тл╕"
 
-#: src/config/options.inc:1022
+#: src/config/options.inc:1033
 #, fuzzy
 msgid "Loading tab"
 msgstr "завантажу╓ться"
 
-#: src/config/options.inc:1024
+#: src/config/options.inc:1035
 msgid "Tab colors for tabs that are loading in the background."
 msgstr ""
 
-#: src/config/options.inc:1026
+#: src/config/options.inc:1037
 #, fuzzy
 msgid "Selected tab"
 msgstr "Поле вибору"
 
-#: src/config/options.inc:1028
+#: src/config/options.inc:1039
 #, fuzzy
 msgid "Selected tab colors."
 msgstr "Роз╕рвати з'╓днання на тл╕"
 
-#: src/config/options.inc:1030
+#: src/config/options.inc:1041
 msgid "Tab separator"
 msgstr ""
 
-#: src/config/options.inc:1032
+#: src/config/options.inc:1043
 msgid "Tab separator colors."
 msgstr ""
 
-#: src/config/options.inc:1035
+#: src/config/options.inc:1046
 #, fuzzy
 msgid "Searched strings"
 msgstr "Неправильний рядок"
 
-#: src/config/options.inc:1037
+#: src/config/options.inc:1048
 #, fuzzy
 msgid "Searched string highlight colors."
 msgstr "Рядок не знайдено"
@@ -3567,69 +3597,69 @@ msgstr "Рядок не знайдено"
 #. ============= BORING PART (colors) END ===================
 #. ==========================================================
 #. Keep options in alphabetical order.
-#: src/config/options.inc:1046
+#: src/config/options.inc:1057
 msgid "Dialog settings"
 msgstr ""
 
-#: src/config/options.inc:1048
+#: src/config/options.inc:1059
 msgid "Dialogs-specific appearance and behaviour settings."
 msgstr ""
 
-#: src/config/options.inc:1051
+#: src/config/options.inc:1062
 msgid "Minimal height of listbox widget"
 msgstr ""
 
-#: src/config/options.inc:1053
+#: src/config/options.inc:1064
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
 
-#: src/config/options.inc:1056
+#: src/config/options.inc:1067
 msgid "Drop shadows"
 msgstr ""
 
-#: src/config/options.inc:1058
+#: src/config/options.inc:1069
 msgid ""
 "Make dialogs drop shadows (the shadows are solid, you can\n"
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
 "also want to eliminate the wide borders by adjusting setup.h."
 msgstr ""
 
-#: src/config/options.inc:1062
+#: src/config/options.inc:1073
 #, fuzzy
 msgid "Underline menu hotkeys"
 msgstr "Поле вибору"
 
-#: src/config/options.inc:1064
+#: src/config/options.inc:1075
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
 
-#: src/config/options.inc:1067
+#: src/config/options.inc:1078
 #, fuzzy
 msgid "Underline button shortcuts"
 msgstr "Поле вибору"
 
-#: src/config/options.inc:1069
+#: src/config/options.inc:1080
 msgid ""
 "Whether to underline button shortcuts to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
 
-#: src/config/options.inc:1073
+#: src/config/options.inc:1084
 #, fuzzy
 msgid "Timer options"
 msgstr "Параметри термiналу"
 
-#: src/config/options.inc:1075
+#: src/config/options.inc:1086
 msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
 
-#: src/config/options.inc:1081
+#: src/config/options.inc:1092
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3637,7 +3667,7 @@ msgid ""
 "2 is count down and show the timer near LEDs"
 msgstr ""
 
-#: src/config/options.inc:1088
+#: src/config/options.inc:1099
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3645,35 +3675,35 @@ msgid ""
 "2 is count down and show the timer near LEDs (DISABLED)"
 msgstr ""
 
-#: src/config/options.inc:1094
+#: src/config/options.inc:1105
 msgid "Duration"
 msgstr ""
 
-#: src/config/options.inc:1096
+#: src/config/options.inc:1107
 msgid ""
 "Inactivity timeout in seconds. The maximum of one day\n"
 "should be enough for just everyone (TM)."
 msgstr ""
 
-#: src/config/options.inc:1101
+#: src/config/options.inc:1112
 msgid "Keybinding action to be triggered when timer reaches zero."
 msgstr ""
 
-#: src/config/options.inc:1104
+#: src/config/options.inc:1115
 #, fuzzy
 msgid "Window tabs"
 msgstr "В╕кно"
 
-#: src/config/options.inc:1106
+#: src/config/options.inc:1117
 msgid "Window tabs settings."
 msgstr ""
 
-#: src/config/options.inc:1108
+#: src/config/options.inc:1119
 #, fuzzy
 msgid "Display tabs bar"
 msgstr "В╕добразити мапу"
 
-#: src/config/options.inc:1110
+#: src/config/options.inc:1121
 msgid ""
 "Show tabs bar on the screen:\n"
 "0 means never\n"
@@ -3681,120 +3711,120 @@ msgid ""
 "2 means always"
 msgstr ""
 
-#: src/config/options.inc:1115
+#: src/config/options.inc:1126
 msgid "Wrap-around tabs cycling"
 msgstr ""
 
-#: src/config/options.inc:1117
+#: src/config/options.inc:1128
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr ""
 
-#: src/config/options.inc:1120
+#: src/config/options.inc:1131
 msgid "Confirm tab closing"
 msgstr ""
 
-#: src/config/options.inc:1122
+#: src/config/options.inc:1133
 #, fuzzy
 msgid "When closing a tab show confirmation dialog."
 msgstr "В╕дкрити запит п╕дтвердження виходу"
 
-#: src/config/options.inc:1126 src/config/opttypes.c:365
+#: src/config/options.inc:1137 src/config/opttypes.c:365
 msgid "Language"
 msgstr ""
 
-#: src/config/options.inc:1128
+#: src/config/options.inc:1139
 msgid ""
 "Language of user interface. 'System' means that the language will\n"
 "be extracted from the environment dynamically."
 msgstr ""
 
-#: src/config/options.inc:1131
+#: src/config/options.inc:1142
 #, fuzzy
 msgid "Display status bar"
 msgstr "В╕добразити мапу"
 
-#: src/config/options.inc:1133
+#: src/config/options.inc:1144
 msgid "Show status bar on the screen."
 msgstr ""
 
-#: src/config/options.inc:1135
+#: src/config/options.inc:1146
 #, fuzzy
 msgid "Display title bar"
 msgstr "В╕добразити мапу"
 
-#: src/config/options.inc:1137
+#: src/config/options.inc:1148
 msgid "Show title bar on the screen."
 msgstr ""
 
-#: src/config/options.inc:1139
+#: src/config/options.inc:1150
 msgid "Display goto dialog in new tabs"
 msgstr ""
 
-#: src/config/options.inc:1141
+#: src/config/options.inc:1152
 msgid ""
 "Pop up goto dialog in newly created tabs when there's no homepage\n"
 "set. This means also showing goto dialog on startup."
 msgstr ""
 
-#: src/config/options.inc:1144
+#: src/config/options.inc:1155
 msgid "Show a message box when file is saved successfully"
 msgstr ""
 
-#: src/config/options.inc:1146
+#: src/config/options.inc:1157
 msgid ""
 "When you pressed a [ Save ] button in some manager, this option\n"
 "will make sure that a box confirming success of the operation will\n"
 "pop up."
 msgstr ""
 
-#: src/config/options.inc:1151
+#: src/config/options.inc:1162
 #, fuzzy
 msgid "Sessions"
 msgstr "Розширення"
 
-#: src/config/options.inc:1153
+#: src/config/options.inc:1164
 msgid "Sessions settings."
 msgstr ""
 
-#: src/config/options.inc:1155
+#: src/config/options.inc:1166
 msgid "Auto save session"
 msgstr ""
 
-#: src/config/options.inc:1157
+#: src/config/options.inc:1168
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
 msgstr ""
 
-#: src/config/options.inc:1160
+#: src/config/options.inc:1171
 msgid "Auto restore session"
 msgstr ""
 
-#: src/config/options.inc:1162
+#: src/config/options.inc:1173
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
 msgstr ""
 
-#: src/config/options.inc:1165
+#: src/config/options.inc:1176
 msgid "Auto save and restore session folder name"
 msgstr ""
 
-#: src/config/options.inc:1167
+#: src/config/options.inc:1178
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "The name has to be unique. Any folders with the same name will be deleted.\n"
 "This only makes sense with bookmark support."
 msgstr ""
 
-#: src/config/options.inc:1171
+#: src/config/options.inc:1182
 #, fuzzy
 msgid "Homepage URI"
 msgstr "Кодова стор╕нка"
 
-#: src/config/options.inc:1173
+#: src/config/options.inc:1184
 msgid ""
 "The URI to load either at startup time when no URI was given\n"
 "on the command line or when requested by the goto-url-home action.\n"
@@ -3802,21 +3832,21 @@ msgid ""
 "as homepage URI instead."
 msgstr ""
 
-#: src/config/options.inc:1179
+#: src/config/options.inc:1190
 #, fuzzy
 msgid "Date format"
 msgstr "Посилання файлу (upload)"
 
-#: src/config/options.inc:1181
+#: src/config/options.inc:1192
 msgid "Date format to use in dialogs. See strftime(3)."
 msgstr ""
 
-#: src/config/options.inc:1184
+#: src/config/options.inc:1195
 #, fuzzy
 msgid "Set window title"
 msgstr "Назва посилання"
 
-#: src/config/options.inc:1186
+#: src/config/options.inc:1197
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
@@ -4000,15 +4030,15 @@ msgid "Accept cookie?"
 msgstr ""
 
 #: src/cookies/dialogs.c:81
-msgid "Accept"
+msgid "~Accept"
 msgstr ""
 
 #: src/cookies/dialogs.c:82
-msgid "Reject"
+msgid "~Reject"
 msgstr ""
 
 #: src/cookies/dialogs.c:149 src/cookies/dialogs.c:342
-#: src/dialogs/document.c:113
+#: src/dialogs/document.c:110
 msgid "Server"
 msgstr "Сервер"
 
@@ -4096,90 +4126,97 @@ msgstr "Очистити повну ╕стор╕ю"
 msgid "Do you really want to remove all cookies?"
 msgstr "Ви д╕йсно бажа╓те вийти з ELinks?"
 
+#: src/cookies/dialogs.c:425
+#, fuzzy
+msgid "~Clear"
+msgstr "Очистити"
+
 #: src/cookies/dialogs.c:431
 #, fuzzy
 msgid "Cookie manager"
 msgstr "Робота з закладками"
 
-#: src/dialogs/document.c:48
+#: src/dialogs/document.c:47
 msgid "You are nowhere!"
 msgstr "Ви н╕де не знаходитесь!"
 
-#: src/dialogs/document.c:103
+#: src/dialogs/document.c:100
 msgid "assumed"
 msgstr "прийнято"
 
-#: src/dialogs/document.c:106
+#: src/dialogs/document.c:103
 msgid "ignoring server setting"
 msgstr "параметри серверу ╕гноруються"
 
-#: src/dialogs/document.c:131
+#: src/dialogs/document.c:128
 msgid "Date"
 msgstr "Дата"
 
-#: src/dialogs/document.c:149 src/globhist/dialogs.c:68
+#: src/dialogs/document.c:146 src/globhist/dialogs.c:68
 msgid "Last visit time"
 msgstr "Востанн╓ в╕дв╕дано"
 
-#: src/dialogs/document.c:168
+#: src/dialogs/document.c:165
 msgid "Unknown"
 msgstr "Нев╕домо"
 
-#: src/dialogs/document.c:179
+#: src/dialogs/document.c:176
 #, fuzzy
 msgid "Link"
 msgstr "Посилання"
 
-#: src/dialogs/document.c:186
+#: src/dialogs/document.c:183
 msgid "Link title"
 msgstr "Назва посилання"
 
-#: src/dialogs/document.c:208
+#: src/dialogs/document.c:205
 #, fuzzy
 msgid "Link last visit time"
 msgstr "Востанн╓ в╕дв╕дано"
 
-#: src/dialogs/document.c:214
+#: src/dialogs/document.c:211
 msgid "Link title (from history)"
 msgstr ""
 
-#: src/dialogs/document.c:233 src/dialogs/document.c:305
+#: src/dialogs/document.c:227 src/dialogs/document.c:296
 msgid "Header info"
 msgstr "╤нформац╕я про заголовок"
 
-#: src/dialogs/document.c:246
+#: src/dialogs/document.c:240
 #, fuzzy
 msgid "Internal header info"
 msgstr "╤нформац╕я про заголовок"
 
-#: src/dialogs/document.c:287
+#: src/dialogs/document.c:281
 msgid "No header info."
 msgstr ""
 
-#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:363
+#: src/dialogs/download.c:250 src/dialogs/menu.c:573 src/sched/download.c:357
 msgid "Download"
 msgstr "Завантаження"
 
-#: src/dialogs/download.c:260
-msgid "Background"
+#: src/dialogs/download.c:257
+#, fuzzy
+msgid "~Background"
 msgstr "На тл╕"
 
-#: src/dialogs/download.c:261
-msgid "Background with notify"
+#: src/dialogs/download.c:258
+#, fuzzy
+msgid "Background with ~notify"
 msgstr "На тл╕ з пов╕домленням"
 
-#: src/dialogs/download.c:262 src/dialogs/download.c:477
-msgid "Abort"
+#: src/dialogs/download.c:259 src/dialogs/download.c:473
+#, fuzzy
+msgid "~Abort"
 msgstr "Перервати"
 
-#. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:267 src/dialogs/download.c:480
+#: src/dialogs/download.c:264
 #, fuzzy
-msgid "Abort and delete file"
+msgid "Abort and ~delete file"
 msgstr "Помилка запису до файлу"
 
 #. cant_delete_item
-#: src/dialogs/download.c:408
+#: src/dialogs/download.c:404
 #, fuzzy, c-format
 msgid "Sorry, but download \"%s\" cannot be interrupted."
 msgstr ""
@@ -4188,7 +4225,7 @@ msgstr ""
 "Назва: \"%s\""
 
 #. cant_delete_used_item
-#: src/dialogs/download.c:410
+#: src/dialogs/download.c:406
 #, fuzzy, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
 msgstr ""
@@ -4197,38 +4234,50 @@ msgstr ""
 "Назва: \"%s\""
 
 #. delete_marked_items_title
-#: src/dialogs/download.c:416
+#: src/dialogs/download.c:412
 msgid "Interrupt marked downloads"
 msgstr ""
 
 #. delete_marked_items
-#: src/dialogs/download.c:418
+#: src/dialogs/download.c:414
 msgid "Interrupt marked downloads?"
 msgstr ""
 
 #. delete_item_title
-#: src/dialogs/download.c:424
+#: src/dialogs/download.c:420
 #, fuzzy
 msgid "Interrupt download"
 msgstr "Перервано"
 
 #. delete_item
-#: src/dialogs/download.c:426
+#: src/dialogs/download.c:422
 msgid "Interrupt this download?"
 msgstr ""
 
 #. clear_all_items_title
-#: src/dialogs/download.c:428
+#: src/dialogs/download.c:424
 msgid "Interrupt all downloads"
 msgstr ""
 
 #. clear_all_items_title
-#: src/dialogs/download.c:430
+#: src/dialogs/download.c:426
 #, fuzzy
 msgid "Do you really want to interrupt all downloads?"
 msgstr "Ви д╕йсно бажа╓те вийти з ELinks та припинити вс╕ завантаження?"
 
-#: src/dialogs/download.c:487
+#. This requires more work to make locking work and query the user
+#: src/dialogs/download.c:476
+#, fuzzy
+msgid "Abort and delete file"
+msgstr "Помилка запису до файлу"
+
+#: src/dialogs/download.c:478 src/dialogs/edit.c:99 src/globhist/dialogs.c:232
+#: src/protocol/auth/dialogs.c:256
+#, fuzzy
+msgid "C~lear"
+msgstr "Очистити"
+
+#: src/dialogs/download.c:483
 #, fuzzy
 msgid "Download manager"
 msgstr "Завантижити зображення"
@@ -4237,15 +4286,15 @@ msgstr "Завантижити зображення"
 msgid "About"
 msgstr "Про програму"
 
-#: src/dialogs/info.c:132
+#: src/dialogs/info.c:130
 msgid "Keys"
 msgstr "Kлав╕ш╕"
 
-#: src/dialogs/info.c:143
+#: src/dialogs/info.c:141
 msgid "Copying"
 msgstr "Л╕ценз╕я"
 
-#: src/dialogs/info.c:144
+#: src/dialogs/info.c:142
 #, fuzzy, c-format
 msgid ""
 "ELinks %s\n"
@@ -4265,40 +4314,145 @@ msgstr ""
 "забезпечення\" (FSF); верс╕╖ 2 Л╕ценз╕╖, або (за вашим бажанням) б╕льш "
 "п╕зньо╖ верс╕╖"
 
-#: src/dialogs/info.c:169
-#, fuzzy
-msgid "master"
-msgstr "╕м'я"
-
-#: src/dialogs/info.c:169
-#, fuzzy
-msgid "slave"
-msgstr "Зберегти"
-
-#: src/dialogs/info.c:181
-#, c-format
-msgid ""
-"Resources: %d handles, %d timers.\n"
-"Connections: %d connections, %d connecting, %d transferring, %d keepalive.\n"
-"Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
-"Document cache: %d formatted, %d locked, %d refreshing.\n"
-"Interlinking: %s terminal, %d terminals, %d sessions."
-msgstr ""
-
-#: src/dialogs/info.c:200
-#, c-format
-msgid "Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%)."
-msgstr ""
-
-#: src/dialogs/info.c:211
+#: src/dialogs/info.c:169 src/dialogs/info.c:273
 msgid "Resources"
 msgstr "Ресурси"
+
+#: src/dialogs/info.c:173
+#, fuzzy, c-format
+msgid "%d handle"
+msgid_plural "%d handles"
+msgstr[0] "хендл╕в"
+msgstr[1] "хендл╕в"
+
+#: src/dialogs/info.c:177
+#, fuzzy, c-format
+msgid "%d timer"
+msgid_plural "%d timers"
+msgstr[0] "таймер╕в"
+msgstr[1] "таймер╕в"
+
+#: src/dialogs/info.c:184
+#, fuzzy, c-format
+msgid "%d connection"
+msgid_plural "%d connections"
+msgstr[0] "з'╓днань"
+msgstr[1] "з'╓днань"
+
+#: src/dialogs/info.c:188
+#, fuzzy, c-format
+msgid "%d connecting"
+msgid_plural "%d connecting"
+msgstr[0] "створюються"
+msgstr[1] "створюються"
+
+#: src/dialogs/info.c:192
+#, fuzzy, c-format
+msgid "%d transferring"
+msgid_plural "%d transferring"
+msgstr[0] "передач"
+msgstr[1] "передач"
+
+#: src/dialogs/info.c:196
+#, fuzzy, c-format
+msgid "%d keepalive"
+msgid_plural "%d keepalive"
+msgstr[0] "збереження зв'язку"
+msgstr[1] "збереження зв'язку"
+
+#: src/dialogs/info.c:203 src/dialogs/info.c:255
+#, c-format
+msgid "%d byte"
+msgid_plural "%d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/dialogs/info.c:207
+#, fuzzy, c-format
+msgid "%d file"
+msgid_plural "%d files"
+msgstr[0] "файл╕в"
+msgstr[1] "файл╕в"
+
+#: src/dialogs/info.c:211 src/dialogs/info.c:226
+#, c-format
+msgid "%d locked"
+msgid_plural "%d locked"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/dialogs/info.c:215
+#, fuzzy, c-format
+msgid "%d loading"
+msgid_plural "%d loading"
+msgstr[0] "Завантаження"
+msgstr[1] "Завантаження"
+
+#: src/dialogs/info.c:218
+#, fuzzy
+msgid "Document cache"
+msgstr "документ╕в"
+
+#: src/dialogs/info.c:222
+#, fuzzy, c-format
+msgid "%d formatted"
+msgid_plural "%d formatted"
+msgstr[0] "Посилання файлу (upload)"
+msgstr[1] "Посилання файлу (upload)"
+
+#: src/dialogs/info.c:230
+#, c-format
+msgid "%d refreshing"
+msgid_plural "%d refreshing"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/dialogs/info.c:233
+#, fuzzy
+msgid "Interlinking"
+msgstr "Введ╕ть номер посилання"
+
+#: src/dialogs/info.c:236
+#, fuzzy
+msgid "master terminal"
+msgstr "Зм╕нити розм╕ри терминалу"
+
+#: src/dialogs/info.c:238
+#, fuzzy
+msgid "slave terminal"
+msgstr "Зм╕нити розм╕ри терминалу"
+
+#: src/dialogs/info.c:242
+#, fuzzy, c-format
+msgid "%d terminal"
+msgid_plural "%d terminals"
+msgstr[0] "Терм╕нал BeOS"
+msgstr[1] "Терм╕нал BeOS"
+
+#: src/dialogs/info.c:246
+#, fuzzy, c-format
+msgid "%d session"
+msgid_plural "%d sessions"
+msgstr[0] "Зберегти параметри"
+msgstr[1] "Зберегти параметри"
+
+#: src/dialogs/info.c:251
+#, fuzzy
+msgid "Memory allocated"
+msgstr "Кеш в пам'ят╕"
+
+#: src/dialogs/info.c:259
+#, c-format
+msgid "%d byte overhead"
+msgid_plural "%d bytes overhead"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/dialogs/menu.c:96
 msgid "Save URL"
 msgstr "Зберегти URL"
 
-#: src/dialogs/menu.c:96 src/dialogs/menu.c:519
+#: src/dialogs/menu.c:96 src/dialogs/menu.c:522
 msgid "Enter URL"
 msgstr "Введ╕ть URL"
 
@@ -4318,7 +4472,7 @@ msgstr "Ви д╕йсно бажа╓те вийти з ELinks?"
 msgid "No history"
 msgstr "╤стор╕я порожня"
 
-#: src/dialogs/menu.c:231 src/dialogs/menu.c:300
+#: src/dialogs/menu.c:231 src/dialogs/menu.c:303
 msgid "Go ~back"
 msgstr "Пoвернутися назад"
 
@@ -4326,354 +4480,342 @@ msgstr "Пoвернутися назад"
 msgid "Go for~ward"
 msgstr ""
 
-#: src/dialogs/menu.c:238 src/dialogs/menu.c:312
+#: src/dialogs/menu.c:239 src/dialogs/menu.c:315
 #, fuzzy
 msgid "Bookm~ark document"
 msgstr "документ╕в"
 
-#: src/dialogs/menu.c:242
+#: src/dialogs/menu.c:243 src/dialogs/menu.c:403
+msgid "Toggle ~html/plain"
+msgstr "Перемикач HTML/текст"
+
+#: src/dialogs/menu.c:244
 msgid "~Reload"
 msgstr "Перезавантажити"
 
-#: src/dialogs/menu.c:245 src/dialogs/menu.c:410
+#: src/dialogs/menu.c:247 src/dialogs/menu.c:413
 msgid "Frame at ~full-screen"
 msgstr "Фрейм на весь екран"
 
-#: src/dialogs/menu.c:253 src/dialogs/menu.c:412
+#: src/dialogs/menu.c:256 src/dialogs/menu.c:415
 msgid "Nex~t tab"
 msgstr ""
 
-#: src/dialogs/menu.c:254 src/dialogs/menu.c:413
+#: src/dialogs/menu.c:257 src/dialogs/menu.c:416
 #, fuzzy
 msgid "Pre~v tab"
 msgstr "Пошуку ще не було"
 
-#: src/dialogs/menu.c:257 src/dialogs/menu.c:414
+#: src/dialogs/menu.c:260 src/dialogs/menu.c:417
 #, fuzzy
 msgid "~Close tab"
 msgstr "Закрити"
 
-#: src/dialogs/menu.c:260
+#: src/dialogs/menu.c:263
 msgid "C~lose all tabs but the current"
 msgstr ""
 
-#: src/dialogs/menu.c:264
+#: src/dialogs/menu.c:267
 #, fuzzy
 msgid "B~ookmark all tabs"
 msgstr "Закладки"
 
-#: src/dialogs/menu.c:297
+#: src/dialogs/menu.c:300
 #, fuzzy
 msgid "Open new ~tab"
 msgstr "В╕дкрити в новому в╕кн╕"
 
-#: src/dialogs/menu.c:298
+#: src/dialogs/menu.c:301
 #, fuzzy
 msgid "Open new tab in backgroun~d"
 msgstr "На тл╕"
 
-#: src/dialogs/menu.c:299
+#: src/dialogs/menu.c:302
 msgid "~Go to URL"
 msgstr "Пeрейти до..."
 
-#: src/dialogs/menu.c:301
+#: src/dialogs/menu.c:304
 msgid "Go ~forward"
 msgstr ""
 
-#: src/dialogs/menu.c:302
+#: src/dialogs/menu.c:305
 msgid "~History"
 msgstr "╤стор╕я стор╕нок до поточно╖"
 
-#: src/dialogs/menu.c:303
+#: src/dialogs/menu.c:306
 #, fuzzy
 msgid "~Unhistory"
 msgstr "╤стор╕я стор╕нок п╕сля поточно╖"
 
-#: src/dialogs/menu.c:308
+#: src/dialogs/menu.c:311
 #, fuzzy
 msgid "~Save as"
 msgstr "Зберегти як"
 
-#: src/dialogs/menu.c:309
+#: src/dialogs/menu.c:312
 #, fuzzy
 msgid "Save UR~L as"
 msgstr "Зберегти URL як"
 
-#: src/dialogs/menu.c:310
+#: src/dialogs/menu.c:313
 #, fuzzy
 msgid "Sa~ve formatted document"
 msgstr "Зберегти в╕дформатований документ"
 
-#: src/dialogs/menu.c:318
+#: src/dialogs/menu.c:321
 #, fuzzy
 msgid "~Kill background connections"
 msgstr "Роз╕рвати з'╓днання на тл╕"
 
-#: src/dialogs/menu.c:319
+#: src/dialogs/menu.c:322
 #, fuzzy
 msgid "Flush all ~caches"
 msgstr "Очистити вс╕ кеш╕"
 
-#: src/dialogs/menu.c:320
+#: src/dialogs/menu.c:323
 #, fuzzy
 msgid "Resource ~info"
 msgstr "╤нформац╕я про ресурси"
 
-#: src/dialogs/menu.c:326
+#: src/dialogs/menu.c:329
 msgid "E~xit"
 msgstr "Вих╕д"
 
-#: src/dialogs/menu.c:352
+#: src/dialogs/menu.c:355
 #, fuzzy
 msgid "Open ~new window"
 msgstr "В╕дкрити нове в╕кно"
 
-#: src/dialogs/menu.c:371
+#: src/dialogs/menu.c:374
 msgid "~OS shell"
 msgstr "Оболонка операц╕йно╖ системи"
 
-#: src/dialogs/menu.c:378
+#: src/dialogs/menu.c:381
 #, fuzzy
 msgid "Resize t~erminal"
 msgstr "Зм╕нити розм╕ри терминалу"
 
-#: src/dialogs/menu.c:394
-msgid "~Search"
-msgstr "Пошук"
-
-#: src/dialogs/menu.c:395
+#: src/dialogs/menu.c:398
 msgid "Search ~backward"
 msgstr "Зворотн╕й пошук"
 
-#: src/dialogs/menu.c:396
+#: src/dialogs/menu.c:399
 msgid "Find ~next"
 msgstr "Знайти наступне"
 
-#: src/dialogs/menu.c:397
+#: src/dialogs/menu.c:400
 msgid "Find ~previous"
 msgstr "Знайти попередн╓"
 
-#: src/dialogs/menu.c:398
+#: src/dialogs/menu.c:401
 #, fuzzy
 msgid "T~ypeahead search"
 msgstr "Тип"
 
-#: src/dialogs/menu.c:400
-msgid "Toggle ~html/plain"
-msgstr "Перемикач HTML/текст"
-
-#: src/dialogs/menu.c:401
+#: src/dialogs/menu.c:404
 #, fuzzy
 msgid "Toggle i~mages"
 msgstr "Перемикнути в╕дображення"
 
-#: src/dialogs/menu.c:402
+#: src/dialogs/menu.c:405
 #, fuzzy
 msgid "Toggle ~link numbering"
 msgstr "Введ╕ть номер посилання"
 
-#: src/dialogs/menu.c:403
+#: src/dialogs/menu.c:406
 msgid "Toggle ~document colors"
 msgstr ""
 
-#: src/dialogs/menu.c:404
+#: src/dialogs/menu.c:407
 msgid "~Wrap text on/off"
 msgstr ""
 
-#: src/dialogs/menu.c:406
+#: src/dialogs/menu.c:409
 msgid "Document ~info"
 msgstr "╤нформац╕я про документ"
 
-#: src/dialogs/menu.c:407
+#: src/dialogs/menu.c:410
 msgid "H~eader info"
 msgstr "╤нформац╕я про заголовок"
 
-#: src/dialogs/menu.c:408
+#: src/dialogs/menu.c:411
 #, fuzzy
 msgid "Rel~oad document"
 msgstr "документ╕в"
 
-#: src/dialogs/menu.c:409
+#: src/dialogs/menu.c:412
 #, fuzzy
 msgid "~Rerender document"
 msgstr "Зберегти в╕дформатований документ"
 
-#: src/dialogs/menu.c:420
+#: src/dialogs/menu.c:423
 msgid "~ELinks homepage"
 msgstr "Домашня стор╕нка Elinks"
 
-#: src/dialogs/menu.c:421
+#: src/dialogs/menu.c:424
 #, fuzzy
 msgid "~Documentation"
 msgstr "╤нформац╕я про документ"
 
-#: src/dialogs/menu.c:422
+#: src/dialogs/menu.c:425
 msgid "~Keys"
 msgstr "Kлав╕ш╕"
 
-#: src/dialogs/menu.c:424
+#: src/dialogs/menu.c:427
 msgid "LED ~indicators"
 msgstr ""
 
-#: src/dialogs/menu.c:427
+#: src/dialogs/menu.c:430
 msgid "~Bugs information"
 msgstr ""
 
-#: src/dialogs/menu.c:429
+#: src/dialogs/menu.c:432
 #, fuzzy
 msgid "ELinks C~vsWeb"
 msgstr "Домашня стор╕нка Elinks"
 
-#: src/dialogs/menu.c:430
+#: src/dialogs/menu.c:433
 #, fuzzy
 msgid "ELinks Cvs ~History"
 msgstr "Домашня стор╕нка Elinks"
 
-#: src/dialogs/menu.c:431
+#: src/dialogs/menu.c:434
 #, fuzzy
 msgid "ELinks ~LXR"
 msgstr "Домашня стор╕нка Elinks"
 
-#: src/dialogs/menu.c:434
+#: src/dialogs/menu.c:437
 msgid "~Copying"
 msgstr "Л╕ценз╕я"
 
-#: src/dialogs/menu.c:435
+#: src/dialogs/menu.c:438
 msgid "~About"
 msgstr "Про програму"
 
-#: src/dialogs/menu.c:441
-msgid "~Add"
-msgstr "Додати"
-
-#: src/dialogs/menu.c:442
+#: src/dialogs/menu.c:445
 msgid "~Modify"
 msgstr "Зм╕нити"
 
-#: src/dialogs/menu.c:443
-msgid "~Delete"
-msgstr "Стерти"
-
-#: src/dialogs/menu.c:449 src/dialogs/menu.c:462
+#: src/dialogs/menu.c:452 src/dialogs/menu.c:465
 msgid "~Language"
 msgstr "Мова"
 
-#: src/dialogs/menu.c:451 src/dialogs/menu.c:463
+#: src/dialogs/menu.c:454 src/dialogs/menu.c:466
 msgid "C~haracter set"
 msgstr "Кодування"
 
-#: src/dialogs/menu.c:452 src/dialogs/menu.c:464
+#: src/dialogs/menu.c:455 src/dialogs/menu.c:467
 msgid "~Terminal options"
 msgstr "Параметри термiналу"
 
-#: src/dialogs/menu.c:453
+#: src/dialogs/menu.c:456
 msgid "File ~extensions"
 msgstr "Розширення файл╕в"
 
-#: src/dialogs/menu.c:455
+#: src/dialogs/menu.c:458
 msgid "~Options manager"
 msgstr ""
 
-#: src/dialogs/menu.c:456
+#: src/dialogs/menu.c:459
 msgid "~Keybinding manager"
 msgstr ""
 
-#: src/dialogs/menu.c:457
+#: src/dialogs/menu.c:460
 msgid "~Save options"
 msgstr "Зберегти параметри"
 
-#: src/dialogs/menu.c:470
+#: src/dialogs/menu.c:473
 #, fuzzy
 msgid "Global ~history"
 msgstr "Керування ╕стор╕╓ю"
 
-#: src/dialogs/menu.c:473
+#: src/dialogs/menu.c:476
 #, fuzzy
 msgid "~Bookmarks"
 msgstr "Закладки"
 
-#: src/dialogs/menu.c:475
+#: src/dialogs/menu.c:478
 #, fuzzy
 msgid "~Cache"
 msgstr "Скасувати"
 
-#: src/dialogs/menu.c:476
+#: src/dialogs/menu.c:479
 msgid "~Downloads"
 msgstr "Завантаження"
 
-#: src/dialogs/menu.c:478
+#: src/dialogs/menu.c:481
 msgid "Coo~kies"
 msgstr ""
 
-#: src/dialogs/menu.c:481
+#: src/dialogs/menu.c:484
 #, fuzzy
 msgid "~Form history"
 msgstr "Нестача пам'ят╕"
 
-#: src/dialogs/menu.c:483
+#: src/dialogs/menu.c:486
 #, fuzzy
 msgid "~Authentication"
 msgstr "HTTP Аутентиф╕кац╕я"
 
-#: src/dialogs/menu.c:499
+#: src/dialogs/menu.c:502
 msgid "~File"
 msgstr "Файл"
 
-#: src/dialogs/menu.c:500
+#: src/dialogs/menu.c:503
 msgid "~View"
 msgstr "Вигляд"
 
-#: src/dialogs/menu.c:501
+#: src/dialogs/menu.c:504
 msgid "~Link"
 msgstr "Посилання"
 
-#: src/dialogs/menu.c:502
+#: src/dialogs/menu.c:505
 msgid "~Tools"
 msgstr ""
 
-#: src/dialogs/menu.c:503
+#: src/dialogs/menu.c:506
 msgid "~Setup"
 msgstr "Параметри"
 
-#: src/dialogs/menu.c:504
+#: src/dialogs/menu.c:507
 msgid "~Help"
 msgstr "Допомога"
 
-#: src/dialogs/menu.c:519
+#: src/dialogs/menu.c:522
 msgid "Go to URL"
 msgstr "Пeрейти до..."
 
-#: src/dialogs/menu.c:570
+#: src/dialogs/menu.c:573
 msgid "Save to file"
 msgstr "Записати до файлу"
 
-#: src/dialogs/menu.c:867
+#: src/dialogs/menu.c:870
 msgid "~Pass frame URI to external command"
 msgstr ""
 
-#: src/dialogs/menu.c:872
+#: src/dialogs/menu.c:875
 msgid "Pass link URI to e~xternal command"
 msgstr ""
 
-#: src/dialogs/menu.c:878
+#: src/dialogs/menu.c:881
 msgid "Pass tab URI to e~xternal command"
 msgstr ""
 
-#: src/dialogs/menu.c:903
+#: src/dialogs/menu.c:906
 msgid "Empty directory"
 msgstr ""
 
-#: src/dialogs/menu.c:947
+#: src/dialogs/menu.c:950
 msgid "Directories:"
 msgstr ""
 
-#: src/dialogs/menu.c:960
+#: src/dialogs/menu.c:963
 #, fuzzy
 msgid "Files:"
 msgstr "Файл"
 
 #. 2 '\n' + 1 '\0'
-#: src/dialogs/options.c:148
+#: src/dialogs/options.c:153
 #, c-format
 msgid ""
 "The environmental variable TERM is set to '%s'.\n"
@@ -4684,64 +4826,64 @@ msgid ""
 "each terminal in which you run ELinks."
 msgstr ""
 
-#: src/dialogs/options.c:172
+#: src/dialogs/options.c:179
 msgid "Terminal options"
 msgstr "Параметри термiналу"
 
-#: src/dialogs/options.c:181
+#: src/dialogs/options.c:188
 msgid "Frame handling:"
 msgstr ""
 
-#: src/dialogs/options.c:182
+#: src/dialogs/options.c:189
 msgid "No frames"
 msgstr "Без рамок"
 
-#: src/dialogs/options.c:183
+#: src/dialogs/options.c:190
 msgid "VT 100 frames"
 msgstr "Рамки VT 100"
 
-#: src/dialogs/options.c:184
+#: src/dialogs/options.c:191
 msgid "Linux or OS/2 frames"
 msgstr "Рамки Linux чи OS/2"
 
-#: src/dialogs/options.c:185
+#: src/dialogs/options.c:192
 #, fuzzy
 msgid "FreeBSD frames"
 msgstr "Без рамок"
 
-#: src/dialogs/options.c:186
+#: src/dialogs/options.c:193
 msgid "KOI8-R frames"
 msgstr "Рамки KOI8-R"
 
-#: src/dialogs/options.c:188
+#: src/dialogs/options.c:195
 #, fuzzy
 msgid "Color mode:"
 msgstr "Кольори"
 
-#: src/dialogs/options.c:189
+#: src/dialogs/options.c:196
 msgid "No colors (mono)"
 msgstr ""
 
-#: src/dialogs/options.c:190
+#: src/dialogs/options.c:197
 #, fuzzy
 msgid "16 colors"
 msgstr "Назва посилання"
 
-#: src/dialogs/options.c:192
+#: src/dialogs/options.c:199
 #, fuzzy
 msgid "256 colors"
 msgstr "Назва посилання"
 
-#: src/dialogs/options.c:276
+#: src/dialogs/options.c:283
 #, fuzzy
 msgid "Resize terminal"
 msgstr "Зм╕нити розм╕ри терминалу"
 
-#: src/dialogs/options.c:279
+#: src/dialogs/options.c:286
 msgid "Width="
 msgstr ""
 
-#: src/dialogs/options.c:280
+#: src/dialogs/options.c:287
 msgid "Height="
 msgstr ""
 
@@ -4917,24 +5059,24 @@ msgstr ""
 msgid "Whether to disallow scripts to open new windows or tabs."
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:368
+#: src/ecmascript/spidermonkey.c:370
 msgid "JavaScript Alert"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:1918
+#: src/ecmascript/spidermonkey.c:1969
 #, c-format
 msgid "A script embedded in the current document raised the following%s%s%s%s"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:1935
+#: src/ecmascript/spidermonkey.c:1985
 msgid "JavaScript Error"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:1955
+#: src/ecmascript/spidermonkey.c:2004
 msgid "JavaScript Emergency"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:1957
+#: src/ecmascript/spidermonkey.c:2006
 #, c-format
 msgid ""
 "A script embedded in the current document was running\n"
@@ -5016,20 +5158,28 @@ msgid ""
 "\"Toggle saving\" button."
 msgstr ""
 
-#: src/formhist/dialogs.c:211 src/protocol/auth/dialogs.c:105
-msgid "Login"
+#: src/formhist/dialogs.c:209
+#, fuzzy
+msgid "~Login"
 msgstr "╤м'я користувача"
 
-#: src/formhist/dialogs.c:214
+#: src/formhist/dialogs.c:212
 #, fuzzy
-msgid "Toggle saving"
+msgid "~Toggle saving"
 msgstr "Перемикнути в╕дображення"
 
-#: src/formhist/dialogs.c:221
+#: src/formhist/dialogs.c:213
+#, fuzzy
+msgid "Clea~r"
+msgstr "Очистити"
+
+#: src/formhist/dialogs.c:219
 #, fuzzy
 msgid "Form history manager"
 msgstr "В╕дкрити ╕стор╕ю"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 #, fuzzy
 msgid "Show form history dialog"
@@ -5058,7 +5208,7 @@ msgid ""
 msgstr ""
 
 #: src/formhist/formhist.c:459
-msgid "Never for this site"
+msgid "Ne~ver for this site"
 msgstr ""
 
 #. name:
@@ -5126,7 +5276,7 @@ msgstr "╤стор╕я пошук╕в"
 
 #: src/globhist/dialogs.c:227
 #, fuzzy
-msgid "Bookmark"
+msgid "~Bookmark"
 msgstr "Закладки"
 
 #: src/globhist/dialogs.c:241
@@ -5318,40 +5468,40 @@ msgid ""
 "directory."
 msgstr ""
 
-#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:341
+#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:258
 #, c-format
 msgid "The call to %s failed: %d (%s)"
 msgstr ""
 
 #. Infinite loop prevention.
-#: src/lowlevel/select.c:344
+#: src/lowlevel/select.c:261
 #, c-format
 msgid "%d select() failures."
 msgstr ""
 
-#: src/main.c:138
+#: src/main.c:142
 msgid "Cannot create a pipe for internal communication."
 msgstr ""
 
-#: src/main.c:198
+#: src/main.c:202
 #, c-format
 msgid "URL expected after -%s"
 msgstr ""
 
-#: src/main.c:206
+#: src/main.c:210
 msgid "No running ELinks found."
 msgstr ""
 
 #. The remote session(s) can not be created
-#: src/main.c:213
+#: src/main.c:217
 msgid "No remote session to connect to."
 msgstr ""
 
-#: src/main.c:222
+#: src/main.c:226
 msgid "Unable to encode session info."
 msgstr ""
 
-#: src/main.c:239
+#: src/main.c:243
 msgid "Unable to attach_terminal()."
 msgstr ""
 
@@ -5449,7 +5599,7 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/mime/backend/default.c:221
+#: src/mime/backend/default.c:220
 msgid "Option system"
 msgstr ""
 
@@ -5648,6 +5798,10 @@ msgstr "Необх╕дна аутентиф╕кац╕я для "
 #: src/protocol/auth/dialogs.c:95
 msgid "HTTP Authentication"
 msgstr "HTTP Аутентиф╕кац╕я"
+
+#: src/protocol/auth/dialogs.c:105
+msgid "Login"
+msgstr "╤м'я користувача"
 
 #: src/protocol/auth/dialogs.c:106 src/protocol/http/http.c:103
 msgid "Password"
@@ -6284,19 +6438,19 @@ msgstr "Нема╓ програми"
 msgid "No program specified for protocol %s."
 msgstr "Не вказано програму для"
 
-#: src/sched/download.c:225 src/sched/download.c:322 src/sched/download.c:501
-#: src/sched/download.c:595
+#: src/sched/download.c:225 src/sched/download.c:319 src/sched/download.c:493
+#: src/sched/download.c:585
 msgid "Download error"
 msgstr "Помилка завантаження"
 
-#: src/sched/download.c:226 src/sched/download.c:596
+#: src/sched/download.c:226 src/sched/download.c:586
 #, fuzzy, c-format
 msgid ""
 "Could not create file '%s':\n"
 "%s"
 msgstr "Не можу писати у файл"
 
-#: src/sched/download.c:323
+#: src/sched/download.c:320
 #, fuzzy, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -6304,24 +6458,24 @@ msgid ""
 "%s"
 msgstr "Помилка завантаження"
 
-#: src/sched/download.c:364
+#: src/sched/download.c:358
 #, fuzzy, c-format
 msgid ""
 "Download complete:\n"
 "%s"
 msgstr "Завантаження зак╕нчено"
 
-#: src/sched/download.c:502
+#: src/sched/download.c:494
 #, c-format
 msgid "'%s' is a directory."
 msgstr ""
 
-#: src/sched/download.c:538
+#: src/sched/download.c:528
 #, fuzzy
 msgid "File exists"
 msgstr "Розширення файл╕в"
 
-#: src/sched/download.c:539
+#: src/sched/download.c:529
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -6331,51 +6485,54 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/sched/download.c:546
-msgid "Save under the alternative name"
+#: src/sched/download.c:536
+msgid "Sa~ve under the alternative name"
 msgstr ""
 
-#: src/sched/download.c:547
-msgid "Overwrite the original file"
+#: src/sched/download.c:537
+msgid "~Overwrite the original file"
 msgstr ""
 
-#: src/sched/download.c:548
-msgid "Resume download of the original file"
-msgstr ""
+#: src/sched/download.c:538
+#, fuzzy
+msgid "~Resume download of the original file"
+msgstr "Спробувати в╕дновити завантаження поточного посилання"
 
-#: src/sched/download.c:1037
+#: src/sched/download.c:1025
 msgid "What to do?"
 msgstr "Що робити?"
 
-#: src/sched/download.c:1040
+#: src/sched/download.c:1028
 msgid "Unknown type"
 msgstr "Нев╕домий тип"
 
-#: src/sched/download.c:1057
+#: src/sched/download.c:1045
 #, c-format
 msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
 msgstr ""
 
-#: src/sched/download.c:1087
+#: src/sched/download.c:1075
 #, no-c-format
 msgid "Program ('%' will be replaced by the filename)"
 msgstr ""
 
-#: src/sched/download.c:1094
+#: src/sched/download.c:1082
 #, c-format
 msgid "The file will be opened with the program '%s'."
 msgstr ""
 
-#: src/sched/download.c:1111
-msgid "Open"
+#: src/sched/download.c:1099
+#, fuzzy
+msgid "~Open"
 msgstr "В╕дкрити"
 
-#: src/sched/download.c:1124
-msgid "Display"
+#: src/sched/download.c:1112
+#, fuzzy
+msgid "~Display"
 msgstr "Показати"
 
-#: src/sched/download.c:1128
-msgid "Show header"
+#: src/sched/download.c:1116
+msgid "Show ~header"
 msgstr ""
 
 #: src/sched/error.c:31
@@ -6417,6 +6574,10 @@ msgstr "Передача"
 #: src/sched/error.c:41
 msgid "Waiting for redirect confirmation"
 msgstr "Оч╕кування п╕дтвердження перенапрямлення"
+
+#: src/sched/error.c:42
+msgid "OK"
+msgstr "Угу"
 
 #: src/sched/error.c:43
 msgid "Interrupted"
@@ -6572,11 +6733,11 @@ msgstr ""
 msgid "Unknown error"
 msgstr "Нев╕дома помилка"
 
-#: src/sched/session.c:694 src/sched/session.c:714 src/sched/task.c:271
+#: src/sched/session.c:688 src/sched/session.c:706 src/sched/task.c:264
 msgid "Warning"
 msgstr "Попередження"
 
-#: src/sched/session.c:695
+#: src/sched/session.c:689
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -6587,7 +6748,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:715
+#: src/sched/session.c:707
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -6600,11 +6761,11 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:742
+#: src/sched/session.c:732
 msgid "Welcome"
 msgstr "В╕та╓мо"
 
-#: src/sched/session.c:743
+#: src/sched/session.c:733
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -6614,7 +6775,7 @@ msgstr ""
 "Натисн╕ть ESC щоб викликати меню. Прочитайте ╕нструкц╕ю в меню 'Допомога-"
 ">╤нструкц╕я'."
 
-#: src/sched/task.c:239
+#: src/sched/task.c:232
 #, c-format
 msgid ""
 "The URL you are about to follow might be maliciously crafted in order to "
@@ -6624,25 +6785,25 @@ msgid ""
 "Do you want to go to URL %s?"
 msgstr ""
 
-#: src/sched/task.c:249
+#: src/sched/task.c:242
 #, fuzzy, c-format
 msgid "Do you want to follow the redirect and post form data to URL %s?"
 msgstr ""
 "Бажа╓те прямувати за переадресац╕╓ю та в╕дправити вм╕ст форми за адресою"
 
-#: src/sched/task.c:253
+#: src/sched/task.c:246
 #, c-format
 msgid ""
 "The form data you are about to post might be incomplete.\n"
 "Do you want to post to URL %s?"
 msgstr ""
 
-#: src/sched/task.c:257
+#: src/sched/task.c:250
 #, fuzzy, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Ви бажа╓те в╕дправити вм╕ст форми за адресою"
 
-#: src/sched/task.c:260
+#: src/sched/task.c:253
 #, fuzzy, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Ви бажа╓те заново в╕дправити вм╕ст форми за адресою"
@@ -6651,15 +6812,15 @@ msgstr "Ви бажа╓те заново в╕дправити вм╕ст форми за адресою"
 msgid "User dialog"
 msgstr "Д╕алог користувача"
 
-#: src/scripting/lua/core.c:590
+#: src/scripting/lua/core.c:591
 msgid "Lua Error"
 msgstr "Помилка Lua"
 
-#: src/scripting/lua/core.c:716
+#: src/scripting/lua/core.c:715
 msgid "Lua Console"
 msgstr "Консоль Lua"
 
-#: src/scripting/lua/core.c:716
+#: src/scripting/lua/core.c:715
 msgid "Enter expression"
 msgstr "Введ╕сть вираз"
 
@@ -6668,7 +6829,7 @@ msgstr "Введ╕сть вираз"
 msgid "Ruby Error"
 msgstr "Помилка Lua"
 
-#: src/scripting/ruby/core.c:156 src/scripting/ruby/core.c:212
+#: src/scripting/ruby/core.c:153 src/scripting/ruby/core.c:206
 msgid "Ruby Message"
 msgstr ""
 
@@ -6755,7 +6916,7 @@ msgstr ""
 msgid "Could not read event: %d (%s)"
 msgstr "Не можу писати у файл"
 
-#: src/terminal/kbd.c:1000
+#: src/terminal/kbd.c:997
 msgid "Too many bytes read from the itrm!"
 msgstr ""
 
@@ -6803,233 +6964,233 @@ msgstr "Помилка в╕дправлення форми"
 msgid "Could not load file %s: %s"
 msgstr "Не можу отримати файл"
 
-#: src/viewer/text/form.c:1427
+#: src/viewer/text/form.c:1421
 #, fuzzy
 msgid "Reset form"
 msgstr "Очистити форму"
 
-#: src/viewer/text/form.c:1429
+#: src/viewer/text/form.c:1423
 msgid "Harmless button"
 msgstr ""
 
-#: src/viewer/text/form.c:1437
+#: src/viewer/text/form.c:1431
 msgid "Submit form to"
 msgstr "Передати форму за адресою"
 
-#: src/viewer/text/form.c:1438
+#: src/viewer/text/form.c:1432
 msgid "Post form to"
 msgstr "В╕дправити форму за адресою"
 
-#: src/viewer/text/form.c:1440
+#: src/viewer/text/form.c:1434
 msgid "Radio button"
 msgstr "Рад╕окнопка"
 
-#: src/viewer/text/form.c:1444
+#: src/viewer/text/form.c:1438
 msgid "Select field"
 msgstr "Поле вибору"
 
-#: src/viewer/text/form.c:1448
+#: src/viewer/text/form.c:1442
 msgid "Text area"
 msgstr "Текстова область"
 
-#: src/viewer/text/form.c:1450
+#: src/viewer/text/form.c:1444
 msgid "File upload"
 msgstr "Посилання файлу (upload)"
 
-#: src/viewer/text/form.c:1452
+#: src/viewer/text/form.c:1446
 msgid "Password field"
 msgstr "Введ╕ть пароль"
 
-#: src/viewer/text/form.c:1490
+#: src/viewer/text/form.c:1484
 msgid "name"
 msgstr "╕м'я"
 
-#: src/viewer/text/form.c:1502
+#: src/viewer/text/form.c:1496
 msgid "value"
 msgstr "значення"
 
-#: src/viewer/text/form.c:1515
+#: src/viewer/text/form.c:1509
 msgid "read only"
 msgstr ""
 
-#: src/viewer/text/form.c:1526
+#: src/viewer/text/form.c:1520
 #, c-format
 msgid "press %s to navigate"
 msgstr ""
 
-#: src/viewer/text/form.c:1528
+#: src/viewer/text/form.c:1522
 #, c-format
 msgid "press %s to edit"
 msgstr ""
 
-#: src/viewer/text/form.c:1564
+#: src/viewer/text/form.c:1558
 #, fuzzy, c-format
 msgid "press %s to submit to %s"
 msgstr "передати за адресою"
 
-#: src/viewer/text/form.c:1566
+#: src/viewer/text/form.c:1560
 #, fuzzy, c-format
 msgid "press %s to post to %s"
 msgstr "передати за адресою"
 
-#: src/viewer/text/link.c:1140
+#: src/viewer/text/link.c:1152
 msgid "Display ~usemap"
 msgstr "В╕добразити мапу"
 
-#: src/viewer/text/link.c:1143
+#: src/viewer/text/link.c:1155
 msgid "~Follow link"
 msgstr "Йти за посиланням"
 
-#: src/viewer/text/link.c:1145
+#: src/viewer/text/link.c:1157
 msgid "Follow link and r~eload"
 msgstr "Йти за посиланням та перезавантажити"
 
-#: src/viewer/text/link.c:1149
+#: src/viewer/text/link.c:1161
 msgid "Open in new ~window"
 msgstr "В╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1151
+#: src/viewer/text/link.c:1163
 #, fuzzy
 msgid "Open in new ~tab"
 msgstr "В╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1153
+#: src/viewer/text/link.c:1165
 #, fuzzy
 msgid "Open in new tab in ~background"
 msgstr "На тл╕"
 
-#: src/viewer/text/link.c:1158
+#: src/viewer/text/link.c:1170
 msgid "~Download link"
 msgstr "Завантажити за посиланням"
 
-#: src/viewer/text/link.c:1161
+#: src/viewer/text/link.c:1173
 msgid "~Add link to bookmarks"
 msgstr "Додати посилання до закладок"
 
-#: src/viewer/text/link.c:1173 src/viewer/text/link.c:1208
+#: src/viewer/text/link.c:1185 src/viewer/text/link.c:1220
 msgid "~Reset form"
 msgstr "Очистити форму"
 
-#: src/viewer/text/link.c:1185
+#: src/viewer/text/link.c:1197
 msgid "Open in ~external editor"
 msgstr ""
 
-#: src/viewer/text/link.c:1191
+#: src/viewer/text/link.c:1203
 msgid "~Submit form"
 msgstr "В╕д╕слати форму"
 
-#: src/viewer/text/link.c:1192
+#: src/viewer/text/link.c:1204
 msgid "Submit form and rel~oad"
 msgstr "В╕д╕слати форму та перезавантажити"
 
-#: src/viewer/text/link.c:1196
+#: src/viewer/text/link.c:1208
 msgid "Submit form and open in new ~window"
 msgstr "В╕д╕слати форму та в╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1198
+#: src/viewer/text/link.c:1210
 #, fuzzy
 msgid "Submit form and open in new ~tab"
 msgstr "В╕д╕слати форму та в╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1201
+#: src/viewer/text/link.c:1213
 #, fuzzy
 msgid "Submit form and open in new tab in ~background"
 msgstr "В╕д╕слати форму та в╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/link.c:1206
+#: src/viewer/text/link.c:1218
 msgid "Submit form and ~download"
 msgstr "В╕д╕слати форму та завантижити"
 
-#: src/viewer/text/link.c:1213
+#: src/viewer/text/link.c:1225
 msgid "V~iew image"
 msgstr "Подивитись зображення"
 
-#: src/viewer/text/link.c:1215
+#: src/viewer/text/link.c:1227
 msgid "Download ima~ge"
 msgstr "Завантижити зображення"
 
-#: src/viewer/text/link.c:1223
+#: src/viewer/text/link.c:1235
 msgid "No link selected"
 msgstr "Нема╓ вибраних посилань"
 
-#: src/viewer/text/link.c:1275
+#: src/viewer/text/link.c:1287
 msgid "Image"
 msgstr "Зображення"
 
-#: src/viewer/text/link.c:1280
+#: src/viewer/text/link.c:1292
 msgid "Usemap"
 msgstr "Мапа посилань"
 
-#: src/viewer/text/search.c:979
+#: src/viewer/text/search.c:977
 msgid "Search hit top, continuing at bottom."
 msgstr ""
 
-#: src/viewer/text/search.c:980
+#: src/viewer/text/search.c:978
 msgid "Search hit bottom, continuing at top."
 msgstr ""
 
-#: src/viewer/text/search.c:983
+#: src/viewer/text/search.c:981
 msgid "No previous search"
 msgstr "Пошуку ще не було"
 
-#: src/viewer/text/search.c:995
+#: src/viewer/text/search.c:993
 #, fuzzy, c-format
 msgid "Could not compile regular expression '%s'"
 msgstr "Введ╕сть вираз"
 
-#: src/viewer/text/search.c:1042
+#: src/viewer/text/search.c:1036
 #, c-format
 msgid "No further matches for '%s'."
 msgstr ""
 
-#: src/viewer/text/search.c:1044
+#: src/viewer/text/search.c:1038
 #, c-format
 msgid "Could not find a link with the text '%s'."
 msgstr ""
 
-#: src/viewer/text/search.c:1046 src/viewer/text/search.c:1455
+#: src/viewer/text/search.c:1040 src/viewer/text/search.c:1449
 #, fuzzy
 msgid "Typeahead"
 msgstr "Тип"
 
-#: src/viewer/text/search.c:1457
+#: src/viewer/text/search.c:1451
 msgid "No links in current document"
 msgstr ""
 
-#: src/viewer/text/search.c:1535
+#: src/viewer/text/search.c:1527
 msgid "Search for text"
 msgstr "Пошук тексту"
 
-#: src/viewer/text/search.c:1564
+#: src/viewer/text/search.c:1556
 #, fuzzy
 msgid "Normal search"
 msgstr "Пошуку ще не було"
 
-#: src/viewer/text/search.c:1565
+#: src/viewer/text/search.c:1557
 msgid "Regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1566
+#: src/viewer/text/search.c:1558
 msgid "Extended regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1567
+#: src/viewer/text/search.c:1559
 msgid "Case sensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1568
+#: src/viewer/text/search.c:1560
 msgid "Case insensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1592
+#: src/viewer/text/search.c:1584
 msgid "Search backward"
 msgstr "Зворотн╕й пошук"
 
-#: src/viewer/text/textarea.c:364
+#: src/viewer/text/textarea.c:363
 msgid "You cannot launch an external editor in the anonymous mode."
 msgstr ""
 
-#: src/viewer/text/textarea.c:373
+#: src/viewer/text/textarea.c:370
 msgid "You can do this only on the master terminal"
 msgstr "Ви можете зробити це т╕льки на головному терм╕нал╕"
 
@@ -7041,13 +7202,40 @@ msgstr "Йти за посиланням"
 msgid "Enter link number"
 msgstr "Введ╕ть номер посилання"
 
-#: src/viewer/text/view.c:1280
+#: src/viewer/text/view.c:1307
 msgid "Save error"
 msgstr "Помилка збереження"
 
-#: src/viewer/text/view.c:1281
+#: src/viewer/text/view.c:1308
 msgid "Error writing to file"
 msgstr "Помилка запису до файлу"
+
+#~ msgid "Delete"
+#~ msgstr "Стерти"
+
+#~ msgid "Add"
+#~ msgstr "Додати"
+
+#~ msgid ""
+#~ "Keystroke should be written in the format: [Prefix-]Key\n"
+#~ "Prefix: Shift, Ctrl, Alt\n"
+#~ "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
+#~ msgstr ""
+#~ "Комб╕нац╕я ма╓ бути записана в формат╕: [Преф╕кс-]Клав╕ша\n"
+#~ "Преф╕кс: Shift, Ctrl, Alt\n"
+#~ "Клав╕ша: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
+
+#, fuzzy
+#~ msgid "master"
+#~ msgstr "╕м'я"
+
+#, fuzzy
+#~ msgid "slave"
+#~ msgstr "Зберегти"
+
+#, fuzzy
+#~ msgid "Bookmark"
+#~ msgstr "Закладки"
 
 #, fuzzy
 #~ msgid "Cannot stat the file"
@@ -7455,27 +7643,6 @@ msgstr "Помилка запису до файлу"
 
 #~ msgid " at "
 #~ msgstr " на "
-
-#~ msgid "handles"
-#~ msgstr "хендл╕в"
-
-#~ msgid "timers"
-#~ msgstr "таймер╕в"
-
-#~ msgid "connections"
-#~ msgstr "з'╓днань"
-
-#~ msgid "connecting"
-#~ msgstr "створюються"
-
-#~ msgid "transferring"
-#~ msgstr "передач"
-
-#~ msgid "keepalive"
-#~ msgstr "збереження зв'язку"
-
-#~ msgid "files"
-#~ msgstr "файл╕в"
 
 #~ msgid "Formatted document cache"
 #~ msgstr "Кеш в╕дформатованих документ╕в"

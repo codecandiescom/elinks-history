@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-03-23 16:44+0100\n"
-"PO-Revision-Date: 2005-03-23 16:46+0100\n"
+"POT-Creation-Date: 2005-03-24 08:55+0100\n"
+"PO-Revision-Date: 2005-03-24 08:57+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -5340,7 +5340,7 @@ msgstr ""
 "Si vous désirez sauver les mots de passe pour cette URL,\n"
 "utilisez le bouton \"Bascule sauvegarde\"."
 
-#: src/formhist/dialogs.c:209 src/protocol/auth/dialogs.c:105
+#: src/formhist/dialogs.c:209
 msgid "~Login"
 msgstr "~Login"
 
@@ -6010,9 +6010,13 @@ msgstr "Authentication requise pour %s à %s"
 msgid "HTTP Authentication"
 msgstr "Authentification HTTP"
 
-#: src/protocol/auth/dialogs.c:106
-msgid "~Password"
-msgstr "Mot de ~passe"
+#: src/protocol/auth/dialogs.c:105
+msgid "Login"
+msgstr "Login"
+
+#: src/protocol/auth/dialogs.c:106 src/protocol/http/http.c:103
+msgid "Password"
+msgstr "Mot de passe"
 
 #: src/protocol/auth/dialogs.c:159
 msgid "Realm"
@@ -6329,10 +6333,6 @@ msgstr "Nom d'utilisateur"
 #: src/protocol/http/http.c:101
 msgid "Proxy authentication username."
 msgstr "Nom d'utilisateur pour l'authentification proxy."
-
-#: src/protocol/http/http.c:103
-msgid "Password"
-msgstr "Mot de passe"
 
 #: src/protocol/http/http.c:105
 msgid "Proxy authentication password."
@@ -7572,12 +7572,3 @@ msgstr "Erreur lors de l'écriture du fichier"
 
 #~ msgid "Bookmark"
 #~ msgstr "Signet"
-
-#~ msgid ""
-#~ "Keystroke should be written in the format: [Prefix-]Key\n"
-#~ "Prefix: Shift, Ctrl, Alt\n"
-#~ "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
-#~ msgstr ""
-#~ "Les touches doivent suivre le format: [Préfixe-]Touche\n"
-#~ "Préfixe: Shift, Ctrl, Alt\n"
-#~ "Touche: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."

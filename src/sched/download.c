@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.195 2003/11/28 03:49:08 jonas Exp $ */
+/* $Id: download.c,v 1.196 2003/11/29 19:09:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,7 +95,7 @@ abort_download(struct file_download *down, int stop)
 {
 	if (down->box_item)
 		done_browser_box(&download_browser, down->box_item);
-	if (down->win) delete_window(down->win);
+	if (down->dlg_data) cancel_dialog(down->dlg_data, NULL);
 	if (down->download.state >= 0)
 		change_connection(&down->download, NULL, PRI_CANCEL, stop);
 	if (down->url) mem_free(down->url);
@@ -231,7 +231,8 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	struct terminal *term = get_download_ses(file_download)->tab->term;
 
 	if (download->state >= 0) {
-		file_download->dirty = 1;
+		if (file_download->dlg_data)
+			redraw_dialog(file_download->dlg_data, 1);
 		return;
 	}
 
@@ -332,7 +333,8 @@ download_data(struct download *download, struct file_download *file_download)
 		file_download->url = u;
 		file_download->download.state = S_WAIT_REDIR;
 
-		file_download->dirty = 1;
+		if (file_download->dlg_data)
+			redraw_dialog(file_download->dlg_data, 1);
 
 		load_url(file_download->url, get_cache_uri(ce), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,

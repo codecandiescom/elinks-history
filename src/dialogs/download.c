@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.9 2003/11/29 18:33:08 jonas Exp $ */
+/* $Id: download.c,v 1.10 2003/11/29 19:09:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,7 @@
 static void
 undisplay_download(struct file_download *file_download)
 {
-	if (file_download->win) delete_window(file_download->win);
+	if (file_download->dlg_data) cancel_dialog(file_download->dlg_data, NULL);
 }
 
 static void
@@ -98,7 +98,7 @@ download_abort_function(struct dialog_data *dlg_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
 
-	file_download->win = NULL;
+	file_download->dlg_data = NULL;
 }
 
 static void
@@ -149,7 +149,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	unsigned char *msg = get_stat_msg(download, term, 1, 1, "\n");
 
 	redraw_below_window(dlg_data->win);
-	file_download->win = dlg_data->win;
+	file_download->dlg_data = dlg_data;
 
 	if (!msg) return;
 
@@ -210,15 +210,6 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	mem_free(url);
 	mem_free(msg);
-	file_download->dirty = 0;
-}
-
-static enum dlg_refresh_code
-download_refresh_handler(struct dialog_data *dlg_data, void *data)
-{
-	struct file_download *file_download = data;
-
-	return file_download->dirty ? REFRESH_DIALOG : REFRESH_NONE;
 }
 
 void
@@ -226,7 +217,6 @@ display_download(struct terminal *term, struct file_download *down,
 		 struct session *ses)
 {
 	struct dialog *dlg;
-	struct dialog_data *dlg_data;
 	struct file_download *file_download;
 
 	foreach (file_download, downloads)
@@ -255,9 +245,7 @@ found:
 
 	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
 
-	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
-
-	if (dlg_data) refresh_dialog(dlg_data, download_refresh_handler, down);
+	do_dialog(term, dlg, getml(dlg, NULL));
 }
 
 

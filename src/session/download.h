@@ -1,16 +1,16 @@
-/* $Id: download.h,v 1.24 2003/11/28 03:49:08 jonas Exp $ */
+/* $Id: download.h,v 1.25 2003/11/29 19:09:12 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
 
 #include <sys/types.h>
 
+#include "bfu/dialog.h"
 #include "cache/cache.h"
 #include "lowlevel/ttime.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
-#include "terminal/window.h"
 #include "util/lists.h"
 
 struct file_download {
@@ -20,7 +20,6 @@ struct file_download {
 	unsigned char *file;
 	unsigned char *prog;
 	struct session *ses;
-	struct window *win;
 	ttime remotetime;
 	int last_pos;
 	int handle;
@@ -32,8 +31,8 @@ struct file_download {
 	/* Should the file be deleted when destroying the structure */
 	unsigned int delete:1;
 
-	/* Should any download dialog be updated */
-	unsigned int dirty:1;
+	/* The current dialog for this download. Can be NULL. */
+	struct dialog_data *dlg_data;
 	struct listbox_item *box_item;
 	int refcount;
 };

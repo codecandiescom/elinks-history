@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.154 2004/06/27 18:34:30 pasky Exp $ */
+/* $Id: listbox.c,v 1.155 2004/07/06 11:05:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -396,7 +396,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 		assert(ops && ops->get_info);
 
-		text = ops->get_info(item, data->term, LISTBOX_TEXT);
+		text = ops->get_text(item, data->term);
 		if (!text) return 0;
 
 		len = strlen(text);

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.119 2004/07/02 16:50:38 zas Exp $ */
+/* $Id: dialogs.c,v 1.120 2004/07/06 11:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,25 +46,25 @@ static int is_globhist_item_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_globhist_item_info(struct listbox_item *box_item, struct terminal *term,
-		       enum listbox_info listbox_info)
+get_globhist_item_text(struct listbox_item *box_item, struct terminal *term)
 {
 	struct global_history_item *item = box_item->udata;
 	struct string info;
 
-	switch (listbox_info) {
-	case LISTBOX_TEXT:
-		if (get_opt_int("document.history.global.display_type")
-		    && *item->title)
-			return stracpy(item->title);
+	if (get_opt_int("document.history.global.display_type")
+	    && *item->title)
+		return stracpy(item->title);
 
-		if (!init_string(&info)) return NULL;
-		add_string_uri_to_string(&info, item->url, URI_PUBLIC);
-		return info.source;
+	if (!init_string(&info)) return NULL;
+	add_string_uri_to_string(&info, item->url, URI_PUBLIC);
+	return info.source;
+}
 
-	case LISTBOX_ALL:
-		break;
-	}
+static unsigned char *
+get_globhist_item_info(struct listbox_item *box_item, struct terminal *term)
+{
+	struct global_history_item *item = box_item->udata;
+	struct string info;
 
 	if (!init_string(&info)) return NULL;
 
@@ -131,6 +131,7 @@ static struct listbox_ops gh_listbox_ops = {
 	lock_globhist_item,
 	unlock_globhist_item,
 	is_globhist_item_used,
+	get_globhist_item_text,
 	get_globhist_item_info,
 	get_globhist_item_uri,
 	can_delete_globhist_item,

@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.31 2004/07/02 16:17:42 zas Exp $ */
+/* $Id: dialogs.c,v 1.32 2004/07/06 11:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,20 +47,19 @@ is_formhist_data_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_formhist_data_info(struct listbox_item *item, struct terminal *term,
-		       enum listbox_info listbox_info)
+get_formhist_data_text(struct listbox_item *item, struct terminal *term)
+{
+	struct formhist_data *formhist_data = item->udata;
+
+	return stracpy(formhist_data->url);
+}
+
+static unsigned char *
+get_formhist_data_info(struct listbox_item *item, struct terminal *term)
 {
 	struct formhist_data *formhist_data = item->udata;
 	struct string info;
 	struct submitted_value *sv;
-
-	switch (listbox_info) {
-	case LISTBOX_TEXT:
-		return stracpy(formhist_data->url);
-
-	case LISTBOX_ALL:
-		break;
-	}
 
 	if (!init_string(&info)) return NULL;
 
@@ -145,6 +144,7 @@ static struct listbox_ops formhist_listbox_ops = {
 	lock_formhist_data,
 	unlock_formhist_data,
 	is_formhist_data_used,
+	get_formhist_data_text,
 	get_formhist_data_info,
 	get_formhist_data_uri,
 	can_delete_formhist_data,

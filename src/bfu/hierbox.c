@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.174 2004/07/02 15:09:31 zas Exp $ */
+/* $Id: hierbox.c,v 1.175 2004/07/06 11:05:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -436,7 +436,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 	context = init_listbox_context(box, term, box->sel, NULL);
 	if (!context) return 0;
 
-	msg = box->ops->get_info(context->item, term, LISTBOX_ALL);
+	msg = box->ops->get_info(context->item, term);
 	if (!msg) {
 		mem_free(context);
 		return 0;
@@ -569,7 +569,7 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 {
 	struct string msg;
 	unsigned char *errmsg;
-	unsigned char *text = ops->get_info(item, term, LISTBOX_TEXT);
+	unsigned char *text = ops->get_text(item, term);
 
 	if (!text || !init_string(&msg)) {
 		mem_free_if(text);
@@ -614,7 +614,7 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 	mem_free(text);
 
 	if (item->type == BI_LEAF) {
-		unsigned char *info = ops->get_info(item, term, LISTBOX_ALL);
+		unsigned char *info = ops->get_info(item, term);
 
 		if (info) {
 			add_format_to_string(&msg, "\n\n%s", info);
@@ -753,7 +753,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		return 0;
 	}
 
-	text = box->ops->get_info(context->item, term, LISTBOX_TEXT);
+	text = box->ops->get_info(context->item, term);
 	if (!text) {
 		mem_free(context);
 		return 0;
@@ -789,7 +789,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 				title = box->ops->messages->delete_item_title;
 		}
 
-		msg = box->ops->get_info(context->item, term, LISTBOX_ALL);
+		msg = box->ops->get_info(context->item, term);
 		box->ops->lock(context->item);
 
 		msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.68 2004/07/02 16:00:46 zas Exp $ */
+/* $Id: listbox.h,v 1.69 2004/07/06 11:05:03 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -25,11 +25,6 @@ struct uri;
 
 struct listbox_data;
 struct listbox_item;
-
-enum listbox_info {
-	LISTBOX_TEXT,
-	LISTBOX_ALL,
-};
 
 /* Structure that can be used for storing all relevant info when traversing
  * listboxes. */
@@ -79,8 +74,8 @@ struct listbox_ops {
 	void (*unlock)(struct listbox_item *);
 	int (*is_used)(struct listbox_item *);
 
-	unsigned char *(*get_info)(struct listbox_item *, struct terminal *,
-				   enum listbox_info);
+	unsigned char *(*get_text)(struct listbox_item *, struct terminal *);
+	unsigned char *(*get_info)(struct listbox_item *, struct terminal *);
 
 	struct uri *(*get_uri)(struct listbox_item *);
 

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.57 2004/07/02 16:17:42 zas Exp $ */
+/* $Id: download.c,v 1.58 2004/07/06 11:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,20 +292,11 @@ is_file_download_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_file_download_info(struct listbox_item *item, struct terminal *term,
-		enum listbox_info listbox_info)
+get_file_download_text(struct listbox_item *item, struct terminal *term)
 {
 	struct file_download *file_download = item->udata;
 
-	switch (listbox_info) {
-	case LISTBOX_TEXT:
-		return get_uri_string(file_download->uri, URI_PUBLIC);
-
-	case LISTBOX_ALL:
-		return NULL;
-	}
-
-	return NULL;
+	return get_uri_string(file_download->uri, URI_PUBLIC);
 }
 
 static struct uri *
@@ -428,7 +419,8 @@ static struct listbox_ops downloads_listbox_ops = {
 	lock_file_download,
 	unlock_file_download,
 	is_file_download_used,
-	get_file_download_info,
+	get_file_download_text,
+	NULL,
 	get_file_download_uri,
 	can_delete_file_download,
 	delete_file_download,

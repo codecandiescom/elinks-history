@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.64 2004/07/06 10:25:28 jonas Exp $ */
+/* $Id: dialogs.c,v 1.65 2004/07/06 11:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,27 +67,29 @@ is_cookie_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_cookie_info(struct listbox_item *item, struct terminal *term,
-                enum listbox_info listbox_info)
+get_cookie_text(struct listbox_item *item, struct terminal *term)
+{
+	/* Are we dealing with a folder? */
+	if (item->type == BI_FOLDER) {
+		struct cookie_server *server = item->udata;
+
+		return stracpy(server->host);
+
+	} else {
+		struct cookie *cookie = item->udata;
+
+		return stracpy(cookie->name);
+	}
+}
+
+static unsigned char *
+get_cookie_info(struct listbox_item *item, struct terminal *term)
 {
 	struct cookie *cookie = item->udata;
 	struct cookie_server *server;
 	struct string string;
 
-	switch (listbox_info) {
-	case LISTBOX_TEXT:
-		/* Are we dealing with a folder? */
-		if (item->type == BI_FOLDER) {
-			server = item->udata;
-			return stracpy(server->host);
-		}
-
-		return stracpy(cookie->name);
-
-	case LISTBOX_ALL:
-		if (item->type == BI_FOLDER) return NULL;
-		break;
-	}
+	if (item->type == BI_FOLDER) return NULL;
 
 	if (!init_string(&string)) return NULL;
 
@@ -167,6 +169,7 @@ static struct listbox_ops cookies_listbox_ops = {
 	lock_cookie,
 	unlock_cookie,
 	is_cookie_used,
+	get_cookie_text,
 	get_cookie_info,
 	NULL,
 	can_delete_cookie,

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.73 2004/07/02 16:17:42 zas Exp $ */
+/* $Id: dialogs.c,v 1.74 2004/07/06 11:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,22 +47,18 @@ is_cache_entry_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_cache_entry_info(struct listbox_item *item, struct terminal *term,
-		     enum listbox_info listbox_info)
+get_cache_entry_text(struct listbox_item *item, struct terminal *term)
+{
+	struct cache_entry *cached = item->udata;
+
+	return get_uri_string(cached->uri, URI_PUBLIC);
+}
+
+static unsigned char *
+get_cache_entry_info(struct listbox_item *item, struct terminal *term)
 {
 	struct cache_entry *cached = item->udata;
 	struct string msg;
-
-	switch (listbox_info) {
-	case LISTBOX_TEXT:
-		if (!init_string(&msg)) return NULL;
-
-		add_uri_to_string(&msg, cached->uri, URI_PUBLIC);
-		return msg.source;
-
-	case LISTBOX_ALL:
-		break;
-	}
 
 	if (!init_string(&msg)) return NULL;
 
@@ -185,6 +181,7 @@ static struct listbox_ops cache_entry_listbox_ops = {
 	lock_cache_entry,
 	unlock_cache_entry,
 	is_cache_entry_used,
+	get_cache_entry_text,
 	get_cache_entry_info,
 	get_cache_entry_uri,
 	can_delete_cache_entry,

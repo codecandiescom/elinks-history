@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.170 2004/07/02 17:05:45 zas Exp $ */
+/* $Id: dialogs.c,v 1.171 2004/07/06 11:05:04 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -62,19 +62,18 @@ is_bookmark_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_bookmark_info(struct listbox_item *item, struct terminal *term,
-		  enum listbox_info listbox_info)
+get_bookmark_text(struct listbox_item *item, struct terminal *term)
+{
+	struct bookmark *bookmark = item->udata;
+
+	return stracpy(bookmark->title);
+}
+
+static unsigned char *
+get_bookmark_info(struct listbox_item *item, struct terminal *term)
 {
 	struct bookmark *bookmark = item->udata;
 	struct string info;
-
-	switch (listbox_info) {
-	case LISTBOX_TEXT:
-		return stracpy(bookmark->title);
-
-	case LISTBOX_ALL:
-		break;
-	}
 
 	if (!init_string(&info)) return NULL;
 
@@ -144,6 +143,7 @@ static struct listbox_ops bookmarks_listbox_ops = {
 	lock_bookmark,
 	unlock_bookmark,
 	is_bookmark_used,
+	get_bookmark_text,
 	get_bookmark_info,
 	get_bookmark_uri,
 	can_delete_bookmark,

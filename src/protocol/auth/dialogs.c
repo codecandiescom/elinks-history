@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.105 2004/07/02 16:17:42 zas Exp $ */
+/* $Id: dialogs.c,v 1.106 2004/07/06 11:05:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,19 +121,18 @@ is_http_auth_basic_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_http_auth_basic_info(struct listbox_item *item, struct terminal *term,
-			 enum listbox_info listbox_info)
+get_http_auth_basic_text(struct listbox_item *item, struct terminal *term)
+{
+	struct http_auth_basic *http_auth_basic = item->udata;
+
+	return get_uri_string(http_auth_basic->uri, URI_HTTP_AUTH);
+}
+
+static unsigned char *
+get_http_auth_basic_info(struct listbox_item *item, struct terminal *term)
 {
 	struct http_auth_basic *http_auth_basic = item->udata;
 	struct string info;
-
-	switch (listbox_info) {
-	case LISTBOX_TEXT:
-		return get_uri_string(http_auth_basic->uri, URI_HTTP_AUTH);
-
-	case LISTBOX_ALL:
-		break;
-	}
 
 	if (!init_string(&info)) return NULL;
 
@@ -201,6 +200,7 @@ static struct listbox_ops auth_listbox_ops = {
 	lock_http_auth_basic,
 	unlock_http_auth_basic,
 	is_http_auth_basic_used,
+	get_http_auth_basic_text,
 	get_http_auth_basic_info,
 	get_http_auth_basic_uri,
 	can_delete_http_auth_basic,

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.345 2004/07/14 22:13:07 zas Exp $ */
+/* $Id: menu.c,v 1.346 2004/07/14 22:14:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -586,10 +586,10 @@ open_uri_in_new_window(struct session *ses, struct uri *uri,
 	done_string(&parameters);
 }
 
-/* open a link in a new xterm */
+/* Open a link in a new xterm. */
 void
 send_open_in_new_window(struct terminal *term, const struct open_in_new *open,
-		       struct session *ses)
+			struct session *ses)
 {
 	struct document_view *doc_view;
 	struct link *link;
@@ -613,7 +613,7 @@ send_open_in_new_window(struct terminal *term, const struct open_in_new *open,
 
 void
 send_open_new_window(struct terminal *term, const struct open_in_new *open,
-		    struct session *ses)
+		     struct session *ses)
 {
 	open_uri_in_new_window(ses, NULL, open->env);
 }

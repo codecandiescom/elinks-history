@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.70 2004/12/15 15:11:55 zas Exp $ */
+/* $Id: link.c,v 1.71 2004/12/15 15:21:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,28 +145,27 @@ static unsigned char *
 get_image_filename_from_src(unsigned char *src)
 {
 	unsigned char *text = NULL;
-	int max_len;
+	unsigned char *start, *filename;
+	int len;
 
+	if (!src) return NULL;
 	/* We can display image as [foo.gif]. */
 
-	max_len = get_opt_int("document.browse.images.filename_maxlen");
+	len = strcspn(src, "?");
 
-	if (max_len >= 0 && src) {
-		int len = strcspn(src, "?");
-		unsigned char *start, *filename;
-
-		for (start = src + len; start > src; start--)
-			if (dir_sep(start[-1])) {
-				break;
-			}
-
-		len -= start - src;
-
-		filename = memacpy(start, len);
-		if (filename) {
-			text = truncate_label(filename, max_len);
-			mem_free(filename);
+	for (start = src + len; start > src; start--)
+		if (dir_sep(start[-1])) {
+			break;
 		}
+
+	len -= start - src;
+
+	filename = memacpy(start, len);
+	if (filename) {
+		int max_len = get_opt_int("document.browse.images.filename_maxlen");
+
+		text = truncate_label(filename, max_len);
+		mem_free(filename);
 	}
 
 	return text;
@@ -178,10 +177,11 @@ static unsigned char *
 get_image_label(unsigned char *label)
 {
 	unsigned char *formatted_label;
-	int max_len = get_opt_int("document.browse.images.label_maxlen");
+	int max_len;
 
 	if (!label) return NULL;
 
+	max_len = get_opt_int("document.browse.images.label_maxlen");
 	formatted_label = truncate_label(label, max_len);
 	mem_free(label);
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.71 2004/11/24 09:03:58 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.72 2004/11/24 17:10:33 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,9 +46,6 @@
 #include "viewer/text/form.h"
 #include "viewer/text/vs.h"
 
-#if 0
-#define WITEKFL
-#endif
 
 /*** Global methods */
 
@@ -961,7 +958,6 @@ unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 static JSBool
 form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-#ifdef WITEKFL
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
 
 	if (!fc) return JS_FALSE;
@@ -1003,14 +999,11 @@ form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	}
 end:
 	VALUE_TO_JSVAL_END(vp);
-#endif
-	return JS_FALSE;
 }
 
 static JSBool
 form_control_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-#ifdef WITEKFL
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
 
 	if (!fc) return JS_FALSE;
@@ -1048,8 +1041,6 @@ form_control_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 	}
 	JSVAL_TO_VALUE_END;
-#endif
-	return JS_FALSE;
 }
 
 static JSBool
@@ -1102,7 +1093,6 @@ static const JSPropertySpec forms_props[] = {
 static JSBool
 forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-#ifdef WITEKFL
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
@@ -1124,14 +1114,11 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 	}
 	VALUE_TO_JSVAL_END(vp);
-#endif
-	return JS_FALSE;
 }
 
 static JSBool
 forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
-#ifdef WITEKFL
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
@@ -1154,14 +1141,11 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	JS_SetPrivate(ctx, form, fc);
 	*rval = OBJECT_TO_JSVAL(form);
 	return JS_TRUE; 
-#endif
-	return JS_FALSE;
 }
 
 static JSBool
 forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
-#ifdef WITEKFL
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
@@ -1184,8 +1168,6 @@ ok:
 	JS_SetPrivate(ctx, form, fc);
 	*rval = OBJECT_TO_JSVAL(form);
 	return JS_TRUE; 
-#endif
-	return JS_FALSE;
 }
 
 /*** The ELinks interface */

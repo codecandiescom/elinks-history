@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.59 2004/04/18 01:24:14 jonas Exp $ */
+/* $Id: menu.h,v 1.60 2004/04/22 18:07:46 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -77,17 +77,28 @@ enum hotkey_state {
 /* XXX: keep order of fields, there's some hard initializations for it. --Zas
  */
 struct menu_item {
-	unsigned char *text;
-	unsigned char *rtext;
-	enum main_action action;
-	menu_func func;
-	void *data;
-	enum menu_item_flags flags;
+	unsigned char *text;		/* The item label */
+
+	/* The following three members are tightly coupled:
+	 *
+	 * - If @action is not MAIN_ACT_NONE the associated keybinding will be
+	 *   shown as the guiding right text and do_action() will be called
+	 *   when the item is selected rendering both @rtext and @func useless.
+	 *
+	 * - A few places however there is no associated keybinding and no
+	 *   ``default'' handler defined in which case @rtext (if non NULL)
+	 *   will be drawn and @func will be called when selecting the item. */
+	unsigned char *rtext;		/* Right aligned guiding text */
+	enum main_action action;	/* Default item handlers */
+	menu_func func;			/* Called when selecting the item */
+
+	void *data;			/* Private data passed to handler */
+	enum menu_item_flags flags;	/* What to free() and display */
 
 	/* If true, don't try to translate text/rtext inside of the menu
 	 * routines. */
-	enum hotkey_state hotkey_state;
-	int hotkey_pos;
+	enum hotkey_state hotkey_state;	/* The state of the hotkey caching */
+	int hotkey_pos;			/* The offset of the hotkey in @text */
 };
 
 #define INIT_MENU_ITEM(text, rtext, action, func, data, flags)		\

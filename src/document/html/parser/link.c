@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.65 2004/12/15 10:10:38 zas Exp $ */
+/* $Id: link.c,v 1.66 2004/12/15 10:32:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,34 +95,6 @@ html_a(unsigned char *a)
 	set_fragment_identifier(a, "name");
 }
 
-/* Get image filename from its src attribute. */
-static unsigned char *
-get_image_filename_from_src(unsigned char *src)
-{
-	unsigned char *text = NULL;
-	int max_len;
-
-	/* We can display image as [foo.gif]. */
-
-	max_len = get_opt_int("document.browse.images.file_tags");
-
-	if (max_len >= 0 && src) {
-		int len = strcspn(src, "?");
-		unsigned char *start;
-
-		for (start = src + len; start > src; start--)
-			if (dir_sep(start[-1])) {
-				break;
-			}
-
-		len -= start - src;
-
-		text = memacpy(start, len);
-	}
-
-	return text;
-}
-
 /* Returns an allocated string made after @label
  * but limited to @max_len length, by truncating
  * the middle of @label string, which is replaced
@@ -167,6 +139,39 @@ truncate_label(unsigned char *label, int max_len)
 
 	return new_label;
 }
+
+/* Get image filename from its src attribute. */
+static unsigned char *
+get_image_filename_from_src(unsigned char *src)
+{
+	unsigned char *text = NULL;
+	int max_len;
+
+	/* We can display image as [foo.gif]. */
+
+	max_len = get_opt_int("document.browse.images.file_tags");
+
+	if (max_len >= 0 && src) {
+		int len = strcspn(src, "?");
+		unsigned char *start, *filename;
+
+		for (start = src + len; start > src; start--)
+			if (dir_sep(start[-1])) {
+				break;
+			}
+
+		len -= start - src;
+
+		filename = memacpy(start, len);
+		if (filename) {
+			text = truncate_label(filename, max_len);
+			mem_free(filename);
+		}
+	}
+
+	return text;
+}
+
 
 /* Returns an allocated string containing formatted @label. */
 static unsigned char *
@@ -266,9 +271,11 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 		} else {
 			label = get_image_filename_from_src(src);
 		}
+
+	} else {
+		label = get_image_label(label);
 	}
 
-	if (label) label = get_image_label(label);
 	if (!label) {
 		add_brackets = 1;
 		label = stracpy("IMG");

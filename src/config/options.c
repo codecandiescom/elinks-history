@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.142 2002/12/10 22:28:08 pasky Exp $ */
+/* $Id: options.c,v 1.143 2002/12/10 22:49:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -649,6 +649,28 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 static void
 register_options()
 {
+	add_opt_tree("",
+		"config", 0,
+		"Configuration handling options.");
+
+	/* You can disagree about the default value here - the original
+	 * behaviour up to 20021013 (during pre18.CVS) was 1, but when I added
+	 * this option, I also realized that it's a good idea to change this.
+	 * The problem is that when you change behaviour of some option in
+	 * future, it will affect *everyone* (like the User Agent Problem),
+	 * otherwise it will only affect those who actually changed it. --pasky
+	 */
+	/* This will stay 1 until we will have new user interface for
+	 * configuration. */
+	add_opt_int("config",
+		"saving_style", 0, 0, 2, 1,
+		"Determines what happens when you let ELinks to save options:\n"
+		"0 is only values of current options are altered\n"
+		"1 is values of current options are altered and missing options\n"
+		"     are added at the end of the file\n"
+		"2 is the configuration file is rewritten from scratch");
+
+
 	add_opt_tree("",
 		"connection", 0,
 		"Connection options.");
@@ -1981,17 +2003,10 @@ register_options()
 
 
 
-	/* You can disagree about the default value here - the original
-	 * behaviour up to 20021013 (during pre18.CVS) was 1, but when I added
-	 * this option, I also realized that it's a good idea to change this.
-	 * The problem is that when you change behaviour of some option in
-	 * future, it will affect *everyone* (like the User Agent Problem),
-	 * otherwise it will only affect those who actually changed it. --pasky
-	 */
-	/* This will stay 1 until we will have new user interface for
-	 * configuration. */
-	add_opt_int("",
-		"config_saving_style", 0, 0, 2, 1,
+	/* Compatibility alias: added by pasky at 2002-12-10, 0.4pre24.CVS.
+	 * Estimated due time: 2003-02-10 */
+	add_opt_alias("",
+		"config_saving_style", 0, "config.saving_style",
 		"Determines what happens when you let ELinks to save options:\n"
 		"0 is only values of current options are altered\n"
 		"1 is values of current options are altered and missing options\n"

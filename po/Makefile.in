@@ -150,9 +150,9 @@ maintainer-clean: distclean
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 dist distdir:
 	# $(MAKE) $(srcdir)/$(PACKAGE).pot
-	$(MAKE) update-po-do
+	$(MAKE) update-po
 	@$(MAKE) dist2
-# This is a separate target because 'update-po-do' must be executed before.
+# This is a separate target because 'update-po' must be executed before.
 dist2: $(DISTFILES)
 	dists="$(DISTFILES)"; \
 	for file in $$dists; do \
@@ -160,10 +160,7 @@ dist2: $(DISTFILES)
 	  cp -p $$dir/$$file $(distdir); \
 	done
 
-# This is here just as a convient shortcut for us poor developers.
-update-po: Makefile $(srcdir)/$(PACKAGE).pot update-po-do
-
-update-po-do: Makefile
+update-po: Makefile $(srcdir)/$(PACKAGE).pot
 	@cd $(srcdir); \
 	if test -n "$(PO)"; then \
 	  lang=`echo $(PO) | sed 's/\.po//'`; \

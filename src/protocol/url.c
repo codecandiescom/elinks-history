@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.45 2002/12/07 11:45:18 zas Exp $ */
+/* $Id: url.c,v 1.46 2002/12/07 12:03:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1074,7 +1074,7 @@ encode_url_string(unsigned char *name, unsigned char **data, int *len)
 			add_chr_to_str(data, len, *name);
 		} else {
 			/* Hex it. */
-			n[1] = hx((((int) *name) & 0xF0) / 16);
+			n[1] = hx((((int) *name) & 0xF0) >> 4);
 			n[2] = hx(((int) *name) & 0xF);
 			add_to_str(data, len, n);
 		}
@@ -1100,7 +1100,7 @@ decode_url_string(unsigned char *src) {
 				int x2 = unhx(*(src + 1));
 
 				if (x2 >= 0) {
-					x1 = x1 * 16 + x2;
+					x1 = (x1 << 4) + x2;
 					if (x1 != 0) { /* don't allow %00 */
 						c = (char) x1;
 						src += 2;

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.77 2004/01/28 02:37:54 jonas Exp $ */
+/* $Id: renderer.c,v 1.78 2004/01/28 02:39:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,9 +26,15 @@
 
 
 struct plain_renderer {
+	/* The document being renderered */
 	struct document *document;
+
+	/* The data and data length of the defragmented cache entry */
 	unsigned char *source;
 	int length;
+
+	/* The convert table that should be used for converting line strings to
+	 * the rendered strings. */
 	struct conv_table *convert_table;
 
 	/* The default template char data for text */

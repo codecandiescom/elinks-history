@@ -1,10 +1,9 @@
-/* $Id: file.h,v 1.10 2004/05/21 11:57:50 jonas Exp $ */
+/* $Id: file.h,v 1.11 2004/06/21 16:56:38 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_FILE_FILE_H
 #define EL__PROTOCOL_FILE_FILE_H
 
 #include "protocol/protocol.h"
-struct string;
 
 extern protocol_handler file_protocol_handler;
 

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.39 2003/07/28 19:29:48 jonas Exp $ */
+/* $Id: screen.c,v 1.40 2003/07/28 20:23:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -382,12 +382,7 @@ alloc_screen(struct terminal *term, int x, int y)
 	struct terminal_screen *screen = term->screen;
 	struct screen_char *image;
 
-	if (!screen) {
-		screen = init_screen();
-		if (!screen) return;
-
-		term->screen = screen;
-	}
+	assert(screen);
 
 	image = mem_realloc(screen->image, size + size);
 	if (!image) return;

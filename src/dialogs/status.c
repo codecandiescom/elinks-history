@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.50 2004/01/28 06:43:30 jonas Exp $ */
+/* $Id: status.c,v 1.51 2004/02/26 00:59:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,7 +323,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 			color = selected_color;
 
 		} else {
-			stat = get_current_download(tab->data);
+			stat = get_current_download(tab_ses);
 
 			if (stat && stat->state != S_OK) {
 				color = loading_color;

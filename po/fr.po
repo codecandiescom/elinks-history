@@ -3607,8 +3607,8 @@ msgid ""
 msgstr ""
 "Ressources: %d descripteurs, %d timers.\n"
 "Connexions: %d connexions, %d en cours, %d en transfert, %d en maintien.\n"
-"Cache mémoire: %d octets, %d fichiers, %d vérrouillés, %d en chargement.\n"
-"Cache documents formatés: %d documents, %d vérrouillés."
+"Cache mémoire: %d octets, %d fichiers, %d verrouillés, %d en chargement.\n"
+"Cache documents formatés: %d documents, %d verrouillés."
 
 #: src/dialogs/info.c:171
 msgid "No entry."

@@ -69,7 +69,7 @@ msgstr "read_bookmarks_xbel(): Chyba v XML_ParserCreate()%c\n"
 msgid "read_bookmarks_xbel(): Error reading %s%c\n"
 msgstr "read_bookmarks_xbel(): Chyba pøi naèítání %s%c\n"
 
-# This translation was based on idea by Jakub Suchy.
+#  This translation was based on idea by Jakub Suchy.
 #: src/bookmarks/backend/xbel.c:124
 #, c-format
 msgid ""
@@ -496,7 +496,7 @@ msgstr "Textový WWW browser"
 msgid "Features: "
 msgstr "Podporuje: "
 
-# XXX: Tohle se mi ani trosku nelibi, ale jak to udelat lepe? ;-)
+#  XXX: Tohle se mi ani trosku nelibi, ale jak to udelat lepe? ;-)
 #: src/dialogs/info.c:64
 msgid " Standard"
 msgstr " Prohlí¾eè"

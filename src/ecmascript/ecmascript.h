@@ -1,4 +1,4 @@
-/* $Id: ecmascript.h,v 1.4 2004/09/23 16:23:27 pasky Exp $ */
+/* $Id: ecmascript.h,v 1.5 2004/09/24 20:47:20 pasky Exp $ */
 
 #ifndef EL__ECMASCRIPT_ECMASCRIPT_H
 #define EL__ECMASCRIPT_ECMASCRIPT_H
@@ -7,6 +7,7 @@
 /* In the future you will get DOM, a complete ECMAScript interface and free
  * plasm displays for everyone. */
 
+#include "util/ttime.h"
 #include "modules/module.h"
 
 struct document_view;
@@ -16,6 +17,7 @@ struct uri;
 struct ecmascript_interpreter {
 	struct document_view *doc_view;
 	void *backend_data;
+	time_t exec_start;
 };
 
 /* Why is the interpreter bound to {struct document_view} instead of

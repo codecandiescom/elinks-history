@@ -1,3 +1,170 @@
+Thu Jul 31 21:59:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Long line was wrapped.  
+
+Thu Jul 31 21:55:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	frame_trans was made static and moved to set_xchar() body.  
+
+Thu Jul 31 21:48:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Useless startx and starty vars were dropped from fill_area() + minor
+	optimizations and whitespaces fixes.  
+
+Thu Jul 31 21:35:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Major cleanup, draw_assert() is gone (sorry jonas), useless
+	intermediate variables like screen were removed, correct assertions
+	were added, out_of_range(term, x, y) macro is used to check coords
+	against term dimensions, position variable is now always the same
+	thing.  
+
+Thu Jul 31 17:41:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	draw_assert(): Introduced and just returns if the assertion don't
+	hold. Apparently there's some bugs in the dialog code that requires
+	more than trivial work. Work that nobody wants to do right now. ;) 
+
+Thu Jul 31 17:29:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/align.h, bfu/dialog.c, bfu/inpfield.c, bfu/listbox.c,
+	bfu/menu.c, document/html/colors.c, document/html/colors.h,
+	document/html/frames.h, document/html/renderer.c, sched/download.c,
+	sched/session.c, terminal/draw.c, terminal/draw.h,
+	viewer/text/link.c:
+
+	Remove last sign of color and char ``encoding'' by making also 
+	find_nearest_color() return unsigned char and fill_area() take color
+	as unsigned char. This patch also purges the get_screen_char_*() and
+	COL() macros.  
+
+Thu Jul 31 16:56:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/align.h, bfu/button.c, bfu/dialog.c, bfu/group.c,
+	bfu/inpfield.c, bfu/listbox.c, bfu/menu.c, bfu/msgbox.c,
+	bfu/text.c, bfu/text.h, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/mime.c, sched/download.c, sched/session.c,
+	scripting/lua/core.c, terminal/draw.c, terminal/draw.h,
+	viewer/text/link.c, viewer/text/search.c:
+
+	This is a big patch doing mostly trivial stuff.  get_bfu_color():
+	return unsigned char. No shifting of the color.  set_char(): Take
+	color as unsigned char.  draw_frame(): Take color as unsigned char.  
+	print_text(): Take color as unsigned char.  
+	
+	Sideeffects are that fill_area() (next in line) still needs the
+	color shiftet.  
+
+Thu Jul 31 15:46:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	draw_frame(): Tidyup.  
+
+Thu Jul 31 15:40:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Various minor optimizations.  
+
+Thu Jul 31 15:17:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: draw.c, draw.h:
+
+	set_only_char(): Take unsigned char instead of unsigned.  
+
+Thu Jul 31 15:04:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/inpfield.c, bfu/listbox.c, bfu/menu.c,
+	sched/download.c, sched/session.c, terminal/draw.c,
+	terminal/draw.h, viewer/text/view.c:
+
+	fill_area(): Take screen data and attr value separately.  
+
+Thu Jul 31 15:02:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	if () internal() -> assertm().  
+
+Thu Jul 31 14:54:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	expand_cells(): optimization, do not recalculate cells indexes if
+	not needed.  
+
+Thu Jul 31 14:42:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, terminal/draw.c, terminal/draw.h,
+	viewer/text/view.c:
+
+	fill_border_area(): Introduced as macro.  
+
+Thu Jul 31 14:15:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	draw_doc(): Insert sanity check. Bail out if width or height of the
+	view is < 2. I don't know why but Zas spotted this. ;) 
+
+Thu Jul 31 09:12:46 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/file.c:
+
+	try_encoding_extensions: Fix possible infinite loop.  
+
+Thu Jul 31 01:34:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Many minor optizations: bits shift instead of [*/]2, register some
+	vars, moved some tests outside loops, reduce number of calls to
+	strncasecmp()...  
+
+Thu Jul 31 01:09:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, bfu/text.c, terminal/draw.c, terminal/draw.h,
+	viewer/text/link.c:
+
+	set_chars(): Take screen data and attr value separately.  
+
+Thu Jul 31 00:33:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.c, bfu/menu.c, terminal/draw.c,
+	terminal/draw.h, viewer/text/view.c:
+
+	set_border_char(): Introduced and used instead of set_char(*FRAME*).  
+
+Thu Jul 31 00:23:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/frames.c:
+
+	create_frameset(): optimization, only allocate memory if needed.  
+
+Wed Jul 30 23:21:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	Minor optimization, result of conversion (binary shift) is constant,
+	moved outside loops.  
+
+Wed Jul 30 22:41:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.h:
+
+	Typo fix ;).  
+
 Wed Jul 30 21:38:43 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/draw.c:

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.3 2003/10/29 16:24:32 jonas Exp $ */
+/* $Id: document.h,v 1.4 2003/10/29 16:29:44 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -8,6 +8,38 @@
 #include "terminal/draw.h"
 #include "util/color.h"
 #include "util/lists.h"
+
+/* TODO: Move this notice to doc/hacking.txt */
+/* XXX: Please try to keep order of fields from max. to min. of size
+ * of each type of fields:
+ *
+ * Prefer:
+ *	long a;
+ *	int b;
+ *	char c;
+ * Instead of:
+ *	char c;
+ *	int b;
+ *	long b;
+ *
+ * It will help to reduce memory padding on some architectures.
+ * It's not a perfect solution, but better than worse.
+ */
+
+struct tag {
+	LIST_HEAD(struct tag);
+
+	int x, y;
+	unsigned char name[1]; /* must be last of struct. --Zas */
+};
+
+struct node {
+	LIST_HEAD(struct node);
+
+	int x, y;
+	int xw, yw;
+};
+
 
 struct line {
 	struct screen_char *d;

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.45 2003/10/29 16:14:12 jonas Exp $ */
+/* $Id: renderer.h,v 1.46 2003/10/29 16:29:44 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -12,37 +12,6 @@
 /* We need this included later, otherwise it will miss some our
  * declarations. */
 /* #include "vs.h" */
-
-
-/* XXX: Please try to keep order of fields from max. to min. of size
- * of each type of fields:
- *
- * Prefer:
- *	long a;
- *	int b;
- *	char c;
- * Instead of:
- *	char c;
- *	int b;
- *	long b;
- *
- * It will help to reduce memory padding on some architectures.
- * It's not a perfect solution, but better than worse.
- */
-
-struct tag {
-	LIST_HEAD(struct tag);
-
-	int x, y;
-	unsigned char name[1]; /* must be last of struct. --Zas */
-};
-
-struct node {
-	LIST_HEAD(struct node);
-
-	int x, y;
-	int xw, yw;
-};
 
 
 /* For struct document_view */

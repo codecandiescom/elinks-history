@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.10 2003/10/27 03:29:21 pasky Exp $ */
+/* $Id: os2.c,v 1.11 2003/10/27 22:44:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ winch_thread(void)
 	}
 }
 
-void
+static void
 winch(void *s)
 {
 	unsigned char c;

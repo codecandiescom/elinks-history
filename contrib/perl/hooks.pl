@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.35 2005/03/26 15:39:00 pasky Exp $
+# $Id: hooks.pl,v 1.36 2005/03/26 17:19:25 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -129,6 +129,15 @@ my %search_prefixes_ = (
 	'^(ly|lycos)(| .*)$' => 'lycos',
 	'^(hb|hotbot)(| .*)$' => 'hotbot',
 	'^(ex|excite)(| .*)$' => 'excite',
+);
+
+my %weather_locators_ = (
+	'weather underground' => 'http://wunderground.com/cgi-bin/findweather/getForecast?query=!query!',
+	'google' => 'http://google.com/search?q=weather+"!query!"',
+	'yahoo' => 'http://search.yahoo.com/search?p=weather+"!query!"',
+	'cnn' => 'http://weather.cnn.com/weather/search?wsearch=!query!',
+	'accuweather' => 'http://wwwa.accuweather.com/adcbin/public/us_getcity.asp?zipcode=!query!',
+	'ask jeeves' => 'http://web.ask.com/web?&q=weather !query!',
 );
 
 sub goto_url_hook
@@ -315,12 +324,10 @@ sub goto_url_hook
 			$locator_rfc         = 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
 				$locator_rfc     = 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
 			my $weather          = loadrc("weather");
-				$locator_weather = 'http://wunderground.com/cgi-bin/findweather/getForecast?query=' . $thingy;
-				$locator_weather = 'http://google.com/search?q=weather+"' . $thingy . '"' if $weather eq 'google';
-				$locator_weather = 'http://search.yahoo.com/search?p=weather+"' . $thingy . '"' if $weather eq 'yahoo';
-				$locator_weather = 'http://weather.cnn.com/weather/search?wsearch=' . $thingy if $weather eq 'cnn';
-				$locator_weather = 'http://wwwa.accuweather.com/adcbin/public/us_getcity.asp?zipcode=' . $thingy if $weather eq 'accuweather';
-				$locator_weather = 'http://web.ask.com/web?&q=weather ' . $thingy if $weather =~ '^(ask|jeeves|ask jeeves)$';
+			$weather             = 'ask jeeves' if $weather =~ /^(ask|jeeves)$/;
+			$weather           ||= 'weather underground';
+			$locator_weather     = $weather_locators_{$weather};
+			$locator_weather     =~ s/!query!/$thingy/;
 			$locator_stock       = 'http://finance.yahoo.com/l?s=' . $thingy;
 			$locator_bs          = 'http://search.atomz.com/search/?sp-a=00062d45-sp00000000&sp-q=' . $thingy;
 			my $bork = ""; $bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");

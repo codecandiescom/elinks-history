@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.123 2004/11/13 13:09:47 jonas Exp $ */
+/* $Id: action.c,v 1.124 2004/11/13 20:27:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -697,7 +697,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			status = FRAME_EVENT_IGNORED;
 	}
 
-	if (ses->insert_mode == INSERT_MODE_ON
+	if (status != FRAME_EVENT_SESSION_DESTROYED
+	    && ses->insert_mode == INSERT_MODE_ON
 	    && link != get_current_link(doc_view))
 		ses->insert_mode = INSERT_MODE_OFF;
 

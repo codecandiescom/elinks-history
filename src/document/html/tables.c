@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.40 2003/06/30 18:01:38 zas Exp $ */
+/* $Id: tables.c,v 1.41 2003/06/30 20:32:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -993,6 +993,8 @@ get_table_width(struct table *t)
 		internal("min(%d) > max(%d)", min, max);
 }
 
+
+/* TODO: understand and rewrite this thing... --Zas */
 static void
 distribute_widths(struct table *t, int width)
 {
@@ -1005,6 +1007,7 @@ distribute_widths(struct table *t, int width)
 	int tx_size;
 
 	if (!t->x) return;
+	
 	if (d < 0) {
 		internal("too small width %d, required %d", width, t->min_t);
 	}

@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.19 2003/10/24 21:02:14 pasky Exp $ */
+/* $Id: history.h,v 1.20 2003/10/24 21:15:26 pasky Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -59,15 +59,15 @@ void go_history(struct session *ses, struct location *loc);
 static inline void
 go_back(struct session *ses)
 {
-	if (!cur_loc(ses)) return;
-	go_history(ses, cur_loc(ses)->prev);
+	if (!ses->history.current) return;
+	go_history(ses, ses->history.current->prev);
 }
 
 static inline void
 go_unback(struct session *ses)
 {
-	if (!cur_loc(ses)) return;
-	go_history(ses, cur_loc(ses)->next);
+	if (!ses->history.current) return;
+	go_history(ses, ses->history.current->next);
 }
 
 void ses_history_move(struct session *ses);

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.275 2004/09/12 04:09:28 miciah Exp $ */
+/* $Id: menu.c,v 1.276 2004/09/12 04:14:53 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -550,17 +550,15 @@ static void
 menu_mouse_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
+	int scroll_direction = 1;
 
 	switch (get_mouse_button(ev)) {
 		case B_WHEEL_UP:
-			if (check_mouse_action(ev, B_DOWN)) {
-				scroll_menu(menu, -1, 1);
-				display_menu(win->term, menu);
-			}
-			return;
+			scroll_direction = -1;
+			/* Fall thru */
 		case B_WHEEL_DOWN:
 			if (check_mouse_action(ev, B_DOWN)) {
-				scroll_menu(menu, 1, 1);
+				scroll_menu(menu, scroll_direction, 1);
 				display_menu(win->term, menu);
 			}
 			return;

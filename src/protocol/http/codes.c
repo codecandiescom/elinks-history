@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.7 2003/06/21 13:01:36 pasky Exp $ */
+/* $Id: codes.c,v 1.8 2003/06/21 13:14:11 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -104,6 +104,20 @@ http_error_document(int code)
 " </head>\n"
 " <body>\n"
 "  <h1 align=\"left\">HTTP error %03d: %s</h1>\n"
+"  \n"
+"  <center><hr /></center>\n"
+"  \n"
+"  <p>An error occured on the server while fetching the document you\n"
+"  requested. Moreover, the server did not send back any explanation of what\n"
+"  happenned whatsoever - it would be nice if you notified the web server\n"
+"  administrator about this, as it is not a nice behaviour from the web\n"
+"  server at all and it frequently indicates some much deeper problem with\n"
+"  the web server software.</p>\n"
+"  \n"
+"  <p>I have no idea about what is wrong, sorry. Please contact the web\n"
+"  server administrator if you believe that this error should not occur.</p>\n"
+"  \n"
+"  <p align=\"right\">Have a nice day.</p>\n"
 " </body>\n"
 "</html>\n",
 			code, code, codestr);

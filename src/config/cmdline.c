@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.116 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: cmdline.c,v 1.117 2005/04/05 07:53:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -772,7 +772,7 @@ struct option_info cmdline_options_info[] = {
 		"these options.")),
 
 	INIT_OPT_INT("", N_("Verbose level"),
-		"verbose", 0, 0, VERBOSE_LEVELS - 1, 0,
+		"verbose", 0, 0, VERBOSE_LEVELS - 1, VERBOSE_WARNINGS,
 		N_("The verbose level controls what messages are shown at\n"
 		"start up and while running:\n"
 		"\t0 means only show serious errors\n"

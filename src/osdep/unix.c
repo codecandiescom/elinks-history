@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.5 2003/10/27 03:29:08 pasky Exp $ */
+/* $Id: unix.c,v 1.6 2003/10/27 09:52:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,9 @@
 
 #include "elinks.h"
 
+#include "lowlevel/select.h"
+#include "terminal/event.h"
+#include "terminal/kbd.h"
 #include "util/memory.h"
 
 
@@ -87,7 +90,7 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 	int h;
 	struct gpm_mouse_spec *gms;
 
-	h = init_mouse(cons, 0);
+	h = init_mouse(cons);
 	if (h < 0) return NULL;
 
 	gms = mem_alloc(sizeof(struct gpm_mouse_spec));

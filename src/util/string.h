@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.87 2004/10/13 15:34:47 zas Exp $ */
+/* $Id: string.h,v 1.88 2004/10/22 23:55:28 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -144,7 +144,12 @@ struct string {
 #endif
 
 /* Initializes the passed string struct by preallocating the @source member. */
+#ifdef DEBUG_MEMLEAK
+struct string *init_string__(unsigned char *file, int line, struct string *string);
+#define init_string(string) init_string__(__FILE__, __LINE__, string)
+#else
 struct string *init_string(struct string *string);
+#endif
 
 /* Resets @string and free()s the @source member. */
 void done_string(struct string *string);

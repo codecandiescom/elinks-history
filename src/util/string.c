@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.104 2004/10/13 15:34:47 zas Exp $ */
+/* $Id: string.c,v 1.105 2004/10/22 23:55:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,13 +235,21 @@ elinks_strlcasecmp(const unsigned char *s1, size_t n1,
  *	instead we should optimize each function. */
 
 inline struct string *
+#ifdef DEBUG_MEMLEAK
+init_string__(unsigned char *file, int line, struct string *string)
+#else
 init_string(struct string *string)
+#endif
 {
 	assertm(string, "[init_string]");
 	if_assert_failed { return NULL; }
 
 	string->length = 0;
+#ifdef DEBUG_MEMLEAK
+	string->source = debug_mem_alloc(file, line, STRING_GRANULARITY + 1);
+#else
 	string->source = mem_alloc(STRING_GRANULARITY + 1);
+#endif
 	if (!string->source) return NULL;
 
 	*string->source = 0;

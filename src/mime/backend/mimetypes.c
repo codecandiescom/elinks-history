@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.24 2003/10/24 19:35:43 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.25 2003/10/25 19:17:57 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -174,7 +174,7 @@ init_mimetypes_map(void)
 }
 
 static void
-done_mimetypes(void)
+done_mimetypes(struct module *module)
 {
 	struct hash_item *item;
 	int i;
@@ -200,14 +200,14 @@ change_hook_mimetypes(struct session *ses, struct option *current, struct option
 	if (!strlcmp(changed->name, -1, "path", 4)
 	    || (!strlcmp(changed->name, -1, "enable", 6)
 		&& !changed->value.number)) {
-		done_mimetypes();
+		done_mimetypes(&mimetypes_mime_module);
 	}
 
 	return 0;
 }
 
 static void
-init_mimetypes(void)
+init_mimetypes(struct module *module)
 {
 	struct change_hook_info mimetypes_change_hooks[] = {
 		{ "mime.mimetypes",		change_hook_mimetypes },
@@ -254,13 +254,17 @@ get_content_type_mimetypes(unsigned char *extension)
 	return NULL;
 }
 
-/* Setup the exported backend */
 struct mime_backend mimetypes_mime_backend = {
-	/* name: */		BACKEND_NAME,
-	/* init: */		init_mimetypes,
-	/* done: */		done_mimetypes,
 	/* get_content_type: */	get_content_type_mimetypes,
 	/* get_mime_handler: */	NULL,
 };
+
+struct module mimetypes_mime_module = INIT_MODULE(
+	/* name: */		"mimetypes",
+	/* options: */		NULL,
+	/* submodules: */	NULL,
+	/* init: */		init_mimetypes,
+	/* done: */		done_mimetypes
+);
 
 #endif /* MIMETYPES */

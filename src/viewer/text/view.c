@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.593 2004/09/26 09:56:55 pasky Exp $ */
+/* $Id: view.c,v 1.594 2004/10/06 12:10:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -825,9 +825,12 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 	struct link *link;
 	enum frame_event_status status;
 
-	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
+	assert(ses && doc_view && doc_view->document && ev);
 	if_assert_failed return FRAME_EVENT_IGNORED;
 
+	/* When changing frame, vs may be NULL. See bug 525. */
+	if (!doc_view->vs) return FRAME_EVENT_IGNORED;
+	
 	link = get_current_link(doc_view);
 
 	if (link && link_is_textinput(link)) {

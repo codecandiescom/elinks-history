@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.53 2003/10/03 11:25:51 jonas Exp $ */
+/* $Id: color.c,v 1.54 2003/10/04 18:08:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,6 +118,7 @@ static struct color_mode_info *color_modes[] = {
 	 * terminal._template_.colors = 2. */
 	/* COLOR_MODE_16 */	&color_mode_16,
 #endif
+	/* COLOR_MODE_DUMP */	NULL,
 };
 
 /* Colors values used in the foreground color table:
@@ -172,10 +173,6 @@ static unsigned char fg_color[16][8] = {
 	/* 15 (brightwhite) */
 	{ 15, 15, 15, 15, 15, 15, 15, 15 },
 };
-
-/* Defined in viewer/dump/dump.c and used to avoid calculating colors when
- * dumping stuff. */
-extern int dump_pos;
 
 /* When determining wether to use negative image we make the most significant
  * be least significant. */
@@ -237,7 +234,8 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 
 	assert(schar && 0 <= type && type < COLOR_TYPES);
 
-	if (dump_pos) return;
+	/* No color calculation colors when dumping stuff. */
+	if (color_mode == COLOR_MODE_DUMP) return;
 
 	fg = get_color(pair->foreground, mode->palette, mode->levels[type].fg);
 	bg = get_color(pair->background, mode->palette, mode->levels[type].bg);

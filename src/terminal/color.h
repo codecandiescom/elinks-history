@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.22 2003/10/03 11:31:09 jonas Exp $ */
+/* $Id: color.h,v 1.23 2003/10/04 18:08:38 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -32,6 +32,7 @@ enum color_mode {
 	COLOR_MODE_MONO = 0,
 	COLOR_MODE_16,
 	COLOR_MODE_256,
+	COLOR_MODE_DUMP,
 
 	COLOR_MODES, /* XXX: Keep last */
 };

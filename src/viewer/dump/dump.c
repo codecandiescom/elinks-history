@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.39 2003/09/30 00:17:57 jonas Exp $ */
+/* $Id: dump.c,v 1.40 2003/10/04 18:08:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,8 +42,7 @@
 #include "viewer/text/vs.h"
 
 
-int dump_pos;
-
+static int dump_pos;
 static struct download dump_download;
 static int dump_redir_count = 0;
 
@@ -116,7 +115,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	o.xw = get_opt_int("document.dump.width");
 	o.yw = 25;
 	o.cp = get_opt_int("document.dump.codepage");
-	o.color_mode = COLOR_MODE_MONO;
+	o.color_mode = COLOR_MODE_DUMP;
 	o.plain = 0;
 	o.frames = 0;
 

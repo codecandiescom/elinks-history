@@ -1,3 +1,80 @@
+Mon Apr 26 16:46:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix bug 431 and make underlining work properly when splitting lines
+	(in table cells).  
+
+Mon Apr 26 15:56:11 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Apr 26 15:48:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/download.c, util/file.c, util/file.h:
+
+	Pop up an error message if attempting to save a file which is a fact
+	a directory. file_is_dir() function was added to util/file.{c,h}, it
+	tests if its argument is a readable directory.  
+
+Mon Apr 26 13:30:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Untangle mem_free_set() casting pointer code.  
+
+Mon Apr 26 13:18:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: loadmsgcat.c, localealias.c:
+
+	Workaround compilation failure under cygwin and debian stable, when
+	using --with-perl: alloca() is not detected at configure time but
+	still included from some perl headers files.  
+
+Mon Apr 26 12:51:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/perl/hooks.c:
+
+	Perl-specific code was moved to appropriate local functions, @err
+	was renamed to non-misleading @count, dSP and PUSHMARK are needed
+	even if no parameter is passed (hook_quit case, conform to perlcall
+	doc), tidyup.  
+
+Mon Apr 26 11:38:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	query_file(): Check only the URI passed and not ses->download_uri.
+	Maybe the checking should be moved back to start_download() but it
+	shouldn't hurt the other users. Besides I like the fact that we not
+	check URI _before_ users have provided a filename so they don't
+	waste their time. FIXME added. Somebody please act as to what is
+	best because I don't know. ;) 
+
+Mon Apr 26 09:05:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	An assertion was added: for now, this one is triggered when saving a
+	preformatted document. This was reported by Stephen Stocker. Jonas
+	please have a look at this one.  
+
+Mon Apr 26 08:49:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	Fix wrapping of lines due to a change introduced in
+	document/html/parser.c 1.385 -> 1.386: we want to match only space
+	char. It restores correct rendering of freshmeat.net index page.  
+
+Mon Apr 26 03:37:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	Fix and improve led option handling.  
+
 Sun Apr 25 17:32:44 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: bookmarks/backend/xbel.c, document/document.c,

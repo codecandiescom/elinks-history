@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.497 2004/06/12 12:33:15 jonas Exp $ */
+/* $Id: session.c,v 1.498 2004/06/12 15:16:50 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -71,13 +71,26 @@ struct file_to_load {
 	struct download stat;
 };
 
+/* This structure and related functions are used to maintain information
+ * for instances opened in new windows. We store all related session info like
+ * URI and base session to clone from so that when the new instance connects
+ * we can look up this information. In case of failure the session information
+ * has a timeout */
+struct session_info {
+	LIST_HEAD(struct session_info);
+
+	int id;
+	int timer;
+	struct session *ses;
+	struct uri *uri;
+};
+
 #define file_to_load_is_active(ftl) ((ftl)->req_sent && is_in_progress_state((ftl)->stat.state))
 
 
 INIT_LIST_HEAD(sessions);
 
 enum remote_session_flags remote_session_flags;
-static int session_id = 1;
 
 
 static struct file_to_load * request_additional_file(struct session *,
@@ -85,16 +98,90 @@ static struct file_to_load * request_additional_file(struct session *,
 
 static void tabwin_func(struct window *tab, struct term_event *ev, int fw);
 
-static struct session *
-get_session(int id)
-{
-	struct session *ses;
 
-	foreach (ses, sessions)
-		if (ses->id == id)
-			return ses;
+static INIT_LIST_HEAD(session_info);
+static int session_info_id = 1;
+
+static struct session_info *
+get_session_info(int id)
+{
+	struct session_info *info;
+
+	foreach (info, session_info)
+		if (info->id == id) {
+			struct session *ses;
+
+			/* Make sure the info->ses session is still with us. */
+			foreach (ses, sessions)
+				if (ses == info->ses)
+					return info;
+
+			info->ses = NULL;
+			return info;
+		}
 
 	return NULL;
+}
+
+static void
+done_session_info(struct session_info *info)
+{
+	del_from_list(info);
+	if (info->timer != -1)
+		kill_timer(info->timer);
+
+	done_uri(info->uri);
+	mem_free(info);
+}
+
+void
+done_saved_session_info(void)
+{
+	while (!list_empty(session_info))
+		done_session_info(session_info.next);
+}
+
+static void
+session_info_timeout(int id)
+{
+	struct session_info *info = get_session_info(id);
+
+	if (!info) return;
+	info->timer = -1;
+	done_session_info(info);
+}
+
+int
+add_session_info(struct session *ses, struct uri *uri)
+{
+	struct session_info *info = mem_calloc(1, sizeof(struct session_info));
+
+	if (!info) return -1;
+
+	info->id = session_info_id++;
+	/* I don't know what a reasonable start up time for a new instance is
+	 * but it won't hurt to have a few seconds atleast. --jonas */
+	info->timer = install_timer(10000, (void (*)(void *))session_info_timeout,
+					   (void *) info->id);
+	info->ses = ses;
+	info->uri = get_uri_reference(uri);
+	add_to_list(session_info, info);
+
+	return info->id;
+}
+
+static struct session *
+init_saved_session(struct terminal *term, int id)
+{
+	struct session_info *info = get_session_info(id);
+	struct session *ses;
+
+	if (!info) return NULL;
+
+	ses = init_session(info->ses, term, info->uri, 0);
+	done_session_info(info);
+
+	return ses;
 }
 
 static struct session *
@@ -663,7 +750,6 @@ init_session(struct session *base_session, struct terminal *term,
 	init_list(ses->scrn_frames);
 	init_list(ses->more_files);
 	init_list(ses->type_queries);
-	ses->id = session_id++;
 	ses->task.type = TASK_NONE;
 	ses->display_timer = -1;
 
@@ -774,7 +860,7 @@ encode_session_info(struct string *info, int cp, struct list_head *url_list)
 int
 decode_session_info(struct terminal *term, int len, const int *data)
 {
-	struct session *base_session;
+	struct session *base_session = NULL;
 	enum remote_session_flags remote = 0;
 	struct uri *current_uri;
 	unsigned char *str;
@@ -786,7 +872,9 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	 * comparing it to possibly supplied -base-session here, and clone the
 	 * session with id of base-session (its current document association
 	 * only, rather) to the newly created session. */
-	base_session = get_session(*(data++));
+	if (init_saved_session(term, *(data++)))
+		return 1;
+
 	magic = *(data++);
 
 	switch (magic) {
@@ -852,11 +940,11 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		unsigned char *end = memchr(str, 0, len);
 		int urilength = end ? end - str : len;
 		struct uri *uri = NULL;
-		unsigned char *decoded = decode_shell_safe_url(str, urilength);
+		unsigned char *uristring = memacpy(str, urilength);
 
-		if (decoded) {
-			uri = get_hooked_uri(decoded, current_uri, term->cwd);
-			mem_free(decoded);
+		if (uristring) {
+			uri = get_hooked_uri(uristring, current_uri, term->cwd);
+			mem_free(uristring);
 		}
 
 		len -= urilength + 1;

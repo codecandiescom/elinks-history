@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.322 2004/06/09 21:22:39 jonas Exp $ */
+/* $Id: menu.c,v 1.323 2004/06/12 15:16:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -550,13 +550,13 @@ free_history_lists(void)
 
 
 static struct string *
-init_session_info_string(struct string *parameters, struct session *ses)
+init_session_info_string(struct string *parameters, int id)
 {
 	int ring = get_opt_int_tree(cmdline_options, "session-ring");
 
 	if (!init_string(parameters)) return NULL;
 
-	add_format_to_string(parameters, "-base-session %d ", ses->id);
+	add_format_to_string(parameters, "-base-session %d ", id);
 	if (ring) add_format_to_string(parameters, " -session-ring %d ", ring);
 
 	return parameters;
@@ -568,15 +568,15 @@ open_uri_in_new_window(struct session *ses, struct uri *uri,
 		       enum term_env_type env)
 {
 	struct string parameters;
+	int base_session_id;
 
 	assert(env && ses);
 	if_assert_failed return;
 
-	if (!init_session_info_string(&parameters, ses)) return;
+	base_session_id = add_session_info(ses, uri);
+	if (base_session_id < 1) return;
 
-	/* TODO: Possibly preload the link URI so it will be ready when
-	 * the new ELinks instance requests it. --jonas */
-	if (uri) add_encoded_shell_safe_url(&parameters, struri(uri));
+	if (!init_session_info_string(&parameters, base_session_id)) return;
 
 	open_new_window(ses->tab->term, path_to_exe, env, parameters.source);
 	done_string(&parameters);

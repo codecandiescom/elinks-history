@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.210 2004/06/11 00:47:18 jonas Exp $ */
+/* $Id: main.c,v 1.211 2004/06/12 15:16:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,6 +241,7 @@ terminate_all_subsystems(void)
 		free_blacklist();
 		done_modules(builtin_modules);
 		done_screen_drivers();
+		done_saved_session_info();
 	}
 
 	shrink_memory(1);

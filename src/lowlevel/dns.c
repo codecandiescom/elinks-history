@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.21 2002/12/07 20:05:56 pasky Exp $ */
+/* $Id: dns.c,v 1.22 2003/01/19 14:43:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ void end_real_lookup(void *data)
 	if (read(query->h, query->addrno, sizeof(int)) != sizeof(int))
 		goto done;
 
-	*query->addr = mem_alloc((*query->addrno + 1) * sizeof(struct sockaddr_storage));
+	*query->addr = mem_calloc(*query->addrno + 1, sizeof(struct sockaddr_storage));
 	if (!*query->addr) goto done;
 
 	for (i = 0; i < *query->addrno; i++) {
@@ -321,7 +321,7 @@ void end_dns_lookup(struct dnsquery *q, int res)
 		if (res < 0) {
 			/* q->addr(no) is pointer to something already allocated */
 
-			*q->addr = mem_alloc(sizeof(struct sockaddr_storage) * dnsentry->addrno);
+			*q->addr = mem_calloc(dnsentry->addrno, sizeof(struct sockaddr_storage));
 			if (!*q->addr) goto done;
 
 			memcpy(*q->addr, dnsentry->addr, sizeof(struct sockaddr_storage) * dnsentry->addrno);
@@ -344,7 +344,7 @@ void end_dns_lookup(struct dnsquery *q, int res)
 	if (dnsentry) {
 		strcpy(dnsentry->name, q->name);
 
-		dnsentry->addr = mem_alloc(sizeof(struct sockaddr_storage) * *q->addrno);
+		dnsentry->addr = mem_calloc(*q->addrno, sizeof(struct sockaddr_storage));
 		if (!dnsentry->addr) goto done;
 
 		memcpy(dnsentry->addr, *q->addr, sizeof(struct sockaddr_storage) * *q->addrno);
@@ -401,7 +401,7 @@ int find_host(unsigned char *name, struct sockaddr **addr, int *addrno,
 		if (dnsentry->get_time + DNS_TIMEOUT < get_time())
 			goto timeout;
 
-		*addr = mem_alloc(sizeof(struct sockaddr_storage) * dnsentry->addrno);
+		*addr = mem_calloc(dnsentry->addrno, sizeof(struct sockaddr_storage));
 		if (*addr) {
 			memcpy(*addr, dnsentry->addr, sizeof(struct sockaddr_storage) * dnsentry->addrno);
 			*addrno = dnsentry->addrno;

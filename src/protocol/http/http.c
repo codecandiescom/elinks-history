@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.130 2003/06/21 11:02:39 zas Exp $ */
+/* $Id: http.c,v 1.131 2003/06/21 11:06:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,8 +65,7 @@ struct http_connection_info {
 #define CHUNK_SIZE	-1
 	int chunk_remaining;
 
-	int code;
-	int is_error;
+	int error_code;
 };
 
 static void uncompress_shutdown(struct connection *);
@@ -866,11 +865,11 @@ thats_all_folks:
 
 			/* There's no content but an error so just print
 			 * that instead of nothing. */
-			if (!conn->from && info->is_error) {
+			if (!conn->from && info->error_code) {
 				unsigned char errs[] = "xxx";
 				unsigned char *str;
 
-				ulongcat(errs, NULL, info->code, 3, '0');
+				ulongcat(errs, NULL, info->error_code, 3, '0');
 
 				str = straconcat("<HTML><HEAD><TITLE>HTTP ERROR ", errs,
 						 "</TITLE></HEAD><BODY>HTTP ERROR ", errs,
@@ -1152,8 +1151,7 @@ out_of_mem:
 		mem_free(cookie);
 	}
 #endif
-	info->code = h;
-	info->is_error = (h < 200 || h >= 400);
+	info->error_code = (h < 200 || h >= 400) ? h : 0;
 
 	if (h == 100) {
 		mem_free(head);

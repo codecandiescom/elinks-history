@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.35 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: document.c,v 1.36 2003/05/18 16:30:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,7 +237,10 @@ head_msg(struct session *ses)
 
 		if (!headers) return;
 
-		if (*headers)  {
+		/* If the headers string starts by a newline, it means that it
+		 * is artificially generated, usually to make ELinks-generated
+		 * documents (ie. file:// directory listings) text/html. */
+		if (*headers && *headers != '\r')  {
 			int i = 0, j = 0;
 			/* Sanitize headers string. */
 			/* XXX: Do we need to check length and limit

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.299 2004/07/13 19:50:14 zas Exp $ */
+/* $Id: download.c,v 1.300 2004/07/13 19:51:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -728,29 +728,10 @@ subst_file(unsigned char *prog, unsigned char *file)
 }
 
 
-static void common_download_do(struct terminal *, int, void *, int);
-
 struct cmdw_hop {
 	struct session *ses;
 	unsigned char *real_file;
 };
-
-static void
-common_download(struct session *ses, unsigned char *file, int resume)
-{
-	struct cmdw_hop *cmdw_hop;
-
-	if (!ses->download_uri) return;
-
-	cmdw_hop = mem_calloc(1, sizeof(struct cmdw_hop));
-	if (!cmdw_hop) return;
-	cmdw_hop->ses = ses;
-
-	kill_downloads_to_file(file);
-
-	create_download_file(ses->tab->term, file, &cmdw_hop->real_file, 0,
-			     resume, common_download_do, cmdw_hop);
-}
 
 static void
 common_download_do(struct terminal *term, int fd, void *data, int resume)
@@ -772,6 +753,23 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	load_uri(file_download->uri, ses->referrer, &file_download->download,
 		 PRI_DOWNLOAD, CACHE_MODE_NORMAL, file_download->last_pos);
+}
+
+static void
+common_download(struct session *ses, unsigned char *file, int resume)
+{
+	struct cmdw_hop *cmdw_hop;
+
+	if (!ses->download_uri) return;
+
+	cmdw_hop = mem_calloc(1, sizeof(struct cmdw_hop));
+	if (!cmdw_hop) return;
+	cmdw_hop->ses = ses;
+
+	kill_downloads_to_file(file);
+
+	create_download_file(ses->tab->term, file, &cmdw_hop->real_file, 0,
+			     resume, common_download_do, cmdw_hop);
 }
 
 void

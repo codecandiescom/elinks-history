@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.219 2003/08/25 22:16:25 jonas Exp $ */
+/* $Id: renderer.c,v 1.220 2003/08/26 23:04:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ realloc_line(struct document *document, int y, int x)
 	int i;
 	int newsize = ALIGN(x + 1);
 	struct line *line;
-	unsigned char color;
+	struct screen_char schar;
 
 	assert(document);
 	if_assert_failed return 0;
@@ -144,12 +144,12 @@ realloc_line(struct document *document, int y, int x)
 		line->d = l;
 	}
 
-	color = find_nearest_color(par_format.bgcolor, 8) << 3;
+	schar.color = find_nearest_color(par_format.bgcolor, 8) << 3;
+	schar.data = ' ';
+	schar.attr = 0;
 
 	for (i = line->l; i <= x; i++) {
-		line->d[i].data = ' ';
-		line->d[i].color = color;
-		line->d[i].attr = 0;
+		memcpy(&line->d[i], &schar, sizeof(struct screen_char));
 	}
 
 	line->l = i;
@@ -248,12 +248,14 @@ set_hchars(struct part *part, int x, int y, int xl,
 	if_assert_failed return;
 
 	if (bgcolor) {
-		unsigned char color = find_nearest_color(*bgcolor, 8) << 3;
+		struct screen_char schar;
+
+		schar.color = find_nearest_color(*bgcolor, 8) << 3;
+		schar.data = data;
+		schar.attr = attr;
 
 		for (; xl; xl--, x++) {
-			POS(x, y).data = data;
-			POS(x, y).attr = attr;
-			POS(x, y).color = color;
+			memcpy(&POS(x, y), &schar, sizeof(struct screen_char));
 		}
 	} else {
 		for (; xl; xl--, x++) {

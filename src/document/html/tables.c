@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.236 2004/06/27 09:17:53 zas Exp $ */
+/* $Id: tables.c,v 1.237 2004/06/27 09:21:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1544,8 +1544,8 @@ get_frame_pos(int a, int a_size, int b, int b_size)
 	return a + 1 + (a_size + 2) * b;
 }
 
-#define H_FRAME_POSITION(tt, xx, yy) frame[0][get_frame_pos(xx, (tt)->cols, yy, (tt)->rows)]
-#define V_FRAME_POSITION(tt, xx, yy) frame[1][get_frame_pos(yy, (tt)->rows, xx, (tt)->cols)]
+#define H_FRAME_POSITION(table, col, row) frame[0][get_frame_pos(col, (table)->cols, row, (table)->rows)]
+#define V_FRAME_POSITION(table, col, row) frame[1][get_frame_pos(row, (table)->rows, col, (table)->cols)]
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,

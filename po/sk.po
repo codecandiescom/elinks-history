@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-01-08 23:00+0100\n"
-"PO-Revision-Date: 2004-01-08 18:52+0100\n"
+"PO-Revision-Date: 2004-01-14 13:23+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -862,15 +862,15 @@ msgstr "Zapísanie konfigurácie prebehlo úspe¹ne"
 #: src/config/dialogs.c:68
 #, c-format
 msgid "Options were saved successfully to config file %s."
-msgstr ""
+msgstr "Nastavenia boli úspe¹ne zapísané do konfiguraèného súboru %s."
 
 #: src/config/dialogs.c:72
 msgid "Do not show anymore"
-msgstr ""
+msgstr "U¾ neukazova»"
 
 #: src/config/dialogs.c:131
 msgid "(expand by pressing space)"
-msgstr "(rozbalí¹ stlaèením medzery)"
+msgstr "(rozbali» stlaèením medzery)"
 
 #: src/config/dialogs.c:134 src/config/dialogs.c:296
 msgid "N/A"
@@ -934,7 +934,7 @@ msgstr "Neplatná kombinácia kláves."
 
 #: src/config/dialogs.c:501
 msgid "Keystroke already used"
-msgstr ""
+msgstr "Kombinácia kláves je u¾ pou¾itá"
 
 #: src/config/dialogs.c:502
 #, c-format
@@ -942,6 +942,8 @@ msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
 "Are you sure you want to replace it?"
 msgstr ""
+"Kombinácia kláves \"%s\" je v súèasnosti pou¾ívaná pre akciu \"%s\".\n"
+"Naozaj ju chce¹ zmeni»?"
 
 #: src/config/dialogs.c:529
 msgid "Need to select a keymap."
@@ -1053,7 +1055,7 @@ msgstr "Otvori» správcu ke¹e"
 
 #: src/config/kbdbind.c:404
 msgid "Free unused cache entries"
-msgstr ""
+msgstr "Uvoµni» nepou¾ívané polo¾ky ke¹e"
 
 #: src/config/kbdbind.c:405
 msgid "Cancel current state"
@@ -1301,12 +1303,11 @@ msgstr "Znovu natiahnu» súèasnú stránku"
 
 #: src/config/kbdbind.c:470
 msgid "Reset form items to their initial values"
-msgstr ""
+msgstr "Resetova» formulár na zaèiatoèné hodnoty"
 
 #: src/config/kbdbind.c:471
-#, fuzzy
 msgid "Show information about the currently used resources"
-msgstr "Zobrazi» informácie o aktuálnej stránke"
+msgstr "Zobrazi» informácie o práve pou¾ívaných zdrojoch"
 
 #: src/config/kbdbind.c:472
 msgid "Attempt to resume download of the current link"
@@ -1370,14 +1371,12 @@ msgid "Show terminal options dialog"
 msgstr "Nastavenie terminálu"
 
 #: src/config/kbdbind.c:487
-#, fuzzy
 msgid "Submit form"
 msgstr "Odosla» formulár"
 
 #: src/config/kbdbind.c:488
-#, fuzzy
 msgid "Submit form and reload"
-msgstr "Odosla» formulár a obnovi» výslednú stránku"
+msgstr "Odosla» formulár a obnovi» stránku"
 
 #: src/config/kbdbind.c:489 src/terminal/tab.c:190 src/terminal/tab.c:226
 msgid "Close tab"
@@ -1713,7 +1712,7 @@ msgstr "©tandardná veµkos» vstupného políèka formulára"
 
 #: src/config/options.inc:148
 msgid "Default form input size if none is specified."
-msgstr ""
+msgstr "©tandardná veµkos» textového políèka formuláru."
 
 #: src/config/options.inc:151
 msgid "Images"
@@ -1857,13 +1856,12 @@ msgid "Enable color"
 msgstr "Zapnú» farby"
 
 #: src/config/options.inc:213
-#, fuzzy
 msgid ""
 "Enable use of the active link background and text color\n"
 "settings instead of the link colors from the document."
 msgstr ""
 "Zapnú» pou¾itie farby textu a pozadia aktívneho odkazu podµa\n"
-"nastavenia v prehliadaèi namiesto browse.links podµa dokumentu."
+"nastavenia v prehliadaèi namiesto podµa dokumentu."
 
 #: src/config/options.inc:216
 msgid "Bold"
@@ -1906,22 +1904,20 @@ msgid "Display numbers next to the links."
 msgstr "Zobrazova» èísla pri odkazoch."
 
 #: src/config/options.inc:241
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the document.browse.search.wraparound option instead."
 msgstr ""
 "Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
-"Prosím pou¾ite rad¹ej voµbu mime.default_type."
+"Prosím pou¾ite rad¹ej voµbu document.browse.search.wraparound."
 
 #: src/config/options.inc:246
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the document.browse.search.show_not_found option instead."
 msgstr ""
 "Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
-"Prosím pou¾ite rad¹ej voµbu mime.default_type."
+"Prosím pou¾ite rad¹ej voµbu document.browse.search.show_not_found."
 
 #: src/config/options.inc:249
 msgid "Use tabindex"
@@ -2025,21 +2021,20 @@ msgstr ""
 "zaèiatok dokumentu."
 
 #: src/config/options.inc:299
-#, fuzzy
 msgid "Wraparound"
-msgstr "Cykli» interaktívne vyhµadávanie"
+msgstr "Cykli»"
 
 #: src/config/options.inc:301
 msgid "Wrap around when searching. Currently only used for typeahead."
 msgstr ""
+"Ak vyhµadávanie dosiahne koniec dokumentu, pokraèova» od zaèiatku.\n"
+"Zatiaµ pou¾ívané iba pre interaktívne vyhµadávanie."
 
 #: src/config/options.inc:303
-#, fuzzy
 msgid "Show not found"
-msgstr "Nena¹iel som server"
+msgstr "Akcia pri nenájdení výskytu"
 
 #: src/config/options.inc:305
-#, fuzzy
 msgid ""
 "How to handle errors when nothing is matched.\n"
 "Currently only used for typeahead:\n"
@@ -2047,7 +2042,8 @@ msgid ""
 "1 means beep the terminal\n"
 "2 means pop up message box"
 msgstr ""
-"Èo robi» ak nebol nájdený ¾iadny výskyt:\n"
+"Èo robi» ak nebol nájdený ¾iadny výskyt.\n"
+"Zatiaµ iba pre interaktívne vyhµadávanie:\n"
 "0 = nerob niè\n"
 "1 = pípni na temináli\n"
 "2 = zobraz chybovú správu"
@@ -2065,7 +2061,6 @@ msgid "Document meta refresh"
 msgstr "Automatické obnovovanie dokumentov"
 
 #: src/config/options.inc:318
-#, fuzzy
 msgid ""
 "Automatically follow document-specified refresh directives ('<meta>\n"
 "refresh' tags). Web-page authors use these to instruct the browser\n"
@@ -2075,14 +2070,16 @@ msgid ""
 "number of seconds a refresh will take."
 msgstr ""
 "Automaticky nasledova» obnovovacie direktívy ¹pecifikované v dokumente\n"
-"('<meta> refresh' tagy). Autori webových stránok pou¾ívajú tento\n"
-"mechanizmus na automatické znovunatiahnutie dokumentu v danom intervale\n"
-"alebo na presmerovanie na inú stránku."
+"('<meta> refresh' tagy). Autori webových stránok pou¾ívajú tento mechanizmus\n"
+"na automatické znovunatiahnutie dokumentu v danom intervale alebo na\n"
+"presmerovanie na inú stránku. Nezávisle na nastavení je cieµová adresa\n"
+"k dispozícii aj ako odkaz na zaèiatku dokumentu. Pokiaµ chcete zdola\n"
+"obmedzi» minimálny interval pre obnovovanie dokumentu, pou¾ite voµbu\n"
+"document.browse.minimum_refresh_time."
 
 #: src/config/options.inc:325
-#, fuzzy
 msgid "Document meta refresh minimum time"
-msgstr "Automatické obnovovanie dokumentov"
+msgstr "Minimálna prestávka pre automatické obnovovanie"
 
 #: src/config/options.inc:327
 msgid ""
@@ -2091,6 +2088,10 @@ msgid ""
 "unchanged. It can fix going back in history for some sites that\n"
 "use refreshing with zero values."
 msgstr ""
+"Minimálny èas v milisekundách, ktorý by mal ubehnú» pred automatickým\n"
+"obnovením stránky. Ak nastavený na nulu, tak sa pou¾ije èas nastavený v\n"
+"dokumente. Táto voµba mô¾e pomôc» pri pohybe spä» v histórii pre niektoré\n"
+"stránky pou¾ívajúce obnovovanie s nulovým èasom."
 
 #: src/config/options.inc:332
 msgid "Scroll margin"
@@ -2296,6 +2297,16 @@ msgid ""
 "  break transparency, if you have it enabled for your terminal\n"
 "  and on your terminal."
 msgstr ""
+"Pou¾íva» farby nastavené v dokumente:\n"
+"0  pou¾i» v¾dy ¹tandardné nastavenie\n"
+"1  pou¾i» farby nastavené v dokumente, okrem pozadia\n"
+"2  pou¾i» farby nastavené v dokumente, vrátane pozadia.\n"
+"   To èasto vyzerá veµmi pôsobivo, ale niektoré stránky vyzerajú naopak\n"
+"   veµmi ¹karedo (bohu¾iaµ vrátane slashdotu (ale skúste si nastavi»\n"
+"   vo svojom profile aby zobrazoval 'plain' verziu, a celý svet bude\n"
+"   vyzera» nejako kraj¹ie)). Uvedomte si tie¾, ¾e pokiaµ pozadie nie\n"
+"   je èierne, tak to pokazí priehµadnos», pokiaµ ju máte na svojom\n"
+"   termináli nastavenú."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:467
@@ -2526,11 +2537,11 @@ msgstr "Zobrazi» URI v dokumente ako odkazy."
 
 #: src/config/options.inc:583
 msgid "Compress empty lines"
-msgstr ""
+msgstr "Zlúèi» prázdne riadky"
 
 #: src/config/options.inc:585
 msgid "Compress successive empty lines to only one in displayed text."
-msgstr ""
+msgstr "Zlúèi» niekoµko za sebou idúcich prázdnych riadkov do jedného."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:591
@@ -2946,6 +2957,12 @@ msgid ""
 "%s in the string means subject (?subject=<this>)\n"
 "%u in the string means the whole URL"
 msgstr ""
+"Ovládaè (externý program) pre tento protokol a systém.\n"
+"%h v re»azci znamená meno hostiteµa (alebo emailovú adresu)\n"
+"%p v re»azci znamená port\n"
+"%d v re»azci znamená cestu (v¹etko za èíslom portu)\n"
+"%s v re»azci znamená predmet (?subject=<toto>)\n"
+"%u v re»azci znamená celé URL"
 
 #: src/config/options.inc:817
 msgid "No-proxy domains"
@@ -3046,6 +3063,9 @@ msgid ""
 "This is particularly useful when we have a block cursor,\n"
 "so that inversed text is displayed correctly."
 msgstr ""
+"Presunú» kurzor do pravého dolného rohu po skonèení vykresµovania obrazovky.\n"
+"To je zvlá¹» u¾itoèné, pokiaµ kurzor zakrýva znak pod ním, lebo to zlep¹í\n"
+"èitateµnos» textu, ktorý by ináè bol pod kurzorom.."
 
 #: src/config/options.inc:868
 msgid "Color mode"
@@ -3059,10 +3079,15 @@ msgid ""
 "1 is 16 color mode, uses the common ANSI colors\n"
 "2 is 256 color mode, requires that xterm-256color TERM is used\n"
 msgstr ""
+"Farebný re¾im urèuje, aké farby sú pou¾ívané a ako sú nastavované na\n"
+"va¹om termináli. Farebné re¾imy sú:\n"
+"0 = monochromatický re¾im; sú pou¾ité iba dve farby\n"
+"1 = 16 farieb; vyu¾íva farby podµa ANSI ¹pecifikácie\n"
+"2 = 256 farieb; vy¾aduje terminál xterm-256color\n"
 
 #: src/config/options.inc:876
 msgid "Enable transparency"
-msgstr ""
+msgstr "Povoli» priehµadnos»"
 
 #: src/config/options.inc:878
 msgid ""
@@ -3072,14 +3097,18 @@ msgid ""
 "it will be visible in ELinks as well. Note that this option makes\n"
 "sense only when colors are enabled."
 msgstr ""
+"Urèuje, aby nebolo nastavené pozadie, pokiaµ by malo by» èierne. To je\n"
+"zvlá¹» u¾itoèné, ak máme terminál (typický v nejakom okennom prostredí)\n"
+"s obrázkom ako pozadie alebo s priehµadným pozadím - bude viditeµné aj\n"
+"v ELinkse. Samozrejme táto voµba má zmysel iba ak je zapnutá podpora farieb."
 
 #: src/config/options.inc:884
 msgid "Use underline"
-msgstr ""
+msgstr "Pou¾íva» podèiarkovanie"
 
 #: src/config/options.inc:886
 msgid "If we should use underline or enhance the color instead."
-msgstr ""
+msgstr "Pou¾íva» buï podèiarkovanie alebo zvýraznenie pou¾itej farby."
 
 #: src/config/options.inc:890
 msgid "Codepage of charset used for displaying content on terminal."
@@ -3088,7 +3117,7 @@ msgstr "Kódová stránka znakovej sady pou¾itej na zobrazovanie na terminále."
 #. Keep options in alphabetical order.
 #: src/config/options.inc:896
 msgid "User interface"
-msgstr ""
+msgstr "U¾ívateµské rozhranie"
 
 #: src/config/options.inc:898
 msgid "User interface options."
@@ -3100,7 +3129,7 @@ msgstr "Nastavenie farieb"
 
 #: src/config/options.inc:904
 msgid "Default user interface color settings."
-msgstr ""
+msgstr "©tandardné nastavenie farieb u¾ívateµského rozhrania."
 
 #: src/config/options.inc:931
 msgid "Color terminals"
@@ -3232,14 +3261,16 @@ msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.color.dialog.generic.background instead."
 msgstr ""
-"Táto voµba je odsúdena na zánik a bude èoskoro zru¹ená. Prosím\n"
-"pou¾ite rad¹ej voµbu ui.colors.color.dialog.generic.background."
+"Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
+"Prosím pou¾ite rad¹ej voµbu ui.colors.color.dialog.generic.background."
 
 #: src/config/options.inc:1011
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.mono.dialog.generic.background instead."
 msgstr ""
+"Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
+"Prosím pou¾ite rad¹ej ui.colors.mono.dialog.generic.background."
 
 #: src/config/options.inc:1014
 msgid "Generic"
@@ -3463,25 +3494,27 @@ msgstr "Farba zvýraznenia vyhµadaných re»azcov."
 #. Keep options in alphabetical order.
 #: src/config/options.inc:1133
 msgid "Dialog settings"
-msgstr ""
+msgstr "Dialógové okná"
 
 #: src/config/options.inc:1135
 msgid "Dialogs-specific appearance and behaviour settings."
-msgstr ""
+msgstr "Nastavenie vzhµadu a správania dialógových okien."
 
 #: src/config/options.inc:1137
 msgid "Minimal height of listbox widget"
-msgstr ""
+msgstr "Minimálna vý¹ka listboxu"
 
 #: src/config/options.inc:1139
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
+"Minimálna vý¹ka listboxu (pou¾íva sa napr. na zálo¾ky alebo globálnu\n"
+"históriu)."
 
 #: src/config/options.inc:1142
 msgid "Drop shadows"
-msgstr ""
+msgstr "Tiene"
 
 #: src/config/options.inc:1144
 msgid ""
@@ -3489,6 +3522,9 @@ msgid ""
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
 "also want to eliminate the wide borders by adjusting setup.h."
 msgstr ""
+"Zobrazova» tiene dialógových okien (tiene sú nepriehµadné, ich farbu je ale\n"
+"mo¾né upravi» voµbami ui.colors.*.dialog.shadow). Mo¾no budete chcie» zú¾i»\n"
+"okraje dialógových okien upravením setup.h."
 
 #: src/config/options.inc:1148
 msgid "Underline hotkeys"
@@ -3499,6 +3535,8 @@ msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
+"Zapnú» podèiarkovanie horúcich kláves v menu aby boli viac viditeµné.\n"
+"Funguje to ale iba ak terminál podèiarkovanie podporuje."
 
 #: src/config/options.inc:1154
 msgid "Timer options"
@@ -3660,9 +3698,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:1249
-#, fuzzy
 msgid "Homepage URI"
-msgstr "Kódová stránka"
+msgstr ""
 
 #: src/config/options.inc:1251
 msgid ""
@@ -4045,9 +4082,8 @@ msgid "Go for~ward"
 msgstr ""
 
 #: src/dialogs/menu.c:188 src/dialogs/menu.c:249
-#, fuzzy
 msgid "Bookm~ark document"
-msgstr "®iadny dokument"
+msgstr ""
 
 #: src/dialogs/menu.c:192 src/dialogs/menu.c:238
 msgid "~Reload"
@@ -4074,9 +4110,8 @@ msgid "C~lose all tabs but the current"
 msgstr ""
 
 #: src/dialogs/menu.c:212
-#, fuzzy
 msgid "B~ookmark all tabs"
-msgstr "Zálo¾ky"
+msgstr ""
 
 #: src/dialogs/menu.c:233
 msgid "Open new ~tab"
@@ -4923,33 +4958,40 @@ msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.enable option instead."
 msgstr ""
+"Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
+"Prosím pou¾ite rad¹ej voµbu mime.mailcap.enable."
 
 #: src/mime/backend/mailcap.c:140
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.path option instead."
 msgstr ""
+"Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
+"Prosím pou¾ite rad¹ej voµbu mime.mailcap.path."
 
 #: src/mime/backend/mailcap.c:145
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.ask option instead."
 msgstr ""
+"Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
+"Prosím pou¾ite rad¹ej voµbu mime.mailcap.ask."
 
 #: src/mime/backend/mailcap.c:150
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use mime.mailcap.description option instead."
 msgstr ""
 "Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
-"Prosím pou¾ite rad¹ej voµbu mime.default_type."
+"Prosím pou¾ite rad¹ej voµbu mime.mailcap.description."
 
 #: src/mime/backend/mailcap.c:155
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
 msgstr ""
+"Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
+"Prosím pou¾ite rad¹ej voµbu mime.mailcap.prioritize."
 
 #. name:
 #: src/mime/backend/mimetypes.c:49 src/mime/backend/mimetypes.c:291

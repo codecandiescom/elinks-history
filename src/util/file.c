@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.31 2004/07/02 12:22:36 pasky Exp $ */
+/* $Id: file.c,v 1.32 2004/07/02 12:23:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,6 @@ file_can_read(const unsigned char *filename)
 #endif
 }
 
-/* Returns non-zero if filename is a directory, 0 else. */
 int
 file_is_dir(const unsigned char *filename)
 {

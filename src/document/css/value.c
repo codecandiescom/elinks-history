@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.13 2004/01/18 14:22:08 pasky Exp $ */
+/* $Id: value.c,v 1.14 2004/01/18 14:23:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,7 +196,8 @@ static css_value_parser_t css_value_parsers[CSS_DV_LAST] = {
 };
 
 int
-css_parse_value(enum css_property_value_type valtype, union css_property_value *value,
+css_parse_value(enum css_property_value_type valtype,
+		union css_property_value *value,
 		unsigned char **string)
 {
 	assert(string && value && valtype < CSS_DV_LAST);

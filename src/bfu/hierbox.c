@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.186 2004/07/22 02:06:02 pasky Exp $ */
+/* $Id: hierbox.c,v 1.187 2004/08/15 11:56:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -638,15 +638,19 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 
 static void
 do_delete_item(struct listbox_item *item, struct listbox_context *info,
-	       int last, int delete)
+	       int last)
 {
 	struct listbox_ops *ops = info->box->ops;
 
 	assert(item);
 
-	if ((!delete && !ops->can_delete(item)) || ops->is_used(item)) {
-		print_delete_error(item, info->term, ops,
-				   delete ? DELETE_LOCKED : DELETE_IMPOSSIBLE);
+	if (!ops->can_delete(item)) {
+		print_delete_error(item, info->term, ops, DELETE_IMPOSSIBLE);
+		return;
+	}
+
+	if (ops->is_used(item)) {
+		print_delete_error(item, info->term, ops, DELETE_LOCKED);
 		return;
 	}
 
@@ -663,7 +667,7 @@ delete_marked(struct listbox_item *item, void *data_, int *offset)
 		if (!context->item) {
 			context->item = item;
 		} else {
-			do_delete_item(item, context, 0, 0);
+			do_delete_item(item, context, 0);
 		}
 
 		return 1;
@@ -694,7 +698,7 @@ push_ok_delete_button(void *context_)
 	}
 
 	/* Delete the last one (traversal should save one to delete) */
-	do_delete_item(context->item, context, 1, 0);
+	do_delete_item(context->item, context, 1);
 
 	/* If removing the last item in a folder move focus to previous item in
 	 * the folder or the root. */
@@ -811,7 +815,7 @@ delete_unused(struct listbox_item *item, void *data_, int *offset)
 
 	if (context->box->ops->is_used(item)) return 0;
 
-	do_delete_item(item, context, 0, 0);
+	do_delete_item(item, context, 0);
 	return 1;
 }
 

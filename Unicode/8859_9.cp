@@ -1,5 +1,5 @@
 ISO 8859-9
-"ISO-8895-9", "iso8859-9", "8859-9" 
+"ISO-8859-9", "iso8859-9", "8859-9", "ISO_8859-9:1989", "ISO-IR-148", "LATIN5", "L5", "csISOLatin5", "ISO8859_9"
 #
 #	Name:             ISO/IEC 8859-9:1999 to Unicode
 #	Unicode version:  3.0

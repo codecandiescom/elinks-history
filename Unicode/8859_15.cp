@@ -1,5 +1,5 @@
 ISO 8859-15
-"ISO-8859-15", "iso8859-15", "8859-15", "latin9", "l9", "il9", "latin0", "l0", "il0"
+"ISO-8859-15", "iso8859-15", "8859-15", "latin9", "l9", "il9", "latin0", "l0", "il0", "ISO_8859-15", "ISO_8859-15:1998", "ISO-IR-203"
 0x20	0x0020	#SPACE
 0x21	0x0021	#EXCLAMATION MARK
 0x22	0x0022	#QUOTATION MARK

@@ -1,5 +1,5 @@
 ISO 8859-8
-"ISO-8859-8", "8859-8"
+"ISO-8859-8", "8859-8", "ISO_8859-8:1988", "ISO-IR-138", "HEBREW", "csISOLatinHebrew", "ISO8859-8", "ISO8859_8"
 #
 #	Name:             ISO/IEC 8859-8:1999 to Unicode
 #	Unicode version:  3.0

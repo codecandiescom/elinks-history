@@ -1,5 +1,5 @@
 CP 850
-"cp850", "850"
+"cp850", "850", "IBM850", "csPC850Multilingual"
 #
 #    Name:     cp850_DOSLatin1 to Unicode table
 #    Unicode version: 2.0

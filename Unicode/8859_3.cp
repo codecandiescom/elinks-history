@@ -1,5 +1,5 @@
 ISO 8859-3
-"ISO-8859-3", "8859-3"
+"ISO-8859-3", "8859-3", "ISO_8859-3:1988", "iso-ir-109", "ISO_8859-3", "latin3", "l3", "csISOLatin3", "ISO8859-3", "ISO8859_3"
 #
 #	Name:             ISO/IEC 8859-3:1999 to Unicode
 #	Unicode version:  3.0

@@ -1,5 +1,5 @@
 CP 866
-"cp866", "866"
+"cp866", "866", "IBM866", "csIBM866"
 #
 #    Name:     cp866_DOSCyrillicRussian to Unicode table
 #    Unicode version: 2.0

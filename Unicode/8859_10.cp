@@ -1,5 +1,5 @@
 ISO 8859-10
-"ISO-8859-10", "8859-10"
+"ISO-8859-10", "8859-10", "ISO_8859-10:1992", "ISO-IR-157", "LATIN6", "L6", "csISOLatin6", "ISO8859-10"
 #
 #	Name:             ISO/IEC 8859-10:1998 to Unicode
 #	Unicode version:  3.0

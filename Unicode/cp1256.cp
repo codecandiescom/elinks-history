@@ -1,5 +1,5 @@
 Window$ 1256
-"windows-1256", "1256", "cp1256"
+"windows-1256", "1256", "cp1256", "MS-ARAB"
 #
 #    Name:     cp1256 to Unicode table
 #    Unicode version: 2.1

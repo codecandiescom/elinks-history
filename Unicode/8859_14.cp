@@ -1,5 +1,5 @@
 ISO 8859-14
-"ISO-8859-14", "8859-14"
+"ISO-8859-14", "8859-14", "ISO_8859-14", "ISO_8859-14:1998", "ISO-IR-199", "LATIN8", "L8"
 #
 #	Name:             ISO/IEC 8859-14:1998 to Unicode
 #	Unicode version:  3.0

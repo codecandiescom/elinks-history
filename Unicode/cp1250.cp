@@ -1,5 +1,5 @@
 Window$ 1250
-"windows-1250", "windows1250", "1250", "cp1250"
+"windows-1250", "windows1250", "1250", "cp1250", "MS-EE"
 #
 #    Name:     cp1250 to Unicode table
 #    Unicode version: 2.0

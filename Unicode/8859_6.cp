@@ -1,5 +1,5 @@
 ISO 8859-6
-"ISO-8859-6", "8859-6"
+"ISO-8859-6", "8859-6", "ISO_8859-6", "ISO_8859-6:1987", "ISO-IR-127", "ECMA-114", "ASMO-708", "ARABIC", "csISOLatinArabic", "ISO8859-6", "ISO8859_6"
 #
 #	Name:             ISO 8859-6:1999 to Unicode
 #	Unicode version:  3.0

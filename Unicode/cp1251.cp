@@ -1,5 +1,5 @@
 Window$ 1251
-"windows-1251", "windows1251", "1251", "cp1251"
+"windows-1251", "windows1251", "1251", "cp1251", "MS-CYRL"
 
 0x20	0x0020	# SPACE
 0x21	0x0021	# EXCLAMATION MARK

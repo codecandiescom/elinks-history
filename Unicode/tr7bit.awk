@@ -24,7 +24,7 @@ function hex2dec(xx) {
 	}
 	return nn;
 }
-		
+
 /^U/{
 	gsub("\\\\", "\\\\");
 	split(substr($0, 3), z, ":")

@@ -1,5 +1,5 @@
 CP 852
-"cp852", "852"
+"cp852", "852", "csPCp852"
 #
 #    Name:     cp852_DOSLatin2 to Unicode table
 #    Unicode version: 2.0

@@ -1,5 +1,5 @@
 KOI8-R
-"koi8-r"
+"koi8-r", "csKOI8R"
 
 0x20	0x0020	# SPACE
 0x21	0x0021	# EXCLAMATION MARK

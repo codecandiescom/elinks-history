@@ -1,5 +1,5 @@
 ISO 8859-16
-"ISO-8859-16", "iso8859-16", "8859-16", "latin10", "l10", "il10"
+"ISO-8859-16", "iso8859-16", "8859-16", "latin10", "l10", "il10", "ISO_8859-16", "ISO_8859-16:2000", "ISO-IR-226", "ISO_8859-16:2001"
 #       Name:             ISO 8859-16:2001 to Unicode
 #       Date:             2001 Octomber 10
 #       Authors:          Ionel Mugurel Ciobica <I.M.Ciobica@TUe.nl>

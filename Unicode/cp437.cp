@@ -1,5 +1,5 @@
 CP 437
-"cp437", "437"
+"cp437", "437", "IBM437", "csPC8CodePage437"
 #
 #    Name:     cp437_DOSLatinUS to Unicode table
 #    Unicode version: 2.0

@@ -1,5 +1,5 @@
 ISO 8859-5
-"ISO-8895-5", "iso8859-5", "8859-5"
+"ISO-8895-5", "iso8859-5", "8859-5", "ISO_8859-5:1988", "iso-ir-144", "ISO_8859-5", "cyrillic", "csISOLatinCyrillic", "ISO8859_5"
 #
 #	Name:             ISO 8859-5:1999 to Unicode
 #	Unicode version:  3.0

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.18 2003/10/17 14:11:38 jonas Exp $ */
+/* $Id: vs.c,v 1.19 2003/10/17 15:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,7 +110,7 @@ next_frame(struct session *ses, int p)
 	int n;
 
 	if (!have_location(ses)
-	    || (ses->screen && !document_has_frames(ses->screen->document)))
+	    || (ses->doc_view && !document_has_frames(ses->doc_view->document)))
 		return;
 
 	vs = &cur_loc(ses)->vs;

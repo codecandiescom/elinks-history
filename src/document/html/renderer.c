@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.295 2003/10/17 13:20:55 jonas Exp $ */
+/* $Id: renderer.c,v 1.296 2003/10/17 15:31:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1748,10 +1748,10 @@ html_interpret(struct session *ses)
 	struct document_view *current_doc_view = NULL;
 	struct view_state *l = NULL;
 
-	if (!ses->screen) {
-		ses->screen = mem_calloc(1, sizeof(struct document_view));
-		if (!ses->screen) return;
-		ses->screen->search_word = &ses->search_word;
+	if (!ses->doc_view) {
+		ses->doc_view = mem_calloc(1, sizeof(struct document_view));
+		if (!ses->doc_view) return;
+		ses->doc_view->search_word = &ses->search_word;
 	}
 
 	if (have_location(ses)) l = &cur_loc(ses)->vs;
@@ -1774,11 +1774,11 @@ html_interpret(struct session *ses)
 
 	foreach (doc_view, ses->scrn_frames) doc_view->used = 0;
 
-	if (l) cached_format_html(l, ses->screen, &o);
+	if (l) cached_format_html(l, ses->doc_view, &o);
 
-	if (document_has_frames(ses->screen->document)) {
+	if (document_has_frames(ses->doc_view->document)) {
 		current_doc_view = current_frame(ses);
-		format_frames(ses, ses->screen->document->frame_desc, &o, 0);
+		format_frames(ses, ses->doc_view->document->frame_desc, &o, 0);
 	}
 
 	foreach (doc_view, ses->scrn_frames) {

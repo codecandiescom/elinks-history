@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.139 2003/10/17 13:13:20 jonas Exp $ */
+/* $Id: menu.c,v 1.140 2003/10/17 15:31:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,7 +340,7 @@ menu_header_info(struct terminal *term, void *ddd, struct session *ses)
 static inline void
 menu_toggle(struct terminal *term, void *ddd, struct session *ses)
 {
-	toggle(ses, ses->screen, 0);
+	toggle(ses, ses->doc_view, 0);
 }
 
 static void

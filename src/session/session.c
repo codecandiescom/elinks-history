@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.175 2003/10/17 15:08:27 jonas Exp $ */
+/* $Id: session.c,v 1.176 2003/10/17 15:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,8 +133,8 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
 	int tabs_cnt = number_of_tabs(ses->tab->term);
 
-	if (!doo && ses->screen && ses->screen->document)
-		doo = &ses->screen->document->opt;
+	if (!doo && ses->doc_view && ses->doc_view->document)
+		doo = &ses->doc_view->document->opt;
 
 	if (tabs_count) *tabs_count = tabs_cnt;
 	ses->visible_tabs_bar = (show_tabs_bar > 0) &&
@@ -352,11 +352,11 @@ print_screen_status(struct session *ses)
 		int msglen;
 		static void *last_ses = NULL;
 
-		if (ses->screen && ses->screen->document
-		    && ses->screen->document->title
-		    && ses->screen->document->title[0]) {
+		if (ses->doc_view && ses->doc_view->document
+		    && ses->doc_view->document->title
+		    && ses->doc_view->document->title[0]) {
 			add_to_strn(&msg, " - ");
-			add_to_strn(&msg, ses->screen->document->title);
+			add_to_strn(&msg, ses->doc_view->document->title);
 		}
 
 		msglen = strlen(msg);
@@ -595,10 +595,10 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	struct cache_entry *e;
 	unsigned char *post_char_pos = strchr(url, POST_CHAR);
 
-	if (ses->screen
-	    && ses->screen->document
-	    && ses->screen->document->refresh) {
-		kill_document_refresh(ses->screen->document->refresh);
+	if (ses->doc_view
+	    && ses->doc_view->document
+	    && ses->doc_view->document->refresh) {
+		kill_document_refresh(ses->doc_view->document->refresh);
 	}
 
 	if (!task || !get_opt_int("document.browse.forms.confirm_submit")
@@ -870,7 +870,7 @@ display_timer(struct session *ses)
 
 	ses->display_timer = install_timer(t, (void (*)(void *))display_timer,
 					   ses);
-	load_frames(ses, ses->screen);
+	load_frames(ses, ses->doc_view);
 	process_file_requests(ses);
 }
 
@@ -989,19 +989,19 @@ doc_end_load(struct download *stat, struct session *ses)
 		draw_formatted(ses);
 
 		if (get_opt_bool_tree(cmdline_options, "auto-submit")) {
-			if (!list_empty(ses->screen->document->forms)) {
+			if (!list_empty(ses->doc_view->document->forms)) {
 				get_opt_bool_tree(cmdline_options,
 						  "auto-submit") = 0;
 				submit = 1;
 			}
 		}
 
-		load_frames(ses, ses->screen);
+		load_frames(ses, ses->doc_view);
 		process_file_requests(ses);
 
-		if (ses->screen->document->refresh
+		if (ses->doc_view->document->refresh
 		    && get_opt_bool("document.browse.refresh")) {
-			start_document_refresh(ses->screen->document->refresh,
+			start_document_refresh(ses->doc_view->document->refresh,
 					       ses);
 		}
 
@@ -1018,11 +1018,11 @@ doc_end_load(struct download *stat, struct session *ses)
 
 #ifdef GLOBHIST
 	add_global_history_item(cur_loc(ses)->vs.url,
-				ses->screen->document->title, time(NULL));
+				ses->doc_view->document->title, time(NULL));
 #endif
 
 	if (submit) {
-		goto_link(get_form_url(ses, ses->screen, fc), fc->target, ses,
+		goto_link(get_form_url(ses, ses->doc_view, fc), fc->target, ses,
 			  1);
 	}
 }
@@ -1370,9 +1370,9 @@ destroy_session(struct session *ses)
 	destroy_downloads(ses);
 	abort_loading(ses, 0);
 	free_files(ses);
-	if (ses->screen) {
-		detach_formatted(ses->screen);
-		mem_free(ses->screen);
+	if (ses->doc_view) {
+		detach_formatted(ses->doc_view);
+		mem_free(ses->doc_view);
 	}
 
 	foreach (doc_view, ses->scrn_frames)
@@ -1669,7 +1669,7 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			if (!ses) break;
 			html_interpret(ses);
 			draw_formatted(ses);
-			load_frames(ses, ses->screen);
+			load_frames(ses, ses->doc_view);
 			process_file_requests(ses);
 			print_screen_status(ses);
 			break;
@@ -1821,7 +1821,7 @@ static void
 do_document_refresh(void *data)
 {
 	struct session *ses = data;
-	struct document_refresh *refresh = ses->screen->document->refresh;
+	struct document_refresh *refresh = ses->doc_view->document->refresh;
 
 	assert(refresh);
 

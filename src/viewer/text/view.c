@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.218 2003/10/17 14:10:51 zas Exp $ */
+/* $Id: view.c,v 1.219 2003/10/17 15:31:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -370,10 +370,10 @@ draw_frames(struct session *ses)
 	int *l;
 	int n, i, d, more;
 
-	assert(ses && ses->screen && ses->screen->document);
+	assert(ses && ses->doc_view && ses->doc_view->document);
 	if_assert_failed return;
 
-	if (!document_has_frames(ses->screen->document)) return;
+	if (!document_has_frames(ses->doc_view->document)) return;
 	n = 0;
 	foreach (doc_view, ses->scrn_frames) doc_view->xl = doc_view->yl = -1, n++;
 	l = &cur_loc(ses)->vs.current_link;
@@ -404,17 +404,17 @@ draw_formatted(struct session *ses)
 	if (ses->tab != get_current_tab(ses->tab->term))
 		return;
 
-	if (!ses->screen || !ses->screen->document) {
+	if (!ses->doc_view || !ses->doc_view->document) {
 		/*internal("document not formatted");*/
 		draw_area(ses->tab->term, 0, 1, ses->tab->term->x,
 			  ses->tab->term->y - 2, ' ', 0, NULL);
 		return;
 	}
 
-	if (!ses->screen->vs && have_location(ses))
-		ses->screen->vs = &cur_loc(ses)->vs;
-	ses->screen->xl = ses->screen->yl = -1;
-	draw_doc(ses->tab->term, ses->screen, 1);
+	if (!ses->doc_view->vs && have_location(ses))
+		ses->doc_view->vs = &cur_loc(ses)->vs;
+	ses->doc_view->xl = ses->doc_view->yl = -1;
+	draw_doc(ses->tab->term, ses->doc_view, 1);
 	draw_frames(ses);
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);
@@ -563,10 +563,10 @@ x_end(struct session *ses, struct document_view *doc_view, int a)
 void
 set_frame(struct session *ses, struct document_view *doc_view, int a)
 {
-	assert(ses && ses->screen && doc_view && doc_view->vs);
+	assert(ses && ses->doc_view && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	if (doc_view == ses->screen) return;
+	if (doc_view == ses->doc_view) return;
 	goto_url(ses, doc_view->vs->url);
 }
 
@@ -869,7 +869,7 @@ current_frame(struct session *ses)
 		if (document_has_frames(doc_view->document)) continue;
 		if (!i--) return doc_view;
 	}
-	doc_view = ses->screen;
+	doc_view = ses->doc_view;
 
 	assert(doc_view && doc_view->document);
 	if_assert_failed return NULL;
@@ -1104,7 +1104,7 @@ quit:
 				draw_formatted(ses);
 				goto x;
 			case ACT_TOGGLE_HTML_PLAIN:
-				toggle(ses, ses->screen, 0);
+				toggle(ses, ses->doc_view, 0);
 				goto x;
 			case ACT_TOGGLE_NUMBERED_LINKS:
 				get_opt_int("document.browse.links.numbering") =

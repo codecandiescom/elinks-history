@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.44 2003/09/25 19:37:05 zas Exp $ */
+/* $Id: session.h,v 1.45 2003/10/17 15:31:44 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -103,7 +103,7 @@ struct session {
 	int reloadlevel;
 	int redirect_cnt;
 
-	struct document_view *screen;
+	struct document_view *doc_view;
 	struct list_head scrn_frames; /* -> struct document_view */
 
 	unsigned char *dn_url;

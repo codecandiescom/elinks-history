@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.68 2002/08/27 00:17:23 pasky Exp $ */
+/* $Id: view.c,v 1.69 2002/08/29 23:58:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,6 @@
 #include "config/options.h"
 #include "config/kbdbind.h"
 #include "dialogs/document.h"
-#include "dialogs/globhist.h"
 #include "document/cache.h"
 #include "document/download.h"
 #include "document/dump.h"
@@ -41,6 +40,7 @@
 #include "document/vs.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
+#include "globhist/dialogs.h"
 #include "intl/charsets.h"
 #include "intl/language.h"
 #include "lowlevel/kbd.h"

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.24 2002/08/29 23:26:01 pasky Exp $ */
+/* $Id: globhist.c,v 1.1 2002/08/29 23:58:23 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -18,8 +18,8 @@
 
 #include "bfu/listbox.h"
 #include "config/options.h"
-#include "dialogs/globhist.h"
-#include "document/globhist.h"
+#include "globhist/dialogs.h"
+#include "globhist/globhist.h"
 #include "lowlevel/home.h"
 #include "util/memory.h"
 #include "util/secsave.h"

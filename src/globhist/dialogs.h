@@ -1,7 +1,7 @@
-/* $Id: globhist.h,v 1.3 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: dialogs.h,v 1.1 2002/08/29 23:58:23 pasky Exp $ */
 
-#ifndef EL__DIALOGS_GLOBHIST_H
-#define EL__DIALOGS_GLOBHIST_H
+#ifndef EL__GLOBHIST_DIALOGS_H
+#define EL__GLOBHIST_DIALOGS_H
 
 #include "document/session.h"
 #include "lowlevel/terminal.h"

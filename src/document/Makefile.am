@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.15 2002/06/16 23:38:22 pasky Exp $
+## $Id: Makefile.am,v 1.16 2002/08/29 23:58:22 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -15,8 +15,6 @@ libdocument_a_SOURCES = \
  dump.h \
  history.c \
  history.h \
- globhist.c \
- globhist.h \
  location.c \
  location.h \
  options.c \

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.14 2002/08/08 18:01:46 pasky Exp $
+## $Id: Makefile.am,v 1.15 2002/08/29 23:58:22 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -11,8 +11,6 @@ libdialogs_a_SOURCES = \
  document.h \
  edit.c \
  edit.h \
- globhist.c \
- globhist.h \
  info.c \
  info.h \
  menu.c \

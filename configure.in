@@ -562,6 +562,7 @@ AC_OUTPUT([ \
  src/dialogs/Makefile \
  src/document/Makefile \
  src/document/html/Makefile \
+ src/globhist/Makefile \
  src/intl/Makefile \
  src/lowlevel/Makefile \
  src/lua/Makefile \

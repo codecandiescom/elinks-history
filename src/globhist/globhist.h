@@ -1,7 +1,7 @@
-/* $Id: globhist.h,v 1.7 2002/08/29 23:26:01 pasky Exp $ */
+/* $Id: globhist.h,v 1.1 2002/08/29 23:58:23 pasky Exp $ */
 
-#ifndef EL__DOCUMENT_GLOBHIST_H
-#define EL__DOCUMENT_GLOBHIST_H
+#ifndef EL__GLOBHIST_GLOBHIST_H
+#define EL__GLOBHIST_GLOBHIST_H
 
 #include <time.h>
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.37 2002/08/11 18:25:50 pasky Exp $ */
+/* $Id: parser.c,v 1.38 2002/08/29 23:58:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,13 +19,13 @@
 #include "bfu/menu.h"
 #include "config/options.h"
 #include "config/kbdbind.h"
-#include "document/globhist.h"
 #include "document/session.h"
 #include "document/view.h"
 #include "document/html/colors.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
+#include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "lowlevel/terminal.h"
 #include "protocol/http/header.h"

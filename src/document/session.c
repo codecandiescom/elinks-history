@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.58 2002/08/28 23:55:57 pasky Exp $ */
+/* $Id: session.c,v 1.59 2002/08/29 23:58:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,10 +24,10 @@
 #include "document/location.h"
 #include "document/options.h"
 #include "document/session.h"
-#include "document/globhist.h"
 #include "document/view.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
+#include "globhist/globhist.h"
 #include "intl/language.h"
 #include "lowlevel/home.h"
 #include "lowlevel/sched.h"

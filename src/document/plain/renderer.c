@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.171 2004/12/20 13:40:51 miciah Exp $ */
+/* $Id: renderer.c,v 1.172 2005/01/01 14:38:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,12 +286,9 @@ add_document_line(struct plain_renderer *renderer,
 		next_char = (line_pos + 1 < width) ? line[line_pos + 1]
 						   : '\0';
 
-		if (line_char == ASCII_TAB
-		    && next_char != ASCII_BS) /* Do not expand tabs that
-					       * precede back-spaces;
-					       * this saves the back-space
-					       * code some trouble. */
-		{
+		/* Do not expand tabs that precede back-spaces; this saves the
+		 * back-space code some trouble. */
+		if (line_char == ASCII_TAB && next_char != ASCII_BS) {
 			int tab_width = 7 - ((line_pos + expanded) & 7);
 
 			expanded += tab_width;
@@ -314,11 +311,9 @@ add_document_line(struct plain_renderer *renderer,
 			if (pos > startpos)
 				pos--;  /* Backspace */
 
-			/* Handle x^H_ as _^Hx */
-			if (next_char == '_'
-			    && prev_char != '_') /* No inf. loop
-						  * swapping two underscores */
-			{
+			/* Handle x^H_ as _^Hx, but prevent an infinite loop
+			 * swapping two underscores. */
+			if (next_char == '_'  && prev_char != '_') {
 				/* x^H_ becomes _^Hx */
 				if (line_pos - 1 >= 0)
 					line[line_pos - 1] = next_char;
@@ -332,10 +327,9 @@ add_document_line(struct plain_renderer *renderer,
 			}
 
 			if (expanded - 2 >= 0) {
-				/* Don't count the backspace character
-				 * or the deleted character
-				 * when returning the line's width
-				 * or when expanding tabs */
+				/* Don't count the backspace character or the
+				 * deleted character when returning the line's
+				 * width or when expanding tabs. */
 				expanded -= 2;
 			}
 
@@ -374,11 +368,11 @@ add_document_line(struct plain_renderer *renderer,
 
 			if (document->options.plain_display_links
 			    && isalpha(line_char) && isalpha(next_char)) {
-				/* We only want to check for a URI
-				 * if there are at least two consecutive
-				 * alphabetic characters, or if
-				 * we are at the very start of the line.
-				 * It improves performance a bit. --Zas */
+				/* We only want to check for a URI if there are
+				 * at least two consecutive alphabetic
+				 * characters, or if we are at the very start of
+				 * the line.  It improves performance a bit.
+				 * --Zas */
 				added_chars = print_document_link(renderer,
 								  lineno, line,
 								  line_pos,
@@ -453,8 +447,7 @@ add_document_lines(struct plain_renderer *renderer)
 		int step = 0;
 		int doc_width = int_min(renderer->max_width, length);
 
-		/* End of line detection.
-		 * We handle \r, \r\n and \n types here. */
+		/* End of line detection: We handle \r, \r\n and \n types. */
 		for (width = 0; width < doc_width; width++) {
 			if (source[width] == ASCII_CR)
 				step++;
@@ -476,8 +469,7 @@ add_document_lines(struct plain_renderer *renderer)
 
 		if (only_spaces && step) {
 			if (renderer->compress && was_empty_line) {
-				/* Successive empty lines
-				 * will appear as one. */
+				/* Successive empty lines will appear as one. */
 				length -= step + spaces;
 				source += step + spaces;
 				renderer->lineno--;
@@ -486,8 +478,7 @@ add_document_lines(struct plain_renderer *renderer)
 			}
 			was_empty_line = 1;
 
-			/* No need to keep whitespaces
-			* on an empty line. */
+			/* No need to keep whitespaces on an empty line. */
 			source += spaces;
 			length -= spaces;
 			width -= spaces;

@@ -719,7 +719,11 @@ void draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			break;
 		case FC_SELECT:
 			fixup_select_state(form, fs);
-			s = form->labels[fs->state];
+			if (fs->state < form->nvalues)
+				s = form->labels[fs->state];
+			else
+				/* XXX: when can this happen? --pasky */
+				s = "";
 			sl = s ? strlen(s) : 0;
 			for (i = 0; i < l->n; i++) {
 				x = l->pos[i].x + xp - vx;
@@ -1283,6 +1287,7 @@ void encode_controls(struct list_head *l, unsigned char **data, int *len,
 	foreach(sv, *l) {
 		unsigned char *p = sv->value;
 		struct document_options o;
+		memset(&o, 0, sizeof(o));
 		o.plain = 1;
 		d_opt = &o;
 		if (sv->type == FC_TEXTAREA) p = encode_textarea(sv->value);
@@ -1336,6 +1341,7 @@ void encode_multipart(struct session *ses, struct list_head *l, unsigned char **
 		if (sv->type != FC_FILE) {
 			struct document_options o;
 			
+			memset(&o, 0, sizeof(o));
 			o.plain = 1;
 			d_opt = &o;
 			p = convert_string(convert_table, sv->value, strlen(sv->value));
@@ -1543,8 +1549,11 @@ submit:
 			
 			foreach(fc, f->f_data->forms)
 				if (fc->form_num == link->form->form_num && fc->type == FC_RADIO
-				    && !xstrcmp(fc->name, link->form->name))
-					find_form_state(f, fc)->state = 0;
+				    && !xstrcmp(fc->name, link->form->name)) {
+					struct form_state *ffs = find_form_state(f, fc);
+
+					if (ffs) ffs->state = 0;
+				}
 			fs->state = 1;
 		}
 	} else if (link->type == L_SELECT) {
@@ -2740,7 +2749,9 @@ unsigned char *print_current_linkx(struct f_data_c *fd, struct terminal *term)
 	unsigned char *m;
 	
 	if (!fd) return NULL;
-	if (fd->vs->current_link == -1 || fd->f_data->frame) return NULL;
+	if (fd->vs->current_link == -1
+	    || fd->vs->current_link >= f->f_data->nlinks
+	    || fd->f_data->frame) return NULL;
 	l = &fd->f_data->links[fd->vs->current_link];
 	if (l->type == L_LINK) {
 		if (!l->where && l->where_img) {

@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.11 2003/08/23 18:24:44 jonas Exp $ */
+/* $Id: frames.h,v 1.12 2003/08/25 06:56:06 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -30,10 +30,7 @@ struct frameset_desc {
 /* For struct document */
 struct line {
 	struct screen_char *d;
-
 	int l;
-
-	color_t bgcolor;
 };
 
 enum cp_status {

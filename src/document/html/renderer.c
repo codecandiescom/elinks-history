@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.217 2003/08/24 02:54:38 jonas Exp $ */
+/* $Id: renderer.c,v 1.218 2003/08/25 06:56:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,6 @@ realloc_lines(struct document *document, int y)
 	for (i = document->y; i <= y; i++) {
 		lines[i].l = 0;
 		lines[i].d = NULL;
-		lines[i].bgcolor = par_format.bgcolor;
 	}
 
 	document->y = i;
@@ -148,8 +147,7 @@ realloc_line(struct document *document, int y, int x)
 		line->d = l;
 	}
 
-	line->bgcolor = par_format.bgcolor;
-	color = find_nearest_color(line->bgcolor, 8) << 3;
+	color = find_nearest_color(par_format.bgcolor, 8) << 3;
 
 	for (i = line->l; i <= x; i++) {
 		line->d[i].data = ' ';

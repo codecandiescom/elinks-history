@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.119 2004/01/30 15:15:33 jonas Exp $ */
+/* $Id: scanner.c,v 1.120 2004/02/01 05:52:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ static struct scan_table_info css_scan_table_info[] = {
 	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
 	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
 
-	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
+	SCAN_TABLE_STRING(" \f\n\r\t\v\000", CSS_CHAR_WHITESPACE),
 	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
 	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
 	SCAN_TABLE_STRING(".#@!\"'<-/",	 CSS_CHAR_TOKEN_START),
@@ -92,8 +92,12 @@ struct scanner_info css_scanner_info = {
 };
 
 #define	check_css_table(c, bit)	(css_scanner_info.scan_table[(c)] & (bit))
-#define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
-#define	scan_back_css(s, bit)	while (check_css_table(*(s), bit)) (s)--;
+
+#define	scan_css(scanner, s, bit)					\
+	while ((s) < (scanner)->end && check_css_table(*(s), bit)) (s)++;
+
+#define	scan_back_css(scanner, s, bit)					\
+	while ((s) >= (scanner)->string && check_css_table(*(s), bit)) (s)--;
 
 #define	is_css_ident_start(c)	check_css_table(c, CSS_CHAR_IDENT_START)
 #define	is_css_ident(c)		check_css_table(c, CSS_CHAR_IDENT)
@@ -103,14 +107,17 @@ struct scanner_info css_scanner_info = {
 #define	is_css_token_start(c)	check_css_table(c, CSS_CHAR_TOKEN_START)
 
 
-#define	skip_css(s, skipto)							\
-	while (*(s) && *(s) != (skipto) && check_css_precedence(*(s), skipto)) {\
-		if (*(s) == '"' || *(s) == '\'') {				\
-			unsigned char *end = strchr(s + 1, *(s));		\
-										\
-			if (end) (s) = end;					\
-		}								\
-		(s)++;								\
+#define	skip_css(scanner, s, skipto)					\
+	while (s < (scanner)->end					\
+	       && *(s) != (skipto)					\
+	       && check_css_precedence(*(s), skipto)) {			\
+		if (*(s) == '"' || *(s) == '\'') {			\
+			int size = (scanner)->end - (s);		\
+			unsigned char *end = memchr(s + 1, *(s), size);	\
+									\
+			if (end) (s) = end;				\
+		}							\
+		(s)++;							\
 	}
 
 
@@ -129,7 +136,7 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 		type = first_char;
 
 	} else if (is_css_digit(first_char) || first_char == '.') {
-		scan_css(string, CSS_CHAR_DIGIT);
+		scan_css(scanner, string, CSS_CHAR_DIGIT);
 
 		/* First scan the full number token */
 		if (*string == '.') {
@@ -137,7 +144,7 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 
 			if (is_css_digit(*string)) {
 				type = CSS_TOKEN_NUMBER;
-				scan_css(string, CSS_CHAR_DIGIT);
+				scan_css(scanner, string, CSS_CHAR_DIGIT);
 			}
 		}
 
@@ -153,19 +160,19 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 		} else {
 			unsigned char *ident = string;
 
-			scan_css(string, CSS_CHAR_IDENT);
+			scan_css(scanner, string, CSS_CHAR_IDENT);
 			type = map_scanner_string(scanner, ident, string,
 						  CSS_TOKEN_DIMENSION);
 		}
 
 	} else if (is_css_ident_start(first_char)) {
-		scan_css(string, CSS_CHAR_IDENT);
+		scan_css(scanner, string, CSS_CHAR_IDENT);
 
 		if (*string == '(') {
 			unsigned char *function_end = string + 1;
 
 			/* Make sure that we have an ending ')' */
-			skip_css(function_end, ')');
+			skip_css(scanner, function_end, ')');
 			if (*function_end == ')') {
 				type = map_scanner_string(scanner, token->string,
 						string, CSS_TOKEN_FUNCTION);
@@ -189,8 +196,8 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 					unsigned char *from = string + 1;
 					unsigned char *to = function_end - 1;
 
-					scan_css(from, CSS_CHAR_WHITESPACE);
-					scan_back_css(to, CSS_CHAR_WHITESPACE);
+					scan_css(scanner, from, CSS_CHAR_WHITESPACE);
+					scan_back_css(scanner, to, CSS_CHAR_WHITESPACE);
 
 					if (*from == '"' || *from == '\'') from++;
 					if (*to == '"' || *to == '\'') to--;
@@ -221,7 +228,7 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 		if (is_css_hexdigit(*string)) {
 			int hexdigits;
 
-			scan_css(string, CSS_CHAR_HEX_DIGIT);
+			scan_css(scanner, string, CSS_CHAR_HEX_DIGIT);
 
 			/* Check that the hexdigit sequence is either 3 or 6 chars */
 			hexdigits = string - token->string - 1;
@@ -233,7 +240,7 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 
 		} else if (is_css_ident(*string)) {
 			/* Not *_ident_start() because hashes are #<name>. */
-			scan_css(string, CSS_CHAR_IDENT);
+			scan_css(scanner, string, CSS_CHAR_IDENT);
 			type = CSS_TOKEN_HASH;
 		}
 
@@ -243,13 +250,13 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 			unsigned char *ident = string;
 
 			/* Scan both ident start and ident */
-			scan_css(string, CSS_CHAR_IDENT);
+			scan_css(scanner, string, CSS_CHAR_IDENT);
 			type = map_scanner_string(scanner, ident, string,
 						  CSS_TOKEN_AT_KEYWORD);
 		}
 
 	} else if (first_char == '!') {
-		scan_css(string, CSS_CHAR_WHITESPACE);
+		scan_css(scanner, string, CSS_CHAR_WHITESPACE);
 		if (!strncasecmp(string, "important", 9)) {
 			type = CSS_TOKEN_IMPORTANT;
 			string += 9;
@@ -279,7 +286,7 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 
 			/* Skip anything looking like SGML "<!--" and "-->"
 			 * comments */
-			scan_css(sgml, CSS_CHAR_SGML_MARKUP);
+			scan_css(scanner, sgml, CSS_CHAR_SGML_MARKUP);
 
 			if (sgml - string >= 2
 			    && ((first_char == '<' && *string == '!')
@@ -294,7 +301,7 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 		if (*string == '*') {
 			type = CSS_TOKEN_SKIP;
 
-			for (string++; *string; string++)
+			for (string++; string < scanner->end; string++)
 				if (*string == '*' && string[1] == '/') {
 					string += 2;
 					break;
@@ -348,8 +355,8 @@ scan_css_tokens(struct scanner *scanner)
 	for (table_end = table + SCANNER_TOKENS;
 	     current < table_end && scanner->position < scanner->end;
 	     current++) {
-		scan_css(scanner->position, CSS_CHAR_WHITESPACE);
-		if (!*scanner->position) break;
+		scan_css(scanner, scanner->position, CSS_CHAR_WHITESPACE);
+		if (scanner->position >= scanner->end) break;
 
 		scan_css_token(scanner, current);
 

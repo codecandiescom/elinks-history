@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.3 2003/11/10 21:29:29 jonas Exp $ */
+/* $Id: renderer.c,v 1.4 2003/11/13 23:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/link.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
 
@@ -75,6 +76,8 @@ render_document(struct view_state *vs, struct document_view *document_view,
 		} else {
 			render_html_document(cache_entry, document);
 		}
+
+		sort_links(document);
 	}
 
 	document_view->document = document;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.374 2003/11/13 22:44:14 jonas Exp $ */
+/* $Id: renderer.c,v 1.375 2003/11/13 23:40:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
-#include "viewer/text/link.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
 
@@ -1507,8 +1506,6 @@ render_html_document(struct cache_entry *ce, struct document *document)
 	document->bgcolor = par_format.bgcolor;
 
 	done_html_parser();
-
-	sort_links(document);
 
 #if 0 /* debug purpose */
 	{

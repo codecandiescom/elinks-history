@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.18 2003/11/05 20:16:22 jonas Exp $ */
+/* $Id: text.c,v 1.19 2003/11/06 00:07:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,10 +59,6 @@ dlg_format_text(struct terminal *term,
 
 		do {
 			while (*text && *text != '\n' && *text != ' ') {
-#if 0
-				if (term)
-					set_char(term, xx, *y, co | *text);
-#endif
 				text++;
 			       	xx++;
 			}
@@ -76,9 +72,7 @@ dlg_format_text(struct terminal *term,
 				tx++;
 		} while (tx - text < w - ww);
 
-		s = align == AL_CENTER ? (w - ww) / 2 : 0;
-
-		if (s < 0) s = 0;
+		s = (align == AL_CENTER ? int_max((w - ww) / 2, 0) : 0);
 
 		while (tt < text - 1) {
 			if (s >= w) {

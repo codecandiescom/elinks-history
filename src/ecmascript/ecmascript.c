@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.25 2004/12/19 14:49:26 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.26 2004/12/31 02:30:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ static struct option_info ecmascript_options[] = {
 		"error_reporting", 0, 0,
 		N_("Open a message box when a script reports an error.")),
 
-	INIT_OPT_INT("ecmascript", N_("Max. Execution time"),
+	INIT_OPT_INT("ecmascript", N_("Maximum execution time"),
 		"max_exec_time", 0, 1, 3600, 5,
 		N_("Maximum execution time in seconds for a script.")),
 

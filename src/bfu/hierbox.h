@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.18 2003/11/20 01:14:16 jonas Exp $ */
+/* $Id: hierbox.h,v 1.19 2003/11/20 12:33:09 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -52,11 +52,5 @@ struct dialog_data *
 hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 		struct hierbox_browser *browser, void *udata,
 		size_t buttons, ...);
-
-struct hierbox_dialog_list_item {
-	LIST_HEAD(struct hierbox_dialog_list_item);
-
-	struct dialog_data *dlg_data;
-};
 
 #endif

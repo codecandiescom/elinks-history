@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.68 2003/11/20 01:14:16 jonas Exp $ */
+/* $Id: hierbox.c,v 1.69 2003/11/20 12:33:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,12 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 
+
+struct hierbox_dialog_list_item {
+	LIST_HEAD(struct hierbox_dialog_list_item);
+
+	struct dialog_data *dlg_data;
+};
 
 void
 update_hierbox_browser(struct hierbox_browser *browser)

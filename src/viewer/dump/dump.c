@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.82 2004/01/16 20:30:31 jonas Exp $ */
+/* $Id: dump.c,v 1.83 2004/02/10 06:35:44 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,6 +139,24 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 }
 
 void
+dump_pre_start(struct list_head *list)
+{
+	static struct list_head *url_list = NULL;
+
+	if (!url_list) url_list = list;
+	if (!url_list) return;
+	if (!list_empty(*url_list)) {
+		struct string_list_item *item = url_list->next;
+
+		terminate = 0;
+		del_from_list(item);
+		dump_start(item->string.source);
+		done_string(&item->string);
+		mem_free(item);
+	}
+}
+
+void
 dump_end(struct download *status, void *p)
 {
 	struct cache_entry *ce = status->ce;
@@ -192,6 +210,7 @@ dump_end(struct download *status, void *p)
 
 terminate:
 	terminate = 1;
+	dump_pre_start(NULL);
 }
 
 void

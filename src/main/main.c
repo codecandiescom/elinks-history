@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.168 2004/01/28 22:03:51 pasky Exp $ */
+/* $Id: main.c,v 1.169 2004/02/10 06:35:44 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,12 +69,13 @@ unsigned char *path_to_exe;
 static int ac;
 static unsigned char **av;
 static int init_b = 0;
+struct list_head url_list;
 
 void
 init(void)
 {
 	unsigned char *url = NULL;
-	INIT_LIST_HEAD(url_list);
+	init_list(url_list);
 
 	init_static_version();
 
@@ -111,6 +112,7 @@ init(void)
 	if (!url) {
 		retval = RET_SYNTAX;
 		terminate = 1;
+		free_string_list(&url_list);
 		goto end;
 	}
 
@@ -146,7 +148,7 @@ init(void)
 		 * installs it's own buggy TSTP handler. */
 		handle_basic_signals(NULL);
 		mem_free(info);
-
+		free_string_list(&url_list);
 		goto end;
 	}
 
@@ -168,7 +170,7 @@ init(void)
 			get_opt_bool("protocol.file.allow_special_files") = 1;
 			dump_start("file:///dev/stdin");
 		} else {
-			dump_start(url);
+			dump_pre_start(&url_list);
 		}
 
 		if (terminate) {
@@ -194,11 +196,8 @@ fatal_error:
 			terminate = 1;
 		}
 	}
-
 end:
-	if (url) mem_free(url);
-
-	free_string_list(&url_list);
+	if (url) mem_free(url);	
 }
 
 
@@ -244,6 +243,7 @@ terminate_all_subsystems(void)
 	done_options();
 	done_event();
 	terminate_osdep();
+	free_string_list(&url_list);
 }
 
 void

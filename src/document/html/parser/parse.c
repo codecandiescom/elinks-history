@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.39 2004/06/20 09:55:14 zas Exp $ */
+/* $Id: parse.c,v 1.40 2004/06/20 09:59:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,7 +260,6 @@ get_num(unsigned char *a, unsigned char *name)
 static inline int
 parse_width(unsigned char *str, int limit_it)
 {
-	unsigned char *end;
 	int percentage = 0;
 	int width;
 	int len;
@@ -284,7 +283,7 @@ parse_width(unsigned char *str, int limit_it)
 
 	/* Convert to number if possible. */
 	errno = 0;
-	width = strtoul((char *)str, (char **)&end, 10);
+	width = strtoul((char *)str, NULL, 10);
 	if (errno) return -1;
 
 #define WIDTH_PIXELS2CHARS(width) ((width) + (HTML_CHAR_WIDTH - 1) / 2) / HTML_CHAR_WIDTH;

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.26 2003/10/04 21:40:58 kuser Exp $ */
+/* $Id: search.c,v 1.27 2003/10/04 22:21:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 
 #include "elinks.h"
 
+#include "bfu/inpfield.h"
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
 #include "intl/gettext/libintl.h"
@@ -810,4 +811,29 @@ find_next_back(struct session *ses, struct document_view *f, int a)
 	ses->search_direction = -ses->search_direction;
 	find_next(ses, f, a);
 	ses->search_direction = -ses->search_direction;
+}
+
+
+struct input_history search_history = { 0, {D_LIST_HEAD(search_history.items)} };
+
+void
+search_back_dlg(struct session *ses, struct document_view *f, int a)
+{
+	input_field(ses->tab->term, NULL, 1,
+		    N_("Search backward"), N_("Search for text"),
+		    N_("OK"), N_("Cancel"), ses, &search_history,
+		    MAX_STR_LEN, "", 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) search_for_back,
+		    NULL);
+}
+
+void
+search_dlg(struct session *ses, struct document_view *f, int a)
+{
+	input_field(ses->tab->term, NULL, 1,
+		    N_("Search"), N_("Search for text"),
+		    N_("OK"), N_("Cancel"), ses, &search_history,
+		    MAX_STR_LEN, "", 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) search_for,
+		    NULL);
 }

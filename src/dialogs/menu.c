@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.137 2003/10/02 13:38:29 kuser Exp $ */
+/* $Id: menu.c,v 1.138 2003/10/04 22:21:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -619,30 +619,6 @@ query_file(struct session *ses, unsigned char *url,
 	}
 
 	done_string(&def);
-}
-
-static struct input_history search_history = { 0, {D_LIST_HEAD(search_history.items)} };
-
-void
-search_back_dlg(struct session *ses, struct document_view *f, int a)
-{
-	input_field(ses->tab->term, NULL, 1,
-		    N_("Search backward"), N_("Search for text"),
-		    N_("OK"), N_("Cancel"), ses, &search_history,
-		    MAX_STR_LEN, "", 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) search_for_back,
-		    NULL);
-}
-
-void
-search_dlg(struct session *ses, struct document_view *f, int a)
-{
-	input_field(ses->tab->term, NULL, 1,
-		    N_("Search"), N_("Search for text"),
-		    N_("OK"), N_("Cancel"), ses, &search_history,
-		    MAX_STR_LEN, "", 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) search_for,
-		    NULL);
 }
 
 void

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"POT-Creation-Date: 2003-09-01 00:24+0200\n"
+"POT-Creation-Date: 2003-09-02 23:12+0200\n"
 "PO-Revision-Date: 2003-06-20 16:45+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
@@ -23,24 +23,24 @@ msgstr "|\\|u|V|B3R 3><P3(73|) 1N |=i3|D"
 #: src/bfu/inpfield.c:46 src/bfu/inpfield.c:55 src/bfu/inpfield.c:75
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:274
 #: src/bookmarks/dialogs.c:284 src/config/dialogs.c:44
-#: src/config/dialogs.c:192 src/config/dialogs.c:327 src/config/dialogs.c:359
-#: src/config/dialogs.c:394 src/config/dialogs.c:406 src/config/dialogs.c:461
-#: src/config/dialogs.c:477 src/config/dialogs.c:611 src/config/dialogs.c:633
-#: src/config/dialogs.c:660 src/config/dialogs.c:724 src/config/dialogs.c:738
-#: src/dialogs/auth.c:164 src/dialogs/edit.c:176 src/dialogs/menu.c:644
+#: src/config/dialogs.c:192 src/config/dialogs.c:325 src/config/dialogs.c:357
+#: src/config/dialogs.c:392 src/config/dialogs.c:404 src/config/dialogs.c:459
+#: src/config/dialogs.c:475 src/config/dialogs.c:609 src/config/dialogs.c:631
+#: src/config/dialogs.c:658 src/config/dialogs.c:722 src/config/dialogs.c:736
+#: src/dialogs/auth.c:162 src/dialogs/edit.c:175 src/dialogs/menu.c:644
 #: src/dialogs/menu.c:655 src/dialogs/menu.c:681 src/dialogs/menu.c:699
-#: src/dialogs/menu.c:710 src/dialogs/mime.c:257 src/dialogs/options.c:272
-#: src/dialogs/options.c:369 src/globhist/dialogs.c:241
+#: src/dialogs/menu.c:710 src/dialogs/mime.c:255 src/dialogs/options.c:270
+#: src/dialogs/options.c:367 src/globhist/dialogs.c:241
 #: src/protocol/protocol.c:60 src/protocol/user.c:156 src/protocol/user.c:172
-#: src/sched/download.c:526 src/sched/download.c:560 src/sched/download.c:721
-#: src/sched/download.c:807 src/sched/download.c:1191
-#: src/sched/download.c:1200 src/sched/download.c:1227
-#: src/sched/download.c:1239 src/sched/session.c:360
+#: src/sched/download.c:525 src/sched/download.c:559 src/sched/download.c:720
+#: src/sched/download.c:806 src/sched/download.c:1190
+#: src/sched/download.c:1199 src/sched/download.c:1226
+#: src/sched/download.c:1238 src/sched/session.c:360
 #: src/scripting/lua/core.c:444 src/scripting/lua/core.c:587
-#: src/scripting/lua/core.c:811 src/viewer/text/form.c:668
+#: src/scripting/lua/core.c:811 src/viewer/text/form.c:667
 #: src/viewer/text/search.c:594 src/viewer/text/search.c:633
-#: src/viewer/text/textarea.c:272 src/viewer/text/view.c:755
-#: src/viewer/text/view.c:1469
+#: src/viewer/text/textarea.c:272 src/viewer/text/view.c:753
+#: src/viewer/text/view.c:1466
 msgid "Cancel"
 msgstr "(4N(3|"
 
@@ -87,20 +87,20 @@ msgid "Folder name"
 msgstr "f0|D4R |\\|4|V|3"
 
 #: src/bookmarks/dialogs.c:170 src/config/dialogs.c:129
-#: src/config/dialogs.c:140 src/config/dialogs.c:323 src/config/dialogs.c:406
-#: src/config/dialogs.c:476 src/config/dialogs.c:660 src/config/dialogs.c:737
-#: src/dialogs/auth.c:160 src/dialogs/document.c:47 src/dialogs/document.c:189
+#: src/config/dialogs.c:140 src/config/dialogs.c:321 src/config/dialogs.c:404
+#: src/config/dialogs.c:474 src/config/dialogs.c:658 src/config/dialogs.c:735
+#: src/dialogs/auth.c:158 src/dialogs/document.c:47 src/dialogs/document.c:189
 #: src/dialogs/document.c:258 src/dialogs/document.c:270
-#: src/dialogs/edit.c:167 src/dialogs/info.c:48 src/dialogs/info.c:75
+#: src/dialogs/edit.c:166 src/dialogs/info.c:48 src/dialogs/info.c:75
 #: src/dialogs/info.c:95 src/dialogs/info.c:122 src/dialogs/info.c:184
 #: src/dialogs/info.c:204 src/dialogs/menu.c:644 src/dialogs/menu.c:655
 #: src/dialogs/menu.c:681 src/dialogs/menu.c:699 src/dialogs/menu.c:710
-#: src/dialogs/mime.c:253 src/dialogs/options.c:262 src/dialogs/options.c:364
-#: src/globhist/dialogs.c:419 src/sched/download.c:585 src/sched/error.c:40
+#: src/dialogs/mime.c:251 src/dialogs/options.c:260 src/dialogs/options.c:362
+#: src/globhist/dialogs.c:419 src/sched/download.c:584 src/sched/error.c:40
 #: src/sched/session.c:1118 src/sched/session.c:1135 src/sched/session.c:1159
 #: src/scripting/lua/core.c:440 src/scripting/lua/core.c:582
 #: src/scripting/lua/core.c:691 src/scripting/lua/core.c:811
-#: src/viewer/text/view.c:755
+#: src/viewer/text/view.c:753
 msgid "OK"
 msgstr "0|<"
 
@@ -143,16 +143,16 @@ msgid "Delete marked bookmarks?"
 msgstr "|)3|_373 marked 800|<|V|4R|<5?"
 
 #: src/bookmarks/dialogs.c:414 src/bookmarks/dialogs.c:422
-#: src/bookmarks/dialogs.c:431 src/dialogs/menu.c:149 src/dialogs/mime.c:164
-#: src/formhist/formhist.c:345 src/globhist/dialogs.c:323
+#: src/bookmarks/dialogs.c:431 src/dialogs/menu.c:149 src/dialogs/mime.c:162
+#: src/formhist/formhist.c:330 src/globhist/dialogs.c:323
 #: src/globhist/dialogs.c:334 src/globhist/dialogs.c:379
 #: src/sched/session.c:618
 msgid "Yes"
 msgstr "Yes"
 
 #: src/bookmarks/dialogs.c:415 src/bookmarks/dialogs.c:423
-#: src/bookmarks/dialogs.c:432 src/dialogs/menu.c:150 src/dialogs/mime.c:165
-#: src/formhist/formhist.c:346 src/globhist/dialogs.c:324
+#: src/bookmarks/dialogs.c:432 src/dialogs/menu.c:150 src/dialogs/mime.c:163
+#: src/formhist/formhist.c:331 src/globhist/dialogs.c:324
 #: src/globhist/dialogs.c:335 src/globhist/dialogs.c:380
 #: src/sched/session.c:619
 msgid "No"
@@ -182,13 +182,13 @@ msgstr "800|<|V|4R|< |\\/|4N493|2"
 msgid "Goto"
 msgstr "6070"
 
-#: src/bookmarks/dialogs.c:625 src/config/dialogs.c:305
-#: src/config/dialogs.c:354 src/config/dialogs.c:520
+#: src/bookmarks/dialogs.c:625 src/config/dialogs.c:303
+#: src/config/dialogs.c:352 src/config/dialogs.c:518
 msgid "Edit"
 msgstr "3o|17"
 
-#: src/bookmarks/dialogs.c:630 src/config/dialogs.c:532
-#: src/config/dialogs.c:780 src/globhist/dialogs.c:476
+#: src/bookmarks/dialogs.c:630 src/config/dialogs.c:530
+#: src/config/dialogs.c:778 src/globhist/dialogs.c:476
 msgid "Delete"
 msgstr "|)3|_373"
 
@@ -196,8 +196,8 @@ msgstr "|)3|_373"
 msgid "Move"
 msgstr "Move"
 
-#: src/bookmarks/dialogs.c:645 src/config/dialogs.c:526
-#: src/config/dialogs.c:774
+#: src/bookmarks/dialogs.c:645 src/config/dialogs.c:524
+#: src/config/dialogs.c:772
 msgid "Add"
 msgstr "4|)|)"
 
@@ -207,8 +207,8 @@ msgstr "4|)|)"
 msgid "Search"
 msgstr "534R(H"
 
-#: src/bookmarks/dialogs.c:655 src/config/dialogs.c:543
-#: src/config/dialogs.c:797 src/globhist/dialogs.c:496
+#: src/bookmarks/dialogs.c:655 src/config/dialogs.c:541
+#: src/config/dialogs.c:795 src/globhist/dialogs.c:496
 msgid "Close"
 msgstr "(1053"
 
@@ -255,7 +255,7 @@ msgstr "Config 3RR0R"
 msgid "Unable to write to config file %s: %s"
 msgstr "Unable to VV|2173 70 config f1|3 %s: %s"
 
-#: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:514
+#: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:512
 #: src/dialogs/document.c:41 src/dialogs/document.c:186
 #: src/globhist/dialogs.c:412 src/globhist/dialogs.c:471
 msgid "Info"
@@ -304,7 +304,7 @@ msgstr "3RR0R"
 msgid "Bad option value."
 msgstr "84|) 0p710N \\/4|U3."
 
-#: src/config/dialogs.c:207 src/config/dialogs.c:405 src/dialogs/edit.c:27
+#: src/config/dialogs.c:207 src/config/dialogs.c:403 src/dialogs/edit.c:27
 #: src/scripting/lua/core.c:311 src/scripting/lua/core.c:312
 msgid "Name"
 msgstr "|\\|4|V|3"
@@ -321,7 +321,7 @@ msgstr "\\/4|U3"
 msgid "Description"
 msgstr "Description"
 
-#: src/config/dialogs.c:355
+#: src/config/dialogs.c:353
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
@@ -329,57 +329,57 @@ msgstr ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 
-#: src/config/dialogs.c:391 src/config/dialogs.c:405
+#: src/config/dialogs.c:389 src/config/dialogs.c:403
 msgid "Add option"
 msgstr "4|)|) 0p710N"
 
-#: src/config/dialogs.c:392
+#: src/config/dialogs.c:390
 msgid "Cannot add an option here."
 msgstr "Can|\\|07 4|)|) an 0p710N here."
 
-#: src/config/dialogs.c:458 src/config/dialogs.c:472
+#: src/config/dialogs.c:456 src/config/dialogs.c:470
 msgid "Delete option"
 msgstr "|)3|_373 0p710N"
 
-#: src/config/dialogs.c:459
+#: src/config/dialogs.c:457
 msgid "Cannot delete this option."
 msgstr "Can|\\|07 |)3|_373 this 0p710N."
 
-#: src/config/dialogs.c:473
+#: src/config/dialogs.c:471
 #, c-format
 msgid "Really delete the option \"%s\"?"
 msgstr "Really |)3|_373 the 0p710N \"%s\"?"
 
-#: src/config/dialogs.c:504
+#: src/config/dialogs.c:502
 msgid "Options manager"
 msgstr "0P710|\\|5 |\\/|4N493|2"
 
-#: src/config/dialogs.c:538 src/config/dialogs.c:792 src/dialogs/options.c:267
-#: src/sched/download.c:1189 src/sched/download.c:1225
+#: src/config/dialogs.c:536 src/config/dialogs.c:790 src/dialogs/options.c:265
+#: src/sched/download.c:1188 src/sched/download.c:1224
 msgid "Save"
 msgstr "54\\/3"
 
-#: src/config/dialogs.c:608 src/config/dialogs.c:630 src/config/dialogs.c:659
+#: src/config/dialogs.c:606 src/config/dialogs.c:628 src/config/dialogs.c:657
 msgid "Add keybinding"
 msgstr "4|)|) |<3`/81|\\|9"
 
-#: src/config/dialogs.c:609
+#: src/config/dialogs.c:607
 msgid "Invalid keystroke."
 msgstr "Invalid |<3`/5troke."
 
-#: src/config/dialogs.c:631
+#: src/config/dialogs.c:629
 msgid "Need to select a keymap."
 msgstr "Need 70 53|3(7 a |<3`/map."
 
-#: src/config/dialogs.c:646 src/config/options.c:2594
+#: src/config/dialogs.c:644 src/config/options.c:2594
 msgid "Action"
 msgstr "Action"
 
-#: src/config/dialogs.c:647
+#: src/config/dialogs.c:645
 msgid "Keymap"
 msgstr "|<3`/map"
 
-#: src/config/dialogs.c:648
+#: src/config/dialogs.c:646
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
@@ -389,15 +389,15 @@ msgstr ""
 "Prefix: Shift, Ctrl, Alt\n"
 "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
-#: src/config/dialogs.c:652
+#: src/config/dialogs.c:650
 msgid "Keystroke"
 msgstr "|<3`/5troke"
 
-#: src/config/dialogs.c:720 src/config/dialogs.c:731
+#: src/config/dialogs.c:718 src/config/dialogs.c:729
 msgid "Delete keybinding"
 msgstr "|)3|_373 |<3`/81|\\|9"
 
-#: src/config/dialogs.c:721
+#: src/config/dialogs.c:719
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
@@ -405,17 +405,17 @@ msgstr ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 
-#: src/config/dialogs.c:732
+#: src/config/dialogs.c:730
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 "Really |)3|_373 the |<3`/81|\\|9 \"%s\" (action \"%s\", |<3`/map \"%s\")?"
 
-#: src/config/dialogs.c:764
+#: src/config/dialogs.c:762
 msgid "Keybinding manager"
 msgstr "|<3`/81|\\|9 |\\/|4N493|2"
 
-#: src/config/dialogs.c:786 src/globhist/dialogs.c:486
+#: src/config/dialogs.c:784 src/globhist/dialogs.c:486
 msgid "Toggle display"
 msgstr "709913 display"
 
@@ -2796,7 +2796,7 @@ msgid "Dialog text colors."
 msgstr "Dialog 73><7 (0|_0Rs."
 
 #: src/config/options.c:1988 src/config/options.c:2356
-#: src/viewer/text/link.c:1000
+#: src/viewer/text/link.c:998
 msgid "Checkbox"
 msgstr "Checkbox"
 
@@ -2829,7 +2829,7 @@ msgid "Dialog selected button colors."
 msgstr "Dialog 53|3(73|) 8u770|\\| (0|_0Rs."
 
 #: src/config/options.c:2036 src/config/options.c:2404
-#: src/viewer/text/link.c:1006
+#: src/viewer/text/link.c:1004
 msgid "Text field"
 msgstr "73><7 |=13|d"
 
@@ -3515,12 +3515,12 @@ msgstr "f0|D4R"
 msgid "Login"
 msgstr "|_061|\\|"
 
-#: src/dialogs/auth.c:130
+#: src/dialogs/auth.c:128
 #, fuzzy, c-format
 msgid "Authentication required for %s at %s"
 msgstr "Authentication required for %s at %s"
 
-#: src/dialogs/auth.c:138
+#: src/dialogs/auth.c:136
 msgid "HTTP Authentication"
 msgstr "HTTP Authentication"
 
@@ -3590,7 +3590,7 @@ msgstr "|-|34|)3R 1|\\|f0"
 msgid "No header info."
 msgstr "|\\|0 |-|34|)3R 1|\\|f0."
 
-#: src/dialogs/edit.c:171 src/globhist/dialogs.c:491
+#: src/dialogs/edit.c:170 src/globhist/dialogs.c:491
 msgid "Clear"
 msgstr "Clear"
 
@@ -3804,7 +3804,7 @@ msgstr "|\\|u \\/\\/1N|)0VV"
 msgid "~OS shell"
 msgstr "OS shell"
 
-#: src/dialogs/menu.c:477 src/dialogs/options.c:341
+#: src/dialogs/menu.c:477 src/dialogs/options.c:339
 msgid "Resize ~terminal"
 msgstr "Resize 73R|V|1|\\|4|"
 
@@ -3957,7 +3957,7 @@ msgstr "3|\\|73R |_|R|_"
 msgid "Save URL"
 msgstr "54\\/3 |_|R|_"
 
-#: src/dialogs/menu.c:680 src/sched/download.c:401 src/sched/download.c:582
+#: src/dialogs/menu.c:680 src/sched/download.c:400 src/sched/download.c:581
 msgid "Download"
 msgstr "|)0VVN|04|)"
 
@@ -3981,20 +3981,20 @@ msgstr "3><73|\\|710N(s)"
 msgid "Content-Type"
 msgstr "Content-7`/P3"
 
-#: src/dialogs/mime.c:161
+#: src/dialogs/mime.c:159
 msgid "Delete extension"
 msgstr "|)3|_373 3><73|\\|710N"
 
-#: src/dialogs/mime.c:162
+#: src/dialogs/mime.c:160
 #, c-format
 msgid "Delete extension %s?"
 msgstr "|)3|_373 3><73|\\|710N %s?"
 
-#: src/dialogs/mime.c:235
+#: src/dialogs/mime.c:233
 msgid "Extension"
 msgstr "3><73|\\|710N"
 
-#: src/dialogs/mime.c:269
+#: src/dialogs/mime.c:267
 msgid "No extensions"
 msgstr "|\\|0 3><73|\\|710N5"
 
@@ -4034,24 +4034,24 @@ msgstr ""
 msgid "UTF-8 I/O"
 msgstr "UTF-8 I/O"
 
-#: src/dialogs/options.c:194
+#: src/dialogs/options.c:192
 msgid "Terminal options"
 msgstr "73R|V|1|\\|4| 0p710Ns"
 
-#: src/dialogs/options.c:310
+#: src/dialogs/options.c:308
 msgid "Columns"
 msgstr "Columns"
 
-#: src/dialogs/options.c:311
+#: src/dialogs/options.c:309
 msgid "Rows"
 msgstr "Rows"
 
-#: src/formhist/formhist.c:339
+#: src/formhist/formhist.c:324
 #, fuzzy
 msgid "Form memory"
 msgstr "Out of /\\/\\3|V|0R`/"
 
-#: src/formhist/formhist.c:340
+#: src/formhist/formhist.c:325
 msgid ""
 "Should I remember this login?\n"
 "\n"
@@ -4262,28 +4262,28 @@ msgstr "Elapsed 71|V|3"
 msgid "estimated time"
 msgstr "estimated 71|V|3"
 
-#: src/sched/download.c:410
+#: src/sched/download.c:409
 msgid "Background"
 msgstr "84(|<6R0Un|)"
 
-#: src/sched/download.c:415
+#: src/sched/download.c:414
 msgid "Background with notify"
 msgstr "84(|<6R0Un|) with |\\|071f`/"
 
-#: src/sched/download.c:420
+#: src/sched/download.c:419
 msgid "Abort"
 msgstr "@80R7"
 
-#: src/sched/download.c:523 src/sched/download.c:557 src/sched/download.c:803
+#: src/sched/download.c:522 src/sched/download.c:556 src/sched/download.c:802
 msgid "Download error"
 msgstr "|)0VVN|04|) 3RR0R"
 
-#: src/sched/download.c:524
+#: src/sched/download.c:523
 #, c-format
 msgid "Could not create file %s: %s"
 msgstr "(0VL|) |\\|07 create f1|3 %s: %s"
 
-#: src/sched/download.c:558
+#: src/sched/download.c:557
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -4294,7 +4294,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:583
+#: src/sched/download.c:582
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -4303,11 +4303,11 @@ msgstr ""
 "Download complete:\n"
 "%s"
 
-#: src/sched/download.c:710
+#: src/sched/download.c:709
 msgid "File exists"
 msgstr "f1|3 exists"
 
-#: src/sched/download.c:711
+#: src/sched/download.c:710
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -4322,19 +4322,19 @@ msgstr ""
 "The alternative filename is:\n"
 "%s"
 
-#: src/sched/download.c:718
+#: src/sched/download.c:717
 msgid "Save under the alternative name"
 msgstr "54\\/3 under the alternative |\\|4|V|3"
 
-#: src/sched/download.c:719
+#: src/sched/download.c:718
 msgid "Overwrite the original file"
 msgstr "OverVV|2173 the original f1|3"
 
-#: src/sched/download.c:720
+#: src/sched/download.c:719
 msgid "Resume download of the original file"
 msgstr "Resume |)0VVN|04|) of the original f1|3"
 
-#: src/sched/download.c:804
+#: src/sched/download.c:803
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -4343,34 +4343,34 @@ msgstr ""
 "Could not create file '%s':\n"
 "%s"
 
-#: src/sched/download.c:1183 src/sched/download.c:1194
+#: src/sched/download.c:1182 src/sched/download.c:1193
 msgid "Unknown type"
 msgstr "U|\\||<N0VVn 7`/P3"
 
-#: src/sched/download.c:1184
+#: src/sched/download.c:1183
 #, fuzzy, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 
-#: src/sched/download.c:1190 src/sched/download.c:1199
-#: src/sched/download.c:1226 src/sched/download.c:1238
+#: src/sched/download.c:1189 src/sched/download.c:1198
+#: src/sched/download.c:1225 src/sched/download.c:1237
 msgid "Display"
 msgstr "Display"
 
-#: src/sched/download.c:1195
+#: src/sched/download.c:1194
 #, fuzzy, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 
-#: src/sched/download.c:1217 src/sched/download.c:1230
+#: src/sched/download.c:1216 src/sched/download.c:1229
 msgid "What to do?"
 msgstr "VV007 70 do?"
 
-#: src/sched/download.c:1218
+#: src/sched/download.c:1217
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4379,11 +4379,11 @@ msgstr ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 
-#: src/sched/download.c:1224 src/sched/download.c:1237
+#: src/sched/download.c:1223 src/sched/download.c:1236
 msgid "Open"
 msgstr "0p3N"
 
-#: src/sched/download.c:1231
+#: src/sched/download.c:1230
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4716,129 +4716,129 @@ msgstr "Can't VV|2173 70 stdout."
 msgid "URL expected after %s."
 msgstr "|_|R|_ expected @f73R %s."
 
-#: src/viewer/text/form.c:664
+#: src/viewer/text/form.c:663
 msgid "Error while posting form"
 msgstr "3RR0R while |o057ing f0|2|V|"
 
-#: src/viewer/text/form.c:665
+#: src/viewer/text/form.c:664
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "(0VL|) |\\|07 get f1|3 %s: %s"
 
-#: src/viewer/text/link.c:827
+#: src/viewer/text/link.c:825
 msgid "Display ~usemap"
 msgstr "Display |_|53map"
 
-#: src/viewer/text/link.c:832
+#: src/viewer/text/link.c:830
 msgid "~Follow link"
 msgstr "f0110VV |1N|<"
 
-#: src/viewer/text/link.c:835
+#: src/viewer/text/link.c:833
 msgid "Follow link and r~eload"
 msgstr "f0110VV |1N|< and |23|04|)"
 
-#: src/viewer/text/link.c:839
+#: src/viewer/text/link.c:837
 msgid "Open in new ~window"
 msgstr "0p3N in |\\|u \\/\\/1N|)0VV"
 
-#: src/viewer/text/link.c:845
+#: src/viewer/text/link.c:843
 msgid "~Download link"
 msgstr "|)0VVN|04|) |1N|<"
 
-#: src/viewer/text/link.c:849
+#: src/viewer/text/link.c:847
 msgid "~Add link to bookmarks"
 msgstr "4|)|) |1N|< 70 800|<|V|4R|<5"
 
-#: src/viewer/text/link.c:861
+#: src/viewer/text/link.c:859
 msgid "~Reset form"
 msgstr "Re537 f0|2|V|"
 
-#: src/viewer/text/link.c:866
+#: src/viewer/text/link.c:864
 msgid "~Submit form"
 msgstr "5U8|\\/|17 f0|2|V|"
 
-#: src/viewer/text/link.c:869
+#: src/viewer/text/link.c:867
 msgid "Submit form and rel~oad"
 msgstr "5U8|V|17 f0|2|V| and |23|04|)"
 
-#: src/viewer/text/link.c:873
+#: src/viewer/text/link.c:871
 msgid "Submit form and open in new ~window"
 msgstr "5U8|V|17 f0|2|V| and 0p3N in |\\|u \\/\\/1N|)0VV"
 
-#: src/viewer/text/link.c:879
+#: src/viewer/text/link.c:877
 msgid "Submit form and ~download"
 msgstr "5U8|\\/|17 f0|2|V| and |)0VVN|04|)"
 
-#: src/viewer/text/link.c:886
+#: src/viewer/text/link.c:884
 msgid "V~iew image"
 msgstr "View 1|V|463"
 
-#: src/viewer/text/link.c:889
+#: src/viewer/text/link.c:887
 msgid "Download ima~ge"
 msgstr "|)0VVN|04|) 1|V|493"
 
-#: src/viewer/text/link.c:895
+#: src/viewer/text/link.c:893
 msgid "No link selected"
 msgstr "|\\|0 |1N|< 53|3(73|)"
 
-#: src/viewer/text/link.c:946
+#: src/viewer/text/link.c:944
 msgid "Image"
 msgstr "1|V|463"
 
-#: src/viewer/text/link.c:952
+#: src/viewer/text/link.c:950
 msgid "Usemap"
 msgstr "|_|53map"
 
-#: src/viewer/text/link.c:972
+#: src/viewer/text/link.c:970
 #, fuzzy
 msgid "Reset form"
 msgstr "Re537 f0|2|V|"
 
-#: src/viewer/text/link.c:979
+#: src/viewer/text/link.c:977
 msgid "Submit form to"
 msgstr "5U8|\\/|17 f0|2|V| 70"
 
-#: src/viewer/text/link.c:981
+#: src/viewer/text/link.c:979
 msgid "Post form to"
 msgstr "|o057 f0|2|V| 70"
 
-#: src/viewer/text/link.c:997
+#: src/viewer/text/link.c:995
 msgid "Radio button"
 msgstr "Radio 8u770|\\|"
 
-#: src/viewer/text/link.c:1003
+#: src/viewer/text/link.c:1001
 msgid "Select field"
 msgstr "53|3(7 |=13|d"
 
-#: src/viewer/text/link.c:1009
+#: src/viewer/text/link.c:1007
 msgid "Text area"
 msgstr "73><7 area"
 
-#: src/viewer/text/link.c:1012
+#: src/viewer/text/link.c:1010
 msgid "File upload"
 msgstr "f1|3 upload"
 
-#: src/viewer/text/link.c:1015
+#: src/viewer/text/link.c:1013
 msgid "Password field"
 msgstr "|o455VV0R|) |=13|d"
 
-#: src/viewer/text/link.c:1024
+#: src/viewer/text/link.c:1022
 msgid "name"
 msgstr "|\\|4|V|3"
 
-#: src/viewer/text/link.c:1034
+#: src/viewer/text/link.c:1032
 msgid "value"
 msgstr "\\/4|U3"
 
-#: src/viewer/text/link.c:1043
+#: src/viewer/text/link.c:1041
 msgid "hit ENTER to"
 msgstr "|-|17 3N73|2 70"
 
-#: src/viewer/text/link.c:1046
+#: src/viewer/text/link.c:1044
 msgid "submit to"
 msgstr "5U8|\\/|17 70"
 
-#: src/viewer/text/link.c:1048
+#: src/viewer/text/link.c:1046
 msgid "post to"
 msgstr "|o057 70"
 
@@ -4855,19 +4855,19 @@ msgstr "534R(H 57r1|\\|6 '%s' |\\|07 f0u|\\|d"
 msgid "You can do this only on the master terminal"
 msgstr "You can do this only on the master 73R|V|1|\\|4|"
 
-#: src/viewer/text/view.c:754
+#: src/viewer/text/view.c:752
 msgid "Go to link"
 msgstr "60 70 |1N|<"
 
-#: src/viewer/text/view.c:754
+#: src/viewer/text/view.c:752
 msgid "Enter link number"
 msgstr "3|\\|73R |1N|< |\\|U|V|83R"
 
-#: src/viewer/text/view.c:1466
+#: src/viewer/text/view.c:1463
 msgid "Save error"
 msgstr "54\\/3 3RR0R"
 
-#: src/viewer/text/view.c:1467
+#: src/viewer/text/view.c:1464
 msgid "Error writing to file"
 msgstr "3RR0R VV|2171n9 70 f1|3"
 

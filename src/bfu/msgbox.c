@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.32 2003/06/07 12:07:17 pasky Exp $ */
+/* $Id: msgbox.c,v 1.33 2003/06/07 12:08:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	/* Check if the info string is valid */
 	if (!text) return;
 
-	/* Use the align string to determine wether @text should be free()d */
+	/* Use the align string to determine whether @text should be free()d */
 	if (align & AL_EXTD_TEXT)
 		add_one_to_ml(&ml, text);
 

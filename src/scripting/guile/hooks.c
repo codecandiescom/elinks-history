@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.9 2003/09/25 19:18:18 jonas Exp $ */
+/* $Id: hooks.c,v 1.10 2003/09/26 20:39:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,19 +33,21 @@ script_hook_goto_url(va_list ap)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
-	SCM proc = scm_c_module_lookup(internal_module(), "%goto-url-hook");
+	SCM proc;
 	SCM x;
 
-	if (!*url[0]) return EHS_NEXT;
+	if (*url == NULL || !*url[0]) return EHS_NEXT;
 
+	proc = scm_c_module_lookup(internal_module(), "%goto-url-hook");
 	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
+
 	if (SCM_STRINGP(x)) {
 		*url = stracpy(SCM_STRING_UCHARS(x));
 	} else {
 		*url = NULL;
 	}
 
-	return EHS_LAST;
+	return EHS_NEXT;
 }
 
 static int
@@ -53,15 +55,20 @@ script_hook_follow_url(va_list ap)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
-	SCM proc = scm_c_module_lookup(internal_module(), "%follow-url-hook");
-	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
+	SCM proc;
+	SCM x;
+
+	if (*url == NULL || !*url[0]) return EHS_NEXT;
+
+	proc = scm_c_module_lookup(internal_module(), "%follow-url-hook");
+	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
 
 	if (SCM_STRINGP(x))
 		*url = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
 	else
 		*url = NULL;
 
-	return EHS_LAST;
+	return EHS_NEXT;
 }
 
 static int
@@ -71,16 +78,21 @@ script_hook_pre_format_html(va_list ap)
 	int *html_len = va_arg(ap, int *);
 	struct session *ses = va_arg(ap, struct session *);
 	unsigned char *url = va_arg(ap, unsigned char *);
-	SCM proc = scm_c_module_lookup(internal_module(), "%pre-format-html-hook");
-	SCM x = scm_call_2(SCM_VARIABLE_REF(proc), scm_makfrom0str(url),
-			   scm_mem2string(*html, *len));
+	SCM proc;
+	SCM x;
+
+	if (*html == NULL || *html_len == 0) return EHS_NEXT;
+
+	proc = scm_c_module_lookup(internal_module(), "%pre-format-html-hook");
+	x = scm_call_2(SCM_VARIABLE_REF(proc), scm_makfrom0str(url),
+		       scm_mem2string(*html, *len));
 
 	if (!SCM_STRINGP(x)) return EHS_NEXT;
 
 	*html_len = SCM_STRING_LENGTH(x);
-	*html = memacpy(SCM_STRING_UCHARS(x), *html_len + 1);
+	*html = memacpy(SCM_STRING_UCHARS(x), *html_len);
 
-	return EHS_LAST;
+	return EHS_NEXT;
 }
 
 /* The Guile function can return:
@@ -97,13 +109,11 @@ script_hook_get_proxy(va_list ap)
 
 	if (SCM_STRINGP(x)) {
 		*retval = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
-		return EHS_LAST;
 	} else if (SCM_NULLP(x)) {
 		*retval = NULL;
-		return EHS_LAST;
-	} else {
-		return EHS_NEXT;
 	}
+
+	return EHS_NEXT;
 }
 
 static int

@@ -1,3 +1,164 @@
+Sat May 22 19:27:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, protocol/date.c, protocol/date.h,
+	protocol/http/date.c, sched/download.c:
+
+	parse_http_date() -> parse_date() 
+
+Sat May 22 19:20:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.h:
+
+	Normalize header.  
+
+Sat May 22 19:15:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix xbel configuration spotted by pasky.  
+
+Sat May 22 18:48:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/: plural.c, plural.y:
+
+	Compilation fix. I wonder how were you able to build it? 
+
+Sat May 22 13:44:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+
+	ssl_write(): Take data + len args instead of write buffer.  
+
+Sat May 22 13:18:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/dialogs.c, config/options.inc, cookies/cookies.c,
+	cookies/dialogs.c:
+
+	Make the UI date format configurable. Closes my part of bug 448.  
+
+Sat May 22 13:12:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: conv.c, conv.h:
+
+	Wrap add_date_to_string() in #ifdef HAVE_STRFTIME.  
+
+Sat May 22 13:06:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/dialogs.c, cookies/cookies.c, cookies/dialogs.c,
+	protocol/file/file.c, util/conv.c, util/conv.h:
+
+	Introduce add_date_to_string() and use it to wrap buffered
+	strftime() calls.  
+
+Fri May 21 15:33:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/scanner.h:
+
+	Whoops. DOM has not been merged yet ;) 
+
+Fri May 21 13:44:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/scanner.c, util/scanner.h:
+
+	Move generic token scanning handling to begin and end rutines.  
+
+Fri May 21 12:43:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Doh! elinks.h includes setup.h ;) 
+
+Fri May 21 12:29:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, m4/features.m4:
+
+	Move macros to m4/.  
+
+Fri May 21 12:22:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: auth/auth.c, http/http.c:
+
+	Minor simplification. Make add_auth_entry() register the auth dialog
+	in the question queue.  
+
+Fri May 21 12:04:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Remove unneeded #ifdefs 
+
+Fri May 21 12:03:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, protocol/Makefile.am,
+	protocol/file/Makefile.am:
+
+	Hurrah! Link file and cgi objects into libprotocol and conditionally
+	build cgi object.  
+
+Fri May 21 11:57:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/css.c, encoding/encoding.c,
+	encoding/encoding.h, protocol/file/file.c, protocol/file/file.h:
+
+	Pretty ugly patch that moves read_encoded_file() to encoding/ which
+	I think makes sense but maybe a better interface for reading local
+	files without connection_state being needed would be great.  
+
+Fri May 21 11:46:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, protocol/Makefile.am:
+
+	Links in auth objects in the libprotocol archive.  
+
+Fri May 21 11:39:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, cookies/cookies.c, dialogs/document.c,
+	document/renderer.c, document/html/parser.c, mime/mime.c,
+	protocol/Makefile.am, protocol/http/Makefile.am,
+	protocol/http/date.c, protocol/http/date.h, protocol/http/header.c,
+	protocol/http/header.h, protocol/http/http.c, sched/download.c:
+
+	Move header and date library to protocol/ so http objects can be
+	linked into libprotocol.a and http support could even be optional.  
+
+Fri May 21 11:38:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: date.c, date.h, header.c, header.h:
+
+	Prepare to move prototol/http header and date files to protocol/.
+	Pasky to keep the history just cp it from protocol/http/Attic/ ASAP
+	and it should be fine I hope.  
+
+Fri May 21 11:21:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser.c, document/html/renderer.c,
+	document/html/parser/forms.c, document/html/parser/parse.c,
+	document/plain/renderer.c, intl/charsets.c, intl/charsets.h,
+	viewer/text/form.c:
+
+	Make it possible to pass int pointer to convert_string() that will
+	be set to the new length.  
+
+Fri May 21 11:11:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/: charsets.c, charsets.h:
+
+	No need for us to suffer more than needed. Let the macro rename
+	convert_string to convert_string_elinks.  
+
+Fri May 21 10:54:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: renderer.c, renderer.h, html/parser.c,
+	html/renderer.c, html/renderer.h, plain/renderer.c:
+
+	Move get_convert_table() to generic document renderer file.  
+
+Thu May 20 23:02:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/dialogs.c:
+
+	get_cookie_info(): Simplify expire info adding.  
+
 Thu May 20 21:35:37 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* features.conf:

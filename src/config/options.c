@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.223 2003/06/13 13:34:26 jonas Exp $ */
+/* $Id: options.c,v 1.224 2003/06/14 21:08:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -600,24 +600,16 @@ version_cmd(struct option *o, unsigned char ***argv, int *argc)
  * The level means the level of indentation.
  */
 static void
-printhelp_descend(struct option *tree, unsigned char *path,
-		  int level, int captions)
+printhelp_descend(struct option *tree, unsigned char *path, int captions)
 {
-#define MAX_INDENTATION		80
-#define CMDLINE_WIDTH		20
 	struct option *option;
-	unsigned char indent[MAX_INDENTATION + 1];
-	int indentation = -1;
+	unsigned char saved[MAX_STR_LEN];
+	unsigned char *savedpos = saved;
 
-	while (indentation++ < MAX_INDENTATION)
-		indent[indentation] = ' ';
-	indent[MAX_INDENTATION - 1] = '\0';
-
-	indentation = level << 1;
-	if (indentation > MAX_INDENTATION) indentation = MAX_INDENTATION;
-	indent[indentation] = '\0';
+	*savedpos = 0;
 
 	foreach (option, *((struct list_head *) tree->ptr)) {
+		int spaces;
 		unsigned char *desc = (option->desc && *option->desc)
 				      ? (unsigned char *) gettext(option->desc)
 				      : (unsigned char *) "N/A";
@@ -646,80 +638,39 @@ printhelp_descend(struct option *tree, unsigned char *path,
 			else
 				description = desc;
 
-			printf("%s%s: (%s)\n", indent, description, newpath);
-			printf("%s%15s", indent, "");
+			printf("  %s: (%s)\n", description, newpath);
+			printf("  %8s", "");
 			for (i = 0; i < l; i++) {
 				putchar(desc[i]);
 
 				if (desc[i] == '\n')
-					printf("%s%15s", indent, "");
+					printf("  %8s", "");
 			}
 			printf("\n\n");
 
 			add_to_strn(&newpath, ".");
-			printhelp_descend(option, newpath, level + 1, captions);
+			printhelp_descend(option, newpath, captions);
 			mem_free(newpath);
 			continue;
 		}
 
-		/* XXX: To minimize indentation the first to if's 'continue' so
-		 * we are here if option type is neither autocreate nor tree */
-		printf("%s%s%s", indent, path, option->name);
-		if (captions) {
-			int spaces;
+		if (!option->capt) {
+			int len = strlen(option->name);
+			int max = MAX_STR_LEN - (savedpos - saved);
 
-			if (!option->capt) {
-				/* Prepare to make comma separated option list
-				 * 'indentation' is used to sum the number of
-				 * printed characters. The sum is negative. */
-				if (indentation > 0) {
-					indent[indentation] = ' ';
-					indent[0] = ',';
-					indent[2] = '\0';
-					indentation = 0;
-				}
-				/* '-' and ' ' and ',' equals 3 */
-				indentation -= strlen(option->name) + 3;
-				continue;
-			} else if (indentation < 0) {
-				/* End the commaseparated list 'mode' and
-				 * reset to use original indentation. */
-				spaces =  CMDLINE_WIDTH + indentation + 1;
-				indentation = level << 1;
-				if (indentation > MAX_INDENTATION)
-					indentation = MAX_INDENTATION;
+			safe_strncpy(savedpos, option->name, max);
+			safe_strncpy(savedpos + len, ", -", max - len);
+			savedpos += len + 3;
+			continue;
+		}
 
-				indent[0] = ' ';
-				indent[indentation] = '\0';
-			} else {
-				/* Column width between '-' & caption start. */
-				spaces = CMDLINE_WIDTH;
-				if (*option_types[option->type].help_str)
-					printf(" %s", gettext(option_types[option->type].help_str));
-				else
-					printf(" ");
-			}
-			/* Find spaces to print between option to caption */
-			spaces -= strlen(option->name);
-			if (*option_types[option->type].help_str)
-				spaces -= strlen(gettext(option_types[option->type].help_str));
+		printf("  %s%s%s ", path, saved, option->name);
+		if (*option_types[option->type].help_str)
+			printf("%s", gettext(option_types[option->type].help_str));
 
-			if (spaces < 1) spaces = 1; /* Minimum one space */
-			while (spaces-- > 0) printf(" ");
-
-			if (*option->capt)
-				printf("%s\n", gettext(option->capt));
-			else
-				printf("\n");
-
-		} else if (desc) {
+		if (!captions && desc) {
 			int l = strlen(desc);
 			int i;
-
-			if (*option_types[option->type].help_str)
-				printf(" %s", gettext(option_types[option->type].help_str));
-			else
-				printf(" ");
 
 			if (option->type == OPT_INT
 				|| option->type == OPT_BOOL
@@ -740,27 +691,43 @@ printhelp_descend(struct option *tree, unsigned char *path,
 				printf("\n");
 			}
 
-			printf("%s%15s", indent, "");
+			printf("    %8s", "");
 
 			for (i = 0; i < l; i++) {
 				putchar(desc[i]);
 
 				if (desc[i] == '\n')
-					printf("%s%15s", indent, "");
+					printf("    %8s", "");
 			}
 			printf("\n\n");
-
-		} else {
-			/* Another little specialty mostly for -?, -h and -help
-			 * when doing -long-help. We print options with NULL
-			 * descriptions as a comma seperated list on one line.
-			 * This way they will share the description with the
-			 * next option that defines one. */
-			printf(",");
+			savedpos = saved;
+			*savedpos = 0;
+			continue;
 		}
+
+#define CMDLINE_WIDTH 20
+
+		/* Column width between '-' & caption start. */
+		spaces = CMDLINE_WIDTH - strlen(option->name) - (savedpos - saved);
+		/* Find spaces to print between option to caption */
+		if (*option_types[option->type].help_str)
+			spaces -= strlen(gettext(option_types[option->type].help_str));
+
+		do {
+			printf(" ");
+		} while (--spaces > 0);
+
+		if (*option->capt)
+			printf("%s\n", gettext(option->capt));
+		else
+			printf("\n");
+
+		savedpos = saved;
+		*savedpos = 0;
 	}
-#undef MAX_INDENTATION
+
 #undef CMDLINE_WIDTH
+
 }
 
 
@@ -772,14 +739,14 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 
 	if (!strcmp(option->name, "config-help")) {
 		printf(gettext("Configuration options:\n"));
-		printhelp_descend(&root_options, "", 1, 0);
+		printhelp_descend(&root_options, "", 0);
 	} else {
 		printf(gettext("Usage: elinks [OPTION]... [URL]\n\n"));
 		printf(gettext("Options:\n"));
 		if (!strcmp(option->name, "long-help")) {
-			printhelp_descend(&cmdline_options, "-", 1, 0);
+			printhelp_descend(&cmdline_options, "-", 0);
 		} else {
-			printhelp_descend(&cmdline_options, "-", 1, 1);
+			printhelp_descend(&cmdline_options, "-", 1);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.163 2004/07/24 17:34:49 zas Exp $ */
+/* $Id: cache.c,v 1.164 2004/07/24 17:46:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,7 +344,6 @@ add_fragment(struct cache_entry *cached, int offset,
 	add_at_pos(f->prev, nf);
 	f = nf;
 
-	ret = 1;
 	enlarge_entry(cached, length);
 
 	remove_overlaps(cached, f, &trunc);
@@ -352,7 +351,7 @@ add_fragment(struct cache_entry *cached, int offset,
 
 	dump_frags(cached, "add_fragment");
 
-	return ret;
+	return 1;
 }
 
 void

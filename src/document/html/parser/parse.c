@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.47 2004/06/21 14:24:19 miciah Exp $ */
+/* $Id: parse.c,v 1.48 2004/06/21 17:08:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,12 +254,12 @@ get_num(unsigned char *a, unsigned char *name)
 
 /* Returns width value from attribute named @name.
  * Parse 'width[%],....'-like string, and return width value in chars.
- * If @limit_it is set, it will limit width value to current useable width,
- * note that @limit_it must be set to be able to parse width expressed in
+ * If @limited is set, it will limit width value to the current usable width,
+ * note that @limited must be set to be able to parse width expressed in
  * percentage.
  * It returns -1 in case of error. */
 int
-get_width(unsigned char *a, unsigned char *name, int limit_it)
+get_width(unsigned char *a, unsigned char *name, int limited)
 {
 	unsigned char *value = get_attr_val(a, name);
 	unsigned char *str = value;
@@ -299,7 +299,7 @@ get_width(unsigned char *a, unsigned char *name, int limit_it)
 
 #define WIDTH_PIXELS2CHARS(width) ((width) + (HTML_CHAR_WIDTH - 1) / 2) / HTML_CHAR_WIDTH;
 
-	if (limit_it) {
+	if (limited) {
 		int maxwidth = par_format.width - (par_format.leftmargin + par_format.rightmargin);
 
 		if (percentage) {
@@ -314,7 +314,7 @@ get_width(unsigned char *a, unsigned char *name, int limit_it)
 
 	} else {
 		if (percentage) {
-			/* No sense, we need @limit_it and @maxwidth for percentage. */
+			/* No sense, we need @limited and @maxwidth for percentage. */
 			return -1;
 		} else {
 			/* Value is a number of pixels, makes an approximation,

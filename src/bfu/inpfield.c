@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.102 2003/11/24 01:22:20 jonas Exp $ */
+/* $Id: inpfield.c,v 1.103 2003/11/27 02:06:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,13 +136,13 @@ input_field_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	if (check_dialog(dlg_data)) return 1;
 
-	if (dlg_data->dlg->widgets->info.field.history)
+	if (widget_has_history(dlg_data->widgets_data))
 		add_to_input_history(dlg_data->dlg->widgets->info.field.history,
 				     text, 1);
 
 	if (fn) fn(data, text);
-	ok_dialog(dlg_data, widget_data);
-	return 0;
+
+	return cancel_dialog(dlg_data, widget_data);
 }
 
 void

@@ -1,5 +1,5 @@
 -- Bookmark system for Links-Lua.
--- $Id: bm.lua,v 1.4 2005/03/25 05:13:40 miciah Exp $
+-- $Id: bm.lua,v 1.5 2005/03/25 18:29:33 miciah Exp $
 
 -----------------------------------------------------------------------
 --  User options
@@ -309,7 +309,7 @@ function bookmarks_follow_url_hook (url)
 	if url then return url,true end
     end
 
-    return nil,nil
+    return url,nil
 end
 table.insert(follow_url_hooks, bookmarks_follow_url_hook)
 

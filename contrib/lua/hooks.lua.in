@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.60 2005/03/25 05:37:20 miciah Exp $
+-- $Id: hooks.lua.in,v 1.61 2005/03/25 18:29:33 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -303,7 +303,7 @@ smartprefixes = {
 
 -- Expand ~ to home directories.
 function expand_tilde (url, current_url)
-    if not match ("~", url) then return nil,nil end
+    if not match ("~", url) then return url,nil end
 
     if string.sub(url, 2, 2) == "/" or string.len(url) == 1 then    -- ~/foo
 	return home_dir..string.sub(url, 2),true
@@ -316,7 +316,7 @@ table.insert(goto_url_hooks, expand_tilde)
     
 -- Don't take localhost as directory name
 function expand_localhost (url)
-    if not match("localhost", url) then return nil,nil end
+    if not match("localhost", url) then return url,nil end
 
     return "http://"..url,nil
 end
@@ -342,13 +342,13 @@ function complete_uri_prefix (url, current_url)
             else
                 error('smartprefix "'..nick..'" has unsupported type "'
                       ..type(smartprefixes[nick])..'".')
-                return nil,nil
+                return url,nil
             end
         end
     end
 
     -- Unmatched.
-    return nil,nil
+    return url,nil
 end
 table.insert(goto_url_hooks, complete_uri_prefix)
 

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.91 2003/10/24 12:00:28 zas Exp $ */
+/* $Id: osdep.c,v 1.92 2003/10/27 00:37:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1647,20 +1647,33 @@ gpm_mouse_in(struct gpm_mouse_spec *gms)
 	gms->fn(gms->data, (char *)&ev, sizeof(struct term_event));
 }
 
-void *
-handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
-	     void *data)
+int
+init_mouse(int cons)
 {
-	int h;
 	Gpm_Connect conn;
-	struct gpm_mouse_spec *gms;
 
 	conn.eventMask = ~GPM_MOVE;
 	conn.defaultMask = GPM_MOVE;
 	conn.minMod = 0;
 	conn.maxMod = 0;
 
-	h = Gpm_Open(&conn, cons);
+	return Gpm_Open(&conn, cons);
+}
+
+int
+done_mouse(void)
+{
+	return Gpm_Close();
+}
+
+void *
+handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
+	     void *data)
+{
+	int h;
+	struct gpm_mouse_spec *gms;
+
+	h = init_mouse(cons, 0);
 	if (h < 0) return NULL;
 
 	gms = mem_alloc(sizeof(struct gpm_mouse_spec));
@@ -1681,8 +1694,8 @@ unhandle_mouse(void *h)
 	if (!gms) return;
 
 	set_handlers(gms->h, NULL, NULL, NULL, NULL);
-	Gpm_Close();
 	mem_free(gms);
+	done_mouse();
 }
 
 #elif !defined(USING_OS2_MOUSE)

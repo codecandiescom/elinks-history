@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.164 2004/09/12 02:33:50 miciah Exp $ */
+/* $Id: listbox.c,v 1.165 2004/09/12 02:34:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -544,8 +544,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		int offset = ev->info.mouse.y - widget_data->box.y;
 
 		box->sel_offset = offset;
-		box->sel = offset ? traverse_listbox_items_list(box->top,
-								box,
+		box->sel = offset ? traverse_listbox_items_list(box->top, box,
 								offset, 1,
 								NULL, NULL)
 				  : box->top;

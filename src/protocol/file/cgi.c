@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.8 2003/12/01 13:50:41 pasky Exp $ */
+/* $Id: cgi.c,v 1.9 2003/12/01 18:28:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@ close_pipe_and_read(struct connection *conn)
 	rb->close = 1;
 	conn->unrestartable = 1;
 	close(conn->cgi_pipes[1]), conn->cgi_pipes[1] = -1;
+	set_connection_state(conn, S_SENT);
 	set_connection_timeout(conn);
 	read_from_socket(conn, conn->socket, rb, http_got_header);
 }

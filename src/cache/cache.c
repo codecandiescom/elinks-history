@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.84 2003/11/08 12:02:31 zas Exp $ */
+/* $Id: cache.c,v 1.85 2003/11/08 12:13:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,8 +24,10 @@ static long cache_size;
 static int id_tag_counter = 0;
 
 
-/* Define to enable cache debugging features (redirect stderr to a file). */
-/* #define DEBUG_CACHE */
+/* Change 0 to 1 to enable cache debugging features (redirect stderr to a file). */
+#if 0
+#define DEBUG_CACHE
+#endif
 
 #ifdef DEBUG_CACHE
 
@@ -499,7 +501,8 @@ garbage_collection(int whole)
 	}
 
 #ifdef DEBUG_CACHE
-	debug("gc %d", whole);
+	debug("gc whole=%d opt_cache_size=%ld gc_cache_size=%ld",
+	      whole, opt_cache_size,gc_cache_size);
 #endif
 
 	if (!whole && cache_size <= opt_cache_size) return;

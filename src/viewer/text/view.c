@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.457 2004/06/13 22:36:50 zas Exp $ */
+/* $Id: view.c,v 1.458 2004/06/13 22:42:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,6 +166,17 @@ draw_frame_lines(struct terminal *term, struct frameset_desc *frameset_desc,
 	}
 }
 
+static void
+draw_view_status(struct terminal *term, struct document_view *doc_view, int active)
+{
+	assert(term && doc_view && doc_view->vs);
+	if_assert_failed return;
+
+	draw_forms(term, doc_view);
+	draw_searched(term, doc_view);
+	if (active) draw_current_link(term, doc_view);
+}
+
 void
 draw_doc(struct session *ses, struct document_view *doc_view, int active)
 {
@@ -252,8 +263,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 	    && doc_view->last_y == vy
 	    && !has_search_word(doc_view)) {
 		clear_link(term, doc_view);
-		draw_forms(term, doc_view);
-		if (active) draw_current_link(term, doc_view);
+		draw_view_status(term, doc_view, active);
 		return;
 	}
 	free_link(doc_view);
@@ -276,8 +286,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 		draw_line(term, box->x + st - vx, box->y + y - vy, en - st,
 			  &doc_view->document->data[y].chars[st]);
 	}
-	draw_forms(term, doc_view);
-	if (active) draw_current_link(term, doc_view);
+	draw_view_status(term, doc_view, active);
 	if (has_search_word(doc_view))
 		doc_view->last_x = doc_view->last_y = -1;
 }

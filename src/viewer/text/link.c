@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.215 2004/06/13 22:37:23 jonas Exp $ */
+/* $Id: link.c,v 1.216 2004/06/13 22:42:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,8 +174,8 @@ draw_link_do(struct terminal *term, struct document_view *doc_view,
 	}
 }
 
-static void
-draw_link(struct terminal *term, struct document_view *doc_view)
+void
+draw_current_link(struct terminal *term, struct document_view *doc_view)
 {
 	struct link *link;
 	int cursor_offset;
@@ -226,16 +226,6 @@ clear_link(struct terminal *term, struct document_view *doc_view)
 
 		free_link(doc_view);
 	}
-}
-
-void
-draw_current_link(struct terminal *term, struct document_view *doc_view)
-{
-	assert(term && doc_view && doc_view->vs);
-	if_assert_failed return;
-
-	draw_searched(term, doc_view);
-	draw_link(term, doc_view);
 }
 
 struct link *

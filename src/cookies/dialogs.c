@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.39 2004/04/12 22:49:15 jonas Exp $ */
+/* $Id: dialogs.c,v 1.40 2004/04/13 16:36:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,7 +259,7 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 		return;
 	}
 
-	add_dlg_text(dlg, dlg_server, AL_LEFT, 1);
+	add_dlg_text(dlg, dlg_server, AL_LEFT, 0);
 	add_dlg_field(dlg, _("Name", term), 0, 0, set_cookie_name, MAX_STR_LEN, name, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
 	add_dlg_field(dlg, _("Value", term), 0, 0, set_cookie_value, MAX_STR_LEN, value, NULL);

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.163 2004/04/12 22:49:14 jonas Exp $ */
+/* $Id: dialogs.c,v 1.164 2004/04/13 16:36:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,7 +323,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 
 	name = straconcat(_("Name", term), ": ", option->name, "\n",
 			  _("Type", term), ": ",
-			  _(option_types[option->type].name, term), "\n", NULL);
+			  _(option_types[option->type].name, term), NULL);
 	desc = straconcat(_("Description", term), ": \n",
 			  _(option->desc ? option->desc
 				  	 : (unsigned char *) "N/A", term),
@@ -350,7 +350,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	}
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
-	add_dlg_text(dlg, name, AL_LEFT, 1);
+	add_dlg_text(dlg, name, AL_LEFT, 0);
 	add_dlg_field(dlg, _("Value", term), 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
 

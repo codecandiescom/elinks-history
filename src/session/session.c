@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.235 2003/11/16 06:25:13 witekfl Exp $ */
+/* $Id: session.c,v 1.236 2003/11/16 06:28:59 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,11 +445,13 @@ free_files(struct session *ses)
 }
 
 
-void
+struct view_state *
 ses_forward(struct session *ses)
 {
 	struct location *loc;
+	struct view_state *vs;
 	int len;
+	int plain;
 
 	free_files(ses);
 
@@ -465,7 +467,7 @@ x:
 
 	/* struct view_state reserves one byte, so len is sufficient. */
 	loc = mem_alloc(sizeof(struct location) + len);
-	if (!loc) return;
+	if (!loc) return NULL;
 	memset(loc, 0, sizeof(struct location));
 	memcpy(&loc->download, &ses->loading, sizeof(struct download));
 
@@ -473,7 +475,7 @@ x:
 		struct frame *frame;
 
 		assertm(have_location(ses), "no location yet");
-		if_assert_failed return;
+		if_assert_failed return NULL;
 
 		copy_location(loc, cur_loc(ses));
 		add_to_history(&ses->history, loc);
@@ -487,9 +489,13 @@ x:
 			goto x;
 		}
 
-		destroy_vs(&frame->vs);
-		init_vs(&frame->vs, ses->loading_url);
-
+		vs = &frame->vs;
+		plain = vs->plain;
+		destroy_vs(vs);
+		init_vs(vs, ses->loading_url);
+		vs->plain = plain;
+		
+		
 		if (ses->goto_position) {
 			if (frame->vs.goto_position)
 				mem_free(frame->vs.goto_position);
@@ -502,7 +508,10 @@ x:
 #endif
 	} else {
 		init_list(loc->frames);
-		init_vs(&loc->vs, ses->loading_url);
+		vs = &loc->vs;
+		plain = vs->plain;
+		init_vs(vs, ses->loading_url);
+		vs->plain = plain;
 		add_to_history(&ses->history, loc);
 
 		if (ses->goto_position) {
@@ -515,6 +524,7 @@ x:
 	 * unhistory, we are venturing in another direction! */
 	if (ses->task == TASK_FORWARD)
 		clean_unhistory(&ses->history);
+	return vs;
 }
 
 static void

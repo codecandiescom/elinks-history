@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.77 2005/03/30 20:25:11 rrowan Exp $
+# $Id: hooks.pl,v 1.78 2005/04/01 23:11:15 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -705,6 +705,8 @@ sub goto_url_hook
 		if ($search)
 		{
 			$bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
+			my ($msgid) = $search =~ /^<(.*)>$/;
+			return 'http://' . $beta . '/groups?as_umsgid=' . $msgid . $bork if $msgid;
 			return 'http://' . $beta . '/groups?q=' . $search . $bork;
 		}
 		else

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.203 2004/09/28 16:21:48 pasky Exp $ */
+/* $Id: connection.c,v 1.204 2004/09/28 16:25:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ static INIT_LIST_HEAD(host_connections);
 static INIT_LIST_HEAD(keepalive_connections);
 
 /* Prototypes */
-static void send_connection_info(struct connection *conn);
+static void notify_connection_callbacks(struct connection *conn);
 static void check_keepalive_connections(void);
 
 static /* inline */ enum connection_priority
@@ -299,7 +299,7 @@ static void
 stat_timer(struct connection *conn)
 {
 	update_remaining_info(conn);
-	send_connection_info(conn);
+	notify_connection_callbacks(conn);
 }
 
 void
@@ -340,7 +340,7 @@ set_connection_state(struct connection *conn, enum connection_state state)
 		download->prev_error = conn->prev_error;
 	}
 
-	if (is_in_progress_state(state)) send_connection_info(conn);
+	if (is_in_progress_state(state)) notify_connection_callbacks(conn);
 }
 
 static void
@@ -398,7 +398,7 @@ free_connection_data(struct connection *conn)
 }
 
 void
-send_connection_info(struct connection *conn)
+notify_connection_callbacks(struct connection *conn)
 {
 	enum connection_state state = conn->state;
 	struct download *download, *next;
@@ -416,7 +416,7 @@ static void
 done_connection(struct connection *conn)
 {
 	del_from_list(conn);
-	send_connection_info(conn);
+	notify_connection_callbacks(conn);
 	if (conn->referrer) done_uri(conn->referrer);
 	done_uri(conn->uri);
 	done_uri(conn->proxied_uri);
@@ -690,7 +690,7 @@ retry_connection(struct connection *conn)
 
 	interrupt_connection(conn);
 	if (conn->uri->post || !max_tries || ++conn->tries >= max_tries) {
-		/*send_connection_info(conn);*/
+		/* notify_connection_callbacks(conn); */
 		done_connection(conn);
 		register_bottom_half((void (*)(void *)) check_queue, NULL);
 	} else {
@@ -703,7 +703,7 @@ void
 abort_connection(struct connection *conn)
 {
 	if (conn->running) interrupt_connection(conn);
-	/* send_connection_info(conn); */
+	/* notify_connection_callbacks(conn); */
 	done_connection(conn);
 	register_bottom_half((void (*)(void *)) check_queue, NULL);
 }

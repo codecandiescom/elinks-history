@@ -1,3 +1,9 @@
+Sat Oct  4 21:03:36 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* acconfig.h, configure.in:
+
+	Add test for regex.h and regex_t to configure.  
+
 Sat Oct  4 20:56:04 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* doc/README:

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.146 2003/09/15 14:11:23 zas Exp $ */
+/* $Id: session.c,v 1.147 2003/09/15 14:23:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,17 +437,17 @@ free_files(struct session *ses)
 void
 ses_forward(struct session *ses)
 {
-	struct location *l;
+	struct location *loc;
 	int len;
 
 	free_files(ses);
 	if (have_location(ses)) {
 		struct frame *frm;
 
-		l = cur_loc(ses);
-		foreach (frm, l->frames)
+		loc = cur_loc(ses);
+		foreach (frm, loc->frames)
 			frm->vs.view = NULL;
-		l->vs.view = NULL;
+		loc->vs.view = NULL;
 	}
 
 	if (ses->search_word) {
@@ -460,10 +460,11 @@ x:
 	if (have_location(ses))
 		int_lower_bound(&len, strlen(cur_loc(ses)->vs.url));
 
-	l = mem_alloc(sizeof(struct location) + len + 1);
-	if (!l) return;
-	memset(l, 0, sizeof(struct location));
-	memcpy(&l->download, &ses->loading, sizeof(struct download));
+	/* struct view_state reserves one byte, so len is sufficient. */
+	loc = mem_alloc(sizeof(struct location) + len);
+	if (!loc) return;
+	memset(loc, 0, sizeof(struct location));
+	memcpy(&loc->download, &ses->loading, sizeof(struct download));
 
 	if (ses->task_target_frame && *ses->task_target_frame) {
 		struct frame *frm;
@@ -471,13 +472,13 @@ x:
 		assertm(have_location(ses), "no location yet");
 		if_assert_failed return;
 
-		copy_location(l, cur_loc(ses));
-		add_to_history(ses, l);
+		copy_location(loc, cur_loc(ses));
+		add_to_history(ses, loc);
 		frm = ses_change_frame_url(ses, ses->task_target_frame,
 					   ses->loading_url);
 
 		if (!frm) {
-			destroy_location(l);
+			destroy_location(loc);
 			ses->task_target_frame = NULL;
 			goto x;
 		}
@@ -496,12 +497,12 @@ x:
 						&ses->loading, PRI_FRAME);
 #endif
 	} else {
-		init_list(l->frames);
-		init_vs(&l->vs, ses->loading_url);
-		add_to_history(ses, l);
+		init_list(loc->frames);
+		init_vs(&loc->vs, ses->loading_url);
+		add_to_history(ses, loc);
 
 		if (ses->goto_position) {
-			l->vs.goto_position = ses->goto_position;
+			loc->vs.goto_position = ses->goto_position;
 			ses->goto_position = NULL;
 		}
 	}

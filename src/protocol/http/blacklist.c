@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.10 2003/07/07 15:36:04 jonas Exp $ */
+/* $Id: blacklist.c,v 1.11 2003/07/23 12:49:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@ add_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags
 	struct blacklist_entry *b;
 
 	foreach (b, blacklist) {
-		if (strncasecmp(host, b->host, hostlen)) continue;
+		if (strlcasecmp(b->host, -1, host, hostlen)) continue;
 
 		b->flags |= flags;
 		return;
@@ -49,7 +49,7 @@ del_blacklist_entry(unsigned char *host, int hostlen, enum blacklist_flags flags
 	struct blacklist_entry *b;
 
 	foreach (b, blacklist) {
-		if (strncasecmp(host, b->host, hostlen)) continue;
+		if (strlcasecmp(b->host, -1, host, hostlen)) continue;
 
 		b->flags &= ~flags;
 		if (!b->flags) {
@@ -66,7 +66,7 @@ get_blacklist_flags(unsigned char *host, int hostlen)
 	struct blacklist_entry *b;
 
 	foreach (b, blacklist)
-		if (!strncasecmp(host, b->host, hostlen))
+		if (!strlcasecmp(b->host, -1, host, hostlen))
 			return b->flags;
 	return 0;
 }

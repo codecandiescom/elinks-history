@@ -225,6 +225,7 @@ Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 	One of Links authors; a lot of misc. features & code
 
 Karsten Schölzel <kuser@gmx.de>
+	Event system chief engineer
 	Scripting subsystem hacking
 	Random minor fixes
 
@@ -446,4 +447,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.132 2003/09/05 10:47:27 pasky Exp $
+$Id: AUTHORS,v 1.133 2003/09/22 22:00:46 jonas Exp $

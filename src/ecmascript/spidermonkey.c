@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.47 2004/09/26 12:55:01 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.48 2004/09/26 20:13:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,7 +357,7 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	enum prop_type prop_type;
 	union prop_union p;
 
-	p.boolean = 1; prop_type = JSPT_BOOLEAN;
+	prop_type = JSPT_UNDEF;
 
 	if (argc != 1)
 		goto bye;

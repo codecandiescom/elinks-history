@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-09-26 22:30+0200\n"
-"PO-Revision-Date: 2004-09-24 14:27+0200\n"
+"POT-Creation-Date: 2004-09-27 09:35+0200\n"
+"PO-Revision-Date: 2004-09-27 09:40+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -45,8 +45,8 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/info.c:44 src/dialogs/info.c:133 src/dialogs/info.c:155
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:497 src/dialogs/menu.c:545
 #: src/dialogs/options.c:176 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:373 src/ecmascript/spidermonkey.c:807
-#: src/ecmascript/spidermonkey.c:824 src/formhist/dialogs.c:183
+#: src/ecmascript/spidermonkey.c:373 src/ecmascript/spidermonkey.c:809
+#: src/ecmascript/spidermonkey.c:826 src/formhist/dialogs.c:183
 #: src/mime/dialogs.c:134 src/protocol/auth/dialogs.c:92
 #: src/protocol/protocol.c:226 src/protocol/user.c:206
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:367
@@ -3076,7 +3076,6 @@ msgid "Rules for passing URIs to external commands."
 msgstr "Règles de passage d'URIs aux commandes externes."
 
 #: src/config/options.inc:678
-#, c-format
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
@@ -5047,9 +5046,8 @@ msgid "ELinks C~vsWeb"
 msgstr "~ELinks CvsWeb"
 
 #: src/dialogs/menu.c:410
-#, fuzzy
 msgid "ELinks Cvs ~History"
-msgstr "~ELinks CvsWeb"
+msgstr "~Historique ELinks CvsWeb "
 
 #: src/dialogs/menu.c:413
 msgid "~Copying"
@@ -5395,21 +5393,21 @@ msgstr "Exécuter ou non ces scripts présents dans les documents."
 
 #: src/ecmascript/ecmascript.c:52
 msgid "Script error reporting"
-msgstr ""
+msgstr "Rapport d'erreur de script"
 
 #: src/ecmascript/ecmascript.c:54
 msgid "Open a message box when a script reports an error."
-msgstr ""
+msgstr "Ouvrir une boîte de message quand un script produit une erreur."
 
 #: src/ecmascript/spidermonkey.c:370
 msgid "JavaScript Alert"
-msgstr ""
+msgstr "Alerte JavaScript"
 
-#: src/ecmascript/spidermonkey.c:790
+#: src/ecmascript/spidermonkey.c:792
 msgid "JavaScript Error"
-msgstr ""
+msgstr "Erreur Javascript"
 
-#: src/ecmascript/spidermonkey.c:793
+#: src/ecmascript/spidermonkey.c:795
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following exception: \n"
@@ -5419,25 +5417,37 @@ msgid ""
 "%s\n"
 ".%*s^%*s."
 msgstr ""
+"Un script contenu dans le document courant a levé l'exception suivante: \n"
+"\n"
+"%s\n"
+"\n"
+"%s\n"
+".%*s^%*s."
 
-#: src/ecmascript/spidermonkey.c:801
+#: src/ecmascript/spidermonkey.c:803
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following exception: \n"
 "\n"
 "%s"
 msgstr ""
+"Un script contenu dans le document courant a levé l'exception suivante: \n"
+"\n"
+"%s"
 
-#: src/ecmascript/spidermonkey.c:818
+#: src/ecmascript/spidermonkey.c:820
 msgid "JavaScript Emergency"
-msgstr ""
+msgstr "Urgence JavaScript"
 
-#: src/ecmascript/spidermonkey.c:819
+#: src/ecmascript/spidermonkey.c:821
 msgid ""
 "A script embedded in the current document was running for more than 5 "
 "seconds in line. This probably means there is a bug in the script and it "
 "could have halted the whole ELinks. The script execution was interrupted."
 msgstr ""
+"Un script contenu dans le document courant s'exécute depuis plus de 5 "
+"secondes. Cela indique probablement qu'il y a un bogue dans ce script et que "
+"cela aura pu bloquer tout ELinks. L'exécution du script a été interrompue."
 
 #: src/formhist/dialogs.c:71
 msgid "Forms are never saved for this URL."
@@ -6432,7 +6442,6 @@ msgstr ""
 "'Activer les préfixes simples' pour plus de détails."
 
 #: src/protocol/rewrite/rewrite.c:74
-#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"

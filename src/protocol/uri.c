@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.250 2004/06/13 12:04:34 jonas Exp $ */
+/* $Id: uri.c,v 1.251 2004/06/18 18:48:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -921,6 +921,21 @@ parse_uri:
 
 	switch (uri_errno) {
 	case URI_ERRNO_OK:
+		/* Fix translation of 1.2.3.4:5 so IP address part won't be
+		 * interpreted as the protocol name. */
+		if (uri.protocol == PROTOCOL_UNKNOWN) {
+			unsigned char *ipscan = newurl;
+
+			/* It's IP? */
+			while (isdigit(*ipscan) || *ipscan == '.')
+				ipscan++;
+
+			if (!*ipscan || *ipscan == ':' || *ipscan == '/') {
+				insert_in_string(&newurl, 0, "http://", 7);
+				goto parse_uri;
+			}
+		}
+
 		/* If file:// URI is transformed we need to reparse. */
 		if (uri.protocol == PROTOCOL_FILE && cwd && *cwd
 		    && transform_file_url(&uri, cwd))

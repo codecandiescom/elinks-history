@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.276 2003/11/26 18:14:41 pasky Exp $ */
+/* $Id: view.c,v 1.277 2003/11/28 18:05:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -347,8 +347,8 @@ page_up(struct session *ses, struct document_view *doc_view, int a)
 	if_assert_failed return;
 
 	doc_view->vs->y -= doc_view->height;
+	int_lower_bound(&doc_view->vs->y, 0);
 	find_link(doc_view, -1, a);
-	if (doc_view->vs->y < 0) doc_view->vs->y = 0/*, find_link(f, 1, a)*/;
 }
 
 
@@ -432,12 +432,21 @@ scroll(struct session *ses, struct document_view *doc_view, int a)
 static void
 hscroll(struct session *ses, struct document_view *doc_view, int a)
 {
+	int x;
+	int max_x;
+
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	doc_view->vs->x += a;
-	int_bounds(&doc_view->vs->x, 0, doc_view->document->width - 1);
+	/* Don't scroll when the rest of the document is already visible */
 
+	max_x = int_max(doc_view->document->width - doc_view->width,
+			doc_view->vs->x);
+	x = doc_view->vs->x + a;
+	int_bounds(&x, 0, max_x);
+	if (x == doc_view->vs->x) return;
+
+	doc_view->vs->x = x;
 	if (c_in_view(doc_view)) return;
 	find_link(doc_view, 1, 0);
 	/* !!! FIXME: check right margin */

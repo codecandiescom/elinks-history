@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.225 2003/10/23 08:49:35 zas Exp $ */
+/* $Id: parser.c,v 1.226 2003/10/23 13:21:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -835,7 +835,7 @@ html_img(unsigned char *a)
 		}
 
 		format.link = straconcat("MAP@", u, NULL);
-			format.attr |= AT_BOLD;
+		format.attr |= AT_BOLD;
 		mem_free(u);
 		mem_free(al);
 	}
@@ -1003,7 +1003,8 @@ static void
 html_center(unsigned char *a)
 {
 	par_format.align = AL_CENTER;
-	if (!table_level) par_format.leftmargin = par_format.rightmargin = 0;
+	if (!table_level)
+		par_format.leftmargin = par_format.rightmargin = 0;
 }
 
 static void
@@ -1016,9 +1017,9 @@ html_linebrk(unsigned char *a)
 		else if (!strcasecmp(al, "right")) par_format.align = AL_RIGHT;
 		else if (!strcasecmp(al, "center")) {
 			par_format.align = AL_CENTER;
-			if (!table_level) par_format.leftmargin = par_format.rightmargin = 0;
-		}
-		else if (!strcasecmp(al, "justify")) par_format.align = AL_BLOCK;
+			if (!table_level)
+				par_format.leftmargin = par_format.rightmargin = 0;
+		} else if (!strcasecmp(al, "justify")) par_format.align = AL_BLOCK;
 		mem_free(al);
 	}
 }
@@ -1074,18 +1075,18 @@ html_h(int h, unsigned char *a,
 
 	switch (par_format.align) {
 		case AL_LEFT:
-			par_format.leftmargin = h << 1;
+			par_format.leftmargin = h * 2;
 			par_format.rightmargin = 0;
 			break;
 		case AL_RIGHT:
 			par_format.leftmargin = 0;
-			par_format.rightmargin = h << 1;
+			par_format.rightmargin = h * 2;
 			break;
 		case AL_CENTER:
 			par_format.leftmargin = par_format.rightmargin = 0;
 			break;
 		case AL_BLOCK:
-			par_format.leftmargin = par_format.rightmargin = h << 1;
+			par_format.leftmargin = par_format.rightmargin = h * 2;
 			break;
 		case AL_NONE:
 			/* Silence compiler warnings */
@@ -1134,7 +1135,7 @@ static void
 html_pre(unsigned char *a)
 {
 	par_format.align = AL_NONE;
-	par_format.leftmargin = par_format.leftmargin > 1;
+	par_format.leftmargin = (par_format.leftmargin > 1);
 	par_format.rightmargin = 0;
 }
 
@@ -1174,8 +1175,7 @@ html_hr(unsigned char *a)
 static void
 html_table(unsigned char *a)
 {
-	par_format.leftmargin = margin;
-	par_format.rightmargin = margin;
+	par_format.leftmargin = par_format.rightmargin = margin;
 	par_format.align = AL_LEFT;
 	html_linebrk(a);
 	format.attr = 0;
@@ -1242,8 +1242,9 @@ html_ul(unsigned char *a)
 		mem_free(al);
 	}
 	par_format.leftmargin += 2 + (par_format.list_level > 1);
-	if (!table_level && par_format.leftmargin > par_format.width / 2)
-		par_format.leftmargin = par_format.width / 2;
+	if (!table_level)
+		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
+
 	par_format.align = AL_LEFT;
 	html_top.dontkill = 1;
 }
@@ -1296,9 +1297,10 @@ html_li(unsigned char *a)
 	/*kill_until(0, "", "UL", "OL", NULL);*/
 	if (!par_format.list_number) {
 		unsigned char x[7] = "*&nbsp;";
+		int t = par_format.flags & P_LISTMASK;
 
-		if ((par_format.flags & P_LISTMASK) == P_O) x[0] = 'o';
-		if ((par_format.flags & P_LISTMASK) == P_PLUS) x[0] = '+';
+		if (t == P_O) x[0] = 'o';
+		if (t == P_PLUS) x[0] = '+';
 		put_chrs(x, 7, put_chars_f, ff);
 		par_format.leftmargin += 2;
 		par_format.align = AL_LEFT;
@@ -1410,13 +1412,13 @@ get_html_form(unsigned char *a, struct form *form)
 		form->action = stracpy(format.href_base);
 		if (form->action) {
 			unsigned char *ch = strchr(form->action, POST_CHAR);
-			if (ch) *ch = 0;
+			if (ch) *ch = '\0';
 
 			/* We have to do following for GET method, because we would end
 			 * up with two '?' otherwise. */
 			if (form->method == FM_GET) {
 				ch = strchr(form->action, '?');
-				if (ch) *ch = 0;
+				if (ch) *ch = '\0';
 			}
 		}
 	}
@@ -1531,12 +1533,14 @@ xxx:
 	fc->method = form.method;
 	fc->action = form.action ? stracpy(form.action) : NULL;
 	fc->name = get_attr_val(a, "name");
+
 	fc->default_value = get_attr_val(a, "value");
+	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
+	if (!fc->default_value && fc->type == FC_RESET) fc->default_value = stracpy("Reset");
+	if (!fc->default_value) fc->default_value = stracpy("");
+
 	fc->ro = has_attr(a, "disabled") ? 2 : has_attr(a, "readonly") ? 1 : 0;
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
-	if (fc->type == FC_SUBMIT && !fc->default_value) fc->default_value = stracpy("Submit");
-	if (fc->type == FC_RESET && !fc->default_value) fc->default_value = stracpy("Reset");
-	if (!fc->default_value) fc->default_value = stracpy("");
 	special_f(ff, SP_CONTROL, fc);
 	format.form = fc;
 	format.attr |= AT_BOLD;
@@ -1601,7 +1605,11 @@ xxx:
 	fc->name = get_attr_val(a, "name");
 
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
-	if (fc->type == FC_CHECKBOX && !fc->default_value) fc->default_value = stracpy("on");
+	if (!fc->default_value && fc->type == FC_CHECKBOX) fc->default_value = stracpy("on");
+	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
+	if (!fc->default_value && fc->type == FC_RESET) fc->default_value = stracpy("Reset");
+	if (!fc->default_value) fc->default_value = stracpy("");
+
 	fc->size = get_num(a, "size");
 	if (fc->size == -1) fc->size = HTML_DEFAULT_INPUT_SIZE;
 	fc->size++;
@@ -1611,9 +1619,6 @@ xxx:
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
 	fc->ro = has_attr(a, "disabled") ? 2 : has_attr(a, "readonly") ? 1 : 0;
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
-	if (fc->type == FC_SUBMIT && !fc->default_value) fc->default_value = stracpy("Submit");
-	if (fc->type == FC_RESET && !fc->default_value) fc->default_value = stracpy("Reset");
-	if (!fc->default_value) fc->default_value = stracpy("");
 	if (fc->type == FC_HIDDEN) goto hid;
 
 	put_chrs(" ", 1, put_chars_f, ff);
@@ -1654,7 +1659,8 @@ xxx:
 		case FC_RESET:
 			format.attr |= AT_BOLD;
 			put_chrs("[&nbsp;", 7, put_chars_f, ff);
-			if (fc->default_value) put_chrs(fc->default_value, strlen(fc->default_value), put_chars_f, ff);
+			if (fc->default_value)
+				put_chrs(fc->default_value, strlen(fc->default_value), put_chars_f, ff);
 			put_chrs("&nbsp;]", 7, put_chars_f, ff);
 			break;
 		default:

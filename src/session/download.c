@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.164 2003/11/13 22:42:00 pasky Exp $ */
+/* $Id: download.c,v 1.165 2003/11/13 22:43:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1306,11 +1306,13 @@ ses_chktype(struct session *ses, struct download **download, struct cache_entry 
 
 	if (!ctype) goto end;
 
-	for (i = 0; known_types[i].type; i++)
-		if (!strcasecmp(ctype, known_types[i].type)) {
-			plaintext = known_types[i].plain;
-			goto free_ct;
-		}
+	for (i = 0; known_types[i].type; i++) {
+		if (strcasecmp(ctype, known_types[i].type))
+			continue;
+
+		plaintext = known_types[i].plain;
+		goto free_ct;
+	}
 
 	xwin = ses->tab->term->environment & ENV_XWIN;
 	handler = get_mime_type_handler(ctype, xwin);

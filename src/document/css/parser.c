@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.61 2004/01/27 01:12:26 pasky Exp $ */
+/* $Id: parser.c,v 1.62 2004/01/27 01:23:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,11 +279,19 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 
 	skip_css_tokens(scanner, '{');
 
+	/* We don't handle the case where a property has already been added to
+	 * a selector. That doesn't matter though, because the best one will be
+	 * always the last one (FIXME: 'important!'), therefore the applier
+	 * will take it last and it will have the "final" effect.
+	 *
+	 * So it's only a little waste and no real harm. The thing is, what do
+	 * you do when you have 'background: #fff' and then 'background:
+	 * x-repeat'? It would require yet another logic to handle merging of
+	 * these etc and the induced overhead would in most cases mean more
+	 * waste that having the property multiple times in a selector, I
+	 * believe. --pasky */
+
 	selector = selectors->next;
-	/* TODO: We don't handle the case where a property has already been
-	 * added to a selector. Maybe we should pass an empty list to
-	 * css_parse_properties() and then do a merge of old and new properties
-	 * favoring the new ones. */
 	css_parse_properties(&selector->properties, scanner);
 
 	skip_css_tokens(scanner, '}');

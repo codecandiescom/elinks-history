@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.6 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: button.h,v 1.7 2003/06/27 19:36:51 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -12,7 +12,7 @@
 #define B_ESC		2
 
 extern struct widget_ops button_ops;
-
+void min_max_buttons_width(struct terminal *term, struct widget_data *butt, int n, int *minwidth, int *maxwidth);
 void max_buttons_width(struct terminal *, struct widget_data *, int, int *);
 void min_buttons_width(struct terminal *, struct widget_data *, int, int *);
 void dlg_format_buttons(struct terminal *, struct terminal *, struct widget_data *, int, int, int *, int, int *, enum format_align);

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.23 2003/06/27 19:26:02 zas Exp $ */
+/* $Id: button.c,v 1.24 2003/06/27 19:36:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,23 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 
+
+void
+min_max_buttons_width(struct terminal *term, struct widget_data *butt,
+		      int n, int *minwidth, int *maxwidth)
+{
+	int maxw = -2;
+	register int i;
+
+	for (i = 0; i < n; i++) {
+		int minw = strlen((butt++)->item->text) + 4;
+
+		maxw += minw + 2;
+		if (minw > *minwidth) *minwidth = minw;
+	}
+
+	if (maxw > *maxwidth) *maxwidth = maxw;
+}
 
 void
 max_buttons_width(struct terminal *term, struct widget_data *butt,

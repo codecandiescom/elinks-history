@@ -1,3 +1,76 @@
+Sat May 25 21:40:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.h:
+
+	Never Commit Untested Patches. Fix for the last patch - preallocate
+	memory for string options correctly now.  
+
+Sat May 25 21:18:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.h:
+
+	...that is, preallocate MAX_STR_LEN for each options string. This
+	prevents many buffer overflows and easy mistakes.  
+
+Sat May 25 21:16:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/download.c:
+
+	Reverted last patch. This bug seems to be *very* common now, let's
+	do it in another way..  
+
+Sat May 25 21:13:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/download.c:
+
+	Fixed very stupid but also very drastic and fatal buffer overflow.
+	We forgot to reallocate download_dir when we were changing it. How
+	silly ;).  
+
+Sat May 25 20:05:05 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: options.h, opttypes.c, options.c:
+
+	Removed stale trash^W^Wterm2 support.  
+
+Sat May 25 19:34:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS:
+
+	Who Is Dmitry? 
+
+Sat May 25 19:18:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	files -> file, totally dumb mistake.. Reported by Dmitry.  
+
+Sat May 25 19:16:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Fixed bzlib detection.  
+
+Sat May 25 13:46:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/conf.c, config/options.c, config/options.h,
+	config/opttypes.c, cookies/cookies.c, dialogs/menu.c,
+	dialogs/options.c, document/cache.c, document/download.c,
+	document/dump.c, document/globhist.c, document/history.c,
+	document/options.c, document/options.h, document/session.c,
+	document/session.h, document/view.c, document/html/renderer.c,
+	lowlevel/dns.c, lowlevel/sched.c, protocol/file.c, protocol/ftp.c,
+	protocol/types.c, protocol/http/http.c:
+
+	Final step of options hiearchization - options were moved to
+	hiearchic structure. Note that it may change yet, without any
+	backwards compatibility, so you may not want to use this yet. Watch
+	links-discuss mailing list. Also, it's quite possible I forgot some.
+	Fixed hiearchical options handling. Implemented saving of
+	hiearchical options. Config file parser fixes. Removed struct
+	document_setup. get_opt() is more debugging-friendly now -
+	internal()s there will show file and line of get_opt() caller.  
+
 Thu May 23 20:49:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/conf.c:

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.17 2002/05/08 13:59:07 pasky Exp $ */
+/* $Id: socket.c,v 1.18 2002/06/09 15:38:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ error:
 
 void dns_found(void *data, int state)
 {
-	int sock;
+	int sock = -1;
 	struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = conn->conn_info;
 	int i;

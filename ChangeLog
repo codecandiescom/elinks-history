@@ -1,3 +1,55 @@
+Fri Feb 20 16:32:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/codes.c:
+
+	Gettextize HTTP error document.  
+
+Fri Feb 20 16:03:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/codes.c:
+
+	Oops fix TODOer.  
+
+Fri Feb 20 16:01:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: codes.c, codes.h, http.c:
+
+	Use question_queuing to make it straight forward to i10n HTTP error
+	messages. TODO: Freeing of http_error_info when freeing
+	question_queue.  
+
+Fri Feb 20 15:19:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.h, protocol/http/http.c:
+
+	Fix do_auth_dialog() prototyping.  
+
+Fri Feb 20 14:41:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, protocol/auth/dialogs.c,
+	protocol/auth/dialogs.h, protocol/http/http.c, sched/session.c,
+	sched/session.h:
+
+	Make the question_queue more bottomhalf like taking data pointer.  
+
+Fri Feb 20 14:24:48 2004  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Updated hungarian translation.  
+
+Fri Feb 20 10:56:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h:
+
+	Disable exmode by default. It is not useful bloat.  
+
+Fri Feb 20 06:26:12 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/uri.c:
+
+	file_exists used instead of access.  
+
 Thu Feb 19 20:43:56 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/lowlevel/dns.c:

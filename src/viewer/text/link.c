@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.310 2004/12/28 23:04:47 zas Exp $ */
+/* $Id: link.c,v 1.311 2004/12/29 14:25:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,7 +184,7 @@ init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 	}
 
 	if (doc_opts->invert_active_link && invert) {
-		swap_values(colors.foreground, colors.background);
+		swap_values(color_t, colors.foreground, colors.background);
 
 		/* Highlight text-input form-fields correctly if contrast
 		 * correction is needed. */

@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.37 2005/02/02 17:33:15 jonas Exp $ */
+/* $Id: error.c,v 1.38 2005/02/08 17:42:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,11 +102,14 @@ struct s_msg_dsc {
 	{S_GOPHER_CSO_ERROR,	N_("The CSO phone-book protocol is not supported.")},
 #endif
 
-	{S_PROXY_ERROR,		N_("The proxy configuration encountered an error.\n"
-				"This usually means that either an environment\n"
-				"variable with proxy info or a proxy scripting\n"
-				"hook did not provide proxy configuration info\n"
-				"in the correct format.")},
+	{S_PROXY_ERROR,		N_("Configuration of the proxy server failed.\n"
+				"This might be caused by an incorrect proxy\n"
+				"setting specified by an environment variable\n"
+				"or returned by a scripting proxy hook.\n"
+				"\n"
+				"The correct syntax for proxy settings are\n"
+				"a host name optionally followed by a colon\n"
+				"and a port number. Example: 'localhost:8080'.")},
 
 	{0,			NULL}
 };

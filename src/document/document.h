@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.22 2003/11/08 16:24:29 zas Exp $ */
+/* $Id: document.h,v 1.23 2003/11/08 16:28:01 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -135,7 +135,7 @@ struct document {
 	enum cp_status cp_status;
 };
 
-#if 1
+#if 0
 #define DEBUG_DOCUMENT_LOCKS
 #endif
 

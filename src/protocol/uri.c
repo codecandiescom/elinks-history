@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.80 2003/12/21 20:56:48 jonas Exp $ */
+/* $Id: uri.c,v 1.81 2004/02/15 12:49:30 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -908,16 +908,20 @@ decode_uri_string(unsigned char *src) {
 		c = *src++;
 
 		if (c == '%') {
-			int x1 = unhx(*src);
+			/* %7E */
+			if (src[0] == '7' && src[1] == 'E') goto next;
+			else {
+				int x1 = unhx(*src);
 
-			if (x1 >= 0) {
-				int x2 = unhx(*(src + 1));
+				if (x1 >= 0) {
+					int x2 = unhx(*(src + 1));
 
-				if (x2 >= 0) {
-					x1 = (x1 << 4) + x2;
-					if (x1 != 0) { /* don't allow %00 */
-						c = (unsigned char) x1;
-						src += 2;
+					if (x2 >= 0) {
+						x1 = (x1 << 4) + x2;
+						if (x1 != 0) { /* don't allow %00 */
+							c = (unsigned char) x1;
+							src += 2;
+						}
 					}
 				}
 			}
@@ -931,7 +935,7 @@ decode_uri_string(unsigned char *src) {
 			c = ' ';
 #endif
 		}
-
+next:
 		*dst++ = c;
 	} while (c != '\0');
 }

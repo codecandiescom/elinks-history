@@ -1,3 +1,108 @@
+Mon Jan 20 18:02:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* acconfig.h, configure.in:
+
+	Added checks for __va_copy() and C99 compliant vsnprintf(). Taken
+	from Samba.  
+
+Mon Jan 20 17:50:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: Makefile.am, snprintf.c, snprintf.h:
+
+	Introduced own implementation of snprintf(), ported from the Samba
+	project. Will be improved yet.  
+
+Mon Jan 20 16:23:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Add struct addrinfo check to the IPv6 checks.  
+
+Mon Jan 20 16:21:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/select.c:
+
+	Portability note.  
+
+Mon Jan 20 15:09:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	Restore stub declaration ifdefs - now they cause conflicts. So it's
+	either -ansi or -Werror, it looks.  
+
+Mon Jan 20 15:08:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: string.c, string.h:
+
+	Introduced qualifiers to declarations of the stub functions.  
+
+Mon Jan 20 14:57:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/gettextP.h:
+
+	Make gettext use our stubs.  
+
+Mon Jan 20 14:56:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/util/string.c, src/util/string.h:
+
+	Fixed strcasecmp() stub, declare stubbed functions everytime (since
+	sometimes just declaration is suppressed, but the function exists so
+	configure will detect it). Introduced strdup() stub.  
+
+Mon Jan 20 14:17:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/: dcigettext.c, gettextP.h, libintl.c:
+
+	Introduced LANGUAGE variable which takes precedence to the LANGUAGE
+	environment variable inside of gettext. Make set_language() to
+	modify that variable instead of using unportable setenv().  
+
+Mon Jan 20 13:58:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/os_dep.h:
+
+	Introduced stub for strcasecmp().  
+
+Mon Jan 20 13:48:17 2003  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	A check for variadic macros was added. For near future use.  
+
+Mon Jan 20 13:38:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/util/string.c, src/util/string.h:
+
+	Introduced stub for strcasecmp().  
+
+Mon Jan 20 11:09:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS, TODO:
+
+	Removed stale TODO item, updated NEWS.  
+
+Mon Jan 20 10:22:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/hash.c:
+
+	Updated the Move Front Rule comment.  
+
+Mon Jan 20 10:19:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/hash.c:
+
+	When retrieving an item from the hash, move it to the head of list
+	of the hash key values. The Links people call it MFR, inspired by
+	them (probably PerM).  
+
+Mon Jan 20 00:57:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/css/: atrule.h, ruleset.h, scanner.h:
+
+	Moved exported functions to css_* namespace.  
+
 Sun Jan 19 20:25:21 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/elusive/parser/css/: atrule.h, parser.h, ruleset.h,

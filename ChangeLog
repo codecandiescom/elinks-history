@@ -1,3 +1,30 @@
+Wed May 12 19:43:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Mention pasky's ode to the almighty bookmarks.  
+
+Wed May 12 19:35:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Mention doc/small.txt in CONFIG_SMALL description.  
+
+Wed May 12 15:08:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* .cvsignore, Makefile.am, configure.in:
+
+	Log the feature summary to features.log file. It ensures settings
+	for all features are shown and simplifies the code plus the file
+	might be useful for someone.  
+
+Tue May 11 23:22:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Move a few cleanup functions to the 'init_b' sequence. They should
+	all be empty when running in client mode.  
+
 Tue May 11 19:45:23 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/text.c:

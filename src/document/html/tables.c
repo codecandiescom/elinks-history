@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.301 2004/06/29 15:25:09 zas Exp $ */
+/* $Id: tables.c,v 1.302 2004/06/29 15:27:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -472,9 +472,7 @@ again:
 			if (u && u[col]) continue;
 			
 			max_width = dd * widths[col] / p;
-			if (!max_width) max_width = 1;
-			if (max_width > max_widths[col])
-				max_width = max_widths[col];
+			int_bounds(&max_width, 1, max_widths[col]);
 			if (max_width > max) {
 				max = max_width;
 				max_index = col;

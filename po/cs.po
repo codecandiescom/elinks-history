@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-22 21:26+0100\n"
-"PO-Revision-Date: 2003-11-18 21:38+0100\n"
+"PO-Revision-Date: 2003-11-24 21:46+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -56,41 +56,33 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:425
-#, fuzzy
 msgid "Deleting used folder"
-msgstr "©ablonová slo¾ka"
+msgstr "Tuhle slo¾ku teï nìkdo pou¾ívá"
 
 #: src/bfu/hierbox.c:426
-#, fuzzy, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr ""
-"Bohu¾el s tímto bookmarkem právì pracuje nìco jiného.\n"
-"\n"
-"Název: \"%s\""
+"Bohu¾el se slo¾kou \"%s\" právì pracuje nìco jiného."
 
 #: src/bfu/hierbox.c:438
-#, fuzzy
 msgid "Deleting used item"
-msgstr "Smazat polo¾ku"
+msgstr "Tuto polo¾ku teï nìkdo pou¾ívá"
 
 #: src/bfu/hierbox.c:439
-#, fuzzy, c-format
 msgid ""
 "Sorry, but the item \"%s\" is being used by something else.\n"
 "\n"
 "%s"
 msgstr ""
-"Bohu¾el s tímto bookmarkem právì pracuje nìco jiného.\n"
+"Bohu¾el s polo¾kou \"%s\" právì pracuje nìco jiného.\n"
 "\n"
-"Název: \"%s\""
+"%s"
 
 #: src/bfu/hierbox.c:536
-#, fuzzy
 msgid "Delete marked items"
-msgstr "Smazat oznaèené polo¾ky?"
+msgstr "Smazat oznaèené polo¾ky"
 
 #: src/bfu/hierbox.c:537
-#, fuzzy
 msgid "Delete marked items?"
 msgstr "Smazat oznaèené polo¾ky?"
 
@@ -107,40 +99,36 @@ msgid "No"
 msgstr "Ne"
 
 #: src/bfu/hierbox.c:547
-#, fuzzy
 msgid "Delete folder"
-msgstr "Smazat bookmark"
+msgstr "Smazat slo¾ku"
 
 #: src/bfu/hierbox.c:548
-#, fuzzy, c-format
+#, c-format
 msgid "Delete the folder \"%s\" and its content?"
-msgstr "Smazat obsah slo¾ky \"%s\"?"
+msgstr "Smazat slo¾ku \"%s\" i s obsahem?"
 
 #: src/bfu/hierbox.c:560
-#, fuzzy
 msgid "Delete item"
 msgstr "Smazat polo¾ku"
 
 #: src/bfu/hierbox.c:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete \"%s\"?\n"
 "\n"
 "%s"
 msgstr ""
-"Smazat bookmark \"%s\"?\n"
+"Smazat \"%s\"?\n"
 "\n"
-"URL: \"%s\""
+"%s"
 
 #: src/bfu/hierbox.c:615
-#, fuzzy
 msgid "Clear all items"
-msgstr "Smazat globální historii"
+msgstr "Smazat v¹echny polo¾ky"
 
 #: src/bfu/hierbox.c:616
-#, fuzzy
 msgid "Do you really want to remove all items?"
-msgstr "Chce¹ opravdu ukonèit ELinks?"
+msgstr "Chce¹ opravdu odstranit v¹echny polo¾ky?"
 
 #: src/bfu/inpfield.c:44 src/bfu/inpfield.c:53
 msgid "Bad number"
@@ -164,12 +152,11 @@ msgstr "Napi¹ tam nìco"
 
 #: src/bfu/leds.c:64
 msgid "LEDs"
-msgstr ""
+msgstr "LED indikátory"
 
 #: src/bfu/leds.c:66
-#, fuzzy
 msgid "LEDs options."
-msgstr "Nastavení SSL."
+msgstr "Nastavení LED indikátorù."
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/bfu/leds.c:68 src/config/options.inc:1719 src/config/options.inc:1726
@@ -179,9 +166,8 @@ msgid "Enable"
 msgstr "Zapnout"
 
 #: src/bfu/leds.c:70
-#, fuzzy
 msgid "Enable LEDs."
-msgstr "Zapnout"
+msgstr "Zapnout LED indikátory."
 
 #. name:
 #: src/bfu/leds.c:237
@@ -250,7 +236,7 @@ msgstr ""
 #: src/bookmarks/dialogs.c:72
 #, c-format
 msgid "URL: \"%s\""
-msgstr ""
+msgstr "URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:185 src/bookmarks/dialogs.c:414
 msgid "Add folder"
@@ -701,9 +687,8 @@ msgid "Open cache manager"
 msgstr "Správce cache"
 
 #: src/config/kbdbind.c:388
-#, fuzzy
 msgid "Open cookie manager"
-msgstr "Správce cache"
+msgstr "Správce cookies"
 
 #: src/config/kbdbind.c:389
 msgid "Reload cookies file"
@@ -4070,9 +4055,8 @@ msgid "~Cache"
 msgstr "~Cache"
 
 #: src/dialogs/menu.c:334
-#, fuzzy
 msgid "Coo~kies"
-msgstr "Cookies"
+msgstr "Coo~kies"
 
 #: src/dialogs/menu.c:340
 msgid "Sa~ve as"
@@ -4087,9 +4071,8 @@ msgid "Save formatted ~document"
 msgstr "Ulo¾ zformátovaný ~dokument"
 
 #: src/dialogs/menu.c:347
-#, fuzzy
 msgid "Ki~ll background connections"
-msgstr "U~konèit v¹echny spojení na pozadí"
+msgstr "Ukonèit v¹echna ~spojení na pozadí"
 
 #: src/dialogs/menu.c:348
 msgid "~Flush all caches"

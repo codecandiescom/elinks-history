@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.93 2003/10/30 13:30:32 zas Exp $ */
+/* $Id: link.c,v 1.94 2003/10/30 17:45:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -594,17 +594,6 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 }
 
 
-static void
-decrement_document_refcount(struct document *document)
-{
-	assert(document);
-	if_assert_failed return;
-
-	if (!--document->refcount) format_cache_entries++;
-	assertm(document->refcount >= 0, "reference count underflow");
-	if_assert_failed document->refcount = 0;
-}
-
 int
 enter(struct session *ses, struct document_view *doc_view, int a)
 {
@@ -660,7 +649,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 
 		doc_view->document->refcount++;
 		add_empty_window(ses->tab->term,
-				 (void (*)(void *)) decrement_document_refcount,
+				 (void (*)(void *)) release_document,
 				 doc_view->document);
 		do_select_submenu(ses->tab->term, link->form->menu, ses);
 

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.8 2003/10/29 19:59:43 jonas Exp $ */
+/* $Id: document.h,v 1.9 2003/10/30 01:53:33 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -148,5 +148,16 @@ init_document(unsigned char *uristring, struct document_options *options);
 
 /* Releases the document and all it's resources. */
 void done_document(struct document *document);
+
+struct document *get_cached_document(unsigned char *uristring, struct document_options *options, int id);
+
+extern int format_cache_entries;
+
+long formatted_info(int);
+
+void shrink_format_cache(int);
+void count_format_cache(void);
+void delete_unused_format_cache_entries(void);
+void format_cache_reactivate(struct document *);
 
 #endif

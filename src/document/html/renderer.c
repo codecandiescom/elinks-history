@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.335 2003/10/30 00:54:55 zas Exp $ */
+/* $Id: renderer.c,v 1.336 2003/10/30 01:53:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,6 @@ struct table_cache_entry {
 
 /* Global variables */
 int margin;
-int format_cache_entries = 0;
 
 static int table_cache_entries = 0;
 static int last_link_to_move;
@@ -85,7 +84,6 @@ static int g_ctrl_num;
 static int empty_format;
 
 static struct hash *table_cache = NULL;
-static INIT_LIST_HEAD(format_cache);
 
 
 /* Prototypes */
@@ -1508,74 +1506,6 @@ format_html(struct cache_entry *ce, struct document *document)
 }
 
 void
-shrink_format_cache(int whole)
-{
-	struct document *document;
-	int format_cache_size = get_opt_int("document.cache.format.size");
-
-	delete_unused_format_cache_entries();
-
-	assertm(format_cache_entries >= 0, "format_cache_entries underflow");
-	if_assert_failed format_cache_entries = 0;
-
-	document = format_cache.prev;
-	while ((whole || format_cache_entries > format_cache_size)
-	       && (void *)document != &format_cache) {
-
-		if (document->refcount) {
-			document = document->prev;
-			continue;
-		}
-
-		document = document->prev;
-		done_document(document->next);
-		format_cache_entries--;
-	}
-}
-
-void
-count_format_cache(void)
-{
-	struct document *document;
-
-	format_cache_entries = 0;
-	foreach (document, format_cache)
-		if (!document->refcount)
-			format_cache_entries++;
-}
-
-void
-delete_unused_format_cache_entries(void)
-{
-	struct document *document;
-
-	foreach (document, format_cache) {
-		if (!document->refcount) {
-			struct cache_entry *ce = NULL;
-
-			if (!find_in_cache(document->url, &ce) || !ce
-			    || ce->id_tag != document->id_tag) {
-				assertm(ce, "file %s disappeared from cache",
-					document->url);
-				document = document->prev;
-				done_document(document->next);
-				format_cache_entries--;
-			}
-		}
-	}
-}
-
-void
-format_cache_reactivate(struct document *document)
-{
-	assert(document);
-	if_assert_failed return;
-
-	del_from_list(document);
-	add_to_list(format_cache, document);
-}
-
-void
 cached_format_html(struct view_state *vs, struct document_view *document_view,
 		   struct document_options *options)
 {
@@ -1603,68 +1533,21 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 		return;
 	}
 
-	foreach (document, format_cache) {
-		if (strcmp(document->url, vs->url)
-		    || compare_opt(&document->options, options))
-			continue;
-
-		if (cache_entry->id_tag != document->id_tag) {
-			if (!document->refcount) {
-				document = document->prev;
-				done_document(document->next);
-				format_cache_entries--;
-			}
-			continue;
-		}
-
-		format_cache_reactivate(document);
-
-		if (!document->refcount++) format_cache_entries--;
-		document_view->document = document;
-
-		goto sx;
-	}
-
-	cache_entry->refcount++;
-	shrink_memory(0);
-
-	document = init_document(vs->url, options);
-	if (!document) {
-		cache_entry->refcount--;
-		return;
-	}
-
-	add_to_list(format_cache, document);
+	document = get_cached_document(vs->url, options, cache_entry->id_tag);
+	if (!document) return;
 
 	document_view->document = document;
-	format_html(cache_entry, document);
 
-sx:
+	if (document->id_tag != cache_entry->id_tag) {
+		cache_entry->refcount++;
+		shrink_memory(0);
+		format_html(cache_entry, document);
+	}
+
 	document_view->width = document->options.xw;
 	document_view->height = document->options.yw;
 	document_view->xp = document->options.xp;
 	document_view->yp = document->options.yp;
-}
-
-long
-formatted_info(int type)
-{
-	int i = 0;
-	struct document *document;
-
-	switch (type) {
-		case INFO_FILES:
-			foreach (document, format_cache) i++;
-			return i;
-		case INFO_LOCKED:
-			foreach (document, format_cache)
-				i += !!document->refcount;
-			return i;
-		default:
-			internal("formatted_info: bad request");
-	}
-
-	return 0;
 }
 
 

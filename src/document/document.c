@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.4 2003/10/29 19:43:37 jonas Exp $ */
+/* $Id: document.c,v 1.5 2003/10/30 01:53:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,9 @@
 #include "viewer/text/link.h"
 
 
+static INIT_LIST_HEAD(format_cache);
+int format_cache_entries = 0;
+
 struct document *
 init_document(unsigned char *uristring, struct document_options *options)
 {
@@ -45,6 +48,38 @@ init_document(unsigned char *uristring, struct document_options *options)
 	document->refcount = 1;
 
 	copy_opt(&document->options, options);
+
+	return document;
+}
+
+struct document *
+get_cached_document(unsigned char *uristring, struct document_options *options,
+		    int id_tag)
+{
+	struct document *document;
+
+	foreach (document, format_cache) {
+		if (strcmp(document->url, uristring)
+		    || compare_opt(&document->options, options))
+			continue;
+
+		if (id_tag != document->id_tag) {
+			if (!document->refcount) {
+				document = document->prev;
+				done_document(document->next);
+				format_cache_entries--;
+			}
+			continue;
+		}
+
+		format_cache_reactivate(document);
+
+		if (!document->refcount++) format_cache_entries--;
+		return document;
+	}
+
+	document = init_document(uristring, options);
+	if (document) add_to_list(format_cache, document);
 
 	return document;
 }
@@ -119,4 +154,95 @@ done_document(struct document *document)
 
 	del_from_list(document);
 	mem_free(document);
+}
+
+/* Formatted document cache management */
+
+void
+shrink_format_cache(int whole)
+{
+	struct document *document;
+	int format_cache_size = get_opt_int("document.cache.format.size");
+
+	delete_unused_format_cache_entries();
+
+	assertm(format_cache_entries >= 0, "format_cache_entries underflow");
+	if_assert_failed format_cache_entries = 0;
+
+	document = format_cache.prev;
+	while ((whole || format_cache_entries > format_cache_size)
+	       && (void *)document != &format_cache) {
+
+		if (document->refcount) {
+			document = document->prev;
+			continue;
+		}
+
+		document = document->prev;
+		done_document(document->next);
+		format_cache_entries--;
+	}
+}
+
+void
+count_format_cache(void)
+{
+	struct document *document;
+
+	format_cache_entries = 0;
+	foreach (document, format_cache)
+		if (!document->refcount)
+			format_cache_entries++;
+}
+
+void
+delete_unused_format_cache_entries(void)
+{
+	struct document *document;
+
+	foreach (document, format_cache) {
+		if (!document->refcount) {
+			struct cache_entry *ce = NULL;
+
+			if (!find_in_cache(document->url, &ce) || !ce
+			    || ce->id_tag != document->id_tag) {
+				assertm(ce, "file %s disappeared from cache",
+					document->url);
+				document = document->prev;
+				done_document(document->next);
+				format_cache_entries--;
+			}
+		}
+	}
+}
+
+void
+format_cache_reactivate(struct document *document)
+{
+	assert(document);
+	if_assert_failed return;
+
+	del_from_list(document);
+	add_to_list(format_cache, document);
+}
+
+long
+formatted_info(int type)
+{
+	int i = 0;
+	struct document *document;
+
+	switch (type) {
+		case INFO_FILES:
+			foreach (document, format_cache) i++;
+			return i;
+		case INFO_LOCKED:
+			foreach (document, format_cache)
+				i += !!document->refcount;
+			return i;
+		default:
+			internal("formatted_info: bad request");
+	}
+
+	return 0;
 }

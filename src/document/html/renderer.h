@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.47 2003/10/29 22:58:10 jonas Exp $ */
+/* $Id: renderer.h,v 1.48 2003/10/30 01:53:33 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -14,16 +14,6 @@
  * declarations. */
 /* #include "vs.h" */
 
-
-extern int format_cache_entries;
-
-
-long formatted_info(int);
-
-void shrink_format_cache(int);
-void count_format_cache(void);
-void delete_unused_format_cache_entries(void);
-void format_cache_reactivate(struct document *);
 
 struct view_state;
 struct document_options;

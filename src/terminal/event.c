@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.76 2004/10/23 11:06:03 pasky Exp $ */
+/* $Id: event.c,v 1.77 2004/10/25 19:10:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,17 +100,9 @@ term_send_event(struct terminal *term, struct term_event *ev)
 				win->handler(win, ev);
 
 		} else {
-			foreachback (win, term->windows) {
-				if (!inactive_tab(win)) {
+			foreachback (win, term->windows)
+				if (!inactive_tab(win))
 					win->handler(win, ev);
-				} else {
-					/* Skip windows in inactive tabs. */
-					while ((struct list_head *) win->prev != &term->windows
-					       && win->prev->type != WINDOW_TAB) {
-						win = win->prev;
-					}
-				}
-			}
 		}
 		term->redrawing = 0;
 		break;
@@ -121,16 +113,13 @@ term_send_event(struct terminal *term, struct term_event *ev)
 		assert(!list_empty(term->windows));
 		if_assert_failed break;
 
-		/* We need to send event to the topmost window --pasky of a
-		 * correct tab. --karpov */
-		win = get_current_tab(term);
-		if (win) {
-			while ((struct list_head *) win->prev != &term->windows
-			       && win->prev->type != WINDOW_TAB) {
-				win = win->prev;
-			}
-		} else {
-			win = term->windows.next;
+		/* We need to send event to correct tab, not to the first one. --karpov */
+		/* ...if we want to send it to a tab at all. --pasky */
+		win = term->windows.next;
+		if (win->type == WINDOW_TAB) {
+			win = get_current_tab(term);
+			assertm(win, "No tab to send the event to!");
+			if_assert_failed return;
 		}
 
 		win->handler(win, ev);

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.23 2004/10/23 11:40:30 pasky Exp $ */
+/* $Id: window.c,v 1.24 2004/10/25 19:10:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,17 +73,7 @@ add_window_at_pos(struct terminal *term, window_handler handler,
 void
 add_window(struct terminal *term, window_handler handler, void *data)
 {
-	struct window *at = get_current_tab(term);
-
-	if (at) {
-		while ((struct list_head *) at != &term->windows
-		       && at->prev->type != WINDOW_TAB) {
-			at = at->prev;
-		}
-	} else {
-		at = (struct window *) &term->windows;
-	}
-	add_window_at_pos(term, handler, data, at);
+	add_window_at_pos(term, handler, data, (struct window *) &term->windows);
 }
 
 void

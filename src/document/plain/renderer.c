@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.70 2004/01/22 18:45:09 jonas Exp $ */
+/* $Id: renderer.c,v 1.71 2004/01/28 02:09:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,13 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+struct plain_renderer {
+	struct document *document;
+	unsigned char *source;
+	int length;
+	struct conv_table *convert_table;
+};
 
 #define realloc_document_links(doc, size) \
 	ALIGN_LINK(&(doc)->links, (doc)->nlinks, size)
@@ -282,9 +289,12 @@ add_node(struct document *document, int x, int y, int width, int height)
 }
 
 static void
-add_document_lines(struct document *document, unsigned char *source, int length,
-		   struct conv_table *convert_table)
+add_document_lines(struct plain_renderer *renderer)
 {
+	struct document *document = renderer->document;
+	unsigned char *source = renderer->source;
+	int length = renderer->length;
+	struct conv_table *convert_table = renderer->convert_table;
 	struct screen_char template;
 	int lineno;
 	int was_empty_line = 0;
@@ -385,6 +395,7 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	struct fragment *fr = ce->frag.next;
 	struct conv_table *convert_table;
 	struct string head;
+	struct plain_renderer renderer;
 	unsigned char *source = NULL;
 	int length = 0;
 
@@ -406,7 +417,12 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	done_string(&head);
 
 	document->title = get_no_post_url(document->url, NULL);
-	add_document_lines(document, source, length, convert_table);
-
 	document->bgcolor = global_doc_opts->default_bg;
+
+	renderer.document = document;
+	renderer.source = source;
+	renderer.length = length;
+	renderer.convert_table = convert_table;
+
+	add_document_lines(&renderer);
 }

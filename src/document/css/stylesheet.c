@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.2 2004/01/24 02:53:10 jonas Exp $ */
+/* $Id: stylesheet.c,v 1.3 2004/01/24 03:35:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,14 +58,7 @@ done_css_stylesheet(struct css_stylesheet *css)
 		struct css_selector *selector = css->selectors.next;
 
 		del_from_list(selector);
-
-		while (!list_empty(selector->properties)) {
-			struct css_property *prop = selector->properties.next;
-
-			del_from_list(prop);
-			mem_free(prop);
-		}
-
+		free_list(selector->properties);
 		mem_free(selector->element);
 		mem_free(selector);
 	}

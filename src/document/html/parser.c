@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.343 2004/01/18 15:01:28 zas Exp $ */
+/* $Id: parser.c,v 1.344 2004/01/18 15:03:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2261,9 +2261,9 @@ static void
 parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int **new_values, int *new_values_count)
 {
 	unsigned char *tmp_str;
-	unsigned long n;
+	unsigned long number;
 	int q, qq, divisor, nn;
-	int *oo;
+	int *tmp_values;
 	int *values = NULL;
 	int values_count = 0;
 	register int i;
@@ -2271,20 +2271,20 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 new_ch:
 	while (isspace(*str)) str++;
 	errno = 0;
-	n = strtoul(str, (char **)&str, 10);
+	number = strtoul(str, (char **)&str, 10);
 	if (errno) {
 		*new_values_count = 0;
 		return;
 	}
 
-	q = n;
+	q = number;
 	if (*str == '%') q = q * max_value / 100;
 	else if (*str != '*') q = (q + (pixels_per_char - 1) / 2) / pixels_per_char;
 	else if (!q) q = -1;
 	else q = -q;
 
-	oo = mem_realloc(values, (values_count + 1) * sizeof(int));
-	if (oo) (values = oo)[values_count++] = q;
+	tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));
+	if (tmp_values) (values = tmp_values)[values_count++] = q;
 	else {
 		*new_values_count = 0;
 		return;
@@ -2328,29 +2328,29 @@ distribute:
 		for (i = 0; i < values_count; i++) if (values[i] < 0) neg = 1;
 		if (!neg) goto distribute;
 
-		oo = mem_alloc(values_count * sizeof(int));
-		if (!oo) {
+		tmp_values = mem_alloc(values_count * sizeof(int));
+		if (!tmp_values) {
 			*new_values_count = 0;
 			return;
 		}
-		memcpy(oo, values, values_count * sizeof(int));
+		memcpy(tmp_values, values, values_count * sizeof(int));
 		for (i = 0; i < values_count; i++) if (values[i] < 1) values[i] = 1;
 		q = max_value - q;
 		divisor = 0;
-		for (i = 0; i < values_count; i++) if (oo[i] < 0) divisor += -oo[i];
+		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) divisor += -tmp_values[i];
 		qq = q;
-		for (i = 0; i < values_count; i++) if (oo[i] < 0) {
-			values[i] += (-oo[i] * qq / divisor);
-			q -= (-oo[i] * qq / divisor);
+		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) {
+			values[i] += (-tmp_values[i] * qq / divisor);
+			q -= (-tmp_values[i] * qq / divisor);
 		}
 		assertm(q >= 0, "parse_frame_widths: q < 0");
 		if_assert_failed q = 0;
-		for (i = 0; i < values_count; i++) if (oo[i] < 0) {
+		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) {
 			if (q) values[i]++, q--;
 		}
 		assertm(q <= 0, "parse_frame_widths: q > 0");
 		if_assert_failed q = 0;
-		mem_free(oo);
+		mem_free(tmp_values);
 	}
 
 	for (i = 0; i < values_count; i++) if (!values[i]) {

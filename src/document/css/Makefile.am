@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2004/01/17 14:06:36 pasky Exp $
+## $Id: Makefile.am,v 1.2 2004/01/17 15:45:48 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -13,5 +13,7 @@ include $(top_srcdir)/Makefile.base
 noinst_LIBRARIES = libcss.a
 libcss_a_SOURCES = \
  css.c \
- css.h
+ css.h \
+ value.c \
+ value.h
 

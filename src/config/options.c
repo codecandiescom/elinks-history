@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.303 2003/10/18 09:14:14 pasky Exp $ */
+/* $Id: options.c,v 1.304 2003/10/18 12:29:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2084,9 +2084,22 @@ register_options(void)
 		"dialog", 0,
 		N_("Dialog colors."));
 
-	add_opt_color("ui.colors.color.dialog", N_("Generic background color"),
+	add_opt_alias("ui.colors.color.dialog", NULL,
+		"background", 0, "ui.colors.color.dialog.generic.background",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use ui.colors.color.dialog.generic.background instead."));
+
+	add_opt_tree("ui.colors.color.dialog", N_("Generic"),
+		"generic", 0,
+		N_("Generic dialog colors."));
+
+	add_opt_color("ui.colors.color.dialog.generic", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.color.dialog.generic", N_("Background color"),
 		"background", 0, "white",
-		N_("Dialog generic background color."));
+		N_("Default background color."));
 
 	add_opt_tree("ui.colors.color.dialog", N_("Frame"),
 		"frame", 0,
@@ -2479,9 +2492,22 @@ register_options(void)
 		"dialog", 0,
 		N_("Dialog colors."));
 
-	add_opt_color("ui.colors.mono.dialog", N_("Dialog generic background color"),
+	add_opt_alias("ui.colors.mono.dialog", NULL,
+		"background", 0, "ui.colors.mono.dialog.generic.background",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use ui.colors.mono.dialog.generic.background instead."));
+
+	add_opt_tree("ui.colors.mono.dialog", N_("Generic"),
+		"generic", 0,
+		N_("Generic dialog colors."));
+
+	add_opt_color("ui.colors.mono.dialog.generic", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.mono.dialog.generic", N_("Background color"),
 		"background", 0, "white",
-		N_("Dialog generic background color."));
+		N_("Default background color."));
 
 	add_opt_tree("ui.colors.mono.dialog", N_("Frame"),
 		"frame", 0,

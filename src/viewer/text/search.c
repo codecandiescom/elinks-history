@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.176 2004/01/29 07:54:54 jonas Exp $ */
+/* $Id: search.c,v 1.177 2004/01/29 11:09:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1147,6 +1147,8 @@ link_typeahead_handler(struct input_line *line, int action)
 					 line->handler);
 			return INPUT_LINE_CANCEL;
 		}
+
+		line->data = "#";
 	}
 
 	switch (do_typeahead(ses, doc_view, buffer, action)) {

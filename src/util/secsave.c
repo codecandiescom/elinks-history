@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.39 2004/07/22 02:25:06 pasky Exp $ */
+/* $Id: secsave.c,v 1.40 2004/08/14 23:19:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,7 +258,7 @@ secure_close(struct secure_save_info *ssi)
 	}
 
 	if (ssi->secure_save && ssi->file_name && ssi->tmp_file_name) {
-#ifdef OS2
+#ifdef CONFIG_OS2
 		/* OS/2 needs this, however it breaks atomicity on
 		 * UN*X. */
 		unlink(ssi->file_name);

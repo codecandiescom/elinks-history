@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.146 2004/08/14 23:08:22 jonas Exp $ */
+/* $Id: osdep.c,v 1.147 2004/08/14 23:18:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ set_cwd(unsigned char *path)
 
 /* Terminal size */
 
-#ifndef OS2
+#ifndef CONFIG_OS2
 
 static void
 sigwinch(void *s)
@@ -224,7 +224,7 @@ c_pipe(int *fd)
 	return pipe(fd);
 }
 
-#elif defined(OS2) || defined(WIN32)
+#elif defined(CONFIG_OS2) || defined(WIN32)
 
 void
 set_bin(int fd)
@@ -311,7 +311,7 @@ is_xterm(void)
 
 unsigned int resize_count = 0;
 
-#ifndef OS2
+#ifndef CONFIG_OS2
 
 #if !(defined(CONFIG_BEOS) && defined(HAVE_SETPGID)) && !defined(WIN32)
 
@@ -615,7 +615,7 @@ get_input_handle(void)
 #endif
 
 
-#if defined(UNIX) || defined(OS2) || defined(CONFIG_RISCOS)
+#if defined(UNIX) || defined(CONFIG_OS2) || defined(CONFIG_RISCOS)
 
 void
 terminate_osdep(void)
@@ -724,7 +724,7 @@ can_resize_window(int environment)
 	return !!(environment & ENV_OS2VIO);
 }
 
-#ifndef OS2
+#ifndef CONFIG_OS2
 int
 can_open_os_shell(int environment)
 {

@@ -1,9 +1,9 @@
-/* $Id: os2.h,v 1.7 2003/10/28 00:17:49 pasky Exp $ */
+/* $Id: os2.h,v 1.8 2004/08/14 23:19:00 jonas Exp $ */
 
 #ifndef EL__OSDEP_OS2_OS2_H
 #define EL__OSDEP_OS2_OS2_H
 
-#ifdef OS2
+#ifdef CONFIG_OS2
 
 struct terminal;
 

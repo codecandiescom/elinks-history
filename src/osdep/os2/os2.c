@@ -1,13 +1,11 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.26 2004/08/12 08:40:35 miciah Exp $ */
+/* $Id: os2.c,v 1.27 2004/08/14 23:19:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include "osdep/system.h"
-
-#ifdef OS2
 
 #ifdef X2
 /* from xf86sup - XFree86 OS/2 support driver */
@@ -772,6 +770,4 @@ prealloc_truncate(int h, int siz)
 {
 	ftruncate(h, siz);
 }
-#endif
-
 #endif

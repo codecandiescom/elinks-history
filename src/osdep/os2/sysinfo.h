@@ -1,9 +1,9 @@
-/* $Id: sysinfo.h,v 1.3 2004/01/01 15:54:38 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.4 2004/08/14 23:19:00 jonas Exp $ */
 
 #ifndef EL__OSDEP_OS2_SYSINFO_H
 #define EL__OSDEP_OS2_SYSINFO_H
 
-#ifdef OS2
+#ifdef CONFIG_OS2
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 /*#define NO_ASYNC_LOOKUP*/

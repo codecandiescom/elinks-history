@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.3 2002/03/17 17:27:52 pasky Exp $ */
+/* $Id: file.c,v 1.4 2002/03/26 18:10:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +40,8 @@
 #include <document/cache.h>
 #include <lowlevel/sched.h>
 #include <protocol/file.h>
+
+#define FILE_DIR_COLOR   "yellow"
 
 #ifdef FS_UNIX_RIGHTS
 void setrwx(int m, unsigned char *p)
@@ -359,9 +361,28 @@ void file_func(struct connection *c)
 				mem_free(n);
 			}
 			add_to_str(&file, &fl, "\">");
-			if (color_dirs && dir[i].s[0] == 'd') add_to_str(&file, &fl, "<font color=\"yellow\">");
+			
+			if (dir[i].s[0] == 'd' && color_dirs) {
+				if (dds.use_document_colours) {
+					add_to_str(&file, &fl,
+							"<font color=\""
+							FILE_DIR_COLOR
+							"\">");
+				} else {
+					add_to_str(&file, &fl, "<b>");
+				}
+			}
+			
 			add_to_str(&file, &fl, dir[i].f);
-			if (color_dirs && dir[i].s[0] == 'd') add_to_str(&file, &fl, "</font>");
+
+			if (dir[i].s[0] == 'd' && color_dirs) {
+				if (dds.use_document_colours) {
+					add_to_str(&file, &fl, "</font>");
+				} else {
+					add_to_str(&file, &fl, "</b>");
+				}
+			}
+			
 			add_to_str(&file, &fl, "</a>");
 			if (lnk) {
 				add_to_str(&file, &fl, " -> ");

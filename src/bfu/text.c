@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.36 2003/11/07 16:00:17 jonas Exp $ */
+/* $Id: text.c,v 1.37 2003/11/07 16:10:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,10 +80,15 @@ dlg_format_text(struct terminal *term,
 		unsigned char *text, int x, int *y, int w, int *rw,
 		struct color_pair *color, enum format_align align)
 {
-	do {
-		int shift;
-		int line_width = split_line(text, w, x);
+	int line_width;
 
+	for (; *text; text += line_width, (*y)++) {
+		int shift;
+
+		/* Skip any leading space from last line split */
+		if (*text == ' ' || *text == '\n') text++;
+
+		line_width = split_line(text, w, x);
 		shift = (align == AL_CENTER ? int_max((w - line_width) / 2, 0) : 0);
 
 		assert(line_width - x <= w && shift < w);
@@ -93,7 +98,5 @@ dlg_format_text(struct terminal *term,
 		}
 
 		if (rw) int_lower_bound(rw, line_width);
-		text += line_width + 1;
-		(*y)++;
-	} while (*(text - 1));
+	}
 }

@@ -243,6 +243,11 @@ msgid ""
 "## options through UI, however only option values will be altered\n"
 "## and all your formatting, own comments etc will be kept as-is.\n"
 msgstr ""
+"## Dies ist eine ELinks-Konfigurations-Datei. Wenn man möchte,\n"
+"## kann man ihn selbst verändern; diese Datei wird durch ELinks verändert,\n"
+"## wenn man die Optionen mittels Benutzerschnittstelle abspeichert, wobei\n"
+"## nur die Werte der Optionen geändert werden. Die gesamte Formatierung,\n"
+"## eigene Kommentare usw. bleiben erhalten.\n"
 
 #: src/config/conf.c:597
 msgid ""
@@ -254,6 +259,14 @@ msgid ""
 "## it is NOT counted as missing. Note that all your formatting,\n"
 "## own comments and so on will be kept as-is.\n"
 msgstr ""
+"## Dies ist eine ELinks-Konfigurations-Datei. Wenn man möchte,\n"
+"## kann man ihn selbst verändern; diese Datei wird durch ELinks verändert,\n"
+"## wenn man die Optionen mittels Benutzerschnittstelle abspeichert, wobei\n"
+"## nur die Werte der Optionen geändert werden und fehlende Optionen werden\n"
+"## an das Ende der Datei angehängt; ist eine Option nicht in dieser Datei,\n"
+"## sondern in einer durch diese einbezogene Datei, so wird sie NICHT als\n"
+"## fehlend betrachtet. Die gesamte Formatierung,\n"
+"## eigene Kommentare usw. bleiben erhalten.\n"
 
 #: src/config/conf.c:607
 msgid ""
@@ -262,6 +275,10 @@ msgid ""
 "## by ELinks when you save options through UI and you are out of\n"
 "## luck with your formatting and own comments then, so beware.\n"
 msgstr ""
+"## Dies ist eine ELinks-Konfigurations-Datei. Wenn man möchte,\n"
+"## kann man ihn selbst verändern, aber diese Datei wird überschrieben,\n"
+"## wenn man die Optionen mittels Benutzerschnittstelle abspeichert, und\n"
+"## jegliche Formatierung, Kommentare usw. gehen verloren, also Vorsicht.\n"
 
 #: src/config/conf.c:620
 msgid ""
@@ -269,6 +286,9 @@ msgid ""
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
+"## Wenn dir nicht gefällt, was ELinks mit dieser Datei macht,\n"
+"## dann kannst du natürlich die Option confi.saving_style ändern.\n"
+"## Nun, sind wir am Ende nicht doch freundliche Typen?\n"
 
 #: src/config/conf.c:635
 msgid "Automatically saved options\n"
@@ -970,7 +990,7 @@ msgstr ""
 
 #: src/config/options.inc:61
 msgid "Comments localization"
-msgstr ""
+msgstr "Kommentare lokalisieren"
 
 #: src/config/options.inc:63
 msgid ""
@@ -981,6 +1001,13 @@ msgid ""
 "terminal where you saved the file, but it should be generally\n"
 "considered unpredictable."
 msgstr ""
+"Wenn diese Option den Wert 1 hat, werden Kommentare in der\n"
+"Konfigurations-Datei in die Sprache übersetzt, die in der\n"
+"Benutzerschnittstelle benutzt wird. Wenn man auf verschiedenen Terminal\n"
+"verschiedene Sprachen benutzt, ist zu beachten, dass die Sprache\n"
+"in der Konfigurations-Datei identisch mit derjenigen des Terminal, auf dem\n"
+"die Datei gespeichert wurde, sein KÖNNTE, aber gewöhnlich ist dies nicht\n"
+"vorhersehbar."
 
 #: src/config/options.inc:71
 msgid "Saving style warnings"
@@ -1345,13 +1372,15 @@ msgstr "Suffix, um Links zu Bildern zu kennzeichnen."
 
 #: src/config/options.inc:252
 msgid "Display links to images w/o alt"
-msgstr "Zeige Links zu Bildern ohne alternativ Beschreibung an"
+msgstr "Zeige Links zu Bildern ohne alternative Beschreibung an"
 
 #: src/config/options.inc:254
 msgid ""
 "Display links to images without an alt attribute. If this option\n"
 "is off, these images are completely invisible."
 msgstr ""
+"Zeige Links zu Bildern ohne alt-Attribut (alternative Beschreibung)\n"
+"an. Wenn diese Option abgeschaltet ist, sind diese Bilder völlig unsichtbar."
 
 #: src/config/options.inc:257
 msgid "Display links to images"
@@ -1533,7 +1562,7 @@ msgstr "Fett"
 
 #: src/config/options.inc:292
 msgid "Make the active link text bold."
-msgstr ""
+msgstr "Zeige den Text des aktuellen Links fett an."
 
 #: src/config/options.inc:294
 msgid "Invert colors"
@@ -1541,7 +1570,7 @@ msgstr "Farben invertieren"
 
 #: src/config/options.inc:296
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
+msgstr "Vorder- und Hintergrundfarbe umtauschen, so dass der Link hervorsticht."
 
 #: src/config/options.inc:299 src/dialogs/options.c:137
 msgid "Underline"
@@ -1549,7 +1578,7 @@ msgstr "Unterstreichen"
 
 #: src/config/options.inc:301
 msgid "Underline the active link."
-msgstr ""
+msgstr "Aktuellen Link unterstreichen."
 
 #: src/config/options.inc:304
 msgid "Directory highlighting"

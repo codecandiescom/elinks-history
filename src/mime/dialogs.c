@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.94 2004/04/13 22:38:48 jonas Exp $ */
+/* $Id: dialogs.c,v 1.95 2004/04/13 22:42:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,9 +123,9 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	}
 
 	if (opt) {
-		safe_strncpy(new->ext, empty_string_or_(fcp), MAX_STR_LEN);
-		safe_strncpy(new->ct, empty_string_or_(opt->value.string), MAX_STR_LEN);
-		safe_strncpy(new->ext_orig, empty_string_or_(translated.source), MAX_STR_LEN);
+		safe_strncpy(new->ext, fcp, MAX_STR_LEN);
+		safe_strncpy(new->ct, opt->value.string, MAX_STR_LEN);
+		safe_strncpy(new->ext_orig, translated.source, MAX_STR_LEN);
 	}
 
 	if (fcp) {

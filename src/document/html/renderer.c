@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.31 2002/06/17 07:42:30 pasky Exp $ */
+/* $Id: renderer.c,v 1.32 2002/06/21 14:11:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,9 +232,6 @@ static inline int fg_color(int fg, int bg)
 	int l = bg < fg ? bg : fg;
 	int h = bg < fg ? fg : bg;
 
-	/* Below, I changed !l to l == 0. The two forms compile to the same
-	 * machine-code with GCC 2.95.4. The latter is more readable (IMO). */
-
 	if (l == h
 		/* Check for clashing colours. For example, 3 (red) clashes
 		 * with 5 (magenta) and 12 (brightblue). */
@@ -243,7 +240,9 @@ static inline int fg_color(int fg, int bg)
 		|| (l == 2 && (h == 6))
 		|| (l == 3 && (h == 5 || h == 12))
 		|| ((l == 4 || l == 5) && (h == 8 || h == 12))
-		|| (d_opt->avoid_dark_on_black && /* FIXME: when possibility to change bg color... */
+		|| (!d_opt->avoid_dark_on_black &&
+			/* ^- FIXME: when possibility to change bg color... */
+			/* ^- XXX: now it means allow_dark_on_black !! */
 			   ((l == 0 && (h == 4 || h == 12)) ||
 			    (l == 1 && (h == 8)))
 		   )

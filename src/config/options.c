@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.57 2002/06/21 14:04:22 pasky Exp $ */
+/* $Id: options.c,v 1.58 2002/06/21 14:11:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -603,12 +603,20 @@ register_options()
 		"cache", 0,
 		"Cache options.");
 
-	add_opt_int("document.cache",
-		"format_cache_size", 0, 0, 256, 5,
+	add_opt_tree("document.cache",
+		"format", 0,
+		"Format cache options.");
+
+	add_opt_int("document.cache.format",
+		"size", 0, 0, 256, 5,
 		"Number of cached formatted pages.");
 
-	add_opt_int("document.cache",
-		"memory_cache_size", 0, 0, MAXINT, 1048576,
+	add_opt_tree("document.cache",
+		"memory", 0,
+		"Memory cache options.");
+
+	add_opt_int("document.cache.memory",
+		"size", 0, 0, MAXINT, 1048576,
 		"Memory cache size (in kilobytes).");
 
 
@@ -649,8 +657,8 @@ register_options()
 		"Default vlink color.");
 
 	add_opt_bool("document.colors",
-		"avoid_dark_on_black", 0, 1,
-		"Avoid dark colors on black background.");
+		"allow_dark_on_black", 0, 0,
+		"Allow dark colors on black background.");
 
 	add_opt_bool("document.colors",
 		"use_document_colors", 0, 1,

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.19 2002/06/21 13:51:21 pasky Exp $ */
+/* $Id: options.c,v 1.20 2002/06/21 14:11:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -761,6 +761,9 @@ void
 html_refresh(struct session *ses)
 {
 	get_opt_int("document.browse.margin_width") = atoi(marg_str);
+	/* XXX: too lazy to change label */
+	get_opt_int("document.colors.allow_dark_on_black") =
+		!get_opt_int("document.colors.allow_dark_on_black");
 	html_interpret(ses);
 	draw_formatted(ses);
 	load_frames(ses, ses->screen);
@@ -849,7 +852,7 @@ menu_html_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[8].dlen = sizeof(int);
 
 	d->items[9].type = D_CHECKBOX;
-	d->items[9].data = (unsigned char *) get_opt_ptr("document.colors.avoid_dark_on_black");
+	d->items[9].data = (unsigned char *) get_opt_ptr("document.colors.allow_dark_on_black");
 	d->items[9].dlen = sizeof(int);
 
 	d->items[10].type = D_BUTTON;

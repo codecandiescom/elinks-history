@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.32 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: dump.c,v 1.33 2002/12/16 22:52:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,10 +38,10 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-
-struct status dump_stat;
 int dump_pos;
-int dump_redir_count = 0;
+
+static struct status dump_stat;
+static int dump_redir_count = 0;
 
 void
 dump_end(struct status *stat, void *p)

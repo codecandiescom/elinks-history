@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.232 2004/06/08 13:32:18 jonas Exp $ */
+/* $Id: uri.c,v 1.233 2004/06/08 13:37:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -315,7 +315,7 @@ compare_uri(struct uri *a, struct uri *b, enum uri_component components)
 		&& (!wants(URI_FRAGMENT)
 		    || compare_component(a->fragment, a->fragmentlen, b->fragment, b->fragmentlen))
 		&& (!wants(URI_POST)
-		    || compare_component(a->post, a->post ? strlen(a->post) : 0, b->post, b->post ? strlen(b->post : 0)));
+		    || compare_component(a->post, a->post ? strlen(a->post) : 0, b->post, b->post ? strlen(b->post) : 0));
 }
 
 

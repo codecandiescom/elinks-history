@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.53 2004/12/10 18:14:50 zas Exp $ */
+/* $Id: link.c,v 1.54 2004/12/10 18:16:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -296,10 +296,7 @@ html_img(unsigned char *a)
 			unsigned char *img_link_suffix = get_opt_str("document.browse.images.image_link_suffix");
 			unsigned char *new_label = straconcat(img_link_prefix, label, img_link_suffix, NULL);
 
-			if (new_label) {
-				mem_free(label);
-				label = new_label;
-			}
+			if (new_label) mem_free_set(&label, new_label);
 		}
 
 		if (!get_opt_bool("document.browse.images.show_any_as_links")) {

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.118 2004/06/07 23:38:54 jonas Exp $ */
+/* $Id: form.c,v 1.119 2004/06/09 20:48:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ fixup_select_state(struct form_control *fc, struct form_state *fs)
 }
 
 static void
-init_ctrl(struct form_control *frm, struct form_state *fs)
+init_form_state(struct form_control *frm, struct form_state *fs)
 {
 	assert(frm && fs);
 	if_assert_failed return;
@@ -179,7 +179,7 @@ find_form_state(struct document_view *doc_view, struct form_control *frm)
 	fs->g_ctrl_num = frm->g_ctrl_num;
 	fs->position = frm->position;
 	fs->type = frm->type;
-	init_ctrl(frm, fs);
+	init_form_state(frm, fs);
 
 	return fs;
 }
@@ -731,7 +731,7 @@ do_reset_form(struct document_view *doc_view, int form_num)
 		if (frm->form_num == form_num) {
 			struct form_state *fs = find_form_state(doc_view, frm);
 
-			if (fs) init_ctrl(frm, fs);
+			if (fs) init_form_state(frm, fs);
 		}
 }
 

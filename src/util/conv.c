@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.29 2003/05/14 12:00:32 pasky Exp $ */
+/* $Id: conv.c,v 1.30 2003/05/14 12:43:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@
 
 
 
-/* This functions takes string @s and stores the @number (of a result width
+/* This function takes string @s and stores the @number (of a result width
  * @width) in string format there, starting at position [*@slen]. If the number
  * would take more space than @width, it is truncated and only the _last_
  * digits of it are inserted to the string. If the number takes less space than
@@ -33,7 +33,7 @@
  *
  * ulongcat(s, NULL, 12345, 4, 0) : s = "2345"
  *
- * ulongcat(s, NULL, 123, 5, '0') : s = "001234"
+ * ulongcat(s, NULL, 123, 5, '0') : s = "00123"
  */
 /* The function returns 0 if OK or ideal desired width if truncated. A negative
  * value signs an error. */
@@ -43,41 +43,47 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		unsigned long number, unsigned int width,
 		unsigned char fillchar)
 {
-	unsigned int start = slen ? *slen : 0;
-	unsigned int pos = 1;
+	unsigned int start = 0; /* start of the whole string */
+	unsigned int nlen = 1; /* '0' is one char, we can't have less. */
+	unsigned int pos = 0; /* starting position of the number */
 	unsigned long q = number;
 	int ret = 0;
 
-	if (width < 1 || !s)
-		return -1;
+	if (width < 1 || !s) return -1; /* error */
 
-	while (q > 9) {
-		pos++;
+	/* Count the length of the number in chars.
+	 * We stop immediatly if width is attained. */
+	while (q > 9) { /* 10 -> nlen = 2, 100 -> nlen = 3, ... */
+		if (nlen == width) { /* max. width attained */
+			ret = width; /* too long to fit */
+			break;
+		}
+		nlen++;
 		q /= 10;
 	}
 
-	if (pos > width) {
-		ret = pos;
-		pos = width;
+	if (slen) {
+		start = *slen; /* Starting at s[*slen]. */
+		*slen += nlen; /* update length */
+		pos += start; /* new position of the number */
 	}
 
+	/* Fill left space with fillchar. */
 	if (fillchar) {
-		unsigned int pad = width - pos;
+		unsigned int pad = width - nlen; /* ie. width = 4 nlen = 2 -> pad = 2 */
 
-		if (pad > 0) {
-			unsigned int tmp = start;
-
-			start += pad;
-			while (pad > 0) s[--pad + tmp] = fillchar;
+		if (pad) {
+			if (slen) *slen += pad; /* update length */
+			pos += pad; /* new position of the number */
+			while (pad) s[--pad + start] = fillchar;
 		}
 	}
 
-	pos += start;
-	s[pos] = '\0';
-	if (slen) *slen = pos;
+	s[pos + nlen] = '\0'; /* Always add nul char at end of string */
 
-	while (pos > start) {
-		s[--pos] = '0' + (number % 10);
+	/* Now write number starting from end. */
+	while (nlen) {
+		s[--nlen + pos] = '0' + (number % 10);
 		number /= 10;
 	}
 
@@ -105,6 +111,7 @@ elinks_longcat(unsigned char *s, unsigned int *slen,
  * hexadecimal format.
  * An additionnal parameter 'upper' permits to choose between
  * uppercased and lowercased hexa numbers. */
+/* FIXME: buggy, for now ... will be fixed very soon. --Zas */
 int inline
 elinks_ulonghexcat(unsigned char *s, unsigned int *slen,
 		   unsigned long number, unsigned int width,

@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.13 2003/06/20 13:56:39 jonas Exp $ */
+/* $Id: common.c,v 1.14 2003/07/08 12:18:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,6 @@
 
 #include "mime/backend/common.h"
 #include "mime/mime.h"
-#include "protocol/url.h" /* For end_of_dir() */
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"

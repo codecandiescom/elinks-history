@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.87 2003/07/07 19:14:08 jonas Exp $ */
+/* $Id: connection.c,v 1.88 2003/07/08 12:18:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,6 @@
 #include "protocol/protocol.h"
 #include "protocol/proxy.h"
 #include "protocol/uri.h"
-#include "protocol/url.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "util/base64.h"

@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.14 2003/06/20 13:56:39 jonas Exp $ */
+/* $Id: common.h,v 1.15 2003/07/08 12:18:41 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -36,8 +36,6 @@ unsigned char *get_content_type_backends(unsigned char *extension);
 
 struct mime_handler *
 get_mime_handler_backends(unsigned char *content_type, int have_x);
-
-/* TODO Temporarily put here until we move it to util/ and protocol/url.c */
 
 /* Extracts a filename from @path separated by @separator. Targeted for use
  * with the general unix PATH style strings. */

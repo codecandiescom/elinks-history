@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.3 2002/12/27 22:29:30 pasky Exp $ */
+/* $Id: parser.c,v 1.4 2002/12/27 22:31:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,9 @@
 /* TODO: Unicode...? --pasky */
 #define whitespace(x) (x <= 32)
 
+
+/* We maintain the states (see below for a nice diagram) in a stack, maintained
+ * by utility functions and structures below. */
 
 enum state_code {
 	HPT_PLAIN,
@@ -48,7 +51,7 @@ struct html_parser_state {
 };
 
 static struct html_parser_state *
-html_state_insert(struct parser_state *state, enum state_code state_code)
+html_state_push(struct parser_state *state, enum state_code state_code)
 {
 	struct html_parser_state *pstate;
 
@@ -62,7 +65,7 @@ html_state_insert(struct parser_state *state, enum state_code state_code)
 }
 
 static struct html_parser_state *
-html_state_remove(struct parser_state *state)
+html_state_pop(struct parser_state *state)
 {
 	struct html_parser_state *pstate = state->data;
 
@@ -168,7 +171,7 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 		if (*html == '&') {
 			state->current->strlen += *len - html_len;
 
-			pstate = html_state_insert(state, HTP_ENTITY);
+			pstate = html_state_push(state, HTP_ENTITY);
 			*str = html, *len = html_len;
 			return 0;
 		}
@@ -177,7 +180,7 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 		if (*html == '<') {
 			state->current->strlen += *len - html_len;
 
-			pstate = html_state_insert(state, HTP_TAG);
+			pstate = html_state_push(state, HTP_TAG);
 			*str = html, *len = html_len;
 			return 0;
 		}
@@ -227,7 +230,7 @@ entity_parse(struct parser_state *state, unsigned char **str, int *len)
 			state->current->strlen = *len - html_len;
 		}
 
-		pstate = html_state_remove(state);
+		pstate = html_state_pop(state);
 		*str = html, *len = html_len;
 		return 0;
 	}
@@ -248,7 +251,7 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	if (pstate->data.tag.tagname) {
 		/* We've parsed the whole tag and now we're at '>'. */
 		/* We don't have anything to do for now. So just retire. */
-		pstate = html_state_remove(state);
+		pstate = html_state_pop(state);
 #ifdef DEBUG
 		if (pstate->state != HTP_PLAIN)
 			internal("At HTP_TAG [2], pstate->state is %d! That means corrupted HTML stack. Fear.", pstate->state);
@@ -266,7 +269,7 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	/* Closing tag fun! */
 	if (*html == '/') {
 		pstate->data.tag.type = *html;
-		pstate = html_state_insert(state, HPT_TAG_NAME);
+		pstate = html_state_push(state, HPT_TAG_NAME);
 
 		html++, html_len--;
 		*str = html, *len = html_len;
@@ -280,7 +283,7 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	}
 	if (*html == '?' || (*html == '!' && !strncmp(html + 1, "--", 2))) {
 		pstate->data.tag.type = *html;
-		pstate = html_state_insert(state, HPT_TAG_COMMENT);
+		pstate = html_state_push(state, HPT_TAG_COMMENT);
 		pstate->data.tag.type = *html;
 
 		html++, html_len--;
@@ -289,10 +292,10 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	}
 
 	/* Ordinary tag. *yawn* */
-	pstate = html_state_insert(state, HPT_TAG_NAME);
-	/* Let's save one parser round: */
+	pstate = html_state_push(state, HPT_TAG_NAME);
+	/* Let's save one parser turn: */
 	if (whitespace(*html)) {
-		pstate = html_state_insert(state, HPT_TAG_WHITE);
+		pstate = html_state_push(state, HPT_TAG_WHITE);
 	}
 
 	return 0;
@@ -411,7 +414,7 @@ html_parser(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
 
-	if (!pstate) pstate = html_state_insert(state, HTP_PLAIN);
+	if (!pstate) pstate = html_state_push(state, HTP_PLAIN);
 	if (!pstate) return;
 
 	while (html_len) {

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.337 2003/10/23 08:42:02 pasky Exp $ */
+/* $Id: options.c,v 1.338 2003/10/23 08:50:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -706,41 +706,54 @@ print_full_help(struct option *tree, unsigned char *path)
 		help = gettext_nonempty(option_types[option->type].help_str);
 
 		/* Print the 'title' of each option type. */
-		if (type == OPT_INT || type == OPT_BOOL || type == OPT_LONG) {
+		switch (type) {
+		case OPT_BOOL:
+		case OPT_INT:
+		case OPT_LONG:
 			printf(gettext("    %s%s%s %s (default: %ld)"),
 				path, saved, option->name, help,
 				(long) option->value.number);
+			break;
 
-		} else if (type == OPT_STRING && option->value.string) {
+		case OPT_STRING:
 			printf(gettext("    %s%s%s %s (default: \"%s\")"),
 				path, saved, option->name, help,
 				option->value.string);
+			break;
 
-		} else if (type == OPT_ALIAS) {
+		case OPT_ALIAS:
 			printf(gettext("    %s%s%s %s (alias for %s)"),
 				path, saved, option->name, help,
 				option->value.string);
+			break;
 
-		} else if (type == OPT_CODEPAGE) {
+		case OPT_CODEPAGE:
 			printf(gettext("    %s%s%s %s (default: %s)"),
 				path, saved, option->name, help,
 				get_cp_name(option->value.number));
+			break;
 
-		} else if (type == OPT_COLOR) {
+		case OPT_COLOR:
+		{
 			color_t color = option->value.color;
 
 			printf(gettext("    %s%s%s %s (default: #%06x)"),
 			       path, saved, option->name, help, color);
+			break;
+		}
 
-		} else if (type == OPT_COMMAND) {
+		case OPT_COMMAND:
 			printf("    %s%s%s", path, saved, option->name);
+			break;
 
-		} else if (type == OPT_LANGUAGE) {
+		case OPT_LANGUAGE:
 			printf(gettext("    %s%s%s %s (default: \"%s\")"),
 				path, saved, option->name, help,
 				language_to_name(option->value.number));
+			break;
 
-		} else if (type == OPT_TREE) {
+		case OPT_TREE:
+		{
 			int pathlen = strlen(path);
 			int namelen = strlen(option->name);
 
@@ -758,6 +771,12 @@ print_full_help(struct option *tree, unsigned char *path)
 
 			capt = gettext_nonempty(capt);
 			printf("  %s: (%s)", capt, saved);
+			break;
+		}
+
+		default:
+			internal("Invalid option type: %d\n", type);
+			break;
 		}
 
 		printf("\n    %8s", "");

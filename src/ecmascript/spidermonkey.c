@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.85 2004/12/17 11:02:50 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.86 2004/12/17 11:05:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,8 +251,8 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
 	struct document_view *doc_view = vs->doc_view;
-
 	VALUE_TO_JSVAL_START;
+
 	/* No need for special window.location measurements - when
 	 * location is then evaluated in string context, toString()
 	 * is called which we overrode for that class below, so
@@ -532,7 +532,6 @@ static JSBool
 form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
-
 	VALUE_TO_JSVAL_START;
 
 	assert(fc);
@@ -633,8 +632,8 @@ form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
-
 	VALUE_TO_JSVAL_START;
+
 	p.boolean = 0; prop_type = JSPT_BOOLEAN;
 
 	assert(fc);
@@ -653,8 +652,8 @@ form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct document *document = doc_view->document;
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
 	int link;
-
 	VALUE_TO_JSVAL_START;
+
 	p.boolean = 0; prop_type = JSPT_BOOLEAN;
 
 	assert(fc);
@@ -712,8 +711,8 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
-
 	VALUE_TO_JSVAL_START;
+
 	if (!JSVAL_IS_INT(id))
 		goto bye;
 
@@ -841,8 +840,8 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct session *ses = doc_view->session;
-
 	VALUE_TO_JSVAL_START;
+
 	if (JSVAL_IS_STRING(id)) {
 		struct form_control *fc;
 
@@ -974,7 +973,6 @@ document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rv
 #ifdef CONFIG_LEDS
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
 #endif
-
 	VALUE_TO_JSVAL_START;
 
 	p.boolean = 0; prop_type = JSPT_BOOLEAN;
@@ -1017,8 +1015,8 @@ location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
-
 	VALUE_TO_JSVAL_START;
+
 	if (!JSVAL_IS_INT(id))
 		goto bye;
 
@@ -1153,8 +1151,8 @@ unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = vs->doc_view;
 	struct session_status *status = &doc_view->session->status;
 	unsigned char *bar = JS_GetPrivate(ctx, obj);
-
 	VALUE_TO_JSVAL_START;
+
 	if (!JSVAL_IS_INT(id))
 		goto bye;
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.107 2004/12/17 22:45:05 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.108 2004/12/17 23:14:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -524,16 +524,18 @@ static const JSClass form_class = {
 };
 
 enum form_prop {
-	JSP_FORM_CONTROL_NAME,
 	JSP_FORM_CONTROL_ACTION,
+	JSP_FORM_CONTROL_ENCODING,
 	JSP_FORM_CONTROL_METHOD,
+	JSP_FORM_CONTROL_NAME,
 	JSP_FORM_CONTROL_TARGET
 };
 
 static const JSPropertySpec form_props[] = {
-	{ "name",	JSP_FORM_CONTROL_NAME,	JSPROP_ENUMERATE },
 	{ "action",	JSP_FORM_CONTROL_ACTION,	JSPROP_ENUMERATE },
+	{ "encoding",	JSP_FORM_CONTROL_ENCODING,	JSPROP_ENUMERATE },
 	{ "method",	JSP_FORM_CONTROL_METHOD,	JSPROP_ENUMERATE },
+	{ "name",	JSP_FORM_CONTROL_NAME,		JSPROP_ENUMERATE },
 	{ "target",	JSP_FORM_CONTROL_TARGET,	JSPROP_ENUMERATE },
 	{ NULL }
 };
@@ -559,12 +561,23 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
-	case JSP_FORM_CONTROL_NAME:
-		P_STRING(fc->name);
-		break;
-
 	case JSP_FORM_CONTROL_ACTION:
 		P_STRING(fc->action);
+		break;
+
+	case JSP_FORM_CONTROL_ENCODING:
+		switch (fc->method) {
+		case FORM_METHOD_GET:
+		case FORM_METHOD_POST:
+			P_STRING("application/x-www-form-urlencoded");
+			goto end;
+		case FORM_METHOD_POST_MP:
+			P_STRING("multipart/form-data");
+			goto end;
+		case FORM_METHOD_POST_TEXT_PLAIN:
+			P_STRING("text/plain");
+			goto end;
+		}
 		break;
 
 	case JSP_FORM_CONTROL_METHOD:
@@ -579,6 +592,10 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			P_STRING("POST");
 			goto end;
 		}
+		break;
+
+	case JSP_FORM_CONTROL_NAME:
+		P_STRING(fc->name);
 		break;
 
 	case JSP_FORM_CONTROL_TARGET:
@@ -606,14 +623,21 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
-	case JSP_FORM_CONTROL_NAME:
-		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->name, stracpy(v.string));
-		break;
-
 	case JSP_FORM_CONTROL_ACTION:
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(fc->action, stracpy(v.string));
+		break;
+
+	case JSP_FORM_CONTROL_ENCODING:
+		JSVAL_REQUIRE(vp, STRING);
+		if (!strcasecmp(v.string, "application/x-www-form-urlencoded")) {
+			fc->method = fc->method == FORM_METHOD_GET ? FORM_METHOD_GET
+			                                           : FORM_METHOD_POST;
+		} else if (!strcasecmp(v.string, "multipart/form-data")) {
+			fc->method = FORM_METHOD_POST_MP;
+		} else if (!strcasecmp(v.string, "text/plain")) {
+			fc->method = FORM_METHOD_POST_TEXT_PLAIN;
+		}
 		break;
 
 	case JSP_FORM_CONTROL_METHOD:
@@ -623,6 +647,11 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		} else if (!strcasecmp(v.string, "POST")) {
 			fc->method = FORM_METHOD_POST;
 		}
+		break;
+
+	case JSP_FORM_CONTROL_NAME:
+		JSVAL_REQUIRE(vp, STRING);
+		mem_free_set(fc->name, stracpy(v.string));
 		break;
 
 	case JSP_FORM_CONTROL_TARGET:

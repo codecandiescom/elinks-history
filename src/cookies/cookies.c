@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.124 2004/03/21 02:04:27 jonas Exp $ */
+/* $Id: cookies.c,v 1.125 2004/03/21 02:21:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,9 +238,9 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
-	cookie->server = memacpy(uri->hoststr, uri->hostlen);
+	cookie->server = get_string_copy(&uri->host);
 	cookie->domain = parse_http_header_param(str, "domain");
-	if (!cookie->domain) cookie->domain = memacpy(uri->hoststr, uri->hostlen);
+	if (!cookie->domain) cookie->domain = get_string_copy(&uri->host);
 
 	/* Now check that all is well */
 	if (!cookie->domain
@@ -358,13 +358,13 @@ set_cookie(struct uri *uri, unsigned char *str)
 				uri->host.source, uri->host.length);
 #endif
 		mem_free(cookie->domain);
-		cookie->domain = memacpy(uri->hoststr, uri->hostlen);
+		cookie->domain = get_string_copy(&uri->host);
 	}
 
 	cookie->id = cookie_id++;
 
 	foreach (cs, c_servers) {
-		if (strlcasecmp(cs->server, -1, uri->hoststr, uri->hostlen))
+		if (string_strlcasecmp(&uri->host, cs->server, -1))
 			continue;
 
 		if (cs->accept)	goto ok;
@@ -604,7 +604,7 @@ send_cookies(struct uri *uri)
 	int datalen = uri->datalen + 1;
 	static struct string header;
 
-	if (!uri->hoststr || !uri->data)
+	if (string_is_empty(&uri->host) || !uri->data)
 		return NULL;
 
 	foreach (cd, c_domains)

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.196 2004/06/25 08:22:27 zas Exp $ */
+/* $Id: tables.c,v 1.197 2004/06/25 08:25:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1324,21 +1324,21 @@ get_table_heights(struct table *table)
 		for (i = 0; i < table->x; i++) {
 			struct table_cell *cell = CELL(table, i, j);
 			struct part *part;
-			int xw = 0, sp;
+			int width = 0, sp;
 
 			if (!cell->is_used || cell->is_spanned) continue;
 
 			for (sp = 0; sp < cell->colspan; sp++) {
-				xw += table->cols_widths[i + sp] +
-				      (sp < cell->colspan - 1 &&
-				       get_vline_width(table, i + sp + 1) >= 0);
+				width += table->cols_widths[i + sp] +
+				         (sp < cell->colspan - 1 &&
+				          get_vline_width(table, i + sp + 1) >= 0);
 			}
 
-			part = format_cell(table, i, j, NULL, 2, 2, xw);
+			part = format_cell(table, i, j, NULL, 2, 2, width);
 			if (!part) return;
 
 			cell->height = part->box.height;
-			/* DBG("%d, %d.",xw, cell->height); */
+			/* DBG("%d, %d.", width, cell->height); */
 			mem_free(part);
 		}
 	}

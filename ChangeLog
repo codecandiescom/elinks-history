@@ -1,3 +1,57 @@
+Wed May  8 13:55:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, main.c, main.h, bfu/bfu.c, bfu/bfu.h, bfu/menu.c,
+	bfu/menu.h, bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	bookmarks/dialogs.c, bookmarks/dialogs.h, config/conf.c,
+	config/conf.h, config/kbdbind.c, config/kbdbind.h,
+	config/options.c, config/options.h, config/urlhist.c,
+	cookies/cookies.c, cookies/cookies.h, cookies/parser.c,
+	cookies/parsetst.c, dialogs/document.c, dialogs/document.h,
+	dialogs/edit.c, dialogs/edit.h, dialogs/globhist.c,
+	dialogs/globhist.h, dialogs/info.c, dialogs/info.h, dialogs/menu.c,
+	dialogs/menu.h, dialogs/options.c, dialogs/options.h,
+	dialogs/refresh.c, dialogs/refresh.h, document/cache.c,
+	document/cache.h, document/download.c, document/download.h,
+	document/dump.c, document/dump.h, document/globhist.c,
+	document/history.c, document/history.h, document/location.c,
+	document/location.h, document/options.c, document/options.h,
+	document/session.c, document/session.h, document/view.c,
+	document/view.h, document/vs.c, document/vs.h,
+	document/html/colors.c, document/html/parser.c,
+	document/html/parser.h, document/html/renderer.c,
+	document/html/renderer.h, document/html/tables.c, intl/charsets.c,
+	intl/charsets.h, intl/language.c, intl/language.h,
+	lowlevel/af_unix.c, lowlevel/connect.c, lowlevel/connect.h,
+	lowlevel/dns.c, lowlevel/home.c, lowlevel/kbd.c, lowlevel/sched.c,
+	lowlevel/sched.h, lowlevel/select.c, lowlevel/select.h,
+	lowlevel/sysname.c, lowlevel/terminal.c, lowlevel/terminal.h,
+	lowlevel/ttime.c, lua/core.c, lua/core.h, lua/hooks.c, lua/hooks.h,
+	osdep/os_dep.c, protocol/file.c, protocol/file.h,
+	protocol/finger.c, protocol/finger.h, protocol/ftp.c,
+	protocol/ftp.h, protocol/mailto.c, protocol/mailto.h,
+	protocol/types.c, protocol/types.h, protocol/url.c, protocol/url.h,
+	protocol/http/date.c, protocol/http/header.c, protocol/http/http.c,
+	protocol/http/http.h, protocol/http/https.c, protocol/http/https.h,
+	ssl/connect.c, ssl/connect.h, ssl/ssl.c, ssl/ssl.h, util/base64.c,
+	util/blacklist.c, util/conv.c, util/error.c, util/memlist.c,
+	util/secsave.c:
+
+	Changed ELinks internal #includes from <file> to "file". Patch by
+	Peter Wang.  
+
+Wed May  8 13:39:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/: download.c, session.c:
+
+	FIXMEs about frames and content-type checking.  
+
+Wed May  8 12:27:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/session.c:
+
+	Tidyup of request_frame(), request_frameset(),
+	request_additional_loading_file() and process_file_requests().  
+
 Tue May  7 13:19:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* acconfig.h, configure.in, src/links.h, src/main.c,

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.20 2003/12/30 19:37:16 jonas Exp $ */
+/* $Id: renderer.c,v 1.21 2004/01/06 21:48:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,10 +26,11 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
-#include "viewer/text/link.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
 
+
+static void sort_links(struct document *document);
 
 void
 render_document(struct view_state *vs, struct document_view *doc_view,
@@ -164,6 +165,79 @@ render_document_frames(struct session *ses)
 				break;
 			}
 			n++;
+		}
+	}
+}
+
+
+static int
+comp_links(struct link *l1, struct link *l2)
+{
+	assert(l1 && l2);
+	if_assert_failed return 0;
+	return (l1->num - l2->num);
+}
+
+#if 0
+static int
+comp_links(struct link *l1, struct link *l2)
+{
+	int res;
+
+	assert(l1 && l2 && l1->pos && l2->pos);
+	if_assert_failed return 0;
+	res = l1->pos->y - l2->pos->y;
+	if (res) return res;
+	return l1->pos->x - l2->pos->x;
+}
+#endif
+
+void
+sort_links(struct document *document)
+{
+	int i;
+
+	assert(document);
+	if_assert_failed return;
+	if (!document->nlinks) return;
+
+	assert(document->links);
+	if_assert_failed return;
+
+	qsort(document->links, document->nlinks, sizeof(struct link),
+	      (void *) comp_links);
+
+	if (!document->height) return;
+
+	document->lines1 = mem_calloc(document->height, sizeof(struct link *));
+	if (!document->lines1) return;
+	document->lines2 = mem_calloc(document->height, sizeof(struct link *));
+	if (!document->lines2) {
+		mem_free(document->lines1);
+		return;
+	}
+
+	for (i = 0; i < document->nlinks; i++) {
+		struct link *link = &document->links[i];
+		register int p, q, j;
+
+		if (!link->n) {
+			done_link_members(link);
+			memmove(link, link + 1,
+				(document->nlinks - i - 1) * sizeof(struct link));
+			document->nlinks--;
+			i--;
+			continue;
+		}
+		p = link->pos[0].y;
+		q = link->pos[link->n - 1].y;
+		if (p > q) j = p, p = q, q = j;
+		for (j = p; j <= q; j++) {
+			assertm(j < document->height, "link out of screen");
+			if_assert_failed continue;
+			document->lines2[j] = &document->links[i];
+			if (!document->lines1[j])
+				document->lines1[j] = &document->links[i];
 		}
 	}
 }

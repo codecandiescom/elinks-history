@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.5 2002/07/08 15:20:43 pasky Exp $ */
+/* $Id: leds.c,v 1.6 2002/07/09 17:30:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,7 @@ init_leds()
 void
 done_leds()
 {
-	kill_timer(redraw_timer);
+	if (redraw_timer >= 0) kill_timer(redraw_timer);
 }
 
 void

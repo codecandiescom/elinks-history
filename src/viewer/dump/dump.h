@@ -1,4 +1,4 @@
-/* $Id: dump.h,v 1.13 2004/05/16 12:13:56 jonas Exp $ */
+/* $Id: dump.h,v 1.14 2004/06/20 15:25:07 pasky Exp $ */
 
 #ifndef EL__VIEWER_DUMP_DUMP_H
 #define EL__VIEWER_DUMP_DUMP_H
@@ -13,6 +13,6 @@ struct string *
 add_document_to_string(struct string *string, struct document *document);
 
 int dump_to_file(struct document *, int);
-void dump_pre_start(struct list_head *);
+void dump_next(struct list_head *);
 
 #endif

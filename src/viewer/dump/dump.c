@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.136 2004/06/17 10:02:22 zas Exp $ */
+/* $Id: dump.c,v 1.137 2004/06/20 15:25:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,7 +239,7 @@ dump_end(struct download *status, void *p)
 
 terminate:
 	terminate = 1;
-	dump_pre_start(NULL);
+	dump_next(NULL);
 }
 
 static void
@@ -265,7 +265,7 @@ dump_start(unsigned char *url)
 
 	if (load_uri(uri, NULL, &dump_download, PRI_MAIN, 0, -1)) {
 terminate:
-		dump_pre_start(NULL);
+		dump_next(NULL);
 		terminate = 1;
 		retval = RET_SYNTAX;
 	}
@@ -274,7 +274,7 @@ terminate:
 }
 
 void
-dump_pre_start(struct list_head *url_list)
+dump_next(struct list_head *url_list)
 {
 	static INIT_LIST_HEAD(todo_list);
 	static INIT_LIST_HEAD(done_list);

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.214 2004/06/17 10:02:20 zas Exp $ */
+/* $Id: main.c,v 1.215 2004/06/20 15:25:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,7 +160,7 @@ init(void)
 	if (get_cmd_opt_int("dump")
 	    || get_cmd_opt_int("source")) {
 		/* Dump the URL list */
-		dump_pre_start(&url_list);
+		dump_next(&url_list);
 
 	} else if (remote_session_flags & SES_REMOTE_PING) {
 		/* If no instance was running return ping failure */

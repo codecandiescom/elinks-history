@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.18 2003/07/02 00:47:45 jonas Exp $
+-- $Id: hooks.lua.in,v 1.19 2003/09/13 04:41:08 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -62,6 +62,7 @@ end
 -- You can write smt like "gg" to goto URL dialog and it'll go to google.com.
 
 dumbprefixes = {
+    arc = "http://web.archive.org/web/*/%c",
     b = "http://babelfish.altavista.com/babelfish/tr",
     bz = "http://bugzilla.elinks.or.cz",
     d = "http://www.dict.org",
@@ -72,6 +73,8 @@ dumbprefixes = {
     sf = "http://www.sourceforge.net/",
     dbug = "http://bugs.debian.org/",
     dpkg = "http://packages.debian.org/",
+    -- Hm, is this Debian-centric? -- Miciah
+    lua = "file:///usr/share/doc/lua40-doc/manual/idx.html",
     pycur = "http://www.python.org/doc/current/",
     pydev = "http://www.python.org/dev/doc/devel/",
     pyhelp = "http://starship.python.net/crew/theller/pyhelp.cgi",
@@ -86,15 +89,28 @@ dumbprefixes = {
 -- for it automagically.
 
 smartprefixes = {
+    arc = "http://web.archive.org/web/*/%s",
     bb = "http://babelfish.altavista.com/babelfish/tr?urltext=%s",
     bb_fr_en = "http://babelfish.altavista.com/babelfish/tr?lp=fr_en&submit=1&urltext=%s",
     bb_en_fr = "http://babelfish.altavista.com/babelfish/tr?lp=en_fr&submit=1&urltext=%s",
     bug = "http://bugzilla.elinks.or.cz/show_bug.cgi?id=%s",
+    cliki = "http://www.cliki.net/admin/search?words=%s",
     d = "http://www.dict.org/bin/Dict?Query=%s&Form=Dict1&Strategy=*&Database=*&submit=Submit+query",
+    foldoc = "http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?%s",
     g  = "http://www.google.com/search?q=%s&btnG=Google+Search",
+    gd = "http://www.google.com/search?q=%s&cat=gwd/Top",
     gg = "http://www.google.com/search?q=%s&btnG=Google+Search",
+    -- Whose idea was it to use 'gg' for websearches? -- Miciah
+    --gg = "http://groups.google.com/groups?q=%s",
+    gi = "http://images.google.com/images?q=%s",
+    gn = "http://news.google.com/news?q=%s",
     go = "http://www.google.com/search?q=%s&btnG=Google+Search",
+    gwho = "http://www.googlism.com/?ism=%s&name=1",
+    gwhat = "http://www.googlism.com/?ism=%s&name=2",
+    gwhere = "http://www.googlism.com/?ism=%s&name=3",
+    gwhen = "http://www.googlism.com/?ism=%s&name=4",
     fm = "http://www.freshmeat.net/search/?q=%s",
+    savannah = "http://savannah.nongnu.org/search/?words=%s&type_of_search=soft&exact=1",
     sf = "http://sourceforge.net/search/?q=%s",
     sfp = "http://sourceforge.net/projects/%s",
     sd = "http://www.slashdot.org/search.pl?query=%s",
@@ -104,15 +120,25 @@ smartprefixes = {
     sdj = "http://www.slashdot.org/search.pl?query=%s&op=journals",
     dbug = "http://bugs.debian.org/%s",
     dpkg = "http://packages.debian.org/%s",
+    emacs = "http://www.emacswiki.org/cgi-bin/wiki.pl?search=%s",
+    lyrics = "http://music.lycos.com/lyrics/results.asp?QT=L&QW=%s",
+    lxr = "http://lxr.linux.no/ident?i=%s",
+    onelook = "http://onelook.com/?w=%s&ls=a",
     py = "http://starship.python.net/crew/theller/pyhelp.cgi?keyword=%s&version=current",
     pydev = "http://starship.python.net/crew/theller/pyhelp.cgi?keyword=%s&version=devel",
     pyvault = "http://py.vaults.ca/apyllo.py?find=%s",
     e2 = "http://www.everything2.org/?node=%s",
     encz = "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=0&ecd_lines=15&ecd_hptxt=0",
     czen = "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=1&ecd_lines=15&ecd_hptxt=0",
-    dict = "http://www.dictionary.com/cgi-bin/dict.pl?db=%%2A&term=%s",
+    dict = "http://dictionary.reference.com/search?q=%s",
+    thes = "http://thesaurus.reference.com/search?q=%s",
     a = "http://acronymfinder.com/af-query.asp?String=exact&Acronym=%s",
+    imdb = "http://imdb.com/Find?%s",
+    mw = "http://www.m-w.com/cgi-bin/dictionary?book=Dictionary&va=%s",
+    mwt = "http://www.m-w.com/cgi-bin/thesaurus?book=Thesaurus&va=%s",
     whatis = "http://uptime.netcraft.com/up/graph/?host=%s",
+    wiki = "http://www.wikipedia.org/w/wiki.phtml?search=%s",
+    wn = "http://www.cogsci.princeton.edu/cgi-bin/webwn1.7.1?stage=1&word=%s",
     -- rfc by number
     rfc = "http://www.rfc-editor.org/rfc/rfc%s.txt",
     -- rfc search

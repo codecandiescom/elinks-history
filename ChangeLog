@@ -1,3 +1,248 @@
+Wed Nov  5 22:55:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Variable rp was renamed part.  
+
+Wed Nov  5 22:51:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Some local variables were renamed: o -> doc_opts, l -> vs. A comment
+	was updated.  
+
+Wed Nov  5 22:09:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	dlg_format_(field|text)(): Only accept one term argument.  
+
+Wed Nov  5 20:28:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, dialogs/hierbox.c:
+
+	dlg_format_box(): Only accept one term argument.  
+
+Wed Nov  5 20:24:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, config/dialogs.c,
+	dialogs/auth.c, dialogs/edit.c, dialogs/mime.c,
+	viewer/text/search.c:
+
+	dlg_format_field(): Only accept one term argument.  
+
+Wed Nov  5 20:21:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/group.c, bfu/group.h, viewer/text/search.c:
+
+	dlg_format_group(): Only accept one term argument.  
+
+Wed Nov  5 20:18:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/checkbox.c, bfu/checkbox.h, dialogs/options.c:
+
+	dlg_format_checkboxes(): Only accept one term argument.  
+
+Wed Nov  5 20:16:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/checkbox.c, bfu/inpfield.c, bfu/msgbox.c, bfu/text.c,
+	bfu/text.h, config/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/mime.c, sched/download.c, viewer/text/search.c:
+
+	dlg_format_text(): Only accept one term argument.  
+
+Wed Nov  5 20:08:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/button.h, bfu/group.c, bfu/inpfield.c,
+	bfu/msgbox.c, config/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/hierbox.c, dialogs/mime.c, dialogs/options.c,
+	sched/download.c, viewer/text/search.c:
+
+	dlg_format_buttons(): Only accept one term argument.  
+
+Wed Nov  5 15:35:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/core.c:
+
+	It.s guile_scripting_module not lua_.. ;) 
+
+Wed Nov  5 15:09:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/scripting/guile/README:
+
+	Lower the Guile FUD. You should be able to use Guile and Lua at once
+	now.  
+
+Wed Nov  5 15:06:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Simplify case 2 of the @om switch to a fall-thru in
+	distribute_widths().  
+
+Wed Nov  5 14:50:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/mime.c, scripting/lua/core.c:
+
+	More uncompiled code that fixes remaining? dialog extra data off by
+	one errors.  
+
+Wed Nov  5 14:47:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Wed Nov  5 14:46:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Considerably simplified the lines splitting as outlined in my
+	comments to the witekfl's patch.  
+
+Wed Nov  5 14:44:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	Update some missing lua bits from last patch. Untested :/ 
+
+Wed Nov  5 14:23:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.h, bfu/checkbox.h, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/listbox.h, bfu/msgbox.c, bfu/widget.h,
+	bookmarks/dialogs.c, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, sched/download.c, viewer/text/search.c:
+
+	Make the add_dlg_<widget>() macros operate and update on
+	dlg->widgets_size directly instead of a passed dlg->widgets[]
+	position.  add_dlg_end() now only asserts that the number of widgets
+	is what we think it is.  I think it also fixes a potential bug in
+	msg_box(). When no button label is passed since we could potentially
+	overwrite the previous button before.  
+
+Wed Nov  5 13:39:48 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/formhist.c:
+
+	Minor fix in the comments.  
+
+Wed Nov  5 11:30:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/conv.h:
+
+	is_safe_in_shell() now considers : char as safe. Please check if
+	correct. It fixes bug 273.  
+
+Wed Nov  5 10:56:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.c, viewer/text/search.c, viewer/text/view.c:
+
+	Old commented code was removed.  
+
+Wed Nov  5 10:46:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/: window.c, window.h:
+
+	Fields xp,yp of struct window were renamed x,y. set_window_ptr()
+	macro was modified a bit.  
+
+Wed Nov  5 10:40:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Fields xp,yp of struct menu were renamed parent_x,parent_y.  
+
+Wed Nov  5 10:34:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Fields xw,yw of struct menu were renamed width,height.  
+
+Wed Nov  5 09:23:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/group.c, bfu/inpfield.c,
+	bfu/msgbox.c, config/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/hierbox.c, dialogs/mime.c, dialogs/options.c,
+	sched/download.c, scripting/lua/core.c, viewer/text/search.c:
+
+	Fields xw,yw of struct dialog_data were renamed width,height.  
+
+Wed Nov  5 08:09:10 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Nov  5 00:52:57 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Synced .pos and updated Italian translation.  
+
+Wed Nov  5 00:45:30 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/formhist.c:
+
+	Oops, forgot N_() for the button text and to mention this fixes bug
+	#240.  
+
+Wed Nov  5 00:40:55 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/sched/connection.c:
+
+	Fix bug 266 introduced in rev 1.58 :) 
+
+Wed Nov  5 00:40:20 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/formhist.c:
+
+	Added the "Never try to remember the form for this site" button in
+	the form dialog.  
+
+Tue Nov  4 23:35:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/edit.c:
+
+	Fix off by one error in edit dialog. It is similar to the one in the
+	option manager. Reported by Miciah.  
+
+Tue Nov  4 23:25:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/checkbox.c, bfu/checkbox.h, bfu/group.c, bfu/group.h,
+	dialogs/options.c, viewer/text/search.c:
+
+	Do the translation when adding the radio or checkbox widget (as we
+	do with buttons) and save a few _() calls.  
+
+Tue Nov  4 23:18:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Extended memory info string tidyup.  
+
+Tue Nov  4 23:17:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Tue Nov  4 23:12:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/frames.c:
+
+	Finish off the minor tidyup of zas.  
+
+Tue Nov  4 23:12:13 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/document.c:
+
+	shrink_format_cache(): If !whole, break the loop as soon as
+	format_cache_entries <= format_cache_size.  
+
 Tue Nov  4 23:10:11 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/document.c:

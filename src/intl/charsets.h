@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.6 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: charsets.h,v 1.7 2003/05/28 00:58:41 zas Exp $ */
 
 #ifndef EL__CHARSETS_H
 #define EL__CHARSETS_H
@@ -20,7 +20,7 @@ struct conv_table {
 };
 
 struct conv_table *get_translation_table(int, int);
-unsigned char *get_entity_string(unsigned char *, int, int);
+unsigned char *get_entity_string(const unsigned char *, const int, const int);
 unsigned char *convert_string(struct conv_table *, unsigned char *, int);
 int get_cp_index(unsigned char *);
 unsigned char *get_cp_name(int);

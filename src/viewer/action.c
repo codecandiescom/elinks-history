@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.14 2004/01/07 19:11:09 jonas Exp $ */
+/* $Id: action.c,v 1.15 2004/01/07 19:18:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,7 +212,7 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_OPEN_OS_SHELL:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				menu_shell(ses->tab->term, NULL, NULL);
+				exec_shell(term);
 			break;
 
 		case ACT_OPTIONS_MANAGER:

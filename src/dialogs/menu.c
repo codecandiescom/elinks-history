@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.275 2004/01/07 18:52:59 jonas Exp $ */
+/* $Id: menu.c,v 1.276 2004/01/07 19:18:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,20 +159,6 @@ history_menu_model(history_menu, prev);
 history_menu_model(unhistory_menu, next);
 
 #undef history_menu_model
-
-
-void
-menu_shell(struct terminal *term, void *xxx, void *yyy)
-{
-	unsigned char *sh;
-
-	if (!can_open_os_shell(term->environment)) return;
-	
-	sh = GETSHELL;
-	if (!sh || !*sh) sh = DEFAULT_SHELL;
-	if (sh && *sh)
-		exec_on_terminal(term, sh, "", 1);
-}
 
 
 void

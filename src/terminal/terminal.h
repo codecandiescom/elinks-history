@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.31 2003/12/21 22:20:59 pasky Exp $ */
+/* $Id: terminal.h,v 1.32 2004/01/07 19:18:01 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -164,6 +164,8 @@ void close_handle(void *);
 #define TERM_FN_RESIZE	2
 
 void exec_on_terminal(struct terminal *, unsigned char *, unsigned char *, int);
+void exec_shell(struct terminal *term);
+
 void set_terminal_title(struct terminal *, unsigned char *);
 void do_terminal_function(struct terminal *, unsigned char, unsigned char *);
 

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.49 2003/06/20 08:09:42 zas Exp $ */
+/* $Id: interlink.c,v 1.50 2003/06/20 11:03:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,6 +83,12 @@ static struct s_addr_info s_info_listen;
 /* Connect socket info */
 static struct s_addr_info s_info_connect;
 
+enum addr_type {
+	ADDR_LOCAL,
+	ADDR_IP_CLIENT,
+	ADDR_IP_SERVER,
+	ADDR_ANY_SERVER,
+};
 
 #ifdef USE_AF_UNIX
 
@@ -109,8 +115,9 @@ get_sun_path(unsigned char **sun_path, int *sun_path_len)
 	return 1;
 }
 
+/* type is ignored here => always local */
 static int
-get_address(struct s_addr_info *info)
+get_address(struct s_addr_info *info, enum addr_type type)
 {
 	struct sockaddr_un *addr = NULL;
 	int sun_path_freespace;
@@ -211,36 +218,44 @@ unlink_unix(struct sockaddr *s_addr)
 
 #else /* AF_INET */
 
-/* It may not be defined in netinet/in.h on some systems. */
+/* These may not be defined in netinet/in.h on some systems. */
 #ifndef INADDR_LOOPBACK
 #define INADDR_LOOPBACK         ((unsigned long int) 0x7f000001)
 #endif
-
-/* FIXME: IPv6 support. */
 
 #ifndef IPPORT_USERRESERVED
 #define IPPORT_USERRESERVED	5000
 #endif
 
+/* FIXME: IPv6 support. */
+
 static int
-get_address(struct s_addr_info *info)
+get_address(struct s_addr_info *info, enum addr_type type)
 {
 	struct sockaddr_in *sin;
 	unsigned short port;
+	unsigned long int ip;
 
 	assert(info);
 
-	/* Each ring is bind to ELINKS_PORT + ring number. */
-	port = ELINKS_PORT + get_opt_int_tree(&cmdline_options, "session-ring");
-	if (port < IPPORT_USERRESERVED || port > 65535)
-		return -1; /* Just in case of... */
+	if (type == ADDR_LOCAL) {
+		/* Each ring is bind to ELINKS_PORT + ring number. */
+		port = ELINKS_PORT + get_opt_int_tree(&cmdline_options,
+						      "session-ring");
+		if (port < IPPORT_USERRESERVED || port > 65535)
+			return -1; /* Just in case of... */
+
+		ip = INADDR_LOOPBACK;
+	} else {
+		return -1;
+	}
 
 	sin = mem_calloc(1, sizeof(struct sockaddr_in));
 	if (!sin) return -1;
 
 	sin->sin_family = AF_INET;
 	sin->sin_port = htons(port);
-	sin->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	sin->sin_addr.s_addr = htonl(ip);
 
 	info->addr = (struct sockaddr *) sin;
 	info->size = sizeof(struct sockaddr_in);
@@ -327,7 +342,7 @@ static int
 bind_to_af_unix(void)
 {
 	int attempts = 0;
-	int af = get_address(&s_info_listen);
+	int af = get_address(&s_info_listen, ADDR_LOCAL);
 
 	if (af == -1) goto free_and_error;
 
@@ -390,7 +405,7 @@ static int
 connect_to_af_unix(void)
 {
 	int attempts = 0;
-	int af = get_address(&s_info_connect);
+	int af = get_address(&s_info_connect, ADDR_LOCAL);
 
 	if (af == -1) goto free_and_error;
 

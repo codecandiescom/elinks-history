@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.136 2004/10/14 20:13:18 jonas Exp $ */
+/* $Id: task.c,v 1.137 2004/11/08 19:15:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,6 +108,11 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	}
 
 	assertm(!ses->loading_uri, "Buggy URI reference counting");
+
+	/* Reset the redirect counter if this is not a redirect. */
+	if (!redir) {
+		ses->redirect_cnt = 0;
+	}
 
 	/* Figure out whether to confirm submit or not */
 
@@ -372,8 +377,6 @@ do_move(struct session *ses, struct download **download_p)
 				 ses->reloadlevel, TASK_RELOAD, 1);
 			return 2;
 		}
-	} else {
-		ses->redirect_cnt = 0;
 	}
 
 b:

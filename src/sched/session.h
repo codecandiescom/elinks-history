@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.81 2003/12/06 17:04:32 pasky Exp $ */
+/* $Id: session.h,v 1.82 2003/12/06 17:05:28 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -80,7 +80,7 @@ struct session_task {
 	/* TODO: union --pasky */
 	unsigned char *task_target_frame;
 	struct location *task_target_location;
-}
+};
 
 struct session_status {
 	unsigned int show_tabs_bar:1;

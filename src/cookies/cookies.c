@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.57 2003/07/03 20:38:08 jonas Exp $ */
+/* $Id: cookies.c,v 1.58 2003/07/08 01:24:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "lowlevel/ttime.h"
 #include "protocol/http/date.h"
 #include "protocol/http/header.h"
+#include "protocol/uri.h"
 #include "protocol/url.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -458,13 +459,12 @@ accept_cookie_never(void *idp)
 
 
 static int
-is_in_domain(unsigned char *d, unsigned char *s)
+is_in_domain(unsigned char *d, unsigned char *s, int sl)
 {
 	int dl = strlen(d);
-	int sl = strlen(s);
 
 	if (dl > sl) return 0;
-	if (dl == sl) return !strcasecmp(d, s);
+	if (dl == sl) return !strncasecmp(d, s, sl);
 	if (s[sl - dl - 1] != '.') return 0;
 
 	return !strncasecmp(d, s + sl - dl, dl);
@@ -472,10 +472,9 @@ is_in_domain(unsigned char *d, unsigned char *s)
 
 
 static inline int
-is_path_prefix(unsigned char *d, unsigned char *s)
+is_path_prefix(unsigned char *d, unsigned char *s, int sl)
 {
 	int dl = strlen(d);
-	int sl = strlen(s);
 
 	if (dl > sl) return 0;
 
@@ -491,33 +490,27 @@ cookie_expired(struct cookie *c)
 
 
 void
-send_cookies(unsigned char **s, int *l, unsigned char *url)
+send_cookies(unsigned char **s, int *l, struct uri *uri)
 {
 	int nc = 0;
 	struct c_domain *cd;
 	struct cookie *c, *d;
-	unsigned char *server = get_host_name(url);
-	unsigned char *data;
+	unsigned char *data = NULL;
+	int datalen = uri->datalen + 1;
 
-	if (!server) return;
-	data = get_url_data(url);
-	if (!data) {
-		mem_free(server);
-		return;
-	}
+	if (!uri->host || !uri->data) return;
 
-	if (data > url) data--;
 	foreach (cd, c_domains)
-		if (is_in_domain(cd->domain, server))
-			goto ok;
+		if (is_in_domain(cd->domain, uri->host, uri->hostlen)) {
+			data = uri->data - 1;
+			break;
+		}
 
-	mem_free(server);
-	return;
+	if (!data) return;
 
-ok:
 	foreach (c, cookies) {
-		if (!is_in_domain(c->domain, server)
-		    || !is_path_prefix(c->path, data))
+		if (!is_in_domain(c->domain, uri->host, uri->hostlen)
+		    || !is_path_prefix(c->path, data, datalen))
 			continue;
 
 		if (cookie_expired(c)) {
@@ -536,7 +529,7 @@ ok:
 		}
 
 		/* Not sure if this is 100% right..? --pasky */
-		if (c->secure && strncmp(url, "https://", 8))
+		if (c->secure && strncmp("https://", uri->protocol, 8))
 			continue;
 
 		if (!nc) {
@@ -559,8 +552,6 @@ ok:
 
 	if (cookies_dirty && get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
 		save_cookies();
-
-	mem_free(server);
 }
 
 

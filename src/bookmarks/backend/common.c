@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.12 2003/06/05 14:38:16 zas Exp $ */
+/* $Id: common.c,v 1.13 2003/11/22 16:50:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,6 @@ bookmarks_read(void)
 
 	fclose(f);
 	bookmarks_dirty = 0;
-#undef INBUF_SIZE
 }
 
 void

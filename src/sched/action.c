@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.93 2004/08/02 14:57:23 jonas Exp $ */
+/* $Id: action.c,v 1.94 2004/08/12 07:33:23 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,7 +443,9 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 			if (ses->status.show_tabs_bar)
 				tab_menu(ses, ses->tab->xpos,
-					 term->height - 2, 1);
+					 term->height - 1
+					  - ses->status.show_status_bar,
+					 1);
 			else
 				tab_menu(ses, 0, 0, 0);
 

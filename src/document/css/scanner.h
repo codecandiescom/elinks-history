@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.3 2004/01/18 15:53:49 pasky Exp $ */
+/* $Id: scanner.h,v 1.4 2004/01/18 15:59:38 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -9,18 +9,16 @@
 enum css_token_type {
 	CSS_TOKEN_NONE,
 
-	CSS_TOKEN_DIGIT,
+	/* Tokens can contain chars that have special meaning like '*'. Their
+	 * type are simply their char value. So all non char tokens have value
+	 * greater than 256. */
+	CSS_TOKEN_DIGIT = 256,
 	CSS_TOKEN_HEX_COLOR,
 	CSS_TOKEN_IDENTIFIER,
 	CSS_TOKEN_NAME,
 	CSS_TOKEN_PERCENTAGE,
 
 	CSS_TOKEN_GARBAGE,
-
-	/* Tokens can contain chars that have special meaning like '*'. Their
-	 * type are simply their char value. This marks the end of such token
-	 * types. */
-	CSS_TOKEN_NON_ASCII_END = 255,
 };
 
 /* This is a token and scanner state */

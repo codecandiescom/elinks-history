@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.354 2004/01/14 17:10:01 jonas Exp $ */
+/* $Id: view.c,v 1.355 2004/01/17 01:09:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -788,17 +788,21 @@ struct document_view *
 current_frame(struct session *ses)
 {
 	struct document_view *doc_view = NULL;
-	int i;
+	int current_frame_number;
 
 	assert(ses);
 	if_assert_failed return NULL;
 
 	if (!have_location(ses)) return NULL;
-	i = cur_loc(ses)->vs.current_link;
+
+	current_frame_number = cur_loc(ses)->vs.current_link;
+	if (current_frame_number == -1) current_frame_number = 0;
+
 	foreach (doc_view, ses->scrn_frames) {
 		if (document_has_frames(doc_view->document)) continue;
-		if (!i--) return doc_view;
+		if (!current_frame_number--) return doc_view;
 	}
+
 	doc_view = ses->doc_view;
 
 	assert(doc_view && doc_view->document);

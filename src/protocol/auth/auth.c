@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.79 2004/05/09 00:59:51 jonas Exp $ */
+/* $Id: auth.c,v 1.80 2004/05/09 01:18:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,10 +134,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	if (entry) {
 		mem_free(newurl);
 
-		if (entry->blocked == 1) {
-			/* Waiting for user/pass in dialog. */
-			return NULL;
-		}
+		/* Waiting for user/pass in dialog. */
+		if (entry->blocked) return NULL;
 
 		/* In order to use an existing entry it has to match exactly.
 		 * This is done step by step. If something isn't equal the
@@ -221,8 +219,9 @@ find_auth(struct uri *uri)
 		}
 	}
 
-	/* No entry found. */
-	if (!entry) return NULL;
+	/* No entry found or waiting for user/password in dialog. */
+	if (!entry || entry->blocked)
+		return NULL;
 
 	/* Sanity check. */
 	if (!auth_entry_has_userinfo(entry)) {

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.27 2003/09/04 14:42:03 zas Exp $ */
+/* $Id: kbd.c,v 1.28 2003/09/04 19:05:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,6 @@
 #define OUT_BUF_SIZE	16384
 #define IN_BUF_SIZE	16
 
-#define USE_TWIN_MOUSE	1
 #define TW_BUTT_LEFT	1
 #define TW_BUTT_MIDDLE	2
 #define TW_BUTT_RIGHT	4
@@ -174,11 +173,8 @@ send_init_sequence(int h, int flags)
 		write_sequence(h, INIT_ALT_SCREEN_SEQ);
 	}
 
-	if (flags & USE_TWIN_MOUSE) {
-		write_sequence(h, INIT_TWIN_MOUSE_SEQ);
-	} else {
-		write_sequence(h, INIT_XWIN_MOUSE_SEQ);
-	}
+	write_sequence(h, INIT_TWIN_MOUSE_SEQ);
+	write_sequence(h, INIT_XWIN_MOUSE_SEQ);
 }
 
 #define DONE_CLS_SEQ		"\033[2J"	/* Erase in Display, Clear All */
@@ -323,9 +319,6 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	for (i = 0; ts[i] != 0; ++i)
 		if (!isA(ts[i]))
 			ts[i] = '-';
-
-	if ((env & ENV_TWIN) && !strcmp(ts, "linux"))
-		itrm->flags |= USE_TWIN_MOUSE;
 
 	/* FIXME: Combination altscreen + xwin does not work as it should,
 	 * mouse clicks are reportedly partially ignored. */

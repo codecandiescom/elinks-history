@@ -3,14 +3,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-12 00:03+0200\n"
+"POT-Creation-Date: 2003-10-12 22:33+0200\n"
 "PO-Revision-Date: 2003-06-20 16:45+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52
 msgid "Bad number"
@@ -786,6 +786,7 @@ msgid "    %s%s%s %s (default: %s)"
 msgstr "    %s%s%s %s (|)34fU@|7: %s)"
 
 #: src/config/options.c:674
+#, c-format
 msgid "    %s%s%s %s (default: #%06x)"
 msgstr "    %s%s%s %s (|)34fU@|7: %06x)"
 

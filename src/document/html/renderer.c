@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.141 2003/06/17 14:51:17 pasky Exp $ */
+/* $Id: renderer.c,v 1.142 2003/06/17 14:52:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,10 +194,10 @@ xpand_line(struct part *p, int y, int x)
 
 	assertm(y < p->data->y, "line does not exist");
 	
-	if (x >= p->data->data[y].l)
-		return realloc_line(p, y, x);
+	if (x < p->data->data[y].l)
+		return 0;
 
-	return 0;
+	return realloc_line(p, y, x);
 }
 
 int

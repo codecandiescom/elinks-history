@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.57 2004/10/21 20:50:26 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.58 2004/10/21 20:52:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,6 +312,8 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 
 found_parent:
+		if (doc_view->vs.ecmascript_fragile)
+			ecmascript_reset_state(&doc_view->vs);
 		assert(doc_view->ecmascript);
 		p.object=JS_GetGlobalObject(doc_view->ecmascript->backend_data);
 		prop_type = JSPT_OBJECT;
@@ -322,7 +324,10 @@ found_parent:
 	{
 		struct document_view *top_view = doc_view->session->doc_view;
 
-		assert(top_view && top_view->vs && top_view->vs->ecmascript);
+		assert(top_view && top_view->vs);
+		if (top_view->vs->ecmascript_fragile)
+			ecmascript_reset_state(top_view->vs);
+		if (!top_view->vs->ecmascript) break;
 		p.object=JS_GetGlobalObject(top_view->vs->ecmascript->backend_data);
 		prop_type = JSPT_OBJECT;
 		break;

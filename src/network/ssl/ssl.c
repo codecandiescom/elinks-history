@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.37 2003/10/27 23:43:58 jonas Exp $ */
+/* $Id: ssl.c,v 1.38 2003/10/27 23:45:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,16 +31,14 @@
 #include "util/string.h"
 
 
-#ifndef PATH_MAX
-#define	PATH_MAX	256 /* according to my /usr/include/bits/posix1_lim.h */
-#endif
-
-
 /* FIXME: As you can see, SSL is currently implemented in very, erm,
  * decentralized manner. */
 
-
 #ifdef HAVE_OPENSSL
+
+#ifndef PATH_MAX
+#define	PATH_MAX	256 /* according to my /usr/include/bits/posix1_lim.h */
+#endif
 
 SSL_CTX *context = NULL;
 

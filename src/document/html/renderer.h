@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.23 2003/05/08 21:50:07 zas Exp $ */
+/* $Id: renderer.h,v 1.24 2003/06/16 14:12:02 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -201,15 +201,16 @@ void destroy_fc(struct form_control *);
 
 struct part {
 	struct list_head uf;
-	unsigned char *spaces;
 	struct f_data *data;
+
+	unsigned char *spaces;
+	int spaces_len;
 
 	int x, y;
 	int xp, yp;
 	int xmax;
 	int xa;
 	int cx, cy;
-	int spl;
 	int link_num;
 };
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.100 2003/06/16 14:08:22 pasky Exp $ */
+/* $Id: renderer.c,v 1.101 2003/06/16 14:12:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,9 +197,9 @@ realloc_spaces(struct part *p, int l)
 
 	c = mem_realloc(p->spaces, l + 1);
 	if (!c) return -1;
-	memset(c + p->spl, 0, l - p->spl + 1);
+	memset(c + p->spaces_len, 0, l - p->spaces_len + 1);
 
-	p->spl = l + 1;
+	p->spaces_len = l + 1;
 	p->spaces = c;
 
 	return 0;
@@ -208,7 +208,7 @@ realloc_spaces(struct part *p, int l)
 static inline int
 xpand_spaces(struct part *p, int l)
 {
-	if (l >= p->spl) return realloc_spaces(p, l);
+	if (l >= p->spaces_len) return realloc_spaces(p, l);
 	return 0;
 }
 
@@ -397,7 +397,7 @@ split_line(struct part *part)
 #endif
 
 	for (i = overlap(par_format); i >= par_format.leftmargin; i--)
-		if (i < part->spl && part->spaces[i])
+		if (i < part->spaces_len && part->spaces[i])
 			goto split;
 
 #if 0
@@ -405,7 +405,7 @@ split_line(struct part *part)
 #endif
 
 	for (i = par_format.leftmargin; i < part->cx ; i++)
-		if (i < part->spl && part->spaces[i])
+		if (i < part->spaces_len && part->spaces[i])
 			goto split;
 
 #if 0
@@ -423,7 +423,7 @@ split_line(struct part *part)
 #if 0
 	if (part->y < part->cy + 1) part->y = part->cy + 1;
 	part->cy++; part->cx = -1;
-	memset(part->spaces, 0, part->spl);
+	memset(part->spaces, 0, part->spaces_len);
 	if (part->data) xpand_lines(part, part->cy + 1);
 	line_break(part);
 #endif
@@ -446,16 +446,20 @@ split:
 	 * I want to review it since it's kinda arcane and error here would
 	 * probably mean some quite interesting random bugs. --pasky */
 
-	if (part->spl - i - 1 > 0) /* 0 is possible and i'm paranoic ... --Zas */
-		memmove(part->spaces, part->spaces + i + 1, part->spl - i - 1);
+	if (part->spaces_len - i - 1 > 0) {
+		/* 0 is possible and i'm paranoic ... --Zas */
+		memmove(part->spaces, part->spaces + i + 1,
+			part->spaces_len - i - 1);
+	}
 
-	memset(part->spaces + part->spl - i - 1, 0, i + 1);
+	memset(part->spaces + part->spaces_len - i - 1, 0, i + 1);
 
-	if (part->spl - par_format.leftmargin > 0)
+	if (part->spaces_len - par_format.leftmargin > 0)
 		memmove(part->spaces + par_format.leftmargin, part->spaces,
-			part->spl - par_format.leftmargin);
+			part->spaces_len - par_format.leftmargin);
 	else	/* Should not occcur. --Zas */
-		internal("part->spl - par_format.leftmargin == %d", part->spl - par_format.leftmargin);
+		internal("part->spaces_len - par_format.leftmargin == %d",
+			 part->spaces_len - par_format.leftmargin);
 
 	part->cx -= i - par_format.leftmargin + 1;
 	part->cy++;
@@ -1002,7 +1006,7 @@ end:
 	part->cx = -1;
 	part->xa = 0;
    	/* if (part->y < part->cy) part->y = part->cy; */
-	memset(part->spaces, 0, part->spl);
+	memset(part->spaces, 0, part->spaces_len);
 }
 
 static void

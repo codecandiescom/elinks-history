@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.14 2002/05/25 21:13:11 pasky Exp $ */
+/* $Id: download.c,v 1.15 2002/05/25 21:16:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,7 +510,7 @@ end_store:
 int
 create_download_file(struct terminal *term, unsigned char *fi, int safe)
 {
-	unsigned char *download_dir;
+	unsigned char *download_dir = get_opt_str("document.download.download_dir");
 	unsigned char *file = fi;
 	unsigned char *wd;
 	int h;
@@ -572,14 +572,6 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe)
 	set_bin(h);
 
 	if (safe) goto end;
-
-	/* XXX: We may have just thing like "./" there! */
-	download_dir = get_opt_str("document.download.download_dir");
-	download_dir = mem_realloc(download_dir, MAX_STR_LEN);
-	/* If this would be NULL, it would be already catched by get_opt_str().
-	 * Let's hope :). --pasky */
-	get_opt_rec(root_options, "document.download.download_dir")->ptr =
-		download_dir;
 
 	safe_strncpy(download_dir, file, MAX_STR_LEN);
 

@@ -139,5 +139,5 @@
     TODO:
 
       - Take document layout and format it to array of form items, links and
-        graphics "objects". Should just take adjusting of layout rectangles to
+        graphics "objects". Should just take adjusting of layout boxes to
         the viewport dimensions and some attributes transformations.

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2002/12/31 01:50:02 pasky Exp $
+## $Id: Makefile.am,v 1.2 2003/01/17 21:48:34 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -11,7 +11,7 @@ liblayouter_a_LIBADD = \
  syntree/layouter.o
 
 liblayouter_a_SOURCES = \
+ box.c \
+ box.h \
  layouter.c \
- layouter.h \
- rectangle.c \
- rectangle.h
+ layouter.h

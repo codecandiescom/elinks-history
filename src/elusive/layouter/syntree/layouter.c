@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.4 2002/12/31 17:13:04 pasky Exp $ */
+/* $Id: layouter.c,v 1.5 2003/01/17 21:48:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,26 +20,26 @@
 /* TODO: Support for incremental layouting! --pasky */
 
 
-static struct layout_rectangle *
-spawn_rect(struct layouter_state *state)
+static struct layout_box *
+spawn_box(struct layouter_state *state)
 {
-	struct layout_rectangle *rect = init_layout_rectangle();
+	struct layout_box *box = init_layout_box();
 
 	if (state->current->next && state->current != state->root)
-		add_at_pos(state->current, rect);
+		add_at_pos(state->current, box);
 	else
-		add_to_list(state->root->leafs, rect);
+		add_to_list(state->root->leafs, box);
 
-	rect->root = state->root;
+	box->root = state->root;
 
-	return rect;
+	return box;
 }
 
 static void
 layout_node(struct layouter_state *state, struct syntree_node *node)
 {
-	struct layout_rectangle_text *text;
-	struct layout_rectangle *rect;
+	struct layout_box_text *text;
+	struct layout_box *box;
 	struct attribute *attrib;
 	struct syntree_node *leaf;
 
@@ -47,18 +47,18 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 	/* TODO: Then make it possible to tie the syntree output with some user
 	 * CSS. --pasky */
 
-	rect = spawn_rect(state);
-	rect->data = text = mem_alloc(sizeof(struct layout_rectangle_text));
+	box = spawn_box(state);
+	box->data = text = mem_alloc(sizeof(struct layout_box_text));
 	text->str = "[NODE] ";
 	text->len = 7;
 
-	rect = spawn_rect(state);
-	rect->data = text = mem_alloc(sizeof(struct layout_rectangle_text));
+	box = spawn_box(state);
+	box->data = text = mem_alloc(sizeof(struct layout_box_text));
 	text->str = node->str;
 	text->len = node->strlen;
 
-	rect = spawn_rect(state);
-	rect->data = text = mem_alloc(sizeof(struct layout_rectangle_text));
+	box = spawn_box(state);
+	box->data = text = mem_alloc(sizeof(struct layout_box_text));
 	text->str = " ";
 	text->len = 1;
 
@@ -69,43 +69,43 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 		snprintf(numbuf, 64, "%d", node->special);
 		numbuflen = strlen(numbuf) + 1;
 
-		rect = spawn_rect(state);
-		rect->data = text = mem_alloc(sizeof(struct layout_rectangle_text) + numbuflen);
-		text->str = rect->data + sizeof(struct layout_rectangle_text);
+		box = spawn_box(state);
+		box->data = text = mem_alloc(sizeof(struct layout_box_text) + numbuflen);
+		text->str = box->data + sizeof(struct layout_box_text);
 		text->len = numbuflen - 1;
 		memcpy(text->str, numbuf, numbuflen);
 	}
 
 	foreach (attrib, node->attrs) {
-		rect = spawn_rect(state);
-		rect->data = text = mem_alloc(sizeof(struct layout_rectangle_text));
+		box = spawn_box(state);
+		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = " ";
 		text->len = 1;
 
-		rect = spawn_rect(state);
-		rect->data = text = mem_alloc(sizeof(struct layout_rectangle_text));
+		box = spawn_box(state);
+		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = attrib->name;
 		text->len = attrib->namelen;
 
-		rect = spawn_rect(state);
-		rect->data = text = mem_alloc(sizeof(struct layout_rectangle_text));
+		box = spawn_box(state);
+		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = "->\"";
 		text->len = 3;
 
-		rect = spawn_rect(state);
-		rect->data = text = mem_alloc(sizeof(struct layout_rectangle_text));
+		box = spawn_box(state);
+		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = attrib->value;
 		text->len = attrib->valuelen;
 
-		rect = spawn_rect(state);
-		rect->data = text = mem_alloc(sizeof(struct layout_rectangle_text));
+		box = spawn_box(state);
+		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = "\"";
 		text->len = 1;
 	}
 
 	foreach (leaf, node->leafs) {
-		rect = spawn_rect(state);
-		state->root = rect;
+		box = spawn_box(state);
+		state->root = box;
 		add_attrib(state->current->attrs, "display", 7, "block", 5);
 		layout_node(state, leaf);
 	}

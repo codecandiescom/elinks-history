@@ -25,12 +25,12 @@ Layouter
 Layouter will take a syntax tree, possibly merge it with other syntax trees
 (ie. it will merge XML syntax tree with CSS syntax tree), locate the tree nodes
 on a virtual display and produce a document layout. The layout has again a
-tree-like structure - it consists from a lot of so-called "rectangles", which
-have arbitrary attributes and can be arbitrary sized (in none, one or two
-dimensions). These rectangles can contain either nothing (these are also called
+tree-like structure - it consists from a lot of so-called "boxes", which have
+arbitrary attributes and can be arbitrary sized (in none, one or two
+dimensions). These boxes can contain either nothing (these are also called
 spacers), end-data (usually text, but also ie. images or other objects) or
-other rectangles. The layout is not dependent of type of the output - thus it
-can be used either for graphics or text or whatever you imagine. It is also
+other boxes. The layout is not dependent of type of the output - thus it can be
+used either for graphics or text or whatever you imagine. It is also
 independent on size of the output device, thus when resizing the viewport, you
 will be still able to use the same layout.
 
@@ -39,9 +39,9 @@ Its interface is defined at layouter/layouter.h.
 
 Renderer
 ~~~~~~~~
-Renderer will take a document layout, relocate and resize the rectangles to
-match the real output proportions and parameters. It is specific for the output
-type and it has no generic output format - the output is viewer-specific.
+Renderer will take a document layout, relocate and resize the boxes to match
+the real output proportions and parameters. It is specific for the output type
+and it has no generic output format - the output is viewer-specific.
 
 Its interface is defined at renderer/renderer.h.
 

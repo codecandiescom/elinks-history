@@ -1,5 +1,5 @@
 /* Layouter frontend */
-/* $Id: layouter.c,v 1.4 2002/12/31 01:25:34 pasky Exp $ */
+/* $Id: layouter.c,v 1.5 2003/01/17 21:48:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,8 +9,8 @@
 
 #include "elinks.h"
 
+#include "elusive/layouter/box.h"
 #include "elusive/layouter/layouter.h"
-#include "elusive/layouter/rectangle.h"
 #include "elusive/parser/parser.h"
 #include "util/memory.h"
 
@@ -32,7 +32,7 @@ elusive_layouter_init(enum layouter_backend_type layouter,
 	state = mem_calloc(1, sizeof(struct layouter_state));
 	if (!state) return NULL;
 
-	state->real_root = init_layout_rectangle();
+	state->real_root = init_layout_box();
 	state->current = state->root = state->real_root;
 	state->layouter = layouter;
 	state->parser = parser;
@@ -59,6 +59,6 @@ elusive_layouter_done(struct layouter_state *state)
 	    layouter_backends[state->layouter]->done)
 		layouter_backends[state->layouter]->done(state);
 
-	done_layout_rectangle(state->real_root);
+	done_layout_box(state->real_root);
 	mem_free(state);
 }

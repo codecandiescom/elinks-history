@@ -1,4 +1,4 @@
-/* $Id: layouter.h,v 1.3 2002/12/31 00:48:54 pasky Exp $ */
+/* $Id: layouter.h,v 1.4 2003/01/17 21:48:34 pasky Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_LAYOUTER_H
 #define EL__USIVE_LAYOUTER_LAYOUTER_H
@@ -6,7 +6,7 @@
 /* This is a universal layouter interface, as exposed to ELinks (in the ideal
  * case). */
 
-#include "elusive/layouter/rectangle.h"
+#include "elusive/layouter/box.h"
 #include "elusive/parser/parser.h"
 
 
@@ -30,9 +30,9 @@ struct layouter_state {
 	 * about parsers at all. */
 	struct parser_state *parser_state;
 
-	struct layout_rectangle *real_root;
-	struct layout_rectangle *root;
-	struct layout_rectangle *current;
+	struct layout_box *real_root;
+	struct layout_box *root;
+	struct layout_box *current;
 };
 
 struct layouter_backend {

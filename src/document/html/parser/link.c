@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.6 2004/05/30 02:46:39 jonas Exp $ */
+/* $Id: link.c,v 1.7 2004/05/30 19:56:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,6 +216,7 @@ html_img(unsigned char *a)
 	if (al) {
 		int img_link_tag = get_opt_int("document.browse.images.image_link_tagging");
 		unsigned char *s;
+		color_t fg;
 
 		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
 			unsigned char *img_link_prefix = get_opt_str("document.browse.images.image_link_prefix");
@@ -260,8 +261,10 @@ show_al:
 		 * extension to the standart. After all, it makes sense. */
 		html_focusable(a);
 
+		fg = format.fg;
 		format.fg = get_opt_color("document.colors.image");
 		put_chrs(al, strlen(al), put_chars_f, ff);
+		format.fg = fg;
 		if (ismap) kill_html_stack_item(&html_top);
 		/* Anything below must take care of properly handling the
 		 * show_any_as_links variable being off! */

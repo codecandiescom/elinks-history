@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.22 2002/09/17 13:57:26 zas Exp $ */
+/* $Id: cache.c,v 1.23 2002/12/01 19:27:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -406,15 +406,15 @@ delete_entry_content(struct cache_entry *e)
 void
 delete_cache_entry(struct cache_entry *e)
 {
-	if (e->refcount) internal("deleteing locked cache entry");
+	if (e->refcount) internal("deleting locked cache entry");
 #ifdef DEBUG
 	if (is_entry_used(e)) internal("deleting loading cache entry");
 #endif
 
 	delete_entry_content(e);
 	del_from_list(e);
-	mem_free(e->url);
 
+	if (e->url) mem_free(e->url);
 	if (e->head) mem_free(e->head);
 	if (e->last_modified) mem_free(e->last_modified);
 	if (e->redirect) mem_free(e->redirect);

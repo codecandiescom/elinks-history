@@ -1,3 +1,31 @@
+Thu Mar 31 10:24:18 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	frame_ev(): simplify code.  
+
+Thu Mar 31 09:54:14 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Do not even display () when accesskey attribute is present but
+	empty.  
+
+Thu Mar 31 09:44:49 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: viewer/text/link.c, config/kbdbind.c:
+
+	Fix display of access key in status bar when accesskey attribute is
+	set to "".  
+
+Thu Mar 31 08:21:36 2005  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Add two new functions available from Lua scripts: set_option(name,
+	value) and and get_option(name). Patch by Sergey and me. Please test
+	and review.  
+
 Wed Mar 30 21:10:30 2005  Laurent Monin <zas@norz.org>:
 
 	* src/document/dom/renderer.c:

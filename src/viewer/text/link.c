@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.241 2004/06/21 09:47:40 miciah Exp $ */
+/* $Id: link.c,v 1.242 2004/06/21 09:49:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -676,7 +676,6 @@ struct link *
 get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 {
 	struct link *l1, *l2, *link;
-	int mouse_x, mouse_y;
 	register int i, height;
 
 	assert(doc_view && doc_view->vs && doc_view->document);
@@ -711,8 +710,8 @@ get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 	}
 
 	/* Is there a link under mouse cursor ? */
-	mouse_x = x + doc_view->vs->x;
-	mouse_y = y + doc_view->vs->y;
+	x += doc_view->vs->x;
+	y += doc_view->vs->y;
 
 	for (link = l1; link <= l2; link++) {
 		for (i = 0; i < link->npoints; i++)

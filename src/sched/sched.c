@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.15 2003/05/06 22:00:16 zas Exp $ */
+/* $Id: sched.c,v 1.16 2003/05/07 09:22:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,11 +46,13 @@ struct k_conn {
 
 	void (*protocol)(struct connection *);
 	unsigned char *host;
+
+	ttime timeout;
+	ttime add_time;
+
 	int port;
 	int pf;
 	int conn;
-	ttime timeout;
-	ttime add_time;
 };
 
 
@@ -429,7 +431,7 @@ add_keepalive_socket(struct connection *c, ttime timeout)
 		goto del;
 	}
 
-	k = mem_alloc(sizeof(struct k_conn));
+	k = mem_calloc(1, sizeof(struct k_conn));
 	if (!k) goto close;
 
 	k->port = get_port(c->url);
@@ -619,7 +621,7 @@ run_connection(struct connection *c)
 
 	hc = is_host_on_list(c);
 	if (!hc) {
-		hc = mem_alloc(sizeof(struct h_conn));
+		hc = mem_calloc(1, sizeof(struct h_conn));
 		if (!hc) {
 			setcstate(c, S_OUT_OF_MEM);
 			del_connection(c);
@@ -632,7 +634,6 @@ run_connection(struct connection *c)
 			mem_free(hc);
 			return;
 		}
-		hc->conn = 0;
 		add_to_list(h_conns, hc);
 	}
 	hc->conn++;
@@ -753,7 +754,7 @@ check_queue()
 	struct connection *c;
 	int max_conns_to_host = get_opt_int("connection.max_connections_to_host");
 	int max_conns = get_opt_int("connection.max_connections");
-	
+
 again:
 	c = queue.next;
 #ifdef DEBUG

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.46 2003/05/06 20:16:23 pasky Exp $ */
+/* $Id: session.c,v 1.47 2003/05/07 09:22:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1512,8 +1512,9 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 
 	u = translate_url(url, ses->tab->term->cwd);
 	if (!u) {
-		struct status stat = { NULL_LIST_HEAD, NULL, NULL, S_BAD_URL,
-				       PRI_CANCEL, 0, NULL, NULL };
+		struct status stat = { NULL_LIST_HEAD, NULL, NULL,
+				       NULL, NULL, NULL,
+				       S_BAD_URL, PRI_CANCEL, 0 };
 
 		print_error_dialog(ses, &stat, N_("Error"));
 		goto end;

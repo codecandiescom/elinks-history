@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.5 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: connection.h,v 1.6 2003/05/07 09:22:55 zas Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
@@ -27,6 +27,10 @@
 #endif
 
 struct remaining_info {
+	ttime elapsed;
+	ttime last_time;
+	ttime dis_b;
+
 	int valid;
 	int size, loaded, last_loaded, cur_loaded;
 
@@ -46,52 +50,50 @@ struct remaining_info {
 	 * counter then, obviously). */
 	int seek;
 
-	ttime elapsed;
-	ttime last_time;
-	ttime dis_b;
-
-	int data_in_secs[CURRENT_SPD_SEC];
 	int timer;
+	int data_in_secs[CURRENT_SPD_SEC];
 };
 
 struct connection {
 	LIST_HEAD(struct connection);
 
-	tcount count;
+	struct list_head statuss;
+	struct remaining_info prg;
+
 	unsigned char *url;
 	unsigned char *prev_url;
+	void *dnsquery;
+	void *conn_info;
+	void *info;
+	void *buffer;
+	void *read_func;
+	void (*conn_func)(void *);
+	struct cache_entry *cache;
+	ssl_t *ssl;
+	struct stream_encoded *stream;
+
+	tcount count;
+
 	int pf; /* 1 == PF_INET, 2 == PF_INET6 */
 	int running;
 	int state;
 	int prev_error;
 	int from;
-	int pri[N_PRI];
-	enum cache_mode cache_mode;
 	int sock1;
 	int sock2;
-	void *dnsquery;
-	void *conn_info;
 	int tries;
-	struct list_head statuss;
-	void *info;
-	void *buffer;
-	void (*conn_func)(void *);
-	struct cache_entry *cache;
 	int received;
 	int est_length;
 	int unrestartable;
-	struct remaining_info prg;
 	int timer;
 	int detached;
-
-	ssl_t *ssl;
 	int no_tsl;
-
-	enum stream_encoding content_encoding;
-	struct stream_encoded *stream;
 	int stream_pipes[2];
+	int pri[N_PRI];
 
-	void *read_func;
+	enum cache_mode cache_mode;
+	enum stream_encoding content_encoding;
+
 };
 
 /* Connection states */
@@ -150,16 +152,19 @@ extern struct s_msg_dsc {
 } msg_dsc[];
 
 struct status {
+	/* XXX: order matters there, there's some hard initialization in
+	 * src/sched/session.c and src/viewer/text/view.c */
 	LIST_HEAD(struct status);
 
 	struct connection *c;
 	struct cache_entry *ce;
-	int state;
-	int prev_error;
-	int pri;
 	void (*end)(struct status *, void *);
 	void *data;
 	struct remaining_info *prg;
+
+	int state;
+	int prev_error;
+	int pri;
 };
 
 extern struct list_head queue;

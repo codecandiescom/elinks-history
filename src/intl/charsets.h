@@ -1,7 +1,7 @@
-/* $Id: charsets.h,v 1.17 2004/05/21 11:21:02 jonas Exp $ */
+/* $Id: charsets.h,v 1.18 2004/07/01 11:41:52 jonas Exp $ */
 
-#ifndef EL__CHARSETS_H
-#define EL__CHARSETS_H
+#ifndef EL__INTL_CHARSETS_H
+#define EL__INTL_CHARSETS_H
 
 #include "intl/codepage.h"
 #include "util/types.h"

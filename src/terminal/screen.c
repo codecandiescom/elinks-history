@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.95 2003/10/02 15:37:44 jonas Exp $ */
+/* $Id: screen.c,v 1.96 2003/10/02 16:02:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,6 +282,33 @@ done_screen_drivers(void)
 }
 
 
+/* Adds the term code for positioning the cursor at @x and @y to @string.
+ * The template term code is: "\033[<@y>;<@x>H" */
+static inline struct string *
+add_cursor_move_to_string(struct string *screen, int y, int x)
+{
+	/* 28 chars for both of the @y and @x numbers should be enough. */
+	unsigned char code[32];
+	int length = 2;
+	int ret;
+
+	code[0] = '\033';
+	code[1] = '[';
+
+	ret = longcat(code, &length, y, 30, 0);
+	/* Make sure theres atleast room for ';' and `some' number ;) */
+	if (ret < 0 || length > 30) return NULL;
+
+	code[length++] = ';';
+
+	ret = longcat(code, &length, x, sizeof(code) - length, 0);
+	if (ret < 0 || length > 31) return NULL;
+
+	code[length++] = 'H';
+
+	return add_bytes_to_string(screen, code, length);
+}
+
 struct screen_state {
 	unsigned char border;
 	unsigned char underline;
@@ -404,34 +431,6 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		}								\
 	}									\
 }
-
-/* Adds the term code for positioning the cursor at @x and @y to @string.
- * The template term code is: "\033[<@y>;<@x>H" */
-static inline struct string *
-add_cursor_move_to_string(struct string *screen, int y, int x)
-{
-	/* 28 chars for both of the @y and @x numbers should be enough. */
-	unsigned char code[32];
-	int length = 2;
-	int ret;
-
-	code[0] = '\033';
-	code[1] = '[';
-
-	ret = longcat(code, &length, y, 30, 0);
-	/* Make sure theres atleast room for ';' and `some' number ;) */
-	if (ret < 0 || length > 30) return NULL;
-
-	code[length++] = ';';
-
-	ret = longcat(code, &length, x, sizeof(code) - length, 0);
-	if (ret < 0 || length > 31) return NULL;
-
-	code[length++] = 'H';
-
-	return add_bytes_to_string(screen, code, length);
-}
-
 
 /* Updating of the terminal screen is done by checking what needs to be updated
  * using the last screen. */

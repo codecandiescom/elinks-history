@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.63 2003/12/29 19:35:02 zas Exp $ */
+/* $Id: renderer.c,v 1.64 2003/12/29 19:38:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 	ALIGN_LINK(&(doc)->links, (doc)->nlinks, size)
 
 static struct screen_char *
-realloc_line(struct document *document, int y, int x)
+realloc_line(struct document *document, int x, int y)
 {
 	struct line *line = realloc_lines(document, y);
 
@@ -213,7 +213,7 @@ add_document_line(struct document *document, int lineno,
 		}
 	}
 
-	pos = realloc_line(document, lineno, width + expanded);
+	pos = realloc_line(document, width + expanded, lineno);
 	if (!pos) {
 		mem_free(line);
 		return 0;

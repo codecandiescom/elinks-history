@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.29 2004/05/26 16:35:58 zas Exp $ */
+/* $Id: checkbox.h,v 1.30 2004/07/02 15:48:32 zas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -10,8 +10,7 @@ struct terminal;
 
 #define add_dlg_radio(dlg, text_, groupid, groupnum, data_)	\
 	do {							\
-		int *n = &(dlg)->widgets_size;			\
-		struct widget *widget = &(dlg)->widgets[*n];	\
+		struct widget *widget = &(dlg)->widgets[(dlg)->widgets_size++];	\
 								\
 		widget->type = WIDGET_CHECKBOX;			\
 		widget->text = (text_);				\
@@ -19,7 +18,6 @@ struct terminal;
 		widget->info.checkbox.gnum = (groupnum);	\
 		widget->datalen = sizeof(int);			\
 		widget->data = (unsigned char *) &(data_);	\
-		(*n)++;						\
 	} while (0)
 
 #define add_dlg_checkbox(dlg, text_, data_) \

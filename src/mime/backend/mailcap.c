@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.25 2003/06/06 20:34:49 jonas Exp $ */
+/* $Id: mailcap.c,v 1.26 2003/06/06 21:18:07 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -575,6 +575,7 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 
 /* Setup the exported backend */
 struct mime_backend mailcap_mime_backend = {
+	/* name: */		BACKEND_NAME,
 	/* init: */		init_mailcap,
 	/* done: */		done_mailcap,
 	/* get_content_type: */	NULL,

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.178 2004/05/17 10:47:03 zas Exp $ */
+/* $Id: tables.c,v 1.179 2004/06/18 23:26:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -819,8 +819,8 @@ format_cell(struct table *table, int column, int row,
 	}
 
 	return format_html_part(cell->start, cell->end, cell->align,
-				table->cellpadding, width, document, x, y,
-				NULL, cell->link_num);
+	                        table->cellpadding, width, document, x, y,
+	                        NULL, cell->link_num);
 }
 
 static inline void

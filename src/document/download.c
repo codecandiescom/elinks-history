@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.22 2002/07/03 23:40:49 pasky Exp $ */
+/* $Id: download.c,v 1.23 2002/07/03 23:46:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ abort_download(struct download *down)
 	mem_free(down->url);
 
 	if (down->handle != -1) {
-		prealloc_truncate(down->handle, down->last_pos)
+		prealloc_truncate(down->handle, down->last_pos);
 		close(down->handle);
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.64 2004/07/19 21:01:26 zas Exp $ */
+/* $Id: menu.h,v 1.65 2004/07/20 01:36:33 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -15,16 +15,17 @@ typedef void (*menu_func)(struct terminal *, void *, void *);
 enum menu_item_flags {
 	NO_FLAG = 0,
 
-	FREE_LIST = 1,
-	FREE_TEXT = 2,
-	FREE_RTEXT = 4, /* only for menu_item */
-	FREE_DATA = 8, /* for menu_item, see menu.c for remarks */
+	FREE_LIST = 1,		/* Free the 'list' of menu items */
 
-	MENU_FULLNAME = 16,
-	SUBMENU = 32,
-	NO_INTL = 64,
-	NO_SELECT = 128,	/* Mark unselectable item */
-	RIGHT_INTL = 256,	/* Force translation of right text. */
+	FREE_TEXT = 2,		/* Free the (main) text */
+	FREE_RTEXT = 4,		/* Free the right aligned text */
+	FREE_DATA = 8,		/* Free the private data */
+
+	MENU_FULLNAME = 16,	/* Catenate base string to <select> item text */
+	SUBMENU = 32,		/* Item opens submenu, so show '>>' as rtext */
+	NO_INTL = 64,		/* Don't translate the text */
+	NO_SELECT = 128,	/* Mark item as unselectable */
+	RIGHT_INTL = 256,	/* Force translation of the right text */
 };
 
 #define FREE_ANY (FREE_LIST|FREE_TEXT|FREE_RTEXT|FREE_DATA)

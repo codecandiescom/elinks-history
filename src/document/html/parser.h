@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.8 2002/06/07 19:53:45 pasky Exp $ */
+/* $Id: parser.h,v 1.9 2002/06/17 08:00:16 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -8,12 +8,12 @@ struct link;
 struct form_control;
 struct f_data;
 
-#include "links.h"
 #include "bfu/align.h"
 #include "bfu/bfu.h"
 #include "document/session.h"
 #include "document/html/colors.h"
 #include "document/html/renderer.h"
+#include "util/lists.h"
 #include "util/memlist.h"
 
 /* XXX: This is just terible - this interface is from 75% only for other HTML

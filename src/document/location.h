@@ -1,10 +1,11 @@
-/* $Id: location.h,v 1.4 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: location.h,v 1.5 2002/06/17 08:00:15 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_LOCATION_H
 #define EL__DOCUMENT_LOCATION_H
 
 #include "document/vs.h"
 #include "lowlevel/sched.h"
+#include "util/lists.h"
 
 struct location {
 	struct location *next;

@@ -1,8 +1,9 @@
-/* $Id: cache.h,v 1.4 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: cache.h,v 1.5 2002/06/17 08:00:15 pasky Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
 
+#include "util/lists.h"
 #include "links.h" /* tcount */
 
 struct cache_entry {

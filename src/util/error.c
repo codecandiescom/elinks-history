@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.28 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: error.c,v 1.29 2002/06/17 08:00:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "links.h"
 
 #include "util/error.h"
+#include "util/lists.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"

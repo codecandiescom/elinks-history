@@ -1,15 +1,15 @@
-/* $Id: renderer.h,v 1.9 2002/06/07 19:53:45 pasky Exp $ */
+/* $Id: renderer.h,v 1.10 2002/06/17 08:00:16 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
-#include "links.h" /* list_head */
 #include "intl/charsets.h"
 #include "document/options.h"
 #include "document/session.h"
 #include "document/html/parser.h"
 #include "lowlevel/terminal.h"
 #include "lowlevel/ttime.h"
+#include "util/lists.h"
 /* We need this included later, otherwise it will miss some our
  * declarations. */
 /* #include "vs.h" */

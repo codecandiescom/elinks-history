@@ -1,9 +1,9 @@
-/* $Id: hash.h,v 1.4 2002/05/23 20:44:54 pasky Exp $ */
+/* $Id: hash.h,v 1.5 2002/06/17 08:00:16 pasky Exp $ */
 
 #ifndef EL__UTIL_HASH_H
 #define EL__UTIL_HASH_H
 
-#include "links.h" /* list_head */
+#include "util/lists.h"
 
 /* This should be hopefully always 32bit at least. I'm not sure what will
  * happen when this will be of other length, but it should still work ok.

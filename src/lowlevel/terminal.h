@@ -1,10 +1,10 @@
-/* $Id: terminal.h,v 1.10 2002/06/09 20:14:38 pasky Exp $ */
+/* $Id: terminal.h,v 1.11 2002/06/17 08:00:16 pasky Exp $ */
 
 #ifndef EL__TERMINAL_H
 #define EL__TERMINAL_H
 
 #include "config/options.h"
-#include "links.h" /* list_head */
+#include "util/lists.h"
 
 typedef unsigned short chr;
 

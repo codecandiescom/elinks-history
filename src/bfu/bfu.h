@@ -1,11 +1,11 @@
-/* $Id: bfu.h,v 1.9 2002/05/08 13:55:00 pasky Exp $ */
+/* $Id: bfu.h,v 1.10 2002/06/17 08:00:14 pasky Exp $ */
 
 #ifndef EL__BFU_H
 #define EL__BFU_H
 
-#include "links.h" /* list_head */
 #include "bfu/align.h"
 #include "lowlevel/terminal.h"
+#include "util/lists.h"
 
 
 struct input_history_item {

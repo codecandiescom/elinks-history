@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: html_r.c,v 1.19 2002/03/16 20:07:59 pasky Exp $ */
+/* $Id: html_r.c,v 1.20 2002/03/16 23:02:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,8 @@
 
 #include "cache.h"
 #include "charsets.h"
+#include "colors.h"
+#include "default.h"
 #include "error.h"
 #include "html.h"
 #include "html_r.h"
@@ -930,7 +932,7 @@ void create_frame(struct frame_param *fp)
 	add_frameset_entry(fp->parent, NULL, fp->name, fp->url);
 }
 
-void *html_special(struct part *part, html_special_type c, ...)
+void *html_special(struct part *part, enum html_special_type c, ...)
 {
 	va_list l;
 	unsigned char *t;

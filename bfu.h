@@ -1,4 +1,4 @@
-/* $Id: bfu.h,v 1.1 2002/03/16 22:03:08 pasky Exp $ */
+/* $Id: bfu.h,v 1.2 2002/03/16 23:02:36 pasky Exp $ */
 
 #ifndef EL__BFU_H
 #define EL__BFU_H
@@ -66,21 +66,21 @@ void add_to_history(struct history *, unsigned char *, int);
 struct dialog_item_data;
 struct dialog_data;
 
-typedef enum {
+enum dialog_item_type {
 	D_END,
 	D_CHECKBOX,
 	D_FIELD,
 	D_FIELD_PASS,
 	D_BUTTON,
 	D_BOX,
-} dialog_item_type;
+};
 
 /* Button flags, go into dialog_item.gid */
 #define B_ENTER		1
 #define B_ESC		2
 
 struct dialog_item {
-	dialog_item_type type;
+	enum dialog_item_type type;
 	/* for buttons:	gid - flags B_XXX
 	 * for fields:	min/max
 	 * for box:	gid is box height */

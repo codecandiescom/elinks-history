@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.13 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: os_dep.c,v 1.14 2002/03/16 23:02:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1309,7 +1309,7 @@ void open_in_new_be(struct terminal *term, unsigned char *exe, unsigned char *pa
 #endif
 
 struct {
-	term_env_type env;
+	enum term_env_type env;
 	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
 	unsigned char *text;
 	unsigned char *hk;

@@ -1,16 +1,38 @@
-/* $Id: html_r.h,v 1.3 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: html_r.h,v 1.4 2002/03/16 23:02:36 pasky Exp $ */
 
 #ifndef EL__HTML_R_H
 #define EL__HTML_R_H
 
 #include "charsets.h"
+#include "colors.h"
 #include "links.h" /* list_head */
-#include "html.h"
 #include "select.h" 
-#include "session.h"
-/* We need this included later, otherwise view.h will miss some our
+/* We need this included later, otherwise it will miss some our
  * declarations. */
+/* #include "html.h" */
+/* #include "session.h" */
 /* #include "view.h" */
+
+/* For struct f_data (also) */
+struct document_options {
+	int xw, yw; /* size of window */
+	int xp, yp; /* pos of window */
+	int col, cp, assume_cp, hard_assume;
+	int use_document_colours;
+	int avoid_dark_on_black;
+	/* if you add anything, fix it in compare_opt */
+	int tables, frames, images, margin;
+	int plain;
+	int num_links, table_order;
+	struct rgb default_fg;
+	struct rgb default_bg;
+	struct rgb default_link;
+	struct rgb default_vlink;
+	unsigned char *framename;
+};
+
+#include "html.h"
+#include "session.h"
 
 struct tag {
 	struct tag *next;
@@ -52,14 +74,14 @@ struct line {
 };
 
 /* For struct link */
-typedef enum {
+enum link_type {
 	L_LINK,
 	L_BUTTON,
 	L_CHECKBOX,
 	L_SELECT,
 	L_FIELD,
 	L_AREA,
-} link_type;
+};
 
 /* For struct link */
 struct point {
@@ -69,7 +91,7 @@ struct point {
 
 /* For struct f_data */
 struct link {
-	link_type type;
+	enum link_type type;
 	int num;
 	long accesskey;
 	unsigned char *where;
@@ -85,23 +107,6 @@ struct link {
 struct link_bg {
 	int x, y;
 	unsigned c;
-};
-
-/* For struct f_data */
-struct document_options {
-	int xw, yw; /* size of window */
-	int xp, yp; /* pos of window */
-	int col, cp, assume_cp, hard_assume;
-	int use_document_colours;
-	int avoid_dark_on_black;
-	int tables, frames, images, margin;  /* if you add anything, fix it in compare_opt */
-	int plain;
-	int num_links, table_order;
-	struct rgb default_fg;
-	struct rgb default_bg;
-	struct rgb default_link;
-	struct rgb default_vlink;
-	unsigned char *framename;
 };
 
 /* For struct f_data */

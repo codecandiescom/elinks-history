@@ -1,5 +1,5 @@
 /* Global include with common functions and definitions for elinks */
-/* $Id: links.h,v 1.61 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: links.h,v 1.62 2002/03/16 23:02:36 pasky Exp $ */
 
 #ifndef EL__LINKS_H
 #define EL__LINKS_H
@@ -25,7 +25,7 @@
 #endif
 
 #ifdef HAVE_LUA
-#include <lua.h>
+/* #include <lua.h> */ /* Yes, you guessed right, this includes ./lua.h */
 #include <lualib.h>
 #endif
 

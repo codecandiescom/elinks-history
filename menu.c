@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.29 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: menu.c,v 1.30 2002/03/16 23:02:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,6 +99,8 @@ void menu_goto_url(struct terminal *term, void *d, struct session *ses)
 {
 	dialog_goto_url(ses, "");
 }
+
+void dialog_save_url(struct session *ses);
 
 void menu_save_url_as(struct terminal *term, void *d, struct session *ses)
 {

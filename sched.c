@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.21 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: sched.c,v 1.22 2002/03/16 23:02:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -805,13 +805,13 @@ int is_entry_used(struct cache_entry *e)
 struct blacklist_entry {
 	struct blacklist_entry *next;
 	struct blacklist_entry *prev;
-	bl_flags_type flags;
+	enum blacklist_flags flags;
 	unsigned char host[1];
 };
 
 struct list_head blacklist = { &blacklist, &blacklist };
 
-void add_blacklist_entry(unsigned char *host, bl_flags_type flags)
+void add_blacklist_entry(unsigned char *host, enum blacklist_flags flags)
 {
 	struct blacklist_entry *b;
 	foreach(b, blacklist) if (!strcasecmp(host, b->host)) {
@@ -824,7 +824,7 @@ void add_blacklist_entry(unsigned char *host, bl_flags_type flags)
 	add_to_list(blacklist, b);
 }
 
-void del_blacklist_entry(unsigned char *host, bl_flags_type flags)
+void del_blacklist_entry(unsigned char *host, enum blacklist_flags flags)
 {
 	struct blacklist_entry *b;
 	foreach(b, blacklist) if (!strcasecmp(host, b->host)) {

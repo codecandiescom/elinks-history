@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.2 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: terminal.h,v 1.3 2002/03/16 23:02:37 pasky Exp $ */
 
 #ifndef EL__TERMINAL_H
 #define EL__TERMINAL_H
@@ -7,17 +7,17 @@
 
 typedef unsigned short chr;
 
-typedef enum {
+enum event_type {
 	EV_INIT,
 	EV_KBD,
 	EV_MOUSE,
 	EV_REDRAW,
 	EV_RESIZE,
 	EV_ABORT,
-} event_type;
+};
 
 struct event {
-	event_type ev;
+	enum event_type ev;
 	long x;
 	long y;
 	long b;
@@ -29,18 +29,18 @@ struct event {
 
 #define ATTR_FRAME	0x8000
 
-typedef enum {
+enum term_mode_type {
 	TERM_DUMB,
 	TERM_VT100,
 	TERM_LINUX,
 	TERM_KOI8,
-} term_mode_type;
+};
 
 struct term_spec {
 	struct term_spec *next;
 	struct term_spec *prev;
 	unsigned char term[MAX_TERM_LEN];
-	term_mode_type mode;
+	enum term_mode_type mode;
 	int m11_hack;
 	int restrict_852;
 	int block_cursor;
@@ -48,13 +48,13 @@ struct term_spec {
 	int charset;
 };
 
-typedef enum {
+enum term_env_type {
 	ENV_XWIN,
 	ENV_SCREEN,
 	ENV_OS2VIO,
 	ENV_BE,
 	ENV_TWIN,
-} term_env_type;
+};
 
 struct terminal {
 	struct terminal *next;
@@ -64,7 +64,7 @@ struct terminal {
 	int fdout;
 	int x;
 	int y;
-	term_env_type environment;
+	enum term_env_type environment;
 	unsigned char term[MAX_TERM_LEN];
 	unsigned char cwd[MAX_CWD_LEN];
 	unsigned *screen;

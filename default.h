@@ -1,8 +1,9 @@
-/* $Id: default.h,v 1.1 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: default.h,v 1.2 2002/03/16 23:02:36 pasky Exp $ */
 
 #ifndef EL__DEFAULT_H
 #define EL__DEFAULT_H
 
+#include "colors.h"
 #include "session.h"
 #include "terminal.h"
 
@@ -48,13 +49,13 @@ extern int base_session;
 extern int dmp;
 extern int dump_width;
 
-typedef enum {
+enum cookies_accept {
 	COOKIES_ACCEPT_NONE,
 	COOKIES_ACCEPT_ASK,
 	COOKIES_ACCEPT_ALL
-} cookies_accept_t;
+};
 
-extern cookies_accept_t cookies_accept;
+extern enum cookies_accept cookies_accept;
 extern int cookies_save;
 extern int cookies_resave;
 extern int cookies_paranoid_security;
@@ -92,14 +93,14 @@ extern int links_wraparound;
 
 extern int allow_special_files;
 
-typedef enum {
+enum referer {
 	REFERER_NONE,
 	REFERER_SAME_URL,
 	REFERER_FAKE,
 	REFERER_TRUE,
-} referer_t;
+};
 
-extern referer_t referer;
+extern enum referer referer;
 extern unsigned char fake_referer[];
 extern unsigned char http_proxy[];
 extern unsigned char ftp_proxy[];

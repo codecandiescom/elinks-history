@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.43 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: default.c,v 1.44 2002/03/16 23:02:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include "charsets.h"
 #include "default.h"
 #include "dns.h"
-#include "html.h"
+#include "colors.h"
 #include "html_r.h"
 #include "kbdbind.h"
 #include "language.h"
@@ -975,7 +975,7 @@ int dmp = 0;
 int dump_width = 80;
 
 
-cookies_accept_t cookies_accept = COOKIES_ACCEPT_ALL;
+enum cookies_accept cookies_accept = COOKIES_ACCEPT_ALL;
 int cookies_save = 1;
 int cookies_resave = 1;
 int cookies_paranoid_security = 0;
@@ -1019,7 +1019,7 @@ int keep_unhistory = 0;
 int default_left_margin = HTML_LEFT_MARGIN;
 
 unsigned char fake_referer[MAX_STR_LEN] = "";
-referer_t referer = REFERER_NONE;
+enum referer referer = REFERER_NONE;
 
 unsigned char http_proxy[MAX_STR_LEN] = "";
 unsigned char ftp_proxy[MAX_STR_LEN] = "";

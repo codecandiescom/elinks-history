@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.14 2002/03/16 22:03:08 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.15 2002/03/16 23:02:36 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -34,13 +34,13 @@
 /* The list of bookmarks */
 struct list_head bookmarks = {&bookmarks, &bookmarks};
 
-/* The last used id of a bookmark */
-bookmark_id next_bookmark_id = 0;
-
 /* A pointer independent id that bookmarks can be identified by. Guarenteed to
  * be unique between all bookmarks. */
 typedef int bookmark_id;
 #define BAD_BOOKMARK_ID ((bookmark_id) -1)
+
+/* The last used id of a bookmark */
+bookmark_id next_bookmark_id = 0;
 
 /* Bookmark record structure */
 struct bookmark {
@@ -55,6 +55,12 @@ struct bookmark {
 /* search memorization */
 unsigned char *bm_last_searched_name = NULL;
 unsigned char *bm_last_searched_url = NULL;
+
+
+void write_bookmarks();
+
+void add_bookmark(const unsigned char *, const unsigned char *);
+
 
 /* Clears the bookmark list */
 void free_bookmarks() {

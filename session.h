@@ -1,15 +1,17 @@
-/* $Id: session.h,v 1.3 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: session.h,v 1.4 2002/03/16 23:02:37 pasky Exp $ */
 
 #ifndef EL__SESSION_H
 #define EL__SESSION_H
 
+/* We need to declare these first :/. Damn cross-dependencies. */
+struct location;
+struct session;
+
 #include "cache.h"
 #include "html.h"
+#include "html_r.h"
 #include "sched.h"
 #include "terminal.h"
-/* We need to declare struct location first :/. */
-struct location;
-#include "html_r.h"
 #include "view.h"
 
 struct location {
@@ -89,14 +91,14 @@ struct download {
 extern struct list_head downloads;
 
 /* This should be used only internally */
-typedef enum {
+enum session_wtd {
 	WTD_NO,
 	WTD_FORWARD,
 	WTD_IMGMAP,
 	WTD_RELOAD,
 	WTD_BACK,
 	WTD_UNBACK,
-} session_wtd;
+};
 
 struct session {
 	struct session *next;
@@ -109,7 +111,7 @@ struct session {
 	struct f_data_c *screen;
 	struct list_head scrn_frames;
 	struct status loading;
-	session_wtd wtd;
+	enum session_wtd wtd;
 	unsigned char *wtd_target;
 	unsigned char *loading_url;
 	int display_timer;

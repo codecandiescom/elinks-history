@@ -1,11 +1,18 @@
-/* $Id: html.h,v 1.3 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: html.h,v 1.4 2002/03/16 23:02:36 pasky Exp $ */
 
 #ifndef EL__HTML_H
 #define EL__HTML_H
 
+/* And this is stuff for session.h. */
+struct link;
+struct form_control;
+struct f_data;
+
 #include "bfu.h"
+#include "colors.h"
 #include "links.h"
-/* #include "html_r.h" */
+#include "html_r.h"
+#include "session.h"
 
 /* XXX: This is just terible - this interface is from 75% only for other HTML
  * files - there's lack of any well defined interface and it's all randomly
@@ -20,13 +27,13 @@ struct form {
 
 extern struct form form;
 
-typedef enum {
+enum form_method {
 	FM_GET,
 	FM_POST,
 	FM_POST_MP,
-} form_method;
+};
 
-typedef enum {
+enum form_type {
 	FC_TEXT,
 	FC_PASSWORD,
 	FC_FILE,
@@ -38,7 +45,7 @@ typedef enum {
 	FC_IMAGE,
 	FC_RESET,
 	FC_HIDDEN,
-} form_type;
+};
 
 struct form_control {
 	struct form_control *next;
@@ -47,10 +54,10 @@ struct form_control {
 	int ctrl_num;
 	int g_ctrl_num;
 	int position;
-	form_method method;
+	enum form_method method;
 	unsigned char *action;
 	unsigned char *target;
-	form_type type;
+	enum form_type type;
 	unsigned char *name;
 	unsigned char *alt;
 	int ro;
@@ -77,42 +84,37 @@ struct form_state {
 	int vypos;
 };
 
-struct rgb {
-	unsigned char r, g, b;
-	unsigned char pad;
+enum format_attr {
+	AT_BOLD = 1,
+	AT_ITALIC = 2,
+	AT_UNDERLINE = 4,
+	AT_FIXED = 8,
+	AT_GRAPHICS = 16,
 };
-
-typedef enum {
-	AT_BOLD=1,
-	AT_ITALIC=2,
-	AT_UNDERLINE=4,
-	AT_FIXED=8,
-	AT_GRAPHICS=16,
-} format_attr;
 
 /* XXX: I'm not sure this file is the best place for this. --pasky */
 /* This enum is pretty ugly, yes ;). */
-typedef enum {
+enum format_align {
 	AL_LEFT,
 	AL_CENTER,
 	AL_RIGHT,
 	AL_BLOCK,
 	AL_NO,
 
-	AL_MASK=0x7f,
+	AL_MASK = 0x7f,
 
 	/* XXX: DIRTY! For backward compatibility with old menu code: */
-	AL_EXTD_TEXT=0x80,
-} format_align;
+	AL_EXTD_TEXT = 0x80,
+};
 
 struct text_attrib_beginning {
-	format_attr attr;
+	enum format_attr attr;
 	struct rgb fg;
 	struct rgb bg;
 };
 
 struct text_attrib {
-	format_attr attr;
+	enum format_attr attr;
 	struct rgb fg;
 	struct rgb bg;
 	int fontsize;
@@ -131,33 +133,33 @@ struct text_attrib {
 };
 
 /* This enum is pretty ugly, yes ;). */
-typedef enum {
-	P_NONE=0,
+enum format_list_flag {
+	P_NONE = 0,
 	
-	P_NUMBER=1,
-	P_alpha=2,
-	P_ALPHA=3,
-	P_roman=4,
-	P_ROMAN=5,
+	P_NUMBER = 1,
+	P_alpha = 2,
+	P_ALPHA = 3,
+	P_roman = 4,
+	P_ROMAN = 5,
 	
-	P_STAR=1,
-	P_O=2,
-	P_PLUS=3,
+	P_STAR = 1,
+	P_O = 2,
+	P_PLUS = 3,
 	
-	P_LISTMASK=7,
+	P_LISTMASK = 7,
 	
-	P_COMPACT=8,
-} format_list_flag;
+	P_COMPACT = 8,
+};
 
 struct par_attrib {
-	format_align align;
+	enum format_align align;
 	int leftmargin;
 	int rightmargin;
 	int width;
 	int list_level;
 	unsigned list_number;
 	int dd_margin;
-	format_list_flag flags;
+	enum format_list_flag flags;
 	struct rgb bgcolor;
 };
 
@@ -203,7 +205,6 @@ int get_num(unsigned char *, unsigned char *);
 int get_width(unsigned char *, unsigned char *, int);
 /* int get_color(unsigned char *, unsigned char *, struct rgb *); */
 int get_bgcolor(unsigned char *, struct rgb *);
-int decode_color(unsigned char *, struct rgb *);
 
 void html_stack_dup();
 void kill_html_stack_item(struct html_element *);
@@ -215,14 +216,14 @@ void scan_http_equiv(unsigned char *, unsigned char *, unsigned char **, int *, 
 
 void parse_html(unsigned char *, unsigned char *, void (*)(void *, unsigned char *, int), void (*)(void *), void (*)(void *), void *(*)(void *, int, ...), void *, unsigned char *);
 
-typedef enum {
+enum html_special_type {
 	SP_TAG,
 	SP_CONTROL,
 	SP_TABLE,
 	SP_USED,
 	SP_FRAMESET,
 	SP_FRAME,
-} html_special_type;
+};
 
 struct frameset_param {
 	struct frameset_desc *parent;

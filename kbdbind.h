@@ -1,20 +1,20 @@
-/* $Id: kbdbind.h,v 1.1 2002/03/16 22:03:09 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.2 2002/03/16 23:02:36 pasky Exp $ */
 
 #ifndef EL__KBDBIND_H
 #define EL__KBDBIND_H
 
 #include "default.h"
 
-enum {
+enum keymap {
 	KM_MAIN,
 	KM_EDIT,
 	KM_MENU,
 	KM_MAX,
-} keymap;
+};
 
 /* Note: if you add anything here, please keep it in alphabetical order,
  * and also update the table in parse_act() in kbdbind.c.  */
-enum {
+enum keyact {
 	ACT_ADD_BOOKMARK,
 	ACT_AUTO_COMPLETE,
 	ACT_BACK,
@@ -68,7 +68,7 @@ enum {
 	ACT_UP,
 	ACT_VIEW_IMAGE,
 	ACT_ZOOM_FRAME
-} keyact;
+};
 
 void init_keymaps();
 void free_keymaps();

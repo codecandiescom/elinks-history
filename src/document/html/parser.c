@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.279 2003/11/18 10:37:42 zas Exp $ */
+/* $Id: parser.c,v 1.280 2003/11/18 10:48:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,9 +112,10 @@ next_attr:
 	while (atchr(*e)) next_char();
 	while (WHITECHAR(*e)) next_char();
 
-	if (*e == '=') goto next_attr;
-
-	if (end_of_tag(*e)) goto end;
+	if (*e != '=') {
+		if (end_of_tag(*e)) goto end;
+		goto next_attr;
+	}
 	next_char();
 
 	while (WHITECHAR(*e)) next_char();
@@ -126,7 +127,7 @@ quoted_value:
 		next_char();
 		while (*e != quote) next_char();
 		next_char();
-		goto quoted_value;
+		if (*e == quote) goto quoted_value;
 	} else {
 		while (!WHITECHAR(*e) && !end_of_tag(*e)) next_char();
 	}

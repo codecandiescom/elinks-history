@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.618 2004/10/10 20:08:22 miciah Exp $ */
+/* $Id: view.c,v 1.619 2004/10/14 18:05:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -815,7 +815,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		status = field_op(ses, doc_view, link, ev);
 
 		if (status != FRAME_EVENT_IGNORED)
-			return status;
+			goto reset_insert_mode_and_out;
 	}
 
 	if (ev->ev == EVENT_KBD) {
@@ -830,9 +830,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		status = FRAME_EVENT_IGNORED;
 	}
 
-	if (ses->insert_mode == INSERT_MODE_ON
-	    && link != get_current_link(doc_view))
-		ses->insert_mode = INSERT_MODE_OFF;
+reset_insert_mode_and_out:
+	if (ses->insert_mode == INSERT_MODE_ON) {
+		assert(link == get_current_link(doc_view));
+	}
 
 	return status;
 }

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.536 2004/07/26 17:24:22 zas Exp $ */
+/* $Id: session.c,v 1.537 2004/07/26 17:40:42 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -576,6 +576,21 @@ request_additional_file(struct session *ses, unsigned char *name, struct uri *ur
 	return ftl;
 }
 
+static void
+load_file_from_doc_view(struct file_to_load *ftl,
+			struct document_view *doc_view,
+			enum cache_mode cache_mode)
+{
+	struct uri *referer = NULL;
+
+	/* FIXME: set referer for any protocol ?
+	 * In set_session_referrer() we don't set it for
+	 * PROTOCOL_FILE. --Zas */
+	if (doc_view && doc_view->document)
+		referer = doc_view->document->uri;
+
+	load_uri(ftl->uri, referer, &ftl->stat, ftl->pri, cache_mode, -1);
+}
 
 void
 process_file_requests(struct session *ses)
@@ -591,17 +606,12 @@ process_file_requests(struct session *ses)
 	while (more) {
 		more = 0;
 		foreach (ftl, ses->more_files) {
-			struct uri *referer = NULL;
-
 			if (ftl->req_sent)
 				continue;
 
 			ftl->req_sent = 1;
-			if (doc_view && doc_view->document)
-				referer = doc_view->document->uri;
 
-			load_uri(ftl->uri, referer,
-				 &ftl->stat, ftl->pri, CACHE_MODE_NORMAL, -1);
+			load_file_from_doc_view(ftl, doc_view, CACHE_MODE_NORMAL);
 			more = 1;
 		}
 	}
@@ -1019,19 +1029,13 @@ reload(struct session *ses, enum cache_mode cache_mode)
 		l->download.end = (void *) doc_end_load;
 		load_uri(l->vs.uri, ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
-			struct uri *referer = NULL;
-
 			if (file_to_load_is_active(ftl))
 				continue;
 
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *) file_end_load;
 
-			if (doc_view && doc_view->document)
-				referer = doc_view->document->uri;
-
-			load_uri(ftl->uri, referer,
-				 &ftl->stat, ftl->pri, cache_mode, -1);
+			load_file_from_doc_view(ftl, doc_view, cache_mode);
 		}
 	}
 }

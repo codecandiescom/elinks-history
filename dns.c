@@ -64,8 +64,16 @@ void lookup_fn(void *data, int h)
 
 	write(h, &addrno, sizeof(int));
 	
-	for (i = 0; i < addrno; i++)
-		write(h, &addrs[i], sizeof(struct sockaddr));
+	for (i = 0; i < addrno; i++) {
+		int done = 0;
+
+		do {
+			int w;
+
+			w = write(h, &addrs[i] + done, sizeof(struct sockaddr) - done);
+			done += w;
+		} while (done < sizeof(struct sockaddr));
+	}
 }
 
 void end_real_lookup(void *data)
@@ -85,14 +93,14 @@ void end_real_lookup(void *data)
 	*query->addr = mem_alloc((*query->addrno + 1) * sizeof(struct sockaddr));
 
 	for (i = 0; i < *query->addrno; i++) {
-		int w = 0;
+		int done = 0;
 
 		do {
 			int r;
 
-			r = read(query->h, &(*query->addr)[i] + w, sizeof(struct sockaddr) - w);
-			w += r;
-		} while (w < sizeof(struct sockaddr));
+			r = read(query->h, &(*query->addr)[i] + done, sizeof(struct sockaddr) - done);
+			done += r;
+		} while (done < sizeof(struct sockaddr));
 	}
 
 	res = 0;

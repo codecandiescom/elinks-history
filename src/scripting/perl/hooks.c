@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.16 2005/01/21 14:11:07 jonas Exp $ */
+/* $Id: hooks.c,v 1.17 2005/02/08 01:50:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,13 +184,14 @@ do_script_hook_get_proxy(unsigned char **new_proxy_url, unsigned char *url)
 	if (SvTRUE(ERRSV)) count = 0;	/* FIXME: error message ? */
 	SPAGAIN;
 	if (count == 1) {
-		STRLEN n_a;	/* Used by POPpx macro. */
-		unsigned char *new_url = POPpx;
-
-		if (new_url) {
-			*new_proxy_url = memacpy(new_url, n_a);
-		} else {
+		if (TOPs == &PL_sv_undef) {
+			(void) POPs;
 			*new_proxy_url = NULL;
+		} else {
+			STRLEN n_a;	/* Used by POPpx macro. */
+			unsigned char *new_url = POPpx;
+
+			*new_proxy_url = memacpy(new_url, n_a);
 		}
 	}
 

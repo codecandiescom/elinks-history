@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.73 2004/04/24 01:05:52 jonas Exp $ */
+/* $Id: cmdline.c,v 1.74 2004/04/24 01:07:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -281,6 +281,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		} else {
 			return gettext("Remote method not supported");
 		}
+		break;
 
 	case REMOTE_METHOD_PING:
 		remote_session_flags = SES_REMOTE_PING;

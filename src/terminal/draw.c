@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.60 2003/09/06 15:29:53 jonas Exp $ */
+/* $Id: draw.c,v 1.61 2003/09/07 00:10:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,6 @@ draw_border_cross(struct terminal *term, int x, int y,
 	};
 	struct screen_char *screen_char;
 	unsigned int d;
-	enum screen_char_attr attr = 0;
 
 	assert(term && term->screen && color);
 	if_assert_failed return;
@@ -50,8 +49,7 @@ draw_border_cross(struct terminal *term, int x, int y,
 		screen_char->data = border_trans[d][3];
 	}
 
-	screen_char->color = get_term_color8(color, 8, 16, &attr);
-	screen_char->attr = attr;
+	set_term_color8(screen_char, color, 8, 16);
 }
 
 void
@@ -59,7 +57,6 @@ draw_border_char(struct terminal *term, int x, int y,
 	         enum border_char border, struct color_pair *color)
 {
 	int position;
-	enum screen_char_attr attr = SCREEN_ATTR_FRAME;
 
 	assert(term && term->screen && term->screen->image && color);
 	if_assert_failed return;
@@ -67,8 +64,8 @@ draw_border_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = (unsigned char) border;
-	term->screen->image[position].color = get_term_color8(color, 8, 16, &attr);
-	term->screen->image[position].attr = attr;
+	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
+	set_term_color8(&term->screen->image[position], color, 8, 16);
 	term->screen->dirty = 1;
 }
 
@@ -86,7 +83,6 @@ get_char(struct terminal *term, int x, int y)
 void
 draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 {
-	enum screen_char_attr attr = 0;
 	int position;
 
 	assert(term && term->screen && term->screen->image);
@@ -94,8 +90,7 @@ draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 	check_range(term, x, y);
 
 	position = x + term->x * y;
-	term->screen->image[position].color = get_term_color8(color, 8, 16, &attr);
-	term->screen->image[position].attr = attr;
+	set_term_color8(&term->screen->image[position], color, 8, 16);
 	term->screen->dirty = 1;
 }
 
@@ -183,8 +178,8 @@ draw_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = data;
-	term->screen->image[position].color = get_term_color8(color, 8, 16, &attr);
 	term->screen->image[position].attr = attr;
+	set_term_color8(&term->screen->image[position], color, 8, 16);
 	term->screen->dirty = 1;
 }
 
@@ -194,7 +189,7 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	  struct color_pair *color)
 {
 	struct screen_char *line;
-	struct screen_char area;
+	struct screen_char area = INIT_SCREEN_CHAR(data, attr, 0);
 	int position;
 	int endx, endy;
 	register int i;
@@ -212,9 +207,7 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	line = &term->screen->image[position];
 
 	/* Compose a screen position in the area so memcpy() can be used. */
-	area.color = color ? get_term_color8(color, 8, 16, &attr) : 0;
-	area.data = data;
-	area.attr = attr;
+	if (color) set_term_color8(&area, color, 8, 16);
 
 	/* Draw the first area line. */
 	for (i = 0; i < endx; i++) {
@@ -239,21 +232,20 @@ draw_text(struct terminal *term, int x, int y,
 	  enum screen_char_attr attr, struct color_pair *color)
 {
 	int position, end;
-	unsigned char enc_color;
+	struct screen_char schar = INIT_SCREEN_CHAR(' ', attr, 0);
 
 	assert(term && term->screen && term->screen->image && text && length >= 0);
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	enc_color = color ? get_term_color8(color, 8, 16, &attr) : 0;
+	if (color) set_term_color8(&schar, color, 8, 16);
 
 	end = int_min(length, term->x - x);
 	position = x + term->x * y;
 
 	for (end += position; position < end && *text; text++, position++) {
-		term->screen->image[position].data = *text;
-		term->screen->image[position].color = enc_color;
-		term->screen->image[position].attr = attr;
+		schar.data = *text;
+		memcpy(&term->screen->image[position], &schar, sizeof(struct screen_char));
 	}
 
 	term->screen->dirty = 1;

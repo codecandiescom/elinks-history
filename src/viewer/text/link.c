@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.46 2003/09/06 15:44:41 jonas Exp $ */
+/* $Id: link.c,v 1.47 2003/09/07 00:10:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,8 +123,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	int xpos, ypos;
 	int i;
 	int cursor_offset = 0;
-	unsigned char link_color;
-	enum screen_char_attr link_attr = SCREEN_ATTR_STANDOUT;
+	struct screen_char link_char = INIT_SCREEN_CHAR(0, SCREEN_ATTR_STANDOUT, 0);
 
 	assert(t && scr && scr->vs);
 	if_assert_failed return;
@@ -173,7 +172,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	ymax = scr->yp + scr->yw;
 	xpos = scr->xp - scr->vs->view_posx;
 	ypos = scr->yp - scr->vs->view_pos;
-	link_color = get_term_color8(&link->color, 8, 8, &link_attr);
+	set_term_color8(&link_char, &link->color, 8, 8);
 
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x + xpos;
@@ -196,7 +195,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			int blockable;
 
 			if (link->type != L_FIELD && link->type != L_AREA
-			    && co->color != link_color) {
+			    && co->color != link_char.color) {
 				blockable = 1;
 			} else {
 				blockable = 0;
@@ -206,8 +205,8 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			set_window_ptr(get_current_tab(t), x, y);
 		}
 
-		co->color = link_color;
-		co->attr = link_attr;
+		co->color = link_char.color;
+		co->attr = link_char.attr;
 	}
 }
 

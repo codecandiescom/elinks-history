@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.33 2003/09/06 22:33:36 jonas Exp $ */
+/* $Id: color.c,v 1.34 2003/09/07 00:10:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,16 +163,16 @@ extern int dump_pos;
  *	00bbbfff (f = foreground, b = background)
  */
 
-unsigned char
-get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
-		enum screen_char_attr *attr)
+void
+set_term_color8(struct screen_char *schar, struct color_pair *pair,
+		int bglevel, int fglevel)
 {
 	register unsigned char fg;
 	register unsigned char bg;
 
-	assert(attr);
+	assert(schar);
 
-	if (dump_pos) return 0;
+	if (dump_pos) return;
 
 	fg = find_nearest_color(pair->foreground, fglevel);
 	bg = find_nearest_color(pair->background, bglevel);
@@ -183,11 +183,11 @@ get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
 	}
 
 	/* Add various color enhancement based on the attributes. */
-	if (*attr) {
-		if (*attr & SCREEN_ATTR_ITALIC)
+	if (schar->attr) {
+		if (schar->attr & SCREEN_ATTR_ITALIC)
 			fg ^= 0x01;
 
-		if (*attr & SCREEN_ATTR_BOLD)
+		if (schar->attr & SCREEN_ATTR_BOLD)
 			fg |= SCREEN_ATTR_BOLD;
 	}
 
@@ -196,13 +196,13 @@ get_term_color8(struct color_pair *pair, int bglevel, int fglevel,
 		fg = fg_color[fg][bg];
 
 		if (fg & SCREEN_ATTR_BOLD) {
-			*attr |= SCREEN_ATTR_BOLD;
+			schar->attr |= SCREEN_ATTR_BOLD;
 		}
 	}
 
 	if (use_inverse(bg, fg)) {
-		*attr |= SCREEN_ATTR_STANDOUT;
+		schar->attr |= SCREEN_ATTR_STANDOUT;
 	}
 
-	return (bg << 4 | fg);
+	schar->color = (bg << 4 | fg);
 }

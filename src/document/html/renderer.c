@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.239 2003/09/06 19:48:50 jonas Exp $ */
+/* $Id: renderer.c,v 1.240 2003/09/07 00:10:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,8 +134,7 @@ realloc_line(struct document *document, int y, int x)
 	int newsize = ALIGN_LINE(x + 1);
 	struct line *line;
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
-	struct screen_char schar;
-	enum screen_char_attr attr = 0;
+	struct screen_char schar = INIT_SCREEN_CHAR(' ', 0, 0);
 
 	assert(document);
 	if_assert_failed return 0;
@@ -151,9 +150,7 @@ realloc_line(struct document *document, int y, int x)
 		line->d = l;
 	}
 
-	schar.color = get_term_color8(&colors, 8, 16, &attr);
-	schar.attr = attr;
-	schar.data = ' ';
+	set_term_color8(&schar, &colors, 8, 16);
 
 	for (i = line->l; i <= x; i++) {
 		memcpy(&line->d[i], &schar, sizeof(struct screen_char));
@@ -254,11 +251,10 @@ set_hchars(struct part *part, int x, int y, int xl,
 
 	if (bgcolor) {
 		struct color_pair colors = INIT_COLOR_PAIR(*bgcolor, 0x0);
-		struct screen_char schar;
+		struct screen_char schar = INIT_SCREEN_CHAR(data, attr, 0);
 
-		schar.color = get_term_color8(&colors, 8, 16, &attr);
+		set_term_color8(&schar, &colors, 8, 16);
 		schar.data = data;
-		schar.attr = attr;
 
 		for (; xl; xl--, x++) {
 			memcpy(&POS(x, y), &schar, sizeof(struct screen_char));
@@ -288,8 +284,7 @@ xset_hchar(struct part *part, int x, int y,
 	if_assert_failed return;
 
 	POS(x, y).data = data;
-	POS(x, y).color = get_term_color8(&colors, 8, 16, &attr);
-	POS(x, y).attr = attr;
+	set_term_color8(&POS(x, y), &colors, 8, 16);
 }
 
 void
@@ -304,7 +299,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, 0x0);
-	struct screen_char schar;
+	struct screen_char schar = INIT_SCREEN_CHAR(data, attr, 0);
 
 	assert(part && part->document);
 	if_assert_failed return;
@@ -315,9 +310,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	assert(part->document->data);
 	if_assert_failed return;
 
-	schar.color = get_term_color8(&colors, 8, 16, &attr);
-	schar.data = data;
-	schar.attr = attr;
+	set_term_color8(&schar, &colors, 8, 16);
 
 	for (; yl; yl--, y++) {
 	    	if (xpand_line(part, y, x)) return;
@@ -757,13 +750,12 @@ put_chars_format_change(struct part *part, unsigned char *color,
 			enum screen_char_attr *attr)
 {
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
-	static enum screen_char_attr attr_cache;
-	static unsigned char color_cache;
+	static struct screen_char schar_cache;
 	struct color_pair colors;
 
 	if (!memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
-		*color = color_cache;
-		*attr = attr_cache;
+		*color = schar_cache.color;
+		*attr = schar_cache.attr;
 		return;
 	}
 
@@ -790,8 +782,10 @@ put_chars_format_change(struct part *part, unsigned char *color,
 	}
 
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	color_cache = *color = get_term_color8(&colors, 8, 16, attr);
-	attr_cache = *attr;
+	memset(&schar_cache, 0, sizeof(struct screen_char));
+	set_term_color8(&schar_cache, &colors, 8, 16);
+	*color = schar_cache.color;
+	*attr = schar_cache.attr;
 
 	/* FIXME:
 	 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */

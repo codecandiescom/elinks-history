@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.29 2003/09/06 15:44:39 jonas Exp $ */
+/* $Id: draw.h,v 1.30 2003/09/07 00:10:16 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -21,12 +21,14 @@ struct screen_char {
 	/* Contains either character value or frame data. */
 	unsigned char data;
 
-	/* The encoded fore- and background color. */
-	unsigned char color;
-
 	/* Attributes are screen_char_attr bits. */
 	unsigned char attr;
+
+	/* The encoded fore- and background color. */
+	unsigned char color;
 };
+
+#define INIT_SCREEN_CHAR(data, attr, color) { data, attr, color }
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */

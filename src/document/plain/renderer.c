@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.110 2004/08/16 10:09:43 miciah Exp $ */
+/* $Id: renderer.c,v 1.111 2004/08/16 10:11:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,6 +166,7 @@ add_document_line(struct plain_renderer *renderer,
 {
 	struct document *document = renderer->document;
 	struct screen_char *template = &renderer->template;
+	enum screen_char_attr saved_renderer_templated_attr = template->attr;
 	struct screen_char *pos;
 	int lineno = renderer->lineno;
 	int expanded = 0;
@@ -261,6 +262,8 @@ add_document_line(struct plain_renderer *renderer,
 				copy_screen_chars(pos++, template, 1);
 			while (tab_width--);
 
+			template->attr = saved_renderer_templated_attr;
+
 		} else if (line_char == ASCII_BS) {
 			if (backspaces * 2 >= line_pos) {
 				/* We've backspaced to the start
@@ -271,17 +274,67 @@ add_document_line(struct plain_renderer *renderer,
 
 			pos--;  /* Backspace */
 
+			/* Handle x^H_ as _^Hx */
+			if (line[line_pos + 1] == '_'
+			    && line[line_pos - 1] != '_') /* No inf. loop
+							   * swapping two
+							   * underscores */
+			{
+				unsigned char saved_char = line[line_pos - 1];
+
+				/* x^H_ becomes _^Hx */
+				line[line_pos - 1] = line[line_pos + 1];
+				line[line_pos + 1] = saved_char;
+
+				/* Go back and reparse the swapped characters */
+				line_pos -= 2;
+				backspaces--;
+				continue;
+			}
+
 			expanded -= 2; /* Don't count the backspace character 
 				        * or the deleted character
 				        * when returning the line's width
 				        * or when expanding tabs */
 
 			backspaces++;
+
+			if (pos->data == '_' && line[line_pos + 1] == '_') {
+				/* Is _^H_ an underlined underscore
+				 * or an emboldened underscore? */
+
+				if (backspaces * 2 < line_pos
+				    && (pos - 1)->attr) {
+					/* There is some preceding text,
+					 * and it has an attribute; copy it */
+					template->attr |= (pos - 1)->attr;
+				} else {
+					/* Default to bold; seems more useful
+					 * than underlining the underscore */
+					template->attr |= SCREEN_ATTR_BOLD;
+				}
+
+			} else if (pos->data == '_') {
+				/* Underline _^Hx */
+
+				template->attr |= SCREEN_ATTR_UNDERLINE;
+
+			} else if (pos->data == line[line_pos + 1]) {
+				/* Embolden x^Hx */
+
+				template->attr |= SCREEN_ATTR_BOLD;
+			}
+
+			/* Handle _^Hx^Hx as both bold and underlined */
+			if (template->attr)
+				template->attr |= pos->attr;
 		} else {
 			if (!isscreensafe(line_char))
 				line_char = '.';
 			template->data = line_char;
 			copy_screen_chars(pos++, template, 1);
+
+			template->attr = saved_renderer_templated_attr;
 		}
 
 		/* Detect copy of nul chars to screen, this should not occur.
@@ -413,9 +466,9 @@ add_document_lines(struct plain_renderer *renderer)
 }
 
 void
-render_plain_document(struct cache_entry *cached, struct document *document,
-		      struct string *buffer)
+render_plain_document(struct cache_entry *cached, struct document *document)
 {
+	struct fragment *fr = cached->frag.next;
 	struct conv_table *convert_table;
 	unsigned char *head = empty_string_or_(cached->head);
 	struct plain_renderer renderer;
@@ -431,10 +484,9 @@ render_plain_document(struct cache_entry *cached, struct document *document,
 	document->bgcolor = global_doc_opts->default_bg;
 	document->width = 0;
 
-	renderer.source = buffer->source;
-	renderer.length = buffer->length;
-
 	renderer.document = document;
+	renderer.source = fr->data;
+	renderer.length = fr->length;
 	renderer.lineno = 0;
 	renderer.convert_table = convert_table;
 	renderer.compress = document->options.plain_compress_empty_lines;

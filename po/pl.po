@@ -10,14 +10,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-26 19:29+0200\n"
+"POT-Creation-Date: 2004-09-26 22:30+0200\n"
 "PO-Revision-Date: 2004-09-26 20:20+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:345
 msgid "Close"
@@ -3125,6 +3125,7 @@ msgid "Rules for passing URIs to external commands."
 msgstr "Zasady przekazywania URI do zewnêtrznych poleceñ."
 
 #: src/config/options.inc:678
+#, c-format
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
@@ -6524,6 +6525,7 @@ msgid "Dumb prefixes, see enable-dumb description for details."
 msgstr "Proste przedrostki, zobacz opis w³±czania prostych przedrostków."
 
 #: src/protocol/rewrite/rewrite.c:74
+#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"

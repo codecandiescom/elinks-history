@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.309 2004/07/22 22:07:14 zas Exp $ */
+/* $Id: download.c,v 1.310 2004/07/22 22:23:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -683,7 +683,7 @@ get_temp_name(struct uri *uri)
 	if (!nm) return NULL;
 
 	if (!init_string(&name)) {
-		mem_free(nm);
+		free(nm);
 		return NULL;
 	}
 

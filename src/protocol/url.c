@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.59 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: url.c,v 1.60 2003/05/19 23:10:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,6 +184,7 @@ parse_url(unsigned char *url, int *prlen,
 
 	/* Possibly skip auth part */
 	host_end = prefix_end + strcspn(prefix_end, "@");
+
 	if (prefix_end + strcspn(prefix_end, "/") > host_end
 	    && *host_end) { /* we have auth info here */
 		unsigned char *user_end = strchr(prefix_end, ':');
@@ -210,27 +211,23 @@ parse_url(unsigned char *url, int *prlen,
 	if (!*host_end && protocols[protocol].need_slash_after_host) return -1;
 
 #ifdef IPV6
-	if (lbracket && rbracket && rbracket - lbracket - 1) {
-		safe_strncpy(hostbuf, lbracket + 1, rbracket - lbracket - 1);
-	}
-#endif
-	if (host) {
-#ifdef IPV6
-		if (lbracket && rbracket)
-			*host = hostbuf;
-		else
-#endif
-			*host = prefix_end;
-	}
-	if (holen) {
-#ifdef IPV6
-		if (lbracket && rbracket)
-			*holen = strlen(hostbuf);
-		else
-#endif
-			*holen = host_end - prefix_end;
-	}
+	if (lbracket && rbracket) {
+		int addrlen = rbracket - lbracket - 1;
 
+		hostbuf[0] = '\0'; /* empty string */
+		if (addrlen > 0 && addrlen < sizeof(hostbuf)) {
+			memcpy(hostbuf, lbracket + 1, addrlen);
+			hostbuf[addrlen] = '\0';
+		}
+
+		if (host) *host = hostbuf;
+		if (holen) *holen = addrlen;
+	} else
+#endif
+	{
+		if (host) *host = prefix_end;
+		if (holen) *holen = host_end - prefix_end;
+	}
 
 	if (*host_end == ':') { /* we have port here */
 		unsigned char *port_end = host_end + 1 + strcspn(host_end + 1, "/");
@@ -908,20 +905,20 @@ http:				prefix = "http://";
 
 	/* Try prefix:some.url -> prefix://some.url.. */
 	if (strncmp(ch + 1, "//", 2)) {
-	add_to_strn(&newurl, "//");
-	add_to_strn(&newurl, ch + 1);
-	if (!parse_url(newurl, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL)) {
-		insert_wd(&newurl, cwd);
-		translate_directories(newurl);
+		add_to_strn(&newurl, "//");
+		add_to_strn(&newurl, ch + 1);
+		if (!parse_url(newurl, NULL,
+			       NULL, NULL,
+			       NULL, NULL,
+			       NULL, NULL,
+			       NULL, NULL,
+			       NULL, NULL,
+			       NULL)) {
+			insert_wd(&newurl, cwd);
+			translate_directories(newurl);
 
-		return newurl;
-	}
+			return newurl;
+		}
 	}
 
 	/* ..and with slash */

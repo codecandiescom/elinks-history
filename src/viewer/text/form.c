@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.189 2004/06/16 16:56:45 jonas Exp $ */
+/* $Id: form.c,v 1.190 2004/06/16 17:07:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1196,8 +1196,8 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_ENTER:
 			if (frm->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
-			else if (textarea_op_enter(fs, frm, rep))
-				status = FRAME_EVENT_OK;
+			else
+				status = textarea_op_enter(fs, frm, rep);
 			break;
 		case ACT_EDIT_BACKSPACE:
 			if (frm->ro) {

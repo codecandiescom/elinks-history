@@ -1,5 +1,7 @@
 TODO list for ELinks (sorted approximatelly by priority):
 
+	Change msg_box to use printf-style formats
+
 	Some rules for sane handling of texinfo documentation
 
 	Show all downloads in one window, kind of "download manager"
@@ -8,7 +10,7 @@ TODO list for ELinks (sorted approximatelly by priority):
 
 	<include ELusive TODO here ;>
 
-	Rewrite html parser
+	Rewrite HTML parser
 
 	CSS support
 
@@ -22,19 +24,84 @@ TODO list for ELinks (sorted approximatelly by priority):
 
 	Mouse buttonbinding ;)
 
+	Sessions: Bookmark the current page of each tab or window under
+a single folder.
+
+	Complementary 'open all bookmarks in folder' or 'open all marked
+bookmarks' buttons in the bookmark mgr.
+
+	Support for bookmarked-link colour in addition to visited-link
+colour
+
+	Alert user when ey attempts to follow a broken link to a fragment
+on the current page
+
+	Show certain information specified with <meta> and <link> tags in the
+Document Info box
+
+	Display links to or with images with a distinct colour
+
+	Configurable highlight colour for text matched after a search
+
+	Kill-ring for edit-boxes
+
+	Support nested <sub>script tags. Maybe use parentheses to disambiguate
+superscript?
+
+	Allow resizing of frames
+
+	Incremental-search
+
+	Show selected link's title (which is specified by the title attribute)
+in the statusbar
+
+	Support using the hardstatus line to display current page's title,
+URL, or whatever
+
+	Use the alternate screen (terminfo capabilities smcup and rmcup)
+in XTerms and GNU Screen
+
+	Allow multiple transfers to be queued up instead of cancelling
+the currently queued item when back is pressed
+
+	Support prefixes for more bindings; candidates: goto-url-current-link,
+add-bookmark-link, back, unback, document-info, next-frame, previous-frame,
+tab-prev, tab-next, tab-close, zoom-frame
+
+	Include search string in 'Search string not found' error box
+
+	Show any info that can be found in globhist for the selected link
+in the Info box
+
+	'Search' in the bookmark mgr. should be able to search
+collapsed folders
+
+	Expand or collapse recursively and expand or collapse all folders
+in hierarchical listboxes
+
+	Highlight marked listbox items instead of or in addition to putting
+asterisks next to them
+
+	Optimize multiple _()s of the same strings
+by using temporary variables
+
+	Allow the output from MIME handlers to be displayed in ELinks
+
+	Add Lua APIs to manipulate bookmarks
+
 	Reorganization of user interface
 
 	When calling external viewer on files, assign temporary files the
 suffix appropriate to the file type (?)
 
-	Cookies manager
+	Cookie manager
 
 	HTTPS proxy support (!) (I have no idea how to do it so someone else
-have to; good job for wannabe ELinks developer ;)
+will have to; good job for a wannabe ELinks developer ;)
 
 	Take info about proxies from env variables (?)
 
-	Passing url to external command (possibly make alt+[0-9] to pass
+	Passing URL to external command (possibly make alt+[0-9] to pass
 current link to external command (?)).
 
 	Insert should toggle insert/overwrite mode.
@@ -43,16 +110,16 @@ current link to external command (?)).
 
 	Bandwidth limiter for file downloads.
 
-	Copy url to X clipboard (using X selections).
+	Copy URL to X clipboard (using X selections).
 
 
 Permanent goals:
 
-	Generic code cleanup
+	General code cleanup
 
 	Write some more documentation.. docs, a lot of docs!
 
-	Speed optimalizations
+	Speed optimizations
 
 
 These are more long-term goals:
@@ -64,10 +131,10 @@ These are more long-term goals:
 
 	Graphics support
 
-	Multiple windows in one console
-
 	Possibility to use commandline-driven interface instead of BFU
 optionally.
 
+	Generalised scripting interface, possibly using SWIG
+(http://www.swig.org/)
 
-$Id: TODO,v 1.42 2003/02/05 09:17:06 zas Exp $
+$Id: TODO,v 1.43 2003/05/03 10:54:03 zas Exp $

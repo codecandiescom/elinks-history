@@ -1,10 +1,29 @@
 Known bugs:
 
+	Empty menus are buggy, thanks Pasky ;)
+
 	Tilde doesn't expand as it should when used in goto dialog, ~ -> /home
 	and ~/ -> current directory.
+
+	Menu accelerators are currently case-sensitive.
+
+	'Open in new tab' only appears when ELinks is run in X.
+
+	When a page displayed as plain-text includes '<title>' and '</title>',
+then the enclosed text is displayed as the page's title.
 	
 	Frames don't work if there's more frames with same name. Turn them off
 in such case.
+
+	When a frame's src is a plain-text file, that file is rendered as HTML.
+
+	In a frameset, following a link to a plain-text file
+breaks out of the frames.
+
+	Loading a page in a frame does not add that page to the global history.
+
+	The 'enter' action does not cause a refresh, even when given a prefix.
+Thus the newly selected link is not highlighted.
 
 	You can't upload large files; it takes _lots_ of memory.
 
@@ -22,13 +41,26 @@ the previous view.
 	Calling cfmakeraw() in kbd.c:setraw() breaks some exotic terminal
 combinations.
 
-	When title/status bar is turned off, there's still a blank line on
-top/bottom of screen.
-
 	Handling of textareas splitted to two pages is just weird.
+(Is this still true with 0.5 CVS?)
 
 	Call to OS Shell doesn't release mouse handler.
 
-$Id: BUGS,v 1.37 2003/05/02 08:26:35 zas Exp $
+	Spaces added by justification are not highlighted in links
+when those links are selected.
+
+	Searches match links' prefixes
+(when document.browse.links.numbering = 1).
+
+	'Add link to bookmarks' is displayed in the Link menu even when
+the -anonymous command-line option was given.
+
+	<li>foo</li><li></li><li>bar</li> displays the bullets for
+the second two <li>s on the same line.
+
+	The newline displayed before a list is superfluous when that list
+is nested under another list.
+
+$Id: BUGS,v 1.38 2003/05/03 10:54:03 zas Exp $
 
 vim: textwidth=80

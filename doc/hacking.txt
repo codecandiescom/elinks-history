@@ -236,6 +236,7 @@ to die with honor if we are to die)
 
 Use blank lines frequently to separate chunks of code.  And use magic "/*" and
 "*/" to give others an idea about what it does and about possible pitfalls.
+(Do not use //, as that is a feature of C++, not of ANSI C.)
 
 Keep in mind that if there's an object and verb in the comment (and it is, in
 most cases), it is a sentence, so it has to start with a capital letter and end
@@ -436,7 +437,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.25 2005/01/03 08:12:57 miciah Exp $ */
+	/* $Id: hacking.txt,v 1.26 2005/01/03 20:47:25 miciah Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -558,4 +559,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.25 2005/01/03 08:12:57 miciah Exp $
+$Id: hacking.txt,v 1.26 2005/01/03 20:47:25 miciah Exp $

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.79 2003/07/06 00:26:22 jonas Exp $ */
+/* $Id: connection.c,v 1.80 2003/07/06 01:31:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,6 +196,38 @@ done_host_connection(struct connection *c)
 	mem_free(h);
 }
 
+
+static struct connection *
+init_connection(unsigned char *url, unsigned char *ref_url, int start,
+		enum cache_mode cache_mode, enum connection_priority priority)
+{
+	struct connection *c = mem_calloc(1, sizeof(struct connection));
+
+	if (!c) return NULL;
+
+	c->uri.protocol = url;
+	if (!parse_uri(&c->uri)) {
+		/* Alert small hack to signal parse uri failure. */
+		*url = 0;
+		mem_free(c);
+		return NULL;
+	}
+
+	c->id = connection_id++;
+	c->url = url;
+	c->ref_url = ref_url;
+	c->pri[priority] =  1;
+	c->cache_mode = cache_mode;
+	c->sock1 = c->sock2 = -1;
+	c->content_encoding = ENCODING_NONE;
+	c->stream_pipes[0] = c->stream_pipes[1] = -1;
+	init_list(c->downloads);
+	c->est_length = -1;
+	c->prg.start = start;
+	c->prg.timer = -1;
+	c->timer = -1;
+	return c;
+};
 
 static void stat_timer(struct connection *c);
 
@@ -792,42 +824,17 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		return 0;
 	}
 
-	c = mem_calloc(1, sizeof(struct connection));
+	assert(!e);
+	c = init_connection(u, ref_url, start, cache_mode, pri);
 	if (!c) {
 		if (download) {
-			download->state = S_BAD_URL;
+			/* Zero length uri signals parse uri failure */
+			download->state = (!*u ? S_BAD_URL : S_OUT_OF_MEM);
 			download->end(download, download->data);
 		}
 		mem_free(u);
 		return -1;
 	}
-
-	c->uri.protocol = u;
-
-	if (!parse_uri(&c->uri)) {
-		if (download) download->end(download, download->data);
-		mem_free(u);
-		return -1;
-	}
-
-	c->id = connection_id++;
-	c->url = u;
-	c->ref_url = ref_url;
-
-	if (cache_mode < NC_RELOAD && e && !list_empty(e->frag)
-	    && !((struct fragment *) e->frag.next)->offset)
-		c->from = ((struct fragment *) e->frag.next)->length;
-
-	c->pri[pri] = 1;
-	c->cache_mode = cache_mode;
-	c->sock1 = c->sock2 = -1;
-	c->content_encoding = ENCODING_NONE;
-	c->stream_pipes[0] = c->stream_pipes[1] = -1;
-	init_list(c->downloads);
-	c->est_length = -1;
-	c->prg.start = start;
-	c->prg.timer = -1;
-	c->timer = -1;
 
 	if (download) {
 		download->prg = &c->prg;

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.105 2004/08/12 08:40:33 miciah Exp $ */
+/* $Id: info.c,v 1.106 2004/09/03 02:14:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,7 +142,9 @@ menu_copying(struct terminal *term, void *d, struct session *ses)
 		msg_text(term, N_("ELinks %s\n"
 			"\n"
 			"(C) 1999 - 2002 Mikulas Patocka\n"
-			"(C) 2001 - 2004 Petr Baudis and others\n"
+			"(C) 2001 - 2004 Petr Baudis\n"
+			"(C) 2002 - 2004 Jonas Fonseca\n"
+			"and others\n"
 			"\n"
 			"This program is free software; you can redistribute it "
 			"and/or modify it under the terms of the GNU General Public "

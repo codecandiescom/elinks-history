@@ -1,3 +1,60 @@
+Mon Jul  8 20:16:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/listbox.c:
+
+	Listbox now uses menu colors.  
+
+Mon Jul  8 17:20:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Superfluous parenthesis.  
+
+Mon Jul  8 17:19:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	document/session.c, document/session.h, document/view.c:
+
+	Introduced action goto-url-home.  
+
+Mon Jul  8 17:01:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Fixed enabling ui colors by default.  
+
+Mon Jul  8 17:00:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/ssl/ssl.c:
+
+	Paranoia NULL ;).  
+
+Mon Jul  8 15:24:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lua/TODO:
+
+	Oops, we have documentation for ELinks-Lua API ;). Thanks, Peter.  
+
+Mon Jul  8 15:20:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in, src/main.c, src/bfu/leds.c,
+	src/document/session.c:
+
+	LED support is now optional, by default off. UI colors are now by
+	default on.  
+
+Mon Jul  8 14:54:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	Removed some stale code, patch by Witold.  
+
+Mon Jul  8 14:52:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, ssl/ssl.h:
+
+	#elif HAVE_GNUTLS -> #elif defined(HAVE_GNUTLS), by Miciah.  
+
 Sun Jul  7 11:15:30 2002  Petr Baudis <pasky@ji.cz>:
 
 	* SITES:

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.42 2003/11/16 14:34:32 zas Exp $ */
+/* $Id: listbox.h,v 1.43 2003/11/21 16:18:26 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -60,15 +60,7 @@ struct listbox_item {
 	unsigned int translated:1; /* Should we call gettext on this text? */
 	int depth;
 
-	/* Run when this item is hilighted */
-	void (*on_hilight)(struct terminal *, struct listbox_data *, struct listbox_item *);
-	/* Run when the user selects on this item. Returns pointer to the
-	 * listbox_item that should be selected after execution. */
-	int (*on_selected)(struct terminal *, struct listbox_data *, struct listbox_item *);
-
 	void *udata;
-
-	enum menu_item_flags flags;
 
 	/* Text to display (must be last) */
 	unsigned char *text;

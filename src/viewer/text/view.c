@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.564 2004/07/28 10:50:57 jonas Exp $ */
+/* $Id: view.c,v 1.565 2004/07/28 11:02:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -729,7 +729,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			}
 
 			if (get_opt_int("document.browse.accesskey.priority") == 1
-				   && try_document_key(ses, doc_view, ev)) {
+			    && try_document_key(ses, doc_view, ev)) {
 				/* The document ate the key! */
 				status = FRAME_EVENT_REFRESH;
 

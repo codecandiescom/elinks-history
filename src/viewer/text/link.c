@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.64 2003/09/30 00:17:57 jonas Exp $ */
+/* $Id: link.c,v 1.65 2003/10/17 12:56:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,39 +71,39 @@ comp_links(struct link *l1, struct link *l2)
 }
 
 void
-sort_links(struct document *f)
+sort_links(struct document *document)
 {
 	int i;
 
-	assert(f);
+	assert(document);
 	if_assert_failed return;
-	if (!f->nlinks) return;
+	if (!document->nlinks) return;
 
-	assert(f->links);
+	assert(document->links);
 	if_assert_failed return;
 
-	qsort(f->links, f->nlinks, sizeof(struct link),
+	qsort(document->links, document->nlinks, sizeof(struct link),
 	      (void *) comp_links);
 
-	if (!f->y) return;
+	if (!document->y) return;
 
-	f->lines1 = mem_calloc(f->y, sizeof(struct link *));
-	if (!f->lines1) return;
-	f->lines2 = mem_calloc(f->y, sizeof(struct link *));
-	if (!f->lines2) {
-		mem_free(f->lines1);
+	document->lines1 = mem_calloc(document->y, sizeof(struct link *));
+	if (!document->lines1) return;
+	document->lines2 = mem_calloc(document->y, sizeof(struct link *));
+	if (!document->lines2) {
+		mem_free(document->lines1);
 		return;
 	}
 
-	for (i = 0; i < f->nlinks; i++) {
-		struct link *link = &f->links[i];
+	for (i = 0; i < document->nlinks; i++) {
+		struct link *link = &document->links[i];
 		register int p, q, j;
 
 		if (!link->n) {
 			done_link_members(link);
 			memmove(link, link + 1,
-				(f->nlinks - i - 1) * sizeof(struct link));
-			f->nlinks--;
+				(document->nlinks - i - 1) * sizeof(struct link));
+			document->nlinks--;
 			i--;
 			continue;
 		}
@@ -111,12 +111,13 @@ sort_links(struct document *f)
 		q = link->pos[link->n - 1].y;
 		if (p > q) j = p, p = q, q = j;
 		for (j = p; j <= q; j++) {
-			if (j >= f->y) {
+			if (j >= document->y) {
 				internal("link out of screen");
 				continue;
 			}
-			f->lines2[j] = &f->links[i];
-			if (!f->lines1[j]) f->lines1[j] = &f->links[i];
+			document->lines2[j] = &document->links[i];
+			if (!document->lines1[j])
+				document->lines1[j] = &document->links[i];
 		}
 	}
 }
@@ -549,14 +550,14 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 
 
 static void
-decrement_document_refcount(struct document *f)
+decrement_document_refcount(struct document *document)
 {
-	assert(f);
+	assert(document);
 	if_assert_failed return;
 
-	if (!--f->refcount) format_cache_entries++;
-	assertm(f->refcount >= 0, "reference count underflow");
-	if_assert_failed f->refcount = 0;
+	if (!--document->refcount) format_cache_entries++;
+	assertm(document->refcount >= 0, "reference count underflow");
+	if_assert_failed document->refcount = 0;
 }
 
 int

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.21 2004/01/19 14:43:53 jonas Exp $ */
+/* $Id: scanner.c,v 1.22 2004/01/19 16:17:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,6 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			token->type = CSS_TOKEN_GARBAGE;
 		}
 
-
 	} else if (first_char == '"' || first_char == '\'') {
 		/* TODO: Escaped delimiters --jonas */
 		unsigned char *string_end = strchr(string, first_char);
@@ -96,6 +95,12 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		} else {
 			token->type = CSS_TOKEN_GARBAGE;
 		}
+
+	} else if ((first_char == '-' && *string == '-' && string[1] == '>')
+		   || (first_char == '<' && *string == '-' && string[1] == '-')) {
+		/* SGML left and right comments */
+		token->type = CSS_TOKEN_SGML_COMMENT;
+		string += 2;
 
 	} else if (is_css_ident(first_char)) {
 		scan_css(string, CSS_CHAR_IDENT);

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.21 2004/01/19 14:43:53 jonas Exp $ */
+/* $Id: scanner.h,v 1.22 2004/01/19 16:17:42 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -30,6 +30,7 @@ struct css_token {
 		CSS_TOKEN_IDENTIFIER,
 		CSS_TOKEN_NAME,
 		CSS_TOKEN_PERCENTAGE,
+		CSS_TOKEN_SGML_COMMENT,
 		CSS_TOKEN_STRING,
 
 		/* A special token for unrecognized tokens */

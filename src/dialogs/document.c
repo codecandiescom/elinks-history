@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.109 2004/10/19 05:50:53 miciah Exp $ */
+/* $Id: document.c,v 1.110 2004/10/19 05:54:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,9 +243,10 @@ no_header_info:
 		return;
 	}
 
-	/* If |cached->head| starts by a newline, it means that it
-	 * is artificially generated, usually to make ELinks-generated
-	 * documents (ie. file:// directory listings) text/html. */
+	/* If |cached->head| starts with a newline, it has been
+	 * artificially generated, usually to give ELinks-generated
+	 * documents (e.g., file:// directory listings) a MIME type
+	 * of text/html. */
 	artificial = (*cached->head == '\r');
 
 	if (!*cached->head) goto no_header_info;
@@ -259,14 +260,14 @@ no_header_info:
 
 	/* Sanitize headers string. */
 	/* XXX: Do we need to check length and limit
-	 * it to something reasonable ? */
+	 * it to something reasonable? */
 
 	while (cached->head[i]) {
 		/* Check for control chars. */
 		if (cached->head[i] < ' '
 		    && cached->head[i] != '\n') {
 			/* Ignore '\r' but replace
-			 * others control chars with
+			 * other control chars with
 			 * a visible char. */
 			if (cached->head[i] != '\r') {
 				 headers[j] = '*';
@@ -282,7 +283,7 @@ no_header_info:
 	/* Ensure null termination. */
 	headers[j] = '\0';
 
-	/* Remove all ending '\n' if any. */
+	/* Remove any trailing newlines. */
 	while (j && headers[--j] == '\n')
 	headers[j] = '\0';
 

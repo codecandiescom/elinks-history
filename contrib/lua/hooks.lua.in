@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.9 2002/12/10 21:17:19 pasky Exp $
+-- $Id: hooks.lua.in,v 1.10 2002/12/12 15:27:09 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -226,10 +226,6 @@ function pre_format_html_hook (url, html)
         html = gsub (html, "<IFRAME.-</IFRAME>", "")
         -- emphasis in text is lost
         return gsub (html, 'text="#002244"', 'text="#001133"', 1)
-
-    -- linuxgames.com
-    elseif sstrfind (url, "linuxgames.com") then
-        return gsub (html, "<CENTER>.-</center>", "", 1)
 
     -- dictionary.com
     elseif sstrfind (url, "dictionary.com/cgi-bin/dict.pl") then

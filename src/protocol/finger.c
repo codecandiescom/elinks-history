@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.6 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: finger.c,v 1.7 2002/09/09 16:04:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,10 +15,10 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-void finger_send_request(struct connection *);
-void finger_sent_request(struct connection *);
-void finger_get_response(struct connection *, struct read_buffer *);
-void finger_end_request(struct connection *);
+static void finger_send_request(struct connection *);
+static void finger_sent_request(struct connection *);
+static void finger_get_response(struct connection *, struct read_buffer *);
+static void finger_end_request(struct connection *, int);
 
 void
 finger_func(struct connection *c)
@@ -29,8 +29,7 @@ finger_func(struct connection *c)
 
 	p = get_port(c->url);
 	if (p == -1) {
-		setcstate(c, S_INTERNAL);
-		abort_connection(c);
+		abort_conn_with_state(c, S_INTERNAL);
 		return;
 	}
 
@@ -38,8 +37,7 @@ finger_func(struct connection *c)
 	make_connection(c, p, &c->sock1, finger_send_request);
 }
 
-
-void
+static void
 finger_send_request(struct connection *c)
 {
 	unsigned char *req = init_str();
@@ -48,7 +46,7 @@ finger_send_request(struct connection *c)
 
 	if (!req) return;
 	/* add_to_str(&req, &rl, "/W"); */
-	
+
 	if (user) {
 		add_to_str(&req, &rl, " ");
 		add_to_str(&req, &rl, user);
@@ -60,8 +58,7 @@ finger_send_request(struct connection *c)
 	setcstate(c, S_SENT);
 }
 
-
-void
+static void
 finger_sent_request(struct connection *c)
 {
 	struct read_buffer *rb;
@@ -73,25 +70,22 @@ finger_sent_request(struct connection *c)
 	read_from_socket(c, c->sock1, rb, finger_get_response);
 }
 
-
-void
+static void
 finger_get_response(struct connection *c, struct read_buffer *rb)
 {
 	struct cache_entry *e;
 	int l;
 
 	set_timeout(c);
-	
+
 	if (get_cache_entry(c->url, &e)) {
-		setcstate(c, S_OUT_OF_MEM);
-		abort_connection(c);
+		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}
 	c->cache = e;
 
 	if (rb->close == 2) {
-		setcstate(c, S_OK);
-		finger_end_request(c);
+		finger_end_request(c, S_OK);
 		return;
 	}
 
@@ -107,9 +101,11 @@ finger_get_response(struct connection *c, struct read_buffer *rb)
 	setcstate(c, S_TRANS);
 }
 
-void
-finger_end_request(struct connection *c)
+static void
+finger_end_request(struct connection *c, int state)
 {
+	setcstate(c, state);
+
 	if (c->state == S_OK) {
 		if (c->cache) {
 			truncate_entry(c->cache, c->from, 1);

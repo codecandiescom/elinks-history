@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.14 2003/11/18 07:52:48 miciah Exp $ */
+/* $Id: hierbox.h,v 1.15 2003/11/18 13:29:00 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -7,6 +7,7 @@
 #include "bfu/listbox.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
+#include "util/lists.h"
 
 /* We use hierarchic listbox browsers for the various managers. They consist
  * of a listbox widget and some buttons.
@@ -47,4 +48,11 @@ struct listbox_data *
 hierbox_browser_box_build(struct list_head *boxes,
 			  struct list_head *items,
 			  struct listbox_ops *ops);
+
+struct hierbox_dialog_list_item {
+	LIST_HEAD(struct hierbox_dialog_list_item);
+
+	struct dialog_data *dlg_data;
+};
+
 #endif

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.124 2004/07/03 16:28:02 jonas Exp $ */
+/* $Id: options.inc,v 1.125 2004/07/08 11:30:22 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -569,13 +569,11 @@ struct option_info config_options_info[] = {
 		"display_tables", 0, 1,
 		N_("Display tables.")),
 
+	/* FIXME: obsolete, how to alias them correctly ? --jonas */
 	INIT_OPT_BOOL("document.html", N_("Expand table columns"),
 		"expand_table_columns", 0, 0,
-		N_("Enable to make table rendering expand table columns so cells\n"
-		"are more correctly vertically aligned with respect to the background\n"
-		"colors, but less correctly vertically aligned with respect to the\n"
-		"overall layout. Only useful if you also have\n"
-		"document.colors.use_document_colors set to 2. Experimental.")),
+		N_("This option is no longer in effect. It is obsoleted by changes\n"
+		"to always expand table columns.")),
 
 	INIT_OPT_BOOL("document.html", N_("Display subscripts"),
 		"display_subs", 0, 1,

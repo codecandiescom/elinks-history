@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.52 2004/05/28 18:39:21 jonas Exp $ */
+/* $Id: options.c,v 1.53 2004/07/08 11:30:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,6 @@ init_document_options(struct document_options *doo)
 	doo->underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
 	doo->bold_active_link = get_opt_bool("document.browse.links.active_link.bold");
 
-	doo->table_expand_cols = get_opt_bool("document.html.expand_table_columns");
 	doo->table_order = get_opt_bool("document.browse.table_move_order");
 	doo->tables = get_opt_bool("document.html.display_tables");
 	doo->frames = get_opt_bool("document.html.display_frames");

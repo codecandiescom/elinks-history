@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.354 2004/07/08 11:12:04 jonas Exp $ */
+/* $Id: tables.c,v 1.355 2004/07/08 11:30:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -792,9 +792,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 			 has_hline_width(table, row + s + 1));
 	}
 
-	if (global_doc_opts && global_doc_opts->table_expand_cols) {
-		/* This is not working correctly. Some pages will be rendered
-		 * much better while other will look very ugly and broken. */
+	if (table->border) {
 		par_format.bgcolor = table->bgcolor;
 		expand_lines(table->part, x - 1, y, height);
 	}

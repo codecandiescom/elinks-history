@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.3 2003/10/28 00:28:46 pasky Exp $ */
+/* $Id: newwin.c,v 1.4 2004/04/15 14:58:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,13 +114,10 @@ get_open_in_new(int environment)
 int
 can_open_in_new(struct terminal *term)
 {
-	struct open_in_new *oin = get_open_in_new(term->environment);
+	int i, possibilities = 0;
 
-	if (!oin) return 0;
-	if (!oin[1].text) {
-		mem_free(oin);
-		return 1;
-	}
-	mem_free(oin);
-	return 2;
+	for (i = 0; oinw[i].env; i++)
+		possibilities += !!(term->environment & oinw[i].env);
+
+	return possibilities;
 }

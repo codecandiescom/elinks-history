@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.42 2003/10/29 22:35:51 jonas Exp $ */
+/* $Id: parser.h,v 1.43 2003/10/30 01:25:14 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -6,10 +6,10 @@
 #include "bfu/dialog.h"
 #include "bfu/style.h"
 #include "document/document.h"
-#include "document/html/frames.h"
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/memlist.h"
+#include "util/string.h"
 
 /* XXX: This is just terible - this interface is from 75% only for other HTML
  * files - there's lack of any well defined interface and it's all randomly

@@ -1,12 +1,12 @@
-/* $Id: formhist.h,v 1.18 2003/10/26 18:41:24 jonas Exp $ */
+/* $Id: formhist.h,v 1.19 2003/10/30 01:25:15 jonas Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
 
-#include "document/html/parser.h"
 #include "modules/module.h"
 #include "sched/session.h"
 #include "util/lists.h"
+#include "viewer/text/form.h"
 
 struct formhist_data {
 	LIST_HEAD(struct formhist_data);

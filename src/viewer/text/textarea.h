@@ -1,10 +1,10 @@
-/* $Id: textarea.h,v 1.6 2003/10/17 13:26:50 zas Exp $ */
+/* $Id: textarea.h,v 1.8 2003/10/30 01:25:15 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_TEXTAREA_H
 #define EL__VIEWER_TEXT_TEXTAREA_H
 
-#include "document/html/parser.h"
-#include "document/html/renderer.h"
+#include "document/html/frames.h"
+#include "sched/session.h"
 #include "terminal/terminal.h"
 #include "viewer/text/form.h"
 
@@ -21,6 +21,6 @@ int textarea_op_down(struct form_state *fs, struct form_control *frm, int rep);
 int textarea_op_end(struct form_state *fs, struct form_control *frm, int rep);
 int textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep);
 
-void set_textarea(struct session *ses, struct document_view *f, int kbd);
+void set_textarea(struct session *ses, struct document_view *doc_view, int kbd);
 
 #endif

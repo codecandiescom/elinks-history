@@ -1,10 +1,10 @@
-/* $Id: link.h,v 1.9 2003/10/17 14:19:43 zas Exp $ */
+/* $Id: link.h,v 1.10 2003/10/30 01:25:15 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
 
-#include "document/html/parser.h"
-#include "document/html/renderer.h"
+#include "document/document.h"
+#include "document/html/frames.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 

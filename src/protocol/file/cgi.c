@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.84 2004/11/10 21:22:54 jonas Exp $ */
+/* $Id: cgi.c,v 1.85 2004/12/21 22:44:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,7 +344,8 @@ execute_cgi(struct connection *conn)
 			|| (dup2(pipe_read[1], STDOUT_FILENO) < 0)) {
 			_exit(2);
 		}
-		for (i = 2; i < 1024; i++) {
+		/* We implicitly chain stderr to ELinks' stderr. */
+		for (i = 3; i < 1024; i++) {
 			close(i);
 		}
 

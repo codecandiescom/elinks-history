@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.244 2003/09/08 19:24:19 jonas Exp $ */
+/* $Id: renderer.c,v 1.245 2003/09/08 21:07:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "sched/session.h"
 #include "terminal/color.h"
 #include "terminal/draw.h"
+#include "terminal/screen.h"
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
@@ -1780,6 +1781,7 @@ html_interpret(struct session *ses)
 
 	o.col = get_opt_bool_tree(ses->tab->term->spec, "colors");
 	o.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
+	o.color_size = get_term_color_size(ses->tab->term);
 
 	mk_document_options(&o);
 

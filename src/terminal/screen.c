@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.74 2003/09/08 20:54:30 jonas Exp $ */
+/* $Id: screen.c,v 1.75 2003/09/08 21:07:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,6 +259,14 @@ get_screen_driver(struct terminal *term)
 	}
 
 	return add_screen_driver(type, term, len);
+}
+
+int
+get_term_color_size(struct terminal *term)
+{
+	struct screen_driver *driver = get_screen_driver(term);
+
+	return driver ? driver->color_size : 0;
 }
 
 void

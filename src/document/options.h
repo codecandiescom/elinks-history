@@ -1,17 +1,21 @@
-/* $Id: options.h,v 1.8 2003/08/23 16:33:20 jonas Exp $ */
+/* $Id: options.h,v 1.9 2003/09/08 21:07:56 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
 
 #include "util/color.h"
 
+/* XXX: If you add anything, fix it in compare_opt */
 struct document_options {
 	int xw, yw; /* size of window */
 	int xp, yp; /* pos of window */
 	int col, cp, assume_cp, hard_assume;
+
+	/* Color options. */
 	int use_document_colours;
 	int allow_dark_on_black;
-	/* if you add anything, fix it in compare_opt */
+	int color_size;
+
 	int tables, frames, images, margin;
 	int plain;
 	int num_links_display;

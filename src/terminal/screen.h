@@ -1,4 +1,4 @@
-/* $Id: screen.h,v 1.15 2003/09/03 21:17:24 jonas Exp $ */
+/* $Id: screen.h,v 1.16 2003/09/08 21:07:57 jonas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
@@ -45,5 +45,8 @@ void beep_terminal(struct terminal *term);
 
 /* Release private screen drawing utilities. */
 void done_screen_drivers(void);
+
+/* How many color bytes are used. */
+int get_term_color_size(struct terminal *term);
 
 #endif

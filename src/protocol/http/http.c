@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.389 2004/12/31 01:39:56 jonas Exp $ */
+/* $Id: http.c,v 1.390 2004/12/31 09:17:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,7 +194,6 @@ struct module http_protocol_module = struct_module(
 
 
 static void decompress_shutdown(struct connection *);
-static void free_proxy_auth(void);
 
 static void
 done_http()

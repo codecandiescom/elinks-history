@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.54 2003/10/17 13:39:33 zas Exp $ */
+/* $Id: search.c,v 1.55 2003/10/21 14:36:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -674,8 +674,11 @@ draw_searched(struct terminal *term, struct document_view *doc_view)
 			int x = pt[i].x + xoffset;
 			int y = pt[i].y + yoffset;
 
-#if 0 /* We should take in account original colors and combine them
-	 with defined color. */
+			/* TODO: We should take in account original colors and
+			 * combine them with defined color. */
+#if 0
+			/* This piece of code shows the old way of handling
+			 * colors and screen char attributes. */
 			unsigned co = get_char(term, x, y);
 			co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
 #endif

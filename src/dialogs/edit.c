@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.27 2003/06/07 15:25:37 pasky Exp $ */
+/* $Id: edit.c,v 1.28 2003/06/07 15:34:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ layout_add_dialog(struct dialog_data *dlg)
  * of the current document. If you want to create two null fields, pass in a
  * pointer to a zero length string (""). */
 void
-do_edit_dialog(struct terminal *term, unsigned char *title,
+do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	       const unsigned char *src_name,
 	       const unsigned char *src_url,
 	       struct session *ses, struct dialog_data *parent,
@@ -112,6 +112,10 @@ do_edit_dialog(struct terminal *term, unsigned char *title,
 
 	unsigned char *name, *url;
 	struct dialog *d;
+
+	if (intl) {
+		title = _(title, term);
+	}
 
 	/* Create the dialog */
 	d = mem_calloc(1, sizeof(struct dialog)

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.27 2003/06/07 15:25:37 pasky Exp $ */
+/* $Id: dialogs.c,v 1.28 2003/06/07 15:34:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,7 +137,7 @@ static void
 launch_search_dialog(struct terminal *term, struct dialog_data *parent,
 		     struct session *ses)
 {
-	do_edit_dialog(term, N_("Search history"), gh_last_searched_title,
+	do_edit_dialog(term, 1, N_("Search history"), gh_last_searched_title,
 		       gh_last_searched_url, ses, parent, history_search_do,
 		       NULL, NULL, 0);
 }

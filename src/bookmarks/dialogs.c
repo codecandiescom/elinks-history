@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.80 2003/06/07 15:25:37 pasky Exp $ */
+/* $Id: dialogs.c,v 1.81 2003/06/07 15:34:42 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -238,7 +238,7 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 		const unsigned char *url = bm->url;
 
 		bm->refcount++;
-		do_edit_dialog(dlg->win->term, N_("Edit bookmark"), name, url,
+		do_edit_dialog(dlg->win->term, 1, N_("Edit bookmark"), name, url,
 			       (struct session *) edit_btn->item->udata, dlg,
 			       bookmark_edit_done, bookmark_edit_cancel,
 			       (void *) bm, 1);
@@ -788,7 +788,7 @@ launch_bm_add_doc_dialog(struct terminal *term,
 			 struct dialog_data *parent,
 			 struct session *ses)
 {
-	do_edit_dialog(term, N_("Add bookmark"), NULL, NULL,
+	do_edit_dialog(term, 1, N_("Add bookmark"), NULL, NULL,
 		       ses, parent, bookmark_add_add, NULL, NULL, 1);
 }
 
@@ -799,7 +799,7 @@ launch_bm_search_doc_dialog(struct terminal *term,
 			    struct dialog_data *parent,
 			    struct session *ses)
 {
-	do_edit_dialog(term, N_("Search bookmarks"),
+	do_edit_dialog(term, 1, N_("Search bookmarks"),
 		       bm_last_searched_name, bm_last_searched_url,
 		       ses, parent, bookmark_search_do, NULL, NULL, 0);
 }
@@ -813,7 +813,7 @@ launch_bm_add_link_dialog(struct terminal *term,
 {
 	unsigned char title[MAX_STR_LEN], url[MAX_STR_LEN];
 
-	do_edit_dialog(term, N_("Add bookmark"),
+	do_edit_dialog(term, 1, N_("Add bookmark"),
 		       get_current_link_name(ses, title, MAX_STR_LEN),
 		       get_current_link_url(ses, url, MAX_STR_LEN), ses,
 		       parent, bookmark_add_add, NULL, NULL, 1);

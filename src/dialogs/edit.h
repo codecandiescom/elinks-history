@@ -1,4 +1,4 @@
-/* $Id: edit.h,v 1.6 2003/05/04 17:25:53 pasky Exp $ */
+/* $Id: edit.h,v 1.7 2003/06/07 15:34:42 pasky Exp $ */
 
 #ifndef EL__DIALOGS_EDIT_H
 #define EL__DIALOGS_EDIT_H
@@ -7,7 +7,7 @@
 #include "terminal/terminal.h"
 #include "sched/session.h"
 
-void do_edit_dialog(struct terminal *, unsigned char *,
+void do_edit_dialog(struct terminal *, int, unsigned char *,
 		    const unsigned char *, const unsigned char *,
 		    struct session *, struct dialog_data *,
 		    void when_done(struct dialog *),

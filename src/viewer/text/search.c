@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.58 2003/10/22 19:24:46 jonas Exp $ */
+/* $Id: search.c,v 1.59 2003/10/24 20:11:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -938,27 +938,27 @@ struct search_dlg_hop {
 };
 
 static int
-search_dlg_cancel(struct dialog_data *dlg, struct widget_data *di)
+search_dlg_cancel(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	void (*fn)(void *) = di->item->udata;
-	struct search_dlg_hop *hop = dlg->dlg->udata2;
+	struct search_dlg_hop *hop = dlg_data->dlg->udata2;
 	void *data = hop->data;
 
 	if (fn) fn(data);
-	cancel_dialog(dlg, di);
+	cancel_dialog(dlg_data, di);
 
 	return 0;
 }
 
 static int
-search_dlg_ok(struct dialog_data *dlg, struct widget_data *di)
+search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	void (*fn)(void *, unsigned char *) = di->item->udata;
-	struct search_dlg_hop *hop = dlg->dlg->udata2;
+	struct search_dlg_hop *hop = dlg_data->dlg->udata2;
 	void *data = hop->data;
-	unsigned char *text = dlg->items->cdata;
+	unsigned char *text = dlg_data->items->cdata;
 
-	update_dialog_data(dlg, di);
+	update_dialog_data(dlg_data, di);
 
 	/* TODO: Some generic update_opt() or so. --pasky */
 
@@ -982,79 +982,79 @@ search_dlg_ok(struct dialog_data *dlg, struct widget_data *di)
 		}
 	}
 
-	if (check_dialog(dlg)) return 1;
+	if (check_dialog(dlg_data)) return 1;
 
-	add_to_input_history(dlg->dlg->items->history, text, 1);
+	add_to_input_history(dlg_data->dlg->items->history, text, 1);
 
 	if (fn) fn(data, text);
-	ok_dialog(dlg, di);
+	ok_dialog(dlg_data, di);
 	return 0;
 }
 
 void
-search_dlg_fn(struct dialog_data *dlg)
+search_dlg_fn(struct dialog_data *dlg_data)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
-	text_width(term, dlg->dlg->udata, &min, &max);
+	text_width(term, dlg_data->dlg->udata, &min, &max);
 	/* I'm leet! --pasky */
-	max_group_width(term, 1, regex_labels, dlg->items + 1, 3, &max);
-	min_group_width(term, 1, regex_labels, dlg->items + 1, 3, &min);
-	max_group_width(term, 1, case_labels, dlg->items + 4, 2, &max);
-	min_group_width(term, 1, case_labels, dlg->items + 4, 2, &min);
-	buttons_width(term, dlg->items + 6, 2, &min, &max);
+	max_group_width(term, 1, regex_labels, dlg_data->items + 1, 3, &max);
+	min_group_width(term, 1, regex_labels, dlg_data->items + 1, 3, &min);
+	max_group_width(term, 1, case_labels, dlg_data->items + 4, 2, &max);
+	min_group_width(term, 1, case_labels, dlg_data->items + 4, 2, &min);
+	buttons_width(term, dlg_data->items + 6, 2, &min, &max);
 
-	if (max < dlg->dlg->items->dlen) max = dlg->dlg->items->dlen;
+	if (max < dlg_data->dlg->items->dlen) max = dlg_data->dlg->items->dlen;
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
 
 	rw = 0; /* !!! FIXME: input field */
-	dlg_format_text(NULL, term, dlg->dlg->udata, 0, &y, w, &rw,
+	dlg_format_text(NULL, term, dlg_data->dlg->udata, 0, &y, w, &rw,
 			text_color, AL_LEFT);
-	dlg_format_field(NULL, term, dlg->items, 0, &y, w, &rw,
+	dlg_format_field(NULL, term, dlg_data->items, 0, &y, w, &rw,
 			 AL_LEFT);
 
 	y++;
-	dlg_format_group(NULL, term, 1, regex_labels, dlg->items + 1, 3, 0,
+	dlg_format_group(NULL, term, 1, regex_labels, dlg_data->items + 1, 3, 0,
 			 &y, w, &rw);
 
 	y++;
-	dlg_format_group(NULL, term, 1, case_labels, dlg->items + 4, 2, 0,
+	dlg_format_group(NULL, term, 1, case_labels, dlg_data->items + 4, 2, 0,
 			 &y, w, &rw);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items + 6, 2, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, term, dlg_data->items + 6, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
-	dlg->xw = rw + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
+	dlg_data->xw = rw + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
 
-	draw_dlg(dlg);
+	center_dlg(dlg_data);
+	draw_dlg(dlg_data);
 
-	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, dlg->dlg->udata, dlg->x + DIALOG_LB,
+	y = dlg_data->y + DIALOG_TB;
+	dlg_format_text(term, term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, text_color, AL_LEFT);
-	dlg_format_field(term, term, dlg->items, dlg->x + DIALOG_LB,
+	dlg_format_field(term, term, dlg_data->items, dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_group(term, term, 1, regex_labels, dlg->items + 1, 3,
-			 dlg->x + DIALOG_LB, &y, w, NULL);
+	dlg_format_group(term, term, 1, regex_labels, dlg_data->items + 1, 3,
+			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_group(term, term, 1, case_labels, dlg->items + 4, 2,
-			 dlg->x + DIALOG_LB, &y, w, NULL);
+	dlg_format_group(term, term, 1, case_labels, dlg_data->items + 4, 2,
+			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items + 6, 2, dlg->x + DIALOG_LB,
+	dlg_format_buttons(term, term, dlg_data->items + 6, 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 
@@ -1074,6 +1074,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	struct dialog *dlg;
 	unsigned char *field;
 	struct search_dlg_hop *hop;
+	int n = 0;
 
 	if (intl) {
 		title = _(title, term);
@@ -1088,7 +1089,8 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	hop->cases = get_opt_int("document.browse.search.case");
 	hop->data = data;
 
-#define SIZEOF_DIALOG (sizeof(struct dialog) + 9 * sizeof(struct widget))
+#define SEARCH_DLG_SIZE 8
+#define SIZEOF_DIALOG (sizeof(struct dialog) + (SEARCH_DLG_SIZE + 1) * sizeof(struct widget))
 
 	dlg = mem_calloc(1, SIZEOF_DIALOG + l);
 	if (!dlg) {
@@ -1114,59 +1116,68 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_to_ml(&ml, hop, NULL);
 
-	dlg->items[0].type = D_FIELD;
-	dlg->items[0].gid = min;
-	dlg->items[0].gnum = max;
-	dlg->items[0].fn = check;
-	dlg->items[0].history = history;
-	dlg->items[0].dlen = l;
-	dlg->items[0].data = field;
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].gid = min;
+	dlg->items[n].gnum = max;
+	dlg->items[n].fn = check;
+	dlg->items[n].history = history;
+	dlg->items[n].dlen = l;
+	dlg->items[n].data = field;
+	n++;
 
-	dlg->items[1].type = D_CHECKBOX;
-	dlg->items[1].gid = 1;
-	dlg->items[1].gnum = 0;
-	dlg->items[1].dlen = sizeof(int);
-	dlg->items[1].data = (unsigned char *) &hop->whether_regex;
+	dlg->items[n].type = D_CHECKBOX;
+	dlg->items[n].gid = 1;
+	dlg->items[n].gnum = 0;
+	dlg->items[n].dlen = sizeof(int);
+	dlg->items[n].data = (unsigned char *) &hop->whether_regex;
+	n++;
 
-	dlg->items[2].type = D_CHECKBOX;
-	dlg->items[2].gid = 1;
-	dlg->items[2].gnum = 1;
-	dlg->items[2].dlen = sizeof(int);
-	dlg->items[2].data = (unsigned char *) &hop->whether_regex;
+	dlg->items[n].type = D_CHECKBOX;
+	dlg->items[n].gid = 1;
+	dlg->items[n].gnum = 1;
+	dlg->items[n].dlen = sizeof(int);
+	dlg->items[n].data = (unsigned char *) &hop->whether_regex;
+	n++;
 
-	dlg->items[3].type = D_CHECKBOX;
-	dlg->items[3].gid = 1;
-	dlg->items[3].gnum = 2;
-	dlg->items[3].dlen = sizeof(int);
-	dlg->items[3].data = (unsigned char *) &hop->whether_regex;
+	dlg->items[n].type = D_CHECKBOX;
+	dlg->items[n].gid = 1;
+	dlg->items[n].gnum = 2;
+	dlg->items[n].dlen = sizeof(int);
+	dlg->items[n].data = (unsigned char *) &hop->whether_regex;
+	n++;
 
-	dlg->items[4].type = D_CHECKBOX;
-	dlg->items[4].gid = 2;
-	dlg->items[4].gnum = 1;
-	dlg->items[4].dlen = sizeof(int);
-	dlg->items[4].data = (unsigned char *) &hop->cases;
+	dlg->items[n].type = D_CHECKBOX;
+	dlg->items[n].gid = 2;
+	dlg->items[n].gnum = 1;
+	dlg->items[n].dlen = sizeof(int);
+	dlg->items[n].data = (unsigned char *) &hop->cases;
+	n++;
 
-	dlg->items[5].type = D_CHECKBOX;
-	dlg->items[5].gid = 2;
-	dlg->items[5].gnum = 0;
-	dlg->items[5].dlen = sizeof(int);
-	dlg->items[5].data = (unsigned char *) &hop->cases;
+	dlg->items[n].type = D_CHECKBOX;
+	dlg->items[n].gid = 2;
+	dlg->items[n].gnum = 0;
+	dlg->items[n].dlen = sizeof(int);
+	dlg->items[n].data = (unsigned char *) &hop->cases;
+	n++;
 
-	dlg->items[6].type = D_BUTTON;
-	dlg->items[6].gid = B_ENTER;
-	dlg->items[6].fn = search_dlg_ok;
-	dlg->items[6].dlen = 0;
-	dlg->items[6].text = okbutton;
-	dlg->items[6].udata = fn;
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = search_dlg_ok;
+	dlg->items[n].dlen = 0;
+	dlg->items[n].text = okbutton;
+	dlg->items[n].udata = fn;
+	n++;
 
-	dlg->items[7].type = D_BUTTON;
-	dlg->items[7].gid = B_ESC;
-	dlg->items[7].fn = search_dlg_cancel;
-	dlg->items[7].dlen = 0;
-	dlg->items[7].text = cancelbutton;
-	dlg->items[7].udata = cancelfn;
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].fn = search_dlg_cancel;
+	dlg->items[n].dlen = 0;
+	dlg->items[n].text = cancelbutton;
+	dlg->items[n].udata = cancelfn;
+	n++;
 
-	dlg->items[8].type = D_END;
+	assert(n == SEARCH_DLG_SIZE);
+	dlg->items[n].type = D_END;
 
 	add_to_ml(&ml, dlg, NULL);
 	do_dialog(term, dlg, ml);

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.11 2002/04/20 09:15:30 pasky Exp $ */
+/* $Id: osdep.c,v 1.12 2002/04/27 11:52:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -395,6 +395,15 @@ void set_window_title(unsigned char *title)
 	mem_free(s);
 }
 
+#ifdef HAVE_X11
+static int x_error = 0;
+static int catch_x_error()
+{
+	x_error = 1;
+	return 0;
+}
+#endif
+
 unsigned char *get_window_title()
 {
 #ifdef HAVE_X11
@@ -409,9 +418,6 @@ unsigned char *get_window_title()
 	if (!is_xterm())
 		return NULL;
 
-	/* FIXME: Here we hope that WINDOWID is correct. If it isn't, we're
-	 * stepping into disaster. */
-
 	winid = getenv("WINDOWID");
 	if (!winid)
 		return NULL;
@@ -423,9 +429,13 @@ unsigned char *get_window_title()
 	if (!display)
 		return NULL;
 
+	/* If WINDOWID is bad, we don't want X to abort us. */
+	x_error = 0;
+	XSetErrorHandler(catch_x_error);
+
 	status = XGetWMName(display, window, &text_prop);
 	/* status = XGetWMIconName(x11_display, x11_window, &text_prop); */
-	if (status && text_prop.value) {
+	if (!x_error && status && text_prop.value) {
 		ret = stracpy(text_prop.value);
 		XFree(text_prop.value);
 	}

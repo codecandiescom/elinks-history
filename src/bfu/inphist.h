@@ -1,4 +1,4 @@
-/* $Id: inphist.h,v 1.14 2003/12/01 15:19:53 pasky Exp $ */
+/* $Id: inphist.h,v 1.15 2004/01/04 15:05:37 jonas Exp $ */
 
 #ifndef EL__BFU_INPHIST_H
 #define EL__BFU_INPHIST_H
@@ -20,6 +20,20 @@ struct input_history {
 	unsigned int dirty:1;
 	unsigned int nosave:1;
 };
+
+#define add_to_history_list(history, entry)			\
+	do {							\
+		add_to_list((history)->entries, entry);		\
+		(history)->size++;				\
+		if (!(history)->nosave)	(history)->dirty = 1;	\
+	} while (0)
+
+#define del_from_history_list(history, entry)			\
+	do {							\
+		del_from_list((entry));				\
+		(history)->size--;				\
+		if (!(history)->nosave)	(history)->dirty = 1;	\
+	} while (0)
 
 void add_to_input_history(struct input_history *, unsigned char *, int);
 

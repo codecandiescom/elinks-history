@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.9 2004/01/18 14:25:13 pasky Exp $ */
+/* $Id: property.h,v 1.10 2004/01/18 14:41:02 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -8,7 +8,8 @@
 #include "util/color.h"
 #include "util/lists.h"
 
-/* The {struct css_property} describes one CSS declaration in a rule. One list of
+/* The {struct css_property} describes one CSS declaration in a rule, therefore
+ * being basically a parsed instance of {struct css_property_info}. One list of
  * these contains all the declarations contained in one rule. */
 
 struct css_property {

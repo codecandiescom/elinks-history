@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.37 2005/03/23 22:48:13 miciah Exp $
+-- $Id: hooks.lua.in,v 1.38 2005/03/24 21:18:11 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -49,6 +49,60 @@ function dofile(s) return do_(loadfile(s)) end
 dofile ("@sysconfdir@/config.lua")
 home_dir = (os and os.getenv and (os.getenv ("HOME") or "/home/"..os.getenv("USER"))) or "."
 dofile (elinks_home.."/config.lua")
+
+----------------------------------------------------------------------
+-- hooks
+----------------------------------------------------------------------
+
+pre_format_html_hooks = {n=0}
+function pre_format_html_hook (url, html)
+    local changed = nil
+
+    table.foreach(pre_format_html_hooks,
+                  function (i, fn)
+                      local new,stop = fn(url,html)
+ 
+                      if new then html=new changed=1 end
+                      return not stop
+                  end)
+
+   return changed and html
+end
+
+goto_url_hooks = {n=0}
+function goto_url_hook (url)
+    local changed = nil
+
+    table.foreach(goto_url_hooks,
+                  function (i, fn)
+                      local new,stop = fn(url)
+ 
+                      if new then url=new changed=1 end
+                      return not stop
+                  end)
+
+   return changed and url
+end
+
+follow_url_hooks = {n=0}
+function follow_url_hook (url)
+    local changed = nil
+
+    table.foreach(follow_url_hooks,
+                  function (i, fn)
+                      local new,stop = fn(url)
+ 
+                      if new then url=new changed=1 end
+                      return not stop
+                  end)
+
+   return changed and url
+end
+
+quit_hooks = {n=0}
+function quit_hook (url, html)
+    table.foreach(quit_hooks, function (i, fn) return not fn() end)
+end
 
 ----------------------------------------------------------------------
 --  case-insensitive string.gsub
@@ -249,7 +303,7 @@ smartprefixes = {
     draft = "http://www.rfc-editor.org/cgi-bin/idsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25",
 }
 
-function goto_url_hook (url, current_url)
+function goto_url_hook_ (url, current_url)
     if dumbprefixes[url] then
 	if current_url then
 	    return string.gsub(dumbprefixes[url], "%%c", current_url)
@@ -290,13 +344,14 @@ function goto_url_hook (url, current_url)
     -- Unmatched.
     return url
 end
+table.insert(goto_url_hooks, goto_url_hook_)
 
 
 -----------------------------------------------------------------------
 --  follow_url_hook
 ---------------------------------------------------------------------
 
-function follow_url_hook (url)
+function follow_url_hook_ (url)
     -- Using bookmark addon.
     if bookmark_addon then
 	if bm_is_category (url) then
@@ -310,6 +365,7 @@ function follow_url_hook (url)
 	return url
     end
 end
+table.insert(follow_url_hooks, follow_url_hook_)
 
 
 ----------------------------------------------------------------------
@@ -381,7 +437,7 @@ function highlight (url, html)
 end
 
 
-function pre_format_html_hook (url, html)
+function pre_format_html_hook_ (url, html)
     local ret = nil
 
     -- Handle gzip'd files within reasonable size.
@@ -458,6 +514,7 @@ function pre_format_html_hook (url, html)
     return ret and html or nil
 end
 
+table.insert(pre_format_html_hooks, pre_format_html_hook_)
 
 ----------------------------------------------------------------------
 --  Miscellaneous functions, accessed with the Lua Console.
@@ -508,7 +565,7 @@ if not tmp_files then
     tmp_files = {}
 end
 
-function quit_hook ()
+function quit_hook_ ()
     if bookmark_addon then
 	bm_save_bookmarks ()
     end
@@ -518,6 +575,7 @@ function quit_hook ()
         for i,v in tmp_files do os.remove (v) end
     end
 end
+table.insert(quit_hooks, quit_hook_)
 
 
 ----------------------------------------------------------------------

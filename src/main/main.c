@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.227 2004/11/19 17:19:05 zas Exp $ */
+/* $Id: main.c,v 1.228 2004/12/16 15:03:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,8 +187,8 @@ init(void)
 		init_search_history();
 	}
 
-	if (get_cmd_opt_int("dump")
-	    || get_cmd_opt_int("source")) {
+	if (get_cmd_opt_bool("dump")
+	    || get_cmd_opt_bool("source")) {
 		/* Dump the URL list */
 #ifdef CONFIG_ECMASCRIPT
 		/* The ECMAScript code is not good at coping with this. And it

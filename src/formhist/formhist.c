@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.34 2003/09/01 23:31:12 zas Exp $ */
+/* $Id: formhist.c,v 1.35 2003/09/02 13:32:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,12 +67,8 @@ free_form_in_list(struct formhist_data *form)
 
 	if (form->url) mem_free(form->url);
 
-	if (form->submit) {
-		foreachback (sv, *form->submit)
-			free_submitted_value(sv);
-
-		mem_free(form->submit);
-	}
+	foreachback (sv, form->submit)
+		free_submitted_value(sv);
 }
 
 static struct formhist_data *
@@ -83,14 +79,11 @@ new_form(unsigned char *url)
 	form = mem_calloc(1, sizeof(struct formhist_data));
 	if (!form) return NULL;
 
-	form->submit = mem_alloc(sizeof(struct list_head));
-	if (!form->submit) { mem_free(form); return NULL; }
-
 	form->url = stracpy(url);
-	if (!form->url) { mem_free(form->submit); mem_free(form); return NULL; }
+	if (!form->url) { mem_free(form); return NULL; }
 
 	init_list(*form);
-	init_list(*form->submit);
+	init_list(form->submit);
 
 	return form;
 }
@@ -148,9 +141,9 @@ load_saved_forms(void)
 			mem_free(enc_value);
 			if (!sv) goto fail;
 
-			add_to_list_bottom(*form->submit, sv);
+			add_to_list(form->submit, sv);
 		}
-		add_to_list_bottom(saved_forms, form);
+		add_to_list(saved_forms, form);
 	}
 
 	fclose(f);
@@ -184,7 +177,7 @@ save_saved_forms(void)
 
 		secure_fprintf(ssi, "%s\n", form->url);
 
-		foreach (sv, *form->submit) {
+		foreach (sv, form->submit) {
 			/* Obfuscate the password. If we do
 			 * $ cat ~/.elinks/password
 			 * we don't want someone behind our back to read our
@@ -209,104 +202,73 @@ save_saved_forms(void)
 /* Check whether the form (chain of @submit submitted_values at @url document)
  * is already present in the form history. */
 static int
-form_already_saved(unsigned char *url, struct list_head *submit)
+form_already_saved(struct formhist_data *form1)
 {
 	struct formhist_data *form;
 
 	if (!loaded && !load_saved_forms()) return 0;
 
 	foreach (form, saved_forms) {
-		struct submitted_value *sv, *savedsv;
+		int count = 0;
+		int exact = 0;
+		struct submitted_value *sv;
 
-		if (strcmp(form->url, url)) continue;
+		if (strcmp(form->url, form1->url)) continue;
 
-		savedsv = (struct submitted_value *) form->submit->next;
-		foreach (sv, *submit) {
-			if (sv->type != FC_TEXT && sv->type != FC_PASSWORD)
-				continue;
+		/* Iterate through submitted entries. */
+		foreach (sv, form1->submit) {
+			struct submitted_value *sv2;
+			unsigned char *value = NULL;
 
-			if (savedsv == (struct submitted_value *) form->submit)
-				break;
-
-			/* FIXME: order vs comparaison --Zas */
-			if (strcmp(sv->name, savedsv->name) ||
-			    strcmp(sv->value, savedsv->value)) return 0;
-
-			savedsv  = savedsv->next;
+			count++;
+			foreach (sv2, form->submit) {
+				if (!strcmp(sv->name, sv2->name)) {
+					exact++;
+					value = sv2->value;
+					break;
+				}
+			}
+			/* If we found a value for that name, check if value
+			 * has changed or not. */
+			if (value && strcmp(sv->value, value)) return 0;
 		}
 
-		if ((sv == (struct submitted_value *) submit)
-		     && (savedsv == (struct submitted_value *) form->submit)) {
-			return 1;
-		}
+		/* Check if submitted values have changed or not. */
+		if (count && exact && count == exact) return 1;
 	}
+
 	return 0;
 }
 
-
-static int
-add_to_saved_forms(struct formhist_data *form1)
+static struct formhist_data *
+get_form_with_url(unsigned char *url)
 {
 	struct formhist_data *form;
-	struct submitted_value *sv;
 
-	/* Check if same url already exists, we only want to save one form per
-	 * action url.
-	 * FIXME: for some yet unknown reason, there's still some duplicate
-	 * url entries in formhist file... --Zas */
-	forget_form(form1);
-
-	form = new_form(form1->url);
-	if (!form) return 0;
-
-	/* We're going to save just <input type="text"> and
-	 * <input type="password">. */
-	foreach (sv, *form1->submit) {
-		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
-			struct submitted_value *sv2;
-
-			sv2 = new_submitted_value(sv->name, sv->value);
-			if (!sv2) goto fail;
-
-			add_to_list_bottom(*form->submit, sv2);
-		}
+	foreachback (form, saved_forms) {
+		if (!strcmp(form->url, url))
+			return form;
 	}
 
-	add_to_list(saved_forms, form);
-	free_form(form1);
-
-	return 1;
-
-fail:
-	free_form(form);
-	return 0;
+	return NULL;
 }
-
 
 /* Appends form data @form1 (url and submitted_value(s)) to the password file.
  * Returns 1 on success, 0 otherwise. */
 static int
-remember_form(struct formhist_data *form1)
+remember_form(struct formhist_data *form)
 {
-	if (!add_to_saved_forms(form1)) return 0;
+	struct formhist_data *form1;
+
+	/* Ensure we have only one entry for that url. */
+	while ((form1 = get_form_with_url(form->url))) {
+		del_from_list(form1);
+		free_form(form1);
+	}
+	add_to_list(saved_forms, form);
+
 	if (!save_saved_forms()) return 0;
 	return 1;
-}
-
-int
-forget_form(struct formhist_data *form1)
-{
-	struct formhist_data *form;
-
-	foreach (form, saved_forms) {
-		if (!strcmp(form->url, form1->url)) {
-			del_from_list(form);
-			free_form(form);
-			return 1;
-		}
-	}
-
-	return 0;
 }
 
 unsigned char *
@@ -320,7 +282,7 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 		if (!strcmp(form->url, url)) {
 			struct submitted_value *sv;
 
-			foreach (sv, *form->submit)
+			foreach (sv, form->submit)
 				if (!strcmp(sv->name, name))
 					return sv->value;
 		}
@@ -329,12 +291,11 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 	return NULL;
 }
 
-struct list_head *
+void
 memorize_form(struct session *ses, struct list_head *submit,
 	      struct form_control *frm)
 {
 	struct formhist_data *form;
-	struct list_head *sb;
 	struct submitted_value *sv;
 	int save = 0;
 
@@ -345,19 +306,23 @@ memorize_form(struct session *ses, struct list_head *submit,
 		}
 	}
 
-	if (!save || form_already_saved(frm->action, submit)) return NULL;
+	if (!save) return;
 
 	form = new_form(frm->action);
-	if (!form) return NULL;
+	if (!form) return;
 
-	/* Set up a new list_head, as @submit will be destroyed as soon as
-	 * get_form_url() returns. */
-	/* XXX: ??? --Zas */
-	sb = form->submit;
-	sb->next = submit->next;
-	sb->prev = submit->prev;
-	((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
-	((struct submitted_value *) sb->prev)->next = (struct submitted_value *) sb;
+	foreach (sv, *submit) {
+		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
+			struct submitted_value *sv2;
+
+			sv2 = new_submitted_value(sv->name, sv->value);
+			if (!sv2) goto fail;
+
+			add_to_list(form->submit, sv2);
+		}
+	}
+
+	if (form_already_saved(form)) { free_form(form); return; }
 
 	msg_box(ses->tab->term, NULL, 0,
 		N_("Form memory"), AL_CENTER,
@@ -369,7 +334,10 @@ memorize_form(struct session *ses, struct list_head *submit,
 		N_("Yes"), remember_form, B_ENTER,
 		N_("No"), free_form, NULL);
 
-	return sb;
+	return;
+
+fail:
+	free_form(form);
 }
 
 void

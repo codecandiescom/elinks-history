@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.16 2003/10/01 15:45:41 jonas Exp $ */
+/* $Id: hooks.c,v 1.17 2003/10/01 16:38:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,11 +32,11 @@ static enum evhook_status
 script_hook_goto_url(va_list ap)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
-#if 0 /* This event argument is still not used by this backend */
 	struct session *ses = va_arg(ap, struct session *);
-#endif
 	SCM proc;
 	SCM x;
+
+	evhook_use_params(url && ses);
 
 	if (*url == NULL || !*url[0]) return EHS_NEXT;
 
@@ -56,11 +56,11 @@ static enum evhook_status
 script_hook_follow_url(va_list ap)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
-#if 0 /* This event argument is still not used by this backend */
 	struct session *ses = va_arg(ap, struct session *);
-#endif
 	SCM proc;
 	SCM x;
+
+	evhook_use_params(url && ses);
 
 	if (*url == NULL || !*url[0]) return EHS_NEXT;
 
@@ -85,8 +85,7 @@ script_hook_pre_format_html(va_list ap)
 	SCM proc;
 	SCM x;
 
-	/* Silence compiler warnings. */
-	if (0 && ses) ;
+	evhook_use_params(html && html_len && ses && url);
 
 	if (*html == NULL || *html_len == 0) return EHS_NEXT;
 
@@ -113,6 +112,8 @@ script_hook_get_proxy(va_list ap)
 	unsigned char *url = va_arg(ap, unsigned char *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%get-proxy-hook");
 	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
+
+	evhook_use_params(retval && url);
 
 	if (SCM_STRINGP(x)) {
 		*retval = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);

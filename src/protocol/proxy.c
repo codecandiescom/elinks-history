@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.35 2004/07/20 22:07:47 zas Exp $ */
+/* $Id: proxy.c,v 1.36 2004/07/21 12:53:34 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -57,9 +57,8 @@ proxy_uri(struct uri *uri, unsigned char *proxy)
 	if (init_string(&string)
 	    && string_concat(&string, "proxy://", proxy, "/", NULL)
 	    && add_uri_to_string(&string, uri, URI_PROXY)) {
-		/* There is no need to use URI_BASE here since
-		 * URI_PROXY should not add any fragments in the first
-		 * place. */
+		/* There is no need to use URI_BASE here since URI_PROXY should
+		 * not add any fragments in the first place. */
 		uri = get_uri(string.source, 0);
 	} else {
 		uri = NULL;
@@ -166,7 +165,6 @@ get_proxy_uri(struct uri *uri)
 		return get_proxy_worker(uri, NULL);
 #endif
 	}
-
 }
 
 struct uri *

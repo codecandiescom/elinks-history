@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.93 2003/10/26 13:46:38 jonas Exp $ */
+/* $Id: core.c,v 1.94 2003/10/26 14:02:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -831,10 +831,10 @@ free_lua_console_history(va_list ap, void *data)
 }
 
 
-struct module lua_scripting_module = module_struct(
+struct module lua_scripting_module = struct_module(
 	/* name: */		"lua",
 	/* options: */		NULL,
-	/* events: */		lua_scripting_hooks,
+	/* hooks: */		lua_scripting_hooks,
 	/* submodules: */	NULL,
 	/* data: */		NULL,
 	/* init: */		init_lua,

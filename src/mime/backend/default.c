@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.25 2003/10/26 13:26:34 jonas Exp $ */
+/* $Id: default.c,v 1.26 2003/10/26 14:02:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,10 +153,10 @@ struct mime_backend default_mime_backend = {
 	/* get_mime_handler: */	get_mime_handler_default,
 };
 
-struct module default_mime_module = module_struct(
+struct module default_mime_module = struct_module(
 	/* name: */		BACKEND_NAME,
 	/* options: */		NULL,
-	/* events: */		NULL,	
+	/* hooks: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,
 	/* init: */		NULL,

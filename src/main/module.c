@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.5 2003/10/26 13:47:20 jonas Exp $ */
+/* $Id: module.c,v 1.6 2003/10/26 14:02:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ void
 init_module(struct module *module)
 {
 	if (module->init) module->init(module);
-	if (module->events) register_event_hooks(module->events);
+	if (module->hooks) register_event_hooks(module->hooks);
 
 	if (module->submodules) {
 		int i;
@@ -89,7 +89,7 @@ done_module(struct module *module)
 			done_module(module->submodules[i]);
 	}
 
-	if (module->events) unregister_event_hooks(module->events);
+	if (module->hooks) unregister_event_hooks(module->hooks);
 	if (module->done) module->done(module);
 }
 

@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.6 2003/10/26 13:46:51 jonas Exp $ */
+/* $Id: core.c,v 1.7 2003/10/26 14:02:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ init_guile(void)
 }
 
 
-struct module lua_scripting_module = module_struct(
+struct module lua_scripting_module = struct_module(
 	/* name: */		"lua",
 	/* options: */		NULL,
 	/* events: */		guile_scripting_hooks,

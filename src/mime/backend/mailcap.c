@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.66 2003/10/26 13:26:34 jonas Exp $ */
+/* $Id: mailcap.c,v 1.67 2003/10/26 14:02:35 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -682,10 +682,10 @@ struct mime_backend mailcap_mime_backend = {
 };
 
 /* Setup the exported module. */
-struct module mailcap_mime_module = module_struct(
+struct module mailcap_mime_module = struct_module(
 	/* name: */		"mailcap",
 	/* options: */		mailcap_options,
-	/* events: */		NULL,	
+	/* hooks: */		NULL,	
 	/* submodules: */	NULL,
 	/* data: */		NULL,
 	/* init: */		init_mailcap,

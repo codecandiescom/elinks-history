@@ -1,4 +1,4 @@
-/* $Id: core.h,v 1.11 2003/10/26 13:46:38 jonas Exp $ */
+/* $Id: core.h,v 1.12 2003/10/26 14:02:35 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_CORE_H
 #define EL__SCRIPTING_LUA_CORE_H
@@ -7,6 +7,7 @@
 
 #include <lua.h> /* This is standart include. */
 
+#include "modules/module.h"
 #include "sched/event.h"
 #include "sched/session.h"
 

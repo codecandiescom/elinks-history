@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.7 2003/10/26 13:46:14 jonas Exp $ */
+/* $Id: scripting.c,v 1.8 2003/10/26 14:02:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@ static struct module *scripting_modules[] = {
 	NULL,
 };
 
-struct module scripting_module = module_struct(
+struct module scripting_module = struct_module(
 	/* name: */		"scripting",
 	/* options: */		NULL,
 	/* events: */		NULL,

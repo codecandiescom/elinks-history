@@ -1,4 +1,4 @@
-/* $Id: module.h,v 1.7 2003/10/26 13:26:34 jonas Exp $ */
+/* $Id: module.h,v 1.8 2003/10/26 14:02:35 jonas Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
@@ -17,9 +17,9 @@ struct module {
 	 * The table should end with NULL_OPTION_INFO. */
 	struct option_info *options;
 
-	/* The events that should be registered for this module.
+	/* The event hookss that should be registered for this module.
 	 * The table should end with NULL_EVENT_HOOK_INFO. */
-	struct event_hook_info *events;
+	struct event_hook_info *hooks;
 
 	/* Any submodules that this module contains. Order matters
 	 * since it is garanteed that initialization will happen in
@@ -39,8 +39,8 @@ struct module {
 	void (*done)(struct module *module);
 };
 
-#define module_struct(name, options, events, submods, data, init, done) \
-	{ name, options, events, submods, data, init, done }
+#define struct_module(name, options, hooks, submods, data, init, done) \
+	{ name, options, hooks, submods, data, init, done }
 
 /* Interface for handling single modules */
 

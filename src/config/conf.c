@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.109 2003/11/25 21:27:12 pasky Exp $ */
+/* $Id: conf.c,v 1.110 2003/11/25 21:58:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -475,9 +475,7 @@ smart_config_output_fn(struct string *string, struct option *option,
 {
 	unsigned char *desc_i18n;
 
-	/* When we're OPT_TREE, we won't get called with action 2 anyway and
-	 * we want to pop out a comment. */
-	if (option->type != OPT_TREE && !option_types[option->type].write)
+	if (option->type == OPT_ALIAS)
 		return;
 
 	/* XXX: OPT_LANGUAGE shouldn't have any bussiness here, but we're just
@@ -555,6 +553,10 @@ split:
 			}
 			add_to_string(string, option->name);
 			add_to_string(string, " = ");
+			/* OPT_ALIAS won't ever. OPT_TREE won't reach action 2.
+			 * OPT_SPECIAL makes no sense in the configuration
+			 * context. */
+			assert(option_types[option->type].write);
 			option_types[option->type].write(option, string);
 			add_char_to_string(string, '\n');
 			if (do_print_comment) add_char_to_string(string, '\n');

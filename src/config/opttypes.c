@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.73 2003/11/25 21:45:34 pasky Exp $ */
+/* $Id: opttypes.c,v 1.74 2003/11/25 21:58:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,6 +110,18 @@ redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 static unsigned char *
 redir_rd(struct option *opt, unsigned char **file)
 	wrap_or_(read, read(real, file), NULL);
+
+static void
+redir_wr(struct option *opt, struct string *string)
+{
+	struct option *real = get_opt_rec(config_options, opt->value.string);
+
+	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->value.string);
+	if_assert_failed { return; }
+
+	if (option_types[real->type].write)
+		option_types[real->type].write(real, string);
+}
 
 static int
 redir_set(struct option *opt, unsigned char *str)
@@ -359,7 +371,7 @@ struct option_type_info option_types[] = {
 
 	{ N_("Special"), exec_cmd, NULL, NULL, NULL, NULL, NULL, NULL, "" },
 
-	{ N_("Alias"), redir_cmd, redir_rd, NULL, NULL, redir_set, redir_add, redir_remove, "" },
+	{ N_("Alias"), redir_cmd, redir_rd, redir_wr, NULL, redir_set, redir_add, redir_remove, "" },
 
 	/* tree */
 	{ N_("Folder"), NULL, NULL, NULL, tree_dup, NULL, NULL, NULL, "" },

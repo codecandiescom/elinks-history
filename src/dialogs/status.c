@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.90 2004/10/10 15:31:51 miciah Exp $ */
+/* $Id: status.c,v 1.91 2004/10/15 02:39:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ get_download_msg(struct download *download, struct terminal *term,
 	}
 
 	if (download->progress->size >= 0 && download->progress->loaded > 0) {
-		if (wide) add_to_string(&msg, ", ");
+		add_to_string(&msg, ", ");
 		add_to_string(&msg, _(full ? N_("estimated time")
 					   : N_("ETA"),
 				      term));

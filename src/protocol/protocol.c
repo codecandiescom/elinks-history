@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.46 2004/05/07 17:53:30 jonas Exp $ */
+/* $Id: protocol.c,v 1.47 2004/05/07 18:01:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,6 @@ struct protocol_backend {
 	unsigned char *name;
 	int port;
 	protocol_handler *handler;
-	protocol_external_handler *external_handler;
 	unsigned int free_syntax:1;
 	unsigned int need_slashes:1;
 	unsigned int need_slash_after_host:1;
@@ -65,22 +64,22 @@ unknown_protocol_handler(struct session *ses, struct uri *uri)
 }
 
 static const struct protocol_backend protocol_backends[] = {
-	{ "file",	 0, file_protocol_handler,	NULL,	1, 1, 0 },
-	{ "finger",	79, finger_protocol_handler,	NULL,	0, 1, 1 },
-	{ "ftp",	21, ftp_protocol_handler,	NULL,	0, 1, 1 },
-	{ "http",	80, http_protocol_handler,	NULL,	0, 1, 1 },
-	{ "https",     443, https_protocol_handler,	NULL,	0, 1, 1 },
-	{ "smb",       139, smb_protocol_handler,	NULL,	0, 1, 1 },
-	{ "javascript",	 0, NULL,			NULL,	0, 0, 0 },
-	{ "proxy",    3128, proxy_protocol_handler,	NULL,	0, 1, 1 },
+	{ "file",	 0, file_protocol_handler,	1, 1, 0 },
+	{ "finger",	79, finger_protocol_handler,	0, 1, 1 },
+	{ "ftp",	21, ftp_protocol_handler,	0, 1, 1 },
+	{ "http",	80, http_protocol_handler,	0, 1, 1 },
+	{ "https",     443, https_protocol_handler,	0, 1, 1 },
+	{ "smb",       139, smb_protocol_handler,	0, 1, 1 },
+	{ "javascript",	 0, NULL,			0, 0, 0 },
+	{ "proxy",    3128, proxy_protocol_handler,	0, 1, 1 },
 
-	/* Keep these two last! */
-	{ NULL,		 0, NULL,   unknown_protocol_handler,	0, 0, 0 },
+	/* Keep these last! */
+	{ NULL,		 0, NULL,			0, 0, 0 },
 
+	{ "user",	 0, NULL,			0, 0, 0 },
 	/* Internal protocol for mapping to protocol.user.* handlers. Placed
 	 * last because it's checked first and else should be ignored. */
-	{ "custom",	 0, NULL,      user_protocol_handler,	0, 0, 0 },
-	{ "user",	 0, NULL,			NULL,	0, 0, 0 },
+	{ "custom",	 0, NULL,			0, 0, 0 },
 };
 
 
@@ -152,8 +151,9 @@ get_protocol_external_handler(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return NULL;
-	if (protocol_backends[protocol].external_handler)
-		return protocol_backends[protocol].external_handler;
+
+	if (protocol == PROTOCOL_USER)
+		return user_protocol_handler;
 
 	/* If both external and regular protocol handler is NULL return
 	 * default handler */

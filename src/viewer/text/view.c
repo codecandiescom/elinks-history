@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.568 2004/07/28 15:15:36 jonas Exp $ */
+/* $Id: view.c,v 1.569 2004/07/28 15:30:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -905,6 +905,8 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	assert(ses && ev);
 	if_assert_failed return 0;
 
+	if (!doc_view) return 0;
+
 	do {
 		assert(doc_view && doc_view->document);
 		if_assert_failed return 0;
@@ -1002,7 +1004,6 @@ quit:
 #ifdef CONFIG_MOUSE
 	if (ev->ev == EVENT_MOUSE) {
 		int bars;
-		int x = 0;
 
 		if (ev->y == 0
 		    && check_mouse_action(ev, B_DOWN)
@@ -1041,9 +1042,8 @@ quit:
 			goto x;
 		}
 
-		if (doc_view) x = do_mouse_event(ses, ev, doc_view);
-
-		if (!x && check_mouse_button(ev, B_RIGHT)) {
+		if (!do_mouse_event(ses, ev, doc_view)
+		    && check_mouse_button(ev, B_RIGHT)) {
 			tab_menu(ses, ev->x, ev->y, 0);
 		}
 	}

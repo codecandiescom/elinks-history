@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.44 2003/09/25 19:21:00 zas Exp $ */
+/* $Id: kbdbind.h,v 1.45 2003/10/02 10:46:22 kuser Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -59,7 +59,6 @@ enum keyact {
 	ACT_LINK_MENU,
 	ACT_JUMP_TO_LINK,
 	ACT_LUA_CONSOLE,
-	ACT_LUA_FUNCTION,
 	ACT_MENU,
 	ACT_NEXT_FRAME,
 	ACT_OPEN_NEW_WINDOW,
@@ -75,6 +74,7 @@ enum keyact {
 	ACT_RESUME_DOWNLOAD,
 	ACT_RIGHT,
 	ACT_SAVE_FORMATTED,
+	ACT_SCRIPTING_FUNCTION,
 	ACT_SCROLL_DOWN,
 	ACT_SCROLL_LEFT,
 	ACT_SCROLL_RIGHT,
@@ -140,8 +140,8 @@ int bind_do(unsigned char *, unsigned char *, unsigned char *);
 unsigned char *bind_act(unsigned char *, unsigned char *);
 void bind_config_string(struct string *);
 
-#ifdef HAVE_LUA
-unsigned char *bind_lua_func(unsigned char *, unsigned char *, int);
+#ifdef HAVE_SCRIPTING
+unsigned char *bind_scripting_func(unsigned char *, unsigned char *, int);
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.71 2003/09/23 20:30:44 jonas Exp $ */
+/* $Id: core.c,v 1.72 2003/10/02 10:46:22 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,7 @@
 #include "lowlevel/home.h"
 #include "lowlevel/signals.h"
 #include "protocol/uri.h"
+#include "sched/event.h"
 #include "sched/session.h"
 #include "scripting/lua/core.h"
 #include "scripting/lua/hooks.h"
@@ -280,6 +281,8 @@ l_bind_key(LS)
 {
 	int ref;
 	unsigned char *err;
+	struct string event_name = NULL_STRING;
+	int event_id;
 
 	if (!lua_isstring(S, 1) || !lua_isstring(S, 2)
 	    || !lua_isfunction(S, 3)) {
@@ -287,11 +290,18 @@ l_bind_key(LS)
 		goto lua_error;
 	}
 
+	if (!init_string(&event_name)) goto lua_error;
+		
 	lua_pushvalue(S, 3);
 	ref = lua_ref(S, 1);
+	add_format_to_string(&event_name, "lua-run-func %i", ref);
+	event_id = register_event(event_name.source);
+	event_id = register_event_hook(event_id, run_lua_func, 0, (void *)ref); 
+	done_string(&event_name);
+	if (event_id == EVENT_NONE) goto lua_error;
 
-	err = bind_lua_func((uchar *)lua_tostring(S, 1),
-			    (uchar *)lua_tostring(S, 2), ref);
+	err = bind_scripting_func((uchar *)lua_tostring(S, 1),
+			    (uchar *)lua_tostring(S, 2), event_id);
 	if (err) {
 		lua_unref(S, ref);
 		alert_lua_error2("error in bind_key: ", err);
@@ -830,21 +840,25 @@ free_lua_console_history(void)
  * Helper to run Lua functions bound to keystrokes.
  */
 
-void
-run_lua_func(struct session *ses, int func_ref)
+enum evhook_status
+run_lua_func(va_list ap, void *data)
 {
+	struct session *ses = va_arg(ap, struct session *);
+	int func_ref = (int)data;
 	int err;
 
 	if (func_ref == LUA_NOREF) {
 		alert_lua_error("key bound to nothing (internal error)");
-		return;
+		return EHS_NEXT;
 	}
 
 	lua_getref(L, func_ref);
-	if (prepare_lua(ses)) return;
+	if (prepare_lua(ses)) return EHS_NEXT;
 	err = lua_call(L, 0, 2);
 	finish_lua();
 	if (!err) handle_standard_lua_returns("keyboard function");
+
+	return EHS_NEXT;
 }
 
 

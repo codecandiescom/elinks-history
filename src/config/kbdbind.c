@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.81 2003/09/27 15:21:26 zas Exp $ */
+/* $Id: kbdbind.c,v 1.82 2003/10/02 10:46:22 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,14 +15,11 @@
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
+#include "sched/event.h"
 #include "scripting/lua/core.h"
 #include "terminal/kbd.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-#ifndef HAVE_LUA
-#define LUA_NOREF	0
-#endif
 
 #define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 
@@ -111,9 +108,10 @@ free_keybinding(struct keybinding *kb)
 		del_from_list(kb->box_item);
 		mem_free(kb->box_item);
 	}
-#ifdef HAVE_LUA
-	if (kb->func_ref != LUA_NOREF)
-		lua_unref(lua_state, kb->func_ref);
+#ifdef HAVE_SCRIPTING
+/* TODO: unref function must be implemented. */
+/*	if (kb->func_ref != EVENT_NONE)
+		scripting_unref(kb->func_ref); */
 #endif
 	del_from_list(kb);
 	mem_free(kb);
@@ -178,7 +176,7 @@ kbd_ev_lookup(enum keymap kmap, long key, long meta, int *func_ref)
 		if (key != kb->key || meta != kb->meta)
 			continue;
 
-		if (kb->action == ACT_LUA_FUNCTION && func_ref)
+		if (kb->action == ACT_SCRIPTING_FUNCTION && func_ref)
 			*func_ref = kb->func_ref;
 
 		return kb;
@@ -199,7 +197,7 @@ kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 		if (act != kb->action)
 			continue;
 
-		if (kb->action == ACT_LUA_FUNCTION && func_ref)
+		if (kb->action == ACT_SCRIPTING_FUNCTION && func_ref)
 			*func_ref = kb->func_ref;
 
 		return kb;
@@ -409,7 +407,7 @@ static struct strtonum action_table[] = {
 #else
 	{ "lua-console", ACT_LUA_CONSOLE, N_("Open a Lua console (DISABLED)") },
 #endif
-	{ " *lua-function*", ACT_LUA_FUNCTION, NULL }, /* internal use only */
+	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "menu", ACT_MENU, N_("Activate the menu") },
 	{ "next-frame", ACT_NEXT_FRAME, N_("Move to the next frame") },
 	{ "open-new-window", ACT_OPEN_NEW_WINDOW, N_("Open a new window") },
@@ -473,7 +471,7 @@ init_action_listboxes(void)
 		add_to_list_bottom(kbdbind_box_items, box_item);
 		box_item->root = NULL;
 		init_list(box_item->child);
-		box_item->visible = (act->num != ACT_LUA_FUNCTION); /* XXX */
+		box_item->visible = (act->num != ACT_SCRIPTING_FUNCTION); /* XXX */
 		box_item->translated = 1;
 		box_item->udata = (void *) act->num;
 		box_item->type = BI_FOLDER;
@@ -558,7 +556,7 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 	action_ = read_action(action);
 	if (action_ < 0) return 3;
 
-	add_keybinding(keymap_, action_, key_, meta_, LUA_NOREF);
+	add_keybinding(keymap_, action_, key_, meta_, EVENT_NONE);
 	return 0;
 }
 
@@ -625,9 +623,9 @@ bind_config_string(struct string *file)
  * Bind to Lua function.
  */
 
-#ifdef HAVE_LUA
+#ifdef HAVE_SCRIPTING
 unsigned char *
-bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
+bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 {
 	unsigned char *err = NULL;
 	long key, meta;
@@ -638,7 +636,7 @@ bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 		err = gettext("Unrecognised keymap");
 	else if (parse_keystroke(ckey, &key, &meta) < 0)
 		err = gettext("Error parsing keystroke");
-	else if ((action = read_action(" *lua-function*")) < 0)
+	else if ((action = read_action(" *scripting-function*")) < 0)
 		err = gettext("Unrecognised action (internal error)");
 	else
 		add_keybinding(kmap, action, key, meta, func_ref);
@@ -792,11 +790,11 @@ add_default_keybindings(void)
 	 * defaults, can we? ;)) */
 
 	for (kb = default_main_keymap; kb->key; kb++)
-		add_keybinding(KM_MAIN, kb->action, kb->key, kb->meta, LUA_NOREF);
+		add_keybinding(KM_MAIN, kb->action, kb->key, kb->meta, EVENT_NONE);
 
 	for (kb = default_edit_keymap; kb->key; kb++)
-		add_keybinding(KM_EDIT, kb->action, kb->key, kb->meta, LUA_NOREF);
+		add_keybinding(KM_EDIT, kb->action, kb->key, kb->meta, EVENT_NONE);
 
 	for (kb = default_menu_keymap; kb->key; kb++)
-		add_keybinding(KM_MENU, kb->action, kb->key, kb->meta, LUA_NOREF);
+		add_keybinding(KM_MENU, kb->action, kb->key, kb->meta, EVENT_NONE);
 }

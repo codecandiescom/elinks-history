@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.209 2003/09/28 13:43:56 jonas Exp $ */
+/* $Id: view.c,v 1.210 2003/10/02 10:46:22 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,7 @@
 #include "protocol/http/auth.h"
 #include "protocol/uri.h"
 #include "sched/download.h"
+#include "sched/event.h"
 #include "sched/history.h"
 #include "sched/location.h"
 #include "sched/session.h"
@@ -1067,9 +1068,9 @@ quak:
 				dialog_lua_console(ses);
 #endif
 				goto x;
-			case ACT_LUA_FUNCTION:
-#ifdef HAVE_LUA
-				run_lua_func(ses, func_ref);
+			case ACT_SCRIPTING_FUNCTION:
+#ifdef HAVE_SCRIPTING
+				trigger_event(func_ref, ses);
 #endif
 				break;
 			case ACT_QUIT:

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.175 2004/01/09 21:04:19 zas Exp $ */
+/* $Id: menu.c,v 1.176 2004/01/09 21:30:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,6 +172,66 @@ select_menu(struct terminal *term, struct menu *menu)
 	select_menu_item(term, &menu->items[menu->selected], menu->data);
 }
 
+/* Get desired width for left text in menu item, accounting spacing. */
+static int
+get_menuitem_text_width(struct terminal *term, struct menu_item *mi)
+{
+	unsigned char *text;
+
+	if (!mi_has_left_text(*mi)) return 0;
+
+	text = mi->text;
+	if (mi_text_translate(*mi))
+		text = _(text, term);
+
+	if (!text[0]) return 0;
+
+	return L_TEXT_SPACE + strlen(text) - !!mi->hotkey_pos + R_TEXT_SPACE;
+}
+
+/* Get desired width for right text in menu item, accounting spacing. */
+static int
+get_menuitem_rtext_width(struct terminal *term, struct menu_item *mi)
+{
+	int rtext_width = 0;
+
+	if (mi_is_submenu(*mi)) {
+		rtext_width = L_RTEXT_SPACE + m_submenu_len + R_RTEXT_SPACE;
+
+	} else if (mi->action != ACT_NONE) {
+		struct string keystroke;
+
+		if (init_string(&keystroke)) {
+			add_keystroke_to_string(&keystroke, mi->action, KM_MAIN);
+			rtext_width = L_RTEXT_SPACE + keystroke.length + R_RTEXT_SPACE;
+			done_string(&keystroke);
+		}
+
+	} else if (mi_has_right_text(*mi)) {
+		unsigned char *rtext = mi->rtext;
+
+		if (mi_rtext_translate(*mi))
+			rtext = _(rtext, term);
+
+		if (rtext[0])
+			rtext_width = L_RTEXT_SPACE + strlen(rtext) + R_RTEXT_SPACE;
+	}
+
+	return rtext_width;
+}
+
+static int
+get_menuitem_width(struct terminal *term, struct menu_item *mi, int max_width)
+{
+	int text_width = get_menuitem_text_width(term, mi);
+	int rtext_width = get_menuitem_rtext_width(term, mi);
+
+	int_upper_bound(&text_width, max_width);
+	int_upper_bound(&rtext_width, max_width - text_width);
+
+	return text_width + rtext_width;
+}
+
 static void
 count_menu_size(struct terminal *term, struct menu *menu)
 {
@@ -180,52 +240,8 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int mx = 0;
 	int my;
 
-	for (my = 0; my < menu->ni; my++) {
-		int text_width = 0;
-		int rtext_width = 0;
-
-		if (mi_has_left_text(menu->items[my])) {
-			unsigned char *text = menu->items[my].text;
-
-			if (mi_text_translate(menu->items[my]))
-				text = _(text, term);
-
-			if (text[0])
-				text_width = L_TEXT_SPACE
-					     + strlen(text)
-				    	     - !!menu->items[my].hotkey_pos
-				    	     + R_TEXT_SPACE;
-		}
-
-		if (mi_is_submenu(menu->items[my])) {
-			rtext_width = L_RTEXT_SPACE + m_submenu_len + R_RTEXT_SPACE;
-
-		} else if (menu->items[my].action != ACT_NONE) {
-			struct string keystroke;
-
-			if (init_string(&keystroke)) {
-				add_keystroke_to_string(&keystroke,
-							menu->items[my].action,
-							KM_MAIN);
-				rtext_width = L_RTEXT_SPACE + keystroke.length + R_RTEXT_SPACE;
-				done_string(&keystroke);
-			}
-
-		} else if (mi_has_right_text(menu->items[my])) {
-			unsigned char *rtext = menu->items[my].rtext;
-
-			if (mi_rtext_translate(menu->items[my]))
-				rtext = _(rtext, term);
-
-			if (rtext[0])
-				rtext_width = L_RTEXT_SPACE + strlen(rtext) + R_RTEXT_SPACE;
-		}
-
-		int_upper_bound(&text_width, width);
-		int_upper_bound(&rtext_width, width - text_width);
-
-		int_lower_bound(&mx, text_width + rtext_width);
-	}
+	for (my = 0; my < menu->ni; my++)
+		int_lower_bound(&mx, get_menuitem_width(term, &menu->items[my], width));
 
 	int_upper_bound(&my, height);
 

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.32 2002/06/17 16:07:02 pasky Exp $ */
+/* $Id: options.h,v 1.33 2002/06/21 13:28:20 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -32,7 +32,6 @@ enum option_type {
 
 	OPT_CODEPAGE,
 	OPT_LANGUAGE,
-	OPT_PROGRAM,
 	OPT_COLOR,
 
 	OPT_COMMAND,

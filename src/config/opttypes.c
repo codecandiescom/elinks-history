@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.18 2002/06/21 13:27:10 pasky Exp $ */
+/* $Id: opttypes.c,v 1.19 2002/06/21 13:28:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,7 +387,6 @@ struct option_type_info option_types[] = {
 
 	{ gen_cmd, cp_rd, cp_wr, int_dup, "<codepage>" },
 	{ gen_cmd, lang_rd, lang_wr, NULL, "<language>" },
-	{ NULL, prog_rd, NULL /*prog_wr*/, NULL, "" },
 	{ gen_cmd, color_rd, color_wr, rgb_dup, "<color|#rrggbb>" },
 
 	{ exec_cmd, NULL, NULL, NULL, "[<...>]" },

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.121 2004/08/17 06:43:39 miciah Exp $ */
+/* $Id: renderer.c,v 1.122 2004/08/17 06:44:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,14 +169,10 @@ print_document_link(struct document *document, int lineno, unsigned char *line,
 {
 	int pos = int_max(0, line_pos - 1);
 	unsigned char *start = &line[pos];
-	int len = get_uri_length(start,
-				 width - pos);
+	int len = get_uri_length(start, width - pos);
 	int x = pos + expanded;
 
-	if (len && check_link_word(document,
-				   start,
-				   len, x,
-				   lineno))
+	if (len && check_link_word(document, start, len, x, lineno))
 		return line_pos + len;
 
 	return 0;

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.103 2004/06/08 15:08:58 jonas Exp $ */
+/* $Id: task.c,v 1.104 2004/06/08 15:12:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,7 +256,6 @@ ses_imgmap(struct session *ses)
 	struct fragment *fr;
 	struct memory_list *ml;
 	struct menu_item *menu;
-	struct uri *uri = ses->loading_uri;
 
 	if (!cached) {
 		INTERNAL("can't find cache entry");

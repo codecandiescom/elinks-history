@@ -7,7 +7,6 @@ croatian
 dutch
 estonian
 finnish
-french
 galician
 german
 greek

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.76 2004/06/16 21:11:29 zas Exp $ */
+/* $Id: textarea.c,v 1.77 2004/06/16 21:13:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,13 +245,13 @@ int textarea_editor = 0;
 
 void
 textarea_edit(int op, struct terminal *term_, struct form_control *form_,
-	      struct form_state *fs_, struct document_view *doc_view_, struct link *l_)
+	      struct form_state *fs_, struct document_view *doc_view_, struct link *link_)
 {
 	static int form_maxlength;
 	static struct form_state *fs;
 	static struct terminal *term;
 	static struct document_view *doc_view;
-	static struct link *l;
+	static struct link *link;
 	static unsigned char *fn;
 
 	assert (op == 0 || op == 1);
@@ -280,7 +280,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	if (form_) form_maxlength = form_->maxlength;
 	if (fs_) fs = fs_;
 	if (doc_view_) doc_view = doc_view_;
-	if (l_) l = l_;
+	if (link_) link = link_;
 	if (term_) term = term_;
 
 	if (op == 0 && !textarea_editor) {
@@ -338,8 +338,8 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 				fs->value[bread] = 0;
 				fs->state = bread;
 
-				if (doc_view && l)
-					draw_form_entry(term, doc_view, l);
+				if (doc_view && link)
+					draw_form_entry(term, doc_view, link);
 			}
 
 close:

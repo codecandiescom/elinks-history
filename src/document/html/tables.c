@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.173 2004/05/16 14:01:17 zas Exp $ */
+/* $Id: tables.c,v 1.174 2004/05/16 14:04:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,7 @@ struct table {
 	int vcellpadding;
 	int cellspacing;
 	int frame, rules, width, wf;
-	int rw;
+	int real_width;
 	int min_t, max_t;
 	int columns_count;
 	int real_columns_count;	/* Number of columns really allocated. */
@@ -1097,7 +1097,7 @@ distribute_widths(struct table *table, int width)
 
 	tx_size = table->x * sizeof(int);
 	memcpy(table->columns_width, table->min_c, tx_size);
-	table->rw = width;
+	table->real_width = width;
 
 	/* XXX: We don't need to fail if unsuccessful.  See below. --Zas */
 	u = fmem_alloc(table->x);
@@ -1907,9 +1907,9 @@ again:
 		distribute_widths(table, width);
 
 	if (!part->document && part->box.x == 1) {
-		int ww = table->rw + margins;
+		int ww = table->real_width + margins;
 
-		int_bounds(&ww, table->rw, par_format.width);
+		int_bounds(&ww, table->real_width, par_format.width);
 		int_lower_bound(&part->box.width, ww);
 		part->cy += table->rh;
 
@@ -1921,7 +1921,7 @@ again:
 #endif
 
 	{
-		int ww = par_format.width - table->rw;
+		int ww = par_format.width - table->real_width;
 
 		if (align == AL_CENTER)
 			x = (ww + par_format.leftmargin
@@ -1937,7 +1937,7 @@ again:
 	get_table_heights(table);
 
 	if (!part->document) {
-		int_lower_bound(&part->box.width, table->rw + margins);
+		int_lower_bound(&part->box.width, table->real_width + margins);
 		part->cy += table->rh;
 		goto ret2;
 	}

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.173 2004/05/31 00:51:13 jonas Exp $ */
+/* $Id: dialogs.c,v 1.174 2004/05/31 00:58:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,18 +499,21 @@ options_manager(struct session *ses)
 static void
 lock_keybinding(struct listbox_item *item)
 {
-	object_lock((struct keybinding *)item->udata);
+	if (item->depth == 2)
+		object_lock((struct keybinding *)item->udata);
 }
 
 static void
 unlock_keybinding(struct listbox_item *item)
 {
-	object_unlock((struct keybinding *)item->udata);
+	if (item->depth == 2)
+		object_unlock((struct keybinding *)item->udata);
 }
 
 static int
 is_keybinding_used(struct listbox_item *item)
 {
+	if (item->depth == 2) return 0;
 	return is_object_used((struct keybinding *)item->udata);
 }
 
@@ -530,7 +533,7 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term,
 		return NULL;
 
 	case LISTBOX_ALL:
-		break;
+		if (item->depth < 2) return NULL;
 	}
 
 	if (!init_string(&info))
@@ -559,7 +562,7 @@ delete_keybinding_item(struct listbox_item *item, int last)
 {
 	struct keybinding *keybinding = item->udata;
 
-	assert(!is_object_used(keybinding));
+	assert(item->depth == 2 && !is_object_used(keybinding));
 
 	free_keybinding(keybinding);
 }

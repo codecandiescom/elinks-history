@@ -4656,3 +4656,5 @@ struct codepage_desc codepages [] = {
 	{"Unicode UTF-8", aliases_utf_8, table_utf_8},
 	{NULL, NULL, NULL}
 };
+
+#define N_CODEPAGES 35

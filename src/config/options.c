@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.469 2004/12/30 23:50:39 jonas Exp $ */
+/* $Id: options.c,v 1.470 2005/01/01 05:44:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -929,8 +929,7 @@ void
 update_options_visibility(void)
 {
 	update_visibility(config_options->value.tree,
-			  get_opt_rec(config_options,
-				      "config.show_template")->value.number);
+			  get_opt_bool("config.show_template"));
 }
 
 static int

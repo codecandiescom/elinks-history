@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.31 2003/05/14 12:48:37 pasky Exp $ */
+/* $Id: conv.c,v 1.32 2003/05/14 13:06:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,43 +43,49 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		unsigned long number, unsigned int width,
 		unsigned char fillchar)
 {
-	unsigned int start = 0; /* start of the whole string */
+	unsigned int start = 0;
 	unsigned int nlen = 1; /* '0' is one char, we can't have less. */
 	unsigned int pos = 0; /* starting position of the number */
 	unsigned long q = number;
 	int ret = 0;
 
-	if (width < 1 || !s) return -1; /* error */
+	if (width < 1 || !s) return -1;
 
 	/* Count the length of the number in chars. */
-	while (q > 9) { /* 10 -> nlen = 2, 100 -> nlen = 3, ... */
+	/* 10 -> nlen = 2, 100 -> nlen = 3, ... */
+	while (q > 9) {
 		nlen++;
 		q /= 10;
 	}
 
-	if (nlen > width) { /* max. width attained, truncate */
+	/* If max. width attained, truncate. */
+	if (nlen > width) {
 		ret = nlen;
 		nlen = width;
 	}
 
 	if (slen) {
-		start = *slen; /* Starting at s[*slen]. */
-		*slen += nlen; /* update length */
-		pos += start; /* new position of the number */
+		start = *slen;
+		*slen += nlen;
+		pos += start;
 	}
 
 	/* Fill left space with fillchar. */
 	if (fillchar) {
-		unsigned int pad = width - nlen; /* ie. width = 4 nlen = 2 -> pad = 2 */
+		/* ie. width = 4 nlen = 2 -> pad = 2 */
+		unsigned int pad = width - nlen;
 
 		if (pad) {
-			if (slen) *slen += pad; /* update length */
-			pos += pad; /* new position of the number */
+			/* Relocate the number's start. */
+			if (slen) *slen += pad;
+			pos += pad;
+
+			/* Pad. */
 			while (pad) s[--pad + start] = fillchar;
 		}
 	}
 
-	s[pos + nlen] = '\0'; /* Always add nul char at end of string */
+	s[pos + nlen] = '\0';
 
 	/* Now write number starting from end. */
 	while (nlen) {

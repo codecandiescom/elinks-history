@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.3 2003/05/10 20:06:27 zas Exp $ */
+/* $Id: snprintf.c,v 1.4 2003/06/07 00:35:46 jonas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -86,6 +86,14 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
+#ifndef VA_COPY
+#ifdef HAVE_VA_COPY
+#define VA_COPY(dest, src) __va_copy(dest, src)
+#else
+#define VA_COPY(dest, src) (dest) = (src)
+#endif
+#endif
+
 #if defined(HAVE_SNPRINTF) && defined(HAVE_VSNPRINTF) && defined(HAVE_C99_VSNPRINTF)
 
 /* only include stdio.h if we are not re-defining snprintf or vsnprintf */
@@ -113,14 +121,6 @@ void dummy_snprintf(void) {}
 /* free memory if the pointer is valid and zero the pointer */
 #ifndef SAFE_FREE
 #define SAFE_FREE(x) do { if ((x)) { free((x)); (x) = NULL; } } while(0)
-#endif
-
-#ifndef VA_COPY
-#ifdef HAVE_VA_COPY
-#define VA_COPY(dest, src) __va_copy(dest, src)
-#else
-#define VA_COPY(dest, src) (dest) = (src)
-#endif
 #endif
 
 static size_t dopr(char *buffer, size_t maxlen, const char *format,

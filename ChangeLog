@@ -1,3 +1,176 @@
+Fri May 10 22:06:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* README:
+
+	Corrected some obsolete statements about ELinks, added description
+	of differences between Links and ELinks.  
+
+Fri May 10 21:38:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, dialogs/info.c:
+
+	DEBUG on compilation fixes, added to features list.  
+
+Fri May 10 21:26:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in, src/links.h, src/setup.h:
+
+	Turn DEBUG off by default, could be enabled thru configure.  
+
+Fri May 10 17:53:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/tables.c:
+
+	Disabled famous well-known and many-errors-catching internal() "cell
+	is now wider" finally (by mikulas, from 0.97).  
+
+Fri May 10 17:50:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+
+	Big forms are slightly faster - we don't uselessly check unused
+	input tags (I hope that's it ;) (by mikulas, from 0.97).  
+
+Fri May 10 17:46:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+
+	Default value of cols attribute of textarea is now
+	HTML_DEFAULT_INPUT_SIZE, instead of 20 (by mikulas, from 0.97).  
+
+Fri May 10 17:45:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+
+	Tread LF as space in attributes (by mikulas, from 0.97).  
+
+Fri May 10 17:43:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+
+	Proccess even HTML code like <font size=1<b> (unterminated tag
+	followed by another tag) correctly (by mikulas, from 0.97).  
+
+Fri May 10 17:35:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/menu.c:
+
+	Move ending field of file_menu22[] outside #ifdef LEAK_DEBUG (by
+	mikulas, from 0.97).  
+
+Fri May 10 17:34:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	End doesn't skip to next line when wrapping in textarea (by mikulas,
+	from 0.97).  
+
+Fri May 10 17:32:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/bfu.c:
+
+	In menu offered by ^W, last item is selected initially (by mikulas,
+	from 0.97).  
+
+Fri May 10 17:16:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Fixed OS/2 crash when user attempted to insert link addr to
+	clipboard, but no link was selected (by mikulas, from 0.97).  
+
+Fri May 10 17:14:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/bfu.c:
+
+	Fixed OS/2 crash when user attempted to paste empty clipboard.  
+
+Fri May 10 17:12:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Swapped x and y entries when reporting image in form (by mikulas,
+	from 0.97).  
+
+Fri May 10 17:09:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/document/download.c, src/lowlevel/terminal.h,
+	src/osdep/os_dep.c, src/osdep/os_dep.h, src/osdep/win32.c:
+
+	Win32 stuff - many bugfixes, more win32-specific functions, better
+	cygwin support, etc (by mikulas, from 0.97).  
+
+Fri May 10 16:25:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/secsave.c:
+
+	Include unistd.h for unlink() ;).  
+
+Fri May 10 16:23:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/secsave.c:
+
+	File is unlink()ed before rename()ing in secsave routines. This is
+	because of OS/2 which needs that. Reported by someone who I can't
+	remember now :( before some time already. (by mikulas, from 0.97) 
+
+Fri May 10 16:20:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/kbdbind.c, document/view.c, document/html/tables.c,
+	intl/charsets.c:
+
+	Fixed name clashes on MacOS X (by mikulas, from 0.97).  
+
+Fri May 10 13:27:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Enable ^[[11m hack by default (by mikulas, from 0.97).  
+
+Fri May 10 13:26:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/: html/renderer.c, view.c:
+
+	Don't decode and back encode hidden form items (by mikulas, from
+	0.97).  
+
+Fri May 10 13:06:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/lowlevel/sysname.c:
+
+	Check for popen(), always default system_name to SYSTEM_NAME if not
+	available.  
+
+Fri May 10 12:46:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/error.c:
+
+	Fix of zas' tidyup.  
+
+Fri May 10 09:27:08 2002  Laurent Monin <zas@norz.org>:
+
+	* src/ssl/: connect.c, ssl.c:
+
+	Tidy up.  
+
+Fri May 10 09:19:14 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	Tidy up.  
+
+Fri May 10 09:03:33 2002  Laurent Monin <zas@norz.org>:
+
+	* src/intl/language.c:
+
+	Tidy up.  
+
+Fri May 10 08:53:37 2002  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Tidy up.  
+
 Thu May  9 21:32:27 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/file.c:

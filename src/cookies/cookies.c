@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.187 2004/11/12 09:49:04 zas Exp $ */
+/* $Id: cookies.c,v 1.188 2004/11/19 15:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,6 @@
 static int cookies_nosave = 0;
 
 static INIT_LIST_HEAD(cookies);
-static INIT_LIST_HEAD(cookie_queries);
 
 struct c_domain {
 	LIST_HEAD(struct c_domain);
@@ -263,8 +262,6 @@ is_domain_security_ok(unsigned char *domain, unsigned char *server, int server_l
 	if (need_dots > 0) return 0;
 	return 1;
 }
-
-static void accept_cookie_dialog(struct session *ses, void *data);
 
 void
 set_cookie(struct uri *uri, unsigned char *str)
@@ -554,47 +551,6 @@ accept_cookie_never(void *idp)
 	reject_cookie(idp);
 }
 #endif
-
-/* TODO: Store cookie in data arg. --jonas*/
-static void
-accept_cookie_dialog(struct session *ses, void *data)
-{
-	struct cookie *cookie = cookie_queries.next;
-	struct string string;
-
-	assert(ses);
-
-	if (list_empty(cookie_queries)
-	    || !init_string(&string))
-		return;
-
-	del_from_list(cookie);
-
-#ifdef HAVE_STRFTIME
-	if (cookie->expires) {
-		add_date_to_string(&string, get_opt_str("ui.date_format"), &cookie->expires);
-	} else
-#endif
-		add_to_string(&string, _("at quit time", ses->tab->term));
-
-	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-		N_("Accept cookie?"), ALIGN_LEFT,
-		msg_text(ses->tab->term, N_("Do you want to accept a cookie "
-		"from %s?\n\n"
-		"Name: %s\n"
-		"Value: %s\n"
-		"Domain: %s\n"
-		"Expires: %s\n"
-		"Secure: %s\n"),
-		cookie->server->host, cookie->name, cookie->value,
-		cookie->domain, string.source,
-		_(cookie->secure ? N_("yes") : N_("no"), ses->tab->term)),
-		cookie, 2,
-		N_("Accept"), accept_cookie, B_ENTER,
-		N_("Reject"), free_cookie, B_ESC);
-
-	done_string(&string);
-}
 
 /* Check whether domain is matching server
  * Ie.

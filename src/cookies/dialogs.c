@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.73 2004/11/19 10:04:45 zas Exp $ */
+/* $Id: dialogs.c,v 1.74 2004/11/19 15:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,50 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
+
+
+INIT_LIST_HEAD(cookie_queries);
+
+/* TODO: Store cookie in data arg. --jonas*/
+void
+accept_cookie_dialog(struct session *ses, void *data)
+{
+	struct cookie *cookie = cookie_queries.next;
+	struct string string;
+
+	assert(ses);
+
+	if (list_empty(cookie_queries)
+	    || !init_string(&string))
+		return;
+
+	del_from_list(cookie);
+
+#ifdef HAVE_STRFTIME
+	if (cookie->expires) {
+		add_date_to_string(&string, get_opt_str("ui.date_format"), &cookie->expires);
+	} else
+#endif
+		add_to_string(&string, _("at quit time", ses->tab->term));
+
+	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+		N_("Accept cookie?"), ALIGN_LEFT,
+		msg_text(ses->tab->term, N_("Do you want to accept a cookie "
+		"from %s?\n\n"
+		"Name: %s\n"
+		"Value: %s\n"
+		"Domain: %s\n"
+		"Expires: %s\n"
+		"Secure: %s\n"),
+		cookie->server->host, cookie->name, cookie->value,
+		cookie->domain, string.source,
+		_(cookie->secure ? N_("yes") : N_("no"), ses->tab->term)),
+		cookie, 2,
+		N_("Accept"), accept_cookie, B_ENTER,
+		N_("Reject"), free_cookie, B_ESC);
+
+	done_string(&string);
+}
 
 
 static void

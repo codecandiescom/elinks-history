@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.567 2004/07/28 12:25:00 jonas Exp $ */
+/* $Id: view.c,v 1.568 2004/07/28 15:15:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -748,7 +748,9 @@ static enum frame_event_status
 frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	enum frame_event_status status = FRAME_EVENT_REFRESH;
-	struct link *link = get_link_at_coordinates(doc_view, ev->x, ev->y);
+	int x = ev->x;
+	int y = ev->y;
+	struct link *link = get_link_at_coordinates(doc_view, x, y);
 
 	if (check_mouse_wheel(ev)) {
 		if (!check_mouse_action(ev, B_DOWN)) {
@@ -785,17 +787,17 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 		/* XXX: This is code duplication with kbd handlers. But
 		 * repeatcount-free here. */
 
-		if (ev->y < scrollmargin) {
+		if (y < scrollmargin) {
 			scroll_mouse_up(ses, doc_view);
 		}
-		if (ev->y >= doc_view->box.height - scrollmargin) {
+		if (y >= doc_view->box.height - scrollmargin) {
 			scroll_mouse_down(ses, doc_view);
 		}
 
-		if (ev->x < scrollmargin * 2) {
+		if (x < scrollmargin * 2) {
 			scroll_mouse_left(ses, doc_view);
 		}
-		if (ev->x >= doc_view->box.width - scrollmargin * 2) {
+		if (x >= doc_view->box.width - scrollmargin * 2) {
 			scroll_mouse_right(ses, doc_view);
 		}
 

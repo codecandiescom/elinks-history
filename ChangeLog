@@ -1,3 +1,73 @@
+Fri Oct  1 16:03:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/menu.c, protocol/proxy.c, util/memory.c,
+	viewer/text/form.c, viewer/text/textarea.c:
+
+	#define _GNU_SOURCE only if it's not defined yet - necessary for
+	those a little wilder systems.  
+
+Fri Oct  1 16:02:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Load imported CSS documents as additional files. It should fix CSS
+	in frames issue reported by pasky and me. I have a bloated patch
+	(that I will stash for now) which tries to add CSS magic numbers for
+	child frames to the parents but it doesn.t look like it is needed.
+	Could be that the get_cached_document() will do it implicit when a
+	CSS document imported from a frame is loaded and the whole frame set
+	is forced to be rerendered.  
+
+Fri Oct  1 14:38:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Dammit broke make dist when I attempted to add doc/ files.  
+
+Fri Oct  1 10:52:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	If there are no non-element nodes after the last element node make 
+	sure that we flush to the end of the cache entry source including 
+	the '>' of the last element tag if it has one. (bug 519) 
+
+Fri Oct  1 07:15:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Attempt to fix bug 517, which leads to an infinite loop. Just break
+	if read_encoded returns an error.  
+
+Fri Oct  1 01:14:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Drop some 'support' words. If there was no support for the feature
+	it wouldn't be mentioned in this file.  
+
+Fri Oct  1 01:12:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/config/options.inc, src/protocol/smb/smb.c:
+
+	Add option protocol.smb.credentials specifying a credential file
+	passed using -A flag to smbclient. Fixes bug 514. Patch by Sergey
+	Starosek <star@sunbay.com>.  
+
+Fri Oct  1 00:42:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	search_link_text(): Always check the wraparound condition even if no
+	matching is performed. Fixes bug 513.  
+
+Fri Oct  1 00:40:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	search_link_text(): Simplify the checking of wrapping around only
+	once.  
+
 Thu Sep 30 21:18:36 2004  Laurent Monin <zas@norz.org>:
 
 	* po/pl.po:

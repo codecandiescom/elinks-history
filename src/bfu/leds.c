@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.20 2003/08/30 00:27:48 jonas Exp $ */
+/* $Id: leds.c,v 1.21 2003/08/30 01:15:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,13 +48,6 @@ static int timer_duration_backup = 0;
 static int redraw_timer = -1;
 static int drawing = 0;
 
-/* The default hardcoded led colors (for no good reason ;) */
-#define LED_BACKGROUND_COLOR	0x000000
-#define LED_FOREGROUND_COLOR	0xFEEDED
-
-static struct color_pair led_color = INIT_COLOR_PAIR(LED_BACKGROUND_COLOR,
-						     LED_FOREGROUND_COLOR);
-
 static void redraw_leds(void *);
 
 void
@@ -65,7 +58,6 @@ init_leds(void)
 	for (i = 0; i < LEDS_COUNT; i++) {
 		leds[i].number = i;
 		leds[i].value = '-';
-		leds[i].fgcolor = LED_FOREGROUND_COLOR;
 		leds[i].__used = 0;
 		leds_backup[i] = 0; /* assure first redraw */
 	}
@@ -86,7 +78,18 @@ done_leds(void)
 void
 draw_leds(struct terminal *term)
 {
+	/* We need a working copy because changing members of @led_color is
+	 * bad since we might not be the only user. */
+	struct color_pair color;
+	struct color_pair *led_color;
 	int i;
+
+	led_color = get_bfu_color(term, "status.status-text");
+	if (!led_color) {
+		if (!drawing && redraw_timer < 0)
+			redraw_timer = install_timer(100, redraw_leds, NULL);
+		return;
+	}
 
 	/* This should be done elsewhere, but this is very nice place where we
 	 * could do that easily. */
@@ -98,24 +101,26 @@ draw_leds(struct terminal *term)
 
 		for (i = l - 1; i >= 0; i--)
 			draw_char(term, term->x - LEDS_COUNT - 3 - (l - i),
-				 term->y - 1, s[i], 0, &led_color);
+				  term->y - 1, s[i], 0, led_color);
 	}
 
 	/* We must shift the whole thing by one char to left, because we don't
 	 * draft the char in the right-down corner :(. */
 
 	draw_char(term, term->x - LEDS_COUNT - 3, term->y - 1,
-		  '[', 0,  &led_color);
+		  '[', 0,  led_color);
+
+	color.background = led_color->background;
 
 	for (i = 0; i < LEDS_COUNT; i++) {
-		struct color_pair color = INIT_COLOR_PAIR(LED_BACKGROUND_COLOR,
-							  leds[i].fgcolor);
+		color.foreground = leds[i].__used ? leds[i].fgcolor
+						  : led_color->foreground;
 
 		draw_char(term, term->x - LEDS_COUNT - 2 + i, term->y - 1,
 			  leds[i].value, 0, &color);
 	}
 
-	draw_char(term, term->x - 2, term->y - 1, ']', 0,  &led_color);
+	draw_char(term, term->x - 2, term->y - 1, ']', 0, led_color);
 
 	/* Redraw each 100ms. */
 	if (!drawing && redraw_timer < 0)
@@ -181,7 +186,6 @@ unregister_led(struct led *led)
 	assertm(led->__used, "Attempted to unregister unused led!");
 	led->__used = 0;
 	led->value = '-';
-	led->fgcolor = LED_FOREGROUND_COLOR;
 }
 
 #endif

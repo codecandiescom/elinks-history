@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.2 2002/06/17 08:01:35 pasky Exp $ */
+/* $Id: string.h,v 1.3 2002/06/17 08:08:11 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -21,10 +21,6 @@ void add_bytes_to_str(unsigned char **, int *, unsigned char *, int);
 void add_chr_to_str(unsigned char **, int *, unsigned char);
 int xstrcmp(unsigned char *, unsigned char *);
 int casecmp(unsigned char *, unsigned char *, int);
-
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
-#endif
 
 #ifndef HAVE_STRCASESTR
 unsigned char *strcasestr(unsigned char *, unsigned char *);

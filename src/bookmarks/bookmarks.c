@@ -1,5 +1,9 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.29 2002/06/17 08:01:34 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.30 2002/06/17 08:08:10 pasky Exp $ */
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

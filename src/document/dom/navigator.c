@@ -1,5 +1,5 @@
 /* The DOM tree navigation interface */
-/* $Id: navigator.c,v 1.5 2004/10/14 23:16:35 jonas Exp $ */
+/* $Id: navigator.c,v 1.6 2004/11/04 14:22:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,10 +75,11 @@ done_dom_navigator(struct dom_navigator *navigator)
 struct dom_node *
 push_dom_node(struct dom_navigator *navigator, struct dom_node *node)
 {
-	dom_navigator_callback_T callback = navigator->callbacks[node->type];
+	dom_navigator_callback_T callback;
 	struct dom_navigator_state *state;
 
 	assert(navigator && node);
+	assert(0 < node->type && node->type < DOM_NODES);
 
 	if (navigator->depth > DOM_NAVIGATOR_MAX_DEPTH) {
 		done_dom_node(node);
@@ -112,6 +113,7 @@ push_dom_node(struct dom_navigator *navigator, struct dom_node *node)
 	 * in the callbacks */
 	navigator->depth++;
 
+	callback = navigator->callbacks[node->type];
 	if (callback) {
 		node = callback(navigator, node, state->data);
 

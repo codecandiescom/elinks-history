@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.240 2003/11/17 16:59:19 pasky Exp $ */
+/* $Id: session.c,v 1.241 2003/11/17 17:01:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1220,7 +1220,6 @@ create_basic_session(struct window *tab)
 #ifdef USE_LEDS
 	init_led_panel(&ses->leds);
 	ses->ssl_led = register_led(ses, 0);
-	if (ses->ssl_led) ses->ssl_led->__used = 1;
 #endif
 
 	add_to_list(sessions, ses);

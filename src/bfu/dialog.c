@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.34 2003/06/07 12:05:11 pasky Exp $ */
+/* $Id: dialog.c,v 1.35 2003/06/07 12:46:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,6 @@ void
 dialog_func(struct window *win, struct event *ev, int fwd)
 {
 	int i;
-	struct terminal *term = win->term;
 	struct dialog_data *dlg = win->data;
 
 	dlg->win = win;

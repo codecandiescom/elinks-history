@@ -1,4 +1,4 @@
-/* $Id: navigator.h,v 1.2 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: navigator.h,v 1.3 2004/09/25 22:19:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOM_NAVIGATOR_H
 #define EL__DOCUMENT_DOM_NAVIGATOR_H
@@ -86,7 +86,7 @@ get_dom_navigator_state(struct dom_navigator *navigator, int top_offset)
 		if (((item) = &(nav)->states[(pos)]))
 
 #define foreachback_dom_state(nav, item, pos)			\
-	for ((pos) = (nav)->depth - 1; (pos) > 1; (pos)--)	\
+	for ((pos) = (nav)->depth - 1; (pos) > 0; (pos)--)	\
 		if (((item) = &(nav)->states[(pos)]))
 
 /* Dive through the navigator states in search for the specified match. */

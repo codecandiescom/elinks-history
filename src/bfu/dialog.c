@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.32 2003/05/06 15:30:41 pasky Exp $ */
+/* $Id: dialog.c,v 1.33 2003/05/17 10:56:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,16 +69,17 @@ redraw_dialog(struct dialog_data *dlg)
 	int y = dlg->y + DIALOG_TOP_BORDER;
 	struct terminal *term = dlg->win->term;
 	int dialog_title_color = get_bfu_color(term, "dialog.title");
+	unsigned char *title = _(dlg->dlg->title, term);
 
 	draw_frame(term, x, y,
 		   dlg->xw - 2 * DIALOG_LEFT_BORDER,
 		   dlg->yw - 2 * DIALOG_TOP_BORDER,
 		   get_bfu_color(term, "dialog.frame"), DIALOG_FRAME);
 
-	i = strlen(_(dlg->dlg->title, term));
+	i = strlen(title);
 	x = (dlg->xw - i) / 2 + dlg->x;
 	print_text(term, x - 1, y, 1, " ", dialog_title_color);
-	print_text(term, x, y, i, _(dlg->dlg->title, term), dialog_title_color);
+	print_text(term, x, y, i, title, dialog_title_color);
 	print_text(term, x + i, y, 1, " ", dialog_title_color);
 
 	for (i = 0; i < dlg->n; i++)

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.88 2004/01/24 23:33:34 pasky Exp $ */
+/* $Id: info.c,v 1.89 2004/01/24 23:50:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ push_toggle_keys_display_button(void *data)
 void
 menu_keys(struct terminal *term, void *d, struct session *ses)
 {
-	enum action actions[] = {
+	enum main_action actions[] = {
 		ACT_MENU,
 		ACT_QUIT,
 		ACT_DOWN,

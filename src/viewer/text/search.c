@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.155 2004/01/14 17:10:01 jonas Exp $ */
+/* $Id: search.c,v 1.156 2004/01/24 23:50:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -966,7 +966,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	int charpos = strlen(typeahead);
 	/* The link interval in which we are currently searching */
 	int upper_link, lower_link;
-	enum action action = kbd_action(KM_EDIT, event, NULL);
+	enum edit_action action = kbd_action(KM_EDIT, event, NULL);
 	int direction, case_sensitive, i;
 
 	if (current_link == -1) current_link = 0;

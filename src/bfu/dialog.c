@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.124 2004/01/24 17:57:58 pasky Exp $ */
+/* $Id: dialog.c,v 1.125 2004/01/24 23:50:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,7 +232,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 		case EV_KBD:
 			{
 			struct widget_data *widget_data = selected_widget(dlg_data);
-			enum action action = kbd_action(KM_MENU, ev, NULL);
+			/* XXX: KM_EDIT ? --pasky */
+			enum menu_action action = kbd_action(KM_MENU, ev, NULL);
 
 			/* First let the widget try out. */
 			if (widget_data->widget->ops->kbd

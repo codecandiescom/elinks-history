@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.358 2004/01/21 10:09:02 witekfl Exp $ */
+/* $Id: view.c,v 1.359 2004/01/24 23:50:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -897,7 +897,7 @@ send_event(struct session *ses, struct term_event *ev)
 
 	if (ev->ev == EV_KBD) {
 		int func_ref;
-		enum action action;
+		enum main_action action;
 
 		if (doc_view && send_to_frame(ses, ev)) return;
 

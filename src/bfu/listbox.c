@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.137 2004/01/14 17:10:00 jonas Exp $ */
+/* $Id: listbox.c,v 1.138 2004/01/24 23:50:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -575,7 +575,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	 * the listbox browser anyway, so what.. */
 
 	switch (ev->ev) {
-		enum action action;
+		enum menu_action action;
 
 		case EV_KBD:
 			action = kbd_action(KM_MENU, ev, NULL);

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.138 2003/10/26 14:58:54 jonas Exp $ */
+/* $Id: main.c,v 1.139 2003/10/26 15:00:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,6 @@
 #include "bfu/leds.h"
 #endif
 #include "bfu/style.h"
-#include "bookmarks/bookmarks.h"
 #include "config/cmdline.h"
 #include "config/conf.h"
 #include "config/kbdbind.h"
@@ -52,14 +51,12 @@
 #include "lowlevel/sysname.h"
 #include "lowlevel/timer.h"
 #include "main.h"
-#include "mime/mime.h"
 #include "protocol/http/auth.h"
 #include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/error.h"
 #include "sched/event.h"
 #include "sched/session.h"
-#include "scripting/scripting.h"
 #include "terminal/kbd.h"
 #include "terminal/screen.h"
 #include "terminal/terminal.h"

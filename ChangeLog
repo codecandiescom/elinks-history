@@ -1,3 +1,102 @@
+Sat Mar 19 17:49:40 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Reorder code.  
+
+Sat Mar 19 17:46:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	do_add_special_bookmark() -> do_add_bookmark().  
+
+Sat Mar 19 17:45:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Merge do_add_special_bookmark() and bookmark_add_add().  
+
+Sat Mar 19 09:40:13 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/perl/hooks.pl:
+
+	It's bigger, yes, but, I believe, much cleaner.  
+	
+	You can now enter "search terms" (with the quotes) in the goto box
+	and it will use your default search engine (or Google).  Use ', `,
+	or ".  
+	
+	New config.pl option: "language".  Set this and you no longer have
+	to enter the "to language" (although you still can) when translating 
+	a page.  
+	
+	Added eff, wired, and slashdot as "news" sources.  Set the config
+	option "news: eff" and the prefixes "news" and "n" will use this.  
+	
+	There are more config options, and they are now documented towards
+	the bottom of the script in a commented sample config.pl.  
+	
+	                                                                    Russ 
+
+Sat Mar 19 09:39:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/elinks.fortune:
+
+	One bit from #elinks that I found quite funny, and a tip about
+	moving bookmarks that I learned yesterday when you told me to check
+	the docs.  
+	
+	Patch by Russ.  
+
+Sat Mar 19 00:45:53 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Mar 19 00:37:21 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.h:
+
+	Typo fixes, thanks to Jonas.  
+
+Sat Mar 19 00:33:22 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Use hotkeys for bookmarks manager buttons.  
+
+Sat Mar 19 00:31:52 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, button.h, dialog.c:
+
+	Add support for hotkeys marked by ~ character in buttons.  
+
+Fri Mar 18 23:56:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Fri Mar 18 23:35:46 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Mar 18 23:25:42 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Drop the [ Clear ] button, this one is too dangerous, so let the
+	user deletes the bookmarks file instead, if needed.  
+
+Fri Mar 18 23:21:01 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Add a new button to bookmarks manager to add a separator.  
+
 Fri Mar 18 14:41:12 2005  Laurent Monin <zas@norz.org>:
 
 	* src/: bookmarks/dialogs.c, config/dialogs.c:

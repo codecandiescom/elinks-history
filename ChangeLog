@@ -1,3 +1,39 @@
+Wed Dec 17 20:28:46 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	More translation update 
+
+Wed Dec 17 19:54:55 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Tranlsation update 
+
+Wed Dec 17 17:42:15 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Dec 17 14:54:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Wed Dec 17 14:05:55 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation fixes.  
+
+Wed Dec 17 13:29:36 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
 Tue Dec 16 20:35:44 2003  Fabio Bonelli <fabiobonelli@libero.it>:
 
 	* src/bookmarks/: bookmarks.c, bookmarks.h:

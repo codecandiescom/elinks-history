@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.114 2003/05/18 13:16:45 pasky Exp $ */
+/* $Id: http.c,v 1.115 2003/05/18 15:13:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,12 +366,6 @@ http_send_header(struct connection *c)
 		return;
 	}
 
-	if (get_opt_int("protocol.http.bugs.http09")) {
-		info->sent_version.major = 0;
-		info->sent_version.minor = 9;
-		goto get_only; /* GET is the only valid method in HTTP/0.9 */
-	}
-
 	post = strchr(c->url, POST_CHAR);
 
 	if (trace) {
@@ -381,7 +375,6 @@ http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "POST ");
 		c->unrestartable = 2;
 	} else {
-get_only:
 		add_to_str(&hdr, &l, "GET ");
 	}
 

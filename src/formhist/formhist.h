@@ -1,8 +1,8 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.h,v 1.9 2003/08/02 17:57:05 jonas Exp $ */
+/* $Id: formhist.h,v 1.10 2003/08/03 00:15:49 jonas Exp $ */
 
-#ifndef EL__FORMSMEM_FORMSMEM_H
-#define EL__FORMSMEM_FORMSMEM_H
+#ifndef EL__FORMHIST_FORMHIST_H
+#define EL__FORMHIST_FORMHIST_H
 
 #include "util/lists.h"
 
@@ -30,4 +30,4 @@ struct list_head *memorize_form(struct session *ses, struct list_head *submit, s
 /* Closes down the form history system. */
 void done_form_history(void);
 
-#endif /* EL__FORMSMEM_FORMSMEM_H */
+#endif /* EL__FORMHIST_FORMHIST_H */

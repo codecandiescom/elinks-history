@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.36 2004/05/24 18:06:51 jonas Exp $ */
+/* $Id: event.c,v 1.37 2004/06/10 15:15:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,7 +203,7 @@ test_queue:
 		term->cwd[MAX_CWD_LEN - 1] = 0;
 
 		term->environment = info->system_env;
-		ev->b = (long) decode_session_info(info->length, (int *) info->data);
+		ev->b = (long) decode_session_info(term, info->length, (int *) info->data);
 		r = sizeof(struct terminal_info) + info->length;
 		/* Fall through */
 	}

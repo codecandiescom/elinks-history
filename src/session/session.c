@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.437 2004/06/10 14:54:29 jonas Exp $ */
+/* $Id: session.c,v 1.438 2004/06/10 15:15:22 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -692,7 +692,7 @@ init_session_info(struct session *base_session, enum remote_session_flags remote
 }
 
 struct initial_session_info *
-decode_session_info(int len, const int *data)
+decode_session_info(struct terminal *term, int len, const int *data)
 {
 	struct initial_session_info *info;
 	struct session *base_session;

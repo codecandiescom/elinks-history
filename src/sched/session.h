@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.138 2004/06/10 14:27:56 jonas Exp $ */
+/* $Id: session.h,v 1.139 2004/06/10 15:15:22 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -191,7 +191,7 @@ print_error_dialog(struct session *ses, enum connection_state state,
 void process_file_requests(struct session *);
 
 struct string *create_session_info(struct string *info, int id, struct list_head *url_list);
-struct initial_session_info *decode_session_info(int len, const int *data);
+struct initial_session_info *decode_session_info(struct terminal *term, int len, const int *data);
 struct initial_session_info *init_session_info(struct session *base_session, enum remote_session_flags remote, unsigned char *uri, int len);
 
 void tabwin_func(struct window *, struct term_event *, int);

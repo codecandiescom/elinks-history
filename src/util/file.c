@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.18 2004/02/09 11:51:38 jonas Exp $ */
+/* $Id: file.c,v 1.19 2004/03/09 15:24:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,25 +24,6 @@
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-/* XXX: On some systems, fgets() won't put NUL at the end of
- * the string. -- Mikulas */
-/* Which systems ??? --Zas */
-inline unsigned char *
-safe_fgets(unsigned char *s, int size, FILE *stream)
-{
-	unsigned char *ret = fgets(s, size, stream);
-
-	if (ret) {
-		unsigned char *p = memchr(s, '\n', size - 2);
-
-		/* Ensure NUL termination. */
-		if (p) *(++p) = '\0';
-		else s[size - 1] = '\0';
-	}
-
-	return ret;
-}
 
 inline int
 file_exists(const unsigned char *filename)
@@ -120,7 +101,7 @@ file_read_line(unsigned char *line, size_t *size, FILE *file, int *lineno)
 		*size = MAX_STR_LEN;
 	}
 
-	while (safe_fgets(line + offset, *size - offset, file)) {
+	while (fgets(line + offset, *size - offset, file)) {
 		unsigned char *linepos = strchr(line + offset, '\n');
 
 		if (!linepos) {

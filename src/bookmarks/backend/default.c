@@ -1,5 +1,5 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.13 2004/01/01 14:24:08 jonas Exp $ */
+/* $Id: default.c,v 1.14 2004/03/09 15:24:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ read_bookmarks_default(FILE *f)
 	int last_depth = 0;
 
 	/* TODO: Ignore lines with bad chars in title or url (?). -- Zas */
-	while (safe_fgets(in_buffer, INBUF_SIZE, f)) {
+	while (fgets(in_buffer, INBUF_SIZE, f)) {
 		unsigned char *title = in_buffer;
 		unsigned char *url;
 		unsigned char *depth_str;

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.68 2004/02/06 22:41:05 jonas Exp $ */
+/* $Id: globhist.c,v 1.69 2004/03/09 15:24:48 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -297,7 +297,7 @@ read_global_history(void)
 	title = in_buffer;
 	global_history.nosave = 1;
 
-	while (safe_fgets(in_buffer, MAX_STR_LEN, f)) {
+	while (fgets(in_buffer, MAX_STR_LEN, f)) {
 		/* Drop ending '\n'. */
 		if (*in_buffer) in_buffer[strlen(in_buffer) - 1] = 0;
 

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.81 2004/02/09 11:33:24 jonas Exp $ */
+/* $Id: inphist.c,v 1.82 2004/03/09 15:24:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ load_input_history(struct input_history *history, unsigned char *filename)
 	if (elinks_home) mem_free(history_file);
 	if (!file) return 0;
 
-	while (safe_fgets(line, MAX_STR_LEN, file)) {
+	while (fgets(line, MAX_STR_LEN, file)) {
 		/* Drop '\n'. */
 		if (*line) line[strlen(line) - 1] = 0;
 		add_to_input_history(history, line, 0);

@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.6 2003/06/08 14:39:57 jonas Exp $ */
+/* $Id: file.h,v 1.7 2004/03/09 15:24:48 zas Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
@@ -23,8 +23,4 @@ unsigned char *get_unique_name(unsigned char *fileprefix);
  * @line is free()d. */
 unsigned char *file_read_line(unsigned char *line, size_t *linesize,
 			      FILE *file, int *linenumber);
-
-/* Wrapper around fgets() that ensures that @buffer is NUL terminated. */
-unsigned char *safe_fgets(unsigned char *buffer, int size, FILE *file);
-
 #endif

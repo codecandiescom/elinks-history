@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.119 2004/02/20 14:41:59 jonas Exp $ */
+/* $Id: cookies.c,v 1.120 2004/03/09 15:24:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -688,7 +688,7 @@ load_cookies(void) {
 	if (elinks_home) mem_free(cookfile);
 	if (!fp) return;
 
-	while (safe_fgets(in_buffer, 6 * MAX_STR_LEN, fp)) {
+	while (fgets(in_buffer, 6 * MAX_STR_LEN, fp)) {
 		struct cookie *cookie;
 		unsigned char *p, *q = in_buffer;
 		enum { NAME = 0, VALUE, SERVER, PATH, DOMAIN, MEMBERS } member;

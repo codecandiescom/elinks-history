@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.77 2004/03/09 14:09:13 zas Exp $ */
+/* $Id: formhist.c,v 1.78 2004/03/09 15:24:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ load_forms_from_file(void)
 	mem_free(file);
 	if (!f) return 0;
 
-	while (safe_fgets(tmp, MAX_STR_LEN, f)) {
+	while (fgets(tmp, MAX_STR_LEN, f)) {
 		unsigned char *p;
 		int dontsave = 0;
 
@@ -212,7 +212,7 @@ load_forms_from_file(void)
 		if (dontsave) form->dontsave = 1;
 
 		/* Fields type, name, value */
-		while (safe_fgets(tmp, MAX_STR_LEN, f)) {
+		while (fgets(tmp, MAX_STR_LEN, f)) {
 			struct submitted_value *sv;
 			unsigned char *type, *name, *value;
 			unsigned char *enc_value;

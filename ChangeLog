@@ -1,3 +1,94 @@
+Tue May 20 22:09:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: version.c, version.h, dialogs/info.c:
+
+	Only print useful version information at backtrace time. A new
+	parameter @more was added to get_dyn_full_version() to handle that..  
+
+Tue May 20 21:54:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/url.c:
+
+	Emit panicking message when addrlen was too bad. We should catch
+	this stuff.  
+
+Tue May 20 21:47:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	Er... static hostbuf is better ;).  
+
+Tue May 20 21:33:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	Fixes, cleanup and optimizations in parse_url(), useless calls to
+	strchr() family were reduced, brackets tests simplified, a
+	typo/compile error introduced by last patch fixed, see diff for more
+	details. Please test extensively.  
+
+Tue May 20 21:27:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/terminal/kbd.c:
+
+	Translate bad chars in terminal string to -. Patch by Karsten and
+	me, fixes bug 168.  
+
+Tue May 20 19:35:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Fixed potential crash pointed out by Sergey.  
+
+Tue May 20 17:56:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/url.c:
+
+	Minor simplification in parse_url(), use safe_strncpy() instead of
+	memcpy() and nulling.  
+
+Tue May 20 17:44:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* INSTALL:
+
+	Added notice about Lua (and its required version).  
+
+Tue May 20 10:10:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/urlhist.c:
+
+	Ooops, forgot initialization of goto_url_history. Fixed.  
+
+Tue May 20 10:07:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: version.c, version.h, config/urlhist.c, config/urlhist.h,
+	dialogs/menu.c, util/encoding.c, util/encoding.h:
+
+	Some global variables are now correctly (i hope) declared as extern
+	in .h files. Compilation with -fno-common is now possible.  
+
+Tue May 20 09:43:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/version.c:
+
+	memset() call is useless, just set first byte to NUL char is
+	sufficient.  
+
+Tue May 20 09:41:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/version.c:
+
+	Use safe_strncpy() instead of memcpy() + strlen() + comparaisons.
+	Pointed out by Miciah.  
+
+Mon May 19 23:10:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	A potential buffer overflow (pointed by Karsten Scholzel) and some
+	minor issues were fixed in IPv6 url handling. Please recheck for bug
+	160.  
+
 Mon May 19 14:12:29 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: Makefile.am, main.c, version.c, version.h, dialogs/info.c,

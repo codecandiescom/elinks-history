@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.272 2004/08/12 05:05:47 miciah Exp $ */
+/* $Id: search.c,v 1.273 2004/08/12 05:13:10 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -948,7 +948,6 @@ print_find_error(struct session *ses, enum find_error find_error)
 {
 	int hit_top = 0;
 	unsigned char *message = NULL;
-	enum msgbox_flags flags = 0;
 
 	switch (find_error) {
 		case FIND_ERROR_HIT_TOP:
@@ -978,7 +977,7 @@ print_find_error(struct session *ses, enum find_error find_error)
 	}
 
 	if (message)
-		msg_box(ses->tab->term, NULL, flags,
+		msg_box(ses->tab->term, NULL, 0,
 			N_("Search"), ALIGN_CENTER,
 			message,
 			NULL, 1,

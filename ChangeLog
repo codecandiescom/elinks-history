@@ -1,3 +1,9 @@
+Mon Feb 24 12:12:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Fixed estimated time displayed when resuming download of some file.  
+
 Wed Feb 19 17:26:44 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/viewer/text/view.c:

@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.54 2004/12/02 16:34:01 zas Exp $ */
+/* $Id: exmode.c,v 1.55 2005/03/05 21:02:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@
 
 static INIT_INPUT_HISTORY(exmode_history);
 
-typedef int (*exmode_handler)(struct session *, unsigned char *, unsigned char *);
+typedef int (*exmode_handler_T)(struct session *, unsigned char *, unsigned char *);
 
 static int
 exmode_action_handler(struct session *ses, unsigned char *command,
@@ -79,7 +79,7 @@ exmode_confcmd_handler(struct session *ses, unsigned char *command,
 	return err;
 }
 
-static const exmode_handler exmode_handlers[] = {
+static const exmode_handler_T exmode_handlers[] = {
 	exmode_action_handler,
 	exmode_confcmd_handler,
 	NULL,

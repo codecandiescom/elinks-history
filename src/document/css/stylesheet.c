@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.3 2004/01/24 03:35:15 jonas Exp $ */
+/* $Id: stylesheet.c,v 1.4 2004/01/25 02:08:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,6 +54,10 @@ init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 void
 done_css_stylesheet(struct css_stylesheet *css)
 {
+	if (!list_empty(css->imports)) {
+		free_string_list(&css->imports);
+	}
+
 	while (!list_empty(css->selectors)) {
 		struct css_selector *selector = css->selectors.next;
 

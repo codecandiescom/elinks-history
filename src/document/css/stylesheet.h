@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.4 2004/01/25 01:33:43 jonas Exp $ */
+/* $Id: stylesheet.h,v 1.5 2004/01/25 02:08:40 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -43,12 +43,16 @@ struct css_selector {
  * user stylesheet so it can contain stuff from both <style> tags and
  * @import'ed CSS documents. */
 struct css_stylesheet {
+	/* The list of URIs the stylesheet imports. */
+	struct list_head imports; /* -> struct string_list_item */
+
 	/* The list of selectors. */
 	struct list_head selectors; /* -> struct css_selector */
 };
 
 #define INIT_CSS_STYLESHEET(css)		\
 	struct css_stylesheet css = {		\
+		{ D_LIST_HEAD(css.imports) },	\
 		{ D_LIST_HEAD(css.selectors) },	\
 	}
 

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.44 2004/01/25 01:27:08 jonas Exp $ */
+/* $Id: parser.c,v 1.45 2004/01/25 02:08:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,8 +119,17 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 
 	/* Skip skip skip that code */
 	switch (token->type) {
-		case CSS_TOKEN_CHARSET:
 		case CSS_TOKEN_IMPORT:
+			token = get_next_css_token(scanner);
+			if (token->type == CSS_TOKEN_STRING) {
+				add_to_string_list(&css->imports,
+						   token->string + 1,
+						   token->length - 2);
+			}
+			skip_css_tokens(scanner, ';');
+			break;
+
+		case CSS_TOKEN_CHARSET:
 			skip_css_tokens(scanner, ';');
 			break;
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.52 2002/10/12 13:35:52 pasky Exp $ */
+/* $Id: ftp.c,v 1.53 2002/10/12 13:57:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -944,6 +944,9 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 	}
 
 	if (ftp_info->mtime) {
+		if (ftp_info->mtime == -1)
+			sprintf(tmp, "%-21s ", "-");
+		else
 		if (FTPPARSE_MTIME_LOCAL == ftp_info->mtimetype)
 			strftime(tmp, 128, "%d-%b-%Y %H:%M LOC ",
 					localtime(&ftp_info->mtime));
@@ -1113,37 +1116,24 @@ out_of_mem:
 		if (url_data) A(url_data);
 		A(ftp_dirlist_head3);
 		if (url_data && *url_data) {
-			unsigned char * str = init_str();
-			int strl = 0;
-			
-			if (str) {
-				if (colorize_dir) {
-					/* The <b> is here for the case when we've
-					* use_document_colors off. */
-					add_to_str(&str, &strl, "<font color=\"");
-					add_to_str(&str, &strl, dircolor);
-					add_to_str(&str, &strl, "\"><b>");
-				}
-				add_to_str(&str, &strl, "[DIR] ");
-				if (colorize_dir) {
-					add_to_str(&str, &strl, "</b></font>");
-				}
-				add_to_str(&str, &strl, "                                 - ");
-				if (colorize_dir) {
-					add_to_str(&str, &strl, "<font color=\"");
-					add_to_str(&str, &strl, dircolor);
-					add_to_str(&str, &strl, "\"><b>");
-				}
-				add_to_str(&str, &strl, "<A HREF=\"../\">..</A>");
-				if (colorize_dir) {
-					add_to_str(&str, &strl, "</b></font>");
-				}
-				add_chr_to_str(&str, &strl, '\n');
+			struct ftpparse ftp_info;
 
-				add_fragment(conn->cache, conn->from, str, strl);
-				conn->from += strl;
-				mem_free(str);
-			}
+			ftp_info.name = "..";
+			ftp_info.namelen = 2;
+			ftp_info.flagtrycwd = 1;
+			ftp_info.flagtryretr = 0;
+			ftp_info.sizetype = FTPPARSE_SIZE_UNKNOWN;
+			ftp_info.size = 0;
+			ftp_info.mtimetype = FTPPARSE_MTIME_UNKNOWN;
+			ftp_info.mtime = -1;
+			ftp_info.idtype = FTPPARSE_ID_UNKNOWN;
+			ftp_info.id = NULL;
+			ftp_info.idlen = 0;
+			ftp_info.symlink = NULL;
+			ftp_info.symlinklen = 0;
+
+			display_dir_entry(conn->cache, &conn->from, &conn->tries,
+					  colorize_dir, dircolor, &ftp_info);
 		}
 		
 		if (url_data)

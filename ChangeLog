@@ -1,3 +1,44 @@
+Wed Feb  2 17:33:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, sched/connection.c, protocol/proxy.c,
+	protocol/proxy.h, sched/connection.h, sched/error.c:
+
+	Try to detect errors in the proxy configuration and pop up an
+	appropriate error message instead of OOM.  
+
+Wed Feb  2 12:58:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Update changelog to close bug 293298 (infinite refresh download).
+	Add debian/watch file by Hugo Haas.  
+
+Wed Feb  2 01:01:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/README:
+
+	Advice to check-po. Rewrap.  
+
+Tue Feb  1 23:51:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.am:
+
+	Don't print the shell code and echo the language code.  
+
+Tue Feb  1 23:47:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.am:
+
+	Make a special check-po rule so not to b0rk when generating the
+	catalogs.  
+
+Tue Feb  1 23:38:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.am:
+
+	Allways perform a verbose check when compiling .po into .gmo files
+	to catch errors.  
+
 Tue Feb  1 01:01:31 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* contrib/perl/hooks.pl:

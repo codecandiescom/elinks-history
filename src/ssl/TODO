@@ -1,0 +1,10 @@
+We should add also support for:
+
+* cryptlib (http://www.cs.auckland.ac.nz/~pgut001/cryptlib/ - it is distributed
+ in zip form which doesn't look very business-like, and it lacks manual in a
+ format conviently readable for me; however, they say it is damn fast and very
+ easy to use)
+
+* NSS (http://www.mozilla.org/projects/security/pki/nss/ - it could be pretty
+ widespread and nicely tested by mozilla, however it scares me, it looks to be
+ pretty complex and already needing some certificates db generated etc)

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.26 2004/04/14 21:38:04 jonas Exp $ */
+/* $Id: event.c,v 1.27 2004/04/14 22:30:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,16 +39,57 @@ term_send_event(struct terminal *term, struct term_event *ev)
 	assert(ev && term && !list_empty(term->windows));
 	if_assert_failed return;
 
-	/* We need to send event to correct tab, not to the first one. --karpov */
-	/* ...if we want to send it to a tab at all. --pasky */
-	win = term->windows.next;
-	if (win->type == WT_TAB) {
-		win = get_current_tab(term);
-		assertm(win, "No tab to send the event to!");
-		if_assert_failed return;
-	}
+	switch (ev->ev) {
+	case EV_INIT:
+	case EV_REDRAW:
+	case EV_RESIZE:
+		if (ev->x < 0 || ev->y < 0) {
+			ERROR(_("Bad terminal size: %d, %d", term),
+			      (int) ev->x, (int) ev->y);
+			break;
+		}
 
-	win->handler(win, ev, 0);
+		resize_screen(term, ev->x, ev->y);
+		clear_terminal(term);
+		erase_screen(term);
+		term->redrawing = 1;
+		/* Note that you do NOT want to ever go and create new
+		 * window inside EV_INIT handler (it'll get second
+		 * EV_INIT here). Perhaps the best thing you could do
+		 * is registering a bottom-half handler which will open
+		 * additional windows.
+		 * --pasky */
+		if (ev->ev == EV_RESIZE) {
+			/* We want to propagate EV_RESIZE even to inactive
+			 * tabs! Nothing wrong will get drawn (in the final
+			 * result) as the active tab is always the first one,
+			 * thus will be drawn last here. Thanks, Witek!
+			 * --pasky */
+			foreachback (win, term->windows)
+				win->handler(win, ev, 0);
+
+		} else {
+			foreachback (win, term->windows)
+				if (!inactive_tab(win))
+					win->handler(win, ev, 0);
+		}
+		term->redrawing = 0;
+		break;
+
+	case EV_MOUSE:
+	case EV_KBD:
+	case EV_ABORT:
+		/* We need to send event to correct tab, not to the first one. --karpov */
+		/* ...if we want to send it to a tab at all. --pasky */
+		win = term->windows.next;
+		if (win->type == WT_TAB) {
+			win = get_current_tab(term);
+			assertm(win, "No tab to send the event to!");
+			if_assert_failed return;
+		}
+
+		win->handler(win, ev, 0);
+	}
 }
 
 static void
@@ -158,43 +199,9 @@ test_queue:
 	}
 	case EV_REDRAW:
 	case EV_RESIZE:
-	{
-		struct window *win;
-
-send_redraw:
-		if (ev->x < 0 || ev->y < 0) {
-			ERROR(_("Bad terminal size: %d, %d", term),
-			      (int) ev->x, (int) ev->y);
-			break;
-		}
-
-		resize_screen(term, ev->x, ev->y);
-		clear_terminal(term);
-		erase_screen(term);
-		term->redrawing = 1;
-		/* Note that you do NOT want to ever go and create new
-		 * window inside EV_INIT handler (it'll get second
-		 * EV_INIT here). Perhaps the best thing you could do
-		 * is registering a bottom-half handler which will open
-		 * additional windows.
-		 * --pasky */
-		if (ev->ev == EV_RESIZE) {
-			/* We want to propagate EV_RESIZE even to inactive
-			 * tabs! Nothing wrong will get drawn (in the final
-			 * result) as the active tab is always the first one,
-			 * thus will be drawn last here. Thanks, Witek!
-			 * --pasky */
-			foreachback (win, term->windows)
-				win->handler(win, ev, 0);
-
-		} else {
-			foreachback (win, term->windows)
-				if (!inactive_tab(win))
-					win->handler(win, ev, 0);
-		}
-		term->redrawing = 0;
+		term_send_event(term, ev);
 		break;
-	}
+
 	case EV_MOUSE:
 #ifdef CONFIG_MOUSE
 		reset_timer();
@@ -209,7 +216,8 @@ send_redraw:
 			ev->ev = EV_REDRAW;
 			ev->x = term->width;
 			ev->y = term->height;
-			goto send_redraw;
+			term_send_event(term, ev);
+			break;
 		} else if (ev->x == KBD_CTRL_C) {
 			((struct window *) &term->windows)->prev->handler
 				(term->windows.prev, ev, 0);

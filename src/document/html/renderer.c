@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.48 2002/11/29 17:52:20 zas Exp $ */
+/* $Id: renderer.c,v 1.49 2002/12/01 18:56:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1004,7 +1004,7 @@ html_form_control(struct part *part, struct form_control *fc)
 						   strlen(fc->default_value));
 
 		if (dv) {
-			mem_free(fc->default_value);
+			if (fc->default_value) mem_free(fc->default_value);
 			fc->default_value = dv;
 		}
 
@@ -1246,7 +1246,8 @@ uncached:
 
 	part->x = part->y = 0;
 	part->data = data;
-	part->xp = xs; part->yp = ys;
+	part->xp = xs;
+	part->yp = ys;
 	part->xmax = part->xa = 0;
 	part->bgcolor = find_nearest_color(&par_format.bgcolor, 8);
 	part->spaces = NULL;
@@ -1373,7 +1374,7 @@ push_base_format(unsigned char *url, struct document_options *opt)
 	memcpy(&format.vlink, &opt->default_vlink, sizeof(struct rgb));
 
 	format.href_base = stracpy(url);
-	format.target_base = stracpy(opt->framename);
+	format.target_base = opt->framename ? stracpy(opt->framename) : NULL;
 
 	par_format.align = opt->plain ? AL_NO : AL_LEFT;
 	par_format.leftmargin = opt->plain ? 0 : opt->margin;

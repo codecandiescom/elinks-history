@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.140 2004/06/17 10:02:20 zas Exp $ */
+/* $Id: conf.c,v 1.141 2004/06/20 18:08:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,9 +123,7 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 		struct option *opt;
 		unsigned char *val;
 
-		if (mirror) {
-			opt = get_opt_rec_real(opt_tree, optname);
-		} else opt = get_opt_rec(opt_tree, optname);
+		opt = mirror ? get_opt_rec_real(opt_tree, optname) : get_opt_rec(opt_tree, optname);
 		mem_free(optname);
 
 		if (!opt || (opt->flags & OPT_HIDDEN))
@@ -140,7 +138,8 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 		} else if (mirror) {
 			if (opt->flags & OPT_DELETED)
 				opt->flags &= ~OPT_WATERMARK;
-			else opt->flags |= OPT_WATERMARK;
+			else
+				opt->flags |= OPT_WATERMARK;
 			if (option_types[opt->type].write) {
 				option_types[opt->type].write(opt, mirror);
 			}
@@ -184,6 +183,7 @@ parse_unset(struct option *opt_tree, unsigned char **file, int *line,
 
 	/* Mirror what we have */
 	if (mirror) add_bytes_to_string(mirror, orig_pos, *file - orig_pos);
+
 	{
 		struct option *opt;
 
@@ -195,11 +195,11 @@ parse_unset(struct option *opt_tree, unsigned char **file, int *line,
 
 		if (!mirror) {
 			if (opt->flags & OPT_ALLOC) delete_option(opt);
-		}
-		else {
+		} else {
 			if (opt->flags & OPT_DELETED)
 				opt->flags |= OPT_WATERMARK;
-			else opt->flags &= ~OPT_WATERMARK;
+			else
+				opt->flags &= ~OPT_WATERMARK;
 		}
 	}
 
@@ -617,9 +617,9 @@ split:
 			add_to_string(string, option->name);
 			if (!(option->flags & OPT_DELETED)) {
 				add_to_string(string, " = ");
-			/* OPT_ALIAS won't ever. OPT_TREE won't reach action 2.
-			 * OPT_SPECIAL makes no sense in the configuration
-			 * context. */
+				/* OPT_ALIAS won't ever. OPT_TREE won't reach action 2.
+				 * OPT_SPECIAL makes no sense in the configuration
+				 * context. */
 				assert(option_types[option->type].write);
 				option_types[option->type].write(option, string);
 			}

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.2 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: options.h,v 1.3 2002/12/11 15:21:08 pasky Exp $ */
 
 #ifndef EL__DIALOGS_OPTIONS_H
 #define EL__DIALOGS_OPTIONS_H
@@ -8,11 +8,6 @@
 
 void charset_list(struct terminal *, void *, struct session *);
 void terminal_options(struct terminal *, void *, struct session *);
-void net_options(struct terminal *, void *, void *);
-void net_programs(struct terminal *, void *, void *);
-void cache_opt(struct terminal *, void *, void *);
-void menu_save_html_options(struct terminal *, void *, struct session *);
-void menu_html_options(struct terminal *, void *, struct session *);
 void menu_language_list(struct terminal *, void *, struct session *);
 void dlg_resize_terminal(struct terminal *, void *, struct session *);
 

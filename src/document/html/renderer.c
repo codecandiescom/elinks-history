@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.221 2003/08/26 23:10:05 jonas Exp $ */
+/* $Id: renderer.c,v 1.222 2003/08/26 23:14:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,7 +295,7 @@ void
 xset_vchars(struct part *part, int x, int y, int yl,
 	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
-	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
+	struct screen_char schar;
 
 	assert(part && part->document);
 	if_assert_failed return;
@@ -306,12 +306,14 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	assert(part->document->data);
 	if_assert_failed return;
 
+	schar.color = find_nearest_color(*bgcolor, 8) << 3;
+	schar.data = data;
+	schar.attr = attr;
+
 	for (; yl; yl--, y++) {
 	    	if (xpand_line(part, y, x)) return;
 
-		POS(x, y).data = data;
-		POS(x, y).color = color;
-		POS(x, y).attr = attr;
+		memcpy(&POS(x, y), &schar, sizeof(struct screen_char));
 	}
 }
 

@@ -1,3 +1,156 @@
+Tue Oct 28 21:28:20 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation updated and fixed.  
+
+Tue Oct 28 20:50:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/ssl.c:
+
+	get_ssl_connection_cipher(): Cleanup.  
+
+Tue Oct 28 20:38:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: checkbox.c, checkbox.h:
+
+	Outcomment unused function.  
+
+Tue Oct 28 19:03:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: scripting/lua/core.c, bfu/button.h, bfu/checkbox.c,
+	bfu/checkbox.h, bfu/dialog.c, bfu/group.c, bfu/inpfield.h,
+	bfu/listbox.h, bfu/widget.h:
+
+	Rename widget_type from D_<type> to WIDGET_<type>. Convert last
+	widget_type users (lua) outside bfu/.  
+
+Tue Oct 28 17:02:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	clear_dialog(): no need to rename, just added a comment about what
+	it does.  
+
+Tue Oct 28 16:38:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Use only one local variable.  
+
+Tue Oct 28 16:28:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Use intermediate variable, make code easier to read.  
+
+Tue Oct 28 14:36:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/msgbox.c:
+
+	Fix last patch. Don't use flags use bflags ;) 
+
+Tue Oct 28 14:34:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/msgbox.c:
+
+	Use add_dlg_button().  
+
+Tue Oct 28 14:14:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	set_term_color(): Assert the color mode.  
+
+Tue Oct 28 12:47:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/options.c, document/options.h,
+	document/html/renderer.c, viewer/text/link.c:
+
+	Replace current boolean color members with a color_flag enum in
+	document_options. This nicely centralizes the terminal color
+	handling.  
+
+Tue Oct 28 12:25:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_links(): Ensure we always have a document options pointer, by
+	falling back to the options of the document (we draw the link for)
+	if d_opt is NULL.  
+
+Tue Oct 28 11:20:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Bunch of FIXME for you, Jonas ;).  
+
+Tue Oct 28 11:10:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/options.h:
+
+	Use correct type for color_mode.  
+
+Tue Oct 28 10:17:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Got rid of a useless goto.  
+
+Tue Oct 28 10:12:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Fix one byte memleak.  
+
+Tue Oct 28 09:48:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Space fix.  
+
+Tue Oct 28 09:45:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Fix last patch: return EVENT_NOT_PROCESSED, when it is the case.  
+
+Tue Oct 28 09:29:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/group.c, bfu/inpfield.c, bfu/inpfield.h,
+	bfu/widget.c, bfu/widget.h, dialogs/auth.c:
+
+	widget_has_history() macro was introduced.  widget_is_textfield()
+	macro was introduced.  They help to do stricter checks about whether
+	a widget has or no history.  add_dlg_field_pass() do not take
+	history parameter anymore (forced to be NULL) since we never use
+	history for such field.  
+
+Tue Oct 28 09:26:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, ssl/ssl.c:
+
+	Move SSL options to modules.  
+
+Tue Oct 28 08:07:08 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update.  
+
+Tue Oct 28 03:19:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am:
+
+	Removed ELusive from HEAD for now. 0.6 stuff. ELusive will live in
+	the ELUSIVE branch for now.  
+
+Tue Oct 28 02:51:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre8.CVS 
+
 Tue Oct 28 02:48:45 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

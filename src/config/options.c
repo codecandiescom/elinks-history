@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.121 2002/11/30 01:02:43 pasky Exp $ */
+/* $Id: options.c,v 1.122 2002/11/30 01:08:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -638,7 +638,7 @@ register_options()
 		"Cache options.");
 
 	add_opt_bool("document.cache",
-		"ignore_cache_control", 0, 0,
+		"ignore_cache_control", 0, 1,
 		"Ignore Cache-Control and Pragma server headers.\n"
 		"When set, the document is cached even with 'Cache-Control: no-cache'.");
 	

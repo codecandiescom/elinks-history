@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.79 2004/01/08 03:44:01 jonas Exp $ */
+/* $Id: form.c,v 1.80 2004/01/17 15:21:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "bfu/msgbox.h"
 #include "config/kbdbind.h"
 #include "document/document.h"
+#include "document/html/parser.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
 #include "formhist/formhist.h"
@@ -42,9 +43,6 @@
 #include "viewer/text/textarea.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
-
-/* Unsafe macros */
-#include "document/html/parser.h"
 
 
 /* TODO: Some of these (particulary those encoding routines) would feel better

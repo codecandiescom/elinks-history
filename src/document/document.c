@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.46 2004/01/07 00:40:47 jonas Exp $ */
+/* $Id: document.c,v 1.47 2004/01/17 15:21:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "config/options.h"
 #include "document/document.h"
 #include "document/html/frames.h"
+#include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/options.h"
 #include "document/refresh.h"
@@ -27,9 +28,6 @@
 #include "util/string.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
-
-/* Unsafe macros */
-#include "document/html/parser.h"
 
 
 static INIT_LIST_HEAD(format_cache);

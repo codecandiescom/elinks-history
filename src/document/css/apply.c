@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: apply.c,v 1.12 2004/01/17 15:05:43 pasky Exp $ */
+/* $Id: apply.c,v 1.13 2004/01/17 15:21:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,15 +10,13 @@
 
 #include "elinks.h"
 
+#include "document/html/parser.h"
 #include "document/options.h"
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-/* Unsafe macros */
-#include "document/html/parser.h"
 
 
 /* TODO: Move this to document/css/ when it'll be big enough or

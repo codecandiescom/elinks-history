@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.40 2004/01/01 07:16:49 miciah Exp $ */
+/* $Id: textarea.c,v 1.41 2004/01/17 15:21:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 
 #include "bfu/msgbox.h"
 #include "document/document.h"
+#include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
@@ -28,9 +29,6 @@
 #include "viewer/text/form.h"
 #include "viewer/text/textarea.h"
 #include "viewer/text/view.h"
-
-/* Unsafe macros */
-#include "document/html/parser.h"
 
 
 /* FIXME: Add comments!! --Zas */

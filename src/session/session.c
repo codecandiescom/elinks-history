@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.297 2004/01/17 00:27:20 jonas Exp $ */
+/* $Id: session.c,v 1.298 2004/01/17 15:21:53 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -25,6 +25,7 @@
 #include "dialogs/menu.h"
 #include "dialogs/status.h"
 #include "document/html/frames.h"
+#include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/refresh.h"
 #include "document/view.h"
@@ -55,9 +56,6 @@
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
-
-/* Unsafe macros */
-#include "document/html/parser.h"
 
 
 struct file_to_load {

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.297 2004/11/05 03:50:49 miciah Exp $ */
+/* $Id: search.c,v 1.298 2004/11/05 06:00:42 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -242,6 +242,30 @@ get_range(struct document *document, int y, int height, int l,
 	return 0;
 }
 
+/* Returns a string |doc| that is a copy of the text in the search nodes
+ * from |s1| to |s1 + doclen - 1| with the space at the end of each line
+ * converted to a new-line character (LF). */
+static unsigned char *
+get_search_region_from_search_nodes(struct search *s1, int doclen)
+{
+	unsigned char *doc;
+	int i;
+	
+	doc = mem_alloc(sizeof(unsigned char ) * (doclen + 1));
+	if (!doc) return NULL;
+
+	for (i = 0; i < doclen; i++) {
+		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
+			doc[i - 1] = '\n';
+		}
+		doc[i] = s1[i].c;
+	}
+
+	doc[doclen] = 0;
+
+	return doc;
+}
+	
 #ifdef HAVE_REGEX_H
 static int
 is_in_range_regex(struct document *document, int y, int height,
@@ -281,19 +305,11 @@ is_in_range_regex(struct document *document, int y, int height,
 		regfree(&regex);
 		return 0;
 	}
-	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
+	doc = get_search_region_from_search_nodes(s1, doclen);
 	if (!doc) {
 		regfree(&regex);
 		return -1;
 	}
-
-	for (i = 0; i < doclen; i++) {
-		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
-			doc[i - 1] = '\n';
-		}
-		doc[i] = s1[i].c;
-	}
-	doc[doclen] = 0;
 
 	doctmp = doc;
 
@@ -551,19 +567,11 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 		regfree(&regex);
 		goto ret;
 	}
-	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
+	doc = get_search_region_from_search_nodes(s1, doclen);
 	if (!doc) {
 		regfree(&regex);
 		goto ret;
 	}
-
-	for (i = 0; i < doclen; i++) {
-		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
-			doc[i - 1] = '\n';
-		}
-		doc[i] = s1[i].c;
-	}
-	doc[doclen] = 0;
 
 	box = &doc_view->box;
 	xoffset = box->x - doc_view->vs->x;

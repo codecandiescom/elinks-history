@@ -1,4 +1,4 @@
-/* $Id: task.h,v 1.11 2004/06/08 13:49:10 jonas Exp $ */
+/* $Id: task.h,v 1.12 2004/06/08 23:05:21 jonas Exp $ */
 
 #ifndef EL__SCHED_TASK_H
 #define EL__SCHED_TASK_H
@@ -26,6 +26,8 @@ void ses_goto(struct session *, struct uri *, unsigned char *,
 struct view_state *ses_forward(struct session *, int);
 
 void end_load(struct download *, struct session *);
+
+struct uri *get_hooked_uri(struct session *ses, unsigned char *uristring);
 
 void goto_url_frame(struct session *, struct uri *, unsigned char *, enum cache_mode);
 void goto_url(struct session *, unsigned char *);

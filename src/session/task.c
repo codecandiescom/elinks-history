@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.107 2004/06/08 22:54:52 jonas Exp $ */
+/* $Id: task.c,v 1.108 2004/06/08 23:05:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,7 +515,7 @@ goto_url(struct session *ses, unsigned char *url)
 	follow_url(ses, url, NULL, TASK_FORWARD, CACHE_MODE_NORMAL, 0);
 }
 
-static struct uri *
+struct uri *
 get_hooked_uri(struct session *ses, unsigned char *uristring)
 {
 	unsigned char *cwd = ses->tab->term->cwd;

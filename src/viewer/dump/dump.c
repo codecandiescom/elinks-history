@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.22 2003/06/21 00:21:36 pasky Exp $ */
+/* $Id: dump.c,v 1.23 2003/06/21 00:26:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,6 +89,48 @@ nextfrag:
 	return 0;
 }
 
+/* This dumps the given @ce's formatted output onto @oh, nothing more. It
+ * returns 0 if it all went fine and 1 if something isn't quite right and we
+ * should terminate ourselves ASAP. */
+static int
+dump_formatted(int oh, struct status *status, struct cache_entry *ce)
+{
+	struct document_options o;
+	struct f_data_c fd;
+	struct view_state *vs = mem_alloc(sizeof(struct view_state)
+					  + strlen(ce->url) + 1);
+
+	if (!vs) return 1;
+
+	memset(&o, 0, sizeof(struct document_options));
+	memset(vs, 0, sizeof(struct view_state));
+	memset(&fd, 0, sizeof(struct f_data_c));
+
+	o.xp = 0;
+	o.yp = 1;
+	o.xw = get_opt_int("document.dump.width");
+	o.yw = 25;
+	o.col = 0;
+	o.cp = get_opt_int("document.dump.codepage");
+	mk_document_options(&o);
+	o.plain = 0;
+	o.frames = 0;
+	memcpy(&o.default_fg, get_opt_ptr("document.colors.text"), sizeof(struct rgb));
+	memcpy(&o.default_bg, get_opt_ptr("document.colors.background"), sizeof(struct rgb));
+	memcpy(&o.default_link, get_opt_ptr("document.colors.link"), sizeof(struct rgb));
+	memcpy(&o.default_vlink, get_opt_ptr("document.colors.vlink"), sizeof(struct rgb));
+	o.framename = "";
+
+	init_vs(vs, ce->url);
+	cached_format_html(vs, &fd, &o);
+	dump_to_file(fd.f_data, oh);
+	detach_formatted(&fd);
+	destroy_vs(vs);
+	mem_free(vs);
+
+	return 0;
+}
+
 void
 dump_end(struct status *stat, void *p)
 {
@@ -123,44 +165,15 @@ dump_end(struct status *stat, void *p)
 		return;
 
 	if (get_opt_int_tree(&cmdline_options, "source")) {
-		if (dump_source(oh, status, ce) > 0) goto terminate;
+		if (dump_source(oh, status, ce) > 0)
+			goto terminate;
 
-		if (stat->state >= 0) return;
+		if (stat->state >= 0)
+			return;
 
 	} else if (ce) {
-		struct document_options o;
-		struct f_data_c fd;
-		struct view_state *vs = mem_alloc(sizeof(struct view_state)
-						  + strlen(ce->url) + 1);
-
-		if (!vs) goto terminate;
-
-		memset(&o, 0, sizeof(struct document_options));
-		memset(vs, 0, sizeof(struct view_state));
-		memset(&fd, 0, sizeof(struct f_data_c));
-
-		o.xp = 0;
-		o.yp = 1;
-		o.xw = get_opt_int("document.dump.width");
-		o.yw = 25;
-		o.col = 0;
-		o.cp = get_opt_int("document.dump.codepage");
-		mk_document_options(&o);
-		o.plain = 0;
-		o.frames = 0;
-		memcpy(&o.default_fg, get_opt_ptr("document.colors.text"), sizeof(struct rgb));
-		memcpy(&o.default_bg, get_opt_ptr("document.colors.background"), sizeof(struct rgb));
-		memcpy(&o.default_link, get_opt_ptr("document.colors.link"), sizeof(struct rgb));
-		memcpy(&o.default_vlink, get_opt_ptr("document.colors.vlink"), sizeof(struct rgb));
-		o.framename = "";
-
-		init_vs(vs, ce->url);
-		cached_format_html(vs, &fd, &o);
-		dump_to_file(fd.f_data, oh);
-		detach_formatted(&fd);
-		destroy_vs(vs);
-		mem_free(vs);
-
+		if (dump_formatted(oh, status, ce) > 0)
+			goto terminate;
 	}
 
 	if (stat->state != S_OK) {

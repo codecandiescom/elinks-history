@@ -4539,7 +4539,7 @@ struct translation translation_french [] = {
   {T_ACCEPT_UI_LANGUAGE, "Langue de l'interface pour Accept-Language"},
   {T_SSL_CIPHER, "Chiffrement SSL"},
   {T_ENCODING, "Encodage"},
-  {T_BOOKMARK_USED, NULL},
+  {T_BOOKMARK_USED, "Désolé, mais ce signet est déjà utilisé par quelque chose."},
   {0, NULL}
 };
 

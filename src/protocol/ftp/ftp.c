@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.100 2003/07/14 19:51:32 jonas Exp $ */
+/* $Id: ftp.c,v 1.101 2003/07/21 04:30:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,13 +62,6 @@ struct ftp_connection_info {
 	unsigned char ftp_buffer[FTP_BUF_SIZE];
 	unsigned char cmd_buffer[1]; /* Must be last field !! */
 };
-
-
-/* Global variables */
-static unsigned char ftp_dirlist_head[] = "<html>\n<head><title>/";
-static unsigned char ftp_dirlist_head2[] = "</title></head>\n<body>\n<h2>Directory /";
-static unsigned char ftp_dirlist_head3[] = "</h2>\n<pre>";
-static unsigned char ftp_dirlist_end[] = "</pre>\n<hr>\n</body>\n</html>";
 
 
 /* Prototypes */
@@ -266,25 +259,24 @@ send_cmd(struct connection *conn, unsigned char *cmd, int cmdl, void *callback, 
 static void
 ftp_login(struct connection *conn)
 {
-	unsigned char *cmd = init_str();
-	int cmdl = 0;
+	struct string cmd;
 
-	if (!cmd) {
+	if (!init_string(&cmd)) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 
-	add_to_str(&cmd, &cmdl, "USER ");
-	if (conn->uri.user) {
+	add_to_string(&cmd, "USER ");
+	if (conn->uri.userlen) {
 		struct uri *uri = &conn->uri;
 
-		add_bytes_to_str(&cmd, &cmdl, uri->user, uri->userlen);
+		add_bytes_to_string(&cmd, uri->user, uri->userlen);
 	} else {
-		add_to_str(&cmd, &cmdl, "anonymous");
+		add_to_string(&cmd, "anonymous");
 	}
-	add_to_str(&cmd, &cmdl, "\r\n");
+	add_to_string(&cmd, "\r\n");
 
-	send_cmd(conn, cmd, cmdl, (void *) ftp_got_info, S_SENT);
+	send_cmd(conn, cmd.source, cmd.length, (void *) ftp_got_info, S_SENT);
 }
 
 /* Parse connection response. */
@@ -371,26 +363,24 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 static void
 ftp_pass(struct connection *conn)
 {
-	unsigned char *cmd;
-	int cmdl = 0;
+	struct string cmd;
 
-	cmd = init_str();
-	if (!cmd) {
+	if (!init_string(&cmd)) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 
-	add_to_str(&cmd, &cmdl, "PASS ");
-	if (conn->uri.password) {
+	add_to_string(&cmd, "PASS ");
+	if (conn->uri.passwordlen) {
 		struct uri *uri = &conn->uri;
 
-		add_bytes_to_str(&cmd, &cmdl, uri->password, uri->passwordlen);
+		add_bytes_to_string(&cmd, uri->password, uri->passwordlen);
 	} else {
-		add_to_str(&cmd, &cmdl, get_opt_str("protocol.ftp.anon_passwd"));
+		add_to_string(&cmd, get_opt_str("protocol.ftp.anon_passwd"));
 	}
-	add_to_str(&cmd, &cmdl, "\r\n");
+	add_to_string(&cmd, "\r\n");
 
-	send_cmd(conn, cmd, cmdl, (void *) ftp_pass_info, S_LOGIN);
+	send_cmd(conn, cmd.source, cmd.length, (void *) ftp_pass_info, S_LOGIN);
 }
 
 /* Parse PASS command response. */
@@ -435,7 +425,7 @@ ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 
 /* Construct PORT command. */
 static void
-add_portcmd_to_str(unsigned char **str, int *strl, unsigned char *pc)
+add_portcmd_to_string(struct string *string, unsigned char *pc)
 {
 	/* From RFC 959: DATA PORT (PORT)
 	 *
@@ -454,25 +444,25 @@ add_portcmd_to_str(unsigned char **str, int *strl, unsigned char *pc)
 	 *
 	 * where h1 is the high order 8 bits of the internet host
 	 * address. */
-	add_to_str(str, strl, "PORT ");
-	add_num_to_str(str, strl, pc[0]);
-	add_chr_to_str(str, strl, ',');
-	add_num_to_str(str, strl, pc[1]);
-	add_chr_to_str(str, strl, ',');
-	add_num_to_str(str, strl, pc[2]);
-	add_chr_to_str(str, strl, ',');
-	add_num_to_str(str, strl, pc[3]);
-	add_chr_to_str(str, strl, ',');
-	add_num_to_str(str, strl, pc[4]);
-	add_chr_to_str(str, strl, ',');
-	add_num_to_str(str, strl, pc[5]);
-	add_to_str(str, strl, "\r\n");
+	add_to_string(string, "PORT ");
+	add_long_to_string(string, pc[0]);
+	add_char_to_string(string, ',');
+	add_long_to_string(string, pc[1]);
+	add_char_to_string(string, ',');
+	add_long_to_string(string, pc[2]);
+	add_char_to_string(string, ',');
+	add_long_to_string(string, pc[3]);
+	add_char_to_string(string, ',');
+	add_long_to_string(string, pc[4]);
+	add_char_to_string(string, ',');
+	add_long_to_string(string, pc[5]);
+	add_to_string(string, "\r\n");
 }
 
 #ifdef IPV6
 /* Construct EPRT command. */
 static void
-add_eprtcmd_to_str(unsigned char **str, int *strl, struct sockaddr_in6 *addr)
+add_eprtcmd_to_string(struct string *string, struct sockaddr_in6 *addr)
 {
 	unsigned char addr_str[INET6_ADDRSTRLEN];
 
@@ -489,11 +479,11 @@ add_eprtcmd_to_str(unsigned char **str, int *strl, struct sockaddr_in6 *addr)
 	 * ---------   --------
 	 * 1           Internet Protocol, Version 4 [Pos81a]
 	 * 2           Internet Protocol, Version 6 [DH96] */
-	add_to_str(str, strl, "EPRT |2|");
-	add_to_str(str, strl, addr_str);
-	add_chr_to_str(str, strl, '|');
-	add_num_to_str(str, strl, ntohs(addr->sin6_port));
-	add_to_str(str, strl, "|\r\n");
+	add_to_string(string, "EPRT |2|");
+	add_to_string(string, addr_str);
+	add_char_to_string(string, '|');
+	add_long_to_string(string, ntohs(addr->sin6_port));
+	add_to_string(string, "|\r\n");
 }
 #endif
 
@@ -509,8 +499,7 @@ add_file_cmd_to_str(struct connection *conn)
 	struct ftp_connection_info *c_i;
 	unsigned char *data;
 	unsigned char *data_end;
-	unsigned char *str;
-	int strl = 0;
+	struct string command;
 	int data_sock;
 	unsigned char pc[6];
 
@@ -521,8 +510,7 @@ add_file_cmd_to_str(struct connection *conn)
 	}
 	conn->info = c_i;
 
-	str = init_str();
-	if (!str) {
+	if (!init_string(&command)) {
 		mem_free(c_i);
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
@@ -573,26 +561,27 @@ add_file_cmd_to_str(struct connection *conn)
 		c_i->pending_commands = 4;
 
 		/* ASCII */
-		add_to_str(&str, &strl, "TYPE A\r\n");
+		add_to_string(&command, "TYPE A\r\n");
 
 #ifdef IPV6
 		if (conn->pf == 2)
 			if (c_i->use_epsv)
-				add_to_str(&str, &strl, "EPSV\r\n");
+				add_to_string(&command, "EPSV\r\n");
 			else
-				add_eprtcmd_to_str(&str, &strl, &data_addr);
+				add_eprtcmd_to_string(&command, &data_addr);
 		else
 #endif
 			if (c_i->use_pasv)
-				add_to_str(&str, &strl, "PASV\r\n");
+				add_to_string(&command, "PASV\r\n");
 			else
-				add_portcmd_to_str(&str, &strl, pc);
+				add_portcmd_to_string(&command, pc);
 
-		add_to_str(&str, &strl, "CWD /");
-		add_bytes_to_str(&str, &strl, data, data_end - data);
-		add_to_str(&str, &strl, "\r\n");
+		add_to_string(&command, "CWD /");
+		if (data != data_end)
+			add_bytes_to_string(&command, data, data_end - data);
+		add_to_string(&command, "\r\n");
 
-		add_to_str(&str, &strl, "LIST\r\n");
+		add_to_string(&command, "LIST\r\n");
 
 		conn->from = 0;
 
@@ -603,48 +592,49 @@ add_file_cmd_to_str(struct connection *conn)
 		c_i->pending_commands = 3;
 
 		/* BINARY */
-		add_to_str(&str, &strl, "TYPE I\r\n");
+		add_to_string(&command, "TYPE I\r\n");
 
 #ifdef IPV6
 		if (conn->pf == 2)
 			if (c_i->use_epsv)
-				add_to_str(&str, &strl, "EPSV\r\n");
+				add_to_string(&command, "EPSV\r\n");
 			else
-				add_eprtcmd_to_str(&str, &strl, &data_addr);
+				add_eprtcmd_to_string(&command, &data_addr);
 		else
 #endif
 			if (c_i->use_pasv)
-				add_to_str(&str, &strl, "PASV\r\n");
+				add_to_string(&command, "PASV\r\n");
 			else
-				add_portcmd_to_str(&str, &strl, pc);
+				add_portcmd_to_string(&command, pc);
 
 		if (conn->from || (conn->prg.start > 0)) {
-			add_to_str(&str, &strl, "REST ");
-			add_num_to_str(&str, &strl, conn->from ? conn->from
+			add_to_string(&command, "REST ");
+			add_long_to_string(&command, conn->from
+							? conn->from
 							: conn->prg.start);
-			add_to_str(&str, &strl, "\r\n");
+			add_to_string(&command, "\r\n");
 
 			c_i->rest_sent = 1;
 			c_i->pending_commands++;
 		}
 
-		add_to_str(&str, &strl, "RETR /");
-		add_bytes_to_str(&str, &strl, data, data_end - data);
-		add_to_str(&str, &strl, "\r\n");
+		add_to_string(&command, "RETR /");
+		add_bytes_to_string(&command, data, data_end - data);
+		add_to_string(&command, "\r\n");
 	}
 
 	c_i->opc = c_i->pending_commands;
 
 	c_i = mem_realloc(c_i, sizeof(struct ftp_connection_info)
-			       + strl + 1);
+			       + command.length + 1);
 	if (!c_i) {
-		mem_free(str);
+		done_string(&command);
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
 
-	strcpy(c_i->cmd_buffer, str);
-	mem_free(str);
+	strcpy(c_i->cmd_buffer, command.source);
+	done_string(&command);
 	conn->info = c_i;
 
 	return c_i;
@@ -656,11 +646,9 @@ static void
 ftp_send_retr_req(struct connection *conn, int state)
 {
 	struct ftp_connection_info *c_i;
-	unsigned char *cmd;
-	int cmdl = 0;
+	struct string cmd;
 
-	cmd = init_str();
-	if (!cmd) {
+	if (!init_string(&cmd)) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
@@ -668,7 +656,7 @@ ftp_send_retr_req(struct connection *conn, int state)
 	/* We don't save return value from add_file_cmd_to_str(), as it's saved
 	 * in conn->info as well. */
 	if (!conn->info && !add_file_cmd_to_str(conn)) {
-		mem_free(cmd);
+		done_string(&cmd);
 		return;
 	}
 	c_i = conn->info;
@@ -678,16 +666,16 @@ ftp_send_retr_req(struct connection *conn, int state)
 		unsigned char *nl = strchr(c_i->cmd_buffer, '\n');
 
 		if (!nl) {
-			add_to_str(&cmd, &cmdl, c_i->cmd_buffer);
+			add_to_string(&cmd, c_i->cmd_buffer);
 		} else {
 			nl++;
-			add_bytes_to_str(&cmd, &cmdl, c_i->cmd_buffer,
+			add_bytes_to_string(&cmd, c_i->cmd_buffer,
 					 nl - c_i->cmd_buffer);
 			memmove(c_i->cmd_buffer, nl, strlen(nl) + 1);
 		}
 	}
 
-	send_cmd(conn, cmd, strlen(cmd), (void *) ftp_retr_file, state);
+	send_cmd(conn, cmd.source, cmd.length, (void *) ftp_retr_file, state);
 }
 
 /* Parse RETR response and return file size or -1 on error. */
@@ -933,39 +921,35 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 		  struct ftpparse *ftp_info)
 {
 	unsigned char tmp[128];
-	unsigned char *str;
-	int strl;
+	struct string string;
 
-	str = init_str();
-	if (!str) return -1;
-
-	strl = 0;
+	if (!init_string(&string)) return -1;
 
 	if (ftp_info->flagtrycwd) {
 		if (ftp_info->flagtryretr) {
-			add_to_str(&str, &strl, "[LNK] ");
+			add_to_string(&string, "[LNK] ");
 		} else {
 			if (colorize_dir) {
 				/* The <b> is here for the case when we've
 				 * use_document_colors off. */
-				add_to_str(&str, &strl, "<font color=\"");
-				add_to_str(&str, &strl, dircolor);
-				add_to_str(&str, &strl, "\"><b>");
+				add_to_string(&string, "<font color=\"");
+				add_to_string(&string, dircolor);
+				add_to_string(&string, "\"><b>");
 			}
-			add_to_str(&str, &strl, "[DIR] ");
+			add_to_string(&string, "[DIR] ");
 			if (colorize_dir) {
-				add_to_str(&str, &strl, "</b></font>");
+				add_to_string(&string, "</b></font>");
 			}
 		}
 	} else {
-		add_to_str(&str, &strl, "[   ] ");
+		add_to_string(&string, "[   ] ");
 	}
 
 	if (ftp_info->perm && ftp_info->permlen)
-		add_bytes_to_str(&str, &strl, ftp_info->perm, ftp_info->permlen);
+		add_bytes_to_string(&string, ftp_info->perm, ftp_info->permlen);
 	else
-		add_to_str(&str, &strl, "-        ");
-	add_chr_to_str(&str, &strl, ' ');
+		add_to_string(&string, "-        ");
+	add_char_to_string(&string, ' ');
 
 
 	if (ftp_info->mtime) {
@@ -979,43 +963,43 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 			strftime(tmp, 128, "%d-%b-%Y %H:%M -   ",
 					gmtime(&ftp_info->mtime));
 
-		add_to_str(&str, &strl, tmp);
+		add_to_string(&string, tmp);
 	}
 
 	if (ftp_info->sizetype != FTPPARSE_SIZE_UNKNOWN) {
 		snprintf(tmp, 128, "%12lu ",ftp_info->size);
-		add_to_str(&str, &strl, tmp);
+		add_to_string(&string, tmp);
 	} else {
-		add_to_str(&str, &strl, "           - ");
+		add_to_string(&string, "           - ");
 	}
 
 	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr && colorize_dir) {
-		add_to_str(&str, &strl, "<font color=\"");
-		add_to_str(&str, &strl, dircolor);
-		add_to_str(&str, &strl, "\"><b>");
+		add_to_string(&string, "<font color=\"");
+		add_to_string(&string, dircolor);
+		add_to_string(&string, "\"><b>");
 	}
 
-	add_to_str(&str, &strl, "<a href=\"");
-	add_htmlesc_str(&str, &strl, ftp_info->name, ftp_info->namelen);
+	add_to_string(&string, "<a href=\"");
+	add_html_to_string(&string, ftp_info->name, ftp_info->namelen);
 	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr)
-		add_chr_to_str(&str, &strl, '/');
-	add_to_str(&str, &strl, "\">");
-	add_htmlesc_str(&str, &strl, ftp_info->name, ftp_info->namelen);
-	add_to_str(&str, &strl, "</a>");
+		add_char_to_string(&string, '/');
+	add_to_string(&string, "\">");
+	add_html_to_string(&string, ftp_info->name, ftp_info->namelen);
+	add_to_string(&string, "</a>");
 	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr && colorize_dir) {
-		add_to_str(&str, &strl, "</b></font>");
+		add_to_string(&string, "</b></font>");
 	}
 	if (ftp_info->symlink) {
-		add_to_str(&str, &strl, " -&gt; ");
-		add_htmlesc_str(&str, &strl, ftp_info->symlink,
+		add_to_string(&string, " -&gt; ");
+		add_html_to_string(&string, ftp_info->symlink,
 				ftp_info->symlinklen);
 	}
-	add_chr_to_str(&str, &strl, '\n');
+	add_char_to_string(&string, '\n');
 
-	if (add_fragment(c_e, *pos, str, strl)) *tries = 0;
-	*pos += strl;
+	if (add_fragment(c_e, *pos, string.source, string.length)) *tries = 0;
+	*pos += string.length;
 
-	mem_free(str);
+	done_string(&string);
 	return 0;
 }
 
@@ -1126,46 +1110,43 @@ out_of_mem:
 		}
 	}
 
-#define A(str) { \
-	int slen = strlen(str); \
-	add_fragment(conn->cache, conn->from, str, slen); \
-	conn->from += slen; }
-
 	if (c_i->dir && !conn->from) {
-		unsigned char *url_data = conn->uri.data;
-		unsigned char *postchar;
-		unsigned char *str;
-		int strl = 0;
+		unsigned char *path = conn->uri.data;
+		int pathlen = conn->uri.datalen;
+		struct string string;
 
-		if (!url_data) {
+		if (!path) {
 			abort_conn_with_state(conn, S_FTP_ERROR);
 			return;
 		}
 
-		url_data = memacpy(url_data, conn->uri.datalen);
-		if (!url_data) goto out_of_mem;
+		if (pathlen) {
+			if (!init_string(&string))
+				goto out_of_mem;
 
-		str = init_str();
-		if (!str) {
-			mem_free(url_data);
-			goto out_of_mem;
+			add_html_to_string(&string, path, pathlen);
 		}
 
-		postchar = strchr(url_data, POST_CHAR);
-		if (postchar) *postchar = 0;
+#define ADD_CONST(str) { \
+	add_fragment(conn->cache, conn->from, str, sizeof(str) - 1); \
+	conn->from += (sizeof(str) - 1); }
 
-		if (*url_data)
-			add_htmlesc_str(&str, &strl, url_data, strlen(url_data));
+		ADD_CONST("<html>\n<head><title>/");
+		if (pathlen) {
+			add_fragment(conn->cache, conn->from,
+				     string.source, string.length);
+			conn->from += string.length;
+		}
+		ADD_CONST("</title></head>\n<body>\n<h2>Directory /");
+		if (pathlen) {
+			add_fragment(conn->cache, conn->from,
+				     string.source, string.length);
+			conn->from += string.length;
+			done_string(&string);
+		}
+		ADD_CONST("</h2>\n<pre>");
 
-		mem_free(url_data);
-
-		A(ftp_dirlist_head);
-		A(str);
-		A(ftp_dirlist_head2);
-		A(str);
-		A(ftp_dirlist_head3);
-
-		if (*str) {
+		if (pathlen) {
 			struct ftpparse ftp_info;
 
 			ftp_info.name = "..";
@@ -1187,8 +1168,6 @@ out_of_mem:
 			display_dir_entry(conn->cache, &conn->from, &conn->tries,
 					  colorize_dir, dircolor, &ftp_info);
 		}
-
-		mem_free(str);
 
 		if (!conn->cache->head) {
 			conn->cache->head = stracpy("\r\n");
@@ -1243,9 +1222,9 @@ out_of_mem:
 				(unsigned char *) dircolor) == -1)
 		goto out_of_mem;
 
-	if (c_i->dir) A(ftp_dirlist_end);
+	if (c_i->dir) ADD_CONST("</pre>\n<hr>\n</body>\n</html>");
 
-#undef A
+#undef ADD_CONST
 
 	set_handlers(conn->sock2, NULL, NULL, NULL, NULL);
 	close_socket(NULL, &conn->sock2);

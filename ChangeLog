@@ -1,3 +1,77 @@
+Mon Jul 26 22:09:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	get_session_info(): reduce indentation level.  
+
+Mon Jul 26 22:07:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: session.c, session.h:
+
+	process_file_requests(): try to mmake it somehow reentrant by using
+	a session status flag. Cleaner, imho.  
+
+Mon Jul 26 22:02:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	process_file_requests(): minor code simplification.  
+
+Mon Jul 26 17:40:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Reduce code redundancy by introducing (perhaps badly named)
+	load_file_from_doc_view(), now used by process_file_requests() and
+	reload().  
+
+Mon Jul 26 17:24:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	encode_session_info(): reduce indentation level.  
+
+Mon Jul 26 17:17:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	request_frame(): drop goto/label |found|.  
+
+Mon Jul 26 17:15:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	request_frame(): drop commented out old code.  
+
+Mon Jul 26 17:13:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	request_frameset(), request_frame(): pass @depth and drop static
+	declaration of @depth.  
+
+Mon Jul 26 17:10:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	request_frameset(): reduce indentation level.  
+
+Mon Jul 26 07:43:49 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Jul 26 05:42:52 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Revert revision 1.168, 'remove_overlaps(): @nf declaration was moved
+	near where it is really used.' We cannot safely pass |f->next| to
+	mem_free after we have passed it to del_from_list, as the latter
+	modifies |x->prev->next|, where |x| is |f->next|, meaning we modify
+	|f->next->prev->next|, which is the same as |f->next|.  
+
 Sun Jul 25 19:46:49 2004  Laurent Monin <zas@norz.org>:
 
 	* src/dialogs/document.c:

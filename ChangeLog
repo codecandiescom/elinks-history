@@ -1,3 +1,28 @@
+Sat May 11 18:32:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre7 
+
+Sat May 11 18:16:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Version now doesn't contain dash, CVS is separated by dot now.  
+
+Sat May 11 18:15:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, contrib/elinks.spec, contrib/elinks.spec.in:
+
+	Moved contrib/elinks.spec to contrib/elinks.spec.in, big cleanup and
+	great symplifications. Patch by <yanek@yankuv.koniec.sk>.  
+
+Sat May 11 18:05:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/compress.c:
+
+	Fixed compilation w/o zlib or bzlib.  
+
 Sat May 11 16:49:28 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/italian.lng, src/intl/language.inc:

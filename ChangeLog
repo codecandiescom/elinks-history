@@ -1,3 +1,10 @@
+Thu Mar 14 17:17:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c, links.h, view.c:
+	
+	optionally submit form after pressing enter on the text field (by
+	default on)
+
 Wed Mar 13 22:07:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.181 2004/04/12 23:01:36 jonas Exp $ */
+/* $Id: uri.c,v 1.182 2004/04/12 23:28:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -725,9 +725,6 @@ parse_uri:
 		enum protocol protocol = find_uri_protocol(newurl);
 		unsigned char *prefix;
 
-		if (protocol == PROTOCOL_FILE && !dir_sep(*newurl))
-			insert_in_string(&newurl, 0, "./", 2);
-
 		switch (protocol) {
 			case PROTOCOL_FTP:
 				prefix = "ftp://";
@@ -740,8 +737,10 @@ parse_uri:
 			case PROTOCOL_FILE:
 			default:
 				prefix = "file://";
+				if (!dir_sep(*newurl))
+					insert_in_string(&newurl, 0, "./", 2);
 		}
-			
+
 		insert_in_string(&newurl, 0, prefix, strlen(prefix));
 		goto parse_uri;
 	}

@@ -1,3 +1,279 @@
+Sat Sep 25 22:06:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	A little hack that lowers html_context.line_breax so newlines in
+	<pre> tags are added even after </end-element-tags>. (bug 504) 
+
+Sat Sep 25 20:37:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/util/memory.c:
+
+	Check for existence of the _SC_PAGE_SIZE value passed to sysconf().
+	It is not defined on Mac OS X. Reported by Eugenia Loli-Queru.  
+
+Sat Sep 25 20:32:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	document.referrer support.  
+
+Sat Sep 25 20:23:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Add support for window.parent. It's aliased to window.top for now,
+	with some non-working commented out code and a thorough description.
+	It will take a big rewrite of the frames support to have
+	window.parent available without some totally insane magic.  
+
+Sat Sep 25 20:02:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Don't set the LED value for -dump rendering.  
+
+Sat Sep 25 19:56:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/frames.c:
+
+	Compilation fixes. The whole frames thing is a huge mess.  
+
+Sat Sep 25 19:51:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: document.h, html/frames.c:
+
+	If a {struct document} has a frame associated somewhere, record it
+	in a @frame field. I need that for ECMAScript window.parent.  
+
+Sat Sep 25 19:25:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/frames.c:
+
+	Compilation fix.  
+
+Sat Sep 25 19:24:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/frames.c:
+
+	Pass frame pointer directly to format_frame().  
+
+Sat Sep 25 19:07:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/memory.c:
+
+	Include <sys/types.h> before <sys/mman.h>. Reported by Eugenia
+	Loli-Queru and verified it fixes compile errors on Mac OS X.  
+
+Sat Sep 25 18:07:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	When assigning to window.location, return JS_FALSE to prevent losing
+	that property object to some stupid string. That was the root of the
+	problem all the time, probably.  
+
+Sat Sep 25 17:52:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	location_goto() now abstracts up the location change hook and is
+	called directly from window_set_property(), instead of passing this
+	to location_set_property().  
+
+Sat Sep 25 17:40:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Drop window properties which are filled by JS_InitClass() later
+	anyway.  
+
+Sat Sep 25 17:38:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Identify window.location by string instead of id.  
+
+Sat Sep 25 15:40:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: ecmascript.c, spidermonkey.c:
+
+	Check *_abs_url before using it, spotted by Jonas.  
+
+Sat Sep 25 15:30:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: ecmascript.c, spidermonkey.c:
+
+	When going anywhere, use join_urls() instead of get_hooked_uri().  
+
+Sat Sep 25 14:18:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Don't fricking touch free_syntax URIs, saving me an hour of
+	debugging! 
+
+Sat Sep 25 14:10:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: setup.h, dialogs/menu.c:
+
+	Show the 'Bug information' entry in the 'Help' menu even for non
+	debug builds. Add cvs history url shortcut.  
+
+Sat Sep 25 12:46:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Support for working directly with the location object, proxying
+	location.href. Man, this was one nightmare to get going.  
+
+Sat Sep 25 04:26:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	Fix serious access of free()d memory causing the table width parsing
+	in get_width() to fail when memory leak detection is disbled. The
+	bug was introduced in (1.41 -> 1.42) when merging parse_width() and
+	get_width().  Filed as bug 483.  
+
+Sat Sep 25 01:31:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/ecmascript.c:
+
+	About disallowing ECMAScript scripts to trash your disk and so.  
+
+Sat Sep 25 01:04:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/leds.c, document/renderer.c, ecmascript/spidermonkey.c,
+	sched/session.c, sched/session.h:
+
+	Add ecmascript error led using 'J' when on.  
+
+Sat Sep 25 00:59:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/ecmascript.c:
+
+	Compilation fix.  
+
+Sat Sep 25 00:59:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/renderer.c, ecmascript/ecmascript.c,
+	ecmascript/ecmascript.h:
+
+	Moved ECMAScript state cleanup bit from render_document_frames() to
+	ecmascript_cleanup_state().  
+
+Sat Sep 25 00:50:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/status.c, ecmascript/spidermonkey.c,
+	sched/session.c, sched/session.h:
+
+	Support for ECMAScript's window.(status|menu)bar.visible. Try
+	javascript:statusbar.visible=0. This is getting scary... ;-) 
+
+Sat Sep 25 00:19:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/: ecmascript.c, spidermonkey.c:
+
+	Add boolean option named ecmascript.error_reporting will stop all
+	script error reporting.  
+
+Sat Sep 25 00:03:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	VALUE_TO_JSVAL_END() now takes a @vp argument.  
+
+Sat Sep 25 00:02:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window.alert() implemented.  
+
+Fri Sep 24 23:46:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Ok, evade the crash by constructing @window_obj as a nice global
+	object again, gradually instead of a direct sledgehammer hit by
+	JS_InitClass().  
+
+Fri Sep 24 23:40:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Carry JSPT_BOOLEAN in int instead of string.  
+
+Fri Sep 24 23:38:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Do the similar thing with VALUE_TO_JSVAL* - group all the local
+	variables into the (enum prop_enum) union.  
+
+Fri Sep 24 23:33:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Convert the JSVAL_TO_VALUE* macros to use {union jsval_union}
+	instead of a bunch of variables.  
+
+Fri Sep 24 23:24:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Get actual support for JSPT_BOOLEAN and JSPT_OBJECT so that we
+	compile again :).  
+
+Fri Sep 24 23:19:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Give the window object few properties - closed, document, location,
+	self, top and window.  
+
+Fri Sep 24 22:53:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	@global_class -> @window_class and the literal name renamed to
+	"window" too. @global_obj -> @window_obj.  
+
+Fri Sep 24 22:43:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	And process_snippets() even when retrieving the document from cache.
+	This should fix the rest of problems with undefined values (the link
+	in the inlinescript.html test).  
+
+Fri Sep 24 22:35:05 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Preserve interpreter over rerenderings. Works most times, but not
+	always.  
+
+Fri Sep 24 22:23:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Untested support for prettyprinting the errors (if enough info is
+	available).  
+
+Fri Sep 24 22:12:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Move the static safeguard functions to the rest of static symbol
+	definitions and drop the spidermonkey_ prefix there.  
+
+Fri Sep 24 22:11:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Introduced error_reporter(), which is, well, an error reporter ;-).  
+
 Fri Sep 24 21:29:53 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/ecmascript/spidermonkey.c:

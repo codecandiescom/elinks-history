@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.37 2004/06/11 14:00:24 jonas Exp $ */
+/* $Id: terminal.h,v 1.38 2004/06/13 12:14:36 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -117,9 +117,6 @@ struct terminal {
 
 	/* The type of environment this terminal lives in. */
 	enum term_env_type environment;
-
-	/* $TERM env. variable value */
-	unsigned char term[MAX_TERM_LEN];
 
 	/* The current working directory for this terminal / ELinks instance. */
 	unsigned char cwd[MAX_CWD_LEN];

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.142 2004/05/25 16:29:00 jonas Exp $ */
+/* $Id: screen.c,v 1.143 2004/06/13 12:14:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,7 +272,7 @@ add_screen_driver(enum term_mode_type type, struct terminal *term, int env_len)
 	if (!driver) return NULL;
 
 	memcpy(driver, screen_drivers[type], sizeof(struct screen_driver) - 1);
-	memcpy(driver->name, term->term, env_len + 1);
+	memcpy(driver->name, term->spec->name, env_len + 1);
 
 	add_to_list(active_screen_drivers, driver);
 

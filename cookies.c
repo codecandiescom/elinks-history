@@ -133,6 +133,9 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	      cookie->name, cookie->value, cookie->server, cookie->domain, cookie->expires, cookie->secure);
 #endif
 	if (check_domain_security(server, cookie->domain)) {
+#ifdef COOKIES_DEBUG
+		debug("Dropped because domain security.");
+#endif
 		denided:
 #ifdef COOKIES_DEBUG
 		debug("Dropped.");

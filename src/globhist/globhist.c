@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.66 2004/01/04 15:05:37 jonas Exp $ */
+/* $Id: globhist.c,v 1.67 2004/01/05 19:47:33 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -8,6 +8,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef CONFIG_GLOBHIST
 
 #include "elinks.h"
 
@@ -53,8 +55,6 @@ unsigned char *gh_last_searched_url = NULL;
 
 /* Timer for periodically writing the history to disk. */
 static int global_history_write_timer = -1;
-
-#ifdef CONFIG_GLOBHIST
 
 enum global_history_options {
 	GLOBHIST_TREE,

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.17 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: file.c,v 1.18 2004/02/09 11:51:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 
 #include "elinks.h"
 
+#include "util/conv.h"
 #include "util/error.h"
 #include "util/file.h"
 #include "util/memory.h"
@@ -95,10 +96,11 @@ get_unique_name(unsigned char *fileprefix)
 			file = mem_alloc(fileprefixlen + 2 + digits);
 			if (!file) return NULL;
 
-			safe_strncpy(file, fileprefix, fileprefixlen + 1);
+			memcpy(file, fileprefix, fileprefixlen);
+			file[fileprefixlen] = '.';
 		}
 
-		sprintf(&file[fileprefixlen], ".%d", suffix);
+		longcat(&file[fileprefixlen + 1], NULL, suffix, digits + 1, 0);
 		suffix++;
 	}
 

@@ -1,3 +1,315 @@
+Wed Jan  7 22:55:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.inc:
+
+	Ending dot was removed in option caption.  
+
+Wed Jan  7 21:24:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, viewer/text/search.c:
+
+	Move typeahead options to document.browse.search.* and make them
+	more generic so they might even be used for other search actions.  
+
+Wed Jan  7 20:02:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	html_iframe() now handles id as a synonymum to name attribute.  
+
+Wed Jan  7 20:01:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Implemented very simplistic, quick'n'dirty <object> element support.
+	Now it just wraps either html_iframe() or html_img() or it just does
+	nothing. You can test it ie. at http://digitasaru.net/ (the
+	navbar.html is an object of type text/html).  
+
+Wed Jan  7 19:32:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/action.c:
+
+	menu_save_url_as() -> save_url_as() and drop some args.  
+
+Wed Jan  7 19:27:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Use local term variable.  
+
+Wed Jan  7 19:18:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/action.c,
+	terminal/terminal.c, terminal/terminal.h:
+
+	Rename menu_shell() to exec_shell() and move to terminal files.  
+
+Wed Jan  7 19:11:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	do_frame_action(): Assert the view state.  
+
+Wed Jan  7 19:08:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	Rename menu_save_formatted() to save_formatted_dlg() and use
+	do_frame_action() as backend (or is it front end ;).  
+
+Wed Jan  7 18:57:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	More #include fixes related to the recent action patches.  
+
+Wed Jan  7 18:52:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, terminal/tab.c,
+	viewer/text/view.c:
+
+	Remove / fix #includes related to the recent action patches.  
+
+Wed Jan  7 18:26:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/README:
+
+	Mention what '~' in string mean that hotkeys should be unique.  
+
+Wed Jan  7 17:02:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, sched/action.c, viewer/text/view.c:
+
+	do_action(): Handle save-* actions. Saving formatted should always
+	be interactive so we hardcode that in menu_save_formatted() now.  
+
+Wed Jan  7 16:46:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Update the anonymous setup menu to use the new *buzz* action object
+	model *buzz ;-) 
+
+Wed Jan  7 16:42:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, sched/action.c, viewer/text/view.c:
+
+	do_action(): Save option and open terminal option dialog was added.  
+
+Wed Jan  7 16:29:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, sched/action.c, viewer/text/view.c:
+
+	Move some frame related action handling to do_action(). It uses
+	do_frame_action() as a backend which is just a moved version of
+	menu_for_frame().  
+
+Wed Jan  7 15:23:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.h, dialogs/menu.c:
+
+	Introduce INIT_MENU_ACTION() to decrease the noise of unused
+	arguments.  
+
+Wed Jan  7 14:53:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Use add_menu_action() in link_menu().  
+
+Wed Jan  7 14:47:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.h, dialogs/menu.c, viewer/text/link.c:
+
+	Make add_menu_action() reflect that no data can be passed. Also
+	purge the flag arg since it is not used.  
+
+Wed Jan  7 14:44:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, sched/action.c, sched/action.h,
+	viewer/text/view.c:
+
+	do_action(): Don't take any data arg. We handle that in the
+	function.  
+
+Wed Jan  7 14:41:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, sched/action.c, viewer/text/link.c,
+	viewer/text/view.c:
+
+	Move bookmark adding action handling to do_action().  
+
+Wed Jan  7 12:13:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, sched/action.c, viewer/text/link.c,
+	viewer/text/view.c:
+
+	Move ACT_OPEN_* handlers to do_action().  
+
+Wed Jan  7 08:44:27 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jan  7 03:49:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/dialogs.c, bookmarks/dialogs.h, dialogs/menu.c,
+	sched/action.c:
+
+	Handle ACT_BOOKMARK_TABS in do_action(). Normalise the dialog to
+	only take the terminal.  
+
+Wed Jan  7 03:47:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/terminal.c:
+
+	Ensure we are not in anonynous mode before autosaving.  
+
+Wed Jan  7 03:42:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Don.t add bookmark entries when running in anonymous mode.  
+
+Wed Jan  7 03:18:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/dialogs.c, bookmarks/dialogs.h, cache/dialogs.c,
+	cache/dialogs.h, config/dialogs.c, config/dialogs.h,
+	cookies/dialogs.c, cookies/dialogs.h, dialogs/download.c,
+	dialogs/download.h, formhist/dialogs.c, formhist/dialogs.h,
+	globhist/dialogs.c, globhist/dialogs.h, sched/action.c:
+
+	Normalise manager functions. They are nolonger menu functions so
+	there is no need to pass bogus arguments to them.  
+
+Wed Jan  7 03:02:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Presenting the missing good parts from last patch. Removing
+	#includes. I sense a small break in the moaning from paskys build
+	box.  
+
+Wed Jan  7 02:57:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Oops forgot to remove menu functions so do_action() is used.  
+
+Wed Jan  7 02:53:30 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	Remove a superfluous |continue| introduced in
+	src/document/html/renderer.c:1.254->1.255.  
+
+Wed Jan  7 02:50:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: globhist/dialogs.c, sched/action.c, viewer/text/view.c:
+
+	do_action(): Handle the manager actions. Also drop the anonymous
+	checking since unwanted buttons will not be shown. For globhist
+	manager it basicly becomes more like the cache manager, and
+	option/keybinding manager will only let the user read descriptions
+	and do we really want to deprive anonymous users this educational
+	experience? ;-) 
+
+Wed Jan  7 02:01:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/view.c:
+
+	Move the rest of the document option toggling in send_event() to
+	do_action().  
+
+Wed Jan  7 01:57:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	Ahh the joy of generalization. Toggling document option that is.  
+
+Wed Jan  7 01:22:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, dialogs/menu.c, dialogs/menu.h,
+	sched/Makefile.am, sched/action.c, sched/action.h,
+	viewer/text/view.c:
+
+	Move do_action() to separate file.  
+
+Wed Jan  7 01:09:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	send_event(): Use do_action().  
+
+Wed Jan  7 00:58:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, dialogs/menu.c, dialogs/menu.h:
+
+	Optionalize whether to bug or not when the action was not handled
+	and also return the action if it handled or ACT_NONE. This should
+	make it usable for send_event() later.  
+
+Wed Jan  7 00:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.c, document/document.h,
+	document/renderer.c, viewer/text/link.c, viewer/text/link.h:
+
+	Finish the moving of sort_links() by also moving done_link_members()
+	used by it and others only in document/. Fix #include of stdlib.h
+	for qsort (on FreeBSD atleast).  
+
+Wed Jan  7 00:38:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Instead of defining a wrapper function for each sub menu define
+	do_submenu() and pass the sub menu items as the data.  
+
+Wed Jan  7 00:21:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, terminal/tab.c, terminal/tab.h,
+	viewer/text/view.c:
+
+	do_action(): Handle close all tabs but current action and normalize
+	the function since it no longer needs to be a menu function.  
+
+Wed Jan  7 00:12:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	do_action(): Handle most used toggling actions.  
+
+Wed Jan  7 00:06:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	do_action(): Handle ACT_DOCUMENT_INFO, ACT_HEADER_INFO and
+	ACT_KILL_BACKGROUNDED_CONNECTIONS.  
+
+Tue Jan  6 23:59:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c:
+
+	It was unanimously decided to use minimize instead of shrink.  
+
+Tue Jan  6 23:39:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	do_action(): Insert all unhandled actions so it will be easier to
+	muddle on.  
+
+Tue Jan  6 23:26:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c:
+
+	Add ACT_CACHE_SHRINK action and use it for do_action(). The concept
+	is muddled so I chose shrink since to me it only indicates some best
+	effort kind of thing but the action description should be quite
+	clear.  
+
 Tue Jan  6 23:02:39 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/dialogs/menu.c:

@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.10 2003/07/31 00:33:30 jonas Exp $ */
+/* $Id: draw.h,v 1.11 2003/07/31 01:09:06 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -70,7 +70,7 @@ enum frame_cross_direction {
 	FRAME_X_UP
 };
 
-void set_char(struct terminal *, int, int, unsigned);
+void set_char(struct terminal *, int, int, unsigned char, unsigned int);
 void set_border_char(struct terminal *term, int x, int y, enum border_char border, unsigned char color);
 void set_xchar(struct terminal *, int x, int y, enum frame_cross_direction);
 struct screen_char *get_char(struct terminal *, int, int);

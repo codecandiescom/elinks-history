@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.30 2003/07/31 00:33:30 jonas Exp $ */
+/* $Id: draw.c,v 1.31 2003/07/31 01:09:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,8 @@
 
 
 void
-set_char(struct terminal *term, int x, int y, unsigned c)
+set_char(struct terminal *term, int x, int y,
+	 unsigned char data, unsigned int attr)
 {
 	struct terminal_screen *screen = term->screen;
 	int position = x + term->x * y;
@@ -22,8 +23,8 @@ set_char(struct terminal *term, int x, int y, unsigned c)
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
-	screen->image[position].data = get_screen_char_data(c);
-	screen->image[position].attr = get_screen_char_attr(c);
+	screen->image[position].data = data;
+	screen->image[position].attr = get_screen_char_attr(attr);
 	screen->dirty = 1;
 }
 
@@ -199,10 +200,10 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	int cp4 = c + p[4];
 	int cp5 = c + p[5];
 
-	set_char(t, x, y, c + p[0]);
-	set_char(t, xt, y, c + p[1]);
-	set_char(t, x, yt, c + p[2]);
-	set_char(t, xt, yt, c + p[3]);
+	set_border_char(t, x, y, (unsigned char) p[0], get_screen_char_attr(c));
+	set_border_char(t, xt, y, (unsigned char) p[1], get_screen_char_attr(c));
+	set_border_char(t, x, yt, (unsigned char) p[2], get_screen_char_attr(c));
+	set_border_char(t, xt, yt, (unsigned char) p[3], get_screen_char_attr(c));
 
 	fill_area(t, x, y1, 1, ywt, cp4);
 	fill_area(t, xt, y1, 1, ywt, cp4);

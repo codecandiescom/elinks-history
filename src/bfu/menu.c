@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.81 2003/07/31 00:33:29 jonas Exp $ */
+/* $Id: menu.c,v 1.82 2003/07/31 01:09:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,14 +324,14 @@ display_menu(struct terminal *term, struct menu *menu)
 						if (hk == 1) {
 #ifdef DEBUG
 							set_char(term, menu->x + x - 1 + 2,
-								 s, (double_hk ?  menu_selected_hotkey_color : hkco) | c);
+								 s, c, (double_hk ?  menu_selected_hotkey_color : hkco));
 #else
 							set_char(term, menu->x + x - 1 + 2, s, hkco | c);
 #endif
 							hk = 2;
 						} else {
 							set_char(term, menu->x + x - (hk ? 1 : 0) + 2,
-								 s, c | co);
+								 s, c, co);
 						}
 					}
 
@@ -341,7 +341,7 @@ display_menu(struct terminal *term, struct menu *menu)
 				     	     x < menu->xw - 4
 				     	     && (c = text[x]);
 				     	     x++)
-						set_char(term, menu->x + x + 2, s, c | co);
+						set_char(term, menu->x + x + 2, s, c, co);
 				}
 			}
 
@@ -358,7 +358,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					     (x >= 0) && (menu->xw - 4 >= l - x)
 					     && (c = rtext[x]);
 				    	     x--)
-						set_char(term, menu->x + menu->xw - 2 - l + x, s, c | co);
+						set_char(term, menu->x + menu->xw - 2 - l + x, s, c, co);
 				}
 			}
 		}
@@ -679,13 +679,13 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 			if (hk == 1) {
 #ifdef DEBUG
-				set_char(term, p, 0, (double_hk ? mainmenu_selected_hotkey_color : hkco) | c);
+				set_char(term, p, 0, c, (double_hk ? mainmenu_selected_hotkey_color : hkco));
 #else
-				set_char(term, p, 0, hkco | c);
+				set_char(term, p, 0, c, hkco);
 #endif
 				hk = 2;
 			} else {
-				set_char(term, p, 0, co | c);
+				set_char(term, p, 0, c, co);
 			}
 		}
 

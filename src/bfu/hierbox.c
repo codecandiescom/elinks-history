@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.91 2003/11/22 21:42:47 jonas Exp $ */
+/* $Id: hierbox.c,v 1.92 2003/11/22 22:02:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,6 +412,34 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 		action_info, 1,
 		N_("OK"), done_hierbox_action_info, B_ESC | B_ENTER);
 
+	return 0;
+}
+
+/* Goto action */
+
+int
+push_hierbox_goto_button(struct dialog_data *dlg_data,
+			 struct widget_data *button)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct session *ses = dlg_data->dlg->udata;
+	unsigned char *uri;
+
+	/* Do nothing with a folder */
+	/* TODO: Maybe pop up a msg_box() with an error message. --jonas */
+	if (!box->sel || box->sel->type == BI_FOLDER) return 0;
+
+	/* Follow the bookmark */
+	/* FIXME: All hierbox browser store the session in dlg_data->udata
+	 * so make it official! --jonas */
+	uri = box->ops->get_info(box->sel, dlg_data->win->term, LISTBOX_URI);
+	if (!uri) return 0;
+
+	goto_url(ses, uri);
+	mem_free(uri);
+
+	/* Close the dialog */
+	delete_window(dlg_data->win);
 	return 0;
 }
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.65 2003/05/07 09:22:55 zas Exp $ */
+/* $Id: view.c,v 1.66 2003/05/07 10:28:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1346,11 +1346,14 @@ decrement_fc_refcount(struct f_data *f)
 
 struct submitted_value {
 	LIST_HEAD(struct submitted_value);
-	int type;
+
 	unsigned char *name;
 	unsigned char *value;
+
 	void *file_content;
+
 	int fc_len;
+	int type;
 	int position;
 };
 
@@ -2372,7 +2375,7 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 
 	int i, j;
 	static char hash[HASH_SIZE];
-	static char first_time = 1;
+	static int first_time = 1;
 
 	if (first_time) memset(hash, 0, HASH_SIZE), first_time = 0;
 
@@ -2530,6 +2533,7 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 			    && l->pos[i].y - f->vs->view_pos == ev->y)
 				return l;
 	}
+
 	return NULL;
 }
 

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-18 18:34+0100\n"
-"PO-Revision-Date: 2003-11-16 07:00+0200\n"
+"PO-Revision-Date: 2003-11-20 05:30+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -276,9 +276,9 @@ msgid "URL"
 msgstr "URL"
 
 #: src/cache/dialogs.c:98
-#, fuzzy
+
 msgid "Redirect"
-msgstr "Odrzucenie"
+msgstr "Przekierowanie"
 
 #: src/cache/dialogs.c:106 src/config/options.inc:353
 #: src/dialogs/document.c:92
@@ -287,7 +287,7 @@ msgstr "Rozmiar"
 
 #: src/cache/dialogs.c:107
 msgid "Loaded size"
-msgstr ""
+msgstr "Rozmiar za³adowanych dokumentów"
 
 #: src/cache/dialogs.c:110 src/dialogs/document.c:137
 msgid "Last modified"
@@ -302,9 +302,8 @@ msgid "Encoding"
 msgstr "Kodowanie"
 
 #: src/cache/dialogs.c:128
-#, fuzzy
 msgid "Flags"
-msgstr "Alias"
+msgstr "Flagi"
 
 #: src/cache/dialogs.c:131 src/dialogs/document.c:95
 msgid "incomplete"
@@ -312,16 +311,15 @@ msgstr "niekompletne"
 
 #: src/cache/dialogs.c:134
 msgid "invalid"
-msgstr ""
+msgstr "nieprawid³owy"
 
 #: src/cache/dialogs.c:141
 msgid "ID tag"
-msgstr ""
+msgstr "tag ID"
 
 #: src/cache/dialogs.c:145
-#, fuzzy
 msgid "Header"
-msgstr "Informacje o nag³ówku"
+msgstr "Nag³ówek"
 
 #: src/cache/dialogs.c:151 src/cache/dialogs.c:178 src/config/dialogs.c:82
 #: src/config/dialogs.c:95 src/config/dialogs.c:390 src/cookies/dialogs.c:124
@@ -661,9 +659,8 @@ msgid "Open bookmark manager"
 msgstr "Otwórz menad¿era zak³adek"
 
 #: src/config/kbdbind.c:390
-#, fuzzy
 msgid "Open cache manager"
-msgstr "Otwórz menad¿era historii"
+msgstr "Otwórz menad¿era pamiêci podrêcznej"
 
 #: src/config/kbdbind.c:391
 msgid "Reload cookies file"
@@ -3888,7 +3885,7 @@ msgid "Reject"
 msgstr "Odrzucenie"
 
 #: src/cookies/dialogs.c:83
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Server: %s\n"
 "Name: %s\n"
@@ -3897,8 +3894,7 @@ msgid ""
 "Expires: %s\n"
 "Secure: %s"
 msgstr ""
-"Czy akceptujesz ciasteczko z %s?\n"
-"\n"
+"Serwer: %s\n"
 "Nazwa: %s\n"
 "Warto¶æ: %s\n"
 "Domena: %s\n"
@@ -3906,9 +3902,8 @@ msgstr ""
 "Bezpieczeñstwo: %s\n"
 
 #: src/cookies/dialogs.c:150
-#, fuzzy
 msgid "Cookie manager"
-msgstr "Obs³uga zak³adek"
+msgstr "Menad¿er ciasteczek"
 
 #: src/dialogs/auth.c:59
 #, c-format
@@ -4102,9 +4097,8 @@ msgstr "~Zak³adki"
 
 #
 #: src/dialogs/menu.c:332
-#, fuzzy
 msgid "~Cache"
-msgstr "Pamiêæ podrêczna"
+msgstr "Pamiêæ podrê~czna"
 
 #: src/dialogs/menu.c:338
 msgid "Sa~ve as"
@@ -5630,18 +5624,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1409
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "No entry."
-#~ msgstr "Brak pozycji."
-
-#~ msgid "%ld more entries."
-#~ msgstr "%ld wiêcej pozycji."
-
-#~ msgid "Cache info"
-#~ msgstr "Informacje o pamiêci podrêcznej"
-
-#~ msgid "Cache content: %s"
-#~ msgstr "Zawarto¶æ pamiêci podrêcznej: %s"
-
-#~ msgid "~Cache info"
-#~ msgstr "Informa~cje o pamiêci podrêcznej"

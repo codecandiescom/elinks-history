@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.74 2003/12/28 02:16:14 zas Exp $ */
+/* $Id: kbdbind.h,v 1.75 2003/12/29 22:43:46 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -147,7 +147,7 @@ void init_keymaps(void);
 void free_keymaps(void);
 
 void add_keybinding(enum keymap km, int action, long key, long meta, int func_ref);
-int keybinding_exists(enum keymap km, long key, long meta, int *action);
+int keybinding_exists(enum keymap km, long key, long meta, enum keyact *action);
 void delete_keybinding(enum keymap km, long key, long meta);
 void free_keybinding(struct keybinding *);
 

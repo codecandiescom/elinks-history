@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.139 2003/12/28 02:00:58 zas Exp $ */
+/* $Id: dialogs.c,v 1.140 2003/12/29 22:43:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -416,11 +416,10 @@ static void
 really_add_keybinding(void *data, unsigned char *keystroke)
 {
 	struct kbdbind_add_hop *hop = data;
-	long key, meta;
-	int action;
+	enum keyact action;
 
 	/* TODO: This should maybe rather happen in a validation function? */
-	if (parse_keystroke(keystroke, &key, &meta) < 0) {
+	if (parse_keystroke(keystroke, &hop->key, &hop->meta) < 0) {
 		msg_box(hop->term, NULL, 0,
 			N_("Add keybinding"), AL_CENTER,
 			N_("Invalid keystroke."),
@@ -429,7 +428,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 		return;
 	}
 
-	if (keybinding_exists(hop->keymap, key, meta, &action)) {
+	if (keybinding_exists(hop->keymap, hop->key, hop->meta, &action)) {
 		struct kbdbind_add_hop *new_hop;
 
 		/* Same keystroke for same action, just return. */
@@ -437,9 +436,6 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 
 		new_hop = new_hop_from(hop);
 		if (!new_hop) return; /* out of mem */
-
-		new_hop->key = key;
-		new_hop->meta = meta;
 
 		msg_box(new_hop->term, getml(new_hop, NULL), MSGBOX_FREE_TEXT,
 			N_("Keystroke already used"), AL_CENTER,
@@ -454,7 +450,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 		return;
 	}
 
-	add_keybinding(hop->keymap, hop->action, key, meta, 0);
+	really_really_add_keybinding((void *) hop);
 }
 
 static int

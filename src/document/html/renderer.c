@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.28 2002/06/09 20:14:37 pasky Exp $ */
+/* $Id: renderer.c,v 1.29 2002/06/11 15:09:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1340,6 +1340,10 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 		struct table_cache_entry_key key;
 		struct hash_item *item;
 		
+		/* Clear key to prevent potential alignment problem
+		 * when keys are compared. */
+		memset(&key, 0, sizeof(struct table_cache_entry_key));
+
 		key.start = start;
 		key.end = end;
 		key.align = align;
@@ -1472,6 +1476,10 @@ ret:
 		/* A goto is used here to prevent a test or code
 		 * redundancy. */
 		if (!tce) goto end;
+		
+		/* Clear memory to prevent bad key comparaison due to alignment
+		 * of key fields. */
+		memset(&tce->key, 0, sizeof(struct table_cache_entry_key));
 
 		tce->key.start = start;
 		tce->key.end = end;

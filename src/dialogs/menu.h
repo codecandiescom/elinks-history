@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.25 2004/01/07 19:32:35 jonas Exp $ */
+/* $Id: menu.h,v 1.26 2004/01/08 13:28:53 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -17,12 +17,12 @@ void free_history_lists(void);
 
 void query_file(struct session *, unsigned char *, void *, void (*)(void *, unsigned char *), void (*)(void *), int);
 
-void exit_prog(struct terminal *, void *, struct session *);
-
 void do_auth_dialog(struct session *);
 
 void really_exit_prog(struct session *ses);
 void query_exit(struct session *ses);
+void exit_prog(struct session *ses, int query);
+
 void save_url_as(struct session *ses);
 
 #endif

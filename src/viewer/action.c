@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.33 2004/01/08 09:53:07 zas Exp $ */
+/* $Id: action.c,v 1.34 2004/01/08 13:28:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,11 +322,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_QUIT:
-			exit_prog(term, (void *)0, ses);
+			exit_prog(ses, 1);
 			break;
 
 		case ACT_REALLY_QUIT:
-			exit_prog(term, (void *)1, ses);
+			exit_prog(ses, 0);
 			break;
 
 		case ACT_REDRAW:

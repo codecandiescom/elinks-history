@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.35 2003/11/12 06:03:17 witekfl Exp $ */
+/* $Id: frames.c,v 1.36 2003/11/13 21:42:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,6 @@ format_frame(struct session *ses, unsigned char *name,
 	struct view_state *vs;
 	struct document_view *doc_view;
 	struct frame *frame;
-	int plain;
 
 	assert(ses && name && o);
 	if_assert_failed return NULL;
@@ -187,8 +186,6 @@ repeat:
 
 	vs = &frame->vs;
 	if (!find_in_cache(vs->url, &ce) || !ce) return NULL;
-	plain = o->plain;
-	if (vs->plain != -1) o->plain = vs->plain;
 
 	if (ce->redirect && frame->redirect_cnt < MAX_REDIRECTS) {
 		unsigned char *u = join_urls(vs->url, ce->redirect);
@@ -197,14 +194,12 @@ repeat:
 			frame->redirect_cnt++;
 			ses_change_frame_url(ses, name, u);
 			mem_free(u);
-			o->plain = plain;
 			goto repeat;
 		}
 	}
 
 	doc_view = find_fd(ses, name, depth, o->x, o->y);
 	if (doc_view) render_document(vs, doc_view, o);
-	o->plain = plain;
 
 	return doc_view;
 }

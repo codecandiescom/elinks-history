@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.226 2003/11/13 13:17:28 zas Exp $ */
+/* $Id: session.c,v 1.227 2003/11/13 21:42:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,11 +446,10 @@ free_files(struct session *ses)
 
 
 void
-ses_forward(struct session *ses, struct view_state **vs_ptr)
+ses_forward(struct session *ses)
 {
 	struct location *loc;
 	int len;
-	int plain;
 
 	free_files(ses);
 
@@ -488,11 +487,8 @@ x:
 			goto x;
 		}
 
-		plain = (&frame->vs)->plain;
 		destroy_vs(&frame->vs);
 		init_vs(&frame->vs, ses->loading_url);
-		(&frame->vs)->plain = plain;
-		if (vs_ptr) *vs_ptr = &frame->vs;
 
 		if (ses->goto_position) {
 			if (frame->vs.goto_position)
@@ -505,11 +501,8 @@ x:
 						&ses->loading, PRI_FRAME);
 #endif
 	} else {
-		plain = (&loc->vs)->plain;
 		init_list(loc->frames);
 		init_vs(&loc->vs, ses->loading_url);
-		(&loc->vs)->plain = plain;
-		if (vs_ptr) *vs_ptr = &loc->vs;
 		add_to_history(&ses->history, loc);
 
 		if (ses->goto_position) {
@@ -786,7 +779,7 @@ b:
 		case TASK_RELOAD:
 			ses->task_target_location = cur_loc(ses)->prev;
 			ses_history_move(ses);
-			ses_forward(ses, NULL);
+			ses_forward(ses);
 			break;
 	}
 

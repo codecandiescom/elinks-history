@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.57 2004/10/09 21:13:38 miciah Exp $ */
+/* $Id: view.h,v 1.58 2004/10/09 22:06:10 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -19,6 +19,32 @@ enum frame_event_status {
 
 /* Releases the document view's resources. But doesn't free() the @view. */
 void detach_formatted(struct document_view *doc_view);
+
+void move_down(struct session *ses, struct document_view *doc_view, int type);
+void move_page_down(struct session *ses, struct document_view *doc_view);
+void move_up(struct session *ses, struct document_view *doc_view, int type);
+void move_page_up(struct session *ses, struct document_view *doc_view);
+void move_link(struct session *ses, struct document_view *doc_view,
+	       int direction, int wraparound_bound, int wraparound_link);
+
+#define move_link_next(ses, doc_view) move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0)
+#define move_link_prev(ses, doc_view) move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1)
+
+void move_link_dir(struct session *ses, struct document_view *doc_view,
+		   int dir_x, int dir_y);
+
+#define move_link_up(ses, doc_view) move_link_dir(ses, doc_view,  0, -1)
+#define move_link_down(ses, doc_view) move_link_dir(ses, doc_view,  0,  1)
+#define move_link_left(ses, doc_view) move_link_dir(ses, doc_view, -1,  0)
+#define move_link_right(ses, doc_view) move_link_dir(ses, doc_view,  1,  0)
+
+void scroll_up(struct session *ses, struct document_view *doc_view);
+void scroll_down(struct session *ses, struct document_view *doc_view);
+void scroll_left(struct session *ses, struct document_view *doc_view);
+void scroll_right(struct session *ses, struct document_view *doc_view);
+
+void move_document_start(struct session *ses, struct document_view *doc_view);
+void move_document_end(struct session *ses, struct document_view *doc_view);
 
 enum frame_event_status set_frame(struct session *ses, struct document_view *doc_view, int xxxx);
 struct document_view *current_frame(struct session *);

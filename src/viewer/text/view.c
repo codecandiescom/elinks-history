@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.597 2004/10/09 21:13:38 miciah Exp $ */
+/* $Id: view.c,v 1.598 2004/10/09 22:06:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ detach_formatted(struct document_view *doc_view)
 
 /* type == 0 -> PAGE_DOWN
  * type == 1 -> DOWN */
-static void
+void
 move_down(struct session *ses, struct document_view *doc_view, int type)
 {
 	int newpos;
@@ -103,7 +103,7 @@ move_down(struct session *ses, struct document_view *doc_view, int type)
 		find_link_page_down(doc_view);
 }
 
-static void
+void
 move_page_down(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
@@ -116,7 +116,7 @@ move_page_down(struct session *ses, struct document_view *doc_view)
 
 /* type == 0 -> PAGE_UP
  * type == 1 -> UP */
-static void
+void
 move_up(struct session *ses, struct document_view *doc_view, int type)
 {
 	assert(ses && doc_view && doc_view->vs);
@@ -134,7 +134,7 @@ move_up(struct session *ses, struct document_view *doc_view, int type)
 		find_link_page_up(doc_view);
 }
 
-static void
+void
 move_page_up(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
@@ -145,7 +145,7 @@ move_page_up(struct session *ses, struct document_view *doc_view)
 		move_up(ses, doc_view, 0);
 }
 
-static void
+void
 move_link(struct session *ses, struct document_view *doc_view, int direction,
 	  int wraparound_bound, int wraparound_link)
 {
@@ -205,10 +205,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 	}
 }
 
-#define move_link_next(ses, doc_view) move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0)
-#define move_link_prev(ses, doc_view) move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1)
-
-static void
+void
 move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, int dir_y)
 {
 	int count;
@@ -236,11 +233,6 @@ move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, in
 		}
 	}
 }
-
-#define move_link_up(ses, doc_view) move_link_dir(ses, doc_view,  0, -1)
-#define move_link_down(ses, doc_view) move_link_dir(ses, doc_view,  0,  1)
-#define move_link_left(ses, doc_view) move_link_dir(ses, doc_view, -1,  0)
-#define move_link_right(ses, doc_view) move_link_dir(ses, doc_view,  1,  0)
 
 /* @steps > 0 -> down */
 static void
@@ -294,7 +286,7 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 	find_link_page_down(doc_view);
 }
 
-static void
+void
 scroll_up(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
@@ -305,7 +297,7 @@ scroll_up(struct session *ses, struct document_view *doc_view)
 	vertical_scroll(ses, doc_view, -steps);
 }
 
-static void
+void
 scroll_down(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
@@ -316,7 +308,7 @@ scroll_down(struct session *ses, struct document_view *doc_view)
 	vertical_scroll(ses, doc_view, steps);
 }
 
-static void
+void
 scroll_left(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
@@ -327,7 +319,7 @@ scroll_left(struct session *ses, struct document_view *doc_view)
 	horizontal_scroll(ses, doc_view, -steps);
 }
 
-static void
+void
 scroll_right(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
@@ -376,7 +368,7 @@ static enum frame_event_status move_cursor(struct session *ses,
 					   struct document_view *doc_view,
 					   int x, int y);
 
-static void
+void
 move_document_start(struct session *ses, struct document_view *doc_view)
 {
 	assert(ses && doc_view && doc_view->vs);
@@ -392,7 +384,7 @@ move_document_start(struct session *ses, struct document_view *doc_view)
 	}
 }
 
-static void
+void
 move_document_end(struct session *ses, struct document_view *doc_view)
 {
 	int max_height;
@@ -629,22 +621,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	switch (kbd_action(KEYMAP_MAIN, ev, NULL)) {
-		case ACT_MAIN_MOVE_PAGE_DOWN: move_page_down(ses, doc_view); break;
-		case ACT_MAIN_MOVE_PAGE_UP: move_page_up(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_NEXT: move_link_next(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_PREV: move_link_prev(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_UP: move_link_up(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_DOWN: move_link_down(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_LEFT: move_link_left(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_RIGHT: move_link_right(ses, doc_view); break;
-		case ACT_MAIN_MOVE_DOCUMENT_START: move_document_start(ses, doc_view); break;
-		case ACT_MAIN_MOVE_DOCUMENT_END: move_document_end(ses, doc_view); break;
-
-		case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view); break;
-		case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;
-		case ACT_MAIN_SCROLL_LEFT: scroll_left(ses, doc_view); break;
-		case ACT_MAIN_SCROLL_RIGHT: scroll_right(ses, doc_view); break;
-
 		case ACT_MAIN_MOVE_CURSOR_UP:
 			status = move_cursor_up(ses, doc_view);
 			break;

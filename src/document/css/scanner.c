@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.6 2004/01/18 17:54:32 jonas Exp $ */
+/* $Id: scanner.c,v 1.7 2004/01/18 20:51:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,8 @@ scan_css_tokens(struct css_scanner *scanner)
 {
 	struct css_token *table = scanner->table;
 	int tokens = scanner->tokens;
-	int current = (scanner->current < tokens) ? scanner->current : 0;
+	int move_to_front = tokens - scanner->current;
+	int current = move_to_front ? scanner->current : 0;
 	unsigned char *string = tokens > 0
 			      ? get_css_token_end(&table[tokens - 1])
 			      : scanner->string;
@@ -103,14 +104,15 @@ scan_css_tokens(struct css_scanner *scanner)
 #endif
 
 	/* Move any untouched tokens */
-	if (current) {
-		int size = (tokens - current) * sizeof(struct css_token);
+	if (move_to_front) {
+		int size = move_to_front * sizeof(struct css_token);
 
 		memmove(table, &table[current], size);
+		
 	}
 
-	/* Set all tokens to CSS_TOKEN_NONE */
-	memset(&table[current], 0, sizeof(struct css_token) * (CSS_SCANNER_TOKENS - current));
+	/* Set all unused tokens to CSS_TOKEN_NONE */
+	memset(&table[move_to_front], 0, sizeof(struct css_token) * (CSS_SCANNER_TOKENS - move_to_front));
 
 	if (tokens && tokens < CSS_SCANNER_TOKENS) {
 		scanner->tokens = -1;
@@ -118,10 +120,8 @@ scan_css_tokens(struct css_scanner *scanner)
 		return;
 	}
 
-	tokens -= current;
-
 	/* Scan tokens til we have filled the table */
-	for (; current < CSS_SCANNER_TOKENS && *string; current++) {
+	for (current = move_to_front; current < CSS_SCANNER_TOKENS && *string; current++) {
 		struct css_token *token = &table[current];
 
 		scan_css(string, CSS_CHAR_WHITESPACE);

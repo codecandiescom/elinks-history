@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.24 2002/05/10 17:50:42 pasky Exp $ */
+/* $Id: parser.c,v 1.25 2002/05/17 21:07:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,16 @@ static inline int atchr(unsigned char c)
 	return isA(c) || (c > ' ' && c != '=' && c != '<' && c != '>');
 }
 
-int parse_element(unsigned char *e, unsigned char *eof, unsigned char **name, int *namelen, unsigned char **attr, unsigned char **end)
+/* This function eats one html element. */
+/* - e is pointer to the begining of the element (*e must be '<')
+ * - eof is pointer to the end of scanned area
+ * - parsed element name is stored in name, it's length is namelen
+ * - first attribute is stored in attr
+ * - end points to first character behind the html element */
+/* It returns -1 when it failed (returned values in pointers are invalid) and
+ * 0 for success. */
+int
+parse_element(unsigned char *e, unsigned char *eof, unsigned char **name, int *namelen, unsigned char **attr, unsigned char **end)
 {
 	if (e >= eof || *(e++) != '<') return -1;
 	if (name) *name = e;
@@ -93,7 +102,13 @@ unsigned char *_xx_;
 	if ((_xx_ = s, l % ALLOC_GR) || (_xx_ = mem_realloc(s, l + ALLOC_GR))) s = _xx_, s[l++] = c;	\
 	} while (0)
 
-unsigned char *get_attr_val(unsigned char *e, unsigned char *name)
+/* Parses html element attributes. */
+/* - e is attr pointer previously get from parse_element,
+ * DON'T PASS HERE ANY OTHER VALUE!!!
+ * - name is searched attribute */
+/* Returns allocated string containing the attribute, or NULL on unsuccess. */
+unsigned char *
+get_attr_val(unsigned char *e, unsigned char *name)
 {
 	unsigned char *n;
 	unsigned char *a = DUMMY;

@@ -2,7 +2,7 @@ elinks (0.11-cvs.1) unstable; urgency=low
 
   * NMU
   * Only read from /dev/stdin if no URL was given on the command line and
-    automatically allow special files to be read (closes: #296976)
+    automatically allow special files to be read (closes: #296976, #297510)
   * Fix repeatedly and endless refreshing of documents that triggers a
     download (like sourceforge's download pages) (closes: #293298)
   * Add watch file, thanks Hugo Haas

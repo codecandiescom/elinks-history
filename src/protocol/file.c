@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.48 2003/06/21 14:45:46 jonas Exp $ */
+/* $Id: file.c,v 1.49 2003/06/21 14:55:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,7 +285,6 @@ file_func(struct connection *c)
 	int fl;
 	DIR *d;
 	int fd;
-	int readlen;
 	struct stat stt;
 	int namelen;
 	int saved_errno;
@@ -592,6 +591,7 @@ dir:
 	} else if (!S_ISREG(stt.st_mode)) {
 		const int bufsize = 4096;
 		int offset = 0;
+		int readlen;
 
 		mem_free(name);
 
@@ -628,6 +628,7 @@ dir:
 
 	} else {
 		struct stream_encoded *stream;
+		int readlen;
 
 		if (encoding == ENCODING_NONE)
 			encoding = guess_encoding(name);

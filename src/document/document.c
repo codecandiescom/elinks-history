@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.25 2003/11/08 16:20:24 zas Exp $ */
+/* $Id: document.c,v 1.26 2003/11/11 15:20:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,8 @@
 #include "cache/cache.h"
 #include "document/document.h"
 #include "document/html/frames.h"
+#include "document/html/parser.h"
+#include "document/html/renderer.h"
 #include "document/options.h"
 #include "terminal/draw.h"
 #include "util/color.h"
@@ -244,15 +246,10 @@ formatted_info(int type)
 			foreach (document, format_cache)
 				i += is_document_locked(document);
 			return i;
-		default:
-			internal("formatted_info: bad request");
 	}
 
 	return 0;
 }
-
-#include "document/html/parser.h"
-#include "document/html/renderer.h"
 
 void
 init_documents(void)

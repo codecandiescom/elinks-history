@@ -220,11 +220,11 @@ dnl ===================================================================
 dnl For wiping SSL hooks..
 #ifdef HAVE_SSL
 
+AC_CHECK_LIB(dl, dlopen) # OpenSSL needs it?
+
 CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"
 cf_result=no
-
-AC_CHECK_LIB(dl, dlopen) # OpenSSL needs it?
 
 AC_ARG_WITH(ssl, [  --without-ssl           disable SSL support],
             [if test "$withval" = no;  then disable_ssl=yes; fi])

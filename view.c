@@ -1697,6 +1697,7 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 				break;
 			case ACT_PASTE_CLIPBOARD: {
 				char *clipboard = get_clipboard_text();
+				if (!clipboard) break;
 				if (!form->ro && strlen(clipboard) <= form->maxlength) {
 					unsigned char *v;
 					if (v = mem_realloc(fs->value, strlen(clipboard) +1)) {

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.31 2004/01/03 13:12:16 jonas Exp $ */
+/* $Id: dialogs.c,v 1.32 2004/01/03 13:59:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,13 +33,13 @@
 static void
 lock_cookie(struct listbox_item *item)
 {
-	object_lock((struct cookie *)item->udata);
+	if (item->udata) object_lock((struct cookie *)item->udata);
 }
 
 static void
 unlock_cookie(struct listbox_item *item)
 {
-	object_unlock((struct cookie *)item->udata);
+	if (item->udata) object_unlock((struct cookie *)item->udata);
 }
 
 static int

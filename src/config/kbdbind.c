@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.28 2002/07/01 16:21:31 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.29 2002/07/02 16:00:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@ struct keybinding {
 	long key;
 	long meta;
 	int func_ref;
+	int watermark;
 };
 
 static struct list_head keymaps[KM_MAX];
@@ -52,6 +53,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		kb->key = key;
 		kb->meta = meta;
 		kb->func_ref = func_ref;
+		kb->watermark = 0;
 		add_to_list(keymaps[km], kb);
 	}
 }
@@ -97,24 +99,33 @@ free_keymaps()
 }
 
 
+static struct keybinding *
+kbd_lookup(enum keymap kmap, long key, long meta, int *func_ref)
+{
+	struct keybinding *kb;
+
+	foreach(kb, keymaps[kmap]) {
+		if (key != kb->key || meta != kb->meta)
+			continue;
+
+		if (kb->action == ACT_LUA_FUNCTION && func_ref)
+			*func_ref = kb->func_ref;
+
+		return kb;
+	}
+
+	return NULL;
+}
+
 int
 kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
 {
 	struct keybinding *kb;
 
-	if (ev->ev == EV_KBD) {
-		foreach(kb, keymaps[kmap]) {
-			if (ev->x != kb->key || ev->y != kb->meta)
-				continue;
+	if (ev->ev != EV_KBD) return -1;
 
-			if (kb->action == ACT_LUA_FUNCTION && func_ref)
-				*func_ref = kb->func_ref;
-
-			return kb->action;
-		}
-	}
-
-	return -1;
+	kb = kbd_lookup(kmap, ev->x, ev->y, func_ref);
+	return kb ? kb->action : -1;
 }
 
 
@@ -356,11 +367,41 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 
 	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
 
-	action_= read_action(action);
+	action_ = read_action(action);
 	if (action_ < 0) return 3;
 
 	add_keybinding(keymap_, action_, key_, meta_, LUA_NOREF);
 	return 0;
+}
+
+void
+bind_act(unsigned char **str, int *len, unsigned char *keymap,
+	 unsigned char *keystroke)
+{
+	int keymap_;
+	long key_, meta_;
+	unsigned char *action;
+	struct keybinding *kb;
+
+	keymap_ = read_keymap(keymap);
+	if (keymap_ < 0) {
+fail:
+		add_to_str(str, len, "\"\"");
+		return;
+	}
+
+	if (parse_keystroke(keystroke, &key_, &meta_) < 0) goto fail;
+
+	kb = kbd_lookup(keymap_, key_, meta_, NULL);
+	if (!kb) goto fail;
+
+	action = write_action(kb->action);
+	if (!action) goto fail;
+
+	kb->watermark = 1;
+	add_to_str(str, len, "\"");
+	add_to_str(str, len, action);
+	add_to_str(str, len, "\"");
 }
 
 void
@@ -378,6 +419,12 @@ bind_config_string(unsigned char **file, int *len)
 			if (!keymap_str || !action_str || action_str[0] == ' ')
 				continue;
 
+			if (keybinding->watermark) {
+				keybinding->watermark = 0;
+				continue;
+			}
+
+			/* TODO: Maybe we should use string.write.. */
 			add_to_str(file, len, "bind \"");
 			add_to_str(file, len, keymap_str);
 			add_to_str(file, len, "\" \"");

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.44 2002/07/02 00:53:22 pasky Exp $ */
+/* $Id: conf.c,v 1.45 2002/07/02 16:00:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,19 +190,21 @@ parse_bind(struct list_head *opt_tree, unsigned char **file, int *line,
 		return ERROR_PARSE;
 	}
 
+	/* Mirror what we already have */
+	if (str) add_bytes_to_str(str, len, orig_pos, *file - orig_pos);
+
 	/* Action */
 	action = option_types[OPT_STRING].read(NULL, file);
 	if (!action) {
 		mem_free(keymap);
 		return ERROR_VALUE;
 	}
-
-	/* Mirror what we already have */
-	/* TODO: When implemented properly, this must be above action. */
-	if (str) add_bytes_to_str(str, len, orig_pos, *file - orig_pos);
 	
-	if (!str) /* TODO ;) */
-	error = bind_do(keymap, keystroke, action) ? ERROR_VALUE : ERROR_NONE;
+	if (str) {
+		bind_act(str, len, keymap, keystroke);
+	} else {
+		error = bind_do(keymap, keystroke, action) ? ERROR_VALUE : ERROR_NONE;
+	}
 	mem_free(keymap); mem_free(keystroke); mem_free(action);
 	return error;
 }
@@ -602,7 +604,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	add_to_str(&tmpstr, &tmplen, "#" NEWLINE);
 
 	origlen = tmplen;
-	/* bind_config_string(&str, &len); */
+	bind_config_string(&tmpstr, &tmplen);
 	if (tmplen > origlen) add_bytes_to_str(&str, &len, tmpstr, tmplen);
 	mem_free(tmpstr);
 

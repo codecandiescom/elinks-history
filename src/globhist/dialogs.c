@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.16 2003/01/03 02:23:55 pasky Exp $ */
+/* $Id: dialogs.c,v 1.17 2003/04/18 07:35:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "bfu/msgbox.h"
 #include "bfu/text.h"
 #include "dialogs/edit.h"
+#include "dialogs/hierbox.h"
 #include "globhist/dialogs.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
@@ -38,6 +39,12 @@ static struct list_head history_dialog_list = {
 	&history_dialog_list
 };
 
+static void listbox_delete_historyitem(struct terminal *,
+				       struct listbox_data *);
+
+static struct listbox_ops gh_listbox_ops = {
+	listbox_delete_historyitem,
+};
 
 void
 update_all_history_dialogs(void)
@@ -60,6 +67,7 @@ history_dialog_box_build()
 	box = mem_calloc(1, sizeof(struct listbox_data));
 	if (!box) return NULL;
 
+	box->ops = &gh_listbox_ops;
 	box->items = &gh_box_items;
 	add_to_list(gh_boxes, box);
 
@@ -111,57 +119,6 @@ history_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 	}
 
 	return EVENT_NOT_PROCESSED;
-}
-
-/* The titles to appear in the history dialog */
-static unsigned char *history_dialog_msg[] = {
-	N_("Global history"),
-};
-
-/* Called to setup the history dialog */
-static void
-layout_history_manager(struct dialog_data *dlg)
-{
-	struct terminal *term = dlg->win->term;
-	int max = 0, min = 0;
-	int w, rw;
-	int y = -1;
-
-	/* Find dimensions of dialog */
-	max_text_width(term, history_dialog_msg[0], &max);
-	min_text_width(term, history_dialog_msg[0], &min);
-	max_buttons_width(term, dlg->items + 2, 2, &max);
-	min_buttons_width(term, dlg->items + 2, 2, &min);
-
-	w = term->x * 9 / 10 - 2 * DIALOG_LB;
-	/* We ignore this now, as we don't compute with the width of the listbox
-	 * itself and we want it to have the maximal width possible. */
-	/* if (w > max) w = max; */
-	if (w < min) w = min;
-
-	if (w > term->x - 2 * DIALOG_LB)
-		w = term->x - 2 * DIALOG_LB;
-
-	if (w < 1)
-		w = 1;
-
-	rw = w;
-
-	y += 1;	/* Blankline between top and top of box */
-	dlg_format_box(NULL, term, &dlg->items[HISTORY_BOX_IND], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
-	y += 1;	/* Blankline between box and menu */
-	dlg_format_buttons(NULL, term, dlg->items, HISTORY_BOX_IND, 0, &y, w, &rw, AL_CENTER);
-	w = rw;
-	dlg->xw = w + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
-	draw_dlg(dlg);
-	y = dlg->y + DIALOG_TB;
-
-	y++;
-	dlg_format_box(term, term, &dlg->items[HISTORY_BOX_IND], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
-	y++;
-	dlg_format_buttons(term, term, &dlg->items[0], HISTORY_BOX_IND, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }
 
 
@@ -272,60 +229,122 @@ struct delete_globhist_item_ctx {
 };
 
 static void
-di_delete_global_history_item(void *vhop)
+do_delete_global_history_item(struct terminal *term,
+			      struct global_history_item *historyitem)
+{
+	if (historyitem->refcount > 0) {
+		msg_box(term, NULL,
+			N_("Delete history item"), AL_CENTER | AL_EXTD_TEXT,
+			N_("Sorry, but this bookmark is already being used by something right now."), "\n\n",
+			N_("Title"), ": \"", historyitem->title, "\n",
+			N_("URL"), ": \"", historyitem->url, NULL,
+ 			NULL, 1,
+ 			N_("Cancel"), NULL, B_ENTER | B_ESC);
+ 		return;
+ 	}
+
+	delete_global_history_item(historyitem);
+}
+
+static int
+delete_marked(struct listbox_item *item, void *data_, int offset)
+{
+	struct delete_globhist_item_ctx *vhop = data_;
+
+	if (item->marked)
+		do_delete_global_history_item(vhop->term,
+				(struct global_history_item *) item->udata);
+	return offset;
+}
+
+static void
+really_delete_global_history_item(void *vhop)
 {
 	struct delete_globhist_item_ctx *ctx = vhop;
 
-	ctx->history_item->refcount--;
-	if (ctx->history_item->refcount > 0) {
-		msg_box(ctx->term, NULL,
-			N_("Delete history item"), AL_CENTER,
-			N_("Sorry, but this bookmark is already being used by something right now."),
-			NULL, 1,
-			N_("Cancel"), NULL, B_ENTER | B_ESC);
-		return;
+	if (ctx->history_item) {
+		if (ctx->history_item->refcount)
+			ctx->history_item->refcount--;
+		do_delete_global_history_item(ctx->term, ctx->history_item);
+	} else {
+		traverse_listbox_items_list(gh_box_items.next, 0, 0,
+						delete_marked, ctx);
 	}
-
-	delete_global_history_item(ctx->history_item);
-}
+ }
 
 static void
 cancel_delete_globhist_item(void *vhop)
 {
 	struct delete_globhist_item_ctx *ctx = vhop;
 
-	ctx->history_item->refcount--;
+	if (ctx->history_item) ctx->history_item->refcount--;
 }
+
+static int
+scan_for_marks(struct listbox_item *item, void *data_, int offset)
+{
+	if (item->marked) {
+		struct delete_globhist_item_ctx *ctx = data_;
+
+		ctx->history_item = NULL;
+		return 0;
+	}
+	return offset;
+}
+
+static void
+listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
+{
+	struct delete_globhist_item_ctx *ctx;
+	struct global_history_item *historyitem;
+
+	if (!box->sel) return;
+	historyitem = (struct global_history_item *) box->sel->udata;
+	if (!historyitem) return;
+
+ 	ctx = mem_alloc(sizeof(struct delete_globhist_item_ctx));
+	if (!ctx) return;
+
+ 	ctx->history_item = historyitem;
+ 	ctx->term = term;
+
+	traverse_listbox_items_list(box->items->next, 0, 0,
+				    scan_for_marks, ctx);
+	historyitem = ctx->history_item;
+
+	if (historyitem) historyitem->refcount++;
+
+	if (!historyitem)
+		msg_box(term, getml(ctx, NULL),
+			N_("Delete history item"), AL_CENTER,
+			N_("Delete marked history items?"),
+			ctx, 2,
+			N_("Yes"), really_delete_global_history_item, B_ENTER,
+			N_("No"), cancel_delete_globhist_item, B_ESC);
+	/* XXX: When we add tree-history, remember to add a check for
+	 * historyitem->box_item->type == BI_FOLDER here. -- Miciah */
+	else
+		msg_box(term, getml(ctx, NULL),
+			N_("Delete history item"), AL_CENTER | AL_EXTD_TEXT,
+			N_("Delete history item"), " \"", historyitem->title, "\" ?\n\n",
+			N_("URL"), ": \"", historyitem->url, "\"", NULL,
+			ctx, 2,
+			N_("Yes"), really_delete_global_history_item, B_ENTER,
+			N_("No"), cancel_delete_globhist_item, B_ESC);
+
+	return;
+}
+
 
 static int
 push_delete_button(struct dialog_data *dlg,
 		   struct widget_data *some_useless_delete_button)
 {
-	struct global_history_item *historyitem;
-	struct terminal *term = dlg->win->term;
 	struct listbox_data *box;
-	struct delete_globhist_item_ctx *ctx;
+	struct terminal *term = dlg->win->term;
 
-	box = (struct listbox_data *)
-	      dlg->dlg->items[HISTORY_BOX_IND].data;
-
-	if (!box->sel) return 0;
-	historyitem = box->sel->udata;
-	if (!historyitem) return 0;
-	historyitem->refcount++;
-
-	ctx = mem_alloc(sizeof(struct delete_globhist_item_ctx));
-	ctx->history_item = historyitem;
-	ctx->term = term;
-
-	msg_box(term, getml(ctx, NULL),
-		N_("Delete history item"), AL_CENTER | AL_EXTD_TEXT,
-		N_("Delete history item"), " \"", historyitem->title, "\" ?\n\n",
-		N_("URL"), ": \"", historyitem->url, "\"", NULL,
-		ctx, 2,
-		N_("Yes"), di_delete_global_history_item, B_ENTER,
-		N_("No"), cancel_delete_globhist_item, B_ESC);
-
+	box = (struct listbox_data *) dlg->dlg->items[HISTORY_BOX_IND].data;
+	listbox_delete_historyitem(term, box);
 	return 0;
 }
 
@@ -431,7 +450,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	if (!d) return;
 
 	d->title = N_("Global history");
-	d->fn = layout_history_manager;
+	d->fn = layout_hierbox_browser;
 	d->handle_event = history_dialog_event_handler;
 	d->abort = history_dialog_abort_handler;
 	d->udata = ses;

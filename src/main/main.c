@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.140 2003/10/26 15:10:52 jonas Exp $ */
+/* $Id: main.c,v 1.141 2003/10/26 15:12:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,9 +218,6 @@ terminate_all_subsystems(void)
 	done_ssl();
 
 	if (init_b) {
-#ifdef HAVE_SCRIPTING
-		trigger_event_name("quit");
-#endif
 		save_url_history();
 		save_search_history();
 		done_modules();

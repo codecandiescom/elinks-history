@@ -178,7 +178,7 @@ void dns_found(void *data, int state)
 		
 		c_i->sa.sin_family = addr.sin_family;
 		c_i->sa.sin_addr.s_addr = addr.sin_addr.s_addr;
-			
+		
 		if (connect(sock, (struct sockaddr *) &c_i->sa, sizeof(c_i->sa)) == 0)
 			break; /* success */
 	}

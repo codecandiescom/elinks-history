@@ -62,6 +62,12 @@ void lookup_fn(void *data, int h)
 	
 	if (do_real_lookup(name, &addrs, &addrno) < 0) return;
 
+	/* We will do blocking I/O here, however it's only local communication
+	 * and it's supposed to be just a flash talk, so it shouldn't matter.
+	 * And it would be incredibly more complicated and messy (and mainly
+	 * useless) to do this in non-blocking way. */
+	fcntl(h, F_SETFL, ~O_NONBLOCK & fcntl(h, F_GETFL));
+
 	write(h, &addrno, sizeof(int));
 	
 	for (i = 0; i < addrno; i++) {
@@ -71,6 +77,7 @@ void lookup_fn(void *data, int h)
 			int w;
 
 			w = write(h, &addrs[i] + done, sizeof(struct sockaddr) - done);
+			if (w < 0) return;
 			done += w;
 		} while (done < sizeof(struct sockaddr));
 	}
@@ -86,6 +93,12 @@ void end_real_lookup(void *data)
 		goto done;
 
 	*query->addr = NULL;
+
+	/* We will do blocking I/O here, however it's only local communication
+	 * and it's supposed to be just a flash talk, so it shouldn't matter.
+	 * And it would be incredibly more complicated and messy (and mainly
+	 * useless) to do this in non-blocking way. */
+	fcntl(query->h, F_SETFL, ~O_NONBLOCK & fcntl(query->h, F_GETFL));
 	
 	if (read(query->h, query->addrno, sizeof(int)) != sizeof(int))
 		goto done;
@@ -99,6 +112,7 @@ void end_real_lookup(void *data)
 			int r;
 
 			r = read(query->h, &(*query->addr)[i] + done, sizeof(struct sockaddr) - done);
+			if (r < 0) goto done;
 			done += r;
 		} while (done < sizeof(struct sockaddr));
 	}

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.5 2003/11/12 13:18:48 jonas Exp $ */
+/* $Id: renderer.c,v 1.6 2003/11/13 14:28:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,6 +180,7 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	source = convert_string(convert_table, source, length, CSM_DEFAULT);
 	if (!source) return;
 
+	document->title = stracpy(document->url);
 	add_document_lines(document, source);
 	document->bgcolor = global_doc_opts->default_bg;
 

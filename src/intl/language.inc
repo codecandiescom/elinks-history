@@ -12147,7 +12147,7 @@ struct translation translation_ukrainian [] = {
   {T_FOLDER_NAME, "╤м'я папки"},
   {T_MOVE, "Перем╕стити"},
   {T_AFTER_RESUME, "п╕сля продовження"},
-  {T_TOGGLE_DISPLAY, NULL},
+  {T_TOGGLE_DISPLAY, "Перемикнути URL/назва"},
   {0, NULL}
 };
 

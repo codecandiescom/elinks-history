@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.18 2003/12/05 17:45:02 pasky Exp $ */
+/* $Id: cgi.c,v 1.19 2003/12/05 17:47:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,8 +142,9 @@ set_vars(struct connection *conn, unsigned char *script)
 	/* XXX: Maybe it is better to set this to an empty string? --pasky */
 	if (setenv("REMOTE_ADDR", "127.0.0.1", 1)) return -1;
 	if (setenv("GATEWAY_INTERFACE", "CGI/1.1", 1)) return -1;
+	if (setenv("SCRIPT_NAME", script, 1)) return -1;
 
-	return setenv("SCRIPT_NAME", script, 1);
+	return 0;
 }
 
 static int

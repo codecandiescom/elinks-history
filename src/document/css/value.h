@@ -1,4 +1,4 @@
-/* $Id: value.h,v 1.1 2004/01/17 15:45:50 pasky Exp $ */
+/* $Id: value.h,v 1.2 2004/01/17 15:46:31 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_VALUE_H
 #define EL__DOCUMENT_CSS_VALUE_H
@@ -13,6 +13,6 @@
 /* It returns positive integer upon success, zero upon parse error, and moves
  * the string pointer to the byte after the value end. */
 int css_parse_value(enum css_decl_valtype valtype, union css_decl_value *value,
-		    unsigned char **string)
+		    unsigned char **string);
 
 #endif

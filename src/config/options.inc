@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.58 2003/12/28 01:55:50 jonas Exp $ */
+/* $Id: options.inc,v 1.59 2003/12/28 01:58:17 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1053,66 +1053,26 @@ struct option_info config_options_info[] = {
 		"tabs", 0,
 		N_("Tabs bar colors.")),
 
-	INIT_OPT_TREE("ui.colors.color.tabs", N_("Unvisited tab"),
-		"unvisited", 0,
+	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Unvisited tab"),
+		"unvisited", "white", "green",
 		N_("Tab colors for tabs that have not completed or has not been\n"
 		   "selected since they completed loading.")),
 
-	INIT_OPT_COLOR("ui.colors.color.tabs.unvisited", N_("Text color"),
-		"text", 0, "green",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.tabs.unvisited", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.tabs", N_("Unselected tab"),
-		"normal", 0,
+	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Unselected tab"),
+		"normal", "white", "black",
 		N_("Unselected tab colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.tabs.normal", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.tabs.normal", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.tabs", N_("Loading tab"),
-		"loading", 0,
+	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Loading tab"),
+		"loading", "white", "darkred",
 		N_("Tab colors for tabs that are loading in the background.")),
 
-	INIT_OPT_COLOR("ui.colors.color.tabs.loading", N_("Text color"),
-		"text", 0, "darkred",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.tabs.loading", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.tabs", N_("Selected tab"),
-		"selected", 0,
+	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Selected tab"),
+		"selected", "green", "black",
 		N_("Selected tab colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.tabs.selected", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.tabs.selected", N_("Background color"),
-		"background", 0, "green",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.tabs", N_("Tab separator"),
-		"separator", 0,
+	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Tab separator"),
+		"separator", "white", "brown",
 		N_("Tab separator colors.")),
-
-	INIT_OPT_COLOR("ui.colors.color.tabs.separator", N_("Text color"),
-		"text", 0, "brown",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.tabs.separator", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
 
 
 	INIT_OPT_COLORS("ui.colors.color", N_("Searched strings"),

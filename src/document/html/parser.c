@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.393 2004/04/19 15:56:47 zas Exp $ */
+/* $Id: parser.c,v 1.394 2004/04/22 15:44:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2806,6 +2806,14 @@ static struct element_info elements[] = {
 	{NULL,		NULL, 0, 0},
 };
 
+
+static inline int
+element_has_implicit_end(unsigned char *name, int namelen, unsigned char *attr)
+{
+	return attr > name
+		&& memchr(name + namelen, '/', attr - name - namelen);
+}
+
 unsigned char *
 skip_comment(unsigned char *html, unsigned char *eof)
 {
@@ -3108,6 +3116,12 @@ ng:;
 						if (!do_html_select(attr, html, eof, &html, f))
 							goto set_lt;
 					}
+					if (ei->func == html_title) {
+						/* Hack to handle <title /> */
+						if (element_has_implicit_end(name, namelen, attr))
+							goto set_lt;
+					}
+
 					if (ei->func == html_textarea) {
 						do_html_textarea(attr, html, eof, &html, f);
 						goto set_lt;
@@ -3470,6 +3484,12 @@ ps:
 	if (!strlcasecmp(name, namelen, "BODY", 4)) return;
 	if (title && !title->length && !strlcasecmp(name, namelen, "TITLE", 5)) {
 		unsigned char *s1;
+
+		/* Hack to handle <title /> */
+		if (element_has_implicit_end(name, namelen, attr))
+			/* FIXME: Maybe add a space to title string so we won't
+			 * end here anymore */
+			goto se;
 
 xse:
 		s1 = s;

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.79 2003/11/22 11:55:21 jonas Exp $ */
+/* $Id: dialogs.c,v 1.80 2003/11/22 12:06:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,12 +65,23 @@ get_globhist_item_info(struct listbox_item *box_item, struct terminal *term)
 	return info.source;
 }
 
+static void
+done_globhist_item(struct listbox_item *item, struct terminal *term, int last)
+{
+	struct global_history_item *historyitem = item->udata;
+
+	assert(!is_object_used(historyitem));
+
+	delete_global_history_item(historyitem);
+}
+
 static struct listbox_ops gh_listbox_ops = {
 	listbox_delete_historyitem,
 	lock_globhist_item,
 	unlock_globhist_item,
 	is_globhist_item_used,
 	get_globhist_item_info,
+	done_globhist_item,
 };
 
 struct hierbox_browser globhist_browser = {

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.88 2003/11/15 17:20:08 jonas Exp $ */
+/* $Id: cookies.c,v 1.89 2003/11/15 17:43:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -539,6 +539,7 @@ static void
 accept_cookie_dialog(struct session *ses)
 {
 	struct cookie *cookie = cookie_queries.next;
+	unsigned char *expires = NULL;
 
 	assert(ses);
 
@@ -546,18 +547,30 @@ accept_cookie_dialog(struct session *ses)
 
 	del_from_list(cookie);
 
-	/* TODO: Format the expire data to be readable for mortals too ;) */
-	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+#ifdef HAVE_STRFTIME
+	if (cookie->expires) {
+		struct tm *when_local = localtime(&cookie->expires);
+		unsigned char str[13];
+		int wr = strftime(str, sizeof(str), "%b %e %H:%M", when_local);
+
+		while (wr < sizeof(str) - 1) str[wr++] = ' ';
+		str[sizeof(str) - 1] = '\0';
+		expires = memacpy(str, sizeof(str) - 1);
+	}
+#endif
+
+	msg_box(ses->tab->term, expires ? getml(expires, NULL) : NULL, MSGBOX_FREE_TEXT,
 		N_("Accept cookie?"), AL_LEFT,
 		msg_text(ses->tab->term, N_("Do you want to accept a cookie "
 		"from %s?\n\n"
 		"Name: %s\n"
 		"Value: %s\n"
 		"Domain: %s\n"
-		"Expires: %d\n"
+		"Expires: %s\n"
 		"Secure: %s\n"),
 		cookie->server, cookie->name, cookie->value,
-		cookie->domain, cookie->expires,
+		cookie->domain,
+		expires ? expires : _("unknown",  ses->tab->term),
 		_(cookie->secure ? N_("yes") : N_("no"), ses->tab->term)),
 		cookie, 2,
 		N_("Accept"), accept_cookie, B_ENTER,

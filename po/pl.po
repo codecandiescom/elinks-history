@@ -10,121 +10,121 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.0.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-09 06:25+0100\n"
+"POT-Creation-Date: 2004-04-07 23:48+0200\n"
 "PO-Revision-Date: 2004-03-09 07:00+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
-#: src/bfu/hierbox.c:358
+#: src/bfu/hierbox.c:361
 msgid "Close"
 msgstr "Zamknij"
 
 #. | MSGBOX_SCROLLABLE
-#: src/bfu/hierbox.c:446 src/bfu/hierbox.c:468 src/cache/dialogs.c:145
-#: src/config/dialogs.c:425 src/cookies/dialogs.c:154
-#: src/dialogs/document.c:44 src/dialogs/document.c:227
-#: src/dialogs/download.c:414 src/formhist/dialogs.c:165
+#: src/bfu/hierbox.c:449 src/bfu/hierbox.c:471 src/cache/dialogs.c:146
+#: src/config/dialogs.c:425 src/cookies/dialogs.c:352
+#: src/dialogs/document.c:44 src/dialogs/document.c:226
+#: src/dialogs/download.c:416 src/formhist/dialogs.c:165
 #: src/globhist/dialogs.c:182
 msgid "Info"
 msgstr "Informacja"
 
-#: src/bfu/hierbox.c:447
+#: src/bfu/hierbox.c:450
 msgid "Press space to expand this folder."
 msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
-#: src/bfu/hierbox.c:449 src/bfu/hierbox.c:471 src/bfu/hierbox.c:609
+#: src/bfu/hierbox.c:452 src/bfu/hierbox.c:474 src/bfu/hierbox.c:612
 #: src/bfu/inpfield.c:48 src/bfu/inpfield.c:57 src/bfu/inpfield.c:77
 #: src/bfu/msgbox.c:185 src/bookmarks/dialogs.c:192
 #: src/bookmarks/dialogs.c:606 src/config/dialogs.c:45 src/config/dialogs.c:71
 #: src/config/dialogs.c:255 src/config/dialogs.c:327 src/config/dialogs.c:357
 #: src/config/dialogs.c:394 src/config/dialogs.c:406 src/config/dialogs.c:489
 #: src/config/dialogs.c:534 src/config/dialogs.c:561 src/config/dialogs.c:602
-#: src/config/dialogs.c:615 src/dialogs/document.c:50
-#: src/dialogs/document.c:230 src/dialogs/document.c:300
-#: src/dialogs/document.c:312 src/dialogs/edit.c:99 src/dialogs/info.c:48
-#: src/dialogs/info.c:137 src/dialogs/info.c:158 src/dialogs/menu.c:64
-#: src/dialogs/menu.c:446 src/dialogs/menu.c:473 src/dialogs/options.c:170
-#: src/dialogs/options.c:243 src/formhist/dialogs.c:132 src/mime/dialogs.c:159
-#: src/protocol/auth/dialogs.c:78 src/protocol/protocol.c:67
-#: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:188
-#: src/sched/download.c:276 src/sched/download.c:311 src/sched/download.c:582
-#: src/sched/error.c:42 src/sched/session.c:124 src/sched/session.c:613
-#: src/sched/session.c:630 src/sched/session.c:654 src/sched/session.c:952
-#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
-#: src/scripting/lua/core.c:591 src/scripting/lua/core.c:715
+#: src/config/dialogs.c:615 src/cookies/dialogs.c:287
+#: src/dialogs/document.c:50 src/dialogs/document.c:229
+#: src/dialogs/document.c:299 src/dialogs/document.c:311 src/dialogs/edit.c:99
+#: src/dialogs/info.c:48 src/dialogs/info.c:137 src/dialogs/info.c:158
+#: src/dialogs/menu.c:64 src/dialogs/menu.c:446 src/dialogs/menu.c:473
+#: src/dialogs/options.c:169 src/dialogs/options.c:242
+#: src/formhist/dialogs.c:132 src/mime/dialogs.c:159
+#: src/protocol/auth/dialogs.c:98 src/protocol/user.c:171
+#: src/sched/download.c:188 src/sched/download.c:276 src/sched/download.c:311
+#: src/sched/download.c:570 src/sched/error.c:42 src/sched/session.c:120
+#: src/sched/session.c:576 src/sched/session.c:593 src/sched/session.c:617
+#: src/scripting/lua/core.c:400 src/scripting/lua/core.c:481
+#: src/scripting/lua/core.c:599 src/scripting/lua/core.c:723
 #: src/viewer/text/form.c:664 src/viewer/text/search.c:859
 #: src/viewer/text/search.c:887 src/viewer/text/search.c:912
 #: src/viewer/text/search.c:943 src/viewer/text/search.c:1392
 #: src/viewer/text/textarea.c:270 src/viewer/text/textarea.c:279
-#: src/viewer/text/view.c:710 src/viewer/text/view.c:1223
+#: src/viewer/text/view.c:707 src/viewer/text/view.c:1213
 msgid "OK"
 msgstr "OK"
 
-#: src/bfu/hierbox.c:577
+#: src/bfu/hierbox.c:580
 #, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Przykro mi, ale element \"%s\" nie mo¿e byæ usuniêty."
 
-#: src/bfu/hierbox.c:578
+#: src/bfu/hierbox.c:581
 #, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Przykro mi, ale element \"%s\" jest u¿ywany przez co¶ innego."
 
-#: src/bfu/hierbox.c:581
+#: src/bfu/hierbox.c:584
 #, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
 
-#: src/bfu/hierbox.c:582
+#: src/bfu/hierbox.c:585
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
 
-#: src/bfu/hierbox.c:606
+#: src/bfu/hierbox.c:609
 msgid "Delete error"
 msgstr "B³±d przy usuwaniu"
 
-#: src/bfu/hierbox.c:697
+#: src/bfu/hierbox.c:700
 msgid "Delete marked items"
 msgstr "Usuwanie zaznaczonych elementów"
 
-#: src/bfu/hierbox.c:698
+#: src/bfu/hierbox.c:701
 msgid "Delete marked items?"
 msgstr "Czy usun±æ zaznaczone elementy?"
 
-#: src/bfu/hierbox.c:700 src/bfu/hierbox.c:721 src/bfu/hierbox.c:735
-#: src/bfu/hierbox.c:795 src/config/dialogs.c:510 src/dialogs/menu.c:93
-#: src/formhist/formhist.c:492 src/mime/dialogs.c:86 src/sched/task.c:169
+#: src/bfu/hierbox.c:703 src/bfu/hierbox.c:724 src/bfu/hierbox.c:738
+#: src/bfu/hierbox.c:798 src/config/dialogs.c:510 src/dialogs/menu.c:93
+#: src/formhist/formhist.c:497 src/mime/dialogs.c:86 src/sched/task.c:176
 #: src/terminal/tab.c:194 src/terminal/tab.c:230
 msgid "Yes"
 msgstr "Tak"
 
-#: src/bfu/hierbox.c:701 src/bfu/hierbox.c:722 src/bfu/hierbox.c:736
-#: src/bfu/hierbox.c:796 src/config/dialogs.c:511 src/dialogs/menu.c:94
-#: src/formhist/formhist.c:493 src/mime/dialogs.c:87 src/sched/task.c:170
+#: src/bfu/hierbox.c:704 src/bfu/hierbox.c:725 src/bfu/hierbox.c:739
+#: src/bfu/hierbox.c:799 src/config/dialogs.c:511 src/dialogs/menu.c:94
+#: src/formhist/formhist.c:498 src/mime/dialogs.c:87 src/sched/task.c:177
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "No"
 msgstr "Nie"
 
-#: src/bfu/hierbox.c:717
+#: src/bfu/hierbox.c:720
 msgid "Delete folder"
 msgstr "Usuñ folder"
 
-#: src/bfu/hierbox.c:718
+#: src/bfu/hierbox.c:721
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Czy skasowaæ folder \"%s\" i jego zawarto¶æ?"
 
-#: src/bfu/hierbox.c:730
+#: src/bfu/hierbox.c:733
 msgid "Delete item"
 msgstr "Usuwanie pozycji"
 
-#: src/bfu/hierbox.c:731
+#: src/bfu/hierbox.c:734
 #, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -135,11 +135,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/bfu/hierbox.c:792
+#: src/bfu/hierbox.c:795
 msgid "Clear all items"
 msgstr "Skasowanie wszystkich pozycji"
 
-#: src/bfu/hierbox.c:793
+#: src/bfu/hierbox.c:796
 msgid "Do you really want to remove all items?"
 msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
 
@@ -220,21 +220,21 @@ msgstr "Brak URL-a"
 
 #
 #. name:
-#: src/bookmarks/bookmarks.c:43 src/bookmarks/bookmarks.c:100
+#: src/bookmarks/bookmarks.c:44 src/bookmarks/bookmarks.c:101
 msgid "Bookmarks"
 msgstr "Zak³adki"
 
 #
-#: src/bookmarks/bookmarks.c:45
+#: src/bookmarks/bookmarks.c:46
 msgid "Bookmark options."
 msgstr "Ustawienia zak³adek"
 
 #
-#: src/bookmarks/bookmarks.c:48 src/bookmarks/bookmarks.c:54
+#: src/bookmarks/bookmarks.c:49 src/bookmarks/bookmarks.c:55
 msgid "File format"
 msgstr "Format pliku"
 
-#: src/bookmarks/bookmarks.c:50
+#: src/bookmarks/bookmarks.c:51
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -244,7 +244,7 @@ msgstr ""
 "0 - domy¶lny format ELinksa (kompatybilny z Linksem 0.9x)\n"
 "1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!)"
 
-#: src/bookmarks/bookmarks.c:56
+#: src/bookmarks/bookmarks.c:57
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -256,13 +256,13 @@ msgstr ""
 "1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!) (WY£¡CZONE)"
 
 #: src/bookmarks/dialogs.c:77 src/config/options.inc:1037
-#: src/dialogs/document.c:84 src/globhist/dialogs.c:62
+#: src/dialogs/document.c:83 src/globhist/dialogs.c:62
 msgid "Title"
 msgstr "Tytu³"
 
-#: src/bookmarks/dialogs.c:78 src/cache/dialogs.c:60 src/dialogs/document.c:68
+#: src/bookmarks/dialogs.c:78 src/cache/dialogs.c:61 src/dialogs/document.c:68
 #: src/dialogs/edit.c:96 src/formhist/dialogs.c:62 src/globhist/dialogs.c:63
-#: src/scripting/lua/core.c:399
+#: src/scripting/lua/core.c:398
 msgid "URL"
 msgstr "URL"
 
@@ -276,34 +276,35 @@ msgstr "Nazwa foldera"
 
 #: src/bookmarks/dialogs.c:192 src/bookmarks/dialogs.c:606
 #: src/config/dialogs.c:328 src/config/dialogs.c:406 src/config/dialogs.c:561
-#: src/config/dialogs.c:616 src/dialogs/edit.c:103 src/dialogs/menu.c:64
-#: src/dialogs/menu.c:446 src/dialogs/menu.c:473 src/dialogs/options.c:173
-#: src/dialogs/options.c:244 src/mime/dialogs.c:160
-#: src/protocol/auth/dialogs.c:79 src/sched/download.c:498
-#: src/sched/download.c:1008 src/sched/download.c:1017
-#: src/sched/download.c:1037 src/sched/download.c:1049
-#: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
-#: src/scripting/lua/core.c:715 src/viewer/text/search.c:1392
-#: src/viewer/text/view.c:710
+#: src/config/dialogs.c:616 src/cookies/dialogs.c:288 src/dialogs/edit.c:103
+#: src/dialogs/menu.c:64 src/dialogs/menu.c:446 src/dialogs/menu.c:473
+#: src/dialogs/options.c:172 src/dialogs/options.c:243 src/mime/dialogs.c:160
+#: src/protocol/auth/dialogs.c:99 src/sched/download.c:486
+#: src/sched/download.c:993 src/sched/download.c:1002
+#: src/sched/download.c:1022 src/sched/download.c:1034
+#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
+#: src/scripting/lua/core.c:723 src/viewer/text/search.c:1392
+#: src/viewer/text/view.c:707
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: src/bookmarks/dialogs.c:235 src/scripting/lua/core.c:393
+#: src/bookmarks/dialogs.c:235 src/scripting/lua/core.c:392
 msgid "Edit bookmark"
 msgstr "Edytuj zak³adkê"
 
-#: src/bookmarks/dialogs.c:375 src/cache/dialogs.c:146
+#: src/bookmarks/dialogs.c:375 src/cache/dialogs.c:147
 #: src/globhist/dialogs.c:181
 msgid "Goto"
 msgstr "Przejd¼ do"
 
 #: src/bookmarks/dialogs.c:376 src/config/dialogs.c:281
-#: src/config/dialogs.c:352 src/config/dialogs.c:426
+#: src/config/dialogs.c:352 src/config/dialogs.c:426 src/cookies/dialogs.c:238
+#: src/cookies/dialogs.c:354
 msgid "Edit"
 msgstr "Edytuj"
 
-#: src/bookmarks/dialogs.c:377 src/cache/dialogs.c:147
-#: src/config/dialogs.c:428 src/config/dialogs.c:636 src/cookies/dialogs.c:155
+#: src/bookmarks/dialogs.c:377 src/cache/dialogs.c:148
+#: src/config/dialogs.c:428 src/config/dialogs.c:636 src/cookies/dialogs.c:355
 #: src/formhist/dialogs.c:166 src/globhist/dialogs.c:186
 msgid "Delete"
 msgstr "Usuñ"
@@ -313,7 +314,7 @@ msgid "Move"
 msgstr "Przenie¶"
 
 #: src/bookmarks/dialogs.c:380 src/config/dialogs.c:427
-#: src/config/dialogs.c:635
+#: src/config/dialogs.c:635 src/cookies/dialogs.c:353
 msgid "Add"
 msgstr "Dodaj"
 
@@ -325,10 +326,10 @@ msgstr "Szukaj"
 
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:384 src/config/dialogs.c:429
-#: src/config/dialogs.c:638 src/cookies/dialogs.c:157
-#: src/dialogs/options.c:172 src/formhist/dialogs.c:169
-#: src/globhist/dialogs.c:192 src/sched/download.c:1006
-#: src/sched/download.c:1035
+#: src/config/dialogs.c:638 src/cookies/dialogs.c:357
+#: src/dialogs/options.c:171 src/formhist/dialogs.c:169
+#: src/globhist/dialogs.c:192 src/sched/download.c:991
+#: src/sched/download.c:1020
 msgid "Save"
 msgstr "Zapisz"
 
@@ -357,120 +358,120 @@ msgstr "Zapisywanie informacji o kartach"
 msgid "Enter folder name"
 msgstr "Wpisz nazwê folderu"
 
-#: src/cache/dialogs.c:65
+#: src/cache/dialogs.c:66
 msgid "Redirect"
 msgstr "Przekierowanie"
 
-#: src/cache/dialogs.c:73 src/config/options.inc:387 src/dialogs/document.c:95
+#: src/cache/dialogs.c:74 src/config/options.inc:387 src/dialogs/document.c:94
 msgid "Size"
 msgstr "Rozmiar"
 
-#: src/cache/dialogs.c:74
+#: src/cache/dialogs.c:75
 msgid "Loaded size"
 msgstr "Rozmiar za³adowanych dokumentów"
 
-#: src/cache/dialogs.c:77 src/dialogs/document.c:140
+#: src/cache/dialogs.c:78 src/dialogs/document.c:139
 msgid "Last modified"
 msgstr "Ostatnia zmiana"
 
-#: src/cache/dialogs.c:85 src/dialogs/document.c:122
+#: src/cache/dialogs.c:86 src/dialogs/document.c:121
 msgid "SSL Cipher"
 msgstr "Szyfr SSL"
 
-#: src/cache/dialogs.c:89 src/dialogs/document.c:127
+#: src/cache/dialogs.c:90 src/dialogs/document.c:126
 msgid "Encoding"
 msgstr "Kodowanie"
 
-#: src/cache/dialogs.c:95
+#: src/cache/dialogs.c:96
 msgid "Flags"
 msgstr "Flagi"
 
-#: src/cache/dialogs.c:98 src/dialogs/document.c:98
+#: src/cache/dialogs.c:99 src/dialogs/document.c:97
 msgid "incomplete"
 msgstr "niekompletne"
 
-#: src/cache/dialogs.c:101
+#: src/cache/dialogs.c:102
 msgid "invalid"
 msgstr "nieprawid³owy"
 
-#: src/cache/dialogs.c:106
+#: src/cache/dialogs.c:107
 msgid "ID tag"
 msgstr "tag ID"
 
-#: src/cache/dialogs.c:110 src/config/options.inc:504
+#: src/cache/dialogs.c:111 src/config/options.inc:504
 msgid "Header"
 msgstr "Nag³ówek"
 
-#: src/cache/dialogs.c:152
+#: src/cache/dialogs.c:153
 msgid "Cache manager"
 msgstr "Menad¿er pamiêci podrêcznej"
 
 #
-#: src/config/cmdline.c:71
+#: src/config/cmdline.c:73
 #, c-format
 msgid "Unknown option %s"
 msgstr "Nieznana opcja %s"
 
-#: src/config/cmdline.c:83
+#: src/config/cmdline.c:85
 #, c-format
 msgid "Cannot parse option %s: %s"
 msgstr "B³±d czytania opcji %s: %s"
 
-#: src/config/cmdline.c:112 src/config/cmdline.c:136 src/config/opttypes.c:38
+#: src/config/cmdline.c:114 src/config/cmdline.c:138 src/config/opttypes.c:38
 msgid "Parameter expected"
 msgstr "Spodziewano siê parametru"
 
-#: src/config/cmdline.c:137
+#: src/config/cmdline.c:139
 msgid "Too many parameters"
 msgstr "Zbyt wiele parametrów"
 
-#: src/config/cmdline.c:142
+#: src/config/cmdline.c:144
 msgid "error"
 msgstr "b³±d"
 
-#: src/config/cmdline.c:144 src/sched/error.c:47
+#: src/config/cmdline.c:146 src/sched/error.c:47
 msgid "Host not found"
 msgstr "Nie znaleziono serwera"
 
 #
-#: src/config/cmdline.c:158
+#: src/config/cmdline.c:160
 msgid "Resolver error"
 msgstr "B³±d resolwera"
 
-#: src/config/cmdline.c:180
+#: src/config/cmdline.c:182
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr "ELinks %s - Tekstowa przegl±darka WWW\n"
 
-#: src/config/cmdline.c:220
+#: src/config/cmdline.c:222
 msgid "Template option folder"
 msgstr "Folder szablonów opcji"
 
-#: src/config/cmdline.c:243
+#: src/config/cmdline.c:245
 #, c-format
 msgid "(default: %ld)"
 msgstr "(domy¶lnie: %ld)"
 
-#: src/config/cmdline.c:250 src/config/cmdline.c:279
+#: src/config/cmdline.c:252 src/config/cmdline.c:281
 #, c-format
 msgid "(default: \"%s\")"
 msgstr "(domy¶lnie: \"%s\")"
 
-#: src/config/cmdline.c:255
+#: src/config/cmdline.c:257
 #, c-format
 msgid "(alias for %s)"
 msgstr "(alias dla %s)"
 
-#: src/config/cmdline.c:260 src/config/cmdline.c:269
+#: src/config/cmdline.c:262 src/config/cmdline.c:271
 #, c-format
 msgid "(default: %s)"
 msgstr "(domy¶lnie: %s)"
 
-#: src/config/cmdline.c:402
+#: src/config/cmdline.c:404
 msgid "Configuration options:\n"
 msgstr "Ustawienia:\n"
 
-#: src/config/cmdline.c:405
+#: src/config/cmdline.c:407
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
@@ -478,19 +479,19 @@ msgstr ""
 "U¿ycie: elinks [OPCJA]... [URL]\n"
 "\n"
 
-#: src/config/cmdline.c:406
+#: src/config/cmdline.c:408
 msgid "Options:\n"
 msgstr "Opcje:\n"
 
-#: src/config/cmdline.c:430
+#: src/config/cmdline.c:432
 msgid "Internal consistency error"
 msgstr "Wewnêtrzny b³±d zgodno¶ci"
 
-#: src/config/cmdline.c:447
+#: src/config/cmdline.c:449
 msgid "Restrict to anonymous mode"
 msgstr "Ograniczenia do trybu anonimowego"
 
-#: src/config/cmdline.c:449
+#: src/config/cmdline.c:451
 msgid ""
 "Restrict ELinks so that it can run on an anonymous account.\n"
 "No local file browsing, no downloads. Execution of viewers\n"
@@ -502,11 +503,11 @@ msgstr ""
 "U¿ywanie przegl±darek jest dozwolone, ale bez mo¿liwo¶ci\n"
 "modyfikacji pozycji w tabeli skojarzeñ."
 
-#: src/config/cmdline.c:454
+#: src/config/cmdline.c:456
 msgid "Only permit local connections"
 msgstr "Zezwól jedynie na lokalne po³±czenia"
 
-#: src/config/cmdline.c:456
+#: src/config/cmdline.c:458
 msgid ""
 "Restrict ELinks so that it can only open connections to\n"
 "local addresses (ie. 127.0.0.1), it will prevent any connection\n"
@@ -517,19 +518,19 @@ msgstr ""
 "serwerami."
 
 #
-#: src/config/cmdline.c:460
+#: src/config/cmdline.c:462
 msgid "Autosubmit first form"
 msgstr "Automatyczne wysy³anie formularzy"
 
-#: src/config/cmdline.c:462
+#: src/config/cmdline.c:464
 msgid "Go and submit the first form you'll stumble upon."
 msgstr "Id¼ i wy¶lij pierwszy formularz na którym natkn±³e¶ siê na b³±d."
 
-#: src/config/cmdline.c:464
+#: src/config/cmdline.c:466
 msgid "Clone session with given ID"
 msgstr "Klonowanie sesji z podanym ID"
 
-#: src/config/cmdline.c:466
+#: src/config/cmdline.c:468
 msgid ""
 "ID of session (ELinks instance) which we want to clone.\n"
 "This is internal ELinks option, you don't want to use it."
@@ -537,11 +538,11 @@ msgstr ""
 "ID sesji (instancji ELinksa), któr± chcemy sklonowaæ.\n"
 "To jest wewnêtrzna opcja ELinksa, nie bêdziesz chcia³ jej u¿ywaæ."
 
-#: src/config/cmdline.c:471
+#: src/config/cmdline.c:473
 msgid "Name of directory with configuration file"
 msgstr "Nazwa katalogu z plikiem konfiguracyjnym"
 
-#: src/config/cmdline.c:473
+#: src/config/cmdline.c:475
 msgid ""
 "ELinks will read and write its config files to the given\n"
 "directory instead of ~/.elinks. If the path begins with\n"
@@ -553,11 +554,11 @@ msgstr ""
 "jest traktowana jako bezwzglêdna, w przeciwnym wypadku jako\n"
 "wzglêdna do katalogu domowego."
 
-#: src/config/cmdline.c:480
+#: src/config/cmdline.c:482
 msgid "Name of configuration file"
 msgstr "Nazwa pliku konfiguracyjnego"
 
-#: src/config/cmdline.c:482
+#: src/config/cmdline.c:484
 msgid ""
 "Name of the file with configuration, from which and to\n"
 "which all the configuration shall be written. It should be\n"
@@ -566,19 +567,19 @@ msgstr ""
 "Nazwa pliku z konfiguracj±, z którego bêdzie czytana i do którego\n"
 "bêdzie zapisywana konfiguracja. Powinna byæ wzglêdna (wzglêdem config-dir)."
 
-#: src/config/cmdline.c:486
+#: src/config/cmdline.c:488
 msgid "MIME type to assume for documents"
 msgstr "Typ MIME przyjmowany dla dokumentów"
 
-#: src/config/cmdline.c:488
+#: src/config/cmdline.c:490
 msgid "Default MIME type to assume for documents of unknown type."
 msgstr "Domy¶lny typ MIME dla dokumentów nieznanego typu."
 
-#: src/config/cmdline.c:490
+#: src/config/cmdline.c:492
 msgid "Write formatted version of given URL to stdout"
 msgstr "Wypisanie sformatowanej wersji danego URL-a na standardowe wyj¶cie"
 
-#: src/config/cmdline.c:492
+#: src/config/cmdline.c:494
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
@@ -586,27 +587,27 @@ msgstr ""
 "Zapisz wersjê czysto tekstow± danego dokumentu HTML\n"
 "na standardowe wyj¶cie."
 
-#: src/config/cmdline.c:495
+#: src/config/cmdline.c:497
 msgid "Codepage to use with -dump"
 msgstr "Strona kodowa u¿ywana razem z -dump"
 
-#: src/config/cmdline.c:497 src/config/options.inc:502
+#: src/config/cmdline.c:499 src/config/options.inc:502
 msgid "Codepage used in dump output."
 msgstr "Strona kodowa u¿ywana przy zrzutach."
 
-#: src/config/cmdline.c:499
+#: src/config/cmdline.c:501
 msgid "Width of document formatted with -dump"
 msgstr "Szeroko¶æ sformatowanego dokumentu z -dump"
 
-#: src/config/cmdline.c:501
+#: src/config/cmdline.c:503
 msgid "Width of the dump output."
 msgstr "Szeroko¶æ wyj¶cia dump"
 
-#: src/config/cmdline.c:503
+#: src/config/cmdline.c:505
 msgid "Evaluate given configuration option"
 msgstr "Wylicz podan± opcjê konfiguracyjn±"
 
-#: src/config/cmdline.c:505
+#: src/config/cmdline.c:507
 msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
@@ -615,11 +616,11 @@ msgstr ""
 "  np. -eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
-#: src/config/cmdline.c:509
+#: src/config/cmdline.c:511
 msgid "Assume the file is HTML"
 msgstr "Przyjmij, ¿e plik jest HTML"
 
-#: src/config/cmdline.c:511
+#: src/config/cmdline.c:513
 msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
@@ -627,46 +628,46 @@ msgstr ""
 "To sprawia, ¿e ELinks przyjmuje, ¿e ogl±dane pliki s± w HTML-u.\n"
 "Jest to równowa¿ne z -default-mime-type text/html."
 
-#: src/config/cmdline.c:520
+#: src/config/cmdline.c:522
 msgid "Print usage help and exit"
 msgstr "Wypisz informacje na temat u¿ycia ELinksa i zakoñcz dzia³anie"
 
-#: src/config/cmdline.c:522
+#: src/config/cmdline.c:524
 msgid "Print usage help and exit."
 msgstr "Wypisz informacje na temat u¿ycia ELinksa i zakoñcz dzia³anie."
 
-#: src/config/cmdline.c:524
+#: src/config/cmdline.c:526
 msgid "Print detailed usage help and exit"
 msgstr "Wypisz dok³adne informacje na temat u¿ycia ELinksa i zakoñcz dzia³anie"
 
-#: src/config/cmdline.c:526
+#: src/config/cmdline.c:528
 msgid "Print detailed usage help and exit."
 msgstr ""
 "Wypisz dok³adne informacje na temat u¿ycia ELinksa i zakoñcz dzia³anie."
 
-#: src/config/cmdline.c:528
+#: src/config/cmdline.c:530
 msgid "Print help for configuration options"
 msgstr "Wypisz pomoc do opcji konfiguracyjnych"
 
-#: src/config/cmdline.c:530
+#: src/config/cmdline.c:532
 msgid "Print help on configuration options and exit."
 msgstr "Wypisz pomoc do opcji konfiguracyjnych i zakoñcz dzia³anie."
 
 #
-#: src/config/cmdline.c:532
+#: src/config/cmdline.c:534
 msgid "Look up specified host"
 msgstr "Szukanie danego hosta"
 
 #
-#: src/config/cmdline.c:534
+#: src/config/cmdline.c:536
 msgid "Look up specified host."
 msgstr "Szukaj podanego hosta."
 
-#: src/config/cmdline.c:536
+#: src/config/cmdline.c:538
 msgid "Run as separate instance"
 msgstr "Uruchamianie jako oddzielna instancja"
 
-#: src/config/cmdline.c:538
+#: src/config/cmdline.c:540
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
@@ -678,19 +679,19 @@ msgstr ""
 "(zak³adki, historia itp.) nie s± zapisywane na dysk, gdy\n"
 "ta opcja jest u¿ywana. Zobacz tak¿e -touch-files."
 
-#: src/config/cmdline.c:543
+#: src/config/cmdline.c:545
 msgid "Don't use files in ~/.elinks"
 msgstr "Nie u¿ywaj plików w ~/.elinks"
 
-#: src/config/cmdline.c:545
+#: src/config/cmdline.c:547
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
 msgstr "Nie próbuj tworzyæ ani u¿ywaæ domowego katalogu rc (~/.elinks)."
 
-#: src/config/cmdline.c:547
+#: src/config/cmdline.c:549
 msgid "Connect to session ring with given ID"
 msgstr "Po³±cz siê do pier¶cienia sesji z danym ID"
 
-#: src/config/cmdline.c:549
+#: src/config/cmdline.c:551
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -722,19 +723,19 @@ msgstr ""
 "komend. Wiedz, ¿e normalnie ¿adne pliki stanu nie s± zapisywane\n"
 "na dysk, gdy ta opcja jest u¿yta. Zobacz tak¿e -touch-files."
 
-#: src/config/cmdline.c:564
+#: src/config/cmdline.c:566
 msgid "Write the source of given URL to stdout"
 msgstr "Wypisz ¼ród³o danego URL na standardowe wyj¶cie"
 
-#: src/config/cmdline.c:566
+#: src/config/cmdline.c:568
 msgid "Write the given HTML document in source form to stdout."
 msgstr "Wypisz ¼ród³o danego URL na standardowe wyj¶cie."
 
-#: src/config/cmdline.c:568
+#: src/config/cmdline.c:570
 msgid "Do not number links in dump output"
 msgstr "Nie numeruj odno¶ników przy -dump"
 
-#: src/config/cmdline.c:570
+#: src/config/cmdline.c:572
 msgid ""
 "Prevents numbering of links (and showing their list at the end of\n"
 "the dumped document) in the -dump output; this was the default behaviour\n"
@@ -744,11 +745,11 @@ msgstr ""
 "zrzucanego dokumentu) przy zrzutach (-dump); to by³o domy¶lne zachowanie\n"
 "przed 0.5pre12. Pamiêtaj, ¿e dotyczy to tylko -dump, niczego innego."
 
-#: src/config/cmdline.c:574
+#: src/config/cmdline.c:576
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr "Uaktualnij pliki w ~/.elinks gdy uruchomiony -no-connect/-session-ring"
 
-#: src/config/cmdline.c:576
+#: src/config/cmdline.c:578
 msgid ""
 "Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 "changed even when -no-connect or -session-ring is used; has no\n"
@@ -759,11 +760,11 @@ msgstr ""
 "nie daje ¿adnego rezultatu, gdy u¿yte bez po³±czenia z ¿adn±\n"
 "z tych opcji."
 
-#: src/config/cmdline.c:580
+#: src/config/cmdline.c:582
 msgid "Print version information and exit"
 msgstr "Wypisz informacje o wersji i zakoñcz dzia³anie"
 
-#: src/config/cmdline.c:582
+#: src/config/cmdline.c:584
 msgid "Print ELinks version information and exit."
 msgstr "Wypisz informacje o wersji ELinksa i zakoñcz dzia³anie."
 
@@ -899,9 +900,9 @@ msgid "N/A"
 msgstr "Brak"
 
 #: src/config/dialogs.c:147 src/config/dialogs.c:163 src/config/dialogs.c:290
-#: src/config/dialogs.c:405 src/cookies/dialogs.c:86 src/dialogs/edit.c:92
-#: src/scripting/lua/core.c:397 src/scripting/lua/core.c:398
-#: src/scripting/lua/core.c:478
+#: src/config/dialogs.c:405 src/cookies/dialogs.c:90 src/cookies/dialogs.c:257
+#: src/dialogs/edit.c:92 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:397 src/scripting/lua/core.c:477
 msgid "Name"
 msgstr "Nazwa"
 
@@ -909,7 +910,8 @@ msgstr "Nazwa"
 msgid "Type"
 msgstr "Typ"
 
-#: src/config/dialogs.c:157 src/config/dialogs.c:293 src/cookies/dialogs.c:87
+#: src/config/dialogs.c:157 src/config/dialogs.c:293 src/cookies/dialogs.c:91
+#: src/cookies/dialogs.c:258
 msgid "Value"
 msgstr "Warto¶æ"
 
@@ -917,9 +919,8 @@ msgstr "Warto¶æ"
 msgid "Description"
 msgstr "Opis"
 
-#: src/config/dialogs.c:252 src/protocol/protocol.c:64 src/sched/session.c:121
-#: src/sched/session.c:948 src/viewer/text/textarea.c:267
-#: src/viewer/text/textarea.c:276
+#: src/config/dialogs.c:252 src/sched/session.c:117
+#: src/viewer/text/textarea.c:267 src/viewer/text/textarea.c:276
 msgid "Error"
 msgstr "B³±d"
 
@@ -1966,7 +1967,7 @@ msgstr "Inwersja kolorów"
 msgid "Invert the fore- and background color so the link stands out."
 msgstr "Odwróæ kolory tekstu i t³a tak, ¿eby wyró¿niæ odno¶nik."
 
-#: src/config/options.inc:225 src/dialogs/options.c:167
+#: src/config/options.inc:225 src/dialogs/options.c:166
 msgid "Underline"
 msgstr "Podkre¶lenie"
 
@@ -2479,7 +2480,7 @@ msgid "Dump output options."
 msgstr "Ustawienia dotycz±ce zrzutów."
 
 #: src/config/options.inc:500 src/config/options.inc:899
-#: src/config/opttypes.c:365 src/dialogs/document.c:102
+#: src/config/opttypes.c:365 src/dialogs/document.c:101
 msgid "Codepage"
 msgstr "Strona kodowa"
 
@@ -2775,7 +2776,7 @@ msgstr "Nazwa u¿ytkownika"
 msgid "Proxy authentication username."
 msgstr "Nazwa u¿ytkownika do uwierzytelnienia wobec serwera proxy."
 
-#: src/config/options.inc:645 src/protocol/auth/dialogs.c:76
+#: src/config/options.inc:645 src/protocol/auth/dialogs.c:59
 msgid "Password"
 msgstr "Has³o"
 
@@ -3186,7 +3187,7 @@ msgstr ""
 "jedynie podzbiór UTF8 jest u¿ywany w zale¿no¶ci od u¿ywanej\n"
 "strony kodowej."
 
-#: src/config/options.inc:868 src/dialogs/options.c:164
+#: src/config/options.inc:868 src/dialogs/options.c:163
 msgid "Restrict frames in cp850/852"
 msgstr "Ogranicz ramki w cp850/852"
 
@@ -4029,7 +4030,7 @@ msgid "Folder"
 msgstr "Folder"
 
 #. name:
-#: src/cookies/cookies.c:91 src/cookies/cookies.c:819
+#: src/cookies/cookies.c:91 src/cookies/cookies.c:816
 msgid "Cookies"
 msgstr "Ciasteczka"
 
@@ -4108,11 +4109,11 @@ msgstr ""
 "Czy zapisywaæ ciasteczka po ka¿dej zmianie na li¶cie ciasteczek?\n"
 "Bez efektu, gdy cookies_save jest wy³±czone."
 
-#: src/cookies/cookies.c:552
+#: src/cookies/cookies.c:549
 msgid "Accept cookie?"
 msgstr "Akceptujesz ciasteczko?"
 
-#: src/cookies/cookies.c:553
+#: src/cookies/cookies.c:550
 #, c-format
 msgid ""
 "Do you want to accept a cookie from %s?\n"
@@ -4131,49 +4132,50 @@ msgstr ""
 "Wa¿ne do: %s\n"
 "Bezpieczeñstwo: %s\n"
 
-#: src/cookies/cookies.c:562
+#: src/cookies/cookies.c:559
 msgid "at quit time"
 msgstr "w momencie koñczenia dzia³ania"
 
-#: src/cookies/cookies.c:563 src/cookies/dialogs.c:93
+#: src/cookies/cookies.c:560 src/cookies/dialogs.c:97
 msgid "yes"
 msgstr "tak"
 
-#: src/cookies/cookies.c:563 src/cookies/dialogs.c:93
+#: src/cookies/cookies.c:560 src/cookies/dialogs.c:97
 msgid "no"
 msgstr "nie"
 
-#: src/cookies/cookies.c:565
+#: src/cookies/cookies.c:562
 msgid "Accept"
 msgstr "Akceptacja"
 
-#: src/cookies/cookies.c:566
+#: src/cookies/cookies.c:563
 msgid "Reject"
 msgstr "Odrzucenie"
 
-#: src/cookies/dialogs.c:85 src/dialogs/document.c:116
+#: src/cookies/dialogs.c:89 src/cookies/dialogs.c:256
+#: src/dialogs/document.c:115
 msgid "Server"
 msgstr "Serwer"
 
 #
-#: src/cookies/dialogs.c:88
+#: src/cookies/dialogs.c:92 src/cookies/dialogs.c:259
 msgid "Domain"
 msgstr "Domena"
 
-#: src/cookies/dialogs.c:90
+#: src/cookies/dialogs.c:94 src/cookies/dialogs.c:260
 msgid "Expires"
 msgstr "Wygasa"
 
-#: src/cookies/dialogs.c:92
+#: src/cookies/dialogs.c:96 src/cookies/dialogs.c:261
 msgid "Secure"
 msgstr "Bezpieczne"
 
-#: src/cookies/dialogs.c:156 src/dialogs/download.c:420 src/dialogs/edit.c:100
+#: src/cookies/dialogs.c:356 src/dialogs/download.c:422 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:168 src/globhist/dialogs.c:189
 msgid "Clear"
 msgstr "Wyczy¶æ"
 
-#: src/cookies/dialogs.c:162
+#: src/cookies/dialogs.c:362
 msgid "Cookie manager"
 msgstr "Menad¿er ciasteczek"
 
@@ -4181,74 +4183,74 @@ msgstr "Menad¿er ciasteczek"
 msgid "You are nowhere!"
 msgstr "Tak naprawdê to jeste¶ nigdzie!"
 
-#: src/dialogs/document.c:106
+#: src/dialogs/document.c:105
 msgid "assumed"
 msgstr "przyjêta domy¶lnie"
 
-#: src/dialogs/document.c:109
+#: src/dialogs/document.c:108
 msgid "ignoring server setting"
 msgstr "ustawienia serwera zignorowane"
 
-#: src/dialogs/document.c:134
+#: src/dialogs/document.c:133
 msgid "Date"
 msgstr "Data"
 
-#: src/dialogs/document.c:152 src/globhist/dialogs.c:64
+#: src/dialogs/document.c:151 src/globhist/dialogs.c:64
 msgid "Last visit time"
 msgstr "Data ostatniej wizyty"
 
-#: src/dialogs/document.c:171
+#: src/dialogs/document.c:170
 msgid "Unknown"
 msgstr "Nieznany"
 
 #
-#: src/dialogs/document.c:183
+#: src/dialogs/document.c:182
 msgid "Link"
 msgstr "Odno¶nik"
 
-#: src/dialogs/document.c:190
+#: src/dialogs/document.c:189
 msgid "Link title"
 msgstr "Tytu³ odno¶nika"
 
-#: src/dialogs/document.c:212
+#: src/dialogs/document.c:211
 msgid "Link last visit time"
 msgstr "Data ostatniej wizyty odno¶nika"
 
-#: src/dialogs/document.c:218
+#: src/dialogs/document.c:217
 msgid "Link title (from history)"
 msgstr "Tytu³ odno¶nika (z historii)"
 
-#: src/dialogs/document.c:249 src/dialogs/document.c:297
-#: src/dialogs/document.c:309
+#: src/dialogs/document.c:248 src/dialogs/document.c:296
+#: src/dialogs/document.c:308
 msgid "Header info"
 msgstr "Informacje o nag³ówku"
 
-#: src/dialogs/document.c:310
+#: src/dialogs/document.c:309
 msgid "No header info."
 msgstr "Brak nag³ówka."
 
-#: src/dialogs/download.c:247 src/dialogs/menu.c:472 src/sched/download.c:308
+#: src/dialogs/download.c:249 src/dialogs/menu.c:472 src/sched/download.c:308
 msgid "Download"
 msgstr "Pobieranie"
 
-#: src/dialogs/download.c:254
+#: src/dialogs/download.c:256
 msgid "Background"
 msgstr "W tle"
 
-#: src/dialogs/download.c:255
+#: src/dialogs/download.c:257
 msgid "Background with notify"
 msgstr "W tle z powiadomieniem"
 
-#: src/dialogs/download.c:256 src/dialogs/download.c:415
+#: src/dialogs/download.c:258 src/dialogs/download.c:417
 msgid "Abort"
 msgstr "Przerwij"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:257 src/dialogs/download.c:418
+#: src/dialogs/download.c:259 src/dialogs/download.c:420
 msgid "Abort and delete file"
 msgstr "Przerwij i skasuj plik"
 
-#: src/dialogs/download.c:425
+#: src/dialogs/download.c:427
 msgid "Download manager"
 msgstr "Menad¿er pobierania"
 
@@ -4629,160 +4631,160 @@ msgstr "Przejd¼ do URL-a"
 msgid "Save to file"
 msgstr "Zapisz do pliku"
 
-#: src/dialogs/options.c:144
+#: src/dialogs/options.c:143
 msgid "Terminal options"
 msgstr "Opcje terminala"
 
-#: src/dialogs/options.c:149
+#: src/dialogs/options.c:148
 msgid "Frame handling:"
 msgstr "Rysowanie ramek:"
 
-#: src/dialogs/options.c:150
+#: src/dialogs/options.c:149
 msgid "No frames"
 msgstr "Brak ramek"
 
-#: src/dialogs/options.c:151
+#: src/dialogs/options.c:150
 msgid "VT 100 frames"
 msgstr "Ramki VT100"
 
-#: src/dialogs/options.c:152
+#: src/dialogs/options.c:151
 msgid "Linux or OS/2 frames"
 msgstr "Ramki typu Linux lub OS/2"
 
-#: src/dialogs/options.c:153
+#: src/dialogs/options.c:152
 msgid "FreeBSD frames"
 msgstr "Ramki FreeBSD"
 
-#: src/dialogs/options.c:154
+#: src/dialogs/options.c:153
 msgid "KOI8-R frames"
 msgstr "Ramki KOI8-R"
 
-#: src/dialogs/options.c:156
+#: src/dialogs/options.c:155
 msgid "Color mode:"
 msgstr "Tryb kolorowy:"
 
-#: src/dialogs/options.c:157
+#: src/dialogs/options.c:156
 msgid "No colors (mono)"
 msgstr "Brak kolorów (mono)"
 
-#: src/dialogs/options.c:158
+#: src/dialogs/options.c:157
 msgid "16 colors"
 msgstr "16 kolorów"
 
-#: src/dialogs/options.c:160
+#: src/dialogs/options.c:159
 msgid "256 colors"
 msgstr "256 kolorów"
 
-#: src/dialogs/options.c:163
+#: src/dialogs/options.c:162
 msgid "Use ^[[11m"
 msgstr "U¿ywaj ^[[11m"
 
-#: src/dialogs/options.c:165
+#: src/dialogs/options.c:164
 msgid "Block the cursor"
 msgstr "Kursor blokowy"
 
-#: src/dialogs/options.c:166
+#: src/dialogs/options.c:165
 msgid "Transparency"
 msgstr "Przezroczysto¶æ"
 
-#: src/dialogs/options.c:168
+#: src/dialogs/options.c:167
 msgid "UTF-8 I/O"
 msgstr "I/O w UTF-8"
 
-#: src/dialogs/options.c:237
+#: src/dialogs/options.c:236
 msgid "Resize terminal"
 msgstr "Zmieñ rozmiar terminala"
 
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/dialogs/status.c:71
+#: src/dialogs/status.c:72
 msgid "Received"
 msgstr "Pobrano"
 
-#: src/dialogs/status.c:76
+#: src/dialogs/status.c:77
 msgid "of"
 msgstr "z"
 
-#: src/dialogs/status.c:85
+#: src/dialogs/status.c:86
 msgid "Average speed"
 msgstr "¦rednia prêdko¶æ"
 
-#: src/dialogs/status.c:86
+#: src/dialogs/status.c:87
 msgid "average speed"
 msgstr "¶rednia prêdko¶æ"
 
-#: src/dialogs/status.c:87
+#: src/dialogs/status.c:88
 msgid "avg"
 msgstr "¶red"
 
-#: src/dialogs/status.c:90
+#: src/dialogs/status.c:91
 msgid "Speed"
 msgstr "Prêdko¶æ"
 
-#: src/dialogs/status.c:90
+#: src/dialogs/status.c:91
 msgid "speed"
 msgstr "prêdko¶æ"
 
-#: src/dialogs/status.c:101
+#: src/dialogs/status.c:102
 msgid "current speed"
 msgstr "aktualna prêdko¶æ"
 
-#: src/dialogs/status.c:101
+#: src/dialogs/status.c:102
 msgid "cur"
 msgstr "akt"
 
-#: src/dialogs/status.c:112
+#: src/dialogs/status.c:113
 msgid "Elapsed time"
 msgstr "Up³ynê³o"
 
-#: src/dialogs/status.c:113
+#: src/dialogs/status.c:114
 msgid "elapsed time"
 msgstr "up³ynê³o"
 
-#: src/dialogs/status.c:114
+#: src/dialogs/status.c:115
 msgid "ETT"
 msgstr "ETT"
 
-#: src/dialogs/status.c:122
+#: src/dialogs/status.c:123
 msgid "estimated time"
 msgstr "pozosta³y czas"
 
-#: src/dialogs/status.c:123
+#: src/dialogs/status.c:124
 msgid "ETA"
 msgstr "ETA"
 
-#: src/dialogs/status.c:311
+#: src/dialogs/status.c:312
 msgid "Untitled"
 msgstr "Bez tytu³u"
 
-#: src/dialogs/status.c:313
+#: src/dialogs/status.c:314
 msgid "No document"
 msgstr "Brak dokumentu"
 
 #. name:
-#: src/document/css/css.c:26 src/document/css/css.c:158
+#: src/document/css/css.c:27 src/document/css/css.c:161
 msgid "Cascading Style Sheets"
 msgstr "Kaskadowe szablony stylów CSS"
 
-#: src/document/css/css.c:28
+#: src/document/css/css.c:29
 msgid "Options concerning how to use CSS for styling documents."
 msgstr "Ustawienia dotycz±ce u¿ycia CSS do stylizacji dokumentów."
 
 #
-#: src/document/css/css.c:30
+#: src/document/css/css.c:31
 msgid "Enable CSS"
 msgstr "W³±cz CSS"
 
-#: src/document/css/css.c:32
+#: src/document/css/css.c:33
 msgid "Enable adding of CSS style info to documents."
 msgstr "W³±cza dodawanie stylów CSS do dokumentu."
 
-#: src/document/css/css.c:34
+#: src/document/css/css.c:35
 msgid "Import external style sheets"
 msgstr "Importowanie zewnêtrznych szablonów stylów"
 
-#: src/document/css/css.c:36
+#: src/document/css/css.c:37
 msgid ""
 "When enabled any external style sheets that are imported from\n"
 "either CSS itself using the @import keyword or from the HTML using\n"
@@ -4792,11 +4794,11 @@ msgstr ""
 "przy u¿yciu s³owa kluczowego @import albo z dokumentu HTML\n"
 "u¿ywaj±c tagu <link> tak¿e bêd± pobrane."
 
-#: src/document/css/css.c:40
+#: src/document/css/css.c:41
 msgid "Default style sheet"
 msgstr "Domy¶lny szablon stylów"
 
-#: src/document/css/css.c:42
+#: src/document/css/css.c:43
 msgid ""
 "The path to the file containing the default user defined\n"
 "Cascading Style Sheet. It can be used to control the basic\n"
@@ -4832,7 +4834,7 @@ msgstr ""
 "Aby zapisaæ has³a dla tego URL-a, nale¿y je w³±czyæ przyciskiem\n"
 "\"Prze³±cz zapisywanie\"."
 
-#: src/formhist/dialogs.c:164 src/protocol/auth/dialogs.c:75
+#: src/formhist/dialogs.c:164 src/protocol/auth/dialogs.c:57
 msgid "Login"
 msgstr "Nazwa u¿ytkownika"
 
@@ -4846,11 +4848,11 @@ msgstr "Menad¿er historii formularzy"
 
 #. TODO: Remember multiple login for the same form.
 #. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
-#: src/formhist/formhist.c:35
+#: src/formhist/formhist.c:36
 msgid "Show forms history dialog"
 msgstr "Poka¿ okno dialogowe historii formularzy"
 
-#: src/formhist/formhist.c:37
+#: src/formhist/formhist.c:38
 msgid ""
 "Ask if a login form should be saved to file or not.\n"
 "This option only disables the dialog, already saved login\n"
@@ -4860,11 +4862,11 @@ msgstr ""
 "Opcja ta jedynie wy³±cza okno dialogowe, poprzednio zapisane\n"
 "formularze logowania pozostaj± nienaruszone."
 
-#: src/formhist/formhist.c:486
+#: src/formhist/formhist.c:491
 msgid "Forms memory"
 msgstr "Zapamiêtywanie formularzy"
 
-#: src/formhist/formhist.c:487
+#: src/formhist/formhist.c:492
 msgid ""
 "Should I remember this login?\n"
 "\n"
@@ -4879,12 +4881,12 @@ msgstr ""
 "\n"
 "Je¶li u¿ywasz istotnych hase³ odpowiedz NIE."
 
-#: src/formhist/formhist.c:494
+#: src/formhist/formhist.c:499
 msgid "Never for this site"
 msgstr "Nigdy dla tego miejsca"
 
 #. name:
-#: src/formhist/formhist.c:519
+#: src/formhist/formhist.c:524
 msgid "Forms History"
 msgstr "Zapamiêtywanie formularzy"
 
@@ -5459,21 +5461,21 @@ msgstr "~Pe³ny ekran"
 msgid "~BeOS terminal"
 msgstr "Terminal ~BeOS"
 
-#: src/protocol/auth/dialogs.c:58
+#: src/protocol/auth/dialogs.c:66
 #, c-format
 msgid "Authentication required for %s at %s"
 msgstr "Potrzebne uwierzytelnienie dla %s w %s"
 
-#: src/protocol/auth/dialogs.c:65
+#: src/protocol/auth/dialogs.c:79
 msgid "HTTP Authentication"
 msgstr "Uwierzytelnienie HTTP"
 
-#: src/protocol/http/codes.c:105
+#: src/protocol/http/codes.c:106
 #, c-format
 msgid "HTTP error %03d"
 msgstr "B³±d HTTP %03d"
 
-#: src/protocol/http/codes.c:128
+#: src/protocol/http/codes.c:129
 msgid ""
 "  An error occurred on the server while fetching the document you\n"
 "  requested. Moreover, the server did not send back any explanation of what\n"
@@ -5491,10 +5493,6 @@ msgstr ""
 "  <br><br>\n"
 "  Nie mam pojêcia co jest ¼le, przykro mi. Skontaktuj siê z administratorem\n"
 "  serwera je¶li wierzysz, ¿e do tego b³êdu nie powinno doj¶æ.\n"
-
-#: src/protocol/protocol.c:65
-msgid "JavaScript is currently not supported."
-msgstr "JavaScript nie jest na razie obs³ugiwana."
 
 #: src/protocol/rewrite/rewrite.c:47
 msgid "URI rewriting"
@@ -5541,6 +5539,7 @@ msgid "Dumb prefixes."
 msgstr "G³upie przedrostki."
 
 #: src/protocol/rewrite/rewrite.c:70
+#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -5573,28 +5572,20 @@ msgstr ""
 "%% w ³añcuchu oznacza '%'"
 
 #. name:
-#: src/protocol/rewrite/rewrite.c:344
+#: src/protocol/rewrite/rewrite.c:347
 msgid "URI rewrite"
 msgstr "Przepisywanie URI"
 
-#: src/protocol/user.c:155 src/sched/error.c:51
-msgid "Bad URL syntax"
-msgstr "Z³a sk³adnia URL-a"
-
-#: src/protocol/user.c:156
-msgid "Bad user protocol URL"
-msgstr "B³êdny URL dla protoko³u u¿ytkownika"
-
-#: src/protocol/user.c:169
+#: src/protocol/user.c:166
 msgid "No program"
 msgstr "Nie okre¶lono programu"
 
-#: src/protocol/user.c:171
+#: src/protocol/user.c:168
 #, c-format
 msgid "No program specified for protocol %s."
 msgstr "Nie okre¶lono programu do obs³ugi protoko³u %s."
 
-#: src/sched/download.c:185 src/sched/download.c:273 src/sched/download.c:578
+#: src/sched/download.c:185 src/sched/download.c:273 src/sched/download.c:566
 msgid "Download error"
 msgstr "B³±d pobierania"
 
@@ -5624,11 +5615,11 @@ msgstr ""
 "%s"
 
 #
-#: src/sched/download.c:487
+#: src/sched/download.c:475
 msgid "File exists"
 msgstr "Plik istnieje"
 
-#: src/sched/download.c:488
+#: src/sched/download.c:476
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -5643,19 +5634,19 @@ msgstr ""
 "Alternatywna nazwa pliku:\n"
 "%s"
 
-#: src/sched/download.c:495
+#: src/sched/download.c:483
 msgid "Save under the alternative name"
 msgstr "Zapisz pod alternatywn± nazw±"
 
-#: src/sched/download.c:496
+#: src/sched/download.c:484
 msgid "Overwrite the original file"
 msgstr "Nadpisz oryginalny plik"
 
-#: src/sched/download.c:497
+#: src/sched/download.c:485
 msgid "Resume download of the original file"
 msgstr "Wznów pobieranie oryginalnego pliku"
 
-#: src/sched/download.c:579
+#: src/sched/download.c:567
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -5664,30 +5655,30 @@ msgstr ""
 "Nie mo¿na utworzyæ pliku '%s':\n"
 "%s"
 
-#: src/sched/download.c:1000 src/sched/download.c:1011
+#: src/sched/download.c:985 src/sched/download.c:996
 msgid "Unknown type"
 msgstr "Nieznany typ"
 
-#: src/sched/download.c:1001
+#: src/sched/download.c:986
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Czy chcesz zapisaæ plik '%s' (typu %s) czy wy¶wietliæ go?"
 
-#: src/sched/download.c:1007 src/sched/download.c:1016
-#: src/sched/download.c:1036 src/sched/download.c:1048
+#: src/sched/download.c:992 src/sched/download.c:1001
+#: src/sched/download.c:1021 src/sched/download.c:1033
 msgid "Display"
 msgstr "Wy¶wietl"
 
-#: src/sched/download.c:1012
+#: src/sched/download.c:997
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Czy chcesz wy¶wietliæ plik '%s' (typu %s)?"
 
-#: src/sched/download.c:1027 src/sched/download.c:1040
+#: src/sched/download.c:1012 src/sched/download.c:1025
 msgid "What to do?"
 msgstr "Co mam zrobiæ?"
 
-#: src/sched/download.c:1028
+#: src/sched/download.c:1013
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5696,11 +5687,11 @@ msgstr ""
 "Czy chcesz otworzyæ plik '%s' (typu %s%s%s)\n"
 "przy u¿yciu '%s', zapisaæ go, czy wy¶wietliæ?"
 
-#: src/sched/download.c:1034 src/sched/download.c:1047
+#: src/sched/download.c:1019 src/sched/download.c:1032
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/sched/download.c:1041
+#: src/sched/download.c:1026
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5773,6 +5764,10 @@ msgstr "B³±d przy czytaniu z gniazda"
 msgid "Data modified"
 msgstr "Dane zosta³y zmodyfikowane"
 
+#: src/sched/error.c:51
+msgid "Bad URL syntax"
+msgstr "Z³a sk³adnia URL-a"
+
 #: src/sched/error.c:53
 msgid "Request must be restarted"
 msgstr "¯±danie musi byæ powtórzone"
@@ -5785,71 +5780,86 @@ msgstr "Nie mo¿na zbadaæ stanu gniazda"
 msgid "Only local connections are permitted"
 msgstr "Dozwolone s± tylko lokalne po³±czenia"
 
-#: src/sched/error.c:57
+#: src/sched/error.c:56
+#, fuzzy
+msgid ""
+"This URL contains a protocol not yet known by ELinks.\n"
+"You can configure an external handler for it through\n"
+"the options system."
+msgstr ""
+"Ten URL zawiera protokó³ jeszcze nieznany ELinksowi.\n"
+"Mo¿esz skonfigurowaæ zewnêtrzny program obs³ugi przy u¿yciu menad¿era\n"
+"ustawieñ."
+
+#: src/sched/error.c:60
 msgid "Bad HTTP response"
 msgstr "Nieprawid³owa odpowied¼ HTTP"
 
-#: src/sched/error.c:58
+#: src/sched/error.c:61
 msgid "HTTP 100 (???)"
 msgstr "HTTP 100 (???)"
 
-#: src/sched/error.c:59
+#: src/sched/error.c:62
 msgid "No content"
 msgstr "Brak zawarto¶ci"
 
-#: src/sched/error.c:61
+#: src/sched/error.c:64
 msgid "Unknown file type"
 msgstr "Nieznany typ pliku"
 
-#: src/sched/error.c:62
+#: src/sched/error.c:65
 msgid "Error opening file"
 msgstr "B³±d przy otwieraniu pliku"
 
-#: src/sched/error.c:63
+#: src/sched/error.c:66
 msgid "CGI script not in CGI path"
 msgstr "Skrypt CGI nie znajduje siê na ¶cie¿ce CGI"
 
-#: src/sched/error.c:65
+#: src/sched/error.c:68
 msgid "Bad FTP response"
 msgstr "Nieprawid³owa odpowied¼ FTP"
 
-#: src/sched/error.c:66
+#: src/sched/error.c:69
 msgid "FTP service unavailable"
 msgstr "Us³uga FTP jest niedostêpna"
 
-#: src/sched/error.c:67
+#: src/sched/error.c:70
 msgid "Bad FTP login"
 msgstr "Nieprawid³owy login"
 
-#: src/sched/error.c:68
+#: src/sched/error.c:71
 msgid "FTP PORT command failed"
 msgstr "Polecenie PORT nie powiod³o siê"
 
-#: src/sched/error.c:69
+#: src/sched/error.c:72
 msgid "File not found"
 msgstr "Nie znaleziono pliku"
 
-#: src/sched/error.c:70
+#: src/sched/error.c:73
 msgid "FTP file error"
 msgstr "B³±d plikowy FTP"
 
-#: src/sched/error.c:72
+#: src/sched/error.c:76
 msgid "SSL error"
 msgstr "B³±d SSL"
 
-#: src/sched/error.c:74
+#: src/sched/error.c:78
 msgid "This version of ELinks does not contain SSL/TLS support"
 msgstr "Ta wersja ELinksa nie zawiera wsparcia dla SSL/TSL"
 
-#: src/sched/error.c:103
+#: src/sched/error.c:81
+msgid "JavaScript is currently not supported."
+msgstr "JavaScript nie jest na razie obs³ugiwana."
+
+#: src/sched/error.c:110
 msgid "Unknown error"
 msgstr "Nieznany b³±d"
 
-#: src/sched/session.c:608
+#: src/sched/session.c:571
 msgid "Welcome"
 msgstr "Powitanie"
 
-#: src/sched/session.c:609
+#: src/sched/session.c:572
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -5860,11 +5870,11 @@ msgstr ""
 "Wci¶nij ESC aby wywo³aæ menu. Wybierz Pomoc->Podrêcznik z menu aby zapoznaæ "
 "siê z instrukcj± u¿ytkowania programu."
 
-#: src/sched/session.c:618 src/sched/session.c:638 src/sched/task.c:166
+#: src/sched/session.c:581 src/sched/session.c:601 src/sched/task.c:173
 msgid "Warning"
 msgstr "Ostrze¿enie"
 
-#: src/sched/session.c:619
+#: src/sched/session.c:582
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5882,7 +5892,7 @@ msgstr ""
 "co mi chodzi, po prostu to zrób), tak ¿e domy¶lne ustawienie bêdzie u¿ywane. "
 "Przepraszamy za wszelkie niedogodno¶ci."
 
-#: src/sched/session.c:639
+#: src/sched/session.c:602
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5904,43 +5914,34 @@ msgstr ""
 "saving_style na 3, by uzyskaæ \"w³a¶ciwe\" zachowanie. Przepraszamy za "
 "wszelkie niedogodno¶ci."
 
-#: src/sched/session.c:949
-msgid ""
-"This URL contains a protocol not yet known by ELinks.\n"
-"You can configure an external handler for it through options system."
-msgstr ""
-"Ten URL zawiera protokó³ jeszcze nieznany ELinksowi.\n"
-"Mo¿esz skonfigurowaæ zewnêtrzny program obs³ugi przy u¿yciu menad¿era\n"
-"ustawieñ."
-
-#: src/sched/task.c:155
+#: src/sched/task.c:162
 #, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Czy chcesz i¶æ za przekierowaniem i wys³aæ dane formularza do %s?"
 
-#: src/sched/task.c:158
+#: src/sched/task.c:165
 #, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Czy chcesz wys³aæ formularz do %s?"
 
-#: src/sched/task.c:160
+#: src/sched/task.c:167
 #, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Czy chcesz ponownie wys³aæ formularz do %s?"
 
-#: src/scripting/lua/core.c:472
+#: src/scripting/lua/core.c:471
 msgid "User dialog"
 msgstr "Okno dialogowe u¿ytkownika"
 
-#: src/scripting/lua/core.c:588
+#: src/scripting/lua/core.c:596
 msgid "Lua Error"
 msgstr "B³±d Lua"
 
-#: src/scripting/lua/core.c:714
+#: src/scripting/lua/core.c:722
 msgid "Lua Console"
 msgstr "Konsola Lua"
 
-#: src/scripting/lua/core.c:714
+#: src/scripting/lua/core.c:722
 msgid "Enter expression"
 msgstr "Wprowad¼ wyra¿enie"
 
@@ -6032,7 +6033,7 @@ msgstr "B³êdny rozmiar terminala: %d, %d"
 msgid "Could not get terminal size"
 msgstr "Nie mo¿na okre¶liæ rozmiaru terminala"
 
-#: src/terminal/kbd.c:999
+#: src/terminal/kbd.c:1003
 msgid "Too many bytes read from the itrm!"
 msgstr "Zbyt du¿o bajtów przeczytanych z itrm!"
 
@@ -6053,7 +6054,7 @@ msgstr "B³±d przy zapisywaniu na standardowe wyj¶cie: %s"
 msgid "Can't write to stdout."
 msgstr "Nie mo¿na zapisaæ na standardowe wyj¶cie."
 
-#: src/viewer/dump/dump.c:304
+#: src/viewer/dump/dump.c:288
 #, c-format
 msgid "URL expected after %s."
 msgstr "Spodziewany URL po %s."
@@ -6257,21 +6258,24 @@ msgstr "Nie mo¿esz uruchomiæ zewnêtrznego edytora w trybie anonimowym."
 msgid "You can do this only on the master terminal"
 msgstr "Mo¿esz zrobiæ to jedynie na g³ównym terminalu"
 
-#: src/viewer/text/view.c:709
+#: src/viewer/text/view.c:706
 msgid "Go to link"
 msgstr "Przejd¼ do odno¶nika"
 
-#: src/viewer/text/view.c:709
+#: src/viewer/text/view.c:706
 msgid "Enter link number"
 msgstr "Wprowad¼ numer odno¶nika"
 
-#: src/viewer/text/view.c:1220
+#: src/viewer/text/view.c:1210
 msgid "Save error"
 msgstr "B³±d zapisu"
 
-#: src/viewer/text/view.c:1221
+#: src/viewer/text/view.c:1211
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
+
+#~ msgid "Bad user protocol URL"
+#~ msgstr "B³êdny URL dla protoko³u u¿ytkownika"
 
 #~ msgid "Read document from stdin"
 #~ msgstr "Czytaj dokument ze standardowego wej¶cia"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-04-05 11:55+0200\n"
+"POT-Creation-Date: 2004-04-07 23:48+0200\n"
 "PO-Revision-Date: 2004-03-04 11:48+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
@@ -5438,6 +5438,7 @@ msgid "Dumb prefixes."
 msgstr "Préfixes simples."
 
 #: src/protocol/rewrite/rewrite.c:70
+#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -5953,7 +5954,7 @@ msgstr "Ne peut écrire sur la sortie standard: %s"
 msgid "Can't write to stdout."
 msgstr "Ne peut écrire sur la sortie standard."
 
-#: src/viewer/dump/dump.c:286
+#: src/viewer/dump/dump.c:288
 #, c-format
 msgid "URL expected after %s."
 msgstr "URL attendue après %s."

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2004-01-18 00:13+0100\n"
+"POT-Creation-Date: 2004-04-07 23:48+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -15,117 +15,117 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
 
-#: src/bfu/hierbox.c:358
+#: src/bfu/hierbox.c:361
 msgid "Close"
 msgstr "Κλείσιμο"
 
 #. | MSGBOX_SCROLLABLE
-#: src/bfu/hierbox.c:446 src/bfu/hierbox.c:468 src/cache/dialogs.c:145
-#: src/config/dialogs.c:423 src/cookies/dialogs.c:154
-#: src/dialogs/document.c:44 src/dialogs/document.c:227
-#: src/dialogs/download.c:414 src/formhist/dialogs.c:165
+#: src/bfu/hierbox.c:449 src/bfu/hierbox.c:471 src/cache/dialogs.c:146
+#: src/config/dialogs.c:425 src/cookies/dialogs.c:352
+#: src/dialogs/document.c:44 src/dialogs/document.c:226
+#: src/dialogs/download.c:416 src/formhist/dialogs.c:165
 #: src/globhist/dialogs.c:182
 msgid "Info"
 msgstr "Πληροφορίες"
 
-#: src/bfu/hierbox.c:447
+#: src/bfu/hierbox.c:450
 msgid "Press space to expand this folder."
 msgstr ""
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
-#: src/bfu/hierbox.c:449 src/bfu/hierbox.c:471 src/bfu/hierbox.c:609
-#: src/bfu/inpfield.c:47 src/bfu/inpfield.c:56 src/bfu/inpfield.c:76
+#: src/bfu/hierbox.c:452 src/bfu/hierbox.c:474 src/bfu/hierbox.c:612
+#: src/bfu/inpfield.c:48 src/bfu/inpfield.c:57 src/bfu/inpfield.c:77
 #: src/bfu/msgbox.c:185 src/bookmarks/dialogs.c:192
 #: src/bookmarks/dialogs.c:606 src/config/dialogs.c:45 src/config/dialogs.c:71
 #: src/config/dialogs.c:255 src/config/dialogs.c:327 src/config/dialogs.c:357
-#: src/config/dialogs.c:392 src/config/dialogs.c:404 src/config/dialogs.c:487
-#: src/config/dialogs.c:531 src/config/dialogs.c:558 src/config/dialogs.c:599
-#: src/config/dialogs.c:612 src/dialogs/document.c:50
-#: src/dialogs/document.c:230 src/dialogs/document.c:300
-#: src/dialogs/document.c:312 src/dialogs/edit.c:99 src/dialogs/info.c:48
-#: src/dialogs/info.c:125 src/dialogs/info.c:145 src/dialogs/menu.c:63
-#: src/dialogs/menu.c:442 src/dialogs/menu.c:473 src/dialogs/options.c:192
-#: src/dialogs/options.c:265 src/formhist/dialogs.c:132 src/mime/dialogs.c:159
-#: src/protocol/auth/dialogs.c:77 src/protocol/protocol.c:67
-#: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:188
-#: src/sched/download.c:276 src/sched/download.c:301 src/sched/download.c:572
-#: src/sched/error.c:42 src/sched/session.c:123 src/sched/session.c:593
-#: src/sched/session.c:610 src/sched/session.c:634 src/sched/session.c:932
-#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
-#: src/scripting/lua/core.c:591 src/scripting/lua/core.c:720
-#: src/viewer/text/form.c:664 src/viewer/text/search.c:861
-#: src/viewer/text/search.c:889 src/viewer/text/search.c:911
-#: src/viewer/text/search.c:947 src/viewer/text/search.c:1239
-#: src/viewer/text/search.c:1250 src/viewer/text/textarea.c:270
-#: src/viewer/text/view.c:707 src/viewer/text/view.c:1222
+#: src/config/dialogs.c:394 src/config/dialogs.c:406 src/config/dialogs.c:489
+#: src/config/dialogs.c:534 src/config/dialogs.c:561 src/config/dialogs.c:602
+#: src/config/dialogs.c:615 src/cookies/dialogs.c:287
+#: src/dialogs/document.c:50 src/dialogs/document.c:229
+#: src/dialogs/document.c:299 src/dialogs/document.c:311 src/dialogs/edit.c:99
+#: src/dialogs/info.c:48 src/dialogs/info.c:137 src/dialogs/info.c:158
+#: src/dialogs/menu.c:64 src/dialogs/menu.c:446 src/dialogs/menu.c:473
+#: src/dialogs/options.c:169 src/dialogs/options.c:242
+#: src/formhist/dialogs.c:132 src/mime/dialogs.c:159
+#: src/protocol/auth/dialogs.c:98 src/protocol/user.c:171
+#: src/sched/download.c:188 src/sched/download.c:276 src/sched/download.c:311
+#: src/sched/download.c:570 src/sched/error.c:42 src/sched/session.c:120
+#: src/sched/session.c:576 src/sched/session.c:593 src/sched/session.c:617
+#: src/scripting/lua/core.c:400 src/scripting/lua/core.c:481
+#: src/scripting/lua/core.c:599 src/scripting/lua/core.c:723
+#: src/viewer/text/form.c:664 src/viewer/text/search.c:859
+#: src/viewer/text/search.c:887 src/viewer/text/search.c:912
+#: src/viewer/text/search.c:943 src/viewer/text/search.c:1392
+#: src/viewer/text/textarea.c:270 src/viewer/text/textarea.c:279
+#: src/viewer/text/view.c:707 src/viewer/text/view.c:1213
 msgid "OK"
 msgstr "Εντάξει"
 
-#: src/bfu/hierbox.c:577
+#: src/bfu/hierbox.c:580
 #, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr ""
 
-#: src/bfu/hierbox.c:578
+#: src/bfu/hierbox.c:581
 #, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr ""
 
-#: src/bfu/hierbox.c:581
+#: src/bfu/hierbox.c:584
 #, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr ""
 
-#: src/bfu/hierbox.c:582
+#: src/bfu/hierbox.c:585
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr ""
 
-#: src/bfu/hierbox.c:606
+#: src/bfu/hierbox.c:609
 #, fuzzy
 msgid "Delete error"
 msgstr "Διαγραφή σελιδοδείκτη"
 
-#: src/bfu/hierbox.c:697
+#: src/bfu/hierbox.c:700
 #, fuzzy
 msgid "Delete marked items"
 msgstr "Πεδίο επιλογής"
 
-#: src/bfu/hierbox.c:698
+#: src/bfu/hierbox.c:701
 #, fuzzy
 msgid "Delete marked items?"
 msgstr "Πεδίο επιλογής"
 
-#: src/bfu/hierbox.c:700 src/bfu/hierbox.c:721 src/bfu/hierbox.c:735
-#: src/bfu/hierbox.c:795 src/config/dialogs.c:507 src/dialogs/menu.c:92
-#: src/formhist/formhist.c:492 src/mime/dialogs.c:86 src/sched/task.c:169
+#: src/bfu/hierbox.c:703 src/bfu/hierbox.c:724 src/bfu/hierbox.c:738
+#: src/bfu/hierbox.c:798 src/config/dialogs.c:510 src/dialogs/menu.c:93
+#: src/formhist/formhist.c:497 src/mime/dialogs.c:86 src/sched/task.c:176
 #: src/terminal/tab.c:194 src/terminal/tab.c:230
 msgid "Yes"
 msgstr "Ναι"
 
-#: src/bfu/hierbox.c:701 src/bfu/hierbox.c:722 src/bfu/hierbox.c:736
-#: src/bfu/hierbox.c:796 src/config/dialogs.c:508 src/dialogs/menu.c:93
-#: src/formhist/formhist.c:493 src/mime/dialogs.c:87 src/sched/task.c:170
+#: src/bfu/hierbox.c:704 src/bfu/hierbox.c:725 src/bfu/hierbox.c:739
+#: src/bfu/hierbox.c:799 src/config/dialogs.c:511 src/dialogs/menu.c:94
+#: src/formhist/formhist.c:498 src/mime/dialogs.c:87 src/sched/task.c:177
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "No"
 msgstr "Όχι"
 
-#: src/bfu/hierbox.c:717
+#: src/bfu/hierbox.c:720
 #, fuzzy
 msgid "Delete folder"
 msgstr "Διαγραφή σελιδοδείκτη"
 
-#: src/bfu/hierbox.c:718
+#: src/bfu/hierbox.c:721
 #, fuzzy, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Διαγραφή κατάληξης"
 
-#: src/bfu/hierbox.c:730
+#: src/bfu/hierbox.c:733
 #, fuzzy
 msgid "Delete item"
 msgstr "Διαγραφή"
 
-#: src/bfu/hierbox.c:731
+#: src/bfu/hierbox.c:734
 #, fuzzy, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -133,58 +133,59 @@ msgid ""
 "%s"
 msgstr "Διαγραφή σελιδοδείκτη"
 
-#: src/bfu/hierbox.c:792
+#: src/bfu/hierbox.c:795
 msgid "Clear all items"
 msgstr ""
 
-#: src/bfu/hierbox.c:793
+#: src/bfu/hierbox.c:796
 #, fuzzy
 msgid "Do you really want to remove all items?"
 msgstr "Θέλετε σίγουρα να τερματίσετε το links;"
 
-#: src/bfu/inpfield.c:44 src/bfu/inpfield.c:53
+#: src/bfu/inpfield.c:45 src/bfu/inpfield.c:54
 msgid "Bad number"
 msgstr "Μη έγκυρος αριθμός"
 
-#: src/bfu/inpfield.c:45
+#: src/bfu/inpfield.c:46
 msgid "Number expected in field"
 msgstr "Δεν αναμενόταν αριθμός στο πεδίο"
 
-#: src/bfu/inpfield.c:54
+#: src/bfu/inpfield.c:55
 msgid "Number out of range"
 msgstr "Αριθμός εκτός ορίου"
 
-#: src/bfu/inpfield.c:73
+#: src/bfu/inpfield.c:74
 msgid "Bad string"
 msgstr "Μη έγκυρο αλφαριθμητικό"
 
-#: src/bfu/inpfield.c:74
+#: src/bfu/inpfield.c:75
 msgid "Empty string not allowed"
 msgstr "Δεν επιτρέπεται κενό αλφαριθμητικό"
 
-#: src/bfu/leds.c:65
+#: src/bfu/leds.c:66
 msgid "LEDs"
 msgstr ""
 
-#: src/bfu/leds.c:67
+#: src/bfu/leds.c:68
 msgid "LEDs (visual indicators) options."
 msgstr ""
 
-#: src/bfu/leds.c:69 src/config/options.inc:1150 src/config/options.inc:1157
-#: src/globhist/globhist.c:75 src/mime/backend/mailcap.c:96
-#: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
+#: src/bfu/leds.c:70 src/config/options.inc:1167 src/config/options.inc:1174
+#: src/config/options.inc:1193 src/globhist/globhist.c:70
+#: src/mime/backend/mailcap.c:96 src/mime/backend/mimetypes.c:55
+#: src/ssl/ssl.c:82
 #, fuzzy
 msgid "Enable"
 msgstr "όνομα"
 
-#: src/bfu/leds.c:71
+#: src/bfu/leds.c:72
 msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
 msgstr ""
 
 #. name:
-#: src/bfu/leds.c:232
+#: src/bfu/leds.c:248
 msgid "LED indicators"
 msgstr ""
 
@@ -204,39 +205,39 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:407
+#: src/bookmarks/backend/xbel.c:389 src/bookmarks/backend/xbel.c:410
 msgid "No title"
 msgstr ""
 
-#: src/bookmarks/backend/xbel.c:392
+#: src/bookmarks/backend/xbel.c:395
 #, fuzzy
 msgid "No URL"
 msgstr "Πήγαινε στο URL"
 
 #. name:
-#: src/bookmarks/bookmarks.c:43 src/bookmarks/bookmarks.c:100
+#: src/bookmarks/bookmarks.c:44 src/bookmarks/bookmarks.c:101
 #, fuzzy
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
-#: src/bookmarks/bookmarks.c:45
+#: src/bookmarks/bookmarks.c:46
 #, fuzzy
 msgid "Bookmark options."
 msgstr "Σελιδοδείκτες"
 
-#: src/bookmarks/bookmarks.c:48 src/bookmarks/bookmarks.c:54
+#: src/bookmarks/bookmarks.c:49 src/bookmarks/bookmarks.c:55
 #, fuzzy
 msgid "File format"
 msgstr "Ανέβασμα αρχείου"
 
-#: src/bookmarks/bookmarks.c:50
+#: src/bookmarks/bookmarks.c:51
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 msgstr ""
 
-#: src/bookmarks/bookmarks.c:56
+#: src/bookmarks/bookmarks.c:57
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -244,14 +245,14 @@ msgid ""
 "(DISABLED)"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:77 src/config/options.inc:1020
-#: src/dialogs/document.c:84 src/globhist/dialogs.c:62
+#: src/bookmarks/dialogs.c:77 src/config/options.inc:1037
+#: src/dialogs/document.c:83 src/globhist/dialogs.c:62
 msgid "Title"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:78 src/cache/dialogs.c:60 src/dialogs/document.c:68
+#: src/bookmarks/dialogs.c:78 src/cache/dialogs.c:61 src/dialogs/document.c:68
 #: src/dialogs/edit.c:96 src/formhist/dialogs.c:62 src/globhist/dialogs.c:63
-#: src/scripting/lua/core.c:399
+#: src/scripting/lua/core.c:398
 msgid "URL"
 msgstr "URL"
 
@@ -264,35 +265,36 @@ msgid "Folder name"
 msgstr ""
 
 #: src/bookmarks/dialogs.c:192 src/bookmarks/dialogs.c:606
-#: src/config/dialogs.c:328 src/config/dialogs.c:404 src/config/dialogs.c:558
-#: src/config/dialogs.c:613 src/dialogs/edit.c:103 src/dialogs/menu.c:63
-#: src/dialogs/menu.c:442 src/dialogs/menu.c:473 src/dialogs/options.c:195
-#: src/dialogs/options.c:266 src/mime/dialogs.c:160
-#: src/protocol/auth/dialogs.c:78 src/sched/download.c:488
-#: src/sched/download.c:998 src/sched/download.c:1007
-#: src/sched/download.c:1027 src/sched/download.c:1039
-#: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
-#: src/scripting/lua/core.c:720 src/viewer/text/search.c:1239
-#: src/viewer/text/search.c:1250 src/viewer/text/view.c:707
+#: src/config/dialogs.c:328 src/config/dialogs.c:406 src/config/dialogs.c:561
+#: src/config/dialogs.c:616 src/cookies/dialogs.c:288 src/dialogs/edit.c:103
+#: src/dialogs/menu.c:64 src/dialogs/menu.c:446 src/dialogs/menu.c:473
+#: src/dialogs/options.c:172 src/dialogs/options.c:243 src/mime/dialogs.c:160
+#: src/protocol/auth/dialogs.c:99 src/sched/download.c:486
+#: src/sched/download.c:993 src/sched/download.c:1002
+#: src/sched/download.c:1022 src/sched/download.c:1034
+#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
+#: src/scripting/lua/core.c:723 src/viewer/text/search.c:1392
+#: src/viewer/text/view.c:707
 msgid "Cancel"
 msgstr "Ακύρωση"
 
-#: src/bookmarks/dialogs.c:235 src/scripting/lua/core.c:393
+#: src/bookmarks/dialogs.c:235 src/scripting/lua/core.c:392
 msgid "Edit bookmark"
 msgstr "Επεξεργασία σελιδοδεικτών"
 
-#: src/bookmarks/dialogs.c:375 src/cache/dialogs.c:146
+#: src/bookmarks/dialogs.c:375 src/cache/dialogs.c:147
 #: src/globhist/dialogs.c:181
 msgid "Goto"
 msgstr "Πήγαινε"
 
 #: src/bookmarks/dialogs.c:376 src/config/dialogs.c:281
-#: src/config/dialogs.c:352 src/config/dialogs.c:424
+#: src/config/dialogs.c:352 src/config/dialogs.c:426 src/cookies/dialogs.c:238
+#: src/cookies/dialogs.c:354
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: src/bookmarks/dialogs.c:377 src/cache/dialogs.c:147
-#: src/config/dialogs.c:426 src/config/dialogs.c:633 src/cookies/dialogs.c:155
+#: src/bookmarks/dialogs.c:377 src/cache/dialogs.c:148
+#: src/config/dialogs.c:428 src/config/dialogs.c:636 src/cookies/dialogs.c:355
 #: src/formhist/dialogs.c:166 src/globhist/dialogs.c:186
 msgid "Delete"
 msgstr "Διαγραφή"
@@ -301,23 +303,23 @@ msgstr "Διαγραφή"
 msgid "Move"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:380 src/config/dialogs.c:425
-#: src/config/dialogs.c:632
+#: src/bookmarks/dialogs.c:380 src/config/dialogs.c:427
+#: src/config/dialogs.c:635 src/cookies/dialogs.c:353
 msgid "Add"
 msgstr "Προσθήκη"
 
 #: src/bookmarks/dialogs.c:381 src/globhist/dialogs.c:187
-#: src/viewer/text/search.c:858 src/viewer/text/search.c:885
-#: src/viewer/text/search.c:907 src/viewer/text/search.c:1249
+#: src/viewer/text/search.c:856 src/viewer/text/search.c:883
+#: src/viewer/text/search.c:907 src/viewer/text/search.c:1387
 msgid "Search"
 msgstr "Αναζήτηση"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:384 src/config/dialogs.c:427
-#: src/config/dialogs.c:635 src/cookies/dialogs.c:157
-#: src/dialogs/options.c:194 src/formhist/dialogs.c:169
-#: src/globhist/dialogs.c:192 src/sched/download.c:996
-#: src/sched/download.c:1025
+#: src/bookmarks/dialogs.c:384 src/config/dialogs.c:429
+#: src/config/dialogs.c:638 src/cookies/dialogs.c:357
+#: src/dialogs/options.c:171 src/formhist/dialogs.c:169
+#: src/globhist/dialogs.c:192 src/sched/download.c:991
+#: src/sched/download.c:1020
 msgid "Save"
 msgstr "Αποθήκευση"
 
@@ -348,141 +350,141 @@ msgstr "Σελιδοδείκτες"
 msgid "Enter folder name"
 msgstr "Εισάγετε αριθμό συνδέσμου"
 
-#: src/cache/dialogs.c:65
+#: src/cache/dialogs.c:66
 msgid "Redirect"
 msgstr ""
 
-#: src/cache/dialogs.c:73 src/config/options.inc:387 src/dialogs/document.c:95
+#: src/cache/dialogs.c:74 src/config/options.inc:387 src/dialogs/document.c:94
 msgid "Size"
 msgstr "Μέγεθος"
 
-#: src/cache/dialogs.c:74
+#: src/cache/dialogs.c:75
 msgid "Loaded size"
 msgstr ""
 
-#: src/cache/dialogs.c:77 src/dialogs/document.c:140
+#: src/cache/dialogs.c:78 src/dialogs/document.c:139
 msgid "Last modified"
 msgstr "Τελευταία τροποποίηση"
 
-#: src/cache/dialogs.c:85 src/dialogs/document.c:122
+#: src/cache/dialogs.c:86 src/dialogs/document.c:121
 msgid "SSL Cipher"
 msgstr ""
 
-#: src/cache/dialogs.c:89 src/dialogs/document.c:127
+#: src/cache/dialogs.c:90 src/dialogs/document.c:126
 msgid "Encoding"
 msgstr ""
 
-#: src/cache/dialogs.c:95
+#: src/cache/dialogs.c:96
 msgid "Flags"
 msgstr ""
 
-#: src/cache/dialogs.c:98 src/dialogs/document.c:98
+#: src/cache/dialogs.c:99 src/dialogs/document.c:97
 msgid "incomplete"
 msgstr "ασυμπλήρωτο"
 
-#: src/cache/dialogs.c:101
+#: src/cache/dialogs.c:102
 msgid "invalid"
 msgstr ""
 
-#: src/cache/dialogs.c:106
+#: src/cache/dialogs.c:107
 msgid "ID tag"
 msgstr ""
 
-#: src/cache/dialogs.c:110
+#: src/cache/dialogs.c:111 src/config/options.inc:504
 #, fuzzy
 msgid "Header"
 msgstr "Πληροφορίες κεφαλίδας"
 
-#: src/cache/dialogs.c:152
+#: src/cache/dialogs.c:153
 #, fuzzy
 msgid "Cache manager"
 msgstr "Διαχειριστής σελιδοδεικτών"
 
-#: src/config/cmdline.c:72
+#: src/config/cmdline.c:73
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Συνδέσεις"
 
-#: src/config/cmdline.c:84
+#: src/config/cmdline.c:85
 #, fuzzy, c-format
 msgid "Cannot parse option %s: %s"
 msgstr "Σφάλμα εγγραφής στον υποδοχέα"
 
-#: src/config/cmdline.c:115 src/config/cmdline.c:139 src/config/opttypes.c:38
+#: src/config/cmdline.c:114 src/config/cmdline.c:138 src/config/opttypes.c:38
 msgid "Parameter expected"
 msgstr ""
 
-#: src/config/cmdline.c:140
+#: src/config/cmdline.c:139
 msgid "Too many parameters"
 msgstr ""
 
-#: src/config/cmdline.c:145
+#: src/config/cmdline.c:144
 #, fuzzy
 msgid "error"
 msgstr "Σφάλμα"
 
-#: src/config/cmdline.c:147 src/sched/error.c:47
+#: src/config/cmdline.c:146 src/sched/error.c:47
 msgid "Host not found"
 msgstr "Ο εξυπηρετητής δε βρέθηκε"
 
-#: src/config/cmdline.c:161
+#: src/config/cmdline.c:160
 #, fuzzy
 msgid "Resolver error"
 msgstr "Σφάλμα αποθήκευσης"
 
-#: src/config/cmdline.c:183
+#: src/config/cmdline.c:182
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr ""
 
-#: src/config/cmdline.c:223
+#: src/config/cmdline.c:222
 msgid "Template option folder"
 msgstr ""
 
-#: src/config/cmdline.c:246
+#: src/config/cmdline.c:245
 #, c-format
 msgid "(default: %ld)"
 msgstr ""
 
-#: src/config/cmdline.c:251 src/config/cmdline.c:285
+#: src/config/cmdline.c:252 src/config/cmdline.c:281
 #, c-format
 msgid "(default: \"%s\")"
 msgstr ""
 
-#: src/config/cmdline.c:256
+#: src/config/cmdline.c:257
 #, c-format
 msgid "(alias for %s)"
 msgstr ""
 
-#: src/config/cmdline.c:261 src/config/cmdline.c:271
+#: src/config/cmdline.c:262 src/config/cmdline.c:271
 #, c-format
 msgid "(default: %s)"
 msgstr ""
 
-#: src/config/cmdline.c:275
-#, c-format
-msgid "(default: #%06lx)"
-msgstr ""
-
-#: src/config/cmdline.c:401
+#: src/config/cmdline.c:404
 msgid "Configuration options:\n"
 msgstr ""
 
-#: src/config/cmdline.c:404
+#: src/config/cmdline.c:407
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
 
-#: src/config/cmdline.c:405
+#: src/config/cmdline.c:408
 msgid "Options:\n"
 msgstr ""
 
-#: src/config/cmdline.c:425
+#: src/config/cmdline.c:432
+#, fuzzy
+msgid "Internal consistency error"
+msgstr "Εσωτερικό σφάλμα"
+
+#: src/config/cmdline.c:449
 msgid "Restrict to anonymous mode"
 msgstr ""
 
-#: src/config/cmdline.c:427
+#: src/config/cmdline.c:451
 msgid ""
 "Restrict ELinks so that it can run on an anonymous account.\n"
 "No local file browsing, no downloads. Execution of viewers\n"
@@ -490,30 +492,41 @@ msgid ""
 "association table."
 msgstr ""
 
-#: src/config/cmdline.c:432
+#: src/config/cmdline.c:456
+msgid "Only permit local connections"
+msgstr ""
+
+#: src/config/cmdline.c:458
+msgid ""
+"Restrict ELinks so that it can only open connections to\n"
+"local addresses (ie. 127.0.0.1), it will prevent any connection\n"
+"to distant servers."
+msgstr ""
+
+#: src/config/cmdline.c:462
 #, fuzzy
 msgid "Autosubmit first form"
 msgstr "Αποστολή φόρμας"
 
-#: src/config/cmdline.c:434
+#: src/config/cmdline.c:464
 msgid "Go and submit the first form you'll stumble upon."
 msgstr ""
 
-#: src/config/cmdline.c:436
+#: src/config/cmdline.c:466
 msgid "Clone session with given ID"
 msgstr ""
 
-#: src/config/cmdline.c:438
+#: src/config/cmdline.c:468
 msgid ""
 "ID of session (ELinks instance) which we want to clone.\n"
 "This is internal ELinks option, you don't want to use it."
 msgstr ""
 
-#: src/config/cmdline.c:441
+#: src/config/cmdline.c:473
 msgid "Name of directory with configuration file"
 msgstr ""
 
-#: src/config/cmdline.c:443
+#: src/config/cmdline.c:475
 msgid ""
 "ELinks will read and write its config files to the given\n"
 "directory instead of ~/.elinks. If the path begins with\n"
@@ -521,111 +534,111 @@ msgid ""
 "be relative to your HOME dir."
 msgstr ""
 
-#: src/config/cmdline.c:448
+#: src/config/cmdline.c:482
 msgid "Name of configuration file"
 msgstr ""
 
-#: src/config/cmdline.c:450
+#: src/config/cmdline.c:484
 msgid ""
 "Name of the file with configuration, from which and to\n"
 "which all the configuration shall be written. It should be\n"
-"relative to confdir."
+"relative to config-dir."
 msgstr ""
 
-#: src/config/cmdline.c:454
+#: src/config/cmdline.c:488
 msgid "MIME type to assume for documents"
 msgstr ""
 
-#: src/config/cmdline.c:456
+#: src/config/cmdline.c:490
 msgid "Default MIME type to assume for documents of unknown type."
 msgstr ""
 
-#: src/config/cmdline.c:458
+#: src/config/cmdline.c:492
 msgid "Write formatted version of given URL to stdout"
 msgstr ""
 
-#: src/config/cmdline.c:460
+#: src/config/cmdline.c:494
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
 msgstr ""
 
-#: src/config/cmdline.c:463
+#: src/config/cmdline.c:497
 msgid "Codepage to use with -dump"
 msgstr ""
 
-#: src/config/cmdline.c:465 src/config/options.inc:502
+#: src/config/cmdline.c:499 src/config/options.inc:502
 msgid "Codepage used in dump output."
 msgstr ""
 
-#: src/config/cmdline.c:467
+#: src/config/cmdline.c:501
 msgid "Width of document formatted with -dump"
 msgstr ""
 
-#: src/config/cmdline.c:469
+#: src/config/cmdline.c:503
 msgid "Width of the dump output."
 msgstr ""
 
-#: src/config/cmdline.c:471
+#: src/config/cmdline.c:505
 msgid "Evaluate given configuration option"
 msgstr ""
 
-#: src/config/cmdline.c:473
+#: src/config/cmdline.c:507
 msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
 
 #. lynx compatibility
-#: src/config/cmdline.c:477
+#: src/config/cmdline.c:511
 msgid "Assume the file is HTML"
 msgstr ""
 
-#: src/config/cmdline.c:479
+#: src/config/cmdline.c:513
 msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
 
-#: src/config/cmdline.c:488
+#: src/config/cmdline.c:522
 msgid "Print usage help and exit"
 msgstr ""
 
-#: src/config/cmdline.c:490
+#: src/config/cmdline.c:524
 msgid "Print usage help and exit."
 msgstr ""
 
-#: src/config/cmdline.c:492
+#: src/config/cmdline.c:526
 msgid "Print detailed usage help and exit"
 msgstr ""
 
-#: src/config/cmdline.c:494
+#: src/config/cmdline.c:528
 msgid "Print detailed usage help and exit."
 msgstr ""
 
-#: src/config/cmdline.c:496
+#: src/config/cmdline.c:530
 msgid "Print help for configuration options"
 msgstr ""
 
-#: src/config/cmdline.c:498
+#: src/config/cmdline.c:532
 msgid "Print help on configuration options and exit."
 msgstr ""
 
-#: src/config/cmdline.c:500
+#: src/config/cmdline.c:534
 #, fuzzy
 msgid "Look up specified host"
 msgstr "Δεν καθορίστηκε πρόγραμμα για"
 
-#: src/config/cmdline.c:502
+#: src/config/cmdline.c:536
 #, fuzzy
 msgid "Look up specified host."
 msgstr "Δεν καθορίστηκε πρόγραμμα για"
 
-#: src/config/cmdline.c:504
+#: src/config/cmdline.c:538
 msgid "Run as separate instance"
 msgstr ""
 
-#: src/config/cmdline.c:506
+#: src/config/cmdline.c:540
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
@@ -633,19 +646,19 @@ msgid ""
 "this option is used. See also -touch-files."
 msgstr ""
 
-#: src/config/cmdline.c:511
+#: src/config/cmdline.c:545
 msgid "Don't use files in ~/.elinks"
 msgstr ""
 
-#: src/config/cmdline.c:513
+#: src/config/cmdline.c:547
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
 msgstr ""
 
-#: src/config/cmdline.c:515
+#: src/config/cmdline.c:549
 msgid "Connect to session ring with given ID"
 msgstr ""
 
-#: src/config/cmdline.c:517
+#: src/config/cmdline.c:551
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -663,58 +676,45 @@ msgid ""
 "-touch-files."
 msgstr ""
 
-#: src/config/cmdline.c:532
+#: src/config/cmdline.c:566
 msgid "Write the source of given URL to stdout"
 msgstr ""
 
-#: src/config/cmdline.c:534
+#: src/config/cmdline.c:568
 msgid "Write the given HTML document in source form to stdout."
 msgstr ""
 
-#: src/config/cmdline.c:536
-msgid "Read document from stdin"
-msgstr ""
-
-#: src/config/cmdline.c:538
-msgid ""
-"Open stdin as an HTML document - this is fully equivalent to:\n"
-" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
-"Use whichever suits you more ;-). Note that reading document from\n"
-"stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
-"know why you would use -source -stdin, though ;-)"
-msgstr ""
-
-#: src/config/cmdline.c:544
+#: src/config/cmdline.c:570
 msgid "Do not number links in dump output"
 msgstr ""
 
-#: src/config/cmdline.c:546
+#: src/config/cmdline.c:572
 msgid ""
 "Prevents numbering of links (and showing their list at the end of\n"
 "the dumped document) in the -dump output; this was the default behaviour\n"
 "until 0.5pre12. Note that this really affects only --dump, nothing else."
 msgstr ""
 
-#: src/config/cmdline.c:550
+#: src/config/cmdline.c:576
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 
-#: src/config/cmdline.c:552
+#: src/config/cmdline.c:578
 msgid ""
 "Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
 
-#: src/config/cmdline.c:556
+#: src/config/cmdline.c:582
 msgid "Print version information and exit"
 msgstr ""
 
-#: src/config/cmdline.c:558
+#: src/config/cmdline.c:584
 msgid "Print ELinks version information and exit."
 msgstr ""
 
-#: src/config/conf.c:604
+#: src/config/conf.c:669
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -722,7 +722,7 @@ msgid ""
 "## and all your formatting, own comments etc will be kept as-is.\n"
 msgstr ""
 
-#: src/config/conf.c:612
+#: src/config/conf.c:677
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -733,7 +733,7 @@ msgid ""
 "## own comments and so on will be kept as-is.\n"
 msgstr ""
 
-#: src/config/conf.c:622
+#: src/config/conf.c:687
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so, but keep in mind that this file is overwritten\n"
@@ -741,60 +741,60 @@ msgid ""
 "## luck with your formatting and own comments then, so beware.\n"
 msgstr ""
 
-#: src/config/conf.c:633
+#: src/config/conf.c:698
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 
-#: src/config/conf.c:648
+#: src/config/conf.c:713
 msgid "Automatically saved options\n"
 msgstr ""
 
-#: src/config/conf.c:662
+#: src/config/conf.c:728
 msgid "Automatically saved keybindings\n"
 msgstr ""
 
-#: src/config/conf.c:711
+#: src/config/conf.c:777
 #, fuzzy
 msgid "Secure file error"
 msgstr "Σφάλμα αρχείου FTP"
 
-#: src/config/conf.c:717
+#: src/config/conf.c:783
 #, fuzzy
 msgid "Cannot read the file"
 msgstr "Σφάλμα εγγραφής σε αρχείο"
 
-#: src/config/conf.c:720
+#: src/config/conf.c:786
 #, fuzzy
 msgid "Cannot stat the file"
 msgstr "Σφάλμα εγγραφής σε αρχείο"
 
-#: src/config/conf.c:723
+#: src/config/conf.c:789
 #, fuzzy
 msgid "Cannot access the file"
 msgstr "Σφάλμα εγγραφής σε αρχείο"
 
-#: src/config/conf.c:726
+#: src/config/conf.c:792
 #, fuzzy
 msgid "Cannot create temp file"
 msgstr "Σφάλμα εγγραφής σε αρχείο"
 
-#: src/config/conf.c:729
+#: src/config/conf.c:795
 #, fuzzy
 msgid "Cannot rename the file"
 msgstr "Σφάλμα εγγραφής σε αρχείο"
 
-#: src/config/conf.c:732
+#: src/config/conf.c:798
 msgid "File saving disabled by option"
 msgstr ""
 
-#: src/config/conf.c:735 src/sched/error.c:46
+#: src/config/conf.c:801 src/sched/error.c:46
 msgid "Out of memory"
 msgstr "Η μνήμη εξαντλήθηκε"
 
-#: src/config/conf.c:738
+#: src/config/conf.c:804
 #, fuzzy
 msgid "Cannot write the file"
 msgstr "Σφάλμα εγγραφής σε αρχείο"
@@ -833,9 +833,9 @@ msgid "N/A"
 msgstr ""
 
 #: src/config/dialogs.c:147 src/config/dialogs.c:163 src/config/dialogs.c:290
-#: src/config/dialogs.c:403 src/cookies/dialogs.c:86 src/dialogs/edit.c:92
-#: src/scripting/lua/core.c:397 src/scripting/lua/core.c:398
-#: src/scripting/lua/core.c:478
+#: src/config/dialogs.c:405 src/cookies/dialogs.c:90 src/cookies/dialogs.c:257
+#: src/dialogs/edit.c:92 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:397 src/scripting/lua/core.c:477
 msgid "Name"
 msgstr "Όνομα"
 
@@ -843,7 +843,8 @@ msgstr "Όνομα"
 msgid "Type"
 msgstr ""
 
-#: src/config/dialogs.c:157 src/config/dialogs.c:293 src/cookies/dialogs.c:87
+#: src/config/dialogs.c:157 src/config/dialogs.c:293 src/cookies/dialogs.c:91
+#: src/cookies/dialogs.c:258
 #, fuzzy
 msgid "Value"
 msgstr "τιμή"
@@ -852,8 +853,8 @@ msgstr "τιμή"
 msgid "Description"
 msgstr ""
 
-#: src/config/dialogs.c:252 src/protocol/protocol.c:64 src/sched/session.c:120
-#: src/sched/session.c:928 src/viewer/text/textarea.c:267
+#: src/config/dialogs.c:252 src/sched/session.c:117
+#: src/viewer/text/textarea.c:267 src/viewer/text/textarea.c:276
 msgid "Error"
 msgstr "Σφάλμα"
 
@@ -867,587 +868,630 @@ msgid ""
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
 
-#: src/config/dialogs.c:389 src/config/dialogs.c:403
+#: src/config/dialogs.c:391 src/config/dialogs.c:405
 msgid "Add option"
 msgstr ""
 
-#: src/config/dialogs.c:390
+#: src/config/dialogs.c:392
 msgid "Cannot add an option here."
 msgstr ""
 
-#: src/config/dialogs.c:432
+#: src/config/dialogs.c:434
 #, fuzzy
 msgid "Option manager"
 msgstr "Διαχειριστής σελιδοδεικτών"
 
-#: src/config/dialogs.c:484 src/config/dialogs.c:528 src/config/dialogs.c:557
+#: src/config/dialogs.c:486 src/config/dialogs.c:531 src/config/dialogs.c:560
 msgid "Add keybinding"
 msgstr ""
 
-#: src/config/dialogs.c:485
+#: src/config/dialogs.c:487
 msgid "Invalid keystroke."
 msgstr ""
 
-#: src/config/dialogs.c:501
+#: src/config/dialogs.c:504
 msgid "Keystroke already used"
 msgstr ""
 
-#: src/config/dialogs.c:502
+#: src/config/dialogs.c:505
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
 "Are you sure you want to replace it?"
 msgstr ""
 
-#: src/config/dialogs.c:529
+#: src/config/dialogs.c:532
 msgid "Need to select a keymap."
 msgstr ""
 
-#: src/config/dialogs.c:544 src/config/options.inc:1169
+#: src/config/dialogs.c:547 src/config/options.inc:1186
 msgid "Action"
 msgstr ""
 
-#: src/config/dialogs.c:545
+#: src/config/dialogs.c:548
 msgid "Keymap"
 msgstr ""
 
-#: src/config/dialogs.c:546
+#: src/config/dialogs.c:549
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
 "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 msgstr ""
 
-#: src/config/dialogs.c:550
+#: src/config/dialogs.c:553
 msgid "Keystroke"
 msgstr ""
 
-#: src/config/dialogs.c:595 src/config/dialogs.c:606
+#: src/config/dialogs.c:598 src/config/dialogs.c:609
 msgid "Delete keybinding"
 msgstr ""
 
-#: src/config/dialogs.c:596
+#: src/config/dialogs.c:599
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr ""
 
-#: src/config/dialogs.c:607
+#: src/config/dialogs.c:610
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 
-#: src/config/dialogs.c:634 src/dialogs/info.c:126 src/globhist/dialogs.c:188
+#: src/config/dialogs.c:637 src/dialogs/info.c:138 src/globhist/dialogs.c:188
 msgid "Toggle display"
 msgstr ""
 
-#: src/config/dialogs.c:640
+#: src/config/dialogs.c:643
 msgid "Keybinding manager"
 msgstr ""
 
-#: src/config/kbdbind.c:286
+#: src/config/kbdbind.c:307
 msgid "Main mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:287
+#: src/config/kbdbind.c:308
 msgid "Edit mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:288
+#: src/config/kbdbind.c:309
 msgid "Menu mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:392
+#: src/config/kbdbind.c:452 src/config/kbdbind.c:563 src/config/kbdbind.c:593
 #, fuzzy
 msgid "Do nothing"
 msgstr "Μεταφόρτωση"
 
-#: src/config/kbdbind.c:393
+#. internal use only
+#: src/config/kbdbind.c:454
 #, fuzzy
 msgid "Abort connection"
 msgstr "συνδέσεις"
 
-#: src/config/kbdbind.c:394
+#: src/config/kbdbind.c:455
 #, fuzzy
 msgid "Add a new bookmark"
 msgstr "Προσθήκη σελιδοδείκτη"
 
-#: src/config/kbdbind.c:395
+#: src/config/kbdbind.c:456
 msgid "Add a new bookmark using current link"
 msgstr ""
 
-#: src/config/kbdbind.c:396
+#: src/config/kbdbind.c:457
 #, fuzzy
 msgid "Bookmark all open tabs"
 msgstr "Σελιδοδείκτες"
 
-#: src/config/kbdbind.c:397
-msgid "Attempt to auto-complete the input"
-msgstr ""
-
-#: src/config/kbdbind.c:398
-msgid "Attempt to unambiguously auto-complete the input"
-msgstr ""
-
-#: src/config/kbdbind.c:399
+#: src/config/kbdbind.c:458
 msgid "Return to the previous document in history"
 msgstr ""
 
-#: src/config/kbdbind.c:400
-msgid "Delete character in front of the cursor"
-msgstr ""
-
-#: src/config/kbdbind.c:401
-msgid "Go to the first line of the buffer"
-msgstr ""
-
-#: src/config/kbdbind.c:402
+#: src/config/kbdbind.c:459
 #, fuzzy
 msgid "Open bookmark manager"
 msgstr "Διαχειριστής σελιδοδεικτών"
 
-#: src/config/kbdbind.c:403
+#: src/config/kbdbind.c:460
 #, fuzzy
 msgid "Open cache manager"
 msgstr "Διαχειριστής σελιδοδεικτών"
 
-#: src/config/kbdbind.c:404
+#: src/config/kbdbind.c:461
 msgid "Free unused cache entries"
 msgstr ""
 
-#: src/config/kbdbind.c:405
-#, fuzzy
-msgid "Cancel current state"
-msgstr "Αδύνατη η λήψη κατάστασης υποδοχέα"
-
-#: src/config/kbdbind.c:406
+#: src/config/kbdbind.c:462
 #, fuzzy
 msgid "Open cookie manager"
 msgstr "Διαχειριστής σελιδοδεικτών"
 
-#: src/config/kbdbind.c:407
+#: src/config/kbdbind.c:463
 msgid "Reload cookies file"
 msgstr ""
 
-#: src/config/kbdbind.c:408
+#: src/config/kbdbind.c:464 src/config/kbdbind.c:570
 msgid "Copy text to clipboard"
 msgstr ""
 
-#: src/config/kbdbind.c:409
-msgid "Delete text from clipboard"
-msgstr ""
-
-#: src/config/kbdbind.c:410
+#: src/config/kbdbind.c:465 src/config/kbdbind.c:572 src/config/kbdbind.c:596
 msgid "Delete character under cursor"
 msgstr ""
 
-#: src/config/kbdbind.c:411
+#: src/config/kbdbind.c:466
 #, fuzzy
 msgid "Show information about the current page"
 msgstr "Μεταφόρτωση εικόνας"
 
-#: src/config/kbdbind.c:412
+#: src/config/kbdbind.c:467 src/config/kbdbind.c:573 src/config/kbdbind.c:597
 msgid "Move cursor downwards"
 msgstr ""
 
-#: src/config/kbdbind.c:413
+#: src/config/kbdbind.c:468
 #, fuzzy
 msgid "Download the current link"
 msgstr "Μεταφόρτωση συνδέσμου"
 
-#: src/config/kbdbind.c:414
+#: src/config/kbdbind.c:469
 #, fuzzy
 msgid "Download the current image"
 msgstr "Μεταφόρτωση εικόνας"
 
-#: src/config/kbdbind.c:415
+#: src/config/kbdbind.c:470
 #, fuzzy
 msgid "Open download manager"
 msgstr "Μεταφόρτωση εικόνας"
 
-#: src/config/kbdbind.c:416
+#: src/config/kbdbind.c:471 src/config/kbdbind.c:574
 msgid "Begin editing"
 msgstr ""
 
 #. FIXME
-#: src/config/kbdbind.c:417
+#: src/config/kbdbind.c:472 src/config/kbdbind.c:575 src/config/kbdbind.c:598
 msgid "Go to the end of the page/line"
 msgstr ""
 
-#: src/config/kbdbind.c:418
-msgid "Go to the last line of the buffer"
-msgstr ""
-
-#: src/config/kbdbind.c:419
+#: src/config/kbdbind.c:473 src/config/kbdbind.c:577 src/config/kbdbind.c:599
 #, fuzzy
 msgid "Follow the current link"
 msgstr "Ακολούθηση συνδέσμου"
 
-#: src/config/kbdbind.c:420
+#: src/config/kbdbind.c:474
 msgid "Follow the current link, forcing reload of the target"
 msgstr ""
 
-#: src/config/kbdbind.c:421
-#, fuzzy
-msgid "Expand item"
-msgstr "όνομα"
+#: src/config/kbdbind.c:475
+msgid "Enter ex-mode (command line)"
+msgstr ""
 
-#: src/config/kbdbind.c:422
+#: src/config/kbdbind.c:476
 msgid "Open the File menu"
 msgstr ""
 
-#: src/config/kbdbind.c:423
+#: src/config/kbdbind.c:477
 msgid "Find the next occurrence of the current search text"
 msgstr ""
 
-#: src/config/kbdbind.c:424
+#: src/config/kbdbind.c:478
 msgid "Find the previous occurrence of the current search text"
 msgstr ""
 
-#: src/config/kbdbind.c:425
+#: src/config/kbdbind.c:479
 msgid "Forget authentication credentials"
 msgstr ""
 
-#: src/config/kbdbind.c:426
+#: src/config/kbdbind.c:480
 #, fuzzy
 msgid "Open form history manager"
 msgstr "Η μνήμη εξαντλήθηκε"
 
-#: src/config/kbdbind.c:427
+#: src/config/kbdbind.c:481
 msgid "Open \"Go to URL\" dialog box"
 msgstr ""
 
-#: src/config/kbdbind.c:428
+#: src/config/kbdbind.c:482
 msgid "Open \"Go to URL\" dialog box containing the current URL"
 msgstr ""
 
-#: src/config/kbdbind.c:429
+#: src/config/kbdbind.c:483
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
 msgstr ""
 
-#: src/config/kbdbind.c:430
+#: src/config/kbdbind.c:484
 msgid "Go to the homepage"
 msgstr ""
 
-#: src/config/kbdbind.c:431
+#: src/config/kbdbind.c:485
 msgid "Show information about the current page HTTP headers"
 msgstr ""
 
-#: src/config/kbdbind.c:432
+#: src/config/kbdbind.c:486
 msgid "Open history manager"
 msgstr ""
 
-#: src/config/kbdbind.c:433
+#: src/config/kbdbind.c:487 src/config/kbdbind.c:578 src/config/kbdbind.c:601
 msgid "Go to the start of the page/line"
 msgstr ""
 
-#: src/config/kbdbind.c:434
+#: src/config/kbdbind.c:488
 #, fuzzy
 msgid "Jump to link"
 msgstr "Πήγαινε στο σύνδεσμο"
 
-#: src/config/kbdbind.c:435
+#: src/config/kbdbind.c:489
 msgid "Open keybinding manager"
 msgstr ""
 
-#: src/config/kbdbind.c:436
+#: src/config/kbdbind.c:490
 #, fuzzy
 msgid "Kill all backgrounded connections"
 msgstr "Τερματισμών συνδέσεων παρασκηνίου"
 
-#: src/config/kbdbind.c:437
-#, fuzzy
-msgid "Delete to beginning of line"
-msgstr "Διαγραφή κατάληξης"
-
-#: src/config/kbdbind.c:438
-#, fuzzy
-msgid "Delete to end of line"
-msgstr "Διαγραφή κατάληξης"
-
-#: src/config/kbdbind.c:439
+#: src/config/kbdbind.c:491 src/config/kbdbind.c:581 src/config/kbdbind.c:602
 #, fuzzy
 msgid "Move the cursor left"
 msgstr "Δρομέας μορφής μπλοκ"
 
-#: src/config/kbdbind.c:440
+#: src/config/kbdbind.c:492
 msgid "Open the link context menu"
 msgstr ""
 
-#: src/config/kbdbind.c:442
+#: src/config/kbdbind.c:494
 msgid "Open a Lua console"
 msgstr ""
 
-#: src/config/kbdbind.c:444
+#: src/config/kbdbind.c:496
 msgid "Open a Lua console (DISABLED)"
 msgstr ""
 
-#: src/config/kbdbind.c:446
+#: src/config/kbdbind.c:498
 msgid "Go at a specified mark"
 msgstr ""
 
-#: src/config/kbdbind.c:447
-#, fuzzy
-msgid "Mark item"
-msgstr "Πεδίο επιλογής"
-
-#: src/config/kbdbind.c:448
+#: src/config/kbdbind.c:499
 msgid "Set a mark"
 msgstr ""
 
-#: src/config/kbdbind.c:449
+#: src/config/kbdbind.c:500
 msgid "Activate the menu"
 msgstr ""
 
-#: src/config/kbdbind.c:450
-msgid "Move to the next frame"
-msgstr ""
-
-#: src/config/kbdbind.c:451
-msgid "Move to the next item"
-msgstr ""
-
-#: src/config/kbdbind.c:452
-#, fuzzy
-msgid "Open the current link in a new tab"
-msgstr "Άνοιγμα σε νέο παράθυρο"
-
-#: src/config/kbdbind.c:453
-#, fuzzy
-msgid "Open the current link a new tab in background"
-msgstr "Άνοιγμα σε νέο παράθυρο"
-
-#: src/config/kbdbind.c:454
-#, fuzzy
-msgid "Open the current link in a new window"
-msgstr "Άνοιγμα σε νέο παράθυρο"
-
-#: src/config/kbdbind.c:455
-#, fuzzy
-msgid "Open a new tab"
-msgstr "Άνοιγμα σε νέο παράθυρο"
-
-#: src/config/kbdbind.c:456
-#, fuzzy
-msgid "Open a new tab in background"
-msgstr "Παρασκήνιο"
-
-#: src/config/kbdbind.c:457
-#, fuzzy
-msgid "Open a new window"
-msgstr "Άνοιγμα σε νέο παράθυρο"
-
-#: src/config/kbdbind.c:458
-#, fuzzy
-msgid "Open an OS shell"
-msgstr "Φλοιός Λ.Σ."
-
-#: src/config/kbdbind.c:459
-msgid "Open options manager"
-msgstr ""
-
-#: src/config/kbdbind.c:460
-msgid "Move downwards by a page"
-msgstr ""
-
-#: src/config/kbdbind.c:461
-msgid "Move upwards by a page"
-msgstr ""
-
-#: src/config/kbdbind.c:462
-msgid "Paste text from the clipboard"
-msgstr ""
-
-#: src/config/kbdbind.c:463
-msgid "Move to the previous frame"
-msgstr ""
-
-#: src/config/kbdbind.c:464
-msgid "Open a quit confirmation dialog box"
-msgstr ""
-
-#: src/config/kbdbind.c:465
-#, fuzzy
-msgid "Quit without confirmation"
-msgstr "Αναμονή επιβεβαίωσης επαναδιεύθυνσης"
-
-#: src/config/kbdbind.c:466
-#, fuzzy
-msgid "Redraw the terminal"
-msgstr "Αλλαγή μεγέθους τερματικού"
-
-#: src/config/kbdbind.c:467
-msgid "Reload the current page"
-msgstr ""
-
-#: src/config/kbdbind.c:468
-msgid "Reset form items to their initial values"
-msgstr ""
-
-#: src/config/kbdbind.c:469
-#, fuzzy
-msgid "Show information about the currently used resources"
-msgstr "Μεταφόρτωση εικόνας"
-
-#: src/config/kbdbind.c:470
-msgid "Attempt to resume download of the current link"
-msgstr ""
-
-#: src/config/kbdbind.c:471
-#, fuzzy
-msgid "Move the cursor right"
-msgstr "Δρομέας μορφής μπλοκ"
-
-#: src/config/kbdbind.c:472
-#, fuzzy
-msgid "Save as"
-msgstr "Αποθήκευση ως"
-
-#: src/config/kbdbind.c:473
-#, fuzzy
-msgid "Save formatted document"
-msgstr "Αποθήκευση μορφοποιημένου κειμένου"
-
-#: src/config/kbdbind.c:474
-#, fuzzy
-msgid "Save options"
-msgstr "Αποθήκευση επιλογών"
-
-#: src/config/kbdbind.c:475
-#, fuzzy
-msgid "Save URL as"
-msgstr "Αποθήκευση URL ως"
-
-#. internal use only
-#: src/config/kbdbind.c:477
-msgid "Scroll down"
-msgstr ""
-
-#: src/config/kbdbind.c:478
-msgid "Scroll left"
-msgstr ""
-
-#: src/config/kbdbind.c:479
-msgid "Scroll right"
-msgstr ""
-
-#: src/config/kbdbind.c:480
-msgid "Scroll up"
-msgstr ""
-
-#: src/config/kbdbind.c:481
-#, fuzzy
-msgid "Search for a text pattern"
-msgstr "Αναζήτηση κειμένου"
-
-#: src/config/kbdbind.c:482
-#, fuzzy
-msgid "Search backwards for a text pattern"
-msgstr "Αναζήτηση κειμένου"
-
-#: src/config/kbdbind.c:483
-msgid "Search link text by typing ahead"
-msgstr ""
-
-#: src/config/kbdbind.c:484
-msgid "Select current highlighted item"
-msgstr ""
-
-#: src/config/kbdbind.c:485
-#, fuzzy
-msgid "Show terminal options dialog"
-msgstr "Επιλογές τερματικού"
-
-#: src/config/kbdbind.c:486
-#, fuzzy
-msgid "Submit form"
-msgstr "Αποστολή φόρμας"
-
-#: src/config/kbdbind.c:487
-#, fuzzy
-msgid "Submit form and reload"
-msgstr "Αποστολή φόρμας και μεταφόρτωση"
-
-#: src/config/kbdbind.c:488 src/terminal/tab.c:191 src/terminal/tab.c:227
-#, fuzzy
-msgid "Close tab"
-msgstr "Κλείσιμο"
-
-#: src/config/kbdbind.c:489
-#, fuzzy
-msgid "Close all tabs but the current one"
-msgstr "Μεταφόρτωση εικόνας"
-
-#: src/config/kbdbind.c:490
-#, fuzzy
-msgid "Open the tab menu"
-msgstr "Άνοιγμα σε νέο παράθυρο"
-
-#: src/config/kbdbind.c:491
-msgid "Next tab"
-msgstr ""
-
-#: src/config/kbdbind.c:492
-#, fuzzy
-msgid "Previous tab"
-msgstr "Δεν υπάρχει προηγούμενη αναζήτηση"
-
-#: src/config/kbdbind.c:493
-msgid "Toggle displaying of links to images"
-msgstr ""
-
-#: src/config/kbdbind.c:494
-msgid "Toggle rendering of tables"
-msgstr ""
-
-#: src/config/kbdbind.c:495
-msgid "Toggle usage of document specific colors"
-msgstr ""
-
-#: src/config/kbdbind.c:496
-msgid "Toggle rendering page as HTML / plain text"
-msgstr ""
-
-#: src/config/kbdbind.c:497
-msgid "Toggle displaying of links numbers"
-msgstr ""
-
-#: src/config/kbdbind.c:498
-msgid "Toggle plain renderer compression of empty lines"
-msgstr ""
-
-#: src/config/kbdbind.c:499
-msgid "Go forward in the unhistory"
-msgstr ""
-
-#: src/config/kbdbind.c:500
-#, fuzzy
-msgid "Collapse item"
-msgstr "Χρόνος που πέρασε"
-
 #: src/config/kbdbind.c:501
-msgid "Move cursor upwards"
+msgid "Move to the next frame"
 msgstr ""
 
 #: src/config/kbdbind.c:502
 #, fuzzy
+msgid "Open the current link in a new tab"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/config/kbdbind.c:503
+#, fuzzy
+msgid "Open the current link a new tab in background"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/config/kbdbind.c:504
+#, fuzzy
+msgid "Open the current link in a new window"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/config/kbdbind.c:505
+#, fuzzy
+msgid "Open a new tab"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/config/kbdbind.c:506
+#, fuzzy
+msgid "Open a new tab in background"
+msgstr "Παρασκήνιο"
+
+#: src/config/kbdbind.c:507
+#, fuzzy
+msgid "Open a new window"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/config/kbdbind.c:508
+#, fuzzy
+msgid "Open an OS shell"
+msgstr "Φλοιός Λ.Σ."
+
+#: src/config/kbdbind.c:509
+msgid "Open options manager"
+msgstr ""
+
+#: src/config/kbdbind.c:510 src/config/kbdbind.c:606
+msgid "Move downwards by a page"
+msgstr ""
+
+#: src/config/kbdbind.c:511 src/config/kbdbind.c:607
+msgid "Move upwards by a page"
+msgstr ""
+
+#: src/config/kbdbind.c:512
+msgid "Move to the previous frame"
+msgstr ""
+
+#: src/config/kbdbind.c:513
+msgid "Open a quit confirmation dialog box"
+msgstr ""
+
+#: src/config/kbdbind.c:514
+#, fuzzy
+msgid "Quit without confirmation"
+msgstr "Αναμονή επιβεβαίωσης επαναδιεύθυνσης"
+
+#: src/config/kbdbind.c:515 src/config/kbdbind.c:585 src/config/kbdbind.c:608
+#, fuzzy
+msgid "Redraw the terminal"
+msgstr "Αλλαγή μεγέθους τερματικού"
+
+#: src/config/kbdbind.c:516
+msgid "Reload the current page"
+msgstr ""
+
+#: src/config/kbdbind.c:517
+#, fuzzy
+msgid "Re-render the current page"
+msgstr "Εμφάνιση εικόνας"
+
+#: src/config/kbdbind.c:518
+msgid "Reset form items to their initial values"
+msgstr ""
+
+#: src/config/kbdbind.c:519
+#, fuzzy
+msgid "Show information about the currently used resources"
+msgstr "Μεταφόρτωση εικόνας"
+
+#: src/config/kbdbind.c:520
+msgid "Attempt to resume download of the current link"
+msgstr ""
+
+#: src/config/kbdbind.c:521 src/config/kbdbind.c:586 src/config/kbdbind.c:609
+#, fuzzy
+msgid "Move the cursor right"
+msgstr "Δρομέας μορφής μπλοκ"
+
+#: src/config/kbdbind.c:522
+#, fuzzy
+msgid "Save as"
+msgstr "Αποθήκευση ως"
+
+#: src/config/kbdbind.c:523
+#, fuzzy
+msgid "Save formatted document"
+msgstr "Αποθήκευση μορφοποιημένου κειμένου"
+
+#: src/config/kbdbind.c:524
+#, fuzzy
+msgid "Save options"
+msgstr "Αποθήκευση επιλογών"
+
+#: src/config/kbdbind.c:525
+#, fuzzy
+msgid "Save URL as"
+msgstr "Αποθήκευση URL ως"
+
+#: src/config/kbdbind.c:526
+msgid "Scroll down"
+msgstr ""
+
+#: src/config/kbdbind.c:527
+msgid "Scroll left"
+msgstr ""
+
+#: src/config/kbdbind.c:528
+msgid "Scroll right"
+msgstr ""
+
+#: src/config/kbdbind.c:529
+msgid "Scroll up"
+msgstr ""
+
+#: src/config/kbdbind.c:530
+#, fuzzy
+msgid "Search for a text pattern"
+msgstr "Αναζήτηση κειμένου"
+
+#: src/config/kbdbind.c:531
+#, fuzzy
+msgid "Search backwards for a text pattern"
+msgstr "Αναζήτηση κειμένου"
+
+#: src/config/kbdbind.c:532 src/config/kbdbind.c:533
+msgid "Search link text by typing ahead"
+msgstr ""
+
+#: src/config/kbdbind.c:534
+msgid "Search document text by typing ahead"
+msgstr ""
+
+#: src/config/kbdbind.c:535
+msgid "Search document text backwards by typing ahead"
+msgstr ""
+
+#: src/config/kbdbind.c:536
+#, fuzzy
+msgid "Show terminal options dialog"
+msgstr "Επιλογές τερματικού"
+
+#: src/config/kbdbind.c:537
+#, fuzzy
+msgid "Submit form"
+msgstr "Αποστολή φόρμας"
+
+#: src/config/kbdbind.c:538
+#, fuzzy
+msgid "Submit form and reload"
+msgstr "Αποστολή φόρμας και μεταφόρτωση"
+
+#: src/config/kbdbind.c:539 src/terminal/tab.c:191 src/terminal/tab.c:227
+#, fuzzy
+msgid "Close tab"
+msgstr "Κλείσιμο"
+
+#: src/config/kbdbind.c:540
+#, fuzzy
+msgid "Close all tabs but the current one"
+msgstr "Μεταφόρτωση εικόνας"
+
+#: src/config/kbdbind.c:541
+#, fuzzy
+msgid "Open the tab menu"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/config/kbdbind.c:542
+#, fuzzy
+msgid "Move the current tab one step ahead"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/config/kbdbind.c:543
+#, fuzzy
+msgid "Move the current tab one step back"
+msgstr "Άνοιγμα σε νέο παράθυρο"
+
+#: src/config/kbdbind.c:544
+msgid "Next tab"
+msgstr ""
+
+#: src/config/kbdbind.c:545
+#, fuzzy
+msgid "Previous tab"
+msgstr "Δεν υπάρχει προηγούμενη αναζήτηση"
+
+#: src/config/kbdbind.c:546
+msgid "Toggle displaying of links to images"
+msgstr ""
+
+#: src/config/kbdbind.c:547
+msgid "Toggle rendering of page using CSS"
+msgstr ""
+
+#: src/config/kbdbind.c:548
+msgid "Toggle rendering of tables"
+msgstr ""
+
+#: src/config/kbdbind.c:549
+msgid "Toggle usage of document specific colors"
+msgstr ""
+
+#: src/config/kbdbind.c:550
+msgid "Toggle rendering page as HTML / plain text"
+msgstr ""
+
+#: src/config/kbdbind.c:551
+msgid "Toggle displaying of links numbers"
+msgstr ""
+
+#: src/config/kbdbind.c:552
+msgid "Toggle plain renderer compression of empty lines"
+msgstr ""
+
+#: src/config/kbdbind.c:553
+#, fuzzy
+msgid "Toggle wrapping of text"
+msgstr "Ενναλαγή HTML/απλό"
+
+#: src/config/kbdbind.c:554
+msgid "Go forward in the unhistory"
+msgstr ""
+
+#: src/config/kbdbind.c:555 src/config/kbdbind.c:587 src/config/kbdbind.c:612
+msgid "Move cursor upwards"
+msgstr ""
+
+#: src/config/kbdbind.c:556
+#, fuzzy
 msgid "View the current image"
 msgstr "Εμφάνιση εικόνας"
 
-#: src/config/kbdbind.c:503
+#: src/config/kbdbind.c:557
 msgid "Maximize the current frame"
 msgstr ""
 
-#: src/config/kbdbind.c:705
+#. internal use only
+#: src/config/kbdbind.c:565
+msgid "Attempt to auto-complete the input"
+msgstr ""
+
+#: src/config/kbdbind.c:566
+msgid "Attempt to unambiguously auto-complete the input"
+msgstr ""
+
+#: src/config/kbdbind.c:567
+msgid "Delete character in front of the cursor"
+msgstr ""
+
+#: src/config/kbdbind.c:568
+msgid "Go to the first line of the buffer"
+msgstr ""
+
+#. internal use only
+#: src/config/kbdbind.c:569 src/config/kbdbind.c:595
+#, fuzzy
+msgid "Cancel current state"
+msgstr "Αδύνατη η λήψη κατάστασης υποδοχέα"
+
+#: src/config/kbdbind.c:571
+msgid "Delete text from clipboard"
+msgstr ""
+
+#: src/config/kbdbind.c:576
+msgid "Go to the last line of the buffer"
+msgstr ""
+
+#: src/config/kbdbind.c:579
+#, fuzzy
+msgid "Delete to beginning of line"
+msgstr "Διαγραφή κατάληξης"
+
+#: src/config/kbdbind.c:580
+#, fuzzy
+msgid "Delete to end of line"
+msgstr "Διαγραφή κατάληξης"
+
+#: src/config/kbdbind.c:582 src/config/kbdbind.c:604
+msgid "Move to the next item"
+msgstr ""
+
+#: src/config/kbdbind.c:583 src/config/kbdbind.c:605
+#, fuzzy
+msgid "Move to the previous item"
+msgstr "Δρομέας μορφής μπλοκ"
+
+#: src/config/kbdbind.c:584
+msgid "Paste text from the clipboard"
+msgstr ""
+
+#: src/config/kbdbind.c:600
+#, fuzzy
+msgid "Expand item"
+msgstr "όνομα"
+
+#: src/config/kbdbind.c:603
+#, fuzzy
+msgid "Mark item"
+msgstr "Πεδίο επιλογής"
+
+#: src/config/kbdbind.c:610
+msgid "Select current highlighted item"
+msgstr ""
+
+#: src/config/kbdbind.c:611
+#, fuzzy
+msgid "Collapse item"
+msgstr "Χρόνος που πέρασε"
+
+#: src/config/kbdbind.c:745
 msgid "Unrecognised keymap"
 msgstr ""
 
-#: src/config/kbdbind.c:707
+#: src/config/kbdbind.c:747
 #, fuzzy
 msgid "Error parsing keystroke"
 msgstr "Σφάλμα εγγραφής στον υποδοχέα"
 
-#: src/config/kbdbind.c:709
+#: src/config/kbdbind.c:749
 msgid "Unrecognised action (internal error)"
 msgstr ""
 
@@ -1786,13 +1830,13 @@ msgid "Active link colors."
 msgstr "Τερματισμών συνδέσεων παρασκηνίου"
 
 #: src/config/options.inc:203 src/config/options.inc:416
-#: src/config/options.inc:914
+#: src/config/options.inc:931
 #, fuzzy
 msgid "Background color"
 msgstr "Παρασκήνιο"
 
 #: src/config/options.inc:205 src/config/options.inc:418
-#: src/config/options.inc:915
+#: src/config/options.inc:932
 #, fuzzy
 msgid "Default background color."
 msgstr "Τερματισμών συνδέσεων παρασκηνίου"
@@ -1806,13 +1850,13 @@ msgstr "Τερματισμών συνδέσεων παρασκηνίου"
 #. The colors and mono tree should be similar but with different default
 #. * values of course so always use the macros below.
 #: src/config/options.inc:207 src/config/options.inc:412
-#: src/config/options.inc:912
+#: src/config/options.inc:929
 #, fuzzy
 msgid "Text color"
 msgstr "Περιοχή κειμένου"
 
 #: src/config/options.inc:209 src/config/options.inc:414
-#: src/config/options.inc:913
+#: src/config/options.inc:930
 msgid "Default text color."
 msgstr ""
 
@@ -1844,7 +1888,7 @@ msgstr "Περιοχή κειμένου"
 msgid "Invert the fore- and background color so the link stands out."
 msgstr ""
 
-#: src/config/options.inc:225 src/dialogs/options.c:189
+#: src/config/options.inc:225 src/dialogs/options.c:166
 msgid "Underline"
 msgstr ""
 
@@ -2274,72 +2318,94 @@ msgstr ""
 msgid "Dump output options."
 msgstr ""
 
-#: src/config/options.inc:500 src/config/options.inc:882
-#: src/config/opttypes.c:372 src/dialogs/document.c:102
+#: src/config/options.inc:500 src/config/options.inc:899
+#: src/config/opttypes.c:365 src/dialogs/document.c:101
 msgid "Codepage"
 msgstr "Κωδικοσελίδα"
 
-#: src/config/options.inc:504
-msgid "Width"
+#: src/config/options.inc:506
+#, c-format
+msgid "Header string used in dumps. %u is substituted by URL."
 msgstr ""
 
-#: src/config/options.inc:506
-msgid "Width of screen in characters when dumping a HTML document."
+#: src/config/options.inc:508
+msgid "Footer"
 msgstr ""
 
 #: src/config/options.inc:510
+#, c-format
+msgid "Footer string used in dumps. %u is substituted by URL."
+msgstr ""
+
+#: src/config/options.inc:512
+msgid "Separator"
+msgstr ""
+
+#: src/config/options.inc:514
+msgid "String which separates two dumps."
+msgstr ""
+
+#: src/config/options.inc:516
+msgid "Width"
+msgstr ""
+
+#: src/config/options.inc:518
+msgid "Width of screen in characters when dumping a HTML document."
+msgstr ""
+
+#: src/config/options.inc:522
 #, fuzzy
 msgid "History"
 msgstr "Ιστορικό"
 
-#: src/config/options.inc:512
+#: src/config/options.inc:524
 msgid "History options."
 msgstr ""
 
-#: src/config/options.inc:514
+#: src/config/options.inc:526
 #, fuzzy
 msgid "Keep unhistory"
 msgstr "Δεν υπάρχει ιστορικό"
 
-#: src/config/options.inc:516
+#: src/config/options.inc:528
 msgid "Keep unhistory (\"forward history\")?"
 msgstr ""
 
-#: src/config/options.inc:520
+#: src/config/options.inc:531
 #, fuzzy
 msgid "HTML rendering"
 msgstr "Γίνετε μεταφορά"
 
-#: src/config/options.inc:522
+#: src/config/options.inc:533
 msgid "Options concerning the display of HTML pages."
 msgstr ""
 
-#: src/config/options.inc:524
+#: src/config/options.inc:535
 #, fuzzy
 msgid "Display frames"
 msgstr "Εμφάνιση"
 
-#: src/config/options.inc:526
+#: src/config/options.inc:537
 #, fuzzy
 msgid "Display frames."
 msgstr "Εμφάνιση"
 
-#: src/config/options.inc:528
+#: src/config/options.inc:539
 #, fuzzy
 msgid "Display tables"
 msgstr "Εμφάνιση"
 
-#: src/config/options.inc:530
+#: src/config/options.inc:541
 #, fuzzy
 msgid "Display tables."
 msgstr "Εμφάνιση"
 
-#: src/config/options.inc:532
+#: src/config/options.inc:543
 #, fuzzy
 msgid "Expand table columns"
 msgstr "όνομα"
 
-#: src/config/options.inc:534
+#: src/config/options.inc:545
 msgid ""
 "Enable to make table rendering expand table columns so cells\n"
 "are more correctly vertically aligned with respect to the background\n"
@@ -2348,29 +2414,29 @@ msgid ""
 "document.colors.use_document_colors set to 2. Experimental."
 msgstr ""
 
-#: src/config/options.inc:540
+#: src/config/options.inc:551
 #, fuzzy
 msgid "Display subscripts"
 msgstr "Εμφάνιση δομής USEMAP"
 
-#: src/config/options.inc:542
+#: src/config/options.inc:553
 msgid "Display subscripts (as [thing])."
 msgstr ""
 
-#: src/config/options.inc:544
+#: src/config/options.inc:555
 #, fuzzy
 msgid "Display superscripts"
 msgstr "Εμφάνιση δομής USEMAP"
 
-#: src/config/options.inc:546
+#: src/config/options.inc:557
 msgid "Display superscripts (as ^thing)."
 msgstr ""
 
-#: src/config/options.inc:548
+#: src/config/options.inc:559
 msgid "Rendering of html link element"
 msgstr ""
 
-#: src/config/options.inc:550
+#: src/config/options.inc:561
 msgid ""
 "Html link rendering verbosity:\n"
 "0 is nothing\n"
@@ -2381,164 +2447,164 @@ msgid ""
 "5 is everything"
 msgstr ""
 
-#: src/config/options.inc:558
+#: src/config/options.inc:569
 msgid "Underline links"
 msgstr ""
 
-#: src/config/options.inc:560
+#: src/config/options.inc:571
 msgid "Underline links."
 msgstr ""
 
-#: src/config/options.inc:562
+#: src/config/options.inc:573
 msgid "Wrap non breaking space"
 msgstr ""
 
-#: src/config/options.inc:564
+#: src/config/options.inc:575
 msgid ""
 "If set do not honour non breaking space (the nbsp entity)\n"
 "but allow to wrap the text. This can help keeping the width\n"
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
 
-#: src/config/options.inc:569
+#: src/config/options.inc:580
 #, fuzzy
 msgid "Plain rendering"
 msgstr "Γίνετε μεταφορά"
 
-#: src/config/options.inc:571
+#: src/config/options.inc:582
 msgid "Options concerning the display of plain text pages."
 msgstr ""
 
-#: src/config/options.inc:573
+#: src/config/options.inc:584
 #, fuzzy
 msgid "Display URIs"
 msgstr "Εμφάνιση"
 
-#: src/config/options.inc:575
+#: src/config/options.inc:586
 msgid "Display URIs in the document as links."
 msgstr ""
 
-#: src/config/options.inc:577
+#: src/config/options.inc:588
 msgid "Compress empty lines"
 msgstr ""
 
-#: src/config/options.inc:579
+#: src/config/options.inc:590
 msgid "Compress successive empty lines to only one in displayed text."
 msgstr ""
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:585
+#: src/config/options.inc:596
 msgid "Protocols"
 msgstr ""
 
-#: src/config/options.inc:587
+#: src/config/options.inc:598
 msgid "Protocol specific options."
 msgstr ""
 
-#: src/config/options.inc:589
+#: src/config/options.inc:600
 msgid "HTTP"
 msgstr ""
 
-#: src/config/options.inc:591
+#: src/config/options.inc:602
 msgid "HTTP-specific options."
 msgstr ""
 
-#: src/config/options.inc:594
+#: src/config/options.inc:605
 msgid "Server bug workarounds"
 msgstr ""
 
-#: src/config/options.inc:596
+#: src/config/options.inc:607
 msgid "Server-side HTTP bugs workarounds."
 msgstr ""
 
-#: src/config/options.inc:598
+#: src/config/options.inc:609
 msgid "Do not send Accept-Charset"
 msgstr ""
 
-#: src/config/options.inc:600
+#: src/config/options.inc:611
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 msgstr ""
 
-#: src/config/options.inc:603
+#: src/config/options.inc:614
 msgid "Allow blacklisting"
 msgstr ""
 
-#: src/config/options.inc:605
+#: src/config/options.inc:616
 msgid "Allow blacklisting of buggy servers."
 msgstr ""
 
-#: src/config/options.inc:607
+#: src/config/options.inc:618
 msgid "Broken 302 redirects"
 msgstr ""
 
-#: src/config/options.inc:609
+#: src/config/options.inc:620
 msgid ""
 "Broken 302 redirect (violates RFC but compatible with Netscape).\n"
 "This is a problem for a lot of web discussion boards and the like.\n"
 "If they will do strange things to you, try to play with this."
 msgstr ""
 
-#: src/config/options.inc:613
+#: src/config/options.inc:624
 msgid "No keepalive after POST requests"
 msgstr ""
 
-#: src/config/options.inc:615
+#: src/config/options.inc:626
 msgid "Disable keepalive connection after POST request."
 msgstr ""
 
-#: src/config/options.inc:617
+#: src/config/options.inc:628
 msgid "Use HTTP/1.0"
 msgstr ""
 
-#: src/config/options.inc:619
+#: src/config/options.inc:630
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
 msgstr ""
 
-#: src/config/options.inc:621 src/config/options.inc:695
-#: src/config/options.inc:709
+#: src/config/options.inc:632 src/config/options.inc:712
+#: src/config/options.inc:726
 msgid "Proxy configuration"
 msgstr ""
 
-#: src/config/options.inc:623
+#: src/config/options.inc:634
 msgid "HTTP proxy configuration."
 msgstr ""
 
-#: src/config/options.inc:625 src/config/options.inc:699
-#: src/config/options.inc:713
+#: src/config/options.inc:636 src/config/options.inc:716
+#: src/config/options.inc:730
 #, fuzzy
 msgid "Host and port-number"
 msgstr "Μη έγκυρος αριθμός"
 
-#: src/config/options.inc:627
+#: src/config/options.inc:638
 msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
 msgstr ""
 
-#: src/config/options.inc:630
+#: src/config/options.inc:641
 #, fuzzy
 msgid "Username"
 msgstr "όνομα"
 
-#: src/config/options.inc:632
+#: src/config/options.inc:643
 msgid "Proxy authentication username."
 msgstr ""
 
-#: src/config/options.inc:634 src/protocol/auth/dialogs.c:75
+#: src/config/options.inc:645 src/protocol/auth/dialogs.c:59
 msgid "Password"
 msgstr "Κωδικός"
 
-#: src/config/options.inc:636
+#: src/config/options.inc:647
 msgid "Proxy authentication password."
 msgstr ""
 
-#: src/config/options.inc:639
+#: src/config/options.inc:650
 msgid "Referer sending"
 msgstr ""
 
-#: src/config/options.inc:641
+#: src/config/options.inc:652
 msgid ""
 "HTTP referer sending options. HTTP referer is a special header\n"
 "sent in the HTTP requests, which is supposed to contain the previous\n"
@@ -2548,11 +2614,11 @@ msgid ""
 "security problem on some badly designed web pages."
 msgstr ""
 
-#: src/config/options.inc:648
+#: src/config/options.inc:659
 msgid "Policy"
 msgstr ""
 
-#: src/config/options.inc:651
+#: src/config/options.inc:662
 msgid ""
 "Mode of sending HTTP referer:\n"
 "0 is send no referer\n"
@@ -2561,27 +2627,27 @@ msgid ""
 "3 is send previous URL as referer (correct, but insecure)\n"
 msgstr ""
 
-#: src/config/options.inc:657
+#: src/config/options.inc:668
 msgid "Fake referer URL"
 msgstr ""
 
-#: src/config/options.inc:659
+#: src/config/options.inc:670
 msgid "Fake referer to be sent when policy is 2."
 msgstr ""
 
-#: src/config/options.inc:662
+#: src/config/options.inc:673
 msgid "Send Accept-Language header"
 msgstr ""
 
-#: src/config/options.inc:664
+#: src/config/options.inc:675
 msgid "Send Accept-Language header."
 msgstr ""
 
-#: src/config/options.inc:666
+#: src/config/options.inc:677
 msgid "Use UI language as Accept-Language"
 msgstr ""
 
-#: src/config/options.inc:668
+#: src/config/options.inc:679
 msgid ""
 "Request localised versions of documents from web-servers (using the\n"
 "Accept-Language header) using the language you have configured for\n"
@@ -2589,11 +2655,11 @@ msgid ""
 "risk because it tells web-masters about your preference in language."
 msgstr ""
 
-#: src/config/options.inc:673
+#: src/config/options.inc:684
 msgid "Activate HTTP TRACE debugging"
 msgstr ""
 
-#: src/config/options.inc:675
+#: src/config/options.inc:686
 msgid ""
 "If active, all HTTP requests are sent with TRACE as their method\n"
 "rather than GET or POST. This is useful for debugging of both ELinks\n"
@@ -2602,188 +2668,194 @@ msgid ""
 "not be enabled on all servers."
 msgstr ""
 
-#: src/config/options.inc:681
+#. OSNews.com is supposed to be relying on the textmode token, at least.
+#: src/config/options.inc:693
 msgid "User-agent identification"
 msgstr ""
 
-#: src/config/options.inc:683
+#: src/config/options.inc:695
 msgid ""
 "Change the User Agent ID. That means identification string, which\n"
-"is sent to HTTP server when a document is requested.\n"
+"is sent to HTTP server when a document is requested. The 'textmode'\n"
+"token in the first field is our silent attempt to establish this as\n"
+"a standard for new textmode user agents, so that the webmasters can\n"
+"have just a single uniform test for these if they are ie. pushing\n"
+"some lite version to them automagically.\n"
 "%v in the string means ELinks version\n"
 "%s in the string means system identification\n"
 "%t in the string means size of the terminal\n"
+"%b in the string means number of bars displayed by ELinks\n"
 "Use \" \" if you don't want any User-Agent header to be sent at all."
 msgstr ""
 
-#: src/config/options.inc:691
+#: src/config/options.inc:708
 msgid "HTTPS"
 msgstr ""
 
-#: src/config/options.inc:693
+#: src/config/options.inc:710
 #, fuzzy
 msgid "HTTPS-specific options."
 msgstr "Δεν καθορίστηκε πρόγραμμα για"
 
-#: src/config/options.inc:697
+#: src/config/options.inc:714
 msgid "HTTPS proxy configuration."
 msgstr ""
 
-#: src/config/options.inc:701
+#: src/config/options.inc:718
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
 msgstr ""
 
-#: src/config/options.inc:705
+#: src/config/options.inc:722
 msgid "FTP"
 msgstr ""
 
-#: src/config/options.inc:707
+#: src/config/options.inc:724
 msgid "FTP specific options."
 msgstr ""
 
-#: src/config/options.inc:711
+#: src/config/options.inc:728
 msgid "FTP proxy configuration."
 msgstr ""
 
-#: src/config/options.inc:715
+#: src/config/options.inc:732
 msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
 msgstr ""
 
-#: src/config/options.inc:718
+#: src/config/options.inc:735
 msgid "Anonymous password"
 msgstr ""
 
-#: src/config/options.inc:720
+#: src/config/options.inc:737
 msgid "FTP anonymous password to be sent."
 msgstr ""
 
-#: src/config/options.inc:722
+#: src/config/options.inc:739
 msgid "Use passive mode (IPv4)"
 msgstr ""
 
-#: src/config/options.inc:724
+#: src/config/options.inc:741
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
 msgstr ""
 
-#: src/config/options.inc:726 src/config/options.inc:730
+#: src/config/options.inc:743 src/config/options.inc:747
 msgid "Use passive mode (IPv6)"
 msgstr ""
 
-#: src/config/options.inc:728
+#: src/config/options.inc:745
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
 msgstr ""
 
-#: src/config/options.inc:732
+#: src/config/options.inc:749
 msgid ""
 "Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 "Works only with IPv6 enabled, so nothing interesting for you."
 msgstr ""
 
-#: src/config/options.inc:738
+#: src/config/options.inc:755
 #, fuzzy
 msgid "Local files"
 msgstr "αρχεία"
 
-#: src/config/options.inc:740
+#: src/config/options.inc:757
 msgid "Options specific to local browsing."
 msgstr ""
 
-#: src/config/options.inc:743 src/config/options.inc:755
+#: src/config/options.inc:760 src/config/options.inc:772
 #, fuzzy
 msgid "Local CGI"
 msgstr "αρχεία"
 
-#: src/config/options.inc:745
+#: src/config/options.inc:762
 #, fuzzy
 msgid "Local CGI specific options."
 msgstr "Δεν καθορίστηκε πρόγραμμα για"
 
-#: src/config/options.inc:747 src/config/options.inc:759
+#: src/config/options.inc:764 src/config/options.inc:776
 #: src/mime/backend/mailcap.c:100 src/mime/backend/mimetypes.c:59
 msgid "Path"
 msgstr ""
 
-#: src/config/options.inc:749
+#: src/config/options.inc:766
 msgid "Colon separated list of directories, where CGI scripts are stored."
 msgstr ""
 
-#: src/config/options.inc:751 src/config/options.inc:763
+#: src/config/options.inc:768 src/config/options.inc:780
 msgid "Allow local CGI"
 msgstr ""
 
-#: src/config/options.inc:753
+#: src/config/options.inc:770
 msgid "Whether to execute local CGI scripts."
 msgstr ""
 
-#: src/config/options.inc:757
+#: src/config/options.inc:774
 #, fuzzy
 msgid "Local CGI specific options. (DISABLED)"
 msgstr "Δεν καθορίστηκε πρόγραμμα για"
 
-#: src/config/options.inc:761
+#: src/config/options.inc:778
 msgid ""
 "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 
-#: src/config/options.inc:765
+#: src/config/options.inc:782
 msgid "Whether to execute local CGI scripts. (DISABLED)"
 msgstr ""
 
-#: src/config/options.inc:768
+#: src/config/options.inc:785
 msgid "Allow reading special files"
 msgstr ""
 
-#: src/config/options.inc:770
+#: src/config/options.inc:787
 msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
 msgstr ""
 
-#: src/config/options.inc:773
+#: src/config/options.inc:790
 msgid "Show hidden files in directory listing"
 msgstr ""
 
-#: src/config/options.inc:775
+#: src/config/options.inc:792
 msgid ""
 "Show hidden files in directory listing ?\n"
 "If set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
 
-#: src/config/options.inc:779
+#: src/config/options.inc:796
 #, fuzzy
 msgid "Try encoding extensions"
 msgstr "Χωρίς καταλήξεις"
 
-#: src/config/options.inc:781
+#: src/config/options.inc:798
 msgid ""
 "When set, if we can't open a file named 'filename', we'll try\n"
 "to open 'filename' with some encoding extension appended\n"
 "(ie. 'filename.gz'); it depends on the supported encodings."
 msgstr ""
 
-#: src/config/options.inc:785
+#: src/config/options.inc:802
 msgid "User protocols"
 msgstr ""
 
-#: src/config/options.inc:787
+#: src/config/options.inc:804
 msgid ""
 "User protocols. Options in this tree specify external\n"
 "handlers for the appropriate protocols. Ie.\n"
 "protocol.user.mailto.unix."
 msgstr ""
 
-#: src/config/options.inc:798
+#: src/config/options.inc:815
 msgid ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 
-#: src/config/options.inc:803
+#: src/config/options.inc:820
 msgid ""
 "Handler (external program) for this protocol and system.\n"
 "%h in the string means hostname (or email address)\n"
@@ -2793,11 +2865,11 @@ msgid ""
 "%u in the string means the whole URL"
 msgstr ""
 
-#: src/config/options.inc:811
+#: src/config/options.inc:828
 msgid "No-proxy domains"
 msgstr ""
 
-#: src/config/options.inc:813
+#: src/config/options.inc:830
 msgid ""
 "Comma separated list of domains for which the proxy (HTTP/FTP)\n"
 "should be disabled. Optionally, a port can be specified for some\n"
@@ -2806,25 +2878,25 @@ msgid ""
 msgstr ""
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:822
+#: src/config/options.inc:839
 #, fuzzy
 msgid "Terminals"
 msgstr "Επιλογές τερματικού"
 
-#: src/config/options.inc:824
+#: src/config/options.inc:841
 #, fuzzy
 msgid "Terminal options."
 msgstr "Επιλογές τερματικού"
 
-#: src/config/options.inc:828
+#: src/config/options.inc:845
 msgid "Options specific to this terminal type (according to $TERM value)."
 msgstr ""
 
-#: src/config/options.inc:830
+#: src/config/options.inc:847
 msgid "Border type"
 msgstr ""
 
-#: src/config/options.inc:832
+#: src/config/options.inc:849
 msgid ""
 "Terminal type; matters mostly only when drawing frames and\n"
 "dialog box borders:\n"
@@ -2835,55 +2907,55 @@ msgid ""
 "4 is FreeBSD"
 msgstr ""
 
-#: src/config/options.inc:840
+#: src/config/options.inc:857
 msgid "Switch fonts for line drawing"
 msgstr ""
 
-#: src/config/options.inc:842
+#: src/config/options.inc:859
 msgid ""
 "Switch fonts when drawing lines, enabling both local characters\n"
 "and lines working at the same time. Makes sense only with linux\n"
 "terminal."
 msgstr ""
 
-#: src/config/options.inc:846
+#: src/config/options.inc:863
 msgid "I/O in UTF8"
 msgstr ""
 
-#: src/config/options.inc:848
+#: src/config/options.inc:865
 msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
 
-#: src/config/options.inc:851 src/dialogs/options.c:186
+#: src/config/options.inc:868 src/dialogs/options.c:163
 msgid "Restrict frames in cp850/852"
 msgstr "Περιορισμός πλαισίων στο cp850/852"
 
-#: src/config/options.inc:853
+#: src/config/options.inc:870
 msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
 msgstr ""
 
-#: src/config/options.inc:856
+#: src/config/options.inc:873
 #, fuzzy
 msgid "Block cursor"
 msgstr "Δρομέας μορφής μπλοκ"
 
-#: src/config/options.inc:858
+#: src/config/options.inc:875
 msgid ""
 "Move cursor to bottom right corner when done drawing.\n"
 "This is particularly useful when we have a block cursor,\n"
 "so that inversed text is displayed correctly."
 msgstr ""
 
-#: src/config/options.inc:862
+#: src/config/options.inc:879
 #, fuzzy
 msgid "Color mode"
 msgstr "Χρώμα"
 
-#: src/config/options.inc:864
+#: src/config/options.inc:881
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -2892,11 +2964,11 @@ msgid ""
 "2 is 256 color mode, requires that xterm-256color TERM is used\n"
 msgstr ""
 
-#: src/config/options.inc:870
+#: src/config/options.inc:887
 msgid "Enable transparency"
 msgstr ""
 
-#: src/config/options.inc:872
+#: src/config/options.inc:889
 msgid ""
 "If we should not set the background to black. This is particularly\n"
 "useful when we have a terminal (typically in some windowing\n"
@@ -2905,392 +2977,392 @@ msgid ""
 "sense only when colors are enabled."
 msgstr ""
 
-#: src/config/options.inc:878
+#: src/config/options.inc:895
 msgid "Use underline"
 msgstr ""
 
-#: src/config/options.inc:880
+#: src/config/options.inc:897
 msgid "If we should use underline or enhance the color instead."
 msgstr ""
 
-#: src/config/options.inc:884
+#: src/config/options.inc:901
 msgid "Codepage of charset used for displaying content on terminal."
 msgstr ""
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:890
+#: src/config/options.inc:907
 msgid "User interface"
 msgstr ""
 
-#: src/config/options.inc:892
+#: src/config/options.inc:909
 #, fuzzy
 msgid "User interface options."
 msgstr "Επιλογές τερματικού"
 
-#: src/config/options.inc:896
+#: src/config/options.inc:913
 msgid "Color settings"
 msgstr ""
 
-#: src/config/options.inc:898
+#: src/config/options.inc:915
 msgid "Default user interface color settings."
 msgstr ""
 
-#: src/config/options.inc:925
+#: src/config/options.inc:942
 #, fuzzy
 msgid "Color terminals"
 msgstr "Τερματικό BeOS"
 
-#: src/config/options.inc:927
+#: src/config/options.inc:944
 msgid "Color settings for color terminal."
 msgstr ""
 
-#: src/config/options.inc:929
+#: src/config/options.inc:946
 msgid "Non-color terminals"
 msgstr ""
 
-#: src/config/options.inc:931
+#: src/config/options.inc:948
 msgid "Color settings for non-color terminal."
 msgstr ""
 
 #. FIXME: obsolete, how to alias them correctly ? --Zas
-#: src/config/options.inc:934
+#: src/config/options.inc:951
 msgid "Main menu bar"
 msgstr ""
 
-#: src/config/options.inc:936
+#: src/config/options.inc:953
 msgid "Main menu bar colors."
 msgstr ""
 
-#: src/config/options.inc:938
+#: src/config/options.inc:955
 msgid "Unselected main menu bar item"
 msgstr ""
 
-#: src/config/options.inc:940
+#: src/config/options.inc:957
 msgid "Unselected main menu bar item colors."
 msgstr ""
 
-#: src/config/options.inc:942
+#: src/config/options.inc:959
 msgid "Selected main menu bar item"
 msgstr ""
 
-#: src/config/options.inc:944
+#: src/config/options.inc:961
 msgid "Selected main menu bar item colors."
 msgstr ""
 
-#: src/config/options.inc:946 src/config/options.inc:975
+#: src/config/options.inc:963 src/config/options.inc:992
 msgid "Hotkey"
 msgstr ""
 
-#: src/config/options.inc:948
+#: src/config/options.inc:965
 msgid "Main menu hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:950 src/config/options.inc:979
+#: src/config/options.inc:967 src/config/options.inc:996
 msgid "Unselected hotkey"
 msgstr ""
 
-#: src/config/options.inc:952
+#: src/config/options.inc:969
 msgid "Main menu unselected hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:954 src/config/options.inc:983
+#: src/config/options.inc:971 src/config/options.inc:1000
 #, fuzzy
 msgid "Selected hotkey"
 msgstr "Πεδίο επιλογής"
 
-#: src/config/options.inc:956
+#: src/config/options.inc:973
 msgid "Main menu selected hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:959
+#: src/config/options.inc:976
 msgid "Menu bar"
 msgstr ""
 
-#: src/config/options.inc:961
+#: src/config/options.inc:978
 msgid "Menu bar colors."
 msgstr ""
 
-#: src/config/options.inc:963
+#: src/config/options.inc:980
 msgid "Unselected menu item"
 msgstr ""
 
-#: src/config/options.inc:965
+#: src/config/options.inc:982
 msgid "Unselected menu item colors."
 msgstr ""
 
-#: src/config/options.inc:967
+#: src/config/options.inc:984
 #, fuzzy
 msgid "Selected menu item"
 msgstr "Πεδίο επιλογής"
 
-#: src/config/options.inc:969
+#: src/config/options.inc:986
 msgid "Selected menu item colors."
 msgstr ""
 
-#: src/config/options.inc:971
+#: src/config/options.inc:988
 #, fuzzy
 msgid "Marked menu item"
 msgstr "Πεδίο επιλογής"
 
-#: src/config/options.inc:973
+#: src/config/options.inc:990
 msgid "Marked menu item colors."
 msgstr ""
 
-#: src/config/options.inc:977
+#: src/config/options.inc:994
 msgid "Menu item hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:981
+#: src/config/options.inc:998
 msgid "Menu item unselected hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:985
+#: src/config/options.inc:1002
 msgid "Menu item selected hotkey colors."
 msgstr ""
 
-#: src/config/options.inc:987
+#: src/config/options.inc:1004
 #, fuzzy
 msgid "Menu frame"
 msgstr "Δεν υπάρχουν πλαίσια (frames)"
 
-#: src/config/options.inc:989
+#: src/config/options.inc:1006
 msgid "Menu frame colors."
 msgstr ""
 
-#: src/config/options.inc:992
+#: src/config/options.inc:1009
 msgid "Dialog"
 msgstr ""
 
-#: src/config/options.inc:994
+#: src/config/options.inc:1011
 msgid "Dialog colors."
 msgstr ""
 
-#: src/config/options.inc:1004
+#: src/config/options.inc:1021
 msgid "Generic"
 msgstr ""
 
-#: src/config/options.inc:1006
+#: src/config/options.inc:1023
 #, fuzzy
 msgid "Generic dialog colors."
 msgstr "Τερματισμών συνδέσεων παρασκηνίου"
 
-#: src/config/options.inc:1008
+#: src/config/options.inc:1025
 #, fuzzy
 msgid "Frame"
 msgstr "όνομα"
 
-#: src/config/options.inc:1010
+#: src/config/options.inc:1027
 msgid "Dialog frame colors."
 msgstr ""
 
-#: src/config/options.inc:1012
+#: src/config/options.inc:1029
 msgid "Scrollbar"
 msgstr ""
 
-#: src/config/options.inc:1014
+#: src/config/options.inc:1031
 msgid "Scrollbar colors."
 msgstr ""
 
-#: src/config/options.inc:1016
+#: src/config/options.inc:1033
 #, fuzzy
 msgid "Scrollbar selected"
 msgstr "Δεν επιλέχθηκε σύνδεσμος"
 
-#: src/config/options.inc:1018
+#: src/config/options.inc:1035
 #, fuzzy
 msgid "Scrollbar selected colors."
 msgstr "Τερματισμών συνδέσεων παρασκηνίου"
 
-#: src/config/options.inc:1022
+#: src/config/options.inc:1039
 msgid "Dialog title colors."
 msgstr ""
 
-#: src/config/options.inc:1024
+#: src/config/options.inc:1041
 #, fuzzy
 msgid "Text"
 msgstr "Περιοχή κειμένου"
 
-#: src/config/options.inc:1026
+#: src/config/options.inc:1043
 msgid "Dialog text colors."
 msgstr ""
 
-#: src/config/options.inc:1028 src/viewer/text/link.c:999
+#: src/config/options.inc:1045 src/viewer/text/link.c:1004
 msgid "Checkbox"
 msgstr "Κουτί επιλογής"
 
-#: src/config/options.inc:1030
+#: src/config/options.inc:1047
 msgid "Dialog checkbox colors."
 msgstr ""
 
-#: src/config/options.inc:1032
+#: src/config/options.inc:1049
 #, fuzzy
 msgid "Checkbox label"
 msgstr "Κουτί επιλογής"
 
-#: src/config/options.inc:1034
+#: src/config/options.inc:1051
 msgid "Dialog checkbox label colors."
 msgstr ""
 
-#: src/config/options.inc:1036
+#: src/config/options.inc:1053
 msgid "Button"
 msgstr ""
 
-#: src/config/options.inc:1038
+#: src/config/options.inc:1055
 msgid "Dialog button colors."
 msgstr ""
 
-#: src/config/options.inc:1040
+#: src/config/options.inc:1057
 msgid "Selected button"
 msgstr ""
 
-#: src/config/options.inc:1042
+#: src/config/options.inc:1059
 msgid "Dialog selected button colors."
 msgstr ""
 
-#: src/config/options.inc:1044 src/viewer/text/link.c:1005
+#: src/config/options.inc:1061 src/viewer/text/link.c:1010
 msgid "Text field"
 msgstr "Πεδίο κειμένου"
 
-#: src/config/options.inc:1046
+#: src/config/options.inc:1063
 msgid "Dialog text field colors."
 msgstr ""
 
-#: src/config/options.inc:1048
+#: src/config/options.inc:1065
 #, fuzzy
 msgid "Text field text"
 msgstr "Πεδίο κειμένου"
 
-#: src/config/options.inc:1050
+#: src/config/options.inc:1067
 msgid "Dialog field text colors."
 msgstr ""
 
-#: src/config/options.inc:1052
+#: src/config/options.inc:1069
 msgid "Meter"
 msgstr ""
 
-#: src/config/options.inc:1054
+#: src/config/options.inc:1071
 msgid "Dialog meter colors."
 msgstr ""
 
-#: src/config/options.inc:1056
+#: src/config/options.inc:1073
 msgid "Shadow"
 msgstr ""
 
-#: src/config/options.inc:1058
+#: src/config/options.inc:1075
 msgid "Dialog shadow colors (see ui.shadows option)."
 msgstr ""
 
-#: src/config/options.inc:1060
+#: src/config/options.inc:1077
 msgid "Title bar"
 msgstr ""
 
-#: src/config/options.inc:1062
+#: src/config/options.inc:1079
 msgid "Title bar colors."
 msgstr ""
 
-#: src/config/options.inc:1064
+#: src/config/options.inc:1081
 msgid "Generic title bar"
 msgstr ""
 
-#: src/config/options.inc:1066
+#: src/config/options.inc:1083
 msgid "Generic title bar colors."
 msgstr ""
 
-#: src/config/options.inc:1068
+#: src/config/options.inc:1085
 msgid "Title bar text"
 msgstr ""
 
-#: src/config/options.inc:1070
+#: src/config/options.inc:1087
 msgid "Title bar text colors."
 msgstr ""
 
-#: src/config/options.inc:1073
+#: src/config/options.inc:1090
 msgid "Status bar"
 msgstr ""
 
-#: src/config/options.inc:1075
+#: src/config/options.inc:1092
 msgid "Status bar colors."
 msgstr ""
 
-#: src/config/options.inc:1077
+#: src/config/options.inc:1094
 msgid "Generic status bar"
 msgstr ""
 
-#: src/config/options.inc:1079
+#: src/config/options.inc:1096
 msgid "Generic status bar colors."
 msgstr ""
 
-#: src/config/options.inc:1081
+#: src/config/options.inc:1098
 #, fuzzy
 msgid "Status bar text"
 msgstr "Αναζήτηση κειμένου"
 
-#: src/config/options.inc:1083
+#: src/config/options.inc:1100
 msgid "Status bar text colors."
 msgstr ""
 
-#: src/config/options.inc:1086
+#: src/config/options.inc:1103
 msgid "Tabs bar"
 msgstr ""
 
-#: src/config/options.inc:1088
+#: src/config/options.inc:1105
 msgid "Tabs bar colors."
 msgstr ""
 
-#: src/config/options.inc:1090
+#: src/config/options.inc:1107
 #, fuzzy
 msgid "Unvisited tab"
 msgstr "Πεδίο επιλογής"
 
-#: src/config/options.inc:1092
+#: src/config/options.inc:1109
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
 msgstr ""
 
-#: src/config/options.inc:1095
+#: src/config/options.inc:1112
 #, fuzzy
 msgid "Unselected tab"
 msgstr "Πεδίο επιλογής"
 
-#: src/config/options.inc:1097
+#: src/config/options.inc:1114
 #, fuzzy
 msgid "Unselected tab colors."
 msgstr "Τερματισμών συνδέσεων παρασκηνίου"
 
-#: src/config/options.inc:1099
+#: src/config/options.inc:1116
 #, fuzzy
 msgid "Loading tab"
 msgstr "γίνεται φόρτωση"
 
-#: src/config/options.inc:1101
+#: src/config/options.inc:1118
 msgid "Tab colors for tabs that are loading in the background."
 msgstr ""
 
-#: src/config/options.inc:1103
+#: src/config/options.inc:1120
 #, fuzzy
 msgid "Selected tab"
 msgstr "Πεδίο επιλογής"
 
-#: src/config/options.inc:1105
+#: src/config/options.inc:1122
 #, fuzzy
 msgid "Selected tab colors."
 msgstr "Τερματισμών συνδέσεων παρασκηνίου"
 
-#: src/config/options.inc:1107
+#: src/config/options.inc:1124
 msgid "Tab separator"
 msgstr ""
 
-#: src/config/options.inc:1109
+#: src/config/options.inc:1126
 msgid "Tab separator colors."
 msgstr ""
 
-#: src/config/options.inc:1112
+#: src/config/options.inc:1129
 #, fuzzy
 msgid "Searched strings"
 msgstr "Μη έγκυρο αλφαριθμητικό"
 
-#: src/config/options.inc:1114
+#: src/config/options.inc:1131
 #, fuzzy
 msgid "Searched string highlight colors."
 msgstr "Το αλφαριθμητικό αναζήτησης δε βρέθηκε"
@@ -3299,58 +3371,58 @@ msgstr "Το αλφαριθμητικό αναζήτησης δε βρέθηκε"
 #. ============= BORING PART (colors) END ===================
 #. ==========================================================
 #. Keep options in alphabetical order.
-#: src/config/options.inc:1123
+#: src/config/options.inc:1140
 msgid "Dialog settings"
 msgstr ""
 
-#: src/config/options.inc:1125
+#: src/config/options.inc:1142
 msgid "Dialogs-specific appearance and behaviour settings."
 msgstr ""
 
-#: src/config/options.inc:1127
+#: src/config/options.inc:1144
 msgid "Minimal height of listbox widget"
 msgstr ""
 
-#: src/config/options.inc:1129
+#: src/config/options.inc:1146
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
 
-#: src/config/options.inc:1132
+#: src/config/options.inc:1149
 msgid "Drop shadows"
 msgstr ""
 
-#: src/config/options.inc:1134
+#: src/config/options.inc:1151
 msgid ""
 "Make dialogs drop shadows (the shadows are solid, you can\n"
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
 "also want to eliminate the wide borders by adjusting setup.h."
 msgstr ""
 
-#: src/config/options.inc:1138
+#: src/config/options.inc:1155
 #, fuzzy
 msgid "Underline hotkeys"
 msgstr "Πεδίο επιλογής"
 
-#: src/config/options.inc:1140
+#: src/config/options.inc:1157
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
 
-#: src/config/options.inc:1144
+#: src/config/options.inc:1161
 #, fuzzy
 msgid "Timer options"
 msgstr "Επιλογές τερματικού"
 
-#: src/config/options.inc:1146
+#: src/config/options.inc:1163
 msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
 
-#: src/config/options.inc:1152
+#: src/config/options.inc:1169
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3358,7 +3430,7 @@ msgid ""
 "2 is count down and show the timer near LEDs"
 msgstr ""
 
-#: src/config/options.inc:1159
+#: src/config/options.inc:1176
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3366,33 +3438,57 @@ msgid ""
 "2 is count down and show the timer near LEDs (DISABLED)"
 msgstr ""
 
-#: src/config/options.inc:1165
+#: src/config/options.inc:1182
 msgid "Duration"
 msgstr ""
 
-#: src/config/options.inc:1167
+#: src/config/options.inc:1184
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
 msgstr ""
 
-#: src/config/options.inc:1171
+#: src/config/options.inc:1188
 msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr ""
 
-#: src/config/options.inc:1174
+#: src/config/options.inc:1190
+#, fuzzy
+msgid "Clock"
+msgstr "κλειδωμένο"
+
+#: src/config/options.inc:1191
+msgid "Digital clock."
+msgstr ""
+
+#: src/config/options.inc:1195
+msgid ""
+"Whether to enable displaying of digital clock. Note that,\n"
+"timer and LEDs should be enabled to make effect."
+msgstr ""
+
+#: src/config/options.inc:1198
+#, fuzzy
+msgid "Format"
+msgstr "Ανέβασμα αρχείου"
+
+#: src/config/options.inc:1200
+msgid "Format string for digital clock. See strftime(3) man page for details."
+msgstr ""
+
+#: src/config/options.inc:1202
 #, fuzzy
 msgid "Window tabs"
 msgstr "Παράθυρο"
 
-#: src/config/options.inc:1176
+#: src/config/options.inc:1204
 msgid "Window tabs settings."
 msgstr ""
 
-#: src/config/options.inc:1178
+#: src/config/options.inc:1206
 #, fuzzy
 msgid "Display tabs bar"
 msgstr "Εμφάνιση δομής USEMAP"
 
-#: src/config/options.inc:1180
+#: src/config/options.inc:1208
 msgid ""
 "Show tabs bar on the screen:\n"
 "0 means never.\n"
@@ -3400,116 +3496,116 @@ msgid ""
 "2 means always."
 msgstr ""
 
-#: src/config/options.inc:1185
+#: src/config/options.inc:1213
 msgid "Wrap-around tabs cycling"
 msgstr ""
 
-#: src/config/options.inc:1187
+#: src/config/options.inc:1215
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr ""
 
-#: src/config/options.inc:1190
+#: src/config/options.inc:1218
 msgid "Confirm tab closing"
 msgstr ""
 
-#: src/config/options.inc:1192
+#: src/config/options.inc:1220
 msgid "When closing a tab show confirmation dialog."
 msgstr ""
 
-#: src/config/options.inc:1196 src/config/opttypes.c:373
+#: src/config/options.inc:1224 src/config/opttypes.c:366
 msgid "Language"
 msgstr ""
 
-#: src/config/options.inc:1198
+#: src/config/options.inc:1226
 msgid ""
 "Language of user interface. System means that the language will\n"
 "be extracted from the environment dynamically."
 msgstr ""
 
-#: src/config/options.inc:1201
+#: src/config/options.inc:1229
 #, fuzzy
 msgid "Display status bar"
 msgstr "Εμφάνιση δομής USEMAP"
 
-#: src/config/options.inc:1203
+#: src/config/options.inc:1231
 msgid "Show status bar on the screen."
 msgstr ""
 
-#: src/config/options.inc:1205
+#: src/config/options.inc:1233
 #, fuzzy
 msgid "Display title bar"
 msgstr "Εμφάνιση δομής USEMAP"
 
-#: src/config/options.inc:1207
+#: src/config/options.inc:1235
 msgid "Show title bar on the screen."
 msgstr ""
 
-#: src/config/options.inc:1209
+#: src/config/options.inc:1237
 msgid "Display goto dialog on startup"
 msgstr ""
 
-#: src/config/options.inc:1211
+#: src/config/options.inc:1239
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr ""
 
-#: src/config/options.inc:1213
+#: src/config/options.inc:1241
 msgid "Show a message box when file is saved sucessfully"
 msgstr ""
 
-#: src/config/options.inc:1215
+#: src/config/options.inc:1243
 msgid ""
 "When you pressed a [ Save ] button in some manager, this option\n"
 "will make sure that a box confirming success of the operation will\n"
 "pop up."
 msgstr ""
 
-#: src/config/options.inc:1220
+#: src/config/options.inc:1248
 #, fuzzy
 msgid "Sessions"
 msgstr "Επέκταση(άσεις)"
 
-#: src/config/options.inc:1222
+#: src/config/options.inc:1250
 msgid "Sessions settings."
 msgstr ""
 
-#: src/config/options.inc:1224
+#: src/config/options.inc:1252
 msgid "Auto save session"
 msgstr ""
 
-#: src/config/options.inc:1226
+#: src/config/options.inc:1254
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
 msgstr ""
 
-#: src/config/options.inc:1229
+#: src/config/options.inc:1257
 msgid "Auto restore session"
 msgstr ""
 
-#: src/config/options.inc:1231
+#: src/config/options.inc:1259
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
 msgstr ""
 
-#: src/config/options.inc:1234
+#: src/config/options.inc:1262
 msgid "Auto save and restore session folder name"
 msgstr ""
 
-#: src/config/options.inc:1236
+#: src/config/options.inc:1264
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "This only makes sense with bookmark support."
 msgstr ""
 
-#: src/config/options.inc:1239
+#: src/config/options.inc:1267
 #, fuzzy
 msgid "Homepage URI"
 msgstr "Κωδικοσελίδα"
 
-#: src/config/options.inc:1241
+#: src/config/options.inc:1269
 msgid ""
 "The URI to load either at startup time when no URI was given\n"
 "on the command line or when requested by the goto-url-home action.\n"
@@ -3517,28 +3613,31 @@ msgid ""
 "used as homepage URI instead."
 msgstr ""
 
-#: src/config/options.inc:1247
+#: src/config/options.inc:1275
 msgid "Set window title"
 msgstr ""
 
-#: src/config/options.inc:1249
+#: src/config/options.inc:1277
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
 "shown on the window titlebar."
 msgstr ""
 
-#: src/config/options.inc:1255
+#: src/config/options.inc:1283
 msgid "Use secure file saving"
 msgstr ""
 
-#: src/config/options.inc:1257
+#: src/config/options.inc:1285
 msgid ""
-"First write data to 'file.tmp', then rename to 'file' upon\n"
-"successfully finishing this. Note that this relates only to\n"
+"First write data to unique temporary file, then rename this file\n"
+"upon successfully finishing this. Note that this relates only to\n"
 "config files, not downloaded files. You may want to disable\n"
-"it, if you want some config file with some exotic permissions.\n"
-"Secure file saving is automagically disabled if file is symlink."
+"it if you are using some exotic permissions for concerned files.\n"
+"Secure file saving is automagically disabled if file is symlink.\n"
+"Warning: some systems (ie. OS/2, Win32) require that destination\n"
+"file doesn't exist when rename() is called, breaking atomicity,\n"
+"and reducing reliability of this feature."
 msgstr ""
 
 #: src/config/opttypes.c:54
@@ -3546,67 +3645,67 @@ msgstr ""
 msgid "Read error"
 msgstr "Σφάλμα αποθήκευσης"
 
-#: src/config/opttypes.c:367
+#: src/config/opttypes.c:360
 msgid "Boolean"
 msgstr ""
 
-#: src/config/opttypes.c:367
+#: src/config/opttypes.c:360
 msgid "[0|1]"
 msgstr ""
 
-#: src/config/opttypes.c:368
+#: src/config/opttypes.c:361
 msgid "Integer"
 msgstr ""
 
-#: src/config/opttypes.c:368 src/config/opttypes.c:369
+#: src/config/opttypes.c:361 src/config/opttypes.c:362
 msgid "<num>"
 msgstr ""
 
-#: src/config/opttypes.c:369
+#: src/config/opttypes.c:362
 msgid "Longint"
 msgstr ""
 
-#: src/config/opttypes.c:370
+#: src/config/opttypes.c:363
 msgid "String"
 msgstr ""
 
-#: src/config/opttypes.c:370
+#: src/config/opttypes.c:363
 msgid "<str>"
 msgstr ""
 
-#: src/config/opttypes.c:372
+#: src/config/opttypes.c:365
 #, fuzzy
 msgid "<codepage>"
 msgstr "Κωδικοσελίδα"
 
-#: src/config/opttypes.c:373
+#: src/config/opttypes.c:366
 #, fuzzy
 msgid "<language>"
 msgstr "Γλώσσα"
 
-#: src/config/opttypes.c:374
+#: src/config/opttypes.c:367
 msgid "Color"
 msgstr "Χρώμα"
 
-#: src/config/opttypes.c:374
+#: src/config/opttypes.c:367
 msgid "<color|#rrggbb>"
 msgstr ""
 
-#: src/config/opttypes.c:376
+#: src/config/opttypes.c:369
 msgid "Special"
 msgstr ""
 
-#: src/config/opttypes.c:378
+#: src/config/opttypes.c:371
 msgid "Alias"
 msgstr ""
 
 #. tree
-#: src/config/opttypes.c:381
+#: src/config/opttypes.c:374
 msgid "Folder"
 msgstr ""
 
 #. name:
-#: src/cookies/cookies.c:91 src/cookies/cookies.c:818
+#: src/cookies/cookies.c:91 src/cookies/cookies.c:816
 msgid "Cookies"
 msgstr ""
 
@@ -3671,11 +3770,11 @@ msgid ""
 "cookies_save is off."
 msgstr ""
 
-#: src/cookies/cookies.c:551
+#: src/cookies/cookies.c:549
 msgid "Accept cookie?"
 msgstr ""
 
-#: src/cookies/cookies.c:552
+#: src/cookies/cookies.c:550
 #, c-format
 msgid ""
 "Do you want to accept a cookie from %s?\n"
@@ -3687,53 +3786,54 @@ msgid ""
 "Secure: %s\n"
 msgstr ""
 
-#: src/cookies/cookies.c:561
+#: src/cookies/cookies.c:559
 #, fuzzy
 msgid "at quit time"
 msgstr "εναπομείνων χρόνος"
 
-#: src/cookies/cookies.c:562 src/cookies/dialogs.c:93
+#: src/cookies/cookies.c:560 src/cookies/dialogs.c:97
 #, fuzzy
 msgid "yes"
 msgstr "byte"
 
-#: src/cookies/cookies.c:562 src/cookies/dialogs.c:93
+#: src/cookies/cookies.c:560 src/cookies/dialogs.c:97
 #, fuzzy
 msgid "no"
 msgstr "Πληροφορίες"
 
-#: src/cookies/cookies.c:564
+#: src/cookies/cookies.c:562
 msgid "Accept"
 msgstr ""
 
-#: src/cookies/cookies.c:565
+#: src/cookies/cookies.c:563
 msgid "Reject"
 msgstr ""
 
-#: src/cookies/dialogs.c:85 src/dialogs/document.c:116
+#: src/cookies/dialogs.c:89 src/cookies/dialogs.c:256
+#: src/dialogs/document.c:115
 msgid "Server"
 msgstr "Εξυπηρετητής"
 
-#: src/cookies/dialogs.c:88
+#: src/cookies/dialogs.c:92 src/cookies/dialogs.c:259
 #, fuzzy
 msgid "Domain"
 msgstr "Πληροφορίες εγγράφου"
 
-#: src/cookies/dialogs.c:90
+#: src/cookies/dialogs.c:94 src/cookies/dialogs.c:260
 msgid "Expires"
 msgstr ""
 
-#: src/cookies/dialogs.c:92
+#: src/cookies/dialogs.c:96 src/cookies/dialogs.c:261
 #, fuzzy
 msgid "Secure"
 msgstr "τρέχον"
 
-#: src/cookies/dialogs.c:156 src/dialogs/download.c:420 src/dialogs/edit.c:100
+#: src/cookies/dialogs.c:356 src/dialogs/download.c:422 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:168 src/globhist/dialogs.c:189
 msgid "Clear"
 msgstr ""
 
-#: src/cookies/dialogs.c:162
+#: src/cookies/dialogs.c:362
 #, fuzzy
 msgid "Cookie manager"
 msgstr "Διαχειριστής σελιδοδεικτών"
@@ -3742,75 +3842,75 @@ msgstr "Διαχειριστής σελιδοδεικτών"
 msgid "You are nowhere!"
 msgstr "Δεν είστε πουθενά!"
 
-#: src/dialogs/document.c:106
+#: src/dialogs/document.c:105
 msgid "assumed"
 msgstr "υπονοοείτε"
 
-#: src/dialogs/document.c:109
+#: src/dialogs/document.c:108
 msgid "ignoring server setting"
 msgstr "αγνόηση ρύθμισης εξυπηρετητή"
 
-#: src/dialogs/document.c:134
+#: src/dialogs/document.c:133
 msgid "Date"
 msgstr "Ημερομηνία"
 
-#: src/dialogs/document.c:152 src/globhist/dialogs.c:64
+#: src/dialogs/document.c:151 src/globhist/dialogs.c:64
 msgid "Last visit time"
 msgstr ""
 
-#: src/dialogs/document.c:171
+#: src/dialogs/document.c:170
 msgid "Unknown"
 msgstr ""
 
-#: src/dialogs/document.c:183
+#: src/dialogs/document.c:182
 #, fuzzy
 msgid "Link"
 msgstr "Σύνδεσμος"
 
-#: src/dialogs/document.c:190
+#: src/dialogs/document.c:189
 msgid "Link title"
 msgstr ""
 
-#: src/dialogs/document.c:212
+#: src/dialogs/document.c:211
 msgid "Link last visit time"
 msgstr ""
 
-#: src/dialogs/document.c:218
+#: src/dialogs/document.c:217
 msgid "Link title (from history)"
 msgstr ""
 
-#: src/dialogs/document.c:249 src/dialogs/document.c:297
-#: src/dialogs/document.c:309
+#: src/dialogs/document.c:248 src/dialogs/document.c:296
+#: src/dialogs/document.c:308
 msgid "Header info"
 msgstr "Πληροφορίες κεφαλίδας"
 
-#: src/dialogs/document.c:310
+#: src/dialogs/document.c:309
 msgid "No header info."
 msgstr ""
 
-#: src/dialogs/download.c:247 src/dialogs/menu.c:472 src/sched/download.c:298
+#: src/dialogs/download.c:249 src/dialogs/menu.c:472 src/sched/download.c:308
 msgid "Download"
 msgstr "Μεταφόρτωση"
 
-#: src/dialogs/download.c:254
+#: src/dialogs/download.c:256
 msgid "Background"
 msgstr "Παρασκήνιο"
 
-#: src/dialogs/download.c:255
+#: src/dialogs/download.c:257
 msgid "Background with notify"
 msgstr ""
 
-#: src/dialogs/download.c:256 src/dialogs/download.c:415
+#: src/dialogs/download.c:258 src/dialogs/download.c:417
 msgid "Abort"
 msgstr "Διακοπή"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:257 src/dialogs/download.c:418
+#: src/dialogs/download.c:259 src/dialogs/download.c:420
 #, fuzzy
 msgid "Abort and delete file"
 msgstr "Σφάλμα εγγραφής σε αρχείο"
 
-#: src/dialogs/download.c:425
+#: src/dialogs/download.c:427
 #, fuzzy
 msgid "Download manager"
 msgstr "Μεταφόρτωση εικόνας"
@@ -3819,15 +3919,15 @@ msgstr "Μεταφόρτωση εικόνας"
 msgid "About"
 msgstr "Περί..."
 
-#: src/dialogs/info.c:122
+#: src/dialogs/info.c:134
 msgid "Keys"
 msgstr "Πλήκτρα"
 
-#: src/dialogs/info.c:133
+#: src/dialogs/info.c:146
 msgid "Copying"
 msgstr "Αντιγραφή..."
 
-#: src/dialogs/info.c:134
+#: src/dialogs/info.c:147
 #, fuzzy, c-format
 msgid ""
 "ELinks %s\n"
@@ -3849,7 +3949,7 @@ msgstr ""
 "όπως αυτή δημοσιεύεται από το Ίδρυμα Ελευθέρου Λογισμικού, είτε η έκδοση 2 "
 "της Άδειας ή (κατά την επιλογή σας) οποιαδήποτε μεταγενέστερη."
 
-#: src/dialogs/info.c:152
+#: src/dialogs/info.c:165
 #, c-format
 msgid ""
 "Resources: %d handles, %d timers.\n"
@@ -3858,104 +3958,104 @@ msgid ""
 "Formatted document cache: %d documents, %d locked."
 msgstr ""
 
-#: src/dialogs/info.c:169
+#: src/dialogs/info.c:182
 msgid "Resources"
 msgstr "Πηγές"
 
-#: src/dialogs/info.c:178
+#: src/dialogs/info.c:191
 #, fuzzy, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "byte μνήμης που κατανεμήθηκαν"
 
-#: src/dialogs/info.c:184
+#: src/dialogs/info.c:197
 msgid "Memory info"
 msgstr "Πληροφορίες μνήμης"
 
-#: src/dialogs/menu.c:62
+#: src/dialogs/menu.c:63
 msgid "Save URL"
 msgstr "Αποθήκευση URL"
 
-#: src/dialogs/menu.c:62 src/dialogs/menu.c:441
+#: src/dialogs/menu.c:63 src/dialogs/menu.c:445
 msgid "Enter URL"
 msgstr "Εισαγωγή URL"
 
-#: src/dialogs/menu.c:86
+#: src/dialogs/menu.c:87
 msgid "Exit ELinks"
 msgstr "Έξοδος από Links"
 
-#: src/dialogs/menu.c:88
+#: src/dialogs/menu.c:89
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
 msgstr ""
 "Θέλετε σίγουρα να τερματίσετε το links (και να διακόψετε όλες τις "
 "μεταφορτώσεις);"
 
-#: src/dialogs/menu.c:90
+#: src/dialogs/menu.c:91
 msgid "Do you really want to exit ELinks?"
 msgstr "Θέλετε σίγουρα να τερματίσετε το links;"
 
-#: src/dialogs/menu.c:120
+#: src/dialogs/menu.c:121
 msgid "No history"
 msgstr "Δεν υπάρχει ιστορικό"
 
-#: src/dialogs/menu.c:181 src/dialogs/menu.c:236
+#: src/dialogs/menu.c:182 src/dialogs/menu.c:237
 msgid "Go ~back"
 msgstr "Πήγαινε πίσω"
 
-#: src/dialogs/menu.c:182
+#: src/dialogs/menu.c:183
 msgid "Go for~ward"
 msgstr ""
 
-#: src/dialogs/menu.c:188 src/dialogs/menu.c:249
+#: src/dialogs/menu.c:189 src/dialogs/menu.c:249
 #, fuzzy
 msgid "Bookm~ark document"
 msgstr "έγγραφα"
 
-#: src/dialogs/menu.c:192 src/dialogs/menu.c:238
+#: src/dialogs/menu.c:193
 msgid "~Reload"
 msgstr "Επαναφόρτωση"
 
-#: src/dialogs/menu.c:195 src/dialogs/menu.c:340
+#: src/dialogs/menu.c:196 src/dialogs/menu.c:344
 msgid "Frame at ~full-screen"
 msgstr "Πλαίσιο σε πλήρη οθόνη"
 
-#: src/dialogs/menu.c:201 src/dialogs/menu.c:342
+#: src/dialogs/menu.c:202 src/dialogs/menu.c:346
 msgid "Nex~t tab"
 msgstr ""
 
-#: src/dialogs/menu.c:202 src/dialogs/menu.c:343
+#: src/dialogs/menu.c:203 src/dialogs/menu.c:347
 #, fuzzy
 msgid "Pre~v tab"
 msgstr "Δεν υπάρχει προηγούμενη αναζήτηση"
 
-#: src/dialogs/menu.c:205 src/dialogs/menu.c:344
+#: src/dialogs/menu.c:206 src/dialogs/menu.c:348
 #, fuzzy
 msgid "~Close tab"
 msgstr "Κλείσιμο"
 
-#: src/dialogs/menu.c:208
+#: src/dialogs/menu.c:209
 msgid "C~lose all tabs but the current"
 msgstr ""
 
-#: src/dialogs/menu.c:212
+#: src/dialogs/menu.c:213
 #, fuzzy
 msgid "B~ookmark all tabs"
 msgstr "Σελιδοδείκτες"
 
-#: src/dialogs/menu.c:233
+#: src/dialogs/menu.c:234
 #, fuzzy
 msgid "Open new ~tab"
 msgstr "Άνοιγμα σε νέο παράθυρο"
 
-#: src/dialogs/menu.c:234
+#: src/dialogs/menu.c:235
 #, fuzzy
 msgid "Open new tab in backgroun~d"
 msgstr "Παρασκήνιο"
 
-#: src/dialogs/menu.c:235
+#: src/dialogs/menu.c:236
 msgid "~Go to URL"
 msgstr "Πήγαινε στο URL"
 
-#: src/dialogs/menu.c:237
+#: src/dialogs/menu.c:238
 msgid "Go ~forward"
 msgstr ""
 
@@ -4058,135 +4158,149 @@ msgid "Toggle ~document colors"
 msgstr ""
 
 #: src/dialogs/menu.c:338
+msgid "~Wrap text on/off"
+msgstr ""
+
+#: src/dialogs/menu.c:340
 msgid "Document ~info"
 msgstr "Πληροφορίες εγγράφου"
 
-#: src/dialogs/menu.c:339
+#: src/dialogs/menu.c:341
 msgid "H~eader info"
 msgstr "Πληροφορίες κεφαλίδας"
 
-#: src/dialogs/menu.c:350
+#: src/dialogs/menu.c:342
+#, fuzzy
+msgid "Rel~oad document"
+msgstr "έγγραφα"
+
+#: src/dialogs/menu.c:343
+#, fuzzy
+msgid "~Rerender document"
+msgstr "Αποθήκευση μορφοποιημένου κειμένου"
+
+#: src/dialogs/menu.c:354
 msgid "~ELinks homepage"
 msgstr ""
 
-#: src/dialogs/menu.c:351
+#: src/dialogs/menu.c:355
 #, fuzzy
 msgid "~Documentation"
 msgstr "Πληροφορίες εγγράφου"
 
-#: src/dialogs/menu.c:352
+#: src/dialogs/menu.c:356
 msgid "~Keys"
 msgstr "Πλήκτρα"
 
-#: src/dialogs/menu.c:355
+#: src/dialogs/menu.c:359
 msgid "~Bugs information"
 msgstr ""
 
-#: src/dialogs/menu.c:356
+#: src/dialogs/menu.c:360
 msgid "ELinks C~vsWeb"
 msgstr ""
 
-#: src/dialogs/menu.c:359
+#: src/dialogs/menu.c:363
 msgid "~Copying"
 msgstr "Αντιγραφή..."
 
-#: src/dialogs/menu.c:360
+#: src/dialogs/menu.c:364
 msgid "~About"
 msgstr "Περί..."
 
-#: src/dialogs/menu.c:366
+#: src/dialogs/menu.c:370
 msgid "~Add"
 msgstr "Προσθήκη"
 
-#: src/dialogs/menu.c:367
+#: src/dialogs/menu.c:371
 msgid "~Modify"
 msgstr "Τροποποίηση"
 
-#: src/dialogs/menu.c:368
+#: src/dialogs/menu.c:372
 msgid "~Delete"
 msgstr "Διαγραφή"
 
-#: src/dialogs/menu.c:374 src/dialogs/menu.c:387
+#: src/dialogs/menu.c:378 src/dialogs/menu.c:391
 msgid "~Language"
 msgstr "Γλώσσα"
 
-#: src/dialogs/menu.c:376 src/dialogs/menu.c:388
+#: src/dialogs/menu.c:380 src/dialogs/menu.c:392
 msgid "C~haracter set"
 msgstr "Πίνακας χαρακτήρων"
 
-#: src/dialogs/menu.c:377 src/dialogs/menu.c:389
+#: src/dialogs/menu.c:381 src/dialogs/menu.c:393
 msgid "~Terminal options"
 msgstr "Επιλογές τερματικού"
 
-#: src/dialogs/menu.c:378
+#: src/dialogs/menu.c:382
 msgid "File ~extensions"
 msgstr "Καταλήξεις αρχείων"
 
-#: src/dialogs/menu.c:380
+#: src/dialogs/menu.c:384
 msgid "~Options manager"
 msgstr ""
 
-#: src/dialogs/menu.c:381
+#: src/dialogs/menu.c:385
 msgid "~Keybinding manager"
 msgstr ""
 
-#: src/dialogs/menu.c:382
+#: src/dialogs/menu.c:386
 msgid "~Save options"
 msgstr "Αποθήκευση επιλογών"
 
-#: src/dialogs/menu.c:395
+#: src/dialogs/menu.c:399
 #, fuzzy
 msgid "Global ~history"
 msgstr "Δεν υπάρχει ιστορικό"
 
-#: src/dialogs/menu.c:398
+#: src/dialogs/menu.c:402
 #, fuzzy
 msgid "~Bookmarks"
 msgstr "Σελιδοδείκτες"
 
-#: src/dialogs/menu.c:400
+#: src/dialogs/menu.c:404
 #, fuzzy
 msgid "~Cache"
 msgstr "Ακύρωση"
 
-#: src/dialogs/menu.c:401
+#: src/dialogs/menu.c:405
 msgid "~Downloads"
 msgstr "Μεταφορτώσεις"
 
-#: src/dialogs/menu.c:403
+#: src/dialogs/menu.c:407
 msgid "Coo~kies"
 msgstr ""
 
-#: src/dialogs/menu.c:406
+#: src/dialogs/menu.c:410
 #, fuzzy
 msgid "~Form history"
 msgstr "Η μνήμη εξαντλήθηκε"
 
-#: src/dialogs/menu.c:421
+#: src/dialogs/menu.c:425
 msgid "~File"
 msgstr "Αρχείο"
 
-#: src/dialogs/menu.c:422
+#: src/dialogs/menu.c:426
 msgid "~View"
 msgstr "Εμφάνιση"
 
-#: src/dialogs/menu.c:423
+#: src/dialogs/menu.c:427
 msgid "~Link"
 msgstr "Σύνδεσμος"
 
-#: src/dialogs/menu.c:424
+#: src/dialogs/menu.c:428
 msgid "~Tools"
 msgstr ""
 
-#: src/dialogs/menu.c:425
+#: src/dialogs/menu.c:429
 msgid "~Setup"
 msgstr "Ρυθμίσεις"
 
-#: src/dialogs/menu.c:426
+#: src/dialogs/menu.c:430
 msgid "~Help"
 msgstr "Βοήθεια"
 
-#: src/dialogs/menu.c:441
+#: src/dialogs/menu.c:445
 msgid "Go to URL"
 msgstr "Πήγαινε στο URL"
 
@@ -4194,71 +4308,71 @@ msgstr "Πήγαινε στο URL"
 msgid "Save to file"
 msgstr "Αποθήκευση σε αρχείο"
 
-#: src/dialogs/options.c:166
+#: src/dialogs/options.c:143
 msgid "Terminal options"
 msgstr "Επιλογές τερματικού"
 
-#: src/dialogs/options.c:171
+#: src/dialogs/options.c:148
 msgid "Frame handling:"
 msgstr ""
 
-#: src/dialogs/options.c:172
+#: src/dialogs/options.c:149
 msgid "No frames"
 msgstr "Δεν υπάρχουν πλαίσια (frames)"
 
-#: src/dialogs/options.c:173
+#: src/dialogs/options.c:150
 msgid "VT 100 frames"
 msgstr "Πλαίσια VT 100"
 
-#: src/dialogs/options.c:174
+#: src/dialogs/options.c:151
 msgid "Linux or OS/2 frames"
 msgstr "Πλαίσια Linux ή OS/2"
 
-#: src/dialogs/options.c:175
+#: src/dialogs/options.c:152
 #, fuzzy
 msgid "FreeBSD frames"
 msgstr "Δεν υπάρχουν πλαίσια (frames)"
 
-#: src/dialogs/options.c:176
+#: src/dialogs/options.c:153
 msgid "KOI8-R frames"
 msgstr "Πλαίσια KOI8-R"
 
-#: src/dialogs/options.c:178
+#: src/dialogs/options.c:155
 #, fuzzy
 msgid "Color mode:"
 msgstr "Χρώμα"
 
-#: src/dialogs/options.c:179
+#: src/dialogs/options.c:156
 msgid "No colors (mono)"
 msgstr ""
 
-#: src/dialogs/options.c:180
+#: src/dialogs/options.c:157
 #, fuzzy
 msgid "16 colors"
 msgstr "Περιοχή κειμένου"
 
-#: src/dialogs/options.c:182
+#: src/dialogs/options.c:159
 #, fuzzy
 msgid "256 colors"
 msgstr "Περιοχή κειμένου"
 
-#: src/dialogs/options.c:185
+#: src/dialogs/options.c:162
 msgid "Use ^[[11m"
 msgstr "Χρήση ^[[11m"
 
-#: src/dialogs/options.c:187
+#: src/dialogs/options.c:164
 msgid "Block the cursor"
 msgstr "Δρομέας μορφής μπλοκ"
 
-#: src/dialogs/options.c:188
+#: src/dialogs/options.c:165
 msgid "Transparency"
 msgstr ""
 
-#: src/dialogs/options.c:190
+#: src/dialogs/options.c:167
 msgid "UTF-8 I/O"
 msgstr ""
 
-#: src/dialogs/options.c:259
+#: src/dialogs/options.c:236
 #, fuzzy
 msgid "Resize terminal"
 msgstr "Αλλαγή μεγέθους τερματικού"
@@ -4266,77 +4380,115 @@ msgstr "Αλλαγή μεγέθους τερματικού"
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/dialogs/status.c:71
+#: src/dialogs/status.c:72
 msgid "Received"
 msgstr "Ελήφθησαν"
 
-#: src/dialogs/status.c:76
+#: src/dialogs/status.c:77
 msgid "of"
 msgstr "από"
 
-#: src/dialogs/status.c:85
+#: src/dialogs/status.c:86
 msgid "Average speed"
 msgstr "Μέση ταχύτητα"
 
-#: src/dialogs/status.c:86
+#: src/dialogs/status.c:87
 #, fuzzy
 msgid "average speed"
 msgstr "Μέση ταχύτητα"
 
-#: src/dialogs/status.c:87
+#: src/dialogs/status.c:88
 msgid "avg"
 msgstr "μ.ό."
 
-#: src/dialogs/status.c:90
+#: src/dialogs/status.c:91
 msgid "Speed"
 msgstr "Ταχύτητα"
 
-#: src/dialogs/status.c:90
+#: src/dialogs/status.c:91
 #, fuzzy
 msgid "speed"
 msgstr "Ταχύτητα"
 
-#: src/dialogs/status.c:101
+#: src/dialogs/status.c:102
 msgid "current speed"
 msgstr "τρέχουσα ταχύτητα"
 
-#: src/dialogs/status.c:101
+#: src/dialogs/status.c:102
 msgid "cur"
 msgstr "τρέχον"
 
-#: src/dialogs/status.c:112
+#: src/dialogs/status.c:113
 msgid "Elapsed time"
 msgstr "Χρόνος που πέρασε"
 
-#: src/dialogs/status.c:113
+#: src/dialogs/status.c:114
 #, fuzzy
 msgid "elapsed time"
 msgstr "Χρόνος που πέρασε"
 
-#: src/dialogs/status.c:114
+#: src/dialogs/status.c:115
 msgid "ETT"
 msgstr ""
 
-#: src/dialogs/status.c:122
+#: src/dialogs/status.c:123
 msgid "estimated time"
 msgstr "εναπομείνων χρόνος"
 
-#: src/dialogs/status.c:123
+#: src/dialogs/status.c:124
 msgid "ETA"
 msgstr ""
 
-#: src/dialogs/status.c:210 src/viewer/text/search.c:942
-msgid "Typeahead"
-msgstr ""
-
-#: src/dialogs/status.c:325
+#: src/dialogs/status.c:312
 msgid "Untitled"
 msgstr ""
 
-#: src/dialogs/status.c:327
+#: src/dialogs/status.c:314
 #, fuzzy
 msgid "No document"
 msgstr "έγγραφα"
+
+#. name:
+#: src/document/css/css.c:27 src/document/css/css.c:161
+msgid "Cascading Style Sheets"
+msgstr ""
+
+#: src/document/css/css.c:29
+msgid "Options concerning how to use CSS for styling documents."
+msgstr ""
+
+#: src/document/css/css.c:31
+#, fuzzy
+msgid "Enable CSS"
+msgstr "όνομα"
+
+#: src/document/css/css.c:33
+msgid "Enable adding of CSS style info to documents."
+msgstr ""
+
+#: src/document/css/css.c:35
+msgid "Import external style sheets"
+msgstr ""
+
+#: src/document/css/css.c:37
+msgid ""
+"When enabled any external style sheets that are imported from\n"
+"either CSS itself using the @import keyword or from the HTML using\n"
+"<link> tags in the document header will also be downloaded."
+msgstr ""
+
+#: src/document/css/css.c:41
+msgid "Default style sheet"
+msgstr ""
+
+#: src/document/css/css.c:43
+msgid ""
+"The path to the file containing the default user defined\n"
+"Cascading Style Sheet. It can be used to control the basic\n"
+"layout of HTML documents. It is assumed to be relative to\n"
+"ELinks' home directory.\n"
+"Leave as \"\" to use built-in document styling."
+msgstr ""
 
 #: src/formhist/dialogs.c:66
 msgid "Forms are never saved for this URL."
@@ -4357,7 +4509,7 @@ msgid ""
 "\" button."
 msgstr ""
 
-#: src/formhist/dialogs.c:164 src/protocol/auth/dialogs.c:74
+#: src/formhist/dialogs.c:164 src/protocol/auth/dialogs.c:57
 msgid "Login"
 msgstr "Όνομα χρήστη"
 
@@ -4373,23 +4525,23 @@ msgstr "Η μνήμη εξαντλήθηκε"
 
 #. TODO: Remember multiple login for the same form.
 #. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
-#: src/formhist/formhist.c:35
+#: src/formhist/formhist.c:36
 msgid "Show forms history dialog"
 msgstr ""
 
-#: src/formhist/formhist.c:37
+#: src/formhist/formhist.c:38
 msgid ""
 "Ask if a login form should be saved to file or not.\n"
 "This option only disables the dialog, already saved login\n"
 "forms are unaffected."
 msgstr ""
 
-#: src/formhist/formhist.c:486
+#: src/formhist/formhist.c:491
 #, fuzzy
 msgid "Forms memory"
 msgstr "Η μνήμη εξαντλήθηκε"
 
-#: src/formhist/formhist.c:487
+#: src/formhist/formhist.c:492
 msgid ""
 "Should I remember this login?\n"
 "\n"
@@ -4399,12 +4551,12 @@ msgid ""
 "If you are using a valuable password, answer NO."
 msgstr ""
 
-#: src/formhist/formhist.c:494
+#: src/formhist/formhist.c:499
 msgid "Never for this site"
 msgstr ""
 
 #. name:
-#: src/formhist/formhist.c:519
+#: src/formhist/formhist.c:524
 #, fuzzy
 msgid "Forms History"
 msgstr "Η μνήμη εξαντλήθηκε"
@@ -4423,50 +4575,50 @@ msgstr "Σελιδοδείκτες"
 msgid "Global history manager"
 msgstr "Δεν υπάρχει ιστορικό"
 
-#: src/globhist/globhist.c:71
+#: src/globhist/globhist.c:66
 msgid "Global history"
 msgstr ""
 
-#: src/globhist/globhist.c:73
+#: src/globhist/globhist.c:68
 msgid "Global history options."
 msgstr ""
 
-#: src/globhist/globhist.c:77
+#: src/globhist/globhist.c:72
 msgid "Enable global history (\"history of all pages visited\")."
 msgstr ""
 
-#: src/globhist/globhist.c:79
+#: src/globhist/globhist.c:74
 msgid "Maximum number of entries"
 msgstr ""
 
-#: src/globhist/globhist.c:81
+#: src/globhist/globhist.c:76
 msgid "Maximum number of entries in the global history."
 msgstr ""
 
-#: src/globhist/globhist.c:83
+#: src/globhist/globhist.c:78
 #, fuzzy
 msgid "Display style"
 msgstr "Εμφάνιση δομής USEMAP"
 
-#: src/globhist/globhist.c:85
+#: src/globhist/globhist.c:80
 msgid ""
 "What to display in global history dialog:\n"
 "0 is URLs\n"
 "1 is page titles"
 msgstr ""
 
-#: src/globhist/globhist.c:89
+#: src/globhist/globhist.c:84
 msgid "Auto-save interval"
 msgstr ""
 
-#: src/globhist/globhist.c:91
+#: src/globhist/globhist.c:86
 msgid ""
 "Interval at which to write global history to disk if it\n"
 "has changed (seconds; 0 to disable)"
 msgstr ""
 
 #. name:
-#: src/globhist/globhist.c:449
+#: src/globhist/globhist.c:444
 #, fuzzy
 msgid "Global History"
 msgstr "Δεν υπάρχει ιστορικό"
@@ -4606,7 +4758,7 @@ msgstr ""
 #: src/lowlevel/home.c:121
 #, c-format
 msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+"Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
 
 #: src/lowlevel/home.c:126
@@ -4621,27 +4773,27 @@ msgid ""
 "directory."
 msgstr ""
 
-#: src/lowlevel/interlink.c:334
+#: src/lowlevel/interlink.c:335
 #, c-format
 msgid "accept() failed: %d (%s)"
 msgstr ""
 
-#: src/lowlevel/interlink.c:373 src/lowlevel/interlink.c:432
+#: src/lowlevel/interlink.c:375 src/lowlevel/interlink.c:436
 #, c-format
 msgid "socket() failed: %d (%s)"
 msgstr ""
 
-#: src/lowlevel/interlink.c:382
+#: src/lowlevel/interlink.c:384
 #, c-format
 msgid "bind() failed: %d (%s)"
 msgstr ""
 
-#: src/lowlevel/interlink.c:402
+#: src/lowlevel/interlink.c:404
 #, c-format
 msgid "listen() failed: %d (%s)"
 msgstr ""
 
-#: src/lowlevel/interlink.c:444
+#: src/lowlevel/interlink.c:448
 #, c-format
 msgid "connect() failed: %d (%s)"
 msgstr ""
@@ -4657,7 +4809,7 @@ msgstr ""
 msgid "%d select() failures."
 msgstr ""
 
-#: src/main.c:104
+#: src/main.c:107
 msgid "Cannot create a pipe for internal communication."
 msgstr ""
 
@@ -4936,24 +5088,38 @@ msgstr "Πλήρης οθόνη"
 msgid "~BeOS terminal"
 msgstr "Τερματικό BeOS"
 
-#: src/protocol/auth/dialogs.c:57
+#: src/protocol/auth/dialogs.c:66
 #, fuzzy, c-format
 msgid "Authentication required for %s at %s"
 msgstr "Εισάγετε όνομα χρήστη για "
 
-#: src/protocol/auth/dialogs.c:64
+#: src/protocol/auth/dialogs.c:79
 msgid "HTTP Authentication"
 msgstr ""
 
-#: src/protocol/protocol.c:65
-msgid "JavaScript is currently not supported."
+#: src/protocol/http/codes.c:106
+#, c-format
+msgid "HTTP error %03d"
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:41
+#: src/protocol/http/codes.c:129
+msgid ""
+"  An error occurred on the server while fetching the document you\n"
+"  requested. Moreover, the server did not send back any explanation of what\n"
+"  happenned whatsoever - it would be nice if you notified the web server\n"
+"  administrator about this, as it is not a nice behaviour from the web\n"
+"  server at all and it frequently indicates some much deeper problem with\n"
+"  the web server software.\n"
+"  <br><br>\n"
+"  I have no idea about what is wrong, sorry. Please contact the web\n"
+"  server administrator if you believe that this error should not occur.\n"
+msgstr ""
+
+#: src/protocol/rewrite/rewrite.c:47
 msgid "URI rewriting"
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:43
+#: src/protocol/rewrite/rewrite.c:49
 msgid ""
 "Rules for rewriting URIs entered in the goto dialog.\n"
 "It makes it possible to define a set of prefixes that will\n"
@@ -4963,31 +5129,31 @@ msgid ""
 "arguments to them like search engine keywords."
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:50
+#: src/protocol/rewrite/rewrite.c:56
 msgid "Enable dumb prefixes"
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:52
+#: src/protocol/rewrite/rewrite.c:58
 msgid "Enable dumb prefixes."
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:54
+#: src/protocol/rewrite/rewrite.c:60
 msgid "Enable smart prefixes"
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:56
+#: src/protocol/rewrite/rewrite.c:62
 msgid "Enable smart prefixes."
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:58
+#: src/protocol/rewrite/rewrite.c:64
 msgid "Dumb Prefixes"
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:60
+#: src/protocol/rewrite/rewrite.c:66
 msgid "Dumb prefixes."
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:64
+#: src/protocol/rewrite/rewrite.c:70
 #, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
@@ -4995,15 +5161,15 @@ msgid ""
 "%% in the string means '%'"
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:68
+#: src/protocol/rewrite/rewrite.c:74
 msgid "Smart Prefixes"
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:70
+#: src/protocol/rewrite/rewrite.c:76
 msgid "Smart prefixes."
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:76
+#: src/protocol/rewrite/rewrite.c:82
 msgid ""
 "Replacement URI for this smartprefix.\n"
 "%c in the string means the current URL\n"
@@ -5013,28 +5179,20 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/protocol/rewrite/rewrite.c:336
+#: src/protocol/rewrite/rewrite.c:347
 msgid "URI rewrite"
 msgstr ""
 
-#: src/protocol/user.c:155 src/sched/error.c:51
-msgid "Bad URL syntax"
-msgstr "Μη έγκυρο συντακτικό URL"
-
-#: src/protocol/user.c:156
-msgid "Bad user protocol URL"
-msgstr ""
-
-#: src/protocol/user.c:169
+#: src/protocol/user.c:166
 msgid "No program"
 msgstr "Δεν υπάρχει πρόγραμμα"
 
-#: src/protocol/user.c:171
+#: src/protocol/user.c:168
 #, fuzzy, c-format
 msgid "No program specified for protocol %s."
 msgstr "Δεν καθορίστηκε πρόγραμμα για"
 
-#: src/sched/download.c:185 src/sched/download.c:273 src/sched/download.c:568
+#: src/sched/download.c:185 src/sched/download.c:273 src/sched/download.c:566
 msgid "Download error"
 msgstr "Σφάλμα μεταφόρτωσης"
 
@@ -5051,19 +5209,19 @@ msgid ""
 "%s"
 msgstr "Σφάλμα μεταφόρτωσης"
 
-#: src/sched/download.c:299
+#: src/sched/download.c:309
 #, fuzzy, c-format
 msgid ""
 "Download complete:\n"
 "%s"
 msgstr "Μεταφόρτωση εικόνας"
 
-#: src/sched/download.c:477
+#: src/sched/download.c:475
 #, fuzzy
 msgid "File exists"
 msgstr "Καταλήξεις αρχείων"
 
-#: src/sched/download.c:478
+#: src/sched/download.c:476
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -5073,60 +5231,60 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/sched/download.c:485
+#: src/sched/download.c:483
 msgid "Save under the alternative name"
 msgstr ""
 
-#: src/sched/download.c:486
+#: src/sched/download.c:484
 msgid "Overwrite the original file"
 msgstr ""
 
-#: src/sched/download.c:487
+#: src/sched/download.c:485
 msgid "Resume download of the original file"
 msgstr ""
 
-#: src/sched/download.c:569
+#: src/sched/download.c:567
 #, fuzzy, c-format
 msgid ""
 "Could not create file '%s':\n"
 "%s"
 msgstr "Αδύνατη η δημιουργία αρχείου"
 
-#: src/sched/download.c:990 src/sched/download.c:1001
+#: src/sched/download.c:985 src/sched/download.c:996
 msgid "Unknown type"
 msgstr "Άγνωστο είδος"
 
-#: src/sched/download.c:991
+#: src/sched/download.c:986
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 
-#: src/sched/download.c:997 src/sched/download.c:1006
-#: src/sched/download.c:1026 src/sched/download.c:1038
+#: src/sched/download.c:992 src/sched/download.c:1001
+#: src/sched/download.c:1021 src/sched/download.c:1033
 msgid "Display"
 msgstr "Εμφάνιση"
 
-#: src/sched/download.c:1002
+#: src/sched/download.c:997
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 
-#: src/sched/download.c:1017 src/sched/download.c:1030
+#: src/sched/download.c:1012 src/sched/download.c:1025
 msgid "What to do?"
 msgstr "Τί θέλετε να κάνετε;"
 
-#: src/sched/download.c:1018
+#: src/sched/download.c:1013
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
 
-#: src/sched/download.c:1024 src/sched/download.c:1037
+#: src/sched/download.c:1019 src/sched/download.c:1032
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: src/sched/download.c:1031
+#: src/sched/download.c:1026
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5199,6 +5357,10 @@ msgstr "Σφάλμα ανάγνωσης από υποδοχέα"
 msgid "Data modified"
 msgstr "Δεδομένα τροποποιήθηκαν"
 
+#: src/sched/error.c:51
+msgid "Bad URL syntax"
+msgstr "Μη έγκυρο συντακτικό URL"
+
 #: src/sched/error.c:53
 msgid "Request must be restarted"
 msgstr "Η αίτηση πρέπει να επανακινηθεί"
@@ -5207,72 +5369,87 @@ msgstr "Η αίτηση πρέπει να επανακινηθεί"
 msgid "Can't get socket state"
 msgstr "Αδύνατη η λήψη κατάστασης υποδοχέα"
 
+#: src/sched/error.c:55
+msgid "Only local connections are permitted"
+msgstr ""
+
 #: src/sched/error.c:56
+msgid ""
+"This URL contains a protocol not yet known by ELinks.\n"
+"You can configure an external handler for it through\n"
+"the options system."
+msgstr ""
+
+#: src/sched/error.c:60
 msgid "Bad HTTP response"
 msgstr "Μη έγκυρη απάντηση HTTP"
 
-#: src/sched/error.c:57
+#: src/sched/error.c:61
 msgid "HTTP 100 (???)"
 msgstr ""
 
-#: src/sched/error.c:58
+#: src/sched/error.c:62
 msgid "No content"
 msgstr "Δεν υπάρχει περιεχόμενο"
 
-#: src/sched/error.c:60
+#: src/sched/error.c:64
 msgid "Unknown file type"
 msgstr "Άγνωστο είδος αρχείου"
 
-#: src/sched/error.c:61
+#: src/sched/error.c:65
 msgid "Error opening file"
 msgstr "Error opening file"
 
-#: src/sched/error.c:62
+#: src/sched/error.c:66
 msgid "CGI script not in CGI path"
 msgstr ""
 
-#: src/sched/error.c:64
+#: src/sched/error.c:68
 msgid "Bad FTP response"
 msgstr "Μη έγκυρη απάντηση FTP"
 
-#: src/sched/error.c:65
+#: src/sched/error.c:69
 msgid "FTP service unavailable"
 msgstr "Η υπηρεσία FTP δεν είναι διαθέσιμη"
 
-#: src/sched/error.c:66
+#: src/sched/error.c:70
 msgid "Bad FTP login"
 msgstr "Μη έγκυρο όνομα χρήστη FTP"
 
-#: src/sched/error.c:67
+#: src/sched/error.c:71
 msgid "FTP PORT command failed"
 msgstr "FTP PORT command failed"
 
-#: src/sched/error.c:68
+#: src/sched/error.c:72
 msgid "File not found"
 msgstr "Το αρχείο δε βρέθηκε"
 
-#: src/sched/error.c:69
+#: src/sched/error.c:73
 msgid "FTP file error"
 msgstr "Σφάλμα αρχείου FTP"
 
-#: src/sched/error.c:71
+#: src/sched/error.c:76
 msgid "SSL error"
 msgstr "Σφάλμα SSL"
 
-#: src/sched/error.c:73
+#: src/sched/error.c:78
 #, fuzzy
 msgid "This version of ELinks does not contain SSL/TLS support"
 msgstr "Αυτή η έκδοση του Links δε διαθέτει υποστήριξη SSL/TSL"
 
-#: src/sched/error.c:102
+#: src/sched/error.c:81
+msgid "JavaScript is currently not supported."
+msgstr ""
+
+#: src/sched/error.c:110
 msgid "Unknown error"
 msgstr "Άγνωστο σφάλμα"
 
-#: src/sched/session.c:588
+#: src/sched/session.c:571
 msgid "Welcome"
 msgstr "Καλώς ήλθατε"
 
-#: src/sched/session.c:589
+#: src/sched/session.c:572
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -5282,11 +5459,11 @@ msgstr ""
 "Πατήστε ESC για μενού. επιλέξτε Βοήθεια->Εγχειρίδιο στο μενού για το "
 "εγχειρίδιο χρήστη."
 
-#: src/sched/session.c:598 src/sched/session.c:618 src/sched/task.c:166
+#: src/sched/session.c:581 src/sched/session.c:601 src/sched/task.c:173
 msgid "Warning"
 msgstr "Προειδοποίηση"
 
-#: src/sched/session.c:599
+#: src/sched/session.c:582
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5297,7 +5474,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:619
+#: src/sched/session.c:602
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5310,45 +5487,39 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:929
-msgid ""
-"This URL contains a protocol not yet known by ELinks.\n"
-"You can configure an external handler for it through options system."
-msgstr ""
-
-#: src/sched/task.c:155
+#: src/sched/task.c:162
 #, fuzzy, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Do you want to follow redirect and post form data to url"
 
-#: src/sched/task.c:158
+#: src/sched/task.c:165
 #, fuzzy, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Do you want to post form data to url"
 
-#: src/sched/task.c:160
+#: src/sched/task.c:167
 #, fuzzy, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Do you want to repost form data to url"
 
-#: src/scripting/lua/core.c:472
+#: src/scripting/lua/core.c:471
 msgid "User dialog"
 msgstr ""
 
-#: src/scripting/lua/core.c:588
+#: src/scripting/lua/core.c:596
 msgid "Lua Error"
 msgstr ""
 
-#: src/scripting/lua/core.c:719
+#: src/scripting/lua/core.c:722
 msgid "Lua Console"
 msgstr ""
 
-#: src/scripting/lua/core.c:719
+#: src/scripting/lua/core.c:722
 msgid "Enter expression"
 msgstr ""
 
 #. name:
-#: src/scripting/scripting.c:34
+#: src/scripting/scripting.c:38
 msgid "Scripting"
 msgstr ""
 
@@ -5430,7 +5601,7 @@ msgstr ""
 msgid "Could not get terminal size"
 msgstr "Αδύνατη η λήψη αρχείου"
 
-#: src/terminal/kbd.c:999
+#: src/terminal/kbd.c:1003
 msgid "Too many bytes read from the itrm!"
 msgstr ""
 
@@ -5453,7 +5624,7 @@ msgstr "Σφάλμα εγγραφής στον υποδοχέα"
 msgid "Can't write to stdout."
 msgstr ""
 
-#: src/viewer/dump/dump.c:204
+#: src/viewer/dump/dump.c:288
 #, c-format
 msgid "URL expected after %s."
 msgstr ""
@@ -5467,189 +5638,197 @@ msgstr "Σφάλμα κατά την αποστολή φόρμας"
 msgid "Could not get file %s: %s"
 msgstr "Αδύνατη η λήψη αρχείου"
 
-#: src/viewer/text/link.c:823
+#: src/viewer/text/link.c:833
 msgid "Display ~usemap"
 msgstr "Εμφάνιση δομής USEMAP"
 
-#: src/viewer/text/link.c:828
+#: src/viewer/text/link.c:838
 msgid "~Follow link"
 msgstr "Ακολούθηση συνδέσμου"
 
-#: src/viewer/text/link.c:830
+#: src/viewer/text/link.c:840
 msgid "Follow link and r~eload"
 msgstr ""
 
-#: src/viewer/text/link.c:834
+#: src/viewer/text/link.c:844
 msgid "Open in new ~window"
 msgstr "Άνοιγμα σε νέο παράθυρο"
 
-#: src/viewer/text/link.c:840
+#: src/viewer/text/link.c:850
 #, fuzzy
 msgid "Open in new ~tab"
 msgstr "Άνοιγμα σε νέο παράθυρο"
 
-#: src/viewer/text/link.c:842
+#: src/viewer/text/link.c:852
 #, fuzzy
 msgid "Open in new tab in ~background"
 msgstr "Παρασκήνιο"
 
-#: src/viewer/text/link.c:847
+#: src/viewer/text/link.c:857
 msgid "~Download link"
 msgstr "Μεταφόρτωση συνδέσμου"
 
-#: src/viewer/text/link.c:850
+#: src/viewer/text/link.c:860
 msgid "~Add link to bookmarks"
 msgstr ""
 
-#: src/viewer/text/link.c:860 src/viewer/text/link.c:881
+#: src/viewer/text/link.c:870 src/viewer/text/link.c:891
 msgid "~Reset form"
 msgstr "Αρχικοποίηση φόρμας"
 
-#: src/viewer/text/link.c:865
+#: src/viewer/text/link.c:875
 msgid "Open in ~external editor"
 msgstr ""
 
-#: src/viewer/text/link.c:869
+#: src/viewer/text/link.c:879
 msgid "~Submit form"
 msgstr "Αποστολή φόρμας"
 
-#: src/viewer/text/link.c:870
+#: src/viewer/text/link.c:880
 msgid "Submit form and rel~oad"
 msgstr ""
 
-#: src/viewer/text/link.c:873
+#: src/viewer/text/link.c:883
 msgid "Submit form and open in new ~window"
 msgstr "Αποστολή φόρμας και άνοιγμα σε νέο παράθυρο"
 
-#: src/viewer/text/link.c:879
+#: src/viewer/text/link.c:889
 msgid "Submit form and ~download"
 msgstr "Αποστολή φόρμας και μεταφόρτωση"
 
-#: src/viewer/text/link.c:886
+#: src/viewer/text/link.c:896
 msgid "V~iew image"
 msgstr "Εμφάνιση εικόνας"
 
-#: src/viewer/text/link.c:888
+#: src/viewer/text/link.c:898
 msgid "Download ima~ge"
 msgstr "Μεταφόρτωση εικόνας"
 
-#: src/viewer/text/link.c:893
+#: src/viewer/text/link.c:903
 msgid "No link selected"
 msgstr "Δεν επιλέχθηκε σύνδεσμος"
 
-#: src/viewer/text/link.c:945
+#: src/viewer/text/link.c:950
 msgid "Image"
 msgstr "Εικόνα"
 
-#: src/viewer/text/link.c:951
+#: src/viewer/text/link.c:956
 msgid "Usemap"
 msgstr "USEMAP"
 
-#: src/viewer/text/link.c:971
+#: src/viewer/text/link.c:976
 #, fuzzy
 msgid "Reset form"
 msgstr "Αρχικοποίηση φόρμας"
 
-#: src/viewer/text/link.c:978
+#: src/viewer/text/link.c:983
 msgid "Submit form to"
 msgstr "Αποστολή φόρμας στο"
 
-#: src/viewer/text/link.c:980
+#: src/viewer/text/link.c:985
 msgid "Post form to"
 msgstr "Αποστολή φόρμας στο"
 
-#: src/viewer/text/link.c:996
+#: src/viewer/text/link.c:1001
 msgid "Radio button"
 msgstr "Κουμπί τύπου ράδιου"
 
-#: src/viewer/text/link.c:1002
+#: src/viewer/text/link.c:1007
 msgid "Select field"
 msgstr "Πεδίο επιλογής"
 
-#: src/viewer/text/link.c:1008
+#: src/viewer/text/link.c:1013
 msgid "Text area"
 msgstr "Περιοχή κειμένου"
 
-#: src/viewer/text/link.c:1011
+#: src/viewer/text/link.c:1016
 msgid "File upload"
 msgstr "Ανέβασμα αρχείου"
 
-#: src/viewer/text/link.c:1014
+#: src/viewer/text/link.c:1019
 msgid "Password field"
 msgstr "Πεδίου κωδικού"
 
-#: src/viewer/text/link.c:1023
+#: src/viewer/text/link.c:1028
 msgid "name"
 msgstr "όνομα"
 
-#: src/viewer/text/link.c:1033
+#: src/viewer/text/link.c:1038
 msgid "value"
 msgstr "τιμή"
 
-#: src/viewer/text/link.c:1042
+#: src/viewer/text/link.c:1047
 msgid "hit ENTER to"
 msgstr "πατήστε ENTER για να"
 
-#: src/viewer/text/link.c:1045
+#: src/viewer/text/link.c:1050
 msgid "submit to"
 msgstr "στείλετε σε"
 
-#: src/viewer/text/link.c:1047
+#: src/viewer/text/link.c:1052
 msgid "post to"
 msgstr "αποστείλετε σε"
 
-#: src/viewer/text/search.c:859
+#: src/viewer/text/search.c:857
 msgid "No previous search"
 msgstr "Δεν υπάρχει προηγούμενη αναζήτηση"
 
-#: src/viewer/text/search.c:886
+#: src/viewer/text/search.c:884
 msgid "Search hit top, continuing at bottom."
 msgstr ""
 
-#: src/viewer/text/search.c:887
+#: src/viewer/text/search.c:885
 msgid "Search hit bottom, continuing at top."
 msgstr ""
 
-#: src/viewer/text/search.c:908
+#: src/viewer/text/search.c:909
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Το αλφαριθμητικό αναζήτησης δε βρέθηκε"
 
-#: src/viewer/text/search.c:943
+#: src/viewer/text/search.c:938
+msgid "Typeahead"
+msgstr ""
+
+#: src/viewer/text/search.c:939
 #, c-format
 msgid "Could not find a link with the text '%s'."
 msgstr ""
 
-#: src/viewer/text/search.c:1218
+#: src/viewer/text/search.c:1368
 #, fuzzy
 msgid "Normal search"
 msgstr "Δεν υπάρχει προηγούμενη αναζήτηση"
 
-#: src/viewer/text/search.c:1219
+#: src/viewer/text/search.c:1369
 msgid "Regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1220
+#: src/viewer/text/search.c:1370
 msgid "Extended regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1221
+#: src/viewer/text/search.c:1371
 msgid "Case sensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1222
+#: src/viewer/text/search.c:1372
 msgid "Case insensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1238
+#: src/viewer/text/search.c:1387
 msgid "Search backward"
 msgstr "Αναζήτηση πίσω"
 
-#: src/viewer/text/search.c:1238 src/viewer/text/search.c:1249
+#: src/viewer/text/search.c:1391
 msgid "Search for text"
 msgstr "Αναζήτηση κειμένου"
 
 #: src/viewer/text/textarea.c:268
+msgid "You cannot launch an external editor in the anonymous mode."
+msgstr ""
+
+#: src/viewer/text/textarea.c:277
 msgid "You can do this only on the master terminal"
 msgstr ""
 
@@ -5661,11 +5840,11 @@ msgstr "Πήγαινε στο σύνδεσμο"
 msgid "Enter link number"
 msgstr "Εισάγετε αριθμό συνδέσμου"
 
-#: src/viewer/text/view.c:1219
+#: src/viewer/text/view.c:1210
 msgid "Save error"
 msgstr "Σφάλμα αποθήκευσης"
 
-#: src/viewer/text/view.c:1220
+#: src/viewer/text/view.c:1211
 msgid "Error writing to file"
 msgstr "Σφάλμα εγγραφής σε αρχείο"
 
@@ -5853,9 +6032,6 @@ msgstr "Σφάλμα εγγραφής σε αρχείο"
 
 #~ msgid "files"
 #~ msgstr "αρχεία"
-
-#~ msgid "locked"
-#~ msgstr "κλειδωμένο"
 
 #~ msgid "Formatted document cache"
 #~ msgstr "Προσωρινή μνήμη μορφοποιημένων εγγράφων"

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.273 2003/09/12 20:59:52 miciah Exp $ */
+/* $Id: options.c,v 1.274 2003/09/19 22:30:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1819,7 +1819,9 @@ register_options(void)
 	/* ========================================================== */
 	/* ============= BORING PART (colors) START ================= */
 	/* ========================================================== */
-
+	/* XXX: All bfu colors needs to have both 'text' and 'background'
+	 *	options even if it is not used. get_bfu_color() depends
+	 *	on it. */
 
 	add_opt_tree("ui.colors", N_("Color terminals"),
 		"color", 0,
@@ -2088,6 +2090,9 @@ register_options(void)
 		"background", 0, "black",
 		N_("Default background color."));
 
+	add_opt_color("ui.colors.color.dialog.shadow", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
 
 	add_opt_tree("ui.colors.color", N_("Title bar"),
 		"title", 0,
@@ -2467,6 +2472,10 @@ register_options(void)
 	add_opt_color("ui.colors.mono.dialog.shadow", N_("Background color"),
 		"background", 0, "black",
 		N_("Default background color."));
+
+	add_opt_color("ui.colors.mono.dialog.shadow", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
 
 
 	add_opt_tree("ui.colors.mono", N_("Title bar"),

@@ -1,4 +1,4 @@
-/* $Id: object.h,v 1.8 2004/04/03 17:40:54 jonas Exp $ */
+/* $Id: object.h,v 1.9 2004/04/03 17:42:35 jonas Exp $ */
 
 #ifndef EL__UTIL_OBJECT_H
 #define EL__UTIL_OBJECT_H
@@ -18,11 +18,11 @@ struct object {
 #include "util/error.h"
 #ifdef CONFIG_DEBUG
 #define object_lock_debug(obj, info) \
-	DBG("object %s[%p] lock %s now %d", (obj)->object.name, obj,	\
+	DBG("object %s[%p] lock %s to %d", (obj)->object.name, obj,	\
 	    info, (obj)->object.refcount)
 #else
 #define object_lock_debug(obj, info) \
-	DBG("object %p lock %s now %d", obj, info, (obj)->object.refcount)
+	DBG("object %p lock %s to %d", obj, info, (obj)->object.refcount)
 #endif /* CONFIG_DEBUG */
 #else
 #define object_lock_debug(obj, info)
@@ -53,13 +53,13 @@ struct object {
 	do {								\
 		object_sanity_check(obj);				\
 		(obj)->object.refcount++;				\
-		object_lock_debug(obj, "+1");				\
+		object_lock_debug(obj, "incremented");			\
 	} while (0)
 
 #define object_unlock(obj)						\
 	do {								\
 		(obj)->object.refcount--;				\
-		object_lock_debug(obj, "-1");				\
+		object_lock_debug(obj, "decremented");			\
 		object_sanity_check(obj);				\
 	} while (0)
 
@@ -68,7 +68,7 @@ struct object {
 	do {								\
 		object_set_name(obj, name);				\
 		object_sanity_check(obj);				\
-		object_lock_debug(obj, "0");				\
+		object_lock_debug(obj, "initialized");			\
 	} while (0)
 
 #endif

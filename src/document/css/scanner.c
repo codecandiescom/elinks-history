@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.47 2004/01/20 16:12:13 jonas Exp $ */
+/* $Id: scanner.c,v 1.48 2004/01/20 16:13:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,8 +176,8 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = CSS_TOKEN_NAME;
 
 		} else if (*string == '(') {
-			if (string - token->string == 4
-			    && memcmp(token->string, "rgb", 3)) {
+			if (string - token->string == 3
+			    && !memcmp(token->string, "rgb", 3)) {
 				type = CSS_TOKEN_RGB;
 
 			} else {

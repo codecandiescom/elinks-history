@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.31 2003/07/06 23:17:35 pasky Exp $ */
+/* $Id: connect.c,v 1.32 2003/07/09 08:54:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ ssl_set_no_tls(struct connection *conn)
 		protocol_priority[i++] = GNUTLS_SSL3;
 		protocol_priority[i++] = 0;
 
-		gnutls_protocol_set_priority(*conn->ssl, protocol_priority);
+		gnutls_protocol_set_priority(*((ssl_t *) conn->ssl), protocol_priority);
 	}
 
 	/* Note that I have no clue about these; I just put all I found here
@@ -83,7 +83,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_cipher_set_priority(*conn->ssl, cipher_priority);
+		gnutls_cipher_set_priority(*((ssl_t *) conn->ssl), cipher_priority);
 	}
 
 	{
@@ -94,7 +94,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_compression_set_priority(*conn->ssl, comp_priority);
+		gnutls_compression_set_priority(*((ssl_t *) conn->ssl), comp_priority);
 	}
 
 	{
@@ -107,7 +107,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_kx_set_priority(*conn->ssl, kx_priority);
+		gnutls_kx_set_priority(*((ssl_t *) conn->ssl), kx_priority);
 	}
 
 	{
@@ -117,7 +117,7 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_mac_set_priority(*conn->ssl, mac_priority);
+		gnutls_mac_set_priority(*((ssl_t *) conn->ssl), mac_priority);
 	}
 
 	{
@@ -128,10 +128,10 @@ ssl_set_no_tls(struct connection *conn)
 			0
 		};
 
-		gnutls_cert_type_set_priority(*conn->ssl, cert_type_priority);
+		gnutls_cert_type_set_priority(*((ssl_t *) conn->ssl), cert_type_priority);
 	}
 
-	gnutls_dh_set_prime_bits(*conn->ssl, 1024);
+	gnutls_dh_set_prime_bits(*((ssl_t *) conn->ssl), 1024);
 #endif
 }
 #endif
@@ -153,13 +153,13 @@ ssl_want_read(struct connection *conn)
 #ifdef HAVE_OPENSSL
 		SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
 #elif defined(HAVE_GNUTLS)
-		gnutls_handshake(*conn->ssl)
+		gnutls_handshake(*((ssl_t *) conn->ssl))
 #endif
 		) {
 		case SSL_ERROR_NONE:
 #ifdef HAVE_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify"))
-				if (gnutls_certificate_verify_peers(*conn->ssl))
+				if (gnutls_certificate_verify_peers(*((ssl_t *) conn->ssl)))
 					goto ssl_error;
 #endif
 
@@ -199,7 +199,7 @@ ssl_connect(struct connection *conn, int sock)
 #ifdef HAVE_OPENSSL
 	SSL_set_fd(conn->ssl, sock);
 #elif defined(HAVE_GNUTLS)
-	gnutls_transport_set_ptr(*conn->ssl, sock);
+	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), sock);
 #endif
 
 #ifdef HAVE_OPENSSL
@@ -209,7 +209,7 @@ ssl_connect(struct connection *conn, int sock)
 				NULL);
 	ret = SSL_get_error(conn->ssl, SSL_connect(conn->ssl));
 #elif defined(HAVE_GNUTLS)
-	ret = gnutls_handshake(*conn->ssl);
+	ret = gnutls_handshake(*((ssl_t *) conn->ssl));
 #endif
 
 	switch (ret) {
@@ -223,7 +223,7 @@ ssl_connect(struct connection *conn, int sock)
 		case SSL_ERROR_NONE:
 #ifdef HAVE_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify"))
-				if (gnutls_certificate_verify_peers(*conn->ssl))
+				if (gnutls_certificate_verify_peers(*((ssl_t *) conn->ssl)))
 					goto ssl_error;
 #endif
 			break;
@@ -253,7 +253,7 @@ ssl_write(struct connection *conn, struct write_buffer *wb)
 	wr = SSL_write(conn->ssl, wb->data + wb->pos,
 		       wb->len - wb->pos);
 #elif defined(HAVE_GNUTLS)
-	wr = gnutls_record_send(*conn->ssl, wb->data + wb->pos,
+	wr = gnutls_record_send(*((ssl_t *) conn->ssl), wb->data + wb->pos,
 				wb->len - wb->pos);
 #endif
 
@@ -295,7 +295,7 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 #ifdef HAVE_OPENSSL
 	rd = SSL_read(conn->ssl, rb->data + rb->len, rb->freespace);
 #elif defined(HAVE_GNUTLS)
-	rd = gnutls_record_recv(*conn->ssl, rb->data + rb->len, rb->freespace);
+	rd = gnutls_record_recv(*((ssl_t *) conn->ssl), rb->data + rb->len, rb->freespace);
 #endif
 
 	if (rd <= 0) {
@@ -348,7 +348,7 @@ ssl_close(struct connection *conn)
 	/* Hmh? No idea.. */
 #elif defined(HAVE_GNUTLS)
 	/* We probably doesn't handle this entirely correctly.. */
-	gnutls_bye(*conn->ssl, GNUTLS_SHUT_RDWR);
+	gnutls_bye(*((ssl_t *) conn->ssl), GNUTLS_SHUT_RDWR);
 #endif
 	free_ssl(conn->ssl);
 	conn->ssl = NULL;

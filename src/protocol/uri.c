@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.73 2003/11/29 17:45:54 pasky Exp $ */
+/* $Id: uri.c,v 1.74 2003/11/29 17:50:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,8 +446,13 @@ transform_file_url(unsigned char **up, unsigned char *cwd)
 	 * assumed to be a local disk specification. */
 	/* TODO: Use FTP for non-localhost hosts. --pasky */
 
+	/* For URL "file://", we open the current directory. Some other
+	 * browsers instead open root directory, but AFAIK the standard does
+	 * not specify that and this was the original behaviour and it is more
+	 * consistent with our file://./ notation. */
+
 	/* Who would name their file/dir '...' ? */
-	if (url[0] == '.') {
+	if (url[0] == '.' || !url[0]) {
 		int cwdlen = strlen(cwd);
 
 		/* Insert the current working directory. */

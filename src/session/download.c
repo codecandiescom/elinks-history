@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.344 2005/02/24 21:51:51 miciah Exp $ */
+/* $Id: download.c,v 1.345 2005/02/27 22:52:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1125,7 +1125,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	add_dlg_ok_button(dlg, _("Display", term), B_ENTER,
 			  (t_done_handler *) tp_display, type_query);
 
-	if (type_query->cached->head && type_query->cached->head) {
+	if (type_query->cached && type_query->cached->head) {
 		add_dlg_button(dlg, _("Show header", term), B_ENTER,
 			       tp_show_header, type_query);
 	} else {

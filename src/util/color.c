@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.7 2004/01/18 22:57:09 jonas Exp $ */
+/* $Id: color.c,v 1.8 2004/01/18 22:58:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,9 +225,9 @@ decode_color(unsigned char *str, int slen, color_t *color)
 		unsigned char *end;
 		color_t string_color;
 
-		str++, slen--;
+		str++;
 
-		if (slen == 3) {
+		if (slen == 4) {
 			/* Expand the short hex color format */
 			buffer[0] = buffer[1] = str[0];
 			buffer[2] = buffer[3] = str[1];

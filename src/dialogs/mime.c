@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.64 2003/11/05 14:50:44 jonas Exp $ */
+/* $Id: mime.c,v 1.65 2003/11/05 20:08:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ add_ext_fn(struct dialog_data *dlg_data)
 			dialog_text_color, AL_LEFT);
 
 	y += 2;
-	dlg_format_buttons(NULL, term,
+	dlg_format_buttons(NULL,
 			   dlg_data->widgets_data + 2, 2,
 			   0, &y, w, &rw,
 			   AL_CENTER);
@@ -104,7 +104,7 @@ add_ext_fn(struct dialog_data *dlg_data)
 			 AL_LEFT);
 
 	y++;
-	dlg_format_buttons(term, term,
+	dlg_format_buttons(term,
 			   &dlg_data->widgets_data[2], 2,
 			   dlg_data->x + DIALOG_LB, &y, w, NULL,
 			   AL_CENTER);

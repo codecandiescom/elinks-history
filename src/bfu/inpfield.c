@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.84 2003/11/05 14:23:13 jonas Exp $ */
+/* $Id: inpfield.c,v 1.85 2003/11/05 20:08:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,7 @@ input_field_fn(struct dialog_data *dlg_data)
 			 AL_LEFT);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 1, 2, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
@@ -164,7 +164,7 @@ input_field_fn(struct dialog_data *dlg_data)
 			 &y, w, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->widgets_data + 1, 2, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, dlg_data->widgets_data + 1, 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 

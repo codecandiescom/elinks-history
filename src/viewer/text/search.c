@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.95 2003/11/05 14:23:15 jonas Exp $ */
+/* $Id: search.c,v 1.96 2003/11/05 20:08:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -999,7 +999,7 @@ search_dlg_fn(struct dialog_data *dlg_data)
 			 &y, w, &rw);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 6, 2, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, dlg_data->widgets_data + 6, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
@@ -1024,7 +1024,7 @@ search_dlg_fn(struct dialog_data *dlg_data)
 			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->widgets_data + 6, 2, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, dlg_data->widgets_data + 6, 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 

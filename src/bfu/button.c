@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.41 2003/11/04 21:50:54 zas Exp $ */
+/* $Id: button.c,v 1.42 2003/11/05 20:08:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@ buttons_width(struct widget_data *widget_data, int n,
 }
 
 void
-dlg_format_buttons(struct terminal *term, struct terminal *t2,
+dlg_format_buttons(struct terminal *term,
 		   struct widget_data *widget_data, int n,
 		   int x, int *y, int w, int *rw, enum format_align align)
 {

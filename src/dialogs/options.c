@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.108 2003/11/05 14:23:15 jonas Exp $ */
+/* $Id: options.c,v 1.109 2003/11/05 20:08:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,7 +142,7 @@ terminal_options_fn(struct dialog_data *dlg_data)
 			      &rw);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->widgets_data + dlg_data->n - 3, 3, 0, &y, w,
+	dlg_format_buttons(NULL, dlg_data->widgets_data + dlg_data->n - 3, 3, 0, &y, w,
 			   &rw, AL_CENTER);
 
 	w = rw;
@@ -158,7 +158,7 @@ terminal_options_fn(struct dialog_data *dlg_data)
 
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->widgets_data + dlg_data->n - 3, 3,
+	dlg_format_buttons(term, dlg_data->widgets_data + dlg_data->n - 3, 3,
 			   dlg_data->x + DIALOG_LB, &y, w, &rw,
 			   AL_CENTER);
 }

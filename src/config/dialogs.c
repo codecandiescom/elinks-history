@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.94 2003/11/05 14:23:14 jonas Exp $ */
+/* $Id: dialogs.c,v 1.95 2003/11/05 20:08:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,7 +245,7 @@ layout_edit_dialog(struct dialog_data *dlg_data)
 	dlg_format_text(NULL, term, desc, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 1, 2, 0,
+	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, 2, 0,
 			   &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg_data->width = w + 2 * DIALOG_LB;
@@ -273,7 +273,7 @@ layout_edit_dialog(struct dialog_data *dlg_data)
 	dlg_format_text(term, term, desc, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg_data->widgets_data[1], 2, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, &dlg_data->widgets_data[1], 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 

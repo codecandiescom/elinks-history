@@ -1,4 +1,4 @@
-/* $Id: screen.h,v 1.12 2003/07/30 21:17:43 jonas Exp $ */
+/* $Id: screen.h,v 1.13 2003/07/30 22:41:28 zas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
@@ -44,7 +44,7 @@ void resize_screen(struct terminal *term, int x, int y);
 /* Updates the terminal screen. */
 void redraw_screen(struct terminal *term);
 
-/* Erases the entire screen and moves the curosr to the upper left corner. */
+/* Erases the entire screen and moves the cursor to the upper left corner. */
 void erase_screen(struct terminal *term);
 
 /* Meeep! */

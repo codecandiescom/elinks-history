@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.22 2002/12/13 23:31:59 pasky Exp $ */
+/* $Id: dialogs.c,v 1.23 2002/12/14 12:57:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,13 +103,14 @@ push_info_button(struct dialog_data *dlg,
 	box = (struct listbox_data *) dlg->dlg->items[OP_BOX_IND].data;
 
 	/* Show history item info */
-	if (!box->sel) return 0;
+	if (!box->sel || !box->sel->udata) return 0;
 	option = box->sel->udata;
-	if (!option) return 0;
 
 	if (option_types[option->type].write) {
 		unsigned char *value = init_str();
 		int val_len = 0;
+
+		if (!value) return 0;
 
 		option_types[option->type].write(option, &value, &val_len);
 
@@ -195,13 +196,22 @@ layout_edit_dialog(struct dialog_data *dlg)
 	struct option *option = dlg->dlg->udata;
 	unsigned char *name, *type, *value, *desc;
 
-	/* TODO: Memory allocation errors handling; any good idea what exactly
-	 * should we do? --pasky */
 	name = straconcat(_(TEXT(T_NNAME), term), ": ", option->name, NULL);
-	type = straconcat(_(TEXT(T_TYPE), term), ": ", _(option_types[option->type].name, term), NULL);
+	type = straconcat(_(TEXT(T_TYPE), term), ": ",
+			  _(option_types[option->type].name, term), NULL);
 	value= straconcat(_(TEXT(T_VALUE), term), ": ", NULL);
-	desc = straconcat(_(TEXT(T_DESCRIPTION), term), ": \n", option->desc, NULL);
-	add_to_ml(&dlg->ml, name, type, value, desc, NULL);
+	desc = straconcat(_(TEXT(T_DESCRIPTION), term), ": \n", option->desc,
+			  NULL);
+
+	if (name && type && value && desc)
+		add_to_ml(&dlg->ml, name, type, value, desc, NULL);
+	else {
+		if (name) mem_free(name);
+		if (type) mem_free(type);
+		if (value) mem_free(value);
+		if (desc) mem_free(desc);
+		return;
+	}
 
 	max_text_width(term, name, &max);
 	min_text_width(term, name, &min);
@@ -330,9 +340,8 @@ push_edit_button(struct dialog_data *dlg,
 	box = (struct listbox_data *) dlg->dlg->items[OP_BOX_IND].data;
 
 	/* Show history item info */
-	if (!box->sel) return 0;
+	if (!box->sel || !box->sel->udata) return 0;
 	option = box->sel->udata;
-	if (!option) return 0;
 
 	if (!option_types[option->type].write ||
 	    !option_types[option->type].read ||
@@ -370,6 +379,7 @@ push_add_button(struct dialog_data *dlg,
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
+
 invalid_option:
 		msg_box(term, NULL,
 			TEXT(T_ADD_OPTION), AL_CENTER,
@@ -385,7 +395,7 @@ invalid_option:
 		if (!option || option->flags != OPT_AUTOCREATE)
 			goto invalid_option;
 	}
-	
+
 	input_field(term, NULL, TEXT(T_ADD_OPTION), TEXT(T_NNAME),
 		TEXT(T_OK), TEXT(T_CANCEL), option, NULL,
 		MAX_STR_LEN, "", 0, 0, NULL,
@@ -434,6 +444,7 @@ push_del_button(struct dialog_data *dlg,
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
+
 invalid_option:
 		msg_box(term, NULL,
 			TEXT(T_DELETE_OPTION), AL_CENTER,
@@ -587,28 +598,28 @@ push_kbdbind_info_button(struct dialog_data *dlg,
 	struct terminal *term = dlg->win->term;
 	struct keybinding *kb;
 	struct listbox_data *box;
+	unsigned char *value;
+	int val_len = 0;
 
 	box = (struct listbox_data *) dlg->dlg->items[KB_BOX_IND].data;
 
 	/* Show history item info */
-	if (!box->sel) return 0;
+	if (!box->sel || !box->sel->udata) return 0;
 	kb = box->sel->udata;
 
-	if (kb) {
-		unsigned char *value = init_str();
-		int val_len = 0;
+	value = init_str();
+	if (!value) return 0;
 
-		make_keystroke(&value, &val_len, kb->key, kb->meta);
+	make_keystroke(&value, &val_len, kb->key, kb->meta);
 
-		msg_box(term, getml(value, NULL),
-			TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
-			TEXT(T_NNAME), ": ", box->sel->text, "\n",
-			TEXT(T_VALUE), ": ", value, NULL,
-			kb, 1,
-			TEXT(T_OK), done_kbdbind_info_button, B_ESC | B_ENTER);
-	}
+	msg_box(term, getml(value, NULL),
+		TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
+		TEXT(T_NNAME), ": ", box->sel->text, "\n",
+		TEXT(T_VALUE), ": ", value, NULL,
+		kb, 1,
+		TEXT(T_OK), done_kbdbind_info_button, B_ESC | B_ENTER);
 
-	return 0;
+	return 0; /* Why not 1 ? --Zas */
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.51 2004/06/13 22:08:30 zas Exp $ */
+/* $Id: view.h,v 1.52 2004/06/16 09:43:40 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -8,6 +8,14 @@ struct session;
 struct term_event;
 struct terminal;
 
+enum frame_event_status {
+	/* The event was not handled */
+	FRAME_EVENT_IGNORED,
+	/* The event was handled, and the screen should be redrawn */
+	FRAME_EVENT_REFRESH,
+	/* The event was handled, and the screen should _not_ be redrawn */
+	FRAME_EVENT_OK,
+};
 
 /* Releases the document view's resources. But doesn't free() the @view. */
 void detach_formatted(struct document_view *doc_view);

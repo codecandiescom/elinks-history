@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.56 2004/12/17 23:51:11 pasky Exp $ */
+/* $Id: forms.c,v 1.57 2004/12/17 23:52:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,6 +118,8 @@ get_html_form(unsigned char *a, struct form *form)
 	/* form->num = a - startf; */
 }
 
+/* This function will look for the last <form> tag preceding @stop_pos and
+ * save its details to @form. */
 static void
 find_form_for_input(unsigned char *stop_pos)
 {

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.109 2004/05/29 00:53:48 jonas Exp $ */
+/* $Id: form.c,v 1.110 2004/05/29 01:08:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -683,40 +683,37 @@ encode_text_plain(struct list_head *l, struct string *data,
 	if (!init_string(data)) return;
 
 	foreach (sv, *l) {
-		unsigned char *p2 = NULL;
+		unsigned char *area51 = NULL;
+		unsigned char *value = sv->value;
 
 		add_to_string(data, sv->name);
 		add_char_to_string(data, '=');
 
-		/* Convert back to original encoding (see html_form_control()
-		 * for the original recoding). */
 		switch (sv->type) {
 		case FC_TEXTAREA:
-		{
-			unsigned char *p = encode_textarea(sv);
-
-			if (!p) break;
-
-			p2 = convert_string(convert_table, p, strlen(p),
-					    CSM_FORM, NULL);
-			mem_free(p);
-			break;
-		}
+			value = area51 = encode_textarea(sv);
+			if (!area51) break;
+			/* Fall through */
 		case FC_TEXT:
 		case FC_PASSWORD:
-			p2 = convert_string(convert_table, sv->value,
-					    strlen(sv->value), CSM_FORM, NULL);
-			break;
-
+			/* Convert back to original encoding (see
+			 * html_form_control() for the original recoding). */
+			value = convert_string(convert_table, value,
+					       strlen(value), CSM_FORM, NULL);
 		default:
-			p2 = stracpy(sv->value);
+			/* Falling right through to free that textarea stuff */
+			mem_free_if(area51);
+
+			/* Did the conversion fail? */
+			if (!value) break;
+
+			encode_newlines(data, value);
+
+			/* Free if we did convert something */
+			if (value != sv->value) mem_free(value);
 		}
 
-		if (p2) {
-			encode_newlines(data, p2);
-			add_to_string(data, "\r\n");
-			mem_free(p2);
-		}
+		add_to_string(data, "\r\n");
 	}
 }
 

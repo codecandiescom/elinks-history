@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.156 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: connection.c,v 1.157 2004/04/04 05:22:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,8 +221,9 @@ check_queue_bugs(void)
 
 
 static struct connection *
-init_connection(struct uri *uri, struct uri *referrer, int start,
-		enum cache_mode cache_mode, enum connection_priority priority)
+init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
+		int start, enum cache_mode cache_mode,
+		enum connection_priority priority)
 {
 	struct connection *conn = mem_calloc(1, sizeof(struct connection));
 
@@ -231,6 +232,7 @@ init_connection(struct uri *uri, struct uri *referrer, int start,
 	/* load_uri() gets the URI from get_proxy() which grabs a reference for
 	 * us. */
 	conn->uri = uri;
+	conn->proxied_uri = get_uri_reference(proxied_uri);
 	conn->id = connection_id++;
 	conn->referrer = get_uri_reference(referrer);
 	conn->pri[priority] =  1;
@@ -406,6 +408,7 @@ done_connection(struct connection *conn)
 	send_connection_info(conn);
 	if (conn->referrer) done_uri(conn->referrer);
 	done_uri(conn->uri);
+	done_uri(conn->proxied_uri);
 	mem_free(conn);
 	check_queue_bugs();
 }
@@ -851,7 +854,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		return 0;
 	}
 
-	conn = init_connection(proxy_uri, referrer, start, cache_mode, pri);
+	conn = init_connection(proxy_uri, uri, referrer, start, cache_mode, pri);
 	if (!conn) {
 		if (download) {
 			download->state = S_OUT_OF_MEM;

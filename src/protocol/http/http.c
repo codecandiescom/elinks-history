@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.263 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: http.c,v 1.264 2004/04/04 05:22:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -328,23 +328,11 @@ http_send_header(struct connection *conn)
 	int trace = get_opt_bool("protocol.http.trace");
 	struct string header;
 	unsigned char *host_data;
-	struct uri real_uri;
-	struct uri *uri;
+	struct uri *uri = conn->proxied_uri; /* Set to the real uri */
 	unsigned char *optstr;
 	int use_connect;
 
 	set_connection_timeout(conn);
-
-	/* Setup the real uri. */
-	if (IS_PROXY_URI(conn->uri)) {
-		assertm(conn->uri->data, "No proxy data");
-		uri = &real_uri;
-		if (!parse_uri(uri, conn->uri->data))
-			uri = NULL;
-
-	} else {
-		uri = conn->uri;
-	}
 
 	/* Sanity check for a host */
 	if (!uri || !uri->host || !*uri->host || !uri->hostlen) {
@@ -1071,26 +1059,13 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	unsigned char *cookie, *ch;
 #endif
 	unsigned char *d;
-	struct uri *uri;
+	struct uri *uri = conn->proxied_uri; /* Set to the real uri */
 	struct http_version version;
-	struct uri real_uri;
 	enum connection_state state = (conn->state != S_PROC ? S_GETH : S_PROC);
 	int a, h = 200;
 	int cf;
 
 	set_connection_timeout(conn);
-
-	/* Setup the real uri. */
-	if (IS_PROXY_URI(conn->uri) && conn->uri->data) {
-		uri = &real_uri;
-		if (!parse_uri(uri, conn->uri->data)) {
-			abort_conn_with_state(conn, S_BAD_URL);
-			return;
-		}
-
-	} else {
-		uri = conn->uri;
-	}
 
 	if (rb->close == 2) {
 		if (!conn->tries && uri->host) {

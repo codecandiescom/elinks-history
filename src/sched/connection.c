@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.47 2003/07/03 22:26:59 jonas Exp $ */
+/* $Id: connection.c,v 1.48 2003/07/03 22:37:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,6 @@ struct k_conn {
 
 static unsigned int connection_id = 0;
 static int active_connections = 0;
-static int st_r = 0;
 static int keepalive_timeout = -1;
 
 /* TODO: queue probably shouldn't be exported; ideally we should probably
@@ -153,20 +152,21 @@ is_host_on_list(struct connection *c)
 	return NULL;
 }
 
+static void stat_timer(struct connection *c);
+
 static void
-stat_timer(struct connection *c)
+update_remaining_info(struct connection *c)
 {
-	ttime a;
 	struct remaining_info *prg = &c->prg;
+	ttime a = get_time() - prg->last_time;
 
 	prg->loaded = c->received;
 	prg->size = c->est_length;
 	prg->pos = c->from;
 	if (prg->size < prg->pos && prg->size != -1)
 		prg->size = c->from;
-	a = get_time() - prg->last_time;
-	prg->dis_b += a;
 
+	prg->dis_b += a;
 	while (prg->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
 		prg->cur_loaded -= prg->data_in_secs[0];
 		memmove(prg->data_in_secs, prg->data_in_secs + 1,
@@ -181,7 +181,13 @@ stat_timer(struct connection *c)
 	prg->last_time += a;
 	prg->elapsed += a;
 	prg->timer = install_timer(SPD_DISP_TIME, (void (*)(void *)) stat_timer, c);
-	if (!st_r) send_connection_info(c);
+}
+
+static void
+stat_timer(struct connection *c)
+{
+	update_remaining_info(c);
+	send_connection_info(c);
 }
 
 void
@@ -207,9 +213,7 @@ set_connection_state(struct connection *c, int state)
 			}
 			prg->last_time = get_time();
 			prg->last_loaded = prg->loaded;
-			st_r = 1;
-			stat_timer(c);
-			st_r = 0;
+			update_remaining_info(c);
 			if (connection_disappeared(c))
 				return;
 		}

@@ -1,3 +1,10 @@
+Mon Nov  1 22:22:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.h, options.inc:
+
+	A few gcc-4 compatibility fixes from Kalle Olavi Niemitalo
+	<kon@iki.fi>.  
+
 Sat Oct 30 02:21:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/search.c:

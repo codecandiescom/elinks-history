@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.12 2003/07/24 09:50:57 miciah Exp $ */
+/* $Id: textarea.c,v 1.13 2003/07/24 10:38:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,7 +257,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	static struct terminal *term;
 	static struct document_view *f;
 	static struct link *l;
-	static unsigned char *fn = NULL;
+	static unsigned char *fn;
 
 	assert (op == 0 || op == 1);
 	if_assert_failed return;

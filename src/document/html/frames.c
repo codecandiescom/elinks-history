@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.22 2003/10/29 20:18:28 jonas Exp $ */
+/* $Id: frames.c,v 1.23 2003/10/30 00:34:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,8 +79,8 @@ create_frameset(struct document *document, struct frameset_param *fp)
 		register int i;
 
 		for (i = 0; i < size; i++) {
-			fd->f[i].xw = fp->xw[i % fp->x];
-			fd->f[i].yw = fp->yw[i / fp->x];
+			fd->f[i].width = fp->xw[i % fp->x];
+			fd->f[i].height = fp->yw[i / fp->x];
 		}
 	}
 
@@ -222,8 +222,8 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 		for (i = 0; i < fsd->x; i++) {
 			struct frame_desc *f = &fsd->f[n];
 
-			o.xw = f->xw;
-			o.yw = f->yw;
+			o.xw = f->width;
+			o.yw = f->height;
 			o.framename = f->name;
 			if (f->subframe)
 				format_frames(ses, f->subframe, &o, depth + 1);

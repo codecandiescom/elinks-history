@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.236 2003/10/29 19:43:38 jonas Exp $ */
+/* $Id: view.c,v 1.237 2003/10/30 00:34:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,17 +116,17 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 	y = yp - 1;
 	for (j = 0; j < fsd->y; j++) {
 		register int x, i;
-		int wwy = fsd->f[j * fsd->x].yw;
+		int height = fsd->f[j * fsd->x].height;
 
 		x = xp - 1;
 		for (i = 0; i < fsd->x; i++) {
-			int wwx = fsd->f[i].xw;
+			int width = fsd->f[i].width;
 
 			if (i) {
-				draw_area(t, x, y + 1, 1, wwy, BORDER_SVLINE,
+				draw_area(t, x, y + 1, 1, height, BORDER_SVLINE,
 					  SCREEN_ATTR_FRAME, &colors);
 				if (j == fsd->y - 1)
-					draw_border_cross(t, x, y + wwy + 1,
+					draw_border_cross(t, x, y + height + 1,
 							  BORDER_X_UP, &colors);
 			} else if (j) {
 				if (x >= 0)
@@ -135,10 +135,10 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 			}
 
 			if (j) {
-				draw_area(t, x + 1, y, wwx, 1, BORDER_SHLINE,
+				draw_area(t, x + 1, y, width, 1, BORDER_SHLINE,
 					  SCREEN_ATTR_FRAME, &colors);
-				if (i == fsd->x - 1 && x + wwx + 1 < t->x)
-					draw_border_cross(t, x + wwx + 1, y,
+				if (i == fsd->x - 1 && x + width + 1 < t->x)
+					draw_border_cross(t, x + width + 1, y,
 							  BORDER_X_LEFT, &colors);
 			} else if (i) {
 				draw_border_cross(t, x, y, BORDER_X_DOWN, &colors);
@@ -147,29 +147,29 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 			if (i && j)
 				draw_border_char(t, x, y, BORDER_SCROSS, &colors);
 
-			x += wwx + 1;
+			x += width + 1;
 		}
-		y += wwy + 1;
+		y += height + 1;
 	}
 
 	y = yp - 1;
 	for (j = 0; j < fsd->y; j++) {
 		register int x, i;
 		int pj = j * fsd->x;
-		int wwy = fsd->f[pj].yw;
+		int height = fsd->f[pj].height;
 
 		x = xp - 1;
 		for (i = 0; i < fsd->x; i++) {
-			int wwx = fsd->f[i].xw;
+			int width = fsd->f[i].width;
 			int p = pj + i;
 
 			if (fsd->f[p].subframe) {
 				draw_frame_lines(t, fsd->f[p].subframe,
 						 x + 1, y + 1);
 			}
-			x += wwx + 1;
+			x += width + 1;
 		}
-		y += wwy + 1;
+		y += height + 1;
 	}
 }
 

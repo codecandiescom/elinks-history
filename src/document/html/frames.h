@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.18 2003/10/29 22:58:10 jonas Exp $ */
+/* $Id: frames.h,v 1.19 2003/10/30 00:34:33 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -17,7 +17,7 @@ struct frame_desc {
 	unsigned char *url;
 
 	int line;
-	int xw, yw;
+	int width, height;
 };
 
 struct frameset_desc {

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.206 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: main.c,v 1.207 2004/05/11 23:22:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,22 +233,22 @@ terminate_all_subsystems(void)
 		save_url_history();
 		done_search_history();
 		free_marks();
+		free_history_lists();
+		free_auth();
+		free_blacklist();
 		done_modules(builtin_modules);
+		done_screen_drivers();
 	}
 
 	shrink_memory(1);
 	free_charsets_lookup();
 	free_colors_lookup();
 	done_modules(main_modules);
-	free_history_lists();
-	free_auth();
 	free_keymaps();
 	free_conv_table();
-	free_blacklist();
 	check_bottom_halves();
 	free_home();
 	free_strerror_buf();
-	done_screen_drivers();
 	done_bfu_colors();
 	done_timer();
 	unregister_modules_options(builtin_modules);

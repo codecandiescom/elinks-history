@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.23 2004/07/21 23:25:07 pasky Exp $ */
+/* $Id: link.c,v 1.24 2004/07/30 16:04:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,6 +183,7 @@ html_img(unsigned char *a)
 
 	al = get_attr_val(a, "alt");
 	if (!al) al = get_attr_val(a, "title");
+	if (al) clr_spaces(al);
 
 	if (!al || !*al) {
 		mem_free_if(al);

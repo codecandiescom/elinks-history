@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.266 2004/01/07 03:49:03 jonas Exp $ */
+/* $Id: menu.c,v 1.267 2004/01/07 12:13:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,9 +270,8 @@ do_submenu(struct terminal *term, void *menu, struct session *ses)
 
 
 static struct menu_item file_menu11[] = {
-	INIT_MENU_ITEM(N_("Open new ~tab"), NULL, ACT_OPEN_NEW_TAB, open_in_new_tab, (void *) 0, 0),
-	INIT_MENU_ITEM(N_("Open new tab in backgroun~d"), NULL, ACT_OPEN_NEW_TAB_IN_BACKGROUND,
-			open_in_new_tab_in_background,(void *) 0, 0),
+	INIT_MENU_ITEM(N_("Open new ~tab"), NULL, ACT_OPEN_NEW_TAB, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("Open new tab in backgroun~d"), NULL, ACT_OPEN_NEW_TAB_IN_BACKGROUND, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("~Go to URL"), NULL, ACT_GOTO_URL, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Go ~back"), NULL, ACT_BACK, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Go ~forward"), NULL, ACT_UNBACK, NULL, NULL, 0),
@@ -345,8 +344,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	x = 1;
 	if (!anonymous && can_open_os_shell(term->environment)) {
 		SET_MENU_ITEM(e, N_("~OS shell"), NULL, ACT_OPEN_OS_SHELL,
-			      menu_shell, NULL,
-			      0, 0, HKS_SHOW);
+			      NULL, NULL, 0, 0, HKS_SHOW);
 		e++;
 		x = 0;
 	}

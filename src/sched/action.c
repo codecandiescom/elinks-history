@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.6 2004/01/07 03:49:03 jonas Exp $ */
+/* $Id: action.c,v 1.7 2004/01/07 12:13:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,6 +67,7 @@ enum keyact
 do_action(struct session *ses, enum keyact action, void *data, int verbose)
 {
 	struct terminal *term = ses->tab->term;
+	struct document_view *doc_view = doc_view = current_frame(ses);
 
 	switch (action) {
 		/* Please keep in alphabetical order for now. Later we can sort
@@ -136,6 +137,36 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 
 		case ACT_KILL_BACKGROUNDED_CONNECTIONS:
 			abort_background_connections();
+			break;
+
+		case ACT_OPEN_LINK_IN_NEW_TAB:
+			open_in_new_tab(ses->tab->term, 1, ses);
+			break;
+
+		case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
+			open_in_new_tab_in_background(ses->tab->term, 1, ses);
+			break;
+
+		case ACT_OPEN_LINK_IN_NEW_WINDOW:
+			if (!doc_view || doc_view->vs->current_link == -1) break;
+			open_in_new_window(ses->tab->term, send_open_in_new_window, ses);
+			break;
+
+		case ACT_OPEN_NEW_TAB:
+			open_in_new_tab(ses->tab->term, 0, ses);
+			break;
+
+		case ACT_OPEN_NEW_TAB_IN_BACKGROUND:
+			open_in_new_tab_in_background(ses->tab->term, 0, ses);
+			break;
+
+		case ACT_OPEN_NEW_WINDOW:
+			open_in_new_window(ses->tab->term, send_open_new_window, ses);
+			break;
+
+		case ACT_OPEN_OS_SHELL:
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				menu_shell(ses->tab->term, NULL, NULL);
 			break;
 
 		case ACT_OPTIONS_MANAGER:
@@ -231,13 +262,6 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 		case ACT_MENU:
 		case ACT_NEXT_FRAME:
 		case ACT_NEXT_ITEM:
-		case ACT_OPEN_NEW_TAB:
-		case ACT_OPEN_NEW_TAB_IN_BACKGROUND:
-		case ACT_OPEN_NEW_WINDOW:
-		case ACT_OPEN_LINK_IN_NEW_TAB:
-		case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-		case ACT_OPEN_LINK_IN_NEW_WINDOW:
-		case ACT_OPEN_OS_SHELL:
 		case ACT_PAGE_DOWN:
 		case ACT_PAGE_UP:
 		case ACT_PASTE_CLIPBOARD:

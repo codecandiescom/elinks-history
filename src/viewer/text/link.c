@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.139 2004/01/07 00:40:47 jonas Exp $ */
+/* $Id: link.c,v 1.140 2004/01/07 12:13:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -842,11 +842,10 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					     send_open_in_new_window, c - 1 ? SUBMENU : 0);
 
 			add_to_menu(&mi, N_("Open in new ~tab"), NULL, ACT_OPEN_LINK_IN_NEW_TAB,
-				     (menu_func) open_in_new_tab, (void *) 1, 0);
+				    NULL, NULL, 0);
 
 			add_to_menu(&mi, N_("Open in new tab in ~background"), NULL,
-				    ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
-				    (menu_func) open_in_new_tab_in_background, (void *) 1, 0);
+				    ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, NULL, NULL, 0);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 				add_separator_to_menu(&mi);

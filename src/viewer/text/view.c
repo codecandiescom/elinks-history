@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.334 2004/01/07 02:50:10 jonas Exp $ */
+/* $Id: view.c,v 1.335 2004/01/07 12:13:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1057,29 +1057,6 @@ quit:
 				goto x;
 			case ACT_SHOW_TERM_OPTIONS:
 				terminal_options(ses->tab->term, NULL, ses);
-				goto x;
-			case ACT_OPEN_OS_SHELL:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					menu_shell(ses->tab->term, NULL, NULL);
-				goto x;
-			case ACT_OPEN_NEW_WINDOW:
-				open_in_new_window(ses->tab->term, send_open_new_window, ses);
-				goto x;
-			case ACT_OPEN_LINK_IN_NEW_WINDOW:
-				if (!doc_view || doc_view->vs->current_link == -1) goto x;
-				open_in_new_window(ses->tab->term, send_open_in_new_window, ses);
-				goto x;
-			case ACT_OPEN_NEW_TAB:
-				open_in_new_tab(ses->tab->term, 0, ses);
-				goto x;
-			case ACT_OPEN_NEW_TAB_IN_BACKGROUND:
-				open_in_new_tab_in_background(ses->tab->term, 0, ses);
-				goto x;
-			case ACT_OPEN_LINK_IN_NEW_TAB:
-				open_in_new_tab(ses->tab->term, 1, ses);
-				goto x;
-			case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-				open_in_new_tab_in_background(ses->tab->term, 1, ses);
 				goto x;
 			case ACT_TAB_MENU:
 			{

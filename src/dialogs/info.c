@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.110 2004/11/14 01:14:25 jonas Exp $ */
+/* $Id: info.c,v 1.111 2004/11/14 02:41:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,20 +184,11 @@ get_ressource_info(struct terminal *term, void *data)
 	add_to_string(&info, "\n");
 
 	add_format_to_string(&info,
-#ifdef HAVE_MMAP
-			_("Allocated      : %ld bytes\n"
-			  "Truly allocated: %ld bytes (x%0.2f)\n"
-			  "Cache size     : %ld bytes\n", term)
-#else
 			_("Allocated      : %ld bytes\n"
 			  "Truly allocated: %ld bytes (x%0.2f)", term)
-#endif
 			,
 			mem_stats.amount, mem_stats.true_amount,
 			(double) mem_stats.true_amount / (double) mem_stats.amount
-#ifdef HAVE_MMAP
-			, cache_info(INFO_BYTES)
-#endif
 			);
 
 #endif /* DEBUG_MEMLEAK */

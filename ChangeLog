@@ -1,3 +1,30 @@
+Fri Apr 19 12:45:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/bfu.c, bfu/bfu.h, dialogs/globhist.c,
+	dialogs/globhist.h, document/globhist.c:
+	
+	Rewrite of box content handling in global history, update all
+	history boxes upon adding/removing something in global history.
+	Patch by Miciah Dashiel.
+
+Fri Apr 19 12:23:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
+	
+	ACT_REALLYQUIT -> ACT_REALLY_QUIT, patch by Peter Wang ;).
+
+Fri Apr 19 12:20:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in, src/osdep/os_dep.c:
+	
+	Saving window title. We have to also link together with X11 (if
+	found, obviously), in order to be able to accomplish this. Patch by
+	Peter Wang.
+	
+	I stole code from vim to save the xterm title.	The vim code is
+	much more complicated (and also shitty, like links :-), meaning I
+	made a lot of bad assumptions.	But it's a start.
+
 Wed Apr 17 22:22:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/config/default.c, src/config/default.h,

@@ -699,8 +699,12 @@ void menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses
 	
 	int fc = (int)fcp;
 	struct bookmark *new_bm;
-
 	struct dialog *d;
+
+	/* Show all bookmarks */
+	foreach (new_bm, bookmarks) {
+		new_bm->selected = 1;
+	}
 
 	/* Create the dialog */
 	d = mem_alloc(BM_DIALOG_MEMSIZE);
@@ -789,8 +793,12 @@ void bookmark_search_do(struct dialog *d)
 	parent = d->udata;
 
 	/* Tell the bookmark dialog to redraw */
-	if (parent && res)
+	if (parent && res) {
+		((struct dlg_data_item_data_box *) parent->dlg->items[BM_BOX_IND].data)->box_top = 0;
+		((struct dlg_data_item_data_box *) parent->dlg->items[BM_BOX_IND].data)->sel = 0;
+		
 		bookmark_dlg_list_update(&(((struct dlg_data_item_data_box *) parent->dlg->items[BM_BOX_IND].data)->items));
+	}
 }
 
 
@@ -955,14 +963,14 @@ void bookmark_edit_dialog(
 	d->items[2].text = TEXT(T_OK);
 	
 	d->items[3].type = D_BUTTON;
-	d->items[3].gid = B_ESC;
-	d->items[3].text = TEXT(T_CANCEL);
-	d->items[3].fn = cancel_dialog;
+	d->items[3].gid = 0;
+	d->items[3].text = TEXT(T_CLEAR);
+	d->items[3].fn = clear_dialog;
 
 	d->items[4].type = D_BUTTON;
-	d->items[4].gid = 0;
-	d->items[4].text = TEXT(T_CLEAR);
-	d->items[4].fn = clear_dialog;
+	d->items[4].gid = B_ESC;
+	d->items[4].text = TEXT(T_CANCEL);
+	d->items[4].fn = cancel_dialog;
 
 	d->items[BM_EDIT_DIALOG_FIELDS_NB].type = D_END;
 	

@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.3 2002/05/10 13:06:10 pasky Exp $ */
+/* $Id: sysname.c,v 1.4 2002/05/17 20:04:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#ifdef HAVE_SYS_UTSNAME_H
+#include <sys/utsname.h>
+#endif
 
 #include "links.h"
 
@@ -20,6 +23,25 @@ get_system_name()
 {
 	FILE *f;
 	unsigned char *p;
+
+#if defined(HAVE_SYS_UTSNAME_H) && defined(HAVE_UNAME)
+	struct utsname name;
+
+	memset(&name, 0, sizeof(struct utsname));
+	if (!uname(&name)) {
+		unsigned char *str = init_str();
+		int l = 0;
+
+		add_to_str(&str, &l, name.sysname);
+		add_to_str(&str, &l, " ");
+		add_to_str(&str, &l, name.release);
+		add_to_str(&str, &l, " ");
+		add_to_str(&str, &l, name.machine);
+		safe_strncpy(system_name, str, MAX_STR_LEN);
+		mem_free(str);
+		return;
+	}
+#endif
 
 #ifdef HAVE_POPEN
 	memset(system_name, 0, MAX_STR_LEN);

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.39 2004/01/21 01:46:12 jonas Exp $ */
+/* $Id: scanner.h,v 1.40 2004/01/21 04:18:39 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -17,12 +17,18 @@ enum css_token_type {
 
 	/* Low level string tokens: */
 
+	/* {...} means char group, <...> means token */
+	/* {identstart}	[a-z_]|{nonascii} */
+	/* {ident}	[a-z0-9_-]|{nonascii} */
+	/* <ident>	{identstart}{ident}* */
+	/* <name>	{ident}+ */
+	/* <number>	[0-9]+|[0-9]*"."[0-9]+ */
+
 	/* Percentage is put because although it looks like being composed of
 	 * <number> and '%' floating point numbers are really not allowed but
 	 * strtol() will round it down for us ;) */
-	CSS_TOKEN_IDENT = 256,	/* [a-z_]|{nonascii} followed by *_NAME chars */
-	CSS_TOKEN_NAME,		/* [a-z0-9_-]|{nonascii}+ */
-	CSS_TOKEN_NUMBER,	/* [0-9]+|[0-9]*"."[0-9]+ */
+	CSS_TOKEN_IDENT = 256,	/* <ident> */
+	CSS_TOKEN_NUMBER,	/* <number> */
 	CSS_TOKEN_PERCENTAGE,	/* <number>% */
 	CSS_TOKEN_STRING,	/* Char sequence delimted by matching ' or " */
 
@@ -46,11 +52,11 @@ enum css_token_type {
 	/* Unknown functions contain also args so parsing is easier but for
 	 * known functions we want to generate tokens for every arg and arg
 	 * delimiter ( ',' or ')' ). */
-	CSS_TOKEN_FUNCTION,	/* <identifier>(<args>) */
+	CSS_TOKEN_FUNCTION,	/* <ident>(<args>) */
 	CSS_TOKEN_RGB,		/* rgb( */
 
 	/* TODO: @-rules; CSS_TOKEN_IMPORT etc. */
-	CSS_TOKEN_ATRULE,	/* @<identifier> */
+	CSS_TOKEN_ATRULE,	/* @<ident> */
 	CSS_TOKEN_IMPORTANT,	/* !<whitespace>important */
 
 	/* TODO: Selector stuff like "|=" and "~=" */

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.186 2003/11/26 11:29:41 miciah Exp $ */
+/* $Id: download.c,v 1.187 2003/11/26 11:45:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -755,8 +755,8 @@ resume_download(void *ses, unsigned char *file)
 }
 
 
-void tp_cancel(void *);
-void tp_free(struct tq *);
+static void tp_cancel(void *);
+static void tp_free(struct tq *);
 
 
 static void continue_download_do(struct terminal *, int, void *, int);
@@ -856,7 +856,7 @@ cancel:
 }
 
 
-void
+static void
 tp_free(struct tq *tq)
 {
 	object_unlock(tq->ce);
@@ -868,7 +868,7 @@ tp_free(struct tq *tq)
 	mem_free(tq);
 }
 
-void
+static void
 tp_cancel(void *data)
 {
 	struct tq *tq = data;

@@ -1,3 +1,25 @@
+Fri Nov 15 17:20:30 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/document.c, document/html/parser.c,
+	globhist/globhist.c, globhist/globhist.h:
+
+	Major globhist performance improvement, we now use hashes to find
+	history items by url.  
+
+Fri Nov 15 16:47:55 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/hash.c:
+
+	key/value shoulnt be freed in del_hash_item() since we dont allocate
+	them in hash stuff.  
+
+Fri Nov 15 13:26:04 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	-R ssl linking fix disabled, creating serious portability problems.
+	Thanks, zas.  
+
 Thu Nov 14 22:23:21 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/view.c:

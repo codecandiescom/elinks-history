@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.206 2004/05/04 01:48:01 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.207 2004/05/06 22:06:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -708,14 +708,17 @@ toggle_display_action_listboxes(void)
 	toggle = state ? numtodesc : numtostr;
 
 	foreach (keymap, keybinding_browser.root.child) {
+		struct strtonum *keymapinfo = keymap->udata;
+		struct strtonum *actions = action_table[keymapinfo->num];
 		struct listbox_item *action;
 
-		keymap->text = toggle(keymap_table, (int) keymap->udata);
+		keymap->text = toggle(keymap_table, keymapinfo->num);
 		keymap->translated = state;
 
 		foreach (action, keymap->child) {
-			action->text = toggle(action_table[(int) keymap->udata],
-						(int) action->udata);
+			struct strtonum *actioninfo = action->udata;
+
+			action->text = toggle(actions, actioninfo->num);
 			action->translated = state;
 		}
 	}

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.2 2002/04/02 13:36:53 pasky Exp $ */
+/* $Id: dialogs.c,v 1.3 2002/04/02 14:11:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,14 +11,15 @@
 
 #include <bfu/align.h>
 #include <bfu/bfu.h>
-#include <bfu/menu.h>
+//#include <bfu/menu.h>
 #include <bookmarks/bookmarks.h>
 #include <bookmarks/dialogs.h>
+#include <dialogs/edit.h>
 #include <document/session.h>
 #include <lowlevel/kbd.h>
 #include <lowlevel/terminal.h>
 #include <intl/language.h>
-#include <protocol/types.h>
+//#include <protocol/types.h>
 #include <util/error.h>
 
 
@@ -33,12 +34,6 @@
 /****************************************************************************
   Bookmark manager stuff.
 ****************************************************************************/
-
-void bookmark_edit_dialog(struct terminal *, unsigned char *,
-			  const unsigned char *, const unsigned char *,
-			  struct session *, struct dialog_data *,
-			  void when_done(struct dialog *),
-			  void *, int);
 
 /* Clears the bookmark list from the bookmark_dialog */
 static inline void
@@ -373,9 +368,9 @@ push_edit_button(struct dialog_data *dlg,
 		const unsigned char *name = get_bookmark_by_id(id)->title;
 		const unsigned char *url = get_bookmark_by_id(id)->url;
 
-		bookmark_edit_dialog(dlg->win->term, TEXT(T_EDIT_BOOKMARK), name, url,
-				     (struct session*) edit_btn->item->udata, dlg,
-				     bookmark_edit_done, (void *) id, 1);
+		do_edit_dialog(dlg->win->term, TEXT(T_EDIT_BOOKMARK), name, url,
+			       (struct session *) edit_btn->item->udata, dlg,
+			       bookmark_edit_done, (void *) id, 1);
 	}
 	/* FIXME There really should be some feedback to the user here */
 	return 0;
@@ -596,8 +591,8 @@ launch_bm_add_doc_dialog(struct terminal *term,
 			 struct dialog_data *parent,
 			 struct session *ses)
 {
-	bookmark_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL, NULL,
-			     ses, parent, bookmark_add_add, NULL, 1);
+	do_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL, NULL,
+		       ses, parent, bookmark_add_add, NULL, 1);
 }
 
 
@@ -607,9 +602,9 @@ launch_bm_search_doc_dialog(struct terminal *term,
 			    struct dialog_data *parent,
 			    struct session *ses)
 {
-	bookmark_edit_dialog(term, TEXT(T_SEARCH_BOOKMARK),
-			     bm_last_searched_name, bm_last_searched_url,
-			     ses, parent, bookmark_search_do, NULL, 0);
+	do_edit_dialog(term, TEXT(T_SEARCH_BOOKMARK),
+		       bm_last_searched_name, bm_last_searched_url,
+		       ses, parent, bookmark_search_do, NULL, 0);
 }
 
 
@@ -621,166 +616,7 @@ launch_bm_add_link_dialog(struct terminal *term,
 {
 	unsigned char url[MAX_STR_LEN];
 
-	bookmark_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL,
-			     get_current_link_url(ses, url, MAX_STR_LEN), ses,
-			     parent, bookmark_add_add, NULL, 1);
-}
-
-
-
-unsigned char *bm_add_msg[] = {
-	TEXT(T_NNAME),
-	TEXT(T_URL),
-};
-
-
-/* Called to setup the add bookmark dialog */
-void
-layout_add_dialog(struct dialog_data *dlg)
-{
-	int max = 0, min = 0;
-	int w, rw;
-	int y = -1;
-	struct terminal *term;
-
-	term = dlg->win->term;
-
-	max_text_width(term, bm_add_msg[0], &max);
-	min_text_width(term, bm_add_msg[0], &min);
-	max_text_width(term, bm_add_msg[1], &max);
-	min_text_width(term, bm_add_msg[1], &min);
-	max_buttons_width(term, dlg->items + 2, 2, &max);
-	min_buttons_width(term, dlg->items + 2, 2, &min);
-	w = term->x * 9 / 10 - 2 * DIALOG_LB;
-
-	if (w > max) w = max;
-	if (w < min) w = min;
-	if (w > term->x - 2 * DIALOG_LB) w = term->x - 2 * DIALOG_LB;
-	if (w < 1) w = 1;
-
-	w = rw = 50;
-
-	dlg_format_text(NULL, term, bm_add_msg[0], 0, &y,
-			w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
-	y += 2;
-	dlg_format_text(NULL, term, bm_add_msg[1], 0, &y,
-			w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
-	y += 2;
-	dlg_format_buttons(NULL, term, dlg->items + 2, 2, 0,
-			   &y, w, &rw, AL_CENTER);
-	w = rw;
-	dlg->xw = w + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
-	draw_dlg(dlg);
-	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, bm_add_msg[0], dlg->x + DIALOG_LB,
-			&y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
-	dlg_format_field(NULL, term, &dlg->items[0], dlg->x + DIALOG_LB,
-			 &y, w, NULL, AL_LEFT);
-	y++;
-	dlg_format_text(term, term, bm_add_msg[1], dlg->x + DIALOG_LB,
-			&y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
-	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB,
-			 &y, w, NULL, AL_LEFT);
-	y++;
-	dlg_format_buttons(term, term, &dlg->items[2], 3, dlg->x + DIALOG_LB,
-			   &y, w, NULL, AL_CENTER);
-}
-
-
-/* Edits a bookmark's fields.
- * If parent is defined, then that points to a dialog that should be sent
- * an update when the add is done.
- *
- * If either of src_name or src_url are NULL, try to obtain the name and url
- * of the current document. If you want to create two null fields, pass in a
- * pointer to a zero length string (""). */
-void
-bookmark_edit_dialog(struct terminal *term, unsigned char *title,
-		     const unsigned char *src_name,
-		     const unsigned char *src_url,
-		     struct session *ses, struct dialog_data *parent,
-		     void when_done(struct dialog *),
-		     void *done_data,
-		     int dialog_type /* 1 edit/add or 0 search dialog */)
-{
-	/* Number of fields in edit dialog --Zas */
-#define BM_EDIT_DIALOG_FIELDS_NB 5
-
-	/* Memory needed by edit dialog --Zas */
-#define BM_EDIT_DIALOG_MEMSIZE (sizeof(struct dialog) + \
-		                + (BM_EDIT_DIALOG_FIELDS_NB + 1) \
-				* sizeof(struct dialog_item) \
-				+ sizeof(struct extension) + 2 * MAX_STR_LEN )
-
-	unsigned char *name, *url;
-	struct dialog *d;
-
-	/* Create the dialog */
-	d = mem_alloc(BM_EDIT_DIALOG_MEMSIZE);
-	if (!d) return;
-
-	memset(d, 0, BM_EDIT_DIALOG_MEMSIZE);
-
-#undef BM_EDIT_DIALOG_MEMSIZE
-
-	name = (unsigned char *) &d->items[BM_EDIT_DIALOG_FIELDS_NB + 1];
-	url = name + MAX_STR_LEN;
-
-	/* Get the name */
-	if (!src_name) {
-		/* Unknown name. */
-		get_current_title(ses, name, MAX_STR_LEN);
-	} else {
-		/* Known name. */
-		safe_strncpy(name, src_name, MAX_STR_LEN);
-	}
-
-	/* Get the url */
-	if (!src_url) {
-		/* Unknown . */
-		get_current_url(ses, url, MAX_STR_LEN);
-	} else {
-		/* Known url. */
-		safe_strncpy(url, src_url, MAX_STR_LEN);
-	}
-
-	d->title = title;
-	d->fn = layout_add_dialog;
-	d->refresh = (void (*)(void *))when_done;
-	d->refresh_data = d;
-	d->udata = parent;
-	d->udata2 = done_data;
-
-	d->items[0].type = D_FIELD;
-	d->items[0].dlen = MAX_STR_LEN;
-	d->items[0].data = name;
-	if (dialog_type == 1) d->items[0].fn = check_nonempty;
-
-	d->items[1].type = D_FIELD;
-	d->items[1].dlen = MAX_STR_LEN;
-	d->items[1].data = url;
-	if (dialog_type == 1) d->items[1].fn = check_nonempty;
-
-	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ENTER;
-	d->items[2].fn = ok_dialog;
-	d->items[2].text = TEXT(T_OK);
-
-	d->items[3].type = D_BUTTON;
-	d->items[3].gid = 0;
-	d->items[3].text = TEXT(T_CLEAR);
-	d->items[3].fn = clear_dialog;
-
-	d->items[4].type = D_BUTTON;
-	d->items[4].gid = B_ESC;
-	d->items[4].text = TEXT(T_CANCEL);
-	d->items[4].fn = cancel_dialog;
-
-	d->items[BM_EDIT_DIALOG_FIELDS_NB].type = D_END;
-
-	do_dialog(term, d, getml(d, NULL));
-
-#undef BM_EDIT_DIALOG_FIELDS_NB
+	do_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL,
+		       get_current_link_url(ses, url, MAX_STR_LEN), ses,
+		       parent, bookmark_add_add, NULL, 1);
 }

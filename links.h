@@ -561,10 +561,10 @@ void set_sigcld();
 
 typedef unsigned ip;
 
-int do_real_lookup(unsigned char *, ip *);
+int do_real_lookup(unsigned char *, ip **, int *);
 void shrink_dns_cache(int);
-int find_host(unsigned char *, ip *, void **, void (*)(void *, int), void *);
-int find_host_no_cache(unsigned char *, ip *, void **, void (*)(void *, int), void *);
+int find_host(unsigned char *, ip **, int *, void **, void (*)(void *, int), void *);
+int find_host_no_cache(unsigned char *, ip **, int *, void **, void (*)(void *, int), void *);
 void kill_dns_request(void **);
 
 /* cache.c */

@@ -180,7 +180,12 @@ void free_connection_data(struct connection *c)
 		internal("connection already suspended");
 	}
 	c->running = 0;
-	if (c->dnsquery) kill_dns_request(&c->dnsquery);
+	if (c->dnsquery) {
+		kill_dns_request(&c->dnsquery);
+		debug("freeeee!");
+		mem_free(*((void **) c->buffer)); /* XXX */
+		debug("freeeeed!");
+	}
 	if (c->buffer) {
 		mem_free(c->buffer);
 		c->buffer = NULL;

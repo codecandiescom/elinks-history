@@ -38,11 +38,13 @@ void close_socket(int *s)
 void connected(/* struct connection */ void *);
 
 struct conn_info {
-	void (*func)(struct connection *);
-	struct sockaddr_in sa;
-	ip addr;
+	/* Note that we MUST start with addr - free_connection_info() relies on it */
+	ip *addr; /* array of addresses */
+	int addrno; /* array len / sizeof(ip) */
 	int port;
+	struct sockaddr_in sa;
 	int *sock;
+	void (*func)(struct connection *);
 };
 
 void dns_found(/* struct connection */ void *, int);
@@ -79,11 +81,11 @@ void make_connection(struct connection *conn, int port, int *sock,
 	log_data("\n", 1);
 	
 	if (conn->no_cache >= NC_RELOAD)
-		async = find_host_no_cache(host, &c_i->addr, &conn->dnsquery,
-				           dns_found, conn);
+		async = find_host_no_cache(host, &c_i->addr, &c_i->addrno,
+					   &conn->dnsquery, dns_found, conn);
 	else
-		async = find_host(host, &c_i->addr, &conn->dnsquery,
-				  dns_found, conn);
+		async = find_host(host, &c_i->addr, &c_i->addrno,
+				  &conn->dnsquery, dns_found, conn);
 	
 	mem_free(host);
 	
@@ -148,14 +150,15 @@ void dns_found(void *data, int state)
 	int sock;
 	struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = conn->buffer;
+	int i;
 	
-	if (state) {
+	if (state < 0) {
 		setcstate(conn, S_NO_DNS);
 		retry_connection(conn);
 		return;
 	}
 	
-	sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sock == -1) {
 		setcstate(conn, -errno);
 		retry_connection(conn);
@@ -164,51 +167,60 @@ void dns_found(void *data, int state)
 	
 	*c_i->sock = sock;
 	fcntl(sock, F_SETFL, O_NONBLOCK);
-	
+
 	memset(&c_i->sa, 0, sizeof(struct sockaddr_in));
-	c_i->sa.sin_family = PF_INET;
-	c_i->sa.sin_addr.s_addr = c_i->addr;
+	c_i->sa.sin_family = AF_INET;
 	c_i->sa.sin_port = htons(c_i->port);
-	
-	if (connect(sock, (struct sockaddr *) &c_i->sa, sizeof(c_i->sa))) {
+
+	for (i = 0; i < c_i->addrno; i++) {
+		c_i->sa.sin_addr.s_addr = c_i->addr[i];
+			
+		if (connect(sock, (struct sockaddr *) &c_i->sa, sizeof(c_i->sa)) == 0)
+			break; /* success */
+	}
+
+	if (i == c_i->addrno) {
+		/* tried everything, but didn't help :( */
+
 		if (errno != EALREADY && errno != EINPROGRESS) {
 			setcstate(conn, -errno);
 			retry_connection(conn);
-			return;
+		} else {
+			set_handlers(sock, NULL, connected, exception, conn);
+			setcstate(conn, S_CONN);
 		}
 		
-		set_handlers(sock, NULL, connected, exception, conn);
-		setcstate(conn, S_CONN);
-		
-	} else {
-#ifdef HAVE_SSL
-		if (conn->ssl) {
-			conn->ssl = getSSL();
-			SSL_set_fd(conn->ssl, sock);
-			if (conn->no_tsl) conn->ssl->options |= SSL_OP_NO_TLSv1;
-			
-			switch (SSL_get_error(conn->ssl, SSL_connect(conn->ssl))) {
-				case SSL_ERROR_WANT_READ:
-					setcstate(conn, S_SSL_NEG);
-					set_handlers(sock, (void (*)(void *)) ssl_want_read,
-						     NULL, exception, conn);
-					return;
-					
-				case SSL_ERROR_NONE:
-					break;
-					
-				default:
-					conn->no_tsl++;
-					setcstate(conn, S_SSL_ERROR);
-					retry_connection(conn);
-					return;
-			}
-		}
-#endif
-		conn->buffer = NULL;
-		c_i->func(conn);
-		mem_free(c_i);
+		return;
 	}
+
+#ifdef HAVE_SSL
+	if (conn->ssl) {
+		conn->ssl = getSSL();
+		SSL_set_fd(conn->ssl, sock);
+		if (conn->no_tsl) conn->ssl->options |= SSL_OP_NO_TLSv1;
+		
+		switch (SSL_get_error(conn->ssl, SSL_connect(conn->ssl))) {
+			case SSL_ERROR_WANT_READ:
+				setcstate(conn, S_SSL_NEG);
+				set_handlers(sock, (void (*)(void *)) ssl_want_read,
+					     NULL, exception, conn);
+				return;
+				
+			case SSL_ERROR_NONE:
+				break;
+				
+			default:
+				conn->no_tsl++;
+				setcstate(conn, S_SSL_ERROR);
+				retry_connection(conn);
+				return;
+		}
+	}
+#endif
+	conn->buffer = NULL;
+	c_i->func(conn);
+	mem_free(c_i->addr);
+	mem_free(c_i);
 }
 
 void connected(void *data)
@@ -255,6 +267,7 @@ void connected(void *data)
 		}
 #endif
 		c->buffer = NULL;
+		//mem_free(b->addr);
 		mem_free(b);
 		func(c);
 	}

@@ -399,15 +399,22 @@ dnl == EMX hack
 
 test "$have_emx" = yes && LDFLAGS="$LDFLAGS -Zexe"
 
+
 # Create CONFDIR #define for config.h
-CONFDIR=$sysconfdir
-CONFDIR=`(
+
+sysconfdir_n=`(
     test "x$prefix" = xNONE && prefix=$ac_default_prefix
     test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
-    eval echo "$CONFDIR"
+    eval echo "$sysconfdir"
 )`
+sysconfdir=$sysconfdir_n
+(echo "$sysconfdir" | grep elinks >/dev/null 2>/dev/null) || \
+	sysconfdir="$sysconfdir/elinks"
+
+CONFDIR=$sysconfdir
 AC_DEFINE_UNQUOTED(CONFDIR,"$CONFDIR")
 AC_SUBST(CONFDIR)
+
 
 dnl gcc specific options (continue)
 if test "x$ac_cv_prog_gcc" = "xyes"; then
@@ -418,9 +425,11 @@ fi
 
 AC_OUTPUT([ \
  Makefile \
+ elinkskeys.5 \
  Unicode/Makefile \
  contrib/Makefile \
  contrib/elinks.spec \
+ contrib/lua/hooks.lua \
  intl/Makefile \
  src/Makefile \
  src/bfu/Makefile \

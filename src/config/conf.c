@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.45 2002/07/02 16:00:53 pasky Exp $ */
+/* $Id: conf.c,v 1.46 2002/07/02 22:38:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,8 +237,8 @@ parse_include(struct list_head *opt_tree, unsigned char **file, int *line,
 	 * with some dummy string which we will destroy later; still better
 	 * than cloning whole options tree or polluting interface with another
 	 * rarely-used option ;). */
-	/* XXX: We should try /etc/elinks/<file> when proceeding
-	 * /etc/elinks/<otherfile> ;). --pasky */
+	/* XXX: We should try CONFDIR/<file> when proceeding
+	 * CONFDIR/<otherfile> ;). --pasky */
 	if (load_config_file(fname[0] == '/' ? (unsigned char *) ""
 					     : elinks_home,
 			     fname, opt_tree, &dumbstr, &dumblen)) {
@@ -420,9 +420,9 @@ load_config_file(unsigned char *prefix, unsigned char *name,
 void
 load_config()
 {
-	load_config_file("/etc/elinks/", "elinks.conf",
+	load_config_file(CONFDIR, "elinks.conf",
 			 root_options, NULL, NULL);
-	load_config_file(elinks_home, "elinks.conf",
+	load_config_file(CONFDIR, "elinks.conf",
 			 root_options, NULL, NULL);
 }
 

@@ -425,7 +425,7 @@ bind main ,             lua-console
 .SH FILES
 
 .TR
-.B /etc/elinks/elinks.conf
+.B @sysconfdir@/elinks.conf
 Site-wide configuration file.
 
 .TR

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.42 2003/10/03 18:28:01 kuser Exp $ */
+/* $Id: home.c,v 1.43 2003/10/04 08:59:03 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,8 @@ get_home(void)
 end:
 	if (home_elinks)
 		add_to_strn(&home_elinks, "/");
-	mem_free(home);
+	if (home)
+		mem_free(home);
 
 	return home_elinks;
 }

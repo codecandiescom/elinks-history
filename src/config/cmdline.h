@@ -1,10 +1,10 @@
-/* $Id: cmdline.h,v 1.4 2004/02/13 08:02:48 witekfl Exp $ */
+/* $Id: cmdline.h,v 1.5 2004/02/23 11:20:34 witekfl Exp $ */
 
 #ifndef EL__CONFIG_CMDLINE_H
 #define EL__CONFIG_CMDLINE_H
 
 #include "util/lists.h"
 
-void parse_options(int, unsigned char *[], struct list_head *);
+int parse_options(int, unsigned char *[], struct list_head *);
 
 #endif

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.175 2004/02/15 06:57:09 witekfl Exp $ */
+/* $Id: main.c,v 1.176 2004/02/23 11:20:33 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,6 +74,8 @@ void
 init(void)
 {
 	int no_connect = 0;
+	int ret;
+
 	INIT_LIST_HEAD(url_list);
 
 	init_static_version();
@@ -107,7 +109,12 @@ init(void)
 	}
 
 	/* Parsing command line options */
-	parse_options(ac - 1, av + 1, &url_list);
+	ret = parse_options(ac - 1, av + 1, &url_list);
+	if (ret) {
+		retval = RET_SYNTAX;
+		terminate = 1;
+		goto end;
+	}
 
 	if (!isatty(0)) {
 		add_to_string_list(&url_list, "file:///dev/stdin", 17);

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.47 2004/02/13 08:02:47 witekfl Exp $ */
+/* $Id: cmdline.c,v 1.48 2004/02/23 11:20:34 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-static void
+static int
 _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_head *url_list)
 {
 	while (argc) {
@@ -69,7 +69,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_
 			if (!option) {
 unknown_option:
 				ERROR(gettext("Unknown option %s"), argv[-1]);
-				return;
+				return 1;
 			}
 
 			if (option_types[option->type].cmdline
@@ -82,7 +82,7 @@ unknown_option:
 					if (err[0])
 						ERROR(gettext("Cannot parse option %s: %s"), argv[-1], err);
 
-					return;
+					return 1;
 				}
 			} else {
 				goto unknown_option;
@@ -92,12 +92,13 @@ unknown_option:
 			add_to_string_list(url_list, argv[-1], -1);
 		}
 	}
+	return 0;
 }
 
-void
+int
 parse_options(int argc, unsigned char *argv[], struct list_head *url_list)
 {
-	_parse_options(argc, argv, cmdline_options, url_list);
+	return _parse_options(argc, argv, cmdline_options, url_list);
 }
 
 

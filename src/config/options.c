@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.36 2002/05/25 20:06:09 pasky Exp $ */
+/* $Id: options.c,v 1.37 2002/05/26 17:56:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,9 +287,9 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 	printf("Options:\n\n");
 
 	/* TODO: Alphabetical order! */
-	foreach (option, *root_options) {
+	foreachback (option, *root_options) {
 
-		if (option->flags & OPT_CMDLINE) {
+		if (1 /*option->flags & OPT_CMDLINE*/) {
 			unsigned char *cname = cmd_name(option->name);
 
 			printf("-%s ", cname);
@@ -362,41 +362,41 @@ void
 register_options()
 {
 	add_opt_tree("",
-		"connection", OPT_CFGFILE,
+		"connection", 0,
 		"Connection options.");
 
 	add_opt_bool("connection",
-		"async_dns", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"async_dns", 0, 1,
 		"Use asynchronous DNS resolver?");
 
 	add_opt_int("connection",
-		"max_connections", OPT_CMDLINE | OPT_CFGFILE, 1, 16, 10,
+		"max_connections", 0, 1, 16, 10,
 		"Maximum number of concurrent connections.");
 
 	add_opt_int("connection",
-		"max_connections_to_host", OPT_CMDLINE | OPT_CFGFILE, 1, 8, 2,
+		"max_connections_to_host", 0, 1, 8, 2,
 		"Maximum number of concurrent connection to a given host.");
 
 	add_opt_int("connection",
-		"retries", OPT_CMDLINE | OPT_CFGFILE, 1, 16, 3,
+		"retries", 0, 1, 16, 3,
 		"Number of tries to estabilish a connection.");
 
 	add_opt_int("connection",
-		"receive_timeout", OPT_CMDLINE | OPT_CFGFILE, 1, 1800, 120,
+		"receive_timeout", 0, 1, 1800, 120,
 		"Timeout on receive (in seconds).");
 
 	add_opt_int("connection",
-		"unrestartable_receive_timeout", OPT_CMDLINE | OPT_CFGFILE, 1, 1800, 600,
+		"unrestartable_receive_timeout", 0, 1, 1800, 600,
 		"Timeout on non restartable connections (in seconds).");
 
 
 
 	add_opt_tree("",
-		"cookies", OPT_CFGFILE,
+		"cookies", 0,
 		"Cookies options.");
 
 	add_opt_int("cookies",
-		"policy", OPT_CMDLINE | OPT_CFGFILE,
+		"policy", 0,
 		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, COOKIES_ACCEPT_ALL,
 		"Mode of accepting cookies:\n"
 		"0 is accept no cookies\n"
@@ -404,42 +404,42 @@ register_options()
 		"2 is accept all cookies");
 
 	add_opt_bool("cookies",
-		"paranoid_security", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"paranoid_security", 0, 0,
 		"When enabled, we'll require three dots in cookies domain for all\n"
 		"non-international domains (instead of just two dots). Please see\n"
 		"code (cookies.c:check_domain_security()) for further description");
 
 	add_opt_bool("cookies",
-		"save", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"save", 0, 1,
 		"Load/save cookies from/to disk?");
 
 	add_opt_bool("cookies",
-		"resave", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"resave", 0, 1,
 		"Save cookies after each change in cookies list? No effect when\n"
 		"cookies_save is off.");
 
 
 
 	add_opt_tree("",
-		"document", OPT_CFGFILE,
+		"document", 0,
 		"Document options.");
 
 	add_opt_tree("document",
-		"browse", OPT_CFGFILE,
+		"browse", 0,
 		"Document browsing options (mainly interactivity).");
 
 
 	add_opt_tree("document.browse",
-		"accesskey", OPT_CFGFILE,
+		"accesskey", 0,
 		"Options for handling accesskey attribute.");
 
 	add_opt_bool("document.browse.accesskey",
-		"auto_follow", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"auto_follow", 0, 0,
 		"Automatically follow link / submit form if appropriate accesskey\n"
 		"is pressed - this is standart behaviour, however dangerous.");
 
 	add_opt_int("document.browse.accesskey",
-		"priority", OPT_CMDLINE | OPT_CFGFILE, 0, 2, 1,
+		"priority", 0, 0, 2, 1,
 		"Priority of 'accesskey' HTML attribute:\n"
 		"0 is first try all normal bindings and if it fails, check accesskey\n"
 		"1 is first try only frame bindings and if it fails, check accesskey\n"
@@ -447,232 +447,232 @@ register_options()
 
 
 	add_opt_tree("document.browse",
-		"forms", OPT_CFGFILE,
+		"forms", 0,
 		"Options for handling forms interaction.");
 
 	add_opt_bool("document.browse.forms",
-		"auto_submit", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"auto_submit", 0, 1,
 		"Automagically submit a form when enter pressed on text field.");
 
 	add_opt_bool("document.browse.forms",
-		"confirm_submit", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"confirm_submit", 0, 1,
 		"Ask for confirmation when submitting a form.");
 
 
 	add_opt_tree("document.browse",
-		"images", OPT_CFGFILE,
+		"images", 0,
 		"Options for handling of images.");
 
 	add_opt_bool("document.browse.images",
-		"show_as_links", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"show_as_links", 0, 0,
 		"Display links to images.");
 
 
 	add_opt_tree("document.browse",
-		"links", OPT_CFGFILE,
+		"links", 0,
 		"Options for handling of links to other documents.");
 
 	add_opt_bool("document.browse.links",
-		"color_dirs", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"color_dirs", 0, 1,
 		"Highlight links to directories when listing local disk content.");
 
 	add_opt_bool("document.browse.links",
-		"numbering", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"numbering", 0, 0,
 		"Display links numbered.");
 
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */
 	add_opt_bool("document.browse.links",
-		"wraparound", /* OPT_CMDLINE | OPT_CFGFILE */ 0, 0,
+		"wraparound", /* 0 */ 0, 0,
 		"When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa.");
 
 
 	add_opt_int("document.browse",
-		"margin_width", OPT_CMDLINE | OPT_CFGFILE, 0, 9, 3,
+		"margin_width", 0, 0, 9, 3,
 		"Horizontal text margin.");
 
 	add_opt_bool("document.browse",
-		"show_status_bar", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"show_status_bar", 0, 1,
 		"Show status bar on the screen.");
 
 	add_opt_bool("document.browse",
-		"show_title_bar", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"show_title_bar", 0, 1,
 		"Show title bar on the screen.");
 
 	/* TODO - this is implemented, but disabled for now as
 	 * it's buggy. */
 	add_opt_bool("document.browse",
-		"startup_goto_dialog", /* OPT_CMDLINE | OPT_CFGFILE */ 0, 1,
+		"startup_goto_dialog", /* 0 */ 0, 1,
 		"Pop up goto dialog on startup when there's no homepage.");
 
 	add_opt_bool("document.browse",
-		"table_move_order", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"table_move_order", 0, 0,
 		"Move by columns in table.");
 
 
 
 	add_opt_tree("document",
-		"cache", OPT_CFGFILE,
+		"cache", 0,
 		"Cache options.");
 
 	add_opt_int("document.cache",
-		"format_cache_size", OPT_CMDLINE | OPT_CFGFILE, 0, 256, 5,
+		"format_cache_size", 0, 0, 256, 5,
 		"Number of cached formatted pages.");
 
 	add_opt_int("document.cache",
-		"memory_cache_size", OPT_CMDLINE | OPT_CFGFILE, 0, MAXINT, 1048576,
+		"memory_cache_size", 0, 0, MAXINT, 1048576,
 		"Memory cache size (in kilobytes).");
 
 
 
 	add_opt_tree("document",
-		"colors", OPT_CFGFILE,
+		"colors", 0,
 		"Default color settings.");
 
 	add_opt_ptr("document.colors",
-		"text", OPT_CMDLINE | OPT_CFGFILE, OPT_COLOR, &default_fg,
+		"text", 0, OPT_COLOR, &default_fg,
 		"Default text color.");
 
 	/* FIXME - this produces ugly results now */
 	add_opt_ptr("document.colors",
-		"background", /* OPT_CMDLINE | OPT_CFGFILE */ 0, OPT_COLOR, &default_bg,
+		"background", /* 0 */ 0, OPT_COLOR, &default_bg,
 		"Default background color.");
 
 	add_opt_ptr("document.colors",
-		"link", OPT_CMDLINE | OPT_CFGFILE, OPT_COLOR, &default_link,
+		"link", 0, OPT_COLOR, &default_link,
 		"Default link color.");
 
 	add_opt_ptr("document.colors",
-		"vlink", OPT_CMDLINE | OPT_CFGFILE, OPT_COLOR, &default_vlink,
+		"vlink", 0, OPT_COLOR, &default_vlink,
 		"Default vlink color.");
 
 	add_opt_bool("document.colors",
-		"avoid_dark_on_black", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"avoid_dark_on_black", 0, 1,
 		"Avoid dark colors on black background.");
 
 	add_opt_bool("document.colors",
-		"use_document_colors", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"use_document_colors", 0, 1,
 		"Use colors specified in document.");
 
 
 
 	add_opt_tree("document",
-		"download", OPT_CFGFILE,
+		"download", 0,
 		"Options regarding files downloading and handling.");
 
 	add_opt_string("document.download",
-		"default_mime_type", OPT_CMDLINE | OPT_CFGFILE, "text/plain",
+		"default_mime_type", 0, "text/plain",
 		"MIME type for a document we should assume by default (when we are\n"
 		"unable to guess it properly from known informations about the\n"
 		"document).");
 
 	add_opt_string("document.download",
-		"download_dir", OPT_CMDLINE | OPT_CFGFILE, "./",
+		"download_dir", 0, "./",
 		"Default download directory.");
 
 	add_opt_bool("document.download",
-		"download_utime", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"download_utime", 0, 0,
 		"Set time of downloaded files accordingly to one stored on server.");
 
 
 
 	add_opt_tree("document",
-		"history", OPT_CFGFILE,
+		"history", 0,
 		"History options.");
 
 	/* XXX: Disable global history if -anonymous is given? */
 	add_opt_bool("document.history",
-		"enable_global_history", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"enable_global_history", 0, 1,
 		"Enable global history (\"history of all pages visited\")?");
 
 	add_opt_bool("document.history",
-		"keep_unhistory", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"keep_unhistory", 0, 1,
 		"Keep unhistory (\"forward history\")?");
 
 
 
 	add_opt_tree("document",
-		"html", OPT_CFGFILE,
+		"html", 0,
 		"Options concerning displaying of HTML pages.");
 
 	add_opt_bool("document.html",
-		"display_frames", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"display_frames", 0, 1,
 		"Display frames.");
 
 	add_opt_bool("document.html",
-		"display_tables", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"display_tables", 0, 1,
 		"Display tables.");
 
 
 
 	add_opt_codepage("document",
-		"assume_codepage", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"assume_codepage", 0, 0,
 		"Default document codepage.");
 
 	add_opt_bool("document",
-		"force_assume_codepage", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"force_assume_codepage", 0, 0,
 		"Ignore charset info sent by server.");
 
 	add_opt_int("document",
-		"dump_width", OPT_CMDLINE | OPT_CFGFILE, 40, 512, 80,
+		"dump_width", 0, 40, 512, 80,
 		"Size of screen in characters, when dumping a HTML document.");
 
 
 
 	add_opt_tree("",
-		"protocol", OPT_CFGFILE,
+		"protocol", 0,
 		"Protocol specific options.");
 
 	add_opt_tree("protocol",
-		"http", OPT_CFGFILE,
+		"http", 0,
 		"HTTP specific options.");
 
 
 	add_opt_tree("protocol.http",
-		"bugs", OPT_CFGFILE,
+		"bugs", 0,
 		"Server-side HTTP bugs workarounds.");
 
 	add_opt_bool("protocol.http.bugs",
-		"allow_blacklist", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"allow_blacklist", 0, 1,
 		"Allow blacklist of buggy servers.");
 
 	add_opt_bool("protocol.http.bugs",
-		"broken_302_redirect", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"broken_302_redirect", 0, 0,
 		"Broken 302 redirect (violates RFC but compatible with Netscape).");
 
 	add_opt_bool("protocol.http.bugs",
-		"post_no_keepalive", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"post_no_keepalive", 0, 0,
 		"No keepalive connection after POST request.");
 
 	add_opt_bool("protocol.http.bugs",
-		"http10", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"http10", 0, 0,
 		"Use HTTP/1.0 protocol instead of HTTP/1.1.");
 
 
 	add_opt_tree("protocol.http",
-		"proxy", OPT_CFGFILE,
+		"proxy", 0,
 		"HTTP proxy configuration.");
 
 	add_opt_string("protocol.http.proxy",
-		"host", OPT_CMDLINE | OPT_CFGFILE, "",
+		"host", 0, "",
 		"Host and port number (host:port) of the HTTP proxy, or blank.");
 
 	add_opt_string("protocol.http.proxy",
-		"user", OPT_CMDLINE | OPT_CFGFILE, "",
+		"user", 0, "",
 		"Proxy authentication user.");
 
 	add_opt_string("protocol.http.proxy",
-		"passwd", OPT_CMDLINE | OPT_CFGFILE, "",
+		"passwd", 0, "",
 		"Proxy authentication passwd.");
 
 
 	add_opt_tree("protocol.http",
-		"referer", OPT_CFGFILE,
+		"referer", 0,
 		"HTTP referer sending rules.");
 
 	add_opt_int("protocol.http.referer",
-		"policy", OPT_CMDLINE | OPT_CFGFILE,
+		"policy", 0,
 		REFERER_NONE, REFERER_TRUE, REFERER_SAME_URL,
 		"Mode of sending HTTP referer:\n"
 		"0 is send no referer\n"
@@ -681,16 +681,16 @@ register_options()
 		"3 is send previous URL as referer (correct, but insecure)\n");
 
 	add_opt_string("protocol.http.referer",
-		"fake", OPT_CMDLINE | OPT_CFGFILE, "",
+		"fake", 0, "",
 		"Fake referer to be sent when policy is 3.");
 
 
 	add_opt_string("protocol.http",
-		"accept_language", OPT_CMDLINE | OPT_CFGFILE, "",
+		"accept_language", 0, "",
 		"Send Accept-Language header.");
 
 	add_opt_string("protocol.http",
-		"user_agent", OPT_CMDLINE | OPT_CFGFILE, "",
+		"user_agent", 0, "",
 		"Change the User Agent ID. That means identification string, which\n"
 		"is sent to HTTP server when a document is requested.\n"
 		"If empty, defaults to: ELinks (<version>; <system_id>; <term_size>)");
@@ -698,64 +698,64 @@ register_options()
 
 
 	add_opt_tree("protocol",
-		"ftp", OPT_CFGFILE,
+		"ftp", 0,
 		"FTP specific options.");
 
 	add_opt_tree("protocol.ftp",
-		"proxy", OPT_CFGFILE,
+		"proxy", 0,
 		"FTP proxy configuration.");
 
 	add_opt_string("protocol.ftp.proxy",
-		"host", OPT_CMDLINE | OPT_CFGFILE, "",
+		"host", 0, "",
 		"Host and port number (host:port) of the FTP proxy, or blank.");
 
 	add_opt_string("protocol.ftp",
-		"anon_passwd", OPT_CMDLINE | OPT_CFGFILE, "some@host.domain",
+		"anon_passwd", 0, "some@host.domain",
 		"FTP anonymous password to be sent.");
 
 
 
 	add_opt_tree("protocol",
-		"file", OPT_CFGFILE,
+		"file", 0,
 		"Options specific for local browsing.");
 
 	add_opt_bool("protocol.file",
-		"allow_special_files", OPT_CMDLINE | OPT_CFGFILE, 0,
+		"allow_special_files", 0, 0,
 		"Allow reading from non-regular files? (DANGEROUS - reading\n"
 		"/dev/urandom or /dev/zero can ruin your day!)");
 
 
 
 	add_opt_tree("protocol",
-		"user", OPT_CFGFILE,
+		"user", 0,
 		"User protocols options.");
 
 	add_opt_ptr("protocol.user",
-		"mailto", OPT_CFGFILE, OPT_PROGRAM, &mailto_prog,
+		"mailto", 0, OPT_PROGRAM, &mailto_prog,
 		NULL);
 
 	add_opt_ptr("protocol.user",
-		"telnet", OPT_CFGFILE, OPT_PROGRAM, &telnet_prog,
+		"telnet", 0, OPT_PROGRAM, &telnet_prog,
 		NULL);
 
 	add_opt_ptr("protocol.user",
-		"tn3270", OPT_CFGFILE, OPT_PROGRAM, &tn3270_prog,
+		"tn3270", 0, OPT_PROGRAM, &tn3270_prog,
 		NULL);
 
 
 
 	add_opt_tree("",
-		"ui", OPT_CFGFILE,
+		"ui", 0,
 		"User interface options.");
 
 	add_opt_ptr("ui",
-		"language", OPT_CMDLINE | OPT_CFGFILE, OPT_LANGUAGE, &current_language,
+		"language", 0, OPT_LANGUAGE, &current_language,
 		"Language of user interface.");
 
 
 
 	add_opt_bool("",
-		"secure_save", OPT_CMDLINE | OPT_CFGFILE, 1,
+		"secure_save", 0, 1,
 		"First write data to 'file.tmp', rename to 'file' upon\n"
 		"successful finishing this. Note that this relates only to\n"
 		"config files, not downloaded files. You may want to disable\n"
@@ -765,50 +765,50 @@ register_options()
 
 
 	add_opt_bool("",
-		"anonymous", OPT_CMDLINE, 0,
+		"anonymous", 0, 0,
 		"Restrict ELinks so that it can run on an anonymous account.\n"
 		"No local file browsing, no downloads. Executing of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.");
 
 	add_opt_int("",
-		"base_session", OPT_CMDLINE, 0, MAXINT, 0,
+		"base_session", 0, 0, MAXINT, 0,
 		"Run this ELinks in separate session - instances of ELinks with\n"
 		"same base_session will connect together and share runtime\n"
 		"informations. By default, base_session is 0.");
 
 	add_opt_bool("",
-		"dump", OPT_CMDLINE, 0,
+		"dump", 0, 0,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout.");
 
 	add_opt_command("",
-		"?", OPT_CMDLINE, printhelp_cmd,
+		"?", 0, printhelp_cmd,
 		NULL);
 
 	add_opt_command("",
-		"h", OPT_CMDLINE, printhelp_cmd,
+		"h", 0, printhelp_cmd,
 		NULL);
 
 	add_opt_command("",
-		"help", OPT_CMDLINE, printhelp_cmd,
+		"help", 0, printhelp_cmd,
 		"Print usage help and exit.");
 
 	add_opt_command("",
-		"lookup", OPT_CMDLINE, lookup_cmd,
+		"lookup", 0, lookup_cmd,
 		"Make lookup for specified host.");
 
 	add_opt_bool("",
-		"no_connect", OPT_CMDLINE, 0,
+		"no_connect", 0, 0,
 		"Run ELinks as a separate instance - instead of connecting to\n"
 		"existing instance.");
 
 	add_opt_bool("",
-		"source", OPT_CMDLINE, 0,
+		"source", 0, 0,
 		"Write the given HTML document in source form to stdout.");
 			
 	add_opt_command("",
-		"version", OPT_CMDLINE, version_cmd,
+		"version", 0, version_cmd,
 		"Print ELinks version information and exit.");
 
 
@@ -817,22 +817,22 @@ register_options()
 	/* These will disappear */
 
 	add_opt_void("",
-		"terminal", OPT_CFGFILE, OPT_TERM,
+		"terminal", 0, OPT_TERM,
 		NULL);
 
 	add_opt_void("",
-		"association", OPT_CFGFILE, OPT_MIME_TYPE,
+		"association", 0, OPT_MIME_TYPE,
 		NULL);
 
 	add_opt_void("",
-		"extension", OPT_CFGFILE, OPT_EXTENSION,
+		"extension", 0, OPT_EXTENSION,
 		NULL);
 
 	add_opt_void("",
-		"bind", OPT_CFGFILE, OPT_KEYBIND,
+		"bind", 0, OPT_KEYBIND,
 		NULL);
 
 	add_opt_void("",
-		"unbind", OPT_CFGFILE, OPT_KEYUNBIND,
+		"unbind", 0, OPT_KEYUNBIND,
 		NULL);
 }

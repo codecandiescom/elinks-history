@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.25 2005/03/26 13:40:09 pasky Exp $
+# $Id: hooks.pl,v 1.26 2005/03/26 13:45:38 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -586,27 +586,28 @@ sub quit_hook
 {
 	# Collapse XBEL bookmark folders (obsoleted by bookmarks.folder_state)
 
-	my $bookmarkfile = $ENV{"HOME"} . '/.elinks/bookmarks.xbel';
-	if (-f $bookmarkfile and loadrc("collapse") eq "yes") {
-		open(BOOKMARKS, "+<$bookmarkfile");
+	my $bookmarkfile = $ENV{'HOME'} . '/.elinks/bookmarks.xbel';
+	if (-f $bookmarkfile and loadrc('collapse') eq 'yes') {
+		open BOOKMARKS, "+<$bookmarkfile";
 		my $bookmark;
 		while (<BOOKMARKS>) {
 			s/<folder folded="no">/<folder folded="yes">/;
 			$bookmark .= $_;
 		}
 		seek(BOOKMARKS, 0, 0);
-		print(BOOKMARKS $bookmark);
+		print BOOKMARKS $bookmark;
 		truncate(BOOKMARKS, tell(BOOKMARKS));
-		close(BOOKMARKS);
+		close BOOKMARKS;
 	}
+
 
 	# Words of wisdom from ELinks the Sage
 
-	if (loadrc("fortune") eq "fortune") {
+	if (loadrc('fortune') eq 'fortune') {
 		system('echo ""; fortune -sa 2>/dev/null');
-		die
+		die;
 	}
-	die if (loadrc("fortune") =~ '^(none|quiet)$');
+	die if (loadrc('fortune') =~ /^(none|quiet)$/);
 
 	my $cookiejar = 'elinks.fortune';
 	my $ohwhynot = `ls /usr/share/doc/elinks*/$cookiejar 2>/dev/null`;
@@ -618,7 +619,7 @@ sub quit_hook
 
 	my (@line, $fortune);
 	$line[0] = 0;
-	while(<COOKIES>) {
+	while (<COOKIES>) {
 		$line[$#line + 1] = tell if /^%$/;
 	}
 	srand();
@@ -630,7 +631,8 @@ sub quit_hook
 		}
 	}
 	close COOKIES;
-	print("\n", $fortune);
+
+	print "\n", $fortune;
 }
 
 

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.99 2003/11/28 00:17:34 jonas Exp $ */
+/* $Id: dialog.c,v 1.100 2003/11/28 01:40:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,9 +282,6 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			}
 
 		case EV_ABORT:
-			/* Moved this line up so that the dlg would have access
-			   to its member vars before they get freed. */
-
 			if (dlg_data->dlg->refresh) {
 				struct dialog_refresh *refresh = dlg_data->dlg->refresh;
 

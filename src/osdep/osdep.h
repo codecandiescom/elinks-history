@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.27 2003/10/27 02:28:31 pasky Exp $ */
+/* $Id: osdep.h,v 1.28 2003/10/27 02:55:17 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -11,9 +11,6 @@
 #define ASCII_CR 13
 #define ASCII_ESC 27
 #define ASCII_DEL 127
-
-
-#include "osdep/system.h"
 
 
 struct terminal;

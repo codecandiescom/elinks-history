@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.120 2003/07/21 16:22:43 jonas Exp $ */
+/* $Id: file.c,v 1.121 2003/07/21 23:41:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,7 +274,7 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
 	/* add_to_string(&fragment, &fragmentlen, "   "); */
 	add_html_to_string(page, entry->attrib, strlen(entry->attrib));
 	add_to_string(page, "<a href=\"");
-	add_to_string(page, htmlname.source);
+	add_string_to_string(page, &htmlname);
 
 	if (entry->attrib[0] == 'd') {
 		add_char_to_string(page, '/');
@@ -302,7 +302,7 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
 		string_concat(page, "<font color=\"", dircolor, "\"><b>", NULL);
 	}
 
-	add_to_string(page, htmlname.source);
+	add_string_to_string(page, &htmlname);
 	done_string(&htmlname);
 
 	if (entry->attrib[0] == 'd' && *dircolor) {

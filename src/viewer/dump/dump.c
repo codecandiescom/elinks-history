@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.79 2004/01/05 13:32:53 pasky Exp $ */
+/* $Id: dump.c,v 1.80 2004/01/05 13:33:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,7 +317,7 @@ fail:
 				continue;
 
 			if (l->title)
-				snprintf(buf, D_BUF, "%4d. %s\n      %s\n",
+				snprintf(buf, D_BUF, "%4d. %s\n\t%s\n",
 					 x + 1, l->title, l->where);
 			else
 				snprintf(buf, D_BUF, "%4d. %s\n",

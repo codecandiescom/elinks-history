@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.42 2003/05/05 23:13:47 zas Exp $ */
+/* $Id: session.c,v 1.43 2003/05/05 23:27:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -263,10 +263,11 @@ print_screen_status(struct session *ses)
 	struct terminal *term = ses->tab->term;
 	unsigned char *msg = NULL;
 	int tabs_count;
+	int ses_tab_is_current = (ses->tab == get_current_tab(ses->tab->term));
 
 	init_bars_status(ses, &tabs_count, d_opt);
 
-	if (ses->visible_status_bar) {
+	if (ses->visible_status_bar && ses_tab_is_current) {
 		static int last_current_link;
 		int tab_info_len = 0;
 		struct status *stat = NULL;
@@ -363,7 +364,7 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-	if (ses->visible_title_bar) {
+	if (ses->visible_title_bar && ses_tab_is_current) {
 		fill_area(term, 0, 0, term->x, 1,
 			  get_bfu_color(term, "title.title-bar"));
 		msg = print_current_title(ses);

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.57 2003/05/05 22:18:50 zas Exp $ */
+/* $Id: view.c,v 1.58 2003/05/05 23:27:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1038,11 +1038,15 @@ draw_frames(struct session *ses)
 void
 draw_formatted(struct session *ses)
 {
+	if (ses->tab != get_current_tab(ses->tab->term))
+		return;
+
 	if (!ses->screen || !ses->screen->f_data) {
 		/*internal("document not formatted");*/
 		fill_area(ses->tab->term, 0, 1, ses->tab->term->x, ses->tab->term->y - 2, ' ');
 		return;
 	}
+
 	if (!ses->screen->vs && have_location(ses))
 		ses->screen->vs = &cur_loc(ses)->vs;
 	ses->screen->xl = ses->screen->yl = -1;

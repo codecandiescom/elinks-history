@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.42 2004/01/28 18:41:59 pasky Exp $ */
+/* $Id: textarea.c,v 1.43 2004/03/03 18:10:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,9 +384,9 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return 1;
 
-	if (doc_view->vs->current_link == -1) return 1;
+	link = get_current_link(doc_view);
+	if (!link) return 1;
 
-	link = &doc_view->document->links[doc_view->vs->current_link];
 	frm = link->form;
 	assert(frm && frm->type == FC_TEXTAREA);
 	if (frm->ro) return 1;
@@ -619,13 +619,15 @@ textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep)
 void
 set_textarea(struct session *ses, struct document_view *doc_view, int kbd)
 {
+	struct link *link;
+
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	if (doc_view->vs->current_link != -1
-	    && doc_view->document->links[doc_view->vs->current_link].type == LINK_AREA) {
+	link = get_current_link(doc_view);
+	if (link && link->type == LINK_AREA) {
 		struct term_event ev = INIT_TERM_EVENT(EV_KBD, kbd, 0, 0);
 
-		field_op(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link], &ev, 1);
+		field_op(ses, doc_view, link, &ev, 1);
 	}
 }

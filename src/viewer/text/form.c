@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.81 2004/01/25 12:40:12 jonas Exp $ */
+/* $Id: form.c,v 1.82 2004/03/03 18:10:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -684,11 +684,10 @@ do_reset_form(struct document_view *doc_view, int form_num)
 void
 reset_form(struct session *ses, struct document_view *doc_view, int a)
 {
-	struct link *link;
+	struct link *link = get_current_link(doc_view);
 
-	if (doc_view->vs->current_link == -1) return;
+	if (!link) return;
 
-	link = &doc_view->document->links[doc_view->vs->current_link];
 	do_reset_form(doc_view, link->form->form_num);
 	draw_forms(ses->tab->term, doc_view);
 }
@@ -787,12 +786,11 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 void
 submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 {
-	struct link *link;
+	struct link *link = get_current_link(doc_view);
 	unsigned char *url;
 
-	if (doc_view->vs->current_link == -1) return;
+	if (!link) return;
 
-	link = &doc_view->document->links[doc_view->vs->current_link];
 	url = get_form_url(ses, doc_view, link->form);
 	if (url) goto_link(url, link->target, ses, do_reload);
 }

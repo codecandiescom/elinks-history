@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.127 2003/12/20 22:07:35 jonas Exp $ */
+/* $Id: listbox.c,v 1.128 2003/12/20 22:18:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "bfu/hierbox.h"
 #include "bfu/listbox.h"
 #include "bfu/style.h"
+#include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
@@ -548,9 +549,13 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	 * the listbox browser anyway, so what.. */
 
 	switch (ev->ev) {
+		enum keyact action;
+
 		case EV_KBD:
+			action = kbd_action(KM_MENU, ev, NULL);
+
 			/* Moving the box */
-			if (ev->x == KBD_DOWN
+			if (action == ACT_DOWN
 			    || keyboard_combo(ev, KBD_CTRL, 'N')) {
 				box_sel_move(dlg_item, 1);
 				display_dlg_item(dlg_data, dlg_item, 1);
@@ -558,7 +563,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_UP
+			if (action == ACT_UP
 			    || keyboard_combo(ev, KBD_CTRL, 'P')) {
 				box_sel_move(dlg_item, -1);
 				display_dlg_item(dlg_data, dlg_item, 1);
@@ -566,7 +571,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_PAGE_DOWN
+			if (action == ACT_PAGE_DOWN
 			    || keyboard_combo(ev, KBD_CTRL, 'V')
 			    || keyboard_combo(ev, KBD_CTRL, 'F')) {
 				box_sel_move(dlg_item, dlg_item->h / 2);
@@ -575,7 +580,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_PAGE_UP
+			if (action == ACT_PAGE_UP
 			    || keyboard_combo(ev, KBD_ALT, 'V')
 			    || keyboard_combo(ev, KBD_CTRL, 'B')) {
 				box_sel_move(dlg_item, -dlg_item->h / 2);
@@ -584,7 +589,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_HOME
+			if (action == ACT_HOME
 			    || keyboard_combo(ev, KBD_CTRL, 'A')) {
 				box_sel_move(dlg_item, -MAXINT);
 				display_dlg_item(dlg_data, dlg_item, 1);
@@ -592,7 +597,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_END
+			if (action == ACT_END
 			    || keyboard_combo(ev, KBD_CTRL, 'E')) {
 				box_sel_move(dlg_item, MAXINT);
 				display_dlg_item(dlg_data, dlg_item, 1);
@@ -613,7 +618,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_DEL) {
+			if (action == ACT_DELETE) {
 				struct listbox_data *box;
 
 				box = get_listbox_widget_data(dlg_item);

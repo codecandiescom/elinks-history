@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.110 2003/12/19 12:03:38 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.111 2003/12/20 22:18:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -798,6 +798,7 @@ static struct default_kb default_menu_keymap[] = {
 	{ ACT_PAGE_DOWN, 'F', KBD_CTRL },
 	{ ACT_PAGE_UP, KBD_PAGE_UP, 0 },
 	{ ACT_PAGE_UP, 'B', KBD_CTRL },
+	{ ACT_DELETE, KBD_DEL, 0 },
 	{ 0, 0, 0}
 };
 

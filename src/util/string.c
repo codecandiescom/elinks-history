@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.73 2003/07/23 16:17:17 zas Exp $ */
+/* $Id: string.c,v 1.74 2003/07/24 02:01:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,12 +26,6 @@
  * probably included in elinks.h, it's important enough) would be nice to
  * have. --pasky */
 
-
-/* Autoallocation string constructors */
-
-/* Note that, contrary to init_str() & co, these functions are NOT granular,
- * thus you can't simply reuse strings allocated by these in add_to_str()-style
- * functions. */
 
 #define string_assert(f, l, x, o) \
 	if ((assert_failed = !(x))) { \
@@ -82,12 +76,6 @@ debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 
 #else /* LEAK_DEBUG */
 
-/* Copy len bytes to an allocated space of len + 1 bytes,
- * last byte is always set to 0.
- * If src == NULL or len < 0 then allocate only one byte
- * and set it to 0.
- * On allocation failure, it returns NULL.
- */
 inline unsigned char *
 memacpy(unsigned char *src, int len)
 {
@@ -145,18 +133,6 @@ add_to_strn(unsigned char **s, unsigned char *a)
 }
 
 
-/* Concatenate all strings parameters. Parameters list must _always_ be
- * terminated by a NULL pointer.  If first parameter is NULL or allocation
- * failure, return NULL.  On success, returns a pointer to a dynamically
- * allocated string.
- *
- * Example:
- * ...
- * unsigned char *s = straconcat("A", "B", "C", NULL);
- * if (!s) return;
- * printf("%s", s); -> print "ABC"
- * mem_free(s); -> free memory used by s
- */
 unsigned char *
 straconcat(unsigned char *str, ...)
 {
@@ -192,9 +168,6 @@ straconcat(unsigned char *str, ...)
 
 
 
-/* Misc. utility string functions. */
-
-/* Compare two strings, handling correctly s1 or s2 being NULL. */
 int
 xstrcmp(unsigned char *s1, unsigned char *s2)
 {
@@ -204,7 +177,6 @@ xstrcmp(unsigned char *s1, unsigned char *s2)
 	return strcmp(s1, s2);
 }
 
-/* Copies at most dst_size chars into dst. Ensures null termination of dst. */
 unsigned char *
 safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 {
@@ -217,11 +189,6 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 	return dst;
 }
 
-/* Trim starting and ending chars from a string.
- * Pointer to the string is passed.
- * WARNING: string is modified.
- * If len != NULL, it is set to length of the new string.
- */
 inline unsigned char *
 trim_chars(unsigned char *s, unsigned char c, int *len)
 {
@@ -282,12 +249,8 @@ elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 
 /* The new string utilities: */
 
-/* Below are functions similar to add_*_to_str() but using the struct string.
- * It is the preferred way to handle strings now and the old functions will be
- * hopefully removed ASAP.
- *
- * Currently most of the functions use add_bytes_to_string() as a backend but
- * later we can optimize each function. */
+/* TODO Currently most of the functions use add_bytes_to_string() as a backend
+ *	instead we should optimize each function. */
 
 struct string *
 init_string(struct string *string)

@@ -1,3 +1,176 @@
+Sun Jul  4 18:17:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	move_link(): Work around the link wrap around by restoring the value
+	of doc_view->vs->current_link so it doesn't matter if
+	next_link_in_view() 'resets' it.  
+
+Sun Jul  4 17:33:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	move_link(): Add FIXME about the buggy link wrap around.  
+
+Sun Jul  4 16:45:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/string.h:
+
+	Tidyup.  
+
+Sun Jul  4 16:43:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/backend/xbel.c, config/conf.c,
+	document/html/parser/parse.c, terminal/event.c, terminal/kbd.c,
+	util/string.h:
+
+	isA() -> isident() + minor tidyup.  
+
+Sun Jul  4 16:31:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	try_document_key(): Cleanup. Use isasciialpha().  
+
+Sun Jul  4 16:29:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: viewer/text/marks.c, intl/charsets.c,
+	intl/gettext/dcigettext.c, protocol/uri.c, util/conv.h,
+	util/string.h:
+
+	Introduce isasciialpha(), isasciialnum() and isident().  
+
+Sun Jul  4 14:56:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Fix serious bug where loading non existing history files would leave
+	the input_history->nosave flag set to 1.  
+
+Sun Jul  4 14:03:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/exmode.c, dialogs/exmode.h, dialogs/menu.c,
+	modules/module.c:
+
+	Modularize exmode and load/save exmode history.  
+
+Sun Jul  4 13:32:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/opttypes.c, util/conv.c:
+
+	Allow '\'' for string delimiters in config set commands.  
+
+Sun Jul  4 13:23:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	More isquote() usage.  
+
+Sun Jul  4 13:06:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/css/scanner.c,
+	document/html/parser/parse.c, protocol/header.c, util/string.h:
+
+	IS_QUOTE() -> isquote(), and use it for option and CSS parsing.  
+
+Sun Jul  4 12:15:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	get_esc_code(): Drop unchecked return value.  
+
+Sun Jul  4 12:13:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: intl/charsets.c, intl/gettext/loadmsgcat.c,
+	protocol/date.c, protocol/uri.c, protocol/ftp/ftp.c,
+	protocol/ftp/ftpparse.c, protocol/http/http.c, protocol/smb/smb.c,
+	terminal/kbd.c, util/conv.h, viewer/text/view.c:
+
+	s/c < '0' || c > '9'/!isdigit(c)/ and s/c >= '0 && c <=
+	'9'/isdigit(c)/.  
+
+Sun Jul  4 11:29:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/backend/mimetypes.c, util/string.h:
+
+	Oops. Wake up and fix last patch.  
+
+Sun Jul  4 11:26:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/exmode.c, document/html/parser/parse.c,
+	intl/gettext/loadmsgcat.c, intl/gettext/localealias.c,
+	mime/backend/mimetypes.c, protocol/header.c, util/string.h:
+
+	Introduce skip_nonspace() + more skip_space() usage.  
+
+Sun Jul  4 11:04:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, cookies/parser.c, document/html/frames.c,
+	intl/gettext/localealias.c, mime/backend/mailcap.c,
+	mime/backend/mimetypes.c, protocol/header.c, protocol/proxy.c,
+	util/string.h:
+
+	skip_whitespace() -> skip_space(), remove remains of local defines.  
+
+Sun Jul  4 10:54:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/frames.c, intl/gettext/localealias.c,
+	protocol/header.c:
+
+	More uses of skip_whitespace().  
+
+Sun Jul  4 10:54:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/draw.c:
+
+	draw_view_status(): Only draw search word if @active. Bug introduced
+	when making the draw_current_link() -> draw_view_status() switch.  
+
+Sun Jul  4 10:49:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.c:
+
+	parse_day(): Use isdigit().  
+
+Sun Jul  4 01:10:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/date.c, protocol/ftp/ftpparse.c, util/conv.c:
+
+	Do the string lowering in month2num(). Make parse_month() check that
+	there are 3 chars so month2num() won't access beyond the string.
+	Looks like most of date parsing does little checking.  
+
+Sun Jul  4 00:01:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Pass struct string * to send_cmd() and simplify code.  
+
+Sat Jul  3 23:58:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Split ftp_send_retr_req() -> end_it_line_by_line().  
+
+Sat Jul  3 23:37:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftpparse.h:
+
+	Improve and reorder comments.  
+
+Sat Jul  3 23:29:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/: ftp.c, ftpparse.c, ftpparse.h:
+
+	Warn about FTPPARSE_(SIZE|MTIME|ID)_UNKNOWN zero value, and let
+	memset() do the job, simplifying code even more.  
+
+Sat Jul  3 23:20:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/: ftp.c, ftpparse.c:
+
+	Use memset() to nullify struct ftpparse fields.  
+
 Sat Jul  3 16:28:02 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: setup.h, bfu/inpfield.h, config/conf.c, config/options.inc,

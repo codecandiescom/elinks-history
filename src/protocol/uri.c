@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.118 2004/04/04 04:15:02 jonas Exp $ */
+/* $Id: uri.c,v 1.119 2004/04/04 04:24:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,8 +51,8 @@ end_with_known_tld(unsigned char *s, int slen)
 	return -1;
 }
 
-static inline unsigned char *
-get_protocol_end(const unsigned char *url)
+static inline int
+get_protocol_length(const unsigned char *url)
 {
 	register unsigned char *end = (unsigned char *) url;
 
@@ -67,9 +67,9 @@ get_protocol_end(const unsigned char *url)
 			break;
 	}
 
-	if (*end != ':' || end == url) return NULL; /* No valid protocol scheme. */
+	if (*end != ':' || end == url) return 0; /* No valid protocol scheme. */
 
-	return end;
+	return end - url;
 }
 
 /* Tcp port range */
@@ -83,7 +83,6 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 #ifdef IPV6
 	unsigned char *lbracket, *rbracket;
 #endif
-	enum protocol protocol;
 	int known;
 
 	assertm(uristring, "No uri to parse.");
@@ -94,21 +93,16 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (!*uristring) return 0;
 
 	uri->protocol_str = uristring;
-	prefix_end = get_protocol_end(uristring);
-	if (!prefix_end) return 0;
+	uri->protocollen = get_protocol_length(uristring);
 
-	uri->protocollen = prefix_end - uristring;
+	/* Invalid */
+	if (!uri->protocollen) return 0;
 
-	/* Check if protocol is known, and retrieve prefix_end. */
-	protocol = get_protocol(struri(uri), uri->protocollen);
-	if (protocol == PROTOCOL_INVALID) return 0;
+	/* Figure out whether the protocol is known */
+	uri->protocol = get_protocol(struri(uri), uri->protocollen);
+	known = (uri->protocol != PROTOCOL_UNKNOWN);
 
-	known = (protocol != PROTOCOL_UNKNOWN);
-
-	/* Set protocol */
-	uri->protocol = protocol;
-
-	prefix_end++; /* ':' */
+	prefix_end = uristring + uri->protocollen + 1; /* ':' */
 
 	/* Skip slashes */
 

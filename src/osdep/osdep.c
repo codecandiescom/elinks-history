@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.115 2003/10/27 23:25:36 pasky Exp $ */
+/* $Id: osdep.c,v 1.116 2003/10/27 23:53:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,14 +186,6 @@ c_pipe(int *fd)
 }
 
 #endif
-
-/* Filename */
-
-int
-check_file_name(unsigned char *file)
-{
-	return 1;		/* !!! FIXME */
-}
 
 /* Exec */
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.505 2004/10/12 07:52:51 zas Exp $ */
+/* $Id: parser.c,v 1.506 2004/10/13 00:30:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -410,7 +410,7 @@ do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsign
 	/* TODO: <noscript> processing. Well, same considerations apply as to
 	 * CSS property display: none processing. */
 	/* TODO: Charsets for external scripts. */
-	unsigned char *type, *src;
+	unsigned char *type, *language, *src;
 	int in_comment = 0;
 
 	html_skip(a);
@@ -427,7 +427,22 @@ not_processed:
 	}
 	if (type) mem_free(type);
 
-	/* XXX: Do any non-javascript scripts use the language attribute? */
+	/* Check that the script content is ecmascript. The value of the
+	 * language attribute can be JavaScript with optional version digits
+	 * postfixed (like: ``JavaScript1.1''). */
+	language = get_attr_val(a, "language");
+	if (language) {
+		int languagelen = strlen(language);
+
+		if (languagelen < 10
+		    || (languagelen > 10 && !isdigit(language[10]))
+		    || strncasecmp(language, "javascript", 10)) {
+			mem_free(language);
+			goto not_processed;
+		}
+
+		mem_free(language);
+	}
 
 	if (part->document && (src = get_attr_val(a, "src"))) {
 		/* External reference. */

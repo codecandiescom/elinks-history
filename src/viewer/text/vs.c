@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.49 2004/10/10 20:36:08 pasky Exp $ */
+/* $Id: vs.c,v 1.50 2004/12/19 00:17:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,7 @@ init_vs(struct view_state *vs, struct uri *uri, int plain)
 	/* If we ever get to render this vs, give it an interpreter. */
 	vs->ecmascript_fragile = 1;
 #endif
+	init_list(vs->forms);
 }
 
 void
@@ -47,6 +48,7 @@ destroy_vs(struct view_state *vs, int blast_ecmascript)
 
 	if (vs->uri) done_uri(vs->uri);
 	mem_free_if(vs->form_info);
+	free_list(vs->forms);
 #ifdef CONFIG_ECMASCRIPT
 	if (blast_ecmascript && vs->ecmascript)
 		ecmascript_put_interpreter(vs->ecmascript);
@@ -60,6 +62,8 @@ destroy_vs(struct view_state *vs, int blast_ecmascript)
 void
 copy_vs(struct view_state *dst, struct view_state *src)
 {
+	struct form_view *fv;
+
 	memcpy(dst, src, sizeof(struct view_state));
 
 	/* We do not copy ecmascript stuff around since it's specific for
@@ -77,6 +81,16 @@ copy_vs(struct view_state *dst, struct view_state *src)
 	/* Redo fragment if there is one? */
 	dst->did_fragment = !src->uri->fragmentlen;
 
+	init_list(dst->forms);
+	foreach (fv, src->forms) {
+		struct form_view *newfv = mem_calloc(1, sizeof(struct form_view));
+
+		if (!newfv) continue;
+		newfv->form = fv->form;
+		/* We do leave out the ECMAScript object intentionally. */
+		add_to_list(dst->forms, newfv);
+	}
+
 	if (src->form_info_len) {
 		dst->form_info = mem_alloc(src->form_info_len
 					   * sizeof(struct form_state));
@@ -85,10 +99,14 @@ copy_vs(struct view_state *dst, struct view_state *src)
 
 			memcpy(dst->form_info, src->form_info,
 			       src->form_info_len * sizeof(struct form_state));
-			for (i = 0; i < src->form_info_len; i++)
+			for (i = 0; i < src->form_info_len; i++) {
 				if (src->form_info[i].value)
 					dst->form_info[i].value =
 						stracpy(src->form_info[i].value);
+				/* XXX: This makes it O(nm). */
+				dst->form_info[i].form_view =
+					find_form_view_in_vs(dst, src->form_info[i].form_view->form);
+			}
 		}
 	}
 }

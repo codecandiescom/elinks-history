@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.45 2004/12/18 02:33:01 pasky Exp $ */
+/* $Id: form.h,v 1.46 2004/12/19 00:17:55 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -13,8 +13,29 @@ struct session;
 struct term_event;
 struct terminal;
 
-struct form_state {
+/* This struct looks a little embarrassing, yeah. */
+struct form_view {
+	LIST_HEAD(struct form_view);
+
+	/* XXX: This is actually very broken. lifespan of form_view (and
+	 * clones, see copy_vs()) can get much longer than form's lifespan.
+	 * That's why find_form_state() is so clumsy. So this way of
+	 * associating form_view to form simply leads to frequent crashes,
+	 * plain and simple. --pasky */
 	struct form *form;
+
+#ifdef CONFIG_ECMASCRIPT
+	/* This holds the ECMAScript object attached to this structure. It can
+	 * be NULL since the object is created on-demand at the first time some
+	 * ECMAScript code accesses it. It is freed automatically by the
+	 * garbage-collecting code when the ECMAScript context is over (usually
+	 * when the document is destroyed). */
+	void *ecmascript_obj;
+#endif
+};
+
+struct form_state {
+	struct form_view *form_view;
 	int g_ctrl_num;
 	int position;
 	enum form_type type;
@@ -23,6 +44,15 @@ struct form_state {
 	int state;
 	int vpos;
 	int vypos;
+	
+#ifdef CONFIG_ECMASCRIPT
+	/* This holds the ECMAScript object attached to this structure. It can
+	 * be NULL since the object is created on-demand at the first time some
+	 * ECMAScript code accesses it. It is freed automatically by the
+	 * garbage-collecting code when the ECMAScript context is over (usually
+	 * when the document is destroyed). */
+	void *ecmascript_obj;
+#endif
 };
 
 struct submitted_value {
@@ -46,8 +76,13 @@ struct uri *get_form_uri(struct session *ses, struct document_view *doc_view, st
 unsigned char *get_form_info(struct session *ses, struct document_view *doc_view);
 
 void selected_item(struct terminal *term, void *item_, void *ses_);
-struct form_state *find_form_state(struct document_view *doc_view, struct form_control *fc);
 int get_current_state(struct session *ses);
+
+struct form_state *find_form_state(struct document_view *doc_view, struct form_control *fc);
+struct form_control *find_form_control(struct document *document, struct form_state *fs);
+struct form_view *find_form_view_in_vs(struct view_state *vs, struct form *form);
+struct form_view *find_form_view(struct document_view *doc_view, struct form *form);
+struct form *find_form_by_form_view(struct document *document, struct form_view *fv);
 
 enum frame_event_status field_op(struct session *ses, struct document_view *doc_view, struct link *link, struct term_event *ev);
 

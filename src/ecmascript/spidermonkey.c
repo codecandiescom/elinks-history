@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.116 2004/12/18 20:36:48 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.117 2004/12/19 00:17:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,8 +515,6 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 }
 
 
-static JSObject *get_form_object(JSContext *ctx, JSObject *jsdoc, struct form *form);
-
 /* Accordingly to the JS specs, each input type should own object. That'd be a
  * huge PITA though, however DOM comes to the rescue and defines just a single
  * HTMLInputElement. The difference could be spotted only by some clever tricky
@@ -597,8 +595,8 @@ input_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
-	struct form_state *fs = find_form_state(doc_view, fc);
+	struct form_state *fs = JS_GetPrivate(ctx, obj);
+	struct form_control *fc = find_form_control(document, fs);
 	int linknum;
 	struct link *link = NULL;
 	VALUE_TO_JSVAL_START;
@@ -709,8 +707,8 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
-	struct form_state *fs = find_form_state(doc_view, fc);
+	struct form_state *fs = JS_GetPrivate(ctx, obj);
+	struct form_control *fc = find_form_control(document, fs);
 	int linknum;
 	struct link *link = NULL;
 	JSVAL_TO_VALUE_START;
@@ -797,12 +795,15 @@ input_click(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct session *ses = doc_view->session;
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	struct form_state *fs = JS_GetPrivate(ctx, obj);
+	struct form_control *fc;
 	int linknum;
 	VALUE_TO_JSVAL_START;
 
 	P_BOOLEAN(0);
 
+	assert(fc);
+	fc = find_form_control(document, fs);
 	assert(fc);
 
 	linknum = get_form_control_link(document, fc);
@@ -830,12 +831,15 @@ input_focus(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct session *ses = doc_view->session;
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	struct form_state *fs = JS_GetPrivate(ctx, obj);
+	struct form_control *fc;
 	int linknum;
 	VALUE_TO_JSVAL_START;
 
 	P_BOOLEAN(0);
 
+	assert(fs);
+	fc = find_form_control(document, fs);
 	assert(fc);
 
 	linknum = get_form_control_link(document, fc);
@@ -857,19 +861,19 @@ input_select(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 }
 
 static JSObject *
-get_input_object(JSContext *ctx, JSObject *jsform, struct form_control *fc)
+get_input_object(JSContext *ctx, JSObject *jsform, struct form_state *fs)
 {
-	if (!fc->ecmascript_obj) {
+	if (!fs->ecmascript_obj) {
 		/* jsform ('form') is input's parent */
 		/* FIXME: That is NOT correct since the real containing element
 		 * should be its parent, but gimme DOM first. --pasky */
 		JSObject *jsinput = JS_NewObject(ctx, (JSClass *) &input_class, NULL, jsform);
 
 		JS_DefineFunctions(ctx, jsinput, (JSFunctionSpec *)&input_funcs);
-		JS_SetPrivate(ctx, jsinput, fc);
-		fc->ecmascript_obj = jsinput;
+		JS_SetPrivate(ctx, jsinput, fs);
+		fs->ecmascript_obj = jsinput;
 	}
-	return fc->ecmascript_obj;
+	return fs->ecmascript_obj;
 }
 
 
@@ -914,7 +918,12 @@ static const JSFunctionSpec form_funcs[] = {
 static JSBool
 form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct form *form = JS_GetPrivate(ctx, obj);
+	JSObject *parent_doc = JS_GetParent(ctx, obj);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct form_view *fv = JS_GetPrivate(ctx, obj);
+	struct form *form = find_form_by_form_view(doc_view->document, fv);
 	VALUE_TO_JSVAL_START;
 
 	assert(form);
@@ -941,7 +950,7 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 				case FC_RESET:
 				case FC_BUTTON:
 				case FC_HIDDEN:
-					fcobj = get_input_object(ctx, obj, fc);
+					fcobj = get_input_object(ctx, obj, find_form_state(doc_view, fc));
 					break;
 
 				case FC_TEXTAREA:
@@ -1016,7 +1025,12 @@ convert:
 static JSBool
 form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct form *form = JS_GetPrivate(ctx, obj);
+	JSObject *parent_doc = JS_GetParent(ctx, obj);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct form_view *fv = JS_GetPrivate(ctx, obj);
+	struct form *form = find_form_by_form_view(doc_view->document, fv);
 	JSVAL_TO_VALUE_START;
 
 	assert(form);
@@ -1076,7 +1090,8 @@ form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
 	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct document_view *doc_view = vs->doc_view;
-	struct form *form = JS_GetPrivate(ctx, obj);
+	struct form_view *fv = JS_GetPrivate(ctx, obj);
+	struct form *form = find_form_by_form_view(doc_view->document, fv);
 	VALUE_TO_JSVAL_START;
 
 	P_BOOLEAN(0);
@@ -1097,7 +1112,8 @@ form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct document_view *doc_view = vs->doc_view;
 	struct session *ses = doc_view->session;
-	struct form *form = JS_GetPrivate(ctx, obj);
+	struct form_view *fv = JS_GetPrivate(ctx, obj);
+	struct form *form = find_form_by_form_view(doc_view->document, fv);
 	VALUE_TO_JSVAL_START;
 
 	P_BOOLEAN(0);
@@ -1109,19 +1125,19 @@ form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 }
 
 static JSObject *
-get_form_object(JSContext *ctx, JSObject *jsdoc, struct form *form)
+get_form_object(JSContext *ctx, JSObject *jsdoc, struct form_view *fv)
 {
-	if (!form->ecmascript_obj) {
-		/* jsdoc ('document') is form's parent */
+	if (!fv->ecmascript_obj) {
+		/* jsdoc ('document') is fv's parent */
 		/* FIXME: That is NOT correct since the real containing element
 		 * should be its parent, but gimme DOM first. --pasky */
 		JSObject *jsform = JS_NewObject(ctx, (JSClass *) &form_class, NULL, jsdoc);
 
 		JS_DefineFunctions(ctx, jsform, (JSFunctionSpec *)&form_funcs);
-		JS_SetPrivate(ctx, jsform, form);
-		form->ecmascript_obj = jsform;
+		JS_SetPrivate(ctx, jsform, fv);
+		fv->ecmascript_obj = jsform;
 	}
-	return form->ecmascript_obj;
+	return fv->ecmascript_obj;
 }
 
 
@@ -1189,9 +1205,7 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	JSObject *parent_doc = JS_GetParent(ctx, obj);
 	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
 	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
-	struct document_view *doc_view = vs->doc_view;
-	struct document *document = doc_view->document;
-	struct form *form;
+	struct form_view *fv;
 	union jsval_union v;
 	int counter = 0;
 	int index;
@@ -1203,10 +1217,10 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	JSVAL_REQUIRE(&argv[0], NUMBER);
 	index = DOUBLE_TO_JSVAL(v.number);
 
-	foreach (form, document->forms) {
+	foreach (fv, vs->forms) {
 		counter++;
 		if (counter == index) {
-			P_OBJECT(get_form_object(ctx, parent_doc, form));
+			P_OBJECT(get_form_object(ctx, parent_doc, fv));
 
 			VALUE_TO_JSVAL_END(rval);
 			/* This returns. */
@@ -1237,7 +1251,7 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 
 	foreach (form, document->forms) {
 		if (form->name && !strcasecmp(v.string, form->name)) {
-			P_OBJECT(get_form_object(ctx, parent_doc, form));
+			P_OBJECT(get_form_object(ctx, parent_doc, find_form_view(doc_view, form)));
 
 			VALUE_TO_JSVAL_END(rval);
 			/* This returns. */
@@ -1299,7 +1313,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			if (!form->name || strcasecmp(v.string, form->name))
 				continue;
 
-			P_OBJECT(get_form_object(ctx, obj, form));
+			P_OBJECT(get_form_object(ctx, obj, find_form_view(doc_view, form)));
 			goto convert;
 		}
 		goto bye;

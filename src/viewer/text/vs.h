@@ -1,7 +1,9 @@
-/* $Id: vs.h,v 1.26 2004/09/26 12:13:08 pasky Exp $ */
+/* $Id: vs.h,v 1.27 2004/12/19 00:17:55 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
+
+#include "util/lists.h"
 
 /* Crossdeps are evil. */
 struct document_view;
@@ -13,6 +15,7 @@ struct view_state {
 	struct document_view *doc_view;
 	struct uri *uri;
 
+	struct list_head forms; /* -> struct form_view */
 	struct form_state *form_info;
 	int form_info_len;
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-22 19:19+0100\n"
-"PO-Revision-Date: 2003-12-09 17:35+0100\n"
+"PO-Revision-Date: 2003-12-22 21:38+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -200,9 +200,8 @@ msgid "No title"
 msgstr "®iadny titulok"
 
 #: src/bookmarks/backend/xbel.c:392
-#, fuzzy
 msgid "No URL"
-msgstr "Choï na URL"
+msgstr "®iadne URL"
 
 #. name:
 #: src/bookmarks/bookmarks.c:42 src/bookmarks/bookmarks.c:99
@@ -355,7 +354,7 @@ msgstr "Kódovanie"
 
 #: src/cache/dialogs.c:95
 msgid "Flags"
-msgstr ""
+msgstr "Príznaky"
 
 #: src/cache/dialogs.c:98 src/dialogs/document.c:98
 msgid "incomplete"
@@ -459,7 +458,7 @@ msgstr "Nastavenie:\n"
 
 #: src/config/cmdline.c:425
 msgid "Restrict to anonymous mode"
-msgstr ""
+msgstr "Obmedzenie na anonymný re¾im"
 
 #: src/config/cmdline.c:427
 msgid ""
@@ -468,6 +467,10 @@ msgid ""
 "is allowed, but user can't add or modify entries in\n"
 "association table."
 msgstr ""
+"Obmedzí ELinks, tak¾e mô¾e bezpeène be¾a» aj na anonymnom úète.\n"
+"Je zakázané prezeranie lokálneho disku a ukladanie súborov,\n"
+"spú¹»enie ext. prezeraèov je povolené, ale nedajú sa meni» ich\n"
+"nastavenia."
 
 #: src/config/cmdline.c:432
 msgid "Autosubmit first form"
@@ -475,21 +478,23 @@ msgstr "Automatické odoslanie prvého formulára"
 
 #: src/config/cmdline.c:434
 msgid "Go and submit the first form you'll stumble upon."
-msgstr ""
+msgstr "Choï a odo¹li prvý formulár, na ktorý narazí¹."
 
 #: src/config/cmdline.c:436
 msgid "Clone session with given ID"
-msgstr ""
+msgstr "Naklonovanie sedenia s daným ID"
 
 #: src/config/cmdline.c:438
 msgid ""
 "ID of session (ELinks instance) which we want to clone.\n"
 "This is internal ELinks option, you don't want to use it."
 msgstr ""
+"ID sedenia (in¹tancia ELinksu), ktoré chceme naklonova».\n"
+"Toto je interný parameter ELinksu, vy ho nechcete pou¾íva»."
 
 #: src/config/cmdline.c:441
 msgid "Set config dir to given string"
-msgstr ""
+msgstr "Nastavenie adresára s konfiguráciou"
 
 #: src/config/cmdline.c:443
 msgid ""
@@ -498,11 +503,14 @@ msgid ""
 "a '/' its used as an absolute path. Else it is assumed to\n"
 "be relative to your HOME dir."
 msgstr ""
+"Nastavi» konfiguraèný adresár na danú cestu. ELinks odtiaµ bude\n"
+"èíta» a zapisova» z konfig. súborov. Ak cesta zaèína lomítkom\n"
+"'/', je pova¾ovaná za absolútnu cestu, inak sa predpokladá,\n"
+"¾e je relatívna k domovskému adreáru."
 
 #: src/config/cmdline.c:448
-#, fuzzy
 msgid "Configuration file name"
-msgstr "Konfiguraèný systém"
+msgstr "Meno konfiguraèného súboru"
 
 #: src/config/cmdline.c:450
 msgid ""
@@ -510,24 +518,27 @@ msgid ""
 "which all the configuration shall be written. It should be\n"
 "relative to confdir."
 msgstr ""
+"Meno konfiguraèného súboru, odkiaµ sa budú èíta» a kam sa budú\n"
+"zapisova» v¹etky nastavenia. Meno by malo byt relatívne k\n"
+"parametru confdir."
 
 #: src/config/cmdline.c:454
 msgid "MIME type to assume for documents"
-msgstr ""
+msgstr "Predpokadaný MIME typ dokumentov"
 
 #: src/config/cmdline.c:456
 msgid "Default MIME type to assume for documents of unknown type."
-msgstr ""
+msgstr "©tandardný MIME typ, ktorý predpoklada» pri neznámych dokumentoch."
 
 #: src/config/cmdline.c:458
 msgid "Write formatted version of given URL to stdout"
-msgstr ""
+msgstr "Vypísa» formátovanú verziu daného URL na ¹tandardný výstup"
 
 #: src/config/cmdline.c:460
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
-msgstr ""
+msgstr "Vypísa» plaintextovú verziu daného HTML dokumentu na ¹tandardný výstup."
 
 #: src/config/cmdline.c:463
 msgid "Codepage to use with -dump"
@@ -539,56 +550,60 @@ msgstr "Kódová stránka pou¾itá v dump výstupe."
 
 #: src/config/cmdline.c:467
 msgid "Width of document formatted with -dump"
-msgstr ""
+msgstr "©írka dokumenty formátovaného pomocou -dump"
 
 #: src/config/cmdline.c:469
 msgid "Width of the dump output."
-msgstr ""
+msgstr "©írka dump výstupu."
 
 #: src/config/cmdline.c:471
 msgid "Evaluate given configuration option"
-msgstr ""
+msgstr "Vyhodnoti» danú konfiguraènú voµbu"
 
 #: src/config/cmdline.c:473
 msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
+"Voµba umo¾òuje pou¾i» voµbu z elinks.conf v príkazovom riadku:\n"
+"  -eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
 #: src/config/cmdline.c:477
 msgid "Assume the file is HTML"
-msgstr ""
+msgstr "Predpoklada», ¾e súbor je HTML"
 
 #: src/config/cmdline.c:479
 msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
+"Voµba prinúti ELinks predpoklada», ¾e súbory, ktoré vidí sú v HTML."
+"Je to ekvivalentné voµbe -default-mime-type text/html ."
 
 #: src/config/cmdline.c:488
 msgid "Print usage help and exit"
-msgstr ""
+msgstr "Zobrazi» nápovedu a skonèi»"
 
 #: src/config/cmdline.c:490
 msgid "Print usage help and exit."
-msgstr ""
+msgstr "Zobrazi» nápovedu a skonèi»."
 
 #: src/config/cmdline.c:492
 msgid "Print detailed usage help and exit"
-msgstr ""
+msgstr "Zobrazi» detailnú nápovedu a skonèi»"
 
 #: src/config/cmdline.c:494
 msgid "Print detailed usage help and exit."
-msgstr ""
+msgstr "Zobrazi» detailnú nápovedu a skonèi»."
 
 #: src/config/cmdline.c:496
 msgid "Print help for configuration options"
-msgstr ""
+msgstr "Zobrazi» nápovedu pre konfiguraèné voµby"
 
 #: src/config/cmdline.c:498
 msgid "Print help on configuration options and exit."
-msgstr ""
+msgstr "Zobrazi» nápovedu pre konfiguraèné voµby a skonèi»."
 
 #: src/config/cmdline.c:500
 msgid "Look up specified host"
@@ -600,7 +615,7 @@ msgstr "Vyhµada» zadaného hostiteµa."
 
 #: src/config/cmdline.c:504
 msgid "Run as separate instance"
-msgstr ""
+msgstr "Spustenie oddelenej in¹tancie programu"
 
 #: src/config/cmdline.c:506
 msgid ""
@@ -609,18 +624,22 @@ msgid ""
 "(bookmarks, history and so on) are written to the disk when\n"
 "this option is used. See also -touch-files."
 msgstr ""
+"Spusti» ELinks ako oddelenú in¹tanciu namiesto toho, aby sa skúsil\n"
+"pripoji» k existujúcej. V tomto prípade sa normálne nebudú zapisova»\n"
+"na disk ¾iadne konfiguraèné súbory (ani zálo¾ky, história a pod.)\n"
+"Viï tie¾ parameter -touch-files."
 
 #: src/config/cmdline.c:511
 msgid "Don't use files in ~/.elinks"
-msgstr ""
+msgstr "Nepou¾íva» súbory v ~/.elinks"
 
 #: src/config/cmdline.c:513
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
-msgstr ""
+msgstr "Nepokú¹a» sa vytvori»/pou¾i» domovský konfiguraèný adresár (~/.elinks/)."
 
 #: src/config/cmdline.c:515
 msgid "Connect to session ring with given ID"
-msgstr ""
+msgstr "Pripoji» sa do skupiny sedení s daným ID"
 
 #: src/config/cmdline.c:517
 msgid ""
@@ -642,15 +661,15 @@ msgstr ""
 
 #: src/config/cmdline.c:532
 msgid "Write the source of given URL to stdout"
-msgstr ""
+msgstr "Vypísa» dané URL v zdrojovej podobe na ¹tandardný výstup"
 
 #: src/config/cmdline.c:534
 msgid "Write the given HTML document in source form to stdout."
-msgstr ""
+msgstr "Vypísa» daný HTML dokument v zdrojovej podobe na ¹tandardný výstup."
 
 #: src/config/cmdline.c:536
 msgid "Read document from stdin"
-msgstr ""
+msgstr "Naèíta» dokument zo ¹tandardného vstupu"
 
 #: src/config/cmdline.c:538
 msgid ""
@@ -660,11 +679,16 @@ msgid ""
 "stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 "know why you would use -source -stdin, though ;-)"
 msgstr ""
+"Otvori» ¹tandardný vstup ako HTML dokument, èo je plne ekvivalentné:\n"
+" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
+"Pou¾ite tú variantu, ktorá sa vám viac páèi. Uvedomte si ale, ¾e èítanie\n"
+"dokumetu zo ¹tandardného vstupu samozrejme funguje IBA PRI POU®ITÍ -dump\n"
+"ALEBO -source PARAMETRA! (Celkom by ma zaujímalo, preèo by ste chceli\n"
+"robi» -source -stdin ;-)"
 
 #: src/config/cmdline.c:544
-#, fuzzy
 msgid "Do not number links in dump output"
-msgstr "Kódová stránka pou¾itá v dump výstupe."
+msgstr "Neèíslova» odkazy v dump výstupe."
 
 #: src/config/cmdline.c:546
 msgid ""
@@ -672,10 +696,13 @@ msgid ""
 "the dumped document) in the -dump output; this was the default behaviour\n"
 "until 0.5pre12. Note that this really affects only --dump, nothing else."
 msgstr ""
+"Zabráni èíslovaniu odkazov (a zobrazovanie ich zoznamu na konci dokumentu)\n"
+"pri -dump výstupe; to bolo ¹tandardné chovanie a¾ po 0.5pre12. Pamätajte ale\n"
+"¾e sa to týka iba parametra --dump a nièoho iného."
 
 #: src/config/cmdline.c:550
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
-msgstr ""
+msgstr "Pou¾íva» súbory v ~/.elinks aj pri spustení s -no-connect/-session-ring"
 
 #: src/config/cmdline.c:552
 msgid ""
@@ -683,14 +710,17 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
+"Ak nastavené na 1, stavové súbory (zálo¾ky, história, ...) budú ukladané\n"
+"na disk aj v prípade, ¾e bol pou¾itý parameter -no-connect alebo\n"
+"-session-ring; inak nemá tento parameter ¾iadny význam,"
 
 #: src/config/cmdline.c:556
 msgid "Print version information and exit"
-msgstr ""
+msgstr "Vypísa» informáciu o verzii a skonèi»"
 
 #: src/config/cmdline.c:558
 msgid "Print ELinks version information and exit."
-msgstr ""
+msgstr "Vypísa» informáciu o verzii ELinksu a skonèi»"
 
 #: src/config/conf.c:600
 msgid ""
@@ -1230,11 +1260,11 @@ msgstr "Hµada» spätne vzorku textu"
 
 #: src/config/kbdbind.c:457
 msgid "Search link text by typing ahead"
-msgstr ""
+msgstr "Interaktívne hµadanie v texte odkazov"
 
 #: src/config/kbdbind.c:458
 msgid "Select current highlighted item"
-msgstr ""
+msgstr "Vybra» práve zvýraznenú polo¾ku"
 
 #: src/config/kbdbind.c:459 src/terminal/tab.c:187
 msgid "Close tab"
@@ -1273,9 +1303,8 @@ msgid "Go forward in the unhistory"
 msgstr "Ís» dopredu v antihistórii"
 
 #: src/config/kbdbind.c:468
-#, fuzzy
 msgid "Collapse item"
-msgstr "Uplynulý èas"
+msgstr "Zvinú» polo¾ku"
 
 #: src/config/kbdbind.c:469
 msgid "Move cursor upwards"
@@ -1855,7 +1884,7 @@ msgstr "Zobrazova» èísla pri odkazoch."
 
 #: src/config/options.inc:234
 msgid "Wraparound typeahead"
-msgstr ""
+msgstr "Cykli» interaktívne vyhµadávanie"
 
 #: src/config/options.inc:236
 msgid "Wrap around when searching for the next link matching a typeahead."
@@ -1863,7 +1892,7 @@ msgstr ""
 
 #: src/config/options.inc:238
 msgid "Typeahead error handling"
-msgstr ""
+msgstr "Obsluha chýb pri interaktívnom vyhµadávaní"
 
 #: src/config/options.inc:240
 msgid ""
@@ -2340,6 +2369,12 @@ msgid ""
 "overall layout. Only useful if you also have\n"
 "document.colors.use_document_colors set to 2. Experimental."
 msgstr ""
+"Ak je táto voµba zapnutá, jednotlivé riadky v ståpcoch tabuµky budú\n"
+"roztiahnuté na maximálnu veµkos». Výsledok bude viac zodpoveda»\n"
+"oèakávanému z hµadiska farby pozadia, ale menej celkovému rozvrhnutiu\n"
+"dokumentu a obèas mô¾e (hlavne iba s 16 farbami) vyzera» veµmi skaredo.\n"
+"Táto voµba je experimentálna a pou¾ije sa iba keï je voµba\n"
+"document.colors.use_document_colors nastavená na hodnotu 2."
 
 #: src/config/options.inc:520
 msgid "Display subscripts"
@@ -2359,7 +2394,7 @@ msgstr "Zobrazi» horné indexy (ako ^index)"
 
 #: src/config/options.inc:528
 msgid "Rendering of html link element"
-msgstr ""
+msgstr "Zobrazovanie HTML elementu 'link' (¹peciálnych odkazov)"
 
 #: src/config/options.inc:530
 msgid ""
@@ -2371,6 +2406,13 @@ msgid ""
 "4 is type in addition\n"
 "5 is everything"
 msgstr ""
+"Èo v¹etko ukazova» pri HTML elemente 'link':\n"
+"0 niè\n"
+"1 titulok\n"
+"2 e¹te zobrazi» meno\n"
+"3 e¹te zobrazi» hreflang (jazyk cieµového dokumentu)\n"
+"4 e¹te zobrazi» typ\n"
+"5 v¹etko"
 
 #: src/config/options.inc:538
 msgid "Underline links"
@@ -2390,14 +2432,18 @@ msgid ""
 "but allow to wrap the text. This can help keeping the width\n"
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
+"Ak nastavené, tak nedeliteµné medzery (&nbsp; entity) budú\n"
+"pova¾ované za normálne medzery a bude na nich rozdeµovaný text.\n"
+"To mô¾e pomôc» proti veµmi ¹irokým dokumentom, aby nebolo nutné\n"
+"horizontálne skrolova» pri ich pozeraní."
 
 #: src/config/options.inc:549
 msgid "Plain rendering"
-msgstr ""
+msgstr "Zobrazovanie textových dokumentov"
 
 #: src/config/options.inc:551
 msgid "Options concerning the display of plain text pages."
-msgstr ""
+msgstr "Nastavenia týkajúce sa zobrazovania stránok s èistým textom."
 
 #: src/config/options.inc:553
 msgid "Display URIs"
@@ -2405,7 +2451,7 @@ msgstr "Zobrazi» URI"
 
 #: src/config/options.inc:555
 msgid "Display URIs in the document as links."
-msgstr ""
+msgstr "Zobrazi» URI v dokumente ako odkazy."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:561
@@ -2605,10 +2651,14 @@ msgid ""
 "request back to the client verbatim. Note that this type of request may\n"
 "not be enabled on all servers."
 msgstr ""
+"Ak je táto voµba zapnutá, v¹etky HTTP po¾iadavky sú posielané s metódou\n"
+"TRACE namiesto GET alebo POST. To je u¾itoèné pri ladení ELinksu a rôznych\n"
+"server-side skriptov. Server iba vráti klientovi jeho ¾iados» tak, ako ju\n"
+"dostal. Tento typ nemusí by» povolený na v¹etkých serveroch."
 
 #: src/config/options.inc:657
 msgid "User-agent identification"
-msgstr ""
+msgstr "Identifikácia prehliadaèa"
 
 #: src/config/options.inc:659
 msgid ""
@@ -2619,6 +2669,12 @@ msgid ""
 "%t in the string means size of the terminal\n"
 "Use \" \" if you don't want any User-Agent header to be sent at all."
 msgstr ""
+"Zmení identifikáciu prehliadaèa (hlavièku User-Agent). To je identifikaèný\n"
+"re»azec, ktorý je poslaný HTTP serveru pri ¾iadosti o dokument.\n"
+"%v bude nahradené verziou ELinksu\n"
+"%s bude nahradené informáciou o systéme\n"
+"%t bude nahradené veµkos»ou terminálu\n"
+"Pou¾itím \" \" sa neodo¹le ¾iadna User-Agent hlavièka."
 
 #: src/config/options.inc:667
 #, fuzzy
@@ -2662,6 +2718,9 @@ msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
 msgstr ""
+"Hostiteµ a èíslo portu (host:port) FTP proxy, alebo niè, ak proxy\n"
+"nepou¾ívate. Ak je voµba nevyplnená, ELinks sa e¹te pokúsi pou¾i»\n"
+"hodnotu ulo¾enú v premennej prostredia FTP_PROXY."
 
 #: src/config/options.inc:694
 msgid "Anonymous password"
@@ -2677,8 +2736,7 @@ msgstr "Pou¾íva» pasívny re¾im (IPv4)"
 
 #: src/config/options.inc:700
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
-msgstr ""
-"Pou¾i» príkaz PASV namiesto PORT (pasívny vs. aktívny re¾im, iba IPv4)."
+msgstr "Pou¾i» príkaz PASV namiesto PORT (pasívny vs. aktívny re¾im, iba IPv4)."
 
 #: src/config/options.inc:702 src/config/options.inc:706
 msgid "Use passive mode (IPv6)"
@@ -2686,14 +2744,16 @@ msgstr "Pou¾íva» pasívny re¾im (IPv6)"
 
 #: src/config/options.inc:704
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
-msgstr ""
-"Pou¾i» príkaz EPSV namiesto EPRT (pasívny vs. aktívny re¾im, iba IPv6)."
+msgstr "Pou¾i» príkaz EPSV namiesto EPRT (pasívny vs. aktívny re¾im, iba IPv6)."
 
 #: src/config/options.inc:708
 msgid ""
 "Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 "Works only with IPv6 enabled, so nothing interesting for you."
 msgstr ""
+"Pou¾i» príkaz EPSV namiesto EPRT (pasívny vs. aktívny re¾im, iba IPv6).\n"
+"Táto voµba má význam ibe pre verziu ELinksu s podporou IPv6, tak¾e sa vás\n"
+"netýka."
 
 #: src/config/options.inc:714
 msgid "Local files"
@@ -2701,7 +2761,7 @@ msgstr "Lokálne súbory"
 
 #: src/config/options.inc:716
 msgid "Options specific to local browsing."
-msgstr ""
+msgstr "Nastavenia prezerania lokálnych súborov"
 
 #: src/config/options.inc:718
 msgid "Allow reading special files"
@@ -2712,6 +2772,9 @@ msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
 msgstr ""
+"Povoli» èítanie zo ¹peciálnych súborov? (NEBEZPEÈNÉ - èítanie"
+"zo súborov ako /dev/urandom alebo /dev/zero vám spôsobí dos»"
+"veµké problémy"
 
 #: src/config/options.inc:723
 msgid "Try encoding extensions"
@@ -2723,10 +2786,13 @@ msgid ""
 "to open 'filename' with some encoding extension appended\n"
 "(ie. 'filename.gz'); it depends on the supported encodings."
 msgstr ""
+"Ak je táto voµba zapnutá "
+""
+""
 
 #: src/config/options.inc:729
 msgid "Show hidden files in directory listing"
-msgstr ""
+msgstr "Zobrazi» skryté súbory vo výpisoch adresárov"
 
 #: src/config/options.inc:731
 msgid ""

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.35 2003/05/02 22:16:19 zas Exp $ */
+/* $Id: view.c,v 1.36 2003/05/02 22:20:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1757,7 +1757,7 @@ set_frame(struct session *ses, struct f_data_c *f, int a)
 /* This is common backend for submit_form_do() and enter(). */
 int
 goto_link(unsigned char *url, unsigned char *target, struct session *ses,
-	  int _reload)
+	  int do_reload)
 {
 	if (!url) return 1;
 
@@ -1769,7 +1769,7 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 		goto_imgmap(ses, url + 4, s,
 			    target ? stracpy(target) : NULL);
 	} else {
-		if (_reload) {
+		if (do_reload) {
 			goto_url_frame_reload(ses, url, target);
 		} else {
 			goto_url_frame(ses, url, target);
@@ -1784,7 +1784,7 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 /* This is common backend for submit_form() and submit_form_reload(). */
 static int
 submit_form_do(struct terminal *term, void *xxx, struct session *ses,
-	       int _reload)
+	       int do_reload)
 {
 	struct f_data_c *fd = current_frame(ses);
 	struct link *link;
@@ -1792,7 +1792,7 @@ submit_form_do(struct terminal *term, void *xxx, struct session *ses,
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
 
-	return goto_link(get_form_url(ses, fd, link->form), link->target, ses, _reload);
+	return goto_link(get_form_url(ses, fd, link->form), link->target, ses, do_reload);
 }
 
 static int

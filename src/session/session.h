@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.160 2004/09/25 01:04:12 jonas Exp $ */
+/* $Id: session.h,v 1.161 2004/09/27 00:10:44 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -193,7 +193,7 @@ extern enum remote_session_flags remote_session_flags;
 /* Return if we have anything being loaded in this session already. */
 static inline int
 have_location(struct session *ses) {
-	return !!ses->history.current;
+	return !!cur_loc(ses);
 }
 
 /* See go_history() description regarding unpredictable effects on cur_loc()

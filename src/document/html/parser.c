@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.442 2004/06/22 21:39:01 zas Exp $ */
+/* $Id: parser.c,v 1.443 2004/06/22 21:43:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,6 @@ struct html_context html_context;
 unsigned char *eofff;
 unsigned char *startf;
 
-int line_breax;
 int position;
 int putsp;
 
@@ -171,7 +170,10 @@ inline void
 ln_break(int n, void (*line_break)(void *), void *f)
 {
 	if (!n || html_top.invisible) return;
-	while (n > line_breax) line_breax++, line_break(f);
+	while (n > html_context.line_breax) {
+		html_context.line_breax++;
+		line_break(f);
+	}
 	position = 0;
 	putsp = -1;
 }
@@ -197,7 +199,7 @@ put_chrs(unsigned char *start, int len,
 	was_br = 0;
 	put_chars(f, start, len);
 	position += len;
-	line_breax = 0;
+	html_context.line_breax = 0;
 	if (was_li > 0) was_li--;
 }
 
@@ -715,7 +717,7 @@ html_li(unsigned char *a)
 	 * have to insert a line break since no list item content has done it
 	 * for us. */
 	if (was_li) {
-		line_breax = 0;
+		html_context.line_breax = 0;
 		ln_break(1, line_break_f, ff);
 	}
 
@@ -772,7 +774,7 @@ html_li(unsigned char *a)
 	}
 
 	putsp = -1;
-	line_breax = 2;
+	html_context.line_breax = 2;
 	was_li = 1;
 }
 
@@ -1258,7 +1260,7 @@ init_html_parser_state(enum html_element_type type, int align, int margin, int w
 void
 done_html_parser_state(struct html_element *element)
 {
-	line_breax = 1;
+	html_context.line_breax = 1;
 
 	while (&html_top != element) {
 		kill_html_stack_item(&html_top);

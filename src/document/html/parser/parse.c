@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.51 2004/06/22 21:39:02 zas Exp $ */
+/* $Id: parse.c,v 1.52 2004/06/22 21:43:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,7 +573,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	int noupdate = 0;
 
 	putsp = -1;
-	line_breax = table_level ? 2 : 1;
+	html_context.line_breax = table_level ? 2 : 1;
 	position = 0;
 	was_br = 0;
 	was_li = 0;
@@ -650,7 +650,7 @@ next_break:
 				ln_break(1, line_break_f, f);
 				html++;
 				if (*html == ASCII_CR || *html == ASCII_LF) {
-					line_breax = 0;
+					html_context.line_breax = 0;
 					goto next_break;
 				}
 				continue;

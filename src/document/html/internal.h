@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.8 2004/06/22 21:39:01 zas Exp $ */
+/* $Id: internal.h,v 1.9 2004/06/22 21:43:47 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -27,11 +27,11 @@ void put_chrs(unsigned char *start, int len, void (*put_chars)(void *, unsigned 
 
 struct html_context {
 	unsigned char *eoff;
+	int line_breax;
 };
 
 extern struct html_context html_context;
 
-extern int line_breax;
 extern int position;
 extern int putsp;
 extern int was_br;

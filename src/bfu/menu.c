@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.69 2003/05/08 14:19:48 zas Exp $ */
+/* $Id: menu.c,v 1.70 2003/05/17 10:49:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,11 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 		memset(used_hotkeys, 0, 255);
 
 		for (i = 0; i < ni; i++) {
-			unsigned char *text = _(items[i].text, term);
+			unsigned char *text;
+
+			if (!*items[i].text) continue;
+
+			text = _(items[i].text, term);
 
 			if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos)
 				items[i].hotkey_pos = find_hotkey_pos(text);
@@ -142,6 +146,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			items[i].hotkey_pos = 0;
 			items[i].ignore_hotkey = 1;
 		} else if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos) {
+			if (!*items[i].text) continue;
 			items[i].hotkey_pos = find_hotkey_pos(_(items[i].text, term));
 			if (items[i].hotkey_pos) items[i].ignore_hotkey = 2; /* cached */
 		}
@@ -363,17 +368,23 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int my;
 
 	for (my = 0; my < menu->ni; my++) {
-		unsigned char *text = _(menu->items[my].text, term);
-		unsigned char *rtext = _(menu->items[my].rtext, term);
 		int s = 4;
 
-		if (text && text[0])
-			s += strlen(text)
-			     - (menu->items[my].hotkey_pos ? 1 : 0)
-			     + 1;
+		if (menu->items[my].text && *menu->items[my].text) {
+			unsigned char *text = _(menu->items[my].text, term);
 
-		if (rtext && rtext[0])
-			s += MENU_HOTKEY_SPACE + strlen(rtext);
+			if (text[0])
+				s += strlen(text)
+				     - (menu->items[my].hotkey_pos ? 1 : 0)
+				     + 1;
+		}
+
+		if (menu->items[my].rtext && *menu->items[my].rtext) {
+			unsigned char *rtext = _(menu->items[my].rtext, term);
+
+			if (rtext[0])
+				s += MENU_HOTKEY_SPACE + strlen(rtext);
+		}
 
 		if (s > mx) mx = s;
 	}
@@ -493,63 +504,69 @@ display_menu(struct terminal *term, struct menu *menu)
 				 menu_frame_color | FRAMES_LTEE);
 
 		} else {
-			unsigned char *text = _(menu->items[p].text, term);
-			unsigned char *rtext = _(menu->items[p].rtext, term);
 			unsigned char c;
-			int l = menu->items[p].hotkey_pos;
 			int x;
 
-			if (l) {
-				/* There's an hotkey so handle it. */
-				int hk = 0;
-#ifdef DEBUG
-				/* For redundant hotkeys highlighting. */
-				int double_hk = 0;
+			if (menu->items[p].text && *menu->items[p].text) {
+				int l = menu->items[p].hotkey_pos;
+				unsigned char *text = _(menu->items[p].text, term);
 
-				if (l < 0) l = -l, double_hk = 1;
+				if (l) {
+					/* There's an hotkey so handle it. */
+					int hk = 0;
+#ifdef DEBUG
+					/* For redundant hotkeys highlighting. */
+					int double_hk = 0;
+
+					if (l < 0) l = -l, double_hk = 1;
 #endif
-				for (x = 0;
-				     x < menu->xw - 4
-				     && (c = text[x]);
-				     x++) {
-					if (!hk && l
-					    && x == l - 1) {
-						hk = 1;
-						continue;
-					}
+					for (x = 0;
+					     x < menu->xw - 4
+					     && (c = text[x]);
+					     x++) {
+						if (!hk && l
+						    && x == l - 1) {
+							hk = 1;
+							continue;
+						}
 
-					if (hk == 1) {
+						if (hk == 1) {
 #ifdef DEBUG
-						set_char(term, menu->x + x - 1 + 2,
-							 s, (double_hk ?  menu_selected_hotkey_color : hkco) | c);
+							set_char(term, menu->x + x - 1 + 2,
+								 s, (double_hk ?  menu_selected_hotkey_color : hkco) | c);
 #else
-						set_char(term, menu->x + x - 1 + 2, s, hkco | c);
+							set_char(term, menu->x + x - 1 + 2, s, hkco | c);
 #endif
-						hk = 2;
-					} else {
-						set_char(term, menu->x + x - (hk ? 1 : 0) + 2,
-							 s, c | co);
+							hk = 2;
+						} else {
+							set_char(term, menu->x + x - (hk ? 1 : 0) + 2,
+								 s, c | co);
+						}
 					}
-				}
 
-			} else {
-				/* No hotkey, just left text. */
-				for (x = 0;
-				     x < menu->xw - 4
-				     && (c = text[x]);
-				     x++)
-					set_char(term, menu->x + x + 2, s, c | co);
+				} else {
+					/* No hotkey, just left text. */
+					for (x = 0;
+				     	     x < menu->xw - 4
+				     	     && (c = text[x]);
+				     	     x++)
+						set_char(term, menu->x + x + 2, s, c | co);
+				}
 			}
 
-			if (rtext && *rtext) {
-				/* There's a right text, so print it */
-				l = strlen(rtext);
+			if (menu->items[p].rtext && *menu->items[p].rtext) {
+				unsigned char *rtext = _(menu->items[p].rtext, term);
 
-				for (x = l - 1;
-				     (x >= 0) && (menu->xw - 4 >= l - x)
-				     && (c = rtext[x]);
-				     x--)
-					set_char(term, menu->x + menu->xw - 2 - l + x, s, c | co);
+				if (*rtext) {
+					/* There's a right text, so print it */
+					int l = strlen(rtext);
+
+					for (x = l - 1;
+					     (x >= 0) && (menu->xw - 4 >= l - x)
+					     && (c = rtext[x]);
+				    	     x--)
+						set_char(term, menu->x + menu->xw - 2 - l + x, s, c | co);
+				}
 			}
 		}
 	}

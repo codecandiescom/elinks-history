@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.76 2004/02/13 17:52:48 zas Exp $ */
+/* $Id: charsets.c,v 1.77 2004/02/27 16:22:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -395,7 +395,7 @@ hits_cmp(struct entity_cache *a, struct entity_cache *b)
 	else return 1;
 }
 
-unsigned char *
+static unsigned char *
 get_entity_string(const unsigned char *str, const int strlen, int encoding)
 {
 #define ENTITY_CACHE_SIZE 10	/* 10 seems a good value. */

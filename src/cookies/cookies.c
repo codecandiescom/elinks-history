@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.61 2003/07/08 13:04:46 jonas Exp $ */
+/* $Id: cookies.c,v 1.62 2003/07/08 13:49:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -556,7 +556,7 @@ send_cookies(unsigned char **s, int *l, struct uri *uri)
 
 
 void
-load_cookies() {
+load_cookies(void) {
 	/* Buffer size is set to be enough to read long lines that
 	 * save_cookies may write. 6 is choosen after the fprintf(..) call
 	 * in save_cookies(). --Zas */
@@ -564,7 +564,6 @@ load_cookies() {
 	unsigned char *cookfile = "cookies";
 	unsigned char *p, *q;
 	FILE *fp;
-	struct cookie *c;
 
 	if (elinks_home) {
 		cookfile = straconcat(elinks_home, cookfile, NULL);
@@ -573,11 +572,9 @@ load_cookies() {
 
 	/* Do it here, as we will delete whole cookies list if the file was
 	 * removed */
-	free_list(c_domains);
-
-	foreach (c, cookies)
-		free_cookie(c);
-	free_list(cookies);
+	cookies_nosave = 1;
+	cleanup_cookies();
+	cookies_nosave = 0;
 
 	fp = fopen(cookfile, "r");
 	if (elinks_home) mem_free(cookfile);
@@ -688,17 +685,18 @@ init_cookies(void)
 void
 cleanup_cookies(void)
 {
-	struct cookie *c;
-
 	free_list(c_domains);
 
-	if (get_opt_int("cookies.save"))
+	if (!cookies_nosave && get_opt_int("cookies.save"))
 		save_cookies();
 
-	foreach (c, cookies)
-		free_cookie(c);
+	while (!list_empty(cookies)) {
+		struct cookie *cookie = cookies.next;
 
-	free_list(cookies);
+		del_from_list(cookie);
+		free_cookie(cookie);
+		mem_free(cookie);
+	}
 }
 
 #endif /* COOKIES */

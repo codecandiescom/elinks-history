@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.134 2003/07/02 18:30:30 zas Exp $ */
+/* $Id: view.c,v 1.135 2003/07/02 20:44:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2057,9 +2057,13 @@ static int
 submit_form_do(struct terminal *term, void *xxx, struct session *ses,
 	       int do_reload)
 {
-	struct f_data_c *fd = current_frame(ses);
+	struct f_data_c *fd;
 	struct link *link;
 
+	assert(term && ses);
+	fd = current_frame(ses);
+
+	assert(fd && fd->vs && fd->f_data);
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
 
@@ -2069,12 +2073,14 @@ submit_form_do(struct terminal *term, void *xxx, struct session *ses,
 static int
 submit_form(struct terminal *term, void *xxx, struct session *ses)
 {
+	assert(term && ses);
 	return submit_form_do(term, xxx, ses, 0);
 }
 
 static int
 submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
 {
+	assert(term && ses);
 	return submit_form_do(term, xxx, ses, 1);
 }
 
@@ -2082,6 +2088,8 @@ static int
 enter(struct session *ses, struct f_data_c *fd, int a)
 {
 	struct link *link;
+
+	assert(ses && fd && fd->vs && fd->f_data);
 
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
@@ -2143,7 +2151,7 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 void
 toggle(struct session *ses, struct f_data_c *f, int a)
 {
-	if (!f || !f->vs) return;
+	assert(ses && f && f->vs);
 
 	f->vs->plain = !f->vs->plain;
 	html_interpret(ses);

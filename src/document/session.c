@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.10 2002/03/22 18:57:21 pasky Exp $ */
+/* $Id: session.c,v 1.11 2002/03/26 19:47:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1473,6 +1473,8 @@ static inline int unhx(unsigned char a)
 	return -1;
 }
 
+/* This is _NOT_ for what do you think it's for! We use this to make URL
+ * shell-safe, nothing more. */
 unsigned char *encode_url(unsigned char *url)
 {
 	unsigned char *u = init_str();
@@ -1484,6 +1486,8 @@ unsigned char *encode_url(unsigned char *url)
 	return u;
 }
 
+/* This is _NOT_ for what do you think it's for! We use this to recover from
+ * making URL shell-safe, nothing more. */
 unsigned char *decode_url(unsigned char *url)
 {
 	unsigned char *u = init_str();

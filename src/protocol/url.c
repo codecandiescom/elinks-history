@@ -1,5 +1,5 @@
-/* URL parser and translator */
-/* $Id: url.c,v 1.4 2002/03/17 17:42:57 pasky Exp $ */
+/* URL parser and translator; implementation of RFC 2396. */
+/* $Id: url.c,v 1.5 2002/03/26 19:47:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.23 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: dialogs.c,v 1.24 2003/04/21 09:30:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,11 +29,13 @@ auth_layout(struct dialog_data *dlg)
 	int w, rw;
 	int y = -1;
 	int dialog_text_color = get_bfu_color(term, "dialog.text");
+	unsigned char *label_login = N_("Login");
+	unsigned char *label_password = N_("Password");
 
-	max_text_width(term, N_("Login"), &max);
-	min_text_width(term, N_("Login"), &min);
-	max_text_width(term, N_("Password"), &max);
-	min_text_width(term, N_("Password"), &min);
+	max_text_width(term, label_login, &max);
+	min_text_width(term, label_login, &min);
+	max_text_width(term, label_password, &max);
+	min_text_width(term, label_password, &min);
 	max_buttons_width(term, dlg->items + 2, 2,  &max);
 	min_buttons_width(term, dlg->items + 2, 2,  &min);
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;
@@ -49,11 +51,11 @@ auth_layout(struct dialog_data *dlg)
 	}
 
 	dlg_format_text(NULL, term,
-			N_("Login"), 0, &y, w, &rw,
+			label_login, 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 	y += 2;
 	dlg_format_text(NULL, term,
-			N_("Password"), 0, &y, w, &rw,
+			label_password, 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 	y += 2;
 	dlg_format_buttons(NULL, term,
@@ -72,14 +74,14 @@ auth_layout(struct dialog_data *dlg)
 		y++;
 	}
 	dlg_format_text(term, term,
-			N_("Login"), dlg->x + DIALOG_LB, &y, w, NULL,
+			label_login, dlg->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[0],
 			 dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_text(term, term,
-			N_("Password"), dlg->x + DIALOG_LB, &y, w, NULL,
+			label_password, dlg->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[1],
@@ -112,7 +114,6 @@ extern struct list_head http_auth_basic_list;
 void
 do_auth_dialog(struct session *ses)
 {
-	/* TODO: complete rewrite */
 	struct dialog *d;
 	struct dialog_data *dd;
 	struct terminal *term = ses->term;
@@ -121,6 +122,7 @@ do_auth_dialog(struct session *ses)
 	if (!list_empty(http_auth_basic_list)
 	    && !((struct http_auth_basic *) http_auth_basic_list.next)->valid)
 		  a = (struct http_auth_basic *) http_auth_basic_list.next;
+
 	if (!a || a->blocked) return;
 	a->valid = 1;
 	a->blocked = 1;

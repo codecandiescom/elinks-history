@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.100 2004/11/08 20:16:49 jonas Exp $ */
+/* $Id: parse.c,v 1.101 2004/11/13 02:22:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -934,6 +934,14 @@ end_element(struct element_info *ei,
 		     elt = elt->prev)
 			if (elt->linebreak > lnb)
 				lnb = elt->linebreak;
+
+		/* This hack forces a line break after a list end. It is needed
+		 * when ending a list with the last <li> having no text the
+		 * line_breax is 2 so the ending list's linebreak will be
+		 * ignored when calling ln_break(). */
+		if (html_context.was_li)
+			html_context.line_breax = 0;
+
 		ln_break(lnb, html_context.line_break_f, part);
 		while (e->prev != (void *) &html_context.stack)
 			kill_html_stack_item(e->prev);

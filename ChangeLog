@@ -1,3 +1,48 @@
+Mon Apr 28 15:37:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/bookmarks.c, config/opttypes.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Mon Apr 28 15:33:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/backend/common.c, bookmarks/backend/default.c,
+	bookmarks/backend/xbel.c, intl/charsets.c,
+	intl/gettext/dcigettext.c, intl/gettext/libintl.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Mon Apr 28 13:22:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Cleanup of some egnimatic code ;).  
+
+Mon Apr 28 10:00:51 2003  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS:
+
+	Raúl Núñez de Arenas Coronado was added to AUTHORS document.  
+
+Mon Apr 28 09:47:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/bookmarks.c, globhist/globhist.c:
+
+	Workaround for bookmarks/globhist segfault caused by deletion of
+	marked items. A real fix is needed there. Patch by Witold Filipczyk
+	and me.  
+
+Mon Apr 28 09:40:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/download.c, util/file.c:
+
+	The problem with tilde expansion at get_unique_name() was fixed. The
+	call to expand_tilde() inside get_unique_name() was substitued by a
+	copy_string(). This patch may still need improvment but it works.
+	Patch by Raúl Núñez de Arenas Coronado.  
+
 Sat Apr 26 09:47:44 2003  Laurent Monin <zas@norz.org>:
 
 	* BUGS:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.671 2005/01/06 09:00:12 zas Exp $ */
+/* $Id: view.c,v 1.672 2005/01/06 21:59:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 
 #include "elinks.h"
 
+#include "bfu/leds.h"
 #include "bfu/menu.h"
 #include "bfu/dialog.h"
 #include "config/kbdbind.h"

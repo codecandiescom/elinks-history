@@ -1,3 +1,28 @@
+Fri Oct  4 19:11:45 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, document/view.c:
+
+	Option number_keys_select_link is now a tristate: 0 never 1 if
+	document.browse.links.numbering = 1 (default) 2 always 
+	
+	Patch by Miciah.  
+
+Fri Oct  4 19:05:19 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
+
+	The follow-link binding was removed. Where the user previously
+	pressed 12L the user now presses 12<enter>.  And now the user can
+	also press 12d to download the twelfth link. When one adds bindings
+	o = open-link-in-new-window, i = download-image, and v = view-image,
+	the world begins to make much sense.  Patch by Miciah.  
+
+Fri Oct  4 17:50:54 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Minor compilation fix.  
+
 Thu Oct  3 11:38:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/dialogs.c:

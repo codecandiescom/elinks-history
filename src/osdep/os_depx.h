@@ -1,4 +1,4 @@
-/* $Id: os_depx.h,v 1.3 2002/09/19 15:49:15 pasky Exp $ */
+/* $Id: os_depx.h,v 1.4 2003/04/16 21:28:46 pasky Exp $ */
 
 #ifndef EL__OS_DEPX_H
 #define EL__OS_DEPX_H
@@ -13,6 +13,10 @@
 
 #ifndef SA_RESTART
 #define SA_RESTART	0
+#endif
+
+#ifndef PIPE_BUF
+#define PIPE_BUF	512 /* POSIX says that. -- Mikulas */
 #endif
 
 /*#ifdef sparc

@@ -1,3 +1,23 @@
+Wed Dec  8 18:29:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	truncate_title() was renamed get_image_label() and slightly
+	modified.  
+
+Wed Dec  8 18:23:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	Move code from truncate_title() to reworked truncate_label().  
+
+Wed Dec  8 17:27:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	get_image_text() was renamed get_image_filename_from_src(). Comments
+	were added.  
+
 Sun Dec  5 22:19:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/document/html/parser/link.c:

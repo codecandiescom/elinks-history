@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.26 2003/05/24 08:55:58 zas Exp $ */
+/* $Id: charsets.c,v 1.27 2003/05/24 11:38:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -369,62 +369,61 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 unsigned char *
 get_entity_string(unsigned char *st, int l, int encoding)
 {
-	unicode_val n = 0;
-
 	if (l <= 0) return NULL;
-	if (st[0] == '#') {
-		if (l == 1) return NULL;
-		if ((st[1] | 32) == 'x') { /* Hexadecimal */
-			if (l == 2 || l > 6) return NULL;
-			st += 2, l -= 2;
+
+	if (*st == '#') { /* Numeric entitie. */
+		unicode_val n = 0;
+
+		if (l == 1) return NULL; /* &#; ? */
+		st++, l--;
+		if ((*st | 32) == 'x') { /* Hexadecimal */
+			if (l == 1 || l > 5) return NULL; /* xFFFF max. */
+			st++, l--;
 			do {
 				unsigned char c = (*(st++) | 32);
 
 				if (c >= '0' && c <= '9')
-					n = (n << 4) + c - '0';
+					n = (n << 4) | (c - '0');
 				else if (c >= 'a' && c <= 'f')
-					n = (n << 4) + c - 'a' + 10;
+					n = (n << 4) | (c - 'a' + 10);
 				else
-					return NULL;
-				if (n >= 0x10000)
-					return NULL;
+					return NULL; /* Bad char. */
 			} while (--l);
 		} else { /* Decimal */
-			if (l > 6) return NULL;
-			st++, l--;
+			if (l > 5) return NULL; /* 65535 max. */
 			do {
 				unsigned char c = *(st++);
 
 				if (c >= '0' && c <= '9')
 					n = n * 10 + c - '0';
 				else
-					return NULL;
-				if (n >= 0x10000)
-					return NULL;
+					return NULL; /* Bad char. */
+				if (n >= 0x10000) return NULL; /* Too big. */
 			} while (--l);
 		}
-	} else {
+
+		return u2cp(n, encoding);
+
+	} else { /* Text entitie. */
 		unsigned long start = 0;
 		unsigned long end = N_ENTITIES - 1;
 
+		/* Dichotomic search is used there. */
 		while (start <= end) {
 			unsigned long middle = (start + end) >> 1;
 			int cmp = xxstrcmp(entities[middle].s, st, l);
 
-			if (!cmp) {
-				n = entities[middle].c;
-				break;
-			}
+			if (!cmp) /* Found. */
+				return u2cp(entities[middle].c, encoding);
+
 			if (cmp > 0)
 				end = middle - 1;
 			else
 				start = middle + 1;
 		}
-
-		if (!n || n >= 0x10000) return NULL;
 	}
 
-	return u2cp(n, encoding);
+	return NULL;
 }
 
 unsigned char *

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.496 2004/06/20 11:24:55 jonas Exp $ */
+/* $Id: view.c,v 1.497 2004/06/20 11:58:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -480,8 +480,6 @@ vertical_scroll(struct session *ses, struct document_view *doc_view, int steps)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	ses->navigate_mode = NAVIGATE_LINKWISE;
-
 	y = doc_view->vs->y + steps;
 	if (steps > 0) {
 		/* DOWN */
@@ -513,8 +511,6 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
-
-	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	x = doc_view->vs->x + steps;
 	int_bounds(&x, 0, doc_view->document->width - 1);

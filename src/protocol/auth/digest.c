@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.8 2004/11/14 18:51:57 jonas Exp $ */
+/* $Id: digest.c,v 1.9 2004/11/14 19:16:52 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -24,14 +24,14 @@
 
 /* taken from RFC 2617 */
 static unsigned char *
-convert_hex(unsigned char *bin, int len)
+convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1])
 {
 	int i;
-	unsigned char *hex = mem_calloc(1, len * 2 + 1);
+	unsigned char *hex = mem_calloc(1, MD5_DIGEST_LENGTH * 2 + 1);
 
 	if (!hex) return NULL;
 
-	for (i = 0; i < len; i++) {
+	for (i = 0; i < MD5_DIGEST_LENGTH; i++) {
 		unsigned char j = bin[i] >> 4 & 0xf;
 
 		if (j <= 9)
@@ -44,7 +44,7 @@ convert_hex(unsigned char *bin, int len)
 		else
 			hex[i * 2 + 1] = j + 'a' - 10;
 	}
-	hex[len * 2] = '\0';
+	hex[MD5_DIGEST_LENGTH * 2] = '\0';
 	return hex;
 }
 
@@ -60,7 +60,9 @@ random_cnonce(void)
 	random = rand();
 	cnonce_digest = MD5((const unsigned char *) &random, sizeof(int), md5);
 
-	return convert_hex(cnonce_digest, MD5_DIGEST_LENGTH);
+	assert(cnonce_digest == md5);
+
+	return convert_hex(md5);
 }
 
 unsigned char *
@@ -76,7 +78,7 @@ digest_calc_ha1(struct auth_entry *entry, unsigned char *cnounce)
 	MD5_Update(&MD5Ctx, ":", 1);
 	MD5_Update(&MD5Ctx, entry->password, strlen(entry->password));
 	MD5_Final(skey, &MD5Ctx);
-	return convert_hex(skey, 16);
+	return convert_hex(skey);
 }
 
 unsigned char *
@@ -92,7 +94,7 @@ digest_calc_response(struct auth_entry *entry, struct uri *uri,
 	MD5_Update(&MD5Ctx, ":/", 2);
 	MD5_Update(&MD5Ctx, uri->data, strlen(uri->data));
 	MD5_Final(Ha2, &MD5Ctx);
-	Ha2_hex = convert_hex(Ha2, 16);
+	Ha2_hex = convert_hex(Ha2);
 
 	MD5_Init(&MD5Ctx);
 	MD5_Update(&MD5Ctx, ha1, 32);
@@ -108,5 +110,5 @@ digest_calc_response(struct auth_entry *entry, struct uri *uri,
 	MD5_Update(&MD5Ctx, Ha2_hex, 32);
 	MD5_Final(Ha2, &MD5Ctx);
 	mem_free_if(Ha2_hex);
-	return convert_hex(Ha2, 16); 
+	return convert_hex(Ha2); 
 }

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.101 2004/08/06 08:35:22 zas Exp $ */
+/* $Id: draw.c,v 1.102 2004/08/06 08:36:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,17 +108,17 @@ draw_char_data(struct terminal *term, int x, int y, unsigned char data)
 void
 draw_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 {
-	int position, size;
+	struct screen_char *screen_char = get_char(term, x, y);
+	int size;
 
-	assert(term && term->screen && term->screen->image && line);
+	assert(line);
 	if_assert_failed return;
-	check_range(term, x, y);
+	if (!screen_char) return;
 
 	size = int_min(l, term->width - x);
 	if (size == 0) return;
 
-	position = x + term->width * y;
-	copy_screen_chars(&term->screen->image[position], line, size);
+	copy_screen_chars(screen_char, line, size);
 	set_screen_dirty(term->screen, y, y);
 }
 

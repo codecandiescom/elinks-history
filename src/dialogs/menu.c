@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.268 2004/01/07 14:41:33 jonas Exp $ */
+/* $Id: menu.c,v 1.269 2004/01/07 14:47:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,19 +216,18 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	menu = new_menu(FREE_LIST);
 	if (!menu) return;
 
-	add_menu_action(&menu, N_("Go ~back"), ACT_BACK, NULL, 0);
-	add_menu_action(&menu, N_("Go for~ward"), ACT_UNBACK, NULL, 0);
+	add_menu_action(&menu, N_("Go ~back"), ACT_BACK);
+	add_menu_action(&menu, N_("Go for~ward"), ACT_UNBACK);
 
 	add_separator_to_menu(&menu);
 
 #ifdef CONFIG_BOOKMARKS
 	if (!anonymous) {
-		add_menu_action(&menu, N_("Bookm~ark document"), ACT_ADD_BOOKMARK,
-				NULL, 0);
+		add_menu_action(&menu, N_("Bookm~ark document"), ACT_ADD_BOOKMARK);
 	}
 #endif
 
-	add_menu_action(&menu, N_("~Reload"), ACT_RELOAD, NULL, 0);
+	add_menu_action(&menu, N_("~Reload"), ACT_RELOAD);
 
 	if (ses->doc_view && document_has_frames(ses->doc_view->document))
 		add_to_menu(&menu, N_("Frame at ~full-screen"), NULL, ACT_ZOOM_FRAME,
@@ -238,19 +237,19 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	add_separator_to_menu(&menu);
 
 	if (tabs > 1) {
-		add_menu_action(&menu, N_("Nex~t tab"), ACT_TAB_NEXT, NULL, 0);
-		add_menu_action(&menu, N_("Pre~v tab"), ACT_TAB_PREV, NULL, 0);
+		add_menu_action(&menu, N_("Nex~t tab"), ACT_TAB_NEXT);
+		add_menu_action(&menu, N_("Pre~v tab"), ACT_TAB_PREV);
 	}
 
-	add_menu_action(&menu, N_("~Close tab"), ACT_TAB_CLOSE, NULL, 0);
+	add_menu_action(&menu, N_("~Close tab"), ACT_TAB_CLOSE);
 
 	if (tabs > 1) {
 		add_menu_action(&menu, N_("C~lose all tabs but the current"),
-				ACT_TAB_CLOSE_ALL_BUT_CURRENT, NULL, 0);
+				ACT_TAB_CLOSE_ALL_BUT_CURRENT);
 #ifdef CONFIG_BOOKMARKS
 		if (!anonymous) {
 			add_menu_action(&menu, N_("B~ookmark all tabs"),
-					ACT_ADD_BOOKMARK_TABS, NULL, 0);
+					ACT_ADD_BOOKMARK_TABS);
 		}
 #endif
 	}

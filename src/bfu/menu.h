@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.44 2004/01/06 21:00:56 jonas Exp $ */
+/* $Id: menu.h,v 1.45 2004/01/07 14:47:17 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -155,8 +155,8 @@ add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
 	add_to_menu(menu, "", NULL, ACT_NONE, NULL, NULL, NO_SELECT)
 
 /* Implies that the action will be handled by do_action() */
-#define add_menu_action(menu, text, action, data, flags) \
-	add_to_menu(menu, text, NULL, action, NULL, data, flags)
+#define add_menu_action(menu, text, action) \
+	add_to_menu(menu, text, NULL, action, NULL, NULL, NO_FLAG)
 
 void do_menu(struct terminal *, struct menu_item *, void *, int);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int, int);

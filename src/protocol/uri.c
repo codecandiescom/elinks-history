@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.66 2003/11/29 00:16:52 pasky Exp $ */
+/* $Id: uri.c,v 1.67 2003/11/29 00:40:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,23 +423,48 @@ static void
 insert_wd(unsigned char **up, unsigned char *cwd)
 {
 	unsigned char *url = *up;
+	unsigned char *path;
 	int cwdlen;
 
 	if (!url || !cwd || !*cwd
 	    || strncasecmp(url, "file://", 7))
 		return;
 	url += 7; /* file:// */
-	if (!strncasecmp(url, "localhost/", 10)) {
-		/* Remove localhost from the URL to make (not only) the
-		 * file:// handler happy. */
-		memmove(url, url + 9, strlen(url + 9) + 1);
-	}
-	if (dir_sep(url[0]))
-		return;
+
+	/* Sort out the host part. We currently support only host "localhost"
+	 * (plus empty host part will be assumed to be "localhost" as well).
+	 * As our extensions, '.' will reference to the cwd on localhost
+	 * (originally, when the first thing after file:// wasn't "localhost/",
+	 * we assumed the cwd as well, and pretended that there's no host part
+	 * at all) and '..' to the directory parent to cwd. Another extension
+	 * is that if this is a DOS-like system, the first char in two-char
+	 * host part is uppercase letter and the second char is a colon, it is
+	 * assumed to be a local disk specification. */
+	/* TODO: Use FTP for non-localhost hosts. --pasky */
+
+	if (url[0] == '.') /* Who would name their file/dir '...' ? */
+		goto insert;
+
+	/* We are not going to do what name of this function hints. */
+
 #ifdef DOS_FS
-	if (upcase(url[0]) >= 'A' && upcase(url[0]) <= 'Z' && url[1] == ':' && dir_sep(url[2])) return;
+	if (upcase(url[0]) >= 'A' && upcase(url[0]) <= 'Z'
+	    && url[1] == ':' && dir_sep(url[2]))
+		return;
 #endif
 
+	for (path = url; *path && !dir_sep(*path); path++);
+	if (dir_sep(*path)) path++;
+
+	/* FIXME: We will in fact assume localhost even for non-local hosts,
+	 * until we will support the FTP transformation. --pasky */
+
+	memmove(url, path, strlen(path) + 1);
+	return;
+
+	/* Insert the current working directory. */
+
+insert:
 	cwdlen = strlen(cwd);
 	url = mem_alloc(strlen(*up) + cwdlen + 2); /*XXX:zas: Post data copy. */
 	if (!url) return;

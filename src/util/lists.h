@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.22 2003/05/24 21:32:25 pasky Exp $ */
+/* $Id: lists.h,v 1.23 2003/05/24 21:35:39 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -20,6 +20,10 @@
 
 
 #ifndef LISTDEBUG
+
+
+#define list_magic_error(where, what) /* no magic */
+
 
 #define list_magic_set(x) /* no magic */
 
@@ -129,6 +133,10 @@ do { \
 #define LISTMAGIC2 ((void *) 0xd0d0b0b0)
 
 
+/* I hope #xyz is ANSI C ;-). Or.. oh well, it's just debug :^). --pasky */
+#define list_magic_error(where,what) list_magic_error_(where, #what, __FILE__, __LINE__)
+
+
 #define list_magic_set(x) \
 do { \
 	(x).magic1 = LISTMAGIC1; \
@@ -146,10 +154,6 @@ do { \
 } while (0)
 
 #define list_magic_chkbool(x, where) (list_magic_correct(x) || (list_magic_error(where, x), 1))
-
-
-/* I hope #xyz is ANSI C ;-). Or.. oh well, it's just debug :^). --pasky */
-#define list_magic_error(where,what) list_magic_error_(where, #what, __FILE__, __LINE__)
 
 
 struct list_head {

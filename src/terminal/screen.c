@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.120 2003/12/07 21:03:15 pasky Exp $ */
+/* $Id: screen.c,v 1.121 2003/12/07 21:39:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,7 +221,7 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 			driver->frame_seqs = m11_hack_frame_seqs;
 		}
 
-	else if (driver->type == TERM_FREEBSD) {
+	} else if (driver->type == TERM_FREEBSD) {
 		if (utf8_io) {
 			driver->charsets[1] = get_cp_index("cp437");
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.5 2002/05/04 08:09:32 pasky Exp $ */
+/* $Id: cache.c,v 1.6 2002/05/04 08:14:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,8 +53,8 @@ unsigned char *extract_proxy(unsigned char *url)
 	return a + 1;
 }
 
-/* Return 0 and save cache entry to 'f' if there's matching one, otherwise
- * return -1. Yes, it's silly. */
+/* Return 1 and save cache entry to 'f' if there's matching one, otherwise
+ * return 0. */
 int
 find_in_cache(unsigned char *url, struct cache_entry **f)
 {
@@ -70,16 +70,16 @@ find_in_cache(unsigned char *url, struct cache_entry **f)
 		add_to_list(cache, e);
 
 		*f = e;
-		return 0;
+		return 1;
 	}
 
-	return -1;
+	return 0;
 }
 
 int get_cache_entry(unsigned char *url, struct cache_entry **f)
 {
 	struct cache_entry *e;
-	if (!find_in_cache(url, f)) return 0;
+	if (find_in_cache(url, f)) return 0;
 	shrink_memory(0);
 	url = extract_proxy(url);
 	if (!(e = mem_alloc(sizeof(struct cache_entry)))) return -1;

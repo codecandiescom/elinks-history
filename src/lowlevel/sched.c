@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.18 2002/04/27 13:15:53 pasky Exp $ */
+/* $Id: sched.c,v 1.19 2002/05/04 08:14:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -835,7 +835,7 @@ int load_url(unsigned char *url, unsigned char *prev_url,
 		stat->prev_error = 0;
 	}
 
-	if (no_cache <= NC_CACHE && !find_in_cache(url, &e) && !e->incomplete) {
+	if (no_cache <= NC_CACHE && find_in_cache(url, &e) && !e->incomplete) {
 		if (stat) {
 			stat->ce = e;
 			stat->state = S_OK;

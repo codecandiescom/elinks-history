@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.24 2002/05/04 08:06:08 pasky Exp $ */
+/* $Id: session.c,v 1.25 2002/05/04 08:14:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -327,7 +327,7 @@ void ses_imgmap(struct session *ses)
 	struct fragment *fr;
 	struct memory_list *ml;
 	struct menu_item *menu;
-	if (find_in_cache(ses->loading_url, &ce) || !ce) {
+	if (!find_in_cache(ses->loading_url, &ce) || !ce) {
 		internal("can't find cache entry");
 		return;
 	}
@@ -394,7 +394,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	struct cache_entry *e;
 
 	if (!wtd_data || !form_submit_confirm || !strchr(url, POST_CHAR)
-	    || (cache == NC_ALWAYS_CACHE && !find_in_cache(url, &e)
+	    || (cache == NC_ALWAYS_CACHE && find_in_cache(url, &e)
 		&& !e->incomplete)) {
 
 		if (wtd_data) mem_free(wtd_data);

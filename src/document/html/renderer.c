@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.19 2002/05/04 07:44:49 pasky Exp $ */
+/* $Id: renderer.c,v 1.20 2002/05/04 08:14:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1731,7 +1731,7 @@ void delete_unused_format_cache_entries()
 		struct cache_entry *cee = NULL;
 
 		if (!ce->refcount) {
-			if (find_in_cache(ce->url, &cee) || !cee
+			if (!find_in_cache(ce->url, &cee) || !cee
 			    || cee->count != ce->use_tag) {
 				if (!cee) internal("file %s disappeared from cache", ce->url);
 				ce = ce->prev;
@@ -1779,7 +1779,7 @@ void cached_format_html(struct view_state *vs, struct f_data_c *screen,
 		if (compare_opt(&ce->opt, opt)) continue;
 		
 		cee = NULL;
-		if (find_in_cache(vs->url, &cee) || !cee || cee->count != ce->use_tag) {
+		if (!find_in_cache(vs->url, &cee) || !cee || cee->count != ce->use_tag) {
 			if (!cee) internal("file %s disappeared from cache", ce->url);
 			if (!ce->refcount) {
 				ce = ce->prev;
@@ -1797,7 +1797,7 @@ void cached_format_html(struct view_state *vs, struct f_data_c *screen,
 		goto sx;
 	}
 
-	if (find_in_cache(vs->url, &cee) || !cee) {
+	if (!find_in_cache(vs->url, &cee) || !cee) {
 		internal("document to format not found");
 		return;
 	}
@@ -1921,7 +1921,7 @@ repeat:
 	if (!fr) return NULL;
 
 	vs = &fr->vs;
-	if (find_in_cache(vs->url, &ce) || !ce) return NULL;
+	if (!find_in_cache(vs->url, &ce) || !ce) return NULL;
 
 	if (ce->redirect && fr->redirect_cnt < MAX_REDIRECTS) {
 		unsigned char *u = join_urls(vs->url, ce->redirect);

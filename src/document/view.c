@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.30 2002/04/29 20:53:11 pasky Exp $ */
+/* $Id: view.c,v 1.31 2002/05/04 08:14:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ void clear_formatted(struct f_data *scr)
 	struct form_control *fc;
 
 	if (!scr) return;
-	if (find_in_cache(scr->url, &ce) || !ce) internal("no cache entry for document");
+	if (!find_in_cache(scr->url, &ce) || !ce) internal("no cache entry for document");
 	else ce->refcount--;
 	if (scr->url) mem_free(scr->url);
 	if (scr->title) mem_free(scr->title);

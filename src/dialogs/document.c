@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.1 2002/04/28 11:17:29 pasky Exp $ */
+/* $Id: document.c,v 1.2 2002/05/04 08:14:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,7 @@ void head_msg(struct session *ses)
 			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 		return;
 	}
-	if (!find_in_cache(cur_loc(ses)->vs.url, &ce)) {
+	if (find_in_cache(cur_loc(ses)->vs.url, &ce)) {
 		if (ce->head) ss = s = stracpy(ce->head);
 		else s = ss = stracpy("");
 		len = strlen(s) - 1;

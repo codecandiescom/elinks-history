@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: lua.c,v 1.11 2002/04/28 11:48:26 pasky Exp $ */
+/* $Id: lua.c,v 1.12 2002/05/04 08:14:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ static int l_current_document(LS)
 	unsigned char *url;
 	struct cache_entry *ce;
 	struct fragment *f;
-	if (!ses || !(url = cur_loc(ses)->vs.url) || find_in_cache(url, &ce) || !(f = ce->frag.next))
+	if (!ses || !(url = cur_loc(ses)->vs.url) || !find_in_cache(url, &ce) || !(f = ce->frag.next))
 		lua_pushnil(S);
 	else
 		lua_pushlstring(S, f->data, f->length);

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.46 2005/03/24 21:50:09 miciah Exp $
+-- $Id: hooks.lua.in,v 1.47 2005/03/25 04:42:47 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -58,13 +58,13 @@ pre_format_html_hooks = {n=0}
 function pre_format_html_hook (url, html)
     local changed = nil
 
-    table.foreach(pre_format_html_hooks,
-                  function (i, fn)
-                      local new,stop = fn(url,html)
- 
-                      if new then html=new changed=1 end
-                      return not stop
-                  end)
+    table.foreachi(pre_format_html_hooks,
+                   function (i, fn)
+                       local new,stop = fn(url,html)
+                   
+                       if new then html=new changed=1 end
+                       return not stop
+                   end)
 
    return changed and html
 end
@@ -73,13 +73,13 @@ goto_url_hooks = {n=0}
 function goto_url_hook (url)
     local changed = nil
 
-    table.foreach(goto_url_hooks,
-                  function (i, fn)
-                      local new,stop = fn(url)
- 
-                      if new then url=new changed=1 end
-                      return not stop
-                  end)
+    table.foreachi(goto_url_hooks,
+                   function (i, fn)
+                       local new,stop = fn(url)
+                   
+                       if new then url=new changed=1 end
+                       return not stop
+                   end)
 
    return changed and url
 end
@@ -88,20 +88,20 @@ follow_url_hooks = {n=0}
 function follow_url_hook (url)
     local changed = nil
 
-    table.foreach(follow_url_hooks,
-                  function (i, fn)
-                      local new,stop = fn(url)
- 
-                      if new then url=new changed=1 end
-                      return not stop
-                  end)
+    table.foreachi(follow_url_hooks,
+                   function (i, fn)
+                       local new,stop = fn(url)
+                   
+                       if new then url=new changed=1 end
+                       return not stop
+                   end)
 
    return changed and url
 end
 
 quit_hooks = {n=0}
 function quit_hook (url, html)
-    table.foreach(quit_hooks, function (i, fn) return not fn() end)
+    table.foreachi(quit_hooks, function (i, fn) return not fn() end)
 end
 
 ----------------------------------------------------------------------

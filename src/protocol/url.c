@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.35 2002/11/25 10:21:42 zas Exp $ */
+/* $Id: url.c,v 1.36 2002/11/25 13:21:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ get_prot_info(unsigned char *prot, int *port,
 	return -1;
 }
 
-
+/* If url is invalid, it will return -1. */
 int
 parse_url(unsigned char *url, int *prlen,
           unsigned char **user, int *uslen,
@@ -233,7 +233,8 @@ parse_url(unsigned char *url, int *prlen,
 	return 0;
 }
 
-
+/* Returns protocol part of url in an allocated string.
+ * If url can't be parsed, it will return NULL. */
 unsigned char *
 get_protocol_name(unsigned char *url)
 {
@@ -283,7 +284,7 @@ get_host_name(unsigned char *url)
 		      &h, &hl,
 		      NULL, NULL,
 		      NULL, NULL,
-		      NULL)) return stracpy("");
+		      NULL)) return NULL;
 
 	return memacpy(h, hl);
 }

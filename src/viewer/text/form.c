@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.135 2004/06/11 21:58:05 jonas Exp $ */
+/* $Id: form.c,v 1.136 2004/06/11 23:03:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,6 +554,13 @@ struct boundary_info {
 	unsigned char string[BOUNDARY_LENGTH];
 };
 
+static inline void
+init_boundary(struct boundary_info *boundary)
+{
+	memset(boundary, 0, sizeof(struct boundary_info));
+	memset(boundary->string, '0', BOUNDARY_LENGTH);
+}
+
 /* Add boundary to string and save the offset */
 static inline void
 add_boundary(struct string *data, struct boundary_info *boundary)
@@ -634,14 +641,13 @@ static void
 encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 		 struct boundary_info *boundary, int cp_from, int cp_to)
 {
-	unsigned char *bound = boundary->string;
 	struct conv_table *convert_table = NULL;
 	struct submitted_value *sv;
 
-	assert(ses && l && data && bound);
+	assert(ses && l && data && boundary);
 	if_assert_failed return;
 
-	memset(bound, '0', BOUNDARY_LENGTH);
+	init_boundary(boundary);
 
 	foreach (sv, *l) {
 		add_boundary(data, boundary);
@@ -856,7 +862,7 @@ struct uri *
 get_form_uri(struct session *ses, struct document_view *doc_view,
 	     struct form_control *frm)
 {
-	struct boundary_info boundary = { 0, NULL };
+	struct boundary_info boundary;
 	INIT_LIST_HEAD(submit);
 	struct string data;
 	struct string go;

@@ -1,10 +1,11 @@
-/* $Id: task.h,v 1.1 2003/12/06 02:56:02 jonas Exp $ */
+/* $Id: task.h,v 1.2 2003/12/06 16:34:13 pasky Exp $ */
 
 #ifndef EL__SCHED_TASK_H
 #define EL__SCHED_TASK_H
 
-#include "terminal/terminal.h"
 #include "sched/session.h"
+
+struct terminal;
 
 /* This is for map_selected(), it is used to pass around information about
  * in-imagemap links. */

@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.25 2004/01/28 05:22:46 jonas Exp $ */
+/* $Id: exmode.c,v 1.26 2004/01/28 05:30:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,8 @@
  * (just like in vi), especially actions, events (where they make sense) and
  * config-file commands. */
 
-#define EXMODE_BUFFER_SIZE	80
-#define EXMODE_WIDGETS		1
+#define INPUT_LINE_BUFFER_SIZE	80
+#define INPUT_LINE_WIDGETS	1
 
 struct input_history exmode_history = {
 	/* items: */	{ D_LIST_HEAD(exmode_history.entries) },
@@ -143,7 +143,7 @@ static exmode_handler exmode_handlers[] = {
 };
 
 static void
-exmode_exec(struct session *ses, unsigned char buffer[EXMODE_BUFFER_SIZE])
+exmode_exec(struct session *ses, unsigned char buffer[INPUT_LINE_BUFFER_SIZE])
 {
 	/* First look it up as action, then try it as an event (but the event
 	 * part should be thought out somehow yet, I s'pose... let's leave it
@@ -170,7 +170,7 @@ exmode_exec(struct session *ses, unsigned char buffer[EXMODE_BUFFER_SIZE])
 
 
 static void
-exmode_layouter(struct dialog_data *dlg_data)
+input_line_layouter(struct dialog_data *dlg_data)
 {
 	struct window *win = dlg_data->win;
 	struct session *ses = dlg_data->dlg->udata2;
@@ -235,19 +235,20 @@ input_field_line(struct session *ses, unsigned char *prompt,
 
 	assert(ses);
 
-	dlg = calloc_dialog(EXMODE_WIDGETS, EXMODE_BUFFER_SIZE);
+	dlg = calloc_dialog(INPUT_LINE_WIDGETS, INPUT_LINE_BUFFER_SIZE);
 	if (!dlg) return;
 
-	buffer = get_dialog_offset(dlg, EXMODE_WIDGETS);
+	buffer = get_dialog_offset(dlg, INPUT_LINE_WIDGETS);
 
 	dlg->handle_event = exmode_handle_event;
-	dlg->layouter = exmode_layouter;
+	dlg->layouter = input_line_layouter;
 	dlg->layout.only_widgets = 1;
 	dlg->udata = buffer;
 	dlg->udata2 = ses;
 	dlg->widgets->info.field.float_label = 1;
 
-	add_dlg_field(dlg, prompt, 0, 0, NULL, 80, buffer, history);
+	add_dlg_field(dlg, prompt, 0, 0, NULL, INPUT_LINE_BUFFER_SIZE,
+		      buffer, history);
 
 	do_dialog(ses->tab->term, dlg, getml(dlg, NULL));
 }

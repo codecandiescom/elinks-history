@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.530 2004/06/26 03:02:38 miciah Exp $ */
+/* $Id: view.c,v 1.531 2004/06/26 03:10:30 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -507,14 +507,14 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 		if (ses->kbdprefix.repeat_count > 65536)
 			ses->kbdprefix.repeat_count = 0;
 
-		return 2;
+		return FRAME_EVENT_OK;
 	} else if (ev->x >= '1' && !ev->y) {
 		int nlinks = document->nlinks, length;
 		unsigned char d[2] = { ev->x, 0 };
 
 		ses->kbdprefix.repeat_count = 0;
 
-		if (!nlinks) return 1;
+		if (!nlinks) return FRAME_EVENT_REFRESH;
 
 		for (length = 1; nlinks; nlinks /= 10)
 			length++;
@@ -524,10 +524,10 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 			    N_("OK"), N_("Cancel"), ses, NULL,
 			    length, d, 1, document->nlinks, check_number,
 			    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
-		return 1;
+		return FRAME_EVENT_REFRESH;
 	}
 
-	return 0;
+	return FRAME_EVENT_IGNORED;
 }
 
 static enum frame_event_status
@@ -659,15 +659,11 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			break;
 		default:
 			if (ev->x >= '0' && ev->x <= '9') {
-				switch (frame_ev_kbd_number(ses, doc_view,
-							    ev)) {
-					case 2:
-						return FRAME_EVENT_OK;
-					case 1:
-						return FRAME_EVENT_REFRESH;
-					default:
-						break;
-				}
+				status = frame_ev_kbd_number(ses, doc_view,
+							     ev);
+
+				if (status != FRAME_EVENT_IGNORED)
+					return status;
 			}
 
 			if (get_opt_int("document.browse.accesskey.priority") == 1

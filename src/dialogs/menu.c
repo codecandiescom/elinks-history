@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.107 2003/06/08 10:49:26 zas Exp $ */
+/* $Id: menu.c,v 1.108 2003/06/08 16:13:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 	int n = 0;
 
 	foreach (l, ses->history) {
-		unsigned char *url, *pc;
+		unsigned char *url;
 
 		if (!n) {
 			n++;
@@ -256,7 +256,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 
 		url = stracpy(l->vs.url);
 		if (url) {
-			pc = strchr(url, POST_CHAR);
+			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
 			add_to_menu(&mi, url, "", MENU_FUNC go_backwards,
@@ -279,7 +279,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 	int n = 0;
 
 	foreach (l, ses->unhistory) {
-		unsigned char *url, *pc;
+		unsigned char *url;
 
 		if (!mi) {
 			mi = new_menu(FREE_LIST | FREE_TEXT);
@@ -288,7 +288,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 
 		url = stracpy(l->vs.url);
 		if (url) {
-			pc = strchr(url, POST_CHAR);
+			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
 			add_to_menu(&mi, url, "", MENU_FUNC go_unbackwards,
@@ -317,7 +317,7 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 	int n = 0;
 
 	foreachback (d, downloads) {
-		unsigned char *url, *pc;
+		unsigned char *url;
 
 		if (!mi) {
 			mi = new_menu(FREE_LIST | FREE_TEXT);
@@ -326,7 +326,7 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 
 		url = stracpy(d->url);
 		if (url) {
-			pc = strchr(url, POST_CHAR);
+			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
 			add_to_menu(&mi, url, "", MENU_FUNC display_download,

@@ -9,6 +9,7 @@ src/bfu/text.c
 src/bookmarks/backend/xbel.c
 src/bookmarks/dialogs.c
 src/config/dialogs.c
+src/config/kbdbind.c
 src/config/options.c
 src/config/opttypes.c
 src/dialogs/auth.c

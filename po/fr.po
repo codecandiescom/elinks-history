@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-21 11:37+0200\n"
+"POT-Creation-Date: 2003-04-21 12:31+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -344,6 +344,304 @@ msgstr "Gestion des associations de touches"
 #: src/config/dialogs.c:779 src/globhist/dialogs.c:482
 msgid "Toggle display"
 msgstr "Commuter affich."
+
+#: src/config/kbdbind.c:258
+msgid "Main mapping"
+msgstr "Général"
+
+#: src/config/kbdbind.c:259
+msgid "Edit mapping"
+msgstr "Edition"
+
+#: src/config/kbdbind.c:260
+msgid "Menu mapping"
+msgstr "Menu"
+
+#: src/config/kbdbind.c:366
+msgid "Abort connection"
+msgstr "Annuler la connexion"
+
+#: src/config/kbdbind.c:367
+msgid "Add a new bookmark"
+msgstr "Ajouter un nouveau signet"
+
+#: src/config/kbdbind.c:368
+msgid "Add a new bookmark using current link"
+msgstr "Ajouter un nouveau signet pour le lien courant"
+
+#: src/config/kbdbind.c:369
+msgid "Attempt to auto-complete the input"
+msgstr "Essayer de compléter l'entrée"
+
+#: src/config/kbdbind.c:370
+msgid "Attempt to unambiguously auto-complete the input"
+msgstr "Essayer de compléter l'entrée (sans ambiguité)"
+
+#: src/config/kbdbind.c:371
+msgid "Return to the previous document in history"
+msgstr "Retourner au document précédent de l'historique"
+
+#: src/config/kbdbind.c:372
+msgid "Delete character in front of the cursor"
+msgstr "Effacer le caractère devant le curseur"
+
+#: src/config/kbdbind.c:373
+msgid "Open bookmark manager"
+msgstr "Ouvrir le gestionnaire de signets"
+
+#: src/config/kbdbind.c:374
+msgid "Reload cookies file"
+msgstr "Recharger le fichier de cookies"
+
+#: src/config/kbdbind.c:375
+msgid "Copy text to clipboard"
+msgstr "Copier le texte vers le clipboard"
+
+#: src/config/kbdbind.c:376
+msgid "Delete text from clipboard"
+msgstr "Effacer le texte du clipboard"
+
+#: src/config/kbdbind.c:377
+msgid "Delete character under cursor"
+msgstr "Effacer le caractère sous le curseur"
+
+#: src/config/kbdbind.c:378
+msgid "Show informations about the current page"
+msgstr "Montrer les informations à propos de la page courante"
+
+#: src/config/kbdbind.c:379
+msgid "Move cursor downwards"
+msgstr "Descendre le curseur"
+
+#: src/config/kbdbind.c:380
+msgid "Download the current link"
+msgstr "Télécharger le lien courant"
+
+#: src/config/kbdbind.c:381
+msgid "Download the current image"
+msgstr "Télécharger l'image courante"
+
+#: src/config/kbdbind.c:382
+msgid "Begin editing"
+msgstr "Débuter l'édition"
+
+#. FIXME
+#: src/config/kbdbind.c:383
+msgid "Go to the end of the page/line"
+msgstr "Aller à la fin de la page"
+
+#: src/config/kbdbind.c:384
+msgid "Follow the current link"
+msgstr "Suivre le lien"
+
+#: src/config/kbdbind.c:385
+msgid "Follow the current link, forcing reload of the target"
+msgstr "Suivre le lien, et forcer le rafraîchissement de la cible"
+
+#: src/config/kbdbind.c:386
+msgid "Open the File menu"
+msgstr "Ouvrir le menu Fichier"
+
+#: src/config/kbdbind.c:387
+msgid "Find the next occurrence of the current search text"
+msgstr "Trouver l'occurence suivante"
+
+#: src/config/kbdbind.c:388
+msgid "Find the next occurrence of the current search text, in reverse"
+msgstr "Trouver l'occurence suivant (vers le haut)"
+
+#: src/config/kbdbind.c:389
+msgid "Forget authentication credentials"
+msgstr "Oublier les informations d'authentification"
+
+#: src/config/kbdbind.c:390
+msgid "Open \"Go to URL\" dialog box"
+msgstr "Ouvrir le dialogue \"Aller à l'URL\""
+
+#: src/config/kbdbind.c:391
+msgid "Open \"Go to URL\" dialog box containing the current URL"
+msgstr "Ouvrir le dialogue \"Aller à l'URL\" avec l'URL courante"
+
+#: src/config/kbdbind.c:392
+msgid "Open \"Go to URL\" dialog box containing the current link URL"
+msgstr "Ouvrir le dialogue \"Aller à l'URL\" avec l'URL du lien courant"
+
+#: src/config/kbdbind.c:393
+msgid "Go to the homepage"
+msgstr "Aller à la homepage"
+
+#: src/config/kbdbind.c:394
+msgid "Show informations about the the current page HTTP headers"
+msgstr "Montrer les informations à propos des entêtes de la page courante"
+
+#: src/config/kbdbind.c:395
+msgid "Open history manager"
+msgstr "Ouvrir le gestionnaire de l'historique"
+
+#: src/config/kbdbind.c:396
+msgid "Go to the start of the page/line"
+msgstr "Aller au début de la page"
+
+#: src/config/kbdbind.c:397
+msgid "Delete to beginning of line"
+msgstr "Supprimer jusqu'au début de la ligne"
+
+#: src/config/kbdbind.c:398
+msgid "Delete to end of line"
+msgstr "Supprimer jusqu'à la fin de la ligne"
+
+#: src/config/kbdbind.c:399
+msgid "Open keybinding manager"
+msgstr "Ouvrir le gestionnaire des associations de touches"
+
+#: src/config/kbdbind.c:400
+msgid "Move the cursor left"
+msgstr "Déplacer le curseur à gauche"
+
+#: src/config/kbdbind.c:401
+msgid "Activate the link context menu"
+msgstr "Activer le menu contextuel du lien"
+
+#: src/config/kbdbind.c:402
+msgid "Jump to link"
+msgstr "Aller au lien"
+
+#: src/config/kbdbind.c:404
+msgid "Open a Lua console"
+msgstr "Ouvrir la console Lua"
+
+#: src/config/kbdbind.c:406
+msgid "Open a Lua console (DISABLED)"
+msgstr "Ouvrir la console Lua (NON ACTIF)"
+
+#. internal use only
+#: src/config/kbdbind.c:409
+msgid "Activate the menu"
+msgstr "Activer le menu"
+
+#: src/config/kbdbind.c:410
+msgid "Move to the next frame"
+msgstr "Se déplacer au cadre suivant"
+
+#: src/config/kbdbind.c:411
+msgid "Open in a new window"
+msgstr "Ouvrir dans une nouvelle fenêtre"
+
+#: src/config/kbdbind.c:412
+msgid "Open the current link in a new window"
+msgstr "Ouvrir le lien courant dans une nouvelle fenêtre"
+
+#: src/config/kbdbind.c:413
+msgid "Open options manager"
+msgstr "Ouvrir le gestionnaire d'options"
+
+#: src/config/kbdbind.c:414
+msgid "Move downwards by a page"
+msgstr "Descendre d'une page"
+
+#: src/config/kbdbind.c:415
+msgid "Move upwards by a page"
+msgstr "Monter d'une page"
+
+#: src/config/kbdbind.c:416
+msgid "Paste text from the clipboard"
+msgstr "Coller le texte du clipboard"
+
+#: src/config/kbdbind.c:417
+msgid "Move to the previous frame"
+msgstr "Se déplacer au cadre précédent"
+
+#: src/config/kbdbind.c:418
+msgid "Open a quit confirmation dialog box"
+msgstr "Ouvrir le dialogue de confirmation pour quitter"
+
+#: src/config/kbdbind.c:419
+msgid "Quit without confirmation"
+msgstr "Quitter sans confirmation"
+
+#: src/config/kbdbind.c:420
+msgid "Reload the current page"
+msgstr "Recharger la page courante"
+
+#: src/config/kbdbind.c:421
+msgid "Attempt to resume download of the current link"
+msgstr "Essayer de reprendre le téléchargement du lien courant"
+
+#: src/config/kbdbind.c:422
+msgid "Move the cursor right"
+msgstr "Déplacer le curseur à droite"
+
+#: src/config/kbdbind.c:423
+msgid "Save formatted document"
+msgstr "Enregistrer le document formaté"
+
+#: src/config/kbdbind.c:424
+msgid "Scroll down"
+msgstr "Défiler vers le bas"
+
+#: src/config/kbdbind.c:425
+msgid "Scroll left"
+msgstr "Défiler vers la gauche"
+
+#: src/config/kbdbind.c:426
+msgid "Scroll right"
+msgstr "Défiler vers la droite"
+
+#: src/config/kbdbind.c:427
+msgid "Scroll up"
+msgstr "Défiler vers le haut"
+
+#: src/config/kbdbind.c:428
+msgid "Search for a text pattern"
+msgstr "Recherche de texte"
+
+#: src/config/kbdbind.c:429
+msgid "Search backwards for a text pattern"
+msgstr "Recherche de texte (vers le haut)"
+
+#: src/config/kbdbind.c:430
+msgid "Toggle displaying of links to images"
+msgstr "Commuter l'affichage des liens vers les images."
+
+#: src/config/kbdbind.c:431
+msgid "Toggle rendering of tables"
+msgstr "Commuter le rendu des tableaux"
+
+#: src/config/kbdbind.c:432
+msgid "Toggle rendering page as HTML / plain text"
+msgstr "Commuter le rendu de la page en HTML/texte plein"
+
+#: src/config/kbdbind.c:433
+msgid "Toggle displaying of links numbers"
+msgstr "Commuter l'affichage des numéros de liens"
+
+#: src/config/kbdbind.c:434
+msgid "Go forward in the unhistory"
+msgstr "Avancer dans l'historique inverse"
+
+#: src/config/kbdbind.c:435
+msgid "Move cursor upwards"
+msgstr "Déplacer le curseur vers le haut"
+
+#: src/config/kbdbind.c:436
+msgid "View the current image"
+msgstr "Voir l'image courante"
+
+#: src/config/kbdbind.c:437
+msgid "Maximize the current frame"
+msgstr "Maximiser le cadre courant"
+
+#: src/config/kbdbind.c:634
+msgid "Unrecognised keymap"
+msgstr "Association non reconnue"
+
+#: src/config/kbdbind.c:636
+msgid "Error parsing keystroke"
+msgstr "Erreur d'interprétation de touche"
+
+#: src/config/kbdbind.c:638
+msgid "Unrecognised action (internal error)"
+msgstr "Action non reconnue (erreur interne)"
 
 #: src/config/options.c:520 src/config/options.c:537 src/config/opttypes.c:40
 msgid "Parameter expected"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-21 11:37+0200\n"
+"POT-Creation-Date: 2003-04-21 12:31+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Yevgeny Gromov <yevgeny@tut.by>\n"
 "Language-Team: Belarusian <i18n@tut.by>\n"
@@ -341,6 +341,328 @@ msgstr "Мэнэджэр камб╕нацый клав╕ш"
 
 #: src/config/dialogs.c:779 src/globhist/dialogs.c:482
 msgid "Toggle display"
+msgstr ""
+
+#: src/config/kbdbind.c:258
+msgid "Main mapping"
+msgstr ""
+
+#: src/config/kbdbind.c:259
+msgid "Edit mapping"
+msgstr ""
+
+#: src/config/kbdbind.c:260
+msgid "Menu mapping"
+msgstr ""
+
+#: src/config/kbdbind.c:366
+#, fuzzy
+msgid "Abort connection"
+msgstr "злучэння╝"
+
+#: src/config/kbdbind.c:367
+#, fuzzy
+msgid "Add a new bookmark"
+msgstr "Дадаць закладку"
+
+#: src/config/kbdbind.c:368
+msgid "Add a new bookmark using current link"
+msgstr ""
+
+#: src/config/kbdbind.c:369
+msgid "Attempt to auto-complete the input"
+msgstr ""
+
+#: src/config/kbdbind.c:370
+msgid "Attempt to unambiguously auto-complete the input"
+msgstr ""
+
+#: src/config/kbdbind.c:371
+msgid "Return to the previous document in history"
+msgstr ""
+
+#: src/config/kbdbind.c:372
+msgid "Delete character in front of the cursor"
+msgstr ""
+
+#: src/config/kbdbind.c:373
+#, fuzzy
+msgid "Open bookmark manager"
+msgstr "Праца з закладкам╕"
+
+#: src/config/kbdbind.c:374
+msgid "Reload cookies file"
+msgstr ""
+
+#: src/config/kbdbind.c:375
+msgid "Copy text to clipboard"
+msgstr ""
+
+#: src/config/kbdbind.c:376
+msgid "Delete text from clipboard"
+msgstr ""
+
+#: src/config/kbdbind.c:377
+msgid "Delete character under cursor"
+msgstr ""
+
+#: src/config/kbdbind.c:378
+msgid "Show informations about the current page"
+msgstr ""
+
+#: src/config/kbdbind.c:379
+msgid "Move cursor downwards"
+msgstr ""
+
+#: src/config/kbdbind.c:380
+#, fuzzy
+msgid "Download the current link"
+msgstr "Скачаць па спасылцы"
+
+#: src/config/kbdbind.c:381
+#, fuzzy
+msgid "Download the current image"
+msgstr "Скачаць в╕дарыс"
+
+#: src/config/kbdbind.c:382
+msgid "Begin editing"
+msgstr ""
+
+#. FIXME
+#: src/config/kbdbind.c:383
+msgid "Go to the end of the page/line"
+msgstr ""
+
+#: src/config/kbdbind.c:384
+#, fuzzy
+msgid "Follow the current link"
+msgstr "Нак╕равацца па спасылцы"
+
+#: src/config/kbdbind.c:385
+msgid "Follow the current link, forcing reload of the target"
+msgstr ""
+
+#: src/config/kbdbind.c:386
+msgid "Open the File menu"
+msgstr ""
+
+#: src/config/kbdbind.c:387
+msgid "Find the next occurrence of the current search text"
+msgstr ""
+
+#: src/config/kbdbind.c:388
+msgid "Find the next occurrence of the current search text, in reverse"
+msgstr ""
+
+#: src/config/kbdbind.c:389
+#, fuzzy
+msgid "Forget authentication credentials"
+msgstr "А╝тэнтыф╕кацыя HTTP"
+
+#: src/config/kbdbind.c:390
+msgid "Open \"Go to URL\" dialog box"
+msgstr ""
+
+#: src/config/kbdbind.c:391
+msgid "Open \"Go to URL\" dialog box containing the current URL"
+msgstr ""
+
+#: src/config/kbdbind.c:392
+msgid "Open \"Go to URL\" dialog box containing the current link URL"
+msgstr ""
+
+#: src/config/kbdbind.c:393
+msgid "Go to the homepage"
+msgstr ""
+
+#: src/config/kbdbind.c:394
+msgid "Show informations about the the current page HTTP headers"
+msgstr ""
+
+#: src/config/kbdbind.c:395
+#, fuzzy
+msgid "Open history manager"
+msgstr "Мэнэджэр параметра╝"
+
+#: src/config/kbdbind.c:396
+msgid "Go to the start of the page/line"
+msgstr ""
+
+#: src/config/kbdbind.c:397
+#, fuzzy
+msgid "Delete to beginning of line"
+msgstr "Выдал╕ць расшырэнне"
+
+#: src/config/kbdbind.c:398
+#, fuzzy
+msgid "Delete to end of line"
+msgstr "Выдал╕ць расшырэнне"
+
+#: src/config/kbdbind.c:399
+#, fuzzy
+msgid "Open keybinding manager"
+msgstr "Мэнэджэр камб╕нацый клав╕ш"
+
+#: src/config/kbdbind.c:400
+#, fuzzy
+msgid "Move the cursor left"
+msgstr "Курсар прамавугольн╕кам"
+
+#: src/config/kbdbind.c:401
+msgid "Activate the link context menu"
+msgstr ""
+
+#: src/config/kbdbind.c:402
+#, fuzzy
+msgid "Jump to link"
+msgstr "Пайц╕ па спасылцы"
+
+#: src/config/kbdbind.c:404
+#, fuzzy
+msgid "Open a Lua console"
+msgstr "Кансоль Lua"
+
+#: src/config/kbdbind.c:406
+msgid "Open a Lua console (DISABLED)"
+msgstr ""
+
+#. internal use only
+#: src/config/kbdbind.c:409
+msgid "Activate the menu"
+msgstr ""
+
+#: src/config/kbdbind.c:410
+msgid "Move to the next frame"
+msgstr ""
+
+#: src/config/kbdbind.c:411
+#, fuzzy
+msgid "Open in a new window"
+msgstr "Адкрыць у новым акне"
+
+#: src/config/kbdbind.c:412
+#, fuzzy
+msgid "Open the current link in a new window"
+msgstr "Адкрыць у новым акне"
+
+#: src/config/kbdbind.c:413
+#, fuzzy
+msgid "Open options manager"
+msgstr "Мэнэджэр параметра╝"
+
+#: src/config/kbdbind.c:414
+msgid "Move downwards by a page"
+msgstr ""
+
+#: src/config/kbdbind.c:415
+msgid "Move upwards by a page"
+msgstr ""
+
+#: src/config/kbdbind.c:416
+msgid "Paste text from the clipboard"
+msgstr ""
+
+#: src/config/kbdbind.c:417
+msgid "Move to the previous frame"
+msgstr ""
+
+#: src/config/kbdbind.c:418
+msgid "Open a quit confirmation dialog box"
+msgstr ""
+
+#: src/config/kbdbind.c:419
+#, fuzzy
+msgid "Quit without confirmation"
+msgstr "Чаканне пацвярджэння перанак╕равання"
+
+#: src/config/kbdbind.c:420
+msgid "Reload the current page"
+msgstr ""
+
+#: src/config/kbdbind.c:421
+msgid "Attempt to resume download of the current link"
+msgstr ""
+
+#: src/config/kbdbind.c:422
+#, fuzzy
+msgid "Move the cursor right"
+msgstr "Курсар прамавугольн╕кам"
+
+#: src/config/kbdbind.c:423
+#, fuzzy
+msgid "Save formatted document"
+msgstr "Захаваць фармац╕раваны дакумент"
+
+#: src/config/kbdbind.c:424
+msgid "Scroll down"
+msgstr ""
+
+#: src/config/kbdbind.c:425
+msgid "Scroll left"
+msgstr ""
+
+#: src/config/kbdbind.c:426
+msgid "Scroll right"
+msgstr ""
+
+#: src/config/kbdbind.c:427
+msgid "Scroll up"
+msgstr ""
+
+#: src/config/kbdbind.c:428
+#, fuzzy
+msgid "Search for a text pattern"
+msgstr "Пошук тэкста"
+
+#: src/config/kbdbind.c:429
+#, fuzzy
+msgid "Search backwards for a text pattern"
+msgstr "Пошук тэкста"
+
+#: src/config/kbdbind.c:430
+msgid "Toggle displaying of links to images"
+msgstr ""
+
+#: src/config/kbdbind.c:431
+msgid "Toggle rendering of tables"
+msgstr ""
+
+#: src/config/kbdbind.c:432
+msgid "Toggle rendering page as HTML / plain text"
+msgstr ""
+
+#: src/config/kbdbind.c:433
+msgid "Toggle displaying of links numbers"
+msgstr ""
+
+#: src/config/kbdbind.c:434
+msgid "Go forward in the unhistory"
+msgstr ""
+
+#: src/config/kbdbind.c:435
+msgid "Move cursor upwards"
+msgstr ""
+
+#: src/config/kbdbind.c:436
+#, fuzzy
+msgid "View the current image"
+msgstr "Праглядзець в╕дарыс"
+
+#: src/config/kbdbind.c:437
+msgid "Maximize the current frame"
+msgstr ""
+
+#: src/config/kbdbind.c:634
+msgid "Unrecognised keymap"
+msgstr ""
+
+#: src/config/kbdbind.c:636
+#, fuzzy
+msgid "Error parsing keystroke"
+msgstr "Памылка запису ╝ сокет"
+
+#: src/config/kbdbind.c:638
+msgid "Unrecognised action (internal error)"
 msgstr ""
 
 #: src/config/options.c:520 src/config/options.c:537 src/config/opttypes.c:40

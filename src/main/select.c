@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.32 2003/06/20 07:41:48 zas Exp $ */
+/* $Id: select.c,v 1.33 2003/07/03 10:59:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,18 +83,18 @@ select_info(int type)
 	struct cache_entry *ce;
 
 	switch (type) {
-		case CI_FILES:
+		case INFO_FILES:
 			for (j = 0; j < FD_SETSIZE; j++)
 				if (threads[j].read_func
 				    || threads[j].write_func
 				    || threads[j].error_func)
 					i++;
 			return i;
-		case CI_TIMERS:
+		case INFO_TIMERS:
 			foreach (ce, timers) i++;
 			return i;
 		default:
-			internal("cache_info: bad request");
+			internal("select_info: bad request");
 	}
 
 	return 0;

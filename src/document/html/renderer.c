@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.158 2003/07/03 02:25:57 jonas Exp $ */
+/* $Id: renderer.c,v 1.159 2003/07/03 10:59:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1831,10 +1831,10 @@ formatted_info(int type)
 	struct f_data *ce;
 
 	switch (type) {
-		case CI_FILES:
+		case INFO_FILES:
 			foreach (ce, format_cache) i++;
 			return i;
-		case CI_LOCKED:
+		case INFO_LOCKED:
 			foreach (ce, format_cache) i += !!ce->refcount;
 			return i;
 		default:

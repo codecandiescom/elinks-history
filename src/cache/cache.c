@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.36 2003/07/03 00:28:21 jonas Exp $ */
+/* $Id: cache.c,v 1.37 2003/07/03 10:59:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,18 +46,18 @@ cache_info(int type)
 	struct cache_entry *ce;
 
 	switch (type) {
-		case CI_BYTES:
+		case INFO_BYTES:
 			return cache_size;
-		case CI_FILES:
+		case INFO_FILES:
 			foreach (ce, cache) i++;
 			return i;
-		case CI_LOCKED:
+		case INFO_LOCKED:
 			foreach (ce, cache) i += !!ce->refcount;
 			return i;
-		case CI_LOADING:
+		case INFO_LOADING:
 			foreach (ce, cache) i += is_entry_used(ce);
 			return i;
-		case CI_LIST:
+		case INFO_LIST:
 			return (long) &cache;
 		default:
 			internal("cache_info: bad request");

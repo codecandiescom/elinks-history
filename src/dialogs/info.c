@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.56 2003/07/03 00:28:21 jonas Exp $ */
+/* $Id: info.c,v 1.57 2003/07/03 10:59:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,12 +112,12 @@ res_inf(struct terminal *term, void *d, struct session *ses)
 			"Memory cache: %d bytes, %d files, %d locked, %d "
 			"loading.\n"
 			"Formatted document cache: %d documents, %d locked."),
-			select_info(CI_FILES), select_info(CI_TIMERS),
-			connect_info(CI_FILES), connect_info(CI_CONNECTING),
-			connect_info(CI_TRANSFER), connect_info(CI_KEEP),
-			cache_info(CI_BYTES), cache_info(CI_FILES),
-			cache_info(CI_LOCKED), cache_info(CI_LOADING),
-			formatted_info(CI_FILES), formatted_info(CI_LOCKED)),
+			select_info(INFO_FILES), select_info(INFO_TIMERS),
+			connect_info(INFO_FILES), connect_info(INFO_CONNECTING),
+			connect_info(INFO_TRANSFER), connect_info(INFO_KEEP),
+			cache_info(INFO_BYTES), cache_info(INFO_FILES),
+			cache_info(INFO_LOCKED), cache_info(INFO_LOADING),
+			formatted_info(INFO_FILES), formatted_info(INFO_LOCKED)),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
@@ -143,7 +143,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 		return;
 	}
 
-	cache = (struct cache_entry *) cache_info(CI_LIST);
+	cache = (struct cache_entry *) cache_info(INFO_LIST);
 	foreach (ce, *cache) {
 		if (count++ < term->y - 10) { /* 10 seems a kool value. --Zas */
 			add_chr_to_str(&a, &l, '\n');

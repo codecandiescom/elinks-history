@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.4 2003/07/02 00:44:54 jonas Exp $ */
+/* $Id: types.h,v 1.5 2003/07/03 10:59:27 jonas Exp $ */
 
 #ifndef EL__UTIL_TYPES_H
 #define EL__UTIL_TYPES_H
@@ -49,7 +49,7 @@ typedef unsigned long long uint32_t;
 #endif
 #endif
 
-/* Historic relict that even */
+/* Historic relict */
 typedef unsigned tcount;
 
 #ifdef HAVE_LONG_LONG
@@ -60,15 +60,15 @@ typedef unsigned tcount;
 
 /* *_info() types */
 enum info_type {
-	CI_BYTES,
-	CI_FILES,
-	CI_LOCKED,
-	CI_LOADING,
-	CI_TIMERS,
-	CI_TRANSFER,
-	CI_CONNECTING,
-	CI_KEEP,
-	CI_LIST,
+	INFO_BYTES,
+	INFO_FILES,
+	INFO_LOCKED,
+	INFO_LOADING,
+	INFO_TIMERS,
+	INFO_TRANSFER,
+	INFO_CONNECTING,
+	INFO_KEEP,
+	INFO_LIST,
 };
 
 #endif

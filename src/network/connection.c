@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.38 2003/07/03 10:45:48 jonas Exp $ */
+/* $Id: connection.c,v 1.39 2003/07/03 10:59:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,20 +102,20 @@ connect_info(int type)
 	struct k_conn *cee;
 
 	switch (type) {
-		case CI_FILES:
+		case INFO_FILES:
 			foreach (ce, queue) info++;
 			break;
-		case CI_CONNECTING:
+		case INFO_CONNECTING:
 			foreach (ce, queue)
 				info += (ce->state > S_WAIT && ce->state < S_TRANS);
 			break;
-		case CI_TRANSFER:
+		case INFO_TRANSFER:
 			foreach (ce, queue) info += (ce->state == S_TRANS);
 			break;
-		case CI_KEEP:
+		case INFO_KEEP:
 			foreach (cee, keepalive_connections) info++;
 			break;
-		case CI_LIST:
+		case INFO_LIST:
 			info = (long) &queue;
 			break;
 		default:

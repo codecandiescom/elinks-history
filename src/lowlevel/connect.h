@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.29 2004/10/07 02:54:50 jonas Exp $ */
+/* $Id: connect.h,v 1.30 2004/11/04 21:10:10 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -24,6 +24,19 @@ struct conn_info {
 	int port;
 };
 
+enum read_buffer_close {
+	/* If a zero-byte message is read prematurely the connection will be
+	 * retried with error state S_CANT_READ. */
+	READ_BUFFER_RETRY_ONCLOSE	= 0,
+	/* If a zero-byte message is read flush the remaining bytes in the
+	 * buffer and tell the protocol handler to end the reading by calling
+	 * read_buffer->done(). */
+	READ_BUFFER_END_ONCLOSE	= 1,
+	/* Used for signaling to protocols - via the read_buffer->done()
+	 * callback - that a zero-byte message was read. */
+	READ_BUFFER_END		= 2,
+};
+
 struct read_buffer {
 	/* A routine called *each time new data comes in*, therefore
 	 * usually many times, not only when all the data arrives. */
@@ -31,7 +44,7 @@ struct read_buffer {
 
 	struct connection_socket *socket;
 	int len;
-	int close;
+	enum read_buffer_close close;
 	int freespace;
 
 	unsigned char data[1]; /* must be at end of struct */

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.21 2004/10/27 15:11:46 jonas Exp $ */
+/* $Id: gopher.c,v 1.22 2004/11/04 21:10:10 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -568,7 +568,7 @@ read_gopher_directory_data(struct connection *conn, struct read_buffer *rb)
 		kill_buffer_data(rb, end - rb->data);
 	}
 
-	if (state != S_TRANS || rb->close == 2)
+	if (state != S_TRANS || rb->close == READ_BUFFER_END)
 		add_to_string(&buffer,
 			"</pre>\n"
 			"</body>\n"
@@ -699,7 +699,7 @@ read_gopher_response_data(struct connection *conn, struct read_buffer *rb)
 	}
 
 	/* Has the transport layer forced a shut down? */
-	if (rb->close == 2) {
+	if (rb->close == READ_BUFFER_END) {
 		state = S_OK;
 	}
 
@@ -722,7 +722,7 @@ receive_gopher_response(struct connection *conn)
 
 	set_connection_timeout(conn);
 
-	rb->close = 1;
+	rb->close = READ_BUFFER_END_ONCLOSE;
 	read_from_socket(conn, &conn->socket, rb, read_gopher_response_data);
 }
 

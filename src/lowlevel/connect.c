@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.112 2004/10/14 12:34:37 zas Exp $ */
+/* $Id: connect.c,v 1.113 2004/11/04 21:10:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -678,8 +678,8 @@ read_select(struct connection *conn)
 	{
 		rd = safe_read(rb->socket->fd, rb->data + rb->len, rb->freespace);
 		if (rd <= 0) {
-			if (rb->close && !rd) {
-				rb->close = 2;
+			if (rb->close != READ_BUFFER_RETRY_ONCLOSE && !rd) {
+				rb->close = READ_BUFFER_END;
 				rb->done(conn, rb);
 				return;
 			}

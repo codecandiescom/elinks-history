@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.1 2004/08/14 07:53:15 jonas Exp $ */
+/* $Id: connection.c,v 1.2 2004/11/04 21:10:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -245,7 +245,7 @@ read_nntp_data(struct connection *conn, struct read_buffer *rb)
 {
 	set_connection_timeout(conn);
 
-	if (rb->close == 2) {
+	if (rb->close == READ_BUFFER_END) {
 		nntp_end_request(conn, S_OK);
 		return;
 	}
@@ -274,7 +274,7 @@ nntp_got_response(struct connection *conn, struct read_buffer *rb)
 
 	set_connection_timeout(conn);
 
-	if (rb->close == 2) {
+	if (rb->close == READ_BUFFER_END) {
 		nntp_end_request(conn, S_OK);
 		return;
 	}
@@ -337,7 +337,7 @@ nntp_get_response(struct connection *conn)
 
 	set_connection_timeout(conn);
 
-	rb->close = 1;
+	rb->close = READ_BUFFER_END_ONCLOSE;
 	read_from_socket(conn, &conn->socket, rb, nntp_got_response);
 }
 

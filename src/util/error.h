@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.26 2003/06/11 06:19:29 miciah Exp $ */
+/* $Id: error.h,v 1.27 2003/06/16 16:11:27 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -47,6 +47,45 @@ void elinks_internal(unsigned char *fmt, ...);
 #else
 #define assert(x) do { if (!(x)) internal("assertion " #x " failed!"); } while (0)
 #endif
+
+/* This is extended assert() version, it can print additional user-specified
+ * message. Quite useful not only to detect that _something_ is wrong, but also
+ * _how_ wrong is it ;-). Note that the format string must always be a regular
+ * string, not a variable reference. Also, be careful _what_ will you attempt
+ * to print, or you could easily get just a SIGSEGV instead of the assertion
+ * failed message. */
+
+#undef assertm
+#ifdef HAVE_VARIADIC_MACROS
+#ifdef FASTMEM
+#define assertm(x,m...) /* We don't do anything in FASTMEM mode. */
+#else
+#define assertm(x,m...) do { if (!(x)) internal("assertion " #x " failed: " m); } while (0)
+#endif
+#else /* HAVE_VARIADIC_MACROS */
+#ifdef FASTMEM
+#define assertm elinks_assertm
+#else
+#define assertm errfile = __FILE__, errline = __LINE__, elinks_assertm
+#endif
+/* This is not nice at all, and does not really work that nice as macros do.
+ * But it is good to try to do at least _some_ assertm()ing even when the
+ * variadic macros are not supported. */
+/* XXX: assertm() usage could generate warnings, so DEBUG (-Werror) and
+ * !HAVE_VARIADIC_MACROS won't play well together. Hrm. --pasky */
+#ifdef FASTMEM
+static inline
+#endif
+void elinks_assertm(int x, unsigned char *fmt, ...)
+#ifdef FASTMEM
+{
+	/* We don't do anything in FASTMEM mode. Let's hope that the compiler
+	 * will at least optimize out the @x computation. */
+}
+#else
+	;
+#endif
+#endif /* HAVE_VARIADIC_MACROS */
 
 
 /* This will print some fancy message, version string and possibly do something

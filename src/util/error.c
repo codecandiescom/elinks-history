@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.62 2003/06/11 09:09:10 miciah Exp $ */
+/* $Id: error.c,v 1.63 2003/06/16 16:11:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "util/lists.h"
 #include "util/memlist.h"
 #include "util/memory.h"
+#include "util/snprintf.h"
 #include "util/string.h"
 #include "util/version.h"
 
@@ -85,6 +86,21 @@ elinks_internal(unsigned char *fmt, ...)
 #ifdef DEBUG
 	force_dump();
 #endif
+}
+
+
+void
+elinks_assertm(int x, unsigned char *fmt, ...)
+{
+	unsigned char *buf;
+	va_list params;
+
+	if (x) return;
+
+	va_start(params, fmt);
+	vasprintf((unsigned char **) &buf, fmt, params);
+	va_end(params);
+	internal("assertion failed: %s", buf);
 }
 
 

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.42 2003/07/11 19:40:41 jonas Exp $ */
+/* $Id: auth.c,v 1.43 2003/07/11 19:48:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,10 +204,10 @@ unsigned char *
 find_auth(struct uri *uri)
 {
 	struct http_auth_basic *entry = NULL;
-	unsigned char *uid, *ret = NULL;
+	unsigned char *uid, *ret;
 	unsigned char *newurl = get_uri_string(uri);
 
-	if (!newurl) goto end;
+	if (!newurl) return NULL;
 
 	/* FIXME Somehow this seems over complicated. If add_auth_entry()
 	 * returned the added entry it would be a lot easier as in no need
@@ -229,6 +229,7 @@ find_auth(struct uri *uri)
 	 * get_auth_entry(). */
 
 	entry = find_auth_entry(newurl, NULL);
+	mem_free(newurl);
 
 	/* Check is user/pass info is in url. */
 	if (uri->userlen || uri->passwordlen) {
@@ -242,21 +243,21 @@ find_auth(struct uri *uri)
 		    || strlen(entry->uid) != uri->userlen
 		    || strncmp(entry->passwd, uri->password, uri->passwordlen)
 		    || strncmp(entry->uid, uri->user, uri->userlen)) {
+
 			entry = add_auth_entry(uri, NULL);
 
-			if (entry && !entry->valid) {
-				goto end;
-			}
+			if (entry && !entry->valid)
+				return NULL;
 		}
 	}
 
 	/* No entry found. */
-	if (!entry) goto end;
+	if (!entry) return NULL;
 
 	/* Sanity check. */
 	if (!entry->passwd || !entry->uid) {
 		del_auth_entry(entry);
-		goto end;
+		return NULL;
 	}
 
 	/* RFC2617 section 2 [Basic Authentication Scheme]
@@ -266,13 +267,9 @@ find_auth(struct uri *uri)
 
 	/* Create base64 encoded string. */
 	uid = straconcat(entry->uid, ":", entry->passwd, NULL);
-	if (!uid) goto end;
-
+	if (!uid) return NULL;
 	ret = base64_encode(uid);
 	mem_free(uid);
-
-end:
-	if (newurl) mem_free(newurl);
 
 	return ret;
 }

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.458 2004/06/10 22:21:25 jonas Exp $ */
+/* $Id: session.c,v 1.459 2004/06/10 22:28:06 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -782,7 +782,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	struct initial_session_info *info = NULL;
 	struct session *base_session;
 	enum remote_session_flags remote = 0;
-	struct uri *current_uri, *uri;
+	struct uri *current_uri;
 	unsigned char *str;
 	int magic;
 
@@ -794,11 +794,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	 * only, rather) to the newly created session. */
 	base_session = get_session(*(data++));
 	magic = *(data++);
-
-	current_uri = base_session && have_location(base_session)
-		    ? cur_loc(base_session)->vs.uri : NULL;
-
-	/* TODO: Warn about bad syntax. --jonas */
 
 	switch (magic) {
 	case SESSION_MAGIC(1, 0):
@@ -823,13 +818,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		base_session = get_master_session();
 		if (!base_session) return NULL;
 
-		/* Even though there are no URIs we still have to
-		 * handle remote stuff. */
-		if (len <= 0) {
-			handle_remote_session(base_session, remote, NULL);
-			return NULL;
-		}
-
 		break;
 
 	default:
@@ -853,13 +841,26 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 	str = (unsigned char *) data;
 
-	if (len <= 0 && !remote)
-		return init_session_info(base_session, remote, NULL);
+	if (len <= 0) {
+		if (!remote)
+			return init_session_info(base_session, remote, NULL);
+
+		/* Even though there are no URIs we still have to
+		 * handle remote stuff. */
+		handle_remote_session(base_session, remote, NULL);
+		return NULL;
+	}
+
+	current_uri = base_session && have_location(base_session)
+		    ? cur_loc(base_session)->vs.uri : NULL;
+
+	/* TODO: Warn about bad syntax. --jonas */
 
 	/* Extract multiple (possible) NUL terminated URIs */
 	while (len > 0) {
 		unsigned char *end = memchr(str, 0, len);
 		int urilength = end ? end - str : len;
+		struct uri *uri;
 		unsigned char *decoded;
 
 		if (!end) break;
@@ -868,8 +869,9 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		uri = decoded ? get_hooked_uri(decoded, current_uri, term->cwd) : NULL;
 		mem_free_if(decoded);
 
-		/* If it is a remote session we return NULL so that the
-		 * terminal of the remote session will be destroyed ASAP. */
+		/* If it is a remote session we never initialize the info so
+		 * that the terminal of the remote session will be destroyed
+		 * ASAP. */
 		if (uri) {
 			if (remote) {
 				remote = handle_remote_session(base_session, remote, uri);

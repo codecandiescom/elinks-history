@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.2 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: renderer.c,v 1.3 2004/09/24 01:16:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -615,7 +615,6 @@ render_dom_document(struct cache_entry *cached, struct document *document)
 	init_dom_renderer(&renderer, document, cached, root, convert_table);
 	init_dom_navigator(&navigator, &renderer, callbacks, 0);
 
-	document->title   = stracpy("DOM renderer");
 	document->bgcolor = global_doc_opts->default_bg;
 
 	walk_dom_nodes(&navigator, root);

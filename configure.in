@@ -752,28 +752,17 @@ dnl ===================================================================
 dnl Checking for X11 (window title restoring).
 dnl ===================================================================
 
-AC_ARG_WITH(x11, [  --without-x11           disable x11 support],
-	[ if test "$withval" = no; then withval=""; disable_x11=yes; fi])
-AC_MSG_CHECKING([for x11 support])
-
-if test "$withval" = yes; then withval=""; fi
-
-if test -z "$disable_x11"; then
-	AC_PATH_X
-	if test -z "$no_x"; then
-		if test -n "$x_includes"; then
-			CFLAGS="$CFLAGS -I$x_includes"
-		fi
-		if test -n "$x_libraries"; then
-			LDFLAGS="$LDFLAGS -L$x_libraries"
-		fi
-		LIBS="-lX11 $LIBS"
-		AC_DEFINE(HAVE_X11)
+AC_PATH_X
+if test -z "$no_x"; then
+	if test -n "$x_includes"; then
+		CFLAGS="$CFLAGS -I$x_includes"
 	fi
-else
-	AC_MSG_RESULT(no)
+	if test -n "$x_libraries"; then
+		LDFLAGS="$LDFLAGS -L$x_libraries"
+	fi
+	LIBS="-lX11 $LIBS"
+	AC_DEFINE(HAVE_X11)
 fi
-
 
 
 dnl ===================================================================

@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.30 2004/01/24 23:55:38 jonas Exp $ */
+/* $Id: css.c,v 1.31 2004/01/25 01:33:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,9 +22,7 @@
 #include "viewer/text/view.h"
 
 
-struct css_stylesheet default_stylesheet = {
-	{ D_LIST_HEAD(default_stylesheet.selectors) },
-};
+INIT_CSS_STYLESHEET(default_stylesheet);
 
 struct option_info css_options_info[] = {
 	INIT_OPT_TREE("document", N_("Cascading Style Sheets"),

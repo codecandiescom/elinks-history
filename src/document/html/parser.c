@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.376 2004/01/24 13:00:41 zas Exp $ */
+/* $Id: parser.c,v 1.377 2004/01/25 01:33:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -726,7 +726,7 @@ add_fragment_identifier(void *part, unsigned char *attr)
 }
 
 static struct form form = NULL_STRUCT_FORM;
-static struct css_stylesheet css_styles;
+static INIT_CSS_STYLESHEET(css_styles);
 
 static unsigned char *last_form_tag;
 static unsigned char *last_form_attr;
@@ -3571,9 +3571,6 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	line_break_f = line_break;
 	special_f = special;
 	scan_http_equiv(start, end, head, title);
-
-	memset(&css_styles, 0, sizeof(struct css_stylesheet));
-	init_list(css_styles.selectors);
 
 	e = mem_calloc(1, sizeof(struct html_element));
 	if (!e) return;

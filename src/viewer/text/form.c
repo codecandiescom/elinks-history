@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.70 2003/12/25 12:01:52 pasky Exp $ */
+/* $Id: form.c,v 1.71 2003/12/25 12:04:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -869,7 +869,9 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 						x = 0;
 						break;
 					}
-				} else fs->state = 0;
+				} else {
+					fs->state = 0;
+				}
 				break;
 			case ACT_UP:
 				if (frm->type == FC_TEXTAREA) {
@@ -877,7 +879,9 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 						x = 0;
 						break;
 					}
-				} else x = 0;
+				} else {
+					x = 0;
+				}
 				break;
 			case ACT_DOWN:
 				if (frm->type == FC_TEXTAREA) {
@@ -885,7 +889,9 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 						x = 0;
 						break;
 					}
-				} else x = 0;
+				} else {
+					x = 0;
+				}
 				break;
 			case ACT_END:
 				if (frm->type == FC_TEXTAREA) {
@@ -893,7 +899,9 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 						x = 0;
 						break;
 					}
-				} else fs->state = strlen(fs->value);
+				} else {
+					fs->state = strlen(fs->value);
+				}
 				break;
 			case ACT_EDIT:
 				if (frm->type == FC_TEXTAREA && !frm->ro)
@@ -910,7 +918,8 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 			case ACT_PASTE_CLIPBOARD: {
 				char *clipboard = get_clipboard_text();
 
-				if (!clipboard) break;
+				if (!clipboard)
+					break;
 				if (!frm->ro) {
 					int cb_len = strlen(clipboard);
 
@@ -933,7 +942,9 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 						x = 0;
 						break;
 					}
-				} else x = 0;
+				} else {
+					x = 0;
+				}
 				break;
 			case ACT_BACKSPACE:
 				if (!frm->ro && fs->state)
@@ -1015,11 +1026,15 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 				x = 0;
 				break;
 		}
-	} else x = 0;
+
+	} else {
+		x = 0;
+	}
 
 	if (x) {
 		draw_form_entry(ses->tab->term, doc_view, l);
 		redraw_from_window(ses->tab);
 	}
+
 	return x;
 }

@@ -286,6 +286,9 @@ Laurent Monin <zas@norz.org>
 	Memory debugging and memleaks detection
 	Referred as 'Zas' or 'zas' in the code
 
+Lewis Collard <lewis@lewis.x3fusion.com>
+	Fixed mmap() usage on FreeBSD
+
 Lukasz Dobrek <dobrek@student.ifpan.edu.pl>
 	$CONFIG_DIR for config directory (later changed to $ELINKS_CONFDIR)
 
@@ -506,4 +509,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.166 2004/09/19 09:56:02 pasky Exp $
+$Id: AUTHORS,v 1.167 2004/09/19 11:40:47 jonas Exp $

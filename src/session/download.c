@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.11 2003/01/23 23:15:12 pasky Exp $ */
+/* $Id: download.c,v 1.12 2003/02/24 12:12:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,7 +274,7 @@ download_window_function(struct dialog_data *dlg)
 						/ 1000 * stat->prg->loaded
 						- stat->prg->elapsed);
 #endif
-			add_time_to_str(&m, &l, (stat->prg->size - (stat->prg->pos - stat->prg->start))
+			add_time_to_str(&m, &l, (stat->prg->size - stat->prg->pos)
 						/ ((longlong) stat->prg->loaded * 10
 						   / (stat->prg->elapsed / 100))
 						* 1000);

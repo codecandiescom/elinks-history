@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.8 2005/03/29 00:35:08 jonas Exp $ */
+/* $Id: date.c,v 1.9 2005/03/29 01:03:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,13 +107,14 @@ parse_day(const unsigned char **date_p)
 	return day;
 }
 
-/* Expects HH:MM[:SS] or HH:MM[P|A]M, with HH <= 23, MM <= 59, SS <= 59.
- * Updates tm, updates src on success and returns 0 on failure, otherwise 1. */
-static int
-parse_time(const unsigned char **src, struct tm *tm, unsigned char *end)
+int
+parse_time(const unsigned char **time, struct tm *tm, unsigned char *end)
 {
 	unsigned char h1, h2, m1, m2, s1, s2;
-	const unsigned char *date = *src;
+	const unsigned char *date = *time;
+
+#define check_time(tm) \
+	((tm)->tm_hour <= 23 && (tm)->tm_min <= 59 && (tm)->tm_sec <= 59)
 
 	/* Eat HH:MM */
 	if (end && date + 5 >= end)
@@ -130,9 +131,9 @@ parse_time(const unsigned char **src, struct tm *tm, unsigned char *end)
 	tm->tm_hour = (h1 - '0') * 10 + h2 - '0';
 	tm->tm_min  = (m1 - '0') * 10 + m2 - '0';
 
-	/* Eat :SS or [PA]M */
+	/* Eat :SS or [PA]M or nothing */
 	if (end && date + 2 >= end)
-		return 0;
+		return check_time(tm);
 
 	if (*date == ':') {
 		date++;
@@ -158,9 +159,9 @@ parse_time(const unsigned char **src, struct tm *tm, unsigned char *end)
 			return 0;
 	}
 
-	*src = date;
+	*time = date;
 
-	return (tm->tm_hour <= 23 && tm->tm_min <= 59 && tm->tm_sec <= 59);
+	return check_time(tm);
 }
 
 

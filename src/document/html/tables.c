@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.103 2003/10/30 16:36:14 zas Exp $ */
+/* $Id: tables.c,v 1.104 2003/10/30 16:44:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,7 @@ struct table_column {
 struct table {
 	struct part *p;
 	struct table_cell *cells;
-	struct table_column *cols;
+	struct table_column *columns;
 	color_t bgcolor;
 	int *min_c, *max_c;
 	int *columns_width;
@@ -193,8 +193,8 @@ new_table(void)
 
 	t->rc = INIT_X;
 
-	t->cols = mem_calloc(INIT_X, sizeof(struct table_column));
-	if (!t->cols) {
+	t->columns = mem_calloc(INIT_X, sizeof(struct table_column));
+	if (!t->columns) {
 		mem_free(t->cells);
 		mem_free(t);
 		return NULL;
@@ -210,7 +210,7 @@ free_table(struct table *t)
 	if (t->max_c) mem_free(t->max_c);
 	if (t->columns_width) mem_free(t->columns_width);
 	if (t->rows_height) mem_free(t->rows_height);
-	mem_free(t->cols);
+	mem_free(t->columns);
 	if (t->xcols) mem_free(t->xcols);
 	mem_free(t->cells);
 	mem_free(t);
@@ -323,18 +323,18 @@ new_columns(struct table *t, int span, int width, int align,
 
 		while (t->c + span > n) if (!(n <<= 1)) return;
 
-		nc = mem_realloc(t->cols, n * sizeof(struct table_column));
+		nc = mem_realloc(t->columns, n * sizeof(struct table_column));
 		if (!nc) return;
 
 		t->rc = n;
-		t->cols = nc;
+		t->columns = nc;
 	}
 
 	while (span--) {
-		t->cols[t->c].align = align;
-		t->cols[t->c].valign = valign;
-		t->cols[t->c].width = width;
-		t->cols[t->c++].group = group;
+		t->columns[t->c].align = align;
+		t->columns[t->c].valign = valign;
+		t->columns[t->c].width = width;
+		t->columns[t->c++].group = group;
 		group = 0;
 	}
 }
@@ -637,10 +637,10 @@ nc:
 	if (group == 1) cell->group = 1;
 
 	if (x < t->c) {
-		if (t->cols[x].align != AL_TR)
-			cell->align = t->cols[x].align;
-		if (t->cols[x].valign != VAL_TR)
-			cell->valign = t->cols[x].valign;
+		if (t->columns[x].align != AL_TR)
+			cell->align = t->columns[x].align;
+		if (t->columns[x].valign != VAL_TR)
+			cell->valign = t->columns[x].valign;
 	}
 
 	cell->bgcolor = l_col;
@@ -740,8 +740,8 @@ scan_done:
 	} else t->rows_height = NULL;
 
 	for (x = 0; x < t->c; x++)
-		if (t->cols[x].width != W_AUTO)
-			set_td_width(t, x, t->cols[x].width, 1);
+		if (t->columns[x].width != W_AUTO)
+			set_td_width(t, x, t->columns[x].width, 1);
 	set_td_width(t, t->x, W_AUTO, 0);
 
 	return t;
@@ -869,7 +869,7 @@ get_vline_width(struct table *t, int col)
 	if (t->rules == R_COLS || t->rules == R_ALL)
 		w = t->cellsp;
 	else if (t->rules == R_GROUPS)
-		w = (col < t->c && t->cols[col].group);
+		w = (col < t->c && t->columns[col].group);
 
 	if (!w && t->cellpd) w = -1;
 

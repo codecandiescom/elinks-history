@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.76 2003/01/05 16:48:12 pasky Exp $ */
+/* $Id: main.c,v 1.77 2003/01/16 21:56:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,7 +260,7 @@ init()
 	int uh;
 	void *info;
 	int len;
-	unsigned char *u;
+	unsigned char *u = NULL;
 
 #ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
@@ -290,6 +290,8 @@ init()
 		terminate = 1;
 		return;
 	}
+	u = stracpy(u);
+	if (!u) goto fatal_error;
 
 	if (!get_opt_bool_tree(&cmdline_options, "no-home")) {
 		init_home();
@@ -306,6 +308,7 @@ init()
 			close(terminal_pipe[1]);
 
 			info = create_session_info(get_opt_int_tree(&cmdline_options, "base-session"), u, &len);
+			mem_free(u), u = NULL;
 			if (!info) {
 				retval = RET_FATAL;
 				terminate = 1;
@@ -356,10 +359,13 @@ init()
 	    get_opt_int_tree(&cmdline_options, "source")) {
 		if (get_opt_bool_tree(&cmdline_options, "stdin")) {
 			get_opt_bool("protocol.file.allow_special_files") = 1;
-			u = "file:///dev/stdin";
+			mem_free(u);
+			u = stracpy("file:///dev/stdin");
+			if (!u) goto fatal_error;
 		}
 
 		dump_start(u);
+		mem_free(u), u = NULL;
 		if (terminate) {
 			/* XXX? */
 			close(terminal_pipe[0]);
@@ -371,6 +377,7 @@ init()
 		int attached;
 
 		info = create_session_info(get_opt_int_tree(&cmdline_options, "base-session"), u, &len);
+		mem_free(u), u = NULL;
 		if (!info) goto fatal_error;
 
 		attached = attach_terminal(get_input_handle(),
@@ -379,6 +386,7 @@ init()
 
 		if (attached == -1) {
 fatal_error:
+			if (u) mem_free(u), u = NULL; /* Just in case... */
 			retval = RET_FATAL;
 			terminate = 1;
 			return;

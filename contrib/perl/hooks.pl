@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.21 2005/03/26 13:35:22 pasky Exp $
+# $Id: hooks.pl,v 1.22 2005/03/26 13:36:02 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -740,8 +740,13 @@ sub search
 
 	if ($engine eq 'google') {
 		my $bork = '';
-		$bork = "/webhp?hl=xx-bork" if (loadrc("bork") eq "yes" and !$search);
-		$bork = "hl=xx-bork&" if (loadrc("bork") eq "yes" and $search);
+		if (loadrc('bork') eq 'yes') {
+			if (not $search) {
+				$bork = "/webhp?hl=xx-bork";
+			} else {
+				$bork = "hl=xx-bork&";
+			}
+		}
 		$url =~ s/!bork!/$bork/;
 	}
 

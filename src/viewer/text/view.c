@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.521 2004/06/25 16:01:46 pasky Exp $ */
+/* $Id: view.c,v 1.522 2004/06/25 16:09:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,7 +189,7 @@ move_link_##postfix(struct session *ses, struct document_view *doc_view) \
 	if (!count) count = 1; \
  \
 	while (count--) \
-		exec \
+		exec; \
 }
 
 move_link_factory(next, move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0))

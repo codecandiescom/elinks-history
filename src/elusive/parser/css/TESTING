@@ -54,7 +54,7 @@ Checksum:	be3e116f071a99789def8c5c7091cb48
 Notes:
 
 		We could try to parse the document backward to see somehow
-		where the error occured.
+		where the error occurred.
 
 -------------------------------------------------------------------------------
 Description:	Bad declarations
@@ -63,4 +63,4 @@ Checksum:	b042dc72c9c36d3e7031e3855af85a67
 Notes:		
 -------------------------------------------------------------------------------
 
-$Id: TESTING,v 1.1 2003/02/25 14:15:50 jonas Exp $
+$Id: TESTING,v 1.2 2003/10/16 13:08:42 zas Exp $

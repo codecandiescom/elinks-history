@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.12 2003/10/02 13:35:18 kuser Exp $ */
+/* $Id: event.c,v 1.13 2003/10/16 13:08:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ static unsigned int eventssize = 0;
 static struct hash *event_hash = NULL;
 
 /* TODO: This should be tuned to the number of events.  When we will have a lot
- * of them, this should be some big enough number to reduce unneccessary
+ * of them, this should be some big enough number to reduce unnecessary
  * slavery of CPU on the startup. Then after all main modules will be
  * initialized and their events will be registered, we could call something
  * like adjust_events_list() which will tune it to the exactly needed number.

@@ -1,4 +1,4 @@
-<!-- $Id: installation.xml,v 1.2 2003/06/10 23:35:14 jonas Exp $ -->
+<!-- $Id: installation.xml,v 1.3 2003/10/16 13:12:03 zas Exp $ -->
 
 <chapter id="installation"><title> Getting ELinks up and running </title>
 	
@@ -152,7 +152,7 @@
 <sect2 id="requirements"><title> Requirements </title>
 <para>
 
-	To succesfully install ELinks all that is required is <ulink
+	To successfully install ELinks all that is required is <ulink
 	url="http://www.gnu.org/software/make/make.html">GNU make</ulink> and a
 	C compiler. If you want to install directly from CVS it is also
 	required that <command>automake</command> and

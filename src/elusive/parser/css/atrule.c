@@ -1,5 +1,5 @@
 /* CSS atrule parsers */
-/* $Id: atrule.c,v 1.6 2003/09/12 10:48:40 zas Exp $ */
+/* $Id: atrule.c,v 1.7 2003/10/16 13:08:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include "elusive/parser/css/test.h"
 #endif
 
-/* Atrules grammer:
+/* Atrules grammar:
  *
  * atrule:
  * 	  charset
@@ -136,7 +136,7 @@ css_parse_atrule(struct parser_state *state, unsigned char **src, int *len)
 	return PSTATE_CHANGE;
 }
 
-/* Charset grammer:
+/* Charset grammar:
  *
  * charset:
  * 	  '@charset' <ws> <string> <ws> ';'
@@ -189,7 +189,7 @@ css_parse_charset(struct parser_state *state, unsigned char **src, int *len)
 	return PSTATE_CHANGE;
 }
 
-/* Import grammer:
+/* Import grammar:
  *
  * import:
  *	  '@import' <string> media_types ';'
@@ -272,7 +272,7 @@ css_parse_import(struct parser_state *state, unsigned char **src, int *len)
 	return PSTATE_CHANGE;
 }
 
-/* Media grammer:
+/* Media grammar:
  *
  * media:
  *	  '@media' media_types '{' ruleset* '}'
@@ -354,7 +354,7 @@ css_parse_media(struct parser_state *state, unsigned char **src, int *len)
 	return PSTATE_SUSPEND;
 }
 
-/* Mediatypes grammer:
+/* Mediatypes grammar:
  *
  * media_types:
  *	  <empty>
@@ -452,7 +452,7 @@ css_parse_mediatypes(struct parser_state *state, unsigned char **src, int *len)
 	return PSTATE_SUSPEND;
 }
 
-/* Page grammer:
+/* Page grammar:
  *
  * page:
  *	 '@page' <ident>? [':' <ident>]? '{' declarations '}'
@@ -464,7 +464,7 @@ css_parse_page(struct parser_state *state, unsigned char **src, int *len)
 	return PSTATE_CHANGE;
 }
 
-/* Font-face grammer:
+/* Font-face grammar:
  *
  * font_face:
  *	 '@font-face' '{' declarations '}'

@@ -1,4 +1,4 @@
-<!-- $Id: preface.xml,v 1.1 2003/06/10 23:31:00 jonas Exp $ -->
+<!-- $Id: preface.xml,v 1.2 2003/10/16 13:12:03 zas Exp $ -->
 
 <preface id="foreword"><title> Foreword </title>
 	
@@ -61,7 +61,7 @@
 <para>
 
 	Any help is useful; from people providing chapters of various features
-	to people fixing bad grammer or typos. If you have suggestions for a
+	to people fixing bad grammar or typos. If you have suggestions for a
 	new chapter or how to improve an existing one we would be happy to
 	hear from you.
 

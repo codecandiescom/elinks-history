@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.38 2003/10/11 13:15:37 zas Exp $ */
+/* $Id: uri.h,v 1.39 2003/10/16 13:08:44 zas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -48,7 +48,7 @@ struct uri {
 	int datalen;
 
 	/* @post can contain some special encoded form data, used internally
-	 * to make form data handling more effecient. The data is marked by
+	 * to make form data handling more efficient. The data is marked by
 	 * POST_CHAR in the uri string. */
 	unsigned char *post;
 };

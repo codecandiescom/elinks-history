@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.221 2003/10/14 18:43:02 fabio Exp $ */
+/* $Id: parser.c,v 1.222 2003/10/16 13:08:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -706,7 +706,7 @@ html_superscript(unsigned char *a)
  * receive focus. Call this from each element which supports tabindex or
  * accesskey. */
 /* Note that in ELinks, we support those attributes (I mean, we call this
- * function) while proccessing any focusable element (otherwise it'd have zero
+ * function) while processing any focusable element (otherwise it'd have zero
  * tabindex, thus messing up navigation between links), thus we support these
  * attributes even near tags where we're not supposed to (like IFRAME, FRAME or
  * LINK). I think this doesn't make any harm ;). --pasky */

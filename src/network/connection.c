@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.102 2003/07/25 16:57:24 jonas Exp $ */
+/* $Id: connection.c,v 1.103 2003/10/16 13:08:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,7 @@ get_host_connection(struct connection *c)
 	return NULL;
 }
 
-/* Returns if the connection was succesfully added. */
+/* Returns if the connection was successfully added. */
 /* Don't add hostnameless host connections but they're valid. */
 static int
 add_host_connection(struct connection *c)

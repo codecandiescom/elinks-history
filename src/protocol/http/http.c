@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.187 2003/10/16 05:01:02 witekfl Exp $ */
+/* $Id: http.c,v 1.188 2003/10/16 13:08:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -941,7 +941,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 			if (zero) info->chunk_remaining = 0;
 			len = info->chunk_remaining;
 
-			/* Maybe everything neccessary didn't come yet.. */
+			/* Maybe everything necessary didn't come yet.. */
 			int_upper_bound(&len, rb->len);
 			conn->received += len;
 

@@ -1,5 +1,5 @@
 /* Parser CSS backend */
-/* $Id: parser.c,v 1.7 2003/09/12 10:48:40 zas Exp $ */
+/* $Id: parser.c,v 1.8 2003/10/16 13:08:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include "elusive/parser/css/test.h"
 #endif
 
-/* Stylesheet grammer:
+/* Stylesheet grammar:
  *
  * Both @charset and @import rules need special handling:
  *

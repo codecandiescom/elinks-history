@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.293 2003/10/15 20:25:41 pasky Exp $ */
+/* $Id: options.c,v 1.294 2003/10/16 13:08:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1237,7 +1237,7 @@ register_options(void)
 		"don't receive an auth cookie, the login page then gives you the\n"
 		"cookie and redirects you back to the original page, but there you\n"
 		"have already cached redirect back to the login page! If this\n"
-		"option has value of 0, this malfunction is fixed, but occassionally\n"
+		"option has value of 0, this malfunction is fixed, but occasionally\n"
 		"you may get superfluous (depends on how you take it ;-) requests to\n"
 		"the server. If this option has value of 1, experienced users can\n"
 		"still workaround it by clever combination of usage of reload,\n"

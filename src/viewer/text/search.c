@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.238 2004/06/11 03:22:01 jonas Exp $ */
+/* $Id: search.c,v 1.239 2004/06/11 10:02:45 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1323,11 +1323,8 @@ static void
 search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	      unsigned char *title, unsigned char *text,
 	      unsigned char *okbutton, unsigned char *cancelbutton,
-	      void *data, struct input_history *history, int l,
-	      unsigned char *def, int min, int max,
-	      int (*check)(struct dialog_data *, struct widget_data *),
-	      void (*fn)(void *, unsigned char *),
-	      void (*cancelfn)(void *))
+	      void *data, struct input_history *history,
+	      void (*fn)(void *, unsigned char *))
 {
 	struct dialog *dlg;
 	unsigned char *field;
@@ -1348,19 +1345,10 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	hop->data = data;
 
 #define SEARCH_WIDGETS_COUNT 8
-	dlg = calloc_dialog(SEARCH_WIDGETS_COUNT, l);
+	dlg = calloc_dialog(SEARCH_WIDGETS_COUNT, MAX_STR_LEN);
 	if (!dlg) {
 		mem_free(hop);
 		return;
-	}
-
-	/* @field is automatically cleared by calloc() */
-	field = get_dialog_offset(dlg, SEARCH_WIDGETS_COUNT);
-
-	if (def) {
-		int defsize = strlen(def) + 1;
-
-		memcpy(field, def, (defsize > l) ? l - 1 : defsize);
 	}
 
 	dlg->title = title;
@@ -1372,7 +1360,9 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_to_ml(&ml, hop, NULL);
 
-	add_dlg_field(dlg, text, min, max, check, l, field, history);
+	/* @field is automatically cleared by calloc() */
+	field = get_dialog_offset(dlg, SEARCH_WIDGETS_COUNT);
+	add_dlg_field(dlg, text, 0, 0, NULL, MAX_STR_LEN, field, history);
 
 	add_dlg_radio(dlg, _("Normal search", term), 1, 0, hop->values[SEARCH_OPT_REGEX].number);
 	add_dlg_radio(dlg, _("Regexp search", term), 1, 1, hop->values[SEARCH_OPT_REGEX].number);
@@ -1381,7 +1371,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	add_dlg_radio(dlg, _("Case insensitive", term), 2, 0, hop->values[SEARCH_OPT_CASE].number);
 
 	add_dlg_button(dlg, B_ENTER, search_dlg_ok, okbutton, fn);
-	add_dlg_button(dlg, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);
+	add_dlg_button(dlg, B_ESC, search_dlg_cancel, cancelbutton, NULL);
 
 	add_dlg_end(dlg, SEARCH_WIDGETS_COUNT);
 
@@ -1409,11 +1399,8 @@ search_dlg(struct session *ses, struct document_view *doc_view, int direction)
 	search_dlg_do(ses->tab->term, NULL, 1,
 		      title, N_("Search for text"),
 		      N_("OK"), N_("Cancel"),
-		      ses, &search_history, MAX_STR_LEN,
-		      "", 0, 0,
-		      NULL,
-		      search_function,
-		      NULL);
+		      ses, &search_history,
+		      search_function);
 }
 
 void

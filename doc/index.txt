@@ -56,11 +56,12 @@ Developer's Guide
 Appendices
 	Appendix A - Notes on User Feedback .............. feedback.txt
 
-(*) The best way to view man pages are of course with the man program.
-The easiest way to do this is by telling the man program to look for man
-pages in the doc/man directory by passing the path using the -M switch.
-If you are standing in the top-level directory you can do this by invoking
-the man program using: man -M doc/man elinks.conf
+(*) Man pages are best viewed with the man program. The easiest way to
+do this is by telling the man program to look for man pages in the
+doc/man directory by using the -M switch. If you are standing in the
+top-level directory you can do this by invoking the man program using:
+
+	man -M doc/man elinks.conf
 
 (**) By internal scripting, we mean scripting of the browser internals
 through embedded Lua, Guile or Perl scripts. ECMAScript scripts
@@ -81,8 +82,8 @@ detailed notes regarding given modules/subsystems.
 
 
 
-$Id: index.txt,v 1.9 2004/12/21 13:55:39 jonas Exp $
+$Id: index.txt,v 1.10 2004/12/21 13:58:00 jonas Exp $
 
-vim: textwidth=72
 (Note: Sometimes, I broke the lines manually earlier than gqap would,
 for greater aesthetical effect. --pasky)
+vim: textwidth=72

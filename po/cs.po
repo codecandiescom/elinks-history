@@ -70,6 +70,7 @@ msgid "read_bookmarks_xbel(): Error reading %s%c\n"
 msgstr "read_bookmarks_xbel(): Chyba pøi naèítání %s%c\n"
 
 #: src/bookmarks/backend/xbel.c:124
+# This translation was based on idea by Jakub Suchy.
 #, c-format
 msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"

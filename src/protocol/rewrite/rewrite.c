@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.8 2003/12/09 23:08:12 jonas Exp $ */
+/* $Id: rewrite.c,v 1.9 2003/12/21 21:18:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,14 +82,20 @@ static struct option_info uri_rewrite_options[] = {
 #define INIT_OPT_DUMB_PREFIX(prefix, uri) \
 	INIT_OPT_STRING("protocol.rewrite.dumb", NULL, prefix, 0, uri, NULL)
 
-	INIT_OPT_DUMB_PREFIX("elinks", "http://elinks.or.cz/"),
-	INIT_OPT_DUMB_PREFIX("documentation", "http://elinks.or.cz/documentation/"),
+	INIT_OPT_DUMB_PREFIX("elinks", ELINKS_HOMEPAGE),
+	INIT_OPT_DUMB_PREFIX("documentation", ELINKS_DOC_URL),
 
 #define INIT_OPT_SMART_PREFIX(prefix, uri) \
 	INIT_OPT_STRING("protocol.rewrite.smart", NULL, prefix, 0, uri, NULL)
+#define bugzilla_prefix(prefix) (ELINKS_BUGS_URL prefix)
 
-	INIT_OPT_SMART_PREFIX("bug", "http://bugzilla.elinks.or.cz/show_bug.cgi?id=%s"),
+	INIT_OPT_SMART_PREFIX("bug", bugzilla_prefix("show_bug.cgi?id=%s")),
 	INIT_OPT_SMART_PREFIX("google", "http://www.google.com/search?q=%s"),
+
+#ifdef DEBUG
+	INIT_OPT_SMART_PREFIX("milestone-bugs", bugzilla_prefix("buglist.cgi?target_milestone=%s")),
+	INIT_OPT_SMART_PREFIX("search-bugs", bugzilla_prefix("buglist.cgi?short_desc_type=allwordssubstr&short_desc=%s")),
+#endif
 
 	NULL_OPTION_INFO,
 };

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.105 2004/12/17 20:24:38 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.106 2004/12/17 20:26:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ enum prop_type {
 	JSPT_OBJECT,
 };
 
-struct property__ {
+struct jsval_property {
 	enum prop_type type;
 	union {
 		int boolean;
@@ -90,7 +90,7 @@ struct property__ {
 
 
 #define VALUE_TO_JSVAL_START \
-	struct property__ prop; \
+	struct jsval_property prop; \
  \
 	P_UNDEF();
 
@@ -102,7 +102,7 @@ bye: \
 
 
 static void
-value_to_jsval(JSContext *ctx, jsval *vp, struct property__ *prop)
+value_to_jsval(JSContext *ctx, jsval *vp, struct jsval_property *prop)
 {
 	switch (prop->type) {
 	case JSPT_STRING:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.414 2004/05/24 01:55:23 jonas Exp $ */
+/* $Id: view.c,v 1.415 2004/05/25 01:19:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -483,7 +483,7 @@ set_frame(struct session *ses, struct document_view *doc_view, int a)
 	if_assert_failed return;
 
 	if (doc_view == ses->doc_view) return;
-	goto_url(ses, struri(doc_view->vs->uri));
+	goto_url_frame(ses, doc_view->vs->uri, NULL, CACHE_MODE_NORMAL);
 }
 
 

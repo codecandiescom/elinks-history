@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.400 2004/05/25 00:26:32 jonas Exp $ */
+/* $Id: session.c,v 1.401 2004/05/25 01:19:40 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -631,7 +631,7 @@ copy_session(struct session *old, struct session *new)
 {
 	if (!have_location(old)) return;
 
-	goto_url(new, struri(cur_loc(old)->vs.uri));
+	goto_url_frame(new, cur_loc(old)->vs.uri, NULL, CACHE_MODE_NORMAL);
 }
 
 /* The session info encoder and decoder:

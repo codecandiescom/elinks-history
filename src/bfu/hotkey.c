@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.28 2004/08/03 21:53:14 zas Exp $ */
+/* $Id: hotkey.c,v 1.29 2004/08/03 22:54:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,7 +122,7 @@ refresh_hotkeys(struct terminal *term, struct menu *menu)
 }
 
 /* Returns true if key (upcased) matches one of the hotkeys in menu */
-static inline int
+static int
 is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 {
 	unsigned char *text;
@@ -147,7 +147,7 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 }
 
 /* Returns true if key (upcased) matches first letter of menu item left text. */
-static inline int
+static int
 is_not_so_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 {
 	unsigned char *text;

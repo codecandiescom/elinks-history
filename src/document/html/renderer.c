@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.238 2003/09/06 19:45:41 jonas Exp $ */
+/* $Id: renderer.c,v 1.239 2003/09/06 19:48:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -824,6 +824,34 @@ put_chars_format_change(struct part *part, unsigned char *color,
 }
 
 static inline void
+put_link_number(struct part *part)
+{
+	unsigned char s[64];
+	unsigned char *fl = format.link;
+	unsigned char *ft = format.target;
+	unsigned char *fi = format.image;
+	struct form_control *ff = format.form;
+	int slen = 0;
+
+	format.link = format.target = format.image = NULL;
+	format.form = NULL;
+
+	s[slen++] = '[';
+	ulongcat(s, &slen, part->link_num, sizeof(s) - 3, 0);
+	s[slen++] = ']';
+	s[slen] = '\0';
+
+	put_chars(part, s, slen);
+
+	if (ff && ff->type == FC_TEXTAREA) line_break(part);
+	if (part->cx == -1) part->cx = par_format.leftmargin;
+	format.link = fl;
+	format.target = ft;
+	format.image = fi;
+	format.form = ff;
+}
+
+static inline void
 process_link(struct part *part, unsigned char *chars, int charslen)
 {
 	struct link *link;
@@ -852,29 +880,7 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 		if (!(format.link || format.image || format.form)) return;
 
 		if (d_opt->num_links_display) {
-			unsigned char s[64];
-			unsigned char *fl = format.link;
-			unsigned char *ft = format.target;
-			unsigned char *fi = format.image;
-			struct form_control *ff = format.form;
-			int slen = 0;
-
-			format.link = format.target = format.image = NULL;
-			format.form = NULL;
-
-			s[slen++] = '[';
-			ulongcat(s, &slen, part->link_num, sizeof(s) - 3, 0);
-			s[slen++] = ']';
-			s[slen] = '\0';
-
-			put_chars(part, s, slen);
-
-			if (ff && ff->type == FC_TEXTAREA) line_break(part);
-			if (part->cx == -1) part->cx = par_format.leftmargin;
-			format.link = fl;
-		   	format.target = ft;
-			format.image = fi;
-			format.form = ff;
+			put_link_number(part);
 		}
 
 		part->link_num++;

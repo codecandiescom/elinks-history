@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.48 2005/02/02 17:33:15 jonas Exp $ */
+/* $Id: proxy.c,v 1.49 2005/03/20 10:12:07 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -78,6 +78,20 @@ proxy_uri(struct uri *uri, unsigned char *proxy, int *connection_state)
 	return uri;
 }
 
+static unsigned char *
+strip_proxy_protocol(unsigned char *proxy,
+		     unsigned char *strip1, unsigned char *strip2)
+{
+	assert(proxy && *proxy);
+
+	if (!strncasecmp(proxy, strip1, strlen(strip1)))
+		proxy += strlen(strip1);
+	else if (strip2 && !strncasecmp(proxy, strip2, strlen(strip2)))
+		proxy += strlen(strip2);
+
+	return proxy;
+}
+
 /* TODO: We could of course significantly simplify the calling convention by
  * autogenerating most of the parameters from protocol name. Having a function
  * exported by protocol/protocol.* dedicated to that would be nice too.
@@ -94,10 +108,7 @@ get_protocol_proxy(unsigned char *opt,
 	if (!proxy || !*proxy) proxy = getenv(env2);
 
 	if (proxy && *proxy) {
-		if (!strncasecmp(proxy, strip1, strlen(strip1)))
-			proxy += strlen(strip1);
-		else if (strip2 && !strncasecmp(proxy, strip2, strlen(strip2)))
-			proxy += strlen(strip2);
+		proxy = strip_proxy_protocol(proxy, strip1, strip2);
 	}
 
 	return proxy;

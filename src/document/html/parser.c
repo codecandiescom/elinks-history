@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.86 2003/05/06 22:36:24 zas Exp $ */
+/* $Id: parser.c,v 1.87 2003/05/08 00:28:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1094,6 +1094,13 @@ html_pre(unsigned char *a)
 	par_format.align = AL_NO;
 	par_format.leftmargin = par_format.leftmargin > 1;
 	par_format.rightmargin = 0;
+}
+
+static void
+html_xmp(unsigned char *a)
+{
+	d_opt->plain = 2;
+	html_pre(a);
 }
 
 static void
@@ -2532,7 +2539,7 @@ static struct element_info elements[] = {
 	{"TR",		html_tr,	1, 0},
 	{"U",		html_underline,	0, 0},
 	{"UL",		html_ul,	2, 0},
-	{"XMP",		html_pre,	2, 0}, /* TODO: you shouldn't interpret any tags inside! */
+	{"XMP",		html_xmp,	2, 0},
 	{NULL,		NULL, 0, 0},
 };
 
@@ -2616,7 +2623,7 @@ set_lt:
 	eoff = eof;
 	lt = html;
 	while (html < eof) {
-		unsigned char *name, *attr, *end;
+		unsigned char *name, *attr, *end, *prev_html;
 		int namelen;
 		struct element_info *ei;
 		int inv;
@@ -2710,7 +2717,7 @@ next_break:
 			goto set_lt;
 		}
 
-		if (*html != '<' || d_opt->plain || parse_element(html, eof, &name, &namelen, &attr, &end)) {
+		if (*html != '<' || d_opt->plain == 1 || parse_element(html, eof, &name, &namelen, &attr, &end)) {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
 			html++;
@@ -2735,6 +2742,7 @@ element:
 ng:;
 		}
 
+		prev_html = html;
 		html = end;
 #if 0
 		for (ei = elements; ei->name; ei++) {
@@ -2751,6 +2759,11 @@ ng:;
 			if (!inv) {
 				unsigned char *a;
 
+				if (d_opt->plain) {
+					put_chrs("<", 1, put_chars, f);
+					html = prev_html + 1;
+					break;
+				}
 				ln_break(ei->linebreak, line_break, f);
 				if (ei->name && ((a = get_attr_val(attr, "id")))) {
 					special(f, SP_TAG, a);
@@ -2807,6 +2820,10 @@ ng:;
 				int lnb = 0;
 				int xxx = 0;
 
+				if (d_opt->plain) {
+					if (ei->func == html_xmp) d_opt->plain = 0;
+					else break;
+				}
 				was_br = 0;
 				if (ei->nopair == 1 || ei->nopair == 3) break;
 				/*debug_stack();*/

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.71 2003/01/01 20:30:33 pasky Exp $ */
+/* $Id: main.c,v 1.72 2003/01/03 00:13:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,7 @@
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
+#include "intl/gettext/libintl.h"
 #include "intl/language.h"
 #include "lowlevel/af_unix.h"
 #include "lowlevel/dns.h"
@@ -265,6 +266,11 @@ init()
 #ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
 #endif
+#ifdef ENABLE_NLS
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
+#endif
+
 	init_options();
 	init_trans();
 	set_sigcld();

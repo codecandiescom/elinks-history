@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.267 2003/11/15 17:20:21 zas Exp $ */
+/* $Id: parser.c,v 1.268 2003/11/15 17:25:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1826,7 +1826,7 @@ static void
 new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullname)
 	/* name == NULL - up;	data == -1 - down */
 {
-	struct menu_item *nmenu = NULL; /* no uninitialized warnings */
+	struct menu_item *new_menu_item = NULL; /* no uninitialized warnings */
 
 	if (name) {
 		clr_spaces(name);
@@ -1834,14 +1834,14 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 	}
 
 	if (name && data == -1) {
-		nmenu = mem_calloc(1, sizeof(struct menu_item));
-		if (!nmenu) {
+		new_menu_item = mem_calloc(1, sizeof(struct menu_item));
+		if (!new_menu_item) {
 			mem_free(name);
 			return;
 		}
 	}
 
-	if (menu->stack_size && name) {
+	if (name && menu->stack_size) {
 		struct menu_item *top, *item;
 
 		top = item = menu->stack[menu->stack_size - 1];
@@ -1849,7 +1849,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 		top = mem_realloc(top, (char *)(item + 2) - (char *)top);
 		if (!top) {
-			if (data == -1) mem_free(nmenu);
+			if (data == -1) mem_free(new_menu_item);
 			mem_free(name);
 			return;
 		}
@@ -1864,7 +1864,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 		if (data == -1) {
 			SET_MENU_ITEM(item, name, M_SUBMENU, do_select_submenu,
-				      nmenu, FREE_NOTHING | (fullname << 8),
+				      new_menu_item, FREE_NOTHING | (fullname << 8),
 				      1, 1, 0, 0);
 		} else {
 			SET_MENU_ITEM(item, name, "", selected_item,
@@ -1883,7 +1883,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 		if (!ms) return;
 		menu->stack = ms;
-		menu->stack[menu->stack_size++] = nmenu;
+		menu->stack[menu->stack_size++] = new_menu_item;
 	}
 
 	if (!name) menu->stack_size--;

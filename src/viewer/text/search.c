@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.183 2004/02/02 15:24:03 jonas Exp $ */
+/* $Id: search.c,v 1.184 2004/02/02 15:32:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -969,7 +969,7 @@ typeahead_error(struct session *ses, unsigned char *typeahead)
 	}
 }
 
-/* searches the @document for a link with the given @text. takes the
+/* Searches the @document for a link with the given @text. takes the
  * current_link in the view, the link to start searching from @i and the
  * direction to search (1 is forward, -1 is back). */
 static inline int
@@ -1003,11 +1003,9 @@ search_link_text(struct document *document, int current_link, int i,
 
 			if (!data || !case_compare_chars(data, text[j]))
 				break;
-
-			if (textlen == j + 1) {
-				return i;
-			}
 		}
+
+		if (textlen == j) return i;
 
 		/* Check if we are at the end of the first range */
 		if (i == (direction > 0 ? upper_link - 1: lower_link + 1)

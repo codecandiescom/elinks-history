@@ -217,6 +217,7 @@ Laurent Monin <zas@norz.org>
 	Bookmarks hacking
 	Misc minor improvements
 	Big amount of bugfixes, tidyups and optimizations
+	Random hacking
 	HTTP Auth fixes
 	Secure file saving
 	Referred as 'Zas' or 'zas' in the code
@@ -317,6 +318,8 @@ Petr Baudis <pasky@ucw.cz>
 	New options system
 	BFU colorization
 	DNS hacking
+	Random hacking
+	Feature of the Day implementation
 	http://elinks.or.cz/
 
 Petr Cech <cech@atrey.karlin.mff.cuni.cz>
@@ -404,4 +407,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.101 2002/11/29 10:18:07 pasky Exp $
+$Id: AUTHORS,v 1.102 2002/12/01 19:31:09 pasky Exp $

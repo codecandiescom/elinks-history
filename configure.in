@@ -404,14 +404,13 @@ AC_ARG_WITH(guile, [  --with-guile            enable Guile support],
 AC_MSG_CHECKING([for Guile])
 
 if test "$enable_guile" = "yes"; then
-	guile_error="failed, so Guile support will not be compiled in"
-	AC_MSG_RESULT(enabled);
+	AC_MSG_RESULT(yes);
 	## Based on the GUILE_FLAGS macro.
 
-	AC_PATH_PROG(GUILE_CONFIG, guile-config, "$guile_error", "$withval:$PATH")
+	AC_PATH_PROG(GUILE_CONFIG, guile-config, "no", "$withval:$PATH")
 
 	## First, let's just see if we can find Guile at all.
-	if test "$GUILE_CONFIG" != "$guile_error" ; then
+	if test "$GUILE_CONFIG" != no; then
 		cf_result="yes";
 
 		GUILE_LIBS="`guile-config link`"
@@ -429,6 +428,8 @@ well tested (success stories heartily welcomed!).  See
 src/scripting/guile/README for further details and hints.
 ***********************************************************************
 EOF
+	else
+		AC_MSG_WARN([Guile support disabled])
 	fi
 else
 	AC_MSG_RESULT(no);

@@ -822,7 +822,7 @@ struct translation translation_brazilian_portuguese [] = {
   {T_ACCEPT_UI_LANGUAGE, "Língua da interface igual à Língua Preferida"},
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, "codificação"},
-  {T_BOOKMARK_USED, NULL},
+  {T_BOOKMARK_USED, "Este bookmark já está a ser usado"},
   {0, NULL}
 };
 
@@ -9076,13 +9076,13 @@ struct translation translation_portuguese [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, "Procurar bookmark"},
   {T_CLEAR, "Limpar"},
-  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_ADD_BOOKMARK_LINK, "Adicionar link aos Bookmarks"},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, "Língua preferida"},
   {T_ACCEPT_UI_LANGUAGE, "Língua da interface igual à Língua preferida"},
   {T_SSL_CIPHER, "Cifra SSL"},
   {T_ENCODING, "Codificação"},
-  {T_BOOKMARK_USED, NULL},
+  {T_BOOKMARK_USED, "Este bookmark já está a ser usado"},
   {0, NULL}
 };
 

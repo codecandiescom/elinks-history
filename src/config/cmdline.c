@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.79 2004/04/24 01:35:35 jonas Exp $ */
+/* $Id: cmdline.c,v 1.80 2004/04/24 01:39:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,9 +248,6 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		len = strcspn(arg, ",)");
 		if (arg[len] == ',') {
 			unsigned char *where = arg + len + 1;
-			unsigned char *comma = arg + len;
-
-			skipback_whitespace(arg, comma);
 
 			if (strstr(where, "new-window")) {
 				remote_session_flags |= SES_REMOTE_NEW_WINDOW;
@@ -259,12 +256,13 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 				remote_session_flags |= SES_REMOTE_NEW_TAB;
 			}
 
-			remote_url = memacpy(arg, comma - arg);
-
 		} else {
 			remote_session_flags |= SES_REMOTE_CURRENT_TAB;
-			remote_url = memacpy(arg, argend - arg);
 		}
+
+		while (len > 0 && isspace(arg[len - 1])) len--;
+		remote_url = memacpy(arg, len);
+
 		break;
 
 	case REMOTE_METHOD_XFEDOCOMMAND:

@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.39 2004/11/19 10:04:45 zas Exp $ */
+/* $Id: inpfield.h,v 1.40 2004/11/19 11:01:54 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -8,25 +8,16 @@
 #include "bfu/widget.h"
 #include "util/memlist.h"
 
+struct dialog;
 struct input_history;
 struct session;
 struct terminal;
 
-#define add_dlg_field_do(dlg, t, label, min_, max_, handler, dlen, d, hist, float_)\
-	do {								\
-		struct widget *widget;					\
-									\
-		widget = &(dlg)->widgets[(dlg)->number_of_widgets++];	\
-		widget->type = (t);					\
-		widget->text = (label);					\
-		widget->info.field.min = (min_);			\
-		widget->info.field.max = (max_);			\
-		widget->fn = (handler);					\
-		widget->datalen = (dlen);				\
-		widget->data = (d);					\
-		widget->info.field.history = (hist);			\
-		widget->info.field.float_label = (float_);		\
-	} while (0)
+void
+add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label,
+		 int min, int max, WIDGET_HANDLER_FUNC(handler),
+		 int data_len, void *data,
+		 struct input_history *history, int float_);
 
 #define add_dlg_field(dlg, label, min, max, handler, len, field, history)	\
 	add_dlg_field_do(dlg, WIDGET_FIELD, label, min, max, handler, len, field, history, 0)

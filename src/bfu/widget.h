@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.67 2004/11/19 10:04:45 zas Exp $ */
+/* $Id: widget.h,v 1.68 2004/11/19 11:01:54 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -36,6 +36,7 @@ typedef enum t_handler_event_status {
 } t_handler_event_status;
 
 /* TODO: wrapper for handler functions */
+#define WIDGET_HANDLER_FUNC(fn) t_handler_event_status (*fn)(struct dialog_data *, struct widget_data *)
 
 
 struct widget_ops {
@@ -56,7 +57,7 @@ struct widget {
 
 	void *udata;
 
-	t_handler_event_status (*fn)(struct dialog_data *, struct widget_data *);
+	WIDGET_HANDLER_FUNC(fn);
 
 	union {
 		struct {

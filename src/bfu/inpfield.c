@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.177 2004/11/18 21:39:33 zas Exp $ */
+/* $Id: inpfield.c,v 1.178 2004/11/19 11:01:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,25 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 
+void
+add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label,
+		 int min, int max, WIDGET_HANDLER_FUNC(handler),
+		 int data_len, void *data,
+		 struct input_history *history, int float_)
+{
+		struct widget *widget;
+
+		widget = &dlg->widgets[dlg->number_of_widgets++];
+		widget->type = type;
+		widget->text = label;
+		widget->info.field.min = min;
+		widget->info.field.max = max;
+		widget->fn = handler;
+		widget->datalen = data_len;
+		widget->data = data;
+		widget->info.field.history = history;
+		widget->info.field.float_label = float_;
+}
 
 t_handler_event_status
 check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)

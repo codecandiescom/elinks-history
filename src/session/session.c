@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.154 2003/09/23 08:30:42 jonas Exp $ */
+/* $Id: session.c,v 1.155 2003/09/25 00:38:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -949,16 +949,15 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 	struct fragment *fr;
 	unsigned char *s = NULL;
 	int len;
-	static int pre_format_html_event_id = EVENT_NONE;
+	static int pre_format_html_event = EVENT_NONE;
 
 	if (!ce || ce->done_pre_format_html_hook) return;
 
 	defrag_entry(ce);
 	fr = ce->frag.next;
 	len = fr->length;
-	set_event_id(pre_format_html_event_id, "pre-format-html");
-	trigger_event(pre_format_html_event_id,
-		      &s, ses, ce->url, fr->data, &len);
+	set_event_id(pre_format_html_event, "pre-format-html");
+	trigger_event(pre_format_html_event, &s, ses, ce->url, fr->data, &len);
 	if (s) {
 		add_fragment(ce, 0, s, len);
 		truncate_entry(ce, len, 1);
@@ -1508,19 +1507,19 @@ static void
 goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 	   enum task_type task, enum cache_mode cache_mode)
 {
+	unsigned char *new_url = url;
 #ifdef HAVE_SCRIPTING
-	unsigned char *newurl = NULL;
 	static int follow_url_event_id = EVENT_NONE;
 
 	set_event_id(follow_url_event_id, "follow-url");
-	trigger_event(follow_url_event_id, &newurl, ses, url);
-	if (newurl && *newurl) url = newurl;
+	trigger_event(follow_url_event_id, &new_url, ses, url);
+	if (!new_url) return;
 #endif
 
-	if (*url) really_goto_url_w(ses, url, target, task, cache_mode);
+	if (*new_url) really_goto_url_w(ses, new_url, target, task, cache_mode);
 
 #ifdef HAVE_SCRIPTING
-	if (newurl) mem_free(newurl);
+	if (new_url != url) mem_free(new_url);
 #endif
 }
 
@@ -1547,19 +1546,19 @@ goto_url(struct session *ses, unsigned char *url)
 void
 goto_url_with_hook(struct session *ses, unsigned char *url)
 {
+	unsigned char *new_url = url;
 #ifdef HAVE_SCRIPTING
-	unsigned char *newurl = NULL;
 	static int goto_url_event_id = EVENT_NONE;
 
 	set_event_id(goto_url_event_id, "goto-url");
-	trigger_event(goto_url_event_id, &newurl, ses, url);
-	if (newurl && *newurl) url = newurl;
+	trigger_event(goto_url_event_id, &new_url, ses, url);
+	if (!newurl) return;
 #endif
 
-	if (*url) goto_url(ses, url);
+	if (*new_url) goto_url(ses, new_url);
 
 #ifdef HAVE_SCRIPTING
-	if (newurl) mem_free(newurl);
+	if (new_url != url) mem_free(new_url);
 #endif
 }
 

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.57 2003/06/21 08:48:11 zas Exp $ */
+/* $Id: interlink.c,v 1.58 2003/06/21 08:54:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,11 +372,7 @@ again:
 	setsock_reuse_addr(s_info_listen.fd);
 
 	if (bind(s_info_listen.fd, s_info_listen.addr, s_info_listen.size) < 0) {
-		/* This error permit to determine if we're a master or
-		 * slave elinks. Dirty but how to do better ?.
-		 * I think we should first try to connect to an existing
-		 * session and then try to bind as master. --Zas */
-		if (errno != EADDRINUSE) /* This will change soon --Zas */
+		if (errno != EADDRINUSE)
 			error(gettext("bind() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 

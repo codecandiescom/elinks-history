@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.562 2004/09/26 09:56:55 pasky Exp $ */
+/* $Id: session.c,v 1.563 2004/09/26 15:03:39 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -491,7 +491,8 @@ doc_end_load(struct download *stat, struct session *ses)
 			print_error_dialog(ses, stat->state, stat->pri);
 		}
 
-	} else if (ses->display_timer == -1) {
+	} else if (is_in_transfering_state(stat->state)
+	           && ses->display_timer == -1) {
 		display_timer(ses);
 	}
 

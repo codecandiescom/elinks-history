@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.110 2003/12/03 14:08:15 miciah Exp $ */
+/* $Id: dialog.c,v 1.111 2003/12/08 00:39:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -464,7 +464,7 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 	struct terminal *term = dlg_data->win->term;
 	int w = dialog_max_width(term);
 	int height = dialog_max_height(term);
-	int rw = 0;
+	int rw = int_min(w, DIALOG_MIN_WIDTH);
 	int y = dlg_data->dlg->layout.padding_top ? 0 : -1;
 	int x = 0;
 

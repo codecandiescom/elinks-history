@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.16 2002/05/23 18:33:14 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.17 2002/06/07 17:20:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,6 +307,7 @@ bind_rd(struct option *o, unsigned char **line)
 
 	return err;
 #endif
+	return 0;
 }
 
 /* unbind KEYMAP KEYSTROKE */
@@ -336,6 +337,7 @@ unbind_rd(struct option *o, unsigned char **line)
 
 	return err;
 #endif
+	return 0;
 }
 
 /*

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.10 2002/06/01 18:46:41 pasky Exp $ */
+/* $Id: opttypes.c,v 1.11 2002/06/07 17:20:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,6 +312,7 @@ type_rd(struct option *o, unsigned char **c)
 	mem_free(w);
 	goto err;
 #endif
+	return 0;
 }
 
 void
@@ -350,6 +351,7 @@ ext_rd(struct option *o, unsigned char **c)
 	if (new.ct) mem_free(new.ct);
 	return err;
 #endif
+	return 0;
 }
 
 void
@@ -384,6 +386,7 @@ prog_rd(struct option *o, unsigned char **c)
 	err_1:
 	return err;
 #endif
+	return 0;
 }
 
 void
@@ -444,6 +447,7 @@ term_rd(struct option *o, unsigned char **c)
 	err:
 	return "Error reading terminal specification";
 #endif
+	return 0;
 }
 
 void

@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.24 2003/12/29 14:05:05 jonas Exp $ */
+/* $Id: history.h,v 1.25 2004/01/04 01:42:29 miciah Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -22,13 +22,17 @@ struct ses_history {
 void create_history(struct ses_history *history);
 void destroy_history(struct ses_history *history);
 void clean_unhistory(struct ses_history *history);
+#ifdef BUG_309_FIX
 void compress_history(struct ses_history *history, struct location *loc);
+#endif
 
 static inline void
 add_to_history(struct ses_history *history, struct location *loc)
 {
+#ifdef BUG_309_FIX
 	if (history->current)
 		compress_history(history, loc);
+#endif
 
 	if (!history->current) {
 		add_to_list(history->history, loc);

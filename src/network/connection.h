@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.33 2003/07/06 02:45:50 jonas Exp $ */
+/* $Id: connection.h,v 1.34 2003/07/06 11:11:46 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -7,6 +7,7 @@
 
 /* We need to declare these first :/. Damn cross-dependencies. */
 struct connection;
+struct read_buffer;
 
 #include "document/cache.h"
 #include "lowlevel/connect.h"
@@ -122,6 +123,10 @@ struct connection {
 	struct cache_entry *cache;
 	ssl_t *ssl;
 	struct stream_encoded *stream;
+
+	/* Only used by ftp in send_cmd/get_resp. Put here
+	 * since having no connection->info is apparently valid. */
+	void (*read_func)(struct connection *, struct read_buffer *);
 
 	unsigned int id;
 

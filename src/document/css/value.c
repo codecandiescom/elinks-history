@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.16 2004/01/18 15:06:16 pasky Exp $ */
+/* $Id: value.c,v 1.17 2004/01/18 15:18:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,8 @@
 #include "util/string.h"
 
 
-typedef int (*css_value_parser_t)(union css_property_value *value,
+typedef int (*css_value_parser_t)(struct css_property_info *propinfo,
+				  union css_property_value *value,
 				  unsigned char **string);
 
 
@@ -54,7 +55,9 @@ rgb_component_parser(unsigned char **string, unsigned char terminator)
 }
 
 static int
-css_parse_color_value(union css_property_value *value, unsigned char **string)
+css_parse_color_value(struct css_property_info *propinfo,
+		      union css_property_value *value,
+		      unsigned char **string)
 {
 	int pos;
 
@@ -91,7 +94,8 @@ css_parse_color_value(union css_property_value *value, unsigned char **string)
 
 
 static int
-css_parse_font_attribute_value(union css_property_value *value,
+css_parse_font_attribute_value(struct css_property_info *propinfo,
+				union css_property_value *value,
 				unsigned char **string)
 {
 	unsigned char *nstring;
@@ -158,7 +162,9 @@ css_parse_font_attribute_value(union css_property_value *value,
 
 
 static int
-css_parse_text_align_value(union css_property_value *value, unsigned char **string)
+css_parse_text_align_value(struct css_property_info *propinfo,
+			   union css_property_value *value,
+			   unsigned char **string)
 {
 	if (!strncasecmp(*string, "left", 4)) {
 		(*string) += 4;
@@ -206,5 +212,5 @@ css_parse_value(struct css_property_info *propinfo,
 	/* Skip the leading whitespaces. */
 	skip_whitespace(*string);
 
-	return css_value_parsers[propinfo->value_type](value, string);
+	return css_value_parsers[propinfo->value_type](propinfo, value, string);
 }

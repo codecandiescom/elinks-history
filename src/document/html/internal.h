@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.6 2004/04/24 00:57:24 pasky Exp $ */
+/* $Id: internal.h,v 1.7 2004/04/24 14:39:13 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -22,8 +22,6 @@ void ln_break(int n, void (*line_break)(void *), void *f);
 
 /* For parser/parse.c: */
 
-int do_html_select(unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end, void *f);
-void do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end, void *f);
 void process_head(unsigned char *head);
 void put_chrs(unsigned char *start, int len, void (*put_chars)(void *, unsigned char *, int), void *f);
 
@@ -44,5 +42,14 @@ void html_focusable(unsigned char *a);
 void html_skip(unsigned char *a);
 unsigned char *get_target(unsigned char *a);
 void import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len);
+
+/* For parser/forms.c: */
+
+extern unsigned char *eofff;
+extern unsigned char *startf;
+
+extern unsigned char *last_form_tag;
+extern unsigned char *last_form_attr;
+extern unsigned char *last_input_tag;
 
 #endif

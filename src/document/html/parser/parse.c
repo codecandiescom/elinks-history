@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.17 2004/04/24 11:46:50 pasky Exp $ */
+/* $Id: parse.c,v 1.18 2004/04/24 14:39:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 
 #include "document/css/apply.h"
 #include "document/css/parser.h"
+#include "document/html/parser/forms.h"
 #include "document/html/parser/link.h"
 #include "document/html/parser/parse.h"
 #include "document/html/parser/stack.h"
@@ -368,14 +369,12 @@ void html_blockquote(unsigned char *);
 void html_body(unsigned char *);
 void html_bold(unsigned char *);
 void html_br(unsigned char *);
-void html_button(unsigned char *);
 void html_center(unsigned char *);
 void html_dd(unsigned char *);
 void html_dl(unsigned char *);
 void html_dt(unsigned char *);
 void html_fixed(unsigned char *);
 void html_font(unsigned char *);
-void html_form(unsigned char *);
 void html_frame(unsigned char *);
 void html_frameset(unsigned char *);
 void html_h1(unsigned char *);
@@ -386,16 +385,13 @@ void html_h5(unsigned char *);
 void html_h6(unsigned char *);
 void html_head(unsigned char *);
 void html_hr(unsigned char *);
-void html_input(unsigned char *);
 void html_italic(unsigned char *);
 void html_li(unsigned char *);
 void html_linebrk(unsigned char *);
 void html_noframes(unsigned char *);
 void html_ol(unsigned char *);
-void html_option(unsigned char *);
 void html_p(unsigned char *);
 void html_pre(unsigned char *);
-void html_select(unsigned char *);
 void html_skip(unsigned char *);
 void html_span(unsigned char *);
 void html_style(unsigned char *);
@@ -403,7 +399,6 @@ void html_subscript(unsigned char *);
 void html_superscript(unsigned char *);
 void html_table(unsigned char *);
 void html_td(unsigned char *);
-void html_textarea(unsigned char *);
 void html_th(unsigned char *);
 void html_title(unsigned char *);
 void html_tr(unsigned char *);

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.74 2003/09/15 21:11:00 jonas Exp $ */
+/* $Id: tables.c,v 1.75 2003/09/15 21:11:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1482,13 +1482,15 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 	}
 }
 
-#define draw_frame_vline(term, xx, yy, ii, jj)				\
-{									\
-	if (V_LINE_X(term, (ii), (jj)) >= 0) {				\
-		xset_vchars((term)->p, (xx), (yy), (term)->r_heights[(jj)], \
-			    vline_table[V_LINE(term, (ii), (jj))],		\
-			    par_format.bgcolor, SCREEN_ATTR_FRAME);	\
-	}								\
+static inline void
+draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
+		 int i, int j)
+{
+	if (V_LINE_X(table, i, j) >= 0) {
+		xset_vchars(table->p, x, y, table->r_heights[j],
+			    vline_table[V_LINE(table, i, j)],
+			    par_format.bgcolor, SCREEN_ATTR_FRAME);
+	}
 }
 
 static void
@@ -1586,7 +1588,7 @@ cont2:
 				if (w >= 0) {
 					draw_frame_point(t, frame, cx, cy, i, j);
 					if (j < t->y)
-						draw_frame_vline(t, cx, cy + 1, i, j);
+						draw_frame_vline(t, frame, cx, cy + 1, i, j);
 					cx++;
 				}
 
@@ -1597,7 +1599,7 @@ cont2:
 			if (fr) {
 				draw_frame_point(t, frame, cx, cy, i, j);
 				if (j < t->y)
-					draw_frame_vline(t, cx, cy + 1, i, j);
+					draw_frame_vline(t, frame, cx, cy + 1, i, j);
 				cx++;
 			}
 
@@ -1608,7 +1610,7 @@ cont2:
 				if ((i > 0 && i < t->x && get_vline_width(t, i) >= 0)
 				    || (i == 0 && fl)
 				    || (i == t->x && fr)) {
-					draw_frame_vline(t, cx, cy, i, j);
+					draw_frame_vline(t, frame, cx, cy, i, j);
 					cx++;
 				}
 				if (i < t->x) cx += t->w_c[i];

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.221 2004/06/14 10:16:27 zas Exp $ */
+/* $Id: link.c,v 1.222 2004/06/14 13:16:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,6 +356,7 @@ next_in_view(struct document_view *doc_view, int current, int direction,
 	     void (*cntr)(struct document_view *, struct link *))
 {
 	struct document *document;
+	struct view_state *vs;
 	int start, end = 0;
 	int y, height;
 
@@ -364,30 +365,31 @@ next_in_view(struct document_view *doc_view, int current, int direction,
 
 	document = doc_view->document;
 	start = document->nlinks - 1;
-	height = doc_view->vs->y + doc_view->box.height;
+	vs = doc_view->vs;
+	height = vs->y + doc_view->box.height;
 
-	for (y = int_max(0, doc_view->vs->y);
+	for (y = int_max(0, vs->y);
 	     y < int_min(height, document->height);
 	     y++) {
 		if (document->lines1[y])
 			int_upper_bound(&start, document->lines1[y]
 					       - document->links);
 
-		if (doc_view->document->lines2[y])
+		if (document->lines2[y])
 			int_lower_bound(&end, document->lines2[y]
 					     - document->links);
 	}
 
 	while (current >= start && current <= end) {
 		if (fn(doc_view, &document->links[current])) {
-			doc_view->vs->current_link = current;
+			vs->current_link = current;
 			if (cntr) cntr(doc_view, &document->links[current]);
 			return 1;
 		}
 		current += direction;
 	}
 
-	doc_view->vs->current_link = -1;
+	vs->current_link = -1;
 	return 0;
 }
 

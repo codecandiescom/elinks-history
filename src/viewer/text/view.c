@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.603 2004/10/09 23:31:48 miciah Exp $ */
+/* $Id: view.c,v 1.604 2004/10/09 23:36:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -846,6 +846,8 @@ send_to_frame(struct session *ses, struct term_event *ev)
 
 	if (status == FRAME_EVENT_REFRESH)
 		refresh_view(ses, doc_view, 0);
+	else
+		print_screen_status(ses);
 
 	return status;
 }
@@ -1045,10 +1047,7 @@ send_event(struct session *ses, struct term_event *ev)
 #endif /* CONFIG_MOUSE */
 
 	/* ses may disappear ie. in close_tab() */
-	if (ses) {
-		ses->kbdprefix.repeat_count = 0;
-		print_screen_status(ses);
-	}
+	if (ses) ses->kbdprefix.repeat_count = 0;
 }
 
 enum frame_event_status

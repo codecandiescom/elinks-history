@@ -1,3 +1,124 @@
+Tue Jul  8 19:04:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	Simplify mailto subject handling even though it seems not to be
+	correctly used.  
+
+Tue Jul  8 18:46:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, user.c, user.h:
+
+	Knock out more 'url' util users.  
+
+Tue Jul  8 18:00:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	#include POST_CHAR from the right place.  
+
+Tue Jul  8 15:31:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Never mind the segfaults .. here come the fix.  
+
+Tue Jul  8 15:10:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Pep up the cookie loading code to be less boring. Test return
+	values.  
+
+Tue Jul  8 13:54:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Get rid of gotos in allocation failure code path making it slower
+	but more readable.  
+
+Tue Jul  8 13:50:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Free the struct in free_cookie().  
+
+Tue Jul  8 13:49:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Generalize and populate usage of cleanup_cookies().  
+
+Tue Jul  8 13:04:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Fix bad domain and server matching introduced in last patch.  
+
+Tue Jul  8 12:56:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Complete uri usage in cookie land.  
+
+Tue Jul  8 12:39:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, cookies/cookies.h, protocol/http/http.c:
+
+	Prepare for the uri take over in cookie land. Fix some untested
+	return values.  
+
+Tue Jul  8 12:23:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h, url.h:
+
+	Move end_of_dir() to uri header.  
+
+Tue Jul  8 12:18:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/backend/common.c, mime/backend/common.h,
+	mime/backend/default.c, sched/connection.c:
+
+	Remove some #includes of protocol/url.h.  
+
+Tue Jul  8 02:25:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.h, http/http.c:
+
+	Complete the struct uri take over in the http backend.  
+
+Tue Jul  8 02:01:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Struct uri usage: Revenge of the buggy servers.  
+
+Tue Jul  8 01:52:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	More struct uri usage.  
+
+Tue Jul  8 01:24:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, cookies/cookies.h, protocol/http/http.c:
+
+	Convert send_cookies() to use struct uri.  
+
+Tue Jul  8 00:02:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Better sanity checking in http_send_header() + small cleanups.  
+	Generalize adding hostname to header so IPv6 are correctly handled
+	for REFERER_SAME_URL.  
+
+Mon Jul  7 22:27:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Fix leak triggered by `elinks --dump localhost:8080`.  
+
 Mon Jul  7 20:13:25 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/: kbdbind.c, kbdbind.h:

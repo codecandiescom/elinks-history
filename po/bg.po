@@ -169,6 +169,7 @@ msgid ""
 "Delete bookmark \"%s\"?\n"
 "\n"
 "URL: \"%s\""
+msgstr ""
 
 #: src/bookmarks/dialogs.c:610
 msgid "Bookmark manager"
@@ -3782,13 +3783,13 @@ msgstr "Колони"
 
 #: src/dialogs/options.c:306
 msgid "Rows"
+msgstr "Редове"
+
 #. Infinite loop prevention.
 #: src/lowlevel/select.c:346
 #, c-format
 msgid "%d select() failures."
 msgstr "%d select() пропада."
-
-msgstr "Редове"
 
 #: src/globhist/dialogs.c:140
 msgid "Search history"

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.309 2004/07/23 15:30:52 zas Exp $ */
+/* $Id: http.c,v 1.310 2004/07/23 15:42:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -829,8 +829,9 @@ read_http_data_done(struct connection *conn)
 
 /* Returns:
  * -1 on error
- * 0 if nothing left to do
- * 1 if more to read */
+ * 0 if more to read
+ * 1 if done
+ */
 static int
 read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 {
@@ -856,7 +857,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 				kill_buffer_data(rb, l);
 				if (l <= 2) {
 					/* Empty line. */
-					return 0;
+					return 1;
 				}
 				continue;
 			}
@@ -943,10 +944,10 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 	}
 
 	/* More to read. */
-	return 1;
+	return 0;
 }
 
-/* Returns 1 if more data, 0 if done. */
+/* Returns 0 if more data, 1 if done. */
 static int
 read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 {
@@ -974,10 +975,10 @@ read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 	kill_buffer_data(rb, len);
 
 	if (!info->length && !rb->close) {
-		return 0;
+		return 1;
 	}
 
-	return 1;
+	return 0;
 }
 
 static void
@@ -1010,10 +1011,10 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 		abort_conn_with_state(conn, S_HTTP_ERROR);
 		break;
 	case 0:
-		read_http_data_done(conn);
+		read_more_http_data(conn, rb);
 		break;
 	case 1:
-		read_more_http_data(conn, rb);
+		read_http_data_done(conn);
 		break;
 	default:
 		INTERNAL("Unexpected return value: %d", ret);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.308 2004/07/22 22:04:16 zas Exp $ */
+/* $Id: download.c,v 1.309 2004/07/22 22:07:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,8 +245,10 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 		file_download->download.prg->seek = 0;
 		/* This is exclusive with the prealloc, thus we can perform
 		 * this in front of that thing safely. */
-		if (lseek(file_download->handle, file_download->last_pos, SEEK_SET) < 0)
-			goto write_error;
+		if (lseek(file_download->handle, file_download->last_pos, SEEK_SET) < 0) {
+			download_error_dialog(file_download, errno);
+			return 0;
+		}
 	}
 
 	foreach (frag, cached->frag) {
@@ -268,23 +270,24 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 					   file_download->stat.prg
 					   ? file_download->stat.prg->size
 					   : cached->length);
-			if (*h == -1) goto write_error;
+			if (*h == -1) {
+				download_error_dialog(file_download, errno);
+				return 0;
+			}
 			set_bin(*h);
 		}
 #endif
 
 		w = safe_write(*h, frag->data + remain, frag->length - remain);
-		if (w == -1) goto write_error;
+		if (w == -1) {
+			download_error_dialog(file_download, errno);
+			return 0;
+		}
 
 		file_download->last_pos += w;
 	}
 
 	return 1;
-
-write_error:
-	download_error_dialog(file_download, errno);
-
-	return 0;
 }
 
 static void

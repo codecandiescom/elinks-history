@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.139 2003/06/21 12:12:51 zas Exp $ */
+/* $Id: http.c,v 1.140 2003/06/21 12:26:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1004,6 +1004,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 				continue;
 			}
 		}
+		break;
 	}
 
 read_more:

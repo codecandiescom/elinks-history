@@ -168,7 +168,6 @@ msgid "Clock"
 msgstr "Óra"
 
 #: src/bfu/leds.c:75
-#, fuzzy
 msgid "Digital clock in the status bar."
 msgstr "Digitális óra a státuszsorban."
 
@@ -180,7 +179,6 @@ msgid "Enable"
 msgstr "Engedélyezés"
 
 #: src/bfu/leds.c:81
-#, fuzzy
 msgid ""
 "Whether to display a digital clock in the status bar.\n"
 "Note that the LED indicators must be enabled for this\n"
@@ -190,14 +188,13 @@ msgstr ""
 "és az idõzítõnek be kell lenni kapcsolva hogy az óra megjelenhessen."
 
 #: src/bfu/leds.c:87
-#, fuzzy
 msgid ""
 "Whether to display a digital clock in the status bar.\n"
 "Note that the LED indicators (DISABLED) must be enabled\n"
 "for this to take any effect."
 msgstr ""
 "Megjelenjen-e a digitális óra a státuszsorban. Megjegyzés: a LED-eknek,\n"
-"és az idõzítõnek be kell lenni kapcsolva hogy az óra megjelenhessen."
+"(LETILTVA) és az idõzítõnek be kell lenni kapcsolva hogy az óra megjelenhessen."
 
 #: src/bfu/leds.c:92
 msgid "Format"
@@ -233,9 +230,8 @@ msgid "LED indicators"
 msgstr "LED állapotjelzõk"
 
 #: src/bfu/menu.c:698
-#, fuzzy
 msgid "Search menu/"
-msgstr "Keresés"
+msgstr "Keresés menü"
 
 #: src/bookmarks/backend/xbel.c:387 src/bookmarks/backend/xbel.c:408
 msgid "No title"
@@ -447,7 +443,7 @@ msgstr "Túl sok paraméter"
 
 #: src/config/cmdline.c:300
 msgid "Remote method not supported"
-msgstr ""
+msgstr "Távoli metódus nem támogatott"
 
 #: src/config/cmdline.c:352
 msgid "Template option folder"
@@ -494,7 +490,7 @@ msgstr ""
 
 #: src/config/cmdline.c:613
 msgid "Name of directory with configuration file"
-msgstr ""
+msgstr "A konfigurációs fájlt tartalmazó könyvtár neve"
 
 #: src/config/cmdline.c:615
 msgid ""
@@ -541,7 +537,7 @@ msgstr "Az ismeretlen dokumentumok alapértelmezett MIME típusa."
 
 #: src/config/cmdline.c:636
 msgid "Ignore user-defined keybindings"
-msgstr ""
+msgstr "A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
 
 #: src/config/cmdline.c:638
 msgid ""
@@ -549,6 +545,9 @@ msgid ""
 "file. It forces use of default keybindings and will reset\n"
 "user-defined ones on save."
 msgstr ""
+"Ha be van kapcsolva, akkor a felhasználó által definiált billentyûkombinációk\n"
+"nem lesznek aktívak, visszaáll az alapértelmezett, és mentéskor megsemmisülnek\n"
+"az egyedi kombinációk."
 
 #: src/config/cmdline.c:642
 msgid "Write formatted version of given URL to stdout"
@@ -713,8 +712,7 @@ msgstr ""
 
 #: src/config/cmdline.c:723
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/cmdline.c:725
 msgid ""
@@ -764,7 +762,7 @@ msgstr ""
 
 #: src/config/cmdline.c:752
 msgid "Verbose level"
-msgstr ""
+msgstr "Üzenetek részletessége"
 
 #: src/config/cmdline.c:754
 msgid ""
@@ -774,6 +772,11 @@ msgid ""
 "\t1 means show serious errors and warnings\n"
 "\t2 means show all messages\n"
 msgstr ""
+"A program indulásakor és futása közben megjelenõ üzenetek\n"
+"részletességének beállítása:\n"
+"\t0 - csak a súlyos hibaüzenetek jelenjenek meg\n"
+"\t1 - a súlyos hibaüzenetek, és a figyelmeztetések is jelenjenek\n"
+"\t2 - az összes üzenet jelenjen meg\n"
 
 #: src/config/cmdline.c:760
 msgid "Print version information and exit"
@@ -1135,8 +1138,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:491
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:492
 msgid "Go to the homepage"
@@ -1243,32 +1245,26 @@ msgid "Move to the start of the document"
 msgstr "Ugrás a dokumentum elejére"
 
 #: src/config/kbdbind.c:521
-#, fuzzy
 msgid "Move one link down"
 msgstr "Ugrás egy linkkel feljebb"
 
 #: src/config/kbdbind.c:522
-#, fuzzy
 msgid "Move one link left"
 msgstr "Ugrás egy linkkel feljebb"
 
 #: src/config/kbdbind.c:523
-#, fuzzy
 msgid "Move to the next link"
-msgstr "Ugrás a következõ elemre"
+msgstr "Ugrás a következõ linkre"
 
 #: src/config/kbdbind.c:524
-#, fuzzy
 msgid "Move to the previous link"
-msgstr "Ugrás az elõzõ elemre"
+msgstr "Ugrás az elõzõ linkre"
 
 #: src/config/kbdbind.c:525
-#, fuzzy
 msgid "Move one link right"
-msgstr "Kurzor mozgatása jobbra"
+msgstr "Ugrás egy linkkel jobbra"
 
 #: src/config/kbdbind.c:526
-#, fuzzy
 msgid "Move one link up"
 msgstr "Ugrás egy linkkel feljebb"
 
@@ -1334,7 +1330,7 @@ msgstr "Az aktuális lap újrarajzolása"
 
 #: src/config/kbdbind.c:542
 msgid "Reset form items to their initial values"
-msgstr ""
+msgstr "Az ûrlap mezõinek beállítása kezdeti értékükre"
 
 #: src/config/kbdbind.c:543
 msgid "Show information about the currently used resources"
@@ -1739,8 +1735,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:99
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:105
@@ -2012,8 +2007,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:230
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:233 src/dialogs/options.c:169
 msgid "Underline"
@@ -2029,8 +2023,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:240
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:242
 msgid "Number links"
@@ -2077,8 +2070,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:273
 msgid "Scrolling"
@@ -2138,8 +2130,7 @@ msgstr "Kis/nagybetû érzékenység"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr ""
-"A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
+msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
 #: src/config/options.inc:303 src/config/options.inc:310
 msgid "Regular expressions"
@@ -2292,8 +2283,7 @@ msgstr ""
 
 #: src/config/options.inc:388
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:390
 msgid ""
@@ -3083,8 +3073,7 @@ msgid "Local CGI specific options. (DISABLED)"
 msgstr "Helyi CGI-vel kapcsolatos beállítások. (LETILTVA)"
 
 #: src/config/options.inc:818
-msgid ""
-"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
 "elválasztva. (LETILTVA)"
@@ -5108,8 +5097,7 @@ msgstr "Ukrán"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -config-dir set to %s, but could not create directory %s."
+msgid "Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -6295,5 +6283,3 @@ msgstr "Mentési hiba"
 msgid "Error writing to file"
 msgstr "Hiba a fájl irása közben"
 
-#~ msgid "Move downwards one link"
-#~ msgstr "Ugrás egy linkkel lentebb"

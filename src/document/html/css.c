@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: css.c,v 1.5 2004/01/17 07:43:07 jonas Exp $ */
+/* $Id: css.c,v 1.6 2004/01/17 07:49:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,10 +196,14 @@ css_parse_value(enum css_decl_valtype valtype, union css_decl_value *value,
 		}
 
 		*string = nstring;
-
-		/* Weights can run from 100 to 900. If 100 is normal and we
-		 * favor normal size by letting it run to 500, bold is > 500 */
-		if (weight > 500) value->font_attribute |= AT_BOLD;
+		/* The font weight(s) have values between 100 to 900.  These
+		 * values form an ordered sequence, where each number indicates
+		 * a weight that is at least as dark as its predecessor.
+		 *
+		 * normal -> Same as '400'.  bold Same as '700'.
+		 */
+		int_bounds(&weight, 100, 900);
+		if (weight >= 700) value->font_attribute |= AT_BOLD;
 		return 1;
 	}
 

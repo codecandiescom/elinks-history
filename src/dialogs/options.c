@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.82 2003/10/22 19:24:46 jonas Exp $ */
+/* $Id: options.c,v 1.83 2003/10/24 17:04:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,13 +110,13 @@ terminal_options_ok(void *p)
 }
 
 static int
-terminal_options_save(struct dialog_data *dlg,
+terminal_options_save(struct dialog_data *dlg_data,
 		      struct widget_data *some_useless_info_button)
 {
-	update_dialog_data(dlg, some_useless_info_button);
-	terminal_options_ok(dlg->dlg->udata);
+	update_dialog_data(dlg_data, some_useless_info_button);
+	terminal_options_ok(dlg_data->dlg->udata);
 	if (!get_opt_int_tree(cmdline_options, "anonymous"))
-	        write_config(dlg->win->term);
+	        write_config(dlg_data->win->term);
         return 0;
 }
 
@@ -141,43 +141,43 @@ static unsigned char *td_labels[] = {
 
 /* Stolen checkbox_list_fn(). Code duplication forever. */
 static void
-terminal_options_fn(struct dialog_data *dlg)
+terminal_options_fn(struct dialog_data *dlg_data)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = 0;
 
 	checkboxes_width(term, 1, td_labels, &min, &max);
-	buttons_width(term, dlg->items + dlg->n - 3, 3, &min, &max);
+	buttons_width(term, dlg_data->items + dlg_data->n - 3, 3, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
 	int_bounds(&w, 5, term->x - 2 * DIALOG_LB);
 
 	rw = 0;
-	dlg_format_checkboxes(NULL, term, 1, dlg->items, dlg->n - 3, 0, &y, w,
+	dlg_format_checkboxes(NULL, term, 1, dlg_data->items, dlg_data->n - 3, 0, &y, w,
 			      &rw, td_labels);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items + dlg->n - 3, 3, 0, &y, w,
+	dlg_format_buttons(NULL, term, dlg_data->items + dlg_data->n - 3, 3, 0, &y, w,
 			   &rw, AL_CENTER);
 
 	w = rw;
-	dlg->xw = rw + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
+	dlg_data->xw = rw + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
 
-	draw_dlg(dlg);
+	center_dlg(dlg_data);
+	draw_dlg(dlg_data);
 
-	y = dlg->y + DIALOG_TB + 1;
-	dlg_format_checkboxes(term, term, 1, dlg->items, dlg->n - 3,
-			      dlg->x + DIALOG_LB, &y, w, NULL,
+	y = dlg_data->y + DIALOG_TB + 1;
+	dlg_format_checkboxes(term, term, 1, dlg_data->items, dlg_data->n - 3,
+			      dlg_data->x + DIALOG_LB, &y, w, NULL,
 			      td_labels);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items + dlg->n - 3, 3,
-			   dlg->x + DIALOG_LB, &y, w, &rw,
+	dlg_format_buttons(term, term, dlg_data->items + dlg_data->n - 3, 3,
+			   dlg_data->x + DIALOG_LB, &y, w, &rw,
 			   AL_CENTER);
 }
 
@@ -189,37 +189,37 @@ terminal_options_fn(struct dialog_data *dlg)
 
 #define TERMOPT_WIDGET_SIZE (TERMOPT_WIDGETS * sizeof(struct widget))
 
-#define set_term_opt_checkbox(dlg, pos, groupid, groupnum, dataz)	\
+#define set_term_opt_checkbox(dlg, n, groupid, groupnum, dataz)		\
 	do {								\
-		(dlg)->items[(pos)].type = D_CHECKBOX;			\
-		(dlg)->items[(pos)].gid = (groupid);			\
-		(dlg)->items[(pos)].gnum = (groupnum);			\
-		(dlg)->items[(pos)].dlen = sizeof(int);			\
-		(dlg)->items[(pos)].data = (unsigned char *) &(dataz);	\
-		(pos)++;						\
+		(dlg)->items[n].type = D_CHECKBOX;			\
+		(dlg)->items[n].gid = (groupid);			\
+		(dlg)->items[n].gnum = (groupnum);			\
+		(dlg)->items[n].dlen = sizeof(int);			\
+		(dlg)->items[n].data = (unsigned char *) &(dataz);	\
+		(n)++;						\
 	} while (0)
 
-#define set_term_opt_button(dlg, pos, key, handler, button_text)	\
+#define set_term_opt_button(dlg, n, key, handler, button_text)		\
 	do {								\
-		(dlg)->items[(pos)].type = D_BUTTON;			\
-		(dlg)->items[(pos)].gid = (key);			\
-		(dlg)->items[(pos)].fn = (handler);			\
-		(dlg)->items[(pos)].text = (button_text);		\
-		(pos)++;						\
+		(dlg)->items[n].type = D_BUTTON;			\
+		(dlg)->items[n].gid = (key);				\
+		(dlg)->items[n].fn = (handler);				\
+		(dlg)->items[n].text = (button_text);			\
+		(n)++;						\
 	} while (0)
 
 void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct termopt_hop *termopt_hop;
-	struct dialog *d;
-	int pos = 0;
+	struct dialog *dlg;
+	int n = 0;
 
 	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
 	if (!termopt_hop) return;
 
-	d = mem_calloc(1, sizeof(struct dialog) + TERMOPT_WIDGET_SIZE);
-	if (!d) {
+	dlg = mem_calloc(1, sizeof(struct dialog) + TERMOPT_WIDGET_SIZE);
+	if (!dlg) {
 		mem_free(termopt_hop);
 		return;
 	}
@@ -234,38 +234,38 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop->underline = get_opt_int_tree(term->spec, "underline");
 	termopt_hop->utf_8_io = get_opt_int_tree(term->spec, "utf_8_io");
 
-	d->title = _("Terminal options", term);
-	d->fn = terminal_options_fn;
-	d->udata = termopt_hop;
-	d->refresh = (void (*)(void *)) terminal_options_ok;
-	d->refresh_data = termopt_hop;
+	dlg->title = _("Terminal options", term);
+	dlg->fn = terminal_options_fn;
+	dlg->udata = termopt_hop;
+	dlg->refresh = (void (*)(void *)) terminal_options_ok;
+	dlg->refresh_data = termopt_hop;
 
-	set_term_opt_checkbox(d, pos, 1, TERM_DUMB, termopt_hop->type);
-	set_term_opt_checkbox(d, pos, 1, TERM_VT100, termopt_hop->type);
-	set_term_opt_checkbox(d, pos, 1, TERM_LINUX, termopt_hop->type);
-	set_term_opt_checkbox(d, pos, 1, TERM_KOI8, termopt_hop->type);
+	set_term_opt_checkbox(dlg, n, 1, TERM_DUMB, termopt_hop->type);
+	set_term_opt_checkbox(dlg, n, 1, TERM_VT100, termopt_hop->type);
+	set_term_opt_checkbox(dlg, n, 1, TERM_LINUX, termopt_hop->type);
+	set_term_opt_checkbox(dlg, n, 1, TERM_KOI8, termopt_hop->type);
 
-	set_term_opt_checkbox(d, pos, 2, COLOR_MODE_MONO, termopt_hop->colors);
-	set_term_opt_checkbox(d, pos, 2, COLOR_MODE_16, termopt_hop->colors);
+	set_term_opt_checkbox(dlg, n, 2, COLOR_MODE_MONO, termopt_hop->colors);
+	set_term_opt_checkbox(dlg, n, 2, COLOR_MODE_16, termopt_hop->colors);
 #ifdef USE_256_COLORS
-	set_term_opt_checkbox(d, pos, 2, COLOR_MODE_256, termopt_hop->colors);
+	set_term_opt_checkbox(dlg, n, 2, COLOR_MODE_256, termopt_hop->colors);
 #endif
 
-	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->m11_hack);
-	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->restrict_852);
-	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->block_cursor);
-	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->trans);
-	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->underline);
-	set_term_opt_checkbox(d, pos, 0, 0, termopt_hop->utf_8_io);
+	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->m11_hack);
+	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->restrict_852);
+	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->block_cursor);
+	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->trans);
+	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->underline);
+	set_term_opt_checkbox(dlg, n, 0, 0, termopt_hop->utf_8_io);
 
-	set_term_opt_button(d, pos, B_ENTER, ok_dialog, _("OK", term));
-	set_term_opt_button(d, pos, B_ENTER, terminal_options_save, _("Save", term));
-	set_term_opt_button(d, pos, B_ESC, cancel_dialog, _("Cancel", term));
+	set_term_opt_button(dlg, n, B_ENTER, ok_dialog, _("OK", term));
+	set_term_opt_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term));
+	set_term_opt_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term));
 
-	assert(pos == TERMOPT_WIDGETS);
-	d->items[pos].type = D_END;
+	assert(n == TERMOPT_WIDGETS);
+	dlg->items[n].type = D_END;
 
-	do_dialog(term, d, getml(d, termopt_hop, NULL));
+	do_dialog(term, dlg, getml(dlg, termopt_hop, NULL));
 }
 
 #ifdef ENABLE_NLS
@@ -320,47 +320,55 @@ do_resize_terminal(struct terminal *term)
 void
 dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct dialog *d;
+	struct dialog *dlg;
 	int x = term->x > 999 ? 999 : term->x;
 	int y = term->y > 999 ? 999 : term->y;
+	int n = 0;
 
 	sprintf(x_str, "%d", x);
 	sprintf(y_str, "%d", y);
 
-	d = mem_calloc(1, sizeof(struct dialog) + 5 * sizeof(struct widget));
-	if (!d) return;
+#define RESIZE_DLG_SIZE 4
+	dlg = mem_calloc(1, sizeof(struct dialog)
+			    + (RESIZE_DLG_SIZE + 1) * sizeof(struct widget));
+	if (!dlg) return;
 
-	d->title = _("Resize ~terminal", term);
-	d->fn = group_fn;
-	d->udata = resize_texts;
-	d->refresh = (void (*)(void *)) do_resize_terminal;
-	d->refresh_data = term;
+	dlg->title = _("Resize ~terminal", term);
+	dlg->fn = group_fn;
+	dlg->udata = resize_texts;
+	dlg->refresh = (void (*)(void *)) do_resize_terminal;
+	dlg->refresh_data = term;
 
-	d->items[0].type = D_FIELD;
-	d->items[0].dlen = 4;
-	d->items[0].data = x_str;
-	d->items[0].fn = check_number;
-	d->items[0].gid = 1;
-	d->items[0].gnum = 999;
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].dlen = 4;
+	dlg->items[n].data = x_str;
+	dlg->items[n].fn = check_number;
+	dlg->items[n].gid = 1;
+	dlg->items[n].gnum = 999;
+	n++;
 
-	d->items[1].type = D_FIELD;
-	d->items[1].dlen = 4;
-	d->items[1].data = y_str;
-	d->items[1].fn = check_number;
-	d->items[1].gid = 1;
-	d->items[1].gnum = 999;
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].dlen = 4;
+	dlg->items[n].data = y_str;
+	dlg->items[n].fn = check_number;
+	dlg->items[n].gid = 1;
+	dlg->items[n].gnum = 999;
+	n++;
 
-	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ENTER;
-	d->items[2].fn = ok_dialog;
-	d->items[2].text = _("OK", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = ok_dialog;
+	dlg->items[n].text = _("OK", term);
+	n++;
 
-	d->items[3].type = D_BUTTON;
-	d->items[3].gid = B_ESC;
-	d->items[3].fn = cancel_dialog;
-	d->items[3].text = _("Cancel", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].fn = cancel_dialog;
+	dlg->items[n].text = _("Cancel", term);
+	n++;
 
-	d->items[4].type = D_END;
+	assert(n == RESIZE_DLG_SIZE);
+	dlg->items[n].type = D_END;
 
-	do_dialog(term, d, getml(d, NULL));
+	do_dialog(term, dlg, getml(dlg, NULL));
 }

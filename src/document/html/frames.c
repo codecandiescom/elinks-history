@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.1 2003/07/04 09:40:00 zas Exp $ */
+/* $Id: frames.c,v 1.2 2003/07/04 09:45:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,6 @@ add_frameset_entry(struct frameset_desc *fsd,
 struct frameset_desc *
 create_frameset(struct f_data *fda, struct frameset_param *fp)
 {
-	int i;
 	struct frameset_desc *fd;
 
 	assert(fp);
@@ -61,9 +60,13 @@ create_frameset(struct f_data *fda, struct frameset_param *fp)
 	fd->x = fp->x;
 	fd->y = fp->y;
 
-	for (i = 0; i < fd->n; i++) {
-		fd->f[i].xw = fp->xw[i % fp->x];
-		fd->f[i].yw = fp->yw[i / fp->x];
+	{
+		register int i;
+
+		for (i = 0; i < fd->n; i++) {
+			fd->f[i].xw = fp->xw[i % fp->x];
+			fd->f[i].yw = fp->yw[i / fp->x];
+		}
 	}
 
 	if (fp->parent) add_frameset_entry(fp->parent, fd, NULL, NULL);
@@ -174,7 +177,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 	      struct document_options *op, int depth)
 {
 	struct document_options o;
-	int j, n;
+	register int j, n;
 
 	assert(ses && fsd && op);
 
@@ -200,7 +203,8 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 			else if (fsd->f[n].name) {
 				fdc = format_frame(ses, fsd->f[n].name, &o, depth);
 				if (fdc && fdc->f_data && fdc->f_data->frame)
-					format_frames(ses, fdc->f_data->frame_desc, &o, depth + 1);
+					format_frames(ses, fdc->f_data->frame_desc,
+						      &o, depth + 1);
 			}
 			o.xp += o.xw + 1;
 			n++;
@@ -208,4 +212,3 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 		o.yp += o.yw + 1;
 	}
 }
-

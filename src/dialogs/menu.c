@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.50 2002/11/29 19:27:03 zas Exp $ */
+/* $Id: menu.c,v 1.51 2002/11/30 20:41:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,8 +208,13 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct menu_item *mi = NULL;
 	int n = 0;
 
-	foreach(l, ses->history) {
+	foreach (l, ses->history) {
 		unsigned char *url, *pc;
+
+		if (!n) {
+			n++;
+			continue;
+		}
 
 		if (!mi) {
 			mi = new_menu(FREE_LIST | FREE_TEXT);
@@ -223,11 +228,11 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 
 			add_to_menu(&mi, url, "", "", MENU_FUNC go_backwards,
 			    	    (void *) n, 0);
-			n++;
 		}
+		n++;
 	}
 
-	if (!n)
+	if (n <= 1)
 		do_menu(term, no_hist_menu, ses);
 	else
 		do_menu(term, mi, ses);

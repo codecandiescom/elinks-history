@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.171 2003/07/22 10:57:07 zas Exp $ */
+/* $Id: parser.c,v 1.172 2003/07/22 13:35:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2554,7 +2554,6 @@ struct hlink {
 */
 };
 
-#if 0
 struct lt_default_name {
 	enum hlink_type type;
 	unsigned char *str;
@@ -2578,9 +2577,9 @@ static struct lt_default_name lt_names[] = {
 	{ LT_HELP, "help" },
 	{ LT_SEARCH, "search" },
 	{ LT_BOOKMARK, "bookmark" },
-	{ LT_ALTERNATE_LANG, "language" },
-	{ LT_ALTERNATE_MEDIA, "media" },
-	{ LT_ALTERNATE_STYLESHEET, "stylesheet-alt" },
+	{ LT_ALTERNATE_LANG, "alt. language" },
+	{ LT_ALTERNATE_MEDIA, "alt. media" },
+	{ LT_ALTERNATE_STYLESHEET, "alt. stylesheet" },
 	{ LT_STYLESHEET, "stylesheet" },
 	{ LT_ALTERNATE, "alternate" },
 	{ LT_COPYRIGHT, "copyright" },
@@ -2589,21 +2588,21 @@ static struct lt_default_name lt_names[] = {
 	{ LT_UNKNOWN, NULL }
 };
 
-/* Search for default name for this link type. */
+/* Search for default name for this link according to its type. */
 static unsigned char *
-get_lt_default_name(enum hlink_type type)
+get_lt_default_name(struct hlink *link)
 {
 	struct lt_default_name *entry = lt_names;
 
+	assert(link);
+
 	while (entry && entry->str) {
-		if (entry->type == type) return entry->str;
+		if (entry->type == link->type) return entry->str;
 		entry++;
 	}
 
 	return "unknown";
 }
-
-#endif
 
 static void
 html_link_clear(struct hlink *link)
@@ -2708,6 +2707,7 @@ static void
 html_link(unsigned char *a)
 {
 	int link_display = get_opt_int("document.html.link_display");
+	unsigned char *name = NULL;
 	struct hlink link;
 
 	if (!link_display) return;
@@ -2719,7 +2719,13 @@ html_link(unsigned char *a)
 	     link.type == LT_STYLESHEET ||
 	     link.type == LT_ALTERNATE_STYLESHEET)) goto free_and_return;
 
-	if (link.name && link.href) {
+	if (link.type != LT_UNKNOWN)
+		/* Give preference to our default names for known types. */
+		name = get_lt_default_name(&link);
+	else
+		name = link.name;
+
+	if (name && link.href) {
 		struct string text;
 
 		if (!init_string(&text)) goto free_and_return;
@@ -2733,7 +2739,7 @@ html_link(unsigned char *a)
 		if (link_display == 1) goto only_title;
 
 		add_to_string(&text, " (");
-		add_to_string(&text, link.name);
+		add_to_string(&text, name);
 
 		if (link_display >= 3 && link.hreflang) {
 			add_to_string(&text, ", ");
@@ -2756,7 +2762,7 @@ only_title:
 		if (text.length)
 			put_link_line("Link: ", text.source, link.href, format.target_base);
 		else
-			put_link_line("Link: ", link.name, link.href, format.target_base);
+			put_link_line("Link: ", name, link.href, format.target_base);
 
 		if (text.source) done_string(&text);
 	}

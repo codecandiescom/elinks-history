@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.55 2002/12/08 13:21:30 pasky Exp $ */
+/* $Id: parser.c,v 1.56 2002/12/09 13:49:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ quoted_value:
 		if (e >= eof) goto end_1;
 		if (*e == quote) goto quoted_value;
 	} else {
-		while (!WHITECHAR(*e) && *e != '>' && *e != '<') e++;
+		while (*e && !WHITECHAR(*e) && *e != '>' && *e != '<') e++;
 		if (e >= eof) goto end_1;
 	}
 

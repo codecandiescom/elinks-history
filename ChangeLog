@@ -1,3 +1,269 @@
+Wed Jul 28 16:25:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* SITES:
+
+	Add link to DEBs of CVS at http://www.miernik.ctnet.pl/debian/ 
+
+Wed Jul 28 16:03:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/menu.c, sched/session.c, terminal/tab.c,
+	terminal/tab.h, terminal/window.c, terminal/window.h:
+
+	Introduce window_handler typedef.  
+
+Wed Jul 28 15:43:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/listbox.c, bfu/menu.c, bfu/text.c,
+	lowlevel/timer.c, osdep/os2/os2.c, osdep/unix/unix.c,
+	terminal/event.c, terminal/event.h, terminal/kbd.c,
+	terminal/mouse.h, viewer/text/view.c:
+
+	struct term_event: Move remaining variables to union.  
+
+Wed Jul 28 15:30:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Check for NULL doc_view in do_mouse_event() and cleanup.  
+
+Wed Jul 28 15:26:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_escape_sequence(): Make it more clear that the event
+	type is changed.  
+
+Wed Jul 28 15:20:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_mouse_handler(): Cleanup handling of clicks outside the
+	mainmenu bar.  
+
+Wed Jul 28 15:15:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	frame_ev_mouse(): Use local @x and @y variables.  
+
+Wed Jul 28 14:58:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/unix/unix.c:
+
+	For helvede. Thanks to miernik for patiently telling me how broken
+	my patches are.  
+
+Wed Jul 28 14:50:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_escape_sequence(): Use local @key and @modifier
+	variables.  
+
+Wed Jul 28 14:39:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	process_queue(): Remove need for l1 label.  
+
+Wed Jul 28 14:37:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	set_kbd_event(): Cleanup.  
+
+Wed Jul 28 14:35:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	process_queue(): Move l2 label code to separate function badly named
+	set_kbd_event().  
+
+Wed Jul 28 14:21:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	process_queue(): Minor simplification.  
+
+Wed Jul 28 13:56:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: os2/os2.c, unix/unix.c:
+
+	Oops some missing users of ev->b was converted 
+
+Wed Jul 28 13:53:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Introduce decode_mouse_position().  
+
+Wed Jul 28 13:37:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_escape_sequence(): Split out mouse escape decoding.  
+
+Wed Jul 28 13:29:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_escape_sequence(): Move the get_esc_code() call
+	after special case.  
+
+Wed Jul 28 13:27:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	get_esc_code(): Return the length of the escape code.  
+
+Wed Jul 28 13:21:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_escape_sequence(): Normalize indentation.  
+
+Wed Jul 28 13:19:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_escape_sequence(): cleanup special case. The switch
+	stretches all the way to the end of the function.  
+
+Wed Jul 28 13:17:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	decode_terminal_escape_sequence(): Write out fake goto label users
+	now return -1. Comment the function.  
+
+Wed Jul 28 13:12:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	process_queue(): Split out decode_terminal_escape_sequence().  
+
+Wed Jul 28 12:25:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/inpfield.c, bfu/menu.c, config/kbdbind.c,
+	viewer/text/form.c, viewer/text/link.c, viewer/text/view.c:
+
+	Use get_kbd_key() int the rest of the EVENT_KBD handlers.  
+
+Wed Jul 28 12:24:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	Use get_kbd_key() at the lower levels.  
+
+Wed Jul 28 12:17:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.h:
+
+	A little clean up and preparation for next patch.  
+
+Wed Jul 28 11:42:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	mouse_text(): Store scroller modifier area in a box and use
+	check_mouse_position(). Note this also means it is only possible to
+	modify the scoller in the right side of the dialog box around the
+	scroller.  
+
+Wed Jul 28 11:22:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	do_mouse_event(): Use check_mouse_position() and elliminate
+	is_in_box() FIXME. When rendering documents we copy the
+	document->option box (and thus x and y members) to the doc_view box
+	so it should be ok but I've added assertions anyway.  
+
+Wed Jul 28 11:02:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Tidy up.  
+
+Wed Jul 28 10:50:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, viewer/text/view.c:
+
+	Use {get,check}_kbd_modifier() for all modifier access.  
+
+Wed Jul 28 10:43:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/menu.c, terminal/event.c,
+	terminal/event.h, viewer/text/link.c, viewer/text/view.c:
+
+	Introduce {get,check}_kbd_modifier() for EVENT_KBD events.  
+
+Wed Jul 28 10:31:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Update comment about mouse button mask.  
+
+Wed Jul 28 10:19:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.h, kbd.c, mouse.h:
+
+	Move the term_event->b member to struct in union. It is now
+	accessible at ev->info.mouse.button 
+
+Wed Jul 28 09:41:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Remove misinforming comments. Questioned by Miciah.  
+
+Wed Jul 28 04:09:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/blacklist.c:
+
+	Now that strlcasecmp() is being used in get_blacklist_entry() NUL
+	terminate the entry->host so -1 usage for automatic length
+	calculation is ok.  
+
+Wed Jul 28 03:36:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	read_select(): Fix buffer overflow by substracting the length of the
+	buffer that has already been read. Reported by Jan Braun
+	<janbraun@gmx.de> on elinks-user Wed, Jul 28, 2004 in
+	<20040728022541.GA25879@fera.kawo2.rwth-aachen.de>.  
+
+Wed Jul 28 02:20:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/info.h, dialogs/menu.h, osdep/newwin.h,
+	util/secsave.h:
+
+	Fix guard names. Declare terminal and session structs to avoid
+	#includes.  
+
+Tue Jul 27 22:53:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	add_uri_command_to_menu(): Make the labels different for each type.  
+
+Tue Jul 27 22:45:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	I recall pasky talking about View being a stripped down version of
+	the tab menu so remove the pass frame URI to external command menu
+	item so that no one will ever notice this feature unless they know
+	the tab menu ;) 
+
+Tue Jul 27 22:41:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	dialogs/menu.h, sched/action.c, viewer/text/link.c:
+
+	Make the external command URI passing use also tab (toplevel) URI.  
+
 Tue Jul 27 22:05:06 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,

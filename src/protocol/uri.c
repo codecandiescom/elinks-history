@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.160 2004/04/07 15:15:05 jonas Exp $ */
+/* $Id: uri.c,v 1.161 2004/04/07 15:22:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -644,7 +644,7 @@ parse_uri:
 	{
 		/* No protocol name */
 		unsigned char *prefix = "file://";
-		unsigned char *ch = url + strcspn(url, ".:/@");
+		unsigned char *ch = newurl + strcspn(newurl, ".:/@");
 		int not_file = 0;
 
 		if (file_exists(newurl)) goto end;
@@ -663,14 +663,14 @@ parse_uri:
 		/* Yes, it would be simpler to make test for IPv6 address first,
 		 * but it would result in confusing mix of ifdefs ;-). */
 
-		if (*ch == '@' || (*ch == ':' && *url != '[')
-		    || !strncasecmp(url, "ftp.", 4)) {
+		if (*ch == '@' || (*ch == ':' && *newurl != '[')
+		    || !strncasecmp(newurl, "ftp.", 4)) {
 			/* Contains user/password/ftp-hostname */
 			prefix = "ftp://";
 			not_file = 1;
 
 #ifdef IPV6
-		} else if (*url == '[' && *ch == ':') {
+		} else if (*newurl == '[' && *ch == ':') {
 			/* Candidate for IPv6 address */
 			unsigned char *bracket2, *colon2;
 
@@ -681,7 +681,7 @@ parse_uri:
 				goto http;
 #endif
 
-		} else if (*url != '.' && *ch == '.') {
+		} else if (*newurl != '.' && *ch == '.') {
 			/* Contains domain name? */
 			unsigned char *host_end, *domain;
 			unsigned char *ipscan;

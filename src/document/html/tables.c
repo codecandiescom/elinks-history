@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.214 2004/06/26 10:33:30 zas Exp $ */
+/* $Id: tables.c,v 1.215 2004/06/26 10:37:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ struct table_cell {
 	unsigned char *end;
 	unsigned char *fragment_id;
 	color_t bgcolor;
-	int mx, my;
+	int col, row;
 	int align;
 	int valign;
 	int group;
@@ -280,8 +280,8 @@ expand_cells(struct table *table, int x, int y)
 					cell->is_spanned = 1;
 					cell->rowspan = cellp->rowspan;
 					cell->colspan = -1;
-					cell->mx = cellp->mx;
-					cell->my = cellp->my;
+					cell->col = cellp->col;
+					cell->row = cellp->row;
 				}
 			}
 		}
@@ -306,8 +306,8 @@ expand_cells(struct table *table, int x, int y)
 					cell->is_spanned = 1;
 					cell->rowspan = -1;
 					cell->colspan = cellp->colspan;
-					cell->mx = cellp->mx;
-					cell->my = cellp->my;
+					cell->col = cellp->col;
+					cell->row = cellp->row;
 				}
 			}
 		}
@@ -677,8 +677,8 @@ qwe:
 
 	p = 1;
 
-	cell->mx = col;
-	cell->my = row;
+	cell->col = col;
+	cell->row = row;
 	cell->is_used = 1;
 	cell->start = en;
 
@@ -742,8 +742,8 @@ qwe:
 		span_cell->is_used = span_cell->is_spanned = 1;
 		span_cell->rowspan = rowspan;
 		span_cell->colspan = colspan;
-		span_cell->mx = col;
-		span_cell->my = row;
+		span_cell->col = col;
+		span_cell->row = row;
 	}
 
 	qqq = table->y;
@@ -754,7 +754,7 @@ qwe:
 			if (!span_cell || span_cell->is_used) {
 				int l, m;
 
-				if (span_cell->mx == col && span_cell->my == row)
+				if (span_cell->col == col && span_cell->row == row)
 					continue;
 
 				for (l = 0; l < k; l++)
@@ -772,8 +772,8 @@ qwe:
 			span_cell->is_used = span_cell->is_spanned = 1;
 			span_cell->rowspan = rowspan;
 			span_cell->colspan = colspan;
-			span_cell->mx = col;
-			span_cell->my = row;
+			span_cell->col = col;
+			span_cell->row = row;
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.182 2004/09/15 23:37:43 pasky Exp $ */
+/* $Id: cache.c,v 1.183 2004/09/27 02:29:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,12 +341,6 @@ add_fragment(struct cache_entry *cached, int offset,
 		if (end_offset > f_end_offset) {
 			/* Overlap - we end further than original fragment. */
 
-			/* Is intersected area same? Truncate it if not, dunno
-			 * why though :). */
-			if (memcmp(f->data + offset - f->offset, data,
-				   f_end_offset - offset))
-				trunc = 1;
-
 			if (end_offset - f->offset <= f->real_length) {
 				/* We fit here, so let's enlarge it by delta of
 				 * old and new end.. */
@@ -364,17 +358,26 @@ add_fragment(struct cache_entry *cached, int offset,
 				break;
 			}
 
-		} else {
-			/* We are subset of original fragment. */
-			if (memcmp(f->data + offset - f->offset, data, length))
-				trunc = 1;
-		}
+		} /* else We are subset of original fragment. */
 
 		/* Copy the stuff over there. */
 		memcpy(f->data + offset - f->offset, data, length);
 
 		remove_overlaps(cached, f, &trunc);
-		if (trunc) truncate_entry(cached, end_offset, 0);
+
+		/* We truncate the entry even if the data contents is the
+		 * same as what we have in the fragment, because that does
+		 * not mean that what is going to follow won't differ, This
+		 * is a serious problem when rendering HTML frame with onload
+		 * snippets - we "guess" the rest of the document here,
+		 * interpret the snippet, then it turns out in the real
+		 * document the snippet is different and we are in trouble.
+		 * 
+		 * Debugging this took me about 1.5 day (really), the diff with
+		 * all the debugging print commands amounted about 20kb (gdb
+		 * wasn't much useful since it stalled the download, de facto
+		 * eliminating the bad behaviour). */
+		truncate_entry(cached, end_offset, 0);
 
 		dump_frags(cached, "add_fragment");
 

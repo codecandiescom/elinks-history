@@ -1,3 +1,378 @@
+Sat Dec 18 23:05:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c, test/malicious_uris.html:
+
+	check_malicious_uri(): Chop trailing dots before checking the TLD.
+	Now the whole thing doesn't go up in flames anymore.  
+
+Sat Dec 18 22:42:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/malicious_uris.html:
+
+	Test cases for malicious URIs.  
+
+Sat Dec 18 21:43:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.inc:
+
+	Typo fix.  
+
+Sat Dec 18 21:38:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	Minor style touches on the malicious URI warning.  
+
+Sat Dec 18 21:37:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	unambiguous_uri -> malicious_uri 
+
+Sat Dec 18 20:45:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, sched/task.c:
+
+	Try to fix bug 382 by alerting the user about misleading and
+	maliciously crafted URIs. It is optional via
+	document.browse.links.warn_malicious; on by default.  
+
+Sat Dec 18 20:36:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	input's parent is form, not input ;-) 
+
+Sat Dec 18 20:31:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/forms.c, document/forms.h,
+	ecmascript/spidermonkey.c:
+
+	Implemented HTMLInputElement DOM object (covers few original
+	JavaScript objects). Reachable through form.<inputname> only now.  
+
+Sat Dec 18 19:53:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Just kill document.html.expand_table_columns.  
+
+Sat Dec 18 19:46:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	s/typeahead text searching/incremental searching/ as someone
+	suggested on #elinks.  
+
+Sat Dec 18 19:22:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, sched/session.c,
+	sched/task.c:
+
+	Replace the fix for bug 559 with a more localized one, since it
+	caused problems with displaying download errors, reported by zas.
+	Now session_is_loading() will use a new cache_entry_is_valid()
+	function to explicitly check if download->cached can be used before
+	passing it to check_incomplete_redirects().  Hella ugly but I don't
+	want to waste more valuable time debugging this load of crap. I
+	might end up starting to rewrite it and I don't think that will be 
+	´ealthy at this point.  
+
+Sat Dec 18 19:12:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	More is_in_progress_state() usage.  
+
+Sat Dec 18 17:47:09 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Dec 18 16:17:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.h:
+
+	Add table->caption_height member that is calculated when calling
+	get_table_heights() by new get_table_caption_height() which is a
+	crude duplication of draw_table_caption(). Fixes bug 572.  
+
+Sat Dec 18 15:54:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/forms.c:
+
+	Some trailing space.  
+
+Sat Dec 18 15:33:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, index.txt, tabs.txt:
+
+	Document the wonders of tabbed browsing.  
+
+Sat Dec 18 15:13:02 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/forms.h, ecmascript/spidermonkey.c:
+
+	Generate the form object only once per form, caching it in
+	form.ecmascript_obj.  
+
+Sat Dec 18 14:25:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	The form object has now the document object as its parent and its
+	methods behave accordingly to that. Fixes unstability on Google
+	News.  
+
+Sat Dec 18 12:38:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	html_special_form_control(): Somehow by cleaning up paskys ugly code
+	this fixes issues bugging at |add_to_list(part->document->forms,
+	init_form())| reported by Neuromancer on #elinks.  
+
+Sat Dec 18 10:53:03 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/document.c:
+
+	Include util/error.h.  
+
+Sat Dec 18 02:33:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	free_task(): Clear ses->loading, so there are no dangling pointers
+	left behind. Fixes the test case in bug 559.  
+
+Sat Dec 18 02:33:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: ecmascript/spidermonkey.c, viewer/text/form.c,
+	viewer/text/form.h:
+
+	Eliminate code duplication in SM's form_submit() and
+	auto_submit_form() by introducing submit_given_form(), which takes a
+	form pointer and submits that form.  
+
+Sat Dec 18 02:22:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	html_(tag|form*) -> html_special_\1, to naming prevent conflicts
+	with HTML element handlers. As suggested by Jonas.  
+
+Sat Dec 18 02:17:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/forms.c:
+
+	Actually free the form controls in done_form().  
+
+Sat Dec 18 02:17:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Cope with NULL fc->form in new_link(). It's a correct condition and
+	we can just take the last encountered form in that case. Explained
+	in a comment. Fixes those nice assertion failures.  
+
+Sat Dec 18 01:48:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Oops. Actually attach form to new form_control.  
+
+Sat Dec 18 01:44:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/forms.c:
+
+	Fixed has_form_submit() so that it actually works - it was returning
+	always 1 since zas' viewer/text/form.c:1.41.  
+
+Sat Dec 18 01:42:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/document.c, document/document.h, document/forms.c,
+	document/forms.h, document/html/internal.h, document/html/parser.c,
+	document/html/parser.h, document/html/renderer.c,
+	document/html/parser/forms.c, document/html/parser/forms.h,
+	ecmascript/spidermonkey.c, formhist/formhist.c,
+	formhist/formhist.h, viewer/text/form.c, viewer/text/form.h,
+	viewer/text/link.c:
+
+	Introducted {struct form}, which now groups {struct form_control}s
+	together based on what form they are members of and it occupies the
+	document.forms list itself. Some redundant fields were removed from
+	form_control, ctrl_num was blasted (it was unused now) and form_num
+	was transformed to {struct form} pointer form. Usage of couple of
+	functions was simplified etc.  
+
+Sat Dec 18 00:45:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/: form.c, form.h:
+
+	Remove now-unused form_state.ctrl_num. form_control.ctrl_num still
+	survives just because it's inconvenient for me to remove it right
+	now, but it will disappear soon.  
+
+Sat Dec 18 00:43:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	fc->form_num + fc->ctrl_num == fc->position 
+
+Sat Dec 18 00:28:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	Reformat a comment.  
+
+Sat Dec 18 00:27:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/Makefile.am, document/document.c,
+	document/forms.c, document/forms.h, document/html/parser/forms.c,
+	ecmascript/spidermonkey.c, formhist/dialogs.c, formhist/formhist.c,
+	formhist/formhist.h, viewer/text/form.c, viewer/text/form.h,
+	viewer/text/link.c, viewer/text/textarea.c, viewer/text/textarea.h:
+
+	Moved struct form_control, has_form_submit() and done_form_control()
+	generic form routines from viewer/text/form.h to document/forms.h.  
+
+Sat Dec 18 00:18:33 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	In add_global_history_item, check whether init_global_history_item 
+	returns NULL.  
+
+Sat Dec 18 00:11:06 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* test/: Makefile.am, backspaces.txt:
+
+	New test-case for backspaces and ASCII mark-up.  
+
+Sat Dec 18 00:06:32 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Whoops, that is _struct_ global_history_item.  
+
+Sat Dec 18 00:04:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Factor the actually allocation and initialisation of the new history
+	item out to the new init_global_history_item.  
+
+Fri Dec 17 23:58:06 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Group the allocation of the new history item's listbox item with the
+	rest of the history item initialisation code.  
+
+Fri Dec 17 23:55:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/forms.c:
+
+	find_form_for_input(): Killed commented out form.num. The number is
+	just offset of the <form> tag start in the HTML part and we can get
+	that anytime easily from html_context.last_form_tag, so no need to
+	carry it around in a struct.  
+
+Fri Dec 17 23:53:42 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	In add_global_history_item, add the new history item to the hash
+	table even if we cannot allocate the box item for it.  
+
+Fri Dec 17 23:52:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/forms.c:
+
+	find_form_for_input(): Description.  
+
+Fri Dec 17 23:51:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/forms.c:
+
+	find_form_for_input(): Sprinkled by few comments.  
+
+Fri Dec 17 23:50:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	In add_global_history_item, drop local variable text, which has been 
+	unused since add_listbox_item stopped taking an argument for the
+	listbox item's label in src/bfu/hierbox.c revision 1.163 (and we
+	stopped passing it, in revision 1.75), which it hadn't used since
+	src/bfu/hierbox.c revision 1.161 when listbox_item->text was
+	superseded by the get_text listbox operation.  
+
+Fri Dec 17 23:49:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/forms.c:
+
+	find_form_for_input(): Killed sa and end_parse label by converting
+	the main stuff to an explicit loop.  
+
+Fri Dec 17 23:47:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/forms.c:
+
+	find_form_for_input(): Changed my mind. Reintroduced end_parse
+	label.  
+
+Fri Dec 17 23:46:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/forms.c:
+
+	find_form_for_input(): Eliminated end_parse label.  
+
+Fri Dec 17 23:44:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/forms.c:
+
+	find_form_for_input(): @i -> @stop_pos.  
+
+Fri Dec 17 23:43:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/forms.c:
+
+	find_form_for_input(): Eliminated sp label.  
+
+Fri Dec 17 23:42:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/forms.c:
+
+	find_form_for_input(): @s -> @pos, @ss -> @tag_start_pos, @lf ->
+	@last_form_tag, @la -> @last_form_attr.  
+
+Fri Dec 17 23:23:52 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inpfield.c:
+
+	When an input line is open and the user clicks outside of it, close
+	the input line and pass the event on to the next window.  
+
+Fri Dec 17 23:20:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	Explain the content of those mysterious lists in struct document.  
+
+Fri Dec 17 23:15:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	FORM_CONTROL -> FORM 
+
+Fri Dec 17 23:14:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Support for form.encoding.  
+
 Fri Dec 17 22:59:00 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: dialogs/menu.c, document/renderer.c, protocol/uri.c,

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.144 2003/07/03 02:25:57 jonas Exp $ */
+/* $Id: parser.c,v 1.145 2003/07/03 21:36:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,10 +288,8 @@ roman(unsigned char *p, unsigned n)
 			strcat(p, roman_tbl[i].s);
 		}
 		i++;
-		if (n && !roman_tbl[i].n) {
-			internal("BUG in roman number convertor");
-			return;
-		}
+		assertm(!(n && !roman_tbl[i].n),
+			"BUG in roman number convertor");
 	}
 }
 
@@ -339,14 +337,10 @@ get_target(unsigned char *a)
 void
 kill_html_stack_item(struct html_element *e)
 {
-	if (e->dontkill == 2) {
-		internal("trying to kill unkillable element");
-		return;
-	}
-	if (!e || (void *)e == &html_stack) {
-		internal("trying to free bad html element");
-		return;
-	}
+	assert(e);
+	assertm((void *)e != &html_stack, "trying to free bad html element");
+	assertm(e->dontkill != 2, "trying to kill unkillable element");
+
 	if (e->attr.link) mem_free(e->attr.link);
 	if (e->attr.target) mem_free(e->attr.target);
 	if (e->attr.image) mem_free(e->attr.image);
@@ -356,9 +350,11 @@ kill_html_stack_item(struct html_element *e)
 	if (e->attr.select) mem_free(e->attr.select);
 	del_from_list(e);
 	mem_free(e);
-	/*if ((void *)(html_stack.next) == &html_stack || !html_stack.next) {
+#if 0
+	if ((void *)(html_stack.next) == &html_stack || !html_stack.next) {
 		debug("killing last element");
-	}*/
+	}
+#endif
 }
 
 static inline void

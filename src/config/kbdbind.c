@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.21 2002/06/30 15:16:02 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.22 2002/06/30 15:18:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,6 +206,7 @@ parse_act(unsigned char *s)
 	/* Please keep this table in alphabetical order, and in sync with
 	 * the ACT_* constants in kbdbind.h.  */
 	struct strtonum table[] = {
+		{ "none", ACT_NONE },
 		{ "add-bookmark", ACT_ADD_BOOKMARK },
 		{ "auto-complete", ACT_AUTO_COMPLETE },
 		{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS },

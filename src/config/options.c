@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.182 2003/01/16 10:06:33 zas Exp $ */
+/* $Id: options.c,v 1.183 2003/01/16 14:35:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -614,7 +614,9 @@ printhelp_descend(struct option *tree, unsigned char *path,
 	indent[indentation] = '\0';
 
 	foreach (option, *((struct list_head *) tree->ptr)) {
-		unsigned char *desc = option->desc && *option->desc ? gettext(option->desc) : "";
+		unsigned char *desc = (option->desc && *option->desc)
+				      ? (unsigned char *) gettext(option->desc)
+				      : (unsigned char *) "";
 
 		/* Don't print autocreated options and deprecated aliases */
 		if (option->flags == OPT_AUTOCREATE ||
@@ -634,7 +636,9 @@ printhelp_descend(struct option *tree, unsigned char *path,
 			add_to_strn(&newpath, option->name);
 
 			if (option->capt)
-				description = *option->capt ? gettext(option->capt) : "";
+				description = *option->capt
+					      ? (unsigned char *) gettext(option->capt)
+					      : (unsigned char *) "";
 			else
 				description = desc;
 
@@ -843,7 +847,10 @@ change_hook_stemplate(struct session *ses, struct option *current, struct option
 static int
 change_hook_language(struct session *ses, struct option *current, struct option *changed)
 {
+/* FIXME */
+#ifdef ENABLE_NLS
 	set_language(*((int *) changed->ptr));
+#endif
 	return 0;
 }
 

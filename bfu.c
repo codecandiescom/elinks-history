@@ -1,19 +1,35 @@
+/* This routines are the bones of user interface. */
+
 #include "links.h"
+
+/*
+ * memory_list is used to track information about all allocated memory
+ * belonging to something.
+ */
 
 struct memory_list *getml(void *p, ...)
 {
 	struct memory_list *ml;
 	va_list ap;
-	int n = 0;
-	void *q = p;
+	void *q;
+	int i;
+	
 	va_start(ap, p);
-	while (q) n++, q = va_arg(ap, void *);
-	if (!(ml = mem_alloc(sizeof(struct memory_list) + n * sizeof(void *)))) return NULL;
-	ml->n = n;
-	n = 0;
-	q = p;
+	for (i = 0, q = p; q; i++) {
+		q = va_arg(ap, void *);
+	}
+	
+	ml = mem_alloc(sizeof(struct memory_list) + i * sizeof(void *));
+	if (!ml) return NULL;
+	
+	ml->n = i;
+	
 	va_start(ap, p);
-	while (q) ml->p[n++] = q, q = va_arg(ap, void *);
+	for (i = 0, q = p; q; i++) {
+		ml->p[i] = q;
+		q = va_arg(ap, void *);
+	}
+	
 	return ml;
 }
 
@@ -21,28 +37,44 @@ void add_to_ml(struct memory_list **ml, ...)
 {
 	struct memory_list *nml;
 	va_list ap;
-	int n = 0;
 	void *q;
+	int n = 0;
+	
 	if (!*ml) {
-		if (!(*ml = mem_alloc(sizeof(struct memory_list)))) return;
+		*ml = mem_alloc(sizeof(struct memory_list));
+		if (!*ml) return;
+		
 		(*ml)->n = 0;
 	}
+	
 	va_start(ap, ml);
 	while ((q = va_arg(ap, void *))) n++;
-	if (!(nml = mem_realloc(*ml, sizeof(struct memory_list) + (n + (*ml)->n) * sizeof(void *))))
+	
+	nml = mem_realloc(*ml, sizeof(struct memory_list) + (n + (*ml)->n) * sizeof(void *));
+	if (!nml)
 		return;
+	
 	va_start(ap, ml);
 	while ((q = va_arg(ap, void *))) nml->p[nml->n++] = q;
+	
 	*ml = nml;
 }
 
 void freeml(struct memory_list *ml)
 {
 	int i;
+	
 	if (!ml) return;
+	
 	for (i = 0; i < ml->n; i++) mem_free(ml->p[i]);
+	
 	mem_free(ml);
 }
+
+
+/*
+ * Menu system
+ */
 
 unsigned char m_bar = 0;
 
@@ -50,21 +82,27 @@ void menu_func(struct window *, struct event *, int);
 void mainmenu_func(struct window *, struct event *, int);
 void dialog_func(struct window *, struct event *, int);
 
+
 void do_menu_selected(struct terminal *term, struct menu_item *items, void *data, int selected)
 {
 	struct menu *menu;
-	if ((menu = mem_alloc(sizeof(struct menu)))) {
+	
+	menu = mem_alloc(sizeof(struct menu));
+	if (menu) {
 		menu->selected = selected;
 		menu->view = 0;
 		menu->items = items;
 		menu->data = data;
 		add_window(term, menu_func, menu);
+		
 	} else if (items->free_i) {
 		int i;
+		
 		for (i = 0; items[i].text; i++) {
 			if (items[i].free_i & 2) mem_free(items[i].text);
 			if (items[i].free_i & 4) mem_free(items[i].rtext);
 		}
+		
 		mem_free(items);
 	}
 }
@@ -76,17 +114,33 @@ void do_menu(struct terminal *term, struct menu_item *items, void *data)
 
 void select_menu(struct terminal *term, struct menu *menu)
 {
-	/*int x = menu->x + 4;
-	int y = menu->y + menu->selected - menu->view + 2;*/
 	struct menu_item *it = &menu->items[menu->selected];
-	void (*func)(struct terminal *, void *, void *) = it->func;
+	void (*func)(struct terminal *, void *, void *);
 	void *data1 = it->data;
 	void *data2 = menu->data;
-	if (menu->selected < 0 || menu->selected >= menu->ni || it->hotkey == M_BAR) return;
+	
+	func = it->func;
+	
+	if (menu->selected < 0 ||
+	    menu->selected >= menu->ni ||
+	    it->hotkey == M_BAR)
+		return;
+	
 	if (!it->in_m) {
 		struct window *win, *win1;
-		for (win = term->windows.next; (void *)win != &term->windows && (win->handler == menu_func || win->handler == mainmenu_func); win1 = win->next, delete_window(win), win = win1) ;
+		
+		win = term->windows.next;
+		
+		while ((void *) win != &term->windows &&
+		       (win->handler == menu_func ||
+			win->handler == mainmenu_func)) {
+			
+			win1 = win->next;
+			delete_window(win);
+			win = win1;
+		}
 	}
+	
 	func(term, data1, data2);
 }
 
@@ -96,16 +150,27 @@ void count_menu_size(struct terminal *term, struct menu *menu)
 	int sy = term->y;
 	int mx = 4;
 	int my;
+	
 	for (my = 0; menu->items[my].text; my++) {
-		int s = strlen(_(menu->items[my].text, term)) + strlen(_(menu->items[my].rtext, term)) + MENU_HOTKEY_SPACE * (_(menu->items[my].rtext, term)[0] != 0) + 4;
+		int s;
+		
+		s = strlen(_(menu->items[my].text, term)) +
+		    strlen(_(menu->items[my].rtext, term)) + 4;
+
+		if (_(menu->items[my].rtext, term)[0] != 0)
+			s += MENU_HOTKEY_SPACE;
+		
 		if (s > mx) mx = s;
 	}
+	
 	menu->ni = my;
 	my += 2;
+	
 	if (mx > sx) mx = sx;
 	if (my > sy) my = sy;
 	menu->xw = mx;
 	menu->yw = my;
+	
 	if ((menu->x = menu->xp) < 0) menu->x = 0;
 	if ((menu->y = menu->yp) < 0) menu->y = 0;
 	if (menu->x + mx > sx) menu->x = sx - mx;
@@ -116,69 +181,108 @@ void scroll_menu(struct menu *menu, int d)
 {
 	int c = 0;
 	int w = menu->yw - 2;
-	int scr_i = SCROLL_ITEMS > (w-1)/2 ? (w-1)/2 : SCROLL_ITEMS;
+	int scr_i = (SCROLL_ITEMS > (w - 1) / 2) ? (w - 1) / 2 : SCROLL_ITEMS;
+	
 	if (scr_i < 0) scr_i = 0;
 	if (w < 0) w = 0;
+	
 	menu->selected += d;
+	
 	while (1) {
 		if (c++ > menu->ni) {
 			menu->selected = -1;
 			menu->view = 0;
 			return;
 		}
+		
 		if (menu->selected < 0) menu->selected = 0;
 		if (menu->selected >= menu->ni) menu->selected = menu->ni - 1;
-		/*if (menu->selected < 0) menu->selected = menu->ni - 1;
-		if (menu->selected >= menu->ni) menu->selected = 0;*/
-		if (menu->ni && menu->items[menu->selected].hotkey != M_BAR) break;
+#if 0
+		if (menu->selected < 0) menu->selected = menu->ni - 1;
+		if (menu->selected >= menu->ni) menu->selected = 0;
+#endif
+		if (menu->ni && menu->items[menu->selected].hotkey != M_BAR)
+			break;
+		
 		menu->selected += d;
 	}
-	/*debug("1:%d %d %d %d", menu->ni, w, menu->view, menu->selected);*/
-	if (menu->selected < menu->view + scr_i) menu->view = menu->selected - scr_i;
-	if (menu->selected >= menu->view + w - scr_i - 1) menu->view = menu->selected - w + scr_i + 1;
-	if (menu->view > menu->ni - w) menu->view = menu->ni - w;
-	if (menu->view < 0) menu->view = 0;
-	/*debug("2:%d %d %d %d", menu->ni, w, menu->view, menu->selected);*/
+	
+	if (menu->selected < menu->view + scr_i)
+		menu->view = menu->selected - scr_i;
+	if (menu->selected >= menu->view + w - scr_i - 1)
+		menu->view = menu->selected - w + scr_i + 1;
+	if (menu->view > menu->ni - w)
+		menu->view = menu->ni - w;
+	if (menu->view < 0)
+		menu->view = 0;
 }
 
 void display_menu(struct terminal *term, struct menu *menu)
 {
 	int p, s;
-	fill_area(term, menu->x+1, menu->y+1, menu->xw-2, menu->yw-2, COLOR_MENU);
+	
+	fill_area(term, menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2, COLOR_MENU);
 	draw_frame(term, menu->x, menu->y, menu->xw, menu->yw, COLOR_MENU_FRAME, 1);
-	for (p = menu->view, s = menu->y + 1; p < menu->ni && p < menu->view + menu->yw - 2; p++, s++) {
-		int x;
-		int h = 0;
-		unsigned char c;
+	
+	for (p = menu->view, s = menu->y + 1;
+	     p < menu->ni && p < menu->view + menu->yw - 2;
+	     p++, s++) {
 		unsigned char *tmptext = _(menu->items[p].text, term);
-		int co = p == menu->selected ? h = 1, COLOR_MENU_SELECTED : COLOR_MENU;
-		if (h) {
-			set_cursor(term, menu->x+1, s, term->x - 1, term->y - 1);
-			/*set_window_ptr(menu->win, menu->x+3, s+1);*/
-			set_window_ptr(menu->win, menu->x+menu->xw, s);
-			fill_area(term, menu->x+1, s, menu->xw-2, 1, co);
+		int h = 0;
+		int co = COLOR_MENU;
+
+		if (p == menu->selected) {
+			h = 1;
+			co = COLOR_MENU_SELECTED;
 		}
+		
+		if (h) {
+			set_cursor(term, menu->x + 1, s, term->x - 1, term->y - 1);
+			set_window_ptr(menu->win, menu->x+menu->xw, s);
+			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, co);
+		}
+		
 		if (menu->items[p].hotkey != M_BAR || (tmptext && tmptext[0])) {
+			unsigned char c;
 			int l = strlen(_(menu->items[p].rtext, term));
-			for (x = l - 1; x >= 0 && menu->xw - 4 >= l - x && (c = _(menu->items[p].rtext, term)[x]); x--)
+			int x;
+			
+			for (x = l - 1;
+			     (x >= 0) && (menu->xw - 4 >= l - x) &&
+			     (c = _(menu->items[p].rtext, term)[x]);
+			     x--) {
 				set_char(term, menu->x + menu->xw - 2 - l + x, s, c | co);
-			for (x = 0; x < menu->xw - 4 && (c = tmptext[x]); x++)
-				set_char(term, menu->x + x + 2, s, !h && strchr(_(menu->items[p].hotkey, term), upcase(c)) ? h = 1, COLOR_MENU_HOTKEY | c : co | c);
+			}
+			
+			for (x = 0; (x < menu->xw - 4) &&
+			            (c = tmptext[x]); x++) {
+				int ch = co;
+				
+				if (!h && strchr(_(menu->items[p].hotkey, term), upcase(c))) {
+					h = 1; ch = COLOR_MENU_HOTKEY;
+				}
+				
+				set_char(term, menu->x + x + 2, s, ch | c);
+			}
+			
 		} else {
 			set_char(term, menu->x, s, COLOR_MENU_FRAME | ATTR_FRAME | 0xc3);
-			fill_area(term, menu->x+1, s, menu->xw-2, 1, COLOR_MENU_FRAME | ATTR_FRAME | 0xc4);
-			set_char(term, menu->x+menu->xw-1, s, COLOR_MENU_FRAME | ATTR_FRAME | 0xb4);
+			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, COLOR_MENU_FRAME | ATTR_FRAME | 0xc4);
+			set_char(term, menu->x + menu->xw - 1, s, COLOR_MENU_FRAME | ATTR_FRAME | 0xb4);
 		}
 	}
+	
 	redraw_from_window(menu->win);
 }
 
 void menu_func(struct window *win, struct event *ev, int fwd)
 {
-	int s = 0;
-	struct menu *menu = win->data;
 	struct window *w1;
+	struct menu *menu = win->data;
+	int s = 0;
+	
 	menu->win = win;
+	
 	switch (ev->ev) {
 		case EV_INIT:
 		case EV_RESIZE:
@@ -187,97 +291,174 @@ void menu_func(struct window *win, struct event *ev, int fwd)
 			count_menu_size(win->term, menu);
 			menu->selected--;
 			scroll_menu(menu, 1);
-		/*case EV_REDRAW:*/
 			display_menu(win->term, menu);
 			break;
+			
 		case EV_MOUSE:
-			if (ev->x < menu->x || ev->x >= menu->x+menu->xw || ev->y < menu->y || ev->y >= menu->y+menu->yw) {
-				if ((ev->b & BM_ACT) == B_DOWN) del:delete_window_ev(win, ev);
-				else for (w1 = win; (void *)w1 != &win->term->windows; w1 = w1->next) {
-					struct menu *m1;
-					if (w1->handler == mainmenu_func) {
-						if (!ev->y) goto del;
-						break;
+			if ((ev->x < menu->x) || (ev->x >= menu->x + menu->xw) ||
+			    (ev->y < menu->y) || (ev->y >= menu->y + menu->yw)) {
+				if ((ev->b & BM_ACT) == B_DOWN)
+					delete_window_ev(win, ev);
+				
+				else {
+					for (w1 = win; (void *) w1 != &win->term->windows; w1 = w1->next) {
+						struct menu *m1;
+						
+						if (w1->handler == mainmenu_func) {
+							if (!ev->y)
+								delete_window_ev(win, ev);
+							break;
+						}
+						
+						if (w1->handler != menu_func) break;
+						
+						m1 = w1->data;
+						
+						if (ev->x > m1->x &&
+						    ev->x < m1->x + m1->xw - 1 &&
+						    ev->y > m1->y &&
+						    ev->y < m1->y + m1->yw - 1)
+							delete_window_ev(win, ev);
 					}
-					if (w1->handler != menu_func) break;
-					m1 = w1->data;
-					if (ev->x > m1->x && ev->x < m1->x+m1->xw-1 && ev->y > m1->y && ev->y < m1->y+m1->yw-1) goto del;
 				}
+				
 			} else {
-				if (!(ev->x < menu->x || ev->x >= menu->x+menu->xw || ev->y < menu->y+1 || ev->y >= menu->y+menu->yw-1)) {
-					int s = ev->y - menu->y-1 + menu->view;
-					if (s >= 0 && s < menu->ni && menu->items[s].hotkey != M_BAR) {
+				if (!(ev->x <  menu->x ||
+				      ev->x >= menu->x + menu->xw ||
+				      ev->y <  menu->y + 1 ||
+				      ev->y >= menu->y + menu->yw-1)) {
+					int s = ev->y - menu->y - 1 + menu->view;
+					
+					if (s >= 0 && s < menu->ni &&
+					    menu->items[s].hotkey != M_BAR) {
+						
 						menu->selected = s;
 						scroll_menu(menu, 0);
 						display_menu(win->term, menu);
-						if ((ev->b & BM_ACT) == B_UP || menu->items[s].in_m) select_menu(win->term, menu);
+						
+						if ((ev->b & BM_ACT) == B_UP ||
+						    menu->items[s].in_m)
+							select_menu(win->term, menu);
 					}
 				}
 			}
+			
 			break;
+			
 		case EV_KBD:
 			switch (kbd_action(KM_MENU, ev, NULL)) {
 				case ACT_LEFT:
 				case ACT_RIGHT:
-					if ((void *)win->next != &win->term->windows && win->next->handler == mainmenu_func) goto mm;
-					/*for (w1 = win; (void *)w1 != &win->term->windows; w1 = w1->next) {
-						if (w1->handler == mainmenu_func) goto mm;
-						if (w1->handler != menu_func) break;
-					}*/
-					if (kbd_action(KM_MENU, ev, NULL) == ACT_RIGHT) goto enter;
-					delete_window(win);
-					goto break2;
-				case ACT_UP: scroll_menu(menu, -1); break;
-				case ACT_DOWN: scroll_menu(menu, 1); break;
-				case ACT_HOME: menu->selected = -1, scroll_menu(menu, 1); break;
-				case ACT_END: menu->selected = menu->ni, scroll_menu(menu, -1); break;
-				case ACT_PAGE_UP:
-					if ((menu->selected -= menu->yw - 3) < -1) menu->selected = -1;
-					if ((menu->view -= menu->yw - 2) < 0) menu->view = 0;
-					scroll_menu(menu, -1);
-					break;
-				case ACT_PAGE_DOWN:
-					if ((menu->selected += menu->yw - 3) > menu->ni) menu->selected = menu->ni;
-					if ((menu->view += menu->yw - 2) >= menu->ni - menu->yw + 2) menu->view = menu->ni - menu->yw + 2;
-					scroll_menu(menu, 1);
-					break;
-				default:
-					if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) || ev->y == KBD_ALT) {
-						mm:
+					if ((void *) win->next != &win->term->windows &&
+					    win->next->handler == mainmenu_func) {
 						delete_window_ev(win, ev);
 						goto break2;
 					}
-					if (ev->x == KBD_ESC) {
-						delete_window_ev(win, (void *)win->next != &win->term->windows && win->next->handler == mainmenu_func ? ev : NULL);
+					
+					if (kbd_action(KM_MENU, ev, NULL) == ACT_RIGHT)
+						goto enter;
+					
+					delete_window(win);
+					
+					goto break2;
+					
+				case ACT_UP:
+					scroll_menu(menu, -1);
+					break;
+					
+				case ACT_DOWN:
+					scroll_menu(menu, 1);
+					break;
+					
+				case ACT_HOME:
+					menu->selected = -1;
+					scroll_menu(menu, 1);
+					break;
+					
+				case ACT_END:
+					menu->selected = menu->ni;
+					scroll_menu(menu, -1);
+					break;
+					
+				case ACT_PAGE_UP:
+					menu->selected -= menu->yw - 3;
+					if (menu->selected < -1) 
+						menu->selected = -1;
+					
+					menu->view -= menu->yw - 2;
+					if (menu->view < 0)
+						menu->view = 0;
+					
+					scroll_menu(menu, -1);
+					break;
+					
+				case ACT_PAGE_DOWN:
+					menu->selected += menu->yw - 3;
+					if (menu->selected > menu->ni)
+						menu->selected = menu->ni;
+					
+					menu->view += menu->yw - 2;
+					if (menu->view >= menu->ni - menu->yw + 2)
+						menu->view = menu->ni - menu->yw + 2;
+					
+					scroll_menu(menu, 1);
+					break;
+					
+				default:
+					if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) ||
+					    ev->y == KBD_ALT) {
+						delete_window_ev(win, ev);
 						goto break2;
 					}
+					
+					if (ev->x == KBD_ESC) {
+						if ((void *) win->next != &win->term->windows &&
+						    win->next->handler == mainmenu_func)
+							delete_window_ev(win, ev);
+						else
+							delete_window_ev(win, NULL);
+						
+						goto break2;
+					}
+					
 					if (ev->x > ' ' && ev->x < 256) {
 						int i;
-						for (i = 0; i < menu->ni; i++)
-							if (strchr(_(menu->items[i].hotkey, win->term), upcase(ev->x))) {
+						
+						for (i = 0; i < menu->ni; i++) {
+							if (strchr(_(menu->items[i].hotkey, win->term),
+								   upcase(ev->x))) {
 								menu->selected = i;
 								scroll_menu(menu, 0);
 								s = 1;
 							}
+						}
 					}
+					
 					break;
 			}
+			
 			display_menu(win->term, menu);
 			if (s || ev->x == KBD_ENTER || ev->x == ' ') {
 				enter:
 				select_menu(win->term, menu);
 			}
-			break2:
-			break;
+			
+break2:			break;
+			
 		case EV_ABORT:
 			if (menu->items->free_i) {
 				int i;
+				
 				for (i = 0; menu->items[i].text; i++) {
-					if (menu->items[i].free_i & 2) mem_free(menu->items[i].text);
-					if (menu->items[i].free_i & 4) mem_free(menu->items[i].rtext);
+					if (menu->items[i].free_i & 2)
+						mem_free(menu->items[i].text);
+					if (menu->items[i].free_i & 4)
+						mem_free(menu->items[i].rtext);
 				}
+				
 				mem_free(menu->items);
 			}
+			
 			break;
 	}
 }

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.46 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: document.c,v 1.47 2003/07/13 13:09:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/http/header.h"
-#include "protocol/url.h"
+#include "protocol/uri.h"
 #include "sched/location.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -73,7 +73,7 @@ loc_msg(struct terminal *term, struct location *location,
 	add_to_str(&str, &strl, _("URL", term));
 	add_to_str(&str, &strl, ": ");
 
-	url = strip_url_password(location->vs.url);
+	url = strip_uri_password(location->vs.url);
 	if (url) {
 		add_to_str(&str, &strl, url);
 		mem_free(url);

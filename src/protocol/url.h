@@ -1,11 +1,10 @@
-/* $Id: url.h,v 1.18 2003/07/12 20:21:15 jonas Exp $ */
+/* $Id: url.h,v 1.19 2003/07/13 13:09:06 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URL_H
 #define EL__PROTOCOL_URL_H
 
 #define POST_CHAR 1
 
-unsigned char *strip_url_password(unsigned char *);
 unsigned char *join_urls(unsigned char *, unsigned char *);
 unsigned char *translate_url(unsigned char *, unsigned char *);
 unsigned char *extract_position(unsigned char *);

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.6 2003/07/06 23:17:36 pasky Exp $ */
+/* $Id: link.c,v 1.7 2003/07/13 13:09:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -923,7 +923,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 
 			add_to_str(&str, &strl, _("Image", term));
 			add_chr_to_str(&str, &strl, ' ');
-			url = strip_url_password(link->where_img);
+			url = strip_uri_password(link->where_img);
 			if (url) {
 				add_to_str(&str, &strl, url);
 				mem_free(url);
@@ -941,7 +941,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 
 			add_to_str(&str, &strl, _("Usemap", term));
 			add_chr_to_str(&str, &strl, ' ');
-			url = strip_url_password(link->where + 4);
+			url = strip_uri_password(link->where + 4);
 			if (url) {
 				add_to_str(&str, &strl, url);
 				mem_free(url);
@@ -949,7 +949,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			return str;
 		}
 
-		return strip_url_password(link->where);
+		return strip_uri_password(link->where);
 	}
 
 	if (!link->form) return NULL;
@@ -973,7 +973,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			add_to_str(&str, &strl, _("Post form to", term));
 		add_chr_to_str(&str, &strl, ' ');
 
-		url = strip_url_password(link->form->action);
+		url = strip_uri_password(link->form->action);
 		if (url) {
 			add_to_str(&str, &strl, url);
 			mem_free(url);
@@ -1044,7 +1044,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			else
 				add_to_str(&str, &strl, _("post to", term));
 			add_chr_to_str(&str, &strl, ' ');
-			url = strip_url_password(link->form->action);
+			url = strip_uri_password(link->form->action);
 			if (url) {
 				add_to_str(&str, &strl, url);
 				mem_free(url);

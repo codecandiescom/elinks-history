@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.10 2003/07/13 12:57:53 jonas Exp $ */
+/* $Id: uri.h,v 1.11 2003/07/13 13:09:06 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -57,6 +57,9 @@ end_of_dir(unsigned char c)
 /* Returns a valid host URL (for http authentification) or NULL. */
 /* The @components bitmask controls what is NOT added. */
 unsigned char *get_uri_string(struct uri *uri, int components);
+
+/* Returns an URI string with any password removed. ;) */
+unsigned char *strip_uri_password(unsigned char *unstripped_uri);
 
 void encode_uri_string(unsigned char *, unsigned char **, int *);
 void decode_uri_string(unsigned char *);

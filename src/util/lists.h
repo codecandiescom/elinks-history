@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.18 2003/05/14 16:59:40 zas Exp $ */
+/* $Id: lists.h,v 1.19 2003/05/16 21:57:03 zas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -204,6 +204,8 @@ do { \
 
 #define free_list(l) \
 do { \
+	if ((l).magic1 != LISTMAGIC1 || (l).magic2 != LISTMAGIC2) \
+		list_magic_error("free_list", &l); \
 	do_not_optimize_here(&l); \
 	while ((l).next != &(l)) { \
 		struct list_head *a__ = (l).next; \

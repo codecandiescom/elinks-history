@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.44 2004/01/20 06:22:24 jonas Exp $ */
+/* $Id: scanner.c,v 1.45 2004/01/20 14:57:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,8 +165,9 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 
 	} else if ((first_char == '-' && *string == '-' && string[1] == '>')
 		   || (first_char == '<' && strlen(string) > 2 && !strncmp(string, "!--", 3))) {
-		/* SGML left and right comments */
+		/* Skip SGML left and right comments */
 		string += 2 + (first_char == '<');
+		type = CSS_TOKEN_NONE;
 
 	} else if (is_css_ident(first_char)) {
 		scan_css(string, CSS_CHAR_IDENT);
@@ -243,12 +244,10 @@ scan_css_tokens(struct css_scanner *scanner)
 
 		scan_css_token(scanner, token);
 
-		if (token->type == CSS_TOKEN_GARBAGE) {
-			current--;
-
-		} else if (token->type == CSS_TOKEN_NONE) {
+		if (token->type == CSS_TOKEN_NONE) {
  			current--;
-			break;
+			/* Did some one scream for us to end scanning? */
+			if (!scanner->position) break;
 		}
 	}
 

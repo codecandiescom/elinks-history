@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.176 2004/11/18 00:52:43 zas Exp $ */
+/* $Id: listbox.c,v 1.177 2004/11/19 11:06:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,17 @@
 
 
 #define VERTICAL_LISTBOX_MARGIN 3
+
+void
+add_dlg_listbox(struct dialog *dlg, int height, void *box_data)
+{
+	struct widget *widget;
+
+	widget = &(dlg)->widgets[(dlg)->number_of_widgets++];
+	widget->type = WIDGET_LISTBOX;
+	widget->info.box.height = height;
+	widget->data = box_data;
+}
 
 /* Layout for generic boxes */
 void
@@ -576,7 +587,7 @@ kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct widget_data *dlg_item = dlg_data->widgets_data;
 	struct term_event *ev = dlg_data->term_event;
-	
+
 	/* Not a pure listbox, but you're not supposed to use this outside of
 	 * the listbox browser anyway, so what.. */
 

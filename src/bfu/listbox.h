@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.74 2004/11/19 10:04:45 zas Exp $ */
+/* $Id: listbox.h,v 1.75 2004/11/19 11:06:40 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -8,23 +8,13 @@
 #include "bfu/widget.h"
 #include "util/lists.h"
 
+struct dialog;
+struct listbox_data;
+struct listbox_item;
 struct terminal;
 struct uri;
 
-
-#define add_dlg_listbox(dlg, height_, box_data)				\
-	do {								\
-		struct widget *widget;					\
-									\
-		widget = &(dlg)->widgets[(dlg)->number_of_widgets++];	\
-		widget->type = WIDGET_LISTBOX;				\
-		widget->info.box.height = (height_);			\
-		widget->data = (void *) box_data;			\
-	} while (0)
-
-
-struct listbox_data;
-struct listbox_item;
+void add_dlg_listbox(struct dialog *dlg, int height, void *box_data);
 
 enum listbox_match {
 	LISTBOX_MATCH_OK,

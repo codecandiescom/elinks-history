@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.45 2003/12/21 21:54:41 jonas Exp $ */
+/* $Id: renderer.c,v 1.46 2003/12/21 22:45:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,12 +219,18 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *xsource;
-		unsigned char *line_end = memchr(source, '\n', length);
-		int width = line_end ? line_end - source : length;
-		int added;
+		int width, added;
+		int step = 0;
 
-		if (line_end && width > 0 && line_end[-1] == '\r')
-			width--;
+		/* End of line detection.
+		 * We handle \r, \r\n and \n types here. */
+		for (width = 0; width < length; width++) {
+			if (source[width] == ASCII_CR)
+				step++;
+			if (source[width + step] == ASCII_LF)
+				step++;
+			if (step) break;
+		}
 
 		/* We will touch the supplied source, so better replicate it. */
 		xsource = memacpy(source, width);
@@ -246,9 +252,10 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 			int_lower_bound(&document->width, added);
 		}
 
-		/* Skip the newline too. */
-		length -= width + 1;
-		source += width + 1;
+		/* Skip end of line chars too. */
+		width += step;
+		length -= width;
+		source += width;
 	}
 }
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.20 2004/09/24 21:29:53 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.21 2004/09/24 22:11:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,6 +287,23 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 static JSRuntime *jsrt;
 
+static void
+error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
+{
+	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
+	struct terminal *term = interpreter->doc_view->session->tab->term;
+
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
+		N_("JavaScript Error"), ALIGN_CENTER,
+		msg_text(term, N_("A script embedded in the current "
+		         "document raised the following exception: "
+		         "\n\n%s"),
+		         message),
+		NULL, 1,
+		N_("OK"), NULL, B_ENTER | B_ESC);
+}
+
+
 void
 spidermonkey_init(void)
 {
@@ -314,6 +331,7 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 		return NULL;
 	interpreter->backend_data = ctx;
 	JS_SetContextPrivate(ctx, interpreter);
+	JS_SetErrorReporter(ctx, error_reporter);
 
 	global_obj = JS_NewObject(ctx, (JSClass *) &global_class, NULL, NULL);
 	if (!global_obj) {

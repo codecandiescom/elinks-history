@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.147 2004/05/10 12:56:13 zas Exp $ */
+/* $Id: listbox.c,v 1.148 2004/05/13 09:08:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,10 +437,8 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		if (!box->sel) box->sel = box->top;
 	}
 
-	draw_area(term, widget_data->dimensions.x, widget_data->dimensions.y,
-		  widget_data->dimensions.width, widget_data->dimensions.height, ' ', 0,
-		  get_bfu_color(term, "menu.normal"));
-
+	draw_box(term, &widget_data->dimensions, ' ', 0,
+		 get_bfu_color(term, "menu.normal"));
 
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {

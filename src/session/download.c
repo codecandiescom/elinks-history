@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.133 2003/11/06 14:47:04 zas Exp $ */
+/* $Id: download.c,v 1.134 2003/11/06 16:52:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,11 +379,7 @@ download_window_function(struct dialog_data *dlg_data)
 	dlg_format_buttons(NULL, dlg_data->widgets_data, dlg_data->n, 0, &y, w,
 			   NULL, AL_CENTER);
 
-	dlg_data->width = w + 2 * DIALOG_LB;
-	dlg_data->height = y + 2 * DIALOG_TB;
-
-	center_dlg(dlg_data);
-	draw_dlg(dlg_data);
+	draw_dlg(dlg_data, w, y, AL_CENTER);
 
 	y = dlg_data->y + DIALOG_TB + 1;
 	x = dlg_data->x + DIALOG_LB;

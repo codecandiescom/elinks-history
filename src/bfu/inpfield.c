@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.87 2003/11/05 20:24:49 jonas Exp $ */
+/* $Id: inpfield.c,v 1.88 2003/11/06 16:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,11 +151,8 @@ input_field_fn(struct dialog_data *dlg_data)
 			   AL_CENTER);
 
 	w = rw;
-	dlg_data->width = rw + 2 * DIALOG_LB;
-	dlg_data->height = y + 2 * DIALOG_TB;
-	center_dlg(dlg_data);
 
-	draw_dlg(dlg_data);
+	draw_dlg(dlg_data, w, y, AL_CENTER);
 
 	y = dlg_data->y + DIALOG_TB;
 	dlg_format_text(term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,

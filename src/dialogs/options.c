@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.110 2003/11/05 20:18:33 jonas Exp $ */
+/* $Id: options.c,v 1.111 2003/11/06 16:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,11 +146,8 @@ terminal_options_fn(struct dialog_data *dlg_data)
 			   &rw, AL_CENTER);
 
 	w = rw;
-	dlg_data->width = rw + 2 * DIALOG_LB;
-	dlg_data->height = y + 2 * DIALOG_TB;
 
-	center_dlg(dlg_data);
-	draw_dlg(dlg_data);
+	draw_dlg(dlg_data, w, y, AL_CENTER);
 
 	y = dlg_data->y + DIALOG_TB + 1;
 	dlg_format_checkboxes(term, dlg_data->widgets_data, dlg_data->n - 3,

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.68 2003/11/06 16:45:23 jonas Exp $ */
+/* $Id: dialog.c,v 1.69 2003/11/06 16:52:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,16 +357,18 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 }
 
 void
-center_dlg(struct dialog_data *dlg_data)
-{
-	dlg_data->x = (dlg_data->win->term->width - dlg_data->width) / 2;
-	dlg_data->y = (dlg_data->win->term->height - dlg_data->height) / 2;
-}
-
-void
-draw_dlg(struct dialog_data *dlg_data)
+draw_dlg(struct dialog_data *dlg_data, int width, int height,
+	 enum format_align align)
 {
 	struct terminal *term = dlg_data->win->term;
+ 
+	dlg_data->width = width + 2 * DIALOG_LB;
+	dlg_data->height = height + 2 * DIALOG_TB;
+
+	if (align == AL_CENTER) {
+		dlg_data->x = (term->width - dlg_data->width) / 2;
+		dlg_data->y = (term->height - dlg_data->height) / 2;
+	}
 
 	draw_area(term, dlg_data->x, dlg_data->y,
 		  dlg_data->width, dlg_data->height, ' ', 0,

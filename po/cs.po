@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-20 18:18+0200\n"
-"PO-Revision-Date: 2003-10-19 15:44+0200\n"
+"PO-Revision-Date: 2003-10-20 18:33+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -244,6 +244,11 @@ msgid ""
 "## options through UI, however only option values will be altered\n"
 "## and all your formatting, own comments etc will be kept as-is.\n"
 msgstr ""
+"## Toto je konfiguraèní soubor ELinksu. Mù¾ete ho ruènì editovat,\n"
+"## pokud si pøejete; tento soubor je editován ELinksem, kdy¾ ukládáte\n"
+"## nastavení pøes u¾ivatelské rozhraní, ale jsou v¾dy zmìnìny pouze\n"
+"## hodnoty voleb a ve¹keré va¹e formátování, vlastní komentáøe a tak\n"
+"## dále budou ponechány tak, jak jsou.\n"
 
 #: src/config/conf.c:597
 msgid ""
@@ -255,6 +260,13 @@ msgid ""
 "## it is NOT counted as missing. Note that all your formatting,\n"
 "## own comments and so on will be kept as-is.\n"
 msgstr ""
+"## Toto je konfiguraèní soubor ELinksu. Mù¾ete ho ruènì editovat,\n"
+"## pokud si pøejete; tento soubor je editován ELinksem, kdy¾ ukládáte\n"
+"## nastavení pøes u¾ivatelské rozhraní, ale jsou v¾dy zmìnìny pouze\n"
+"## hodnoty voleb a nové volby jsou ulo¾eny na konec souboru; pokud\n"
+"## není nìjaká volba pøímo v tomto souboru, ale v souboru, který zde\n"
+"## includujete, nepoèítá se jako chybìjící! Ve¹keré va¹e formátování,\n"
+"## vlastní komentáøe a tak dále budou ponechány tak, jak jsou.\n"
 
 #: src/config/conf.c:607
 msgid ""
@@ -263,6 +275,10 @@ msgid ""
 "## by ELinks when you save options through UI and you are out of\n"
 "## luck with your formatting and own comments then, so beware.\n"
 msgstr ""
+"## Toto je konfiguraèní soubor ELinksu. Mù¾ete ho ruènì editovat,\n"
+"## pokud si pøejete, ale uvìdomte si, ¾e je tento soubor pøepsán ELinksem\n"
+"## poka¾dé, kdy¾ ukládáte nastavení pøes u¾ivatelské rozhraní. A s va¹ím\n"
+"## vlastním formátováním a komentáøema se mù¾ete jít klouzat.\n"
 
 #: src/config/conf.c:620
 msgid ""
@@ -270,16 +286,17 @@ msgid ""
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
+"## Samozøejmì pokud se vám nelíbí, co vám ELinks s tímto souborem provede,\n"
+"## mù¾ete to ovlivnit zmìnou volby config.saving_style. No tak, nejsme\n"
+"## nakonec docela fajn?\n"
 
 #: src/config/conf.c:635
-#, fuzzy
 msgid "Automatically saved options\n"
-msgstr "Nastavení cache formátovaných dokumentù."
+msgstr "Automaticky ulo¾ené nastavení\n"
 
 #: src/config/conf.c:649
-#, fuzzy
 msgid "Automatically saved keybindings\n"
-msgstr "Nastavení cache formátovaných dokumentù."
+msgstr "Automaticky ulo¾ené klávesové vazby\n"
 
 #: src/config/conf.c:691
 msgid "File saving disabled by option"
@@ -972,7 +989,7 @@ msgstr ""
 
 #: src/config/options.c:938
 msgid "Comments localization"
-msgstr ""
+msgstr "Pøelo¾ené komentáøe"
 
 #: src/config/options.c:940
 msgid ""
@@ -983,6 +1000,11 @@ msgid ""
 "terminal where you saved the file, but it should be generally\n"
 "considered unpredictable."
 msgstr ""
+"Pokud je tato volba zapnutá, kometáøe v konfiguraèním souboru budou\n"
+"pøelo¾eny do jazyka pou¾ívaného v ELinksu. Uvìdomte si ale, ¾e pokud máte\n"
+"v rùzných terminálech nastavený rùzný jazyk, jazyk pou¾itý v konfiguraèním\n"
+"souboru MÙ®E být ten samý jako na terminálu, kde jste nechali tento soubor\n"
+"ulo¾it, ale nemìli byste na to spoléhat."
 
 #: src/config/options.c:948
 msgid "Saving style warnings"
@@ -2285,7 +2307,6 @@ msgid "Program"
 msgstr "Program"
 
 #: src/config/options.c:1579
-#, fuzzy, c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
@@ -2921,7 +2942,6 @@ msgid "Color mode"
 msgstr "Barevný re¾im"
 
 #: src/config/options.c:1919
-#, fuzzy
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"

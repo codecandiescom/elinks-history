@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.37 2003/05/14 17:20:54 pasky Exp $ */
+/* $Id: conv.c,v 1.38 2003/05/15 12:53:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,6 @@ elinks_longcat(unsigned char *s, unsigned int *slen,
  * hexadecimal format.
  * An additionnal parameter 'upper' permits to choose between
  * uppercased and lowercased hexa numbers. */
-/* FIXME: buggy, for now ... will be fixed very soon. --Zas */
 int inline
 elinks_ulonghexcat(unsigned char *s, unsigned int *slen,
 		   unsigned long number, unsigned int width,
@@ -127,41 +126,48 @@ elinks_ulonghexcat(unsigned char *s, unsigned int *slen,
 	static unsigned char uhex[]= "0123456789ABCDEF";
 	static unsigned char lhex[]= "0123456789abcdef";
 	unsigned char *hex = (unsigned char *) (upper ? &uhex : &lhex);
-	unsigned int start = 0;
-	unsigned int pos = 1;
+	unsigned int start = slen ? *slen : 0;
+	unsigned int nlen = 1; /* '0' is one char, we can't have less. */
+	unsigned int pos = start; /* starting position of the number */
 	unsigned long q = number;
 	int ret = 0;
 
-	if (width < 1 || !s) return 2;
+	if (width < 1 || !s) return -1;
 
+	/* Count the length of the number in chars. */
 	while (q > 15) {
-		if (pos == width) {
-			ret = 1;
-			break;
-		}
-		++pos;
+		nlen++;
 		q /= 16;
 	}
 
-	if (slen) start = *slen;
+	/* If max. width attained, truncate. */
+	if (nlen > width) {
+		ret = nlen;
+		nlen = width;
+	}
 
+	if (slen) *slen += nlen;
+
+	/* Fill left space with fillchar. */
 	if (fillchar) {
-		unsigned int pad = width - pos;
+		/* ie. width = 4 nlen = 2 -> pad = 2 */
+		unsigned int pad = width - nlen;
 
-		if (pad) {
-			unsigned int tmp = start;
+		if (pad > 0) {
+			/* Relocate the start of number. */
+			if (slen) *slen += pad;
+			pos += pad;
 
-			start += pad;
-			while (pad) s[--pad + tmp] = fillchar;
+			/* Pad. */
+			while (pad > 0) s[--pad + start] = fillchar;
 		}
 	}
 
-	pos += start;
-	s[pos] = '\0';
-	if (slen) *slen += pos;
+	s[pos + nlen] = '\0';
 
-	while (pos > start) {
-		s[--pos] = hex[(number % 16)];
+	/* Now write number starting from end. */
+	while (nlen > 0) {
+		s[--nlen + pos] = hex[(number % 16)];
 		number /= 16;
 	}
 
@@ -177,7 +183,7 @@ add_num_to_str(unsigned char **str, int *len, long num)
 	int tlen = 0;
 
 	ret = longcat(&t, &tlen, num, sizeof(t) - 1, 0);
-	if (ret == 2 || !tlen) return ret;
+	if (ret < 0 || !tlen) return ret;
 
 	add_bytes_to_str(str, len, t, tlen);
 
@@ -203,7 +209,7 @@ add_knum_to_str(unsigned char **str, int *len, long num)
 		ret = longcat(&t, &tlen, num, sizeof(t) - 1, 0);
 	}
 
-	if (ret == 2 || !tlen) return ret;
+	if (ret < 0 || !tlen) return ret;
 
 	add_bytes_to_str(str, len, t, tlen);
 

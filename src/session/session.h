@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.69 2003/11/24 16:35:01 fabio Exp $ */
+/* $Id: session.h,v 1.70 2003/11/25 19:46:35 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -51,7 +51,6 @@ struct frame {
 struct kbdprefix {
 	int rep;
 	int rep_num;
-	int prefix;
 };
 
 /* This describes, what are we trying to do right now. We pass this around so

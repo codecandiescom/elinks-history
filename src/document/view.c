@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.94 2002/11/28 13:39:08 zas Exp $ */
+/* $Id: view.c,v 1.95 2002/11/29 14:22:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,9 +113,9 @@ clear_formatted(struct f_data *scr)
 		if (l->pos) mem_free(l->pos);
 		if (l->name) mem_free(l->name);
 	}
-	mem_free(scr->links);
-	for (y = 0; y < scr->y; y++) mem_free(scr->data[y].d);
-	mem_free(scr->data);
+	if (scr->links) mem_free(scr->links);
+	for (y = 0; y < scr->y; y++) if (scr->data[y].d) mem_free(scr->data[y].d);
+	if (scr->data) mem_free(scr->data);
 	if (scr->lines1) mem_free(scr->lines1);
 	if (scr->lines2) mem_free(scr->lines2);
 	mem_free(scr->opt.framename);
@@ -200,9 +200,12 @@ sort_links(struct f_data *f)
 {
 	int i;
 
-	if (f->nlinks)
-		qsort(f->links, f->nlinks, sizeof(struct link),
-		      (void *) comp_links);
+	if (!f->nlinks) return;
+
+	qsort(f->links, f->nlinks, sizeof(struct link),
+	      (void *) comp_links);
+
+	if (!f->y) return;
 
 	f->lines1 = mem_calloc(f->y, sizeof(struct link *));
 	if (!f->lines1) return;

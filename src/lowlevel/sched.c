@@ -1,10 +1,11 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.53 2002/12/01 12:18:05 pasky Exp $ */
+/* $Id: sched.c,v 1.54 2002/12/01 14:39:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-12 20:27+0100\n"
-"PO-Revision-Date: 2005-01-13 00:36+0100\n"
+"POT-Creation-Date: 2005-01-15 21:21+0100\n"
+"PO-Revision-Date: 2005-01-15 21:24+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "Tast mellemrum for at udfolde denne mappe."
 #: src/dialogs/document.c:226 src/dialogs/document.c:243
 #: src/dialogs/document.c:301 src/dialogs/edit.c:98 src/dialogs/info.c:44
 #: src/dialogs/info.c:135 src/dialogs/info.c:157 src/dialogs/menu.c:97
-#: src/dialogs/menu.c:519 src/dialogs/menu.c:570 src/dialogs/options.c:174
+#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:174
 #: src/dialogs/options.c:254 src/ecmascript/spidermonkey.c:371
 #: src/ecmascript/spidermonkey.c:1930 src/ecmascript/spidermonkey.c:1956
 #: src/formhist/dialogs.c:179 src/mime/dialogs.c:130
@@ -169,7 +169,7 @@ msgstr "Navn"
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:411
 #: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:357
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
-#: src/dialogs/menu.c:519 src/dialogs/menu.c:570 src/dialogs/options.c:177
+#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:177
 #: src/dialogs/options.c:255 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
 #: src/sched/download.c:1022 src/sched/download.c:1032
@@ -2679,17 +2679,15 @@ msgid ""
 "to reload a document at a given interval or to load another page.\n"
 "Regardless of the value the refresh URI is accessible as a link.\n"
 "Use the document.browse.minimum_refresh_time to control the minimum\n"
-"number of seconds a refresh will take."
+"number of seconds a refresh will wait."
 msgstr ""
-"Følg dokumentets angivelse af hvor tit dette skal\n"
-"genopfriskes via HTML-elementet \"<meta=refresh ..>\".\n"
-"Forfattere af websider bruger dette til at instruere\n"
-"browseren om at genindlæse siden med et bestemt\n"
-"tidsinterval eller til at indlæse en anden side.\n"
-"Uanset værdien, er den angivne adresse tilgængelig\n"
-"via et link. Brug document.browse.minimum_refresh_time\n"
-"til at styre det mindste antal sekunder en genopfriskning\n"
-"må vente."
+"Følg dokumentets angivelse af hvor tit dette skal genopfriskes\n"
+"via HTML-elementet \"<meta=refresh ..>\". Forfattere af websider\n"
+"bruger dette til at instruere browseren om at genindlæse siden\n"
+"med et bestemt tidsinterval eller til at indlæse en anden side.\n"
+"Uanset værdien, er den angivne adresse tilgængelig via et link.\n"
+"Brug document.browse.minimum_refresh_time til at styre det\n"
+"mindste antal sekunder en genopfriskning må vente."
 
 #: src/config/options.inc:428
 msgid "Document meta refresh minimum time"
@@ -4398,7 +4396,7 @@ msgstr "Ingen serverinformation om side"
 msgid "Internal header info"
 msgstr "Intern serverinformation om side"
 
-#: src/dialogs/download.c:253 src/dialogs/menu.c:569 src/sched/download.c:365
+#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:365
 msgid "Download"
 msgstr "Download"
 
@@ -4538,7 +4536,7 @@ msgstr "Ressourcer"
 msgid "Save URL"
 msgstr "Gem adresse"
 
-#: src/dialogs/menu.c:96 src/dialogs/menu.c:518
+#: src/dialogs/menu.c:96 src/dialogs/menu.c:519
 msgid "Enter URL"
 msgstr "Indtast adresse"
 
@@ -4558,7 +4556,7 @@ msgstr "Vil du virkelig afslutte ELinks?"
 msgid "No history"
 msgstr "Ingen historik"
 
-#: src/dialogs/menu.c:231 src/dialogs/menu.c:299
+#: src/dialogs/menu.c:231 src/dialogs/menu.c:300
 msgid "Go ~back"
 msgstr "Gå ~tilbage"
 
@@ -4566,7 +4564,7 @@ msgstr "Gå ~tilbage"
 msgid "Go for~ward"
 msgstr "Gå ~frem"
 
-#: src/dialogs/menu.c:238 src/dialogs/menu.c:311
+#: src/dialogs/menu.c:238 src/dialogs/menu.c:312
 msgid "Bookm~ark document"
 msgstr "Tilføj dokument som bog~mærke"
 
@@ -4574,19 +4572,19 @@ msgstr "Tilføj dokument som bog~mærke"
 msgid "~Reload"
 msgstr "Gen~indlæs"
 
-#: src/dialogs/menu.c:245 src/dialogs/menu.c:409
+#: src/dialogs/menu.c:245 src/dialogs/menu.c:410
 msgid "Frame at ~full-screen"
 msgstr "~Maksimer ramme"
 
-#: src/dialogs/menu.c:253 src/dialogs/menu.c:411
+#: src/dialogs/menu.c:253 src/dialogs/menu.c:412
 msgid "Nex~t tab"
 msgstr "N~æste faneblad"
 
-#: src/dialogs/menu.c:254 src/dialogs/menu.c:412
+#: src/dialogs/menu.c:254 src/dialogs/menu.c:413
 msgid "Pre~v tab"
 msgstr "F~orrige faneblad"
 
-#: src/dialogs/menu.c:257 src/dialogs/menu.c:413
+#: src/dialogs/menu.c:257 src/dialogs/menu.c:414
 msgid "~Close tab"
 msgstr "~Luk faneblad"
 
@@ -4598,287 +4596,287 @@ msgstr "Luk ~alle faneblade på nær det aktuelle"
 msgid "B~ookmark all tabs"
 msgstr "Tilføj alle faneblade som ~bogmærker"
 
-#: src/dialogs/menu.c:296
+#: src/dialogs/menu.c:297
 msgid "Open new ~tab"
 msgstr "~Åbn nyt faneblad"
 
-#: src/dialogs/menu.c:297
+#: src/dialogs/menu.c:298
 msgid "Open new tab in backgroun~d"
 msgstr "Åbn nyt faneblad i ~baggrunden"
 
-#: src/dialogs/menu.c:298
+#: src/dialogs/menu.c:299
 msgid "~Go to URL"
 msgstr "~Gå til adresse"
 
-#: src/dialogs/menu.c:300
+#: src/dialogs/menu.c:301
 msgid "Go ~forward"
 msgstr "Gå ~frem"
 
-#: src/dialogs/menu.c:301
+#: src/dialogs/menu.c:302
 msgid "~History"
 msgstr "~Historik"
 
-#: src/dialogs/menu.c:302
+#: src/dialogs/menu.c:303
 msgid "~Unhistory"
 msgstr "For~læns historik"
 
-#: src/dialogs/menu.c:307
+#: src/dialogs/menu.c:308
 msgid "~Save as"
 msgstr "Gem ~som"
 
-#: src/dialogs/menu.c:308
+#: src/dialogs/menu.c:309
 msgid "Save UR~L as"
 msgstr "Gem ad~resse som"
 
-#: src/dialogs/menu.c:309
+#: src/dialogs/menu.c:310
 msgid "Sa~ve formatted document"
 msgstr "Gem tekstf~ormateret dokument"
 
-#: src/dialogs/menu.c:317
+#: src/dialogs/menu.c:318
 msgid "~Kill background connections"
 msgstr "Dr~æb baggrundsforbindelser"
 
-#: src/dialogs/menu.c:318
+#: src/dialogs/menu.c:319
 msgid "Flush all ~caches"
 msgstr "Tøm alle ~cacher"
 
-#: src/dialogs/menu.c:319
+#: src/dialogs/menu.c:320
 msgid "Resource ~info"
 msgstr "Ressource~information"
 
-#: src/dialogs/menu.c:325
+#: src/dialogs/menu.c:326
 msgid "E~xit"
 msgstr "~Afslut"
 
-#: src/dialogs/menu.c:351
+#: src/dialogs/menu.c:352
 msgid "Open ~new window"
 msgstr "Åbn i ~nyt vindue"
 
-#: src/dialogs/menu.c:370
+#: src/dialogs/menu.c:371
 msgid "~OS shell"
 msgstr "~Kommandofortolker"
 
-#: src/dialogs/menu.c:377
+#: src/dialogs/menu.c:378
 msgid "Resize t~erminal"
 msgstr "Ændr t~erminalstørrelse"
 
-#: src/dialogs/menu.c:393
+#: src/dialogs/menu.c:394
 msgid "~Search"
 msgstr "~Søg"
 
-#: src/dialogs/menu.c:394
+#: src/dialogs/menu.c:395
 msgid "Search ~backward"
 msgstr "Søg ~bagud"
 
-#: src/dialogs/menu.c:395
+#: src/dialogs/menu.c:396
 msgid "Find ~next"
 msgstr "Søg ~næste"
 
-#: src/dialogs/menu.c:396
+#: src/dialogs/menu.c:397
 msgid "Find ~previous"
 msgstr "Søg ~forrige"
 
-#: src/dialogs/menu.c:397
+#: src/dialogs/menu.c:398
 msgid "T~ypeahead search"
 msgstr "~Tast og find"
 
-#: src/dialogs/menu.c:399
+#: src/dialogs/menu.c:400
 msgid "Toggle ~html/plain"
 msgstr "S~kift mellem HTML/tekst"
 
-#: src/dialogs/menu.c:400
+#: src/dialogs/menu.c:401
 msgid "Toggle i~mages"
 msgstr "B~illedlinks fra/til"
 
-#: src/dialogs/menu.c:401
+#: src/dialogs/menu.c:402
 msgid "Toggle ~link numbering"
 msgstr "Linkn~ummerering fra/til"
 
-#: src/dialogs/menu.c:402
+#: src/dialogs/menu.c:403
 msgid "Toggle ~document colors"
 msgstr "Dokumentf~arver fra/til"
 
-#: src/dialogs/menu.c:403
+#: src/dialogs/menu.c:404
 msgid "~Wrap text on/off"
 msgstr "Ombr~yd tekst fra/til"
 
-#: src/dialogs/menu.c:405
+#: src/dialogs/menu.c:406
 msgid "Document ~info"
 msgstr "~Dokumentinformation"
 
-#: src/dialogs/menu.c:406
+#: src/dialogs/menu.c:407
 msgid "H~eader info"
 msgstr "Ser~verinformation om side"
 
-#: src/dialogs/menu.c:407
+#: src/dialogs/menu.c:408
 msgid "Rel~oad document"
 msgstr "~Genindlæs dokument"
 
-#: src/dialogs/menu.c:408
+#: src/dialogs/menu.c:409
 msgid "~Rerender document"
 msgstr "Genfo~rmater dokument"
 
-#: src/dialogs/menu.c:419
+#: src/dialogs/menu.c:420
 msgid "~ELinks homepage"
 msgstr "~ELinks hjemmeside"
 
-#: src/dialogs/menu.c:420
+#: src/dialogs/menu.c:421
 msgid "~Documentation"
 msgstr "~Dokumentation"
 
-#: src/dialogs/menu.c:421
+#: src/dialogs/menu.c:422
 msgid "~Keys"
 msgstr "~Taster"
 
-#: src/dialogs/menu.c:423
+#: src/dialogs/menu.c:424
 msgid "LED ~indicators"
 msgstr "LED ~indikatorer"
 
-#: src/dialogs/menu.c:426
+#: src/dialogs/menu.c:427
 msgid "~Bugs information"
 msgstr "Information om ~programfejl"
 
-#: src/dialogs/menu.c:428
+#: src/dialogs/menu.c:429
 msgid "ELinks C~vsWeb"
 msgstr "ELinks C~vsWeb"
 
-#: src/dialogs/menu.c:429
+#: src/dialogs/menu.c:430
 msgid "ELinks Cvs ~History"
 msgstr "ELinks cvs ~historik"
 
-#: src/dialogs/menu.c:430
+#: src/dialogs/menu.c:431
 msgid "ELinks ~LXR"
 msgstr "ELinks ~LXR"
 
-#: src/dialogs/menu.c:433
+#: src/dialogs/menu.c:434
 msgid "~Copying"
 msgstr "Li~cens"
 
-#: src/dialogs/menu.c:434
+#: src/dialogs/menu.c:435
 msgid "~About"
 msgstr "~Om ELinks"
 
-#: src/dialogs/menu.c:440
+#: src/dialogs/menu.c:441
 msgid "~Add"
 msgstr "~Tilføj"
 
-#: src/dialogs/menu.c:441
+#: src/dialogs/menu.c:442
 msgid "~Modify"
 msgstr "~Ændr"
 
-#: src/dialogs/menu.c:442
+#: src/dialogs/menu.c:443
 msgid "~Delete"
 msgstr "~Slet"
 
-#: src/dialogs/menu.c:448 src/dialogs/menu.c:461
+#: src/dialogs/menu.c:449 src/dialogs/menu.c:462
 msgid "~Language"
 msgstr "~Sprog"
 
-#: src/dialogs/menu.c:450 src/dialogs/menu.c:462
+#: src/dialogs/menu.c:451 src/dialogs/menu.c:463
 msgid "C~haracter set"
 msgstr "~Tegnsæt"
 
-#: src/dialogs/menu.c:451 src/dialogs/menu.c:463
+#: src/dialogs/menu.c:452 src/dialogs/menu.c:464
 msgid "~Terminal options"
 msgstr "Sk~ærmstyring"
 
-#: src/dialogs/menu.c:452
+#: src/dialogs/menu.c:453
 msgid "File ~extensions"
 msgstr "Filend~elser"
 
-#: src/dialogs/menu.c:454
+#: src/dialogs/menu.c:455
 msgid "~Options manager"
 msgstr "~Opsætningshåndtering"
 
-#: src/dialogs/menu.c:455
+#: src/dialogs/menu.c:456
 msgid "~Keybinding manager"
 msgstr "T~astetildelingshåndtering"
 
-#: src/dialogs/menu.c:456
+#: src/dialogs/menu.c:457
 msgid "~Save options"
 msgstr "~Gem opsætning"
 
-#: src/dialogs/menu.c:469
+#: src/dialogs/menu.c:470
 msgid "Global ~history"
 msgstr "Global ~historik"
 
-#: src/dialogs/menu.c:472
+#: src/dialogs/menu.c:473
 msgid "~Bookmarks"
 msgstr "~Bogmærker"
 
-#: src/dialogs/menu.c:474
+#: src/dialogs/menu.c:475
 msgid "~Cache"
 msgstr "~Cache"
 
-#: src/dialogs/menu.c:475
+#: src/dialogs/menu.c:476
 msgid "~Downloads"
 msgstr "~Downloads"
 
-#: src/dialogs/menu.c:477
+#: src/dialogs/menu.c:478
 msgid "Coo~kies"
 msgstr "Coo~kier"
 
-#: src/dialogs/menu.c:480
+#: src/dialogs/menu.c:481
 msgid "~Form history"
 msgstr "~Formularhistorik"
 
-#: src/dialogs/menu.c:482
+#: src/dialogs/menu.c:483
 msgid "~Authentication"
 msgstr "~Identitetsbekræftelse"
 
-#: src/dialogs/menu.c:498
+#: src/dialogs/menu.c:499
 msgid "~File"
 msgstr "~Filer"
 
-#: src/dialogs/menu.c:499
+#: src/dialogs/menu.c:500
 msgid "~View"
 msgstr "~Vis"
 
-#: src/dialogs/menu.c:500
+#: src/dialogs/menu.c:501
 msgid "~Link"
 msgstr "~Link"
 
-#: src/dialogs/menu.c:501
+#: src/dialogs/menu.c:502
 msgid "~Tools"
 msgstr "V~ærktøjer"
 
-#: src/dialogs/menu.c:502
+#: src/dialogs/menu.c:503
 msgid "~Setup"
 msgstr "~Opsætning"
 
-#: src/dialogs/menu.c:503
+#: src/dialogs/menu.c:504
 msgid "~Help"
 msgstr "~Hjælp"
 
-#: src/dialogs/menu.c:518
+#: src/dialogs/menu.c:519
 msgid "Go to URL"
 msgstr "Gå til adresse"
 
-#: src/dialogs/menu.c:569
+#: src/dialogs/menu.c:570
 msgid "Save to file"
 msgstr "Gem i fil"
 
-#: src/dialogs/menu.c:866
+#: src/dialogs/menu.c:867
 msgid "~Pass frame URI to external command"
 msgstr "~Videregiv rammens adresse til ekstern kommando"
 
-#: src/dialogs/menu.c:871
+#: src/dialogs/menu.c:872
 msgid "Pass link URI to e~xternal command"
 msgstr "~Videregiv linkadresse til ekstern kommando"
 
-#: src/dialogs/menu.c:877
+#: src/dialogs/menu.c:878
 msgid "Pass tab URI to e~xternal command"
 msgstr "~Videregiv fanebladets adresse til ekstern kommando"
 
-#: src/dialogs/menu.c:902
+#: src/dialogs/menu.c:903
 msgid "Empty directory"
 msgstr "Tom mappe"
 
-#: src/dialogs/menu.c:946
+#: src/dialogs/menu.c:947
 msgid "Directories:"
 msgstr "Mapper:"
 
-#: src/dialogs/menu.c:959
+#: src/dialogs/menu.c:960
 msgid "Files:"
 msgstr "Filer:"
 
@@ -5475,7 +5473,8 @@ msgstr "Ukrainsk"
 msgid ""
 "Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
-"Indstillingen -config-dir er sat til %s, men kataloget %s kunne ikke oprettes."
+"Indstillingen -config-dir er sat til %s, men kataloget %s kunne ikke "
+"oprettes."
 
 #: src/lowlevel/home.c:127
 #, c-format
@@ -5675,7 +5674,7 @@ msgstr "Typeforespørgelsesstreng"
 
 #: src/mime/backend/mailcap.c:109
 msgid ""
-"Type of description to show in \"what shall I do with this file\"\n"
+"Type of description to show in \"what to do with this file\"\n"
 "query dialog:\n"
 "0 is show \"mailcap\"\n"
 "1 is show program to be run\n"
@@ -5685,7 +5684,7 @@ msgstr ""
 "eksterne filtype håndteres:\n"
 "0 betyder vis \"mailcap\"\n"
 "1 betyder vis det program som vil blive kørt\n"
-"2 betyder vis beskrivelse fra mailcapfilen hvis muligt ellers \"mailcap\""
+"2 betyder vis beskrivelse fra mailcap-filen hvis muligt ellers \"mailcap\""
 
 #: src/mime/backend/mailcap.c:115
 msgid "Prioritize entries by file"

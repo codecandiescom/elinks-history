@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.81 2003/11/27 01:55:02 jonas Exp $ */
+/* $Id: mime.c,v 1.82 2003/11/27 18:51:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,15 +94,12 @@ struct extension {
 	unsigned char *ct;
 };
 
-static int
-push_add_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
+static void
+add_mime_extension(struct extension *ext)
 {
-	struct extension *ext = (struct extension *) widget_data->widget->udata;
 	struct string name;
 
-	update_dialog_data(dlg_data, widget_data);
-
-	if (!ext || check_dialog(dlg_data) || !init_string(&name)) return 1;
+	if (!ext || !init_string(&name)) return 1;
 
 	add_to_string(&name, "mime.extension.");
 	add_optname_to_string(&name, ext->ext, strlen(ext->ext));
@@ -110,8 +107,6 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	really_del_ext(ext->ext_orig); /* ..or rename ;) */
 	safe_strncpy(get_opt_str(name.source), ext->ct, MAX_STR_LEN);
 	done_string(&name);
-
-	return cancel_dialog(dlg_data, widget_data);
 }
 
 void
@@ -161,7 +156,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	add_dlg_field(dlg, _("Extension(s)", term), 0, 0, check_nonempty, MAX_STR_LEN, ext, NULL);
 	add_dlg_field(dlg, _("Content-Type", term), 0, 0, check_nonempty, MAX_STR_LEN, ct, NULL);
 
-	add_dlg_button(dlg, B_ENTER, push_add_button, _("OK", term), new);
+	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), add_mime_extension, new);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
 	add_dlg_end(dlg, MIME_WIDGETS_COUNT);

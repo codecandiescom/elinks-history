@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.83 2003/11/10 00:32:36 jonas Exp $ */
+/* $Id: msgbox.c,v 1.84 2003/11/27 18:51:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,18 +22,6 @@
 #include "util/snprintf.h"
 #include "util/string.h"
 
-
-static int
-msg_box_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
-{
-	void (*fn)(void *) = (void (*)(void *)) widget_data->widget->udata;
-	void *data = dlg_data->dlg->udata2;
-
-	if (fn) fn(data);
-	cancel_dialog(dlg_data, widget_data);
-
-	return 0;
-}
 
 void
 msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
@@ -93,7 +81,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 		if (!(flags & MSGBOX_NO_INTL))
 			label = _(label, term);
 
-		add_dlg_button(dlg, bflags, msg_box_button, label, fn);
+		add_dlg_ok_button(dlg, bflags, label, fn, udata);
 	}
 
 	va_end(ap);

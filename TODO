@@ -11,8 +11,6 @@ for them; dummy javascript support (just an error message)
 
 	Show all downloads in one window, kind of "download manager"
 
-	Better history manager (switch displaying of URLs/titles)
-
 	Forward/backward history manager
 
 	Rewrite html parser
@@ -75,4 +73,4 @@ optionally.
 	Write some more documentation.. docs, a lot of docs!
 
 
-$Id: TODO,v 1.37 2002/12/17 21:45:42 pasky Exp $
+$Id: TODO,v 1.38 2002/12/18 21:23:31 pasky Exp $

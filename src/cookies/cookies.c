@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.6 2002/03/17 21:53:08 pasky Exp $ */
+/* $Id: cookies.c,v 1.7 2002/03/19 18:29:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -522,7 +522,15 @@ void load_cookies() {
 
 		cookie->id = cookie_id++;
 
-		accept_cookie(cookie);
+		{
+			int cr = cookies_resave;
+
+			/* XXX: We don't want to overwrite the cookies file
+			 * periodically to our death. */
+			cookies_resave = 0;
+			accept_cookie(cookie);
+			cookies_resave = cr;
+		}
 
 		continue;
 
@@ -532,8 +540,6 @@ inv:
 	}
 	fclose(fp);
 }
-
-int cquit = 0; /* XXX */
 
 void save_cookies() {
 	struct cookie *c;
@@ -556,9 +562,6 @@ void save_cookies() {
 			fprintf(fp, "%s %s %s %s %s %ld %d\n", c->name, c->value,
 			    c->server?c->server:(unsigned char *)"", c->path?c->path:(unsigned char *)"",
 			    c->domain?c->domain:(unsigned char *)"", c->expires, c->secure);
-
-		if (cquit)
-			free_cookie(c);
 	}
 
 	fclose(fp);
@@ -572,12 +575,15 @@ void init_cookies()
 
 void cleanup_cookies()
 {
+	struct cookie *c;
+
 	free_list(c_domains);
 
-	cquit = 1;
 	if (cookies_save)
 		save_cookies();
-	cquit = 0;
+	foreach (c, cookies) {
+		free_cookie(c);
+	}
 
 	free_list(cookies);
 }

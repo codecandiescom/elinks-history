@@ -1,10 +1,8 @@
-/* $Id: connect.h,v 1.14 2003/07/03 00:28:22 jonas Exp $ */
+/* $Id: connect.h,v 1.15 2003/12/01 14:00:18 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
 
-/* We MAY have problems with this. If there will be any, just tell me, and
- * I will move it to start of links.h. */
 #include <sys/types.h>
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 

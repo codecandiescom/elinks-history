@@ -1,10 +1,8 @@
-/* $Id: dns.h,v 1.4 2003/06/28 10:47:53 jonas Exp $ */
+/* $Id: dns.h,v 1.5 2003/12/01 14:01:01 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_DNS_H
 #define EL__LOWLEVEL_DNS_H
 
-/* We MAY have problems with this. If there will be any, just tell me, and
- * I will move it to start of links.h. */
 #include <sys/socket.h>
 #include <sys/types.h>
 

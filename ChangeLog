@@ -1,3 +1,16 @@
+Sun Aug  8 06:33:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	In handle_ret_goto_url, use goto_url_with_hook instead of goto_url 
+	to avoid a segfault when Lua code tells the browser to load a new
+	URL but provides a string that is not a full, parsable URI -- e.g., 
+	a simple path-name. The code was fine until src/sched/task.c 1.111 
+	on 2004-06-09, which changed goto_url to require a full URI.  
+	
+	An added bonus to this change is that goto-url hooks are called when
+	Lua sends the browser to a new URI.  
+
 Sat Aug  7 22:03:53 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/scripting/lua/core.c:

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.303 2003/12/21 22:30:47 pasky Exp $ */
+/* $Id: parser.c,v 1.304 2003/12/21 22:46:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -518,8 +518,6 @@ static int was_br;
 static int was_li;
 static int was_xmp;
 
-static int uttered_glyph; /* keep it poetic ;-) */
-
 static inline void
 ln_break(int n, void (*line_break)(void *), void *f)
 {
@@ -533,7 +531,6 @@ static void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
-	uttered_glyph = 1;
 	if (par_format.align == AL_NONE) putsp = 0;
 	if (!len || html_top.invisible) return;
 	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
@@ -2520,7 +2517,13 @@ html_frameset(unsigned char *a)
 	unsigned char *cols, *rows;
 	int width, height;
 
-	if (search_html_stack("BODY") || uttered_glyph
+	/* XXX: This is still not 100% correct. We should also ignore the
+	 * frameset when we encountered anything 3v1l (read as: non-whitespace
+	 * text/element/anything) in the document outside of <head>. Well, this
+	 * is still better than nothing and it should heal up the security
+	 * concerns at least because sane sites should enclose the documents in
+	 * <body> elements ;-). See also bug 171. --pasky */
+	if (search_html_stack("BODY")
 	    || !global_doc_opts->frames || !special_f(ff, SP_USED, NULL))
 		return;
 
@@ -3849,7 +3852,6 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	last_form_tag = NULL;
 	last_form_attr = NULL;
 	last_input_tag = NULL;
-	uttered_glyph = 0;
 }
 
 void

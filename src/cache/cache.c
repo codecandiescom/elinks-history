@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.128 2004/04/03 12:20:12 jonas Exp $ */
+/* $Id: cache.c,v 1.129 2004/04/03 13:08:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include "util/types.h"
 
 /* The list of cache entries */
-static INIT_LIST_HEAD(cache);
+static INIT_LIST_HEAD(cache_entries);
 
 static long cache_size;
 static int id_tag_counter = 0;
@@ -81,16 +81,16 @@ cache_info(int type)
 		case INFO_BYTES:
 			return cache_size;
 		case INFO_FILES:
-			foreach (ce, cache) i++;
+			foreach (ce, cache_entries) i++;
 			return i;
 		case INFO_LOCKED:
-			foreach (ce, cache) i += is_object_used(ce);
+			foreach (ce, cache_entries) i += is_object_used(ce);
 			return i;
 		case INFO_LOADING:
-			foreach (ce, cache) i += is_entry_used(ce);
+			foreach (ce, cache_entries) i += is_entry_used(ce);
 			return i;
 		case INFO_LIST:
-			return (long) &cache;
+			return (long) &cache_entries;
 	}
 	return 0;
 }
@@ -115,12 +115,12 @@ find_in_cache(struct uri *uri)
 		if (!proxy_uri) return NULL;
 	}
 
-	foreach (ce, cache) {
+	foreach (ce, cache_entries) {
 		if (!ce->valid || ce->uri != uri) continue;
 
 		/* Move it on the top of the list. */
 		del_from_list(ce);
-		add_to_list(cache, ce);
+		add_to_list(cache_entries, ce);
 
 		found = ce;
 		break;
@@ -155,7 +155,7 @@ get_cache_entry(struct uri *uri)
 	ce->id_tag = id_tag_counter++;
 	object_nolock(ce); /* Debugging purpose. */
 
-	add_to_list(cache, ce);
+	add_to_list(cache_entries, ce);
 
 	ce->box_item = add_listbox_item(&cache_browser, struri(ce->uri), ce);
 
@@ -567,7 +567,7 @@ garbage_collection(int whole)
 	 * will work only with the unused entries from then on. Also ensure
 	 * that @cache_size is in sync. */
 
-	foreach (ce, cache) {
+	foreach (ce, cache_entries) {
 		old_cache_size += ce->data_size;
 
 		if (!is_object_used(ce) && !is_entry_used(ce))
@@ -593,7 +593,7 @@ garbage_collection(int whole)
 	 * Mark potential targets for destruction, from the oldest to the
 	 * newest. */
 
-	foreachback (ce, cache) {
+	foreachback (ce, cache_entries) {
 		/* We would have shrinked enough already? */
 		if (!whole && new_cache_size <= gc_cache_size)
 			goto shrinked_enough;
@@ -631,7 +631,7 @@ shrinked_enough:
 
 	/* Something is strange when we decided all is ok before dropping any
 	 * cache entry. */
-	if ((void *) ce == &cache) return;
+	if ((void *) ce == &cache_entries) return;
 
 
 	if (!whole) {
@@ -647,7 +647,7 @@ shrinked_enough:
 		 * be enough to free the huge entry. This actually fixes that
 		 * situation. */
 
-		for (entry = ce; (void *) entry != &cache; entry = entry->next) {
+		for (entry = ce; (void *) entry != &cache_entries; entry = entry->next) {
 			long newer_cache_size = new_cache_size + entry->data_size;
 
 			if (newer_cache_size > gc_cache_size)
@@ -662,7 +662,7 @@ shrinked_enough:
 	/* Scanning cache, pass #4:
 	 * Destroy the marked entries. So sad, but that's life, bro'. */
 
-	for (; (void *) ce != &cache; ) {
+	for (; (void *) ce != &cache_entries; ) {
 		ce = ce->next;
 		if (ce->prev->gc_target)
 			delete_cache_entry(ce->prev);

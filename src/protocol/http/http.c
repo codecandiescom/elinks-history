@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.281 2004/04/22 19:36:08 pasky Exp $ */
+/* $Id: http.c,v 1.282 2004/04/22 19:38:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -527,7 +527,7 @@ http_send_header(struct connection *conn)
 	}
 #endif
 
-	/* FIXME: what about post http 1.1 ?? --Zas */
+	/* FIXME: What about post-HTTP/1.1?? --Zas */
 	if (HTTP_1_1(info->sent_version)) {
 		if (!IS_PROXY_URI(conn->uri)) {
 			add_to_string(&header, "Connection: ");
@@ -1203,8 +1203,9 @@ again:
 	     || (d = parse_http_header(conn->cached->head, "Proxy-Connection", NULL))) {
 		if (!strcasecmp(d, "close")) info->close = 1;
 		mem_free(d);
-	} else if (PRE_HTTP_1_1(version))
+	} else if (PRE_HTTP_1_1(version)) {
 		info->close = 1;
+	}
 
 	cf = conn->from;
 	conn->from = 0;
@@ -1306,7 +1307,7 @@ again:
 		if (d) conn->cached->last_modified = d;
 	}
 
-	/* FIXME: parse only if http 1.1 or later ? --Zas */
+	/* FIXME: Parse only if HTTP/1.1 or later? --Zas */
 	d = parse_http_header(conn->cached->head, "ETag", NULL);
 	if (d) {
 		if (conn->cached->etag)  {

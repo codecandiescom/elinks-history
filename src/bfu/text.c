@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.102 2004/07/19 22:09:49 zas Exp $ */
+/* $Id: text.c,v 1.103 2004/07/28 11:42:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,20 +366,22 @@ mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 {
 #ifdef CONFIG_MOUSE
 	int border = DIALOG_LEFT_BORDER + DIALOG_LEFT_INNER_BORDER;
-	int x1 = dlg_data->box.x + border;
-	int x2 = dlg_data->box.x + dlg_data->box.width - 1 - border;
-	int y = widget_data->box.y;
-	int height = widget_data->box.height;
 	int current = widget_data->info.text.current;
 	int scroller_y = widget_data->info.text.scroller_y;
 	int scroller_height = widget_data->info.text.scroller_height;
 	int scroller_middle = scroller_y + scroller_height/2
 			      - widget_data->info.text.scroller_last_dir;
+	struct box scroller_box;
+
+	set_box(&scroller_box,
+		dlg_data->box.x + dlg_data->box.width - 1 - border,
+		widget_data->box.y,
+		DIALOG_LEFT_INNER_BORDER * 2 + 1,
+		widget_data->box.height);
 
 	/* Scroll is possible by using left or right of dialog, and within
 	 * the scroller height. */
-	if ((ev->x > x1 && ev->x < x2)
-	    || ev->y < y || ev->y >= y + height)
+	if (!check_mouse_position(ev, &scroller_box))
 		return EVENT_NOT_PROCESSED;
 
 	switch (get_mouse_button(ev)) {

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.318 2004/08/02 22:13:24 jonas Exp $ */
+/* $Id: http.c,v 1.319 2004/08/02 23:58:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,7 +253,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 	}
 
 	if (conn->info && !((struct http_connection_info *) conn->info)->close
-	    && (!conn->socket.ssl /* FIXME: Assuming ssl handle */) /* We won't keep alive ssl connections */
+	    && (!conn->socket.ssl) /* We won't keep alive ssl connections */
 	    && (!get_opt_int("protocol.http.bugs.post_no_keepalive")
 		|| !conn->uri->post)) {
 		add_keepalive_connection(conn, HTTP_KEEPALIVE_TIMEOUT);
@@ -335,7 +335,7 @@ http_send_header(struct connection *conn)
 		return;
 	}
 
-	use_connect = IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && !conn->socket.ssl /* FIXME: Assuming ssl handle */;
+	use_connect = IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && !conn->socket.ssl;
 
 	if (trace) {
 		add_to_string(&header, "TRACE ");
@@ -348,7 +348,7 @@ http_send_header(struct connection *conn)
 		add_to_string(&header, "GET ");
 	}
 
-	if (!IS_PROXY_URI(conn->uri) || conn->socket.ssl /* FIXME: Assuming ssl handle */) {
+	if (!IS_PROXY_URI(conn->uri) || conn->socket.ssl) {
 		add_char_to_string(&header, '/');
 	}
 
@@ -356,7 +356,7 @@ http_send_header(struct connection *conn)
 		/* Add port if it was specified or the default port */
 		add_uri_to_string(&header, uri, URI_HTTP_CONNECT);
 	} else {
-		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->socket.ssl /* FIXME: Assuming ssl handle */) {
+		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->socket.ssl) {
 			add_url_to_http_string(&header, uri, URI_DATA);
 		} else {
 			add_url_to_http_string(&header, conn->uri, URI_DATA);
@@ -1167,7 +1167,7 @@ again:
 		return;
 	}
 	if (h == 200 && IS_PROXY_URI(conn->uri)
-	    && uri->protocol == PROTOCOL_HTTPS && !conn->socket.ssl /* FIXME: Assuming ssl handle */) {
+	    && uri->protocol == PROTOCOL_HTTPS && !conn->socket.ssl) {
 #ifdef CONFIG_SSL
 		if (init_ssl_connection(conn) == S_SSL_ERROR) {
 			abort_conn_with_state(conn, S_SSL_ERROR);
@@ -1206,7 +1206,9 @@ again:
 	}
 
 #ifdef CONFIG_SSL
-	if (conn->socket.ssl /* FIXME: Assuming ssl handle */)
+	/* TODO: Move this to some more generic place like lowlevel/connect.c
+	 * or sched/connection.c when other protocols will need it. --jonas */
+	if (conn->socket.ssl)
 		mem_free_set(&conn->cached->ssl_info, get_ssl_connection_cipher(conn));
 #endif
 

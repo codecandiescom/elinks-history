@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.58 2003/05/08 23:03:08 zas Exp $ */
+/* $Id: session.c,v 1.59 2003/05/09 13:23:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1321,8 +1321,10 @@ decode_url(unsigned char *url)
 }
 
 struct initial_session_info *
-decode_session_info(void *data, int len)
+decode_session_info(const void *pdata)
 {
+	int *data = pdata;
+	int len = *(data++);
 	struct initial_session_info *info;
 	int url_len;
 
@@ -1331,9 +1333,9 @@ decode_session_info(void *data, int len)
 	info = mem_calloc(1, sizeof(struct initial_session_info));
 	if (!info) return NULL;
 
-	info->base_session = *((int *) data);
+	info->base_session = *(data++);
 
-	url_len = *((int *) data + 1);
+	url_len = *(data++);
 	if (url_len) {
 		unsigned char *url;
 
@@ -1342,7 +1344,7 @@ decode_session_info(void *data, int len)
 		url = mem_alloc(url_len + 1);
 		if (!url) goto url_decoded;
 
-		memcpy(url, (int *) data + 2, url_len);
+		memcpy(url, data, url_len);
 		url[url_len] = '\0';
 
 		info->url = decode_url(url);

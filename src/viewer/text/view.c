@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.631 2004/10/17 20:44:10 miciah Exp $ */
+/* $Id: view.c,v 1.632 2004/10/17 20:45:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -649,8 +649,8 @@ try_mark_key(struct session *ses, struct document_view *doc_view,
 #endif
 
 static enum frame_event_status
-frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
-		    struct term_event *ev)
+try_prefix_key(struct session *ses, struct document_view *doc_view,
+	       struct term_event *ev)
 {
 	struct document *document = doc_view->document;
 	struct document_options *doc_opts = &document->options;
@@ -721,7 +721,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		}
 	}
 
-	status = frame_ev_kbd_number(ses, doc_view, ev);
+	status = try_prefix_key(ses, doc_view, ev);
 	if (status != FRAME_EVENT_IGNORED)
 		return status;
 

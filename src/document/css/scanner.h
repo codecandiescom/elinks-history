@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.43 2004/01/21 06:19:22 jonas Exp $ */
+/* $Id: scanner.h,v 1.44 2004/01/21 17:02:57 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -10,9 +10,7 @@
 /* The various token types and what they contain. Patterns taken from
  * the flex scanner declarations in the CSS 2 Specification. */
 enum css_token_type {
-	CSS_TOKEN_NONE,
-
-	/* Char tokens from 0-255 have their char value as type and non string
+	/* Char tokens from 1-255 have their char value as type and non string
 	 * tokens have values from 256 and up. */
 
 	/* Low level string tokens: */
@@ -67,8 +65,20 @@ enum css_token_type {
 
 	/* TODO: Selector stuff like "|=" and "~=" */
 
+	/* Special tokens */
+
 	/* A special token for unrecognized strings */
 	CSS_TOKEN_GARBAGE,
+
+	/* Token type used internally when scanning to signal that the token
+	 * should not be recorded in the scanners token table. Put here so we
+	 * can more easily check <= CSS_TOKEN_NONE. */
+	CSS_TOKEN_SKIP = -1,
+
+	/* Another internal token type used both to mark unused tokens in the
+	 * scanner table as invalid or when scanning to signal that the
+	 * scanning should end. */
+	CSS_TOKEN_NONE = 0,
 };
 
 /* Define if you want a talking scanner */

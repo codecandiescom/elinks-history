@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.76 2004/01/21 16:21:11 jonas Exp $ */
+/* $Id: scanner.c,v 1.77 2004/01/21 17:02:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,7 +206,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		   || (first_char == '<' && strlen(string) > 2 && !strncmp(string, "!--", 3))) {
 		/* Skip SGML left and right comments */
 		string += 2 + (first_char == '<');
-		type = CSS_TOKEN_NONE;
+		type = CSS_TOKEN_SKIP;
 
 	} else if (is_css_ident_start(first_char)) {
 		scan_css(string, CSS_CHAR_IDENT);
@@ -240,11 +240,10 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	} else if (first_char == '<' && *string == '/') {
 		/* Some kind of SGML tag end ... better bail out screaming */
 		type = CSS_TOKEN_NONE;
-		string = NULL;
 
 	} else if (first_char == '/' && *string == '*') {
 		/* Comments */
-		type = CSS_TOKEN_NONE;
+		type = CSS_TOKEN_SKIP;
 
 		for (string++; *string; string++)
 			if (*string == '*' && string[1] == '/') {
@@ -308,10 +307,13 @@ scan_css_tokens(struct css_scanner *scanner)
 
 		scan_css_token(scanner, current);
 
-		if (current->type == CSS_TOKEN_NONE) {
+		if (current->type <= CSS_TOKEN_NONE) {
  			current--;
-			/* Did some one scream for us to end scanning? */
-			if (!scanner->position) break;
+			/* Did some one scream for us to end the madness? */
+			if (current->type == CSS_TOKEN_NONE) {
+				scanner->position = NULL;
+				break;
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.466 2004/06/11 00:10:21 jonas Exp $ */
+/* $Id: session.c,v 1.467 2004/06/11 00:18:25 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -584,16 +584,21 @@ setup_first_session(struct session *ses, struct uri *uri)
 {
 	struct terminal *term = ses->tab->term;
 
+	/* Start loading URI in the background */
 	if (uri) goto_uri(ses, uri);
 
 	if (first_use) {
+		/* Only open the goto URL dialog if no URI was passed on the
+		 * command line. */
+		void *handler = uri ? dialog_goto_url_open_first : NULL;
+
 		msg_box(term, NULL, 0,
 			N_("Welcome"), AL_CENTER,
 			N_("Welcome to ELinks!\n\n"
 			"Press ESC for menu. Documentation is available in "
 			"Help menu."),
 			ses, 1,
-			N_("OK"), dialog_goto_url_open_first, B_ENTER | B_ESC);
+			N_("OK"), handler, B_ENTER | B_ESC);
 
 #ifdef CONFIG_BOOKMARKS
 	} else if (!uri && get_opt_bool("ui.sessions.auto_restore")) {

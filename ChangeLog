@@ -1,3 +1,83 @@
+Mon Nov 22 17:07:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	Introduce md5_bin_digest buffer typedef.  
+
+Mon Nov 22 17:04:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	Fix descriptions from last patch. Rename convert_hex() ->
+	convert_to_md5_hex_digest(). I like upcased hex numbers.  
+
+Mon Nov 22 16:52:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	init_random_cnonce() -> init_cnonce_digest(), digest_calc_response()
+	-> init_response_digest() and add function descriptions + lots of
+	FIXMEs.  
+
+Mon Nov 22 13:27:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, bfu/listmenu.c, bfu/listmenu.h, bfu/menu.h,
+	dialogs/info.c, dialogs/info.h, dialogs/menu.c, dialogs/menu.h,
+	dialogs/options.c, dialogs/options.h, document/html/parser.c,
+	mime/dialogs.c, sched/task.c, sched/task.h, viewer/text/form.c,
+	viewer/text/form.h, viewer/text/link.c, viewer/text/link.h,
+	viewer/text/textarea.c, viewer/text/textarea.h:
+
+	Drop type casting to menu_func, use correct prototype for functions
+	which are called by menus (menu_func).  
+
+Mon Nov 22 11:31:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: dialog.c, hierbox.c, inpfield.c, widget.h:
+
+	Trim trailing whitespaces.  
+
+Mon Nov 22 11:29:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Drop inline keyword since performance is not an issue here.  
+
+Mon Nov 22 07:28:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/dialog.h,
+	bfu/hierbox.c, bfu/inpfield.c, bfu/listbox.c, bfu/widget.c,
+	bfu/widget.h, bookmarks/dialogs.c:
+
+	Now longer use the |dlg_data->focus_selected_widget| flag to
+	indicate to the widget-specific drawing code whether the widget is
+	focused. Instead, check within the individual drawing routines 
+	whether the widget being drawn is focused.  
+	
+	struct dialog_data: Drop the boolean focus_selected_widget.  
+	
+	display_widget_focused, display_widget_unfocused: Drop.  
+	
+	display_widget: Expose.  
+	
+	select_widget, cycle_widget_focus: Set
+	|dlg_data->selected_widget_id| _before_ calling display_widget on
+	the previously selected widget.  
+	
+	display_button, display_checkbox, display_field_do: Use
+	|is_selected_widget(dlg_data, widget_data)| instead of checking
+	|dlg_data->focus_selected_widget|.  
+	
+	Everywhere: Use display_widget instead of display_widget_focused and
+	display_widget_unfocused.  
+
+Mon Nov 22 06:28:50 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	Fix some compilation errors that came with the change from void * to
+	t_widget_handler * for the callback provided to add_dlg_button_do.  
+
 Sun Nov 21 17:15:50 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/: button.c, checkbox.c, dialog.c, inpfield.c, listbox.c,

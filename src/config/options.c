@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.14 2002/05/17 15:41:59 pasky Exp $ */
+/* $Id: options.c,v 1.15 2002/05/17 21:34:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,30 +50,29 @@ struct option *all_options[] = { links_options, html_options, NULL, };
  * more fun. This part of code is under heavy development, so please treat
  * with care. --pasky, 20020428 ;) */
 
-/* Get record of option of given name. It is guaranteed to never return
- * NULL. */
+/* Get record of option of given name, or NULL if there's no such option. */
 struct option *
-get_opt_rec(unsigned char *name)
+get_opt_rec(struct option *optlist, unsigned char *name)
 {
 	struct option *opt;
 
-	for (opt = links_options; opt->name; opt++) {
+	for (opt = optlist; opt->name; opt++) {
 		if (!strcmp(opt->name, name)) {
 			return opt;
 		}
 	}
 
-	internal("Attempted to fetch unexistent option %s!", name);
-	return NULL; /* This never happens, though. Silencing gcc. */
+	return NULL;
 }
 
 /* Fetch pointer to value of certain option. It is guaranteed to never return
  * NULL. */
 void *
-get_opt(unsigned char *name)
+get_opt(struct option *optlist, unsigned char *name)
 {
-	struct option *opt = get_opt_rec(name);
+	struct option *opt = get_opt_rec(optlist, name);
 
+	if (!opt) internal("Attempted to fetch unexistent option %s!", name);
 	if (!opt->ptr) internal("Option %s has no value!", name);
 	return opt->ptr;
 }
@@ -87,6 +86,20 @@ cmd_name(unsigned char *name)
 
 	for (ptr = cname; *ptr; ptr++) {
 		if (*ptr == '_') *ptr = '-';
+	}
+
+	return cname;
+}
+
+/* Get option name from command-line alias */
+unsigned char *
+opt_name(unsigned char *name)
+{
+	unsigned char *cname = stracpy(name);
+	unsigned char *ptr;
+
+	for (ptr = cname; *ptr; ptr++) {
+		if (*ptr == '-') *ptr = '_';
 	}
 
 	return cname;

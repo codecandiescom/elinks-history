@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.8 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: conf.c,v 1.9 2002/05/17 21:34:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,38 +37,37 @@ unsigned char *_parse_options(int argc, unsigned char *argv[], struct option **o
 		argv++, argc--;
 
 		if (argv[-1][0] == '-') {
-			struct option *option;
 			struct option **oplist;
+			unsigned char *argname = &argv[-1][1];
 
-			/* TODO: get_opt_rec() - but we must get rid of oplist
-			 * first. */
+			/* Treat --foo same as -foo. */
+			if (argname[0] == '-') argname++;
 
-			for (oplist = opt; (option = *oplist); oplist++) {
-				for (; option->name; option++) {
-					unsigned char *cname = cmd_name(option->name);
+			for (oplist = opt; *oplist; oplist++) {
+				struct option *option;
+				unsigned char *oname = opt_name(argname);
 
-					if (option->rd_cmd &&
-					    option->flags & OPT_CMDLINE &&
-					    ((cname &&
-					      !strcasecmp(cname,
-							 &argv[-1][(argv[-1][1] == '-' ? 2 : 1)])) ||
-					     !strcasecmp(option->name,
-						         &argv[-1][(argv[-1][1] == '-' ? 2 : 1)]))) {
-						unsigned char *err = option->rd_cmd(option, &argv, &argc);
+				option = get_opt_rec(*oplist, argname);
+				if (!option && oname)
+					option = get_opt_rec(*oplist, oname);
 
-						mem_free(cname);
+				mem_free(oname);
 
-						if (err) {
-							if (err[0])
-								fprintf(stderr, "Error parsing option %s: %s\n", argv[-1], err);
+				if (!option)
+					continue;
 
-							return NULL;
-						}
+				if (option->rd_cmd &&
+				    option->flags & OPT_CMDLINE) {
+					unsigned char *err = option->rd_cmd(option, &argv, &argc);
 
-						goto found;
+					if (err) {
+						if (err[0])
+							fprintf(stderr, "Error parsing option %s: %s\n", argv[-1], err);
+
+						return NULL;
 					}
 
-					mem_free(cname);
+					goto found;
 				}
 			}
 
@@ -129,7 +128,6 @@ void parse_config_file(unsigned char *name, unsigned char *file, struct option *
 
 	while (file[0]) {
 		struct option **optlist;
-		struct option *option;
 		unsigned char *id, *val, *tok = NULL;
 		int id_len, val_len, tok_len;
 
@@ -171,27 +169,32 @@ void parse_config_file(unsigned char *name, unsigned char *file, struct option *
 
 		tok_len = strlen(tok);
 
-		/* TODO: get_opt_rec() - but we must get rid of oplist
-		 * first. */
+		for (optlist = opt; *optlist; optlist++) {
+			struct option *option;
+			unsigned char *oname = mem_alloc(tok_len + 1);
 
-		for (optlist = opt; (option = *optlist); optlist++) {
-		    	for (; option->name; option++) {
-				if (option->flags & OPT_CFGFILE &&
-				    tok_len == strlen(option->name) &&
-				    !casecmp(tok, option->name, tok_len)) {
-					unsigned char *value = memacpy(val, val_len);
-					unsigned char *err = option->rd_cfg(option, value);
+			safe_strncpy(oname, tok, tok_len + 1);
 
-					if (err) {
-						if (err[0])
-							fprintf(stderr, "Error parsing config file %s, line %d: %s\n",
-								name, line, err);
-						error = 1;
-					}
+			option = get_opt_rec(*optlist, oname);
 
-					mem_free(value);
-					goto next;
+			mem_free(oname);
+
+			if (!option)
+				continue;
+
+			if (option->flags & OPT_CFGFILE) {
+				unsigned char *value = memacpy(val, val_len);
+				unsigned char *err = option->rd_cfg(option, value);
+
+				if (err) {
+					if (err[0])
+						fprintf(stderr, "Error parsing config file %s, line %d: %s\n",
+							name, line, err);
+					error = 1;
 				}
+
+				mem_free(value);
+				goto next;
 			}
 		}
 

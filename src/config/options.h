@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.7 2002/05/11 16:47:55 pasky Exp $ */
+/* $Id: options.h,v 1.8 2002/05/17 21:34:27 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -30,16 +30,17 @@ extern struct option html_options[];
 extern struct option *all_options[];
 
 
-extern struct option *get_opt_rec(unsigned char *);
+extern struct option *get_opt_rec(struct option *, unsigned char *);
 
-extern void *get_opt(unsigned char *);
+extern void *get_opt(struct option *, unsigned char *);
 
-#define get_opt_int(name) *((int *) get_opt(name))
-#define get_opt_long(name) *((long *) get_opt(name))
-#define get_opt_char(name) *((unsigned char *) get_opt(name))
-#define get_opt_str(name) ((unsigned char *) get_opt(name))
+#define get_opt_int(name) *((int *) get_opt(links_options, name))
+#define get_opt_long(name) *((long *) get_opt(links_options, name))
+#define get_opt_char(name) *((unsigned char *) get_opt(links_options, name))
+#define get_opt_str(name) ((unsigned char *) get_opt(links_options, name))
 
 extern unsigned char *cmd_name(unsigned char *);
+extern unsigned char *opt_name(unsigned char *);
 
 
 extern int anonymous;

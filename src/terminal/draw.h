@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.45 2004/05/13 09:06:32 zas Exp $ */
+/* $Id: draw.h,v 1.46 2004/05/13 13:26:01 zas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -110,8 +110,13 @@ void draw_box(struct terminal *term, struct rect *box,
 void draw_shadow_box(struct terminal *term, struct rect *box,
 		     struct color_pair *color, int width, int height);
 
+/* Draw borders. */
 void draw_border(struct terminal *term, int x, int y, int xw, int yw,
 		 struct color_pair *color, int width);
+
+void draw_border_box(struct terminal *term, struct rect *box,
+		     struct color_pair *color, int width);
+
 
 /* Draws @length chars from @text. */
 void draw_text(struct terminal *term, int x, int y,

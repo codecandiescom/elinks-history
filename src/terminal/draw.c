@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.87 2004/05/13 09:06:32 zas Exp $ */
+/* $Id: draw.c,v 1.88 2004/05/13 13:26:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,6 +174,74 @@ draw_border(struct terminal *term, int x, int y, int xw, int yw,
 	}
 
 	set_screen_dirty(term->screen, y, y + yw);
+}
+
+void
+draw_border_box(struct terminal *term, struct rect *box,
+	        struct color_pair *color, int width)
+{
+	static enum border_char p1[] = {
+		BORDER_SULCORNER,
+		BORDER_SURCORNER,
+		BORDER_SDLCORNER,
+		BORDER_SDRCORNER,
+		BORDER_SVLINE,
+		BORDER_SHLINE,
+	};
+	static enum border_char p2[] = {
+		BORDER_DULCORNER,
+		BORDER_DURCORNER,
+		BORDER_DDLCORNER,
+		BORDER_DDRCORNER,
+		BORDER_DVLINE,
+		BORDER_DHLINE,
+	};
+	enum border_char *p = (width > 1) ? p2 : p1;
+	struct rect borderbox;
+
+	set_rect(&borderbox,
+		 box->x - 1, box->y - 1,
+		 box->width + 2, box->height + 2);
+
+	if (borderbox.width > 2) {
+		struct rect bbox;
+
+		/* Horizontal top border */
+		set_rect(&bbox, box->x, borderbox.y, box->width, 1);
+		draw_box(term, &bbox, p[5], SCREEN_ATTR_FRAME, color);
+
+		/* Horizontal bottom border */
+		bbox.y += borderbox.height - 1;
+		draw_box(term, &bbox, p[5], SCREEN_ATTR_FRAME, color);
+	}
+
+	if (borderbox.height > 2) {
+		struct rect bbox;
+
+		/* Vertical left border */
+		set_rect(&bbox, borderbox.x, box->y, 1, box->height);
+		draw_box(term, &bbox, p[4], SCREEN_ATTR_FRAME, color);
+
+		/* Vertical right border */
+		bbox.x += borderbox.width - 1;
+		draw_box(term, &bbox, p[4], SCREEN_ATTR_FRAME, color);
+	}
+
+	if (borderbox.width > 1 && borderbox.height > 1) {
+		int right = borderbox.x + borderbox.width - 1;
+		int bottom = borderbox.y + borderbox.height - 1;
+
+		/* Upper left corner */
+		draw_border_char(term, borderbox.x, borderbox.y, p[0], color);
+		/* Upper right corner */
+		draw_border_char(term, right, borderbox.y, p[1], color);
+		/* Lower left corner */
+		draw_border_char(term, borderbox.x, bottom, p[2], color);
+		/* Lower right corner */
+		draw_border_char(term, right, bottom, p[3], color);
+	}
+
+	set_screen_dirty(term->screen, borderbox.y, borderbox.y + borderbox.height);
 }
 
 void

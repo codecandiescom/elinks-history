@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.229 2004/05/13 09:08:06 zas Exp $ */
+/* $Id: menu.c,v 1.230 2004/05/13 13:26:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -383,11 +383,10 @@ display_menu(struct terminal *term, struct menu *menu)
 		 int_max(0, menu->dimensions.width - MENU_BORDER_SIZE * 2),
 		 int_max(0, menu->dimensions.height - MENU_BORDER_SIZE * 2));
 
-	copy_rect(&nbox, &box);
-	
 	draw_box(term, &box, ' ', 0, normal_color);
-	draw_border(term, menu->dimensions.x, menu->dimensions.y,
-		    menu->dimensions.width, menu->dimensions.height, frame_color, 1);
+	draw_border_box(term, &box, frame_color, 1);
+
+	copy_rect(&nbox, &box);
 
 	for (p = menu->first, y = box.y;
 	     p < menu->size && p < menu->first + box.height;
@@ -402,7 +401,7 @@ display_menu(struct terminal *term, struct menu *menu)
 
 		nbox.y = y;
 		nbox.height = 1;
-	
+
 		if (p == menu->selected) {
 			/* This entry is selected. */
 			color = selected_color;
@@ -767,7 +766,7 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 	int p = 0;
 	int i;
 	struct rect box;
-	
+
 	/* FIXME: menu horizontal scrolling do not work well yet, we need to cache
 	 * menu items width and recalculate them only when needed (ie. language change)
 	 * instead of looping and calculate them each time. --Zas */
@@ -798,7 +797,7 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 		box.width = L_MAINMENU_SPACE;
 		draw_box(term, &box, '<', 0, normal_color);
 	}
-	
+
 	p += L_MAINMENU_SPACE;
 
 	for (i = menu->first; i < menu->size; i++) {

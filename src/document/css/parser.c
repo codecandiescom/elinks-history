@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.9 2004/01/18 02:28:04 jonas Exp $ */
+/* $Id: parser.c,v 1.10 2004/01/18 02:33:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,55 +51,55 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 
 	assert(props && string);
 
-	/* Align myself. */
+	while (*string) {
+		/* Align myself. */
 
-again:
-	skip_whitespace(string);
+		skip_whitespace(string);
 
-	/* Extract property name. */
+		/* Extract property name. */
 
-	pos = strcspn(string, ":;");
-	if (string[pos] == ';') {
-		string += pos + 1;
-		goto again;
-	}
-	if (string[pos] == 0) return;
-
-	for (i = 0; css_property_info[i].namelen; i++) {
-		struct css_property_info *info = &css_property_info[i];
-
-		if (!strlcasecmp(string, pos, info->name, info->namelen)) {
-			property_info = info;
-			break;
+		pos = strcspn(string, ":;");
+		if (string[pos] == ';') {
+			string += pos + 1;
+			continue;
 		}
-	}
+		if (string[pos] == 0) return;
 
-	string += pos + 1;
+		for (i = 0; css_property_info[i].namelen; i++) {
+			struct css_property_info *info = &css_property_info[i];
 
-	if (!property_info) {
-		/* Unknown property, check the next one. */
-		goto ride_on;
-	}
+			if (!strlcasecmp(string, pos, info->name, info->namelen)) {
+				property_info = info;
+				break;
+			}
+		}
 
-	/* We might be on track of something, cook up the struct. */
+		string += pos + 1;
 
-	prop = mem_calloc(1, sizeof(struct css_property));
-	if (!prop) {
-		goto ride_on;
-	}
-	prop->property = property_info->property;
-	prop->value_type = property_info->value_type;
-	if (!css_parse_value(prop->value_type, &prop->value, &string)) {
-		mem_free(prop);
-		goto ride_on;
-	}
-	add_to_list(*props, prop);
+		if (!property_info) {
+			/* Unknown property, check the next one. */
+			goto ride_on;
+		}
 
-	/* Maybe we have something else to go yet? */
+		/* We might be on track of something, cook up the struct. */
+
+		prop = mem_calloc(1, sizeof(struct css_property));
+		if (!prop) {
+			goto ride_on;
+		}
+		prop->property = property_info->property;
+		prop->value_type = property_info->value_type;
+		if (!css_parse_value(prop->value_type, &prop->value, &string)) {
+			mem_free(prop);
+			goto ride_on;
+		}
+		add_to_list(*props, prop);
+
+		/* Maybe we have something else to go yet? */
 
 ride_on:
-	pos = strcspn(string, ";");
-	i = (string[pos] == ';');
-	string += pos + i;
-	if (*string) goto again;
+		pos = strcspn(string, ";");
+		i = (string[pos] == ';');
+		string += pos + i;
+	}
 }

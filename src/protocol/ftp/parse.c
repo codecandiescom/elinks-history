@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.22 2005/03/28 23:24:11 zas Exp $ */
+/* $Id: parse.c,v 1.23 2005/03/29 01:03:47 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -25,6 +25,7 @@
 #include "elinks.h"
 
 #include "osdep/ascii.h"
+#include "protocol/date.h"
 #include "protocol/ftp/parse.h"
 #include "util/conv.h"
 #include "util/string.h"
@@ -550,20 +551,8 @@ parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
 
 	/* Fourth/Third column: Time hh:mm[:ss] */
 
-	mtime.tm_hour = parse_ftp_number(&src, end, 0, 23);
-	if (src >= end || *src != ':')
+	if (!parse_time((const unsigned char **) &src, &mtime, end))
 		return NULL;
-
-	src++;
-
-	mtime.tm_min = parse_ftp_number(&src, end, 0, 59);
-	if (src >= end) return NULL;
-
-	if (*src == ':') {
-		src++;
-		mtime.tm_sec = parse_ftp_number(&src, end, 0, 59);
-		if (src >= end) return NULL;
-	}
 
 	/* Store the time-stamp */
 	info->mtime = mktime(&mtime);
@@ -654,24 +643,8 @@ parse_ftp_winnt_response(struct ftp_file_info *info, unsigned char *src, int len
 	/* Second column: hh:mm[AP]M, listing does not contain value for
 	 * seconds */
 
-	mtime.tm_hour = parse_ftp_number(&src, end, 1, 12);
-	if (src >= end || *src != ':')
+	if (!parse_time((const unsigned char **) &src, &mtime, end))
 		return NULL;
-
-	src++;
-
-	mtime.tm_min = parse_ftp_number(&src, end, 0, 59);
-	if (src + 2 >= end)
-		return NULL;
-
-	/* Adjust hour from AM/PM. Just for the record, the sequence goes
-	 * 11:00AM, 12:00PM, 01:00PM ... 11:00PM, 12:00AM, 01:00AM . */
-	if (mtime.tm_hour == 12)
-		mtime.tm_hour = 0;
-
-	if (*src == 'P')
-		mtime.tm_hour += 12;
-
 
 	/* Store the time-stamp. */
 	info->mtime = mktime (&mtime);

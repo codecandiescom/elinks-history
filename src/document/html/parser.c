@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.435 2004/06/18 20:19:28 zas Exp $ */
+/* $Id: parser.c,v 1.436 2004/06/18 20:22:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -731,6 +731,7 @@ html_li(unsigned char *a)
 	} else {
 		unsigned char c = 0;
 		unsigned char n[32];
+		int nlen;
 		int t = par_format.flags & P_LISTMASK;
 		int s = get_num(a, "value");
 
@@ -755,9 +756,10 @@ html_li(unsigned char *a)
 		} else {
 			ulongcat(n, NULL, par_format.list_number, (sizeof(n) - 1), 0);
 		}
+		nlen = strlen(n);
 		put_chrs(n, strlen(n), put_chars_f, ff);
 		put_chrs(".&nbsp;", 7, put_chars_f, ff);
-		par_format.leftmargin += strlen(n) + c + 2;
+		par_format.leftmargin += nlen + c + 2;
 		par_format.align = AL_LEFT;
 		html_top.next->parattr.list_number = par_format.list_number + 1;
 		par_format.list_number = 0;

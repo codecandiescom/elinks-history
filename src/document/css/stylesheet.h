@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.11 2004/01/26 23:22:31 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.12 2004/01/26 23:23:26 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -72,8 +72,7 @@ struct css_stylesheet {
 	}
 
 /* Dynamically allocates a stylesheet. */
-struct css_stylesheet *
-init_css_stylesheet(css_stylesheet_importer importer)
+struct css_stylesheet *init_css_stylesheet(css_stylesheet_importer importer);
 
 /* Releases all the content of the stylesheet (but not the stylesheet itself). */
 void done_css_stylesheet(struct css_stylesheet *css);

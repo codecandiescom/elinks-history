@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: apply.c,v 1.2 2004/01/17 02:09:23 jonas Exp $ */
+/* $Id: apply.c,v 1.3 2004/01/17 02:24:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@ struct css_property {
 
 	enum css_decl_property {
 		CSS_DP_NONE,
+		CSS_DP_BACKGROUND_COLOR,
 		CSS_DP_COLOR,
 		CSS_DP_LAST,
 	} property;
@@ -68,8 +69,9 @@ struct css_property {
 
 /* Property <-> valtype associations. Indexed by property. */
 static enum css_decl_valtype prop2valtype[CSS_DP_LAST] = {
-	/* CSS_DP_NONE */	CSS_DV_NONE,
-	/* CSS_DP_COLOR */	CSS_DV_COLOR,
+	/* CSS_DP_NONE */		CSS_DV_NONE,
+	/* CSS_DP_BACKGROUND_COLOR */	CSS_DV_COLOR,
+	/* CSS_DP_COLOR */		CSS_DV_COLOR,
 };
 
 
@@ -199,8 +201,7 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 
 	/* Align myself. */
 
-	while (WHITECHAR(*string))
-		string++;
+	skip_whitespace(string);
 
 	/* Extract property name. */
 
@@ -212,8 +213,10 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 		return 0;
 	}
 
-	if (!strlcasecmp(string, pos, "color", -1)) {
+	if (!strlcasecmp(string, pos, "color", 5)) {
 		property = CSS_DP_COLOR;
+	} else if (!strlcasecmp(string, pos, "background-color", 16)) {
+		property = CSS_DP_BACKGROUND_COLOR;
 	}
 
 	string += pos + 1;
@@ -273,6 +276,10 @@ css_apply(struct html_element *element)
 	foreach (prop, props) {
 		i++;
 		switch (prop->property) {
+			case CSS_DP_BACKGROUND_COLOR:
+				assert(prop->value_type == CSS_DV_COLOR);
+				element->attr.bg = prop->value.color;
+				break;
 			case CSS_DP_COLOR:
 				assert(prop->value_type == CSS_DV_COLOR);
 				element->attr.fg = prop->value.color;

@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.30 2003/12/27 12:44:13 jonas Exp $ */
+/* $Id: xbel.c,v 1.31 2004/01/01 14:24:08 jonas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -11,7 +11,7 @@
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
 
-#if defined(HAVE_LIBEXPAT) && defined(BOOKMARKS)
+#if defined(HAVE_LIBEXPAT) && defined(CONFIG_BOOKMARKS)
 
 #include <ctype.h>
 #include <expat.h>

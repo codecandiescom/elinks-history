@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.247 2004/01/01 09:56:01 jonas Exp $ */
+/* $Id: menu.c,v 1.248 2004/01/01 14:24:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,7 +318,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 
 	add_separator_to_menu(&menu);
 
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 	add_to_menu(&menu, N_("Bookm~ark document"), NULL, ACT_ADD_BOOKMARK,
 		    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
 #endif
@@ -348,7 +348,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 		add_to_menu(&menu, N_("C~lose all tabs but the current"), "",
 			    ACT_TAB_CLOSE_ALL_BUT_CURRENT,
 			    (menu_func) close_all_tabs_but_current, NULL, 0);
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 		add_to_menu(&menu, N_("B~ookmark all tabs"), "", ACT_ADD_BOOKMARK_TABS,
 			    (menu_func) menu_bookmark_terminal_tabs, NULL, 0);
 #endif
@@ -380,7 +380,7 @@ static struct menu_item file_menu21[] = {
 	INIT_MENU_ITEM(N_("Save UR~L as"), NULL, ACT_SAVE_URL_AS, menu_save_url_as, NULL, 0),
 	INIT_MENU_ITEM(N_("Sa~ve formatted document"), NULL, ACT_SAVE_FORMATTED,
 			menu_save_formatted, NULL, 0),
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 	INIT_MENU_ITEM(N_("Bookm~ark document"), NULL, ACT_ADD_BOOKMARK,
 			launch_bm_add_doc_dialog, NULL, 0),
 #endif
@@ -541,7 +541,7 @@ static struct menu_item tools_menu[] = {
 #ifdef CONFIG_GLOBHIST
 	INIT_MENU_ITEM(N_("Global ~history"), NULL, ACT_HISTORY_MANAGER, menu_history_manager, NULL, 0),
 #endif
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 	INIT_MENU_ITEM(N_("~Bookmarks"), NULL, ACT_BOOKMARK_MANAGER, menu_bookmark_manager, NULL, 0),
 #endif
 	INIT_MENU_ITEM(N_("~Cache"), NULL, ACT_CACHE_MANAGER, menu_cache_manager, NULL, 0),

@@ -1,11 +1,11 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.12 2003/11/24 12:00:33 zas Exp $ */
+/* $Id: default.c,v 1.13 2004/01/01 14:24:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -157,4 +157,4 @@ struct bookmarks_backend default_bookmarks_backend = {
 	write_bookmarks_default,
 };
 
-#endif /* BOOKMARKS */
+#endif /* CONFIG_BOOKMARKS */

@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.22 2004/01/01 14:03:52 jonas Exp $ */
+/* $Id: module.c,v 1.23 2004/01/01 14:24:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ struct module *builtin_modules[] = {
 #ifdef CONFIG_LEDS
 	&leds_module,
 #endif
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 	&bookmarks_module,
 #endif
 #ifdef COOKIES

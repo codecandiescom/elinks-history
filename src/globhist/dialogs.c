@@ -1,13 +1,15 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.100 2004/01/01 09:56:02 jonas Exp $ */
+/* $Id: dialogs.c,v 1.101 2004/01/01 14:24:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "elinks.h"
+#ifdef CONFIG_GLOBHIST
 
 #include <string.h>
+
+#include "elinks.h"
 
 #include "bfu/button.h"
 #include "bfu/dialog.h"
@@ -26,8 +28,6 @@
 #include "util/string.h"
 #include "util/object.h"
 
-
-#ifdef CONFIG_GLOBHIST
 
 /* Implementation of the listbox operations */
 
@@ -153,7 +153,7 @@ push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *wid
 
 /* Bookmarking: */
 
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 static int
 push_bookmark_button(struct dialog_data *dlg_data,
 		     struct widget_data *some_useless_info_button)
@@ -179,7 +179,7 @@ push_bookmark_button(struct dialog_data *dlg_data,
 static struct hierbox_browser_button globhist_buttons[] = {
 	{ N_("Goto"),		push_hierbox_goto_button,	1 },
 	{ N_("Info"),		push_hierbox_info_button,	1 },
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 	{ N_("Bookmark"),	push_bookmark_button,		0 },
 #endif
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },

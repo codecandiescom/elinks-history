@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.147 2003/12/27 17:31:36 jonas Exp $ */
+/* $Id: dialogs.c,v 1.148 2004/01/01 14:24:08 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -8,6 +8,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef CONFIG_BOOKMARKS
 
 #include <string.h>
 
@@ -36,8 +38,6 @@
  * (add/modify/delete). */
 #define BOOKMARKS_RESAVE	1
 
-
-#ifdef BOOKMARKS
 
 /* Last searched values */
 unsigned char *bm_last_searched_name = NULL;

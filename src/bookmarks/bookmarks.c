@@ -1,9 +1,11 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.104 2003/12/28 01:34:54 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.105 2004/01/01 14:24:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef CONFIG_BOOKMARKS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,8 +27,6 @@
 #include "util/secsave.h"
 #include "util/string.h"
 #include "util/object.h"
-
-#ifdef BOOKMARKS
 
 /* The list of bookmarks */
 INIT_LIST_HEAD(bookmarks);
@@ -432,4 +432,4 @@ open_bookmark_folder(struct session *ses, unsigned char *foldername)
 	}
 }
 
-#endif /* BOOKMARKS */
+#endif /* CONFIG_BOOKMARKS */

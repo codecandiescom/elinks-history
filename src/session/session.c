@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.287 2004/01/01 14:03:52 jonas Exp $ */
+/* $Id: session.c,v 1.288 2004/01/01 14:24:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -727,7 +727,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	if (info->url) {
 		goto_url(ses, info->url);
 
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 	} else if (!first_use
 		   && number_of_tabs(ses->tab->term) < 2
 		   && get_opt_bool("ui.sessions.auto_restore")) {

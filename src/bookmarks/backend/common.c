@@ -1,11 +1,11 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.13 2003/11/22 16:50:56 jonas Exp $ */
+/* $Id: common.c,v 1.14 2004/01/01 14:24:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -93,4 +93,4 @@ bookmarks_write(struct list_head *bookmarks_list)
 	if (!secure_close(ssi)) bookmarks_dirty = 0;
 }
 
-#endif /* BOOKMARKS */
+#endif /* CONFIG_BOOKMARKS */

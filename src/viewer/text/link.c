@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.134 2003/12/30 10:48:56 jonas Exp $ */
+/* $Id: link.c,v 1.135 2004/01/01 14:24:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -936,7 +936,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 				add_to_menu(&mi, N_("~Download link"), NULL, ACT_DOWNLOAD,
 					    (menu_func) send_download, NULL, 0);
 
-#ifdef BOOKMARKS
+#ifdef CONFIG_BOOKMARKS
 				add_to_menu(&mi, N_("~Add link to bookmarks"), NULL, ACT_ADD_BOOKMARK_LINK,
 					    (menu_func) launch_bm_add_link_dialog,
 					    NULL, 0);

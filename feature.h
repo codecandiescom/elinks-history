@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.25 2004/01/01 14:03:51 jonas Exp $ */
+/* $Id: feature.h,v 1.26 2004/01/01 14:24:07 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -62,7 +62,7 @@
  *
  * Default: enabled */
 
-#define BOOKMARKS
+#define CONFIG_BOOKMARKS
 
 
 /*** XBEL Bookmarks

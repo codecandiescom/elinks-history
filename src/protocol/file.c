@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.69 2003/06/23 03:05:25 jonas Exp $ */
+/* $Id: file.c,v 1.70 2003/06/23 03:11:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -583,7 +583,7 @@ file_func(struct connection *connection)
 {
 	struct cache_entry *cache;
 	unsigned char *filename;
-	DIR *d;
+	DIR *directory;
 	int filenamelen;
 	struct file_info *info;
 
@@ -605,14 +605,14 @@ file_func(struct connection *connection)
 		return;
 	}
 
-	d = opendir(filename);
-	if (d) {
+	directory = opendir(filename);
+	if (directory) {
 		int state;
 
 		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
 			mem_free(filename);
 			mem_free(info);
-			closedir(d);
+			closedir(directory);
 
 			if (get_cache_entry(connection->url, &cache)) {
 				abort_conn_with_state(connection, S_OUT_OF_MEM);
@@ -628,8 +628,8 @@ file_func(struct connection *connection)
 			goto end;
 		}
 
-		state = list_directory(d, filename, info);
-		closedir(d);
+		state = list_directory(directory, filename, info);
+		closedir(directory);
 		mem_free(filename);
 
 		if (state != S_OK) {

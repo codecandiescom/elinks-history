@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.29 2003/07/28 04:16:22 jonas Exp $ */
+/* $Id: screen.c,v 1.30 2003/07/28 04:42:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,6 +276,7 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 #endif
 
 /* Updates the terminal screen. */
+/* This is done by checking what needs to be updated using the last screen. */
 void
 redraw_screen(struct terminal *term)
 {
@@ -285,8 +286,8 @@ redraw_screen(struct terminal *term)
 	int prev_y = -1;
 	int attrib = -1;
 	int mode = -1;
- 	register struct screen_char *pos;
  	register struct screen_char *current = term->last_screen;
+ 	register struct screen_char *pos = term->screen;
  	register struct screen_char *prev_pos = NULL;
 
 	if (!term->dirty
@@ -295,7 +296,7 @@ redraw_screen(struct terminal *term)
 
  	fill_option_cache(opt_cache, term);
 
- 	for (pos = term->screen; y < term->y; y++) {
+ 	for (; y < term->y; y++) {
  		register int x = 0;
  
  		for (; x < term->x; x++, current++, pos++) {
@@ -311,10 +312,12 @@ redraw_screen(struct terminal *term)
 			    && (current->data <= 1 || current->data == ' '))
 				continue;
  
-			/* Avoid cursor moves if there are only 10 chars away. */
+			/* Move the cursor when @prev_pos is more than 10 chars
+			 * away. */
  			if (prev_y != y || prev_pos + 10 <= pos) {
  				add_cursor_move_to_string(&screen, y + 1, x + 1);
- 				prev_pos = pos; prev_y = y;
+ 				prev_pos = pos;
+				prev_y = y;
 			}
 
 			for (; prev_pos <= pos ; prev_pos++)

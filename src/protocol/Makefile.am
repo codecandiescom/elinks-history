@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.37 2004/10/12 14:26:47 zas Exp $
+## $Id: Makefile.am,v 1.38 2004/10/12 15:23:27 zas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -16,7 +16,8 @@ endif
 fileobj = file/file.o
 
 if CONFIG_FINGER
-fingerobj = finger.o
+fingerdir = finger
+fingerobj = $(fingerdir)/finger.o
 endif
 
 if CONFIG_FTP
@@ -46,11 +47,11 @@ rewritedir = rewrite
 rewriteobj = $(rewritedir)/rewrite.o
 endif
 
-SUBDIRS = auth file $(ftpdir) $(gopherdir) http $(nntpdir) $(rewritedir) $(smbdir)
+SUBDIRS = auth file $(fingerdir) $(ftpdir) $(gopherdir) http $(nntpdir) $(rewritedir) $(smbdir)
 
 noinst_LIBRARIES = libprotocol.a
 
-EXTRA_libprotocol_a_SOURCES = data.c data.h finger.c finger.h
+EXTRA_libprotocol_a_SOURCES = data.c data.h
 libprotocol_a_LIBADD = \
  $(authobj) \
  $(dataobj) \

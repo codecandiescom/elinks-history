@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.79 2004/10/12 14:26:47 zas Exp $ */
+/* $Id: protocol.c,v 1.80 2004/10/12 15:23:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include "protocol/about.h"
 #include "protocol/data.h"
 #include "protocol/file/file.h"
-#include "protocol/finger.h"
+#include "protocol/finger/finger.h"
 #include "protocol/ftp/ftp.h"
 #include "protocol/gopher/gopher.h"
 #include "protocol/http/http.h"

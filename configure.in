@@ -1076,6 +1076,7 @@ AC_OUTPUT([ \
  src/protocol/Makefile \
  src/protocol/auth/Makefile \
  src/protocol/file/Makefile \
+ src/protocol/finger/Makefile \
  src/protocol/gopher/Makefile \
  src/protocol/ftp/Makefile \
  src/protocol/http/Makefile \

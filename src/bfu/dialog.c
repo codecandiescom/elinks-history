@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.198 2005/03/05 20:46:46 zas Exp $ */
+/* $Id: dialog.c,v 1.199 2005/03/05 21:21:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include "util/string.h"
 
 
-static window_handler dialog_func;
+static window_handler_T dialog_func;
 
 struct dialog_data *
 do_dialog(struct terminal *term, struct dialog *dlg,

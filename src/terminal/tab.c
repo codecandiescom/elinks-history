@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.81 2005/02/28 14:58:15 zas Exp $ */
+/* $Id: tab.c,v 1.82 2005/03/05 21:21:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@
 
 
 struct window *
-init_tab(struct terminal *term, void *data, window_handler handler)
+init_tab(struct terminal *term, void *data, window_handler_T handler)
 {
 	struct window *win = mem_calloc(1, sizeof(*win));
 

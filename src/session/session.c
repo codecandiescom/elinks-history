@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.609 2005/03/05 21:11:03 zas Exp $ */
+/* $Id: session.c,v 1.610 2005/03/05 21:21:27 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -96,7 +96,7 @@ static struct file_to_load *request_additional_file(struct session *,
 						    unsigned char *,
 						    struct uri *, int);
 
-static window_handler tabwin_func;
+static window_handler_T tabwin_func;
 
 
 static INIT_LIST_HEAD(session_info);

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.33 2003/09/01 22:44:46 zas Exp $ */
+/* $Id: formhist.c,v 1.34 2003/09/01 23:31:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,33 @@ INIT_LIST_HEAD(saved_forms);
 
 static int loaded = 0;
 
+static struct submitted_value *
+new_submitted_value(unsigned char *name, unsigned char *value)
+{
+	struct submitted_value *sv;
+
+	sv = mem_alloc(sizeof(struct submitted_value));
+	if (!sv) return NULL;
+
+	sv->value = stracpy(value);
+	if (!sv->value) { mem_free(sv); return NULL; }
+
+	sv->name = stracpy(name);
+	if (!sv->name) { mem_free(sv->value); mem_free(sv); return NULL; }
+
+	return sv;
+}
+
+
+static void inline
+free_submitted_value(struct submitted_value *sv)
+{
+	if (!sv) return;
+	if (sv->value) mem_free(sv->value);
+	if (sv->name) mem_free(sv->name);
+	mem_free(sv);
+}
+
 static void
 free_form_in_list(struct formhist_data *form)
 {
@@ -41,13 +68,31 @@ free_form_in_list(struct formhist_data *form)
 	if (form->url) mem_free(form->url);
 
 	if (form->submit) {
-		foreachback (sv, *form->submit) {
-			if (sv->name) mem_free(sv->name);
-			if (sv->value) mem_free(sv->value);
-		}
-		free_list(*form->submit);
+		foreachback (sv, *form->submit)
+			free_submitted_value(sv);
+
 		mem_free(form->submit);
 	}
+}
+
+static struct formhist_data *
+new_form(unsigned char *url)
+{
+	struct formhist_data *form;
+
+	form = mem_calloc(1, sizeof(struct formhist_data));
+	if (!form) return NULL;
+
+	form->submit = mem_alloc(sizeof(struct list_head));
+	if (!form->submit) { mem_free(form); return NULL; }
+
+	form->url = stracpy(url);
+	if (!form->url) { mem_free(form->submit); mem_free(form); return NULL; }
+
+	init_list(*form);
+	init_list(*form->submit);
+
+	return form;
 }
 
 static void
@@ -77,24 +122,13 @@ load_saved_forms(void)
 
 		tmp[strlen(tmp) - 1] = '\0';
 
-		form = mem_alloc(sizeof(struct formhist_data));
-		if (!form) return 0;
-
-		form->submit = mem_alloc(sizeof(struct list_head));
-		if (!form->submit) {
-			mem_free(form);
-			return 0;
-		}
-
-		form->url = stracpy(tmp);
-		if (!form->url) goto fail;
-
-		init_list(*form);
-		init_list(*form->submit);
+		form = new_form(tmp);
+		if (!form) continue;
 
 		while (safe_fgets(tmp, MAX_STR_LEN, f)) {
 			struct submitted_value *sv;
 			unsigned char *name, *value, *p;
+			unsigned char *enc_value;
 
 			if (tmp[0] == '\n' && !tmp[1]) break;
 
@@ -107,21 +141,12 @@ load_saved_forms(void)
 			p = strchr(p, '\n');
 			if (p) *p = '\0';
 
-			sv = mem_alloc(sizeof(struct submitted_value));
+			enc_value = base64_decode(value);
+			if (!enc_value) goto fail;
+
+			sv = new_submitted_value(name, enc_value);
+			mem_free(enc_value);
 			if (!sv) goto fail;
-
-			sv->name = stracpy(name);
-			if (!sv->name) {
-				mem_free(sv);
-				goto fail;
-			}
-
-			sv->value = base64_decode(value);
-			if (!sv->value) {
-				mem_free(sv->name);
-				mem_free(sv);
-				goto fail;
-			}
 
 			add_to_list_bottom(*form->submit, sv);
 		}
@@ -218,6 +243,7 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 	return 0;
 }
 
+
 static int
 add_to_saved_forms(struct formhist_data *form1)
 {
@@ -230,17 +256,8 @@ add_to_saved_forms(struct formhist_data *form1)
 	 * url entries in formhist file... --Zas */
 	forget_form(form1);
 
-	form = mem_calloc(1, sizeof(struct formhist_data));
+	form = new_form(form1->url);
 	if (!form) return 0;
-
-	form->submit = mem_alloc(sizeof(struct list_head));
-	if (!form->submit) goto fail;
-
-	form->url = stracpy(form1->url);
-	if (!form->url) goto fail;
-
-	init_list(*form);
-	init_list(*form->submit);
 
 	/* We're going to save just <input type="text"> and
 	 * <input type="password">. */
@@ -248,21 +265,8 @@ add_to_saved_forms(struct formhist_data *form1)
 		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
 			struct submitted_value *sv2;
 
-			sv2 = mem_alloc(sizeof(struct submitted_value));
+			sv2 = new_submitted_value(sv->name, sv->value);
 			if (!sv2) goto fail;
-
-			sv2->value = stracpy(sv->value);
-			if (!sv2->value) {
-				mem_free(sv2);
-				goto fail;
-			}
-
-			sv2->name = stracpy(sv->name);
-			if (!sv2->name) {
-				mem_free(sv2->name);
-				mem_free(sv2);
-				goto fail;
-			}
 
 			add_to_list_bottom(*form->submit, sv2);
 		}
@@ -343,29 +347,17 @@ memorize_form(struct session *ses, struct list_head *submit,
 
 	if (!save || form_already_saved(frm->action, submit)) return NULL;
 
-	form = mem_alloc(sizeof(struct formhist_data));
+	form = new_form(frm->action);
 	if (!form) return NULL;
-
-	form->submit = mem_alloc(sizeof(struct list_head));
-	if (!form->submit) {
-		mem_free(form);
-		return NULL;
-	}
-	init_list(*form->submit);
 
 	/* Set up a new list_head, as @submit will be destroyed as soon as
 	 * get_form_url() returns. */
+	/* XXX: ??? --Zas */
 	sb = form->submit;
 	sb->next = submit->next;
 	sb->prev = submit->prev;
 	((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
 	((struct submitted_value *) sb->prev)->next = (struct submitted_value *) sb;
-
-	form->url = stracpy(frm->action);
-	if (!form->url) {
-		free_form(form);
-		return NULL;
-	}
 
 	msg_box(ses->tab->term, NULL, 0,
 		N_("Form memory"), AL_CENTER,

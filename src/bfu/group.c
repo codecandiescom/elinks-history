@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.13 2003/05/04 19:30:46 pasky Exp $ */
+/* $Id: group.c,v 1.14 2003/05/06 14:11:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include "terminal/terminal.h"
 
 
-static int
+static inline int
 base_group_width(struct terminal *term, struct widget_data *item)
 {
 	if (item->item->type == D_CHECKBOX)
@@ -30,7 +30,8 @@ base_group_width(struct terminal *term, struct widget_data *item)
 	return item->item->dlen + 1;
 }
 
-void
+/* TODO: We should join these two functions in one. --Zas */
+static inline void
 max_group_width(struct terminal *term, unsigned char **texts,
 		struct widget_data *item, int n, int *w)
 {
@@ -49,35 +50,40 @@ max_group_width(struct terminal *term, unsigned char **texts,
 	if (ww > *w) *w = ww;
 }
 
-void
+static inline void
 min_group_width(struct terminal *term, unsigned char **texts,
 		struct widget_data *item, int n, int *w)
 {
 	int base = base_group_width(term, item);
+	int wt = 0;
 
 	while (n--) {
-		int wx = base + strlen(_(texts[0], term));
+		int wx = strlen(_(texts[0], term));
 
-		if (wx > *w) *w = wx;
+		if (wx > wt) wt = wx;
 		texts++;
 		item++;
 	}
+
+	*w = wt + base;
 }
 
-void
+static void
 dlg_format_group(struct terminal *term, struct terminal *t2,
 		 unsigned char **texts, struct widget_data *item,
 		 int n, int x, int *y, int w, int *rw)
 {
 	int nx = 0;
 	int base = base_group_width(t2, item);
+	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	while (n--) {
 		int sl;
 		int wx = base;
+		unsigned char *text = _(texts[0], t2);
 
-		if (_(texts[0], t2)[0]) {
-			sl = strlen(_(texts[0], t2));
+		if (text[0]) {
+			sl = strlen(text);
 		} else {
 			sl = -1;
 		}
@@ -90,8 +96,8 @@ dlg_format_group(struct terminal *term, struct terminal *t2,
 
 		if (term) {
 			print_text(term, x + nx + 4 * (item->item->type == D_CHECKBOX),
-				   *y, strlen(_(texts[0], t2)),	_(texts[0], t2),
-				   get_bfu_color(term, "dialog.text"));
+				   *y, ((sl == -1) ? strlen(text) : sl) /* hmmm... */, text,
+				   dialog_text_color);
 			item->x = x + nx + (sl + 1) * (item->item->type != D_CHECKBOX);
 			item->y = *y;
 			if (item->item->type == D_FIELD ||

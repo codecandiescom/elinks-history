@@ -436,6 +436,9 @@ Sergey Karpov <karpov@sai.msu.su>
 	First tab browsing patch for ELinks
 	Ideas !
 
+Sergey Starosek <star@sunbay.com>
+	Optionally use credential file for the SMB protocol
+
 Sergio R. Velasquez Zeballos <svelasqu@thor.uc.edu.ve>
 	Proxy auth (Basic)
 
@@ -515,4 +518,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.170 2004/09/27 00:38:08 pasky Exp $
+$Id: AUTHORS,v 1.171 2004/10/01 01:12:39 jonas Exp $

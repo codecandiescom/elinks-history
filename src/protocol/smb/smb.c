@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.57 2004/08/14 05:59:21 jonas Exp $ */
+/* $Id: smb.c,v 1.58 2004/10/01 01:12:39 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -578,6 +578,7 @@ smb_protocol_handler(struct connection *conn)
 #define MAX_SMBCLIENT_ARGS 32
 		int n = 0;
 		unsigned char *v[MAX_SMBCLIENT_ARGS];
+		unsigned char *optstr;
 
 		close(1);
 		dup2(out_pipe[1], 1);
@@ -661,6 +662,13 @@ smb_protocol_handler(struct connection *conn)
 				while ((ss = strchr(ss, '/'))) *ss = '\\'; /* Escape '/' */
 				v[n++] = s;
 			}
+		}
+		
+		/* Optionally add SMB credentials file. */
+		optstr = get_opt_str("protocol.smb.credentials");
+		if (optstr[0]) {
+			v[n++] = "-A";
+			v[n++] = optstr;
 		}
 
 		v[n++] = NULL;	/* End of arguments list. */

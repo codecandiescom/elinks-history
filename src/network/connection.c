@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.140 2004/03/21 02:10:48 jonas Exp $ */
+/* $Id: connection.c,v 1.141 2004/03/21 02:21:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 	if (!parse_uri(&conn->uri, url)
 	    || (VALID_PROTOCOL(conn->uri.protocol)
 		&& get_protocol_need_slash_after_host(conn->uri.protocol)
-		&& !conn->uri.hostlen)) {
+		&& string_is_empty(&conn->uri.host))) {
 		/* Alert small hack to signal parse uri failure. */
 		*url = 0;
 		mem_free(conn);
@@ -434,7 +434,7 @@ init_keepalive_connection(struct connection *conn, ttime timeout)
 	unsigned char *host = get_uri_host(uri);
 	int hostlen = get_uri_host_length(uri, URI_PORT);
 
-	assert(uri->hoststr);
+	assert(!string_is_empty(&uri->host));
 	if_assert_failed return NULL;
 
 	keep_conn = mem_calloc(1, sizeof(struct keepalive_connection) + hostlen);
@@ -461,7 +461,7 @@ get_keepalive_connection(struct connection *conn)
 	unsigned char *host = get_uri_host(uri);
 	int hostlen = get_uri_host_length(uri, URI_PORT);
 
-	if (!uri->hoststr) return NULL;
+	if (string_is_empty(&uri->host)) return NULL;
 
 	foreach (keep_conn, keepalive_connections)
 		if (keep_conn->protocol == handler
@@ -685,7 +685,7 @@ try_to_suspend_connection(struct connection *conn, unsigned char *host)
 		if (get_priority(c) <= priority) return -1;
 		if (c->state == S_WAIT) continue;
 		if (c->uri.post && get_priority(c) < PRI_CANCEL) continue;
-		if (host && strlcmp(host, -1, c->uri.hoststr, c->uri.hostlen)) continue;
+		if (host && string_strlcmp(&c->uri.host, host, -1)) continue;
 		suspend_connection(c);
 		return 0;
 	}

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.246 2004/03/21 01:49:16 jonas Exp $ */
+/* $Id: http.c,v 1.247 2004/03/21 02:21:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1074,7 +1074,7 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (rb->close == 2) {
-		if (!conn->tries && uri->hoststr) {
+		if (!conn->tries && !string_is_empty(&uri->host)) {
 			if (info->bl_flags & BL_NO_CHARSET) {
 				del_blacklist_entry(&uri->host, BL_NO_CHARSET);
 			} else {

@@ -1,3 +1,273 @@
+Sat May 29 19:44:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	end_of_dir(): Is now passed URI struct and uses it to ignore '?' as
+	end of dir for file:// URIS. Problem with this was reported by
+	Grzegorz Adam Hankiewicz Thu, May 27, 2004 on elinks-users.  
+
+Sat May 29 19:28:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Use get_uri_string(..., URI_PATH); to get path. Even though it means
+	an allocation it should be safer since fragments for sure is removed
+	and it removes the bad presumption that uri->data[-1] == '/'.  
+
+Sat May 29 19:17:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/css.c, encoding/encoding.c,
+	encoding/encoding.h, protocol/file/file.c:
+
+	I am well aware that this is quite a big patch, but the previous way
+	to call read_encoded_file() was so damn stupid and I don't know why
+	I ever thought about passing the filename in a buffer. Now filename
+	is passed using a string struct much cleaner and much safer.  
+
+Sat May 29 19:09:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Whoops. Fix logic and wtf is file:// restricted in
+	add_uri_to_string() anyway undone.  
+
+Sat May 29 18:28:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Rewrite the dsep() *hint hint* thing to is_uri_dir_sep(uri, char)
+	which wraps dir_sep() more elegantly.  
+
+Sat May 29 18:14:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: user.c, file/cgi.c:
+
+	Use get_uri_string(..., URI_QUERY); and clean things up a bit.  
+
+Sat May 29 18:14:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Introduce URI_QUERY component and cleanup URI_PATH component.  
+
+Sat May 29 17:44:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Use conn->proxied_uri when adding globhist entries.  
+
+Sat May 29 17:42:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Move end_of_dir() to c file.  
+
+Sat May 29 17:37:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Minor simplification.  
+
+Sat May 29 17:36:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	execute_cgi(): Use get_uri_string(..., URI_PATH); 
+
+Sat May 29 17:29:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	add_file_cmd_to_str(): Use add_uri_to_string(..., URI_PATH); 
+
+Sat May 29 17:23:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Only optionally add '/' 
+
+Sat May 29 17:12:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, protocol/uri.c, protocol/uri.h:
+
+	Introduce URI_PATH component and use it for cookies.  
+
+Sat May 29 16:15:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, viewer/text/link.c, viewer/text/view.c:
+
+	Since we encode URIs internally we have to decode them before
+	showing them on the screen. Mentioned in bug 358. Also a little
+	curious comment and light cleanup.  
+
+Sat May 29 15:41:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Add TODO items.  
+
+Sat May 29 15:36:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, config/options.inc,
+	dialogs/menu.c, dialogs/menu.h, sched/action.c, viewer/text/link.c:
+
+	Add support for passing URIs to external commands filed as bug 124.
+	It is really just a mix of URI rewrite and open_in_new_window code.
+	Option tree name should be reviewed and whether to execute in fore-
+	or background on terminal.  
+
+Sat May 29 14:03:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Pop msg_box() when fragment is missing. Fixes bug 95.  
+
+Sat May 29 13:54:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/link.c, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Pass session to draw_doc(). Use term variable in draw_doc(). We
+	should start writting out usage of term unless in the very lowlevel
+	parts.  
+
+Sat May 29 13:36:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Fix indentation.  
+
+Sat May 29 13:33:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	With the newly introduced get_validated_cache_entry() bug 304 ("Do
+	you want to post form data to URL" when cloning tab) should be
+	fairly easy to fix by simple doing the same check that load_uri()
+	will do to see if the existing cache entry can be 'reused'. Note
+	this had me fooled at first because I have WWW_HOME set which is
+	loaded in the background and I was so used to having the confirm
+	post submit dialog load the 'post'-document of the cloned session.  
+
+Sat May 29 13:26:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	Fix comments.  
+
+Sat May 29 13:21:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, sched/connection.c:
+
+	Move the cache entry checking in load_uri() to separate function.
+	The fact that it 'mangles' the cache makes it a bit more
+	complicated. This is one of the scariest part of the code and
+	putting it in a function should hopefully make it either more clear.
+	Please check the logics.  
+
+Sat May 29 11:38:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Make tabwin_func sanity checking related to bug 296 into an
+	assertion.  
+
+Sat May 29 04:25:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	formhist/dialogs.h, protocol/auth/auth.c, protocol/auth/auth.h,
+	protocol/auth/dialogs.c, protocol/auth/dialogs.h, sched/action.c:
+
+	Skeleton for HTTP Auth manager.  
+
+Sat May 29 03:40:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	Fix bad dereference.  
+
+Sat May 29 02:44:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: history.c, task.c, task.h:
+
+	Remove two args to ses_goto() that is always the same: The priority
+	(PRI_MAIN) and end handler (end_load).  
+
+Sat May 29 02:28:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Initialize form control list in the declaration.  
+
+Sat May 29 02:26:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Initialize post data string in get_form_uri() and fix possible leak
+	if @go initialization failed.  
+
+Sat May 29 01:08:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	encode_text_plain(): Cleanup and make the code more compact but more
+	commented.  
+
+Sat May 29 00:53:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, document/html/parser/forms.c,
+	protocol/user.c, viewer/text/form.c, viewer/text/form.h:
+
+	Add support for saving form data to temporary file that can be
+	included from external handlers.  It also adds (crappy) support for
+	<form enctype="text/plain">.  
+	
+	This should kind of fix bug 450 although there are probably a few
+	things to improve: 
+	1) The form data file is always created.  
+	2) I don't know if it is correct to use \r\n for each encoded form
+	line.  
+
+Sat May 29 00:45:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Get rid of many labels/gotos by introducing add_boundary().  
+
+Sat May 29 00:45:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: util/file.c, util/file.h, viewer/text/textarea.c:
+
+	Introduce get_tempdir_filename() and use it in textarea_edit().  
+
+Fri May 28 23:44:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	subst_cmd(): Various fixes related to 450 so that for example
+	POST_CHAR + post data is not addes as subject and not for %u
+	substitution either.  
+
+Fri May 28 23:43:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	get_current_url(): Use get_real_uri_length() and rewrite it a little
+	too.  
+
+Fri May 28 23:42:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	get_real_uri_length(): Takes URI struct and returns the 'no post
+	length'.  
+
+Fri May 28 23:34:14 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Fri May 28 21:18:44 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:

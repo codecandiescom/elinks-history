@@ -8,8 +8,6 @@ block FTP data connections from servers in active mode)
 
 	Strip spaces from the end of the URL
 
-	Each header file should include full path in anti-reinclude #define
-
 	Support for <xmp>
 
 	Better support for vlink - we have to update already rendered document
@@ -35,8 +33,6 @@ suffix appropriate to the file type.
 
 	HTTPS proxy support
 
-	HTTP-proxy-auth support
-
 	Take info about proxies from env variables (?)
 
 	Possibility to read HTML source from stdin
@@ -49,9 +45,6 @@ current link to external command).
 	Something like indicator-bar, simple letter-flags indicating current
 state of browser, or changeable thru Lua.
 
-	Possibility to use commandline-driven interface instead of BFU
-optionally.
-
 	A mechanism that does not overwrite filenames: If two files are to be
 saved in the same dir with the same name links should do someting like wget,
 which adds .1, .2 ... on the filename and does not overwrite the file that
@@ -62,6 +55,9 @@ existed first.
 
 
 	Multiple windows in one console
+
+	Possibility to use commandline-driven interface instead of BFU
+optionally.
 
 	Generic code cleanup
 
@@ -79,4 +75,4 @@ existed first.
 	CSS (?)
 
 
-$Id: TODO,v 1.23 2002/04/23 12:17:09 pasky Exp $
+$Id: TODO,v 1.24 2002/04/27 22:03:13 pasky Exp $

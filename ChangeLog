@@ -1,3 +1,497 @@
+Sun Dec 21 23:02:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	HTTPS proxy support.  
+
+Sun Dec 21 22:46:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	For now drop the @uttered_glyph and associated proposed fix for bug
+	171 (<frameset> should be ignored if not the very first thing after
+	<head>). It broke virtually all framesets because whitespaces were
+	considered as 'anything' as well. It is much less pressing now,
+	tho', so the real fix has to wait.  
+
+Sun Dec 21 22:45:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/plain/renderer.c:
+
+	Fix and improve last jonas patch: we now detects 3 types of end of
+	lines and display lines as it should.  
+
+Sun Dec 21 22:30:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Removed nonsensical unreachable comment near a statement in
+	parse_html(). It is perfectly reachable. I guess it was me who
+	sticked it there, tho' ;-).  
+
+Sun Dec 21 22:20:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.inc, terminal/screen.c, terminal/terminal.h:
+
+	Changed back order of TERM_FREEBSD and TERM_KOI8 not to reposition
+	TERM_KOI8. This keeps backward compatibility, although I'm not sure
+	if we have *any* koi8 users now... whatever ;-).  
+
+Sun Dec 21 22:15:43 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.inc:
+
+	In the description for terminal._template_.type, add FreeBSD and
+	correct the value of KOI-8. Raise the maximum value for the option
+	by one so that selecting KOI-8 as the terminal type does not crash
+	ELinks with an internal error.  
+
+Sun Dec 21 22:01:43 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/text.c:
+
+	In display_text, when the text widget is selected, ignore the block
+	cursor setting and always display the cursor at the top-left corner
+	of widget. This is done to aid screen readers that depend on the
+	position of the cursor, as well as to help the user see that the
+	text widget is selected.  
+
+Sun Dec 21 21:54:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, document/plain/renderer.c:
+
+	Don't show \r in "\r\n" as '.'. Requested by zas.  
+
+Sun Dec 21 21:52:52 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/text.c:
+
+	Display the scroll bar's elevator in the correct position, instead
+	of always at the top of the bar, when the text widget is not
+	selected.  
+
+Sun Dec 21 21:42:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/text.c:
+
+	Remove an obsolete TODO for scroll bars.  
+
+Sun Dec 21 21:41:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Make URI rewrite prefix selection dependant on whether args was
+	passed. So dumb prefixes won't shadow smart ones.  
+
+Sun Dec 21 21:28:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in, src/protocol/rewrite/rewrite.c:
+
+	The prefixes were copied from lua hooks to URI rewrite plugin.  
+
+Sun Dec 21 21:28:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Revert last bogus patch.  
+
+Sun Dec 21 21:25:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Use file_history for 'Save URL as' dialog and not goto_history.  
+
+Sun Dec 21 21:18:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Use setup defines for URIs and add some useful #ifdef DEBUG smart
+	prefixes.  
+
+Sun Dec 21 21:14:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/formhist.c:
+
+	document.browse.forms.show_formhist is by default off for now. I
+	believe it is currently rather annoying for most of the ELinks user
+	audience, has some rough edges etc.  
+
+Sun Dec 21 20:56:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix possible leak in last patch.  
+
+Sun Dec 21 20:50:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Use expand_tilde() always on possible file:// requests. Fixes bug
+	331.  
+
+Sun Dec 21 20:46:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/refresh.c:
+
+	Grammar fix in a comment.  
+
+Sun Dec 21 19:40:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Finish zas' fixes for link wrap around to also include pressing down
+	on last link.  
+
+Sun Dec 21 19:29:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Add support for ACT_KILL_TO_BOL and ACT_REDRAW.  
+
+Sun Dec 21 19:18:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Make the typeahead searching work both forward and backwards so
+	up/down can also be used to navigate matching links.  
+
+Sun Dec 21 19:09:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, link.h, view.c, vs.c:
+
+	Rename c_in_view() to current_link_is_visible().  
+
+Sun Dec 21 19:08:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/refresh.c:
+
+	Force a reload when the document refresh URI is the current one.
+	Idea by pasky.  
+
+Sun Dec 21 18:30:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	The <noframe> element content is now also printed when its parent
+	<frameset> wasn't processed.  
+
+Sun Dec 21 18:25:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Introduced search_html_stack() (+ debug facility dump_html_stack).
+	@encountered_body was removed and instead we now check whether the
+	stack contains the BODY element.  
+
+Sun Dec 21 18:17:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix page up to not move change current link if we do not have to.
+	Same for page down.  
+
+Sun Dec 21 17:55:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	sleep(1) when error was encountered so that user can read it.  
+
+Sun Dec 21 17:25:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Do not report configuration file errors through elinks_error(). It
+	was really quite clumsy as elinks_error() is designed just for
+	rather internal errors reporting. It looked ugly, slowed down
+	startup by great deal as it was beeping at each line, etc. Let's
+	live in a happier world ;-).  
+
+Sun Dec 21 17:20:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Reverted the detach_formatted() changes. You can't just blast it off
+	madly like that, it should only clean up well-defined items. At
+	least examine the users before doing such a thing, please, so that
+	you will see you just introduced bunch of segfaults when the
+	detached document will be del_from_list()'d.  
+
+Sun Dec 21 17:09:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Track CPPFLAGS along CFLAGS when hunting -I directives.  
+
+Sun Dec 21 17:04:09 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Dec 21 17:03:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Dropped really horrid zas' hack. If we are going to fix the
+	warnings, we have not to do it in such a pervert way. ;p 
+
+Sun Dec 21 17:01:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: search.c, search.h, view.c:
+
+	Make typeahead keys configurable.  
+
+Sun Dec 21 16:54:34 2003  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	Attempt to fix a weird configure time warning, please review and
+	propose a better fix if any.  
+
+Sun Dec 21 16:44:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	Fixed l10n of error message when deleting error occurs.  
+
+Sun Dec 21 16:37:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	detach_formatted(): Cleanup and simplification.  
+
+Sun Dec 21 16:33:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	A possible fix (although I don.t know if it is even the correct one)
+	for some image option configuration that breaks numbered links.
+	Reported by Zellner.  
+
+Sun Dec 21 16:30:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Slightly alter the typeahead status appearence and position the
+	cursor there.  
+
+Sun Dec 21 16:26:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Sun Dec 21 16:22:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Sun Dec 21 15:20:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Fixed negation bug introduced by the Jonas' cleanups ;-). This fixes
+	uncancellable mainmenu aka bug 334.  
+
+Sun Dec 21 14:56:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, bfu/menu.c, cache/cache.c,
+	document/document.c, document/renderer.c, document/html/parser.c,
+	document/html/tables.c, globhist/globhist.c, lowlevel/interlink.c,
+	lowlevel/select.c, protocol/uri.c, protocol/ftp/ftp.c,
+	sched/session.c, sched/task.c, ssl/ssl.c, terminal/color.c,
+	terminal/screen.c, util/error.h, util/file.c, util/lists.h,
+	util/memory.c, viewer/text/form.c, viewer/text/link.c,
+	viewer/text/view.c:
+
+	internal() -> INTERNAL().  
+
+Sun Dec 21 14:51:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/listbox.c, cache/cache.c, config/options.c,
+	cookies/cookies.c, dialogs/status.c, document/html/parser.c,
+	document/html/tables.c, lowlevel/dns.c, mime/mime.c,
+	osdep/os2/os2.c, protocol/auth/auth.c, sched/connection.c,
+	ssl/connect.c, ssl/ssl.c, util/error.h, util/object.h:
+
+	debug() -> DBG(), wdebug() -> WDBG().  
+
+Sun Dec 21 14:46:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Yeah, sure, go ahead, kill me. Typo fix.  
+
+Sun Dec 21 14:41:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/dialogs.c:
+
+	Supertypo fix.  
+
+Sun Dec 21 14:39:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	internal() -> assertm() 
+
+Sun Dec 21 14:39:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	formhist/dialogs.c, globhist/dialogs.c:
+
+	Changed the listbox_item info composition to be done the cookies way
+	- sequence of add_format_to_string()s. This will hopefully ease the
+	translation and overally sanitize this stuff. ;-) 
+
+Sun Dec 21 14:13:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, bookmarks/backend/xbel.c, config/cmdline.c,
+	config/options.c, intl/gettext/libintl.h, lowlevel/home.c,
+	lowlevel/interlink.c, lowlevel/select.c, mime/backend/mailcap.c,
+	scripting/lua/core.c, terminal/event.c, terminal/kbd.c,
+	util/error.h, util/memory.c, viewer/dump/dump.c:
+
+	error() -> ERROR().  
+
+Sun Dec 21 14:08:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Include title in the info string for bookmarks.  
+
+Sun Dec 21 13:53:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Renamed er()'s @sleep to @shall_sleep. Spotted by zas.  
+
+Sun Dec 21 13:43:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Reverted accidental change to the if (!s) condition.  
+
+Sun Dec 21 12:51:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h:
+
+	debug() now doesn't sleep() anymore. Introduced wdebug() which still
+	sleep()s.  
+
+Sun Dec 21 12:40:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/event.c:
+
+	Tidyup of in_term().  
+
+Sun Dec 21 12:33:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Removed some redundant keybindings introduced by Jonas.  
+
+Sun Dec 21 12:25:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: cmdline.c, options.c, options.inc:
+
+	Moved cmdline options and option handlers from config/options.* to
+	config/cmdline.c.  
+
+Sun Dec 21 12:04:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Blank lines and trivial reindentation.  
+
+Sun Dec 21 11:32:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Trivial cleanup.  
+
+Sun Dec 21 11:25:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/dump/dump.c:
+
+	Group destructors in dump_formatted().  
+
+Sun Dec 21 06:55:16 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/guile/core.c:
+
+	Handle malloc failures in init_guile.  
+
+Sun Dec 21 06:54:11 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/guile/: core.c, hooks.c:
+
+	Fix problems that occur when a binary that is compiled with Guile
+	support is started with the -no-home argument: 
+	
+	1. In init_guile, if elinks_home is NULL, 
+	   return before attempting to straconcat it with a filename.  
+	   This fixes an assertion failure upon starting ELinks.  
+	
+	2. In Guile's ELinks event hook handlers, when looking up the
+	   corresponding Guile code functions, handle (i.e., ignore) any
+	   exceptions.  This fixes the problem that ELinks immediately dies 
+	   when the Guile code attempts to look up an undefined hook.  
+	
+	Note: Altho these changes seem to work, I don't know Guile; they
+	might be entirely cruddy.  
+
+Sun Dec 21 02:22:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Some minor cleanups.  
+
+Sun Dec 21 02:06:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/menu.c, config/kbdbind.c,
+	config/kbdbind.h:
+
+	Introduce ACT_CANCEL as a configurable version of KBD_ESC, and
+	ACT_NEXT_ITEM as a configurable version of KBD_TAB.  
+
+Sun Dec 21 00:40:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, config/kbdbind.c:
+
+	Make select and submit button keybinding configurable.  
+
+Sun Dec 21 00:30:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/inpfield.c, config/kbdbind.c,
+	config/kbdbind.h, terminal/event.c, viewer/text/form.c,
+	viewer/text/view.c:
+
+	Introduce ACT_REDRAW used for redrawing the terminal. Bound to
+	ctrl-(l|L) in all mappings.  
+
+Sat Dec 20 23:54:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	Remove macro that was made obsolete in last patch.  
+
+Sat Dec 20 23:53:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.c, config/kbdbind.c:
+
+	Move some builtin keybindings to default keybindings and remove some
+	that already existed.  
+
+Sat Dec 20 23:42:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Arrange default keybindings so they are sorted by the key.  
+
 Sat Dec 20 23:06:20 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* AUTHORS, src/config/options.inc, src/protocol/proxy.c,

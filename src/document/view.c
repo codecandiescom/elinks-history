@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.9 2002/03/18 11:34:03 pasky Exp $ */
+/* $Id: view.c,v 1.10 2002/03/22 18:57:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 
 #include <main.h>
 #include <bfu/bfu.h>
+#include <bfu/menu.h>
 #include <dialogs/menu.h>
 #include <bookmarks/bookmarks.h>
 #include <cookies/cookies.h>
@@ -43,6 +44,7 @@
 #include <protocol/http/header.h>
 #include <protocol/url.h>
 #include <util/error.h>
+
 
 /* FIXME: Add comments!! --Zas */
 /* TODO: This file needs to be splitted to many smaller ones. Definitively.

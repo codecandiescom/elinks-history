@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.5 2002/03/19 20:40:03 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.6 2002/03/22 18:57:20 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -16,6 +16,7 @@
 
 #include <bfu/align.h>
 #include <bfu/bfu.h>
+#include <bfu/menu.h>
 #include <config/default.h>
 #include <document/session.h>
 #include <lowlevel/kbd.h>

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.493 2004/06/19 21:21:22 jonas Exp $ */
+/* $Id: view.c,v 1.494 2004/06/19 21:27:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -742,11 +742,11 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 		/* If the view was not scrolled there's nothing more to do */
 		if (vs_x == doc_view->vs->x && vs_y == doc_view->vs->y)
 			return FRAME_EVENT_OK;
-	}
 
-	/* Restrict the cursor position within the current view */
-	int_bounds(&x, box->x, box->x + box->width - 1);
-	int_bounds(&y, box->y, box->y + box->height - 1);
+		/* Restrict the cursor position within the current view */
+		int_bounds(&x, box->x, box->x + box->width - 1);
+		int_bounds(&y, box->y, box->y + box->height - 1);
+	}
 
 	/* Scrolling could have changed the navigation mode */
 	ses->navigate_mode = NAVIGATE_CURSOR_ROUTING;

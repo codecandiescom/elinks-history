@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.174 2003/01/04 20:06:37 pasky Exp $ */
+/* $Id: options.c,v 1.175 2003/01/04 20:26:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -517,7 +517,7 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 static unsigned char *
 eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	if (*argc < 1) return "Parameter expected";
+	if (*argc < 1) return gettext("Parameter expected");
 
 	(*argv)++; (*argc)--;	/* Consume next argument */
 
@@ -534,15 +534,15 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	struct sockaddr *addrs = NULL;
 	int addrno, i;
 
-	if (!*argc) return "Parameter expected";
-	if (*argc > 1) return "Too many parameters";
+	if (!*argc) return gettext("Parameter expected");
+	if (*argc > 1) return gettext("Too many parameters");
 
 	(*argv)++; (*argc)--;
 	if (do_real_lookup(*(*argv - 1), &addrs, &addrno)) {
 #ifdef HAVE_HERROR
 		herror("error");
 #else
-		fprintf(stderr, "error: host not found\n");
+		fprintf(stderr, gettext("error: host not found\n"));
 #endif
 		return "";
 	}
@@ -556,7 +556,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 				(addr.sin6_family == AF_INET6 ? (void *) &addr.sin6_addr
 							      : (void *) &((struct sockaddr_in *) &addr)->sin_addr),
 				p, INET6_ADDRSTRLEN))
-			printf("Resolver error.");
+			printf(gettext("Resolver error."));
 		else
 			printf("%s\n", p);
 #else
@@ -578,7 +578,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 static unsigned char *
 version_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	printf("ELinks " VERSION_STRING " - Text WWW browser\n");
+	printf(gettext("ELinks %s - Text WWW browser\n"), VERSION_STRING);
 	fflush(stdout);
 	return "";
 }
@@ -614,6 +614,8 @@ printhelp_descend(struct option *tree, unsigned char *path,
 	indent[indentation] = '\0';
 
 	foreach (option, *((struct list_head *) tree->ptr)) {
+		unsigned char *desc = gettext(option->desc);
+
 		/* Don't print autocreated options and deprecated aliases */
 		if (option->flags == OPT_AUTOCREATE ||
 		    (option->type == OPT_ALIAS && tree != &cmdline_options)) {
@@ -621,7 +623,7 @@ printhelp_descend(struct option *tree, unsigned char *path,
 		} else if (option->type == OPT_TREE) {
 			unsigned char *newpath;
 			unsigned char *description;
-			int l = strlen(option->desc);
+			int l = strlen(desc);
 			int i;
 
 			/* Append option name to path */
@@ -632,16 +634,16 @@ printhelp_descend(struct option *tree, unsigned char *path,
 			add_to_strn(&newpath, option->name);
 
 			if (option->capt)
-				description = option->capt;
+				description = gettext(option->capt);
 			else
-				description = option->desc;
+				description = desc;
 
 			printf("%s%s: (%s)\n", indent, description, newpath);
 			printf("%s%15s", indent, "");
 			for (i = 0; i < l; i++) {
-				putchar(option->desc[i]);
+				putchar(desc[i]);
 
-				if (option->desc[i] == '\n')
+				if (desc[i] == '\n')
 					printf("%s%15s", indent, "");
 			}
 			printf("\n\n");
@@ -651,6 +653,7 @@ printhelp_descend(struct option *tree, unsigned char *path,
 			mem_free(newpath);
 			continue;
 		}
+
 		/* XXX: To minimize indentation the first to if's 'continue' so
 		 * we are here if option type is neither autocreate nor tree */
 		printf("%s%s%s", indent, path, option->name);
@@ -683,36 +686,37 @@ printhelp_descend(struct option *tree, unsigned char *path,
 			} else {
 				/* Column width between '-' & caption start. */
 				spaces = CMDLINE_WIDTH;
-				printf(" %s", option_types[option->type].help_str);
+				printf(" %s", gettext(option_types[option->type].help_str));
 			}
 			/* Find spaces to print between option to caption */
 			spaces -= strlen(option->name);
-			spaces -= strlen(option_types[option->type].help_str);
+			spaces -= strlen(gettext(option_types[option->type].help_str));
 
 			if (spaces < 1) spaces = 1; /* Minimum one space */
 			while (spaces-- > 0) printf(" ");
 
-			printf("%s\n", option->capt);
-		} else if (option->desc) {
-			int l = strlen(option->desc);
+			printf("%s\n", gettext(option->capt));
+
+		} else if (desc) {
+			int l = strlen(desc);
 			int i;
 
-			printf(" %s", option_types[option->type].help_str);
+			printf(" %s", gettext(option_types[option->type].help_str));
 
 			if (option->type == OPT_INT
 				|| option->type == OPT_BOOL
 				|| option->type == OPT_LONG) {
-				printf(" (default: %d)\n", * (int *) option->ptr);
+				printf(gettext(" (default: %d)\n"), *((int *) option->ptr));
 			} else if (option->type == OPT_STRING && option->ptr) {
-				printf(" (default: \"%s\")\n", (char *) option->ptr);
+				printf(gettext(" (default: \"%s\")\n"), (char *) option->ptr);
 			} else if (option->type == OPT_ALIAS) {
-				printf("(alias for %s)\n", (char *) option->ptr);
+				printf(gettext("(alias for %s)\n"), (char *) option->ptr);
 			} else if (option->type == OPT_CODEPAGE) {
-				printf(" (default: %s)\n",
+				printf(gettext(" (default: %s)\n"),
 					get_cp_name(* (int *) option->ptr));
 			} else if (option->type == OPT_COLOR) {
 				struct rgb *color = (struct rgb *) option->ptr;
-				printf(" (default: #%02x%02x%02x)\n",
+				printf(gettext(" (default: #%02x%02x%02x)\n"),
 					color->r, color->g, color->b);
 			} else {
 				printf("\n");
@@ -721,12 +725,13 @@ printhelp_descend(struct option *tree, unsigned char *path,
 			printf("%s%15s", indent, "");
 
 			for (i = 0; i < l; i++) {
-				putchar(option->desc[i]);
+				putchar(desc[i]);
 
-				if (option->desc[i] == '\n')
+				if (desc[i] == '\n')
 					printf("%s%15s", indent, "");
 			}
 			printf("\n\n");
+
 		} else {
 			/* Another little specialty mostly for -?, -h and -help
 			 * when doing -long-help. We print options with NULL
@@ -748,11 +753,11 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 	printf("\n");
 
 	if (!strcmp(option->name, "config-help")) {
-		printf("Configuration options:\n");
+		printf(gettext("Configuration options:\n"));
 		printhelp_descend(&root_options, "", 1, 0);
 	} else {
-		printf("Usage: elinks [options] [url]\n\n");
-		printf("Options:\n");
+		printf(gettext("Usage: elinks [OPTION]... [URL]\n\n"));
+		printf(gettext("Options:\n"));
 		if (!strcmp(option->name, "long-help")) {
 			printhelp_descend(&cmdline_options, "-", 1, 0);
 		} else {

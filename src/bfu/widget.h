@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.91 2005/01/05 00:51:44 jonas Exp $ */
+/* $Id: widget.h,v 1.92 2005/03/01 16:29:31 miciah Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -19,7 +19,6 @@
 #include "util/box.h"
 
 struct dialog_data;
-struct widget_data;
 
 
 struct widget_ops {

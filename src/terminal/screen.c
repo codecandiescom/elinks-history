@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.61 2003/09/02 18:26:28 jonas Exp $ */
+/* $Id: screen.c,v 1.62 2003/09/02 18:39:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,6 @@ struct screen_driver {
 	unsigned int m11_hack:1;
 	unsigned int utf_8_io:1;
 	unsigned int colors:1;
-	unsigned int restrict_852:1;
 	unsigned int trans:1;
 	unsigned int underline:1;
 };
@@ -111,10 +110,6 @@ print_char(struct string *screen, struct screen_driver *driver,
 			}
 		}
 
-		if (driver->restrict_852 && border && c >= 176 && c < 224) {
-			c = driver->frame[c - 176];
-		}
-
 	} else {
 		if (driver->frame == frame_vt100 && border != state->border) {
 			state->border = border;
@@ -124,10 +119,6 @@ print_char(struct string *screen, struct screen_driver *driver,
 			} else {
 				add_char_to_string(screen, '\x0e');
 			}
-		}
-
-		if (border && c >= 176 && c < 224) {
-			c = driver->frame[c - 176];
 		}
 	}
 
@@ -216,6 +207,10 @@ print_char(struct string *screen, struct screen_driver *driver,
 	}
 
 	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
+		if (border && driver->frame && c >= 176 && c < 224) {
+			c = driver->frame[c - 176];
+		}
+
 		if (driver->utf_8_io) {
 			int charset = driver->charset;
 
@@ -273,12 +268,13 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 static inline void
 init_screen_driver(struct screen_driver *driver, struct terminal *term)
 {
+	memset(driver, 0, sizeof(struct screen_driver));
+
 	driver->type = get_opt_int_tree(term->spec, "type");
 	driver->m11_hack = get_opt_bool_tree(term->spec, "m11_hack");
 	driver->utf_8_io = get_opt_bool_tree(term->spec, "utf_8_io");
 	driver->colors = get_opt_bool_tree(term->spec, "colors");
 	driver->charset	= get_opt_int_tree(term->spec, "charset");
-	driver->restrict_852 = get_opt_bool_tree(term->spec, "restrict_852");
 	driver->trans = get_opt_bool_tree(term->spec, "transparency");
 	driver->underline = get_opt_bool_tree(term->spec, "underline");
 
@@ -288,7 +284,9 @@ init_screen_driver(struct screen_driver *driver, struct terminal *term)
 	driver->koi8r = get_cp_index("koi8-r");
 
 	if (driver->type == TERM_LINUX) {
-		driver->frame = frame_restrict;
+		if (get_opt_bool_tree(term->spec, "restrict_852")) {
+			driver->frame = frame_restrict;
+		}
 	} else if (driver->type == TERM_VT100) {
 		driver->frame = (driver->utf_8_io) ? frame_vt100_u : frame_vt100;
 	} else if (driver->type == TERM_KOI8) {

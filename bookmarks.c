@@ -14,6 +14,10 @@ struct list_head bookmarks = {&bookmarks, &bookmarks};
 /* The last used id of a bookmark */
 bookmark_id next_bookmark_id = 0;
 
+/* search memorization */
+unsigned char *bm_last_searched_name = NULL;
+unsigned char *bm_last_searched_url = NULL;
+
 /* Clears the bookmark list */
 void free_bookmarks() {
 	struct bookmark *bm;
@@ -30,6 +34,8 @@ void free_bookmarks() {
 void finalize_bookmarks() {
 	write_bookmarks();
 	free_bookmarks();
+	if (bm_last_searched_name) mem_free(bm_last_searched_name);
+	if (bm_last_searched_url) mem_free(bm_last_searched_url);
 }
 
 
@@ -175,6 +181,14 @@ int bookmark_simple_search(unsigned char *search_title, unsigned char *search_ur
 	struct bookmark *bm;
 
 	if (search_title == NULL || search_url == NULL) return 0;
+
+	/* memorize title criteria */
+	if (bm_last_searched_name) mem_free(bm_last_searched_name);
+	bm_last_searched_name = stracpy(search_title); 
+
+	/* memorize url criteria */
+	if (bm_last_searched_url) mem_free(bm_last_searched_url);
+	bm_last_searched_url = stracpy(search_url);
 
 	if (!*search_title && !*search_url) {
 		foreach(bm, bookmarks) {
@@ -718,6 +732,13 @@ void menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses
 		new_bm->selected = 1;
 	}
 
+	/* reset momorized search criterias */
+	if (bm_last_searched_name) mem_free(bm_last_searched_name);
+	bm_last_searched_name = NULL;
+	
+	if (bm_last_searched_url) mem_free(bm_last_searched_url);
+	bm_last_searched_url = NULL;
+
 	/* Create the dialog */
 	d = mem_alloc(BM_DIALOG_MEMSIZE);
 	if (!d) return;
@@ -823,7 +844,7 @@ void launch_bm_add_doc_dialog(struct terminal *term,struct dialog_data *parent,s
 }
 
 void launch_bm_search_doc_dialog(struct terminal *term,struct dialog_data *parent,struct session *ses) {
-	bookmark_edit_dialog(term, TEXT(T_SEARCH_BOOKMARK), NULL, NULL, ses, parent, bookmark_search_do, NULL, 0);
+	bookmark_edit_dialog(term, TEXT(T_SEARCH_BOOKMARK), bm_last_searched_name, bm_last_searched_url, ses, parent, bookmark_search_do, NULL, 0);
 }
 	
 

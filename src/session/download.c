@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.335 2004/12/02 16:34:01 zas Exp $ */
+/* $Id: download.c,v 1.336 2004/12/17 00:46:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -371,7 +371,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	}
 
 	if (file_download->remotetime
-	    && get_opt_int("document.download.set_original_time")) {
+	    && get_opt_bool("document.download.set_original_time")) {
 		struct utimbuf foo;
 
 		foo.actime = foo.modtime = file_download->remotetime;

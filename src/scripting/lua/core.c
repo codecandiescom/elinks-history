@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.155 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: core.c,v 1.156 2004/06/12 18:43:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,9 +573,6 @@ prepare_lua(struct session *ses)
 
 	return sigsetjmp(errjmp, 1);
 }
-
-void
-sig_ctrl_c(struct terminal *t);
 
 void
 finish_lua(void)

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.30 2002/12/07 00:16:33 pasky Exp $ */
+/* $Id: opttypes.c,v 1.31 2002/12/07 14:26:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 
 #include "links.h"
 
+#include "bfu/listbox.h"
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "document/html/colors.h"
@@ -438,7 +439,21 @@ tree_dup(struct option *opt)
 	foreachback (option, *tree) {
 		struct option *new_opt = copy_option(option);
 
-		if (new_opt) add_to_list(*new, new_opt);
+		if (!new_opt) continue;
+		add_to_list(*new, new_opt);
+
+		if (new_opt->box_item) {
+			if (opt->box_item) {
+				add_at_pos((struct listbox_item *)
+						opt->box_item->child.prev,
+						new_opt->box_item);
+			} else {
+				add_at_pos((struct listbox_item *)
+						root_option_box_items.prev,
+						new_opt->box_item);
+			}
+			new_opt->box_item->root = opt->box_item;
+		}
 	}
 
 	return new;

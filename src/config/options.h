@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.38 2002/12/06 20:28:47 pasky Exp $ */
+/* $Id: options.h,v 1.39 2002/12/07 14:26:52 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -117,7 +117,6 @@ extern void *get_opt_(unsigned char *, int, struct list_head *, unsigned char *)
 #define get_opt_ptr(name) get_opt_ptr_tree(root_options, name)
 
 
-extern void add_opt_rec(struct list_head *, unsigned char *, struct option *);
 extern struct option *add_opt(struct list_head *, unsigned char *, unsigned char *,
 			      enum option_flags, enum option_type, int, int, void *,
 			      unsigned char *);

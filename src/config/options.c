@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.132 2002/12/06 20:28:47 pasky Exp $ */
+/* $Id: options.c,v 1.133 2002/12/07 14:26:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,10 @@
  * as it may be useful for some supernatural entities. And when that age will
  * come... */
 
+/* TODO: We should remove special case for root options and use some auxiliary
+ * (struct option *) instead. This applies to bookmarks, global history and
+ * listbox items as well, though. --pasky */
+
 struct list_head *root_options;
 struct list_head *cmdline_options;
 
@@ -55,6 +59,8 @@ struct list_head root_option_box_items = {
 };
 
 struct list_head option_boxes = { &option_boxes, &option_boxes };
+
+static void add_opt_rec(struct list_head *, unsigned char *, struct option *);
 
 /**********************************************************************
  Options interface
@@ -130,6 +136,7 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 		}
 		if (option->name) mem_free(option->name);
 		option->name = stracpy(name);
+		if (option->box_item) option->box_item->text = option->name;
 
 		add_opt_rec(tree, "", option);
 
@@ -174,14 +181,19 @@ get_opt_(unsigned char *file, int line, struct list_head *tree,
 }
 
 /* Add option to tree. */
-void
+static void
 add_opt_rec(struct list_head *tree, unsigned char *path, struct option *option)
 {
+	struct option ruler;
 	struct option *opt_tree = NULL;
 	struct list_head *cat = tree;
 
 	if (*path) {
 		opt_tree = get_opt_rec(tree, path);
+		cat = opt_tree->ptr;
+	} else if (tree != cmdline_options && tree != root_options) {
+		/* Ugh. Yes, I must be kidding. Will disappear soon. --pasky */
+		opt_tree = (struct option *) ((char *) tree - ((char *) &ruler.ptr - (char *) &ruler));
 		cat = opt_tree->ptr;
 	}
 	if (!cat) return;
@@ -222,16 +234,11 @@ add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 		option->box_item = NULL;
 		goto add_it;
 	}
-	option->box_item = mem_calloc(1, sizeof(struct listbox_item)
-						+ strlen(name) + 1);
+	option->box_item = mem_calloc(1, sizeof(struct listbox_item));
 	if (option->box_item) {
 		init_list(option->box_item->child);
 		option->box_item->visible = 1;
-
-		option->box_item->text = ((unsigned char *) option->box_item
-						+ sizeof(struct listbox_item));
-		strcpy(option->box_item->text, name);
-
+		option->box_item->text = option->name;
 		option->box_item->box = &option_boxes;
 		option->box_item->udata = option;
 		option->box_item->type = type == OPT_TREE ? BI_FOLDER : BI_LEAF;
@@ -292,11 +299,28 @@ copy_option(struct option *template)
 	option->type = template->type;
 	option->min = template->min;
 	option->max = template->max;
-	option->ptr = option_types[template->type].dup
-				? option_types[template->type].dup(template)
-				: template->ptr;
 	option->desc = template->desc;
-	option->box_item = NULL; /* FIXME/TODO */
+
+	option->box_item = mem_calloc(1, sizeof(struct listbox_item));
+	if (option->box_item) {
+		init_list(option->box_item->child);
+		option->box_item->visible = 1;
+		option->box_item->text = option->name;
+		option->box_item->box = &option_boxes;
+		option->box_item->udata = option;
+		option->box_item->type = template->box_item
+						? template->box_item->type
+						: template->type == OPT_TREE
+							? BI_FOLDER
+							: BI_LEAF;
+		option->box_item->depth = template->box_item
+						? template->box_item->depth
+						: 0;
+	}
+
+	option->ptr = option_types[template->type].dup
+			? option_types[template->type].dup(template)
+			: template->ptr;
 
 	return option;
 }

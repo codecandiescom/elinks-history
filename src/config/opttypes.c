@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.26 2002/11/13 21:13:02 pasky Exp $ */
+/* $Id: opttypes.c,v 1.27 2002/11/29 19:16:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,6 +201,8 @@ num_rd(struct option *opt, unsigned char **file)
 	unsigned char *end = *file;
 	long *value = mem_alloc(sizeof(long));
 
+	if (!value) return NULL;
+	
 	/* We don't want to move file if (commandline), but strtolx() second
 	 * parameter must not be NULL. */
 	*value = strtolx(*file, &end);
@@ -242,7 +244,7 @@ int_dup(struct option *opt)
 {
 	int *new = mem_alloc(sizeof(int));
 
-	memcpy(new, opt->ptr, sizeof(int));
+	if (new) memcpy(new, opt->ptr, sizeof(int));
 	return new;
 }
 
@@ -251,7 +253,7 @@ long_dup(struct option *opt)
 {
 	long *new = mem_alloc(sizeof(long));
 
-	memcpy(new, opt->ptr, sizeof(long));
+	if (new) memcpy(new, opt->ptr, sizeof(long));
 	return new;
 }
 
@@ -263,6 +265,8 @@ str_rd(struct option *opt, unsigned char **file)
 	unsigned char *str2 = init_str();
 	int str2l = 0;
 
+	if (!str2) return NULL;
+	
 	/* We're getting used in some parser functions in conf.c as well, and
 	 * that's w/ opt == NULL; so don't rely on opt to point anywhere. */
 	if (!commandline && *str != '"') { mem_free(str2); return NULL; }
@@ -314,7 +318,9 @@ str_wr(struct option *o, unsigned char **s, int *l)
 	if (strlen(o->ptr) >= o->max) {
 		unsigned char *s1 = init_str();
 		int l1 = 0;
-
+		
+		if (!s1) return;
+		
 		add_bytes_to_str(&s1, &l1, o->ptr, o->max - 1);
 		add_quoted_to_str(s, l, s1);
 		mem_free(s1);
@@ -328,7 +334,7 @@ str_dup(struct option *opt)
 {
 	unsigned char *new = mem_alloc(MAX_STR_LEN);
 
-	safe_strncpy(new, opt->ptr, MAX_STR_LEN);
+	if (new) safe_strncpy(new, opt->ptr, MAX_STR_LEN);
 	return new;
 }
 
@@ -410,7 +416,7 @@ color_dup(struct option *opt)
 {
 	struct rgb *new = mem_alloc(sizeof(struct rgb));
 
-	memcpy(new, opt->ptr, sizeof(struct rgb));
+	if (new) memcpy(new, opt->ptr, sizeof(struct rgb));
 	return new;
 }
 

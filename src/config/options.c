@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.115 2002/11/29 12:02:20 pasky Exp $ */
+/* $Id: options.c,v 1.116 2002/11/29 19:11:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,6 +70,8 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 	unsigned char *name = aname;
 	unsigned char *sep;
 
+	if (!aname) return NULL;
+	
 	/* We iteratively call get_opt_rec() each for path_elemets-1, getting
 	 * appropriate tree for it and then resolving [path_elemets]. */
 	if ((sep = strrchr(name, '.'))) {
@@ -119,8 +121,12 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 			mem_free(aname);
 			return NULL;
 		}
-		mem_free(option->name);
+		if (option->name) mem_free(option->name);
 		option->name = stracpy(name);
+		if (!option->name) {
+			mem_free(aname);
+			return NULL;
+		}
 
 		add_opt_rec(tree, "", option);
 
@@ -184,7 +190,13 @@ add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 {
 	struct option *option = mem_alloc(sizeof(struct option));
 
+	if (!option) return NULL;
+
 	option->name = stracpy(name); /* I hope everyone will like this. */
+	if (!option->name) {
+		mem_free(option);
+		return NULL;
+	}
 	option->flags = flags;
 	option->type = type;
 	option->min = min;
@@ -234,8 +246,14 @@ struct option *
 copy_option(struct option *template)
 {
 	struct option *option = mem_alloc(sizeof(struct option));
-
+	
+	if (!option) return NULL;
+	
 	option->name = stracpy(template->name);
+	if (!option->name) {
+		mem_free(option);
+		return NULL;
+	}
 	option->flags = template->flags;
 	option->type = template->type;
 	option->min = template->min;
@@ -255,8 +273,8 @@ struct list_head *
 init_options_tree()
 {
 	struct list_head *list = mem_alloc(sizeof(struct list_head));
-
-	init_list(*list);
+	
+	if (list) init_list(*list);
 
 	return list;
 }
@@ -321,7 +339,7 @@ unsigned char *eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	struct sockaddr *addrs;
+	struct sockaddr *addrs = NULL;
 	int addrno, i;
 
 	if (!*argc) return "Parameter expected";
@@ -358,7 +376,7 @@ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 #endif
 	}
 
-	mem_free(addrs);
+	if (addrs) mem_free(addrs);
 
 	fflush(stdout);
 

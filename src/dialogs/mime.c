@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.40 2003/08/01 11:41:35 zas Exp $ */
+/* $Id: mime.c,v 1.41 2003/08/01 11:49:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ add_ext_fn(struct dialog_data *dlg)
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_upper_bound(&w, max);
 	int_lower_bound(&w, min);
-	int_upper_bound(&w, dlg->win->term->x - 2 * DIALOG_LB);
+	int_upper_bound(&w, term->x - 2 * DIALOG_LB);
 	int_lower_bound(&w, 1);
 
 	rw = 0;

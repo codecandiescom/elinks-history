@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.302 2004/06/29 15:27:00 zas Exp $ */
+/* $Id: tables.c,v 1.303 2004/06/29 15:29:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -381,7 +381,7 @@ distribute_widths(struct table *table, int width)
 
 	while (d) {
 		int max, max_index;
-		int p = 0;
+		int total_width = 0;
 		int wq;
 		int dd;
 
@@ -450,10 +450,10 @@ distribute_widths(struct table *table, int width)
 					INTERNAL("could not expand table");
 					goto end2;
 			}
-			p += widths[col];
+			total_width += widths[col];
 		}
 
-		if (!p) {
+		if (!total_width) {
 			om++;
 			continue;
 		}
@@ -470,8 +470,8 @@ again:
 
 			if (!widths[col]) continue;
 			if (u && u[col]) continue;
-			
-			max_width = dd * widths[col] / p;
+
+			max_width = dd * widths[col] / total_width;
 			int_bounds(&max_width, 1, max_widths[col]);
 			if (max_width > max) {
 				max = max_width;

@@ -1,3 +1,726 @@
+Sat Jun  7 22:09:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	Drop a note about bitfields usage and especially about how important
+	it is to specify signedness near bit-sized structure field. *hint*
+	*hint* 
+
+Sat Jun  7 21:56:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.c, mime.h, backend/default.c, backend/mailcap.c:
+
+	Use bitfield width of one for boolean members. If not faster it is
+	prettier.  
+
+Sat Jun  7 21:41:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	One add_to_menu() was forgotten.  
+
+Sat Jun  7 21:39:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, dialogs/mime.c, dialogs/options.c,
+	document/html/parser.c, viewer/text/view.c:
+
+	Introduced menu_item.no_intl and additional parameter to
+	add_to_menu() with the same effect. If zero, menu system will again
+	translate the menu items properly. If non-zero, the item won't be
+	translated at all.  
+
+Sat Jun  7 21:33:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	s/term/win->term/ 
+
+Sat Jun  7 21:33:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Nasty sneaky DEBUG piece. Compilation fix.  
+
+Sat Jun  7 21:31:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Yet Another Aftermath Compile Fix[tm] 
+
+Sat Jun  7 21:31:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hotkey.c:
+
+	Oops, typo fix.  
+
+Sat Jun  7 21:28:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: hotkey.c, inphist.c, menu.c, menu.h:
+
+	Introduced menu_item.no_intl and additional parameter to
+	add_to_menu() with the same effect. If zero, menu system will again
+	translate the menu items properly. If non-zero, the item won't be
+	translated at all.  
+
+Sat Jun  7 21:20:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Tiny tidy up fixing indentation.  
+
+Sat Jun  7 20:55:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Minor reorder of fields, limit ignore_hotkey to 2 bits.  
+
+Sat Jun  7 20:51:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.h:
+
+	ignore_hotkey must be unsigned 
+
+Sat Jun  7 20:51:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.h:
+
+	Minor reorder of fields, limit ignore_hotkey to 2 bits.  
+
+Sat Jun  7 20:08:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/menu.h, dialogs/menu.c:
+
+	menu_item.submenu is now boolean and takes only one bit.  
+
+Sat Jun  7 20:05:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inphist.c, bfu/menu.c, bfu/menu.h, dialogs/menu.c,
+	document/html/parser.c:
+
+	(menu_item.) in_m -> submenu 
+
+Sat Jun  7 20:00:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Namespace cleanup --- _send_download() -> send_download_do().  
+
+Sat Jun  7 19:44:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Fixed now-misplaced comment.  
+
+Sat Jun  7 19:07:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/history.c:
+
+	Cleanups: Use list functions (magic tests), make vars local, let the
+	code breathe.  
+
+Sat Jun  7 18:29:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Small cleanup. Use have_location().  
+
+Sat Jun  7 17:53:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hotkey.c:
+
+	Removed trailing newline.  
+
+Sat Jun  7 17:53:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/group.c, dialogs/options.c:
+
+	Group layouting functions now also can translate lists of strings by
+	themselves if told so.  
+
+Sat Jun  7 17:34:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.c:
+
+	t2 -> term, fix previous patch.  
+
+Sat Jun  7 16:21:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/checkbox.c, bfu/checkbox.h, dialogs/options.c:
+
+	Checkboxes layouting functions now also can translate lists of
+	strings by themselves if told so.  
+
+Sat Jun  7 15:43:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Save position of POST_CHAR in variable.  
+
+Sat Jun  7 15:35:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, sched/error.c, sched/session.c:
+
+	Picking up the broken pieces of pasky hacking frenzy 
+
+Sat Jun  7 15:34:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/dialogs.c, dialogs/edit.c, dialogs/edit.h,
+	globhist/dialogs.c:
+
+	do_edit_dialog() now also takes parameter specifying whether it
+	should translate the passed strings by itself.  
+
+Sat Jun  7 15:29:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/auth.c:
+
+	Fixed localization of the 'Auth. required for blabla' message in the
+	authentication dialog.  
+
+Sat Jun  7 15:25:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/dialogs.c, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, lua/core.c, sched/download.c:
+
+	Make user dialogs (created by do_dialog) again translated properly
+	(or at least most of them for now).  
+
+Sat Jun  7 15:10:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, bookmarks/dialogs.c,
+	config/dialogs.c, dialogs/menu.c, lua/core.c, viewer/text/view.c:
+
+	input_field() now takes additional parameter telling whether to
+	translate the string parameters passed or not. Now the input_field()
+	dialogs should be properly translated again as well.  
+
+Sat Jun  7 15:01:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	@t is already localized, so msg_box() shouldn't try to further
+	localize the strings passed.  
+
+Sat Jun  7 15:00:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, sched/session.h, viewer/text/view.c:
+
+	All print_error_dialog() were setting the title to Error, so make it
+	implicit.  
+
+Sat Jun  7 14:56:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/download.c, sched/error.c, sched/error.h,
+	sched/session.c, viewer/dump/dump.c:
+
+	get_err_msg() now returns localized result when it makes sense.  
+
+Sat Jun  7 14:51:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/libintl.h:
+
+	When term is NULL, just go and straightly call gettext().  
+
+Sat Jun  7 14:44:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	s/value/Value/ in option info dialog.  
+
+Sat Jun  7 14:43:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/libintl.h:
+
+	Legalize _() calls with term == NULL.  
+
+Sat Jun  7 14:40:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/download.c, sched/session.c, viewer/text/view.c:
+
+	Fix previous patch adding term to msg_text() + fix of MSG_* typo 
+
+Sat Jun  7 14:40:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: error.c, sched.c, sched.h:
+
+	Moved msg_dsc from sched/sched.* to sched/error.*.  
+
+Sat Jun  7 14:37:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, sched/Makefile.am, sched/download.c, sched/error.c,
+	sched/error.h, sched/session.c, sched/session.h,
+	viewer/dump/dump.c:
+
+	Moved free_strerror_buf() and get_err_msg() from sched/session.* to
+	sched/error.*.  
+
+Sat Jun  7 14:16:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/dialogs.c, config/dialogs.c, dialogs/info.c,
+	dialogs/mime.c, globhist/dialogs.c, protocol/user.c,
+	sched/download.c, sched/session.c, viewer/text/view.c:
+
+	Pass term parameter to msg_text().  
+
+Sat Jun  7 14:07:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Reformatted Search string not found message to look more natural.  
+
+Sat Jun  7 14:03:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Indentation fix.  
+
+Sat Jun  7 14:02:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Translate option description in option info msgbox.  
+
+Sat Jun  7 13:56:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/user.c:
+
+	More clear error message when protocol has no handler.  
+
+Sat Jun  7 13:54:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: msgbox.c, msgbox.h:
+
+	Introduced msg_text_ni() along msg_text(), not performing automatic
+	localization (msg_box() now automagically localizes the format
+	string). Both those functions now use the same backend,
+	msg_text_do().  
+
+Sat Jun  7 13:46:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/align.h, bfu/button.c, bfu/text.c,
+	document/html/parser.c:
+
+	Removed now-useless AL_MASK. Also destroyed one forgotten
+	AL_EXTD_TEXT, thanks Jonas.  
+
+Sat Jun  7 13:45:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/msgbox.h:
+
+	Tiny comment updates.  
+
+Sat Jun  7 13:42:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: msgbox.c, msgbox.h:
+
+	MSGBOX_INTL -> MSGBOX_NO_INTL and inverted its meaning. Now, w/o any
+	flags all the string arguments are automagically localized.  
+
+Sat Jun  7 13:27:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Small language update. Now da.po rates higher than de.po! ;)) 
+
+Sat Jun  7 13:18:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Grammar fix of delete folder message.  
+
+Sat Jun  7 13:17:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/align.h, bfu/inpfield.c, bfu/msgbox.c, bfu/msgbox.h,
+	bookmarks/dialogs.c, config/dialogs.c, dialogs/document.c,
+	dialogs/info.c, dialogs/menu.c, dialogs/mime.c, globhist/dialogs.c,
+	lua/core.c, protocol/url.c, protocol/user.c, sched/download.c,
+	sched/session.c, viewer/text/view.c:
+
+	Moved the msg_box() flags from enum format_align at bfu/align.h to
+	enum msgbox_flags in bfu/msgbox.h. msg_box() now takes additional
+	flags parameter. AL_* -> MSGBOX_*.  
+
+Sat Jun  7 12:58:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/align.h, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c:
+
+	AL_NO -> AL_NONE 
+
+Sat Jun  7 12:54:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: align.h, msgbox.c, msgbox.h:
+
+	Introduced AL_INTL msg_box() flag, which will make msg_box() to l18n
+	all the passed strings for you. Must not be used in conjuction with
+	msg_text(), though.  
+
+Sat Jun  7 12:46:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, msgbox.c:
+
+	Removed unused variables.  
+
+Sat Jun  7 12:40:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/msgbox.h:
+
+	Rewritten msg_text() description, it had nothing to do with
+	gettextization ;-). Added note about its recommended usage.  
+
+Sat Jun  7 12:30:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/msgbox.h:
+
+	Documentation of the msg_box() call extended, reintroduced
+	informations lost during the transition, bunch of grammar/typo
+	fixes, some more docs about AL_EXTD_TEXT behaviour...  
+
+Sat Jun  7 12:15:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/msgbox.h:
+
+	Reformatted msg_box() declaration, it is not definiton but really a
+	declaration ;).  
+
+Sat Jun  7 12:13:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/msgbox.c:
+
+	Removed the 'info' udata hack, pass directly the text as udata to
+	the formatting function. Side effect is ungettextization of
+	msg_box(). People should pass already gettextized strings to it.  
+
+Sat Jun  7 12:08:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/msgbox.c:
+
+	Typo fix.  
+
+Sat Jun  7 12:07:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/msgbox.c:
+
+	Reverted the last patch, it does bad thing at a bad place. We
+	shouldn't assume that we can't have zero btutons, and the implicit
+	Ok button insertion doesn't feel that great. It should be done
+	differently, if at all... (I personally believe the current state of
+	ok button being inserted explicitly is fine, *shrug*.) 
+
+Sat Jun  7 12:05:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, group.c, hotkey.c,
+	menu.c, text.c:
+
+	Removed early gettextization from the BFU routines. All (or almost
+	all) the strings getting into BFU routines should be already
+	gettextized, as they may be constructed from various format strings
+	etc. And double-gettextization is eeevil. Uff, now the harder part:
+	look around the BFU users and properly gettextize everything.  
+
+Sat Jun  7 11:35:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Removed useless fmttext variable from memory_inf(), format string
+	can be used directly in msg_text().  
+
+Sat Jun  7 11:00:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Insert VERSION_STRING to menu_copying()'s msg_box() thru %s, making
+	gettext not choke on it.  
+
+Sat Jun  7 10:58:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	ses_goto() really-post msg_box() cleanup --- make m1 a real format
+	string, taking m2 as %s content.  
+
+Sat Jun  7 10:57:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/snprintf.c:
+
+	Missing type casting was fixed.  
+
+Sat Jun  7 10:56:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/dialogs.c, config/dialogs.c, dialogs/document.c,
+	dialogs/info.c, globhist/dialogs.c, sched/download.c,
+	sched/session.c, viewer/text/view.c:
+
+	msg_box() / msg_text() calls tidyup --- minor reformatting and
+	mainly reindentation of parameters. I know, stupid pasky changing
+	his mind...  
+
+Sat Jun  7 10:43:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	If buttons count is < 1, we always print default OK button. It will
+	simplifies msg_box() calls too.  
+
+Sat Jun  7 10:34:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: snprintf.c, snprintf.h:
+
+	Renamed internal snprintf implementation entry points to
+	elinks_\&(), and defined the proper names to point at them by
+	preprocessor (just like it is in util/string.h). This is to avoid
+	linking and declarations shadowing problems.  
+
+Sat Jun  7 10:27:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/snprintf.c:
+
+	Include elinks.h.  
+
+Sat Jun  7 10:24:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/snprintf.h:
+
+	If USE_OWN_LIBC is defined, pretend that we don't have any of the
+	snprintf() routines and use the own ones.  
+
+Sat Jun  7 10:24:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/snprintf.c:
+
+	Attempt to clarify the #if maze just a little.  
+
+Sat Jun  7 10:21:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/snprintf.c:
+
+	Removed useless if discovered by Zas.  
+
+Sat Jun  7 10:20:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	Use add_one_to_ml() to simplify code.  
+
+Sat Jun  7 10:20:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/snprintf.c:
+
+	Removed useless SAFE_FREE macro.  
+
+Sat Jun  7 10:16:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/snprintf.c:
+
+	Moved #include <math.h> into the main TEST_SNPRINTF code piece.  
+
+Sat Jun  7 10:15:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/snprintf.c:
+
+	Minor reorganization of #includes, to follow more the ELinks
+	standards.  
+
+Sat Jun  7 10:03:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: memlist.c, memlist.h:
+
+	add1_to_ml -> add_one_to_ml 
+
+Sat Jun  7 09:59:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: snprintf.c, snprintf.h:
+
+	Make VA_COPY declaration public, so that not only snprintf.c can use
+	it.  
+
+Sat Jun  7 09:56:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: memlist.c, memlist.h:
+
+	add1_to_ml() was introduced, it behaves like add_to_ml() but is
+	faster when only one element is added.  
+
+Sat Jun  7 09:56:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: snprintf.c, snprintf.h:
+
+	Reverted 'Internal *snprintf() functions can now be used when
+	--enable-own-libc is set. Minor cleanup and portability
+	improvments.'. It is doing too much stuff at the same time.  
+
+Sat Jun  7 09:26:20 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Sat Jun  7 09:01:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Dependancy to submenu label was removed in welcome message.  
+
+Sat Jun  7 08:47:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Typo fix.  
+
+Sat Jun  7 08:37:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/memlist.h:
+
+	Test exists in configure script, so just use HAVE_VARIADIC_MACROS.  
+
+Sat Jun  7 08:30:20 2003  Laurent Monin <zas@norz.org>:
+
+	* acconfig.h, configure.in, src/version.c, src/util/snprintf.h,
+	src/util/string.h:
+
+	USE_LIBC  was renamed to USE_OWN_LIBC.  
+
+Sat Jun  7 08:22:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/version.c:
+
+	Own_libc now appears in version string if was compiled with
+	--enable-own-libc.  
+
+Sat Jun  7 08:16:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	Redundant VA_COPY test was removed, it is in snprintf.h.  
+
+Sat Jun  7 08:14:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: snprintf.c, snprintf.h:
+
+	Internal *snprintf() functions can now be used when
+	--enable-own-libc is set. Minor cleanup and portability improvments.  
+
+Sat Jun  7 03:55:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Add sanity check before freeing hash. Apparently needed when exiting
+	a slave instance. Interesting.  
+
+Sat Jun  7 03:13:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Cleanup memory info dialog to use msg_text().  
+
+Sat Jun  7 01:55:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/msgbox.c:
+
+	Check malloc() failure and give vsnprintf() full buffer size. This
+	should round up the code part of the migration. Now po files needs
+	to be synced and (re)translated 8/ 
+
+Sat Jun  7 01:45:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/msgbox.c, bfu/msgbox.h, bookmarks/dialogs.c,
+	config/dialogs.c, dialogs/info.c, dialogs/mime.c,
+	globhist/dialogs.c, protocol/user.c, sched/download.c,
+	sched/session.c, viewer/text/view.c:
+
+	Migrate to use printf format strings in msg_box 
+
+Sat Jun  7 01:43:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/setup.h:
+
+	Used in mimetypes backend. Hmmm.  
+
+Sat Jun  7 01:04:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/snprintf.c:
+
+	Minor optimizations: use variables for temporary results.  
+
+Sat Jun  7 00:54:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/msgbox.c:
+
+	Don't end string too soon 
+
+Sat Jun  7 00:49:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/snprintf.c:
+
+	Elinksification and whitespaces fix.  
+
+Sat Jun  7 00:35:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/snprintf.c:
+
+	Move up #define of VA_COPY so it is reachable from vasprintf() 
+
+Sat Jun  7 00:33:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: msgbox.c, msgbox.h:
+
+	First step of migrating to using printf style strings in msg_box.  
+
+Fri Jun  6 23:23:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Ditto as last commit for mailcap backend 
+
+Fri Jun  6 23:20:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Use the option systems change_hook to control the backend.  We now
+	store a local pointer to the mimetypes option tree and uses it for 
+	getting all options this pointer.  
+
+Fri Jun  6 23:14:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	A few cleanups adding missing #includes and changing the indentation
+	level.  
+
+Fri Jun  6 23:13:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	When using key prefix Ctrl-, automagically upcase the letter after
+	the prefix, since normally we can't catch lowercase variant of this
+	(but don't save the keybindings such transformed since in the
+	future, this could change and that prefix could become perfectly
+	valid). Should fix bug 34, reported by Stepan Roh.  
+
+Fri Jun  6 23:06:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Whitespaces.  
+
+Fri Jun  6 22:59:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/Makefile.am:
+
+	Added DESIGN and TODO to EXTRA_DIST.  
+
+Fri Jun  6 22:56:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* COPYING, src/elusive/LICENCE, src/elusive/Makefile.am,
+	src/elusive/README:
+
+	Relicenced ELusive to BSD licence (w/o advertising clause), as
+	agreed upon in the bug 50. This should fix it.  
+
 Fri Jun  6 21:18:07 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/mime/backend/: common.h, default.c, mailcap.c, mimetypes.c:

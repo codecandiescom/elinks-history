@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.13 2002/03/28 21:38:50 pasky Exp $ */
+/* $Id: bfu.c,v 1.14 2002/04/16 10:43:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,23 +82,24 @@ void display_dlg_item(struct dialog_data *dlg, struct dialog_item_data *di,
 
 			fill_area(term, di->x, di->y, di->l, 1,
 				  COLOR_DIALOG_FIELD);
+			{
+				int len = strlen(di->cdata + di->vpos);
 
-			if (di->item->type == D_FIELD) {
-				/* I gave up here with the wrapping :/. --pasky */
-				print_text(term, di->x, di->y,
-					   strlen(di->cdata + di->vpos) <= di->l ? strlen(di->cdata + di->vpos)
-										 : di->l,
-					   di->cdata + di->vpos, COLOR_DIALOG_FIELD_TEXT);
-			} else {
-				fill_area(term, di->x, di->y,
-					  strlen(di->cdata + di->vpos) <= di->l ? strlen(di->cdata + di->vpos)
-										 : di->l,
-					  1, COLOR_DIALOG_FIELD_TEXT | '*');
+				if (di->item->type == D_FIELD) {
+					print_text(term, di->x, di->y,
+						   len <= di->l ? len : di->l,
+						   di->cdata + di->vpos,
+						   COLOR_DIALOG_FIELD_TEXT);
+				} else {
+					fill_area(term, di->x, di->y,
+						  len <= di->l ? len : di->l, 1,
+						  COLOR_DIALOG_FIELD_TEXT | '*');
+				}
 			}
-
 			if (sel) {
-				set_cursor(term, di->x + di->cpos - di->vpos, di->y,
-						 di->x + di->cpos - di->vpos, di->y);
+				int x = di->x + di->cpos - di->vpos;
+
+				set_cursor(term, x, di->y, x, di->y);
 				set_window_ptr(dlg->win, di->x, di->y);
 			}
 			break;
@@ -107,12 +108,17 @@ void display_dlg_item(struct dialog_data *dlg, struct dialog_item_data *di,
 			co = sel ? COLOR_DIALOG_BUTTON_SELECTED
 				 : COLOR_DIALOG_BUTTON;
 			text = _(di->item->text, term);
-			print_text(term, di->x, di->y, 2, "[ ", co);
-			print_text(term, di->x + 2, di->y, strlen(text), text, co);
-			print_text(term, di->x + 2 + strlen(text), di->y, 2, " ]", co);
-			if (sel) {
-				set_cursor(term, di->x + 2, di->y, di->x + 2, di->y);
-				set_window_ptr(dlg->win, di->x, di->y);
+			{
+				int len = strlen(text);
+				int x = di->x + 2;
+
+				print_text(term, di->x, di->y, 2, "[ ", co);
+				print_text(term, x, di->y, len, text, co);
+				print_text(term, x + len, di->y, 2, " ]", co);
+				if (sel) {
+					set_cursor(term, x, di->y, x, di->y);
+					set_window_ptr(dlg->win, di->x, di->y);
+				}
 			}
 			break;
 
@@ -158,16 +164,16 @@ void dlg_select_item(struct dialog_data *dlg, struct dialog_item_data *di)
 void dlg_set_history(struct dialog_item_data *di)
 {
 	unsigned char *s = "";
-	int l;
+	int len;
 
 	if ((void *) di->cur_hist != &di->history)
 		s = di->cur_hist->d;
-	l = strlen(s);
-	if (l > di->item->dlen)
-		l = di->item->dlen - 1;
-	memcpy(di->cdata, s, l);
-	di->cdata[l] = 0;
-	di->cpos = l;
+	len = strlen(s);
+	if (len > di->item->dlen)
+		len = di->item->dlen - 1;
+	memcpy(di->cdata, s, len);
+	di->cdata[len] = 0;
+	di->cpos = len;
 }
 
 /* dlg_mouse() */
@@ -194,8 +200,12 @@ int dlg_mouse(struct dialog_data *dlg, struct dialog_item_data *di,
 			    || ev->x >= di->x + di->l)
 				return 0;
 			di->cpos = di->vpos + ev->x - di->x;
-			if (di->cpos > strlen(di->cdata))
-				di->cpos = strlen(di->cdata);
+			{
+				int len = strlen(di->cdata);
+
+				if (di->cpos > len)
+					di->cpos = len;
+			}
 			display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 			dlg->selected = di - dlg->items;
 			display_dlg_item(dlg, di, 1);
@@ -243,25 +253,20 @@ int dlg_mouse(struct dialog_data *dlg, struct dialog_item_data *di,
 void redraw_dialog(struct dialog_data *dlg)
 {
 	int i;
+	int x = dlg->x + DIALOG_LEFT_BORDER;
+	int y = dlg->y + DIALOG_TOP_BORDER;
 	struct terminal *term = dlg->win->term;
 
-	draw_frame(term,
-		   dlg->x + DIALOG_LEFT_BORDER,
-		   dlg->y + DIALOG_TOP_BORDER,
+	draw_frame(term, x, y,
 		   dlg->xw - 2 * DIALOG_LEFT_BORDER,
 		   dlg->yw - 2 * DIALOG_TOP_BORDER,
 		   COLOR_DIALOG_FRAME, DIALOG_FRAME);
 
 	i = strlen(_(dlg->dlg->title, term));
-	print_text(term, (dlg->xw - i) / 2 + dlg->x - 1,
-		   dlg->y + DIALOG_TOP_BORDER, 1, " ",
-		   COLOR_DIALOG_TITLE);
-	print_text(term, (dlg->xw - i) / 2 + dlg->x,
-		   dlg->y + DIALOG_TOP_BORDER, i, _(dlg->dlg->title, term),
-		   COLOR_DIALOG_TITLE);
-	print_text(term, (dlg->xw - i) / 2 + dlg->x + i,
-		   dlg->y + DIALOG_TOP_BORDER, 1, " ",
-		   COLOR_DIALOG_TITLE);
+	x = (dlg->xw - i) / 2 + dlg->x;
+	print_text(term, x - 1, y, 1, " ", COLOR_DIALOG_TITLE);
+	print_text(term, x, y, i, _(dlg->dlg->title, term), COLOR_DIALOG_TITLE);
+	print_text(term, x + i, y, 1, " ", COLOR_DIALOG_TITLE);
 
 	for (i = 0; i < dlg->n; i++)
 		display_dlg_item(dlg, &dlg->items[i], i == dlg->selected);
@@ -275,13 +280,13 @@ void tab_compl(struct terminal *term, unsigned char *item, struct window *win)
 	struct event ev = {EV_REDRAW, 0, 0, 0};
 	struct dialog_item_data *di =
 		&((struct dialog_data *) win->data)->items[((struct dialog_data *) win->data)->selected];
-	int l = strlen(item);
+	int len = strlen(item);
 
-	if (l >= di->item->dlen)
-		l = di->item->dlen - 1;
-	memcpy(di->cdata, item, l);
-	di->cdata[l] = 0;
-	di->cpos = l;
+	if (len >= di->item->dlen)
+		len = di->item->dlen - 1;
+	memcpy(di->cdata, item, len);
+	di->cdata[len] = 0;
+	di->cpos = len;
 	di->vpos = 0;
 	ev.x = term->x;
 	ev.y = term->y;
@@ -294,7 +299,8 @@ void do_tab_compl(struct terminal *term, struct list_head *history,
 {
 	unsigned char *cdata =
 		((struct dialog_data *) win->data)->items[((struct dialog_data *) win->data)->selected].cdata;
-	int l = strlen(cdata), n = 0;
+	int l = strlen(cdata);
+	int n = 0;
 	struct input_history_item *hi;
 	struct menu_item *items = DUMMY, *i;
 
@@ -575,7 +581,8 @@ sel:
 			     ev->x == KBD_RIGHT) {
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 
-				if ((++dlg->selected) >= dlg->n)
+				dlg->selected++;
+				if (dlg->selected >= dlg->n)
 					dlg->selected = 0;
 
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
@@ -588,7 +595,8 @@ sel:
 			     ev->x == KBD_LEFT) {
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 
-				if ((--dlg->selected) < 0)
+				dlg->selected--;
+				if (dlg->selected < 0)
 					dlg->selected = dlg->n - 1;
 
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
@@ -744,7 +752,10 @@ void max_text_width(struct terminal *term, unsigned char *text, int *width)
 	do {
 		int c = 0;
 
-		while (*text && *text != '\n') text++, c++;
+		while (*text && *text != '\n') {
+			text++;
+			c++;
+		}
 		if (c > *width) *width = c;
 	} while (*(text++));
 }
@@ -756,12 +767,16 @@ void min_text_width(struct terminal *term, unsigned char *text, int *width)
 	do {
 		int c = 0;
 
-		while (*text && *text != '\n' && *text != ' ') text++, c++;
+		while (*text && *text != '\n' && *text != ' ') {
+			text++;
+			c++;
+		}
 		if (c > *width) *width = c;
 	} while (*(text++));
 }
 
-/* dlg_format_text() */
+/* Format text according to dialog dimensions and alignment. */
+/* TODO: Longer names for local variables. */
 void dlg_format_text(struct terminal *term, struct terminal *t2,
 		     unsigned char *text, int x, int *y, int w,	int *rw,
 		     int co, enum format_align align)
@@ -772,6 +787,7 @@ void dlg_format_text(struct terminal *term, struct terminal *t2,
 		unsigned char *tt = text;
 		int s;
 		int xx = x;
+		int ww;
 
 		do {
 			while (*text && *text != '\n' && *text != ' ') {
@@ -779,17 +795,21 @@ void dlg_format_text(struct terminal *term, struct terminal *t2,
 				if (term)
 					set_char(term, xx, *y, co | *text);
 #endif
-				text++, xx++;
+				text++;
+			       	xx++;
 			}
+
 			tx = ++text;
+			ww = xx - x;
 			xx++;
 			if (*(text - 1) != ' ') break;
+
 			while (*tx && *tx != '\n' && *tx != ' ')
 				tx++;
-		} while (tx - text + xx - x <= w);
+		} while (tx - text < w - ww);
 
-		s = (align & AL_MASK) == AL_CENTER ? (w - (xx - 1 - x)) / 2
-						   : 0;
+		s = (align & AL_MASK) == AL_CENTER ? (w - ww) / 2 : 0;
+
 		if (s < 0) s = 0;
 
 		while (tt < text - 1) {
@@ -803,7 +823,7 @@ void dlg_format_text(struct terminal *term, struct terminal *t2,
 			s++;
 			tt++;
 		}
-		if (rw && xx - 1 - x > *rw) *rw = xx - 1 - x;
+		if (rw && ww > *rw) *rw = ww;
 		(*y)++;
 	} while (*(text - 1));
 }
@@ -1323,6 +1343,8 @@ void msg_box(struct terminal *term, struct memory_list *ml,
 	do_dialog(term, dlg, ml);
 }
 
+
+/* FIXME: Move these history related functions elsewhere. --Zas */
 /* Search duplicate entries in history list and remove older ones. */
 static void remove_duplicate_from_history(struct input_history *historylist,
 					  unsigned char *url)

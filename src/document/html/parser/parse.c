@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.14 2004/04/24 11:29:24 pasky Exp $ */
+/* $Id: parse.c,v 1.15 2004/04/24 11:31:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -724,8 +724,8 @@ start_element(struct element_info *ei,
               unsigned char *eof, unsigned char *attr, void *f)
 {
 	unsigned char *a;
-	struct par_attrib pa;
-	int ali;
+	struct par_attrib old_format;
+	int restore_format;
 
 	if (was_xmp) {
 		put_chrs("<", 1, put_chars_f, f);
@@ -748,8 +748,8 @@ start_element(struct element_info *ei,
 		return;
 	}
 
-	ali = (par_format.align == AL_NONE);
-	pa = par_format;
+	restore_format = (par_format.align == AL_NONE);
+	old_format = par_format;
 
 	if (ei->func == html_table && global_doc_opts->tables
 	    && table_level < HTML_MAX_TABLE_LEVEL) {
@@ -817,7 +817,8 @@ start_element(struct element_info *ei,
 	}
 
 	if (ei->func != html_br) was_br = 0;
-	if (ali) par_format = pa;
+
+	if (restore_format) par_format = old_format;
 }
 
 static void

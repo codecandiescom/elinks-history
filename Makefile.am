@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.8 2002/03/17 11:28:53 pasky Exp $
+## $Id: Makefile.am,v 1.9 2002/03/17 14:58:52 pasky Exp $
 
 SUBDIRS = src
 

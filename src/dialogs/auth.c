@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.51 2003/09/17 15:32:02 zas Exp $ */
+/* $Id: auth.c,v 1.52 2003/09/17 15:43:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,6 @@ auth_layout(struct dialog_data *dlg)
 
 	rw = 0;
 	if (dlg->dlg->udata) {
-		text_width(term, dlg->dlg->udata, &min, &max);
 		dlg_format_text(NULL, term,
 				dlg->dlg->udata, 0, &y, w, &rw,
 				dialog_text_color, AL_LEFT);

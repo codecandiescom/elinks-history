@@ -1,9 +1,11 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.17 2004/01/07 19:32:35 jonas Exp $ */
+/* $Id: action.c,v 1.18 2004/01/08 00:29:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <stdlib.h>
 
 #include "elinks.h"
 #include "main.h"
@@ -14,6 +16,7 @@
 #include "config/dialogs.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
+#include "cookies/cookies.h"
 #include "cookies/dialogs.h"
 #include "dialogs/document.h"
 #include "dialogs/download.h"
@@ -24,6 +27,7 @@
 #include "document/view.h"
 #include "formhist/dialogs.h"
 #include "globhist/dialogs.h"
+#include "protocol/auth/auth.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -97,6 +101,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 	switch (action) {
 		/* Please keep in alphabetical order for now. Later we can sort
 		 * by most used or something. */
+		case ACT_ABORT_CONNECTION:
+			abort_loading(ses, 1);
+			print_screen_status(ses);
+			break;
+
 		case ACT_ADD_BOOKMARK:
 #ifdef CONFIG_BOOKMARKS
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
@@ -134,6 +143,14 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			shrink_memory(1);
 			break;
 
+		case ACT_COOKIES_LOAD:
+#ifdef CONFIG_COOKIES
+			if (!get_opt_int_tree(cmdline_options, "anonymous")
+			    && get_opt_int("cookies.save"))
+				load_cookies();
+#endif
+			break;
+
 		case ACT_COOKIE_MANAGER:
 #ifdef CONFIG_COOKIES
 			cookie_manager(ses);
@@ -148,12 +165,21 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			download_manager(ses);
 			break;
 
+		case ACT_FILE_MENU:
+			activate_bfu_technology(ses, 0);
+			break;
+
 		case ACT_FIND_NEXT:
 			do_frame_action(ses, find_next);
 			break;
 
 		case ACT_FIND_NEXT_BACK:
 			do_frame_action(ses, find_next_back);
+			break;
+
+		case ACT_FORGET_CREDENTIALS:
+			free_auth();
+			shrink_memory(1); /* flush caches */
 			break;
 
 		case ACT_FORMHIST_MANAGER:
@@ -166,6 +192,14 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			dialog_goto_url(ses, "");
 			break;
 
+		case ACT_GOTO_URL_HOME:
+		{
+			unsigned char *url = getenv("WWW_HOME");
+
+			if (!url || !*url) url = WWW_HOME_URL;
+			goto_url_with_hook(ses, url);
+			break;
+		}
 		case ACT_HEADER_INFO:
 			head_msg(ses);
 			break;
@@ -182,6 +216,15 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_KILL_BACKGROUNDED_CONNECTIONS:
 			abort_background_connections();
+			break;
+
+		case ACT_MENU:
+			activate_bfu_technology(ses, -1);
+			break;
+
+		case ACT_NEXT_FRAME:
+			next_frame(ses, 1);
+			draw_formatted(ses, 0);
 			break;
 
 		case ACT_OPEN_LINK_IN_NEW_TAB:
@@ -217,6 +260,19 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_OPTIONS_MANAGER:
 			options_manager(ses);
+			break;
+
+		case ACT_PREVIOUS_FRAME:
+			next_frame(ses, -1);
+			draw_formatted(ses, 0);
+			break;
+
+		case ACT_REALLY_QUIT:
+			exit_prog(term, (void *)1, ses);
+			break;
+
+		case ACT_REDRAW:
+			redraw_terminal_cls(term);
 			break;
 
 		case ACT_RELOAD:
@@ -263,6 +319,17 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			switch_to_next_tab(term);
 			break;
 
+		case ACT_TAB_MENU:
+			assert(ses->tab == get_current_tab(term));
+
+			if (ses->status.show_tabs_bar)
+				set_window_ptr(ses->tab, ses->tab->xpos, term->height - 2);
+			else
+				set_window_ptr(ses->tab, 0, 0);
+
+			tab_menu(term, ses->tab, ses);
+			break;
+
 		case ACT_TAB_PREV:
 			switch_to_prev_tab(term);
 			break;
@@ -307,13 +374,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			do_frame_action(ses, set_frame);
 			break;
 
-		case ACT_ABORT_CONNECTION:
 		case ACT_AUTO_COMPLETE:
 		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
 		case ACT_BACKSPACE:
 		case ACT_BEGINNING_OF_BUFFER:
 		case ACT_CANCEL:
-		case ACT_COOKIES_LOAD:
 		case ACT_COPY_CLIPBOARD:
 		case ACT_CUT_CLIPBOARD:
 		case ACT_DELETE:
@@ -326,11 +391,8 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_ENTER:
 		case ACT_ENTER_RELOAD:
 		case ACT_EXPAND:
-		case ACT_FILE_MENU:
-		case ACT_FORGET_CREDENTIALS:
 		case ACT_GOTO_URL_CURRENT:
 		case ACT_GOTO_URL_CURRENT_LINK:
-		case ACT_GOTO_URL_HOME:
 		case ACT_HOME:
 		case ACT_KILL_TO_BOL:
 		case ACT_KILL_TO_EOL:
@@ -341,16 +403,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_MARK_SET:
 		case ACT_MARK_GOTO:
 		case ACT_MARK_ITEM:
-		case ACT_MENU:
-		case ACT_NEXT_FRAME:
 		case ACT_NEXT_ITEM:
 		case ACT_PAGE_DOWN:
 		case ACT_PAGE_UP:
 		case ACT_PASTE_CLIPBOARD:
-		case ACT_PREVIOUS_FRAME:
 		case ACT_QUIT:
-		case ACT_REALLY_QUIT:
-		case ACT_REDRAW:
 		case ACT_RESUME_DOWNLOAD:
 		case ACT_RIGHT:
 		case ACT_SCRIPTING_FUNCTION:
@@ -359,7 +416,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_SCROLL_RIGHT:
 		case ACT_SCROLL_UP:
 		case ACT_SELECT:
-		case ACT_TAB_MENU:
 		case ACT_UNEXPAND:
 		case ACT_UP:
 		case ACT_VIEW_IMAGE:

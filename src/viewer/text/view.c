@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.342 2004/01/07 19:08:36 jonas Exp $ */
+/* $Id: view.c,v 1.343 2004/01/08 00:29:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,6 @@
 #include "bfu/msgbox.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
-#include "cookies/cookies.h"
 #include "dialogs/document.h"
 #include "dialogs/menu.h"
 #include "dialogs/options.h"
@@ -32,7 +31,6 @@
 #include "main.h"
 #include "osdep/newwin.h"
 #include "osdep/osdep.h"
-#include "protocol/auth/auth.h"
 #include "protocol/uri.h"
 #include "sched/action.h"
 #include "sched/download.h"
@@ -932,27 +930,6 @@ send_event(struct session *ses, struct term_event *ev)
 
 		/* TODO: Merge with do_action() */
 		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
-			case ACT_MENU:
-				activate_bfu_technology(ses, -1);
-				goto x;
-			case ACT_FILE_MENU:
-				activate_bfu_technology(ses, 0);
-				goto x;
-			case ACT_NEXT_FRAME:
-				next_frame(ses, 1);
-				draw_formatted(ses, 0);
-				/*draw_frames(ses);
-				  print_screen_status(ses);
-				  redraw_from_window(ses->tab);*/
-				goto x;
-			case ACT_PREVIOUS_FRAME:
-				next_frame(ses, -1);
-				draw_formatted(ses, 0);
-				goto x;
-			case ACT_ABORT_CONNECTION:
-				abort_loading(ses, 1);
-				print_screen_status(ses);
-				goto x;
 			case ACT_GOTO_URL_CURRENT: {
 				unsigned char *url;
 				struct location *loc;
@@ -978,27 +955,6 @@ quak:
 				dialog_goto_url(ses, url);
 				goto x;
 			}
-			case ACT_GOTO_URL_HOME: {
-				unsigned char *url = getenv("WWW_HOME");
-
-				if (!url || !*url) url = WWW_HOME_URL;
-				goto_url_with_hook(ses, url);
-				goto x;
-			}
-			case ACT_FORGET_CREDENTIALS:
-				free_auth();
-				shrink_memory(1); /* flush caches */
-				goto x;
-			case ACT_COOKIES_LOAD:
-#ifdef CONFIG_COOKIES
-				if (!get_opt_int_tree(cmdline_options, "anonymous")
-				    && get_opt_int("cookies.save"))
-					load_cookies();
-#endif
-				goto x;
-			case ACT_REALLY_QUIT:
-				exit_prog(ses->tab->term, (void *)1, ses);
-				goto x;
 			case ACT_LUA_CONSOLE:
 #ifdef HAVE_LUA
 				trigger_event_name("dialog-lua-console", ses);
@@ -1013,21 +969,6 @@ quak:
 
 quit:
 				exit_prog(ses->tab->term, (void *)(ev->x == KBD_CTRL_C), ses);
-				goto x;
-			case ACT_TAB_MENU:
-			{
-				struct window *tab = get_current_tab(ses->tab->term);
-
-				if (ses->status.show_tabs_bar)
-					set_window_ptr(tab, tab->xpos, tab->term->height - 2);
-				else
-					set_window_ptr(tab, 0, 0);
-
-				tab_menu(ses->tab->term, tab, tab->data);
-				goto x;
-			}
-			case ACT_REDRAW:
-				redraw_terminal_cls(ses->tab->term);
 				goto x;
 
 			default:

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.150 2004/11/18 08:15:30 jonas Exp $ */
+/* $Id: options.inc,v 1.151 2004/11/25 23:53:05 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -695,7 +695,8 @@ static struct option_info config_options_info[] = {
 		N_("A rule for passing URI to an external command.\n"
 		"The format is:\n"
 		"%c in the string means the current URL\n"
-		"%% in the string means '%'")),
+		"%% in the string means '%'\n\n"
+		"Do _not_ put single- or double-quotes around %c.")),
 
 	/* Keep options in alphabetical order. */
 

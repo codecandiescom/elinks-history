@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.103 2003/07/06 02:45:49 jonas Exp $ */
+/* $Id: file.c,v 1.104 2003/07/07 00:57:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -582,22 +582,19 @@ static void
 file_func(struct connection *connection)
 {
 	unsigned char *redirect = NULL;
-	unsigned char *filename;
-	int filenamelen;
+	unsigned char filename[MAX_STR_LEN];
+	int filenamelen = connection->uri.datalen;
 	DIR *directory;
 	struct file_data data;
 	enum connection_state state;
 
-	if (get_opt_int_tree(&cmdline_options, "anonymous")) {
+	if (get_opt_int_tree(&cmdline_options, "anonymous")
+	    || filenamelen > MAX_STR_LEN - 1 || filenamelen <= 0) {
 		abort_conn_with_state(connection, S_BAD_URL);
 		return;
 	}
 
-	get_filenamepart_from_url(connection->uri.protocol, &filename, &filenamelen);
-	if (!filename) {
-		abort_conn_with_state(connection, S_OUT_OF_MEM);
-		return;
-	}
+	safe_strncpy(filename, connection->uri.data, filenamelen + 1);
 
 	directory = opendir(filename);
 	if (directory) {
@@ -612,7 +609,6 @@ file_func(struct connection *connection)
 		}
 
 		closedir(directory);
-		mem_free(filename);
 
 	} else {
 		struct stream_encoded *stream;
@@ -627,8 +623,6 @@ file_func(struct connection *connection)
 		} else if (fd != -1) {
 			encoding = guess_encoding(filename);
 		}
-
-		mem_free(filename);
 
 		if (fd == -1) {
 			abort_conn_with_state(connection, -saved_errno);

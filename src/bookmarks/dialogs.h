@@ -1,4 +1,4 @@
-/* $Id: dialogs.h,v 1.6 2003/05/04 17:25:52 pasky Exp $ */
+/* $Id: dialogs.h,v 1.7 2003/11/08 05:17:40 miciah Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
@@ -11,11 +11,20 @@
 extern unsigned char *bm_last_searched_name;
 extern unsigned char *bm_last_searched_url;
 
-/* Launches bookmark manager */
-void menu_bookmark_manager(struct terminal *, void *, struct session *);
+/* Launch the bookmark manager */
+void menu_bookmark_manager(struct terminal *term, void *fcp,
+			   struct session *ses);
 
-/* Launches add dialogs */
-void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *, struct session *);
-void launch_bm_add_link_dialog(struct terminal *, struct dialog_data *, struct session *);
+/* Launch 'Add bookmark' dialog... */
+
+/* ...with the current document's title and URL */
+void launch_bm_add_doc_dialog(struct terminal *term,
+			      struct dialog_data *parent,
+			      struct session *ses);
+
+/* ...with the selected link's title and URL */
+void launch_bm_add_link_dialog(struct terminal *term,
+			       struct dialog_data *parent,
+			       struct session *ses);
 
 #endif

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.645 2004/11/12 16:16:22 zas Exp $ */
+/* $Id: view.c,v 1.646 2004/11/12 16:24:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -754,7 +754,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		}
 	}
 
-	return status;
+	return FRAME_EVENT_IGNORED;
 }
 
 #ifdef CONFIG_MOUSE

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.11 2002/05/18 11:49:17 zas Exp $ */
+/* $Id: secsave.c,v 1.12 2002/05/18 12:19:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@
  */
 
 /* FIXME: locking system on files about to be rewritten ? */
-/* FIXME: race conditions about ssi->file_name. */
+/* FIXME: Low risk race conditions about ssi->file_name. */
 
 
 /* Open a file for writing in a secure way. It returns a pointer to a structure
@@ -198,7 +198,10 @@ secure_close(struct secure_save_info *ssi)
 			 * UN*X. */
 			unlink(ssi->file_name);
 #endif
-			/* FIXME: Race condition on ssi->filename. */
+			/* FIXME: Race condition on ssi->file_name. The file
+			 * named ssi->file_name may have changed since
+			 * secure_open() call (where we stat() file and
+			 * more..).  */
 			if (rename(ssi->tmp_file_name, ssi->file_name) == -1) {
 				ret = errno;
 			} else {
@@ -206,7 +209,9 @@ secure_close(struct secure_save_info *ssi)
 				ret = 0;
 			}
 		}
-	} else ret = 0;
+	} else {
+		ret = 0;
+	}
 
 free:
 	if (ssi->tmp_file_name) mem_free(ssi->tmp_file_name);

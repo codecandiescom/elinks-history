@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.26 2003/07/27 23:35:25 jonas Exp $ */
+/* $Id: link.c,v 1.27 2003/07/28 09:39:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/tab.h"
+#include "terminal/screen.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/error.h"
@@ -174,24 +175,26 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x + xpos;
 		int y = link->pos[i].y + ypos;
-		unsigned co;
+		struct screen_char *co;
 
 		if (!(x >= scr->xp && y >= scr->yp && x < xmax && y < ymax)) {
 			scr->link_bg[i].x = -1;
 			scr->link_bg[i].y = -1;
-			scr->link_bg[i].c = -1;
 			continue;
 		}
 
 		scr->link_bg[i].x = x;
 		scr->link_bg[i].y = y;
-		scr->link_bg[i].c = co = get_char(t, x, y);
+
+		co = get_char(t, x, y);
+		scr->link_bg[i].c.data = co->data;
+		scr->link_bg[i].c.attr = co->attr;
 
 		if (i == cursor_offset) {
 			int blockable;
 
 			if (link->type != L_FIELD && link->type != L_AREA
-			    && ((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
+			    && (co->attr & 0x38) != (link->sel_color & 0x38)) {
 				blockable = 1;
 			} else {
 				blockable = 0;
@@ -231,7 +234,7 @@ clear_link(struct terminal *t, struct document_view *scr)
 			struct link_bg *bgchar = &link_bg[i];
 
 			if (bgchar->x != -1 && bgchar->y != -1)
-				set_char(t, bgchar->x, bgchar->y, bgchar->c);
+				set_char(t, bgchar->x, bgchar->y, encode_screen_char(bgchar->c));
 		}
 		free_link(scr);
 	}

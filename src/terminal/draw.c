@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.21 2003/07/28 09:30:37 jonas Exp $ */
+/* $Id: draw.c,v 1.22 2003/07/28 09:39:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,13 +27,13 @@ set_char(struct terminal *term, int x, int y, unsigned c)
 	screen->dirty = 1;
 }
 
-unsigned
+struct screen_char *
 get_char(struct terminal *term, int x, int y)
 {
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return 0; }
 
-	return encode_screen_char(term->screen->image[x + term->x * y]);
+	return &term->screen->image[x + term->x * y];
 }
 
 void

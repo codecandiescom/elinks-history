@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.30 2003/07/15 20:18:08 jonas Exp $ */
+/* $Id: renderer.h,v 1.31 2003/07/28 09:39:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -7,6 +7,7 @@
 #include "document/options.h"
 #include "document/html/parser.h"
 #include "terminal/draw.h"
+#include "terminal/screen.h"
 #include "lowlevel/ttime.h"
 #include "sched/session.h"
 #include "util/lists.h"
@@ -85,7 +86,7 @@ struct link {
 /* For struct document_view */
 struct link_bg {
 	int x, y;
-	unsigned c;
+	struct screen_char c;
 };
 
 /* For struct f_data */

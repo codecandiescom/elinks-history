@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.170 2003/07/28 06:54:33 zas Exp $ */
+/* $Id: view.c,v 1.171 2003/07/28 09:39:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,23 +203,23 @@ enum frame_cross_direction {
 static void
 set_xchar(struct terminal *t, int x, int y, enum frame_cross_direction dir)
 {
-	unsigned int c, d;
+	unsigned int d;
+	struct screen_char *screen_char;
 
 	assert(t);
 	if_assert_failed return;
 
 	if (x < 0 || x >= t->x || y < 0 || y >= t->y) return;
 
-	c = get_char(t, x, y);
-	if (!(c & ATTR_FRAME)) return;
+	screen_char = get_char(t, x, y);
+	if (!(screen_char->attr & 0x80)) return;
 
-	c &= 0xff;
 	d = dir>>1;
-	if (c == frame_trans[d][0])
-		set_only_char(t, x, y, frame_trans[d][1 + (dir & 1)] | ATTR_FRAME);
+	if (screen_char->data == frame_trans[d][0])
+		screen_char->data = frame_trans[d][1 + (dir & 1)] | ATTR_FRAME;
 	else
-		if (c == frame_trans[d][2 - (dir & 1)])
-			set_only_char(t, x, y, frame_trans[d][3] | ATTR_FRAME);
+		if (screen_char->data == frame_trans[d][2 - (dir & 1)])
+			screen_char->data = frame_trans[d][3] | ATTR_FRAME;
 }
 
 static void

@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.5 2003/07/27 17:23:53 jonas Exp $ */
+/* $Id: draw.h,v 1.6 2003/07/28 09:39:08 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -38,7 +38,7 @@ enum frame_char {
 };
 
 void set_char(struct terminal *, int, int, unsigned);
-unsigned get_char(struct terminal *, int, int);
+struct screen_char *get_char(struct terminal *, int, int);
 void set_color(struct terminal *, int, int, unsigned);
 void set_only_char(struct terminal *, int, int, unsigned);
 void set_line(struct terminal *, int, int, int, chr *);

@@ -63,6 +63,9 @@ using the Insert or '*' key--asterisk will appear near of all marked
 bookmarks--and then move to where you want to have the stuff moved to, and
 press the "Move" button.
 
+Separators can be inserted as well, using "Add separator" button, or by
+entering a special bookmark with "-" as title and no url.
+
 
 		Chapter 3: Searching needle in the haycock
 
@@ -124,6 +127,7 @@ unambiguously figure out the bookmarks hierarchy:
 	E: This folder is currently expanded. (No effect for non-folders.)
 	F: This entry is a folder. The <url> part is usually empty.
 
+Separators: these are special bookmarks with "-" as title and no url.
 
 Pros: Naturally, ELinks handles the native format the best, easiest and most
 reliably.
@@ -153,11 +157,9 @@ Pros: XBEL is the gateway to the rest of the bookmarks world.
 
 Cons: The support for XBEL is incomplete and there are known bugs. Especially,
 national character sets are basically not supported, so ELinks will most likely
-get it wrong if you have any non-ASCII characters in your bookmarks. Also,
-there is a missing support for some more nifty bookmarks features, like
-bookmarks separator bars. Generally, the XBEL support should be considered
-experimental and you shouldn't rely on it. It *could* trash your XBEL bookmarks
-file so make regular backups.
+get it wrong if you have any non-ASCII characters in your bookmarks.
+Generally, the XBEL support should be considered experimental and you shouldn't
+rely on it. It *could* trash your XBEL bookmarks file so make regular backups.
 
 To use the XBEL format, set bookmarks.file_format = 1.
 
@@ -205,4 +207,4 @@ simplified rather sooner than later.
 
 
 
-$Id: bookmarks.txt,v 1.13 2005/01/03 21:51:40 pasky Exp $
+$Id: bookmarks.txt,v 1.14 2005/03/20 08:19:05 zas Exp $

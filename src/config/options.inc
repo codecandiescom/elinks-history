@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.175 2005/01/03 00:30:02 jonas Exp $ */
+/* $Id: options.inc,v 1.176 2005/01/03 02:01:53 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1082,11 +1082,12 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_INT("ui.timer", N_("Duration"),
 		"duration", 0, 1, 86400, 86400,
-		N_("Inactivity timeout. One day should be enough for just everyone (TM).")),
+		N_("Inactivity timeout in second. A maximum of one day\n"
+		"should be enough for just everyone (TM).")),
 
 	INIT_OPT_STRING("ui.timer", N_("Action"),
 		"action", 0, "",
-		N_("Key-binding action to be triggered when timer reaches zero.")),
+		N_("Keybinding action to be triggered when timer reaches zero.")),
 
 
 	INIT_OPT_TREE("ui", N_("Window tabs"),
@@ -1096,9 +1097,9 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_INT("ui.tabs", N_("Display tabs bar"),
 		"show_bar", 0, 0, 2, 1,
 		N_("Show tabs bar on the screen:\n"
-		   "0 means never.\n"
-		   "1 means only if two or more tabs.\n"
-		   "2 means always.")),
+		"0 means never\n"
+		"1 means only if two or more tabs are open\n"
+		"2 means always")),
 
 	INIT_OPT_BOOL("ui.tabs", N_("Wrap-around tabs cycling"),
 		"wraparound", 0, 1,

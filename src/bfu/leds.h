@@ -1,11 +1,12 @@
-/* $Id: leds.h,v 1.12 2003/11/17 10:58:43 pasky Exp $ */
+/* $Id: leds.h,v 1.13 2003/11/17 11:10:55 pasky Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
 
 #include "modules/module.h"
-#include "sched/session.h"
 #include "util/color.h"
+
+struct session;
 
 /* TODO: Variable count! */
 #define LEDS_COUNT	5

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.1 2003/11/30 19:45:00 jonas Exp $ */
+/* $Id: status.c,v 1.2 2003/12/01 11:23:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,6 +148,65 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 	}
 }
 
+static inline void
+display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
+{
+	static int last_current_link;
+	unsigned char *msg = NULL;
+	unsigned int tab_info_len = 0;
+	struct download *stat = get_current_download(ses);
+	struct color_pair *text_color = NULL;
+
+	if (stat) {
+		/* Show S_INTERRUPTED message *once* but then show links
+		 * again as usual. */
+		if (current_frame(ses)) {
+			int ncl = current_frame(ses)->vs->current_link;
+
+			if (stat->state == S_INTERRUPTED
+				&& ncl != last_current_link)
+				stat->state = S_OK;
+			last_current_link = ncl;
+
+			if (stat->state == S_OK)
+				msg = print_current_link(ses);
+		}
+
+		if (!msg) {
+			int full = term->width > 100;
+			int wide = term->width > 80;
+
+			msg = get_stat_msg(stat, term, wide, full, ", ");
+		}
+	}
+
+	draw_area(term, 0, term->height - 1, term->width, 1, ' ', 0,
+		get_bfu_color(term, "status.status-bar"));
+
+	if (!ses->visible_tabs_bar && tabs_count > 1) {
+		unsigned char tab_info[8];
+
+		tab_info[tab_info_len++] = '[';
+		ulongcat(tab_info, &tab_info_len, term->current_tab + 1, 4, 0);
+		tab_info[tab_info_len++] = ']';
+		tab_info[tab_info_len++] = ' ';
+		tab_info[tab_info_len] = '\0';
+
+		text_color = get_bfu_color(term, "status.status-text");
+		draw_text(term, 0, term->height - 1, tab_info, tab_info_len,
+			0, text_color);
+	}
+
+	if (!msg) return;
+
+	if (!text_color)
+		text_color = get_bfu_color(term, "status.status-text");
+
+	draw_text(term, 0 + tab_info_len, term->height - 1,
+		  msg, strlen(msg), 0, text_color);
+	mem_free(msg);
+}
+
 /* Print statusbar and titlebar, set terminal title. */
 void
 print_screen_status(struct session *ses)
@@ -160,59 +219,7 @@ print_screen_status(struct session *ses)
 	init_bars_status(ses, &tabs_count, NULL);
 
 	if (ses->visible_status_bar && ses_tab_is_current) {
-		static int last_current_link;
-		unsigned int tab_info_len = 0;
-		struct download *stat = get_current_download(ses);
-		struct color_pair *text_color = NULL;
-
-		if (stat) {
-			/* Show S_INTERRUPTED message *once* but then show links
-			 * again as usual. */
-			if (current_frame(ses)) {
-				int ncl = current_frame(ses)->vs->current_link;
-
-				if (stat->state == S_INTERRUPTED
-				    && ncl != last_current_link)
-					stat->state = S_OK;
-				last_current_link = ncl;
-
-				if (stat->state == S_OK)
-					msg = print_current_link(ses);
-			}
-
-			if (!msg) {
-				int full = term->width > 100;
-				int wide = term->width > 80;
-
-				msg = get_stat_msg(stat, term, wide, full, ", ");
-			}
-		}
-
-		draw_area(term, 0, term->height - 1, term->width, 1, ' ', 0,
-			  get_bfu_color(term, "status.status-bar"));
-
-		if (!ses->visible_tabs_bar && tabs_count > 1) {
-			unsigned char tab_info[8];
-
-			tab_info[tab_info_len++] = '[';
-			ulongcat(tab_info, &tab_info_len, term->current_tab + 1, 4, 0);
-			tab_info[tab_info_len++] = ']';
-			tab_info[tab_info_len++] = ' ';
-			tab_info[tab_info_len] = '\0';
-
-			text_color = get_bfu_color(term, "status.status-text");
-			draw_text(term, 0, term->height - 1, tab_info, tab_info_len,
-				  0, text_color);
-		}
-
-		if (msg) {
-			if (!text_color)
-				text_color = get_bfu_color(term, "status.status-text");
-
-			draw_text(term, 0 + tab_info_len, term->height - 1,
-				  msg, strlen(msg), 0, text_color);
-			mem_free(msg);
-		}
+		display_status_bar(ses, term, tabs_count);
 	}
 
 	if (ses->visible_tabs_bar) {

@@ -13,8 +13,6 @@ for them; dummy javascript support (just an error message)
 
 	Show all downloads in one window, kind of "download manager"
 
-	Some way to tell ELinks to stop loading the page it's displaying
-
 	Better history manager (switch displaying of URLs/titles)
 
 	Forward/backward history manager
@@ -85,4 +83,4 @@ optionally.
 	Write some more documentation.. docs, a lot of docs!
 
 
-$Id: TODO,v 1.34 2002/11/29 12:39:53 pasky Exp $
+$Id: TODO,v 1.35 2002/12/05 23:43:54 pasky Exp $

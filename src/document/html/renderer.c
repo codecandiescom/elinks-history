@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.302 2003/10/18 16:07:30 jonas Exp $ */
+/* $Id: renderer.c,v 1.303 2003/10/18 16:12:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,24 +243,26 @@ void
 xset_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
-	struct screen_char *template = NULL;
+	struct screen_char *template;
 
 	assert(part && part->document);
 	if_assert_failed return;
 
-	for (; yl; yl--, y++) {
+	if (realloc_line(part->document, Y(y), X(x)))
+		return;
+
+	template = &POS(x, y);
+	template->data = data;
+	template->attr = SCREEN_ATTR_FRAME;
+
+	/* TODO: We need to acquire color flags from the document options. */
+	set_term_color(template, &colors, 0, part->document->opt.color_mode);
+
+	for (yl -= 1, y += 1; yl; yl--, y++) {
 	    	if (realloc_line(part->document, Y(y), X(x)))
 			return;
 
-		if (template) {
-			copy_screen_chars(&POS(x, y), template, 1);
-		} else {
-			template = &POS(x, y);
-			template->data = data;
-			template->attr = SCREEN_ATTR_FRAME;
-			set_term_color(template, &colors, 0,
-				       part->document->opt.color_mode);
-		}
+		copy_screen_chars(&POS(x, y), template, 1);
 	}
 }
 

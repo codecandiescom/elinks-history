@@ -1,3 +1,10 @@
+Mon Nov  4 16:57:00 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, lua/core.c, lua/core.h, protocol/http/http.c:
+
+	Lua memory is now free at exit (cleaner way), a comment about a
+	"needed" memleak was added.  
+
 Wed Oct 30 13:31:49 2002  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/listbox.c:

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.14 2003/11/22 15:50:19 jonas Exp $ */
+/* $Id: dialogs.c,v 1.15 2003/11/22 16:10:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,51 +47,9 @@ is_cookie_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_cookie_info(struct cookie *cookie, struct terminal *term);
-
-static unsigned char *
-get_cookie_item_info(struct listbox_item *item, struct terminal *term)
-{
-	return get_cookie_info(item->udata, term);
-}
-
-static void
-done_cookie_item(struct listbox_item *item, int last)
+get_cookie_info(struct listbox_item *item, struct terminal *term)
 {
 	struct cookie *cookie = item->udata;
-
-	assert(!is_object_used(cookie));
-
-	del_from_list(cookie);
-	free_cookie(cookie);
-
-	if (last
-	    && get_opt_bool("cookies.save")
-	    && get_opt_bool("cookies.resave"))
-		save_cookies();
-}
-
-static struct listbox_ops cookies_listbox_ops = {
-	lock_cookie,
-	unlock_cookie,
-	is_cookie_used,
-	get_cookie_item_info,
-	done_cookie_item,
-};
-
-static INIT_LIST_HEAD(cookie_box_items);
-
-struct hierbox_browser cookie_browser = {
-	{ D_LIST_HEAD(cookie_browser.boxes) },
-	&cookie_box_items,
-	{ D_LIST_HEAD(cookie_browser.dialogs) },
-	&cookies_listbox_ops,
-};
-
-
-static unsigned char *
-get_cookie_info(struct cookie *cookie, struct terminal *term)
-{
 	unsigned char *expires = NULL;
 	struct string string;
 
@@ -123,6 +81,40 @@ get_cookie_info(struct cookie *cookie, struct terminal *term)
 	if (expires) mem_free(expires);
 	return string.source;
 }
+
+static void
+done_cookie_item(struct listbox_item *item, int last)
+{
+	struct cookie *cookie = item->udata;
+
+	assert(!is_object_used(cookie));
+
+	del_from_list(cookie);
+	free_cookie(cookie);
+
+	if (last
+	    && get_opt_bool("cookies.save")
+	    && get_opt_bool("cookies.resave"))
+		save_cookies();
+}
+
+static struct listbox_ops cookies_listbox_ops = {
+	lock_cookie,
+	unlock_cookie,
+	is_cookie_used,
+	get_cookie_info,
+	done_cookie_item,
+};
+
+static INIT_LIST_HEAD(cookie_box_items);
+
+struct hierbox_browser cookie_browser = {
+	{ D_LIST_HEAD(cookie_browser.boxes) },
+	&cookie_box_items,
+	{ D_LIST_HEAD(cookie_browser.dialogs) },
+	&cookies_listbox_ops,
+};
+
 
 static int
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)

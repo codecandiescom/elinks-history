@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-04 16:41+0100\n"
+"POT-Creation-Date: 2004-01-04 17:41+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -20,7 +20,7 @@ msgstr "Fermer"
 
 #. | MSGBOX_SCROLLABLE
 #: src/bfu/hierbox.c:444 src/bfu/hierbox.c:466 src/cache/dialogs.c:145
-#: src/config/dialogs.c:406 src/cookies/dialogs.c:154
+#: src/config/dialogs.c:410 src/cookies/dialogs.c:154
 #: src/dialogs/document.c:44 src/dialogs/document.c:232
 #: src/dialogs/download.c:418 src/formhist/dialogs.c:165
 #: src/globhist/dialogs.c:182
@@ -35,17 +35,16 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:469 src/bfu/hierbox.c:607
 #: src/bfu/inpfield.c:47 src/bfu/inpfield.c:56 src/bfu/inpfield.c:76
 #: src/bfu/msgbox.c:185 src/bookmarks/dialogs.c:191
-#: src/bookmarks/dialogs.c:605 src/config/dialogs.c:45
-#: src/config/dialogs.c:228 src/config/dialogs.c:302 src/config/dialogs.c:332
-#: src/config/dialogs.c:367 src/config/dialogs.c:379 src/config/dialogs.c:398
-#: src/config/dialogs.c:470 src/config/dialogs.c:514 src/config/dialogs.c:541
-#: src/config/dialogs.c:582 src/config/dialogs.c:595 src/dialogs/document.c:50
+#: src/bookmarks/dialogs.c:605 src/config/dialogs.c:45 src/config/dialogs.c:57
+#: src/config/dialogs.c:240 src/config/dialogs.c:314 src/config/dialogs.c:344
+#: src/config/dialogs.c:379 src/config/dialogs.c:391 src/config/dialogs.c:474
+#: src/config/dialogs.c:518 src/config/dialogs.c:545 src/config/dialogs.c:586
+#: src/config/dialogs.c:599 src/dialogs/document.c:50
 #: src/dialogs/document.c:235 src/dialogs/document.c:305
 #: src/dialogs/document.c:317 src/dialogs/edit.c:99 src/dialogs/info.c:48
 #: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:116
-#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/options.c:146
-#: src/dialogs/options.c:202 src/dialogs/options.c:275
-#: src/formhist/dialogs.c:132 src/mime/dialogs.c:159
+#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/options.c:192
+#: src/dialogs/options.c:265 src/formhist/dialogs.c:132 src/mime/dialogs.c:159
 #: src/protocol/auth/dialogs.c:77 src/protocol/protocol.c:67
 #: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:185
 #: src/sched/download.c:273 src/sched/download.c:298 src/sched/download.c:569
@@ -94,14 +93,14 @@ msgid "Delete marked items?"
 msgstr "Supprimer les items sélectionnés?"
 
 #: src/bfu/hierbox.c:698 src/bfu/hierbox.c:719 src/bfu/hierbox.c:733
-#: src/bfu/hierbox.c:793 src/config/dialogs.c:490 src/dialogs/menu.c:163
+#: src/bfu/hierbox.c:793 src/config/dialogs.c:494 src/dialogs/menu.c:163
 #: src/formhist/formhist.c:492 src/mime/dialogs.c:86 src/sched/task.c:169
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
 msgid "Yes"
 msgstr "Oui"
 
 #: src/bfu/hierbox.c:699 src/bfu/hierbox.c:720 src/bfu/hierbox.c:734
-#: src/bfu/hierbox.c:794 src/config/dialogs.c:491 src/dialogs/menu.c:164
+#: src/bfu/hierbox.c:794 src/config/dialogs.c:495 src/dialogs/menu.c:164
 #: src/formhist/formhist.c:493 src/mime/dialogs.c:87 src/sched/task.c:170
 #: src/terminal/tab.c:193 src/terminal/tab.c:229
 msgid "No"
@@ -269,10 +268,10 @@ msgid "Folder name"
 msgstr "Nom du dossier"
 
 #: src/bookmarks/dialogs.c:191 src/bookmarks/dialogs.c:605
-#: src/config/dialogs.c:303 src/config/dialogs.c:379 src/config/dialogs.c:541
-#: src/config/dialogs.c:596 src/dialogs/edit.c:103 src/dialogs/menu.c:116
-#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/options.c:205
-#: src/dialogs/options.c:276 src/mime/dialogs.c:160
+#: src/config/dialogs.c:315 src/config/dialogs.c:391 src/config/dialogs.c:545
+#: src/config/dialogs.c:600 src/dialogs/edit.c:103 src/dialogs/menu.c:116
+#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/options.c:195
+#: src/dialogs/options.c:266 src/mime/dialogs.c:160
 #: src/protocol/auth/dialogs.c:78 src/sched/download.c:485
 #: src/sched/download.c:984 src/sched/download.c:993 src/sched/download.c:1013
 #: src/sched/download.c:1025 src/scripting/lua/core.c:402
@@ -291,13 +290,13 @@ msgstr "Modifier"
 msgid "Goto"
 msgstr "Aller à"
 
-#: src/bookmarks/dialogs.c:375 src/config/dialogs.c:254
-#: src/config/dialogs.c:327 src/config/dialogs.c:407
+#: src/bookmarks/dialogs.c:375 src/config/dialogs.c:266
+#: src/config/dialogs.c:339 src/config/dialogs.c:411
 msgid "Edit"
 msgstr "Modifier"
 
 #: src/bookmarks/dialogs.c:376 src/cache/dialogs.c:147
-#: src/config/dialogs.c:409 src/config/dialogs.c:616 src/cookies/dialogs.c:155
+#: src/config/dialogs.c:413 src/config/dialogs.c:620 src/cookies/dialogs.c:155
 #: src/formhist/dialogs.c:166 src/globhist/dialogs.c:186
 msgid "Delete"
 msgstr "Supprimer"
@@ -306,8 +305,8 @@ msgstr "Supprimer"
 msgid "Move"
 msgstr "Déplacer"
 
-#: src/bookmarks/dialogs.c:379 src/config/dialogs.c:408
-#: src/config/dialogs.c:615
+#: src/bookmarks/dialogs.c:379 src/config/dialogs.c:412
+#: src/config/dialogs.c:619
 msgid "Add"
 msgstr "Ajouter"
 
@@ -318,9 +317,9 @@ msgid "Search"
 msgstr "Chercher"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:383 src/config/dialogs.c:410
-#: src/config/dialogs.c:618 src/cookies/dialogs.c:157
-#: src/dialogs/options.c:204 src/formhist/dialogs.c:169
+#: src/bookmarks/dialogs.c:383 src/config/dialogs.c:414
+#: src/config/dialogs.c:622 src/cookies/dialogs.c:157
+#: src/dialogs/options.c:194 src/formhist/dialogs.c:169
 #: src/globhist/dialogs.c:192 src/sched/download.c:982
 #: src/sched/download.c:1011
 msgid "Save"
@@ -867,43 +866,52 @@ msgstr ""
 "Impossible d'écrire dans le fichier de configuration %s.\n"
 "%s"
 
-#: src/config/dialogs.c:104
+#: src/config/dialogs.c:53
+msgid "Write config success"
+msgstr "Succès d'écriture de configuration"
+
+#: src/config/dialogs.c:54
+#, c-format
+msgid "Options were saved successfully to config file %s."
+msgstr "Les options ont été sauvées avec succès dans le fichier %s."
+
+#: src/config/dialogs.c:116
 msgid "(expand by pressing space)"
 msgstr "(déployer en pressant espace)"
 
-#: src/config/dialogs.c:107 src/config/dialogs.c:269
+#: src/config/dialogs.c:119 src/config/dialogs.c:281
 msgid "N/A"
 msgstr "N/A"
 
-#: src/config/dialogs.c:120 src/config/dialogs.c:136 src/config/dialogs.c:263
-#: src/config/dialogs.c:378 src/cookies/dialogs.c:86 src/dialogs/edit.c:92
+#: src/config/dialogs.c:132 src/config/dialogs.c:148 src/config/dialogs.c:275
+#: src/config/dialogs.c:390 src/cookies/dialogs.c:86 src/dialogs/edit.c:92
 #: src/scripting/lua/core.c:397 src/scripting/lua/core.c:398
 #: src/scripting/lua/core.c:478
 msgid "Name"
 msgstr "Nom"
 
-#: src/config/dialogs.c:121 src/config/dialogs.c:137 src/config/dialogs.c:264
+#: src/config/dialogs.c:133 src/config/dialogs.c:149 src/config/dialogs.c:276
 msgid "Type"
 msgstr "Type"
 
-#: src/config/dialogs.c:130 src/config/dialogs.c:266 src/cookies/dialogs.c:87
+#: src/config/dialogs.c:142 src/config/dialogs.c:278 src/cookies/dialogs.c:87
 msgid "Value"
 msgstr "Valeur"
 
-#: src/config/dialogs.c:133 src/config/dialogs.c:139 src/config/dialogs.c:267
+#: src/config/dialogs.c:145 src/config/dialogs.c:151 src/config/dialogs.c:279
 msgid "Description"
 msgstr "Description"
 
-#: src/config/dialogs.c:225 src/protocol/protocol.c:64 src/sched/session.c:117
+#: src/config/dialogs.c:237 src/protocol/protocol.c:64 src/sched/session.c:117
 #: src/sched/session.c:881 src/viewer/text/textarea.c:269
 msgid "Error"
 msgstr "Erreur"
 
-#: src/config/dialogs.c:226
+#: src/config/dialogs.c:238
 msgid "Bad option value."
 msgstr "Mauvaise valeur"
 
-#: src/config/dialogs.c:328
+#: src/config/dialogs.c:340
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
@@ -912,39 +920,31 @@ msgstr ""
 "Il s'agit d'une option spéciale (comme un dossier),\n"
 "essayez de presser la touche ESPACE pour voir son contenu."
 
-#: src/config/dialogs.c:364 src/config/dialogs.c:378
+#: src/config/dialogs.c:376 src/config/dialogs.c:390
 msgid "Add option"
 msgstr "Ajouter option"
 
-#: src/config/dialogs.c:365
+#: src/config/dialogs.c:377
 msgid "Cannot add an option here."
 msgstr "Impossible d'ajouter cette option ici."
 
-#: src/config/dialogs.c:395 src/config/kbdbind.c:474
-msgid "Save options"
-msgstr "Enregistrer les options"
-
-#: src/config/dialogs.c:396
-msgid "Options were successfully saved to file."
-msgstr "Les options ont été sauvées avec succès."
-
-#: src/config/dialogs.c:415
+#: src/config/dialogs.c:419
 msgid "Option manager"
 msgstr "Gestionnaire d'options"
 
-#: src/config/dialogs.c:467 src/config/dialogs.c:511 src/config/dialogs.c:540
+#: src/config/dialogs.c:471 src/config/dialogs.c:515 src/config/dialogs.c:544
 msgid "Add keybinding"
 msgstr "Ajouter une association de touches"
 
-#: src/config/dialogs.c:468
+#: src/config/dialogs.c:472
 msgid "Invalid keystroke."
 msgstr "Touche invalide."
 
-#: src/config/dialogs.c:484
+#: src/config/dialogs.c:488
 msgid "Keystroke already used"
 msgstr "Touche déjà utilisée"
 
-#: src/config/dialogs.c:485
+#: src/config/dialogs.c:489
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
@@ -953,19 +953,19 @@ msgstr ""
 "La combinaison de touches \"%s\" est déjà utilisée pour l'action \"%s\".\n"
 "Etes-vous sûr de vouloir remplacer ?"
 
-#: src/config/dialogs.c:512
+#: src/config/dialogs.c:516
 msgid "Need to select a keymap."
 msgstr "Vous devez sélectionner une table."
 
-#: src/config/dialogs.c:527 src/config/options.inc:1168
+#: src/config/dialogs.c:531 src/config/options.inc:1168
 msgid "Action"
 msgstr "Action"
 
-#: src/config/dialogs.c:528
+#: src/config/dialogs.c:532
 msgid "Keymap"
 msgstr "Table"
 
-#: src/config/dialogs.c:529
+#: src/config/dialogs.c:533
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
@@ -975,31 +975,31 @@ msgstr ""
 "Préfixe: Shift, Ctrl, Alt\n"
 "Touche: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
-#: src/config/dialogs.c:533
+#: src/config/dialogs.c:537
 msgid "Keystroke"
 msgstr "Touches"
 
-#: src/config/dialogs.c:578 src/config/dialogs.c:589
+#: src/config/dialogs.c:582 src/config/dialogs.c:593
 msgid "Delete keybinding"
 msgstr "Supprimer l'association de touches"
 
-#: src/config/dialogs.c:579
+#: src/config/dialogs.c:583
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr "Cet objet n'est pas une association de touches."
 
-#: src/config/dialogs.c:590
+#: src/config/dialogs.c:594
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 "Supprimer l'association de touches \"%s\" (action \"%s\", keymap \"%s\")?"
 
-#: src/config/dialogs.c:617 src/dialogs/info.c:126 src/globhist/dialogs.c:188
+#: src/config/dialogs.c:621 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
 msgstr "Commuter affich."
 
-#: src/config/dialogs.c:623
+#: src/config/dialogs.c:627
 msgid "Keybinding manager"
 msgstr "Gestionnaire d'assoc. de touches"
 
@@ -1320,6 +1320,10 @@ msgstr "Enregistrer l'URL sous"
 #: src/config/kbdbind.c:473
 msgid "Save formatted document"
 msgstr "Enregistrer le document formaté"
+
+#: src/config/kbdbind.c:474
+msgid "Save options"
+msgstr "Enregistrer les options"
 
 #: src/config/kbdbind.c:475
 msgid "Scroll down"
@@ -1861,7 +1865,7 @@ msgstr "Inverser les couleurs"
 msgid "Invert the fore- and background color so the link stands out."
 msgstr "Inverser les couleurs de fond et de texte."
 
-#: src/config/options.inc:221 src/dialogs/options.c:199
+#: src/config/options.inc:221 src/dialogs/options.c:189
 msgid "Underline"
 msgstr "Souligné"
 
@@ -3012,7 +3016,7 @@ msgstr ""
 "seulement une partie de l'UTF8 est utilisée, en accord avec le jeu de "
 "caractères du terminal."
 
-#: src/config/options.inc:845 src/dialogs/options.c:196
+#: src/config/options.inc:845 src/dialogs/options.c:186
 msgid "Restrict frames in cp850/852"
 msgstr "Limiter les cadres dans cp850/852"
 
@@ -3638,19 +3642,33 @@ msgstr ""
 "Afficher le dialogue \"Atteindre l'URL\" si aucune page de démarrage n'est "
 "définie."
 
-#: src/config/options.inc:1213
+#: src/config/options.inc:1212
+msgid "Show a message box when file is saved sucessfully."
+msgstr "Montrer un dialogue quand un fichier est sauvé avec succès."
+
+#: src/config/options.inc:1214
+msgid ""
+"When you pressed a [ Save ] button in some manager, this option\n"
+"will make sure that a box confirming success of the operation will\n"
+"pop up."
+msgstr ""
+"Quand vous avez pressé un bouton [ Sauver ] dans un gestionnaire, cette\n"
+"option active un dialogue qui confirme que l'opération s'est déroulée\n"
+"correctement."
+
+#: src/config/options.inc:1219
 msgid "Sessions"
 msgstr "Sessions"
 
-#: src/config/options.inc:1215
+#: src/config/options.inc:1221
 msgid "Sessions settings."
 msgstr "Configuration des sessions."
 
-#: src/config/options.inc:1217
+#: src/config/options.inc:1223
 msgid "Auto save session"
 msgstr "Sauver automatiquement la session"
 
-#: src/config/options.inc:1219
+#: src/config/options.inc:1225
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
@@ -3658,11 +3676,11 @@ msgstr ""
 "Sauvegarder automatiquement la session au moment de quitter.\n"
 "Cette fonctionnalité nécessite le support des signets."
 
-#: src/config/options.inc:1222
+#: src/config/options.inc:1228
 msgid "Auto restore session"
 msgstr "Restaurer automatiquement la session"
 
-#: src/config/options.inc:1224
+#: src/config/options.inc:1230
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
@@ -3670,11 +3688,11 @@ msgstr ""
 "Restaurer automatiquement la session au démarrage.\n"
 "Cette fonctionnalité nécessite le support des signets."
 
-#: src/config/options.inc:1227
+#: src/config/options.inc:1233
 msgid "Auto save and restore session folder name"
 msgstr "Nom du dossier pour sauver et restaurer automatiquement la session"
 
-#: src/config/options.inc:1229
+#: src/config/options.inc:1235
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "This only makes sense with bookmark support."
@@ -3683,11 +3701,11 @@ msgstr ""
 "automatique de la session.\n"
 "Cette option n'a de sens qu'avec le support des signets."
 
-#: src/config/options.inc:1233
+#: src/config/options.inc:1239
 msgid "Set window title"
 msgstr "Modifier le titre de la fenêtre"
 
-#: src/config/options.inc:1235
+#: src/config/options.inc:1241
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
@@ -3697,11 +3715,11 @@ msgstr ""
 "environnement de type xterm. Cela permet d'avoir le titre du\n"
 "document courant en tant que titre de fenêtre."
 
-#: src/config/options.inc:1241
+#: src/config/options.inc:1247
 msgid "Use secure file saving"
 msgstr "Utiliser la sauvegarde fiable des fichiers."
 
-#: src/config/options.inc:1243
+#: src/config/options.inc:1249
 msgid ""
 "First write data to 'file.tmp', then rename to 'file' upon\n"
 "successfully finishing this. Note that this relates only to\n"
@@ -4361,75 +4379,67 @@ msgstr "Atteindre l'URL"
 msgid "Save to file"
 msgstr "Enregistrer dans le fichier"
 
-#: src/dialogs/options.c:143
-msgid "Save terminal options"
-msgstr "Sauver les options du terminal"
-
-#: src/dialogs/options.c:144
-msgid "Terminal options were successfully saved to file."
-msgstr "Les options de terminal ont été sauvées avec succès."
-
-#: src/dialogs/options.c:176
+#: src/dialogs/options.c:166
 msgid "Terminal options"
 msgstr "Options du terminal"
 
-#: src/dialogs/options.c:181
+#: src/dialogs/options.c:171
 msgid "Frame handling:"
 msgstr "Gestion des cadres (frames):"
 
-#: src/dialogs/options.c:182
+#: src/dialogs/options.c:172
 msgid "No frames"
 msgstr "Aucun cadre"
 
-#: src/dialogs/options.c:183
+#: src/dialogs/options.c:173
 msgid "VT 100 frames"
 msgstr "Cadres VT 100"
 
-#: src/dialogs/options.c:184
+#: src/dialogs/options.c:174
 msgid "Linux or OS/2 frames"
 msgstr "Cadres Linux ou OS/2"
 
-#: src/dialogs/options.c:185
+#: src/dialogs/options.c:175
 msgid "FreeBSD frames"
 msgstr "Cadres FreeBSD"
 
-#: src/dialogs/options.c:186
+#: src/dialogs/options.c:176
 msgid "KOI8-R frames"
 msgstr "Cadres KOI8-R"
 
-#: src/dialogs/options.c:188
+#: src/dialogs/options.c:178
 msgid "Color mode:"
 msgstr "Mode couleurs:"
 
-#: src/dialogs/options.c:189
+#: src/dialogs/options.c:179
 msgid "No colors (mono)"
 msgstr "Monochrome"
 
-#: src/dialogs/options.c:190
+#: src/dialogs/options.c:180
 msgid "16 colors"
 msgstr "16 couleurs"
 
-#: src/dialogs/options.c:192
+#: src/dialogs/options.c:182
 msgid "256 colors"
 msgstr "256 couleurs"
 
-#: src/dialogs/options.c:195
+#: src/dialogs/options.c:185
 msgid "Use ^[[11m"
 msgstr "Utiliser ^[[11m"
 
-#: src/dialogs/options.c:197
+#: src/dialogs/options.c:187
 msgid "Block the cursor"
 msgstr "Bloquer le curseur"
 
-#: src/dialogs/options.c:198
+#: src/dialogs/options.c:188
 msgid "Transparency"
 msgstr "Transparence"
 
-#: src/dialogs/options.c:200
+#: src/dialogs/options.c:190
 msgid "UTF-8 I/O"
 msgstr "E/S UTF-8"
 
-#: src/dialogs/options.c:269
+#: src/dialogs/options.c:259
 msgid "Resize terminal"
 msgstr "Redimensionner le terminal"
 
@@ -5970,6 +5980,12 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1581
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "Save terminal options"
+#~ msgstr "Sauver les options du terminal"
+
+#~ msgid "Terminal options were successfully saved to file."
+#~ msgstr "Les options de terminal ont été sauvées avec succès."
 
 #~ msgid ""
 #~ "Automatically save and restore the session when quitting so\n"

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.25 2004/01/19 19:18:13 jonas Exp $ */
+/* $Id: parser.c,v 1.26 2004/01/19 19:19:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,15 +138,19 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 		return;
 	}
 
-	selector = mem_calloc(1, sizeof(struct css_selector));
-	if (!selector) return;
+	/* Check if we have already encountered the selector */
+	selector = get_css_selector(css, token->string, token->length);
+	if (!selector) {
+		selector = mem_calloc(1, sizeof(struct css_selector));
+		if (!selector) return;
 
-	init_list(selector->properties);
+		init_list(selector->properties);
 
-	selector->element = memacpy(token->string, token->length);
-	if (!selector->element) {
-		mem_free(selector);
-		return;
+		selector->element = memacpy(token->string, token->length);
+		if (!selector->element) {
+			mem_free(selector);
+			return;
+		}
 	}
 
 	skip_css_tokens(scanner, '{');

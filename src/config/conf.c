@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.65 2002/12/11 14:48:21 pasky Exp $ */
+/* $Id: conf.c,v 1.66 2002/12/11 14:49:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -560,7 +560,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 		add_to_str(&str, &len,
 			"##" NEWLINE
 			"## Obviously, if you don't like what ELinks is going to do with" NEWLINE
-			"## this file, you can change it by altering the config_saving_style" NEWLINE
+			"## this file, you can change it by altering the config.saving_style" NEWLINE
 			"## option. Come on, aren't we friendly guys after all?" NEWLINE);
 	}
 

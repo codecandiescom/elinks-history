@@ -1,3 +1,82 @@
+Sun Apr 28 18:03:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: conf.c, options.c, options.h:
+
+	Changed struct option - now we've only config name there,
+	commandline alias is automatically generated. Also added flags
+	field, specifying if the option is commandline, configfile or both.
+	Modified the code accordingly. Also, we now accept -no-connect as
+	well as -no_connect on the command line now.  
+
+Sun Apr 28 17:28:31 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Tidy up. Function's type is on the line before function's name now.  
+
+Sun Apr 28 17:17:55 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	CWD/REST commands are now sent before PORT command. A function 
+	add_portcmd_to_str() was added, it constructs PORT command and its
+	parameters.  Code redundancy was reduced.  
+
+Sun Apr 28 15:42:57 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/conv.c:
+
+	isA() is now used in accept_char() macro.  
+
+Sun Apr 28 15:11:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/options.c, document/dump.c:
+
+	Few bugfixes in the options fetching code. Converted testing for
+	value of 'dump' to the new options fetching, so that we can test it.  
+
+Sun Apr 28 14:51:33 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file.c:
+
+	Minor tidy up.  
+
+Sun Apr 28 14:33:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/options.c, config/options.h:
+
+	Made enum dump_type and changed type of dmp to enum dump_type.
+	Annihilated macros D_DUMP and D_SOURCE, added enum D_NONE.  
+
+Sun Apr 28 14:24:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: options.c, options.h:
+
+	First draft of implementation of new options system.  
+
+Sun Apr 28 13:31:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+
+	Added descrpition of the second part of TODO list ;).  
+
+Sun Apr 28 12:02:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/TODO:
+
+	Added note about postponing the HTML rewrite until js + inline
+	images will be in glinks.  
+
+Sun Apr 28 12:00:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/Makefile.am, config/conf.c, config/conf.h,
+	config/urlhist.c, config/urlhist.h, lowlevel/home.c,
+	lowlevel/home.h:
+
+	Moved URL history saving/loading routines from config/conf.* to
+	config/urlhist.*. Moved free() of links_home from config/conf.* to
+	lowlevel/home.*.  
+
 Sun Apr 28 11:49:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/menu.c, dialogs/edit.c, document/view.c,

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.136 2004/04/05 04:57:15 jonas Exp $ */
+/* $Id: uri.c,v 1.137 2004/04/05 05:06:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,10 +437,9 @@ proceed: ;
  * 'file' protocol backend can understand. No host parts etc, that is what this
  * function is supposed to chew. */
 static void
-transform_file_url(unsigned char **up, unsigned char *cwd)
+transform_file_url(struct uri *uri, unsigned char *cwd)
 {
-	unsigned char *url = *up + 7; /* file:// */
-	unsigned char *path;
+	unsigned char *path = uri->data;
 
 	/* Sort out the host part. We currently support only host "localhost"
 	 * (plus empty host part will be assumed to be "localhost" as well).
@@ -459,32 +458,31 @@ transform_file_url(unsigned char **up, unsigned char *cwd)
 	 * consistent with our file://./ notation. */
 
 	/* Who would name their file/dir '...' ? */
-	if (url[0] == '.' || !url[0]) {
+	if (*path == '.' || !*path) {
 		int cwdlen = strlen(cwd);
 
 		/* Either we will end up with '//' and translate_directories()
 		 * will shorten it or the '/' will mark the inserted cwd as a
 		 * directory. */
-		if (url[0] == '.') url[0] = '/';
+		if (*path == '.') *path = '/';
 
 		/* Insert the current working directory. */
-		insert_in_uri(up, 7, cwd, cwdlen);
-
+		insert_in_uri(&struri(uri), 7, cwd, cwdlen);
 		return;
 	}
 
 #ifdef DOS_FS
-	if (upcase(url[0]) >= 'A' && upcase(url[0]) <= 'Z'
-	    && url[1] == ':' && dir_sep(url[2]))
+	if (upcase(path[0]) >= 'A' && upcase(path[0]) <= 'Z'
+	    && path[1] == ':' && dir_sep(path[2]))
 		return;
 #endif
 
-	for (path = url; *path && !dir_sep(*path); path++);
+	for (; *path && !dir_sep(*path); path++);
 
 	/* FIXME: We will in fact assume localhost even for non-local hosts,
 	 * until we will support the FTP transformation. --pasky */
 
-	memmove(url, path, strlen(path) + 1);
+	memmove(uri->data, path, strlen(path) + 1);
 }
 
 unsigned char *
@@ -639,10 +637,10 @@ parse_uri:
 	switch (uri_errno) {
 	case URI_ERRNO_OK:
 		if (uri.protocol == PROTOCOL_FILE && cwd && *cwd)
-			transform_file_url(&newurl, cwd);
+			transform_file_url(&uri, cwd);
 
-		translate_directories(newurl);
-		return newurl;
+		translate_directories(struri(&uri));
+		return struri(&uri);
 
 	case URI_ERRNO_NO_SLASHES:
 		/* Try prefix:some.url -> prefix://some.url.. */

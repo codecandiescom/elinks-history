@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.8 2003/08/30 00:06:15 jonas Exp $ */
+/* $Id: color.c,v 1.9 2003/08/30 19:36:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,6 @@ fg_color(unsigned char fg, unsigned char bg)
 
 /* TODO: Either only #define mix_color_pair() in header file to use
  * mix_attr_colors() as backend or reduce code duplication some other way. */
-/* TODO: Don't use both octal and hex numbers. --jonas */
 
 unsigned char
 mix_color_pair(struct color_pair *pair)
@@ -210,8 +209,8 @@ mix_color_pair(struct color_pair *pair)
 
 	color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07);
 
-	if (!(color & 0100) && bg == (fg & 0x07)) {
-		color = (color & 070) | 7 * !(color & 020);
+	if (!(color & 0x40) && bg == (fg & 0x07)) {
+		color = (color & 0x38) | 7 * !(color & 0x10);
 	}
 
 	return color;
@@ -253,8 +252,8 @@ mix_attr_colors(struct color_pair *pair, enum screen_char_attr attr)
 	fg = fg_color(fg, bg);
 	color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07);
 
-	if (!(color & 0100) && bg == (fg & 0x07)) {
-		color = (color & 070) | 7 * !(color & 020);
+	if (!(color & 0x40) && bg == (fg & 0x07)) {
+		color = (color & 0x38) | 7 * !(color & 0x10);
 	}
 
 	return color;

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.49 2004/05/30 17:51:27 jonas Exp $ */
+/* $Id: dialogs.c,v 1.50 2004/05/30 18:12:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,19 +126,6 @@ delete_cookie(struct listbox_item *item, int last)
 	if (!cookie) return;
 
 	assert(!is_object_used(cookie));
-
-	/* Update the root text if we own it */
-	if (item->root
-	    && item->root->text == cookie->server) {
-		struct listbox_item *item2;
-
-		foreach (item2, item->root->child)
-			if (item2 != item) {
-				struct cookie *cookie2 = item2->udata;
-
-				item->root->text = cookie2->server;
-			}
-	}
 
 	del_from_list(cookie);
 	free_cookie(cookie);

@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.11 2002/12/13 14:52:57 zas Exp $ */
+/* $Id: xbel.c,v 1.12 2002/12/13 18:46:08 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -135,8 +135,6 @@ read_bookmarks_xbel(FILE *f)
 	}
 
 	if (xbeltree_to_bookmarks_list(root_node, NULL)) readok = 1;
-
-	free_xbeltree(root_node);
 }
 
 static void
@@ -271,7 +269,6 @@ on_element_open(void *data, const char *name, const char **attr)
 			current_node->children = node;
 			current_node->children->next = tmp;
 			current_node->children->prev = NULL;
-
 		}
 		else current_node->children = node;
 	}
@@ -280,31 +277,33 @@ on_element_open(void *data, const char *name, const char **attr)
 	current_node = node;
 
 	current_node->name = stracpy((unsigned char *)name);
-	if (!current_node->name) return;
+	if (!current_node->name) {
+		mem_free(current_node);
+		return;
+	}
 
 	while (*attr) {
 		tmp = stracpy((unsigned char *) *attr);
 
 		if (!tmp) {
-
-free:
-			foreach(attribute, *current_node->attrs) {
-				mem_free(attribute->name);
-			}
-			mem_free(current_node->name);
+			free_node(current_node);
 			return;
 		}
 
 		attribute = mem_calloc(1, sizeof(struct attributes));
 		if (!attribute) {
 			mem_free(tmp);
-			goto free;
+			free_node(current_node);
+			return;
 		}
+
 		attribute->name = tmp;
+
 		add_to_list(*current_node->attrs, attribute);
 
 		++attr;
 	}
+
 }
 
 static void
@@ -520,8 +519,7 @@ free_node(struct tree_node *node)
 		mem_free(node->attrs);
 	}
 
-	mem_free(node->name);
-
+	if (node->name) mem_free(node->name);
 	if (node->text) mem_free(node->text);
 
 	mem_free(node);

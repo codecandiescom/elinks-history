@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.384 2003/10/25 19:38:09 pasky Exp $ */
+/* $Id: options.c,v 1.385 2003/10/25 19:47:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,8 +256,10 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 
 		/* This fits as the last list entry, add it there. This
 		 * optimizes the most expensive BUT most common case ;-). */
-		} else if (strcmp(((struct option *) cat->prev)->name,
-			   option->name) <= 0) {
+		} else if ((option->type != OPT_TREE
+			    || cat->prev->type == OPT_TREE)
+			   && strcmp(((struct option *) cat->prev)->name,
+				     option->name) <= 0) {
 			add_to_list_end(*cat, option);
 			if (abi) add_to_list_end(*bcat, option->box_item);
 
@@ -269,7 +271,9 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 			assert(bpos != (struct listbox_item *) bcat);
 
 			foreach (pos, *cat) {
-				if (strcmp(pos->name, option->name) <= 0) {
+				if ((option->type != OPT_TREE
+				     || pos->type == OPT_TREE)
+				    && strcmp(pos->name, option->name) <= 0) {
 					bpos = bpos->next;
 					assert(bpos != (struct listbox_item *) bcat);
 					continue;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.303 2003/12/21 18:17:36 jonas Exp $ */
+/* $Id: view.c,v 1.304 2003/12/21 19:09:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,7 @@ page_down(struct session *ses, struct document_view *doc_view, int a)
 		newpos = -1;
 	}
 
-	if (!c_in_view(doc_view))
+	if (!current_link_is_visible(doc_view))
 		find_link(doc_view, 1, a);
 }
 
@@ -355,7 +355,8 @@ page_up(struct session *ses, struct document_view *doc_view, int a)
 	if (doc_view->vs->y == 0) return;
 	doc_view->vs->y -= doc_view->height;
 	int_lower_bound(&doc_view->vs->y, 0);
-	if (!c_in_view(doc_view))
+
+	if (!current_link_is_visible(doc_view))
 		find_link(doc_view, -1, a);
 }
 
@@ -434,8 +435,9 @@ scroll(struct session *ses, struct document_view *doc_view, int a)
 	doc_view->vs->y += a;
 	if (a > 0) int_upper_bound(&doc_view->vs->y, max_height);
 	int_lower_bound(&doc_view->vs->y, 0);
-	if (c_in_view(doc_view)) return;
-	find_link(doc_view, a < 0 ? -1 : 1, 0);
+
+	if (!current_link_is_visible(doc_view))
+		find_link(doc_view, a < 0 ? -1 : 1, 0);
 }
 
 static void
@@ -451,8 +453,9 @@ hscroll(struct session *ses, struct document_view *doc_view, int a)
 	if (x == doc_view->vs->x) return;
 
 	doc_view->vs->x = x;
-	if (c_in_view(doc_view)) return;
-	find_link(doc_view, 1, 0);
+
+	if (!current_link_is_visible(doc_view))
+		find_link(doc_view, 1, 0);
 	/* !!! FIXME: check right margin */
 }
 

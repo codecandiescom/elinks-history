@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.26 2003/12/01 16:05:48 jonas Exp $ */
+/* $Id: vs.c,v 1.27 2003/12/21 19:09:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,7 @@ check_vs(struct document_view *doc_view)
 	int_upper_bound(&vs->current_link, doc_view->document->nlinks - 1);
 
 	if (vs->current_link != -1) {
-		if (!c_in_view(doc_view)) {
+		if (!current_link_is_visible(doc_view)) {
 			struct link *links = doc_view->document->links;
 
 			set_pos_x(doc_view, &links[vs->current_link]);

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.125 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: link.c,v 1.126 2003/12/21 19:09:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ set_link(struct document_view *doc_view)
 	assert(doc_view);
 	if_assert_failed return;
 
-	if (!c_in_view(doc_view))
+	if (!current_link_is_visible(doc_view))
 		find_link(doc_view, 1, 0);
 }
 
@@ -412,7 +412,7 @@ in_view(struct document_view *doc_view, struct link *link)
 }
 
 int
-c_in_view(struct document_view *doc_view)
+current_link_is_visible(struct document_view *doc_view)
 {
 	assert(doc_view && doc_view->vs);
 	if_assert_failed return 0;

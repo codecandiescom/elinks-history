@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.2 2003/07/03 01:40:45 jonas Exp $ */
+/* $Id: form.c,v 1.3 2003/07/03 08:19:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -860,8 +860,10 @@ field_op(struct session *ses, struct f_data_c *f, struct link *l,
 				break;
 			default:
 				if (!ev->y && (ev->x >= 32 && ev->x < 256)) {
-					if (!frm->ro && strlen(fs->value) < frm->maxlength) {
-						unsigned char *v = mem_realloc(fs->value, strlen(fs->value) + 2);
+					int value_len = strlen(fs->value);
+
+					if (!frm->ro && value_len < frm->maxlength) {
+						unsigned char *v = mem_realloc(fs->value, value_len + 2);
 
 						if (v) {
 							fs->value = v;

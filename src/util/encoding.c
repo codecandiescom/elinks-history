@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.22 2003/06/20 23:02:44 jonas Exp $ */
+/* $Id: encoding.c,v 1.23 2003/06/20 23:34:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@
 /* TODO: When more decoders will join the game, we should probably move them
  * to separate files, maybe even to separate directory. --pasky */
 
-struct decoding_handlers {
+struct decoding_backend {
 	unsigned char *name;
 	int (*open)(struct stream_encoded *stream, int fd);
 	int (*read)(struct stream_encoded *stream, unsigned char *data, int len);
@@ -80,7 +80,7 @@ dummy_close(struct stream_encoded *stream)
 
 static unsigned char *dummy_extensions[] = { NULL };
 
-static struct decoding_handlers dummy_handlers = {
+static struct decoding_backend dummy_decoding_backend = {
 	"none",
 	dummy_open,
 	dummy_read,
@@ -127,7 +127,7 @@ gzip_close(struct stream_encoded *stream)
 
 static unsigned char *gzip_extensions[] = { ".gz", ".tgz", NULL };
 
-static struct decoding_handlers gzip_handlers = {
+static struct decoding_backend gzip_decoding_backend = {
 	"gzip",
 	gzip_open,
 	gzip_read,
@@ -217,7 +217,7 @@ bzip2_close(struct stream_encoded *stream)
 
 static unsigned char *bzip2_extensions[] = { ".bz2", NULL };
 
-static struct decoding_handlers bzip2_handlers = {
+static struct decoding_backend bzip2_decoding_backend = {
 	"bzip2",
 	bzip2_open,
 	bzip2_read,
@@ -229,17 +229,17 @@ static struct decoding_handlers bzip2_handlers = {
 #endif
 
 
-static struct decoding_handlers *handlers[] = {
-	&dummy_handlers,
+static struct decoding_backend *decoding_backends[] = {
+	&dummy_decoding_backend,
 #ifdef HAVE_ZLIB_H
-	&gzip_handlers,
+	&gzip_decoding_backend,
 #else
-	&dummy_handlers,
+	&dummy_decoding_backend,
 #endif
 #ifdef HAVE_BZLIB_H
-	&bzip2_handlers,
+	&bzip2_decoding_backend,
 #else
-	&dummy_handlers,
+	&dummy_decoding_backend,
 #endif
 };
 
@@ -259,7 +259,7 @@ open_encoded(int fd, enum stream_encoding encoding)
 	if (!stream) return NULL;
 
 	stream->encoding = encoding;
-	if (handlers[stream->encoding]->open(stream, fd) >= 0)
+	if (decoding_backends[stream->encoding]->open(stream, fd) >= 0)
 		return stream;
 
 	mem_free(stream);
@@ -272,7 +272,7 @@ open_encoded(int fd, enum stream_encoding encoding)
 int
 read_encoded(struct stream_encoded *stream, unsigned char *data, int len)
 {
-	return handlers[stream->encoding]->read(stream, data, len);
+	return decoding_backends[stream->encoding]->read(stream, data, len);
 }
 
 /* Decode the given chunk of data in the context of @stream. @data contains the
@@ -282,7 +282,7 @@ unsigned char *
 decode_encoded(struct stream_encoded *stream, unsigned char *data, int len,
 		int *new_len)
 {
-	return handlers[stream->encoding]->decode(stream, data, len, new_len);
+	return decoding_backends[stream->encoding]->decode(stream, data, len, new_len);
 }
 
 /* Closes encoded stream. Note that fd associated with the stream will be
@@ -290,7 +290,7 @@ decode_encoded(struct stream_encoded *stream, unsigned char *data, int len,
 void
 close_encoded(struct stream_encoded *stream)
 {
-	handlers[stream->encoding]->close(stream);
+	decoding_backends[stream->encoding]->close(stream);
 	mem_free(stream);
 }
 
@@ -298,7 +298,7 @@ close_encoded(struct stream_encoded *stream)
 /* Return a list of extensions associated with that encoding. */
 unsigned char **listext_encoded(enum stream_encoding encoding)
 {
-	return handlers[encoding]->extensions;
+	return decoding_backends[encoding]->extensions;
 }
 
 enum stream_encoding
@@ -309,7 +309,7 @@ guess_encoding(unsigned char *filename)
 	int enc;
 
 	for (enc = 1; enc < NB_KNOWN_ENCODING; enc++) {
-		unsigned char **ext = listext_encoded(enc);
+		unsigned char **ext = decoding_backends[enc]->extensions;
 
 		while (ext && *ext) {
 			int len = strlen(*ext);
@@ -327,5 +327,5 @@ guess_encoding(unsigned char *filename)
 unsigned char *
 get_encoding_name(enum stream_encoding encoding)
 {
-	return handlers[encoding]->name;
+	return decoding_backends[encoding]->name;
 }

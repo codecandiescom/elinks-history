@@ -1,5 +1,5 @@
 /* These routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.8 2003/06/05 12:08:04 zas Exp $ */
+/* $Id: memlist.c,v 1.9 2003/06/05 16:39:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,8 +27,13 @@
 /* Create a memory list. If p is NULL or allocation fails, it will
  * returns NULL.
  * It always stops at first NULL element. */
+#ifdef DEBUG_MEMLIST
+struct memory_list *
+debug_getml(unsigned char *file, int line, void *p, ...)
+#else
 struct memory_list *
 getml(void *p, ...)
+#endif
 {
 	struct memory_list *ml;
 	va_list ap;
@@ -38,8 +43,8 @@ getml(void *p, ...)
 	/* If first element is NULL, there's no need to allocate memory, so
 	 * just return. */
 	if (!p) {
-#ifdef DEBUG
-		error("getml(NULL, ....)");
+#ifdef DEBUG_MEMLIST
+		error("%s:%d getml(NULL, ....)", file, line);
 #endif
 		return NULL;
 	}
@@ -70,8 +75,13 @@ getml(void *p, ...)
  * If memory list exists, it enlarges it, else it creates it.
  * if there's no elements or first element is NULL, it does nothing.
  * It always stops at first NULL element. */
+#ifdef DEBUG_MEMLIST
+void
+debug_add_to_ml(unsigned char *file, int line, struct memory_list **ml, ...)
+#else
 void
 add_to_ml(struct memory_list **ml, ...)
+#endif
 {
 	va_list ap;
 	void *q;
@@ -84,8 +94,8 @@ add_to_ml(struct memory_list **ml, ...)
 
 	/* None, so just return. */
 	if (!n) {
-#ifdef DEBUG
-		error("add_to_ml(%p, NULL, ...)", ml);
+#ifdef DEBUG_MEMLIST
+		error("%s:%d add_to_ml(%p, NULL, ...)", file, line, ml);
 #endif
 		return;
 	}

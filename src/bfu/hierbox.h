@@ -1,12 +1,14 @@
-/* $Id: hierbox.h,v 1.39 2003/11/26 21:39:20 jonas Exp $ */
+/* $Id: hierbox.h,v 1.40 2003/12/01 15:19:53 pasky Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
 
 #include "bfu/dialog.h"
 #include "bfu/listbox.h"
-#include "terminal/terminal.h"
 #include "util/lists.h"
+
+struct session;
+
 
 typedef int (*hierbox_button_handler)(struct dialog_data *dlg_data, struct widget_data *button);
 

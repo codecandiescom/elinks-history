@@ -1,16 +1,16 @@
-/* $Id: widget.h,v 1.45 2003/11/29 02:13:34 jonas Exp $ */
+/* $Id: widget.h,v 1.46 2003/12/01 15:19:53 pasky Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
 
-#include "bfu/inphist.h"
 #include "bfu/style.h"
-#include "terminal/terminal.h"
 #include "util/lists.h"
 
+struct dialog_data;
+struct input_history;
+struct input_history_entry;
 
 struct widget_data;
-struct dialog_data; /* XXX */
 
 enum widget_type {
 	WIDGET_CHECKBOX,

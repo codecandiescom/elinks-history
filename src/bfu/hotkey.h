@@ -1,10 +1,12 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.h,v 1.3 2003/06/18 01:05:55 jonas Exp $ */
+/* $Id: hotkey.h,v 1.4 2003/12/01 15:19:53 pasky Exp $ */
 
 #ifndef EL__BFU_HOTKEY_H
 #define EL__BFU_HOTKEY_H
 
-#include "bfu/menu.h"
+struct menu;
+struct menu_item;
+struct terminal;
 
 /* int find_hotkey_pos(unsigned char *text); */
 void init_hotkeys(struct terminal *term, struct menu_item *items, int ni, int hotkeys);

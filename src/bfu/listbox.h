@@ -1,14 +1,14 @@
-/* $Id: listbox.h,v 1.55 2003/11/26 23:49:45 jonas Exp $ */
+/* $Id: listbox.h,v 1.56 2003/12/01 15:19:53 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
 
 #include "bfu/dialog.h"
-#include "bfu/menu.h"
 #include "bfu/style.h"
 #include "bfu/widget.h"
-#include "terminal/terminal.h"
 #include "util/lists.h"
+
+struct terminal;
 
 
 #define add_dlg_listbox(dlg, height_, box_data)				\

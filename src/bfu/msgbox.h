@@ -1,12 +1,13 @@
-/* $Id: msgbox.h,v 1.19 2003/11/29 01:46:26 jonas Exp $ */
+/* $Id: msgbox.h,v 1.20 2003/12/01 15:19:53 pasky Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
 
 #include "bfu/button.h"
 #include "bfu/style.h"
-#include "terminal/terminal.h"
 #include "util/memlist.h"
+
+struct terminal;
 
 
 /* Bitmask specifying some @msg_box() function parameters attributes or

@@ -1,14 +1,15 @@
-/* $Id: inpfield.h,v 1.24 2003/11/09 15:24:47 jonas Exp $ */
+/* $Id: inpfield.h,v 1.25 2003/12/01 15:19:53 pasky Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
 
 #include "bfu/dialog.h"
-#include "bfu/inphist.h"
 #include "bfu/style.h"
 #include "bfu/widget.h"
-#include "terminal/terminal.h"
 #include "util/memlist.h"
+
+struct input_history;
+struct terminal;
 
 #define add_dlg_field_do(dlg, t, label, min_, max_, handler, datalen_, data_, hist)	\
 	do {								\

@@ -1,12 +1,13 @@
-/* $Id: text.h,v 1.18 2003/11/29 01:46:26 jonas Exp $ */
+/* $Id: text.h,v 1.19 2003/12/01 15:19:53 pasky Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
 
 #include "bfu/style.h"
 #include "bfu/widget.h"
-#include "terminal/terminal.h"
 #include "util/color.h"
+
+struct terminal;
 
 #define add_dlg_text(dlg, text_, align_, bottom_pad_)			\
 	do {								\

@@ -1,10 +1,11 @@
-/* $Id: checkbox.h,v 1.25 2003/11/10 00:15:27 jonas Exp $ */
+/* $Id: checkbox.h,v 1.26 2003/12/01 15:19:53 pasky Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
 
 #include "bfu/widget.h"
-#include "terminal/terminal.h"
+
+struct terminal;
 
 #define add_dlg_checkbox(dlg, text_, data_)				\
 	do {								\

@@ -1,11 +1,12 @@
-/* $Id: inphist.h,v 1.13 2003/10/29 15:01:32 zas Exp $ */
+/* $Id: inphist.h,v 1.14 2003/12/01 15:19:53 pasky Exp $ */
 
 #ifndef EL__BFU_INPHIST_H
 #define EL__BFU_INPHIST_H
 
-#include "terminal/terminal.h"
-#include "terminal/window.h"
 #include "util/lists.h"
+
+struct terminal;
+struct window;
 
 
 struct input_history_entry {

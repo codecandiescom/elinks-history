@@ -1,3 +1,132 @@
+Tue Sep  9 21:57:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	move_links(): Cleanup indentation.  
+
+Tue Sep  9 21:52:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: terminal/draw.c, viewer/text/view.c:
+
+	Cursor positionning was fixed regarding block_cursor option.  
+
+Tue Sep  9 21:33:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix link numbering.  
+
+Tue Sep  9 21:16:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	put_chars(): Cleanup and optimize whitespace trimming.  
+
+Tue Sep  9 20:46:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Move up and call get_format_screen_char() from set_hline().
+	Simplifies put_chars().  
+
+Tue Sep  9 20:19:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Last patch fixed handling of <a href="foo">123<sup>456</sup>789</a>.
+	:) 
+
+Tue Sep  9 20:07:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	A bit experimental patch moving link processing after the
+	set_hline() and the format changing. Passes fm! ;) 
+
+Tue Sep  9 19:45:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Simplify the format change handling code. It is now done in
+	get_format_screen_char() returning a pointer to a template
+	screen_char 
+
+Tue Sep  9 19:07:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Move sub/super state variables closer to user.  
+
+Tue Sep  9 18:58:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Whitespace fixes.  
+
+Tue Sep  9 18:00:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Use copy_screen_chars() macro.  
+
+Tue Sep  9 17:53:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	draw_doc(): Minor cleanup.  
+
+Tue Sep  9 17:50:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: elusive/renderer/text/renderer.c, terminal/draw.c,
+	terminal/screen.c, viewer/text/link.c:
+
+	Use copy_screen_chars() macro.  
+
+Tue Sep  9 17:39:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, terminal/draw.h:
+
+	Introduce copy_screen_chars() macro to wrap memcpy()s.  
+
+Tue Sep  9 13:11:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	An issue related to weird html links was fixed. It was revealed by
+	an assertion failure when accessing to
+	http://www.etla.org/articles/filter/.  
+
+Tue Sep  9 10:52:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	A useless label was removed in parse_element(), minor cleanup.  
+
+Tue Sep  9 10:11:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Slightly improved get_attr_val() performance by moving some tests
+	outsided loops (especially if (found) test)), gain is 25% mininum
+	compared to previous code.  
+
+Mon Sep  8 23:16:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	do_document_refresh(): Check if any type query is in progress and if
+	it is for the same url bail out.  
+
+Mon Sep  8 22:19:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/options.c, document/options.h,
+	document/html/renderer.c, elusive/renderer/text/renderer.c,
+	terminal/color.c, terminal/draw.c, terminal/draw.h,
+	terminal/screen.c, terminal/screen.h, viewer/text/link.c:
+
+	Revert the last 3 hours of patches from me. This stuff needs more
+	thought.  
+
 Mon Sep  8 21:16:53 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/color.c:

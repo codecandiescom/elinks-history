@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.16 2003/05/06 20:28:25 pasky Exp $ */
+/* $Id: terminal.c,v 1.17 2003/05/06 20:28:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,20 +166,6 @@ init_term(int fdin, int fdout,
 	term->dirty = 1;
 	term->blocked = -1;
 	term->spec = get_opt_rec(&root_options, "terminal._template_");
-
-#if 0	/* Done by calloc() call, hope NULL == 0 */
-	term->redrawing = 0;
-	term->x = 0;
-	term->y = 0;
-	term->cx = 0;
-	term->cy = 0;
-	term->screen = NULL;
-	term->last_screen = NULL;
-	term->term[0] = 0;
-	term->cwd[0] = 0;
-	term->input_queue = NULL;
-	term->qlen = 0;
-#endif
 
 	/* alloc_term_screen(term, 80, 25); */
 	add_to_list(terminals, term);

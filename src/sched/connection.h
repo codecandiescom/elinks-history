@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.34 2003/07/06 11:11:46 jonas Exp $ */
+/* $Id: connection.h,v 1.35 2003/07/06 17:53:17 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -21,12 +21,12 @@ struct read_buffer;
 enum connection_priority {
 	PRI_MAIN	= 0,
 	PRI_DOWNLOAD	= 0,
-	PRI_FRAME	= 1,
-	PRI_NEED_IMG	= 2,
-	PRI_IMG		= 3,
-	PRI_PRELOAD	= 4,
-	PRI_CANCEL	= 5,
-	PRIORITIES	= 6,
+	PRI_FRAME,
+	PRI_NEED_IMG,
+	PRI_IMG,
+	PRI_PRELOAD,
+	PRI_CANCEL,
+	PRIORITIES,
 };
 
 /* Numbers < 0 and > -10000 are reserved for system errors reported via
@@ -35,15 +35,15 @@ enum connection_priority {
 enum connection_state {
 	/* States >= 0 are used for connections still in progress. */
 	S_WAIT			= 0,
-	S_DNS			= 1,
-	S_CONN			= 2,
-	S_SSL_NEG		= 3,
-	S_SENT			= 4,
-	S_LOGIN			= 5,
-	S_GETH			= 6,
-	S_PROC			= 7,
-	S_TRANS			= 8,
-	S_QUESTIONS		= 9,
+	S_DNS,
+	S_CONN,
+	S_SSL_NEG,
+	S_SENT,
+	S_LOGIN,
+	S_GETH,
+	S_PROC,
+	S_TRANS,
+	S_QUESTIONS,
 
 	/* State < 0 are used for the final result of a connection
 	 * (it's finished already and it ended up like this) */

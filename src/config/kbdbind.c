@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.25 2002/07/01 14:58:34 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.26 2002/07/01 15:06:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,9 +26,9 @@
 struct keybinding {
 	struct keybinding *next;
 	struct keybinding *prev;
-	enum keyact act;
-	long x;
-	long y;
+	enum keyact action;
+	long key;
+	long meta;
 	int func_ref;
 };
 
@@ -36,31 +36,33 @@ static struct list_head keymaps[KM_MAX];
 
 static void add_default_keybindings();
 
+static void delete_keybinding(enum keymap, long, long);
+
 
 static void
-add_keybinding(enum keymap km, int act, long x, long y, int func_ref)
+add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 {
 	struct keybinding *kb;
 
-	delete_keybinding(km, x, y);
+	delete_keybinding(km, key, meta);
 
 	kb = mem_alloc(sizeof(struct keybinding));
 	if (kb) {
-		kb->act = act;
-		kb->x = x;
-		kb->y = y;
+		kb->action = action;
+		kb->key = key;
+		kb->meta = meta;
 		kb->func_ref = func_ref;
 		add_to_list(keymaps[km], kb);
 	}
 }
 
 static void
-delete_keybinding(enum keymap km, long x, long y)
+delete_keybinding(enum keymap km, long key, long meta)
 {
 	struct keybinding *kb;
 
 	foreach(kb, keymaps[km]) {
-		if (kb->x != x || kb->y != y)
+		if (kb->key != key || kb->meta != meta)
 			continue;
 
 #ifdef HAVE_LUA
@@ -102,13 +104,13 @@ kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
 
 	if (ev->ev == EV_KBD) {
 		foreach(kb, keymaps[kmap]) {
-			if (ev->x != kb->x || ev->y != kb->y)
+			if (ev->x != kb->key || ev->y != kb->meta)
 				continue;
 
-			if (kb->act == ACT_LUA_FUNCTION && func_ref)
+			if (kb->action == ACT_LUA_FUNCTION && func_ref)
 				*func_ref = kb->func_ref;
 
-			return kb->act;
+			return kb->action;
 		}
 	}
 
@@ -317,18 +319,18 @@ unsigned char *
 bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 {
 	unsigned char *err = NULL;
-	long x, y;
+	long key, meta;
 	int action;
 	int kmap = parse_keymap(ckmap);
 
 	if (kmap < 0)
 		err = "Unrecognised keymap";
-	else if (parse_keystroke(ckey, &x, &y) < 0)
+	else if (parse_keystroke(ckey, &key, &meta) < 0)
 		err = "Error parsing keystroke";
 	else if ((action = parse_action(" *lua-function*")) < 0)
 		err = "Unrecognised action (internal error)";
 	else
-		add_keybinding(kmap, action, x, y, func_ref);
+		add_keybinding(kmap, action, key, meta, func_ref);
 
 	return err;
 }
@@ -340,9 +342,9 @@ bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
  */
 
 struct default_kb {
-	int act;
-	long x;
-	long y;
+	int action;
+	long key;
+	long meta;
 };
 
 static struct default_kb default_main_keymap[] = {
@@ -461,12 +463,12 @@ add_default_keybindings()
 	 * can't trust clueless users what they'll push into sources modifying
 	 * defaults, can we? ;)) */
 
-	for (kb = default_main_keymap; kb->x; kb++)
-		add_keybinding(KM_MAIN, kb->act, kb->x, kb->y, LUA_NOREF);
+	for (kb = default_main_keymap; kb->key; kb++)
+		add_keybinding(KM_MAIN, kb->action, kb->key, kb->meta, LUA_NOREF);
 
-	for (kb = default_edit_keymap; kb->x; kb++)
-		add_keybinding(KM_EDIT, kb->act, kb->x, kb->y, LUA_NOREF);
+	for (kb = default_edit_keymap; kb->key; kb++)
+		add_keybinding(KM_EDIT, kb->action, kb->key, kb->meta, LUA_NOREF);
 
-	for (kb = default_menu_keymap; kb->x; kb++)
-		add_keybinding(KM_MENU, kb->act, kb->x, kb->y, LUA_NOREF);
+	for (kb = default_menu_keymap; kb->key; kb++)
+		add_keybinding(KM_MENU, kb->action, kb->key, kb->meta, LUA_NOREF);
 }

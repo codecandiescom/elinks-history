@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.23 2003/05/12 21:21:48 pasky Exp $ */
+/* $Id: conv.c,v 1.24 2003/05/12 21:23:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,16 +138,13 @@ elinks_ulonghexcat(unsigned char *s, unsigned int *slen,
 			unsigned int tmp = start;
 
 			start += pad;
-			if (slen) *slen += pad;
 			while (pad) s[--pad + tmp] = fillchar;
 		}
 	}
 
-	if (slen) *slen += pos;
-
 	pos += start;
-
 	s[pos] = '\0';
+	if (slen) *slen += pos;
 
 	while (pos > start) {
 		s[--pos] = hex[(number % 16)];

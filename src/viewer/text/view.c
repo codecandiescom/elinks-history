@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.658 2004/11/12 22:49:26 zas Exp $ */
+/* $Id: view.c,v 1.659 2004/11/14 11:10:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -689,7 +689,7 @@ try_prefix_key(struct session *ses, struct document_view *doc_view,
 
 		/* If too big, just restart from zero, so pressing
 		 * '0' six times or more will reset the count. */
-		if (ses->kbdprefix.repeat_count > 65536)
+		if (ses->kbdprefix.repeat_count > 99999)
 			ses->kbdprefix.repeat_count = 0;
 
 		return FRAME_EVENT_OK;

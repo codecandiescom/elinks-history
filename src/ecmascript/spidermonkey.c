@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.28 2004/09/24 23:38:41 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.29 2004/09/24 23:40:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,6 +59,7 @@ enum prop_type {
 };
 
 union prop_union {
+	int boolean;
 	int number;
 	JSObject *object;
 	unsigned char *string;
@@ -95,7 +96,7 @@ value_to_jsval(JSContext *ctx, jsval *vp, enum prop_type prop_type,
 		break;
 
 	case JSPT_BOOLEAN:
-		*vp = BOOLEAN_TO_JSVAL(atoi(prop->string));
+		*vp = BOOLEAN_TO_JSVAL(prop->boolean);
 		break;
 
 	case JSPT_OBJECT:
@@ -208,7 +209,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		/* TODO: It will be a major PITA to implement this properly.
 		 * Well, perhaps not so much if we introduce reference tracking
 		 * for (struct session)? Still... --pasky */
-		p.string = "0"; prop_type = JSPT_BOOLEAN; break;
+		p.boolean = 0; prop_type = JSPT_BOOLEAN; break;
 	case JSP_WIN_SELF: p.object = obj; prop_type = JSPT_OBJECT; break;
 	case JSP_WIN_TOP:
 	{

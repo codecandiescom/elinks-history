@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.392 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: session.c,v 1.393 2004/05/05 17:52:45 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -263,6 +263,7 @@ load_frames(struct session *ses, struct document_view *doc_view)
 	request_frameset(ses, document->frame_desc);
 }
 
+#ifdef CONFIG_CSS
 static inline void
 load_css_imports(struct session *ses, struct document_view *doc_view)
 {
@@ -279,6 +280,9 @@ load_css_imports(struct session *ses, struct document_view *doc_view)
 		done_uri(uri);
 	}
 }
+#else
+#define load_css_imports(ses, doc_view)
+#endif
 
 void
 display_timer(struct session *ses)

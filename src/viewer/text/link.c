@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.201 2004/06/13 00:17:56 jonas Exp $ */
+/* $Id: link.c,v 1.202 2004/06/13 00:25:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -897,18 +897,4 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 	if (!link->form_control) return NULL;
 
 	return get_form_info(ses, doc_view);
-}
-
-unsigned char *
-print_current_link(struct session *ses)
-{
-	struct document_view *doc_view;
-
-	assert(ses && ses->tab && ses->tab->term);
-	if_assert_failed return NULL;
-	doc_view = current_frame(ses);
-	assert(doc_view);
-	if_assert_failed return NULL;
-
-	return get_current_link_info(ses, doc_view);
 }

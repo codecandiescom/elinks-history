@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.115 2003/11/25 19:35:37 jonas Exp $ */
+/* $Id: listbox.c,v 1.116 2003/11/26 03:19:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,7 +237,7 @@ done_down:
 
 struct box_context {
 	struct terminal *term;
-	struct widget_data *listbox_item_data;
+	struct widget_data *widget_data;
 	struct listbox_data *box;
 	struct dialog_data *dlg_data;
 	int dist;
@@ -255,7 +255,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 
 	if (data->dist > 0) {
 		if (data->box->sel_offset
-		    < data->listbox_item_data->h - 1) {
+		    < data->widget_data->h - 1) {
 			data->box->sel_offset++;
 		} else {
 			data->box->top =
@@ -278,9 +278,9 @@ box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 /* Moves the selected item by [dist] items. If [dist] is out of the current
  * range, the selected item is moved to the extreme (ie, the top or bottom) */
 void
-box_sel_move(struct widget_data *listbox_item_data, int dist)
+box_sel_move(struct widget_data *widget_data, int dist)
 {
-	struct listbox_data *box = get_listbox_widget_data(listbox_item_data);
+	struct listbox_data *box = get_listbox_widget_data(widget_data);
 
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
@@ -301,7 +301,7 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 		memset(&data, 0, sizeof(struct box_context));
 
 		data.box = box;
-		data.listbox_item_data = listbox_item_data;
+		data.widget_data = widget_data;
 		data.dist = dist;
 
 		/* XXX: This is ugly, yes; but we don't want to call the
@@ -329,7 +329,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		text = _(text, data->term);
 
 	len = strlen(text);
-	int_upper_bound(&len, int_max(0, data->listbox_item_data->w - depth * 5));
+	int_upper_bound(&len, int_max(0, data->widget_data->w - depth * 5));
 
 	stylename = (item == data->box->sel) ? "menu.selected"
 		  : ((item->marked)	     ? "menu.marked"
@@ -337,7 +337,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 	color = get_bfu_color(data->term, stylename);
 
-	y = data->listbox_item_data->y + data->offset;
+	y = data->widget_data->y + data->offset;
 	for (d = 0; d < depth - 1; d++) {
 		struct listbox_item *root = item;
 		struct listbox_item *child = item;
@@ -349,7 +349,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		}
 
 		/* XXX */
-		x = data->listbox_item_data->x + d * 5;
+		x = data->widget_data->x + d * 5;
 		draw_text(data->term, x, y, "     ", 5, 0, color);
 
 		if (root ? root->child.prev == child
@@ -386,18 +386,18 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 		if (item->marked) str[4] = '*';
 
-		x = data->listbox_item_data->x + (depth - 1) * 5;
+		x = data->widget_data->x + (depth - 1) * 5;
 		for (i = 0; i < 5; i++) {
 			draw_border_char(data->term, x + i, y, str[i], color);
 		}
 	}
 
-	draw_text(data->term, data->listbox_item_data->x + depth * 5,
-		  data->listbox_item_data->y + data->offset,
+	draw_text(data->term, data->widget_data->x + depth * 5,
+		  data->widget_data->y + data->offset,
 		  text, len, 0, color);
 
 	if (item == data->box->sel) {
-		int x = data->listbox_item_data->x;
+		int x = data->widget_data->x;
 
 		/* For blind users: */
 		set_cursor(data->term, x, y, 0);
@@ -411,11 +411,11 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 /* Displays a dialog box */
 static void
-display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_data,
+display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		int sel)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box = get_listbox_widget_data(listbox_item_data);
+	struct listbox_data *box = get_listbox_widget_data(widget_data);
 	struct box_context *data;
 
 	if (!list_empty(*box->items)) {
@@ -423,8 +423,8 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_d
 		if (!box->sel) box->sel = box->top;
 	}
 
-	draw_area(term, listbox_item_data->x, listbox_item_data->y,
-		  listbox_item_data->w, listbox_item_data->h, ' ', 0,
+	draw_area(term, widget_data->x, widget_data->y,
+		  widget_data->w, widget_data->h, ' ', 0,
 		  get_bfu_color(term, "menu.normal"));
 
 
@@ -439,11 +439,11 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_d
 	data = mem_calloc(1, sizeof(struct box_context));
 	if (data) {
 		data->term = term;
-		data->listbox_item_data = listbox_item_data;
+		data->widget_data = widget_data;
 		data->box = box;
 		data->dlg_data = dlg_data;
 
-		traverse_listbox_items_list(box->top, box, listbox_item_data->h,
+		traverse_listbox_items_list(box->top, box, widget_data->h,
 					    1, display_listbox_item, data);
 
 		mem_free(data);

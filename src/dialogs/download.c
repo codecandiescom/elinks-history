@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.14 2003/11/29 21:55:33 jonas Exp $ */
+/* $Id: download.c,v 1.15 2003/11/30 19:45:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "bfu/style.h"
 #include "bfu/text.h"
 #include "dialogs/menu.h"
+#include "dialogs/status.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/ttime.h"

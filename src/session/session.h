@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.72 2003/11/29 21:55:34 jonas Exp $ */
+/* $Id: session.h,v 1.73 2003/11/30 19:45:01 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -206,7 +206,6 @@ set_referrer(struct session *ses, unsigned char *referrer)
 	ses->ref_url = referrer;
 }
 
-void print_screen_status(struct session *);
 void print_error_dialog(struct session *, struct download *);
 void print_unknown_protocol_dialog(struct session *);
 
@@ -215,8 +214,6 @@ void process_file_requests(struct session *);
 void *create_session_info(int, unsigned char *, int *);
 struct initial_session_info *decode_session_info(const void *);
 struct session *create_basic_session(struct window *);
-
-void init_bars_status(struct session *, int *, struct document_options *);
 
 void tabwin_func(struct window *, struct term_event *, int);
 
@@ -245,6 +242,8 @@ void map_selected(struct terminal *, struct link_def *, struct session *);
 void free_files(struct session *);
 void display_timer(struct session *ses);
 
+struct download *get_current_download(struct session *ses);
+
 /* Information about the current document */
 unsigned char *get_current_url(struct session *, unsigned char *, size_t);
 unsigned char *get_current_title(struct session *, unsigned char *, size_t);
@@ -256,10 +255,5 @@ unsigned char *get_current_link_name(struct session *, unsigned char *, size_t);
 extern struct list_head questions_queue;
 
 void add_questions_entry(void *);
-
-unsigned char *
-get_stat_msg(struct download *stat, struct terminal *term,
-	     int wide, int full, unsigned char *separator);
-
 
 #endif

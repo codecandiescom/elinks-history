@@ -1,9 +1,10 @@
-/* $Id: widget.h,v 1.34 2003/11/09 03:13:15 jonas Exp $ */
+/* $Id: widget.h,v 1.35 2003/11/09 14:24:13 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
 
 #include "bfu/inphist.h"
+#include "bfu/style.h"
 #include "terminal/terminal.h"
 #include "util/lists.h"
 
@@ -60,6 +61,9 @@ struct widget {
 		struct {
 			int flags;
 		} button;
+		struct {
+			enum format_align align;
+		} text;
 	} info;
 
 	int datalen;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.302 2003/12/21 18:30:49 pasky Exp $ */
+/* $Id: parser.c,v 1.303 2003/12/21 22:30:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3391,7 +3391,7 @@ ng:;
 			}
 			goto set_lt;
 		}
-		goto set_lt; /* unreachable */
+		goto set_lt;
 	}
 
 	put_chrs(lt, html - lt, put_chars_f, f);

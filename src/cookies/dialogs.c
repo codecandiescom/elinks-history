@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.18 2003/11/23 17:33:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.19 2003/11/23 18:52:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,16 +110,6 @@ static struct listbox_ops cookies_listbox_ops = {
 	done_cookie_item,
 };
 
-static INIT_LIST_HEAD(cookie_box_items);
-
-struct hierbox_browser cookie_browser = {
-	{ D_LIST_HEAD(cookie_browser.boxes) },
-	&cookie_box_items,
-	{ D_LIST_HEAD(cookie_browser.dialogs) },
-	&cookies_listbox_ops,
-};
-
-
 static int
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
@@ -127,14 +117,29 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 	return 0;
 }
 
+static INIT_LIST_HEAD(cookie_box_items);
+
+static struct hierbox_browser_button cookie_buttons[] = {
+	{ N_("Info"),		push_hierbox_info_button	},
+	{ N_("Delete"),		push_hierbox_delete_button	},
+	{ N_("Clear"),		push_hierbox_clear_button	},
+	{ N_("Save"),		push_save_button		},
+
+	END_HIERBOX_BROWSER_BUTTONS,
+};
+
+struct hierbox_browser cookie_browser = {
+	N_("Cookie manager"),
+	cookie_buttons,
+
+	{ D_LIST_HEAD(cookie_browser.boxes) },
+	&cookie_box_items,
+	{ D_LIST_HEAD(cookie_browser.dialogs) },
+	&cookies_listbox_ops,
+};
+
 void
 menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	hierbox_browser(term, N_("Cookie manager"),
-			0, &cookie_browser, ses,
-			4,
-			N_("Info"), push_hierbox_info_button,
-			N_("Delete"), push_hierbox_delete_button,
-			N_("Clear"), push_hierbox_clear_button,
-			N_("Save"), push_save_button);
+	hierbox_browser(&cookie_browser, ses, 0);
 }

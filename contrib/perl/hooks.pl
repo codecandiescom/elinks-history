@@ -1,18 +1,48 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.59 2005/03/27 11:12:38 pasky Exp $
+# $Id: hooks.pl,v 1.60 2005/03/27 11:26:23 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
+#
+# To get the complete documentation for this file in a user-friendly
+# manner, do either
+#	pod2html hooks.pl > hooks.html && elinks hooks.html
+# or
+#	perldoc hooks.pl
+
+
+=head1 NAME
+
+hooks.pl -- the Perl hooks for the ELinks text WWW browser
+
+=head1 DESCRIPTION
+
+This file contains the Perl hoks for the ELinks text WWW browser.
+
+These hooks can alter the browser's behaviour in various ways; probably the
+most popular is processing the user input in the Goto URL dialog and rewriting
+it in various ways (like the builtin URL prefixes capability, but much more
+powerful and flexible).
+
+Other popular capability is the hooks is to rewrite the HTML source of the page
+before it is rendered, usually to get rid of the ads and/or make the web page
+more ELinks-friendly. The hooks also allow you to fine-tune the proxying rules,
+can show a fortune when ELinks exits, and more!
+
+=cut
 
 
 use strict;
 use warnings;
 use diagnostics;
+
 use Carp;
 
 
-=head1 SAMPLE CONFIGURATION FILE
+=head1 CONFIGURATION FILE
 
-Save this as ~/.elinks/config.pl:
+The hooks file reads its file from I<~/.elinks/config.pl>.
+Note that the following is only an example,
+and does not contain the default values:
 
 	bork:       yep       # BORKify Google?
 	collapse:   okay      # Collapse all XBEL bookmark folders on exit?
@@ -1201,3 +1231,15 @@ sub location
 
 	return $url;
 }
+
+
+=head1 SEE ALSO
+
+elinks(1), perl(1)
+
+
+=head1 AUTHORS
+
+Russ Rowan, Petr Baudis
+
+=cut

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.62 2003/06/07 16:21:07 pasky Exp $ */
+/* $Id: options.c,v 1.63 2003/06/07 17:53:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,7 +303,7 @@ menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 
 static unsigned char *resize_texts[] = {
 	N_("Columns"),
-	N_("Rows")
+	N_("Rows"),
 };
 
 static unsigned char x_str[4];

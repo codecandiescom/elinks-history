@@ -208,7 +208,7 @@ static void *mempcpy PARAMS ((void *dest, const void *src, size_t n));
 #endif
 
 /* This is the type used for the search tree where known translations
-   are stored.  */
+   are stored. */
 struct known_translation_t
 {
   /* Domain in which to search.  */

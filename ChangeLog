@@ -1,3 +1,129 @@
+Sat May 17 22:01:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	In bz already.  
+
+Sat May 17 21:04:41 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/edit.c:
+
+	Fix bug 158: 'Add bookmark' and 'Search history' boxes too small.  
+	layout_add_dialog and layout_hierbox_browser grow yet more
+	similar...  
+
+Sat May 17 20:53:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Minor cleanup.  
+
+Sat May 17 20:43:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	When not resuming, open() file w/ O_TRUNC, fixing bug 27. Patch by
+	Witek and me.  
+
+Sat May 17 10:56:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	A useless call to _() was removed.  
+
+Sat May 17 10:49:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Useless calls to _() were reduced.  
+
+Sat May 17 10:28:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/libintl.h:
+
+	An helper was added to detect redundant calls to _(). Should help
+	with bug 141. To enable it, define DEBUG_IT in libintl.h 
+
+Sat May 17 00:09:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	...and now properly wrap=hardize the textareas being sent. wrap=hard
+	is now supported properly. hopefully.  
+
+Sat May 17 00:00:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Reordering of file menu entries. Feel free to improve.  
+
+Fri May 16 23:44:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Tidyup.  
+
+Fri May 16 23:44:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Don't normally call format_text with wrap attribute being hard. That
+	gives us weird result, by hard-inserting newlines there and thus
+	smooth rewrapping not being done correctly.  
+
+Fri May 16 23:31:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, terminal/terminal.c:
+
+	Removed that terrible startup goto dialog hack, this also fixes
+	various problems with tabs, redrawing and opening/closing while this
+	is turned on. Fixes bug 142. Patch by Sergey and me.  
+
+Fri May 16 23:09:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/backend/mailcap.c:
+
+	Comments about a potential buffer overflow concerning
+	convert_command() were added. Jonas please fix it asap.  
+
+Fri May 16 22:49:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/backend/default.c:
+
+	Cleanup, fixes (i hope), and optim.  
+
+Fri May 16 22:38:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/mime.c:
+
+	Fixed my last patch is...  
+
+Fri May 16 22:30:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Removed a bug which slipped between my fingers and entered bugzilla
+	already ;-).  
+
+Fri May 16 22:29:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/mime.c:
+
+	Cleanup and optimizations. fonseca please verify.  
+
+Fri May 16 22:28:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Cleanup of the Help menu URL shortcuts, use a common function and
+	per-item data (the URL).  
+
+Fri May 16 22:25:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Minor help menu reordering, added some bars.  
+
 Fri May 16 21:57:03 2003  Laurent Monin <zas@norz.org>:
 
 	* src/util/lists.h:

@@ -1,5 +1,5 @@
-/* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.53 2002/12/05 21:30:05 pasky Exp $ */
+/* Bookmarks dialogs */
+/* $Id: dialogs.c,v 1.54 2002/12/06 18:56:02 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */

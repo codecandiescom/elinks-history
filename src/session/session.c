@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.19 2003/05/03 19:32:22 pasky Exp $ */
+/* $Id: session.c,v 1.20 2003/05/03 19:35:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1085,21 +1085,21 @@ create_basic_session(struct window *win)
 {
         struct session *ses = mem_calloc(1, sizeof(struct session));
 
-	if (ses) {
-		create_history(ses);
-		init_list(ses->scrn_frames);
-		init_list(ses->more_files);
-                ses->term = win->term;
-		ses->win = win;
-		ses->id = session_id++;
-		ses->screen = NULL;
-		ses->wtd = WTD_NO;
-		ses->display_timer = -1;
-		ses->loading_url = NULL;
-		ses->goto_position = NULL;
+	if (!ses) return NULL;
 
-		add_to_list(sessions, ses);
-	}
+	create_history(ses);
+	init_list(ses->scrn_frames);
+	init_list(ses->more_files);
+        ses->term = win->term;
+	ses->win = win;
+	ses->id = session_id++;
+	ses->screen = NULL;
+	ses->wtd = WTD_NO;
+	ses->display_timer = -1;
+	ses->loading_url = NULL;
+	ses->goto_position = NULL;
+
+	add_to_list(sessions, ses);
 
 	return ses;
 }
@@ -1109,6 +1109,8 @@ create_session(struct window *win)
 {
 	struct terminal *term = win->term;
 	struct session *ses = create_basic_session(win);
+
+	if (!ses) return NULL;
 
 	if (first_use) {
 		first_use = 0;

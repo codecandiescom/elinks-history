@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.26 2003/09/04 14:14:20 pasky Exp $ */
+/* $Id: kbd.c,v 1.27 2003/09/04 14:42:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,48 +159,60 @@ kbd_ctrl_c(void)
 #define write_sequence(fd, seq) \
 	hard_write(fd, seq, sizeof(seq) / sizeof(unsigned char) - 1)
 
-#define INIT_TERMINAL_SEQ	"\033)0\0337"
-#define INIT_TWIN_MOUSE_SEQ	"\033[?9h"
-#define INIT_XWIN_MOUSE_SEQ	"\033[?1000h"
-#define INIT_ALT_SCREEN_SEQ	"\033[?47h"
+#define INIT_TERMINAL_SEQ	"\033)0\0337"	/* Special Character and Line Drawing Set, Save Cursor */
+#define INIT_TWIN_MOUSE_SEQ	"\033[?9h"	/* Send MIT Mouse Row & Column on Button Press */
+#define INIT_XWIN_MOUSE_SEQ	"\033[?1000h"	/* ??? */
+#define INIT_ALT_SCREEN_SEQ	"\033[?47h"	/* Use Alternate Screen Buffer */
 
 static void
 send_init_sequence(int h, int flags)
 {
 	write_sequence(h, INIT_TERMINAL_SEQ);
 
+	/* If alternate screen is supported switch to it. */
+	if (flags & USE_ALTSCREEN) {
+		write_sequence(h, INIT_ALT_SCREEN_SEQ);
+	}
+
 	if (flags & USE_TWIN_MOUSE) {
 		write_sequence(h, INIT_TWIN_MOUSE_SEQ);
 	} else {
 		write_sequence(h, INIT_XWIN_MOUSE_SEQ);
 	}
-
-	/* If alternate screen is supported switch to it. */
-	if (flags & USE_ALTSCREEN) {
-		write_sequence(h, INIT_ALT_SCREEN_SEQ);
-	}
 }
 
-#define DONE_TERMINAL_SEQ	"\033[2J\0338\r \b"
-#define DONE_TWIN_MOUSE_SEQ	"\033[?9l"
-#define DONE_XWIN_MOUSE_SEQ	"\033[?1000l"
-#define DONE_ALT_SCREEN_SEQ	"\033[?47l"
+#define DONE_CLS_SEQ		"\033[2J"	/* Erase in Display, Clear All */
+#define DONE_TERMINAL_SEQ	"\0338\r \b"	/* Restore Cursor (DECRC) + ??? */
+#define DONE_TWIN_MOUSE_SEQ	"\033[?9l"	/* Don't Send MIT Mouse Row & Column on Button Press */
+#define DONE_XWIN_MOUSE_SEQ	"\033[?1000l"	/* ??? */
+#define DONE_ALT_SCREEN_SEQ	"\033[?47l"	/* Use Normal Screen Buffer */
 
 static void
 send_done_sequence(int h, int flags)
 {
-	write_sequence(h, DONE_TERMINAL_SEQ);
+	write_sequence(h, DONE_CLS_SEQ);
 
+#if 0
 	if (flags & USE_TWIN_MOUSE) {
 		write_sequence(h, DONE_TWIN_MOUSE_SEQ);
 	} else {
 		write_sequence(h, DONE_XWIN_MOUSE_SEQ);
 	}
+#endif
+
+	/* This is a hack to make xterm + alternate screen working,
+	 * if we send only DONE_XWIN_MOUSE_SEQ, mouse is not totally
+	 * released it seems, in rxvt and xterm... --Zas */
+	write_sequence(h, DONE_TWIN_MOUSE_SEQ);
+	write_sequence(h, DONE_XWIN_MOUSE_SEQ);
+
 
 	/* Switch from alternate screen. */
 	if (flags & USE_ALTSCREEN) {
 		write_sequence(h, DONE_ALT_SCREEN_SEQ);
 	}
+
+	write_sequence(h, DONE_TERMINAL_SEQ);
 }
 
 #undef write_sequence
@@ -317,7 +329,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 	/* FIXME: Combination altscreen + xwin does not work as it should,
 	 * mouse clicks are reportedly partially ignored. */
-	if (env & (ENV_SCREEN /* | ENV_XWIN */))
+	if (env & (ENV_SCREEN | ENV_XWIN))
 		itrm->flags |= USE_ALTSCREEN;
 
 	if (queue_ts(itrm, ts, strlen(ts), MAX_TERM_LEN)) {
@@ -344,12 +356,14 @@ end:
 	queue_event(itrm, (char *)&env, sizeof(int));
 	queue_event(itrm, (char *)&init_len, sizeof(int));
 	queue_event(itrm, (char *)init_string, init_len);
+	send_init_sequence(std_out, itrm->flags);
+
 	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, itrm);
+
 	if (get_opt_bool("ui.window_title")) {
 		itrm->orig_title = get_window_title();
 		set_window_title("ELinks");
 	}
-	send_init_sequence(std_out, itrm->flags);
 }
 
 
@@ -415,11 +429,9 @@ free_trm(struct itrm *itrm)
 	}
 
 	unhandle_terminal_resize(itrm->ctl_in);
+	unhandle_mouse(itrm->mouse_h);
 	send_done_sequence(itrm->std_out,itrm->flags);
 	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
-
-	if (itrm->mouse_h)
-		unhandle_mouse(itrm->mouse_h);
 
 	set_handlers(itrm->std_in, NULL, NULL, NULL, NULL);
 	set_handlers(itrm->sock_in, NULL, NULL, NULL, NULL);

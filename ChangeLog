@@ -1,3 +1,91 @@
+Fri Jul 11 19:58:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Update comments.  
+
+Fri Jul 11 19:48:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Get rid of cleanup gotos by freeing @newurl after lookup.  
+
+Fri Jul 11 19:40:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Use uri->(user*|pass*) for comparison.  
+
+Fri Jul 11 19:22:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	One goto iterator out, one label to go.  
+
+Fri Jul 11 19:20:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: auth.c, auth.h, http.c:
+
+	Get rid of add_auth_code enum. Instead the added entry is returned.  
+
+Fri Jul 11 17:25:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/auth.c, protocol/http/auth.c:
+
+	A few fixes: Always set entry->valid according to @uid and @passwd.  
+	Proper initialization of @uid and @passwd.  The entry can be invalid
+	so removed from assertion.  
+
+Fri Jul 11 14:26:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Update and add a few comments.  
+
+Fri Jul 11 06:06:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Fix assertion failure and return value.  
+
+Fri Jul 11 04:35:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/auth.c:
+
+	Mark the entry valid when the user confirmed.  
+
+Fri Jul 11 03:56:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Aasert members when updating.  
+
+Fri Jul 11 03:53:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Simplify the updating code path.  
+
+Fri Jul 11 03:47:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Update the entry members step by step instead of recreating the
+	entry.  
+
+Thu Jul 10 23:05:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/auth.c, protocol/http/auth.c:
+
+	More usage of entry->valid to mark if @uid and @passwd is properly
+	defined.  
+
+Thu Jul 10 22:44:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/auth.c, protocol/http/auth.c:
+
+	Always allocate @uid and @passwd in init_auth_entry().  
+
 Thu Jul 10 13:53:58 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/http/auth.c:

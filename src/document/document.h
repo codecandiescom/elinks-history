@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.34 2003/11/18 21:40:46 pasky Exp $ */
+/* $Id: document.h,v 1.35 2003/11/18 22:58:05 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -52,7 +52,7 @@ struct point {
 	int x, y;
 };
 
-struct form_control
+struct form_control;
 
 struct link {
 	long accesskey;

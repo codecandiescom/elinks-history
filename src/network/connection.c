@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.104 2003/10/19 17:51:37 pasky Exp $ */
+/* $Id: connection.c,v 1.105 2003/10/19 17:57:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,7 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 	c->ref_url = ref_url;
 	c->pri[priority] =  1;
 	c->cache_mode = cache_mode;
-	c->socket = c->sock2 = -1;
+	c->socket = c->data_socket = -1;
 	c->content_encoding = ENCODING_NONE;
 	c->stream_pipes[0] = c->stream_pipes[1] = -1;
 	init_list(c->downloads);
@@ -340,8 +340,8 @@ free_connection_data(struct connection *c)
 	c->running = 0;
 
 	if (c->socket != -1) set_handlers(c->socket, NULL, NULL, NULL, NULL);
-	if (c->sock2 != -1) set_handlers(c->sock2, NULL, NULL, NULL, NULL);
-	close_socket(NULL, &c->sock2);
+	if (c->data_socket != -1) set_handlers(c->data_socket, NULL, NULL, NULL, NULL);
+	close_socket(NULL, &c->data_socket);
 
 	/* XXX: See also protocol/http/http.c:uncompress_shutdown(). */
 	if (c->stream) {

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.109 2003/10/19 17:51:36 pasky Exp $ */
+/* $Id: ftp.c,v 1.110 2003/10/19 17:57:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,7 +532,7 @@ add_file_cmd_to_str(struct connection *conn)
 		 	    (struct sockaddr_storage *) &data_addr);
 		if (data_sock < 0)
 			return NULL;
-		conn->sock2 = data_sock;
+		conn->data_socket = data_sock;
 	}
 #endif
 
@@ -540,7 +540,7 @@ add_file_cmd_to_str(struct connection *conn)
 		data_sock = get_pasv_socket(conn, conn->socket, pc);
 		if (data_sock < 0)
 			return NULL;
-		conn->sock2 = data_sock;
+		conn->data_socket = data_sock;
 	}
 
 	data = conn->uri.data;
@@ -754,7 +754,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 				abort_conn_with_state(conn, S_FTP_ERROR);
 				return;
 			}
-			conn->sock2 = fd;
+			conn->data_socket = fd;
 			connect(fd, (struct sockaddr *) &sa, sizeof(struct sockaddr_in));
 		}
 
@@ -765,7 +765,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 				abort_conn_with_state(conn, S_FTP_ERROR);
 				return;
 			}
-			conn->sock2 = fd;
+			conn->data_socket = fd;
 			connect(fd, (struct sockaddr *) &sa, sizeof(struct sockaddr_in6));
 		}
 #endif
@@ -844,7 +844,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 		}
 	}
 
-	set_handlers(conn->sock2,
+	set_handlers(conn->data_socket,
 		     (void (*)(void *)) got_something_from_data_connection,
 		     NULL, NULL, conn);
 
@@ -1082,23 +1082,23 @@ got_something_from_data_connection(struct connection *conn)
 
 		c_i->has_data = 1;
 
-		set_handlers(conn->sock2, NULL, NULL, NULL, NULL);
+		set_handlers(conn->data_socket, NULL, NULL, NULL, NULL);
 		if ((conn->pf != 2 && c_i->use_pasv)
 #ifdef IPV6
 	    	    || (conn->pf == 2 && c_i->use_epsv)
 #endif
 		   ) {
-			newsock = conn->sock2;
+			newsock = conn->data_socket;
 		} else {
-			newsock = accept(conn->sock2, NULL, NULL);
+			newsock = accept(conn->data_socket, NULL, NULL);
 			if (newsock < 0) {
 conn_error:
 				retry_conn_with_state(conn, -errno);
 				return;
 			}
-			close(conn->sock2);
+			close(conn->data_socket);
 		}
-		conn->sock2 = newsock;
+		conn->data_socket = newsock;
 
 		set_handlers(newsock,
 			     (void (*)(void *)) got_something_from_data_connection,
@@ -1186,7 +1186,7 @@ out_of_mem:
 		add_to_strn(&conn->cache->head, "Content-Type: text/html\r\n");
 	}
 
-	len = read(conn->sock2, c_i->ftp_buffer + c_i->buf_pos,
+	len = read(conn->data_socket, c_i->ftp_buffer + c_i->buf_pos,
 		   FTP_BUF_SIZE - c_i->buf_pos);
 
 	if (len < 0) goto conn_error;
@@ -1232,8 +1232,8 @@ out_of_mem:
 
 	if (c_i->dir) ADD_CONST("</pre>\n<hr>\n</body>\n</html>");
 
-	set_handlers(conn->sock2, NULL, NULL, NULL, NULL);
-	close_socket(NULL, &conn->sock2);
+	set_handlers(conn->data_socket, NULL, NULL, NULL, NULL);
+	close_socket(NULL, &conn->data_socket);
 
 	if (c_i->conn_state == 1) {
 		ftp_end_request(conn, S_OK);

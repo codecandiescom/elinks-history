@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.38 2003/10/19 17:51:37 pasky Exp $ */
+/* $Id: connection.h,v 1.39 2003/10/19 17:57:49 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -136,7 +136,7 @@ struct connection {
 	int prev_error;
 	int from;
 	int socket;
-	int sock2;
+	int data_socket;
 	int tries;
 	int received;
 	int est_length;

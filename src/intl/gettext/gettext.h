@@ -19,7 +19,7 @@
 #define _GETTEXT_H 1
 
 #if HAVE_LIMITS_H || _LIBC
-# include <limits.h>
+#include <limits.h>
 #endif
 
 /* @@ end of prolog @@ */
@@ -38,9 +38,9 @@
    when cross-compiling.  */
 
 #if __STDC__
-# define UINT_MAX_32_BITS 4294967295U
+#define UINT_MAX_32_BITS 4294967295U
 #else
-# define UINT_MAX_32_BITS 0xFFFFFFFF
+#define UINT_MAX_32_BITS 0xFFFFFFFF
 #endif
 
 /* If UINT_MAX isn't defined, assume it's a 32-bit type.
@@ -49,53 +49,49 @@
    (that certainly have <limits.h>) have 64+-bit integral types.  */
 
 #ifndef UINT_MAX
-# define UINT_MAX UINT_MAX_32_BITS
+#define UINT_MAX UINT_MAX_32_BITS
 #endif
 
 #if UINT_MAX == UINT_MAX_32_BITS
 typedef unsigned nls_uint32;
 #else
-# if USHRT_MAX == UINT_MAX_32_BITS
+#if USHRT_MAX == UINT_MAX_32_BITS
 typedef unsigned short nls_uint32;
-# else
-#  if ULONG_MAX == UINT_MAX_32_BITS
+#else
+#if ULONG_MAX == UINT_MAX_32_BITS
 typedef unsigned long nls_uint32;
-#  else
+#else
   /* The following line is intended to throw an error.  Using #error is
      not portable enough.  */
-  "Cannot determine unsigned 32-bit data type."
-#  endif
-# endif
+"Cannot determine unsigned 32-bit data type."
 #endif
-
-
+#endif
+#endif
 /* Header for binary .mo file format.  */
-struct mo_file_header
-{
-  /* The magic number.  */
-  nls_uint32 magic;
-  /* The revision number of the file format.  */
-  nls_uint32 revision;
-  /* The number of strings pairs.  */
-  nls_uint32 nstrings;
-  /* Offset of table with start offsets of original strings.  */
-  nls_uint32 orig_tab_offset;
-  /* Offset of table with start offsets of translation strings.  */
-  nls_uint32 trans_tab_offset;
-  /* Size of hashing table.  */
-  nls_uint32 hash_tab_size;
-  /* Offset of first hashing entry.  */
-  nls_uint32 hash_tab_offset;
+	struct mo_file_header {
+	/* The magic number.  */
+	nls_uint32 magic;
+	/* The revision number of the file format.  */
+	nls_uint32 revision;
+	/* The number of strings pairs.  */
+	nls_uint32 nstrings;
+	/* Offset of table with start offsets of original strings.  */
+	nls_uint32 orig_tab_offset;
+	/* Offset of table with start offsets of translation strings.  */
+	nls_uint32 trans_tab_offset;
+	/* Size of hashing table.  */
+	nls_uint32 hash_tab_size;
+	/* Offset of first hashing entry.  */
+	nls_uint32 hash_tab_offset;
 };
 
-struct string_desc
-{
-  /* Length of addressed string.  */
-  nls_uint32 length;
-  /* Offset of string in file.  */
-  nls_uint32 offset;
+struct string_desc {
+	/* Length of addressed string.  */
+	nls_uint32 length;
+	/* Offset of string in file.  */
+	nls_uint32 offset;
 };
 
 /* @@ begin of epilog @@ */
 
-#endif	/* gettext.h  */
+#endif /* gettext.h  */

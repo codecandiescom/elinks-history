@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.8 2003/04/14 15:44:26 zas Exp $ */
+/* $Id: libintl.h,v 1.9 2003/04/17 11:58:39 zas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -18,7 +18,6 @@
 #include "intl/charsets.h"
 #include "lowlevel/terminal.h"
 
-
 /* TODO: Ideally, we should internally work only in Unicode - then the need for
  * charsets multiplexing would cease. That'll take some work yet, though.
  * --pasky */
@@ -26,20 +25,21 @@
 /* Wraps around gettext(), employing charset multiplexing. If you don't care
  * about charset (usually during initialization or when you don't use terminals
  * at all), use gettext() directly. */
-static inline unsigned char *
-_(unsigned char *msg, struct terminal *term) {
+static inline unsigned char *_(unsigned char *msg, struct terminal *term)
+{
 	static int current_charset = -1;
 	int new_charset;
 
 	/* Prevent useless (and possibly dangerous) calls. */
-	if (!msg || !*msg) return msg;
+	if (!msg || !*msg)
+		return msg;
 
 	/* Prevent useless switching. */
 	new_charset = get_opt_int_tree(term->spec, "charset");
 	if (current_charset != new_charset) {
 		current_charset = new_charset;
-		bind_textdomain_codeset(/* PACKAGE */ "elinks",
-			get_cp_mime_name(current_charset));
+		bind_textdomain_codeset( /* PACKAGE */ "elinks",
+					get_cp_mime_name(current_charset));
 	}
 
 	return (unsigned char *) gettext(msg);
@@ -47,7 +47,6 @@ _(unsigned char *msg, struct terminal *term) {
 
 /* no-op - just for marking */
 #define N_(msg) (gettext_noop(msg))
-
 
 /* Languages table lookups. */
 

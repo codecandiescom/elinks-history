@@ -20,30 +20,30 @@
 #define _LOADINFO_H	1
 
 #ifndef PARAMS
-# if __STDC__
-#  define PARAMS(args) args
-# else
-#  define PARAMS(args) ()
-# endif
+#if __STDC__
+#define PARAMS(args) args
+#else
+#define PARAMS(args) ()
+#endif
 #endif
 
 #ifndef internal_function
-# define internal_function
+#define internal_function
 #endif
 
 /* Tell the compiler when a conditional or integer expression is
    almost always true or almost always false.  */
 #ifndef HAVE_BUILTIN_EXPECT
-# define __builtin_expect(expr, val) (expr)
+#define __builtin_expect(expr, val) (expr)
 #endif
 
 /* Separator in PATH like lists of pathnames.  */
 #if defined _WIN32 || defined __WIN32__ || defined __EMX__ || defined __DJGPP__
   /* Win32, OS/2, DOS */
-# define PATH_SEPARATOR ';'
+#define PATH_SEPARATOR ';'
 #else
   /* Unix */
-# define PATH_SEPARATOR ':'
+#define PATH_SEPARATOR ':'
 #endif
 
 /* Encoding of locale name parts.  */
@@ -59,53 +59,47 @@
 #define CEN_SPECIFIC	(CEN_REVISION|CEN_SPONSOR|CEN_SPECIAL|CEN_AUDIENCE)
 #define XPG_SPECIFIC	(XPG_CODESET|XPG_NORM_CODESET|XPG_MODIFIER)
 
+struct loaded_l10nfile {
+	const char *filename;
+	const char *langdirname;
+	int langdirnamelen;
 
-struct loaded_l10nfile
-{
-  const char *filename;
-  const char *langdirname;
-  int langdirnamelen;
+	int decided;
 
-  int decided;
+	const void *data;
 
-  const void *data;
-
-  struct loaded_l10nfile *next;
-  struct loaded_l10nfile *successor[1];
+	struct loaded_l10nfile *next;
+	struct loaded_l10nfile *successor[1];
 };
-
 
 /* Normalize codeset name.  There is no standard for the codeset
    names.  Normalization allows the user to use any of the common
    names.  The return value is dynamically allocated and has to be
    freed by the caller.  */
-extern const char *_nl_normalize_codeset PARAMS ((const char *codeset,
-						  size_t name_len));
+extern const char *_nl_normalize_codeset PARAMS((const char *codeset,
+						 size_t name_len));
 
-extern struct loaded_l10nfile *
-_nl_make_l10nflist PARAMS ((struct loaded_l10nfile **l10nfile_list,
-			    const char *dirlist, size_t dirlist_len, int mask,
-			    const char *language, const char *territory,
-			    const char *codeset,
-			    const char *normalized_codeset,
-			    const char *modifier, const char *special,
-			    const char *sponsor, const char *revision,
-			    const char *filename, int do_allocate));
+extern struct loaded_l10nfile *_nl_make_l10nflist
+PARAMS((struct loaded_l10nfile ** l10nfile_list, const char *dirlist,
+	size_t dirlist_len, int mask, const char *language,
+	const char *territory, const char *codeset,
+	const char *normalized_codeset, const char *modifier,
+	const char *special, const char *sponsor, const char *revision,
+	const char *filename, int do_allocate));
 
-
-extern const char *_nl_expand_alias PARAMS ((const char *name));
+extern const char *_nl_expand_alias PARAMS((const char *name));
 
 /* normalized_codeset is dynamically allocated and has to be freed by
    the caller.  */
-extern int _nl_explode_name PARAMS ((char *name, const char **language,
-				     const char **modifier,
-				     const char **territory,
-				     const char **codeset,
-				     const char **normalized_codeset,
-				     const char **special,
-				     const char **sponsor,
-				     const char **revision));
+extern int _nl_explode_name PARAMS((char *name, const char **language,
+				    const char **modifier,
+				    const char **territory,
+				    const char **codeset,
+				    const char **normalized_codeset,
+				    const char **special,
+				    const char **sponsor,
+				    const char **revision));
 
-extern char *_nl_find_language PARAMS ((const char *name));
+extern char *_nl_find_language PARAMS((const char *name));
 
-#endif	/* loadinfo.h */
+#endif /* loadinfo.h */

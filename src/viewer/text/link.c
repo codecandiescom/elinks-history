@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.234 2004/06/19 17:58:37 jonas Exp $ */
+/* $Id: link.c,v 1.235 2004/06/19 18:16:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,8 +189,9 @@ draw_current_link(struct session *ses, struct document_view *doc_view)
 	ypos = doc_view->box.y - doc_view->vs->y;
 	cursor_offset = get_link_cursor_offset(doc_view, link);
 
-	/* If we are navigating using cursor routing never set the cursor */
-	if (ses->insert_mode != INSERT_MODE_ON
+	/* If we are navigating using cursor routing and not editing a
+	 * text-input form-field never set the cursor. */
+	if (ses->insert_mode == INSERT_MODE_OFF
 	    && ses->navigate_mode == NAVIGATE_CURSOR_ROUTING)
 		cursor_offset = -1;
 

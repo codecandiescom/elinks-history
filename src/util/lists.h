@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.32 2003/10/25 14:41:43 jonas Exp $ */
+/* $Id: lists.h,v 1.33 2003/10/26 03:00:19 zas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -57,18 +57,17 @@ struct xlist_head {
 
 #else /* LISTDEBUG */
 
+#define LISTMAGIC1 ((void *) 0xdadababa)
+#define LISTMAGIC2 ((void *) 0xd0d0b0b0)
+#define LISTMAGIC3 ((void *) 0x25254545)
 
 #define list_del_enforce(x) \
 do { \
-	/* Little hack: we put the complement of LISTMAGIC1 to prev */\
+	/* Little hack: we put LISTMAGIC3 in prev */ \
 	/* and the line number in next. Debugging purpose. */ \
-	(x)->prev = (void *) ~((unsigned int) LISTMAGIC1); \
+	(x)->prev = LISTMAGIC3; \
 	(x)->next = (void *) ((unsigned int) __LINE__); \
 } while (0)
-
-
-#define LISTMAGIC1 ((void *) 0xdadababa)
-#define LISTMAGIC2 ((void *) 0xd0d0b0b0)
 
 
 #define list_magic_error(where,what) internal("[%s] %s - bad list magic", where, #what)

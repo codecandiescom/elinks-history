@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.301 2003/12/21 18:25:14 pasky Exp $ */
+/* $Id: parser.c,v 1.302 2003/12/21 18:30:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2359,7 +2359,14 @@ html_iframe(unsigned char *a)
 static void
 html_noframes(unsigned char *a)
 {
-	if (global_doc_opts->frames) html_skip(a);
+	struct html_element *element;
+
+	if (!global_doc_opts->frames) return;
+
+	element = search_html_stack("frameset");
+	if (element && !element->frameset) return;
+
+	html_skip(a);
 }
 
 static void

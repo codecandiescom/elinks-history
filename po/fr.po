@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-29 21:18+0100\n"
+"POT-Creation-Date: 2003-12-29 22:07+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -3573,30 +3573,56 @@ msgstr ""
 "Afficher le dialogue \"Atteindre l'URL\" si aucune page de démarrage n'est "
 "définie."
 
-#: src/config/options.inc:1193
-msgid "Auto save and restore session"
-msgstr "Sauver et restaurer automatiquement la session"
+#: src/config/options.inc:1194
+msgid "Sessions"
+msgstr "Sessions"
 
-#: src/config/options.inc:1195
+#: src/config/options.inc:1196
+msgid "Sessions settings."
+msgstr "Configuration des sessions."
+
+#: src/config/options.inc:1198
+msgid "Auto save session"
+msgstr "Sauver automatiquement la session"
+
+#: src/config/options.inc:1200
 msgid ""
-"Automatically save and restore the session when quitting so\n"
-"it can be continued later. Requires bookmark support:\n"
-"0 means no auto saving and restoring\n"
-"1 means auto save session when quitting\n"
-"2 means auto save and restore session"
+"Automatically save the session when quitting.\n"
+"This feature requires bookmark support."
 msgstr ""
-"Sauver et restaurer automatiquement la session au moment de\n"
-"quitter de manière à permettre la reprise plus tard.\n"
-"Le support des signets est nécessaire:\n"
-"0 pour désactiver la sauvegarde et restauration de session\n"
-"1 pour sauvegarder la session au moment de quitter\n"
-"2 pour sauver et restaurer automatiquement la session"
+"Sauvegarder automatiquement la session au moment de quitter.\n"
+"Cette fonctionnalité nécessite le support des signets."
 
-#: src/config/options.inc:1202
+#: src/config/options.inc:1203
+msgid "Auto restore session"
+msgstr "Restaurer automatiquement la session"
+
+#: src/config/options.inc:1205
+msgid ""
+"Automatically restore the session at start.\n"
+"This feature requires bookmark support."
+msgstr ""
+"Restaurer automatiquement la session au démarrage.\n"
+"Cette fonctionnalité nécessite le support des signets."
+
+#: src/config/options.inc:1208
+msgid "Auto save and restore session folder name"
+msgstr "Nom du dossier pour sauver et restaurer automatiquement la session"
+
+#: src/config/options.inc:1210
+msgid ""
+"Name of the bookmarks folder used for auto saving and restoring session.\n"
+"This only makes sense with bookmark support."
+msgstr ""
+"Nom du dossier dans les signets utilisé pour la sauvegarde et restauration\n"
+"automatique de la session.\n"
+"Cette option n'a de sens qu'avec le support des signets."
+
+#: src/config/options.inc:1214
 msgid "Set window title"
 msgstr "Modifier le titre de la fenêtre"
 
-#: src/config/options.inc:1204
+#: src/config/options.inc:1216
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
@@ -3606,11 +3632,11 @@ msgstr ""
 "environnement de type xterm. Cela permet d'avoir le titre du\n"
 "document courant en tant que titre de fenêtre."
 
-#: src/config/options.inc:1210
+#: src/config/options.inc:1222
 msgid "Use secure file saving"
 msgstr "Utiliser la sauvegarde fiable des fichiers."
 
-#: src/config/options.inc:1212
+#: src/config/options.inc:1224
 msgid ""
 "First write data to 'file.tmp', then rename to 'file' upon\n"
 "successfully finishing this. Note that this relates only to\n"
@@ -5504,10 +5530,6 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/session.c:736 src/terminal/terminal.c:180
-msgid "Auto saved session"
-msgstr "Session sauvée automatiquement"
-
 #: src/sched/session.c:883
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
@@ -5871,3 +5893,17 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1579
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid ""
+#~ "Automatically save and restore the session when quitting so\n"
+#~ "it can be continued later. Requires bookmark support:\n"
+#~ "0 means no auto saving and restoring\n"
+#~ "1 means auto save session when quitting\n"
+#~ "2 means auto save and restore session"
+#~ msgstr ""
+#~ "Sauver et restaurer automatiquement la session au moment de\n"
+#~ "quitter de manière à permettre la reprise plus tard.\n"
+#~ "Le support des signets est nécessaire:\n"
+#~ "0 pour désactiver la sauvegarde et restauration de session\n"
+#~ "1 pour sauvegarder la session au moment de quitter\n"
+#~ "2 pour sauver et restaurer automatiquement la session"

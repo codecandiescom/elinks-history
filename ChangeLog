@@ -1,3 +1,76 @@
+Sat Nov 23 19:49:52 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/: string.c, string.h:
+
+	Stricter parameters checking for string functions.  
+	
+	If DEBUG is defined, most errors will force a core dump.  If DEBUG
+	is not defined, some important errors will generate a message.  
+	
+	WARNING: since we are stricter, some previously (perhaps) working
+	code may cause errors and/or core dumps now.  
+	
+	ie. memacpy(NULL, len), behavior wasn't clearly defined... now it
+	produces an error.  
+	
+	Please report any issue.  
+
+Sat Nov 23 19:37:46 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/memory.c:
+
+	We now force immediate segfault on memory allocation failures.  
+
+Sat Nov 23 19:36:12 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/memdebug.c:
+
+	We now force immediate segfault on memory allocation failures. file
+	and line infos were added to some functions.  
+
+Sat Nov 23 19:34:00 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/auth.c:
+
+	Some issues with NULL values of user and pass were fixed.  
+
+Sat Nov 23 19:31:51 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	Calls to memacpy(x, l) when x is NULL were removed.  
+
+Sat Nov 23 19:25:44 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sched.c:
+
+	A potential memleak was fixed.  
+
+Sat Nov 23 19:24:27 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, lowlevel/home.c:
+
+	Calls to stracpy(x) when x is NULL were removed.  
+
+Sat Nov 23 19:23:49 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Calls to stracpy(x) when x is NULL and calls to copy_string(d,s)
+	when s is NULL were removed.  
+
+Sat Nov 23 19:20:40 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/: download.c, session.c, view.c, vs.c:
+
+	Calls to stracpy(x) when x is NULL were removed.  
+
+Sat Nov 23 12:45:25 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/session.c:
+
+	Minor cleanups, clarifications,  and optimizations.  
+
 Thu Nov 21 11:15:03 2002  Laurent Monin <zas@norz.org>:
 
 	* src/: config/options.c, protocol/file.c, util/encoding.c,

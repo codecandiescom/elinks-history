@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.160 2004/04/07 19:34:51 jonas Exp $ */
+/* $Id: connection.c,v 1.161 2004/04/08 14:14:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -839,6 +839,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			continue;
 
 		done_uri(proxy_uri);
+		done_uri(proxied_uri);
 
 		if (get_priority(conn) > pri) {
 			del_from_list(conn);

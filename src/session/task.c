@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.67 2004/04/04 17:04:16 jonas Exp $ */
+/* $Id: task.c,v 1.68 2004/04/08 14:14:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,6 +118,8 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	    && ses->doc_view->document->refresh) {
 		kill_document_refresh(ses->doc_view->document->refresh);
 	}
+
+	assertm(!ses->loading_uri, "Buggy URI reference counting");
 
 	/* Do it here because it might be ses->goto_position being passed */
 	pos = null_or_stracpy(pos);

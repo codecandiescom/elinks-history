@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.61 2004/01/21 01:00:48 jonas Exp $ */
+/* $Id: scanner.c,v 1.62 2004/01/21 01:20:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -320,10 +320,10 @@ scan_css_tokens(struct css_scanner *scanner)
 
 /* Scanner table accessors and mutators */
 
-struct css_token *
-get_css_token_(struct css_scanner *scanner)
-{
 #ifdef CSS_SCANNER_DEBUG
+struct css_token *
+get_css_token_debug(struct css_scanner *scanner)
+{
 	if (css_scanner_has_tokens(scanner)) {
 		struct css_token *token = scanner->current;
 
@@ -331,15 +331,14 @@ get_css_token_(struct css_scanner *scanner)
 		elinks_wdebug("<%s> %d %d [%s]", scanner->function, token->type,
 			      token->length, token->string);
 	}
-#endif
 
 	/* Make sure we do not return CSS_TOKEN_NONE tokens */
 	assert(!css_scanner_has_tokens(scanner)
 		|| scanner->current->type != CSS_TOKEN_NONE);
 
-	return css_scanner_has_tokens(scanner)
-		? scanner->current : NULL;
+	return get_css_token_(scanner);
 }
+#endif
 
 struct css_token *
 skip_css_tokens_(struct css_scanner *scanner, enum css_token_type skipto)

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.45 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: smb.c,v 1.46 2004/06/18 09:13:41 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -501,6 +501,7 @@ smb_protocol_handler(struct connection *conn)
 	}
 
 	if (!cpid) {
+#define SMBCLIENT "smbclient"
 #define MAX_SMBCLIENT_ARGS 32
 		int n = 0;
 		unsigned char *v[MAX_SMBCLIENT_ARGS];
@@ -516,7 +517,7 @@ smb_protocol_handler(struct connection *conn)
 		close(out_pipe[0]);
 		close(err_pipe[0]);
 
-		v[n++] = "smbclient";
+		v[n++] = SMBCLIENT;
 
 		/* FIXME: handle alloc failures. */
 		/* At this point, we are the child process.
@@ -586,11 +587,12 @@ smb_protocol_handler(struct connection *conn)
 		v[n++] = NULL;
 		assert(n < MAX_SMBCLIENT_ARGS);
 
-		execvp("smbclient", (char **) v);
+		execvp(SMBCLIENT, (char **) v);
 
-		fprintf(stderr, "smbclient not found in $PATH");
+		fprintf(stderr,  SMBCLIENT " not found in $PATH");
 		_exit(1);
 #undef MAX_SMBCLIENT_ARGS
+#undef SMBCLIENT
 	}
 
 	mem_free(share);

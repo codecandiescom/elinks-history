@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.13 2002/04/27 20:47:26 pasky Exp $ */
+/* $Id: types.c,v 1.14 2002/04/27 21:46:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ is_in_list_rear_cmp(unsigned char *start, unsigned char *end,
 	/* XXX: The '.' cmp is hack for extensions. That means this compare
 	 * function is not generally usable :(. But then again, who else than
 	 * extensions department would want to use it? */
-	return (l >= l2 && str[l - l2 - 1] == '.'
+	return (l > l2 && (*start != '.' && str[l - l2 - 1] == '.')
 		&& !casecmp(str + l - l2, start, l2));
 }
 

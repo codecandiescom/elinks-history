@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.35 2003/07/11 03:53:01 jonas Exp $ */
+/* $Id: auth.c,v 1.36 2003/07/11 03:56:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,6 +123,9 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	entry = find_auth_entry(newurl, realm);
 	if (entry) {
 		mem_free(newurl);
+
+		assert(entry->valid && entry->uid && entry->passwd);
+		if_assert_failed { mem_free(newurl); return ADD_AUTH_ERROR; }
 
 		/* Found an entry. */
 		if (entry->blocked == 1) {

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.157 2004/07/23 20:07:26 zas Exp $ */
+/* $Id: ftp.c,v 1.158 2004/07/23 20:09:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1069,34 +1069,34 @@ static int
 ftp_data_accept(struct connection *conn)
 {
 	struct ftp_connection_info *c_i = conn->info;
+	int newsock;
 
-	if (!c_i->has_data) {
-		int newsock;
+	if (c_i->has_data) return 0;
 
-		c_i->has_data = 1;
+	c_i->has_data = 1;
 
-		set_handlers(conn->data_socket, NULL, NULL, NULL, NULL);
-		if ((conn->pf != 2 && c_i->use_pasv)
+	set_handlers(conn->data_socket, NULL, NULL, NULL, NULL);
+
+	if ((conn->pf != 2 && c_i->use_pasv)
 #ifdef CONFIG_IPV6
-	    	    || (conn->pf == 2 && c_i->use_epsv)
+	    || (conn->pf == 2 && c_i->use_epsv)
 #endif
-		   ) {
-			newsock = conn->data_socket;
-		} else {
-			newsock = accept(conn->data_socket, NULL, NULL);
-			if (newsock < 0) {
-				retry_conn_with_state(conn, -errno);
-				return -1;
-			}
-			close(conn->data_socket);
+	   ) {
+		newsock = conn->data_socket;
+	} else {
+		newsock = accept(conn->data_socket, NULL, NULL);
+		if (newsock < 0) {
+			retry_conn_with_state(conn, -errno);
+			return -1;
 		}
-		conn->data_socket = newsock;
-
-		set_handlers(newsock,
-			     (void (*)(void *)) got_something_from_data_connection,
-			     NULL, NULL, conn);
+		close(conn->data_socket);
 	}
 
+	conn->data_socket = newsock;
+
+	set_handlers(newsock,
+		     (void (*)(void *)) got_something_from_data_connection,
+		     NULL, NULL, conn);
 	return 0;
 }
 

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua,v 1.6 2002/06/30 19:50:56 pasky Exp $
+-- $Id: hooks.lua,v 1.1 2002/06/30 22:21:06 pasky Exp $
 
 ----------------------------------------------------------------------
 --  Local configuration

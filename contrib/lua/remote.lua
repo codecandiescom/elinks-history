@@ -1,5 +1,5 @@
 -- ELinks-side part of elinks-remote
--- $Id: remote.lua,v 1.3 2002/05/19 19:34:56 pasky Exp $
+-- $Id: remote.lua,v 1.1 2002/06/30 22:21:06 pasky Exp $
 
 -- See script elinks-remote for explanation what's this about.
 

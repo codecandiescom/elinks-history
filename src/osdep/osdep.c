@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.75 2003/06/15 12:59:08 pasky Exp $ */
+/* $Id: osdep.c,v 1.76 2003/06/28 11:13:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,9 +44,9 @@
 #include "elinks.h"
 
 #include "intl/gettext/libintl.h"
-#include "osdep/os_dep.h"
-#include "lowlevel/signals.h"
 #include "lowlevel/select.h"
+#include "lowlevel/signals.h"
+#include "osdep/os_dep.h"
 #include "terminal/kbd.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
@@ -120,9 +120,7 @@ get_e(char *env)
 {
 	char *v = getenv(env);
 
-	if (v) return atoi(v);
-
-	return 0;
+	return (v ? atoi(v) : 0);
 }
 
 #if defined(OS2)

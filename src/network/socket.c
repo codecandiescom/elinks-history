@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.56 2004/01/31 00:40:47 pasky Exp $ */
+/* $Id: socket.c,v 1.57 2004/02/01 13:35:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,8 +268,9 @@ dns_found(void *data, int state)
 	int i;
 	int trno = c_i->triedno;
 	int only_local = get_opt_int_tree(cmdline_options, "localhost");
-	int local = 0;
-	
+	int saved_errno = 0;
+	int at_least_one_remote_ip = 0;
+
 	if (state < 0) {
 		abort_conn_with_state(conn, S_NO_DNS);
 		return;
@@ -290,6 +291,7 @@ dns_found(void *data, int state)
 		c_i->triedno++;
 
 		if (only_local) {
+			int local = 0;
 #ifdef IPV6
 			if (addr.sin6_family == AF_INET6)
 				local = IN6_IS_ADDR_LOOPBACK(&(((struct sockaddr_in6 *) &addr)->sin6_addr));
@@ -297,9 +299,12 @@ dns_found(void *data, int state)
 #endif
 				local = (ntohl(((struct sockaddr_in *) &addr)->sin_addr.s_addr) >> 24)
 					== IN_LOOPBACKNET;
-			
+
 			/* This forbids connections to anything but local, if option is set. */
-			if (!local) continue;
+			if (!local) {
+				at_least_one_remote_ip = 1;
+				continue;
+			}
 		}
 
 #ifdef IPV6
@@ -307,8 +312,13 @@ dns_found(void *data, int state)
 #else
 		sock = socket(addr.sin_family, SOCK_STREAM, IPPROTO_TCP);
 #endif
-		if (sock == -1) continue;
+		if (sock == -1) {
+			if (errno && !saved_errno) saved_errno = errno;
+			continue;
+		}
+
 		if (set_nonblocking_fd(sock) < 0) {
+			if (errno && !saved_errno) saved_errno = errno;
 			close(sock);
 			continue;
 		}
@@ -347,13 +357,15 @@ dns_found(void *data, int state)
 			return;
 		}
 
+		if (errno && !saved_errno) saved_errno = errno;
+
 		close(sock);
 	}
 
 	if (i >= c_i->addrno) {
 		/* Tried everything, but it didn't help :(. */
 
-		if (only_local && !local) {
+		if (only_local && !saved_errno && at_least_one_remote_ip) {
 			/* Yes we might hit a local address and fail in the
 			 * process, but what matters is the last one because
 			 * we do not know the previous one's errno, and the

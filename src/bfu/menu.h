@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.46 2004/01/07 15:23:16 jonas Exp $ */
+/* $Id: menu.h,v 1.47 2004/01/13 14:54:39 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -25,6 +25,8 @@ enum menu_item_flags {
 	NO_SELECT = 128,	/* Mark unselectable item */
 	RIGHT_INTL = 256,	/* Force translation of right text. */
 };
+
+#define FREE_ANY (FREE_LIST|FREE_TEXT|FREE_RTEXT|FREE_DATA)
 
 /*
  * Unselectable menu item

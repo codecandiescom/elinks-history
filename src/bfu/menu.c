@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.177 2004/01/13 14:26:48 zas Exp $ */
+/* $Id: menu.c,v 1.178 2004/01/13 14:54:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,7 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 #endif
 		refresh_hotkeys(term, menu);
 		add_window(term, menu_handler, menu);
-	} else if (items->flags & (FREE_LIST|FREE_TEXT|FREE_RTEXT|FREE_DATA)) {
+	} else if (items->flags & FREE_ANY) {
 		free_menu_items(items);
 	}
 }
@@ -744,7 +744,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_ABORT:
-			if (menu->items->flags & (FREE_LIST|FREE_TEXT|FREE_RTEXT|FREE_DATA))
+			if (menu->items->flags & FREE_ANY)
 				free_menu_items(menu->items);
 
 			break;

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.57 2003/10/24 19:35:43 jonas Exp $ */
+/* $Id: mailcap.c,v 1.58 2003/10/25 19:17:32 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -33,6 +33,7 @@
 #include "mime/backend/common.h"
 #include "mime/backend/mailcap.h"
 #include "mime/mime.h"
+#include "modules/module.h"
 #include "osdep/os_dep.h"		/* For exe() */
 #include "sched/session.h"
 #include "util/file.h"
@@ -375,7 +376,7 @@ init_mailcap_map(void)
 }
 
 static void
-done_mailcap(void)
+done_mailcap(struct module *module)
 {
 	struct hash_item *item;
 	int i;
@@ -409,14 +410,14 @@ change_hook_mailcap(struct session *ses, struct option *current, struct option *
 	if (!strlcmp(changed->name, -1, "path", 4)
 	    || (!strlcmp(changed->name, -1, "enable", 6)
 		&& !changed->value.number)) {
-		done_mailcap();
+		done_mailcap(&mailcap_mime_module);
 	}
 
 	return 0;
 }
 
 static void
-init_mailcap(void)
+init_mailcap(struct module *module)
 {
 	struct change_hook_info mimetypes_change_hooks[] = {
 		{ "mime.mailcap",		change_hook_mailcap },
@@ -620,13 +621,18 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 }
 
 
-/* Setup the exported backend */
 struct mime_backend mailcap_mime_backend = {
-	/* name: */		BACKEND_NAME,
-	/* init: */		init_mailcap,
-	/* done: */		done_mailcap,
 	/* get_content_type: */	NULL,
 	/* get_mime_handler: */	get_mime_handler_mailcap,
 };
+
+/* Setup the exported module. */
+struct module mailcap_mime_module = INIT_MODULE(
+	/* name: */		"mailcap",
+	/* options: */		NULL,
+	/* submodules: */	NULL,
+	/* init: */		init_mailcap,
+	/* done: */		done_mailcap
+);
 
 #endif /* MAILCAP */

@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.8 2003/10/27 02:46:12 pasky Exp $ */
+/* $Id: system.h,v 1.9 2003/10/27 23:40:24 pasky Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -29,11 +29,11 @@
 # define UNIX
 #endif
 
-#include "osdep/unix.h"
-#include "osdep/os2.h"
-#include "osdep/win32.h"
-#include "osdep/beos.h"
-#include "osdep/riscos.h"
+#include "osdep/sysinfo/unix.h"
+#include "osdep/sysinfo/os2.h"
+#include "osdep/sysinfo/win32.h"
+#include "osdep/sysinfo/beos.h"
+#include "osdep/sysinfo/riscos.h"
 
 #ifndef HAVE_SA_STORAGE
 #define sockaddr_storage sockaddr

@@ -30,7 +30,7 @@ msgstr "Info"
 
 #: src/bfu/hierbox.c:447
 msgid "Press space to expand this folder."
-msgstr ""
+msgstr "Premere spazio per espandere questa cartella."
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
 #: src/bfu/hierbox.c:449 src/bfu/hierbox.c:471 src/bfu/hierbox.c:609
@@ -338,19 +338,17 @@ msgid "Add bookmark"
 msgstr "Aggiungi segnalibro"
 
 #: src/bookmarks/dialogs.c:583
-#, fuzzy
 msgid "Saved session"
-msgstr "~Salva opzioni"
+msgstr "Sessione salvata"
 
 #: src/bookmarks/dialogs.c:604
 #, fuzzy
 msgid "Bookmark tabs"
-msgstr "Segnalibri"
+msgstr "Schede segnalibri"
 
 #: src/bookmarks/dialogs.c:604
-#, fuzzy
 msgid "Enter folder name"
-msgstr "Nome cartella"
+msgstr "Immettere nome cartella"
 
 #: src/cache/dialogs.c:65
 msgid "Redirect"
@@ -460,9 +458,9 @@ msgid "(default: %s)"
 msgstr "(predefinito: %s)"
 
 #: src/config/cmdline.c:275
-#, fuzzy, c-format
+#, c-format
 msgid "(default: #%06lx)"
-msgstr "(predefinito: #%06x)"
+msgstr "(predefinito: #%06lx)"
 
 #: src/config/cmdline.c:401
 msgid "Configuration options:\n"
@@ -757,7 +755,7 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
+"Impostare a 1 per modificare i file runtime di stato (segnalibri, "
 "cronologia, ...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in combinazione con una di queste opzioni."
@@ -821,8 +819,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione "
+"config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:648
@@ -879,7 +877,9 @@ msgstr "Errore configurazione"
 msgid ""
 "Unable to write to config file %s.\n"
 "%s"
-msgstr "Impossible scrivere il file di configurazione %s: %s"
+msgstr ""
+"Impossible scrivere il file di configurazione %s.\n"
+"%s"
 
 #: src/config/dialogs.c:67
 msgid "Write config success"
@@ -892,7 +892,7 @@ msgstr ""
 
 #: src/config/dialogs.c:72
 msgid "Do not show anymore"
-msgstr ""
+msgstr "Non mostrare più"
 
 #: src/config/dialogs.c:131
 msgid "(expand by pressing space)"
@@ -961,7 +961,7 @@ msgstr "Combinazione di tasti non valida."
 
 #: src/config/dialogs.c:501
 msgid "Keystroke already used"
-msgstr ""
+msgstr "Combinazione di tasti già usata"
 
 #: src/config/dialogs.c:502
 #, c-format
@@ -969,6 +969,8 @@ msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
 "Are you sure you want to replace it?"
 msgstr ""
+"La combinazione di tasti \"%s\" è già usata per \"%s\".\n"
+"Si desidera veramente sostituirla?"
 
 #: src/config/dialogs.c:529
 msgid "Need to select a keymap."
@@ -1012,8 +1014,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:634 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -1048,9 +1050,8 @@ msgid "Add a new bookmark using current link"
 msgstr "Aggiungi nuovo segnalibro usando il collegamento corrente"
 
 #: src/config/kbdbind.c:396
-#, fuzzy
 msgid "Bookmark all open tabs"
-msgstr "Opzioni segnalibri."
+msgstr "Aggiungi ai segnalibri tutte le schede aperte"
 
 #: src/config/kbdbind.c:397
 msgid "Attempt to auto-complete the input"
@@ -1069,9 +1070,8 @@ msgid "Delete character in front of the cursor"
 msgstr "Cancella il carattere prima del cursore"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Go to the first line of the buffer."
-msgstr "Vai all'inizio della pagina/riga"
+msgstr "Vai alla prima riga del buffer."
 
 #: src/config/kbdbind.c:402
 msgid "Open bookmark manager"
@@ -1143,9 +1143,8 @@ msgid "Go to the end of the page/line"
 msgstr "Vai alla fine della pagina/riga"
 
 #: src/config/kbdbind.c:419
-#, fuzzy
 msgid "Go to the last line of the buffer."
-msgstr "Vai all'inizio della pagina/riga"
+msgstr "Vai all'ultima riga del buffer."
 
 #: src/config/kbdbind.c:420
 msgid "Follow the current link"
@@ -1173,9 +1172,8 @@ msgid "Forget authentication credentials"
 msgstr "Dimentica le credenziali di autenticazione"
 
 #: src/config/kbdbind.c:426
-#, fuzzy
 msgid "Open form history manager"
-msgstr "Gestore cronologia"
+msgstr "Apri il gestore cronologia"
 
 #: src/config/kbdbind.c:427
 msgid "Open \"Go to URL\" dialog box"
@@ -1207,9 +1205,8 @@ msgid "Go to the start of the page/line"
 msgstr "Vai all'inizio della pagina/riga"
 
 #: src/config/kbdbind.c:434
-#, fuzzy
 msgid "Kill all backgrounded connections"
-msgstr "Uccidi connessioni in bac~kground"
+msgstr "Uccidi connessioni in background"
 
 #: src/config/kbdbind.c:435
 msgid "Delete to beginning of line"
@@ -1293,9 +1290,8 @@ msgid "Open the current link in a new window"
 msgstr "Apri collegamento corrente in una nuova finestra"
 
 #: src/config/kbdbind.c:460
-#, fuzzy
 msgid "Open an OS shell"
-msgstr "~OS shell"
+msgstr "Apri una shell"
 
 #: src/config/kbdbind.c:461
 msgid "Open options manager"
@@ -1335,12 +1331,11 @@ msgstr "Ricarica la pagina corrente"
 
 #: src/config/kbdbind.c:470
 msgid "Reset form items to their initial values"
-msgstr ""
+msgstr "Azzera i campi nei form al loro valore iniziale"
 
 #: src/config/kbdbind.c:471
-#, fuzzy
 msgid "Show information about the currently used resources"
-msgstr "Mostra informazioni sulla pagina corrente"
+msgstr "Mostra informazioni sulle risorse in uso"
 
 #: src/config/kbdbind.c:472
 msgid "Attempt to resume download of the current link"
@@ -1351,23 +1346,20 @@ msgid "Move the cursor right"
 msgstr "Sposta il cursore a destra"
 
 #: src/config/kbdbind.c:474
-#, fuzzy
 msgid "Save as"
-msgstr "Sal~va come"
+msgstr "Salva come"
 
 #: src/config/kbdbind.c:475
-#, fuzzy
 msgid "Save URL as"
-msgstr "Salva ~URL come"
+msgstr "Salva URL come"
 
 #: src/config/kbdbind.c:476
 msgid "Save formatted document"
 msgstr "Salva documento formattato"
 
 #: src/config/kbdbind.c:477
-#, fuzzy
 msgid "Save options"
-msgstr "~Salva opzioni"
+msgstr "Salva opzioni"
 
 #: src/config/kbdbind.c:478
 msgid "Scroll down"
@@ -1402,17 +1394,14 @@ msgid "Select current highlighted item"
 msgstr "Seleziona l'elemento evidenziato"
 
 #: src/config/kbdbind.c:486
-#, fuzzy
 msgid "Show terminal options dialog"
-msgstr "Opzioni terminale"
+msgstr "Mosta la finestra di dialogo delle opzioni terminale"
 
 #: src/config/kbdbind.c:487
-#, fuzzy
 msgid "Submit form"
 msgstr "Invia form"
 
 #: src/config/kbdbind.c:488
-#, fuzzy
 msgid "Submit form and reload"
 msgstr "Invia form e ricarica"
 
@@ -1421,14 +1410,12 @@ msgid "Close tab"
 msgstr "Chiudi scheda"
 
 #: src/config/kbdbind.c:490
-#, fuzzy
 msgid "Close all tabs but the current one"
-msgstr "Chiudi ~tutti tranne questo"
+msgstr "Chiudi tutti tranne quello corrente"
 
 #: src/config/kbdbind.c:491
-#, fuzzy
 msgid "Open the tab menu"
-msgstr "Apri il menu File"
+msgstr "Apri il menu delle schede"
 
 #: src/config/kbdbind.c:492
 msgid "Next tab"
@@ -1757,7 +1744,7 @@ msgstr "Impostazioni predefinite dei colori"
 
 #: src/config/options.inc:148
 msgid "Default form input size if none is specified."
-msgstr ""
+msgstr "Dimensione predefinita dell'input nei form se nessuna è specificata."
 
 #: src/config/options.inc:151
 msgid "Images"
@@ -1954,22 +1941,20 @@ msgid "Display numbers next to the links."
 msgstr "Mostra i numeri a fianco dei collegamenti."
 
 #: src/config/options.inc:241
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the document.browse.search.wraparound option instead."
 msgstr ""
 "Questa opzione è deprecata e sarà presto rimossa.\n"
-"Si usi l'opzione mime.mailcap.ask."
+"Si usi l'opzione document.browse.search.wraparound."
 
 #: src/config/options.inc:246
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the document.browse.search.show_not_found option instead."
 msgstr ""
 "Questa opzione è deprecata e sarà presto rimossa.\n"
-"Si usi l'opzione ui.dialog.shadows."
+"Si usi l'opzione document.browse.search.show_not_found."
 
 #: src/config/options.inc:249
 msgid "Use tabindex"
@@ -2075,7 +2060,6 @@ msgstr ""
 "la cima o il fondo del documento."
 
 #: src/config/options.inc:299
-#, fuzzy
 msgid "Wraparound"
 msgstr "Ricomincia dall'inizio"
 
@@ -3020,8 +3004,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.inc:809
 msgid ""
@@ -3515,16 +3499,16 @@ msgid "Tabs bar colors."
 msgstr "Colori barra delle schede."
 
 #: src/config/options.inc:1100
-#, fuzzy
 msgid "Unvisited tab"
-msgstr "Scheda non selezionata"
+msgstr "Scheda non ancora visitata"
 
 #: src/config/options.inc:1102
-#, fuzzy
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
-msgstr "Colori per le schede in caricamento sullo sfondo."
+msgstr ""
+"Colori per le schede che non sono state\n"
+"selezionate da quando hanno completato il caricamento."
 
 #: src/config/options.inc:1105
 msgid "Unselected tab"
@@ -3587,7 +3571,7 @@ msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
-"Altezza minima del widget listbox (usato ad esempio per i bookmark\n"
+"Altezza minima del widget listbox (usato ad esempio per i segnalibri\n"
 "o per la cronologia)."
 
 #: src/config/options.inc:1142
@@ -3605,9 +3589,8 @@ msgstr ""
 "Puoi anche voler eliminare i bordi larghi modificando setup.h."
 
 #: src/config/options.inc:1148
-#, fuzzy
 msgid "Underline hotkeys"
-msgstr "Sottolinea collegamenti"
+msgstr "Sottolinea acceleratori"
 
 #: src/config/options.inc:1150
 msgid ""
@@ -3748,7 +3731,7 @@ msgstr ""
 
 #: src/config/options.inc:1223
 msgid "Show a message box when file is saved sucessfully"
-msgstr ""
+msgstr "Mostra una finestra di dialogo quando il file è salvato con successo"
 
 #: src/config/options.inc:1225
 msgid ""
@@ -3758,35 +3741,36 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:1230
-#, fuzzy
 msgid "Sessions"
-msgstr "Estensione(i)"
+msgstr "Sessioni"
 
 #: src/config/options.inc:1232
-#, fuzzy
 msgid "Sessions settings."
-msgstr "Impostazioni schede."
+msgstr "Impostazioni sessioni."
 
 #: src/config/options.inc:1234
-#, fuzzy
 msgid "Auto save session"
-msgstr "Intervallo per l'autosalvataggio"
+msgstr "Salva la sessione automaticamente"
 
 #: src/config/options.inc:1236
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
 msgstr ""
+"Salva automaticamente la sessione all'uscita.\n"
+"Questa funzionalità richiede il supporto per i segnalibri."
 
 #: src/config/options.inc:1239
 msgid "Auto restore session"
-msgstr ""
+msgstr "Ripristina sessione automaticamente"
 
 #: src/config/options.inc:1241
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
 msgstr ""
+"Ripristina automaticamente la sessione all'avvio.\n"
+"Questa funzionalità richiede il supporto per i segnalibri."
 
 #: src/config/options.inc:1244
 msgid "Auto save and restore session folder name"
@@ -3799,9 +3783,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:1249
-#, fuzzy
 msgid "Homepage URI"
-msgstr "Codepage"
+msgstr "URI dell homepage"
 
 #: src/config/options.inc:1251
 msgid ""
@@ -4138,7 +4121,7 @@ msgid "Copying"
 msgstr "Licenza"
 
 #: src/dialogs/info.c:134
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -4153,7 +4136,7 @@ msgstr ""
 "ELinks %s\n"
 "\n"
 "(C) 1999 - 2002 Mikulas Patocka\n"
-"(C) 2001 - 2003 Petr Baudis\n"
+"(C) 2001 - 2004 Petr Baudis e altri\n"
 "\n"
 "Questo programma è software libero; lo puoi ridistribuire e/o modificare nei "
 "termini della GNU General Public License come pubblicato dalla Free Software "
@@ -4243,7 +4226,6 @@ msgid "~Close tab"
 msgstr "Chiudi scheda"
 
 #: src/dialogs/menu.c:208
-#, fuzzy
 msgid "C~lose all tabs but the current"
 msgstr "Chiudi ~tutti tranne questo"
 
@@ -4382,7 +4364,6 @@ msgid "~Bugs information"
 msgstr "Informazioni sui ~bachi"
 
 #: src/dialogs/menu.c:356
-#, fuzzy
 msgid "ELinks C~vsWeb"
 msgstr "~CvsWeb di ELinks"
 
@@ -4635,13 +4616,13 @@ msgstr "Salva form per questo URL."
 
 #: src/formhist/dialogs.c:127
 msgid "Form not saved"
-msgstr ""
+msgstr "Form non salvato"
 
 #: src/formhist/dialogs.c:128
 msgid ""
 "No saved information for this URL.\n"
-"If you want to save passwords for this URL, enable it by the \"Toggle saving"
-"\" button."
+"If you want to save passwords for this URL, enable it by the \"Toggle "
+"saving\" button."
 msgstr ""
 "Non ci sono informazioni salvate per questo URL.\n"
 "Se desideri salvare le password per questo URL, abilitale tramite il "
@@ -4974,8 +4955,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
-"minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le "
+"maiuscole/minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -5127,8 +5108,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
-"*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come "
+"image/*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #: src/mime/backend/mailcap.c:130
@@ -5710,9 +5691,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5720,9 +5701,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:891
 msgid ""

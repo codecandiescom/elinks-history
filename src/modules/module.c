@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.34 2004/07/04 14:03:37 jonas Exp $ */
+/* $Id: module.c,v 1.35 2004/09/22 21:59:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "dialogs/exmode.h"
 #include "document/css/css.h"
 #include "document/document.h"
+#include "ecmascript/ecmascript.h"
 #include "formhist/formhist.h"
 #include "globhist/globhist.h"
 #include "mime/mime.h"
@@ -50,6 +51,9 @@ struct module *builtin_modules[] = {
 #endif
 #ifdef CONFIG_COOKIES
 	&cookies_module,
+#endif
+#ifdef CONFIG_ECMASCRIPT
+	&ecmascript_module,
 #endif
 #ifdef CONFIG_FORMHIST
 	&forms_history_module,

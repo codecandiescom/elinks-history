@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.3 2004/09/22 21:57:55 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.4 2004/09/22 22:14:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,14 +238,20 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 		return NULL;
 	interpreter->backend_data = ctx;
 
-	global_obj = JS_NewObject(ctx, (JSClass *) &global_class, 0, 0);
+	global_obj = JS_NewObject(ctx, (JSClass *) &global_class, NULL, NULL);
+	if (!global_obj) {
+		spidermonkey_put_interpreter(interpreter);
+		return NULL;
+	}
 	JS_InitStandardClasses(ctx, global_obj);
 
 	document_obj = JS_InitClass(ctx, global_obj, NULL,
 	                            (JSClass *) &document_class, NULL, 0,
 	                            (JSPropertySpec *) document_props, NULL,
 	                            NULL, NULL);
-	JS_SetPrivate(ctx, document_obj, interpreter->doc_view->document);
+	if (document_obj)
+		JS_SetPrivate(ctx, document_obj,
+		              interpreter->doc_view->document);
 
 	return ctx;
 }
@@ -258,6 +264,7 @@ spidermonkey_put_interpreter(struct ecmascript_interpreter *interpreter)
 	assert(interpreter);
 	ctx = interpreter->backend_data;
 	JS_DestroyContext(ctx);
+	interpreter->backend_data = NULL;
 }
 
 

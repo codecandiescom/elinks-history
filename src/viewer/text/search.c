@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.150 2004/01/01 20:08:47 miciah Exp $ */
+/* $Id: search.c,v 1.151 2004/01/02 16:14:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1038,6 +1038,14 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 
 		if (link->type != LINK_HYPERTEXT
 		    || charpos > link->n) continue;
+
+		if (link->name) {
+			if ((!case_sensitive && !strncasecmp(link->name, typeahead, charpos))
+			    || (case_sensitive && !strncmp(link->name, typeahead, charpos))) {
+				doc_view->vs->current_link = i;
+				return TYPEAHEAD_MATCHED;
+			}
+		}
 
 		for (j = 0; j < charpos; j++, linkpos++) {
 			unsigned char data = get_document_char(doc_view->document,

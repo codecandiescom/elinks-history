@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.27 2002/07/05 02:00:34 pasky Exp $ */
+/* $Id: http.c,v 1.28 2002/07/08 14:54:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,25 +241,6 @@ void http_send_header(struct connection *c)
 		} else {
 			eurl = memacpy(url_data, post - url_data - 1);
 		}
-		
-#if 0
-		/* XXX: This is pretty ugly and ineffective (read as slow). */
- 		while (strchr(eurl, ' ')) {
-			unsigned char *space = strchr(eurl, ' ');
-			unsigned char *neurl = mem_alloc(strlen(eurl) + 3);
-			
-			if (!neurl) break;
-			memcpy(neurl, eurl, space - eurl);
-			neurl[space - eurl] = 0;
-			strcat(neurl, "%20");
-			strcat(neurl, space + 1);
-			mem_free(eurl);
-			eurl = neurl;
-		}
-		
-		add_to_str(&hdr, &l, eurl);
-		mem_free(eurl);
-#endif
 
 		p = eurl;
 		while ((p1 = strchr(p, ' '))) {

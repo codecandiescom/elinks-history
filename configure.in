@@ -84,7 +84,7 @@ AC_DEFUN([EL_CONFIG_DEPENDS],
 			$1=yes;
 		fi
 	done
-	if test "$1" = yes; then
+	if test "[$]$1" = yes; then
 		EL_CONFIG($1, [$3])
 	fi
 	AC_MSG_RESULT([$]$1)
@@ -171,7 +171,7 @@ AC_CHECK_SIZEOF(char, 1)
 AC_CHECK_SIZEOF(short, 2)
 AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(long, 4)
-test "$HAVE_LONG_LONG" = yes && AC_CHECK_SIZEOF(long long, 8)
+test "x$HAVE_LONG_LONG" = xyes && AC_CHECK_SIZEOF(long long, 8)
 
 dnl Check for variadic macros
 EL_CHECK_CODE([variadic macros], HAVE_VARIADIC_MACROS,
@@ -294,7 +294,7 @@ AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 	[ if test "$withval" = no; then withval=""; disable_$1=yes; fi])
 
 	AC_MSG_CHECKING([for $1 support])
-	if test "$withval" = yes; then withval=""; fi
+	if test "x$withval" = xyes; then withval=""; fi
 
 	if test -z "$disable_$1"; then
 		AC_MSG_RESULT(yes)

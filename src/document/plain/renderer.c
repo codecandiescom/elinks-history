@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.128 2004/08/17 07:16:22 miciah Exp $ */
+/* $Id: renderer.c,v 1.129 2004/08/17 07:19:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,12 +11,15 @@
 #include "elinks.h"
 #include "main.h"
 
+#include "bookmarks/bookmarks.h"
 #include "cache/cache.h"
+#include "config/options.h"
 #include "document/docdata.h"
 #include "document/document.h"
 #include "document/options.h"
 #include "document/plain/renderer.h"
 #include "document/renderer.h"
+#include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
@@ -171,13 +174,43 @@ print_document_link(struct plain_renderer *renderer, int lineno,
 	struct document *document = renderer->document;
 	unsigned char *start = &line[line_pos];
 	int len = get_uri_length(start, width - line_pos);
-	//int link_end = line_pos + len;
+	int link_end = line_pos + len;
+	unsigned char saved_char;
+	struct document_options *doc_opts = &document->options;
+	struct color_pair colors;
+	unsigned char *optstring = NULL;
 	struct screen_char template = renderer->template;
 	int i;
 
 	if (!len || !check_link_word(document, start, len, line_pos + expanded,
 				    lineno))
 		return 0;
+
+	saved_char = line[link_end];
+	line[link_end] = '\0';
+
+	if (0)
+		/* Shut up compiler */ ;
+#ifdef CONFIG_GLOBHIST
+	else if (get_global_history_item(start))
+		optstring = "document.colors.vlink";
+#endif
+#ifdef CONFIG_BOOKMARKS
+	else if (get_bookmark(start))
+		optstring = "document.colors.bookmark";
+#endif
+	else
+		optstring = "document.colors.link";
+
+	line[link_end] = saved_char;
+
+	assert(optstring);
+
+	colors.background = doc_opts->default_bg;
+	colors.foreground = get_opt_color(optstring);
+
+	set_term_color(&template, &colors,
+		       doc_opts->color_flags, doc_opts->color_mode);
 
 	for (i = len; i; i--) {
 		template.data = line[line_pos++];

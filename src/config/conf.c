@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.90 2003/07/24 02:05:58 pasky Exp $ */
+/* $Id: conf.c,v 1.91 2003/10/20 11:46:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -473,6 +473,7 @@ smart_config_output_fn(struct string *string, struct option *option,
 		       unsigned char *path, int depth, int do_print_comment,
 		       int action)
 {
+	unsigned char *desc_i18n;
 	int i, l;
 
 	/* When we're OPT_TREE, we won't get called with action 2 anyway and
@@ -508,14 +509,15 @@ smart_config_output_fn(struct string *string, struct option *option,
 			if (!option->desc || !do_print_comment)
 				break;
 
-			l = strlen(option->desc);
+			desc_i18n = gettext(option->desc);
+			l = strlen(desc_i18n);
 
 			if (depth)
 				add_xchar_to_string(string, ' ', depth * indentation);
 			add_to_string(string, "# ");
 
 			for (i = 0; i < l; i++) {
-				if (option->desc[i] == '\n') {
+				if (desc_i18n[i] == '\n') {
 					add_to_string(string, NEWLINE);
 					if (depth)
 						add_xchar_to_string(string, ' ',
@@ -523,7 +525,7 @@ smart_config_output_fn(struct string *string, struct option *option,
 					add_to_string(string, "# ");
 				} else {
 					add_char_to_string(string,
-							   option->desc[i]);
+							   desc_i18n[i]);
 				}
 			}
 
@@ -576,36 +578,43 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	    || (savestyle < 2
 		&& (load_config_file(prefix, name, options, &config)
 		    || !config.length))) {
-		unsigned char headings[3][1024] = {
-			"## This is ELinks configuration file. You can edit it manually," NEWLINE
-			"## if you wish so; this file is edited by ELinks when you save" NEWLINE
-			"## options through UI, however only option values will be altered" NEWLINE
-			"## and all your formatting, own comments etc will be kept as-is." NEWLINE,
+		switch (savestyle) {
+		case 0:
+			add_to_string(&config, gettext(
+			"## This is ELinks configuration file. You can edit it manually,\n"
+			"## if you wish so; this file is edited by ELinks when you save\n"
+			"## options through UI, however only option values will be altered\n"
+			"## and all your formatting, own comments etc will be kept as-is.\n"));
+			break;
+		case 1:
+			add_to_string(&config, gettext(
+			"## This is ELinks configuration file. You can edit it manually,\n"
+			"## if you wish so; this file is edited by ELinks when you save\n"
+			"## options through UI, however only option values will be altered\n"
+			"## and missing options will be added at the end of file; if option\n"
+			"## is not written in this file, but in some file included from it,\n"
+			"## it is NOT counted as missing. Note that all your formatting,\n"
+			"## own comments and so on will be kept as-is.\n"));
+			break;
+		case 2:
+			add_to_string(&config, gettext(
+			"## This is ELinks configuration file. You can edit it manually,\n"
+			"## if you wish so, but keep in mind that this file is overwritten\n"
+			"## by ELinks when you save options through UI and you are out of\n"
+			"## luck with your formatting and own comments then, so beware.\n"));
+			break;
+		default:
+			break;
+		}
 
-			"## This is ELinks configuration file. You can edit it manually," NEWLINE
-			"## if you wish so; this file is edited by ELinks when you save" NEWLINE
-			"## options through UI, however only option values will be altered" NEWLINE
-			"## and missing options will be added at the end of file; if option" NEWLINE
-			"## is not written in this file, but in some file included from it," NEWLINE
-			"## it is NOT counted as missing. Note that all your formatting," NEWLINE
-			"## own comments and so on will be kept as-is." NEWLINE,
-
-			"## This is ELinks configuration file. You can edit it manually," NEWLINE
-			"## if you wish so, but keep in mind that this file is overwritten" NEWLINE
-			"## by ELinks when you save options through UI and you are out of" NEWLINE
-			"## luck with your formatting and own comments then, so beware." NEWLINE,
-		};
-
-		add_to_string(&config, headings[savestyle]);
-		add_to_string(&config,
-			"##" NEWLINE
-			"## Obviously, if you don't like what ELinks is going to do with" NEWLINE
-			"## this file, you can change it by altering the config.saving_style" NEWLINE
-			"## option. Come on, aren't we friendly guys after all?" NEWLINE);
+		add_to_string(&config, gettext(
+			"##\n"
+			"## Obviously, if you don't like what ELinks is going to do with\n"
+			"## this file, you can change it by altering the config.saving_style\n"
+			"## option. Come on, aren't we friendly guys after all?\n"));
 	}
 
-	if (savestyle == 0)
-		goto get_me_out;
+	if (savestyle == 0) goto get_me_out;
 
 	indentation = get_opt_int("config.indentation");
 	comments = get_opt_int("config.comments");
@@ -614,7 +623,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	add_to_string(&tmpstring, NEWLINE NEWLINE NEWLINE);
 	add_to_string(&tmpstring, "#####################################" NEWLINE);
-	add_to_string(&tmpstring, "# Automatically saved options" NEWLINE);
+	add_to_string(&tmpstring, gettext("# Automatically saved options\n"));
 	add_to_string(&tmpstring, "#" NEWLINE);
 	add_to_string(&tmpstring, NEWLINE);
 
@@ -628,7 +637,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	add_to_string(&tmpstring, NEWLINE NEWLINE NEWLINE);
 	add_to_string(&tmpstring, "#####################################" NEWLINE);
-	add_to_string(&tmpstring, "# Automatically saved keybindings" NEWLINE);
+	add_to_string(&tmpstring, gettext("# Automatically saved keybindings\n"));
 	add_to_string(&tmpstring, "#" NEWLINE);
 
 	origlen = tmpstring.length;

@@ -73,7 +73,7 @@ AC_STRUCT_TM
 dnl AC_CHECK_SPECIAL_TYPE(type, define, include sys types, code)
 AC_DEFUN([AC_CHECK_SPECIAL_TYPE],
 [
-	msg_$2=yes
+	$2=yes
 	AC_MSG_CHECKING([for $1])
 	AC_TRY_COMPILE([
 #if $3
@@ -87,8 +87,8 @@ AC_DEFUN([AC_CHECK_SPECIAL_TYPE],
 #endif
 	], [$4],
 	[AC_DEFINE($2, 1, [Define to 1 if we have $1])],
-	msg_$2=no)
-	AC_MSG_RESULT([$]msg_$2)
+	$2=no)
+	AC_MSG_RESULT([$]$2)
 ])
 
 AC_CHECK_SPECIAL_TYPE(typeof, HAVE_TYPEOF, 0, [int a; typeof(a) b;])
@@ -100,7 +100,7 @@ AC_CHECK_SIZEOF(char, 1)
 AC_CHECK_SIZEOF(short, 2)
 AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(long, 4)
-test "$have_long_long" = yes && AC_CHECK_SIZEOF(long long, 8)
+test "$HAVE_LONG_LONG" = yes && AC_CHECK_SIZEOF(long long, 8)
 
 dnl Check for variadic macros
 AC_CACHE_CHECK([for variadic cpp macros],

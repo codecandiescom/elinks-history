@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.138 2004/04/05 05:18:55 jonas Exp $ */
+/* $Id: uri.c,v 1.139 2004/04/05 05:22:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -365,6 +365,8 @@ translate_directories(struct uri *uri, unsigned char *uristring)
 			return;
 	}
 
+	assert(uri->data);
+
 	/* This is a maybe not the right place but both join_urls() and
 	 * get_translated_uri() through translate_url() calls this function
 	 * and then it already works on and modifies an allocated copy. */
@@ -442,6 +444,8 @@ static struct uri *
 transform_file_url(struct uri *uri, unsigned char *cwd)
 {
 	unsigned char *path = uri->data;
+
+	assert(uri->data);
 
 	/* Sort out the host part. We currently support only host "localhost"
 	 * (plus empty host part will be assumed to be "localhost" as well).

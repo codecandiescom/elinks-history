@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.34 2003/05/09 16:49:43 zas Exp $ */
+/* $Id: string.c,v 1.35 2003/05/09 17:09:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,6 +387,7 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 			unsigned int tmp = start;
 
 			start += pad;
+			if (slen) *slen += pad;
 			while (pad) s[--pad + tmp] = fillchar;
 		}
 	}

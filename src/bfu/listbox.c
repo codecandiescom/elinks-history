@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.119 2003/11/26 14:23:50 jonas Exp $ */
+/* $Id: listbox.c,v 1.120 2003/11/26 16:44:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ dlg_format_box(struct terminal *term, struct widget_data *widget_data,
  *
  */
 
-/* Traverse the hierarchic tree @item @offset items, calling @fn,
+/* Traverse a hierarchic tree from @item by @offset items, calling @fn,
  * if it is not NULL, on each item traversed (that is, each of the items
  * that we move _through_; this means from the passed @item up to,
  * but not including, the returned item).

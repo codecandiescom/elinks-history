@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.12 2003/09/12 10:48:40 zas Exp $ */
+/* $Id: header.c,v 1.13 2003/11/03 15:26:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,8 +68,11 @@ parse_http_header_param(unsigned char *str, unsigned char *name)
 	register unsigned char *p = str;
 	int namelen, plen = 0;
 
-	assert(str && *str && name && *name);
+	assert(str && name && *name);
 	if_assert_failed return NULL;
+
+	/* Returns now if string @str is empty. */
+	if (!*p) return NULL;
 
 	namelen = strlen(name);
 	do {

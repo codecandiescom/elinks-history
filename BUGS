@@ -1,59 +1,57 @@
 Known bugs:
 
-	Tilde doesn't expand as it should when used in goto dialog, ~ -> /home
-	and ~/ -> current directory.
+- Tilde doesn't expand as it should when used in goto dialog, ~ -> /home and ~/
+  -> current directory.
 
-	Menu accelerators are currently case-sensitive.
+- Menu accelerators are currently case-sensitive.
 
-	When a page displayed as plain-text includes '<title>' and '</title>',
-then the enclosed text is displayed as the page's title.
-	
-	Frames don't work if there's more frames with same name. Turn them off
-in such case.
+- When a page displayed as plain-text includes '<title>' and '</title>', then
+  the enclosed text is displayed as the page's title.
 
-	When a frame's src is a plain-text file, that file is rendered as HTML.
+- Frames don't work if there's more frames with same name. Turn them off in such
+  case.
 
-	In a frameset, following a link to a plain-text file
-breaks out of the frames.
+- When a frame's src is a plain-text file, that file is rendered as HTML.
 
-	Loading a page in a frame does not add that page to the global history.
+- In a frameset, following a link to a plain-text file breaks out of the frames.
 
-	The 'enter' action does not cause a refresh, even when given a prefix.
-Thus the newly selected link is not highlighted.
+- Loading a page in a frame does not add that page to the global history.
 
-	You can't upload large files; it takes _lots_ of memory.
+- The 'enter' action does not cause a refresh, even when given a prefix.  Thus
+  the newly selected link is not highlighted.
 
-	You shouldn't press '^Z' when you are in a viewer
+- You can't upload large files; it takes _lots_ of memory.
 
-	Handling of &#13; is not lynx-compatible in <pre> tag (should be
-newline).
+- You shouldn't press '^Z' when you are in a viewer
 
-	Tags inside <XMP> are still interpreted.
+- Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
 
-	When switching between source view and rendered view, the position of
-the view is based on the page number of the previous view, not on the content of
-the previous view.
+- Tags inside <XMP> are still interpreted.
 
-	Calling cfmakeraw() in kbd.c:setraw() breaks some exotic terminal
-combinations.
+- When switching between source view and rendered view, the position of the view
+  is based on the page number of the previous view, not on the content of the
+  previous view.
 
-	Handling of textareas splitted to two pages is just weird.
-(Is this still true with 0.5 CVS?)
+- Calling cfmakeraw() in kbd.c:setraw() breaks some exotic terminal
+  combinations.
 
-	Call to OS Shell doesn't release mouse handler.
+- Handling of textareas splitted to two pages is just weird.  (Is this still
+  true with 0.5 CVS?)
 
-	Spaces added by justification are not highlighted in links
-when those links are selected.
+- Call to OS Shell doesn't release mouse handler.
 
-	Searches match links' prefixes
-(when document.browse.links.numbering = 1).
+- Spaces added by justification are not highlighted in links when those links
+  are selected.
 
-	<li>foo</li><li></li><li>bar</li> displays the bullets for
-the second two <li>s on the same line.
+- Searches match links' prefixes (when document.browse.links.numbering = 1).
 
-	The newline displayed before a list is superfluous when that list
-is nested under another list.
+- <li>foo</li><li></li><li>bar</li> displays the bullets for the second two
+  <li>s on the same line.
 
-$Id: BUGS,v 1.40 2003/05/03 21:55:07 pasky Exp $
+- The newline displayed before a list is superfluous when that list is nested
+  under another list.
 
-vim: textwidth=80
+
+Key: - nothing done + work in progress * almost ready
+
+$Id: BUGS,v 1.41 2003/05/03 21:59:27 pasky Exp $

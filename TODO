@@ -1,145 +1,144 @@
 TODO list for ELinks (sorted approximatelly by priority):
 
-	Change msg_box to use printf-style formats
+- Change msg_box to use printf-style formats
 
-	Some rules for sane handling of texinfo documentation
+- Some rules for sane handling of texinfo documentation
 
-	Show all downloads in one window, kind of "download manager"
+- Show all downloads in one window, kind of "download manager"
 
-	Forward/backward history manager
+- Forward/backward history manager
 
-	<include ELusive TODO here ;>
+- <include ELusive TODO here ;>
 
-	Rewrite HTML parser
+- Rewrite HTML parser
 
-	CSS support
+- CSS support
 
-	Support for <xmp>
+- Support for <xmp>
 
-	Better support for vlink - we have to update already rendered document
+- Better support for vlink - we have to update already rendered document
 
-	Use terminfo instead of hardwired ANSI control sequences
+- Use terminfo instead of hardwired ANSI control sequences
 
-	Improve keybinding so that it works more universally
+- Improve keybinding so that it works more universally
 
-	Mouse buttonbinding ;)
+- Mouse buttonbinding ;)
 
-	Show certain information specified with <meta> and <link> tags in the
-Document Info box
+- Show certain information specified with <meta> and <link> tags in the
+  Document Info box
 
-	Display links to or with images with a distinct colour
+- Display links to or with images with a distinct colour
 
-	Kill-ring for edit-boxes
+- Kill-ring for edit-boxes
 
-	Support nested <sub>script tags. Maybe use parentheses to disambiguate
-superscript?
+- Support nested <sub>script tags. Maybe use parentheses to disambiguate
+  superscript?
 
-	Allow resizing of frames
+- Allow resizing of frames
 
-	Show selected link's title (which is specified by the title attribute)
-in the statusbar
+- Show selected link's title (which is specified by the title attribute) in the
+  statusbar
 
-	Support using the hardstatus line to display current page's title,
-URL, or whatever
+- Support using the hardstatus line to display current page's title, URL, or
+  whatever
 
-	Use the alternate screen (terminfo capabilities smcup and rmcup)
-in XTerms and GNU Screen
+- Use the alternate screen (terminfo capabilities smcup and rmcup) in XTerms
+  and GNU Screen
 
-	Allow multiple transfers to be queued up instead of cancelling
-the currently queued item when back is pressed
+- Allow multiple transfers to be queued up instead of cancelling the currently
+  queued item when back is pressed
 
-	Support prefixes for more bindings; candidates: goto-url-current-link,
-add-bookmark-link, back, unback, document-info, next-frame, previous-frame,
-tab-prev, tab-next, tab-close, zoom-frame
+- Support prefixes for more bindings; candidates: goto-url-current-link,
+  add-bookmark-link, back, unback, document-info, next-frame, previous-frame,
+  tab-prev, tab-next, tab-close, zoom-frame
 
-	Show any info that can be found in globhist for the selected link
-in the Info box
+- Show any info that can be found in globhist for the selected link in the Info
+  box
 
-	Optimize multiple _()s of the same strings by using temporary variables
+- Optimize multiple _()s of the same strings by using temporary variables
 
-	Allow the output from MIME handlers to be displayed in ELinks
+- Allow the output from MIME handlers to be displayed in ELinks
 
-	Add Lua APIs to manipulate bookmarks
+- Add Lua APIs to manipulate bookmarks
 
-	Reorganization of user interface
+- Reorganization of user interface
 
-	When calling external viewer on files, assign temporary files the
-suffix appropriate to the file type (?)
+- When calling external viewer on files, assign temporary files the suffix
+  appropriate to the file type (?)
 
-	Cookie manager
+- Cookie manager
 
-	HTTPS proxy support (!) (I have no idea how to do it so someone else
-will have to; good job for a wannabe ELinks developer ;)
+- HTTPS proxy support (!) (I have no idea how to do it so someone else will
+  have to; good job for a wannabe ELinks developer ;)
 
-	Take info about proxies from env variables (?)
+- Take info about proxies from env variables (?)
 
-	Passing URL to external command (possibly make alt+[0-9] to pass
-current link to external command (?)).
+- Passing URL to external command (possibly make alt+[0-9] to pass current link
+  to external command (?)).
 
-	Insert should toggle insert/overwrite mode.
+- Insert should toggle insert/overwrite mode.
 
-	Disk cache
+- Disk cache
 
-	Bandwidth limiter for file downloads.
+- Bandwidth limiter for file downloads.
 
-	Copy URL to X clipboard (using X selections).
+- Copy URL to X clipboard (using X selections).
 
 
 Bookmarks/listboxes:
 
-	Sessions: Bookmark the current page of each tab or window under
-a single folder.
+- Sessions: Bookmark the current page of each tab or window under a single
+  folder.
 
-	Complementary 'open all bookmarks in folder' or 'open all marked
-bookmarks' buttons in the bookmark mgr.
+- Complementary 'open all bookmarks in folder' or 'open all marked bookmarks'
+  buttons in the bookmark mgr.
 
-	Support for bookmarked-link colour in addition to visited-link
-colour
+- Support for bookmarked-link colour in addition to visited-link colour
 
-	'Search' in the bookmark mgr. should be able to search
-collapsed folders
+- 'Search' in the bookmark mgr. should be able to search collapsed folders
 
-	Expand or collapse recursively and expand or collapse all folders
-in hierarchical listboxes
+- Expand or collapse recursively and expand or collapse all folders in
+  hierarchical listboxes
 
-	Highlight marked listbox items instead of or in addition to putting
-asterisks next to them
+- Highlight marked listbox items instead of or in addition to putting asterisks
+  next to them
 
 
 Search improvements:
 
-	Alert user when he attempts to follow a broken link to a fragment
-on the current page
+- Alert user when he attempts to follow a broken link to a fragment on the
+  current page
 
-	Include search string in 'Search string not found' error box
+- Include search string in 'Search string not found' error box
 
-	Incremental-search
+- Incremental-search
 
-	Configurable highlight colour for text matched after a search
+- Configurable highlight colour for text matched after a search
 
 
 Permanent goals:
 
-	General code cleanup
+- General code cleanup
 
-	Write some more documentation.. docs, a lot of docs!
+- Write some more documentation.. docs, a lot of docs!
 
-	Speed optimizations
+- Speed optimizations
 
 
 These are more long-term goals:
 
-	EcmaScript (http://home.worldcom.ch/~jmlugrin/fesi/)
+- EcmaScript (http://home.worldcom.ch/~jmlugrin/fesi/)
 
-	Then, support for proxy autoconfiguration
-(http://www.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html).
+- Then, support for proxy autoconfiguration
+  (http://www.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html)
 
-	Graphics support
+- Graphics support
 
-	Possibility to use commandline-driven interface instead of BFU
-optionally.
+- Possibility to use commandline-driven interface instead of BFU optionally
 
-	Generalised scripting interface, possibly using SWIG
-(http://www.swig.org/)
+- Generalised scripting interface, possibly using SWIG (http://www.swig.org/)
 
-$Id: TODO,v 1.44 2003/05/03 21:54:20 pasky Exp $
+
+Key: - nothing done + work in progress * almost ready
+
+$Id: TODO,v 1.45 2003/05/03 21:59:27 pasky Exp $

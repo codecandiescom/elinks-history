@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.174 2004/12/27 10:26:43 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.175 2004/12/27 10:31:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,6 +137,8 @@ set_prop_astring(struct jsval_property *prop, unsigned char *string)
 	prop->type = JSPT_ASTRING;
 }
 
+#if 0 /* not used. */
+
 static void
 set_prop_int(struct jsval_property *prop, int number)
 {
@@ -145,7 +147,6 @@ set_prop_int(struct jsval_property *prop, int number)
 	prop->type = JSPT_INT;
 }
 
-#if 0 /* not yet used. */
 static void
 set_prop_double(struct jsval_property *prop, jsdouble floatnum)
 {
@@ -1426,9 +1427,6 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (JSVAL_IS_STRING(id)) {
 		forms_namedItem(ctx, obj, 1, &id, vp);
@@ -1447,16 +1445,15 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		foreach (form, document->forms)
 			counter++;
 
-		set_prop_int(&prop, counter);
+		int_to_jsval(ctx, vp, counter);
 		break;
 	}
 	default:
 		/* Array index. */
 		forms_item(ctx, obj, 1, &id, vp);
-		return JS_TRUE;
+		break;
 	}
 
-	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
 
@@ -1469,9 +1466,6 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct form_view *fv;
 	int counter = -1;
 	int index;
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (argc != 1)
 		return JS_TRUE;
@@ -1481,10 +1475,8 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	foreach (fv, vs->forms) {
 		counter++;
 		if (counter == index) {
-			set_prop_object(&prop, get_form_object(ctx, parent_doc, fv));
-
-			value_to_jsval(ctx, rval, &prop);
-			return JS_TRUE;
+			object_to_jsval(ctx, rval, get_form_object(ctx, parent_doc, fv));
+			break;
 		}
 	}
 
@@ -1501,9 +1493,6 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 	struct document *document = doc_view->document;
 	struct form *form;
 	unsigned char *string;
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (argc != 1)
 		return JS_TRUE;
@@ -1514,11 +1503,9 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 
 	foreach (form, document->forms) {
 		if (form->name && !strcasecmp(string, form->name)) {
-			set_prop_object(&prop, get_form_object(ctx, parent_doc,
+			object_to_jsval(ctx, rval, get_form_object(ctx, parent_doc,
 					find_form_view(doc_view, form)));
-
-			value_to_jsval(ctx, rval, &prop);
-			return JS_TRUE;
+			break;
 		}
 	}
 

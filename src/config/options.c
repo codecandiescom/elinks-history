@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.256 2003/07/26 08:04:34 pasky Exp $ */
+/* $Id: options.c,v 1.257 2003/07/28 05:54:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -726,7 +726,8 @@ print_short_help()
 {
 #define ALIGN_WIDTH 20
 	struct option *option;
-	struct string saved = NULL_STRING;
+	struct string string = NULL_STRING;
+	struct string *saved = NULL;
 	unsigned char align[ALIGN_WIDTH];
 
 	/* Initialize @space used to align captions. */
@@ -736,18 +737,22 @@ print_short_help()
 	foreach (option, *((struct list_head *) cmdline_options->ptr)) {
 		unsigned char *capt;
 		unsigned char *help;
+		unsigned char *info = saved ? saved->source
+					    : (unsigned char *) "";
 		int len = strlen(option->name);
 
 		/* When no caption is available the option name is 'stacked'
 		 * and the caption is shared with next options that has one. */
 		if (!option->capt) {
-			if (!saved.length && !init_string(&saved)) {
-				saved.source = "";
-				continue;
+			if (!saved) {
+				if (!init_string(&string))
+					continue;
+
+				saved = &string;
 			}
 
-			add_to_string(&saved, option->name);
-			add_to_string(&saved, ", -");
+			add_to_string(saved, option->name);
+			add_to_string(saved, ", -");
 			continue;
 		}
 
@@ -755,16 +760,16 @@ print_short_help()
 		help = gettext_nonempty(option_types[option->type].help_str);
 
 		/* When @help string is non empty align at least one space. */
-		len = ALIGN_WIDTH - len - strlen(help) - saved.length;
+		len = ALIGN_WIDTH - len - strlen(help);
+		len -= (saved ? saved->length : 0);
 		len = (len < 0) ? !!(*help) : len;
 
 		align[len] = '\0';
-		printf("  -%s%s %s%s%s\n", saved.source, option->name, help, align, capt);
+		printf("  -%s%s %s%s%s\n", info, option->name, help, align, capt);
 		align[len] = ' ';
-		if (saved.length) {
-			done_string(&saved);
-			saved.source = "";
-			saved.length = 0;
+		if (saved) {
+			done_string(saved);
+			saved = NULL;
 		}
 	}
 #undef ALIGN_WIDTH

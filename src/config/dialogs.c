@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.64 2003/07/17 08:56:30 zas Exp $ */
+/* $Id: dialogs.c,v 1.65 2003/07/21 05:49:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,21 +108,20 @@ push_info_button(struct dialog_data *dlg,
 	option = box->sel->udata;
 
 	if (option_types[option->type].write) {
-		unsigned char *value = init_str();
-		int val_len = 0;
+		struct string value;
+		
+		if (!init_string(&value)) return 0;
 
-		if (!value) return 0;
+		option_types[option->type].write(option, &value);
 
-		option_types[option->type].write(option, &value, &val_len);
-
-		msg_box(term, getml(value, NULL), MSGBOX_FREE_TEXT,
+		msg_box(term, getml(value.source, NULL), MSGBOX_FREE_TEXT,
 			N_("Info"), AL_LEFT,
 			msg_text(term, N_("Name: %s\n"
 				"Type: %s\n"
 				"Value: %s\n\n"
 				"Description:\n%s"),
 				option->name, option_types[option->type].name,
-				value, _(option->desc ? option->desc
+				value.source, _(option->desc ? option->desc
 						      : (unsigned char *) "N/A",
 					 term)),
 			option, 1,
@@ -285,13 +284,12 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 #define EDIT_DIALOG_FIELDS_NB 3
 	struct dialog *d;
 	unsigned char *value;
-	unsigned char *tvalue = init_str();
-	int tval_len = 0;
+	struct string tvalue;
 
-	if (!tvalue) return;
+	if (!init_string(&tvalue)) return;
 
 	commandline = 1;
-	option_types[option->type].write(option, &tvalue, &tval_len);
+	option_types[option->type].write(option, &tvalue);
 	commandline = 0;
 
 	/* Create the dialog */
@@ -300,7 +298,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 			    * sizeof(struct widget)
 			  + MAX_STR_LEN);
 	if (!d) {
-		mem_free(tvalue);
+		done_string(&tvalue);
 		return;
 	}
 
@@ -310,8 +308,8 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	d->udata2 = ses;
 
 	value = (unsigned char *) &d->items[EDIT_DIALOG_FIELDS_NB + 1];
-	safe_strncpy(value, tvalue, MAX_STR_LEN);
-	mem_free(tvalue);
+	safe_strncpy(value, tvalue.source, MAX_STR_LEN);
+	done_string(&tvalue);
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
 	d->items[0].type = D_FIELD;

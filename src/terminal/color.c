@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.75 2004/06/18 04:52:40 jonas Exp $ */
+/* $Id: color.c,v 1.76 2004/06/18 14:00:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,7 +307,11 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		/* TODO: Maybe also do something to honour the
 		 * allow_dark_on_black option. --jonas */
 		if (bg == fg && (flags & COLOR_ENSURE_CONTRAST)) {
-			fg = (bg == 0) ? 15 : 0;
+			if (flags & COLOR_ENSURE_INVERTED_CONTRAST) {
+				bg = (fg == 0) ? 15 : 0;
+			} else {
+				fg = (bg == 0) ? 15 : 0;
+			}
 		}
 
 		TERM_COLOR_FOREGROUND(schar->color) = fg;

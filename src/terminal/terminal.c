@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.54 2004/01/01 15:38:12 pasky Exp $ */
+/* $Id: terminal.c,v 1.55 2004/01/03 23:43:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,21 +87,6 @@ redraw_terminal_ev(struct terminal *term, int e)
 
 	term->redrawing = 0;
 }
-
-#if 0
-/* These are macros - see terminal.h */
-void
-redraw_terminal(struct terminal *term)
-{
-	redraw_terminal_ev(term, EV_REDRAW);
-}
-
-void
-redraw_terminal_all(struct terminal *term)
-{
-	redraw_terminal_ev(term, EV_RESIZE);
-}
-#endif
 
 void
 redraw_terminal_cls(struct terminal *term)

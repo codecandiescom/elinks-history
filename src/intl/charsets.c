@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.89 2004/06/25 10:52:30 zas Exp $ */
+/* $Id: charsets.c,v 1.90 2004/07/01 12:13:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 
 #include "document/options.h"
 #include "intl/charsets.h"
+#include "intl/codepage.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/fastfind.h"

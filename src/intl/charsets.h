@@ -1,9 +1,8 @@
-/* $Id: charsets.h,v 1.18 2004/07/01 11:41:52 jonas Exp $ */
+/* $Id: charsets.h,v 1.19 2004/07/01 12:13:22 jonas Exp $ */
 
 #ifndef EL__INTL_CHARSETS_H
 #define EL__INTL_CHARSETS_H
 
-#include "intl/codepage.h"
 #include "util/types.h"
 
 typedef uint32_t unicode_val;

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.81 2004/07/04 16:43:53 jonas Exp $ */
+/* $Id: kbd.c,v 1.82 2004/07/05 02:54:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,8 +158,8 @@ kbd_ctrl_c(void)
 {
 	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_CTRL_C, 0, 0);
 
-	if (ditrm)
-		queue_event(ditrm, (unsigned char *) &ev, sizeof(struct term_event));
+	if (!ditrm) return;
+	queue_event(ditrm, (unsigned char *) &ev, sizeof(struct term_event));
 }
 
 #define write_sequence(fd, seq) \

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.22 2003/10/16 13:08:39 zas Exp $ */
+/* $Id: leds.c,v 1.23 2003/10/26 14:30:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "config/options.h"
 #include "lowlevel/select.h"
 #include "lowlevel/timer.h"
+#include "modules/module.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
@@ -51,7 +52,7 @@ static int drawing = 0;
 static void redraw_leds(void *);
 
 void
-init_leds(void)
+init_leds(struct module *module)
 {
 	int i;
 
@@ -70,7 +71,7 @@ init_leds(void)
 }
 
 void
-done_leds(void)
+done_leds(struct module *module)
 {
 	if (redraw_timer >= 0) kill_timer(redraw_timer);
 }
@@ -187,5 +188,15 @@ unregister_led(struct led *led)
 	led->__used = 0;
 	led->value = '-';
 }
+
+struct module leds_module = struct_module(
+	/* name: */		"leds",
+	/* options: */		NULL,
+	/* events: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		init_leds,
+	/* done: */		done_leds
+);
 
 #endif

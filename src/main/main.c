@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.136 2003/10/26 13:46:14 jonas Exp $ */
+/* $Id: main.c,v 1.137 2003/10/26 14:30:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,9 +166,6 @@ init(void)
 
 	init_b = 1;
 	init_modules();
-#ifdef USE_LEDS
-	init_leds();
-#endif
 	init_timer();
 #ifdef GLOBHIST
 	init_global_history();
@@ -261,9 +258,6 @@ terminate_all_subsystems(void)
 	free_strerror_buf();
 #ifdef FORMS_MEMORY
 	done_form_history();
-#endif
-#ifdef USE_LEDS
-	done_leds();
 #endif
 	done_screen_drivers();
 	done_bfu_colors();

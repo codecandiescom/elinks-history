@@ -1,8 +1,9 @@
-/* $Id: leds.h,v 1.8 2003/08/30 00:27:48 jonas Exp $ */
+/* $Id: leds.h,v 1.9 2003/10/26 14:30:51 jonas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
 
+#include "modules/module.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
 
@@ -30,8 +31,8 @@ struct led {
 	int __used;
 };
 
-void init_leds(void);
-void done_leds(void);
+extern struct module leds_module;
+
 void draw_leds(struct terminal *);
 
 struct led *register_led(int);

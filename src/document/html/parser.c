@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.504 2004/10/11 18:14:56 pasky Exp $ */
+/* $Id: parser.c,v 1.505 2004/10/12 07:52:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,8 +429,7 @@ not_processed:
 
 	/* XXX: Do any non-javascript scripts use the language attribute? */
 
-	src = get_attr_val(a, "src");
-	if (part->document && src) {
+	if (part->document && (src = get_attr_val(a, "src"))) {
 		/* External reference. */
 
 		unsigned char *import_url;

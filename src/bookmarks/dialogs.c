@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.176 2004/07/18 13:33:57 pasky Exp $ */
+/* $Id: dialogs.c,v 1.177 2004/07/20 19:01:15 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -195,6 +195,23 @@ push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 }
 
 
+static void
+add_bookmark_after_selected(struct bookmark *bookmark, struct bookmark *selected)
+{
+	if (selected == bookmark->root
+	    || !selected
+	    || !selected->box_item
+	    || !bookmark->box_item)
+		return;
+
+	del_from_list(bookmark->box_item);
+	del_from_list(bookmark);
+
+	add_at_pos(selected, bookmark);
+	add_at_pos(selected->box_item, bookmark->box_item);
+}
+
+
 /**** ADD FOLDER *****************************************************/
 
 static void
@@ -217,9 +234,10 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 	struct widget_data *widget_data = dlg_data->widgets_data;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct bookmark *bm = NULL;
+	struct bookmark *selected = NULL;
 
 	if (box->sel) {
-		struct bookmark *selected = box->sel->udata;
+		selected = box->sel ? box->sel->udata : NULL;
 
 		if (box->sel->type == BI_FOLDER && box->sel->expanded) {
 			bm = selected;
@@ -230,6 +248,8 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 
 	bm = add_bookmark(bm, 1, name, NULL);
 	if (!bm) return;
+
+	add_bookmark_after_selected(bm, selected);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -471,6 +491,7 @@ bookmark_add_add(struct dialog *dlg)
 	struct widget_data *widget_data = NULL; /* silence stupid gcc */
 	struct listbox_data *box = NULL;
 	struct bookmark *bm = NULL;
+	struct bookmark *selected = NULL;
 
 	if (dlg->udata) {
 		struct dialog_data *dlg_data = (struct dialog_data *) dlg->udata;
@@ -479,7 +500,7 @@ bookmark_add_add(struct dialog *dlg)
 		box = get_dlg_listbox_data(dlg_data);
 
 		if (box->sel) {
-			struct bookmark *selected = box->sel->udata;
+			selected = box->sel->udata;
 
 			if (box->sel->type == BI_FOLDER) {
 				bm = selected;
@@ -491,6 +512,8 @@ bookmark_add_add(struct dialog *dlg)
 
 	bm = add_bookmark(bm, 1, dlg->widgets[0].data, dlg->widgets[1].data);
 	if (!bm) return;
+
+	add_bookmark_after_selected(bm, selected);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();

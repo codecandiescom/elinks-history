@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.291 2004/06/29 10:43:43 jonas Exp $ */
+/* $Id: tables.c,v 1.292 2004/06/29 10:56:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -656,6 +656,32 @@ end:
 }
 #endif
 
+static inline void
+check_table_height(struct table *table, struct table_frames *frames, int y)
+{
+#ifndef CONFIG_FASTMEM
+	/* XXX: Cannot we simply use the @yp value we just calculated
+	 * in draw_table_cells()? --pasky */
+	int old_height = table->real_height + table->part->cy;
+	int our_height = frames->top + y + frames->bottom;
+	int row;
+
+	/* XXX: We cannot use get_table_real_height() because we are
+	 * looking one row ahead - which is completely arcane to me.
+	 * It makes a difference only when a table uses ruler="groups"
+	 * and has non-zero cellspacing or vcellpadding. --pasky */
+
+	for (row = 0; row < table->rows; row++) {
+		our_height += table->rows_heights[row] +
+		              (row < table->rows - 1 &&
+		               get_hline_width(table, row + 1) >= 0);
+	}
+
+	assertm(old_height == our_height, "size not matching! %d vs %d",
+		old_height, our_height);
+#endif
+}
+
 static int
 get_table_real_height(struct table *table)
 {
@@ -852,29 +878,8 @@ draw_table_cells(struct table *table, int x, int y)
 		}
 	}
 
-#ifndef CONFIG_FASTMEM
-	/* This is just a big sanity check */
-	{
-		/* XXX: Cannot we simply use the @yp value we just calculated
-		 * above? --pasky */
-		int old_height = table->real_height + table->part->cy;
-		int our_height = table_frames.top + y + table_frames.bottom;
-
-		/* XXX: We cannot use get_table_real_height() because we are
-		 * looking one row ahead - which is completely arcane to me.
-		 * It makes a difference only when a table uses ruler="groups"
-		 * and has non-zero cellspacing or vcellpadding. --pasky */
-
-		for (row = 0; row < table->rows; row++) {
-			our_height += table->rows_heights[row] +
-			              (row < table->rows - 1 &&
-			               get_hline_width(table, row + 1) >= 0);
-		}
-
-		assertm(old_height == our_height, "size not matching! %d vs %d",
-			old_height, our_height);
-	}
-#endif
+	/* Do a sanity check whether the height is correct */
+	check_table_height(table, &table_frames, y);
 }
 
 

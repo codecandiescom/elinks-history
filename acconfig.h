@@ -85,9 +85,6 @@
 /* (you will still need some support from the libc) */
 #undef BACKTRACE
 
-/* Define to 1 if we should support mouse */
-#undef USE_MOUSE
-
 /* Define to 1 to reduce binary size as far as possible. */
 #undef ELINKS_SMALL
 

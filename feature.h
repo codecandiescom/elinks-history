@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.14 2004/01/01 02:53:00 pasky Exp $ */
+/* $Id: feature.h,v 1.15 2004/01/01 03:09:13 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -275,6 +275,21 @@
  * Default: enabled */
 
 #define FORMS_MEMORY
+
+
+/*** Mouse Support
+ *
+ * ELinks may be controlled not only by keyboard, but also by mouse to quite
+ * a some extent. You can select links, menu items, scroll document, click at
+ * buttons etc, and it should hopefully work. ELinks supports mouse control by
+ * GPM, xterm mouse reporting and TWAIN's twterm mouse reporting.
+ *
+ * It is generally nice convience and doesn't cost too much. However, you can
+ * do everything with keyboard as you can with mouse.
+ *
+ * Default: enabled */
+
+#define USE_MOUSE
 
 
 #endif

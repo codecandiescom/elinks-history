@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.34 2002/07/11 21:12:14 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.35 2002/08/08 20:46:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,21 +23,13 @@
 #define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 
 
-struct keybinding {
-	struct keybinding *next;
-	struct keybinding *prev;
-	enum keyact action;
-	long key;
-	long meta;
-	int func_ref;
-	int watermark;
-};
-
 static struct list_head keymaps[KM_MAX];
 
 static void add_default_keybindings();
 
 static void delete_keybinding(enum keymap, long, long);
+
+static int read_action(unsigned char *);
 
 
 static void
@@ -99,8 +91,19 @@ free_keymaps()
 }
 
 
-static struct keybinding *
-kbd_lookup(enum keymap kmap, long key, long meta, int *func_ref)
+int
+kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
+{
+	struct keybinding *kb;
+
+	if (ev->ev != EV_KBD) return -1;
+
+	kb = kbd_ev_lookup(kmap, ev->x, ev->y, func_ref);
+	return kb ? kb->action : -1;
+}
+
+struct keybinding *
+kbd_ev_lookup(enum keymap kmap, long key, long meta, int *func_ref)
 {
 	struct keybinding *kb;
 
@@ -117,17 +120,26 @@ kbd_lookup(enum keymap kmap, long key, long meta, int *func_ref)
 	return NULL;
 }
 
-int
-kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
+struct keybinding *
+kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 {
 	struct keybinding *kb;
+	enum keyact act = read_action(name);
 
-	if (ev->ev != EV_KBD) return -1;
+	if (act < 0) return NULL;
 
-	kb = kbd_lookup(kmap, ev->x, ev->y, func_ref);
-	return kb ? kb->action : -1;
+	foreach(kb, keymaps[kmap]) {
+		if (act != kb->action)
+			continue;
+
+		if (kb->action == ACT_LUA_FUNCTION && func_ref)
+			*func_ref = kb->func_ref;
+
+		return kb;
+	}
+
+	return NULL;
 }
-
 
 /*
  * Config file helpers.
@@ -342,7 +354,6 @@ static struct strtonum action_table[] = {
 static int
 read_action(unsigned char *action)
 {
-
 	return strtonum(action_table, action);
 }
 
@@ -395,7 +406,7 @@ fail:
 
 	if (parse_keystroke(keystroke, &key_, &meta_) < 0) goto fail;
 
-	kb = kbd_lookup(keymap_, key_, meta_, NULL);
+	kb = kbd_ev_lookup(keymap_, key_, meta_, NULL);
 	if (!kb) goto fail;
 
 	action = write_action(kb->action);

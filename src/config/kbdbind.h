@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.21 2002/07/11 21:12:14 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.22 2002/08/08 20:46:53 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -82,11 +82,25 @@ enum keyact {
 	ACT_ZOOM_FRAME
 };
 
+struct keybinding {
+	struct keybinding *next;
+	struct keybinding *prev;
+	enum keyact action;
+	long key;
+	long meta;
+	int func_ref;
+	int watermark;
+};
+
+
 void init_keymaps();
 void free_keymaps();
 
 long read_key(unsigned char *);
+
 int kbd_action(enum keymap, struct event *, int *);
+struct keybinding *kbd_ev_lookup(enum keymap, long, long, int *);
+struct keybinding *kbd_nm_lookup(enum keymap, unsigned char *, int *);
 
 int bind_do(unsigned char *, unsigned char *, unsigned char *);
 void bind_act(unsigned char **, int *, unsigned char *, unsigned char *);

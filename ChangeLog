@@ -1,3 +1,168 @@
+Sat Jul 26 21:20:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre4 
+
+Sat Jul 26 21:17:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Sat Jul 26 21:13:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation minor fixes.  
+
+Sat Jul 26 21:12:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation updated.  
+
+Sat Jul 26 20:34:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/version.c:
+
+	Added info about Guile existence to the version string.  
+
+Sat Jul 26 20:33:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	My regexps weren't smart enough. uri.string -> uri.protocol_str, the
+	(hopefully) final bit.  
+
+Sat Jul 26 20:30:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: uri.c, uri.h, user.c:
+
+	uri.string -> uri.protocol_str 
+
+Sat Jul 26 11:26:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/event.c:
+
+	Some redundant tests were removed, minor optimization and cleanup.  
+
+Sat Jul 26 11:16:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/event.c:
+
+	Minor optimization by increasing code redundancy a bit, we prevent a
+	test with constant result to be done in a loop.  
+
+Sat Jul 26 10:58:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/event.c:
+
+	int -> register unsigned int for mask and cov, it seems safer.  
+
+Sat Jul 26 10:55:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/event.c:
+
+	Minor hack to prevent double calls to get_opt_bool_tree() in some
+	cases.  
+
+Sat Jul 26 10:39:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/event.c:
+
+	Be a nice code and assertm() instead of if+internal() in
+	term_send_event(). Added recovery failure path.  
+
+Sat Jul 26 10:20:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/event.c:
+
+	Minor rewrite and assertions added in term_send_event().  
+
+Sat Jul 26 10:01:24 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	pl.po was fixed (please review). fr.po was updated. .po files were
+	resynced.  
+
+Sat Jul 26 08:06:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/pl.po:
+
+	Polish translation update, patch by witekfl.  
+
+Sat Jul 26 08:04:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	build-in -> built-in, idea by witekfl.  
+
+Sat Jul 26 02:14:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Rename: mode -> prev_mode, attrib -> prev_attrib, A -> attrib, B ->
+	mode in print_char().  
+
+Sat Jul 26 01:36:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Hardcode the first indexes in add_cursor_mode_to_string() for speed.  
+
+Sat Jul 26 01:10:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Try to optimize attribute updating in print_char() by doing a little
+	extra copying but only one string adding.  
+
+Sat Jul 26 00:39:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Trim the number of args to print_char() plus use variables instead
+	of macro.  
+
+Sat Jul 26 00:12:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Inline add_cursor_move_to_string() by order of pasky! 
+
+Sat Jul 26 00:06:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Introduce add_cursor_move_to_string().  
+
+Fri Jul 25 22:58:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Format print_char() to look more homogenous and give the code room
+	to breathe.  
+
+Fri Jul 25 22:39:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Small optimization to only set charset if it is used (utf8).  
+
+Fri Jul 25 22:18:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Simplify alloc_screen().  
+
 Fri Jul 25 22:04:01 2003  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/http/http.c:

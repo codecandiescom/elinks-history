@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.2 2003/08/25 02:44:56 jonas Exp $ */
+/* $Id: color.h,v 1.3 2003/08/31 12:48:36 jonas Exp $ */
 
 #ifndef EL__UTIL_COLOR_H
 #define EL__UTIL_COLOR_H
@@ -7,16 +7,29 @@
 
 typedef uint32_t color_t;
 
+#define ALPHA_COLOR_MASK	0xFF000000
+#define RED_COLOR_MASK		0x00FF0000
+#define GREEN_COLOR_MASK	0x0000FF00
+#define BLUE_COLOR_MASK		0x000000FF
+
+#define RED_COLOR(color)	(((color) & RED_COLOR_MASK)   >> 16)
+#define GREEN_COLOR(color)	(((color) & GREEN_COLOR_MASK) >>  8)
+#define BLUE_COLOR(color)	(((color) & BLUE_COLOR_MASK)  >>  0)
+
 struct rgb {
 	unsigned char r, g, b;
 	unsigned char pad;
 };
 
+/* Initialize a rgb strubt from a color_t */
+#define INIT_RGB(color) \
+	{ RED_COLOR(color), GREEN_COLOR(color), BLUE_COLOR(color) }
+
 #define INT2RGB(color, rgb) \
 	do { \
-		(rgb).r = ((color) >> 16) & 0xFF; \
-		(rgb).g = ((color) >>  8) & 0xFF; \
-		(rgb).b = ((color) >>  0) & 0xFF; \
+		(rgb).r = RED_COLOR(color); \
+		(rgb).g = GREEN_COLOR(color); \
+		(rgb).b = BLUE_COLOR(color); \
 	} while (0)
 
 struct color_pair {

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.85 2004/01/22 21:14:30 pasky Exp $ */
+/* $Id: scanner.c,v 1.86 2004/01/22 21:26:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,6 +439,7 @@ struct scan_table_info {
 	int bits;
 };
 
+/* FIXME: We assume that sizeof(void *) == sizeof(int) here! --pasky */
 #define SCAN_TABLE_INFO(type, data1, data2, bits) \
 	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
 

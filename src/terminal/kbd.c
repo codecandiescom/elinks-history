@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.16 2003/06/08 22:11:48 pasky Exp $ */
+/* $Id: kbd.c,v 1.17 2003/07/22 02:54:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -476,8 +476,8 @@ dispatch_special(unsigned char *text)
 static void
 in_sock(struct itrm *itrm)
 {
-	unsigned char *path, *delete;
-	int pl, dl;
+	struct string path;
+	struct string delete;
 	char ch;
 	int fg;
 	int c, i, p;
@@ -517,50 +517,46 @@ ex:
 	RD(fg);
 
 	/* FIXME: goto fr on error ?? */
-	path = init_str();
-	if (!path) goto fr;
-	delete = init_str();
-	if (!delete) {
-		mem_free(path);
+	if (!init_string(&path)) goto fr;
+	if (!init_string(&delete)) {
+		done_string(&path);
 		goto fr;
 	}
 
-	pl = 0;
 	while (1) {
 		RD(ch);
 		if (!ch) break;
-		add_chr_to_str(&path, &pl, ch);
+		add_char_to_string(&path, ch);
 	}
 
-	dl = 0;
 	while (1) {
 		RD(ch);
 		if (!ch) break;
-		add_chr_to_str(&delete, &dl, ch);
+		add_char_to_string(&delete, ch);
 	}
 
-	if (!*path) {
-		dispatch_special(delete);
+	if (!*path.source) {
+		dispatch_special(delete.source);
 	} else {
 		int blockh;
 		unsigned char *param;
 		int path_len, del_len, param_len;
 
 		if (is_blocked() && fg) {
-			if (*delete) unlink(delete);
+			if (*delete.source) unlink(delete.source);
 			goto nasty_thing;
 		}
 
-		path_len = strlen(path);
-		del_len = strlen(delete);
+		path_len = path.length;
+		del_len = delete.length;
 		param_len = path_len + del_len + 3;
 
 		param = mem_alloc(param_len);
 		if (!param) goto nasty_thing;
 
 		param[0] = fg;
-		memcpy(param + 1, path, path_len + 1);
-		memcpy(param + 1 + path_len + 1, delete, del_len + 1);
+		memcpy(param + 1, path.source, path_len + 1);
+		memcpy(param + 1 + path_len + 1, delete.source, del_len + 1);
 
 		if (fg == 1) block_itrm(itrm->ctl_in);
 
@@ -587,8 +583,8 @@ ex:
 	}
 
 nasty_thing:
-	mem_free(path);
-	mem_free(delete);
+	done_string(&path);
+	done_string(&delete);
 	memmove(buf, buf + p, OUT_BUF_SIZE - p);
 	c -= p;
 

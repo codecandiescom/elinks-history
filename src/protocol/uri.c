@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.121 2004/04/04 06:12:05 jonas Exp $ */
+/* $Id: uri.c,v 1.122 2004/04/04 06:15:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -615,6 +615,7 @@ prx:
 	return n;
 }
 
+
 static unsigned char *
 translate_url(unsigned char *url, unsigned char *cwd)
 {
@@ -786,24 +787,7 @@ end:
 	return NULL;
 }
 
-struct uri *
-get_translated_uri(unsigned char *uristring, unsigned char *cwd,
-		   unsigned char **fragment)
-{
-	struct uri *uri;
-
-	uristring = cwd ? translate_url(uristring, cwd) : stracpy(uristring);
-	if (!uristring) return NULL;
-
-	if (fragment) *fragment = extract_fragment(uristring);
-	uri = get_uri(uristring, -1);
-	mem_free(uristring);
-	if (!uri && fragment && *fragment) mem_free(*fragment), *fragment = NULL;
-
-	return uri;
-}
-
-unsigned char *
+static inline unsigned char *
 extract_fragment(unsigned char *uri)
 {
 	unsigned char *fragment, *frag_start, *post_start;
@@ -831,6 +815,24 @@ extract_fragment(unsigned char *uri)
 
 	return fragment;
 }
+
+struct uri *
+get_translated_uri(unsigned char *uristring, unsigned char *cwd,
+		   unsigned char **fragment)
+{
+	struct uri *uri;
+
+	uristring = cwd ? translate_url(uristring, cwd) : stracpy(uristring);
+	if (!uristring) return NULL;
+
+	if (fragment) *fragment = extract_fragment(uristring);
+	uri = get_uri(uristring, -1);
+	mem_free(uristring);
+	if (!uri && fragment && *fragment) mem_free(*fragment), *fragment = NULL;
+
+	return uri;
+}
+
 
 struct string *
 add_uri_filename_to_string(struct string *string, struct uri *uri)

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.89 2003/10/25 19:48:40 pasky Exp $ */
+/* $Id: options.h,v 1.90 2003/10/26 19:18:17 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -281,12 +281,6 @@ extern void unregister_options(struct option_info info[], struct option *tree);
 
 
 /* TODO: We need to do *something* with this ;). */
-
-enum cookies_accept {
-	COOKIES_ACCEPT_NONE,
-	COOKIES_ACCEPT_ASK,
-	COOKIES_ACCEPT_ALL
-};
 
 enum referer {
 	REFERER_NONE,

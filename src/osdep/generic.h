@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.18 2004/07/29 09:43:10 jonas Exp $ */
+/* $Id: generic.h,v 1.19 2004/08/21 15:16:47 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -13,7 +13,9 @@
 #include <sys/signal.h> /* may contain SA_RESTART */
 #endif
 
+#ifdef HAVE_STDDEF_H
 #include <stddef.h> /* may contain offsetof() */
+#endif
 
 #ifndef INT_MAX
 #ifdef MAXINT

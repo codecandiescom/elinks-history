@@ -130,6 +130,10 @@ int parse_url(unsigned char *url, int *prlen,
 	}
 	
 #ifdef IPV6
+	/* [address] is permitted only inside hostname part. */
+	if (prefix_end + strcspn(prefix_end, "/") < rbracket)
+		lbracket = rbracket = NULL;
+	
 	if (lbracket && rbracket)
 		host_end = rbracket + strcspn(rbracket, ":/");
 	else
@@ -169,6 +173,7 @@ int parse_url(unsigned char *url, int *prlen,
 		if (polen) *polen = port_end - host_end - 1;
 		
 		/* test if port is number */
+		/* TODO: possibly lookup for the service otherwise? --pasky */
 		for (idx = 1; idx < port_end - host_end; idx++)
 			if (host_end[idx] < '0' || host_end[idx] > '9')
 				return -1;

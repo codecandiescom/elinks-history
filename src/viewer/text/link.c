@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.165 2004/05/14 00:18:41 jonas Exp $ */
+/* $Id: link.c,v 1.166 2004/05/14 10:12:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -693,8 +693,8 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 	}
 
 	/* Is there a link under mouse cursor ? */
-	mouse_x = ev->x + doc_view->vs->x;
-	mouse_y = ev->y + doc_view->vs->y;
+	mouse_x = ev->x - doc_view->box.x + doc_view->vs->x;
+	mouse_y = ev->y - doc_view->box.y + doc_view->vs->y;
 
 	for (link = l1; link <= l2; link++) {
 		for (i = 0; i < link->n; i++)

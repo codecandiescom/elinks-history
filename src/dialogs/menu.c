@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.202 2003/11/26 11:34:52 miciah Exp $ */
+/* $Id: menu.c,v 1.203 2003/11/26 14:10:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,6 +304,7 @@ static struct menu_item tools_menu[] = {
 #ifdef FORMS_MEMORY
 	INIT_MENU_ITEM(N_("~Form history"), "", menu_formhist_manager, NULL, 0),
 #endif
+	NULL_MENU_ITEM
 };
 
 static struct menu_item file_menu21[] = {

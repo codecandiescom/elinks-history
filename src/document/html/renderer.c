@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.104 2003/06/16 14:40:03 pasky Exp $ */
+/* $Id: renderer.c,v 1.105 2003/06/16 14:45:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,8 +384,75 @@ del_chars(struct part *part, int x, int y)
 }
 
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
+/* FIXME: Understand it and comment it ...
+ * Previous code was kept in #if 0/#endif, see below. */
+static int
+split_line(struct part *part)
+{
+	register int i; /* What is i ? */
+	register int tmp;
 
-/*  */
+	for (i = overlap(par_format); i >= par_format.leftmargin; i--)
+		if (i < part->spaces_len && part->spaces[i])
+			goto split;
+
+	for (i = par_format.leftmargin; i < part->cx ; i++)
+		if (i < part->spaces_len && part->spaces[i])
+			goto split;
+
+	tmp = part->cx + par_format.rightmargin;
+	if (tmp > part->x)
+		part->x = tmp;
+
+	return 0; /* XXX: What does this mean ? */
+
+split:
+	tmp = i + par_format.rightmargin;
+	if (tmp > part->x)
+		part->x = tmp;
+
+	if (part->data) {
+#ifdef DEBUG
+		if ((POS(i, part->cy) & 0xff) != ' ')
+			internal("bad split: %c", (char)POS(i, part->cy));
+#endif
+		move_chars(part, i + 1, part->cy, par_format.leftmargin, part->cy + 1);
+		del_chars(part, i, part->cy);
+	}
+
+	i++; /* Since we were using (i + 1) only later... */
+
+	tmp = part->spaces_len - i;
+	if (tmp > 0) /* 0 is possible and i'm paranoiac ... --Zas */
+		memmove(part->spaces, part->spaces + i, tmp);
+
+	/* XXX: is this correct ??? tmp <= 0 case ? --Zas */
+	memset(part->spaces + tmp, 0, i);
+
+	tmp = part->spaces_len - par_format.leftmargin;
+	if (tmp > 0)
+		memmove(part->spaces + par_format.leftmargin, part->spaces, tmp);
+	else	/* Should not occcur. --Zas */
+		internal("part->spl - par_format.leftmargin == %d", tmp);
+
+	/* Following should be equivalent to old code (see below)
+	 * please verify and simplify if possible. */
+	part->cy++;
+
+	if (part->cx == i) {
+		part->cx = -1;
+		if (part->y < part->cy) part->y = part->cy;
+		return 2; /* XXX: mean ? */
+	} else {
+		part->cx -= i - par_format.leftmargin;
+		if (part->y < part->cy + 1) part->y = part->cy + 1;
+		return 1; /* XXX: mean ? */
+
+	}
+}
+
+
+#if 0
 /* TODO: optimization and verification needed there. --Zas */
 static int
 split_line(struct part *part)
@@ -472,6 +539,7 @@ split:
 
 	return 1 + (part->cx == -1);
 }
+#endif
 
 /* This function is very rare exemplary of clean and beautyful code here.
  * Please handle with care. --pasky */

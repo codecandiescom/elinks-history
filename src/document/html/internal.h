@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.3 2004/04/23 23:23:10 pasky Exp $ */
+/* $Id: internal.h,v 1.4 2004/04/24 00:03:58 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -14,5 +14,7 @@ extern struct list_head html_stack;
 
 extern void *ff;
 extern void (*line_break_f)(void *);
+
+void ln_break(int n, void (*line_break)(void *), void *f);
 
 #endif

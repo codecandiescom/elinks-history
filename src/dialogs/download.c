@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.12 2003/11/29 20:55:05 jonas Exp $ */
+/* $Id: download.c,v 1.13 2003/11/29 21:37:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,26 +110,32 @@ download_progress_bar(struct terminal *term,
 {
 	/* FIXME: not yet perfect, pasky will improve it later. --Zas */
 	/* Note : values > 100% are theorically possible and were seen. */
-	unsigned char percent[] = "XXXX%"; /* Reduce or enlarge at will. */
-	const unsigned int percent_width = sizeof(percent) - 1;
+	unsigned char percent[] = "????"; /* Reduce or enlarge at will. */
 	unsigned int percent_len = 0;
-	int gauge_width = width - percent_width; /* width for gauge meter */
 	int progress = (int) ((longlong) 100 * current / total);
-	int barprogress = gauge_width * progress / 100;
+	int barprogress = int_min(width * progress / 100, width - 1);
 
-	int_upper_bound(&barprogress, gauge_width); /* Limit to preserve display. */
-
-	if (ulongcat(percent, &percent_len, progress, percent_width - 1, 0) > 0)
-		memset(percent, '?', percent_len); /* Too long, we limit to preserve display. */
-
-	percent[percent_len++] = '%'; /* on error, will print '%' only, should not occur. */
-	percent[percent_len] = '\0';
+	/* On error, will print '?' only, should not occur. */
+	if (!ulongcat(percent, &percent_len, progress, sizeof(percent) - 1, 0)
+	     && percent_len < width - 3) {
+		percent[percent_len++] = '%';
+	} else {
+		percent[0] = '?';
+		percent_len = 1;
+	}
 
 	(*y)++;
+
+	/* Draw the progress meter part "[###    ]" */
 	draw_char_data(term, x, *y, '[');
 	draw_area(term, x + 1, *y, barprogress, 1, ' ', 0, meter_color);
-	draw_char_data(term, x + gauge_width, *y, ']');
-	draw_text(term, x + width - percent_len + 1, *y, percent, percent_len, 0, text_color);
+	draw_char_data(term, x + width - 1, *y, ']');
+
+	/* Draw the percentage centered in the progress meter */
+	for (x += (width - percent_len) / 2; percent_len > 0; percent_len--) {
+		draw_char_data(term, x + percent_len, *y, percent[percent_len - 1]);
+	}
+
 	(*y)++;
 }
 

@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.7 2003/06/07 08:14:07 zas Exp $ */
+/* $Id: snprintf.c,v 1.8 2003/06/07 09:56:08 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -71,6 +71,8 @@
 #include "config.h"
 #endif
 
+#include "util/snprintf.h"
+
 /* #define TEST_SNPRINTF */ /* For compiling a standlone test binary. */
 
 #ifdef TEST_SNPRINTF /* need math library headers for testing */
@@ -84,13 +86,22 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-#include "util/snprintf.h"
+#ifndef VA_COPY
+#ifdef HAVE_VA_COPY
+#define VA_COPY(dest, src) __va_copy(dest, src)
+#else
+#define VA_COPY(dest, src) (dest) = (src)
+#endif
+#endif
 
+#if defined(HAVE_SNPRINTF) && defined(HAVE_VSNPRINTF) && defined(HAVE_C99_VSNPRINTF)
 
-#if !defined(USE_OUR_SNPRINTF_C)
-/* make the compiler happy with an empty file */
+/* only include stdio.h if we are not re-defining snprintf or vsnprintf */
+#include <stdio.h>
+ /* make the compiler happy with an empty file */
+
 void dummy_snprintf(void);
-void dummy_snprintf(void) {};
+void dummy_snprintf(void) {}
 
 #else
 
@@ -104,6 +115,12 @@ void dummy_snprintf(void) {};
 #define LLONG long long
 #else
 #define LLONG long
+#endif
+
+/* XXX: Where is this used ?? --Zas */
+/* free memory if the pointer is valid and zero the pointer */
+#ifndef SAFE_FREE
+#define SAFE_FREE(x) do { if ((x)) { free((x)); (x) = NULL; } } while(0)
 #endif
 
 static size_t dopr(char *buffer, size_t maxlen, const char *format,
@@ -475,7 +492,7 @@ fmtint(char *buffer, size_t *currlen, size_t maxlen,
 	int signvalue = 0;
 	unsigned long uvalue;
 	char convert[20];
-	char *numbers = (char *) &hexnumbers;
+	char *numbers = &hexnumbers;
 	int place = 0;
 	int spadlen = 0; /* amount to space pad */
 	int zpadlen = 0; /* amount to zero pad */
@@ -499,7 +516,7 @@ fmtint(char *buffer, size_t *currlen, size_t maxlen,
 
 	if (flags & DP_F_UP) {
 		 /* Should characters be upper case? */
-		numbers = (char *) &HEXnumbers;
+		numbers = &HEXnumbers;
 	}
 
 	do {
@@ -642,7 +659,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 	double ufvalue;
 	char iconvert[311];
 	char fconvert[311];
-	char *numbers = (char *) &hexnumbers;
+	char *numbers = &hexnumbers;
 	int iplace = 0;
 	int fplace = 0;
 	int padlen = 0; /* amount to pad */
@@ -676,7 +693,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 #if 0
 	if (flags & DP_F_UP) {
 		caps = 1; /* Should characters be upper case? */
-		numbers = (char *) &HEXnumbers;
+		numbers = &HEXnumbers;
 	}
 #endif
 
@@ -794,15 +811,24 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 }
 
 
-#ifdef USE_OUR_VSNPRINTF
+/* yes this really must be a ||. Don't muck with this (tridge) */
+#if !defined(HAVE_VSNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
 int
 vsnprintf(char *str, size_t count, const char *fmt, va_list args)
 {
 	return dopr(str, count, fmt, args);
 }
-#endif /* USE_OUR_VSNPRINTF */
+#endif
 
-#ifdef USE_OUR_SNPRINTF
+/* yes this really must be a ||. Don't muck wiith this (tridge)
+ *
+ * The logic for these two is that we need our own definition if the
+ * OS *either* has no definition of *sprintf, or if it does have one
+ * that doesn't work properly according to the autoconf test.  Perhaps
+ * these should really be smb_snprintf to avoid conflicts with buggy
+ * linkers? -- mbp
+ */
+#if !defined(HAVE_SNPRINTF) || !defined(HAVE_C99_SNPRINTF)
 int
 snprintf(char *str, size_t count, const char *fmt, ...)
 {
@@ -815,11 +841,11 @@ snprintf(char *str, size_t count, const char *fmt, ...)
 
 	return ret;
 }
-#endif /* USE_OUR_SNPRINTF */
+#endif
 
-#endif /* USE_OUR_SNPRINTF_C */
+#endif
 
-#ifdef USE_OUR_VASPRINTF
+#ifndef HAVE_VASPRINTF
 int
 vasprintf(char **ptr, const char *format, va_list ap)
 {
@@ -831,8 +857,7 @@ vasprintf(char **ptr, const char *format, va_list ap)
 	ret = vsnprintf(NULL, 0, format, ap2);
 	if (ret <= 0) return ret;
 
-	/* Should we use mem_alloc() here instead of malloc() ???
-	 * Or should we provide mem_vasprintf() ?? --Zas */
+	/* Should we use mem_alloc() here instead of malloc() ??? --Zas */
 	(*ptr) = (char *) malloc(ret + 1);
 	if (!*ptr) return -1;
 
@@ -840,10 +865,10 @@ vasprintf(char **ptr, const char *format, va_list ap)
 
 	return vsnprintf(*ptr, ret + 1, format, ap2);
 }
-#endif /* USE_OUR_VASPRINTF */
+#endif
 
 
-#ifdef USE_OUR_ASPRINTF
+#ifndef HAVE_ASPRINTF
 int
 asprintf(char **ptr, const char *format, ...)
 {
@@ -857,10 +882,8 @@ asprintf(char **ptr, const char *format, ...)
 
 	return ret;
 }
-#endif /* USE_OUR_ASPRINTF */
+#endif
 
-
-/* Test purpose. */
 #ifdef TEST_SNPRINTF
 
 int sprintf(char *str,const char *fmt,...);
@@ -1006,4 +1029,4 @@ main(void)
 
 	return 0;
 }
-#endif /* TEST_SNPRINTF */
+#endif /* SNPRINTF_TEST */

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.36 2002/07/05 03:59:40 pasky Exp $ */
+/* $Id: sched.c,v 1.37 2002/07/05 18:24:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -995,40 +995,57 @@ change_connection(struct status *oldstat, struct status *newstat,
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 
+/* This will remove 'pos' bytes from the start of the cache for the specified
+ * connection. */
 void
 detach_connection(struct status *stat, int pos)
 {
-	struct connection *c;
+	struct connection *conn;
 	int i, l;
 
 	if (stat->state < 0) return;
 
-	c = stat->c;
-	if (!c->detached) {
-		if (!c->cache)
+	conn = stat->c;
+	if (!conn->detached) {
+		int total_len;
+		int i, total_pri = 0;
+
+		if (!conn->cache)
 			return;
 
-		l = (c->est_length == -1) ? c->from : c->est_length;
+		total_len = (conn->est_length == -1) ? conn->from
+						     : conn->est_length;
 
-		if (l < get_opt_long("document.cache.memory.size") * MAX_CACHED_OBJECT)
+		if (total_len < get_opt_long("document.cache.memory.size")
+				* MAX_CACHED_OBJECT) {
+			/* This whole thing will fit to the memory anyway, so
+			 * there's no problem in detaching the connection. */
 			return;
+		}
 
-		l = 0;
 		for (i = 0; i < PRI_CANCEL; i++)
-			l += c->pri[i];
-		if (!l)
+			total_pri += conn->pri[i];
+		if (!total_pri)
 			internal("detaching free connection");
 
+		/* Pre-clean cache. */
 		delete_unused_format_cache_entries();
-		if (l != 1 || c->cache->refcount)
+
+		if (total_pri != 1 || conn->cache->refcount) {
+			/* We're too important, or someone uses our cache
+			 * entry. */
 			return;
+		}
 
 		/* debug("detached"); */
-		c->cache->url[0] = 0;
-		c->detached = 1;
+
+		/* We aren't valid cache entry anymore. */
+		conn->cache->url[0] = 0;
+		conn->detached = 1;
 	}
 
-	free_entry_to(c->cache, pos);
+	/* Strip the entry. */
+	free_entry_to(conn->cache, pos);
 }
 
 void

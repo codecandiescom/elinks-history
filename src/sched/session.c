@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.510 2004/06/13 20:20:39 jonas Exp $ */
+/* $Id: session.c,v 1.511 2004/06/13 23:30:57 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -855,19 +855,18 @@ encode_session_info(struct string *info, struct list_head *url_list)
 /* Older elinks versions (up to and including 0.9.1) sends no magic variable and if
  * this is detected we fallback to the old session info format. For this format
  * the magic member of terminal_info hold the length of the URI string. The
- * old format is handled by the defualt label in the switch.
+ * old format is handled by the default label in the switch.
  *
  * The new session info format supports extraction of multiple URIS from the
  * terminal_info data member. The magic variable controls how to interpret
  * the fields:
  *
- *	INTERLINK_NORMAL_MAGIC will cause for us to use the terminal_info
- *	session_info variable to look up wether we have to ``resume'' a saved
- *	session.
+ *	INTERLINK_NORMAL_MAGIC means use the terminal_info session_info
+ *	variable as an id for a saved session.
  *
- *	INTERLINK_REMOTE_MAGIC means to use the terminal_info session_info
- *	variable as the remote session flags.
- */
+ *	INTERLINK_REMOTE_MAGIC means use the terminal_info session_info
+ *	variable as the remote session flags. */
+
 int
 decode_session_info(struct terminal *term, struct terminal_info *info)
 {
@@ -879,14 +878,18 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 
 	switch (info->magic) {
 	case INTERLINK_NORMAL_MAGIC:
-		/* This is the only place where the session id comes into game.
-		 * We're comparing it to possibly supplied -base-session here,
-		 * and initialize from an already saved session with id of
-		 * base-session. At the moment only opening instances in new
-		 * window uses it to know how to initialize it when the new
-		 * instance connects to the master. This is also the reason why
-		 * we don't need to handle it for the old format. New instances
-		 * will always be of the same origin as the master. */
+		/* Lookup if there are any saved sessions that should be
+		 * resumed using the session_info as an id. The id is derived
+		 * from the value of -base-session command line option in the
+		 * connecting instance.
+		 *
+		 * At the moment it is only used when opening instances in new
+		 * window to figure out how to initialize it when the new
+		 * instance connects to the master.
+		 *
+		 * We don't need to handle it for the old format since new
+		 * instances connecting this way will always be of the same
+		 * origin as the master. */
 		if (init_saved_session(term, info->session_info))
 			return 1;
 		break;

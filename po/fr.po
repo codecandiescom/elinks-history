@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-01-31 11:23+0100\n"
-"PO-Revision-Date: 2005-01-31 11:25+0100\n"
+"POT-Creation-Date: 2005-02-09 10:35+0100\n"
+"PO-Revision-Date: 2005-02-09 10:40+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "Fermer"
 #: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/cache/dialogs.c:219
 #: src/config/dialogs.c:516 src/cookies/dialogs.c:421
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
-#: src/dialogs/download.c:470 src/formhist/dialogs.c:212
+#: src/dialogs/download.c:476 src/formhist/dialogs.c:212
 #: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
 msgid "Info"
 msgstr "Info"
@@ -48,8 +48,8 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/ecmascript/spidermonkey.c:1963 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
-#: src/protocol/user.c:268 src/sched/download.c:231 src/sched/download.c:327
-#: src/sched/download.c:368 src/sched/download.c:507 src/sched/download.c:601
+#: src/protocol/user.c:268 src/sched/download.c:229 src/sched/download.c:325
+#: src/sched/download.c:366 src/sched/download.c:505 src/sched/download.c:599
 #: src/sched/error.c:42 src/sched/session.c:239 src/sched/session.c:706
 #: src/sched/session.c:730 src/sched/session.c:747
 #: src/scripting/lua/core.c:395 src/scripting/lua/core.c:476
@@ -171,12 +171,10 @@ msgstr "Nom"
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
 #: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
 #: src/dialogs/options.c:283 src/mime/dialogs.c:131
-#: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
-#: src/sched/download.c:1022 src/sched/download.c:1032
-#: src/sched/download.c:1053 src/sched/download.c:1066
-#: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
-#: src/scripting/lua/core.c:717 src/viewer/text/search.c:1571
-#: src/viewer/text/view.c:730
+#: src/protocol/auth/dialogs.c:109 src/sched/download.c:549
+#: src/sched/download.c:1134 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
+#: src/viewer/text/search.c:1571 src/viewer/text/view.c:730
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -465,7 +463,7 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: src/bookmarks/dialogs.c:452 src/cookies/dialogs.c:425
-#: src/dialogs/download.c:476 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
+#: src/dialogs/download.c:482 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
 #: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
 msgid "Clear"
 msgstr "Effacer"
@@ -474,8 +472,7 @@ msgstr "Effacer"
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:204 src/formhist/dialogs.c:216
-#: src/globhist/dialogs.c:235 src/sched/download.c:1019
-#: src/sched/download.c:1050
+#: src/globhist/dialogs.c:235 src/sched/download.c:1118
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -4392,7 +4389,7 @@ msgstr "Info. en-têtes internes"
 msgid "No header info."
 msgstr "Aucune information d'en-tête."
 
-#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:365
+#: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:363
 msgid "Download"
 msgstr "Téléchargement"
 
@@ -4404,59 +4401,59 @@ msgstr "Arrière-plan"
 msgid "Background with notify"
 msgstr "Arrière-plan et notifier"
 
-#: src/dialogs/download.c:262 src/dialogs/download.c:471
+#: src/dialogs/download.c:262 src/dialogs/download.c:477
 msgid "Abort"
 msgstr "Arrêter"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:263 src/dialogs/download.c:474
+#: src/dialogs/download.c:267 src/dialogs/download.c:480
 msgid "Abort and delete file"
 msgstr "Arrêter et supprimer fichier"
 
 #. cant_delete_item
-#: src/dialogs/download.c:402
+#: src/dialogs/download.c:408
 #, c-format
 msgid "Sorry, but download \"%s\" cannot be interrupted."
 msgstr "Désolé, mais le téléchargement \"%s\" ne peut être supprimé."
 
 #. cant_delete_used_item
-#: src/dialogs/download.c:404
+#: src/dialogs/download.c:410
 #, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
 msgstr ""
 "Désolé, mais le téléchargement \"%s\" est actuellement utilisé ailleurs."
 
 #. delete_marked_items_title
-#: src/dialogs/download.c:410
+#: src/dialogs/download.c:416
 msgid "Interrupt marked downloads"
 msgstr "Interrompre les téléchargements marqués"
 
 #. delete_marked_items
-#: src/dialogs/download.c:412
+#: src/dialogs/download.c:418
 msgid "Interrupt marked downloads?"
 msgstr "Interrompre les téléchargements marqués ?"
 
 #. delete_item_title
-#: src/dialogs/download.c:418
+#: src/dialogs/download.c:424
 msgid "Interrupt download"
 msgstr "Interrompre le téléchargement"
 
 #. delete_item
-#: src/dialogs/download.c:420
+#: src/dialogs/download.c:426
 msgid "Interrupt this download?"
 msgstr "Interrompre ce téléchargement ?"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:422
+#: src/dialogs/download.c:428
 msgid "Interrupt all downloads"
 msgstr "Interrompre tous les téléchargements"
 
 #. clear_all_items_title
-#: src/dialogs/download.c:424
+#: src/dialogs/download.c:430
 msgid "Do you really want to interrupt all downloads?"
 msgstr "Interrompre tous les téléchargements en cours ?"
 
-#: src/dialogs/download.c:481
+#: src/dialogs/download.c:487
 msgid "Download manager"
 msgstr "Gestionnaire de téléchargements"
 
@@ -5518,40 +5515,40 @@ msgstr ""
 "Merci de vérifier si vous avez la variable $HOME correctement configurée et "
 "si vous avez le droit d'écrire dans votre répertoire personnel."
 
-#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:339
+#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:341
 #, c-format
 msgid "The call to %s failed: %d (%s)"
 msgstr "L'appel à %s a échoué: %d (%s)"
 
 #. Infinite loop prevention.
-#: src/lowlevel/select.c:342
+#: src/lowlevel/select.c:344
 #, c-format
 msgid "%d select() failures."
 msgstr "%d échecs de select()."
 
-#: src/main.c:143
+#: src/main.c:144
 msgid "Cannot create a pipe for internal communication."
 msgstr "Ne peut créer un tube pour la communication interne."
 
-#: src/main.c:203
+#: src/main.c:204
 #, c-format
 msgid "URL expected after -%s"
 msgstr "URL attendue après -%s"
 
-#: src/main.c:211
+#: src/main.c:212
 msgid "No running ELinks found."
 msgstr "Aucun ELinks en cours d'exécution."
 
 #. The remote session(s) can not be created
-#: src/main.c:218
+#: src/main.c:219
 msgid "No remote session to connect to."
 msgstr "Aucune session distante à laquelle se connecter."
 
-#: src/main.c:227
+#: src/main.c:228
 msgid "Unable to encode session info."
 msgstr "Impossible d'encoder les infos de session."
 
-#: src/main.c:244
+#: src/main.c:245
 msgid "Unable to attach_terminal()."
 msgstr "Echec de attach_terminal()."
 
@@ -6612,12 +6609,12 @@ msgstr "Aucun programme"
 msgid "No program specified for protocol %s."
 msgstr "Aucun programme spécifié pour le protocole %s."
 
-#: src/sched/download.c:227 src/sched/download.c:324 src/sched/download.c:503
-#: src/sched/download.c:597
+#: src/sched/download.c:225 src/sched/download.c:322 src/sched/download.c:501
+#: src/sched/download.c:595
 msgid "Download error"
 msgstr "Erreur de téléchargement"
 
-#: src/sched/download.c:228 src/sched/download.c:598
+#: src/sched/download.c:226 src/sched/download.c:596
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -6626,7 +6623,7 @@ msgstr ""
 "Impossible de créer le fichier '%s':\n"
 "%s"
 
-#: src/sched/download.c:325
+#: src/sched/download.c:323
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -6637,7 +6634,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:366
+#: src/sched/download.c:364
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -6646,16 +6643,16 @@ msgstr ""
 "Téléchargement terminé:\n"
 "%s"
 
-#: src/sched/download.c:504
+#: src/sched/download.c:502
 #, c-format
 msgid "'%s' is a directory."
 msgstr "'%s' est un répertoire."
 
-#: src/sched/download.c:540
+#: src/sched/download.c:538
 msgid "File exists"
 msgstr "Fichier existant"
 
-#: src/sched/download.c:541
+#: src/sched/download.c:539
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -6670,67 +6667,52 @@ msgstr ""
 "Le nom alternatif est:\n"
 "%s"
 
-#: src/sched/download.c:548
+#: src/sched/download.c:546
 msgid "Save under the alternative name"
 msgstr "Sauver sous un nom alternatif"
 
-#: src/sched/download.c:549
+#: src/sched/download.c:547
 msgid "Overwrite the original file"
 msgstr "Ecraser le fichier original"
 
-#: src/sched/download.c:550
+#: src/sched/download.c:548
 msgid "Resume download of the original file"
 msgstr "Reprendre le téléchargement du fichier original"
 
-#: src/sched/download.c:1013 src/sched/download.c:1025
-msgid "Unknown type"
-msgstr "Type inconnu"
-
-#: src/sched/download.c:1014
-#, c-format
-msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher ?"
-
-#: src/sched/download.c:1020 src/sched/download.c:1030
-#: src/sched/download.c:1051 src/sched/download.c:1064
-msgid "Display"
-msgstr "Afficher"
-
-#: src/sched/download.c:1021 src/sched/download.c:1031
-#: src/sched/download.c:1052 src/sched/download.c:1065
-msgid "Show header"
-msgstr "Montrer les en-têtes"
-
-#: src/sched/download.c:1026
-#, c-format
-msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr "Voulez-vous afficher le fichier '%s' (type: %s) ?"
-
-#: src/sched/download.c:1042 src/sched/download.c:1056
+#: src/sched/download.c:1037
 msgid "What to do?"
 msgstr "Que faire ?"
 
-#: src/sched/download.c:1043
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', save it or display it?"
-msgstr ""
-"Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
-"avec '%s', l'enregistrer ou l'afficher ?"
-
-#: src/sched/download.c:1049 src/sched/download.c:1063
-msgid "Open"
-msgstr "Ouvrir"
+#: src/sched/download.c:1040
+msgid "Unknown type"
+msgstr "Type inconnu"
 
 #: src/sched/download.c:1057
 #, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', or display it?"
-msgstr ""
-"Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
-"avec '%s', ou l'afficher ?"
+msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
+msgstr "Que voulez-vous faire avec le fichier '%s' (type: %s%s%s) ?"
+
+#: src/sched/download.c:1087
+#, no-c-format
+msgid "Program ('%' will be replaced by the filename)"
+msgstr "Programme ('%' sera remplacé par le nom du fichier)"
+
+#: src/sched/download.c:1094
+#, c-format
+msgid "The file will be opened with the program '%s'."
+msgstr "Le fichier sera ouvert avec le programme '%s'."
+
+#: src/sched/download.c:1111
+msgid "Open"
+msgstr "Ouvrir"
+
+#: src/sched/download.c:1124
+msgid "Display"
+msgstr "Afficher"
+
+#: src/sched/download.c:1128
+msgid "Show header"
+msgstr "Montrer les en-têtes"
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"
@@ -6920,7 +6902,26 @@ msgstr ""
 msgid "The CSO phone-book protocol is not supported."
 msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté."
 
-#: src/sched/error.c:126
+#: src/sched/error.c:105
+msgid ""
+"Configuration of the proxy server failed.\n"
+"This might be caused by an incorrect proxy\n"
+"setting specified by an environment variable\n"
+"or returned by a scripting proxy hook.\n"
+"\n"
+"The correct syntax for proxy settings are\n"
+"a host name optionally followed by a colon\n"
+"and a port number. Example: 'localhost:8080'."
+msgstr ""
+"La configuration du serveur de proxy a échoué.\n"
+"Cela peut être causé par un réglage de proxy incorrect\n"
+"soit par une variable d'environnement soit par un script.\n"
+"\n"
+"La syntaxe correcte pour la sélection de proxy est\n"
+"le nom d'hôte éventuellement suivi de deux points et\n"
+"du numéro de port. Par exemple: 'localhost:8080'."
+
+#: src/sched/error.c:135
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
@@ -7138,7 +7139,7 @@ msgstr "Mauvais évènement %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évènement: %d (%s)"
 
-#: src/terminal/kbd.c:998
+#: src/terminal/kbd.c:1000
 msgid "Too many bytes read from the itrm!"
 msgstr "Trop d'octets lus en provenance de itrm!"
 
@@ -7420,3 +7421,20 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1281
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "Would you like to save the file '%s' (type: %s) or display it?"
+#~ msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher ?"
+
+#~ msgid ""
+#~ "Would you like to open the file '%s' (type: %s%s%s)\n"
+#~ "with '%s', save it or display it?"
+#~ msgstr ""
+#~ "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
+#~ "avec '%s', l'enregistrer ou l'afficher ?"
+
+#~ msgid ""
+#~ "Would you like to open the file '%s' (type: %s%s%s)\n"
+#~ "with '%s', or display it?"
+#~ msgstr ""
+#~ "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
+#~ "avec '%s', ou l'afficher ?"

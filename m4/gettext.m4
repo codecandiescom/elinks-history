@@ -60,15 +60,15 @@ AC_DEFUN([AM_WITH_NLS],
       AC_DEFINE(ENABLE_NLS, 1,
         [Define to 1 if translation of program messages to the user's native language
    is requested.])
-      AC_MSG_CHECKING([whether included gettext is requested])
-
+dnl      AC_MSG_CHECKING([whether included gettext is requested])
 dnl      AC_ARG_WITH(included-gettext,
 dnl        [  --with-included-gettext use the GNU gettext library included here],
 dnl        nls_cv_force_use_gnu_gettext=$withval,
 dnl        nls_cv_force_use_gnu_gettext=no)
-      nls_cv_force_use_gnu_gettext=yes
+dnl      AC_MSG_RESULT($nls_cv_force_use_gnu_gettext)
 
-      AC_MSG_RESULT($nls_cv_force_use_gnu_gettext)
+      nls_cv_force_use_gnu_gettext=yes
+      nls_cv_use_gnu_gettext=yes
 
       nls_cv_use_gnu_gettext="$nls_cv_force_use_gnu_gettext"
       if test "$nls_cv_force_use_gnu_gettext" != "yes"; then

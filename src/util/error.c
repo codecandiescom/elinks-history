@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.79 2004/01/01 16:34:41 jonas Exp $ */
+/* $Id: error.c,v 1.80 2004/01/06 21:43:06 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -138,6 +138,11 @@ force_dump(void)
 	fprintf(stderr,
 		"\n\033[1m%s\033[0m %s\n", "Forcing core dump!",
 		"Man the Lifeboats! Women and children first!\n");
+	fputs("But please DO NOT report this as a segfault!!! It is an internal error, not a\n"
+	      "normal segfault, there is a huge difference in these for us the developers.\n"
+	      "Also, noting the EXACT error you got above is crucial for hunting the problem\n"
+	      "down. Thanks, and please get in touch with us.\n",
+	      stderr);
 	fputs(full_static_version, stderr);
 	fputc('\n', stderr);
 	fflush(stderr);

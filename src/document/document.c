@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.9 2003/10/30 17:45:04 jonas Exp $ */
+/* $Id: document.c,v 1.10 2003/10/30 17:53:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,6 +168,8 @@ release_document(struct document *document)
 	if_assert_failed return;
 
 	if (!--document->refcount) format_cache_entries++;
+	del_from_list(document);
+	add_to_list(format_cache, document);
 
 	assertm(document->refcount >= 0, "reference count underflow");
 	if_assert_failed document->refcount = 0;

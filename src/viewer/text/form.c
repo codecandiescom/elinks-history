@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.131 2004/06/11 19:32:48 jonas Exp $ */
+/* $Id: form.c,v 1.132 2004/06/11 19:38:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -551,23 +551,23 @@ encode_controls(struct list_head *l, struct string *data,
 struct boundary_info {
 	int count;
 	int *offsets;
+	unsigned char string[BL];
 };
 
 static inline void
-add_boundary(struct string *data, unsigned char *bound,
-	     struct boundary_info *boundary)
+add_boundary(struct string *data, struct boundary_info *boundary)
 {
 	add_to_string(data, "--");
 	if (realloc_bound_ptrs(&boundary->offsets, boundary->count))
 		boundary->offsets[boundary->count++] = data->length;
 
-	add_bytes_to_string(data, bound, BL);
+	add_bytes_to_string(data, boundary->string, BL);
 }
 
 static inline void
-check_boundary(struct string *data, unsigned char *bound,
-	       struct boundary_info *boundary)
+check_boundary(struct string *data, struct boundary_info *boundary)
 {
+	unsigned char *bound = boundary->string;
 	unsigned char *pos, *end = data->source + data->length - BL;
 	register int i;
 
@@ -596,11 +596,11 @@ again:
 /* FIXME: shouldn't we encode data at send time (in http.c) ? --Zas */
 static void
 encode_multipart(struct session *ses, struct list_head *l, struct string *data,
-		 unsigned char *bound, int cp_from, int cp_to)
+		 struct boundary_info *boundary, int cp_from, int cp_to)
 {
+	unsigned char *bound = boundary->string;
 	struct conv_table *convert_table = NULL;
 	struct submitted_value *sv;
-	struct boundary_info boundary = { 0, NULL };
 
 	assert(ses && l && data && bound);
 	if_assert_failed return;
@@ -608,7 +608,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 	memset(bound, 'x', BL);
 
 	foreach (sv, *l) {
-		add_boundary(data, bound, &boundary);
+		add_boundary(data, boundary);
 
 		/* FIXME: name is not encoded.
 		 * from RFC 1867:
@@ -701,16 +701,16 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 		add_to_string(data, "\r\n");
 	}
 
-	add_boundary(data, bound, &boundary);
+	add_boundary(data, boundary);
 	add_to_string(data, "--\r\n");
 
-	check_boundary(data, bound, &boundary);
+	check_boundary(data, boundary);
 
-	mem_free_if(boundary.offsets);
+	mem_free_if(boundary->offsets);
 	return;
 
 encode_error:
-	mem_free_if(boundary.offsets);
+	mem_free_if(boundary->offsets);
 	done_string(data);
 
 	/* XXX: This error message should move elsewhere. --Zas */
@@ -820,10 +820,10 @@ struct uri *
 get_form_uri(struct session *ses, struct document_view *doc_view,
 	     struct form_control *frm)
 {
+	struct boundary_info boundary = { 0, NULL };
 	INIT_LIST_HEAD(submit);
 	struct string data;
 	struct string go;
-	unsigned char bound[BL];
 	int cp_from, cp_to;
 	struct uri *uri;
 
@@ -852,7 +852,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 		break;
 
 	case FM_POST_MP:
-		encode_multipart(ses, &submit, &data, bound, cp_from, cp_to);
+		encode_multipart(ses, &submit, &data, &boundary, cp_from, cp_to);
 		break;
 
 	case FM_POST_TEXT_PLAIN:
@@ -918,7 +918,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 		} else {
 			add_to_string(&go, "multipart/form-data; boundary=");
-			add_bytes_to_string(&go, bound, BL);
+			add_bytes_to_string(&go, boundary.string, BL);
 			add_char_to_string(&go, '\n');
 		}
 

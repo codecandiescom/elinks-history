@@ -1,3 +1,185 @@
+Thu Nov  6 22:45:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Local variables renaming.  
+
+Thu Nov  6 22:25:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Intermediate variable to improve readibility and perhaps more.  
+
+Thu Nov  6 22:02:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.h, bfu/group.c, bfu/inpfield.c, bfu/msgbox.c,
+	config/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/hierbox.c, dialogs/mime.c, dialogs/options.c,
+	sched/download.c, scripting/lua/core.c, viewer/text/search.c:
+
+	Set dialog max default width by using a macro.  
+
+Thu Nov  6 22:01:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	It seems /proc/#/statm is unreliable, values reported in it are not
+	well defined and are different in  2.4 and 2.6 linux kernels. Have a
+	look at http://mail.nl.linux.org/linux-mm/2003-08/msg00073.html
+	thread for more info. Since it was only used in debug mode and is
+	not portable, i prefer to drop it for now.  
+
+Thu Nov  6 21:13:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Fix to not skip any characters when forcing a split.  
+
+Thu Nov  6 20:11:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/group.c, bfu/group.h,
+	bfu/inpfield.c, bfu/inpfield.h, bfu/msgbox.c, bookmarks/dialogs.c,
+	config/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/hierbox.c, dialogs/hierbox.h, dialogs/mime.c,
+	dialogs/options.c, globhist/dialogs.c, sched/download.c,
+	scripting/lua/core.c, viewer/text/search.c:
+
+	Rename: dlg.fn to dlg.layouter and rename layout functions to end
+	with *_layouter.  
+
+Thu Nov  6 19:03:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Fix some text wraparound issues by adding increasing the search
+	string by one byte.  
+
+Thu Nov  6 18:36:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	If we can.t find a place to split force one.  
+
+Thu Nov  6 17:29:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Compilation fix: use new draw_dialog().  
+
+Thu Nov  6 16:59:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/group.c, bfu/inpfield.c,
+	bfu/msgbox.c, config/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/hierbox.c, dialogs/mime.c, dialogs/options.c,
+	sched/download.c, viewer/text/search.c:
+
+	Rename: draw_dlg() -> draw_dialog().  
+
+Thu Nov  6 16:52:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/group.c, bfu/inpfield.c,
+	bfu/msgbox.c, config/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	dialogs/hierbox.c, dialogs/mime.c, dialogs/options.c,
+	sched/download.c, viewer/text/search.c:
+
+	draw_dlg(): Merge in center_dlg() using an align parameter + take
+	width and height parameter.  
+
+Thu Nov  6 16:45:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	Use local term variable.  
+
+Thu Nov  6 16:43:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/checkbox.h:
+
+	Fix space.  
+
+Thu Nov  6 14:47:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Cleanup and variables renaming in download_progress_bar(), more
+	generic now.  
+
+Thu Nov  6 14:34:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/download.c, terminal/draw.c, terminal/draw.h:
+
+	Reverted download_progress_bar() -> draw_progress_bar() change +
+	cleanups in the same commit. Please do not move code and change it
+	at once (except strictly necessary changes to keep it working, of
+	course). (Note that this is different from the reverts of Jonas
+	patches - cause of this revert is not undesirability of the
+	direction nor staying in the way, just grave formal mistake.) Please
+	split the patch up and reintroduce it.  
+
+Thu Nov  6 14:22:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	dlg_format_text(): Completely rewrite to only have one main loop.
+	Find split positions smarter in separate function and don.t
+	calculate shift if we don't need to draw the text.  
+
+Thu Nov  6 11:42:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/download.c, terminal/draw.c, terminal/draw.h:
+
+	download_progress_bar() was replaced by draw_progress_bar(), more
+	generic. It was cleanup and moved to draw.c.  
+
+Thu Nov  6 09:45:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, document/options.c, document/options.h,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/tables.c, intl/charsets.c, sched/session.c,
+	viewer/text/link.c:
+
+	d_opt was renamed global_doc_opts.  
+
+Thu Nov  6 02:38:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Introduce is_unsplitable() macro.  
+
+Thu Nov  6 01:59:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Don.t move to next line if the shift needs to be corrected.  Fix off
+	by one error? reported by Miciah so we do not draw the ending space
+	charecter.  
+
+Thu Nov  6 01:02:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Rename: xx -> line_x, ww -> line_width.  
+
+Thu Nov  6 00:32:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	Rename: s -> split, tt -> split and turn make that the working
+	pointer.  
+
+Thu Nov  6 00:15:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	dlg_format_text(): Use draw_text() to draw one line at a time
+	instead of one char.  
+
+Thu Nov  6 00:07:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/text.c:
+
+	dlg_format_text(): Cleanup.  
+
 Wed Nov  5 22:55:08 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/renderer.c:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.429 2004/06/01 06:23:10 miciah Exp $ */
+/* $Id: view.c,v 1.430 2004/06/01 06:26:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1006,10 +1006,8 @@ quit:
 				switch_to_tab(ses->tab->term, tab, nb_tabs);
 
 				if (check_mouse_button(ev, B_RIGHT)) {
-					struct window *tab = get_current_tab(ses->tab->term);
-
-					set_window_ptr(tab, ev->x, ev->y);
-					tab_menu(ses->tab->term, tab, tab->data);
+					set_window_ptr(ses->tab, ev->x, ev->y);
+					tab_menu(ses->tab->term, ses->tab, ses);
 				}
 			}
 

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.57 2004/06/27 13:13:53 pasky Exp $ */
+/* $Id: connect.c,v 1.58 2004/06/27 13:20:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,9 +187,6 @@ ssl_want_read(struct connection *conn)
 int
 ssl_connect(struct connection *conn, int sock)
 {
-#ifdef CONFIG_OPENSSL
-	unsigned char *client_cert = NULL;
-#endif
 	int ret;
 
 	assertm(conn->ssl, "No ssl handle");
@@ -200,26 +197,28 @@ ssl_connect(struct connection *conn, int sock)
 #ifdef CONFIG_OPENSSL
 	SSL_set_fd(conn->ssl, sock);
 
-	if (get_opt_bool("connection.ssl.client_cert.enable")) {
-		client_cert = get_opt_str("connection.ssl.client_cert.file");
-		if (!client_cert || !*client_cert) {
-			client_cert = getenv("X509_CLIENT_CERT");
-			if (client_cert && !*client_cert)
-				client_cert = NULL;
-		}
-	}
-
 	if (get_opt_bool("connection.ssl.cert_verify"))
 		SSL_set_verify(conn->ssl, SSL_VERIFY_PEER
 					  | SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
 				NULL);
 
-	if (client_cert) {
-		SSL_CTX *ctx = ((SSL *)conn->ssl)->ctx;
+	if (get_opt_bool("connection.ssl.client_cert.enable")) {
+		unsigned char *client_cert;
 
-		SSL_CTX_use_certificate_chain_file(ctx, client_cert);
-		SSL_CTX_use_PrivateKey_file(ctx, client_cert,
-					    SSL_FILETYPE_PEM);
+		client_cert = get_opt_str("connection.ssl.client_cert.file");
+		if (!*client_cert) {
+			client_cert = getenv("X509_CLIENT_CERT");
+			if (client_cert && !*client_cert)
+				client_cert = NULL;
+		}
+
+		if (client_cert) {
+			SSL_CTX *ctx = ((SSL *)conn->ssl)->ctx;
+
+			SSL_CTX_use_certificate_chain_file(ctx, client_cert);
+			SSL_CTX_use_PrivateKey_file(ctx, client_cert,
+						    SSL_FILETYPE_PEM);
+		}
 	}
 
 #elif defined(CONFIG_GNUTLS)

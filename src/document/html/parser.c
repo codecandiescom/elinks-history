@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.70 2003/04/20 15:05:50 zas Exp $ */
+/* $Id: parser.c,v 1.71 2003/04/21 19:31:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -864,6 +864,7 @@ html_img(unsigned char *a)
 					al = mem_alloc(max_part_len * 2 + 2);
 					if (!al) return;
 
+					/* TODO: Faster way ?? sprintf() is quite expensive. */
 					sprintf(al, "%.*s*%.*s",
 						max_part_len, start,
 						max_part_len, start + len
@@ -873,6 +874,7 @@ html_img(unsigned char *a)
 					al = mem_alloc(len + 1);
 					if (!al) return;
 
+					/* TODO: Faster way ?? */
 					sprintf(al, "%.*s", len, start);
 				}
 			} else {
@@ -1092,10 +1094,10 @@ static void
 html_hr(unsigned char *a)
 {
 	int i/* = par_format.width - 10*/;
-	char r = 205;
+	unsigned char r = FRAMED_HLINE;
 	int q = get_num(a, "size");
 
-	if (q >= 0 && q < 2) r = 196;
+	if (q >= 0 && q < 2) r = FRAMES_HLINE;
 	html_stack_dup();
 	par_format.align = AL_CENTER;
 	if (format.link) mem_free(format.link), format.link = NULL;
@@ -1204,13 +1206,15 @@ html_ol(unsigned char *a)
 
 	al = get_attr_val(a, "type");
 	if (al) {
-		if (!strcmp(al, "1")) par_format.flags = P_NUMBER;
-		else if (!strcmp(al, "a")) par_format.flags = P_alpha;
-		else if (!strcmp(al, "A")) par_format.flags = P_ALPHA;
-		else if (!strcmp(al, "r")) par_format.flags = P_roman;
-		else if (!strcmp(al, "R")) par_format.flags = P_ROMAN;
-		else if (!strcmp(al, "i")) par_format.flags = P_roman;
-		else if (!strcmp(al, "I")) par_format.flags = P_ROMAN;
+		if (*al && !al[1]) {
+			if (*al == '1') par_format.flags = P_NUMBER;
+			else if (*al == 'a') par_format.flags = P_alpha;
+			else if (*al == 'A') par_format.flags = P_ALPHA;
+			else if (*al == 'r') par_format.flags = P_roman;
+			else if (*al == 'R') par_format.flags = P_ROMAN;
+			else if (*al == 'i') par_format.flags = P_roman;
+			else if (*al == 'I') par_format.flags = P_ROMAN;
+		}
 		mem_free(al);
 	}
 
@@ -1254,7 +1258,7 @@ html_li(unsigned char *a)
 
 				for (x = n; *x; x++) *x = upcase(*x);
 			}
-		} else sprintf(n, "%d", par_format.list_number);
+		} else sprintf(n, "%d", par_format.list_number); /* FIXME: hmmmm.... --Zas */
 
 		put_chrs(n, strlen(n), put_chars_f, ff);
 		put_chrs(".&nbsp;", 7, put_chars_f, ff);

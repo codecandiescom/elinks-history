@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.8 2004/05/01 19:25:42 zas Exp $ */
+/* $Id: forms.c,v 1.9 2004/05/01 19:26:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,9 +235,6 @@ html_input(unsigned char *a)
 
 	find_form_for_input(a);
 	html_focusable(a);
-
-	fc = mem_calloc(1, sizeof(struct form_control));
-	if (!fc) return;
 
 	al = get_attr_val(a, "type");
 	if (!al) goto no_type_attr;

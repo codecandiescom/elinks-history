@@ -94,7 +94,7 @@ The Managers
 
 The managers let you control the state of subsystems, such as cookies and the
 global history. They are accessible from the Tools or Setup submenu in the
-Main Menu. The managers consists of an area showing a hierarchy of boxes and
+Main Menu. The managers consists of an area showing a hierarchic listbox and
 buttons at the bottom. Below, a view of the cookie manager is shown.
 
 +----------------------------- Cookie manager ------------------------------+
@@ -114,32 +114,32 @@ buttons at the bottom. Below, a view of the cookie manager is shown.
 |  [ Info ]  [ Add ]  [ Edit ]  [ Delete ]  [ Clear ]  [ Save ]  [ Close ]  |
 +---------------------------------------------------------------------------+
 
-Each hierarchic box is either a folder or a leaf. A folder box is displayed
+Each item is either a folder or a leaf. A folder is displayed
 with a "[-]" or "[+]" before the name telling whether the folder is currently
-open or closed. Nested boxes are displayed indented compared to the folder
+open or closed. Nested items are displayed indented compared to the folder
 they are nested in. In the cookie manager example above "bjork.com" is a
-folder box and "PREF" is a leaf box.
+folder and "PREF" is a leaf.
 
-Boxes can be "marked", which makes it possible to select a group of boxes and
-perform an action on them, such as deleting all marked boxes. If any box has
-been marked the currently selected box is ignored when performing the action.
-Marked boxes are displayed with an asterics ('*') prefixing the name.
+Items can be "marked", which makes it possible to select a group of items and
+perform an action on them, such as deleting all marked items. If any item has
+been marked the currently selected item is ignored when performing the action.
+Marked items are displayed with an asterics ('*') prefixing the name.
 
 The buttons make it possible to perform actions either on selected or marked
-boxes or on all boxes in the manager. Buttons named "Clear" and "Save" are
-performed on all boxes; "Clear" will delete all boxes and "Save" will update
+items or on all items in the manager. Buttons named "Clear" and "Save" are
+performed on all items; "Clear" will delete all items and "Save" will update
 the runtime state file associated with the manager in the ~/.elinks/
 directory. Most buttons presses will query you before completing the action.
 
-At any time, both the currently selected box and button are highlighted. The
-same goes for marked boxes. Most manager dialogs also maintains the state, so
-that when you reopen the manager later it will have the same box selected and
+At any time, both the currently selected item and button are highlighted. The
+same goes for marked items. Most manager dialogs also maintains the state, so
+that when you reopen the manager later it will have the same items selected and
 the same folders opened or closed.
 
 The basic default controls for managers are the following:
 
-	Up/Down		Select the box above/below.
-	'*'		Toggle marking of a box.
+	Up/Down		Select the item above/below.
+	'*'		Toggle marking of a item.
 	Space		Open and close folders.
 	Left/Right	Select the button to the left/right.
 	Home/End	Select the first/last item.
@@ -147,7 +147,7 @@ The basic default controls for managers are the following:
 	Esc		Close the manager dialog.
 
 Some managers also supports searching, either by pressing the "[ Search ]"
-button or by pressing '/'. By searching the empty string, all hidden boxes from
+button or by pressing '/'. By searching the empty string, all hidden items from
 the previous search will be shown again.
 
 Navigation
@@ -291,4 +291,4 @@ Useful Document Display Options:
 
  - Insert mode in text-input form-fields
 
-$Id: introduction.txt,v 1.14 2005/01/03 20:38:29 miciah Exp $
+$Id: introduction.txt,v 1.15 2005/01/03 20:45:49 miciah Exp $

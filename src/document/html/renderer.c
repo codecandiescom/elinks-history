@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.510 2004/12/18 02:17:14 pasky Exp $ */
+/* $Id: renderer.c,v 1.511 2004/12/18 02:22:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -944,7 +944,7 @@ do { \
 }
 
 static void
-html_tag(struct document *document, unsigned char *t, int x, int y)
+html_special_tag(struct document *document, unsigned char *t, int x, int y)
 {
 	struct tag *tag;
 	int tag_len;
@@ -1325,7 +1325,7 @@ end:
 }
 
 static void
-html_form(struct part *part, struct form *form)
+html_special_form(struct part *part, struct form *form)
 {
 	assert(part && form);
 	if_assert_failed return;
@@ -1340,7 +1340,7 @@ html_form(struct part *part, struct form *form)
 }
 
 static void
-html_form_control(struct part *part, struct form_control *fc)
+html_special_form_control(struct part *part, struct form_control *fc)
 {
 	struct form *form;
 
@@ -1422,17 +1422,17 @@ html_special(struct part *part, enum html_special_type c, ...)
 		case SP_TAG:
 			t = va_arg(l, unsigned char *);
 			if (document)
-				html_tag(document, t, X(part->cx), Y(part->cy));
+				html_special_tag(document, t, X(part->cx), Y(part->cy));
 			va_end(l);
 			break;
 		case SP_FORM:
 			form = va_arg(l, struct form *);
-			html_form(part, form);
+			html_special_form(part, form);
 			va_end(l);
 			break;
 		case SP_CONTROL:
 			fc = va_arg(l, struct form_control *);
-			html_form_control(part, fc);
+			html_special_form_control(part, fc);
 			va_end(l);
 			break;
 		case SP_TABLE:

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.296 2004/10/30 02:21:43 miciah Exp $ */
+/* $Id: search.c,v 1.297 2004/11/05 03:50:49 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -272,7 +272,6 @@ is_in_range_regex(struct document *document, int y, int height,
 
 	reg_err = regcomp(&regex, text, regex_flags);
 	if (reg_err) {
-		/* TODO: error message */
 		regfree(&regex);
 		return -2;
 	}

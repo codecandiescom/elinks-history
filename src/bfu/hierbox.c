@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.75 2003/11/21 21:27:03 jonas Exp $ */
+/* $Id: hierbox.c,v 1.76 2003/11/22 01:27:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,15 +206,18 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 
 		case EV_INIT:
 		{
+			struct hierbox_browser *browser = dlg_data->dlg->udata2;
 			struct hierbox_dialog_list_item *item;
+			struct listbox_item *litem;
 
 			item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
 			if (item) {
-				struct hierbox_browser *browser;
-
 				item->dlg_data = dlg_data;
-				browser = dlg_data->dlg->udata2;
 				add_to_list(browser->dialogs, item);
+			}
+
+			foreach (litem, *browser->items) {
+				litem->visible = 1;
 			}
 		}
 		case EV_RESIZE:
@@ -254,16 +257,9 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 		struct hierbox_browser *browser, void *udata,
 		size_t buttons, ...)
 {
-	struct dialog *dlg;
+	struct dialog *dlg = calloc_dialog(buttons + 2, add_size);
 	va_list ap;
-	struct listbox_item *litem;
 
-	foreach (litem, *browser->items) {
-		litem->visible = 1;
-	}
-
-	/* Create the dialog */
-	dlg = calloc_dialog(buttons + 2, add_size);
 	if (!dlg) return NULL;
 
 	dlg->title = _(title, term);

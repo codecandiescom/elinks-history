@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.91 2003/10/02 08:43:38 jonas Exp $ */
+/* $Id: screen.c,v 1.92 2003/10/02 14:58:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -365,6 +365,45 @@ add_char16(struct string *screen, struct screen_driver *driver,
 	}
 }
 
+#define add_chars(image_, term_, driver_, state_, ADD_CHAR)				\
+{										\
+	register struct screen_char *current = (term_)->screen->last_image;	\
+	register struct screen_char *pos = (term_)->screen->image;		\
+	register struct screen_char *prev_pos = NULL;				\
+	register int y = 0;							\
+	int prev_y = -1;							\
+										\
+	for (; y < (term_)->y; y++) {						\
+		register int x = 0;						\
+										\
+		for (; x < (term_)->x; x++, current++, pos++) {			\
+										\
+			if (compare_color(pos->color, current->color)) {	\
+				/* No update for exact match. */		\
+										\
+				if (pos->data == current->data			\
+				    && pos->attr == current->attr)		\
+					continue;				\
+										\
+				/* Else if the color match and the data is
+				 * ``space''. */				\
+				if (pos->data <= ' ' && current->data <= ' ')	\
+					continue;				\
+			}							\
+										\
+			/* Move the cursor when @prev_pos is more than 10 chars
+			 * away. */						\
+			if (prev_y != y || prev_pos + 10 <= pos) {		\
+				add_cursor_move_to_string(image_, y + 1, x + 1);\
+				prev_pos = pos;					\
+				prev_y = y;					\
+			}							\
+										\
+			for (; prev_pos <= pos ; prev_pos++)			\
+				ADD_CHAR(image_, driver_, prev_pos, state_);	\
+		}								\
+	}									\
+}
 /* Adds the term code for positioning the cursor at @x and @y to @string.
  * The template term code is: "\033[<@y>;<@x>H" */
 static inline struct string *
@@ -397,40 +436,7 @@ static inline void
 add_chars16(struct string *image, struct terminal *term,
 	    struct screen_state *state, struct screen_driver *driver)
 {
-	register struct screen_char *current = term->screen->last_image;
-	register struct screen_char *pos = term->screen->image;
-	register struct screen_char *prev_pos = NULL;
-	register int y = 0;
-	int prev_y = -1;
-
-	for (; y < term->y; y++) {
-		register int x = 0;
-
-		for (; x < term->x; x++, current++, pos++) {
-
-			if (compare_color(pos->color, current->color)) {
-				/* No update for exact match. */
-				if (pos->data == current->data
-				    && pos->attr == current->attr)
-					continue;
-
-				/* Else if the color match and the data is ``space''. */
-				if (pos->data <= ' ' && current->data <= ' ')
-					continue;
-			}
-
-			/* Move the cursor when @prev_pos is more than 10 chars
-			 * away. */
-			if (prev_y != y || prev_pos + 10 <= pos) {
-				add_cursor_move_to_string(image, y + 1, x + 1);
-				prev_pos = pos;
-				prev_y = y;
-			}
-
-			for (; prev_pos <= pos ; prev_pos++)
-				add_char16(image, driver, prev_pos, state);
-		}
-	}
+	add_chars(image, term, driver, state, add_char16);
 }
 
 /* Updating of the terminal screen is done by checking what needs to be updated

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.36 2002/11/25 13:44:18 zas Exp $ */
+/* $Id: cookies.c,v 1.37 2002/11/29 19:23:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,7 +238,7 @@ free_cookie_name:
 	if (!cookie->path) {
 		unsigned char *path_end;
 
-		cookie->path = stracpy("/");
+		cookie->path = stracpy("/"); /* FIXME: untested return value. */
 		add_to_strn(&cookie->path, document);
 
 		for (path_end = cookie->path; *path_end; path_end++) {
@@ -271,7 +271,7 @@ free_cookie_name:
 
 	cookie->domain = parse_http_header_param(str, "domain");
 	if (!cookie->domain)
-		cookie->domain = stracpy(server);
+		cookie->domain = stracpy(server); /* FIXME: untested return value. */
 	if (cookie->domain[0] == '.')
 		memmove(cookie->domain, cookie->domain + 1,
 			strlen(cookie->domain));
@@ -594,31 +594,31 @@ load_cookies() {
 		p = strchr(in_buffer, '\t');
 		if (!p)	goto inv;
 		*p++ = '\0';
-		cookie->name = stracpy(q);
+		cookie->name = stracpy(q); /* FIXME: untested return value. */
 
 		q = p;
 		p = strchr(p, '\t');
 		if (!p) goto inv;
 		*p++ = '\0';
-		cookie->value = stracpy(q);
+		cookie->value = stracpy(q); /* FIXME: untested return value. */
 
 		q = p;
 		p = strchr(p, '\t');
 		if (!p) goto inv;
 		*p++ = '\0';
-		cookie->server = stracpy(q);
+		cookie->server = stracpy(q); /* FIXME: untested return value. */
 
 		q = p;
 		p = strchr(p, '\t');
 		if (!p) goto inv;
 		*p++ = '\0';
-		cookie->path = stracpy(q);
+		cookie->path = stracpy(q); /* FIXME: untested return value. */
 
 		q = p;
 		p = strchr(p, '\t');
 		if (!p) goto inv;
 		*p++ = '\0';
-		cookie->domain = stracpy(q);
+		cookie->domain = stracpy(q); /* FIXME: untested return value. */
 
 		q = p;
 		p = strchr(p, '\t');

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.46 2003/07/22 03:40:53 jonas Exp $ */
+/* $Id: conv.c,v 1.47 2003/07/24 14:36:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -333,23 +333,6 @@ strtolx(unsigned char *str, unsigned char **end)
 
 	return num;
 }
-
-
-unsigned char
-hx(int a)
-{
-	return a >= 10 ? a + 'A' - 10 : a + '0';
-}
-
-int
-unhx(unsigned char a)
-{
-	if (a >= '0' && a <= '9') return a - '0';
-	if (a >= 'A' && a <= 'F') return a - 'A' + 10;
-	if (a >= 'a' && a <= 'f') return a - 'a' + 10;
-	return -1;
-}
-
 
 /* This is _NOT_ for what do you think it's for! We use this to make URL
  * shell-safe, nothing more. */

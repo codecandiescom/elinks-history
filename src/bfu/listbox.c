@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.105 2003/11/09 11:40:14 jonas Exp $ */
+/* $Id: listbox.c,v 1.106 2003/11/09 13:10:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -538,9 +538,6 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	/* Not a pure listbox, but you're not supposed to use this outside of
 	 * the listbox browser anyway, so what.. */
-	/* We rely ie. on the fact that listbox is the last item of the dialog
-	 * and so on; we definitively shouldn't, but handling of all the stuff
-	 * would be much more painful. */
 
 	switch (ev->ev) {
 		case EV_KBD:

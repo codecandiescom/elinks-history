@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.3 2003/10/27 01:19:30 pasky Exp $ */
+/* $Id: os2.c,v 1.4 2003/10/27 01:21:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -666,6 +666,14 @@ void
 set_highpri(void)
 {
 	DosSetPriority(PRTYS_PROCESS, PRTYC_FOREGROUNDSERVER, 0, 0);
+}
+
+
+int
+can_open_os_shell(int environment)
+{
+	if (environment & ENV_XWIN) return 0;
+	return 1;
 }
 
 # endif

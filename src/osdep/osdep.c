@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.98 2003/10/27 01:20:34 pasky Exp $ */
+/* $Id: osdep.c,v 1.99 2003/10/27 01:21:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1146,16 +1146,14 @@ can_resize_window(int environment)
 	return !!(environment & ENV_OS2VIO);
 }
 
+#ifndef OS2
 int
 can_open_os_shell(int environment)
 {
-#ifdef OS2
 	if (environment & ENV_XWIN) return 0;
-#endif
 	return 1;
 }
 
-#ifndef OS2
 void
 set_highpri(void)
 {

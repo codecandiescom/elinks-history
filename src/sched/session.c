@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.292 2004/01/08 14:59:52 jonas Exp $ */
+/* $Id: session.c,v 1.293 2004/01/08 23:36:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -749,7 +749,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	} else {
 		unsigned char *h = get_homepage_url();
 
-		if (!h) {
+		if (!h || !*h) {
 			if (get_opt_int("ui.startup_goto_dialog")
 			    && !first_use) {
 				/* We can't create new window in EV_INIT

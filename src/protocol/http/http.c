@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.76 2002/12/06 14:17:49 pasky Exp $ */
+/* $Id: http.c,v 1.77 2002/12/07 10:55:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -635,7 +635,7 @@ http_send_header(struct connection *c)
 
 	write_to_socket(c, c->sock1, hdr, strlen(hdr), http_get_header);
 	mem_free(hdr);
-	
+
 	setcstate(c, S_SENT);
 }
 
@@ -1068,7 +1068,7 @@ again:
 		if ((d = parse_http_header(e->head, "Cache-Control", NULL))
 		    || (d = parse_http_header(e->head, "Pragma", NULL)))
 		{
-			if (strstr(d, "no-cache")) {
+			if (strstr(d, "no-cache") || strstr(d, "private")) {
 				e->cache_mode = NC_PR_NO_CACHE;
 			}
 			mem_free(d);

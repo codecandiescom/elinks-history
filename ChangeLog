@@ -1,3 +1,16 @@
+Thu Aug 29 21:15:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.h, dialogs/globhist.c, document/globhist.c:
+
+	Fixed deleting/replacing of the global history items.  
+
+Thu Aug 29 21:14:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/listbox.c:
+
+	Extended API of traverse..(), now we can modify the offset inside of
+	the callback.  
+
 Thu Aug 29 17:20:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/listbox.c:

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.25 2003/06/26 21:09:58 pasky Exp $ */
+/* $Id: sched.c,v 1.26 2003/06/26 21:19:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ struct h_conn {
 struct k_conn {
 	LIST_HEAD(struct k_conn);
 
-	void (*protocol)(struct connection *);
+	protocol_handler *protocol;
 	unsigned char *host;
 
 	ttime timeout;
@@ -229,7 +229,7 @@ static struct k_conn *
 is_host_on_keepalive_list(struct connection *c)
 {
 	unsigned char *ho;
-	void (*ph)(struct connection *) = get_protocol_handler(c->url);
+	protocol_handler *ph = get_protocol_handler(c->url);
 	int po;
 	struct k_conn *h;
 
@@ -558,7 +558,7 @@ static void
 run_connection(struct connection *c)
 {
 	struct h_conn *hc;
-	void (*func)(struct connection *);
+	protocol_handler *func;
 
 	if (c->running) {
 		internal("connection already running");

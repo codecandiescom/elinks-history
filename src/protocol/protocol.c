@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.9 2003/06/26 21:09:58 pasky Exp $ */
+/* $Id: protocol.c,v 1.10 2003/06/26 21:19:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,9 +111,8 @@ check_protocol(unsigned char *p, int l)
 }
 
 int
-get_prot_info(unsigned char *prot, int *port,
-	      void (**handler)(struct connection *),
-	      void (**external_handler)(struct session *ses, unsigned char *))
+get_prot_info(unsigned char *prot, int *port, protocol_handler **handler,
+	      protocol_external_handler **external_handler)
 {
 	enum uri_scheme scheme = check_protocol(prot, strlen(prot));
 
@@ -152,9 +151,9 @@ get_protocol_need_slash_after_host(enum uri_scheme scheme)
 }
 
 
-void (*get_protocol_handler(unsigned char *url))(struct connection *)
+protocol_handler *get_protocol_handler(unsigned char *url)
 {
-	void (*f)(struct connection *) = NULL;
+	protocol_handler *f = NULL;
 	unsigned char *p = get_protocol_name(url);
 
 	if (!p) return NULL;
@@ -164,9 +163,9 @@ void (*get_protocol_handler(unsigned char *url))(struct connection *)
 	return f;
 }
 
-void (*get_protocol_external_handler(unsigned char *url))(struct session *, unsigned char *)
+protocol_external_handler *get_protocol_external_handler(unsigned char *url)
 {
-	void (*f)(struct session *, unsigned char *) = NULL;
+	protocol_external_handler *f = NULL;
 	unsigned char *p = get_protocol_name(url);
 
 	if (!p) return NULL;

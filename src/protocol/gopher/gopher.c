@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.7 2004/08/18 18:09:55 jonas Exp $ */
+/* $Id: gopher.c,v 1.8 2004/08/18 18:11:49 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -100,12 +100,13 @@ static struct gopher_entity_info gopher_entity_info[] = {
 	{ GOPHER_BINARY,	"    (BINARY)",	NULL			   },
 	{ GOPHER_CHTML,		"     (CHTML)",	"text/html"		   },
 	{ GOPHER_CSO,		"       (CSO)",	"text/html"		   },
+	{ GOPHER_DIRECTORY,	" (DIRECTORY)",	"text/html"		   },
+	{ GOPHER_FILE,		"      (FILE)",	NULL /* "text/plain" */	   },
 	{ GOPHER_GIF,		" (GIF IMAGE)",	"image/gif"		   },
 	{ GOPHER_HTML,		"      (HTML)",	"text/html"		   },
 	{ GOPHER_IMAGE,		"     (IMAGE)",	NULL /* "image/gif" */	   },
 	{ GOPHER_INDEX,		"     (INDEX)",	"text/html"		   },
 	{ GOPHER_MACBINHEX,	"(BINARY HEX)",	"application/octet-stream" },
-	{ GOPHER_DIRECTORY,	" (DIRECTORY)",	"text/html"		   },
 	{ GOPHER_MIME,		"      (MIME)",	"application/octet-stream" },
 	{ GOPHER_PCBINARY,	"  (PCBINARY)",	"application/octet-stream" },
 	{ GOPHER_PLUS_IMAGE,	"    (IMAGE+)",	NULL /* "image/gif" */	   },
@@ -114,7 +115,6 @@ static struct gopher_entity_info gopher_entity_info[] = {
 	{ GOPHER_PLUS_SOUND,	"    (SOUND+)",	"audio/basic"		   },
 	{ GOPHER_SOUND,		"     (SOUND)",	"audio/basic"		   },
 	{ GOPHER_TELNET,	"    (TELNET)",	NULL			   },
-	{ GOPHER_FILE,		"      (FILE)",	NULL /* "text/plain" */	   },
 	{ GOPHER_TN3270,	"    (TN3270)",	NULL			   },
 	{ GOPHER_UUENCODED,	" (UUENCODED)",	"application/octet-stream" },
 	{ GOPHER_WWW,		"(W3 ADDRESS)",	NULL			   },

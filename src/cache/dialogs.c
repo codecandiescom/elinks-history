@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.58 2004/04/09 03:10:26 jonas Exp $ */
+/* $Id: dialogs.c,v 1.59 2004/05/03 22:57:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "intl/gettext/libintl.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
+#include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/memory.h"
@@ -137,6 +138,39 @@ delete_cache_entry_item(struct listbox_item *item, int last)
 	delete_cache_entry(cached);
 }
 
+static void
+draw_cache_entry_item(struct listbox_item *item, struct listbox_context *context,
+		      int x, int y, int width)
+{
+	struct cache_entry *cached = item->udata;
+	unsigned char *stylename;
+	struct color_pair *color;
+	struct string msg;
+	int trimmedlen;
+
+	/* We have nothing to work with */
+	if (width < 4) return;
+
+	if (!init_string(&msg)) return;
+
+	add_uri_to_string(&msg, cached->uri, URI_PUBLIC);
+	if (cached->uri->post)
+		add_to_string(&msg, " (POST DATA)");
+
+	stylename = (item == context->box->sel) ? "menu.selected"
+		  : ((item->marked)	        ? "menu.marked"
+					        : "menu.normal");
+
+	color = get_bfu_color(context->term, stylename);
+	trimmedlen = int_min(msg.length, width - 3);
+
+	draw_text(context->term, x, y, msg.source, trimmedlen, 0, color);
+	if (trimmedlen < msg.length)
+		draw_text(context->term, x + trimmedlen, y, "...", 3, 0, color);
+
+	done_string(&msg);
+}
+
 static struct listbox_ops cache_entry_listbox_ops = {
 	lock_cache_entry,
 	unlock_cache_entry,
@@ -144,7 +178,7 @@ static struct listbox_ops cache_entry_listbox_ops = {
 	get_cache_entry_info,
 	can_delete_cache_entry,
 	delete_cache_entry_item,
-	NULL,
+	draw_cache_entry_item,
 };
 
 static struct hierbox_browser_button cache_buttons[] = {

@@ -1,4 +1,4 @@
-## $Id: Makefile.doc,v 1.5 2003/06/10 17:26:44 jonas Exp $
+## $Id: Makefile.doc,v 1.6 2003/06/10 23:47:29 jonas Exp $
 
 SUFFIXES = .xml .1 .5
 HTMLDOCTOOL = @HTMLDOCTOOL@
@@ -21,3 +21,6 @@ DOCBUILDDIR = $(top_srcdir)/doc/
 manpages-html: $(manpages_HTMLFORMAT)
 manpages-man: $(manpages_MANFORMAT)
 manpages: manpages-man manpages-html
+
+book-html: $(book_HTMLFORMAT)
+book: $(book_HTMLFORMAT)

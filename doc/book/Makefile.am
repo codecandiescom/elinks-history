@@ -1,26 +1,22 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.9 2003/06/10 21:29:43 jonas Exp $
+## $Id: Makefile.am,v 1.10 2003/06/10 23:47:29 jonas Exp $
 
 include $(top_srcdir)/doc/book/Makefile.doc
 
 SUBDIRS = manpages
 
-EXTRA_PROGRAMS = manual
-manual_SOURCES = manual.xml
-manual_HTMLFORMAT = manual.html
+EXTRA_PROGRAMS = book
+book_SOURCES = book.xml
+book_HTMLFORMAT = book.html
 
 EXTRA_DIST = \
- $(manual_SOURCES) \
+ $(book_SOURCES) \
  Makefile.doc \
  README \
  TODO \
+ book.xml \
  config/* \
  elinksbool.dtd \
  features/* \
  info/* \
- intro/* \
- manual.xml
-
-manual-html: $(manual_HTMLFORMAT)
-
-manual: $(manual_HTMLFORMAT)
+ intro/*

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.192 2004/01/25 14:03:32 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.193 2004/01/25 14:04:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,30 @@ static void add_default_keybindings(void);
 static void init_action_listboxes(void);
 static void free_action_listboxes(void);
 
+
+static int
+delete_keybinding(enum keymap km, long key, long meta)
+{
+	struct keybinding *kb;
+
+	foreach (kb, keymaps[km]) {
+		int was_default = 0;
+
+		if (kb->key != key || kb->meta != meta)
+			continue;
+
+		if (kb->flags & KBDB_DEFAULT) {
+			kb->flags &= ~KBDB_DEFAULT;
+			was_default = 1;
+		}
+
+		free_keybinding(kb);
+
+		return 1 + was_default;
+	}
+
+	return 0;
+}
 
 struct keybinding *
 add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
@@ -137,30 +161,6 @@ keybinding_exists(enum keymap km, long key, long meta, int *action)
 		if (action) *action = kb->action;
 
 		return 1;
-	}
-
-	return 0;
-}
-
-static int
-delete_keybinding(enum keymap km, long key, long meta)
-{
-	struct keybinding *kb;
-
-	foreach (kb, keymaps[km]) {
-		int was_default = 0;
-
-		if (kb->key != key || kb->meta != meta)
-			continue;
-
-		if (kb->flags & KBDB_DEFAULT) {
-			kb->flags &= ~KBDB_DEFAULT;
-			was_default = 1;
-		}
-
-		free_keybinding(kb);
-
-		return 1 + was_default;
 	}
 
 	return 0;

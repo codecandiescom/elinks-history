@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.184 2004/06/22 22:42:25 zas Exp $ */
+/* $Id: tables.c,v 1.185 2004/06/24 09:07:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -818,7 +818,8 @@ format_cell(struct table *table, int column, int row,
 }
 
 static inline void
-get_cell_width(unsigned char *start, unsigned char *end, int cellpadding, int w,
+get_cell_width(unsigned char *start, unsigned char *end,
+	       int cellpadding, int width,
 	       int a, int *min, int *max, int n_link, int *n_links)
 {
 	struct part *part;
@@ -827,8 +828,8 @@ get_cell_width(unsigned char *start, unsigned char *end, int cellpadding, int w,
 	if (max) *max = -1;
 	if (n_links) *n_links = n_link;
 
-	part = format_html_part(start, end, AL_LEFT, cellpadding, w, NULL, !!a,
-			        !!a, NULL, n_link);
+	part = format_html_part(start, end, AL_LEFT, cellpadding, width, NULL,
+			        !!a, !!a, NULL, n_link);
 	if (!part) return;
 
 	if (min) *min = part->box.width;

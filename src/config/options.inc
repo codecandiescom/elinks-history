@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.162 2004/12/18 21:43:42 zas Exp $ */
+/* $Id: options.inc,v 1.163 2004/12/19 02:08:03 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -585,10 +585,6 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_TREE("document", N_("Downloading"),
 		"download", 0,
 		N_("Options regarding files downloading and handling.")),
-
-	/* Compatibility alias. Added: 2003-05-07, 0.5pre1.CVS. */
-	INIT_OPT_ALIAS("document.download", "default_mime_type",
-		"mime.default_type"),
 
 	INIT_OPT_STRING("document.download", N_("Default download directory"),
 		"directory", 0, "./",

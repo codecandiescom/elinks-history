@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.309 2003/10/18 22:32:38 pasky Exp $ */
+/* $Id: options.c,v 1.310 2003/10/18 23:42:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1481,6 +1481,12 @@ register_options(void)
 	add_opt_bool("document.html", N_("Display tables"),
 		"display_tables", 0, 1,
 		N_("Display tables."));
+
+	add_opt_bool("document.html", N_("Expand table columns"),
+		"expand_table_columns", 0, 0,
+		N_("Enable to make table rendering expand table columns\n"
+		"so cells are more correctly vertical aligned with respect\n"
+		"to colors. Still a bit experimental."));
 
 	add_opt_bool("document.html", N_("Display subscripts"),
 		"display_subs", 0, 1,

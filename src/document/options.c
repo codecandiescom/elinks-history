@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.31 2003/10/18 00:57:56 jonas Exp $ */
+/* $Id: options.c,v 1.32 2003/10/18 23:42:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,7 @@ init_document_options(struct document_options *doo)
 	doo->allow_dark_on_black = get_opt_bool("document.colors.allow_dark_on_black");
 	doo->ensure_contrast = get_opt_bool("document.colors.ensure_contrast");
 
+	doo->table_expand_cols = get_opt_bool("document.html.expand_table_columns");
 	doo->table_order = get_opt_bool("document.browse.table_move_order");
 	doo->tables = get_opt_bool("document.html.display_tables");
 	doo->frames = get_opt_bool("document.html.display_frames");

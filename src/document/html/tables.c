@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.91 2003/10/18 16:55:52 jonas Exp $ */
+/* $Id: tables.c,v 1.92 2003/10/18 23:42:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
+#include "document/options.h"
 #include "terminal/draw.h"
 #include "util/color.h"
 #include "util/conv.h"
@@ -1330,6 +1331,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 	struct document *document = t->p->document;
 	int yp;
 	int xp = x + (t->border && (t->frame & F_LHS));
+	int expand_cols = (d_opt && d_opt->table_expand_cols);
 
 	for (i = 0; i < t->x; i++) {
 		yp = y + (t->border && (t->frame & F_ABOVE));
@@ -1354,19 +1356,18 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					       get_hline_width(t, j + s + 1) >= 0);
 				}
 
-#if USE_256_COLORS
-				/* This is not working correctly. Some pages
-				 * will be rendered much better (/.) while
-				 * other will look very ugly and broken. */
-				/* For now it is enabled for 256 color builds
-				 * as it is still a bit experimental and
-				 * someone might feel encouraged to fix it. */
-				par_format.bgcolor = t->bgcolor;
-				for (s = yp; s < yp + yw; s++) {
-					expand_lines(t->p, s);
-					expand_line(t->p, s, xp);
+				if (expand_cols) {
+					/* This is not working correctly. Some
+					 * pages will be rendered much better
+					 * (/.) while other will look very ugly
+					 * and broken. */
+					par_format.bgcolor = t->bgcolor;
+					for (s = yp; s < yp + yw; s++) {
+						expand_lines(t->p, s);
+						expand_line(t->p, s, xp);
+					}
 				}
-#endif
+
 				html_stack_dup();
 				html_top.dontkill = 1;
 

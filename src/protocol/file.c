@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.64 2003/06/23 02:24:37 jonas Exp $ */
+/* $Id: file.c,v 1.65 2003/06/23 02:27:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -686,6 +686,13 @@ file_func(struct connection *c)
 		}
 
 		stream = open_encoded(fd, encoding);
+		if (!stream) {
+			close(fd);
+			mem_free(info);
+			abort_conn_with_state(c, S_OUT_OF_MEM);
+			return;
+		}
+
 		state = read_file(stream, stt.st_size, info);
 
 		close_encoded(stream);

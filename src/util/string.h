@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.68 2004/03/20 18:32:46 jonas Exp $ */
+/* $Id: string.h,v 1.69 2004/03/20 21:01:06 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -141,11 +141,24 @@ void done_string(struct string *string);
 
 #define string_is_empty(string) (!(string)->source || !(string)->length)
 
+#define string_strcmp(string, str) \
+	strncmp((string)->source, str, (string)->length)
+
+#define string_strcasecmp(string, str) \
+	strncmp((string)->source, str, (string)->length)
+
 #define string_strlcmp(string, str, len) \
 	strlcmp((string)->source, (string)->length, str, len)
 
 #define string_strlcasecmp(string, str, len) \
 	strlcmp((string)->source, (string)->length, str, len)
+
+#define string_strchr(string, c) memchr((string)->source, c, (string)->length)
+
+#define string_copy(buffer, string) \
+	memcpy(buffer, (string)->source, (string)->length)
+
+#define get_string_copy(string) memacpy((string)->source, (string)->length)
 
 struct string *add_to_string(struct string *string, unsigned char *text);
 struct string *add_char_to_string(struct string *string, unsigned char character);

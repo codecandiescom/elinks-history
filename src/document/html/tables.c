@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.360 2004/07/08 15:29:19 jonas Exp $ */
+/* $Id: tables.c,v 1.361 2004/07/08 16:14:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -773,9 +773,11 @@ static void
 draw_table_cell(struct table *table, int col, int row, int x, int y)
 {
 	struct table_cell *cell = CELL(table, col, row);
+	struct document *document = table->part->document;
+	struct part *part;
 	int width = 0;
 	int height = 0;
-	int s;
+	int s, tmpy = 0;
 	struct html_element *state;
 
 	if (!cell->start) return;
@@ -802,33 +804,28 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 
 	format.bg = cell->bgcolor;
 	par_format.bgcolor = cell->bgcolor;
-	{
-		struct document *document = table->part->document;
-		struct part *part;
-		int tmpy = y;
 
-		if (cell->valign == VALIGN_MIDDLE)
-			tmpy += (height - cell->height) / 2;
-		else if (cell->valign == VALIGN_BOTTOM)
-			tmpy += (height - cell->height);
+	if (cell->valign == VALIGN_MIDDLE)
+		tmpy += (height - cell->height) / 2;
+	else if (cell->valign == VALIGN_BOTTOM)
+		tmpy += (height - cell->height);
 
-		part = format_cell(table, cell, document, x, tmpy, width);
-		if (part) {
-			/* The cell content doesn't necessarily fill out the
-			 * whole cell height so use the calculated @height
-			 * because it is an upper bound. */
-			assert(height >= cell->height);
+	part = format_cell(table, cell, document, x, tmpy, width);
+	if (part) {
+		/* The cell content doesn't necessarily fill out the whole cell
+		 * height so use the calculated @height because it is an upper
+		 * bound. */
+		assert(height >= cell->height);
 
-			/* The line expansion draws the _remaining_ background
-			 * color of both untouched lines and lines that doesn't
-			 * stretch the whole cell width. */
-			expand_lines(table->part, x + width, y, height, cell->bgcolor);
+		/* The line expansion draws the _remaining_ background color of
+		 * both untouched lines and lines that doesn't stretch the
+		 * whole cell width. */
+		expand_lines(table->part, x + width, y, height, cell->bgcolor);
 
-			if (cell->fragment_id)
-				add_fragment_identifier(part, cell->fragment_id);
+		if (cell->fragment_id)
+			add_fragment_identifier(part, cell->fragment_id);
 
-			mem_free(part);
-		}
+		mem_free(part);
 	}
 
 	done_html_parser_state(state);

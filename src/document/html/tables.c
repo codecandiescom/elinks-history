@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.177 2004/05/16 14:27:15 zas Exp $ */
+/* $Id: tables.c,v 1.178 2004/05/17 10:47:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1931,7 +1931,8 @@ again:
 		else
 			x = par_format.leftmargin;
 
-		int_bounds(&x, 0, ww);
+		if (x > ww) x = ww;
+		if (x < 0) x = 0;
 	}
 
 	get_table_heights(table);

@@ -632,7 +632,7 @@ enable_gnutls=""
 
 AC_ARG_WITH(gnutls, [  --without-gnutls        disable GNUTLS SSL support],
 	    [if test "$with_gnutls" = no;  then disable_gnutls=yes; fi])
-AC_ARG_WITH(gnutls, [  --with-gnutls[=DIR]     enable GNUTLS SSL support],
+AC_ARG_WITH(gnutls, [  --with-gnutls[[=DIR]]     enable GNUTLS SSL support],
 	    [if test "$with_gnutls" != no;  then enable_gnutls=yes; fi])
 gnutls_withval="$withval"
 
@@ -642,7 +642,7 @@ fi
 
 AC_ARG_WITH(openssl, [  --without-openssl       disable OpenSSL support],
 	    [if test "$with_openssl" = no;  then disable_openssl=yes; fi])
-AC_ARG_WITH(openssl, [  --with-openssl[=DIR]    enable OpenSSL support (default)])
+AC_ARG_WITH(openssl, [  --with-openssl[[=DIR]]    enable OpenSSL support (default)])
 openssl_withval="$withval"
 
 dnl ---- OpenSSL

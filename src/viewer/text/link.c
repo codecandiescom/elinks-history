@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.203 2004/06/13 00:30:42 jonas Exp $ */
+/* $Id: link.c,v 1.204 2004/06/13 00:39:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -780,15 +780,18 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	}
 
 	if (link->form_control) {
-		if (link->form_control->type == FC_RESET) {
+		switch (link->form_control->type) {
+		case FC_RESET:
 			add_menu_action(&mi, N_("~Reset form"), ACT_MAIN_RESET_FORM);
-		} else {
-			if (link->form_control->type == FC_TEXTAREA
-			    && !link->form_control->ro) {
+			break;
+
+		case FC_TEXTAREA:
+			if (!link->form_control->ro) {
 				add_to_menu(&mi, N_("Open in ~external editor"), NULL, ACT_MAIN_EDIT,
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}
-
+			/* Fall through */
+		default:
 			add_menu_action(&mi, N_("~Submit form"), ACT_MAIN_SUBMIT_FORM);
 			add_menu_action(&mi, N_("Submit form and rel~oad"), ACT_MAIN_SUBMIT_FORM_RELOAD);
 

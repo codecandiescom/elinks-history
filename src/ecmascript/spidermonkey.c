@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.119 2004/12/19 01:27:31 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.120 2004/12/19 01:41:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -918,6 +918,7 @@ static const JSFunctionSpec form_funcs[] = {
 static JSBool
 form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
+	/* DBG("doc %p %s\n", parent_doc, JS_GetStringBytes(JS_ValueToString(ctx, OBJECT_TO_JSVAL(parent_doc)))); */
 	JSObject *parent_doc = JS_GetParent(ctx, obj);
 	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
 	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
@@ -1185,7 +1186,7 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			if (!form->name || strcasecmp(v.string, form->name))
 				continue;
 
-			P_OBJECT(get_form_object(ctx, obj, find_form_view(doc_view, form)));
+			P_OBJECT(get_form_object(ctx, parent_doc, find_form_view(doc_view, form)));
 			goto convert;
 		}
 		goto bye;

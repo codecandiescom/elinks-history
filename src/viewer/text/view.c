@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.498 2004/06/20 12:22:16 zas Exp $ */
+/* $Id: view.c,v 1.499 2004/06/20 12:35:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -832,8 +832,8 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		case ACT_MAIN_PAGE_UP: rep_ev(ses, doc_view, page_up); break;
 		case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down); break;
 		case ACT_MAIN_UP: rep_ev(ses, doc_view, up); break;
-		case ACT_MAIN_HOME: rep_ev(ses, doc_view, home); break;
-		case ACT_MAIN_END: rep_ev(ses, doc_view, x_end); break;
+		case ACT_MAIN_HOME: home(ses, doc_view); break;
+		case ACT_MAIN_END: x_end(ses, doc_view); break;
 
 		case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view); break;
 		case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;

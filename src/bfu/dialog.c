@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.112 2003/12/09 20:18:27 jonas Exp $ */
+/* $Id: dialog.c,v 1.113 2003/12/13 01:53:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,6 +230,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 		case EV_KBD:
 			{
 			struct widget_data *widget_data = selected_widget(dlg_data);
+			enum keyact action = kbd_action(KM_MAIN, ev, NULL);
 
 			/* First let the widget try out. */
 			if (widget_data->widget->ops->kbd
@@ -279,13 +280,19 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 			/* Cycle focus. */
 
-			if ((ev->x == KBD_TAB && !ev->y) || ev->x == KBD_DOWN
+			if ((ev->x == KBD_TAB && !ev->y)
+			    || action == ACT_DOWN
+			    || action == ACT_RIGHT
+			    || ev->x == KBD_DOWN
 			    || ev->x == KBD_RIGHT) {
 				cycle_widget_focus(dlg_data, 1);
 				break;
 			}
 
-			if ((ev->x == KBD_TAB && ev->y) || ev->x == KBD_UP
+			if ((ev->x == KBD_TAB && ev->y)
+			    || action == ACT_UP
+			    || action == ACT_LEFT
+			    || ev->x == KBD_UP
 			    || ev->x == KBD_LEFT) {
 				cycle_widget_focus(dlg_data, -1);
 				break;

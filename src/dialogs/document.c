@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.58 2003/10/05 20:18:25 pasky Exp $ */
+/* $Id: document.c,v 1.59 2003/10/17 13:13:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ nowhere_box(struct terminal *term, unsigned char *title)
 /* Location info. message box. */
 static void
 loc_msg(struct terminal *term, struct location *location,
-	struct document_view *frame)
+	struct document_view *doc_view)
 {
 	struct cache_entry *ce;
 	struct string msg;
@@ -90,9 +90,9 @@ loc_msg(struct terminal *term, struct location *location,
 
 	add_char_to_string(&msg, '\n');
 
-	if (frame && frame->document->title) {
+	if (doc_view && doc_view->document->title) {
 		add_format_to_string(&msg, "%s: %s", _("Title", term),
-				     frame->document->title);
+				     doc_view->document->title);
 	}
 
 	add_char_to_string(&msg, '\n');
@@ -107,13 +107,13 @@ loc_msg(struct terminal *term, struct location *location,
 			add_format_to_string(&msg, "(%s)", _("incomplete", term));
 		}
 
-		if (frame) {
+		if (doc_view) {
 			add_format_to_string(&msg, "\n%s: %s", _("Codepage", term),
-					get_cp_name(frame->document->cp));
+					get_cp_name(doc_view->document->cp));
 
-			if (frame->document->cp_status == CP_STATUS_ASSUMED) {
+			if (doc_view->document->cp_status == CP_STATUS_ASSUMED) {
 				add_format_to_string(&msg, " (%s)", _("assumed", term));
-			} else if (frame->document->cp_status == CP_STATUS_IGNORED) {
+			} else if (doc_view->document->cp_status == CP_STATUS_IGNORED) {
 				add_format_to_string(&msg, " (%s)",
 						_("ignoring server setting", term));
 			}
@@ -182,18 +182,18 @@ loc_msg(struct terminal *term, struct location *location,
 	}
 #endif
 
-	if (frame) {
+	if (doc_view) {
 		unsigned char *a;
 
 		add_char_to_string(&msg, '\n');
-		a = print_current_link_do(frame, term);
+		a = print_current_link_do(doc_view, term);
 		if (a) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Link", term), a);
 			mem_free(a);
 		}
 
-		a = print_current_link_title_do(frame, term);
+		a = print_current_link_title_do(doc_view, term);
 		if (a) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Link title", term), a);

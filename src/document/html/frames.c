@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.16 2003/10/17 12:26:21 zas Exp $ */
+/* $Id: frames.c,v 1.17 2003/10/17 13:15:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,58 +105,58 @@ create_frame(struct frame_param *fp)
 }
 
 static void
-add_frame_to_list(struct session *ses, struct document_view *fd)
+add_frame_to_list(struct session *ses, struct document_view *doc_view)
 {
 	struct document_view *f;
 
-	assert(ses && fd);
+	assert(ses && doc_view);
 	if_assert_failed return;
 
 	foreach (f, ses->scrn_frames) {
-		if (f->yp > fd->yp || (f->yp == fd->yp && f->xp > fd->xp)) {
-			add_at_pos(f->prev, fd);
+		if (f->yp > doc_view->yp || (f->yp == doc_view->yp && f->xp > doc_view->xp)) {
+			add_at_pos(f->prev, doc_view);
 			return;
 		}
 	}
 
-	add_to_list_bottom(ses->scrn_frames, fd);
+	add_to_list_bottom(ses->scrn_frames, doc_view);
 }
 
 static struct document_view *
 find_fd(struct session *ses, unsigned char *name,
 	int depth, int x, int y)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 
 	assert(ses && name);
 	if_assert_failed return NULL;
 
-	foreachback (fd, ses->scrn_frames) {
-		if (!fd->used && !strcasecmp(fd->name, name)) {
-			fd->used = 1;
-			fd->depth = depth;
-			return fd;
+	foreachback (doc_view, ses->scrn_frames) {
+		if (!doc_view->used && !strcasecmp(doc_view->name, name)) {
+			doc_view->used = 1;
+			doc_view->depth = depth;
+			return doc_view;
 		}
 	}
 
-	fd = mem_calloc(1, sizeof(struct document_view));
-	if (!fd) return NULL;
+	doc_view = mem_calloc(1, sizeof(struct document_view));
+	if (!doc_view) return NULL;
 
-	fd->used = 1;
-	fd->name = stracpy(name);
-	if (!fd->name) {
-		mem_free(fd);
+	doc_view->used = 1;
+	doc_view->name = stracpy(name);
+	if (!doc_view->name) {
+		mem_free(doc_view);
 		return NULL;
 	}
-	fd->depth = depth;
-	fd->xp = x;
-	fd->yp = y;
-	fd->search_word = &ses->search_word;
+	doc_view->depth = depth;
+	doc_view->xp = x;
+	doc_view->yp = y;
+	doc_view->search_word = &ses->search_word;
 
-	/*add_to_list(ses->scrn_frames, fd);*/
-	add_frame_to_list(ses, fd);
+	/*add_to_list(ses->scrn_frames, doc_view);*/
+	add_frame_to_list(ses, doc_view);
 
-	return fd;
+	return doc_view;
 }
 
 struct document_view *
@@ -165,7 +165,7 @@ format_frame(struct session *ses, unsigned char *name,
 {
 	struct cache_entry *ce;
 	struct view_state *vs;
-	struct document_view *fd;
+	struct document_view *doc_view;
 	struct frame *fr;
 
 	assert(ses && name && o);
@@ -189,10 +189,10 @@ repeat:
 		}
 	}
 
-	fd = find_fd(ses, name, depth, o->xp, o->yp);
-	if (fd) cached_format_html(vs, fd, o);
+	doc_view = find_fd(ses, name, depth, o->xp, o->yp);
+	if (doc_view) cached_format_html(vs, doc_view, o);
 
-	return fd;
+	return doc_view;
 }
 
 void
@@ -225,11 +225,11 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 			if (f->subframe)
 				format_frames(ses, f->subframe, &o, depth + 1);
 			else if (f->name) {
-				struct document_view *fdc;
+				struct document_view *doc_view;
 
-				fdc = format_frame(ses, f->name, &o, depth);
-				if (fdc && document_has_frames(fdc->document))
-					format_frames(ses, fdc->document->frame_desc,
+				doc_view = format_frame(ses, f->name, &o, depth);
+				if (doc_view && document_has_frames(doc_view->document))
+					format_frames(ses, doc_view->document->frame_desc,
 						      &o, depth + 1);
 			}
 			o.xp += o.xw + 1;

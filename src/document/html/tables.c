@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.318 2004/06/29 23:12:58 pasky Exp $ */
+/* $Id: tables.c,v 1.319 2004/06/29 23:13:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1138,10 +1138,10 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		distribute_widths(table, table->width);
 
 	if (!part->document && part->box.x == 1) {
-		int ww = table->real_width + margins;
+		int total_width = table->real_width + margins;
 
-		int_bounds(&ww, table->real_width, par_format.width);
-		int_lower_bound(&part->box.width, ww);
+		int_bounds(&total_width, table->real_width, par_format.width);
+		int_lower_bound(&part->box.width, total_width);
 		part->cy += table->real_height;
 
 		goto ret2;

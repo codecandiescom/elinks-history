@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.119 2003/11/12 09:19:26 zas Exp $ */
+/* $Id: screen.c,v 1.120 2003/12/07 21:03:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,15 @@ static unsigned char frame_vt100_u[48] = {
 	192, 218, 193, 194, 195, 196, 197, 193,
 	193, 194, 194, 192, 192, 218, 218, 197,
 	197, 217, 218, 177,  32, 32,  32,  32
+};
+
+static unsigned char frame_freebsd[48] = {
+	130, 138, 128, 153, 150, 150, 150, 140,
+	140, 150, 153, 140, 139, 139, 139, 140,
+	142, 151, 152, 149, 146, 143, 149, 149,
+	142, 141, 151, 152, 149, 146, 143, 151,
+	151, 152, 152, 142, 142, 141, 141, 143,
+	143, 139, 141, 128, 128, 128, 128, 128,
 };
 
 static unsigned char frame_koi[48] = {
@@ -147,6 +156,17 @@ static struct screen_driver linux_screen_driver = {
 	/* trans: */		1,
 };
 
+static struct screen_driver freebsd_screen_driver = {
+				NULL_LIST_HEAD,
+	/* type: */		TERM_FREEBSD,
+	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
+	/* frame: */		frame_freebsd,
+	/* frame_seqs: */	NULL,		/* No m11_hack */
+	/* underline: */	underline_seqs,
+	/* color_mode: */	COLOR_MODE_16,
+	/* trans: */		1,
+};
+
 static struct screen_driver koi8_screen_driver = {
 				NULL_LIST_HEAD,
 	/* type: */		TERM_KOI8,
@@ -163,6 +183,7 @@ static struct screen_driver *screen_drivers[] = {
 	/* TERM_DUMB: */	&dumb_screen_driver,
 	/* TERM_VT100: */	&vt100_screen_driver,
 	/* TERM_LINUX: */	&linux_screen_driver,
+	/* TERM_FREEBSD: */	&freebsd_screen_driver,
 	/* TERM_KOI8: */	&koi8_screen_driver,
 };
 
@@ -199,6 +220,15 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 		} else if (get_opt_bool_tree(term_spec, "m11_hack")) {
 			driver->frame_seqs = m11_hack_frame_seqs;
 		}
+
+	else if (driver->type == TERM_FREEBSD) {
+		if (utf8_io) {
+			driver->charsets[1] = get_cp_index("cp437");
+
+		} else if (get_opt_bool_tree(term_spec, "m11_hack")) {
+			driver->frame_seqs = m11_hack_frame_seqs;
+		}
+
 
 	} else if (driver->type == TERM_VT100) {
 		if (utf8_io) {

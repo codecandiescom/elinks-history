@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.29 2003/12/01 14:31:58 pasky Exp $ */
+/* $Id: terminal.h,v 1.30 2003/12/07 21:03:16 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -19,6 +19,7 @@ enum term_mode_type {
 	TERM_DUMB = 0,
 	TERM_VT100,
 	TERM_LINUX,
+	TERM_FREEBSD,
 	TERM_KOI8,
 };
 

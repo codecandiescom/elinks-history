@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.24 2004/01/19 19:01:42 jonas Exp $ */
+/* $Id: parser.c,v 1.25 2004/01/19 19:18:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,9 +166,10 @@ get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 {
 	struct css_selector *selector;
 
-	foreach (selector, css->selectors)
+	foreach (selector, css->selectors) {
 		if (!strlcasecmp(name, namelen, selector->element, -1))
 			return selector;
+	}
 
 	return NULL;
 }

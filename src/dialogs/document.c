@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.20 2002/12/17 13:29:15 zas Exp $ */
+/* $Id: document.c,v 1.21 2002/12/17 23:58:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,56 +231,61 @@ head_msg(struct session *ses)
 		return;
 	}
 
-	if (find_in_cache(cur_loc(ses)->vs.url, &ce)) {
-		unsigned char *headers;
+	if (find_in_cache(cur_loc(ses)->vs.url, &ce) && ce->head) {
+		unsigned char *headers = stracpy(ce->head);
 
-		if (ce->head) {
-			headers = stracpy(ce->head);
-			if (!headers) return;
+		if (!headers) return;
 
-			if (*headers)  {
-				int i = 0, j = 0;
+		if (*headers)  {
+			int i = 0, j = 0;
+			/* Sanitize headers string. */
+			/* XXX: Do we need to check length and limit
+			 * it to something reasonable ? */
 
-				/* Sanitize headers string. */
-				/* XXX: Do we need to check length and limit
-				 * it to something reasonable ? */
-
-				while (ce->head[i]) {
-					/* Check for control chars. */
-					if (ce->head[i] < ' '
-					    && ce->head[i] != '\n') {
-						/* Ignore '\r' but replace
-						 * others control chars with
-						 * a visible char. */
-						if (ce->head[i] != '\r') {
-							 headers[j] = '*';
-							 j++;
-						}
-					} else {
-						headers[j] = ce->head[i];
-						j++;
+			while (ce->head[i]) {
+				/* Check for control chars. */
+				if (ce->head[i] < ' '
+				    && ce->head[i] != '\n') {
+					/* Ignore '\r' but replace
+					 * others control chars with
+					 * a visible char. */
+					if (ce->head[i] != '\r') {
+						 headers[j] = '*';
+						 j++;
 					}
-					i++;
+				} else {
+					headers[j] = ce->head[i];
+					j++;
 				}
-
-				/* Ensure null termination. */
-				headers[j] = '\0';
-
-				/* Remove all ending '\n' if any. */
-				while (j && headers[--j] == '\n')
-					headers[j] = '\0';
+				i++;
 			}
 
-		} else {
-			headers = stracpy("");
-			if (!headers) return;
+			/* Ensure null termination. */
+			headers[j] = '\0';
+
+			/* Remove all ending '\n' if any. */
+			while (j && headers[--j] == '\n')
+			headers[j] = '\0';
+
+
+			if (*headers)
+			/* Headers info message box. */
+				msg_box(ses->term, getml(headers, NULL),
+				TEXT(T_HEADER_INFO), AL_LEFT,
+				headers,
+				NULL, 1,
+				TEXT(T_OK), NULL, B_ENTER | B_ESC);
+
+			return;
 		}
 
-		/* Headers info message box. */
-		msg_box(ses->term, getml(headers, NULL),
-			TEXT(T_HEADER_INFO), AL_LEFT,
-			headers,
-			NULL, 1,
-			TEXT(T_OK), NULL, B_ENTER | B_ESC);
+		mem_free(headers);
 	}
+
+	msg_box(ses->term, NULL,
+		TEXT(T_HEADER_INFO), AL_LEFT,
+		TEXT(T_NO_HEADER_INFO),
+		NULL, 1,
+		TEXT(T_OK), NULL, B_ENTER | B_ESC);
+
 }

@@ -397,3 +397,4 @@ T_KKEYMAP, "Table",
 T_KEYSTROKE_HELP, "Les touches doivent suivre le format: [Prefix-]Touche\nPrefix: Shift, Ctrl, Alt\nTouche: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 T_KEYSTROKE, "Touches",
 T_INVALID_KEYSTROKE, "Touche invalide.",
+T_NO_HEADER_INFO, "Aucune information d'entête.",

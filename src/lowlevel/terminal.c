@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.59 2003/05/03 20:26:58 pasky Exp $ */
+/* $Id: terminal.c,v 1.60 2003/05/03 20:41:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,7 +261,7 @@ add_window_at_pos(struct terminal *term,
 	ev.x = term->x;
 	ev.y = term->y;
 
-	win = mem_alloc(sizeof(struct window));
+	win = mem_calloc(sizeof(struct window));
 	if (!win) {
 		if (data) mem_free(data);
 		return;
@@ -270,7 +270,6 @@ add_window_at_pos(struct terminal *term,
 	win->handler = handler;
 	win->data = data;
 	win->term = term;
-	win->xp = win->yp = 0;
 	/* Ordinary (not root) window */
 	win->type = 0;
 	add_at_pos(at, win);
@@ -516,9 +515,12 @@ init_term(int fdin, int fdout,
 	term->input_queue = NULL;
 	term->qlen = 0;
 
+	/* alloc_term_screen(term, 80, 25); */
+	add_to_list(terminals, term);
+
 	init_list(term->windows);
 
-	win = mem_alloc(sizeof(struct window));
+	win = mem_calloc(sizeof(struct window));
 	if (!win) {
 		mem_free(term);
 		check_if_no_terminal();
@@ -526,14 +528,11 @@ init_term(int fdin, int fdout,
 	}
 
 	win->handler = root_window;
-	win->data = NULL;
 	win->term = term;
 	/* Root window */
 	win->type = 1;
 
 	add_to_list(term->windows, win);
-	/* alloc_term_screen(term, 80, 25); */
-	add_to_list(terminals, term);
 
 	set_handlers(fdin, (void (*)(void *)) in_term, NULL,
 		     (void (*)(void *)) destroy_terminal, term);

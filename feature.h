@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.23 2004/01/01 11:53:36 pasky Exp $ */
+/* $Id: feature.h,v 1.24 2004/01/01 13:54:57 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -319,7 +319,7 @@
 
 #ifdef HAVE_SETENV
 /* Uncomment the following line if you want to enable this: */
-/* #define ELINKS_LOCAL_CGI */
+/* #define CONFIG_CGI */
 #endif
 
 

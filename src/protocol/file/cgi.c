@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.44 2003/12/15 06:39:04 witekfl Exp $ */
+/* $Id: cgi.c,v 1.45 2004/01/01 13:54:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 
 #include "elinks.h"
 
-#ifdef ELINKS_LOCAL_CGI
+#ifdef CONFIG_CGI
 
 #include "config/options.h"
 #include "cookies/cookies.h"
@@ -390,4 +390,4 @@ end2:
 	return 0;
 }
 
-#endif /* ELINKS_LOCAL_CGI */
+#endif /* CONFIG_CGI */

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.52 2004/12/17 23:44:39 pasky Exp $ */
+/* $Id: forms.c,v 1.53 2004/12/17 23:46:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,22 @@ se:
 	while (pos < stop_pos && *pos != '<') {
 		pos++;
 	}
-	if (pos >= stop_pos) goto end_parse;
+
+	if (pos >= stop_pos) {
+		/* We hit start of the current tag. So take
+		 * the last <form> encountered, if any, and
+		 * be done with it. */
+		if (last_form_start && last_form_attr) {
+			html_context.last_form_tag = last_form_start;
+			html_context.last_form_attr = last_form_attr;
+			html_context.last_input_tag = stop_pos;
+			get_html_form(last_form_attr, &form);
+		} else {
+			memset(&form, 0, sizeof(struct form));
+		}
+		return;
+	}
+
 	if (pos + 2 < stop_pos && (pos[1] == '!' || pos[1] == '?')) {
 		pos = skip_comment(pos, stop_pos);
 		goto se;
@@ -162,17 +177,6 @@ se:
 	last_form_start = tag_start_pos;
 	last_form_attr = attr;
 	goto se;
-
-
-end_parse:
-	if (last_form_start && last_form_attr) {
-		html_context.last_form_tag = last_form_start;
-		html_context.last_form_attr = last_form_attr;
-		html_context.last_input_tag = stop_pos;
-		get_html_form(last_form_attr, &form);
-	} else {
-		memset(&form, 0, sizeof(struct form));
-	}
 }
 
 int

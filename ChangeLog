@@ -1,3 +1,27 @@
+Sat Dec 28 19:49:20 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/manual/: README, TODO:
+
+	A small step for the manual a big step for ELinks documentation. ;) 
+
+Sat Dec 28 02:20:21 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/syntree.c:
+
+	Properly initialize lists in init_syntree_node().  
+
+Fri Dec 27 23:58:29 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	HPT_TAG_WHITE parser.  
+
+Fri Dec 27 23:49:01 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Comments parser.  
+
 Fri Dec 27 22:37:09 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/elusive/parser/html/parser.c:

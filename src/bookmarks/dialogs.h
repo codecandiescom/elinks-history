@@ -1,4 +1,4 @@
-/* $Id: dialogs.h,v 1.12 2004/01/07 03:18:19 jonas Exp $ */
+/* $Id: dialogs.h,v 1.13 2004/01/07 03:49:03 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
@@ -37,7 +37,7 @@ void launch_bm_add_link_dialog(struct terminal *term,
 			       struct dialog_data *parent,
 			       struct session *ses);
 
-void menu_bookmark_terminal_tabs(struct terminal *term, void *d, struct session *ses);
+void bookmark_terminal_tabs_dialog(struct terminal *term);
 
 #endif
 #endif

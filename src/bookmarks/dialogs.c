@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.151 2004/01/07 03:18:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.152 2004/01/07 03:49:03 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -577,7 +577,7 @@ launch_bm_add_link_dialog(struct terminal *term,
 }
 
 void
-menu_bookmark_terminal_tabs(struct terminal *term, void *d, struct session *ses)
+bookmark_terminal_tabs_dialog(struct terminal *term)
 {
 	unsigned char buffer[MAX_STR_LEN];
 	unsigned char *template = _("Saved session", term);
@@ -600,9 +600,9 @@ menu_bookmark_terminal_tabs(struct terminal *term, void *d, struct session *ses)
 	}
 #endif
 
-	input_field(ses->tab->term, NULL, 1,
+	input_field(term, NULL, 1,
 		    N_("Bookmark tabs"), N_("Enter folder name"),
-		    N_("OK"), N_("Cancel"), ses->tab->term, NULL,
+		    N_("OK"), N_("Cancel"), term, NULL,
 		    MAX_STR_LEN, buffer, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) bookmark_terminal_tabs,
 		    NULL);

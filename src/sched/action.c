@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.5 2004/01/07 03:18:20 jonas Exp $ */
+/* $Id: action.c,v 1.6 2004/01/07 03:49:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,13 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 	switch (action) {
 		/* Please keep in alphabetical order for now. Later we can sort
 		 * by most used or something. */
+		case ACT_ADD_BOOKMARK_TABS:
+#ifdef CONFIG_BOOKMARKS
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				bookmark_terminal_tabs_dialog(term);
+#endif
+			break;
+
 		case ACT_BACK:
 			go_back(ses);
 			break;
@@ -185,7 +192,6 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 
 		case ACT_ABORT_CONNECTION:
 		case ACT_ADD_BOOKMARK:
-		case ACT_ADD_BOOKMARK_TABS:
 		case ACT_ADD_BOOKMARK_LINK:
 		case ACT_AUTO_COMPLETE:
 		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.16 2003/07/25 22:18:18 jonas Exp $ */
+/* $Id: screen.c,v 1.17 2003/07/25 22:39:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,19 +153,29 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 	}
 
 	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
-		int charset = opt_cache->charset;
-		int type = opt_cache->type;
+		if (opt_cache->utf_8_io) {
+			int charset;
 
-		if (B) {
-			if (type == TERM_LINUX || type == TERM_VT100)
-				charset = opt_cache->cp437;
-			else if (type == TERM_KOI8)
-				charset = opt_cache->koi8r;
-		}
-		if (opt_cache->utf_8_io)
+			if (B) {
+				switch (opt_cache->type) {
+					case TERM_LINUX:
+					case TERM_VT100:
+						charset = opt_cache->cp437;
+						break;
+					case TERM_KOI8:
+						charset = opt_cache->koi8r;
+						break;
+					default:
+						charset = opt_cache->charset;
+				}
+			} else {
+				charset = opt_cache->charset;
+			}
+
 			add_to_string(screen, cp2utf_8(charset, c));
-		else
+		} else {
 			add_char_to_string(screen, c);
+		}
 	}
 	else if (!c || c == 1) add_char_to_string(screen, ' ');
 	else add_char_to_string(screen, '.');

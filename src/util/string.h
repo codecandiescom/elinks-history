@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.18 2003/05/02 08:25:30 zas Exp $ */
+/* $Id: string.h,v 1.19 2003/05/03 15:21:14 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -71,11 +71,11 @@ isA(unsigned char c)
 
 #ifdef USE_LIBC
 #undef HAVE_MEMMOVE
+#undef HAVE_BCOPY /* prevent using bcopy() stub for memmove() */
 #undef HAVE_MEMPCPY
 #undef HAVE_STPCPY
 #undef HAVE_STRCASECMP
 #undef HAVE_STRCASESTR
-#undef HAVE_STRCHR
 #undef HAVE_STRDUP
 #undef HAVE_STRERROR
 #undef HAVE_STRNCASECMP

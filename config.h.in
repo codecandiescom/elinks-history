@@ -60,6 +60,9 @@
 /* Define if you have the timegm function.  */
 #undef HAVE_TIMEGM
 
+/* Define if you have the <arpa/inet.h> header file.  */
+#undef HAVE_ARPA_INET_H
+
 /* Define if you have the <dirent.h> header file.  */
 #undef HAVE_DIRENT_H
 

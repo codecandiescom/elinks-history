@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.497 2004/09/24 18:50:38 pasky Exp $ */
+/* $Id: parser.c,v 1.498 2004/09/24 19:01:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -502,7 +502,7 @@ not_processed:
 		return 1;
 	}
 
-	if (*html != '^') {
+	if (part->document && *html != '^') {
 		add_to_string_list(&part->document->onload_snippets,
 		                   html, *end - html);
 	}

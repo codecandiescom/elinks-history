@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.9 2003/11/29 16:56:30 jonas Exp $ */
+/* $Id: state.c,v 1.10 2003/11/29 17:12:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,6 +125,13 @@ free_strerror_buf(void)
 	free_list(strerror_buf);
 }
 
+
+#define average_speed(progress) \
+	((longlong) (progress)->loaded * 10 / ((progress)->elapsed / 100))
+
+#define current_speed(progress) \
+	((progress)->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000))
+
 unsigned char *
 get_stat_msg(struct download *stat, struct terminal *term)
 {
@@ -135,7 +142,6 @@ get_stat_msg(struct download *stat, struct terminal *term)
 		/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
 		return stracpy(get_err_msg(stat->state, term));
 	}
-
 
 	if (!init_string(&msg)) return NULL;
 
@@ -148,24 +154,24 @@ get_stat_msg(struct download *stat, struct terminal *term)
 		add_char_to_string(&msg, ' ');
 		add_xnum_to_string(&msg, stat->prg->size);
 	}
+
 	add_to_string(&msg, ", ");
+
 	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg, _("avg", term));
 		add_char_to_string(&msg, ' ');
 	}
-	add_xnum_to_string(&msg, (longlong)stat->prg->loaded * 10
-		/ (stat->prg->elapsed / 100));
+
+	add_xnum_to_string(&msg, average_speed(stat->prg));
 	add_to_string(&msg, "/s");
+
 	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg, ", ");
 		add_to_string(&msg, _("cur", term));
 		add_char_to_string(&msg, ' '),
-		add_xnum_to_string(&msg, stat->prg->cur_loaded
-			/ (CURRENT_SPD_SEC
-				* SPD_DISP_TIME / 1000));
+		add_xnum_to_string(&msg, current_speed(stat->prg));
 		add_to_string(&msg, "/s");
 	}
 
 	return msg.source;
 }
-

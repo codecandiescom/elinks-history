@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.145 2003/12/27 21:51:07 zas Exp $ */
+/* $Id: menu.c,v 1.146 2003/12/28 19:53:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -780,7 +780,7 @@ check:
 
 		p += textlen;
 
-		if (p > term->width)
+		if (p > term->width - 2)
 			break;
 	}
 

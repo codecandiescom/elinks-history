@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.360 2004/01/18 16:26:24 zas Exp $ */
+/* $Id: parser.c,v 1.361 2004/01/18 16:29:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2403,9 +2403,9 @@ static void
 parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
 		   int **new_values, int *new_values_count)
 {
-	int val, ret = 0;
-	int *values = NULL;
-	int values_count = 0;
+	int val, ret;
+	int *values;
+	int values_count;
 	register int i;
 
 	ret = extract_rows_or_cols_values(str, max_value, pixels_per_char,

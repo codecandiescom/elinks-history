@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.192 2005/03/08 15:25:20 zas Exp $ */
+/* $Id: ftp.c,v 1.193 2005/03/08 15:34:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -579,6 +579,10 @@ ftp_got_pwd(struct connection *conn, struct read_buffer *rb)
 			}
 		}
 
+		/* The path has to start with /, so it means we proudly ignore
+		 * any TOP-20 paths (see RFC 959) and any other esoteric ones.
+		 * We should perhaps even do more checks about the path
+		 * returned by the server. --Zas */
 		if (start != -1 && end != -1 && end >= start && data[start] == '/') {
 			mem_free_set(&conn->basedir,
 				     memacpy(&data[start], end - start + 1));

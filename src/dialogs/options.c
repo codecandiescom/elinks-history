@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.84 2003/10/24 22:33:01 pasky Exp $ */
+/* $Id: options.c,v 1.85 2003/10/24 22:38:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,16 +188,6 @@ terminal_options_fn(struct dialog_data *dlg_data)
 #endif
 
 #define TERMOPT_WIDGET_SIZE (TERMOPT_WIDGETS * sizeof(struct widget))
-
-#define set_dlg_checkbox(dlg, n, groupid, groupnum, dataz)		\
-	do {								\
-		(dlg)->items[n].type = D_CHECKBOX;			\
-		(dlg)->items[n].gid = (groupid);			\
-		(dlg)->items[n].gnum = (groupnum);			\
-		(dlg)->items[n].dlen = sizeof(int);			\
-		(dlg)->items[n].data = (unsigned char *) &(dataz);	\
-		(n)++;						\
-	} while (0)
 
 #define set_dlg_button(dlg, n, key, handler, button_text)		\
 	do {								\

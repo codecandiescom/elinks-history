@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.59 2003/10/24 20:11:54 zas Exp $ */
+/* $Id: search.c,v 1.60 2003/10/24 22:38:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1125,40 +1125,11 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	dlg->items[n].data = field;
 	n++;
 
-	dlg->items[n].type = D_CHECKBOX;
-	dlg->items[n].gid = 1;
-	dlg->items[n].gnum = 0;
-	dlg->items[n].dlen = sizeof(int);
-	dlg->items[n].data = (unsigned char *) &hop->whether_regex;
-	n++;
-
-	dlg->items[n].type = D_CHECKBOX;
-	dlg->items[n].gid = 1;
-	dlg->items[n].gnum = 1;
-	dlg->items[n].dlen = sizeof(int);
-	dlg->items[n].data = (unsigned char *) &hop->whether_regex;
-	n++;
-
-	dlg->items[n].type = D_CHECKBOX;
-	dlg->items[n].gid = 1;
-	dlg->items[n].gnum = 2;
-	dlg->items[n].dlen = sizeof(int);
-	dlg->items[n].data = (unsigned char *) &hop->whether_regex;
-	n++;
-
-	dlg->items[n].type = D_CHECKBOX;
-	dlg->items[n].gid = 2;
-	dlg->items[n].gnum = 1;
-	dlg->items[n].dlen = sizeof(int);
-	dlg->items[n].data = (unsigned char *) &hop->cases;
-	n++;
-
-	dlg->items[n].type = D_CHECKBOX;
-	dlg->items[n].gid = 2;
-	dlg->items[n].gnum = 0;
-	dlg->items[n].dlen = sizeof(int);
-	dlg->items[n].data = (unsigned char *) &hop->cases;
-	n++;
+	set_dlg_checkbox(dlg, n, 1, 0, hop->whether_regex);
+	set_dlg_checkbox(dlg, n, 1, 1, hop->whether_regex);
+	set_dlg_checkbox(dlg, n, 1, 2, hop->whether_regex);
+	set_dlg_checkbox(dlg, n, 2, 1, hop->cases);
+	set_dlg_checkbox(dlg, n, 2, 0, hop->cases);
 
 	dlg->items[n].type = D_BUTTON;
 	dlg->items[n].gid = B_ENTER;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.155 2002/12/13 20:12:27 jonas Exp $ */
+/* $Id: options.c,v 1.156 2002/12/13 22:43:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -595,7 +595,7 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 		printf("Options:\n\n");
 	}
 
-	foreachback (option, *((struct list_head *) cmdline_options.ptr)) {
+	foreach (option, *((struct list_head *) cmdline_options.ptr)) {
 		if (1 /*option->flags & OPT_CMDLINE*/) {
 			printf("-%s ", option->name);
 

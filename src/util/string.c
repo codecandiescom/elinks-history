@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.90 2004/01/02 15:38:06 pasky Exp $ */
+/* $Id: string.c,v 1.91 2004/01/02 15:39:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,7 +175,8 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 	 * So noone should better rely on the return value actually meaning
 	 * anything quantitatively. --pasky */ \
  \
-	string_assert(errfile, errline, s1 && s2, c); \
+ 	if (!s1 || !s2) \
+		return 1; \
  \
 	/* n1,n2 is unsigned, so don't assume -1 < 0 ! >:) */ \
  \

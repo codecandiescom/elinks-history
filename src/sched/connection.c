@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.51 2003/07/03 22:55:51 jonas Exp $ */
+/* $Id: connection.c,v 1.52 2003/07/03 23:30:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,64 +231,6 @@ set_connection_state(struct connection *c, int state)
 	if (state >= 0) send_connection_info(c);
 }
 
-static struct keepalive_connection *
-get_keepalive_connection(struct connection *c)
-{
-	unsigned char *host;
-	protocol_handler *handler = get_protocol_handler(c->url);
-	int port;
-	struct keepalive_connection *keepalive_connection;
-
-	if (!handler) return NULL;
-
-	port = get_port(c->url);
-	if (port == -1) return NULL;
-
-	host = get_host_and_pass(c->url, 1);
-	if (!host) return NULL;
-
-	foreach (keepalive_connection, keepalive_connections)
-		if (keepalive_connection->protocol == handler
-		    && keepalive_connection->port == port
-		    && !strcmp(keepalive_connection->host, host)) {
-			mem_free(host);
-			return keepalive_connection;
-		}
-
-	mem_free(host);
-	return NULL;
-}
-
-int
-get_keepalive_socket(struct connection *c)
-{
-	struct keepalive_connection *k = get_keepalive_connection(c);
-
-	if (!k) return -1;
-
-	c->sock1 = k->conn;
-	c->pf = k->pf;
-
-	del_from_list(k);
-	if (k->host) mem_free(k->host);
-	mem_free(k);
-
-	return 0;
-}
-
-static inline void
-abort_all_keepalive_connections(void)
-{
-	struct keepalive_connection *k;
-
-	foreach (k, keepalive_connections) {
-		mem_free(k->host);
-		close(k->conn);
-	}
-	free_list(keepalive_connections);
-	check_keepalive_connections();
-}
-
 static void
 free_connection_data(struct connection *c)
 {
@@ -375,6 +317,52 @@ del_connection(struct connection *c)
 #ifdef DEBUG
 	check_queue_bugs();
 #endif
+}
+
+
+static struct keepalive_connection *
+get_keepalive_connection(struct connection *c)
+{
+	unsigned char *host;
+	protocol_handler *handler = get_protocol_handler(c->url);
+	int port;
+	struct keepalive_connection *keepalive_connection;
+
+	if (!handler) return NULL;
+
+	port = get_port(c->url);
+	if (port == -1) return NULL;
+
+	host = get_host_and_pass(c->url, 1);
+	if (!host) return NULL;
+
+	foreach (keepalive_connection, keepalive_connections)
+		if (keepalive_connection->protocol == handler
+		    && keepalive_connection->port == port
+		    && !strcmp(keepalive_connection->host, host)) {
+			mem_free(host);
+			return keepalive_connection;
+		}
+
+	mem_free(host);
+	return NULL;
+}
+
+int
+get_keepalive_socket(struct connection *c)
+{
+	struct keepalive_connection *k = get_keepalive_connection(c);
+
+	if (!k) return -1;
+
+	c->sock1 = k->conn;
+	c->pf = k->pf;
+
+	del_from_list(k);
+	if (k->host) mem_free(k->host);
+	mem_free(k);
+
+	return 0;
 }
 
 void
@@ -467,6 +455,20 @@ check_keepalive_connections(void)
 		keepalive_timeout = install_timer(KEEPALIVE_CHECK_TIME,
 				                  keepalive_timer, NULL);
 }
+
+static inline void
+abort_all_keepalive_connections(void)
+{
+	struct keepalive_connection *k;
+
+	foreach (k, keepalive_connections) {
+		mem_free(k->host);
+		close(k->conn);
+	}
+	free_list(keepalive_connections);
+	check_keepalive_connections();
+}
+
 
 static inline void
 add_to_queue(struct connection *c)

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.407 2004/05/25 07:14:50 jonas Exp $ */
+/* $Id: session.c,v 1.408 2004/05/26 16:22:09 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -268,16 +268,13 @@ static inline void
 load_css_imports(struct session *ses, struct document_view *doc_view)
 {
 	struct document *document = doc_view->document;
-	struct string_list_item *import;
+	struct uri *uri;
+	int index;
 
 	if (!document) return;
 
-	foreach (import, document->css_imports) {
-		struct uri *uri = get_uri(import->string.source, -1);
-
-		if (!uri) continue;
+	foreach_uri (uri, index, &document->css_imports) {
 		request_additional_file(ses, "", uri, PRI_CSS);
-		done_uri(uri);
 	}
 }
 #else

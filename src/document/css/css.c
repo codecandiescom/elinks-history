@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.43 2004/05/21 11:57:50 jonas Exp $ */
+/* $Id: css.c,v 1.44 2004/05/26 16:22:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,10 +53,9 @@ struct option_info css_options_info[] = {
 
 
 void
-import_css(struct css_stylesheet *css, unsigned char *url)
+import_css(struct css_stylesheet *css, struct uri *uri)
 {
 	/* Do we have it in the cache? (TODO: CSS cache) */
-	struct uri *uri = get_uri(url, -1);
 	struct cache_entry *cached = uri ? find_in_cache(uri) : NULL;
 	struct fragment *fragment;
 

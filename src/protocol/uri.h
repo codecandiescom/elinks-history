@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.100 2004/05/25 03:45:40 jonas Exp $ */
+/* $Id: uri.h,v 1.101 2004/05/26 16:22:09 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -126,6 +126,23 @@ enum uri_component {
 	/* Used for adding the proxied URI after the '/' in the proxy URI */
 	URI_PROXY		= ~URI_DEFAULT_PORT,
 };
+
+
+/* List for maintaining multiple URIs. Free it with mem_free() */
+struct uri_list {
+	int size;
+	struct uri **uris;
+};
+
+#define foreach_uri(uri, index, list) \
+	for (index = 0; index < (list)->size; index++) \
+		if ((uri = (list)->uris[index]))
+
+/* Adds @uri to the URI list */
+struct uri *add_to_uri_list(struct uri_list *list, struct uri *uri);
+
+/* Free all entries in the URI list */
+void free_uri_list(struct uri_list *list);
 
 
 /* A small URI struct cache to increase reusability. */

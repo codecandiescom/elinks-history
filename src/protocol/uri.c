@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.200 2004/05/25 17:40:26 jonas Exp $ */
+/* $Id: uri.c,v 1.201 2004/05/26 16:22:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -994,6 +994,39 @@ get_no_post_url(unsigned char *url, int *url_len)
 	return memacpy(url, len);
 }
 
+
+/* URI list */
+
+#define URI_LIST_GRANULARITY 0x3
+
+#define realloc_uri_list(list) \
+	mem_align_alloc(&(list)->uris, (list)->size, (list)->size + 1, \
+			struct uri *, URI_LIST_GRANULARITY)
+
+struct uri *
+add_to_uri_list(struct uri_list *list, struct uri *uri)
+{
+	if (!realloc_uri_list(list))
+		return NULL;
+
+	list->uris[list->size++] = get_uri_reference(uri);
+
+	return uri;
+};
+
+void
+free_uri_list(struct uri_list *list)
+{
+	struct uri *uri;
+	int index;
+
+	if (!list->uris) return;
+
+	foreach_uri (uri, index, list)
+		done_uri(uri);
+
+	mem_free(list->uris);
+}
 
 /* URI cache */
 

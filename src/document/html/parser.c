@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.425 2004/05/25 03:52:55 jonas Exp $ */
+/* $Id: parser.c,v 1.426 2004/05/26 16:22:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -222,6 +222,7 @@ void
 import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 {
 	unsigned char *import_url;
+	struct uri *uri;
 
 	if (!global_doc_opts->css_enable
 	    || !global_doc_opts->css_import)
@@ -236,13 +237,18 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 
 	if (!import_url) return;
 
+	uri = get_uri(import_url, -1);
+	mem_free(import_url);
+
+	if (!uri) return;
+
 	/* Request the imported stylesheet as part of the document ... */
-	special_f(ff, SP_STYLESHEET, import_url);
+	special_f(ff, SP_STYLESHEET, uri);
 
 	/* ... and then attempt to import from the cache. */
-	import_css(css, import_url);
+	import_css(css, uri);
 
-	mem_free(import_url);
+	done_uri(uri);
 }
 
 INIT_CSS_STYLESHEET(css_styles, import_css_stylesheet);

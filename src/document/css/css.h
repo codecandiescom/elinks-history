@@ -1,10 +1,11 @@
-/* $Id: css.h,v 1.10 2004/01/25 09:33:29 jonas Exp $ */
+/* $Id: css.h,v 1.11 2004/05/26 16:22:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_CSS_H
 #define EL__DOCUMENT_CSS_CSS_H
 
 struct css_stylesheet;
 struct module;
+struct uri;
 
 /* TODO: Basicly we need two default stylesheets. One that ELinks controls
  * (which is defined by the defaults of every property, they could however also
@@ -20,6 +21,6 @@ extern struct css_stylesheet default_stylesheet;
 extern struct module css_module;
 
 /* This function will try to import the given @url from the cache. */
-void import_css(struct css_stylesheet *css, unsigned char *url);
+void import_css(struct css_stylesheet *css, struct uri *uri);
 
 #endif

@@ -1,9 +1,10 @@
-/* $Id: document.h,v 1.58 2004/05/23 17:13:34 jonas Exp $ */
+/* $Id: document.h,v 1.59 2004/05/26 16:22:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
 
 #include "document/options.h"
+#include "protocol/uri.h"
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/object.h"
@@ -15,7 +16,6 @@ struct form_control;
 struct frameset_desc;
 struct module;
 struct screen_char;
-struct uri;
 
 
 /* Tags are used for ``id''s or anchors in the document referenced by the
@@ -106,7 +106,11 @@ struct document {
 	struct list_head forms;
 	struct list_head tags;
 	struct list_head nodes;
-	struct list_head css_imports;
+
+	/* FIXME: We should externally maybe using cache_entry store the
+	 * dependencies between the various entries so nothing gets removed
+	 * unneeded. */
+	struct uri_list css_imports;
 
 	struct uri *uri;
 	unsigned char *title;

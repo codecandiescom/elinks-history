@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.64 2003/05/02 11:15:10 zas Exp $ */
+/* $Id: renderer.c,v 1.65 2003/05/02 14:09:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1886,11 +1886,12 @@ html_interpret(struct session *ses)
 
 	mk_document_options(&o);
 
-	o.plain = 1;
 	if (l) {
-		if (l->plain != 1) o.plain = 0;
-		l->plain = o.plain;
-	};
+		if (l->plain < 0) l->plain = 0;
+		o.plain = l->plain;
+	} else {
+		o.plain = 1;
+	}
 
 	memcpy(&o.default_fg, get_opt_ptr("document.colors.text"), sizeof(struct rgb));
 	memcpy(&o.default_bg, get_opt_ptr("document.colors.background"), sizeof(struct rgb));

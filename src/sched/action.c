@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.125 2004/11/13 21:51:35 zas Exp $ */
+/* $Id: action.c,v 1.126 2004/11/14 00:11:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,10 +160,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			auth_manager(ses);
 			break;
 
-		case ACT_MAIN_HISTORY_MOVE_BACK:
-			go_back(ses);
-			break;
-
 		case ACT_MAIN_BOOKMARK_MANAGER:
 #ifdef CONFIG_BOOKMARKS
 			bookmark_manager(ses);
@@ -191,36 +187,19 @@ do_action(struct session *ses, enum main_action action, int verbose)
 #endif
 			break;
 
+		case ACT_MAIN_COPY_CLIPBOARD:
+			if (!has_vs) break;
+			status = do_frame_action(ses, doc_view,
+						 copy_current_link_to_clipboard,
+						 0, 1);
+			break;
+
 		case ACT_MAIN_DOCUMENT_INFO:
 			document_info_dialog(ses);
 			break;
 
-		case ACT_MAIN_LINK_DOWNLOAD:
-			if (!has_vs || anonymous) break;
-			status = do_frame_action(ses, doc_view,
-						 download_link,
-						 action, 1);
-			break;
-
-		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
-			if (!has_vs || anonymous) break;
-			status = do_frame_action(ses, doc_view,
-						 download_link,
-						 action, 1);
-			break;
-
 		case ACT_MAIN_DOWNLOAD_MANAGER:
 			download_manager(ses);
-			break;
-
-		case ACT_MAIN_LINK_FOLLOW:
-			if (!has_vs) break;
-			status = do_frame_action(ses, doc_view, enter, 0, 1);
-			break;
-
-		case ACT_MAIN_LINK_FOLLOW_RELOAD:
-			if (!has_vs) break;
-			status = do_frame_action(ses, doc_view, enter, 1, 1);
 			break;
 
 		case ACT_MAIN_EXMODE:
@@ -256,6 +235,29 @@ do_action(struct session *ses, enum main_action action, int verbose)
 #endif
 			break;
 
+		case ACT_MAIN_FRAME_EXTERNAL_COMMAND:
+			if (!has_vs) break;
+			status = do_frame_action(ses, doc_view,
+						 pass_uri_to_command,
+						 PASS_URI_FRAME, 0);
+			break;
+
+		case ACT_MAIN_FRAME_NEXT:
+			next_frame(ses, 1);
+			draw_formatted(ses, 0);
+			break;
+
+		case ACT_MAIN_FRAME_MAXIMIZE:
+			if (!has_vs) break;
+			status = do_frame_action(ses, doc_view,
+						 set_frame, 0, 0);
+			break;
+
+		case ACT_MAIN_FRAME_PREV:
+			next_frame(ses, -1);
+			draw_formatted(ses, 0);
+			break;
+
 		case ACT_MAIN_GOTO_URL:
 			goto_url_action(ses, NULL);
 			break;
@@ -282,6 +284,18 @@ do_action(struct session *ses, enum main_action action, int verbose)
 #endif
 			break;
 
+		case ACT_MAIN_HISTORY_MOVE_BACK:
+			go_back(ses);
+			break;
+
+		case ACT_MAIN_HISTORY_MOVE_FORWARD:
+			go_unback(ses);
+			break;
+
+		case ACT_MAIN_JUMP_TO_LINK:
+			try_jump_to_link_number(ses, doc_view);
+			break;
+
 		case ACT_MAIN_KEYBINDING_MANAGER:
 			if (anonymous) break;
 			keybinding_manager(ses);
@@ -289,6 +303,44 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS:
 			abort_background_connections();
+			break;
+
+		case ACT_MAIN_LINK_DOWNLOAD:
+			if (!has_vs || anonymous) break;
+			status = do_frame_action(ses, doc_view,
+						 download_link,
+						 action, 1);
+			break;
+
+		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
+			if (!has_vs || anonymous) break;
+			status = do_frame_action(ses, doc_view,
+						 download_link,
+						 action, 1);
+			break;
+
+		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
+			if (!has_vs || anonymous) break;
+			status = do_frame_action(ses, doc_view,
+						 download_link,
+						 action, 1);
+			break;
+
+		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
+			if (!has_vs) break;
+			status = do_frame_action(ses, doc_view,
+						 pass_uri_to_command,
+						 PASS_URI_LINK, 0);
+			break;
+
+		case ACT_MAIN_LINK_FOLLOW:
+			if (!has_vs) break;
+			status = do_frame_action(ses, doc_view, enter, 0, 1);
+			break;
+
+		case ACT_MAIN_LINK_FOLLOW_RELOAD:
+			if (!has_vs) break;
+			status = do_frame_action(ses, doc_view, enter, 1, 1);
 			break;
 
 		case ACT_MAIN_LINK_MENU:
@@ -304,13 +356,95 @@ do_action(struct session *ses, enum main_action action, int verbose)
 #endif
 			break;
 
+		case ACT_MAIN_MARK_SET:
+#ifdef CONFIG_MARKS
+			ses->kbdprefix.mark = KP_MARK_SET;
+			status = FRAME_EVENT_REFRESH;
+#endif
+			break;
+
+		case ACT_MAIN_MARK_GOTO:
+#ifdef CONFIG_MARKS
+			/* TODO: Show promptly a menu (or even listbox?)
+			 * with all the marks. But the next letter must
+			 * still choose a mark directly! --pasky */
+			ses->kbdprefix.mark = KP_MARK_GOTO;
+			status = FRAME_EVENT_REFRESH;
+#endif
+			break;
+
 		case ACT_MAIN_MENU:
 			activate_bfu_technology(ses, -1);
 			break;
 
-		case ACT_MAIN_FRAME_NEXT:
-			next_frame(ses, 1);
-			draw_formatted(ses, 0);
+		case ACT_MAIN_MOVE_CURSOR_UP:
+			if (!has_vs) break;
+			status = move_cursor_up(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_CURSOR_DOWN:
+			if (!has_vs) break;
+			status = move_cursor_down(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_CURSOR_LEFT:
+			if (!has_vs) break;
+			status = move_cursor_left(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_CURSOR_RIGHT:
+			if (!has_vs) break;
+			status = move_cursor_right(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_LINK_DOWN:
+			if (!has_vs) break;
+			status = move_link_down(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_LINK_LEFT:
+			if (!has_vs) break;
+			status = move_link_left(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_LINK_NEXT:
+			if (!has_vs) break;
+			status = move_link_next(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_LINK_PREV:
+			if (!has_vs) break;
+			status = move_link_prev(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_LINK_RIGHT:
+			if (!has_vs) break;
+			status = move_link_right(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_LINK_UP:
+			if (!has_vs) break;
+			status = move_link_up(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_PAGE_DOWN:
+			if (!has_vs) break;
+			status = move_page_down(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_PAGE_UP:
+			if (!has_vs) break;
+			status = move_page_up(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_DOCUMENT_START:
+			if (!has_vs) break;
+			status = move_document_start(ses, doc_view);
+			break;
+
+		case ACT_MAIN_MOVE_DOCUMENT_END:
+			if (!has_vs) break;
+			status = move_document_end(ses, doc_view);
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
@@ -358,32 +492,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			options_manager(ses);
 			break;
 
-		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
-			if (!has_vs) break;
-			status = do_frame_action(ses, doc_view,
-						 pass_uri_to_command,
-						 PASS_URI_LINK, 0);
-			break;
-
-		case ACT_MAIN_FRAME_EXTERNAL_COMMAND:
-			if (!has_vs) break;
-			status = do_frame_action(ses, doc_view,
-						 pass_uri_to_command,
-						 PASS_URI_FRAME, 0);
-			break;
-
-		case ACT_MAIN_TAB_EXTERNAL_COMMAND:
-			if (!has_vs) break;
-			status = do_frame_action(ses, doc_view,
-						 pass_uri_to_command,
-						 PASS_URI_TAB, 0);
-			break;
-
-		case ACT_MAIN_FRAME_PREV:
-			next_frame(ses, -1);
-			draw_formatted(ses, 0);
-			break;
-
 		case ACT_MAIN_QUIT:
 			exit_prog(ses, 1);
 			break;
@@ -414,13 +522,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			resource_info(term);
 			break;
 
-		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
-			if (!has_vs || anonymous) break;
-			status = do_frame_action(ses, doc_view,
-						 download_link,
-						 action, 1);
-			break;
-
 		case ACT_MAIN_SAVE_AS:
 			if (!has_vs || anonymous) break;
 			status = do_frame_action(ses, doc_view,
@@ -434,14 +535,34 @@ do_action(struct session *ses, enum main_action action, int verbose)
 						 0, 0);
 			break;
 
+		case ACT_MAIN_SAVE_OPTIONS:
+			if (anonymous) break;
+			write_config(term);
+			break;
+
 		case ACT_MAIN_SAVE_URL_AS:
 			if (anonymous) break;
 			save_url_as(ses);
 			break;
 
-		case ACT_MAIN_SAVE_OPTIONS:
-			if (anonymous) break;
-			write_config(term);
+		case ACT_MAIN_SCROLL_DOWN:
+			if (!has_vs) break;
+			status = scroll_down(ses, doc_view);
+			break;
+
+		case ACT_MAIN_SCROLL_LEFT:
+			if (!has_vs) break;
+			status = scroll_left(ses, doc_view);
+			break;
+
+		case ACT_MAIN_SCROLL_RIGHT:
+			if (!has_vs) break;
+			status = scroll_right(ses, doc_view);
+			break;
+
+		case ACT_MAIN_SCROLL_UP:
+			if (!has_vs) break;
+			status = scroll_up(ses, doc_view);
 			break;
 
 		case ACT_MAIN_SEARCH:
@@ -481,8 +602,20 @@ do_action(struct session *ses, enum main_action action, int verbose)
 						 submit_form, 1, 0);
 			break;
 
-		case ACT_MAIN_TAB_NEXT:
-			switch_current_tab(ses, 1);
+		case ACT_MAIN_TAB_CLOSE:
+			close_tab(term, ses);
+			status = FRAME_EVENT_SESSION_DESTROYED;
+			break;
+
+		case ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT:
+			close_all_tabs_but_current(ses);
+			break;
+
+		case ACT_MAIN_TAB_EXTERNAL_COMMAND:
+			if (!has_vs) break;
+			status = do_frame_action(ses, doc_view,
+						 pass_uri_to_command,
+						 PASS_URI_TAB, 0);
 			break;
 
 		case ACT_MAIN_TAB_MOVE_LEFT:
@@ -506,17 +639,12 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 			break;
 
+		case ACT_MAIN_TAB_NEXT:
+			switch_current_tab(ses, 1);
+			break;
+
 		case ACT_MAIN_TAB_PREV:
 			switch_current_tab(ses, -1);
-			break;
-
-		case ACT_MAIN_TAB_CLOSE:
-			close_tab(term, ses);
-			status = FRAME_EVENT_SESSION_DESTROYED;
-			break;
-
-		case ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT:
-			close_all_tabs_but_current(ses);
 			break;
 
 		case ACT_MAIN_TOGGLE_CSS:
@@ -553,142 +681,15 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			toggle_wrap_text(ses, ses->doc_view, 0);
 			break;
 
-		case ACT_MAIN_HISTORY_MOVE_FORWARD:
-			go_unback(ses);
-			break;
-
 		case ACT_MAIN_VIEW_IMAGE:
 			if (!has_vs) break;
 			status = do_frame_action(ses, doc_view,
 						 view_image, 0, 1);
 			break;
 
-		case ACT_MAIN_FRAME_MAXIMIZE:
-			if (!has_vs) break;
-			status = do_frame_action(ses, doc_view,
-						 set_frame, 0, 0);
-			break;
-
-		case ACT_MAIN_MOVE_PAGE_DOWN:
-			if (!has_vs) break;
-			status = move_page_down(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_PAGE_UP:
-			if (!has_vs) break;
-			status = move_page_up(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_LINK_NEXT:
-			if (!has_vs) break;
-			status = move_link_next(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_LINK_PREV:
-			if (!has_vs) break;
-			status = move_link_prev(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_LINK_UP:
-			if (!has_vs) break;
-			status = move_link_up(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_LINK_DOWN:
-			if (!has_vs) break;
-			status = move_link_down(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_LINK_LEFT:
-			if (!has_vs) break;
-			status = move_link_left(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_LINK_RIGHT:
-			if (!has_vs) break;
-			status = move_link_right(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_DOCUMENT_START:
-			if (!has_vs) break;
-			status = move_document_start(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_DOCUMENT_END:
-			if (!has_vs) break;
-			status = move_document_end(ses, doc_view);
-			break;
-
-		case ACT_MAIN_SCROLL_DOWN:
-			if (!has_vs) break;
-			status = scroll_down(ses, doc_view);
-			break;
-
-		case ACT_MAIN_SCROLL_UP:
-			if (!has_vs) break;
-			status = scroll_up(ses, doc_view);
-			break;
-
-		case ACT_MAIN_SCROLL_LEFT:
-			if (!has_vs) break;
-			status = scroll_left(ses, doc_view);
-			break;
-
-		case ACT_MAIN_SCROLL_RIGHT:
-			if (!has_vs) break;
-			status = scroll_right(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_CURSOR_UP:
-			if (!has_vs) break;
-			status = move_cursor_up(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_CURSOR_DOWN:
-			if (!has_vs) break;
-			status = move_cursor_down(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_CURSOR_LEFT:
-			if (!has_vs) break;
-			status = move_cursor_left(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MOVE_CURSOR_RIGHT:
-			if (!has_vs) break;
-			status = move_cursor_right(ses, doc_view);
-			break;
-
-		case ACT_MAIN_COPY_CLIPBOARD:
-			if (!has_vs) break;
-			status = do_frame_action(ses, doc_view,
-						 copy_current_link_to_clipboard,
-						 0, 1);
-			break;
-
-		case ACT_MAIN_JUMP_TO_LINK:
-			try_jump_to_link_number(ses, doc_view);
-			break;
-
-		case ACT_MAIN_MARK_SET:
-#ifdef CONFIG_MARKS
-			ses->kbdprefix.mark = KP_MARK_SET;
-			status = FRAME_EVENT_REFRESH;
-#endif
-			break;
-
-		case ACT_MAIN_MARK_GOTO:
-#ifdef CONFIG_MARKS
-			/* TODO: Show promptly a menu (or even listbox?)
-			 * with all the marks. But the next letter must
-			 * still choose a mark directly! --pasky */
-			ses->kbdprefix.mark = KP_MARK_GOTO;
-			status = FRAME_EVENT_REFRESH;
-#endif
-			break;
-
 		case ACT_MAIN_SCRIPTING_FUNCTION:
-		default:
+		case ACT_MAIN_NONE:
+		case MAIN_ACTIONS:
 			if (verbose) {
 				INTERNAL("No action handling defined for '%s'.",
 					 write_action(KEYMAP_MAIN, action));

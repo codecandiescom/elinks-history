@@ -1,3 +1,215 @@
+Sat Oct 12 22:03:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Fixed -lookup.  
+
+Sat Oct 12 21:41:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* doc/hacking.txt:
+
+	Where to find more documentation about some part of ELinks.  
+
+Sat Oct 12 20:31:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* HACKING, doc/hacking.txt:
+
+	Moved HACKING to doc/hacking.txt.  
+
+Sat Oct 12 19:53:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Attempt to fix -R stuff, #1.  
+
+Sat Oct 12 19:49:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/sched.c:
+
+	Quick fix for random memory shooting problem caused by downloads
+	resuming.  
+
+Sat Oct 12 18:55:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Simpler way to preserve aligment of fields, and to tell user perms
+	are missing.  
+
+Sat Oct 12 18:33:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/widget.c:
+
+	Properly adjust vpos of input field when browsing the input field
+	history.  
+	
+	Fixes: 
+	
+	-- 
+	
+	also when one scrolls up and down in the goto URL dialog, if the URL
+	is rather long you get sent to the end of the line of all of the
+	other URL's .. like.. say 
+	
+	
+	http://www.google.com/monkey/pig/shenanigans/farm/tuberculosis/moose/index.html
+	
+	was the first URL, you'd see maybe moose/index.html .. and when you
+	scroll up to the previous URL, which was http://www.google.com, you
+	see only a blank line (you have to hit home or the left arrow to get
+	back) 
+	
+	-- 
+	
+	reported by <matr1x@shaw.ca>.  
+
+Sat Oct 12 17:55:10 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	FTP directory list fields consistency was improved. A little hack is
+	used to print perms even if not sent by ftp server. If time isn't
+	known as local, then a - is printed.  
+
+Sat Oct 12 16:34:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/session.c:
+
+	win_handler() should handle properly case when it's called with a
+	NULL ses. That should fix the first leds update race as reported by
+	<kuser@gmx.de>.  
+
+Sat Oct 12 16:27:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/ssl/ssl.c:
+
+	In a nutshell, on OS's without a /dev/urandom, the OpenSSL library
+	cannot initialize the PRNG and so every attempt to use SSL fails. 
+	It's actually an OpenSSL FAQ, and according to them, it's up to the
+	application coders to seed the RNG.  
+	
+	So, I've attached two patches to fix the problem.  It works for me
+	without a problem (I use prngd, an egd clone).  The code is pretty
+	much stolen from the URL above
+	(http://archives.postgresql.org/pgsql-patches/2002-01/msg00070.php).  
+	
+	Patch by William Yodlowsky <wyodlows@andromeda.rutgers.edu>, ported
+	to ELinks and minor changes by me.  
+
+Sat Oct 12 16:25:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/ssl/ssl.c:
+
+	Let's try once more, properly ;).  
+
+Sat Oct 12 16:25:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/ssl/ssl.c:
+
+	In a nutshell, on OS's without a /dev/urandom, the OpenSSL library 
+	cannot initialize the PRNG and so every attempt to use SSL fails.  
+	It's actually an OpenSSL FAQ, and according to them, it's up to the 
+	application coders to seed the RNG.  
+	
+	So, I've attached two patches to fix the problem.  It works for me
+	without a problem (I use prngd, an egd clone).  The code is pretty
+	much stolen from the URL above
+	(http://archives.postgresql.org/pgsql-patches/2002-01/msg00070.php).  
+
+Sat Oct 12 15:56:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Add -Rssldir/lib to LDFLAGS if needed, using OpenSSL and using gcc.
+	Idea by William Yodlowsky <wyodlows@andromeda.rutgers.edu>.  
+
+Sat Oct 12 15:49:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/osdep/os_dep.c:
+
+	Currently elinks fails to find the terminal title if $WINDOWID is
+	not the toplevel window but a child of one (happens eg. in
+	multi-gnome-terminal).  This patch (adapted from vim 6) fixes this
+	for me.  
+	
+	Patch by Michal Politowski <mpol@charybda.icm.edu.pl> and me.  
+
+Sat Oct 12 15:39:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Compilation fix.  
+
+Sat Oct 12 15:38:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/colors.c:
+
+	Small optimalization while dumping, don't ever find_nearest_color().
+	Patch by Witold.  
+
+Sat Oct 12 15:12:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	-session-ring is added to commandline when launching new ELinks
+	instances from ELinks, if relevant.  
+
+Sat Oct 12 15:04:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, util/secsave.c:
+
+	With -session-ring option, no files are touched on disk in same way
+	as with -no-connect.  
+
+Sat Oct 12 15:01:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/sched.c:
+
+	Fixed segfault with two ELinks together, each one trying to get
+	somewhere ;-).  
+
+Sat Oct 12 14:51:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/session.c, lowlevel/af_unix.c:
+
+	Properly documented -base-session (_finally_ description of what it
+	_really_ does ;). Introduced -session-ring option which enables you
+	to run multiple 'session rings' at once, not only one as until now.
+	Will be good for development convenience ;).  
+
+Sat Oct 12 14:17:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/: ftp.c, ftpparse.c, ftpparse.h:
+
+	Show permissions in directory listing.  
+
+Sat Oct 12 13:59:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Now size is displayed in directory listing everytime when we know
+	it, even near directories.  
+
+Sat Oct 12 13:57:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Now displaying of .. and other items share same code.  
+
+Sat Oct 12 13:35:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+
+	Moved displaying of single items in directory listing to special
+	function.  
+
+Sat Oct 12 12:44:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: listbox.c, widget.h:
+
+	Introduced height property of a widget, being used in listbox which
+	has dynamic height now.  
+
 Fri Oct 11 19:24:20 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/ftp.c:

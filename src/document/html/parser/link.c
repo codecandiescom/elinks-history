@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.26 2004/09/03 11:17:25 jonas Exp $ */
+/* $Id: link.c,v 1.27 2004/09/03 11:20:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -354,6 +354,7 @@ html_object(unsigned char *a)
 	 * <img> and <iframe> etc. */
 
 	url = get_url_val(a, "data");
+	if (!url) url = get_url_val(a, "codebase");
 	if (!url) return;
 
 	type = get_attr_val(a, "type");
@@ -372,6 +373,18 @@ html_object(unsigned char *a)
 		object_src = url;
 		html_img(a);
 		object_src = NULL;
+	} else {
+		unsigned char *name = get_attr_val(a, "standby");
+
+		html_focusable(a);
+
+		if (name && *name) {
+			put_link_line("Object: ", name, url, global_doc_opts->framename);
+		} else {
+			put_link_line("Object: ", type, url, global_doc_opts->framename);
+		}
+
+		mem_free_if(name);
 	}
 
 	mem_free(type);

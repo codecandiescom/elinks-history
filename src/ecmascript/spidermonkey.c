@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.44 2004/09/25 20:32:12 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.45 2004/09/26 00:30:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
+#include "dialogs/menu.h"
 #include "dialogs/status.h"
 #include "document/html/frames.h"
 #include "document/document.h"
@@ -35,6 +36,7 @@
 #include "ecmascript/spidermonkey.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
+#include "osdep/newwin.h"
 #include "protocol/uri.h"
 #include "sched/task.h"
 #include "terminal/tab.h"
@@ -335,9 +337,11 @@ window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 }
 
 static JSBool window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
 
 static const JSFunctionSpec window_funcs[] = {
 	{ "alert",	window_alert,		1 },
+	{ "open",	window_open,		3 },
 	{ NULL }
 };
 
@@ -349,7 +353,10 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	enum prop_type prop_type;
 	union prop_union p;
 
-	assert(argc == 1);
+	p.boolean = 1; prop_type = JSPT_BOOLEAN;
+
+	if (argc != 1)
+		goto bye;
 
 	JSVAL_REQUIRE(&argv[0], STRING);
 	if (!v.string || !*v.string)
@@ -361,7 +368,85 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
-	p.boolean = 1; prop_type = JSPT_BOOLEAN;
+	VALUE_TO_JSVAL_END(rval);
+}
+
+struct delayed_open {
+	struct session *ses;
+	struct uri *uri;
+};
+
+static void
+delayed_open(void *data)
+{
+	struct delayed_open *deo = data;
+
+	assert(deo);
+	open_uri_in_new_tab(deo->ses, deo->uri, 0, 0);
+	done_uri(deo->uri);
+	mem_free(deo);
+}
+
+static JSBool
+window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
+{
+	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	struct session *ses = doc_view->session;
+	union jsval_union v;
+	unsigned char *url;
+	struct uri *uri;
+	enum prop_type prop_type;
+	union prop_union p;
+	static time_t ratelimit_start;
+	static int ratelimit_count;
+
+	p.boolean = 0; prop_type = JSPT_BOOLEAN;
+	if (argc < 1) goto bye;
+
+	/* Ratelimit window opening. Recursive window.open() is very nice.
+	 * We permit at most 20 tabs in 2 seconds. The ratelimiter is very
+	 * rough but shall suffice against the usual cases. */
+
+	if (!ratelimit_start || time(NULL) - ratelimit_start > 2) {
+		ratelimit_start = time(NULL);
+		ratelimit_count = 0;
+	} else {
+		ratelimit_count++;
+		if (ratelimit_count > 20)
+			goto bye;
+	}
+
+	JSVAL_REQUIRE(&argv[0], STRING);
+	url = v.string;
+	assert(url);
+	/* TODO: Support for window naming and perhaps some window features? */
+
+	url = join_urls(doc_view->document->uri,
+	                trim_chars(url, ' ', 0));
+	if (!url) goto bye;
+	uri = get_uri(url, 0);
+	mem_free(url);
+	if (!uri) goto bye;
+
+	if (can_open_in_new(ses->tab->term)) {
+		open_uri_in_new_window(ses, uri, ~0 /* any env */);
+		p.boolean = 1;
+	} else {
+		/* When opening a new tab, we might get rerendered, losing our
+		 * context and triggerring a disaster, so postpone that. */
+		struct delayed_open *deo = mem_calloc(1, sizeof(*deo));
+
+		if (deo) {
+			deo->ses = ses;
+			deo->uri = uri;
+			register_bottom_half((void (*)(void *)) delayed_open,
+			                     deo);
+			p.boolean = 1;
+		} else {
+			done_uri(deo->uri);
+		}
+	}
+
 	VALUE_TO_JSVAL_END(rval);
 }
 

@@ -1,15 +1,17 @@
-/* $Id: options.h,v 1.23 2003/10/26 23:29:37 jonas Exp $ */
+/* $Id: options.h,v 1.24 2003/10/28 11:10:10 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
 
+#include "terminal/color.h"
 #include "util/color.h"
 
 /* This mostly acts as a option cache so rendering will be faster. However it
  * is also used to validate and invalidate documents in the format cache as to
  * whether they satisfy the current state of the document options. */
 struct document_options {
-	int color_mode, cp, assume_cp, hard_assume;
+	enum color_mode color_mode;
+	int cp, assume_cp, hard_assume;
 	int margin;
 	int num_links_key;
 	int use_document_colours;

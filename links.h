@@ -9,9 +9,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#ifdef HAVE_CONFIG2_H
-#include "config2.h"
-#endif
 
 #include "os_dep.h"
 #include <stdio.h>
@@ -50,9 +47,6 @@
 #include <dirent.h>
 #endif
 #include <signal.h>
-/*#ifdef HAVE_SIGACTION_H
-#include <sigaction.h>
-#endif*/
 #ifdef HAVE_SYS_WAIT_H
 #include <sys/wait.h>
 #endif
@@ -103,24 +97,6 @@
 #include "setup.h"
 
 #define DUMMY ((void *)-1L)
-
-/*
-#if defined(HAVE_GETPID) && defined(HAVE_SETPGID) && defined(HAVE_GETPGID)
-#define USE_PGRP
-#ifndef HAVE_SETPGRP
-static inline int setpgrp()
-{
-	return getpgid(0);
-}
-#endif
-#ifndef HAVE_GETPGRP
-static inline int getpgrp()
-{
-	return setpgid(0,0);
-}
-#endif
-#endif
-*/
 
 #define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 

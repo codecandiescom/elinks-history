@@ -39,12 +39,8 @@ version. Then,
 
 	 should be enough. However, in some FreeBSD 3 distributions you have to
 	 set CFLAGS=-aout before running ./configure.
-	
-	 If configure fails, you can try generic makefile: make -f Makefile.gen
-	 (it won't probably work, though, as it's not maintained anymore).
 
-  OS/2 - you can use ./configure. If it fails or if you don't have bash, use
-	 make -f Makefile.gen
+  OS/2 - you can use ./configure.
 
 	 The only supported compiler is EMX, you probably won't be able to
 	 compile it with anything else.
@@ -80,5 +76,5 @@ want them ;) so just copy the hooks.lua to ~/.links, and edit the configuration
 part - it adds various nice functionality to elinks, like decompression of
 gzipped files or user-defined protocols.
 
-$Id: INSTALL,v 1.6 2002/03/07 12:54:13 pasky Exp $
+$Id: INSTALL,v 1.7 2002/03/15 22:21:57 pasky Exp $
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.5 2003/01/03 02:23:57 pasky Exp $ */
+/* $Id: dump.c,v 1.6 2003/01/03 02:24:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,7 +150,7 @@ nextfrag:
 	if (stat->state != S_OK) {
 		unsigned char *m = get_err_msg(stat->state);
 
-		fprintf(stderr, "%s\n", N_(m)); /* TODO: -> gettext() */
+		fprintf(stderr, "%s\n", gettext(m));
 		retval = RET_ERROR;
 		goto terminate;
 	}

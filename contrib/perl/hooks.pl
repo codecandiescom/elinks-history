@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.32 2005/03/26 14:33:59 pasky Exp $
+# $Id: hooks.pl,v 1.33 2005/03/26 14:35:07 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -744,10 +744,11 @@ my %search_engines_ = (
 sub search
 {
 	my ($engine, $search) = @_;
+	my $key = $search ? 'search' : 'home';
 
 	# Google is the default, Google is the best!
-	$engine = 'google' unless $search_engines_{$engine};
-	my $url = $search_engines_{$engine};
+	$engine = 'google' unless $search_engines_{$engine}->{$key};
+	my $url = $search_engines_{$engine}->{$key};
 
 	if ($engine eq 'google') {
 		my $bork = '';

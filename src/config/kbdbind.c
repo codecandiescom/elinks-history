@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.14 2002/05/10 16:20:29 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.15 2002/05/17 16:18:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,6 +217,7 @@ parse_act(unsigned char *s)
 		{ "document-info", ACT_DOCUMENT_INFO },
 		{ "down", ACT_DOWN },
 		{ "download", ACT_DOWNLOAD },
+		{ "download-image", ACT_DOWNLOAD_IMAGE },
 		{ "edit", ACT_EDIT },
 		{ "end", ACT_END },
 		{ "enter", ACT_ENTER },

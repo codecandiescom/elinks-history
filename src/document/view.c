@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.44 2002/05/10 17:34:46 pasky Exp $ */
+/* $Id: view.c,v 1.45 2002/05/17 16:18:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2206,6 +2206,7 @@ static int try_document_key(struct session *ses, struct f_data_c *fd,
 
 void frm_download(struct session *, struct f_data_c *);
 void send_image(struct terminal *term, void *xxx, struct session *ses);
+void send_download_image(struct terminal *term, void *xxx, struct session *ses);
 
 int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 {
@@ -2271,6 +2272,7 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_FIND_NEXT_BACK: find_next_back(ses, fd, 0); break;
 			case ACT_ZOOM_FRAME: set_frame(ses, fd, 0), x = 2; break;
 			case ACT_VIEW_IMAGE: send_image(ses->term, NULL, ses); break;
+			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->term, NULL, ses); break;
 			case ACT_LINK_MENU: link_menu(ses->term, NULL, ses); break;
 			default:
 				if (ev->x >= '1' && ev->x <= '9' && !ev->y) {

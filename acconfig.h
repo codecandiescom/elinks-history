@@ -1,20 +1,5 @@
 
 @BOTTOM@
-/* Define to 1 if we have __va_copy() */
-#undef HAVE_VA_COPY
-
-/* Define to 1 if we have C99 compliant vsnprintf() */
-#undef HAVE_C99_VSNPRINTF
-
-/* Define to 1 if we have _beginthread() */
-#undef HAVE_BEGINTHREAD
-
-/* Define to 1 if we have MouOpen() */
-#undef HAVE_MOUOPEN
-
-/* Define to 1 if we have _read_kbd() */
-#undef HAVE_READ_KBD
-
 /* Define to 1 if we have clone() */
 #undef HAVE_CLONE
 
@@ -41,15 +26,6 @@
 
 /* Define to 1 if we should use GNUTLS */
 #undef HAVE_GNUTLS
-
-/* Define to 1 if we should include IPv6 support */
-#undef IPV6
-
-/* Define to 1 if we have XFree under OS/2 */
-#undef X2
-
-/* Define to 1 if we have X11 */
-#undef HAVE_X11
 
 /* Define to 1 if we should include leak debugger and internal error checking facilites */
 #undef CONFIG_DEBUG

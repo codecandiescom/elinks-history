@@ -196,7 +196,7 @@ AC_TRY_LINK([#include <stdarg.h>
 va_list ap1,ap2;], [__va_copy(ap1,ap2);],
 el_cv_HAVE_VA_COPY=yes,el_cv_HAVE_VA_COPY=no)])
 if test x"$el_cv_HAVE_VA_COPY" = x"yes"; then
-    AC_DEFINE(HAVE_VA_COPY)
+	EL_DEFINE(HAVE_VA_COPY, __va_copy)
 fi
 
 AC_CACHE_CHECK([for C99 vsnprintf],el_cv_HAVE_C99_VSNPRINTF,[
@@ -226,7 +226,7 @@ main() { foo("hello"); }
 ],
 el_cv_HAVE_C99_VSNPRINTF=yes,el_cv_HAVE_C99_VSNPRINTF=no,el_cv_HAVE_C99_VSNPRINTF=cross)])
 if test x"$el_cv_HAVE_C99_VSNPRINTF" = x"yes"; then
-    AC_DEFINE(HAVE_C99_VSNPRINTF)
+	EL_DEFINE(HAVE_C99_VSNPRINTF, [C99 compliant vsnprintf()])
 fi
 
 AC_CHECK_LIB(dl, dlopen) # OpenSSL and Lua frequently needs it
@@ -325,13 +325,13 @@ AC_TRY_LINK([#include <stdlib.h>],
 AC_MSG_RESULT($cf_result)
 
 if test "$cf_result" = yes; then
-	AC_DEFINE(HAVE_BEGINTHREAD)
+	EL_DEFINE(HAVE_BEGINTHREAD, [_beginthread()])
 else
 	EL_RESTORE_FLAGS
 fi
 
-AC_CHECK_FUNC(MouOpen, AC_DEFINE(HAVE_MOUOPEN))
-AC_CHECK_FUNC(_read_kbd, AC_DEFINE(HAVE_READ_KBD))
+AC_CHECK_FUNC(MouOpen, EL_DEFINE(HAVE_MOUOPEN, [MouOpen()]))
+AC_CHECK_FUNC(_read_kbd, EL_DEFINE(HAVE_READ_KBD, [_read_kbd()]))
 
 AC_MSG_CHECKING([for XFree for OS/2])
 
@@ -356,7 +356,7 @@ fi
 if test "$cf_result" != yes; then
 	EL_RESTORE_FLAGS
 else
-	AC_DEFINE(X2)
+	EL_DEFINE(X2, [XFree under OS/2])
 fi
 
 AC_MSG_RESULT($cf_result)
@@ -704,7 +704,7 @@ if test -z "$disable_ipv6" &&
    test "$HAVE_SA_IN6" = yes &&
    test "$HAVE_ADDRINFO" = yes &&
    test "$have_gai" = yes; then
-	AC_DEFINE(IPV6)
+	EL_DEFINE(IPV6, [IPv6 support])
 	cf_result=yes
 fi
 
@@ -725,7 +725,7 @@ if test -z "$no_x"; then
 		LDFLAGS="$LDFLAGS -L$x_libraries"
 	fi
 	LIBS="-lX11 $LIBS"
-	AC_DEFINE(HAVE_X11)
+	EL_DEFINE(HAVE_X11, [X11])
 fi
 
 

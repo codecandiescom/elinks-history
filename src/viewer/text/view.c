@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.74 2003/05/16 23:44:01 pasky Exp $ */
+/* $Id: view.c,v 1.75 2003/05/16 23:44:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1379,19 +1379,19 @@ free_succesful_controls(struct list_head *submit)
 }
 
 static inline unsigned char *
-encode_textarea(unsigned char *t)
+encode_textarea(unsigned char *text)
 {
+	unsigned char *newtext = init_str();
 	int len = 0;
-	unsigned char *o = init_str();
 
-	if (!o) return NULL;
+	if (!newtext) return NULL;
 
-	for (; *t; t++) {
-		if (*t != '\n') add_chr_to_str(&o, &len, *t);
-		else add_to_str(&o, &len, "\r\n");
+	for (; *text; text++) {
+		if (*text != '\n') add_chr_to_str(&newtext, &len, *text);
+		else add_to_str(&newtext, &len, "\r\n");
 	}
 
-	return o;
+	return newtext;
 }
 
 static void

@@ -106,7 +106,7 @@ msgstr "Elimina cartella"
 #: src/bfu/hierbox.c:548
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
-msgstr "Eliminare la cartella "\"%s\" e il suo contenuto?"
+msgstr "Eliminare la cartella \"%s\" e il suo contenuto?"
 
 #: src/bfu/hierbox.c:560
 msgid "Delete item"

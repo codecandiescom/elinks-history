@@ -1,3 +1,39 @@
+Sat Mar 20 21:01:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, lowlevel/connect.c, protocol/uri.c,
+	protocol/uri.h, protocol/user.c, protocol/http/http.c,
+	sched/connection.c:
+
+	uri->host -> uri->hoststr 
+
+Sat Mar 20 21:01:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/string.h:
+
+	More (yet unused) utils.  
+
+Sat Mar 20 18:55:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h, auth/auth.c, ftp/ftp.c:
+
+	Store protocol password info in a string struct.  
+
+Sat Mar 20 18:32:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/finger.c, protocol/uri.c, protocol/uri.h,
+	protocol/user.c, protocol/auth/auth.c, protocol/ftp/ftp.c,
+	sched/connection.c, util/string.h:
+
+	Store protocol user info in a string struct. Add a few handy string
+	struct macros.  
+
+Sat Mar 20 14:39:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/frames.c:
+
+	Check end pointer when using strto[u]l() to parse frame dimensions.
+	Idea by Christian Haggstrom <c00chm@cs.umu.se> 
+
 Fri Mar 19 16:10:20 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* Makefile.base:

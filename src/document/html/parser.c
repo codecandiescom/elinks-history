@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.524 2005/02/25 16:53:33 jonas Exp $ */
+/* $Id: parser.c,v 1.525 2005/02/25 16:55:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1152,15 +1152,19 @@ process_head(unsigned char *head)
 
 			errno = 0;
 			seconds = strtoul(refresh, NULL, 10);
-			if (errno || seconds > 7200) seconds = 0;
+			if (errno || seconds > 7200)
+				seconds = 0;
 
 			html_focusable(NULL);
+
 			url = join_urls(html_context.base_href, saved_url);
 			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
 			html_context.special_f(html_context.part, SP_REFRESH, seconds, url);
+
 			mem_free(url);
 			mem_free(saved_url);
 		}
+
 		mem_free(refresh);
 	}
 }

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.72 2004/04/02 17:58:36 jonas Exp $ */
+/* $Id: uri.h,v 1.73 2004/04/02 18:03:27 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -92,9 +92,14 @@ enum uri_component {
 
 
 /* A small URI struct cache to increase reusability. */
+
+/* Register a new URI in the cache */
 struct uri *get_uri(unsigned char *string);
+
+/* Dereference an URI from the cache */
 void done_uri(struct uri *uri);
 
+/* Take a reference of an URI already registered in the cache. */
 static inline struct uri *
 get_uri_reference(struct uri *uri)
 {

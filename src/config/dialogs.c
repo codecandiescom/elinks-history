@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.210 2005/03/18 14:41:12 zas Exp $ */
+/* $Id: dialogs.c,v 1.211 2005/03/23 11:24:27 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -93,12 +93,10 @@ write_config_dialog(struct terminal *term, unsigned char *config_file,
 	if (stdio_error > 0)
 		errmsg = straconcat(strerr, " (", strerror(stdio_error), ")", NULL);
 
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Write config error"), ALIGN_CENTER,
-		msg_text(term, N_("Unable to write to config file %s.\n%s"),
-			 config_file, errmsg ? errmsg : strerr),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(term, MSGBOX_FREE_TEXT,
+		 N_("Write config error"), ALIGN_CENTER,
+		 msg_text(term, N_("Unable to write to config file %s.\n%s"),
+		 	  config_file, errmsg ? errmsg : strerr));
 
 	mem_free_if(errmsg);
 }
@@ -331,11 +329,10 @@ check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data
 	}
 	commandline = 0;
 
-	msg_box(term, NULL, 0,
-		N_("Error"), ALIGN_LEFT,
-		N_("Bad option value."),
-		NULL, 1,
-		N_("OK"), NULL, B_ESC | B_ENTER);
+	info_box(term, 0,
+		 N_("Error"), ALIGN_LEFT,
+		 N_("Bad option value."));
+
 	return EVENT_NOT_PROCESSED;
 }
 
@@ -428,13 +425,11 @@ push_edit_button(struct dialog_data *dlg_data,
 	if (!option_types[option->type].write ||
 	    !option_types[option->type].read ||
 	    !option_types[option->type].set) {
-		msg_box(term, NULL, 0,
-			N_("Edit"), ALIGN_LEFT,
-			N_("This option cannot be edited. This means that "
-			   "this is some special option like a folder - try "
-			   "to press a space in order to see its contents."),
-			NULL, 1,
-			N_("OK"), NULL, B_ESC | B_ENTER);
+		info_box(term, 0,
+			 N_("Edit"), ALIGN_LEFT,
+			 N_("This option cannot be edited. This means that "
+			    "this is some special option like a folder - try "
+			    "to press a space in order to see its contents."));
 		return EVENT_PROCESSED;
 	}
 
@@ -468,11 +463,8 @@ push_add_button(struct dialog_data *dlg_data,
 	if (!item || !item->udata) {
 
 invalid_option:
-		msg_box(term, NULL, 0,
-			N_("Add option"), ALIGN_CENTER,
-			N_("Cannot add an option here."),
-			NULL, 1,
-			N_("OK"), NULL, B_ESC | B_ENTER);
+		info_box(term, 0, N_("Add option"), ALIGN_CENTER,
+			 N_("Cannot add an option here."));
 		return EVENT_PROCESSED;
 	}
 
@@ -839,11 +831,9 @@ check_keystroke(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	if (parse_keystroke(keystroke, &hop->key, &hop->meta) >= 0)
 		return EVENT_PROCESSED;
 
-	msg_box(hop->term, NULL, 0,
-		N_("Add keybinding"), ALIGN_CENTER,
-		N_("Invalid keystroke."),
-		NULL, 1,
-		N_("OK"), NULL, B_ESC | B_ENTER);
+	info_box(hop->term, 0, N_("Add keybinding"), ALIGN_CENTER,
+		 N_("Invalid keystroke."));
+	
 	return EVENT_NOT_PROCESSED;
 }
 
@@ -858,11 +848,8 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 	unsigned char *text;
 
 	if (!item || !item->depth) {
-		msg_box(term, NULL, 0,
-			N_("Add keybinding"), ALIGN_CENTER,
-			N_("Need to select a keymap."),
-			NULL, 1,
-			N_("OK"), NULL, B_ESC | B_ENTER);
+		info_box(term, 0, N_("Add keybinding"), ALIGN_CENTER,
+			 N_("Need to select a keymap."));
 		return EVENT_PROCESSED;
 	}
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.204 2005/03/04 15:08:29 miciah Exp $ */
+/* $Id: spidermonkey.c,v 1.205 2005/03/23 11:31:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,11 +366,8 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 	if (!*string)
 		return JS_TRUE;
 
-	msg_box(vs->doc_view->session->tab->term, NULL, MSGBOX_FREE_TEXT,
-		N_("JavaScript Alert"), ALIGN_CENTER,
-		stracpy(string),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(vs->doc_view->session->tab->term, MSGBOX_FREE_TEXT,
+		N_("JavaScript Alert"), ALIGN_CENTER, stracpy(string));
 
 	undef_to_jsval(ctx, rval);
 	return JS_TRUE;
@@ -1985,10 +1982,8 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 			       strlen(report->linebuf) - pos - 1, " ");
 	}
 
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("JavaScript Error"), ALIGN_CENTER,
-		msg.source, NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(term, MSGBOX_FREE_TEXT, N_("JavaScript Error"), ALIGN_CENTER,
+		 msg.source);
 
 reported:
 	/* Im clu'les. --pasky */
@@ -2005,16 +2000,14 @@ safeguard(JSContext *ctx, JSScript *script)
 		struct terminal *term = interpreter->vs->doc_view->session->tab->term;
 
 		/* A killer script! Alert! */
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("JavaScript Emergency"), ALIGN_LEFT,
-			msg_text(term,
-				 N_("A script embedded in the current document was running\n"
-				 "for more than %d seconds. This probably means there is\n"
-				 "a bug in the script and it could have halted the whole\n"
-				 "ELinks, so the script execution was interrupted."),
-				 max_exec_time),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		info_box(term, MSGBOX_FREE_TEXT,
+			 N_("JavaScript Emergency"), ALIGN_LEFT,
+			 msg_text(term,
+				  N_("A script embedded in the current document was running\n"
+				  "for more than %d seconds. This probably means there is\n"
+				  "a bug in the script and it could have halted the whole\n"
+				  "ELinks, so the script execution was interrupted."),
+				  max_exec_time));
 		return JS_FALSE;
 	}
 	return JS_TRUE;

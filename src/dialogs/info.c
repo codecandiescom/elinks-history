@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.125 2005/03/04 02:05:57 jonas Exp $ */
+/* $Id: info.c,v 1.126 2005/03/23 11:28:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,11 +37,9 @@
 void
 menu_about(struct terminal *term, void *xxx, void *xxxx)
 {
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("About"), ALIGN_CENTER,
-		get_dyn_full_version(term, 1),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(term, MSGBOX_FREE_TEXT,
+		 N_("About"), ALIGN_CENTER,
+		 get_dyn_full_version(term, 1));
 }
 
 struct keys_toggle_info {
@@ -139,22 +137,20 @@ menu_keys(struct terminal *term, void *d_, void *xxx)
 void
 menu_copying(struct terminal *term, void *xxx, void *xxxx)
 {
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Copying"), ALIGN_CENTER,
-		msg_text(term, N_("ELinks %s\n"
-			"\n"
-			"(C) 1999 - 2002 Mikulas Patocka\n"
-			"(C) 2001 - 2004 Petr Baudis\n"
-			"(C) 2002 - 2005 Jonas Fonseca\n"
-			"and others\n"
-			"\n"
-			"This program is free software; you can redistribute it "
-			"and/or modify it under the terms of the GNU General Public "
-			"License as published by the Free Software Foundation, "
-			"specifically version 2 of the License."),
-			VERSION_STRING),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(term, MSGBOX_FREE_TEXT,
+		 N_("Copying"), ALIGN_CENTER,
+		 msg_text(term, N_("ELinks %s\n"
+		 	 "\n"
+			 "(C) 1999 - 2002 Mikulas Patocka\n"
+			 "(C) 2001 - 2004 Petr Baudis\n"
+			 "(C) 2002 - 2005 Jonas Fonseca\n"
+			 "and others\n"
+			 "\n"
+			 "This program is free software; you can redistribute it "
+			 "and/or modify it under the terms of the GNU General Public "
+			 "License as published by the Free Software Foundation, "
+			 "specifically version 2 of the License."),
+			 VERSION_STRING));
 }
 
 

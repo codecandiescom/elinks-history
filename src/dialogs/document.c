@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.115 2005/03/03 11:39:09 jonas Exp $ */
+/* $Id: document.c,v 1.116 2005/03/23 11:28:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,11 +43,8 @@ nowhere_box(struct terminal *term, unsigned char *title)
 	if (!title || !*title)
 		title = N_("Info");
 
-	msg_box(term, NULL, 0,
-		title, ALIGN_CENTER,
-		N_("You are nowhere!"),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(term, 0, title, ALIGN_CENTER,
+		 N_("You are nowhere!"));
 }
 
 /* Location info. message box. */
@@ -219,11 +216,8 @@ document_info_dialog(struct session *ses)
 #endif
 	}
 
-	msg_box(term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
-		N_("Info"), ALIGN_LEFT,
-		msg.source,
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(term, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
+		 N_("Info"), ALIGN_LEFT, msg.source);
 }
 
 void
@@ -290,11 +284,8 @@ display_headers:
 	}
 
 	/* Headers info message box. */
-	msg_box(ses->tab->term, NULL, msgbox_flags,
-		title, ALIGN_LEFT,
-		headers,
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(ses->tab->term, msgbox_flags,
+		title, ALIGN_LEFT, headers);
 }
 
 /* Headers info. message box. */

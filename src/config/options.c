@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.342 2003/10/23 09:09:51 pasky Exp $ */
+/* $Id: options.c,v 1.343 2003/10/23 09:11:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,6 +457,21 @@ done_options(void)
 }
 
 void
+register_change_hooks(struct change_hook_info *change_hooks)
+{
+	int i;
+
+	for (i = 0; change_hooks[i].name; i++) {
+		struct option *option = get_opt_rec(config_options,
+						    change_hooks[i].name);
+
+		option->change_hook = change_hooks[i].change_hook;
+	}
+}
+
+
+
+void
 unmark_options_tree(struct list_head *tree)
 {
 	struct option *option;
@@ -467,8 +482,6 @@ unmark_options_tree(struct list_head *tree)
 			unmark_options_tree(option->value.tree);
 	}
 }
-
-
 
 static int
 check_nonempty_tree(struct list_head *options)
@@ -965,19 +978,6 @@ static struct change_hook_info change_hooks[] = {
 	{ "ui.language",		change_hook_language },
 	{ NULL,				NULL },
 };
-
-void
-register_change_hooks(struct change_hook_info *change_hooks)
-{
-	int i;
-
-	for (i = 0; change_hooks[i].name; i++) {
-		struct option *option = get_opt_rec(config_options,
-						    change_hooks[i].name);
-
-		option->change_hook = change_hooks[i].change_hook;
-	}
-}
 
 /**********************************************************************
  Options values

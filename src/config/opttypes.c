@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.82 2004/05/01 18:01:10 miciah Exp $ */
+/* $Id: opttypes.c,v 1.83 2004/05/26 13:59:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,10 +131,6 @@ redir_set(struct option *opt, unsigned char *str)
 static int
 redir_add(struct option *opt, unsigned char *str)
 	wrap_or_(add, add(real, str), 0);
-
-static int
-redir_remove(struct option *opt, unsigned char *str)
-	wrap_or_(remove, remove(real, str), 0);
 
 
 /* Support functions for config file parsing. */
@@ -360,20 +356,20 @@ tree_dup(struct option *opt, struct option *template)
 }
 
 
-struct option_type_info option_types[] = {
-	{ N_("Boolean"), bool_cmd, num_rd, num_wr, NULL, num_set, NULL, NULL, N_("[0|1]") },
-	{ N_("Integer"), gen_cmd, num_rd, num_wr, NULL, num_set, NULL, NULL, N_("<num>") },
-	{ N_("Longint"), gen_cmd, num_rd, num_wr, NULL, num_set, NULL, NULL, N_("<num>") },
-	{ N_("String"), gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, NULL, N_("<str>") },
+const struct option_type_info option_types[] = {
+	{ N_("Boolean"), bool_cmd, num_rd, num_wr, NULL, num_set, NULL, N_("[0|1]") },
+	{ N_("Integer"), gen_cmd, num_rd, num_wr, NULL, num_set, NULL, N_("<num>") },
+	{ N_("Longint"), gen_cmd, num_rd, num_wr, NULL, num_set, NULL, N_("<num>") },
+	{ N_("String"), gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, N_("<str>") },
 
-	{ N_("Codepage"), gen_cmd, str_rd, cp_wr, NULL, cp_set, NULL, NULL, N_("<codepage>") },
-	{ N_("Language"), gen_cmd, str_rd, lang_wr, NULL, lang_set, NULL, NULL, N_("<language>") },
-	{ N_("Color"), gen_cmd, str_rd, color_wr, NULL, color_set, NULL, NULL, N_("<color|#rrggbb>") },
+	{ N_("Codepage"), gen_cmd, str_rd, cp_wr, NULL, cp_set, NULL, N_("<codepage>") },
+	{ N_("Language"), gen_cmd, str_rd, lang_wr, NULL, lang_set, NULL, N_("<language>") },
+	{ N_("Color"), gen_cmd, str_rd, color_wr, NULL, color_set, NULL, N_("<color|#rrggbb>") },
 
-	{ N_("Special"), exec_cmd, NULL, NULL, NULL, NULL, NULL, NULL, "" },
+	{ N_("Special"), exec_cmd, NULL, NULL, NULL, NULL, NULL, "" },
 
-	{ N_("Alias"), redir_cmd, redir_rd, redir_wr, NULL, redir_set, redir_add, redir_remove, "" },
+	{ N_("Alias"), redir_cmd, redir_rd, redir_wr, NULL, redir_set, redir_add, "" },
 
 	/* tree */
-	{ N_("Folder"), NULL, NULL, NULL, tree_dup, NULL, NULL, NULL, "" },
+	{ N_("Folder"), NULL, NULL, NULL, tree_dup, NULL, NULL, "" },
 };

@@ -1,4 +1,4 @@
-/* $Id: opttypes.h,v 1.10 2004/05/01 18:01:10 miciah Exp $ */
+/* $Id: opttypes.h,v 1.11 2004/05/26 13:59:45 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTTYPES_H
 #define EL__CONFIG_OPTTYPES_H
@@ -14,12 +14,11 @@ struct option_type_info {
 	void (*dup)(struct option *, struct option *);
 	int (*set)(struct option *, unsigned char *);
 	int (*add)(struct option *, unsigned char *);
-	int (*remove)(struct option *, unsigned char *);
 	unsigned char *help_str;
 };
 
 /* enum option_type is index in this array */
-extern struct option_type_info option_types[];
+extern const struct option_type_info option_types[];
 
 extern int commandline;
 

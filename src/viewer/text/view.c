@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.524 2004/06/26 02:11:50 miciah Exp $ */
+/* $Id: view.c,v 1.525 2004/06/26 02:22:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,27 +516,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 #endif
 
-	if (ev->x >= '0' && ev->x <= '9'
-	    && (ev->y
-		|| !doc_view->document->options.num_links_key
-		|| (doc_view->document->options.num_links_key == 1
-		    && !doc_view->document->options.num_links_display))) {
-		/* Repeat count.
-		 * ses->kbdprefix.repeat_count is initialized to zero
-		 * the first time by init_session() calloc() call.
-		 * When used, it has to be reset to zero. */
-
-		ses->kbdprefix.repeat_count *= 10;
-		ses->kbdprefix.repeat_count += ev->x - '0';
-
-		/* If too big, just restart from zero, so pressing
-		 * '0' six times or more will reset the count. */
-		if (ses->kbdprefix.repeat_count > 65536)
-			ses->kbdprefix.repeat_count = 0;
-
-		return FRAME_EVENT_OK;
-	}
-
 	if (get_opt_int("document.browse.accesskey.priority") >= 2
 	    && try_document_key(ses, doc_view, ev)) {
 		/* The document ate the key! */
@@ -633,7 +612,26 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 				status = FRAME_EVENT_IGNORED;
 			break;
 		default:
-			if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
+			if (ev->x >= '0' && ev->x <= '9'
+			    && (ev->y
+				|| !doc_view->document->options.num_links_key
+				|| (doc_view->document->options.num_links_key == 1
+				    && !doc_view->document->options.num_links_display))) {
+				/* Repeat count.
+				 * ses->kbdprefix.repeat_count is initialized to zero
+				 * the first time by init_session() calloc() call.
+				 * When used, it has to be reset to zero. */
+
+				ses->kbdprefix.repeat_count *= 10;
+				ses->kbdprefix.repeat_count += ev->x - '0';
+
+				/* If too big, just restart from zero, so pressing
+				 * '0' six times or more will reset the count. */
+				if (ses->kbdprefix.repeat_count > 65536)
+					ses->kbdprefix.repeat_count = 0;
+
+				return FRAME_EVENT_OK;
+			} else if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
 				/* FIXME: This probably doesn't work
 				 * together with the keybinding...? */
 

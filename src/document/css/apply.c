@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.54 2004/01/30 15:15:33 jonas Exp $ */
+/* $Id: apply.c,v 1.55 2004/03/09 15:05:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,8 @@ css_apply_font_attribute(struct html_element *element, struct css_property *prop
 	element->attr.attr &= ~prop->value.font_attribute.rem;
 }
 
+/* FIXME: Because the current CSS doesn't provide reasonable defaults for each
+ * HTML element this applier will cause bad rendering of <pre> tags. */
 static void
 css_apply_text_align(struct html_element *element, struct css_property *prop)
 {

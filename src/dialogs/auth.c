@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.41 2003/07/23 08:29:18 zas Exp $ */
+/* $Id: auth.c,v 1.42 2003/07/23 08:37:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,11 +143,11 @@ do_auth_dialog(struct session *ses)
 	d->refresh_data = ses;
 
 	d->items[0].type = D_FIELD;
-	d->items[0].dlen = MAX_UID_LEN;
+	d->items[0].dlen = HTTP_AUTH_USER_MAXLEN;
 	d->items[0].data = a->user;
 
 	d->items[1].type = D_FIELD_PASS;
-	d->items[1].dlen = MAX_PASSWD_LEN;
+	d->items[1].dlen = HTTP_AUTH_PASSWORD_MAXLEN;
 	d->items[1].data = a->password;
 
 	d->items[2].type = D_BUTTON;

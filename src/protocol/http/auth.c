@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.61 2003/07/23 08:29:19 zas Exp $ */
+/* $Id: auth.c,v 1.62 2003/07/23 08:37:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,7 +61,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define set_auth_uid(e, u) \
 	do { \
-		int userlen = MIN((u)->userlen, MAX_UID_LEN - 1); \
+		int userlen = MIN((u)->userlen, HTTP_AUTH_USER_MAXLEN - 1); \
 		if (userlen) \
 			memcpy((e)->user, (u)->user, userlen); \
 		(e)->user[userlen] = 0; \
@@ -69,7 +69,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define set_auth_passwd(e, u) \
 	do { \
-		int passwordlen = MIN((u)->passwordlen, MAX_PASSWD_LEN - 1); \
+		int passwordlen = MIN((u)->passwordlen, HTTP_AUTH_PASSWORD_MAXLEN - 1); \
 		if (passwordlen) \
 			memcpy((e)->password, (u)->password, passwordlen); \
 		(e)->password[passwordlen] = 0; \
@@ -96,13 +96,13 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 
 	/* Copy user and pass info passed url if any else NULL terminate. */
 
-	entry->user = mem_alloc(MAX_UID_LEN + MAX_PASSWD_LEN);
+	entry->user = mem_alloc(HTTP_AUTH_USER_MAXLEN + HTTP_AUTH_PASSWORD_MAXLEN);
 	if (!entry->user) {
 		if (entry->realm) mem_free(entry->realm);
 		mem_free(entry);
 		return NULL;
 	}
-	entry->password = entry->user + MAX_UID_LEN;
+	entry->password = entry->user + HTTP_AUTH_USER_MAXLEN;
 	set_auth_uid(entry, uri);
 	set_auth_passwd(entry, uri);
 

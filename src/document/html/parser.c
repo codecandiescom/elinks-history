@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.257 2003/11/13 18:18:00 jonas Exp $ */
+/* $Id: parser.c,v 1.258 2003/11/14 08:28:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -655,9 +655,9 @@ get_width(unsigned char *a, unsigned char *n, int trunc)
 }
 
 void
-set_id_attribute(unsigned char *attr)
+set_fragment_identifier(unsigned char *attr_name)
 {
-	unsigned char *id_attr = get_attr_val(attr, "id");
+	unsigned char *id_attr = get_attr_val(attr_name, "id");
 
 	if (id_attr) {
 		special_f(ff, SP_TAG, id_attr);

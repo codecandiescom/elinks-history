@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.49 2002/10/08 22:07:57 pasky Exp $ */
+/* $Id: dialogs.c,v 1.50 2002/10/08 22:09:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,6 +166,10 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 	struct listbox_data *box;
 
 	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
+
+	/* Do nothing with a folder */
+	if (box->sel && box->sel->type == BI_FOLDER)
+		return 0;
 
 	/* Follow the bookmark */
 	if (box->sel)

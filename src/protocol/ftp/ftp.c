@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.191 2005/03/08 15:21:39 miciah Exp $ */
+/* $Id: ftp.c,v 1.192 2005/03/08 15:25:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -568,6 +568,8 @@ ftp_got_pwd(struct connection *conn, struct read_buffer *rb)
 		unsigned char *data = rb->data;
 		int i, start = -1, end = -1;
 
+		/* FIXME: double quoting is not handled, see Appendix II of
+		 * RFC 959. --Zas */
 		for (i = 0; i < rb->len && data[i] != ASCII_LF; i++) {
 			if (data[i] == '"') {
 				if (start == -1)

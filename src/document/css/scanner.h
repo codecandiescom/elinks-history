@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.31 2004/01/20 15:59:40 jonas Exp $ */
+/* $Id: scanner.h,v 1.32 2004/01/20 16:12:13 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -17,7 +17,6 @@ enum css_token_type {
 
 	CSS_TOKEN_ANGLE = 256,	/* <number>rad, <number>grad or <number>deg */
 	CSS_TOKEN_ATRULE,	/* @<identifier> */
-	CSS_TOKEN_COMMENT,	/* C comments */
 	CSS_TOKEN_DIMENSION,	/* <number><ident> */
 	CSS_TOKEN_EM,		/* <number>em */
 	CSS_TOKEN_EX,		/* <number>ex */

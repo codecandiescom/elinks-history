@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.46 2004/01/20 15:59:40 jonas Exp $ */
+/* $Id: scanner.c,v 1.47 2004/01/20 16:12:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,9 +84,9 @@ get_number_identifier(unsigned char *ident, int length)
 }
 
 
-/* TODO: CSS_TOKEN_COMMENT and CSS_TOKEN_HASH. Last one conflicts a bit with
- * hex color token. Color should have precedens and the selector parser will
- * just have to treat CSS_TOKEN_HASH and CSS_TOKEN_HEX_COLOR alike. */
+/* TODO: CSS_TOKEN_HASH:.it conflicts a bit with hex color token. Color should
+ * have precedens and the selector parser will just have to treat
+ * CSS_TOKEN_HASH and CSS_TOKEN_HEX_COLOR alike. */
 static inline void
 scan_css_token(struct css_scanner *scanner, struct css_token *token)
 {
@@ -176,7 +176,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = CSS_TOKEN_NAME;
 
 		} else if (*string == '(') {
-			if (string - token->string == 3
+			if (string - token->string == 4
 			    && memcmp(token->string, "rgb", 3)) {
 				type = CSS_TOKEN_RGB;
 
@@ -201,6 +201,16 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		/* Some kind of SGML tag end ... better bail out screaming */
 		type = CSS_TOKEN_NONE;
 		string = NULL;
+
+	} else if (first_char == '/' && *string == '*') {
+		/* Comments */
+		type = CSS_TOKEN_NONE;
+
+		for (string++; *string; string++)
+			if (*string == '*' && string[1] == '/') {
+				string += 2;
+				break;
+			}
 
 	} else {
 		/* TODO: Better composing of error tokens. For now we just

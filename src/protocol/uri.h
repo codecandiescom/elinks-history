@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.147 2004/10/17 15:38:03 jonas Exp $ */
+/* $Id: uri.h,v 1.148 2004/10/21 17:03:10 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -70,6 +70,7 @@ enum uri_errno {
 	URI_ERRNO_INVALID_PROTOCOL,	/* No protocol was found */
 	URI_ERRNO_NO_SLASHES,		/* Slashes after protocol missing */
 	URI_ERRNO_TOO_MANY_SLASHES,	/* Too many slashes after protocol */
+	URI_ERRNO_NO_PORT_COLON,	/* ':' after host without port */
 	URI_ERRNO_NO_HOST_SLASH,	/* Slash after host missing */
 	URI_ERRNO_IPV6_SECURITY,	/* IPv6 security bug detected */
 	URI_ERRNO_INVALID_PORT,		/* Port number is bad */
@@ -238,7 +239,7 @@ struct uri *get_translated_uri(unsigned char *uristring, unsigned char *cwd);
 
 /* Check if two URIs are equal. If @components are 0 simply compare the whole
  * URI else only compare the specific parts. */
-int compare_uri(struct uri *uri1, struct uri *uri2, enum uri_component componentse);
+int compare_uri(struct uri *uri1, struct uri *uri2, enum uri_component components);
 
 /* These functions recreate the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for

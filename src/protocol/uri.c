@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.288 2004/10/17 17:17:09 jonas Exp $ */
+/* $Id: uri.c,v 1.289 2004/10/21 17:03:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,6 +270,9 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 		uri->port = host_end;
 		uri->portlen = port_end - host_end;
+
+		if (host_end == port_end)
+			return URI_ERRNO_NO_PORT_COLON;
 
 		/* We only use 8 bits for portlen so better check */
 		if (uri->portlen != port_end - host_end)
@@ -1060,6 +1063,14 @@ parse_uri:
 	case URI_ERRNO_NO_SLASHES:
 		/* Try prefix:some.url -> prefix://some.url.. */
 		insert_in_string(&newurl, uri.protocollen + 1, "//", 2);
+		goto parse_uri;
+
+	case URI_ERRNO_NO_PORT_COLON:
+		assert(uri.portlen == 0
+		       && uri.string < uri.port
+		       && uri.port[-1] == ':');
+
+		memmove(uri.port - 1, uri.port, strlen(uri.port));
 		goto parse_uri;
 
 	case URI_ERRNO_NO_HOST_SLASH:

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.61 2004/01/02 19:33:10 jonas Exp $ */
+/* $Id: globhist.c,v 1.62 2004/01/04 11:42:10 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -97,12 +97,6 @@ static struct option_info global_history_options[] = {
 #define get_globhist_display_type()	get_opt_globhist(GLOBHIST_DISPLAY_TYPE).number
 #define get_globhist_write_interval()	get_opt_globhist(GLOBHIST_WRITE_INTERVAL).number
 
-struct globhist_cache_entry {
-	LIST_HEAD(struct globhist_cache_entry);
-
-	struct global_history_item *item;
-};
-
 static struct hash *globhist_cache = NULL;
 static int globhist_cache_entries = 0;
 static int globhist_dirty = 0;
@@ -117,7 +111,6 @@ free_global_history_item(struct global_history_item *historyitem)
 
 		item = get_hash_item(globhist_cache, historyitem->url, strlen(historyitem->url));
 		if (item) {
-			mem_free(item->value);
 			del_hash_item(globhist_cache, item);
 			globhist_cache_entries--;
 		}
@@ -151,8 +144,8 @@ get_global_history_item(unsigned char *url)
 	/* Search for cached entry. */
 
 	item = get_hash_item(globhist_cache, url, strlen(url));
-	if (!item) return NULL;
-	return ((struct globhist_cache_entry *) item->value)->item;
+
+	return item ? (struct global_history_item *) item->value : NULL;
 }
 
 #if 0
@@ -185,13 +178,6 @@ static void
 free_globhist_cache(void)
 {
 	if (globhist_cache) {
-		struct hash_item *item;
-		int i;
-
-		foreach_hash_item (item, *globhist_cache, i)
-			if (item->value)
-				mem_free(item->value);
-
 		free_hash(globhist_cache);
 	}
 
@@ -267,15 +253,10 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 		globhist_cache = init_hash(8, &strhash);
 
 	if (globhist_cache && globhist_cache_entries < max_globhist_items) {
+		int urllen = strlen(history_item->url);
+
 		/* Create a new entry. */
-		struct globhist_cache_entry *globhistce = mem_alloc(sizeof(struct globhist_cache_entry));
-
-		if (!globhistce) return;
-
-		globhistce->item = history_item;
-		if (!add_hash_item(globhist_cache, history_item->url, strlen(history_item->url), globhistce)) {
-			mem_free(globhistce);
-		} else {
+		if (add_hash_item(globhist_cache, history_item->url, urllen, history_item)) {
 			globhist_cache_entries++;
 		}
 	}

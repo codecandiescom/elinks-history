@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.1 2003/12/07 16:45:17 pasky Exp $ */
+/* $Id: smb.c,v 1.2 2003/12/07 20:15:26 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -64,7 +64,7 @@ smb_read_text(struct connection *conn, int sock)
 	si = mem_realloc(si, sizeof(struct smb_connection_info) + si->textlen
 			     + READ_SIZE + 2);
 	if (!si) {
-		abort_conn_with_state(conn, -errno);
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 	conn->info = si;

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.157 2004/12/15 19:05:52 jonas Exp $ */
+/* $Id: options.inc,v 1.158 2004/12/16 10:31:23 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -207,7 +207,7 @@ static struct option_info config_options_info[] = {
 		"0     means always display IMG\n"
 		"1     means always display filename\n"
 		"2     means display alt/title attribute if possible, IMG if not\n"
-		"3     means display alt/title attribute if possible, filename if not\n")),
+		"3     means display alt/title attribute if possible, filename if not")),
 
 	INIT_OPT_INT("document.browse.images", N_("Maximum length for image filename"),
 		"filename_maxlen", 0, 0, 500, 0,
@@ -815,7 +815,7 @@ static struct option_info config_options_info[] = {
 		"0 is send no referer\n"
 		"1 is send current URL as referer\n"
 		"2 is send fixed fake referer\n"
-		"3 is send previous URL as referer (correct, but insecure)\n")),
+		"3 is send previous URL as referer (correct, but insecure)")),
 
 	INIT_OPT_STRING("protocol.http.referer", N_("Fake referer URL"),
 		"fake", 0, "",

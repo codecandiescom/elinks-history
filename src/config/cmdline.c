@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.104 2004/11/08 22:11:47 jonas Exp $ */
+/* $Id: cmdline.c,v 1.105 2004/12/16 10:31:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -766,7 +766,7 @@ struct option_info cmdline_options_info[] = {
 		"start up and while running:\n"
 		"	0 means only show serious errors\n"
 		"	1 means show serious errors and warnings\n"
-		"	2 means show all messages\n")),
+		"	2 means show all messages")),
 
 	INIT_OPT_COMMAND("", N_("Print version information and exit"),
 		"version", 0, version_cmd,

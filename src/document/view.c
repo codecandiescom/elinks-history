@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.36 2002/05/06 14:12:13 pasky Exp $ */
+/* $Id: view.c,v 1.37 2002/05/06 15:19:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1660,16 +1660,23 @@ void textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	if (l_) l = l_;
 	if (term_) term = term_;
 
-	if (!fn) fn = tempnam(NULL, "linksarea");
-	if (!fn) return;
-
 	if (op == 0 && !textarea_editor && term->master) {
-		FILE *taf = fopen(fn, "w");
+		FILE *taf;
 		char *ed = getenv("EDITOR");
 		char *ex;
+		int h;
+
+		fn = stracpy("linksarea-XXXXXX");
+		h = mkstemp(fn);
+		if (h < 0) {
+			mem_free(fn); fn = NULL; fs = NULL;
+			return;
+		}
+
+		taf = fdopen(h, "w");
 
 		if (!taf) {
-			fn = NULL; fs = NULL;
+			mem_free(fn); fn = NULL; fs = NULL;
 			return;
 		}
 
@@ -1681,7 +1688,7 @@ void textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		ex = mem_alloc(strlen(ed) + strlen(fn) + 2);
 		if (!ex) {
 			unlink(fn);
-			fn = NULL; fs = NULL;
+			mem_free(fn); fn = NULL; fs = NULL;
 			return;
 		}
 
@@ -1693,7 +1700,7 @@ void textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		textarea_editor = 1;
 
 	} else if (op == 0 && !term->master) {
-		fn = NULL; fs = NULL;
+		mem_free(fn); fn = NULL; fs = NULL;
 
 		msg_box(term, NULL,
 			TEXT(T_ERROR), AL_CENTER,
@@ -1727,6 +1734,7 @@ void textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 			unlink(fn);
 		}
 
+		mem_free(fn);
 		textarea_editor = 0; fn = NULL; fs = NULL;
 	}
 }

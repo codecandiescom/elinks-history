@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.9 2003/10/23 22:35:40 jonas Exp $ */
+/* $Id: options.inc,v 1.10 2003/10/23 22:39:56 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -445,8 +445,8 @@ struct option_info config_options_info[] = {
 		"memory", 0,
 		N_("Memory cache options.")),
 
-	INIT_OPT_INT("document.cache.memory", N_("Size"),
-		"size", 0, 0, MAXINT, 1048576,
+	INIT_OPT_LONG("document.cache.memory", N_("Size"),
+		"size", 0, 0, MAXLONG, 1048576,
 		N_("Memory cache size (in bytes).")),
 
 

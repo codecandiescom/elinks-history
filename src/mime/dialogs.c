@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.91 2004/04/11 22:58:51 jonas Exp $ */
+/* $Id: dialogs.c,v 1.92 2004/04/13 22:31:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,9 +80,9 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 
 
 struct extension {
-	unsigned char *ext_orig;
-	unsigned char *ext;
-	unsigned char *ct;
+	unsigned char ext_orig[MAX_STR_LEN];
+	unsigned char ext[MAX_STR_LEN];
+	unsigned char ct[MAX_STR_LEN];
 };
 
 static void
@@ -105,9 +105,6 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 {
 	struct option *opt;
 	struct extension *new;
-	unsigned char *ext;
-	unsigned char *ct;
-	unsigned char *ext_orig;
 	struct dialog *dlg;
 	struct string translated;
 
@@ -119,7 +116,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	}
 
 #define MIME_WIDGETS_COUNT 4
-	dlg = calloc_dialog(MIME_WIDGETS_COUNT, sizeof(struct extension) + 3 * MAX_STR_LEN);
+	dlg = calloc_dialog(MIME_WIDGETS_COUNT, sizeof(struct extension));
 	if (!dlg) {
 		if (fcp) {
 			mem_free(fcp);
@@ -129,14 +126,11 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	}
 
 	new = (struct extension *) get_dialog_offset(dlg, MIME_WIDGETS_COUNT);
-	new->ext = ext = (unsigned char *) (new + 1);
-	new->ct = ct = ext + MAX_STR_LEN;
-	new->ext_orig = ext_orig = ct + MAX_STR_LEN;
 
 	if (opt) {
-		safe_strncpy(ext, empty_string_or_(fcp), MAX_STR_LEN);
-		safe_strncpy(ct, empty_string_or_(opt->value.string), MAX_STR_LEN);
-		safe_strncpy(ext_orig, empty_string_or_(translated.source), MAX_STR_LEN);
+		safe_strncpy(new->ext, empty_string_or_(fcp), MAX_STR_LEN);
+		safe_strncpy(new->ct, empty_string_or_(opt->value.string), MAX_STR_LEN);
+		safe_strncpy(new->ext_orig, empty_string_or_(translated.source), MAX_STR_LEN);
 	}
 
 	if (fcp) done_string(&translated);
@@ -144,8 +138,8 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	dlg->title = _("Extension", term);
 	dlg->layouter = generic_dialog_layouter;
 
-	add_dlg_field(dlg, _("Extension(s)", term), 0, 0, check_nonempty, MAX_STR_LEN, ext, NULL);
-	add_dlg_field(dlg, _("Content-Type", term), 0, 0, check_nonempty, MAX_STR_LEN, ct, NULL);
+	add_dlg_field(dlg, _("Extension(s)", term), 0, 0, check_nonempty, MAX_STR_LEN, new->ext, NULL);
+	add_dlg_field(dlg, _("Content-Type", term), 0, 0, check_nonempty, MAX_STR_LEN, new->ct, NULL);
 
 	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), add_mime_extension, new);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);

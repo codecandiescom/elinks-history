@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.48 2003/10/29 14:47:13 zas Exp $ */
+/* $Id: inphist.c,v 1.49 2003/10/29 14:56:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,18 +60,18 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 	struct widget_data *widget_data = selected_widget(dlg_data);
 	int cdata_len = strlen(widget_data->cdata);
 	int n = 0;
-	struct input_history_item *hi;
+	struct input_history_entry *entry;
 	struct menu_item *items = NULL;
 
-	foreach (hi, *history) {
-		if (strncmp(widget_data->cdata, hi->d, cdata_len)) continue;
+	foreach (entry, *history) {
+		if (strncmp(widget_data->cdata, entry->d, cdata_len)) continue;
 
 		if (!realloc_menu_items(&items, n)) {
 			if (items) mem_free(items);
 			return;
 		}
 
-		SET_MENU_ITEM(&items[n], hi->d, "", tab_compl, hi->d, FREE_LIST, 0, 1, HKS_SHOW, 0);
+		SET_MENU_ITEM(&items[n], entry->d, "", tab_compl, entry->d, FREE_LIST, 0, 1, HKS_SHOW, 0);
 		n++;
 	}
 
@@ -104,7 +104,7 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 	 * been set yet. */
 	int max = 0;
 	unsigned char *match = NULL;
-	struct input_history_item *entry;
+	struct input_history_entry *entry;
 
 	foreach (entry, *history) {
 		unsigned char *c = entry->d - 1;
@@ -128,15 +128,15 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 
 /* Search for duplicate entries in history list, save first one and remove
  * older ones. */
-static struct input_history_item *
+static struct input_history_entry *
 check_duplicate_entries(struct input_history *history, unsigned char *data)
 {
-	struct input_history_item *entry, *first_duplicate = NULL;
+	struct input_history_entry *entry, *first_duplicate = NULL;
 
 	if (!history || !data || !*data) return NULL;
 
 	foreach (entry, history->entries) {
-		struct input_history_item *duplicate;
+		struct input_history_entry *duplicate;
 
 		if (strcmp(entry->d, data)) continue;
 
@@ -165,7 +165,7 @@ void
 add_to_input_history(struct input_history *history, unsigned char *data,
 		     int check_duplicate)
 {
-	struct input_history_item *entry;
+	struct input_history_entry *entry;
 	int length;
 
 	if (!history || !data || !*data)
@@ -186,7 +186,7 @@ add_to_input_history(struct input_history *history, unsigned char *data,
 
 	/* Copy it all etc. */
 	/* One byte is already reserved for url in struct input_history_item. */
-	entry = mem_alloc(sizeof(struct input_history_item) + length);
+	entry = mem_alloc(sizeof(struct input_history_entry) + length);
 	if (!entry) return;
 
 	memcpy(entry->d, data, length + 1);
@@ -249,7 +249,7 @@ load_input_history(struct input_history *history, unsigned char *filename)
 int
 save_input_history(struct input_history *history, unsigned char *filename)
 {
-	struct input_history_item *entry;
+	struct input_history_entry *entry;
 	struct secure_save_info *ssi;
 	unsigned char *history_file;
 	int i = 0;

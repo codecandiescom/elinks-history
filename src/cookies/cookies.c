@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.192 2004/12/19 00:57:48 jonas Exp $ */
+/* $Id: cookies.c,v 1.193 2005/01/02 14:21:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,8 +100,10 @@ static struct option_info cookies_options[] = {
 	INIT_OPT_BOOL("cookies", N_("Paranoid security"),
 		"paranoid_security", 0, 0,
 		N_("When enabled, we'll require three dots in cookies domain for all\n"
-		"non-international domains (instead of just two dots). Please see\n"
-		"code (cookies.c:check_domain_security()) for explanation.")),
+		"non-international domains (instead of just two dots). Some countries\n"
+		"have generic second level domains (eg. .com.pl, .co.uk) and allowing\n"
+		"sites to set cookies for these generic domains could potentially be\n"
+		"very bad. Note, it is off by default as it breaks a lot of sites.")),
 
 	INIT_OPT_BOOL("cookies", N_("Saving"),
 		"save", 0, 1,

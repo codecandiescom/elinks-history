@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.188 2004/01/24 23:58:42 pasky Exp $ */
+/* $Id: menu.c,v 1.189 2004/01/25 12:38:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -628,8 +628,8 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 	int s = 0;
 
 	switch (kbd_action(KM_MENU, ev, NULL)) {
-		case ACT_LEFT:
-		case ACT_RIGHT:
+		case ACT_MENU_LEFT:
+		case ACT_MENU_RIGHT:
 			if ((void *) win->next != &win->term->windows
 			    && win->next->handler == mainmenu_handler) {
 				delete_window_ev(win, ev);
@@ -643,39 +643,39 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 
 			goto break2;
 
-		case ACT_UP:
+		case ACT_MENU_UP:
 			scroll_menu(menu, -1);
 			break;
 
-		case ACT_DOWN:
+		case ACT_MENU_DOWN:
 			scroll_menu(menu, 1);
 			break;
 
-		case ACT_HOME:
+		case ACT_MENU_HOME:
 			menu->selected = -1;
 			scroll_menu(menu, 1);
 			break;
 
-		case ACT_END:
+		case ACT_MENU_END:
 			menu->selected = menu->ni;
 			scroll_menu(menu, -1);
 			break;
 
-		case ACT_PAGE_UP:
+		case ACT_MENU_PAGE_UP:
 			menu_page_up(menu);
 			break;
 
 			break;
 
-		case ACT_PAGE_DOWN:
+		case ACT_MENU_PAGE_DOWN:
 			menu_page_down(menu);
 			break;
 
-		case ACT_ENTER:
-		case ACT_SELECT:
+		case ACT_MENU_ENTER:
+		case ACT_MENU_SELECT:
 			goto enter;
 
-		case ACT_CANCEL:
+		case ACT_MENU_CANCEL:
 			if ((void *) win->next != &win->term->windows
 			    && win->next->handler == mainmenu_handler)
 				delete_window_ev(win, ev);

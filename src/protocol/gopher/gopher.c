@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.4 2004/08/18 17:42:00 jonas Exp $ */
+/* $Id: gopher.c,v 1.5 2004/08/18 17:43:03 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -699,11 +699,6 @@ send_gopher_command(struct connection *conn)
 	set_connection_state(conn, S_SENT);
 }
 
-
-void
-cso_protocol_handler(struct connection *conn)
-{
-}
 
 /* FIXME: No decoding of strange data types as yet. */
 void

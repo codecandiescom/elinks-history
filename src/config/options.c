@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.377 2003/10/25 16:19:54 pasky Exp $ */
+/* $Id: options.c,v 1.378 2003/10/25 17:14:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,6 +224,7 @@ static void
 add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 {
 	struct list_head *cat = tree->value.tree;
+	int abi = 0;
 
 	if (*path) {
 		tree = get_opt_rec(tree, path);
@@ -234,7 +235,9 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 	if (option->box_item && option->name && !strcmp(option->name, "_template_"))
 		option->box_item->visible = get_opt_int("config.show_template");
 
-	if (tree->box_item && option->box_item) {
+	abi = (tree->box_item && option->box_item);
+
+	if (abi) {
 		/* The config_root tree is a just a placeholder for the
 		 * box_items, it actually isn't a real box_item by itself;
 		 * these ghosts are indicated by the fact that they have
@@ -243,8 +246,6 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 			option->box_item->depth = tree->box_item->depth + 1;
 			option->box_item->root = tree->box_item;
 		}
-
-		add_to_list_end(tree->box_item->child, option->box_item);
 	}
 
 	if (tree->flags & OPT_SORT) {
@@ -253,12 +254,18 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 		/* The list is empty, just add it there. */
 		if (list_empty(*cat)) {
 			add_to_list(*cat, option);
+			if (abi)
+				add_to_list(tree->box_item->child,
+						option->box_item);
 
 		/* This fits as the last list entry, add it there. This
 		 * optimizes the most expensive BUT most common case ;-). */
 		} else if (strcmp(((struct option *) cat->prev)->name,
 			   option->name) <= 0) {
 			add_to_list_end(*cat, option);
+			if (abi)
+				add_to_list_end(tree->box_item->child,
+						option->box_item);
 
 		/* Scan the list linearly. This could be probably optimized ie.
 		 * to choose direction based on the first letter or so. */
@@ -268,6 +275,9 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 					continue;
 
 				add_at_pos(pos->prev, option);
+				if (abi)
+					add_at_pos(pos->prev->box_item->child,
+							option->box_item);
 				break;
 			}
 
@@ -276,6 +286,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 
 	} else {
 		add_to_list_end(*cat, option);
+		if (abi) add_to_list_end(tree->box_item->child, option->box_item);
 	}
 }
 

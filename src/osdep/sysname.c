@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.14 2003/09/07 21:41:50 jonas Exp $ */
+/* $Id: sysname.c,v 1.15 2003/10/26 19:10:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@
 
 unsigned char system_name[MAX_STR_LEN];
 
-#ifndef HAVE_POPEN
+#ifdef HAVE_POPEN
 static int
 got_it_from_uname_command(void)
 {

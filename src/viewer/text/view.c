@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.408 2004/05/14 00:18:41 jonas Exp $ */
+/* $Id: view.c,v 1.409 2004/05/14 00:43:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -858,8 +858,8 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 		if_assert_failed return;
 
 		/* FIXME: is_in_box() ? */
-		if (ev->x >= o->x && ev->x < o->x + doc_view->box.width
-		    && ev->y >= o->y && ev->y < o->y + doc_view->box.height) {
+		if (ev->x >= o->box.x && ev->x < o->box.x + doc_view->box.width
+		    && ev->y >= o->box.y && ev->y < o->box.y + doc_view->box.height) {
 			matched = doc_view;
 			break;
 		}

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.417 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: parser.c,v 1.418 2004/05/14 00:43:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -871,8 +871,8 @@ html_frameset(unsigned char *a)
 	}
 
 	if (!html_top.frameset) {
-		width = global_doc_opts->width;
-		height = global_doc_opts->height;
+		width = global_doc_opts->box.width;
+		height = global_doc_opts->box.height;
 		global_doc_opts->needs_height = 1;
 	} else {
 		struct frameset_desc *frameset_desc = html_top.frameset;
@@ -1297,7 +1297,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	par_format.leftmargin = options->margin;
 	par_format.rightmargin = options->margin;
 
-	par_format.width = options->width;
+	par_format.width = options->box.width;
 	par_format.list_level = par_format.list_number = 0;
 	par_format.dd_margin = options->margin;
 	par_format.flags = P_NONE;

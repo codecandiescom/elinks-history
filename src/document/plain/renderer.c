@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.99 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: renderer.c,v 1.100 2004/05/14 00:43:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -418,7 +418,7 @@ render_plain_document(struct cache_entry *cached, struct document *document)
 	renderer.lineno = 0;
 	renderer.convert_table = convert_table;
 	renderer.compress = document->options.plain_compress_empty_lines;
-	renderer.max_width = document->options.wrap ? document->options.width
+	renderer.max_width = document->options.wrap ? document->options.box.width
 						    : MAXINT;
 
 	/* Setup the style */

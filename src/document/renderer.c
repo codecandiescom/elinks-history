@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.45 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: renderer.c,v 1.46 2004/05/14 00:43:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,12 +91,13 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	/* If we do not care about the height and width of the document
 	 * just use the setup values. */
 
-	set_box(&doc_view->box,
-		document->options.x, document->options.y,
-		document->options.needs_width
-		 ? document->options.width : options->width,
-		document->options.needs_height
-		 ? document->options.height : options->height);
+	copy_box(&doc_view->box, &document->options.box);
+
+	if (!document->options.needs_width)
+		document->options.box.width = options->box.width;
+
+	if (!document->options.needs_height)
+		document->options.box.height = options->box.height;
 }
 
 
@@ -118,17 +119,15 @@ render_document_frames(struct session *ses)
 
 	init_document_options(&doc_opts);
 
-	doc_opts.x = 0;
-	doc_opts.y = 0;
-	doc_opts.width = ses->tab->term->width;
-	doc_opts.height = ses->tab->term->height;
+	set_box(&doc_opts.box, 0, 0,
+		ses->tab->term->width, ses->tab->term->height);
 
 	if (ses->status.show_title_bar) {
-		doc_opts.y++;
-		doc_opts.height--;
+		doc_opts.box.y++;
+		doc_opts.box.height--;
 	}
-	if (ses->status.show_status_bar) doc_opts.height--;
-	if (ses->status.show_tabs_bar) doc_opts.height--;
+	if (ses->status.show_status_bar) doc_opts.box.height--;
+	if (ses->status.show_tabs_bar) doc_opts.box.height--;
 
 	doc_opts.color_mode = get_opt_int_tree(ses->tab->term->spec, "colors");
 	if (!get_opt_int_tree(ses->tab->term->spec, "underline"))

@@ -1,10 +1,11 @@
-/* $Id: options.h,v 1.46 2004/05/04 11:45:29 jonas Exp $ */
+/* $Id: options.h,v 1.47 2004/05/14 00:43:26 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
 
 #include "terminal/color.h"
 #include "util/color.h"
+#include "util/box.h"
 
 /* This mostly acts as a option cache so rendering will be faster. However it
  * is also used to validate and invalidate documents in the format cache as to
@@ -61,22 +62,25 @@ struct document_options {
 	/* XXX: Everything past this comment is specialy handled by compare_opt() */
 	unsigned char *framename;
 
-	/* The position of the window. */
-	/* This is not compared at all since it doesn't make any difference
-	 * what position the document will fit into a frameset or so. */
-	int x, y;
-
-	/* The width of the window. */
-	/* This controls how wide tables can be rendered and so on. It is thus
-	 * also to blame for the extra memory consumption when resizing because
-	 * all documents has to be rerendered. */
-	/* Placed here because we only need to compare it if not @plain. */
-	int width;
-
-	/* The height of the window */
-	/* It is placed here because only documents containing textarea or
-	 * frames uses it and we only compare it if @needs_height is set. */
-	int height;
+	/* The position of the window (box.x and box.y)
+	 *
+	 *	This is not compared at all since it doesn't make any
+	 *	difference what position the document will fit into a frameset
+	 *	or so.
+	 *
+	 * The width of the window (box.width)
+	 *
+	 *	This controls how wide tables can be rendered and so on. It is
+	 *	thus also to blame for the extra memory consumption when
+	 *	resizing because all documents has to be rerendered. We only
+	 *	need to compare it if not @plain.
+	 *
+	 * The height of the window (box.height)
+	 *
+	 *	Only documents containing textarea or frames uses it and we
+	 *	only compare it if @needs_height is set.
+	 */
+	struct box box;
 	unsigned int needs_height:1;
 	unsigned int needs_width:1;
 

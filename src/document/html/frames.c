@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.69 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: frames.c,v 1.70 2004/05/14 00:43:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,7 @@ repeat:
 		goto repeat;
 	}
 
-	doc_view = find_fd(ses, name, depth, o->x, o->y);
+	doc_view = find_fd(ses, name, depth, o->box.x, o->box.y);
 	if (doc_view) render_document(vs, doc_view, o);
 	o->plain = plain;
 
@@ -218,12 +218,12 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 	for (j = 0; j < fsd->box.height; j++) {
 		register int i;
 
-		o.x = op->x;
+		o.box.x = op->box.x;
 		for (i = 0; i < fsd->box.width; i++) {
 			struct frame_desc *frame_desc = &fsd->frame_desc[n];
 
-			o.width = frame_desc->width;
-			o.height = frame_desc->height;
+			o.box.width = frame_desc->width;
+			o.box.height = frame_desc->height;
 			o.framename = frame_desc->name;
 			if (frame_desc->subframe)
 				format_frames(ses, frame_desc->subframe, &o, depth + 1);
@@ -235,10 +235,10 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 					format_frames(ses, doc_view->document->frame_desc,
 						      &o, depth + 1);
 			}
-			o.x += o.width + 1;
+			o.box.x += o.box.width + 1;
 			n++;
 		}
-		o.y += o.height + 1;
+		o.box.y += o.box.height + 1;
 	}
 }
 

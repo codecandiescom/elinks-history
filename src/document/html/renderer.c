@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.434 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: renderer.c,v 1.435 2004/05/14 00:43:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1534,7 +1534,7 @@ render_html_document(struct cache_entry *cached, struct document *document)
 	done_string(&title);
 
 	part = format_html_part(start, end, par_format.align,
-			      par_format.leftmargin, document->options.width, document,
+			      par_format.leftmargin, document->options.box.width, document,
 			      0, 0, head.source, 1);
 	mem_free_if(part);
 

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.19 2002/09/18 16:07:01 pasky Exp $ */
+/* $Id: terminal.h,v 1.20 2002/11/29 17:37:33 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -69,6 +69,7 @@ struct terminal {
 	int blocked;
 	unsigned char *input_queue;
 	int qlen;
+	int qfreespace;
 	struct list_head windows;
 	unsigned char *title;
 	struct {

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.30 2002/11/29 16:26:13 zas Exp $ */
+/* $Id: terminal.c,v 1.31 2002/11/29 17:37:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -476,16 +476,21 @@ in_term(struct terminal *term)
 	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	struct event *ev;
 	int r;
-	unsigned char *iq;
+	unsigned char *iq = term->input_queue;
 
-	iq = mem_realloc(term->input_queue, term->qlen + ALLOC_GR);
-	if (!iq) {
-		destroy_terminal(term);
-		return;
+	if (!iq || !term->qfreespace || term->qfreespace - term->qlen > ALLOC_GR) {
+		int newsize = ((term->qlen + ALLOC_GR) & ~(ALLOC_GR - 1));
+
+		iq = mem_realloc(term->input_queue, newsize);
+		if (!iq) {
+			destroy_terminal(term);
+			return;
+		}
+		term->input_queue = iq;
+		term->qfreespace = newsize - term->qlen;
 	}
-	term->input_queue = iq;
 
-	r = read(term->fdin, iq + term->qlen, ALLOC_GR);
+	r = read(term->fdin, iq + term->qlen, term->qfreespace);
 	if (r <= 0) {
 		if (r == -1 && errno != ECONNRESET)
 			error("ERROR: error %d on terminal: could not read event", errno);
@@ -493,6 +498,7 @@ in_term(struct terminal *term)
 		return;
 	}
 	term->qlen += r;
+	term->qfreespace -= r;
 
 test_queue:
 	if (term->qlen < sizeof(struct event)) return;
@@ -644,8 +650,13 @@ send_redraw:
 	if (ev->ev == EV_ABORT) destroy_terminal(term);
 	/* redraw_screen(term); */
 mm:
-	if (term->qlen == r) term->qlen = 0;
-	else memmove(iq, iq + r, term->qlen -= r);
+	if (term->qlen == r) {
+		term->qlen = 0;
+	} else {
+		term->qlen -= r;
+		memmove(iq, iq + r, term->qlen);
+	}
+	term->qfreespace += r;
 
 	goto test_queue;
 }

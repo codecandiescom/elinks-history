@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.32 2004/07/12 11:31:17 jonas Exp $
+## $Id: Makefile.am,v 1.33 2004/08/14 03:32:32 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -7,6 +7,11 @@ authobj = auth/auth.o auth/dialogs.o
 
 if CONFIG_CGI
 cgiobj = file/cgi.o
+endif
+
+if CONFIG_DATA
+datasrc = data.c data.h
+dataobj = data.o
 endif
 
 fileobj = file/file.o
@@ -33,9 +38,10 @@ SUBDIRS = auth file ftp http $(rewritedir) $(smbdir)
 
 noinst_LIBRARIES = libprotocol.a
 
-EXTRA_libprotocol_a_SOURCES = finger.c finger.h
+EXTRA_libprotocol_a_SOURCES = $(datasrc) finger.c finger.h
 libprotocol_a_LIBADD = \
  $(authobj) \
+ $(dataobj) \
  $(cgiobj) \
  $(fileobj) \
  $(fingerobj) \

@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.34 2004/07/12 13:52:33 jonas Exp $ */
+/* $Id: protocol.h,v 1.35 2004/08/14 03:32:32 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -11,6 +11,7 @@ struct uri;
 
 enum protocol {
 	PROTOCOL_ABOUT,
+	PROTOCOL_DATA,
 	PROTOCOL_FILE,
 	PROTOCOL_FINGER,
 	PROTOCOL_FTP,

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.60 2004/08/03 09:37:25 jonas Exp $ */
+/* $Id: protocol.c,v 1.61 2004/08/14 03:32:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 /* Backends dynamic area: */
 
 #include "protocol/about.h"
+#include "protocol/data.h"
 #include "protocol/file/file.h"
 #include "protocol/finger.h"
 #include "protocol/ftp/ftp.h"
@@ -44,6 +45,7 @@ struct protocol_backend {
 
 static const struct protocol_backend protocol_backends[] = {
 	{ "about",	   0, about_protocol_handler,	0, 0, 1, 0 },
+	{ "data",	   0, data_protocol_handler,	0, 0, 1, 0 },
 	{ "file",	   0, file_protocol_handler,	1, 0, 0, 0 },
 	{ "finger",	  79, finger_protocol_handler,	1, 1, 0, 0 },
 	{ "ftp",	  21, ftp_protocol_handler,	1, 1, 0, 0 },

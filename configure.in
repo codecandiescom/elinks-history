@@ -744,6 +744,10 @@ EL_ARG_DEPEND(CONFIG_IPV6, ipv6,
 	      [  --disable-ipv6          disable IPv6 support])
 AM_CONDITIONAL(CONFIG_IPV6, test "$CONFIG_IPV6" = yes)
 
+EL_ARG_ENABLE(CONFIG_DATA, data, [Data protocol],
+	      [  --disable-data          disable data protocol support])
+AM_CONDITIONAL(CONFIG_DATA, test "$CONFIG_DATA" = yes)
+
 EL_ARG_ENABLE(CONFIG_URI_REWRITE, uri-rewrite, [URI rewriting],
 	      [  --disable-uri-rewrite   disable URI rewrite support])
 AM_CONDITIONAL(CONFIG_URI_REWRITE, test "$CONFIG_URI_REWRITE" = yes)

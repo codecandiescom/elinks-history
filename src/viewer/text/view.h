@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.44 2004/04/15 16:32:02 jonas Exp $ */
+/* $Id: view.h,v 1.45 2004/05/25 06:38:21 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -32,7 +32,6 @@ void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int a
 /* File menu handlers. */
 
 void save_as(struct terminal *, void *, struct session *);
-void save_url(struct session *, unsigned char *);
 
 /* Various event emitters and link menu handlers. */
 

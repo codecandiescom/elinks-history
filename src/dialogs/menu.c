@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.314 2004/05/25 04:48:54 jonas Exp $ */
+/* $Id: menu.c,v 1.315 2004/05/25 06:38:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,6 +57,34 @@ menu_url_shortcut(struct terminal *term, void *d, struct session *ses)
 	if (!u) return;
 	goto_url(ses, u);
 	mem_free(u);
+}
+
+static void
+save_url(struct session *ses, unsigned char *url)
+{
+	struct document_view *doc_view;
+	struct uri *uri;
+
+	assert(ses && ses->tab && ses->tab->term && url);
+	if_assert_failed return;
+
+	if (!*url) return;
+
+	uri = get_translated_uri(url, ses->tab->term->cwd, NULL);
+	if (!uri) {
+		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);
+		return;
+	}
+
+	if (ses->download_uri) done_uri(ses->download_uri);
+	ses->download_uri = uri;
+
+	doc_view = current_frame(ses);
+	assert(doc_view && doc_view->document && doc_view->document->uri);
+	if_assert_failed return;
+
+	set_session_referrer(ses, doc_view->document->uri);
+	query_file(ses, ses->download_uri, ses, start_download, NULL, 1);
 }
 
 void

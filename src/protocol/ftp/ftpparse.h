@@ -1,8 +1,8 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.h,v 1.5 2003/06/28 10:47:53 jonas Exp $ */
+/* $Id: ftpparse.h,v 1.6 2003/11/26 22:14:31 pasky Exp $ */
 
-#ifndef EL__PROTOCOL_FTPPARSE_H
-#define EL__PROTOCOL_FTPPARSE_H
+#ifndef EL__PROTOCOL_FTP_FTPPARSE_H
+#define EL__PROTOCOL_FTP_FTPPARSE_H
 
 /*
 ftpparse(&fp,buf,len) tries to parse one line of LIST output.

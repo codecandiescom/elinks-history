@@ -1,7 +1,7 @@
-/* $Id: ftp.h,v 1.5 2003/06/26 20:04:40 jonas Exp $ */
+/* $Id: ftp.h,v 1.6 2003/11/26 22:14:31 pasky Exp $ */
 
-#ifndef EL__PROTOCOL_FTP_H
-#define EL__PROTOCOL_FTP_H
+#ifndef EL__PROTOCOL_FTP_FTP_H
+#define EL__PROTOCOL_FTP_FTP_H
 
 #include "protocol/protocol.h"
 

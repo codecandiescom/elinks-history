@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.18 2003/07/14 19:51:32 jonas Exp $
+## $Id: Makefile.am,v 1.19 2003/11/26 22:14:30 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
-SUBDIRS = http
+SUBDIRS = ftp http
 
 noinst_LIBRARIES = libprotocol.a
 libprotocol_a_SOURCES = \
@@ -11,10 +11,6 @@ libprotocol_a_SOURCES = \
  file.h \
  finger.c \
  finger.h \
- ftp.c \
- ftp.h \
- ftpparse.c \
- ftpparse.h \
  protocol.c \
  protocol.h \
  proxy.c \

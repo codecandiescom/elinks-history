@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.33 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: auth.c,v 1.34 2003/07/10 22:44:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,22 +126,6 @@ do_auth_dialog(struct session *ses)
 	if (!a || a->blocked) return;
 	a->valid = 1;
 	a->blocked = 1;
-	if (!a->uid) {
-		a->uid = mem_alloc(MAX_UID_LEN);
-		if (!a->uid) {
-			del_auth_entry(a);
-			return;
-		}
-		*a->uid = 0;
-	}
-	if (!a->passwd) {
-		a->passwd = mem_alloc(MAX_PASSWD_LEN);
-		if (!a->passwd) {
-			del_auth_entry(a);
-			return;
-		}
-		*a->passwd = 0;
-	}
 
 	snprintf(sticker, MAX_STR_LEN,
 		_("Authentication required for %s at %s", term),

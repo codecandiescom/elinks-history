@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.31 2003/07/10 13:53:58 jonas Exp $ */
+/* $Id: auth.c,v 1.32 2003/07/10 22:44:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,25 +79,28 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 		}
 	}
 
-	if (uri->userlen || uri->passwordlen) {
-		/* Copy user and pass info if any in passed url. */
-		entry->uid = mem_alloc(MAX_UID_LEN);
-		if (!entry->uid) {
-			if (entry->realm) mem_free(entry->realm);
-			mem_free(entry);
-			return NULL;
-		}
-		safe_strncpy(entry->uid, uri->user, MAX_UID_LEN);
+#define min(x, y) ((x) < (y) ? (x) : (y))
 
-		entry->passwd = mem_alloc(MAX_PASSWD_LEN);
-		if (!entry->passwd) {
-			if (entry->realm) mem_free(entry->realm);
-			if (entry->uid) mem_free(entry->uid);
-			mem_free(entry);
-			return NULL;
-		}
-		safe_strncpy(entry->passwd, uri->password, MAX_PASSWD_LEN);
+	/* Copy user and pass info passed url if any else NULL terminate. */
+
+	entry->uid = mem_alloc(MAX_UID_LEN);
+	if (!entry->uid) {
+		if (entry->realm) mem_free(entry->realm);
+		mem_free(entry);
+		return NULL;
 	}
+	safe_strncpy(entry->uid, uri->user, min(uri->userlen + 1, MAX_UID_LEN));
+
+	entry->passwd = mem_alloc(MAX_PASSWD_LEN);
+	if (!entry->passwd) {
+		if (entry->realm) mem_free(entry->realm);
+		if (entry->uid) mem_free(entry->uid);
+		mem_free(entry);
+		return NULL;
+	}
+	safe_strncpy(entry->uid, uri->user, min(uri->userlen + 1, MAX_UID_LEN));
+
+#undef min
 
 	return entry;
 }

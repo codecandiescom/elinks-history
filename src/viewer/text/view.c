@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.308 2003/12/26 13:15:45 zas Exp $ */
+/* $Id: view.c,v 1.309 2003/12/26 13:37:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -777,7 +777,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_SEARCH: search_dlg(ses, doc_view, 0); break;
 			case ACT_SEARCH_BACK: search_back_dlg(ses, doc_view, 0); break;
 			case ACT_SEARCH_TYPEAHEAD:
-				ses->kbdprefix.typeahead = mem_calloc(1, MAX_STR_LEN);
+				search_typeahead(ses, NULL, 1);
 				x = 1;
 				break;
 			case ACT_FIND_NEXT: find_next(ses, doc_view, 0); break;

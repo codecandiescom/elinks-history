@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.227 2003/12/26 13:15:44 zas Exp $ */
+/* $Id: menu.c,v 1.228 2003/12/26 13:37:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -480,6 +480,7 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ITEM(N_("Search ~backward"), "?", ACT_SEARCH_BACK, menu_for_frame, (void *)search_back_dlg, 0),
 	INIT_MENU_ITEM(N_("Find ~next"), "n", ACT_FIND_NEXT, menu_for_frame, (void *)find_next, 0),
 	INIT_MENU_ITEM(N_("Find ~previous"), "N", ACT_FIND_NEXT_BACK, menu_for_frame, (void *)find_next_back, 0),
+	INIT_MENU_ITEM(N_("T~ypeahead search"), NULL, ACT_SEARCH_TYPEAHEAD, menu_for_frame, (void *)search_typeahead, 0),
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("Toggle ~html/plain"), "\\", ACT_TOGGLE_HTML_PLAIN, menu_toggle_plain_html, NULL, 0),
 	INIT_MENU_ITEM(N_("Toggle i~mages"), "*", ACT_TOGGLE_DISPLAY_IMAGES, menu_toggle_images, NULL, 0),

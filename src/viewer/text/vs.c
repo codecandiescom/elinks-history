@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.2 2003/01/05 16:48:17 pasky Exp $ */
+/* $Id: vs.c,v 1.3 2003/05/16 19:06:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,8 +25,6 @@ init_vs(struct view_state *vs, unsigned char *url)
 	memset(vs, 0, sizeof(struct view_state));
 	vs->current_link = -1;
 	vs->plain = -1;
-	vs->form_info = NULL;
-	vs->form_info_len = 0;
 	strcpy(vs->url, url);
 }
 

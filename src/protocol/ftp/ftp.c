@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.214 2005/04/01 16:18:05 jonas Exp $ */
+/* $Id: ftp.c,v 1.215 2005/04/05 12:01:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1145,6 +1145,24 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 		    int *tries, int colorize_dir, unsigned char *dircolor)
 {
 	int ret = 0;
+#ifdef DEBUG_FTP_PARSER
+ 	static int debug_ftp_parser = 1;
+	int buflen_orig = buflen;
+	unsigned char *response_orig = NULL;
+
+	if (debug_ftp_parser) {
+		buffer = get_ftp_debug_parse_responses(buffer, buflen);
+		buflen = strlen(buffer);
+		response_orig = buffer;
+		debug_ftp_parser = 0;
+	}
+
+#define	end_ftp_dirlist_processing()	do { mem_free_if(response_orig); } while (0)
+#define get_ftp_dirlist_offset(retval)	int_min(retval, buflen_orig)
+#else
+#define	end_ftp_dirlist_processing()	/* Nothing to free */
+#define	get_ftp_dirlist_offset(retval)	(retval)
+#endif
 
 	while (1) {
 		struct ftp_file_info ftp_info = INIT_FTP_FILE_INFO;
@@ -1166,8 +1184,11 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 			ret += bufp + 1;
 			if (bufp && buf[bufp - 1] == ASCII_CR) bufp--;
 		} else {
-			if (!bufp || (!last && bufl < FTP_BUF_SIZE))
-				return ret;
+			if (!bufp || (!last && bufl < FTP_BUF_SIZE)) {
+				end_ftp_dirlist_processing();
+				return get_ftp_dirlist_offset(ret);
+			}
+
 			ret += bufp;
 		}
 
@@ -1183,9 +1204,16 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 
 			retv = display_dir_entry(cached, pos, tries, colorize_dir,
 						dircolor, &ftp_info);
-			if (retv < 0)
-				return retv;
+			if (retv < 0) {
+				end_ftp_dirlist_processing();
+				return get_ftp_dirlist_offset(ret);
+			}
 		}
+#ifdef DEBUG_FTP_PARSER
+		else {
+			ERROR("Error parsing: [%.*s]", bufp, buf);
+		}
+#endif
 	}
 }
 

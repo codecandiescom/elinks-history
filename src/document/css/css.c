@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: css.c,v 1.8 2004/01/17 14:26:17 pasky Exp $ */
+/* $Id: css.c,v 1.9 2004/01/17 14:38:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,7 +316,7 @@ css_apply(struct html_element *element)
 
 	code = get_attr_val(element->options, "style");
 	if (!code)
-		return 0;
+		return;
 
 	css_parse_decl(&props, code);
 	mem_free(code);

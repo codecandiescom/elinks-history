@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.123 2004/02/08 20:36:15 jonas Exp $ */
+/* $Id: inpfield.c,v 1.124 2004/02/09 01:25:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -511,13 +511,18 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 			if (widget_has_history(widget_data))
 				add_to_input_history(widget_data->widget->info.field.history,
 						     input_line->buffer, 1);
-			/* Falling */
+
+			if (!*input_line->buffer)
+				goto cancel_input_line;
+			break;
+
 		case ACT_EDIT_BACKSPACE:
-			if (*input_line->buffer) break;
-			/* Falling */
+			if (!*input_line->buffer)
+				goto cancel_input_line;
+			break;
+
 		case ACT_EDIT_CANCEL:
-			cancel_dialog(dlg_data, widget_data);
-			return EVENT_PROCESSED;
+			goto cancel_input_line;
 
 		default:
 			break;
@@ -534,13 +539,9 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	update_dialog_data(dlg_data, widget_data);
 
 	/* Then pass it on to the specialized handler */
-	switch (handler(input_line, action)) {
-		case INPUT_LINE_CANCEL:
-			cancel_dialog(dlg_data, widget_data);
-			break;
-
-		default:
-			break;
+	if (handler(input_line, action) == INPUT_LINE_CANCEL) {
+cancel_input_line:
+		cancel_dialog(dlg_data, widget_data);
 	}
 
 	/* Completely bypass any further dialog event handling */

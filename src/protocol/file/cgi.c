@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.67 2004/05/29 18:15:23 jonas Exp $ */
+/* $Id: cgi.c,v 1.68 2004/06/20 15:21:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,9 +339,12 @@ execute_cgi(struct connection *conn)
 		for (i = 2; i < 1024; i++) {
 			close(i);
 		}
+
+		last_slash[-1] = 0; set_cwd(script); last_slash[-1] = '/';
 		if (execl(script, last_slash, NULL)) {
 			_exit(3);
 		}
+
 	} else { /* ELinks */
 		struct http_connection_info *info;
 

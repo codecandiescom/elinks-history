@@ -1,3 +1,161 @@
+Sun Sep 28 21:11:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix assertion failure reported by darix when downloading md5summer
+	from http://fileforum.betanews.com.  
+
+Sun Sep 28 20:28:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Use granular allocation for dynamic menues.  
+
+Sun Sep 28 19:55:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/memory.h:
+
+	"Eew" someone cried. Under normal circumstances the mere sight of
+	such ill formed creatures would make any sane person want to give it
+	all up, turn around and head back. But there was no way back. No
+	sane way out of this one. Only forward one step at a time.  
+
+Sun Sep 28 18:38:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Simplify 'No link selected' testing to see if the menu item list is
+	empty 
+
+Sun Sep 28 18:23:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	A missing obvious user of menu_func.  
+
+Sun Sep 28 18:22:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, contrib/elinks.spec.in:
+
+	RPM spec update by darix.  
+
+Sun Sep 28 16:10:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Seems we can keep the goodies and eat it too (or how was that saying
+	;) so clean away temporary variables since menu->data is passed (so
+	no segfaulting like a few patches ago).  
+
+Sun Sep 28 16:04:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Remove dublicate code by making select_(main)menu() wrap
+	select_menu_item().  
+
+Sun Sep 28 15:49:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Further simplify dejavu code in select_(main)menu().  
+
+Sun Sep 28 15:42:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Reordering of declarations.  
+
+Sun Sep 28 15:33:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Use SET_MENU_ITEM() in add_to_menu().  
+
+Sun Sep 28 15:16:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Got rid of a useless #else.  
+
+Sun Sep 28 15:12:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Declarations were moved near variable use.  
+
+Sun Sep 28 15:05:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Tidyup (logical operators at start of lines).  
+
+Sun Sep 28 14:55:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	x?1:0 things were rewritten !!x.  
+
+Sun Sep 28 14:07:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Use SET_MENU_ITEM() when setting up select menus.  
+
+Sun Sep 28 13:43:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, bfu/menu.h, dialogs/menu.c, dialogs/mime.c,
+	dialogs/options.c, document/html/parser.c, viewer/text/link.c,
+	viewer/text/view.c:
+
+	Replace MENU_FUNC* with a typedef. Should it be made so the cast is
+	(menu_func *)? 
+
+Sun Sep 28 13:07:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.h:
+
+	Use INIT_MENU_ITEM() when defining NULL_MENU_ITEM 
+
+Sun Sep 28 13:02:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Use MENU_HEAD macro.  
+
+Sun Sep 28 13:00:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Tidyup patch was reverted. It causes a weird segfault when opening
+	new tab. Reported by Jonas.  
+
+Sun Sep 28 12:09:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Small update by Witold.  
+
+Sun Sep 28 00:13:16 2003  Laurent Monin <zas@norz.org>:
+
+	* acconfig.h, configure.in, src/bfu/dialog.c, src/bfu/listbox.c,
+	src/bfu/menu.c, src/osdep/os_dep.c, src/sched/session.c,
+	src/terminal/event.c, src/terminal/kbd.c, src/util/version.c,
+	src/viewer/text/view.c:
+
+	A configure option --disable-mouse was added. If used, it undefines
+	USE_MOUSE which control compilation of mouse-related code. A bunch
+	of #ifdef/#endif was spread among the code for that.  
+
+Sat Sep 27 22:23:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	As the guile and lua backends no longer conflict with global
+	function names, it should be possible for the user to select both
+	backends at the same time. This patch removes logic from configure
+	which blocked this.  --Karsten Schölzel 
+
 Sat Sep 27 16:10:00 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* contrib/elinks.spec.in:

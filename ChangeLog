@@ -1,3 +1,11 @@
+Sat Mar  9 22:10:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, dns.c, setup.h:
+	
+	one memory leak fixed in dns (not visible as it's in our child
+	thread); also some sanity checks and lint silencing; based on patch
+	by <csaba.raduly@sophos.com>
+
 Fri Mar  8 14:42:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* http.c:

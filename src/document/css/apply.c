@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.85 2004/09/21 20:09:58 pasky Exp $ */
+/* $Id: apply.c,v 1.86 2004/09/21 20:15:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,6 +131,10 @@ examine_element(struct css_selector *base,
 	}
 
 	if (seltype <= CST_ELEMENT && element->namelen) {
+		selector = find_css_selector(selectors, CST_ELEMENT, rel,
+		                             "*", 1);
+		process_found_selector(selector, CST_ELEMENT, base);
+
 		selector = find_css_selector(selectors, CST_ELEMENT, rel,
 		                             element->name, element->namelen);
 		process_found_selector(selector, CST_ELEMENT, base);

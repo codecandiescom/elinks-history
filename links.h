@@ -2109,10 +2109,13 @@ extern struct rgb default_bg;
 extern struct rgb default_link;
 extern struct rgb default_vlink;
 
+extern int color_dirs;
+
 extern int show_status_bar;
 extern int show_title_bar;
 
-extern int color_dirs;
+extern int form_submit_confirm;
+
 extern int allow_special_files;
 
 typedef enum {

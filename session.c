@@ -966,7 +966,7 @@ void ses_goto(struct session *ses, unsigned char *url, unsigned char *target, in
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
 	
-	if (!strchr(url, POST_CHAR)
+	if (!form_submit_confirm || !strchr(url, POST_CHAR)
 	    || (cache == NC_ALWAYS_CACHE && !find_in_cache(url, &e) && !e->incomplete)
 	    || !(w = mem_alloc(sizeof(struct wtd_data)))) {
 		if (ses->goto_position) mem_free(ses->goto_position);

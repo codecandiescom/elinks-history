@@ -960,10 +960,13 @@ struct rgb default_bg = { 0, 0, 0 };
 struct rgb default_link = { 0, 0, 255 };
 struct rgb default_vlink = { 255, 255, 0 };
 
+int color_dirs = 1;
+
 int show_status_bar = 1;
 int show_title_bar = 1;
 
-int color_dirs = 1;
+int form_submit_confirm = 1;
+
 int allow_special_files = 0;
 int keep_unhistory = 0;
 
@@ -1115,6 +1118,11 @@ struct option links_options[] = {
 		gen_cmd, num_rd, num_wr,
 	 	0, 256, &max_format_cache_entries,
 		"Number of cached formatted pages." },
+	 
+	{	"form-submit-confirm", "form_submit_confirm",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &form_submit_confirm,
+		"Ask for confirmation when submitting a form." },
 	 
 	{	"ftp.anonymous-password", "ftp.anonymous_password",
 		gen_cmd, str_rd, str_wr,

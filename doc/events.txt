@@ -64,13 +64,13 @@ Arguments:
 
 Description:
 
- If another URL than @url should be followed it is passed by freeing the
- old one and setting @url to the new value. @url may under no not become
- NULL and should remain freeable.
- Valid values for @url includes:
- - leaving @url unchanged if the original URL should be followed.
- - a dynamically allocated new URL to be followed instead.
- - empty string if no URL should be followed.
+ If a URL other than @url should be followed, the old one should be freed
+ and the new one should be assigned to @url. @url must not be assigned
+ NULL and must remain freeable.
+ Valid values for @url are:
+ - unchanged, if the original URL should be followed;
+ - a new, dynamically allocated URL to be followed instead; or
+ - an empty string, if no URL should be followed.
 
 -------------------------------------------------------------------------------
 Name:		follow-url
@@ -148,4 +148,4 @@ Description:
  Allows a subsystem to do whatever clean up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.7 2003/12/12 14:05:42 jonas Exp $
+$Id: events.txt,v 1.8 2004/01/01 19:18:46 miciah Exp $

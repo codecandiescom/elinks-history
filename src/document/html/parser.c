@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.167 2003/07/22 09:58:41 zas Exp $ */
+/* $Id: parser.c,v 1.168 2003/07/22 10:03:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2505,6 +2505,7 @@ enum hlink_type {
 	LT_START,
 	LT_TOP,
 	LT_PARENT,
+	LT_UP,
 	LT_NEXT,
 	LT_PREV,
 	LT_CONTENTS,
@@ -2525,7 +2526,6 @@ enum hlink_type {
 	LT_ALTERNATE_MEDIA,
 	LT_ALTERNATE_STYLESHEET,
 	LT_STYLESHEET,
-
 };
 
 struct lt_default_name {
@@ -2538,6 +2538,7 @@ static struct lt_default_name lt_names[] = {
 	{ LT_START, "start" },
 	{ LT_TOP, "top" },
 	{ LT_PARENT, "parent" },
+	{ LT_UP, "up" },
 	{ LT_NEXT, "next" },
 	{ LT_PREV, "previous" },
 	{ LT_CONTENTS, "contents" },
@@ -2647,6 +2648,8 @@ html_link_parse(unsigned char *a, struct hlink *link)
 		link->type = LT_START;
 	else if (!strcasecmp(link->name, "top"))
 		link->type = LT_TOP;
+	else if (!strcasecmp(link->name, "up"))
+		link->type = LT_UP;
 	else if (!strcasecmp(link->name, "parent"))
 		link->type = LT_PARENT;
 	else if (!strcasecmp(link->name, "next"))

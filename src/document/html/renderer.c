@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.506 2004/12/17 03:19:35 miciah Exp $ */
+/* $Id: renderer.c,v 1.507 2004/12/17 03:21:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1210,7 +1210,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (link_state == LINK_STATE_NEW) {
 		int x_offset = 0;
 
-		/* Don't add non accessible links. It seems to be caused
+		/* Don't add inaccessible links. It seems to be caused
 		 * by the parser putting a space char after stuff like
 		 * <img>-tags or comments wrapped in <a>-tags. See bug
 		 * 30 for test case. */

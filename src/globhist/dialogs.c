@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.64 2003/11/09 03:17:55 jonas Exp $ */
+/* $Id: dialogs.c,v 1.65 2003/11/09 03:27:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,15 +404,16 @@ push_bookmark_button(struct dialog_data *dlg_data,
 #endif
 
 #ifdef BOOKMARKS
-# define GLOBHIST_WIDGETS	9
+# define GLOBHIST_MANAGER_BUTTONS	7
 #else
-# define GLOBHIST_WIDGETS	8
+# define GLOBHIST_MANAGER_BUTTONS	6
 #endif
+
+#define GLOBHIST_MANAGER_ADDSIZE	(sizeof(struct global_history_item) + 2 * MAX_STR_LEN)
 
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct dialog *dlg;
 	struct dialog_data *dlg_data;
 	struct history_dialog_list_item *item;
 	struct global_history_item *litem;
@@ -431,35 +432,21 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 		gh_last_searched_url = NULL;
 	}
 
-	/* XXX: sizeof(struct global_history_item): why? */
-	dlg = calloc_dialog(GLOBHIST_WIDGETS,
-			    sizeof(struct global_history_item) + 2 * MAX_STR_LEN);
-	if (!dlg) return;
-
-	dlg->title = _("Global history", term);
-	dlg->layouter = hierbox_browser_layouter;
-	dlg->handle_event = hierbox_dialog_event_handler;
-	dlg->abort = history_dialog_abort_handler;
-	dlg->udata = ses;
-
-	add_dlg_listbox(dlg, 12, history_dialog_box_build());
-
-	add_dlg_button(dlg, B_ENTER, push_goto_button, _("Goto", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_info_button, _("Info", term), NULL);
+	dlg_data = hierbox_browser(term, N_("Global history"),
+			GLOBHIST_MANAGER_ADDSIZE, history_dialog_box_build(), ses,
+			GLOBHIST_MANAGER_BUTTONS,
+			N_("Goto"), push_goto_button, B_ENTER, ses,
+			N_("Info"), push_info_button, B_ENTER, ses,
 #ifdef BOOKMARKS
-	add_dlg_button(dlg, B_ENTER, push_bookmark_button, _("Bookmark", term), NULL);
+			N_("Bookmark"), push_bookmark_button, B_ENTER, NULL,
 #endif
-	add_dlg_button(dlg, B_ENTER, push_delete_button, _("Delete", term), NULL);
-	add_dlg_button(dlg, B_ENTER, push_search_button, _("Search", term), NULL);
-	add_dlg_button(dlg, B_ENTER, push_toggle_display_button, _("Toggle display", term), NULL);
-	add_dlg_button(dlg, B_ENTER, push_clear_button, _("Clear", term), NULL);
-	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
+			N_("Delete"), push_delete_button, B_ENTER, NULL,
+			N_("Search"), push_search_button, B_ENTER, NULL,
+			N_("Toggle display"), push_toggle_display_button, B_ENTER, ses,
+			N_("Clear"), push_clear_button, B_ENTER, NULL);
 
-	add_dlg_end(dlg, GLOBHIST_WIDGETS);
-
-
-	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 	if (!dlg_data) return;
+	dlg_data->dlg->abort = history_dialog_abort_handler;
 
 	item = mem_alloc(sizeof(struct history_dialog_list_item));
 	if (item) {

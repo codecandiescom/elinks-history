@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.149 2004/07/17 19:51:58 zas Exp $ */
+/* $Id: dialog.c,v 1.150 2004/07/17 20:03:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,7 @@
 #include "bfu/text.h"
 
 
-static void dialog_func(struct window *win, struct term_event *ev, int fwd);
+static void dialog_func(struct window *win, struct term_event *ev, int xxx);
 
 struct dialog_data *
 do_dialog(struct terminal *term, struct dialog *dlg,
@@ -335,7 +335,7 @@ dialog_ev_abort(struct dialog_data *dlg_data, struct term_event *ev)
 
 /* TODO: use EVENT_PROCESSED/EVENT_NOT_PROCESSED. */
 static void
-dialog_func(struct window *win, struct term_event *ev, int fwd)
+dialog_func(struct window *win, struct term_event *ev, int xxx)
 {
 	struct dialog_data *dlg_data = win->data;
 
@@ -396,14 +396,14 @@ check_dialog(struct dialog_data *dlg_data)
 }
 
 int
-cancel_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
+cancel_dialog(struct dialog_data *dlg_data, struct widget_data *xxx)
 {
 	delete_window(dlg_data->win);
 	return 0;
 }
 
 int
-update_dialog_data(struct dialog_data *dlg_data, struct widget_data *widget_data)
+update_dialog_data(struct dialog_data *dlg_data, struct widget_data *xxx)
 {
 	int i;
 
@@ -431,7 +431,7 @@ ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 /* Clear text fields in dialog. */
 int
-clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
+clear_dialog(struct dialog_data *dlg_data, struct widget_data *xxx)
 {
 	int i;
 

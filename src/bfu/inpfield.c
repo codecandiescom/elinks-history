@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.169 2004/11/17 22:13:43 zas Exp $ */
+/* $Id: inpfield.c,v 1.170 2004/11/17 22:16:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,8 +220,7 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	do_dialog(term, dlg, ml);
 }
 
-/* FIXME: should return t_handler_event_status ! --Zas */
-static inline void
+static t_handler_event_status
 display_field_do(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		 int sel, int hide)
 {
@@ -262,20 +261,20 @@ display_field_do(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		set_cursor(term, x, widget_data->box.y, 0);
 		set_window_ptr(dlg_data->win, widget_data->box.x, widget_data->box.y);
 	}
+
+	return EVENT_PROCESSED;
 }
 
 static t_handler_event_status
 display_field(struct dialog_data *dlg_data, struct widget_data *widget_data, int sel)
 {
-	display_field_do(dlg_data, widget_data, sel, 0);
-	return EVENT_PROCESSED;
+	return display_field_do(dlg_data, widget_data, sel, 0);
 }
 
 static t_handler_event_status
 display_field_pass(struct dialog_data *dlg_data, struct widget_data *widget_data, int sel)
 {
-	display_field_do(dlg_data, widget_data, sel, 1);
-	return EVENT_PROCESSED;
+	return display_field_do(dlg_data, widget_data, sel, 1);
 }
 
 static t_handler_event_status

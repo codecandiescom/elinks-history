@@ -28,7 +28,11 @@ the previous view.
 	Calling cfmakeraw() in kbd.c:setraw() breaks some exotic terminal
 combinations.
 
+	When doing -dump on broken sites like groups.yahoo.com, links can get
+stuck bouncing in redirects around unhappily, as we don't check for
+MAX_REDIRECTS - AFAIK not an easy AND nice way how to, as we don't have needed
+field in structure passed to end_dump().
 
-$Id: BUGS,v 1.8 2002/02/07 00:12:53 pasky Exp $
+$Id: BUGS,v 1.9 2002/02/08 21:14:39 pasky Exp $
 
 vim: textwidth=80

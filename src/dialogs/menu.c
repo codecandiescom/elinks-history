@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.254 2004/01/06 23:26:58 jonas Exp $ */
+/* $Id: menu.c,v 1.255 2004/01/06 23:39:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -643,6 +643,101 @@ do_action(struct session *ses, enum keyact action, void *data)
 			go_unback(ses);
 			break;
 
+		case ACT_ABORT_CONNECTION:
+		case ACT_ADD_BOOKMARK:
+		case ACT_ADD_BOOKMARK_TABS:
+		case ACT_ADD_BOOKMARK_LINK:
+		case ACT_AUTO_COMPLETE:
+		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
+		case ACT_BACKSPACE:
+		case ACT_BEGINNING_OF_BUFFER:
+		case ACT_BOOKMARK_MANAGER:
+		case ACT_CACHE_MANAGER:
+		case ACT_CANCEL:
+		case ACT_COOKIE_MANAGER:
+		case ACT_COOKIES_LOAD:
+		case ACT_COPY_CLIPBOARD:
+		case ACT_CUT_CLIPBOARD:
+		case ACT_DELETE:
+		case ACT_DOCUMENT_INFO:
+		case ACT_DOWN:
+		case ACT_DOWNLOAD:
+		case ACT_DOWNLOAD_IMAGE:
+		case ACT_DOWNLOAD_MANAGER:
+		case ACT_EDIT:
+		case ACT_END:
+		case ACT_END_OF_BUFFER:
+		case ACT_ENTER:
+		case ACT_ENTER_RELOAD:
+		case ACT_EXPAND:
+		case ACT_FILE_MENU:
+		case ACT_FIND_NEXT:
+		case ACT_FIND_NEXT_BACK:
+		case ACT_FORGET_CREDENTIALS:
+		case ACT_FORMHIST_MANAGER:
+		case ACT_GOTO_URL_CURRENT:
+		case ACT_GOTO_URL_CURRENT_LINK:
+		case ACT_GOTO_URL_HOME:
+		case ACT_HEADER_INFO:
+		case ACT_HISTORY_MANAGER:
+		case ACT_HOME:
+		case ACT_KILL_BACKGROUNDED_CONNECTIONS:
+		case ACT_KILL_TO_BOL:
+		case ACT_KILL_TO_EOL:
+		case ACT_KEYBINDING_MANAGER:
+		case ACT_LEFT:
+		case ACT_LINK_MENU:
+		case ACT_JUMP_TO_LINK:
+		case ACT_LUA_CONSOLE:
+		case ACT_MARK_SET:
+		case ACT_MARK_GOTO:
+		case ACT_MARK_ITEM:
+		case ACT_MENU:
+		case ACT_NEXT_FRAME:
+		case ACT_NEXT_ITEM:
+		case ACT_OPEN_NEW_TAB:
+		case ACT_OPEN_NEW_TAB_IN_BACKGROUND:
+		case ACT_OPEN_NEW_WINDOW:
+		case ACT_OPEN_LINK_IN_NEW_TAB:
+		case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
+		case ACT_OPEN_LINK_IN_NEW_WINDOW:
+		case ACT_OPEN_OS_SHELL:
+		case ACT_OPTIONS_MANAGER:
+		case ACT_PAGE_DOWN:
+		case ACT_PAGE_UP:
+		case ACT_PASTE_CLIPBOARD:
+		case ACT_PREVIOUS_FRAME:
+		case ACT_QUIT:
+		case ACT_REALLY_QUIT:
+		case ACT_REDRAW:
+		case ACT_RESUME_DOWNLOAD:
+		case ACT_RIGHT:
+		case ACT_SAVE_AS:
+		case ACT_SAVE_URL_AS:
+		case ACT_SAVE_FORMATTED:
+		case ACT_SAVE_OPTIONS:
+		case ACT_SCRIPTING_FUNCTION:
+		case ACT_SCROLL_DOWN:
+		case ACT_SCROLL_LEFT:
+		case ACT_SCROLL_RIGHT:
+		case ACT_SCROLL_UP:
+		case ACT_SEARCH:
+		case ACT_SEARCH_BACK:
+		case ACT_SEARCH_TYPEAHEAD:
+		case ACT_SELECT:
+		case ACT_SHOW_TERM_OPTIONS:
+		case ACT_TAB_CLOSE_ALL_BUT_CURRENT:
+		case ACT_TAB_MENU:
+		case ACT_TOGGLE_DISPLAY_IMAGES:
+		case ACT_TOGGLE_DISPLAY_TABLES:
+		case ACT_TOGGLE_DOCUMENT_COLORS:
+		case ACT_TOGGLE_HTML_PLAIN:
+		case ACT_TOGGLE_NUMBERED_LINKS:
+		case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
+		case ACT_UNEXPAND:
+		case ACT_UP:
+		case ACT_VIEW_IMAGE:
+		case ACT_ZOOM_FRAME:
 		default:
 			INTERNAL("No action handling defined for '%s'.",
 				 write_action(action));

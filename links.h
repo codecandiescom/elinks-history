@@ -2120,6 +2120,7 @@ extern int form_submit_auto;
 extern int form_submit_confirm;
 extern int accesskey_enter;
 extern int accesskey_priority;
+extern int links_wraparound;
 
 extern int allow_special_files;
 

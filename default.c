@@ -969,6 +969,7 @@ int form_submit_auto = 1;
 int form_submit_confirm = 1;
 int accesskey_enter = 0;
 int accesskey_priority = 1;
+int links_wraparound = 0;
 
 int allow_special_files = 0;
 int keep_unhistory = 0;
@@ -1210,7 +1211,7 @@ struct option links_options[] = {
 	 	0, MAX_STR_LEN, fake_referer,
 		"Fake referer to be sent when http-referer is 3." },
 
-	{	"keep_unhistory", "keep_unhistory",
+	{	"keep-unhistory", "keep_unhistory",
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &keep_unhistory,
 	 	"Keep unhistory (\"forward history\")?" },
@@ -1219,6 +1220,16 @@ struct option links_options[] = {
 		gen_cmd, lang_rd, lang_wr,
 	 	0, 0, &current_language,
 		"Language of user interface." },
+
+		/* TODO - this is somewhat implemented by ff, but commented out
+		 * for now as it doesn't work somewhat. */
+#if 0
+	{	"links-wraparound", "links_wraparound",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &links_wraparound,
+	 	"When pressing 'down' on the last link, jump at the first one, and\n"
+		"vice versa." },
+#endif
  
 	{	"lookup", NULL,
 		lookup_cmd, NULL, NULL,

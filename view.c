@@ -1062,25 +1062,51 @@ void page_up(struct session *ses, struct f_data_c *f, int a)
 	if (f->vs->view_pos < 0) f->vs->view_pos = 0/*, find_link(f, 1, a)*/;
 }
 
-void set_textarea(struct session *, struct f_data_c *, int);
 
-void down(struct session *ses, struct f_data_c *f, int a)
+static void set_textarea(struct session *, struct f_data_c *, int);
+static void jump_to_link_number(struct session *, struct f_data_c *, int);
+
+
+static void down(struct session *ses, struct f_data_c *fd, int a)
 {
-	int l = f->vs->current_link;
+	int current_link = fd->vs->current_link;
+
+	if (links_wraparound && current_link >= fd->f_data->nlinks - 1) {
+		/* FIXME: This is not working :/. */
+		jump_to_link_number(ses, fd, 0);
+	}
 	
-	/*if (f->vs->current_link >= f->nlinks - 1) return;*/
-	if (f->vs->current_link == -1 || !next_in_view(f, f->vs->current_link+1, 1, in_viewy, set_pos_x)) page_down(ses, f, 1);
-	if (l != f->vs->current_link) set_textarea(ses, f, KBD_UP);
+	if (current_link == -1
+	    || !next_in_view(fd, fd->vs->current_link + 1, 1, in_viewy,
+		    	     set_pos_x)) {
+		page_down(ses, fd, 1);
+	}
+	
+	if (current_link != fd->vs->current_link) {
+		set_textarea(ses, fd, KBD_UP);
+	}
 }
 
-void up(struct session *ses, struct f_data_c *f, int a)
+static void up(struct session *ses, struct f_data_c *fd, int a)
 {
-	int l = f->vs->current_link;
+	int current_link = fd->vs->current_link;
+
+	if (links_wraparound && current_link == 0) {
+		/* FIXME: This is not working :/. */
+		jump_to_link_number(ses, fd, fd->f_data->nlinks - 1);
+	}
 	
-	/*if (f->vs->current_link == 0) return;*/
-	if (f->vs->current_link == -1 || !next_in_view(f, f->vs->current_link-1, -1, in_viewy, set_pos_x)) page_up(ses, f, 1);
-	if (l != f->vs->current_link) set_textarea(ses, f, KBD_DOWN);
+	if (current_link == -1
+	    || !next_in_view(fd, fd->vs->current_link - 1, -1, in_viewy,
+		    	     set_pos_x)) {
+		page_up(ses, fd, 1);
+	}
+	
+	if (current_link != fd->vs->current_link) {
+		set_textarea(ses, fd, KBD_DOWN);
+	}
 }
+
 
 void scroll(struct session *ses, struct f_data_c *f, int a)
 {
@@ -1951,7 +1977,7 @@ yyyy:
 	return x;
 }
 
-void set_textarea(struct session *ses, struct f_data_c *f, int kbd)
+static void set_textarea(struct session *ses, struct f_data_c *f, int kbd)
 {
 	if (f->vs->current_link != -1 && f->f_data->links[f->vs->current_link].type == L_AREA) {
 		struct event ev = { EV_KBD, 0, 0, 0 };
@@ -2117,13 +2143,21 @@ struct link *choose_mouse_link(struct f_data_c *f, struct event *ev)
 	return NULL;
 }
 
+/* This is backend of the backend goto_link_number_do() below ;)). */
+static void jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
+{
+	if (n < 0 || n > fd->f_data->nlinks) return;
+
+	fd->vs->current_link = n;
+	check_vs(fd);
+}
+
 /* This is common backend for goto_link_number() and try_document_key(). */
 static void goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 {
 	struct link *link = &fd->f_data->links[n];
-	
-	fd->vs->current_link = n;
-	check_vs(fd);
+
+	jump_to_link_number(ses, fd, n);
 	
 	if (accesskey_enter && link->type != L_AREA && link->type != L_FIELD)
 		enter(ses, fd, 0);
@@ -2135,7 +2169,6 @@ static void goto_link_number(struct session *ses, unsigned char *num)
 	int n = atoi(num);
 	
 	if (!fd) return;
-	if (n < 0 || n > fd->f_data->nlinks) return;
 	goto_link_number_do(ses, fd, n - 1);
 }
 

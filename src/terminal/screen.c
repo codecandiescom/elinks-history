@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.58 2003/09/01 20:49:10 jonas Exp $ */
+/* $Id: screen.c,v 1.59 2003/09/02 13:38:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ struct screen_state {
 
 /* Time critical section. */
 static inline void
-print_char(struct string *screen, struct screen_driver *opt_cache,
+print_char(struct string *screen, struct screen_driver *driver,
 	   struct screen_char *ch, struct screen_state *state)
 {
 	unsigned char c = ch->data;
@@ -98,8 +98,8 @@ print_char(struct string *screen, struct screen_driver *opt_cache,
 	unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
 	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
 
-	if (opt_cache->type == TERM_LINUX) {
-		if (opt_cache->m11_hack && !opt_cache->utf_8_io) {
+	if (driver->type == TERM_LINUX) {
+		if (driver->m11_hack && !driver->utf_8_io) {
 			if (border != state->border) {
 				state->border = border;
 
@@ -111,7 +111,7 @@ print_char(struct string *screen, struct screen_driver *opt_cache,
 			}
 		}
 
-		if (opt_cache->restrict_852 && border && c >= 176 && c < 224) {
+		if (driver->restrict_852 && border && c >= 176 && c < 224) {
 			c = state->frame[c - 176];
 		}
 
@@ -135,7 +135,7 @@ print_char(struct string *screen, struct screen_driver *opt_cache,
 	if (underline != state->underline) {
 		/* Underline is optional which makes everything a bit more
 		 * complicated. */
-		if (!opt_cache->underline) {
+		if (!driver->underline) {
 			/* If underlines should _not_ be drawn color
 			 * enhancements have to be applied _before_ adding the
 			 * color below and the state should not be touch
@@ -176,13 +176,13 @@ print_char(struct string *screen, struct screen_driver *opt_cache,
 		code[1] = '[';
 		code[2] = '0';
 
-		if (opt_cache->colors) {
+		if (driver->colors) {
 			code[3] = ';';
 			code[4] = '3';
 			code[5] = '0' + TERM_COLOR_FOREGROUND(color);
 
 			code[8] = '0' + TERM_COLOR_BACKGROUND(color);
-			if (!opt_cache->trans || code[8] != '0') {
+			if (!driver->trans || code[8] != '0') {
 				code[6] = ';';
 				code[7] = '4';
 				length = 9;
@@ -216,17 +216,17 @@ print_char(struct string *screen, struct screen_driver *opt_cache,
 	}
 
 	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
-		if (opt_cache->utf_8_io) {
-			int charset = opt_cache->charset;
+		if (driver->utf_8_io) {
+			int charset = driver->charset;
 
 			if (border) {
-				switch (opt_cache->type) {
+				switch (driver->type) {
 					case TERM_LINUX:
 					case TERM_VT100:
-						charset = opt_cache->cp437;
+						charset = driver->cp437;
 						break;
 					case TERM_KOI8:
-						charset = opt_cache->koi8r;
+						charset = driver->koi8r;
 						break;
 					default:
 						break;
@@ -304,14 +304,14 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 #endif
 
 static inline unsigned char *
-get_frame_table(struct screen_driver *opt_cache)
+get_frame_table(struct screen_driver *driver)
 {
-	switch (opt_cache->type) {
+	switch (driver->type) {
 		case TERM_LINUX:
 			return frame_restrict;
 
 		case TERM_VT100:
-			return (opt_cache->utf_8_io)
+			return (driver->utf_8_io)
 				? frame_vt100_u : frame_vt100;
 
 		case TERM_KOI8:
@@ -327,7 +327,7 @@ get_frame_table(struct screen_driver *opt_cache)
 void
 redraw_screen(struct terminal *term)
 {
-	struct screen_driver opt_cache;
+	struct screen_driver driver;
 	struct string image;
 	register int y = 0;
 	int prev_y = -1;
@@ -342,8 +342,8 @@ redraw_screen(struct terminal *term)
 	    || (term->master && is_blocked())
 	    || !init_string(&image)) return;
 
- 	fill_option_cache(opt_cache, term);
-	state.frame = get_frame_table(&opt_cache);
+ 	fill_option_cache(driver, term);
+	state.frame = get_frame_table(&driver);
 
 	current = screen->last_image;
  	pos = screen->image;
@@ -373,20 +373,20 @@ redraw_screen(struct terminal *term)
 			}
 
 			for (; prev_pos <= pos ; prev_pos++)
-				print_char(&image, &opt_cache, prev_pos, &state);
+				print_char(&image, &driver, prev_pos, &state);
 		}
 	}
 
 	if (image.length) {
-		if (opt_cache.colors)
+		if (driver.colors)
 			add_bytes_to_string(&image, "\033[37;40m", 8);
 
 		add_bytes_to_string(&image, "\033[0m", 4);
 
-		if (opt_cache.type == TERM_LINUX && opt_cache.m11_hack)
+		if (driver.type == TERM_LINUX && driver.m11_hack)
 			add_bytes_to_string(&image, "\033[10m", 5);
 
-		if (opt_cache.type == TERM_VT100)
+		if (driver.type == TERM_VT100)
 			add_char_to_string(&image, '\x0f');
 	}
 

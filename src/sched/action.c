@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.15 2004/01/07 19:18:01 jonas Exp $ */
+/* $Id: action.c,v 1.16 2004/01/07 19:27:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,29 +185,29 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_OPEN_LINK_IN_NEW_TAB:
-			open_in_new_tab(ses->tab->term, 1, ses);
+			open_in_new_tab(term, 1, ses);
 			break;
 
 		case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-			open_in_new_tab_in_background(ses->tab->term, 1, ses);
+			open_in_new_tab_in_background(term, 1, ses);
 			break;
 
 		case ACT_OPEN_LINK_IN_NEW_WINDOW:
 			/* FIXME: Use do_frame_action(). --jonas */
 			if (!doc_view || doc_view->vs->current_link == -1) break;
-			open_in_new_window(ses->tab->term, send_open_in_new_window, ses);
+			open_in_new_window(term, send_open_in_new_window, ses);
 			break;
 
 		case ACT_OPEN_NEW_TAB:
-			open_in_new_tab(ses->tab->term, 0, ses);
+			open_in_new_tab(term, 0, ses);
 			break;
 
 		case ACT_OPEN_NEW_TAB_IN_BACKGROUND:
-			open_in_new_tab_in_background(ses->tab->term, 0, ses);
+			open_in_new_tab_in_background(term, 0, ses);
 			break;
 
 		case ACT_OPEN_NEW_WINDOW:
-			open_in_new_window(ses->tab->term, send_open_new_window, ses);
+			open_in_new_window(term, send_open_new_window, ses);
 			break;
 
 		case ACT_OPEN_OS_SHELL:

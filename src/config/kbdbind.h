@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.88 2004/01/24 20:03:37 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.89 2004/01/24 21:08:06 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -138,6 +138,7 @@ enum action {
 enum kbdbind_flags {
 	KBDB_WATERMARK = 1,
 	KBDB_TOUCHED = 2,
+	KBDB_DEFAULT = 4,
 };
 
 struct keybinding {

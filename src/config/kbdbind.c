@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.173 2004/01/24 20:28:28 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.174 2004/01/24 21:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 	kb->key = key;
 	kb->meta = meta;
 	kb->func_ref = func_ref;
-	kb->flags &= ~KBDB_WATERMARK;
+	kb->flags = 0;
 	add_to_list(keymaps[km], kb);
 
 	if (action == ACT_NONE) {
@@ -104,12 +104,25 @@ boom:
 void
 free_keybinding(struct keybinding *kb)
 {
-	if (kb->box_item) done_listbox_item(&keybinding_browser, kb->box_item);
+	if (kb->box_item) {
+		done_listbox_item(&keybinding_browser, kb->box_item);
+		kb->box_item = NULL;
+	}
+
 #ifdef HAVE_SCRIPTING
 /* TODO: unref function must be implemented. */
 /*	if (kb->func_ref != EVENT_NONE)
 		scripting_unref(kb->func_ref); */
 #endif
+
+	if (kb->flags & KBDB_DEFAULT) {
+		/* We cannot just delete a default keybinding, instead we have
+		 * to rebind it to ACT_NONE so that it gets written so to the
+		 * config file. */
+		kb->action = ACT_NONE;
+		return;
+	}
+
 	del_from_list(kb);
 	mem_free(kb);
 }
@@ -565,7 +578,7 @@ init_action_listboxes(void)
 		struct listbox_item *box_item;
 		int i;
 
-		if (act->num == ACT_SCRIPTING_FUNCTION)
+		if (act->num == ACT_SCRIPTING_FUNCTION || act->num == ACT_NONE)
 			continue;
 
 		box_item = mem_calloc(1, sizeof(struct listbox_item));
@@ -835,8 +848,13 @@ add_keymap_default_keybindings(enum keymap keymap, struct default_kb *defaults)
 {
 	struct default_kb *kb;
 
-	for (kb = defaults; kb->key; kb++)
-		add_keybinding(keymap, kb->action, kb->key, kb->meta, EVENT_NONE);
+	for (kb = defaults; kb->key; kb++) {
+		struct keybinding *keybinding;
+
+		keybinding = add_keybinding(keymap, kb->action,
+					    kb->key, kb->meta, EVENT_NONE);
+		keybinding->flags |= KBDB_DEFAULT;
+	}
 }
 
 static void

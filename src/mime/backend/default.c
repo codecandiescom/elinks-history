@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.33 2004/07/31 04:06:01 miciah Exp $ */
+/* $Id: default.c,v 1.34 2004/08/14 13:13:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,12 @@ static struct option_info default_mime_options[] = {
 
 	INIT_OPT_TREE("mime", N_("File type handlers"),
 		"handler", OPT_AUTOCREATE,
-		N_("Handler for certain MIME types (as specified in mime.type.*).\n"
-		"Each handler usually serves family of MIME types (ie. images).")),
+		N_("Handlers for certain file types. One must configure mime.type.*\n"
+		   "to refer to these handlers.\n\n"
+		   "One can define a handler and refer to it for several MIME types -- e.g.,\n"
+		   "one might define an 'images' handler to which mime.type.image.png,\n"
+		   "mime.type.image.jpeg, and so on will refer; or one might define a handler\n"
+		   "for a more specific type of file -- e.g., PDF files.")),
 
 	INIT_OPT_TREE("mime.handler", NULL,
 		"_template_", OPT_AUTOCREATE,

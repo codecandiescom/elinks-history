@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.294 2004/04/01 05:03:27 jonas Exp $ */
+/* $Id: menu.c,v 1.295 2004/04/04 03:41:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -453,7 +453,7 @@ dialog_goto_url(struct session *ses, char *url)
 static INIT_INPUT_HISTORY(file_history);
 
 void
-query_file(struct session *ses, unsigned char *url, void *data,
+query_file(struct session *ses, struct uri *uri, void *data,
 	   void (*std)(void *, unsigned char *),
 	   void (*cancel)(void *), int interactive)
 {
@@ -465,7 +465,7 @@ query_file(struct session *ses, unsigned char *url, void *data,
 	if (def.length && !dir_sep(def.source[def.length - 1]))
 		add_char_to_string(&def, '/');
 
-	add_string_uri_filename_to_string(&def, url);
+	add_string_uri_filename_to_string(&def, struri(uri));
 
 	if (interactive) {
 		input_field(ses->tab->term, NULL, 1,

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.249 2004/04/04 03:37:01 jonas Exp $ */
+/* $Id: download.c,v 1.250 2004/04/04 03:41:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -901,7 +901,7 @@ tp_save(struct tq *tq)
 		mem_free(tq->prog);
 		tq->prog = NULL;
 	}
-	query_file(tq->ses, struri(tq->uri), tq, continue_download, tp_cancel, 1);
+	query_file(tq->ses, tq->uri, tq, continue_download, tp_cancel, 1);
 }
 
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.392 2004/04/04 03:37:01 jonas Exp $ */
+/* $Id: view.c,v 1.393 2004/04/04 03:41:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1038,7 +1038,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 	if (!ses->download_uri) return;
 
 	set_session_referrer(ses, doc_view->document->uri);
-	query_file(ses, struri(ses->download_uri), ses, download, NULL, 1);
+	query_file(ses, ses->download_uri, ses, download, NULL, 1);
 }
 
 static struct string *
@@ -1165,7 +1165,7 @@ save_url(struct session *ses, unsigned char *url)
 	if_assert_failed return;
 
 	set_session_referrer(ses, doc_view->document->uri);
-	query_file(ses, struri(ses->download_uri), ses, start_download, NULL, 1);
+	query_file(ses, ses->download_uri, ses, start_download, NULL, 1);
 }
 
 void
@@ -1196,7 +1196,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 		if_assert_failed return;
 
 		set_session_referrer(ses, doc_view->document->uri);
-		query_file(ses, struri(ses->download_uri), ses, start_download, NULL, 1);
+		query_file(ses, ses->download_uri, ses, start_download, NULL, 1);
 	}
 }
 
@@ -1238,5 +1238,5 @@ save_formatted(void *data, unsigned char *file)
 void
 save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a)
 {
-	query_file(ses, struri(doc_view->vs->uri), ses, save_formatted, NULL, 1);
+	query_file(ses, doc_view->vs->uri, ses, save_formatted, NULL, 1);
 }

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.298 2004/01/17 15:21:53 pasky Exp $ */
+/* $Id: session.c,v 1.299 2004/01/22 23:29:41 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -769,7 +769,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 			if (str == (void *) info->url_list.next) {
 				/* Open first url. */
-				goto_url(ses, url);
+				goto_url_with_hook(ses, url);
 			} else {
 				/* Open next ones. */
 				open_url_in_new_tab(ses, url, 1);

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.165 2004/09/12 02:34:26 miciah Exp $ */
+/* $Id: listbox.c,v 1.166 2004/09/12 02:34:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,6 +558,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		}
 
 		display_dlg_item(dlg_data, widget_data, 1);
+
 		return EVENT_PROCESSED;
 	}
 

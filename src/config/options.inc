@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.66 2003/12/28 06:25:40 miciah Exp $ */
+/* $Id: options.inc,v 1.67 2003/12/28 09:24:54 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1059,7 +1059,7 @@ struct option_info config_options_info[] = {
 		N_("Status bar colors.")),
 
 	INIT_OPT_COLORS(".status", N_("Generic status bar"),
-		"status-bar", "white", "black", "black", "gray",
+		"status-bar", "white", "black", "white", "black",
 		N_("Generic status bar colors.")),
 
 	INIT_OPT_COLORS(".status", N_("Status bar text"),

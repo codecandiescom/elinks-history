@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.387 2004/04/16 09:44:12 zas Exp $ */
+/* $Id: parser.c,v 1.388 2004/04/16 11:10:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1006,11 +1006,8 @@ html_img(unsigned char *a)
 							      - max_part_len);
 
 				} else {
-					al = mem_alloc(len + 1);
+					al = memacpy(start, len);
 					if (!al) return;
-
-					/* TODO: Faster way ?? */
-					sprintf(al, "%.*s", len, start);
 				}
 			} else {
 				al = stracpy("IMG");

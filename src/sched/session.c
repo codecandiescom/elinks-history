@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.267 2003/12/02 11:23:45 zas Exp $ */
+/* $Id: session.c,v 1.268 2003/12/02 19:58:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -948,11 +948,6 @@ create_basic_session(struct window *tab)
 	ses->task = TASK_NONE;
 	ses->display_timer = -1;
 
-	/* Further updating of these is handled using change hooks */
-	ses->visible_title_bar = get_opt_int("ui.show_title_bar");
-	ses->visible_status_bar = get_opt_int("ui.show_status_bar");
-	ses->set_window_title = get_opt_int("ui.window_title");
-
 #ifdef USE_LEDS
 	init_led_panel(&ses->leds);
 	ses->ssl_led = register_led(ses, 0);
@@ -1486,6 +1481,7 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 	switch (ev->ev) {
 		case EV_ABORT:
 			if (ses) destroy_session(ses);
+			if (!list_empty(sessions)) update_status();
 			break;
 		case EV_INIT:
 			/* Perhaps we should call just create_base_session()
@@ -1498,6 +1494,7 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 				destroy_terminal(tab->term);
 				return;
 			}
+			update_status();
 			/* fall-through */
 		case EV_RESIZE:
 			if (!ses) break;

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.18 2003/12/02 19:16:34 jonas Exp $ */
+/* $Id: status.c,v 1.19 2003/12/02 19:57:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,16 +125,28 @@ get_stat_msg(struct download *stat, struct terminal *term,
 }
 
 
+#define show_tabs(option, tabs) (((option) > 0) && !((option) == 1 && (tabs) < 2))
+
 void
 update_status(void)
 {
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
+	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
 	int set_window_title = get_opt_bool("ui.window_title");
 	struct session *ses;
+	int tabs = 1;
+	struct terminal *term = NULL;
 
 	foreach (ses, sessions) {
 		int dirty = 0;
+
+		/* Try to descrease the number of tab calculation using that
+		 * tab sessions share the same term. */
+		if (ses->tab->term != term) {
+			term = ses->tab->term;
+			tabs = number_of_tabs(term);
+		}
 
 		if (ses->visible_title_bar != show_title_bar) {
 			ses->visible_title_bar = show_title_bar;
@@ -143,6 +155,11 @@ update_status(void)
 
 		if (ses->visible_status_bar != show_status_bar) {
 			ses->visible_status_bar = show_status_bar;
+			dirty = 1;
+		}
+
+		if (show_tabs(show_tabs_bar, tabs) != ses->visible_tabs_bar) {
+			ses->visible_tabs_bar = show_tabs(show_tabs_bar, tabs);
 			dirty = 1;
 		}
 
@@ -157,21 +174,10 @@ update_status(void)
 void
 init_bars_status(struct session *ses, int *tabs_count, struct document_options *doo)
 {
-	static int prev_tabs_bar = 0;
-	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
-	int tabs_cnt = number_of_tabs(ses->tab->term);
+	if (tabs_count) *tabs_count = number_of_tabs(ses->tab->term);
 
 	if (!doo && ses->doc_view && ses->doc_view->document)
 		doo = &ses->doc_view->document->options;
-
-	if (tabs_count) *tabs_count = tabs_cnt;
-	ses->visible_tabs_bar = (show_tabs_bar > 0) &&
-				!(show_tabs_bar == 1 && tabs_cnt < 2);
-
-	if (prev_tabs_bar != ses->visible_tabs_bar) {
-		prev_tabs_bar = ses->visible_tabs_bar;
-		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
-	}
 
 	if (doo) {
 		doo->x = 0;

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.12 2003/11/05 10:46:53 zas Exp $ */
+/* $Id: window.c,v 1.13 2003/12/02 19:58:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,8 +84,10 @@ delete_window(struct window *win)
 {
 	struct term_event ev = INIT_TERM_EVENT(EV_ABORT, 0, 0, 0);
 
-	win->handler(win, &ev, 1);
+	/* Updating the status when destroying tabs needs this before the win
+	 * handler call. */
 	del_from_list(win);
+	win->handler(win, &ev, 1);
 	if (win->data) mem_free(win->data);
 	redraw_terminal(win->term);
 	mem_free(win);

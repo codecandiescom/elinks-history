@@ -965,6 +965,7 @@ int color_dirs = 1;
 int show_status_bar = 1;
 int show_title_bar = 1;
 
+int form_submit_auto = 1;
 int form_submit_confirm = 1;
 int accesskey_priority = 1;
 
@@ -1127,7 +1128,12 @@ struct option links_options[] = {
 		gen_cmd, num_rd, num_wr,
 	 	0, 256, &max_format_cache_entries,
 		"Number of cached formatted pages." },
-	 
+	  
+	{	"form-submit-auto", "form_submit_auto",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &form_submit_auto,
+		"Automagically submit a form when enter pressed on text field." },
+
 	{	"form-submit-confirm", "form_submit_confirm",
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &form_submit_confirm,

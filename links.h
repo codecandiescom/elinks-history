@@ -2116,6 +2116,7 @@ extern int color_dirs;
 extern int show_status_bar;
 extern int show_title_bar;
 
+extern int form_submit_auto;
 extern int form_submit_confirm;
 extern int accesskey_priority;
 

@@ -1,6 +1,8 @@
 #include "links.h"
 
 /* FIXME: Add comments!! --Zas */
+/* TODO: This file needs to be splitted to many smaller ones. Definitively.
+ * --pasky */
 
 void init_vs(struct view_state *vs, unsigned char *url)
 {
@@ -1496,15 +1498,12 @@ void set_frame(struct session *ses, struct f_data_c *f, int a)
 	goto_url(ses, f->vs->url);
 }
 
-int submit_form(struct terminal *term, void *xxx, struct session *ses) {
-	struct f_data_c *f = current_frame(ses);
-	struct link *link;
+/* This is common backend for submit_form() and enter(). */
+static int submit_form_do(struct f_data_c *fd, struct link *link,
+			  struct session *ses) {
 	unsigned char *url;
 	
-	if (f->vs->current_link == -1) return 1;
-	link = &f->f_data->links[f->vs->current_link];
-	
-	if ((url = get_form_url(ses, f, link->form))) {
+	if ((url = get_form_url(ses, fd, link->form))) {
 		if (strlen(url) >= 4 && !casecmp(url, "MAP@", 4)) {
 			goto_imgmap(ses, url + 4, stracpy(url + 4),
 				    stracpy(link->target));
@@ -1519,53 +1518,75 @@ int submit_form(struct terminal *term, void *xxx, struct session *ses) {
 	return 1;
 }
 
+static int submit_form(struct terminal *term, void *xxx,
+		       struct session *ses) {
+	struct f_data_c *fd = current_frame(ses);
+	struct link *link;
+	
+	if (fd->vs->current_link == -1) return 1;
+	link = &fd->f_data->links[fd->vs->current_link];
+	
+	return submit_form_do(fd, link, ses);
+}
 
-int enter(struct session *ses, struct f_data_c *f, int a)
+
+static int enter(struct session *ses, struct f_data_c *fd, int a)
 {
 	struct link *link;
-	unsigned char *u;
 	
-	if (f->vs->current_link == -1) return 1;
-	link = &f->f_data->links[f->vs->current_link];
-	if (link->type == L_LINK || link->type == L_BUTTON) {
-submit:
-		/* XXX: Some code duplication with submit_form() here. */
-		if ((u = get_link_url(ses, f, link))) {
-			if (strlen(u) >= 4 && !casecmp(u, "MAP@", 4)) {
-				goto_imgmap(ses, u + 4, stracpy(u + 4), stracpy(link->target));
-			} else {
-				goto_url_f(ses, u, link->target);
-			}
-			mem_free(u);
-			return 2;
-		}
+	if (fd->vs->current_link == -1) return 1;
+	link = &fd->f_data->links[fd->vs->current_link];
+	
+	if (link->type == L_LINK || link->type == L_BUTTON
+	    || ((has_form_submit(fd->f_data, link->form) || form_submit_auto)
+		&& (link->type == L_FIELD || link->type == L_AREA))) {
+
+		return submit_form_do(fd, link, ses);
+
 	} else if (link->type == L_FIELD || link->type == L_AREA) {
-		if (!has_form_submit(f->f_data, link->form))
-			goto submit;
-		down(ses, f, 0);
-	} else if (link->type == L_CHECKBOX) {
-		struct form_state *fs = find_form_state(f, link->form);
+		/* We won't get here if (has_form_submit() ||
+		 * 			 form_submit_auto) */
+		down(ses, fd, 0);
 		
-		if (link->form->ro) return 1;
-		if (link->form->type == FC_CHECKBOX) fs->state = !fs->state;
-		else {
+	} else if (link->type == L_CHECKBOX) {
+		struct form_state *fs = find_form_state(fd, link->form);
+		
+		if (link->form->ro)
+			return 1;
+		
+		if (link->form->type == FC_CHECKBOX) {
+			fs->state = !fs->state;
+			
+		} else {
 			struct form_control *fc;
 			
-			foreach(fc, f->f_data->forms)
-				if (fc->form_num == link->form->form_num && fc->type == FC_RADIO
+			foreach(fc, fd->f_data->forms) {
+				if (fc->form_num == link->form->form_num
+				    && fc->type == FC_RADIO
 				    && !xstrcmp(fc->name, link->form->name)) {
-					struct form_state *ffs = find_form_state(f, fc);
+					struct form_state *ffs;
 
+					ffs = find_form_state(fd, fc);
 					if (ffs) ffs->state = 0;
 				}
+			}
 			fs->state = 1;
 		}
+		
 	} else if (link->type == L_SELECT) {
-		if (link->form->ro) return 1;
-		f->f_data->refcount++;
-		add_empty_window(ses->term, (void (*)(void *))decrement_fc_refcount, f->f_data);
+		if (link->form->ro)
+			return 1;
+		
+		fd->f_data->refcount++;
+		add_empty_window(ses->term,
+				 (void (*)(void *)) decrement_fc_refcount,
+				 fd->f_data);
 		do_select_submenu(ses->term, link->form->menu, ses);
-	} else internal("bad link type %d", link->type);
+		
+	} else {
+		internal("bad link type %d", link->type);
+	}
+	
 	return 1;
 }
 

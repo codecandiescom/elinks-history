@@ -130,9 +130,6 @@ Generic code changes:
 
 - Optimize multiple _()s of the same strings by using temporary variables
 
-- Create and use a structure to store URLs, instead of using a string (this
-  should fix the bug that file-uploads are very slow and memory-consumptive)
-
 
 Build-time configuration / build:
 
@@ -151,4 +148,4 @@ Permanent goals:
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.57 2003/05/12 08:07:31 miciah Exp $
+$Id: TODO,v 1.58 2003/05/12 08:09:06 miciah Exp $

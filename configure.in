@@ -53,6 +53,14 @@ AC_TRY_COMPILE([#include<sys/socket.h>],
 AC_MSG_RESULT($have_sa_storage)
 test "$have_sa_storage" = yes && AC_DEFINE(HAVE_SA_STORAGE)
 
+AC_MSG_CHECKING([for sockaddr_in6])
+AC_TRY_COMPILE([#include<sys/socket.h>
+                #include<netinet/in.h>],
+               [int x = sizeof(struct sockaddr_in6);],
+               have_sa_in6=yes, have_sa_in6=no)
+AC_MSG_RESULT($have_sa_in6)
+test "$have_sa_in6" = yes && AC_DEFINE(HAVE_SA_IN6)
+
 dnl Checks for library functions.
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP

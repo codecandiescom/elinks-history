@@ -203,6 +203,9 @@
 #undef HAVE_SA_STORAGE
 
 /* */
+#undef HAVE_SA_IN6
+
+/* */
 #undef HAVE_GAI
 
 /* */

@@ -5783,7 +5783,7 @@ msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
 #: src/viewer/text/link.c:920
 msgid "Open in new ~tab"
-msgstr "Ouvrir dans une nouvel ongle~t"
+msgstr "Ouvrir dans un nouvel ongle~t"
 
 #: src/viewer/text/link.c:923
 msgid "Open in new tab in ~background"

@@ -1,3 +1,107 @@
+Sun May 18 16:30:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	If *headers starts by a newline, pretend it is empty.  
+
+Sun May 18 16:27:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Default is like HTTP code is 200.  
+
+Sun May 18 16:26:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	HTTP/0.9 documents are text/html. Thanks to Mikulas for
+	implementation tips.  
+
+Sun May 18 16:08:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Removed useless 'cache' variables, conn->cache used instead.  
+
+Sun May 18 16:05:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Renamed 'c' identifier to 'conn'.  
+
+Sun May 18 16:03:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Renamed 'e' identifier to 'cache'.  
+
+Sun May 18 15:59:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Removed some now-dead code. Effectively reverted the whole previous
+	zas' patch by now.  
+
+Sun May 18 15:56:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Real HTTP/0.9 support. When we don't receive a header starting by
+	/^HTTP\//, it is treated as no header and immediatelly a body. Fixes
+	bug 14.  
+
+Sun May 18 15:15:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	sent_version.major can never be zero now. We always hope for better
+	;).  
+
+Sun May 18 15:13:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, protocol/http/http.c:
+
+	Removed protocol.http.bugs.http09, it does not seem really useful.  
+
+Sun May 18 13:16:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Wha, stupid CVS! ;) 
+
+Sun May 18 13:16:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Structurize (use struct http_version more agressively), indentation
+	fixes (minor).  
+
+Sun May 18 12:45:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Use a pointer to struct http_version in get_http_code(). Idea by
+	fonseca ;).  
+
+Sun May 18 12:37:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, protocol/http/http.c:
+
+	Support from HTTP/0.9 was added. A new option
+	protocol.http.bugs.http09 enables it. An issue still exists, since
+	we have no content-type header, it always renders document as text.
+	Please propose fix for that.  
+
+Sun May 18 11:43:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	HTTP version handling was almost totally rewritten, major and minor
+	version numbers are handled separately, get_http_code() is now able
+	to handle any http version (past, present and future). A new struct
+	http_version was introduced. Minor changes were made to prepare
+	HTTP/0.9 support. Feel free to improve.  
+
 Sat May 17 22:01:04 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* TODO:

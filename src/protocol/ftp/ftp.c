@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.204 2005/03/12 00:08:02 zas Exp $ */
+/* $Id: ftp.c,v 1.205 2005/03/12 00:17:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -590,50 +590,47 @@ static int
 get_ftp_data_socket(struct connection *conn, struct string *command)
 {
 	struct ftp_connection_info *c_i = conn->info;
-#ifdef CONFIG_IPV6
-	struct sockaddr_in6 data_addr;
-#endif
-	unsigned char pc[6];
+
+	c_i->use_pasv = get_opt_bool("protocol.ftp.use_pasv");
 
 #ifdef CONFIG_IPV6
 	c_i->use_epsv = get_opt_bool("protocol.ftp.use_epsv");
 
-	if (!c_i->use_epsv && conn->protocol_family == 1) {
-		int data_sock;
-
-		memset(&data_addr, 0, sizeof(data_addr));
-		data_sock = get_pasv6_socket(conn, conn->socket.fd,
-		 	    (struct sockaddr_storage *) &data_addr);
-		if (data_sock < 0) return 0;
-
-		conn->data_socket.fd = data_sock;
-	}
-#endif
-
-	c_i->use_pasv = get_opt_bool("protocol.ftp.use_pasv");
-
-	if (!c_i->use_pasv && conn->protocol_family != 1) {
-		int data_sock;
-
-		memset(pc, 0, sizeof(pc));
-		data_sock = get_pasv_socket(conn, conn->socket.fd, pc);
-		if (data_sock < 0) return 0;
-
-		conn->data_socket.fd = data_sock;
-	}
-
-#ifdef CONFIG_IPV6
-	if (conn->protocol_family == 1)
-		if (c_i->use_epsv)
+	if (conn->protocol_family == 1) {
+		if (c_i->use_epsv) {
 			add_to_string(command, "EPSV");
-		else
+
+		} else {
+			struct sockaddr_in6 data_addr;
+			int data_sock;
+
+			memset(&data_addr, 0, sizeof(data_addr));
+			data_sock = get_pasv6_socket(conn, conn->socket.fd,
+			 	    (struct sockaddr_storage *) &data_addr);
+			if (data_sock < 0) return 0;
+
+			conn->data_socket.fd = data_sock;
 			add_eprtcmd_to_string(command, &data_addr);
-	else
+		}
+
+	} else
 #endif
-		if (c_i->use_pasv)
+	{
+		if (c_i->use_pasv) {
 			add_to_string(command, "PASV");
-		else
+
+		} else {
+			unsigned char pc[6];
+			int data_sock;
+
+			memset(pc, 0, sizeof(pc));
+			data_sock = get_pasv_socket(conn, conn->socket.fd, pc);
+			if (data_sock < 0) return 0;
+
+			conn->data_socket.fd = data_sock;
 			add_portcmd_to_string(command, pc);
+		}
+	}
 
 	add_crlf_to_string(command);
 

@@ -5,9 +5,22 @@
 # This file was contributed by <zimon@niksula.hut.fi> and
 # <yanek@yankuv.koniec.sk>.
 #
+#
+# If you want to update this file, I'd like you to push your change through at
+# least one of these people:
+#
+# * <bet@rahul.net>
+# * <yanek@yankuv.koniec.sk>
+#
+# Just try to send the patch/new version to them and wait few days if they will
+# do anything. If yes, they'll approve it or forward it to me (don't fear, the
+# credit won't be lost) if it's ok by them. If you won't get any reply, send it
+# to the elinks-dev mailing list. Thanks! --pasky
+#
+#
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.6 2003/07/20 21:10:43 pasky Exp $
+# $Id: elinks.spec.in,v 1.7 2003/07/20 21:15:49 pasky Exp $
 
 Summary: Enhanced version of Links (Lynx-like text WWW browser)
 Name: elinks

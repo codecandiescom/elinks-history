@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.68 2003/07/04 19:02:21 jonas Exp $ */
+/* $Id: connection.c,v 1.69 2003/07/04 20:45:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,8 +359,6 @@ static struct keepalive_connection *
 init_keepalive_connection(struct connection *c, ttime timeout)
 {
 	struct keepalive_connection *k;
-	protocol_handler *handler = get_protocol_handler(&c->uri);
-	int port = get_uri_port(&c->uri);
 
 	k = mem_calloc(1, sizeof(struct keepalive_connection));
 	if (!k) return NULL;
@@ -371,8 +369,8 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 		return NULL;
 	}
 
-	k->port = port;
-	k->protocol = handler;
+	k->port = get_uri_port(&c->uri);
+	k->protocol = get_protocol_handler(&c->uri);
 	k->pf = c->pf;
 	k->socket = c->sock1;
 	k->timeout = timeout;
@@ -386,17 +384,17 @@ get_keepalive_connection(struct connection *c)
 {
 	protocol_handler *handler = get_protocol_handler(&c->uri);
 	int port = get_uri_port(&c->uri);
-	struct keepalive_connection *keepalive_connection;
+	struct keepalive_connection *connection;
 	unsigned char *host = get_host_and_pass(c->url, 1);
 
 	if (!host) return NULL;
 
-	foreach (keepalive_connection, keepalive_connections)
-		if (keepalive_connection->protocol == handler
-		    && keepalive_connection->port == port
-		    && !strcmp(keepalive_connection->host, host)) {
+	foreach (connection, keepalive_connections)
+		if (connection->protocol == handler
+		    && connection->port == port
+		    && !strcmp(connection->host, host)) {
 			mem_free(host);
-			return keepalive_connection;
+			return connection;
 		}
 
 	mem_free(host);
@@ -542,24 +540,6 @@ suspend_connection(struct connection *c)
 	set_connection_state(c, S_WAIT);
 }
 
-static int
-try_to_suspend_connection(struct connection *c, unsigned char *ho)
-{
-	enum connection_priority priority = get_priority(c);
-	struct connection *d;
-
-	foreachback (d, queue) {
-		if (get_priority(d) <= priority) return -1;
-		if (d->state == S_WAIT) continue;
-		if (d->unrestartable == 2 && get_priority(d) < PRI_CANCEL) continue;
-		if (ho && strncmp(c->uri.host, ho, c->uri.hostlen)) continue;
-		suspend_connection(d);
-		return 0;
-	}
-
-	return -1;
-}
-
 static void
 run_connection(struct connection *c)
 {
@@ -643,6 +623,24 @@ check_queue_bugs(void)
 		cc, active_connections);
 }
 #endif
+
+static int
+try_to_suspend_connection(struct connection *c, unsigned char *ho)
+{
+	enum connection_priority priority = get_priority(c);
+	struct connection *d;
+
+	foreachback (d, queue) {
+		if (get_priority(d) <= priority) return -1;
+		if (d->state == S_WAIT) continue;
+		if (d->unrestartable == 2 && get_priority(d) < PRI_CANCEL) continue;
+		if (ho && strncmp(c->uri.host, ho, c->uri.hostlen)) continue;
+		suspend_connection(d);
+		return 0;
+	}
+
+	return -1;
+}
 
 static inline int
 try_connection(struct connection *c, int max_conns_to_host, int max_conns)
@@ -1007,11 +1005,10 @@ change_connection(struct download *old, struct download *new,
 void
 detach_connection(struct download *download, int pos)
 {
-	struct connection *conn;
+	struct connection *conn = download->c;
 
 	if (is_in_result_state(download->state)) return;
 
-	conn = download->c;
 	if (!conn->detached) {
 		int total_len;
 		int i, total_pri = 0;

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.25 2002/05/17 22:41:51 pasky Exp $ */
+/* $Id: menu.c,v 1.26 2002/05/18 19:25:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,7 +324,11 @@ struct menu_item file_menu22[] = {
 	{TEXT(T_KILL_BACKGROUND_CONNECTIONS), "", TEXT(T_HK_KILL_BACKGROUND_CONNECTIONS), MENU_FUNC menu_kill_background_connections, (void *)0, 0, 0},
 	{TEXT(T_FLUSH_ALL_CACHES), "", TEXT(T_HK_FLUSH_ALL_CACHES), MENU_FUNC flush_caches, (void *)0, 0, 0},
 	{TEXT(T_RESOURCE_INFO), "", TEXT(T_HK_RESOURCE_INFO), MENU_FUNC res_inf, (void *)0, 0, 0},
+#if 0
+	/* This ought to be rewritten first, now it's too messy - try it with
+	 * a bit full cache. */
 	{TEXT(T_CACHE_INFO), "", TEXT(T_HK_CACHE_INFO), MENU_FUNC cache_inf, (void *)0, 0, 0},
+#endif
 #ifdef LEAK_DEBUG
 	{TEXT(T_MEMORY_INFO), "", TEXT(T_HK_MEMORY_INFO), MENU_FUNC memory_inf, (void *)0, 0, 0},
 #endif

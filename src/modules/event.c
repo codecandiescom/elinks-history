@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.8 2003/09/23 14:06:10 pasky Exp $ */
+/* $Id: event.c,v 1.9 2003/09/29 16:46:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,21 @@ register_event(unsigned char *name)
 	int namelen;
 
 	if (id != EVENT_NONE) return id;
+
+	event = events;
 	if (!realloc_events()) return EVENT_NONE;
+
+	/* If @events got relocated update the hash. */
+	if (event != events) {
+		for (id = 0; id < eventssize; id++) {
+			unsigned char *name = events[id].name;
+			struct hash_item *item;
+
+			item = get_hash_item(event_hash, name, strlen(name));
+
+			if (item) item->value = &events[id];
+		}
+	}
 
 	event = &events[eventssize];
 

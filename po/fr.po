@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-06-16 10:01+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-06-16 23:43+0200\n"
 "PO-Revision-Date: 2004-06-12 01:20+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:342
 msgid "Close"
@@ -51,12 +51,12 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/sched/session.c:239 src/sched/session.c:652 src/sched/session.c:676
 #: src/sched/session.c:693 src/scripting/lua/core.c:399
 #: src/scripting/lua/core.c:480 src/scripting/lua/core.c:595
-#: src/scripting/lua/core.c:719 src/viewer/text/form.c:788
+#: src/scripting/lua/core.c:719 src/viewer/text/form.c:823
 #: src/viewer/text/search.c:864 src/viewer/text/search.c:892
 #: src/viewer/text/search.c:917 src/viewer/text/search.c:948
-#: src/viewer/text/search.c:1374 src/viewer/text/textarea.c:267
-#: src/viewer/text/textarea.c:276 src/viewer/text/view.c:246
-#: src/viewer/text/view.c:860 src/viewer/text/view.c:1264
+#: src/viewer/text/search.c:1374 src/viewer/text/textarea.c:270
+#: src/viewer/text/textarea.c:279 src/viewer/text/view.c:246
+#: src/viewer/text/view.c:860 src/viewer/text/view.c:1266
 msgid "OK"
 msgstr "OK"
 
@@ -94,14 +94,14 @@ msgstr "Supprimer les items sélectionnés?"
 
 #: src/bfu/hierbox.c:691 src/bfu/hierbox.c:718 src/bfu/hierbox.c:732
 #: src/bfu/hierbox.c:794 src/config/dialogs.c:638 src/dialogs/menu.c:124
-#: src/formhist/formhist.c:494 src/mime/dialogs.c:75 src/sched/task.c:184
+#: src/formhist/formhist.c:454 src/mime/dialogs.c:75 src/sched/task.c:184
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "Yes"
 msgstr "Oui"
 
 #: src/bfu/hierbox.c:692 src/bfu/hierbox.c:719 src/bfu/hierbox.c:733
 #: src/bfu/hierbox.c:795 src/config/dialogs.c:639 src/dialogs/menu.c:125
-#: src/formhist/formhist.c:495 src/mime/dialogs.c:76 src/sched/task.c:185
+#: src/formhist/formhist.c:455 src/mime/dialogs.c:76 src/sched/task.c:185
 #: src/terminal/tab.c:196 src/terminal/tab.c:232
 msgid "No"
 msgstr "Non"
@@ -930,7 +930,7 @@ msgid "Description"
 msgstr "Description"
 
 #: src/config/dialogs.c:297 src/sched/session.c:236
-#: src/viewer/text/textarea.c:264 src/viewer/text/textarea.c:273
+#: src/viewer/text/textarea.c:267 src/viewer/text/textarea.c:276
 msgid "Error"
 msgstr "Erreur"
 
@@ -3496,7 +3496,7 @@ msgstr "Texte"
 msgid "Dialog text colors."
 msgstr "Couleurs du texte des dialogues."
 
-#: src/config/options.inc:1087 src/viewer/text/form.c:1271
+#: src/config/options.inc:1087 src/viewer/text/form.c:1331
 msgid "Checkbox"
 msgstr "Case à cocher"
 
@@ -3528,7 +3528,7 @@ msgstr "Bouton sélectionné"
 msgid "Dialog selected button colors."
 msgstr "Couleurs du bouton sélectionné dans les dialogues."
 
-#: src/config/options.inc:1103 src/viewer/text/form.c:1275
+#: src/config/options.inc:1103 src/viewer/text/form.c:1335
 msgid "Text field"
 msgstr "Champ texte"
 
@@ -4851,8 +4851,6 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -4868,11 +4866,11 @@ msgstr ""
 "Cette option désactive seulement le dialogue, les formulaires\n"
 "déjà mémorisés ne sont pas affectés."
 
-#: src/formhist/formhist.c:488
+#: src/formhist/formhist.c:448
 msgid "Forms memory"
 msgstr "Mémorisation formulaires"
 
-#: src/formhist/formhist.c:489
+#: src/formhist/formhist.c:449
 msgid ""
 "Should I remember this login?\n"
 "\n"
@@ -4888,12 +4886,12 @@ msgstr ""
 "\n"
 "Si ces informations sont sensibles, répondez NON."
 
-#: src/formhist/formhist.c:496
+#: src/formhist/formhist.c:456
 msgid "Never for this site"
 msgstr "Jamais pour ce site"
 
 #. name:
-#: src/formhist/formhist.c:521
+#: src/formhist/formhist.c:481
 msgid "Forms History"
 msgstr "Mémorisation formulaires"
 
@@ -5213,6 +5211,7 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:687
 msgid "Mailcap"
@@ -6066,151 +6065,160 @@ msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant?"
 msgid "Do you really want to close all except the current tab?"
 msgstr "Êtes-vous sûr de vouloir fermer tous les onglets sauf celui-ci ?"
 
-#: src/viewer/text/form.c:784
+#: src/viewer/text/form.c:819
 msgid "Error while posting form"
 msgstr "Erreur lors de l'envoi du formulaire"
 
-#: src/viewer/text/form.c:785
+#: src/viewer/text/form.c:820
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "Impossible d'obtenir le fichier %s: %s"
 
-#: src/viewer/text/form.c:1259
+#: src/viewer/text/form.c:1318
 msgid "Reset form"
 msgstr "Réinitialiser le formulaire"
 
-#: src/viewer/text/form.c:1266
+#: src/viewer/text/form.c:1326
 msgid "Submit form to"
 msgstr "Envoi du formulaire à"
 
-#: src/viewer/text/form.c:1267
+#: src/viewer/text/form.c:1327
 msgid "Post form to"
 msgstr "Transfert du formulaire à"
 
-#: src/viewer/text/form.c:1269
+#: src/viewer/text/form.c:1329
 msgid "Radio button"
 msgstr "Bouton radio"
 
-#: src/viewer/text/form.c:1273
+#: src/viewer/text/form.c:1333
 msgid "Select field"
 msgstr "Liste"
 
-#: src/viewer/text/form.c:1277
+#: src/viewer/text/form.c:1337
 msgid "Text area"
 msgstr "Champ texte multiligne"
 
-#: src/viewer/text/form.c:1279
+#: src/viewer/text/form.c:1339
 msgid "File upload"
 msgstr "Envoi de fichier"
 
-#: src/viewer/text/form.c:1281
+#: src/viewer/text/form.c:1341
 msgid "Password field"
 msgstr "Champ mot de passe"
 
-#: src/viewer/text/form.c:1308
+#: src/viewer/text/form.c:1379
 msgid "name"
 msgstr "Nom"
 
-#: src/viewer/text/form.c:1320
+#: src/viewer/text/form.c:1388
 msgid "value"
 msgstr "Valeur"
 
-#: src/viewer/text/form.c:1337
+#: src/viewer/text/form.c:1396
+msgid "read only"
+msgstr "lecture seule"
+
+#: src/viewer/text/form.c:1407
+#, c-format
+msgid "press %s to navigate"
+msgstr "pressez %s pour naviguer"
+
+#: src/viewer/text/form.c:1409
 #, c-format
 msgid "press %s to edit"
 msgstr "pressez %s pour éditer"
 
-#: src/viewer/text/form.c:1353
+#: src/viewer/text/form.c:1429
 #, c-format
 msgid "press %s to submit to"
 msgstr "pressez %s pour soumettre à"
 
-#: src/viewer/text/form.c:1355
+#: src/viewer/text/form.c:1431
 #, c-format
 msgid "press %s to post to"
 msgstr "pressez %s pour poster à"
 
-#: src/viewer/text/link.c:819
+#: src/viewer/text/link.c:838
 msgid "Display ~usemap"
 msgstr "Afficher ~usemap"
 
-#: src/viewer/text/link.c:822
+#: src/viewer/text/link.c:841
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/link.c:824
+#: src/viewer/text/link.c:843
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/link.c:828
+#: src/viewer/text/link.c:847
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:830
+#: src/viewer/text/link.c:849
 msgid "Open in new ~tab"
 msgstr "Ouvrir dans un nouvel ongle~t"
 
-#: src/viewer/text/link.c:832
+#: src/viewer/text/link.c:851
 msgid "Open in new tab in ~background"
 msgstr "Ouvrir dans un nouvel onglet en arrière-~plan"
 
-#: src/viewer/text/link.c:837
+#: src/viewer/text/link.c:856
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/link.c:840
+#: src/viewer/text/link.c:859
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:851 src/viewer/text/link.c:877
+#: src/viewer/text/link.c:870 src/viewer/text/link.c:896
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:856
+#: src/viewer/text/link.c:875
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:861
+#: src/viewer/text/link.c:880
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:862
+#: src/viewer/text/link.c:881
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:865
+#: src/viewer/text/link.c:884
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:867
+#: src/viewer/text/link.c:886
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:870
+#: src/viewer/text/link.c:889
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:875
+#: src/viewer/text/link.c:894
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:882
+#: src/viewer/text/link.c:901
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:884
+#: src/viewer/text/link.c:903
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:889
+#: src/viewer/text/link.c:908
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:935
+#: src/viewer/text/link.c:958
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:940
+#: src/viewer/text/link.c:963
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -6268,11 +6276,11 @@ msgstr "Ignorer la casse"
 msgid "Search backward"
 msgstr "Chercher en arrière"
 
-#: src/viewer/text/textarea.c:265
+#: src/viewer/text/textarea.c:268
 msgid "You cannot launch an external editor in the anonymous mode."
 msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
 
-#: src/viewer/text/textarea.c:274
+#: src/viewer/text/textarea.c:277
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
@@ -6293,10 +6301,10 @@ msgstr "Aller au lien"
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1261
+#: src/viewer/text/view.c:1263
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1262
+#: src/viewer/text/view.c:1264
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"

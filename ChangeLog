@@ -1,3 +1,150 @@
+Tue Sep  2 21:14:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre5 
+
+Tue Sep  2 21:13:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Updated po files.  
+
+Tue Sep  2 21:11:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Minor update.  
+
+Tue Sep  2 20:27:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: screen.c, terminal.h:
+
+	Adding prefilled screen_drivers. If not for speed they make the
+	defaults clearer.  
+
+Tue Sep  2 19:54:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	init_screen_driver(): Moved and group with the screen driver struff.  
+
+Tue Sep  2 19:47:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/uri.c:
+
+	Minor optim.  
+
+Tue Sep  2 19:33:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Comments members of struct screen_driver.  
+
+Tue Sep  2 19:25:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Cleanup UTF8 I/O and move most logic to init_screen_driver().  
+
+Tue Sep  2 19:02:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Generalize adding of frame sequences when changing frame state.  
+
+Tue Sep  2 18:39:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Handle ``frame char translation'' genericly depending on
+	screen_driver->frame.  
+
+Tue Sep  2 18:26:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Merge fill_option_cache() and get_frame_table() into
+	init_screen_driver().  
+
+Tue Sep  2 16:20:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/uri.c:
+
+	Minor optimizations.  
+
+Tue Sep  2 14:04:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	A useless list initialization was removed. Reported by Jonas.  
+
+Tue Sep  2 14:01:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Goto fail is better ;) Spotted by Jonas.  
+
+Tue Sep  2 13:55:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/: formhist.c, formhist.h:
+
+	Allocate space for url + struct formhist_data in one time.  
+
+Tue Sep  2 13:42:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Move screen_state->frame to the screen_driver.  
+
+Tue Sep  2 13:38:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Rename: opt_cache -> driver.  
+
+Tue Sep  2 13:37:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Last bits of formhist fix.  
+
+Tue Sep  2 13:32:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/: formhist.h, formhist.c:
+
+	Form history was fixed. Major tidyup. Please report any issue, all
+	previous versions have some bad bugs and design errors.  
+
+Mon Sep  1 23:59:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Always do two fg_color[] adjustments like in the old code.  
+
+Mon Sep  1 23:53:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Can't sleep before this is done. Revert bogus patch that caused
+	visited links and many other things to be drawn wrong.  
+
+Mon Sep  1 23:31:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Code cleanup. Code redundancy was reduced. A potential memleak was
+	fixed.  
+
+Mon Sep  1 22:44:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Forget_form() is now used.  
+
 Mon Sep  1 21:11:08 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/color.c:

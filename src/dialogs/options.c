@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.34 2002/09/07 09:06:29 zas Exp $ */
+/* $Id: options.c,v 1.35 2002/09/09 14:32:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,8 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct dialog *d;
 	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
-
+	void *opt_term_type = (void *) get_opt_ptr_tree(opt_tree, "type");
+	
 	d = mem_alloc(sizeof(struct dialog) + 12 * sizeof(struct widget));
 	if (!d) return;
 	memset(d, 0, sizeof(struct dialog) + 12 * sizeof(struct widget));
@@ -130,25 +131,25 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[0].gid = 1;
 	d->items[0].gnum = TERM_DUMB;
 	d->items[0].dlen = sizeof(int);
-	d->items[0].data = (void *) get_opt_ptr_tree(opt_tree, "type");
+	d->items[0].data = opt_term_type;
 
 	d->items[1].type = D_CHECKBOX;
 	d->items[1].gid = 1;
 	d->items[1].gnum = TERM_VT100;
 	d->items[1].dlen = sizeof(int);
-	d->items[1].data = (void *) get_opt_ptr_tree(opt_tree, "type");
+	d->items[1].data = opt_term_type;
 
 	d->items[2].type = D_CHECKBOX;
 	d->items[2].gid = 1;
 	d->items[2].gnum = TERM_LINUX;
 	d->items[2].dlen = sizeof(int);
-	d->items[2].data = (void *) get_opt_ptr_tree(opt_tree, "type");
+	d->items[2].data = opt_term_type;
 
 	d->items[3].type = D_CHECKBOX;
 	d->items[3].gid = 1;
 	d->items[3].gnum = TERM_KOI8;
 	d->items[3].dlen = sizeof(int);
-	d->items[3].data = (void *) get_opt_ptr_tree(opt_tree, "type");
+	d->items[3].data = opt_term_type;
 
 	d->items[4].type = D_CHECKBOX;
 	d->items[4].gid = 0;
@@ -280,6 +281,7 @@ dlg_http_options(struct dialog_data *dlg, struct widget_data *di)
 	struct http_bugs *bugs = (struct http_bugs *)di->cdata;
 #endif
 	struct dialog *d;
+	void *opt_referer_policy = (void *) get_opt_ptr("protocol.http.referer.policy");
 
 	d = mem_alloc(sizeof(struct dialog) + 14 * sizeof(struct widget));
 	if (!d) return 0;
@@ -313,13 +315,13 @@ dlg_http_options(struct dialog_data *dlg, struct widget_data *di)
 	d->items[4].gid = 1;
 	d->items[4].gnum = REFERER_NONE;
 	d->items[4].dlen = sizeof(int);
-	d->items[4].data = (void *) get_opt_ptr("protocol.http.referer.policy");
+	d->items[4].data = opt_referer_policy;
 
 	d->items[5].type = D_CHECKBOX;
 	d->items[5].gid = 1;
 	d->items[5].gnum = REFERER_SAME_URL;
 	d->items[5].dlen = sizeof(int);
-	d->items[5].data = (void *) get_opt_ptr("protocol.http.referer.policy");
+	d->items[5].data = opt_referer_policy;
 
 	/* This should be last, but I did it wrong originally and now I would
 	 * break backwards compatibility by changing it :/. */
@@ -327,13 +329,13 @@ dlg_http_options(struct dialog_data *dlg, struct widget_data *di)
 	d->items[6].gid = 1;
 	d->items[6].gnum = REFERER_FAKE;
 	d->items[6].dlen = sizeof(int);
-	d->items[6].data = (void *) get_opt_ptr("protocol.http.referer.policy");
+	d->items[6].data = opt_referer_policy;
 
 	d->items[7].type = D_CHECKBOX;
 	d->items[7].gid = 1;
 	d->items[7].gnum = REFERER_TRUE;
 	d->items[7].dlen = sizeof(int);
-	d->items[7].data = (void *) get_opt_ptr("protocol.http.referer.policy");
+	d->items[7].data = opt_referer_policy;
 
 	d->items[8].type = D_CHECKBOX;
 	d->items[8].gid = 0;

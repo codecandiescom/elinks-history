@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.20 2002/08/27 13:31:23 pasky Exp $ */
+/* $Id: cache.c,v 1.21 2002/09/09 14:35:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,8 +432,9 @@ garbage_collection(int u)
 	long ncs = cache_size;
 	long ccs = 0;
 	int no = 0;
-
-	if (!u && cache_size <= get_opt_long("document.cache.memory.size")) return;
+	long opt_cache_memory_size = get_opt_long("document.cache.memory.size");
+	
+	if (!u && cache_size <= opt_cache_memory_size) return;
 
 	foreach(e, cache) {
 		if (e->refcount || is_entry_used(e)) {
@@ -451,10 +452,10 @@ garbage_collection(int u)
 	       	cache_size = ccs;
 	}
 
-	if (!u && ncs <= get_opt_long("document.cache.memory.size")) return;
+	if (!u && ncs <= opt_cache_memory_size) return;
 
 	for (e = cache.prev; (void *)e != &cache; e = e->prev) {
-		if (!u && ncs <= get_opt_long("document.cache.memory.size") * MEMORY_CACHE_GC_PERCENT / 100)
+		if (!u && ncs <= opt_cache_memory_size * MEMORY_CACHE_GC_PERCENT / 100)
 			goto g;
 		if (e->refcount || is_entry_used(e)) {
 			no = 1;
@@ -478,7 +479,7 @@ g:
 
 	if (!u) {
 		for (f = e; (void *)f != &cache; f = f->next) {
-			if (ncs + f->data_size <= get_opt_long("document.cache.memory.size") * MEMORY_CACHE_GC_PERCENT / 100) {
+			if (ncs + f->data_size <= opt_cache_memory_size * MEMORY_CACHE_GC_PERCENT / 100) {
 				ncs += f->data_size;
 				f->tgc = 0;
 			}

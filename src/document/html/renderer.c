@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.273 2003/09/15 21:08:06 jonas Exp $ */
+/* $Id: renderer.c,v 1.274 2003/09/15 21:28:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,40 +215,17 @@ set_hchars(struct part *part, int x, int y, int xl,
 	}
 }
 
+/* xset_hchar() and xset_vchars() is used for rendering table frames. */
 void
-xset_hchar(struct part *part, int x, int y,
-	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
+xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 {
-	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, 0x0);
-	struct screen_char *position;
-
-	assert(part && part->document);
-	if_assert_failed return;
-
-	if (realloc_line(part->document, Y(y), X(x)))
-		return;
-
-	assert(part->document->data);
-	if_assert_failed return;
-
-	position = &POS(x, y);
-	position->data = data;
-	position->attr = attr;
-	set_term_color(position, &colors, COLOR_DEFAULT);
+	set_hchars(part, x, y, xl, data, &par_format.bgcolor, SCREEN_ATTR_FRAME);
 }
 
 void
-xset_hchars(struct part *part, int x, int y, int xl,
-	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
+xset_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 {
-	set_hchars(part, x, y, xl, data, &bgcolor, attr);
-}
-
-void
-xset_vchars(struct part *part, int x, int y, int yl,
-	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
-{
-	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, 0x0);
+	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char *template = NULL;
 
 	assert(part && part->document);
@@ -263,7 +240,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 		} else {
 			template = &POS(x, y);
 			template->data = data;
-			template->attr = attr;
+			template->attr = SCREEN_ATTR_FRAME;
 			set_term_color(template, &colors, COLOR_DEFAULT);
 		}
 	}

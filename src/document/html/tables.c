@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.79 2003/09/15 21:25:41 jonas Exp $ */
+/* $Id: tables.c,v 1.80 2003/09/15 21:28:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1467,8 +1467,7 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 	    +  9 * int_max(left,   0)
 	    + 27 * int_max(bottom, 0);
 
-	xset_hchar(table->p, x, y, border_chars[pos], par_format.bgcolor,
-		   SCREEN_ATTR_FRAME);
+	xset_hchars(table->p, x, y, 1, border_chars[pos]);
 }
 
 static inline void
@@ -1482,7 +1481,7 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
  
  	if (pos < 0 || table->w_c[i] <= 0) return;
  
- 	xset_hchars(table->p, x, y, table->w_c[i], hltable[pos], par_format.bgcolor, SCREEN_ATTR_FRAME);
+ 	xset_hchars(table->p, x, y, table->w_c[i], hltable[pos]);
 }
 
 static inline void
@@ -1496,7 +1495,7 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
  
  	if (pos < 0 || table->r_heights[j] <= 0) return;
  
- 	xset_vchars(table->p, x, y, table->r_heights[j], vltable[pos], par_format.bgcolor, SCREEN_ATTR_FRAME);
+ 	xset_vchars(table->p, x, y, table->r_heights[j], vltable[pos]);
 }
 
 static void

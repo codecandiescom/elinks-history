@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.56 2003/06/22 16:43:51 jonas Exp $ */
+/* $Id: file.c,v 1.57 2003/06/22 16:47:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,24 +282,24 @@ file_func(struct connection *c)
 {
 	struct cache_entry *e;
 	unsigned char *fragment;
-	unsigned char *name;
+	unsigned char *filename;
 	unsigned char *head;
 	int fragmentlen;
 	DIR *d;
-	int namelen;
+	int filenamelen;
 
 	if (get_opt_int_tree(&cmdline_options, "anonymous")) {
 		abort_conn_with_state(c, S_BAD_URL);
 		return;
 	}
 
-	get_filenamepart_from_url(c->url, &name, &namelen);
-	if (!name) {
+	get_filenamepart_from_url(c->url, &filename, &filenamelen);
+	if (!filename) {
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}
 
-	d = opendir(name);
+	d = opendir(filename);
 	if (d) {
 		struct dirs *dir;
 		int dirl;
@@ -318,9 +318,9 @@ file_func(struct connection *c)
 		}
 
 
-		if (name[0] && !dir_sep(name[namelen - 1])) {
+		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
 			if (get_cache_entry(c->url, &e)) {
-				mem_free(name);
+				mem_free(filename);
 				closedir(d);
 				abort_conn_with_state(c, S_OUT_OF_MEM);
 				return;
@@ -331,7 +331,7 @@ file_func(struct connection *c)
 			e->redirect_get = 1;
 			e->redirect = stracpy(c->url);
 			if (e->redirect) add_to_strn(&e->redirect, "/");
-			mem_free(name);
+			mem_free(filename);
 			closedir(d);
 
 			goto end;
@@ -348,13 +348,13 @@ file_func(struct connection *c)
 		}
 
 		add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
-		add_htmlesc_str(&fragment, &fragmentlen, name, strlen(name));
+		add_htmlesc_str(&fragment, &fragmentlen, filename, strlen(filename));
 		add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
 		{
-			unsigned char *pslash, *slash = name - 1;
+			unsigned char *pslash, *slash = filename - 1;
 
 			while (pslash = ++slash, slash = strchr(slash, '/')) {
-				if (slash == name) {
+				if (slash == filename) {
 					add_chr_to_str(&fragment, &fragmentlen, '/');
 					continue;
 				}
@@ -362,7 +362,7 @@ file_func(struct connection *c)
 				slash[0] = 0;
 				add_to_str(&fragment, &fragmentlen, "<a href=\"");
 				/* FIXME: htmlesc? At least we should escape quotes. --pasky */
-				add_to_str(&fragment, &fragmentlen, name);
+				add_to_str(&fragment, &fragmentlen, filename);
 				add_chr_to_str(&fragment, &fragmentlen, '/');
 				add_to_str(&fragment, &fragmentlen, "\">");
 				add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
@@ -397,7 +397,7 @@ file_func(struct connection *c)
 			if (!*p) continue;
 
 			l = 0;
-			n = stracpy(name);
+			n = stracpy(filename);
 			if (!n) continue;
 
 			add_to_strn(&n, de->d_name);
@@ -437,7 +437,7 @@ file_func(struct connection *c)
 				int nl = 0;
 
 				if (!n) continue;
-				add_to_str(&n, &nl, name);
+				add_to_str(&n, &nl, filename);
 				add_htmlesc_str(&n, &nl,
 						dir[i].f, strlen(dir[i].f));
 				do {
@@ -474,7 +474,7 @@ file_func(struct connection *c)
 				int nl = 0;
 
 				if (n) {
-					add_to_str(&n, &nl, name);
+					add_to_str(&n, &nl, filename);
 					add_htmlesc_str(&n, &nl,
 							dir[i].f, strlen(dir[i].f));
 					if (!stat(n, &st))
@@ -510,7 +510,7 @@ file_func(struct connection *c)
 			add_chr_to_str(&fragment, &fragmentlen, '\n');
 		}
 
-		mem_free(name);
+		mem_free(filename);
 		for (i = 0; i < dirl; i++) {
 			if (dir[i].s) mem_free(dir[i].s);
 		       	if (dir[i].f) mem_free(dir[i].f);
@@ -525,7 +525,7 @@ file_func(struct connection *c)
 		int readlen;
 		struct stat stt;
 		enum stream_encoding encoding = ENCODING_NONE;
-		int fd = open(name, O_RDONLY | O_NOCTTY);
+		int fd = open(filename, O_RDONLY | O_NOCTTY);
 		int saved_errno;
 
 		saved_errno = errno;
@@ -541,21 +541,21 @@ file_func(struct connection *c)
 					int tname_len = 0;
 
 					if (!tname) {
-						mem_free(name);
+						mem_free(filename);
 						abort_conn_with_state(c, S_OUT_OF_MEM);
 						return;
 					}
 
-					add_to_str(&tname, &tname_len, name);
+					add_to_str(&tname, &tname_len, filename);
 					add_to_str(&tname, &tname_len, *ext);
 
 					/* We try with some extensions. */
 					fd = open(tname, O_RDONLY | O_NOCTTY);
 					if (fd >= 0) {
 						/* Ok, found one, use it. */
-						mem_free(name);
-						name = tname;
-						namelen = strlen(tname);
+						mem_free(filename);
+						filename = tname;
+						filenamelen = strlen(tname);
 						encoding = enc;
 						enc = ENCODINGS_KNOWN;
 						break;
@@ -567,7 +567,7 @@ file_func(struct connection *c)
 		}
 
 		if (fd == -1) {
-			mem_free(name);
+			mem_free(filename);
 			abort_conn_with_state(c, -saved_errno);
 			return;
 		}
@@ -576,15 +576,15 @@ file_func(struct connection *c)
 		if (fstat(fd, &stt)) {
 			saved_errno = errno;
 			close(fd);
-			mem_free(name);
+			mem_free(filename);
 			abort_conn_with_state(c, -saved_errno);
 			return;
 		}
 
 		if (encoding == ENCODING_NONE)
-			encoding = guess_encoding(name);
+			encoding = guess_encoding(filename);
 
-		mem_free(name);
+		mem_free(filename);
 
 		if (encoding != ENCODING_NONE && !S_ISREG(stt.st_mode)) {
 			/* We only want to open regular encoded files. */

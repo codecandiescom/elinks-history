@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.41 2002/09/18 16:07:01 pasky Exp $ */
+/* $Id: download.c,v 1.42 2002/09/18 16:35:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,7 +259,7 @@ download_window_function(struct dialog_data *dlg)
 						- stat->prg->elapsed);
 #endif
 			add_time_to_str(&m, &l, (stat->prg->size - stat->prg->pos)
-				 		/ ((longlong) stat->prg->loaded * 10
+						/ ((longlong) stat->prg->loaded * 10
 						   / (stat->prg->elapsed / 100))
 						* 1000);
 		}
@@ -329,11 +329,11 @@ download_window_function(struct dialog_data *dlg)
 		set_only_char(term, x + w - 5, y, ']');
 		fill_area(term, x + 1, y,
 			  (int) ((longlong) p * (longlong) stat->prg->pos
-			         / (longlong) stat->prg->size),
+				 / (longlong) stat->prg->size),
 			  1, get_bfu_color(term, "dialog.meter"));
 		sprintf(q, "%3d%%",
 			  (int) ((longlong) 100 * (longlong) stat->prg->pos
-			         / (longlong) stat->prg->size));
+				 / (longlong) stat->prg->size));
 		print_text(term, x + w - 4, y, strlen(q), q, dialog_text_color);
 		y++;
 	}
@@ -453,7 +453,7 @@ download_data(struct status *stat, struct download *down)
 		if (remain >= 0 && frag->length > remain) {
 			int w;
 
-#ifdef HAVE_OPEN_PREALLOC
+#ifdef USE_OPEN_PREALLOC
 			if (!down->last_pos && (!down->stat.prg
 						|| down->stat.prg->size > 0)) {
 				close(down->handle);
@@ -471,7 +471,7 @@ download_data(struct status *stat, struct download *down)
 			if (w == -1) {
 				int saved_errno;
 
-#ifdef HAVE_OPEN_PREALLOC
+#ifdef USE_OPEN_PREALLOC
 write_error:
 #endif
 				saved_errno = errno; /* Saved in case of ... --Zas */
@@ -672,7 +672,7 @@ get_temp_name(unsigned char *url)
 
 	if (fnnn) {
 		s = memacpy(fnnn, l - (fnnn - fn));
-	       	if (s) {
+		if (s) {
 			check_shell_security(&s);
 			add_to_str(&name, &nl, s);
 			mem_free(s);

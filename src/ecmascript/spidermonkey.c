@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.29 2004/09/24 23:40:03 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.30 2004/09/24 23:46:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,15 +457,13 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 	JS_SetContextPrivate(ctx, interpreter);
 	JS_SetErrorReporter(ctx, error_reporter);
 
-	window_obj = JS_InitClass(ctx, NULL, NULL,
-	                          (JSClass *) &window_class, NULL, 0,
-	                          (JSPropertySpec *) window_props, NULL,
-	                          NULL, NULL);
+	window_obj = JS_NewObject(ctx, (JSClass *) &window_class, NULL, NULL);
 	if (!window_obj) {
 		spidermonkey_put_interpreter(interpreter);
 		return NULL;
 	}
 	JS_InitStandardClasses(ctx, window_obj);
+	JS_DefineProperties(ctx, window_obj, (JSPropertySpec *) window_props);
 	JS_SetPrivate(ctx, window_obj, interpreter->doc_view);
 
 	document_obj = JS_InitClass(ctx, window_obj, NULL,

@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.9 2003/10/24 22:38:07 pasky Exp $ */
+/* $Id: checkbox.h,v 1.10 2003/10/24 23:39:47 pasky Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -7,7 +7,7 @@
 #include "bfu/widget.h"
 #include "terminal/terminal.h"
 
-#define set_dlg_checkbox(dlg, n, groupid, groupnum, dataz)		\
+#define add_dlg_checkbox(dlg, n, groupid, groupnum, dataz)		\
 	do {								\
 		(dlg)->items[n].type = D_CHECKBOX;			\
 		(dlg)->items[n].gid = (groupid);			\

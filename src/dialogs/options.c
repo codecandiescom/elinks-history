@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.90 2003/10/24 23:31:10 pasky Exp $ */
+/* $Id: options.c,v 1.91 2003/10/24 23:39:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,29 +221,29 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh = (void (*)(void *)) terminal_options_ok;
 	dlg->refresh_data = termopt_hop;
 
-	set_dlg_checkbox(dlg, n, 1, TERM_DUMB, termopt_hop->type);
-	set_dlg_checkbox(dlg, n, 1, TERM_VT100, termopt_hop->type);
-	set_dlg_checkbox(dlg, n, 1, TERM_LINUX, termopt_hop->type);
-	set_dlg_checkbox(dlg, n, 1, TERM_KOI8, termopt_hop->type);
+	add_dlg_checkbox(dlg, n, 1, TERM_DUMB, termopt_hop->type);
+	add_dlg_checkbox(dlg, n, 1, TERM_VT100, termopt_hop->type);
+	add_dlg_checkbox(dlg, n, 1, TERM_LINUX, termopt_hop->type);
+	add_dlg_checkbox(dlg, n, 1, TERM_KOI8, termopt_hop->type);
 
-	set_dlg_checkbox(dlg, n, 2, COLOR_MODE_MONO, termopt_hop->colors);
-	set_dlg_checkbox(dlg, n, 2, COLOR_MODE_16, termopt_hop->colors);
+	add_dlg_checkbox(dlg, n, 2, COLOR_MODE_MONO, termopt_hop->colors);
+	add_dlg_checkbox(dlg, n, 2, COLOR_MODE_16, termopt_hop->colors);
 #ifdef USE_256_COLORS
-	set_dlg_checkbox(dlg, n, 2, COLOR_MODE_256, termopt_hop->colors);
+	add_dlg_checkbox(dlg, n, 2, COLOR_MODE_256, termopt_hop->colors);
 #endif
 
-	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->m11_hack);
-	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->restrict_852);
-	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->block_cursor);
-	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->trans);
-	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->underline);
-	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->utf_8_io);
+	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->m11_hack);
+	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->restrict_852);
+	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->block_cursor);
+	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->trans);
+	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->underline);
+	add_dlg_checkbox(dlg, n, 0, 0, termopt_hop->utf_8_io);
 
-	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
-	set_dlg_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term), NULL);
-	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term), NULL);
+	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	set_dlg_end(dlg, n);
+	add_dlg_end(dlg, n);
 
 	assert(n == TERMOPT_WIDGETS);
 
@@ -321,13 +321,13 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh = (void (*)(void *)) do_resize_terminal;
 	dlg->refresh_data = term;
 
-	set_dlg_field(dlg, n, 1, 999, check_number, 4, x_str, NULL);
-	set_dlg_field(dlg, n, 1, 999, check_number, 4, y_str, NULL);
+	add_dlg_field(dlg, n, 1, 999, check_number, 4, x_str, NULL);
+	add_dlg_field(dlg, n, 1, 999, check_number, 4, y_str, NULL);
 
-	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
-	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	set_dlg_end(dlg, n);
+	add_dlg_end(dlg, n);
 
 	assert(n == RESIZE_DLG_SIZE);
 

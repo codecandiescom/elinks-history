@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.10 2003/10/24 23:35:51 jonas Exp $ */
+/* $Id: inpfield.h,v 1.11 2003/10/24 23:39:47 pasky Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -10,7 +10,7 @@
 #include "terminal/terminal.h"
 #include "util/memlist.h"
 
-#define set_dlg_field_do(dlg, n, t, min, max, handler, len, field, hist)	\
+#define add_dlg_field_do(dlg, n, t, min, max, handler, len, field, hist)	\
 	do {								\
 		(dlg)->items[n].type = (t);				\
 		(dlg)->items[n].gid = (min);				\
@@ -22,11 +22,11 @@
 		(n)++;							\
 	} while (0)
 
-#define set_dlg_field(dlg, n, min, max, handler, len, field, history)	\
-	set_dlg_field_do(dlg, n, D_FIELD, min, max, handler, len, field, history)
+#define add_dlg_field(dlg, n, min, max, handler, len, field, history)	\
+	add_dlg_field_do(dlg, n, D_FIELD, min, max, handler, len, field, history)
 
-#define set_dlg_field_pass(dlg, n, min, max, handler, len, field, history)	\
-	set_dlg_field_do(dlg, n, D_FIELD_PASS, min, max, handler, len, field, history)
+#define add_dlg_field_pass(dlg, n, min, max, handler, len, field, history)	\
+	add_dlg_field_do(dlg, n, D_FIELD_PASS, min, max, handler, len, field, history)
 
 extern struct widget_ops field_ops;
 extern struct widget_ops field_pass_ops;

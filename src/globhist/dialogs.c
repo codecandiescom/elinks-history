@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.44 2003/10/24 23:36:43 pasky Exp $ */
+/* $Id: dialogs.c,v 1.45 2003/10/24 23:39:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -467,19 +467,19 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = history_dialog_abort_handler;
 	dlg->udata = ses;
 
-	set_dlg_button(dlg, n, B_ENTER, push_goto_button, _("Goto", term), ses);
-	set_dlg_button(dlg, n, B_ENTER, push_info_button, _("Info", term), NULL);
-	set_dlg_button(dlg, n, B_ENTER, push_delete_button, _("Delete", term), NULL);
-	set_dlg_button(dlg, n, B_ENTER, push_search_button, _("Search", term), NULL);
-	set_dlg_button(dlg, n, B_ENTER, push_toggle_display_button, _("Toggle display", term), NULL);
-	set_dlg_button(dlg, n, B_ENTER, push_clear_button, _("Clear", term), NULL);
-	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, push_goto_button, _("Goto", term), ses);
+	add_dlg_button(dlg, n, B_ENTER, push_info_button, _("Info", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, push_delete_button, _("Delete", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, push_search_button, _("Search", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, push_toggle_display_button, _("Toggle display", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, push_clear_button, _("Clear", term), NULL);
+	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
 	assert(n == HISTORY_BOX_IND);
 
-	set_dlg_listbox(dlg, n, 12, history_dialog_box_build());
+	add_dlg_listbox(dlg, n, 12, history_dialog_box_build());
 
-	set_dlg_end(dlg, n);
+	add_dlg_end(dlg, n);
 
 	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 

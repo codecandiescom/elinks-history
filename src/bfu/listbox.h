@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.31 2003/10/24 23:36:42 pasky Exp $ */
+/* $Id: listbox.h,v 1.32 2003/10/24 23:39:47 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -11,7 +11,7 @@
 #include "util/lists.h"
 
 
-#define set_dlg_listbox(dlg, n, height, content)			\
+#define add_dlg_listbox(dlg, n, height, content)			\
 	do {								\
 		(dlg)->items[n].type = D_BOX;				\
 		(dlg)->items[n].gid = (height);				\

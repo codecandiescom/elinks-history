@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.13 2003/10/24 23:31:09 pasky Exp $ */
+/* $Id: widget.h,v 1.14 2003/10/24 23:39:47 pasky Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -20,7 +20,7 @@ enum widget_type {
 	D_BOX,
 };
 
-#define set_dlg_end(dlg, n)						\
+#define add_dlg_end(dlg, n)						\
 	do {								\
 		(dlg)->items[n].type = D_END;				\
 	} while (0)

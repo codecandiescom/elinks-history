@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.79 2003/10/24 23:36:43 pasky Exp $ */
+/* $Id: dialogs.c,v 1.80 2003/10/24 23:39:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,12 +311,12 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	done_string(&tvalue);
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
-	set_dlg_field(dlg, n, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
+	add_dlg_field(dlg, n, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 
-	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
-	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	set_dlg_end(dlg, n);
+	add_dlg_end(dlg, n);
 
 	assert(n == EDIT_DIALOG_FIELDS_NB);
 
@@ -501,19 +501,19 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = option_dialog_abort_handler;
 	dlg->udata = ses;
 
-	set_dlg_button(dlg, n, B_ENTER, push_info_button, _("Info", term), ses);
-	set_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
-	set_dlg_button(dlg, n, B_ENTER, push_add_button, _("Add", term), ses);
-	set_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
-	set_dlg_button(dlg, n, B_ENTER, push_del_button, _("Delete", term), ses);
-	set_dlg_button(dlg, n, B_ENTER, push_save_button, _("Save", term), ses);
-	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, push_info_button, _("Info", term), ses);
+	add_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
+	add_dlg_button(dlg, n, B_ENTER, push_add_button, _("Add", term), ses);
+	add_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
+	add_dlg_button(dlg, n, B_ENTER, push_del_button, _("Delete", term), ses);
+	add_dlg_button(dlg, n, B_ENTER, push_save_button, _("Save", term), ses);
+	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
 	assert(n == OP_BOX_IND);
 
-	set_dlg_listbox(dlg, n, 12, option_dlg_box_build());
+	add_dlg_listbox(dlg, n, 12, option_dlg_box_build());
 
-	set_dlg_end(dlg, n);
+	add_dlg_end(dlg, n);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
@@ -738,17 +738,17 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = kbdbind_dialog_abort_handler;
 	dlg->udata = ses;
 
-	set_dlg_button(dlg, n, B_ENTER, push_kbdbind_add_button, _("Add", term), ses);
-	set_dlg_button(dlg, n, B_ENTER, push_kbdbind_del_button, _("Delete", term), ses);
-	set_dlg_button(dlg, n, B_ENTER, push_kbdbind_toggle_display_button, _("Toggle display", term), ses);
-	set_dlg_button(dlg, n, B_ENTER, push_kbdbind_save_button, _("Save", term), ses);
-	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, push_kbdbind_add_button, _("Add", term), ses);
+	add_dlg_button(dlg, n, B_ENTER, push_kbdbind_del_button, _("Delete", term), ses);
+	add_dlg_button(dlg, n, B_ENTER, push_kbdbind_toggle_display_button, _("Toggle display", term), ses);
+	add_dlg_button(dlg, n, B_ENTER, push_kbdbind_save_button, _("Save", term), ses);
+	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
 	assert(n == KB_BOX_IND);
 
-	set_dlg_listbox(dlg, n, 12, kbdbind_dlg_box_build());
+	add_dlg_listbox(dlg, n, 12, kbdbind_dlg_box_build());
 
-	set_dlg_end(dlg, n);
+	add_dlg_end(dlg, n);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.58 2003/10/24 23:31:10 pasky Exp $ */
+/* $Id: auth.c,v 1.59 2003/10/24 23:39:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,13 +150,13 @@ do_auth_dialog(struct session *ses)
 	dlg->udata2 = a;
 	dlg->refresh_data = ses;
 
-	set_dlg_field(dlg, n, 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
-	set_dlg_field_pass(dlg, n, 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password, NULL);
+	add_dlg_field(dlg, n, 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
+	add_dlg_field_pass(dlg, n, 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password, NULL);
 
-	set_dlg_button(dlg, n, B_ENTER, auth_ok, _("OK", term), NULL);
-	set_dlg_button(dlg, n, B_ESC, auth_cancel, _("Cancel", term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, auth_ok, _("OK", term), NULL);
+	add_dlg_button(dlg, n, B_ESC, auth_cancel, _("Cancel", term), NULL);
 
-	set_dlg_end(dlg, n);
+	add_dlg_end(dlg, n);
 
 	assert(n == AUTH_DLG_SIZE);
 

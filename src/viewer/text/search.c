@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.63 2003/10/24 23:31:12 pasky Exp $ */
+/* $Id: search.c,v 1.64 2003/10/24 23:39:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1116,18 +1116,18 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_to_ml(&ml, hop, NULL);
 
-	set_dlg_field(dlg, n, min, max, check, l, field, history);
+	add_dlg_field(dlg, n, min, max, check, l, field, history);
 
-	set_dlg_checkbox(dlg, n, 1, 0, hop->whether_regex);
-	set_dlg_checkbox(dlg, n, 1, 1, hop->whether_regex);
-	set_dlg_checkbox(dlg, n, 1, 2, hop->whether_regex);
-	set_dlg_checkbox(dlg, n, 2, 1, hop->cases);
-	set_dlg_checkbox(dlg, n, 2, 0, hop->cases);
+	add_dlg_checkbox(dlg, n, 1, 0, hop->whether_regex);
+	add_dlg_checkbox(dlg, n, 1, 1, hop->whether_regex);
+	add_dlg_checkbox(dlg, n, 1, 2, hop->whether_regex);
+	add_dlg_checkbox(dlg, n, 2, 1, hop->cases);
+	add_dlg_checkbox(dlg, n, 2, 0, hop->cases);
 
-	set_dlg_button(dlg, n, B_ENTER, search_dlg_ok, okbutton, fn);
-	set_dlg_button(dlg, n, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);
+	add_dlg_button(dlg, n, B_ENTER, search_dlg_ok, okbutton, fn);
+	add_dlg_button(dlg, n, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);
 
-	set_dlg_end(dlg, n);
+	add_dlg_end(dlg, n);
 
 	assert(n == SEARCH_DLG_SIZE);
 

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.86 2003/10/24 23:31:12 pasky Exp $ */
+/* $Id: core.c,v 1.87 2003/10/24 23:39:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -444,14 +444,14 @@ l_edit_bookmark_dialog(LS)
 	dlg->refresh = (void (*)(void *))dialog_run_lua;
 	dlg->refresh_data = data;
 
-	set_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->cat, NULL);
-	set_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->name, NULL);
-	set_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->url, NULL);
+	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->cat, NULL);
+	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->name, NULL);
+	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->url, NULL);
 
-	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
-	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
+	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
+	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
-	set_dlg_end(dlg, n);
+	add_dlg_end(dlg, n);
 
 	assert(n == L_EDIT_BMK_DLG_SIZE);
 
@@ -589,10 +589,10 @@ l_xdialog(LS)
 		dlg->items[i].data = data->fields[i];
 	}
 
-	set_dlg_button(dlg, i, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
-	set_dlg_button(dlg, i, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
+	add_dlg_button(dlg, i, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
+	add_dlg_button(dlg, i, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
-	set_dlg_end(dlg, i);
+	add_dlg_end(dlg, i);
 
 	assert(i == nitems - 1);
 

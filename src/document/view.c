@@ -1,5 +1,5 @@
 /* Document view */
-/* $Id: view.c,v 1.119 2003/10/31 12:42:41 jonas Exp $ */
+/* $Id: view.c,v 1.120 2003/10/31 12:57:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "document/document.h"
 #include "document/html/frames.h"
 #include "document/html/renderer.h"
+#include "document/view.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "terminal/tab.h"
@@ -268,7 +269,6 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 	document_view->x = document->options.x;
 	document_view->y = document->options.y;
 }
-
 
 void
 html_interpret(struct session *ses)

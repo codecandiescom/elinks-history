@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.82 2004/07/18 16:34:45 pasky Exp $ */
+/* $Id: parse.c,v 1.83 2004/07/18 18:29:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ next_attr:
 	if (isquote(*e)) {
 		unsigned char quote = *e;
 
-quoted_value:
+/* quoted_value: */
 		next_char();
 		while (*e != quote) next_char();
 		next_char();

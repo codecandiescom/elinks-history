@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.13 2004/09/23 15:25:27 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.14 2004/09/23 16:23:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -337,6 +337,20 @@ spidermonkey_put_interpreter(struct ecmascript_interpreter *interpreter)
 	ctx = interpreter->backend_data;
 	JS_DestroyContext(ctx);
 	interpreter->backend_data = NULL;
+}
+
+
+void
+spidermonkey_eval(struct ecmascript_interpreter *interpreter,
+                  struct string *code)
+{
+	JSContext *ctx;
+	jsval rval;
+
+	assert(interpreter);
+	ctx = interpreter->backend_data;
+	JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
+	                  code->source, code->length, "", 0, &rval);
 }
 
 

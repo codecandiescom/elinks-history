@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.470 2004/06/30 16:46:44 zas Exp $ */
+/* $Id: renderer.c,v 1.471 2004/07/01 16:29:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,7 +124,7 @@ void put_chars(struct part *, unsigned char *, int);
 #define ALIGN_SPACES(x, o, n) mem_align_alloc(x, o, n, unsigned char, SPACES_GRANULARITY)
 
 static int
-realloc_line(struct document *document, int y, int x)
+realloc_line(struct document *document, int y, int length)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char *pos, *end;
@@ -135,16 +135,16 @@ realloc_line(struct document *document, int y, int x)
 
 	line = &document->data[y];
 
-	if (x < line->length)
+	if (length < line->length)
 		return 0;
 
-	if (!ALIGN_LINE(&line->chars, line->length, x + 1))
+	if (!ALIGN_LINE(&line->chars, line->length, length + 1))
 		return -1;
 
 	/* We cannot rely on the aligned allocation to clear the members for us
 	 * since for line splitting we simply trim the length. Question is if
 	 * it is better to to clear the line after the splitting or here. */
-	end = &line->chars[x];
+	end = &line->chars[length];
 	end->data = ' ';
 	end->attr = 0;
 	set_term_color(end, &colors, 0, document->options.color_mode);
@@ -153,7 +153,7 @@ realloc_line(struct document *document, int y, int x)
 		copy_screen_chars(pos, end, 1);
 	}
 
-	line->length = x + 1;
+	line->length = length + 1;
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.33 2003/12/25 13:10:17 jonas Exp $ */
+/* $Id: status.c,v 1.34 2003/12/26 09:55:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,7 +266,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 {
 	struct color_pair *normal_color = get_bfu_color(term, "tabs.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
-	struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
+	struct color_pair *fresh_color = get_bfu_color(term, "tabs.unvisited");
 	struct color_pair *tabsep_color = get_bfu_color(term, "tabs.separator");
 	struct session_status *status = &ses->status;
 	int tab_width = int_max(1, term->width / tabs_count);
@@ -278,9 +278,10 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 	int xpos = 0;
 
 	for (tab_num = 0; tab_num < tabs_count; tab_num++) {
-		struct color_pair *color;
+		struct color_pair *color = normal_color;
 		struct window *tab = get_tab_by_number(term, tab_num);
 		struct document_view *doc_view;
+		struct session *tab_ses = tab->data;
 		int actual_tab_width = tab_width;
 		unsigned char *msg;
 		int msglen;
@@ -291,7 +292,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 			tab_remain_width -= tab_add;
 		}
 
-		doc_view = tab->data ? current_frame(tab->data) : NULL;
+		doc_view = tab_ses ? current_frame(tab_ses) : NULL;
 
 		if (doc_view) {
 			if (doc_view->document->title
@@ -309,19 +310,21 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 			xpos += 1;
 		}
 
-		/* TODO: fresh_color, for tabs that have not been
-		 * selected since they completed loading. -- Miciah */
 		if (tab_num == term->current_tab) {
 			color = selected_color;
+
 		} else {
 			struct download *stat;
 
 			stat = get_current_download(tab->data);
 
-			if (stat && stat->state != S_OK)
-				color = loading_color;
-			else
-				color = normal_color;
+			/* Set incomplete download to unvisited */
+			if (tab_ses && tab_ses->status.visited
+			    && stat && stat->state != S_OK)
+				tab_ses->status.visited = 0;
+
+			if (!tab_ses || !tab_ses->status.visited)
+				color = fresh_color;
 		}
 
 		draw_area(term, xpos, ypos, actual_tab_width, 1, ' ', 0, color);
@@ -478,6 +481,9 @@ print_screen_status(struct session *ses)
 		if (status->show_leds)
 			display_leds(ses, status);
 #endif
+
+		if (!ses->status.visited)
+			ses->status.visited = 1;
 	}
 
 	if (status->show_tabs_bar) {

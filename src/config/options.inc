@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.48 2003/12/24 22:06:30 pasky Exp $ */
+/* $Id: options.inc,v 1.49 2003/12/26 09:55:26 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1263,6 +1263,19 @@ struct option_info config_options_info[] = {
 	INIT_OPT_TREE("ui.colors.color", N_("Tabs bar"),
 		"tabs", 0,
 		N_("Tabs bar colors.")),
+
+	INIT_OPT_TREE("ui.colors.color.tabs", N_("Unvisited tab"),
+		"unvisited", 0,
+		N_("Tab colors for tabs that have not completed or has not been\n"
+		   "selected since they completed loading.")),
+
+	INIT_OPT_COLOR("ui.colors.color.tabs.unvisited", N_("Text color"),
+		"text", 0, "darkred",
+		N_("Default text color.")),
+
+	INIT_OPT_COLOR("ui.colors.color.tabs.unvisited", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color.")),
 
 	INIT_OPT_TREE("ui.colors.color.tabs", N_("Unselected tab"),
 		"normal", 0,

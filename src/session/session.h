@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.85 2003/12/13 00:32:42 jonas Exp $ */
+/* $Id: session.h,v 1.86 2003/12/26 09:55:27 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -99,6 +99,8 @@ struct session_status {
 	struct led_panel leds;
 	struct led *ssl_led;
 #endif
+	/* Has the tab been visited yet. */
+	unsigned int visited:1;
 };
 
 /* This is one of the building stones of ELinks architecture --- this structure

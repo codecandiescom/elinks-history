@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.19 2002/12/07 20:05:59 pasky Exp $ */
+/* $Id: string.c,v 1.20 2002/12/08 17:54:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,10 +45,10 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 	if (len < 0) { warnfl("memacpy len < 1"); len = 0; }
 
 	m = debug_mem_alloc(f, l, len + 1);
-	if (!m) return NULL;
-
-	if (src && len) memcpy(m, src, len);
-	m[len] = 0;
+	if (m) {
+		if (src && len) memcpy(m, src, len);
+		m[len] = 0;
+	}
 
 	return m;
 }
@@ -95,10 +95,10 @@ memacpy(unsigned char *src, int len)
 #endif
 
 	m = mem_alloc(len + 1);
-	if (!m) return NULL;
-
-	if (src && len) memcpy(m, src, len);
-	m[len] = 0;
+	if (m) {
+		if (src && len) memcpy(m, src, len);
+		m[len] = 0;
+	}
 
 	return m;
 }
@@ -147,9 +147,10 @@ add_to_strn(unsigned char **s, unsigned char *a)
 
 	p = mem_realloc(*s, strlen(*s) + strlen(a) + 1);
 
-	if (!p) return;
-	strcat(p, a);
-	*s = p;
+	if (p) {
+		strcat(p, a);
+		*s = p;
+	}
 }
 
 
@@ -187,17 +188,14 @@ straconcat(unsigned char *str, ...)
 
 	va_start(ap, str);
 	while ((a = va_arg(ap, unsigned char *))) {
-		unsigned char *p;
-
-		len += strlen(a);
-		p = mem_realloc(s, len);
-		if (!p) {
-			mem_free(s);
-			va_end(ap);
-			return NULL;
+		if (*a) {
+			len += strlen(a);
+			s = mem_realloc(s, len);
+			if (s)
+				strcat(s, a);
+			else
+				break;
 		}
-		s = p;
-		strcat(s, a);
 	}
 
 	va_end(ap);
@@ -213,9 +211,8 @@ debug_init_str(unsigned char *file, int line)
 {
 	unsigned char *p = debug_mem_alloc(file, line, ALLOC_GR);
 
-	if (!p) return NULL;
+	if (p) *p = 0;
 
-	*p = 0;
 	return p;
 }
 #else
@@ -224,9 +221,8 @@ init_str()
 {
 	unsigned char *p = mem_alloc(ALLOC_GR);
 
-	if (!p) return NULL;
+	if (p) *p = 0;
 
-	*p = 0;
 	return p;
 }
 #endif

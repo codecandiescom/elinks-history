@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.112 2004/12/18 02:33:00 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.113 2004/12/18 14:25:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -671,8 +671,9 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 static JSBool
 form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	JSObject *parent_doc = JS_GetParent(ctx, obj);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct document_view *doc_view = vs->doc_view;
 	struct form *form = JS_GetPrivate(ctx, obj);
 	VALUE_TO_JSVAL_START;
@@ -690,8 +691,9 @@ form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 static JSBool
 form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	JSObject *parent_doc = JS_GetParent(ctx, obj);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct document_view *doc_view = vs->doc_view;
 	struct session *ses = doc_view->session;
 	struct form *form = JS_GetPrivate(ctx, obj);
@@ -732,9 +734,10 @@ static const JSPropertySpec forms_props[] = {
 };
 
 static JSObject *
-get_form_object(JSContext *ctx, JSObject *parent, struct form *form)
+get_form_object(JSContext *ctx, JSObject *jsdoc, struct form *form)
 {
-	JSObject *jsform = JS_NewObject(ctx, (JSClass *) &form_class, NULL, parent);
+	/* jsdoc ('document') is form's parent */
+	JSObject *jsform = JS_NewObject(ctx, (JSClass *) &form_class, NULL, jsdoc);
 
 	JS_DefineFunctions(ctx, jsform, (JSFunctionSpec *)&form_funcs);
 	JS_SetPrivate(ctx, jsform, form);
@@ -777,8 +780,9 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 static JSBool
 forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	JSObject *parent_doc = JS_GetParent(ctx, obj);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct form *form;
@@ -796,7 +800,7 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	foreach (form, document->forms) {
 		counter++;
 		if (counter == index) {
-			P_OBJECT(get_form_object(ctx, obj, form));
+			P_OBJECT(get_form_object(ctx, parent_doc, form));
 
 			VALUE_TO_JSVAL_END(rval);
 			/* This returns. */
@@ -809,8 +813,9 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 static JSBool
 forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
-	JSObject *parent = JS_GetParent(ctx, obj);
-	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	JSObject *parent_doc = JS_GetParent(ctx, obj);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct form *form;
@@ -826,7 +831,7 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 
 	foreach (form, document->forms) {
 		if (form->name && !strcasecmp(v.string, form->name)) {
-			P_OBJECT(get_form_object(ctx, obj, form));
+			P_OBJECT(get_form_object(ctx, parent_doc, form));
 
 			VALUE_TO_JSVAL_END(rval);
 			/* This returns. */
@@ -885,16 +890,10 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		}
 #endif
 		foreach (form, document->forms) {
-			jsval forms;
-			JSBool success;
-
 			if (!form->name || strcasecmp(v.string, form->name))
 				continue;
 
-			success = JS_GetProperty(ctx, obj, "forms", &forms);
-			assert(success == JS_TRUE);
-
-			P_OBJECT(get_form_object(ctx, JSVAL_TO_OBJECT(forms), form));
+			P_OBJECT(get_form_object(ctx, obj, form));
 			goto convert;
 		}
 		goto bye;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.367 2004/11/19 17:08:47 witekfl Exp $ */
+/* $Id: http.c,v 1.368 2004/11/19 23:40:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -401,9 +401,7 @@ http_send_header(struct connection *conn)
 		unsigned char *passwd = get_opt_str("protocol.http.proxy.passwd");
 
 		if (proxy_auth.digest) {
-			unsigned char *cnonce;
-			unsigned char *ha1;
-			unsigned char *response;
+			unsigned char *challenge;
 			int userlen = int_min(strlen(user), HTTP_AUTH_USER_MAXLEN - 1);
 			int passwordlen = int_min(strlen(passwd), HTTP_AUTH_PASSWORD_MAXLEN - 1);
 
@@ -414,39 +412,17 @@ http_send_header(struct connection *conn)
 				memcpy(proxy_auth.password, passwd, passwordlen);
 			proxy_auth.password[passwordlen] = '\0';
 
-			cnonce = random_cnonce();
-			ha1 = digest_calc_ha1(&proxy_auth, cnonce);
-			response = digest_calc_response(&proxy_auth, uri, ha1, cnonce);
+			/* FIXME: @uri is the proxied URI. Maybe the passed URI
+			 * should be the proxy URI aka conn->uri. --jonas */
+			challenge = get_http_auth_digest_challenge(&proxy_auth, uri);
+			if (challenge) {
+				add_to_string(&header, "Proxy-Authorization: Digest ");
+				add_to_string(&header, challenge);
+				add_crlf_to_string(&header);
 
-			add_to_string(&header, "Proxy-Authorization: Digest ");
-			add_to_string(&header, "username=\"");
-			add_to_string(&header, proxy_auth.user);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "realm=\"");
-			add_to_string(&header, proxy_auth.realm);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "nonce=\"");
-			add_to_string(&header, proxy_auth.nonce);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "uri=\"/");
-			add_bytes_to_string(&header, uri->data, uri->datalen);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "qop=auth, nc=00000001, ");
-			add_to_string(&header, "cnonce=\"");
-			add_to_string(&header, cnonce);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "response=\"");
-			add_to_string(&header, response);
-			add_to_string(&header, "\"");
-			if (proxy_auth.opaque) {
-				add_to_string(&header, ", opaque=\"");
-				add_to_string(&header, proxy_auth.opaque);
-				add_to_string(&header, "\"");
+				mem_free(challenge);
 			}
-			add_crlf_to_string(&header);
-			mem_free_if(cnonce);
-			mem_free_if(ha1);
-			mem_free_if(response);
+
 		} else {
 			if (user[0]) {
 				unsigned char *proxy_data;
@@ -648,39 +624,16 @@ http_send_header(struct connection *conn)
 	if (entry) {
 #ifdef CONFIG_SSL_DIGEST
 		if (entry->digest) {
-			unsigned char *cnonce = random_cnonce();
-			unsigned char *ha1 = digest_calc_ha1(entry, cnonce);
-			unsigned char *response = digest_calc_response(entry, uri, ha1, cnonce);
+			unsigned char *challenge;
 
-			add_to_string(&header, "Authorization: Digest ");
-			add_to_string(&header, "username=\"");
-			add_to_string(&header, entry->user);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "realm=\"");
-			add_to_string(&header, entry->realm);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "nonce=\"");
-			add_to_string(&header, entry->nonce);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "uri=\"/");
-			add_bytes_to_string(&header, uri->data, uri->datalen);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "qop=auth, nc=00000001, ");
-			add_to_string(&header, "cnonce=\"");
-			add_to_string(&header, cnonce);
-			add_to_string(&header, "\", ");
-			add_to_string(&header, "response=\"");
-			add_to_string(&header, response);
-			add_to_string(&header, "\"");
-			if (entry->opaque) {
-				add_to_string(&header, ", opaque=\"");
-				add_to_string(&header, entry->opaque);
-				add_to_string(&header, "\"");
+			challenge = get_http_auth_digest_challenge(entry, uri);
+			if (challenge) {
+				add_to_string(&header, "Authorization: Digest ");
+				add_to_string(&header, challenge);
+				add_crlf_to_string(&header);
+
+				mem_free(challenge);
 			}
-			add_crlf_to_string(&header);
-			mem_free_if(cnonce);
-			mem_free_if(ha1);
-			mem_free_if(response);
 		} else
 #endif
 		{

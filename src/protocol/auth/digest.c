@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.14 2004/11/17 21:09:04 zas Exp $ */
+/* $Id: digest.c,v 1.15 2004/11/19 23:40:05 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -108,4 +108,53 @@ digest_calc_response(struct auth_entry *entry, struct uri *uri,
 	MD5_Final(Ha2, &MD5Ctx);
 	mem_free_if(Ha2_hex);
 	return convert_hex(Ha2);
+}
+
+
+unsigned char *
+get_http_auth_digest_challenge(struct auth_entry *entry, struct uri *uri)
+{
+	struct string string;
+	unsigned char *cnonce;
+	unsigned char *ha1;
+	unsigned char *response;
+
+	if (!init_string(&string))
+		return NULL;
+
+	cnonce = random_cnonce();
+	ha1 = digest_calc_ha1(entry, cnonce);
+	response = digest_calc_response(entry, uri, ha1, cnonce);
+	mem_free_if(ha1);
+
+	add_to_string(&string, "username=\"");
+	add_to_string(&string, entry->user);
+	add_to_string(&string, "\", ");
+	add_to_string(&string, "realm=\"");
+	add_to_string(&string, entry->realm);
+	add_to_string(&string, "\", ");
+	add_to_string(&string, "nonce=\"");
+	add_to_string(&string, entry->nonce);
+	add_to_string(&string, "\", ");
+	add_to_string(&string, "uri=\"/");
+	add_bytes_to_string(&string, uri->data, uri->datalen);
+	add_to_string(&string, "\", ");
+	add_to_string(&string, "qop=auth, nc=00000001, ");
+	add_to_string(&string, "cnonce=\"");
+	add_to_string(&string, cnonce);
+	add_to_string(&string, "\", ");
+	add_to_string(&string, "response=\"");
+	add_to_string(&string, response);
+	add_to_string(&string, "\"");
+
+	mem_free_if(cnonce);
+	mem_free_if(response);
+
+	if (entry->opaque) {
+		add_to_string(&string, ", opaque=\"");
+		add_to_string(&string, entry->opaque);
+		add_to_string(&string, "\"");
+	}
+
+	return string.source;
 }

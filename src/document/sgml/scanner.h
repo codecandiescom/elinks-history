@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.2 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: scanner.h,v 1.3 2004/09/25 23:51:04 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_SGML_SCANNER_H
 #define EL__DOCUMENT_SGML_SCANNER_H
@@ -57,8 +57,10 @@ enum sgml_token_type {
 
 extern struct scanner_info sgml_scanner_info;
 
+/* Treat '<' as more valuable then '>' so that scanning of '<a<b>' using
+ * skipping to next '>' will stop at the second '<'. */
 #define get_sgml_precedence(token_type) \
-	((token_type) == '<' ? (1 << 10) : \
+	((token_type) == '<' ? (1 << 11) : \
 	 (token_type) == '>' ? (1 << 10) : 0)
 
 #define skip_sgml_tokens(scanner, type) \

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-27 15:36+0100\n"
+"POT-Creation-Date: 2003-12-27 16:47+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -38,7 +38,7 @@ msgstr "Info"
 #: src/dialogs/document.c:317 src/dialogs/edit.c:99 src/dialogs/info.c:48
 #: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:116
 #: src/dialogs/menu.c:602 src/dialogs/menu.c:633 src/dialogs/mime.c:159
-#: src/dialogs/options.c:190 src/dialogs/options.c:264
+#: src/dialogs/options.c:190 src/dialogs/options.c:263
 #: src/formhist/dialogs.c:132 src/protocol/auth/dialogs.c:77
 #: src/protocol/protocol.c:63 src/protocol/user.c:158 src/protocol/user.c:174
 #: src/sched/download.c:185 src/sched/download.c:273 src/sched/download.c:298
@@ -50,8 +50,8 @@ msgstr "Info"
 #: src/viewer/text/search.c:861 src/viewer/text/search.c:889
 #: src/viewer/text/search.c:911 src/viewer/text/search.c:947
 #: src/viewer/text/search.c:1237 src/viewer/text/search.c:1248
-#: src/viewer/text/textarea.c:272 src/viewer/text/view.c:818
-#: src/viewer/text/view.c:1567
+#: src/viewer/text/textarea.c:272 src/viewer/text/view.c:820
+#: src/viewer/text/view.c:1576
 msgid "OK"
 msgstr "OK"
 
@@ -267,12 +267,12 @@ msgstr "Nom du dossier"
 #: src/config/dialogs.c:337 src/config/dialogs.c:483 src/config/dialogs.c:538
 #: src/dialogs/edit.c:103 src/dialogs/menu.c:116 src/dialogs/menu.c:602
 #: src/dialogs/menu.c:633 src/dialogs/mime.c:160 src/dialogs/options.c:193
-#: src/dialogs/options.c:265 src/protocol/auth/dialogs.c:78
+#: src/dialogs/options.c:264 src/protocol/auth/dialogs.c:78
 #: src/sched/download.c:485 src/sched/download.c:984 src/sched/download.c:993
 #: src/sched/download.c:1020 src/sched/download.c:1032
 #: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
 #: src/scripting/lua/core.c:720 src/viewer/text/search.c:1237
-#: src/viewer/text/search.c:1248 src/viewer/text/view.c:818
+#: src/viewer/text/search.c:1248 src/viewer/text/view.c:820
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -1279,106 +1279,114 @@ msgid "Save formatted document"
 msgstr "Enregistrer le document formaté"
 
 #: src/config/kbdbind.c:473
+msgid "Save options"
+msgstr "Enregistrer les options"
+
+#: src/config/kbdbind.c:474
 msgid "Scroll down"
 msgstr "Défiler vers le bas"
 
-#: src/config/kbdbind.c:474
+#: src/config/kbdbind.c:475
 msgid "Scroll left"
 msgstr "Défiler vers la gauche"
 
-#: src/config/kbdbind.c:475
+#: src/config/kbdbind.c:476
 msgid "Scroll right"
 msgstr "Défiler vers la droite"
 
-#: src/config/kbdbind.c:476
+#: src/config/kbdbind.c:477
 msgid "Scroll up"
 msgstr "Défiler vers le haut"
 
-#: src/config/kbdbind.c:477
+#: src/config/kbdbind.c:478
 msgid "Search for a text pattern"
 msgstr "Recherche de texte"
 
-#: src/config/kbdbind.c:478
+#: src/config/kbdbind.c:479
 msgid "Search backwards for a text pattern"
 msgstr "Recherche de texte (vers le haut)"
 
-#: src/config/kbdbind.c:479
+#: src/config/kbdbind.c:480
 msgid "Search link text by typing ahead"
 msgstr "Rechercher un lien par préfrappe"
 
-#: src/config/kbdbind.c:480
+#: src/config/kbdbind.c:481
 msgid "Select current highlighted item"
 msgstr "Sélectionne l'item courant"
 
-#: src/config/kbdbind.c:481 src/terminal/tab.c:184
+#: src/config/kbdbind.c:482
+msgid "Show terminal options dialog"
+msgstr "Montrer les options du terminal"
+
+#: src/config/kbdbind.c:483 src/terminal/tab.c:184
 msgid "Close tab"
 msgstr "Fermer un onglet"
 
-#: src/config/kbdbind.c:482
+#: src/config/kbdbind.c:484
 msgid "Close all tabs but the current one"
 msgstr "Fermer les autres onglets"
 
-#: src/config/kbdbind.c:483
+#: src/config/kbdbind.c:485
 msgid "Open the tab menu"
 msgstr "Ouvrir le menu des onglets"
 
-#: src/config/kbdbind.c:484
+#: src/config/kbdbind.c:486
 msgid "Next tab"
 msgstr "Onglet suivant"
 
-#: src/config/kbdbind.c:485
+#: src/config/kbdbind.c:487
 msgid "Previous tab"
 msgstr "Onglet précédent"
 
-#: src/config/kbdbind.c:486
+#: src/config/kbdbind.c:488
 msgid "Toggle displaying of links to images"
 msgstr "Commuter l'affichage des liens vers les images."
 
-#: src/config/kbdbind.c:487
+#: src/config/kbdbind.c:489
 msgid "Toggle rendering of tables"
 msgstr "Commuter le rendu des tableaux"
 
-#: src/config/kbdbind.c:488
+#: src/config/kbdbind.c:490
 msgid "Toggle usage of document specific colors"
 msgstr "Commuter l'utilisation des couleurs spécifiques au document"
 
-#: src/config/kbdbind.c:489
+#: src/config/kbdbind.c:491
 msgid "Toggle rendering page as HTML / plain text"
 msgstr "Commuter le rendu de la page en HTML/texte plein"
 
-#: src/config/kbdbind.c:490
+#: src/config/kbdbind.c:492
 msgid "Toggle displaying of links numbers"
 msgstr "Commuter l'affichage des numéros de liens"
 
-#: src/config/kbdbind.c:491
+#: src/config/kbdbind.c:493
 msgid "Go forward in the unhistory"
 msgstr "Avancer dans l'historique inverse"
 
-#: src/config/kbdbind.c:492
+#: src/config/kbdbind.c:494
 msgid "Collapse item"
 msgstr "Rétracter l'item"
 
-#: src/config/kbdbind.c:493
+#: src/config/kbdbind.c:495
 msgid "Move cursor upwards"
 msgstr "Déplacer le curseur vers le haut"
 
-#: src/config/kbdbind.c:494
+#: src/config/kbdbind.c:496
 msgid "View the current image"
 msgstr "Voir l'image courante"
 
-#: src/config/kbdbind.c:495
+#: src/config/kbdbind.c:497
 msgid "Maximize the current frame"
 msgstr "Maximiser le cadre courant"
 
-#: src/config/kbdbind.c:688
+#: src/config/kbdbind.c:690
 msgid "Unrecognised keymap"
 msgstr "Association non reconnue"
 
-#: src/config/kbdbind.c:690
+#: src/config/kbdbind.c:692
 msgid "Error parsing keystroke"
 msgstr "Erreur d'interprétation de touche"
 
-#: src/config/kbdbind.c:692
+#: src/config/kbdbind.c:694
 msgid "Unrecognised action (internal error)"
 msgstr "Action non reconnue (erreur interne)"
 
@@ -4502,7 +4510,7 @@ msgstr "Transparence"
 msgid "UTF-8 I/O"
 msgstr "E/S UTF-8"
 
-#: src/dialogs/options.c:258
+#: src/dialogs/options.c:257
 msgid "Resize terminal"
 msgstr "Redimensionner le terminal"
 
@@ -5995,19 +6003,19 @@ msgstr "Recherche du texte"
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:817
+#: src/viewer/text/view.c:819
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:817
+#: src/viewer/text/view.c:819
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1564
+#: src/viewer/text/view.c:1573
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1565
+#: src/viewer/text/view.c:1574
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.243 2004/10/01 16:03:47 pasky Exp $ */
+/* $Id: form.c,v 1.244 2004/10/17 21:05:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1259,8 +1259,10 @@ field_op(struct session *ses, struct document_view *doc_view,
 			/* FIXME: We should maybe have ACT_EDIT_ENTER_RELOAD */
 			if ((has_form_submit(doc_view->document, fc)
 			      && !get_opt_int("document.browse.forms.auto_submit"))
-			    || goto_current_link(ses, doc_view, 0))
+			    || goto_current_link(ses, doc_view, 0)) {
+				ses->insert_mode = INSERT_MODE_OFF;
 				status = FRAME_EVENT_OK;
+			}
 			break;
 		case ACT_EDIT_BACKSPACE:
 			if (form_field_is_readonly(fc)) {

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.21 2003/07/10 03:02:55 jonas Exp $ */
+/* $Id: auth.c,v 1.22 2003/07/10 04:28:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,10 +12,13 @@
 #include "dialogs/auth.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/http/auth.h"
+#include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "protocol/url.h"
 #include "sched/session.h"
 #include "util/base64.h"
+#include "util/conv.h"
+#include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -25,41 +28,35 @@ INIT_LIST_HEAD(http_auth_basic_list);
 /* Returns a valid host url for http authentification or NULL. */
 /* FIXME: This really belongs to url.c, but it would look alien there. */
 static unsigned char *
-get_auth_url(unsigned char *url)
+get_auth_url(struct uri *uri)
 {
-	unsigned char *protocol = get_protocol_name(url);
-	unsigned char *host = get_host_name(url);
-	unsigned char *port = get_port_str(url);
-	unsigned char *newurl = NULL;
+	unsigned char *str = init_str();
+	int len = 0;
 
-	if (!protocol || !*protocol || !host || !*host) goto end;
+	if (!str) return NULL;
+	assert(uri->protocol && uri->protocollen && uri->host && uri->hostlen);
+	if_assert_failed { mem_free(str); return NULL; }
 
-	newurl = straconcat(protocol, "://", host, NULL);
-	if (!newurl) goto end;
+	add_bytes_to_str(&str, &len, uri->protocol, uri->protocollen);
+	add_to_str(&str, &len, "://");
+	add_bytes_to_str(&str, &len, uri->host, uri->hostlen);
 
-	if (port && *port) {
-		add_to_strn(&newurl, ":");
-		add_to_strn(&newurl, port);
+	if (uri->port && uri->portlen) {
+		add_chr_to_str(&str, &len, ':');
+		add_bytes_to_str(&str, &len, uri->port, uri->portlen);
 	} else {
 		/* TODO Use get_protocol_port() and ulongcat --jonas */
-		if (!strcasecmp(protocol, "http")) {
+		if (!strcasecmp(uri->protocol, "http")) {
 			/* RFC2616 section 3.2.2
 			 * If the port is empty or not given, port 80 is
 			 * assumed. */
-			add_to_strn(&newurl, ":");
-			add_to_strn(&newurl, "80");
-		} else if (!strcasecmp(protocol, "https")) {
-			add_to_strn(&newurl, ":");
-			add_to_strn(&newurl, "443");
+			add_to_str(&str, &len, ":80");
+		} else if (!strcasecmp(uri->protocol, "https")) {
+			add_to_str(&str, &len, ":443");
 		}
 	}
 
-end:
-	if (protocol) mem_free(protocol);
-	if (host) mem_free(host);
-	if (port) mem_free(port);
-
-	return newurl;
+	return str;
 }
 
 
@@ -110,7 +107,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	struct http_auth_basic *entry;
 	unsigned char *user = memacpy(uri->user, uri->userlen);
 	unsigned char *pass = memacpy(uri->password, uri->passwordlen);
-	unsigned char *newurl = get_auth_url(uri->protocol);
+	unsigned char *newurl = get_auth_url(uri);
 	int ret = ADD_AUTH_ERROR;
 
 	if (!newurl || !user || !pass) goto end;
@@ -204,7 +201,7 @@ find_auth(struct uri *uri)
 {
 	struct http_auth_basic *entry = NULL;
 	unsigned char *uid, *ret = NULL;
-	unsigned char *newurl = get_auth_url(uri->protocol);
+	unsigned char *newurl = get_auth_url(uri);
 	unsigned char *user = memacpy(uri->user, uri->userlen);
 	unsigned char *pass = memacpy(uri->password, uri->passwordlen);
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.498 2004/06/12 15:16:50 jonas Exp $ */
+/* $Id: session.c,v 1.499 2004/06/12 16:06:14 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1140,11 +1140,10 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 	struct uri *uri;
 	int length;
 
-	/* Not looking at anything */
-	if (!have_location(ses))
-		return NULL;
+	uri = have_location(ses) ? cur_loc(ses)->vs.uri : ses->loading_uri;
 
-	uri = cur_loc(ses)->vs.uri;
+	/* Not looking or loading anything */
+	if (!uri) return NULL;
 
 	/* Ensure that the url size is not greater than str_size.
 	 * We can't just happily strncpy(str, here, str_size)

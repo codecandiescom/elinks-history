@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.76 2003/10/27 02:17:52 jonas Exp $ */
+/* $Id: error.c,v 1.77 2003/12/21 12:51:56 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -31,13 +31,13 @@
 unsigned char full_static_version[1024] = "ELinks " VERSION_STRING;
 
 static void
-er(int bell, unsigned char *fmt, va_list params)
+er(int bell, int sleep, unsigned char *fmt, va_list params)
 {
 	if (bell) fputc(7, stderr);
 	vfprintf(stderr, fmt, params);
 	fputc('\n', stderr);
 	fflush(stderr);
-	sleep(1);
+	if (sleep) sleep(1);
 }
 
 int errline;
@@ -54,7 +54,23 @@ elinks_debug(unsigned char *fmt, ...)
 	snprintf(errbuf, sizeof(errbuf), "DEBUG MESSAGE at %s:%d: %s",
 		 errfile, errline, fmt);
 
-	er(0, errbuf, params);
+	er(0, 0, errbuf, params);
+
+	va_end(params);
+}
+
+void
+elinks_wdebug(unsigned char *fmt, ...)
+{
+	unsigned char errbuf[4096];
+	va_list params;
+
+	va_start(params, fmt);
+
+	snprintf(errbuf, sizeof(errbuf), "DEBUG MESSAGE at %s:%d: %s",
+		 errfile, errline, fmt);
+
+	er(0, 1, errbuf, params);
 
 	va_end(params);
 }
@@ -70,7 +86,7 @@ elinks_error(unsigned char *fmt, ...)
 	snprintf(errbuf, sizeof(errbuf), "ERROR at %s:%d: %s",
 		 errfile, errline, fmt);
 
-	er(1, errbuf, params);
+	er(1, 1, errbuf, params);
 
 	va_end(params);
 }
@@ -87,7 +103,7 @@ elinks_internal(unsigned char *fmt, ...)
 		 "\033[1mINTERNAL ERROR\033[0m at %s:%d: %s",
 		 errfile, errline, fmt);
 
-	er(1, errbuf, params);
+	er(1, 1, errbuf, params);
 
 	va_end(params);
 #ifdef DEBUG

@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.35 2003/10/27 02:17:52 jonas Exp $ */
+/* $Id: error.h,v 1.36 2003/12/21 12:51:56 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -21,6 +21,15 @@ extern unsigned char *errfile;
 #undef debug
 #define debug errfile = __FILE__, errline = __LINE__, elinks_debug
 void elinks_debug(unsigned char *fmt, ...);
+
+/* @wdebug(format_string) is used for printing of debugging information, akin
+ * to debug(). However, it sleep(1)s, therefore being useful when it is going
+ * to be overdrawn or so. It should not be used anywhere in the official
+ * codebase (although it is often lying there commented out, as it may get
+ * handy). */
+#undef wdebug
+#define wdebug errfile = __FILE__, errline = __LINE__, elinks_wdebug
+void elinks_wdebug(unsigned char *fmt, ...);
 
 /* @error(format_string) is used to report non-fatal errors during the ELinks
  * run. It tries to (not that agressively) draw user's attention to the error,

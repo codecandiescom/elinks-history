@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.253 2004/04/08 02:52:52 jonas Exp $ */
+/* $Id: download.c,v 1.254 2004/04/08 13:05:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,13 @@ get_download_ses(struct file_download *file_download)
 void
 abort_download(struct file_download *file_download, int stop)
 {
+#if 0
+	/* When hacking to cleanup the download code, remove lots of duplicated
+	 * code and implement stuff from bug 435 we should reintroduce this
+	 * assertion. Currently it will trigger often and shows that the
+	 * download dialog code potentially could access free()d memory. */
 	assert(!is_object_used(file_download));
+#endif
 
 	if (file_download->box_item)
 		done_listbox_item(&download_browser, file_download->box_item);

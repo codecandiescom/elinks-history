@@ -1,3 +1,10 @@
+Thu Jan 31 22:32:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	make UL, DIR, MENU, OL and DL _block_ elements, thus leaving a line
+	after themselves
+
 Thu Jan 31 22:24:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bookmarks.c:

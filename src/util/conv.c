@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.33 2003/05/14 13:06:56 pasky Exp $ */
+/* $Id: conv.c,v 1.34 2003/05/14 13:08:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,8 @@
  *
  * ulongcat(s, NULL, 123, 5, '0') : s = "00123"
  */
-/* The function returns 0 if OK or ideal desired width if truncated. A negative
- * value signs an error. */
+/* The function returns 0 if OK or width needed for the whole number to fit
+ * there, if it had to be truncated. A negative value signs an error. */
 /* TODO: Align to right, left, center... --Zas */
 int inline
 elinks_ulongcat(unsigned char *s, unsigned int *slen,

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.195 2004/06/12 19:07:48 zas Exp $ */
+/* $Id: link.c,v 1.196 2004/06/12 19:14:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,6 @@ set_link(struct document_view *doc_view)
 	if (!current_link_is_visible(doc_view))
 		find_link(doc_view, 1, 0);
 }
-
 
 static void
 draw_link(struct terminal *term, struct document_view *doc_view, int l)
@@ -182,7 +181,6 @@ draw_link(struct terminal *term, struct document_view *doc_view, int l)
 	}
 }
 
-
 void
 free_link(struct document_view *doc_view)
 {
@@ -192,7 +190,6 @@ free_link(struct document_view *doc_view)
 	mem_free_set(&doc_view->link_bg, NULL);
 	doc_view->link_bg_n = 0;
 }
-
 
 void
 clear_link(struct terminal *term, struct document_view *doc_view)
@@ -219,7 +216,6 @@ clear_link(struct terminal *term, struct document_view *doc_view)
 	}
 }
 
-
 void
 draw_current_link(struct terminal *term, struct document_view *doc_view)
 {
@@ -229,7 +225,6 @@ draw_current_link(struct terminal *term, struct document_view *doc_view)
 	draw_searched(term, doc_view);
 	draw_link(term, doc_view, doc_view->vs->current_link);
 }
-
 
 struct link *
 get_first_link(struct document_view *doc_view)
@@ -279,7 +274,6 @@ get_last_link(struct document_view *doc_view)
 			link = doc_view->document->lines2[i];
 	return link;
 }
-
 
 static int
 in_viewx(struct document_view *doc_view, struct link *link)
@@ -375,7 +369,6 @@ next_in_view(struct document_view *doc_view, int p, int d,
 	return 0;
 }
 
-
 void
 set_pos_x(struct document_view *doc_view, struct link *link)
 {
@@ -470,7 +463,6 @@ nolink:
 	doc_view->vs->current_link = -1;
 }
 
-
 struct uri *
 get_link_uri(struct session *ses, struct document_view *doc_view,
 	     struct link *link)
@@ -527,7 +519,6 @@ goto_current_link(struct session *ses, struct document_view *doc_view, int do_re
 	done_uri(uri);
 	return link;
 }
-
 
 enum frame_event_status
 enter(struct session *ses, struct document_view *doc_view, int a)
@@ -617,7 +608,6 @@ get_current_state(struct session *ses)
 	return -1;
 }
 
-
 struct link *
 choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 {
@@ -669,7 +659,6 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 
 	return NULL;
 }
-
 
 /* This is backend of the backend goto_link_number_do() below ;)). */
 void
@@ -851,7 +840,6 @@ end:
 	do_menu(term, mi, ses, 1);
 }
 
-
 /* Return current link's title. Pretty trivial. */
 unsigned char *
 print_current_link_title_do(struct document_view *doc_view, struct terminal *term)
@@ -868,7 +856,6 @@ print_current_link_title_do(struct document_view *doc_view, struct terminal *ter
 
 	return (link && link->title) ? stracpy(link->title) : NULL;
 }
-
 
 unsigned char *
 print_current_link_do(struct document_view *doc_view, struct terminal *term)

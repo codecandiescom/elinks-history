@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.46 2003/10/02 15:18:28 jonas Exp $ */
+/* $Id: color.c,v 1.47 2003/10/02 17:10:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,6 +108,18 @@ static struct color_mode_info color_modes[] = {
 			/* COLOR_ENHANCE */	{ 8, 16 },
 		}
 	},
+
+#ifdef USE_256_COLORS
+	/* COLOR_MODE_16 */
+	{
+		palette256,
+		{
+			/* COLOR_DEFAULT */	{ 128, 256 },
+			/* COLOR_LINK */	{ 128, 128 },
+			/* COLOR_ENHANCE */	{ 128, 256 },
+		}
+	},
+#endif
 };
 
 /* Colors values used in the foreground color table:
@@ -210,6 +222,9 @@ set_term_color16(struct screen_char *schar, enum color_type type,
 	}
 
 	schar->color[0] = (bg << 4 | fg);
+#ifdef USE_256_COLORS
+	schar->color[1] = 0;
+#endif
 }
 
 void
@@ -232,6 +247,17 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	case COLOR_MODE_16:
 		set_term_color16(schar, type, fg, bg);
 		break;
+#ifdef USE_256_COLORS
+	case COLOR_MODE_256:
+		if (fg == bg) {
+			/* TODO: Be smarter!  */
+			fg = (bg == 0) ? 128 : 0;
+		}
+
+		schar->color[0] = fg;
+		schar->color[1] = bg;
+		break;
+#endif
 	default:
 		internal("Invalid color mode");
 	}

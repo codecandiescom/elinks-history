@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.38 2003/11/11 22:03:11 zas Exp $ */
+/* $Id: cache.h,v 1.39 2003/11/11 22:32:39 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -12,6 +12,7 @@
 enum cache_mode {
 	CACHE_MODE_ALWAYS,
 	CACHE_MODE_NORMAL,
+	CACHE_MODE_CHECK_IF_MODIFIED,
 	CACHE_MODE_FORCE_RELOAD,
 	CACHE_MODE_NEVER,
 };

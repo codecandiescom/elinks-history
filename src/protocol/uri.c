@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.68 2003/11/29 00:44:39 pasky Exp $ */
+/* $Id: uri.c,v 1.69 2003/11/29 00:45:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,7 +471,8 @@ transform_file_uri(unsigned char **up, unsigned char *cwd)
 
 insert:
 	cwdlen = strlen(cwd);
-	url = mem_alloc(strlen(*up) + cwdlen + 2); /*XXX:zas: Post data copy. */
+	/* XXX: Post data copy. --zas */
+	url = mem_alloc(strlen(*up) + cwdlen + 2);
 	if (!url) return;
 
 	memcpy(url, *up, 7);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.58 2004/12/13 04:18:00 miciah Exp $ */
+/* $Id: link.c,v 1.59 2004/12/13 04:19:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,6 +232,7 @@ html_img(unsigned char *a)
 		mem_free(usemap_attr);
 		if (!joined_urls) return;
 		map_url = straconcat("MAP@", joined_urls, NULL);
+		mem_free(joined_urls);
 		if (!map_url) return;
 
 		html_stack_dup(ELEMENT_KILLABLE);

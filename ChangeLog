@@ -1,3 +1,40 @@
+Wed Aug 28 23:57:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Don't show goto dialog upon startup by default, it looks ugly when
+	it overrides some other startup dialog ;-).  
+
+Wed Aug 28 23:55:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/session.c, protocol/http/http.c:
+
+	Be ugly to users. Be annoying. Beg things from them. If
+	protocol.http.user_agent is empty or contains only one space, don't
+	send User-Agent header, if protocol.http.user_agent is empty, show
+	warning box on the startup telling the user that it's probably not
+	what he wants.  
+
+Wed Aug 28 23:27:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/config/conf.h, src/config/options.c:
+
+	Introduced -eval option (evaluate configuration commands), patch by
+	David D. Kilzer <ddkilzer@lubricants-oil.com>.  
+
+Wed Aug 28 23:20:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/main.c, src/config/options.c:
+
+	Support for -no-home (don't care about ~/.elinks at all), patch by
+	David D. Kilzer <ddkilzer@lubricants-oil.com> and me.  
+
+Wed Aug 28 23:10:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS:
+
+	pasky.ji.cz/elinks -> elinks.or.cz 
+
 Tue Aug 27 19:01:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/http.c:

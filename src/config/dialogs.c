@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.103 2003/11/07 21:23:09 jonas Exp $ */
+/* $Id: dialogs.c,v 1.104 2003/11/07 22:21:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,7 +294,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	done_string(&tvalue);
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
-	add_dlg_field(dlg, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
+	add_dlg_field(dlg, NULL, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);

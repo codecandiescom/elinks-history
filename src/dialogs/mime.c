@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.72 2003/11/07 00:39:01 jonas Exp $ */
+/* $Id: mime.c,v 1.73 2003/11/07 22:22:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,12 +35,6 @@ get_real_opt(unsigned char *base, unsigned char *id)
 }
 
 
-static unsigned char *ext_msg[] = {
-	N_("Extension(s)"),
-	N_("Content-Type"),
-};
-
-
 static void
 add_ext_layouter(struct dialog_data *dlg_data)
 {
@@ -48,20 +42,14 @@ add_ext_layouter(struct dialog_data *dlg_data)
 	int w = dialog_max_width(term);
 	int rw = 0;
 	int y = -1;
-	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
-	dlg_format_text(NULL,
-			ext_msg[0],
-			0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
+	dlg_format_field(NULL, &dlg_data->widgets_data[0],
+			 0, &y, w, NULL, AL_LEFT);
+	y++;
+	dlg_format_field(NULL, &dlg_data->widgets_data[1],
+			 0, &y, w, NULL, AL_LEFT);
 
-	y += 2;
-	dlg_format_text(NULL,
-			ext_msg[1],
-			0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
-
-	y += 2;
+	y++;
 	dlg_format_buttons(NULL,
 			   dlg_data->widgets_data + 2, 2,
 			   0, &y, w, &rw,
@@ -72,20 +60,11 @@ add_ext_layouter(struct dialog_data *dlg_data)
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 
 	y = dlg_data->y + DIALOG_TB;
-	dlg_format_text(term,
-			ext_msg[0],
-			dlg_data->x + DIALOG_LB, &y, w, NULL,
-			dialog_text_color, AL_LEFT);
 	dlg_format_field(term,
 			 &dlg_data->widgets_data[0],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL,
 			 AL_LEFT);
-
 	y++;
-	dlg_format_text(term,
-			ext_msg[1],
-			dlg_data->x + DIALOG_LB, &y, w, NULL,
-			dialog_text_color, AL_LEFT);
 	dlg_format_field(term,
 			 &dlg_data->widgets_data[1],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL,
@@ -223,8 +202,8 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	dlg->refresh = (void (*)(void *)) really_add_ext;
 	dlg->refresh_data = new;
 
-	add_dlg_field(dlg, 0, 0, check_nonempty, MAX_STR_LEN, ext, NULL);
-	add_dlg_field(dlg, 0, 0, check_nonempty, MAX_STR_LEN, ct, NULL);
+	add_dlg_field(dlg, _("Extension(s)", term), 0, 0, check_nonempty, MAX_STR_LEN, ext, NULL);
+	add_dlg_field(dlg, _("Content-Type", term), 0, 0, check_nonempty, MAX_STR_LEN, ct, NULL);
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);

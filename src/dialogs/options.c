@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.115 2003/11/07 13:33:46 jonas Exp $ */
+/* $Id: options.c,v 1.116 2003/11/07 22:21:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,8 +279,8 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh = (void (*)(void *)) do_resize_terminal;
 	dlg->refresh_data = term;
 
-	add_dlg_field(dlg, 1, 999, check_number, 4, x_str, NULL);
-	add_dlg_field(dlg, 1, 999, check_number, 4, y_str, NULL);
+	add_dlg_field(dlg, NULL, 1, 999, check_number, 4, x_str, NULL);
+	add_dlg_field(dlg, NULL, 1, 999, check_number, 4, y_str, NULL);
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);

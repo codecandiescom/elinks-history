@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.79 2003/11/07 13:55:26 jonas Exp $ */
+/* $Id: auth.c,v 1.80 2003/11/07 22:22:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,8 +32,6 @@ auth_dialog_layouter(struct dialog_data *dlg_data)
 	int rw = 0;
 	int y = -1;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
-	unsigned char *label_login = N_("Login");
-	unsigned char *label_password = N_("Password");
 
 	if (dlg_data->dlg->udata) {
 		dlg_format_text(NULL,
@@ -42,14 +40,14 @@ auth_dialog_layouter(struct dialog_data *dlg_data)
 		y++;
 	}
 
-	dlg_format_text(NULL,
-			label_login, 0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
-	y += 2;
-	dlg_format_text(NULL,
-			label_password, 0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
-	y += 2;
+	dlg_format_field(NULL,
+			 &dlg_data->widgets_data[0],
+			 0, &y, w, &rw, AL_LEFT);
+	y++;
+	dlg_format_field(NULL,
+			 &dlg_data->widgets_data[1],
+			 0, &y, w, &rw, AL_LEFT);
+	y++;
 	dlg_format_buttons(NULL,
 			   dlg_data->widgets_data + 2, 2,
 			   0, &y, w, &rw, AL_CENTER);
@@ -65,16 +63,11 @@ auth_dialog_layouter(struct dialog_data *dlg_data)
 				dialog_text_color, AL_LEFT);
 		y++;
 	}
-	dlg_format_text(term,
-			label_login, dlg_data->x + DIALOG_LB, &y, w, NULL,
-			dialog_text_color, AL_LEFT);
+
 	dlg_format_field(term,
 			 &dlg_data->widgets_data[0],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term,
-			label_password, dlg_data->x + DIALOG_LB, &y, w, NULL,
-			dialog_text_color, AL_LEFT);
 	dlg_format_field(term,
 			 &dlg_data->widgets_data[1],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
@@ -132,8 +125,8 @@ do_auth_dialog(struct session *ses)
 	dlg->udata2 = a;
 	dlg->refresh_data = ses;
 
-	add_dlg_field(dlg, 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
-	add_dlg_field_pass(dlg, 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
+	add_dlg_field(dlg, _("Login", term), 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
+	add_dlg_field_pass(dlg, _("Password", term), 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
 
 	add_dlg_button(dlg, B_ENTER, auth_ok, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ESC, auth_cancel, _("Cancel", term), NULL);

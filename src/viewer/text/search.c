@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.105 2003/11/07 20:52:04 jonas Exp $ */
+/* $Id: search.c,v 1.106 2003/11/07 22:20:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -968,11 +968,14 @@ search_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int w = dialog_max_width(term);
-	int y = 2;
-	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
+	int y = -1;
 
 	int_upper_bound(&w, dlg_data->dlg->widgets->datalen);
 
+	dlg_format_field(NULL, dlg_data->widgets_data,
+			 0, &y, w, NULL, AL_LEFT);
+
+	y++;
 	dlg_format_group(NULL, dlg_data->widgets_data + 1, 3, 0,
 			 &y, w, NULL);
 
@@ -987,8 +990,7 @@ search_dialog_layouter(struct dialog_data *dlg_data)
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 
 	y = dlg_data->y + DIALOG_TB;
-	dlg_format_text(term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
-			&y, w, NULL, text_color, AL_LEFT);
+
 	dlg_format_field(term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 
@@ -1058,7 +1060,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_to_ml(&ml, hop, NULL);
 
-	add_dlg_field(dlg, min, max, check, l, field, history);
+	add_dlg_field(dlg, text, min, max, check, l, field, history);
 
 	add_dlg_radio(dlg, _("Normal search", term), 1, 0, hop->whether_regex);
 	add_dlg_radio(dlg, _("Regexp search", term), 1, 1, hop->whether_regex);

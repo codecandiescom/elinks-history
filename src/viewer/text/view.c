@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.413 2004/05/24 01:43:40 jonas Exp $ */
+/* $Id: view.c,v 1.414 2004/05/24 01:55:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1012,7 +1012,6 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 {
 	struct link *link = get_current_link(doc_view);
 	void (*download)(void *ses, unsigned char *file) = start_download;
-	unsigned char *url;
 
 	if (!link) return;
 
@@ -1025,11 +1024,11 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 		case ACT_MAIN_RESUME_DOWNLOAD:
 			download = resume_download;
 		case ACT_MAIN_DOWNLOAD:
-			url = get_link_url(ses, doc_view, link);
+			ses->download_uri = get_link_uri(ses, doc_view, link);
 			break;
 
 		case ACT_MAIN_DOWNLOAD_IMAGE:
-			url = stracpy(link->where_img);
+			ses->download_uri = get_uri(link->where_img, -1);
 			break;
 
 		default:
@@ -1037,10 +1036,6 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 			return;
 	}
 
-	if (!url) return;
-
-	ses->download_uri = get_uri(url, -1);
-	mem_free(url);
 	if (!ses->download_uri) return;
 
 	set_session_referrer(ses, doc_view->document->uri);

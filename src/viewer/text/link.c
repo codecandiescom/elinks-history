@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.171 2004/05/23 17:13:34 jonas Exp $ */
+/* $Id: link.c,v 1.172 2004/05/24 01:55:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,6 +493,14 @@ get_link_url(struct session *ses, struct document_view *doc_view,
 	}
 }
 
+struct uri *
+get_link_uri(struct session *ses, struct document_view *doc_view,
+	     struct link *link)
+{
+	unsigned char *uristring = get_link_url(ses, doc_view, link);
+
+	return uristring ? get_uri(uristring, -1) : NULL;
+}
 
 /* This is common backend for submit_form_do() and enter(). */
 int

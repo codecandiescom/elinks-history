@@ -40,6 +40,9 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 #endif
 	int i;
 
+	if (!name || !addrs || !addrno)
+		return -1;
+
 #ifdef IPV6
 	/* I had a strong preference for the following, but the glibc is really
 	 * obsolete so I had to rather use much more complicated getaddrinfo().
@@ -71,6 +74,7 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 
 	*addrno = i;
 	*addrs = mem_alloc(i * sizeof(struct sockaddr_storage));
+	if (!*addrs) return -1;
 	memset(*addrs, 0, i * sizeof(struct sockaddr_storage));
 
 #ifdef IPV6
@@ -138,6 +142,8 @@ void lookup_fn(void *data, int h)
 			done += w;
 		} while (done < sizeof(struct sockaddr_storage));
 	}
+
+	mem_free(addrs);
 }
 
 void end_real_lookup(void *data)

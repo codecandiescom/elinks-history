@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2004-01-08 16:35+0100\n"
+"POT-Creation-Date: 2004-01-08 18:30+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -233,8 +233,8 @@ msgid ""
 msgstr ""
 "Format du fichier de signets:\n"
 "0 est le format par défaut d'ELinks (compatible avec Links 0.9x)\n"
-"1 est le format de signets XML universel XBEL (PAS DE SUPPORT DES CARACTERES "
-"NATIONAUX!)"
+"1 est le format de signets XML universel XBEL\n"
+"  (PAS DE SUPPORT DES CARACTERES NATIONAUX!)"
 
 #: src/bookmarks/bookmarks.c:56
 msgid ""
@@ -245,8 +245,8 @@ msgid ""
 msgstr ""
 "Format du fichier de signets:\n"
 "0 est le format par défaut d'ELinks (compatible avec Links 0.9x)\n"
-"1 est le format de signets XML universel XBEL (PAS DE SUPPORT DES CARACTERES "
-"NATIONAUX!) (DESACTIVE)"
+"1 est le format de signets XML universel XBEL\n"
+"  (PAS DE SUPPORT DES CARACTERES NATIONAUX!) (DÉSACTIVÉ)"
 
 #: src/bookmarks/dialogs.c:76 src/config/options.inc:1030
 #: src/dialogs/document.c:84 src/globhist/dialogs.c:62
@@ -757,7 +757,7 @@ msgstr "Afficher la version et quitter"
 msgid "Print ELinks version information and exit."
 msgstr "Afficher la version d'ELinks et quitter."
 
-#: src/config/conf.c:601
+#: src/config/conf.c:605
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -769,7 +769,7 @@ msgstr ""
 "## des options, mais seules les valeurs des options seront\n"
 "## modifiées; votre formatage et commentaires seront préservés.\n"
 
-#: src/config/conf.c:609
+#: src/config/conf.c:613
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -787,7 +787,7 @@ msgstr ""
 "## dans un fichier inclus, l'option ne sera pas considérée comme\n"
 "## manquante. Votre formatage et commentaires seront préservés.\n"
 
-#: src/config/conf.c:619
+#: src/config/conf.c:623
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so, but keep in mind that this file is overwritten\n"
@@ -800,7 +800,7 @@ msgstr ""
 "## des options, votre formatage et commentaires peuvent ne pas\n"
 "## être préservés.\n"
 
-#: src/config/conf.c:630
+#: src/config/conf.c:634
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
@@ -809,47 +809,47 @@ msgstr ""
 "## Evidemment, si vous n'aimez pas ce que ELinks fait avec ce fichier,\n"
 "## vous pouvez modifier la valeur de l'option config.saving_style.\n"
 
-#: src/config/conf.c:645
+#: src/config/conf.c:649
 msgid "Automatically saved options\n"
 msgstr "Options sauvées automatiquement\n"
 
-#: src/config/conf.c:659
+#: src/config/conf.c:663
 msgid "Automatically saved keybindings\n"
 msgstr "Associations de touches sauvées automatiquement\n"
 
-#: src/config/conf.c:697
+#: src/config/conf.c:712
 msgid "Secure file error"
 msgstr "Erreur de fichier fiable"
 
-#: src/config/conf.c:703
+#: src/config/conf.c:718
 msgid "Cannot read the file"
 msgstr "Échec de lecture du fichier"
 
-#: src/config/conf.c:706
+#: src/config/conf.c:721
 msgid "Cannot stat the file"
 msgstr "Échec d'obtention du statut du fichier"
 
-#: src/config/conf.c:709
+#: src/config/conf.c:724
 msgid "Cannot access the file"
 msgstr "Échec d'accès au fichier"
 
-#: src/config/conf.c:712
+#: src/config/conf.c:727
 msgid "Cannot create temp file"
 msgstr "Échec de création de fichier temporaire"
 
-#: src/config/conf.c:715
+#: src/config/conf.c:730
 msgid "Cannot rename the file"
 msgstr "Échec du renommage du fichier"
 
-#: src/config/conf.c:718
+#: src/config/conf.c:733
 msgid "File saving disabled by option"
 msgstr "Sauvegarde de fichier désactivée par option"
 
-#: src/config/conf.c:721 src/sched/error.c:46
+#: src/config/conf.c:736 src/sched/error.c:46
 msgid "Out of memory"
 msgstr "Mémoire saturée"
 
-#: src/config/conf.c:724
+#: src/config/conf.c:739
 msgid "Cannot write the file"
 msgstr "Ecriture du fichier impossible"
 
@@ -991,7 +991,9 @@ msgstr "Supprimer l'association de touches"
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
-msgstr "Cet objet n'est pas une association de touches."
+msgstr ""
+"Cet objet n'est pas une association de touches.\n"
+"Essayez de presser espace pour obtenir les associations de touches."
 
 #: src/config/dialogs.c:607
 #, c-format
@@ -1383,7 +1385,7 @@ msgstr "Envoyer le formulaire et recharger"
 
 #: src/config/kbdbind.c:488 src/terminal/tab.c:190 src/terminal/tab.c:226
 msgid "Close tab"
-msgstr "Fermer un onglet"
+msgstr "Fermer l'onglet"
 
 #: src/config/kbdbind.c:489
 msgid "Close all tabs but the current one"
@@ -1447,7 +1449,7 @@ msgstr "Maximiser le cadre courant"
 
 #: src/config/kbdbind.c:696
 msgid "Unrecognised keymap"
-msgstr "Association non reconnue"
+msgstr "Table d'associations de touches non reconnue"
 
 #: src/config/kbdbind.c:698
 msgid "Error parsing keystroke"
@@ -1493,8 +1495,8 @@ msgid ""
 "file. Zero means that no indentation is performed at all\n"
 "when saving the configuration."
 msgstr ""
-"Largeur d'un niveau d'indentation dans le fichier de configuration\n"
-"Zero signifie qu'aucune indentation ne sera effectuée lors de la\n"
+"Largeur d'un niveau d'indentation dans le fichier de configuration.\n"
+"Zéro signifie qu'aucune indentation ne sera effectuée lors de la\n"
 "sauvegarde de la configuration."
 
 #: src/config/options.inc:37
@@ -1610,7 +1612,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 "Nombre d'essais pour établir une connexion.\n"
-"Zero signifie essais infinis."
+"Zéro signifie essais infinis."
 
 #: src/config/options.inc:93 src/sched/error.c:52
 msgid "Receive timeout"
@@ -1655,7 +1657,7 @@ msgstr "Touches d'accès"
 msgid ""
 "Options for handling of the accesskey attribute of the active\n"
 "HTML elements."
-msgstr "Options pour gérer l'attribut 'accesskey' des éléments HTML actifs."
+msgstr "Options concernant l'attribut 'accesskey' des éléments HTML actifs."
 
 #: src/config/options.inc:119
 msgid "Automatic links following"
@@ -1883,7 +1885,8 @@ msgstr "Inverser les couleurs"
 
 #: src/config/options.inc:218
 msgid "Invert the fore- and background color so the link stands out."
-msgstr "Inverser les couleurs de fond et de texte."
+msgstr ""
+"Inverser les couleurs de fond et de texte pour mettre le lien en évidence."
 
 #: src/config/options.inc:221 src/dialogs/options.c:189
 msgid "Underline"
@@ -2308,7 +2311,11 @@ msgstr ""
 "Utiliser les couleurs spécifiées dans le document:\n"
 "0 toujours utiliser les couleurs par défaut\n"
 "1 utiliser les couleurs du document, mais pas le fond\n"
-"2 utiliser les couleurs du document, y compris le fond."
+"2 utiliser les couleurs du document, y compris le fond.\n"
+"  Dans la plupart des cas le rendu des sites est correct\n"
+"  mais parfois c'est vraiment moche.\n"
+"  Notez que si le fond n'est pas noir, la transparence ne\n"
+"  fonctionnera pas."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:463
@@ -3781,12 +3788,13 @@ msgid ""
 "Secure file saving is automagically disabled if file is symlink."
 msgstr ""
 "Un fichier temporaire est tout d'abord créé, ensuite en l'absence\n"
-"d'erreur celui-ci est renommé vers le fichier final.\n"
+"d'erreur celui-ci est renommé vers le fichier final. L'intégrité\n"
+"des fichiers en cas de crash application ou système est ainsi garantie.\n"
 "Notez que cela ne concerne que les fichiers de configuration, et non\n"
 "les fichiers téléchargés. Si vous utilisez des permissions exotiques\n"
 "pour les fichiers de configuration, il est conseillé de ne pas activer\n"
 "cette option. Si un fichier de config. est un lien symbolique, cette\n"
-"fonctionnalité ne sera pas utilisé."
+"fonctionnalité ne sera pas utilisée."
 
 #: src/config/opttypes.c:54
 msgid "Read error"
@@ -3888,10 +3896,10 @@ msgid ""
 msgstr ""
 "Age maximal pour les cookies (en jours)\n"
 "-1  utiliser si possible la date d'expiration du cookie.\n"
-" 0  forcer l'expiration à la fin de la session courante, ignorant la date "
-"d'expiration du cookie.\n"
-" 1+ utiliser si possible la date d'expiration du cookie, mais limiter l'age "
-"à ce nombre de jours."
+" 0  forcer l'expiration à la fin de la session courante,\n"
+"    ignorant la date d'expiration du cookie.\n"
+" 1+ utiliser si possible la date d'expiration du cookie,\n"
+"    mais limiter l'age à ce nombre de jours."
 
 #: src/cookies/cookies.c:110
 msgid "Paranoid security"
@@ -5838,7 +5846,7 @@ msgstr "Impossible d'obtenir le fichier %s: %s"
 
 #: src/viewer/text/link.c:825
 msgid "Display ~usemap"
-msgstr "Afficher ~USEMAP"
+msgstr "Afficher ~usemap"
 
 #: src/viewer/text/link.c:830
 msgid "~Follow link"

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.596 2004/10/09 21:08:55 miciah Exp $ */
+/* $Id: view.c,v 1.597 2004/10/09 21:13:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,7 +523,7 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 #define move_cursor_down(ses, view)	move_cursor(ses, view, ses->tab->x, ses->tab->y + 1)
 
 
-static int
+int
 try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
 {
 	int link_number = ses->kbdprefix.repeat_count - 1;
@@ -682,18 +682,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			break;
 		}
 
-		case ACT_MAIN_LINK_FOLLOW:
-			if (!try_jump_to_link_number(ses, doc_view))
-				status = FRAME_EVENT_OK;
-			else
-				status = enter(ses, doc_view, 0);
-			break;
-		case ACT_MAIN_LINK_FOLLOW_RELOAD:
-			if (!try_jump_to_link_number(ses, doc_view))
-				status = FRAME_EVENT_OK;
-			else
-				status = enter(ses, doc_view, 1);
-			break;
 		case ACT_MAIN_JUMP_TO_LINK:
 			try_jump_to_link_number(ses, doc_view);
 			status = FRAME_EVENT_OK;
@@ -713,11 +701,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 #endif
 			status = FRAME_EVENT_OK;
 			break;
-		case ACT_MAIN_LINK_DOWNLOAD:
-		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
-		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
 		case ACT_MAIN_LINK_MENU:
-		case ACT_MAIN_VIEW_IMAGE:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:

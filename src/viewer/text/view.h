@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.56 2004/08/15 11:52:52 jonas Exp $ */
+/* $Id: view.h,v 1.57 2004/10/09 21:13:38 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -28,6 +28,11 @@ void toggle_plain_html(struct session *ses, struct document_view *doc_view, int 
 
 /* Used for changing wrapping of text */
 void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx);
+
+/* If the user has provided a numeric prefix, jump to the link
+ * with that number as its index. */
+int try_jump_to_link_number(struct session *ses,
+			    struct document_view *doc_view);
 
 /* File menu handlers. */
 

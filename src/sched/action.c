@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.97 2004/09/26 00:28:24 pasky Exp $ */
+/* $Id: action.c,v 1.98 2004/10/09 21:13:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,8 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 typedef enum frame_event_status (*frame_action)(struct session *, struct document_view *, int);
 
 static void
-do_frame_action(struct session *ses, frame_action action, int magic)
+do_frame_action(struct session *ses, frame_action action, int magic,
+		int jump_to_link_number)
 {
 	struct document_view *doc_view;
 
@@ -98,6 +99,9 @@ do_frame_action(struct session *ses, frame_action action, int magic)
 
 	assertm(doc_view->vs, "document view has no state");
 	if_assert_failed return;
+
+	if (jump_to_link_number && !try_jump_to_link_number(ses, doc_view))
+		return;
 
 	/* This is hopefully only some temporary setup. --jonas */
 	if (action(ses, doc_view, magic) == FRAME_EVENT_REFRESH)
@@ -194,12 +198,12 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_LINK_DOWNLOAD:
 			if (!get_cmd_opt_int("anonymous"))
-				do_frame_action(ses, download_link, action);
+				do_frame_action(ses, download_link, action, 1);
 			break;
 
 		case ACT_MAIN_LINK_DOWNLOAD_IMAGE:
 			if (!get_cmd_opt_int("anonymous"))
-				do_frame_action(ses, download_link, action);
+				do_frame_action(ses, download_link, action, 1);
 			break;
 
 		case ACT_MAIN_DOWNLOAD_MANAGER:
@@ -207,11 +211,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW:
-			do_frame_action(ses, enter, 0);
+			do_frame_action(ses, enter, 0, 1);
 			break;
 
 		case ACT_MAIN_LINK_FOLLOW_RELOAD:
-			do_frame_action(ses, enter, 1);
+			do_frame_action(ses, enter, 1, 1);
 			break;
 
 		case ACT_MAIN_EXMODE:
@@ -225,11 +229,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_FIND_NEXT:
-			do_frame_action(ses, find_next, 1);
+			do_frame_action(ses, find_next, 1, 0);
 			break;
 
 		case ACT_MAIN_FIND_NEXT_BACK:
-			do_frame_action(ses, find_next, -1);
+			do_frame_action(ses, find_next, -1, 0);
 			break;
 
 		case ACT_MAIN_FORGET_CREDENTIALS:
@@ -334,15 +338,15 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
-			do_frame_action(ses, pass_uri_to_command, PASS_URI_LINK);
+			do_frame_action(ses, pass_uri_to_command, PASS_URI_LINK, 0);
 			break;
 
 		case ACT_MAIN_FRAME_EXTERNAL_COMMAND:
-			do_frame_action(ses, pass_uri_to_command, PASS_URI_FRAME);
+			do_frame_action(ses, pass_uri_to_command, PASS_URI_FRAME, 0);
 			break;
 
 		case ACT_MAIN_TAB_EXTERNAL_COMMAND:
-			do_frame_action(ses, pass_uri_to_command, PASS_URI_TAB);
+			do_frame_action(ses, pass_uri_to_command, PASS_URI_TAB, 0);
 			break;
 
 		case ACT_MAIN_FRAME_PREV:
@@ -371,7 +375,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_RESET_FORM:
-			do_frame_action(ses, reset_form, 0);
+			do_frame_action(ses, reset_form, 0, 0);
 			break;
 
 		case ACT_MAIN_RESOURCE_INFO:
@@ -380,17 +384,17 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_LINK_DOWNLOAD_RESUME:
 			if (!get_cmd_opt_int("anonymous"))
-				do_frame_action(ses, download_link, action);
+				do_frame_action(ses, download_link, action, 1);
 			break;
 
 		case ACT_MAIN_SAVE_AS:
 			if (!get_cmd_opt_int("anonymous"))
-				do_frame_action(ses, save_as, 0);
+				do_frame_action(ses, save_as, 0, 0);
 			break;
 
 		case ACT_MAIN_SAVE_FORMATTED:
 			if (!get_cmd_opt_int("anonymous"))
-				do_frame_action(ses, save_formatted_dlg, 0);
+				do_frame_action(ses, save_formatted_dlg, 0, 0);
 			break;
 
 		case ACT_MAIN_SAVE_URL_AS:
@@ -404,18 +408,18 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SEARCH:
-			do_frame_action(ses, search_dlg, 1);
+			do_frame_action(ses, search_dlg, 1, 0);
 			break;
 
 		case ACT_MAIN_SEARCH_BACK:
-			do_frame_action(ses, search_dlg, -1);
+			do_frame_action(ses, search_dlg, -1, 0);
 			break;
 
 		case ACT_MAIN_SEARCH_TYPEAHEAD:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_LINK:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT:
 		case ACT_MAIN_SEARCH_TYPEAHEAD_TEXT_BACK:
-			do_frame_action(ses, search_typeahead, action);
+			do_frame_action(ses, search_typeahead, action, 0);
 			break;
 
 		case ACT_MAIN_SHOW_TERM_OPTIONS:
@@ -423,11 +427,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SUBMIT_FORM:
-			do_frame_action(ses, submit_form, 0);
+			do_frame_action(ses, submit_form, 0, 0);
 			break;
 
 		case ACT_MAIN_SUBMIT_FORM_RELOAD:
-			do_frame_action(ses, submit_form, 1);
+			do_frame_action(ses, submit_form, 1, 0);
 			break;
 
 		case ACT_MAIN_TAB_NEXT:
@@ -506,11 +510,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_VIEW_IMAGE:
-			do_frame_action(ses, view_image, 0);
+			do_frame_action(ses, view_image, 0, 1);
 			break;
 
 		case ACT_MAIN_FRAME_MAXIMIZE:
-			do_frame_action(ses, set_frame, 0);
+			do_frame_action(ses, set_frame, 0, 0);
 			break;
 
 		case ACT_MAIN_JUMP_TO_LINK:

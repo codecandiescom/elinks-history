@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.144 2002/12/10 23:13:52 pasky Exp $ */
+/* $Id: options.c,v 1.145 2002/12/11 13:18:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -650,6 +650,27 @@ static void
 register_options()
 {
 	add_opt_tree("",
+		"bookmarks", 0,
+		"Bookmarks options.");
+
+	{
+	unsigned char *bff =
+		"Format of the file with saved bookmarks (matters for both\n"
+		"reading and saving):\n"
+		"0 is the default ELinks (Links 0.9x compatible) format\n"
+		"1 is XBEL universal XML bookmarks format"
+#ifndef HAVE_LIBEXPAT
+		" (DISABLED)"
+#endif
+		;
+
+	add_opt_int("bookmarks",
+		"file_format", 0, 0, 1, 0,
+		bff);
+	}
+
+
+	add_opt_tree("",
 		"config", 0,
 		"Configuration handling options.");
 
@@ -1227,7 +1248,7 @@ register_options()
 		"user", OPT_AUTOCREATE,
 		"User protocols options.");
 
-	/* TODO: Poorly designed options structure. Ought to be able to specify
+	/* FIXME: Poorly designed options structure. Ought to be able to specify
 	 * need_slashes, free_form and similiar options as well :-(. --pasky */
 
 	/* Basically, it looks like protocol.user.mailto.win32 = "blah" */

@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.5 2002/12/10 22:52:15 pasky Exp $ */
+/* $Id: common.c,v 1.6 2002/12/11 13:18:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,12 +18,6 @@
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"
-
-
-/* When multiple backends will come into game, replace this with appropriate
- * get_opt_*() call. */
-
-#define MOOMAGIC 0
 
 
 /* Backends dynamic area: */
@@ -48,10 +42,11 @@ static struct bookmarks_backend *bookmarks_backends[] = {
 void
 bookmarks_read()
 {
+	int backend = get_opt_int("bookmarks.file_format");
 	unsigned char *file_name;
 	FILE *f;
 
-	if (!bookmarks_backends[MOOMAGIC]->read) return;
+	if (!bookmarks_backends[backend]->read) return;
 
 	file_name = straconcat(elinks_home, "bookmarks", NULL);
 	if (!file_name) return;
@@ -60,7 +55,7 @@ bookmarks_read()
 	mem_free(file_name);
 	if (!f) return;
 
-	bookmarks_backends[MOOMAGIC]->read(f);
+	bookmarks_backends[backend]->read(f);
 
 	fclose(f);
 	bookmarks_dirty = 0;
@@ -70,11 +65,12 @@ bookmarks_read()
 void
 bookmarks_write(struct list_head *bookmarks)
 {
+	int backend = get_opt_int("bookmarks.file_format");
 	struct secure_save_info *ssi;
 	unsigned char *file_name;
 
 	if (!bookmarks_dirty) return;
-	if (!bookmarks_backends[MOOMAGIC]->write) return;
+	if (!bookmarks_backends[backend]->write) return;
 
 	file_name = straconcat(elinks_home, "bookmarks", NULL);
 	if (!file_name) return;
@@ -83,7 +79,7 @@ bookmarks_write(struct list_head *bookmarks)
 	mem_free(file_name);
 	if (!ssi) return;
 
-	bookmarks_backends[MOOMAGIC]->write(ssi, bookmarks);
+	bookmarks_backends[backend]->write(ssi, bookmarks);
 
 	if (!secure_close(ssi)) bookmarks_dirty = 0;
 }

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.10 2002/04/19 12:45:03 pasky Exp $ */
+/* $Id: globhist.c,v 1.11 2002/04/26 13:25:26 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -347,13 +347,6 @@ push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
 }
 
 
-/* Used to carry extra info between confirmation and real function. */
-struct push_button_hop_struct {
-	struct dialog *dlg;
-	struct dlg_data_item_data_box *box;
-	struct global_history_item *historyitem;
-};
-
 static int
 push_delete_button(struct dialog_data *dlg,
 		   struct dialog_item_data *some_useless_delete_button)
@@ -382,40 +375,29 @@ push_delete_button(struct dialog_data *dlg,
 
 
 static void
-really_clear_history(void *vhop)
+really_clear_history(struct dlg_data_item_data_box *box)
 {
-	struct push_button_hop_struct *hop =
-		(struct push_button_hop_struct *) vhop;
-
 	while (global_history.n) {
 		delete_global_history_item(global_history.items.prev);
 	}
 
-	hop->box->sel = history_dialog_list_update(&(hop->box->items)) - 1;
+	box->sel = history_dialog_list_update(&(box->items)) - 1;
 }
 
 static int
 push_clear_button(struct dialog_data *dlg,
 		  struct dialog_item_data *some_useless_clear_button)
 {
-	struct push_button_hop_struct *hop;
 	struct terminal *term = dlg->win->term;
 	struct dlg_data_item_data_box *box;
 
 	box = (struct dlg_data_item_data_box *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
-	hop = mem_alloc(sizeof(struct push_button_hop_struct));
-	if (!hop)
-		return 0;
-
-	hop->dlg = dlg->dlg;
-	hop->box = box;
-
-	msg_box(term, getml(hop, NULL),
+	msg_box(term, NULL,
 		TEXT(T_CLEAR_GLOBAL_HISTORY), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_CLEAR_GLOBAL_HISTORY), "?", NULL,
-		hop, 2,
+		box, 2,
 		TEXT(T_YES), really_clear_history, B_ENTER,
 		TEXT(T_NO), NULL, B_ESC);
 

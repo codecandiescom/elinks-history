@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.20 2005/03/28 23:20:00 zas Exp $ */
+/* $Id: parse.c,v 1.21 2005/03/28 23:21:28 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -164,7 +164,7 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
    int perms = 0;
 
    if (len != 9
-       && !(len == 10 && src[9] == '+'))   // ACL tag
+       && !(len == 10 && src[9] == '+'))   /* ACL tag */
       	return -1;
 
    switch (src[0]) {
@@ -181,7 +181,7 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
 
    switch (src[2]) {
    case('S'): perms |= S_ISUID; break;
-   case('s'): perms |= S_ISUID; // fall-through
+   case('s'): perms |= S_ISUID; /* fall-through */
    case('x'): perms |= S_IXUSR; break;
    case('-'): break;
    default: return -1;
@@ -202,7 +202,7 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
 
    switch (src[2]) {
    case('S'): perms |= S_ISGID; break;
-   case('s'): perms |= S_ISGID; // fall-through
+   case('s'): perms |= S_ISGID; /* fall-through */
    case('x'): perms |= S_IXGRP; break;
    case('-'): break;
    default: return -1;
@@ -223,7 +223,7 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
 
    switch (src[2]) {
    case('T'): perms |= S_ISVTX; break;
-   case('t'): perms |= S_ISVTX; // fall-through
+   case('t'): perms |= S_ISVTX; /* fall-through */
    case('x'): perms |= S_IXOTH; break;
    case('l'):
    case('L'): perms |= S_ISGID; perms &= ~S_IXGRP; break;

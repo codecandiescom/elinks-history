@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.72 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: parse.c,v 1.73 2004/06/28 15:31:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,7 +243,7 @@ get_num(unsigned char *a, unsigned char *name)
 
 		errno = 0;
 		num = strtol(al, (char **) &end, 10);
-		if (!errno && !*end && num >= 0 && num <= INT_MAX)
+		if (!errno && *al && !*end && num >= 0 && num <= INT_MAX)
 			result = (int) num;
 
 		mem_free(al);

@@ -386,7 +386,7 @@ unsigned char *join_urls(unsigned char *base, unsigned char *rel)
 	}
 	if (rel[0] == '?') {
 		if (!(n = stracpy(base))) return NULL;
-		for (p = n; *p && *p != POST_CHAR && (*p != '?' || *p != '#'); p++) ;
+		for (p = n; *p && *p != POST_CHAR && *p != '?' && *p != '#'; p++) ;
 		*p = 0;
 		add_to_strn(&n, rel);
 		translate_directories(n);

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.51 2004/05/30 12:42:25 jonas Exp $ */
+/* $Id: mime.c,v 1.52 2004/06/10 11:51:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,37 @@ static struct option_info mime_options[] = {
 
 #define get_opt_mime(which)	mime_options[(which)].option
 #define get_default_mime_type()	get_opt_mime(MIME_DEFAULT_TYPE).value.string
+
+/* Checks protocols headers for a suitable filename */
+static unsigned char *
+get_content_filename(struct uri *uri)
+{
+	struct cache_entry *cached = find_in_cache(uri);
+	unsigned char *filename, *pos;
+
+	if (!cached || !cached->head)
+		return NULL;
+
+	pos = parse_http_header(cached->head, "Content-Disposition", NULL);
+	if (!pos) return NULL;
+
+	filename = parse_http_header_param(pos, "filename");
+	mem_free(pos);
+	if (!filename) return NULL;
+
+	/* We don't want to add any directories from the path so make sure we
+	 * only add the filename. */
+	pos = get_filename_position(filename);
+	if (!*pos) {
+		mem_free(filename);
+		return NULL;
+	}
+
+	if (pos > filename)
+		memmove(filename, pos, strlen(pos) + 1);
+
+	return filename;
+}
 
 /* Checks if application/x-<extension> has any handlers. */
 static inline unsigned char *
@@ -196,36 +227,6 @@ struct mime_handler *
 get_mime_type_handler(unsigned char *content_type, int xwin)
 {
 	return get_mime_handler_backends(content_type, xwin);
-}
-
-unsigned char *
-get_content_filename(struct uri *uri)
-{
-	struct cache_entry *cached = find_in_cache(uri);
-	unsigned char *filename, *pos;
-
-	if (!cached || !cached->head)
-		return NULL;
-
-	pos = parse_http_header(cached->head, "Content-Disposition", NULL);
-	if (!pos) return NULL;
-
-	filename = parse_http_header_param(pos, "filename");
-	mem_free(pos);
-	if (!filename) return NULL;
-
-	/* We don't want to add any directories from the path so make sure we
-	 * only add the filename. */
-	pos = get_filename_position(filename);
-	if (!*pos) {
-		mem_free(filename);
-		return NULL;
-	}
-
-	if (pos > filename)
-		memmove(filename, pos, strlen(pos) + 1);
-
-	return filename;
 }
 
 struct string *

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.164 2003/07/22 03:00:57 jonas Exp $ */
+/* $Id: parser.c,v 1.165 2003/07/22 03:09:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1656,17 +1656,17 @@ html_option(unsigned char *a)
 
 	val = get_attr_val(a, "value");
 	if (!val) {
+		struct string str;
 		unsigned char *p, *r;
 		unsigned char *name;
 		int namelen;
-		int l = 0;
 
 		for (p = a - 1; *p != '<'; p--);
 
-		val = init_str();
-		if (!val) goto x;
+		if (!init_string(&str)) goto x;
 		if (parse_element(p, eoff, NULL, NULL, NULL, &p)) {
 			internal("parse element failed");
+			val = str.source;
 			goto x;
 		}
 
@@ -1675,10 +1675,12 @@ rrrr:
 		while (p < eoff && !WHITECHAR(*p) && *p != '<') {
 
 pppp:
-			add_chr_to_str(&val, &l, *p), p++;
+			add_char_to_string(&str, *p), p++;
 		}
 
 		r = p;
+		val = str.source; /* Has to be before the possible 'goto x' */
+
 		while (r < eoff && WHITECHAR(*r)) r++;
 		if (r >= eoff) goto x;
 		if (r - 2 <= eoff && (r[1] == '!' || r[1] == '?')) {

@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.15 2003/06/14 10:36:36 zas Exp $ */
+/* $Id: fastfind.c,v 1.16 2003/06/14 17:21:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,48 +37,77 @@
 #define FASTFIND_DEBUG
 #endif
 
+/* Define whether to use 32 or 64 bits per compressed element. */
 #if 1
+#define USE_32_BITS
+#endif
+
+#define END_LEAF_BITS		1
+#define COMPRESSED_BITS		1
+
+#ifdef USE_32_BITS
 /* Use only 32 bits per element, but has very low limits. */
 /* Adequate for ELinks tags search. */
-struct ff_elt {
-	unsigned int e:1; /* End leaf -> p is significant */
-	unsigned int c:1; /* Compressed */
-	unsigned int p:9; /* Index in pointers (max 512) */
-	unsigned int l:14; /* Index in lines (max 16384 - 1) */
-	unsigned int ch:7; /* Index of char when compressed. */
-};
 
-#define ff_elt_c ff_elt /* Both are 32 bits long. */
-#define FF_MAX_KEYS (1<<9) /* <= p */
-#define FF_MAX_LINES ((1<<14) - 1)  /* <= l */
-#define FF_MAX_CHARS (1<<7)  /* <= ch */
+#define POINTER_INDEX_BITS	9	/* 512 */
+#define LINE_INDEX_BITS		14	/* 16384 */
+#define COMP_CHAR_INDEX_BITS	7	/* 128	*/
 
-#else
+#define ff_elt ff_elt_c /* Both are 32 bits long. */
 
+#if (POINTER_INDEX_BITS + LINE_INDEX_BITS + \
+     COMP_CHAR_INDEX_BITS + END_LEAF_BITS + \
+     COMPRESSED_BITS) > 32
+#error Over 32 bits in struct ff_elt !!
+#endif
+
+#else /* !USE_32_BITS */
 /* Keep this one if there is more than 512 keywords in a list
  * it eats a bit more memory.
  * ELinks may need this one if fastfind is used in other
  * things than tags searching. */
-struct ff_elt {
-	unsigned int e:1; /* End leaf -> p is significant */
-	unsigned int c:1; /* Compressed */
-	unsigned int p:12; /* Index in pointers (4096) */
-	unsigned int l:18; /* Index in lines (262144 - 1) */
-};
+/* This will make struct ff_elt_c use 64 bits. */
 
-/* This struct uses 64 bits. */
-struct ff_elt_c {
-	unsigned int e:1; /* End leaf -> p is significant */
-	unsigned int c:1; /* Compressed */
-	unsigned int p:12; /* Index in pointers */
-	unsigned int l:18; /* Index in lines */
-	unsigned int ch; /* Index of char when compressed. */
+#define POINTER_INDEX_BITS	12
+#define LINE_INDEX_BITS		18
+#define COMP_CHAR_INDEX_BITS	8
+
+#if (POINTER_INDEX_BITS + LINE_INDEX_BITS + \
+     + END_LEAF_BITS + COMPRESSED_BITS) > 32
+#error Over 32 bits in struct ff_elt !!
+#endif
+
+struct ff_elt {
+	/* End leaf -> p is significant */
+	unsigned int e:END_LEAF_BITS;
+
+	/* Compressed */
+	unsigned int c:COMPRESSED_BITS;
+
+	/* Index in pointers */
+	unsigned int p:POINTER_INDEX_BITS;
+
+	/* Index in lines */
+	unsigned int l:LINE_INDEX_BITS;
 };
-#define FF_MAX_KEYS (1<<12) /* <= p */
-#define FF_MAX_LINES ((1<<18) - 1) /* <= l */
-#define FF_MAX_CHARS (1<<7) /* <= ch */
 
 #endif
+
+
+#define FF_MAX_KEYS  (1  << POINTER_INDEX_BITS)
+#define FF_MAX_LINES ((1 << LINE_INDEX_BITS) - 1)
+#define FF_MAX_CHARS (1  << COMP_CHAR_INDEX_BITS)
+
+
+struct ff_elt_c {
+	unsigned int e:END_LEAF_BITS;
+	unsigned int c:COMPRESSED_BITS;
+	unsigned int p:POINTER_INDEX_BITS;
+	unsigned int l:LINE_INDEX_BITS;
+
+	/* Index of char when compressed. */
+	unsigned int ch:COMP_CHAR_INDEX_BITS;
+};
 
 
 struct fastfind_info {
@@ -114,50 +143,67 @@ struct fastfind_info {
 	unsigned char uniq_chars[FF_MAX_CHARS];
 };
 
+#ifdef FASTFIND_DEBUG
+
+#define meminc(x, size) (x)->memory_usage += (size)
+#define testinc(x) (x)->tests++
+#define iterinc(x) (x)->iterations++
+#define foundinc(x) \
+	do { \
+		(x)->iterdelta += (x)->iterations - (x)->itertmp;	\
+		(x)->testsdelta += (x)->tests - (x)->teststmp;		\
+		(x)->found++;						\
+	} while (0)
+
+#else /* !FASTFIND_DEBUG */
+
+#define meminc(x, size)
+#define testinc(x)
+#define iterinc(x)
+#define foundinc(x)
+
+#endif
 
 static struct fastfind_info *
-ff_init(int case_sensitive)
+init_fastfind(int case_sensitive)
 {
 	struct fastfind_info *info = mem_calloc(1, sizeof(struct fastfind_info));
 
-	if (info) {
-#ifdef FASTFIND_DEBUG
-		info->memory_usage += sizeof(struct fastfind_info) - sizeof(unsigned long) * 10;
-#endif
-		info->min_key_len = 255; /* Non sense to use that code if key length > 255 so... */
-		info->case_sensitive = !!case_sensitive;
-	}
+	if (!info) return NULL;
+
+	meminc(info, sizeof(struct fastfind_info) - sizeof(unsigned long) * 10);
+	/* Non sense to use that code if key length > 255 so... */
+	info->min_key_len = 255;
+	info->case_sensitive = case_sensitive;
 
 	return info;
 }
-
 
 /* Return 1 on success, 0 on allocation failure */
 static int
 add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 {
-	void **new_pointers;
-	int *new_keylen_list;
+	void **pointers;
+	int *keylen_list;
 	int new_count = info->pointers_count + 1;
 
 	assert(new_count < FF_MAX_KEYS);
 
 	/* On error, cleanup is done by fastfind_terminate(). */
 
-	new_pointers = mem_realloc(info->pointers, new_count * sizeof(void *));
-	if (!new_pointers) return 0;
-	info->pointers = new_pointers;
+	pointers = mem_realloc(info->pointers, new_count * sizeof(void *));
+	if (!pointers) return 0;
+	info->pointers = pointers;
 
-	new_keylen_list = mem_realloc(info->keylen_list, new_count * sizeof(int));
-	if (!new_keylen_list) return 0;
-	info->keylen_list = new_keylen_list;
+	keylen_list = mem_realloc(info->keylen_list, new_count * sizeof(int));
+	if (!keylen_list) return 0;
+	info->keylen_list = keylen_list;
 
-#ifdef FASTFIND_DEBUG
-	info->memory_usage += sizeof(int) + sizeof(void *);
-#endif
+	meminc(info, sizeof(int) + sizeof(void *));
 
+	/* Record new pointer and key len, used in search */
 	info->pointers[info->pointers_count] = p;
-	info->keylen_list[info->pointers_count] = key_len; /* Record key len, used in search */
+	info->keylen_list[info->pointers_count] = key_len;
 
 	info->pointers_count = new_count;
 
@@ -168,25 +214,24 @@ add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 static int
 alloc_line(struct fastfind_info *info)
 {
-	/* FIXME: Check limit */
-	struct ff_elt **new_lines;
+	struct ff_elt **lines;
 	struct ff_elt *line;
 
 	assert(info->lines_count < FF_MAX_LINES);
 
-	/* info->lines[0] is never used since l=0 marks no leaf in struct ff_elt.
-	 * That's the reason of that + 2. */
-	new_lines = mem_realloc(info->lines, sizeof(struct ff_elt *) * (info->lines_count + 2));
-	if (!new_lines) return 0;
-	info->lines = new_lines;
+	/* info->lines[0] is never used since l=0 marks no leaf
+	 * in struct ff_elt. That's the reason of that + 2. */
+	lines = mem_realloc(info->lines, sizeof(struct ff_elt *)
+					 * (info->lines_count + 2));
+	if (!lines) return 0;
+	info->lines = lines;
 
 	line = mem_calloc(info->uniq_chars_count, sizeof(struct ff_elt));
 	if (!line) return 0;
 
-#ifdef FASTFIND_DEBUG
-	info->memory_usage += sizeof(struct ff_elt *)
-			      + sizeof(struct ff_elt) * info->uniq_chars_count;
-#endif
+	meminc(info, sizeof(struct ff_elt *));
+	meminc(info, sizeof(struct ff_elt) * info->uniq_chars_count);
+
 	info->lines_count++;
 	info->lines[info->lines_count] = line;
 
@@ -196,22 +241,19 @@ alloc_line(struct fastfind_info *info)
 static int
 char2idx(unsigned char c, struct fastfind_info *info)
 {
-	int j;
-	int idx = -1;
+	register int idx;
 
-	for (j = 0; j < info->uniq_chars_count; j++)
-		if (info->uniq_chars[j] == c) {
-			idx = j;
-			break;
-		}
+	for (idx = 0; idx < info->uniq_chars_count; idx++)
+		if (info->uniq_chars[idx] == c)
+			return idx;
 
-	return idx;
+	return -1;
 }
 
 static void
 init_idxtab(struct fastfind_info *info)
 {
-	int i;
+	register int i;
 
 	for (i = 0; i < FF_MAX_CHARS; i++)
 		info->idxtab[i] = char2idx((unsigned char) i, info);
@@ -219,13 +261,12 @@ init_idxtab(struct fastfind_info *info)
 
 #define ifcase(c) (info->case_sensitive ? c : upcase(c))
 
-/* This function must be called once and only once per list. --Zas */
 void *
-fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void), int case_sensitive)
+fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
+	       int case_sensitive)
 {
 	struct fastfind_key_value *p;
-	struct fastfind_info *info = ff_init(case_sensitive);
-	register int i;
+	struct fastfind_info *info = init_fastfind(case_sensitive);
 
 	assert(info && reset && next);
 
@@ -233,6 +274,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 	(*reset)();
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
+		register int i;
 
 		assert(key_len); /* We do not want empty keys. */
 
@@ -243,24 +285,21 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 			info->max_key_len = key_len;
 
 		for (i = 0; i < key_len; i++) {
-			int found = 0;
 			int j;
 
-			/* ifcase() test should be move outside loops but
+			/* ifcase() test should be moved outside loops but
 			 * remember we call this routine only once per list.
-			 * So i go for code readibility vs performance here. --Zas */
-			for (j = 0; j < info->uniq_chars_count; j++) {
-				if (info->uniq_chars[j] == ifcase(p->key[i])) {
-						found = 1;
+			 * So I go for code readability vs performance here. --Zas */
+			for (j = 0; j < info->uniq_chars_count; j++)
+				if (info->uniq_chars[j] == ifcase(p->key[i]))
 						break;
-				}
-			}
 
-			if (!found) {
+			if (j >= info->uniq_chars_count) {
 				assert(info->uniq_chars_count < FF_MAX_CHARS);
 				info->uniq_chars[info->uniq_chars_count++] = ifcase(p->key[i]);
 			}
 		}
+
 		info->count++;
 	}
 
@@ -278,35 +317,33 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
 		struct ff_elt *current = info->root_line;
+		register int i;
 
 #if 0
 		fprintf(stderr, "K: %s\n", p->key);
 #endif
-		for (i = 0; i < key_len; i++) {
-			int idx;
-
+		for (i = 0; i < key_len - 1; i++) {
 			/* Convert char to its index value */
-			if (info->case_sensitive)
-				idx = info->idxtab[p->key[i]];
-			else
-				idx = info->idxtab[upcase(p->key[i])];
+			int idx = info->idxtab[ifcase(p->key[i])];
 
-			if (key_len == i + 1) { /* End of the Word */
-				current[idx].e = 1; /* Mark final leaf */
-				/* Memorize pointer to data */
-				current[idx].p = info->pointers_count;
-				if (!add_to_pointers(p->data, key_len, info))
-					goto alloc_error;
-
-			} else {
-				if (current[idx].l == 0) { /* There's no leaf line yet */
-					if (!alloc_line(info)) goto alloc_error;
-					current[idx].l = info->lines_count;
-				}
-
-				current = info->lines[current[idx].l]; /* Descend to leaf line */
+			if (current[idx].l == 0) { /* There's no leaf line yet */
+				if (!alloc_line(info)) goto alloc_error;
+				current[idx].l = info->lines_count;
 			}
+
+			/* Descend to leaf line */
+			current = info->lines[current[idx].l];
 		}
+
+		/* Index final leaf */
+		i = info->idxtab[ifcase(p->key[i])];
+
+		current[i].e = 1;
+
+		/* Memorize pointer to data */
+		current[i].p = info->pointers_count;
+		if (!add_to_pointers(p->data, key_len, info))
+			goto alloc_error;
 	}
 
 	return (void *) info;
@@ -316,12 +353,10 @@ alloc_error:
 	return NULL;
 }
 
-/* This one should be called to minimize memory usage of index.
- * Highly recommended but optionnal. */
 void
-fastfind_index_compress(void *current_, void *fastfind_info)
+fastfind_index_compress(void *current_elt, void *fastfind_info)
 {
-	struct ff_elt *current = (struct ff_elt *)current_;
+	struct ff_elt *current = (struct ff_elt *)current_elt;
 	struct fastfind_info *info = (struct fastfind_info *) fastfind_info;
 	int cnt = 0;
 	int pos = -1;
@@ -343,9 +378,14 @@ fastfind_index_compress(void *current_, void *fastfind_info)
 		}
 	}
 
+	if (pos == -1 || cnt >= 2 || current[pos].c) return;
+
 	/* Compress if possible ;) */
-	if (pos != -1 && cnt < 2 && !current[pos].c) {
-		int cur = 0;
+	for (i = 1; i < info->lines_count; i++)
+		if (info->lines[i] == current)
+			break;
+
+	if (i < info->lines_count) {
 		struct ff_elt_c *new = mem_alloc(sizeof(struct ff_elt_c));
 
 		if (!new) return;
@@ -356,26 +396,13 @@ fastfind_index_compress(void *current_, void *fastfind_info)
 		new->l = current[pos].l;
 		new->ch = pos;
 
-		for (i = 1; i < info->lines_count; i++) {
-			if (info->lines[i] == current) {
-				cur = i;
-				break;
-			}
-		}
-
-		if (cur) {
-			mem_free(info->lines[cur]);
-			info->lines[cur] = (struct ff_elt *) new;
-#ifdef FASTFIND_DEBUG
-			info->memory_usage += sizeof(struct ff_elt_c);
-			info->memory_usage -= sizeof(struct ff_elt) * info->uniq_chars_count;
-#endif
-		} else
-			mem_free(new);
+		mem_free(info->lines[i]);
+		info->lines[i] = (struct ff_elt *) new;
+		meminc(info, sizeof(struct ff_elt_c));
+		meminc(info, sizeof(struct ff_elt) * -info->uniq_chars_count);
 	}
 }
 
-/* The main reason of all that stuff is here. --Zas */
 void *
 fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 {
@@ -386,94 +413,68 @@ fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 	assert(info);
 
 #ifdef FASTFIND_DEBUG
-#define testinc() info->tests++
-#define iterinc() info->iterations++
-#define foundinc() \
-	do { \
-		info->iterdelta += info->iterations - info->itertmp;	\
-		info->testsdelta += info->tests - info->teststmp;	\
-		info->found++;						\
-	} while (0)
-
 	info->searches++;
 	info->total_key_len += key_len;
 	info->teststmp = info->tests;
 	info->itertmp = info->iterations;
 
-	testinc();
+	testinc(info);
    	if (!key) return NULL;
-	testinc();
+	testinc(info);
 	if (key_len > info->max_key_len) return NULL;
-	testinc();
+	testinc(info);
 	if (key_len < info->min_key_len) return NULL;
 #else
-#define testinc()
-#define iterinc()
-#define foundinc()
 	if (!key || key_len > info->max_key_len || key_len < info->min_key_len)
 		return NULL;
 #endif
 
 	current = info->root_line;
 
-	testinc(); /* We count one test for case sensitivity (in loop for now). */
+	testinc(info); /* We count one test for case sensitivity (in loop for now). */
 
 	for (; i < key_len; i++) {
-		int lidx;
+		/* TODO: Move this ifcase() test outside loop. Here performance
+		 * matters. We do not count this test in stats as it will
+		 * disappear. It will imply code duplication. */
+		int lidx = info->idxtab[ifcase(key[i])];
+		struct ff_elt *line;
 
-		iterinc();
+		iterinc(info);
 
-		/* TODO: Move this test outside loop. Here performance matters.
-		 * We do not count this test in stats as it will disappear.
-		 * It will imply code duplication. */
-		if (info->case_sensitive)
-			lidx = info->idxtab[key[i]];
-		else
-			lidx = info->idxtab[upcase(key[i])];
-
-		testinc();
+		testinc(info);
 		if (lidx < 0) return NULL;
 
-		testinc();
-		if (current->c) { /* Compressed line. */
+		testinc(info);
+		if (current->c) {
+			/* It is a compressed line. */
 
-			testinc();
+			testinc(info);
 			if (((struct ff_elt_c *)(current))->ch != lidx)
 				return NULL;
+			line = current;
 
-			testinc();
-			if (current->e && key_len == info->keylen_list[current->p]) {
-				testinc();
-				foundinc();
-				return info->pointers[current->p];
-			}
-
-			testinc();
-			if (current->l)
-				current = (struct ff_elt *) info->lines[current->l];
-			else
-				return NULL;
-
-		} else { /* Normal line. */
-			testinc();
-			if (current[lidx].e && key_len == info->keylen_list[current[lidx].p]) {
-				testinc();
-				foundinc();
-				return info->pointers[current[lidx].p];
-			}
-
-			testinc();
-			if (current[lidx].l)
-				current = (struct ff_elt *) info->lines[current[lidx].l];
-			else
-				return NULL;
+		} else {
+			line = &current[lidx];
 		}
+
+		testinc(info);
+		if (line->e && key_len == info->keylen_list[line->p]) {
+			testinc(info);
+			foundinc(info);
+			return info->pointers[line->p];
+		}
+
+		testinc(info);
+		if (!line->l)
+			return NULL;
+
+		current = (struct ff_elt *) info->lines[line->l];
 	}
 
 	return NULL;
 }
 
-/* Fastfind cleanup, it frees index, must be called once per list. --Zas */
 void
 fastfind_terminate(void *fastfind_info)
 {

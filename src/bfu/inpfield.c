@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.108 2004/01/28 06:14:54 jonas Exp $ */
+/* $Id: inpfield.c,v 1.109 2004/01/28 06:34:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,17 +499,18 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	struct session *ses = dlg_data->dlg->udata2;
 	enum edit_action action;
 
-	if (!ev->ev == EV_KBD) return EVENT_NOT_PROCESSED;
+	if (ev->ev != EV_KBD) return EVENT_NOT_PROCESSED;
 
 	/* First let the input field do its business */
 	kbd_field(dlg_data->widgets_data, dlg_data, ev);
 	update_dialog_data(dlg_data, NULL);
 
+	/* The pass it on to the specialized handler */
 	action = kbd_action(KM_EDIT, ev, NULL);
-
 	if (handler(ses, action, buffer))
 		cancel_dialog(dlg_data, NULL);
 
+	/* Completely bypass any further dialog event handling */
 	return EVENT_PROCESSED;
 }
 

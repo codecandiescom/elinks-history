@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.390 2004/04/04 03:15:16 jonas Exp $ */
+/* $Id: view.c,v 1.391 2004/04/04 03:18:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1033,6 +1033,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 		return;
 	}
 
+	ses->dn_url = url;
 	set_session_referrer(ses, doc_view->document->uri);
 	query_file(ses, ses->dn_url, ses, download, NULL, 1);
 }

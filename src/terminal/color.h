@@ -1,10 +1,18 @@
-/* $Id: color.h,v 1.13 2003/09/07 00:10:16 jonas Exp $ */
+/* $Id: color.h,v 1.14 2003/09/08 15:22:45 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
 
 #include "terminal/draw.h"
 #include "util/color.h"
+
+/* Terminal color encoding: */
+/* Below color pairs are encoded to terminal colors. Both the terminal fore-
+ * and background color are a number between 0 and 7. They are stored in an
+ * unsigned char as specified in the following bit sequence:
+ *
+ *	0bbb0fff (f = foreground, b = background)
+ */
 
 #define TERM_COLOR_MASK	0x07
 

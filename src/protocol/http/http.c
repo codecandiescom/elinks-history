@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.59 2002/10/29 23:18:35 pasky Exp $ */
+/* $Id: http.c,v 1.60 2002/11/04 16:57:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -495,6 +495,9 @@ http_send_header(struct connection *c)
 			add_to_str(&ac, &aclen, "\r\n");
 		}
 
+		/* Never freed until exit(), if you found a  better solution,
+		 * let us now ;)
+		 * Do not use mem_alloc() here. */
 		accept_charset = malloc(strlen(ac) + 1);
 		if (accept_charset) {
 			strcpy(accept_charset, ac);

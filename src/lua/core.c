@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.19 2002/09/17 14:35:24 zas Exp $ */
+/* $Id: core.c,v 1.20 2002/11/04 16:57:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -616,6 +616,11 @@ init_lua(void)
 	if (elinks_home) do_hooks_file(L, elinks_home, "hooks.lua");
 }
 
+void
+cleanup_lua(void)
+{
+	lua_close(L);
+}
 
 /*
  * Attempt to handle infinite loops by trapping SIGINT.  If we get a

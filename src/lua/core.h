@@ -1,4 +1,4 @@
-/* $Id: core.h,v 1.2 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: core.h,v 1.3 2002/11/04 16:57:00 zas Exp $ */
 
 #ifndef EL__LUA_CORE_H
 #define EL__LUA_CORE_H
@@ -13,6 +13,7 @@ extern lua_State *lua_state;
 void init_lua(void);
 int prepare_lua(struct session *);
 void finish_lua(void);
+void cleanup_lua(void);
 
 void alert_lua_error(unsigned char *);
 void alert_lua_error2(unsigned char *, unsigned char *);

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.59 2002/10/17 20:15:12 zas Exp $ */
+/* $Id: main.c,v 1.60 2002/11/04 16:57:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,6 +402,9 @@ terminate_all_subsystems()
 #endif
 #ifdef COOKIES
 		cleanup_cookies();
+#endif
+#ifdef HAVE_LUA
+		cleanup_lua();
 #endif
 	}
 

@@ -78,6 +78,7 @@ test "$have_long_long" = yes && AC_DEFINE(HAVE_LONG_LONG)
 
 AC_MSG_CHECKING([for int32_t])
 AC_TRY_COMPILE([
+#include <sys/types.h>
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif
@@ -90,6 +91,7 @@ test "$have_int32_t" = yes && AC_DEFINE(HAVE_INT32_T)
 
 AC_MSG_CHECKING([for uint32_t])
 AC_TRY_COMPILE([
+#include <sys/types.h>
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif

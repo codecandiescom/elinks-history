@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.2 2002/09/01 11:37:48 pasky Exp $ */
+/* $Id: types.h,v 1.3 2002/09/01 11:42:00 pasky Exp $ */
 
 #ifndef EL__UTIL_TYPES_H
 #define EL__UTIL_TYPES_H
@@ -6,6 +6,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <sys/types.h>
 
 #ifdef HAVE_STDINT_H
 #include <stdint.h>

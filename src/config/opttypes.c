@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.23 2002/08/08 18:01:45 pasky Exp $ */
+/* $Id: opttypes.c,v 1.24 2002/08/30 15:00:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -376,14 +376,17 @@ void
 color_wr(struct option *opt, unsigned char **str, int *len)
 {
 	struct rgb *color = (struct rgb *) opt->ptr;
-	unsigned char strcolor[8];
-
-	/* TODO: We should be clever boys and try to save color as name, not
-	 * always as RGB. --pasky */
-
-	snprintf(strcolor, 8, "#%02x%02x%02x", color->r, color->g, color->b);
+	unsigned char *strcolor = get_color_name(color);
+	
+	if (!strcolor) {
+		strcolor = (unsigned char *) mem_alloc(8 * sizeof(unsigned char));
+		if (!strcolor) return;
+		snprintf(strcolor, 8, "#%02x%02x%02x", color->r, color->g, color->b);
+	}
 
 	add_quoted_to_str(str, len, strcolor);
+
+	mem_free(strcolor);	
 }
 
 void *

@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.5 2002/08/07 02:56:59 pasky Exp $ */
+/* $Id: colors.c,v 1.6 2002/08/30 15:00:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,7 @@
 #include "links.h"
 
 #include "document/html/colors.h"
-
+#include "util/string.h"
 
 struct color_spec {
 	char *name;
@@ -161,10 +161,11 @@ struct color_spec color_specs[] = {
 	{"yellowgreen",		0x9ACD32},
 };
 
-int decode_color(unsigned char *str, struct rgb *col)
-{
+
 #define endof(T) ((T)+sizeof(T)/sizeof(*(T)))
 
+int decode_color(unsigned char *str, struct rgb *col)
+{
 	int ch;
 
 	if (*str != '#') {
@@ -191,10 +192,23 @@ found:
 		}
 	}
 	return -1;
-
-#undef endof
 }
 
+/* Returns an allocated string containing name of the color or NULL if there's
+ * no name for that color. */
+unsigned char * get_color_name(struct rgb *col)
+{
+	int color = col->r * 0x10000 + col->g * 0x100 + col->b;
+	struct color_spec *cs;
+
+	for (cs = color_specs; cs < endof(color_specs); cs++)
+		if (cs->rgb == color)
+			return stracpy(cs->name);
+	
+	return NULL;
+}
+
+#undef endof
 
 
 #include "document/options.h"

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.110 2002/10/13 12:11:23 pasky Exp $ */
+/* $Id: options.c,v 1.111 2002/11/13 21:13:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1744,6 +1744,14 @@ register_options()
 		"dump", 0, 0,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout.");
+
+	add_opt_alias_tree(cmdline_options, "",
+		"dump-charset", 0, "document.dump.codepage",
+		"Codepage used in dump output.");
+
+	add_opt_alias_tree(cmdline_options, "",
+		"dump-width", 0, "document.dump.width",
+		"Width of the dump output.");
 
 	add_opt_command_tree(cmdline_options, "",
 		"eval", 0, eval_cmd,

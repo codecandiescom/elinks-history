@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.1 2003/06/26 17:02:28 jonas Exp $ */
+/* $Id: protocol.c,v 1.2 2003/06/26 18:14:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@
 
 static void dummyjs_func(struct session *, unsigned char *);
 
-struct {
+struct protocol_backend {
 	unsigned char *prot;
 	int port;
 	void (*func)(struct connection *);
@@ -36,8 +36,9 @@ struct {
 	int free_syntax;
 	int need_slashes;
 	int need_slash_after_host;
-} protocols[] =
-{
+};
+
+static struct protocol_backend protocol_backends[] = {
 	{"custom", 0, NULL, user_func, 0, 0, 0}, /* protocol.user.* */ /* DO NOT MOVE! */
 	{"file", 0, file_func, NULL, 1, 1, 0},
 	{"http", 80, http_func, NULL, 0, 1, 1},
@@ -77,8 +78,8 @@ check_protocol(unsigned char *p, int l)
 		return 0;
 	}
 
-	for (i = 0; protocols[i].prot; i++)
-		if (!strcasecmp(protocols[i].prot, p)) {
+	for (i = 0; protocol_backends[i].prot; i++)
+		if (!strcasecmp(protocol_backends[i].prot, p)) {
 			p[l] = ':';
 			return i;
 		}
@@ -92,14 +93,13 @@ get_prot_info(unsigned char *prot, int *port,
 	      void (**func)(struct connection *),
 	      void (**nc_func)(struct session *ses, unsigned char *))
 {
-	int i;
+	int i = check_protocol(prot, strlen(prot));
 
-	i = check_protocol(prot, strlen(prot));
 	if (i < 0) return -1;
 
-	if (port) *port = protocols[i].port;
-	if (func) *func = protocols[i].func;
-	if (nc_func) *nc_func = protocols[i].nc_func;
+	if (port) *port = protocol_backends[i].port;
+	if (func) *func = protocol_backends[i].func;
+	if (nc_func) *nc_func = protocol_backends[i].nc_func;
 	return 0;
 }
 
@@ -108,11 +108,11 @@ get_prot_url_info(int i, int *free_syntax, int *need_slashes,
                   int *need_slash_after_host)
 {
         if (free_syntax)
-                *free_syntax = protocols[i].free_syntax;
+                *free_syntax = protocol_backends[i].free_syntax;
         if (need_slashes)
-                *need_slashes = protocols[i].need_slashes;
+                *need_slashes = protocol_backends[i].need_slashes;
         if (need_slash_after_host)
-                *need_slash_after_host = protocols[i].need_slash_after_host;
+                *need_slash_after_host = protocol_backends[i].need_slash_after_host;
 }
 
 

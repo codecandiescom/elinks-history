@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.177 2003/01/04 21:27:18 pasky Exp $ */
+/* $Id: options.c,v 1.178 2003/01/04 21:55:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2266,7 +2266,7 @@ register_options()
 
 	add_opt_ptr("ui", N_("Language"),
 		"language", 0, OPT_LANGUAGE, mem_calloc(1, sizeof(int)),
-		N_("Language of user interface. System means that the language will "
+		N_("Language of user interface. System means that the language will\n"
 		"be extracted from the environment dynamically."));
 	get_opt_rec(&root_options, "ui.language")->change_hook = change_hook_language;
 

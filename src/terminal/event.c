@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.34 2004/04/15 00:55:12 jonas Exp $ */
+/* $Id: event.c,v 1.35 2004/04/23 19:20:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ test_queue:
 			}
 
 			if (badchar) {
-				ERROR(_("Warning: terminal name contains illicit chars.", term));
+				usrerror(_("Warning: terminal name contains illicit chars.", term));
 			} else {
 				strcat(name, term->term);
 

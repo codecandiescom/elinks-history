@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.82 2004/03/09 12:24:38 jonas Exp $ */
+/* $Id: error.c,v 1.83 2004/04/23 19:20:18 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -109,6 +109,15 @@ elinks_internal(unsigned char *fmt, ...)
 #ifdef CONFIG_DEBUG
 	force_dump();
 #endif
+}
+
+
+void
+usrerror(unsigned char *fmt, va_list params)
+{
+	vfprintf(stderr, fmt, params);
+	fputc('\n', stderr);
+	fflush(stderr);
 }
 
 

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.126 2004/04/22 18:50:59 pasky Exp $ */
+/* $Id: dump.c,v 1.127 2004/04/23 19:20:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,7 +280,7 @@ dump_end(struct download *status, void *p)
 	}
 
 	if (status->state != S_OK) {
-		ERROR(get_err_msg(status->state, NULL));
+		usrerror(get_err_msg(status->state, NULL));
 		retval = RET_ERROR;
 		goto terminate;
 	}
@@ -298,13 +298,13 @@ dump_start(unsigned char *url)
 
 	mem_free_if(wd);
 	if (!*url) {
-		ERROR(gettext("URL expected after %s."),
+		usrerror(gettext("URL expected after %s."),
 			get_opt_int_tree(cmdline_options, "source")
 			? "-source" : "-dump");
 		goto terminate;
 
 	} else if (!uri || get_protocol_external_handler(uri->protocol)) {
-		ERROR(gettext("URL protocol not supported (%s)."), url);
+		usrerror(gettext("URL protocol not supported (%s)."), url);
 		goto terminate;
 	}
 

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.56 2004/04/23 11:39:42 pasky Exp $ */
+/* $Id: cmdline.c,v 1.57 2004/04/23 19:20:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_
 
 			if (!option) {
 unknown_option:
-				ERROR(gettext("Unknown option %s"), argv[-1]);
+				usrerror(gettext("Unknown option %s"), argv[-1]);
 				return 1;
 			}
 
@@ -85,7 +85,7 @@ unknown_option:
 
 				if (err) {
 					if (err[0])
-						ERROR(gettext("Cannot parse option %s: %s"), argv[-1], err);
+						usrerror(gettext("Cannot parse option %s: %s"), argv[-1], err);
 
 					return 1;
 				} else if (remote_url) {
@@ -150,7 +150,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 #ifdef HAVE_HERROR
 		herror(gettext("error"));
 #else
-		ERROR(gettext("Host not found"));
+		usrerror(gettext("Host not found"));
 #endif
 		return "";
 	}

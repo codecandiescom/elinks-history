@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.42 2004/03/09 12:24:38 jonas Exp $ */
+/* $Id: error.h,v 1.43 2004/04/23 19:20:18 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -31,9 +31,12 @@ void elinks_debug(unsigned char *fmt, ...);
 #define WDBG errfile = __FILE__, errline = __LINE__, elinks_wdebug
 void elinks_wdebug(unsigned char *fmt, ...);
 
-/* @ERROR(format_string) is used to report non-fatal errors during the ELinks
- * run. It tries to (not that agressively) draw user's attention to the error,
- * but never dumps core or so. */
+/* @ERROR(format_string) is used to report non-fatal unexpected errors during
+ * the ELinks run. It tries to (not that agressively) draw user's attention to
+ * the error, but never dumps core or so. Note that this should be used only in
+ * cases of non-severe internal inconsistences etc, never as an indication of
+ * user error (bad parameter, config file error etc.). We have usrerror() for
+ * this kind of stuff, and there's nothing naughty about using that. */
 #undef ERROR
 #define ERROR errfile = __FILE__, errline = __LINE__, elinks_error
 void elinks_error(unsigned char *fmt, ...);
@@ -44,6 +47,12 @@ void elinks_error(unsigned char *fmt, ...);
 #undef INTERNAL
 #define INTERNAL errfile = __FILE__, errline = __LINE__, elinks_internal
 void elinks_internal(unsigned char *fmt, ...);
+
+
+/* @usrerror(format_string) is used to report user errors during a peaceful
+ * ELinks run. It does not belong to the family above - it doesn't print code
+ * location, beep nor sleep, it just wraps around fprintf(stderr, "...\n");. */
+void usrerror(unsigned char *fmt, ...);
 
 
 

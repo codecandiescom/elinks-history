@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.464 2004/12/16 10:47:16 zas Exp $ */
+/* $Id: options.c,v 1.465 2004/12/16 10:54:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,9 +130,16 @@ check_description(unsigned char *desc)
 #endif
 }
 
+static void
+debug_check_option_syntax(struct option *option)
+{
+	if (!option) return;
+	check_caption(option->capt);
+	check_description(option->desc);
+}
+
 #else
-#define check_caption(caption)
-#define check_description(desc)
+#define debug_check_option_syntax(option)
 #endif
 
 
@@ -447,8 +454,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->capt = capt;
 	option->desc = desc;
 
-	check_caption(option->capt);
-	check_description(option->desc);
+	debug_check_option_syntax(option);
 
 	if (option->type != OPT_ALIAS
 	    && ((tree->flags & OPT_LISTBOX) || (option->flags & OPT_LISTBOX))) {
@@ -1011,8 +1017,7 @@ register_options(struct option_info info[], struct option *tree)
 		struct option *option = &info[i].option;
 		unsigned char *string;
 
-		check_caption(option->capt);
-		check_description(option->desc);
+		debug_check_option_syntax(option);
 
 		if (option->type != OPT_ALIAS
 		    && ((tree->flags & OPT_LISTBOX)

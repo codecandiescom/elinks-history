@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.153 2004/06/15 01:48:09 jonas Exp $ */
+/* $Id: session.h,v 1.154 2004/06/15 20:03:35 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -39,11 +39,12 @@ struct frame {
 	struct view_state vs;
 };
 
-/* This is the repeat count being inserted by user so far. It is stored
- * intermediately per-session. */
+/* Use for keyboard prefixes. */
 struct kbdprefix {
-	int rep;
-	int rep_num;
+	/* This is the repeat count being inserted by user so far. It is stored
+	 * intermediately per-session. */
+	int repeat_count;
+
 #ifdef CONFIG_MARKS
 	/* If the previous key was a mark prefix, this describes what kind of
 	 * action are we supposed to do when we receive the next key. */

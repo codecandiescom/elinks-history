@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.467 2004/06/15 19:28:02 zas Exp $ */
+/* $Id: view.c,v 1.468 2004/06/15 20:03:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -533,11 +533,9 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 static void
 scroll_up(struct session *ses, struct document_view *doc_view)
 {
-	int steps;
+	int steps = ses->kbdprefix.repeat_count;
 
-	if (ses->kbdprefix.rep)
-		steps = ses->kbdprefix.rep_num;
-	else
+	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
 	vertical_scroll(ses, doc_view, -steps);
@@ -546,11 +544,9 @@ scroll_up(struct session *ses, struct document_view *doc_view)
 static void
 scroll_down(struct session *ses, struct document_view *doc_view)
 {
-	int steps;
+	int steps = ses->kbdprefix.repeat_count;
 
-	if (ses->kbdprefix.rep)
-		steps = ses->kbdprefix.rep_num;
-	else
+	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
 	vertical_scroll(ses, doc_view, steps);
@@ -559,11 +555,9 @@ scroll_down(struct session *ses, struct document_view *doc_view)
 static void
 scroll_left(struct session *ses, struct document_view *doc_view)
 {
-	int steps;
+	int steps = ses->kbdprefix.repeat_count;
 
-	if (ses->kbdprefix.rep)
-		steps = ses->kbdprefix.rep_num;
-	else
+	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
 	horizontal_scroll(ses, doc_view, -steps);
@@ -572,11 +566,9 @@ scroll_left(struct session *ses, struct document_view *doc_view)
 static void
 scroll_right(struct session *ses, struct document_view *doc_view)
 {
-	int steps;
+	int steps = ses->kbdprefix.repeat_count;
 
-	if (ses->kbdprefix.rep)
-		steps = ses->kbdprefix.rep_num;
-	else
+	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
 	horizontal_scroll(ses, doc_view, steps);
@@ -685,13 +677,18 @@ static inline void
 rep_ev(struct session *ses, struct document_view *doc_view,
        void (*f)(struct session *, struct document_view *))
 {
-	register int i;
+	register int i = 1;
 
 	assert(ses && doc_view && f);
 	if_assert_failed return;
 
-	i = ses->kbdprefix.rep ? ses->kbdprefix.rep_num : 1;
+	if (ses->kbdprefix.repeat_count) {
+		i = ses->kbdprefix.repeat_count;
+		ses->kbdprefix.repeat_count = 0;
+	}
+
 	while (i--) f(ses, doc_view);
+
 }
 
 static enum frame_event_status
@@ -720,29 +717,27 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 				break;
 		}
 
-		ses->kbdprefix.rep = 0;
+		ses->kbdprefix.repeat_count = 0;
 		ses->kbdprefix.mark = KP_MARK_NOTHING;
 		return FRAME_EVENT_REFRESH;
 	}
 #endif
 
-	if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
+	if (ev->x >= '0' && ev->x <= '9'
 	    && (ev->y
 		|| !doc_view->document->options.num_links_key
 		|| (doc_view->document->options.num_links_key == 1
 		    && !doc_view->document->options.num_links_display))) {
 		/* Repeat count */
 
-		if (!ses->kbdprefix.rep) {
-			ses->kbdprefix.rep_num = ev->x - '0';
-		} else {
-			ses->kbdprefix.rep_num = ses->kbdprefix.rep_num * 10
-						 + ev->x - '0';
-		}
+		ses->kbdprefix.repeat_count *= 10;
+		ses->kbdprefix.repeat_count += ev->x - '0';
 
-		int_upper_bound(&ses->kbdprefix.rep_num, 65536);
+		/* If too big, just restart from zero, so pressing
+		 * '0' six times or more will reset the count. */
+		if (ses->kbdprefix.repeat_count > 65536)
+			ses->kbdprefix.repeat_count = 0;
 
-		ses->kbdprefix.rep = 1;
 		return FRAME_EVENT_OK;
 	}
 
@@ -765,20 +760,21 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-			if (!ses->kbdprefix.rep) break;
+			if (!ses->kbdprefix.repeat_count) break;
 
-			if (ses->kbdprefix.rep_num
+			if (ses->kbdprefix.repeat_count
 			    > doc_view->document->nlinks) {
-				ses->kbdprefix.rep = 0;
+				ses->kbdprefix.repeat_count = 0;
 				return FRAME_EVENT_OK;
 			}
 
 			jump_to_link_number(ses,
 					    current_frame(ses),
-					    ses->kbdprefix.rep_num
+					    ses->kbdprefix.repeat_count
 						- 1);
 
 			refresh_view(ses, doc_view, 0);
+
 	}
 
 	switch (kbd_action(KM_MAIN, ev, NULL)) {
@@ -854,7 +850,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			}
 	}
 
-	ses->kbdprefix.rep = 0;
+	ses->kbdprefix.repeat_count = 0;
 	return status;
 }
 
@@ -1166,7 +1162,7 @@ quit:
 
 x:
 	/* ses may disappear ie. in close_tab() */
-	if (ses) ses->kbdprefix.rep = 0;
+	if (ses) ses->kbdprefix.repeat_count = 0;
 }
 
 void

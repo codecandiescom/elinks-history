@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.492 2004/06/19 18:26:54 jonas Exp $ */
+/* $Id: view.c,v 1.493 2004/06/19 21:21:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,19 +723,19 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 	 * within the document canvas */
 	if (!is_in_box(box, x, y)) {
 		int vs_x = doc_view->vs->x, vs_y = doc_view->vs->y;
+		int max_height = doc_view->document->height - doc_view->vs->y;
+		int max_width = doc_view->document->width - doc_view->vs->x;
 
 		if (y < box->y) {
 			vertical_scroll(ses, doc_view, -1);
 
-		} else if (y >= box->y + box->height
-			   && y + doc_view->vs->y < doc_view->document->height) {
+		} else if (y >= box->y + box->height && y <= max_height) {
 			vertical_scroll(ses, doc_view, 1);
 
 		} else if (x < box->x) {
 			horizontal_scroll(ses, doc_view, -1);
 
-		} else if (x >= box->x + box->width
-			   && x + doc_view->vs->x < doc_view->document->width) {
+		} else if (x >= box->x + box->width && x <= max_width) {
 			horizontal_scroll(ses, doc_view, 1);
 		}
 

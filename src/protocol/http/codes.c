@@ -1,5 +1,9 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.4 2003/06/21 12:56:16 pasky Exp $ */
+/* $Id: codes.c,v 1.5 2003/06/21 13:00:29 pasky Exp $ */
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE /* Needed for vasprintf() */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +12,7 @@
 #include "elinks.h"
 
 #include "protocol/http/codes.h"
+#include "util/snprintf.h"
 
 
 struct http_code {
@@ -92,13 +97,17 @@ http_error_document(int code)
 	unsigned char *codestr = http_code_to_string(info->error_code);
 
 	if (!codestr) codestr = "Unknown error";
-			
-	ulongcat(errs, NULL, info->error_code, 3, '0');
 
-	str = straconcat("<html><head><title>HTTP error ", errs,
-			 "</title></head><body>HTTP error ", errs,
-			 " : <b>", codestr, "</b>",
-			 "</body></html>", NULL);
+	str = vasprintf(
+"<html>\n"
+" <head>\n"
+"  <title>HTTP error %03d</title>\n"
+" </head>\n"
+" <body>\n"
+"  <h1 align=\"left\">HTTP error %03d: %s</h1>\n"
+" </body>\n"
+"</html>\n",
+			info->error_code, info->error_code, codestr);
 
 	return str;
 }

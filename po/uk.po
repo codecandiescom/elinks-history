@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-30 12:16+0200\n"
+"POT-Creation-Date: 2003-05-02 18:11+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dmitry Pinchukov <dpinch@mail.ru>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
@@ -29,19 +29,19 @@ msgstr "В пол╕ ма╓ бути число"
 #: src/config/dialogs.c:390 src/config/dialogs.c:402 src/config/dialogs.c:457
 #: src/config/dialogs.c:472 src/config/dialogs.c:606 src/config/dialogs.c:628
 #: src/config/dialogs.c:654 src/config/dialogs.c:718 src/config/dialogs.c:731
-#: src/dialogs/auth.c:193 src/dialogs/edit.c:173 src/dialogs/menu.c:635
-#: src/dialogs/menu.c:645 src/dialogs/menu.c:674 src/dialogs/menu.c:692
-#: src/dialogs/menu.c:702 src/dialogs/mime.c:279 src/dialogs/options.c:267
+#: src/dialogs/auth.c:193 src/dialogs/edit.c:173 src/dialogs/menu.c:643
+#: src/dialogs/menu.c:653 src/dialogs/menu.c:682 src/dialogs/menu.c:700
+#: src/dialogs/menu.c:710 src/dialogs/mime.c:279 src/dialogs/options.c:267
 #: src/dialogs/options.c:364 src/globhist/dialogs.c:238 src/lua/core.c:443
 #: src/lua/core.c:587 src/lua/core.c:813 src/protocol/url.c:67
 #: src/protocol/user.c:107 src/protocol/user.c:135 src/sched/download.c:512
-#: src/sched/download.c:545 src/sched/download.c:707 src/sched/download.c:793
-#: src/sched/download.c:1180 src/sched/download.c:1188
-#: src/sched/download.c:1223 src/sched/download.c:1233 src/sched/session.c:313
-#: src/sched/session.c:585 src/viewer/text/view.c:1628
-#: src/viewer/text/view.c:1962 src/viewer/text/view.c:2404
-#: src/viewer/text/view.c:2450 src/viewer/text/view.c:2687
-#: src/viewer/text/view.c:3350
+#: src/sched/download.c:545 src/sched/download.c:702 src/sched/download.c:788
+#: src/sched/download.c:1175 src/sched/download.c:1183
+#: src/sched/download.c:1218 src/sched/download.c:1228 src/sched/session.c:353
+#: src/sched/session.c:625 src/viewer/text/view.c:1646
+#: src/viewer/text/view.c:1979 src/viewer/text/view.c:2421
+#: src/viewer/text/view.c:2467 src/viewer/text/view.c:2704
+#: src/viewer/text/view.c:3384
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -93,14 +93,14 @@ msgstr "╤м'я папки"
 #: src/dialogs/document.c:230 src/dialogs/document.c:277
 #: src/dialogs/document.c:289 src/dialogs/edit.c:164 src/dialogs/info.c:109
 #: src/dialogs/info.c:136 src/dialogs/info.c:155 src/dialogs/info.c:216
-#: src/dialogs/info.c:248 src/dialogs/info.c:277 src/dialogs/menu.c:635
-#: src/dialogs/menu.c:645 src/dialogs/menu.c:673 src/dialogs/menu.c:692
-#: src/dialogs/menu.c:702 src/dialogs/mime.c:275 src/dialogs/options.c:257
+#: src/dialogs/info.c:248 src/dialogs/info.c:277 src/dialogs/menu.c:643
+#: src/dialogs/menu.c:653 src/dialogs/menu.c:681 src/dialogs/menu.c:700
+#: src/dialogs/menu.c:710 src/dialogs/mime.c:275 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:413 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:812
-#: src/sched/download.c:570 src/sched/sched.c:70 src/sched/session.c:1076
-#: src/sched/session.c:1093 src/sched/session.c:1117
-#: src/viewer/text/view.c:2686
+#: src/sched/download.c:570 src/sched/sched.c:70 src/sched/session.c:1124
+#: src/sched/session.c:1141 src/sched/session.c:1165
+#: src/viewer/text/view.c:2703
 msgid "OK"
 msgstr "Угу"
 
@@ -139,14 +139,14 @@ msgstr ""
 #: src/bookmarks/dialogs.c:410 src/bookmarks/dialogs.c:417
 #: src/bookmarks/dialogs.c:425 src/dialogs/menu.c:137 src/dialogs/mime.c:181
 #: src/globhist/dialogs.c:320 src/globhist/dialogs.c:330
-#: src/globhist/dialogs.c:375 src/sched/session.c:583
+#: src/globhist/dialogs.c:375 src/sched/session.c:623
 msgid "Yes"
 msgstr "Так"
 
 #: src/bookmarks/dialogs.c:411 src/bookmarks/dialogs.c:418
 #: src/bookmarks/dialogs.c:426 src/dialogs/menu.c:138 src/dialogs/mime.c:182
 #: src/globhist/dialogs.c:321 src/globhist/dialogs.c:331
-#: src/globhist/dialogs.c:376 src/sched/session.c:584
+#: src/globhist/dialogs.c:376 src/sched/session.c:624
 msgid "No"
 msgstr "Н╕"
 
@@ -181,9 +181,9 @@ msgstr "Перем╕стити"
 msgid "Add"
 msgstr "Додати"
 
-#: src/bookmarks/dialogs.c:644 src/dialogs/menu.c:701
-#: src/globhist/dialogs.c:475 src/viewer/text/view.c:2401
-#: src/viewer/text/view.c:2447
+#: src/bookmarks/dialogs.c:644 src/dialogs/menu.c:709
+#: src/globhist/dialogs.c:475 src/viewer/text/view.c:2418
+#: src/viewer/text/view.c:2464
 msgid "Search"
 msgstr "Пошук"
 
@@ -225,7 +225,7 @@ msgid "Type"
 msgstr ""
 
 #: src/config/dialogs.c:121 src/config/dialogs.c:202
-#: src/viewer/text/view.c:3610
+#: src/viewer/text/view.c:3640
 msgid "value"
 msgstr "значення"
 
@@ -233,9 +233,9 @@ msgstr "значення"
 msgid "Description"
 msgstr ""
 
-#: src/config/dialogs.c:181 src/protocol/url.c:64 src/sched/session.c:856
-#: src/sched/session.c:918 src/sched/session.c:1396
-#: src/viewer/text/view.c:1959 src/viewer/text/view.c:3295
+#: src/config/dialogs.c:181 src/protocol/url.c:64 src/sched/session.c:896
+#: src/sched/session.c:958 src/sched/session.c:1444
+#: src/viewer/text/view.c:1976 src/viewer/text/view.c:3331
 msgid "Error"
 msgstr "Помилка"
 
@@ -274,7 +274,7 @@ msgid "Options manager"
 msgstr ""
 
 #: src/config/dialogs.c:533 src/config/dialogs.c:785 src/dialogs/options.c:262
-#: src/sched/download.c:1178 src/sched/download.c:1221
+#: src/sched/download.c:1173 src/sched/download.c:1216
 msgid "Save"
 msgstr "Зберегти"
 
@@ -613,48 +613,62 @@ msgid "Search backwards for a text pattern"
 msgstr "Пошук тексту"
 
 #: src/config/kbdbind.c:430
-msgid "Toggle displaying of links to images"
-msgstr ""
+#, fuzzy
+msgid "Close tab"
+msgstr "Закрити"
 
 #: src/config/kbdbind.c:431
-msgid "Toggle rendering of tables"
+msgid "Next tab"
 msgstr ""
 
 #: src/config/kbdbind.c:432
-msgid "Toggle rendering page as HTML / plain text"
-msgstr ""
+#, fuzzy
+msgid "Previous tab"
+msgstr "Пошуку ще не було"
 
 #: src/config/kbdbind.c:433
-msgid "Toggle displaying of links numbers"
+msgid "Toggle displaying of links to images"
 msgstr ""
 
 #: src/config/kbdbind.c:434
-msgid "Go forward in the unhistory"
+msgid "Toggle rendering of tables"
 msgstr ""
 
 #: src/config/kbdbind.c:435
-msgid "Move cursor upwards"
+msgid "Toggle rendering page as HTML / plain text"
 msgstr ""
 
 #: src/config/kbdbind.c:436
+msgid "Toggle displaying of links numbers"
+msgstr ""
+
+#: src/config/kbdbind.c:437
+msgid "Go forward in the unhistory"
+msgstr ""
+
+#: src/config/kbdbind.c:438
+msgid "Move cursor upwards"
+msgstr ""
+
+#: src/config/kbdbind.c:439
 #, fuzzy
 msgid "View the current image"
 msgstr "Подивитись зображення"
 
-#: src/config/kbdbind.c:437
+#: src/config/kbdbind.c:440
 msgid "Maximize the current frame"
 msgstr ""
 
-#: src/config/kbdbind.c:634
+#: src/config/kbdbind.c:637
 msgid "Unrecognised keymap"
 msgstr ""
 
-#: src/config/kbdbind.c:636
+#: src/config/kbdbind.c:639
 #, fuzzy
 msgid "Error parsing keystroke"
 msgstr "Помилка запису в сокет"
 
-#: src/config/kbdbind.c:638
+#: src/config/kbdbind.c:641
 msgid "Unrecognised action (internal error)"
 msgstr ""
 
@@ -1543,7 +1557,7 @@ msgstr ""
 msgid "Codepage"
 msgstr "Кодова стор╕нка"
 
-#: src/config/options.c:1282 src/config/options.c:2479
+#: src/config/options.c:1282 src/config/options.c:2490
 msgid "Codepage used in dump output."
 msgstr ""
 
@@ -2405,7 +2419,7 @@ msgid "Dialog text colors."
 msgstr ""
 
 #: src/config/options.c:1873 src/config/options.c:2198
-#: src/viewer/text/view.c:3576
+#: src/viewer/text/view.c:3606
 msgid "Checkbox"
 msgstr "Прапорець"
 
@@ -2439,7 +2453,7 @@ msgid "Dialog selected button colors."
 msgstr ""
 
 #: src/config/options.c:1921 src/config/options.c:2246
-#: src/viewer/text/view.c:3582
+#: src/viewer/text/view.c:3612
 msgid "Text field"
 msgstr "Текстове поле"
 
@@ -2687,44 +2701,65 @@ msgid "Show status bar on the screen."
 msgstr ""
 
 #: src/config/options.c:2418
+msgid "Cycle tabs bar"
+msgstr ""
+
+#: src/config/options.c:2420
+msgid "Cycle at left/right when swapping tabs."
+msgstr ""
+
+#: src/config/options.c:2422
+#, fuzzy
+msgid "Display tabs bar"
+msgstr "В╕добразити мапу"
+
+#: src/config/options.c:2424
+msgid ""
+"Show tabs bar on the screen:\n"
+"0 means never.\n"
+"1 means only if two or more tabs.\n"
+"2 means always."
+msgstr ""
+
+#: src/config/options.c:2429
 #, fuzzy
 msgid "Display title bar"
 msgstr "В╕добразити мапу"
 
-#: src/config/options.c:2420
+#: src/config/options.c:2431
 msgid "Show title bar on the screen."
 msgstr ""
 
-#: src/config/options.c:2422
+#: src/config/options.c:2433
 msgid "Display goto dialog on startup"
 msgstr ""
 
-#: src/config/options.c:2424
+#: src/config/options.c:2435
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr ""
 
-#: src/config/options.c:2426
+#: src/config/options.c:2437
 #, fuzzy
 msgid "Set window title"
 msgstr "Назва посилання"
 
-#: src/config/options.c:2428
+#: src/config/options.c:2439
 msgid ""
 "Whether ELinks window title should be touched when ELinks is\n"
 "run in a windowing environment."
 msgstr ""
 
-#: src/config/options.c:2437
+#: src/config/options.c:2448
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the config.saving_style option instead."
 msgstr ""
 
-#: src/config/options.c:2440
+#: src/config/options.c:2451
 msgid "Use secure file saving"
 msgstr ""
 
-#: src/config/options.c:2442
+#: src/config/options.c:2453
 msgid ""
 "First write data to 'file.tmp', then rename to 'file' upon\n"
 "successfully finishing this. Note that this relates only to\n"
@@ -2734,11 +2769,11 @@ msgid ""
 msgstr ""
 
 #. Commandline options
-#: src/config/options.c:2452
+#: src/config/options.c:2463
 msgid "Restrict to anonymous mode"
 msgstr ""
 
-#: src/config/options.c:2454
+#: src/config/options.c:2465
 msgid ""
 "Restrict ELinks so that it can run on an anonymous account.\n"
 "No local file browsing, no downloads. Execution of viewers\n"
@@ -2746,104 +2781,104 @@ msgid ""
 "association table."
 msgstr ""
 
-#: src/config/options.c:2459
+#: src/config/options.c:2470
 #, fuzzy
 msgid "Autosubmit first form"
 msgstr "В╕д╕слати форму"
 
-#: src/config/options.c:2461
+#: src/config/options.c:2472
 msgid "Go and submit the first form you'll stumble upon."
 msgstr ""
 
-#: src/config/options.c:2463
+#: src/config/options.c:2474
 msgid "Clone session with given ID"
 msgstr ""
 
-#: src/config/options.c:2465
+#: src/config/options.c:2476
 msgid ""
 "ID of session (ELinks instance) which we want to clone.\n"
 "This is internal ELinks option, you don't want to use it."
 msgstr ""
 
-#: src/config/options.c:2468
+#: src/config/options.c:2479
 msgid "MIME type to assume for documents"
 msgstr ""
 
-#: src/config/options.c:2470
+#: src/config/options.c:2481
 msgid "Default MIME type to assume for documents of unknown type."
 msgstr ""
 
-#: src/config/options.c:2472
+#: src/config/options.c:2483
 msgid "Write formatted version of given URL to stdout"
 msgstr ""
 
-#: src/config/options.c:2474
+#: src/config/options.c:2485
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
 msgstr ""
 
-#: src/config/options.c:2477
+#: src/config/options.c:2488
 msgid "Codepage to use with -dump"
 msgstr ""
 
-#: src/config/options.c:2481
+#: src/config/options.c:2492
 msgid "Width of document formatted with -dump"
 msgstr ""
 
-#: src/config/options.c:2483
+#: src/config/options.c:2494
 msgid "Width of the dump output."
 msgstr ""
 
-#: src/config/options.c:2485
+#: src/config/options.c:2496
 msgid "Evaluate given configuration option"
 msgstr ""
 
-#: src/config/options.c:2487
+#: src/config/options.c:2498
 msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
 
-#: src/config/options.c:2500
+#: src/config/options.c:2511
 msgid "Print usage help and exit"
 msgstr ""
 
-#: src/config/options.c:2502
+#: src/config/options.c:2513
 msgid "Print usage help and exit."
 msgstr ""
 
-#: src/config/options.c:2504
+#: src/config/options.c:2515
 msgid "Print detailed usage help and exit"
 msgstr ""
 
-#: src/config/options.c:2506
+#: src/config/options.c:2517
 msgid "Print detailed usage help and exit."
 msgstr ""
 
-#: src/config/options.c:2508
+#: src/config/options.c:2519
 msgid "Print help for configuration options"
 msgstr ""
 
-#: src/config/options.c:2510
+#: src/config/options.c:2521
 msgid "Print help on configuration options and exit."
 msgstr ""
 
-#: src/config/options.c:2512
+#: src/config/options.c:2523
 #, fuzzy
 msgid "Look up specified host"
 msgstr "Не вказано програму для"
 
-#: src/config/options.c:2514
+#: src/config/options.c:2525
 #, fuzzy
 msgid "Look up specified host."
 msgstr "Не вказано програму для"
 
-#: src/config/options.c:2516
+#: src/config/options.c:2527
 msgid "Run as separate instance"
 msgstr ""
 
-#: src/config/options.c:2518
+#: src/config/options.c:2529
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
@@ -2851,19 +2886,19 @@ msgid ""
 "this option is used. See also -touch-files."
 msgstr ""
 
-#: src/config/options.c:2523
+#: src/config/options.c:2534
 msgid "Don't use files in ~/.elinks"
 msgstr ""
 
-#: src/config/options.c:2525
+#: src/config/options.c:2536
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
 msgstr ""
 
-#: src/config/options.c:2527
+#: src/config/options.c:2538
 msgid "Connect to session ring with given ID"
 msgstr ""
 
-#: src/config/options.c:2529
+#: src/config/options.c:2540
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -2881,19 +2916,19 @@ msgid ""
 "-touch-files."
 msgstr ""
 
-#: src/config/options.c:2544
+#: src/config/options.c:2555
 msgid "Write the source of given URL to stdout"
 msgstr ""
 
-#: src/config/options.c:2546
+#: src/config/options.c:2557
 msgid "Write the given HTML document in source form to stdout."
 msgstr ""
 
-#: src/config/options.c:2548
+#: src/config/options.c:2559
 msgid "Read document from stdin"
 msgstr ""
 
-#: src/config/options.c:2550
+#: src/config/options.c:2561
 msgid ""
 "Open stdin as an HTML document - this is fully equivalent to:\n"
 " -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
@@ -2902,22 +2937,22 @@ msgid ""
 "know why you would use -source -stdin, though ;-)"
 msgstr ""
 
-#: src/config/options.c:2556
+#: src/config/options.c:2567
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 
-#: src/config/options.c:2558
+#: src/config/options.c:2569
 msgid ""
 "Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
 
-#: src/config/options.c:2562
+#: src/config/options.c:2573
 msgid "Print version information and exit"
 msgstr ""
 
-#: src/config/options.c:2564
+#: src/config/options.c:2575
 msgid "Print ELinks version information and exit."
 msgstr ""
 
@@ -3427,84 +3462,84 @@ msgstr "Зм╕нити"
 msgid "~Delete"
 msgstr "Стерти"
 
-#: src/dialogs/menu.c:565 src/dialogs/menu.c:578
+#: src/dialogs/menu.c:572 src/dialogs/menu.c:586
 msgid "~Language"
 msgstr "Мова"
 
-#: src/dialogs/menu.c:566 src/dialogs/menu.c:579
+#: src/dialogs/menu.c:574 src/dialogs/menu.c:587
 msgid "C~haracter set"
 msgstr "Кодування"
 
-#: src/dialogs/menu.c:567 src/dialogs/menu.c:580
+#: src/dialogs/menu.c:575 src/dialogs/menu.c:588
 msgid "~Terminal options"
 msgstr "Параметри термiналу"
 
-#. {N_("~Associations"), ">", MENU_FUNC do_menu, assoc_menu, 1, 0},
-#: src/dialogs/menu.c:569
+#. {N_("~Associations"), SUBMENU_INDICATOR, MENU_FUNC do_menu, assoc_menu, 1, 0},
+#: src/dialogs/menu.c:577
 msgid "File ~extensions"
 msgstr "Розширення файл╕в"
 
-#: src/dialogs/menu.c:571
+#: src/dialogs/menu.c:579
 msgid "~Options manager"
 msgstr ""
 
-#: src/dialogs/menu.c:572
+#: src/dialogs/menu.c:580
 msgid "~Keybinding manager"
 msgstr ""
 
-#: src/dialogs/menu.c:573
+#: src/dialogs/menu.c:581
 msgid "~Save options"
 msgstr "Зберегти параметри"
 
-#: src/dialogs/menu.c:609
+#: src/dialogs/menu.c:619
 msgid "~File"
 msgstr "Файл"
 
-#: src/dialogs/menu.c:610
+#: src/dialogs/menu.c:620
 msgid "~View"
 msgstr "Вигляд"
 
-#: src/dialogs/menu.c:611
+#: src/dialogs/menu.c:621
 msgid "~Link"
 msgstr "Посилання"
 
-#: src/dialogs/menu.c:612
+#: src/dialogs/menu.c:622
 msgid "~Downloads"
 msgstr "Завантаження"
 
-#: src/dialogs/menu.c:613
+#: src/dialogs/menu.c:623
 msgid "~Setup"
 msgstr "Параметри"
 
-#: src/dialogs/menu.c:614
+#: src/dialogs/menu.c:624
 msgid "~Help"
 msgstr "Допомога"
 
-#: src/dialogs/menu.c:634
+#: src/dialogs/menu.c:642
 msgid "Go to URL"
 msgstr "Пeрейти до..."
 
-#: src/dialogs/menu.c:634 src/dialogs/menu.c:644
+#: src/dialogs/menu.c:642 src/dialogs/menu.c:652
 msgid "Enter URL"
 msgstr "Введ╕ть URL"
 
-#: src/dialogs/menu.c:644
+#: src/dialogs/menu.c:652
 msgid "Save URL"
 msgstr "Зберегти URL"
 
-#: src/dialogs/menu.c:673 src/sched/download.c:388 src/sched/download.c:567
+#: src/dialogs/menu.c:681 src/sched/download.c:388 src/sched/download.c:567
 msgid "Download"
 msgstr "Завантаження"
 
-#: src/dialogs/menu.c:673
+#: src/dialogs/menu.c:681
 msgid "Save to file"
 msgstr "Записати до файлу"
 
-#: src/dialogs/menu.c:691
+#: src/dialogs/menu.c:699
 msgid "Search backward"
 msgstr "Зворотн╕й пошук"
 
-#: src/dialogs/menu.c:691 src/dialogs/menu.c:701
+#: src/dialogs/menu.c:699 src/dialogs/menu.c:709
 msgid "Search for text"
 msgstr "Пошук тексту"
 
@@ -3619,27 +3654,32 @@ msgstr "Консоль Lua"
 msgid "Enter expression"
 msgstr "Введ╕сть вираз"
 
-#: src/osdep/os_dep.c:1834
+#: src/osdep/os_dep.c:1885
+msgid "~Tab"
+msgstr ""
+
+#: src/osdep/os_dep.c:1886
 msgid "~Xterm"
 msgstr "Xterm"
 
-#: src/osdep/os_dep.c:1835
-msgid "~Twterm"
+#: src/osdep/os_dep.c:1887
+#, fuzzy
+msgid "T~wterm"
 msgstr "Twterm"
 
-#: src/osdep/os_dep.c:1836
+#: src/osdep/os_dep.c:1888
 msgid "~Screen"
 msgstr "Екран"
 
-#: src/osdep/os_dep.c:1838 src/osdep/os_dep.c:1842
+#: src/osdep/os_dep.c:1890 src/osdep/os_dep.c:1894
 msgid "~Window"
 msgstr "В╕кно"
 
-#: src/osdep/os_dep.c:1839
+#: src/osdep/os_dep.c:1891
 msgid "~Full screen"
 msgstr "Повний екран"
 
-#: src/osdep/os_dep.c:1845
+#: src/osdep/os_dep.c:1897
 msgid "~BeOS terminal"
 msgstr "Терм╕нал BeOS"
 
@@ -3707,11 +3747,11 @@ msgstr "На тл╕ з пов╕домленням"
 msgid "Abort"
 msgstr "Перервати"
 
-#: src/sched/download.c:508 src/sched/download.c:541 src/sched/download.c:789
+#: src/sched/download.c:508 src/sched/download.c:541 src/sched/download.c:784
 msgid "Download error"
 msgstr "Помилка завантаження"
 
-#: src/sched/download.c:509 src/sched/download.c:790
+#: src/sched/download.c:509 src/sched/download.c:785
 msgid "Could not create file"
 msgstr "Не можу писати у файл"
 
@@ -3723,62 +3763,62 @@ msgstr "Помилка завантаження"
 msgid "Download complete"
 msgstr "Завантаження зак╕нчено"
 
-#: src/sched/download.c:699
+#: src/sched/download.c:694
 #, fuzzy
 msgid "File exists"
 msgstr "Розширення файл╕в"
 
-#: src/sched/download.c:700
+#: src/sched/download.c:695
 msgid "This file already exists:\n"
 msgstr ""
 
-#: src/sched/download.c:702
+#: src/sched/download.c:697
 msgid "The alternative filename is:\n"
 msgstr ""
 
-#: src/sched/download.c:704
+#: src/sched/download.c:699
 msgid "Save under the alternative name"
 msgstr ""
 
-#: src/sched/download.c:705
+#: src/sched/download.c:700
 msgid "Overwrite the original file"
 msgstr ""
 
-#: src/sched/download.c:706
+#: src/sched/download.c:701
 msgid "Resume download of the original file"
 msgstr ""
 
-#: src/sched/download.c:1174 src/sched/download.c:1183
+#: src/sched/download.c:1169 src/sched/download.c:1178
 msgid "Unknown type"
 msgstr "Нев╕домий тип"
 
-#: src/sched/download.c:1175 src/sched/download.c:1184
-#: src/sched/download.c:1216 src/sched/download.c:1227
+#: src/sched/download.c:1170 src/sched/download.c:1179
+#: src/sched/download.c:1211 src/sched/download.c:1222
 msgid "Content type is"
 msgstr "Тип документу"
 
-#: src/sched/download.c:1176 src/sched/download.c:1185
+#: src/sched/download.c:1171 src/sched/download.c:1180
 msgid "Do you want to save or display this file?"
 msgstr "Ви б хот╕ли зберегти чи показати цей файл?"
 
-#: src/sched/download.c:1179 src/sched/download.c:1187
-#: src/sched/download.c:1222 src/sched/download.c:1232
+#: src/sched/download.c:1174 src/sched/download.c:1182
+#: src/sched/download.c:1217 src/sched/download.c:1227
 msgid "Display"
 msgstr "Показати"
 
-#: src/sched/download.c:1215 src/sched/download.c:1226
+#: src/sched/download.c:1210 src/sched/download.c:1221
 msgid "What to do?"
 msgstr "Що робити?"
 
-#: src/sched/download.c:1217 src/sched/download.c:1228
+#: src/sched/download.c:1212 src/sched/download.c:1223
 msgid "Do you want to open file with"
 msgstr "Бажа╓те в╕дкрити файл за допомогою"
 
-#: src/sched/download.c:1218 src/sched/download.c:1229
+#: src/sched/download.c:1213 src/sched/download.c:1224
 msgid "save it or display it?"
 msgstr "зберегти чи показати його?"
 
-#: src/sched/download.c:1220 src/sched/download.c:1231
+#: src/sched/download.c:1215 src/sched/download.c:1226
 msgid "Open"
 msgstr "В╕дкрити"
 
@@ -3926,38 +3966,43 @@ msgstr "в середньому"
 msgid "cur"
 msgstr "поточна"
 
-#: src/sched/session.c:569
+#: src/sched/session.c:288
+#, fuzzy
+msgid "Untitled"
+msgstr "Назва посилання"
+
+#: src/sched/session.c:609
 msgid "Do you want to follow redirect and post form data to url"
 msgstr ""
 "Бажа╓те прямувати за переадресац╕╓ю та в╕дправити вм╕ст форми за адресою"
 
-#: src/sched/session.c:572
+#: src/sched/session.c:612
 msgid "Do you want to post form data to url"
 msgstr "Ви бажа╓те в╕дправити вм╕ст форми за адресою"
 
-#: src/sched/session.c:574
+#: src/sched/session.c:614
 msgid "Do you want to repost form data to url"
 msgstr "Ви бажа╓те заново в╕дправити вм╕ст форми за адресою"
 
-#: src/sched/session.c:580 src/sched/session.c:1081 src/sched/session.c:1101
+#: src/sched/session.c:620 src/sched/session.c:1129 src/sched/session.c:1149
 msgid "Warning"
 msgstr "Попередження"
 
-#: src/sched/session.c:1071
+#: src/sched/session.c:1119
 msgid "Welcome"
 msgstr "В╕та╓мо"
 
-#: src/sched/session.c:1072
+#: src/sched/session.c:1120
 msgid "Welcome to ELinks!"
 msgstr "Ласкаво просимо до ELinks!"
 
-#: src/sched/session.c:1073
+#: src/sched/session.c:1121
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
 msgstr ""
 "Натисн╕ть ESC щоб викликати меню. Прочитайте ╕нструкц╕ю в меню 'Допомога-"
 ">╤нструкц╕я'."
 
-#: src/sched/session.c:1082
+#: src/sched/session.c:1130
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -3968,7 +4013,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1102
+#: src/sched/session.c:1150
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -3995,147 +4040,147 @@ msgstr ""
 msgid "URL expected after %s."
 msgstr ""
 
-#: src/viewer/text/view.c:1625
+#: src/viewer/text/view.c:1643
 msgid "Error while posting form"
 msgstr "Помилка в╕дправлення форми"
 
-#: src/viewer/text/view.c:1626
+#: src/viewer/text/view.c:1644
 msgid "Could not get file"
 msgstr "Не можу отримати файл"
 
-#: src/viewer/text/view.c:1960
+#: src/viewer/text/view.c:1977
 msgid "You can do this only on the master terminal"
 msgstr "Ви можете зробити це т╕льки на головному терм╕нал╕"
 
-#: src/viewer/text/view.c:2402
+#: src/viewer/text/view.c:2419
 msgid "No previous search"
 msgstr "Пошуку ще не було"
 
-#: src/viewer/text/view.c:2448
+#: src/viewer/text/view.c:2465
 msgid "Search string not found"
 msgstr "Рядок не знайдено"
 
-#: src/viewer/text/view.c:2685
+#: src/viewer/text/view.c:2702
 msgid "Go to link"
 msgstr "Йти за посиланням"
 
-#: src/viewer/text/view.c:2686
+#: src/viewer/text/view.c:2703
 msgid "Enter link number"
 msgstr "Введ╕ть номер посилання"
 
-#: src/viewer/text/view.c:3347
+#: src/viewer/text/view.c:3381
 msgid "Save error"
 msgstr "Помилка збереження"
 
-#: src/viewer/text/view.c:3348
+#: src/viewer/text/view.c:3382
 msgid "Error writing to file"
 msgstr "Помилка запису до файлу"
 
-#: src/viewer/text/view.c:3392
+#: src/viewer/text/view.c:3426
 msgid "Display ~usemap"
 msgstr "В╕добразити мапу"
 
-#: src/viewer/text/view.c:3397
+#: src/viewer/text/view.c:3431
 msgid "~Follow link"
 msgstr "Йти за посиланням"
 
-#: src/viewer/text/view.c:3400
+#: src/viewer/text/view.c:3434
 msgid "Follow link and r~eload"
 msgstr "Йти за посиланням та перезавантажити"
 
-#: src/viewer/text/view.c:3404
+#: src/viewer/text/view.c:3438
 msgid "Open in new ~window"
 msgstr "В╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/view.c:3410
+#: src/viewer/text/view.c:3444
 msgid "~Download link"
 msgstr "Завантажити за посиланням"
 
-#: src/viewer/text/view.c:3414
+#: src/viewer/text/view.c:3448
 msgid "~Add link to bookmarks"
 msgstr "Додати посилання до закладок"
 
-#: src/viewer/text/view.c:3425 src/viewer/text/view.c:3544
+#: src/viewer/text/view.c:3459 src/viewer/text/view.c:3574
 msgid "~Reset form"
 msgstr "Очистити форму"
 
-#: src/viewer/text/view.c:3430
+#: src/viewer/text/view.c:3464
 msgid "~Submit form"
 msgstr "В╕д╕слати форму"
 
-#: src/viewer/text/view.c:3433
+#: src/viewer/text/view.c:3467
 msgid "Submit form and rel~oad"
 msgstr "В╕д╕слати форму та перезавантажити"
 
-#: src/viewer/text/view.c:3437
+#: src/viewer/text/view.c:3471
 msgid "Submit form and open in new ~window"
 msgstr "В╕д╕слати форму та в╕дкрити в новому в╕кн╕"
 
-#: src/viewer/text/view.c:3443
+#: src/viewer/text/view.c:3477
 msgid "Submit form and ~download"
 msgstr "В╕д╕слати форму та завантижити"
 
-#: src/viewer/text/view.c:3450
+#: src/viewer/text/view.c:3484
 msgid "V~iew image"
 msgstr "Подивитись зображення"
 
-#: src/viewer/text/view.c:3453
+#: src/viewer/text/view.c:3487
 msgid "Download ima~ge"
 msgstr "Завантижити зображення"
 
-#: src/viewer/text/view.c:3459
+#: src/viewer/text/view.c:3493
 msgid "No link selected"
 msgstr "Нема╓ вибраних посилань"
 
-#: src/viewer/text/view.c:3505
+#: src/viewer/text/view.c:3535
 msgid "Image"
 msgstr "Зображення"
 
-#: src/viewer/text/view.c:3523
+#: src/viewer/text/view.c:3553
 msgid "Usemap"
 msgstr "Мапа посилань"
 
-#: src/viewer/text/view.c:3552
+#: src/viewer/text/view.c:3582
 msgid "Submit form to"
 msgstr "Передати форму за адресою"
 
-#: src/viewer/text/view.c:3554
+#: src/viewer/text/view.c:3584
 msgid "Post form to"
 msgstr "В╕дправити форму за адресою"
 
-#: src/viewer/text/view.c:3573
+#: src/viewer/text/view.c:3603
 msgid "Radio button"
 msgstr "Рад╕окнопка"
 
-#: src/viewer/text/view.c:3579
+#: src/viewer/text/view.c:3609
 msgid "Select field"
 msgstr "Поле вибору"
 
-#: src/viewer/text/view.c:3585
+#: src/viewer/text/view.c:3615
 msgid "Text area"
 msgstr "Текстова область"
 
-#: src/viewer/text/view.c:3588
+#: src/viewer/text/view.c:3618
 msgid "File upload"
 msgstr "Посилання файлу (upload)"
 
-#: src/viewer/text/view.c:3591
+#: src/viewer/text/view.c:3621
 msgid "Password field"
 msgstr "Введ╕ть пароль"
 
-#: src/viewer/text/view.c:3600
+#: src/viewer/text/view.c:3630
 msgid "name"
 msgstr "╕м'я"
 
-#: src/viewer/text/view.c:3621
+#: src/viewer/text/view.c:3651
 msgid "hit ENTER to"
 msgstr "натисн╕ть ENTER, щоб"
 
-#: src/viewer/text/view.c:3624
+#: src/viewer/text/view.c:3654
 msgid "submit to"
 msgstr "передати за адресою"
 
-#: src/viewer/text/view.c:3626
+#: src/viewer/text/view.c:3656
 msgid "post to"
 msgstr "в╕дправити за адресою"
 

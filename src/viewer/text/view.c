@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.584 2004/09/12 02:27:29 miciah Exp $ */
+/* $Id: view.c,v 1.585 2004/09/12 17:55:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -971,7 +971,7 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 
 	if (mouse->y == ses->tab->term->height - bars
 	    && check_mouse_action(ev, B_DOWN)) {
-		int tab = get_tab_number_by_xpos(ses->tab->term, mouse->x);
+		int tab_num = get_tab_number_by_xpos(ses->tab->term, mouse->x);
 
 		if (check_mouse_button(ev, B_WHEEL_UP)) {
 			switch_to_prev_tab(ses->tab->term);
@@ -979,8 +979,8 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 		} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
 			switch_to_next_tab(ses->tab->term);
 
-		} else if (tab != -1) {
-			switch_to_tab(ses->tab->term, tab, -1);
+		} else if (tab_num != -1) {
+			switch_to_tab(ses->tab->term, tab_num, -1);
 
 			if (check_mouse_button(ev, B_RIGHT)) {
 				struct window *tab = get_current_tab(ses->tab->term);

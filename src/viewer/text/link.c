@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.83 2003/10/28 11:20:48 zas Exp $ */
+/* $Id: link.c,v 1.84 2003/10/28 12:25:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,6 +135,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	int cursor_offset = 0;
 	struct screen_char *template;
 	enum color_flags color_flags = COLOR_DECREASE_LIGHTNESS;
+	struct document_options *doc_opts;
 	struct color_pair colors;
 
 	assert(t && doc_view && doc_view->vs);
@@ -185,27 +186,28 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	template = &doc_view->link_bg[link->n].c;
 	template->attr = 0;
 
-	/* FIXME: following test !! --Zas */
-	if (d_opt) {
-		if (!d_opt->allow_dark_on_black)
-			color_flags |= COLOR_INCREASE_CONTRAST;
+	/* We prefer to use the global d_opt since it is kept up to date by
+	 * an option change hook. However if it is not available fall back to
+	 * use the options from the viewed document. */
+	doc_opts = (d_opt) ? d_opt : &doc_view->document->opt;
 
-		if (d_opt->ensure_contrast)
-			color_flags |= COLOR_ENSURE_CONTRAST;
+	if (!doc_opts->allow_dark_on_black)
+		color_flags |= COLOR_INCREASE_CONTRAST;
 
-		if (d_opt->underline_active_link)
-			template->attr |= SCREEN_ATTR_UNDERLINE;
+	if (doc_opts->ensure_contrast)
+		color_flags |= COLOR_ENSURE_CONTRAST;
 
-		if (d_opt->bold_active_link)
-			template->attr |= SCREEN_ATTR_BOLD;
-	}
+	if (doc_opts->underline_active_link)
+		template->attr |= SCREEN_ATTR_UNDERLINE;
 
-	/* FIXME: and here ??? */
-	if (d_opt->color_active_link) {
-		colors.foreground = d_opt->active_link_fg;
-		colors.background = d_opt->active_link_bg;
+	if (doc_opts->bold_active_link)
+		template->attr |= SCREEN_ATTR_BOLD;
 
-	} else if (d_opt->invert_active_link
+	if (doc_opts->color_active_link) {
+		colors.foreground = doc_opts->active_link_fg;
+		colors.background = doc_opts->active_link_bg;
+
+	} else if (doc_opts->invert_active_link
 		   && link->type != L_FIELD
 		   && link->type != L_AREA) {
 		colors.foreground = link->color.background;
@@ -216,8 +218,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 		colors.background = link->color.background;
 	}
 
-	/* FIXME: this causes segfaults. --Zas */
-	set_term_color(template, &colors, color_flags, d_opt->color_mode);
+	set_term_color(template, &colors, color_flags, doc_opts->color_mode);
 
 	xmax = doc_view->xp + doc_view->xw;
 	ymax = doc_view->yp + doc_view->yw;

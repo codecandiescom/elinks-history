@@ -1,3 +1,139 @@
+Wed Jul  9 20:21:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	Compilation fix.  
+
+Wed Jul  9 20:09:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/setup.h:
+
+	More mailcap and mime.types locations.  
+
+Wed Jul  9 19:46:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	Callocize back init_keepalive_connection().  
+
+Wed Jul  9 19:40:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	Uncle pasky's today compilation fixes.  
+
+Wed Jul  9 19:21:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	add_host_connection() simplification. And always use mem_calloc()
+	when allocating structures, Jonas.  
+
+Wed Jul  9 18:37:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	Restored assertion error message and recovery path for
+	assigned!=download at load_url().  
+
+Wed Jul  9 18:31:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	Restored the assertion failure message in !list_empty() assertion at
+	check_keepalive_connections().  
+
+Wed Jul  9 18:29:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	Fixed add_keepalive_connection() c->sock1!=-1 recovery path.  
+
+Wed Jul  9 18:19:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Fixed bug intrduced in 1.152. POST requests _are_ unrestartable! 
+
+Wed Jul  9 17:28:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	[P]urify user protocol handling. Should speed up thing a bit.  
+	Reorder the flow so we bail out earlier if no program is defined.  
+	Added note about possible problem of host containing also username
+	uri part.  
+
+Wed Jul  9 15:08:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	Also show bad URL syntax warning if @proto is NULL.  
+
+Wed Jul  9 15:02:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	Require that @prot is non NULL and fix possible leak when no @host
+	was returned.  
+
+Wed Jul  9 14:39:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	Merge in prog_func() in user_func().  
+
+Wed Jul  9 14:31:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	Split out subject scanning, and elimintate changes of the url
+	string.  
+
+Wed Jul  9 13:41:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Remove bad assertion and readd connection->from initialization.
+	Triggered by Miciah unbacking to a https page.  
+
+Wed Jul  9 08:54:39 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/ssl/connect.c:
+
+	Compilation fix: Typecasts in the GNUTLS code.  
+
+Wed Jul  9 01:59:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Fix bad memmove() size. Spotted by Zardoz.  
+
+Wed Jul  9 01:51:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	Fix collection of mailto subject.  
+
+Wed Jul  9 01:24:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	Fix untested usage of @subj when scanning for @subj_end. Reported by
+	pasky.  
+
+Wed Jul  9 01:23:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Make uri hostnames end also before '?' (needed for mailto uris).  
+
+Tue Jul  8 23:21:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/href_tests.html:
+
+	Added some mailto test cases.  
+
 Tue Jul  8 19:04:29 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/user.c:

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.131 2004/06/27 17:08:27 pasky Exp $ */
+/* $Id: osdep.c,v 1.132 2004/06/27 17:14:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,13 @@ set_window_title(unsigned char *title)
 		 * potential alternative set_window_title() routines might
 		 * want to take different precautions. */
 		for (i = 0; title[i] && i < xsize; i++) {
-			if (title[i] < ' ')
+			/* 0x80 .. 0x9f are ISO-8859-* control characters.
+			 * In some other encodings they could be used for
+			 * legitimate characters, though (ie. in Kamenicky).
+			 * We should therefore maybe check for these only
+			 * if the terminal is running in an ISO- encoding. */
+			if (iscntrl(title[i]) || (title[i] & 0x7f) < 0x20
+			    || title[i] == 0x7f)
 				continue;
 
 			s[j++] = title[i];

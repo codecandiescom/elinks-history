@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.36 2003/12/26 10:10:09 jonas Exp $ */
+/* $Id: status.c,v 1.37 2003/12/26 13:57:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,6 +199,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	struct download *stat = get_current_download(ses);
 	struct session_status *status = &ses->status;
 	struct color_pair *text_color = NULL;
+	int msglen;
 
 	if (ses->kbdprefix.typeahead) {
 		unsigned char *uri = print_current_link(ses);
@@ -259,9 +260,27 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	if (!text_color)
 		text_color = get_bfu_color(term, "status.status-text");
 
+	msglen = strlen(msg);
 	draw_text(term, 0 + tab_info_len, term->height - 1,
-		  msg, strlen(msg), 0, text_color);
+		  msg, msglen, 0, text_color);
 	mem_free(msg);
+
+	if (download_is_progressing(stat)) {
+		int xend = term->width - 1;
+		int width;
+
+#ifdef USE_LEDS
+		if (ses->status.show_leds)
+			xend -= LEDS_COUNT + 2;
+#endif
+
+		if (xend - msglen < 0) return;
+		width = int_min(20, xend - msglen);
+
+		download_progress_bar(term, xend - width, term->height - 1,
+				      width, NULL, NULL,
+				      stat->prg->pos, stat->prg->size);
+	}
 }
 
 static inline void

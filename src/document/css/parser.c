@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.18 2004/01/18 15:06:16 pasky Exp $ */
+/* $Id: parser.c,v 1.19 2004/01/18 15:41:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "document/css/parser.h"
 #include "document/css/property.h"
+#include "document/css/scanner.h"
 #include "document/css/value.h"
 #include "document/html/parser.h"
 #include "util/color.h"
@@ -24,40 +25,48 @@
 void
 css_parse_properties(struct list_head *props, unsigned char *string)
 {
+	struct css_scanner scanner;
+
 	assert(props && string);
 
-	while (*string) {
+	init_css_scanner(&scanner, string);
+
+	while (css_scanner_has_tokens(&scanner)) {
 		struct css_property_info *property_info = NULL;
 		struct css_property *prop;
-		int pos, i;
+		struct css_token *token = get_css_token(&scanner);
+		int i;
 
-		/* Align myself. */
-
-		skip_whitespace(string);
+		if (!token) break;
 
 		/* Extract property name. */
 
-		pos = strcspn(string, ":;");
-		if (string[pos] != ':') {
-			string += pos + (string[pos] == ';');
+		if (token->type != CSS_TOKEN_IDENTIFIER
+		    || !check_next_css_token(&scanner, ':')) {
+			skip_css_tokens(&scanner, ';');
 			continue;
 		}
 
 		for (i = 0; css_property_info[i].name; i++) {
 			struct css_property_info *info = &css_property_info[i];
 
-			if (!strlcasecmp(string, pos, info->name, -1)) {
+			if (css_token_contains(token, info->name, -1)) {
 				property_info = info;
 				break;
 			}
 		}
 
-		string += pos + 1;
-
-		if (!property_info) {
-			/* Unknown property, check the next one. */
+		if (!skip_css_tokens(&scanner, ':')) {
+			INTERNAL("I thought we already knew ':' was the next token");
 			goto ride_on;
 		}
+
+		token = get_css_token(&scanner);
+
+		if (!property_info || !token) {
+ 			/* Unknown property, check the next one. */
+ 			goto ride_on;
+ 		}
 
 		/* We might be on track of something, cook up the struct. */
 
@@ -67,6 +76,7 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 		}
 		prop->type = property_info->type;
 		prop->value_type = property_info->value_type;
+		string = token->string;
 		if (!css_parse_value(property_info, &prop->value, &string)) {
 			mem_free(prop);
 			goto ride_on;
@@ -76,7 +86,6 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 		/* Maybe we have something else to go yet? */
 
 ride_on:
-		pos = strcspn(string, ";");
-		string += pos + (string[pos] == ';');
+		skip_css_tokens(&scanner, ';');
 	}
 }

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.37 2004/01/18 02:55:59 jonas Exp $
+## $Id: Makefile.am,v 1.38 2004/01/18 15:41:03 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -11,6 +11,7 @@ libdocument_a_LIBADD = \
  css/apply.o \
  css/parser.o \
  css/property.o \
+ css/scanner.o \
  css/value.o \
  html/frames.o \
  html/parser.o \

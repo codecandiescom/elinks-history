@@ -51,6 +51,9 @@
 /* Define if you have the setpgrp function.  */
 #undef HAVE_SETPGRP
 
+/* Define if you have the strcasestr function.  */
+#undef HAVE_STRCASESTR
+
 /* Define if you have the timegm function.  */
 #undef HAVE_TIMEGM
 

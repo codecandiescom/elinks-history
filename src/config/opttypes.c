@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.81 2004/04/23 20:44:27 pasky Exp $ */
+/* $Id: opttypes.c,v 1.82 2004/05/01 18:01:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,12 +34,13 @@ static unsigned char *
 gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	unsigned char *str;
+	int dummy_line = 0;
 
 	if (!*argc) return gettext("Parameter expected");
 
 	/* FIXME!! We will modify argv! (maybe) */
 	commandline = 1;
-	str = option_types[o->type].read(o, *argv);
+	str = option_types[o->type].read(o, *argv, &dummy_line);
 	commandline = 0;
 	if (str) {
 		/* We ate parameter */
@@ -108,8 +109,8 @@ redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 	wrap_or_(cmdline, cmdline(real, argv, argc), NULL);
 
 static unsigned char *
-redir_rd(struct option *opt, unsigned char **file)
-	wrap_or_(read, read(real, file), NULL);
+redir_rd(struct option *opt, unsigned char **file, int *line)
+	wrap_or_(read, read(real, file, line), NULL);
 
 static void
 redir_wr(struct option *opt, struct string *string)
@@ -149,7 +150,7 @@ add_optstring_to_string(struct string *s, unsigned char *q, int qlen)
 /* Config file handlers. */
 
 static unsigned char *
-num_rd(struct option *opt, unsigned char **file)
+num_rd(struct option *opt, unsigned char **file, int *line)
 {
 	unsigned char *end = *file;
 	long *value = mem_alloc(sizeof(long));
@@ -187,7 +188,7 @@ num_wr(struct option *option, struct string *string)
 
 
 static unsigned char *
-str_rd(struct option *opt, unsigned char **file)
+str_rd(struct option *opt, unsigned char **file, int *line)
 {
 	unsigned char *str = *file;
 	struct string str2;
@@ -216,6 +217,9 @@ str_rd(struct option *opt, unsigned char **file)
 			/* \\ means \. */
 			if (str[1] == '\\') str++;
 		}
+
+		if (*str == '\n') (*line)++;
+
 		add_char_to_string(&str2, *str);
 		str++;
 	}

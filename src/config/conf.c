@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.137 2004/04/11 21:11:54 jonas Exp $ */
+/* $Id: conf.c,v 1.138 2004/05/01 18:01:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 		if (!option_types[opt->type].read)
 			return ERROR_VALUE;
 
-		val = option_types[opt->type].read(opt, file);
+		val = option_types[opt->type].read(opt, file, line);
 		if (!val) {
 			return ERROR_VALUE;
 		} else if (mirror) {
@@ -218,13 +218,13 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 	if (!*file) return ERROR_PARSE;
 
 	/* Keymap */
-	keymap = option_types[OPT_STRING].read(NULL, file);
+	keymap = option_types[OPT_STRING].read(NULL, file, line);
 	*file = skip_white(*file, line);
 	if (!keymap || !**file)
 		return ERROR_OPTION;
 
 	/* Keystroke */
-	keystroke = option_types[OPT_STRING].read(NULL, file);
+	keystroke = option_types[OPT_STRING].read(NULL, file, line);
 	*file = skip_white(*file, line);
 	if (!keystroke || !**file) {
 		mem_free(keymap);
@@ -247,7 +247,7 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 
 	/* Action */
 	next_pos = *file;
-	action = option_types[OPT_STRING].read(NULL, file);
+	action = option_types[OPT_STRING].read(NULL, file, line);
 	if (!action) {
 		mem_free(keymap);
 		return ERROR_VALUE;
@@ -290,7 +290,7 @@ parse_include(struct option *opt_tree, unsigned char **file, int *line,
 	if (!*file) return ERROR_PARSE;
 
 	/* File name */
-	fname = option_types[OPT_STRING].read(NULL, file);
+	fname = option_types[OPT_STRING].read(NULL, file, line);
 	if (!fname)
 		return ERROR_VALUE;
 

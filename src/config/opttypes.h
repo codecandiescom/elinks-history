@@ -1,4 +1,4 @@
-/* $Id: opttypes.h,v 1.9 2003/10/22 21:35:44 jonas Exp $ */
+/* $Id: opttypes.h,v 1.10 2004/05/01 18:01:10 miciah Exp $ */
 
 #ifndef EL__CONFIG_OPTTYPES_H
 #define EL__CONFIG_OPTTYPES_H
@@ -9,7 +9,7 @@
 struct option_type_info {
 	unsigned char *name;
 	unsigned char *(*cmdline)(struct option *, unsigned char ***, int *);
-	unsigned char *(*read)(struct option *, unsigned char **);
+	unsigned char *(*read)(struct option *, unsigned char **, int *);
 	void (*write)(struct option *, struct string *);
 	void (*dup)(struct option *, struct option *);
 	int (*set)(struct option *, unsigned char *);

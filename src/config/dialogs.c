@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.165 2004/04/16 16:31:34 zas Exp $ */
+/* $Id: dialogs.c,v 1.166 2004/05/01 18:01:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,9 +249,10 @@ check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data
 	struct session *ses = dlg_data->dlg->udata2;
 	unsigned char *value = widget_data->cdata;
 	unsigned char *chinon;
+	int dummy_line = 0;
 
 	commandline = 1;
-	chinon = option_types[option->type].read(option, &value);
+	chinon = option_types[option->type].read(option, &value, &dummy_line);
 	if (chinon) {
 		if (option_types[option->type].set &&
 		    option_types[option->type].set(option, chinon)) {

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.455 2004/06/22 22:42:25 zas Exp $ */
+/* $Id: parser.c,v 1.456 2004/06/22 22:56:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,6 @@ get_target(unsigned char *a)
 	return v;
 }
 
-void *ff;
 void (*put_chars_f)(void *, unsigned char *, int);
 void (*line_break_f)(void *);
 void *(*special_f)(void *, enum html_special_type, ...);
@@ -204,7 +203,7 @@ set_fragment_identifier(unsigned char *attr_name, unsigned char *attr)
 	unsigned char *id_attr = get_attr_val(attr_name, attr);
 
 	if (id_attr) {
-		special_f(ff, SP_TAG, id_attr);
+		special_f(html_context.ff, SP_TAG, id_attr);
 		mem_free(id_attr);
 	}
 }
@@ -241,7 +240,7 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 	if (!uri) return;
 
 	/* Request the imported stylesheet as part of the document ... */
-	special_f(ff, SP_STYLESHEET, uri);
+	special_f(html_context.ff, SP_STYLESHEET, uri);
 
 	/* ... and then attempt to import from the cache. */
 	import_css(css, uri);
@@ -379,7 +378,7 @@ html_body(unsigned char *a)
 	if (html_context.has_link_lines
 	    && par_format.bgcolor
 	    && !search_html_stack("BODY")) {
-		special_f(ff, SP_COLOR_LINK_LINES);
+		special_f(html_context.ff, SP_COLOR_LINK_LINES);
 	}
 }
 
@@ -440,7 +439,7 @@ html_br(unsigned char *a)
 {
 	html_linebrk(a);
 	if (html_context.was_br)
-		ln_break(2, line_break_f, ff);
+		ln_break(2, line_break_f, html_context.ff);
 	else
 		html_context.was_br = 1;
 }
@@ -570,10 +569,10 @@ html_hr(unsigned char *a)
 	i = get_width(a, "width", 1);
 	if (i == -1) i = par_format.width - (margin - 2) * 2;
 	format.attr = AT_GRAPHICS;
-	special_f(ff, SP_NOWRAP, 1);
-	while (i-- > 0) put_chrs(&r, 1, put_chars_f, ff);
-	special_f(ff, SP_NOWRAP, 0);
-	ln_break(2, line_break_f, ff);
+	special_f(html_context.ff, SP_NOWRAP, 1);
+	while (i-- > 0) put_chrs(&r, 1, put_chars_f, html_context.ff);
+	special_f(html_context.ff, SP_NOWRAP, 0);
+	ln_break(2, line_break_f, html_context.ff);
 	kill_html_stack_item(&html_top);
 }
 
@@ -598,7 +597,7 @@ html_th(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.attr |= AT_BOLD;
-	put_chrs(" ", 1, put_chars_f, ff);
+	put_chrs(" ", 1, put_chars_f, html_context.ff);
 }
 
 void
@@ -607,7 +606,7 @@ html_td(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.attr &= ~AT_BOLD;
-	put_chrs(" ", 1, put_chars_f, ff);
+	put_chrs(" ", 1, put_chars_f, html_context.ff);
 }
 
 void
@@ -709,7 +708,7 @@ html_li(unsigned char *a)
 	 * for us. */
 	if (html_context.was_li) {
 		html_context.line_breax = 0;
-		ln_break(1, line_break_f, ff);
+		ln_break(1, line_break_f, html_context.ff);
 	}
 
 	/*kill_html_stack_until(0, "", "UL", "OL", NULL);*/
@@ -719,7 +718,7 @@ html_li(unsigned char *a)
 
 		if (t == P_O) x[0] = 'o';
 		if (t == P_PLUS) x[0] = '+';
-		put_chrs(x, 7, put_chars_f, ff);
+		put_chrs(x, 7, put_chars_f, html_context.ff);
 		par_format.leftmargin += 2;
 		par_format.align = AL_LEFT;
 
@@ -733,7 +732,8 @@ html_li(unsigned char *a)
 		if (s != -1) par_format.list_number = s;
 
 		if (t == P_ALPHA || t == P_alpha) {
-			put_chrs("&nbsp;", 6, put_chars_f, ff), c = 1;
+			put_chrs("&nbsp;", 6, put_chars_f, html_context.ff);
+			c = 1;
 			n[0] = par_format.list_number
 			       ? (par_format.list_number - 1) % 26
 			         + (t == P_ALPHA ? 'A' : 'a')
@@ -749,15 +749,17 @@ html_li(unsigned char *a)
 			}
 
 		} else {
-			if (par_format.list_number < 10)
-				put_chrs("&nbsp;", 6, put_chars_f, ff), c = 1;
+			if (par_format.list_number < 10) {
+				put_chrs("&nbsp;", 6, put_chars_f, html_context.ff);
+				c = 1;
+			}
 
 			ulongcat(n, NULL, par_format.list_number, (sizeof(n) - 1), 0);
 		}
 
 		nlen = strlen(n);
-		put_chrs(n, nlen, put_chars_f, ff);
-		put_chrs(".&nbsp;", 7, put_chars_f, ff);
+		put_chrs(n, nlen, put_chars_f, html_context.ff);
+		put_chrs(".&nbsp;", 7, put_chars_f, html_context.ff);
 		par_format.leftmargin += nlen + c + 2;
 		par_format.align = AL_LEFT;
 		html_top.next->parattr.list_number = par_format.list_number + 1;
@@ -781,7 +783,7 @@ html_dl(unsigned char *a)
 	par_format.dd_margin = par_format.leftmargin;
 	html_top.type = ELEMENT_DONT_KILL;
 	if (!(par_format.flags & P_COMPACT)) {
-		ln_break(2, line_break_f, ff);
+		ln_break(2, line_break_f, html_context.ff);
 		html_top.linebreak = 2;
 	}
 }
@@ -793,7 +795,7 @@ html_dt(unsigned char *a)
 	par_format.align = AL_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
 	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
-		ln_break(2, line_break_f, ff);
+		ln_break(2, line_break_f, html_context.ff);
 }
 
 void
@@ -852,8 +854,8 @@ html_frame(unsigned char *a)
 		put_link_line("Frame: ", name, url, "");
 
 	} else {
-		if (special_f(ff, SP_USED, NULL)) {
-			special_f(ff, SP_FRAME, html_top.frameset, name, url);
+		if (special_f(html_context.ff, SP_USED, NULL)) {
+			special_f(html_context.ff, SP_FRAME, html_top.frameset, name, url);
 		}
 	}
 
@@ -875,7 +877,8 @@ html_frameset(unsigned char *a)
 	 * concerns at least because sane sites should enclose the documents in
 	 * <body> elements ;-). See also bug 171. --pasky */
 	if (search_html_stack("BODY")
-	    || !global_doc_opts->frames || !special_f(ff, SP_USED, NULL))
+	    || !global_doc_opts->frames
+	    || !special_f(html_context.ff, SP_USED, NULL))
 		return;
 
 	cols = get_attr_val(a, "cols");
@@ -917,7 +920,9 @@ html_frameset(unsigned char *a)
 			   &fp.height, &fp.y);
 
 	fp.parent = html_top.frameset;
-	if (fp.x && fp.y) html_top.frameset = special_f(ff, SP_FRAMESET, &fp);
+	if (fp.x && fp.y) {
+		html_top.frameset = special_f(html_context.ff, SP_FRAMESET, &fp);
+	}
 	mem_free_if(fp.width);
 	mem_free_if(fp.height);
 
@@ -950,7 +955,7 @@ process_head(unsigned char *head)
 			html_focusable(NULL);
 			url = join_urls(format.href_base, saved_url);
 			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
-			special_f(ff, SP_REFRESH, seconds, url);
+			special_f(html_context.ff, SP_REFRESH, seconds, url);
 			mem_free(url);
 			mem_free(saved_url);
 		}

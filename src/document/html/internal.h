@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.21 2004/06/22 22:42:25 zas Exp $ */
+/* $Id: internal.h,v 1.22 2004/06/22 22:56:51 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -13,7 +13,6 @@ extern struct list_head html_stack;
 #define par_format (((struct html_element *) html_stack.next)->parattr)
 #define html_top (*(struct html_element *) html_stack.next)
 
-extern void *ff;
 extern void (*put_chars_f)(void *, unsigned char *, int);
 extern void (*line_break_f)(void *);
 extern void *(*special_f)(void *, enum html_special_type, ...);
@@ -45,12 +44,20 @@ struct html_context {
 	unsigned char *last_form_attr;
 	unsigned char *last_input_tag;
 
-	/* For
+	/* For:
 	 * html/parser/parse.c
 	 * html/parser.c
 	 * html/renderer.c
 	 * html/tables.c */
 	int table_level;
+
+	/* For:
+	 * html/parser/forms.c
+	 * html/parser/link.c
+	 * html/parser/parse.c
+	 * html/parser/stack.c
+	 * html/parser.c */
+	void *ff;
 };
 
 extern struct html_context html_context;

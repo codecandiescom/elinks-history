@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.12 2004/06/22 22:18:52 zas Exp $ */
+/* $Id: link.c,v 1.13 2004/06/22 22:56:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,7 +244,7 @@ show_al:
 
 		fg = format.fg;
 		format.fg = get_opt_color("document.colors.image");
-		put_chrs(al, strlen(al), put_chars_f, ff);
+		put_chrs(al, strlen(al), put_chars_f, html_context.ff);
 		format.fg = fg;
 		if (ismap) kill_html_stack_item(&html_top);
 		/* Anything below must take care of properly handling the
@@ -266,17 +266,17 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 {
 	html_context.has_link_lines = 1;
 	html_stack_dup(ELEMENT_KILLABLE);
-	ln_break(1, line_break_f, ff);
+	ln_break(1, line_break_f, html_context.ff);
 	mem_free_set(&format.link, NULL);
 	mem_free_set(&format.target, NULL);
 	mem_free_set(&format.title, NULL);
 	format.form = NULL;
-	put_chrs(prefix, strlen(prefix), put_chars_f, ff);
+	put_chrs(prefix, strlen(prefix), put_chars_f, html_context.ff);
 	format.link = join_urls(format.href_base, link);
 	format.target = stracpy(target);
 	format.fg = format.clink;
-	put_chrs(linkname, strlen(linkname), put_chars_f, ff);
-	ln_break(1, line_break_f, ff);
+	put_chrs(linkname, strlen(linkname), put_chars_f, html_context.ff);
+	ln_break(1, line_break_f, html_context.ff);
 	kill_html_stack_item(&html_top);
 }
 

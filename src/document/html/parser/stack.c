@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.13 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: stack.c,v 1.14 2004/06/22 22:56:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,5 +213,5 @@ killll:
 		kill_html_stack_item(e->next);
 	}
 
-	ln_break(l, line_break_f, ff);
+	ln_break(l, line_break_f, html_context.ff);
 }

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.47 2002/07/03 12:02:03 pasky Exp $ */
+/* $Id: conf.c,v 1.48 2002/07/03 12:03:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -422,7 +422,7 @@ load_config()
 {
 	load_config_file(CONFDIR, "elinks.conf",
 			 root_options, NULL, NULL);
-	load_config_file(CONFDIR, "elinks.conf",
+	load_config_file(elinks_home, "elinks.conf",
 			 root_options, NULL, NULL);
 }
 

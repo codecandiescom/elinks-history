@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.28 2003/07/28 03:57:27 jonas Exp $ */
+/* $Id: screen.c,v 1.29 2003/07/28 04:16:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,12 +324,12 @@ redraw_screen(struct terminal *term)
 
 	if (screen.length) {
 		if (opt_cache.colors)
-			add_to_string(&screen, "\033[37;40m");
+			add_bytes_to_string(&screen, "\033[37;40m", 8);
 
-		add_to_string(&screen, "\033[0m");
+		add_bytes_to_string(&screen, "\033[0m", 4);
 
 		if (opt_cache.type == TERM_LINUX && opt_cache.m11_hack)
-			add_to_string(&screen, "\033[10m");
+			add_bytes_to_string(&screen, "\033[10m", 5);
 
 		if (opt_cache.type == TERM_VT100)
 			add_char_to_string(&screen, '\x0f');

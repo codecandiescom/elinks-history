@@ -4,7 +4,7 @@
 " Last Change:	Dec 12th 2002
 " Description:	This file covers elinks version 0.4pre15
 
-" $Id: elinks.vim,v 1.5 2003/01/18 23:36:33 jonas Exp $
+" $Id: elinks.vim,v 1.6 2003/06/04 21:47:44 jonas Exp $
 
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
@@ -49,18 +49,25 @@ syn match	elinksKeymap	/"\(main\|edit\|menu\)"/ skipwhite nextgroup=elinksKey
 syn match	elinksKey	/"[^"]\+"/ skipwhite nextgroup=elinksActStr
 
 syn match	elinksActStr	/=\s*"[^"]*"/ contains=elinksAssign,elinksAction
-syn keyword	elinksAction	contained add-bookmark auto-complete auto-complete-unambiguous back backspace
-syn keyword	elinksAction	contained bookmark-manager cookies-load copy-clipboard cut-clipboard delete
-syn keyword	elinksAction	contained document-info down download download-image edit end enter enter-reload
+syn keyword	elinksAction	contained abort-connection add-bookmark add-bookmark-link
+syn keyword	elinksAction	contained auto-complete auto-complete-unambiguous
+syn keyword	elinksAction	contained back backspace bookmark-manager
+syn keyword	elinksAction	contained cookies-load copy-clipboard cut-clipboard
+syn keyword	elinksAction	contained delete document-info down download download-image
+syn keyword	elinksAction	contained edit end enter enter-reload
 syn keyword	elinksAction	contained file-menu find-next find-next-back follow-link forget-credentials
 syn keyword	elinksAction	contained goto-url goto-url-current goto-url-current-link goto-url-home
-syn keyword	elinksAction	contained header-info history-manager home jump-to-link keybinding-manager kill-to-bol kill-to-eol
-syn keyword	elinksAction	contained left link-menu lua-console menu next-frame none open-link-in-new-window
-syn keyword	elinksAction	contained open-new-window page-down page-up paste-clipboard previous-frame quit
-syn keyword	elinksAction	contained really-quit reload right save-formatted scroll-down scroll-left
-syn keyword	elinksAction	contained scroll-right scroll-up search search-back toggle-display-images toggle-numbered-links
-syn keyword	elinksAction	contained toggle-display-tables toggle-html-plain unback up view-image zoom-frame
-syn keyword	elinksAction	contained options-manager abort-connection resume-download add-bookmark-link
+syn keyword	elinksAction	contained header-info history-manager home jump-to-link
+syn keyword	elinksAction	contained keybinding-manager kill-to-bol kill-to-eol
+syn keyword	elinksAction	contained left link-menu lua-console menu next-frame none
+syn keyword	elinksAction	contained open-link-in-new-window open-new-window options-manager
+syn keyword	elinksAction	contained page-down page-up paste-clipboard previous-frame quit
+syn keyword	elinksAction	contained really-quit reload resume-download right
+syn keyword	elinksAction	contained save-formatted scroll-down scroll-left
+syn keyword	elinksAction	contained scroll-right scroll-up search search-back
+syn keyword	elinksAction	contained tab-close tab-next tab-prev toggle-display-images
+syn keyword	elinksAction	contained toggle-numbered-links toggle-display-tables toggle-html-plain
+syn keyword	elinksAction	contained unback up view-image zoom-frame
 
 " Include statements
 syn match	elinksInclude	/^\s*include\s/ skipwhite nextgroup=elinksValue

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.12 2003/12/09 09:21:25 zas Exp $ */
+/* $Id: smb.c,v 1.13 2003/12/09 09:34:06 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -480,8 +480,9 @@ smb_func(struct connection *conn)
 	}
 
 	if (!cpid) {
+#define MAX_SMBCLIENT_ARGS 32
 		int n = 0;
-		unsigned char *v[32]; /* FIXME: overflow risk (v[n++]). --Zas */
+		unsigned char *v[MAX_SMBCLIENT_ARGS];
 
 		close(1);
 		dup2(out_pipe[1], 1);
@@ -496,7 +497,7 @@ smb_func(struct connection *conn)
 
 		v[n++] = "smbclient";
 
-		/* FIXME: handle alloc failures. */
+		/* FIXME: handle alloc failures and overflow risks. */
 
 		if (!*share) {
 			v[n++] = "-L";	/* get a list of shares available on a host */
@@ -556,11 +557,11 @@ smb_func(struct connection *conn)
 		}
 
 		v[n++] = NULL;
+		assert(n < MAX_SMBCLIENT_ARGS);
 
 		execvp("smbclient", (char **) v);
 
-		/* FIXME: error() ??. */
-		fprintf(stderr, "smbclient not found in $PATH");
+		error("smbclient not found in $PATH");
 		_exit(1);
 	}
 

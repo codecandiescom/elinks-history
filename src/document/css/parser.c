@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.80 2004/01/29 04:19:16 jonas Exp $ */
+/* $Id: parser.c,v 1.81 2004/01/29 12:47:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,109 +179,95 @@ struct selector_pkg {
  * TODO: selector can currently only be simple element names, and element
  * chains are not supported yet.
  */
-static struct list_head *
+static void
 css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		   struct list_head *selectors)
 {
-	unsigned char *name = NULL, *id = NULL, *class = NULL, *pseudo = NULL;
-	struct scanner_token *token = get_scanner_token(scanner);
-
 	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just <element>.
 	 * And anyway we should have css_parse_selector(). --pasky */
 	/* TODO: comma-separated list of simple selectors. */
 	/* FIXME: element can be even '*' --pasky */
 
 	while (scanner_has_tokens(scanner)) {
+		struct scanner_token *token = get_scanner_token(scanner);
+		struct scanner_token element;
 		struct selector_pkg *pkg = NULL;
 		struct css_selector *selector;
+
+		/* This is basicly check_css_precedence(token->type, ','))
+		 * meaning check if the token precedence is less than or equal
+		 * some ordinary token. But that would be too corny to write at
+		 * this stage. */
+		if (token->type == '{'
+		    || token->type == '}'
+		    || token->type == ';')
+			break;
 
 		/* Load up the selector */
 
 		if (token->type != CSS_TOKEN_IDENT) {
-			skip_css_tokens(scanner, '}');
-			return NULL;
+			skip_css_tokens(scanner, ',');
+			continue;
 		}
 
-		name = memacpy(token->string, token->length);
+		/* Save it */
+		memcpy(&element, token, sizeof(struct scanner_token));
+		token = get_next_scanner_token(scanner);
 
 		/* Let's see if we will get anything else of this. */
 
-		token = get_next_scanner_token(scanner);
-
-		if (token->type == CSS_TOKEN_HASH
-			|| token->type == CSS_TOKEN_HEX_COLOR) {
+		switch (token->type) {
 			/* id */
-			id = memacpy(token->string + 1, token->length - 1);
-			token = get_next_scanner_token(scanner);
-		}
+			case CSS_TOKEN_HASH:
+			case CSS_TOKEN_HEX_COLOR:
+				if (!skip_css_tokens(scanner, ','))
+					return;
+				continue;
 
-		if (token->type == '.') {
 			/* class */
-			token = get_next_scanner_token(scanner);
-			if (token->type != CSS_TOKEN_IDENT) {
-				goto syntax_error;
-			}
-			class = memacpy(token->string, token->length);
-			token = get_next_scanner_token(scanner);
-		}
-
-		if (token->type == ':') {
+			case '.':
 			/* pseudo */
-			token = get_next_scanner_token(scanner);
-			if (token->type != CSS_TOKEN_IDENT) {
-				goto syntax_error;
-			}
-			pseudo = memacpy(token->string, token->length);
-			token = get_next_scanner_token(scanner);
+			case ':':
+				token = get_next_scanner_token(scanner);
+				if (token->type != CSS_TOKEN_IDENT
+				    || !skip_css_tokens(scanner, ','))
+					return;
+				continue;
+
+			case ',':
+			case '{':
+				/* These are the only ones we are currently
+				 * interested in. */
+				break;
+
+			default:
+				if (!skip_css_tokens(scanner, ','))
+					return;
+				continue;
 		}
 
 		/* Check if we have already encountered the selector */
 
 		/* FIXME: This is totally broken because we have to do this _after_
 		 * scanning for id/class/pseudo. --pasky */
-		selector = get_css_selector(css, name, -1);
-		if (!selector)
-			goto syntax_error;
+		selector = get_css_selector(css, element.string, element.length);
+		if (!selector) continue;
 
 		pkg = mem_calloc(1, sizeof(struct selector_pkg));
-		if (!pkg)
-			goto syntax_error;
+		if (!pkg) continue;
 		pkg->selector = selector;
 
 		/* This is a temporary measure, so that overly specific selectors won't
 		 * spoil our whole stylesheet until we support them, and we always
 		 * favour the general selectors instead. Keep just the add_to_list()
 		 * when we will start supporting the id/class/pseudo. */
-		if (!id && !class && !pseudo) {
-			add_to_list(*selectors, pkg);
-		} else {
-			if (id) mem_free(id), id = NULL;
-			if (class) mem_free(class), class = NULL;
-			if (pseudo) mem_free(pseudo), pseudo = NULL;
-			mem_free(pkg); pkg = NULL;
-		}
-		if (name) mem_free(name), name = NULL;
+		add_to_list(*selectors, pkg);
 
 		if (token->type != ',') break;
 
 		/* Multiple elements hooked up to this ruleset. */
 		token = get_next_scanner_token(scanner);
 	}
-
-	if (token->type != '{') {
-syntax_error:
-		if (id) mem_free(id), id = NULL;
-		if (class) mem_free(class), class = NULL;
-		if (pseudo) mem_free(pseudo), pseudo = NULL;
-		if (name) mem_free(name), name = NULL;
-
-		free_list(*selectors);
-
-		skip_css_block(scanner);
-		return NULL;
-	}
-
-	return selectors;
 }
 
 
@@ -296,12 +282,13 @@ css_parse_ruleset(struct css_stylesheet *css, struct scanner *scanner)
 	INIT_LIST_HEAD(selectors);
 	struct selector_pkg *pkg, *fpkg;
 
-	if (!css_parse_selector(css, scanner, &selectors)
-	    || list_empty(selectors)) {
+	css_parse_selector(css, scanner, &selectors);
+	if (list_empty(selectors)
+	    || !skip_css_tokens(scanner, '{')) {
+		skip_css_tokens(scanner, '}');
 		return;
 	}
 
-	skip_css_tokens(scanner, '{');
 
 	/* We don't handle the case where a property has already been added to
 	 * a selector. That doesn't matter though, because the best one will be

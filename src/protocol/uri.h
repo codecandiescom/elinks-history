@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.115 2004/06/03 23:01:38 jonas Exp $ */
+/* $Id: uri.h,v 1.116 2004/06/04 13:36:04 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -90,22 +90,22 @@ enum uri_component {
 	URI_PORT		= (1 << 4),
 	URI_DEFAULT_PORT	= (1 << 5),
 	URI_DATA		= (1 << 6),
-	URI_POST		= (1 << 7),
+	URI_POST		= (1 << 8),
 
 	/* Control for ``encoding'' URIs into Internationalized Domain Names.
 	 * Hopefully only a few lowlevel places should have to use it and it
 	 * should never be exposed to the user. */
-	URI_IDN			= (1 << 8),
+	URI_IDN			= (1 << 9),
 
 	/* Add stuff from uri->data and up and prefixes a '/' */
-	URI_PATH		= (1 << 9),
+	URI_PATH		= (1 << 10),
 
 	/* Add filename from last direcory separator in uri->data to end of
 	 * path. */
-	URI_FILENAME		= (1 << 10),
+	URI_FILENAME		= (1 << 11),
 
 	/* Add query part from uri->data not including the '?' */
-	URI_QUERY		= (1 << 11),
+	URI_QUERY		= (1 << 12),
 
 	/* Some predefined classes for formatting of URIs */
 

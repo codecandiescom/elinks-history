@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.165 2003/11/13 22:43:41 pasky Exp $ */
+/* $Id: download.c,v 1.166 2003/11/14 12:29:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,9 +607,9 @@ download_data(struct download *download, struct file_download *file_download)
 		if (!u) break;
 
 		if (!broken_302_redirect && !ce->redirect_get) {
-			unsigned char *p = strchr(file_download->url, POST_CHAR);
+			unsigned char *postdata = post_data_start(file_download->url);
 
-			if (p) add_to_strn(&u, p);
+			if (postdata) add_to_strn(&u, postdata);
 		}
 
 		mem_free(file_download->url);

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.34 2003/07/09 14:39:59 jonas Exp $ */
+/* $Id: user.c,v 1.35 2003/07/09 15:02:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,15 +119,15 @@ static void
 user_func(struct session *ses, unsigned char *url)
 {
 	unsigned char *urldata;
-	unsigned char *proto, *host, *port, *dir, *subj;
+	unsigned char *host, *port, *dir, *subj;
 	unsigned char *prog;
+	unsigned char *proto = get_protocol_name(url);
 
-	/* I know this may be NULL and I don't care. --pasky */
-	proto = get_protocol_name(url);
+	if (!proto) return;
 
 	host = get_host_and_pass(url, 0);
 	if (!host) {
-		if (proto) mem_free(proto);
+		mem_free(proto);
 		msg_box(ses->tab->term, NULL, 0,
 			N_("Bad URL syntax"), AL_CENTER,
 			N_("Bad user protocol URL"),
@@ -161,17 +161,17 @@ user_func(struct session *ses, unsigned char *url)
 	if (!prog || !*prog) {
 		/* Shouldn't ever happen, but be paranoid. */
 		/* Happens when you're in X11 and you've no handler for it. */
-		msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+		msg_box(ses->tab->term, getml(proto, NULL), MSGBOX_FREE_TEXT,
 			N_("No program"), AL_CENTER,
 			msg_text(ses->tab->term,
 				N_("No program specified for protocol %s."),
 				proto),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
-		return;
 	} else {
 		unsigned char *cmd = subst_cmd(prog, url, host, port, dir, subj);
 
+		mem_free(proto);
 		if (cmd) {
 			exec_on_terminal(ses->tab->term, cmd, "", 1);
 			mem_free(cmd);
@@ -182,7 +182,6 @@ user_func(struct session *ses, unsigned char *url)
 	if (subj) mem_free(subj);
 	if (port) mem_free(port);
 	mem_free(host);
-	if (proto) mem_free(proto);
 }
 
 struct protocol_backend user_protocol_backend = {

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.359 2004/07/20 01:11:42 jonas Exp $ */
+/* $Id: menu.c,v 1.360 2004/07/24 13:47:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,45 +154,52 @@ static struct menu_item no_hist_menu[] = {
 	NULL_MENU_ITEM
 };
 
-#define history_menu_model(name__, dir__) 				\
-static void 								\
-name__(struct terminal *term, void *ddd, struct session *ses) 		\
-{ 									\
-	struct location *loc; 						\
-	struct menu_item *mi = NULL; 					\
- 									\
-	if (!have_location(ses)) goto loop_done; 			\
- 									\
-	for (loc = cur_loc(ses)->dir__; 				\
-	     loc != (struct location *) &ses->history.history; 		\
-	     loc = loc->dir__) { 					\
-		unsigned char *url; 					\
- 									\
-		if (!mi) { 						\
-			mi = new_menu(FREE_LIST | FREE_TEXT | NO_INTL);	\
-			if (!mi) return; 				\
-		} 							\
- 									\
-		url = get_uri_string(loc->vs.uri, URI_PUBLIC); 		\
-		if (url) { 						\
-			add_to_menu(&mi, url, NULL, ACT_MAIN_NONE, 	\
-				    (menu_func) go_historywards,	\
-			    	    (void *) loc, 0);			\
-		} 							\
-	} 								\
-loop_done: 								\
- 									\
-	if (!mi) 							\
-		do_menu(term, no_hist_menu, ses, 0); 			\
-	else 								\
-		do_menu(term, mi, ses, 0); 				\
+/* unhist == 0 => history
+ * unhist == 1 => unhistory */
+static void
+history_menu_common(struct terminal *term, struct session *ses, int unhist)
+{
+	struct location *loc;
+	struct menu_item *mi = NULL;
+
+	if (!have_location(ses)) goto loop_done;
+
+	for (loc = unhist ? cur_loc(ses)->next : cur_loc(ses)->prev;
+	     loc != (struct location *) &ses->history.history;
+	     loc = unhist ? loc->next : loc->prev) {
+		unsigned char *url;
+
+		if (!mi) {
+			mi = new_menu(FREE_LIST | FREE_TEXT | NO_INTL);
+			if (!mi) return;
+		}
+
+		url = get_uri_string(loc->vs.uri, URI_PUBLIC);
+		if (url) {
+			add_to_menu(&mi, url, NULL, ACT_MAIN_NONE,
+				    (menu_func) go_historywards,
+			    	    (void *) loc, 0);
+		}
+	}
+loop_done:
+
+	if (!mi)
+		do_menu(term, no_hist_menu, ses, 0);
+	else
+		do_menu(term, mi, ses, 0);
 }
 
-history_menu_model(history_menu, prev);
-history_menu_model(unhistory_menu, next);
+static void
+history_menu(struct terminal *term, void *xxx, struct session *ses)
+{
+	history_menu_common(term, ses, 0);
+}
 
-#undef history_menu_model
-
+static void
+unhistory_menu(struct terminal *term, void *xxx, struct session *ses)
+{
+	history_menu_common(term, ses, 1);
+}
 
 void
 tab_menu(struct session *ses, int x, int y, int place_above_cursor)

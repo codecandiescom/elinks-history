@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.85 2003/05/04 21:52:21 pasky Exp $ */
+/* $Id: main.c,v 1.86 2003/05/07 11:55:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,9 +134,22 @@ sig_cont(struct terminal *t)
 }
 
 #ifdef BACKTRACE
+
+#ifdef HAVE_EXECINFO_H
+#include <execinfo.h>
+#endif
+
 static void
-sig_segv(struct terminal *t)
+sig_segv(int signum)
 {
+#ifdef HAVE_EXECINFO_H
+	void *stack[100];
+
+	/* Backtrace NOW and not later... */
+	/* Backtrace. */
+	backtrace_symbols_fd(stack, 100, 2);
+#endif
+
 	/* Get some attention. */
 	fprintf(stderr,"\a"); fflush(stderr); sleep(1);	fprintf(stderr,"\a\n");
 
@@ -149,14 +162,12 @@ sig_segv(struct terminal *t)
 	fprintf(stderr, "send the developers output of 'bt' command entered inside of gdb (which you run\n");
 	fprintf(stderr, "as gdb elinks core). Thanks a lot for your cooperation!\n\n");
 
-	/* Backtrace. */
-	dump_backtrace(stderr, 1);
-
 	/* TODO: Perhaps offer launching of gdb? Or trying to continue w/
 	 * program execution? --pasky */
 
 	/* The fastest way OUT! */
-	abort();
+	signal(SIGSEGV, SIG_DFL);
+	raise(SIGSEGV);
 }
 #endif
 
@@ -180,7 +191,8 @@ handle_basic_signals(struct terminal *term)
 	install_signal_handler(SIGCONT, (void (*)(void *))sig_cont, term, 0);
 #endif
 #ifdef BACKTRACE
-	install_signal_handler(SIGSEGV, (void (*)(void *))sig_segv, term, 0);
+	signal(SIGSEGV, sig_segv);
+/*	install_signal_handler(SIGSEGV, (void (*)(void *))sig_segv, term, 0); */
 #endif
 }
 

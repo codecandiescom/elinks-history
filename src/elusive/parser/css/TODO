@@ -1,0 +1,23 @@
+			TODO for ELusive CSS Parser
+
+General:
+--------
+
+* Check up on CSS discussions from links-discuss mailing list. They contain
+  info about how to convert different units. This is renderer stuff however.
+
+* In the interface function parse() the loop 'while (*len)' will not make it
+  possible to have a last token correctly used since it will stop there not
+  calling the lower parser even though it might not need more input.
+
+* Make mediatype bitmap entries public and util functions mediatype for
+  converting/adding them to the stylesheet.
+
+	css_add_mediatype(stylesheet_node, "tty");
+  or
+	css_add_mediatype(stylesheet_node, str2mediatype("tty"));
+
+* The interface function done() should set len pointer to -1 and have the
+  state parsers clean up after themselves.
+
+$Id: TODO,v 1.1 2003/01/19 18:29:14 jonas Exp $

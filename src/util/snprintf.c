@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.4 2003/06/07 00:35:46 jonas Exp $ */
+/* $Id: snprintf.c,v 1.5 2003/06/07 00:49:14 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -390,7 +390,7 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args_in)
 				fmtstr(buffer, &currlen, maxlen, strvalue, flags, min, max);
 				break;
 			case 'p':
-				strvalue = va_arg (args, void *);
+				strvalue = va_arg(args, void *);
 				fmtint(buffer, &currlen, maxlen, (long) strvalue, 16, min, max, flags);
 				break;
 			case 'n':
@@ -579,7 +579,7 @@ fmtint(char *buffer, size_t *currlen, size_t maxlen,
 }
 
 static LDOUBLE
-abs_val(LDOUBLE value)
+my_abs(LDOUBLE value)
 {
 	LDOUBLE result = value;
 
@@ -590,7 +590,7 @@ abs_val(LDOUBLE value)
 }
 
 static LDOUBLE
-POW10(int exp)
+my_pow10(int exp)
 {
 	LDOUBLE result = 1;
 
@@ -603,7 +603,7 @@ POW10(int exp)
 }
 
 static LLONG
-ROUND(LDOUBLE value)
+my_round(LDOUBLE value)
 {
 	LLONG intpart;
 
@@ -675,7 +675,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 	if (max < 0)
 		max = 6;
 
-	ufvalue = abs_val(fvalue);
+	ufvalue = my_abs(fvalue);
 
 	if (fvalue < 0) {
 		signvalue = '-';
@@ -710,11 +710,11 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 	temp = ufvalue;
 	my_modf(temp, &intpart);
 
-	fracpart = ROUND((POW10(max)) * (ufvalue - intpart));
+	fracpart = my_round((my_pow10(max)) * (ufvalue - intpart));
 
-	if (fracpart >= POW10(max)) {
+	if (fracpart >= my_pow10(max)) {
 		intpart++;
-		fracpart -= POW10(max);
+		fracpart -= my_pow10(max);
 	}
 
 
@@ -907,7 +907,8 @@ main(void)
 		"-16.16f",
 		NULL
 	};
-	double fp_nums[] = { 6442452944.1234, -1.5, 134.21, 91340.2, 341.1234, 0203.9, 0.96, 0.996,
+	double fp_nums[] = { 6442452944.1234, -1.5, 134.21, 91340.2,
+			     341.1234, 0203.9, 0.96, 0.996,
 			     0.9996, 1.996, 4.136, 5.030201, 0};
 	char *int_fmt[] = {
 		"%-1.5d",
@@ -947,9 +948,11 @@ main(void)
 		for (y = 0; fp_nums[y] != 0 ; y++) {
 			int l1 = snprintf(NULL, 0, fp_fmt[x], fp_nums[y]);
 			int l2 = snprintf(buf1, sizeof(buf1), fp_fmt[x], fp_nums[y]);
-			sprintf (buf2, fp_fmt[x], fp_nums[y]);
-			if (strcmp (buf1, buf2)) {
-				printf("snprintf doesn't match Format: %s\n\tsnprintf = [%s]\n\t sprintf = [%s]\n",
+
+			sprintf(buf2, fp_fmt[x], fp_nums[y]);
+			if (strcmp(buf1, buf2)) {
+				printf("snprintf doesn't match Format: %s\n\t"
+				       "snprintf = [%s]\n\t sprintf = [%s]\n",
 				       fp_fmt[x], buf1, buf2);
 				fail++;
 			}
@@ -965,9 +968,11 @@ main(void)
 		for (y = 0; int_nums[y] != 0 ; y++) {
 			int l1 = snprintf(NULL, 0, int_fmt[x], int_nums[y]);
 			int l2 = snprintf(buf1, sizeof(buf1), int_fmt[x], int_nums[y]);
-			sprintf (buf2, int_fmt[x], int_nums[y]);
-			if (strcmp (buf1, buf2)) {
-				printf("snprintf doesn't match Format: %s\n\tsnprintf = [%s]\n\t sprintf = [%s]\n",
+
+			sprintf(buf2, int_fmt[x], int_nums[y]);
+			if (strcmp(buf1, buf2)) {
+				printf("snprintf doesn't match Format: %s\n\t"
+				       "snprintf = [%s]\n\t sprintf = [%s]\n",
 				       int_fmt[x], buf1, buf2);
 				fail++;
 			}
@@ -983,9 +988,11 @@ main(void)
 		for (y = 0; str_vals[y] != 0 ; y++) {
 			int l1 = snprintf(NULL, 0, str_fmt[x], str_vals[y]);
 			int l2 = snprintf(buf1, sizeof(buf1), str_fmt[x], str_vals[y]);
-			sprintf (buf2, str_fmt[x], str_vals[y]);
-			if (strcmp (buf1, buf2)) {
-				printf("snprintf doesn't match Format: %s\n\tsnprintf = [%s]\n\t sprintf = [%s]\n",
+
+			sprintf(buf2, str_fmt[x], str_vals[y]);
+			if (strcmp(buf1, buf2)) {
+				printf("snprintf doesn't match Format: %s\n\t"
+				       "snprintf = [%s]\n\t sprintf = [%s]\n",
 				       str_fmt[x], buf1, buf2);
 				fail++;
 			}
@@ -1002,11 +1009,13 @@ main(void)
 	printf("seeing how many digits we support\n");
 	{
 		double v0 = 0.12345678901234567890123456789012345678901;
-		for (x=0; x<100; x++) {
+
+		for ( x = 0; x < 100; x++) {
 			double p = pow(10, x);
 			double r = v0*p;
+
 			snprintf(buf1, sizeof(buf1), "%1.1f", r);
-			sprintf(buf2,                "%1.1f", r);
+			sprintf(buf2,"%1.1f", r);
 			if (strcmp(buf1, buf2)) {
 				printf("we seem to support %d digits\n", x-1);
 				break;

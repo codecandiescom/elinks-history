@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.31 2003/06/12 00:02:08 jonas Exp $ */
+/* $Id: session.h,v 1.32 2003/06/12 00:08:31 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -63,7 +63,7 @@ enum task_type {
 	TASK_UNBACK,
 };
 
-/* This is one of the building stones of ELinks architecture --- this tructure
+/* This is one of the building stones of ELinks architecture --- this structure
  * carries information about the specific ELinks session. Each tab (thus, at
  * least one per terminal, in the normal case) has own session. Session
  * describes mainly the current browsing and control state, from the currently
@@ -82,8 +82,8 @@ struct session {
 
 	/* Browsing history */
 
-	struct list_head history; /* struct location */
-	struct list_head unhistory; /* struct location */
+	struct list_head history; /* -> struct location */
+	struct list_head unhistory; /* -> struct location */
 
 
 	/* The current document */
@@ -95,7 +95,7 @@ struct session {
 	 * handling. --pasky */
 	struct location *location;
 
-	struct list_head more_files; /* struct file_to_load */
+	struct list_head more_files; /* -> struct file_to_load */
 
 	struct status loading;
 	unsigned char *loading_url;
@@ -104,7 +104,7 @@ struct session {
 	int redirect_cnt;
 
 	struct f_data_c *screen;
-	struct list_head scrn_frames; /* struct f_data_c */
+	struct list_head scrn_frames; /* -> struct f_data_c */
 
 	unsigned char *dn_url;
 
@@ -152,7 +152,7 @@ struct session {
 	unsigned char *last_title;
 };
 
-extern struct list_head sessions; /* struct session */
+extern struct list_head sessions; /* -> struct session */
 
 /* This returns a pointer to the current location inside of the given session.
  * That's nice for encapsulation and alrady paid out once ;-). */

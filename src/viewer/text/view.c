@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.222 2003/10/18 22:13:10 pasky Exp $ */
+/* $Id: view.c,v 1.223 2003/10/21 15:12:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -328,9 +328,7 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	if (doc_view->xl == vx
 	    && doc_view->yl == vy
 	    && doc_view->xl != -1
-	    && (!doc_view->search_word
-		|| !*doc_view->search_word
-		|| !(*doc_view->search_word)[0])) {
+	    && !has_search_word(doc_view)) {
 		clear_link(t, doc_view);
 		draw_forms(t, doc_view);
 		if (active) draw_current_link(t, doc_view);
@@ -357,9 +355,7 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	}
 	draw_forms(t, doc_view);
 	if (active) draw_current_link(t, doc_view);
-	if (doc_view->search_word
-	    && *doc_view->search_word
-	    && (*doc_view->search_word)[0])
+	if (has_search_word(doc_view))
 		doc_view->xl = doc_view->yl = -1;
 }
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.55 2003/10/21 14:36:48 jonas Exp $ */
+/* $Id: search.c,v 1.56 2003/10/21 15:12:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -626,9 +626,7 @@ get_searched(struct document_view *doc_view, struct point **pt, int *pl)
 	assert(doc_view && doc_view->vs && pt && pl);
 	if_assert_failed return;
 
-	if (!doc_view->search_word
-	    || !*doc_view->search_word
-	    || !(*doc_view->search_word)[0])
+	if (!has_search_word(doc_view))
 		return;
 
 	get_search_data(doc_view->document);
@@ -658,9 +656,7 @@ draw_searched(struct terminal *term, struct document_view *doc_view)
 	assert(term && doc_view);
 	if_assert_failed return;
 
-	if (!doc_view->search_word
-	    || !*doc_view->search_word
-	    || !(*doc_view->search_word)[0])
+	if (!has_search_word(doc_view))
 		return;
 
 	get_searched(doc_view, &pt, &len);

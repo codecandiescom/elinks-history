@@ -1,4 +1,4 @@
-/* $Id: search.h,v 1.7 2003/10/17 13:39:33 zas Exp $ */
+/* $Id: search.h,v 1.8 2003/10/21 15:12:51 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
@@ -21,5 +21,12 @@ void search_back_dlg(struct session *ses, struct document_view *doc_view, int a)
 
 void load_search_history(void);
 void save_search_history(void);
+
+static inline int has_search_word(struct document_view *doc_view)
+{
+	return (doc_view->search_word
+		&& *doc_view->search_word
+		&& (*doc_view->search_word)[0]);
+}
 
 #endif

@@ -1,7 +1,7 @@
-/* $Id: css.h,v 1.4 2004/01/17 15:22:58 pasky Exp $ */
+/* $Id: css.h,v 1.5 2004/01/17 15:36:20 pasky Exp $ */
 
-#ifndef EL__DOCUMENT_HTML_CSS_H
-#define EL__DOCUMENT_HTML_CSS_H
+#ifndef EL__DOCUMENT_CSS_CSS_H
+#define EL__DOCUMENT_CSS_CSS_H
 
 #include "document/html/parser.h"
 #include "util/color.h"

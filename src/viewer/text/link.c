@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.23 2003/07/27 23:14:20 jonas Exp $ */
+/* $Id: link.c,v 1.24 2003/07/27 23:17:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,30 +178,34 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x + xp - vx;
 		int y = link->pos[i].y + yp - vy;
+		unsigned co;
 
-		if (x >= xp && y >= yp && x < xp+xw && y < yp+yw) {
-			unsigned co = get_char(t, x, y);
+		if (!(x >= xp && y >= yp && x < xp+xw && y < yp+yw)) {
+			scr->link_bg[i].x = -1;
+			scr->link_bg[i].y = -1;
+			scr->link_bg[i].c = -1;
+			continue;
+		}
 
-			if (scr->link_bg) {
-				scr->link_bg[i].x = x;
-				scr->link_bg[i].y = y;
-				scr->link_bg[i].c = co;
-			}
+		co = get_char(t, x, y);
 
-			if (i == cursor_offset) {
-				int blockable = 0;
+		scr->link_bg[i].x = x;
+		scr->link_bg[i].y = y;
+		scr->link_bg[i].c = co;
 
-				if (link->type != L_FIELD && link->type != L_AREA) {
-					if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
-						blockable = 1;
-					}
+		if (i == cursor_offset) {
+			int blockable = 0;
+
+			if (link->type != L_FIELD && link->type != L_AREA) {
+				if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
+					blockable = 1;
 				}
-
-				set_cursor(t, x, y, blockable);
-				set_window_ptr(get_current_tab(t), x, y);
 			}
-			set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color << 8);
-		} else scr->link_bg[i].x = scr->link_bg[i].y = scr->link_bg[i].c = -1;
+
+			set_cursor(t, x, y, blockable);
+			set_window_ptr(get_current_tab(t), x, y);
+		}
+		set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color << 8);
 	}
 }
 

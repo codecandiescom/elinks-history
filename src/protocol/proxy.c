@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.38 2004/07/22 00:00:47 pasky Exp $ */
+/* $Id: proxy.c,v 1.39 2004/07/22 00:05:18 pasky Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -85,7 +85,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 	case PROTOCOL_HTTP:
 		protocol_proxy = get_opt_str("protocol.http.proxy.host");
 		if (!*protocol_proxy) protocol_proxy = getenv("HTTP_PROXY");
-		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("protocol_proxy");
+		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("http_proxy");
 
 		if (protocol_proxy && *protocol_proxy) {
 			if (!strncasecmp(protocol_proxy, "http://", 7))
@@ -96,7 +96,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 	case PROTOCOL_HTTPS:
 		protocol_proxy = get_opt_str("protocol.https.proxy.host");
 		if (!*protocol_proxy) protocol_proxy = getenv("HTTPS_PROXY");
-		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("protocol_proxy");
+		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("https_proxy");
 
 		if (protocol_proxy && *protocol_proxy) {
 			if (!strncasecmp(protocol_proxy, "http://", 7))
@@ -107,7 +107,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 	case PROTOCOL_FTP:
 		protocol_proxy = get_opt_str("protocol.ftp.proxy.host");
 		if (!*protocol_proxy) protocol_proxy = getenv("FTP_PROXY");
-		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("protocol_proxy");
+		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("ftp_proxy");
 
 		if (protocol_proxy && *protocol_proxy) {
 			if (!strncasecmp(protocol_proxy, "ftp://", 6))

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.7 2003/07/31 00:23:34 zas Exp $ */
+/* $Id: frames.c,v 1.8 2003/08/04 18:54:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,14 +18,12 @@
 #include "document/options.h"
 #include "lowlevel/ttime.h"
 #include "protocol/uri.h"
-#include "terminal/draw.h" /* chr type */
+#include "terminal/draw.h"
 #include "util/string.h"
 
 
-
 static void
-add_frameset_entry(struct frameset_desc *fsd,
-		   struct frameset_desc *subframe,
+add_frameset_entry(struct frameset_desc *fsd, struct frameset_desc *subframe,
 		   unsigned char *name, unsigned char *url)
 {
 	int idx;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.156 2003/07/21 00:21:46 pasky Exp $ */
+/* $Id: parser.c,v 1.157 2003/07/21 23:37:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2137,6 +2137,9 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	fc->ro = has_attr(attr, "disabled") ? 2 : has_attr(attr, "readonly") ? 1 : 0;
 	fc->default_value = memacpy(html, p - html);
 	for (p = fc->default_value; p && p[0]; p++) {
+		/* FIXME: We don't cope well with entities here. Bugzilla uses
+		 * &#13; inside of textarea and we fail miserably upon that
+		 * one.  --pasky */
 		if (p[0] == '\r') {
 			if (p[1] == '\n' || (p > fc->default_value && p[-1] == '\n')) {
 				memcpy(p, p + 1, strlen(p)), p--;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.93 2003/06/07 15:00:01 pasky Exp $ */
+/* $Id: view.c,v 1.94 2003/06/07 15:10:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2751,10 +2751,10 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					nl = f_data->nlinks, lnl = 1;
 					while (nl) nl /= 10, lnl++;
 					if (lnl > 1)
-						input_field(ses->tab->term, NULL, N_("Go to link"),
-							    N_("Enter link number"), N_("OK"),
-							    N_("Cancel"), ses, NULL, lnl, d, 1,
-							    f_data->nlinks, check_number,
+						input_field(ses->tab->term, NULL, 1,
+							    N_("Go to link"), N_("Enter link number"),
+							    N_("OK"), N_("Cancel"), ses, NULL,
+							    lnl, d, 1, f_data->nlinks, check_number,
 							    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
 				}
 #if 0

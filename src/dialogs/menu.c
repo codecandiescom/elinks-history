@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.99 2003/06/07 13:17:36 pasky Exp $ */
+/* $Id: menu.c,v 1.100 2003/06/07 15:10:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -638,7 +638,8 @@ activate_bfu_technology(struct session *ses, int item)
 void
 dialog_goto_url(struct session *ses, char *url)
 {
-	input_field(ses->tab->term, NULL, N_("Go to URL"), N_("Enter URL"),
+	input_field(ses->tab->term, NULL, 1,
+		    N_("Go to URL"), N_("Enter URL"),
 		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
 		    MAX_STR_LEN, url, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) goto_url_with_hook,
@@ -648,7 +649,8 @@ dialog_goto_url(struct session *ses, char *url)
 static void
 dialog_save_url(struct session *ses)
 {
-	input_field(ses->tab->term, NULL, N_("Save URL"), N_("Enter URL"),
+	input_field(ses->tab->term, NULL, 1,
+		    N_("Save URL"), N_("Enter URL"),
 		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) save_url,
@@ -676,11 +678,10 @@ query_file(struct session *ses, unsigned char *url,
 	add_bytes_to_str(&def, &dfl, file, l);
 
 	if (interactive) {
-		input_field(ses->tab->term, NULL,
-			    N_("Download"), N_("Save to file"), N_("OK"),
-			    N_("Cancel"),
-			    ses, &file_history, MAX_STR_LEN, def,
-			    0, 0, NULL,
+		input_field(ses->tab->term, NULL, 1,
+			    N_("Download"), N_("Save to file"),
+			    N_("OK"),  N_("Cancel"), ses, &file_history,
+			    MAX_STR_LEN, def, 0, 0, NULL,
 			    (void (*)(void *, unsigned char *)) std,
 			    (void (*)(void *)) cancel);
 	} else {
@@ -695,7 +696,8 @@ static struct input_history search_history = { 0, {D_LIST_HEAD(search_history.it
 void
 search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->tab->term, NULL, N_("Search backward"), N_("Search for text"),
+	input_field(ses->tab->term, NULL, 1,
+		    N_("Search backward"), N_("Search for text"),
 		    N_("OK"), N_("Cancel"), ses, &search_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) search_for_back,
@@ -705,7 +707,8 @@ search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 void
 search_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->tab->term, NULL, N_("Search"), N_("Search for text"),
+	input_field(ses->tab->term, NULL, 1,
+		    N_("Search"), N_("Search for text"),
 		    N_("OK"), N_("Cancel"), ses, &search_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) search_for,

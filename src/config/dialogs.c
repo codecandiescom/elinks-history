@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.49 2003/06/07 14:44:00 pasky Exp $ */
+/* $Id: dialogs.c,v 1.50 2003/06/07 15:10:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -403,7 +403,7 @@ invalid_option:
 			goto invalid_option;
 	}
 
-	input_field(term, NULL, N_("Add option"), N_("Name"),
+	input_field(term, NULL, 1, N_("Add option"), N_("Name"),
 		N_("OK"), N_("Cancel"), option, NULL,
 		MAX_STR_LEN, "", 0, 0, NULL,
 		add_option_to_tree, NULL);
@@ -656,8 +656,9 @@ push_kbdbind_add_button(struct dialog_data *dlg,
 		return 0;
 	}
 
-	input_field(term, getml(text, hop, NULL), N_("Add keybinding"), text,
-		N_("OK"), N_("Cancel"), hop, NULL,
+	input_field(term, getml(text, hop, NULL), 0,
+		_("Add keybinding", term), text,
+		_("OK", term), _("Cancel", term), hop, NULL,
 		MAX_STR_LEN, "", 0, 0, NULL,
 		really_add_keybinding, NULL);
 	return 0;

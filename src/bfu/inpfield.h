@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.4 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: inpfield.h,v 1.5 2003/06/07 15:10:58 pasky Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -19,7 +19,7 @@ int check_nonempty(struct dialog_data *, struct widget_data *);
 void dlg_format_field(struct terminal *, struct terminal *, struct widget_data *, int, int *, int, int *, enum format_align);
 
 void input_field_fn(struct dialog_data *);
-void input_field(struct terminal *, struct memory_list *, unsigned char *,
+void input_field(struct terminal *, struct memory_list *, int, unsigned char *,
 		 unsigned char *, unsigned char *, unsigned char *, void *,
 		 struct input_history *, int, unsigned char *, int, int,
 		 int (*)(struct dialog_data *, struct widget_data *),

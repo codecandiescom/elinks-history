@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.78 2003/06/07 14:16:56 pasky Exp $ */
+/* $Id: dialogs.c,v 1.79 2003/06/07 15:10:58 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -166,7 +166,8 @@ do_add_folder(struct dialog_data *dlg, unsigned char *name)
 static int
 push_add_folder_button(struct dialog_data *dlg, struct widget_data *di)
 {
-	input_field(dlg->win->term, NULL, N_("Add folder"), N_("Folder name"),
+	input_field(dlg->win->term, NULL, 1,
+		    N_("Add folder"), N_("Folder name"),
 		    N_("OK"), N_("Cancel"), dlg, NULL,
 		    MAX_STR_LEN, NULL, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) do_add_folder,

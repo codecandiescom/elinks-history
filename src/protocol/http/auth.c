@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.25 2003/07/10 12:30:01 jonas Exp $ */
+/* $Id: auth.c,v 1.26 2003/07/10 12:38:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	unsigned char *newurl = get_auth_url(uri);
 	int ret = ADD_AUTH_ERROR;
 
-	if (!newurl) goto end;
+	if (!newurl) return ADD_AUTH_ERROR;
 
 	/* Is host/realm already known ? */
 	entry = find_auth_entry(newurl, realm);
@@ -116,8 +116,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		/* Found an entry. */
 		if (entry->blocked == 1) {
 			/* Waiting for user/pass in dialog. */
-			ret = ADD_AUTH_EXIST;
-			goto end;
+			mem_free(newurl);
+			return ADD_AUTH_EXIST;
 		}
 
 		/* If we have user/pass info then check if identical to
@@ -130,8 +130,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 				    && !strncmp(uri->user, entry->uid, uri->userlen)
 				    && !strncmp(uri->password, entry->passwd, uri->passwordlen)) {
 				    /* Same host/realm/pass/user. */
-				    ret = ADD_AUTH_EXIST;
-				    goto end;
+					mem_free(newurl);
+					return ADD_AUTH_EXIST;
 				}
 			}
 		}
@@ -184,9 +184,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	if (ret != ADD_AUTH_NONE) ret = ADD_AUTH_NEW; /* Entry added. */
 
 end:
-	if (ret == ADD_AUTH_ERROR || ret == ADD_AUTH_EXIST) {
-		if (newurl) mem_free(newurl);
-	}
+	if (ret == ADD_AUTH_ERROR) mem_free(newurl);
 
 	return ret;
 }

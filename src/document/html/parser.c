@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.26 2002/06/07 19:53:45 pasky Exp $ */
+/* $Id: parser.c,v 1.27 2002/06/07 22:28:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -641,15 +641,76 @@ void html_img(unsigned char *a)
 		mem_free(al);
 	}
 	ismap = format.link && has_attr(a, "ismap") && !usemap;
-	if ((!(al = get_attr_val(a, "alt")) && !(al = get_attr_val(a, "title"))) || !*al) {
+
+	al = get_attr_val(a, "alt");
+	if (!al) al = get_attr_val(a, "title");
+	if (!al || !*al) {
 		if (al) mem_free(al);
 		if (!d_opt->images && !format.link) return;
-		if (usemap) al = stracpy("[USEMAP]");
-		else if (ismap) al = stracpy("[ISMAP]");
-		else al = stracpy("[IMG]");
+
+		if (usemap) {
+			al = stracpy("[USEMAP]");
+		} else if (ismap) {
+			al = stracpy("[ISMAP]");
+		} else {
+			unsigned char *src = get_attr_val(a, "src");
+			int max_real_len;
+			int max_len;
+
+			/* We can display image as [foo.gif]. */
+
+			max_len = get_opt_int("document.browse.images.file_tags");
+
+#if 0
+			/* This should be maybe whole terminal width? */
+			max_real_len = par_format.width * max_len / 100;
+#else
+			/* It didn't work well and I'm too lazy to code that;
+			 * absolute values will have to be enough for now ;).
+			 * --pasky */
+			max_real_len = max_len;
+#endif
+
+			if ((!max_len || max_real_len > 0) && src) {
+				int len = strcspn(src, "?");
+				unsigned char *start;
+
+				for (start = src + len; start > src; start--)
+					if (dir_sep(*start)) {
+						start++;
+						break;
+					}
+
+				if (start > src) len = strcspn(start, "?");
+
+				if (max_len && len > max_real_len) {
+					int max_part_len = max_real_len / 2;
+
+					al = mem_alloc(max_part_len * 2 + 4);
+					if (!al) return;
+
+					sprintf(al, "[%.*s*%.*s]",
+						max_part_len, start,
+						max_part_len, start + len
+							      - max_part_len);
+
+				} else {
+					al = mem_alloc(len + 3);
+					if (!al) return;
+
+					sprintf(al, "[%.*s]", len, start);
+				}
+			} else {
+				al = stracpy("[IMG]");
+			}
+
+			if (src) mem_free(src);
+		}
 	}
+
 	if (format.image) mem_free(format.image), format.image = NULL;
 	if (format.title) mem_free(format.title), format.title = NULL;
+
 	if (al) {
 		unsigned char *s;
 

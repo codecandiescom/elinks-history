@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.41 2002/06/07 18:06:27 pasky Exp $ */
+/* $Id: options.c,v 1.42 2002/06/07 22:28:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -467,6 +467,15 @@ register_options()
 	add_opt_tree("document.browse",
 		"images", 0,
 		"Options for handling of images.");
+
+	add_opt_int("document.browse.images",
+		"file_tags", 0, -1, 500, -1,
+		"Display [target filename] instead of [IMG] as visible image tags:\n"
+		"-1 means always display just [IMG]\n"
+		"0 means always display full target filename\n"
+		"1-500 means display target filename of this maximal length;\n"
+		"      if filename is longer, middle part of it\n"
+		"      is stripped and substituted by an asterisk");
 
 	add_opt_bool("document.browse.images",
 		"show_as_links", 0, 0,

@@ -1,3 +1,65 @@
+Fri Sep 19 15:41:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/event.c:
+
+	I am in a maze with passages all alike .. and this cut'n'paste error
+	is haunting me.  
+
+Fri Sep 19 15:37:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/event.c:
+
+	invalid_event_id(): Test == EVENT_NONE last since last will not be
+	used in current code, but it protects against bad thing if
+	EVENT_NONE becomes > 0 for some reason as zas pointed out.  
+
+Fri Sep 19 15:33:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/event.c:
+
+	Oops cut'n'paste error in last patch spotted by kuser.  
+
+Fri Sep 19 15:11:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/event.c:
+
+	Rebounding cleanup.  
+
+Fri Sep 19 14:43:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/event.c:
+
+	Short lines were "compressed" a bit, make use of event variable name
+	everywhere, make use of register attribute, cleanup,
+	invalid_event_id() inlined function was added.  
+
+Fri Sep 19 14:09:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Use TERM_STRING() and friends for the underline sequences.  
+
+Fri Sep 19 13:55:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Introduce TERM_STRING() and add_term_string() to simplify the
+	frame_seq handling.  
+
+Fri Sep 19 13:48:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	This might be a bit abusive. Use mem_align_alloc() to cleanup link
+	point setup.  
+
+Fri Sep 19 13:14:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, sched/Makefile.am, sched/event.c, sched/event.h:
+
+	Shiny new event system by kuser .. spiced up with comments by pasky
+	and me.  
+
 Thu Sep 18 19:04:41 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/hash.c:

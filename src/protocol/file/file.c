@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.160 2004/04/13 18:38:40 jonas Exp $ */
+/* $Id: file.c,v 1.161 2004/04/13 18:58:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -507,34 +507,34 @@ try_encoding_extensions(unsigned char *filename, int filenamelen, int *fd)
 static inline enum connection_state
 read_file(struct stream_encoded *stream, int readsize, struct string *page)
 {
-	/* + 1 is there because of bug in Linux. Read returns -EACCES when
-	 * reading 0 bytes to invalid address */
-	unsigned char *fragment;
-	int fragmentlen = 0;
-	int readlen;
-
-	if (!readsize) readsize = 4096;
-	fragment = mem_alloc(readsize + 1);
-	if (!fragment)
-		return S_OUT_OF_MEM;
+	if (!init_string(page)) return S_OUT_OF_MEM;
 
 	/* We read with granularity of stt.st_size (given as @readsize) - this
 	 * does best job for uncompressed files, and doesn't hurt for
 	 * compressed ones anyway - very large files usually tend to inflate
 	 * fast anyway. At least I hope ;).  --pasky */
-	while ((readlen = read_encoded(stream, fragment + fragmentlen, readsize))) {
-		unsigned char *tmp;
+	if (!readsize) readsize = 4096;
+
+	/* + 1 is there because of bug in Linux. Read returns -EACCES when
+	 * reading 0 bytes to invalid address */
+	while (realloc_string(page, page->length + readsize + 1)) {
+		unsigned char *string_pos = page->source + page->length;
+		int readlen = read_encoded(stream, string_pos, readsize);
 
 		if (readlen < 0) {
 			/* FIXME: We should get the correct error value.
 			 * But it's I/O error in 90% of cases anyway.. ;)
 			 * --pasky */
-			mem_free(fragment);
+			done_string(page);
 			return (enum connection_state) -errno;
+
+		} else if (readlen == 0) {
+			/* NUL-terminate just in case */
+			page->source[page->length] = '\0';
+			return S_OK;
 		}
 
-		fragmentlen += readlen;
-
+		page->length += readlen;
 #if 0
 		/* This didn't work so well as it should (I had to implement
 		 * end of stream handling to bzip2 anyway), so I rather
@@ -546,23 +546,10 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 			break;
 		}
 #endif
-
-		tmp = mem_realloc(fragment, fragmentlen + readsize);
-		if (!tmp) {
-			mem_free(fragment);
-			return S_OUT_OF_MEM;
-		}
-
-		fragment = tmp;
 	}
 
-	fragment[fragmentlen] = '\0'; /* NULL-terminate just in case */
-
-	page->source = fragment;
-	page->length = fragmentlen;
-	/* XXX BAD practice that should be changed. --jonas */
-	set_string_magic(page);
-	return S_OK;
+	done_string(page);
+	return S_OUT_OF_MEM;
 }
 
 static inline int

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.124 2003/12/21 02:22:25 jonas Exp $ */
+/* $Id: menu.c,v 1.125 2003/12/21 13:43:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -782,7 +782,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 			    check_hotkeys((struct menu_head *)menu, ev->x, win->term))
 				s = 2;
 
-			if (!s || action == ACT_CANCEL) {
+			if (!s) {
 				delete_window_ev(win, action == ACT_CANCEL
 						      ? ev : NULL);
 			} else {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.176 2003/10/17 15:31:44 zas Exp $ */
+/* $Id: session.c,v 1.177 2003/10/21 15:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,9 +360,10 @@ print_screen_status(struct session *ses)
 		}
 
 		msglen = strlen(msg);
-		if ((last_ses != ses ) || !ses->last_title ||
-		    strlen(ses->last_title) != msglen ||
-		    memcmp(ses->last_title, msg, msglen)) {
+		if (last_ses != ses
+		    || !ses->last_title
+		    || strlen(ses->last_title) != msglen
+		    || memcmp(ses->last_title, msg, msglen)) {
 			if (ses->last_title) mem_free(ses->last_title);
 			ses->last_title = msg;
 			set_terminal_title(term, msg);

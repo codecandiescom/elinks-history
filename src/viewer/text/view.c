@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.451 2004/06/13 00:24:45 jonas Exp $ */
+/* $Id: view.c,v 1.452 2004/06/13 21:19:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,8 +345,10 @@ draw_formatted(struct session *ses, int rerender)
 	refresh_view(ses, ses->doc_view, 1);
 }
 
+/* type == 0 -> PAGE_DOWN
+ * type == 1 -> DOWN */
 static void
-page_down(struct session *ses, struct document_view *doc_view, int a)
+move_down(struct session *ses, struct document_view *doc_view, int type)
 {
 	int newpos;
 
@@ -358,11 +360,19 @@ page_down(struct session *ses, struct document_view *doc_view, int a)
 		doc_view->vs->y = newpos;
 
 	if (!current_link_is_visible(doc_view))
-		find_link(doc_view, 1, a);
+		find_link(doc_view, 1, type);
 }
 
 static void
-page_up(struct session *ses, struct document_view *doc_view, int a)
+page_down(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	move_down(ses, doc_view, 0);
+}
+
+/* type == 0 -> PAGE_UP
+ * type == 1 -> UP */
+static void
+move_up(struct session *ses, struct document_view *doc_view, int type)
 {
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
@@ -372,12 +382,17 @@ page_up(struct session *ses, struct document_view *doc_view, int a)
 	int_lower_bound(&doc_view->vs->y, 0);
 
 	if (!current_link_is_visible(doc_view))
-		find_link(doc_view, -1, a);
+		find_link(doc_view, -1, type);
 }
 
+static void
+page_up(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	move_up(ses, doc_view, 0);
+}
 
 void
-down(struct session *ses, struct document_view *doc_view, int a)
+down(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	int current_link;
 
@@ -399,7 +414,7 @@ down(struct session *ses, struct document_view *doc_view, int a)
 
 	if (current_link == -1
 	    || !next_in_view(doc_view, current_link + 1, 1, in_viewy, set_pos_x)) {
-		page_down(ses, doc_view, 1);
+		move_down(ses, doc_view, 1);
 	}
 
 	if (current_link != doc_view->vs->current_link) {
@@ -408,7 +423,7 @@ down(struct session *ses, struct document_view *doc_view, int a)
 }
 
 static void
-up(struct session *ses, struct document_view *doc_view, int a)
+up(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	int current_link;
 
@@ -430,7 +445,7 @@ up(struct session *ses, struct document_view *doc_view, int a)
 
 	if (current_link == -1
 	    || !next_in_view(doc_view, current_link - 1, -1, in_viewy, set_pos_x)) {
-		page_up(ses, doc_view, 1);
+		move_up(ses, doc_view, 1);
 	}
 
 	if (current_link != doc_view->vs->current_link) {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.461 2004/06/10 23:22:53 jonas Exp $ */
+/* $Id: session.c,v 1.462 2004/06/10 23:43:28 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -645,11 +645,9 @@ copy_session(struct session *old, struct session *new)
 	goto_uri(new, cur_loc(old)->vs.uri);
 }
 
-static struct session *
+static void 
 process_session_info(struct session *ses, struct initial_session_info *info)
 {
-	if (!info) return NULL;
-
 	if (info->base_session) {
 		copy_session(info->base_session, ses);
 	}
@@ -676,8 +674,6 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	}
 
 	free_session_info(info);
-
-	return ses;
 }
 
 static struct session *
@@ -707,7 +703,11 @@ create_session(struct window *tab, struct initial_session_info *session_info)
 
 	add_to_list(sessions, ses);
 
-	return process_session_info(ses, session_info);
+	if (!session_info) return NULL;
+
+	process_session_info(ses, session_info);
+
+	return ses;
 }
 
 

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.35 2003/10/30 15:32:46 pasky Exp $ */
+/* $Id: mime.c,v 1.36 2003/11/14 16:54:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,15 +101,30 @@ check_encoding_type(unsigned char *extension)
 	return NULL;
 }
 
+#if 0
+#define DEBUG_CONTENT_TYPE
+#endif
+
+#ifdef DEBUG_CONTENT_TYPE
+#define debug_get_content_type_params(head__, url__) \
+	debug("get_content_type(head, url)\n=== head ===\n%s\n=== url ===\n%s\n", head__, url__)
+#define debug_ctype(ctype__) debug("ctype= %s", (ctype__))
+#define debug_extension(extension__) debug("extension= %s", (extension__))
+#else
+#define debug_get_content_type_params(head__, url__)
+#define debug_ctype(ctype__)
+#define debug_extension(extension__)
+#endif
+
 unsigned char *
 get_content_type(unsigned char *head, unsigned char *url)
 {
-	unsigned char *extension;
+	unsigned char *extension, *ctype;
+
+	debug_get_content_type_params(head, url);
 
 	/* If there's one in header, it's simple.. */
 	if (head) {
-		unsigned char *ctype;
-
 		ctype = parse_http_header(head, "Content-Type", NULL);
 		if (ctype) {
 			unsigned char *end = strchr(ctype, ';');
@@ -121,6 +136,8 @@ get_content_type(unsigned char *head, unsigned char *url)
 			while (ctypelen && ctype[--ctypelen] <= ' ')
 				ctype[ctypelen] = '\0';
 
+			debug_ctype(ctype);
+
 			return ctype;
 		}
 	}
@@ -130,20 +147,26 @@ get_content_type(unsigned char *head, unsigned char *url)
 	 * would always compare only to "gz". */
 	/* Guess type accordingly to the extension */
 	extension = get_extension_from_url(url);
+	debug_extension(extension);
 	if (extension) {
-		unsigned char *ctype = get_content_type_backends(extension);
 
+		ctype = get_content_type_backends(extension);
+		debug_ctype(ctype);
 		if (!ctype) ctype = check_encoding_type(extension);
+		debug_ctype(ctype);
 		if (!ctype) ctype = check_extension_type(extension);
+		debug_ctype(ctype);
 
 		mem_free(extension);
 
-		if (ctype)
-			return ctype;
+		if (ctype) return ctype;
 	}
 
+	ctype = get_default_mime_type();
+	debug_ctype(ctype);
+
 	/* Fallback.. use some hardwired default */
-	return stracpy(get_default_mime_type());
+	return stracpy(ctype);
 }
 
 struct mime_handler *

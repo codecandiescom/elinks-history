@@ -1,3 +1,192 @@
+Mon Dec 30 18:15:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/: layouter.c, layouter.h:
+
+	Renaming fixes. Allow user to supply parsing engine to be used by
+	the layouter.  
+
+Mon Dec 30 18:04:50 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: layouter/layouter.c, layouter/rectangle.c,
+	parser/html/parser.c:
+
+	Fixed file headers.  
+
+Mon Dec 30 17:58:37 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/: layouter.c, layouter.h, rectangle.h:
+
+	Added generic layouter interface.  
+
+Mon Dec 30 17:49:02 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: parser.c, html/parser.c, html/parser.h:
+
+	html_backend -> html_parser_backend 
+
+Mon Dec 30 17:01:03 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/manual/Makefile.am:
+
+	Generic header added.  
+
+Mon Dec 30 16:47:38 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/DESIGN:
+
+	Notice about independence on terminal size.  
+
+Mon Dec 30 16:42:05 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: parser.c, parser.h:
+
+	elusive_*() -> elusive_parser_*(), obviously.  
+
+Mon Dec 30 16:34:38 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: layouter/.cvsignore, layouter/.vimrc,
+	layouter/syntree/.cvsignore, layouter/syntree/.vimrc,
+	renderer/.cvsignore, renderer/.vimrc, renderer/text/.cvsignore,
+	renderer/text/.vimrc:
+
+	Added fairies.  
+
+Mon Dec 30 16:30:28 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/: rectangle.c, rectangle.h:
+
+	struct layout_rectangle definition and utility functions.  
+
+Mon Dec 30 16:14:45 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, manual/Makefile.am:
+
+	Fixes for last commit: rename all -> alldocs in
+	doc/manual/Makefile.am and typo in doc/Makefile.am 
+
+Mon Dec 30 15:57:00 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.am, configure.in, doc/Makefile.am,
+	doc/manual/Makefile.am, doc/manual/scripts/installcss,
+	doc/manual/scripts/make-manual:
+
+	Manual added to build system. Small fixes when doing html doc
+	building so css is only installed when docs where succesfully made.  
+
+Mon Dec 30 15:51:23 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/manual/: authors.xml, bookmarks.xml, configuration.xml,
+	fdl.xml, installation.xml, introduction.xml, mailcap.xml,
+	manual.xml, mime.xml, misc.xml, preface.xml, revision.xml,
+	sample-configfile.xml, wordlist.xml:
+
+	<?xml version="1.0" encoding="ISO-8859-1"?> added to all files.
+	Fixes xmlto encoding errors. We should investigate using UTF-8 and
+	character entities instead. Also moving own defined entities up
+	before include entities. This fixes internal links when using xmlto.  
+
+Mon Dec 30 15:05:30 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: README, TODO, DESIGN:
+
+	Moved structure description to the DESIGN file.  
+
+Mon Dec 30 14:23:04 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: README, TODO:
+
+	Moved the TODO list to the TODO file, restructured and elaborated.  
+
+Mon Dec 30 14:22:46 2002  Laurent Monin <zas@norz.org>:
+
+	* src/elusive/parser/parser.c:
+
+	Minor simplification.  
+
+Mon Dec 30 13:55:55 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/README:
+
+	Removed legacy cruft.  
+
+Mon Dec 30 12:44:50 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Fixed spawning of thousands of scary zero-length text fragments.  
+
+Mon Dec 30 03:51:43 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/manual/: .cvsignore, TODO, authors.xml, bookmarks.xml,
+	configuration.xml, fdl.xml, installation.xml, introduction.xml,
+	mailcap.xml, manual.xml, mime.xml, misc.xml, options-reference.xml,
+	sample-configfile.xml, sample-configuration.xml, style.css,
+	wordlist.xml:
+
+	Last files added. Made some codingstyle updates. Guidelines needs to
+	be written. CSS need to be rewritten. Use wordlist.xml for
+	references to acronym and explanations.  
+
+Mon Dec 30 03:40:51 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/manual/scripts/make-manual:
+
+	Added support for more docbook tools. Changed to /bin/bash to be on
+	the save side.  
+
+Mon Dec 30 02:56:12 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Fixed tags closing hiearchy corrections.  
+
+Mon Dec 30 02:43:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Fixed matching of opening tag when parsing the closing one.  
+
+Mon Dec 30 02:39:33 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Fixed double attribute records in node->attrs. Fixed parsing of
+	"attrname= value" snippets.  
+
+Mon Dec 30 02:27:44 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Tiny fix of attribute value reading logic.  
+
+Mon Dec 30 02:21:47 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Some utility debug stuff (commented out). Fixed parsing of closing
+	tags.  
+
+Mon Dec 30 02:04:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: parser.c, parser.h, html/parser.c:
+
+	parser -> init,parse,done transformation for the parser functions.
+	Added real_root and parser (enum parser_backend_type) items to the
+	parser_state. Some memory (de)allocation moved/added to the
+	init/done functions.  
+
+Mon Dec 30 01:09:12 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/syntree.c:
+
+	Fixed invalid node->str free()ing logic.  
+
+Mon Dec 30 01:08:22 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/html/parser.c:
+
+	Infinite loop while parsing fixes.  
+
 Sun Dec 29 17:40:59 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/elusive/parser/html/parser.c:
@@ -64,7 +253,8 @@ Sun Dec 29 11:30:34 2002  Petr Baudis <pasky@ucw.cz>:
 
 Sun Dec 29 10:57:29 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/manual/: Makefile.am, sample-configuration.xml, style.css:
+	* doc/manual/: Makefile.am, sample-configuration.xml, style.css,
+	scripts/installcss, scripts/make-manual:
 
 		Various manual tilities.  
 

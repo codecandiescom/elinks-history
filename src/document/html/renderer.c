@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.467 2004/06/30 05:33:56 jonas Exp $ */
+/* $Id: renderer.c,v 1.468 2004/06/30 15:35:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,22 +186,22 @@ realloc_spaces(struct part *part, int length)
  * when drawing table cells. So make the cleared chars share the colors in
  * place. */
 static inline void
-clear_hchars(struct part *part, int x, int y, int xl)
+clear_hchars(struct part *part, int x, int y, int width)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char *pos, *end;
 
-	assert(part && part->document && xl > 0);
+	assert(part && part->document && width > 0);
 	if_assert_failed return;
 
-	if (realloc_line(part->document, Y(y), X(x) + xl - 1))
+	if (realloc_line(part->document, Y(y), X(x) + width - 1))
 		return;
 
 	assert(part->document->data);
 	if_assert_failed return;
 
 	pos = &POS(x, y);
-	end = pos + xl - 1;
+	end = pos + width - 1;
 	end->data = ' ';
 	end->attr = 0;
 	set_term_color(end, &colors, 0, part->document->options.color_mode);
@@ -244,26 +244,26 @@ get_frame_char(struct part *part, int x, int y, unsigned char data,
 }
 
 void
-draw_frame_hchars(struct part *part, int x, int y, int xl, unsigned char data,
-		  color_t bgcolor, color_t fgcolor)
+draw_frame_hchars(struct part *part, int x, int y, int width,
+		  unsigned char data, color_t bgcolor, color_t fgcolor)
 {
 	struct screen_char *template;
 
-	assert(xl > 0);
+	assert(width > 0);
 	if_assert_failed return;
 
-	template = get_frame_char(part, x + xl - 1, y, data, bgcolor, fgcolor);
+	template = get_frame_char(part, x + width - 1, y, data, bgcolor, fgcolor);
 	if (!template) return;
 
-	/* The template char is the last we need to draw so only decrease @xl. */
-	for (xl -= 1; xl; xl--, x++) {
+	/* The template char is the last we need to draw so only decrease @width. */
+	for (width -= 1; width; width--, x++) {
 		copy_screen_chars(&POS(x, y), template, 1);
 	}
 }
 
 void
-draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data,
-		  color_t bgcolor, color_t fgcolor)
+draw_frame_vchars(struct part *part, int x, int y, int height,
+		  unsigned char data, color_t bgcolor, color_t fgcolor)
 {
 	struct screen_char *template = get_frame_char(part, x, y, data,
 						      bgcolor, fgcolor);
@@ -272,7 +272,7 @@ draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data,
 
 	/* The template char is the first vertical char to be drawn. So
 	 * copy it to the rest. */
-	for (yl -= 1, y += 1; yl; yl--, y++) {
+	for (height -= 1, y += 1; height; height--, y++) {
 	    	if (realloc_line(part->document, Y(y), X(x)))
 			return;
 
@@ -469,15 +469,15 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 }
 
 static inline void
-copy_chars(struct part *part, int x, int y, int xl, struct screen_char *d)
+copy_chars(struct part *part, int x, int y, int width, struct screen_char *d)
 {
-	assert(xl > 0 && part && part->document && part->document->data);
+	assert(width > 0 && part && part->document && part->document->data);
 	if_assert_failed return;
 
-	if (realloc_line(part->document, Y(y), X(x) + xl - 1))
+	if (realloc_line(part->document, Y(y), X(x) + width - 1))
 		return;
 
-	copy_screen_chars(&POS(x, y), d, xl);
+	copy_screen_chars(&POS(x, y), d, width);
 }
 
 static inline void

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.54 2004/10/13 15:34:47 zas Exp $ */
+/* $Id: fastfind.c,v 1.55 2004/10/25 15:52:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,11 +300,9 @@ alloc_leafset(struct fastfind_info *info)
 static inline int
 char2idx(unsigned char c, struct fastfind_info *info)
 {
-	int idx;
+	unsigned char *idx = memchr(info->uniq_chars, c, info->uniq_chars_count);
 
-	for (idx = 0; idx < info->uniq_chars_count; idx++)
-		if (info->uniq_chars[idx] == c)
-			return idx;
+	if (idx) return (idx - info->uniq_chars);
 
 	return -1;
 }
@@ -359,11 +357,9 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			 * remember we call this routine only once per list.
 			 * So I go for code readability vs performance here.
 			 * --Zas */
-			for (j = 0; j < info->uniq_chars_count; j++)
-				if (info->uniq_chars[j] == k)
-					break;
+			j = char2idx(k, info);
 
-			if (j >= info->uniq_chars_count) {
+			if (j == -1) {
 				assert(info->uniq_chars_count < FF_MAX_CHARS);
 				if_assert_failed goto alloc_error;
 

@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.24 2003/05/24 21:41:05 pasky Exp $ */
+/* $Id: lists.h,v 1.25 2003/05/24 21:50:54 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -20,6 +20,9 @@
 
 
 #ifndef LISTDEBUG
+
+
+#define list_del_enforce(x) /* better don't */
 
 
 #define list_magic_error(where, what) /* no magic */
@@ -61,6 +64,7 @@ do { \
 	do_not_optimize_here(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
+	list_del_enforce(x); \
 	do_not_optimize_here(x); \
 } while (0)
 
@@ -134,6 +138,14 @@ do { \
 
 
 
+#define list_del_enforce(x) \
+do { \
+	/* Little hack: we put the complement of LISTMAGIC1 to prev */\
+	/* and the line number in next. Debugging purpose. */ \
+	(x)->prev = (void *) ~((unsigned int) LISTMAGIC1); \
+	(x)->next = (void *) ((unsigned int) __LINE__); \
+} while (0)
+
 
 #define LISTMAGIC1 ((void *) 0xdadababa)
 #define LISTMAGIC2 ((void *) 0xd0d0b0b0)
@@ -193,10 +205,7 @@ do { \
 	do_not_optimize_here(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
-	/* Little hack: we put the complement of LISTMAGIC1 to prev */\
-	/* and the line number in next. Debugging purpose. */ \
-	(x)->prev = (void *) ~((unsigned int) LISTMAGIC1); \
-	(x)->next = (void *)((unsigned int) __LINE__); \
+	list_del_enforce(x); \
 	do_not_optimize_here(x); \
 } while (0)
 

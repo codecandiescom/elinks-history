@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.32 2003/04/19 18:41:42 zas Exp $ */
+/* $Id: core.c,v 1.33 2003/04/26 07:57:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -780,7 +780,7 @@ handle_standard_lua_returns(unsigned char *from)
  * Console stuff.
  */
 
-static struct input_history lua_console_history = { 0, {&lua_console_history.items, &lua_console_history.items} };
+static struct input_history lua_console_history = { 0, {D_LIST_HEAD(lua_console_history.items)} };
 
 static void
 lua_console(struct session *ses, unsigned char *expr)

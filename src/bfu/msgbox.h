@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.25 2004/11/19 17:46:05 zas Exp $ */
+/* $Id: msgbox.h,v 1.26 2004/12/25 14:19:21 zas Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -20,6 +20,8 @@ enum msgbox_flags {
 	/* Should the text be scrollable */
 	/* XXX: The text need to be allocated since it will be mangled */
 	MSGBOX_SCROLLABLE = 0x4,
+	/* Only i18n the title but not the text. */
+	MSGBOX_INTL_TITLE_ONLY = 0x8,
 };
 
 /* This is _the_ dialog function used in almost all parts of the code. It is

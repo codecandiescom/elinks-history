@@ -1,5 +1,5 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.14 2003/10/27 23:46:55 pasky Exp $ */
+/* $Id: beos.c,v 1.15 2004/04/17 01:30:30 jonas Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -48,13 +48,6 @@ get_system_env(void)
 		env |= ENV_BE;
 
 	return env;
-}
-
-void
-open_in_new_be(struct terminal *term, unsigned char *exe_name,
-	       unsigned char *param)
-{
-	exec_new_elinks(term, DEFAULT_BEOS_TERM_CMD, exe_name, param);
 }
 
 

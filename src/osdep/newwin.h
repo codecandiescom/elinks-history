@@ -1,4 +1,4 @@
-/* $Id: newwin.h,v 1.5 2004/04/17 01:10:39 jonas Exp $ */
+/* $Id: newwin.h,v 1.6 2004/04/17 01:30:30 jonas Exp $ */
 
 #ifndef EL__DIALOG_SYSTEM_H
 #define EL__DIALOG_SYSTEM_H
@@ -7,7 +7,7 @@
 
 struct open_in_new {
 	enum term_env_type env;
-	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
+	unsigned char *command;
 	unsigned char *text;
 };
 

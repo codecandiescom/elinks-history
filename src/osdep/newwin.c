@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.10 2004/04/17 01:19:49 jonas Exp $ */
+/* $Id: newwin.c,v 1.11 2004/04/17 01:30:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,48 +29,19 @@ exec_new_elinks(struct terminal *term, unsigned char *xterm,
 	mem_free(str);
 }
 
-static void
-open_in_new_twterm(struct terminal *term, unsigned char *exe_name,
-		   unsigned char *param)
-{
-	unsigned char *twterm = getenv("ELINKS_TWTERM");
-
-	if (!twterm) twterm = getenv("LINKS_TWTERM");
-	if (!twterm) twterm = DEFAULT_TWTERM_CMD;
-	exec_new_elinks(term, twterm, exe_name, param);
-}
-
-static void
-open_in_new_xterm(struct terminal *term, unsigned char *exe_name,
-		  unsigned char *param)
-{
-	unsigned char *xterm = getenv("ELINKS_XTERM");
-
-	if (!xterm) xterm = getenv("LINKS_XTERM");
-	if (!xterm) xterm = DEFAULT_XTERM_CMD;
-	exec_new_elinks(term, xterm, exe_name, param);
-}
-
-static void
-open_in_new_screen(struct terminal *term, unsigned char *exe_name,
-		   unsigned char *param)
-{
-	exec_new_elinks(term, DEFAULT_SCREEN_CMD, exe_name, param);
-}
-
 struct open_in_new oinw[] = {
-	{ ENV_XWIN,	open_in_new_xterm,	N_("~Xterm") },
-	{ ENV_TWIN,	open_in_new_twterm,	N_("T~wterm") },
-	{ ENV_SCREEN,	open_in_new_screen,	N_("~Screen") },
+	{ ENV_XWIN,	DEFAULT_XTERM_CMD,	    N_("~Xterm") },
+	{ ENV_TWIN,	DEFAULT_TWTERM_CMD,	    N_("T~wterm") },
+	{ ENV_SCREEN,	DEFAULT_SCREEN_CMD,	    N_("~Screen") },
 #ifdef OS2
-	{ ENV_OS2VIO,	open_in_new_vio,	N_("~Window") },
-	{ ENV_OS2VIO,	open_in_new_fullscreen,	N_("~Full screen") },
+	{ ENV_OS2VIO,	DEFAULT_OS2_WINDOW_CMD,	    N_("~Window") },
+	{ ENV_OS2VIO,	DEFAULT_OS2_FULLSCREEN_CMD, N_("~Full screen") },
 #endif
 #ifdef WIN32
-	{ ENV_WIN32,	open_in_new_win32,	N_("~Window") },
+	{ ENV_WIN32,	"",			    N_("~Window") },
 #endif
 #ifdef BEOS
-	{ ENV_BE,	open_in_new_be,		N_("~BeOS terminal") },
+	{ ENV_BE,	DEFAULT_BEOS_TERM_CMD,	    N_("~BeOS terminal") },
 #endif
 	{ 0, NULL, NULL }
 };
@@ -114,12 +85,26 @@ void
 open_new_window(struct terminal *term, unsigned char *exe_name,
 		enum term_env_type environment, unsigned char *param)
 {
+	unsigned char *command = NULL;
 	int i;
 
 	foreach_oinw (i, environment)
-		break;
+		command = oinw[i].command;
 
-	assert(oinw[i].fn);
+	assert(command);
 
-	oinw[i].fn(term, exe_name, param);
+	if (environment & ENV_XWIN) {
+		unsigned char *xterm = getenv("ELINKS_XTERM");
+
+		if (!xterm) xterm = getenv("LINKS_XTERM");
+		if (xterm) command = xterm;
+
+	} else if (environment & ENV_TWIN) {
+		unsigned char *twterm = getenv("ELINKS_TWTERM");
+
+		if (!twterm) twterm = getenv("LINKS_TWTERM");
+		if (twterm) command = twterm;
+	}
+
+	exec_new_elinks(term, command, exe_name, param);
 }

@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.16 2004/01/05 04:54:31 miciah Exp $ */
+/* $Id: os2.c,v 1.17 2004/04/17 01:30:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -658,21 +658,6 @@ get_system_env(void)
 	if (!is_xterm()) env |= ENV_OS2VIO;
 
 	return env;
-}
-
-
-void
-open_in_new_vio(struct terminal *term, unsigned char *exe_name,
-		unsigned char *param)
-{
-	exec_new_elinks(term, DEFAULT_OS2_WINDOW_CMD, exe_name, param);
-}
-
-void
-open_in_new_fullscreen(struct terminal *term, unsigned char *exe_name,
-		       unsigned char *param)
-{
-	exec_new_elinks(term, DEFAULT_OS2_FULLSCREEN_CMD, exe_name, param);
 }
 
 

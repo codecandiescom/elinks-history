@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.12 2003/10/28 00:17:50 pasky Exp $ */
+/* $Id: win32.c,v 1.13 2004/04/17 01:30:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,14 +227,6 @@ int
 get_system_env(void)
 {
 	return get_common_env() | ENV_WIN32;
-}
-
-
-void
-open_in_new_win32(struct terminal *term, unsigned char *exe_name,
-		  unsigned char *param)
-{
-	exec_new_elinks(term, "", exe_name, param);
 }
 
 #endif

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.16 2003/04/29 08:44:45 zas Exp $ */
+/* $Id: download.c,v 1.17 2003/05/01 10:43:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -648,8 +648,8 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	/* !overwrite means always silently overwrite, which may be admitelly
 	 * indeed a little confusing ;-) */
 	int overwrite = get_opt_int("document.download.overwrite");
+	unsigned char *ofilex = expand_tilde(ofile);
 	unsigned char *file;
-	unsigned char *ofilex;
 
 	/* TODO: If the file already exists, possibly:
 	 * * inform the user
@@ -658,23 +658,18 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	 * * allow to rename the old file
 	 * --pasky */
 
-	/* Let's do the tilde expansion right now. Please note that 'ofilex'
-	 * is needed to do the comparisons, 'get_unique_name', etc... because
-	 * we cannot do 'ofile=expand_tilde(ofile)'. Moreover, it should be
-	 * free'd somewhere... */
-	file = expand_tilde(ofile);
-	ofilex = expand_tilde(ofile);
-
 	if (!overwrite || resume) {
 		/* Nothing special to do... */
-		callback(term, file, data, resume);
+		callback(term, ofilex, data, resume);
 		return;
 	}
 
+	/* If ofilex is unique -> file == ofilex */
 	file = get_unique_name(ofilex);
 
-	if (!file || !strcmp(ofilex, file) || overwrite == 1) {
+	if (!file || overwrite == 1 || !strcmp(ofilex, file)) {
 		/* Still nothing special to do... */
+		if (file != ofilex) mem_free(ofilex);
 		callback(term, file, data, 0);
 		return;
 	}
@@ -684,14 +679,14 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 
 	lun_hop = mem_calloc(1, sizeof(struct lun_hop));
 	if (!lun_hop) {
-		mem_free(file);
+		if (file != ofilex) mem_free(file);
 		mem_free(ofilex);
 		callback(term, NULL, data, 0);
 		return;
 	}
 	lun_hop->term = term;
-	lun_hop->ofile = stracpy(ofilex);
-	lun_hop->file = file;
+	lun_hop->ofile = ofilex;
+	lun_hop->file = (file != ofilex) ? file : stracpy(ofilex);
 	lun_hop->callback = callback;
 	lun_hop->data = data;
 

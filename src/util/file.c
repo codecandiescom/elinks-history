@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.10 2003/04/28 09:40:27 zas Exp $ */
+/* $Id: file.c,v 1.11 2003/05/01 10:43:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,9 @@ expand_tilde(unsigned char *fi)
 	unsigned char *file = init_str();
 	int fl = 0;
 
-	if (fi[0] == '~' && dir_sep(fi[1])) {
+	if (!file) return NULL;
+
+	if (fi[0] == '~' && (!fi[1] || dir_sep(fi[1]))) {
 		unsigned char *home = getenv("HOME");
 
 		if (home) {
@@ -70,6 +72,7 @@ expand_tilde(unsigned char *fi)
 	}
 
 	add_to_str(&file, &fl, fi);
+
 	return file;
 }
 
@@ -77,22 +80,11 @@ expand_tilde(unsigned char *fi)
 unsigned char *
 get_unique_name(unsigned char *fileprefix)
 {
-	unsigned char *prefix;
-	unsigned char *file;
+	unsigned char *file = fileprefix;
+	int fileprefixlen = strlen(fileprefix);
 	int memtrigger = 1;
 	int suffix = 1;
 	int digits = 0;
-	int prefixlen;
-
-	/* This 'copy_string' is not really needed, but it's replacing a call
-	 * to 'expand_tilde', so the rest of the code doesn't need to be touched.
-	 * This function should be cleaned, anyway, to get rid of the 'mem_free'
-	 * calls for 'prefix', etc... NOTE THAT NOW THIS FUNCTION WANTS 'fileprefix'
-	 * already 'tildexpanded'. This is fixed in current uses of this function. */
-	copy_string(&prefix, fileprefix);
-	if (!prefix) return NULL;
-	prefixlen = strlen(prefix);
-	file = prefix;
 
 	while (file_exists(file)) {
 		if (!(suffix < memtrigger)) {
@@ -101,17 +93,17 @@ get_unique_name(unsigned char *fileprefix)
 			memtrigger *= 10;
 			digits++;
 
-			if (file != prefix) mem_free(file);
-			file = mem_alloc(prefixlen + 2 + digits);
-			if (!file) return prefix;
-			safe_strncpy(file, prefix, prefixlen + 1);
+			if (file != fileprefix) mem_free(file);
+			file = mem_alloc(fileprefixlen + 2 + digits);
+			if (!file) return NULL;
+
+			safe_strncpy(file, fileprefix, fileprefixlen + 1);
 		}
 
-		sprintf(&file[prefixlen], ".%d", suffix);
+		sprintf(&file[fileprefixlen], ".%d", suffix);
 		suffix++;
 	}
 
-	if (prefix != file) mem_free(prefix);
 	return file;
 }
 

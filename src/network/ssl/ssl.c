@@ -1,16 +1,16 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.45 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: ssl.c,v 1.46 2004/04/29 23:22:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 #include <openssl/ssl.h>
 #include <openssl/rand.h>
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 #include <gnutls/gnutls.h>
 #else
 #error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
@@ -34,7 +34,7 @@
 /* FIXME: As you can see, SSL is currently implemented in very, erm,
  * decentralized manner. */
 
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 
 #ifndef PATH_MAX
 #define	PATH_MAX	256 /* according to my /usr/include/bits/posix1_lim.h */
@@ -104,7 +104,7 @@ static struct module openssl_module = struct_module(
 	/* done: */		done_openssl
 );
 
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 
 GNUTLS_ANON_CLIENT_CREDENTIALS anon_cred = NULL;
 GNUTLS_CERTIFICATE_CLIENT_CREDENTIALS xcred = NULL;
@@ -173,7 +173,7 @@ static struct module gnutls_module = struct_module(
 	/* done: */		done_gnutls
 );
 
-#endif /* HAVE_OPENSSL or HAVE_GNUTLS */
+#endif /* CONFIG_OPENSSL or CONFIG_GNUTLS */
 
 static struct option_info ssl_options[] = {
 	INIT_OPT_TREE("connection", N_("SSL"),
@@ -184,9 +184,9 @@ static struct option_info ssl_options[] = {
 };
 
 static struct module *ssl_modules[] = {
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	&openssl_module,
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	&gnutls_module,
 #endif
 	NULL,
@@ -205,10 +205,10 @@ struct module ssl_module = struct_module(
 int
 init_ssl_connection(struct connection *conn)
 {
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	conn->ssl = SSL_new(context);
 	if (!conn->ssl) return S_SSL_ERROR;
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	const unsigned char server_name[] = "localhost";
 	ssl_t *state = mem_alloc(sizeof(GNUTLS_STATE));
 
@@ -256,9 +256,9 @@ done_ssl_connection(struct connection *conn)
 	ssl_t *ssl = conn->ssl;
 
 	if (!ssl) return;
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	SSL_free(ssl);
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	gnutls_deinit(*ssl);
 	mem_free(ssl);
 #endif
@@ -273,12 +273,12 @@ get_ssl_connection_cipher(struct connection *conn)
 
 	if (!init_string(&str)) return NULL;
 
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	add_format_to_string(&str, "%ld-bit %s %s",
 		SSL_get_cipher_bits(ssl, NULL),
 		SSL_get_cipher_version(ssl),
 		SSL_get_cipher_name(ssl));
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	/* XXX: How to get other relevant parameters? */
 	add_format_to_string(&str, "%s - %s - %s - %s - %s (compr: %s)",
 		gnutls_protocol_get_name(gnutls_protocol_get_version(*ssl)),
@@ -292,4 +292,4 @@ get_ssl_connection_cipher(struct connection *conn)
 	return str.source;
 }
 
-#endif /* HAVE_SSL */
+#endif /* CONFIG_SSL */

@@ -1,9 +1,9 @@
-/* $Id: ssl.h,v 1.18 2003/10/27 23:58:58 jonas Exp $ */
+/* $Id: ssl.h,v 1.19 2004/04/29 23:22:15 jonas Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
 
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 
 #include "modules/module.h"
 #include "sched/connection.h"
@@ -22,11 +22,11 @@ unsigned char *get_ssl_connection_cipher(struct connection *conn);
 
 /* Internal type used in ssl module. */
 
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 #define	ssl_t	SSL
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 #define	ssl_t	GNUTLS_STATE
 #endif
 
-#endif /* HAVE_SSL */
+#endif /* CONFIG_SSL */
 #endif

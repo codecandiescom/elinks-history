@@ -535,7 +535,7 @@ dnl We by default use OpenSSL, and we always prefer it. However, when GNUTLS
 dnl is enabled, we won't try to use OpenSSL anymore.
 
 dnl For wiping SSL hooks..
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 
 disable_openssl=""
 disable_gnutls=""
@@ -605,8 +605,8 @@ else
 		fi
 		EL_RESTORE_FLAGS
 	else
-		AC_DEFINE(HAVE_OPENSSL)
-		AC_DEFINE(HAVE_SSL)
+		AC_DEFINE(CONFIG_OPENSSL)
+		AC_DEFINE(CONFIG_SSL)
 	fi
 fi
 
@@ -663,8 +663,8 @@ else
 			fi
 			EL_RESTORE_FLAGS
 		else
-			AC_DEFINE(HAVE_GNUTLS)
-			AC_DEFINE(HAVE_SSL)
+			AC_DEFINE(CONFIG_GNUTLS)
+			AC_DEFINE(CONFIG_SSL)
 		fi
 	fi
 fi

@@ -1,15 +1,15 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.46 2004/04/23 13:55:15 zas Exp $ */
+/* $Id: connect.c,v 1.47 2004/04/29 23:22:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 #include <openssl/ssl.h>
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 #include <gnutls/gnutls.h>
 #else
 #error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
@@ -30,11 +30,11 @@
 
 
 /* SSL errors */
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 #define	SSL_ERROR_WANT_READ2	9999 /* XXX */
 #define	SSL_ERROR_WANT_WRITE2	SSL_ERROR_WANT_WRITE
 #define	SSL_ERROR_SYSCALL2	SSL_ERROR_SYSCALL
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 #define	SSL_ERROR_NONE		GNUTLS_E_SUCCESS
 #define	SSL_ERROR_WANT_READ	GNUTLS_E_AGAIN
 #define	SSL_ERROR_WANT_READ2	GNUTLS_E_INTERRUPTED
@@ -48,9 +48,9 @@
 static void
 ssl_set_no_tls(struct connection *conn)
 {
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	((ssl_t *) conn->ssl)->options |= SSL_OP_NO_TLSv1;
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	/* We do a little more work here, setting up all these priorities (like
 	 * they couldn't have some reasonable defaults there).. */
 
@@ -144,14 +144,14 @@ ssl_want_read(struct connection *conn)
 		ssl_set_no_tls(conn);
 
 	switch (
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 		SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 		gnutls_handshake(*((ssl_t *) conn->ssl))
 #endif
 		) {
 		case SSL_ERROR_NONE:
-#ifdef HAVE_GNUTLS
+#ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify")
 			    && gnutls_certificate_verify_peers(*((ssl_t *) conn->ssl))) {
 				retry_conn_with_state(conn, S_SSL_ERROR);
@@ -178,7 +178,7 @@ ssl_want_read(struct connection *conn)
 int
 ssl_connect(struct connection *conn, int sock)
 {
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	unsigned char *client_cert = NULL;
 #endif
 	int ret;
@@ -188,7 +188,7 @@ ssl_connect(struct connection *conn, int sock)
 	if (conn->no_tsl)
 		ssl_set_no_tls(conn);
 
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	SSL_set_fd(conn->ssl, sock);
 
 	if (get_opt_bool("connection.ssl.client_cert.enable")) {
@@ -201,11 +201,11 @@ ssl_connect(struct connection *conn, int sock)
 	}
 
 
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), (gnutls_transport_ptr) sock);
 #endif
 
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	if (get_opt_bool("connection.ssl.cert_verify"))
 		SSL_set_verify(conn->ssl, SSL_VERIFY_PEER
 					  | SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
@@ -220,7 +220,7 @@ ssl_connect(struct connection *conn, int sock)
 	}
 
 	ret = SSL_get_error(conn->ssl, SSL_connect(conn->ssl));
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	ret = gnutls_handshake(*((ssl_t *) conn->ssl));
 #endif
 
@@ -233,7 +233,7 @@ ssl_connect(struct connection *conn, int sock)
 			return -1;
 
 		case SSL_ERROR_NONE:
-#ifdef HAVE_GNUTLS
+#ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify"))
 				if (gnutls_certificate_verify_peers(*((ssl_t *) conn->ssl)))
 					goto ssl_error;
@@ -259,18 +259,18 @@ ssl_write(struct connection *conn, struct write_buffer *wb)
 {
 	int wr = -1;
 
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	wr = SSL_write(conn->ssl, wb->data + wb->pos,
 		       wb->len - wb->pos);
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	wr = gnutls_record_send(*((ssl_t *) conn->ssl), wb->data + wb->pos,
 				wb->len - wb->pos);
 #endif
 
 	if (wr <= 0) {
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 		int err = SSL_get_error(conn->ssl, wr);
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 		int err = wr;
 #endif
 
@@ -300,20 +300,20 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 {
 	int rd = -1;
 
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	rd = SSL_read(conn->ssl, rb->data + rb->len, rb->freespace);
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	rd = gnutls_record_recv(*((ssl_t *) conn->ssl), rb->data + rb->len, rb->freespace);
 #endif
 
 	if (rd <= 0) {
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 		int err = SSL_get_error(conn->ssl, rd);
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 		int err = rd;
 #endif
 
-#ifdef HAVE_GNUTLS
+#ifdef CONFIG_GNUTLS
 		if (err == GNUTLS_E_REHANDSHAKE)
 			return -1;
 #endif
@@ -350,9 +350,9 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 int
 ssl_close(struct connection *conn)
 {
-#ifdef HAVE_OPENSSL
+#ifdef CONFIG_OPENSSL
 	/* Hmh? No idea.. */
-#elif defined(HAVE_GNUTLS)
+#elif defined(CONFIG_GNUTLS)
 	/* We probably doesn't handle this entirely correctly.. */
 	gnutls_bye(*((ssl_t *) conn->ssl), GNUTLS_SHUT_RDWR);
 #endif

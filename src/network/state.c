@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.25 2004/04/25 09:49:44 zas Exp $ */
+/* $Id: state.c,v 1.26 2004/04/29 23:22:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,7 +77,7 @@ struct s_msg_dsc {
 	{S_FTP_NO_FILE,		N_("File not found")},
 	{S_FTP_FILE_ERROR,	N_("FTP file error")},
 
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 	{S_SSL_ERROR,		N_("SSL error")},
 #else
 	{S_NO_SSL,		N_("This version of ELinks does not contain SSL/TLS support")},

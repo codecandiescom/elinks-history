@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.286 2004/04/23 20:44:29 pasky Exp $ */
+/* $Id: http.c,v 1.287 2004/04/29 23:22:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1119,7 +1119,7 @@ again:
 	}
 	if (h == 200 && IS_PROXY_URI(conn->uri)
 	    && uri->protocol == PROTOCOL_HTTPS && !conn->ssl) {
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 		if (init_ssl_connection(conn) == S_SSL_ERROR) {
 			abort_conn_with_state(conn, S_SSL_ERROR);
 			return;
@@ -1156,7 +1156,7 @@ again:
 		}
 	}
 
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 	if (conn->ssl)
 		mem_free_set(&conn->cached->ssl_info, get_ssl_connection_cipher(conn));
 #endif

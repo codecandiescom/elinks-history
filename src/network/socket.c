@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.71 2004/04/29 23:11:42 jonas Exp $ */
+/* $Id: socket.c,v 1.72 2004/04/29 23:22:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ void
 close_socket(struct connection *conn, int *s)
 {
 	if (*s == -1) return;
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 	if (conn && conn->ssl) ssl_close(conn);
 #endif
 	close(*s);
@@ -459,7 +459,7 @@ dns_found(void *data, int state)
 		return;
 	}
 
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 	if (conn->ssl && ssl_connect(conn, sock) < 0) return;
 #endif
 
@@ -501,7 +501,7 @@ connected(void *data)
 		return;
 	}
 
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 	if (conn->ssl && ssl_connect(conn, *c_i->sock) < 0) return;
 #endif
 
@@ -529,7 +529,7 @@ write_select(struct connection *conn)
 	printf("-\n");
 #endif
 
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 	if (conn->ssl) {
 		wr = ssl_write(conn, wb);
 		if (wr <= 0) return;
@@ -613,7 +613,7 @@ read_select(struct connection *conn)
 		conn->buffer = rb;
 	}
 
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 	if (conn->ssl) {
 		rd = ssl_read(conn, rb);
 		if (rd <= 0) return;

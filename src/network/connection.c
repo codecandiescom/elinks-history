@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.168 2004/04/25 17:32:44 zas Exp $ */
+/* $Id: connection.c,v 1.169 2004/04/29 23:22:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -592,7 +592,7 @@ sort_queue(void)
 static void
 interrupt_connection(struct connection *conn)
 {
-#ifdef HAVE_SSL
+#ifdef CONFIG_SSL
 	if (conn->ssl) done_ssl_connection(conn);
 #endif
 

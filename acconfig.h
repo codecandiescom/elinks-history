@@ -19,13 +19,13 @@
 #undef HAVE_LUA
 
 /* Define to 1 if we should use SSL */
-#undef HAVE_SSL
+#undef CONFIG_SSL
 
 /* Define to 1 if we should use OpenSSL */
-#undef HAVE_OPENSSL
+#undef CONFIG_OPENSSL
 
 /* Define to 1 if we should use GNUTLS */
-#undef HAVE_GNUTLS
+#undef CONFIG_GNUTLS
 
 /* Define to 1 if we should include leak debugger and internal error checking facilites */
 #undef CONFIG_DEBUG

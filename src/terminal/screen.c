@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.51 2003/08/29 11:50:27 jonas Exp $ */
+/* $Id: screen.c,v 1.52 2003/08/31 00:13:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "terminal/color.h"
 #include "terminal/draw.h"
 #include "terminal/hardio.h"
 #include "terminal/kbd.h"
@@ -150,6 +151,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 #define getcompcode(c) ((int)((int)(c)<<1 | ((int)(c)&4)>>2) & 7)
 
 		} else if (getcompcode(color & 7) < getcompcode(color >> 3 & 7)) {
+			/* Render the char using ``negative image'' */
 			code[3] = ';';
 			code[4] = '7';
 			length = 5;
@@ -157,7 +159,8 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 			length = 3;
 		}
 
-		if (color & 0100) {
+		/* Check if the char should be rendered bold. */
+		if (color & TERM_COLOR_BOLD) {
 			code[length++] = ';';
 			code[length++] = '1';
 		}

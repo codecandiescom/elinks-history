@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.19 2003/08/02 19:03:52 jonas Exp $ */
+/* $Id: formhist.c,v 1.20 2003/08/02 20:05:48 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -69,16 +69,21 @@ write_form_history(void)
 {
 	struct form_history_item *item;
 	struct secure_save_info *ssi;
-	unsigned char *filename;
-
-	if (!form_history_dirty
-	    || !elinks_home) return;
-
-	filename = straconcat(elinks_home, FORM_HISTORY_FILENAME, NULL);
-	if (!filename) return;
-
-	ssi = secure_open(filename, 0177);
-	mem_free(filename);
+	struct string filename;
+ 
+ 	if (!form_history_dirty
+	    || !elinks_home
+	    || !init_string(&filename))
+		return;
+ 
+	if (!add_to_string(&filename, elinks_home)
+	    || !add_to_string(&filename, FORM_HISTORY_FILENAME)) {
+		done_string(&filename);
+		return;
+	}
+ 
+	ssi = secure_open(filename.source, 0177);
+	done_string(&filename);
 	if (!ssi) return;
 
 	/* Write the list to formhist file */

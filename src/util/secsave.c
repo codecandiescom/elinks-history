@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.30 2003/07/17 08:56:32 zas Exp $ */
+/* $Id: secsave.c,v 1.31 2004/02/07 00:58:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,17 +212,25 @@ secure_close(struct secure_save_info *ssi)
 	if (!ssi) return ret;
 	if (!ssi->fp) goto free;
 
-	if (fclose(ssi->fp) == EOF) {
-		ret = errno;
-		secsave_errno = SS_ERR_OTHER;
-		goto free;
-	}
-	if (ssi->err) {
-		ret = ssi->err;
-		goto free;
-	}
-
 	if (ssi->secure_save) {
+		/* Ensure data is effectively written to disk, we first flush libc buffers
+		 * using fflush(), then fsync() to flush kernel buffers, and finally call
+		 * fclose() (which call fflush() again, but the first one is needed since
+		 * it doesn't make much sense to flush kernel buffers and then libc buffers,
+		 * while closing file releases file descriptor we need to call fsync(). */
+		if (fflush(ssi->fp) == EOF	/* Flush related libc buffers. */
+		    || fsync(fileno(ssi->fp))	/* Flush related kernel buffers. */
+		    || fclose(ssi->fp) == EOF) {
+			ret = errno;
+			secsave_errno = SS_ERR_OTHER;
+			goto free;
+		}
+
+		if (ssi->err) {
+			ret = ssi->err;
+			goto free;
+		}
+
 		if (ssi->file_name && ssi->tmp_file_name) {
 #ifdef OS2
 			/* OS/2 needs this, however it breaks atomicity on
@@ -242,6 +250,17 @@ secure_close(struct secure_save_info *ssi)
 			}
 		}
 	} else {
+		if (fclose(ssi->fp) == EOF) {
+			ret = errno;
+			secsave_errno = SS_ERR_OTHER;
+			goto free;
+		}
+
+		if (ssi->err) {
+			ret = ssi->err;
+			goto free;
+		}
+
 		ret = 0;
 	}
 

@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.34 2003/07/23 02:28:09 pasky Exp $ */
+/* $Id: parser.c,v 1.35 2003/07/23 02:28:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -485,6 +485,8 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 			return PSTATE_CHANGE;
 		}
 	}
+
+	/* FIXME: @quoted persistence over suspends? --pasky */
 
 	if (*html == '"' || *html == '\'') {
 		quoted = *html;

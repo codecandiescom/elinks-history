@@ -1,3 +1,248 @@
+Fri Nov 19 19:05:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/checkbox.h:
+
+	Fix cut and paste error introduced in (1.34 -> 1.35) 'Move specific
+	info to widgets headers, ...' 
+
+Fri Nov 19 18:59:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/widget.h:
+
+	Fix potentially confusing comment.  
+
+Fri Nov 19 17:46:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/button.h, bfu/checkbox.c, bfu/checkbox.h,
+	bfu/common.h, bfu/group.c, bfu/hierbox.h, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/leds.c, bfu/listbox.c, bfu/listbox.h,
+	bfu/menu.c, bfu/msgbox.c, bfu/msgbox.h, bfu/style.h, bfu/text.c,
+	bfu/text.h, bfu/widget.h, document/css/apply.c,
+	document/css/property.h, document/html/parser.h, util/Makefile.am,
+	util/align.h:
+
+	Move enum format_align to new util/align.h since it is not bfu
+	specific. Drop most bfu/style.h inclusions.  
+
+Fri Nov 19 17:19:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, bfu/inphist.c, bfu/inphist.h, bfu/widget.c,
+	bfu/widget.h:
+
+	Move dlg_set_history() to inphist.{c,h}.  
+
+Fri Nov 19 17:14:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: checkbox.h, dialog.h, inpfield.h, text.h, widget.h:
+
+	Move macros from widget.h to related header files.  
+
+Fri Nov 19 17:08:47 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Off course Proxy-Authenticate. Spotted by Jonas.  
+
+Fri Nov 19 17:07:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.h, checkbox.h, inpfield.h, listbox.h, text.h,
+	widget.h:
+
+	Move specific info to widgets headers, and simplify widget.h.  
+
+Fri Nov 19 16:54:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/widget.h, dialogs/status.c, modules/module.c,
+	sched/session.c, sched/session.h:
+
+	Reduce number of inclusions, just include bfu/dialog.h.  
+
+Fri Nov 19 16:42:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/backend/common.c,
+	bookmarks/backend/default.c, bookmarks/backend/xbel.c,
+	cache/cache.c, config/kbdbind.c, config/options.c,
+	config/opttypes.c, config/urlhist.c, cookies/cookies.c,
+	dialogs/status.c, globhist/globhist.c, protocol/nntp/codes.c:
+
+	Reduce number of inclusions, just include bfu/dialog.h.  
+
+Fri Nov 19 16:33:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/widget.h, dialogs/exmode.c:
+
+	Reduce number of inclusions, just include bfu/dialog.h.  
+
+Fri Nov 19 16:29:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Reduce number of inclusions, just include bfu/dialog.h.  
+
+Fri Nov 19 16:27:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/widget.h:
+
+	Do not include twice the same header.  
+
+Fri Nov 19 16:26:11 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/widget.h, dialogs/edit.c, dialogs/options.c,
+	formhist/dialogs.c, globhist/dialogs.c, mime/dialogs.c,
+	protocol/auth/dialogs.c, scripting/lua/core.c:
+
+	Reduce number of inclusions, just include bfu/dialog.h.  
+
+Fri Nov 19 16:22:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/widget.h, bookmarks/dialogs.c, cache/dialogs.c,
+	config/dialogs.c, cookies/dialogs.c, dialogs/download.c:
+
+	Reduce number of inclusions, just include bfu/dialog.h.  
+
+Fri Nov 19 16:16:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/widget.h, dialogs/document.c, dialogs/info.c,
+	dialogs/menu.c, ecmascript/spidermonkey.c, formhist/formhist.c,
+	protocol/protocol.c, protocol/user.c, sched/download.c,
+	sched/session.c, sched/task.c, terminal/tab.c, viewer/text/draw.c,
+	viewer/text/form.c, viewer/text/search.c, viewer/text/textarea.c,
+	viewer/text/view.c:
+
+	Fix header files inclusions.  
+
+Fri Nov 19 16:08:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	#include missing headers revealed by widget cleanup.  
+
+Fri Nov 19 16:08:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: msgbox.h, widget.h:
+
+	Create dynamic widget #include area. The message box interface rely
+	on the button flags (B_*) so #include the widget header.  
+
+Fri Nov 19 15:53:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, dialogs.c, dialogs.h:
+
+	Move accept_cookie_dialog() and cookie_queries list_head to dialogs
+	file.  
+
+Fri Nov 19 15:45:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: listbox.c, listbox.h:
+
+	Fix get_listbox_widget_data() compilation issue.  
+
+Fri Nov 19 15:40:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: common.h, hierbox.h, inpfield.h, listbox.h, msgbox.h,
+	widget.h:
+
+	Drop more #include.  
+
+Fri Nov 19 15:39:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/exmode.c:
+
+	These dialog/widget #includes looks like relics from the
+	pre-input_line implementation.  
+
+Fri Nov 19 15:33:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: Makefile.am, button.h, checkbox.h, common.h, hierbox.h,
+	inpfield.h, listbox.h, text.h, widget.h:
+
+	Create new header common.h and drop some #include <bfu/widget.h>
+	from header files.  
+
+Fri Nov 19 12:17:10 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: main.c, protocol/http/http.c, protocol/http/http.h:
+
+	Experimental proxy digest authorization. Not tested at all. Note
+	that wrong credentials leads to infinite loop.  
+
+Fri Nov 19 11:12:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: text.c, text.h:
+
+	Make add_dlg_text() a function.  
+
+Fri Nov 19 11:07:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	Drop now useless ().  
+
+Fri Nov 19 11:06:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: listbox.c, listbox.h:
+
+	Make add_dlg_listbox() a function.  
+
+Fri Nov 19 11:01:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: inpfield.c, inpfield.h, widget.h:
+
+	Make add_dlg_field_do() a function with the help of
+	WIDGET_HANDLER_FUNC() new macro.  
+
+Fri Nov 19 10:48:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: checkbox.c, checkbox.h:
+
+	Move code from macro add_dlg_radio() to new function
+	add_dlg_radio_do().  
+
+Fri Nov 19 10:30:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, button.h:
+
+	Make add_dlg_button_do() a function.  
+
+Fri Nov 19 10:04:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.h, bfu/checkbox.h, bfu/dialog.c, bfu/dialog.h,
+	bfu/inpfield.h, bfu/listbox.h, bfu/msgbox.c, bfu/text.h,
+	bfu/widget.h, config/dialogs.c, cookies/dialogs.c, dialogs/edit.c,
+	protocol/auth/dialogs.c, scripting/lua/core.c:
+
+	Rename |widgets_size| of struct dialog to |number_of_widgets|. Make
+	it appear only in bfu/ with the help of some new macros.  
+
+Fri Nov 19 09:39:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.c, bfu/dialog.c, bfu/dialog.h, bfu/group.c,
+	dialogs/download.c:
+
+	Rename |n| field of struct dialog_data to explicit
+	|number_of_widgets|. More foreach_widget() usage.  
+
+Fri Nov 19 09:28:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: dialog.c, dialog.h:
+
+	Introduce foreach_widget() and few helpers macros. Use them for
+	widget_data iterations.  
+
+Fri Nov 19 05:07:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/connection.c:
+
+	Update a TODO comment to reflect the renaming of uncompress_shutdown 
+	to decompress_shutdown.  
+
+Thu Nov 18 23:52:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.c:
+
+	Let display_checkbox() return EVENT_PROCESSED on allocation error.
+	Spotted by Miciah.  
+
 Thu Nov 18 22:25:48 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/util/snprintf.c:

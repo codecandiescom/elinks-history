@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.27 2004/06/22 06:46:18 miciah Exp $ */
+/* $Id: memory.h,v 1.28 2004/09/14 23:09:28 pasky Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -15,6 +15,22 @@
 #define fmem_free(x) mem_free(x)
 
 
+/* Cygwin wants some size_t definition here... let's try to make it happy
+ * then. Hrmpf. */
+#include <sys/types.h>
+#include <stddef.h>
+
+#ifdef HAVE_MMAP
+void *mem_mmap_alloc(size_t size);
+void mem_mmap_free(void *p, size_t size);
+void *mem_mmap_realloc(void *p, size_t old_size, size_t new_size);
+#else
+#define mem_mmap_alloc(x) mem_alloc(x)
+#define mem_mmap_free(x, y) mem_free(x)
+#define mem_mmap_realloc(x, y, z) mem_realloc(x, z)
+#endif
+
+
 #ifdef LEAK_DEBUG
 
 #include "util/memdebug.h"
@@ -27,11 +43,6 @@
 #else
 
 #ifndef CONFIG_FASTMEM
-
-/* Cygwin wants some size_t definition here... let's try to make it happy
- * then. Hrmpf. */
-#include <sys/types.h>
-#include <stddef.h>
 
 void *mem_alloc(size_t);
 void *mem_calloc(size_t, size_t);

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.180 2004/09/14 22:31:40 pasky Exp $ */
+/* $Id: cache.c,v 1.181 2004/09/14 23:09:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,24 +210,49 @@ enlarge_entry(struct cache_entry *cached, int size)
 /* One byte is reserved for data in struct fragment. */
 #define FRAGSIZE(x) (sizeof(struct fragment) + (x) - 1)
 
+/* We store the fragments themselves in a private vault, safely separated from
+ * the rest of memory structures. If we lived in the main libc memory pool, we
+ * would trigger annoying pathological behaviour like artificially enlarging
+ * the memory pool to 50M, then securing it with some stupid cookie record at
+ * the top and then no matter how you flush the cache the data segment is still
+ * 50M big.
+ *
+ * Cool, but we don't want that, so fragments (where the big data is stored)
+ * live in their little mmap()ed worlds. There is some overhead, but if we
+ * assume single fragment per cache entry and page size (mmap() allocation
+ * granularity) 4096, for a squad of ten 1kb documents this amounts 30kb.
+ * That's not *that* horrible when you realize that the freshmeat front page
+ * takes 300kb in memory and we usually do not deal with documents so small
+ * that max. 4kb overhead would be visible there.
+ *
+ * The alternative would be of course to manage an entire custom memory pool,
+ * but that is feasible only when we are able to resize it efficiently. We
+ * aren't, except on Linux.
+ *
+ * Of course for all this to really completely prevent the pathological cases,
+ * we need to stuff the rendered documents in too and prevent the
+ * convert_string() call from HTML renderer to duplicate the whole rendered
+ * document (in regular memory, of course). */
+
 static struct fragment *
 frag_alloc(size_t size)
 {
-	struct fragment *f = mem_calloc(1, FRAGSIZE(size));
-	/* Do not simplify here, please. */
+	struct fragment *f = mem_mmap_alloc(FRAGSIZE(size));
+	if (!f) return NULL;
+	memset(f, 0, FRAGSIZE(size));
 	return f;
 }
 
 static struct fragment *
 frag_realloc(struct fragment *f, size_t size)
 {
-	return mem_realloc(f, FRAGSIZE(size));
+	return mem_mmap_realloc(f, FRAGSIZE(f->real_length), FRAGSIZE(size));
 }
 
 static void
 frag_free(struct fragment *f)
 {
-	mem_free(f);
+	mem_mmap_free(f, FRAGSIZE(f->real_length));
 }
 
 
@@ -469,7 +494,7 @@ truncate_entry(struct cache_entry *cached, int offset, int final)
 			if (final) {
 				struct fragment *nf;
 
-				nf = frag_realloc(f->length);
+				nf = frag_realloc(f, f->length);
 				if (nf) {
 					nf->next->prev = nf;
 					nf->prev->next = nf;
@@ -517,7 +542,12 @@ delete_entry_content(struct cache_entry *cached)
 {
 	enlarge_entry(cached, -cached->data_size);
 
-	free_list(cached->frag);
+	while (cached->frag.next != (void *) &cached->frag) {
+		struct fragment *f = cached->frag.next;
+
+		del_from_list(f);
+		frag_free(f);
+	}
 	cached->id = id_counter++;
 	cached->length = 0;
 	cached->incomplete = 1;

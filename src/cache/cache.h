@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.88 2004/08/14 05:56:23 jonas Exp $ */
+/* $Id: cache.h,v 1.89 2004/09/14 23:09:28 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -27,6 +27,9 @@ enum cache_mode {
 struct cache_entry {
 	LIST_HEAD(struct cache_entry);
 
+	/* Items in this list are ALLOCATED IN A NON-STANDARD WAY! Thus if you
+	 * are gonna mess with them (you shouldn't), you need to use the
+	 * mmap suite. */
 	struct list_head frag;		/* -> struct fragment */
 
 	struct uri *uri;		/* Identifier for the cached data */

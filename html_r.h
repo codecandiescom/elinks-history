@@ -4,7 +4,11 @@
 #include "charsets.h"
 #include "links.h" /* list_head */
 #include "html.h"
-//#include "session.h"
+#include "select.h" 
+#include "session.h"
+/* We need this included later, otherwise view.h will miss some our
+ * declarations. */
+/* #include "view.h" */
 
 struct tag {
 	struct tag *next;
@@ -105,8 +109,6 @@ struct search {
 	int x, y;
 };
 
-#include "select.h" 
-
 struct f_data {
 	struct f_data *next;
 	struct f_data *prev;
@@ -167,6 +169,8 @@ void format_cache_reactivate(struct f_data *);
 void cached_format_html(struct view_state *, struct f_data_c *, struct document_options *);
 void html_interpret(struct session *);
 void get_search_data(struct f_data *);
+
+void destroy_fc(struct form_control *);
 
 /* Interface with html_tbl.c */
 

@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.7 2002/03/16 15:17:23 pasky Exp $ */
+/* $Id: select.c,v 1.8 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@
 #include "cache.h"
 #include "error.h"
 #include "select.h"
+#include "terminal.h"
 
 
 #ifndef FD_SETSIZE

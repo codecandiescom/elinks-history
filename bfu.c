@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.18 2002/03/16 17:44:40 pasky Exp $ */
+/* $Id: bfu.c,v 1.19 2002/03/16 20:07:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "error.h"
 #include "html.h"
+#include "terminal.h"
 
 /*
  * memory_list is used to track information about all allocated memory

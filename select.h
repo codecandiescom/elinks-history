@@ -1,7 +1,7 @@
 #ifndef EL__SELECT_H
 #define EL__SELECT_H
 
-//typedef long ttime;
+typedef long ttime;
 
 extern int terminate;
 

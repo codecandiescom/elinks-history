@@ -1,6 +1,8 @@
 #ifndef EL__DNS_H
 #define EL__DNS_H
 
+/* We MAY have problems with this. If there will be any, just tell me, and
+ * I will move it to start of links.h. */
 #include <sys/socket.h>
 #include <sys/types.h>
 

@@ -1,5 +1,5 @@
 /* URL parser and translator */
-/* $Id: url.c,v 1.21 2002/03/16 15:17:23 pasky Exp $ */
+/* $Id: url.c,v 1.22 2002/03/16 20:08:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "http.h"
 #include "https.h"
 #include "mailto.h"
+#include "sched.h"
 #include "url.h"
 
 struct {

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.12 2002/03/16 17:51:49 pasky Exp $ */
+/* $Id: main.c,v 1.13 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,10 @@
 #include "https.h"
 #include "main.h"
 #include "select.h"
+#include "sched.h"
+#include "terminal.h"
 #include "url.h"
+#include "view.h"
 
 enum {
 	RET_OK,

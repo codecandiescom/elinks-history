@@ -1,7 +1,7 @@
 #ifndef EL__CONNECT_H
 #define EL__CONNECT_H
 
-//#include "sched.h"
+#include "sched.h"
 
 struct read_buffer {
 	int sock;

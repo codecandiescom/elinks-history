@@ -3,10 +3,22 @@
 
 #include "cache.h"
 #include "html.h"
+#include "sched.h"
+#include "terminal.h"
+/* We need to declare struct location first :/. */
+struct location;
 #include "html_r.h"
-//#include "sched.h"
-//#include "terminal.h"
 #include "view.h"
+
+struct location {
+	struct location *next;
+	struct location *prev;
+	struct list_head frames;
+	struct status stat;
+	struct view_state vs;
+};
+
+#define cur_loc(x) ((struct location *) ((x)->history.next))
 
 /* For map_selected() */
 struct link_def {
@@ -46,16 +58,6 @@ struct frame {
 	int redirect_cnt;
 	struct view_state vs;
 };
-
-struct location {
-	struct location *next;
-	struct location *prev;
-	struct list_head frames;
-	struct status stat;
-	struct view_state vs;
-};
-
-#define cur_loc(x) ((struct location *) ((x)->history.next))
 
 /* For struct session */
 struct kbdprefix {

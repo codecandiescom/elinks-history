@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.5 2002/03/16 15:17:22 pasky Exp $ */
+/* $Id: finger.c,v 1.6 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "cache.h"
 #include "connect.h"
 #include "finger.h"
+#include "sched.h"
 #include "url.h"
 
 void finger_send_request(struct connection *);

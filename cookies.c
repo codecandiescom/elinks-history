@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.24 2002/03/16 17:44:40 pasky Exp $ */
+/* $Id: cookies.c,v 1.25 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #endif
 #include "http.h"
 #include "session.h"
+#include "terminal.h"
 #include "url.h"
 
 tcount cookie_id = 0;

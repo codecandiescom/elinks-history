@@ -1,8 +1,8 @@
 #ifndef EL__URL_H
 #define EL__URL_H
 
-//#include "sched.h"
-//#include "session.h"
+#include "sched.h"
+#include "session.h"
 
 #define POST_CHAR 1
 

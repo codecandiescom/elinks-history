@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.27 2002/03/16 17:44:41 pasky Exp $ */
+/* $Id: menu.c,v 1.28 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,9 +25,12 @@
 #endif
 #include "html_r.h"
 #include "main.h"
+#include "sched.h"
 #include "select.h"
 #include "session.h"
+#include "terminal.h"
 #include "url.h"
+#include "view.h"
 
 void menu_about(struct terminal *term, void *d, struct session *ses)
 {

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: html_r.c,v 1.18 2002/03/16 17:44:40 pasky Exp $ */
+/* $Id: html_r.c,v 1.19 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "select.h"
 #include "session.h"
 #include "url.h"
+#include "view.h"
 
 static inline int color_distance(struct rgb *c1, struct rgb *c2)
 {
@@ -836,6 +837,24 @@ void line_break(struct part *part)
 void html_init(struct part *part)
 {
 	/* !!! FIXME: background */
+}
+
+void destroy_fc(struct form_control *fc)
+{
+	int i;
+
+	if (fc->action) mem_free(fc->action);
+	if (fc->target) mem_free(fc->target);
+	if (fc->name) mem_free(fc->name);
+	if (fc->alt) mem_free(fc->alt);
+	if (fc->default_value) mem_free(fc->default_value);
+	for (i = 0; i < fc->nvalues; i++) {
+		if (fc->values[i]) mem_free(fc->values[i]);
+		if (fc->labels[i]) mem_free(fc->labels[i]);
+	}
+	if (fc->values) mem_free(fc->values);
+	if (fc->labels) mem_free(fc->labels);
+	if (fc->menu) free_menu(fc->menu);
 }
 
 int g_ctrl_num;

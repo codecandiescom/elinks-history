@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.39 2002/03/16 17:51:49 pasky Exp $ */
+/* $Id: view.c,v 1.40 2002/03/16 20:08:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "html_r.h"
 #include "http.h"
 #include "main.h"
+#include "terminal.h"
 #include "url.h"
 
 /* FIXME: Add comments!! --Zas */
@@ -65,24 +66,6 @@ void init_formatted(struct f_data *scr)
 	init_list(scr->forms);
 	init_list(scr->tags);
 	init_list(scr->nodes);
-}
-
-void destroy_fc(struct form_control *fc)
-{
-	int i;
-	
-	if (fc->action) mem_free(fc->action);
-	if (fc->target) mem_free(fc->target);
-	if (fc->name) mem_free(fc->name);
-	if (fc->alt) mem_free(fc->alt);
-	if (fc->default_value) mem_free(fc->default_value);
-	for (i = 0; i < fc->nvalues; i++) {
-		if (fc->values[i]) mem_free(fc->values[i]);
-		if (fc->labels[i]) mem_free(fc->labels[i]);
-	}
-	if (fc->values) mem_free(fc->values);
-	if (fc->labels) mem_free(fc->labels);
-	if (fc->menu) free_menu(fc->menu);
 }
 
 void free_frameset_desc(struct frameset_desc *fd)
@@ -2477,6 +2460,7 @@ void do_mouse_event(struct session *ses, struct event *ev)
 	send_to_frame(ses, &evv);
 }
 
+void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *);
 void head_msg(struct session *ses);
 
 #ifdef HAVE_LUA

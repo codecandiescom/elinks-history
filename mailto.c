@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */ 
-/* $Id: mailto.c,v 1.5 2002/03/16 15:17:23 pasky Exp $ */
+/* $Id: mailto.c,v 1.6 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include "links.h"
 
 #include "mailto.h"
+#include "terminal.h"
 #include "url.h"
 
 void prog_func(struct terminal *term, struct list_head *list, unsigned char *param, unsigned char *name)

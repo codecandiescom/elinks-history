@@ -1,11 +1,14 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.19 2002/03/16 17:44:41 pasky Exp $ */
+/* $Id: sched.c,v 1.20 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <string.h>
+#ifdef HAVE_SSL
+#include <openssl/ssl.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -48,6 +51,17 @@ struct k_conn {
 };
 
 struct list_head keepalive_connections = {&keepalive_connections, &keepalive_connections};
+
+void send_connection_info(struct connection *c);
+
+
+static inline int getpri(struct connection *c)
+{
+	int i;
+	for (i = 0; i < N_PRI; i++) if (c->pri[i]) return i;
+	internal("connection has no owner");
+	return N_PRI;
+}
 
 long connect_info(int type)
 {
@@ -789,13 +803,13 @@ int is_entry_used(struct cache_entry *e)
 struct blacklist_entry {
 	struct blacklist_entry *next;
 	struct blacklist_entry *prev;
-	int flags;
+	bl_flags_type flags;
 	unsigned char host[1];
 };
 
 struct list_head blacklist = { &blacklist, &blacklist };
 
-void add_blacklist_entry(unsigned char *host, int flags)
+void add_blacklist_entry(unsigned char *host, bl_flags_type flags)
 {
 	struct blacklist_entry *b;
 	foreach(b, blacklist) if (!strcasecmp(host, b->host)) {
@@ -808,7 +822,7 @@ void add_blacklist_entry(unsigned char *host, int flags)
 	add_to_list(blacklist, b);
 }
 
-void del_blacklist_entry(unsigned char *host, int flags)
+void del_blacklist_entry(unsigned char *host, bl_flags_type flags)
 {
 	struct blacklist_entry *b;
 	foreach(b, blacklist) if (!strcasecmp(host, b->host)) {

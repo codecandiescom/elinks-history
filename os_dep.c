@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.11 2002/03/16 15:17:23 pasky Exp $ */
+/* $Id: os_dep.c,v 1.12 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 
 #include "links.h"
 #include "select.h"
+#include "terminal.h"
 
 #if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
 #define USE_GPM
@@ -1305,7 +1306,7 @@ void open_in_new_be(struct terminal *term, unsigned char *exe, unsigned char *pa
 #endif
 
 struct {
-	int env;
+	term_env_type env;
 	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
 	unsigned char *text;
 	unsigned char *hk;

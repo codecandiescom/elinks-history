@@ -1,6 +1,7 @@
 #ifndef EL__HTML_H
 #define EL__HTML_H
 
+#include "links.h"
 //#include "html_r.h"
 //#include "menu.h"
 

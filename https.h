@@ -1,7 +1,7 @@
 #ifndef EL__HTTPS_H
 #define EL__HTTPS_H
 
-//#include "sched.h"
+#include "sched.h"
 
 void https_func(struct connection *c);
 

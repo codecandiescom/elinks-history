@@ -1,7 +1,7 @@
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
 
-//#include "terminal.h"
+#include "terminal.h"
 
 extern unsigned char *path_to_exe;
 

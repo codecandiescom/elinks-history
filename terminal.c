@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.7 2002/03/16 15:17:23 pasky Exp $ */
+/* $Id: terminal.c,v 1.8 2002/03/16 20:08:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,8 @@
 #include "error.h"
 #include "main.h"
 #include "select.h"
+#include "terminal.h"
+#include "view.h"
 
 int hard_write(int fd, unsigned char *p, int l)
 {
@@ -265,6 +267,10 @@ void empty_window_handler(struct window *win, struct event *ev, int fwd)
 			return;
 		case EV_ABORT:
 			fn(data);
+			return;
+		case EV_KBD:
+		case EV_MOUSE:
+			/* Silence compiler warnings */
 			return;
 	}
 	ewd->b = 1;

@@ -1,5 +1,5 @@
 /* Internal "https" protocol implementation */
-/* $Id: https.c,v 1.5 2002/03/16 15:17:22 pasky Exp $ */
+/* $Id: https.c,v 1.6 2002/03/16 20:07:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 
 #include "http.h"
 #include "https.h"
+#include "sched.h"
 
 /* FIXME: As you can see, SSL is currently implemented in very, erm,
  * decentralized manner. */

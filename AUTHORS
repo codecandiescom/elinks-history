@@ -115,7 +115,10 @@ Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 Lukasz Dobrek <dobrek@student.ifpan.edu.pl>
 	$CONFIG_DIR for config directory
 
-M.K.Srikant <srix@vsnl.com>
+Len Lattanzi <Len_Lattanzi@StanfordAlumni.org>
+	Allow reading of special (non-regular) files
+
+M. K. Srikant <srix@vsnl.com>
 	Small fix in forms
 
 Marco Bodrato <bodrato@linuz.sns.it>

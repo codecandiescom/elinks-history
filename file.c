@@ -335,9 +335,33 @@ void file_func(struct connection *c)
 		add_to_str(&file, &fl, "</pre></body></html>\n");
 		head = stracpy("\r\nContent-Type: text/html\r\n");
 	} else if (!S_ISREG(stt.st_mode)) {
+		const int bufsize = 4096;
+		int offset = 0;
+
 		mem_free(name);
+
+		file = mem_alloc(bufsize + 1);
+		if (!file) {
+			close(h);
+			setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
+		}
+		
+		while ((r = read(h, file + offset, bufsize)) > 0) {
+			offset += r;
+			
+			file = mem_realloc(file, offset + bufsize + 1);
+			if (!file) {
+				close(h);
+				setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
+			}
+		}
+		
+		fl = offset;
+		file[fl] = '\0'; /* NULL-terminate just in case */
+		
 		close(h);
-		setcstate(c, S_FILE_TYPE); abort_connection(c); return;
+
+		head = stracpy("");
 	} else {
 		mem_free(name);
 		/* + 1 is there because of bug in Linux. Read returns -EACCES when

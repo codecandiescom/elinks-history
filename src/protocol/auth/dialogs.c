@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.109 2004/07/22 02:06:02 pasky Exp $ */
+/* $Id: dialogs.c,v 1.110 2004/07/23 16:47:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,8 +139,20 @@ get_http_auth_basic_info(struct listbox_item *item, struct terminal *term)
 
 	add_format_to_string(&info, "%s: ", _("URL", term));
 	add_uri_to_string(&info, http_auth_basic->uri, URI_HTTP_AUTH);
-	add_format_to_string(&info, "\n%s: %s\n", _("Realm", term), http_auth_basic->realm);
-	add_format_to_string(&info, "%s: %s\n", _("State", term),
+	add_format_to_string(&info, "\n%s: ", _("Realm", term));
+	{
+		int len = strlen(http_auth_basic->realm);
+		int maxlen = 512; /* Max. number of chars displayed for realm. */
+
+		if (len < maxlen)
+			add_bytes_to_string(&info, http_auth_basic->realm, len);
+		else {
+			add_bytes_to_string(&info, http_auth_basic->realm, maxlen);
+			add_to_string(&info, "...");
+		}
+	}
+
+	add_format_to_string(&info, "\n%s: %s\n", _("State", term),
 		http_auth_basic->valid ? _("valid", term) : _("invalid", term));
 
 	return info.source;

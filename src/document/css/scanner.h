@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.65 2004/01/28 01:26:28 jonas Exp $ */
+/* $Id: scanner.h,v 1.66 2004/02/01 16:43:43 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -95,13 +95,14 @@ extern struct scanner_info css_scanner_info;
 #define get_css_precedence(token_type) \
 	((token_type) == '}' ? (1 << 10) : \
 	 (token_type) == '{' ? (1 <<  9) : \
-	 (token_type) == ';' ? (1 <<  8) : 0)
+	 (token_type) == ';' ? (1 <<  8) : \
+	 (token_type) == ')' ? (1 <<  7) : 0)
 
 /* Check whether it is safe to skip the @token when looking for @skipto. */
 static inline int
 check_css_precedence(int type, int skipto)
 {
-	return get_css_precedence(type) <= get_css_precedence(skipto);
+	return get_css_precedence(type) < get_css_precedence(skipto);
 }
 
 #endif

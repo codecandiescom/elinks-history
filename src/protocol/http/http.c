@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.129 2003/06/21 10:41:47 zas Exp $ */
+/* $Id: http.c,v 1.130 2003/06/21 11:02:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -867,12 +867,21 @@ thats_all_folks:
 			/* There's no content but an error so just print
 			 * that instead of nothing. */
 			if (!conn->from && info->is_error) {
-				unsigned char data[] = "HTTP ERROR xxx";
-				int data_len = strlen(data);
+				unsigned char errs[] = "xxx";
+				unsigned char *str;
 
-				ulongcat(data + (data_len - 3), NULL, info->code, 3, '0');
-				add_fragment(conn->cache, conn->from, data, data_len);
-				conn->from += data_len;
+				ulongcat(errs, NULL, info->code, 3, '0');
+
+				str = straconcat("<HTML><HEAD><TITLE>HTTP ERROR ", errs,
+						 "</TITLE></HEAD><BODY>HTTP ERROR ", errs,
+						 "</BODY></HTML>", NULL);
+				if (str) {
+					int strl = strlen(str);
+
+					add_fragment(conn->cache, conn->from, str, strl);
+					conn->from += strl;
+					mem_free(str);
+				}
 			}
 
 			http_end_request(conn, S_OK);

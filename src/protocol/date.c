@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.17 2005/03/29 03:47:24 jonas Exp $ */
+/* $Id: date.c,v 1.18 2005/04/01 16:21:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,8 +56,9 @@ parse_year(const unsigned char **date_p, unsigned char *end)
 		year = year * 10 + date[3] - '0' - 1900;
 		date += 4;
 
-	} else if (year < 60) {
-		/* It's already next century. */
+	} else if (year < 70) {
+		/* Assuming the epoch starting at 1.1.1970 so it's already next
+		 * century. --wget */
 		year += 100;
 		date += 2;
 	}

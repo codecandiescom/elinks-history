@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.35 2004/04/03 17:40:54 jonas Exp $ */
+/* $Id: download.h,v 1.36 2004/04/14 00:42:28 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -37,6 +37,9 @@ struct file_download {
 	/* Should the file be deleted when destroying the structure */
 	unsigned int delete:1;
 
+	/* Should the download be stopped/interrupted when destroying the structure */
+	unsigned int stop:1;
+
 	/* The current dialog for this download. Can be NULL. */
 	struct dialog_data *dlg_data;
 	struct listbox_item *box_item;
@@ -74,6 +77,6 @@ void destroy_downloads(struct session *);
 
 int ses_chktype(struct session *, struct download *, struct cache_entry *, int);
 
-void abort_download(struct file_download *file_download, int stop);
+void abort_download(struct file_download *file_download);
 
 #endif

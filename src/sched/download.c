@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.268 2004/04/14 00:35:42 jonas Exp $ */
+/* $Id: download.c,v 1.269 2004/04/14 00:42:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,7 +129,7 @@ init_file_download(struct uri *uri, struct session *ses, unsigned char *file, in
 
 
 void
-abort_download(struct file_download *file_download, int stop)
+abort_download(struct file_download *file_download)
 {
 #if 0
 	/* When hacking to cleanup the download code, remove lots of duplicated
@@ -145,7 +145,7 @@ abort_download(struct file_download *file_download, int stop)
 		cancel_dialog(file_download->dlg_data, NULL);
 	if (file_download->download.state >= 0)
 		change_connection(&file_download->download, NULL, PRI_CANCEL,
-				  stop);
+				  file_download->stop);
 	if (file_download->uri) done_uri(file_download->uri);
 
 	if (file_download->handle != -1) {
@@ -174,7 +174,7 @@ kill_downloads_to_file(unsigned char *file)
 			continue;
 
 		file_download = file_download->prev;
-		abort_download(file_download->next, 0);
+		abort_download(file_download->next);
 	}
 }
 
@@ -183,7 +183,7 @@ void
 abort_all_downloads(void)
 {
 	while (!list_empty(downloads))
-		abort_download(downloads.next, 0 /* does it matter? */);
+		abort_download(downloads.next);
 }
 
 
@@ -207,7 +207,7 @@ destroy_downloads(struct session *ses)
 			continue;
 
 		file_download = file_download->prev;
-		abort_download(file_download->next, 0);
+		abort_download(file_download->next);
 	}
 }
 
@@ -364,7 +364,7 @@ abort:
 		beep_terminal(term);
 	}
 
-	abort_download(file_download, 0);
+	abort_download(file_download);
 }
 
 static void
@@ -403,7 +403,7 @@ download_data(struct download *download, struct file_download *file_download)
 
 	if (!write_cache_entry_to_file(cached, file_download)) {
 		detach_connection(download, file_download->last_pos);
-		abort_download(file_download, 0);
+		abort_download(file_download);
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.44 2004/04/09 03:10:26 jonas Exp $ */
+/* $Id: download.c,v 1.45 2004/04/14 00:42:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,8 +49,10 @@ static void
 do_abort_download(struct file_download *file_download)
 {
 	/* We are maybe called from bottom halve so check consistency */
-	if (is_in_downloads_list(file_download))
-		abort_download(file_download, 1);
+	if (is_in_downloads_list(file_download)) {
+		file_download->stop = 1;
+		abort_download(file_download);
+	}
 }
 
 static int
@@ -310,8 +312,8 @@ delete_file_download(struct listbox_item *item, int last)
 	struct file_download *file_download = item->udata;
 
 	assert(!is_object_used(file_download));
-
-	abort_download(file_download, 1);
+	register_bottom_half((void (*)(void *)) do_abort_download,
+			     file_download);
 }
 
 static enum dlg_refresh_code

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.25 2004/01/21 10:09:01 witekfl Exp $ */
+/* $Id: renderer.c,v 1.26 2004/02/02 16:20:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,15 +46,12 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 
 	name = doc_view->name;
 	doc_view->name = NULL;
+
 	detach_formatted(doc_view);
 
 	doc_view->name = name;
-	doc_view->link_bg = NULL;
-	doc_view->link_bg_n = 0;
-
 	doc_view->vs = vs;
 	doc_view->last_x = doc_view->last_y = -1;
-	doc_view->document = NULL;
 
 	cache_entry = find_in_cache(vs->url);
 	if (!cache_entry) {

@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.13 2004/07/07 05:45:36 miciah Exp $ */
+/* $Id: draw.c,v 1.14 2004/07/13 14:48:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,9 +163,10 @@ draw_view_status(struct session *ses, struct document_view *doc_view, int active
 	}
 }
 
+/* Puts the formatted document on the given terminal's screen. */
 /* @active indicates whether the document is focused -- i.e.,
  * whether it is displayed in the selected frame or document. */
-void
+static void
 draw_doc(struct session *ses, struct document_view *doc_view, int active)
 {
 	struct color_pair color = INIT_COLOR_PAIR(0, 0);

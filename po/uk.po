@@ -2,7 +2,6 @@
 # Dmitry Pinchukov <dpinch@mail.ru>
 # Olexander Kunytsa <kunia@istc.kiev.ua>
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
@@ -60,12 +59,12 @@ msgstr "Порожн╕ рядки неприпустим╕"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Помилка в XML_ParserCreate()"
 
 #: src/bookmarks/backend/xbel.c:110
 #, c-format
 msgid "read_bookmarks_xbel(): Error reading %s"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Помилка читання %s"
 
 #: src/bookmarks/backend/xbel.c:119
 #, c-format
@@ -73,11 +72,12 @@ msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
 msgstr ""
+"read_bookmarks_xbel(): Помилка розбору в %s, рядок %d, стовпчик %d:\n"
+"%s"
 
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
-#, fuzzy
 msgid "No title"
-msgstr "Назва посилання"
+msgstr "Нема╓ назви"
 
 #: src/bookmarks/dialogs.c:167 src/bookmarks/dialogs.c:633
 msgid "Add folder"
@@ -107,34 +107,41 @@ msgstr "Угу"
 
 #: src/bookmarks/dialogs.c:236 src/scripting/lua/core.c:427
 msgid "Edit bookmark"
-msgstr "Редагувати закладку"
+msgstr "Редагувати закладинку"
 
 #: src/bookmarks/dialogs.c:264 src/bookmarks/dialogs.c:273
 #: src/bookmarks/dialogs.c:407 src/bookmarks/dialogs.c:414
 #: src/bookmarks/dialogs.c:422
 msgid "Delete bookmark"
-msgstr "Видалити закладку"
+msgstr "Видалити закладинку"
 
 #: src/bookmarks/dialogs.c:265
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
 "\n"
 "Title: \"%s\""
-msgstr "Вибачте, ця закладинка вже чимось використову╓ться прямо зараз"
+msgstr ""
+"Вибачте, ця закладинка вже чимось використову╓ться прямо зараз.\n"
+"\n"
+"Назва: \"%s\""
 
 #: src/bookmarks/dialogs.c:274
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
 "\n"
 "Title: \"%s\"\n"
 "URL: \"%s\""
-msgstr "Вибачте, ця закладинка вже чимось використову╓ться прямо зараз"
+msgstr ""
+"Вибачте, ця закладинка вже чимось використову╓ться прямо зараз.\n"
+"\n"
+"Назва: \"%s\"\n"
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:408
 msgid "Delete marked bookmarks?"
-msgstr ""
+msgstr "Видалити в╕дм╕чен╕ закладинки?"
 
 #: src/bookmarks/dialogs.c:410 src/bookmarks/dialogs.c:418
 #: src/bookmarks/dialogs.c:427 src/dialogs/menu.c:147 src/dialogs/mime.c:162
@@ -153,17 +160,20 @@ msgid "No"
 msgstr "Н╕"
 
 #: src/bookmarks/dialogs.c:415
-#, fuzzy, c-format
+#, c-format
 msgid "Delete content of folder \"%s\"?"
-msgstr "Видалити розширення"
+msgstr "Видалити вм╕ст папки \"%s\"?"
 
 #: src/bookmarks/dialogs.c:423
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete bookmark \"%s\"?\n"
 "\n"
 "URL: \"%s\""
-msgstr "Видалити закладку"
+msgstr ""
+"Видалити закладинку \"%s\"?\n"
+"\n"
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:602
 msgid "Bookmark manager"
@@ -205,48 +215,46 @@ msgstr "Закрити"
 
 #: src/bookmarks/dialogs.c:787 src/bookmarks/dialogs.c:814
 msgid "Add bookmark"
-msgstr "Додати закладку"
+msgstr "Додати закладинку"
 
 #: src/bookmarks/dialogs.c:799
 msgid "Search bookmarks"
-msgstr "Пошук по закладках"
+msgstr "Пошук по закладинках"
 
 #: src/config/cmdline.c:57
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse option %s: %s"
-msgstr "Помилка запису в сокет"
+msgstr "Неможливо роз╕брати опц╕ю %s: %s"
 
 #: src/config/cmdline.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown option %s"
-msgstr "З'╓днання"
+msgstr "Нев╕дома опц╕я %s"
 
 #: src/config/conf.c:673
 msgid "File saving disabled by option"
-msgstr ""
+msgstr "Збереження файл╕в заборонено опц╕╓ю"
 
 #: src/config/conf.c:676 src/sched/error.c:44
 msgid "Out of memory"
 msgstr "Нестача пам'ят╕"
 
 #: src/config/conf.c:679
-#, fuzzy
 msgid "Cannot write the file"
 msgstr "Помилка запису до файлу"
 
 #: src/config/conf.c:682
-#, fuzzy
 msgid "Secure open failed"
-msgstr "Помилка в╕дкриття файлу"
+msgstr "Безпечне в╕дкриття не вдалося"
 
 #: src/config/dialogs.c:40
 msgid "Config error"
 msgstr "Помилка конф╕гурац╕╖"
 
 #: src/config/dialogs.c:41
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write to config file %s: %s"
-msgstr "Не можу записати файл конф╕гурац╕╖"
+msgstr "Не можу записати до файлу конф╕гурац╕╖ %s: %s"
 
 #: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:512
 #: src/dialogs/document.c:41 src/dialogs/document.c:203
@@ -264,10 +272,16 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"╤м'я: %s\n"
+"Тип: %s\n"
+"Значення: %s\n"
+"\n"
+"Опис:\n"
+"%s"
 
 #: src/config/dialogs.c:126 src/config/dialogs.c:138 src/config/dialogs.c:213
 msgid "N/A"
-msgstr ""
+msgstr "Н/Д"
 
 #: src/config/dialogs.c:133
 #, c-format
@@ -277,6 +291,10 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"╤м'я: %s\n"
+"Тип: %s\n"
+"Опис:\n"
+"%s"
 
 #: src/config/dialogs.c:189 src/protocol/protocol.c:57 src/sched/session.c:389
 #: src/viewer/text/textarea.c:266
@@ -285,56 +303,57 @@ msgstr "Помилка"
 
 #: src/config/dialogs.c:190
 msgid "Bad option value."
-msgstr ""
+msgstr "Нев╕рне значення параметру."
 
 #: src/config/dialogs.c:207 src/config/dialogs.c:403 src/dialogs/edit.c:27
 #: src/scripting/lua/core.c:314 src/scripting/lua/core.c:315
 msgid "Name"
-msgstr "Назва"
+msgstr "╤м'я"
 
 #: src/config/dialogs.c:208
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: src/config/dialogs.c:210
-#, fuzzy
 msgid "Value"
-msgstr "значення"
+msgstr "Значення"
 
 #: src/config/dialogs.c:211
 msgid "Description"
-msgstr ""
+msgstr "Опис"
 
 #: src/config/dialogs.c:353
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
+"Цю опц╕ю не можна редагувати. Це значить, що це деяка спец╕альна опц╕я на "
+"кшталт папки - спробуйте натиснути проб╕л, щоб побачити ╖╖ вм╕ст."
 
 #: src/config/dialogs.c:389 src/config/dialogs.c:403
 msgid "Add option"
-msgstr ""
+msgstr "Додати опц╕ю"
 
 #: src/config/dialogs.c:390
 msgid "Cannot add an option here."
-msgstr ""
+msgstr "Тут неможливо додати опц╕ю."
 
 #: src/config/dialogs.c:456 src/config/dialogs.c:470
 msgid "Delete option"
-msgstr ""
+msgstr "Видалити опц╕ю"
 
 #: src/config/dialogs.c:457
 msgid "Cannot delete this option."
-msgstr ""
+msgstr "Неможливо видалити цю опц╕ю."
 
 #: src/config/dialogs.c:471
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the option \"%s\"?"
-msgstr "Видалити розширення"
+msgstr "Справд╕ видалити опц╕ю \"%s\"?"
 
 #: src/config/dialogs.c:502
 msgid "Options manager"
-msgstr ""
+msgstr "Опц╕╖"
 
 #: src/config/dialogs.c:536 src/config/dialogs.c:790 src/dialogs/options.c:237
 #: src/sched/download.c:1234 src/sched/download.c:1270
@@ -343,23 +362,23 @@ msgstr "Зберегти"
 
 #: src/config/dialogs.c:606 src/config/dialogs.c:628 src/config/dialogs.c:657
 msgid "Add keybinding"
-msgstr ""
+msgstr "Додати прив'язку клав╕ш"
 
 #: src/config/dialogs.c:607
 msgid "Invalid keystroke."
-msgstr ""
+msgstr "Некоректна комб╕нац╕я."
 
 #: src/config/dialogs.c:629
 msgid "Need to select a keymap."
-msgstr ""
+msgstr "Потр╕бно вибрати розкладку."
 
 #: src/config/dialogs.c:644 src/config/options.c:2626
 msgid "Action"
-msgstr ""
+msgstr "Д╕я"
 
 #: src/config/dialogs.c:645
 msgid "Keymap"
-msgstr ""
+msgstr "Розкладка"
 
 #: src/config/dialogs.c:646
 msgid ""
@@ -367,307 +386,292 @@ msgid ""
 "Prefix: Shift, Ctrl, Alt\n"
 "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 msgstr ""
+"Комб╕нац╕я ма╓ бути записана в формат╕: [Преф╕кс-]Клав╕ша\n"
+"Преф╕кс: Shift, Ctrl, Alt\n"
+"Клав╕ша: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
 #: src/config/dialogs.c:650
 msgid "Keystroke"
-msgstr ""
+msgstr "Комб╕нац╕я"
 
 #: src/config/dialogs.c:718 src/config/dialogs.c:729
 msgid "Delete keybinding"
-msgstr ""
+msgstr "Видалити прив'язку клав╕ш"
 
 #: src/config/dialogs.c:719
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr ""
+"Цей елемент не ╓ прив'язкою клав╕ш. Спробуйте натиснути проб╕л, щоб "
+"потрапити до прив'язок."
 
 #: src/config/dialogs.c:730
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
+msgstr "Справд╕ видалити комб╕нац╕ю \"%s\" (д╕я \"%s\", розкладка \"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
-msgstr ""
+msgstr "Комб╕нац╕╖ клав╕ш"
 
 #: src/config/dialogs.c:784 src/globhist/dialogs.c:492
 msgid "Toggle display"
-msgstr "Перемикнути URL/назва"
+msgstr "Перемикнути в╕дображення"
 
 #: src/config/kbdbind.c:260
 msgid "Main mapping"
-msgstr ""
+msgstr "Головна розкладка"
 
 #: src/config/kbdbind.c:261
 msgid "Edit mapping"
-msgstr ""
+msgstr "Редагувати розкладку"
 
 #: src/config/kbdbind.c:262
 msgid "Menu mapping"
-msgstr ""
+msgstr "Розкладка меню"
 
 #: src/config/kbdbind.c:370
-#, fuzzy
 msgid "Abort connection"
-msgstr "з'╓днань"
+msgstr "Перервати з'╓днання"
 
 #: src/config/kbdbind.c:371
-#, fuzzy
 msgid "Add a new bookmark"
-msgstr "Додати закладку"
+msgstr "Додати нову закладинку"
 
 #: src/config/kbdbind.c:372
 msgid "Add a new bookmark using current link"
-msgstr ""
+msgstr "Додати нову закладинку використовуючи поточне посилання"
 
 #: src/config/kbdbind.c:373
 msgid "Attempt to auto-complete the input"
-msgstr ""
+msgstr "Спробувати автоматично доповнити вв╕д"
 
 #: src/config/kbdbind.c:374
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr ""
+msgstr "Спробувати неявно автоматично доповнити вв╕д"
 
 #: src/config/kbdbind.c:375
 msgid "Return to the previous document in history"
-msgstr ""
+msgstr "Повернутись до попереднього документа в ╕стор╕╖"
 
 #: src/config/kbdbind.c:376
 msgid "Delete character in front of the cursor"
-msgstr ""
+msgstr "Видалити символ перед курсором"
 
 #: src/config/kbdbind.c:377
-#, fuzzy
 msgid "Open bookmark manager"
 msgstr "Робота з закладками"
 
 #: src/config/kbdbind.c:378
 msgid "Reload cookies file"
-msgstr ""
+msgstr "Перезавантажити файл з cookies"
 
 #: src/config/kbdbind.c:379
 msgid "Copy text to clipboard"
-msgstr ""
+msgstr "Скоп╕ювати текст у буфер"
 
 #: src/config/kbdbind.c:380
 msgid "Delete text from clipboard"
-msgstr ""
+msgstr "Видалити текст з буферу"
 
 #: src/config/kbdbind.c:381
 msgid "Delete character under cursor"
-msgstr ""
+msgstr "Видалити символ п╕д курсором"
 
 #: src/config/kbdbind.c:382
-#, fuzzy
 msgid "Show information about the current page"
-msgstr "Завантижити зображення"
+msgstr "Показати ╕нформац╕ю про поточну стор╕нку"
 
 #: src/config/kbdbind.c:383
 msgid "Move cursor downwards"
-msgstr ""
+msgstr "Перем╕стити курсор вниз"
 
 #: src/config/kbdbind.c:384
-#, fuzzy
 msgid "Download the current link"
-msgstr "Завантажити за посиланням"
+msgstr "Скачати документ за посиланням"
 
 #: src/config/kbdbind.c:385
-#, fuzzy
 msgid "Download the current image"
 msgstr "Завантижити зображення"
 
 #: src/config/kbdbind.c:386
 msgid "Begin editing"
-msgstr ""
+msgstr "Почати редагування"
 
 #. FIXME
 #: src/config/kbdbind.c:387
 msgid "Go to the end of the page/line"
-msgstr ""
+msgstr "Перейти до к╕нця стор╕нки або рядка"
 
 #: src/config/kbdbind.c:388
-#, fuzzy
 msgid "Follow the current link"
 msgstr "Йти за посиланням"
 
 #: src/config/kbdbind.c:389
 msgid "Follow the current link, forcing reload of the target"
-msgstr ""
+msgstr "Перейти за посиланням з примусовим перезавантаженням документа"
 
 #: src/config/kbdbind.c:390
 msgid "Open the File menu"
-msgstr ""
+msgstr "В╕дкрити меню File"
 
 #: src/config/kbdbind.c:391
 msgid "Find the next occurrence of the current search text"
-msgstr ""
+msgstr "Знайти наступне вхождення тексту, що шука╓ться"
 
 #: src/config/kbdbind.c:392
 msgid "Find the previous occurrence of the current search text"
-msgstr ""
+msgstr "Знайте попередн╓ входження тексту, що шука╓ться"
 
 #: src/config/kbdbind.c:393
-#, fuzzy
 msgid "Forget authentication credentials"
-msgstr "HTTP Аутентиф╕кац╕я"
+msgstr "Забути параметри аутентикац╕╖"
 
 #: src/config/kbdbind.c:394
 msgid "Open \"Go to URL\" dialog box"
-msgstr ""
+msgstr "В╕дкрити д╕алог \"Перейти до URL\""
 
 #: src/config/kbdbind.c:395
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr ""
+msgstr "В╕дкрити д╕алог \"Перейти до URL\" з поточним URL"
 
 #: src/config/kbdbind.c:396
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
+msgstr "В╕дкрити д╕алог \"Перейти до URL\" з адресою поточного посилання"
 
 #: src/config/kbdbind.c:397
 msgid "Go to the homepage"
-msgstr ""
+msgstr "Перейти до домашньо╖ стор╕нки"
 
 #: src/config/kbdbind.c:398
 msgid "Show information about the current page HTTP headers"
-msgstr ""
+msgstr "Показати ╕нформац╕ю про HTTP-заголовки поточно╖ стор╕нки"
 
 #: src/config/kbdbind.c:399
 msgid "Open history manager"
-msgstr ""
+msgstr "В╕дкрити ╕стор╕ю"
 
 #: src/config/kbdbind.c:400
 msgid "Go to the start of the page/line"
-msgstr ""
+msgstr "Перейти до початку стор╕нки або рядка"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Видалити розширення"
+msgstr "Стерти до початку рядка"
 
 #: src/config/kbdbind.c:402
-#, fuzzy
 msgid "Delete to end of line"
-msgstr "Видалити розширення"
+msgstr "Стерти до к╕нця рядка"
 
 #: src/config/kbdbind.c:403
 msgid "Open keybinding manager"
-msgstr ""
+msgstr "В╕дкрити прив'язки клав╕ш"
 
 #: src/config/kbdbind.c:404
-#, fuzzy
 msgid "Move the cursor left"
-msgstr "Прямокутний курсор"
+msgstr "Перем╕стити курсор л╕воруч"
 
 #: src/config/kbdbind.c:405
 msgid "Open the link context menu"
-msgstr ""
+msgstr "В╕дкрити контекстне меню посилання"
 
 #: src/config/kbdbind.c:406
-#, fuzzy
 msgid "Jump to link"
-msgstr "Йти за посиланням"
+msgstr "Перейти до посилання"
 
 #: src/config/kbdbind.c:408
-#, fuzzy
 msgid "Open a Lua console"
-msgstr "Консоль Lua"
+msgstr "В╕дкрити консоль Lua"
 
 #: src/config/kbdbind.c:410
 msgid "Open a Lua console (DISABLED)"
-msgstr ""
+msgstr "В╕дкрити консоль Lua (В╤ДКЛЮЧЕНО)"
 
 #. internal use only
 #: src/config/kbdbind.c:413
 msgid "Activate the menu"
-msgstr ""
+msgstr "Активувати меню"
 
 #: src/config/kbdbind.c:414
 msgid "Move to the next frame"
-msgstr ""
+msgstr "Перейти до наступного фрейму"
 
 #: src/config/kbdbind.c:415
-#, fuzzy
 msgid "Open a new window"
-msgstr "В╕дкрити в новому в╕кн╕"
+msgstr "В╕дкрити нове в╕кно"
 
 #: src/config/kbdbind.c:416
-#, fuzzy
 msgid "Open the current link in a new window"
-msgstr "В╕дкрити в новому в╕кн╕"
+msgstr "В╕дкрити посилання в новому в╕кн╕"
 
 #: src/config/kbdbind.c:417
 msgid "Open options manager"
-msgstr ""
+msgstr "В╕дкрити налаштування опц╕й"
 
 #: src/config/kbdbind.c:418
 msgid "Move downwards by a page"
-msgstr ""
+msgstr "Перем╕ститись вниз за стор╕нкою"
 
 #: src/config/kbdbind.c:419
 msgid "Move upwards by a page"
-msgstr ""
+msgstr "Перем╕ститись вгору за стор╕нкою"
 
 #: src/config/kbdbind.c:420
 msgid "Paste text from the clipboard"
-msgstr ""
+msgstr "Вставити текст з буферу"
 
 #: src/config/kbdbind.c:421
 msgid "Move to the previous frame"
-msgstr ""
+msgstr "Перейти до попереднього фрейму"
 
 #: src/config/kbdbind.c:422
 msgid "Open a quit confirmation dialog box"
-msgstr ""
+msgstr "В╕дкрити запит п╕дтвердження виходу"
 
 #: src/config/kbdbind.c:423
-#, fuzzy
 msgid "Quit without confirmation"
-msgstr "Оч╕кування п╕дтвердження перенапрямлення"
+msgstr "Вийти без п╕дтвердження"
 
 #: src/config/kbdbind.c:424
 msgid "Reload the current page"
-msgstr ""
+msgstr "Перезавантажити поточну стор╕нку"
 
 #: src/config/kbdbind.c:425
 msgid "Attempt to resume download of the current link"
-msgstr ""
+msgstr "Спробувати в╕дновити завантаження поточного посилання"
 
 #: src/config/kbdbind.c:426
-#, fuzzy
 msgid "Move the cursor right"
-msgstr "Прямокутний курсор"
+msgstr "Перем╕стити курсор л╕воруч"
 
 #: src/config/kbdbind.c:427
-#, fuzzy
 msgid "Save formatted document"
 msgstr "Зберегти в╕дформатований документ"
 
 #: src/config/kbdbind.c:428
 msgid "Scroll down"
-msgstr ""
+msgstr "Прокрутити вниз"
 
 #: src/config/kbdbind.c:429
 msgid "Scroll left"
-msgstr ""
+msgstr "Прокрутити л╕воруч"
 
 #: src/config/kbdbind.c:430
 msgid "Scroll right"
-msgstr ""
+msgstr "Прокрутити праворуч"
 
 #: src/config/kbdbind.c:431
 msgid "Scroll up"
-msgstr ""
+msgstr "Прокрутити вгору"
 
 #: src/config/kbdbind.c:432
-#, fuzzy
 msgid "Search for a text pattern"
-msgstr "Пошук тексту"
+msgstr "Пошук тексту за шаблоном"
 
 #: src/config/kbdbind.c:433
-#, fuzzy
 msgid "Search backwards for a text pattern"
-msgstr "Пошук тексту"
+msgstr "Зворотн╕й пошук тексту за шаблоном"
 
 #: src/config/kbdbind.c:434
 #, fuzzy

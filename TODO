@@ -52,6 +52,7 @@ current link to external command (?)).
 
 	Copy url to X clipboard (using X selections).
 
+	Document source colorization (by converting source to html).
 
 These are more long-term goals:
 
@@ -73,4 +74,4 @@ optionally.
 	Write some more documentation.. docs, a lot of docs!
 
 
-$Id: TODO,v 1.38 2002/12/18 21:23:31 pasky Exp $
+$Id: TODO,v 1.39 2003/01/02 09:40:17 zas Exp $

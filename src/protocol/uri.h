@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.19 2003/07/22 14:53:48 jonas Exp $ */
+/* $Id: uri.h,v 1.20 2003/07/22 14:57:11 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -63,7 +63,8 @@ enum uri_component {
 /* Adds the components to an already initialized string. */
 struct string *add_uri_to_string(struct string *string, struct uri *uri, enum uri_component components);
 
-/* Takes an uri string. Useful if there's no struct uri around. */
+/* Takes an uri string, parses it and adds the desired components. Useful if
+ * there's no struct uri around. */
 struct string *add_string_uri_to_string(struct string *string, unsigned char *uristring, enum uri_component components);
 
 /* Returns the new URI string or NULL upon an error. */

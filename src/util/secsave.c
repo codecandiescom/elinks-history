@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.19 2002/09/17 14:40:19 zas Exp $ */
+/* $Id: secsave.c,v 1.20 2002/09/17 16:29:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,8 +71,14 @@ secure_open(unsigned char *file_name, mode_t mask)
 {
 	mode_t saved_mask;
 	struct stat st;
-	struct secure_save_info *ssi = (struct secure_save_info *)
-				       mem_calloc(1, sizeof(struct secure_save_info));
+	struct secure_save_info *ssi;
+
+	if (get_opt_bool_tree(cmdline_options, "no-connect")
+	    && !get_opt_bool_tree(cmdline_options, "touch-files"))
+		return NULL;
+		
+	ssi = (struct secure_save_info *)
+		mem_calloc(1, sizeof(struct secure_save_info));
 
 	if (!ssi) goto end;
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.99 2002/09/13 20:34:58 pasky Exp $ */
+/* $Id: options.c,v 1.100 2002/09/17 16:29:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1734,6 +1734,10 @@ register_options()
 		"stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 		"know why you would use -source -stdin, though ;-)");
 
+	add_opt_bool_tree(cmdline_options, "",
+		"touch-files", 0, 0,
+		"Set to 1 to have files changed when -no-connect is used.");
+	
 	add_opt_command_tree(cmdline_options, "",
 		"version", 0, version_cmd,
 		"Print ELinks version information and exit.");

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.67 2004/09/03 19:45:34 jonas Exp $ */
+/* $Id: mime.c,v 1.68 2004/09/27 11:30:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,7 +248,7 @@ get_content_type(struct cache_entry *cached)
 
 		ctype = get_extension_content_type(extension);
 		mem_free(extension);
-		if (ctype) {
+		if (ctype && *ctype) {
 			cached->content_type = ctype;
 			return ctype;
 		}

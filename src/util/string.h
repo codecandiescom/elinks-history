@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.88 2004/10/22 23:55:28 jonas Exp $ */
+/* $Id: string.h,v 1.89 2004/12/19 10:04:53 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -168,6 +168,16 @@ struct string *add_xchar_to_string(struct string *string, unsigned char characte
 
 /* Add printf-style format string to @string. */
 struct string *add_format_to_string(struct string *string, unsigned char *format, ...);
+
+/* Get a regular newly allocated stream of bytes from @string. */
+unsigned char *squeezastring(struct string *string);
+
+
+static inline unsigned char *
+squeezastring(struct string *string)
+{
+	return memacpy(string->source, string->length);
+}
 
 
 #undef realloc_string

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.58 2002/12/14 17:11:40 zas Exp $ */
+/* $Id: parser.c,v 1.59 2002/12/14 17:44:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ end_1:
 
 
 /* Eat newlines when loading attribute value? */
-int get_attr_val_eat_nl = 0;
+static int get_attr_val_eat_nl = 0;
 
 /* Parses html element attributes. */
 /* - e is attr pointer previously get from parse_element,
@@ -223,7 +223,7 @@ ea:
 
 #undef add_chr
 
-unsigned char *
+static unsigned char *
 get_url_val(unsigned char *e, unsigned char *name)
 {
 	unsigned char *val;
@@ -245,7 +245,7 @@ has_attr(unsigned char *e, unsigned char *name)
 	return 1;
 }
 
-struct {
+static struct {
 	int n;
 	unsigned char *s;
 } roman_tbl[] = {
@@ -271,7 +271,7 @@ struct {
 	{0,	NULL}
 };
 
-void
+static void
 roman(unsigned char *p, unsigned n)
 {
 	int i = 0;
@@ -298,7 +298,7 @@ roman(unsigned char *p, unsigned n)
 	}
 }
 
-int
+static int
 get_color(unsigned char *a, unsigned char *c, struct rgb *rgb)
 {
 	unsigned char *at;
@@ -322,7 +322,7 @@ get_bgcolor(unsigned char *a, struct rgb *rgb)
 	return get_color(a, "bgcolor", rgb);
 }
 
-unsigned char *
+static unsigned char *
 get_target(unsigned char *a)
 {
 	unsigned char *v = get_attr_val(a, "target");
@@ -370,7 +370,8 @@ kill_elem(unsigned char *e)
 		kill_html_stack_item(&html_top);
 }
 
-#ifdef DEBUG
+#if 0
+/* Never called */
 void
 debug_stack()
 {
@@ -439,12 +440,12 @@ unsigned char *eofff;
 unsigned char *startf;
 
 int line_breax;
-int pos;
-int putsp;
+static int pos;
+static int putsp;
 
-int was_br;
+static int was_br;
 
-void
+static void
 ln_break(int n, void (*line_break)(void *), void *f)
 {
 	if (!n || html_top.invisible) return;
@@ -453,7 +454,7 @@ ln_break(int n, void (*line_break)(void *), void *f)
 	putsp = -1; /* ??? */
 }
 
-void
+static void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
@@ -477,7 +478,7 @@ put_chrs(unsigned char *start, int len,
 	line_breax = 0;
 }
 
-void
+static void
 kill_until(int ls, ...)
 {
 	int l;
@@ -491,7 +492,7 @@ kill_until(int ls, ...)
 
 		va_start(arg, ls);
 		while (1) {
-			char *s = va_arg(arg, char *);
+			unsigned char *s = va_arg(arg, unsigned char *);
 
 			if (!s) break;
 			if (!*s) {
@@ -558,7 +559,7 @@ get_num(unsigned char *a, unsigned char *n)
 	return -1;
 }
 
-int
+static int
 parse_width(unsigned char *w, int trunc)
 {
 	unsigned char *end;
@@ -623,7 +624,7 @@ unsigned char *last_form_tag;
 unsigned char *last_form_attr;
 unsigned char *last_input_tag;
 
-void
+static void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      unsigned char *link, unsigned char *target)
 {
@@ -642,42 +643,42 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	kill_html_stack_item(&html_top);
 }
 
-void
+static void
 html_span(unsigned char *a)
 {
 }
 
-void
+static void
 html_bold(unsigned char *a)
 {
 	format.attr |= AT_BOLD;
 }
 
-void
+static void
 html_italic(unsigned char *a)
 {
 	format.attr |= AT_ITALIC;
 }
 
-void
+static void
 html_underline(unsigned char *a)
 {
 	format.attr |= AT_UNDERLINE;
 }
 
-void
+static void
 html_fixed(unsigned char *a)
 {
        format.attr |= AT_FIXED;
 }
 
-void
+static void
 html_subscript(unsigned char *a)
 {
        format.attr |= AT_SUBSCRIPT;
 }
 
-void
+static void
 html_superscript(unsigned char *a)
 {
        format.attr |= AT_SUPERSCRIPT;
@@ -691,7 +692,7 @@ html_superscript(unsigned char *a)
  * tabindex, thus messing up navigation between links), thus we support these
  * attributes even near tags where we're not supposed to (like IFRAME, FRAME or
  * LINK). I think this doesn't make any harm ;). --pasky */
-void
+static void
 html_focusable(unsigned char *a)
 {
 	unsigned char *accesskey = a ? get_attr_val(a, "accesskey") : NULL;
@@ -715,7 +716,7 @@ html_focusable(unsigned char *a)
 	}
 }
 
-void
+static void
 html_a(unsigned char *a)
 {
 	unsigned char *href, *name;
@@ -760,7 +761,7 @@ html_a(unsigned char *a)
 	}
 }
 
-void
+static void
 html_font(unsigned char *a)
 {
 	unsigned char *al = get_attr_val(a, "size");
@@ -772,7 +773,8 @@ html_font(unsigned char *a)
 		unsigned char *end;
 
 		if (*al == '+') p = 1, nn++;
-		if (*al == '-') p = -1, nn++;
+		else if (*al == '-') p = -1, nn++;
+
 		errno = 0;
 		s = strtoul(nn, (char **)&end, 10);
 		if (!errno && *nn && !*end) {
@@ -787,7 +789,7 @@ html_font(unsigned char *a)
 	get_color(a, "color", &format.fg);
 }
 
-void
+static void
 html_img(unsigned char *a)
 {
 	int ismap, usemap = 0;
@@ -806,12 +808,8 @@ html_img(unsigned char *a)
 			return;
 		}
 
-		format.link = mem_alloc(strlen(u) + 5);
-		if (format.link) {
-			strcpy(format.link, "MAP@");
-			strcat(format.link, u);
-		}
-		format.attr |= AT_BOLD;
+		format.link = straconcat("MAP@", u, NULL);
+			format.attr |= AT_BOLD;
 		mem_free(u);
 		mem_free(al);
 	}
@@ -922,7 +920,7 @@ html_img(unsigned char *a)
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
 }
 
-void
+static void
 html_body(unsigned char *a)
 {
 	get_color(a, "text", &format.fg);
@@ -932,26 +930,26 @@ html_body(unsigned char *a)
 	get_bgcolor(a, &par_format.bgcolor);
 }
 
-void
+static void
 html_skip(unsigned char *a)
 {
 	html_top.invisible = html_top.dontkill = 1;
 }
 
-void
+static void
 html_title(unsigned char *a)
 {
 	html_top.invisible = html_top.dontkill = 1;
 }
 
-void
+static void
 html_center(unsigned char *a)
 {
 	par_format.align = AL_CENTER;
 	if (!table_level) par_format.leftmargin = par_format.rightmargin = 0;
 }
 
-void
+static void
 html_linebrk(unsigned char *a)
 {
 	char *al = get_attr_val(a, "align");
@@ -968,7 +966,7 @@ html_linebrk(unsigned char *a)
 	}
 }
 
-void
+static void
 html_br(unsigned char *a)
 {
 	html_linebrk(a);
@@ -976,13 +974,13 @@ html_br(unsigned char *a)
 	was_br = 1;
 }
 
-void
+static void
 html_form(unsigned char *a)
 {
 	was_br = 1;
 }
 
-void
+static void
 html_p(unsigned char *a)
 {
 	if (par_format.leftmargin < margin) par_format.leftmargin = margin;
@@ -991,21 +989,21 @@ html_p(unsigned char *a)
 	html_linebrk(a);
 }
 
-void
+static void
 html_address(unsigned char *a)
 {
 	par_format.leftmargin += 1;
 	par_format.align = AL_LEFT;
 }
 
-void
+static void
 html_blockquote(unsigned char *a)
 {
 	par_format.leftmargin += 2;
 	par_format.align = AL_LEFT;
 }
 
-void
+static void
 html_h(int h, unsigned char *a)
 {
 	par_format.align = AL_LEFT;
@@ -1033,37 +1031,37 @@ html_h(int h, unsigned char *a)
 	}
 }
 
-void
+static void
 html_h2(unsigned char *a)
 {
 	html_h(2, a);
 }
 
-void
+static void
 html_h3(unsigned char *a)
 {
 	html_h(3, a);
 }
 
-void
+static void
 html_h4(unsigned char *a)
 {
 	html_h(4, a);
 }
 
-void
+static void
 html_h5(unsigned char *a)
 {
 	html_h(5, a);
 }
 
-void
+static void
 html_h6(unsigned char *a)
 {
 	html_h(6, a);
 }
 
-void
+static void
 html_pre(unsigned char *a)
 {
 	par_format.align = AL_NO;
@@ -1071,7 +1069,7 @@ html_pre(unsigned char *a)
 	par_format.rightmargin = 0;
 }
 
-void
+static void
 html_hr(unsigned char *a)
 {
 	int i/* = par_format.width - 10*/;
@@ -1098,7 +1096,7 @@ html_hr(unsigned char *a)
 	kill_html_stack_item(&html_top);
 }
 
-void
+static void
 html_table(unsigned char *a)
 {
 	par_format.leftmargin = margin;
@@ -1108,13 +1106,13 @@ html_table(unsigned char *a)
 	format.attr = 0;
 }
 
-void
+static void
 html_tr(unsigned char *a)
 {
 	html_linebrk(a);
 }
 
-void
+static void
 html_th(unsigned char *a)
 {
 	/*html_linebrk(a);*/
@@ -1123,7 +1121,7 @@ html_th(unsigned char *a)
 	put_chrs(" ", 1, put_chars_f, ff);
 }
 
-void
+static void
 html_td(unsigned char *a)
 {
 	/*html_linebrk(a);*/
@@ -1132,7 +1130,7 @@ html_td(unsigned char *a)
 	put_chrs(" ", 1, put_chars_f, ff);
 }
 
-void
+static void
 html_base(unsigned char *a)
 {
 	unsigned char *al = get_url_val(a, "href");
@@ -1150,7 +1148,7 @@ html_base(unsigned char *a)
 	}
 }
 
-void
+static void
 html_ul(unsigned char *a)
 {
 	unsigned char *al;
@@ -1173,7 +1171,7 @@ html_ul(unsigned char *a)
 	html_top.dontkill = 1;
 }
 
-void
+static void
 html_ol(unsigned char *a)
 {
 	unsigned char *al;
@@ -1204,7 +1202,7 @@ html_ol(unsigned char *a)
 	html_top.dontkill = 1;
 }
 
-void
+static void
 html_li(unsigned char *a)
 {
 	/*kill_until(0, "", "UL", "OL", NULL);*/
@@ -1250,7 +1248,7 @@ html_li(unsigned char *a)
 	line_breax = 2;
 }
 
-void
+static void
 html_dl(unsigned char *a)
 {
 	par_format.flags &= ~P_COMPACT;
@@ -1267,7 +1265,7 @@ html_dl(unsigned char *a)
 	}
 }
 
-void
+static void
 html_dt(unsigned char *a)
 {
 	kill_until(0, "", "DL", NULL);
@@ -1277,7 +1275,7 @@ html_dt(unsigned char *a)
 		ln_break(2, line_break_f, ff);
 }
 
-void
+static void
 html_dd(unsigned char *a)
 {
 	kill_until(0, "", "DL", NULL);
@@ -1288,7 +1286,7 @@ html_dd(unsigned char *a)
 	par_format.align = AL_LEFT;
 }
 
-void
+static void
 get_html_form(unsigned char *a, struct form *form)
 {
 	unsigned char *al;
@@ -1339,7 +1337,7 @@ get_html_form(unsigned char *a, struct form *form)
 	form->num = a - startf;
 }
 
-void
+static void
 find_form_for_input(unsigned char *i)
 {
 	unsigned char *s, *ss, *name, *attr;
@@ -1392,7 +1390,7 @@ end_parse:
 	}
 }
 
-void
+static void
 html_button(unsigned char *a)
 {
 	unsigned char *al;
@@ -1456,7 +1454,7 @@ xxx:
 #endif
 }
 
-void
+static void
 html_input(unsigned char *a)
 {
 	int i;
@@ -1572,7 +1570,7 @@ hid:
 	special_f(ff, SP_CONTROL, fc);
 }
 
-void
+static void
 html_select(unsigned char *a)
 {
 	/* Note I haven't seen this code in use, do_html_select() seems to take
@@ -1587,7 +1585,7 @@ html_select(unsigned char *a)
 	format.select_disabled = 2 * has_attr(a, "disabled");
 }
 
-void
+static void
 html_option(unsigned char *a)
 {
 	struct form_control *fc;
@@ -1661,7 +1659,7 @@ x:
 	special_f(ff, SP_CONTROL, fc);
 }
 
-void
+static void
 clr_spaces(unsigned char *name)
 {
 	unsigned char *nm, *second;
@@ -1681,10 +1679,10 @@ clr_spaces(unsigned char *name)
 /* TODO: Move following stuff to special file. */
 
 
-int menu_stack_size;
-struct menu_item **menu_stack;
+static int menu_stack_size;
+static struct menu_item **menu_stack;
 
-void
+static void
 new_menu_item(unsigned char *name, int data, int fullname)
 	/* name == NULL - up;	data == -1 - down */
 {
@@ -1746,7 +1744,7 @@ new_menu_item(unsigned char *name, int data, int fullname)
 	if (!name) menu_stack_size--;
 }
 
-void
+static void
 init_menu()
 {
 	menu_stack_size = 0;
@@ -1768,7 +1766,7 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 	mem_free(m);
 }
 
-struct menu_item *
+static struct menu_item *
 detach_menu()
 {
 	struct menu_item *i = NULL;
@@ -1778,14 +1776,14 @@ detach_menu()
 	return i;
 }
 
-void
+static void
 destroy_menu()
 {
 	if (menu_stack) free_menu(menu_stack[0]);
 	detach_menu();
 }
 
-void
+static void
 menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls)
 {
 	unsigned char *bs;
@@ -1807,7 +1805,7 @@ menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls)
 	}
 }
 
-int
+static int
 menu_contains(struct menu_item *m, int f)
 {
 	if (m->func != MENU_FUNC do_select_submenu)
@@ -1836,7 +1834,7 @@ found:
 	do_menu_selected(term, menu, ses, sel);
 }
 
-int
+static int
 do_html_select(unsigned char *attr, unsigned char *html,
 	       unsigned char *eof, unsigned char **end, void *f)
 {
@@ -2025,13 +2023,13 @@ end_parse:
 
 
 
-void
+static void
 html_textarea(unsigned char *a)
 {
 	internal("This should be never called");
 }
 
-void
+static void
 do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		 unsigned char **end, void *f)
 {
@@ -2113,7 +2111,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	special_f(f, SP_CONTROL, fc);
 }
 
-void
+static void
 html_iframe(unsigned char *a)
 {
 	unsigned char *name, *url;
@@ -2142,13 +2140,13 @@ html_iframe(unsigned char *a)
 	mem_free(url);
 }
 
-void
+static void
 html_noframes(unsigned char *a)
 {
 	if (d_opt->frames) html_skip(a);
 }
 
-void
+static void
 html_frame(unsigned char *a)
 {
 	unsigned char *name, *src, *url;
@@ -2191,7 +2189,7 @@ html_frame(unsigned char *a)
 	mem_free(url);
 }
 
-void
+static void
 parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 {
 	unsigned char *aa;
@@ -2203,7 +2201,12 @@ parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 
 new_ch:
 	while (WHITECHAR(*a)) a++;
+	errno = 0;
 	n = strtoul(a, (char **)&a, 10);
+	if (errno) {
+		*olp = 0;
+		return;
+	}
 
 	q = n;
 	if (*a == '%') q = q * ww / 100;
@@ -2288,7 +2291,7 @@ distribute:
 	}
 }
 
-void
+static void
 html_frameset(unsigned char *a)
 {
 	int x, y;
@@ -2378,7 +2381,7 @@ html_frameset(unsigned char *a)
 }
 #endif
 
-void
+static void
 html_link(unsigned char *a)
 {
 	unsigned char *name, *url;
@@ -2427,7 +2430,7 @@ struct element_info {
 
 #define NUMBER_OF_TAGS 64
 
-struct element_info elements[] = {
+static struct element_info elements[] = {
 	{"A",		html_a,		0, 2},
 	{"ABBR",	html_italic,	0, 0},
 	{"ADDRESS",	html_address,	2, 0},
@@ -2517,7 +2520,7 @@ skip_comment(unsigned char *html, unsigned char *eof)
 	return eof;
 }
 
-void
+static void
 process_head(unsigned char *head)
 {
 	unsigned char *refresh, *url;
@@ -2706,7 +2709,7 @@ ng:;
 		name[namelen] = tmp;
 		while (ei) { /* This exists just to be able to conviently break; out. */
 			if (!inv) {
-				char *a;
+				unsigned char *a;
 
 				ln_break(ei->linebreak, line_break, f);
 				if (ei->name && ((a = get_attr_val(attr, "id")))) {

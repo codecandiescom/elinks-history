@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.137 2004/01/03 11:56:08 jonas Exp $ */
+/* $Id: hierbox.c,v 1.138 2004/01/03 13:12:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,35 @@ do_add_listbox_item(struct listbox_item *root, unsigned char *text, void *data,
 
 	/* TODO: Sort? */
 	add_to_list(root->child, item);
+
+	return item;
+}
+
+struct listbox_item *
+add_listbox_items(struct hierbox_browser *browser, void *data, int noempty,
+		  unsigned char *text, ...)
+{
+	struct listbox_item *item, *root = &browser->root;
+	unsigned char *label;
+	va_list ap;
+
+	va_start(ap, text);
+
+	while ((label = va_arg(ap, unsigned char *))) {
+		root = do_add_listbox_item(root, text, NULL, noempty, BI_FOLDER);
+		if (!root) {
+			va_end(ap);
+			return NULL;
+		}
+
+		text = label;
+	}
+
+	va_end(ap);
+
+	item = do_add_listbox_item(root, text, data, 0, BI_LEAF);
+  
+	update_hierbox_browser(browser);
 
 	return item;
 }
@@ -574,7 +603,7 @@ do_delete_item(struct listbox_item *item, struct listbox_context *info,
 {
 	struct listbox_ops *ops = info->box->ops;
 
-	assert(item && item->udata);
+	assert(item);
 
 	if ((!delete && !ops->can_delete(item)) || ops->is_used(item)) {
 		print_delete_error(item, info->term, ops,
@@ -730,7 +759,7 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_context *context;
 
-	if (!box->sel || !box->sel->udata) return 0;
+	if (!box->sel) return 0;
 
 	assert(box->ops);
 

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.30 2004/01/02 18:37:57 jonas Exp $ */
+/* $Id: dialogs.c,v 1.31 2004/01/03 13:12:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,6 +45,16 @@ unlock_cookie(struct listbox_item *item)
 static int
 is_cookie_used(struct listbox_item *item)
 {
+	if (item->type == BI_FOLDER) {
+		struct listbox_item *root = item;
+
+		foreach (item, root->child)
+			if (is_object_used((struct cookie *)item->udata))
+				return 1;
+
+		return 0;
+	}
+
 	return is_object_used((struct cookie *)item->udata);
 }
 
@@ -97,7 +107,22 @@ delete_cookie(struct listbox_item *item, int last)
 {
 	struct cookie *cookie = item->udata;
 
+	if (!cookie) return;
+
 	assert(!is_object_used(cookie));
+
+	/* Update the root text if we own it */
+	if (item->root
+	    && item->root->text == cookie->server) {
+		struct listbox_item *item2;
+
+		foreach (item2, item->root->child)
+			if (item2 != item) {
+				struct cookie *cookie2 = item2->udata;
+
+				item->root->text = cookie2->server;
+			}
+	}
 
 	del_from_list(cookie);
 	free_cookie(cookie);

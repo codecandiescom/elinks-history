@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.52 2003/07/25 10:03:52 zas Exp $ */
+/* $Id: charsets.c,v 1.53 2003/07/25 12:39:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -565,10 +565,10 @@ convert_string(struct conv_table *convert_table, unsigned char *chars, int chars
 
 		for (i = 0; i < charslen; i++)
 			if (chars[i] == '&')
-				goto xx;
-		return memacpy(chars, charslen);
+				break;
+		if (i == charslen) /* No '&' found. */
+			return memacpy(chars, charslen);
 	}
-xx:
 
 	/* Buffer allocation */
 

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.36 2003/12/05 21:00:51 pasky Exp $ */
+/* $Id: cgi.c,v 1.37 2003/12/05 22:13:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,8 +241,15 @@ test_path(unsigned char *path)
 	for (path_ptr = &cgi_path;
 	     (filename = get_next_path_filename(path_ptr, ':'));
 	     ) {
-		int res = strcmp(path, filename);
+		int filelen = strlen(filename);
+		int res;
 
+		if (filename[filelen - 1] != '/') {
+			add_to_strn(&filename, "/");
+			filelen++;
+		}
+
+		res = strncmp(path, filename, filelen);
 		mem_free(filename);
 		if (!res) return 0;
 	}
@@ -284,12 +291,15 @@ execute_cgi(struct connection *conn)
 	}
 
 	last_slash = strrchr(script, '/');
-	if (last_slash) {
+	if (last_slash++) {
+		unsigned char storage;
 		int res;
 
+		/* We want to compare against path with the trailing slash. */
+		storage = *last_slash;
 		*last_slash = 0;
 		res = test_path(script);
-		*last_slash = '/';
+		*last_slash = storage;
 		if (res && (scriptlen < 4
 			    || strcasecmp(script + scriptlen - 4, ".cgi"))) {
 			state = S_FILE_CGI_BAD_PATH;

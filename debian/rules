@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# $Id: rules,v 1.6 2005/01/11 03:19:27 jonas Exp $
+# $Id: rules,v 1.7 2005/01/11 03:36:06 jonas Exp $
 # Sample debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 
@@ -19,7 +19,7 @@ build-stamp:
 	./configure --prefix=/usr --mandir=\$${prefix}/share/man \
 	--sysconfdir=/etc/elinks \
 	--without-openssl --without-x --with-gnutls=/usr
-	# --enable-leds --enable-debug
+	# --enable-debug
 	# Add here commands to compile the package.
 	$(MAKE)
 
@@ -56,9 +56,9 @@ install: build
 	mkdir -p debian/elinks/usr/share/applnk/Internet/
 	cp debian/elinks.desktop debian/elinks/usr/share/applnk/Internet/
 # upstream CVS bug hack: remove double contrib dirs
-	rm -rf contrib/lua/lua contrib/conv/conv contrib/guile/guile || true
+	-rm -rf contrib/lua/lua contrib/conv/conv contrib/guile/guile
 # locale.alias causes conflicts and I believe it's not necessary
-	rm -f debian/elinks/usr/share/locale/locale.alias || true
+	-rm -f debian/elinks/usr/share/locale/locale.alias
 
 	touch install-stamp
 
@@ -75,6 +75,7 @@ binary-arch: build install
 	dh_installdocs AUTHORS SITES TODO BUGS
 	dh_installdocs doc/bookmarks.txt doc/exmode.txt doc/index.txt doc/introduction.txt doc/mailcap.txt doc/marks.txt doc/mime.html doc/remote.txt doc/tabs.txt
 	dh_installexamples contrib/
+
 # remove CVS directories, Makefiles and other useless files (from contrib/)
 # XXX: Keep after installation of directories
 	-find debian/elinks -name CVS -exec rm -rf "{}" \;
@@ -88,14 +89,14 @@ binary-arch: build install
 	-find debian/elinks -name links_wps.zip -exec rm -rf "{}" \;
 	-find debian/elinks -name colws.diff -exec rm -rf "{}" \;
 
-#contrib/*
 	dh_installmime
 	dh_installmenu
 #	dh_installemacsen
 #	dh_installpam
 #	dh_installinit
 ##	dh_installcron
-	dh_installmanpages
+# The build system installs the manpages
+#	dh_installman
 
 # comment out for slink:
 ##	dh_installinfo

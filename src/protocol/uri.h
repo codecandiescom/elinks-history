@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.116 2004/06/04 13:36:04 jonas Exp $ */
+/* $Id: uri.h,v 1.117 2004/06/04 13:44:20 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -198,6 +198,9 @@ get_uri_reference(struct uri *uri)
 #define get_proxy_uri(uri)					\
 	(((uri)->protocol != PROTOCOL_PROXY)			\
 	? get_proxy(uri) : get_uri_reference(uri))
+
+/* Get URI using the string returned by get_uri_string(@uri, @components) */
+struct uri *get_composed_uri(struct uri *uri, enum uri_component components);
 
 /* Resolves an URI relative to a current working directory (CWD) and possibly
  * extracts the fragment. It is possible to just use it to extract fragment

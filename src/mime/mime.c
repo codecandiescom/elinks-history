@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.16 2003/06/18 00:30:25 jonas Exp $ */
+/* $Id: mime.c,v 1.17 2003/06/18 00:34:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ try_extension_type(unsigned char *extension)
 	if (!content_type)
 		return NULL;
 
-	handler = get_mime_type_handler(content_type, 0);
+	handler = get_mime_type_handler(content_type, 1);
 	if (handler) {
 		mem_free(handler->program);
 		mem_free(handler);

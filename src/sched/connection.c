@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.42 2003/07/03 20:52:47 jonas Exp $ */
+/* $Id: connection.c,v 1.43 2003/07/03 21:04:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,12 +125,12 @@ connect_info(int type)
 }
 
 static inline int
-connection_disappeared(struct connection *c, unsigned int id)
+connection_disappeared(struct connection *c)
 {
 	struct connection *d;
 
 	foreach (d, queue)
-		if (c == d && id == d->id)
+		if (c == d && c->id == d->id)
 			return 0;
 
 	return 1;
@@ -196,8 +196,6 @@ set_connection_state(struct connection *c, int state)
 	c->state = state;
 	if (c->state == S_TRANS) {
 		if (prg->timer == -1) {
-			unsigned int id = c->id;
-
 			if (!prg->valid) {
 				int tmp = prg->start;
 				int tmp2 = prg->seek;
@@ -212,7 +210,7 @@ set_connection_state(struct connection *c, int state)
 			st_r = 1;
 			stat_timer(c);
 			st_r = 0;
-			if (connection_disappeared(c, id))
+			if (connection_disappeared(c))
 				return;
 		}
 
@@ -350,7 +348,6 @@ void
 send_connection_info(struct connection *c)
 {
 	int state = c->state;
-	unsigned int id = c->id;
 	struct status *stat = c->statuss.next;
 
 	while ((void *)stat != &c->statuss) {
@@ -358,7 +355,7 @@ send_connection_info(struct connection *c)
 		stat = stat->next;
 		if (stat->prev->end)
 			stat->prev->end(stat->prev, stat->prev->data);
-		if (state >= 0 && connection_disappeared(c, id))
+		if (state >= 0 && connection_disappeared(c))
 			return;
 	}
 }

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.251 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: search.c,v 1.252 2004/07/12 11:58:02 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1132,7 +1132,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	}
 
 	i = search_link_text(document, current, i, text, direction, offset);
-	if (i < 0) return TYPEAHEAD_CANCEL;
+	if (i < 0) return TYPEAHEAD_ERROR;
 
 	assert(i >= 0 && i < doc_view->document->nlinks);
 

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.34 2004/01/19 00:24:31 jonas Exp $ */
+/* $Id: value.c,v 1.35 2004/01/19 00:30:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,76 +19,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-
-static int
-rgb_component_parser(unsigned char **string, unsigned char terminator)
-{
-	unsigned char *nstring;
-	int part;
-
-	/* FIXME: We should handle the % values as floats. */
-
-	skip_whitespace(*string);
-	part = strtol(*string, (char **) &nstring, 10);
-	if (*string == nstring) {
-		return -1;
-	}
-	*string = nstring;
-	skip_whitespace(*string);
-	if (**string == '%') {
-		part *= 255; part /= 100;
-		(*string)++;
-	}
-	skip_whitespace(*string);
-	if (**string != terminator) {
-		return -1;
-	}
-	(*string)++;
-
-	if (part > 255) part = 255;
-	return part;
-}
-
-static int
-do_css_parse_color_value(struct css_property_info *propinfo,
-		      union css_property_value *value,
-		      unsigned char **string)
-{
-	int pos;
-
-	assert(propinfo->value_type == CSS_VT_COLOR);
-
-	if (!strncasecmp(*string, "rgb(", 4)) {
-		/* RGB function */
-		int part;
-
-		(*string) += 4;
-
-		part = rgb_component_parser(string, ',');
-		if (part < 0) return 0;
-		value->color |= part << 16;
-
-		part = rgb_component_parser(string, ',');
-		if (part < 0) return 0;
-		value->color |= part << 8;
-
-		part = rgb_component_parser(string, ')');
-		if (part < 0) return 0;
-		value->color |= part;
-
-		return 1;
-	}
-
-	/* Just a color value we already know how to parse. */
-	
-	pos = strcspn(*string, ",; \t\r\n");
-	if (decode_color(*string, pos, &value->color) < 0) {
-		(*string) += pos;
-		return 0;
-	}
-	(*string) += pos;
-	return 1;
-}
 
 int
 css_parse_color_value(struct css_property_info *propinfo,
@@ -152,8 +82,6 @@ css_parse_background_value(struct css_property_info *propinfo,
 			   struct css_scanner *scanner)
 {
 	struct css_token *token = get_css_token(scanner);
-	unsigned char *tok_string = token->string;
-	unsigned char **string = &tok_string;
 	int success = 0;
 
 	assert(propinfo->value_type == CSS_VT_COLOR);
@@ -161,11 +89,17 @@ css_parse_background_value(struct css_property_info *propinfo,
 	/* This is pretty naive, we just jump space by space, trying to parse
 	 * each token as a color. */
 
-	while (**string && **string != ';') {
-		success += do_css_parse_color_value(propinfo, value, string);
-		if (**string == ',')
-			(*string)++; /* Uh. */
-		skip_whitespace(*string);
+	while (token && token->type != ';') {
+		if (!css_parse_color_value(propinfo, value, scanner)) {
+			token = get_next_css_token(scanner);
+			continue;
+		}
+
+		success++;
+		if (check_next_css_token(scanner, ','))
+			skip_css_tokens(scanner, ','); /* Uh. */
+
+		token = get_css_token(scanner);
 	}
 
 	return success;

@@ -1,5 +1,5 @@
 /* NNTP response codes */
-/* $Id: codes.c,v 1.4 2005/02/28 14:19:24 zas Exp $ */
+/* $Id: codes.c,v 1.5 2005/03/23 11:41:00 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -120,16 +120,14 @@ nntp_error_code_dialog(struct terminal *term, struct uri *uri, enum nntp_code co
 
 	if (!codestr) codestr = "Unknown error";
 
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("NNTP error"), ALIGN_CENTER,
-		msg_text(term,
-			N_("An error occurred while fetching the document you\n"
-			"requested from %s.\n"
-			"\n"
-			"The error message is: %s"),
-			struri(uri), codestr),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER);
+	info_box(term, MSGBOX_FREE_TEXT,
+		 N_("NNTP error"), ALIGN_CENTER,
+		 msg_text(term,
+			 N_("An error occurred while fetching the document you\n"
+			 "requested from %s.\n"
+			 "\n"
+			 "The error message is: %s"),
+			 struri(uri), codestr));
 }
 
 struct nntp_error_info {

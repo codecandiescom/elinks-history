@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.77 2004/12/29 18:29:33 jonas Exp $ */
+/* $Id: user.c,v 1.78 2005/03/23 11:41:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,13 +259,11 @@ user_protocol_handler(struct session *ses, struct uri *uri)
 
 		/* Shouldn't ever happen, but be paranoid. */
 		/* Happens when you're in X11 and you've no handler for it. */
-		msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-			N_("No program"), ALIGN_CENTER,
-			msg_text(ses->tab->term,
-				N_("No program specified for protocol %s."),
-				empty_string_or_(protocol)),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		info_box(ses->tab->term, MSGBOX_FREE_TEXT,
+			 N_("No program"), ALIGN_CENTER,
+			 msg_text(ses->tab->term,
+				 N_("No program specified for protocol %s."),
+				 empty_string_or_(protocol)));
 
 		mem_free_if(protocol);
 		return;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.352 2005/03/05 21:11:03 zas Exp $ */
+/* $Id: download.c,v 1.353 2005/03/23 11:41:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,12 +221,10 @@ download_error_dialog(struct file_download *file_download, int saved_errno)
 
 	if (!ses) return;
 
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Download error"), ALIGN_CENTER,
-		msg_text(term, N_("Could not create file '%s':\n%s"),
-			 file_download->file, emsg),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(term, MSGBOX_FREE_TEXT,
+		 N_("Download error"), ALIGN_CENTER,
+		 msg_text(term, N_("Could not create file '%s':\n%s"),
+			  file_download->file, emsg));
 }
 
 static int
@@ -298,7 +296,6 @@ abort_download_and_beep(struct file_download *file_download, struct terminal *te
 static void
 download_data_store(struct download *download, struct file_download *file_download)
 {
-	struct session *ses = file_download->ses;
 	struct terminal *term = file_download->term;
 
 	if (!term) {
@@ -318,13 +315,10 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		unsigned char *url = get_uri_string(file_download->uri, URI_PUBLIC);
 
 		if (url) {
-			msg_box(term, NULL, MSGBOX_FREE_TEXT,
-				N_("Download error"), ALIGN_CENTER,
-				msg_text(term, N_("Error downloading %s:\n\n%s"), url, errmsg),
-				ses, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC /*,
-				N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
-
+			info_box(term, MSGBOX_FREE_TEXT,
+				 N_("Download error"), ALIGN_CENTER,
+				 msg_text(term, N_("Error downloading %s:\n\n%s"),
+					  url, errmsg));
 			mem_free(url);
 		}
 
@@ -359,11 +353,9 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		}
 
 		if (url) {
-			msg_box(term, NULL, MSGBOX_FREE_TEXT,
-				N_("Download"), ALIGN_CENTER,
-				msg_text(term, N_("Download complete:\n%s"), url),
-				ses, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
+			info_box(term, MSGBOX_FREE_TEXT,
+				 N_("Download"), ALIGN_CENTER,
+				 msg_text(term, N_("Download complete:\n%s"), url));
 			mem_free(url);
 		}
 	}
@@ -497,12 +489,10 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	/* Check if file is a directory, and use a default name if it's the
 	 * case. */
 	if (file_is_dir(ofile)) {
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Download error"), ALIGN_CENTER,
-			msg_text(term, N_("'%s' is a directory."),
-				 ofile),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		info_box(term, MSGBOX_FREE_TEXT,
+			 N_("Download error"), ALIGN_CENTER,
+			 msg_text(term, N_("'%s' is a directory."),
+				  ofile));
 		mem_free(ofile);
 		callback(term, NULL, data, 0);
 		return;
@@ -591,12 +581,10 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 	}
 
 	if (h == -1) {
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Download error"), ALIGN_CENTER,
-			msg_text(term, N_("Could not create file '%s':\n%s"),
-				file, strerror(saved_errno)),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		info_box(term, MSGBOX_FREE_TEXT,
+			 N_("Download error"), ALIGN_CENTER,
+			 msg_text(term, N_("Could not create file '%s':\n%s"),
+				  file, strerror(saved_errno)));
 
 		mem_free(file);
 		goto finish;

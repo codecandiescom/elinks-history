@@ -272,8 +272,10 @@ or
 
         /* Name of the tag */
         char *name;
+
         /* Function hopefully handling the content of the tag */
         void (*func)(unsigned char *);
+
         /* Do we need to break a line? */
         int linebreak;
 
@@ -437,7 +439,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.26 2005/01/03 20:47:25 miciah Exp $ */
+	/* $Id: hacking.txt,v 1.27 2005/01/03 20:48:51 miciah Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -559,4 +561,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.26 2005/01/03 20:47:25 miciah Exp $
+$Id: hacking.txt,v 1.27 2005/01/03 20:48:51 miciah Exp $

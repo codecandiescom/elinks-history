@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.138 2003/06/17 14:33:30 zas Exp $ */
+/* $Id: renderer.c,v 1.139 2003/06/17 14:41:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,8 +158,13 @@ realloc_line(struct part *p, int y, int x)
 static inline int
 xpand_lines(struct part *p, int y)
 {
-	assert(p && p->data);
+	assert(p);
 
+	if (!p->data) {
+		/* It appears that this is a valid situation at the
+		 * display_complicated_table() -> expand_lines() call path. */
+		return 0;
+	}
 	y += p->yp;
 	if (y >= p->data->y) return realloc_lines(p, y);
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.294 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: http.c,v 1.295 2004/07/02 23:14:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,7 +224,7 @@ check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
 	    || HTTP_1_0(info->sent_version))
 		return 0;
 
-	server = parse_http_header(head, "Server", NULL);
+	server = parse_header(head, "Server", NULL);
 	if (!server)
 		return 0;
 
@@ -1074,7 +1074,7 @@ again:
 		return;
 	}
 
-	d = parse_http_header(head, "Status", NULL);
+	d = parse_header(head, "Status", NULL);
 	if (d) {
 		int h2 = atoi(d);
 
@@ -1088,7 +1088,7 @@ again:
 
 #ifdef CONFIG_COOKIES
 	ch = head;
-	while ((cookie = parse_http_header(ch, "Set-Cookie", &ch))) {
+	while ((cookie = parse_header(ch, "Set-Cookie", &ch))) {
 		set_cookie(uri, cookie);
 		mem_free(cookie);
 	}
@@ -1146,8 +1146,8 @@ again:
 	mem_free_set(&conn->cached->head, head);
 
 	if (!get_opt_bool("document.cache.ignore_cache_control")) {
-		if ((d = parse_http_header(conn->cached->head, "Cache-Control", NULL))
-		    || (d = parse_http_header(conn->cached->head, "Pragma", NULL)))
+		if ((d = parse_header(conn->cached->head, "Cache-Control", NULL))
+		    || (d = parse_header(conn->cached->head, "Pragma", NULL)))
 		{
 			if (strstr(d, "no-cache"))
 				conn->cached->cache_mode = CACHE_MODE_NEVER;
@@ -1161,7 +1161,7 @@ again:
 #endif
 
 	if (h == 301 || h == 302 || h == 303 || h == 307) {
-		d = parse_http_header(conn->cached->head, "Location", NULL);
+		d = parse_header(conn->cached->head, "Location", NULL);
 		if (d) {
 			redirect_cache(conn->cached, d, h == 303, -1);
 			mem_free(d);
@@ -1169,10 +1169,10 @@ again:
 	}
 
 	if (h == 401) {
-		d = parse_http_header(conn->cached->head, "WWW-Authenticate", NULL);
+		d = parse_header(conn->cached->head, "WWW-Authenticate", NULL);
 		if (d) {
 			if (!strncasecmp(d, "Basic", 5)) {
-				unsigned char *realm = get_http_header_param(d, "realm");
+				unsigned char *realm = get_header_param(d, "realm");
 
 				if (realm) {
 					add_auth_entry(uri, realm);
@@ -1188,8 +1188,8 @@ again:
 	info->length = -1;
 	info->recv_version = version;
 
-	if ((d = parse_http_header(conn->cached->head, "Connection", NULL))
-	     || (d = parse_http_header(conn->cached->head, "Proxy-Connection", NULL))) {
+	if ((d = parse_header(conn->cached->head, "Connection", NULL))
+	     || (d = parse_header(conn->cached->head, "Proxy-Connection", NULL))) {
 		if (!strcasecmp(d, "close")) info->close = 1;
 		mem_free(d);
 	} else if (PRE_HTTP_1_1(version)) {
@@ -1198,7 +1198,7 @@ again:
 
 	cf = conn->from;
 	conn->from = 0;
-	d = parse_http_header(conn->cached->head, "Content-Range", NULL);
+	d = parse_header(conn->cached->head, "Content-Range", NULL);
 	if (d) {
 		if (strlen(d) > 6) {
 			d[5] = 0;
@@ -1238,7 +1238,7 @@ again:
 	}
 	conn->prg.start = conn->from;
 
-	d = parse_http_header(conn->cached->head, "Content-Length", NULL);
+	d = parse_header(conn->cached->head, "Content-Length", NULL);
 	if (d) {
 		unsigned char *ep;
 		int l;
@@ -1255,7 +1255,7 @@ again:
 	}
 
 	if (!conn->unrestartable) {
-		d = parse_http_header(conn->cached->head, "Accept-Ranges", NULL);
+		d = parse_header(conn->cached->head, "Accept-Ranges", NULL);
 
 		if (d) {
 			if (!strcasecmp(d, "none"))
@@ -1267,7 +1267,7 @@ again:
 		}
 	}
 
-	d = parse_http_header(conn->cached->head, "Transfer-Encoding", NULL);
+	d = parse_header(conn->cached->head, "Transfer-Encoding", NULL);
 	if (d) {
 		if (!strcasecmp(d, "chunked")) {
 			info->length = LEN_CHUNKED;
@@ -1277,7 +1277,7 @@ again:
 	}
 	if (!info->close && info->length == -1) info->close = 1;
 
-	d = parse_http_header(conn->cached->head, "Last-Modified", NULL);
+	d = parse_header(conn->cached->head, "Last-Modified", NULL);
 	if (d) {
 		if (conn->cached->last_modified && strcasecmp(conn->cached->last_modified, d)) {
 			delete_entry_content(conn->cached);
@@ -1292,12 +1292,12 @@ again:
 		else mem_free(d);
 	}
 	if (!conn->cached->last_modified) {
-		d = parse_http_header(conn->cached->head, "Date", NULL);
+		d = parse_header(conn->cached->head, "Date", NULL);
 		if (d) conn->cached->last_modified = d;
 	}
 
 	/* FIXME: Parse only if HTTP/1.1 or later? --Zas */
-	d = parse_http_header(conn->cached->head, "ETag", NULL);
+	d = parse_header(conn->cached->head, "ETag", NULL);
 	if (d) {
 		if (conn->cached->etag)  {
 			unsigned char *old_tag = conn->cached->etag;
@@ -1328,7 +1328,7 @@ again:
 			mem_free(d);
 	}
 
-	d = parse_http_header(conn->cached->head, "Content-Encoding", NULL);
+	d = parse_header(conn->cached->head, "Content-Encoding", NULL);
 	if (d) {
 		unsigned char *extension = get_extension_from_uri(uri);
 		enum stream_encoding file_encoding;

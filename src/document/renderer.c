@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.62 2004/07/01 11:56:08 jonas Exp $ */
+/* $Id: renderer.c,v 1.63 2004/07/02 23:14:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,11 +258,11 @@ get_convert_table(unsigned char *head, int to_cp,
 
 	while (cp_index == -1) {
 		unsigned char *ct_charset;
-		unsigned char *a = parse_http_header(part, "Content-Type", &part);
+		unsigned char *a = parse_header(part, "Content-Type", &part);
 
 		if (!a) break;
 
-		ct_charset = parse_http_header_param(a, "charset");
+		ct_charset = parse_header_param(a, "charset");
 		if (ct_charset) {
 			cp_index = get_cp_index(ct_charset);
 			mem_free(ct_charset);
@@ -271,7 +271,7 @@ get_convert_table(unsigned char *head, int to_cp,
 	}
 
 	if (cp_index == -1) {
-		unsigned char *a = parse_http_header(head, "Content-Charset", NULL);
+		unsigned char *a = parse_header(head, "Content-Charset", NULL);
 
 		if (a) {
 			cp_index = get_cp_index(a);
@@ -280,7 +280,7 @@ get_convert_table(unsigned char *head, int to_cp,
 	}
 
 	if (cp_index == -1) {
-		unsigned char *a = parse_http_header(head, "Charset", NULL);
+		unsigned char *a = parse_header(head, "Charset", NULL);
 
 		if (a) {
 			cp_index = get_cp_index(a);

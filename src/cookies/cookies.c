@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.158 2004/07/01 23:26:33 zas Exp $ */
+/* $Id: cookies.c,v 1.159 2004/07/02 23:14:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,7 +289,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	cookie->name = memacpy(str, cstr.nam_end - str);
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
 	cookie->server = get_cookie_server(uri->host, uri->hostlen);
-	cookie->domain = parse_http_header_param(str, "domain");
+	cookie->domain = parse_header_param(str, "domain");
 	if (!cookie->domain) cookie->domain = memacpy(uri->host, uri->hostlen);
 
 	/* Now check that all is well */
@@ -316,7 +316,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	/* Get expiration date */
 
-	date = parse_http_header_param(str, "expires");
+	date = parse_header_param(str, "expires");
 	if (date) {
 		cookie->expires = parse_date(date); /* Convert date to seconds. */
 
@@ -349,7 +349,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		cookie->expires = (ttime) 0;
 	}
 
-	cookie->path = parse_http_header_param(str, "path");
+	cookie->path = parse_header_param(str, "path");
 	if (!cookie->path) {
 		unsigned char *path_end;
 
@@ -384,7 +384,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		memmove(cookie->domain, cookie->domain + 1,
 			strlen(cookie->domain));
 
-	secure = parse_http_header_param(str, "secure");
+	secure = parse_header_param(str, "secure");
 	if (secure) {
 		cookie->secure = 1;
 		mem_free(secure);

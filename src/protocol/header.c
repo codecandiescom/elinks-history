@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.5 2004/07/02 23:03:50 zas Exp $ */
+/* $Id: header.c,v 1.6 2004/07/02 23:14:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include "util/string.h"
 
 unsigned char *
-parse_http_header(unsigned char *head, unsigned char *item,
+parse_header(unsigned char *head, unsigned char *item,
 		  unsigned char **ptr)
 {
 	unsigned char *pos;
@@ -75,7 +75,7 @@ cont:
  * It supposes that separator is ';' and ignore first element in the
  * list. (ie. '1' is ignored in "1; URL=xxx") */
 unsigned char *
-parse_http_header_param(unsigned char *str, unsigned char *name)
+parse_header_param(unsigned char *str, unsigned char *name)
 {
 	unsigned char *p = str;
 	int namelen, plen = 0;
@@ -111,7 +111,7 @@ parse_http_header_param(unsigned char *str, unsigned char *name)
 /* Parse string param="value", return value as new string or NULL if any
  * error. */
 unsigned char *
-get_http_header_param(unsigned char *e, unsigned char *name)
+get_header_param(unsigned char *e, unsigned char *name)
 {
 	unsigned char *n, *start;
 

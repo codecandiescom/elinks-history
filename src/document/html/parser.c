@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.477 2004/07/02 23:01:55 pasky Exp $ */
+/* $Id: parser.c,v 1.478 2004/07/02 23:14:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -950,9 +950,9 @@ process_head(unsigned char *head)
 {
 	unsigned char *refresh, *url;
 
-	refresh = parse_http_header(head, "Refresh", NULL);
+	refresh = parse_header(head, "Refresh", NULL);
 	if (refresh) {
-		url = parse_http_header_param(refresh, "URL");
+		url = parse_header_param(refresh, "URL");
 		if (url) {
 			unsigned char *saved_url = url;
 			/* Extraction of refresh time. */

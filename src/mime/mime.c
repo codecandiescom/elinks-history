@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.57 2004/06/10 12:10:53 jonas Exp $ */
+/* $Id: mime.c,v 1.58 2004/07/02 23:14:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include "mime/backend/common.h"
 #include "mime/mime.h"
 #include "modules/module.h"
-#include "protocol/header.h"	/* For parse_http_header() */
+#include "protocol/header.h"	/* For parse_header() */
 #include "protocol/uri.h"
 #include "util/conv.h"
 #include "util/file.h"
@@ -58,10 +58,10 @@ get_content_filename(struct uri *uri, struct cache_entry *cached)
 	if (!cached || !cached->head)
 		return NULL;
 
-	pos = parse_http_header(cached->head, "Content-Disposition", NULL);
+	pos = parse_header(cached->head, "Content-Disposition", NULL);
 	if (!pos) return NULL;
 
-	filename = parse_http_header_param(pos, "filename");
+	filename = parse_header_param(pos, "filename");
 	mem_free(pos);
 	if (!filename) return NULL;
 
@@ -179,7 +179,7 @@ get_content_type(struct cache_entry *cached)
 
 	/* If there's one in header, it's simple.. */
 	if (cached->head) {
-		ctype = parse_http_header(cached->head, "Content-Type", NULL);
+		ctype = parse_header(cached->head, "Content-Type", NULL);
 		if (ctype) {
 			unsigned char *end = strchr(ctype, ';');
 			int ctypelen;

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.95 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: document.c,v 1.96 2004/07/02 23:14:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ document_info_dialog(struct session *ses)
 			}
 		}
 
-		a = parse_http_header(cached->head, "Server", NULL);
+		a = parse_header(cached->head, "Server", NULL);
 		if (a) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Server", term), a);
@@ -125,7 +125,7 @@ document_info_dialog(struct session *ses)
 					     cached->encoding_info);
 		}
 
-		a = parse_http_header(cached->head, "Date", NULL);
+		a = parse_header(cached->head, "Date", NULL);
 		if (a) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Date", term), a);

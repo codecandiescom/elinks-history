@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.97 2002/11/29 16:26:12 zas Exp $ */
+/* $Id: view.c,v 1.98 2002/11/29 16:35:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,7 +593,7 @@ draw_searched(struct terminal *t, struct f_data_c *scr)
 		co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
 		set_color(t, x, y, co);
 	}
-	mem_free(pt);
+	if (pt) mem_free(pt);
 }
 
 void

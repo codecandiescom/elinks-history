@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.63 2003/06/16 16:11:27 pasky Exp $ */
+/* $Id: error.c,v 1.64 2003/06/17 00:13:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ elinks_assertm(int x, unsigned char *fmt, ...)
 	if (x) return;
 
 	va_start(params, fmt);
-	vasprintf((unsigned char **) &buf, fmt, params);
+	vasprintf((char **) &buf, fmt, params);
 	va_end(params);
 	internal("assertion failed: %s", buf);
 }

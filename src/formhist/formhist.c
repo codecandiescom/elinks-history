@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.22 2003/08/04 19:32:56 jonas Exp $ */
+/* $Id: formhist.c,v 1.23 2003/08/18 19:46:22 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -41,7 +41,7 @@ load_saved_forms(void)
 	file = straconcat(elinks_home, "password", NULL);
 	if (!file) return 0;
 	
-	f = fopen(file, "a+");
+	f = fopen(file, "r");
 	mem_free(file);
 	if (!f) return 0;
 
@@ -233,7 +233,7 @@ remember_form(struct formsmem_data *fmem_data)
 			/* Obfuscate the password. If we do
 			 * $ cat ~/.elinks/password we don't want
 			 * someone behind our back to read our password */
-			if (sv->value) {
+			if (sv->value && *sv->value) {
 				encvalue = base64_encode(sv->value);
 				if (!encvalue) return 0;
 			}
@@ -254,13 +254,17 @@ fail:
 	return 0;
 }
 
+void free_form_in_list(struct formsmem_data* form);
+
 void
 done_form_history(void)
 {
 	struct formsmem_data *form;
 
-	foreach(form, saved_forms)
-		free_form(form);
+	foreach(form, saved_forms) {
+		free_form_in_list(form);
+	}
+	free_list(saved_forms);
 }
 
 void
@@ -273,11 +277,25 @@ free_form(struct formsmem_data *form)
 	foreachback (sv, *form->submit) {
 		if (sv->name) mem_free(sv->name);
 		if (sv->value) mem_free(sv->value);
-		mem_free(sv);
 	}
-
+	free_list(*form->submit);
         if (form->submit) mem_free(form->submit);
         mem_free(form);
+}
+
+void
+free_form_in_list(struct formsmem_data *form)
+{
+	struct submitted_value *sv;
+
+	if (form->url) mem_free(form->url);
+
+	foreachback (sv, *form->submit) {
+		if (sv->name) mem_free(sv->name);
+		if (sv->value) mem_free(sv->value);
+	}
+	free_list(*form->submit);
+	if (form->submit) mem_free(form->submit);
 }
 
 struct list_head *

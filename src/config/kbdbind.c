@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.137 2003/12/28 02:16:13 zas Exp $ */
+/* $Id: kbdbind.c,v 1.138 2003/12/28 02:58:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -769,6 +769,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 't',		 0,		ACT_OPEN_NEW_TAB },
 	{ 'u',		 0,		ACT_UNBACK },
 	{ 'v',		 0,		ACT_VIEW_IMAGE },
+	{ 'w',		 0,		ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES },
 	{ 'x',		 0,		ACT_ENTER_RELOAD },
 	{ 'z',		 0,		ACT_ABORT_CONNECTION },
 	{ '{',		 0,		ACT_SCROLL_LEFT },

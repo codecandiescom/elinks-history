@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.171 2003/07/20 21:02:02 pasky Exp $ */
+/* $Id: renderer.c,v 1.172 2003/07/20 23:12:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -746,10 +746,19 @@ decode:
 				   || (chars[i] == '#')))
 				i++;
 
-			/* Eat &nbsp &nbsp<foo>. --Zas ;) */
-			/* But do not eat &nbsp=123 or &nbsp&nbsp123 --Zas */
-			if (chars[i] != '=' && chars[i] != '&' &&
-			    !isalnum(chars[i]) && i > start) {
+			/* This prevents bug 213: we were expanding "entities"
+			 * in URL query strings. */
+			/* XXX: But this disables &nbsp&nbsp usage, which
+			 * appears to be relatively common! --pasky */
+			if (chars[i] != '&' && chars[i] != '='
+			    && !isalnum(chars[i]) && i > start) {
+				if (chars[i] != ';') {
+					/* Eat &nbsp &nbsp<foo> happily, but
+					 * pull back from the character after
+					 * entity string if it is not the valid
+					 * terminator. */
+					i--;
+				}
 				e = get_entity_string(&chars[start], i - start,
 						d_opt->cp);
 				if (!e) goto putc;

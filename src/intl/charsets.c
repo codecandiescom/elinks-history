@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.42 2003/07/01 22:39:00 zas Exp $ */
+/* $Id: charsets.c,v 1.43 2003/07/20 23:12:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -623,10 +623,19 @@ decode:
 				   || (c[i] == '#')))
 				i++;
 
-			/* Eat &nbsp &nbsp<foo>. --pasky */
-			/* But do not eat &nbsp=123 or &nbsp&nbsp123 --Zas */
-			if (c[i] != '=' && c[i] != '&' && !isalnum(c[i]) &&
-			    i > start) {
+			/* This prevents bug 213: we were expanding "entities"
+			 * in URL query strings. */
+			/* XXX: But this disables &nbsp&nbsp usage, which
+			 * appears to be relatively common! --pasky */
+			if (c[i] != '&' && c[i] != '='
+			    && !isalnum(c[i]) && i > start) {
+				if (c[i] != ';') {
+					/* Eat &nbsp &nbsp<foo> happily, but
+					 * pull back from the character after
+					 * entity string if it is not the valid
+					 * terminator. */
+					i--;
+				}
 				e = get_entity_string(&c[start], i - start,
 	 					      d_opt->cp);
 				if (!e) goto putc;

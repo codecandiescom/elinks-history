@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.15 2003/11/29 18:18:06 jonas Exp $ */
+/* $Id: state.c,v 1.16 2003/11/29 18:32:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,8 @@ free_strerror_buf(void)
 	 * 1000)
 
 unsigned char *
-get_stat_msg(struct download *stat, struct terminal *term, int wide, int full)
+get_stat_msg(struct download *stat, struct terminal *term,
+	     int wide, int full, unsigned char *separater)
 {
 	struct string msg;
 
@@ -150,6 +151,10 @@ get_stat_msg(struct download *stat, struct terminal *term, int wide, int full)
 
 	if (!init_string(&msg)) return NULL;
 
+	/* FIXME: The following is a PITA from the l10n standpoint. A *big*
+	 * one, _("of")-like pearls are a nightmare. Format strings need to
+	 * be introduced to this fuggy corner of code as well. --pasky */
+
 	add_to_string(&msg, _("Received", term));
 	add_char_to_string(&msg, ' ');
 	add_xnum_to_string(&msg, stat->prg->pos + stat->prg->start);
@@ -160,7 +165,7 @@ get_stat_msg(struct download *stat, struct terminal *term, int wide, int full)
 		add_xnum_to_string(&msg, stat->prg->size);
 	}
 
-	add_to_string(&msg, ", ");
+	add_to_string(&msg, separater);
 
 	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg,
@@ -186,7 +191,7 @@ get_stat_msg(struct download *stat, struct terminal *term, int wide, int full)
 
 	/* Do the following only if there is room */
 
-	add_to_string(&msg, ", ");
+	add_to_string(&msg, separater);
 
 	add_to_string(&msg, _("Elapsed time", term));
 	add_char_to_string(&msg, ' ');

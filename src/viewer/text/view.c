@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.445 2004/06/09 21:13:19 jonas Exp $ */
+/* $Id: view.c,v 1.446 2004/06/09 21:14:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,7 +341,7 @@ draw_formatted(struct session *ses, int rerender)
 	if (!ses->doc_view->vs && have_location(ses))
 		ses->doc_view->vs = &cur_loc(ses)->vs;
 	ses->doc_view->last_x = ses->doc_view->last_y = -1;
-	
+
 	draw_frames(ses);
 	refresh_view(ses, ses->doc_view);
 }

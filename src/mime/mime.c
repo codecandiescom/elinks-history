@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.4 2003/05/16 22:38:41 zas Exp $ */
+/* $Id: mime.c,v 1.5 2003/06/04 18:05:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,12 +34,11 @@ done_mime()
 unsigned char *
 get_content_type(unsigned char *head, unsigned char *url)
 {
-	unsigned char *pos;
-	unsigned char *extension;
 	unsigned char *content_type;
+	unsigned char *extension;
+	int extensionlen;
 
 	/* If there's one in header, it's simple.. */
-
 	if (head) {
 	       	content_type = parse_http_header(head, "Content-Type", NULL);
 
@@ -64,38 +63,21 @@ get_content_type(unsigned char *head, unsigned char *url)
 	 * would always compare only to "gz". */
 	/* Guess type accordingly to the extension */
 	content_type = get_content_type_backends(url);
-	if (content_type) return content_type;
+	if (content_type)
+		return content_type;
 
-	/* Get extension */
+	extensionlen = get_extension_from_url(url, &extension);
 
-	extension = NULL;
-
-	/* Hmmm, well, can we do better there ? --Zas */
-	for (pos = url; *pos && !end_of_dir(*pos); pos++) {
-		if (*pos == '.') {
-			extension = pos + 1;
-		} else if (dir_sep(*pos)) {
-			extension = NULL;
-		}
-	}
-
-	if (extension) {
+	if (extensionlen) {
 		unsigned char *ext_type = init_str();
 		int el = 0;
-		int ext_len = 0;
 
 		if (!ext_type) return NULL; /* Bad thing. */
-
-		while (extension[ext_len]
-		       && !dir_sep(extension[ext_len])
-		       && !end_of_dir(extension[ext_len])) {
-			ext_len++;
-		}
 
 		/* Try to make application/x-extension from it */
 
 		add_to_str(&ext_type, &el, "application/x-");
-		add_bytes_to_str(&ext_type, &el, extension, ext_len);
+		add_bytes_to_str(&ext_type, &el, extension, extensionlen);
 
 		if (get_mime_type_handler(NULL, ext_type))
 			return ext_type;

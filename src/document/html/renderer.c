@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.191 2003/07/31 17:29:00 jonas Exp $ */
+/* $Id: renderer.c,v 1.192 2003/08/01 12:16:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,11 +488,11 @@ split_line_at(struct part *part, register int x)
 
 	if (part->cx == x) {
 		part->cx = -1;
-		if (part->y < part->cy) part->y = part->cy;
+		int_lower_bound(&part->y, part->cy);
 		return 2;
 	} else {
 		part->cx -= x - par_format.leftmargin;
-		if (part->y < part->cy + 1) part->y = part->cy + 1;
+		int_lower_bound(&part->y, part->cy + 1);
 		return 1;
 	}
 }
@@ -521,14 +521,9 @@ split_line(struct part *part)
 		if (x < part->spaces_len && part->spaces[x])
 			return split_line_at(part, x);
 
-	{
-		int new_x = part->cx + par_format.rightmargin;
-
-		/* Make sure that we count the right margin to the total
-		 * actual box width. */
-		if (new_x > part->x)
-			part->x = new_x;
-	}
+	/* Make sure that we count the right margin to the total
+	 * actual box width. */
+	int_upper_bound(&part->x, part->cx + par_format.rightmargin);
 
 	return 0;
 }
@@ -736,7 +731,6 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	int bg, fg;
 	struct link *link;
 	struct point *pt;
-	int tmp; /* used for temporary results. */
 
 	assert(part);
 	if_assert_failed return;
@@ -776,8 +770,7 @@ end_format_change:
 
 	if (!charslen) return;
 
-	if (part->y < part->cy + 1)
-		part->y = part->cy + 1;
+	int_lower_bound(&part->y, part->cy + 1);
 
 	if (nowrap && part->cx + charslen > overlap(par_format))
 		return;
@@ -801,12 +794,11 @@ end_format_change:
 
 	assert(charslen > 0);
 	part->xa += charslen;
-	tmp = part->xa
-	      - (chars[charslen - 1] == ' ' && par_format.align != AL_NONE)
-	      + par_format.leftmargin + par_format.rightmargin;
-
-	if (tmp > part->xmax) part->xmax = tmp;
-
+	part->xmax = int_max(part->xmax, part->xa
+					 - (chars[charslen - 1] == ' '
+				            && par_format.align != AL_NONE)
+					 + par_format.leftmargin
+					 + par_format.rightmargin);
 	return;
 
 process_link:
@@ -994,8 +986,7 @@ line_break(struct part *part)
 	assert(part);
 	if_assert_failed return;
 
-	if (part->cx + par_format.rightmargin > part->x)
-		part->x = part->cx + par_format.rightmargin;
+	int_lower_bound(&part->x, part->cx + par_format.rightmargin);
 
 	if (nobreak) {
 		nobreak = 0;
@@ -1281,7 +1272,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	do_format(start, end, part, head);
 
-	if (part->xmax < part->x) part->xmax = part->x;
+	part->xmax = int_max(part->xmax, part->x);
 
 	nobreak = 0;
 	line_breax = 1;
@@ -1539,8 +1530,7 @@ format_html(struct cache_entry *ce, struct document *screen)
 	}
 
 	for (i = 0; i < screen->y; i++)
-		if (screen->data[i].l > screen->x)
-			screen->x = screen->data[i].l;
+		screen->x = int_max(screen->x, screen->data[i].l);
 
 	if (form.action) mem_free(form.action), form.action = NULL;
 	if (form.target) mem_free(form.target), form.target = NULL;

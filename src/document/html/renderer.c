@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.102 2003/06/16 14:30:51 pasky Exp $ */
+/* $Id: renderer.c,v 1.103 2003/06/16 14:33:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,17 +251,17 @@ xset_hchars(struct part *part, int x, int y, int xl, unsigned c)
 }
 
 static inline void
-set_hline(struct part *part, int x, int y, int xl,
-          unsigned char *d, unsigned c, int spc)
+set_hline(struct part *part, int x, int y,
+	  unsigned char *chars, int charslen, unsigned attr)
 {
 	if (xpand_lines(part, y)
-	    || xpand_line(part, y, x + xl - 1)
-	    || (spc && xpand_spaces(part, x + xl - 1)))
+	    || xpand_line(part, y, x + charslen - 1)
+	    || (spc && xpand_spaces(part, x + charslen - 1)))
 		return;
 
-	for (; xl; xl--, x++, d++) {
-		if (spc) part->spaces[x] = (*d == ' ');
-		if (part->data) POS(x, y) = (*d | c);
+	for (; charslen > 0; charslen--, x++, chars++) {
+		part->spaces[x] = (*chars == ' ');
+		if (part->data) POS(x, y) = (*chars | attr);
 	}
 }
 
@@ -758,8 +758,8 @@ end_format_change:
 	if (nowrap && part->cx + charslen > overlap(par_format))
 		return;
 
-	set_hline(part, part->cx, part->cy, charslen, chars,
-		  (((fg&0x08)<<3)|(bg<<3)|(fg&0x07))<<8, 1);
+	set_hline(part, part->cx, part->cy, chars, charslen,
+		  (((fg&0x08)<<3) | (bg<<3) | (fg&0x07)) << 8);
 	part->cx += charslen;
 	nobreak = 0;
 

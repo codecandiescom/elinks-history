@@ -1,11 +1,10 @@
 Tips to obtain a very small static elinks binary suitable for mini distributions:
 
 Use dietlibc (http://www.fefe.de/dietlibc/) or similar stuff (uClibc, ...):
-export CC='diet gcc'
+export CC='diet -Os gcc'
 
 Use compilers flags to optimize for size:
-export CFLAGS='-Os -s -fno-inline -nostdinc -march=i386 -fomit-frame-pointer \
-               -malign-functions=1 -malign-jumps=1 -malign-loops=1 -mpreferred-stack-boundary=2'
+export CFLAGS='-s -fno-inline -nostdinc -fomit-frame-pointer'
 
 Disable some compile-time options:
 ./configure --disable-ipv6 --disable-backtrace --disable-nls --enable-fastmem \
@@ -29,26 +28,23 @@ Dependencies over external libs must be removed using related configure options.
 --without-openssl	removes libssl dependency (ssl support)
 --without-x 		removes libx11 dependency (setting terminal title)
 
-With these, using gcc 3.2, CFLAGS='-Os -s -fno-inline', dietlibc 0.23 and elinks 0.5pre7 from cvs,
-I obtain a small static binary with the following features:
-Standard, Fastmem, No Backtrace, Bookmarks, Cookies, Global History, Mailcap, Mimetypes files, Forms memory
-
-and a size of:
--rwxr-xr-x    1 zas      zas        453412 2003-10-19 12:50 src/elinks
-
-It seems gcc 2.95.x do not generate as small binaries than gcc 3.2.x with
+It seems gcc 2.95.x do not generate as small binaries as gcc 3.2.x with
 same flags.
 
-Not so bad :)
+You can use an executable compressor like UPX (http://upx.sourceforge.net/)
 
-Next you can use an executable compressor like UPX
-(http://upx.sourceforge.net/), it gives very good results:
-Example using a diet elinks binary:
--rwxr-xr-x   1 zas      users      463164 Oct 20 10:52 src/elinks
-upx --best ./src/elinks
--rwxr-xr-x   1 zas      users      208700 Oct 20 10:52 src/elinks
 
-Whow ! 200kb :)
+
+Here is some results using gcc 2.95.3, dietlibc-0.23, and previous flags:
+
+me> ls -l src/elinks
+-rwxr-xr-x   1 zas      users      495100 Oct 20 15:53 src/elinks
+me> upx --best src/elinks
+me> ls -l src/elinks
+-rwxr-xr-x   1 zas      users      217946 Oct 20 15:53 src/elinks
+
+Whow ! Around 200kb :)
+
 
 Details about --enable-small configure option effects:
 - it disables long descriptions of options.
@@ -57,4 +53,4 @@ Details about --enable-small configure option effects:
 - it disables fastfind feature (reducing performance, but also reducing a lot
   memory usage, and a bit the executable size).
 
-/* $Id: small.txt,v 1.6 2003/10/20 09:16:15 zas Exp $ */
+/* $Id: small.txt,v 1.7 2003/10/20 13:58:13 zas Exp $ */

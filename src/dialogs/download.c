@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.16 2003/12/01 13:55:39 pasky Exp $ */
+/* $Id: download.c,v 1.17 2003/12/03 13:58:06 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,7 +77,7 @@ push_delete_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 	file_download->delete = 1;
 	object_unlock(file_download);
 	register_bottom_half((void (*)(void *)) do_abort_download,
-			     dlg_data->dlg->udata);
+			     file_download);
 	return 0;
 }
 

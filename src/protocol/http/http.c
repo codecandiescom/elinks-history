@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.304 2004/07/23 14:52:36 zas Exp $ */
+/* $Id: http.c,v 1.305 2004/07/23 14:57:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,38 +64,38 @@ subst_user_agent(unsigned char *fmt, unsigned char *version,
 		add_bytes_to_string(&agent, fmt, p);
 		fmt += p;
 
-		if (*fmt == '%') {
-			fmt++;
-			switch (*fmt) {
-				case 'b':
-					if (!list_empty(sessions)) {
-						unsigned char bs[4] = "";
-						int blen = 0;
-						struct session *ses = sessions.prev;
-						int bars = ses->status.show_status_bar
-							+ ses->status.show_tabs_bar
-							+ ses->status.show_title_bar;
+		if (*fmt != '%') continue;
 
-						ulongcat(bs, &blen, bars, 2, 0);
-						add_to_string(&agent, bs);
-					}
-					break;
-				case 'v':
-					add_to_string(&agent, version);
-					break;
-				case 's':
-					add_to_string(&agent, sysname);
-					break;
-				case 't':
-					if (termsize)
-						add_to_string(&agent, termsize);
-					break;
-				default:
-					add_bytes_to_string(&agent, fmt - 1, 2);
-					break;
-			}
-			if (*fmt) fmt++;
+		fmt++;
+		switch (*fmt) {
+			case 'b':
+				if (!list_empty(sessions)) {
+					unsigned char bs[4] = "";
+					int blen = 0;
+					struct session *ses = sessions.prev;
+					int bars = ses->status.show_status_bar
+						+ ses->status.show_tabs_bar
+						+ ses->status.show_title_bar;
+
+					ulongcat(bs, &blen, bars, 2, 0);
+					add_to_string(&agent, bs);
+				}
+				break;
+			case 'v':
+				add_to_string(&agent, version);
+				break;
+			case 's':
+				add_to_string(&agent, sysname);
+				break;
+			case 't':
+				if (termsize)
+					add_to_string(&agent, termsize);
+				break;
+			default:
+				add_bytes_to_string(&agent, fmt - 1, 2);
+				break;
 		}
+		if (*fmt) fmt++;
 	}
 
 	return agent.source;

@@ -1,7 +1,31 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.6 2004/03/25 17:33:57 witekfl Exp $
+## $Id: Makefile.am,v 1.7 2004/08/15 05:51:12 miciah Exp $
 
 include $(top_srcdir)/Makefile.base
 
-EXTRA_DIST = * conv/* guile/* lua/* perl/*
-
+EXTRA_DIST = \
+ LinksOS2Icon.zip \
+ README \
+ colws.diff \
+ elinks-vim.diff \
+ elinks.spec.in \
+ elinks.vim \
+ keybind-full.conf \
+ keybind.conf \
+ links_wps.zip \
+ wipe-out-ssl \
+ wipe-out-ssl.awk \
+ conv/conf-links2elinks.pl \
+ conv/mailcap.pl \
+ conv/old_to_new_bookmarks.sh \
+ conv/w3m2links.gawk \
+ guile/internal-hooks.scm \
+ guile/user-hooks.scm \
+ lua/bm-to-elinks-bookmarks.lua \
+ lua/bm.lua \
+ lua/config.lua \
+ lua/elinks-remote \
+ lua/hooks.lua.in \
+ lua/md5check.lua \
+ lua/remote.lua \
+ perl/hooks.pl

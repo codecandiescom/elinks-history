@@ -1,7 +1,11 @@
-/* $Id: os_depx.h,v 1.4 2003/04/16 21:28:46 pasky Exp $ */
+/* $Id: os_depx.h,v 1.5 2003/04/17 07:44:44 zas Exp $ */
 
 #ifndef EL__OS_DEPX_H
 #define EL__OS_DEPX_H
+
+#ifdef HAVE_LIMITS_H
+#include <limits.h> /* may contain PIPE_BUF definition on some systems */
+#endif
 
 #ifndef MAXINT
 #ifdef INT_MAX

@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.14 2003/12/22 22:00:08 pasky Exp $ */
+/* $Id: libintl.c,v 1.15 2004/12/24 02:41:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,6 @@ struct language languages[] = {
 	{N_("Icelandic"), "is"},
 	{N_("Indonesian"), "id"},
 	{N_("Italian"), "it"},
-	{N_("Leet"), "leet"},
 	{N_("Lithuanian"), "lt"},
 	{N_("Norwegian"), "no"},
 	{N_("Polish"), "pl"},

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.207 2003/10/01 00:49:47 jonas Exp $ */
+/* $Id: parser.c,v 1.208 2003/10/02 22:25:58 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,10 +481,12 @@ static void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
+#if 0
 	if (was_li) {
 		was_li = 0;
 		line_breax = 0;
 	}
+#endif
 	if (par_format.align == AL_NONE) putsp = 0;
 	if (!len || html_top.invisible) return;
 	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
@@ -1318,7 +1320,9 @@ html_li(unsigned char *a)
 	}
 	putsp = -1;
 	line_breax = 2;
+#if 0
 	was_li = 1;
+#endif
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.11 2005/03/27 14:53:11 jonas Exp $ */
+/* $Id: parse.c,v 1.12 2005/03/27 18:32:07 miciah Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -24,7 +24,6 @@
 #include "elinks.h"
 
 #include "osdep/ascii.h"
-#include "protocol/ftp/ftpparse.h"
 #include "protocol/ftp/parse.h"
 #include "util/conv.h"
 #include "util/string.h"

@@ -294,5 +294,7 @@ http://www.lighthouse.org/color_contrast.htm
 
 	Basic introduction to usage of HSL colors.
 
-$Id: color-model.txt,v 1.12 2004/05/28 16:37:08 zas Exp $
+
+
+$Id: color-model.txt,v 1.13 2004/12/16 09:33:23 pasky Exp $
 vim: textwidth=80

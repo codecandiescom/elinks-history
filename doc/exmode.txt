@@ -99,3 +99,7 @@ Also, perhaps wider scale of commands should be implemented in ex-mode. The
 code is extremely flexible and it is very trivial to make another ex-mode
 command handler, it's just that noone did it yet ;-). Also, more actions
 should be able to take arguments.
+
+
+
+$Id: exmode.txt,v 1.2 2004/12/16 09:33:23 pasky Exp $

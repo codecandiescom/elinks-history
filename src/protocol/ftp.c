@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.35 2002/09/12 14:46:28 zas Exp $ */
+/* $Id: ftp.c,v 1.36 2002/09/13 15:05:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,6 +65,7 @@ static void ftp_login(struct connection *);
 static void ftp_send_retr_req(struct connection *, int);
 static void ftp_got_info(struct connection *, struct read_buffer *);
 static void ftp_got_user_info(struct connection *, struct read_buffer *);
+static void ftp_pass(struct connection *);
 static void ftp_pass_info(struct connection *, struct read_buffer *);
 static void ftp_retr_file(struct connection *, struct read_buffer *);
 static void ftp_got_final_response(struct connection *, struct read_buffer *);
@@ -156,6 +157,16 @@ get_resp(struct connection *conn)
 	read_from_socket(conn, conn->sock1, rb, conn->read_func);
 }
 
+/* Send command, set connection state and free cmd string. */
+static void
+send_cmd(struct connection *conn, unsigned char *cmd, int cmdl, void *callback, int state)
+{
+	conn->read_func = (void *) callback;
+	write_to_socket(conn, conn->sock1, cmd, cmdl, get_resp);
+
+	mem_free(cmd);
+	setcstate(conn, state);
+}
 
 /* Send USER command. */
 static void
@@ -172,7 +183,6 @@ ftp_login(struct connection *conn)
 
 	add_to_str(&cmd, &cmdl, "USER ");
 	str = get_user_name(conn->url);
-
 	if (str && *str) {
 		add_to_str(&cmd, &cmdl, str);
 	} else {
@@ -181,10 +191,7 @@ ftp_login(struct connection *conn)
 	if (str) mem_free(str);
 	add_to_str(&cmd, &cmdl, "\r\n");
 
-	conn->read_func = (void *) ftp_got_info;
-	write_to_socket(conn, conn->sock1, cmd, cmdl, get_resp);
-	mem_free(cmd);
-	setcstate(conn, S_SENT);
+	send_cmd(conn, cmd, cmdl, (void *) ftp_got_info, S_SENT);
 }
 
 /* Parse connection response. */
@@ -264,33 +271,34 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 		return;
 	}
 
-	{
-		/* Send PASS command. */
-		unsigned char *str;
-		unsigned char *cmd;
-		int cmdl = 0;
+	ftp_pass(conn);
+}
 
-		cmd = init_str();
-		if (!cmd) {
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
-			return;
-		}
+/* Send PASS command. */
+static void
+ftp_pass(struct connection *conn)
+{
+	unsigned char *str;
+	unsigned char *cmd;
+	int cmdl = 0;
 
-		add_to_str(&cmd, &cmdl, "PASS ");
-		str = get_pass(conn->url);
-		if (str && *str) {
-			add_to_str(&cmd, &cmdl, str);
-		} else {
-			add_to_str(&cmd, &cmdl, get_opt_str("protocol.ftp.anon_passwd"));
-		}
-		if (str) mem_free(str);
-		add_to_str(&cmd, &cmdl, "\r\n");
-
-		conn->read_func = (void *) ftp_pass_info;
-		write_to_socket(conn, conn->sock1, cmd, cmdl, get_resp);
-		mem_free(cmd);
-		setcstate(conn, S_LOGIN);
+	cmd = init_str();
+	if (!cmd) {
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		return;
 	}
+
+	add_to_str(&cmd, &cmdl, "PASS ");
+	str = get_pass(conn->url);
+	if (str && *str) {
+		add_to_str(&cmd, &cmdl, str);
+	} else {
+		add_to_str(&cmd, &cmdl, get_opt_str("protocol.ftp.anon_passwd"));
+	}
+	if (str) mem_free(str);
+	add_to_str(&cmd, &cmdl, "\r\n");
+
+	send_cmd(conn, cmd, cmdl, (void *) ftp_pass_info, S_LOGIN);
 }
 
 /* Parse PASS command response. */
@@ -564,10 +572,7 @@ ftp_send_retr_req(struct connection *conn, int state)
 		}
 	}
 
-	conn->read_func = (void *) ftp_retr_file;
-	write_to_socket(conn, conn->sock1, cmd, strlen(cmd), get_resp);
-	mem_free(cmd);
-	setcstate(conn, state);
+	send_cmd(conn, cmd, strlen(cmd), (void *) ftp_retr_file, state);
 }
 
 /* Parse RETR response and return file size or -1 on error. */
@@ -1027,7 +1032,7 @@ static void
 ftp_end_request(struct connection *conn, int state)
 {
 	setcstate(conn, state);
-	
+
 	if (conn->state == S_OK) {
 		if (conn->cache) {
 			truncate_entry(conn->cache, conn->from, 1);

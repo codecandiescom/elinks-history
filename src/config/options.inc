@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.183 2005/01/13 13:24:30 jonas Exp $ */
+/* $Id: options.inc,v 1.184 2005/01/14 15:40:55 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -142,7 +142,7 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_TREE("document.browse", N_("Access keys"),
 		"accesskey", 0,
-		N_("Options for handling of the access keys for active links.\n"
+		N_("Options for handling of link access keys.\n"
 		"Access keys can be assigned using the ACCESSKEY attribute in\n"
 		"HTML elements and can be used to give focus to the link when\n"
 		"the assigned access key is pressed.")),

@@ -1,16 +1,9 @@
-/* $Id: screen.h,v 1.13 2003/07/30 22:41:28 zas Exp $ */
+/* $Id: screen.h,v 1.14 2003/08/01 22:19:33 jonas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
 
-/* One position in the terminal screen's image. */
-struct screen_char {
-	/* Contains either character value or frame data. */
-	unsigned char data;
-
-	/* Attributes includes color and frame info. */
-	unsigned char attr;
-};
+#include "terminal/draw.h"
 
 /* The terminal's screen manages */
 struct terminal_screen {

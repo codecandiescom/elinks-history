@@ -1,12 +1,21 @@
-/* $Id: draw.h,v 1.17 2003/08/01 14:59:10 jonas Exp $ */
+/* $Id: draw.h,v 1.18 2003/08/01 22:19:33 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
 
-#include "terminal/screen.h"
 #include "terminal/terminal.h"
 
 #define SCREEN_ATTR_FRAME	0x80
+
+/* One position in the terminal screen's image. */
+struct screen_char {
+	/* Contains either character value or frame data. */
+	unsigned char data;
+
+	/* Attributes includes color and frame info. */
+	unsigned char attr;
+};
+
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.254 2004/06/28 22:49:55 pasky Exp $ */
+/* $Id: tables.c,v 1.255 2004/06/28 22:51:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -796,7 +796,7 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 		 int col, int row, color_t bgcolor, color_t fgcolor)
 {
 	/* TODO: Use /BORDER._.* / macros ! --pasky */
-	static unsigned char border_chars[81] = {
+	static unsigned char const border_chars[81] = {
 		0x00, 0xb3, 0xba,	0xc4, 0xc0, 0xd3,	0xcd, 0xd4, 0xc8,
 		0xc4, 0xd9, 0xbd,	0xc4, 0xc1, 0xd0,	0xcd, 0xd4, 0xc8,
 		0xcd, 0xbe, 0xbc,	0xcd, 0xbe, 0xbc,	0xcd, 0xcf, 0xca,
@@ -831,7 +831,7 @@ static inline void
 draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 		 int col, int row, color_t bgcolor, color_t fgcolor)
 {
- 	static unsigned char hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
+ 	static unsigned char const hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
  	int pos = H_FRAME_POSITION(table, col, row);
 
  	assertm(pos < 3, "Horizontal table position out of bound [%d]", pos);
@@ -847,7 +847,7 @@ static inline void
 draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 		 int col, int row, color_t bgcolor, color_t fgcolor)
 {
- 	static unsigned char vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
+ 	static unsigned char const vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
  	int pos = V_FRAME_POSITION(table, col, row);
 
  	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.155 2003/07/06 21:25:48 pasky Exp $ */
+/* $Id: http.c,v 1.156 2003/07/06 21:51:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -290,7 +290,7 @@ http_end_request(struct connection *conn, enum connection_state state)
 	if (conn->info && !((struct http_connection_info *) conn->info)->close
 	    && (!conn->ssl) /* We won't keep alive ssl connections */
 	    && (!get_opt_int("protocol.http.bugs.post_no_keepalive")
-	        || !conn->uri.post)) {
+		|| !conn->uri.post)) {
 		add_keepalive_connection(conn, HTTP_KEEPALIVE_TIMEOUT);
 	} else {
 		abort_connection(conn);
@@ -453,7 +453,7 @@ http_send_header(struct connection *conn)
 	if (*optstr && strcmp(optstr, " ")) {
 		unsigned char *ustr, ts[64] = "";
 
-                add_to_str(&hdr, &l, "User-Agent: ");
+		add_to_str(&hdr, &l, "User-Agent: ");
 
 		if (!list_empty(terminals)) {
 			unsigned int tslen = 0;
@@ -472,7 +472,7 @@ http_send_header(struct connection *conn)
 		}
 
 		add_to_str(&hdr, &l, "\r\n");
-        }
+	}
 
 	switch (get_opt_int("protocol.http.referer.policy")) {
 		case REFERER_NONE:
@@ -1254,7 +1254,7 @@ out_of_mem:
 				int f;
 
 				errno = 0;
-			       	f = strtol(d + 6, NULL, 10);
+				f = strtol(d + 6, NULL, 10);
 
 				if (!errno && f >= 0) conn->from = f;
 			}
@@ -1336,7 +1336,7 @@ out_of_mem:
 		else mem_free(d);
 	}
 	if (!conn->cache->last_modified) {
-	       	d = parse_http_header(conn->cache->head, "Date", NULL);
+		d = parse_http_header(conn->cache->head, "Date", NULL);
 		if (d) conn->cache->last_modified = d;
 	}
 

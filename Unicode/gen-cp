@@ -20,7 +20,7 @@ for i in $codepages; do
 	echo '};'
 	echo
 	echo 'unsigned char *aliases_'$i' [] = {'
-	head -2 $i.cp | tail +2 | sed 's/ \+/ /g; s/ $//; s/\", /\",£/g' | tr "£" "\n" \
+	head -2 $i.cp | tail +2 | sed 's/ \+/ /g; s/ $//; s/\", /\",£/g; s/$/,/' | tr "£" "\n" \
 	| sed 's/^/£/g' | tr "£" "\t" 
 	echo '	NULL
 };'

@@ -1,7 +1,11 @@
-/* $Id: uri.h,v 1.3 2003/07/04 15:53:23 jonas Exp $ */
+/* $Id: uri.h,v 1.4 2003/07/08 02:25:40 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
+
+#ifndef POST_CHAR
+#define POST_CHAR 1
+#endif
 
 /* This is only some temporary look while doing the uri parsing cleanup. */
 struct uri {

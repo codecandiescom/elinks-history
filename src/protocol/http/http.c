@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.165 2003/07/08 02:01:18 jonas Exp $ */
+/* $Id: http.c,v 1.166 2003/07/08 02:25:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,6 @@
 #include "protocol/http/header.h"
 #include "protocol/http/http.h"
 #include "protocol/uri.h"
-#include "protocol/url.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 #include "util/base64.h"
@@ -129,18 +128,13 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 	 * backends. --pasky */
 
 	/* Nop, this doesn't stand for EuroURL, but Encoded URL. */
-	unsigned char *eurl;
-	unsigned char *p, *p1;
-
-	if (!post) {
-		eurl = stracpy(url_data);
-	} else {
-		eurl = memacpy(url_data, post - url_data - 1);
-	}
+	unsigned char *eurl = (post ? memacpy(url_data, post - url_data - 1)
+				    : stracpy(url_data));
+	unsigned char *p = eurl;
+	unsigned char *p1 = eurl;
 
 	if (!eurl) return;
 
-	p = p1 = eurl;
 	while (*(p += strcspn(p, " \t\r\n\\"))) {
 		unsigned char ch = *p;
 
@@ -234,8 +228,7 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 }
 
 static int
-check_http_server_bugs(struct uri *uri,
-		       struct http_connection_info *info,
+check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
 		       unsigned char *head)
 {
 	unsigned char *server, **s;
@@ -256,15 +249,14 @@ check_http_server_bugs(struct uri *uri,
 		return 0;
 
 	for (s = buggy_servers; *s; s++) {
-		if (!strstr(server, *s)) continue;
-		mem_free(server);
-
-		add_blacklist_entry(uri->host, uri->hostlen, BL_HTTP10);
-		return 1;
+		if (strstr(server, *s)) {
+			add_blacklist_entry(uri->host, uri->hostlen, BL_HTTP10);
+			break;
+		}
 	}
 
 	mem_free(server);
-	return 0;
+	return (*s != NULL);
 }
 
 static void
@@ -340,7 +332,8 @@ add_uri_host_to_str(unsigned char **hdr, int *l, struct uri *uri)
 	}
 }
 
-#define IS_PROXY_URI(x) ((x).protocollen == 5 && !strncasecmp("proxy", (x).protocol, 5))
+#define IS_PROXY_URI(x) \
+	((x).protocollen == 5 && !strncasecmp("proxy", (x).protocol, 5))
 
 static void
 http_send_header(struct connection *conn)
@@ -1132,7 +1125,7 @@ again:
 		return;
 	}
 
-	if (check_http_server_bugs(uri, conn->info, head)) {
+	if (check_http_server_bugs(uri, info, head)) {
 		mem_free(head);
 		retry_conn_with_state(conn, S_RESTART);
 		return;

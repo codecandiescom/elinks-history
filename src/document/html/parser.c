@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.398 2004/04/23 20:44:28 pasky Exp $ */
+/* $Id: parser.c,v 1.399 2004/04/23 22:01:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -467,7 +467,8 @@ debug_stack(void)
 
 		printf("\"");
 		for (i = 0; i < e->namelen; i++) printf("%c", e->name[i]);
-		printf("\"\n");
+		printf("\" : %d", e->type);
+		printf("\n");
 	}
 	printf("%c", 7);
 	fflush(stdout);
@@ -1117,10 +1118,17 @@ html_style(unsigned char *a)
 }
 
 static void
+html_head(unsigned char *a)
+{
+	/* This makes sure it gets to the stack and helps tame down unclosed
+	 * <title>. */
+}
+
+static void
 html_title(unsigned char *a)
 {
 	html_top.invisible = 1;
-	html_top.type = ELEMENT_DONT_KILL;
+	html_top.type = ELEMENT_WEAK;
 }
 
 static void
@@ -2767,7 +2775,7 @@ static struct element_info elements[] = {
 	{"H4",		html_h4,	2, 2},
 	{"H5",		html_h5,	2, 2},
 	{"H6",		html_h6,	2, 2},
-	/* {"HEAD",	html_skip,	0, 0}, */
+	{"HEAD",	html_head,	0, 0},
 	{"HR",		html_hr,	2, 1},
 	{"I",		html_italic,	0, 0},
 	{"IFRAME",	html_iframe,	1, 1},
@@ -2805,14 +2813,6 @@ static struct element_info elements[] = {
 	{NULL,		NULL, 0, 0},
 };
 
-
-static inline int
-element_has_implicit_end(unsigned char *name, int namelen, unsigned char *attr)
-{
-	int len = (attr - name) - namelen;
-
-	return len > 0 && memchr(name + namelen, '/', len);
-}
 
 unsigned char *
 skip_comment(unsigned char *html, unsigned char *eof)
@@ -3103,6 +3103,9 @@ ng:;
 					special_f(f, SP_TAG, a);
 					mem_free(a);
 				}
+				if (html_top.type == ELEMENT_WEAK) {
+					kill_html_stack_item(&html_top);
+				}
 				if (!html_top.invisible) {
 					int ali = (par_format.align == AL_NONE);
 					struct par_attrib pa = par_format;
@@ -3116,12 +3119,6 @@ ng:;
 						if (!do_html_select(attr, html, eof, &html, f))
 							goto set_lt;
 					}
-					if (ei->func == html_title) {
-						/* Hack to handle <title /> */
-						if (element_has_implicit_end(name, namelen, attr))
-							goto set_lt;
-					}
-
 					if (ei->func == html_textarea) {
 						do_html_textarea(attr, html, eof, &html, f);
 						goto set_lt;
@@ -3484,12 +3481,6 @@ ps:
 	if (!strlcasecmp(name, namelen, "BODY", 4)) return;
 	if (title && !title->length && !strlcasecmp(name, namelen, "TITLE", 5)) {
 		unsigned char *s1;
-
-		/* Hack to handle <title /> */
-		if (element_has_implicit_end(name, namelen, attr))
-			/* FIXME: Maybe add a space to title string so we won't
-			 * end here anymore */
-			goto se;
 
 xse:
 		s1 = s;

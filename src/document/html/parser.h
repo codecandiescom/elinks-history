@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.58 2004/01/25 09:33:30 jonas Exp $ */
+/* $Id: parser.h,v 1.59 2004/04/23 22:01:05 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -104,6 +104,10 @@ enum html_element_type {
 	ELEMENT_DONT_KILL,
 	/* These elements can safely be removed from the stack by both */
 	ELEMENT_KILLABLE,
+	/* These elements not only cannot bear any other elements inside but
+	 * any attempt to do so will cause them to terminate. This is so deadly
+	 * that it affects even invisible elements. Ie. <title>foo<body>. */
+	ELEMENT_WEAK,
 };
 
 struct html_element {

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.12 2002/05/08 13:59:07 pasky Exp $ */
+/* $Id: dns.c,v 1.13 2002/05/12 14:46:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,10 +412,10 @@ timeout:
 
 void kill_dns_request(void **qp)
 {
-	struct dnsquery *q = *qp;
+	struct dnsquery *query = *qp;
 
-	q->fn = NULL;
-	mem_free(q->addr); q->addr = NULL;
+	query->fn = NULL;
+	failed_real_lookup(query);
 	*qp = NULL;
 }
 

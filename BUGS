@@ -13,9 +13,6 @@ newline).
 
 	Tags inside <XMP> are still interpreted.
 
-	When we're running DNS lookup in background and Terminate all
-connections on background, we're in big trouble.
-
 	links '...?q=foo+bar' when launching new instance in xterm leads to
 incorrectly decoding +ba to 0xba.
 
@@ -31,6 +28,6 @@ top/bottom of screen.
 
 	Handling of textareas splitted to two pages is just weird.
 
-$Id: BUGS,v 1.23 2002/04/02 12:53:17 pasky Exp $
+$Id: BUGS,v 1.24 2002/05/12 14:46:28 pasky Exp $
 
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.163 2004/12/27 00:46:03 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.164 2004/12/27 00:48:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -469,9 +469,6 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
 	unsigned char *string;
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (argc != 1)
 		return JS_TRUE;
@@ -486,7 +483,7 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
-	value_to_jsval(ctx, rval, &prop);
+	undef_to_jsval(ctx, rval);
 	return JS_TRUE;
 }
 

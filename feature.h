@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.20 2004/01/01 09:56:01 jonas Exp $ */
+/* $Id: feature.h,v 1.21 2004/01/01 10:04:03 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -329,9 +329,9 @@
  *
  * Default: enabled if smbclient will be found */
 
-#ifdef ELINKS_SMB
+#ifdef CONFIG_SMB
 /* Uncomment the following line if you want to always have this disabled: */
-/* #undef ELINKS_SMB */
+/* #undef CONFIG_SMB */
 #endif
 
 

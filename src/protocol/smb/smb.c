@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.28 2003/12/31 08:37:14 miciah Exp $ */
+/* $Id: smb.c,v 1.29 2004/01/01 10:04:04 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -38,6 +38,7 @@
 #include "util/snprintf.h"
 #include "util/string.h"
 
+#ifdef CONFIG_SMB
 
 /* XXX: Nice cleanup target --pasky */
 /* FIXME: we rely on smbclient output which may change in future,
@@ -601,3 +602,5 @@ struct protocol_backend smb_protocol_backend = {
 	/* need_slashes: */		1,
 	/* need_slash_after_host: */	1,
 };
+
+#endif /* CONFIG_SMB */

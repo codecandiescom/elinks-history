@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.31 2003/12/07 16:45:16 pasky Exp $ */
+/* $Id: protocol.c,v 1.32 2004/01/01 10:04:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,9 @@ static struct protocol_backend *protocol_backends[] = {
 	/* PROTOCOL_FTP */	&ftp_protocol_backend,
 	/* PROTOCOL_HTTP */	&http_protocol_backend,
 	/* PROTOCOL_HTTPS */	&https_protocol_backend,
+#ifdef CONFIG_SMB
 	/* PROTOCOL_SMB */	&smb_protocol_backend,
+#endif
 	/* PROTOCOL_JAVASCRIPT */	&dummyjs_protocol_backend,
 	/* PROTOCOL_LUA */	&lua_protocol_backend,
 	/* PROTOCOL_PROXY */	&proxy_protocol_backend,

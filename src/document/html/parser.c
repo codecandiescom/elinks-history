@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.527 2005/03/05 00:13:08 zas Exp $ */
+/* $Id: parser.c,v 1.528 2005/03/05 01:20:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1138,7 +1138,7 @@ process_head(unsigned char *head)
 
 	refresh = parse_header(head, "Refresh", NULL);
 	if (!refresh) return;
-	
+
 	url = parse_header_param(refresh, "URL");
 	if (!url) {
 		/* If the URL parameter is missing assume that the
@@ -1149,20 +1149,42 @@ process_head(unsigned char *head)
 	if (url) {
 		unsigned char *saved_url = url;
 		/* Extraction of refresh time. */
-		unsigned long seconds;
+		unsigned long seconds = 0;
+		int valid = 1;
 
-		errno = 0;
-		seconds = strtoul(refresh, NULL, 10);
-		if (errno || seconds > 7200)
-			seconds = 0;
+		/* We try to extract the refresh time, and to handle weird things
+		 * in an elegant way. Among things we can have negative values,
+		 * too big ones, just ';' (we assume 0 seconds in that case) and
+		 * more. */
+		if (*refresh != ';') {
+			if (isdigit(*refresh)) {
+				unsigned long max_seconds = 2*24*60*60; /* 2 days */
 
-		html_focusable(NULL);
+				errno = 0;
+				seconds = strtoul(refresh, NULL, 10);
+				if (errno == ERANGE || seconds > max_seconds) {
+					/* Too big refresh value, limit it. */
+					seconds = max_seconds;
+				} else if (errno) {
+					/* Bad syntax */
+					valid = 0;
+				}
+			} else {
+				/* May be a negative number, or some bad syntax. */
+				valid = 0;
+			}
+		}
 
-		url = join_urls(html_context.base_href, saved_url);
-		put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
-		html_context.special_f(html_context.part, SP_REFRESH, seconds, url);
+		if (valid) {
+			html_focusable(NULL);
 
-		mem_free(url);
+			url = join_urls(html_context.base_href, saved_url);
+			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
+			html_context.special_f(html_context.part, SP_REFRESH, seconds, url);
+
+			mem_free(url);
+		}
+
 		mem_free(saved_url);
 	}
 

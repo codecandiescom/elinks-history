@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.138 2003/12/27 17:36:01 zas Exp $ */
+/* $Id: dialogs.c,v 1.139 2003/12/28 02:00:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -392,10 +392,22 @@ struct kbdbind_add_hop {
 	long key, meta;
 };
 
+struct kbdbind_add_hop *
+new_hop_from(struct kbdbind_add_hop *hop) {
+	struct kbdbind_add_hop *new_hop = mem_alloc(sizeof(struct kbdbind_add_hop));
+
+	if (new_hop)
+		memcpy(new_hop, hop, sizeof(struct kbdbind_add_hop));
+
+	return new_hop;
+}
+
 static void
 really_really_add_keybinding(void *data)
 {
 	struct kbdbind_add_hop *hop = data;
+
+	assert(hop);
 
 	add_keybinding(hop->keymap, hop->action, hop->key, hop->meta, 0);
 }
@@ -418,19 +430,24 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	}
 
 	if (keybinding_exists(hop->keymap, key, meta, &action)) {
+		struct kbdbind_add_hop *new_hop;
+
 		/* Same keystroke for same action, just return. */
 		if (action == hop->action) return;
 
-		hop->key = key;
-		hop->meta = meta;
+		new_hop = new_hop_from(hop);
+		if (!new_hop) return; /* out of mem */
 
-		msg_box(hop->term, NULL, MSGBOX_FREE_TEXT,
+		new_hop->key = key;
+		new_hop->meta = meta;
+
+		msg_box(new_hop->term, getml(new_hop, NULL), MSGBOX_FREE_TEXT,
 			N_("Keystroke already used"), AL_CENTER,
-			msg_text(hop->term, N_("The keystroke \"%s\" "
+			msg_text(new_hop->term, N_("The keystroke \"%s\" "
 			"is currently used for \"%s\".\n"
 			"Are you sure you want to replace it?"),
 			keystroke, write_action(action)),
-			hop, 2,
+			new_hop, 2,
 			N_("Yes"), really_really_add_keybinding, B_ENTER,
 			N_("No"), NULL, B_ESC);
 

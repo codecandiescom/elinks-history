@@ -1,3 +1,16 @@
+Thu Jan  9 18:06:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	If file contained a NUL char, it wasn't sent completely to the
+	server (occurred when uploading a file thru form). Patch by Mikulas.  
+
+Thu Jan  9 14:09:37 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation updated. Need more work. Help welcome ;).  
+
 Tue Jan  7 23:26:26 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* po/Makefile.in.in:

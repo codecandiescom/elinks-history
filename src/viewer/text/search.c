@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.256 2004/07/15 15:20:07 jonas Exp $ */
+/* $Id: search.c,v 1.257 2004/07/16 12:20:04 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1067,8 +1067,8 @@ get_document_char(struct document *document, int x, int y)
 }
 
 static inline void
-draw_link_text(struct terminal *term, struct document_view *doc_view,
-	       int chars, int offset)
+draw_typeahead_match(struct terminal *term, struct document_view *doc_view,
+		     int chars, int offset)
 {
 	struct color_pair *color = get_bfu_color(term, "searched");
 	int xoffset = doc_view->box.x - doc_view->vs->x;
@@ -1237,7 +1237,7 @@ link_typeahead_handler(struct input_line *line, int action)
 		case TYPEAHEAD_MATCHED:
 			fixup_typeahead_match(ses, doc_view);
 			draw_formatted(ses, 0);
-			draw_link_text(ses->tab->term, doc_view, strlen(buffer), offset);
+			draw_typeahead_match(ses->tab->term, doc_view, strlen(buffer), offset);
 			return INPUT_LINE_PROCEED;
 
 		case TYPEAHEAD_ERROR:

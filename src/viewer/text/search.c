@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.116 2003/11/15 20:11:38 kuser Exp $ */
+/* $Id: search.c,v 1.117 2003/11/15 20:21:34 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,11 +317,11 @@ is_in_range_regex(struct document *document, int y, int yy,
 	doctmp = doc;
 
 find_next:
-	while (pos < doclen && (search_start[pos].y < y-1
+	while (pos < doclen && (search_start[pos].y < y - 1
 				|| search_start[pos].y > yy)) pos++;
 	doctmp = &doc[pos];
 	s1 = &search_start[pos];
-	while (pos < doclen && search_start[pos].y >= y-1
+	while (pos < doclen && search_start[pos].y >= y - 1
 			    && search_start[pos].y <= yy) pos++;
 	save_c = doc[pos];
 	doc[pos] = 0;
@@ -444,8 +444,8 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 {
 	unsigned char *txt;
 	struct point *points = NULL;
-	int xp, yp;
-	int xx, yy;
+	int xmin, ymin;
+	int xmax, ymax;
 	int xoffset, yoffset;
 	int len = 0;
 	int case_sensitive = get_opt_int("document.browse.search.case");
@@ -454,12 +454,12 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 			     : lowered_string(*doc_view->search_word, l);
 	if (!txt) return;
 
-	xp = doc_view->x;
-	yp = doc_view->y;
-	xx = xp + doc_view->width;
-	yy = yp + doc_view->height;
-	xoffset = xp - doc_view->vs->x;
-	yoffset = yp - doc_view->vs->y;
+	xmin = doc_view->x;
+	ymin = doc_view->y;
+	xmax = xmin + doc_view->width;
+	ymax = ymin + doc_view->height;
+	xoffset = xmin - doc_view->vs->x;
+	yoffset = ymin - doc_view->vs->y;
 
 #define maybe_tolower(c) (case_sensitive ? (c) : tolower(c))
 
@@ -479,14 +479,14 @@ srch_failed:
 			register int j;
 			int y = s1[i].y + yoffset;
 
-			if (y < yp || y >= yy)
+			if (y < ymin || y >= ymax)
 				continue;
 
 			for (j = 0; j < s1[i].n; j++) {
 				int sx = s1[i].x + j;
 				int x = sx + xoffset;
 
-				if (x < xp || x >= xx)
+				if (x < xmin || x >= xmax)
 					continue;
 
 				if (!realloc_points(&points, len))
@@ -514,8 +514,8 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	unsigned char *doctmp;
 	int doclen;
 	struct point *points = NULL;
-	int xp, yp;
-	int xx, yy;
+	int xmin, ymin;
+	int xmax, ymax;
 	int xoffset, yoffset;
 	int len = 0;
 	int regex_flags = REG_NEWLINE;
@@ -566,22 +566,22 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	}
 	doc[doclen] = 0;
 
-	xp = doc_view->x;
-	yp = doc_view->y;
-	xx = xp + doc_view->width;
-	yy = yp + doc_view->height;
-	xoffset = xp - doc_view->vs->x;
-	yoffset = yp - doc_view->vs->y;
+	xmin = doc_view->x;
+	ymin = doc_view->y;
+	xmax = xmin + doc_view->width;
+	ymax = ymin + doc_view->height;
+	xoffset = xmin - doc_view->vs->x;
+	yoffset = ymin - doc_view->vs->y;
 
 	doctmp = doc;
 
 find_next:
-	while (pos < doclen && (search_start[pos].y + yoffset < yp-1
-				|| search_start[pos].y + yoffset > yy)) pos++;
+	while (pos < doclen && (search_start[pos].y + yoffset < ymin - 1
+				|| search_start[pos].y + yoffset > ymax)) pos++;
 	doctmp = &doc[pos];
 	s1 = &search_start[pos];
-	while (pos < doclen && search_start[pos].y + yoffset >= yp-1
-			    && search_start[pos].y + yoffset <= yy) pos++;
+	while (pos < doclen && search_start[pos].y + yoffset >= ymin - 1
+			    && search_start[pos].y + yoffset <= ymax) pos++;
 	save_c = doc[pos];
 	doc[pos] = 0;
 
@@ -595,14 +595,14 @@ find_next:
 			register int j;
 			int y = s1[i].y + yoffset;
 
-			if (y < yp || y >= yy)
+			if (y < ymin || y >= ymax)
 				continue;
 
 			for (j = 0; j < s1[i].n; j++) {
 				int sx = s1[i].x + j;
 				int x = sx + xoffset;
 
-				if (x < xp || x >= xx)
+				if (x < xmin || x >= xmax)
 					continue;
 
 				if (!realloc_points(&points, len))

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.4 2003/11/11 21:25:59 jonas Exp $ */
+/* $Id: renderer.c,v 1.5 2003/11/12 13:18:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,28 +66,39 @@ add_document_line(struct document *document, int lineno,
 		  unsigned char *line, int width, struct screen_char *template)
 {
 	struct screen_char *pos, *end;
-	unsigned char *source;
+	int line_pos, expanded = 0;
 
-	for (source = line + width - 1; source >= line; source--) {
-		if (*source == ASCII_TAB)
-			width += 7;
-		else if (*source < ' ' || *source == ASCII_ESC)
-			*source = ' ';
+	for (line_pos = 0; line_pos < width; line_pos++) {
+		unsigned char line_char = line[line_pos];
+
+		if (line_char == ASCII_TAB) {
+			int tab_width = 7 - ((line_pos + expanded) & 7);
+
+			expanded += tab_width;
+		} else if (line_char < ' ' || line_char == ASCII_ESC) {
+			line[line_pos] = ' ';
+		}
 	}
+
+	width += expanded;
 
 	pos = realloc_line(document, lineno, width);
 	if (!pos) return 0;
 
-	for (end = pos + width; pos < end; pos++, line++) {
-		if (*line == ASCII_TAB) {
-			int tab_width = 7;
+	expanded = 0;
+	for (line_pos = 0, end = pos + width; pos < end; pos++, line_pos++) {
+		unsigned char line_char = line[line_pos];
+
+		if (line_char == ASCII_TAB) {
+			int tab_width = 7 - ((line_pos + expanded) & 7);
 
 			template->data = ' ';
+			expanded += tab_width;
 
 			for (; tab_width; tab_width--, pos++)
 				copy_screen_chars(pos, template, 1);
 		} else {
-			template->data = *line;
+			template->data = line_char;
 			copy_screen_chars(pos, template, 1);
 		}
 	}

@@ -452,7 +452,7 @@ Suveg Gabor <gsuveg@sgmobil2000.hu>
 Taniel Kirikal <taniel@colleduc.ee>
 	Estonian translation
 
-Timo Lindfors <lindi@kurp.hut.fi>
+Timo Lindfors <timo.lindfors@iki.fi>
 	HTTPS proxy support
 
 Tom Lear <tom@trap.mtview.ca.us>
@@ -497,4 +497,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.162 2004/06/20 19:22:16 pasky Exp $
+$Id: AUTHORS,v 1.163 2004/07/01 12:48:49 zas Exp $

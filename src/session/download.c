@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.173 2003/11/16 12:57:41 pasky Exp $ */
+/* $Id: download.c,v 1.174 2003/11/17 01:48:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -522,11 +522,11 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		unsigned char *errmsg = get_err_msg(download->state, term);
 		unsigned char *url;
 
-		if (errmsg) goto abort;
+		if (!errmsg) goto abort;
 
 		url = get_no_post_url(file_download->url, NULL);
 
-		if (url) goto abort;
+		if (!url) goto abort;
 
 		msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
 			N_("Download error"), AL_CENTER,

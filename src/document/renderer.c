@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.99 2004/09/27 09:37:46 pasky Exp $ */
+/* $Id: renderer.c,v 1.100 2004/09/28 07:35:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 		interpreter->vs->doc_view->session->status.ecmascript_led->value = '-';
 #endif
 
-	if (list_empty(*doc_snippets))
+	if (list_empty(*doc_snippets) || !get_opt_bool("ecmascript.enable"))
 		return;
 
 	/* Position @doc_current in @doc_snippet to match the end of

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.135 2004/04/05 04:44:45 jonas Exp $ */
+/* $Id: uri.c,v 1.136 2004/04/05 04:57:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,20 +462,13 @@ transform_file_url(unsigned char **up, unsigned char *cwd)
 	if (url[0] == '.' || !url[0]) {
 		int cwdlen = strlen(cwd);
 
+		/* Either we will end up with '//' and translate_directories()
+		 * will shorten it or the '/' will mark the inserted cwd as a
+		 * directory. */
+		if (url[0] == '.') url[0] = '/';
+
 		/* Insert the current working directory. */
-
-		/* XXX: Post data copy. --zas */
-		url = mem_alloc(strlen(*up) + cwdlen + 2);
-		if (!url) return;
-
-		memcpy(url, *up, 7);
-		strcpy(url + 7, cwd);
-
-		if (!dir_sep(cwd[cwdlen - 1])) strcat(url, "/");
-
-		strcat(url, *up + 7);
-		mem_free(*up);
-		*up = url;
+		insert_in_uri(up, 7, cwd, cwdlen);
 
 		return;
 	}

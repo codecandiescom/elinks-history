@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.15 2003/06/08 12:33:45 pasky Exp $ */
+/* $Id: error.h,v 1.16 2003/06/08 12:36:56 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -7,7 +7,6 @@ void list_magic_error_(unsigned char *, unsigned char *, unsigned char *, int);
 
 void force_dump(void);
 void do_not_optimize_here(void *);
-void error(unsigned char *, ...);
 
 
 /* This errfile thing is needed, as we don't have var-arg macros in standart,
@@ -20,6 +19,12 @@ extern unsigned char *errfile;
  * is running in the DEBUG mode. */
 #define internal errfile = __FILE__, errline = __LINE__, elinks_internal
 void elinks_internal(unsigned char *, ...);
+
+/* @error(format_string) is used to report non-fatal errors during the ELinks
+ * run. It tries to (not that agressively) draw user's attention to the error,
+ * but never dumps core or so. */
+#define error elinks_error
+void elinks_error(unsigned char *, ...);
 
 /* @debug(format_string) is used for printing of debugging information. It
  * should not be used anywhere in the official codebase (although it is often

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.53 2003/06/08 12:33:45 pasky Exp $ */
+/* $Id: error.c,v 1.54 2003/06/08 12:36:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ er(int bell, unsigned char *fmt, va_list params)
 }
 
 void
-error(unsigned char *fmt, ...)
+elinks_error(unsigned char *fmt, ...)
 {
 	va_list params;
 

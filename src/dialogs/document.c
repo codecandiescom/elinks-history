@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.19 2002/12/08 21:01:20 pasky Exp $ */
+/* $Id: document.c,v 1.20 2002/12/17 13:29:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,22 +91,9 @@ loc_msg(struct terminal *term, struct location *location,
 		add_to_str(&str, &strl, _(TEXT(T_TITLE), term));
 		add_to_str(&str, &strl, ": ");
 		add_to_str(&str, &strl, frame->f_data->title);
-		add_to_str(&str, &strl, "\n");
 	}
 
-#ifdef GLOBHIST
-	add_to_str(&str, &strl, _(TEXT(T_LAST_VISIT_TIME), term));
-	add_to_str(&str, &strl, ": ");
-	historyitem = get_global_history_item(location->vs.url);
-	if (historyitem) {
-		/* Stupid ctime() adds a newline, and we don't want that, so we
-		 * use add_bytes_to_str. -- Miciah */
-		a = ctime(&historyitem->last_visit);
-		add_bytes_to_str(&str, &strl, a, strlen(a) - 1);
-	} else {
-		add_to_str(&str, &strl, _(TEXT(T_UNKNOWN), term));
-	}
-#endif
+	add_to_str(&str, &strl, "\n");
 
 	if (!get_cache_entry(location->vs.url, &ce)) {
 		add_to_str(&str, &strl, "\n");
@@ -146,6 +133,19 @@ loc_msg(struct terminal *term, struct location *location,
 			mem_free(a);
 		}
 
+		if (ce->ssl_info) {
+			add_to_str(&str, &strl, "\n");
+			add_to_str(&str, &strl, _(TEXT(T_SSL_CIPHER), term));
+			add_to_str(&str, &strl, ": ");
+			add_to_str(&str, &strl, ce->ssl_info);
+		}
+		if (ce->encoding_info) {
+			add_to_str(&str, &strl, "\n");
+			add_to_str(&str, &strl, _(TEXT(T_ENCODING), term));
+			add_to_str(&str, &strl, ": ");
+			add_to_str(&str, &strl, ce->encoding_info);
+		}
+
 		a = parse_http_header(ce->head, "Date", NULL);
 		if (a) {
 			add_to_str(&str, &strl, "\n");
@@ -161,24 +161,29 @@ loc_msg(struct terminal *term, struct location *location,
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, ce->last_modified);
 		}
-		if (ce->ssl_info) {
-			add_to_str(&str, &strl, "\n");
-			add_to_str(&str, &strl, _(TEXT(T_SSL_CIPHER), term));
-			add_to_str(&str, &strl, ": ");
-			add_to_str(&str, &strl, ce->ssl_info);
-		}
-		if (ce->encoding_info) {
-			add_to_str(&str, &strl, "\n");
-			add_to_str(&str, &strl, _(TEXT(T_ENCODING), term));
-			add_to_str(&str, &strl, ": ");
-			add_to_str(&str, &strl, ce->encoding_info);
-		}
+
 	}
 
+#ifdef GLOBHIST
+	add_to_str(&str, &strl, "\n");
+	add_to_str(&str, &strl, _(TEXT(T_LAST_VISIT_TIME), term));
+	add_to_str(&str, &strl, ": ");
+	historyitem = get_global_history_item(location->vs.url);
+	if (historyitem) {
+		/* Stupid ctime() adds a newline, and we don't want that, so we
+		 * use add_bytes_to_str. -- Miciah */
+		a = ctime(&historyitem->last_visit);
+		add_bytes_to_str(&str, &strl, a, strlen(a) - 1);
+	} else {
+		add_to_str(&str, &strl, _(TEXT(T_UNKNOWN), term));
+	}
+#endif
+
 	if (frame) {
+		add_to_str(&str, &strl, "\n");
 		a = print_current_link_do(frame, term);
 		if (a) {
-			add_to_str(&str, &strl, "\n\n");
+			add_to_str(&str, &strl, "\n");
 			add_to_str(&str, &strl, _(TEXT(T_LINK), term));
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, a);

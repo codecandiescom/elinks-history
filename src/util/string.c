@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.2 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: string.c,v 1.3 2002/06/17 07:45:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,7 +180,7 @@ add_chr_to_str(unsigned char **s, int *l, unsigned char a)
 }
 
 
-/* String comparsion functions */
+/* String comparison functions */
 
 int
 xstrcmp(unsigned char *s1, unsigned char *s2)
@@ -230,23 +230,6 @@ strcasestr(unsigned char *haystack, unsigned char *needle)
 unsigned char *
 safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 {
-#if 0
-	size_t to_copy;
-
-	to_copy = strlen(src);
-
-	/* Ensure that the url size is not greater than str_size */
-	if (dst_size < to_copy)
-		to_copy = dst_size - 1;
-
-	strncpy(dst, src, to_copy);
-
-	/* Ensure null termination */
-	dst[to_copy] = '\0';
-
-	return dst;
-#endif
-
 	strncpy(dst, src, dst_size);
 	dst[dst_size - 1] = 0;
 

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.88 2003/06/24 12:08:05 jonas Exp $ */
+/* $Id: file.c,v 1.89 2003/06/24 12:32:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,7 +303,7 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 
 	if (!htmlname) return;
 	add_htmlesc_str(&htmlname, &htmlnamelen,
-			&entry->name[pathlen], strlen(entry->name) - pathlen);
+			entry->name + pathlen, strlen(entry->name) - pathlen);
 
 	/* add_to_str(&fragment, &fragmentlen, "   "); */
 	add_htmlesc_str(&fragment, &fragmentlen,
@@ -392,9 +392,11 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 
 		/* Always show "..", always hide ".", others like ".x" are shown if
 		 * show_hidden_files = 1 */
-		if (entry->d_name[0] == '.' &&
-		    !(entry->d_name[1] == '.' && entry->d_name[2] == '\0')) {
-			if (!show_hidden_files || entry->d_name[1] == '\0')
+		if (entry->d_name[0] == '.') {
+			if (entry->d_name[1] == '\0') continue;
+
+			if (!show_hidden_files &&
+			    entry->d_name[1] != '.' && entry->d_name[2] != '\0')
 				continue;
 		}
 
@@ -413,13 +415,10 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		}
 
 #ifdef FS_UNIX_SOFTLINKS
-		if (lstat(name, &st))
+		stp = (lstat(name, &st)) ? NULL : &st;
 #else
-		if (stat(name, &st))
+		stp = (stat(name, &st)) ? NULL : &st;
 #endif
-			stp = NULL;
-		else
-			stp = &st;
 
 		attriblen = 0;
 		stat_mode(&attrib, &attriblen, stp);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.429 2004/06/05 21:14:33 jonas Exp $ */
+/* $Id: parser.c,v 1.430 2004/06/06 13:19:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -637,7 +637,7 @@ html_base(unsigned char *a)
 				continue;
 
 			done_uri(element->attr.href_base);
-			element->attr.href_base = uri;
+			element->attr.href_base = get_uri_reference(uri);
 		}
 
 		done_uri(uri);

@@ -1,3 +1,5 @@
+/* $Id: os_dep.h,v 1.9 2002/03/16 00:35:05 pasky Exp $ */
+
 #define SYS_UNIX	1
 #define SYS_OS2		2
 #define SYS_WIN32	3

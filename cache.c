@@ -1,4 +1,5 @@
 /* Cache subsystem */
+/* $Id: cache.c,v 1.4 2002/03/16 00:35:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,4 +1,5 @@
 /* Internal bookmarks support */
+/* $Id: bookmarks.c,v 1.10 2002/03/16 00:35:04 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */

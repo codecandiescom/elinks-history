@@ -1,3 +1,5 @@
+/* $Id: setup.h,v 1.6 2002/03/16 00:35:05 pasky Exp $ */
+
 #if 0
 #define VERSION_STRING			VERSION " ["__DATE__ " " __TIME__"]"
 #else

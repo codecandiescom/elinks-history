@@ -1,4 +1,5 @@
 /* URL parser and translator */
+/* $Id: url.c,v 1.20 2002/03/16 00:35:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

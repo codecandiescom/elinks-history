@@ -1,4 +1,5 @@
 /* The main program - startup */
+/* $Id: main.c,v 1.9 2002/03/16 00:35:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,3 +1,10 @@
+/* Internal "finger" protocol implementation */
+/* $Id: finger.c,v 1.4 2002/03/16 00:35:05 pasky Exp $ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include "links.h"
 
 void finger_send_request(struct connection *);

@@ -1,4 +1,5 @@
 /* Internal MIME types implementation */
+/* $Id: types.c,v 1.7 2002/03/16 00:35:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

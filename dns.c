@@ -1,4 +1,5 @@
 /* Domain Name System Resolver Department */
+/* $Id: dns.c,v 1.20 2002/03/16 00:35:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

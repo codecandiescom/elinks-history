@@ -1,4 +1,5 @@
 /* Charsets convertor */
+/* $Id: charsets.c,v 1.7 2002/03/16 00:35:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,3 +1,5 @@
+/* $Id: os_depx.h,v 1.4 2002/03/16 00:35:05 pasky Exp $ */
+
 #ifndef MAXINT
 #ifdef INT_MAX
 #define MAXINT INT_MAX

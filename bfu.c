@@ -1,4 +1,5 @@
 /* This routines are the bones of user interface. */
+/* $Id: bfu.c,v 1.16 2002/03/16 00:35:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,4 +1,5 @@
 /* Global include with common functions and definitions for elinks */
+/* $Id: links.h,v 1.56 2002/03/16 00:35:05 pasky Exp $ */
 
 #ifndef __EXTENSION__
 #define __EXTENSION__ /* Helper for SunOS */

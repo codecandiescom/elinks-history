@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.92 2005/03/01 16:29:31 miciah Exp $ */
+/* $Id: widget.h,v 1.93 2005/03/01 16:59:58 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -30,7 +30,6 @@ struct widget_ops {
 	t_widget_handler *select;
 	t_widget_handler *clear;
 };
-
 
 struct widget {
 	struct widget_ops *ops;

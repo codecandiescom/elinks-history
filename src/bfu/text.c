@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.116 2004/11/21 17:15:51 zas Exp $ */
+/* $Id: text.c,v 1.117 2005/03/01 16:59:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,12 +26,12 @@ void
 add_dlg_text(struct dialog *dlg, unsigned char *text,
 	     enum format_align align, int bottom_pad)
 {
-	struct widget *widget;
+	struct widget *widget = &dlg->widgets[dlg->number_of_widgets++];
 
-	widget = &dlg->widgets[dlg->number_of_widgets++];
 	widget->type = WIDGET_TEXT;
 	widget->text = text;
-	widget->info.text.align = align;
+
+	widget->info.text.align	   = align;
 	widget->info.text.is_label = !!bottom_pad;
 }
 

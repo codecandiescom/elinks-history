@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.3 2004/08/18 17:37:52 jonas Exp $ */
+/* $Id: gopher.c,v 1.4 2004/08/18 17:42:00 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -405,8 +405,13 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 	switch (entity) {
 	case GOPHER_WWW:
 		/* Gopher pointer to W3 */
-		add_gopher_link(buffer, name, selector);
-		break;
+		if (selector) {
+			add_gopher_link(buffer, name, selector);
+			break;
+		}
+
+		/* Fall through if no selector is defined so the
+		 * text is just displayed. */
 
 	case GOPHER_INFO:
 		/* Information or separator line */

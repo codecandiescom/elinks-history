@@ -57,7 +57,7 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "A \"%s\" bejegyzést nem lehet törölni."
 
@@ -67,7 +67,7 @@ msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "A \"%s\" már használatban van."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "A \"%s\" mappát nem lehet törölni."
 
@@ -622,8 +622,7 @@ msgstr ""
 #: src/config/dialogs.c:504
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:531 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -718,9 +717,8 @@ msgid "Download the current image"
 msgstr "Kép letöltése"
 
 #: src/config/kbdbind.c:396
-#, fuzzy
 msgid "Open download manager"
-msgstr "Letöltéskezelõ"
+msgstr "Letöltéskezelõ megnyitása"
 
 #: src/config/kbdbind.c:397
 msgid "Begin editing"
@@ -765,8 +763,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:407
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:408
 msgid "Go to the homepage"
@@ -1217,8 +1214,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:98
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:104
@@ -1572,8 +1568,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:217
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:220 src/dialogs/options.c:186
 msgid "Underline"
@@ -1589,8 +1584,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:227
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:229
 msgid "Number links"
@@ -1632,8 +1626,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:253
 msgid "Searching"
@@ -1782,8 +1775,7 @@ msgstr ""
 
 #: src/config/options.inc:336
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:338
 msgid ""
@@ -2477,22 +2469,20 @@ msgstr ""
 "meg a lokális könyvtárlistákban."
 
 #: src/config/options.inc:710
-#, fuzzy
 msgid "Local CGI"
-msgstr "Helyi fájlok"
+msgstr "Helyi CGI"
 
 #: src/config/options.inc:712
-#, fuzzy
 msgid "Local CGI specific options."
-msgstr "Protokoll beállítások."
+msgstr "Helyi CGI-vel kapcsolatos beállítások."
 
 #: src/config/options.inc:714
 msgid "Allow local CGI"
-msgstr ""
+msgstr "Helyi CGI engedélyezése"
 
 #: src/config/options.inc:716
 msgid "Whether to execute local CGI scripts."
-msgstr ""
+msgstr "A helyi CGI scriptek futtatásának engedélyezése."
 
 #: src/config/options.inc:718 src/mime/backend/mailcap.c:102
 #: src/mime/backend/mimetypes.c:59
@@ -2501,7 +2491,7 @@ msgstr "Útvonal"
 
 #: src/config/options.inc:720
 msgid "Colon separated list of directories, where CGI scripts are stored."
-msgstr ""
+msgstr "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal elválasztva."
 
 #: src/config/options.inc:722
 msgid "User protocols"
@@ -2947,24 +2937,20 @@ msgid "Dialog frame colors."
 msgstr "Dialógusablak kereteinek színe."
 
 #: src/config/options.inc:1054 src/config/options.inc:1499
-#, fuzzy
 msgid "Scrollbar"
-msgstr "Margó görgetéshez"
+msgstr "Görgetõsáv"
 
 #: src/config/options.inc:1056 src/config/options.inc:1501
-#, fuzzy
 msgid "Scrollbar colors."
-msgstr "Címsor színei."
+msgstr "Görgetõsáv színei."
 
 #: src/config/options.inc:1066 src/config/options.inc:1511
-#, fuzzy
 msgid "Scrollbar selected"
-msgstr "Görgetés balra"
+msgstr "Kiválasztott görgetõsáv"
 
 #: src/config/options.inc:1068 src/config/options.inc:1513
-#, fuzzy
 msgid "Scrollbar selected colors."
-msgstr "Kiválasztott fül színei."
+msgstr "Kiválasztott görgetõsáv színei."
 
 #: src/config/options.inc:1078 src/config/options.inc:1523
 #: src/dialogs/document.c:84
@@ -3587,8 +3573,7 @@ msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/options.inc:1969
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/options.inc:1971
 msgid ""
@@ -3953,9 +3938,8 @@ msgstr "Megszakítás"
 
 #. This requires more work to make locking work and query the user
 #: src/dialogs/download.c:250 src/dialogs/download.c:417
-#, fuzzy
 msgid "Abort and delete file"
-msgstr "A fáljt nem lehet olvasni"
+msgstr "Megszakítás, és a fájl törlése"
 
 #: src/dialogs/download.c:423
 msgid "Download manager"
@@ -4398,9 +4382,8 @@ msgid "Average speed"
 msgstr "Átlagos sebesség"
 
 #: src/dialogs/status.c:85
-#, fuzzy
 msgid "average speed"
-msgstr "Átlagos sebesség"
+msgstr "átlagos sebesség"
 
 #: src/dialogs/status.c:86
 msgid "avg"
@@ -4411,9 +4394,8 @@ msgid "Speed"
 msgstr "Sebesség"
 
 #: src/dialogs/status.c:89
-#, fuzzy
 msgid "speed"
-msgstr "Sebesség"
+msgstr "sebesség"
 
 #: src/dialogs/status.c:100
 msgid "current speed"
@@ -4428,9 +4410,8 @@ msgid "Elapsed time"
 msgstr "Eltelt idõ"
 
 #: src/dialogs/status.c:112
-#, fuzzy
 msgid "elapsed time"
-msgstr "Eltelt idõ"
+msgstr "eltelt idõ"
 
 #: src/dialogs/status.c:119
 msgid "estimated time"
@@ -4580,8 +4561,7 @@ msgstr "Látogatott lapok"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -5116,7 +5096,7 @@ msgstr "Hiba a fájl megnyitásakor"
 
 #: src/sched/error.c:62
 msgid "CGI script not in CGI path"
-msgstr ""
+msgstr "A CGI script nincs a CGI elérési útvonalban"
 
 #: src/sched/error.c:64
 msgid "Bad FTP response"
@@ -5399,7 +5379,7 @@ msgstr "Û~rlap törlése"
 
 #: src/viewer/text/link.c:933
 msgid "Open in ~external editor"
-msgstr ""
+msgstr "Megnyitás külsõ szerkesztõprogramban"
 
 #: src/viewer/text/link.c:937
 msgid "~Submit form"
@@ -5829,3 +5809,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

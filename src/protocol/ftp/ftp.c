@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.59 2002/10/12 23:47:32 pasky Exp $ */
+/* $Id: ftp.c,v 1.60 2002/10/13 00:37:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,15 +171,17 @@ again:
 			if (sa && response == 229) { /* EPSV response parsing. */
 				/* See RFC 2428 */
 				struct sockaddr_in6 *s = (struct sockaddr_in6 *) sa;
-				int sal;
+				int sal = sizeof(struct sockaddr_in6);
 				int n[6];
 				
-				if (parse_psv_resp(num_end, (int *)&n, 65535) != 1)
+				if (parse_psv_resp(num_end, (int *)&n, 65535) != 1) {
 					return -1;
+				}
 
 				memset(s, 0, sizeof(struct sockaddr_in6));
-				if (!getpeername(conn->sock1, (struct sockaddr *)&sa, &sal))
+				if (getpeername(conn->sock1, (struct sockaddr *)sa, &sal)) {
 					return -1;
+				}
 				s->sin6_family = AF_INET6;
 				s->sin6_port = htons(n[5]);
 			}

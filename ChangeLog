@@ -1,3 +1,243 @@
+Sat Jul  3 16:28:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: setup.h, bfu/inpfield.h, config/conf.c, config/options.inc,
+	dialogs/status.c, osdep/osdep.c, osdep/os2/os2.c,
+	osdep/win32/win32.c, viewer/dump/dump.c:
+
+	Introduce DEFAULT_TERMINAL_{WIDTH,HEIGHT} macros with values 80 /
+	25. I hope it is ok to make the default height 25 rather than 24
+	since that is what -dump likes.  
+
+Sat Jul  3 16:25:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	handle_trm(): Fix bug setting width and height to non-zero before
+	calling get_terminal_size(). If the ioctl() would fail COLUMNS and
+	LINES environment variables would not be checked. Introduced in
+	(1.58 -> 1.59) 'Introduce struct terminal_info that holds all the
+	stuff sent over the interlink'. Motivation was that the terminal
+	event was initialized with these values and would later be updated
+	but all should be handled by get_terminal_size() now.  
+
+Sat Jul  3 16:03:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/osdep.c, terminal/kbd.c:
+
+	get_terminal_size() [default one]: If ioctl() fails set @x and @y to
+	zero so resize_terminal() don't have to.  
+
+Sat Jul  3 15:56:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/osdep.c:
+
+	set_window_title(): Set the GNU screen window name. Idea snatched
+	from w3m.  
+
+Sat Jul  3 14:13:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	add_char_to_string(): minor simplification.  
+
+Sat Jul  3 11:31:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Fix bug in (1.295 -> 1.296). Add crlf to accept charset string and
+	not header string.  
+
+Sat Jul  3 11:01:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	init(): Move isatty() checks to check_stdio() and call it after both
+	parse_options() so any commandl line options are correctly
+	overridden.  
+
+Sat Jul  3 10:27:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: http/http.c, ftp/ftp.c:
+
+	Use add_crlf_to_string().  
+
+Sat Jul  3 10:26:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/: string.c, string.h:
+
+	Introduce add_crlf_to_string().  
+
+Sat Jul  3 09:58:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Use ASCII_LF/ASCII_CR.  
+
+Sat Jul  3 09:44:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	get_ftp_response(): reduce indentation level.  
+
+Sat Jul  3 01:34:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_element(): Improve tag soup handling and allow stuff like
+	<font=pn-normal>.  
+
+Sat Jul  3 01:21:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/osdep.c:
+
+	Insert Adam Borowski's words from debian bug 228977 regarding xterm
+	detection.  
+
+Sat Jul  3 00:04:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/encoding/encoding.c:
+
+	Revert protocol/file/file.c:1.159 changing core part of
+	read_encoded_file() from if() chain to a switch() - I think it's
+	more clear as it was.  
+
+Sat Jul  3 00:02:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Fix last patch, handle errors if any. Spotted by pasky ;).  
+
+Fri Jul  2 23:51:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Introduce ftp_data_connect() and reduce code redundancy in
+	ftp_retr_file().  
+
+Fri Jul  2 23:39:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Compilation fix of our put_chars() spaces assertion.  
+
+Fri Jul  2 23:38:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	put_chars(): update last_tag_for_newline also if
+	html_is_preformatted() because in that case the existing test is
+	unreliable (and often wrong). Could fix Debian bug 219331 (<pre
+	id=foo> positioned foo wrongly) reported by Francesco Potorti
+	<Potorti@isti.cnr.it>. Insights and help all along the way by Jonas.
+	Hope this does not break anything :-).  
+
+Fri Jul  2 23:34:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Introduce a test in put_chars() to make sure our thoughts about the
+	eerie last_tag_for_newline test are right - if we didn't pass the
+	test assert that there are no non-whites in the string. Please
+	report any failures.  
+
+Fri Jul  2 23:30:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	ftp_got_final_response(): trivial clean up.  
+
+Fri Jul  2 23:29:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Document renderer_context.last_tag_for_newline.  
+
+Fri Jul  2 23:17:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/header.c:
+
+	parse_header(): parameters tidy up.  
+
+Fri Jul  2 23:14:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: cookies/cookies.c, dialogs/document.c, document/renderer.c,
+	document/html/parser.c, mime/mime.c, protocol/header.c,
+	protocol/header.h, protocol/http/http.c:
+
+	s/_http_header/_header/ 
+
+Fri Jul  2 23:07:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Simplify parse_html()'s element processing plant by eliminating the
+	dark goto put_sp, which seems to be rather pointless. This is quite
+	adventurous so it's worth it to stop by this revision when looking
+	for any HTML screwups.  
+
+Fri Jul  2 23:04:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/internal.h:
+
+	Try to describe html_context.putsp.  
+
+Fri Jul  2 23:03:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/header.c:
+
+	get_http_header_param(): minor tidyup.  
+
+Fri Jul  2 23:01:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Make the impact of the put_chrs()'s -1 branch a little more clear.  
+
+Fri Jul  2 22:43:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftpparse.c:
+
+	Reformat comments to be in ELinks style and fix a minor typo (bellow
+	-> below).  
+
+Fri Jul  2 22:42:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	put_chrs(): Move the len == 0 check near the place where len is
+	decremented. Removes one putsp asignment.  
+
+Fri Jul  2 22:34:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	put_chrs(): Use oneline logics.  
+
+Fri Jul  2 22:31:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Use bitfields for boolean fields in struct ftp_connection_info.  
+
+Fri Jul  2 22:17:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fixed subconcious errorneous swap of two if()s in put_chrs() by me
+	in the tidyup, spotted by Jonas.  
+
+Fri Jul  2 22:14:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	put_chrs(): simplify trivially.  
+
+Fri Jul  2 22:12:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	put_chrs() tidyup.  
+
 Fri Jul  2 22:09:12 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/html/renderer.c:

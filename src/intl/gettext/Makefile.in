@@ -105,7 +105,7 @@ INCLUDES = -I../../.. -I$(top_srcdir)/src -I$(top_srcdir)/src/intl/gettext
 
 
 all: all-@USE_INCLUDED_LIBINTL@
-all-yes: libintl.$la libintl.h charset.alias ref-add.sed ref-del.sed
+all-yes: libintl.$la charset.alias ref-add.sed ref-del.sed
 all-no: all-no-@BUILD_INCLUDED_LIBINTL@
 all-no-yes: libgnuintl.$la
 all-no-no:
@@ -123,35 +123,15 @@ libintl.la libgnuintl.la: $(OBJECTS)
 	  -rpath $(libdir) \
 	  -no-undefined
 
-libintl.h: libgnuintl.h
-	cp $(srcdir)/libgnuintl.h libintl.h
-
 charset.alias: config.charset
 	$(SHELL) $(srcdir)/config.charset '@host@' > t-$@
 	mv t-$@ $@
 
 check: all
 
-# This installation goal is only used in GNU gettext.  Packages which
-# only use the library should use install instead.
-
-# We must not install the libintl.h/libintl.a files if we are on a
-# system which has the GNU gettext() function in its C library or in a
-# separate library.
-# If you want to use the one which comes with this version of the
-# package, you have to use `configure --with-included-gettext'.
 install: install-exec install-data
 install-exec: all
-	if test "$(PACKAGE)" = "gettext" \
-	   && test '@INTLOBJS@' = '$(GETTOBJS)'; then \
-	  $(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(includedir); \
-	  $(INSTALL_DATA) libintl.h $(DESTDIR)$(includedir)/libintl.h; \
-	  $(LIBTOOL) --mode=install \
-	    $(INSTALL_DATA) libintl.$la $(DESTDIR)$(libdir)/libintl.$la; \
-	else \
-	  : ; \
-	fi
-	if test '@USE_INCLUDED_LIBINTL@' = yes; then \
+	@if test '@USE_INCLUDED_LIBINTL@' = yes; then \
 	  $(mkinstalldirs) $(DESTDIR)$(libdir); \
 	  temp=$(DESTDIR)$(libdir)/t-charset.alias; \
 	  dest=$(DESTDIR)$(libdir)/charset.alias; \
@@ -181,42 +161,12 @@ install-exec: all
 	  : ; \
 	fi
 install-data: all
-	if test "$(PACKAGE)" = "gettext"; then \
-	  $(mkinstalldirs) $(DESTDIR)$(gettextsrcdir); \
-	  $(INSTALL_DATA) VERSION $(DESTDIR)$(gettextsrcdir)/VERSION; \
-	  dists="$(DISTFILES.common)"; \
-	  for file in $$dists; do \
-	    $(INSTALL_DATA) $(srcdir)/$$file \
-			    $(DESTDIR)$(gettextsrcdir)/$$file; \
-	  done; \
-	  chmod a+x $(DESTDIR)$(gettextsrcdir)/config.charset; \
-	  dists="$(DISTFILES.generated)"; \
-	  for file in $$dists; do \
-	    if test -f $$file; then dir=.; else dir=$(srcdir); fi; \
-	    $(INSTALL_DATA) $$dir/$$file \
-			    $(DESTDIR)$(gettextsrcdir)/$$file; \
-	  done; \
-	  dists="$(DISTFILES.obsolete)"; \
-	  for file in $$dists; do \
-	    rm -f $(DESTDIR)$(gettextsrcdir)/$$file; \
-	  done; \
-	else \
-	  : ; \
-	fi
 
 # Define this as empty until I found a useful application.
 installcheck:
 
 uninstall:
-	if test "$(PACKAGE)" = "gettext" \
-	   && test '@INTLOBJS@' = '$(GETTOBJS)'; then \
-	  rm -f $(DESTDIR)$(includedir)/libintl.h; \
-	  $(LIBTOOL) --mode=uninstall \
-	    rm -f $(DESTDIR)$(libdir)/libintl.$la; \
-	else \
-	  : ; \
-	fi
-	if test '@USE_INCLUDED_LIBINTL@' = yes; then \
+	@if test '@USE_INCLUDED_LIBINTL@' = yes; then \
 	  if test -f $(DESTDIR)$(libdir)/charset.alias; then \
 	    temp=$(DESTDIR)$(libdir)/t-charset.alias; \
 	    dest=$(DESTDIR)$(libdir)/charset.alias; \
@@ -242,13 +192,6 @@ uninstall:
 	else \
 	  : ; \
 	fi
-	if test "$(PACKAGE)" = "gettext"; then \
-	  for file in VERSION $(DISTFILES.common) $(DISTFILES.generated); do \
-	    rm -f $(DESTDIR)$(gettextsrcdir)/$$file; \
-	  done; \
-	else \
-	  : ; \
-	fi
 
 info dvi:
 
@@ -269,17 +212,13 @@ ID: $(HEADERS) $(SOURCES)
 
 mostlyclean:
 	rm -f *.a *.la *.o *.lo core core.*
-	rm -f libintl.h charset.alias ref-add.sed ref-del.sed
+	rm -f charset.alias ref-add.sed ref-del.sed
 	rm -f -r .libs _libs
 
 clean: mostlyclean
 
 distclean: clean
 	rm -f Makefile ID TAGS
-	if test "$(PACKAGE)" = gettext; then \
-	  rm -f $(DISTFILES.normal); \
-	else \
-	  : ; \
 	fi
 
 maintainer-clean: distclean
@@ -291,11 +230,7 @@ maintainer-clean: distclean
 # other files which should not be distributed in other packages.
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 dist distdir: Makefile
-	if test "$(PACKAGE)" = gettext; then \
-	  additional="$(DISTFILES.gettext)"; \
-	else \
-	  additional="$(DISTFILES.normal)"; \
-	fi; \
+	additional="$(DISTFILES.normal)"; \
 	$(MAKE) $(DISTFILES.common) $(DISTFILES.generated) $$additional; \
 	for file in $(DISTFILES.common) $(DISTFILES.generated) $$additional; do \
 	  if test -f $$file; then dir=.; else dir=$(srcdir); fi; \

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.82 2004/01/08 21:07:05 jonas Exp $ */
+/* $Id: options.inc,v 1.83 2004/01/08 21:43:53 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -142,6 +142,10 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.browse.forms", N_("Confirm submission"),
 		"confirm_submit", 0, 1,
 		N_("Ask for confirmation when submitting a form.")),
+
+	INIT_OPT_INT("document.html", N_("Default form input size"),
+		"input_size", 0, 3, 300, HTML_DEFAULT_INPUT_SIZE,
+		N_("Default form input size if none is specified.")),
 
 
 	INIT_OPT_TREE("document.browse", N_("Images"),
@@ -566,10 +570,6 @@ struct option_info config_options_info[] = {
 		N_("If set do not honour non breaking space (the nbsp entity)\n"
 		"but allow to wrap the text. This can help keeping the width\n"
 		"of documents down so no horizontal scrolling is needed.")),
-
-	INIT_OPT_INT("document.html", N_("Default form input size"),
-		"default_form_input_size", 0, 3, 300, HTML_DEFAULT_INPUT_SIZE,
-		N_("Default form input size if none is specified.")),
 
 
 	INIT_OPT_TREE("document", N_("Plain rendering"),

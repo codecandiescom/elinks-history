@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.190 2004/04/14 06:06:04 jonas Exp $ */
+/* $Id: main.c,v 1.191 2004/04/14 06:08:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,13 +118,7 @@ init(void)
 		return;
 	}
 
-	/* FIXME: This is almost perfect. Only problem that remains is piping
-	 * stuff from stdin to be rendered in the text viewer this is possible
-	 * but requires one to pass -eval allowing special files because we use
-	 * /dev/stdin. It would be cool if either always allowed to read from
-	 * /dev/stdin in read_encoded_file(). Actually we already do that for
-	 * -dump and -source but setting protocol.file.allow_special_files
-	 * could be dangerous when not using the dump viewer. --jonas */
+	/* Should the document be read from stdin? */
 	if (!isatty(STDIN_FILENO)) {
 		add_to_string_list(&url_list, "file:///dev/stdin", 17);
 		get_opt_bool_tree(cmdline_options, "no-connect") = 1;

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.207 2004/06/18 15:00:53 jonas Exp $ */
+/* $Id: form.c,v 1.208 2004/06/19 08:39:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1239,9 +1239,15 @@ field_op(struct session *ses, struct document_view *doc_view,
 				break;
 			}
 
-			text = memrchr(fs->value, ASCII_LF, fs->state - 1);
-			/* Don't remove the line feed */
-			text = text ? text + 1 : fs->value;
+			text = memrchr(fs->value, ASCII_LF, fs->state);
+			if (text) {
+				/* Leave the new-line character if it does not
+				 * immediately precede the cursor. */
+				if (text != &fs->value[fs->state - 1])
+					text++;
+			} else {
+				text = fs->value;
+			}
 
 			length = strlen(fs->value + fs->state) + 1;
 			memmove(text, fs->value + fs->state, length);

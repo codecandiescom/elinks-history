@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.272 2003/09/05 20:33:14 miciah Exp $ */
+/* $Id: options.c,v 1.273 2003/09/12 20:59:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2160,6 +2160,18 @@ register_options(void)
 		N_("Default text color."));
 
 	add_opt_color("ui.colors.color.tabs.normal", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color."));
+
+	add_opt_tree("ui.colors.color.tabs", N_("Loading tab"),
+		"loading", 0,
+		N_("Tab colors for tabs that are loading in the background."));
+
+	add_opt_color("ui.colors.color.tabs.loading", N_("Text color"),
+		"text", 0, "darkred",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.color.tabs.loading", N_("Background color"),
 		"background", 0, "white",
 		N_("Default background color."));
 

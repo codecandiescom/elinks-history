@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.224 2003/06/14 21:08:59 jonas Exp $ */
+/* $Id: options.c,v 1.225 2003/06/14 22:31:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -600,7 +600,7 @@ version_cmd(struct option *o, unsigned char ***argv, int *argc)
  * The level means the level of indentation.
  */
 static void
-printhelp_descend(struct option *tree, unsigned char *path, int captions)
+printhelp_descend(struct option *tree, unsigned char *path)
 {
 	struct option *option;
 	unsigned char saved[MAX_STR_LEN];
@@ -609,7 +609,6 @@ printhelp_descend(struct option *tree, unsigned char *path, int captions)
 	*savedpos = 0;
 
 	foreach (option, *((struct list_head *) tree->ptr)) {
-		int spaces;
 		unsigned char *desc = (option->desc && *option->desc)
 				      ? (unsigned char *) gettext(option->desc)
 				      : (unsigned char *) "N/A";
@@ -649,7 +648,7 @@ printhelp_descend(struct option *tree, unsigned char *path, int captions)
 			printf("\n\n");
 
 			add_to_strn(&newpath, ".");
-			printhelp_descend(option, newpath, captions);
+			printhelp_descend(option, newpath);
 			mem_free(newpath);
 			continue;
 		}
@@ -668,7 +667,7 @@ printhelp_descend(struct option *tree, unsigned char *path, int captions)
 		if (*option_types[option->type].help_str)
 			printf("%s", gettext(option_types[option->type].help_str));
 
-		if (!captions && desc) {
+		if (desc) {
 			int l = strlen(desc);
 			int i;
 
@@ -704,32 +703,62 @@ printhelp_descend(struct option *tree, unsigned char *path, int captions)
 			*savedpos = 0;
 			continue;
 		}
+	}
+}
 
-#define CMDLINE_WIDTH 20
+static void
+print_short_help()
+{
 
-		/* Column width between '-' & caption start. */
-		spaces = CMDLINE_WIDTH - strlen(option->name) - (savedpos - saved);
-		/* Find spaces to print between option to caption */
-		if (*option_types[option->type].help_str)
-			spaces -= strlen(gettext(option_types[option->type].help_str));
+#define ALIGN_WIDTH 20
+#define gettext_nonempty(x) (*(x) ? gettext(x) : (x))
 
-		do {
-			printf(" ");
-		} while (--spaces > 0);
+	struct option *option;
+	unsigned char saved[MAX_STR_LEN];
+	unsigned char *savedpos = saved;
+	unsigned char align[ALIGN_WIDTH];
+	int len = 0;
 
-		if (*option->capt)
-			printf("%s\n", gettext(option->capt));
-		else
-			printf("\n");
+	/* Initialize @space used to align captions. */
+	while (len < ALIGN_WIDTH - 1) align[len++] = ' ';
+	align[len] = '\0';
+	*savedpos = '\0';
 
+	foreach (option, *((struct list_head *) cmdline_options.ptr)) {
+		unsigned char *capt;
+		unsigned char *help;
+
+		len = strlen(option->name);
+
+		/* When no caption is available the option name is 'stacked'
+		 * and the caption is shared with next options that has one. */
+		if (!option->capt) {
+			int max = MAX_STR_LEN - (savedpos - saved);
+
+			safe_strncpy(savedpos, option->name, max);
+			safe_strncpy(savedpos + len, ", -", max - len);
+			savedpos += len + 3;
+			continue;
+		}
+
+		capt = gettext_nonempty(option->capt);
+		help = gettext_nonempty(option_types[option->type].help_str);
+
+		/* When @help string is non empty align at least one space. */
+		len = ALIGN_WIDTH - len - strlen(help) - (savedpos - saved);
+		len = (len < 0) ? (*help) : len;
+
+		align[len] = '\0';
+		printf("  -%s%s %s%s%s\n", saved, option->name, help, align, capt);
+		align[len] = ' ';
 		savedpos = saved;
 		*savedpos = 0;
 	}
 
-#undef CMDLINE_WIDTH
+#undef ALIGN_WIDTH
+#undef gettext_nonempty
 
 }
-
 
 static unsigned char *
 printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
@@ -739,14 +768,14 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 
 	if (!strcmp(option->name, "config-help")) {
 		printf(gettext("Configuration options:\n"));
-		printhelp_descend(&root_options, "", 0);
+		printhelp_descend(&root_options, "");
 	} else {
 		printf(gettext("Usage: elinks [OPTION]... [URL]\n\n"));
 		printf(gettext("Options:\n"));
 		if (!strcmp(option->name, "long-help")) {
-			printhelp_descend(&cmdline_options, "-", 0);
+			printhelp_descend(&cmdline_options, "-");
 		} else {
-			printhelp_descend(&cmdline_options, "-", 1);
+			print_short_help();
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.33 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: session.c,v 1.34 2002/05/08 15:48:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,8 +52,11 @@ struct file_to_load {
 	struct status stat;
 };
 
-struct file_to_load *request_additional_file(struct session *, unsigned char *, int);
-struct file_to_load *request_additional_loading_file(struct session *, unsigned char *, struct status *, int);
+struct file_to_load * request_additional_file(struct session *,
+					      unsigned char *, int);
+struct file_to_load *request_additional_loading_file(struct session *,
+						     unsigned char *,
+						     struct status *, int);
 
 
 struct list_head sessions = {&sessions, &sessions};
@@ -69,82 +72,139 @@ struct strerror_val {
 
 struct list_head strerror_buf = { &strerror_buf, &strerror_buf };
 
-void free_strerror_buf()
+
+void
+free_strerror_buf()
 {
 	free_list(strerror_buf);
 }
 
-unsigned char *get_err_msg(int state)
+unsigned char *
+get_err_msg(int state)
 {
 	unsigned char *e;
 	struct strerror_val *s;
+
 	if (state <= S_OK || state >= S_WAIT) {
 		int i;
+
 		for (i = 0; msg_dsc[i].msg; i++)
-			if (msg_dsc[i].n == state) return msg_dsc[i].msg;
-		unk:
+			if (msg_dsc[i].n == state)
+				return msg_dsc[i].msg;
+unknow_error:
 		return TEXT(T_UNKNOWN_ERROR);
 	}
-	if (!(e = strerror(-state)) || !*e) goto unk;
-	foreach(s, strerror_buf) if (!strcmp(s->msg, e)) return s->msg;
-	if (!(s = mem_alloc(sizeof(struct strerror_val) + strlen(e) + 1))) goto unk;
+
+	e = strerror(-state);
+	if (!e || !*e) goto unknow_error;
+
+	foreach(s, strerror_buf)
+		if (!strcmp(s->msg, e))
+			return s->msg;
+
+	s = mem_alloc(sizeof(struct strerror_val) + strlen(e) + 1);
+	if (!s) goto unknow_error;
+
 	strcpy(s->msg, e);
 	add_to_list(strerror_buf, s);
+
 	return s->msg;
 }
 
-
-void add_xnum_to_str(unsigned char **s, int *l, int n)
+void
+add_xnum_to_str(unsigned char **s, int *l, int n)
 {
 	unsigned char suff = 0;
 	int d = -1;
-	if (n >= 1000000) suff = 'M', d = (n / 100000) % 10, n /= 1000000;
-	else if (n >= 1000) suff = 'k', d = (n / 100) % 10, n /= 1000;
+
+	if (n >= 1000000)  {
+		suff = 'M';
+	       	d = (n / 100000) % 10;
+	       	n /= 1000000;
+	} else if (n >= 1000) {
+		suff = 'k';
+	       	d = (n / 100) % 10;
+		n /= 1000;
+	}
 	add_num_to_str(s, l, n);
-	if (n < 10 && d != -1) add_chr_to_str(s, l, '.'), add_num_to_str(s, l, d);
+
+	if (n < 10 && d != -1) {
+		add_chr_to_str(s, l, '.');
+	       	add_num_to_str(s, l, d);
+	}
 	add_chr_to_str(s, l, ' ');
+
 	if (suff) add_chr_to_str(s, l, suff);
 	add_chr_to_str(s, l, 'B');
 }
 
-void add_time_to_str(unsigned char **s, int *l, ttime t)
+void
+add_time_to_str(unsigned char **s, int *l, ttime t)
 {
 	unsigned char q[64];
+
 	t /= 1000;
 	t &= 0xffffffff;
 	if (t < 0) t = 0;
-	if (t >= 86400) sprintf(q, "%dd ", (int)(t / 86400)), add_to_str(s, l, q);
-	if (t >= 3600) t %= 86400, sprintf(q, "%d:%02d", (int)(t / 3600), (int)(t / 60 % 60)), add_to_str(s, l, q);
-	else sprintf(q, "%d", (int)(t / 60)), add_to_str(s, l, q);
-	sprintf(q, ":%02d", (int)(t % 60)), add_to_str(s, l, q);
+	if (t >= 86400) {
+		sprintf(q, "%dd ", (int)(t / 86400));
+	       	add_to_str(s, l, q);
+	}
+	if (t >= 3600) {
+		t %= 86400;
+	       	sprintf(q, "%d:%02d", (int)(t / 3600), (int)(t / 60 % 60));
+		add_to_str(s, l, q);
+	} else {
+		sprintf(q, "%d", (int)(t / 60));
+		add_to_str(s, l, q);
+	}
+	sprintf(q, ":%02d", (int)(t % 60));
+	add_to_str(s, l, q);
 }
 
-unsigned char *get_stat_msg(struct status *stat, struct terminal *term)
+unsigned char *
+get_stat_msg(struct status *stat, struct terminal *term)
 {
 	if (stat->state == S_TRANS && stat->prg->elapsed / 100) {
 		unsigned char *m = init_str();
 		int l = 0;
+
 		add_to_str(&m, &l, _(TEXT(T_RECEIVED), term));
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, stat->prg->pos);
-		if (stat->prg->size >= 0)
-			add_to_str(&m, &l, " "), add_to_str(&m, &l, _(TEXT(T_OF), term)), add_to_str(&m, &l, " "), add_xnum_to_str(&m, &l, stat->prg->size);
+		if (stat->prg->size >= 0) {
+			add_to_str(&m, &l, " ");
+			add_to_str(&m, &l, _(TEXT(T_OF), term));
+			add_to_str(&m, &l, " ");
+			add_xnum_to_str(&m, &l, stat->prg->size);
+		}
 		add_to_str(&m, &l, ", ");
-		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
-			add_to_str(&m, &l, _(TEXT(T_AVG), term)), add_to_str(&m, &l, " ");
-		add_xnum_to_str(&m, &l, (longlong)stat->prg->loaded * 10 / (stat->prg->elapsed / 100));
+		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+			add_to_str(&m, &l, _(TEXT(T_AVG), term));
+			add_to_str(&m, &l, " ");
+		}
+		add_xnum_to_str(&m, &l, (longlong)stat->prg->loaded * 10
+					/ (stat->prg->elapsed / 100));
 		add_to_str(&m, &l, "/s");
-		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
-			add_to_str(&m, &l, ", "), add_to_str(&m, &l, _(TEXT(T_CUR), term)), add_to_str(&m, &l, " "),
-			add_xnum_to_str(&m, &l, stat->prg->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000)),
+		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+			add_to_str(&m, &l, ", ");
+			add_to_str(&m, &l, _(TEXT(T_CUR), term));
+			add_to_str(&m, &l, " "),
+			add_xnum_to_str(&m, &l, stat->prg->cur_loaded
+						/ (CURRENT_SPD_SEC
+						   * SPD_DISP_TIME / 1000));
 			add_to_str(&m, &l, "/s");
+		}
+
 		return m;
 	}
+
 	return stracpy(_(get_err_msg(stat->state), term));
 }
 
 /* Print statusbar and titlebar, set terminal title. */
-void print_screen_status(struct session *ses)
+void
+print_screen_status(struct session *ses)
 {
 	struct terminal *term = ses->term;
 	struct status *stat = NULL;
@@ -214,9 +274,12 @@ void print_screen_status(struct session *ses)
 	redraw_from_window(ses->win);
 }
 
-void print_error_dialog(struct session *ses, struct status *stat, unsigned char *title)
+void
+print_error_dialog(struct session *ses, struct status *stat,
+		   unsigned char *title)
 {
 	unsigned char *t = get_err_msg(stat->state);
+
 	if (!t) return;
 	msg_box(ses->term, NULL,
 		title, AL_CENTER,
@@ -226,22 +289,30 @@ void print_error_dialog(struct session *ses, struct status *stat, unsigned char 
 		_("Retry"), NULL, 0 */ /* !!! FIXME: retry */);
 }
 
-void free_wtd(struct session *ses)
+void
+free_wtd(struct session *ses)
 {
 	if (!ses->wtd) {
 		internal("no WTD");
 		return;
 	}
-	if (ses->goto_position) mem_free(ses->goto_position), ses->goto_position = NULL;
+
+	if (ses->goto_position) {
+		mem_free(ses->goto_position);
+		ses->goto_position = NULL;
+	}
+
 	mem_free(ses->loading_url);
 	ses->loading_url = NULL;
 	ses->wtd = WTD_NO;
 }
 
-void abort_files_load(struct session *ses)
+void
+abort_files_load(struct session *ses)
 {
 	struct file_to_load *ftl;
 	int q;
+
 	do {
 		q = 0;
 		foreach(ftl, ses->more_files) {
@@ -253,9 +324,11 @@ void abort_files_load(struct session *ses)
 	} while (q);
 }
 
-void free_files(struct session *ses)
+void
+free_files(struct session *ses)
 {
 	struct file_to_load *ftl;
+
 	abort_files_load(ses);
 	foreach(ftl, ses->more_files) {
 		if (ftl->ce) ftl->ce->refcount--;
@@ -265,51 +338,77 @@ void free_files(struct session *ses)
 }
 
 
-void ses_forward(struct session *ses)
+void
+ses_forward(struct session *ses)
 {
 	struct location *l;
 	int len;
+
 	free_files(ses);
 	if (have_location(ses)) {
 		struct frame *frm;
+
 		l = cur_loc(ses);
-		foreach(frm, l->frames) frm->vs.f = NULL;
+		foreach(frm, l->frames)
+			frm->vs.f = NULL;
 		l->vs.f = NULL;
 	}
-	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
-	x:
+
+	if (ses->search_word) {
+		mem_free(ses->search_word);
+	       	ses->search_word = NULL;
+	}
+
+x:
 	len = strlen(ses->loading_url);
-	if (have_location(ses) && len < strlen(cur_loc(ses)->vs.url))
-		len = strlen(cur_loc(ses)->vs.url);
-	if (!(l = mem_alloc(sizeof(struct location) + len + 1))) return;
+	if (have_location(ses)) {
+		int vs_url_len = strlen(cur_loc(ses)->vs.url);
+
+	       	if (len < vs_url_len)
+			len = vs_url_len;
+	}
+
+	l = mem_alloc(sizeof(struct location) + len + 1);
+	if (!l) return;
 	memset(l, 0, sizeof(struct location));
 	memcpy(&l->stat, &ses->loading, sizeof(struct status));
+
 	if (ses->wtd_target && *ses->wtd_target) {
 		struct frame *frm;
+
 		if (!have_location(ses)) {
 			internal("no location yet");
 			return;
 		}
 		copy_location(l, cur_loc(ses));
 		add_to_history(ses, l);
-		frm = ses_change_frame_url(ses, ses->wtd_target, ses->loading_url);
+		frm = ses_change_frame_url(ses, ses->wtd_target,
+					   ses->loading_url);
+
 		if (!frm) {
 			destroy_location(l);
 			ses->wtd_target = NULL;
 			goto x;
 		}
+
 		destroy_vs(&frm->vs);
 		init_vs(&frm->vs, ses->loading_url);
+
 		if (ses->goto_position) {
-			if (frm->vs.goto_position) mem_free(frm->vs.goto_position);
+			if (frm->vs.goto_position)
+				mem_free(frm->vs.goto_position);
 			frm->vs.goto_position = ses->goto_position;
 			ses->goto_position = NULL;
 		}
-		/* request_additional_loading_file(ses, ses->loading_url, &ses->loading, PRI_FRAME); */
+#if 0
+		request_additional_loading_file(ses, ses->loading_url,
+						&ses->loading, PRI_FRAME);
+#endif
 	} else {
 		init_list(l->frames);
 		init_vs(&l->vs, ses->loading_url);
 		add_to_history(ses, l);
+
 		if (ses->goto_position) {
 			l->vs.goto_position = ses->goto_position;
 			ses->goto_position = NULL;
@@ -317,12 +416,14 @@ void ses_forward(struct session *ses)
 	}
 }
 
-void ses_imgmap(struct session *ses)
+void
+ses_imgmap(struct session *ses)
 {
 	struct cache_entry *ce;
 	struct fragment *fr;
 	struct memory_list *ml;
 	struct menu_item *menu;
+
 	if (!find_in_cache(ses->loading_url, &ce) || !ce) {
 		internal("can't find cache entry");
 		return;
@@ -330,16 +431,24 @@ void ses_imgmap(struct session *ses)
 	defrag_entry(ce);
 	fr = ce->frag.next;
 	if ((void *)fr == &ce->frag) return;
-	if (get_image_map(ce->head, fr->data, fr->data + fr->length, ses->goto_position, &menu, &ml, ses->imgmap_href_base, ses->imgmap_target_base, ses->term->spec->charset, ses->ds.assume_cp, ses->ds.hard_assume))
+
+	if (get_image_map(ce->head, fr->data, fr->data + fr->length,
+			  ses->goto_position, &menu, &ml,
+			  ses->imgmap_href_base, ses->imgmap_target_base,
+			  ses->term->spec->charset, ses->ds.assume_cp,
+			  ses->ds.hard_assume))
 		return;
+
 	add_empty_window(ses->term, (void (*)(void *))freeml, ml);
 	do_menu(ses->term, menu, ses);
 }
 
-void map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
+void
+map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 {
 	goto_url_frame(ses, ld->link, ld->target);
 }
+
 
 void file_end_load(struct status *, struct file_to_load *);
 void abort_preloading(struct session *);
@@ -355,26 +464,33 @@ struct wtd_data {
 	void (*fn)(struct status *, struct session *);
 };
 
-void post_yes(struct wtd_data *w)
+
+void
+post_yes(struct wtd_data *w)
 {
 	abort_preloading(w->ses);
 	if (w->ses->goto_position) mem_free(w->ses->goto_position);
+
 	w->ses->goto_position = stracpy(w->pos);
 	w->ses->loading.end = (void (*)(struct status *, void *))w->fn;
 	w->ses->loading.data = w->ses;
 	w->ses->loading_url = stracpy(w->url);
 	w->ses->wtd = w->wtd;
 	w->ses->wtd_target = w->target;
-	load_url(w->ses->loading_url, w->ses->ref_url, &w->ses->loading, w->pri, w->cache_mode);
+
+	load_url(w->ses->loading_url, w->ses->ref_url, &w->ses->loading,
+		 w->pri, w->cache_mode);
 }
 
-void post_no(struct wtd_data *w)
+void
+post_no(struct wtd_data *w)
 {
 	*strchr(w->url, POST_CHAR) = 0;
 	post_yes(w);
 }
 
-void post_cancel(struct wtd_data *w)
+void
+post_cancel(struct wtd_data *w)
 {
 	reload(w->ses, NC_CACHE);
 }
@@ -438,7 +554,8 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		TEXT(T_CANCEL), post_cancel, B_ESC);
 }
 
-int do_move(struct session *ses, struct status **stat)
+int
+do_move(struct session *ses, struct status **stat)
 {
 	struct cache_entry *ce = NULL;
 	int l = 0;
@@ -448,42 +565,67 @@ int do_move(struct session *ses, struct status **stat)
 		return 0;
 	}
 
-	if (!(ce = (*stat)->ce) || (ses->wtd == WTD_IMGMAP && (*stat)->state >= 0)) {
+	ce = (*stat)->ce;
+	if (!ce || (ses->wtd == WTD_IMGMAP && (*stat)->state >= 0)) {
 		return 0;
 	}
 
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u, *p, *gp;
 		enum session_wtd w = ses->wtd;
+
 		if (ses->wtd == WTD_BACK && !have_location(ses))
 			goto b;
-		if (!(u = join_urls(ses->loading_url, ce->redirect))) goto b;
-		if (!http_bugs.bug_302_redirect) if (!ce->redirect_get && (p = strchr(ses->loading_url, POST_CHAR))) add_to_strn(&u, p);
+
+		u = join_urls(ses->loading_url, ce->redirect);
+		if (!u) goto b;
+
+		if (!http_bugs.bug_302_redirect) {
+			if (!ce->redirect_get) {
+				p = strchr(ses->loading_url, POST_CHAR);
+				if (p) add_to_strn(&u, p);
+			}
+		}
 		/* ^^^^ According to RFC2068 POST must not be redirected to GET, but
 			some BUGGY message boards rely on it :-( */
+
 		gp = stracpy(ses->goto_position);
 		abort_loading(ses);
-		if (have_location(ses)) *stat = &cur_loc(ses)->stat;
-		else *stat = NULL;
-		if (ses->ref_url) mem_free(ses->ref_url);
+		if (have_location(ses))
+			*stat = &cur_loc(ses)->stat;
+		else
+			*stat = NULL;
+
+		if (ses->ref_url)
+			mem_free(ses->ref_url);
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, ce->url);
 		if (w == WTD_FORWARD || w == WTD_IMGMAP) {
-			ses_goto(ses, u, ses->wtd_target, PRI_MAIN, NC_CACHE, w, gp, end_load, 1);
+			ses_goto(ses, u, ses->wtd_target, PRI_MAIN, NC_CACHE,
+				 w, gp, end_load, 1);
 			return 2;
 		}
+
 		if (gp) mem_free(gp);
 		if (w == WTD_BACK || w == WTD_UNBACK) {
-			ses_goto(ses, u, NULL, PRI_MAIN, NC_CACHE, WTD_RELOAD, NULL, end_load, 1);
+			ses_goto(ses, u, NULL, PRI_MAIN, NC_CACHE,
+				 WTD_RELOAD, NULL, end_load, 1);
 			return 2;
 		}
 		if (w == WTD_RELOAD) {
-			ses_goto(ses, u, NULL, PRI_MAIN, ses->reloadlevel, WTD_RELOAD, NULL, end_load, 1);
+			ses_goto(ses, u, NULL, PRI_MAIN, ses->reloadlevel,
+				 WTD_RELOAD, NULL, end_load, 1);
 			return 2;
 		}
-	} else ses->redirect_cnt = 0;
-	b:
-	if (ses->display_timer != -1) kill_timer(ses->display_timer), ses->display_timer = -1;
+	} else {
+		ses->redirect_cnt = 0;
+	}
+
+b:
+	if (ses->display_timer != -1) {
+		kill_timer(ses->display_timer);
+	       	ses->display_timer = -1;
+	}
 	if (ses->wtd == WTD_FORWARD) {
 		if (ses_chktype(ses, stat, ce)) {
 			free_wtd(ses);
@@ -495,8 +637,13 @@ int do_move(struct session *ses, struct status **stat)
 	if (ses->wtd == WTD_BACK) ses_back(ses);
 	if (ses->wtd == WTD_UNBACK) ses_unback(ses);
 	if (ses->wtd == WTD_RELOAD) ses_back(ses), ses_forward(ses);
-	if ((*stat)->state >= 0) change_connection(&ses->loading, *stat = &cur_loc(ses)->stat, PRI_MAIN);
-	else cur_loc(ses)->stat.state = ses->loading.state;
+	if ((*stat)->state >= 0) {
+		*stat = &cur_loc(ses)->stat;
+		change_connection(&ses->loading, *stat, PRI_MAIN);
+	} else {
+		cur_loc(ses)->stat.state = ses->loading.state;
+	}
+
 	free_wtd(ses);
 	return 1;
 }
@@ -588,24 +735,31 @@ request_frameset(struct session *ses, struct frameset_desc *fd)
 	depth--;
 }
 
-void load_frames(struct session *ses, struct f_data_c *fd)
+void
+load_frames(struct session *ses, struct f_data_c *fd)
 {
 	struct f_data *ff = fd->f_data;
+
 	if (!ff || !ff->frame) return;
 	request_frameset(ses, ff->frame_desc);
 }
 
-void display_timer(struct session *ses)
+void
+display_timer(struct session *ses)
 {
 	ttime t = get_time();
 	html_interpret(ses);
 	draw_formatted(ses);
+
 	t = (get_time() - t) * DISPLAY_TIME;
 	if (t < DISPLAY_TIME_MIN) t = DISPLAY_TIME_MIN;
-	ses->display_timer = install_timer(t, (void (*)(void *))display_timer, ses);
+
+	ses->display_timer = install_timer(t, (void (*)(void *))display_timer,
+					   ses);
 	load_frames(ses, ses->screen);
 	process_file_requests(ses);
 }
+
 
 struct list_head questions_queue = {&questions_queue, &questions_queue};
 
@@ -615,9 +769,12 @@ struct questions_entry {
 	void (*callback)(struct session *);
 };
 
-void check_questions_queue(struct session *ses)
+
+void
+check_questions_queue(struct session *ses)
 {
 	struct questions_entry *q;
+
 	while (!list_empty(questions_queue)) {
 		q = questions_queue.next;
 		q->callback(ses);
@@ -626,15 +783,18 @@ void check_questions_queue(struct session *ses)
 	}
 }
 
-void add_questions_entry(void *callback)
+void
+add_questions_entry(void *callback)
 {
-	struct questions_entry *q;
-	if (!(q = mem_alloc(sizeof(struct questions_entry)))) return;
+	struct questions_entry *q = mem_alloc(sizeof(struct questions_entry));
+
+	if (!q) return;
 	q->callback = callback;
 	add_to_list(questions_queue, q);
 }
 
-void end_load(struct status *stat, struct session *ses)
+void
+end_load(struct status *stat, struct session *ses)
 {
 	int d;
 
@@ -662,7 +822,8 @@ void end_load(struct status *stat, struct session *ses)
 }
 
 #ifdef HAVE_SCRIPTING
-void maybe_pre_format_html(struct status *stat, struct session *ses)
+void
+maybe_pre_format_html(struct status *stat, struct session *ses)
 {
 	struct fragment *fr;
 	unsigned char *s;
@@ -683,19 +844,26 @@ void maybe_pre_format_html(struct status *stat, struct session *ses)
 }
 #endif
 
-void doc_end_load(struct status *stat, struct session *ses)
+void
+doc_end_load(struct status *stat, struct session *ses)
 {
 	if (stat->state < 0) {
 #ifdef HAVE_SCRIPTING
 		maybe_pre_format_html(stat, ses);
 #endif
-		if (ses->display_timer != -1) kill_timer(ses->display_timer), ses->display_timer = -1;
+		if (ses->display_timer != -1) {
+			kill_timer(ses->display_timer);
+			ses->display_timer = -1;
+		}
 		html_interpret(ses);
 		draw_formatted(ses);
 		load_frames(ses, ses->screen);
 		process_file_requests(ses);
-		if (stat->state != S_OK) print_error_dialog(ses, stat, TEXT(T_ERROR));
+		if (stat->state != S_OK)
+			print_error_dialog(ses, stat, TEXT(T_ERROR));
+
 	} else if (ses->display_timer == -1) display_timer(ses);
+
 	check_questions_queue(ses);
 	print_screen_status(ses);
 
@@ -812,11 +980,13 @@ process_file_requests(struct session *ses)
 	stop_recursion = 0;
 }
 
-struct session *create_session(struct window *win)
+struct session *
+create_session(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct session *ses;
-	if ((ses = mem_alloc(sizeof(struct session)))) {
+	struct session *ses = mem_alloc(sizeof(struct session));
+
+	if (ses) {
 		memset(ses, 0, sizeof(struct session));
 		create_history(ses);
 		init_list(ses->scrn_frames);
@@ -832,6 +1002,7 @@ struct session *create_session(struct window *win)
 		memcpy(&ses->ds, &dds, sizeof(struct document_setup));
 		add_to_list(sessions, ses);
 	}
+
 	if (first_use) {
 		first_use = 0;
 		msg_box(term, NULL,
@@ -841,70 +1012,102 @@ struct session *create_session(struct window *win)
 			NULL, 1,
 			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 	}
+
 	return ses;
 }
 
-void copy_session(struct session *old, struct session *new)
+void
+copy_session(struct session *old, struct session *new)
 {
 	if (have_location(old)) {
 		goto_url(new, cur_loc(old)->vs.url);
 	}
 }
 
-void *create_session_info(int cp, unsigned char *url, int *ll)
+void *
+create_session_info(int cp, unsigned char *url, int *ll)
 {
 	int l = strlen(url);
 	int *i;
+
 	*ll = 2 * sizeof(int) + l;
-	if (!(i = mem_alloc(2 * sizeof(int) + l))) return NULL;
+
+	i = mem_alloc(2 * sizeof(int) + l);
+	if (!i) return NULL;
+
 	i[0] = cp;
 	i[1] = l;
 	memcpy(i + 2, url, l);
+
 	return i;
 }
 
 /* This is _NOT_ for what do you think it's for! We use this to make URL
  * shell-safe, nothing more. */
-unsigned char *encode_url(unsigned char *url)
+unsigned char *
+encode_url(unsigned char *url)
 {
 	unsigned char *u = init_str();
 	int l = 0;
+
 	for (; *url; url++) {
-		if (is_safe_in_shell(*url) && *url != '+') add_chr_to_str(&u, &l, *url);
-		else add_chr_to_str(&u, &l, '+'), add_chr_to_str(&u, &l, hx(*url >> 4)), add_chr_to_str(&u, &l, hx(*url & 0xf));
+		if (is_safe_in_shell(*url) && *url != '+')
+			add_chr_to_str(&u, &l, *url);
+		else {
+			add_chr_to_str(&u, &l, '+');
+			add_chr_to_str(&u, &l, hx(*url >> 4));
+		       	add_chr_to_str(&u, &l, hx(*url & 0xf));
+		}
 	}
+
 	return u;
 }
 
 /* This is _NOT_ for what do you think it's for! We use this to recover from
  * making URL shell-safe, nothing more. */
-unsigned char *decode_url(unsigned char *url)
+unsigned char *
+decode_url(unsigned char *url)
 {
 	unsigned char *u = init_str();
 	int l = 0;
+
 	for (; *url; url++) {
-		if (*url != '+' || unhx(url[1]) == -1 || unhx(url[2]) == -1) add_chr_to_str(&u, &l, *url);
-		else add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2])), url += 2;
+		if (*url != '+' || unhx(url[1]) == -1 || unhx(url[2]) == -1)
+			add_chr_to_str(&u, &l, *url);
+		else {
+			add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2]));
+		       	url += 2;
+		}
 	}
+
 	return u;
 }
 
-int read_session_info(int fd, struct session *ses, void *data, int len)
+int
+read_session_info(int fd, struct session *ses, void *data, int len)
 {
 	unsigned char *h;
 	int cpfrom, sz;
 	struct session *s;
+
 	if (len < 2 * sizeof(int)) return -1;
 	cpfrom = *(int *)data;
 	sz = *((int *)data + 1);
-	foreach(s, sessions) if (s->id == cpfrom) {
-		copy_session(s, ses);
-		break;
+
+	foreach(s, sessions) {
+		if (s->id == cpfrom) {
+			copy_session(s, ses);
+			break;
+		}
 	}
+
 	if (sz) {
 		char *u, *uu;
+
 		if (len < 2 * sizeof(int) + sz) return 0;
-		if ((u = mem_alloc(sz + 1))) {
+
+		u = mem_alloc(sz + 1);
+		if (u) {
 			memcpy(u, (int *)data + 2, sz);
 			u[sz] = 0;
 			uu = decode_url(u);
@@ -927,10 +1130,12 @@ int read_session_info(int fd, struct session *ses, void *data, int len)
 			goto_url(ses, h);
 		}
 	}
+
 	return 0;
 }
 
-void abort_preloading(struct session *ses)
+void
+abort_preloading(struct session *ses)
 {
 	if (ses->wtd) {
 		change_connection(&ses->loading, NULL, PRI_CANCEL);
@@ -938,9 +1143,11 @@ void abort_preloading(struct session *ses)
 	}
 }
 
-void abort_loading(struct session *ses)
+void
+abort_loading(struct session *ses)
 {
 	struct location *l = cur_loc(ses);
+
 	if (have_location(ses)) {
 		if (l->stat.state >= 0)
 			change_connection(&l->stat, NULL, PRI_CANCEL);
@@ -949,17 +1156,27 @@ void abort_loading(struct session *ses)
 	abort_preloading(ses);
 }
 
-void destroy_session(struct session *ses)
+void
+destroy_session(struct session *ses)
 {
 	struct f_data_c *fdc;
+
 	if (!ses) return;
+
 	destroy_downloads(ses);
 	abort_loading(ses);
 	free_files(ses);
-	if (ses->screen) detach_formatted(ses->screen), mem_free(ses->screen);
-	foreach(fdc, ses->scrn_frames) detach_formatted(fdc);
+	if (ses->screen) {
+		detach_formatted(ses->screen);
+		mem_free(ses->screen);
+	}
+
+	foreach(fdc, ses->scrn_frames)
+		detach_formatted(fdc);
+
 	free_list(ses->scrn_frames);
 	destroy_history(ses);
+
 	if (ses->loading_url) mem_free(ses->loading_url);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
 	if (ses->goto_position) mem_free(ses->goto_position);
@@ -980,19 +1197,24 @@ void destroy_session(struct session *ses)
 	/*mem_free(ses);*/
 }
 
-void destroy_all_sessions()
+void
+destroy_all_sessions()
 {
 	/*while (!list_empty(sessions)) destroy_session(sessions.next);*/
 }
 
-void reload(struct session *ses, enum cache_mode cache_mode)
+void
+reload(struct session *ses, enum cache_mode cache_mode)
 {
 	struct location *l;
 	struct f_data_c *fd = current_frame(ses);
-	
+
 	abort_loading(ses);
-	if (cache_mode == -1) cache_mode = ++ses->reloadlevel;
-	else ses->reloadlevel = cache_mode;
+	if (cache_mode == -1)
+		cache_mode = ++ses->reloadlevel;
+	else
+		ses->reloadlevel = cache_mode;
+
 	l = cur_loc(ses);
 	if (have_location(ses)) {
 		struct file_to_load *ftl;
@@ -1004,7 +1226,8 @@ void reload(struct session *ses, enum cache_mode cache_mode)
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
-			load_url(ftl->url, fd?fd->f_data?fd->f_data->url:NULL:NULL, &ftl->stat, PRI_FRAME, cache_mode);
+			load_url(ftl->url, fd?fd->f_data?fd->f_data->url:NULL:NULL,
+				 &ftl->stat, PRI_FRAME, cache_mode);
 		}
 	}
 }
@@ -1068,7 +1291,10 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	}
 
 	abort_loading(ses);
-	if (ses->ref_url) mem_free(ses->ref_url), ses->ref_url=NULL;
+	if (ses->ref_url) {
+		mem_free(ses->ref_url);
+		ses->ref_url=NULL;
+	}
 
 	if (fd && fd->f_data && fd->f_data->url) {
  		ses->ref_url = init_str();
@@ -1119,7 +1345,9 @@ void goto_url(struct session *ses, unsigned char *url)
 
 /* TODO: Should there be goto_imgmap_reload() ? */
 
-void goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href, unsigned char *target)
+void
+goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
+	    unsigned char *target)
 {
 	if (ses->imgmap_href_base) mem_free(ses->imgmap_href_base);
 	ses->imgmap_href_base = href;
@@ -1128,57 +1356,78 @@ void goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href, u
 	goto_url_w(ses, url, target, WTD_IMGMAP, NC_CACHE);
 }
 
-struct frame *ses_find_frame(struct session *ses, unsigned char *name)
+struct frame *
+ses_find_frame(struct session *ses, unsigned char *name)
 {
 	struct location *l = cur_loc(ses);
 	struct frame *frm;
-	
+
 	if (!have_location(ses)) {
 		internal("ses_request_frame: no location yet");
 		return NULL;
 	}
-	foreachback(frm, l->frames) if (!strcasecmp(frm->name, name)) return frm;
+
+	foreachback(frm, l->frames)
+		if (!strcasecmp(frm->name, name))
+			return frm;
+
 	/*internal("ses_find_frame: frame not found");*/
 	return NULL;
 }
 
-struct frame *ses_change_frame_url(struct session *ses, unsigned char *name, unsigned char *url)
+struct frame *
+ses_change_frame_url(struct session *ses, unsigned char *name,
+		     unsigned char *url)
 {
 	struct location *l = cur_loc(ses);
 	struct frame *frm;
-	
+
 	if (!have_location(ses)) {
 		internal("ses_change_frame_url: no location yet");
 		return NULL;
 	}
+
 	foreachback(frm, l->frames) if (!strcasecmp(frm->name, name)) {
 		if (strlen(url) > strlen(frm->vs.url)) {
 			struct f_data_c *fd;
 			struct frame *nf = frm;
-			if (!(nf = mem_realloc(frm, sizeof(struct frame) + strlen(url) + 1))) return NULL;
+
+			nf = mem_realloc(frm, sizeof(struct frame)
+					      + strlen(url) + 1);
+			if (!nf) return NULL;
+
 			nf->prev->next = nf->next->prev = nf;
-			foreach(fd, ses->scrn_frames) {
-				if (fd->vs == &frm->vs) fd->vs = &nf->vs;
-			}
+
+			foreach(fd, ses->scrn_frames)
+				if (fd->vs == &frm->vs)
+					fd->vs = &nf->vs;
+
 			frm = nf;
 		}
 		strcpy(frm->vs.url, url);
+
 		return frm;
 	}
+
 	return NULL;
 
 }
 
-void win_func(struct window *win, struct event *ev, int fw)
+void
+win_func(struct window *win, struct event *ev, int fw)
 {
 	struct session *ses = win->data;
+
 	switch (ev->ev) {
 		case EV_ABORT:
 			destroy_session(ses);
 			break;
 		case EV_INIT:
-			if (!(ses = win->data = create_session(win)) ||
-			    read_session_info(win->term->fdin, ses, (char *)ev->b + sizeof(int), *(int *)ev->b)) {
+			ses = win->data = create_session(win);
+			if (!ses
+			    || read_session_info(win->term->fdin, ses,
+				                 (char *)ev->b + sizeof(int),
+						 *(int *)ev->b)) {
 				destroy_terminal(win->term);
 				return;
 			}
@@ -1206,7 +1455,9 @@ void win_func(struct window *win, struct event *ev, int fw)
  * Gets the url being viewed by this session. Writes it into str.
  * A maximum of str_size bytes (including null) will be written.
  */
-unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t str_size) {
+unsigned char *
+get_current_url(struct session *ses, unsigned char *str, size_t str_size)
+{
 	unsigned char *here, *end_of_url;
 	size_t url_len = 0;
 
@@ -1217,7 +1468,8 @@ unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t s
 	here = cur_loc(ses)->vs.url;
 
 	/* Find the length of the url */
-	if ((end_of_url = strchr(here, POST_CHAR))) {
+	end_of_url = strchr(here, POST_CHAR);
+	if (end_of_url) {
 		url_len = (size_t)(end_of_url - (unsigned char *)here);
 	} else {
 		url_len = strlen(here);
@@ -1239,7 +1491,9 @@ unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t s
  * Gets the title of the page being viewed by this session. Writes it into str.
  * A maximum of str_size bytes (including null) will be written.
  */
-unsigned char *get_current_title(struct session *ses, unsigned char *str, size_t str_size) {
+unsigned char *
+get_current_title(struct session *ses, unsigned char *str, size_t str_size)
+{
 	struct f_data_c *fd;
 	fd = (struct f_data_c *)current_frame(ses);
 
@@ -1254,9 +1508,11 @@ unsigned char *get_current_title(struct session *ses, unsigned char *str, size_t
  * Gets the url of the link currently selected. Writes it into str.
  * A maximum of str_size bytes (including null) will be written.
  */
-unsigned char *get_current_link_url(struct session *ses, unsigned char *str, size_t str_size) {
+unsigned char *
+get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
+{
 	struct f_data_c *fd;
-    struct link *l;
+	struct link *l;
 
 	fd = (struct f_data_c *)current_frame(ses);
 	/* What the hell is an 'fd'? */
@@ -1264,12 +1520,12 @@ unsigned char *get_current_link_url(struct session *ses, unsigned char *str, siz
 		return NULL;
 
 	/* Nothing selected? */
-    if (fd->vs->current_link == -1)
+	if (fd->vs->current_link == -1)
 		return NULL;
 
-    l = &fd->f_data->links[fd->vs->current_link];
+	l = &fd->f_data->links[fd->vs->current_link];
 	/* Only write a link */
-    if (l->type != L_LINK)
+	if (l->type != L_LINK)
 		return NULL;
 
 	return safe_strncpy(str, l->where ? l->where : l->where_img, str_size);

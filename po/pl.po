@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-08 18:40+0200\n"
-"PO-Revision-Date: 2004-10-08 19:00+0200\n"
+"POT-Creation-Date: 2004-10-10 10:41+0200\n"
+"PO-Revision-Date: 2004-10-10 12:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -63,8 +63,8 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/viewer/text/form.c:843 src/viewer/text/search.c:949
 #: src/viewer/text/search.c:1010 src/viewer/text/search.c:1403
 #: src/viewer/text/search.c:1516 src/viewer/text/textarea.c:365
-#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:583
-#: src/viewer/text/view.c:1193
+#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:659
+#: src/viewer/text/view.c:1188
 msgid "OK"
 msgstr "OK"
 
@@ -178,7 +178,7 @@ msgstr "Nazwa"
 #: src/sched/download.c:1016 src/sched/download.c:1036
 #: src/sched/download.c:1048 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:723
-#: src/viewer/text/search.c:1517 src/viewer/text/view.c:583
+#: src/viewer/text/search.c:1517 src/viewer/text/view.c:659
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -213,7 +213,7 @@ msgstr "Cyfrowy zegar w pasku statusu."
 
 #
 #: src/bfu/leds.c:79 src/bfu/leds.c:85 src/bfu/leds.c:105
-#: src/config/options.inc:1321 src/config/options.inc:1328
+#: src/config/options.inc:1331 src/config/options.inc:1338
 #: src/ecmascript/ecmascript.c:48 src/globhist/globhist.c:65
 #: src/mime/backend/mailcap.c:94 src/mime/backend/mimetypes.c:52
 #: src/ssl/ssl.c:81
@@ -339,7 +339,7 @@ msgstr ""
 "0 - domy¶lny format ELinksa (kompatybilny z Linksem 0.9x)\n"
 "1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!) (WY£¡CZONE)"
 
-#: src/bookmarks/dialogs.c:81 src/config/options.inc:1190
+#: src/bookmarks/dialogs.c:81 src/config/options.inc:1200
 #: src/dialogs/document.c:81 src/globhist/dialogs.c:72
 msgid "Title"
 msgstr "Tytu³"
@@ -498,7 +498,7 @@ msgstr "URL proxy"
 msgid "Redirect"
 msgstr "Przekierowanie"
 
-#: src/cache/dialogs.c:90 src/config/options.inc:465 src/dialogs/document.c:92
+#: src/cache/dialogs.c:90 src/config/options.inc:475 src/dialogs/document.c:92
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -538,7 +538,7 @@ msgstr "nieprawid³owy"
 msgid "ID"
 msgstr "ID"
 
-#: src/cache/dialogs.c:130 src/config/options.inc:592
+#: src/cache/dialogs.c:130 src/config/options.inc:602
 msgid "Header"
 msgstr "Nag³ówek"
 
@@ -1194,7 +1194,7 @@ msgid "Keystroke"
 msgstr "Skrót klawiszowy"
 
 #: src/config/dialogs.c:694 src/config/dialogs.c:891
-#: src/config/options.inc:1340
+#: src/config/options.inc:1350
 msgid "Action"
 msgstr "Akcja"
 
@@ -2285,14 +2285,14 @@ msgid "Active link colors."
 msgstr "Kolory aktywnego odno¶nika."
 
 #
-#: src/config/options.inc:252 src/config/options.inc:495
-#: src/config/options.inc:1084
+#: src/config/options.inc:252 src/config/options.inc:505
+#: src/config/options.inc:1094
 msgid "Background color"
 msgstr "Kolor t³a"
 
 #
-#: src/config/options.inc:254 src/config/options.inc:497
-#: src/config/options.inc:1085
+#: src/config/options.inc:254 src/config/options.inc:507
+#: src/config/options.inc:1095
 msgid "Default background color."
 msgstr "Domy¶lny kolor t³a."
 
@@ -2305,13 +2305,13 @@ msgstr "Domy¶lny kolor t³a."
 #. *	on it.
 #. The colors and mono tree should be similar but with different default
 #. * values of course so always use the macros below.
-#: src/config/options.inc:256 src/config/options.inc:491
-#: src/config/options.inc:1082
+#: src/config/options.inc:256 src/config/options.inc:501
+#: src/config/options.inc:1092
 msgid "Text color"
 msgstr "Kolor tekstu"
 
-#: src/config/options.inc:258 src/config/options.inc:493
-#: src/config/options.inc:1083
+#: src/config/options.inc:258 src/config/options.inc:503
+#: src/config/options.inc:1093
 msgid "Default text color."
 msgstr "Domy¶lny kolor tekstu."
 
@@ -2559,19 +2559,46 @@ msgstr ""
 "1 - u¿yæ dzwonka\n"
 "2 - wy¶wietliæ okienko dialogowe"
 
-#: src/config/options.inc:384
+#: src/config/options.inc:383
+msgid "Typeahead searching"
+msgstr "Szukanie z wyprzedzeniem"
+
+#: src/config/options.inc:385
+msgid ""
+"Start typeahead searching when an unbound key is pressed without any "
+"modifiers.\n"
+"\n"
+"Note that most keys have default bindings, so this feature will not be "
+"useful\n"
+"unless you unbind them.\n"
+"\n"
+"0 disables this feature; typeahead searching will only be used\n"
+"  when you press a key bound to search-typeahead or similar\n"
+"1 automatically starts typeahead searching thru link text\n"
+"2 automatically starts typeahead searching thru all document text"
+msgstr ""
+"Szukaj z wyprzedzeniem gdy nie przypisany klawisz jest przyci¶niêty bez "
+"¿adnych modyfikatorów.\n"
+"Zauwa¿, ¿e wiêkszo¶æ klawiszy ma domy¶lne przypisania, tak wiêc ta "
+"w³a¶ciwo¶æ nie bêdzie u¿yteczna dopóki nie skasujesz tych przypisañ.\n"
+"0 - wy³±cza tê w³a¶ciwo¶æ; szukanie z wyprzedzeniem bêdzie uruchomione\n"
+"  jedynie je¶li naci¶niesz klawisz przypisany do szukania z wyprzedzeniem\n"
+"1 - automatycznie zaczynaj szukaæ z wyprzedzeniem w¶ród odno¶ników\n"
+"2 - automatycznie zaczynaj szukaæ z wyprzedzeniem w ca³ym dokumencie"
+
+#: src/config/options.inc:394
 msgid "Horizontal text margin"
 msgstr "Margines poziomy"
 
-#: src/config/options.inc:386
+#: src/config/options.inc:396
 msgid "Horizontal text margin."
 msgstr "Margines poziomy."
 
-#: src/config/options.inc:388
+#: src/config/options.inc:398
 msgid "Document meta refresh"
 msgstr "Obs³uga meta refresh"
 
-#: src/config/options.inc:390
+#: src/config/options.inc:400
 msgid ""
 "Automatically follow document-specified refresh directives ('<meta>\n"
 "refresh' tags). Web-page authors use these to instruct the browser\n"
@@ -2588,11 +2615,11 @@ msgstr ""
 "aby kontrolowaæ minimaln± liczbê sekund oczekiwania na prze³adowanie\n"
 "strony."
 
-#: src/config/options.inc:397
+#: src/config/options.inc:407
 msgid "Document meta refresh minimum time"
 msgstr "Minimalny czas zw³oki przy prze³adowaniu strony"
 
-#: src/config/options.inc:399
+#: src/config/options.inc:409
 msgid ""
 "The minimum number of milliseconds that should pass before\n"
 "refreshing. If set to zero the document refresh time is used\n"
@@ -2605,30 +2632,30 @@ msgstr ""
 "b³êdy przy powrotach w historii dla pewnych stron, które u¿ywaj±\n"
 "zerowej warto¶ci czasu od¶wie¿ania."
 
-#: src/config/options.inc:404
+#: src/config/options.inc:414
 msgid "Tables navigation order"
 msgstr "Porz±dek nawigowania w tabelach"
 
-#: src/config/options.inc:406
+#: src/config/options.inc:416
 msgid "Move by columns in table, instead of rows."
 msgstr "Przesuwaj siê w kolumnach, zamiast w wierszach."
 
 #
 #. Keep options in alphabetical order.
-#: src/config/options.inc:412
+#: src/config/options.inc:422
 msgid "Cache"
 msgstr "Pamiêæ podrêczna"
 
 #
-#: src/config/options.inc:414
+#: src/config/options.inc:424
 msgid "Cache options."
 msgstr "Ustawienia pamiêci podrêcznej."
 
-#: src/config/options.inc:416
+#: src/config/options.inc:426
 msgid "Cache information about redirects"
 msgstr "Informacje pamiêci podrêcznej na temat przekierowañ"
 
-#: src/config/options.inc:418
+#: src/config/options.inc:428
 msgid ""
 "Cache even redirects sent by server (usually thru HTTP by a 302\n"
 "HTTP code and a Location header). This was the original behaviour\n"
@@ -2667,11 +2694,11 @@ msgstr ""
 "parzyste przekierowania bêd± pochodzi³y z pamiêci podrêcznej i serwer\n"
 "nie bêdzie odpytywany."
 
-#: src/config/options.inc:436
+#: src/config/options.inc:446
 msgid "Ignore cache-control info from server"
 msgstr "Ignoruj pola nag³ówka o cache-control"
 
-#: src/config/options.inc:438
+#: src/config/options.inc:448
 msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
@@ -2681,20 +2708,20 @@ msgstr ""
 "z 'Cache-Control: no-cache'."
 
 #
-#: src/config/options.inc:441
+#: src/config/options.inc:451
 msgid "Formatted documents"
 msgstr "Sformatowane dokumenty"
 
-#: src/config/options.inc:443
+#: src/config/options.inc:453
 msgid "Format cache options."
 msgstr "Ustawienia formatu pamiêci podrêcznej"
 
 #
-#: src/config/options.inc:445
+#: src/config/options.inc:455
 msgid "Number"
 msgstr "Ilo¶æ"
 
-#: src/config/options.inc:447
+#: src/config/options.inc:457
 msgid ""
 "Number of cached formatted pages. Do not get too generous\n"
 "here, 'formatted' means that all the accompanying structures\n"
@@ -2724,34 +2751,34 @@ msgstr ""
 "pamiêci podrêcznej. (Wtedy, oczywi¶cie ¿aden nowy dokument\n"
 "nie bêdzie móg³ byæ zapamiêtany.)"
 
-#: src/config/options.inc:461
+#: src/config/options.inc:471
 msgid "Memory cache"
 msgstr "Pamiêæ podrêczna"
 
 #
-#: src/config/options.inc:463
+#: src/config/options.inc:473
 msgid "Memory cache options."
 msgstr "Ustawienia pamiêci podrêcznej."
 
-#: src/config/options.inc:467
+#: src/config/options.inc:477
 msgid "Memory cache size (in bytes)."
 msgstr "Rozmiar pamiêci podrêcznej (w bajtach)."
 
 #
-#: src/config/options.inc:471
+#: src/config/options.inc:481
 msgid "Charset"
 msgstr "Zestaw znaków"
 
 #
-#: src/config/options.inc:473
+#: src/config/options.inc:483
 msgid "Charset options."
 msgstr "Ustawienia dotycz±ce zestawu znaków."
 
-#: src/config/options.inc:475
+#: src/config/options.inc:485
 msgid "Default codepage"
 msgstr "Domy¶lna strona kodowa"
 
-#: src/config/options.inc:477
+#: src/config/options.inc:487
 msgid ""
 "Default document codepage. 'System' stands for\n"
 "a codepage determined by a selected locale."
@@ -2759,60 +2786,60 @@ msgstr ""
 "Domy¶lna strona kodowa dokumentu. 'System' oznacza,\n"
 "¿e strona kodowa bêdzie okre¶lana na podstawie locale."
 
-#: src/config/options.inc:480
+#: src/config/options.inc:490
 msgid "Ignore charset info from server"
 msgstr "Ignoruj informacje o stronie kodowej z serwera"
 
-#: src/config/options.inc:482
+#: src/config/options.inc:492
 msgid "Ignore charset info sent by server."
 msgstr "Ignoruj informacje o stronie kodowej wysy³ane przez serwer."
 
-#: src/config/options.inc:486
+#: src/config/options.inc:496
 msgid "Default color settings"
 msgstr "Domy¶lne ustawienia kolorów"
 
-#: src/config/options.inc:488
+#: src/config/options.inc:498
 msgid "Default document color settings."
 msgstr "Domy¶lne ustawienia kolorów dokumentu."
 
 #
-#: src/config/options.inc:499
+#: src/config/options.inc:509
 msgid "Link color"
 msgstr "Kolor odno¶nika"
 
-#: src/config/options.inc:501
+#: src/config/options.inc:511
 msgid "Default link color."
 msgstr "Domy¶lny kolor odno¶nika."
 
-#: src/config/options.inc:503
+#: src/config/options.inc:513
 msgid "Visited-link color"
 msgstr "Kolor odwiedzonego odno¶nika"
 
-#: src/config/options.inc:505
+#: src/config/options.inc:515
 msgid "Default visited link color."
 msgstr "Domy¶lny kolor odwiedzonego odno¶nika."
 
-#: src/config/options.inc:507
+#: src/config/options.inc:517
 msgid "Image-link color"
 msgstr "Kolor odno¶nika w obrazku"
 
-#: src/config/options.inc:509
+#: src/config/options.inc:519
 msgid "Default image link color."
 msgstr "Domy¶lny kolor odno¶nika w obrazku."
 
-#: src/config/options.inc:511
+#: src/config/options.inc:521
 msgid "Bookmarked-link color"
 msgstr "Kolor odno¶nika bêd±cego w zak³adce"
 
-#: src/config/options.inc:513
+#: src/config/options.inc:523
 msgid "Default bookmarked link color."
 msgstr "Domy¶lny kolor odno¶nika bêd±cego w zak³adce"
 
-#: src/config/options.inc:515
+#: src/config/options.inc:525
 msgid "Directory color"
 msgstr "Kolor katalogów"
 
-#: src/config/options.inc:517
+#: src/config/options.inc:527
 msgid ""
 "Default directory color.\n"
 "See document.browse.links.color_dirs option."
@@ -2820,29 +2847,29 @@ msgstr ""
 "Domy¶lny kolor katalogów.\n"
 "Zobacz opcjê document.browse.links.color_dirs ."
 
-#: src/config/options.inc:520
+#: src/config/options.inc:530
 msgid "Allow dark colors on black background"
 msgstr "Zezwolenie na ciemne kolory na czarnym tle"
 
-#: src/config/options.inc:522
+#: src/config/options.inc:532
 msgid "Allow dark colors on black background."
 msgstr "Zezwól na ciemne kolory na czarnym tle."
 
-#: src/config/options.inc:524
+#: src/config/options.inc:534
 msgid "Ensure contrast"
 msgstr "Gwarancja kontrastu"
 
-#: src/config/options.inc:526
+#: src/config/options.inc:536
 msgid "Makes sure that the back- and foreground color is never equal."
 msgstr "Zapewnia, ¿e kolor t³a nigdy nie jest identyczny z kolorem tekstu."
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.
-#: src/config/options.inc:531
+#: src/config/options.inc:541
 msgid "Use document-specified colors"
 msgstr "U¿ycie kolorów podanych w dokumencie"
 
-#: src/config/options.inc:533
+#: src/config/options.inc:543
 msgid ""
 "Use colors specified in document:\n"
 "0 is use always the default settings\n"
@@ -2868,28 +2895,28 @@ msgstr ""
 
 #
 #. Keep options in alphabetical order.
-#: src/config/options.inc:550
+#: src/config/options.inc:560
 msgid "Downloading"
 msgstr "Pobieranie"
 
-#: src/config/options.inc:552
+#: src/config/options.inc:562
 msgid "Options regarding files downloading and handling."
 msgstr "Ustawienia dotycz±ce pobierania plików."
 
 #
-#: src/config/options.inc:558
+#: src/config/options.inc:568
 msgid "Default download directory"
 msgstr "Domy¶lny katalog dla pobieranych plików"
 
-#: src/config/options.inc:560
+#: src/config/options.inc:570
 msgid "Default download directory."
 msgstr "Domy¶lny katalog dla pobieranych plików."
 
-#: src/config/options.inc:562
+#: src/config/options.inc:572
 msgid "Set original time"
 msgstr "Ustaw oryginalny czas"
 
-#: src/config/options.inc:564
+#: src/config/options.inc:574
 msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
@@ -2898,11 +2925,11 @@ msgstr ""
 "na serwerze."
 
 #. Does automatic resuming make sense as an option?
-#: src/config/options.inc:568
+#: src/config/options.inc:578
 msgid "Prevent overwriting"
 msgstr "Zapobieganie nadpisywaniu"
 
-#: src/config/options.inc:570
+#: src/config/options.inc:580
 msgid ""
 "Prevent overwriting the local files:\n"
 "0 is files will silently be overwritten.\n"
@@ -2915,11 +2942,11 @@ msgstr ""
 "2 - zapytaj u¿ytkownika."
 
 #
-#: src/config/options.inc:575
+#: src/config/options.inc:585
 msgid "Notify download completion by bell"
 msgstr "Informuj o zakoñczeniu pobierania dzwonkiem"
 
-#: src/config/options.inc:577
+#: src/config/options.inc:587
 msgid ""
 "Audio notification when download is completed:\n"
 "0 is never.\n"
@@ -2931,20 +2958,20 @@ msgstr ""
 "1 - gdy powiadamianie w tle jest w³±czone.\n"
 "2 - zawsze"
 
-#: src/config/options.inc:583
+#: src/config/options.inc:593
 msgid "Dump output"
 msgstr "Zrzuty"
 
-#: src/config/options.inc:585
+#: src/config/options.inc:595
 msgid "Dump output options."
 msgstr "Ustawienia dotycz±ce zrzutów."
 
-#: src/config/options.inc:587 src/config/options.inc:1051
+#: src/config/options.inc:597 src/config/options.inc:1061
 #: src/config/opttypes.c:365 src/dialogs/document.c:99
 msgid "Codepage"
 msgstr "Strona kodowa"
 
-#: src/config/options.inc:589
+#: src/config/options.inc:599
 msgid ""
 "Codepage used in dump output. 'System' stands for\n"
 "a codepage determined by a selected locale."
@@ -2952,90 +2979,90 @@ msgstr ""
 "Strona kodowa u¿yta podczasu zrzutu. 'System' oznacza\n"
 "i¿ zostanie okre¶lona przez wybrane locale."
 
-#: src/config/options.inc:594
+#: src/config/options.inc:604
 #, c-format
 msgid "Header string used in dumps. %u is substituted by URL."
 msgstr "£añcuch nag³ówka u¿ywany przy zrzutach. %u jest zastêpowane przez URL."
 
-#: src/config/options.inc:596
+#: src/config/options.inc:606
 msgid "Footer"
 msgstr "Stopka"
 
-#: src/config/options.inc:598
+#: src/config/options.inc:608
 #, c-format
 msgid "Footer string used in dumps. %u is substituted by URL."
 msgstr "£añcuch stopki u¿ywany przy zrzutach. %u jest zastêpowane przez URL."
 
-#: src/config/options.inc:600
+#: src/config/options.inc:610
 msgid "Separator"
 msgstr "Separator"
 
-#: src/config/options.inc:602
+#: src/config/options.inc:612
 msgid "String which separates two dumps."
 msgstr "£añcuch, który rozdziela dwa zrzuty."
 
-#: src/config/options.inc:604
+#: src/config/options.inc:614
 msgid "Width"
 msgstr "Szeroko¶æ"
 
-#: src/config/options.inc:606
+#: src/config/options.inc:616
 msgid "Width of screen in characters when dumping a HTML document."
 msgstr "Szeroko¶æ ekranu w znakach przy zrzutach dokumentów HTML."
 
 #
-#: src/config/options.inc:610
+#: src/config/options.inc:620
 msgid "History"
 msgstr "Historia"
 
-#: src/config/options.inc:612
+#: src/config/options.inc:622
 msgid "History options."
 msgstr "Ustawienia dotycz±ce historii"
 
 #
-#: src/config/options.inc:614
+#: src/config/options.inc:624
 msgid "Keep unhistory"
 msgstr "Zapamiêtuj historiê powrotów"
 
-#: src/config/options.inc:616
+#: src/config/options.inc:626
 msgid "Keep unhistory (\"forward history\")?"
 msgstr "Czy pamiêtaæ historiê powrotów?"
 
 #
-#: src/config/options.inc:619
+#: src/config/options.inc:629
 msgid "HTML rendering"
 msgstr "Renderowanie HTML-a"
 
-#: src/config/options.inc:621
+#: src/config/options.inc:631
 msgid "Options concerning the display of HTML pages."
 msgstr "Ustawienia dotycz±ce wy¶wietlania stron HTML."
 
 #
-#: src/config/options.inc:623
+#: src/config/options.inc:633
 msgid "Display frames"
 msgstr "Wy¶wietlanie ramek"
 
 #
-#: src/config/options.inc:625
+#: src/config/options.inc:635
 msgid "Display frames."
 msgstr "Wy¶wietlaj ramki."
 
 #
-#: src/config/options.inc:627
+#: src/config/options.inc:637
 msgid "Display tables"
 msgstr "Wy¶wietlanie tabel"
 
 #
-#: src/config/options.inc:629
+#: src/config/options.inc:639
 msgid "Display tables."
 msgstr "Wy¶wietlaj tabele"
 
 #
 #. FIXME: obsolete, how to alias them correctly ? --jonas
-#: src/config/options.inc:632
+#: src/config/options.inc:642
 msgid "Expand table columns"
 msgstr "Rozszerz kolumny tabeli"
 
-#: src/config/options.inc:634
+#: src/config/options.inc:644
 msgid ""
 "This option is no longer in effect. It is obsoleted by changes\n"
 "to always expand table columns."
@@ -3044,28 +3071,28 @@ msgstr ""
 "aby zawsze rozszerzaæ kolumny tabeli."
 
 #
-#: src/config/options.inc:637
+#: src/config/options.inc:647
 msgid "Display subscripts"
 msgstr "Wy¶wietlanie indeksów dolnych"
 
-#: src/config/options.inc:639
+#: src/config/options.inc:649
 msgid "Display subscripts (as [thing])."
 msgstr "Pokazuj indeks dolny (jako [co¶])."
 
 #
-#: src/config/options.inc:641
+#: src/config/options.inc:651
 msgid "Display superscripts"
 msgstr "Wy¶wietlanie indeksów górnych"
 
-#: src/config/options.inc:643
+#: src/config/options.inc:653
 msgid "Display superscripts (as ^thing)."
 msgstr "Pokazuj indeks górny (jako ^co¶)."
 
-#: src/config/options.inc:645
+#: src/config/options.inc:655
 msgid "Rendering of html link element"
 msgstr "Renderowanie elementu odno¶nika html"
 
-#: src/config/options.inc:647
+#: src/config/options.inc:657
 msgid ""
 "Html link rendering verbosity:\n"
 "0 is nothing\n"
@@ -3083,19 +3110,19 @@ msgstr ""
 "4 - dodatkowo typ\n"
 "5 - wszystko"
 
-#: src/config/options.inc:655
+#: src/config/options.inc:665
 msgid "Underline links"
 msgstr "Podkre¶lanie odno¶ników"
 
-#: src/config/options.inc:657
+#: src/config/options.inc:667
 msgid "Underline links."
 msgstr "Podkre¶laj odno¶niki."
 
-#: src/config/options.inc:659
+#: src/config/options.inc:669
 msgid "Wrap non breaking space"
 msgstr "Zawijanie nie ³ami±cych spacji"
 
-#: src/config/options.inc:661
+#: src/config/options.inc:671
 msgid ""
 "If set do not honour non breaking space (the nbsp entity)\n"
 "but allow to wrap the text. This can help keeping the width\n"
@@ -3106,41 +3133,41 @@ msgstr ""
 "tak, ¿eby nie by³o potrzebne przewijanie w poziomie."
 
 #
-#: src/config/options.inc:666
+#: src/config/options.inc:676
 msgid "Plain rendering"
 msgstr "Renderowanie zwyk³ego tekstu"
 
-#: src/config/options.inc:668
+#: src/config/options.inc:678
 msgid "Options concerning the display of plain text pages."
 msgstr "Ustawienia dotycz±ce wy¶wietlania zwyk³ego tekstu."
 
-#: src/config/options.inc:670
+#: src/config/options.inc:680
 msgid "Display URIs"
 msgstr "Wy¶wietlanie URI"
 
-#: src/config/options.inc:672
+#: src/config/options.inc:682
 msgid "Display URIs in the document as links."
 msgstr "Wy¶wietlanie URI w dokumencie jako odno¶ników."
 
-#: src/config/options.inc:674
+#: src/config/options.inc:684
 msgid "Compress empty lines"
 msgstr "Usuwanie pustych linii"
 
-#: src/config/options.inc:676
+#: src/config/options.inc:686
 msgid "Compress successive empty lines to only one in displayed text."
 msgstr ""
 "Usuwaj nastêpne puste linie, tak ¿eby tylko jedna pusta linia by³a "
 "wy¶wietlana."
 
-#: src/config/options.inc:679
+#: src/config/options.inc:689
 msgid "URI passing"
 msgstr "Przekazywanie URI"
 
-#: src/config/options.inc:681
+#: src/config/options.inc:691
 msgid "Rules for passing URIs to external commands."
 msgstr "Zasady przekazywania URI do zewnêtrznych poleceñ."
 
-#: src/config/options.inc:685
+#: src/config/options.inc:695
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
@@ -3153,19 +3180,19 @@ msgstr ""
 "%% w ³añcuchu oznacza '%'"
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:694
+#: src/config/options.inc:704
 msgid "Information files"
 msgstr "Pliki informacyjne"
 
-#: src/config/options.inc:696
+#: src/config/options.inc:706
 msgid "Options for information files in ~/.elinks."
 msgstr "Ustawienia plików informacyjnych w ~/.elinks."
 
-#: src/config/options.inc:698
+#: src/config/options.inc:708
 msgid "Save interval"
 msgstr "Przedzia³ czasu pomiêdzy automatycznymi zapisami"
 
-#: src/config/options.inc:700
+#: src/config/options.inc:710
 msgid ""
 "Interval at which to trigger information files in ~/.elinks\n"
 "to be saved to disk if they has changed (seconds; 0 to disable)"
@@ -3173,11 +3200,11 @@ msgstr ""
 "Przedzia³ czasu po krórym w razie potrzeby nastêpuje zapis\n"
 "plików informacyjnych w ~/.elinks (w sekundach: 0 aby wy³±czyæ)"
 
-#: src/config/options.inc:703
+#: src/config/options.inc:713
 msgid "Use secure file saving"
 msgstr "U¿ywanie bezpiecznego zapisu plików"
 
-#: src/config/options.inc:705
+#: src/config/options.inc:715
 msgid ""
 "First write data to unique temporary file, then rename this file\n"
 "upon successfully finishing this. Note that this relates only to\n"
@@ -3200,35 +3227,35 @@ msgstr ""
 "pewno¶æ zapisu."
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:718
+#: src/config/options.inc:728
 msgid "Protocols"
 msgstr "Protoko³y"
 
-#: src/config/options.inc:720
+#: src/config/options.inc:730
 msgid "Protocol specific options."
 msgstr "Ustawienia dotycz±ce protoko³ów."
 
-#: src/config/options.inc:722
+#: src/config/options.inc:732
 msgid "HTTP"
 msgstr "HTTP"
 
-#: src/config/options.inc:724
+#: src/config/options.inc:734
 msgid "HTTP-specific options."
 msgstr "Ustawienia dotycz±ce protoko³u HTTP."
 
-#: src/config/options.inc:727
+#: src/config/options.inc:737
 msgid "Server bug workarounds"
 msgstr "Obej¶cie b³êdów serwera"
 
-#: src/config/options.inc:729
+#: src/config/options.inc:739
 msgid "Server-side HTTP bugs workarounds."
 msgstr "Obej¶cia b³êdów HTTP po stronie serwera."
 
-#: src/config/options.inc:731
+#: src/config/options.inc:741
 msgid "Do not send Accept-Charset"
 msgstr "Nie wysy³aj Accept-Charset"
 
-#: src/config/options.inc:733
+#: src/config/options.inc:743
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
@@ -3236,19 +3263,19 @@ msgstr ""
 "Pole nag³ówka Accept-Charset jest d³ugie i wys³anie go mo¿e powodowaæ\n"
 "b³êdy w dzia³aniu niektórych serwerów."
 
-#: src/config/options.inc:736
+#: src/config/options.inc:746
 msgid "Allow blacklisting"
 msgstr "Zezwolenie na \"czarn± listê\""
 
-#: src/config/options.inc:738
+#: src/config/options.inc:748
 msgid "Allow blacklisting of buggy servers."
 msgstr "Pozwól na \"czarn± listê\" zapluskwionym serwerom."
 
-#: src/config/options.inc:740
+#: src/config/options.inc:750
 msgid "Broken 302 redirects"
 msgstr "B³êdne przekierowania 302"
 
-#: src/config/options.inc:742
+#: src/config/options.inc:752
 msgid ""
 "Broken 302 redirect (violates RFC but compatible with Netscape).\n"
 "This is a problem for a lot of web discussion boards and the like.\n"
@@ -3258,38 +3285,38 @@ msgstr ""
 "z Netscapem). Jest to problem wielu webowych forum dyskusyjnych.\n"
 "Je¶li sprawiaj± problemy, spróbuj to ustawiæ."
 
-#: src/config/options.inc:746
+#: src/config/options.inc:756
 msgid "No keepalive after POST requests"
 msgstr "Brak keepalive po zg³oszeniu POST"
 
-#: src/config/options.inc:748
+#: src/config/options.inc:758
 msgid "Disable keepalive connection after POST request."
 msgstr "Wy³±cza po³±czenia keepalive po zg³oszeniu POST."
 
-#: src/config/options.inc:750
+#: src/config/options.inc:760
 msgid "Use HTTP/1.0"
 msgstr "U¿ywanie HTTP/1.0"
 
-#: src/config/options.inc:752
+#: src/config/options.inc:762
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
 msgstr "U¿yj protoko³u HTTP/1.0 zamiast HTTP/1.1."
 
-#: src/config/options.inc:754 src/config/options.inc:834
-#: src/config/options.inc:848
+#: src/config/options.inc:764 src/config/options.inc:844
+#: src/config/options.inc:858
 msgid "Proxy configuration"
 msgstr "Konfiguracja proxy"
 
-#: src/config/options.inc:756
+#: src/config/options.inc:766
 msgid "HTTP proxy configuration."
 msgstr "Konfiguracja proxy dla protoko³u HTTP."
 
 #
-#: src/config/options.inc:758 src/config/options.inc:838
-#: src/config/options.inc:852
+#: src/config/options.inc:768 src/config/options.inc:848
+#: src/config/options.inc:862
 msgid "Host and port-number"
 msgstr "Host i numer portu"
 
-#: src/config/options.inc:760
+#: src/config/options.inc:770
 msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
@@ -3298,30 +3325,30 @@ msgstr ""
 "Je¶li puste sprawdzana jest zmienna ¶rodowiskowa HTTP_PROXY."
 
 #
-#: src/config/options.inc:763
+#: src/config/options.inc:773
 msgid "Username"
 msgstr "Nazwa u¿ytkownika"
 
 #
-#: src/config/options.inc:765
+#: src/config/options.inc:775
 msgid "Proxy authentication username."
 msgstr "Nazwa u¿ytkownika do uwierzytelnienia wobec serwera proxy."
 
-#: src/config/options.inc:767 src/protocol/auth/dialogs.c:89
+#: src/config/options.inc:777 src/protocol/auth/dialogs.c:89
 msgid "Password"
 msgstr "Has³o"
 
 #
-#: src/config/options.inc:769
+#: src/config/options.inc:779
 msgid "Proxy authentication password."
 msgstr "Has³o do uwierzytelnienia wobec serwera proxy."
 
 #
-#: src/config/options.inc:772
+#: src/config/options.inc:782
 msgid "Referer sending"
 msgstr "Wysy³anie referencji"
 
-#: src/config/options.inc:774
+#: src/config/options.inc:784
 msgid ""
 "HTTP referer sending options. HTTP referer is a special header\n"
 "sent in the HTTP requests, which is supposed to contain the previous\n"
@@ -3336,11 +3363,11 @@ msgstr ""
 "mo¿e siê dowiedzieæ z jakiej strony odno¶nik wybra³e¶(a¶). Takie\n"
 "zachowanie mo¿e naruszaæ prywatno¶æ."
 
-#: src/config/options.inc:781
+#: src/config/options.inc:791
 msgid "Policy"
 msgstr "Polisa"
 
-#: src/config/options.inc:784
+#: src/config/options.inc:794
 msgid ""
 "Mode of sending HTTP referer:\n"
 "0 is send no referer\n"
@@ -3354,27 +3381,27 @@ msgstr ""
 "2 - wysy³aj z góry ustalony Referer\n"
 "3 - wysy³aj poprzedni URL (zgodne z RFC, ale niebezpieczne)\n"
 
-#: src/config/options.inc:790
+#: src/config/options.inc:800
 msgid "Fake referer URL"
 msgstr "Ustalony zmy¶lony Referer URL"
 
-#: src/config/options.inc:792
+#: src/config/options.inc:802
 msgid "Fake referer to be sent when policy is 2."
 msgstr "Zmy¶lony URL jest wysy³any, gdy polisa jest ustawiona na 2."
 
-#: src/config/options.inc:795
+#: src/config/options.inc:805
 msgid "Send Accept-Language header"
 msgstr "Wysy³anie pola nag³ówka Accept-Language"
 
-#: src/config/options.inc:797
+#: src/config/options.inc:807
 msgid "Send Accept-Language header."
 msgstr "Wy¶lij pole nag³ówka Accept-Language"
 
-#: src/config/options.inc:799
+#: src/config/options.inc:809
 msgid "Use UI language as Accept-Language"
 msgstr "U¿yj jêzyka interfejsu u¿ytkownika jako Accept-Language"
 
-#: src/config/options.inc:801
+#: src/config/options.inc:811
 msgid ""
 "Request localised versions of documents from web-servers (using the\n"
 "Accept-Language header) using the language you have configured for\n"
@@ -3386,11 +3413,11 @@ msgstr ""
 "interfejs u¿ytkownika. Wiedz, ¿e mo¿e siê to wi±zaæ z pewnym ryzykiem\n"
 "poniewa¿ mówisz serwerowi o swoich preferencjach jêzykowych."
 
-#: src/config/options.inc:806
+#: src/config/options.inc:816
 msgid "Activate HTTP TRACE debugging"
 msgstr "Uaktywnij debugowanie HTTP TRACE"
 
-#: src/config/options.inc:808
+#: src/config/options.inc:818
 msgid ""
 "If active, all HTTP requests are sent with TRACE as their method\n"
 "rather than GET or POST. This is useful for debugging of both ELinks\n"
@@ -3404,11 +3431,11 @@ msgstr ""
 "nie wszystkie serwery to obs³uguj±."
 
 #. OSNews.com is supposed to be relying on the textmode token, at least.
-#: src/config/options.inc:815
+#: src/config/options.inc:825
 msgid "User-agent identification"
 msgstr "Identyfikacja przegl±darki"
 
-#: src/config/options.inc:817
+#: src/config/options.inc:827
 msgid ""
 "Change the User Agent ID. That means identification string, which\n"
 "is sent to HTTP server when a document is requested. The 'textmode'\n"
@@ -3434,19 +3461,19 @@ msgstr ""
 "%b - liczba pasków wy¶wietlanych przez ELinksa\n"
 "U¿yj \" \" je¶li nie chcesz wysy³ania ¿adnej informacji o przegl±darce."
 
-#: src/config/options.inc:830
+#: src/config/options.inc:840
 msgid "HTTPS"
 msgstr "HTTPS"
 
-#: src/config/options.inc:832
+#: src/config/options.inc:842
 msgid "HTTPS-specific options."
 msgstr "Ustawienia dotycz±ce protoko³u HTTPS."
 
-#: src/config/options.inc:836
+#: src/config/options.inc:846
 msgid "HTTPS proxy configuration."
 msgstr "Konfiguracja proxy dla protoko³u HTTPS."
 
-#: src/config/options.inc:840
+#: src/config/options.inc:850
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
@@ -3454,19 +3481,19 @@ msgstr ""
 "Host i numer portu (host:port) serwera proxy HTTPS, lub puste.\n"
 "Je¶li puste sprawdzana jest zmienna ¶rodowiskowa HTTPS_PROXY."
 
-#: src/config/options.inc:844
+#: src/config/options.inc:854
 msgid "FTP"
 msgstr "FTP"
 
-#: src/config/options.inc:846
+#: src/config/options.inc:856
 msgid "FTP specific options."
 msgstr "Opcje dotycz±ce protoko³u FTP."
 
-#: src/config/options.inc:850
+#: src/config/options.inc:860
 msgid "FTP proxy configuration."
 msgstr "Konfiguracja proxy dla protoko³u FTP."
 
-#: src/config/options.inc:854
+#: src/config/options.inc:864
 msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
@@ -3474,31 +3501,31 @@ msgstr ""
 "Host i numer portu (host:port) serwera proxy FTP, albo puste.\n"
 "Je¶li puste sprawdzana jest zmienna ¶rodowiskowa FTP_PROXY."
 
-#: src/config/options.inc:857
+#: src/config/options.inc:867
 msgid "Anonymous password"
 msgstr "Has³o dla anonimowego FTP"
 
-#: src/config/options.inc:859
+#: src/config/options.inc:869
 msgid "FTP anonymous password to be sent."
 msgstr "Has³o wysy³ane do anonimowych serwerów FTP."
 
-#: src/config/options.inc:861
+#: src/config/options.inc:871
 msgid "Use passive mode (IPv4)"
 msgstr "U¿ywanie trybu pasywnego (IPv4)"
 
-#: src/config/options.inc:863
+#: src/config/options.inc:873
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
 msgstr "U¿ywaj PASV zamiast PORT (tryb pasywny kontra aktywny, tylko IPv4)."
 
-#: src/config/options.inc:865 src/config/options.inc:869
+#: src/config/options.inc:875 src/config/options.inc:879
 msgid "Use passive mode (IPv6)"
 msgstr "U¿ywanie trybu pasywnego (IPv6)"
 
-#: src/config/options.inc:867
+#: src/config/options.inc:877
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
 msgstr "U¿ywaj EPSV zamiast EPRT (tryb pasywny kontra aktywny, tylko IPv6)."
 
-#: src/config/options.inc:871
+#: src/config/options.inc:881
 msgid ""
 "Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 "Works only with IPv6 enabled, so nothing interesting for you."
@@ -3507,63 +3534,63 @@ msgstr ""
 "Dzia³a tylko z w³±czonym IPv6, wiêc nic ciekawego dla Ciebie."
 
 #
-#: src/config/options.inc:877
+#: src/config/options.inc:887
 msgid "Local files"
 msgstr "Lokalne pliki"
 
-#: src/config/options.inc:879
+#: src/config/options.inc:889
 msgid "Options specific to local browsing."
 msgstr "Ustawienia dotycz±ce przegl±dania lokalnych plików."
 
 #
-#: src/config/options.inc:882 src/config/options.inc:894
+#: src/config/options.inc:892 src/config/options.inc:904
 msgid "Local CGI"
 msgstr "Lokalne CGI"
 
-#: src/config/options.inc:884
+#: src/config/options.inc:894
 msgid "Local CGI specific options."
 msgstr "Ustawienia dotycz±ce lokalnych skryptów CGI."
 
-#: src/config/options.inc:886 src/config/options.inc:898
+#: src/config/options.inc:896 src/config/options.inc:908
 #: src/cookies/dialogs.c:102 src/mime/backend/mailcap.c:98
 #: src/mime/backend/mimetypes.c:56
 msgid "Path"
 msgstr "¦cie¿ka"
 
-#: src/config/options.inc:888
+#: src/config/options.inc:898
 msgid "Colon separated list of directories, where CGI scripts are stored."
 msgstr ""
 "Oddzielona dwukropkami lista katalogów, w których s± umieszczone\n"
 "skrypty CGI."
 
-#: src/config/options.inc:890 src/config/options.inc:902
+#: src/config/options.inc:900 src/config/options.inc:912
 msgid "Allow local CGI"
 msgstr "Pozwolenie na wykonywanie skryptów CGI"
 
-#: src/config/options.inc:892
+#: src/config/options.inc:902
 msgid "Whether to execute local CGI scripts."
 msgstr "Czy uruchamiaæ lokalne skrypty CGI."
 
-#: src/config/options.inc:896
+#: src/config/options.inc:906
 msgid "Local CGI specific options. (DISABLED)"
 msgstr "Ustawienia dotycz±ce lokalnych skryptów CGI. (WY£¡CZONE)"
 
-#: src/config/options.inc:900
+#: src/config/options.inc:910
 msgid ""
 "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "Oddzielona dwukropkami lista katalogów, z których mo¿na wykonywaæ\n"
 "skrypty CGI. (WY£¡CZONE)"
 
-#: src/config/options.inc:904
+#: src/config/options.inc:914
 msgid "Whether to execute local CGI scripts. (DISABLED)"
 msgstr "Czy uruchamiaæ lokalne skrypty CGI. (WY£¡CZONE)"
 
-#: src/config/options.inc:907
+#: src/config/options.inc:917
 msgid "Allow reading special files"
 msgstr "Zezwolenie na czytanie plików specjalnych"
 
-#: src/config/options.inc:909
+#: src/config/options.inc:919
 msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
@@ -3572,11 +3599,11 @@ msgstr ""
 "czytanie\n"
 "/dev/urandom czy /dev/zero mo¿e zepsuæ Ci dzieñ!)"
 
-#: src/config/options.inc:912
+#: src/config/options.inc:922
 msgid "Show hidden files in directory listing"
 msgstr "Pokazuj ukryte pliki przy wy¶wietlaniu katalogów"
 
-#: src/config/options.inc:914
+#: src/config/options.inc:924
 msgid ""
 "Show hidden files in directory listing ?\n"
 "If set to false, files with name starting with a dot will be\n"
@@ -3587,11 +3614,11 @@ msgstr ""
 "pokazywane."
 
 #
-#: src/config/options.inc:918
+#: src/config/options.inc:928
 msgid "Try encoding extensions"
 msgstr "Próbuj ró¿ne rozszerzenia plików"
 
-#: src/config/options.inc:920
+#: src/config/options.inc:930
 msgid ""
 "When set, if we can't open a file named 'filename', we'll try\n"
 "to open 'filename' with some encoding extension appended\n"
@@ -3602,11 +3629,11 @@ msgstr ""
 "'plik.gz'); zale¿y to od wspieranych formatów kompresji."
 
 #
-#: src/config/options.inc:924
+#: src/config/options.inc:934
 msgid "User protocols"
 msgstr "Protoko³y u¿ytkownika"
 
-#: src/config/options.inc:926
+#: src/config/options.inc:936
 msgid ""
 "User protocols. Options in this tree specify external\n"
 "handlers for the appropriate protocols. Ie.\n"
@@ -3616,25 +3643,25 @@ msgstr ""
 "uchwytów dla odpowiadaj±cych im protoko³ów.\n"
 "Np. protocol.user.mailto.unix."
 
-#: src/config/options.inc:931
+#: src/config/options.inc:941
 msgid "SMB"
 msgstr "SMB"
 
-#: src/config/options.inc:933
+#: src/config/options.inc:943
 msgid "SAMBA specific options."
 msgstr "Opcje dotycz±ce SAMBY."
 
-#: src/config/options.inc:935
+#: src/config/options.inc:945
 msgid "Credentials"
 msgstr "Dane uwierzytelniaj±ce"
 
-#: src/config/options.inc:937
+#: src/config/options.inc:947
 msgid "Credentials file passed to smbclient via -A option."
 msgstr ""
 "Plik z danymi uwierzytelniaj±cymi przekazywany do smbclient-a\n"
 "przy u¿yciu opcji -A."
 
-#: src/config/options.inc:947
+#: src/config/options.inc:957
 msgid ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
@@ -3642,7 +3669,7 @@ msgstr ""
 "Uchwyt (zewnêtrzny program) dla tego protoko³u. Nazwij\n"
 "ustawienia w tym drzewie zgodnie z Twoim systemem (np. unix, unix-xwin)."
 
-#: src/config/options.inc:952
+#: src/config/options.inc:962
 msgid ""
 "Handler (external program) for this protocol and system.\n"
 "%f in the string means file name to include form data from\n"
@@ -3660,11 +3687,11 @@ msgstr ""
 "%s - tytu³ maila (?subject=<tytu³>)\n"
 "%u - ca³y URL"
 
-#: src/config/options.inc:980
+#: src/config/options.inc:990
 msgid "No-proxy domains"
 msgstr "Domeny dostêpne bez udzia³u proxy"
 
-#: src/config/options.inc:982
+#: src/config/options.inc:992
 msgid ""
 "Comma separated list of domains for which the proxy (HTTP/FTP)\n"
 "should be disabled. Optionally, a port can be specified for some\n"
@@ -3677,25 +3704,25 @@ msgstr ""
 
 #
 #. Keep options in alphabetical order.
-#: src/config/options.inc:991
+#: src/config/options.inc:1001
 msgid "Terminals"
 msgstr "Terminale"
 
 #
-#: src/config/options.inc:993
+#: src/config/options.inc:1003
 msgid "Terminal options."
 msgstr "Ustawienia terminala"
 
-#: src/config/options.inc:997
+#: src/config/options.inc:1007
 msgid "Options specific to this terminal type (according to $TERM value)."
 msgstr ""
 "Ustawienia specyficzne dla danego typu terminala (nawi±zuj±c do $TERM)."
 
-#: src/config/options.inc:999
+#: src/config/options.inc:1009
 msgid "Border type"
 msgstr "Typ ramek"
 
-#: src/config/options.inc:1001
+#: src/config/options.inc:1011
 msgid ""
 "Terminal type; matters mostly only when drawing frames and\n"
 "dialog box borders:\n"
@@ -3713,11 +3740,11 @@ msgstr ""
 "3 - KOI-8\n"
 "4 - FreeBSD"
 
-#: src/config/options.inc:1009
+#: src/config/options.inc:1019
 msgid "Switch fonts for line drawing"
 msgstr "Zmiana fontu do rysowania linii"
 
-#: src/config/options.inc:1011
+#: src/config/options.inc:1021
 msgid ""
 "Switch fonts when drawing lines, enabling both local characters\n"
 "and lines working at the same time. Makes sense only with linux\n"
@@ -3726,11 +3753,11 @@ msgstr ""
 "Zmienia font podczas rysowania linii, w³±czaj±c oba zestawy\n"
 "znaków. Ma sens jedynie na linuksowym terminalu."
 
-#: src/config/options.inc:1015
+#: src/config/options.inc:1025
 msgid "I/O in UTF8"
 msgstr "I/O in UTF8"
 
-#: src/config/options.inc:1017
+#: src/config/options.inc:1027
 msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
@@ -3739,11 +3766,11 @@ msgstr ""
 "jedynie podzbiór UTF8 jest u¿ywany w zale¿no¶ci od u¿ywanej\n"
 "strony kodowej."
 
-#: src/config/options.inc:1020 src/dialogs/options.c:170
+#: src/config/options.inc:1030 src/dialogs/options.c:170
 msgid "Restrict frames in cp850/852"
 msgstr "Ogranicz ramki w cp850/852"
 
-#: src/config/options.inc:1022
+#: src/config/options.inc:1032
 msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
@@ -3752,11 +3779,11 @@ msgstr ""
 "z terminalami linuksowymi u¿ywaj±cymi stron kodowych cp850/852."
 
 #
-#: src/config/options.inc:1025
+#: src/config/options.inc:1035
 msgid "Block cursor"
 msgstr "Kursor blokowy"
 
-#: src/config/options.inc:1027
+#: src/config/options.inc:1037
 msgid ""
 "Move cursor to bottom right corner when done drawing.\n"
 "This is particularly useful when we have a block cursor,\n"
@@ -3766,11 +3793,11 @@ msgstr ""
 "Jest to szczególnie u¿yteczne z kursorem blokowym, tekst\n"
 "z inwersj± jest wy¶wietlany poprawnie."
 
-#: src/config/options.inc:1031
+#: src/config/options.inc:1041
 msgid "Color mode"
 msgstr "Tryb kolorowy"
 
-#: src/config/options.inc:1033
+#: src/config/options.inc:1043
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -3785,11 +3812,11 @@ msgstr ""
 "2 - tryb 256 kolorowy, potrzebuje xterma z obs³ug± 256 kolorów\n"
 
 #
-#: src/config/options.inc:1039
+#: src/config/options.inc:1049
 msgid "Enable transparency"
 msgstr "Przezroczysto¶æ"
 
-#: src/config/options.inc:1041
+#: src/config/options.inc:1051
 msgid ""
 "If we should not set the background to black. This is particularly\n"
 "useful when we have a terminal (typically in some windowing\n"
@@ -3804,15 +3831,15 @@ msgstr ""
 "Wiedz, ¿e to ustawienie ma sens jedynie, gdy u¿ywanie kolorów jest\n"
 "w³±czone."
 
-#: src/config/options.inc:1047
+#: src/config/options.inc:1057
 msgid "Use underline"
 msgstr "U¿yj podkre¶lenia"
 
-#: src/config/options.inc:1049
+#: src/config/options.inc:1059
 msgid "If we should use underline or enhance the color instead."
 msgstr "Czy powinno siê u¿ywaæ podkre¶lenia czy wzmocnienia koloru."
 
-#: src/config/options.inc:1053
+#: src/config/options.inc:1063
 msgid ""
 "Codepage of charset used for displaying content on terminal.\n"
 "'System' stands for a codepage determined by a selected locale."
@@ -3821,329 +3848,329 @@ msgstr ""
 "'System' oznacza i¿ zostanie okreslona przez wybrane locale."
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:1060
+#: src/config/options.inc:1070
 msgid "User interface"
 msgstr "Interfejs u¿ytkownika"
 
 #
-#: src/config/options.inc:1062
+#: src/config/options.inc:1072
 msgid "User interface options."
 msgstr "Ustawienia interfejsu u¿ytkownika."
 
-#: src/config/options.inc:1066
+#: src/config/options.inc:1076
 msgid "Color settings"
 msgstr "Ustawienia kolorów"
 
-#: src/config/options.inc:1068
+#: src/config/options.inc:1078
 msgid "Default user interface color settings."
 msgstr "Domy¶lne ustawienia kolorów interfejsu u¿ytkownika."
 
 #
-#: src/config/options.inc:1095
+#: src/config/options.inc:1105
 msgid "Color terminals"
 msgstr "Kolorowe terminale"
 
-#: src/config/options.inc:1097
+#: src/config/options.inc:1107
 msgid "Color settings for color terminal."
 msgstr "Ustawienia kolorów dla kolorowych terminali."
 
-#: src/config/options.inc:1099
+#: src/config/options.inc:1109
 msgid "Non-color terminals"
 msgstr "Terminale monochromatyczne"
 
-#: src/config/options.inc:1101
+#: src/config/options.inc:1111
 msgid "Color settings for non-color terminal."
 msgstr "Ustawienia kolorów dla terminali monochromatycznych."
 
 #. FIXME: obsolete, how to alias them correctly ? --Zas
-#: src/config/options.inc:1104
+#: src/config/options.inc:1114
 msgid "Main menu bar"
 msgstr "Pasek menu g³ównego"
 
-#: src/config/options.inc:1106
+#: src/config/options.inc:1116
 msgid "Main menu bar colors."
 msgstr "Kolory g³ównego paska menu."
 
-#: src/config/options.inc:1108
+#: src/config/options.inc:1118
 msgid "Unselected main menu bar item"
 msgstr "Pasek niewybranego elementu menu"
 
-#: src/config/options.inc:1110
+#: src/config/options.inc:1120
 msgid "Unselected main menu bar item colors."
 msgstr "Kolory dla paska niewybranego elementu menu."
 
-#: src/config/options.inc:1112
+#: src/config/options.inc:1122
 msgid "Selected main menu bar item"
 msgstr "Pasek wybranego elementu menu"
 
-#: src/config/options.inc:1114
+#: src/config/options.inc:1124
 msgid "Selected main menu bar item colors."
 msgstr "Kolory dla paska wybranego elementu menu."
 
-#: src/config/options.inc:1116 src/config/options.inc:1145
+#: src/config/options.inc:1126 src/config/options.inc:1155
 msgid "Hotkey"
 msgstr "Klawisz skrótu"
 
-#: src/config/options.inc:1118
+#: src/config/options.inc:1128
 msgid "Main menu hotkey colors."
 msgstr "Kolory klawiszy skrótu g³ównego paska menu."
 
-#: src/config/options.inc:1120 src/config/options.inc:1149
+#: src/config/options.inc:1130 src/config/options.inc:1159
 msgid "Unselected hotkey"
 msgstr "Niewybrany klawisz skrótu"
 
-#: src/config/options.inc:1122
+#: src/config/options.inc:1132
 msgid "Main menu unselected hotkey colors."
 msgstr "Kolory niewybranych klawiszy skrótu g³ównego menu"
 
 #
-#: src/config/options.inc:1124 src/config/options.inc:1153
+#: src/config/options.inc:1134 src/config/options.inc:1163
 msgid "Selected hotkey"
 msgstr "Wybrany klawisz skrótu"
 
-#: src/config/options.inc:1126
+#: src/config/options.inc:1136
 msgid "Main menu selected hotkey colors."
 msgstr "Kolory wybranych klawiszy skrótu g³ównego menu."
 
-#: src/config/options.inc:1129
+#: src/config/options.inc:1139
 msgid "Menu bar"
 msgstr "Pasek menu"
 
-#: src/config/options.inc:1131
+#: src/config/options.inc:1141
 msgid "Menu bar colors."
 msgstr "Kolory paska menu."
 
-#: src/config/options.inc:1133
+#: src/config/options.inc:1143
 msgid "Unselected menu item"
 msgstr "Niewybrane elementy menu"
 
-#: src/config/options.inc:1135
+#: src/config/options.inc:1145
 msgid "Unselected menu item colors."
 msgstr "Kolory niewybranego elementu menu."
 
 #
-#: src/config/options.inc:1137
+#: src/config/options.inc:1147
 msgid "Selected menu item"
 msgstr "Pod¶wietlone elementy menu"
 
-#: src/config/options.inc:1139
+#: src/config/options.inc:1149
 msgid "Selected menu item colors."
 msgstr "Kolory wybranych elementów menu."
 
 #
-#: src/config/options.inc:1141
+#: src/config/options.inc:1151
 msgid "Marked menu item"
 msgstr "Pod¶wietlone elementy menu"
 
-#: src/config/options.inc:1143
+#: src/config/options.inc:1153
 msgid "Marked menu item colors."
 msgstr "Kolory pod¶wietlonych elementów menu."
 
-#: src/config/options.inc:1147
+#: src/config/options.inc:1157
 msgid "Menu item hotkey colors."
 msgstr "Kolory klawiszy skrótu menu."
 
-#: src/config/options.inc:1151
+#: src/config/options.inc:1161
 msgid "Menu item unselected hotkey colors."
 msgstr "Kolory niewybranych klawiszy skrótu menu."
 
-#: src/config/options.inc:1155
+#: src/config/options.inc:1165
 msgid "Menu item selected hotkey colors."
 msgstr "Kolory wybranych klawiszy skrótu menu."
 
 #
-#: src/config/options.inc:1157
+#: src/config/options.inc:1167
 msgid "Menu frame"
 msgstr "Ramka menu"
 
-#: src/config/options.inc:1159
+#: src/config/options.inc:1169
 msgid "Menu frame colors."
 msgstr "Kolory ramki menu."
 
-#: src/config/options.inc:1162
+#: src/config/options.inc:1172
 msgid "Dialog"
 msgstr "Okno dialogowe"
 
-#: src/config/options.inc:1164
+#: src/config/options.inc:1174
 msgid "Dialog colors."
 msgstr "Kolory okna dialogowego."
 
-#: src/config/options.inc:1174
+#: src/config/options.inc:1184
 msgid "Generic"
 msgstr "Zwyk³e"
 
-#: src/config/options.inc:1176
+#: src/config/options.inc:1186
 msgid "Generic dialog colors."
 msgstr "Zwyk³e kolory okienka dialogowego."
 
 #
-#: src/config/options.inc:1178
+#: src/config/options.inc:1188
 msgid "Frame"
 msgstr "Ramka"
 
-#: src/config/options.inc:1180
+#: src/config/options.inc:1190
 msgid "Dialog frame colors."
 msgstr "Kolory ramki okna dialogowego."
 
-#: src/config/options.inc:1182
+#: src/config/options.inc:1192
 msgid "Scrollbar"
 msgstr "Pasek przewijania"
 
-#: src/config/options.inc:1184
+#: src/config/options.inc:1194
 msgid "Scrollbar colors."
 msgstr "Kolory paska przewijania."
 
-#: src/config/options.inc:1186
+#: src/config/options.inc:1196
 msgid "Scrollbar selected"
 msgstr "Pasek przewijania wybrany"
 
-#: src/config/options.inc:1188
+#: src/config/options.inc:1198
 msgid "Scrollbar selected colors."
 msgstr "Kolory wybranego paska przewijania."
 
-#: src/config/options.inc:1192
+#: src/config/options.inc:1202
 msgid "Dialog title colors."
 msgstr "Kolory tytu³u okna dialogowego."
 
 #
-#: src/config/options.inc:1194
+#: src/config/options.inc:1204
 msgid "Text"
 msgstr "Tekst"
 
-#: src/config/options.inc:1196
+#: src/config/options.inc:1206
 msgid "Dialog text colors."
 msgstr "Kolory tekstu w oknie dialogowym."
 
-#: src/config/options.inc:1198 src/viewer/text/form.c:1407
+#: src/config/options.inc:1208 src/viewer/text/form.c:1407
 msgid "Checkbox"
 msgstr "Przycisk wyboru"
 
-#: src/config/options.inc:1200
+#: src/config/options.inc:1210
 msgid "Dialog checkbox colors."
 msgstr "Kolory przycisku wyboru."
 
 #
-#: src/config/options.inc:1202
+#: src/config/options.inc:1212
 msgid "Checkbox label"
 msgstr "Etykieta przycisku wyboru"
 
-#: src/config/options.inc:1204
+#: src/config/options.inc:1214
 msgid "Dialog checkbox label colors."
 msgstr "Kolory etykiety przycisku wyboru."
 
-#: src/config/options.inc:1206
+#: src/config/options.inc:1216
 msgid "Button"
 msgstr "Przycisk"
 
-#: src/config/options.inc:1208
+#: src/config/options.inc:1218
 msgid "Dialog button colors."
 msgstr "Kolory przycisku."
 
 #
-#: src/config/options.inc:1210
+#: src/config/options.inc:1220
 msgid "Selected button"
 msgstr "Wybrany przycisk"
 
-#: src/config/options.inc:1212
+#: src/config/options.inc:1222
 msgid "Dialog selected button colors."
 msgstr "Kolory wybranego przycisku."
 
-#: src/config/options.inc:1214 src/viewer/text/form.c:1411
+#: src/config/options.inc:1224 src/viewer/text/form.c:1411
 msgid "Text field"
 msgstr "Pole tekstowe"
 
-#: src/config/options.inc:1216
+#: src/config/options.inc:1226
 msgid "Dialog text field colors."
 msgstr "Kolory pola tekstowego."
 
 #
-#: src/config/options.inc:1218
+#: src/config/options.inc:1228
 msgid "Text field text"
 msgstr "Tekst w polu tekstowym"
 
-#: src/config/options.inc:1220
+#: src/config/options.inc:1230
 msgid "Dialog field text colors."
 msgstr "Kolory tekstu w polu tekstowym."
 
-#: src/config/options.inc:1222
+#: src/config/options.inc:1232
 msgid "Meter"
 msgstr "Licznik"
 
-#: src/config/options.inc:1224
+#: src/config/options.inc:1234
 msgid "Dialog meter colors."
 msgstr "Kolory licznika."
 
-#: src/config/options.inc:1226
+#: src/config/options.inc:1236
 msgid "Shadow"
 msgstr "Cieñ"
 
-#: src/config/options.inc:1228
+#: src/config/options.inc:1238
 msgid "Dialog shadow colors (see ui.shadows option)."
 msgstr "Kolory cienia (zobacz opcjê ui.shadows)."
 
 #
-#: src/config/options.inc:1230
+#: src/config/options.inc:1240
 msgid "Title bar"
 msgstr "Pasek tytu³owy"
 
-#: src/config/options.inc:1232
+#: src/config/options.inc:1242
 msgid "Title bar colors."
 msgstr "Kolory paska tytu³owego."
 
-#: src/config/options.inc:1234
+#: src/config/options.inc:1244
 msgid "Generic title bar"
 msgstr "Zwyk³y pasek tytu³owy"
 
-#: src/config/options.inc:1236
+#: src/config/options.inc:1246
 msgid "Generic title bar colors."
 msgstr "Kolory zwyk³ego paska tytu³owego."
 
-#: src/config/options.inc:1238
+#: src/config/options.inc:1248
 msgid "Title bar text"
 msgstr "Tekst na pasku tytu³owym"
 
-#: src/config/options.inc:1240
+#: src/config/options.inc:1250
 msgid "Title bar text colors."
 msgstr "Kolory tekstu na pasku tytu³owym."
 
-#: src/config/options.inc:1243
+#: src/config/options.inc:1253
 msgid "Status bar"
 msgstr "Pasek statusu"
 
-#: src/config/options.inc:1245
+#: src/config/options.inc:1255
 msgid "Status bar colors."
 msgstr "Kolory paska statusu."
 
-#: src/config/options.inc:1247
+#: src/config/options.inc:1257
 msgid "Generic status bar"
 msgstr "Zwyk³y pasek statusu"
 
-#: src/config/options.inc:1249
+#: src/config/options.inc:1259
 msgid "Generic status bar colors."
 msgstr "Kolory zwyk³ego paska statusu."
 
 #
-#: src/config/options.inc:1251
+#: src/config/options.inc:1261
 msgid "Status bar text"
 msgstr "Tekst na pasku statusu"
 
-#: src/config/options.inc:1253
+#: src/config/options.inc:1263
 msgid "Status bar text colors."
 msgstr "Kolory tekstu na pasku statusu."
 
-#: src/config/options.inc:1256
+#: src/config/options.inc:1266
 msgid "Tabs bar"
 msgstr "Pasek kart"
 
-#: src/config/options.inc:1258
+#: src/config/options.inc:1268
 msgid "Tabs bar colors."
 msgstr "Kolory paska kart."
 
-#: src/config/options.inc:1260
+#: src/config/options.inc:1270
 msgid "Unvisited tab"
 msgstr "Nieodwiedzana karta"
 
-#: src/config/options.inc:1262
+#: src/config/options.inc:1272
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
@@ -4151,44 +4178,44 @@ msgstr ""
 "Kolory karty dla kart, które nie zosta³y\n"
 "wybrane od zakoñczenia ³adowania."
 
-#: src/config/options.inc:1265
+#: src/config/options.inc:1275
 msgid "Unselected tab"
 msgstr "Niewybrana karta"
 
-#: src/config/options.inc:1267
+#: src/config/options.inc:1277
 msgid "Unselected tab colors."
 msgstr "Kolory niewybranych kart."
 
-#: src/config/options.inc:1269
+#: src/config/options.inc:1279
 msgid "Loading tab"
 msgstr "Karta, do której wczytywany jest dokument"
 
-#: src/config/options.inc:1271
+#: src/config/options.inc:1281
 msgid "Tab colors for tabs that are loading in the background."
 msgstr "Kolory kart dla kart, do których wczytywany jest dokument w tle."
 
 #
-#: src/config/options.inc:1273
+#: src/config/options.inc:1283
 msgid "Selected tab"
 msgstr "Wybrana karta"
 
-#: src/config/options.inc:1275
+#: src/config/options.inc:1285
 msgid "Selected tab colors."
 msgstr "Kolory wybranej karty."
 
-#: src/config/options.inc:1277
+#: src/config/options.inc:1287
 msgid "Tab separator"
 msgstr "Separator kart"
 
-#: src/config/options.inc:1279
+#: src/config/options.inc:1289
 msgid "Tab separator colors."
 msgstr "Kolory separatora kart."
 
-#: src/config/options.inc:1282
+#: src/config/options.inc:1292
 msgid "Searched strings"
 msgstr "Szukane ³añcuchy"
 
-#: src/config/options.inc:1284
+#: src/config/options.inc:1294
 msgid "Searched string highlight colors."
 msgstr "Kolory pod¶wietlenia szukanych ³añcuchów."
 
@@ -4196,19 +4223,19 @@ msgstr "Kolory pod¶wietlenia szukanych ³añcuchów."
 #. ============= BORING PART (colors) END ===================
 #. ==========================================================
 #. Keep options in alphabetical order.
-#: src/config/options.inc:1293
+#: src/config/options.inc:1303
 msgid "Dialog settings"
 msgstr "Ustawienia okien dialogowych"
 
-#: src/config/options.inc:1295
+#: src/config/options.inc:1305
 msgid "Dialogs-specific appearance and behaviour settings."
 msgstr "Ustawienia dotycz±ce wygl±du i zachowania okien dialogowych."
 
-#: src/config/options.inc:1298
+#: src/config/options.inc:1308
 msgid "Minimal height of listbox widget"
 msgstr "Minimalna wysoko¶æ listy wyboru"
 
-#: src/config/options.inc:1300
+#: src/config/options.inc:1310
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
@@ -4216,11 +4243,11 @@ msgstr ""
 "Minimalna wysoko¶æ listy wyboru (u¿ywanej np. przy zak³adkach\n"
 "czy globalnej historii)."
 
-#: src/config/options.inc:1303
+#: src/config/options.inc:1313
 msgid "Drop shadows"
 msgstr "Rzucanie cienia"
 
-#: src/config/options.inc:1305
+#: src/config/options.inc:1315
 msgid ""
 "Make dialogs drop shadows (the shadows are solid, you can\n"
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
@@ -4231,11 +4258,11 @@ msgstr ""
 "Mo¿esz te¿ wyeliminowaæ szerokie obrze¿a przez dostosowanie pliku\n"
 "setup.h."
 
-#: src/config/options.inc:1309
+#: src/config/options.inc:1319
 msgid "Underline hotkeys"
 msgstr "Podkre¶lanie klawiszy skrótu"
 
-#: src/config/options.inc:1311
+#: src/config/options.inc:1321
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
@@ -4244,11 +4271,11 @@ msgstr ""
 "Wymaga w³±czenia podkre¶lania dla terminala."
 
 #
-#: src/config/options.inc:1315
+#: src/config/options.inc:1325
 msgid "Timer options"
 msgstr "Ustawienia stopera"
 
-#: src/config/options.inc:1317
+#: src/config/options.inc:1327
 msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
@@ -4256,7 +4283,7 @@ msgstr ""
 "Odmierzane akcje po pewnym okresie bezczynno¶ci u¿ytkownika.\n"
 "Komu¶ mo¿e siê to przyda, chocia¿ mo¿esz w to nie wierzyæ."
 
-#: src/config/options.inc:1323
+#: src/config/options.inc:1333
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -4268,7 +4295,7 @@ msgstr ""
 "1 - odlicza, ale nie pokazuje stopera\n"
 "2 - odlicza i pokazuje stoper w pobli¿u LEDów"
 
-#: src/config/options.inc:1330
+#: src/config/options.inc:1340
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -4281,35 +4308,35 @@ msgstr ""
 "2 - odlicza i pokazuje stoper w pobli¿u LEDów (WY£¡CZONE)"
 
 #
-#: src/config/options.inc:1336
+#: src/config/options.inc:1346
 msgid "Duration"
 msgstr "Czas trwania"
 
-#: src/config/options.inc:1338
+#: src/config/options.inc:1348
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
 msgstr ""
 "Limit czasu bezczynno¶ci. Jeden dzieñ powinien wystarczyæ ka¿demu (TM)."
 
-#: src/config/options.inc:1342
+#: src/config/options.inc:1352
 msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr ""
 "Akcja powi±zana z klawiatur±, która ma byæ wyzwolona gdy stoper\n"
 "osi±gnie zero."
 
-#: src/config/options.inc:1345
+#: src/config/options.inc:1355
 msgid "Window tabs"
 msgstr "Karty"
 
-#: src/config/options.inc:1347
+#: src/config/options.inc:1357
 msgid "Window tabs settings."
 msgstr "Ustawienia kart."
 
 #
-#: src/config/options.inc:1349
+#: src/config/options.inc:1359
 msgid "Display tabs bar"
 msgstr "Wy¶wietl pasek kart"
 
-#: src/config/options.inc:1351
+#: src/config/options.inc:1361
 msgid ""
 "Show tabs bar on the screen:\n"
 "0 means never.\n"
@@ -4321,29 +4348,29 @@ msgstr ""
 "1 - tylko gdy wiêcej ni¿ jeden tab.\n"
 "2 - zawsze."
 
-#: src/config/options.inc:1356
+#: src/config/options.inc:1366
 msgid "Wrap-around tabs cycling"
 msgstr "Cykliczno¶æ kart"
 
-#: src/config/options.inc:1358
+#: src/config/options.inc:1368
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr "Przeskakiwanie z ostatniej karty do pierwszej i na odwrót."
 
-#: src/config/options.inc:1361
+#: src/config/options.inc:1371
 msgid "Confirm tab closing"
 msgstr "Potwierdzenie zamkniêcia karty"
 
-#: src/config/options.inc:1363
+#: src/config/options.inc:1373
 msgid "When closing a tab show confirmation dialog."
 msgstr "Przy zamykaniu karty pokazuj okienko dialogowe potwierdzania."
 
-#: src/config/options.inc:1367 src/config/opttypes.c:366
+#: src/config/options.inc:1377 src/config/opttypes.c:366
 msgid "Language"
 msgstr "Jêzyk"
 
-#: src/config/options.inc:1369
+#: src/config/options.inc:1379
 msgid ""
 "Language of user interface. 'System' means that the language will\n"
 "be extracted from the environment dynamically."
@@ -4352,28 +4379,28 @@ msgstr ""
 "uzyskany ze ¶rodowiska w sposób dynamiczny."
 
 #
-#: src/config/options.inc:1372
+#: src/config/options.inc:1382
 msgid "Display status bar"
 msgstr "Wy¶wietlanie paska statusu"
 
-#: src/config/options.inc:1374
+#: src/config/options.inc:1384
 msgid "Show status bar on the screen."
 msgstr "Pokazuje pasek statusu na ekranie"
 
 #
-#: src/config/options.inc:1376
+#: src/config/options.inc:1386
 msgid "Display title bar"
 msgstr "Wy¶wietlanie paska tytu³owego"
 
-#: src/config/options.inc:1378
+#: src/config/options.inc:1388
 msgid "Show title bar on the screen."
 msgstr "Pokazuje pasek tytu³owy na ekranie."
 
-#: src/config/options.inc:1380
+#: src/config/options.inc:1390
 msgid "Display goto dialog in new tabs"
 msgstr "Wy¶wietlanie okienka \"goto\" w nowych kartach"
 
-#: src/config/options.inc:1382
+#: src/config/options.inc:1392
 msgid ""
 "Pop up goto dialog in newly created tabs when there's no homepage\n"
 "set. This means also showing goto dialog on startup."
@@ -4381,11 +4408,11 @@ msgstr ""
 "Wy¶wietl okno goto w nowo stworzonej karcie je¶li strona domowa nie jest\n"
 "ustawiona. Oznacza to i¿ okno to bêdzie pokazywane tak¿e przy starcie."
 
-#: src/config/options.inc:1385
+#: src/config/options.inc:1395
 msgid "Show a message box when file is saved successfully"
 msgstr "Pokazuj okienko dialogowe, gdy plik zostanie pomy¶lnie zapisany"
 
-#: src/config/options.inc:1387
+#: src/config/options.inc:1397
 msgid ""
 "When you pressed a [ Save ] button in some manager, this option\n"
 "will make sure that a box confirming success of the operation will\n"
@@ -4394,19 +4421,19 @@ msgstr ""
 "Gdy wci¶niesz przycisk [ Zapisz ] w jakim¶ menad¿erze, te ustawienie\n"
 "zapewni, ¿e pojawi siê okienko potwierdzaj±ce pomy¶lne wykonanie operacji."
 
-#: src/config/options.inc:1392
+#: src/config/options.inc:1402
 msgid "Sessions"
 msgstr "Sesje"
 
-#: src/config/options.inc:1394
+#: src/config/options.inc:1404
 msgid "Sessions settings."
 msgstr "Ustawienia sesji."
 
-#: src/config/options.inc:1396
+#: src/config/options.inc:1406
 msgid "Auto save session"
 msgstr "Automatyczne zapisywanie sesji"
 
-#: src/config/options.inc:1398
+#: src/config/options.inc:1408
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
@@ -4414,11 +4441,11 @@ msgstr ""
 "Automatycznie zapisuj sesjê przy koñczeniu dzia³ania.\n"
 "Wymagana jest obs³uga zak³adek."
 
-#: src/config/options.inc:1401
+#: src/config/options.inc:1411
 msgid "Auto restore session"
 msgstr "Automatyczne odtwarzanie sesji"
 
-#: src/config/options.inc:1403
+#: src/config/options.inc:1413
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
@@ -4426,11 +4453,11 @@ msgstr ""
 "Automatycznie odtwarzaj sesjê na starcie.\n"
 "Wymagana jest obs³uga zak³adek."
 
-#: src/config/options.inc:1406
+#: src/config/options.inc:1416
 msgid "Auto save and restore session folder name"
 msgstr "Nazwa foldera do automatycznego zapisywania i odtwarzania sesji"
 
-#: src/config/options.inc:1408
+#: src/config/options.inc:1418
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "The name has to be unique. Any folders with the same name will be deleted.\n"
@@ -4442,11 +4469,11 @@ msgstr ""
 "zostan± usuniête. Ma sens jedynie wtedy, gdy wkompilowana jest obs³uga\n"
 "zak³adek."
 
-#: src/config/options.inc:1412
+#: src/config/options.inc:1422
 msgid "Homepage URI"
 msgstr "URI strony domowej"
 
-#: src/config/options.inc:1414
+#: src/config/options.inc:1424
 msgid ""
 "The URI to load either at startup time when no URI was given\n"
 "on the command line or when requested by the goto-url-home action.\n"
@@ -4459,20 +4486,20 @@ msgstr ""
 "u¿yta jako strona domowa."
 
 #
-#: src/config/options.inc:1420
+#: src/config/options.inc:1430
 msgid "Date format"
 msgstr "Format daty"
 
-#: src/config/options.inc:1422
+#: src/config/options.inc:1432
 msgid "Date format to use in dialogs. See strftime(3)."
 msgstr "Format daty u¿ywany w dialog. Zobacz strftime(3)."
 
 #
-#: src/config/options.inc:1425
+#: src/config/options.inc:1435
 msgid "Set window title"
 msgstr "Ustalenie tytu³u okna"
 
-#: src/config/options.inc:1427
+#: src/config/options.inc:1437
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
@@ -6413,6 +6440,16 @@ msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje autentykacji?"
 msgid "Authentication manager"
 msgstr "Zarz±dca autentykacji"
 
+#. name:
+#: src/protocol/finger.c:21
+msgid "Finger"
+msgstr "Finger"
+
+#. name:
+#: src/protocol/gopher/gopher.c:52
+msgid "Gopher"
+msgstr "Gopher"
+
 #: src/protocol/http/codes.c:107
 #, c-format
 msgid "HTTP error %03d"
@@ -6498,7 +6535,7 @@ msgid "This version of ELinks does not contain %s protocol support"
 msgstr "Ta wersja ELinksa nie zawiera obs³ugi protoko³u %s"
 
 #. name:
-#: src/protocol/protocol.c:260
+#: src/protocol/protocol.c:266
 msgid "Protocol"
 msgstr "Protokó³"
 
@@ -7373,19 +7410,19 @@ msgstr "Nie mo¿esz uruchomiæ zewnêtrznego edytora w trybie anonimowym."
 msgid "You can do this only on the master terminal"
 msgstr "Mo¿esz zrobiæ to jedynie na g³ównym terminalu"
 
-#: src/viewer/text/view.c:582
+#: src/viewer/text/view.c:658
 msgid "Go to link"
 msgstr "Przejd¼ do odno¶nika"
 
-#: src/viewer/text/view.c:582
+#: src/viewer/text/view.c:658
 msgid "Enter link number"
 msgstr "Wprowad¼ numer odno¶nika"
 
-#: src/viewer/text/view.c:1190
+#: src/viewer/text/view.c:1185
 msgid "Save error"
 msgstr "B³±d zapisu"
 
-#: src/viewer/text/view.c:1191
+#: src/viewer/text/view.c:1186
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
 

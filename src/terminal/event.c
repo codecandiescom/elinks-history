@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.64 2004/07/01 17:22:12 jonas Exp $ */
+/* $Id: event.c,v 1.65 2004/07/01 19:27:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@ struct terminal_interlink {
 
 	/* This is the queue of events as coming from the other ELinks instance
 	 * owning the hosting terminal. */
-	unsigned char input_queue[0];
+	unsigned char input_queue[1];
 };
 
 

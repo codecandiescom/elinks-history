@@ -3,7 +3,7 @@ See ChangeLog for recent changes, bugfixes and new features.
 ELinks 0.10.2:
 
 * Ruby scripting back-end (experimental)
-* Debian package files (fakeroot dpkg-buildpackage -uc -us)
+* Debian package files (apt-get install devscripts && debuild -uc -us)
 
 ELinks 0.10.0 (Thelma):
 

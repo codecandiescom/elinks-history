@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.262 2004/01/07 01:22:22 jonas Exp $ */
+/* $Id: menu.c,v 1.263 2004/01/07 02:57:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,8 +419,8 @@ static struct menu_item setup_menu[] = {
 	INIT_MENU_ITEM(N_("~Terminal options"), NULL, ACT_SHOW_TERM_OPTIONS, terminal_options, NULL, 0),
 	INIT_MENU_ITEM(N_("File ~extensions"), NULL, ACT_NONE, do_submenu, ext_menu, SUBMENU),
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("~Options manager"), NULL, ACT_OPTIONS_MANAGER, menu_options_manager, NULL, 0),
-	INIT_MENU_ITEM(N_("~Keybinding manager"), NULL, ACT_KEYBINDING_MANAGER, menu_keybinding_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Options manager"), NULL, ACT_OPTIONS_MANAGER, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("~Keybinding manager"), NULL, ACT_KEYBINDING_MANAGER, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("~Save options"), NULL, ACT_SAVE_OPTIONS, write_config, NULL, 0),
 	NULL_MENU_ITEM
 };
@@ -434,18 +434,18 @@ static struct menu_item setup_menu_anon[] = {
 
 static struct menu_item tools_menu[] = {
 #ifdef CONFIG_GLOBHIST
-	INIT_MENU_ITEM(N_("Global ~history"), NULL, ACT_HISTORY_MANAGER, menu_history_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("Global ~history"), NULL, ACT_HISTORY_MANAGER, NULL, NULL, 0),
 #endif
 #ifdef CONFIG_BOOKMARKS
-	INIT_MENU_ITEM(N_("~Bookmarks"), NULL, ACT_BOOKMARK_MANAGER, menu_bookmark_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Bookmarks"), NULL, ACT_BOOKMARK_MANAGER, NULL, NULL, 0),
 #endif
-	INIT_MENU_ITEM(N_("~Cache"), NULL, ACT_CACHE_MANAGER, menu_cache_manager, NULL, 0),
-	INIT_MENU_ITEM(N_("~Downloads"), NULL, ACT_DOWNLOAD_MANAGER, menu_download_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Cache"), NULL, ACT_CACHE_MANAGER, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("~Downloads"), NULL, ACT_DOWNLOAD_MANAGER, NULL, NULL, 0),
 #ifdef CONFIG_COOKIES
-	INIT_MENU_ITEM(N_("Coo~kies"), NULL, ACT_COOKIE_MANAGER, menu_cookie_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("Coo~kies"), NULL, ACT_COOKIE_MANAGER, NULL, NULL, 0),
 #endif
 #ifdef CONFIG_FORMHIST
-	INIT_MENU_ITEM(N_("~Form history"), NULL, ACT_FORMHIST_MANAGER, menu_formhist_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Form history"), NULL, ACT_FORMHIST_MANAGER, NULL, NULL, 0),
 #endif
 	NULL_MENU_ITEM
 };

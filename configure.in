@@ -138,18 +138,25 @@ AC_DEFUN([EL_ARG_DEPEND],
 	AC_MSG_CHECKING([for $4])
 	if test "x[$]$1" = xyes; then
 		# require all dependencies to be met
+		changequote(, )
 		for dependency in $3; do
+			el_name=`echo "$dependency" | sed 's/=[-_a-zA-Z0-9]*//'`;
+			el_arg=`echo "$dependency" | sed 's/[-_a-zA-Z0-9]*=//'`;
 			# Hope this is portable?!? --jonas
-			eval el_config_value=$`echo $dependency`;
-			if test "x$el_config_value" != xyes; then
+			eval el_value=$`echo $el_name`;
+
+			if test "x$el_value" != "x$el_arg"; then
 				ENABLE_$1=no;
 				break;
 			fi
 		done
+		changequote([, ])
 
 		if test "[$]ENABLE_$1" = yes; then
 			EL_CONFIG($1, [$4])
 		fi
+	else
+		ENABLE_$1=no;
 	fi
 	AC_MSG_RESULT([$]ENABLE_$1)
 ])
@@ -270,13 +277,14 @@ AC_CHECK_FUNCS(strcasecmp strncasecmp strcasestr strstr strchr strrchr)
 AC_CHECK_FUNCS(memmove bcopy stpcpy strdup index mempcpy)
 AC_CHECK_FUNCS(isalnum)
 AC_CHECK_FUNCS(snprintf vsnprintf asprintf vasprintf)
-AC_CHECK_FUNCS(getuid geteuid)
 AC_CHECK_FUNCS(getifaddrs)
 AC_CHECK_FUNCS(fflush fsync)
 
 AC_HAVE_FUNCS(cygwin_conv_to_full_win32_path)
 
-AC_CHECK_FUNCS(setenv, [have_setenv=yes], [have_setenv=no])
+AC_CHECK_FUNCS(setenv, HAVE_SETENV=yes)
+AC_CHECK_FUNCS(getuid, HAVE_GETUID=yes)
+AC_CHECK_FUNCS(geteuid, HAVE_GETEUID=yes)
 
 dnl These aren't probably needed now, as they are commented in links.h.
 dnl I've no idea about their historical background, but I keep them here
@@ -399,8 +407,8 @@ dnl ===================================================================
 
 AC_CHECK_HEADERS(expat.h, cf_result=yes, cf_result=no)
 if test "$cf_result" = yes; then
-	AC_CHECK_LIB(expat, XML_ParserCreate, [have_expat=yes], [have_expat=no])
-	if test "$have_expat" = yes; then
+	AC_CHECK_LIB(expat, XML_ParserCreate, HAVE_EXPAT=yes, HAVE_EXPAT=no)
+	if test "x$HAVE_EXPAT" = xyes; then
 		LIBS="$LIBS -lexpat"
 	fi
 fi
@@ -822,7 +830,7 @@ dnl ===================================================================
 dnl Backtraces displaying support.
 dnl ===================================================================
 
-AC_CHECK_HEADERS(execinfo.h, have_execinfo=yes, have_execinfo=no)
+AC_CHECK_HEADERS(execinfo.h, HAVE_EXECINFO=yes, HAVE_EXECINFO=no)
 # possible checks for other system-specific means go here
 
 
@@ -830,7 +838,7 @@ dnl ===================================================================
 dnl SMB protocol support.
 dnl ===================================================================
 
-AC_CHECK_PROG(have_smbclient, smbclient, yes, no)
+AC_CHECK_PROG(HAVE_SMBCLIENT, smbclient, yes, no)
 
 
 dnl ===================================================================
@@ -849,7 +857,7 @@ dnl ===================================================================
 EL_ARG_ENABLE(CONFIG_BOOKMARKS, bookmarks, [bookmark support],
 	      [  --disable-bookmarks     disable bookmark support])
 
-EL_ARG_DEPEND(CONFIG_XBEL_BOOKMARKS, xbel, have_expat, [xbel bookmark support],
+EL_ARG_DEPEND(CONFIG_XBEL_BOOKMARKS, xbel, [HAVE_EXPAT=yes], [xbel bookmark support],
 	      [  --disable-xbel          disable xbel bookmark support (requires expat)])
 
 
@@ -873,10 +881,10 @@ EL_ARG_ENABLE(CONFIG_MIMETYPES, mimetypes, [mimetypes file support],
 EL_ARG_ENABLE(CONFIG_URI_REWRITE, uri-rewrite, [URI rewriting support],
 	      [  --disable-uri-rewrite   disable URI rewrite support])
 
-EL_ARG_DEPEND(CONFIG_CGI, cgi, have_setenv, [local CGI support],
+EL_ARG_DEPEND(CONFIG_CGI, cgi, [HAVE_SETENV=yes], [local CGI support],
 	      [  --enable-cgi            enable local CGI support])
 
-EL_ARG_DEPEND(CONFIG_SMB, smb, have_smbclient, [SMB protocol support],
+EL_ARG_DEPEND(CONFIG_SMB, smb, [HAVE_SMBCLIENT=yes], [SMB protocol support],
 	      [  --disable-smb           disable SMB protocol support (requires smbclient)])
 
 
@@ -894,11 +902,11 @@ EL_ARG_ENABLE(CONFIG_LEDS, leds, [LEDs support],
 	      [  --enable-leds           enable LEDs support])
 
 
-EL_ARG_DEPEND(CONFIG_BACKTRACE, backtrace, have_execinfo, [backtrace support],
+EL_ARG_DEPEND(CONFIG_BACKTRACE, backtrace, [HAVE_EXECINFO=yes], [backtrace support],
 	      [  --disable-backtrace     disable backtrace support])
 
-EL_ARG_DEPEND(CONFIG_NO_ROOT_EXEC, backtrace, [have_getuid have_geteuid], [no root exec support],
-	      [  --enable-backtrace      enable prevention of usage by root])
+EL_ARG_DEPEND(CONFIG_NO_ROOT_EXEC, no-root, [HAVE_GETUID=yes HAVE_GETEUID=yes], [no root exec support],
+	      [  --enable-no-root        enable prevention of usage by root])
 
 
 EL_ARG_ENABLE(CONFIG_DEBUG, debug, [leak debugging and error checking],

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id */
+/* $Id: mailcap.h,v 1.2 2002/12/10 21:22:24 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_MAILCAP_H
 #define EL__PROTOCOL_MAILCAP_H

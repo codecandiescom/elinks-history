@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.1 2004/04/24 00:33:14 pasky Exp $ */
+/* $Id: parse.c,v 1.2 2004/04/24 00:38:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,6 +251,30 @@ has_attr(unsigned char *e, unsigned char *name)
 }
 
 
+
+/* Extract numerical value of attribute @name.
+ * It will return a positive integer value on success,
+ * or -1 on error. */
+int
+get_num(unsigned char *a, unsigned char *name)
+{
+	unsigned char *al = get_attr_val(a, name);
+	int result = -1;
+
+	if (al) {
+		unsigned char *end;
+		long num;
+
+		errno = 0;
+		num = strtol(al, (char **)&end, 10);
+		if (!errno && !*end && num >= 0 && num <= MAXINT)
+			result = (int) num;
+
+		mem_free(al);
+	}
+
+	return result;
+}
 
 
 static int

@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.3 2002/10/01 17:11:46 zas Exp $ */
+/* $Id: ftpparse.c,v 1.4 2002/10/02 08:48:17 zas Exp $ */
 
 /*** NOTE: the following source file has been modified to compile cleanly
  *** under gcc-2.95. The functionality should remain unchanged from the public
@@ -27,7 +27,7 @@ NetPresenz (Mac).
 NetWare.
 MSDOS.
 
-Definitely not covered: 
+Definitely not covered:
 Long VMS filenames, with information split across two lines.
 NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
 */
@@ -65,7 +65,7 @@ totai(long year, long month, long mday)
 	year /= 4;
 	result += 146097 * (year - 5);
 	result += 11017;
-	
+
 	return result * 86400;
 }
 
@@ -161,7 +161,7 @@ guesstai(long month, long mday)
 }
 
 static int
-check(char *buf, char *monthname)
+check(unsigned char *buf, unsigned char *monthname)
 {
 	if ((buf[0] != monthname[0]) && (buf[0] != monthname[0] - 32))
 		return 0;
@@ -173,11 +173,11 @@ check(char *buf, char *monthname)
 	return 1;
 }
 
-static char *months[12] = { "jan", "feb", "mar", "apr", "may", "jun",
+static unsigned char *months[12] = { "jan", "feb", "mar", "apr", "may", "jun",
 			    "jul", "aug", "sep", "oct", "nov", "dec" };
 
 static int
-getmonth(char *buf, int len)
+getmonth(unsigned char *buf, int len)
 {
 	int i;
 
@@ -189,7 +189,7 @@ getmonth(char *buf, int len)
 }
 
 static long
-getlong(char *buf, int len)
+getlong(unsigned char *buf, int len)
 {
 	long u = 0;
 
@@ -199,7 +199,7 @@ getlong(char *buf, int len)
 }
 
 int
-ftpparse(struct ftpparse *fp, char *buf, int len)
+ftpparse(struct ftpparse *fp, unsigned char *buf, int len)
 {
 	int i;
 	int j;
@@ -359,7 +359,7 @@ ftpparse(struct ftpparse *fp, char *buf, int len)
 								fp->mtime = base + totai(year, month, mday);
 							} else
 								return 0;
-							
+
 							fp->name = buf + j + 1;
 							fp->namelen = len - j - 1;
 							state = 8;
@@ -412,7 +412,7 @@ ftpparse(struct ftpparse *fp, char *buf, int len)
 	for (i = 0; i < len; ++i)
 		if (buf[i] == ';')
 			break;
-	
+
 	if (i < len) {
 		fp->name = buf;
 		fp->namelen = i;

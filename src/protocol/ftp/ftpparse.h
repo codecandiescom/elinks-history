@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.h,v 1.2 2002/10/01 16:31:17 zas Exp $ */
+/* $Id: ftpparse.h,v 1.3 2002/10/02 08:48:17 zas Exp $ */
 
 #ifndef FTPPARSE_H
 #define FTPPARSE_H
@@ -19,29 +19,29 @@ fp.name points somewhere within buf.
 */
 
 struct ftpparse {
-  char *name; /* not necessarily 0-terminated */
-  int namelen;
-  int flagtrycwd; /* 0 if cwd is definitely pointless, 1 otherwise */
-  int flagtryretr; /* 0 if retr is definitely pointless, 1 otherwise */
-  int sizetype;
-  long size; /* number of octets */
-  int mtimetype;
-  time_t mtime; /* modification time */
-  int idtype;
-  char *id; /* not necessarily 0-terminated */
-  int idlen;
-  char *symlink;
-  int symlinklen;
-} ;
+	unsigned char *name;	/* not necessarily 0-terminated */
+	int namelen;
+	int flagtrycwd;		/* 0 if cwd is definitely pointless, 1 otherwise */
+	int flagtryretr;	/* 0 if retr is definitely pointless, 1 otherwise */
+	int sizetype;
+	long size;		/* number of octets */
+	int mtimetype;
+	time_t mtime;		/* modification time */
+	int idtype;
+	unsigned char *id;	/* not necessarily 0-terminated */
+	int idlen;
+	unsigned char *symlink;
+	int symlinklen;
+};
 
 #define FTPPARSE_SIZE_UNKNOWN 0
-#define FTPPARSE_SIZE_BINARY 1 /* size is the number of octets in TYPE I */
-#define FTPPARSE_SIZE_ASCII 2 /* size is the number of octets in TYPE A */
+#define FTPPARSE_SIZE_BINARY 1	/* size is the number of octets in TYPE I */
+#define FTPPARSE_SIZE_ASCII 2	/* size is the number of octets in TYPE A */
 
 #define FTPPARSE_MTIME_UNKNOWN 0
-#define FTPPARSE_MTIME_LOCAL 1 /* time is correct */
-#define FTPPARSE_MTIME_REMOTEMINUTE 2 /* time zone and secs are unknown */
-#define FTPPARSE_MTIME_REMOTEDAY 3 /* time zone and time of day are unknown */
+#define FTPPARSE_MTIME_LOCAL 1	/* time is correct */
+#define FTPPARSE_MTIME_REMOTEMINUTE 2	/* time zone and secs are unknown */
+#define FTPPARSE_MTIME_REMOTEDAY 3	/* time zone and time of day are unknown */
 /*
 When a time zone is unknown, it is assumed to be GMT. You may want
 to use localtime() for LOCAL times, along with an indication that the
@@ -49,8 +49,8 @@ time is correct in the local time zone, and gmtime() for REMOTE* times.
 */
 
 #define FTPPARSE_ID_UNKNOWN 0
-#define FTPPARSE_ID_FULL 1 /* unique identifier for files on this FTP server */
+#define FTPPARSE_ID_FULL 1	/* unique identifier for files on this FTP server */
 
-extern int ftpparse(struct ftpparse *,char *,int);
+extern int ftpparse(struct ftpparse *, unsigned char *, int);
 
 #endif

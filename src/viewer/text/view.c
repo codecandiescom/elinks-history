@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.676 2005/01/13 13:23:26 jonas Exp $ */
+/* $Id: view.c,v 1.677 2005/02/21 22:46:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -762,6 +762,14 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	enum frame_event_status status = FRAME_EVENT_IGNORED;
 	int accesskey_priority;
 
+	{
+		struct link *link = get_current_link(doc_view);
+
+		status = try_form_action(ses, doc_view, link, ev);
+		if (status != FRAME_EVENT_IGNORED)
+			return status;
+	}
+
 #ifdef CONFIG_MARKS
 	status = try_mark_key(ses, doc_view, ev);
 	if (status != FRAME_EVENT_IGNORED)
@@ -874,7 +882,6 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 static enum frame_event_status
 frame_ev(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
-	struct link *link;
 	enum frame_event_status status;
 
 	assertm(doc_view && doc_view->document, "document not formatted");
@@ -885,12 +892,6 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 
 	/* When changing frame, vs may be NULL. See bug 525. */
 	if (!doc_view->vs) return FRAME_EVENT_IGNORED;
-
-	link = get_current_link(doc_view);
-
-	status = try_form_action(ses, doc_view, link, ev);
-	if (status != FRAME_EVENT_IGNORED)
-		return status;
 
 	if (ev->ev == EVENT_KBD) {
 		status = frame_ev_kbd(ses, doc_view, ev);

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.2 2002/08/07 00:09:18 pasky Exp $ */
+/* $Id: user.c,v 1.3 2002/08/07 00:18:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,6 +111,9 @@ mailto_func(struct session *ses, unsigned char *url)
 			subj = strchr(urldata, '?');
 		}
 	}
+
+	/* Stay silent about complete RFC 2368 support or do it yourself! ;-).
+	 * --pasky */
 
 	if (subj) {
 		subj++;

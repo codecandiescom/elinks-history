@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.225 2003/08/29 11:16:58 jonas Exp $ */
+/* $Id: renderer.c,v 1.226 2003/08/29 18:18:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ realloc_line(struct document *document, int y, int x)
 	int i;
 	int newsize = ALIGN(x + 1);
 	struct line *line;
-	struct color_pair colors = { par_format.bgcolor, 0x0 };
+	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char schar;
 
 	assert(document);
@@ -249,7 +249,7 @@ set_hchars(struct part *part, int x, int y, int xl,
 	if_assert_failed return;
 
 	if (bgcolor) {
-		struct color_pair colors = { *bgcolor, 0x0 };
+		struct color_pair colors = INIT_COLOR_PAIR(*bgcolor, 0x0);
 		struct screen_char schar;
 
 		schar.color = mix_color_pair(&colors);
@@ -271,7 +271,7 @@ void
 xset_hchar(struct part *part, int x, int y,
 	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
-	struct color_pair colors = { bgcolor, 0x0 };
+	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, 0x0);
 
 	assert(part && part->document);
 	if_assert_failed return;
@@ -299,7 +299,7 @@ void
 xset_vchars(struct part *part, int x, int y, int yl,
 	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
-	struct color_pair colors = { bgcolor, 0x0 };
+	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, 0x0);
 	struct screen_char schar;
 
 	assert(part && part->document);

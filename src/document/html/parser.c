@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.254 2003/11/11 15:05:16 zas Exp $ */
+/* $Id: parser.c,v 1.255 2003/11/12 15:52:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1079,7 +1079,7 @@ static void
 html_h(int h, unsigned char *a,
        enum format_align default_align)
 {
-	par_format.align = default_align;
+	if (!par_format.align) par_format.align = default_align;
 	html_linebrk(a);
 
 	h -= 2;

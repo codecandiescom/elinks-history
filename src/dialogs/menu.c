@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.44 2002/08/18 11:49:45 pasky Exp $ */
+/* $Id: menu.c,v 1.45 2002/08/27 00:17:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -584,7 +584,7 @@ struct input_history file_history = { 0, {&file_history.items, &file_history.ite
 void
 query_file(struct session *ses, unsigned char *url,
 	   void (*std)(struct session *, unsigned char *),
-	   void (*cancel)(struct session *))
+	   void (*cancel)(struct session *), int interactive)
 {
 	unsigned char *file, *def;
 	int dfl = 0;
@@ -596,11 +596,18 @@ query_file(struct session *ses, unsigned char *url,
 	if (*def && !dir_sep(def[strlen(def) - 1])) add_chr_to_str(&def, &dfl, '/');
 	add_bytes_to_str(&def, &dfl, file, l);
 
-	input_field(ses->term, NULL, TEXT(T_DOWNLOAD), TEXT(T_SAVE_TO_FILE),
-		    TEXT(T_OK), TEXT(T_CANCEL), ses, &file_history,
-		    MAX_STR_LEN, def, 0, 0, NULL,
-		    (void (*)(void *, unsigned char *))std,
-		    (void (*)(void *))cancel);
+	if (interactive) {
+		input_field(ses->term, NULL,
+			    TEXT(T_DOWNLOAD), TEXT(T_SAVE_TO_FILE), TEXT(T_OK),
+			    TEXT(T_CANCEL),
+			    ses, &file_history, MAX_STR_LEN, def,
+			    0, 0, NULL,
+			    (void (*)(void *, unsigned char *)) std,
+			    (void (*)(void *)) cancel);
+	} else {
+		std(ses, def);
+	}
+
 	mem_free(def);
 }
 

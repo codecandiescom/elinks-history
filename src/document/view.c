@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.67 2002/08/27 00:06:52 pasky Exp $ */
+/* $Id: view.c,v 1.68 2002/08/27 00:17:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2556,7 +2556,7 @@ void send_event(struct session *ses, struct event *ev)
 				goto x;
 			case ACT_SAVE_FORMATTED:
 				/* TODO: if (!anonymous) for non-HTTI ? --pasky */
-				menu_save_formatted(ses->term, NULL, ses);
+				menu_save_formatted(ses->term, (void *) 1, ses);
 				goto x;
 			case ACT_ADD_BOOKMARK:
 				if (!get_opt_int_tree(cmdline_options, "anonymous")) launch_bm_add_doc_dialog(ses->term, NULL, ses);
@@ -2690,7 +2690,7 @@ void frm_download(struct session *ses, struct f_data_c *fd)
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
-		query_file(ses, ses->dn_url, start_download, NULL);
+		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
 
@@ -2706,7 +2706,7 @@ void send_download_image(struct terminal *term, void *xxx, struct session *ses)
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
-		query_file(ses, ses->dn_url, start_download, NULL);
+		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
 
@@ -2722,7 +2722,7 @@ void send_download(struct terminal *term, void *xxx, struct session *ses)
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
-		query_file(ses, ses->dn_url, start_download, NULL);
+		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
 
@@ -2811,7 +2811,7 @@ void save_url(struct session *ses, unsigned char *url)
 	ses->dn_url = u;
 	ses->ref_url = init_str();
 	add_to_str(&ses->ref_url, &l, fd->f_data->url);
-	query_file(ses, ses->dn_url, start_download, NULL);
+	query_file(ses, ses->dn_url, start_download, NULL, 1);
 }
 
 void send_image(struct terminal *term, void *xxx, struct session *ses)
@@ -2838,7 +2838,7 @@ void save_as(struct terminal *term, void *xxx, struct session *ses)
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &len, fd->f_data->url);
-		query_file(ses, ses->dn_url, start_download, NULL);
+		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
 
@@ -2864,7 +2864,7 @@ void menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 	struct f_data_c *f;
 
 	if (!(f = current_frame(ses)) || !f->f_data) return;
-	query_file(ses, f->vs->url, save_formatted, NULL);
+	query_file(ses, f->vs->url, save_formatted, NULL, !((int) xxx));
 }
 
 /* Open a contextual menu on a link, form or image element. */

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.141 2004/12/19 14:50:57 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.142 2004/12/19 16:05:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -746,6 +746,8 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		mem_free_set(&fc->alt, stracpy(v.string));
 		break;
 	case JSP_INPUT_CHECKED:
+		if (fc->type != FC_CHECKBOX && fc->type != FC_RADIO)
+			break;
 		JSVAL_REQUIRE(vp, BOOLEAN);
 		fs->state = v.boolean;
 		break;
@@ -780,7 +782,8 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	case JSP_INPUT_VALUE:
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(&fs->value, stracpy(v.string));
-		fs->state = strlen(fs->value);
+		if (fc->type == FC_TEXT || fc->type == FC_PASSWORD || fc->type == FC_FILE)
+			fs->state = strlen(fs->value);
 		break;
 
 	default:

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.388 2004/12/30 23:50:40 jonas Exp $ */
+/* $Id: http.c,v 1.389 2004/12/31 01:39:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,7 @@
 #include "protocol/auth/auth.h"
 #include "protocol/auth/digest.h"
 #include "protocol/header.h"
+#include "protocol/http/blacklist.h"
 #include "protocol/http/codes.h"
 #include "protocol/http/http.h"
 #include "protocol/uri.h"
@@ -193,10 +194,17 @@ struct module http_protocol_module = struct_module(
 
 
 static void decompress_shutdown(struct connection *);
+static void free_proxy_auth(void);
 
 static void
 done_http()
 {
+	mem_free_if(proxy_auth.realm);
+	mem_free_if(proxy_auth.nonce);
+	mem_free_if(proxy_auth.opaque);
+
+	free_blacklist();
+
 	if (accept_charset)
 		mem_free(accept_charset);
 }
@@ -228,14 +236,6 @@ init_accept_charset()
 	done_string(&ac);
 }
 
-
-void
-free_proxy_auth(void)
-{
-	mem_free_if(proxy_auth.realm);
-	mem_free_if(proxy_auth.nonce);
-	mem_free_if(proxy_auth.opaque);
-}
 
 unsigned char *
 subst_user_agent(unsigned char *fmt, unsigned char *version,

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.229 2004/12/30 23:50:39 jonas Exp $ */
+/* $Id: main.c,v 1.230 2004/12/31 01:39:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,8 +45,6 @@
 #include "modules/version.h"
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
-#include "protocol/http/blacklist.h"
-#include "protocol/http/http.h"
 #include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/error.h"
@@ -294,7 +292,6 @@ terminate_all_subsystems(void)
 #endif
 		free_history_lists();
 		free_auth();
-		free_blacklist();
 		done_modules(builtin_modules);
 		done_screen_drivers();
 		done_saved_session_info();
@@ -309,7 +306,6 @@ terminate_all_subsystems(void)
 	check_bottom_halves();
 	free_home();
 	free_strerror_buf();
-	free_proxy_auth();
 	done_bfu_colors();
 	done_timer();
 	unregister_modules_options(builtin_modules);

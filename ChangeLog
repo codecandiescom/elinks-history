@@ -1,3 +1,37 @@
+Wed Feb 23 22:02:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/: bookmarks.c, dialogs.c:
+
+	Fix opening of either single bookmarks or folders by using
+	get_translated_uri() instead of get_uri(). The problem occurs for
+	URLs without a slash at the end. Reported by Michal Kwiatkowski.  
+
+Wed Feb 23 21:52:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, protocol/about.c,
+	protocol/data.c, protocol/file/file.c, protocol/finger/finger.c,
+	protocol/ftp/ftp.c, protocol/gopher/gopher.c, protocol/http/http.c,
+	protocol/nntp/connection.c, protocol/smb/smb.c, sched/session.c:
+
+	Introduce normalize_cache_entry() that should be called when
+	completion the creation of a cache entry. Fixes a truncating bug in
+	the NNTP backend.  
+
+Wed Feb 23 20:05:34 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In try_form_insert_mode, check first whether the current link is a
+	text input field. This fixes the problem reported by Jonas and
+	resulting from my previous changes whereby a link had to be
+	activated twice before it would do anything.  
+
+Wed Feb 23 19:09:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.h:
+
+	Add the parameter names in the declarations.  
+
 Tue Feb 22 21:11:08 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* debian/changelog:

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.95 2004/09/27 09:35:43 pasky Exp $ */
+/* $Id: renderer.c,v 1.96 2004/09/27 09:36:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,6 +98,8 @@ static void
 process_snippets(struct ecmascript_interpreter *interpreter,
                  struct list_head *snippets, struct string_list_item **current)
 {
+	if (!*current)
+		*current = snippets->next;
 	for (; *current != snippets; (*current) = (*current)->next) {
 		/* TODO: Support for external references. --pasky */
 		ecmascript_eval(interpreter, &doc_current->string);

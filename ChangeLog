@@ -1,3 +1,19 @@
+Sat Jun  8 09:57:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+
+	Tidyup of translate_directories(). Also, if /. or /.. is the last
+	segment of path, it (and preceding path element, respectively) is
+	removed as well - reported by Jonas Fonseca <fonseca@diku.dk>.  
+
+Fri Jun  7 22:28:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/html/parser.c:
+
+	Introduced document.browse.images.file_tags, which can enable
+	displaying [filename] instead of [IMG] possibly. Original patch by
+	Grzegorz Golawski <grzegol@pld.org.pl>.  
+
 Fri Jun  7 20:09:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/README:

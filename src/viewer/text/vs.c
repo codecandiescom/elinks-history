@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.40 2004/09/24 00:03:36 pasky Exp $ */
+/* $Id: vs.c,v 1.41 2004/09/24 21:21:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,9 @@ destroy_vs(struct view_state *vs)
 void
 copy_vs(struct view_state *dst, struct view_state *src)
 {
+#ifdef CONFIG_ECMASCRIPT
 	struct string_list_item *snippet;
+#endif
 
 	memcpy(dst, src, sizeof(struct view_state));
 

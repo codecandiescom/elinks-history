@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.41 2004/06/12 11:19:29 jonas Exp $ */
+/* $Id: event.c,v 1.42 2004/06/12 12:14:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,12 +205,19 @@ test_queue:
 		term->environment = info->system_env;
 		r = sizeof(struct terminal_info) + info->length;
 
+		/* We need to make sure that it is possible to draw on before
+		 * decoding the session info so that handling of bad URL syntax
+		 * by openning msg_box() will be possible. */
+		term_send_event(term, ev);
+
 		/* Either the initialization of the first session failed or we
 		 * are doing a remote session so quit.*/
 		if (!decode_session_info(term, info->length, (int *) info->data)) {
 			destroy_terminal(term);
 			return;
 		}
+
+		ev->ev = EV_REDRAW;
 		/* Fall through */
 	}
 	case EV_REDRAW:

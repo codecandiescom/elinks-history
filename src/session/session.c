@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.13 2003/05/03 01:53:11 pasky Exp $ */
+/* $Id: session.c,v 1.14 2003/05/03 02:36:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -281,7 +281,7 @@ print_screen_status(struct session *ses)
 		for (tab = 0; tab < number; tab++) {
 			struct window *win = get_tab_by_number(term, tab);
 
-			if (win->dat
+			if (win->data
 			    && current_frame(win->data)
 			    && current_frame(win->data)->f_data->title
 			    && strlen(current_frame(win->data)->f_data->title))

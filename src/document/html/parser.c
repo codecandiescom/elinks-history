@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.319 2004/01/03 15:10:02 zas Exp $ */
+/* $Id: parser.c,v 1.320 2004/01/04 00:38:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -392,15 +392,19 @@ static struct html_element *
 search_html_stack(char *name)
 {
 	struct html_element *element;
+	int namelen;
 
-#if 0
+	assert(name && *name);
+	namelen = strlen(name);
+
+#if 0	/* Debug code. Please keep. */
 	dump_html_stack();
 #endif
+
 	foreach (element, html_stack) {
 		if (element == &html_top)
 			continue; /* skip the top element */
-		if (!element->name || !element->namelen
-		    || strlcasecmp(element->name, element->namelen, name, -1))
+		if (strlcasecmp(element->name, element->namelen, name, namelen))
 			continue;
 		return element;
 	}

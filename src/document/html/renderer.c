@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.267 2003/09/15 20:14:44 jonas Exp $ */
+/* $Id: renderer.c,v 1.268 2003/09/15 20:17:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,10 +117,9 @@ realloc_lines(struct document *document, int y)
 static int
 realloc_line(struct document *document, int y, int x)
 {
-	int i;
-	struct line *line;
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
-	struct screen_char schar = INIT_SCREEN_CHAR(' ', 0, 0);
+	struct screen_char *pos, *end;
+	struct line *line;
 
 	if (realloc_lines(document, y))
 		return -1;
@@ -133,13 +132,17 @@ realloc_line(struct document *document, int y, int x)
 	if (!ALIGN_LINE(&line->d, line->l, x + 1))
 		return -1;
 
-	set_term_color(&schar, &colors, COLOR_DEFAULT);
+	/* Make a template of the last char using that align alloc clears the
+	 * other members. */
+	end = &line->d[x];
+	end->data = ' ';
+	set_term_color(end, &colors, COLOR_DEFAULT);
 
-	for (i = line->l; i <= x; i++) {
-		copy_screen_chars(&line->d[i], &schar, 1);
+	for (pos = &line->d[line->l]; pos < end; pos++) {
+		copy_screen_chars(pos, end, 1);
 	}
 
-	line->l = i;
+	line->l = x + 1;
 
 	return 0;
 }

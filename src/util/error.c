@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.67 2003/06/18 11:49:52 pasky Exp $ */
+/* $Id: error.c,v 1.68 2003/06/18 17:00:29 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -12,6 +12,7 @@
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

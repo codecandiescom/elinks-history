@@ -1,4 +1,4 @@
-/* $Id: unix.h,v 1.2 2003/10/27 03:27:36 pasky Exp $ */
+/* $Id: unix.h,v 1.3 2003/10/27 03:29:08 pasky Exp $ */
 
 #ifndef EL__OSDEP_UNIX_H
 #define EL__OSDEP_UNIX_H
@@ -25,7 +25,7 @@ static inline int dir_sep(char x) { return x == '/'; }
 #define ASSOC_BLOCK
 #define ASSOC_CONS_XWIN
 #if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
-#define USE_GPM
+#define GPM_MOUSE
 #endif
 
 #endif

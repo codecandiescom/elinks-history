@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.268 2004/08/12 04:31:30 miciah Exp $ */
+/* $Id: search.c,v 1.269 2004/08/12 04:35:10 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -926,7 +926,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 {
 	int hit_top = 0;
 	unsigned char *message = NULL;
-	unsigned int free_text = 0;
+	enum msgbox_flags flags = 0;
 
 	switch (find_next_do(ses, doc_view, direction)) {
 		case FIND_ERROR_HIT_TOP:
@@ -951,7 +951,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 							   N_("Search string"
 							      " '%s' not found"),
 							   ses->search_word);
-					free_text = 1;
+					flags |= MSGBOX_FREE_TEXT;
 					break;
 
 				case 1:
@@ -968,7 +968,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 	}
 
 	if (message)
-		msg_box(ses->tab->term, NULL, free_text ? MSGBOX_FREE_TEXT : 0,
+		msg_box(ses->tab->term, NULL, flags,
 			N_("Search"), ALIGN_CENTER,
 			message,
 			NULL, 1,

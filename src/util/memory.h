@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.9 2003/04/22 14:17:16 zas Exp $ */
+/* $Id: memory.h,v 1.10 2003/06/08 11:54:25 pasky Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -41,6 +41,7 @@ void *mem_realloc(void *, size_t);
 #else
 
 # include <stdlib.h>
+
 /* TODO: For enhanced portability, checks at configure time:
  * malloc(0) -> NULL
  * realloc(NULL, 0) -> NULL
@@ -50,23 +51,34 @@ void *mem_realloc(void *, size_t);
  * For these we need some replacement functions.
  * This should not be an issue on most modern systems.
  */
+
 # define mem_alloc(size) malloc(size)
 # define mem_calloc(count, size) calloc(count, size)
 # define mem_free(p) free(p)
 # define mem_realloc(p, size) realloc(p, size)
 
+
 /* fmem_* functions should be use for allocation and freeing of memory
  * inside a function.
  * See alloca(3) manpage. */
+
+#undef fmem_alloc
+#undef fmem_free
+
 #ifdef HAVE_ALLOCA
-#if defined HAVE_ALLOCA_H
+
+#ifdef HAVE_ALLOCA_H
 #include <alloca.h>
 #endif
-#undef fmem_alloc
 #define fmem_alloc(x) alloca(x)
-#undef fmem_free
 #define fmem_free(x)
-#endif
+
+#else /* HAVE_ALLOCA */
+
+#define fmem_alloc(x) mem_alloc(x)
+#define fmem_free(x) mem_free(x)
+
+#endif /* HAVE_ALLOCA */
 
 #endif /* FASTMEM */
 

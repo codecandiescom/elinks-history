@@ -1,3 +1,9 @@
+Sat Oct  4 20:50:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Corrected scripting/ note.  
+
 Sat Oct  4 20:43:02 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* NEWS:

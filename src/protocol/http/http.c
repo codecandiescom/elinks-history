@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.298 2004/07/04 12:13:42 jonas Exp $ */
+/* $Id: http.c,v 1.299 2004/07/10 14:30:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -970,7 +970,6 @@ thats_all_folks:
 	}
 
 	http_end_request(conn, S_OK, 0);
-	return;
 }
 
 /* Returns offset of the header end, zero if more data is needed, -1 when

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.26 2002/06/17 10:31:00 pasky Exp $ */
+/* $Id: types.c,v 1.27 2002/06/17 11:23:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -753,7 +753,7 @@ void
 really_add_ext(void *fcp)
 {
 	struct extension *ext = (struct extension *) fcp;
-	unsigned char *name = straconcat("mime.extension". ".", ext->ext, NULL);
+	unsigned char *name = straconcat("mime.extension", ".", ext->ext, NULL);
 
 	if (!name) return;
 

@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.10 2003/09/30 00:03:51 jonas Exp $ */
+/* $Id: style.c,v 1.11 2003/12/01 14:41:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "config/options.h"
 #include "terminal/color.h"
 #include "terminal/draw.h"
+#include "terminal/terminal.h"
 #include "util/color.h"
 #include "util/hash.h"
 

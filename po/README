@@ -1,0 +1,130 @@
+			README for Translators
+
+1. Adding a new language:
+=========================
+
+First make the po template file
+
+	$ cd po/
+	$ make elinks.pot
+
+Use this to the as the basis for you translation
+
+	$ cp elinks.pot <your language code>.po
+
+Then follow the instructions in the 'Updating .po files' section below.
+
+1.1 Integrating a new language file:
+------------------------------------
+
+When you are done editing it you need to integrate it as part of ELinks
+
+	$ cd ../
+
+Add your language code to the ALL_LINGUAS string in configure.in (keep the
+alphabetic order ;). To make the change take effect you have to rebuild all
+Makefiles
+
+	$ ./autogen.sh
+	$ ./configure
+
+The language file will now be compiled when you run make and you can check the
+translation file for errors and fix any warnings you get.
+
+Next thing is to add it to the Setup->Language menu. This is done by adding an
+entry in the language array in src/intl/gettext/libintl.c, and should not
+require any C coding skills, just copy an already existing entry and edit the
+name of your language (in English) so you end up with something like
+
+	struct language languages[] = {
+		{"System", "system"},
+		{"English", "en"},
+
+		... other entries ...
+		{"<name for your language in English>", "<your language code>"},
+		... other entries ...
+
+	        {NULL, NULL},
+	};
+
+1.2 Making the new language file part of ELinks:
+------------------------------------------------
+
+Finally to make it part of the ELinks distribution send it to one of the
+mailinglists or file it as a bug at <http://bugzilla.elinks.or.cz>.
+
+
+2. Updating .po files:
+======================
+
+2.1 Tools needed:
+-----------------
+
+There are a great deal of tools for editing and working with .po files most are
+described in the gettext manual availabe at <http://www.gnu.org/manual/gettext>
+or by typing `info gettext` on some systems. Some editors have special .po modes
+to help spot errors etc. but nothing fancy is required to update only some
+reasonable editor.
+
+In order to compile, get warnings and actually use your updated language file
+you will however need the gettext tools. If you don't have any of these tools
+please don't hesitate to still do the update and send it to the mailinglist or
+bugzilla so it can be added to CVS. By next release or nightly generated tarball
+you can then make use of your updates.
+
+2.2 The basics of updating:
+---------------------------
+
+Each string that needs to translation will look like this
+
+	#: src/dialogs/info.c:184
+	#, fuzzy, c-format
+	msgid "Cache content: %s"
+	msgstr "Cacheindhold: %s"
+
+Lines starting with '#' are comments or control hints for the po compiler.  The
+text following '#:' is a listing of each place (filename and line number) in the
+code where the string is used. Text following '#,' are a comma separated list of
+control hints:
+
+	'fuzzy'
+
+		means that the string was changed in the code and the translator
+		needs to check if the translation is still ok. When it has been
+		checked or updated it is safe to remove 'fuzzy' and the following
+		comma.
+
+	'c-format'
+
+		is a hint to the compiler, checker and translator that the
+		string uses printf format.
+
+The string following 'msgid' are the original untranslated string. It is used to
+get the translated one so: DO NEVER CHANGE IT. If you spot an error in it change
+it in the code instead.
+
+The string following 'msgstr' is the translated string.
+TODO: write about the meaning of % fragments.
+
+
+2.3 Making the updates part of ELinks:
+--------------------------------------
+
+If the language file is already added finally run make to compile and check the
+language file for errors and fix any warnings you get. Then patch your changes
+and send it to one of the mailinglists or file it as a bug at
+<http://bugzilla.elinks.or.cz>.
+
+
+3. Statistics:
+==============
+
+Some people (like Zas but other mortals as well ;) like to know how much of the
+language file is up-to-date. This can be accomplished by running the
+gen_translations_stats.sh script from the po/ directory. It will list the
+current status of each language file. Be proud if your language file rank higher
+or the same as the French one.
+
+
+$Id: README,v 1.1 2003/06/26 16:24:10 jonas Exp $
+vim: textwidth=80

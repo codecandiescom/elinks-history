@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.47 2003/05/03 01:11:23 pasky Exp $ */
+/* $Id: menu.c,v 1.48 2003/05/03 01:16:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -585,6 +585,9 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					break;
 #undef DIST
 				default:
+				{
+					int i;
+
 					if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) ||
 					    ev->y == KBD_ALT) {
 						delete_window_ev(win, ev);
@@ -601,34 +604,36 @@ menu_func(struct window *win, struct event *ev, int fwd)
 						goto break2;
 					}
 
-					if (ev->x > ' ' && ev->x < 256) {
-						int i;
+					if (ev->x <= ' ' || ev->x >= 256)
+						break;
 
-						for (i = 0; i < menu->ni; i++) {
-							if (is_hotkey(&menu->items[i], ev->x, win->term)) {
-								menu->selected = i;
-								scroll_menu(menu, 0);
-								s = 1;
-							}
-						}
+					for (i = 0; i < menu->ni; i++) {
+						if (!is_hotkey(&menu->items[i], ev->x, win->term))
+							continue;
+						menu->selected = i;
+						scroll_menu(menu, 0);
+						s = 1;
+					}
 
-						if (s == 0) {
-							for (i = 0; i < menu->ni; i++) {
-								if (menu->items[i].text &&
-								    (upcase(menu->items[i].text[0])
-								     == upcase(ev->x))) {
-									if (upcase(menu->items[menu->selected].text[0]) ==
-									    upcase(ev->x) &&
-									    menu->selected >= i) continue;
-									menu->selected = i;
- 									scroll_menu(menu, 0);
- 									break;
-								}
-							}
- 						}
+					if (s != 0)
+						break;
+
+					for (i = 0; i < menu->ni; i++) {
+						if (!menu->items[i].text ||
+						    (upcase(menu->items[i].text[0])
+						     != upcase(ev->x)))
+							continue;
+						if (upcase(menu->items[menu->selected].text[0])
+						    	== upcase(ev->x)
+						    && menu->selected >= i)
+							continue;
+						menu->selected = i;
+						scroll_menu(menu, 0);
+						break;
 					}
 
 					break;
+				}
 			}
 
 			display_menu(win->term, menu);
@@ -791,20 +796,17 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 							    - (menu->items[i].hotkey_pos
 							    ? 1 : 0);
 
-					if (ev->x >= o && ev->x < p) {
-						menu->selected = i;
-						display_mainmenu(win->term,
-								 menu);
-						if ((ev->b & BM_ACT) == B_UP
-						    || menu->items[s].in_m) {
-							/* Uh-oh! But I will
-							 * fit here! --pasky */
-							select_mainmenu(
-								win->term,
+					if (ev->x < o || ev->x >= p)
+						continue;
+
+					menu->selected = i;
+					display_mainmenu(win->term, menu);
+					if ((ev->b & BM_ACT) == B_UP
+					    || menu->items[s].in_m) {
+						select_mainmenu(win->term,
 								menu);
-						}
-						break;
 					}
+					break;
 				}
 			}
 			break;
@@ -843,10 +845,10 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 
 				s = 1;
 				for (i = 0; i < menu->ni; i++)
-					if (is_hotkey(&menu->items[i], ev->x, win->term)) {
-						menu->selected = i;
-						s = 2;
-					}
+					if (!is_hotkey(&menu->items[i], ev->x, win->term))
+						continue;
+					menu->selected = i;
+					s = 2;
 
 			} else if (!s) {
 				delete_window_ev(win, ev->x != KBD_ESC  ? ev

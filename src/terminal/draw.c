@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.28 2003/07/30 21:38:43 jonas Exp $ */
+/* $Id: draw.c,v 1.29 2003/07/30 23:21:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,9 +127,13 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw, unsigned c)
 	int endx = (xw < term->x - x) ? xw : term->x - x;
 	int offset_base = x + term->x * y;
 	register int j;
+	struct screen_char ch;
 
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
+
+	ch.data = get_screen_char_data(c);
+	ch.attr = get_screen_char_attr(c);
 
 	for (j = starty; j < endy; j++) {
 		register int offset = offset_base + term->x * j;
@@ -139,8 +143,8 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw, unsigned c)
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
 		for (; position < endx + offset; position++) {
-			screen->image[position].data = get_screen_char_data(c);
-			screen->image[position].attr = get_screen_char_attr(c);
+			screen->image[position].data = ch.data;
+			screen->image[position].attr = ch.attr;
 		}
 	}
 	screen->dirty = 1;
@@ -194,15 +198,17 @@ print_text(struct terminal *term, int x, int y, int l,
 	struct terminal_screen *screen = term->screen;
 	int end = (l <= term->x - x) ? l : term->x - x;
 	int position = x + term->x * y;
+	unsigned char c_attr;
 
 	assert(text && l >= 0);
 	if_assert_failed { return; }
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
+	c_attr = get_screen_char_attr(c);
 	for (end += position; position < end && *text; text++, position++) {
 		screen->image[position].data = *text;
-		screen->image[position].attr = get_screen_char_attr(c);
+		screen->image[position].attr = c_attr;
 	}
 	screen->dirty = 1;
 }

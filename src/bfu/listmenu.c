@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.6 2004/04/16 16:29:58 zas Exp $ */
+/* $Id: listmenu.c,v 1.7 2004/04/17 02:48:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		/* TODO: recheck that --Zas */
 		memset(item, 0, sizeof(struct menu_item));
 
-	} else mem_free_if(name);
+	} else mem_free(name);
 
 	if (name && data == -1) {
 		int size = (menu->stack_size + 1) * sizeof(struct menu_item *);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.19 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: url.c,v 1.20 2002/05/17 17:41:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -924,6 +924,7 @@ extract_position(unsigned char *url)
 
 	memcpy(r, uu + 1, u - uu - 1);
 	r[u - uu - 1] = 0;
+
 	memmove(uu, u, strlen(u) + 1);
 
 	return r;

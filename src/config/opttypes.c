@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.6 2002/05/25 20:05:05 pasky Exp $ */
+/* $Id: opttypes.c,v 1.7 2002/05/25 22:55:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,8 +130,8 @@ str_rd(struct option *opt, unsigned char **file)
 
 	if (opt->max && str2l >= opt->max) { mem_free(str2); return 0; }
 
-	mem_free(opt->ptr);
-	opt->ptr = str2;
+	safe_strncpy(opt->ptr, str2, MAX_STR_LEN);
+	mem_free(str2);
 
 	return 1;
 }
@@ -155,6 +155,7 @@ str_wr(struct option *o, unsigned char **s, int *l)
 int
 cp_rd(struct option *opt, unsigned char **str)
 {
+	unsigned char buf[MAX_STR_LEN];
 	void *ptr;
 	int ret;
 
@@ -162,16 +163,14 @@ cp_rd(struct option *opt, unsigned char **str)
 	 * option. */
 
 	ptr = opt->ptr;
-	opt->ptr = init_str();
+	opt->ptr = buf;
 	ret = str_rd(opt, str);
 	if (!ret) {
-		mem_free(opt->ptr);
 		opt->ptr = ptr;
 		return 0;
 	}
 
 	ret = get_cp_index(opt->ptr);
-	mem_free(opt->ptr);
 	opt->ptr = ptr;
 
 	if (ret < 0) {
@@ -194,6 +193,7 @@ cp_wr(struct option *o, unsigned char **s, int *l)
 int
 lang_rd(struct option *opt, unsigned char **str)
 {
+	unsigned char buf[MAX_STR_LEN];
 	void *ptr;
 	int ret;
 
@@ -201,24 +201,21 @@ lang_rd(struct option *opt, unsigned char **str)
 	 * option. */
 
 	ptr = opt->ptr;
-	opt->ptr = init_str();
+	opt->ptr = buf;
 	ret = str_rd(opt, str);
 	if (!ret) {
-		mem_free(opt->ptr);
 		ptr = opt->ptr;
 		return 0;
 	}
 
 	for (ret = 0; ret < n_languages(); ret++)
 		if (!strcasecmp(language_name(ret), opt->ptr)) {
-			mem_free(opt->ptr);
 			opt->ptr = ptr;
 			*((int *) opt->ptr) = ret;
 			set_language(ret);
 			return 1;
 		}
 
-	mem_free(opt->ptr);
 	opt->ptr = ptr;
 
 	*((int *) opt->ptr) = -1;
@@ -428,6 +425,7 @@ term_wr(struct option *o, unsigned char **s, int *l)
 int
 color_rd(struct option *opt, unsigned char **str)
 {
+	unsigned char buf[MAX_STR_LEN];
 	void *ptr;
 	int ret;
 	struct rgb color;
@@ -436,16 +434,14 @@ color_rd(struct option *opt, unsigned char **str)
 	 * option. */
 
 	ptr = opt->ptr;
-	opt->ptr = init_str();
+	opt->ptr = buf;
 	ret = str_rd(opt, str);
 	if (!ret) {
-		mem_free(opt->ptr);
 		ptr = opt->ptr;
 		return 0;
 	}
 
 	ret = decode_color(opt->ptr, &color);
-	mem_free(opt->ptr);
 	opt->ptr = ptr;
 	*((struct rgb *) opt->ptr) = color;
 

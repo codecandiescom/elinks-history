@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.600 2004/10/09 22:43:51 miciah Exp $ */
+/* $Id: view.c,v 1.601 2004/10/09 22:51:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,7 +506,7 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 }
 
 
-static void
+void
 copy_current_link_to_clipboard(struct session *ses,
 			       struct document_view *doc_view)
 {
@@ -639,11 +639,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	switch (kbd_action(KEYMAP_MAIN, ev, NULL)) {
-		case ACT_MAIN_COPY_CLIPBOARD:
-			copy_current_link_to_clipboard(ses, doc_view);
-			status = FRAME_EVENT_OK;
-			break;
-
 		case ACT_MAIN_JUMP_TO_LINK:
 			try_jump_to_link_number(ses, doc_view);
 			status = FRAME_EVENT_OK;

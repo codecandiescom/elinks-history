@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.100 2004/10/09 22:19:40 miciah Exp $ */
+/* $Id: action.c,v 1.101 2004/10/09 22:51:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -611,6 +611,9 @@ do_action(struct session *ses, enum main_action action, int verbose)
 				refresh_view(ses, doc_view, 0);
 			break;
 
+		case ACT_MAIN_COPY_CLIPBOARD:
+			copy_current_link_to_clipboard(ses, doc_view);
+			break;
 
 		case ACT_MAIN_JUMP_TO_LINK:
 		case ACT_MAIN_MARK_SET:

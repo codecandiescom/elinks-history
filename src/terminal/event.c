@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.3 2003/07/26 10:20:12 zas Exp $ */
+/* $Id: event.c,v 1.4 2003/07/26 10:39:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,8 +42,8 @@ term_send_event(struct terminal *term, struct event *ev)
 	win = term->windows.next;
 	if (win->type == WT_TAB) {
 		win = get_current_tab(term);
-		if (!win)
-			internal("No tab to send the event to!");
+		assertm(win, "No tab to send the event to!");
+		if_assert_failed return;
 	}
 
 	win->handler(win, ev, 0);

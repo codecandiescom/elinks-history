@@ -86,7 +86,7 @@ sub follow_url_hook
 	my $url = shift;
 
 	# Bork! Bork! Bork!
-	if ($url =~ 'google.com')
+	if ($url =~ 'google\.com')
 	{
 		if ($url =~ '^http://(|www\.|search\.)google\.com(|/search)(|/)$')
 		{
@@ -111,7 +111,7 @@ sub pre_format_html_hook
 	my $html = shift;
 
 	# /. sanitation
-	if ($url =~ 'slashdot.org')
+	if ($url =~ 'slashdot\.org')
 	{
 #		$html =~ s/^<!-- Advertisement code. -->.*<!-- end ad code -->$/<br>/sm;
 		return $html;

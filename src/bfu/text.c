@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.43 2003/11/07 17:24:01 pasky Exp $ */
+/* $Id: text.c,v 1.44 2003/11/07 17:26:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@ text_width(struct terminal *term, register unsigned char *text,
 static inline int
 split_line(unsigned char *text, int w)
 {
-	unsigned char *tx;
+	unsigned char *next_split;
 	unsigned char *split = text;
 	int line_width;
 
@@ -57,13 +57,13 @@ split_line(unsigned char *text, int w)
 		}
 
 		line_width = split - text;
-		tx = ++split;
+		next_split = ++split;
 
 		if (*(split - 1) != ' ') break;
 
-		while (is_unsplitable(tx))
-			tx++;
-	} while (tx - split < w - line_width);
+		while (is_unsplitable(next_split))
+			next_split++;
+	} while (next_split - split < w - line_width);
 
 	assert(line_width + 1 == split - text);
 

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.168 2004/11/17 19:10:36 zas Exp $ */
+/* $Id: listbox.c,v 1.169 2004/11/17 21:59:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -574,7 +574,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 }
 
 static t_handler_event_status
-kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
+kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	    struct term_event *ev)
 {
 	struct widget_data *dlg_item = dlg_data->widgets_data;

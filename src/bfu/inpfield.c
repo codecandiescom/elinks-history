@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.165 2004/11/17 19:10:05 zas Exp $ */
+/* $Id: inpfield.c,v 1.166 2004/11/17 21:59:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,7 @@ display_field:
 }
 
 static t_handler_event_status
-kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
+kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	  struct term_event *ev)
 {
 	struct window *win = dlg_data->win;
@@ -563,7 +563,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 		}
 
 		/* First let the input field do its business */
-		kbd_field(widget_data, dlg_data, ev);
+		kbd_field(dlg_data, widget_data, ev);
 		break;
 
 	case EVENT_REDRAW:

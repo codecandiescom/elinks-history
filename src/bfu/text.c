@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.107 2004/11/17 19:10:48 zas Exp $ */
+/* $Id: text.c,v 1.108 2004/11/17 21:59:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,7 +326,7 @@ format_and_display_text(struct widget_data *widget_data,
 }
 
 static t_handler_event_status
-kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
+kbd_text(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	 struct term_event *ev)
 {
 	int current = widget_data->info.text.current;

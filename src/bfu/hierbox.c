@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.191 2004/11/17 19:09:39 zas Exp $ */
+/* $Id: hierbox.c,v 1.192 2004/11/17 21:59:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,7 +156,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 
 	/* Check if listbox has something to say to this */
 	if (widget->ops->kbd
-	    && widget->ops->kbd(widget_data, dlg_data, ev)
+	    && widget->ops->kbd(dlg_data, widget_data, ev)
 	       == EVENT_PROCESSED)
 		return EVENT_PROCESSED;
 

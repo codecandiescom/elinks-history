@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.210 2004/01/02 19:33:10 jonas Exp $ */
+/* $Id: download.c,v 1.211 2004/01/13 14:41:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -811,7 +811,11 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct codw_hop *codw_hop = data;
 	struct file_download *file_download = NULL;
-	unsigned char *url = codw_hop->tq->url;
+
+	assert(codw_hop);
+	assert(codw_hop->tq);
+	assert(codw_hop->tq->url && *codw_hop->tq->url);
+	assert(codw_hop->tq->ses);
 
 	if (!codw_hop->real_file) goto cancel;
 
@@ -820,7 +824,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	object_nolock(file_download); /* Debugging purpose. */
 
-	file_download->url = stracpy(url);
+	file_download->url = stracpy(codw_hop->tq->url);
 	if (!file_download->url) goto cancel;
 
 	file_download->file = codw_hop->real_file;
@@ -847,6 +851,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	add_to_list(downloads, file_download);
 	change_connection(&codw_hop->tq->download, &file_download->download, PRI_DOWNLOAD, 0);
 	tp_free(codw_hop->tq);
+
 	display_download(codw_hop->tq->ses->tab->term, file_download, codw_hop->tq->ses);
 
 	mem_free(codw_hop);

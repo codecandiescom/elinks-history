@@ -1,10 +1,7 @@
-/* $Id: options.h,v 1.71 2003/10/22 20:44:58 pasky Exp $ */
+/* $Id: options.h,v 1.72 2003/10/22 21:35:44 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
-
-/* #include "bfu/listbox.h" */
-struct listbox_item;
 
 #include "util/color.h"
 #include "util/lists.h"
@@ -61,29 +58,35 @@ enum option_type {
 
 	OPT_COMMAND,
 
-	OPT_ALIAS, /* ptr is "real" option name */
+	OPT_ALIAS,
 
 	OPT_TREE,
 };
 
-struct session;
+/* Defined in bfu/listbox.h, later and sched/session.h */
+struct listbox_item;
 struct option;
+struct session;
 
 union option_value {
-	/* Keep first to makes options_root initialization possible. */
+	/* XXX: Keep first to make @options_root initialization possible. */
+	/* The OPT_TREE list_head is allocated. */
 	struct list_head *tree;
 
 	/* Used by OPT_BOOL, OPT_INT, OPT_LONG, OPT_CODEPAGE and
 	 * OPT_LANGUAGE */
 	long number;
 
-	/* The rest is basicly OPT_#{toupper(membername)} */
-
+	/* The OPT_COLOR value */
 	color_t color;
+
+	/* The OPT_COMMAND value */
 	unsigned char *(*command)(struct option *, unsigned char ***, int *);
 
-	/* Each string option get allocated MAX_STR_LEN bytes. Used by
-	 * OPT_STRING and OPT_ALIAS. */
+	/* Both the OPT_STRING and OPT_ALIAS strings are allocated.
+	 * The OPT_ALIAS string has variable size and should remain untouched!
+	 * It contains the name of the "real" / aliased option.
+	 * The OPT_STRING string has size MAX_STR_LEN bytes. */
 	unsigned char *string;
 };
 

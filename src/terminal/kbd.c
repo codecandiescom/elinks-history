@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.49 2004/03/26 17:49:52 zas Exp $ */
+/* $Id: kbd.c,v 1.50 2004/03/26 17:56:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -480,21 +480,17 @@ in_sock(struct itrm *itrm)
 	unsigned char buf[OUT_BUF_SIZE];
 
 	bytes_read = safe_read(itrm->sock_in, buf, OUT_BUF_SIZE);
-	if (bytes_read <= 0) {
-fr:
-		free_trm(itrm);
-		return;
-	}
+	if (bytes_read <= 0) goto free_and_return;
 
 qwerty:
 	for (i = 0; i < bytes_read; i++)
 		if (!buf[i])
-			goto ex;
+			goto has_nul_byte;
 
 	safe_hard_write(itrm->std_out, buf, bytes_read);
 	return;
 
-ex:
+has_nul_byte:
 	safe_hard_write(itrm->std_out, buf, i);
 
 	i++;
@@ -506,16 +502,16 @@ ex:
 #define RD(xx) { \
 	unsigned char cc; \
 	if (p < bytes_read) cc = buf[p++]; \
-	else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto fr; \
+	else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto free_and_return; \
 	xx = cc; }
 
 	RD(fg);
 
 	/* FIXME: goto fr on error ?? */
-	if (!init_string(&path)) goto fr;
+	if (!init_string(&path)) goto free_and_return;
 	if (!init_string(&delete)) {
 		done_string(&path);
-		goto fr;
+		goto free_and_return;
 	}
 
 	while (1) {
@@ -588,6 +584,9 @@ nasty_thing:
 	bytes_read -= p;
 
 	goto qwerty;
+
+free_and_return:
+	free_trm(itrm);
 }
 
 int process_queue(struct itrm *);

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.253 2004/06/26 21:29:58 pasky Exp $ */
+/* $Id: link.c,v 1.254 2004/06/26 21:31:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -525,7 +525,7 @@ next_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y)
 		int bottom = int_min(doc_view->vs->y + doc_view->box.height,
 				     document->height);
 
-		for (; dir_y > 0 ? y <= bottom : y >= top; y += dir_y) {
+		for (; dir_y > 0 ? y < bottom : y >= top; y += dir_y) {
 			/* @backup points to the nearest link from the left
 			 * to the desired position. */
 			struct link *backup = NULL;

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.29 2004/04/14 22:47:51 jonas Exp $ */
+/* $Id: event.c,v 1.30 2004/04/14 22:50:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,11 +81,11 @@ term_send_event(struct terminal *term, struct term_event *ev)
 	case EV_MOUSE:
 	case EV_KBD:
 	case EV_ABORT:
-		/* We need to send event to correct tab, not to the first one. --karpov */
-		/* ...if we want to send it to a tab at all. --pasky */
 		assert(!list_empty(term->windows));
 		if_assert_failed break;
 
+		/* We need to send event to correct tab, not to the first one. --karpov */
+		/* ...if we want to send it to a tab at all. --pasky */
 		win = term->windows.next;
 		if (win->type == WT_TAB) {
 			win = get_current_tab(term);

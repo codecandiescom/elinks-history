@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.8 2002/03/28 17:35:57 pasky Exp $ */
+/* $Id: ftp.c,v 1.9 2002/04/02 17:16:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -570,6 +570,11 @@ void ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 
 	response = get_ftp_response(conn, rb, 2);
 
+	if (response == -1) {
+		abort_conn_with_state(conn, S_FTP_ERROR);
+		return;
+	}
+
 	if (!response) {
 		read_from_socket(conn, conn->sock1, rb, ftp_retr_file);
 		setcstate(conn, S_GETH);
@@ -577,45 +582,49 @@ void ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (response >= 100 && response < 200) {
-		int file_len;
-		unsigned char *data = rb->data;
-		int pos, pos_file_len = 0;
+		/* We only need to parse response after RETR */
+		if (!c_i->dir) {
+			int file_len;
+			unsigned char *data = rb->data;
+			int pos, pos_file_len = 0;
 
-		/* 150 Opening BINARY mode data connection for hello-1.0-1.1.diff.gz (16452 bytes). */
+			/* Getting file size from text response.. */
+			/* 150 Opening BINARY mode data connection for hello-1.0-1.1.diff.gz (16452 bytes). */
 
-		for (pos = 0; pos < rb->len && data[pos] != 10; pos++)
-			if (data[pos] == '(')
-				pos_file_len = pos;
+			for (pos = 0; pos < rb->len && data[pos] != 10; pos++)
+				if (data[pos] == '(')
+					pos_file_len = pos;
 
-		if (!pos_file_len || pos_file_len == rb->len - 1)
+			if (!pos_file_len || pos_file_len == rb->len - 1)
+				goto nol;
+
+			pos_file_len++;
+			if (data[pos_file_len] < '0' || data[pos_file_len] > '9')
+				goto nol;
+
+			for (pos = pos_file_len; pos < rb->len; pos++)
+				if (data[pos] < '0' || data[pos] > '9')
+					goto quak;
 			goto nol;
-
-		pos_file_len++;
-		if (data[pos_file_len] < '0' || data[pos_file_len] > '9')
-			goto nol;
-
-		for (pos = pos_file_len; pos < rb->len; pos++)
-			if (data[pos] < '0' || data[pos] > '9')
-				goto quak;
-		goto nol;
 
 quak:
-		for (; pos < rb->len; pos++)
-			if (data[pos] != ' ')
-				break;
+			for (; pos < rb->len; pos++)
+				if (data[pos] != ' ')
+					break;
 
-		if (pos + 4 > rb->len)
-			goto nol;
+			if (pos + 4 > rb->len)
+				goto nol;
 
-		if (casecmp(&data[pos], "byte", 4))
-			goto nol;
+			if (casecmp(&data[pos], "byte", 4))
+				goto nol;
 
-		file_len = strtol(&data[pos_file_len], NULL, 10);
-		if (file_len && !conn->from) {
-			/* FIXME: ..when downloads resuming implemented.. */
-			conn->est_length = file_len;
-		}
+			file_len = strtol(&data[pos_file_len], NULL, 10);
+			if (file_len && !conn->from) {
+				/* FIXME: ..when downloads resuming implemented.. */
+				conn->est_length = file_len;
+			}
 nol:
+		}
 	}
 
 	set_handlers(conn->sock2,

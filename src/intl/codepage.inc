@@ -605,7 +605,7 @@ struct table_entry table_8859_5 [] = {
 	{0, 0}
 };
 
-unsigned char *aliases_8859_5 [] = {"ISO-8895-5", "iso8859-5", "8859-5", "ISO_8859-5:1988", "iso-ir-144", "ISO_8859-5", "cyrillic", "csISOLatinCyrillic", "ISO8859_5", NULL };
+unsigned char *aliases_8859_5 [] = {"ISO-8859-5", "iso8859-5", "8859-5", "ISO_8859-5:1988", "iso-ir-144", "ISO_8859-5", "cyrillic", "csISOLatinCyrillic", "ISO8859_5", NULL };
 
 struct table_entry table_8859_6 [] = {
 	{0x80, 0x0080},

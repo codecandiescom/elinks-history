@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.9 2002/03/30 20:50:42 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.10 2002/03/30 21:17:46 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -317,7 +317,7 @@ void bookmark_edit_dialog(struct terminal *, unsigned char *,
 static inline void
 bookmark_dlg_list_clear(struct list_head *bm_list)
 {
-	free_list( *bm_list );
+	free_list(*bm_list);
 }
 
 
@@ -535,7 +535,6 @@ bookmark_get_name(bookmark_id id)
 
 	return bm->title;
 }
-
 
 
 /* Goes to the called bookmark */

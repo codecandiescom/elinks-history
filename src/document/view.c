@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.18 2002/03/29 10:36:56 pasky Exp $ */
+/* $Id: view.c,v 1.19 2002/03/30 21:17:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2716,57 +2716,100 @@ void menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 	query_file(ses, f->vs->url, save_formatted, NULL);
 }
 
+/* Open a contextual menu on a link, form or image element. */
+/* TODO: This should be completely configurable. */
 void link_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct f_data_c *f = current_frame(ses);
 	struct link *link;
-	struct menu_item *mi;
+	struct menu_item *mi = new_menu(1);
 	int l = 0;
 
-	if (!(mi = new_menu(1))) return;
-	if (!f) goto x;
-	if (f->vs->current_link == -1) goto no_l;
+	if (!mi) return;
+	if (!f || f->vs->current_link < 0) goto end;
+
 	link = &f->f_data->links[f->vs->current_link];
 	if (link->type == L_LINK && link->where) {
 		l = 1;
-		if (strlen(link->where) >= 4 && !casecmp(link->where, "MAP@", 4))
-			add_to_menu(&mi, TEXT(T_DISPLAY_USEMAP), ">", TEXT(T_HK_DISPLAY_USEMAP), MENU_FUNC send_enter, NULL, 1);
+		if (strlen(link->where) >= 4
+		    && !casecmp(link->where, "MAP@", 4))
+			add_to_menu(&mi, TEXT(T_DISPLAY_USEMAP),
+				    ">", TEXT(T_HK_DISPLAY_USEMAP),
+				    MENU_FUNC send_enter, NULL, 1);
 		else {
 			int c = can_open_in_new(term);
-			add_to_menu(&mi, TEXT(T_FOLLOW_LINK), "", TEXT(T_HK_FOLLOW_LINK), MENU_FUNC send_enter, NULL, 0);
+
+			add_to_menu(&mi, TEXT(T_FOLLOW_LINK),
+				    "", TEXT(T_HK_FOLLOW_LINK),
+				    MENU_FUNC send_enter, NULL, 0);
+
 			if (c)
-				add_to_menu(&mi, TEXT(T_OPEN_IN_NEW_WINDOW), c - 1 ? ">" : "", TEXT(T_HK_OPEN_IN_NEW_WINDOW), MENU_FUNC open_in_new_window, send_open_in_new_xterm, c - 1);
+				add_to_menu(&mi, TEXT(T_OPEN_IN_NEW_WINDOW),
+					     c - 1 ? ">" : "",
+					     TEXT(T_HK_OPEN_IN_NEW_WINDOW),
+					     MENU_FUNC open_in_new_window,
+					     send_open_in_new_xterm, c - 1);
+
 			if (!anonymous)
-				add_to_menu(&mi, TEXT(T_DOWNLOAD_LINK), "d", TEXT(T_HK_DOWNLOAD_LINK), MENU_FUNC send_download, NULL, 0);
-			/*add_to_menu(&mi, TEXT(T_ADD_BOOKMARK), "A", TEXT(T_HK_ADD_BOOKMARK), MENU_FUNC launch_bm_add_link_dialog, NULL, 0);*/
+				add_to_menu(&mi, TEXT(T_DOWNLOAD_LINK),
+					    "d", TEXT(T_HK_DOWNLOAD_LINK),
+					    MENU_FUNC send_download, NULL, 0);
+
+			add_to_menu(&mi, TEXT(T_ADD_BOOKMARK),
+				    "A", TEXT(T_HK_ADD_BOOKMARK),
+				    MENU_FUNC launch_bm_add_link_dialog,
+				    NULL, 0);
 
 		}
 	}
+
 	if (link->form) {
 		l = 1;
-		if (link->form->type == FC_RESET) add_to_menu(&mi, TEXT(T_RESET_FORM), "", TEXT(T_HK_RESET_FORM), MENU_FUNC send_enter, NULL, 0);
-		else {
+		if (link->form->type == FC_RESET) {
+			add_to_menu(&mi, TEXT(T_RESET_FORM),
+				    "", TEXT(T_HK_RESET_FORM),
+				    MENU_FUNC send_enter, NULL, 0);
+		} else {
 			int c = can_open_in_new(term);
-			add_to_menu(&mi, TEXT(T_SUBMIT_FORM), "", TEXT(T_HK_SUBMIT_FORM), MENU_FUNC submit_form, NULL, 0);
+
+			add_to_menu(&mi, TEXT(T_SUBMIT_FORM),
+				    "", TEXT(T_HK_SUBMIT_FORM),
+				    MENU_FUNC submit_form, NULL, 0);
+
 			if (c && link->form->method == FM_GET)
-				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW), c - 1 ? ">" : "", TEXT(T_HK_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW), MENU_FUNC open_in_new_window, send_open_in_new_xterm, c - 1);
+				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW),
+					    c - 1 ? ">" : "",
+					    TEXT(T_HK_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW),
+					    MENU_FUNC open_in_new_window,
+					    send_open_in_new_xterm, c - 1);
+
 			if (!anonymous)
-				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_DOWNLOAD), "d", TEXT(T_HK_SUBMIT_FORM_AND_DOWNLOAD), MENU_FUNC send_download, NULL, 0);
+				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_DOWNLOAD),
+					    "d", TEXT(T_HK_SUBMIT_FORM_AND_DOWNLOAD),
+					    MENU_FUNC send_download, NULL, 0);
 		}
 	}
+
 	if (link->where_img) {
 		l = 1;
-		add_to_menu(&mi, TEXT(T_VIEW_IMAGE), "", TEXT(T_HK_VIEW_IMAGE), MENU_FUNC send_image, NULL, 0);
+		add_to_menu(&mi, TEXT(T_VIEW_IMAGE),
+			    "", TEXT(T_HK_VIEW_IMAGE),
+			    MENU_FUNC send_image, NULL, 0);
 		if (!anonymous)
-			add_to_menu(&mi, TEXT(T_DOWNLOAD_IMAGE), "", TEXT(T_HK_DOWNLOAD_IMAGE), MENU_FUNC send_download_image, NULL, 0);
+			add_to_menu(&mi, TEXT(T_DOWNLOAD_IMAGE),
+				    "", TEXT(T_HK_DOWNLOAD_IMAGE),
+				    MENU_FUNC send_download_image, NULL, 0);
 	}
-	x:
+
+end:
 	if (!l) {
-		no_l:
-		add_to_menu(&mi, TEXT(T_NO_LINK_SELECTED), "", M_BAR, NULL, NULL, 0);
+		add_to_menu(&mi, TEXT(T_NO_LINK_SELECTED),
+			    "", M_BAR,
+			    NULL, NULL, 0);
 	}
 	do_menu(term, mi, ses);
 }
+
 
 unsigned char *print_current_titlex(struct f_data_c *fd, int w)
 {

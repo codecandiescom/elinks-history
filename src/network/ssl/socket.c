@@ -1,18 +1,11 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.33 2003/07/09 23:03:11 jonas Exp $ */
+/* $Id: socket.c,v 1.34 2003/09/10 06:06:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_SSL
-#ifdef HAVE_OPENSSL
-#include <openssl/ssl.h>
-#elif defined(HAVE_GNUTLS)
-#include <gnutls/gnutls.h>
-#endif
-#endif
 
 #include "elinks.h"
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.39 2003/05/03 01:07:47 pasky Exp $ */
+/* $Id: view.c,v 1.40 2003/05/03 01:30:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1330,7 +1330,7 @@ has_form_submit(struct f_data *f, struct form_control *frm)
 	return 0;
 }
 
-static void
+static inline void
 decrement_fc_refcount(struct f_data *f)
 {
 	if (!--f->refcount) format_cache_entries++;
@@ -1362,15 +1362,14 @@ free_succesful_controls(struct list_head *submit)
 static inline unsigned char *
 encode_textarea(unsigned char *t)
 {
+	int len = 0;
 	unsigned char *o = init_str();
 
-	if (o) {
-		int len = 0;
+	if (!o) return NULL;
 
-		for (; *t; t++) {
-			if (*t != '\n') add_chr_to_str(&o, &len, *t);
-			else add_to_str(&o, &len, "\r\n");
-		}
+	for (; *t; t++) {
+		if (*t != '\n') add_chr_to_str(&o, &len, *t);
+		else add_to_str(&o, &len, "\r\n");
 	}
 
 	return o;
@@ -1751,7 +1750,8 @@ get_link_url(struct session *ses, struct f_data_c *f,
 void
 set_frame(struct session *ses, struct f_data_c *f, int a)
 {
-	if (f != ses->screen) goto_url(ses, f->vs->url);
+	if (f == ses->screen) return;
+	goto_url(ses, f->vs->url);
 }
 
 /* This is common backend for submit_form_do() and enter(). */
@@ -1872,11 +1872,11 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 void
 toggle(struct session *ses, struct f_data_c *f, int a)
 {
-	if (f && f->vs) {
-		f->vs->plain = !f->vs->plain;
-		html_interpret(ses);
-		draw_formatted(ses);
-	}
+	if (!f || !f->vs) return;
+
+	f->vs->plain = !f->vs->plain;
+	html_interpret(ses);
+	draw_formatted(ses);
 }
 
 static inline void
@@ -1932,10 +1932,9 @@ get_current_state(struct session *ses)
 
 	if (!f || f->vs->current_link == -1) return -1;
 	l = &f->f_data->links[f->vs->current_link];
-	if (l->type == L_SELECT) {
-		fs = find_form_state(f, l->form);
-		if (fs) return fs->state;
-	}
+	if (l->type != L_SELECT) return -1;
+	fs = find_form_state(f, l->form);
+	if (fs) return fs->state;
 	return -1;
 }
 
@@ -2519,10 +2518,9 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 static void
 jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 {
-	if (n >= 0 && n <= fd->f_data->nlinks) {
-		fd->vs->current_link = n;
-		check_vs(fd);
-	}
+	if (n < 0 || n > fd->f_data->nlinks) return;
+	fd->vs->current_link = n;
+	check_vs(fd);
 }
 
 /* This is common backend for goto_link_number() and try_document_key(). */
@@ -2825,16 +2823,18 @@ current_frame(struct session *ses)
 static int
 send_to_frame(struct session *ses, struct event *ev)
 {
-	int r = 0;
+	int r;
 	struct f_data_c *fd = current_frame(ses);
 
-	if (fd) {
-		r = frame_ev(ses, fd, ev);
-		if (r == 1) {
-			draw_doc(ses->term, fd, 1);
-			print_screen_status(ses);
-			redraw_from_window(ses->win);
-		}
+	if (!fd) {
+		/*internal("document not formatted");*/
+		return 0;
+	}
+	r = frame_ev(ses, fd, ev);
+	if (r == 1) {
+		draw_doc(ses->term, fd, 1);
+		print_screen_status(ses);
+		redraw_from_window(ses->win);
 	}
 
 	return r;
@@ -2847,7 +2847,12 @@ do_for_frame(struct session *ses,
 {
 	struct f_data_c *fd = current_frame(ses);
 
-	if (fd) f(ses, fd, a);
+	if (!fd) {
+		/*internal("document not formatted");*/
+		return;
+	}
+
+	f(ses, fd, a);
 }
 
 static void
@@ -3348,7 +3353,8 @@ send_image(struct terminal *term, void *xxx, struct session *ses)
 
 	if (!fd || fd->vs->current_link == -1) return;
 	u = fd->f_data->links[fd->vs->current_link].where_img;
-	if (u) goto_url(ses, u);
+	if (!u) return;
+	goto_url(ses, u);
 }
 
 void
@@ -3501,12 +3507,16 @@ end:
 unsigned char *
 print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
 {
-	if (fd && !fd->f_data->frame && fd->vs->current_link != -1
-	    && fd->vs->current_link < fd->f_data->nlinks) {
-		struct link *link = &fd->f_data->links[fd->vs->current_link];
+	struct link *lnk;
 
-		if (link->title) return stracpy(link->title);
-	}
+	if (!fd || fd->f_data->frame || fd->vs->current_link == -1
+	    || fd->vs->current_link >= fd->f_data->nlinks)
+		return NULL;
+
+	lnk = &fd->f_data->links[fd->vs->current_link];
+
+	if (lnk->title)
+		return stracpy(lnk->title);
 
 	return NULL;
 }

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.97 2004/12/21 07:26:17 miciah Exp $ */
+/* $Id: globhist.c,v 1.98 2004/12/21 07:30:47 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -197,6 +197,26 @@ init_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	return history_item;
 }
 
+static int
+cap_global_history(int max_globhist_items)
+{
+	while (global_history.size >= max_globhist_items) {
+		struct global_history_item *history_item;
+
+		history_item = global_history.entries.prev;
+
+		if ((void *) history_item == &global_history.entries) {
+			INTERNAL("global history is empty");
+			global_history.size = 0;
+			return 0;
+		}
+
+		delete_global_history_item(history_item);
+	}
+
+	return 1;
+}
+
 /* Add a new entry in history list, take care of duplicate, respect history
  * size limit, and update any open history dialogs. */
 void
@@ -212,17 +232,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	history_item = get_global_history_item(url);
 	if (history_item) delete_global_history_item(history_item);
 
-	while (global_history.size >= max_globhist_items) {
-		history_item = global_history.entries.prev;
-
-		if ((void *) history_item == &global_history.entries) {
-			INTERNAL("global history is empty");
-			global_history.size = 0;
-			return;
-		}
-
-		delete_global_history_item(history_item);
-	}
+	if (!cap_global_history(max_globhist_items)) return;
 
 	history_item = init_global_history_item(url, title, vtime);
 	if (!history_item) return;

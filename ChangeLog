@@ -1,3 +1,78 @@
+Fri Dec 20 22:14:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/view.c:
+
+	Fixed possible problem with NULL stracpy() when trying to
+	download-image, reported by Jonas.  
+
+Fri Dec 20 21:58:30 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/bm-to-elinks-bookmarks.lua:
+
+	Lua script to convert Lua's bookmarks to ELinks' file format,
+	contributed by Peter Wang.  
+
+Fri Dec 20 21:58:16 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/bm-to-elinks-bookmarks.lua:
+
+	file bm-to-elinks-bookmarks.lua was initially added on branch
+	REL_0_4.  
+
+Fri Dec 20 21:52:46 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Don't show *lua-function* binding in the manager. Thanks Peter Wang
+	for the idea.  
+
+Fri Dec 20 21:46:56 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: conf.c, kbdbind.c, kbdbind.h:
+
+	Fixed problem with empty action bind commands being written when
+	keybinding is removed (reported by Peter Wang).  
+
+Fri Dec 20 17:39:59 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/: czech.lng, english.lng:
+
+	Attempt to clarify error messages triggered by attempts to edit
+	non-(options,keybindings). Might be helpful if you don't know that
+	space unrolls the tree.  
+
+Fri Dec 20 16:09:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	A memleak introduced by last patch was fixed. Triggered by Bookmarks
+	file format option 1 -> 0.  
+
+Fri Dec 20 15:26:28 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/: bookmarks.c, backend/default.c, backend/xbel.c:
+
+	Fixes and cleanup. Fabio please verify that stuff.  
+
+Fri Dec 20 10:40:23 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/: brazilian_portuguese.lng, bulgarian.lng, catalan.lng,
+	croatian.lng, czech.lng, danish.lng, dutch.lng, estonian.lng,
+	finnish.lng, galician.lng, german.lng, greek.lng, hungarian.lng,
+	icelandic.lng, indonesian.lng, italian.lng, lithuanian.lng,
+	norwegian.lng, polish.lng, portuguese.lng, romanian.lng,
+	russian.lng, slovak.lng, spanish.lng, swedish.lng, turkish.lng,
+	ukrainian.lng:
+
+	Ooops ;) 
+
+Fri Dec 20 09:15:01 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/english.lng, intl/french.lng, src/dialogs/menu.c:
+
+	Some translations were fixed and updated. T_HK_KEYBINDING_MANAGER
+	was introduced.  
+
 Thu Dec 19 15:35:45 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* AUTHORS, contrib/elinks.spec.in:

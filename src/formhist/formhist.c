@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.46 2003/09/05 21:29:24 miciah Exp $ */
+/* $Id: formhist.c,v 1.47 2003/09/13 23:23:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,6 +104,8 @@ load_saved_forms(void)
 
 	if (loaded) return 1;
 
+	if (!elinks_home) return 0;
+
 	file = straconcat(elinks_home, FORMHIST_FILENAME, NULL);
 	if (!file) return 0;
 
@@ -164,6 +166,8 @@ save_saved_forms(void)
 	struct secure_save_info *ssi;
 	unsigned char *file;
 	struct formhist_data *form;
+
+	if (!elinks_home) return 0;
 
 	file = straconcat(elinks_home, FORMHIST_FILENAME, NULL);
 	if (!file) return 0;

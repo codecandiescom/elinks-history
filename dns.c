@@ -47,7 +47,7 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 	for (i = 0; hostent->h_addr_list[i] != NULL; i++) {
 		struct sockaddr_in *addr = (struct sockaddr_in *) *addrs;
 		
-		addr[i].sin_family = AF_INET;
+		addr[i].sin_family = hostent->h_addrtype;
 		memcpy(&addr[i].sin_addr.s_addr, hostent->h_addr_list[i], sizeof(struct in_addr));
 	}
 	

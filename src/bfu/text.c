@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.27 2003/11/06 19:03:10 jonas Exp $ */
+/* $Id: text.c,v 1.28 2003/11/06 21:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,8 +77,14 @@ dlg_format_text(struct terminal *term, unsigned char *text,
 
 	/* Layout the text line by line working on text chunks of max
 	 * @dlg_width chars. */
-	for (; length > 0; line_y++, text += split + 1, length -= split + 1) {
+	for (; length > 0; line_y++, text += split, length -= split) {
 		int shift;
+
+		/* Skip any leading space from last line split */
+		if (*text == ' ' || *text == '\n') {
+			text++;
+			length--;
+		}
 
 		split = split_line(text, dlg_width, length);
 		if (real_width) int_lower_bound(real_width, split);

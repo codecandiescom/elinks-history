@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.129 2003/11/16 23:20:56 miciah Exp $ */
+/* $Id: core.c,v 1.130 2003/11/21 11:01:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,8 +112,22 @@ l_current_title(LS)
 	struct document_view *doc_view = current_frame(lua_ses);
 
 	if (doc_view && doc_view->document->title) {
-		lua_pushstring(S, doc_view->document->title);
-		return 1;
+		unsigned char *clean_title = stracpy(doc_view->document->title);
+
+		if (clean_title) {
+			register int i = 0;
+
+			while (clean_title[i]) {
+				if (clean_title[i] < ' '
+				    || clean_title[i] == NBSP_CHAR)
+					clean_title[i] = ' ';
+				i++;
+			}
+
+			lua_pushstring(S, clean_title);
+			mem_free(clean_title);
+			return 1;
+		}
 	}
 
 	lua_pushnil(S);

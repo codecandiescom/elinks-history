@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.49 2003/11/15 16:06:47 pasky Exp $ */
+/* $Id: cache.h,v 1.50 2003/11/15 16:18:17 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -38,7 +38,7 @@ struct cache_entry {
 
 	int length;
 	int data_size;
-	int locks; /* No direct access, use provided macros for that. */
+	int refcount; /* No direct access, use provided macros for that. */
 
 #ifdef HAVE_SCRIPTING
 	unsigned int done_pre_format_html_hook:1;
@@ -60,17 +60,17 @@ struct cache_entry {
 #endif
 
 #ifdef DEBUG_CACHE_ENTRIES_LOCKS
-#define ce_lock_debug(ce, info) debug("cache entry %p lock %s now %d url= %s", ce, info, (ce)->locks, struri((ce)->uri))
+#define ce_lock_debug(ce, info) debug("cache entry %p lock %s now %d url= %s", ce, info, (ce)->refcount, struri((ce)->uri))
 #else
 #define ce_lock_debug(ce, info)
 #endif
 
-#define ce_sanity_check(ce) do { assert(ce); assertm((ce)->locks >= 0, "Cache entry lock underflow."); } while (0)
+#define ce_sanity_check(ce) do { assert(ce); assertm((ce)->refcount >= 0, "Cache entry lock underflow."); } while (0)
 
-#define get_cache_entry_locks(ce) ((ce)->locks)
-#define is_cache_entry_locked(ce) (!!(ce)->locks)
-#define cache_entry_lock(ce) do { ce_sanity_check(ce); (ce)->locks++; ce_lock_debug(ce, "+1"); } while (0)
-#define cache_entry_unlock(ce) do { (ce)->locks--; ce_lock_debug(ce, "-1"); ce_sanity_check(ce);} while (0)
+#define get_cache_entry_refcount(ce) ((ce)->refcount)
+#define is_cache_entry_locked(ce) (!!(ce)->refcount)
+#define cache_entry_lock(ce) do { ce_sanity_check(ce); (ce)->refcount++; ce_lock_debug(ce, "+1"); } while (0)
+#define cache_entry_unlock(ce) do { (ce)->refcount--; ce_lock_debug(ce, "-1"); ce_sanity_check(ce);} while (0)
 
 /* Please keep this one. It serves for debugging. --Zas */
 #define cache_entry_nolock(ce) do { ce_sanity_check(ce); ce_lock_debug(ce, "0"); } while (0)

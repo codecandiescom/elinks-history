@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.102 2004/09/28 13:30:41 pasky Exp $ */
+/* $Id: renderer.c,v 1.103 2004/09/28 13:55:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,15 @@
 static void sort_links(struct document *document);
 
 #ifdef CONFIG_ECMASCRIPT
+/* XXX: This function is de facto obsolete, since we do not need to copy
+ * snippets around anymore (we process them in one go after the document is
+ * loaded; gradual processing was practically impossible because the snippets
+ * could reorder randomly during the loading - consider i.e.
+ * <body onLoad><script></body>: first just <body> is loaded, but then the
+ * rest of the document is loaded and <script> gets before <body>; do not even
+ * imagine the trouble with rewritten (through scripting hooks) documents;
+ * besides, implementing document.write() will be much simpler).
+ * But I want to take no risk by reworking that now. --pasky */
 static void
 add_snippets(struct ecmascript_interpreter *interpreter,
              struct list_head *doc_snippets, struct list_head *queued_snippets)
@@ -55,6 +64,7 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 	if (list_empty(*doc_snippets) || !get_opt_bool("ecmascript.enable"))
 		return;
 
+#if 0
 	/* Position @doc_current in @doc_snippet to match the end of
 	 * @queued_snippets. */
 	if (list_empty(*queued_snippets)) {
@@ -78,6 +88,10 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 			iterator = iterator->next;
 		}
 	}
+#else
+	/* We do this only once per document now. */
+	assert(list_empty(*queued_snippets));
+#endif
 
 	assert(doc_current);
 	for (; doc_current != (struct string_list_item *) doc_snippets;
@@ -216,14 +230,16 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	}
 #ifdef CONFIG_ECMASCRIPT
 	assert(vs->ecmascript);
-	/* Passing of the onload_snippets pointers gives *_snippets()
-	 * some feeling of universality, shall we ever get any other snippets
-	 * (?). */
-	add_snippets(vs->ecmascript,
-	             &document->onload_snippets,
-	             &vs->ecmascript->onload_snippets);
-	process_snippets(vs->ecmascript, &vs->ecmascript->onload_snippets,
-	                 &vs->ecmascript->current_onload_snippet);
+	if (!document->options.gradual_rerendering) {
+		/* Passing of the onload_snippets pointers gives *_snippets()
+		 * some feeling of universality, shall we ever get any other
+		 * snippets (?). */
+		add_snippets(vs->ecmascript,
+		             &document->onload_snippets,
+		             &vs->ecmascript->onload_snippets);
+		process_snippets(vs->ecmascript, &vs->ecmascript->onload_snippets,
+		                 &vs->ecmascript->current_onload_snippet);
+	}
 #endif
 
 	/* If we do not care about the height and width of the document
@@ -274,6 +290,7 @@ render_document_frames(struct session *ses, int no_cache)
 
 	doc_opts.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
 	doc_opts.no_cache = no_cache == 1;
+	doc_opts.gradual_rerendering = no_cache == 2;
 
 	if (vs) {
 		if (vs->plain < 0) vs->plain = 0;

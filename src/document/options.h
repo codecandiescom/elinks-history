@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.51 2004/07/12 18:32:58 jonas Exp $ */
+/* $Id: options.h,v 1.52 2004/09/28 13:55:13 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -85,6 +85,7 @@ struct document_options {
 
 	/* Internal flag for rerendering */
 	unsigned int no_cache:1;
+	unsigned int gradual_rerendering:1;
 
 	/* Active link coloring */
 	/* This is mostly here to make use of this option cache so link

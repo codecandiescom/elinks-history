@@ -1,5 +1,5 @@
 -- Configuration for hooks.lua file, put in ~/.elinks/ as config.lua.
--- $Id: config.lua,v 1.6 2005/03/27 22:25:04 miciah Exp $
+-- $Id: config.lua,v 1.7 2005/03/27 22:27:08 miciah Exp $
 
 -- ** IMPORTANT **
 -- Individual functions may be disabled for security by assigning them
@@ -26,13 +26,6 @@
 
     pause = '; echo -ne "\\n\\e[1;32mPress ENTER to continue...\\e[0m"; read'
 
--- Highlighting: Set highlight_enable = 1 if you want to see highlighted
--- source code.  You need to have code2html installed and set text/html
--- as the MIME-type for .c, .h, .pl, .py, .sh, .awk, .patch extensions
--- in the Options Manager or in elinks.conf
-
-    highlight_enable = nil
-
 -- Make ALT="" into ALT="&nbsp;": Makes web pages with superfluous
 -- images look better.  However, even if you disable the "Display links
 -- to images" option, single space links to such images will appear.
@@ -57,6 +50,13 @@
 -- line:
 
 --  dofile (elinks_home.."/script.lua")
+
+-- Highlighting: Uncomment the following line if you want to see highlighted
+-- source code.  You need to have code2html installed and set text/html
+-- as the MIME-type for .c, .h, .pl, .py, .sh, .awk, .patch extensions
+-- in the Options Manager or in elinks.conf
+
+--  dofile (elinks_home.."/highlight.lua")
 
 --  dofile (elinks_home.."/md5checks.lua")
 --  dofile (elinks_home.."/remote.lua")

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.369 2004/09/11 13:55:55 jonas Exp $ */
+/* $Id: tables.c,v 1.370 2004/12/18 16:17:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -667,7 +667,7 @@ check_table_height(struct table *table, struct table_frames *frames, int y)
 	/* XXX: Cannot we simply use the @yp value we just calculated
 	 * in draw_table_cells()? --pasky */
 	int old_height = table->real_height + table->part->cy;
-	int our_height = frames->top + y + frames->bottom;
+	int our_height = frames->top + y + frames->bottom + table->caption_height;
 	int row;
 
 	/* XXX: We cannot use get_table_real_height() because we are
@@ -687,6 +687,38 @@ check_table_height(struct table *table, struct table_frames *frames, int y)
 }
 
 static int
+get_table_caption_height(struct table *table)
+{
+	unsigned char *start = table->caption.start;
+	unsigned char *end = table->caption.end;
+	struct part *part;
+
+	if (!start || !end) return 0;
+
+	while (start < end && isspace(*start))
+		start++;
+
+	while (start < end && isspace(end[-1]))
+		end--;
+
+	if (start >= end) return 0;
+
+	part = format_html_part(start, end, table->align,
+		0, table->real_width, NULL, 0, 0,
+		NULL, table->link_num);
+
+	if (!part) {
+		return 0;
+
+	} else {
+		int height = part->box.height;
+		mem_free(part);
+
+		return height;
+	}
+}
+
+static int
 get_table_real_height(struct table *table)
 {
 	struct table_frames table_frames;
@@ -696,6 +728,7 @@ get_table_real_height(struct table *table)
 	get_table_frames(table, &table_frames);
 
 	height = table_frames.top + table_frames.bottom;
+	height += table->caption_height;
 	for (row = 0; row < table->rows; row++) {
 		height += table->rows_heights[row];
 		if (row && has_hline_width(table, row))
@@ -710,6 +743,8 @@ get_table_heights(struct table *table)
 {
 	int rowspan;
 	int col, row;
+
+	table->caption_height = get_table_caption_height(table);
 
 	for (row = 0; row < table->rows; row++) {
 		for (col = 0; col < table->cols; col++) {

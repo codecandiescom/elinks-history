@@ -741,6 +741,16 @@ else
 						    [gnutls_check_version(NULL)],
 						    cf_result=yes, cf_result=no)
 				fi
+
+				# Verify if the MD5 compatibility layer is
+				# usable.
+				if test "$cf_result" = yes; then
+					HAVE_GNUTLS_OPENSSL=yes
+					EL_CHECK_OPTIONAL_LIBRARY(HAVE_GNUTLS_OPENSSL,
+								  [GNU TLS OpenSSL compatibility],
+								  gnutls/openssl.h, gnutls-openssl,
+								  MD5_Init)
+				fi
 			fi
 		done
 
@@ -765,6 +775,9 @@ EL_CONFIG_DEPENDS(CONFIG_SSL, [CONFIG_OPENSSL CONFIG_GNUTLS], [SSL])
 AM_CONDITIONAL(CONFIG_OPENSSL, test "$CONFIG_OPENSSL" = yes)
 AM_CONDITIONAL(CONFIG_GNUTLS, test "$CONFIG_GNUTLS" = yes)
 AM_CONDITIONAL(CONFIG_SSL, test "$CONFIG_SSL" = yes)
+
+EL_CONFIG_DEPENDS(CONFIG_SSL_DIGEST, [CONFIG_OPENSSL HAVE_GNUTLS_OPENSSL], [SSL MD5 Digest])
+AM_CONDITIONAL(CONFIG_SSL_DIGEST, test "$CONFIG_SSL_DIGEST" = yes)
 
 #endif
 

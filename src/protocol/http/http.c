@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.362 2004/11/14 19:46:50 jonas Exp $ */
+/* $Id: http.c,v 1.363 2004/11/14 21:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -585,7 +585,7 @@ http_send_header(struct connection *conn)
 
 	entry = find_auth(uri);
 	if (entry) {
-#ifdef CONFIG_SSL
+#ifdef CONFIG_SSL_DIGEST
 		if (entry->digest) {
 			unsigned char *cnonce = random_cnonce();
 			unsigned char *ha1 = digest_calc_ha1(entry, cnonce);
@@ -1343,7 +1343,7 @@ again:
 					mem_free(realm);
 				}
 			}
-#ifdef CONFIG_SSL
+#ifdef CONFIG_SSL_DIGEST
 			else if (!strncasecmp(d, "Digest", 6)) {
 				unsigned char *realm = get_header_param(d, "realm");
 				unsigned char *nonce = get_header_param(d, "nonce");

@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.4 2004/11/14 15:27:29 jonas Exp $
+## $Id: Makefile.am,v 1.5 2004/11/14 21:32:18 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
-if CONFIG_SSL
+if CONFIG_SSL_DIGEST
 digestobj = digest.o
 endif
 

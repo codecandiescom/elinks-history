@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.84 2004/04/24 11:41:25 jonas Exp $ */
+/* $Id: cmdline.c,v 1.85 2004/04/24 11:50:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -694,7 +694,7 @@ struct option_info cmdline_options_info[] = {
 		"  openURL(URL)              -- open URL in current tab\n"
 		"  openURL(URL, new-tab)     -- open URL in new tab\n"
 		"  openURL(URL, new-window)  -- open URL in new window\n"
-		"  bookmark(URL)             -- bookmark URL\n"
+		"  addBookmark(URL)          -- bookmark URL\n"
 		"  xfeDoCommand(openBrowser) -- open new window")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),

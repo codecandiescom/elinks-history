@@ -5,9 +5,6 @@ kept here, though, to be more on the developers' eyes ;-).
 
 What yet needs to take its way to Bugzilla:
 
-  Allow multiple transfers to be queued up instead of cancelling the currently
-queued item when back is pressed
-
   Change msg_box to use printf-style formats
 
   Some rules for sane handling of texinfo documentation
@@ -35,4 +32,4 @@ uncertain feel that it could be better and bear a look of some UI designer ;)
   Speed/memory optimizations
 
 
-$Id: TODO,v 1.61 2003/05/16 22:30:06 pasky Exp $
+$Id: TODO,v 1.62 2003/05/17 22:01:04 pasky Exp $

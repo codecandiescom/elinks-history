@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.27 2003/06/04 17:15:14 pasky Exp $ */
+/* $Id: secsave.c,v 1.28 2003/06/04 19:08:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ secure_close(struct secure_save_info *ssi)
 			 * more..).  */
 			if (rename(ssi->tmp_file_name, ssi->file_name) == -1) {
 				ret = errno;
-				SS_ERR_secsave_errno = OTHER;
+				secsave_errno = SS_ERR_OTHER;
 			} else {
 				/* Return 0 if file is successfully written. */
 				ret = 0;

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.50 2003/06/21 15:12:02 jonas Exp $ */
+/* $Id: file.c,v 1.51 2003/06/22 12:13:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,6 +288,7 @@ file_func(struct connection *c)
 	struct stat stt;
 	int namelen;
 	int saved_errno;
+	int show_hidden_files;
 	enum stream_encoding encoding = ENCODING_NONE;
 
 	if (get_opt_int_tree(&cmdline_options, "anonymous")) {
@@ -446,6 +447,7 @@ dir:
 		}
 		add_to_str(&file, &fl, "</h2>\n<pre>");
 
+		show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
 		while ((de = readdir(d))) {
 			struct stat st, *stp;
 			unsigned char **p;
@@ -453,7 +455,10 @@ dir:
 			struct dirs *nd;
 			unsigned char *n;
 
-			if (!strcmp(de->d_name, ".")) continue;
+			/* Always show "..", always hide ".", others like ".x" are shown if
+			 * show_hidden_files = 1 */
+			if (de->d_name[0] == '.' && !(de->d_name[1] == '.' && de->d_name[2] == '\0'))
+				if (!show_hidden_files || de->d_name[1] == '\0') continue;
 
 			nd = mem_realloc(dir, (dirl + 1) * sizeof(struct dirs));
 			if (!nd) continue;

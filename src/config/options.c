@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.235 2003/06/20 18:21:59 pasky Exp $ */
+/* $Id: options.c,v 1.236 2003/06/22 12:13:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1617,6 +1617,12 @@ register_options(void)
 		N_("When set, if we can't open a file named 'filename', we'll try\n"
 		"to open 'filename' with some encoding extension appended\n"
 		"(ie. 'filename.gz'); it depends on the supported encodings."));
+
+	add_opt_bool("protocol.file", N_("Show hidden files in directory listing"),
+		"show_hidden_files", 0, 1,
+		N_("Show hidden files in directory listing ?\n"
+		   "If set to false, files with name starting with a dot will be\n"
+		   "hidden in local directories listing."));
 
 
 	add_opt_tree("protocol", N_("User protocols"),

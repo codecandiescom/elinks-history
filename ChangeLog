@@ -1,3 +1,215 @@
+Wed Jan  1 20:42:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/: belarusian.lng, brazilian_portuguese.lng, bulgarian.lng,
+	catalan.lng, croatian.lng, czech.lng, danish.lng, dutch.lng,
+	english.lng, estonian.lng, finnish.lng, french.lng, galician.lng,
+	german.lng, greek.lng, hungarian.lng, icelandic.lng,
+	indonesian.lng, italian.lng, lithuanian.lng, norwegian.lng,
+	polish.lng, portuguese.lng, romanian.lng, russian.lng, slovak.lng,
+	spanish.lng, swedish.lng, turkish.lng, ukrainian.lng:
+
+	Removed unused hotkeys.  
+
+Wed Jan  1 20:36:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/group.c,
+	bfu/menu.c, bfu/msgbox.c, bfu/text.c, config/dialogs.c,
+	dialogs/auth.c, dialogs/document.c, dialogs/info.c,
+	document/download.c, document/session.c, intl/language.h,
+	viewer/text/view.c:
+
+	_() -> GT() - first step in the gettext migration. Patch by witekfl.  
+
+Wed Jan  1 20:30:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: Makefile.am, main.c, dialogs/info.c, dialogs/menu.c,
+	document/cache.c, document/download.c, document/download.h,
+	document/history.c, document/location.h, document/session.c,
+	document/session.h, lowlevel/Makefile.am, lowlevel/connect.c,
+	lowlevel/connect.h, lowlevel/sched.c, lowlevel/sched.h,
+	lua/hooks.h, protocol/file.c, protocol/file.h, protocol/finger.c,
+	protocol/finger.h, protocol/ftp.c, protocol/ftp.h, protocol/url.c,
+	protocol/url.h, protocol/http/http.c, protocol/http/http.h,
+	protocol/http/https.c, protocol/http/https.h, sched/Makefile.am,
+	sched/sched.c, sched/sched.h, ssl/connect.c, ssl/connect.h,
+	viewer/dump/dump.c, viewer/dump/dump.h:
+
+	Moved lowlevel/sched.* to sched/sched.*.  
+
+Wed Jan  1 20:03:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: syntree.c, syntree.h, html/parser.c:
+
+	Moved spawn_syntree_node from html/parser.c to syntree.*.  
+
+Wed Jan  1 19:54:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* SITES:
+
+	Updated URLs for PLD's RPMs.  
+
+Wed Jan  1 18:58:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: Makefile.am, stack.c, stack.h,
+	html/parser.c:
+
+	Moved the state stack toolkit implementation and interface from
+	html/parser.c to common state.*.  
+
+Wed Jan  1 18:19:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: Makefile.am, config/options.c, dialogs/document.c,
+	dialogs/menu.c, document/Makefile.am, document/history.c,
+	document/location.h, document/session.c, document/session.h,
+	document/view.c, document/view.h, document/vs.c, document/vs.h,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/renderer.h, elusive/renderer/text/renderer.c,
+	lowlevel/terminal.c, lua/core.c, viewer/dump/dump.c,
+	viewer/text/Makefile.am, viewer/text/view.c, viewer/text/view.h,
+	viewer/text/vs.c, viewer/text/vs.h:
+
+	Moved document/view.* and document/vs.* to viewer/text/view.* and
+	viewer/text/vs.*.  
+
+Wed Jan  1 17:48:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: Makefile.am, main.c, document/Makefile.am, document/dump.c,
+	document/dump.h, document/view.c, viewer/dump/Makefile.am,
+	viewer/dump/dump.c, viewer/dump/dump.h:
+
+	Moved document/dump.* to viewer/dump/dump.*.  
+
+Wed Jan  1 17:42:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am:
+
+	Added the new dirs (sched, viewer, viewer/dump, viewer/text) to the
+	build system.  
+
+Wed Jan  1 17:40:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/Makefile.am:
+
+	There're no real sources yet, Luke.  
+
+Wed Jan  1 17:33:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/.cvsignore, sched/.vimrc, sched/Makefile.am,
+	viewer/.cvsignore, viewer/.vimrc, viewer/Makefile.am,
+	viewer/dump/.cvsignore, viewer/dump/.vimrc,
+	viewer/dump/Makefile.am, viewer/text/.cvsignore,
+	viewer/text/.vimrc, viewer/text/Makefile.am:
+
+	Populated with fairies.  
+
+Wed Jan  1 17:23:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, doc/Makefile.am:
+
+	Build updates for moving DocBook files to doc/book 
+
+Wed Jan  1 17:18:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Compilation fixes.  
+
+Wed Jan  1 17:14:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/: text/renderer.c, text/renderer.h,
+	renderer.h:
+
+	Try to initialize text renderer output properly.  
+
+Wed Jan  1 17:13:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/belarusian.lng:
+
+	Belarusian translation by Yevgeny Gromov <yevgeny@tut.by>.  
+
+Wed Jan  1 14:32:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/: renderer.c, renderer.h:
+
+	Introduced renderer_state.input, containing input data from the
+	viewer (ie. terminal specification).  
+
+Wed Jan  1 14:28:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	text_layout -> text_render, include document/html/rednerer.h for
+	now.  
+
+Wed Jan  1 14:01:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Added else to clarify things a little. Doesn't matter factually.
+	Thanks, Miciah.  
+
+Wed Jan  1 01:58:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Show (it's togglable) human-readable captions of keybindings and
+	keymaps in the keybinding manager. Patch by Jonas Fonseca and me.  
+
+Wed Jan  1 01:26:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, intl/german.lng:
+
+	German translation update (huge ;) by Josef 'Jupp' Schugt
+	<jupp@gmx.de>.  
+
+Wed Jan  1 01:21:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, intl/index.txt:
+
+	Belarusian translation by Yevgeny Gromov <yevgeny@tut.by>.  
+
+Wed Jan  1 01:21:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/belarusian.lng:
+
+	file belarusian.lng was initially added on branch REL_0_4.  
+
+Wed Jan  1 01:17:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/: brazilian_portuguese.lng, bulgarian.lng, catalan.lng,
+	croatian.lng, czech.lng, danish.lng, dutch.lng, english.lng,
+	estonian.lng, finnish.lng, french.lng, galician.lng, german.lng,
+	greek.lng, hungarian.lng, icelandic.lng, indonesian.lng,
+	italian.lng, lithuanian.lng, norwegian.lng, polish.lng,
+	portuguese.lng, romanian.lng, slovak.lng, spanish.lng, swedish.lng,
+	turkish.lng:
+
+	Copyright notice updates. Mainly 2002 -> 2003 in my line, but some
+	other tiny corrections in some translations.  
+
+Wed Jan  1 01:01:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/protocol/http/http.c:
+
+	Here is a patch for elinks (cvs version) ot make it more POSIX 
+	compliant.  src/protocol/http/http.c uses PIPE_BUF without including 
+	limits.h.  This breaks compilation with the diet libc 
+	(http://www.fefe.de/dietlibc/).  
+	
+	Patch by Felix von Leitner.  
+
+Wed Jan  1 00:52:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/spanish.lng:
+
+	Partial spanish translation update by David Mediavilla.  
+
+Wed Jan  1 00:51:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Updated David Mediavilla's email addy.  
+
 Tue Dec 31 17:13:04 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/elusive/layouter/syntree/layouter.c:
@@ -158,7 +370,7 @@ Mon Dec 30 17:49:02 2002  Petr Baudis <pasky@ucw.cz>:
 
 Mon Dec 30 17:01:03 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/manual/Makefile.am:
+	* doc/book/Makefile.am:
 
 	Generic header added.  
 
@@ -191,23 +403,22 @@ Mon Dec 30 16:30:28 2002  Petr Baudis <pasky@ucw.cz>:
 
 Mon Dec 30 16:14:45 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/: Makefile.am, manual/Makefile.am:
+	* doc/: Makefile.am, book/Makefile.am:
 
 	Fixes for last commit: rename all -> alldocs in
 	doc/manual/Makefile.am and typo in doc/Makefile.am 
 
 Mon Dec 30 15:57:00 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* Makefile.am, configure.in, doc/Makefile.am,
-	doc/manual/Makefile.am, doc/manual/scripts/installcss,
-	doc/manual/scripts/make-manual:
+	* Makefile.am, configure.in, doc/Makefile.am, doc/book/Makefile.am,
+	doc/book/scripts/installcss, doc/book/scripts/make-manual:
 
 	Manual added to build system. Small fixes when doing html doc
 	building so css is only installed when docs where succesfully made.  
 
 Mon Dec 30 15:51:23 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/manual/: authors.xml, bookmarks.xml, configuration.xml,
+	* doc/book/: authors.xml, bookmarks.xml, configuration.xml,
 	fdl.xml, installation.xml, introduction.xml, mailcap.xml,
 	manual.xml, mime.xml, misc.xml, preface.xml, revision.xml,
 	sample-configfile.xml, wordlist.xml:
@@ -249,7 +460,7 @@ Mon Dec 30 12:44:50 2002  Petr Baudis <pasky@ucw.cz>:
 
 Mon Dec 30 03:51:43 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/manual/: .cvsignore, TODO, authors.xml, bookmarks.xml,
+	* doc/book/: .cvsignore, TODO, authors.xml, bookmarks.xml,
 	configuration.xml, fdl.xml, installation.xml, introduction.xml,
 	mailcap.xml, manual.xml, mime.xml, misc.xml, options-reference.xml,
 	sample-configfile.xml, sample-configuration.xml, style.css,
@@ -261,7 +472,7 @@ Mon Dec 30 03:51:43 2002  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Dec 30 03:40:51 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/manual/scripts/make-manual:
+	* doc/book/scripts/make-manual:
 
 	Added support for more docbook tools. Changed to /bin/bash to be on
 	the save side.  
@@ -385,21 +596,21 @@ Sun Dec 29 11:30:34 2002  Petr Baudis <pasky@ucw.cz>:
 
 Sun Dec 29 10:57:29 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/manual/: Makefile.am, sample-configuration.xml, style.css,
+	* doc/book/: Makefile.am, sample-configuration.xml, style.css,
 	scripts/installcss, scripts/make-manual:
 
 		Various manual tilities.  
 
 Sun Dec 29 10:53:33 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/manual/: TODO, VERSION, bookmarks.xml, configuration.xml,
+	* doc/book/: TODO, VERSION, bookmarks.xml, configuration.xml,
 	fdl.xml, mailcap.xml, misc.xml, preface.xml, revision.xml:
 
 	The first few chapters. More to come.  
 
 Sat Dec 28 19:49:20 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/manual/: README, TODO:
+	* doc/book/: README, TODO:
 
 	A small step for the manual a big step for ELinks documentation. ;) 
 

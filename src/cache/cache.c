@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.33 2003/06/24 14:47:51 zas Exp $ */
+/* $Id: cache.c,v 1.34 2003/06/24 14:56:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,6 @@ add_fragment(struct cache_entry *e, int offset,
 	if (!length) return 0;
 
 	end_offset = offset + length;
-
 	if (e->length < end_offset)
 		e->length = end_offset;
 
@@ -151,15 +150,16 @@ add_fragment(struct cache_entry *e, int offset,
 		if (f->offset > offset) break;
 		if (f_end_offset < offset) continue;
 
-		/* Is intersected area same? Truncate it if not, dunno
-		 * why though :). */
-		if (memcmp(f->data + offset - f->offset, data, length))
-			trunc = 1;
-
 		if (end_offset > f_end_offset) {
 			/* Overlap - we end further than original fragment. */
 
 			ret = 1; /* !!! FIXME */
+
+			/* Is intersected area same? Truncate it if not, dunno
+			 * why though :). */
+			if (memcmp(f->data + offset - f->offset, data,
+				   f_end_offset - offset))
+				trunc = 1;
 
 			if (end_offset - f->offset <= f->real_length) {
 				/* We fit here, so let's enlarge it by delta of
@@ -176,6 +176,10 @@ add_fragment(struct cache_entry *e, int offset,
 				break;
 			}
 
+		} else {
+			/* We are subset of original fragment. */
+			if (memcmp(f->data + offset - f->offset, data, length))
+				trunc = 1;
 		}
 
 		/* Copy the stuff over there. */

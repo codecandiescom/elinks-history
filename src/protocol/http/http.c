@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.32 2002/07/09 22:03:50 pasky Exp $ */
+/* $Id: http.c,v 1.33 2002/07/10 10:08:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -609,13 +609,11 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 				/* FIXME: We should probably handle errors as
 				 * well. --pasky */
 				ret = 4096; /* pipe capacity */
-
-			} else if (ret < 4096) {
-				return (output == DUMMY ? NULL : output);
 			}
-		} else {
-			ret = 65536;
 		}
+		/* finishing could be changed above ;) */
+		if (finishing) ret = 65536;
+		if (ret < 4096) return (output == DUMMY ? NULL : output);
 
 		if (!conn->stream) {
 			conn->stream = open_encoded(conn->stream_pipes[0],

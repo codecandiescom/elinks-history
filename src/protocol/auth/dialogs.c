@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.89 2003/11/27 19:26:35 jonas Exp $ */
+/* $Id: dialogs.c,v 1.90 2003/11/27 21:20:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include "util/snprintf.h"
 
 
-static int
+static void
 auth_ok(struct dialog *dlg)
 {
 	struct http_auth_basic *entry = dlg->udata2;
@@ -34,7 +34,7 @@ auth_ok(struct dialog *dlg)
 	reload(dlg->udata, CACHE_MODE_INCREMENT);
 }
 
-static int
+static void
 auth_cancel(struct http_auth_basic *entry)
 {
 	entry->blocked = 0;

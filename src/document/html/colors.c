@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.22 2003/06/26 13:55:56 zas Exp $ */
+/* $Id: colors.c,v 1.23 2003/07/29 15:34:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -395,22 +395,20 @@ color_distance(struct rgb *c1, struct rgb *c2)
 }
 
 int
-find_nearest_color(struct rgb *r, int l)
+find_nearest_color(struct rgb *rgb, int l)
 {
 #define RGB_HASH_SIZE 4096
 #define HASH_RGB(r, l) ((((r)->r << 3) + ((r)->g << 2) + (r)->b + (l)) & (RGB_HASH_SIZE - 1))
 
-	int dist, dst, min, i;
+	int min_dist, dist, color, i;
 	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
 	/*static struct rgb_cache_entry rgb_bgcache[RGB_HASH_SIZE];*/
 	struct rgb_cache_entry *rgb_cache = /*l == 8 ? rgb_bgcache :*/ rgb_fgcache;
 	static int cache_init = 0;
 	int h;
 
-	if (dump_pos) {
-		/* We don't ever care about colors while dumping stuff. */
-		return 0;
-	}
+	/* We don't ever care about colors while dumping stuff. */
+	if (dump_pos) return 0;
 
 	if (!cache_init) {
 		for (h = 0; h < RGB_HASH_SIZE; h++)
@@ -420,27 +418,31 @@ find_nearest_color(struct rgb *r, int l)
 
 	h = HASH_RGB(r, l);
 
-	if (rgb_cache[h].color != -1 && rgb_cache[h].l == l
-			&& rgb_cache[h].rgb.r == r->r && rgb_cache[h].rgb.g == r->g
-			&& rgb_cache[h].rgb.b == r->b) return rgb_cache[h].color;
+	if (rgb_cache[h].color != -1
+	    && rgb_cache[h].l == l
+	    && rgb_cache[h].rgb.r == rgb->r
+	    && rgb_cache[h].rgb.g == rgb->g
+	    && rgb_cache[h].rgb.b == rgb->b)
+		return rgb_cache[h].color;
 
-	dist = 0xffffff;
-	min = 0;
+	min_dist = 0xffffff;
+	color = 0;
 
 	for (i = 0; i < l; i++) {
-		dst = color_distance(r, /*l==8 ? &bgpalette[i] :*/ &palette[i]);
-		if (dst < dist) {
-			dist = dst;
-			min = i;
+		dist = color_distance(rgb, /*l==8 ? &bgpalette[i] :*/ &palette[i]);
+		if (dist < min_dist) {
+			min_dist = dist;
+			color = i;
 		}
 	}
 
-	rgb_cache[h].color = min;
+	rgb_cache[h].color = color;
 	rgb_cache[h].l = l;
-	rgb_cache[h].rgb.r = r->r;
-	rgb_cache[h].rgb.g = r->g;
-	rgb_cache[h].rgb.b = r->b;
-	return min;
+	rgb_cache[h].rgb.r = rgb->r;
+	rgb_cache[h].rgb.g = rgb->g;
+	rgb_cache[h].rgb.b = rgb->b;
+
+	return color;
 
 #undef HASH_RGB
 #undef RGB_HASH_SIZE

@@ -1,0 +1,645 @@
+<!-- $Id: elinkskeys.5.xml,v 1.1 2003/05/09 00:43:36 jonas Exp $ -->
+
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
+	"http://www.oasis-open.org/docbook/sgml/4.2/docbook.dtd">
+	
+<!--DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN">
+	http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"-->
+	
+<refentry id="elinkskeys">
+
+<refmeta>
+	<refentrytitle>elinkskeys</refentrytitle>
+	<manvolnum>5</manvolnum>
+</refmeta>
+
+<refnamediv>
+	<refname>elinkskeys</refname>
+	<refpurpose>keybindings for ELinks</refpurpose>
+</refnamediv>
+
+<refsect1><title> DESCRIPTION </title>
+<para>
+
+	Key bindings for <emphasis>elinks</emphasis> should be placed
+	in a file called <filename>~/.elinks/elinks.conf</filename>. Note that
+	any information regarding their format/structure may not be up-to-date.
+	If you will discover that, please feed us with a patch.
+
+</para>
+<para>
+
+	Key binding statements are of the form:
+
+</para>
+<screen>
+
+	bind <emphasis>"keymap" "keystroke" = "action"</emphasis>
+
+</screen>
+<para>
+
+	where:
+
+</para>
+<variablelist>
+	
+	<varlistentry><term>keymap</term>
+	<listitem><para>
+			
+	is <varname>main</varname>, <varname>edit</varname>, or
+	<emphasis>menu</emphasis>.
+	
+	</para></listitem>
+	</varlistentry>
+
+	<varlistentry><term>keystroke</term>
+	<listitem><para>
+	
+	is a case sensitive key, which you can prefix with
+	<varname>Ctrl-</varname> or <varname>Alt-</varname>.
+	<varname>Ctrl-</varname> must be followed by an uppercase key.
+	See below for a list of valid keys.
+
+	</para></listitem>
+	</varlistentry>
+
+	<varlistentry><term>action</term>
+	<listitem><para>
+
+	is what the key should do.  The actions available are dependent on the
+	keymap, and are listed separately below.
+
+	</para></listitem>
+	</varlistentry>
+
+</variablelist>
+<para>
+
+	All words/strings may all be quoted "like so".  Backslashes are escape
+	characters, even if not between quotes.  Lines beginning with a hash
+	character (#) are comments.
+
+</para>
+<para>
+
+	Keys can be unbound just by binding them to "none" action.  It may be
+	of use if you accidentally type a key often.
+
+</para>
+</refsect1>
+
+<refsect1><title> KEYS </title>
+<para>
+
+	Valid keys are: alphanumeric characters, punctuation, Enter, Backspace,
+	Tab, Escape, Left, Right, Up, Down, Insert, Delete, Home, End, PageUp,
+	PageDown, F1 to F12.
+
+</para>
+<para>
+
+	Some keys will need to be quoted or escaped.  For example, space can be
+	written as " " (quote space quote), and the quote itself as \\"
+	(backslash quote).  Backslash can be written as \\\\&nbsp;(double
+	backslash).
+
+</para>
+</refsect1>
+
+<refsect1><title> MAIN KEYMAP ACTIONS </title>
+<para>
+
+	The <emphasis>main</emphasis> keymap is used for general browsing.
+
+</para>
+<variablelist>
+	
+	<varlistentry><term>add-bookmark</term>
+	<listitem>
+	<para>
+
+		Open a dialog box to add a new bookmark.
+
+	</para>
+	</listitem>
+	</varlistentry>
+
+	<varlistentry><term>back</term>
+	<listitem>
+	<para>
+
+		Return to the previous page.
+
+	</para>
+	</listitem>
+	</varlistentry>
+	
+	<varlistentry><term>bookmark-manager</term>
+	<listitem>
+	<para>
+
+		Open the bookmark manager dialog.
+	
+	</para>
+	</listitem>
+	</varlistentry>
+
+	<varlistentry><term>cookies-load</term>
+	<listitem>
+	<para>
+
+		??? Reload cookies file.  (ELinks only)
+		[pasky, shouldn't this be load-cookies?]
+
+	</para>
+	</listitem>
+	</varlistentry>
+
+	<varlistentry><term>copy-clipboard</term>
+	<listitem><para>
+
+		Copy the current link to the clipboard.
+
+	</para></listitem>
+	</varlistentry>
+	
+	<varlistentry>
+<term><emphasis>document-info</emphasis></term>
+<listitem>
+<para>Show some information about the current page.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>down</emphasis></term>
+<listitem>
+<para>Move cursor downwards.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>download</emphasis></term>
+<listitem>
+<para>Start downloading the current link.</para> 
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>end</emphasis></term>
+<listitem>
+<para>Go to the end of the page.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>enter</emphasis></term>
+<listitem>
+<para>Follow the current link.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>file-menu</emphasis></term>
+<listitem>
+<para>Open the File menu.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>find-next</emphasis></term>
+<listitem>
+<para>Find the next occurrence of the current search text.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>find-next-back</emphasis></term>
+<listitem>
+<para>Find the next occurrence of the current search text, in reverse.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>goto-url</emphasis></term>
+<listitem>
+<para>Open a "Go to URL" dialog box.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>goto-url-current</emphasis></term>
+<listitem>
+<para>Open a "Go to URL" dialog box containing the current URL.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>goto-url-current-link</emphasis></term>
+<listitem>
+<para>Open a "Go to URL" dialog box containing the current link.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>header-info</emphasis></term>
+<listitem>
+<para>Show the current page header information.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>home</emphasis></term>
+<listitem>
+<para>Go to the start of the page.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>link-menu</emphasis></term>
+<listitem>
+<para>Activate the contextual link menu.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>lua-console</emphasis></term>
+<listitem>
+<para>Open a Lua Console dialog box.  Only available if Lua scripting
+support has been compiled in (Links-Lua and ELinks).</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>menu</emphasis></term>
+<listitem>
+<para>Activate the menu.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>next-frame</emphasis></term>
+<listitem>
+<para>Move to the next frame.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>open-new-window</emphasis></term>
+<listitem>
+<para>Open a new instace of <emphasis>ELinks</emphasis> in a new window.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>open-link-in-new-window</emphasis></term>
+<listitem>
+<para>Open the current link in a new instance of <emphasis>ELinks</emphasis> in a new
+window.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>page-down</emphasis></term>
+<listitem>
+<para>Move downwards by a page.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>page-up</emphasis></term>
+<listitem>
+<para>Move upwards by a page.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>paste-clipboard</emphasis></term>
+<listitem>
+<para>Paste text from the clipboard.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>previous-frame</emphasis></term>
+<listitem>
+<para>Move to the previous frame.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>quit</emphasis></term>
+<listitem>
+<para>Open a quit confirmation dialog box.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>really-quit</emphasis></term>
+<listitem>
+<para>Quit without confirmation.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>reload</emphasis></term>
+<listitem>
+<para>Reload the current page.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>scroll-down</emphasis></term>
+<listitem>
+<para>Scroll the viewing window downwards.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>scroll-left</emphasis></term>
+<listitem>
+<para>Scroll the viewing window to the left.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>scroll-right</emphasis></term>
+<listitem>
+<para>Scroll the viewing window to the right.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>scroll-up</emphasis></term>
+<listitem>
+<para>Scroll the viewing window upwards.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>search</emphasis></term>
+<listitem>
+<para>Search for some text.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>search-back</emphasis></term>
+<listitem>
+<para>Search for some text, in reverse.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>toggle-display-images</emphasis></term>
+<listitem>
+<para>Toggle whether to display links to images.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>toggle-display-tables</emphasis></term>
+<listitem>
+<para>Toggle whether to render tables.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>toggle-html-plain</emphasis></term>
+<listitem>
+<para>Toggles between rendering the current page as HTML or plaintext.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>unback</emphasis></term>
+<listitem>
+<para>Go forwards in unhistory.  (ELinks only)</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>up</emphasis></term>
+<listitem>
+<para>Move cursor upwards.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>view-image</emphasis></term>
+<listitem>
+<para>View the image under the cursor.</para>
+
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>zoom-frame</emphasis></term>
+<listitem>
+<para>Show the current frame using the entire screen.</para>
+</listitem>
+</varlistentry>
+</variablelist> <!-- .TP -->
+</refsect1>
+
+<refsect1><title>EDIT KEYMAP ACTIONS</title>
+<para>The
+<emphasis>edit</emphasis>
+keymap is used for editing text fields.</para>
+
+<variablelist>
+<varlistentry>
+<term><emphasis>up</emphasis></term>
+<term>
+<emphasis>down</emphasis></term>
+<term>
+<emphasis>left</emphasis></term>
+<term>
+<emphasis>right</emphasis></term>
+<term>
+<emphasis>home</emphasis></term>
+<term>
+<emphasis>end</emphasis></term>
+<term>
+<emphasis>backspace</emphasis></term>
+<term>
+<emphasis>delete</emphasis></term>
+<term>
+<emphasis>kill-to-bol</emphasis></term>
+<listitem>
+<para>Delete text from cursor to beginning of line.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>kill-to-eol</emphasis></term>
+<listitem>
+<para>Delete text from cursor to end of line.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><emphasis>auto-complete</emphasis></term>
+<term>
+<emphasis>enter</emphasis></term>
+<term>
+<emphasis>copy-clipboard</emphasis></term>
+<term>
+<emphasis>cut-clipboard</emphasis></term>
+<term>
+<emphasis>paste-clipboard</emphasis></term>
+<term>
+<emphasis>edit</emphasis></term>
+<listitem>
+<para>Edit the current textarea in an external text editor.  (ELinks only)</para>
+</listitem>
+</varlistentry>
+</variablelist> <!-- .TP -->
+</refsect1>
+
+<refsect1><title> MENU KEYMAP ACTIONS </title>
+<para>
+
+	The <emphasis>menu</emphasis> keymap is used for navigating
+	menus.
+
+</para>
+<variablelist>
+	<varlistentry><term><emphasis>left</emphasis></term><listitem><para></para></listitem></varlistentry>
+	<varlistentry><term><emphasis>right</emphasis></term><listitem><para></para></listitem></varlistentry>
+	<varlistentry><term><emphasis>up</emphasis></term><listitem><para></para></listitem></varlistentry>
+	<varlistentry><term><emphasis>down</emphasis></term><listitem><para></para></listitem></varlistentry>
+	<varlistentry><term><emphasis>home</emphasis></term><listitem><para></para></listitem></varlistentry>
+	<varlistentry><term><emphasis>end</emphasis></term><listitem><para></para></listitem></varlistentry>
+	<varlistentry><term><emphasis>page-up</emphasis></term><listitem><para></para></listitem></varlistentry>
+	<varlistentry><term><emphasis>page-down</emphasis></term><listitem><para></para></listitem></varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1><title> DEFAULT BINDINGS </title>
+<para>
+
+	The default bindings are shown below.  Any bindings in
+	<filename>elinks.conf</filename> will override these. This list is
+	given as an example, and may not be up to date.
+
+</para>
+<screen>
+bind main PageDown      page-down
+bind main " "           page-down
+bind main Ctrl-F        page-down
+bind main PageUp        page-up
+bind main b             page-up
+bind main B             page-up
+bind main Ctrl-B        page-up
+bind main Down          down
+bind main Up            up
+bind main Ctrl-Insert   copy-clipboard
+bind main Ctrl-C        copy-clipboard
+bind main Insert        scroll-up
+bind main Ctrl-P        scroll-up
+bind main Delete        scroll-down
+bind main Ctrl-N        scroll-down
+bind main [             scroll-left
+bind main ]             scroll-right
+bind main Home          home
+bind main Ctrl-A        home
+bind main End           end
+bind main Ctrl-E        end
+bind main Right         enter
+bind main Enter         enter
+bind main Left          back
+bind main d             download
+bind main D             download
+bind main /             search
+bind main ?             search-back
+bind main n             find-next
+bind main N             find-next-back
+bind main f             zoom-frame
+bind main F             zoom-frame
+bind main Ctrl-R        reload
+bind main g             goto-url
+bind main G             goto-url-current
+bind main a             add-bookmark
+bind main A             add-bookmark
+bind main s             bookmark-manager
+bind main S             bookmark-manager
+bind main q             quit
+bind main Q             really-quit
+bind main =             document-info
+bind main |             header-info
+bind main \\\&nbsp;           toggle-html-plain
+bind main *             toggle-display-images
+bind main Tab           next-frame
+bind main Escape        menu
+bind main F9            menu
+bind main F10           file-menu
+
+bind edit Left          left
+bind edit Right         right
+bind edit Home          home
+bind edit Ctrl-A        home
+bind edit Up            up
+bind edit Down          down
+bind edit End           end
+bind edit Ctrl-E        end
+bind edit Ctrl-Insert   copy-clipboard
+bind edit Ctrl-B        copy-clipboard
+bind edit Ctrl-X        cut-clipboard
+bind edit Ctrl-V        paste-clipboard
+bind edit Enter         enter
+bind edit Backspace     backspace
+bind edit Ctrl-H        backspace
+bind edit Delete        delete
+bind edit Ctrl-D        delete
+bind edit Ctrl-U        kill-to-bol
+bind edit Ctrl-K        kill-to-eol
+bind edit Ctrl-W        auto-complete
+
+bind menu Left          left
+bind menu Right         right
+bind menu Home          home
+bind menu Ctrl-A        home
+bind menu Up            up
+bind menu Down          down
+bind menu End           end
+bind menu Ctrl-E        end
+bind menu Enter         enter
+bind menu PageDown      page-down
+bind menu Ctrl-F        page-down
+bind menu PageUp        page-up
+bind menu Ctrl-B        page-up
+
+# ELinks only
+bind main l             link-menu
+bind main L             link-menu
+bind main u             unback
+bind main U             unback
+bind main Ctrl-K        cookies-load
+bind edit F4            edit
+bind edit Ctrl-T        edit
+
+# Links-Lua and ELinks
+bind main ,             lua-console
+</screen>
+</refsect1>
+
+<refsect1><title> AUTHOR </title>
+<para>
+
+	This manual page was finally written by Peter Wang (one and a half
+	years after writing the binding code), using excerpts by David
+	Mediavilla.  You can thank Petr Baudis for the subtle requests for
+	documentation. Updated by Zas. Moved to docbook format and cleaned up
+	by Jonas.
+
+</para>
+</refsect1>
+
+<refsect1><title> SEE ALSO </title>
+<para>
+
+	<command>elinks(1)</command>
+	<command>elinks.conf(5)</command>,
+
+</para>
+</refsect1>
+
+</refentry>

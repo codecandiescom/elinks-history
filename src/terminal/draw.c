@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.15 2003/07/27 23:59:03 jonas Exp $ */
+/* $Id: draw.c,v 1.16 2003/07/28 06:53:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,17 +64,17 @@ set_only_char(struct terminal *t, int x, int y, unsigned c)
 void
 set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
-	register int i;
-	int end = (x + l <= t->x) ? l : t->x - x;
+	int end = (l <= t->x - x) ? l : t->x - x;
 	register int offset = x + t->x * y;
+	register int i;
+
+	assert(line);
+	if_assert_failed { return; }
 
 	assert(l >= 0 && l <= t->x && x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return; }
 
 	if (end == 0) return;
-
-	assert(line);
-	if_assert_failed { return; }
 
 	for (i = 0; i < end; i++) {
 		int position = i + offset;
@@ -119,14 +119,12 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 
 	for (j = starty; j < endy; j++) {
 		register int offset = offset_base + t->x * j;
-		register int i;
+		register int position = startx + offset;
 
 		/* No, we can't use memset() here :(. It's int, not char. */
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
-		for (i = startx; i < endx; i++) {
-			int position = i + offset;
-
+		for (; position < endx + offset; position++) {
 			t->screen[position].data = get_screen_char_data(c);
 			t->screen[position].attr = get_screen_char_attr(c);
 		}
@@ -179,7 +177,7 @@ void
 print_text(struct terminal *t, int x, int y, int l,
 	   unsigned char *text, unsigned c)
 {
-	int end = (x + l <= t->x) ? l : t->x - x;
+	int end = (l <= t->x - x) ? l : t->x - x;
 	int position = x + t->x * y;
 
 	assert(text && l >= 0);

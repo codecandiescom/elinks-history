@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.585 2004/11/21 05:20:14 miciah Exp $ */
+/* $Id: session.c,v 1.586 2004/11/26 10:26:18 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -843,10 +843,9 @@ init_session(struct session *base_session, struct terminal *term,
 	 */
 	update_status();
 
-	/* We know that @ses == sessions.next so check if the newly inserted
-	 * session is the only in the list and do the special setup for the
-	 * first session, */
-	if (sessions.prev != ses || !setup_first_session(ses, uri)) {
+	/* Check if the newly inserted session is the only in the list and do
+	 * the special setup for the first session, */
+	if (!list_is_singleton(sessions) || !setup_first_session(ses, uri)) {
 		setup_session(ses, uri, base_session);
 	}
 

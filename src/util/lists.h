@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.41 2004/07/14 00:24:24 jonas Exp $ */
+/* $Id: lists.h,v 1.42 2004/11/26 10:26:18 jonas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -131,6 +131,7 @@ do { \
 
 
 #define list_empty(x) (list_magic_chkbool(x, "list_empty") && (x).next == &(x))
+#define list_is_singleton(x) (list_magic_chkbool(x, "list_empty") && (x).next == (x).prev)
 #define list_has_next(l,p) \
 	(list_magic_chkbool(l, "list_has_next") && (p)->next !=  (void *) &(l))
 

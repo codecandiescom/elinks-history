@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.170 2003/10/24 17:05:26 pasky Exp $ */
+/* $Id: menu.c,v 1.171 2003/10/24 20:56:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ menu_save_url_as(struct terminal *term, void *d, struct session *ses)
 static inline void
 menu_go_back(struct terminal *term, void *d, struct session *ses)
 {
-	go_back(ses, cur_loc(ses)->prev);
+	go_back(ses);
 }
 
 static inline void
@@ -175,7 +175,7 @@ go_backwards(struct terminal *term, struct location *target, struct session *ses
 {
 	abort_loading(ses, 0);
 
-	go_back(ses, target);
+	go_history(ses, target);
 }
 
 static void
@@ -183,7 +183,7 @@ go_unbackwards(struct terminal *term, struct location *target, struct session *s
 {
 	abort_loading(ses, 0);
 
-	go_unback(ses, target);
+	go_history(ses, target);
 }
 
 static struct menu_item no_hist_menu[] = {

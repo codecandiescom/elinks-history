@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.228 2003/10/24 00:18:25 pasky Exp $ */
+/* $Id: view.c,v 1.229 2003/10/24 20:56:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1031,10 +1031,10 @@ send_event(struct session *ses, struct term_event *ev)
 				draw_formatted(ses);
 				goto x;
 			case ACT_BACK:
-				go_back(ses, cur_loc(ses)->prev);
+				go_back(ses);
 				goto x;
 			case ACT_UNBACK:
-				go_unback(ses, cur_loc(ses)->next);
+				go_unback(ses);
 				goto x;
 			case ACT_RELOAD:
 				reload(ses, -1);

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.12 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: user.c,v 1.13 2002/12/21 19:22:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,14 +151,14 @@ user_func(struct session *ses, unsigned char *url)
 		if (strncmp(subj, "subject=", 8)) {
 			subj = strstr(subj, "&subject=");
 			if (subj) {
-				char *t;
+				unsigned char *t;
 
 				subj += 9;
 				t = strchr(subj, '&');
 				if (t) *t = 0;
 			}
 		} else {
-			char *t;
+			unsigned char *t;
 
 			subj += 8;
 			t = strchr(subj, '&');

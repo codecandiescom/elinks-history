@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.210 2003/10/02 22:51:23 jonas Exp $ */
+/* $Id: parser.c,v 1.211 2003/10/04 12:50:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,17 +481,6 @@ static void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
-#if 0
-	/* TODO: This (outcommented use of was_li) is related to and fixes bug
-	 * #208 "Rendering of paragraphs nested in listitems could be
-	 * improved". It makes rendering of pages like (DocBook generated)
-	 * HOWTOs better. */
-	/* Side effect is that <li><li> will be rendered as "* *". */
-	if (was_li) {
-		was_li = 0;
-		line_breax = 0;
-	}
-#endif
 	if (par_format.align == AL_NONE) putsp = 0;
 	if (!len || html_top.invisible) return;
 	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
@@ -510,6 +499,7 @@ put_chrs(unsigned char *start, int len,
 	put_chars(f, start, len);
 	position += len;
 	line_breax = 0;
+	if (was_li > 0) was_li--;
 }
 
 static void
@@ -1323,11 +1313,16 @@ html_li(unsigned char *a)
 		par_format.list_number = 0;
 		html_top.next->parattr.list_number++;
 	}
+
 	putsp = -1;
-	line_breax = 2;
-#if 0
-	was_li = 1;
-#endif
+	/* This is related to and fixes bug #208 "Rendering of paragraphs
+	 * nested in listitems could be improved". It makes rendering of pages
+	 * like (DocBook generated) HOWTOs better. */
+	/* Side effect is that <li><li> will be rendered as "* *" however
+	 * for <li><li><li> the last and any following <li> will be rendered
+	 * correctly. TODO: Find a patter to match <li><li>. */
+	line_breax = (was_li > 0) ? 0 : 2;
+	was_li = 2;
 }
 
 static void

@@ -1,15 +1,17 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.9 2002/04/02 21:50:37 pasky Exp $
+## $Id: Makefile.am,v 1.10 2002/04/28 11:17:29 pasky Exp $
 
 INCLUDES = \
  -I$(srcdir)/..
 
 noinst_LIBRARIES = libdialogs.a
 libdialogs_a_SOURCES = \
- globhist.c \
- globhist.h \
+ document.c \
+ document.h \
  edit.c \
  edit.h \
+ globhist.c \
+ globhist.h \
  info.c \
  info.h \
  menu.c \

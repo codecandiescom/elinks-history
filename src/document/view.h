@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.6 2002/03/28 22:59:17 pasky Exp $ */
+/* $Id: view.h,v 1.7 2002/04/28 11:17:30 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
@@ -42,11 +42,9 @@ void do_for_frame(struct session *, void (*)(struct session *, struct f_data_c *
 
 int get_current_state(struct session *);
 
+unsigned char *print_current_link_do(struct f_data_c *, struct terminal *);
 unsigned char *print_current_link(struct session *);
 unsigned char *print_current_title(struct session *);
-
-/* void loc_msg(struct terminal *, struct location *, struct f_data_c *); */
-void state_msg(struct session *);
 
 void search_for(struct session *, unsigned char *);
 void search_for_back(struct session *, unsigned char *);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.469 2004/06/30 16:10:27 zas Exp $ */
+/* $Id: renderer.c,v 1.470 2004/06/30 16:46:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1158,7 +1158,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 void
 line_break(struct part *part)
 {
-	struct tag *t;
+	struct tag *tag;
 
 	assert(part);
 	if_assert_failed return;
@@ -1185,11 +1185,11 @@ line_break(struct part *part)
 
 	if (part->cx > 0) align_line(part, part->cy, 1);
 
-	for (t = renderer_context.last_tag_for_newline;
-	     t && (void *) t != &part->document->tags;
-	     t = t->prev) {
-		t->x = X(0);
-		t->y = Y(part->cy + 1);
+	for (tag = renderer_context.last_tag_for_newline;
+	     tag && (void *) tag != &part->document->tags;
+	     tag = tag->prev) {
+		tag->x = X(0);
+		tag->y = Y(part->cy + 1);
 	}
 
 end:

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.51 2003/10/06 00:27:30 zas Exp $ */
+/* $Id: inpfield.c,v 1.52 2003/10/24 16:26:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@
 
 
 int
-check_number(struct dialog_data *dlg, struct widget_data *di)
+check_number(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	unsigned char *end;
 	long l;
@@ -39,7 +39,7 @@ check_number(struct dialog_data *dlg, struct widget_data *di)
 	l = strtol(di->cdata, (char **)&end, 10);
 
 	if (errno || !*di->cdata || *end) {
-		msg_box(dlg->win->term, NULL, 0,
+		msg_box(dlg_data->win->term, NULL, 0,
 			N_("Bad number"), AL_CENTER,
 			N_("Number expected in field"),
 			NULL, 1,
@@ -48,7 +48,7 @@ check_number(struct dialog_data *dlg, struct widget_data *di)
 	}
 
 	if (l < di->item->gid || l > di->item->gnum) {
-		msg_box(dlg->win->term, NULL, 0,
+		msg_box(dlg_data->win->term, NULL, 0,
 			N_("Bad number"), AL_CENTER,
 			N_("Number out of range"),
 			NULL, 1,
@@ -60,7 +60,7 @@ check_number(struct dialog_data *dlg, struct widget_data *di)
 }
 
 int
-check_nonempty(struct dialog_data *dlg, struct widget_data *di)
+check_nonempty(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	unsigned char *p;
 
@@ -68,7 +68,7 @@ check_nonempty(struct dialog_data *dlg, struct widget_data *di)
 		if (*p > ' ')
 			return 0;
 
-	msg_box(dlg->win->term, NULL, 0,
+	msg_box(dlg_data->win->term, NULL, 0,
 		N_("Bad string"), AL_CENTER,
 		N_("Empty string not allowed"),
 		NULL, 1,
@@ -91,76 +91,77 @@ dlg_format_field(struct terminal *term, struct terminal *t2,
 }
 
 static int
-input_field_cancel(struct dialog_data *dlg, struct widget_data *di)
+input_field_cancel(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	void (*fn)(void *) = di->item->udata;
-	void *data = dlg->dlg->udata2;
+	void *data = dlg_data->dlg->udata2;
 
 	if (fn) fn(data);
-	cancel_dialog(dlg, di);
+	cancel_dialog(dlg_data, di);
 
 	return 0;
 }
 
 static int
-input_field_ok(struct dialog_data *dlg, struct widget_data *di)
+input_field_ok(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	void (*fn)(void *, unsigned char *) = di->item->udata;
-	void *data = dlg->dlg->udata2;
-	unsigned char *text = dlg->items->cdata;
+	void *data = dlg_data->dlg->udata2;
+	unsigned char *text = dlg_data->items->cdata;
 
-	if (check_dialog(dlg)) return 1;
+	if (check_dialog(dlg_data)) return 1;
 
-	add_to_input_history(dlg->dlg->items->history, text, 1);
+	add_to_input_history(dlg_data->dlg->items->history, text, 1);
 
 	if (fn) fn(data, text);
-	ok_dialog(dlg, di);
+	ok_dialog(dlg_data, di);
 	return 0;
 }
 
 void
-input_field_fn(struct dialog_data *dlg)
+input_field_fn(struct dialog_data *dlg_data)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
-	text_width(term, dlg->dlg->udata, &min, &max);
-	buttons_width(term, dlg->items + 1, 2, &min, &max);
+	text_width(term, dlg_data->dlg->udata, &min, &max);
+	buttons_width(term, dlg_data->items + 1, 2, &min, &max);
 
-	if (max < dlg->dlg->items->dlen) max = dlg->dlg->items->dlen;
+	if (max < dlg_data->dlg->items->dlen)
+		max = dlg_data->dlg->items->dlen;
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
 
 	rw = 0; /* !!! FIXME: input field */
-	dlg_format_text(NULL, term, dlg->dlg->udata, 0, &y, w, &rw,
+	dlg_format_text(NULL, term, dlg_data->dlg->udata, 0, &y, w, &rw,
 			text_color, AL_LEFT);
-	dlg_format_field(NULL, term, dlg->items, 0, &y, w, &rw,
+	dlg_format_field(NULL, term, dlg_data->items, 0, &y, w, &rw,
 			 AL_LEFT);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items + 1, 2, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, term, dlg_data->items + 1, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
-	dlg->xw = rw + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
+	dlg_data->xw = rw + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
+	center_dlg(dlg_data);
 
-	draw_dlg(dlg);
+	draw_dlg(dlg_data);
 
-	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, dlg->dlg->udata, dlg->x + DIALOG_LB,
+	y = dlg_data->y + DIALOG_TB;
+	dlg_format_text(term, term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, text_color, AL_LEFT);
-	dlg_format_field(term, term, dlg->items, dlg->x + DIALOG_LB,
+	dlg_format_field(term, term, dlg_data->items, dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items + 1, 2, dlg->x + DIALOG_LB,
+	dlg_format_buttons(term, term, dlg_data->items + 1, 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 
@@ -178,6 +179,7 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 {
 	struct dialog *dlg;
 	unsigned char *field;
+	int n = 0;
 
 	if (intl) {
 		title = _(title, term);
@@ -186,7 +188,8 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 		cancelbutton = _(cancelbutton, term);
 	}
 
-#define SIZEOF_DIALOG (sizeof(struct dialog) + 4 * sizeof(struct widget))
+#define INPUT_DLG_SIZE 3
+#define SIZEOF_DIALOG (sizeof(struct dialog) + (INPUT_DLG_SIZE + 1) * sizeof(struct widget))
 
 	dlg = mem_calloc(1, SIZEOF_DIALOG + l);
 	if (!dlg) return;
@@ -207,29 +210,34 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	dlg->udata = text;
 	dlg->udata2 = data;
 
-	dlg->items[0].type = D_FIELD;
-	dlg->items[0].gid = min;
-	dlg->items[0].gnum = max;
-	dlg->items[0].fn = check;
-	dlg->items[0].history = history;
-	dlg->items[0].dlen = l;
-	dlg->items[0].data = field;
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].gid = min;
+	dlg->items[n].gnum = max;
+	dlg->items[n].fn = check;
+	dlg->items[n].history = history;
+	dlg->items[n].dlen = l;
+	dlg->items[n].data = field;
+	n++;
 
-	dlg->items[1].type = D_BUTTON;
-	dlg->items[1].gid = B_ENTER;
-	dlg->items[1].fn = input_field_ok;
-	dlg->items[1].dlen = 0;
-	dlg->items[1].text = okbutton;
-	dlg->items[1].udata = fn;
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = input_field_ok;
+	dlg->items[n].dlen = 0;
+	dlg->items[n].text = okbutton;
+	dlg->items[n].udata = fn;
+	n++;
 
-	dlg->items[2].type = D_BUTTON;
-	dlg->items[2].gid = B_ESC;
-	dlg->items[2].fn = input_field_cancel;
-	dlg->items[2].dlen = 0;
-	dlg->items[2].text = cancelbutton;
-	dlg->items[2].udata = cancelfn;
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].fn = input_field_cancel;
+	dlg->items[n].dlen = 0;
+	dlg->items[n].text = cancelbutton;
+	dlg->items[n].udata = cancelfn;
+	n++;
 
-	dlg->items[3].type = D_END;
+	assert(n == INPUT_DLG_SIZE);
+
+	dlg->items[n].type = D_END;
 
 	add_to_ml(&ml, dlg, NULL);
 	do_dialog(term, dlg, ml);
@@ -237,10 +245,10 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 
 
 static inline void
-display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
-		 int hide)
+display_field_do(struct widget_data *di, struct dialog_data *dlg_data,
+		 int sel, int hide)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
 
 	int_bounds(&di->vpos, di->cpos - di->l + 1, di->cpos);
@@ -267,24 +275,24 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 		int x = di->x + di->cpos - di->vpos;
 
 		set_cursor(term, x, di->y, 0);
-		set_window_ptr(dlg->win, di->x, di->y);
+		set_window_ptr(dlg_data->win, di->x, di->y);
 	}
 }
 
 static void
-display_field(struct widget_data *di, struct dialog_data *dlg, int sel)
+display_field(struct widget_data *di, struct dialog_data *dlg_data, int sel)
 {
-	display_field_do(di, dlg, sel, 0);
+	display_field_do(di, dlg_data, sel, 0);
 }
 
 static void
-display_field_pass(struct widget_data *di, struct dialog_data *dlg, int sel)
+display_field_pass(struct widget_data *di, struct dialog_data *dlg_data, int sel)
 {
-	display_field_do(di, dlg, sel, 1);
+	display_field_do(di, dlg_data, sel, 1);
 }
 
 static void
-init_field(struct widget_data *widget, struct dialog_data *dialog,
+init_field(struct widget_data *widget, struct dialog_data *dlg_data,
 	   struct term_event *ev)
 {
 	if (widget->item->history) {
@@ -307,7 +315,7 @@ init_field(struct widget_data *widget, struct dialog_data *dialog,
 }
 
 static int
-mouse_field(struct widget_data *di, struct dialog_data *dlg,
+mouse_field(struct widget_data *di, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
 	if (ev->y != di->y || ev->x < di->x
@@ -337,20 +345,20 @@ mouse_field(struct widget_data *di, struct dialog_data *dlg,
 	di->cpos = di->vpos + ev->x - di->x;
 	int_upper_bound(&di->cpos, strlen(di->cdata));
 
-	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-	dlg->selected = di - dlg->items;
+	display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+	dlg_data->selected = di - dlg_data->items;
 
 dsp_f:
-	display_dlg_item(dlg, di, 1);
+	display_dlg_item(dlg_data, di, 1);
 	return EVENT_PROCESSED;
 }
 
 /* XXX: The world's best candidate for massive goto cleanup! --pasky */
 static int
-kbd_field(struct widget_data *di, struct dialog_data *dlg,
+kbd_field(struct widget_data *di, struct dialog_data *dlg_data,
 	  struct term_event *ev)
 {
-	struct window *win = dlg->win;
+	struct window *win = dlg_data->win;
 	struct terminal *term = win->term;
 
 	switch (kbd_action(KM_EDIT, ev, NULL)) {
@@ -468,8 +476,8 @@ kbd_field(struct widget_data *di, struct dialog_data *dlg,
 	return EVENT_NOT_PROCESSED;
 
 dsp_f:
-	display_dlg_item(dlg, di, 1);
-	redraw_from_window(dlg->win);
+	display_dlg_item(dlg_data, di, 1);
+	redraw_from_window(dlg_data->win);
 	return EVENT_PROCESSED;
 }
 

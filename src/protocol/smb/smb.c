@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.22 2003/12/09 13:58:06 pasky Exp $ */
+/* $Id: smb.c,v 1.23 2003/12/09 13:58:41 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -88,8 +88,6 @@ smb_read_data(struct connection *conn, int sock, unsigned char *dst)
 	return r;
 }
 
-#undef READ_SIZE
-
 static void
 smb_read_text(struct connection *conn, int sock)
 {
@@ -135,6 +133,8 @@ smb_got_data(struct connection *conn)
 		conn->tries = 0;
 	conn->from += r;
 }
+
+#undef READ_SIZE
 
 static void
 smb_got_text(struct connection *conn)

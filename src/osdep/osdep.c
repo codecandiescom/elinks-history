@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.154 2004/11/25 23:50:15 miciah Exp $ */
+/* $Id: osdep.c,v 1.155 2004/12/26 23:36:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -503,8 +503,77 @@ get_window_title(void)
 }
 
 int
-resize_window(int x, int y)
+resize_window(int width, int height, int old_width, int old_height)
 {
+#ifdef HAVE_X11
+	/* Following code is stolen from our beloved vim. */
+	unsigned char *winid;
+	Display *display;
+	Window window;
+	Status status;
+	XWindowAttributes attributes;
+
+	if (!is_xterm())
+		return -1;
+
+	winid = getenv("WINDOWID");
+	if (!winid)
+		return -1;
+	window = (Window) atol(winid);
+	if (!window)
+		return -1;
+
+	display = XOpenDisplay(NULL);
+	if (!display)
+		return -1;
+
+	/* If WINDOWID is bad, we don't want X to abort us. */
+	x_error = 0;
+	XSetErrorHandler((int (*)(Display *, XErrorEvent *)) catch_x_error);
+
+	status = XGetWindowAttributes(display, window, &attributes);
+
+	while (!x_error && !status) {
+		Window root, parent, *children;
+		unsigned int num_children;
+
+		if (!XQueryTree(display, window, &root, &parent, &children, &num_children))
+			break;
+		if (children)
+			XFree((void *) children);
+		if (parent == root || parent == 0)
+			break;
+		window = parent;
+		status = XGetWindowAttributes(display, window, &attributes);
+	}
+
+	if (!x_error && status) {
+		width  *= (attributes.width  / old_width);
+		height *= (attributes.height / old_height);
+
+		status = XResizeWindow(display, window, width, height);
+		while (!x_error && !status) {
+			Window root, parent, *children;
+			unsigned int num_children;
+
+			if (!XQueryTree(display, window, &root, &parent, &children, &num_children))
+				break;
+			if (children)
+				XFree((void *) children);
+			if (parent == root || parent == 0)
+				break;
+			window = parent;
+			status = XResizeWindow(display, window, width, height);
+		}
+	}
+
+	XCloseDisplay(display);
+
+	return 0;
+#else
+	/* At least reset the window title to a blank one. */
+	return stracpy("");
+#endif
 	return -1;
 }
 
@@ -728,7 +797,7 @@ get_system_env(void)
 int
 can_resize_window(int environment)
 {
-	return !!(environment & ENV_OS2VIO);
+	return !!(environment & (ENV_OS2VIO | ENV_XWIN));
 }
 
 #ifndef CONFIG_OS2

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.112 2004/09/04 11:19:11 jonas Exp $ */
+/* $Id: kbd.c,v 1.113 2004/12/26 23:36:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -403,24 +403,34 @@ free_trm(struct itrm *itrm)
 }
 
 /* Resize terminal to dimensions specified by @text string.
- * @text should look like 'width,height' where width and height are integers. */
+ * @text should look like "width,height,old-width,old-height" where width and
+ * height are integers. */
 static inline void
 resize_terminal_from_str(unsigned char *text)
 {
-	unsigned char *p;
-	int width, height;
+	enum { NEW_WIDTH = 0, NEW_HEIGHT, OLD_WIDTH, OLD_HEIGHT, NUMBERS } i;
+	int numbers[NUMBERS];
 
 	assert(text && *text);
 	if_assert_failed return;
 
-	p = strchr(text, ',');
-	if (!p) return;
+	for (i = 0; i < NUMBERS; i++) {
+		unsigned char *p = strchr(text, ',');
 
-	*p++ = '\0';
-	width = atoi(text);
-	height = atoi(p);
+		if (p) {
+			*p++ = '\0';
 
-	resize_window(width, height);
+		} else if (i < OLD_HEIGHT) {
+			return;
+		}
+
+		numbers[i] = atoi(text);
+
+		if (p) text = p;
+	}
+
+	resize_window(numbers[NEW_WIDTH], numbers[NEW_HEIGHT],
+		      numbers[OLD_WIDTH], numbers[OLD_HEIGHT]);
 	resize_terminal();
 }
 

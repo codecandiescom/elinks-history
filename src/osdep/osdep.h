@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.41 2004/08/15 00:27:04 jonas Exp $ */
+/* $Id: osdep.h,v 1.42 2004/12/26 23:36:47 jonas Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
@@ -36,7 +36,7 @@ unsigned char *get_window_title(void);
 void block_stdin(void);
 void unblock_stdin(void);
 int exe(unsigned char *);
-int resize_window(int, int);
+int resize_window(int, int, int, int);
 int can_resize_window(int);
 int can_open_os_shell(int);
 void set_highpri(void);

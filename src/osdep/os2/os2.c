@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.29 2004/10/13 15:34:47 zas Exp $ */
+/* $Id: os2.c,v 1.30 2004/12/26 23:36:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -422,7 +422,7 @@ set_window_title(int init, const char *url)
 #endif
 
 int
-resize_window(int x, int y)
+resize_window(int x, int y, int old_width, int old_height)
 {
 	A_DECL(VIOMODEINFO, vmi);
 

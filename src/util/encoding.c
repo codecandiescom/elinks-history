@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.2 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: encoding.c,v 1.3 2002/07/09 21:16:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,21 +26,6 @@
 
 /* TODO: When more decoders will join the game, we should probably move them
  * to separate files, maybe even to separate directory. --pasky */
-
-
-#if 0
-static void *
-z_mem_alloc(void *opaque, int items, int size)
-{
-	return mem_alloc(items * size);
-}
-
-static void
-z_mem_free(void *opaque, void *address)
-{
-	mem_free(address);
-}
-#endif
 
 
 struct decoding_handlers {
@@ -115,69 +100,6 @@ gzip_close(struct stream_encoded *stream)
 {
 	gzclose((gzFile *) stream->data);
 }
-
-#if 0
-static unsigned char *
-decompress_gzip(unsigned char *stream, int cur_size, int *new_size)
-{
-	z_stream z;
-	char *stream_pos = stream;
-	char method, flags;
-	char *output;
-	int size;
-	int ret;
-
-	output = mem_alloc(cur_size * 4);
-	if (!output) return stream;
-
-	z.opaque = NULL;
-	z.zalloc = (alloc_func) z_mem_alloc;
-	z.zfree = z_mem_free;
-	z.next_in = stream_pos;
-	z.next_out = output;
-	z.avail_out = size = cur_size * 4;
-	z.avail_in = cur_size + 1;
-
-	/* XXX: Why -15? --pasky */
-	ret = inflateInit2(&z, -15);
-
-	while (ret == Z_OK) {
-		char *output_new;
-
-		ret = inflate(&z, Z_SYNC_FLUSH);
-
-		if (ret == Z_STREAM_END) {
-			mem_free(stream);
-			*new_size = (int) z.total_out;
-			output = mem_realloc(output, z.total_out);
-			inflateEnd(&z);
-			return output;
-		}
-
-		if (ret != Z_OK) {
-			inflateEnd(&z);
-			break;
-		}
-
-		size += cur_size * 4;
-
-		output_new = mem_realloc(output, size);
-		if (!output_new) {
-			mem_free(output);
-			inflateEnd(&z);
-			return stream;
-		}
-
-		output = output_new;
-		z.avail_out += cur_size * 4;
-		z.next_out = output + z.total_out;
-	}
-
-	mem_free(output);
-	
-	return stream;
-}
-#endif
 
 struct decoding_handlers gzip_handlers = {
 	gzip_open,
@@ -256,65 +178,6 @@ bzip2_close(struct stream_encoded *stream)
 	mem_free(data);
 }
 
-#if 0
-static unsigned char *
-decompress_bzip2(unsigned char *stream, int cur_size, int *new_size)
-{
-	bz_stream bz;
-	char *output;
-	int size;
-	int ret;
-	
-	output = mem_alloc(cur_size * 4);
-	if (!output) return stream;
-	
-	bz.opaque = NULL;
-	bz.bzalloc = z_mem_alloc;
-	bz.bzfree = z_mem_free;
-	bz.next_in = stream;
-	bz.next_out = output;
-	bz.avail_out = size = cur_size * 4;
-	bz.avail_in = cur_size;
-
-	ret = BZ2_bzDecompressInit(&bz, 0, 0);
-
-	while (ret == BZ_OK) {
-		char *output_new;
-
-		ret = BZ2_bzDecompress(&bz);
-
-		if (ret == BZ_STREAM_END) {
-			mem_free(stream);
-			*new_size = (int) bz.total_out_lo32;
-			output = mem_realloc(output, bz.total_out_lo32);
-			BZ2_bzDecompressEnd(&bz);
-			return output;
-		}
-
-		if (ret != BZ_OK) {
-			BZ2_bzDecompressEnd(&bz);
-			break;
-		}
-
-		size += cur_size * 4;
-
-		output_new = mem_realloc(output, size);
-		if (!output_new) {
-			mem_free(output);
-			BZ2_bzDecompressEnd(&bz);
-			return stream;
-		}
-
-		output = output_new;
-		bz.avail_out += cur_size * 4;
-		bz.next_out = output+bz.total_out_lo32;
-	}
-
-	mem_free(output);
-
-	return stream;
-}
-#endif
 
 struct decoding_handlers bzip2_handlers = {
 	bzip2_open,

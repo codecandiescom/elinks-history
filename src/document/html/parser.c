@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.15 2002/04/06 17:08:11 pasky Exp $ */
+/* $Id: parser.c,v 1.16 2002/04/26 17:07:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,10 +499,15 @@ void html_fixed(unsigned char *a) { format.attr |= AT_FIXED; }
 /* Extract the extra information that is available for elements which can
  * receive focus. Call this from each element which supports tabindex or
  * accesskey. */
+/* Note that in ELinks, we support those attributes (I mean, we call this
+ * function) while proccessing any focusable element (otherwise it'd have zero
+ * tabindex, thus messing up navigation between links), thus we support these
+ * attributes even near tags where we're not supposed to (like IFRAME, FRAME or
+ * LINK). I think this doesn't make any harm ;). --pasky */
 void html_focusable(unsigned char *a)
 {
-	char *accesskey = get_attr_val(a, "accesskey");
-	int tabindex = get_num(a, "tabindex");
+	char *accesskey = a ? get_attr_val(a, "accesskey") : NULL;
+	int tabindex = a ? get_num(a, "tabindex") : 0;
 
 	format.accesskey = 0;
 	format.tabindex = 0x80000000;
@@ -524,17 +529,29 @@ void html_focusable(unsigned char *a)
 
 void html_a(unsigned char *a)
 {
-	char *al;
-	if ((al = get_attr_val(a, "href"))) {
-		char *all = al;
-		while (all[0] == ' ') all++;
-		while (all[0] && all[strlen(all) - 1] == ' ') all[strlen(all) - 1] = 0;
+	char *href, *name;
+
+	href = get_attr_val(a, "href");
+	if (href) {
+		char *href_pos = href;
+		char *target;
+
+		/* Strip spaces */
+
+		while (href_pos[0] == ' ') href_pos++;
+		while (href_pos[0] &&
+		       href_pos[strlen(href_pos) - 1] == ' ')
+			href_pos[strlen(href_pos) - 1] = 0;
+
 		if (format.link) mem_free(format.link);
-		format.link = join_urls(format.href_base, all);
-		mem_free(al);
-		if ((al = get_target(a))) {
+		format.link = join_urls(format.href_base, href_pos);
+
+		mem_free(href);
+
+		target = get_target(a);
+		if (target) {
 			if (format.target) mem_free(format.target);
-			format.target = al;
+			format.target = target;
 		} else {
 			if (format.target) mem_free(format.target);
 			format.target = stracpy(format.target_base);
@@ -546,10 +563,15 @@ void html_a(unsigned char *a)
 			memcpy(&format.fg, &format.clink, sizeof(struct rgb));
 
 		html_focusable(a);
-	} else kill_html_stack_item(&html_top);
-	if ((al = get_attr_val(a, "name"))) {
-		special_f(ff, SP_TAG, al);
-		mem_free(al);
+
+	} else {
+		kill_html_stack_item(&html_top);
+	}
+
+	name = get_attr_val(a, "name");
+	if (name) {
+		special_f(ff, SP_TAG, name);
+		mem_free(name);
 	}
 }
 
@@ -1584,10 +1606,21 @@ void do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *e
 void html_iframe(unsigned char *a)
 {
 	unsigned char *name, *url;
-	if (!(url = get_attr_val(a, "src"))) return;
-	if (!(name = get_attr_val(a, "name"))) name = stracpy("");
-	if (*name) put_link_line("IFrame: ", name, url, d_opt->framename);
-	else put_link_line("", "IFrame", url, d_opt->framename);
+
+	url = get_attr_val(a, "src");
+	if (!url) return;
+
+	name = get_attr_val(a, "name");
+	if (!name) name = stracpy("");
+
+	html_focusable(a);
+
+	if (*name) {
+		put_link_line("IFrame: ", name, url, d_opt->framename);
+	} else {
+		put_link_line("", "IFrame", url, d_opt->framename);
+	}
+
 	mem_free(name);
 	mem_free(url);
 }
@@ -1599,29 +1632,42 @@ void html_noframes(unsigned char *a)
 
 void html_frame(unsigned char *a)
 {
-	unsigned char *name, *u2, *url;
-	if (!(u2 = get_attr_val(a, "src"))) {
+	unsigned char *name, *src, *url;
+
+	src = get_attr_val(a, "src");
+	if (!src) {
 		url = stracpy("");
 	} else {
-		url = join_urls(format.href_base, u2);
-		mem_free(u2);
+		url = join_urls(format.href_base, src);
+		mem_free(src);
 	}
 	if (!url) return;
-	name = get_attr_val (a, "name");
-	if (!name)
+
+	name = get_attr_val(a, "name");
+	if (!name) {
 		name = stracpy(url);
-	else if (!name[0]) { /* When name doesn't have a value */
+	} else if (!name[0]) {
+		/* When name doesn't have a value */
 		mem_free(name);
 		name = stracpy(url);
 	}
-	if (!d_opt->frames || !html_top.frameset) put_link_line("Frame: ", name, url, "");
-	else {
+	if (!name) return;
+
+	if (!d_opt->frames || !html_top.frameset) {
+		html_focusable(a);
+		put_link_line("Frame: ", name, url, "");
+
+	} else {
 		struct frame_param fp;
+
 		fp.name = name;
 		fp.url = url;
 		fp.parent = html_top.frameset;
-		if (special_f(ff, SP_USED, NULL)) special_f(ff, SP_FRAME, &fp);
+
+		if (special_f(ff, SP_USED, NULL))
+			special_f(ff, SP_FRAME, &fp);
 	}
+
 	mem_free(name);
 	mem_free(url);
 }
@@ -1781,16 +1827,34 @@ void html_frameset(unsigned char *a)
 void html_link(unsigned char *a)
 {
 	unsigned char *name, *url;
-	if ((name = get_attr_val(a, "type"))) {
+
+	name = get_attr_val(a, "type");
+	if (name) {
+		/* FIXME? Shouldn't we cmp with 'name' here? I'm really
+		 * confused from this now, I'd like an explanation. Thanks ;).
+		 * --pasky */
 		if (casecmp(a, "text/css", 8)) {
 			mem_free(name);
 			return;
 		}
 		mem_free(name);
 	}
-	if (!(url = get_attr_val(a, "href"))) return;
-	if (!(name = get_attr_val(a, "rel"))) if (!(name = get_attr_val(a, "rev"))) name = stracpy(url);
-	if (strcasecmp(name, "STYLESHEET") && strcasecmp(name, "made") && strcasecmp(name, "SHORTCUT ICON")) put_link_line("Link: ", name, url, format.target_base);
+
+	url = get_attr_val(a, "href");
+	if (!url) return;
+
+	name = get_attr_val(a, "rel");
+	if (!name) name = get_attr_val(a, "rev");
+	if (!name) name = stracpy(url);
+
+	/* Ignore few annoying links.. */
+	if (strcasecmp(name, "STYLESHEET") &&
+	    strcasecmp(name, "made") &&
+	    strcasecmp(name, "SHORTCUT ICON")) {
+		html_focusable(a);
+		put_link_line("Link: ", name, url, format.target_base);
+	}
+
 	mem_free(name);
 	mem_free(url);
 }
@@ -1899,13 +1963,17 @@ unsigned char *skip_comment(unsigned char *html, unsigned char *eof)
 
 void process_head(unsigned char *head)
 {
-	unsigned char *r, *p;
-	if ((r = parse_http_header(head, "Refresh", NULL))) {
-		if ((p = parse_http_header_param(r, "URL"))) {
-			put_link_line("Refresh: ", p, p, d_opt->framename);
-			mem_free(p);
+	unsigned char *refresh, *url;
+
+	refresh = parse_http_header(head, "Refresh", NULL);
+	if (refresh) {
+		url = parse_http_header_param(refresh, "URL");
+		if (url) {
+			html_focusable(NULL);
+			put_link_line("Refresh: ", url, url, d_opt->framename);
+			mem_free(url);
 		}
-		mem_free(r);
+		mem_free(refresh);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.29 2003/11/17 11:09:03 pasky Exp $ */
+/* $Id: leds.c,v 1.30 2003/11/17 11:11:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/timer.h"
 #include "modules/module.h"
+#include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
 #include "util/color.h"

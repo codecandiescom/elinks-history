@@ -1,5 +1,5 @@
-/* This routines are the bones of user interface. */
-/* $Id: dialog.c,v 1.1 2002/07/04 21:19:44 pasky Exp $ */
+/* Dialog box implementation. */
+/* $Id: dialog.c,v 1.2 2002/07/04 21:42:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

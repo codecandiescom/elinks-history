@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.21 2003/12/12 14:05:43 jonas Exp $ */
+/* $Id: hooks.c,v 1.22 2003/12/13 04:40:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@ internal_module(void)
  * to do is explained in doc/events.txt */
 
 static enum evhook_status
-script_hook_goto_url(va_list ap)
+script_hook_goto_url(va_list ap, void *data)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
@@ -59,7 +59,7 @@ script_hook_goto_url(va_list ap)
 }
 
 static enum evhook_status
-script_hook_follow_url(va_list ap)
+script_hook_follow_url(va_list ap, void *data)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
@@ -82,7 +82,7 @@ script_hook_follow_url(va_list ap)
 }
 
 static enum evhook_status
-script_hook_pre_format_html(va_list ap)
+script_hook_pre_format_html(va_list ap, void *data)
 {
 	unsigned char **html = va_arg(ap, unsigned char **);
 	int *html_len = va_arg(ap, int *);
@@ -112,7 +112,7 @@ script_hook_pre_format_html(va_list ap)
  *  - ""           to not use any proxy
  *  - nil          to use the default proxies */
 static enum evhook_status
-script_hook_get_proxy(va_list ap)
+script_hook_get_proxy(va_list ap, void *data)
 {
 	unsigned char **retval = va_arg(ap, unsigned char **);
 	unsigned char *url = va_arg(ap, unsigned char *);
@@ -131,7 +131,7 @@ script_hook_get_proxy(va_list ap)
 }
 
 static enum evhook_status
-script_hook_quit(va_list ap)
+script_hook_quit(va_list ap, void *data)
 {
 	SCM proc = scm_c_module_lookup(internal_module(), "%quit-hook");
 

@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.9 2003/11/05 15:35:22 jonas Exp $ */
+/* $Id: core.c,v 1.10 2003/12/13 04:40:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@
 
 
 static void
-init_guile(void)
+init_guile(struct module *module)
 {
 	SCM user_module;
 	SCM internal_module;

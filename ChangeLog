@@ -1,3 +1,67 @@
+Sun Mar 20 17:40:35 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	add_dlg_button_do(): code cleanup.  
+
+Sun Mar 20 11:50:07 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Mar 20 11:05:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Use find_uri_protocol() when the URI looks ok but has unknown
+	protocol. This fixes URIs like blah.com:9090 on the command line
+	while 127.0.0.1:80 and files with ':' in them should still work.
+	(bug 639) 
+
+Sun Mar 20 10:57:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	find_uri_protocol(): Uninline. Return PROTOCOL_UNKNOWN if nothing is
+	matched and handle that specially in the translate_url() goto
+	looping.  
+
+Sun Mar 20 10:40:54 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/: bookmarks.c, backend/default.c, backend/xbel.c:
+
+	Add option to control whether (expanded) folder states should be
+	stored when saving bookmarks (bookmarks.folder_state). Defaults to
+	on; the current behavior. (bug 642) 
+
+Sun Mar 20 10:20:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Move the triggering of the quit hook after builtin modules has been
+	terminated. (bug 641) 
+
+Sun Mar 20 10:13:45 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/proxy.c:
+
+	get_proxy_worker(): Use strip_proxy_protocol() to remove http:// and
+	ftp:// from scripting proxies. (bug 640) 
+
+Sun Mar 20 10:12:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/proxy.c:
+
+	get_protocol_proxy(): Factor out the protocol stripping to new
+	strip_proxy_protocol().  
+
+Sun Mar 20 08:19:05 2005  Laurent Monin <zas@norz.org>:
+
+	* doc/bookmarks.txt:
+
+	Update: we now support separators.  
+
 Sat Mar 19 17:49:40 2005  Laurent Monin <zas@norz.org>:
 
 	* src/bookmarks/dialogs.c:

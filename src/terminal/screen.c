@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.37 2003/07/28 10:04:45 jonas Exp $ */
+/* $Id: screen.c,v 1.38 2003/07/28 10:14:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,6 +355,21 @@ beep_terminal(struct terminal *term)
 	hard_write(term->fdout, "\a", 1);
 }
 
+struct terminal_screen *
+init_screen(void)
+{
+	struct terminal_screen *screen;
+
+	screen = mem_calloc(1, sizeof(struct terminal_screen));
+	if (!screen) return NULL;
+
+	screen->lcx = -1;
+	screen->lcy = -1;
+	screen->dirty = 1;
+
+	return screen;
+}
+
 /* Update the size of the previous and the current screen image. The two images
  * are allocated in one chunk. */
 /* TODO: It seems allocation failure here is fatal. We should do something! */
@@ -366,8 +381,9 @@ alloc_screen(struct terminal *term, int x, int y)
 	struct screen_char *image;
 
 	if (!screen) {
-		screen = mem_calloc(1, sizeof(struct terminal_screen));
+		screen = init_screen();
 		if (!screen) return;
+
 		term->screen = screen;
 	}
 

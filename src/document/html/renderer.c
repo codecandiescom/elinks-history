@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.377 2003/11/15 15:38:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.378 2003/11/16 15:25:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1154,7 +1154,6 @@ html_special(struct part *part, enum html_special_type c, ...)
 	unsigned long seconds;
 	struct form_control *fc;
 	struct frameset_param *fsp;
-	struct frame_param *fp;
 
 	assert(part);
 	if_assert_failed return NULL;
@@ -1183,9 +1182,15 @@ html_special(struct part *part, enum html_special_type c, ...)
 			va_end(l);
 			return create_frameset(document, fsp);
 		case SP_FRAME:
-			fp = va_arg(l, struct frame_param *);
+		{
+			struct frameset_desc *parent = va_arg(l, struct frameset_desc *);
+			unsigned char *name = va_arg(l, unsigned char *);
+			unsigned char *url = va_arg(l, unsigned char *);
+
 			va_end(l);
-			create_frame(fp);
+
+			add_frameset_entry(parent, NULL, name, url);
+		}
 			break;
 		case SP_NOWRAP:
 			nowrap = va_arg(l, int);

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.42 2003/11/16 15:02:47 jonas Exp $ */
+/* $Id: frames.c,v 1.43 2003/11/16 15:25:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include "util/string.h"
 
 
-static void
+void
 add_frameset_entry(struct frameset_desc *frameset_desc,
 		   struct frameset_desc *subframe,
 		   unsigned char *name, unsigned char *url)
@@ -100,15 +100,6 @@ create_frameset(struct document *document, struct frameset_param *fp)
 		document->frame_desc = fd;
 
 	return fd;
-}
-
-void
-create_frame(struct frame_param *fp)
-{
-	assert(fp && fp->parent);
-	if_assert_failed return;
-
-	add_frameset_entry(fp->parent, NULL, fp->name, fp->url);
 }
 
 static void

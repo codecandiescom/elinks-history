@@ -45,9 +45,10 @@ dnl
 AC_DEFUN([AM_WITH_NLS],
   [AC_MSG_CHECKING([whether NLS is requested])
     dnl Default is enabled NLS
-    AC_ARG_ENABLE(nls,
-      [  --disable-nls           do not use Native Language Support],
-      USE_NLS=$enableval, USE_NLS=yes)
+    EL_ARG_ENABLE(CONFIG_NLS, nls, [Native Language Support],
+      [  --disable-nls           do not use Native Language Support])
+
+    USE_NLS=$CONFIG_NLS
     AC_MSG_RESULT($USE_NLS)
     AC_SUBST(USE_NLS)
 

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.55 2004/03/21 00:21:13 jonas Exp $ */
+/* $Id: user.c,v 1.56 2004/03/21 00:32:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,6 +59,8 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 	if (!init_string(&string)) return NULL;
 
 	while (*cmd) {
+		unsigned char *substr = NULL;
+		int sublen = 0;
 		int p;
 
 		for (p = 0; cmd[p] && cmd[p] != '%'; p++);
@@ -71,15 +73,11 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 		cmd++;
 		switch (*cmd) {
 			case 'u':
-			{
-				unsigned char *url = struri(*uri);
-
-				add_shell_safe_to_string(&string, url,
-							 strlen(url));
+				substr = struri(*uri);
+				sublen = strlen(struri(*uri));
 				break;
-			}
+
 			case 'h':
-			{
 				/* TODO	For some user protocols it would be
 				 *	better if substitution of each uri
 				 *	field was completely configurable. Now
@@ -89,34 +87,33 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 				 *	protocol handling. */
 				/* It would break a lot of configurations so I
 				 * don't know. --jonas */
-				unsigned char *host = get_uri_host(uri);
-				int hostlen = get_uri_host_length(uri, 0);
+				substr = get_uri_host(uri);
+				sublen = get_uri_host_length(uri, 0);
+				break;
 
-				if (host && hostlen)
-					add_shell_safe_to_string(&string, host,
-								 hostlen);
-				break;
-			}
 			case 'p':
-				if (!string_is_empty(&uri->port))
-					add_shell_safe_to_string(&string,
-								 uri->port.source,
-								 uri->port.length);
+				substr = uri->port.source;
+				sublen = uri->port.length;
 				break;
+
 			case 'd':
-				if (uri->datalen)
-					add_shell_safe_to_string(&string, uri->data,
-								 uri->datalen);
+				substr = uri->data;
+				sublen = uri->datalen;
 				break;
+
 			case 's':
-				if (subj)
-					add_shell_safe_to_string(&string, subj,
-								 strlen(subj));
+				substr = subj;
+				sublen = subj ? strlen(subj) : 0;
 				break;
+
 			default:
 				add_bytes_to_string(&string, cmd - 1, 2);
 				break;
 		}
+
+		if (substr && sublen)
+			add_shell_safe_to_string(&string, substr, sublen);
+
 		if (*cmd) cmd++;
 	}
 

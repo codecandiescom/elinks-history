@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.31 2003/11/15 18:44:37 kuser Exp $ */
+/* $Id: options.inc,v 1.32 2003/11/27 00:05:06 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -526,6 +526,12 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.html", N_("Underline links"),
 		"underline_links", 0, 0,
 		N_("Underline links.")),
+
+	INIT_OPT_BOOL("document.html", N_("Wrap non breaking space"),
+		"wrap_nbsp", 0, 0,
+		N_("If set do not honour non breaking space (the nbsp entity)\n"
+		"but allow to wrap the text. This can help keeping the width\n"
+		"of documents down so no horizontal scrolling is needed.")),
 
 
 	INIT_OPT_TREE("document", N_("Plain rendering"),

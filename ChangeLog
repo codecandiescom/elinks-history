@@ -1,3 +1,196 @@
+Fri Oct 31 22:37:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/Makefile.am, document/view.c, document/view.h,
+	document/html/renderer.c, sched/session.c, viewer/dump/dump.c,
+	viewer/text/link.c, viewer/text/view.c, viewer/text/view.h:
+
+	Reverted moving of some document_view specific functions. These
+	functions are about _viewing_ the document on some device, thus
+	inherently 100% viewer stuff, and have no business at all to live in
+	document processing.  
+
+Fri Oct 31 22:33:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/view.c, document/view.h, document/html/frames.h,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/renderer.h, sched/session.c:
+
+	Reverted moving of document_view setup from the renderer to document
+	view file. This bit is in principle not bad, but it is stucking
+	clumsily in the way of the future reverting. This should be
+	reintroduced later.  
+
+Fri Oct 31 22:28:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: Makefile.am, plain.c, plain.h, view.c,
+	html/parser.c, html/renderer.c:
+
+	Removed plaintext 'renderer'. Other patches to be reverted depend on
+	it. Also, it should live in own directory. This could otherwise be a
+	good bit in principle, but it is in the way.  
+
+Fri Oct 31 22:18:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, dialogs/document.c, dialogs/info.c,
+	dialogs/menu.h, scripting/lua/core.c, viewer/dump/dump.c,
+	viewer/dump/dump.h, viewer/text/link.c, viewer/text/textarea.c,
+	viewer/text/view.c:
+
+	Reverted the includes fix from document/ split up, other patches to
+	be reverted depend on it.  
+
+Fri Oct 31 22:15:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: Makefile.am, draw.c, draw.h, plain.c:
+
+	Removed the drawing library, other patches to be reverted depend on
+	it. Drawing belongs to viewer, viewer _views_ the document.  
+
+Fri Oct 31 21:51:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: dialog.c, dialog.h:
+
+	Hmm, I deleted the wrong part of the patch. This one wasn't supposed
+	to be reverted, for one.  
+
+Fri Oct 31 21:46:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/options.c:
+
+	Clean up resize terminal dialog after Jonas.  
+
+Fri Oct 31 21:33:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/inpfield.c, bfu/msgbox.c,
+	bookmarks/dialogs.c, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, sched/download.c, scripting/lua/core.c,
+	viewer/text/search.c, bfu/widget.h:
+
+	Reverted removal of add_dlg_end().  
+
+Fri Oct 31 20:40:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: draw.c, draw.h, plain.c:
+
+	Setup default colors in get_document_line().  
+
+Fri Oct 31 19:54:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: Makefile.am, draw.c, draw.h, plain.c:
+
+	Start up a document drawing library.  
+
+Fri Oct 31 19:14:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain.c:
+
+	Setup document bg color.  
+
+Fri Oct 31 18:16:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Remove traces of plain text handling in the html parser.  
+
+Fri Oct 31 18:03:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Remove unused html init feature.  
+
+Fri Oct 31 17:56:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, document/document.c, document/document.h:
+
+	Encapsulate document backend lifecycles.  
+
+Fri Oct 31 17:32:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, dialogs/document.c, dialogs/info.c,
+	dialogs/menu.h, scripting/lua/core.c, viewer/dump/dump.c,
+	viewer/dump/dump.h, viewer/text/link.c, viewer/text/textarea.c,
+	viewer/text/view.c:
+
+	Fix #includes from document/ split up.  
+
+Fri Oct 31 17:32:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: view.c, html/renderer.c:
+
+	Sort links in the common render function.  
+
+Fri Oct 31 17:11:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: Makefile.am, plain.c, plain.h, view.c,
+	html/renderer.c:
+
+	Introducing a plain text renderer. This should fix bug 260 and move
+	us towards backending various document type handling.  
+
+Fri Oct 31 12:58:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, document/Makefile.am:
+
+	Build only one libdocument archive.  
+
+Fri Oct 31 12:57:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/view.c:
+
+	Include own header file. :/ 
+
+Fri Oct 31 12:57:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/Makefile.am:
+
+	Fix comment.  
+
+Fri Oct 31 12:42:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/view.c, document/view.h, document/html/frames.h,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/renderer.h, sched/session.c:
+
+	Move document_view setup from the html renderer to the document view
+	file. This also fixes a fix #includes.  
+
+Fri Oct 31 06:53:46 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation update.  
+
+Fri Oct 31 02:08:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/Makefile.am, document/document.h,
+	document/refresh.c, document/refresh.h, sched/session.c,
+	sched/session.h:
+
+	Move document refresh stuff to own file.  
+
+Fri Oct 31 01:59:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/Makefile.am, document/view.c, document/view.h,
+	document/html/renderer.c, sched/session.c, viewer/dump/dump.c,
+	viewer/text/link.c, viewer/text/view.c, viewer/text/view.h:
+
+	Move some document_view specific functions.  
+
+Fri Oct 31 01:38:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.h, document/view.h,
+	document/html/frames.c, document/html/frames.h, sched/session.h,
+	viewer/text/link.h, viewer/text/textarea.h, viewer/text/vs.c:
+
+	Move the precious document_view struct to it's own file.  
+
+Fri Oct 31 01:11:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, document.h:
+
+	Cleanup.  
+
 Thu Oct 30 22:57:41 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/: parser.c, parser.h, renderer.c, tables.c:

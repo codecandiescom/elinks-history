@@ -20,6 +20,12 @@ suffix appropriate to the file type.
 
 	Cookies manager
 
+	HTTPS proxy support
+
+	HTTP-proxy-auth support
+
+	Take info about proxies from env variables (?)
+
 	Possibility to read HTML source from stdin
 
 	Passing url to external command
@@ -39,4 +45,4 @@ suffix appropriate to the file type.
 	CSS (?)
 
 
-$Id: TODO,v 1.10 2002/03/02 14:04:07 pasky Exp $
+$Id: TODO,v 1.11 2002/03/10 20:06:17 pasky Exp $

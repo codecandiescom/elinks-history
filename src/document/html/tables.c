@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.218 2004/06/26 10:53:49 zas Exp $ */
+/* $Id: tables.c,v 1.219 2004/06/26 19:03:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,13 +56,13 @@
 #define TABLE_RULE_ALL		3
 #define TABLE_RULE_GROUPS	4
 
-#define INIT_X		2
-#define INIT_Y		2
+#define INIT_REAL_COLS		2
+#define INIT_REAL_ROWS		2
 
 #define realloc_bad_html(bad_html, size) \
 	mem_align_alloc(bad_html, size, (size) + 1, struct html_start_end, 0xFF)
 
-#define CELL(t, x, y) (&(t)->cells[(y) * (t)->rx + (x)])
+#define CELL(table, col, row) (&(table)->cells[(row) * (table)->real_cols + (col)])
 
 /* Types and structs */
 
@@ -103,7 +103,7 @@ struct table {
 	color_t bordercolor;
 
 	struct table_column *columns;
-	int columns_count;
+	int columns_count; /* Number of columns used. */
 	int real_columns_count;	/* Number of columns really allocated. */
 
 	int *min_cols_widths;
@@ -114,8 +114,8 @@ struct table {
 
 	int *rows_heights;
 
-	int cols, rows;
-	int rx, ry;
+	int cols, rows;	/* For number of cells used. */
+	int real_cols, real_rows; /* For number of cells really allocated. */
 	int border;
 	int cellpadding;
 	int vcellpadding;
@@ -218,22 +218,23 @@ new_table(void)
 
 	if (!table) return NULL;
 
-	table->cells = mem_calloc(INIT_X * INIT_Y, sizeof(struct table_cell));
+	table->cells = mem_calloc(INIT_REAL_COLS * INIT_REAL_ROWS,
+				  sizeof(struct table_cell));
 	if (!table->cells) {
 		mem_free(table);
 		return NULL;
 	}
 
-	table->columns = mem_calloc(INIT_X, sizeof(struct table_column));
+	table->columns = mem_calloc(INIT_REAL_COLS, sizeof(struct table_column));
 	if (!table->columns) {
 		mem_free(table->cells);
 		mem_free(table);
 		return NULL;
 	}
 
-	table->rx = INIT_X;
-	table->ry = INIT_Y;
-	table->real_columns_count = INIT_X;
+	table->real_cols = INIT_REAL_COLS;
+	table->real_rows = INIT_REAL_ROWS;
+	table->real_columns_count = INIT_REAL_COLS;
 
 	return table;
 }
@@ -325,22 +326,22 @@ new_cell(struct table *table, int x, int y)
 		struct table new_table;
 		int col, row;
 
-		if (x < table->rx && y < table->ry) {
+		if (x < table->real_cols && y < table->real_rows) {
 			expand_cells(table, x, y);
 			return CELL(table, x, y);
 		}
 
-		new_table.rx = table->rx;
-		new_table.ry = table->ry;
+		new_table.real_cols = table->real_cols;
+		new_table.real_rows = table->real_rows;
 
-		while (x >= new_table.rx)
-			if (!(new_table.rx <<= 1))
+		while (x >= new_table.real_cols)
+			if (!(new_table.real_cols <<= 1))
 				return NULL;
-		while (y >= new_table.ry)
-			if (!(new_table.ry <<= 1))
+		while (y >= new_table.real_rows)
+			if (!(new_table.real_rows <<= 1))
 				return NULL;
 
-		new_table.cells = mem_calloc(new_table.rx * new_table.ry,
+		new_table.cells = mem_calloc(new_table.real_cols * new_table.real_rows,
 					     sizeof(struct table_cell));
 		if (!new_table.cells) return NULL;
 
@@ -354,8 +355,8 @@ new_cell(struct table *table, int x, int y)
 
 		mem_free(table->cells);
 		table->cells = new_table.cells;
-		table->rx = new_table.rx;
-		table->ry = new_table.ry;
+		table->real_cols = new_table.real_cols;
+		table->real_rows = new_table.real_rows;
 	}
 }
 

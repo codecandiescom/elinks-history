@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.8 2003/12/10 00:12:08 witekfl Exp $ */
+/* $Id: task.c,v 1.9 2003/12/10 15:50:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -570,6 +570,9 @@ goto_url_with_hook(struct session *ses, unsigned char *url)
 #if defined(HAVE_SCRIPTING) || defined(URI_REWRITE)
 	static int goto_url_event_id = EVENT_NONE;
 
+	new_url = stracpy(url);
+	if (!new_url) return;
+
 	set_event_id(goto_url_event_id, "goto-url");
 	trigger_event(goto_url_event_id, &new_url, ses);
 	if (!new_url) return;
@@ -578,7 +581,7 @@ goto_url_with_hook(struct session *ses, unsigned char *url)
 	if (*new_url) goto_url(ses, new_url);
 
 #if defined(HAVE_SCRIPTING) || defined(URI_REWRITE)
-	if (new_url != url) mem_free(new_url);
+	mem_free(new_url);
 #endif
 }
 

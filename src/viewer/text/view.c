@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.108 2003/07/01 14:12:46 zas Exp $ */
+/* $Id: view.c,v 1.109 2003/07/01 14:28:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1510,32 +1510,20 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 		int cp_from, int cp_to)
 {
 	struct submitted_value *sv;
+	struct conv_table *convert_table = NULL;
 	int lst = 0;
-	char *p2;
-	struct conv_table *convert_table = get_translation_table(cp_from, cp_to);
 
-	*len = 0;
 	*data = init_str();
 	if (!*data) return;
+	*len = 0;
 
 	foreach (sv, *l) {
-		unsigned char *p = sv->value;
+		unsigned char *p2 = NULL;
 		struct document_options o;
 
 		memset(&o, 0, sizeof(o));
 		o.plain = 1;
 		d_opt = &o;
-
-		if (sv->type == FC_TEXTAREA) {
-			/* We need to reformat text now if it has to be wrapped
-			 * hard, just before encoding it. */
-			void *blabla;
-
-			blabla = format_text(sv->value, sv->frm->cols, sv->frm->wrap);
-			if (blabla) mem_free(blabla);
-
-			p = encode_textarea(sv->value);
-		}
 
 		if (lst) add_chr_to_str(data, len, '&'); else lst = 1;
 		encode_url_string(sv->name, data, len);
@@ -1543,19 +1531,39 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 
 		/* Convert back to original encoding (see html_form_control()
 		 * for the original recoding). */
-		if (sv->type == FC_TEXT || sv->type == FC_PASSWORD ||
-		    sv->type == FC_TEXTAREA) {
-			p2 = convert_string(convert_table, p, strlen(p));
+		if (sv->type == FC_TEXTAREA) {
+			unsigned char *p;
+			void *blabla;
+
+			/* We need to reformat text now if it has to be wrapped
+			 * hard, just before encoding it. */
+			blabla = format_text(sv->value, sv->frm->cols,
+					     sv->frm->wrap);
+			if (blabla) mem_free(blabla);
+
+			p = encode_textarea(sv->value);
+			if (p) {
+				if (!convert_table)
+					convert_table = get_translation_table(cp_from, cp_to);
+
+				p2 = convert_string(convert_table, p,
+						    strlen(p));
+				mem_free(p);
+			}
+		} else if (sv->type == FC_TEXT ||
+			   sv->type == FC_PASSWORD) {
+			if (!convert_table)
+				convert_table = get_translation_table(cp_from, cp_to);
+
+			p2 = convert_string(convert_table, sv->value,
+					    strlen(sv->value));
 		} else {
-			p2 = stracpy(p);
+			p2 = stracpy(sv->value);
 		}
 
 		if (p2) {
 			encode_url_string(p2, data, len);
 			mem_free(p2);
-		}
-		if (sv->type == FC_TEXTAREA) {
-			mem_free(p);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.11 2002/11/23 19:24:52 zas Exp $ */
+/* $Id: home.c,v 1.12 2002/12/02 14:43:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,11 @@ get_home(int *new)
 	if (home[0]) add_to_strn(&home, "/");
 
 	home_elinks = stracpy(home);
-
+	if (!home_elinks) {
+		if (home) mem_free(home);
+		if (config_dir) mem_free(config_dir);
+		return NULL;
+	}
 	if (config_dir) {
 		add_to_strn(&home_elinks, config_dir);
 
@@ -109,6 +113,12 @@ first_failed:
 
 	/* FIXME: home_elinks == NULL case --Zas */
 	home_elinks = stracpy(home);
+	if (!home_elinks) {
+		if (home) mem_free(home);
+		if (config_dir) mem_free(config_dir);
+		return NULL;
+	}
+
 	add_to_strn(&home_elinks, "elinks");
 
 	if (stat(home_elinks, &st)) {

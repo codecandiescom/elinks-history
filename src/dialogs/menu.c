@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.64 2002/12/11 15:10:33 pasky Exp $ */
+/* $Id: menu.c,v 1.65 2002/12/13 21:02:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,7 +548,7 @@ static struct menu_item setup_menu[] = {
 /*	{TEXT(T_ASSOCIATIONS), ">", TEXT(T_HK_ASSOCIATIONS), MENU_FUNC do_menu, assoc_menu, 1, 0}, */
 	{TEXT(T_FILE_EXTENSIONS), ">", TEXT(T_HK_FILE_EXTENSIONS), MENU_FUNC do_menu, ext_menu, 1, 0},
 	{"", "", M_BAR, NULL, NULL, 0, 0},
-	{TEXT(T_OPTIONS_MANAGER), "", TEXT(T_HK_SAVE_OPTIONS), MENU_FUNC menu_options_manager, NULL, 0, 0},
+	{TEXT(T_OPTIONS_MANAGER), "", TEXT(T_HK_OPTIONS_MANAGER), MENU_FUNC menu_options_manager, NULL, 0, 0},
 	{TEXT(T_SAVE_OPTIONS), "", TEXT(T_HK_SAVE_OPTIONS), MENU_FUNC write_config, NULL, 0, 0},
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };

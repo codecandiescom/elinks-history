@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.31 2003/07/31 17:29:01 jonas Exp $ */
+/* $Id: link.c,v 1.32 2003/08/01 13:05:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ next_in_view(struct document_view *f, int p, int d,
 	yl = f->vs->view_pos + f->yw;
 
 	if (yl > f->document->y) yl = f->document->y;
-	for (y = f->vs->view_pos < 0 ? 0 : f->vs->view_pos; y < yl; y++) {
+	for (y = int_max(0, f->vs->view_pos); y < yl; y++) {
 		if (f->document->lines1[y] && f->document->lines1[y] - f->document->links < p1)
 			p1 = f->document->lines1[y] - f->document->links;
 		if (f->document->lines2[y] && f->document->lines2[y] - f->document->links > p2)
@@ -388,14 +388,15 @@ set_pos_x(struct document_view *f, struct link *l)
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].y >= f->vs->view_pos
 		    && l->pos[i].y < f->vs->view_pos + f->yw) {
+			/* XXX: bug ?? if l->pos[i].x == xm => xm = xm + 1 --Zas*/
 			if (l->pos[i].x >= xm) xm = l->pos[i].x + 1;
-			if (l->pos[i].x < xl) xl = l->pos[i].x;
+			xl = int_min(xl, l->pos[i].x);
 		}
 	}
 	if (xl == MAXINT) return;
 	/*if ((f->vs->view_posx = xm - f->xw) > xl) f->vs->view_posx = xl;*/
-	if (f->vs->view_posx + f->xw < xm) f->vs->view_posx = xm - f->xw;
-	if (f->vs->view_posx > xl) f->vs->view_posx = xl;
+	int_lower_bound(&f->vs->view_posx, xm - f->xw);
+	int_upper_bound(&f->vs->view_posx, xl);
 }
 
 void
@@ -411,14 +412,12 @@ set_pos_y(struct document_view *f, struct link *l)
 	yl = f->document->y;
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].y >= ym) ym = l->pos[i].y + 1;
-		if (l->pos[i].y < yl) yl = l->pos[i].y;
+		yl = int_min(yl, l->pos[i].y);
 	}
 	f->vs->view_pos = (ym + yl) / 2 - f->document->opt.yw / 2;
-	if (f->vs->view_pos > f->document->y - f->document->opt.yw)
-		f->vs->view_pos = f->document->y - f->document->opt.yw;
-	if (f->vs->view_pos < 0) f->vs->view_pos = 0;
+	int_upper_bound(&f->vs->view_pos, f->document->y - f->document->opt.yw);
+	int_lower_bound(&f->vs->view_pos, 0);
 }
-
 
 void
 find_link(struct document_view *f, int p, int s)

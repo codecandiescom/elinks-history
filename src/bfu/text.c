@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.113 2004/11/18 00:52:43 zas Exp $ */
+/* $Id: text.c,v 1.114 2004/11/19 11:12:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,19 @@
 #include "util/color.h"
 
 #define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && !isspace(*(pos)))
+
+void
+add_dlg_text(struct dialog *dlg, unsigned char *text,
+	     enum format_align align, int bottom_pad)
+{
+	struct widget *widget;
+
+	widget = &dlg->widgets[dlg->number_of_widgets++];
+	widget->type = WIDGET_TEXT;
+	widget->text = text;
+	widget->info.text.align = align;
+	widget->info.text.is_label = !!bottom_pad;
+}
 
 /* Returns length of substring (from start of @text) before a split. */
 static inline int
@@ -330,7 +343,7 @@ kbd_text(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	int current = widget_data->info.text.current;
 	struct term_event *ev = dlg_data->term_event;
-	 
+
 	switch (kbd_action(KEYMAP_MENU, ev, NULL)) {
 		case ACT_MENU_UP:
 			current--;

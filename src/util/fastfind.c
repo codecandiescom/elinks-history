@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.13 2003/06/14 01:13:23 zas Exp $ */
+/* $Id: fastfind.c,v 1.14 2003/06/14 10:32:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,27 +32,28 @@
 #include "util/memory.h"
 
 
-#if 0
+#if 1
 /* Use only 32 bits per element, but has very low limits. */
+/* Adequate for ELinks tags search. */
 struct ff_elt {
 	unsigned int e:1; /* End leaf -> p is significant */
 	unsigned int c:1; /* Compressed */
 	unsigned int p:9; /* Index in pointers (max 512) */
 	unsigned int l:14; /* Index in lines (max 16384 - 1) */
-	unsigned int ch:7; /* no use in elt */
+	unsigned int ch:7; /* Index of char when compressed. */
 };
 
-struct ff_elt_c {
-	unsigned int e:1; /* End leaf -> p is significant */
-	unsigned int c:1; /* Compressed */
-	unsigned int p:9; /* Index in pointers */
-	unsigned int l:14; /* Index in lines */
-	unsigned int ch:7; /* char when compressed. */
-};
+#define ff_elt_c ff_elt /* Both are 32 bits long. */
+#define FF_MAX_KEYS (1<<9) /* <= p */
+#define FF_MAX_LINES ((1<<14) - 1)  /* <= l */
+#define FF_MAX_CHARS (1<<7)  /* <= ch */
+
 #else
+
 /* Keep this one if there is more than 512 keywords in a list
  * it eats a bit more memory.
- * ELinks needs this one. */
+ * ELinks may need this one if fastfind is used in other
+ * things than tags searching. */
 struct ff_elt {
 	unsigned int e:1; /* End leaf -> p is significant */
 	unsigned int c:1; /* Compressed */
@@ -60,18 +61,20 @@ struct ff_elt {
 	unsigned int l:18; /* Index in lines (262144 - 1) */
 };
 
+/* This struct uses 64 bits. */
 struct ff_elt_c {
 	unsigned int e:1; /* End leaf -> p is significant */
 	unsigned int c:1; /* Compressed */
 	unsigned int p:12; /* Index in pointers */
 	unsigned int l:18; /* Index in lines */
-	unsigned char ch;
+	unsigned int ch; /* Index of char when compressed. */
 };
+#define FF_MAX_KEYS (1<<12) /* <= p */
+#define FF_MAX_LINES ((1<<18) - 1) /* <= l */
+#define FF_MAX_CHARS (1<<7) /* <= ch */
+
 #endif
 
-#define FF_LINE_SIZE (1<<7)
-#define FF_MAX_KEYS (1<<12)
-#define FF_MAX_LINES ((1<<18) - 1)
 
 struct fastfind_info {
 	void **pointers;
@@ -85,7 +88,7 @@ struct fastfind_info {
 	int max_key_len;
 	int count;
 	int case_sensitive;
-	int idxtab[FF_LINE_SIZE];
+	int idxtab[FF_MAX_CHARS];
 
 	int pointers_count;
 	int lines_count;
@@ -93,13 +96,17 @@ struct fastfind_info {
 #ifdef FASTFIND_DEBUG
 	unsigned long searches;
 	unsigned long found;
+	unsigned long itertmp;
+	unsigned long iterdelta;
 	unsigned long iterations;
 	unsigned long tests;
+	unsigned long teststmp;
+	unsigned long testsdelta;
 	unsigned long memory_usage;
 	unsigned long total_key_len;
 #endif
 
-	unsigned char uniq_chars[FF_LINE_SIZE];
+	unsigned char uniq_chars[FF_MAX_CHARS];
 };
 
 
@@ -110,7 +117,7 @@ ff_init(int case_sensitive)
 
 	if (info) {
 #ifdef FASTFIND_DEBUG
-		info->memory_usage += sizeof(struct fastfind_info) - sizeof(unsigned long) * 6;
+		info->memory_usage += sizeof(struct fastfind_info) - sizeof(unsigned long) * 10;
 #endif
 		info->min_key_len = 255; /* Non sense to use that code if key length > 255 so... */
 		info->case_sensitive = !!case_sensitive;
@@ -201,7 +208,7 @@ init_idxtab(struct fastfind_info *info)
 {
 	int i;
 
-	for (i = 0; i < FF_LINE_SIZE; i++)
+	for (i = 0; i < FF_MAX_CHARS; i++)
 		info->idxtab[i] = char2idx((unsigned char) i, info);
 }
 
@@ -245,7 +252,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 			}
 
 			if (!found) {
-				assert(info->uniq_chars_count < FF_LINE_SIZE);
+				assert(info->uniq_chars_count < FF_MAX_CHARS);
 				info->uniq_chars[info->uniq_chars_count++] = ifcase(p->key[i]);
 			}
 		}
@@ -376,9 +383,17 @@ fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 #ifdef FASTFIND_DEBUG
 #define testinc() info->tests++
 #define iterinc() info->iterations++
-#define foundinc() info->found++
+#define foundinc() \
+	do { \
+		info->iterdelta += info->iterations - info->itertmp;	\
+		info->testsdelta += info->tests - info->teststmp;	\
+		info->found++;						\
+	} while (0)
+
 	info->searches++;
 	info->total_key_len += key_len;
+	info->teststmp = info->tests;
+	info->itertmp = info->iterations;
 
 	testinc();
    	if (!key) return NULL;
@@ -464,22 +479,28 @@ fastfind_terminate(void *fastfind_info)
 #ifdef FASTFIND_DEBUG
 	fprintf(stderr, "------ FastFind Statistics ------\n");
 	fprintf(stderr, "Uniq_chars  : %s\n", info->uniq_chars);
-	fprintf(stderr, "Uniq_chars #: %d\n", info->uniq_chars_count);
+	fprintf(stderr, "Uniq_chars #: %d/%d max.\n", info->uniq_chars_count, FF_MAX_CHARS);
 	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
 	fprintf(stderr, "Max_key_len : %d\n", info->max_key_len);
-	fprintf(stderr, "Entries     : %d/%d\n", info->pointers_count, FF_MAX_KEYS);
-	fprintf(stderr, "FFlines     : %d/%d\n", info->lines_count, FF_MAX_LINES);
+	fprintf(stderr, "Entries     : %d/%d max.\n", info->pointers_count, FF_MAX_KEYS);
+	fprintf(stderr, "FFlines     : %d/%d max.\n", info->lines_count, FF_MAX_LINES);
 	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
 		info->memory_usage, (double) info->memory_usage / info->pointers_count);
+	fprintf(stderr, "Struct elt  : %d bytes (normal) , %d bytes (compressed)\n",
+		sizeof(struct ff_elt), sizeof(struct ff_elt_c));
 	fprintf(stderr, "Searches    : %lu\n", info->searches);
 	fprintf(stderr, "Found       : %lu (%0.2f%%)\n",
 		info->found, 100 * (double) info->found / info->searches);
-	fprintf(stderr, "Iterations  : %lu (%0.2f per search)\n",
-		info->iterations, (double) info->iterations / info->searches);
-	fprintf(stderr, "Tests       : %lu (%0.2f per search)\n",
-		info->tests, (double) info->tests / info->searches);
-	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search)\n",
-		info->total_key_len, (double) info->total_key_len / info->searches);
+	fprintf(stderr, "Iterations  : %lu (%0.2f per search, %0.2f before found)\n",
+		info->iterations, (double) info->iterations / info->searches,
+		(double) info->iterdelta / info->found);
+	fprintf(stderr, "Tests       : %lu (%0.2f per search, %0.2f per iter., %0.2f before found)\n",
+		info->tests, (double) info->tests / info->searches,
+		(double) info->tests / info->iterations,
+		(double) info->testsdelta / info->found);
+	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search, %0.2f per iter.)\n",
+		info->total_key_len, (double) info->total_key_len / info->searches,
+		(double) info->total_key_len / info->iterations);
 #endif
 
 	if (info->pointers) mem_free(info->pointers);

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.225 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: connection.c,v 1.226 2005/03/04 17:55:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,9 +325,8 @@ set_connection_state(struct connection *conn, enum connection_state state)
 				return;
 		}
 
-	} else if (progress->timer != TIMER_ID_UNDEF) {
-		kill_timer(progress->timer);
-		progress->timer = TIMER_ID_UNDEF;
+	} else {
+		kill_timer(&progress->timer);
 	}
 
 	foreach (download, conn->downloads) {
@@ -379,10 +378,7 @@ free_connection_data(struct connection *conn)
 	mem_free_set(&conn->buffer, NULL);
 	mem_free_set(&conn->info, NULL);
 
-	if (conn->timer != TIMER_ID_UNDEF) {
-		kill_timer(conn->timer);
-		conn->timer = TIMER_ID_UNDEF;
-	}
+	kill_timer(&conn->timer);
 
 	active_connections--;
 	assertm(active_connections >= 0, "active connections underflow");
@@ -571,10 +567,7 @@ check_keepalive_connections(void)
 	ttime ct = get_time();
 	int p = 0;
 
-	if (keepalive_timeout != TIMER_ID_UNDEF) {
-		kill_timer(keepalive_timeout);
-		keepalive_timeout = TIMER_ID_UNDEF;
-	}
+	kill_timer(&keepalive_timeout);
 
 	foreachsafe (keep_conn, next, keepalive_connections) {
 		if (can_read(keep_conn->socket)
@@ -1076,8 +1069,7 @@ connection_timeout_1(struct connection *conn)
 void
 set_connection_timeout(struct connection *conn)
 {
-	if (conn->timer != TIMER_ID_UNDEF)
-		kill_timer(conn->timer);
+	kill_timer(&conn->timer);
 
 	conn->timer = install_timer((conn->unrestartable
 				     ? get_opt_int("connection.unrestartable_receive_timeout")

@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.42 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: refresh.c,v 1.43 2005/03/04 17:55:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,10 +48,7 @@ init_document_refresh(unsigned char *url, unsigned long seconds)
 void
 kill_document_refresh(struct document_refresh *refresh)
 {
-	if (refresh->timer != TIMER_ID_UNDEF) {
-		kill_timer(refresh->timer);
-		refresh->timer = TIMER_ID_UNDEF;
-	}
+	kill_timer(&refresh->timer);
 }
 
 void

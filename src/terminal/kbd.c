@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.122 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: kbd.c,v 1.123 2005/03/04 17:55:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,8 +397,7 @@ free_trm(struct itrm *itrm)
 	set_handlers(itrm->std_out, NULL, NULL, NULL, NULL);
 	set_handlers(itrm->sock_out, NULL, NULL, NULL, NULL);
 
-	if (itrm->timer != TIMER_ID_UNDEF)
-		kill_timer(itrm->timer);
+	kill_timer(&itrm->timer);
 
 	if (itrm == ditrm) ditrm = NULL;
 	mem_free_if(itrm->ev_queue);
@@ -977,10 +976,7 @@ in_kbd(struct itrm *itrm)
 
 	if (!can_read(itrm->std_in)) return;
 
-	if (itrm->timer != TIMER_ID_UNDEF) {
-		kill_timer(itrm->timer);
-		itrm->timer = TIMER_ID_UNDEF;
-	}
+	kill_timer(&itrm->timer);
 
 	if (itrm->qlen >= IN_BUF_SIZE) {
 		set_handlers(itrm->std_in, NULL, NULL,

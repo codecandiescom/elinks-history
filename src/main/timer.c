@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timer.c,v 1.3 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: timer.c,v 1.4 2005/03/04 17:55:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,13 +76,16 @@ install_timer(ttime time, void (*func)(void *), void *data)
 }
 
 void
-kill_timer(timer_id_T id)
+kill_timer(timer_id_T *id)
 {
 	struct timer *timer, *next;
 	int k = 0;
 
+	assert(id != NULL);
+	if (*id == TIMER_ID_UNDEF) return;
+	
 	foreachsafe (timer, next, timers)
-		if (timer->id == id) {
+		if (timer->id == *id) {
 			del_from_list(timer);
 			mem_free(timer);
 			k++;
@@ -90,6 +93,8 @@ kill_timer(timer_id_T id)
 
 	assertm(k, "trying to kill nonexisting timer");
 	assertm(k < 2, "more timers with same id");
+
+	*id = TIMER_ID_UNDEF;
 }
 
 int

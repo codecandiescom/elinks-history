@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.65 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: leds.c,v 1.66 2005/03/04 17:55:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,8 +116,7 @@ init_leds(struct module *module)
 void
 done_leds(struct module *module)
 {
-	if (redraw_timer != TIMER_ID_UNDEF)
-		kill_timer(redraw_timer);
+	kill_timer(&redraw_timer);
 }
 
 void

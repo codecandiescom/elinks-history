@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.18 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: timer.c,v 1.19 2005/03/04 17:55:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,10 +61,7 @@ count_down(void *xxx)
 void
 reset_timer(void)
 {
-	if (countdown != TIMER_ID_UNDEF) {
-		kill_timer(countdown);
-		countdown = TIMER_ID_UNDEF;
-	}
+	kill_timer(&countdown);
 
 	if (!get_opt_int("ui.timer.enable")) return;
 
@@ -98,10 +95,7 @@ periodic_save_change_hook(struct session *ses, struct option *current,
 {
 	if (get_cmd_opt_bool("anonymous")) return 0;
 
-	if (periodic_save_timer != TIMER_ID_UNDEF) {
-		kill_timer(periodic_save_timer);
-		periodic_save_timer = TIMER_ID_UNDEF;
-	}
+	kill_timer(&periodic_save_timer);
 
 	periodic_save_handler(NULL);
 
@@ -124,6 +118,6 @@ init_timer(void)
 void
 done_timer(void)
 {
-	if (periodic_save_timer >= 0) kill_timer(periodic_save_timer);
-	if (countdown >= 0) kill_timer(countdown);
+	kill_timer(&periodic_save_timer);
+	kill_timer(&countdown);
 }

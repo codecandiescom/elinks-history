@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.606 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: session.c,v 1.607 2005/03/04 17:55:36 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -128,8 +128,7 @@ static void
 done_session_info(struct session_info *info)
 {
 	del_from_list(info);
-	if (info->timer != TIMER_ID_UNDEF)
-		kill_timer(info->timer);
+	kill_timer(&info->timer);
 
 	if (info->uri) done_uri(info->uri);
 	mem_free(info);
@@ -521,10 +520,7 @@ doc_loading_callback(struct download *download, struct session *ses)
 #ifdef CONFIG_SCRIPTING
 		maybe_pre_format_html(download->cached, ses);
 #endif
-		if (ses->display_timer != TIMER_ID_UNDEF) {
-			kill_timer(ses->display_timer);
-			ses->display_timer = TIMER_ID_UNDEF;
-		}
+		kill_timer(&ses->display_timer);
 
 		draw_formatted(ses, 1);
 
@@ -1080,8 +1076,8 @@ destroy_session(struct session *ses)
 	set_session_referrer(ses, NULL);
 
 	if (ses->loading_uri) done_uri(ses->loading_uri);
-	if (ses->display_timer != TIMER_ID_UNDEF)
-		kill_timer(ses->display_timer);
+	
+	kill_timer(&ses->display_timer);
 
 	while (!list_empty(ses->type_queries))
 		done_type_query(ses->type_queries.next);

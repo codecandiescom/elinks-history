@@ -3,6 +3,8 @@
 /* #undef it defaultly */
 #define COOKIES_RESAVE	1
 
+/* #define COOKIES_DEBUG */
+
 #define ACCEPT_NONE	0
 #define ACCEPT_ASK	1
 #define ACCEPT_ALL	2
@@ -126,8 +128,15 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		cookie->secure = 1;
 		mem_free(s);
 	} else cookie->secure = 0;
+#ifdef COOKIES_DEBUG
+	debug("Got cookie %s = %s from %s, domain %s, expires at %d, secure %d\n",
+	      cookie->name, cookie->value, cookie->server, cookie->domain, cookie->expires, cookie->secure);
+#endif
 	if (check_domain_security(server, cookie->domain)) {
 		denided:
+#ifdef COOKIES_DEBUG
+		debug("Dropped.");
+#endif
 		free_cookie(cookie);
 		mem_free(cookie);
 		mem_free(server);
@@ -267,6 +276,9 @@ void send_cookies(unsigned char **s, int *l, unsigned char *url)
 	ok:
 	foreach (c, cookies) if (is_in_domain(c->domain, server)) if (is_path_prefix(c->path, data)) {
 		if (cookie_expired(c)) {
+#ifdef COOKIES_DEBUG
+			debug("Cookie %s=%s (exp %d) expired.\n", c->name, c->value, c->expires);
+#endif
 			d = c;
 			c = c->prev;
 			del_from_list(d);

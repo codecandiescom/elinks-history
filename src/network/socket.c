@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.28 2002/11/18 16:40:52 zas Exp $ */
+/* $Id: socket.c,v 1.29 2002/11/18 22:31:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -458,8 +458,7 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
-#define RD_READ_SIZE (2<<13) /* 16384 */
-#define RD_MEM (sizeof(struct read_buffer) + RD_READ_SIZE + RD_ALLOC_GR)
+#define RD_MEM (sizeof(struct read_buffer) + 4 * RD_ALLOC_GR + RD_ALLOC_GR)
 
 void
 read_select(struct connection *c)
@@ -532,7 +531,6 @@ alloc_read_buffer(struct connection *c)
 }
 
 #undef RD_ALLOC_GR
-#undef RD_READ_SIZE
 #undef RD_MEM
 
 void

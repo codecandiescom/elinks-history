@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.503 2004/10/11 18:13:57 pasky Exp $ */
+/* $Id: parser.c,v 1.504 2004/10/11 18:14:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -418,7 +418,7 @@ do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsign
 	/* We try to process nested <script> if we didn't process the parent
 	 * one. That's why's all the fuzz. */
 	type = get_attr_val(a, "type");
-	if (part->document && type && strcasecmp(type, "text/javascript")) {
+	if (type && strcasecmp(type, "text/javascript")) {
 		mem_free(type);
 not_processed:
 		/* Permit nested scripts and retreat. */
@@ -430,7 +430,7 @@ not_processed:
 	/* XXX: Do any non-javascript scripts use the language attribute? */
 
 	src = get_attr_val(a, "src");
-	if (src) {
+	if (part->document && src) {
 		/* External reference. */
 
 		unsigned char *import_url;

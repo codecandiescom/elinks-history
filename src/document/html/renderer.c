@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.95 2003/06/08 10:49:26 zas Exp $ */
+/* $Id: renderer.c,v 1.96 2003/06/11 22:52:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,6 @@
 
 /* This is here in order not to break the cross-deps. */
 #include "sched/history.h"
-#include "sched/location.h"
 
 /* Types and structs */
 

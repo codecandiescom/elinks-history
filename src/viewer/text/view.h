@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.7 2003/05/08 23:03:09 zas Exp $ */
+/* $Id: view.h,v 1.8 2003/06/11 22:52:31 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -6,7 +6,6 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "terminal/terminal.h"
-#include "sched/location.h"
 #include "sched/session.h"
 
 extern int textarea_editor;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.31 2002/05/23 18:50:36 pasky Exp $ */
+/* $Id: options.c,v 1.32 2002/05/23 19:50:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,6 +103,7 @@ add_opt_rec(struct hash *hash, unsigned char *path, struct option *option)
 	memcpy(aopt, option, sizeof(struct option));
 
 	while (*name) {
+		struct option *cat;
 		struct hash_item *item;
 
 		/* We take even the last element of path (ended not by '.'
@@ -118,7 +119,14 @@ add_opt_rec(struct hash *hash, unsigned char *path, struct option *option)
 			return;
 		}
 
-		hash = (struct hash *) item->value;
+		cat = (struct option *) item->value;
+		if (cat->type != OPT_HASH) {
+			mem_free(aname);
+			mem_free(aopt);
+			return;
+		}
+
+		hash = (struct hash *) cat->ptr;
 
 		name = sep + 1;
 	}

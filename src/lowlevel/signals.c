@@ -1,34 +1,36 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.1 2003/05/23 21:22:20 zas Exp $ */
+/* $Id: signals.c,v 1.2 2003/05/24 20:16:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <signal.h>
-#ifdef HAVE_SYS_SIGNAL_H
-#include <sys/signal.h>
-#endif
-
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
+#ifdef HAVE_SYS_SIGNAL_H
+#include <sys/signal.h>
 #endif
 #include <sys/types.h>
 #ifdef HAVE_SYS_WAIT_H
 #include <sys/wait.h>
 #endif
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #include "elinks.h"
 
 #include "main.h"
+/* This does not deserve to survive. Gotta be moved... somewhere else.
+ * 'nuff said. --pasky */
 #include "dialogs/menu.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "terminal/kbd.c"
 #include "util/error.h"
 #include "version.h"
+
 
 static void unhandle_basic_signals(struct terminal *term);
 
@@ -213,6 +215,8 @@ unhandle_basic_signals(struct terminal *term)
 #endif
 }
 
+
+
 static int signal_mask[NUM_SIGNALS];
 static struct signal_handler signal_handlers[NUM_SIGNALS];
 int critical_section = 0;
@@ -339,4 +343,3 @@ check_signals(void)
 
 	return r;
 }
-

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.91 2003/05/23 21:22:20 zas Exp $ */
+/* $Id: main.c,v 1.92 2003/05/24 20:16:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,13 +9,9 @@
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef HAVE_SYS_SIGNAL_H
-#include <sys/signal.h>
-#endif
 #include <sys/types.h>
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */

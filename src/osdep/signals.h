@@ -1,8 +1,8 @@
 /* Signals handling. */
-/* $Id: signals.h,v 1.1 2003/05/23 21:22:20 zas Exp $ */
+/* $Id: signals.h,v 1.2 2003/05/24 20:16:16 pasky Exp $ */
 
-#ifndef __EL_SIGNALS_H
-#define __EL_SIGNALS_H
+#ifndef EL__LOWLEVEL_SIGNALS_H
+#define EL__LOWLEVEL_SIGNALS_H
 
 #define NUM_SIGNALS	32
 

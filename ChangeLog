@@ -1,3 +1,122 @@
+Sat Sep 27 16:10:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/elinks.spec.in:
+
+	Check what $RPM_BUILD_ROOT actually is before rm -rf'ing it.
+	Suggested by darix. I wonder what darix actually experienced before
+	suggesting this ;-).  
+
+Sat Sep 27 15:26:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	(void *) 1 thing seems useless, i replaced it with NULL, please let
+	me know if it has any impact.  
+
+Sat Sep 27 15:21:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Tidyup.  
+
+Sat Sep 27 15:17:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Tidyup.  
+
+Sat Sep 27 14:03:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/options.c:
+
+	Tidyup.  
+
+Sat Sep 27 13:56:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Old inactive code was removed. Cache info menu item is now displayed
+	only in debug mode (as it needs more work).  
+
+Sat Sep 27 13:47:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/frames.c, document/html/frames.h,
+	document/html/renderer.c, viewer/text/view.c, viewer/text/vs.c:
+
+	Wrap testing of whether a document has frames in
+	document_has_frames() macro.  
+
+Sat Sep 27 13:16:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: elinks.h, document/options.c, intl/gettext/dcigettext.c:
+
+	Generalizing offsetof() in elinks.h was a bad idea - reverted. Mixed
+	in is removal of ISSLASH() macro in favor of our own dir_sep().  
+
+Sat Sep 27 12:50:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: elinks.h, document/options.c, intl/gettext/dcigettext.c:
+
+	Move offsetof() macro definition to elinks.h 
+
+Sat Sep 27 12:14:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Remove a debug() call that should not have been part of last patch.  
+
+Sat Sep 27 12:01:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/options.c, document/html/renderer.c,
+	viewer/dump/dump.c:
+
+	init_document_options(): Clear the struct. This hopefully fixes the
+	mess I created in the last couple of patches.  
+
+Sat Sep 27 11:40:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/options.c, document/options.h,
+	document/html/renderer.c, viewer/dump/dump.c:
+
+	Rename mk_document_options() to init_document_options() and move
+	more code shared by dump and text viewer to it. Doing memset() (in
+	the light of zeroing out padding bytes, sorry I overlooked this) is
+	on the TODO list but this causes problems that has to be fixed
+	first.  
+
+Sat Sep 27 11:27:37 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	French translation was updated and .po files were resynced.  
+
+Sat Sep 27 00:32:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: options.c, options.h:
+
+	Make boolean fields more visible and drop the bogus blame of @xw and
+	@yw.  
+
+Fri Sep 26 23:06:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: options.c, options.h:
+
+	Rearrange members of struct document_options so compare_opt() can be
+	divided into a part compared using memcmp() and a part (from
+	@framename) that need special or no comparing. This is very
+	experimental but padding bytes should not be a problem since
+	document_options are allocated via document allocation using
+	mem_calloc()! 
+
+Fri Sep 26 22:12:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/formhist.c:
+
+	English style issues fixed in s-i-t-l dialog :-).  
+
 Fri Sep 26 21:42:14 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

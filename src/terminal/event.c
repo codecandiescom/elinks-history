@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.65 2004/07/01 19:27:02 pasky Exp $ */
+/* $Id: event.c,v 1.66 2004/07/01 19:32:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ struct terminal_interlink {
 	int qlen;
 	int qfreespace;
 
-	/* Something weird regarding the UTF8 I/O. */
+	/* UTF8 input key value decoding data. */
 	struct {
 		unicode_val ucs;
 		int len;

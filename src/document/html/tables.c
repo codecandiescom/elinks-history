@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.37 2003/06/29 22:20:52 zas Exp $ */
+/* $Id: tables.c,v 1.38 2003/06/29 22:32:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,38 +276,42 @@ expand_cells(struct table *t, int x, int y)
 static struct table_cell *
 new_cell(struct table *t, int x, int y)
 {
-	struct table nt;
-	int i, j;
+	if (x < t->x && y < t->y) return CELL(t, x, y);
 
-	if (x < t->x && y < t->y) goto ret;
+	while (1) {
+		struct table nt;
+		register int i = 0;
 
-rep:
-	if (x < t->rx && y < t->ry) {
-		expand_cells(t, x, y);
-		goto ret;
+		if (x < t->rx && y < t->ry) {
+			expand_cells(t, x, y);
+			return CELL(t, x, y);
+		}
+
+		nt.rx = t->rx;
+		nt.ry = t->ry;
+
+		while (x >= nt.rx) if (!(nt.rx *= 2)) return NULL;
+		while (y >= nt.ry) if (!(nt.ry *= 2)) return NULL;
+
+		nt.cells = mem_calloc(nt.rx * nt.ry, sizeof(struct table_cell));
+		if (!nt.cells) return NULL;
+
+		while (i < t->x) {
+			register int j = 0;
+
+			while (j < t->y) {
+				memcpy(CELL(&nt, i, j), CELL(t, i, j),
+				       sizeof(struct table_cell));
+				j++;
+			}
+			i++;
+		}
+
+		mem_free(t->cells);
+		t->cells = nt.cells;
+		t->rx = nt.rx;
+		t->ry = nt.ry;
 	}
-
-	nt.rx = t->rx;
-	nt.ry = t->ry;
-
-	while (x >= nt.rx) if (!(nt.rx *= 2)) return NULL;
-	while (y >= nt.ry) if (!(nt.ry *= 2)) return NULL;
-
-	nt.cells = mem_calloc(nt.rx * nt.ry, sizeof(struct table_cell));
-	if (!nt.cells) return NULL;
-
-	for (i = 0; i < t->x; i++)
-		for (j = 0; j < t->y; j++)
-			memcpy(CELL(&nt, i, j), CELL(t, i, j), sizeof(struct table_cell));
-
-	mem_free(t->cells);
-	t->cells = nt.cells;
-	t->rx = nt.rx;
-	t->ry = nt.ry;
-	goto rep;
-
-ret:
-	return CELL(t, x, y);
 }
 
 static void

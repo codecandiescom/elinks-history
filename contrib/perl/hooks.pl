@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.33 2005/03/26 14:35:07 pasky Exp $
+# $Id: hooks.pl,v 1.34 2005/03/26 14:44:20 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -112,6 +112,25 @@ elinks: el / elinks, bz / bug (# or search optional), doc(|s|umentation), faq
 
 ################################################################################
 ### goto_url_hook ##############################################################
+
+my %search_prefixes_ = (
+	'^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$' => 'elgoog',
+	'^(g|google)(| .*)$' => 'google',
+	'^(y|yahoo)(| .*)$' => 'yahoo',
+	'^(ask|jeeves)(| .*)$' => 'ask jeeves',
+	'^a9(| .*)$' => 'a9',
+	'^(av|altavista)(| .*)$' => 'altavista',
+	'^(msn|microsoft)(| .*)$' => 'msn',
+	'^(dmoz|odp|mozilla)(| .*)$' => 'dmoz',
+	'^(dp|dogpile)(| .*)$' => 'dogpile',
+	'^(ma|mamma)(| .*)$' => 'mamma',
+	'^(wc|webcrawler)(| .*)$' => 'webcrawler',
+	'^(ns|netscape)(| .*)$' => 'netscape',
+	'^(ly|lycos)(| .*)$' => 'lycos',
+	'^(hb|hotbot)(| .*)$' => 'hotbot',
+	'^(ex|excite)(| .*)$' => 'excite',
+);
+
 sub goto_url_hook
 {
 	my $url = shift;
@@ -156,38 +175,9 @@ sub goto_url_hook
 		return search(loadrc('search'), $url);
 	}
 
-	if ($url =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'
-	    or $url =~ '^(g|google)(| .*)$'
-	    or $url =~ '^(y|yahoo)(| .*)$'
-	    or $url =~ '^(ask|jeeves)(| .*)$'
-	    or $url =~ '^a9(| .*)$'
-	    or $url =~ '^(av|altavista)(| .*)$'
-	    or $url =~ '^(msn|microsoft)(| .*)$'
-	    or $url =~ '^(dmoz|odp|mozilla)(| .*)$'
-	    or $url =~ '^(dp|dogpile|dp)(| .*)$'
-	    or $url =~ '^(ma|mamma)(| .*)$'
-	    or $url =~ '^(wc|webcrawler)(| .*)$'
-	    or $url =~ '^(ns|netscape)(| .*)$'
-	    or $url =~ '^(ly|lycos)(| .*)$'
-	    or $url =~ '^(hb|hotbot)(| .*)$'
-	    or $url =~ '^(ex|excite)(| .*)$') {
-		my $engine = $url;
-		$url = search("elgoog",         $search) if ($engine =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$');
-		$url = search("google",         $search) if ($engine =~ '^(g|google)(| .*)$');
-		$url = search("yahoo",          $search) if ($engine =~ '^(y|yahoo)(| .*)$');
-		$url = search("ask jeeves",     $search) if ($engine =~ '^(ask|jeeves)(| .*)$');
-		$url = search("a9",             $search) if ($engine =~ '^a9(| .*)$');
-		$url = search("altavista",      $search) if ($engine =~ '^(av|altavista)(| .*)$');
-		$url = search("msn",            $search) if ($engine =~ '^(msn|microsoft)(| .*)$');
-		$url = search("dmoz",           $search) if ($engine =~ '^(dmoz|odp|mozilla)(| .*)$');
-		$url = search("dogpile",        $search) if ($engine =~ '^(dp|dogpile)(| .*)$');
-		$url = search("mamma",          $search) if ($engine =~ '^(ma|mamma)(| .*)$');
-		$url = search("webcrawler",     $search) if ($engine =~ '^(wc|webcrawler)(| .*)$');
-		$url = search("netscape",       $search) if ($engine =~ '^(ns|netscape)(| .*)$');
-		$url = search("lycos",          $search) if ($engine =~ '^(ly|lycos)(| .*)$');
-		$url = search("hotbot",         $search) if ($engine =~ '^(hb|hotbot)(| .*)$');
-		$url = search("excite",         $search) if ($engine =~ '^(ex|excite)(| .*)$');
-		return $url;
+	foreach my $prefix (keys %search_prefixes_) {
+		next unless $url =~ /$prefix/;
+		return search($search_prefixes_{$prefix}, $search);
 	}
 
 

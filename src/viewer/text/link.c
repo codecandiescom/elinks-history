@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.151 2004/01/25 13:17:23 jonas Exp $ */
+/* $Id: link.c,v 1.152 2004/01/31 00:58:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -670,7 +670,7 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 {
 	struct link *l1, *l2, *link;
 	int mouse_x, mouse_y;
-	register int i;
+	register int i, height;
 
 	assert(doc_view && doc_view->vs && doc_view->document && ev);
 	if_assert_failed return NULL;
@@ -685,18 +685,23 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 	/* Find links candidats. */
 	l1 = doc_view->document->links + doc_view->document->nlinks;
 	l2 = doc_view->document->links;
-	for (i = doc_view->vs->y;
-	     i < doc_view->document->height && i < doc_view->vs->y + doc_view->height;
-	     i++) {
-		if (doc_view->document->lines1[i] && doc_view->document->lines1[i] < l1)
+	height = int_min(doc_view->document->height,
+			 doc_view->vs->y + doc_view->height);
+
+	for (i = doc_view->vs->y; i < height; i++) {
+		if (doc_view->document->lines1[i]
+		    && doc_view->document->lines1[i] < l1)
 			l1 = doc_view->document->lines1[i];
-		if (doc_view->document->lines2[i] && doc_view->document->lines2[i] > l2)
+
+		if (doc_view->document->lines2[i]
+		    && doc_view->document->lines2[i] > l2)
 			l2 = doc_view->document->lines2[i];
 	}
 
 	/* Is there a link under mouse cursor ? */
 	mouse_x = ev->x + doc_view->vs->x;
 	mouse_y = ev->y + doc_view->vs->y;
+
 	for (link = l1; link <= l2; link++) {
 		for (i = 0; i < link->n; i++)
 			if (link->pos[i].x == mouse_x

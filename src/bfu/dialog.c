@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.160 2004/11/17 01:07:17 zas Exp $ */
+/* $Id: dialog.c,v 1.161 2004/11/17 01:12:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,6 +226,7 @@ dialog_ev_mouse(struct dialog_data *dlg_data, struct term_event *ev)
 }
 #endif /* CONFIG_MOUSE */
 
+/* Look up for a button with matching flag. */
 static void
 select_button_by_flag(struct dialog_data *dlg_data, int flag)
 {
@@ -234,6 +235,24 @@ select_button_by_flag(struct dialog_data *dlg_data, int flag)
 	for (i = 0; i < dlg_data->n; i++) {
 		if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
 		    && dlg_data->dlg->widgets[i].info.button.flags & flag) {
+			select_dlg_item(dlg_data, i);
+			break;
+		}
+	}
+}
+
+/* Look up for a button with matching starting letter. */
+static void
+select_button_by_key(struct dialog_data *dlg_data, struct term_event *ev)
+{
+	int i;
+
+	if (!check_kbd_label_key(ev)) return;
+
+	for (i = 0; i < dlg_data->n; i++) {
+		if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
+		    && toupper(dlg_data->dlg->widgets[i].text[0])
+		       == toupper(get_kbd_key(ev))) {
 			select_dlg_item(dlg_data, i);
 			break;
 		}
@@ -301,19 +320,7 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 		return;
 	}
 
-	/* Look up for a button with matching starting letter. */
-	if (check_kbd_label_key(ev)) {
-		int i;
-
-		for (i = 0; i < dlg_data->n; i++) {
-			if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
-			    && toupper(dlg_data->dlg->widgets[i].text[0])
-			       == toupper(get_kbd_key(ev))) {
-				select_dlg_item(dlg_data, i);
-				return;
-			}
-		}
-	}
+	select_button_by_key(dlg_data, ev);
 }
 
 static void

@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.25 2004/10/23 07:54:27 pasky Exp $ */
+/* $Id: cookies.h,v 1.26 2004/12/17 22:40:38 pasky Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -41,7 +41,6 @@ struct cookie {
 	struct object object;
 };
 
-struct cookie_server *get_cookie_server(unsigned char *host, int hostlen);
 void accept_cookie(struct cookie *);
 void free_cookie(struct cookie *);
 void set_cookie(struct uri *, unsigned char *);

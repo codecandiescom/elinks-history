@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.190 2004/12/02 16:34:01 zas Exp $ */
+/* $Id: cookies.c,v 1.191 2004/12/17 22:40:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,7 +122,7 @@ static struct option_info cookies_options[] = {
 #define get_cookies_save()		get_opt_cookies(COOKIES_SAVE).number
 #define get_cookies_resave()		get_opt_cookies(COOKIES_RESAVE).number
 
-struct cookie_server *
+static struct cookie_server *
 get_cookie_server(unsigned char *host, int hostlen)
 {
 	struct cookie_server *sort_spot = NULL;

@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.19 2002/05/18 19:23:51 pasky Exp $ */
+/* $Id: options.c,v 1.20 2002/05/18 19:29:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -571,9 +571,11 @@ unsigned char *dump_cmd(struct option *o, unsigned char ***argv, int *argc)
 	return NULL;
 }
 
-unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
+unsigned char *
+printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	struct option *option;
+	struct hash_item *item;
+	int i;
 
 	version_cmd(NULL, NULL, NULL);
 	printf("\n");
@@ -581,7 +583,10 @@ unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 	printf("Usage: links [OPTION]... [URL]\n\n");
 	printf("Options:\n\n");
 
-	for (option = links_options_list; option->name; option++) {
+	/* TODO: Alphabetical order! */
+	foreach_hash_item (links_options, item, i) {
+		struct option *option = item->value;
+
 		if (option->flags & OPT_CMDLINE) {
 			unsigned char *cname = cmd_name(option->name);
 

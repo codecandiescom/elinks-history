@@ -1,3 +1,203 @@
+Wed Mar 27 13:32:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/view.c, protocol/url.c, protocol/url.h:
+	
+	encode_string -> encode_url_string, prepare decode_url_string
+
+Tue Mar 26 22:02:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/view.c, protocol/url.c:
+	
+	Rewritten strip_url_password(), so now it works somehow correctly
+	once more; taken from patch by sc
+
+Tue Mar 26 21:09:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/view.c, protocol/url.c:
+	
+	move encode_string() to protocol/url.c
+
+Tue Mar 26 19:47:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/session.c, protocol/url.c:
+	
+	remark near encode_url() family.. the name is 'a bit' confusing
+
+Tue Mar 26 19:10:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/links.h:
+	
+	links.h tidyup
+
+Tue Mar 26 18:49:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/: file.c, ftp.c:
+	
+	don't mess with use_document_colors at all and just do <font><b> :)
+
+Tue Mar 26 18:10:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/: file.c, ftp.c:
+	
+	some playing with d_opt vs. dds and use_document_colours and bold
+	instead of yellow for dirs
+
+Tue Mar 26 17:45:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/: dns.c, select.c:
+	
+	yet another BSD compilation fix, take #3 (i know i hate BSD [at
+	least now])
+
+Tue Mar 26 17:43:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/select.c:
+	
+	yet another BSD compilation fix, take #2 (i think i hate BSD)
+
+Tue Mar 26 17:39:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/: dns.c, select.c:
+	
+	yet another BSD compilation fix
+
+Tue Mar 26 17:37:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* .vimrc, src/.vimrc, src/bfu/.vimrc, src/bookmarks/.vimrc,
+	src/config/.vimrc, src/cookies/.vimrc, src/dialogs/.vimrc,
+	src/document/.vimrc, src/document/html/.vimrc, src/intl/.vimrc,
+	src/lowlevel/.vimrc, src/lua/.vimrc, src/osdep/.vimrc,
+	src/protocol/.vimrc, src/protocol/http/.vimrc, src/ssl/.vimrc,
+	src/util/.vimrc:
+	
+	all .vimrc files include elinks/.vimrc; added some more tabbing
+	settings for zas ;)
+
+Tue Mar 26 17:21:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/af_unix.c:
+	
+	another BSD compilation fix, take #3
+
+Tue Mar 26 17:19:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/af_unix.c:
+	
+	another BSD compilation fix, take #2
+
+Tue Mar 26 17:16:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/af_unix.c:
+	
+	another BSD compilation fix
+
+Tue Mar 26 17:11:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/default.c:
+	
+	BSD compilation fix, take #2; stupid
+
+Tue Mar 26 17:08:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/default.c:
+	
+	BSD compilation fix
+
+Tue Mar 26 16:50:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/italian.lng, src/intl/language.inc:
+	
+	updated italian translation by Cristiano Guadagnino
+	<cris@geppo.cmb2000.it>
+
+Tue Mar 26 16:45:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/cache.c:
+	
+	Fixed files not displayed properly when there was reload request on
+	background (by mikulas, from 0.97pre7)
+
+Tue Mar 26 16:45:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/menu.c:
+	
+	don't print contents of posted data in downloads menu (by mikulas,
+	from 0.97pre7)
+
+Tue Mar 26 16:38:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/catalan.lng, intl/dutch.lng,
+	intl/english.lng, intl/estonian.lng, intl/finnish.lng,
+	intl/french.lng, intl/galician.lng, intl/german.lng,
+	intl/greek.lng, intl/hungarian.lng, intl/icelandic.lng,
+	intl/indonesian.lng, intl/italian.lng, intl/lithuanian.lng,
+	intl/romanian.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng, src/intl/lang_defs.h,
+	src/intl/language.inc:
+	
+	??? -> \?\?\?, so that it's not recognized as trigraph (by mikulas,
+	from 0.97pre7)
+
+Tue Mar 26 15:57:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/TODO:
+	
+	some babbling about imagined syntactic tree
+
+Tue Mar 26 15:28:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/tables.c:
+	
+	tables.c cleanup by zas, bit 4 and last
+
+Tue Mar 26 15:20:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/tables.c:
+	
+	tables.c cleanup by zas, bit 3 (fixed problem)
+
+Tue Mar 26 15:12:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/tables.c:
+	
+	tables.c cleanup by zas, bit 2
+
+Tue Mar 26 15:09:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/tables.c:
+	
+	tables.c cleanup by zas, bit 1
+
+Tue Mar 26 13:02:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* autogen.sh:
+	
+	/bin/bash -> /bin/sh
+
+Mon Mar 25 22:03:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/renderer.c:
+	
+	renderer tidyup by zas
+
+Mon Mar 25 21:33:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/README.timegm:
+	
+	docs fixes by sc
+
+Mon Mar 25 21:32:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+	
+	tidyup of ftp.c; patch by zas
+
+Mon Mar 25 21:24:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/connect.c:
+	
+	hm, ok, and now we again work with non-SSL connections as well ;)
+
 Mon Mar 25 18:38:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/connect.c, ssl/connect.c:

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.88 2004/03/20 23:53:06 jonas Exp $ */
+/* $Id: uri.c,v 1.89 2004/03/21 00:04:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *prefix_end, *host_end;
 #ifdef IPV6
-	unsigned char *lbracket, *rbracket;
+	unsigned char *lbracket, *rbracket = NULL;
 #endif
 	enum protocol protocol;
 	int known;
@@ -125,10 +125,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (lbracket) {
 		rbracket = strchr(lbracket, ']');
 		/* [address] is handled only inside of hostname part (surprisingly). */
-		if (rbracket && prefix_end + strcspn(prefix_end, "/") < rbracket)
-			lbracket = rbracket = NULL;
-	} else {
-		rbracket = NULL;
+		if (rbracket && prefix_end + strcspn(prefix_end, "/") >= rbracket)
+			uri->ipv6 = 1;
 	}
 #endif
 
@@ -152,7 +150,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	}
 
 #ifdef IPV6
-	if (rbracket)
+	if (uri->ipv6)
 		host_end = rbracket + strcspn(rbracket, ":/?");
 	else
 #endif
@@ -163,7 +161,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		return 0;
 
 #ifdef IPV6
-	if (rbracket) {
+	if (uri->ipv6) {
 		int addrlen = rbracket - lbracket - 1;
 
 		/* Check for valid length.
@@ -283,13 +281,11 @@ add_uri_to_string(struct string *string, struct uri *uri,
 
  	if (wants(URI_HOST) && uri->hostlen) {
 #ifdef IPV6
- 		int brackets = !!memchr(uri->hoststr, ':', uri->hostlen);
-
-		if (brackets) add_char_to_string(string, '[');
+		if (uri->ipv6) add_char_to_string(string, '[');
 #endif
 		add_bytes_to_string(string, uri->hoststr, uri->hostlen);
 #ifdef IPV6
-		if (brackets) add_char_to_string(string, ']');
+		if (uri->ipv6) add_char_to_string(string, ']');
 #endif
  	}
 

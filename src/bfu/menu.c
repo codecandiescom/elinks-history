@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.281 2004/11/08 19:27:22 jonas Exp $ */
+/* $Id: menu.c,v 1.282 2004/11/11 20:20:39 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -372,7 +372,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
 	unsigned char c;
 	int xbase = x + L_TEXT_SPACE;
 	int w = width - (L_TEXT_SPACE + R_TEXT_SPACE);
-	int hk = 0;
+	int hk_state = 0;
 #ifdef CONFIG_DEBUG
 	/* For redundant hotkeys highlighting. */
 	int double_hk = 0;
@@ -389,22 +389,22 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
 		hk_color_sel = tmp;
 	}
 
-	for (x = 0; x < w + !!hk && (c = text[x]); x++) {
-		if (!hk && x == hotkey_pos - 1) {
-			hk = 1;
+	for (x = 0; x < w + !!hk_state && (c = text[x]); x++) {
+		if (!hk_state && x == hotkey_pos - 1) {
+			hk_state = 1;
 			continue;
 		}
 
-		if (hk == 1) {
+		if (hk_state == 1) {
 #ifdef CONFIG_DEBUG
 			draw_char(term, xbase + x - 1, y, c, hk_attr,
 				  (double_hk ? hk_color_sel : hk_color));
 #else
 			draw_char(term, xbase + x - 1, y, c, hk_attr, hk_color);
 #endif
-			hk = 2;
+			hk_state = 2;
 		} else {
-			draw_char(term, xbase + x - !!hk, y, c, 0, color);
+			draw_char(term, xbase + x - !!hk_state, y, c, 0, color);
 		}
 	}
 }

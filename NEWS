@@ -10,6 +10,7 @@ ELinks-0.5.0:
 * Guile scripting extensions
 * HTML meta refresh
 * 256 colors support
+* regex searches
 
 ELinks-0.4.0:
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.187 2004/06/16 15:28:42 zas Exp $ */
+/* $Id: form.c,v 1.188 2004/06/16 15:41:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,6 +116,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	struct document_view *doc_view;
 	struct link *link;
 	struct form_state *fs;
+	struct form_control *fc;
 
 	assert(term && ses);
 	if_assert_failed return;
@@ -127,15 +128,14 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	link = get_current_link(doc_view);
 	if (!link || link->type != LINK_SELECT) return;
 
-	fs = find_form_state(doc_view, link->form_control);
+	fc = link->form_control;
+	fs = find_form_state(doc_view, fc);
 	if (fs) {
-		struct form_control *frm = link->form_control;
-
-		if (item >= 0 && item < frm->nvalues) {
+		if (item >= 0 && item < fc->nvalues) {
 			fs->state = item;
-			mem_free_set(&fs->value, stracpy(frm->values[item]));
+			mem_free_set(&fs->value, stracpy(fc->values[item]));
 		}
-		fixup_select_state(frm, fs);
+		fixup_select_state(fc, fs);
 	}
 
 	refresh_view(ses, doc_view, 0);

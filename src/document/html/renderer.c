@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.316 2003/10/20 19:48:21 jonas Exp $ */
+/* $Id: renderer.c,v 1.317 2003/10/21 00:29:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -874,6 +874,7 @@ put_link_number(struct part *part)
 	put_chars(part, s, slen);
 
 	if (ff && ff->type == FC_TEXTAREA) line_break(part);
+	if (part->cx == -1) part->cx = par_format.leftmargin;
 
 	format.link = fl;
 	format.target = ft;

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.52 2002/10/17 15:35:47 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.53 2002/10/17 15:42:54 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -199,6 +199,8 @@ struct bookmark_search_ctx {
 int
 test_search(struct bookmark *bm, void *d) {
 	struct bookmark_search_ctx *ctx = d;
+
+	if (bm->box_item->type == BI_FOLDER) return 1;
 
 	return ((ctx->search_title && *ctx->search_title
 		 && strcasestr(bm->title, ctx->search_title)) ||

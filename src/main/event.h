@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.9 2003/10/01 16:37:17 pasky Exp $ */
+/* $Id: event.h,v 1.10 2003/10/02 13:35:18 kuser Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -98,6 +98,7 @@ unsigned char *get_event_name(int id);
 
 void trigger_event(int id, ...);
 
+void trigger_event_name(unsigned char *name, ...);
 
 /*** The very events subsystem itself */
 

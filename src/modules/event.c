@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.11 2003/10/01 10:33:12 jonas Exp $ */
+/* $Id: event.c,v 1.12 2003/10/02 13:35:18 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "util/error.h"
 #include "util/hash.h"
 #include "util/memory.h"
+#include "util/snprintf.h"
 #include "util/string.h"
 
 
@@ -150,25 +151,44 @@ get_event_name(int id)
 	return events[id].name;
 }
 
-void
-trigger_event(int id, ...)
+static inline void
+trigger_event_va(int id, va_list ap_init)
 {
 	register int i;
 	struct event_handler *ev_handler;
-	va_list ap;
 
 	if (invalid_event_id(id)) return;
 
 	ev_handler = events[id].handlers;
 	for (i = 0; i < events[id].count; i++, ev_handler++) {
 		enum evhook_status ret;
+		va_list ap;
 
-		va_start(ap, id);
+		VA_COPY(ap, ap_init);
 		ret = ev_handler->callback(ap, ev_handler->data);
 		va_end(ap);
 
 		if (ret == EHS_LAST) return;
 	}
+}
+
+void
+trigger_event(int id, ...)
+{
+	va_list ap;
+
+	va_start(ap, id);
+	trigger_event_va(id, ap);
+}
+
+void
+trigger_event_name(unsigned char *name, ...)
+{
+	va_list ap;
+	int id = get_event_id(name);
+
+	va_start(ap, name);
+	trigger_event_va(id, ap);
 }
 
 static inline void

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.271 2004/07/01 13:06:28 zas Exp $ */
+/* $Id: link.c,v 1.272 2004/07/04 16:31:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -972,26 +972,26 @@ int
 try_document_key(struct session *ses, struct document_view *doc_view,
 		 struct term_event *ev)
 {
-	long x;
+	long key;
 	int passed = -1;
 	int i; /* GOD I HATE C! --FF */ /* YEAH, BRAINFUCK RULEZ! --pasky */
 
 	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
 	if_assert_failed return 0;
 
-	x = (ev->x < 0x100) ? toupper(ev->x) : ev->x;
-	if (x >= 'A' && x <= 'Z' && ev->y != KBD_ALT) {
+	if (isasciialpha(ev->x) && ev->y != KBD_ALT) {
 		/* We accept those only in alt-combo. */
 		return 0;
 	}
 
 	/* Run through all the links and see if one of them is bound to the
 	 * key we test.. */
+	key = toupper(ev->x);
 
 	for (i = 0; i < doc_view->document->nlinks; i++) {
 		struct link *link = &doc_view->document->links[i];
 
-		if (x == link->accesskey) {
+		if (key== link->accesskey) {
 			if (passed != i && i <= doc_view->vs->current_link) {
 				/* This is here in order to rotate between
 				 * links with same accesskey. */

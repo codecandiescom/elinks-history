@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.36 2004/06/27 18:34:30 pasky Exp $ */
+/* $Id: forms.c,v 1.37 2004/07/01 21:28:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -705,6 +705,10 @@ pp:
 			fc->wrap = FORM_WRAP_NONE;
 		}
 		mem_free(wrap_attr);
+
+	} else if (has_attr(attr, "nowrap")) {
+		fc->wrap = FORM_WRAP_NONE;
+
 	} else {
 		fc->wrap = FORM_WRAP_SOFT;
 	}

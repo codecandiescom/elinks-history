@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.58 2003/11/12 00:21:04 zas Exp $ */
+/* $Id: session.h,v 1.59 2003/11/12 00:44:09 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -181,8 +181,9 @@ set_referrer(struct session *ses, unsigned char *referrer)
 	if (ses->ref_url) mem_free(ses->ref_url);
 
 	if (referrer) {
-		/* TODO: Don't set referrer for file: protocol */
-		referrer = stracpy(referrer);
+		/* Don't set referrer for file protocol */
+		referrer = strncasecmp("file:", referrer, 5)
+			 ? stracpy(referrer) : NULL;
 	}
 
 	ses->ref_url = referrer;

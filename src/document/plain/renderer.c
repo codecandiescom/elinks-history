@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.129 2004/08/17 07:19:11 miciah Exp $ */
+/* $Id: renderer.c,v 1.130 2004/08/17 07:40:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -350,9 +350,10 @@ add_document_line(struct plain_renderer *renderer,
 			int added_chars = 0;
 
 			if (document->options.plain_display_links) {
-				/* We only want to detect url if there is at least
-				 * to consecutive alphanumeric characters, or when
-				 * we are at the very start of line.
+				/* We only want to check for a URI
+				 * if there are at least two consecutive
+				 * alphabetic characters, or if
+				 * we are at the very start of the line.
 				 * It improves performance a bit. --Zas */
 				int is_alpha_char = isalpha(line_char);
 

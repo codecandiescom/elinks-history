@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.509 2004/06/21 12:08:35 miciah Exp $ */
+/* $Id: view.c,v 1.510 2004/06/21 12:20:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -632,10 +632,12 @@ move_document_start(struct session *ses, struct document_view *doc_view)
 
 	doc_view->vs->y = doc_view->vs->x = 0;
 
-	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING)
+	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
+		/* Move to the first line and the first column. */
 		move_cursor(ses, doc_view, doc_view->box.x, doc_view->box.y);
-	else
+	} else {
 		find_link_page_down(doc_view);
+	}
 }
 
 static void
@@ -650,11 +652,15 @@ move_document_end(struct session *ses, struct document_view *doc_view)
 	doc_view->vs->x = 0;
 	int_lower_bound(&doc_view->vs->y, int_max(0, max_height));
 
-	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING)
+	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
+		/* Move to the last line but preserve the column. This is done
+		 * to avoid moving the cursor backwards if it is
+		 * already on the last line but is not on the first column. */
 		move_cursor(ses, doc_view, ses->tab->x,
 			    doc_view->document->height);
-	else
+	} else {
 		find_link_page_up(doc_view);
+	}
 }
 
 void

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.50 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: download.c,v 1.51 2004/05/30 17:21:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,8 +297,15 @@ get_file_download_info(struct listbox_item *item, struct terminal *term,
 {
 	struct file_download *file_download = item->udata;
 
-	return (listbox_info == LISTBOX_URI)
-		? get_uri_string(file_download->uri, URI_PUBLIC) : NULL;
+	switch (listbox_info) {
+	case LISTBOX_URI:
+		return get_uri_string(file_download->uri, URI_PUBLIC);
+
+	case LISTBOX_ALL:
+		return NULL;
+	}
+
+	return NULL;
 }
 
 static int

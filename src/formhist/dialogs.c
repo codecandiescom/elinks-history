@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.23 2004/01/07 03:18:20 jonas Exp $ */
+/* $Id: dialogs.c,v 1.24 2004/05/30 17:21:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,8 +54,13 @@ get_formhist_data_info(struct listbox_item *item, struct terminal *term,
 	struct string info;
 	struct submitted_value *sv;
 
-	if (listbox_info == LISTBOX_URI)
+	switch (listbox_info) {
+	case LISTBOX_URI:
 		return stracpy(formhist_data->url);
+
+	case LISTBOX_ALL:
+		break;
+	}
 
 	if (!init_string(&info)) return NULL;
 

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.159 2004/05/22 13:18:32 jonas Exp $ */
+/* $Id: dialogs.c,v 1.160 2004/05/30 17:21:44 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -68,8 +68,13 @@ get_bookmark_info(struct listbox_item *item, struct terminal *term,
 	struct bookmark *bookmark = item->udata;
 	struct string info;
 
-	if (listbox_info == LISTBOX_URI)
+	switch (listbox_info) {
+	case LISTBOX_URI:
 		return stracpy(bookmark->url);
+
+	case LISTBOX_ALL:
+		break;
+	}
 
 	if (!init_string(&info)) return NULL;
 

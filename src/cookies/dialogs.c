@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.47 2004/05/22 13:18:34 jonas Exp $ */
+/* $Id: dialogs.c,v 1.48 2004/05/30 17:21:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,8 +70,13 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 	struct cookie *cookie = item->udata;
 	struct string string;
 
-	if (listbox_info == LISTBOX_URI)
+	switch (listbox_info) {
+	case LISTBOX_URI:
 		return NULL;
+
+	case LISTBOX_ALL:
+		break;
+	}
 
 	if (!init_string(&string)) return NULL;
 

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.110 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: dialogs.c,v 1.111 2004/05/30 17:21:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,8 +52,13 @@ get_globhist_item_info(struct listbox_item *box_item, struct terminal *term,
 	struct global_history_item *item = box_item->udata;
 	struct string info;
 
-	if (listbox_info == LISTBOX_URI)
+	switch (listbox_info) {
+	case LISTBOX_URI:
 		return stracpy(item->url);
+
+	case LISTBOX_ALL:
+		break;
+	}
 
 	if (!init_string(&info)) return NULL;
 

@@ -1,3 +1,190 @@
+Tue Oct 19 19:23:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/protocol.c:
+
+	Fix the typo fix.  
+
+Tue Oct 19 19:19:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* features.conf:
+
+	Trim a ridiciously huge FTP description.  
+
+Tue Oct 19 18:29:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memory.h:
+
+	Undefine CRASH_IF_ALLOC_MAXTRIES by default (then we might give up
+	on all our error handling whatsoever) and lower ALLOC_MAXTRIES to 3
+	(makes no sense to try more times).  
+
+Tue Oct 19 17:21:03 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Tue Oct 19 14:38:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/: memdebug.c, memory.c, memory.h:
+
+	Define CRASH_IF_ALLOC_MAXTRIES by default, ALLOC_MAXTRIES was
+	increased from 3 to 5, ALLOC_DELAY from 1 to 3 seconds. Minor
+	tidyup.  
+
+Tue Oct 19 12:46:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/table.c:
+
+	Check if @span_cell is NULL before using it.  
+
+Tue Oct 19 10:24:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/table.c:
+
+	Also put an upper limit on <col span=value> and <colgroup
+	span=value>. Fixes mozilla_die3.html in the browser test suite of
+	horror.  
+
+Tue Oct 19 09:35:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Prevent assertion failure in get_hash_item(), do not call it when
+	extensionlen==0.  
+
+Tue Oct 19 09:23:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, document/html/parser/table.c:
+
+	Limit rowspan/colspan values to HTML_MAX_(ROWSPAN|COLSPAN) set to
+	32768 by default. It prevents crash reported at
+	
+	http://www.securityfocus.com/archive/1/378632/2004-10-16/2004-10-22/0, using links_die1.html.
+
+Tue Oct 19 08:40:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	An assertion was disabled, it is triggered when checkboxes are
+	pressed in bugzilla. Please recheck this one.  
+
+Tue Oct 19 08:32:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/dump/dump.c:
+
+	When saving formatted documents skip trailing spaces, fix bug 544.  
+
+Tue Oct 19 08:09:17 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Oct 19 06:02:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	In cached_header_dialog, introduce the local variable |title| to fit
+	the call to msg_box at the end of the routine within the confines of
+	an eighty-column terminal without violating the unspoken rule that
+	calls to msg_box must put the title and its alignment flag on the
+	same line.  
+
+Tue Oct 19 05:54:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Give some comments that native-English-speaker touch.  
+
+Tue Oct 19 05:50:53 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Remove an extra space.  
+
+Tue Oct 19 05:48:32 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	If there is nothing left after removing all CRs and trailing
+	newlines, display the 'No header info' box instead of an empty
+	'Header info' box.  
+
+Tue Oct 19 05:46:04 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Rework some gotos to save some indentation and simplify the code.  
+
+Tue Oct 19 05:40:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Delete an extra space.  
+
+Tue Oct 19 05:40:04 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Move the allocation of |headers| to slightly simplify memory
+	management and to allow it to be localised.  
+
+Tue Oct 19 05:34:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Reduce intentation in cached_header_dialog by swapping an if block 
+	and its implicit else block and adding a little goto magic.  
+
+Tue Oct 19 05:28:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Fix missing '#ifndef BUG_517' -> '#ifdef BUG_517' in 1.344 as was
+	pointed out by Miciah.  
+
+Tue Oct 19 05:26:22 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	In cached_header_dialog, mem_alloc the needed memory rather than
+	using stracpy as cached_header_dialog goes on to perform the copying
+	itself.  
+
+Tue Oct 19 05:23:59 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	In cached_header_dialog, use |cached->head| instead of |header|, the
+	latter of which is a copy of the former, to check whether the header
+	is empty and whether it begins with '\r'.  
+
+Tue Oct 19 05:08:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/document.c, dialogs/document.h, sched/download.c:
+
+	Export cached_header_dialog.  
+	
+	Introduce tp_show_header, which backs a new button in type-query
+	boxes, 'Show header', and uses the new
+	download_show_header_callback, which uses cached_header_dialog.  
+
+Tue Oct 19 05:01:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Factor most of protocol_header_dialog out into the new
+	cached_header_dialog. protocol_header_dialog now only calls either
+	nowhere_box, if the session has no location, or
+	cached_header_dialog, with the return of find_in_cache.  
+
+Tue Oct 19 04:54:22 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	Delete an extra blank line at the end of protocol_header_dialog.  
+
 Mon Oct 18 05:08:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/search.c:

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-18 23:48+0100\n"
-"PO-Revision-Date: 2005-01-18 23:54+0100\n"
+"PO-Revision-Date: 2005-01-19 15:29+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -1146,7 +1146,7 @@ msgstr "Kan ikke skrive filen"
 
 #: src/config/dialogs.c:89
 msgid "Secure file saving error"
-msgstr "Fejl ved sikkerfilskrivning"
+msgstr "Fejl ved sikker filskrivning"
 
 #: src/config/dialogs.c:97
 msgid "Write config error"
@@ -1801,7 +1801,7 @@ msgstr "Flyt til næste emne"
 
 #: src/config/kbdbind.c:569
 msgid "Open in external editor"
-msgstr "Åbn i ekstern tekstbehandler"
+msgstr "Åbn i en ekstern tekstbehandler"
 
 #: src/config/kbdbind.c:570
 msgid "Paste text from the clipboard"
@@ -1995,7 +1995,7 @@ msgstr "Maksimal antal sideløbende forbindelser til en given værtsmaskine."
 
 #: src/config/options.inc:88
 msgid "Connection retries"
-msgstr "Forbindelse genetableringsforsøg"
+msgstr "Forbindelsesgenetableringsforsøg"
 
 #: src/config/options.inc:90
 msgid ""
@@ -2343,7 +2343,7 @@ msgstr "Farver"
 
 #: src/config/options.inc:264
 msgid "Active link colors."
-msgstr "Farver for aktive link."
+msgstr "Farver for det aktuelle link."
 
 #: src/config/options.inc:266 src/config/options.inc:526
 #: src/config/options.inc:829
@@ -2692,7 +2692,7 @@ msgstr ""
 
 #: src/config/options.inc:428
 msgid "Document meta refresh minimum time"
-msgstr "Minimumstid for dokument (meta) genopfriskning"
+msgstr "Minimumstid for dokument genopfriskning"
 
 #: src/config/options.inc:430
 msgid ""
@@ -2984,7 +2984,7 @@ msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
 msgstr ""
-"Sæt tidstemplet for hver overført fil to tidsstemplet gemt\n"
+"Sæt tidstemplet for hver downloadet fil til tidsstemplet gemt\n"
 "på serveren."
 
 #. Does automatic resuming make sense as an option?
@@ -3349,7 +3349,7 @@ msgstr ""
 
 #: src/config/options.inc:770 src/dialogs/options.c:169
 msgid "Block cursor"
-msgstr "Udfyld markør"
+msgstr "Udfyldt markør"
 
 #: src/config/options.inc:772
 msgid ""
@@ -3927,7 +3927,7 @@ msgid ""
 "vice versa."
 msgstr ""
 "Når der flyttes til højre fra det sidste faneblad, hop da til\n"
-"det første og vice versa."
+"det første og omvendt."
 
 #: src/config/options.inc:1120
 msgid "Confirm tab closing"
@@ -5135,11 +5135,11 @@ msgstr ""
 
 #: src/formhist/dialogs.c:67
 msgid "Forms are never saved for this URL."
-msgstr "Formularer gemmes aldrig for denne adresse."
+msgstr "Formularer bliver aldrig gemt for denne adresse."
 
 #: src/formhist/dialogs.c:69
 msgid "Forms are saved for this URL."
-msgstr "Formularer gemmes for denne adresse."
+msgstr "Formularer bliver gemt for denne adresse."
 
 #. cant_delete_item
 #: src/formhist/dialogs.c:121
@@ -5241,7 +5241,7 @@ msgstr ""
 "Bemærk at adgangskoden vil blive gemt i en ulæselig, men ikke\n"
 "krypteret, form på din disk.\n"
 "\n"
-"Hvis du bruger en værdifuldt adgangskode, så svar NEJ."
+"Hvis du bruger en værdifuld adgangskode, så svar NEJ."
 
 #: src/formhist/formhist.c:459
 msgid "Never for this site"
@@ -5718,8 +5718,8 @@ msgid ""
 "the extension of the file name."
 msgstr ""
 "Indstilinger for mime.types filer. Disse filer kan anvendes til\n"
-"at finde frem til en content-type (indholdstype) for adresser ved\n"
-"at kigge på filnavnets endelse."
+"at sammenkæde oplysninger om filers navne-endelser og deres\n"
+"indholdstype."
 
 #: src/mime/backend/mimetypes.c:55
 msgid "Enable mime.types support."
@@ -7186,7 +7186,7 @@ msgstr "værdi"
 
 #: src/viewer/text/form.c:1515
 msgid "read only"
-msgstr "skrivebeskyttet"
+msgstr "kun læsning"
 
 #: src/viewer/text/form.c:1526
 #, c-format
@@ -7246,7 +7246,7 @@ msgstr "~Nulstil formular"
 
 #: src/viewer/text/link.c:1185
 msgid "Open in ~external editor"
-msgstr "Åbn i en ekstern tekstbehandler"
+msgstr "Åbn i en ~ekstern tekstbehandler"
 
 #: src/viewer/text/link.c:1191
 msgid "~Submit form"

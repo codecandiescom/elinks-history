@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.75 2003/12/22 13:13:31 pasky Exp $ */
+/* $Id: dump.c,v 1.76 2004/01/02 13:29:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,7 +302,8 @@ fail:
 		return -1;
 	}
 
-	if (get_opt_bool("document.browse.links.numbering")) {
+	if (get_opt_bool("document.browse.links.numbering")
+	    && document->nlinks) {
 		struct link *l;
 		char *header = "\nReferences\n\n   Visible links\n";
 		int headlen = strlen(header);

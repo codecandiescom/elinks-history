@@ -785,7 +785,7 @@ dnl ===================================================================
 
 AC_CHECK_PROG(have_smbclient, smbclient, yes, no)
 if test "$have_smbclient" = yes; then
-	AC_DEFINE(ELINKS_SMB)
+	AC_DEFINE(CONFIG_SMB)
 fi
 
 

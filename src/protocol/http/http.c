@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.230 2003/12/26 14:10:42 jonas Exp $ */
+/* $Id: http.c,v 1.231 2003/12/26 14:21:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,7 +322,8 @@ http_send_header(struct connection *conn)
 	set_connection_timeout(conn);
 
 	/* Setup the real uri. */
-	if (IS_PROXY_URI(conn->uri) && conn->uri.data) {
+	if (IS_PROXY_URI(conn->uri)) {
+		assertm(conn->uri.data, "No proxy data");
 		uri = &real_uri;
 		if (!parse_uri(uri, conn->uri.data))
 			uri = NULL;
@@ -383,17 +384,10 @@ http_send_header(struct connection *conn)
 		}
 	} else {
 		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->ssl) {
-			struct uri https_real_uri;
-
-			if (!parse_uri(&https_real_uri, conn->uri.data)) {
-				abort_conn_with_state(conn, S_BAD_URL);
-				return;
-			}
-			add_url_to_http_string(&header, https_real_uri.data);
+			add_url_to_http_string(&header, uri->data);
 		} else {
 			add_url_to_http_string(&header, conn->uri.data);
 		}
-
 	}
 
 	add_to_string(&header, " HTTP/");

@@ -1,3 +1,128 @@
+Fri Apr 16 17:41:01 2004  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/protocol/uri.c:
+
+	Fix a bug in normalize_uri triggered if you enter
+	"javascript:gourl('../../../');" as new url.  
+
+Fri Apr 16 16:36:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: terminal/kbd.c, terminal/screen.c, terminal/tab.c,
+	terminal/terminal.c, terminal/window.c, mime/dialogs.c,
+	mime/backend/mailcap.c, mime/backend/mimetypes.c,
+	scripting/lua/core.c, formhist/formhist.c:
+
+	Populate with mem_free_if() and mem_free_set_if().  
+
+Fri Apr 16 16:33:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.c, globhist/dialogs.c, globhist/globhist.c,
+	lowlevel/connect.c, lowlevel/dns.c, lowlevel/home.c,
+	lowlevel/interlink.c, protocol/proxy.c, protocol/uri.c,
+	protocol/user.c, protocol/auth/auth.c, protocol/file/file.c,
+	protocol/http/codes.c, protocol/http/http.c, sched/connection.c,
+	sched/download.c, sched/event.c, sched/history.c, sched/session.c,
+	sched/task.c, ssl/connect.c, util/fastfind.c, util/file.c,
+	util/secsave.c, viewer/dump/dump.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/search.c, viewer/text/textarea.c,
+	viewer/text/view.c, viewer/text/vs.c:
+
+	Populate with mem_free_if() and mem_free_set_if().  
+
+Fri Apr 16 16:29:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/listmenu.c, bfu/menu.c,
+	bfu/style.c, bookmarks/bookmarks.c, bookmarks/dialogs.c,
+	bookmarks/backend/xbel.c, config/cmdline.c, config/dialogs.c,
+	config/options.c, cookies/cookies.c, cookies/dialogs.c,
+	dialogs/info.c, dialogs/status.c, document/document.c,
+	document/css/stylesheet.c, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c:
+
+	Populate with mem_free_if() and mem_free_set_if().  
+
+Fri Apr 16 16:27:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/memory.h:
+
+	mem_free_if_set() -> mem_free_set_if(), idea by Pasky.  
+
+Fri Apr 16 16:26:39 2004  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/: document/html/parser.c, viewer/text/search.c:
+
+	Compile fix.  
+
+Fri Apr 16 16:16:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/memory.h:
+
+	mem_free_if(pointer) and mem_free_if_set(pointer, newpointer) were
+	introduced.  
+
+Fri Apr 16 11:10:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Minor simplification: use memacpy() instead of mem_alloc() +
+	sprintf().  
+
+Fri Apr 16 10:16:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	A minor compilation warning was fixed, using explicit type casting.  
+
+Fri Apr 16 10:09:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.c, sched/session.c, sched/task.c:
+
+	Trailing whitespaces were removed.  
+
+Fri Apr 16 10:02:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/dialog.c, bfu/group.c, bfu/inpfield.c,
+	bfu/inphist.c, bfu/listbox.c, bfu/text.c, bfu/widget.c,
+	bookmarks/backend/default.c, config/kbdbind.c, config/opttypes.c,
+	dialogs/download.c, dialogs/menu.c, dialogs/options.c,
+	dialogs/status.c, osdep/getifaddrs.c, protocol/http/http.c,
+	sched/session.c, util/scanner.c, util/snprintf.c,
+	viewer/text/form.c, viewer/text/search.c, viewer/text/textarea.c,
+	viewer/text/view.c:
+
+	Include util/math.h where it is needed (last bits).  
+
+Fri Apr 16 09:44:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.h, bfu/menu.c, document/refresh.c,
+	document/css/scanner.c, document/css/value.c,
+	document/html/frames.c, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c,
+	document/plain/renderer.c, protocol/auth/auth.c, sched/event.c,
+	terminal/draw.c, terminal/screen.h, viewer/text/link.c,
+	viewer/text/vs.c:
+
+	Include util/math.h where it is needed.  
+
+Fri Apr 16 09:42:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: elinks.h, util/Makefile.am, util/math.h:
+
+	int_bounds() family was moved to new util/math.h.  
+
+Fri Apr 16 09:23:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/perl/: core.c, hooks.c:
+
+	Perl scripting module compilation issues were fixed.  
+
+Fri Apr 16 09:20:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: elinks.h, osdep/generic.h:
+
+	Include system headers before redefining macros, it fixes some
+	compilation failures on some systems.  
+
 Thu Apr 15 17:30:06 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/cmdline.c:

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.24 2002/09/11 21:04:54 pasky Exp $ */
+/* $Id: connect.c,v 1.25 2002/09/12 12:46:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,8 +87,7 @@ void exception(void *data)
 {
 	struct connection *c = (struct connection *) data;
 
-	setcstate(c, S_EXCEPT);
-	retry_connection(c);
+	retry_conn_with_state(c, S_EXCEPT);
 }
 
 void make_connection(struct connection *conn, int port, int *sock,
@@ -100,16 +99,14 @@ void make_connection(struct connection *conn, int port, int *sock,
 
 	host = get_host_name(conn->url);
 	if (!host) {
-		setcstate(conn, S_INTERNAL);
-		abort_connection(conn);
+		abort_conn_with_state(conn, S_INTERNAL);
 		return;
 	}
 
 	c_i = mem_alloc(sizeof(struct conn_info));
 	if (!c_i) {
 		mem_free(host);
-		setcstate(conn, S_OUT_OF_MEM);
-		retry_connection(conn);
+		retry_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -153,8 +150,7 @@ get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
 
 	if (getsockname(ctrl_sock, (struct sockaddr *) &sa, &len)) {
 error:
-		setcstate(conn, -errno);
-		retry_connection(conn);
+		retry_conn_with_state(conn, -errno);
 		return -1;
 	}
 
@@ -215,8 +211,7 @@ get_pasv6_socket(struct connection *conn, int ctrl_sock,
 
 	if (getsockname(ctrl_sock, (struct sockaddr *) s6, &len)) {
 error:
-		setcstate(conn, -errno);
-		retry_connection(conn);
+		retry_conn_with_state(conn, -errno);
 		return -1;
 	}
 
@@ -270,8 +265,7 @@ void dns_found(void *data, int state)
 	int trno = c_i->triedno;
 
 	if (state < 0) {
-		setcstate(conn, S_NO_DNS);
-		retry_connection(conn);
+		retry_conn_with_state(conn, S_NO_DNS);
 		return;
 	}
 
@@ -395,8 +389,7 @@ void write_select(struct connection *c)
 
 	if (!wb) {
 		internal("write socket has no buffer");
-		setcstate(c, S_INTERNAL);
-		abort_connection(c);
+		abort_conn_with_state(c, S_INTERNAL);
 		return;
 	}
 
@@ -414,8 +407,7 @@ void write_select(struct connection *c)
 	} else {
 		wr = write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
-			setcstate(c, wr ? -errno : S_CANT_WRITE);
-			retry_connection(c);
+			retry_conn_with_state(c, wr ? -errno : S_CANT_WRITE);
 			return;
 		}
 	}
@@ -441,8 +433,7 @@ void write_to_socket(struct connection *c, int s, unsigned char *data,
 
 	wb = mem_alloc(sizeof(struct write_buffer) + len);
 	if (!wb) {
-		setcstate(c, S_OUT_OF_MEM);
-		abort_connection(c);
+		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -466,8 +457,7 @@ void read_select(struct connection *c)
 
 	if (!rb) {
 		internal("read socket has no buffer");
-		setcstate(c, S_INTERNAL);
-		abort_connection(c);
+		abort_conn_with_state(c, S_INTERNAL);
 		return;
 	}
 
@@ -475,8 +465,7 @@ void read_select(struct connection *c)
 
 	rb = mem_realloc(rb, sizeof(struct read_buffer) + rb->len + READ_SIZE);
 	if (!rb) {
-		setcstate(c, S_OUT_OF_MEM);
-		abort_connection(c);
+		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}
 	c->buffer = rb;
@@ -494,9 +483,8 @@ void read_select(struct connection *c)
 				rb->done(c, rb);
 				return;
 			}
-			setcstate(c, rd ? -errno : S_CANT_READ);
 			/* mem_free(rb); */
-			retry_connection(c);
+			retry_conn_with_state(c, rd ? -errno : S_CANT_READ);
 			return;
 		}
 	}
@@ -512,8 +500,7 @@ struct read_buffer *alloc_read_buffer(struct connection *c)
 
 	rb = mem_alloc(sizeof(struct read_buffer) + READ_SIZE);
 	if (!rb) {
-		setcstate(c, S_OUT_OF_MEM);
-		abort_connection(c);
+		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return NULL;
 	}
 	memset(rb, 0, sizeof(struct read_buffer));

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.194 2004/06/12 18:51:21 zas Exp $ */
+/* $Id: link.c,v 1.195 2004/06/12 19:07:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -931,68 +931,61 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 
 	if (link->type == LINK_CHECKBOX || link->type == LINK_SELECT
 	    || link_is_textinput(link)) {
+		struct form_control *fc = link->form_control;
+		unsigned char *label;
 		struct string str;
 
-		if (!init_string(&str)) return NULL;
-
-		if (link->form_control->type == FC_RADIO)
-			add_to_string(&str, _("Radio button", term));
-
-		else if (link->form_control->type == FC_CHECKBOX)
-			add_to_string(&str, _("Checkbox", term));
-
-		else if (link->form_control->type == FC_SELECT)
-			add_to_string(&str, _("Select field", term));
-
-		else if (link->form_control->type == FC_TEXT)
-			add_to_string(&str, _("Text field", term));
-
-		else if (link->form_control->type == FC_TEXTAREA)
-			add_to_string(&str, _("Text area", term));
-
-		else if (link->form_control->type == FC_FILE)
-			add_to_string(&str, _("File upload", term));
-
-		else if (link->form_control->type == FC_PASSWORD)
-			add_to_string(&str, _("Password field", term));
-
-		else {
-			done_string(&str);
+		switch (fc->type) {
+		case FC_RADIO:
+			label = _("Radio button", term); break;
+		case FC_CHECKBOX:
+			label = _("Checkbox", term); break;
+		case FC_SELECT:
+			label = _("Select field", term); break;
+		case FC_TEXT:
+			label = _("Text field", term); break;
+		case FC_TEXTAREA:
+			label = _("Text area", term); break;
+		case FC_FILE:
+			label = _("File upload", term); break;
+		case FC_PASSWORD:
+			label = _("Password field", term); break;
+		default:
 			return NULL;
 		}
 
-		if (link->form_control->name
-		    && link->form_control->name[0]) {
+		if (!init_string(&str)) return NULL;
+
+		add_to_string(&str, label);
+
+		if (fc->name && fc->name[0]) {
 			add_to_string(&str, ", ");
 			add_to_string(&str, _("name", term));
 			add_char_to_string(&str, ' ');
-			add_to_string(&str, link->form_control->name);
+			add_to_string(&str, fc->name);
 		}
 
-		if ((link->form_control->type == FC_CHECKBOX ||
-		     link->form_control->type == FC_RADIO)
-		    && link->form_control->default_value
-		    && link->form_control->default_value[0]) {
+		if ((fc->type == FC_CHECKBOX || fc->type == FC_RADIO)
+		    && fc->default_value && fc->default_value[0]) {
 			add_to_string(&str, ", ");
 			add_to_string(&str, _("value", term));
 			add_char_to_string(&str, ' ');
-			add_to_string(&str, link->form_control->default_value);
+			add_to_string(&str, fc->default_value);
 		}
 
-		if (link->type == LINK_FIELD
-		    && !has_form_submit(doc_view->document, link->form_control)
-		    && link->form_control->action) {
+		if (link->type == LINK_FIELD && fc->action
+		    && !has_form_submit(doc_view->document, fc)) {
 			add_to_string(&str, ", ");
 			add_to_string(&str, _("hit ENTER to", term));
 			add_char_to_string(&str, ' ');
-			if (link->form_control->method == FM_GET)
+			if (fc->method == FM_GET)
 				add_to_string(&str, _("submit to", term));
 			else
 				add_to_string(&str, _("post to", term));
 			add_char_to_string(&str, ' ');
 
 			/* Add the uri with password and post info stripped */
-			add_string_uri_to_string(&str, link->form_control->action, URI_PUBLIC);
+			add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
 		}
 
 		return str.source;

@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.28 2003/10/27 15:40:30 jonas Exp $ */
+/* $Id: urlhist.c,v 1.29 2003/10/29 14:47:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 
 
 struct input_history goto_url_history = {
-	/* items: */	{ D_LIST_HEAD(goto_url_history.items) },
+	/* items: */	{ D_LIST_HEAD(goto_url_history.entries) },
 	/* size: */	0,
 	/* dirty: */	0,
 	/* nosave: */	0,

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.180 2003/10/27 23:58:29 pasky Exp $ */
+/* $Id: menu.c,v 1.181 2003/10/29 14:47:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,7 +554,7 @@ dialog_save_url(struct session *ses)
 }
 
 static struct input_history file_history = {
-	/* items: */	{ D_LIST_HEAD(file_history.items) },
+	/* items: */	{ D_LIST_HEAD(file_history.entries) },
 	/* size: */	0,
 	/* dirty: */	0,
 	/* nosave: */	0,
@@ -592,8 +592,8 @@ query_file(struct session *ses, unsigned char *url,
 void
 free_history_lists(void)
 {
-	free_list(goto_url_history.items);
-	free_list(file_history.items);
+	free_list(goto_url_history.entries);
+	free_list(file_history.entries);
 #ifdef HAVE_SCRIPTING
 	trigger_event_name("free-history");
 #endif

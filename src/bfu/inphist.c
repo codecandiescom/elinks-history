@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.47 2003/10/29 14:09:50 pasky Exp $ */
+/* $Id: inphist.c,v 1.48 2003/10/29 14:47:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,10 +104,10 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 	 * been set yet. */
 	int max = 0;
 	unsigned char *match = NULL;
-	struct input_history_item *cur;
+	struct input_history_item *entry;
 
-	foreach (cur, *history) {
-		unsigned char *c = cur->d - 1;
+	foreach (entry, *history) {
+		unsigned char *c = entry->d - 1;
 		unsigned char *m = (match ? match : widget_data->cdata) - 1;
 		int len = 0;
 
@@ -116,8 +116,8 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 			continue;
 		if (len < match_len || (*c && m != widget_data->cdata + len))
 			max = len;
-		match = cur->d;
-		match_len = (m == widget_data->cdata + len && !*m) ? strlen(cur->d) : len;
+		match = entry->d;
+		match_len = (m == widget_data->cdata + len && !*m) ? strlen(entry->d) : len;
 	}
 
 	if (!match) return;
@@ -129,21 +129,21 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 /* Search for duplicate entries in history list, save first one and remove
  * older ones. */
 static struct input_history_item *
-check_duplicate_entries(struct input_history *history, unsigned char *entry)
+check_duplicate_entries(struct input_history *history, unsigned char *data)
 {
-	struct input_history_item *item, *first_duplicate = NULL;
+	struct input_history_item *entry, *first_duplicate = NULL;
 
-	if (!history || !entry || !*entry) return NULL;
+	if (!history || !data || !*data) return NULL;
 
-	foreach (item, history->items) {
+	foreach (entry, history->entries) {
 		struct input_history_item *duplicate;
 
-		if (strcmp(item->d, entry)) continue;
+		if (strcmp(entry->d, data)) continue;
 
 		/* Found a duplicate -> remove it from history list */
 
-		duplicate = item;
-		item = item->prev;
+		duplicate = entry;
+		entry = entry->prev;
 
 		del_from_list(duplicate);
 
@@ -162,23 +162,23 @@ check_duplicate_entries(struct input_history *history, unsigned char *entry)
 /* Add a new entry in inputbox history list, take care of duplicate if
  * check_duplicate and respect history size limit. */
 void
-add_to_input_history(struct input_history *history, unsigned char *entry,
+add_to_input_history(struct input_history *history, unsigned char *data,
 		     int check_duplicate)
 {
-	struct input_history_item *item;
+	struct input_history_item *entry;
 	int length;
 
-	if (!history || !entry || !*entry)
+	if (!history || !data || !*data)
 		return;
 
 	/* Strip spaces at the margins */
-	trim_chars(entry, ' ', &length);
+	trim_chars(data, ' ', &length);
 	if (!length) return;
 
 	if (check_duplicate) {
-		item = check_duplicate_entries(history, entry);
-		if (item) {
-			add_to_list(history->items, item);
+		entry = check_duplicate_entries(history, data);
+		if (entry) {
+			add_to_list(history->entries, entry);
 			if (!history->nosave) history->dirty = 1;
 			return;
 		}
@@ -186,13 +186,13 @@ add_to_input_history(struct input_history *history, unsigned char *entry,
 
 	/* Copy it all etc. */
 	/* One byte is already reserved for url in struct input_history_item. */
-	item = mem_alloc(sizeof(struct input_history_item) + length);
-	if (!item) return;
+	entry = mem_alloc(sizeof(struct input_history_item) + length);
+	if (!entry) return;
 
-	memcpy(item->d, entry, length + 1);
+	memcpy(entry->d, data, length + 1);
 
 	/* add new entry to history list */
-	add_to_list(history->items, item);
+	add_to_list(history->entries, entry);
 	history->size++;
 
 	if (!history->nosave) history->dirty = 1;
@@ -200,15 +200,15 @@ add_to_input_history(struct input_history *history, unsigned char *entry,
 	/* limit size of history to MAX_HISTORY_ITEMS
 	 * removing first entries if needed */
 	for (; history->size > MAX_HISTORY_ITEMS; history->size--) {
-		if (list_empty(history->items)) {
+		if (list_empty(history->entries)) {
 			internal("history is empty");
 			history->size = 0;
 			return;
 		}
 
-		item = history->items.prev;
-		del_from_list(item);
-		mem_free(item);
+		entry = history->entries.prev;
+		del_from_list(entry);
+		mem_free(entry);
 	}
 }
 
@@ -249,7 +249,7 @@ load_input_history(struct input_history *history, unsigned char *filename)
 int
 save_input_history(struct input_history *history, unsigned char *filename)
 {
-	struct input_history_item *historyitem;
+	struct input_history_item *entry;
 	struct secure_save_info *ssi;
 	unsigned char *history_file;
 	int i = 0;
@@ -266,9 +266,9 @@ save_input_history(struct input_history *history, unsigned char *filename)
 	mem_free(history_file);
 	if (!ssi) return -1;
 
-	foreachback (historyitem, history->items) {
+	foreachback (entry, history->entries) {
 		if (i++ > MAX_HISTORY_ITEMS) break;
-		secure_fputs(ssi, historyitem->d);
+		secure_fputs(ssi, entry->d);
 		secure_fputc(ssi, '\n');
 		if (ssi->err) break;
 	}

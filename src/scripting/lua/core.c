@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.101 2003/10/29 11:12:04 zas Exp $ */
+/* $Id: core.c,v 1.102 2003/10/29 14:47:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -790,7 +790,7 @@ handle_standard_lua_returns(unsigned char *from)
 /* Console stuff. */
 
 static struct input_history lua_console_history = {
-	/* items: */	{ D_LIST_HEAD(lua_console_history.items) },
+	/* items: */	{ D_LIST_HEAD(lua_console_history.entries) },
 	/* size: */	0,
 	/* dirty: */	0,
 	/* nosave: */	0,
@@ -831,7 +831,7 @@ dialog_lua_console(va_list ap, void *data)
 enum evhook_status
 free_lua_console_history(va_list ap, void *data)
 {
-	free_list(lua_console_history.items);
+	free_list(lua_console_history.entries);
 	return EHS_NEXT;
 }
 

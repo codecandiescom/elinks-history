@@ -24,7 +24,7 @@ to do with them.
 
 You launch the bookmark manager by pressing the 's' key in standby (standard)
 mode. You should see a big empty space (bookmarks will slowly appear there as
-you will add them) and couple of buttons shriveling at the bottom. So, as a
+you will add them) and couple of buttons shrivelling at the bottom. So, as a
 start, move with the right (or left, both will do) arrow to the button "Add
 bookmark" and fill in the input fields it will offer to you. I mean, you can
 type something like "ELinks homepage" to the first field, then move down by ie.

@@ -94,7 +94,7 @@ A) nearest not red hue from fg is either green or blue (simpler for now), let
 B) move fg away from green and red: fg is now blue
    now hc1 is satisfied, sc1 is not, and sc3 is
 
-C) since we can't satisty all constraints, reiterate
+C) since we can't satisfy all constraints, reiterate
    going back to A) let move initial fg from red to blue instead of green
    now hc1 is satisfied, sc1 is not, and sc3 too
 
@@ -104,7 +104,7 @@ D) we cannot satisfy hc1 and sc1, so since sc1 is a soft constraint,
 Finally we have (fg, bg) = (H=blue L=70% S=100%; H=blue L=40% S=95%)
 
 - Lightness constraints satisfaction:
-E) hc2 can be satisfied by either increasing lighness of fg, or darkness of bg
+E) hc2 can be satisfied by either increasing lightness of fg, or darkness of bg
    we choose to change fg (randomly)
    (fg, bg) = (H=blue L=90% S=100%; H=blue L=40% S=95%)
 
@@ -150,7 +150,7 @@ Referring to hue, lighness and saturation is done by using these names or H, L,
 S.
 Referring to fg or bg is possible by using fg or ^, bg or _.
 Delta is expressed by / or delta
-Conditionnal is ':'
+Conditional is ':'
 
 hard constraint 1 = "no red" => "hue no red" == "H![0,30]"
 hard constraint 2 = "lightness contrast > 50%" => "L delta gt 50"
@@ -173,8 +173,8 @@ Maybe the option system can be made to handle it even though it might not be opt
 	 |    |    |    +- Red (0 or 1 whether to allow this color)
 	 |    |    |    : (the basic colors of the color wheel)
 	 |    |   [-]- Lightness constraints
-	 |    |    |    +- Minimum constrast
-	 |    |    |    +- Maximum constrast
+	 |    |    |    +- Minimum contrast
+	 |    |    |    +- Maximum contrast
 	 |    |   [-]- Saturation constraints
 	 |    |         +- Minimum saturation
 	 |    |         +- Maximum saturation
@@ -205,7 +205,7 @@ So constraints will take the form of:
 link hue != blue : link hue = blue, link attr = bold 
 link hue >< italic hue
 fg hue in !red 
-fg ligthness > bg lightness
+fg lightness > bg lightness
 !(fg hue == yellow && bg hue == white)
 fg hue >< bg hue
 fg saturation < 90%
@@ -218,7 +218,7 @@ More about hues or "what is red ?":
 Defining hues is not as easy it seems, the main problem here is to know what
 we talk about when using red name.
 
-Where is start and end of red ? Applying KISS principe, let's say that in HLS
+Where is start and end of red ? Applying KISS principle, let's say that in HLS
 system S° < H < E° where S is starting hue, and E ending one.
 For each hue we want to express let use a similar non-overlapping interval.
 Take a circle, divide it in 3 parts for primary hues RGB:
@@ -294,5 +294,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 	Basic introduction to usage of HSL colors.
 
-$Id: color-model.txt,v 1.9 2003/10/08 11:08:59 jonas Exp $
+$Id: color-model.txt,v 1.10 2003/10/13 18:55:36 fabio Exp $
 vim: textwidth=80

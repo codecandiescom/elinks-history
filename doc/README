@@ -23,7 +23,7 @@ ELinks DocTool								[sect1]
    Since [DocBook] seems to be a lot of work to get it running on multiple
    platforms I am investigating going for something simpler. Something that will
    need only the standard UN*X tools to run, an ELinks doctool. This tool will
-   be build upon some achitecture similar to [help2doc] currently used for
+   be build upon some architecture similar to [help2doc] currently used for
    generate [elinks.conf(5)].
 
   The format								[sect2]
@@ -78,7 +78,7 @@ File Info								[meta]
 
    Charset:		iso-8859-1
    Language:		en
-   CVS Id:		$Id: README,v 1.6 2003/10/11 18:57:23 jonas Exp $
+   CVS Id:		$Id: README,v 1.7 2003/10/13 18:55:36 fabio Exp $
    Copyright:		(c) 2003 Jonas Fonseca and others
    License:		Licensed under the GNU GPL.
    vim:			textwidth=80 filetype=doctool

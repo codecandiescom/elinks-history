@@ -79,7 +79,7 @@ of tables. It calls parse_html.
 
 The rendering functions put_chars_conv, line_break, html_special receive struct
 part * from the parser.  They render the text or calculate the size of the text
-(in case of tables).  struct part has a pointer to struct f_data - a stucture
+(in case of tables).  struct part has a pointer to struct f_data - a structure
 that holds the actual formatted data.  If the pointer is NULL, rendering
 functions only calculate size.
 
@@ -196,7 +196,7 @@ but on separate lines near function headers in function definitions.
 Please _USE_ one tab instead of 8 spaces!  It makes things easier.
 
 Always place spaces around '=', after ',' and - if reasonable - around other
-operators as well.  You shouldn't make assigments in conditionals, so do:
+operators as well.  You shouldn't make assignments in conditionals, so do:
 
 foo = mem_alloc(1234);
 if (!foo) panic("aaaaaaaaaaaaaaaaaaaarrrrrrggggggggg");
@@ -410,7 +410,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.15 2003/09/26 21:05:02 pasky Exp $ */
+	/* $Id: hacking.txt,v 1.16 2003/10/13 18:55:36 fabio Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -515,4 +515,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.15 2003/09/26 21:05:02 pasky Exp $
+$Id: hacking.txt,v 1.16 2003/10/13 18:55:36 fabio Exp $

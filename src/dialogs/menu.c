@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.257 2004/01/07 00:06:29 jonas Exp $ */
+/* $Id: menu.c,v 1.258 2004/01/07 00:12:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,30 +191,6 @@ history_menu_model(unhistory_menu, next);
 #undef history_menu_model
 
 
-static inline void
-menu_toggle_plain_html(struct terminal *term, void *ddd, struct session *ses)
-{
-	toggle_plain_html(ses, ses->doc_view, 0);
-}
-
-static inline void
-menu_toggle_images(struct terminal *term, void *ddd, struct session *ses)
-{
-	toggle_images(ses, ses->doc_view, 0);
-}
-
-static inline void
-menu_toggle_link_numbering(struct terminal *term, void *ddd, struct session *ses)
-{
-	toggle_link_numbering(ses, ses->doc_view, 0);
-}
-
-static inline void
-menu_toggle_document_colors(struct terminal *term, void *ddd, struct session *ses)
-{
-	toggle_document_colors(ses, ses->doc_view, 0);
-}
-
 void
 menu_shell(struct terminal *term, void *xxx, void *yyy)
 {
@@ -393,10 +369,10 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ITEM(N_("Find ~previous"), NULL, ACT_FIND_NEXT_BACK, menu_for_frame, (void *)find_next_back, 0),
 	INIT_MENU_ITEM(N_("T~ypeahead search"), NULL, ACT_SEARCH_TYPEAHEAD, menu_for_frame, (void *)search_typeahead, 0),
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("Toggle ~html/plain"), NULL, ACT_TOGGLE_HTML_PLAIN, menu_toggle_plain_html, NULL, 0),
-	INIT_MENU_ITEM(N_("Toggle i~mages"), NULL, ACT_TOGGLE_DISPLAY_IMAGES, menu_toggle_images, NULL, 0),
-	INIT_MENU_ITEM(N_("Toggle ~link numbering"), NULL, ACT_TOGGLE_NUMBERED_LINKS, menu_toggle_link_numbering, NULL, 0),
-	INIT_MENU_ITEM(N_("Toggle ~document colors"), NULL, ACT_TOGGLE_DOCUMENT_COLORS, menu_toggle_document_colors, NULL, 0),
+	INIT_MENU_ITEM(N_("Toggle ~html/plain"), NULL, ACT_TOGGLE_HTML_PLAIN, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("Toggle i~mages"), NULL, ACT_TOGGLE_DISPLAY_IMAGES, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("Toggle ~link numbering"), NULL, ACT_TOGGLE_NUMBERED_LINKS, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("Toggle ~document colors"), NULL, ACT_TOGGLE_DOCUMENT_COLORS, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Document ~info"), NULL, ACT_DOCUMENT_INFO, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("H~eader info"), NULL, ACT_HEADER_INFO, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Frame at ~full-screen"), NULL, ACT_ZOOM_FRAME, menu_for_frame, (void *)set_frame, 0),
@@ -630,6 +606,22 @@ do_action(struct session *ses, enum keyact action, void *data)
 			close_tab(term, ses);
 			break;
 
+		case ACT_TOGGLE_DISPLAY_IMAGES:
+			toggle_images(ses, ses->doc_view, 0);
+			break;
+
+		case ACT_TOGGLE_DOCUMENT_COLORS:
+			toggle_document_colors(ses, ses->doc_view, 0);
+			break;
+
+		case ACT_TOGGLE_HTML_PLAIN:
+			toggle_plain_html(ses, ses->doc_view, 0);
+			break;
+
+		case ACT_TOGGLE_NUMBERED_LINKS:
+			toggle_link_numbering(ses, ses->doc_view, 0);
+			break;
+
 		case ACT_UNBACK:
 			go_unback(ses);
 			break;
@@ -716,11 +708,7 @@ do_action(struct session *ses, enum keyact action, void *data)
 		case ACT_SHOW_TERM_OPTIONS:
 		case ACT_TAB_CLOSE_ALL_BUT_CURRENT:
 		case ACT_TAB_MENU:
-		case ACT_TOGGLE_DISPLAY_IMAGES:
 		case ACT_TOGGLE_DISPLAY_TABLES:
-		case ACT_TOGGLE_DOCUMENT_COLORS:
-		case ACT_TOGGLE_HTML_PLAIN:
-		case ACT_TOGGLE_NUMBERED_LINKS:
 		case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
 		case ACT_UNEXPAND:
 		case ACT_UP:

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.32 2003/10/26 13:25:40 zas Exp $ */
+/* $Id: hierbox.c,v 1.33 2003/10/27 10:35:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,9 +143,9 @@ layout_hierbox_browser(struct dialog_data *dlg_data)
 	/* Find dimensions of dialog */
 	text_width(term, dlg_data->dlg->title, &min, &max);
 #if 0
-	buttons_width(term, dlg->widgets + 2, 2, &min, &max);
+	buttons_width(dlg->widgets + 2, 2, &min, &max);
 #endif
-	buttons_width(term, dlg_data->widgets_data, n, &min, &max);
+	buttons_width(dlg_data->widgets_data, n, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	/* We ignore this now, as we don't compute with the width of the listbox

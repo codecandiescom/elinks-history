@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.39 2003/10/26 15:59:12 zas Exp $ */
+/* $Id: button.c,v 1.40 2003/10/27 10:35:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,8 +19,8 @@
 
 
 void
-buttons_width(struct terminal *term, struct widget_data *widget_data,
-	      int n, int *minwidth, int *maxwidth)
+buttons_width(struct widget_data *widget_data, int n,
+	      int *minwidth, int *maxwidth)
 {
 	int maxw = -2;
 	register int i;
@@ -36,8 +36,7 @@ buttons_width(struct terminal *term, struct widget_data *widget_data,
 }
 
 void
-max_buttons_width(struct terminal *term, struct widget_data *widget_data,
-		  int n, int *width)
+max_buttons_width(struct widget_data *widget_data, int n, int *width)
 {
 	int w = -2;
 	register int i;
@@ -49,8 +48,7 @@ max_buttons_width(struct terminal *term, struct widget_data *widget_data,
 }
 
 void
-min_buttons_width(struct terminal *term, struct widget_data *widget_data,
-		  int n, int *width)
+min_buttons_width(struct widget_data *widget_data, int n, int *width)
 {
 	register int i;
 
@@ -72,13 +70,13 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 
 		while (i2 < n) {
 			mw = 0;
-			max_buttons_width(t2, widget_data1, i2 - i1 + 1, &mw);
+			max_buttons_width(widget_data1, i2 - i1 + 1, &mw);
 			if (mw <= w) i2++;
 			else break;
 		}
 
 		mw = 0;
-		max_buttons_width(t2, widget_data1, i2 - i1, &mw);
+		max_buttons_width(widget_data1, i2 - i1, &mw);
 		if (rw) int_bounds(rw, mw, w);
 
 		if (term) {

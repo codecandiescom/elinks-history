@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.50 2003/10/26 15:37:45 zas Exp $ */
+/* $Id: checkbox.c,v 1.51 2003/10/27 10:35:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ checkbox_list_fn(struct dialog_data *dlg_data)
 	int n = dlg_data->n - 2;
 
 	checkboxes_width(term, 1, dlg_data->dlg->udata, &min, &max);
-	buttons_width(term, dlg_data->widgets_data + n, 2, &min, &max);
+	buttons_width(dlg_data->widgets_data + n, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);

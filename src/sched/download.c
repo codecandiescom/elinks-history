@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.119 2003/10/26 14:04:11 zas Exp $ */
+/* $Id: download.c,v 1.120 2003/10/27 10:35:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ download_window_function(struct dialog_data *dlg_data)
 
 	text_width(term, url, &min, &max);
 	text_width(term, msg.source, &min, &max);
-	buttons_width(term, dlg_data->widgets_data, dlg_data->n, &min, &max);
+	buttons_width(dlg_data->widgets_data, dlg_data->n, &min, &max);
 
 	int_bounds(&w, min, term->x - 2 * DIALOG_LB);
 	if (t && download->prg->size >= 0) {

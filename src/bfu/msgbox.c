@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.63 2003/10/26 15:47:24 zas Exp $ */
+/* $Id: msgbox.c,v 1.64 2003/10/27 10:35:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ msg_box_fn(struct dialog_data *dlg_data)
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, text, &min, &max);
-	buttons_width(term, dlg_data->widgets_data, dlg_data->n, &min, &max);
+	buttons_width(dlg_data->widgets_data, dlg_data->n, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);

@@ -1,3 +1,245 @@
+Wed May  7 20:57:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/hardio.c:
+
+	Some debugging code was added, dump hard_write data to stderr 
+
+Wed May  7 18:26:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Miscelleanous optimizations and cleanups. Patch by zas.  
+
+Wed May  7 18:19:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Default mime type will be moved to mime.default_type 
+
+Wed May  7 18:07:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/globhist.c:
+
+	Compilation fix.  
+
+Wed May  7 17:57:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.h:
+
+	ASCII_BSD systems don't exist (yet).  
+
+Wed May  7 17:46:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/document.c, globhist/globhist.c, lua/core.c,
+	sched/session.c:
+
+	Frame title may be NULL after witekfl's fix of <title> element
+	handling.  
+
+Wed May  7 17:30:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Use -rdynamic when available. It makes backtrace work right and it
+	will be a must when dynamic .so modules will be introduced (not that
+	it would be anytime soon). Looks like zero or only very minimal
+	overhead.  
+
+Wed May  7 16:43:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	SIGSEGV handler is critical. Thus don't postpone it to the select
+	loop but handle it immediatelly. Fixes infinite loop upon segfault,
+	reported by Jonas.  
+
+Wed May  7 16:29:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	A new function was added (disabled for now). ulongcat() which may
+	replace some sprintf("%d", x) calls later.  
+
+Wed May  7 15:16:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Reduced the number of printed stack frames from 30 to 20.  
+
+Wed May  7 15:11:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, util/error.c, util/error.h:
+
+	Reverted bogus backtrace patch.  
+
+Wed May  7 14:45:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.h:
+
+	Reintroduced bitfields ;-).  
+
+Wed May  7 14:36:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.h:
+
+	Explicit signedness to fix some portability issues
+	
+	(http://mailman.webdav.org/pipermail/neon/2001-December/000757.html). Thanks, zas.
+
+Wed May  7 14:31:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.h:
+
+	Reorganized the listbox structures to make sense again.  
+
+Wed May  7 14:17:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.h:
+
+	led.value isn't private data ;p 
+
+Wed May  7 13:56:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Prevent shifting of the code too far at the right ;-).  
+
+Wed May  7 13:45:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	ELinks is now either Normal or Debug regarding info box.  
+
+Wed May  7 13:38:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.h:
+
+	Minor cleanup.  
+
+Wed May  7 13:03:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Some comments about structs.  
+
+Wed May  7 12:59:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.h:
+
+	Reordering and comment about struct fields order.  
+
+Wed May  7 12:55:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/backend/common.h:
+
+	Order matters in struct bookmarks_backend.  
+
+Wed May  7 12:54:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.h:
+
+	Minor reordering in fields of struct bookmark.  
+
+Wed May  7 12:49:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/widget.h:
+
+	Fields reordering and comment about bounded to order struct
+	widget_ops.  
+
+Wed May  7 12:41:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Change in struct mneu_item fields order was reverted, a comment was
+	added about it. Cleanup, optimization and more debugging code in
+	menu.c.  
+
+Wed May  7 11:55:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, util/error.c, util/error.h:
+
+	Backtrace feature was simplified and now it works. SEGV signal must
+	be handled by system at some time to perform core dump. Backtrace
+	size is now 100 (we use many parameters in some functions).  
+
+Wed May  7 10:49:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.h:
+
+	Minor reorganization of struct menu_item fields.  
+
+Wed May  7 10:47:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.h:
+
+	Structs fields were reorganized. Bitfields were replaced by int
+	type.  
+
+Wed May  7 10:40:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/leds.h:
+
+	Struct leds fields were reorganized.  
+
+Wed May  7 10:39:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.h:
+
+	Structs fields were reorganized.  
+
+Wed May  7 10:35:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.h:
+
+	Struct session fields were reorganized.  
+
+Wed May  7 10:28:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Structs fields cleanup and minor changes.  
+
+Wed May  7 10:13:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.h:
+
+	Structs fields cleanup.  
+
+Wed May  7 10:07:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.h:
+
+	Structs fields were reorganized.  
+
+Wed May  7 09:57:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/terminal.h:
+
+	Struct terminal fields were reorganized.  
+
+Wed May  7 09:49:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/: cache.c, cache.h:
+
+	Structs were a bit reorganized. Made use of mem_calloc() instead of
+	mem_alloc().  
+
+Wed May  7 09:22:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/sched.c, sched/sched.h, sched/session.c,
+	viewer/text/view.c:
+
+	Some structs were reorganized to prevent memory padding. There was a
+	badly initialized struct status, one field was missing, fixed now.  
+
+Wed May  7 08:42:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: renderer.c, renderer.h:
+
+	Minor cleanup and optimization. Please take care of memory
+	alignement of fields in structs.  
+
 Tue May  6 23:10:45 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* BUGS:

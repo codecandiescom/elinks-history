@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.59 2003/10/25 19:46:30 jonas Exp $ */
+/* $Id: mailcap.c,v 1.60 2003/10/25 21:43:12 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -78,8 +78,16 @@ struct mailcap_entry {
 	unsigned char command[1];
 };
 
+enum mailcap_option {
+	MAILCAP_ENABLE,
+	MAILCAP_PATH,
+	MAILCAP_ASK,
+	MAILCAP_DESCRIPTION,
+	MAILCAP_PRIORITIZE,
 
-/* Keep options in alphabetical order. */
+	MAILCAP_OPTIONS
+};
+
 static struct option_info mailcap_options[] = {
 	INIT_OPT_TREE("mime", N_("Mailcap"),
 		"mailcap", 0,
@@ -116,10 +124,17 @@ static struct option_info mailcap_options[] = {
 	NULL_OPTION_INFO,
 };
 
+#define get_opt_mailcap(which)		mailcap_options[(which)].option
+#define get_mailcap(which)		get_opt_mailcap(which).value
+#define get_mailcap_ask()		get_mailcap(MAILCAP_ASK).number
+#define get_mailcap_description()	get_mailcap(MAILCAP_DESCRIPTION).number
+#define get_mailcap_enable()		get_mailcap(MAILCAP_ENABLE).number
+#define get_mailcap_prioritize()	get_mailcap(MAILCAP_PRIORITIZE).number
+#define get_mailcap_path()		get_mailcap(MAILCAP_PATH).string
+
 /* State variables */
 static struct hash *mailcap_map = NULL;
 static int mailcap_map_size = 0;
-static struct option *mailcap_tree = NULL;
 
 
 static inline void
@@ -391,7 +406,7 @@ init_mailcap_map(void)
 	unsigned char *path;
 	unsigned int priority = 0;
 
-	if (!get_opt_bool_tree(mailcap_tree, "enable"))
+	if (!get_mailcap_enable())
 		return NULL;
 
 	mailcap_map = init_hash(8, &strhash);
@@ -399,7 +414,7 @@ init_mailcap_map(void)
 		return NULL;
 
 	/* Try to setup mailcap_path */
-	path = get_opt_str_tree(mailcap_tree, "path");
+	path = get_mailcap_path();
 	if (!path || !*path) path = getenv("MAILCAP");
 	if (!path) path = DEFAULT_MAILCAP_PATH;
 
@@ -446,8 +461,8 @@ done_mailcap(struct module *module)
 static int
 change_hook_mailcap(struct session *ses, struct option *current, struct option *changed)
 {
-	if (!strlcmp(changed->name, -1, "path", 4)
-	    || (!strlcmp(changed->name, -1, "enable", 6)
+	if (changed == &get_opt_mailcap(MAILCAP_PATH)
+	    || (changed == &get_opt_mailcap(MAILCAP_ENABLE)
 		&& !changed->value.number)) {
 		done_mailcap(&mailcap_mime_module);
 	}
@@ -464,7 +479,6 @@ init_mailcap(struct module *module)
 	};
 
 	register_change_hooks(mimetypes_change_hooks);
-	mailcap_tree = get_opt_rec(config_options, "mime.mailcap");
 }
 
 /* The command semantics include the following:
@@ -601,7 +615,7 @@ get_mailcap_entry(unsigned char *type)
 	/* Check list of entries */
 	entry = (item && item->value) ? check_entries(item->value) : NULL;
 
-	if (!entry || get_opt_bool_tree(mailcap_tree, "prioritize")) {
+	if (!entry || get_mailcap_prioritize()) {
 		/* The type lookup has either failed or we need to check
 		 * the priorities so get the wild card handler */
 		struct mailcap_entry *wildcard = NULL;
@@ -651,7 +665,7 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 	}
 
 	handler->block = (entry->needsterminal || entry->copiousoutput);
-	handler->ask = get_opt_bool_tree(mailcap_tree, "ask");
+	handler->ask = get_mailcap_ask();
 	handler->program = program;
 	handler->description = entry->description;
 	handler->backend_name = BACKEND_NAME;

@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.28 2003/10/31 12:42:42 jonas Exp $ */
+/* $Id: frames.h,v 1.29 2003/10/31 22:33:50 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -6,6 +6,8 @@
 #include "document/document.h"
 #include "document/options.h"
 #include "document/view.h"
+#include "lowlevel/ttime.h"
+#include "terminal/draw.h"
 
 struct frameset_desc;
 

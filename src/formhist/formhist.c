@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.39 2003/09/03 09:22:25 zas Exp $ */
+/* $Id: formhist.c,v 1.40 2003/09/03 09:24:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ new_form(unsigned char *url)
 	struct formhist_data *form;
 	int url_size = strlen(url) + 1;
 
-	form = mem_calloc(1, sizeof(struct formhist_data) + strlen(url) + 1);
+	form = mem_calloc(1, sizeof(struct formhist_data) + url_size);
 	if (!form) return NULL;
 
 	memcpy(form->url, url, url_size);

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.33 2004/01/04 18:56:35 jonas Exp $ */
+/* $Id: download.c,v 1.34 2004/01/05 16:55:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,6 @@ download_progress_bar(struct terminal *term, int x, int y, int width,
 		      unsigned char *text, struct color_pair *meter_color,
 		      longlong current, longlong total)
 {
-	/* FIXME: not yet perfect, pasky will improve it later. --Zas */
 	/* Note : values > 100% are theorically possible and were seen. */
 	int progress = (int) ((longlong) 100 * current / total);
 	int barprogress;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.299 2004/12/16 09:52:23 jonas Exp $ */
+/* $Id: uri.c,v 1.300 2004/12/16 09:56:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,6 +96,26 @@ check_uri_file(unsigned char *name)
 
 	return -1;
 }
+
+/* Encodes URIs without encoding stuff like fragments and query separators. */
+static void
+encode_file_uri_string(struct string *string, unsigned char *uristring)
+{
+	int filenamelen = check_uri_file(uristring);
+	unsigned char saved = 0;
+
+	if (filenamelen >= 0) {
+		saved = uristring[filenamelen];
+		uristring[filenamelen] = 0;
+	}
+
+	encode_uri_string(string, uristring, 0);
+	if (filenamelen >= 0) {
+		uristring[filenamelen] = saved;
+		add_to_string(string, &uristring[filenamelen]);
+	}
+}
+
 
 static inline int
 get_protocol_length(const unsigned char *url)
@@ -1018,7 +1038,7 @@ parse_uri:
 				add_to_string(&str, "file://");
 				if (!dir_sep(*newurl))
 					add_to_string(&str, "./");
-				encode_uri_string(&str, newurl, 0);
+				encode_file_uri_string(&str, newurl);
 
 				mem_free(newurl);
 				newurl = str.source;
@@ -1129,10 +1149,12 @@ parse_uri:
 		switch (protocol) {
 			case PROTOCOL_FTP:
 				add_to_string(&str, "ftp://");
+				encode_uri_string(&str, newurl, 0);
 				break;
 
 			case PROTOCOL_HTTP:
 				add_to_string(&str, "http://");
+				add_to_string(&str, newurl);
 				break;
 
 			case PROTOCOL_FILE:
@@ -1140,13 +1162,10 @@ parse_uri:
 				add_to_string(&str, "file://");
 				if (!dir_sep(*newurl))
 					add_to_string(&str, "./");
+
+				encode_file_uri_string(&str, newurl);
 		}
 
-		if (protocol == PROTOCOL_HTTP) {
-			add_to_string(&str, newurl);
-		} else {
-			encode_uri_string(&str, newurl, 0);
-		}
 		mem_free(newurl);
 		newurl = str.source;
 

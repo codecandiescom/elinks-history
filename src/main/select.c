@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.61 2005/03/03 17:18:59 zas Exp $ */
+/* $Id: select.c,v 1.62 2005/03/04 01:18:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,7 +145,7 @@ check_bottom_halves(void)
 		del_from_list(bh);
 		mem_free(bh);
 		fn(data);
-	};
+	}
 }
 
 static void

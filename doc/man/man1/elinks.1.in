@@ -3,7 +3,7 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "ELINKS" "1" "23 December 2003" "" ""
+.TH "ELINKS" "1" "19 December 2004" "" ""
 
 .SH NAME
 elinks \- lynx-like alternative character mode WWW browser
@@ -55,10 +55,17 @@ be relative to your \fBHOME\fR dir.
 \fB-config-file <str> (default: "elinks.conf")\fR
 Name of the file with configuration, from which and to
 which all the configuration shall be written. It should be
-relative to confdir.
+relative to config-dirP
+\fB-config-help\fR
+Print help on configuration options and exit.
 .TP
 \fB-default-mime-type (alias for mime.default_type) \fR
 Default MIME type to assume for documents of unknown type.
+.TP
+\fB-default-keys [0|1] (default: 0)\fR
+If set, parse but don't set keybindings from configuration
+file. It forces use of default keybindings and will reset
+user-defined ones on save.
 .TP
 \fB-dump [0|1] (default: 0) \fR
 Write a plain-text version of the given HTML document to
@@ -72,20 +79,22 @@ Width of the dump output.
 .TP
 \fB-eval \fR
 Specify elinks.conf config options on the command-line:
--eval 'set protocol.file.allow_special_files = 1'
+\fI-eval 'set protocol.file.allow_special_files = 1'\fR.
 .TP
 \fB-force-html \fR
 This makes ELinks assume that the files it sees are HTML. This is
-equivalent to -default-mime-type text/html.
+equivalent to \fI-default-mime-type text/html\fR.
 .TP
 \fB-?, -h, -help \fR
 Print usage help and exit.
 .TP
+\fB-localhost [0|1] (default: 0) \fR
+Restrict ELinks so that it can only open connections to
+local addresses (ie. 127.0.0.1), it will prevent any connection
+to distant servers.
+.TP
 \fB-long-help \fR
 Print detailed usage help and exit.
-.TP
-\fB-config-help \fR
-Print help on configuration options and exit.
 .TP
 \fB-lookup \fR
 Look up specified host.
@@ -94,10 +103,55 @@ Look up specified host.
 Run ELinks as a separate instance instead of connecting to an
 existing instance. Note that normally no runtime state files
 (bookmarks, history and so on) are written to the disk when
-this option is used. See also -touch-files.
+this option is used. See also \fI-touch-files\fR.
 .TP
 \fB-no-home [0|1] (default: 0) \fR
-Don't attempt to create and/or use home rc directory (~/.elinks).
+Disables creation and use of files in the user specific home
+configuration directory (\fI~/.elinks\fR). It forces default
+configuration values to be used and disables saving of changed
+configuration option and state files (e.g. cookies).
+.TP
+\fB-no-numbering [0|1] (default: 0) \fR
+Prevents numbering of links in the \fI-dump\fR. output; this was the
+default behaviour until 0.5pre12.
+Note that this really affects only \fI-dump\fR, nothing else.
+.TP
+\fB-no-references [0|1] (default: 0) \fR
+Prevents dumping of links references (URIs) in the \fI-dump\fR output.
+Note that this really affects only \fI-dump\fR, nothing else.
+.TP
+\fB-remote\fR
+Mozilla compliant support for controlling a remote ELinks instance.
+The command takes an additional argument containing the method which
+should be invoked and any parameters that should be passed to it.
+For ease of use the additional method argument can be omitted in which
+case any URL arguments will be opened in new tabs in the remote instance.
+Following is a list of the methods that are supported:
+.RS
+.PD 0
+.TP
+.B ping()
+check for remote instance
+.TP
+.B openURL()
+prompt URL in current tab
+.TP
+.B openURL(URL)
+open URL in current tab
+.TP
+.B openURL(URL, new-tab)
+open URL in new tab
+.TP
+.B openURL(URL, new-window)
+open URL in new window
+.TP
+.B addBookmark(URL)
+bookmark URL
+.TP
+.B xfeDoCommand(openBrowser)
+open new window
+.PD
+.RE
 .TP
 \fB-session-ring <num> (default: 0) \fR
 ID of session ring this ELinks session should connect to. ELinks
@@ -110,18 +164,35 @@ this number doesn't exist yet, it's created and this ELinks instance
 will become the master instance (that usually doesn't matter for you
 as a user much). Note that you usually don't want to use this unless
 you're a developer and you want to do some testing - if you want the
-ELinks instances each running standalone, rather use the -no-connect
+ELinks instances each running standalone, rather use the \fI-no-connect\fR
 command-line option. Also note that normally no runtime state files
 are written to the disk when this option is used. See also
--touch-files.
+\fI-touch-files\fR.
 .TP
 \fB-source [0|1] (default: 0) \fR
 Write the given HTML document in source form to stdout.
 .TP
 \fB-touch-files [0|1] (default: 0) \fR
 Set to 1 to have runtime state files (bookmarks, history, ...)
-changed even when -no-connect or -session-ring is used; has no
+changed even when \fI-no-connect\fR or \fI-session-ring\fR is used; has no
 effect if not used in connection with any of these options.
+.TP
+\fB-verbose <num> (default: 0) \fR
+The verbose level controls what messages are shown at
+start up and while running:
+.RS
+.PD 0
+.TP
+.B 0
+means only show serious errors
+.TP
+.B 1
+means show serious errors and warnings
+.TP
+.B 2
+means show all messages
+.PD
+.RE
 .TP
 \fB-version \fR
 Print ELinks version information and exit.
@@ -189,12 +260,8 @@ Internal ELinks socket for communication between its instances.
 .SH "PLATFORMS"
 .PP
 ELinks is known to work on Linux, FreeBSD, OpenBSD, Solaris, IRIX,
-HPUX, Digital Unix, AIX, OS/2, BeOS and RISC OS. Port for Win32 is in
-state of beta testing.
+HPUX, Digital Unix, AIX, OS/2, BeOS and RISC OS.
 .SH "BUGS"
-.PP
-See the \fIBUGS\fR file coming with ELinks distribution
-tarball for list of known bugs. 
 .PP
 Please report any other bugs you find to the ELinks mailing list
 elinks-users@linuxfromscratch.org <URL:http://elinks.or.cz/community.html> or
@@ -203,8 +270,7 @@ the bug system <URL:http://bugzilla.elinks.or.cz/>.
 .PP
 ELinks is free software; you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free
-Software Foundation; either version 2 of the License, or (at your
-option) any later version.
+Software Foundation; version 2 of the License.
 .SH "AUTHORS"
 .PP
 \fBLinks\fR was written by Mikulas Patocka
@@ -213,7 +279,7 @@ based on Links - was written by a team around Petr Baudis
 <pasky@ucw.cz>. See file \fIAUTHORS\fR in
 the source tree for a list of people contributing to this project. 
 .PP
-The homepage of ELinks can be found at http://elinks.or.cz/ <URL:http://elinks.or.cz> 
+The homepage of ELinks can be found at <URL:http://elinks.or.cz> 
 .PP
 This manual page was written by Peter Gervai
 <grin@tolna.net>, using excerpts from a (yet?) unknown

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.74 2003/12/24 10:45:19 zas Exp $ */
+/* $Id: text.c,v 1.75 2003/12/27 20:03:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	y += step;
 
 	/* Scale the number of visible lines */
-	height = int_max(height * scale / 100, 1);
+	height = height * scale / 100;
 	int_bounds(&height, 1, int_max(widget_data->h - step, 1));
 
 	draw_area(win->term, x, y, 1, height, ' ', 0,

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.163 2004/01/09 10:40:07 pasky Exp $ */
+/* $Id: menu.c,v 1.164 2004/01/09 10:44:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -847,6 +847,123 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 }
 
 
+#ifdef CONFIG_MOUSE
+static void
+mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
+{
+	struct window *win = menu->win;
+
+	if ((ev->b & BM_BUTT) >= B_WHEEL_UP)
+		return;
+
+	if ((ev->b & BM_ACT) == B_DOWN && ev->y) {
+		delete_window_ev(win, NULL);
+
+	} else if (!ev->y) {
+		int p = L_MENU_SPACE;
+		int i;
+
+		/* We don't initialize to
+		 * menu->first_displayed here,
+		 * since it breaks horizontal
+		 * scrolling using mouse in some
+		 * cases. --Zas */
+		for (i = 0; i < menu->ni; i++) {
+			int o = p;
+
+			if (mi_has_left_text(menu->items[i])) {
+				unsigned char *text = menu->items[i].text;
+
+				if (mi_text_translate(menu->items[i]))
+					text = _(text, win->term);
+
+				p += L_TEXT_SPACE
+				     + strlen(text)
+				     - !!menu->items[i].hotkey_pos
+				     + R_TEXT_SPACE;
+			}
+
+			if (ev->x < o) {
+				if (ev->x > L_MENU_SPACE)
+					continue;
+
+				menu->selected--;
+				if (menu->selected < 0)
+					menu->selected = menu->ni - 1;
+
+			} else if (ev->x >= p) {
+				if (ev->x < win->term->width - R_MENU_SPACE)
+					continue;
+
+				menu->selected++;
+				if (menu->selected > menu->ni - 1)
+					menu->selected = 0;
+
+			} else {
+				menu->selected = i;
+			}
+
+			display_mainmenu(win->term, menu);
+
+			if ((ev->b & BM_ACT) == B_UP
+			    || mi_is_submenu(menu->items[menu->selected])) {
+				select_mainmenu(win->term,
+						menu);
+			}
+			break;
+		}
+	}
+}
+#endif
+
+static void
+mainmenu_kbd_handler(struct mainmenu *menu, struct term_event *ev)
+{
+	struct window *win = menu->data;
+	enum keyact action = kbd_action(KM_MENU, ev, NULL);
+
+	if (action == ACT_ENTER
+	    || action == ACT_DOWN
+	    || action == ACT_UP
+	    || action == ACT_PAGE_UP
+	    || action == ACT_PAGE_DOWN) {
+		select_mainmenu(win->term, menu);
+		return;
+	}
+
+	if (action == ACT_LEFT) {
+		menu->selected--;
+		if (menu->selected < 0)
+			menu->selected = menu->ni - 1;
+		s = 1;
+
+	} else if (action == ACT_RIGHT) {
+		menu->selected++;
+		if (menu->selected >= menu->ni)
+			menu->selected = 0;
+		s = 1;
+	}
+
+	if (fwd && (action == ACT_LEFT || action == ACT_RIGHT)) {
+		display_mainmenu(win->term, menu);
+		select_mainmenu(win->term, menu);
+		return;
+	}
+
+	if (ev->x > ' ' && ev->x < 256 &&
+	    check_hotkeys((struct menu_head *)menu, ev->x, win->term))
+		s = 2;
+
+	if (!s) {
+		delete_window_ev(win, action != ACT_CANCEL
+				      ? ev : NULL);
+	} else {
+		display_mainmenu(win->term, menu);
+		if (s == 2)
+			select_mainmenu(win->term, menu);
+	}
+}
+
 static void
 mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 {
@@ -854,6 +971,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 	int s = 0;
 
 	menu->win = win;
+
 	switch (ev->ev) {
 		case EV_INIT:
 		case EV_RESIZE:
@@ -863,115 +981,13 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_MOUSE:
 #ifdef CONFIG_MOUSE
-			if ((ev->b & BM_BUTT) >= B_WHEEL_UP)
-				break;
-
-			if ((ev->b & BM_ACT) == B_DOWN && ev->y) {
-				delete_window_ev(win, NULL);
-
-			} else if (!ev->y) {
-				int p = L_MENU_SPACE;
-				int i;
-
-				/* We don't initialize to
-				 * menu->first_displayed here,
-				 * since it breaks horizontal
-				 * scrolling using mouse in some
-				 * cases. --Zas */
-				for (i = 0; i < menu->ni; i++) {
-					int o = p;
-
-					if (mi_has_left_text(menu->items[i])) {
-						unsigned char *text = menu->items[i].text;
-
-						if (mi_text_translate(menu->items[i]))
-							text = _(text, win->term);
-
-						p += L_TEXT_SPACE
-						     + strlen(text)
-						     - !!menu->items[i].hotkey_pos
-						     + R_TEXT_SPACE;
-					}
-
-					if (ev->x < o) {
-						if (ev->x > L_MENU_SPACE)
-							continue;
-
-						menu->selected--;
-						if (menu->selected < 0)
-							menu->selected = menu->ni - 1;
-
-					} else if (ev->x >= p) {
-						if (ev->x < win->term->width - R_MENU_SPACE)
-							continue;
-
-						menu->selected++;
-						if (menu->selected > menu->ni - 1)
-							menu->selected = 0;
-
-					} else {
-						menu->selected = i;
-					}
-
-					display_mainmenu(win->term, menu);
-
-					if ((ev->b & BM_ACT) == B_UP
-					    || mi_is_submenu(menu->items[menu->selected])) {
-						select_mainmenu(win->term,
-								menu);
-					}
-					break;
-				}
-			}
+			mainmenu_mouse_handler(menu, ev);
 #endif /* CONFIG_MOUSE */
 			break;
 
 		case EV_KBD:
-		{
-			enum keyact action = kbd_action(KM_MENU, ev, NULL);
-
-			if (action == ACT_ENTER
-			    || action == ACT_DOWN
-			    || action == ACT_UP
-			    || action == ACT_PAGE_UP
-			    || action == ACT_PAGE_DOWN) {
-				select_mainmenu(win->term, menu);
-				break;
-			}
-
-			if (action == ACT_LEFT) {
-				menu->selected--;
-				if (menu->selected < 0)
-					menu->selected = menu->ni - 1;
-				s = 1;
-
-			} else if (action == ACT_RIGHT) {
-				menu->selected++;
-				if (menu->selected >= menu->ni)
-					menu->selected = 0;
-				s = 1;
-			}
-
-			if (fwd && (action == ACT_LEFT || action == ACT_RIGHT)) {
-				display_mainmenu(win->term, menu);
-				select_mainmenu(win->term, menu);
-				break;
-			}
-
-			if (ev->x > ' ' && ev->x < 256 &&
-			    check_hotkeys((struct menu_head *)menu, ev->x, win->term))
-				s = 2;
-
-			if (!s) {
-				delete_window_ev(win, action != ACT_CANCEL
-						      ? ev : NULL);
-			} else {
-				display_mainmenu(win->term, menu);
-				if (s == 2)
-					select_mainmenu(win->term, menu);
-			}
+			mainmenu_kbd_handler(menu, ev);
 			break;
-		}
 
 		case EV_ABORT:
 			break;

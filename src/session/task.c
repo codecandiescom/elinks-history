@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.101 2004/06/08 14:46:21 jonas Exp $ */
+/* $Id: task.c,v 1.102 2004/06/08 14:51:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,14 +267,12 @@ ses_imgmap(struct session *ses)
 	fr = cached->frag.next;
 	if ((void *)fr == &cached->frag) return;
 
-	/* FIXME: It must be possible to unify ses->imgmap_href_base
-	 * and ses->goto_uri and only pass the latter. */
 	if (uri && uri->fragment)
 		pos = memacpy(uri->fragment, uri->fragmentlen);
 
 	if (get_image_map(cached->head, fr->data, fr->data + fr->length,
 			  pos, &menu, &ml,
-			  ses->imgmap_href_base, ses->task.target_frame,
+			  ses->loading_uri, ses->task.target_frame,
 			  get_opt_int_tree(ses->tab->term->spec, "charset"),
 			  get_opt_int("document.codepage.assume"),
 			  get_opt_int("document.codepage.force_assumed")))
@@ -566,7 +564,5 @@ goto_url_home(struct session *ses)
 void
 goto_imgmap(struct session *ses, struct uri *uri, unsigned char *target)
 {
-	if (ses->imgmap_href_base) done_uri(ses->imgmap_href_base);
-	ses->imgmap_href_base = get_uri_reference(uri);
 	follow_url(ses, struri(uri), target, TASK_IMGMAP, CACHE_MODE_NORMAL, 1);
 }

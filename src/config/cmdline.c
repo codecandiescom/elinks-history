@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.1 2002/05/23 18:38:24 pasky Exp $ */
+/* $Id: cmdline.c,v 1.2 2002/05/23 18:50:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "config/cmdline.h"
 #include "config/options.h"
+#include "config/opttypes.h"
 #include "util/hash.h"
 
 

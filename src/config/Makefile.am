@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.10 2002/05/23 18:38:24 pasky Exp $
+## $Id: Makefile.am,v 1.11 2002/05/23 18:50:36 pasky Exp $
 
 INCLUDES = \
  -I$(srcdir)/..
@@ -14,6 +14,8 @@ libconfig_a_SOURCES = \
  kbdbind.h \
  options.c \
  options.h \
+ opttypes.c \
+ opttypes.h \
  urlhist.c \
  urlhist.h
 

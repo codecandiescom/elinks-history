@@ -1,0 +1,457 @@
+/* Option variables types handlers */
+/* $Id: opttypes.c,v 1.1 2002/05/23 18:50:36 pasky Exp $ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <string.h>
+
+#include "links.h"
+
+#include "config/kbdbind.h"
+#include "config/options.h"
+#include "config/opttypes.h"
+#include "intl/charsets.h"
+#include "intl/language.h"
+#include "protocol/types.h"
+
+
+unsigned char *gen_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	unsigned char *r;
+	if (!*argc) return "Parameter expected";
+	(*argv)++; (*argc)--;
+	/* FIXME!! We will modify argv! */
+	if (!option_types[o->type].read(o, *argv - 1)) r = "Read error"; else return NULL;
+	(*argv)--; (*argc)++;
+	return r;
+}
+
+/* If 0 follows, disable option and eat 0. If 1 follows, enable option and
+ * eat 1. If anything else follow, enable option and don't eat anything. */
+unsigned char *
+bool_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	*((int *) o->ptr) = 1;
+
+	if (!*argc) return NULL;
+
+	/* Argument is empty or longer than 1 char.. */
+	if (!(*argv)[0][0] || !(*argv)[0][1]) return NULL;
+
+	switch ((*argv)[0][0] == '0') {
+		case '0': *((int *) o->ptr) = 0; break;
+		case '1': *((int *) o->ptr) = 1; break;
+		default: return NULL;
+	}
+
+	/* We ate parameter */
+	(*argv)++; (*argc)--;
+	return NULL;
+}
+
+unsigned char *
+exec_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	return ((unsigned char *(*)(struct option *, unsigned char ***, int *)) o->ptr)(o, argv, argc);
+}
+
+
+void add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
+{
+	add_chr_to_str(s, l, '"');
+	while (*q) {
+		if (*q == '"' || *q == '\\') add_chr_to_str(s, l, '\\');
+		add_chr_to_str(s, l, *q);
+		q++;
+	}
+	add_chr_to_str(s, l, '"');
+}
+
+
+int
+num_rd(struct option *opt, unsigned char **file)
+{
+	long value;
+
+	value = strtolx(*file, file);
+
+	if (!WHITECHAR(**file) && **file != '#') return 0;
+
+	if (value < opt->min || value > opt->max) return 0;
+
+	*((int *) opt->ptr) = value;
+
+	return 1;
+}
+
+void num_wr(struct option *o, unsigned char **s, int *l)
+{
+	add_knum_to_str(s, l, *((int *) o->ptr));
+}
+
+
+int
+str_rd(struct option *opt, unsigned char **file)
+{
+	unsigned char *str = *file;
+	unsigned char *str2 = init_str();
+	int str2l = 0;
+
+	if (*str != '"') return 0;
+	str++;
+
+	while (*str && *str != '"') {
+		if (*str == '\\') {
+			/* FIXME: This won't work on crlf systems. */
+			if (str[1] == '\n') { str[1] = ' '; str++; }
+			/* When there's '"', we will just move on there, thus
+			 * we will never test for it in while() condition and
+			 * we will treat it just as '"', ignoring the backslash
+			 * itself. */
+			if (str[1] == '"') str++;
+		}
+		add_chr_to_str(&str2, &str2l, *str);
+		str++;
+	}
+
+	if (!*str) { mem_free(str2); *file = str; return 0; }
+
+	str++; /* Skip the quote. */
+	*file = str;
+
+	if (str2l >= MAX_STR_LEN) { mem_free(str2); return 0; }
+
+	mem_free(opt->ptr);
+	opt->ptr = str2;
+
+	return 1;
+}
+
+void str_wr(struct option *o, unsigned char **s, int *l)
+{
+	if (strlen(o->ptr) > o->max - 1) {
+		unsigned char *s1 = init_str();
+		int l1 = 0;
+		add_bytes_to_str(&s1, &l1, o->ptr, o->max - 1);
+		add_quoted_to_str(s, l, s1);
+		mem_free(s1);
+	}
+	else add_quoted_to_str(s, l, o->ptr);
+}
+
+int
+cp_rd(struct option *o, unsigned char **c)
+{
+#if 0
+	unsigned char *tok = get_token(&c);
+	unsigned char *e = NULL;
+	int i;
+	if (!tok) return "Missing argument";
+	/*if (!strcasecmp(c, "none")) i = -1;
+	else */if ((i = get_cp_index(tok)) == -1) e = "Unknown codepage";
+	else *((int *) o->ptr) = i;
+	mem_free(tok);
+	return e;
+#endif
+}
+
+void cp_wr(struct option *o, unsigned char **s, int *l)
+{
+	unsigned char *n = get_cp_mime_name(*(int *)o->ptr);
+	add_to_str(s, l, n);
+}
+
+int
+lang_rd(struct option *o, unsigned char **c)
+{
+#if 0
+	int i;
+	unsigned char *tok = get_token(&c);
+	if (!tok) return "Missing argument";
+	for (i = 0; i < n_languages(); i++)
+		if (!(strcasecmp(language_name(i), tok))) {
+			set_language(i);
+			mem_free(tok);
+			return NULL;
+		}
+	mem_free(tok);
+	return "Unknown language";
+#endif
+}
+
+void lang_wr(struct option *o, unsigned char **s, int *l)
+{
+	add_quoted_to_str(s, l, language_name(current_language));
+}
+
+int getnum(unsigned char *s, int *n, int r1, int r2)
+{
+	unsigned char *e;
+	long l = strtol(s, (char **)&e, 10);
+	if (*e || !*s) return -1;
+	if (l < r1 || l >= r2) return -1;
+	*n = (int)l;
+	return 0;
+}
+
+int
+type_rd(struct option *o, unsigned char **c)
+{
+#if 0
+	unsigned char *err = "Error reading association specification";
+	struct assoc new;
+	unsigned char *w;
+	int n;
+	memset(&new, 0, sizeof(struct assoc));
+	if (!(new.label = get_token(&c))) goto err;
+	if (!(new.ct = get_token(&c))) goto err;
+	if (!(new.prog = get_token(&c))) goto err;
+	if (!(w = get_token(&c))) goto err;
+	if (getnum(w, &n, 0, 32)) goto err_f;
+	mem_free(w);
+	new.cons = !!(n & 1);
+	new.xwin = !!(n & 2);
+	new.ask = !!(n & 4);
+	if ((n & 8) || (n & 16)) new.block = !!(n & 16);
+	else new.block = !new.xwin || new.cons;
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '9') goto err_f;
+	new.system = w[0] - '0';
+	mem_free(w);
+	update_assoc(&new);
+	err = NULL;
+	err:
+	if (new.label) mem_free(new.label);
+	if (new.ct) mem_free(new.ct);
+	if (new.prog) mem_free(new.prog);
+	return err;
+	err_f:
+	mem_free(w);
+	goto err;
+#endif
+}
+
+void type_wr(struct option *o, unsigned char **s, int *l)
+{
+	struct assoc *a;
+	foreachback(a, assoc) {
+		add_quoted_to_str(s, l, a->label);
+		add_to_str(s, l, " ");
+		add_quoted_to_str(s, l, a->ct);
+		add_to_str(s, l, " ");
+		add_quoted_to_str(s, l, a->prog);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, (!!a->cons) + (!!a->xwin) * 2 + (!!a->ask) * 4 + (!a->block) * 8 + (!!a->block) * 16);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, a->system);
+	}
+}
+
+int
+ext_rd(struct option *o, unsigned char **c)
+{
+#if 0
+	unsigned char *err = "Error reading extension specification";
+	struct extension new;
+	memset(&new, 0, sizeof(struct extension));
+	if (!(new.ext = get_token(&c))) goto err;
+	if (!(new.ct = get_token(&c))) goto err;
+	update_ext(&new);
+	err = NULL;
+	err:
+	if (new.ext) mem_free(new.ext);
+	if (new.ct) mem_free(new.ct);
+	return err;
+#endif
+}
+
+void ext_wr(struct option *o, unsigned char **s, int *l)
+{
+	struct extension *a;
+	foreachback(a, extensions) {
+		add_quoted_to_str(s, l, a->ext);
+		add_to_str(s, l, " ");
+		add_quoted_to_str(s, l, a->ct);
+	}
+}
+
+int
+prog_rd(struct option *o, unsigned char **c)
+{
+#if 0
+	unsigned char *err = "Error reading program specification";
+	unsigned char *prog, *w;
+	if (!(prog = get_token(&c))) goto err_1;
+	if (!(w = get_token(&c))) goto err_2;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '9') goto err_3;
+	update_prog(o->ptr, prog, w[0] - '0');
+	err = NULL;
+	err_3:
+	mem_free(w);
+	err_2:
+	mem_free(prog);
+	err_1:
+	return err;
+#endif
+}
+
+void prog_wr(struct option *o, unsigned char **s, int *l)
+{
+	struct protocol_program *a;
+	foreachback(a, *(struct list_head *)o->ptr) {
+		if (!*a->prog) continue;
+		add_quoted_to_str(s, l, a->prog);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, a->system);
+	}
+}
+
+/* terminal NAME(str) MODE(0-3) M11_HACK(0-1) BLOCK_CURSOR.RESTRICT_852.COL(0-7) CHARSET(str) [ UTF_8_IO("utf-8") ]*/
+int
+term_rd(struct option *o, unsigned char **c)
+{
+#if 0
+	struct term_spec *ts;
+	unsigned char *w;
+	int i;
+	if (!(w = get_token(&c))) goto err;
+	if (!(ts = new_term_spec(w))) {
+		mem_free(w);
+		goto end;
+	}
+	ts->utf_8_io = 0;
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '3') goto err_f;
+	ts->mode = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
+	ts->m11_hack = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '7') goto err_f;
+	ts->col = (w[0] - '0') & 1;
+	ts->restrict_852 = !!((w[0] - '0') & 2);
+	ts->block_cursor = !!((w[0] - '0') & 4);
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if ((i = get_cp_index(w)) == -1) goto err_f;
+	ts->charset = i;
+	mem_free(w);
+	if (!(w = get_token(&c))) goto end;
+	if (!(strcasecmp(w, "utf-8"))) ts->utf_8_io = 1;
+	mem_free(w);
+	end:
+	return NULL;
+	err_f:
+	mem_free(w);
+	err:
+	return "Error reading terminal specification";
+#endif
+}
+
+/* terminal2 NAME(str) MODE(0-3) M11_HACK(0-1) RESTRICT_852(0-1) COL(0-1) CHARSET(str) [ UTF_8_IO("utf-8") ]*/
+int
+term2_rd(struct option *o, unsigned char **c)
+{
+#if 0
+	struct term_spec *ts;
+	unsigned char *w;
+	int i;
+	if (!(w = get_token(&c))) goto err;
+	if (!(ts = new_term_spec(w))) {
+		mem_free(w);
+		goto end;
+	}
+	ts->utf_8_io = 0;
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '3') goto err_f;
+	ts->mode = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
+	ts->m11_hack = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
+	ts->restrict_852 = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
+	ts->col = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if ((i = get_cp_index(w)) == -1) goto err_f;
+	ts->charset = i;
+	mem_free(w);
+	if (!(w = get_token(&c))) goto end;
+	if (!(strcasecmp(w, "utf-8"))) ts->utf_8_io = 1;
+	mem_free(w);
+	end:
+	return NULL;
+	err_f:
+	mem_free(w);
+	err:
+	return "Error reading terminal specification";
+#endif
+}
+
+void term_wr(struct option *o, unsigned char **s, int *l)
+{
+	struct term_spec *ts;
+	foreachback(ts, term_specs) {
+		add_quoted_to_str(s, l, ts->term);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, ts->mode);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, ts->m11_hack);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, !!ts->col + !!ts->restrict_852 * 2 + !!ts->block_cursor * 4);
+		add_to_str(s, l, " ");
+		add_to_str(s, l, get_cp_mime_name(ts->charset));
+		if (ts->utf_8_io) {
+			add_to_str(s, l, " utf-8");
+		}
+	}
+}
+
+int
+color_rd(struct option *o, unsigned char **c)
+{
+#if 0
+	unsigned char *val = get_token(&c);
+
+	if (!val) {
+		return "Missing argument";
+	} else {
+		int err = decode_color(val, o->ptr);
+
+		mem_free(val);
+		return (err) ? "Error decoding color" : NULL;
+	}
+#endif
+}
+
+struct option_type_info option_types[] = {
+	{ bool_cmd, num_rd, num_wr, "[0|1]" },
+	{ gen_cmd, num_rd, num_wr, "<num>" },
+	{ gen_cmd, num_rd, num_wr, "<num>" },
+	{ gen_cmd, str_rd, str_wr, "<str>" },
+
+	{ gen_cmd, cp_rd, cp_wr, "<codepage>" },
+	{ gen_cmd, lang_rd, lang_wr, "<language>" },
+	{ NULL, type_rd, type_wr, "" },
+	{ NULL, ext_rd, ext_wr, "" },
+	{ NULL, prog_rd, prog_wr, "" },
+	{ NULL, term_rd, term_wr, "" },
+	{ NULL, term2_rd, NULL, "" },
+	{ NULL, bind_rd, NULL, "" },
+	{ NULL, unbind_rd, NULL, "" },
+	{ gen_cmd, color_rd, NULL, "<color|#rrggbb>" },
+
+	{ exec_cmd, NULL, NULL, "[<...>]" },
+};

@@ -1,9 +1,8 @@
-/* $Id: options.h,v 1.18 2002/05/23 18:33:14 pasky Exp $ */
+/* $Id: options.h,v 1.19 2002/05/23 18:50:36 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
 
-#include "document/options.h"
 #include "document/html/colors.h"
 /* Possibly, there should be util/hash.h included as well, but it somehow works
  * without it and I'm glad that 2/3 of ELinks files don't depend on it ;). */
@@ -47,16 +46,6 @@ struct option {
 	void *ptr;
 	unsigned char *desc;
 };
-
-
-struct option_type_info {
-	unsigned char *(*cmdline)(struct option *, unsigned char ***, int *);
-	int (*read)(struct option *, unsigned char **);
-	void (*write)(struct option *, unsigned char **, int *);
-	unsigned char *help_str;
-};
-
-extern struct option_type_info option_types[];
 
 
 extern struct hash *root_options;

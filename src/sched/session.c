@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.165 2003/10/01 18:09:03 pasky Exp $ */
+/* $Id: session.c,v 1.166 2003/10/01 22:18:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -956,7 +956,8 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 	int len;
 	static int pre_format_html_event = EVENT_NONE;
 
-	if (!ce || ce->done_pre_format_html_hook) return;
+	if (!ce || ce->done_pre_format_html_hook || list_empty(ce->frag))
+		return;
 
 	defrag_entry(ce);
 	fr = ce->frag.next;

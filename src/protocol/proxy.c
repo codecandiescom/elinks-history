@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.49 2005/03/20 10:12:07 jonas Exp $ */
+/* $Id: proxy.c,v 1.50 2005/03/20 10:13:45 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -120,8 +120,11 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy, int *connection_state)
 	unsigned char *protocol_proxy = NULL;
 
 	if (proxy) {
-		if (*proxy)
+		if (*proxy) {
+			proxy = strip_proxy_protocol(proxy, "http://", "ftp://");
+
 			return proxy_uri(uri, proxy, connection_state);
+		}
 
 		/* "" from script_hook_get_proxy() */
 		return get_composed_uri(uri, URI_BASE);

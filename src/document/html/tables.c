@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.343 2004/07/01 17:48:36 jonas Exp $ */
+/* $Id: tables.c,v 1.344 2004/07/01 17:59:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -968,6 +968,18 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 			  bgcolor, fgcolor);
 }
 
+static inline int
+table_row_has_group(struct table *table, int row)
+{
+	int col;
+
+	for (col = 0; col < table->cols; col++)
+		if (CELL(table, col, row)->group)
+			return 1;
+
+	return 0;
+}
+
 static void
 init_table_rules(struct table *table, signed char *frame[2])
 {
@@ -995,23 +1007,23 @@ init_table_rules(struct table *table, signed char *frame[2])
 
 	if (table->rules == TABLE_RULE_GROUPS) {
 		for (col = 1; col < table->cols; col++) {
-			if (!table->cols_x[col])
-				memset(&V_FRAME_POSITION(table, col, 0), 0, table->rows);
+			if (table->cols_x[col])
+				continue;
+
+			memset(&V_FRAME_POSITION(table, col, 0), 0, table->rows);
 		}
 
 		for (row = 1; row < table->rows; row++) {
-			for (col = 0; col < table->cols; col++)
-				if (CELL(table, col, row)->group)
-					goto cont;
+			if (table_row_has_group(table, row))
+				continue;
 
 			memset(&H_FRAME_POSITION(table, 0, row), 0, table->cols);
-cont:;
 		}
 	}
 }
 
 static void
-draw_table_frames(struct table *table, int x, int y)
+draw_table_frames(struct table *table, int indent, int y)
 {
 	struct table_frames table_frames;
 	signed char *frame[2];
@@ -1037,7 +1049,7 @@ draw_table_frames(struct table *table, int x, int y)
 
 	cy = y;
 	for (row = 0; row <= table->rows; row++) {
-		cx = x;
+		cx = indent;
 		if ((row > 0 && row < table->rows && has_hline_width(table, row))
 		    || (row == 0 && table_frames.top)
 		    || (row == table->rows && table_frames.bottom)) {

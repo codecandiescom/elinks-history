@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.227 2004/06/27 08:32:44 zas Exp $ */
+/* $Id: tables.c,v 1.228 2004/06/27 08:36:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1022,35 +1022,35 @@ get_column_widths(struct table *table)
 
 	colspan = 1;
 	do {
-		int i, j;
+		int col, row;
 		int new_colspan = MAXINT;
 
-		for (i = 0; i < table->cols; i++) for (j = 0; j < table->rows; j++) {
-			struct table_cell *cell = CELL(table, i, j);
+		for (col = 0; col < table->cols; col++)	for (row = 0; row < table->rows; row++) {
+			struct table_cell *cell = CELL(table, col, row);
 
 			if (cell->is_spanned || !cell->is_used) continue;
 
-			assertm(cell->colspan + i <= table->cols, "colspan out of table");
+			assertm(cell->colspan + col <= table->cols, "colspan out of table");
 			if_assert_failed return -1;
 
 			if (cell->colspan == colspan) {
 				int k, p = 0;
 
 				for (k = 1; k < colspan; k++)
-					p += (get_vline_width(table, i + k) >= 0);
+					p += (get_vline_width(table, col + k) >= 0);
 
-				distribute_values(&table->min_cols_widths[i],
+				distribute_values(&table->min_cols_widths[col],
 						  colspan,
 						  cell->min_width - p,
-						  &table->max_cols_widths[i]);
+						  &table->max_cols_widths[col]);
 
-				distribute_values(&table->max_cols_widths[i],
+				distribute_values(&table->max_cols_widths[col],
 						  colspan,
 						  cell->max_width - p,
 						  NULL);
 
 				for (k = 0; k < colspan; k++) {
-					int tmp = i + k;
+					int tmp = col + k;
 
 					int_lower_bound(&table->max_cols_widths[tmp],
 							table->min_cols_widths[tmp]);

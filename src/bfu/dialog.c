@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.97 2003/11/27 18:39:24 jonas Exp $ */
+/* $Id: dialog.c,v 1.98 2003/11/27 21:51:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
+#include "lowlevel/select.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -283,6 +284,15 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 		case EV_ABORT:
 			/* Moved this line up so that the dlg would have access
 			   to its member vars before they get freed. */
+
+			if (dlg_data->dlg->refresh) {
+				struct dialog_refresh *refresh = dlg_data->dlg->refresh;
+
+				if (refresh->timer != -1)
+					kill_timer(refresh->timer);
+				mem_free(refresh);
+			}
+
 			if (dlg_data->dlg->abort)
 				dlg_data->dlg->abort(dlg_data);
 
@@ -495,4 +505,54 @@ draw_dialog(struct dialog_data *dlg_data, int width, int height)
 		draw_area(term, dlg_data->x + dlg_data->width, dlg_data->y + 1,
 			  2, dlg_data->height, ' ', 0, shadow_color);
 	}
+}
+
+void
+do_refresh_dialog(struct dialog_data *dlg_data)
+{
+	struct dialog_refresh *refresh = dlg_data->dlg->refresh;
+	enum dlg_refresh_code refresh_code;
+
+	assert(refresh && refresh->handler);
+
+	refresh_code = refresh->handler(dlg_data, refresh->data);
+
+	if (refresh_code == REFRESH_CANCEL) {
+		refresh->timer = -1;
+		cancel_dialog(dlg_data, NULL);
+		return;
+	}
+
+	/* We want dialog_has_refresh() to be true while drawing
+	 * so we can not set the timer to -1. */
+	redraw_dialog(dlg_data);
+
+	if (refresh_code == REFRESH_NONE) {
+		refresh->timer = -1;
+		return;
+	}
+
+	refresh->timer = install_timer(RESOURCE_INFO_REFRESH,
+				(void (*)(void *)) do_refresh_dialog, dlg_data);
+}
+
+void
+refresh_dialog(struct dialog_data *dlg_data, dialog_refresh_handler handler, void *data)
+{
+	struct dialog_refresh *refresh = dlg_data->dlg->refresh;
+
+	if (!refresh) {
+		refresh = mem_calloc(1, sizeof(struct dialog_refresh));
+		if (!refresh) return;
+
+		dlg_data->dlg->refresh = refresh;
+
+	} else if (refresh->timer != -1) {
+		kill_timer(refresh->timer);
+	}
+
+	refresh->handler = handler;
+	refresh->data = data;
+	refresh->timer = install_timer(RESOURCE_INFO_REFRESH,
+				(void (*)(void *)) do_refresh_dialog, dlg_data);
 }

@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.29 2003/11/27 18:39:24 jonas Exp $ */
+/* $Id: dialog.h,v 1.30 2003/11/27 21:51:57 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -28,10 +28,28 @@ struct dialog_layout {
 	unsigned int float_groups:1;
 };
 
+enum dlg_refresh_code {
+	/* The dialog should be refreshed again */
+	REFRESH_DIALOG,
+	/* The dialog should be canceled */
+	REFRESH_CANCEL,
+	/* The dialog should not be refreshed or canceled */
+	REFRESH_NONE,
+};
+
+typedef enum dlg_refresh_code (*dialog_refresh_handler)(struct dialog_data *, void *);
+
+struct dialog_refresh {
+	dialog_refresh_handler handler;
+	void *data;
+	int timer;
+};
+
 struct dialog {
 	unsigned char *title;
 	void *udata;
 	void *udata2;
+	struct dialog_refresh *refresh;
 
 	void (*layouter)(struct dialog_data *);
 	int (*handle_event)(struct dialog_data *, struct term_event *);
@@ -52,6 +70,9 @@ struct dialog {
 
 #define get_dialog_offset(dlg, n) \
 	(((unsigned char *) dlg) + sizeof_dialog(n, 0))
+
+#define dialog_has_refresh(dlg_data) \
+	((dlg_data)->dlg->refresh && (dlg_data)->dlg->refresh->timer != -1)
 
 static inline int
 dialog_max_width(struct terminal *term)
@@ -90,5 +111,6 @@ int clear_dialog(struct dialog_data *, struct widget_data *);
 int check_dialog(struct dialog_data *);
 int update_dialog_data(struct dialog_data *, struct widget_data *);
 void generic_dialog_layouter(struct dialog_data *dlg_data);
+void refresh_dialog(struct dialog_data *, dialog_refresh_handler handler, void *data);
 
 #endif

@@ -1,3 +1,282 @@
+Sun Apr  4 22:00:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	object_nolock() cached URIs.  
+
+Sun Apr  4 22:00:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Fix bad URI reference taking in -dump redirects. Thanks to lindi-.  
+
+Sun Apr  4 20:51:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix bug introduced in the struct uri introduction in translate_url()
+	when it lived in src/protocol/url.c, revision 1.89->1.90 change.  
+
+Sun Apr  4 17:42:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Compilation fix: @url -> @uri in maybe_pre_format_html().  
+
+Sun Apr  4 17:31:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, http/http.c:
+
+	Make add_uri_to_string() only add slash after host if URI_DATA or
+	URI_POST was specified. This makes it possible to use it instead of
+	add_uri_host_to_string() in the HTTP code. I hope the it's not a
+	security problem sending the real protocol string of the referrer.  
+
+Sun Apr  4 17:04:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Fix bug in ses_goto() TASK_IMGMAP case where the new
+	ses->goto_position would be point to free()d memory. Instead
+	ses_goto() now allocates it.s own position pointer.  
+
+Sun Apr  4 16:38:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	destroy_vs(): Takes care of free()ing the goto_position member.  
+
+Sun Apr  4 16:26:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Cleanup and remove dead code.  
+
+Sun Apr  4 16:05:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	More sanity checking before requesting frame.  
+
+Sun Apr  4 16:02:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Check length of URI string before + assert() string. Reported by
+	lindi-.  
+
+Sun Apr  4 07:40:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	I mean now cleanup and fix leak in get_uri_string().  
+
+Sun Apr  4 07:34:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Cleanup get_uri_port().  
+
+Sun Apr  4 07:19:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Cleanup get_protocol_length().  
+
+Sun Apr  4 06:15:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Move extract_fragment() up and static inline it.  
+
+Sun Apr  4 06:12:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.c, protocol/uri.h, sched/session.c:
+
+	Turn get_translated_uri() into a Swiss army knife that can also just
+	extract fragment and return URI from cache.  
+
+Sun Apr  4 05:55:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.c, protocol/uri.h, sched/task.c,
+	viewer/dump/dump.c, viewer/text/view.c:
+
+	Introduce get_translated_uri() which get_uri() from translate_url()s
+	and possibly extract_fragment().  
+
+Sun Apr  4 05:22:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/http.c, sched/connection.c,
+	sched/connection.h:
+
+	Like for the cache entry store both (proxy) uri and proxied uri for
+	connections. The new member is named proxied_uri. It should
+	hopefully not cost more than an extra reference and it simplifies
+	the HTTP code a bit.  
+
+Sun Apr  4 04:49:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Optimize the common case where there is no fragment in the requested
+	frame uri.  
+
+Sun Apr  4 04:44:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.c, document/html/frames.c,
+	document/html/frames.h, sched/session.c:
+
+	Make the frame description struct reference an URI.  
+
+Sun Apr  4 04:28:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	do_follow_url(): Cleanup useless test if protocol is invalid. It can
+	never be at this point.  
+
+Sun Apr  4 04:24:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	parse_uri(): Cleanup. get_protocol_end() is now
+	get_protocol_length() to save lines.  
+
+Sun Apr  4 04:15:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h, uri.c, uri.h:
+
+	Cleanup the uri <-> protocol interface. Since the uri parsing is the
+	only user of known_protocol() it allows us to make the URI parser
+	figure out the protocol part first and then query whether it is a
+	known protocol. And then why not rename known_protocol() to
+	get_protocol().  
+
+Sun Apr  4 03:51:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Fix leading spaces.  
+
+Sun Apr  4 03:46:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, protocol/uri.c, protocol/uri.h,
+	sched/download.c:
+
+	add_string_uri_filename_to_string() -> add_uri_filename_to_string()
+	and take URI arg.  
+
+Sun Apr  4 03:41:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/download.c,
+	viewer/text/view.c:
+
+	query_file(): Take URI as arg.  
+
+Sun Apr  4 03:37:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/download.c, sched/session.c, sched/session.h,
+	viewer/text/view.c:
+
+	Rename ses->dn_url to ses->download_uri and make it an URI struct
+	pointer.  
+
+Sun Apr  4 03:18:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix last patch.  
+
+Sun Apr  4 03:15:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	download_link(): Change code layout.  
+
+Sun Apr  4 03:09:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: util/conv.c, util/conv.h, viewer/text/view.c:
+
+	I hope this is correct. send_open_in_new_window() now adds
+	-base-session and -session-ring args to the parameter string.
+	encode_shell_safe_url() renamed to add_encoded_shell_safe_url() and
+	now works directly on the parameter string it gets passed.  
+
+Sun Apr  4 02:56:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	send_open_in_new_window(): Change code layout.  
+
+Sun Apr  4 02:50:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	send_open_in_new_window(): Same as for send_open_new_window(). Do
+	not use ses->dn_url to store parameters. The new elinks instance
+	will request the URI we could ofcourse preload it already but that
+	is not the case anyway but added as a possible TODO.  
+
+Sun Apr  4 02:44:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Introduce init_session_info_string() to initialize string and add
+	-base-session and -session-ring parameters to it.  
+
+Sun Apr  4 02:34:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	send_open_new_window(): dn_url -> parameters.  
+
+Sun Apr  4 02:31:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	send_open_new_window(): Hmm puzzling why we assign the parameters of
+	the new elinks instance to ses->dn_url. It makes no sense and let.s
+	see what will happen if we simply remove that. The only sane usage
+	of dn_url is for query_file() calls as a way to keep the string
+	around for possible callbacks.  
+
+Sun Apr  4 02:07:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	do_follow_url(): Unify error handling.  
+
+Sun Apr  4 01:48:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/protocol.c, sched/connection.h, sched/error.c:
+
+	We might as well use the print_error_dialog() function for the
+	javascript-not-supported popup.  
+
+Sun Apr  4 01:40:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/error.c:
+
+	More ænglish? 
+
+Sun Apr  4 01:40:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.h, download.c, error.c, session.c,
+	session.h, task.c:
+
+	Introduce S_UNKNOWN_PROTOCOL and use it to substitute
+	print_unknown_protocol_dialog() with print_error_dialog(..,
+	S_UNKNOWN_PROTOCOL, ..).  
+
+Sun Apr  4 01:26:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, sched/task.c,
+	viewer/text/view.c:
+
+	Simplify the error dialog interface so only the state and priority
+	needs to be passed. If retry should be supported an additional URI
+	arg can be passed as well.  
+
 Sat Apr  3 20:26:05 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/history.c:

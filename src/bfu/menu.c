@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.215 2004/04/18 01:24:14 jonas Exp $ */
+/* $Id: menu.c,v 1.216 2004/04/18 01:27:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,11 +92,10 @@ void
 do_menu_selected(struct terminal *term, struct menu_item *items,
 		 void *data, int selected, int hotkeys)
 {
-	struct menu *menu = mem_alloc(sizeof(struct menu));
+	struct menu *menu = mem_calloc(1, sizeof(struct menu));
 
 	if (menu) {
 		menu->selected = selected;
-		menu->first = 0;
 		menu->items = items;
 		menu->data = data;
 		menu->size = count_items(items);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.81 2003/05/10 11:55:11 zas Exp $ */
+/* $Id: renderer.c,v 1.82 2003/05/14 21:08:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,6 +388,7 @@ del_chars(struct part *part, int x, int y)
 
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
 
+/* TODO: optimization and verification needed there. --Zas */
 static int
 split_line(struct part *part)
 {
@@ -443,9 +444,17 @@ split:
 		del_chars(part, i, part->cy);
 	}
 
-	memmove(part->spaces, part->spaces + i + 1, part->spl - i - 1);
+	if (part->spl - i - 1 > 0) /* 0 is possible and i'm paranoiac ... --Zas */
+		memmove(part->spaces, part->spaces + i + 1, part->spl - i - 1);
+
 	memset(part->spaces + part->spl - i - 1, 0, i + 1);
-	memmove(part->spaces + par_format.leftmargin, part->spaces, part->spl - par_format.leftmargin);
+
+	if (part->spl - par_format.leftmargin > 0)
+		memmove(part->spaces + par_format.leftmargin, part->spaces,
+			part->spl - par_format.leftmargin);
+	else	/* Should not occcur. --Zas */
+		internal("part->spl - par_format.leftmargin == %d", part->spl - par_format.leftmargin);
+
 	part->cx -= i - par_format.leftmargin + 1;
 	part->cy++;
 

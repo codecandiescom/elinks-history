@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.474 2004/07/02 22:17:41 pasky Exp $ */
+/* $Id: parser.c,v 1.475 2004/07/02 22:34:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,9 +190,7 @@ put_chrs(unsigned char *start, int len,
 	}
 
 	if (!len) {
-		html_context.putsp = -1;
-		if (html_is_preformatted())
-			html_context.putsp = 0;
+		html_context.putsp = html_is_preformatted() ? 0 : -1;
 		return;
 	}
 

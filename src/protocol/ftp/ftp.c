@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.65 2002/10/13 19:06:30 pasky Exp $ */
+/* $Id: ftp.c,v 1.66 2002/10/13 19:08:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -592,11 +592,11 @@ add_file_cmd_to_str(struct connection *conn)
 			else
 				add_portcmd_to_str(&str, &strl, pc);
 
-		add_to_str(&str, &strl, "LIST\r\n");
-
 		add_to_str(&str, &strl, "CWD /");
 		add_bytes_to_str(&str, &strl, data, data_end - data);
 		add_to_str(&str, &strl, "\r\n");
+
+		add_to_str(&str, &strl, "LIST\r\n");
 
 		conn->from = 0;
 

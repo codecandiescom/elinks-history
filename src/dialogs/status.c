@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.11 2003/12/01 21:06:35 jonas Exp $ */
+/* $Id: status.c,v 1.12 2003/12/01 21:46:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,12 +348,44 @@ display_title_bar(struct session *ses, struct terminal *term)
 	done_string(&title);
 }
 
+static inline void
+display_window_title(struct session *ses, struct terminal *term)
+{
+	static struct session *last_ses;
+	unsigned char *doc_title = NULL;
+	unsigned char *title;
+	int titlelen;
+
+	if (ses->doc_view
+	    && ses->doc_view->document
+	    && ses->doc_view->document->title
+	    && ses->doc_view->document->title[0])
+		doc_title = ses->doc_view->document->title;
+
+	title = straconcat("ELinks",
+			   doc_title ? " - " : NULL,
+			   doc_title,
+			   NULL);
+
+	titlelen = strlen(title);
+	if (last_ses != ses
+	    || !ses->last_title
+	    || strlen(ses->last_title) != titlelen
+	    || memcmp(ses->last_title, title, titlelen)) {
+		if (ses->last_title) mem_free(ses->last_title);
+		ses->last_title = title;
+		set_terminal_title(term, title);
+		last_ses = ses;
+	} else {
+		mem_free(title);
+	}
+}
+
 /* Print statusbar and titlebar, set terminal title. */
 void
 print_screen_status(struct session *ses)
 {
 	struct terminal *term = ses->tab->term;
-	unsigned char *msg = NULL;
 	int tabs_count;
 	int ses_tab_is_current = (ses->tab == get_current_tab(ses->tab->term));
 
@@ -371,35 +403,8 @@ print_screen_status(struct session *ses)
 		display_title_bar(ses, term);
 	}
 
-	if (!ses_tab_is_current || !ses->set_window_title)
-		goto title_set;
-
-	msg = stracpy("ELinks");
-	if (msg) {
-		int msglen;
-		static void *last_ses = NULL;
-
-		if (ses->doc_view && ses->doc_view->document
-		    && ses->doc_view->document->title
-		    && ses->doc_view->document->title[0]) {
-			add_to_strn(&msg, " - ");
-			add_to_strn(&msg, ses->doc_view->document->title);
-		}
-
-		msglen = strlen(msg);
-		if (last_ses != ses
-		    || !ses->last_title
-		    || strlen(ses->last_title) != msglen
-		    || memcmp(ses->last_title, msg, msglen)) {
-			if (ses->last_title) mem_free(ses->last_title);
-			ses->last_title = msg;
-			set_terminal_title(term, msg);
-			last_ses = ses;
-		} else {
-			mem_free(msg);
-		}
-	}
-title_set:
+	if (ses_tab_is_current && ses->set_window_title)
+		display_window_title(ses, term);
 
 	redraw_from_window(ses->tab);
 

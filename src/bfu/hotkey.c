@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.2 2003/06/07 12:05:11 pasky Exp $ */
+/* $Id: hotkey.c,v 1.3 2003/06/07 17:53:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,4 +204,3 @@ check_not_so_hot_keys(struct menu_head *menu, unsigned char key, struct terminal
 	return 0;
 
 }
-

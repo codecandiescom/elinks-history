@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.79 2003/06/04 17:05:43 zas Exp $ */
+/* $Id: conf.c,v 1.80 2003/06/04 17:10:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -662,12 +662,12 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	}
 
 	if (term && (secsave_errno || ret)) {
-		unsigned char *strerr = _("unknown error", term);
+		unsigned char *strerr = _("Secure open failed", term);
 
 		if (secsave_errno == DISABLED)
-			strerr = _("file saving disabled by option", term);
+			strerr = _("File saving disabled by option", term);
 		else if (secsave_errno == OUT_OF_MEM)
-			strerr = _("out of memory", term);
+			strerr = _("Out of memory", term);
 		else if (secsave_errno == OTHER && ret)
 			strerr = (unsigned char *) strerror(ret);
 

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.22 2002/06/17 07:42:31 pasky Exp $ */
+/* $Id: osdep.c,v 1.23 2002/06/20 11:05:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1806,3 +1806,16 @@ set_highpri()
 	DosSetPriority(PRTYS_PROCESS, PRTYC_FOREGROUNDSERVER, 0, 0);
 }
 #endif
+
+unsigned char *
+get_system_str(int xwin)
+{
+	unsigned char *system_str;
+
+	system_str = stracpy(SYSTEM_STR);
+	if (!system_str) return NULL;
+
+	if (xwin) add_to_strn(&system_str, "-xwin");
+
+	return system_str;
+}

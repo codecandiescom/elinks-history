@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.4 2002/06/11 20:22:20 pasky Exp $ */
+/* $Id: os_dep.h,v 1.5 2002/06/20 11:05:32 pasky Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -187,5 +187,7 @@ int can_resize_window(int);
 int can_open_os_shell(int);
 struct open_in_new *get_open_in_new(int);
 void set_highpri();
+
+unsigned char *get_system_str(int);
 
 #endif

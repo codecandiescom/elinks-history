@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.16 2002/06/17 16:07:02 pasky Exp $ */
+/* $Id: options.c,v 1.17 2002/06/20 11:05:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -615,6 +615,10 @@ void
 net_programs(struct terminal *term, void *xxx, void *yyy)
 {
 	struct dialog *d;
+	unsigned char *system_str;
+	unsigned char *optname;
+	
+	system_str = get_system_str(term->environment & ENV_XWIN);
 
 	d = mem_alloc(sizeof(struct dialog) + 6 * sizeof(struct dialog_item));
 	if (!d) return;
@@ -626,17 +630,23 @@ net_programs(struct terminal *term, void *xxx, void *yyy)
 	/* FIXME: We autocreate stuff here, which is bad. But not worth fixing,
 	 * as this ought to disappear later anyway. --pasky */
 
+	optname = straconcat("protocol.user.mailto.", system_str, NULL);
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_STR_LEN;
-	d->items[0].data = get_opt_str("protocol.user.mailto." SYSTEM_STR);
+	d->items[0].data = get_opt_str(optname);
+	mem_free(optname);
 
+	optname = straconcat("protocol.user.telnet.", system_str, NULL);
 	d->items[1].type = D_FIELD;
 	d->items[1].dlen = MAX_STR_LEN;
-	d->items[1].data = get_opt_str("protocol.user.telnet." SYSTEM_STR);
+	d->items[1].data = get_opt_str(optname);
+	mem_free(optname);
 
+	optname = straconcat("protocol.user.tn3270.", system_str, NULL);
 	d->items[2].type = D_FIELD;
 	d->items[2].dlen = MAX_STR_LEN;
-	d->items[2].data = get_opt_str("protocol.user.tn3270." SYSTEM_STR);
+	d->items[2].data = get_opt_str(optname);
+	mem_free(optname);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
@@ -651,6 +661,8 @@ net_programs(struct terminal *term, void *xxx, void *yyy)
 	d->items[5].type = D_END;
 
 	do_dialog(term, d, getml(d, NULL));
+
+	mem_free(system_str);
 }
 
 #if 0

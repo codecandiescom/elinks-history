@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.31 2002/06/20 10:11:17 pasky Exp $ */
+/* $Id: menu.c,v 1.32 2002/06/20 11:05:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,8 +445,8 @@ struct menu_item assoc_menu[] = {
 #if 0
 	{TEXT(T_ADD), "", TEXT(T_HK_ADD), MENU_FUNC menu_add_ct, NULL, 0, 0},
 	{TEXT(T_MODIFY), ">", TEXT(T_HK_MODIFY), MENU_FUNC menu_list_assoc, menu_add_ct, 1, 0},
-#endif
 	{TEXT(T_DELETE), ">", TEXT(T_HK_DELETE), MENU_FUNC menu_list_assoc, menu_del_ct, 1, 0},
+#endif
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 

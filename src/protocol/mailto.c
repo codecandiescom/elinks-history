@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: mailto.c,v 1.11 2002/06/17 15:16:54 pasky Exp $ */
+/* $Id: mailto.c,v 1.12 2002/06/20 11:05:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@ prog_func(struct terminal *term, unsigned char *progid,
 	  unsigned char *param, unsigned char *name)
 {
 	unsigned char *cmd;
-	unsigned char *prog = get_prog(progid);
+	unsigned char *prog = get_prog(term, progid);
 
 	if (!prog || !*prog) {
 		msg_box(term, NULL,

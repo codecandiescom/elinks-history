@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.30 2002/06/20 10:11:17 pasky Exp $ */
+/* $Id: types.c,v 1.31 2002/06/20 11:05:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,19 +129,6 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 
 
-
-unsigned char *
-get_system_str(int xwin)
-{
-	unsigned char *system_str;
-
-	system_str = stracpy(SYSTEM_STR);
-	if (!system_str) return NULL;
-
-	if (xwin) add_to_strn(&system_str, "-xwin");
-
-	return system_str;
-}
 
 unsigned char *
 get_type_assoc_name(unsigned char *type, int xwin)
@@ -314,6 +301,7 @@ add_ct_fn(struct dialog_data *dlg)
 }
 
 
+#if 0
 
 void
 really_del_ct(void *fcp)
@@ -355,7 +343,6 @@ menu_del_ct(struct terminal *term, void *fcp, void *xxx2)
 }
 
 
-#if 0
 
 struct assoc {
 	unsigned char *name;
@@ -476,7 +463,6 @@ menu_add_ct(struct terminal *term, void *fcp, void *xxx2)
 	do_dialog(term, d, getml(d, NULL));
 }
 
-#endif
 
 struct menu_item mi_no_assoc[] = {
 	{TEXT(T_NO_ASSOCIATIONS), "", M_BAR, NULL, NULL, 0, 0},
@@ -488,32 +474,35 @@ void
 menu_list_assoc(struct terminal *term, void *fn, void *xxx)
 {
 	struct list_head *class_tree;
-	struct option *opt;
+	struct option *class_opt;
 	struct menu_item *mi = NULL;
 	
 	class_tree = (struct list_head *) get_opt_ptr("mime.association");
-	foreachback (opt, *class_tree) {
-		struct option *class_opt = opt;
+	foreachback (class_opt, *class_tree) {
 		struct list_head *id_tree;
+		struct option *id_opt;
 
-		if (!strcmp(opt->name, "_template_")) continue;
+		if (!strcmp(class_opt->name, "_template_")) continue;
 		
-		id_tree = (struct list_head *) opt->ptr;
+		id_tree = (struct list_head *) class_opt->ptr;
 
-		foreachback (opt, *class_tree) {
+		foreachback (id_opt, *id_tree) {
 			unsigned char *system_str;
 			unsigned char *ct;
 
-			if (!strcmp(opt->name, "_template_")) continue;
+			if (!strcmp(id_opt->name, "_template_")) continue;
 
-			system_str = get_system_str(term->environment & ENV_XWIN);
+			system_str = get_system_str(term->environment
+						    & ENV_XWIN);
 			if (!system_str) continue;
-			opt = get_opt_rec_real((struct list_head *) opt->ptr,
-					       system_str);
+			id_opt = get_opt_rec_real((struct list_head *)
+						  id_opt->ptr,
+						  system_str);
 			mem_free(system_str);
-			if (!opt) continue;
+			if (!id_opt) continue;
 
-			ct = straconcat(class_opt->name, "/", opt->name, NULL);
+			ct = straconcat(class_opt->name, "/", id_opt->name,
+					NULL);
 			if (!ct) continue;
 
 			if (!mi) {
@@ -532,6 +521,7 @@ menu_list_assoc(struct terminal *term, void *fn, void *xxx)
 		do_menu(term, mi, xxx);
 }
 
+#endif
 
 
 
@@ -768,12 +758,16 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 
 
 unsigned char *
-get_prog(unsigned char *progid)
+get_prog(struct terminal *term, unsigned char *progid)
 {
 	struct option *opt;
-	unsigned char *name = straconcat("protocol.user", ".", progid, ".",
-					 SYSTEM_STR, NULL);
+	unsigned char *system_str = get_system_str(term->environment & ENV_XWIN);
+	unsigned char *name;
 
+	if (!system_str) return NULL;
+	name = straconcat("protocol.user", ".", progid, ".",
+			  system_str, NULL);
+	mem_free(system_str);
 	if (!name) return NULL;
 
 	opt = get_opt_rec_real(root_options, name);

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.116 2003/11/07 18:40:51 jonas Exp $ */
+/* $Id: core.c,v 1.117 2003/11/07 22:36:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,13 +324,6 @@ lua_error:
 /* Begin very hackish bit for bookmark editing dialog.  */
 /* XXX: Add history and generalise.  */
 
-static unsigned char *dlg_msg[] = {
-	N_("Name"),
-	N_("Name"),
-	N_("URL"),
-	""
-};
-
 struct lua_dlg_data {
 	lua_State *state;
 	unsigned char cat[MAX_STR_LEN];
@@ -365,33 +358,24 @@ dialog_layouter(struct dialog_data *dlg_data)
 	int y = -1;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
-	dlg_format_text(NULL, dlg_msg[0], 0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
-	y += 2;
-	dlg_format_text(NULL, dlg_msg[1], 0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
-	y += 2;
-	dlg_format_text(NULL, dlg_msg[2], 0, &y, w, &rw,
-			dialog_text_color, AL_LEFT);
-	y += 2;
+	dlg_format_field(NULL, &dlg_data->widgets_data[0], 0, &y, w, &rw, AL_LEFT);
+	y++;
+	dlg_format_field(NULL, &dlg_data->widgets_data[1], 0, &y, w, &rw, AL_LEFT);
+	y++;
+	dlg_format_field(NULL, &dlg_data->widgets_data[2], 0, &y, w, &rw, AL_LEFT);
+	y++;
 	dlg_format_buttons(NULL, dlg_data->widgets_data + 3, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 	w = rw;
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 
 	y = dlg_data->y + DIALOG_TB;
-	dlg_format_text(term, dlg_msg[0], dlg_data->x + DIALOG_LB, &y, w, NULL,
-			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, &dlg_data->widgets_data[0], dlg_data->x + DIALOG_LB, &y, w,
 			 NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, dlg_msg[1], dlg_data->x + DIALOG_LB, &y, w, NULL,
-			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, &dlg_data->widgets_data[1], dlg_data->x + DIALOG_LB, &y, w,
 			 NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, dlg_msg[2], dlg_data->x + DIALOG_LB, &y, w, NULL,
-			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, &dlg_data->widgets_data[2], dlg_data->x + DIALOG_LB, &y, w,
 			 NULL, AL_LEFT);
 	y++;
@@ -428,9 +412,9 @@ l_edit_bookmark_dialog(LS)
 	dlg->refresh = (void (*)(void *))dialog_run_lua;
 	dlg->refresh_data = data;
 
-	add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN, data->cat, NULL);
-	add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN, data->name, NULL);
-	add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN, data->url, NULL);
+	add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN, data->cat, NULL);
+	add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN, data->name, NULL);
+	add_dlg_field(dlg, _("URL", term), 0, 0, NULL, MAX_STR_LEN, data->url, NULL);
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
@@ -450,13 +434,6 @@ l_edit_bookmark_dialog(LS)
 /* XXX: Add history and custom labels.  */
 
 #define XDIALOG_MAX_FIELDS	5
-
-#if 0
-static unsigned char *xdialog_msg[] = {
-	N_("A field"),
-	""
-};
-#endif
 
 struct lua_xdialog_data {
 	lua_State *state;
@@ -497,9 +474,9 @@ xdialog_layouter(struct dialog_data *dlg_data)
 		nfields++;
 
 	for (i = 0; i < nfields; i++) {
-		dlg_format_text(NULL, dlg_msg[0], 0, &y, w, &rw,
-				dialog_text_color, AL_LEFT);
-		y += 2;
+		dlg_format_field(NULL, &dlg_data->widgets_data[i],
+				 0, &y, w, &rw, AL_LEFT);
+		y++;
 	}
 
 	dlg_format_buttons(NULL, dlg_data->widgets_data + nfields, 2,
@@ -510,9 +487,6 @@ xdialog_layouter(struct dialog_data *dlg_data)
 
 	y = dlg_data->y + DIALOG_TB;
 	for (i = 0; i < nfields; i++) {
-		dlg_format_text(term, dlg_msg[0],
-				dlg_data->x + DIALOG_LB, &y, w, NULL,
-				dialog_text_color, AL_LEFT);
 		dlg_format_field(term, &dlg_data->widgets_data[i],
 				 dlg_data->x + DIALOG_LB, &y, w,
 				 NULL, AL_LEFT);
@@ -557,7 +531,7 @@ l_xdialog(LS)
 	dlg->refresh_data = data;
 
 	while (dlg->widgets_size < nfields) {
-		add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN,
+		add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN,
 			      data->fields[i], NULL);
 	}
 

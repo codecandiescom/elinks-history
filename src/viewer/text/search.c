@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.304 2004/12/17 01:33:54 miciah Exp $ */
+/* $Id: search.c,v 1.305 2004/12/17 16:19:08 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -379,7 +379,7 @@ is_in_range_plain(struct document *document, int y, int height,
 	int yy = y + height;
 	unsigned char *txt;
 	int found = 0;
-	int case_sensitive = get_opt_int("document.browse.search.case");
+	int case_sensitive = get_opt_bool("document.browse.search.case");
 
 	txt = case_sensitive ? stracpy(text) : lowered_string(text, textlen);
 	if (!txt) return -1;
@@ -461,7 +461,7 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 	struct box *box;
 	int xoffset, yoffset;
 	int len = 0;
-	int case_sensitive = get_opt_int("document.browse.search.case");
+	int case_sensitive = get_opt_bool("document.browse.search.case");
 
 	txt = case_sensitive ? stracpy(*doc_view->search_word)
 			     : lowered_string(*doc_view->search_word, l);

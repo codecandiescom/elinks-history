@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.512 2004/06/21 12:52:50 miciah Exp $ */
+/* $Id: view.c,v 1.513 2004/06/21 12:55:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,6 +177,8 @@ draw_view_status(struct session *ses, struct document_view *doc_view, int active
 	if (active) draw_current_link(ses, doc_view);
 }
 
+/* @active indicates whether the document is focused -- i.e.,
+ * whether it is displayed in the selected frame or document. */
 void
 draw_doc(struct session *ses, struct document_view *doc_view, int active)
 {

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.91 2003/11/24 00:33:56 jonas Exp $ */
+/* $Id: dialogs.c,v 1.92 2003/11/24 23:41:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,8 @@
 
 
 #ifdef GLOBHIST
+
+/* Implementation of the listbox operations */
 
 static void lock_globhist_item(struct listbox_item *item)
 {
@@ -83,6 +85,7 @@ static struct listbox_ops gh_listbox_ops = {
 	done_globhist_item,
 };
 
+/* Searching: */
 
 static void
 history_search_do(struct dialog *dlg)
@@ -116,6 +119,8 @@ push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 	return 0;
 }
 
+/* Toggling: */
+
 static int
 push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
@@ -137,6 +142,7 @@ push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *wid
 	return 0;
 }
 
+/* Bookmarking: */
 
 #ifdef BOOKMARKS
 static int
@@ -159,11 +165,7 @@ push_bookmark_button(struct dialog_data *dlg_data,
 }
 #endif
 
-#ifdef BOOKMARKS
-# define GLOBHIST_MANAGER_BUTTONS	7
-#else
-# define GLOBHIST_MANAGER_BUTTONS	6
-#endif
+/* The global history manager: */
 
 static struct hierbox_browser_button globhist_buttons[] = {
 	{ N_("Goto"),		push_hierbox_goto_button	},

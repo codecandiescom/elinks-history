@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.201 2003/11/26 04:47:38 jonas Exp $ */
+/* $Id: menu.c,v 1.202 2003/11/26 11:34:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,10 +291,10 @@ static struct menu_item file_menu11[] = {
 
 static struct menu_item tools_menu[] = {
 #ifdef GLOBHIST
-	INIT_MENU_ITEM(N_("Global histor~y"), "h", menu_history_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("Global ~history"), "h", menu_history_manager, NULL, 0),
 #endif
 #ifdef BOOKMARKS
-	INIT_MENU_ITEM(N_("Bookmark~s"), "s", menu_bookmark_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Bookmarks"), "s", menu_bookmark_manager, NULL, 0),
 #endif
 	INIT_MENU_ITEM(N_("~Cache"), "C", menu_cache_manager, NULL, 0),
 	INIT_MENU_ITEM(N_("~Downloads"), "", menu_download_manager, NULL, 0),
@@ -302,7 +302,7 @@ static struct menu_item tools_menu[] = {
 	INIT_MENU_ITEM(N_("Coo~kies"), "K", menu_cookie_manager, NULL, 0),
 #endif
 #ifdef FORMS_MEMORY
-	INIT_MENU_ITEM(N_("Form histor~y"), "", menu_formhist_manager, NULL, 0),
+	INIT_MENU_ITEM(N_("~Form history"), "", menu_formhist_manager, NULL, 0),
 #endif
 };
 

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.38 2004/06/12 15:02:11 jonas Exp $ */
+/* $Id: menu.h,v 1.39 2004/06/13 00:54:54 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -38,9 +38,7 @@ open_in_new_window(struct terminal *term,
 		   void (*)(struct terminal *, const struct open_in_new *, struct session *ses),
 		   struct session *ses);
 
-void
-add_new_win_to_menu(struct menu_item **mi, unsigned char *text, int action,
-		    struct terminal *term);
+void add_new_win_to_menu(struct menu_item **mi, unsigned char *text, struct terminal *term);
 
 void add_uri_command_to_menu(struct menu_item **mi);
 void pass_uri_to_command(struct session *ses, struct document_view *doc_view, int a);

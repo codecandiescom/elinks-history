@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.229 2003/11/14 02:28:42 miciah Exp $ */
+/* $Id: session.c,v 1.230 2003/11/14 12:38:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -605,7 +605,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 	struct task *task = mem_alloc(sizeof(struct task));
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
-	unsigned char *post_char_pos = strchr(url, POST_CHAR);
+	unsigned char *post_char_pos = post_data_start(url);
 
 	if (ses->doc_view
 	    && ses->doc_view->document
@@ -696,7 +696,7 @@ do_move(struct session *ses, struct download **stat)
 
 		if (!ce->redirect_get &&
 		    !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
-			unsigned char *p = strchr(ses->loading_url, POST_CHAR);
+			unsigned char *p = post_data_start(ses->loading_url);
 
 			if (p) add_to_strn(&u, p);
 		}
@@ -1752,33 +1752,12 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 unsigned char *
 get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 {
-	unsigned char *here, *end_of_url;
-	size_t url_len = 0;
-
 	/* Not looking at anything */
 	if (!have_location(ses))
 		return NULL;
 
-	here = cur_loc(ses)->vs.url;
-
-	/* Find the length of the url */
-	end_of_url = strchr(here, POST_CHAR);
-	if (end_of_url) {
-		url_len = (size_t) (end_of_url - here);
-	} else {
-		url_len = strlen(here);
-	}
-
-	/* Ensure that the url size is not greater than
-	 * str_size. We can't just happily
-	 * strncpy(str, here, str_size)
-	 * because we have to stop at POST_CHAR, not only at
-	 * NULL. */
-	int_upper_bound(&url_len, str_size - 1);
-
-	return safe_strncpy(str, here, url_len + 1);
+	return get_no_post_url(cur_loc(ses)->vs.url, NULL);
 }
-
 
 /*
  * Gets the title of the page being viewed by this session. Writes it into str.

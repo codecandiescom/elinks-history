@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.437 2004/06/18 20:35:38 zas Exp $ */
+/* $Id: parser.c,v 1.438 2004/06/18 20:53:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -762,7 +762,7 @@ html_li(unsigned char *a)
 		}
 
 		nlen = strlen(n);
-		put_chrs(n, strlen(n), put_chars_f, ff);
+		put_chrs(n, nlen, put_chars_f, ff);
 		put_chrs(".&nbsp;", 7, put_chars_f, ff);
 		par_format.leftmargin += nlen + c + 2;
 		par_format.align = AL_LEFT;

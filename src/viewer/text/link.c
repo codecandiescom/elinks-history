@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.212 2004/06/13 22:19:01 zas Exp $ */
+/* $Id: link.c,v 1.213 2004/06/13 22:26:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -491,6 +491,30 @@ find_link(struct document_view *doc_view, int direction, int normal)
 
 nolink:
 	doc_view->vs->current_link = -1;
+}
+
+void
+find_link_up(struct document_view *doc_view)
+{
+	find_link(doc_view, -1, 1);
+}
+
+void
+find_link_page_up(struct document_view *doc_view)
+{
+	find_link(doc_view, -1, 0);
+}
+
+void
+find_link_down(struct document_view *doc_view)
+{
+	find_link(doc_view, 1, 1);
+}
+
+void
+find_link_page_down(struct document_view *doc_view)
+{
+	find_link(doc_view, 1, 0);
 }
 
 struct uri *

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.60 2003/07/08 12:56:17 jonas Exp $ */
+/* $Id: cookies.c,v 1.61 2003/07/08 13:04:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,7 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 
 	/* Match domain and server.. */
 
-	if (!strcasecmp(domain, server)) {
+	if (!strncasecmp(domain, server, server_len)) {
 		/* We should probably allow domains which are same as servers.
 		 * --<rono@sentuny.com.au> */
 		/* Mozilla does it as well ;))) and I can't figure out any

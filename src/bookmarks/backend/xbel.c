@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.13 2002/12/13 18:58:28 zas Exp $ */
+/* $Id: xbel.c,v 1.14 2002/12/17 13:48:05 pasky Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -513,7 +513,7 @@ free_node(struct tree_node *node)
 	struct attributes *attribute;
 
 	if (node->attrs) {
-		foreach(attribute, *node->attrs) {
+		foreachback(attribute, *node->attrs) {
 			if (attribute->name)
 				mem_free(attribute->name);
 			mem_free(attribute);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.64 2002/12/26 03:06:34 pasky Exp $ */
+/* $Id: download.c,v 1.65 2002/12/26 03:11:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,12 +87,12 @@ get_download_ses(struct download *down)
 
 
 static void
-abort_download(struct download *down)
+abort_download(struct download *down, int abort)
 {
 	if (down->win) delete_window(down->win);
 	if (down->ask) delete_window(down->ask);
 	if (down->stat.state >= 0)
-		change_connection(&down->stat, NULL, PRI_CANCEL, 1);
+		change_connection(&down->stat, NULL, PRI_CANCEL, abort);
 	if (down->url) mem_free(down->url);
 
 	if (down->handle != -1) {
@@ -119,7 +119,7 @@ kill_downloads_to_file(unsigned char *file)
 	foreach (down, downloads) {
 		if (!strcmp(down->file, file)) {
 			down = down->prev;
-			abort_download(down->next);
+			abort_download(down->next, 0);
 		}
 	}
 }
@@ -129,7 +129,7 @@ void
 abort_all_downloads()
 {
 	while (!list_empty(downloads))
-		abort_download(downloads.next);
+		abort_download(downloads.next, 0 /* does it matter? */);
 }
 
 
@@ -141,7 +141,7 @@ destroy_downloads(struct session *ses)
 	foreach(d, downloads) {
 		if (d->ses == ses && d->prog) {
 			d = d->prev;
-			abort_download(d->next);
+			abort_download(d->next, 0);
 		}
 	}
 }
@@ -151,6 +151,12 @@ static void
 undisplay_download(struct download *down)
 {
 	if (down->win) delete_window(down->win);
+}
+
+static void
+do_abort_download(struct download *down)
+{
+	abort_download(down, 1);
 }
 
 
@@ -167,7 +173,7 @@ dlg_set_notify(struct dialog_data *dlg, struct widget_data *di)
 static int
 dlg_abort_download(struct dialog_data *dlg, struct widget_data *di)
 {
-	register_bottom_half((void (*)(void *)) abort_download,
+	register_bottom_half((void (*)(void *)) do_abort_download,
 			     dlg->dlg->udata);
 	return 0;
 }
@@ -503,7 +509,7 @@ write_error:
 					}
 				}
 
-				abort_download(down);
+				abort_download(down, 0);
 				return;
 			}
 			down->last_pos += w;
@@ -570,7 +576,7 @@ end_store:
 			}
 		}
 
-		abort_download(down);
+		abort_download(down, 0);
 		return;
 	}
 

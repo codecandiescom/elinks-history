@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.123 2005/02/28 10:26:50 zas Exp $ */
+/* $Id: info.c,v 1.124 2005/03/02 23:11:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,8 +165,7 @@ get_resource_info(struct terminal *term, void *data)
 	int terminal_count = 0, session_count = 0;
 	struct terminal *terminal;
 	struct session *ses;
-	unsigned char *terminal_status = term->master
-				       ? N_("master") : N_("slave");
+	long val;
 
 	if (!init_string(&info))
 		return NULL;
@@ -177,30 +176,106 @@ get_resource_info(struct terminal *term, void *data)
 	foreach (ses, sessions)
 		session_count++;
 
-	add_format_to_string(&info,
-		_("Resources: %d handles, %d timers.\n"
-		"Connections: %d connections, %d connecting, %d "
-		"transferring, %d keepalive.\n"
-		"Memory cache: %d bytes, %d files, %d locked, %d "
-		"loading.\n"
-		"Document cache: %d formatted, %d locked, %d refreshing.\n"
-		"Interlinking: %s terminal, %d terminals, %d sessions.", term),
-		select_info(INFO_FILES), select_info(INFO_TIMERS),
-		connect_info(INFO_FILES), connect_info(INFO_CONNECTING),
-		connect_info(INFO_TRANSFER), connect_info(INFO_KEEP),
-		cache_info(INFO_BYTES), cache_info(INFO_FILES),
-		cache_info(INFO_LOCKED), cache_info(INFO_LOADING),
-		formatted_info(INFO_FILES), formatted_info(INFO_LOCKED),
-		formatted_info(INFO_TIMERS),
-		_(terminal_status, term), terminal_count, session_count);
+#define val_add(text) \
+	add_format_to_string(&info, text, val);
+
+	add_to_string(&info, _("Resources", term));
+	add_to_string(&info, ": ");
+
+	val = select_info(INFO_FILES);
+	val_add(n_("%d handle", "%d handles", val, term));
+	add_to_string(&info, ", ");
+
+	val = select_info(INFO_TIMERS);
+	val_add(n_("%d timer", "%d timers", val, term));
+	add_to_string(&info, ".\n");
+
+	add_to_string(&info, _("Connections", term));
+	add_to_string(&info, ": ");
+
+	val = connect_info(INFO_FILES);
+	val_add(n_("%d connection", "%d connections", val, term));
+	add_to_string(&info, ", ");
+
+	val = connect_info(INFO_CONNECTING);
+	val_add(n_("%d connecting", "%d connecting", val, term));
+	add_to_string(&info, ", ");
+
+	val = connect_info(INFO_TRANSFER);
+	val_add(n_("%d transferring", "%d transferring", val, term));
+	add_to_string(&info, ", ");
+
+	val = connect_info(INFO_KEEP);
+	val_add(n_("%d keepalive", "%d keepalive", val, term));
+	add_to_string(&info, ".\n");
+
+	add_to_string(&info, _("Memory cache", term));
+	add_to_string(&info, ": ");
+
+	val = cache_info(INFO_BYTES);
+	val_add(n_("%d byte", "%d bytes", val, term));
+	add_to_string(&info, ", ");
+
+	val = cache_info(INFO_FILES);
+	val_add(n_("%d file", "%d files", val, term));
+	add_to_string(&info, ", ");
+
+	val = cache_info(INFO_LOCKED);
+	val_add(n_("%d locked", "%d locked", val, term));
+	add_to_string(&info, ", ");
+
+	val = cache_info(INFO_LOADING);
+	val_add(n_("%d loading", "%d loading", val, term));
+	add_to_string(&info, ".\n");
+
+	add_to_string(&info, _("Document cache", term));
+	add_to_string(&info, ": ");
+
+	val = formatted_info(INFO_FILES);
+	val_add(n_("%d formatted", "%d formatted", val, term));
+	add_to_string(&info, ", ");
+
+	val = formatted_info(INFO_LOCKED);
+	val_add(n_("%d locked", "%d locked", val, term));
+	add_to_string(&info, ", ");
+
+	val = formatted_info(INFO_TIMERS);
+	val_add(n_("%d refreshing", "%d refreshing", val, term));
+	add_to_string(&info, ".\n");
+
+	add_to_string(&info, _("Interlinking", term));
+	add_to_string(&info, ": ");
+	if (term->master)
+		add_to_string(&info, _("master terminal", term));
+	else
+		add_to_string(&info, _("slave terminal", term));
+	add_to_string(&info, ", ");
+
+	val = terminal_count;
+	val_add(n_("%d terminal", "%d terminals", val, term));
+	add_to_string(&info, ", ");
+
+	val = session_count;
+	val_add(n_("%d session", "%d sessions", val, term));
+	add_char_to_string(&info, '.');
 
 #ifdef DEBUG_MEMLEAK
-	add_to_string(&info, "\n");
-	add_format_to_string(&info,
-		_("Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%).", term),
-		mem_stats.amount, mem_stats.true_amount - mem_stats.amount,
+	add_char_to_string(&info, '\n');
+	add_to_string(&info, _("Memory allocated", term));
+	add_to_string(&info, ": ");
+
+	val = mem_stats.amount;
+	val_add(n_("%d byte", "%d bytes", val, term));
+	add_to_string(&info, ", ");
+
+	val = mem_stats.true_amount - mem_stats.amount;
+	val_add(n_("%d byte overhead", "%d bytes overhead", val, term));
+
+	add_format_to_string(&info, " (%0.2f%%).",
 		(double) (mem_stats.true_amount - mem_stats.amount) / (double) mem_stats.amount * 100);
 #endif /* DEBUG_MEMLEAK */
+
+#undef val_add
 
 	return info.source;
 }

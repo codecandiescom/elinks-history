@@ -1,3 +1,103 @@
+Wed May 21 18:07:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/gen_translations_stats.sh:
+
+	Fix for division by zero in awk part caused by parsing of error
+	messages.  Also some minor alignment adjustments.  
+
+Wed May 21 11:44:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Menu entries were added for tab navigation. Fix bug 156.  
+
+Wed May 21 11:32:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: terminal/tab.c, terminal/tab.h, viewer/text/view.c:
+
+	switch_to_[next|prev]_tab() were introduced.  
+
+Wed May 21 10:19:19 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	s/Open in a new window/Open a new window/ 
+
+Wed May 21 10:08:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: Makefile.am, menu.c, menu.h, hotkey.c, hotkey.h:
+
+	Hotkeys functions were moved to hotkey.{c,h}.  
+
+Wed May 21 10:00:28 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/encoding.c:
+
+	Move encoding_names definition up to where that unnecessary
+	prototype for it that I removed in the last commit was.  
+
+Wed May 21 09:47:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Submenu mark was changed from > to >> to prevent conflict with > key
+	shortcut (will be used for tabs). Please comment.  
+
+Wed May 21 09:46:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/: encoding.c, encoding.h:
+
+	Just for fun, s/\[ \]/[]/ and remove an unnecessary prototype.  
+
+Wed May 21 09:32:59 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Fix for bug 162: open-link-in-new-window displays menu even if no
+	link is selected.  
+
+Wed May 21 08:35:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	A missing newline after version information is now printed on forced
+	core dump.  
+
+Wed May 21 07:10:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	Is there any need to copy address to a buffer ? Please test,
+	comment, improve or revert (if needed).  
+
+Wed May 21 02:04:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* elinks.1, elinks.conf.5, elinkskeys.5.in:
+
+	Manpages are now hosted in doc/man/ ...  
+
+Wed May 21 02:02:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.am, configure.in, doc/Makefile.am:
+
+	Installed manpages are now hosted in doc/man/ and maintained in
+	DocBook format (elinks.conf.5 will join later). Automake dictates
+	that we have to use separate Makefiles since path/to/manpage is not
+	supported.  
+
+Tue May 20 22:41:46 2003  Laurent Monin <zas@norz.org>:
+
+	* contrib/lua/hooks.lua.in:
+
+	A dumb prefix bz and a smart prefix bug were added to fasten access
+	to ELinks bugzilla. Idea by fonseca ;).  
+
+Tue May 20 22:11:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Fixed problems with 'gg:foo bar' query parsing, patch by thement.  
+
 Tue May 20 22:09:16 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: version.c, version.h, dialogs/info.c:

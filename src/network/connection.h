@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.26 2003/07/04 12:12:08 jonas Exp $ */
+/* $Id: connection.h,v 1.27 2003/07/04 13:34:48 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -178,7 +178,7 @@ void check_queue(void);
 long connect_info(int);
 void set_connection_state(struct connection *, int);
 
-int get_keepalive_socket(struct connection *);
+int has_keepalive_connection(struct connection *);
 void add_keepalive_socket(struct connection *, ttime);
 
 void retry_connection(struct connection *);

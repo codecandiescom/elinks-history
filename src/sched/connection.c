@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.59 2003/07/04 13:14:43 jonas Exp $ */
+/* $Id: connection.c,v 1.60 2003/07/04 13:34:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -350,11 +350,11 @@ get_keepalive_connection(struct connection *c)
 }
 
 int
-get_keepalive_socket(struct connection *c)
+has_keepalive_connection(struct connection *c)
 {
 	struct keepalive_connection *k = get_keepalive_connection(c);
 
-	if (!k) return -1;
+	if (!k) return 0;
 
 	c->sock1 = k->conn;
 	c->pf = k->pf;
@@ -363,7 +363,7 @@ get_keepalive_socket(struct connection *c)
 	if (k->host) mem_free(k->host);
 	mem_free(k);
 
-	return 0;
+	return 1;
 }
 
 void

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.148 2003/07/04 11:56:24 jonas Exp $ */
+/* $Id: http.c,v 1.149 2003/07/04 13:34:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,7 +301,7 @@ http_func(struct connection *conn)
 	/* setcstate(conn, S_CONN); */
 	set_connection_timeout(conn);
 
-	if (get_keepalive_socket(conn)) {
+	if (!has_keepalive_connection(conn)) {
 		int p = get_port(conn->url);
 
 		if (p == -1) {

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.91 2003/07/04 11:56:24 jonas Exp $ */
+/* $Id: ftp.c,v 1.92 2003/07/04 13:34:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ ftp_func(struct connection *conn)
 {
 	set_connection_timeout(conn);
 
-	if (get_keepalive_socket(conn)) {
+	if (!has_keepalive_connection(conn)) {
 		int port = get_port(conn->url);
 
 		if (port == -1) {

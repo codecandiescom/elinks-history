@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.65 2003/05/07 12:41:43 zas Exp $ */
+/* $Id: menu.c,v 1.66 2003/05/07 23:18:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,6 +170,7 @@ is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
 	int key_pos = item->hotkey_pos;
 
 	if (key_pos < 0) key_pos = -key_pos;
+
 	return (key_pos && text
 		&& (upcase(text[key_pos]) == upcase(hotkey)));
 #else
@@ -680,11 +681,12 @@ menu_func(struct window *win, struct event *ev, int fwd)
 						break;
 
 					for (i = 0; i < menu->ni; i++) {
-						if (!is_hotkey(&menu->items[i], ev->x, win->term))
-							continue;
-						menu->selected = i;
-						scroll_menu(menu, 0);
-						s = 1;
+						if (is_hotkey(&menu->items[i], ev->x, win->term)) {
+							menu->selected = i;
+							scroll_menu(menu, 0);
+							s = 1;
+							break;
+						}
 					}
 
 					if (s != 0)
@@ -929,12 +931,13 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 				int i;
 
 				s = 1;
-				for (i = 0; i < menu->ni; i++)
-					if (!is_hotkey(&menu->items[i], ev->x, win->term))
-						continue;
-					menu->selected = i;
-					s = 2;
-
+				for (i = 0; i < menu->ni; i++) {
+					if (is_hotkey(&menu->items[i], ev->x, win->term)) {
+						menu->selected = i;
+						s = 2;
+						break;
+					}
+				}
 			} else if (!s) {
 				delete_window_ev(win, ev->x != KBD_ESC  ? ev
 									: NULL);

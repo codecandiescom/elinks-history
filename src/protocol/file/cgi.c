@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.72 2004/08/01 20:08:24 pasky Exp $ */
+/* $Id: cgi.c,v 1.73 2004/08/01 20:12:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,8 @@ close_pipe_and_read(struct connection *conn)
 	rb->freespace -= 17;
 	rb->close = 1;
 	conn->unrestartable = 1;
-	close(conn->cgi_pipes[1]), conn->cgi_pipes[1] = -1;
+	close(conn->cgi_pipes[1]);
+	conn->data_socket.fd = conn->cgi_pipes[1] = -1;
 	set_connection_state(conn, S_SENT);
 	set_connection_timeout(conn);
 	read_from_socket(conn, &conn->socket, rb, http_got_header);
@@ -91,9 +92,13 @@ send_post_data(struct connection *conn)
 		add_bytes_to_string(&data, buffer, n);
 
 	set_connection_timeout(conn);
-	/* XXX: Could we use data_socket? --jonas */
-	write_to_socket(conn, (struct connection_socket *) /* lalala */ &conn->cgi_pipes[1],
-			data.source, data.length, close_pipe_and_read);
+
+	/* Use data socket for passing the pipe. It will be cleaned up in
+	 * close_pipe_and_read(). */
+	conn->data_socket.fd = conn->cgi_pipes[1];
+
+	write_to_socket(conn, &conn->data_socket, data.source, data.length, close_pipe_and_read);
+
 	done_string(&data);
 	set_connection_state(conn, S_SENT);
 #undef POST_BUFFER_SIZE

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.20 2004/04/16 16:35:52 zas Exp $ */
+/* $Id: file.c,v 1.21 2004/04/23 13:47:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,11 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-inline int
+
+/* Not that these two would be so useful for portability (they are ANSI C) but
+ * they encapsulate the lowlevel stuff (need for <unistd.h>) nicely. */
+
+int
 file_exists(const unsigned char *filename)
 {
 #ifdef HAVE_ACCESS
@@ -35,6 +39,21 @@ file_exists(const unsigned char *filename)
 	return stat (filename, &buf) >= 0;
 #endif
 }
+
+int
+file_can_read(const unsigned char *filename)
+{
+#ifdef HAVE_ACCESS
+	return access(filename, R_OK) >= 0;
+#else
+	FILE *f = fopen(filename, "r");
+	int ok = !!f;
+
+	if (f) fclose(f);
+	return ok;
+#endif
+}
+
 
 unsigned char *
 expand_tilde(unsigned char *filename)

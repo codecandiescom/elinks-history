@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.8 2004/04/23 11:44:33 pasky Exp $ */
+/* $Id: file.h,v 1.9 2004/04/23 13:47:58 pasky Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 int file_exists(const unsigned char *filename);
+int file_can_read(const unsigned char *filename);
 
 /* Tilde is only expanded for the current users homedir (~/). */
 /* The returned file name is allocated. */

@@ -157,6 +157,7 @@ Petr Kulhavy <brain@artax.karlin.mff.cuni.cz>
 Peter Wang <tjaden@alphalink.com.au>
 	Rebindable keys
 	/etc/links.cfg
+	Lua scripting support
 
 Radovan Stas <radoone@skmi.science.upjs.sk>
 	Slovak translation

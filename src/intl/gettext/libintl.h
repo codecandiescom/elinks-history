@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.13 2003/05/17 10:28:11 zas Exp $ */
+/* $Id: libintl.h,v 1.14 2003/05/19 13:21:16 zas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -37,7 +37,7 @@ _(unsigned char *msg, struct terminal *term)
 	int new_charset;
 
 	/* Prevent useless (and possibly dangerous) calls. */
-	if (!msg || !*msg)
+	if (!term || !msg || !*msg)
 		return msg;
 
 	/* Prevent useless switching. */

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.54 2004/05/22 13:06:00 jonas Exp $ */
+/* $Id: conv.c,v 1.55 2004/05/22 13:12:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,6 +234,7 @@ add_time_to_string(struct string *string, ttime time)
 	return string;
 }
 
+#ifdef HAVE_STRFTIME
 struct string *
 add_date_to_string(struct string *string, unsigned char *fmt, ttime *date)
 {
@@ -246,6 +247,7 @@ add_date_to_string(struct string *string, unsigned char *fmt, ttime *date)
 
 	return add_to_string(string, buffer);
 }
+#endif
 
 /* Encoders and string changers */
 

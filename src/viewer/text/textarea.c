@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.116 2004/06/18 15:02:01 jonas Exp $ */
+/* $Id: textarea.c,v 1.117 2004/06/18 19:05:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,6 +57,10 @@ format_text(unsigned char *text, int width, enum form_wrap wrap, int format)
 
 	assert(text);
 	if_assert_failed return NULL;
+
+	/* Allocate the ending entries */
+	if (!realloc_line_info(&line, 2))
+		return NULL;
 
 	while (text[pos]) {
 		if (text[pos] == '\n') {

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.255 2004/06/26 21:53:20 pasky Exp $ */
+/* $Id: link.c,v 1.256 2004/06/26 21:55:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -576,7 +576,7 @@ next_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y)
 		/* How many lines are already past their last link */
 		int last = 0;
 
-		while ((last < max_x - min_x) && (x += dir_x)) {
+		while ((last < max_y - min_y) && (x += dir_x)) {
 			int y;
 
 			last = 0;

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Baris Metin <baris@gelecek.com.tr>\n"
 "Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
@@ -4314,16 +4314,15 @@ msgstr "Geçen zaman"
 msgid "estimated time"
 msgstr "Hesaplanan zaman"
 
-#: src/dialogs/status.c:204
-#, c-format
-msgid "Typeahead: %s [%s]"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+msgid "Typeahead"
 msgstr ""
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 msgid "Untitled"
 msgstr ""
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 #, fuzzy
 msgid "No document"
 msgstr "belgeler"
@@ -5599,10 +5598,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Aranan söz dizimi bulunamadý"
-
-#: src/viewer/text/search.c:1034
-msgid "Typeahead"
-msgstr ""
 
 #: src/viewer/text/search.c:1035
 #, c-format

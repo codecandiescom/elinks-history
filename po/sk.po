@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-12-23 14:42+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -4407,16 +4407,15 @@ msgstr "uplynulý èas"
 msgid "estimated time"
 msgstr "predpokladaný èas"
 
-#: src/dialogs/status.c:204
-#, fuzzy, c-format
-msgid "Typeahead: %s [%s]"
-msgstr "Typ"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+msgid "Typeahead"
+msgstr "Interaktívne vyhµadávanie"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 msgid "Untitled"
 msgstr "Bez názvu"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 msgid "No document"
 msgstr "®iadny dokument"
 
@@ -5677,10 +5676,6 @@ msgstr "Vyhµadávanie dosiahlo zaèiatok dokumentu, pokraèujem od konca."
 msgid "Search string '%s' not found"
 msgstr "Hµadaný re»azec '%s' nabol nájdený"
 
-#: src/viewer/text/search.c:1034
-msgid "Typeahead"
-msgstr "Interaktívne vyhµadávanie"
-
 #: src/viewer/text/search.c:1035
 #, c-format
 msgid "Could not find a link with the text '%s'."
@@ -5733,6 +5728,10 @@ msgstr "Chyba pri ukladaní"
 #: src/viewer/text/view.c:1528
 msgid "Error writing to file"
 msgstr "Chyba pri zápise do súboru"
+
+#, fuzzy
+#~ msgid "Typeahead: %s [%s]"
+#~ msgstr "Typ"
 
 #~ msgid ""
 #~ "Name: %s\n"

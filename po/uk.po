@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dmitry Pinchukov <dpinch@mail.ru>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
@@ -4331,17 +4331,17 @@ msgstr "Витрачений час"
 msgid "estimated time"
 msgstr "Оч╕куваний час"
 
-#: src/dialogs/status.c:204
-#, fuzzy, c-format
-msgid "Typeahead: %s [%s]"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+#, fuzzy
+msgid "Typeahead"
 msgstr "Тип"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 #, fuzzy
 msgid "Untitled"
 msgstr "Назва посилання"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 #, fuzzy
 msgid "No document"
 msgstr "документ╕в"
@@ -5621,11 +5621,6 @@ msgstr ""
 msgid "Search string '%s' not found"
 msgstr "Рядок не знайдено"
 
-#: src/viewer/text/search.c:1034
-#, fuzzy
-msgid "Typeahead"
-msgstr "Тип"
-
 #: src/viewer/text/search.c:1035
 #, c-format
 msgid "Could not find a link with the text '%s'."
@@ -5679,6 +5674,10 @@ msgstr "Помилка збереження"
 #: src/viewer/text/view.c:1528
 msgid "Error writing to file"
 msgstr "Помилка запису до файлу"
+
+#, fuzzy
+#~ msgid "Typeahead: %s [%s]"
+#~ msgstr "Тип"
 
 #~ msgid ""
 #~ "Name: %s\n"

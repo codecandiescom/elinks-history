@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.386 2005/01/12 16:32:57 jonas Exp $ */
+/* $Id: menu.c,v 1.387 2005/01/13 13:26:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,7 +267,8 @@ tab_menu(struct session *ses, int x, int y, int place_above_cursor)
 #endif
 	}
 
-	add_uri_command_to_menu(&menu, PASS_URI_TAB);
+	if (have_location(ses))
+		add_uri_command_to_menu(&menu, PASS_URI_TAB);
 
 	/* Adjust the menu position taking the menu frame into account */
 	if (place_above_cursor) {

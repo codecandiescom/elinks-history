@@ -1,3 +1,74 @@
+Mon May 10 17:15:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/status.c, document/renderer.c, document/view.h,
+	document/html/frames.c, util/rect.h, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/search.c, viewer/text/textarea.c,
+	viewer/text/view.c:
+
+	Use struct rect in struct document_view, changes were made
+	accordingly with the help of two new little helpers:
+	(row|col)_is_in_rect().  
+
+Mon May 10 15:34:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.c:
+
+	Use struct rect, set_rect() and is_in_rect().  
+
+Mon May 10 15:15:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	display_button(): use struct rect * and precalculated label length
+	value instead of strlen( ) call.  
+
+Mon May 10 12:56:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/dialog.c, bfu/group.c, bfu/inpfield.c,
+	bfu/listbox.c, bfu/menu.c, bfu/text.c, document/html/renderer.c,
+	document/html/tables.c, document/plain/renderer.c, util/rect.h:
+
+	Convert set_rect() and is_in_rect() macros to static inline
+	functions.  
+
+Mon May 10 05:17:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Drop the 'support' word for the configuration summary.  
+
+Mon May 10 01:51:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.h, document/html/renderer.c,
+	document/html/tables.c, document/plain/renderer.c,
+	viewer/text/search.c:
+
+	Use struct rect in struct node. I propose to rename it box though it
+	is shorter and a bit more descriptive IMO.  
+
+Sun May  9 23:33:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/protocol.c, sched/connection.h, sched/error.c:
+
+	A little advertisement shouldn't hurt anyone so pop up 'this version
+	does not support ... protocol' message for finger and smb. Or is
+	this too bloated\? 
+
+Sun May  9 23:04:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf, src/protocol/Makefile.am,
+	src/protocol/finger.h:
+
+	Make finger protocol support optional. Maybe it should be disabled
+	by default since I don't think so maybe people use it and it more
+	serves as a protocol implementation reference.  
+
+Sun May  9 22:27:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Use struct rect in struct menu.  
+
 Sun May  9 21:46:23 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/widget.h, util/Makefile.am, util/rect.h:

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.85 2004/04/24 11:50:58 jonas Exp $ */
+/* $Id: cmdline.c,v 1.86 2004/04/29 23:11:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	}
 
 	for (i = 0; i < addrno; i++) {
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &(addrs)[i]);
 		unsigned char p[INET6_ADDRSTRLEN];
 

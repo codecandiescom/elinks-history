@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.70 2004/04/19 15:56:48 zas Exp $ */
+/* $Id: connect.c,v 1.71 2004/04/29 23:11:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,7 +211,7 @@ sock_error:
 	return sock;
 }
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 int
 get_pasv6_socket(struct connection *conn, int ctrl_sock,
 		 struct sockaddr_storage *s6)
@@ -271,7 +271,7 @@ sock_error:
 }
 #endif
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 static inline int
 check_if_local_address6(struct sockaddr_in6 *addr)
 {
@@ -362,7 +362,7 @@ dns_found(void *data, int state)
 		set_handlers(*c_i->sock, NULL, NULL, NULL, conn);
 
 	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		struct sockaddr_in6 addr = *((struct sockaddr_in6 *)&c_i->addr[i]);
 #else
 		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
@@ -372,7 +372,7 @@ dns_found(void *data, int state)
 
 		if (only_local) {
 			int local = 0;
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 			if (addr.sin6_family == AF_INET6)
 				local = check_if_local_address6((struct sockaddr_in6 *) &addr);
 			else
@@ -386,7 +386,7 @@ dns_found(void *data, int state)
 			}
 		}
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		sock = socket(addr.sin6_family, SOCK_STREAM, IPPROTO_TCP);
 #else
 		sock = socket(addr.sin_family, SOCK_STREAM, IPPROTO_TCP);
@@ -403,7 +403,7 @@ dns_found(void *data, int state)
 		}
 		*c_i->sock = sock;
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		addr.sin6_port = htons(c_i->port);
 #else
 		addr.sin_port = htons(c_i->port);
@@ -414,7 +414,7 @@ dns_found(void *data, int state)
 		 * established. At least I hope that noone else will want to do
 		 * something else ;-). --pasky */
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		if (addr.sin6_family == AF_INET6) {
 			conn->pf = 2;
 			if (connect(sock, (struct sockaddr *) &addr,

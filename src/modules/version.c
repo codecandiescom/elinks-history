@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.33 2004/04/29 23:02:41 jonas Exp $ */
+/* $Id: version.c,v 1.34 2004/04/29 23:11:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,7 @@ get_dyn_full_version(struct terminal *term, int more)
 #ifndef CONFIG_BACKTRACE
 		comma, _("No Backtrace", term),
 #endif
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		comma, "IPv6",
 #endif
 #ifdef HAVE_ZLIB_H

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.49 2004/04/20 07:45:48 zas Exp $ */
+/* $Id: dns.c,v 1.50 2004/04/29 23:11:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ int
 do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno,
 	       int in_thread)
 {
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	struct addrinfo hint, *ai, *ai_cur;
 #else
 	struct hostent *hostent;
@@ -83,7 +83,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	if (!name || !addrs || !addrno)
 		return -1;
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	/* I had a strong preference for the following, but the glibc is really
 	 * obsolete so I had to rather use much more complicated getaddrinfo().
 	 * But we duplicate the code terribly here :|. */
@@ -106,7 +106,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	}
 #endif
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	for (i = 0, ai_cur = ai; ai_cur; i++, ai_cur = ai_cur->ai_next);
 #else
 	for (i = 0; hostent->h_addr_list[i] != NULL; i++);
@@ -120,7 +120,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	if (!*addrs) return -1;
 	*addrno = i;
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	for (i = 0, ai_cur = ai; ai_cur; i++, ai_cur = ai_cur->ai_next) {
 		struct sockaddr_in6 *addr = (struct sockaddr_in6 *) &(*addrs)[i];
 

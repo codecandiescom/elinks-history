@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.193 2004/04/24 16:03:23 jonas Exp $ */
+/* $Id: uri.c,v 1.194 2004/04/29 23:11:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ enum uri_errno
 parse_uri(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *prefix_end, *host_end;
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	unsigned char *lbracket, *rbracket;
 #endif
 	int known;
@@ -115,7 +115,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	/* Isolate host */
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	/* Get brackets enclosing IPv6 address */
 	lbracket = strchr(prefix_end, '[');
 	if (lbracket) {
@@ -147,14 +147,14 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		prefix_end = host_end + 1;
 	}
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	if (rbracket)
 		host_end = rbracket + strcspn(rbracket, ":/?");
 	else
 #endif
 		host_end = prefix_end + strcspn(prefix_end, ":/?");
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	if (rbracket) {
 		int addrlen = rbracket - lbracket - 1;
 
@@ -266,13 +266,13 @@ add_uri_to_string(struct string *string, struct uri *uri,
  	}
 
  	if (wants(URI_HOST) && uri->hostlen) {
-#ifdef IPV6
+#ifdef CONFIG_IPV6
  		int brackets = !!memchr(uri->host, ':', uri->hostlen);
 
 		if (brackets) add_char_to_string(string, '[');
 #endif
 		add_bytes_to_string(string, uri->host, uri->hostlen);
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		if (brackets) add_char_to_string(string, ']');
 #endif
  	}
@@ -618,7 +618,7 @@ find_uri_protocol(unsigned char *newurl)
 		/* Contains user/password/ftp-hostname */
 		return PROTOCOL_FTP;
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	} else if (*newurl == '[' && *ch == ':') {
 		/* Candidate for IPv6 address */
 		unsigned char *bracket2, *colon2;

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.132 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: ftp.c,v 1.133 2004/04/29 23:11:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ struct ftp_connection_info {
 	int has_data;   /* Do we have data socket? */
 	int buf_pos;
 	int use_pasv; /* Use PASV (yes or no) */
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	int use_epsv; /* Use EPSV */
 #endif
 	unsigned char ftp_buffer[FTP_BUF_SIZE];
@@ -177,7 +177,7 @@ again:
 				s->sin_port = htons((n[4] << 8) + n[5]);
 			}
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 			if (sa && response == 229) { /* EPSV response parsing. */
 				/* See RFC 2428 */
 				struct sockaddr_in6 *s = (struct sockaddr_in6 *) sa;
@@ -472,7 +472,7 @@ add_portcmd_to_string(struct string *string, unsigned char *pc)
 	add_to_string(string, "\r\n");
 }
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 /* Construct EPRT command. */
 static void
 add_eprtcmd_to_string(struct string *string, struct sockaddr_in6 *addr)
@@ -506,7 +506,7 @@ add_eprtcmd_to_string(struct string *string, struct sockaddr_in6 *addr)
 static struct ftp_connection_info *
 add_file_cmd_to_str(struct connection *conn)
 {
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	struct sockaddr_in6 data_addr;
 #endif
 	struct ftp_connection_info *c_i;
@@ -528,7 +528,7 @@ add_file_cmd_to_str(struct connection *conn)
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	memset(&data_addr, 0, sizeof(struct sockaddr_in6));
 #endif
 	memset(pc, 0, 6);
@@ -536,7 +536,7 @@ add_file_cmd_to_str(struct connection *conn)
 	if (get_opt_bool("protocol.ftp.use_pasv"))
 		c_i->use_pasv = 1;
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	if (get_opt_bool("protocol.ftp.use_epsv"))
 		c_i->use_epsv = 1;
 
@@ -576,7 +576,7 @@ add_file_cmd_to_str(struct connection *conn)
 		/* ASCII */
 		add_to_string(&command, "TYPE A\r\n");
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		if (conn->pf == 2)
 			if (c_i->use_epsv)
 				add_to_string(&command, "EPSV\r\n");
@@ -607,7 +607,7 @@ add_file_cmd_to_str(struct connection *conn)
 		/* BINARY */
 		add_to_string(&command, "TYPE I\r\n");
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		if (conn->pf == 2)
 			if (c_i->use_epsv)
 				add_to_string(&command, "EPSV\r\n");
@@ -782,7 +782,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			connect(fd, (struct sockaddr *) &sa, sizeof(struct sockaddr_in));
 		}
 
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 		if (response == 229) {
 			int fd = socket(PF_INET6, SOCK_STREAM, 0);
 
@@ -1110,7 +1110,7 @@ got_something_from_data_connection(struct connection *conn)
 
 		set_handlers(conn->data_socket, NULL, NULL, NULL, NULL);
 		if ((conn->pf != 2 && c_i->use_pasv)
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	    	    || (conn->pf == 2 && c_i->use_epsv)
 #endif
 		   ) {

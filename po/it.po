@@ -4060,7 +4060,7 @@ msgstr "Cac~he"
 
 #: src/dialogs/menu.c:334
 msgid "Coo~kies"
-msgstr "Cook~ie"
+msgstr "C~ookie"
 
 #: src/dialogs/menu.c:340
 msgid "Sa~ve as"

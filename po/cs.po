@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-07 10:24+0200\n"
-"PO-Revision-Date: 2003-09-02 23:11+0200\n"
+"PO-Revision-Date: 2003-10-09 14:26+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -131,7 +131,7 @@ msgstr ""
 "Název: \"%s\""
 
 #: src/bookmarks/dialogs.c:274
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
 "\n"
@@ -484,7 +484,6 @@ msgid "Delete character under cursor"
 msgstr "Smazání znaku pod kurzorem"
 
 #: src/config/kbdbind.c:379
-#, fuzzy
 msgid "Show information about the current page"
 msgstr "Zobrazení informací o souèasné stránce"
 
@@ -532,7 +531,7 @@ msgstr "Najít pøedchozí výskyt právì vyhledávaného textu"
 
 #: src/config/kbdbind.c:390
 msgid "Forget authentication credentials"
-msgstr ""
+msgstr "Vymazat z pamìti pøihla¹ovací informace HTTP autentikace"
 
 #: src/config/kbdbind.c:391
 msgid "Open \"Go to URL\" dialog box"
@@ -551,7 +550,6 @@ msgid "Go to the homepage"
 msgstr "Jít na domovskou stránku"
 
 #: src/config/kbdbind.c:395
-#, fuzzy
 msgid "Show information about the current page HTTP headers"
 msgstr "Zobrazit informace o HTTP hlavièkách souèasné stránky"
 
@@ -626,15 +624,15 @@ msgstr "Pøesunout se o stránku vý¹e"
 
 #: src/config/kbdbind.c:417
 msgid "Paste text from the clipboard"
-msgstr ""
+msgstr "Vlo¾it text ze schránky"
 
 #: src/config/kbdbind.c:418
 msgid "Move to the previous frame"
-msgstr ""
+msgstr "Pøesunout se do pøedchozího rámce"
 
 #: src/config/kbdbind.c:419
 msgid "Open a quit confirmation dialog box"
-msgstr ""
+msgstr "Otevøít dialog potvrzující ukonèení ELinksu"
 
 #: src/config/kbdbind.c:420
 msgid "Quit without confirmation"
@@ -694,32 +692,31 @@ msgstr "Pøedchozí tab"
 
 #: src/config/kbdbind.c:434
 msgid "Toggle displaying of links to images"
-msgstr ""
+msgstr "Pøepnout zobrazování odkazù na obrázky"
 
 #: src/config/kbdbind.c:435
 msgid "Toggle rendering of tables"
-msgstr ""
+msgstr "Pøepnout zobrazování tabulek"
 
 #: src/config/kbdbind.c:436
 msgid "Toggle rendering page as HTML / plain text"
-msgstr ""
+msgstr "Pøepnout zobrazení stránky jako HTML nebo èistý text"
 
 #: src/config/kbdbind.c:437
 msgid "Toggle displaying of links numbers"
-msgstr ""
+msgstr "Pøepnout èíslování odkazù"
 
 #: src/config/kbdbind.c:438
-#, fuzzy
 msgid "Toggle usage of document specific colors"
-msgstr "Pou¾ívat barvy nastavené v dokumentu"
+msgstr "Pøepnout pou¾ívání barev nastavených v dokumentu"
 
 #: src/config/kbdbind.c:439
 msgid "Go forward in the unhistory"
-msgstr ""
+msgstr "Jít kupøedu ve zpìtné historii"
 
 #: src/config/kbdbind.c:440
 msgid "Move cursor upwards"
-msgstr ""
+msgstr "Pøesunout kurzor smìrem nahoru"
 
 #: src/config/kbdbind.c:441
 msgid "View the current image"
@@ -727,11 +724,11 @@ msgstr "Zobrazit obrázek"
 
 #: src/config/kbdbind.c:442
 msgid "Maximize the current frame"
-msgstr ""
+msgstr "Maximizovat aktuální rámec"
 
 #: src/config/kbdbind.c:635
 msgid "Unrecognised keymap"
-msgstr ""
+msgstr "Neznámá mapa kláves"
 
 #: src/config/kbdbind.c:637
 msgid "Error parsing keystroke"
@@ -739,7 +736,7 @@ msgstr "Chyba pøi ètení kombinace kláves"
 
 #: src/config/kbdbind.c:639
 msgid "Unrecognised action (internal error)"
-msgstr ""
+msgstr "Neznámá akce (vnitøní chyba)"
 
 #: src/config/options.c:526 src/config/options.c:550 src/config/opttypes.c:39
 msgid "Parameter expected"
@@ -791,9 +788,9 @@ msgid "    %s%s%s %s (default: %s)"
 msgstr "    %s%s%s %s (výchozí: %s)"
 
 #: src/config/options.c:674
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: #%06x)"
-msgstr "    %s%s%s %s (výchozí: %d)"
+msgstr "    %s%s%s %s (výchozí: #%06x)"
 
 #: src/config/options.c:792
 msgid "Configuration options:\n"
@@ -1031,9 +1028,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1025
-#, fuzzy
 msgid "Maximum age"
-msgstr "Maximální poèet spojení"
+msgstr "Maximální stáøí"
 
 #: src/config/options.c:1027
 msgid ""
@@ -1276,9 +1272,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1164
-#, fuzzy
 msgid "Searching"
-msgstr "Hledat"
+msgstr "Vyhledávání"
 
 #: src/config/options.c:1166
 msgid "Options for searching."
@@ -1307,9 +1302,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1181 src/config/options.c:1188
-#, fuzzy
 msgid "Regular expressions"
-msgstr "Zadej výraz"
+msgstr "Regulární výrazy"
 
 #: src/config/options.c:1183
 msgid ""
@@ -1384,9 +1378,8 @@ msgid "Cache options."
 msgstr "Nastavení cache."
 
 #: src/config/options.c:1230
-#, fuzzy
 msgid "Cache information about redirects"
-msgstr "Zobrazení informací o souèasné stránce"
+msgstr "Pamatovat si informaci o pøesmìrováních"
 
 #: src/config/options.c:1232
 msgid ""
@@ -2449,9 +2442,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1843
-#, fuzzy
 msgid "Color mode"
-msgstr "Barva"
+msgstr "Barevný re¾im"
 
 #: src/config/options.c:1845
 msgid ""
@@ -3303,7 +3295,7 @@ msgstr "Boolean"
 
 #: src/config/opttypes.c:441
 msgid "[0|1]"
-msgstr ""
+msgstr "[0|1]"
 
 #: src/config/opttypes.c:442
 msgid "Integer"
@@ -3311,7 +3303,7 @@ msgstr "Èíslo"
 
 #: src/config/opttypes.c:442 src/config/opttypes.c:443
 msgid "<num>"
-msgstr ""
+msgstr "<èíslo>"
 
 #: src/config/opttypes.c:443
 msgid "Longint"
@@ -3446,7 +3438,6 @@ msgid "Keys"
 msgstr "Klávesy"
 
 #: src/dialogs/info.c:57
-#, fuzzy
 msgid ""
 "ESC      display menu\n"
 "^C, q    quit\n"
@@ -3684,7 +3675,7 @@ msgstr "~Rám pøes celou obrazovku"
 
 #: src/dialogs/menu.c:476
 msgid "Nex~t tab"
-msgstr ""
+msgstr "Dal¹í ~tab"
 
 #: src/dialogs/menu.c:477
 msgid "Pre~v tab"
@@ -3696,7 +3687,7 @@ msgstr "Zavøít tab"
 
 #: src/dialogs/menu.c:484
 msgid "~ELinks homepage"
-msgstr "Homepage ELinksu"
+msgstr "~Homepage ELinksu"
 
 #: src/dialogs/menu.c:485
 msgid "~Documentation"
@@ -3708,7 +3699,7 @@ msgstr "~Klávesy"
 
 #: src/dialogs/menu.c:489
 msgid "~Bugs information"
-msgstr ""
+msgstr "Informace o ~chybách"
 
 #: src/dialogs/menu.c:490
 msgid "~ELinks CvsWeb"
@@ -3849,17 +3840,15 @@ msgstr "Rámeèky KOI8-R"
 
 #: src/dialogs/options.c:128
 msgid "No colors (mono)"
-msgstr ""
+msgstr "Èernobílý terminál"
 
 #: src/dialogs/options.c:129
-#, fuzzy
 msgid "16 colors"
-msgstr "Pou¾ívat barvièky"
+msgstr "16 barev"
 
 #: src/dialogs/options.c:131
-#, fuzzy
 msgid "256 colors"
-msgstr "Pou¾ívat barvièky"
+msgstr "256 barev"
 
 #: src/dialogs/options.c:133
 msgid "Use ^[[11m"
@@ -3894,9 +3883,8 @@ msgid "Rows"
 msgstr "Øádky"
 
 #: src/formhist/formhist.c:335
-#, fuzzy
 msgid "Form memory"
-msgstr "Do¹la pamì», bobánku"
+msgstr "Formuláøová pamì»"
 
 #: src/formhist/formhist.c:336
 msgid ""
@@ -4383,17 +4371,17 @@ msgid "No document"
 msgstr "®ádný dokument"
 
 #: src/sched/session.c:635
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Chce¹ následovat pøesmìrování a odeslat formuláø na adresu %s?"
 
 #: src/sched/session.c:638
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Chce¹ odeslat formuláø na adresu %s?"
 
 #: src/sched/session.c:640
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Chce¹ je¹tì jednou odeslat formuláø na adresu %s?"
 
@@ -4546,14 +4534,12 @@ msgid "LED indicators"
 msgstr "LED indikátory"
 
 #: src/util/version.c:101
-#, fuzzy
 msgid "Forms memory"
-msgstr "Do¹la pamì», bobánku"
+msgstr "Formuláøová pamì»"
 
 #: src/util/version.c:104
-#, fuzzy
 msgid "No mouse"
-msgstr "®ádný dokument"
+msgstr "Bez my¹i"
 
 #: src/viewer/dump/dump.c:75
 #, c-format
@@ -4704,25 +4690,24 @@ msgid "Search string '%s' not found"
 msgstr "Nena¹el jsem øetìzec '%s'"
 
 #: src/viewer/text/search.c:879
-#, fuzzy
 msgid "Normal search"
-msgstr "®ádné pøedchozí hledání"
+msgstr "Normální výraz"
 
 #: src/viewer/text/search.c:880
 msgid "Regexp search"
-msgstr ""
+msgstr "Regulární výraz"
 
 #: src/viewer/text/search.c:881
 msgid "Extended regexp search"
-msgstr ""
+msgstr "Roz¹íøený regulární výraz"
 
 #: src/viewer/text/search.c:886
 msgid "Case sensitive"
-msgstr ""
+msgstr "Rozli¹ovat velikost písmen"
 
 #: src/viewer/text/search.c:887
 msgid "Case insensitive"
-msgstr ""
+msgstr "Nerozli¹ovat velikost písmen"
 
 #: src/viewer/text/search.c:1136
 msgid "Search backward"

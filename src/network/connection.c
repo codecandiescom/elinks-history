@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.144 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: connection.c,v 1.145 2004/03/31 20:31:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,8 +143,8 @@ struct host_connection {
 static struct host_connection *
 get_host_connection(struct connection *conn)
 {
-	unsigned char *host = conn->uri.host;
-	int hostlen = conn->uri.hostlen;
+	unsigned char *host = conn->uri->host;
+	int hostlen = conn->uri->hostlen;
 	struct host_connection *host_conn;
 
 	if (!host) return NULL;
@@ -162,11 +162,11 @@ add_host_connection(struct connection *conn)
 {
 	struct host_connection *host_conn = get_host_connection(conn);
 
-	if (!host_conn && conn->uri.host) {
-		host_conn = mem_calloc(1, sizeof(struct host_connection) + conn->uri.hostlen);
+	if (!host_conn && conn->uri->host) {
+		host_conn = mem_calloc(1, sizeof(struct host_connection) + conn->uri->hostlen);
 		if (!host_conn) return 0;
 
-		memcpy(host_conn->host, conn->uri.host, conn->uri.hostlen);
+		memcpy(host_conn->host, conn->uri->host, conn->uri->hostlen);
 		add_to_list(host_connections, host_conn);
 	}
 	if (host_conn) host_conn->connections++;
@@ -228,10 +228,12 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 
 	if (!conn) return NULL;
 
-	if (!parse_uri(&conn->uri, url)
-	    || (VALID_PROTOCOL(conn->uri.protocol)
-		&& get_protocol_need_slash_after_host(conn->uri.protocol)
-		&& !conn->uri.hostlen)) {
+	conn->uri = get_uri(url);
+	/* FIXME: Move validation to get_uri() it's ugly. --jonas */
+	if (!conn->uri
+	    || (VALID_PROTOCOL(conn->uri->protocol)
+		&& get_protocol_need_slash_after_host(conn->uri->protocol)
+		&& !conn->uri->hostlen)) {
 		/* Alert small hack to signal parse uri failure. */
 		*url = 0;
 		mem_free(conn);
@@ -411,8 +413,7 @@ done_connection(struct connection *conn)
 {
 	del_from_list(conn);
 	send_connection_info(conn);
-	/* TODO: Some free_uri(). */
-	mem_free(struri(conn->uri));
+	done_uri(conn->uri);
 	mem_free(conn);
 	check_queue_bugs();
 }
@@ -430,7 +431,7 @@ static struct keepalive_connection *
 init_keepalive_connection(struct connection *conn, ttime timeout)
 {
 	struct keepalive_connection *keep_conn;
-	struct uri *uri = &conn->uri;
+	struct uri *uri = conn->uri;
 	unsigned char *host = uri->user ? uri->user : uri->host;
 	int hostlen  = (uri->port ? uri->port + uri->portlen - host
 				  : uri->host + uri->hostlen - host);
@@ -456,7 +457,7 @@ static struct keepalive_connection *
 get_keepalive_connection(struct connection *conn)
 {
 	struct keepalive_connection *keep_conn;
-	struct uri *uri = &conn->uri;
+	struct uri *uri = conn->uri;
 	protocol_handler *handler = get_protocol_handler(uri->protocol);
 	int port = get_uri_port(uri);
 	unsigned char *host = uri->user ? uri->user : uri->host;
@@ -618,7 +619,7 @@ suspend_connection(struct connection *conn)
 static void
 run_connection(struct connection *conn)
 {
-	protocol_handler *func = get_protocol_handler(conn->uri.protocol);
+	protocol_handler *func = get_protocol_handler(conn->uri->protocol);
 
 	assert(func);
 
@@ -642,7 +643,7 @@ retry_connection(struct connection *conn)
 	int max_tries = get_opt_int("connection.retries");
 
 	interrupt_connection(conn);
-	if (conn->uri.post || !max_tries || ++conn->tries >= max_tries) {
+	if (conn->uri->post || !max_tries || ++conn->tries >= max_tries) {
 		/*send_connection_info(conn);*/
 		done_connection(conn);
 		register_bottom_half((void (*)(void *))check_queue, NULL);
@@ -686,8 +687,8 @@ try_to_suspend_connection(struct connection *conn, unsigned char *host)
 	foreachback (c, queue) {
 		if (get_priority(c) <= priority) return -1;
 		if (c->state == S_WAIT) continue;
-		if (c->uri.post && get_priority(c) < PRI_CANCEL) continue;
-		if (host && strlcmp(host, -1, c->uri.host, c->uri.hostlen)) continue;
+		if (c->uri->post && get_priority(c) < PRI_CANCEL) continue;
+		if (host && strlcmp(host, -1, c->uri->host, c->uri->hostlen)) continue;
 		suspend_connection(c);
 		return 0;
 	}
@@ -851,13 +852,13 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	}
 
 	conn = init_connection(u, ref_url, start, cache_mode, pri);
+	mem_free(u);
 	if (!conn) {
 		if (download) {
 			/* Zero length uri signals parse uri failure */
 			download->state = (!*u ? S_BAD_URL : S_OUT_OF_MEM);
 			download->end(download, download->data);
 		}
-		mem_free(u);
 		return -1;
 	}
 

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.149 2004/03/28 19:01:48 zas Exp $ */
+/* $Id: file.c,v 1.150 2004/03/31 20:31:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -623,7 +623,7 @@ file_func(struct connection *connection)
 {
 	unsigned char *redirect = NULL;
 	unsigned char filename[MAX_STR_LEN];
-	int filenamelen = connection->uri.datalen;
+	int filenamelen = connection->uri->datalen;
 	DIR *directory;
 	struct string page;
 	enum connection_state state;
@@ -642,10 +642,10 @@ file_func(struct connection *connection)
 	/* This function works on already simplified file-scheme URI pre-chewed
 	 * by transform_file_url(). By now, the function contains no hostname
 	 * part anymore, possibly relative path is converted to an absolute one
-	 * and uri.data is just the final path to file/dir we should try to
+	 * and uri->data is just the final path to file/dir we should try to
 	 * show. */
 
-	safe_strncpy(filename, connection->uri.data, filenamelen + 1);
+	safe_strncpy(filename, connection->uri->data, filenamelen + 1);
 	decode_uri_string(filename);
 	filenamelen = strlen(filename);
 

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.66 2004/03/31 16:47:18 jonas Exp $ */
+/* $Id: uri.h,v 1.67 2004/03/31 20:31:22 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -77,7 +77,7 @@ unsigned char *unparse_uri(struct uri *uri);
 /* Returns the raw zero-terminated URI string the (struct uri) is associated
  * with. Thus, chances are high that it is the original URI received, not any
  * cheap reconstruction. */
-#define struri(uri) ((uri).protocol_str)
+#define struri(uri) ((uri)->protocol_str)
 
 
 enum uri_component {

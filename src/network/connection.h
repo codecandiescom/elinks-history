@@ -1,16 +1,16 @@
-/* $Id: connection.h,v 1.52 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: connection.h,v 1.53 2004/03/31 20:31:22 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
 
 #include "cache/cache.h"
 #include "encoding/encoding.h"
-#include "protocol/uri.h"
 #include "util/lists.h"
 #include "util/ttime.h"
 
 struct conn_info;
 struct read_buffer;
+struct uri;
 
 
 enum connection_priority {
@@ -112,7 +112,7 @@ struct connection {
 	struct list_head downloads;
 	struct remaining_info prg;
 
-	struct uri uri;
+	struct uri *uri;
 	unsigned char *ref_url;
 	void *dnsquery;
 	struct conn_info *conn_info;

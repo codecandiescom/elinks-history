@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.57 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: cgi.c,v 1.58 2004/03/31 20:31:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,7 @@ static void
 send_post_data(struct connection *conn)
 {
 #define POST_BUFFER_SIZE 4096
-	unsigned char *post = conn->uri.post;
+	unsigned char *post = conn->uri->post;
 	unsigned char *postend;
 	unsigned char buffer[POST_BUFFER_SIZE];
 	struct string data;
@@ -104,7 +104,7 @@ send_post_data(struct connection *conn)
 static void
 send_request(struct connection *conn)
 {
-	if (conn->uri.post) send_post_data(conn);
+	if (conn->uri->post) send_post_data(conn);
 	else close_pipe_and_read(conn);
 }
 
@@ -112,8 +112,8 @@ send_request(struct connection *conn)
 static int
 set_vars(struct connection *conn, unsigned char *script)
 {
-	unsigned char *post = conn->uri.post;
-	unsigned char *question_mark = strchr(conn->uri.data, '?');
+	unsigned char *post = conn->uri->post;
+	unsigned char *question_mark = strchr(conn->uri->data, '?');
 	unsigned char *query_string = question_mark
 				    ? question_mark + 1 : (unsigned char *) "";
 	unsigned char *optstr;
@@ -236,7 +236,7 @@ set_vars(struct connection *conn, unsigned char *script)
 
 #ifdef CONFIG_COOKIES
 	{
-		struct string *cookies = send_cookies(&conn->uri);
+		struct string *cookies = send_cookies(conn->uri);
 
 		if (cookies) {
 			setenv("HTTP_COOKIE", cookies->source, 1);
@@ -281,7 +281,7 @@ execute_cgi(struct connection *conn)
 	unsigned char *question_mark;
 	unsigned char *post_char;
 	unsigned char *script;
-	int scriptlen = conn->uri.datalen;
+	int scriptlen = conn->uri->datalen;
 	struct stat buf;
 	int res;
 	enum connection_state state = S_OK;
@@ -294,12 +294,12 @@ execute_cgi(struct connection *conn)
 		return 1;
 	}
 
-	question_mark = memchr(conn->uri.data, '?', scriptlen);
-	post_char = memchr(conn->uri.data, POST_CHAR, scriptlen);
-	if (post_char) conn->uri.post = post_char + 1;
-	if (question_mark) scriptlen = question_mark - conn->uri.data;
-	else if (post_char) scriptlen = post_char - conn->uri.data;
-	script = memacpy(conn->uri.data, scriptlen);
+	question_mark = memchr(conn->uri->data, '?', scriptlen);
+	post_char = memchr(conn->uri->data, POST_CHAR, scriptlen);
+	if (post_char) conn->uri->post = post_char + 1;
+	if (question_mark) scriptlen = question_mark - conn->uri->data;
+	else if (post_char) scriptlen = post_char - conn->uri->data;
+	script = memacpy(conn->uri->data, scriptlen);
 	if (!script) {
 		state = S_OUT_OF_MEM;
 		goto end2;

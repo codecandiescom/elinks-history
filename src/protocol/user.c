@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.60 2004/03/22 14:35:39 jonas Exp $ */
+/* $Id: user.c,v 1.61 2004/03/31 20:31:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "osdep/osdep.h"
+#include "protocol/uri.h"
 #include "protocol/user.h"
 #include "sched/download.h"
 #include "sched/session.h"
@@ -72,7 +73,7 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 		switch (*cmd) {
 			case 'u':
 			{
-				unsigned char *url = struri(*uri);
+				unsigned char *url = struri(uri);
 
 				add_shell_safe_to_string(&string, url,
 							 strlen(url));

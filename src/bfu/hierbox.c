@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.117 2003/11/29 02:38:43 jonas Exp $ */
+/* $Id: hierbox.c,v 1.118 2003/12/03 00:49:52 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,11 +434,11 @@ enum delete_error {
 
 unsigned char *delete_messages[2][DELETE_ERRORS] = {
 	{
-		N_("Sorry, but the item \"%s\" can not be deleted."),
+		N_("Sorry, but the item \"%s\" cannot be deleted."),
 		N_("Sorry, but the item \"%s\" is being used by something else."),
 	},
 	{
-		N_("Sorry, but the folder \"%s\" can not be deleted."),
+		N_("Sorry, but the folder \"%s\" cannot be deleted."),
 		N_("Sorry, but the folder \"%s\" is being used by something else."),
 	},
 };

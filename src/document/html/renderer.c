@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.270 2003/09/15 20:22:19 jonas Exp $ */
+/* $Id: renderer.c,v 1.271 2003/09/15 20:23:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,18 +249,23 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, 0x0);
-	struct screen_char schar = INIT_SCREEN_CHAR(data, attr, 0);
+	struct screen_char *template = NULL;
 
 	assert(part && part->document);
 	if_assert_failed return;
-
-	set_term_color(&schar, &colors, COLOR_DEFAULT);
 
 	for (; yl; yl--, y++) {
 	    	if (realloc_line(part->document, Y(y), X(x)))
 			return;
 
-		copy_screen_chars(&POS(x, y), &schar, 1);
+		if (template) {
+			copy_screen_chars(&POS(x, y), template, 1);
+		} else {
+			template = &POS(x, y);
+			template->data = data;
+			template->attr = attr;
+			set_term_color(template, &colors, COLOR_DEFAULT);
+		}
 	}
 }
 

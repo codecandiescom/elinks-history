@@ -1,3 +1,14 @@
+Sat Oct  5 09:20:05 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/view.c, globhist/dialogs.c:
+
+	Instead of an empty menu_history_manager in src/globhist/dialogs.c, 
+	#ifdef out the call to menu_history_manager in src/document/view.c.
+	This is more consistant with how it is handled in src/dialogs/menu.c
+	and with bookmarks.  
+	
+	 -- Miciah <miciah@myrealbox.com> 
+
 Fri Oct  4 19:11:45 2002  Laurent Monin <zas@norz.org>:
 
 	* src/: config/options.c, document/view.c:

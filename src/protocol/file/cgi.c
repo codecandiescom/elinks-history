@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.39 2003/12/06 00:02:58 pasky Exp $ */
+/* $Id: cgi.c,v 1.40 2003/12/06 00:30:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ set_vars(struct connection *conn, unsigned char *script)
 	}
 
 	if (setenv("SERVER_SOFTWARE", "ELinks/" VERSION, 1)) return -1;
-	if (setenv("SERVER_PROTOCOL", "ELGI/1.0", 1)) return -1;
+	if (setenv("SERVER_PROTOCOL", "HTTP/1.1", 1)) return -1;
 	/* XXX: Maybe it is better to set this to an empty string? --pasky */
 	if (setenv("SERVER_NAME", "localhost", 1)) return -1;
 	/* XXX: Maybe it is better to set this to an empty string? --pasky */

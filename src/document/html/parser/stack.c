@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.21 2004/09/24 01:46:00 pasky Exp $ */
+/* $Id: stack.c,v 1.22 2004/09/24 01:47:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,6 +84,8 @@ kill_html_stack_item(struct html_element *e)
 	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
 
+	/* As our another tiny l33t extension, we allow the onLoad attribute for
+	 * any element, executing it when that element is fully loaded. */
 	if (e->options)	onload = get_attr_val(e->options, "onLoad");
 	if (onload && *onload && *onload != '^') {
 		/* XXX: The following expression alone amounts two #includes. */

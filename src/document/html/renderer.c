@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.184 2003/07/29 22:55:49 jonas Exp $ */
+/* $Id: renderer.c,v 1.185 2003/07/29 23:09:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,6 +233,8 @@ xpand_spaces(struct part *p, int l)
 #define X(x) (part->xp + (x))
 #define Y(y) (part->yp + (y))
 
+#define set_position(xpos, ypos, value) \
+	do { POS(x, y) = (value); } while (0)
 
 static inline void
 set_hchar(struct part *part, int x, int y, unsigned c)
@@ -247,7 +249,7 @@ set_hchar(struct part *part, int x, int y, unsigned c)
 	assert(part->document->data);
 	if_assert_failed return;
 
-	POS(x, y) = c;
+	set_position(x, y, c);
 }
 
 static inline void
@@ -263,7 +265,7 @@ set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 	assert(part->document->data);
 	if_assert_failed return;
 
-	for (; xl; xl--, x++) POS(x, y) = c;
+	for (; xl; xl--, x++) set_position(x, y, c);
 }
 
 void
@@ -297,7 +299,7 @@ set_hline(struct part *part, int x, int y,
 	for (; charslen > 0; charslen--, x++, chars++) {
 		part->spaces[x] = (*chars == ' ');
 		if (part->document && part->document->data)
-			POS(x, y) = (*chars | attr);
+			set_position(x, y, (*chars | attr));
 	}
 }
 
@@ -368,7 +370,7 @@ copy_chars(struct part *part, int x, int y, int xl, chr *d)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 
-	for (; xl; xl--, x++, d++) POS(x, y) = *d;
+	for (; xl; xl--, x++, d++) set_position(x, y, *d);
 }
 
 static inline void

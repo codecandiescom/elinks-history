@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.13 2004/01/07 19:08:35 jonas Exp $ */
+/* $Id: action.c,v 1.14 2004/01/07 19:11:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,6 +76,9 @@ do_frame_action(struct session *ses,
 	doc_view = current_frame(ses);
 
 	assertm(doc_view, "document not formatted");
+	if_assert_failed return;
+
+	assertm(doc_view->vs, "document view has no state");
 	if_assert_failed return;
 
 	func(ses, doc_view, 0);

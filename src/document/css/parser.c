@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.39 2004/01/24 02:05:46 jonas Exp $ */
+/* $Id: parser.c,v 1.40 2004/01/24 02:41:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,19 +191,6 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 	skip_css_tokens(scanner, '}');
 }
 
-struct css_selector *
-get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
-{
-	struct css_selector *selector;
-
-	foreach (selector, css->selectors) {
-		if (!strlcasecmp(name, namelen, selector->element, -1))
-			return selector;
-	}
-
-	return NULL;
-}
-
 void
 css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 {
@@ -227,25 +214,5 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 			/* TODO: Skip to ';' or block if '{' */
 			skip_css_tokens(&scanner, token->type);
 		}
-	}
-}
-
-void
-done_css_stylesheet(struct css_stylesheet *css)
-{
-	while (!list_empty(css->selectors)) {
-		struct css_selector *selector = css->selectors.next;
-
-		del_from_list(selector);
-
-		while (!list_empty(selector->properties)) {
-			struct css_property *prop = selector->properties.next;
-
-			del_from_list(prop);
-			mem_free(prop);
-		}
-
-		mem_free(selector->element);
-		mem_free(selector);
 	}
 }

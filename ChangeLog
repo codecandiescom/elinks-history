@@ -1,3 +1,15 @@
+Thu Mar 25 17:34:59 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/elinks.spec.in:
+
+	A lot of bconds. Added hooks.pl.  
+
+Thu Mar 25 17:33:57 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/Makefile.am:
+
+	Stubs for perl scripting engine.  
+
 Wed Mar 24 19:35:56 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/http/http.c:

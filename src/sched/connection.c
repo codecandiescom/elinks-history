@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.147 2004/03/31 23:38:27 jonas Exp $ */
+/* $Id: connection.c,v 1.148 2004/03/31 23:47:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,7 +221,7 @@ check_queue_bugs(void)
 
 
 static struct connection *
-init_connection(unsigned char *url, unsigned char *referrer, int start,
+init_connection(unsigned char *url, struct uri *referrer, int start,
 		enum cache_mode cache_mode, enum connection_priority priority)
 {
 	struct connection *conn = mem_calloc(1, sizeof(struct connection));
@@ -241,7 +241,7 @@ init_connection(unsigned char *url, unsigned char *referrer, int start,
 	}
 
 	conn->id = connection_id++;
-	conn->referrer = referrer;
+	conn->referrer = get_uri_reference(referrer);
 	conn->pri[priority] =  1;
 	conn->cache_mode = cache_mode;
 	conn->socket = conn->data_socket = -1;
@@ -413,6 +413,7 @@ done_connection(struct connection *conn)
 {
 	del_from_list(conn);
 	send_connection_info(conn);
+	if (conn->referrer) done_uri(conn->referrer);
 	done_uri(conn->uri);
 	mem_free(conn);
 	check_queue_bugs();
@@ -851,7 +852,7 @@ load_url(unsigned char *url, struct uri *referrer, struct download *download,
 		return 0;
 	}
 
-	conn = init_connection(u, struri(referrer), start, cache_mode, pri);
+	conn = init_connection(u, referrer, start, cache_mode, pri);
 	mem_free(u);
 	if (!conn) {
 		if (download) {

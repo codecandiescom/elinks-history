@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.23 2003/07/03 01:03:36 jonas Exp $ */
+/* $Id: socket.c,v 1.24 2003/07/03 01:26:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,7 +216,7 @@ ssl_connect(struct connection *conn, int sock)
 	switch (ret) {
 		case SSL_ERROR_WANT_READ:
 		case SSL_ERROR_WANT_READ2:
-			setcstate(conn, S_SSL_NEG);
+			set_connection_state(conn, S_SSL_NEG);
 			set_handlers(sock, (void (*)(void *)) ssl_want_read,
 				     NULL, dns_exception, conn);
 			return -1;
@@ -233,7 +233,7 @@ ssl_connect(struct connection *conn, int sock)
 			/* debug("sslerr %s", gnutls_strerror(ret)); */
 			conn->no_tsl++;
 ssl_error:
-			setcstate(conn, S_SSL_ERROR);
+			set_connection_state(conn, S_SSL_ERROR);
 			close_socket(NULL, c_i->sock);
 			dns_found(conn, 0);
 			return -1;
@@ -270,7 +270,7 @@ ssl_write(struct connection *conn, struct write_buffer *wb)
 			return -1;
 		}
 
-		setcstate(conn, wr ? (err == SSL_ERROR_SYSCALL ? -errno
+		set_connection_state(conn, wr ? (err == SSL_ERROR_SYSCALL ? -errno
 							       : S_SSL_ERROR)
 				   : S_CANT_WRITE);
 
@@ -323,7 +323,7 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 			return -1;
 		}
 
-		setcstate(conn, rd ? (err == SSL_ERROR_SYSCALL2 ? -errno
+		set_connection_state(conn, rd ? (err == SSL_ERROR_SYSCALL2 ? -errno
 								: S_SSL_ERROR)
 				   : S_CANT_READ);
 

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.13 2003/07/03 01:03:35 jonas Exp $ */
+/* $Id: finger.c,v 1.14 2003/07/03 01:26:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,12 +38,8 @@ finger_func(struct connection *c)
 	make_connection(c, p, &c->sock1, finger_send_request);
 }
 
-static void
-finger_send_request(struct connection *c)
-{
-	unsigned char *req = init_str();
-	int rl = 0;
-	unsigned char *user = get_user_name(c->url);
+static void finger_send_request(struct connection *c) { unsigned char *req =
+	init_str(); int rl = 0; unsigned char *user = get_user_name(c->url);
 
 	if (!req) return;
 	/* add_to_str(&req, &rl, "/W"); */
@@ -56,7 +52,7 @@ finger_send_request(struct connection *c)
 	add_to_str(&req, &rl, "\r\n");
 	write_to_socket(c, c->sock1, req, rl, finger_sent_request);
 	mem_free(req);
-	setcstate(c, S_SENT);
+	set_connection_state(c, S_SENT);
 }
 
 static void
@@ -99,13 +95,13 @@ finger_get_response(struct connection *c, struct read_buffer *rb)
 	c->from += l;
 	kill_buffer_data(rb, l);
 	read_from_socket(c, c->sock1, rb, finger_get_response);
-	setcstate(c, S_TRANS);
+	set_connection_state(c, S_TRANS);
 }
 
 static void
 finger_end_request(struct connection *c, int state)
 {
-	setcstate(c, state);
+	set_connection_state(c, state);
 
 	if (c->state == S_OK) {
 		if (c->cache) {

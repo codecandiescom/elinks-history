@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.88 2003/07/03 00:28:22 jonas Exp $ */
+/* $Id: ftp.c,v 1.89 2003/07/03 01:26:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,7 @@ send_cmd(struct connection *conn, unsigned char *cmd, int cmdl, void *callback, 
 	write_to_socket(conn, conn->sock1, cmd, cmdl, get_resp);
 
 	mem_free(cmd);
-	setcstate(conn, state);
+	set_connection_state(conn, state);
 }
 
 /* Send USER command. */
@@ -413,7 +413,7 @@ ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 
 	if (!response) {
 		read_from_socket(conn, conn->sock1, rb, ftp_pass_info);
-		setcstate(conn, S_LOGIN);
+		set_connection_state(conn, S_LOGIN);
 		return;
 	}
 
@@ -760,7 +760,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 
 		if (!response) {
 			read_from_socket(conn, conn->sock1, rb, ftp_retr_file);
-			setcstate(conn, S_GETH);
+			set_connection_state(conn, S_GETH);
 			return;
 		}
 
@@ -842,7 +842,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 
 	if (!response) {
 		read_from_socket(conn, conn->sock1, rb, ftp_retr_file);
-		setcstate(conn, S_GETH);
+		set_connection_state(conn, S_GETH);
 		return;
 	}
 
@@ -883,7 +883,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 	if (!response) {
 		read_from_socket(conn, conn->sock1, rb, ftp_got_final_response);
 		if (conn->state != S_TRANS)
-			setcstate(conn, S_GETH);
+			set_connection_state(conn, S_GETH);
 		return;
 	}
 
@@ -924,7 +924,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 	} else {
 		c_i->conn_state = 1;
 		if (conn->state != S_TRANS)
-			setcstate(conn, S_GETH);
+			set_connection_state(conn, S_GETH);
 	}
 
 	return;
@@ -1228,7 +1228,7 @@ out_of_mem:
 
 		}
 
-		setcstate(conn, S_TRANS);
+		set_connection_state(conn, S_TRANS);
 		return;
 	}
 
@@ -1249,7 +1249,7 @@ out_of_mem:
 		ftp_end_request(conn, S_OK);
 	} else {
 		c_i->conn_state = 2;
-		setcstate(conn, S_TRANS);
+		set_connection_state(conn, S_TRANS);
 	}
 
 	return;
@@ -1258,7 +1258,7 @@ out_of_mem:
 static void
 ftp_end_request(struct connection *conn, int state)
 {
-	setcstate(conn, state);
+	set_connection_state(conn, state);
 
 	if (conn->state == S_OK) {
 		if (conn->cache) {

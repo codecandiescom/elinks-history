@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.34 2003/07/03 01:11:53 jonas Exp $ */
+/* $Id: connection.c,v 1.35 2003/07/03 01:26:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,7 @@ stat_timer(struct connection *c)
 }
 
 void
-setcstate(struct connection *c, int state)
+set_connection_state(struct connection *c, int state)
 {
 	struct status *stat;
 	struct remaining_info *prg = &c->prg;
@@ -528,7 +528,7 @@ static inline void
 suspend_connection(struct connection *c)
 {
 	interrupt_connection(c);
-	setcstate(c, S_WAIT);
+	set_connection_state(c, S_WAIT);
 }
 
 static int
@@ -571,7 +571,7 @@ run_connection(struct connection *c)
 
 	func = get_protocol_handler(c->url);
 	if (!func) {
-		setcstate(c, S_BAD_URL);
+		set_connection_state(c, S_BAD_URL);
 		del_connection(c);
 		return;
 	}
@@ -580,13 +580,13 @@ run_connection(struct connection *c)
 	if (!hc) {
 		hc = mem_calloc(1, sizeof(struct h_conn));
 		if (!hc) {
-			setcstate(c, S_OUT_OF_MEM);
+			set_connection_state(c, S_OUT_OF_MEM);
 			del_connection(c);
 			return;
 		}
 		hc->host = get_host_name(c->url);
 		if (!hc->host) {
-			setcstate(c, S_BAD_URL);
+			set_connection_state(c, S_BAD_URL);
 			del_connection(c);
 			mem_free(hc);
 			return;
@@ -634,7 +634,7 @@ abort_connection(struct connection *c)
 void
 abort_conn_with_state(struct connection *conn, int state)
 {
-	setcstate(conn, state);
+	set_connection_state(conn, state);
 	abort_connection(conn);
 }
 
@@ -642,7 +642,7 @@ abort_conn_with_state(struct connection *conn, int state)
 void
 retry_conn_with_state(struct connection *conn, int state)
 {
-	setcstate(conn, state);
+	set_connection_state(conn, state);
 	retry_connection(conn);
 }
 
@@ -748,7 +748,7 @@ again2:
 	foreachback (c, queue) {
 		if (getpri(c) < PRI_CANCEL) break;
 		if (c->state == S_WAIT) {
-			setcstate(c, S_INTERRUPTED);
+			set_connection_state(c, S_INTERRUPTED);
 			del_connection(c);
 			goto again2;
 		}
@@ -940,7 +940,7 @@ load_url(unsigned char *url, unsigned char *ref_url,
 			stat->c = c;
 			stat->ce = c->cache;
 			add_to_list(c->statuss, stat);
-			setcstate(c, c->state);
+			set_connection_state(c, c->state);
 		}
 #ifdef DEBUG
 		check_queue_bugs();
@@ -982,7 +982,7 @@ load_url(unsigned char *url, unsigned char *ref_url,
 	}
 
 	add_to_queue(c);
-	setcstate(c, S_WAIT);
+	set_connection_state(c, S_WAIT);
 
 #ifdef DEBUG
 	check_queue_bugs();
@@ -1111,7 +1111,7 @@ static void
 connection_timeout(struct connection *c)
 {
 	c->timer = -1;
-	setcstate(c, S_TIMEOUT);
+	set_connection_state(c, S_TIMEOUT);
 	if (c->dnsquery) {
 		abort_connection(c);
 	} else if (c->conn_info) {
@@ -1144,7 +1144,7 @@ void
 abort_all_connections(void)
 {
 	while (!list_empty(queue)) {
-		setcstate(queue.next, S_INTERRUPTED);
+		set_connection_state(queue.next, S_INTERRUPTED);
 		abort_connection(queue.next);
 	}
 

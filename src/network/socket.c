@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.38 2003/07/03 00:28:22 jonas Exp $ */
+/* $Id: socket.c,v 1.39 2003/07/03 01:26:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ dns_exception(void *data)
 	struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = (struct conn_info *) conn->conn_info;
 
-	setcstate(conn, S_EXCEPT);
+	set_connection_state(conn, S_EXCEPT);
 	close_socket(NULL, c_i->sock);
 	dns_found(conn, 0);
 }
@@ -132,7 +132,7 @@ make_connection(struct connection *conn, int port, int *sock,
 
 	mem_free(host);
 
-	if (async) setcstate(conn, S_DNS);
+	if (async) set_connection_state(conn, S_DNS);
 }
 
 
@@ -323,7 +323,7 @@ dns_found(void *data, int state)
 		if (errno == EALREADY || errno == EINPROGRESS) {
 			/* It will take some more time... */
 			set_handlers(sock, NULL, connected, dns_exception, conn);
-			setcstate(conn, S_CONN);
+			set_connection_state(conn, S_CONN);
 			return;
 		}
 
@@ -334,7 +334,7 @@ dns_found(void *data, int state)
 		/* Tried everything, but it didn't help :(. */
 
 		/* We set new state only if we already tried something new. */
-		if (trno != c_i->triedno) setcstate(conn, -errno);
+		if (trno != c_i->triedno) set_connection_state(conn, -errno);
 		retry_connection(conn);
 		return;
 	}
@@ -370,7 +370,7 @@ connected(void *data)
 	}
 
 	if (err > 0) {
-		setcstate(conn, -err);
+		set_connection_state(conn, -err);
 
 		/* There are maybe still some more candidates. */
 		close_socket(NULL, c_i->sock);

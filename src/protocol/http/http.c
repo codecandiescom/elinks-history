@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.145 2003/07/03 00:28:22 jonas Exp $ */
+/* $Id: http.c,v 1.146 2003/07/03 01:26:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,7 +270,7 @@ check_http_server_bugs(unsigned char *url,
 static void
 http_end_request(struct connection *conn, int state)
 {
-	setcstate(conn, state);
+	set_connection_state(conn, state);
 	uncompress_shutdown(conn);
 
 	if (conn->state == S_OK) {
@@ -697,7 +697,7 @@ http_send_header(struct connection *conn)
 	write_to_socket(conn, conn->sock1, hdr, l, http_get_header);
 	mem_free(hdr);
 
-	setcstate(conn, S_SENT);
+	set_connection_state(conn, S_SENT);
 }
 
 
@@ -1009,7 +1009,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 
 read_more:
 	read_from_socket(conn, conn->sock1, rb, read_http_data);
-	setcstate(conn, S_TRANS);
+	set_connection_state(conn, S_TRANS);
 	return;
 
 thats_all_folks:
@@ -1109,7 +1109,7 @@ again:
 	}
 	if (!a) {
 		read_from_socket(conn, conn->sock1, rb, http_got_header);
-		setcstate(conn, state);
+		set_connection_state(conn, state);
 		return;
 	}
 	if (a == -2) a = 0;

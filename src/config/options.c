@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.372 2003/10/25 15:09:58 zas Exp $ */
+/* $Id: options.c,v 1.373 2003/10/25 15:15:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,7 +312,8 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->capt = capt;
 	option->desc = desc;
 
-	if (option->type != OPT_ALIAS && (tree->flags & OPT_LISTBOX)) {
+	if (option->type != OPT_ALIAS
+	    && ((tree->flags & OPT_LISTBOX) || (option->flags & OPT_LISTBOX))) {
 		option->box_item = init_option_listbox_item(option);
 		if (!option->box_item) {
 			delete_option(option);

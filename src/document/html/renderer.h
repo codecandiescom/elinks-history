@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.40 2003/09/15 21:28:34 jonas Exp $ */
+/* $Id: renderer.h,v 1.41 2003/09/29 23:09:25 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -90,7 +90,7 @@ struct link_bg {
 	struct screen_char c;
 };
 
-/* For struct f_data */
+/* For struct document */
 struct search {
 	int x, y;
 	signed int n:24;	/* This structure is size-critical */

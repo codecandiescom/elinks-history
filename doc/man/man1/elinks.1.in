@@ -23,8 +23,8 @@ clients.
 .PP
 ELinks can handle both local files and remote URLs. The main
 supported remote URL protocols are HTTP, HTTPS (with SSL support
-compiled in) and FTP. Additional support exists for finger, Gopher,
-SMB, data and NNTP.
+compiled in) and FTP. Additional protocol support exists for finger,
+Gopher, SMB and NNTP.
 .SH "OPTIONS"
 .PP
 Most options can be set in the user interface or config file, so

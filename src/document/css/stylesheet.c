@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.16 2004/01/27 00:52:38 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.17 2004/01/27 01:05:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,6 @@ get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 	return NULL;
 }
 
-#if 0
 static struct css_selector *
 copy_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 {
@@ -126,7 +125,6 @@ clone_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 
 	return copy;
 }
-#endif
 
 void
 merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2)

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.58 2004/01/27 00:54:52 pasky Exp $ */
+/* $Id: parser.c,v 1.59 2004/01/27 01:03:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,16 +173,21 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
  * TODO: selector can currently only be simple element names, and element
  * chains are not supported yet.
  */
-static struct css_selector *
+static struct list_head *
 css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 {
 	struct css_token *token = get_css_token(scanner);
+	static struct list_head selectors;
 	struct css_selector *selector;
+
+	init_list(selectors);
 
 	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just <element>.
 	 * And anyway we should have css_parse_selector(). --pasky */
 	/* TODO: comma-separated list of simple selectors. */
 	/* FIXME: element can be even '*' --pasky */
+
+next_one:
 
 	if (token->type != CSS_TOKEN_IDENT) {
 		skip_css_tokens(scanner, '}');
@@ -193,8 +198,8 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 	/* FIXME: This is totally broken because we have to do this _after_
 	 * scanning for id/class/pseudo. --pasky */
 	selector = get_css_selector(css, token->string, token->length);
-
-	if (!selector) goto out_of_memory;
+	if (!selector)
+		goto out_of_memory;
 
 	/* Let's see if we will get anything else of this. */
 
@@ -227,6 +232,14 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 		token = get_next_css_token(scanner);
 	}
 
+	add_to_list(selectors, selector);
+
+	if (token->type == ',') {
+		/* Multiple elements hooked up to this ruleset. */
+		token = get_next_css_token(scanner);
+		goto next_one;
+	}
+
 	if (token->type != '{') {
 syntax_error:
                 if (selector->id) mem_free(selector->id);
@@ -234,11 +247,17 @@ syntax_error:
                 if (selector->pseudo) mem_free(selector->pseudo);
 
 out_of_memory:
+		foreach (selector, selectors) {
+			if (selector->id) mem_free(selector->id);
+			if (selector->class) mem_free(selector->class);
+			if (selector->pseudo) mem_free(selector->pseudo);
+		}
+
 		skip_css_block(scanner);
 		return NULL;
 	}
 
-	return selector;
+	return &selectors;
 }
 
 
@@ -246,21 +265,21 @@ out_of_memory:
  *
  * ruleset:
  *	  selector [ ',' selector ]* '{' properties '}'
- *
- * TODO: we don't handle comma separated list of selectors yet.
  */
 static void
 css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 {
 	struct css_selector *selector;
+	struct list_head *selectors;
 
-	selector = css_parse_selector(css, scanner);
-	if (!selector) {
+	selectors = css_parse_selector(css, scanner);
+	if (!selectors || list_empty(*selectors)) {
 		return;
 	}
 
 	skip_css_tokens(scanner, '{');
 
+	selector = selectors->next;
 	/* TODO: We don't handle the case where a property has already been
 	 * added to a selector. Maybe we should pass an empty list to
 	 * css_parse_properties() and then do a merge of old and new properties
@@ -268,6 +287,12 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 	css_parse_properties(&selector->properties, scanner);
 
 	skip_css_tokens(scanner, '}');
+
+	/* Mirror the properties to all the selectors. */
+	selector = selector->next;
+	while (selector != selectors) {
+		selector = selector->next;
+	}
 }
 
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.435 2004/05/14 00:43:26 jonas Exp $ */
+/* $Id: renderer.c,v 1.436 2004/05/16 12:57:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,8 +100,8 @@ static struct hash *table_cache = NULL;
 void line_break(struct part *);
 void put_chars(struct part *, unsigned char *, int);
 
-#define X(x_)	(part->x + (x_))
-#define Y(y_)	(part->y + (y_))
+#define X(x_)	(part->box.x + (x_))
+#define Y(y_)	(part->box.y + (y_))
 
 #define SPACES_GRANULARITY	0x7F
 
@@ -177,7 +177,7 @@ realloc_spaces(struct part *part, int length)
 
 #define LINE(y_)	part->document->data[Y(y_)]
 #define POS(x_, y_)	LINE(y_).chars[X(x_)]
-#define LEN(y_)		int_max(LINE(y_).length - part->x, 0)
+#define LEN(y_)		int_max(LINE(y_).length - part->box.x, 0)
 
 
 /* When we clear chars we want to preserve and use the background colors
@@ -523,8 +523,7 @@ split_line_at(struct part *part, register int width)
 
 	/* Make sure that we count the right margin to the total
 	 * actual box width. */
-	if (new_width > part->width)
-		part->width = new_width;
+	int_upper_bound(&new_width, part->box.width);
 
 	if (part->document) {
 		assert(part->document->data);
@@ -558,11 +557,11 @@ split_line_at(struct part *part, register int width)
 
 	if (part->cx == width) {
 		part->cx = -1;
-		int_lower_bound(&part->height, part->cy);
+		int_lower_bound(&part->box.height, part->cy);
 		return 2;
 	} else {
 		part->cx -= width - par_format.leftmargin;
-		int_lower_bound(&part->height, part->cy + 1);
+		int_lower_bound(&part->box.height, part->cy + 1);
 		return 1;
 	}
 }
@@ -593,7 +592,7 @@ split_line(struct part *part)
 
 	/* Make sure that we count the right margin to the total
 	 * actual box width. */
-	int_lower_bound(&part->width, part->cx + par_format.rightmargin);
+	int_lower_bound(&part->box.width, part->cx + par_format.rightmargin);
 
 	return 0;
 }
@@ -1039,7 +1038,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		last_tag_for_newline = (void *)&part->document->tags;
 	}
 
-	int_lower_bound(&part->height, part->cy + 1);
+	int_lower_bound(&part->box.height, part->cy + 1);
 
 	link_state = get_link_state();
 
@@ -1100,7 +1099,7 @@ line_break(struct part *part)
 	assert(part);
 	if_assert_failed return;
 
-	int_lower_bound(&part->width, part->cx + par_format.rightmargin);
+	int_lower_bound(&part->box.width, part->cx + par_format.rightmargin);
 
 	if (nobreak) {
 		nobreak = 0;
@@ -1111,7 +1110,7 @@ line_break(struct part *part)
 
 	if (!part->document || !part->document->data) goto end;
 
-	if (!realloc_lines(part->document, part->height + part->cy + 1))
+	if (!realloc_lines(part->document, part->box.height + part->cy + 1))
 		return;
 
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
@@ -1372,8 +1371,8 @@ format_html_part(unsigned char *start, unsigned char *end,
 	if (!part) goto ret;
 
 	part->document = document;
-	part->x = xs;
-	part->y = ys;
+	part->box.x = xs;
+	part->box.y = ys;
 	part->cx = -1;
 	part->cy = 0;
 	part->link_num = link_num;
@@ -1384,7 +1383,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	done_html_parser_state(html_state);
 
-	part->max_width = int_max(part->max_width, part->width);
+	int_lower_bound(&part->max_width, part->box.width);
 
 	nobreak = 0;
 
@@ -1394,7 +1393,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	if (document) {
 		struct node *node = document->nodes.next;
 
-		node->box.height = ys - node->box.y + part->height;
+		node->box.height = ys - node->box.y + part->box.height;
 	}
 
 ret:

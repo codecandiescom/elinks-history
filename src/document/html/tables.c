@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.167 2004/05/14 08:49:07 zas Exp $ */
+/* $Id: tables.c,v 1.168 2004/05/16 12:57:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -804,8 +804,8 @@ format_cell(struct table *table, int column, int row,
 	struct table_cell *cell = CELL(table, column, row);
 
 	if (document) {
-		x += table->p->x;
-		y += table->p->y;
+		x += table->p->box.x;
+		y += table->p->box.y;
 	}
 
 	return format_html_part(cell->start, cell->end, cell->align,
@@ -827,7 +827,7 @@ get_cell_width(unsigned char *start, unsigned char *end, int cellpadding, int w,
 			     NULL, n_link);
 	if (!p) return;
 
-	if (min) *min = p->width;
+	if (min) *min = p->box.width;
 	if (max) *max = p->max_width;
 	if (n_links) *n_links = p->link_num;
 
@@ -1329,7 +1329,7 @@ get_table_heights(struct table *t)
 			p = format_cell(t, i, j, NULL, 2, 2, xw);
 			if (!p) return;
 
-			cell->height = p->height;
+			cell->height = p->box.height;
 			/* DBG("%d, %d.",xw, cell->height); */
 			mem_free(p);
 		}
@@ -1458,7 +1458,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				if (p) {
 					int yt;
 
-					for (yt = 0; yt < p->height; yt++) {
+					for (yt = 0; yt < p->box.height; yt++) {
 						expand_lines(t->p, yp + yt);
 						expand_line(t->p, yp + yt, xp + t->columns_width[i]);
 					}
@@ -1805,14 +1805,14 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	fragment_id = get_attr_val(attr, "id");
 
 	wf = 0;
-	width = get_width(attr, "width", (p->document || p->x));
+	width = get_width(attr, "width", (p->document || p->box.x));
 	if (width == -1) {
 		width = par_format.width - par_format.leftmargin - par_format.rightmargin;
 		if (width < 0) width = 0;
 		wf = 1;
 	}
 
-	t = parse_table(html, eof, end, bgcolor, (p->document || p->x), &bad_html, &bad_html_n);
+	t = parse_table(html, eof, end, bgcolor, (p->document || p->box.x), &bad_html, &bad_html_n);
 	if (!t) {
 		mem_free_if(bad_html);
 		goto ret0;
@@ -1855,12 +1855,12 @@ again:
 	get_table_width(t);
 
 	margins = par_format.leftmargin + par_format.rightmargin;
-	if (!p->document && !p->x) {
+	if (!p->document && !p->box.x) {
 		if (!wf) int_upper_bound(&t->max_t, width);
 		int_lower_bound(&t->max_t, t->min_t);
 
-		p->max_width = int_max(p->max_width, t->max_t + margins);
-		p->width = int_max(p->width, t->min_t + margins);
+		int_lower_bound(&p->max_width, t->max_t + margins);
+		int_lower_bound(&p->box.width, t->min_t + margins);
 
 		goto ret2;
 	}
@@ -1885,11 +1885,11 @@ again:
 	else
 		distribute_widths(t, width);
 
-	if (!p->document && p->x == 1) {
+	if (!p->document && p->box.x == 1) {
 		int ww = t->rw + margins;
 
 		int_bounds(&ww, t->rw, par_format.width);
-		p->width = int_max(p->width, ww);
+		int_lower_bound(&p->box.width, ww);
 		p->cy += t->rh;
 
 		goto ret2;
@@ -1910,27 +1910,26 @@ again:
 		else
 			x = par_format.leftmargin;
 
-		if (x > ww) x = ww;
-		if (x < 0) x = 0;
+		int_bounds(&x, 0, ww);
 	}
 
 	get_table_heights(t);
 
 	if (!p->document) {
-		p->width = int_max(p->width, t->rw + margins);
+		int_lower_bound(&p->box.width, t->rw + margins);
 		p->cy += t->rh;
 		goto ret2;
 	}
 
 	node = p->document->nodes.next;
-	node->box.height = p->y - node->box.y + p->cy;
+	node->box.height = p->box.y - node->box.y + p->cy;
 
 	display_complicated_table(t, x, p->cy, &cye);
 	display_table_frames(t, x, p->cy);
 
 	new_node = mem_alloc(sizeof(struct node));
 	if (new_node) {
-		set_box(&new_node->box, node->box.x, p->y + cye,
+		set_box(&new_node->box, node->box.x, p->box.y + cye,
 			node->box.width, 0);
 		add_to_list(p->document->nodes, new_node);
 	}
@@ -1943,7 +1942,7 @@ again:
 
 ret2:
 	p->link_num = t->link_num;
-	p->height = int_max(p->height, p->cy);
+	int_lower_bound(&p->box.height, p->cy);
 	free_table(t);
 	done_html_parser_state(state);
 

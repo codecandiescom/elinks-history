@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.20 2003/09/30 11:49:44 jonas Exp $ */
+/* $Id: color.h,v 1.21 2003/10/01 23:12:07 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -23,6 +23,7 @@
 enum color_type {
 	COLOR_DEFAULT = 0,
 	COLOR_LINK,
+	COLOR_ENHANCE,
 
 	COLOR_TYPES, /* XXX: Keep last */
 };

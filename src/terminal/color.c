@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.44 2003/10/01 00:35:27 jonas Exp $ */
+/* $Id: color.c,v 1.45 2003/10/01 23:12:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,6 +95,7 @@ static struct color_mode_info color_modes[] = {
 		{
 			/* COLOR_DEFAULT */	{ 8, 16 },
 			/* COLOR_LINK */	{ 8,  8 },
+			/* COLOR_ENHANCE */	{ 8, 16 },
 		}
 	},
 
@@ -104,6 +105,7 @@ static struct color_mode_info color_modes[] = {
 		{
 			/* COLOR_DEFAULT */	{ 8, 16 },
 			/* COLOR_LINK */	{ 8,  8 },
+			/* COLOR_ENHANCE */	{ 8, 16 },
 		}
 	},
 };
@@ -171,7 +173,8 @@ extern int dump_pos;
 #define use_inverse(bg, fg) CMPCODE(fg & TERM_COLOR_MASK) < CMPCODE(bg)
 
 static inline void
-set_term_color16(struct screen_char *schar, unsigned char fg, unsigned char bg)
+set_term_color16(struct screen_char *schar, enum color_type type,
+		 unsigned char fg, unsigned char bg)
 {
 	/* Adjusts the foreground color to be more visible. */
 	if (d_opt && !d_opt->allow_dark_on_black) {
@@ -185,6 +188,12 @@ set_term_color16(struct screen_char *schar, unsigned char fg, unsigned char bg)
 
 		if (schar->attr & SCREEN_ATTR_BOLD)
 			fg |= SCREEN_ATTR_BOLD;
+
+		if ((schar->attr & SCREEN_ATTR_UNDERLINE)
+		    && type == COLOR_ENHANCE) {
+			fg |= SCREEN_ATTR_BOLD;
+			fg ^= 0x04;
+		}
 	}
 
 	/* Adjusts the foreground color to be more visible. */
@@ -221,7 +230,7 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	switch (color_mode) {
 	case COLOR_MODE_MONO:
 	case COLOR_MODE_16:
-		set_term_color16(schar, fg, bg);
+		set_term_color16(schar, type, fg, bg);
 		break;
 	default:
 		internal("Invalid color mode");

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.85 2003/09/30 11:47:01 jonas Exp $ */
+/* $Id: screen.c,v 1.86 2003/10/01 23:12:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -306,34 +306,12 @@ add_char16(struct string *screen, struct screen_driver *driver,
 	}
 
 	/* This is optimized for the (common) case that underlines are rare. */
-	if (underline != state->underline) {
-		/* Underline is optional which makes everything a bit more
-		 * complicated. */
-		if (!driver->underline) {
-			/* If underlines should _not_ be drawn color
-			 * enhancements have to be applied _before_ adding the
-			 * color below and the state should not be touch
-			 * because we want to apply enhancements for each
-			 * underlined char. */
-			if (underline) {
-				color |= SCREEN_ATTR_BOLD;
-				color ^= 0x04;
+	if (underline != state->underline && driver->underline) {
+		/* Completely handle the underlining even if we later change
+		 * the color. */
+		state->underline = underline;
 
-				/* Mark that underline has been handled so it
-				 * is not added when adding the color below. */
-				underline = 0;
-			}
-		} else if (color != state->color) {
-			/* Color changes wipes away any previous attributes
-			 * which means underlines has to be added together with
-			 * the color below so here we just update the state. */
-			state->underline = underline;
-		} else {
-			/* Completely handle the underlining. */
-			state->underline = underline;
-
-			add_term_string(screen, driver->underline[!!underline]);
-		}
+		add_term_string(screen, driver->underline[!!underline]);
 	}
 
 	if (color != state->color) {
@@ -359,7 +337,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 			add_bytes_to_string(screen, ";7", 2);
 		}
 
-		if (underline) {
+		if (underline && driver->underline) {
 			add_bytes_to_string(screen, ";4", 2);
 		}
 

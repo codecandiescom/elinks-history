@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.43 2003/01/05 16:48:15 pasky Exp $ */
+/* $Id: terminal.c,v 1.44 2003/01/18 22:58:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1066,8 +1066,22 @@ void
 draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	   unsigned c, int w)
 {
-	static int p1[] = { 218, 191, 192, 217, 179, 196 };
-	static int p2[] = { 201, 187, 200, 188, 186, 205 };
+	static enum frame_char p1[] = {
+		FRAMES_ULCORNER,
+		FRAMES_URCORNER,
+		FRAMES_DLCORNER,
+		FRAMES_DRCORNER,
+		FRAMES_VLINE,
+		FRAMES_HLINE,
+	};
+	static enum frame_char p2[] = {
+		FRAMED_ULCORNER,
+		FRAMED_URCORNER,
+		FRAMED_DLCORNER,
+		FRAMED_DRCORNER,
+		FRAMED_VLINE,
+		FRAMED_HLINE,
+	};
 	int *p = w > 1 ? p2 : p1;
 
 	c |= ATTR_FRAME;

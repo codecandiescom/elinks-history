@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.27 2002/12/26 03:06:35 pasky Exp $ */
+/* $Id: tables.c,v 1.28 2003/01/18 22:58:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,6 +112,8 @@ struct s_e {
 /* Global variables */
 
 int table_level;
+
+/* TODO: Use /FRAME._.* / macros ! --pasky */
 
 static unsigned char frame_table[81] = {
 	0x00, 0xb3, 0xba,	0xc4, 0xc0, 0xd3,	0xcd, 0xd4, 0xc8,

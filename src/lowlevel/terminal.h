@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.20 2002/11/29 17:37:33 zas Exp $ */
+/* $Id: terminal.h,v 1.21 2003/01/18 22:58:04 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -130,6 +130,34 @@ void block_itrm(int);
 int unblock_itrm(int);
 void exec_thread(unsigned char *, int);
 void close_handle(void *);
+
+/* Linux frame symbols table (it's magically converted to other terminals when
+ * needed). */
+/* In the screen image, they have attribute ATTR_FRAME; you should drop them
+ * to the image using draw_frame_char(). */
+/* TODO: When we'll support internal Unicode, this should be changed to some
+ * Unicode sequences. --pasky */
+
+enum frame_char {
+	/* single-lined */
+	FRAMES_ULCORNER = 218,
+	FRAMES_URCORNER = 191,
+	FRAMES_DLCORNER = 192,
+	FRAMES_DRCORNER = 217,
+	FRAMES_LTEE = 180, /* => the tee points to the left => -| */
+	FRAMES_RTEE = 195,
+	FRAMES_VLINE = 179,
+	FRAMES_HLINE = 196,
+	FRAMES_CROSS = 197, /* + */
+
+	/* double-lined */ /* TODO: The TEE-chars! */
+	FRAMED_ULCORNER = 201,
+	FRAMED_URCORNER = 187,
+	FRAMED_DLCORNER = 200,
+	FRAMED_DRCORNER = 188,
+	FRAMED_VLINE = 186,
+	FRAMED_HLINE = 205,
+};
 
 #define TERM_FN_TITLE	1
 #define TERM_FN_RESIZE	2

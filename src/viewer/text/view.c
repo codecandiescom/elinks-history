@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.11 2003/01/05 16:48:17 pasky Exp $ */
+/* $Id: view.c,v 1.12 2003/01/18 22:58:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -867,10 +867,9 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 		for (i = 0; i < fsd->x; i++) {
 			int wwx = fsd->f[i].xw;
 
-			/* FIXME: don't use hardcoded charcodes..? */
-			if (i) fill_area(t, x, y + 1, 1, wwy, 179 | ATTR_FRAME);
-			if (j) fill_area(t, x + 1, y, wwx, 1, 196 | ATTR_FRAME);
-			if (i && j) set_char(t, x, y, 197 | ATTR_FRAME);
+			if (i) fill_area(t, x, y + 1, 1, wwy, FRAMES_VLINE | ATTR_FRAME);
+			if (j) fill_area(t, x + 1, y, wwx, 1, FRAMES_HLINE | ATTR_FRAME);
+			if (i && j) set_char(t, x, y, FRAMES_CROSS | ATTR_FRAME);
 			if (fsd->f[j * fsd->x + i].subframe) {
 				draw_frame_lines(t, fsd->f[j * fsd->x + i].subframe, x + 1, y + 1);
 			}

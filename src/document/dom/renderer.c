@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.15 2004/09/27 12:28:05 jonas Exp $ */
+/* $Id: renderer.c,v 1.16 2004/10/01 10:52:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -689,6 +689,12 @@ render_dom_document(struct cache_entry *cached, struct document *document,
 	document->bgcolor = global_doc_opts->default_bg;
 
 	walk_dom_nodes(&navigator, root);
+	/* If there are no non-element nodes after the last element node make
+	 * sure that we flush to the end of the cache entry source including
+	 * the '>' of the last element tag if it has one. (bug 519) */
+	if (check_dom_node_source(&renderer, renderer.position, 0)) {
+		render_dom_flush(&renderer, renderer.end);
+	}
 
 	done_dom_node(root);
 	done_dom_navigator(&navigator);

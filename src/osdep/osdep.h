@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.20 2003/10/20 15:38:33 pasky Exp $ */
+/* $Id: osdep.h,v 1.21 2003/10/27 01:17:08 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -152,6 +152,10 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 
 #if !defined(HAVE_BEGINTHREAD) && !defined(BEOS) && !defined(HAVE_PTHREADS) && !defined(HAVE_CLONE)
 #define THREAD_SAFE_LOOKUP
+#endif
+
+#if defined(HAVE_MOUOPEN) && !defined(USE_GPM) && defined(USE_MOUSE)
+#define USING_OS2_MOUSE
 #endif
 
 #ifndef HAVE_SA_STORAGE

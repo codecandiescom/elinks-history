@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.95 2003/10/27 01:12:33 pasky Exp $ */
+/* $Id: osdep.c,v 1.96 2003/10/27 01:17:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -617,9 +617,7 @@ input_thread(void *p)
 }
 #endif /* #ifdef HAVE_READ_KBD */
 
-#if defined(HAVE_MOUOPEN) && !defined(USE_GPM) && defined(USE_MOUSE)
-
-#define USING_OS2_MOUSE
+#if USING_OS2_MOUSE
 
 #ifdef HAVE_SYS_FMUTEX_H
 _fmutex mouse_mutex;
@@ -796,7 +794,7 @@ done_draw(void)
 #endif
 }
 
-#endif /* if HAVE_MOUOPEN */
+#endif /* USING_OS2_MOUSE */
 
 #elif defined(HAVE_CLONE)
 

@@ -1,3 +1,132 @@
+Thu Jun 12 18:43:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Since go_backwards() is called only with psteps being 1 and more,
+	steps is always >= 0. Thus removed useless check.  
+
+Thu Jun 12 18:41:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Really do.  
+
+Thu Jun 12 18:40:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, sched/history.c, sched/location.c,
+	sched/location.h:
+
+	Removed the location.unhist_jump hack, it will not be needed soon
+	anymoe and it didn't sound as a good idea anyway.  
+
+Thu Jun 12 16:26:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: Makefile.doc, config/elinks.conf.xml, tools/help2doc,
+	tools/help2docbook:
+
+	Renamed the doc script. It has been hacked extensively to also
+	support generating elinks.conf.5, just fly to src/doc/book and `make
+	generated-docs`.  
+
+Thu Jun 12 01:15:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/lua/hooks.c:
+
+	Fix a login inversion in 'Use have_location() instead of hardwired
+	list_empty() call.' 
+
+Thu Jun 12 01:06:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.h:
+
+	Damn dependencies. Removed set_location() ...  
+
+Thu Jun 12 00:47:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: history.h, session.h:
+
+	Added more functions to encapsulate location/history management.  
+
+Thu Jun 12 00:08:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.h:
+
+	Minor tidy up of comments 
+
+Thu Jun 12 00:02:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, history.c, session.c, session.h:
+
+	Renames: session_wtd -> task_type, wtd_data -> task.  
+
+Wed Jun 11 22:54:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/document.c, document/html/renderer.c, lua/core.c,
+	viewer/text/vs.c:
+
+	Removed useless including of sched/history.h.  
+
+Wed Jun 11 22:52:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/renderer.c, lua/core.c, viewer/text/view.h:
+
+	Removed useless including of sched/location.h.  
+
+Wed Jun 11 22:49:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	If @location, destroy_location() upon destroying struct session.  
+
+Wed Jun 11 22:49:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lua/hooks.c:
+
+	Use have_location() instead of hardwired list_empty() call.  
+
+Wed Jun 11 22:42:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	Reordering of declarations.  
+
+Wed Jun 11 22:42:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: history.h, session.h:
+
+	Moved have_location() from sched/history.h to sched/session.h.  
+
+Wed Jun 11 22:36:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: location.h, session.h:
+
+	Moved cur_loc() from sched/location.h to sched/session.h, it makes
+	more sense and is nicer from the OO POV. Added session.location
+	field, not being used yet. The gracious reviewer shall overlook that
+	the comments inserted already reflect the planned final state.  
+
+Wed Jun 11 22:33:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/tools/help2docbook:
+
+	Converted to backend design ;) 
+
+Wed Jun 11 22:29:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Briefly described struct session. Massively reorganized it --- now
+	it is logically chunked to several parts clustering tightly related
+	fields, and each of the parts is even captioned! ;-). Documented
+	type of linked lists items.  
+
+Wed Jun 11 22:14:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Commented (struct session)'s helper structures, minor reorder inside
+	of (struct frame) to be a bit more logical.  
+
 Wed Jun 11 22:05:51 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/sched/history.c:

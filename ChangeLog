@@ -1,3 +1,75 @@
+Sat Aug 31 00:27:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bookmarks/dialogs.c, globhist/dialogs.c,
+	globhist/globhist.c, globhist/globhist.h:
+
+	Introduced refcount to the world of global history as well.  
+
+Fri Aug 30 23:38:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	...what about two really-del dialogs per one bookmark? 
+
+Fri Aug 30 23:38:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/czech.lng, src/intl/language.inc:
+
+	Czech translation update.  
+
+Fri Aug 30 23:32:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bookmarks/dialogs.c, dialogs/edit.c, dialogs/edit.h,
+	globhist/dialogs.c:
+
+	..even when the edit dialog is cancelled.  
+
+Fri Aug 30 23:21:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/bookmarks/bookmarks.c, src/bookmarks/bookmarks.h,
+	src/bookmarks/dialogs.c, src/intl/lang_defs.h,
+	src/intl/language.inc:
+
+	Added refcount to struct bookmark as a protection to evil people
+	trying to edit and delete a bookmark at once.  
+
+Fri Aug 30 22:57:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+
+	Stale TODO items removed.  
+
+Fri Aug 30 22:57:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/intl/language.inc:
+
+	Forgotten language updates.  
+
+Fri Aug 30 22:55:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/bookmarks.c,
+	bookmarks/bookmarks.h, bookmarks/dialogs.c, globhist/dialogs.c,
+	globhist/globhist.c, globhist/globhist.h:
+
+	Multiple instances of listboxes should coexist quite nicely now -
+	changed listbox_item.box to pointer to list_head.  
+
+Fri Aug 30 22:10:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/hungarian.lng:
+
+	Hungarian translation updates by Varga Balázs <vinnui@broadband.hu>.  
+
 Fri Aug 30 15:00:01 2002  Laurent Monin <zas@norz.org>:
 
 	* src/: config/opttypes.c, document/html/colors.c,
@@ -3748,7 +3820,436 @@ Wed May  8 13:55:00 2002  Petr Baudis <pasky@ji.cz>:
 	protocol/ftp.h, protocol/mailto.c, protocol/mailto.h,
 	protocol/types.c, protocol/types.h, protocol/url.c, protocol/url.h,
 	protocol/http/date.c, protocol/http/header.c, protocol/http/http.c,
-	protocol/http/http.h, protocol/http/htt                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                src/: main.c, config/Makefile.am, config/conf.c, config/conf.h,
+	protocol/http/http.h, protocol/http/https.c, protocol/http/https.h,
+	ssl/connect.c, ssl/connect.h, ssl/ssl.c, ssl/ssl.h, util/base64.c,
+	util/blacklist.c, util/conv.c, util/error.c, util/memlist.c,
+	util/secsave.c:
+
+	Changed ELinks internal #includes from <file> to "file". Patch by
+	Peter Wang.  
+
+Wed May  8 13:39:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/: download.c, session.c:
+
+	FIXMEs about frames and content-type checking.  
+
+Wed May  8 12:27:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/session.c:
+
+	Tidyup of request_frame(), request_frameset(),
+	request_additional_loading_file() and process_file_requests().  
+
+Tue May  7 13:19:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in, src/links.h, src/main.c,
+	src/config/kbdbind.c, src/dialogs/info.c, src/dialogs/menu.c,
+	src/dialogs/refresh.c, src/document/cache.h, src/document/dump.c,
+	src/document/session.c, src/document/view.c, src/lowlevel/sched.c,
+	src/lua/Makefile.am, src/lua/core.c, src/lua/core.h,
+	src/lua/hooks.c, src/lua/hooks.h, src/lua/lua.c, src/lua/lua.h,
+	src/protocol/http/http.c:
+
+	Moved most lua pieces to src/lua/hooks.*. Moved src/lua/lua.* to
+	src/lua/core.*. Minor code cleanups. Also introduced proxy_for_hook.
+	We also have HAVE_SCRIPTING dummy #define now. Patch by Peter Wang
+	and me.  
+
+Tue May  7 07:23:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/ukrainian.lng, src/intl/language.inc:
+
+	Ukrainian translation update by Dmitry.  
+
+Mon May  6 15:27:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/czech.lng, src/intl/language.inc:
+
+	Czech translation stylistical correction.  
+
+Mon May  6 15:24:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* test/javascript_broken.html:
+
+	Broken page due to braindead HTML parser and <td> inside <script>
+	inside <table>.  
+
+Mon May  6 15:19:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Use mkstemp() instead of tmpname() in textarea_edit().  
+
+Mon May  6 14:12:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/conf.c, config/options.c, cookies/cookies.c,
+	document/download.c, document/dump.c, document/view.c,
+	lowlevel/af_unix.c, lowlevel/connect.c, lowlevel/connect.h,
+	lowlevel/dns.c, lowlevel/home.c, osdep/os_dep.c, protocol/file.c,
+	protocol/url.c, util/secsave.c:
+
+	OS/2 compilation fixes by Cris. IIRC only #includes swapping.  
+
+Mon May  6 11:45:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/secsave.h:
+
+	Include stdio.h and sys/types.h in util/secfile.h. Broke compilation
+	on OS/2 otherwise.  
+
+Sun May  5 16:43:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/kbdbind.c:
+
+	Repair of zas' broken tidyup.  
+
+Sun May  5 16:19:40 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Tidy up. Table in parse_act() is now an strtonum array.  
+
+Sun May  5 15:10:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: hooks.lua, links-remote, remote.lua:
+
+	Semi-support from passing URLs from remote programs to ELinks (like
+	'netscape -remote'), contributed by Len Trigg <len@reeltwo.com>.  
+
+Sun May  5 15:07:30 2002  Laurent Monin <zas@norz.org>:
+
+	* linkskeys.5:
+
+	Updated for link-menu action.  
+
+Sun May  5 14:52:53 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
+
+	A new configurable keyboard shortcut was added. It has the same
+	effect than a right mouse button click on a link/image/form, it
+	popups a contextual menu with possible actions for it. It's bound to
+	'l' or 'L' keys by default and corresponds to action named
+	ACT_LINK_MENU.  
+
+Sun May  5 14:23:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Lua RedHat-specific -I fix by Len Trigg <len@reeltwo.com>.  
+
+Sun May  5 12:40:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/home.c, protocol/ftp.h:
+
+	OS/2 compilation fixes by Cris.  
+
+Sun May  5 12:36:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/sched.c:
+
+	Minor tidyup in check_queue_bugs() by Cris.  
+
+Sat May  4 17:06:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	Tidy up. head_msg() was partially rewritten. Now it replaces control
+	chars in headers with '*' if needed, '\r' is ignored, ending '\n'
+	are removed.  
+
+Sat May  4 15:12:24 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng, src/intl/language.inc:
+
+	Updated french translation by Zas.  
+
+Sat May  4 12:55:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/italian.lng, src/intl/language.inc:
+
+	Updated italian translation by Cris.  
+
+Sat May  4 12:50:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL:
+
+	Added note about versions of automake and autoconf.  
+
+Sat May  4 09:14:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/danish.lng, intl/dutch.lng,
+	intl/english.lng, intl/estonian.lng, intl/finnish.lng,
+	intl/french.lng, intl/galician.lng, intl/german.lng,
+	intl/greek.lng, intl/hungarian.lng, intl/icelandic.lng,
+	intl/indonesian.lng, intl/italian.lng, intl/lithuanian.lng,
+	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng, src/document/view.c,
+	src/intl/lang_defs.h, src/intl/language.inc:
+
+	Added reload actions to link context menu.  
+
+Sat May  4 09:00:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/session.c,
+	document/view.c:
+
+	Added ACT_ENTER_RELOAD - loads document behind link even when it's
+	already in cache. Very useful for some web discussion systems, we
+	cache redirects when we are logging in for more times, thus we won't
+	relogin at all. submit_form_do() -> goto_link(). submit_form() ->
+	submit_form_do(), submit_form() and submit_form_reload() as only
+	wrappeers for submit_form_do().  
+
+Sat May  4 08:42:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/: session.c, session.h, view.c:
+
+	Added cache_mode parameter to goto_url_w(). goto_url_f() ->
+	goto_url_frame(). Added goto_url_frame_reload().  
+
+Sat May  4 08:30:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/session.c, document/session.h, lowlevel/sched.c,
+	lowlevel/sched.h:
+
+	Use enum cache_mode in prototypes declaration. More spreading of
+	enum cache_mode in document/session.*.  
+
+Sat May  4 08:23:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/session.c, lowlevel/connect.c, lowlevel/sched.c,
+	lowlevel/sched.h, protocol/http/http.c:
+
+	no_cache -> cache_mode, NC_* moved to enum cache_mode.  
+
+Sat May  4 08:14:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/document.c, document/cache.c, document/session.c,
+	document/view.c, document/html/renderer.c, lowlevel/sched.c,
+	lua/lua.c:
+
+	Changed return value of find_in_cache() - now it returns 0 when
+	nothing was found and 1 if something was digged from the cache. Much
+	more intuitive than -1/0, I think.  
+
+Sat May  4 08:09:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/cache.c:
+
+	Tidyup of find_in_cache().  
+
+Sat May  4 08:06:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/session.c:
+
+	Tidyup of ses_goto().  
+
+Sat May  4 07:57:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/session.c:
+
+	Tidyup of goto_url_w().  
+
+Sat May  4 07:44:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/renderer.c:
+
+	cache_entries_count -> table_cache_entries. *sigh* I feel like
+	talking with a deaf sometimes.  
+
+Thu May  2 19:20:45 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	A limit to the number of entries in cache used for nested tables was
+	added.  It's a partial fix against poor performance obtained when
+	refreshing some pages (like
+	http://www.gentoo.org/index-packages.html).  A better fix will come
+	later with the implementation of hash tables for cache searching.  
+
+Wed May  1 19:34:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+
+	Cleanup of get_html_form(). Strip query string from action if action
+	is not specified, but only when method is get.  
+
+Wed May  1 18:33:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/hooks.lua:
+
+	Added hook for e2:something in URL - search on
+	http://www.everything2.org/.  
+
+Wed May  1 12:47:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+
+	Commented out code for stripping anything behind '?' in the base URL
+	when composing action URL for a form. Reported by Anders Widman
+	<andewid@tnonline.net>.  
+
+Wed May  1 12:41:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Attempt #1 to fix compilation on FreeBSD. Thanks to clemensF.  
+
+Wed May  1 09:00:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* SITES:
+
+	Added http://elinks.pld.org.pl/ as new ELinks' primary site.  
+
+Tue Apr 30 13:02:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre7-CVS 
+
+Tue Apr 30 12:53:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre6 
+
+Tue Apr 30 10:10:03 2002  Laurent Monin <zas@norz.org>:
+
+	* test/href_tests.html:
+
+	The purpose of this document is to permit testing of href links.  
+
+Tue Apr 30 09:22:16 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/types.c:
+
+	Tidy up. Small optimization in get_content_type() concerning ending
+	spaces removing.  
+
+Mon Apr 29 22:37:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+
+	Fixed bug reproducible when using proxy - the equation was evaluated
+	from right to left, it looks :(.  
+
+Mon Apr 29 22:23:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/main.c:
+
+	Include <signal.h>. Bug reported by drewie.  
+
+Mon Apr 29 22:04:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Include <signal.h>. Bug reported by drewie.  
+
+Mon Apr 29 20:53:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Minor tidyup of frame_ev(). Now, when you click to margin of
+	document displayed (3 vert., 6 horiz.), the document gets scrolled
+	in appropriate direction. Thanks to thement for the idea.  
+
+Mon Apr 29 19:03:34 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	Tidy up. parse_url() calls were reindented. Small optimization of 
+	encode_url_string(), snprintf() is no more called.  
+
+Mon Apr 29 18:40:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	In help, show 15 leading whitespaces near descritpion rather than
+	35.  
+
+Mon Apr 29 17:28:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mailto.c:
+
+	Tidy up. A call to parse_url() was replaced by calls to wrapping
+	functions.  
+
+Sun Apr 28 18:03:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: conf.c, options.c, options.h:
+
+	Changed struct option - now we've only config name there,
+	commandline alias is automatically generated. Also added flags
+	field, specifying if the option is commandline, configfile or both.
+	Modified the code accordingly. Also, we now accept -no-connect as
+	well as -no_connect on the command line now.  
+
+Sun Apr 28 17:28:31 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Tidy up. Function's type is on the line before function's name now.  
+
+Sun Apr 28 17:17:55 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	CWD/REST commands are now sent before PORT command. A function 
+	add_portcmd_to_str() was added, it constructs PORT command and its
+	parameters.  Code redundancy was reduced.  
+
+Sun Apr 28 15:42:57 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/conv.c:
+
+	isA() is now used in accept_char() macro.  
+
+Sun Apr 28 15:11:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/options.c, document/dump.c:
+
+	Few bugfixes in the options fetching code. Converted testing for
+	value of 'dump' to the new options fetching, so that we can test it.  
+
+Sun Apr 28 14:51:33 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file.c:
+
+	Minor tidy up.  
+
+Sun Apr 28 14:33:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/options.c, config/options.h:
+
+	Made enum dump_type and changed type of dmp to enum dump_type.
+	Annihilated macros D_DUMP and D_SOURCE, added enum D_NONE.  
+
+Sun Apr 28 14:24:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: options.c, options.h:
+
+	First draft of implementation of new options system.  
+
+Sun Apr 28 13:31:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+
+	Added descrpition of the second part of TODO list ;).  
+
+Sun Apr 28 12:02:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/TODO:
+
+	Added note about postponing the HTML rewrite until js + inline
+	images will be in glinks.  
+
+Sun Apr 28 12:00:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/Makefile.am, config/conf.c, config/conf.h,
 	config/urlhist.c, config/urlhist.h, lowlevel/home.c,
 	lowlevel/home.h:
 

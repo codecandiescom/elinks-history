@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.24 2003/07/27 23:17:44 jonas Exp $ */
+/* $Id: link.c,v 1.25 2003/07/27 23:30:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,10 +118,8 @@ static void
 draw_link(struct terminal *t, struct document_view *scr, int l)
 {
 	struct link *link;
-	struct view_state *vs;
-	int xp, yp;
-	int xw, yw;
-	int vx, vy;
+	int xmax, ymax;
+	int xpos, ypos;
 	int i;
 	int cursor_offset = 0;
 
@@ -133,13 +131,6 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	if (l == -1) return;
 
 	link = &scr->document->links[l];
-	xp = scr->xp;
-	yp = scr->yp;
-	xw = scr->xw;
-	yw = scr->yw;
-	vs = scr->vs;
-	vx = vs->view_posx;
-	vy = vs->view_pos;
 
 	switch (link->type) {
 		struct form_state *fs;
@@ -175,12 +166,17 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	if (!scr->link_bg) return;
 	scr->link_bg_n = link->n;
 
+	xmax = scr->xp + scr->xw;
+	ymax = scr->yp + scr->yw;
+	xpos = scr->xp - scr->vs->view_posx;
+	ypos = scr->yp - scr->vs->view_pos;
+
 	for (i = 0; i < link->n; i++) {
-		int x = link->pos[i].x + xp - vx;
-		int y = link->pos[i].y + yp - vy;
+		int x = link->pos[i].x + xpos;
+		int y = link->pos[i].y + ypos;
 		unsigned co;
 
-		if (!(x >= xp && y >= yp && x < xp+xw && y < yp+yw)) {
+		if (!(x >= scr->xp && y >= scr->yp && x < xmax && y < ymax)) {
 			scr->link_bg[i].x = -1;
 			scr->link_bg[i].y = -1;
 			scr->link_bg[i].c = -1;

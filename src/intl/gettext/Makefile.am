@@ -4,7 +4,7 @@
 include $(top_srcdir)/Makefile.base
 
 EXTRA_DIST = TODO VERSION config.charset locale.alias plural.y
-CLEANFILES = charset.alias
+DISTCLEANFILES = charset.alias
 
 localedir = $(datadir)/locale
 
@@ -49,7 +49,7 @@ plural.c: plural.y
 	$(YACC) $(YFLAGS) --output $@ $<
 	rm -f $*.h
 
-install-exec-local: charset.alias all
+install-data-local: charset.alias all
 	@if test '@USE_INCLUDED_LIBINTL@' = yes; then \
 	  $(mkinstalldirs) $(DESTDIR)$(libdir); \
 	  temp=$(DESTDIR)$(libdir)/t-charset.alias; \

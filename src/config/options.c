@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.258 2003/08/23 04:44:57 jonas Exp $ */
+/* $Id: options.c,v 1.259 2003/08/23 16:33:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,6 @@
 #include "config/conf.h"
 #include "config/options.h"
 #include "config/opttypes.h"
-#include "document/html/colors.h"
 #include "document/html/parser.h"
 #include "document/cache.h"
 #include "globhist/globhist.h"
@@ -34,6 +33,7 @@
 #include "lowlevel/dns.h"
 #include "lowlevel/select.h"
 #include "sched/session.h"
+#include "util/color.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"

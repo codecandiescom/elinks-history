@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.29 2003/08/23 05:43:49 jonas Exp $ */
+/* $Id: parser.h,v 1.30 2003/08/23 16:33:21 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -10,9 +10,9 @@ struct f_data;
 
 #include "bfu/dialog.h"
 #include "bfu/style.h"
-#include "document/html/colors.h"
 #include "document/html/renderer.h"
 #include "sched/session.h"
+#include "util/color.h"
 #include "util/lists.h"
 #include "util/memlist.h"
 

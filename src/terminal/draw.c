@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.48 2003/08/23 04:44:58 jonas Exp $ */
+/* $Id: draw.c,v 1.49 2003/08/23 16:33:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "terminal/color.h"
 #include "terminal/draw.h"
 #include "terminal/screen.h"
 #include "terminal/terminal.h"

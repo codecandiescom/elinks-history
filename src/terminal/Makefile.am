@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.9 2003/07/25 13:21:11 pasky Exp $
+## $Id: Makefile.am,v 1.10 2003/08/23 16:33:21 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -7,6 +7,8 @@ EXTRA_DIST = TODO
 
 noinst_LIBRARIES = libterminal.a
 libterminal_a_SOURCES = \
+ color.c \
+ color.h \
  draw.c \
  draw.h \
  event.c \

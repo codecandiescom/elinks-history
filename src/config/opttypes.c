@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.61 2003/08/23 04:44:57 jonas Exp $ */
+/* $Id: opttypes.c,v 1.62 2003/08/23 16:33:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,9 +13,9 @@
 #include "bfu/listbox.h"
 #include "config/options.h"
 #include "config/opttypes.h"
-#include "document/html/colors.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
+#include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"

@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.15 2003/08/23 04:44:57 jonas Exp $ */
+/* $Id: options.c,v 1.16 2003/08/23 16:33:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,7 @@
 
 #include "config/options.h"
 #include "document/options.h"
-#include "document/html/colors.h"
+#include "util/color.h"
 #include "util/string.h"
 
 

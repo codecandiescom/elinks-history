@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.63 2003/08/23 15:52:43 jonas Exp $ */
+/* $Id: tables.c,v 1.64 2003/08/23 16:33:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,11 +11,11 @@
 
 #include "elinks.h"
 
-#include "document/html/colors.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
 #include "terminal/draw.h"
+#include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"

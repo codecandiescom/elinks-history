@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.63 2003/08/23 04:44:57 jonas Exp $ */
+/* $Id: options.h,v 1.64 2003/08/23 16:33:20 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -6,7 +6,7 @@
 /* #include "bfu/listbox.h" */
 struct listbox_item;
 
-#include "document/html/colors.h"
+#include "util/color.h"
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"

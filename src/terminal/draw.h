@@ -1,11 +1,12 @@
-/* $Id: draw.h,v 1.22 2003/08/23 04:44:59 jonas Exp $ */
+/* $Id: draw.h,v 1.23 2003/08/23 16:33:22 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
 
-#include "document/html/colors.h"
+#include "util/color.h"
 #include "terminal/terminal.h"
 
+/* All attributes should fit inside an unsigned char. */
 enum screen_char_attr {
 	SCREEN_ATTR_ITALIC	= 0x10,
 	SCREEN_ATTR_UNDERLINE	= 0x20,

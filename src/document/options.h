@@ -1,9 +1,9 @@
-/* $Id: options.h,v 1.7 2003/08/23 04:44:57 jonas Exp $ */
+/* $Id: options.h,v 1.8 2003/08/23 16:33:20 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
 
-#include "document/html/colors.h"
+#include "util/color.h"
 
 struct document_options {
 	int xw, yw; /* size of window */

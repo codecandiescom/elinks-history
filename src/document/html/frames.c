@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.9 2003/08/21 14:29:44 zas Exp $ */
+/* $Id: frames.c,v 1.10 2003/08/23 16:33:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,11 +14,11 @@
 
 #include "document/html/frames.h"
 
-#include "document/html/colors.h"
 #include "document/options.h"
 #include "lowlevel/ttime.h"
 #include "protocol/uri.h"
 #include "terminal/draw.h"
+#include "util/color.h"
 #include "util/string.h"
 
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.107 2003/09/28 15:33:00 zas Exp $ */
+/* $Id: menu.c,v 1.108 2003/09/28 15:42:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,18 +144,16 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int my;
 
 	for (my = 0; my < menu->ni; my++) {
-		int s = 4;
 		unsigned char *text = menu->items[my].text;
 		unsigned char *rtext = menu->items[my].rtext;
-
+		int s = 4;
 
 		if (text && *text) {
 			if (!menu->items[my].no_intl) text = _(text, term);
 
 			if (text[0])
-				s += strlen(text)
-				     - !!menu->items[my].hotkey_pos
-				     + 1;
+				s += strlen(text) + 1
+				     - !!menu->items[my].hotkey_pos;
 		}
 
 		if (rtext && *rtext) {
@@ -223,7 +221,6 @@ scroll_menu(struct menu *menu, int d)
 static void
 display_menu(struct terminal *term, struct menu *menu)
 {
-	int p, s;
 	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
 	struct color_pair *frame_color = get_bfu_color(term, "menu.frame");
@@ -233,6 +230,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	int mxw = menu->xw - 2;
 	int my = menu->y + 1;
 	int myw = menu->yw - 2;
+	int p, s;
 
 	draw_area(term,	mx, my, mxw, myw, ' ', 0, normal_color);
 	draw_border(term, menu->x, menu->y, menu->xw, menu->yw, frame_color, 1);
@@ -612,23 +610,23 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 static void
 display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
-	int i;
-	int p = 2;
 	struct color_pair *normal_color = get_bfu_color(term, "mainmenu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "mainmenu.selected");
 	struct color_pair *hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
 	struct color_pair *selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
+	int p = 2;
+	int i;
 
 	draw_area(term, 0, 0, term->x, 1, ' ', 0, normal_color);
 
 	for (i = 0; i < menu->ni; i++) {
-		int j;
 		struct color_pair *co = normal_color;
 		struct color_pair *hkco = hotkey_color;
-		int hk = 0;
-		int key_pos = menu->items[i].hotkey_pos;
-		unsigned char c;
 		unsigned char *tmptext = menu->items[i].text;
+		int key_pos = menu->items[i].hotkey_pos;
+		int hk = 0;
+		int j;
+		unsigned char c;
 
 #ifdef DEBUG
 		int double_hk = 0;
@@ -715,8 +713,8 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 static void
 mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 {
-	int s = 0;
 	struct mainmenu *menu = win->data;
+	int s = 0;
 
 	menu->win = win;
 	switch (ev->ev) {
@@ -739,8 +737,8 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 				int i;
 
 				for (i = 0; i < menu->ni; i++) {
-					int o = p;
 					unsigned char *text = menu->items[i].text;
+					int o = p;
 
 					if (!menu->items[i].no_intl) text = _(text, win->term);
 

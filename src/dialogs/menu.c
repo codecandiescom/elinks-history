@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.387 2005/01/13 13:26:21 jonas Exp $ */
+/* $Id: menu.c,v 1.388 2005/02/16 17:35:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,19 +231,22 @@ tab_menu(struct session *ses, int x, int y, int place_above_cursor)
 	add_menu_action(&menu, N_("Go ~back"), ACT_MAIN_HISTORY_MOVE_BACK);
 	add_menu_action(&menu, N_("Go for~ward"), ACT_MAIN_HISTORY_MOVE_FORWARD);
 
-	add_menu_separator(&menu);
+	if (have_location(ses)) {
+		add_menu_separator(&menu);
 
 #ifdef CONFIG_BOOKMARKS
-	if (!anonymous) {
-		add_menu_action(&menu, N_("Bookm~ark document"), ACT_MAIN_ADD_BOOKMARK);
-	}
+		if (!anonymous) {
+			add_menu_action(&menu, N_("Bookm~ark document"), ACT_MAIN_ADD_BOOKMARK);
+		}
 #endif
 
-	add_menu_action(&menu, N_("~Reload"), ACT_MAIN_RELOAD);
+		add_menu_action(&menu, N_("Toggle ~html/plain"), ACT_MAIN_TOGGLE_HTML_PLAIN);
+		add_menu_action(&menu, N_("~Reload"), ACT_MAIN_RELOAD);
 
-	if (ses->doc_view && document_has_frames(ses->doc_view->document)) {
-		add_menu_action(&menu, N_("Frame at ~full-screen"), ACT_MAIN_FRAME_MAXIMIZE);
-		add_uri_command_to_menu(&menu, PASS_URI_FRAME);
+		if (ses->doc_view && document_has_frames(ses->doc_view->document)) {
+			add_menu_action(&menu, N_("Frame at ~full-screen"), ACT_MAIN_FRAME_MAXIMIZE);
+			add_uri_command_to_menu(&menu, PASS_URI_FRAME);
+		}
 	}
 
 	/* Keep tab related operations below this separator */

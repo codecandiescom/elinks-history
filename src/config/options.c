@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.192 2003/04/18 07:38:59 zas Exp $ */
+/* $Id: options.c,v 1.193 2003/04/19 18:35:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -540,9 +540,9 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	(*argv)++; (*argc)--;
 	if (do_real_lookup(*(*argv - 1), &addrs, &addrno, 0)) {
 #ifdef HAVE_HERROR
-		herror("error");
+		herror(gettext("error"));
 #else
-		fprintf(stderr, gettext("error: host not found\n"));
+		error(gettext("error: host not found"));
 #endif
 		return "";
 	}
@@ -556,7 +556,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 				(addr.sin6_family == AF_INET6 ? (void *) &addr.sin6_addr
 							      : (void *) &((struct sockaddr_in *) &addr)->sin_addr),
 				p, INET6_ADDRSTRLEN))
-			printf(gettext("Resolver error."));
+			error(gettext("Resolver error."));
 		else
 			printf("%s\n", p);
 #else

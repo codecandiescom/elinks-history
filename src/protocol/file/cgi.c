@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.31 2003/12/05 18:18:53 pasky Exp $ */
+/* $Id: cgi.c,v 1.32 2003/12/05 18:20:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,6 +217,11 @@ set_vars(struct connection *conn, unsigned char *script)
 	    && conn->cache->last_modified
 	    && conn->cache_mode <= CACHE_MODE_CHECK_IF_MODIFIED) {
 		setenv("HTTP_IF_MODIFIED_SINCE", conn->cache->last_modified, 1);
+	}
+
+	if (conn->cache_mode >= CACHE_MODE_FORCE_RELOAD) {
+		setenv("HTTP_PRAGMA", "no-cache", 1);
+		setenv("HTTP_CACHE_CONTROL", "no-cache", 1);
 	}
 
 	return 0;

@@ -410,7 +410,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.14 2003/09/26 17:44:42 zas Exp $ */
+	/* $Id: hacking.txt,v 1.15 2003/09/26 21:05:02 pasky Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -429,14 +429,20 @@ Coding practices:
   very easy to reach the top bit in these cases, and with int foo:1, foo would
   be either 0 or -1, which is probably not what you want.
 
-- Please wrap hard initializations of structures with macros, it will ease any
-  future change in structure (ie. moving fields), like that:
+- Wrap hard initializations of structures with macros, if the structure's
+initializers are going to be spread widely (so that we can grep for them
+easily), there are massive typecasts needed in most of the initializers,
+you feel that order of the fields in structure is unstable yet and it is
+likely to change (and you don't want to change the initializers everytime
+you do so), or in similiar cases.
+
+  You can do it like:
 
   struct example {
 	int a;
 	int b;
 	char *c;
-  }
+  };
   #define INIT_EXAMPLE(a, b, c) {a, b, c}
   #define NULL_EXAMPLE {0, 0, NULL}
 
@@ -509,4 +515,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.14 2003/09/26 17:44:42 zas Exp $
+$Id: hacking.txt,v 1.15 2003/09/26 21:05:02 pasky Exp $

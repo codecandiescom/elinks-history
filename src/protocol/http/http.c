@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.67 2002/11/25 13:56:46 zas Exp $ */
+/* $Id: http.c,v 1.68 2002/11/25 14:24:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -820,8 +820,14 @@ next_chunk:
 				unsigned char *de;
 				int n = 0;
 
-				if (l != -1)
+				if (l != -1) {
+					errno = 0;
 					n = strtol(rb->data, (char **)&de, 16);
+					if (errno || *de) {
+						abort_conn_with_state(conn, S_HTTP_ERROR);
+						return;
+					}
+				}
 
 				if (l == -1 || de == rb->data) {
 					abort_conn_with_state(conn, S_HTTP_ERROR);
@@ -1078,9 +1084,12 @@ again:
 		if (strlen(d) > 6) {
 			d[5] = 0;
 			if (!(strcasecmp(d, "bytes")) && d[6] >= '0' && d[6] <= '9') {
-				int f = strtol(d + 6, NULL, 10);
+				int f;
 
-				if (f >= 0) c->from = f;
+				errno = 0;
+			       	f = strtol(d + 6, NULL, 10);
+				
+				if (!errno && f >= 0) c->from = f;
 			}
 		}
 		mem_free(d);
@@ -1128,9 +1137,12 @@ again:
 	d = parse_http_header(e->head, "Content-Length", NULL);
 	if (d) {
 		unsigned char *ep;
-		int l = strtol(d, (char **)&ep, 10);
+		int l;
+	       
+		errno = 0;
+		l = strtol(d, (char **)&ep, 10);
 
-		if (!*ep && l >= 0) {
+		if (!errno && !*ep && l >= 0) {
 			if (!info->close || version >= 11) info->length = l;
 			c->est_length = c->from + l;
 		}

@@ -1,11 +1,12 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.10 2002/11/19 22:25:44 zas Exp $ */
+/* $Id: conv.c,v 1.11 2002/11/25 14:24:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <ctype.h>
+#include <errno.h>
 #ifdef HAVE_LIMITS_H
 #include <limits.h>
 #endif
@@ -85,9 +86,12 @@ add_knum_to_str(unsigned char **str, int *len, int num)
 long
 strtolx(unsigned char *str, unsigned char **end)
 {
-	long num = strtol(str, (char **) end, 10);
+	long num;
 	unsigned char postfix;
-
+	
+	errno = 0;
+	num = strtol(str, (char **) end, 10);
+	if (errno) return 0;
 	if (!*end) return num;
 
 	postfix = upcase(**end);

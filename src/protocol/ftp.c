@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.72 2002/11/19 21:43:09 zas Exp $ */
+/* $Id: ftp.c,v 1.73 2002/11/25 14:24:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -731,10 +731,10 @@ next:
 
 	if (strncasecmp(&data[pos], "byte", 4))
 		return -1;
-
+	
+	errno = 0;
 	file_len = strtol(&data[pos_file_len], NULL, 10);
-
-	if (errno == ERANGE) return -1;
+	if (errno) return -1;
 
 	return file_len;
 }

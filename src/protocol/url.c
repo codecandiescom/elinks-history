@@ -1,10 +1,11 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.37 2002/11/25 13:28:53 zas Exp $ */
+/* $Id: url.c,v 1.38 2002/11/25 14:24:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -360,8 +361,9 @@ get_port(unsigned char *url)
 		      NULL)) return -1;
 
 	if (h) {
+		errno = 0;
 		n = strtol(h, NULL, 10);
-		if (n) return n;
+		if (!errno && n > 0) return n;
 	}
 
 	h = get_protocol_name(url);

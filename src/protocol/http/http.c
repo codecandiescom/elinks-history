@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.331 2004/09/22 12:28:27 pasky Exp $ */
+/* $Id: http.c,v 1.332 2004/09/22 15:46:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1128,16 +1128,23 @@ again:
 		return;
 	}
 
-	d = parse_header(head, "Status", NULL);
-	if (d) {
-		int h2 = atoi(d);
+	if (uri->protocol == PROTOCOL_FILE) {
+		/* ``Status'' is not a standard HTTP header field although some
+		 * HTTP servers like www.php.net uses it for some reason. It should
+		 * only be used for CGI scripts so that it does not interfere
+		 * with status code depended handling for ``normal'' HTTP like
+		 * redirects. */
+		d = parse_header(head, "Status", NULL);
+		if (d) {
+			int h2 = atoi(d);
 
-		mem_free(d);
-		if (h2 >= 100 && h2 < 600) h = h2;
-		if (h == 101) {
-			mem_free(head);
-			abort_conn_with_state(conn, S_HTTP_ERROR);
-			return;
+			mem_free(d);
+			if (h2 >= 100 && h2 < 600) h = h2;
+			if (h == 101) {
+				mem_free(head);
+				abort_conn_with_state(conn, S_HTTP_ERROR);
+				return;
+			}
 		}
 	}
 

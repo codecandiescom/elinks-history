@@ -1,3 +1,158 @@
+Tue Dec 30 22:44:36 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Dec 30 22:20:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	*INIT_OPT_COLORS(), more swapping due to pasky, it is an idiot.  
+
+Tue Dec 30 21:49:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	*INIT_OPT_COLORS(), has first f g coming well, then b g follows.
+	Haiku is exciting.  
+
+Tue Dec 30 21:37:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update. Hmm, a lot of new stuff, not finished yet.  
+
+Tue Dec 30 21:28:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Tue Dec 30 21:28:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Default fg color for tabs.unvisited changed from green to darkblue.
+	It _is_ the best choice, fullstop (green is totally unreadable).  
+
+Tue Dec 30 19:58:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Fix hotkey.  
+
+Tue Dec 30 19:37:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: options.c, options.h, renderer.c, html/renderer.c:
+
+	Reintroduce needs_width but be less optimistic and always set it to
+	1 for HTML documents. A half way fix is added out commented but it
+	will be non trivial to fix it for all cases.  
+
+Tue Dec 30 18:45:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hotkey.c:
+
+	Hotkey conflict is now detected even for first menu item. It fixes
+	bug 350.  
+
+Tue Dec 30 18:44:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, config/options.inc:
+
+	Optionalize hotkey underlining (ui.dialogs.underline_hotkeys) off by
+	default.  
+
+Tue Dec 30 18:36:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Rename document_view -> doc_view.  
+
+Tue Dec 30 18:26:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/: document.c, options.c, options.h, renderer.c,
+	html/parser.c:
+
+	Patches concerning plain text resizing issue and needs_width
+	introduction were reverted. Jonas will fix that soon.  
+
+Tue Dec 30 17:54:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Underline hotkey chars to make them more visible. Maybe it should be
+	configurable anyway it is of course disabled if the terminal
+	underline option is.  
+
+Tue Dec 30 16:38:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix up() and down() handling so they call page_up() and page_down()
+	when link wraparound is disabled. I believe that is the old
+	behaviour.  
+
+Tue Dec 30 13:57:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.inc, document/options.c, document/options.h,
+	document/html/parser.c:
+
+	Default form input size is now configurable through
+	document.html.default_form_input_size. It helps with textarea
+	without cols attribute.  
+
+Tue Dec 30 13:02:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/: document.c, options.c, options.h, renderer.c:
+
+	Separate document options comparaison functions to better handling
+	terminal size changes, it should fix cache growing on height change.  
+
+Tue Dec 30 12:45:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/: options.c, options.h, renderer.c, html/parser.c:
+
+	A field needs_width was added to struct document_options. We now use
+	it as needs_height. It fixes non rerendering of plain text documents
+	on width change. Please report any side-effect this patch may have.  
+
+Tue Dec 30 11:22:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/refresh.c:
+
+	Compilation fix: include config/options.h header file needed for
+	get_opt_int().  
+
+Tue Dec 30 10:48:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Always use the color mode set in the document options since the
+	global one might have a color mode different from the current mode.
+	Fixes wrong drawing of current link when changing back and forth
+	between color modes.  
+
+Tue Dec 30 08:17:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, document/refresh.c:
+
+	Add option to control the minimum time used for document refreshing.
+	By default set to 1 second (is this fair?). Fixes last part of bug
+	309 (Broken go back).  
+
+Tue Dec 30 00:25:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Add itrm queue debug code, and new escape sequences are now
+	recognised, it fixes impossibility to bind some function keys under
+	rxvt-like terminals, now Shift-F5 should work more often.  
+
 Mon Dec 29 22:47:10 2003  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

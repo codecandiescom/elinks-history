@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.26 2003/09/29 20:45:08 zas Exp $ */
+/* $Id: ssl.c,v 1.27 2003/10/27 21:43:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,8 @@
 /* We'll be legend. We won't grow old. */
 #include "ssl/ssl.h"
 
+#include "intl/gettext/libintl.h"
+#include "modules/module.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"
@@ -58,14 +60,11 @@ const static int cipher_priority[16] = {
 const static int comp_priority[16] = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
 const static int mac_priority[16] = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
 const static int cert_type_priority[16] = { GNUTLS_CRT_X509, GNUTLS_CRT_OPENPGP, 0 };
-
-#endif
 #endif
 
-void
-init_ssl(void)
+static void
+init_ssl(struct module *module)
 {
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 	unsigned char f_randfile[PATH_MAX];
 
@@ -102,13 +101,11 @@ init_ssl(void)
 
 	/* Here, we should load certificate files etc. */
 #endif
-#endif
 }
 
-void
-done_ssl(void)
+static void
+done_ssl(struct module *module)
 {
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 	if (context) SSL_CTX_free(context);
 #elif defined(HAVE_GNUTLS)
@@ -116,9 +113,50 @@ done_ssl(void)
 	if (anon_cred) gnutls_anon_free_client_sc(anon_cred);
 	gnutls_global_deinit();
 #endif
-#endif
 }
 
+#ifdef HAVE_OPENSSL
+static struct module openssl_module = struct_module(
+	/* name: */		"OpenSSL",
+	/* options: */		NULL,
+	/* events: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);
+#elif defined(HAVE_GNUTLS)
+static struct module gnutls_module = struct_module(
+	/* name: */		"GnuTLS",
+	/* options: */		NULL,
+	/* events: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);
+#endif
+
+static struct module *ssl_modules[] = {
+#ifdef HAVE_OPENSSL
+	&openssl_module,
+#elif defined(HAVE_GNUTLS)
+	&gnutls_module,
+#endif
+	NULL,
+};
+
+struct module ssl_module = struct_module(
+	/* name: */		N_("SSL"),
+	/* options: */		NULL,
+	/* events: */		NULL,
+	/* submodules: */	ssl_modules,
+	/* data: */		NULL,
+	/* init: */		init_ssl,
+	/* done: */		done_ssl
+);
+
+#endif /* HAVE_SSL */
 
 ssl_t *
 get_ssl(void)

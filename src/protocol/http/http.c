@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.308 2004/07/23 15:25:21 zas Exp $ */
+/* $Id: http.c,v 1.309 2004/07/23 15:30:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1005,17 +1005,19 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 		ret = read_chunked_http_data(conn, rb);
 	}
 
-	if (ret < 0) {
+	switch (ret) {
+	case -1:
 		abort_conn_with_state(conn, S_HTTP_ERROR);
-		return;
-	}
-
-	if (!ret) {
+		break;
+	case 0:
 		read_http_data_done(conn);
-		return;
+		break;
+	case 1:
+		read_more_http_data(conn, rb);
+		break;
+	default:
+		INTERNAL("Unexpected return value: %d", ret);
 	}
-
-	read_more_http_data(conn, rb);
 }
 
 /* Returns offset of the header end, zero if more data is needed, -1 when

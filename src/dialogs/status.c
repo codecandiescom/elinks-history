@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.78 2004/08/02 16:17:43 zas Exp $ */
+/* $Id: status.c,v 1.79 2004/08/02 16:26:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,13 +180,6 @@ update_status(void)
 		}
 #endif
 
-		if (dirty) {
-			/* Force the current document to be rerendered so the
-			 * document view and document height is updated to fit
-			 * into the new dimensions. Related to bug 87. */
-			render_document_frames(ses, 1);
-		}
-
 		status->set_window_title = set_window_title;
 
 		/* This more belongs to the current browsing state but ... */
@@ -196,6 +189,11 @@ update_status(void)
 			ses->insert_mode = INSERT_MODE_OFF;
 
 		if (!dirty) continue;
+
+		/* Force the current document to be rerendered so the
+		 * document view and document height is updated to fit
+		 * into the new dimensions. Related to bug 87. */
+		render_document_frames(ses, 1);
 
 		set_screen_dirty(term->screen, 0, term->height);
 	}

@@ -1,3 +1,17 @@
+Tue Sep  7 10:47:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Fix bug 496 involving memory leaks when handling HTTPS proxy
+	connections.  
+
+Tue Sep  7 10:41:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	The reordering of session status updating _also_ has benefits when
+	dealing with big documents. Important clarity by Miciah.  
+
 Sat Sep  4 12:34:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/rewrite/rewrite.c:

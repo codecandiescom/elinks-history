@@ -1,16 +1,14 @@
-			ELinks manual TODO list
+			TODO items for ELinks Documentation
 
 Processing stuff:
 -----------------
 
-* Write processing (multiplexor) script.
-	This should probably only test/use the db2*, docbook2* and xmlto
-	wrappers. Calling jade, saxon or xsltproc directly would complicate
-	things a lot.
+* Make saner rules for html in Makefile.doc
+	We should handle also calling tidy and adding css stylesheet links.
 
-* Write validation script (using nsgml. Others?)
-
-* Make sane rules for Makefile.am
+* A script for automating config option info
+	This concerns config/cmdoptions.xml and config/options.xml. A ruby
+	script for generating config/options.xml exist, but ...
 
 General manual mangling:
 ------------------------
@@ -26,7 +24,7 @@ Suggestions for sections or chapter:
 
 * Overview/introduction to essential managers
 
-	* Compile time configuration
+* Compile time configuration
 
 * FAQ ?
 
@@ -36,8 +34,11 @@ Suggestions for sections or chapter:
 	Listboxes, menus, editor, mouse (wheel). How to cut and
 	paste.
 
-* Info about deficiencies in implementations.
-	Mainly to inform users about lack of security. SSL Certificate
-	verification come to mind.
+The larger scope
+----------------
 
-$Id: TODO,v 1.3 2002/12/30 03:51:43 jonas Exp $
+* WRITE MORE!!
+
+* Move the webpage content to also use doc/book files maybe using webbook.
+
+$Id: TODO,v 1.4 2003/06/10 16:29:39 jonas Exp $

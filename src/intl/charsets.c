@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.64 2003/10/28 16:28:47 zas Exp $ */
+/* $Id: charsets.c,v 1.65 2003/10/28 16:38:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -328,11 +328,11 @@ get_translation_table(int from, int to)
 	new_translation_table(table);
 
 	if (codepages[from].table == table_utf_8) {
-		register int i, j;
+		register int i;
 
-		for (j = 0; codepages[to].table[j].c; j++)
-			add_utf_8(table, codepages[to].table[j].u,
-				  strings[codepages[to].table[j].c]);
+		for (i = 0; codepages[to].table[i].c; i++)
+			add_utf_8(table, codepages[to].table[i].u,
+				  strings[codepages[to].table[i].c]);
 
 		for (i = 0; unicode_7b[i].x != -1; i++)
 			if (unicode_7b[i].x >= 0x80)

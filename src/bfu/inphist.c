@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.18 2003/05/04 19:54:32 pasky Exp $ */
+/* $Id: inphist.c,v 1.19 2003/05/06 14:24:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@ static void
 tab_compl_n(struct terminal *term, unsigned char *item, int len,
 	    struct window *win)
 {
-	struct event ev = {EV_REDRAW, 0, 0, 0};
+	struct event ev = {EV_REDRAW, term->x, term->y, 0};
 	struct dialog_data *dd = (struct dialog_data *) win->data;
 	struct widget_data *di = &(dd)->items[dd->selected];
 
@@ -34,12 +34,10 @@ tab_compl_n(struct terminal *term, unsigned char *item, int len,
 	di->cdata[len] = 0;
 	di->cpos = len;
 	di->vpos = 0;
-	ev.x = term->x;
-	ev.y = term->y;
 	dialog_func(win, &ev, 0);
 }
 
-static void
+static inline void
 tab_compl(struct terminal *term, unsigned char *item, struct window *win)
 {
 	tab_compl_n(term, item, strlen(item), win);
@@ -80,13 +78,13 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 		n++;
 	}
 
-	if (n == 1) {
-		tab_compl(term, items->data, win);
-		mem_free(items);
-		return;
-	}
-
 	if (n) {
+	        if (n == 1) {
+			tab_compl(term, items->data, win);
+			mem_free(items);
+			return;
+		}
+
 		memset(&items[n], 0, sizeof(struct menu_item));
 		do_menu_selected(term, items, win, n - 1, 0);
 	}
@@ -125,10 +123,7 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 		match_len = (m == cdata + len && !*m) ? strlen(cur->d) : len;
 	}
 
-	if (!match)
-		return;
-
-	tab_compl_n(term, match, match_len, win);
+	if (match) tab_compl_n(term, match, match_len, win);
 }
 
 

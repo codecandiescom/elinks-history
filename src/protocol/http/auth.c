@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.34 2003/07/11 03:47:32 jonas Exp $ */
+/* $Id: auth.c,v 1.35 2003/07/11 03:53:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,8 +102,6 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 	safe_strncpy(entry->passwd, uri->password,
 		     min(uri->passwordlen + 1, MAX_UID_LEN));
 
-	entry->valid = (*entry->uid && *entry->passwd);
-
 	return entry;
 }
 
@@ -169,20 +167,18 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 		if (entry->valid) return ADD_AUTH_EXIST;
 
-		entry->valid = (*entry->uid && *entry->passwd);
+	} else {
+		/* Create a new entry. */
+		entry = init_auth_entry(newurl, realm, uri);
+		if (!entry) {
+			mem_free(newurl);
+			return ADD_AUTH_ERROR;
+		}
 
-		/* Return whether entry was added with user/pass from url. */
-		return (entry->uid || entry->passwd) ? ADD_AUTH_NONE : ADD_AUTH_NEW;
+		add_to_list(http_auth_basic_list, entry);
 	}
 
-	/* Create a new entry. */
-	entry = init_auth_entry(newurl, realm, uri);
-	if (!entry) {
-		mem_free(newurl);
-		return ADD_AUTH_ERROR;
-	}
-
-	add_to_list(http_auth_basic_list, entry);
+	entry->valid = (*entry->uid && *entry->passwd);
 
 	/* Return whether entry was added with user/pass from url. */
 	return (entry->uid || entry->passwd) ? ADD_AUTH_NONE : ADD_AUTH_NEW;

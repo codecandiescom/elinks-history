@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.363 2004/07/08 16:25:44 jonas Exp $ */
+/* $Id: tables.c,v 1.364 2004/07/08 16:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -851,12 +851,6 @@ draw_table_cells(struct table *table, int x, int y)
 		for (row = 0; row < table->rows; row++) {
 			int row_height = table->rows_heights[row] +
 				(row < table->rows - 1 && has_hline_width(table, row + 1));
-			struct part *part = table->part;
-			/* Hmm that table_frame.top looks strange if you look
-			 * at how @yp is initialized. Bug? --jonas */
-			int lines = yp + row_height + table_frames.top - part->cy;
-
-			expand_lines(table->part, x - 1, part->cy, lines, bgcolor);
 
 			draw_table_cell(table, col, row, xp, yp);
 

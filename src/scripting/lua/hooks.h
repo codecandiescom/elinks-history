@@ -1,4 +1,4 @@
-/* $Id: hooks.h,v 1.6 2003/07/03 00:28:23 jonas Exp $ */
+/* $Id: hooks.h,v 1.7 2003/07/24 01:43:15 pasky Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_HOOKS_H
 #define EL__SCRIPTING_LUA_HOOKS_H
@@ -7,7 +7,7 @@
 
 #include "sched/session.h"
 
-void script_hook_goto_url(struct session *, unsigned char *);
+unsigned char *script_hook_goto_url(struct session *, unsigned char *);
 unsigned char *script_hook_follow_url(struct session *, unsigned char *);
 unsigned char *script_hook_pre_format_html(struct session *, unsigned char *, unsigned char *, int *);
 unsigned char *script_hook_get_proxy(unsigned char *);

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.11 2003/06/15 22:44:14 pasky Exp $ */
+/* $Id: hooks.c,v 1.12 2003/07/24 01:43:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,17 +32,17 @@
  *  - do nothing.
  */
 
-void
+unsigned char *
 script_hook_goto_url(struct session *ses, unsigned char *url)
 {
 	lua_State *L = lua_state;
 	int err;
+	unsigned char *newurl = NULL;
 
 	lua_getglobal(L, "goto_url_hook");
 	if (lua_isnil(L, -1)) {
 		lua_pop(L, 1);
-		goto_url(ses, url);
-		return;
+		return NULL;
 	}
 
 	lua_pushstring(L, url);
@@ -52,17 +52,21 @@ script_hook_goto_url(struct session *ses, unsigned char *url)
 		lua_pushstring(L, cur_loc(ses)->vs.url);
 
 	if (prepare_lua(ses))
-		return;
+		return stracpy("");
 	err = lua_call(L, 2, 1);
 	finish_lua();
 	if (err)
-		return;
+		return stracpy("");
 
 	if (lua_isstring(L, -1))
-		goto_url(ses, (unsigned char *) lua_tostring(L, -1));
+		newurl = stracpy((unsigned char *) lua_tostring(L, -1));
 	else if (!lua_isnil(L, -1))
 		alert_lua_error("goto_url_hook must return a string or nil");
+	else
+		newurl = stracpy("");
 	lua_pop(L, 1);
+
+	return newurl;
 }
 
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.126 2003/07/22 14:17:58 pasky Exp $ */
+/* $Id: session.c,v 1.127 2003/07/24 01:43:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1509,9 +1509,15 @@ void
 goto_url_with_hook(struct session *ses, unsigned char *url)
 {
 #ifdef HAVE_SCRIPTING
-	script_hook_goto_url(ses, url);
-#else
-	goto_url(ses, url);
+	unsigned char *newurl = script_hook_goto_url(ses, url);
+
+	if (newurl) url = newurl;
+#endif
+
+	if (*url) goto_url(ses, url);
+
+#ifdef HAVE_SCRIPTING
+	if (newurl) mem_free(newurl);
 #endif
 }
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.143 2003/06/29 16:07:02 zas Exp $ */
+/* $Id: parser.c,v 1.144 2003/07/03 02:25:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/link.h"
 #include "viewer/text/view.h"
 
 /* TODO: This needs rewrite. Yes, no kidding. */

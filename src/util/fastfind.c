@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.59 2004/10/26 20:52:26 zas Exp $ */
+/* $Id: fastfind.c,v 1.60 2004/10/26 21:04:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,6 +206,52 @@ struct fastfind_info {
 	} while (0)
 #define FF_DBG_comment(x, comment) do { (x)->debug.comment = empty_string_or_(comment); } while (0)
 
+/* Update search stats. */
+static void
+FF_DBG_search_stats(struct fastfind_info *info, int key_len)
+{
+	info->debug.searches++;
+	info->debug.total_key_len += key_len;
+	info->debug.teststmp = info->debug.tests;
+	info->debug.itertmp = info->debug.iterations;
+}
+
+/* Dump all stats. */
+static void
+FF_DBG_dump_stats(struct fastfind_info *info)
+{
+	fprintf(stderr, "------ FastFind Statistics ------\n");
+	fprintf(stderr, "Comment     : %s\n", info->debug.comment);
+	fprintf(stderr, "Case        : %s\n", info->case_sensitive ? "sensitive" : "insensitive");
+	fprintf(stderr, "Uniq_chars  : %s\n", info->uniq_chars);
+	fprintf(stderr, "Uniq_chars #: %d/%d max.\n", info->uniq_chars_count, FF_MAX_CHARS);
+	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
+	fprintf(stderr, "Max_key_len : %d\n", info->max_key_len);
+	fprintf(stderr, "Entries     : %d/%d max.\n", info->pointers_count, FF_MAX_KEYS);
+	fprintf(stderr, "FFleafsets  : %d/%d max.\n", info->leafsets_count, FF_MAX_LEAFSETS);
+	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
+		info->debug.memory_usage, (double) info->debug.memory_usage / info->pointers_count);
+	fprintf(stderr, "struct info : %d bytes\n", sizeof(struct fastfind_info) - sizeof(info->debug));
+	fprintf(stderr, "Struct node : %d bytes (normal) , %d bytes (compressed)\n",
+		sizeof(struct ff_node), sizeof(struct ff_node_c));
+	fprintf(stderr, "Searches    : %lu\n", info->debug.searches);
+	fprintf(stderr, "Found       : %lu (%0.2f%%)\n",
+		info->debug.found, 100 * (double) info->debug.found / info->debug.searches);
+	fprintf(stderr, "Iterations  : %lu (%0.2f per search, %0.2f before found, %lu max)\n",
+		info->debug.iterations, (double) info->debug.iterations / info->debug.searches,
+		(double) info->debug.iterdelta / info->debug.found,
+		info->debug.itermax);
+	fprintf(stderr, "Tests       : %lu (%0.2f per search, %0.2f per iter., %0.2f before found, %lu max)\n",
+		info->debug.tests, (double) info->debug.tests / info->debug.searches,
+		(double) info->debug.tests / info->debug.iterations,
+		(double) info->debug.testsdelta / info->debug.found,
+		info->debug.testsmax);
+	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search, %0.2f per iter.)\n",
+		info->debug.total_key_len, (double) info->debug.total_key_len / info->debug.searches,
+		(double) info->debug.total_key_len / info->debug.iterations);
+	fprintf(stderr, "\n");
+}
+
 #else /* !DEBUG_FASTFIND */
 
 #define FF_DBG_mem(x, size)
@@ -213,6 +259,8 @@ struct fastfind_info {
 #define FF_DBG_iter(x)
 #define FF_DBG_found(x)
 #define FF_DBG_comment(x, comment)
+#define FF_DBG_search_stats(info, key_len)
+#define FF_DBG_dump_stats(info)
 
 #endif /* DEBUG_FASTFIND */
 
@@ -419,6 +467,8 @@ alloc_error:
 	return NULL;
 }
 
+#undef ifcase
+
 void
 fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 {
@@ -477,6 +527,7 @@ fastfind_index_compress(struct fastfind_info *info)
 	fastfind_node_compress(info->root_leafset, info);
 }
 
+
 /* This macro searchs for the key in indexed list */
 #define FF_SEARCH(what) do {							\
 	int i;									\
@@ -516,19 +567,6 @@ fastfind_index_compress(struct fastfind_info *info)
 	}									\
 } while (0)
 
-#ifdef DEBUG_FASTFIND
-static void
-FF_DBG_search_stats(struct fastfind_info *info, int key_len)
-{
-	info->debug.searches++;
-	info->debug.total_key_len += key_len;
-	info->debug.teststmp = info->debug.tests;
-	info->debug.itertmp = info->debug.iterations;
-}
-#else
-#define FF_DBG_search_stats(info, key_len)
-#endif
-
 void *
 fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 {
@@ -562,45 +600,6 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 
 #undef FF_SEARCH
 
-#ifdef DEBUG_FASTFIND
-static void
-FF_DBG_dump_stats(struct fastfind_info *info)
-{
-	fprintf(stderr, "------ FastFind Statistics ------\n");
-	fprintf(stderr, "Comment     : %s\n", info->debug.comment);
-	fprintf(stderr, "Case        : %s\n", info->case_sensitive ? "sensitive" : "insensitive");
-	fprintf(stderr, "Uniq_chars  : %s\n", info->uniq_chars);
-	fprintf(stderr, "Uniq_chars #: %d/%d max.\n", info->uniq_chars_count, FF_MAX_CHARS);
-	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
-	fprintf(stderr, "Max_key_len : %d\n", info->max_key_len);
-	fprintf(stderr, "Entries     : %d/%d max.\n", info->pointers_count, FF_MAX_KEYS);
-	fprintf(stderr, "FFleafsets  : %d/%d max.\n", info->leafsets_count, FF_MAX_LEAFSETS);
-	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
-		info->debug.memory_usage, (double) info->debug.memory_usage / info->pointers_count);
-	fprintf(stderr, "struct info : %d bytes\n", sizeof(struct fastfind_info) - sizeof(info->debug));
-	fprintf(stderr, "Struct node : %d bytes (normal) , %d bytes (compressed)\n",
-		sizeof(struct ff_node), sizeof(struct ff_node_c));
-	fprintf(stderr, "Searches    : %lu\n", info->debug.searches);
-	fprintf(stderr, "Found       : %lu (%0.2f%%)\n",
-		info->debug.found, 100 * (double) info->debug.found / info->debug.searches);
-	fprintf(stderr, "Iterations  : %lu (%0.2f per search, %0.2f before found, %lu max)\n",
-		info->debug.iterations, (double) info->debug.iterations / info->debug.searches,
-		(double) info->debug.iterdelta / info->debug.found,
-		info->debug.itermax);
-	fprintf(stderr, "Tests       : %lu (%0.2f per search, %0.2f per iter., %0.2f before found, %lu max)\n",
-		info->debug.tests, (double) info->debug.tests / info->debug.searches,
-		(double) info->debug.tests / info->debug.iterations,
-		(double) info->debug.testsdelta / info->debug.found,
-		info->debug.testsmax);
-	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search, %0.2f per iter.)\n",
-		info->debug.total_key_len, (double) info->debug.total_key_len / info->debug.searches,
-		(double) info->debug.total_key_len / info->debug.iterations);
-	fprintf(stderr, "\n");
-}
-#else
-#define FF_DBG_dump_stats(info)
-#endif
-
 void
 fastfind_done(struct fastfind_info *info)
 {
@@ -617,8 +616,6 @@ fastfind_done(struct fastfind_info *info)
 	mem_free_if(info->leafsets);
 	mem_free(info);
 }
-
-#undef ifcase
 
 
 /* EXAMPLE */

@@ -1,5 +1,5 @@
-/* HTML viewer (and much more) */
-/* $Id: draw.c,v 1.1 2004/06/23 08:16:23 jonas Exp $ */
+/* Text mode drawing functions */
+/* $Id: draw.c,v 1.2 2004/06/23 08:18:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.43 2002/12/11 22:01:35 pasky Exp $ */
+/* $Id: options.c,v 1.44 2002/12/11 22:05:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,8 +33,8 @@ display_codepage(struct terminal *term, void *pcp, struct session *ses)
 {
 	struct option *opt = get_opt_rec(term->spec, "charset");
 
-	if (opt->ptr != (int) pcp) {
-		opt->ptr = (int) pcp;
+	if (*((int *) opt->ptr) != (int) pcp) {
+		*((int *) opt->ptr) = (int) pcp;
 		opt->flags |= OPT_TOUCHED;
 	}
 

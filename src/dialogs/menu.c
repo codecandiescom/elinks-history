@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.281 2004/01/08 18:37:46 jonas Exp $ */
+/* $Id: menu.c,v 1.282 2004/01/25 00:21:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -337,6 +337,7 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ACTION(N_("Toggle ~document colors"), ACT_TOGGLE_DOCUMENT_COLORS),
 	INIT_MENU_ACTION(N_("Document ~info"), ACT_DOCUMENT_INFO),
 	INIT_MENU_ACTION(N_("H~eader info"), ACT_HEADER_INFO),
+	INIT_MENU_ACTION(N_("~Rerender document"), ACT_RERENDER),
 	INIT_MENU_ACTION(N_("Frame at ~full-screen"), ACT_ZOOM_FRAME),
 	BAR_MENU_ITEM,
 	INIT_MENU_ACTION(N_("Nex~t tab"), ACT_TAB_NEXT),

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.183 2004/01/25 00:09:21 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.184 2004/01/25 00:21:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -513,6 +513,7 @@ static struct strtonum main_action_table[] = {
 	{ "really-quit", ACT_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
 	{ "redraw", ACT_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "reload", ACT_RELOAD, DACT(N_("Reload the current page")) },
+	{ "rerender", ACT_RERENDER, DACT(N_("Re-render the current page")) },
 	{ "reset-form", ACT_RESET_FORM, DACT(N_("Reset form items to their initial values")) },
 	{ "resource-info", ACT_RESOURCE_INFO, DACT(N_("Show information about the currently used resources")) },
 	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
@@ -632,6 +633,7 @@ static struct strtonum edit_action_table[] = {
 	{ "really-quit", ACT_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
 	{ "redraw", ACT_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "reload", ACT_RELOAD, DACT(N_("Reload the current page")) },
+	{ "rerender", ACT_RERENDER, DACT(N_("Re-render the current page")) },
 	{ "reset-form", ACT_RESET_FORM, DACT(N_("Reset form items to their initial values")) },
 	{ "resource-info", ACT_RESOURCE_INFO, DACT(N_("Show information about the currently used resources")) },
 	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
@@ -751,6 +753,7 @@ static struct strtonum menu_action_table[] = {
 	{ "really-quit", ACT_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
 	{ "redraw", ACT_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "reload", ACT_RELOAD, DACT(N_("Reload the current page")) },
+	{ "rerender", ACT_RERENDER, DACT(N_("Re-render the current page")) },
 	{ "reset-form", ACT_RESET_FORM, DACT(N_("Reset form items to their initial values")) },
 	{ "resource-info", ACT_RESOURCE_INFO, DACT(N_("Show information about the currently used resources")) },
 	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.45 2004/01/24 23:50:18 pasky Exp $ */
+/* $Id: action.c,v 1.46 2004/01/25 00:21:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,6 +348,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_RELOAD:
 			reload(ses, CACHE_MODE_INCREMENT);
+			break;
+
+		case ACT_RERENDER:
+			draw_formatted(ses, 1);
 			break;
 
 		case ACT_RESET_FORM:

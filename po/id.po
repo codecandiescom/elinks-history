@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-22 22:06+0100\n"
+"POT-Creation-Date: 2003-12-23 13:37+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Muhamad Faizal <faizal@mfaizal.net>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=us-ascii\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:306
 msgid "Close"
@@ -21,7 +21,7 @@ msgstr "Selesai"
 #: src/bfu/hierbox.c:406 src/cache/dialogs.c:145 src/config/dialogs.c:355
 #: src/cookies/dialogs.c:129 src/dialogs/document.c:44
 #: src/dialogs/document.c:232 src/dialogs/download.c:408
-#: src/formhist/dialogs.c:168 src/globhist/dialogs.c:181
+#: src/formhist/dialogs.c:167 src/globhist/dialogs.c:181
 msgid "Info"
 msgstr "Info"
 
@@ -38,7 +38,7 @@ msgstr "Info"
 #: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:135
 #: src/dialogs/menu.c:605 src/dialogs/menu.c:636 src/dialogs/mime.c:159
 #: src/dialogs/options.c:190 src/dialogs/options.c:264
-#: src/formhist/dialogs.c:133 src/protocol/auth/dialogs.c:77
+#: src/formhist/dialogs.c:132 src/protocol/auth/dialogs.c:77
 #: src/protocol/protocol.c:63 src/protocol/user.c:158 src/protocol/user.c:174
 #: src/sched/download.c:185 src/sched/download.c:273 src/sched/download.c:298
 #: src/sched/download.c:569 src/sched/error.c:42 src/sched/session.c:121
@@ -284,7 +284,7 @@ msgstr "Ubah"
 
 #: src/bookmarks/dialogs.c:377 src/cache/dialogs.c:147
 #: src/config/dialogs.c:358 src/config/dialogs.c:528 src/cookies/dialogs.c:130
-#: src/formhist/dialogs.c:169 src/globhist/dialogs.c:185
+#: src/formhist/dialogs.c:168 src/globhist/dialogs.c:185
 msgid "Delete"
 msgstr "Hapus"
 
@@ -307,7 +307,7 @@ msgstr "Cari"
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:384 src/config/dialogs.c:359
 #: src/config/dialogs.c:530 src/cookies/dialogs.c:132
-#: src/dialogs/options.c:192 src/formhist/dialogs.c:172
+#: src/dialogs/options.c:192 src/formhist/dialogs.c:171
 #: src/globhist/dialogs.c:191 src/sched/download.c:982
 #: src/sched/download.c:1018
 msgid "Save"
@@ -3590,7 +3590,7 @@ msgid "Folder"
 msgstr ""
 
 #. name:
-#: src/cookies/cookies.c:91 src/cookies/cookies.c:817
+#: src/cookies/cookies.c:91 src/cookies/cookies.c:818
 msgid "Cookies"
 msgstr ""
 
@@ -3655,11 +3655,11 @@ msgid ""
 "cookies_save is off."
 msgstr ""
 
-#: src/cookies/cookies.c:550
+#: src/cookies/cookies.c:551
 msgid "Accept cookie?"
 msgstr ""
 
-#: src/cookies/cookies.c:551
+#: src/cookies/cookies.c:552
 #, c-format
 msgid ""
 "Do you want to accept a cookie from %s?\n"
@@ -3671,26 +3671,26 @@ msgid ""
 "Secure: %s\n"
 msgstr ""
 
-#: src/cookies/cookies.c:560
+#: src/cookies/cookies.c:561
 #, fuzzy
 msgid "at quit time"
 msgstr "perkiraan selesai"
 
-#: src/cookies/cookies.c:561 src/cookies/dialogs.c:81
+#: src/cookies/cookies.c:562 src/cookies/dialogs.c:81
 #, fuzzy
 msgid "yes"
 msgstr "bytes"
 
-#: src/cookies/cookies.c:561 src/cookies/dialogs.c:81
+#: src/cookies/cookies.c:562 src/cookies/dialogs.c:81
 #, fuzzy
 msgid "no"
 msgstr "Info"
 
-#: src/cookies/cookies.c:563
+#: src/cookies/cookies.c:564
 msgid "Accept"
 msgstr ""
 
-#: src/cookies/cookies.c:564
+#: src/cookies/cookies.c:565
 msgid "Reject"
 msgstr ""
 
@@ -3713,7 +3713,7 @@ msgid "Secure"
 msgstr "skrg"
 
 #: src/cookies/dialogs.c:131 src/dialogs/download.c:414 src/dialogs/edit.c:100
-#: src/formhist/dialogs.c:171 src/globhist/dialogs.c:188
+#: src/formhist/dialogs.c:170 src/globhist/dialogs.c:188
 msgid "Clear"
 msgstr ""
 
@@ -4339,23 +4339,23 @@ msgstr ""
 msgid "Forms are saved for this URL."
 msgstr ""
 
-#: src/formhist/dialogs.c:129
+#: src/formhist/dialogs.c:128
 msgid ""
 "No saved information for this URL.\n"
 "If you want to save passwords for this URL, enable it by the \"Toggle saving"
 "\" button."
 msgstr ""
 
-#: src/formhist/dialogs.c:167 src/protocol/auth/dialogs.c:74
+#: src/formhist/dialogs.c:166 src/protocol/auth/dialogs.c:74
 msgid "Login"
 msgstr "User ID"
 
-#: src/formhist/dialogs.c:170
+#: src/formhist/dialogs.c:169
 #, fuzzy
 msgid "Toggle saving"
 msgstr "Ganti ~html/teks"
 
-#: src/formhist/dialogs.c:176
+#: src/formhist/dialogs.c:175
 #, fuzzy
 msgid "Form history manager"
 msgstr "Memory habis"
@@ -4469,126 +4469,126 @@ msgstr "nama"
 msgid "English"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:26
+#: src/intl/gettext/libintl.c:27
 msgid "Belarusian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:27
+#: src/intl/gettext/libintl.c:28
 msgid "Brazilian Portuguese"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:28
+#: src/intl/gettext/libintl.c:29
 msgid "Bulgarian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:29
+#: src/intl/gettext/libintl.c:30
 msgid "Catalan"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:30
+#: src/intl/gettext/libintl.c:31
 msgid "Croatian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:31
+#: src/intl/gettext/libintl.c:32
 #, fuzzy
 msgid "Czech"
 msgstr "Batal"
 
-#: src/intl/gettext/libintl.c:32
+#: src/intl/gettext/libintl.c:33
 msgid "Danish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:33
+#: src/intl/gettext/libintl.c:34
 msgid "Dutch"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:34
+#: src/intl/gettext/libintl.c:35
 msgid "Estonian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:35
+#: src/intl/gettext/libintl.c:36
 msgid "Finnish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:36
+#: src/intl/gettext/libintl.c:37
 msgid "French"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:37
+#: src/intl/gettext/libintl.c:38
 msgid "Galician"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:38
+#: src/intl/gettext/libintl.c:39
 msgid "German"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:39
+#: src/intl/gettext/libintl.c:40
 msgid "Greek"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:40
+#: src/intl/gettext/libintl.c:41
 msgid "Hungarian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:41
+#: src/intl/gettext/libintl.c:42
 msgid "Icelandic"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:42
+#: src/intl/gettext/libintl.c:43
 msgid "Indonesian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:43
+#: src/intl/gettext/libintl.c:44
 msgid "Italian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:44
+#: src/intl/gettext/libintl.c:45
 #, fuzzy
 msgid "Leet"
 msgstr "Hapus"
 
-#: src/intl/gettext/libintl.c:45
+#: src/intl/gettext/libintl.c:46
 msgid "Lithuanian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:46
+#: src/intl/gettext/libintl.c:47
 msgid "Norwegian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:47
+#: src/intl/gettext/libintl.c:48
 msgid "Polish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:48
+#: src/intl/gettext/libintl.c:49
 msgid "Portuguese"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:49
+#: src/intl/gettext/libintl.c:50
 #, fuzzy
 msgid "Romanian"
 msgstr "~Info dokumen"
 
-#: src/intl/gettext/libintl.c:50
+#: src/intl/gettext/libintl.c:51
 msgid "Russian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:51
+#: src/intl/gettext/libintl.c:52
 msgid "Slovak"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:52
+#: src/intl/gettext/libintl.c:53
 msgid "Spanish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:53
+#: src/intl/gettext/libintl.c:54
 msgid "Swedish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:54
+#: src/intl/gettext/libintl.c:55
 msgid "Turkish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:55
+#: src/intl/gettext/libintl.c:56
 msgid "Ukrainian"
 msgstr ""
 
@@ -4982,6 +4982,7 @@ msgid "Dumb prefixes."
 msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:64
+#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -5411,7 +5412,7 @@ msgstr ""
 msgid "Warning: terminal name contains illicit chars."
 msgstr ""
 
-#: src/terminal/event.c:171
+#: src/terminal/event.c:172
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr ""

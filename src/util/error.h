@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.23 2003/06/08 14:11:19 pasky Exp $ */
+/* $Id: error.h,v 1.24 2003/06/08 14:14:41 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -64,9 +64,16 @@ void do_not_optimize_here(void *);
 #endif
 
 
+/* This function dumps backtrace (or whatever similiar it founds on the stack)
+ * nicely formatted and with symbols resolved to @f. When @trouble is set, it
+ * tells it to be extremely careful and not use dynamic memory allocation
+ * functions etc (useful in SIGSEGV handler etc). */
+/* Note that this function just calls system-specific backend provided by the
+ * libc, so it is available only on some systems. BACKTRACE is defined if it
+ * is available on yours. */
 #ifdef BACKTRACE
 #include <stdio.h>
-void dump_backtrace(FILE *, int);
+void dump_backtrace(FILE *f, int trouble);
 #endif
 
 #endif

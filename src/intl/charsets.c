@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.78 2004/03/01 19:17:51 witekfl Exp $ */
+/* $Id: charsets.c,v 1.79 2004/04/22 19:46:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -761,6 +761,8 @@ charsets_list_next(void)
 int
 get_cp_index(unsigned char *name)
 {
+	void *found;
+
 	if (!strcasecmp(name, "System")) {
 #if HAVE_LANGINFO_CODESET
 		name = nl_langinfo(CODESET);
@@ -768,10 +770,15 @@ get_cp_index(unsigned char *name)
 		name = "us-ascii";
 #endif
 	}
+
 	/* We assume sizeof(void *) == sizeof(unsigned int), it may cause
 	 * issue on 64bits platforms... How can we do better ? --Zas */
-	return ((unsigned int)
-		fastfind_search(name, strlen(name), ff_info_charsets) - 1);
+	found = fastfind_search(name, strlen(name), ff_info_charsets);
+	if (found) {
+		return ((unsigned int) found) - 1;
+	} else {
+		return -1;
+	}
 }
 
 #endif /* USE_FASTFIND */

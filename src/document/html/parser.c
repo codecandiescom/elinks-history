@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.354 2004/01/18 15:38:07 zas Exp $ */
+/* $Id: parser.c,v 1.355 2004/01/18 15:46:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2321,22 +2321,24 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 	/* Here begins distribution between rows or cols.
 	 * Be warn, this is Mikulas's black magic ;) */
 
+#define foreach_values(i) for (i = 0; i < values_count; i++)
+	
 	val = 2 * values_count - 1;
-	for (i = 0; i < values_count; i++) if (values[i] > 0) val += values[i] - 1;
+	foreach_values(i) if (values[i] > 0) val += values[i] - 1;
 
 	if (val >= max_value) {
 		int divisor = 0;
 		int tmp_val;
 		
 distribute:
-		for (i = 0; i < values_count; i++) if (values[i] < 1) values[i] = 1;
+		foreach_values(i) if (values[i] < 1) values[i] = 1;
 		val -= max_value;
 
-		for (i = 0; i < values_count; i++) divisor += values[i];
+		foreach_values(i) divisor += values[i];
 		assert(divisor);
 
 		tmp_val = val;
-		for (i = 0; i < values_count; i++) {
+		foreach_values(i) {
 			int tmp;
 		
 			/* SIGH! gcc 2.7.2.* has an optimizer bug! */
@@ -2349,7 +2351,7 @@ distribute:
 		while (val) {
 			int flag = 0;
 			
-			for (i = 0; i < values_count; i++) {
+			foreach_values(i) {
 				if (val < 0) values[i]++, val++, flag = 1;
 				if (val > 0 && values[i] > 1) values[i]--, val--, flag = 1;
 				if (!val) break;
@@ -2362,7 +2364,7 @@ distribute:
 		int neg = 0;
 		int tmp_val;
 		
-		for (i = 0; i < values_count; i++) if (values[i] < 0) neg = 1;
+		foreach_values(i) if (values[i] < 0) neg = 1;
 		if (!neg) goto distribute;
 
 		tmp_values = fmem_alloc(values_count * sizeof(int));
@@ -2372,14 +2374,14 @@ distribute:
 		}
 		memcpy(tmp_values, values, values_count * sizeof(int));
 		
-		for (i = 0; i < values_count; i++) if (values[i] < 1) values[i] = 1;
+		foreach_values(i) if (values[i] < 1) values[i] = 1;
 		val = max_value - val;
 	
-		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) divisor += -tmp_values[i];
+		foreach_values(i) if (tmp_values[i] < 0) divisor += -tmp_values[i];
 		assert(divisor);
 		
 		tmp_val = val;
-		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) {
+		foreach_values(i) if (tmp_values[i] < 0) {
 			int tmp = (-tmp_values[i] * tmp_val / divisor);
 			
 			values[i] += tmp;
@@ -2388,23 +2390,23 @@ distribute:
 		assertm(val >= 0, "parse_frame_widths: val < 0");
 		if_assert_failed val = 0;
 		
-		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) {
-			if (val) values[i]++, val--;
-		}
+		foreach_values(i) if (tmp_values[i] < 0 && val) values[i]++, val--;
+		
 		assertm(val <= 0, "parse_frame_widths: val > 0");
 		if_assert_failed val = 0;
 		
 		fmem_free(tmp_values);
 	}
 
-	for (i = 0; i < values_count; i++) if (!values[i]) {
+	foreach_values(i) if (!values[i]) {
 		register int j;
 		int maxval = 0;
 		int maxpos = 0;
 
-		for (j = 0; j < values_count; j++) if (values[j] > maxval) maxval = values[j], maxpos = j;
+		foreach_values(j) if (values[j] > maxval) maxval = values[j], maxpos = j;
 		if (maxval) values[i] = 1, values[maxpos]--;
 	}
+#undef foreach_values
 }
 
 static void

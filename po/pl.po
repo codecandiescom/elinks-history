@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-11 20:24+0100\n"
-"PO-Revision-Date: 2004-11-1 20:30+0100\n"
+"POT-Creation-Date: 2004-11-14 09:54+0100\n"
+"PO-Revision-Date: 2004-11-14 10:05+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/dialogs/document.c:50 src/dialogs/document.c:226
 #: src/dialogs/document.c:243 src/dialogs/document.c:301 src/dialogs/edit.c:99
 #: src/dialogs/info.c:44 src/dialogs/info.c:133 src/dialogs/info.c:155
-#: src/dialogs/menu.c:96 src/dialogs/menu.c:505 src/dialogs/menu.c:556
+#: src/dialogs/menu.c:96 src/dialogs/menu.c:502 src/dialogs/menu.c:553
 #: src/dialogs/options.c:176 src/dialogs/options.c:249
 #: src/ecmascript/spidermonkey.c:407 src/ecmascript/spidermonkey.c:933
 #: src/ecmascript/spidermonkey.c:954 src/formhist/dialogs.c:183
@@ -63,8 +63,8 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/viewer/text/form.c:849 src/viewer/text/search.c:956
 #: src/viewer/text/search.c:1017 src/viewer/text/search.c:1463
 #: src/viewer/text/search.c:1576 src/viewer/text/textarea.c:365
-#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:686
-#: src/viewer/text/view.c:1215
+#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:711
+#: src/viewer/text/view.c:1257
 msgid "OK"
 msgstr "OK"
 
@@ -171,14 +171,14 @@ msgstr "Nazwa"
 #: src/bfu/hierbox.c:958 src/bookmarks/dialogs.c:269
 #: src/bookmarks/dialogs.c:669 src/config/dialogs.c:410
 #: src/config/dialogs.c:497 src/config/dialogs.c:905 src/cookies/dialogs.c:323
-#: src/dialogs/edit.c:103 src/dialogs/menu.c:96 src/dialogs/menu.c:505
-#: src/dialogs/menu.c:556 src/dialogs/options.c:179 src/dialogs/options.c:250
+#: src/dialogs/edit.c:103 src/dialogs/menu.c:96 src/dialogs/menu.c:502
+#: src/dialogs/menu.c:553 src/dialogs/options.c:179 src/dialogs/options.c:250
 #: src/mime/dialogs.c:135 src/protocol/auth/dialogs.c:93
 #: src/sched/download.c:552 src/sched/download.c:1023
 #: src/sched/download.c:1033 src/sched/download.c:1054
 #: src/sched/download.c:1067 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:723
-#: src/viewer/text/search.c:1577 src/viewer/text/view.c:686
+#: src/viewer/text/search.c:1577 src/viewer/text/view.c:711
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -4504,7 +4504,7 @@ msgid "Folder"
 msgstr "Folder"
 
 #. name:
-#: src/cookies/cookies.c:82 src/cookies/cookies.c:858
+#: src/cookies/cookies.c:82 src/cookies/cookies.c:859
 msgid "Cookies"
 msgstr "Ciasteczka"
 
@@ -4768,7 +4768,7 @@ msgstr "Brak nag³ówka."
 msgid "Artificial header info"
 msgstr "Sztuczne informacje o nag³ówku"
 
-#: src/dialogs/download.c:257 src/dialogs/menu.c:555 src/sched/download.c:366
+#: src/dialogs/download.c:257 src/dialogs/menu.c:552 src/sched/download.c:366
 msgid "Download"
 msgstr "Pobieranie"
 
@@ -4873,53 +4873,46 @@ msgstr ""
 "rozprowadzaæ dalej i/lub modyfikowaæ na warunkach GPL GNU, wydanej przez "
 "Free Software Foundation - wed³ug wersji 2-giej tej Licencji."
 
-#: src/dialogs/info.c:162
+#
+#: src/dialogs/info.c:167
+msgid "master"
+msgstr "g³ówny"
+
+#: src/dialogs/info.c:167
+msgid "slave"
+msgstr "podrzêdny"
+
+#: src/dialogs/info.c:179
 #, c-format
 msgid ""
 "Resources: %d handles, %d timers.\n"
 "Connections: %d connections, %d connecting, %d transferring, %d keepalive.\n"
 "Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
-"Formatted document cache: %d documents, %d locked."
+"Document cache: %d formatted, %d locked, %d refreshing.\n"
+"Interlinking: %s terminal, %d terminals, %d sessions."
 msgstr ""
 "Zasoby: %d uchwyt(ów), %d zegar(ów).\n"
 "Po³±czenia: %d po³±czeñ, %d nawi±zuj±cych po³±czenie, %d przesy³aj±cych,\n"
 "            %d trwa³ych.\n"
 "Pamiêæ podrêczna: %d bajtów, %d plików, %d zablokowanych, %d ³adowanych.\n"
-"Sformatowane dokumenty: %d dokumentów, %d zablokowanych."
+"Sformatowane dokumenty: %d dokumentów, %d zablokowanych, %d z "
+"od¶wierzaniem.\n"
+"Po³±czenia wewnêtrzne: %s terminal, %d terminali, %d sesji."
 
-#: src/dialogs/info.c:179
-msgid "Resources"
-msgstr "Zasoby"
-
-#: src/dialogs/info.c:190
+#: src/dialogs/info.c:198
 #, c-format
-msgid ""
-"Allocated      : %ld bytes\n"
-"Truly allocated: %ld bytes (x%0.2f)\n"
-"Cache size     : %ld bytes\n"
-msgstr ""
-"Zaalokowane               : %ld bajtów\n"
-"Naprawdê zaalokowane      : %ld bajtów (x%0.2f)\n"
-"Rozmiar pamiêci podrêcznej: %ld bajtów\n"
-
-#: src/dialogs/info.c:194
-#, c-format
-msgid ""
-"Allocated      : %ld bytes\n"
-"Truly allocated: %ld bytes (x%0.2f)"
-msgstr ""
-"Zaalokowane\t\t: %ld bajtów\n"
-"Naprawdê zaalokowane\t: %ld bajtów (x%0.2f)"
+msgid "Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%)."
+msgstr "Zaalokowane: %ld bajtów, %ld bajtów \"na górze\" (%0.2f%%)."
 
 #: src/dialogs/info.c:209
-msgid "Memory info"
-msgstr "Informacje o pamiêci"
+msgid "Resources"
+msgstr "Zasoby"
 
 #: src/dialogs/menu.c:95
 msgid "Save URL"
 msgstr "Zapisz URL"
 
-#: src/dialogs/menu.c:95 src/dialogs/menu.c:504
+#: src/dialogs/menu.c:95 src/dialogs/menu.c:501
 msgid "Enter URL"
 msgstr "Wprowad¼ URL"
 
@@ -4955,19 +4948,19 @@ msgstr "Dodaj dokument do z~ak³adek"
 msgid "~Reload"
 msgstr "P~rze³aduj"
 
-#: src/dialogs/menu.c:234 src/dialogs/menu.c:400
+#: src/dialogs/menu.c:234 src/dialogs/menu.c:397
 msgid "Frame at ~full-screen"
 msgstr "Ramka na ~ca³ym ekranie"
 
-#: src/dialogs/menu.c:242 src/dialogs/menu.c:402
+#: src/dialogs/menu.c:242 src/dialogs/menu.c:399
 msgid "Nex~t tab"
 msgstr "Nas~têpna karta"
 
-#: src/dialogs/menu.c:243 src/dialogs/menu.c:403
+#: src/dialogs/menu.c:243 src/dialogs/menu.c:400
 msgid "Pre~v tab"
 msgstr "~Poprzednia karta"
 
-#: src/dialogs/menu.c:246 src/dialogs/menu.c:404
+#: src/dialogs/menu.c:246 src/dialogs/menu.c:401
 msgid "~Close tab"
 msgstr "~Zamknij kartê"
 
@@ -5028,242 +5021,238 @@ msgstr "Wyczy¶æ ~ca³± pamiêæ podrêczn±"
 msgid "Resource ~info"
 msgstr "~Informacje o zasobach"
 
-#: src/dialogs/menu.c:308
-msgid "~Memory info"
-msgstr "Infor~macje o pamiêci"
-
-#: src/dialogs/menu.c:315
+#: src/dialogs/menu.c:312
 msgid "E~xit"
 msgstr "W~yj¶cie"
 
-#: src/dialogs/menu.c:341
+#: src/dialogs/menu.c:338
 msgid "~New window"
 msgstr "~Nowe okno"
 
-#: src/dialogs/menu.c:360
+#: src/dialogs/menu.c:357
 msgid "~OS shell"
 msgstr "P~ow³oka systemowa"
 
-#: src/dialogs/menu.c:367
+#: src/dialogs/menu.c:364
 msgid "Resize t~erminal"
 msgstr "Zmieñ rozmiar ~terminala"
 
-#: src/dialogs/menu.c:384
+#: src/dialogs/menu.c:381
 msgid "~Search"
 msgstr "~Szukaj"
 
-#: src/dialogs/menu.c:385
+#: src/dialogs/menu.c:382
 msgid "Search ~backward"
 msgstr "Szukaj ~wstecz"
 
-#: src/dialogs/menu.c:386
+#: src/dialogs/menu.c:383
 msgid "Find ~next"
 msgstr "Znajd¼ ~nastêpne"
 
-#: src/dialogs/menu.c:387
+#: src/dialogs/menu.c:384
 msgid "Find ~previous"
 msgstr "Znajd¼ ~poprzednie"
 
-#: src/dialogs/menu.c:388
+#: src/dialogs/menu.c:385
 msgid "T~ypeahead search"
 msgstr "Szukanie z w~yprzedzeniem"
 
-#: src/dialogs/menu.c:390
+#: src/dialogs/menu.c:387
 msgid "Toggle ~html/plain"
 msgstr "Prze³±cz ~html/plain"
 
-#: src/dialogs/menu.c:391
+#: src/dialogs/menu.c:388
 msgid "Toggle i~mages"
 msgstr "Prze³±cz ~obrazki"
 
-#: src/dialogs/menu.c:392
+#: src/dialogs/menu.c:389
 msgid "Toggle ~link numbering"
 msgstr "Prze³±cz n~umerowanie odno¶ników"
 
-#: src/dialogs/menu.c:393
+#: src/dialogs/menu.c:390
 msgid "Toggle ~document colors"
 msgstr "Prze³±cz sposób u¿ycia kolorów podanych w ~dokumencie"
 
-#: src/dialogs/menu.c:394
+#: src/dialogs/menu.c:391
 msgid "~Wrap text on/off"
 msgstr "Zawi~janie tekstu w³/wy³"
 
-#: src/dialogs/menu.c:396
+#: src/dialogs/menu.c:393
 msgid "Document ~info"
 msgstr "~Informacje o dokumencie"
 
-#: src/dialogs/menu.c:397
+#: src/dialogs/menu.c:394
 msgid "H~eader info"
 msgstr "Informacj~e o nag³ówku"
 
-#: src/dialogs/menu.c:398
+#: src/dialogs/menu.c:395
 msgid "Rel~oad document"
 msgstr "P~rze³aduj dokument"
 
-#: src/dialogs/menu.c:399
+#: src/dialogs/menu.c:396
 msgid "~Rerender document"
 msgstr "Prze~formatuj dokument"
 
-#: src/dialogs/menu.c:410
+#: src/dialogs/menu.c:407
 msgid "~ELinks homepage"
 msgstr "Strona domowa ~ELinksa"
 
 #
-#: src/dialogs/menu.c:411
+#: src/dialogs/menu.c:408
 msgid "~Documentation"
 msgstr "~Dokumentacja"
 
-#: src/dialogs/menu.c:412
+#: src/dialogs/menu.c:409
 msgid "~Keys"
 msgstr "~Klawiszologia"
 
-#: src/dialogs/menu.c:414
+#: src/dialogs/menu.c:411
 msgid "~Bugs information"
 msgstr "Informacje o ~b³êdach"
 
-#: src/dialogs/menu.c:416
+#: src/dialogs/menu.c:413
 msgid "ELinks C~vsWeb"
 msgstr "ELinks C~VSWeb"
 
-#: src/dialogs/menu.c:417
+#: src/dialogs/menu.c:414
 msgid "ELinks Cvs ~History"
 msgstr "~Historia CVS-u ELinksa"
 
-#: src/dialogs/menu.c:418
+#: src/dialogs/menu.c:415
 msgid "ELinks ~LXR"
 msgstr "ELinks ~LXR"
 
-#: src/dialogs/menu.c:421
+#: src/dialogs/menu.c:418
 msgid "~Copying"
 msgstr "Ko~piowanie"
 
-#: src/dialogs/menu.c:422
+#: src/dialogs/menu.c:419
 msgid "~About"
 msgstr "~O programie"
 
-#: src/dialogs/menu.c:428
+#: src/dialogs/menu.c:425
 msgid "~Add"
 msgstr "~Dodaj"
 
-#: src/dialogs/menu.c:429
+#: src/dialogs/menu.c:426
 msgid "~Modify"
 msgstr "~Zmieñ"
 
-#: src/dialogs/menu.c:430
+#: src/dialogs/menu.c:427
 msgid "~Delete"
 msgstr "~Usuñ"
 
-#: src/dialogs/menu.c:436 src/dialogs/menu.c:449
+#: src/dialogs/menu.c:433 src/dialogs/menu.c:446
 msgid "~Language"
 msgstr "~Jêzyk"
 
-#: src/dialogs/menu.c:438 src/dialogs/menu.c:450
+#: src/dialogs/menu.c:435 src/dialogs/menu.c:447
 msgid "C~haracter set"
 msgstr "~Zestaw znaków"
 
-#: src/dialogs/menu.c:439 src/dialogs/menu.c:451
+#: src/dialogs/menu.c:436 src/dialogs/menu.c:448
 msgid "~Terminal options"
 msgstr "Opcje ~terminala"
 
-#: src/dialogs/menu.c:440
+#: src/dialogs/menu.c:437
 msgid "File ~extensions"
 msgstr "~Rozszerzenia"
 
-#: src/dialogs/menu.c:442
+#: src/dialogs/menu.c:439
 msgid "~Options manager"
 msgstr "Menad¿er ~ustawieñ"
 
-#: src/dialogs/menu.c:443
+#: src/dialogs/menu.c:440
 msgid "~Keybinding manager"
 msgstr "Menad¿er przypisañ ~klawiszy"
 
-#: src/dialogs/menu.c:444
+#: src/dialogs/menu.c:441
 msgid "~Save options"
 msgstr "Zapisz ~opcje"
 
-#: src/dialogs/menu.c:457
+#: src/dialogs/menu.c:454
 msgid "Global ~history"
 msgstr "Historia ~globalna"
 
 #
-#: src/dialogs/menu.c:460
+#: src/dialogs/menu.c:457
 msgid "~Bookmarks"
 msgstr "~Zak³adki"
 
 #
-#: src/dialogs/menu.c:462
+#: src/dialogs/menu.c:459
 msgid "~Cache"
 msgstr "Pamiêæ podrê~czna"
 
-#: src/dialogs/menu.c:463
+#: src/dialogs/menu.c:460
 msgid "~Downloads"
 msgstr "Po~bieranie"
 
-#: src/dialogs/menu.c:465
+#: src/dialogs/menu.c:462
 msgid "Coo~kies"
 msgstr "Ciastecz~ka"
 
-#: src/dialogs/menu.c:468
+#: src/dialogs/menu.c:465
 msgid "~Form history"
 msgstr "Historia ~formularzy"
 
-#: src/dialogs/menu.c:470
+#: src/dialogs/menu.c:467
 msgid "~Authentication"
 msgstr "~Autentykacja"
 
-#: src/dialogs/menu.c:484
+#: src/dialogs/menu.c:481
 msgid "~File"
 msgstr "~Plik"
 
-#: src/dialogs/menu.c:485
+#: src/dialogs/menu.c:482
 msgid "~View"
 msgstr "~Widok"
 
-#: src/dialogs/menu.c:486
+#: src/dialogs/menu.c:483
 msgid "~Link"
 msgstr "~Odno¶nik"
 
-#: src/dialogs/menu.c:487
+#: src/dialogs/menu.c:484
 msgid "~Tools"
 msgstr "~Narzêdzia"
 
-#: src/dialogs/menu.c:488
+#: src/dialogs/menu.c:485
 msgid "~Setup"
 msgstr "~Ustawienia"
 
-#: src/dialogs/menu.c:489
+#: src/dialogs/menu.c:486
 msgid "~Help"
 msgstr "Po~moc"
 
-#: src/dialogs/menu.c:504
+#: src/dialogs/menu.c:501
 msgid "Go to URL"
 msgstr "Przejd¼ do URL-a"
 
-#: src/dialogs/menu.c:555
+#: src/dialogs/menu.c:552
 msgid "Save to file"
 msgstr "Zapisz do pliku"
 
-#: src/dialogs/menu.c:852
+#: src/dialogs/menu.c:849
 msgid "~Pass frame URI to external command"
 msgstr "~Przeka¿ URI ramki do zewnêtrznego polecenia"
 
-#: src/dialogs/menu.c:857
+#: src/dialogs/menu.c:854
 msgid "Pass link URI to e~xternal command"
 msgstr "Przeka¿ URI odno¶nika do z~ewnêtrznego polecenia"
 
-#: src/dialogs/menu.c:863
+#: src/dialogs/menu.c:860
 msgid "Pass tab URI to e~xternal command"
 msgstr "Przeka¿ URI karty do ze~wnêtrznego polecenia"
 
-#: src/dialogs/menu.c:888
+#: src/dialogs/menu.c:885
 msgid "Empty directory"
 msgstr "Pusty katalog"
 
-#: src/dialogs/menu.c:932
+#: src/dialogs/menu.c:929
 msgid "Directories:"
 msgstr "Katalogi:"
 
-#: src/dialogs/menu.c:945
+#: src/dialogs/menu.c:942
 msgid "Files:"
 msgstr "Pliki:"
 
@@ -5748,7 +5737,7 @@ msgstr ""
 "1 - tytu³y stron"
 
 #. name:
-#: src/globhist/globhist.c:389
+#: src/globhist/globhist.c:386
 msgid "Global History"
 msgstr "Historia globalna"
 
@@ -7270,87 +7259,87 @@ msgstr "wci¶nij %s aby wys³aæ do"
 msgid "press %s to post to"
 msgstr "wci¶nij %s aby wys³aæ do"
 
-#: src/viewer/text/link.c:1105
+#: src/viewer/text/link.c:1109
 msgid "Display ~usemap"
 msgstr "Poka¿ ~mapê obrazków"
 
-#: src/viewer/text/link.c:1108
+#: src/viewer/text/link.c:1112
 msgid "~Follow link"
 msgstr "Wybierz od~no¶nik"
 
-#: src/viewer/text/link.c:1110
+#: src/viewer/text/link.c:1114
 msgid "Follow link and r~eload"
 msgstr "Wybierz odno¶nik i p~rze³aduj"
 
-#: src/viewer/text/link.c:1114
+#: src/viewer/text/link.c:1118
 msgid "Open in new ~window"
 msgstr "~Otwórz w nowym oknie"
 
-#: src/viewer/text/link.c:1116
+#: src/viewer/text/link.c:1120
 msgid "Open in new ~tab"
 msgstr "Otwórz w nowej ~karcie"
 
-#: src/viewer/text/link.c:1118
+#: src/viewer/text/link.c:1122
 msgid "Open in new tab in ~background"
 msgstr "Otwórz w nowej k~arcie w tle"
 
-#: src/viewer/text/link.c:1123
+#: src/viewer/text/link.c:1127
 msgid "~Download link"
 msgstr "~Pobierz"
 
-#: src/viewer/text/link.c:1126
+#: src/viewer/text/link.c:1130
 msgid "~Add link to bookmarks"
 msgstr "~Dodaj zak³adkê"
 
-#: src/viewer/text/link.c:1138 src/viewer/text/link.c:1172
+#: src/viewer/text/link.c:1142 src/viewer/text/link.c:1176
 msgid "~Reset form"
 msgstr "Wy~czy¶æ formularz"
 
-#: src/viewer/text/link.c:1150
+#: src/viewer/text/link.c:1154
 msgid "Open in ~external editor"
 msgstr "Otwórz w zewnêtrznym ~edytorze"
 
-#: src/viewer/text/link.c:1156
+#: src/viewer/text/link.c:1160
 msgid "~Submit form"
 msgstr "~Prze¶lij formularz"
 
-#: src/viewer/text/link.c:1157
+#: src/viewer/text/link.c:1161
 msgid "Submit form and rel~oad"
 msgstr "Prze¶lij f~ormularz i prze³aduj"
 
-#: src/viewer/text/link.c:1160
+#: src/viewer/text/link.c:1164
 msgid "Submit form and open in new ~window"
 msgstr "Prze¶lij ~formularz i otwórz w nowym oknie"
 
-#: src/viewer/text/link.c:1162
+#: src/viewer/text/link.c:1166
 msgid "Submit form and open in new ~tab"
 msgstr "Prze¶lij formularz i otwórz na nowej ~karcie"
 
-#: src/viewer/text/link.c:1165
+#: src/viewer/text/link.c:1169
 msgid "Submit form and open in new tab in ~background"
 msgstr "Prze¶lij formularz i otwórz w ~tle na nowej karcie"
 
-#: src/viewer/text/link.c:1170
+#: src/viewer/text/link.c:1174
 msgid "Submit form and ~download"
 msgstr "Prze¶lij formu~larz i ¶ci±gnij"
 
-#: src/viewer/text/link.c:1177
+#: src/viewer/text/link.c:1181
 msgid "V~iew image"
 msgstr "Poka¿ o~brazek"
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1183
 msgid "Download ima~ge"
 msgstr "Pobierz ~obrazek"
 
-#: src/viewer/text/link.c:1187
+#: src/viewer/text/link.c:1191
 msgid "No link selected"
 msgstr "Nie wybrano ¿adnego odno¶nika"
 
-#: src/viewer/text/link.c:1239
+#: src/viewer/text/link.c:1243
 msgid "Image"
 msgstr "Obrazek"
 
-#: src/viewer/text/link.c:1244
+#: src/viewer/text/link.c:1248
 msgid "Usemap"
 msgstr "Mapa obrazków"
 
@@ -7425,21 +7414,36 @@ msgstr "Nie mo¿esz uruchomiæ zewnêtrznego edytora w trybie anonimowym."
 msgid "You can do this only on the master terminal"
 msgstr "Mo¿esz zrobiæ to jedynie na g³ównym terminalu"
 
-#: src/viewer/text/view.c:685
+#: src/viewer/text/view.c:710
 msgid "Go to link"
 msgstr "Przejd¼ do odno¶nika"
 
-#: src/viewer/text/view.c:685
+#: src/viewer/text/view.c:710
 msgid "Enter link number"
 msgstr "Wprowad¼ numer odno¶nika"
 
-#: src/viewer/text/view.c:1212
+#: src/viewer/text/view.c:1254
 msgid "Save error"
 msgstr "B³±d zapisu"
 
-#: src/viewer/text/view.c:1213
+#: src/viewer/text/view.c:1255
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
+
+#~ msgid ""
+#~ "Allocated      : %ld bytes\n"
+#~ "Truly allocated: %ld bytes (x%0.2f)\n"
+#~ "Cache size     : %ld bytes\n"
+#~ msgstr ""
+#~ "Zaalokowane               : %ld bajtów\n"
+#~ "Naprawdê zaalokowane      : %ld bajtów (x%0.2f)\n"
+#~ "Rozmiar pamiêci podrêcznej: %ld bajtów\n"
+
+#~ msgid "Memory info"
+#~ msgstr "Informacje o pamiêci"
+
+#~ msgid "~Memory info"
+#~ msgstr "Infor~macje o pamiêci"
 
 #~ msgid "Is the current link bookmarked"
 #~ msgstr "Czy bie¿±cy odno¶nik jest dodany do zak³adek"

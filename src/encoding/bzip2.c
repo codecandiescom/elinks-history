@@ -1,5 +1,5 @@
 /* Bzip2 encoding (ENCODING_BZIP2) backend */
-/* $Id: bzip2.c,v 1.2 2004/05/28 13:02:30 jonas Exp $ */
+/* $Id: bzip2.c,v 1.3 2004/08/16 00:59:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,6 +80,67 @@ bzip2_decode(struct stream_encoded *stream, unsigned char *data, int len,
 	return data;
 }
 
+#ifdef ELINKS_SMALL
+#define BZIP2_SMALL 1
+#else
+#define BZIP2_SMALL 0
+#endif
+
+static unsigned char *
+bzip2_decode_buffer(unsigned char *data, int len, int *new_len)
+{
+	bz_stream stream;
+	unsigned char *buffer = NULL;
+	int error;
+
+	memset(&stream, 0, sizeof(bz_stream));
+	stream.next_in = data;
+	stream.avail_in = len;
+
+	if (BZ2_bzDecompressInit(&stream, 0, BZIP2_SMALL) != BZ_OK)
+		return NULL;
+
+	do {
+		unsigned char *new_buffer;
+		size_t size = stream.total_out_lo32 + MAX_STR_LEN;
+
+		/* FIXME: support for 64 bit.  real size is
+		 *
+		 * 	(total_in_hi32 << * 32) + total_in_lo32
+		 *
+		 * --jonas */
+		assertm(!stream.total_out_hi32, "64 bzip2 decoding not supported");
+
+		new_buffer = mem_realloc(buffer, size);
+		if (!new_buffer) {
+			error = BZ_MEM_ERROR;
+			break;
+		}
+
+		buffer		 = new_buffer;
+		stream.next_out  = buffer + stream.total_out_lo32;
+		stream.avail_out = MAX_STR_LEN;
+
+		error = BZ2_bzDecompress(&stream);
+		if (error == BZ_STREAM_END) {
+			*new_len = stream.total_out_lo32;
+			error = BZ_OK;
+			break;
+		}
+
+	} while (error == BZ_OK);
+
+	BZ2_bzDecompressEnd(&stream);
+
+	if (error != BZ_OK) {
+		if (buffer) mem_free(buffer);
+		*new_len = 0;
+		return NULL;
+	}
+
+	return buffer;
+}
+
 static void
 bzip2_close(struct stream_encoded *stream)
 {
@@ -99,5 +160,6 @@ struct decoding_backend bzip2_decoding_backend = {
 	bzip2_open,
 	bzip2_read,
 	bzip2_decode,
+	bzip2_decode_buffer,
 	bzip2_close,
 };

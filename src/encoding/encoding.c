@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.35 2004/07/29 10:02:25 jonas Exp $ */
+/* $Id: encoding.c,v 1.36 2004/08/16 00:59:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,17 @@ dummy_decode(struct stream_encoded *stream, unsigned char *data, int len,
 	return data;
 }
 
+static unsigned char *
+dummy_decode_buffer(unsigned char *data, int len, int *new_len)
+{
+	unsigned char *buffer = memacpy(data, len);
+
+	if (!buffer) return NULL;
+
+	*new_len = len;
+	return buffer;
+}
+
 static void
 dummy_close(struct stream_encoded *stream)
 {
@@ -75,6 +86,7 @@ static struct decoding_backend dummy_decoding_backend = {
 	dummy_open,
 	dummy_read,
 	dummy_decode,
+	dummy_decode_buffer,
 	dummy_close,
 };
 
@@ -130,6 +142,13 @@ decode_encoded(struct stream_encoded *stream, unsigned char *data, int len,
 		int *new_len)
 {
 	return decoding_backends[stream->encoding]->decode(stream, data, len, new_len);
+}
+
+unsigned char *
+decode_encoded_buffer(enum stream_encoding encoding, unsigned char *data, int len,
+		      int *new_len)
+{
+	return decoding_backends[encoding]->decode_buffer(data, len, new_len);
 }
 
 /* Closes encoded stream. Note that fd associated with the stream will be
@@ -210,7 +229,7 @@ try_encoding_extensions(struct string *filename, int *fd)
 
 /* Reads the file from @stream in chunks of size @readsize. */
 /* Returns a connection state. S_OK if all is well. */
-static inline enum connection_state
+enum connection_state
 read_file(struct stream_encoded *stream, int readsize, struct string *page)
 {
 	if (!init_string(page)) return S_OUT_OF_MEM;

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.20 2003/07/10 02:51:22 jonas Exp $ */
+/* $Id: auth.c,v 1.21 2003/07/10 03:02:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,12 +105,12 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
  *	ADD_AUTH_NEW	if entry was added
  *	ADD_AUIH_ERROR	on error. */
 enum add_auth_code
-add_auth_entry(unsigned char *url, unsigned char *realm)
+add_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
-	unsigned char *user = get_user_name(url);
-	unsigned char *pass = get_pass(url);
-	unsigned char *newurl = get_auth_url(url);
+	unsigned char *user = memacpy(uri->user, uri->userlen);
+	unsigned char *pass = memacpy(uri->password, uri->passwordlen);
+	unsigned char *newurl = get_auth_url(uri->protocol);
 	int ret = ADD_AUTH_ERROR;
 
 	if (!newurl || !user || !pass) goto end;
@@ -220,7 +220,7 @@ again:
 		if ((entry && !entry->valid && entry->uid && entry->passwd
 		    && (strcmp(user, entry->uid) || strcmp(pass, entry->passwd)))
 		   || !entry) {
-			if (add_auth_entry(uri->protocol, NULL) == ADD_AUTH_NONE) {
+			if (add_auth_entry(uri, NULL) == ADD_AUTH_NONE) {
 				/* An entry was re-created, we free user/pass
 				 * before retry to prevent infinite loop. */
 				if (user) {

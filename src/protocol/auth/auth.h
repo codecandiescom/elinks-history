@@ -1,7 +1,9 @@
-/* $Id: auth.h,v 1.6 2003/07/10 02:46:50 jonas Exp $ */
+/* $Id: auth.h,v 1.7 2003/07/10 03:02:55 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_AUTH_H
 #define EL__PROTOCOL_HTTP_AUTH_H
+
+#include "protocol/uri.h"
 
 struct http_auth_basic {
         LIST_HEAD(struct http_auth_basic);
@@ -23,7 +25,7 @@ enum add_auth_code {
 };
 
 unsigned char *find_auth(struct uri *);
-enum add_auth_code add_auth_entry(unsigned char *, unsigned char *);
+enum add_auth_code add_auth_entry(struct uri *, unsigned char *);
 void del_auth_entry(struct http_auth_basic *);
 void free_auth(void);
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.172 2003/07/10 02:46:50 jonas Exp $ */
+/* $Id: http.c,v 1.173 2003/07/10 03:02:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1199,7 +1199,7 @@ again:
 				unsigned char *realm = get_http_header_param(d, "realm");
 
 				if (realm) {
-					enum add_auth_code code = add_auth_entry(uri->protocol, realm);
+					enum add_auth_code code = add_auth_entry(uri, realm);
 
 					if (code == ADD_AUTH_NEW || code == ADD_AUTH_EXIST) {
 						add_questions_entry(do_auth_dialog);

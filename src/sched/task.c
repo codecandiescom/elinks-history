@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.159 2005/03/02 17:29:35 zas Exp $ */
+/* $Id: task.c,v 1.160 2005/03/02 17:35:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,7 +143,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	 struct location *target_location, enum cache_mode cache_mode,
 	 enum task_type task_type, int redir)
 {
-	struct task *task = NULL;
+	struct task *task;
 	int referrer_incomplete = 0;
 	int malicious_uri = 0;
 	int confirm_submit = uri->form;

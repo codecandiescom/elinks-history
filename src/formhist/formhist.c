@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.82 2004/05/31 03:45:44 jonas Exp $ */
+/* $Id: formhist.c,v 1.83 2004/06/16 14:47:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,34 +87,6 @@ form_type2str(enum form_type num)
 };
 
 #undef FORM_TYPE_COUNT
-
-static struct submitted_value *
-new_submitted_value(unsigned char *name, unsigned char *value, enum form_type type)
-{
-	struct submitted_value *sv;
-
-	sv = mem_alloc(sizeof(struct submitted_value));
-	if (!sv) return NULL;
-
-	sv->value = stracpy(value);
-	if (!sv->value) { mem_free(sv); return NULL; }
-
-	sv->name = stracpy(name);
-	if (!sv->name) { mem_free(sv->value); mem_free(sv); return NULL; }
-
-	sv->type = type;
-
-	return sv;
-}
-
-static void inline
-free_submitted_value(struct submitted_value *sv)
-{
-	if (!sv) return;
-	mem_free_if(sv->value);
-	mem_free_if(sv->name);
-	mem_free(sv);
-}
 
 static void
 free_form_in_list(struct formhist_data *form)

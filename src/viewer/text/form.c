@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.182 2004/06/16 09:15:57 miciah Exp $ */
+/* $Id: form.c,v 1.183 2004/06/16 14:47:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,6 +51,34 @@
  * in viewer/common/. --pasky */
 
 /* FIXME: Add comments!! --Zas */
+
+struct submitted_value *
+new_submitted_value(unsigned char *name, unsigned char *value, enum form_type type)
+{
+	struct submitted_value *sv;
+
+	sv = mem_alloc(sizeof(struct submitted_value));
+	if (!sv) return NULL;
+
+	sv->value = stracpy(value);
+	if (!sv->value) { mem_free(sv); return NULL; }
+
+	sv->name = stracpy(name);
+	if (!sv->name) { mem_free(sv->value); mem_free(sv); return NULL; }
+
+	sv->type = type;
+
+	return sv;
+}
+
+void
+free_submitted_value(struct submitted_value *sv)
+{
+	if (!sv) return;
+	mem_free_if(sv->value);
+	mem_free_if(sv->name);
+	mem_free(sv);
+}
 
 static void
 fixup_select_state(struct form_control *fc, struct form_state *fs)

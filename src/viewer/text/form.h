@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.28 2004/06/16 14:43:19 zas Exp $ */
+/* $Id: form.h,v 1.29 2004/06/16 14:47:44 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -84,6 +84,9 @@ struct submitted_value {
 	enum form_type type;
 	int position;
 };
+
+struct submitted_value *new_submitted_value(unsigned char *name, unsigned char *value, enum form_type type);
+void free_submitted_value(struct submitted_value *sv);
 
 struct uri *get_form_uri(struct session *ses, struct document_view *doc_view, struct form_control *fc);
 

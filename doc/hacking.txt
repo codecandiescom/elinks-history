@@ -414,7 +414,7 @@ Coding practices:
 
 - If speed is not critical and especially if you are messing with some struct
   where size might matter, feel encouraged to use bitfields to store boolean
-  (or tristate or quadrostate ;) values (ie. unsigned int foo:1 for one-bit
+  (or tristate or tetrastate ;) values (ie. unsigned int foo:1 for one-bit
   field). HOWEVER please ALWAYS specify signedness of all such fields. It is
   very easy to reach the top bit in these cases, and with int foo:1, foo would
   be either 0 or -1, which is probably not what you want.
@@ -466,4 +466,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.7 2003/06/07 22:09:41 pasky Exp $
+$Id: hacking.txt,v 1.8 2003/06/07 22:10:39 pasky Exp $

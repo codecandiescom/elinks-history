@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.34 2003/10/05 19:55:18 jonas Exp $ */
+/* $Id: inphist.c,v 1.35 2003/10/05 20:03:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,9 +206,9 @@ add_to_input_history(struct input_history *historylist, unsigned char *url,
 int
 load_input_history(struct input_history *history, unsigned char *filename)
 {
-	FILE *fp;
 	unsigned char *history_file = filename;
-	unsigned char url[MAX_STR_LEN];
+	unsigned char line[MAX_STR_LEN];
+	FILE *file;
 
 	if (get_opt_int_tree(cmdline_options, "anonymous")) return 0;
 	if (elinks_home) {
@@ -216,17 +216,17 @@ load_input_history(struct input_history *history, unsigned char *filename)
 		if (!history_file) return 0;
 	}
 
-	fp = fopen(history_file, "r");
+	file = fopen(history_file, "r");
 	if (elinks_home) mem_free(history_file);
-	if (!fp) return 0;
+	if (!file) return 0;
 
-	while (safe_fgets(url, MAX_STR_LEN, fp)) {
+	while (safe_fgets(line, MAX_STR_LEN, file)) {
 		/* Drop '\n'. */
-		if (*url) url[strlen(url) - 1] = 0;
-		add_to_input_history(history, url, 0);
+		if (*line) line[strlen(line) - 1] = 0;
+		add_to_input_history(history, line, 0);
 	}
 
-	fclose(fp);
+	fclose(file);
 	return 0;
 }
 

@@ -1,5 +1,9 @@
 /* Global history */
-/* $Id: globhist.c,v 1.23 2002/08/29 22:36:42 pasky Exp $ */
+/* $Id: globhist.c,v 1.24 2002/08/29 23:26:01 pasky Exp $ */
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,6 +172,44 @@ add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 
 	update_all_history_dialogs();
 }
+
+
+int
+globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
+{
+	struct global_history_item *item;
+
+	if (!search_title || !search_url)
+		return 0;
+
+	/* Memorize last searched title */
+	if (gh_last_searched_title) mem_free(gh_last_searched_title);
+	gh_last_searched_title = stracpy(search_title);
+
+	/* Memorize last searched url */
+	if (gh_last_searched_url) mem_free(gh_last_searched_url);
+	gh_last_searched_url = stracpy(search_url);
+
+	if (!*search_title && !*search_url) {
+		foreach (item, global_history.items) {
+			item->box_item->visible = 1;
+		}
+		return 1;
+	}
+
+	foreach (item, global_history.items) {
+		if ((search_title && *search_title
+		     && strcasestr(item->title, search_title)) ||
+		    (search_url && *search_url
+		     && strcasestr(item->url, search_url))) {
+			item->box_item->visible = 1;
+		} else {
+			item->box_item->visible = 0;
+		}
+	}
+	return 1;
+}
+
 
 void
 read_global_history()

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.22 2002/08/29 22:36:41 pasky Exp $ */
+/* $Id: listbox.c,v 1.23 2002/08/29 23:26:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,6 +75,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 			    int (*fn)(struct listbox_item *, void *, int),
 			    void *d)
 {
+	struct listbox_item *visible_item = item;
 	struct listbox_data *box;
 
 	if (!item) return NULL;
@@ -88,12 +89,13 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 		if (offset > 0) {
 			/* Direction UP. */
 
-			if (!follow_visible || item->visible) offset--;
+			offset--;
 
 			if (!list_empty(item->child) && item->expanded
 			    && (!follow_visible || item->visible)) {
 				/* Descend to children. */
 				item = item->child.next;
+				visible_item = item;
 				goto next;
 			}
 
@@ -112,15 +114,22 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 			/* We're not at the end of anything, go on. */
 			item = item->next;
 
+			if (follow_visible && !item->visible) {
+				offset++;
+			} else {
+				visible_item = item;
+			}
+
 		} else {
 			/* Direction DOWN. */
 
-			if (!follow_visible || item->visible) offset++;
+			offset++;
 
 			if (!list_empty(item->child) && item->expanded
 			    && (!follow_visible || item->visible)) {
 				/* Descend to children. */
 				item = item->child.prev;
+				visible_item = item;
 				goto next;
 			}
 
@@ -138,13 +147,19 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 
 			/* We're not at the start of anything, go on. */
 			item = item->prev;
+
+			if (follow_visible && !item->visible) {
+				offset--;
+			} else {
+				visible_item = item;
+			}
 		}
 
 next:
 		/* Hmm.. sometimes I need this place ;-). --pasky */
 	}
 
-	return item;
+	return visible_item;
 }
 
 struct box_context {
@@ -204,6 +219,13 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 	data->box = box;
 	data->listbox_item_data = listbox_item_data;
 	data->dist = dist;
+
+	/* We want to have these visible if possible. */
+	if (box->top && !box->top->visible) {
+		box->top = traverse_listbox_items_list(box->top, 1,
+				1, NULL, NULL);
+		box->sel = box->top;
+	}
 
 	if (traverse_listbox_items_list(box->sel, dist, 1, NULL, NULL)
 	    != box->sel) {
@@ -269,6 +291,14 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 	data->listbox_item_data = listbox_item_data;
 	data->box = box;
 	data->offset = 0;
+
+	/* We want to have these visible if possible. */
+	if (box->top && !box->top->visible) {
+/*		debug("top: %s - (%d) %p\n", box->top->text, box->top->visible, box->top); */
+		box->top = traverse_listbox_items_list(box->top, 1,
+				1, NULL, NULL);
+		box->sel = box->top;
+	}
 
 	traverse_listbox_items_list(box->top, listbox_item_data->item->gid,
 				    1, display_listbox_item, data);

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.20 2002/08/29 22:36:42 pasky Exp $ */
+/* $Id: dialogs.c,v 1.21 2002/08/29 23:26:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -416,9 +416,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	/* Show all bookmarks */
 	foreach (new_bm, bookmarks) {
-		if (!new_bm->selected)
-			add_to_list(bookmark_box_items, new_bm->box_item);
-		new_bm->selected = 1;
+		new_bm->box_item->visible = 1;
 	}
 
 	/* Reset momorized search criterias */
@@ -520,9 +518,9 @@ bookmark_search_do(struct dialog *d)
 		struct listbox_item *item = bookmark_box_items.next;
 		struct listbox_data *box = (struct listbox_data *) item->data;
 
-		if (!list_empty(*item)) {
-			box->sel = item;
+		if (!list_empty(bookmark_box_items)) {
 			box->top = item;
+			box->sel = box->top;
 		}
 	}
 }

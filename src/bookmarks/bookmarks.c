@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.33 2002/08/29 22:36:42 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.34 2002/08/29 23:26:01 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -102,7 +102,6 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 	}
 
 	bm->id = next_bookmark_id++;
-	bm->selected = 1;
 
 	/* Actually add it */
 	add_to_list(bookmarks, bm);
@@ -193,31 +192,19 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 
 	if (!*search_title && !*search_url) {
 		foreach (bm, bookmarks) {
-			if (!bm->selected)
-				add_to_list(bookmark_box_items, bm->box_item);
-			bm->selected = 1;
+			bm->box_item->visible = 1;
 		}
 	        return 1;
 	}
 
 	foreach (bm, bookmarks) {
-		int s = bm->selected;
-
 		if ((search_title && *search_title
 		     && strcasestr(bm->title, search_title)) ||
 		    (search_url && *search_url
 		     && strcasestr(bm->url, search_url))) {
-			bm->selected = 1;
+			bm->box_item->visible = 1;
 		} else {
-			bm->selected = 0;
-		}
-
-		if (s != bm->selected) {
-			if (bm->selected) {
-				add_to_list(bookmark_box_items, bm->box_item);
-			} else {
-				del_from_list(bm->box_item);
-			}
+			bm->box_item->visible = 0;
 		}
 	}
 	return 1;

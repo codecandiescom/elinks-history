@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.8 2002/08/29 09:33:33 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.9 2002/08/29 23:26:01 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -21,7 +21,6 @@ struct bookmark {
 	bookmark_id id;         /* Bookmark id */
 	unsigned char *title;   /* title of bookmark */
 	unsigned char *url;     /* Location of bookmarked item */
-	int selected;           /* Whether to display this bookmark or not */
 	
 	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
 	 * and simpler. */

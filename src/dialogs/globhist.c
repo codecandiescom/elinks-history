@@ -1,9 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.29 2002/08/29 21:15:02 pasky Exp $ */
-
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
-#endif
+/* $Id: globhist.c,v 1.30 2002/08/29 23:26:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,26 +230,15 @@ layout_history_manager(struct dialog_data *dlg)
 static void
 history_search_do(struct dialog *d)
 {
-	struct listbox_data *box;
-	struct dialog_data *parent;
+	if (globhist_simple_search(d->items[1].data, d->items[0].data)) {
+		struct listbox_item *item = gh_box_items.next;
+		struct listbox_data *box = (struct listbox_data *) item->data;
 
-	if (!d->items[0].data && !d->items[1].data)
-		return;
-
-	if (gh_last_searched_title) mem_free(gh_last_searched_title);
-	gh_last_searched_title = stracpy(d->items[0].data);
-
-	if (gh_last_searched_url) mem_free(gh_last_searched_url);
-	gh_last_searched_url = stracpy(d->items[1].data);
-
-	parent = d->udata;
-	if (!parent) return;
-
-	box = (struct listbox_data *)
-	      parent->dlg->items[HISTORY_BOX_IND].data;
-//	box->box_top = 0;
-//	box->sel = 0;
-//	history_dialog_list_update(&box->items);
+		if (!list_empty(gh_box_items)) {
+			box->top = item;
+			box->sel = box->top;
+		}
+	}
 }
 
 static void
@@ -389,6 +374,11 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	struct dialog *d;
 	struct dialog_data *dd;
 	struct history_dialog_list_item *item;
+	struct global_history_item *litem;
+
+	foreach (litem, global_history.items) {
+		litem->box_item->visible = 1;
+	}
 
 	if (gh_last_searched_title) {
 		mem_free(gh_last_searched_title);

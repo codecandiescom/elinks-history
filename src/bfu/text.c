@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.109 2004/11/17 22:03:48 zas Exp $ */
+/* $Id: text.c,v 1.110 2004/11/17 22:13:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,8 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 }
 
 static t_handler_event_status
-display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
+display_text(struct dialog_data *dlg_data, struct widget_data *widget_data,
+	     int sel)
 {
 	struct window *win = dlg_data->win;
 	struct box box;
@@ -321,7 +322,7 @@ format_and_display_text(struct widget_data *widget_data,
 			widget_data->box.x, &y, widget_data->box.width, NULL,
 			height);
 
-	display_text(widget_data, dlg_data, 1);
+	display_text(dlg_data, widget_data, 1);
 	redraw_from_window(dlg_data->win);
 }
 

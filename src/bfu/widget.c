@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.32 2004/08/13 20:54:42 jonas Exp $ */
+/* $Id: widget.c,v 1.33 2004/11/17 22:13:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@ display_dlg_item(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		 int selected)
 {
 	if (widget_data->widget->ops->display)
-		widget_data->widget->ops->display(widget_data, dlg_data, selected);
+		widget_data->widget->ops->display(dlg_data, widget_data, selected);
 }
 
 /* XXX: Should we move it to inphist.c since it only concerns fields with history ? --Zas */

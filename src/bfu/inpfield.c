@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.168 2004/11/17 22:07:16 zas Exp $ */
+/* $Id: inpfield.c,v 1.169 2004/11/17 22:13:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,9 +220,9 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	do_dialog(term, dlg, ml);
 }
 
-
+/* FIXME: should return t_handler_event_status ! --Zas */
 static inline void
-display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
+display_field_do(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		 int sel, int hide)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -265,16 +265,16 @@ display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
 }
 
 static t_handler_event_status
-display_field(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
+display_field(struct dialog_data *dlg_data, struct widget_data *widget_data, int sel)
 {
-	display_field_do(widget_data, dlg_data, sel, 0);
+	display_field_do(dlg_data, widget_data, sel, 0);
 	return EVENT_PROCESSED;
 }
 
 static t_handler_event_status
-display_field_pass(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
+display_field_pass(struct dialog_data *dlg_data, struct widget_data *widget_data, int sel)
 {
-	display_field_do(widget_data, dlg_data, sel, 1);
+	display_field_do(dlg_data, widget_data, sel, 1);
 	return EVENT_PROCESSED;
 }
 

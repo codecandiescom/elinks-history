@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.171 2004/11/17 22:07:16 zas Exp $ */
+/* $Id: listbox.c,v 1.172 2004/11/17 22:13:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,7 +429,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 /* Displays a dialog box */
 static t_handler_event_status
-display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
+display_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		int sel)
 {
 	struct terminal *term = dlg_data->win->term;

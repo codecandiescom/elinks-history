@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.79 2004/11/17 22:07:16 zas Exp $ */
+/* $Id: checkbox.c,v 1.80 2004/11/17 22:13:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@ dlg_format_checkbox(struct terminal *term,
 }
 
 static t_handler_event_status
-display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
+display_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		 int selected)
 {
 	struct terminal *term = dlg_data->win->term;

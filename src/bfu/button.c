@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.65 2004/11/17 22:03:48 zas Exp $ */
+/* $Id: button.c,v 1.66 2004/11/17 22:13:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,7 @@ dlg_format_buttons(struct terminal *term,
 }
 
 static t_handler_event_status
-display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
+display_button(struct dialog_data *dlg_data, struct widget_data *widget_data, int sel)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;

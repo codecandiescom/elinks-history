@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.138 2003/11/07 14:21:17 jonas Exp $ */
+/* $Id: download.c,v 1.139 2003/11/07 14:32:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,8 +312,8 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	struct file_download *file_download = dlg_data->dlg->udata;
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
-	int w = dialog_max_width(term);
-	int x, y;
+	int rw, w = dialog_max_width(term);
+	int x, y = 0;
 	int t = 0;
 	int url_len;
 	unsigned char *url;
@@ -326,8 +326,6 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	if (!init_string(&msg)) return;
 	t = download_progress_string(term, download, &msg);
-
-	int_lower_bound(&w, 0);
 
 	url = strchr(file_download->url, POST_CHAR);
 	url_len = url ? url - file_download->url : strlen(file_download->url);
@@ -357,19 +355,19 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 		int_upper_bound(&w, max);
 	}
 	int_lower_bound(&w, 1);
+	rw = w;
 
-	y = 0;
-	dlg_format_text(NULL, url, 0, &y, w, NULL,
+	dlg_format_text(NULL, url, 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 
 	y++;
 	if (t && download->prg->size >= 0) y += 2;
-	dlg_format_text(NULL, msg.source, 0, &y, w, NULL,
+	dlg_format_text(NULL, msg.source, 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 
 	y++;
 	dlg_format_buttons(NULL, dlg_data->widgets_data, dlg_data->n, 0, &y, w,
-			   NULL, AL_CENTER);
+			   &rw, AL_CENTER);
 
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 

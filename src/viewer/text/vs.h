@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.6 2003/10/29 20:18:29 jonas Exp $ */
+/* $Id: vs.h,v 1.7 2003/10/30 01:08:24 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -12,8 +12,7 @@ struct view_state {
 	unsigned char *goto_position;
 	struct form_state *form_info;
 	int form_info_len;
-	int view_pos;
-	int view_posx;
+	int x, y;
 	int current_link;
 	int plain;
 	int url_len;

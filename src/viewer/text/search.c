@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.86 2003/10/30 00:54:55 zas Exp $ */
+/* $Id: search.c,v 1.87 2003/10/30 01:08:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,8 +462,8 @@ get_searched_plain(struct document_view *doc_view, struct point **pt, int *pl,
 	yp = doc_view->yp;
 	xx = xp + doc_view->width;
 	yy = yp + doc_view->height;
-	xpv= xp - doc_view->vs->view_posx;
-	ypv= yp - doc_view->vs->view_pos;
+	xpv= xp - doc_view->vs->x;
+	ypv= yp - doc_view->vs->y;
 
 #define maybe_tolower(c) (case_sensitive ? (c) : tolower(c))
 
@@ -567,8 +567,8 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	yp = doc_view->yp;
 	xx = xp + doc_view->width;
 	yy = yp + doc_view->height;
-	xpv= xp - doc_view->vs->view_posx;
-	ypv= yp - doc_view->vs->view_pos;
+	xpv= xp - doc_view->vs->x;
+	ypv= yp - doc_view->vs->y;
 
 	doctmp = doc;
 	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
@@ -630,7 +630,7 @@ get_searched(struct document_view *doc_view, struct point **pt, int *pl)
 
 	get_search_data(doc_view->document);
 	l = strlen(*doc_view->search_word);
-	if (get_range(doc_view->document, doc_view->vs->view_pos,
+	if (get_range(doc_view->document, doc_view->vs->y,
 		      doc_view->height, l, &s1, &s2)
 	   ) {
 		*pt = NULL;
@@ -664,8 +664,8 @@ draw_searched(struct terminal *term, struct document_view *doc_view)
 	if (len) {
 		register int i;
 		struct color_pair *color = get_bfu_color(term, "searched");
-		int xoffset = doc_view->xp - doc_view->vs->view_posx;
-		int yoffset = doc_view->yp - doc_view->vs->view_pos;
+		int xoffset = doc_view->xp - doc_view->vs->x;
+		int yoffset = doc_view->yp - doc_view->vs->y;
 
 		for (i = 0; i < len; i++) {
 			int x = pt[i].x + xoffset;
@@ -828,7 +828,7 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && ses->tab && ses->tab->term && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	p = doc_view->vs->view_pos;
+	p = doc_view->vs->y;
 	step = ses->search_direction * doc_view->height;
 
 	if (!a && ses->search_word) {
@@ -853,9 +853,9 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 
 	do {
 		if (is_in_range(doc_view->document, p, doc_view->height, ses->search_word, &min, &max)) {
-			doc_view->vs->view_pos = p;
+			doc_view->vs->y = p;
 			if (max >= min)
-				doc_view->vs->view_posx = int_min(int_max(doc_view->vs->view_posx,
+				doc_view->vs->x = int_min(int_max(doc_view->vs->x,
 									  max - doc_view->width),
 								  min);
 

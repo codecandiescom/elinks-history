@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.50 2003/10/30 00:54:55 zas Exp $ */
+/* $Id: form.c,v 1.51 2003/10/30 01:08:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,8 +206,8 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 	width = doc_view->width;
 	height = doc_view->height;
 	vs = doc_view->vs;
-	vx = vs->view_posx;
-	vy = vs->view_pos;
+	vx = vs->x;
+	vy = vs->y;
 
 	switch (frm->type) {
 		unsigned char *s;

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.32 2003/11/03 10:10:49 zas Exp $ */
+/* $Id: frames.c,v 1.33 2003/11/04 23:12:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,11 +142,11 @@ find_fd(struct session *ses, unsigned char *name,
 
 	foreachback (doc_view, ses->scrn_frames) {
 		if (doc_view->used) continue;
-		if (!strcasecmp(doc_view->name, name)) {
-			doc_view->used = 1;
-			doc_view->depth = depth;
-			return doc_view;
-		}
+		if (strcasecmp(doc_view->name, name)) continue;
+
+		doc_view->used = 1;
+		doc_view->depth = depth;
+		return doc_view;
 	}
 
 	doc_view = mem_calloc(1, sizeof(struct document_view));

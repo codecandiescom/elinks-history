@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.65 2004/01/27 02:09:37 pasky Exp $ */
+/* $Id: parser.c,v 1.66 2004/01/27 02:22:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,11 +206,11 @@ next_one:
 	 * scanning for id/class/pseudo. --pasky */
 	selector = get_css_selector(css, token->string, token->length);
 	if (!selector)
-		goto out_of_memory;
+		goto syntax_error;
 
 	pkg = mem_alloc(sizeof(struct selector_pkg));
 	if (!pkg)
-		goto out_of_memory;
+		goto syntax_error;
 	pkg->selector = selector;
 
 	/* Let's see if we will get anything else of this. */
@@ -254,18 +254,7 @@ next_one:
 
 	if (token->type != '{') {
 syntax_error:
-                if (selector->id) mem_free(selector->id);
-                if (selector->class) mem_free(selector->class);
-                if (selector->pseudo) mem_free(selector->pseudo);
 		if (pkg) mem_free(pkg);
-
-out_of_memory:
-		foreach (pkg, selectors) {
-			selector = pkg->selector;
-			if (selector->id) mem_free(selector->id);
-			if (selector->class) mem_free(selector->class);
-			if (selector->pseudo) mem_free(selector->pseudo);
-		}
 		free_list(selectors);
 
 		skip_css_block(scanner);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.578 2004/11/10 22:09:10 jonas Exp $ */
+/* $Id: session.c,v 1.579 2004/11/10 23:16:06 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -483,15 +483,15 @@ static int
 check_incomplete_redirects(struct cache_entry *cached)
 {
 	while (cached) {
-		if (cached->redirect) {
-			cached = find_in_cache(cached->redirect);
-			continue;
+		if (!cached->redirect) {
+			/* XXX: This is not quite true, but does that difference
+			 * matter here? */
+			return cached->incomplete;
 		}
 
-		/* XXX: This is not quite true, but does that difference
-		 * matter here? */
-		return cached->incomplete;
+		cached = find_in_cache(cached->redirect);
 	}
+
 	return 0;
 }
 

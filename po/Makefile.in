@@ -47,7 +47,7 @@ COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 
 POFILES = @POFILES@
 GMOFILES = @GMOFILES@
-DISTFILES = Makefile.in $(PACKAGE).pot \
+DISTFILES = Makefile.in README $(PACKAGE).pot \
 	$(POFILES) $(GMOFILES)
 
 POTFILES_REL = $(shell find $(top_srcdir)/src/ -name '*.[ch]' | sort)

@@ -1,3 +1,141 @@
+Thu Jul  8 21:06:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Hmm .. fix the strange bug on newsforge.com (added in tablebg.html)
+	but always expanding width - 1 chars even for the right table edge
+	expanding. This removes the hack I added in (1.358 -> 1.359). Stuff
+	like /. looks more 'tight' but let's see if it is not for the
+	better. :) 
+
+Thu Jul  8 20:33:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/table.c:
+
+	parse_table_attributes(): Minor cleanup.  
+
+Thu Jul  8 17:17:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Convert to FIXME.  
+
+Thu Jul  8 17:03:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/tablebg.html:
+
+	Test for the problem with center alignment at newsforge.com 
+
+Thu Jul  8 16:31:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cells(): Remove last suspicious expand_lines() call. Now
+	we expand before and after drawing table cells and for each cell and
+	that should be enough.  
+
+Thu Jul  8 16:25:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cell(): It seems that the special line expansion for
+	table border case is not needed after we align the edge of the whole
+	table.  
+
+Thu Jul  8 16:22:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cell(): Oops. Fix off by @y error in last patch.  
+
+Thu Jul  8 16:14:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cell(): Remove internal block.  
+
+Thu Jul  8 15:39:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	expand_lines(): Don't do anything if not rendering background
+	colors.  
+
+Thu Jul  8 15:29:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	expand_lines(): Take the bgcolor as arg.  
+
+Thu Jul  8 14:05:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cells(): Fix the easy fix for off by one error in right
+	table edge alignment when there are borders involved.  
+
+Thu Jul  8 13:53:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cells(): Hmm .. the easy way to fix off by one error in
+	right table edge alignment. The deeper issue is that we align always
+	to the right. It is very obvious when looking at sf with 255 colors.
+	The separators in the top menu '|' is drawn with it's darker
+	background color as '| '. This is a problem that is hard to fix and
+	not a very serious one but it leads the last column to be sometimes
+	drawn too wide.  
+
+Thu Jul  8 13:32:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cells(): My assertion about removing the the
+	expand_table_.. option was wrong. But I won't introduce the use of
+	it again instead we should maybe ignore it if no background color
+	usage is set. Anyway expand lines before and after drawing all
+	cells. Now the left edge of the body table on /. is nice. Off by one
+	errors on the right edge is very obvious now.  
+
+Thu Jul  8 12:44:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.c, parser/table.h:
+
+	struct table_cell: Rename @group -> @is_group, and make it a boolean
+	member.  
+
+Thu Jul  8 11:30:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, document/options.c, document/options.h,
+	document/html/tables.c:
+
+	Obsolete document.html.expand_table_columns since always expanding
+	table columns slipped in the backdoor. The only thing (protected
+	and) affected by the option seems to be tha drawing of background
+	color for borders so simply check if table->border instead. Lightly
+	tested on various sites, so please report any issues.  
+
+Thu Jul  8 11:12:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_cell(): Take @cell as arg and ditch @col and @row args.  
+
+Thu Jul  8 11:09:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cell(): Initialize the HTML state alignment to that of
+	the cell. If not for anything else it makes the code cleaner.  
+
+Thu Jul  8 11:00:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cell(): Use the calculated width that accounts for stuff
+	like column spanning. Fixes amongst other things background coloring
+	in sf's left menu.  
+
 Wed Jul  7 05:45:36 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/draw.c:

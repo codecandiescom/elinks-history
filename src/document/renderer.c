@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.2 2003/11/10 21:27:49 jonas Exp $ */
+/* $Id: renderer.c,v 1.3 2003/11/10 21:29:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,11 @@ render_document(struct view_state *vs, struct document_view *document_view,
 		document->id_tag = cache_entry->id_tag;
 		defrag_entry(cache_entry);
 
-		render_html_document(cache_entry, document);
+		if (document->options.plain) {
+			render_plain_document(cache_entry, document);
+		} else {
+			render_html_document(cache_entry, document);
+		}
 	}
 
 	document_view->document = document;

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: plain.c,v 1.3 2003/10/31 19:54:09 jonas Exp $ */
+/* $Id: plain.c,v 1.4 2003/10/31 20:40:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,6 @@
 static void
 add_document_lines(struct document *document, unsigned char *source)
 {
-	struct screen_char template;
 	struct color_pair colors;
 	int length = strlen(source);
 	int lineno;
@@ -35,10 +34,6 @@ add_document_lines(struct document *document, unsigned char *source)
 	/* Setup the style */
 	colors.foreground = d_opt->default_fg;
 	colors.background = d_opt->default_bg;
-
-	template.attr = 0;
-	template.data = ' ';
-	set_term_color(&template, &colors, d_opt->color_flags, d_opt->color_mode);
 
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *lineend = strchr(source, '\n');
@@ -55,13 +50,12 @@ add_document_lines(struct document *document, unsigned char *source)
 			add_to_list(document->nodes, node);
 		}
 
-		pos = get_document_line(document, lineno, width);
+		pos = get_document_line(document, lineno, width, &colors);
 		if (!pos) continue;
 
 		for (end = pos + width; pos < end; pos++, source++) {
-			template.data = (*source < ' ' || *source == ASCII_ESC)
-					? ' ' : *source;
-			copy_screen_chars(pos, &template, 1);
+			pos->data = (*source < ' ' || *source == ASCII_ESC)
+				  ? ' ' : *source;
 		}
 
 		/* Skip the newline too. */

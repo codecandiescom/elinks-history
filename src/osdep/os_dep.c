@@ -1,10 +1,13 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.16 2002/05/10 17:09:21 pasky Exp $ */
+/* $Id: os_dep.c,v 1.17 2002/05/11 12:05:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#ifdef HAVE_IO_H
+#include <io.h> /* For win32 && set_bin(). */
+#endif
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>

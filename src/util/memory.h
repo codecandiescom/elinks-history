@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.7 2002/12/23 21:36:09 pasky Exp $ */
+/* $Id: memory.h,v 1.8 2003/04/22 10:09:24 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -51,6 +51,20 @@ void *mem_realloc(void *, size_t);
 # define mem_calloc(count, size) calloc(count, size)
 # define mem_free(p) free(p)
 # define mem_realloc(p, size) realloc(p, size)
+
+/* fmem_* functions should be use for allocation and freeing of memory
+ * inside a function.
+ * See alloca(3) manpage. */
+#ifdef HAVE_ALLOCA
+#if defined HAVE_ALLOCA_H
+#include <alloca.h>
+#endif
+#define fmem_alloc(x) alloca(x)
+#define fmem_free(x)
+#else
+#define fmem_alloc(x) mem_alloc(x)
+#define fmem_free(x) mem_free(x)
+#endif
 
 #endif /* FASTMEM */
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.28 2003/01/18 22:58:04 pasky Exp $ */
+/* $Id: tables.c,v 1.29 2003/04/22 10:09:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1008,12 +1008,12 @@ distribute_widths(struct table *t, int width)
 	t->rw = width;
 
 	/* XXX: We don't need to fail if unsuccessful.  See below. --Zas */
-	u = mem_alloc(t->x);
+	u = fmem_alloc(t->x);
 
-	w = mem_alloc(tx_size);
+	w = fmem_alloc(tx_size);
 	if (!w) goto end;
 
-	mx = mem_alloc(tx_size);
+	mx = fmem_alloc(tx_size);
 	if (!mx) goto end1;
 
 	while (d) {
@@ -1133,13 +1133,13 @@ a:
 	}
 
 end2:
-	mem_free(mx);
+	fmem_free(mx);
 
 end1:
-	mem_free(w);
+	fmem_free(w);
 
 end:
-	if (u) mem_free(u);
+	if (u) fmem_free(u);
 }
 
 
@@ -1492,13 +1492,13 @@ display_table_frames(struct table *t, int x, int y)
 	int i, j;
 	int cx, cy;
 
-	fh = mem_alloc((t->x + 2) * (t->y + 1));
+	fh = fmem_alloc((t->x + 2) * (t->y + 1));
 	if (!fh) return;
 	memset(fh, -1, (t->x + 2) * (t->y + 1));
 
-	fv = mem_alloc((t->x + 1) * (t->y + 2));
+	fv = fmem_alloc((t->x + 1) * (t->y + 2));
 	if (!fv) {
-		mem_free(fh);
+		fmem_free(fh);
 		return;
 	}
 	memset(fv, -1, (t->x + 1) * (t->y + 2));
@@ -1611,8 +1611,8 @@ cont:;
 		/*for (cyy = cy1; cyy < cy; cyy++) expand_line(t->p, cyy, cx - 1);*/
 	}
 
-	mem_free(fh);
-	mem_free(fv);
+	fmem_free(fh);
+	fmem_free(fv);
 }
 
 void

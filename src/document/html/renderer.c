@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.60 2003/04/21 20:04:04 zas Exp $ */
+/* $Id: renderer.c,v 1.61 2003/04/22 10:09:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -466,15 +466,15 @@ justify_line(struct part *part, int y)
 	int *space_list;
 	int spaces;
 
-	line = mem_alloc(len * sizeof(chr));
+	line = fmem_alloc(len * sizeof(chr));
 	if (!line) return;
 
 	/* It may sometimes happen that the line is only one char long and that
 	 * char is space - then we're going to write to both [0] and [1], but
 	 * we allocated only one field. Thus, we've to do (len + 1). --pasky */
-	space_list = mem_alloc((len + 1) * sizeof(int));
+	space_list = fmem_alloc((len + 1) * sizeof(int));
 	if (!space_list) {
-		mem_free(line);
+		fmem_free(line);
 		return;
 	}
 
@@ -533,8 +533,8 @@ justify_line(struct part *part, int y)
 		}
 	}
 
-	mem_free(space_list);
-	mem_free(line);
+	fmem_free(space_list);
+	fmem_free(line);
 }
 
 static void

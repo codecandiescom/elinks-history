@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.11 2003/11/29 17:31:12 jonas Exp $ */
+/* $Id: error.c,v 1.12 2003/11/29 17:37:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,9 +162,11 @@ get_stat_msg(struct download *stat, struct terminal *term)
 
 	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg, WIDE(term, N_("avg"), N_("Average speed")));
-		add_char_to_string(&msg, ' ');
+	} else {
+		add_to_string(&msg, _("Speed", term));
 	}
 
+	add_char_to_string(&msg, ' ');
 	add_xnum_to_string(&msg, average_speed(stat->prg));
 	add_to_string(&msg, "/s");
 

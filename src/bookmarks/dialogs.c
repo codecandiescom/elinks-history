@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.218 2005/03/30 10:28:13 zas Exp $ */
+/* $Id: dialogs.c,v 1.219 2005/03/30 10:30:44 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -495,20 +495,9 @@ bookmark_manager(struct session *ses)
 }
 
 
-
 /****************************************************************************\
-  Bookmark add dialog.
+  Bookmark search dialog.
 \****************************************************************************/
-
-/* Adds the bookmark */
-static void
-bookmark_add_add(void *data)
-{
-	struct dialog *dlg = data;
-	struct dialog_data *dlg_data = (struct dialog_data *) dlg->udata;
-
-	do_add_bookmark(dlg_data, dlg->widgets[0].data, dlg->widgets[1].data);
-}
 
 
 /* Searchs a substring either in title or url fields (ignoring
@@ -623,6 +612,21 @@ launch_bm_search_doc_dialog(struct terminal *term,
 }
 
 
+
+/****************************************************************************\
+  Bookmark add dialog.
+\****************************************************************************/
+
+/* Adds the bookmark */
+static void
+bookmark_add_add(void *data)
+{
+	struct dialog *dlg = data;
+	struct dialog_data *dlg_data = (struct dialog_data *) dlg->udata;
+
+	do_add_bookmark(dlg_data, dlg->widgets[0].data, dlg->widgets[1].data);
+}
+
 void
 launch_bm_add_dialog(struct terminal *term,
 		     struct dialog_data *parent,
@@ -653,6 +657,11 @@ launch_bm_add_link_dialog(struct terminal *term,
 			     get_current_link_name(ses, title, MAX_STR_LEN),
 			     get_current_link_url(ses, url, MAX_STR_LEN));
 }
+
+
+/****************************************************************************\
+  Bookmark tabs dialog.
+\****************************************************************************/
 
 void
 bookmark_terminal_tabs_dialog(struct terminal *term)

@@ -1,3 +1,166 @@
+Tue Sep 17 17:17:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/main.c:
+
+	We should shrink_memory(1) after script_hook_finish() - what if some
+	script would like to touch something cached..? 
+
+Tue Sep 17 17:17:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bookmarks/dialogs.c, dialogs/Makefile.am,
+	dialogs/hierbox.c, dialogs/hierbox.h:
+
+	Moved some hiearchy boxes browser common stuff to dialogs/hierbox.*.
+	This is only very preliminary, dialogs/hierbox.* is still
+	bookmarks-specific.  
+
+Tue Sep 17 17:11:02 2002  Laurent Monin <zas@norz.org>:
+
+	* src/main.c:
+
+	Fix missing if (init_b) for global history.  
+
+Tue Sep 17 16:58:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Jump to first item after search, not the last one.  
+
+Tue Sep 17 16:56:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Fixed set_bookmarks_visible() segfault (obvious as you look at it
+	now) (fixes crashes during bookmarks search).  
+
+Tue Sep 17 16:36:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Improved help of no-connect and touch-files.  
+
+Tue Sep 17 16:29:05 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, util/secsave.c:
+
+	-touch-files option was added. It forces file saving when
+	-no-connect is used.  
+
+Tue Sep 17 16:19:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: listbox.c, listbox.h:
+
+	Fixed weirdness with handling of corner bookmarks (was causing
+	crashes and infinite loops).  
+
+Tue Sep 17 14:53:21 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 14:49:49 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 14:44:09 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 14:40:19 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/secsave.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 14:36:48 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: http/auth.c, http/http.c, ftp.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 14:33:04 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/terminal.c, lua/core.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 14:29:44 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: kbd.c, sched.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 14:25:36 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: af_unix.c, connect.c, dns.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 14:21:50 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: document/view.c, globhist/dialogs.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 14:09:36 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/download.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 13:56:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/options.c, document/cache.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 13:50:37 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: edit.c, mime.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 13:47:26 2002  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 13:43:00 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/msgbox.c, bookmarks/dialogs.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 13:38:08 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: inpfield.c, menu.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 13:21:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/intl/: charsets.c, language.c:
+
+	Populate with mem_calloc().  
+
+Tue Sep 17 10:29:32 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Minor optimizations. Make use of mem_calloc().  
+
+Tue Sep 17 10:20:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Minor optimizations. Make use of mem_calloc().  
+
 Mon Sep 16 12:57:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/README, contrib/hpux-pipe.diff, src/lowlevel/kbd.c:

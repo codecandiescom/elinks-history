@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.91 2004/03/21 01:31:05 jonas Exp $ */
+/* $Id: uri.c,v 1.92 2004/03/21 01:41:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -281,11 +281,11 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		add_char_to_string(string, '@');
  	}
 
- 	if (wants(URI_HOST) && uri->hostlen) {
+ 	if (wants(URI_HOST) && !string_is_empty(&uri->host)) {
 #ifdef IPV6
 		if (uri->ipv6) add_char_to_string(string, '[');
 #endif
-		add_bytes_to_string(string, uri->hoststr, uri->hostlen);
+		add_string_to_string(string, &uri->host);
 #ifdef IPV6
 		if (uri->ipv6) add_char_to_string(string, ']');
 #endif

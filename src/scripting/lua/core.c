@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.167 2004/08/12 08:40:39 miciah Exp $ */
+/* $Id: core.c,v 1.168 2004/09/23 08:40:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -511,7 +511,8 @@ do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 	if (file_can_read(file)) {
 		int oldtop = lua_gettop(S);
 
-		lua_dofile(S, file);
+		if (lua_dofile(S, file) != 0)
+			sleep(3); /* Let some time to see error messages. */
 		lua_settop(S, oldtop);
 	}
 

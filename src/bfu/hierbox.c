@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.104 2003/11/26 14:31:13 jonas Exp $ */
+/* $Id: hierbox.c,v 1.105 2003/11/26 17:59:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -424,33 +424,48 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 
 /* Delete action */
 
+
+enum delete_error {
+	DELETE_IMPOSSIBLE = 0,
+	DELETE_LOCKED,
+	DELETE_ERRORS,
+};
+
+unsigned char *delete_messages[2][DELETE_ERRORS] = {
+	{
+		N_("Sorry, but the item \"%s\" can not be deleted."),
+		N_("Sorry, but the item \"%s\" is being used by something else."),
+	},
+	{
+		N_("Sorry, but the folder \"%s\" is being used by something else."),
+		N_("Sorry, but the folder \"%s\" can not be deleted."),
+	},
+};
+
 static void
 print_delete_error(struct listbox_item *item, struct terminal *term,
-		   struct listbox_ops *ops)
+		   struct listbox_ops *ops, enum delete_error err)
 {
-	if (item->type == BI_FOLDER) {
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Deleting used folder"), AL_CENTER,
-			msg_text(term, N_("Sorry, but the folder \"%s\""
-				 " is being used by something else."),
-				 item->text),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+	struct string msg;
+	unsigned char *text = delete_messages[(item->type == BI_FOLDER)][err];
 
-	} else {
-		unsigned char *msg = ops->get_info(item, term, LISTBOX_ALL);
+	if (!init_string(&msg)) return;
 
-		if (!msg) return;
+	add_format_to_string(&msg, text, item->text);
+	if (item->type == BI_LEAF) {
+		unsigned char *info = ops->get_info(item, term, LISTBOX_ALL);
 
-		msg_box(term, getml(msg, NULL), MSGBOX_FREE_TEXT,
-			N_("Deleting used item"), AL_LEFT,
-			msg_text(term, N_("Sorry, but the item \"%s\""
-				 " is being used by something else.\n\n"
-				 "%s"),
-				item->text, msg),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		if (info) {
+			add_format_to_string(&msg, "\n\n%s", info);
+			mem_free(info);
+		}
 	}
+
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
+		N_("Delete error"), AL_LEFT,
+		msg.source,
+		NULL, 1,
+		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
 static void
@@ -458,16 +473,18 @@ do_delete_item(struct listbox_item *item, struct hierbox_action_info *info,
 	       int last)
 {
 	struct listbox_ops *ops = info->box->ops;
+	enum delete_error delete_error;
 
 	assert(item && item->udata);
 
 	/* FIXME: Hmm maybe this silent treatment is not optimal. Ideally we
 	 * should probably combine the delete error message to also be usable
 	 * for this. --jonas */
-	if (!ops->can_delete(item)) return;
+	delete_error = !ops->can_delete(item)
+		     ? DELETE_IMPOSSIBLE : DELETE_LOCKED;
 
-	if (ops->is_used(item)) {
-		print_delete_error(item, info->term, ops);
+	if (delete_error == DELETE_IMPOSSIBLE || ops->is_used(item)) {
+		print_delete_error(item, info->term, ops, delete_error);
 		return;
 	}
 
@@ -622,7 +639,11 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 	if (!action_info) return 0;
 
 	if (action_info->item) {
-		print_delete_error(action_info->item, term, box->ops);
+		/* FIXME: If the clear button should be used for browsers where
+		 * not all items can be deleted scan_for_used() should also can
+		 * for undeletable and we should be able to pass either delete
+		 * error types. */
+		print_delete_error(action_info->item, term, box->ops, DELETE_LOCKED);
 		mem_free(action_info);
 		return 0;
 	}

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.196 2005/02/20 23:04:37 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.197 2005/02/21 18:07:38 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1591,6 +1591,10 @@ history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 
 	go_back(ses);
 
+/* history_back() must return 0 for onClick to cause displaying previous page
+ * and return non zero for <a href="javascript:history.back()"> to prevent
+ * "calculating" new link. Returned value 2 is changed to 0 in function
+ * spidermonkey_eval_boolback */
 	return 2;
 }
 

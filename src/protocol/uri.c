@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.226 2004/06/06 12:21:53 jonas Exp $ */
+/* $Id: uri.c,v 1.227 2004/06/06 12:34:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -674,16 +674,24 @@ join_urls(struct uri *base, unsigned char *rel)
 		return n;
 	}
 
-	if (!strncasecmp("proxy://", rel, 8)) goto prx;
-
 	/* Check if there is some protocol name to go for */
 	tmp = get_protocol_length(rel);
-	if (tmp && get_protocol(rel, tmp) != PROTOCOL_UNKNOWN) {
-		n = translate_url(rel, NULL);
-		if (n) return n;
+	if (tmp) {
+		switch (get_protocol(rel, tmp)) {
+		case PROTOCOL_UNKNOWN:
+		case PROTOCOL_PROXY:
+			/* Mysteriously proxy URIs are breaking here ... */
+			break;
+
+		case PROTOCOL_FILE:
+			/* FIXME: Use get_uri_string(base, URI_PATH) as cwd arg
+			 * to translate_url(). */
+		default:
+			n = translate_url(rel, NULL);
+			if (n) return n;
+		}
 	}
 
-prx:
 	if (!base->data) {
 		INTERNAL("bad base url");
 		return NULL;

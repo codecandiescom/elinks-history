@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.18 2003/10/24 21:00:59 pasky Exp $ */
+/* $Id: history.h,v 1.19 2003/10/24 21:02:14 pasky Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -70,6 +70,6 @@ go_unback(struct session *ses)
 	go_history(ses, cur_loc(ses)->next);
 }
 
-void ses_history_move(struct session *);
+void ses_history_move(struct session *ses);
 
 #endif

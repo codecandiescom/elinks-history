@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.269 2004/09/12 03:43:14 miciah Exp $ */
+/* $Id: menu.c,v 1.270 2004/09/12 03:49:02 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -435,10 +435,10 @@ display_menu(struct terminal *term, struct menu *menu)
 		int_max(0, menu->box.width - MENU_BORDER_SIZE * 2),
 		int_max(0, menu->box.height - MENU_BORDER_SIZE * 2));
 
-	draw_box(term, &box, ' ', 0, normal_color);
-	draw_border(term, &box, frame_color, 1);
-
 	copy_box(&nbox, &box);
+
+	draw_box(term, &nbox, ' ', 0, normal_color);
+	draw_border(term, &nbox, frame_color, 1);
 
 	nbox.height = 1;
 

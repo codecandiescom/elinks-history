@@ -1,3 +1,103 @@
+Sun Jan  2 22:47:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Sorry for flipflopping zas ;) this extra cheese really doesn't make
+	sense.  
+
+Sun Jan  2 22:21:29 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jan  2 19:31:50 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Hopefully last batch of updates for command line option
+	descriptions.  
+	
+	- Use \t instead of tabs in strings. Dunno how portable that is.  
+	
+	- Elaborate more in the lookup description.  
+	
+	- Tone down Mozilla compliant'ness for -remote it is mentioned in
+	  the remote.txt docs. Try to clarify the passing of method +
+	parameters.  
+	
+	- "... used in s/connection/conjunction/ with ..." since google has 
+	  2,380,000 hits for the latter while only 802,000 for the former.  
+
+Sun Jan  2 18:32:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/protocol/uri.h:
+
+	If I try "links -dump www.tromsø.no" it finds the correct ACE-name 
+	("www.xn--troms-zua.no"), but the virtual-server this domain is
+	hosted on 
+	(venus.gan.no), requires the ACE-name in the "Host:" header. Elinks
+	incorrectly sets this header to www.tromsø.no.  
+	
+	This patch by Gisle Vanem solves the issue.  
+
+Sun Jan  2 15:55:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	On route 66.  
+
+Sun Jan  2 15:28:48 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jan  2 15:23:36 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	More cookie option description modifiction commiction m33piction.  
+
+Sun Jan  2 14:21:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Make cookies.paranoid_security self contained.  
+
+Sun Jan  2 14:11:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/dialogs.c:
+
+	Introduce add_cookie_info_to_string() which adds everything except
+	the server attribute. Use it for accept dialogs to increase the
+	reuse of i18n strings.  
+
+Sun Jan  2 14:07:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Normalize multi-state options.  
+
+Sun Jan  2 12:54:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Another clarification by the Miciah Patch Watchers.  
+
+Sun Jan  2 12:38:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/terminal.txt:
+
+	Add hints from Miciah's reply to 'How do I enable the pretty line
+	graphics and colors under gnu/screen'.  
+
+Sun Jan  2 12:21:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: index.txt, introduction.txt, terminal.txt:
+
+	Split out terminal setup docs to terminal.txt like pasky requested.  
+
 Sat Jan  1 18:11:51 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

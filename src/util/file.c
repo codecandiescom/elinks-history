@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.21 2004/04/23 13:47:58 pasky Exp $ */
+/* $Id: file.c,v 1.22 2004/04/23 13:48:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,8 @@ file_exists(const unsigned char *filename)
 	return access(filename, F_OK) >= 0;
 #else
 	struct stat buf;
-	return stat (filename, &buf) >= 0;
+
+	return stat(filename, &buf) >= 0;
 #endif
 }
 

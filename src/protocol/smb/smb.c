@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.3 2003/12/07 20:15:58 pasky Exp $ */
+/* $Id: smb.c,v 1.4 2003/12/07 20:17:52 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -239,7 +239,9 @@ np:
 					if (WHITECHAR(*lll)/* && WHITECHAR(lll[1])*/)
 						break;
 
-				if (type == 1) {
+				switch (type) {
+				case 1:
+				{
 					unsigned char *llll;
 
 					if (!strstr(lll, "Disk"))
@@ -261,8 +263,10 @@ np:
 					add_bytes_to_string(&page, ll, lll - ll);
 					add_to_string(&page, "</a>");
 					add_to_string(&page, lll);
+					break;
+				}
 
-				} else if (type == 2) {
+				case 2:
 sss:
 					add_bytes_to_string(&page, line, ll - line);
 					add_to_string(&page, "<a href=\"smb://");
@@ -271,8 +275,9 @@ sss:
 					add_bytes_to_string(&page, ll, lll - ll);
 					add_to_string(&page, "</a>");
 					add_to_string(&page, lll);
+					break;
 
-				} else if (type == 3) {
+				case 3:
 					if (pos < strlen(line) && pos
 					    && WHITECHAR(line[pos - 1])
 					    && !WHITECHAR(line[pos])) {
@@ -287,7 +292,7 @@ sss:
 							break;
 					goto sss;
 
-				} else {
+				default:
 					goto af;
 				}
 

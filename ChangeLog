@@ -1,3 +1,368 @@
+Sat Oct 18 22:01:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Open in new tab -> Open new tab in the File menu.  
+
+Sat Oct 18 22:00:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, terminal/tab.c, terminal/tab.h,
+	viewer/text/link.c:
+
+	Fix the open_in_new_tab*() suite so that it opens the active link at
+	correct times. The old behaviour was some strange mindtwist of mine,
+	mixing opening in background and opening upon a link ;-).  
+
+Sat Oct 18 21:45:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/tab.c:
+
+	Duh, this is terrible. Again fixed get_link_url() calling ;-).  
+
+Sat Oct 18 21:44:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/tab.c:
+
+	Fixed calling of get_link_url().  
+
+Sat Oct 18 21:41:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/: tab.h, tab.c:
+
+	Compilation fix.  
+
+Sat Oct 18 21:41:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, terminal/tab.c, terminal/tab.h,
+	viewer/text/link.c:
+
+	open_in_new_tab*() is now called directly, not through the annoying
+	send_open*_new_window() wrapper.  
+
+Sat Oct 18 21:21:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/tab.c:
+
+	Remove useless @exe_name parameter from do_open_in_new_tab().  
+
+Sat Oct 18 21:17:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Compilation fix.  
+
+Sat Oct 18 21:16:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Oops, use send_open_new_window instead of send_open_in_new_window in
+	file_menu11.  
+
+Sat Oct 18 21:14:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, viewer/text/link.c, viewer/text/view.c,
+	viewer/text/view.h:
+
+	send_open_*new_xterm() -> send_open_*new_window().  
+
+Sat Oct 18 21:10:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, osdep/os_dep.c, viewer/text/link.c:
+
+	Moved the opening in new tab [in background] from the New window
+	submenu.  
+
+Sat Oct 18 20:40:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Removed useless prototype (already in the .h file).  
+
+Sat Oct 18 20:27:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: osdep/os_dep.c, terminal/tab.c, terminal/tab.h:
+
+	Moved *open_in_new_tab*() from osdep/os_dep.c to terminal/tab.*.  
+
+Sat Oct 18 19:49:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/config/options.c, src/document/html/parser.c:
+
+	document.browse.images.show_any_as_links introduced (by default on).
+	If off, images are shown only as their alt attribute, but aren't
+	selectable links. Requested by and inspired by a patch of Johannes
+	Zellner <johannes@zellner.org>.  
+
+Sat Oct 18 19:46:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* autogen.sh:
+
+	Add configure fixup for broken autotool on FreeBSD. Fixes "ltconfig:
+	you must specify a host type if you use `--no-verify'" reported by
+	Dmitry Pinchukov <dpinch@viart.com.ua> and me.  
+
+Sat Oct 18 19:23:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Reverted the --without-x11 - it is completely redundant to
+	--without-x, already provided by autoconf.  
+
+Sat Oct 18 19:17:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/ftp.c:
+
+	Avoid *blatant* lies in directory listing.  
+
+Sat Oct 18 17:38:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/gen_translations_stats.sh:
+
+	Fix prefix number removal with FreeBSD sed.  
+
+Sat Oct 18 17:16:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	No need for DEFAULT_COLOR_FLAGS after all. d_opt rules! 
+
+Sat Oct 18 17:10:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	get_format_screen_char(): Use d_opt to acquire color_flags as it is
+	more "stable" than using part->document.opt, fixes a few stains.  
+
+Sat Oct 18 17:04:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	get_format_screen_char(): Clear @color_flag before updating it,
+	initialize it to the default color options.  
+
+Sat Oct 18 16:55:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Rename: xset_hchars() to draw_frame_hchars(), xset_vchars() to
+	draw_frame_vchars().  
+
+Sat Oct 18 16:48:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Added a few comments.  
+
+Sat Oct 18 16:41:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Yes .. being a lazy programmer commiting uncompiled code makes you
+	look more active with all the following fixups.  
+
+Sat Oct 18 16:37:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	xset_hchars(): Add assertion "xl > 0" again.  
+
+Sat Oct 18 16:33:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Acquire color_flags from the document options. This fixes the
+	problem with table border drawing.  
+
+Sat Oct 18 16:28:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	xset_{h,v}chars(): Factor out common part into get_frame_char().  
+
+Sat Oct 18 16:12:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Make xset_vchars() look like xset_hchars() by moving template
+	preparation out the loop.  
+
+Sat Oct 18 16:07:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Merge xset_hchars() with set_hchars().  
+
+Sat Oct 18 16:02:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	clear_hchars(): Introduced as a specialized version of set_hchars().  
+
+Sat Oct 18 15:38:38 2003  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	A configure option named without-x11 was added to prevent linking
+	against libx11 even if it is available.  
+
+Sat Oct 18 13:33:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/help2doc:
+
+	Improve usage help.  
+
+Sat Oct 18 13:32:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Change order of arguments.  
+
+Sat Oct 18 13:24:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	Prevent manpage updating when elinks has not been build.  
+
+Sat Oct 18 13:14:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: Makefile.am, tools/help2doc:
+
+	Add update-manpages build rule. Please help keeping the elinks.conf
+	manpage up to date when options are changed.  
+
+Sat Oct 18 13:11:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Update against current option tree.  
+
+Sat Oct 18 13:08:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Only use "(DISABLED)" in option description.  
+
+Sat Oct 18 12:32:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Add comment about when the aliases has been added.  
+
+Sat Oct 18 12:29:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, config/options.c:
+
+	Properly fix the get_bfu_style(..., "dialog") issue by introducing
+	ui.colors.*.generic color and aliasing ui.colors.*.dialog.background
+	to *.generic.background.  
+
+Sat Oct 18 09:14:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	No trailing spaces in ui.window_title description.  
+
+Sat Oct 18 09:12:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update. Only few config options descriptions and
+	most of commandline options descriptions left.  
+
+Sat Oct 18 01:37:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	"dialog" is not a valid bfu style name. Use dialog.frame instead.  
+
+Sat Oct 18 01:19:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Make links standout again in mono mode.  
+
+Sat Oct 18 01:16:33 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Oct 18 00:57:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/options.c, document/options.h,
+	viewer/text/link.c:
+
+	Add active link bold option.  
+
+Sat Oct 18 00:38:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	add_char16(): Like in add_char256() handle boldness as if it is not
+	part of the color byte when USE_256_COLORS.  
+
+Sat Oct 18 00:26:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, screen.c:
+
+	Propagate the bold attribute from the foreground color brightness
+	and check the screen_char->attr bolt bit when drawing.  
+
+Sat Oct 18 00:14:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Clear the bold bit. Fixes color weirdness.  
+
+Sat Oct 18 00:09:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.h:
+
+	Fix COLOR_INCREASE_CONTRAST comment.  
+
+Sat Oct 18 00:01:47 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Oct 17 23:54:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Use macros when comparing fore- and background colors.  
+
+Fri Oct 17 23:52:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Use macros when assigning fore- and background colors.  
+
+Fri Oct 17 23:27:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Fix option text, set ensure_contrast on by default.  
+
+Fri Oct 17 22:57:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: man/man5/elinks.conf.5, tools/help2doc:
+
+	Sync with current option tree, fix path to imported xml files.  
+
+Fri Oct 17 22:57:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Minor cleanup.  
+
+Fri Oct 17 22:45:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Makes ftp directory listing looks like local directory listing. It
+	lies a bit, and is a hack for now. Feel free to improve.  
+
 Fri Oct 17 21:37:54 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* po/cs.po:

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.64 2005/03/25 19:25:06 miciah Exp $
+-- $Id: hooks.lua.in,v 1.65 2005/03/27 22:59:41 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -10,6 +10,7 @@
 --  Taken from Lua's compat.lua.
 ----------------------------------------------------------------------
 
+_INPUT = io.stdin
 _OUTPUT = io.stdout
 
 function writeto (name)
@@ -32,6 +33,14 @@ function write (...)
   return f:write(unpack(arg))
 end
 
+function read (...)
+  local f = _INPUT
+  if type(arg[1]) == 'userdata' then
+    f = table.remove(arg, 1)
+  end
+  return f:read(unpack(arg))
+end
+
 function do_ (f, err)
   if not f then print(err); return end
   local a,b = pcall(f)
@@ -40,6 +49,7 @@ function do_ (f, err)
   end
 end
 
+function dostring(s) return do_(loadstring(s)) end
 function dofile(s) return do_(loadfile(s)) end
 
 ----------------------------------------------------------------------

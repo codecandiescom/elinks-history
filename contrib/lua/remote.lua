@@ -1,5 +1,5 @@
 -- ELinks-side part of elinks-remote
--- $Id: remote.lua,v 1.2 2003/10/02 12:16:04 kuser Exp $
+-- $Id: remote.lua,v 1.3 2005/03/27 22:59:41 miciah Exp $
 
 -- See script elinks-remote for explanation what's this about.
 
@@ -16,11 +16,11 @@
 ----------------------------------------------------------------------
 
 function external_url ()
-   fh = openfile (external_url_file, "r")
+   fh = io.open (external_url_file, "r")
    aline = current_url ()
    if fh then
       aline = read (fh, "*l")
-      closefile (fh)
+      io.close (fh)
    else
       print ("Couldn't open outfile")
    end
@@ -32,11 +32,11 @@ end
 
 
 function set_external_url ()
-   fh = openfile (external_url_file, "w")
+   fh = io.open (external_url_file, "w")
    aline = current_link ()
    if fh then
       write (fh, aline.."\n")
-      closefile (fh)
+      io.close (fh)
    else
       print ("Couldn't open outfile")
    end

@@ -1,6 +1,6 @@
 -- Check MD5 sums of download files automagically (it expects them in
 -- downloadedfile.txt).
--- $Id: md5check.lua,v 1.3 2005/03/27 22:44:05 miciah Exp $
+-- $Id: md5check.lua,v 1.4 2005/03/27 22:59:41 miciah Exp $
 
 ----------------------------------------------------------------------
 -- Installation
@@ -22,9 +22,9 @@
 -- information automatically (yet?).
 
 function file_exists(filename)
-    local f = openfile(filename, "r")
+    local f = io.open(filename, "r")
     if f then
-	closefile(f)
+	io.close(f)
 	return 1
     end
     return nil
@@ -32,17 +32,17 @@ end
 
 function md5sum_check(download_dir)
     local results = {}
-    gsub(current_document(), "([a-z%d]+)  ([^\n]+)\n",
+    string.gsub(current_document(), "([a-z%d]+)  ([^\n]+)\n",
 	function (sum, filename)
 	    -- lua regexps don't seem to be able to do this
-	    if strlen(sum) ~= 32 then return end
+	    if string.len(sum) ~= 32 then return end
 
 	    local fn = download_dir.."/"..filename
 	    if file_exists(fn) then
-		local localsum = gsub(pipe_read("md5sum "..fn),
-				      "^([a-z%d]+).*$", "%1")
-		tinsert(results, filename.. " -- "..
-			((sum == localsum) and "ok\n" or "MISMATCH!\n"))
+		local localsum = string.gsub(pipe_read("md5sum "..fn),
+					     "^([a-z%d]+).*$", "%1")
+		table.insert(results, filename.. " -- "..
+			     ((sum == localsum) and "ok\n" or "MISMATCH!\n"))
 	    end
 	end)
 
@@ -51,7 +51,7 @@ function md5sum_check(download_dir)
     results.n = nil
     for i,v in results do write(v) end
     writeto()
-    tinsert(tmp_files, tmp)
+    table.insert(tmp_files, tmp)
     return 'goto_url', tmp
 end
 

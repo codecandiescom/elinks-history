@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.62 2003/07/23 02:53:30 jonas Exp $ */
+/* $Id: string.c,v 1.63 2003/07/23 12:32:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,6 +234,45 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	if (len) *len = l;
 
 	return s;
+}
+
+#define strlcmp_device(s1,n1,s2,n2,t1,t2) {\
+	size_t p, n; \
+ \
+	/* XXX: The return value is inconsistent. Hrmpf. Making it consistent
+	 * would make the @n1 != @n2 case significantly more expensive, though.
+	 * So noone should better rely on the return value actually meaning
+	 * anything quantitively. --pasky */ \
+ \
+	assert(s1 && s2); \
+	assert(n1 >= -1 && n2 >= -1); \
+ \
+	/* TODO: Don't precompute strlen()s but rather make the loop smarter.
+	 * --pasky */ \
+	if (n1 == -1) n1 = strlen(s1); \
+	if (n2 == -1) n2 = strlen(s2); \
+ \
+	if (n1 != n2) return n1 - n2; \
+ \
+	for (p = 0, n = n1; p < n && s1[p] && s2[p]; p++) \
+		if (t1 != t2) \
+			return t1 - t2; \
+ \
+	return 0; \
+}
+
+int
+elinks_strlcmp(const unsigned char *s1, size_t n1,
+		const unsigned char *s2, size_t n2)
+{
+	strlcmp_device(s1, n1, s2, n2, s1[p], s2[p]);
+}
+
+int
+elinks_strlcasecmp(const unsigned char *s1, size_t n1,
+		   const unsigned char *s2, size_t n2)
+{
+	strlcmp_device(s1, n1, s2, n2, upcase(s1[p]), upcase(s2[p]));
 }
 
 

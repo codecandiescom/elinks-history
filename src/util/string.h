@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.43 2003/07/22 15:59:19 jonas Exp $ */
+/* $Id: string.h,v 1.44 2003/07/23 12:32:45 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -40,6 +40,32 @@ int xstrcmp(unsigned char *, unsigned char *);
 
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
 unsigned char *trim_chars(unsigned char *, unsigned char, int *);
+
+
+/* strlcmp() is the middle child of history, everyone is using it differently.
+ * On some weird *systems* it seems to be defined (equivalent to strcasecmp()),
+ * so we'll better use our #define redir. */
+
+/* This routine compares string @s1 of length @n1 with string @s2 of length
+ * @n2.
+ *
+ * This acts identically to strcmp() but for non-zero-terminated strings,
+ * rather than being similiar to strncmp(). That means, it fails if @n1 != @n2,
+ * thus you may use it for testing whether @s2 matches *full* @s1, not only its
+ * start (which can be a security hole, ie. in the cookies domain checking).
+ *
+ * @n1 or @n2 may be -1, which is same as strlen(@s[12]) but possibly more
+ * effective (in the future ;-). */
+/* Returns an integer less than, equal to, or greater than zero if @s1 is
+ * found, respectively, to be less than, to match, or be greater than @s2. */
+#define strlcmp elinks_strlcmp
+int elinks_strlcmp(const unsigned char *s1, size_t n1,
+		   const unsigned char *s2, size_t n2);
+
+/* Acts identically to strlcmp(), except for being case insensitive. */
+#define strlcasecmp elinks_strlcasecmp
+int elinks_strlcasecmp(const unsigned char *s1, size_t n1,
+		       const unsigned char *s2, size_t n2);
 
 
 #define WHITECHAR(x) ((x) == ' ' || ((x) >= ASCII_TAB && (x) <= ASCII_CR))

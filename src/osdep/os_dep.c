@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.105 2003/10/27 02:00:38 pasky Exp $ */
+/* $Id: os_dep.c,v 1.106 2003/10/27 02:04:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -517,6 +517,12 @@ int
 get_output_handle(void)
 {
 	return 1;
+}
+
+int
+get_ctl_handle()
+{
+	return 0;
 }
 
 #if defined(BEOS)

@@ -1,7 +1,9 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.210 2004/04/16 10:02:07 zas Exp $ */
+/* $Id: search.c,v 1.211 2004/04/16 16:26:39 kuser Exp $ */
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

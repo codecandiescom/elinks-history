@@ -1,11 +1,13 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.388 2004/04/16 11:10:24 zas Exp $ */
+/* $Id: parser.c,v 1.389 2004/04/16 16:26:39 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* strcasestr() */
+#endif
 
 #include <errno.h>
 #include <stdarg.h>

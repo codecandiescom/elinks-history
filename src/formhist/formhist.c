@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.7 2003/08/02 15:59:20 jonas Exp $ */
+/* $Id: formhist.c,v 1.8 2003/08/02 16:03:53 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -26,7 +26,7 @@
 #include "util/string.h"
 #include "viewer/text/form.h"
 
-INIT_LIST_HEAD(saved_forms);
+INIT_LIST_HEAD(form_history);
 
 static int loaded = 0;
 
@@ -48,7 +48,7 @@ done_form_history_item(struct form_history_item *item)
 }
 
 static int
-load_saved_forms(void)
+init_form_history(void)
 {
 	struct form_history_item *form;
 	struct submitted_value *sv;
@@ -102,7 +102,7 @@ load_saved_forms(void)
 			add_to_list_bottom(form->submit, sv);
 		}
 
-		add_to_list_bottom(saved_forms, form);
+		add_to_list_bottom(form_history, form);
 	}
 
 	fclose(f);
@@ -126,9 +126,9 @@ get_saved_control_value(unsigned char *url, unsigned char *name)
 	struct form_history_item *form;
 	struct submitted_value *sv;
 
-	if (!loaded && !load_saved_forms()) return NULL;
+	if (!loaded && !init_form_history()) return NULL;
 
-	foreach (form, saved_forms) {
+	foreach (form, form_history) {
 		if (strcmp(form->url, url)) continue;
 
 		foreach (sv, form->submit)
@@ -149,9 +149,9 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 	struct form_history_item *form;
 	struct submitted_value *sv, *savedsv;
 
-	if (!loaded && !load_saved_forms()) return 0;
+	if (!loaded && !init_form_history()) return 0;
 
-	foreach (form, saved_forms) {
+	foreach (form, form_history) {
 		if (strcmp(form->url, url)) continue;
 
 		savedsv = (struct submitted_value *) form->submit.next;
@@ -229,10 +229,10 @@ remember_form(struct form_history_item *fmem_data)
 			add_to_list_bottom(form->submit, sv2);
 		}
 
-	add_to_list(saved_forms, form);
+	add_to_list(form_history, form);
 
 	/* Write the list to password file */
-	foreach (tmpform, saved_forms) {
+	foreach (tmpform, form_history) {
 		secure_fprintf(ssi, "%s\n", tmpform->url);
 		foreachback (sv, tmpform->submit) {
 			unsigned char *encvalue = "";
@@ -316,7 +316,7 @@ done_form_history(void)
 {
 	struct form_history_item *form;
 
-	foreach(form, saved_forms)
+	foreach(form, form_history)
 		done_form_history_item(form);
 }
 

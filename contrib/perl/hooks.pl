@@ -124,9 +124,10 @@ sub pre_format_html_hook
 ### proxy_for_hook #############################################################
 sub proxy_for_hook
 {
-	my $url = NIL;
+	my $url = shift;
+	my $proxy_url = '';
 
-	return $url;
+	return $proxy_url;
 }
 
 ################################################################################

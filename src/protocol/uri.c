@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.151 2004/04/06 12:29:04 jonas Exp $ */
+/* $Id: uri.c,v 1.152 2004/04/07 12:46:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -368,52 +368,47 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 	dest = path;
 
 	while (*dest && !end_of_dir(src[0])) {
-		/* TODO: Rewrite this parser in sane way, gotos are ugly ;). */
-
 		/* If the following pieces are the LAST parts of URL, we remove
 		 * them as well. See RFC 1808 for details. */
 
-		if (dsep(src[0]) && src[1] == '.'
-		    && (!src[2] || dsep(src[2]))) {
+		if (!dsep(src[0])) {
+			/* This is to reduce indentation */
 
-			/* /./ - strip that.. */
+		} else if (src[1] == '.') {
+			if (!src[2] || dsep(src[2])) {
+				/* /./ - strip that.. */
+				src += 2;
+				continue;
 
-			if (src == path && (!src[2] || !src[3])) {
-				/* ..if this is not the only URL (why?). */
-				goto proceed;
+			} else if (src[2] == '.' && (!src[3] || dsep(src[3]))) {
+				/* /../ - strip that and preceding element. */
+
+				/* First back out the last incrementation of
+				 * @dest (dest++) to get the position that was
+				 * last asigned to. */
+				if (dest > path) dest--;
+
+				/* @dest might be pointing to a dir separator
+				 * so we decrement before any testing. */
+				do {
+					if (dest > path) dest--;
+				} while (!dsep(*dest));
+
+				src += 3;
+				continue;
 			}
 
-			src += 2;
-		}
-		else
-		if (dsep(src[0]) && src[1] == '.' && src[2] == '.'
-		    && (!src[3] || dsep(src[3]))) {
-			unsigned char *orig_dest = dest;
-
-			/* /../ - strip that and preceding element. */
-
-			while (dest > path) {
-				dest--;
-				if (dsep(*dest)) {
-					if (dest + 3 == orig_dest
-					    && dest[1] == '.'
-					    && dest[2] == '.') {
-						dest = orig_dest;
-						goto proceed;
-					}
-					break;
-				}
-			}
-
-			src += 3;
-		} else if (dsep(src[0]) && dsep(src[1])) {
-
+		} else if (dsep(src[1])) {
 			/* // - ignore first '/'. */
-
 			src += 1;
-		} else {
-proceed: ;
-			*dest++ = *src++;
+			continue;
+		}
+
+		/* We don't want access memory past the NUL char. */
+		*dest = *src;
+		if (*dest) {
+			dest++;
+			src++;
 		}
 	}
 

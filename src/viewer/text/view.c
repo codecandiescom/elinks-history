@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.254 2003/10/31 22:37:18 pasky Exp $ */
+/* $Id: view.c,v 1.255 2003/11/03 15:06:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,7 +412,7 @@ static void
 scroll(struct session *ses, struct document_view *doc_view, int a)
 {
 	int max_height;
-	
+
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
@@ -453,13 +453,13 @@ static void
 x_end(struct session *ses, struct document_view *doc_view, int a)
 {
 	int max_height;
-	
+
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
 	max_height = doc_view->document->height - doc_view->document->options.height;
 	doc_view->vs->x = 0;
-	int_bounds(&doc_view->vs->y, 0, max_height);
+	int_lower_bound(&doc_view->vs->y, int_max(0, max_height));
 	find_link(doc_view, -1, 0);
 }
 

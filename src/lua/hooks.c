@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.2 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: hooks.c,v 1.3 2002/05/17 15:43:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,8 +163,8 @@ script_hook_pre_format_html(struct session *ses, unsigned char *url,
 unsigned char *
 script_hook_get_proxy(unsigned char *url)
 {
-	static unsigned char buf[MAX_STR_LEN];
 	lua_State *L = lua_state;
+	char *ret = NULL;
 	int err;
 
 	lua_getglobal(L, "proxy_for_hook");
@@ -181,17 +181,12 @@ script_hook_get_proxy(unsigned char *url)
 	if (err)
 		return NULL;
 
-	if (lua_isstring(L, -1)) {
-		safe_strncpy(buf, lua_tostring(L, -1), sizeof buf);
-		lua_pop(L, 1);
-		return buf;
-	}
-
-	if (!lua_isnil(L, -1))
+	if (lua_isstring(L, -1))
+		ret = stracpy((unsigned char *)lua_tostring(L, -1));
+	else if (!lua_isnil(L, -1))
 		alert_lua_error("proxy_hook must return a string or nil");
-
 	lua_pop(L, 1);
-	return NULL;
+	return ret;
 }
 
 

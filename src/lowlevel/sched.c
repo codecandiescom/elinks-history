@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.25 2002/05/12 16:40:43 fis Exp $ */
+/* $Id: sched.c,v 1.26 2002/05/17 15:43:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -779,16 +779,11 @@ again2:
 }
 
 
-/* get_proxy() */
-unsigned char *get_proxy(unsigned char *url)
+/* get_proxy_worker() */
+static unsigned char *get_proxy_worker(unsigned char *url, unsigned char *proxy)
 {
 	int l = strlen(url);
-	unsigned char *proxy = NULL;
 	unsigned char *u;
-
-#ifdef HAVE_SCRIPTING
-	proxy = script_hook_get_proxy(url);
-#endif
 
 	if (proxy) {
 		if (!*proxy) proxy = NULL;  /* "" from script_hook_get_proxy() */
@@ -810,6 +805,22 @@ unsigned char *get_proxy(unsigned char *url)
 
 	strcat(u, url);
 	return u;
+}
+
+
+/* get_proxy() */
+unsigned char *get_proxy(unsigned char *url)
+{
+#ifdef HAVE_SCRIPTING
+	unsigned char *tmp, *ret;
+
+	tmp = script_hook_get_proxy(url);
+	ret = get_proxy_worker(url, tmp);
+	if (tmp) mem_free(tmp);
+	return ret;
+#else
+	return get_proxy_worker(url, NULL);
+#endif
 }
 
 

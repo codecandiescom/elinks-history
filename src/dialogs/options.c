@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.155 2004/11/19 16:26:11 zas Exp $ */
+/* $Id: options.c,v 1.156 2004/11/21 13:33:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 		cls_redraw_all_terminals();
 	}
 
-	if (button->widget->fn == push_ok_button)
+	if (button->widget->handler == push_ok_button)
 		return cancel_dialog(dlg_data, button);
 
 	return EVENT_PROCESSED;

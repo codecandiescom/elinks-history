@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.181 2004/11/21 13:23:58 zas Exp $ */
+/* $Id: inpfield.c,v 1.182 2004/11/21 13:33:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@ add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label
 		widget->text = label;
 		widget->info.field.min = min;
 		widget->info.field.max = max;
-		widget->fn = handler;
+		widget->handler = handler;
 		widget->datalen = data_len;
 		widget->data = data;
 		widget->info.field.history = history;

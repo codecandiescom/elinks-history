@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.84 2004/11/21 13:23:58 zas Exp $ */
+/* $Id: widget.h,v 1.85 2004/11/21 13:33:17 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -40,7 +40,7 @@ struct widget {
 
 	void *udata;
 
-	t_widget_handler *fn;
+	t_widget_handler *handler;
 
 	union {
 		struct widget_info_checkbox checkbox;

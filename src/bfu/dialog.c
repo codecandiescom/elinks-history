@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.180 2004/11/19 16:33:01 zas Exp $ */
+/* $Id: dialog.c,v 1.181 2004/11/21 13:33:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -407,8 +407,8 @@ check_dialog(struct dialog_data *dlg_data)
 		    !widget_is_textfield(widget_data))
 			continue;
 
-		if (widget_data->widget->fn &&
-		    widget_data->widget->fn(dlg_data, widget_data)) {
+		if (widget_data->widget->handler &&
+		    widget_data->widget->handler(dlg_data, widget_data)) {
 			select_widget(dlg_data, widget_data);
 			redraw_dialog(dlg_data, 0);
 			return 1;

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.73 2004/11/19 17:46:04 zas Exp $ */
+/* $Id: button.c,v 1.74 2004/11/21 13:33:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@ add_dlg_button_do(struct dialog *dlg, int key, void *handler, unsigned char *tex
 	widget->info.button.flags = key;
 	widget->info.button.done = done;
 	widget->info.button.done_data = done_data;
-	widget->fn = handler;
+	widget->handler = handler;
 	widget->text = text;
 	widget->udata = data;
 }
@@ -172,7 +172,7 @@ mouse_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 static t_handler_event_status
 select_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	return widget_data->widget->fn(dlg_data, widget_data);
+	return widget_data->widget->handler(dlg_data, widget_data);
 }
 
 struct widget_ops button_ops = {

@@ -1,3 +1,132 @@
+Wed Sep 10 19:23:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Merge xpand_spaces() with realloc_spaces() and use granular
+	allocation.  
+
+Wed Sep 10 19:15:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Merge xpand_line() with realloc_line().  realloc_line() now calls
+	realloc_lines().  Use X() and Y() macros to get the canvas position.  
+
+Wed Sep 10 18:43:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Merge xpand_lines() with realloc_lines().  
+
+Wed Sep 10 18:12:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, util/memory.h:
+
+	Make the granular allocation code generic.  
+
+Wed Sep 10 16:06:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Introduce ALIGN_LINK().  
+
+Wed Sep 10 15:49:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	new_link(): Minor cleanup remove useless assignments.  
+
+Wed Sep 10 14:40:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.h:
+
+	Switch @from and @to macro names. Some say it is more correct ;) 
+
+Wed Sep 10 14:10:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix link navigation bug introduced in 1.250.  
+
+Wed Sep 10 08:16:25 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Use a variable to save a few calls to current_frame() in
+	print_screen_status().  
+
+Wed Sep 10 06:06:47 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/ssl/connect.c:
+
+	Eliminate some superfluous #includes.  
+	
+	When I suggested, made, and forgot to commit this change a few
+	months ago, pasky had this comment: 
+	
+	20:21:10< pasky> Miciah: i'd not be against reducing it to
+	                 ssl/ssl.h, as long as you will make clear in the log message that
+			 pasky wishes this not to become a precedent and such things MUST be 
+			 considered on case-by-case basis 20:21:35< pasky> i really don't
+	                 want to see a flood of "removed redundant includes from ABC, it is
+	included by XYZ as well" 
+
+Wed Sep 10 03:41:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Add TODO about how to avoid last_* variables allocation and freeing.  
+
+Wed Sep 10 03:19:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	new_link(): Use format.form instead of last_form.  
+
+Wed Sep 10 03:14:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Merge link initialization from process_link() into new_link().  
+
+Wed Sep 10 00:53:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/home.c:
+
+	Cleanup dir_sep() trimming.  
+
+Wed Sep 10 00:37:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/home.c:
+
+	Cut the b33p and just access @first_use directly.  
+
+Wed Sep 10 00:33:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/home.c:
+
+	Cleanup.  
+
+Wed Sep 10 00:26:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/home.c:
+
+	get_home(): Move directory testing to test_confdir(). Inspired by
+	kuser.  
+
+Wed Sep 10 00:04:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/home.c:
+
+	get_home(): No need to allocate config_dir. Inspired by kuser.  
+
+Tue Sep  9 23:32:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/home.c:
+
+	get_home(): Split out path_to_exe directory name extraction to
+	elinks_dirname(). Patch by kuser.  
+
 Tue Sep  9 21:57:12 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/renderer.c:

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.39 2005/03/26 17:48:33 pasky Exp $
+# $Id: hooks.pl,v 1.40 2005/03/26 17:49:17 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -726,6 +726,7 @@ sub search
 		$url =~ s/!bork!/$bork/;
 	}
 
+	$url .= $search if $search;
 	return $url;
 }
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.242 2004/06/13 22:43:53 zas Exp $ */
+/* $Id: search.c,v 1.243 2004/06/18 04:46:01 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -930,8 +930,8 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 
 enum typeahead_code {
 	TYPEAHEAD_MATCHED,
-	TYPEAHEAD_STOP,
-	TYPEAHEAD_ESCAPE,
+	TYPEAHEAD_ERROR,
+	TYPEAHEAD_CANCEL,
 };
 
 static void
@@ -1104,7 +1104,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			i--;
 			if (i >= 0) break;
 			if (!get_opt_bool("document.browse.search.wraparound"))
-				return TYPEAHEAD_STOP;
+				return TYPEAHEAD_ERROR;
 
 			i = doc_view->document->nlinks - 1;
 			break;
@@ -1115,21 +1115,21 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			i++;
 			if (i < doc_view->document->nlinks) break;
 			if (!get_opt_bool("document.browse.search.wraparound"))
-				return TYPEAHEAD_STOP;
+				return TYPEAHEAD_ERROR;
 
 			i = 0;
 			break;
 
  		case ACT_EDIT_ENTER:
 			goto_current_link(ses, doc_view, 0);
-			return TYPEAHEAD_ESCAPE;
+			return TYPEAHEAD_CANCEL;
 
 		default:
 			direction = 1;
 	}
 
 	i = search_link_text(document, current, i, text, direction, offset);
-	if (i < 0) return TYPEAHEAD_STOP;
+	if (i < 0) return TYPEAHEAD_CANCEL;
 
 	assert(i >= 0 && i < doc_view->document->nlinks);
 
@@ -1228,11 +1228,11 @@ link_typeahead_handler(struct input_line *line, int action)
 			draw_link_text(ses->tab->term, doc_view, strlen(buffer), offset);
 			return INPUT_LINE_PROCEED;
 
-		case TYPEAHEAD_STOP:
+		case TYPEAHEAD_ERROR:
 			typeahead_error(ses, buffer);
 			/* Falling */
 
-		case TYPEAHEAD_ESCAPE:
+		case TYPEAHEAD_CANCEL:
 		default:
 			return INPUT_LINE_CANCEL;
 	}

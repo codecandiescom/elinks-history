@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-15 21:21+0100\n"
-"PO-Revision-Date: 2005-01-18 23:37+0100\n"
+"POT-Creation-Date: 2005-01-18 23:48+0100\n"
+"PO-Revision-Date: 2005-01-18 23:54+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -54,12 +54,13 @@ msgstr "Tast mellemrum for at udfolde denne mappe."
 #: src/sched/session.c:240 src/sched/session.c:707 src/sched/session.c:731
 #: src/sched/session.c:748 src/scripting/lua/core.c:395
 #: src/scripting/lua/core.c:476 src/scripting/lua/core.c:593
-#: src/scripting/lua/core.c:717 src/viewer/text/draw.c:67
-#: src/viewer/text/form.c:857 src/viewer/text/search.c:953
-#: src/viewer/text/search.c:1014 src/viewer/text/search.c:1459
-#: src/viewer/text/search.c:1570 src/viewer/text/textarea.c:366
-#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:730
-#: src/viewer/text/view.c:1283
+#: src/scripting/lua/core.c:717 src/scripting/ruby/core.c:63
+#: src/scripting/ruby/core.c:155 src/scripting/ruby/core.c:195
+#: src/viewer/text/draw.c:67 src/viewer/text/form.c:857
+#: src/viewer/text/search.c:953 src/viewer/text/search.c:1014
+#: src/viewer/text/search.c:1459 src/viewer/text/search.c:1570
+#: src/viewer/text/textarea.c:366 src/viewer/text/textarea.c:375
+#: src/viewer/text/view.c:730 src/viewer/text/view.c:1283
 msgid "OK"
 msgstr "Ok"
 
@@ -2093,15 +2094,15 @@ msgstr "Adgangstaster"
 
 #: src/config/options.inc:145
 msgid ""
-"Options for handling of the access keys for active links.\n"
-"Access keys can be assigned using the ACCESSKEY attribute in\n"
-"HTML elements and can be used to give focus to the link when\n"
-"the assigned access key is pressed."
+"Options for handling of link access keys.\n"
+"An HTML document can use the ACCESSKEY attribute to assign\n"
+"an access key to an element. When an access key is pressed,\n"
+"the corresponding element will be given focus."
 msgstr ""
 "Indstillinger der styrer hvordan adgangstaster håndteres.\n"
-"Adgangstaster kan angives med \"accesskey\"-attributten\n"
-"i HTML-elementer og gør det muligt at fokusere links når\n"
-"den angivne adgangstast tastes."
+"Et HTML dokument kan benytte \"accesskey\"-attributten til\n"
+"at angive en adgangstast for et element. Når den angivne\n"
+"adgangstast tastes fokuseres det tilsvarende element."
 
 #: src/config/options.inc:150
 msgid "Automatic links following"
@@ -6998,8 +6999,16 @@ msgstr "Lua-konsol"
 msgid "Enter expression"
 msgstr "Indtast udtryk"
 
+#: src/scripting/ruby/core.c:60
+msgid "Ruby Error"
+msgstr "Ruby-fejl"
+
+#: src/scripting/ruby/core.c:152 src/scripting/ruby/core.c:192
+msgid "Ruby Message"
+msgstr "Ruby-besked"
+
 #. name:
-#: src/scripting/scripting.c:36
+#: src/scripting/scripting.c:40
 msgid "Scripting"
 msgstr "Scriptning"
 

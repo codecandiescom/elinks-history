@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.396 2004/04/22 16:06:36 zas Exp $ */
+/* $Id: parser.c,v 1.397 2004/04/22 16:08:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3522,6 +3522,7 @@ xsp:
 	if (!he) goto se;
 
 	add_to_string(head, he);
+	mem_free(he);
 
 	c = get_attr_val(attr, "content");
 	if (c) {
@@ -3530,7 +3531,6 @@ xsp:
 	        mem_free(c);
 	}
 
-	mem_free(he);
 	add_to_string(head, "\r\n");
 	goto se;
 }

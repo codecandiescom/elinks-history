@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.123 2004/01/18 00:59:10 pasky Exp $ */
+/* $Id: conf.c,v 1.124 2004/01/28 19:38:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,6 +164,48 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 }
 
 static enum parse_error
+parse_unset(struct option *opt_tree, unsigned char **file, int *line,
+	    struct string *mirror)
+{
+	unsigned char *orig_pos = *file;
+	unsigned char *optname;
+	unsigned char bin;
+
+	/* XXX: This does not handle the autorewriting well and is mostly a
+	 * quick hack than anything now. --pasky */
+
+	*file = skip_white(*file, line);
+	if (!**file) return ERROR_PARSE;
+
+	/* Option name */
+	optname = *file;
+	while (isA(**file) || **file == '*' || **file == '.') (*file)++;
+
+	bin = **file;
+	**file = '\0';
+	optname = stracpy(optname);
+	if (!optname) return ERROR_NOMEM;
+	**file = bin;
+
+	/* Mirror what we have */
+	if (mirror) add_bytes_to_string(mirror, orig_pos, *file - orig_pos);
+
+	{
+		struct option *opt;
+
+		opt = get_opt_rec(opt_tree, optname);
+		mem_free(optname);
+
+		if (!opt || (opt->flags & OPT_HIDDEN))
+			return ERROR_OPTION;
+
+		delete_option(opt);
+	}
+
+	return ERROR_NONE;
+}
+
+static enum parse_error
 parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 	   struct string *mirror)
 {
@@ -282,6 +324,7 @@ struct parse_handler {
 
 static struct parse_handler parse_handlers[] = {
 	{ "set", parse_set },
+	{ "unset", parse_unset },
 	{ "bind", parse_bind },
 	{ "include", parse_include },
 	{ NULL, NULL }

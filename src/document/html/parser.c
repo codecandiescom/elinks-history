@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.204 2003/09/28 13:43:55 jonas Exp $ */
+/* $Id: parser.c,v 1.205 2003/09/28 14:07:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1755,7 +1755,6 @@ clr_spaces(unsigned char *name)
 
 /* TODO: Move following stuff to special file. */
 
-
 static int menu_stack_size;
 static struct menu_item **menu_stack;
 
@@ -1798,20 +1797,17 @@ new_menu_item(unsigned char *name, int data, int fullname)
 			while (below->text) below++;
 			below[-1].data = top;
 		}
-		item->text = name;
+
 		if (data == -1) {
-			item->rtext = M_SUBMENU;
-			item->func = (menu_func) do_select_submenu;
-			item->data = nmenu;
-			item->submenu = 1;
+			SET_MENU_ITEM(item, name, M_SUBMENU, do_select_submenu,
+				      nmenu, FREE_NOTHING | (fullname << 8),
+				      1, 1, 0, 0);
 		} else {
-			item->rtext = "";
-			item->func = (menu_func) selected_item;
-			item->data = (void *) data;
-			item->submenu = 0;
+			SET_MENU_ITEM(item, name, "", selected_item,
+				      data, FREE_NOTHING | (fullname << 8),
+				      0, 1, 0, 0);
 		}
-		item->item_free = FREE_NOTHING | (fullname << 8); /* XXX: DIRTY! */
-		item->no_intl = 1;
+
 		item++;
 		memset(item, 0, sizeof(struct menu_item));
 		/*item->text = "";*/

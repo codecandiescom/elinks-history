@@ -76,6 +76,8 @@ void end_real_lookup(void *data)
 	
 	if (!query->addr || !query->addrno)
 		goto done;
+
+	*query->addr = NULL;
 	
 	if (read(query->h, query->addrno, sizeof(int)) != sizeof(int))
 		goto done;
@@ -96,7 +98,7 @@ void end_real_lookup(void *data)
 	res = 0;
 	
 done:
-	if (res < 0 && *query->addr) mem_free(*query->addr);
+	if (res < 0 && query->addr && *query->addr) mem_free(*query->addr);
 		
 	set_handlers(query->h, NULL, NULL, NULL, NULL);
 	close(query->h);

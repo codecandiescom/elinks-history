@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.31 2003/08/26 09:35:37 zas Exp $ */
+/* $Id: dns.c,v 1.32 2003/08/28 19:28:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,8 +274,7 @@ do_queued_lookup(struct dnsquery *query)
 
 	} else {
 		/* debug("queuing lookup for %s", q->name); */
-		if (dns_queue->next_in_queue)
-			internal("DNS queue corrupted");
+		assertm(!dns_queue->next_in_queue, "DNS queue corrupted");
 		dns_queue->next_in_queue = query;
 		dns_queue = query;
 		return -1;

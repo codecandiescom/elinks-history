@@ -1,9 +1,11 @@
 #!/bin/sh
 
-# $Id: find_unused_translations.sh,v 1.7 2002/12/15 02:27:49 zas Exp $
+# $Id: find_unused_translations.sh,v 1.8 2002/12/16 10:08:25 zas Exp $
 
 # This script lists unused translations and, if given the argument 'patch',
 # generates <language>.lng.patch for each translation file to remove them.
+
+echo "This script doesn't work... Either fix it or wait a new version ;)" && exit
 
 echo 'Finding unused translations...'
 

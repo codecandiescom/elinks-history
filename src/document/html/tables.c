@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.230 2004/06/27 08:49:43 zas Exp $ */
+/* $Id: tables.c,v 1.231 2004/06/27 08:56:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1138,54 +1138,56 @@ distribute_widths(struct table *table, int width)
 		for (col = 0; col < table->cols; col++) {
 			switch (om) {
 				case 0:
-					if (table->cols_widths[col] < table->cols_x[col]) {
-						widths[col] = 1;
-						max_widths[col] = int_min(table->cols_x[col],
-								table->max_cols_widths[col])
-							- table->cols_widths[col];
-						if (max_widths[col] <= 0) widths[col] = 0;
-					}
+					if (table->cols_widths[col] >= table->cols_x[col])
+						break;
 
+					widths[col] = 1;
+					max_widths[col] = int_min(table->cols_x[col],
+								  table->max_cols_widths[col])
+							  - table->cols_widths[col];
+					if (max_widths[col] <= 0) widths[col] = 0;
 					break;
 				case 1:
-					if (table->cols_x[col] <= WIDTH_RELATIVE) {
-						widths[col] = WIDTH_RELATIVE - table->cols_x[col];
-						max_widths[col] = table->max_cols_widths[col]
-							- table->cols_widths[col];
-						if (max_widths[col] <= 0) widths[col] = 0;
-					}
+					if (table->cols_x[col] > WIDTH_RELATIVE)
+						break;
+
+					widths[col] = WIDTH_RELATIVE - table->cols_x[col];
+					max_widths[col] = table->max_cols_widths[col]
+							  - table->cols_widths[col];
+					if (max_widths[col] <= 0) widths[col] = 0;
 					break;
 				case 2:
 					if (table->cols_x[col] != WIDTH_AUTO)
 						break;
 					/* Fall-through */
 				case 3:
-					if (table->cols_widths[col] < table->max_cols_widths[col]) {
-						max_widths[col] = table->max_cols_widths[col]
-							- table->cols_widths[col];
-						if (max_cols_width) {
-							widths[col] = 5 + table->max_cols_widths[col] * 10 / max_cols_width;
-						} else {
-							widths[col] = 1;
-						}
+					if (table->cols_widths[col] >= table->max_cols_widths[col])
+						break;
+					max_widths[col] = table->max_cols_widths[col]
+							  - table->cols_widths[col];
+					if (max_cols_width) {
+						widths[col] = 5 + table->max_cols_widths[col] * 10 / max_cols_width;
+					} else {
+						widths[col] = 1;
 					}
 					break;
 				case 4:
-					if (table->cols_x[col] >= 0) {
-						widths[col] = 1;
-						max_widths[col] = table->cols_x[col] - table->cols_widths[col];
-						if (max_widths[col] <= 0) widths[col] = 0;
-					}
+					if (table->cols_x[col] < 0)
+						break;
+					widths[col] = 1;
+					max_widths[col] = table->cols_x[col]
+							  - table->cols_widths[col];
+					if (max_widths[col] <= 0) widths[col] = 0;
 					break;
 				case 5:
-					if (table->cols_x[col] < 0) {
-						if (table->cols_x[col] <= WIDTH_RELATIVE) {
-							widths[col] = WIDTH_RELATIVE - table->cols_x[col];
-						} else {
-							widths[col] = 1;
-						}
-						max_widths[col] = MAXINT;
+					if (table->cols_x[col] >= 0)
+						break;
+					if (table->cols_x[col] <= WIDTH_RELATIVE) {
+						widths[col] = WIDTH_RELATIVE - table->cols_x[col];
+					} else {
+						widths[col] = 1;
 					}
+					max_widths[col] = MAXINT;
 					break;
 				case 6:
 					widths[col] = 1;

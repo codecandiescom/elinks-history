@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.21 2002/07/04 15:45:38 pasky Exp $ */
+/* $Id: globhist.c,v 1.22 2002/07/04 19:18:18 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -15,6 +15,7 @@
 
 #include "bfu/bfu.h"
 #include "bfu/button.h"
+#include "bfu/listbox.h"
 #include "bfu/msgbox.h"
 #include "bfu/text.h"
 #include "dialogs/edit.h"

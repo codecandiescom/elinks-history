@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: mailto.c,v 1.10 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: mailto.c,v 1.11 2002/06/17 15:16:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,11 +20,11 @@
 #include "util/string.h"
 
 void
-prog_func(struct terminal *term, struct list_head *list,
+prog_func(struct terminal *term, unsigned char *progid,
 	  unsigned char *param, unsigned char *name)
 {
 	unsigned char *cmd;
-	unsigned char *prog = get_prog(list);
+	unsigned char *prog = get_prog(progid);
 
 	if (!prog || !*prog) {
 		msg_box(term, NULL,
@@ -61,7 +61,7 @@ mailto_func(struct session *ses, unsigned char *url)
 	check_shell_security(&param);
 
 	f = 0;
-	prog_func(ses->term, &mailto_prog, param, TEXT(T_MAIL));
+	prog_func(ses->term, "mailto", param, TEXT(T_MAIL));
 
 	mem_free(param);
 
@@ -83,7 +83,7 @@ fail:
 
 
 void
-tn_func(struct session *ses, unsigned char *url, struct list_head *prog,
+tn_func(struct session *ses, unsigned char *url, unsigned char *prog,
 	unsigned char *t1, unsigned char *t2)
 {
 	unsigned char *host, *port, *param;
@@ -122,12 +122,12 @@ fail:
 void
 telnet_func(struct session *ses, unsigned char *url)
 {
-	tn_func(ses, url, &telnet_prog, TEXT(T_TELNET), TEXT(T_BAD_TELNET_URL));
+	tn_func(ses, url, "telnet", TEXT(T_TELNET), TEXT(T_BAD_TELNET_URL));
 }
 
 
 void
 tn3270_func(struct session *ses, unsigned char *url)
 {
-	tn_func(ses, url, &tn3270_prog, TEXT(T_TN3270), TEXT(T_BAD_TN3270_URL));
+	tn_func(ses, url, "tn3270", TEXT(T_TN3270), TEXT(T_BAD_TN3270_URL));
 }

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.14 2002/06/17 07:42:30 pasky Exp $ */
+/* $Id: options.c,v 1.15 2002/06/17 15:16:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -625,15 +625,15 @@ net_programs(struct terminal *term, void *xxx, void *yyy)
 
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_STR_LEN;
-	d->items[0].data = get_prog(&mailto_prog);
+	d->items[0].data = get_opt_str("protocol.user.mailto." SYSTEM_STR);
 
 	d->items[1].type = D_FIELD;
 	d->items[1].dlen = MAX_STR_LEN;
-	d->items[1].data = get_prog(&telnet_prog);
+	d->items[1].data = get_opt_str("protocol.user.telnet." SYSTEM_STR);
 
 	d->items[2].type = D_FIELD;
 	d->items[2].dlen = MAX_STR_LEN;
-	d->items[2].data = get_prog(&tn3270_prog);
+	d->items[2].data = get_opt_str("protocol.user.tn3270." SYSTEM_STR);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;

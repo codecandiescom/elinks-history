@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.27 2002/06/17 11:23:18 pasky Exp $ */
+/* $Id: types.c,v 1.28 2002/06/17 15:16:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,8 @@ struct list_head tn3270_prog = { &tn3270_prog, &tn3270_prog };
 struct list_head assoc = { &assoc, &assoc };
 
 
+/* TODO: Maybe we should move this to config/options.c, make it more generic
+ * and export it to world? Let's see if anyone will need it. */
 struct option *
 get_real_opt(unsigned char *base, unsigned char *id)
 {
@@ -246,7 +248,6 @@ void
 free_types()
 {
 	struct assoc *a;
-	struct protocol_program *p;
 
 	foreach(a, assoc) {
 		mem_free(a->ct);
@@ -254,18 +255,6 @@ free_types()
 		mem_free(a->label);
 	}
 	free_list(assoc);
-
-	foreach(p, mailto_prog)
-		mem_free(p->prog);
-	free_list(mailto_prog);
-
-	foreach(p, telnet_prog)
-		mem_free(p->prog);
-	free_list(telnet_prog);
-
-	foreach(p, tn3270_prog)
-		mem_free(p->prog);
-	free_list(tn3270_prog);
 }
 
 
@@ -859,45 +848,24 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 }
 
 
-void
-update_prog(struct list_head *l, unsigned char *p, int s)
-{
-	struct protocol_program *repl;
-
-	foreach(repl, *l) {
-		if (repl->system == s) {
-			mem_free(repl->prog);
-			goto replace;
-		}
-	}
-
-	repl = mem_alloc(sizeof(struct protocol_program));
-	if (!repl) return;
-	add_to_list(*l, repl);
-	repl->system = s;
-
-replace:
-	repl->prog = mem_alloc(MAX_STR_LEN);
-	if (repl->prog) {
-		safe_strncpy(repl->prog, p, MAX_STR_LEN);
-	}
-}
-
-
 unsigned char *
-get_prog(struct list_head *l)
+get_prog(unsigned char *progid)
 {
-	struct protocol_program *repl;
+	/* TODO: Use get_opt_real() - we need to generalize it first. */
+	struct option *opt;
+	unsigned char *name = straconcat("protocol.user", ".", progid, ".",
+					 SYSTEM_STR, NULL);
 
-	foreach(repl, *l)
-		if (repl->system == SYSTEM_ID)
-			return repl->prog;
+	if (!name) return NULL;
 
-	update_prog(l, "", SYSTEM_ID);
+	/* FIXME: This doesn't work, we need to drop OPT_AUTOCREATE for tree
+	 * protocol.user.progid as well! Let's rewrite this, use some clone of
+	 * get_opt_rec() itself. --pasky */
 
-	foreach(repl, *l)
-		if (repl->system == SYSTEM_ID)
-			return repl->prog;
+	get_opt_rec(root_options, "protocol.user")->flags &= ~OPT_AUTOCREATE;
+	opt = get_opt_rec(root_options, name);
+	get_opt_rec(root_options, "protocol.user")->flags |= OPT_AUTOCREATE;
 
-	return NULL;
+	mem_free(name);
+	return (unsigned char *) opt->ptr;
 }

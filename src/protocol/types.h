@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.5 2002/06/17 08:00:16 pasky Exp $ */
+/* $Id: types.h,v 1.6 2002/06/17 15:16:54 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_TYPES_H
 #define EL__PROTOCOL_TYPES_H
@@ -21,24 +21,12 @@ struct assoc {
 	int system;
 };
 
-struct protocol_program {
-	struct protocol_program *next;
-	struct protocol_program *prev;
-	unsigned char *prog;
-	int system;
-};
-
 extern struct list_head assoc;
-
-extern struct list_head mailto_prog;
-extern struct list_head telnet_prog;
-extern struct list_head tn3270_prog;
 
 unsigned char *get_content_type(unsigned char *, unsigned char *);
 struct assoc *get_type_assoc(struct terminal *term, unsigned char *);
 void update_assoc(struct assoc *);
-void update_prog(struct list_head *, unsigned char *, int);
-unsigned char *get_prog(struct list_head *);
+unsigned char *get_prog(unsigned char *);
 void free_types();
 
 void menu_add_ct(struct terminal *, void *, void *);

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.50 2003/07/21 10:17:41 pasky Exp $ */
+/* $Id: charsets.c,v 1.51 2003/07/21 23:28:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -559,8 +559,6 @@ convert_string(struct conv_table *convert_table, unsigned char *chars, int chars
 	unsigned char *buffer;
 	int bufferpos = 0;
 	int charspos = 0;
-
-	/* FIXME: Code redundancy with put_chars_conv() in renderer.c. --Zas */
 
 	if (!convert_table) {
 		int i;

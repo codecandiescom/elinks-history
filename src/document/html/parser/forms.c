@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.2 2004/04/25 17:32:44 zas Exp $ */
+/* $Id: forms.c,v 1.3 2004/04/29 13:09:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,18 +445,19 @@ do_html_select(unsigned char *attr, unsigned char *html,
 	struct conv_table *ct = special_f(f, SP_TABLE, NULL);
 	struct form_control *fc;
 	struct string lbl = NULL_STRING;
-	unsigned char **val, **labels;
+	unsigned char **values = NULL;
+	unsigned char **labels;
 	unsigned char *t_name, *t_attr, *en;
 	int t_namelen;
 	int nnmi = 0;
-	int order, preselect, group;
+	int order = 0;
+	int preselect = -1;
+	int group = 0;
 	int i, max_width;
 
 	if (has_attr(attr, "multiple")) return 1;
 	find_form_for_input(attr);
 	html_focusable(attr);
-	val = NULL;
-	order = 0, group = 0, preselect = -1;
 	init_menu(&lnk_menu);
 
 se:
@@ -471,12 +472,12 @@ see:
 abort:
 		*end = html;
 		if (lbl.source) done_string(&lbl);
-		if (val) {
+		if (values) {
 			int j;
 
 			for (j = 0; j < order; j++)
-				mem_free_if(val[j]);
-			mem_free(val);
+				mem_free_if(values[j]);
+			mem_free(values);
 		}
 		destroy_menu(&lnk_menu);
 		*end = en;
@@ -504,40 +505,40 @@ abort:
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "/SELECT", 7)) {
-		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, values, order, nnmi);
 		goto end_parse;
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "/OPTION", 7)) {
-		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, values, order, nnmi);
 		goto see;
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "OPTION", 6)) {
-		unsigned char *v, *vx;
+		unsigned char *value, *label;
 
-		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, values, order, nnmi);
 
 		if (has_attr(t_attr, "disabled")) goto see;
 		if (preselect == -1 && has_attr(t_attr, "selected")) preselect = order;
-		v = get_attr_val(t_attr, "value");
+		value = get_attr_val(t_attr, "value");
 
-		if (!mem_align_alloc(&val, order, order + 1, unsigned char *, 0xFF))
+		if (!mem_align_alloc(&values, order, order + 1, unsigned char *, 0xFF))
 			goto abort;
 
-		val[order++] = v;
-		vx = get_attr_val(t_attr, "label");
-		if (vx) new_menu_item(&lnk_menu, vx, order - 1, 0);
-		if (!v || !vx) {
+		values[order++] = value;
+		label = get_attr_val(t_attr, "label");
+		if (label) new_menu_item(&lnk_menu, label, order - 1, 0);
+		if (!value || !label) {
 			init_string(&lbl);
-			nnmi = !!vx;
+			nnmi = !!label;
 		}
 		goto see;
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "OPTGROUP", 8)
 	    || !strlcasecmp(t_name, t_namelen, "/OPTGROUP", 9)) {
-		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, values, order, nnmi);
 
 		if (group) new_menu_item(&lnk_menu, NULL, -1, 0), group = 0;
 	}
@@ -576,10 +577,10 @@ end_parse:
 	fc->name = get_attr_val(attr, "name");
 	fc->type = FC_SELECT;
 	fc->default_state = preselect < 0 ? 0 : preselect;
-	fc->default_value = order ? stracpy(val[fc->default_state]) : stracpy("");
+	fc->default_value = order ? stracpy(values[fc->default_state]) : stracpy("");
 	fc->ro = has_attr(attr, "disabled") ? 2 : has_attr(attr, "readonly") ? 1 : 0;
 	fc->nvalues = order;
-	fc->values = val;
+	fc->values = values;
 	fc->menu = detach_menu(&lnk_menu);
 	fc->labels = labels;
 
@@ -626,7 +627,8 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	while (html < eof && (*html == '\n' || *html == '\r')) html++;
 	p = html;
 	while (p < eof && *p != '<') {
-		pp:
+
+pp:
 		p++;
 	}
 	if (p >= eof) {
@@ -653,8 +655,10 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		 * &#13; inside of textarea and we fail miserably upon that
 		 * one.  --pasky */
 		if (p[0] == '\r') {
-			if (p[1] == '\n' || (p > fc->default_value && p[-1] == '\n')) {
-				memcpy(p, p + 1, strlen(p)), p--;
+			if (p[1] == '\n'
+			    || (p > fc->default_value && p[-1] == '\n')) {
+				memcpy(p, p + 1, strlen(p));
+				p--;
 			} else {
 				p[0] = '\n';
 			}

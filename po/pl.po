@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.11.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-16 17:40+0100\n"
-"PO-Revision-Date: 2005-02-16 17:45+0100\n"
+"PO-Revision-Date: 2005-02-17 08:20+0100\n"
 "Last-Translator: Adam Golebiowski <adamg@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -242,7 +242,7 @@ msgstr "LEDy"
 
 #: src/bfu/leds.c:91
 msgid "LEDs (visual indicators) options."
-msgstr "Ustawienia dotycz±ce LEDów (wska¼ników)"
+msgstr "Ustawienia dotycz±ce LEDów (wska¼ników)."
 
 #: src/bfu/leds.c:95
 msgid ""
@@ -324,7 +324,7 @@ msgstr "Zak³adki"
 #
 #: src/bookmarks/bookmarks.c:50
 msgid "Bookmark options."
-msgstr "Ustawienia zak³adek"
+msgstr "Ustawienia zak³adek."
 
 #
 #: src/bookmarks/bookmarks.c:53 src/bookmarks/bookmarks.c:59
@@ -777,7 +777,7 @@ msgstr "Wypisanie sformatowanych wersji danych URL-i na standardowe wyj¶cie"
 
 #: src/config/cmdline.c:655
 msgid "Print formatted plain-text versions of given URLs to stdout."
-msgstr "Wypisanie sformatowanych wersji podanych URL-i na standardowe wyj¶cie"
+msgstr "Wypisanie sformatowanych wersji podanych URL-i na standardowe wyj¶cie."
 
 #: src/config/cmdline.c:657
 msgid "Codepage to use with -dump"
@@ -793,7 +793,7 @@ msgstr "Szeroko¶æ sformatowanego dokumentu z -dump"
 
 #: src/config/cmdline.c:663
 msgid "Width of the dump output."
-msgstr "Szeroko¶æ wyj¶cia dump"
+msgstr "Szeroko¶æ wyj¶cia dump."
 
 #: src/config/cmdline.c:665
 msgid "Evaluate configuration file directive"
@@ -1268,7 +1268,7 @@ msgstr "Niepoprawny skrót klawiszowy."
 
 #: src/config/dialogs.c:864
 msgid "Need to select a keymap."
-msgstr "Trzeba wybraæ mapowanie klawiatury"
+msgstr "Trzeba wybraæ mapowanie klawiatury."
 
 #: src/config/dialogs.c:896
 msgid ""
@@ -1867,7 +1867,7 @@ msgstr "System konfiguracyjny"
 
 #: src/config/options.inc:21
 msgid "Configuration handling options."
-msgstr "Ustawienia systemu konfiguracji"
+msgstr "Ustawienia systemu konfiguracji."
 
 #
 #: src/config/options.inc:23
@@ -2138,7 +2138,7 @@ msgstr "Wy¶wietlanie klawisza dostêpu w informacji o odno¶niku"
 
 #: src/config/options.inc:158
 msgid "Display access key in link info."
-msgstr "Czy wy¶wietlaæ klawisz dostêpu w informacji o odno¶niku?"
+msgstr "Czy wy¶wietlaæ klawisz dostêpu w informacji o odno¶niku."
 
 #: src/config/options.inc:160
 msgid "Accesskey priority"
@@ -2185,7 +2185,7 @@ msgstr "Potwierdzenie chêci wys³ania"
 
 #: src/config/options.inc:179
 msgid "Ask for confirmation when submitting a form."
-msgstr "Czy pytaæ o potwierdzenie przy wysy³aniu formularza?"
+msgstr "Czy pytaæ o potwierdzenie przy wysy³aniu formularza."
 
 #: src/config/options.inc:181
 msgid "Default form input size"
@@ -2436,7 +2436,7 @@ msgstr "Pod¶wietlanie katalogów"
 
 #: src/config/options.inc:295
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr "Czy pod¶wietlaæ odno¶niki do katalogów na FTP i lokalnie?"
+msgstr "Czy pod¶wietlaæ odno¶niki do katalogów na FTP i lokalnie."
 
 #: src/config/options.inc:297
 msgid "Number links"
@@ -2444,7 +2444,7 @@ msgstr "Numerowanie odno¶ników"
 
 #: src/config/options.inc:299
 msgid "Display numbers next to the links."
-msgstr "Czy wy¶wietlaæ liczby z prawej strony odno¶ników?"
+msgstr "Czy wy¶wietlaæ liczby z prawej strony odno¶ników."
 
 #: src/config/options.inc:301
 msgid "Handling of target=_blank"
@@ -2531,7 +2531,7 @@ msgstr "Przewijanie"
 #
 #: src/config/options.inc:346
 msgid "Scrolling options."
-msgstr "Ustawienia przewijania"
+msgstr "Ustawienia przewijania."
 
 #: src/config/options.inc:348
 msgid "Horizontal step"
@@ -2809,7 +2809,7 @@ msgstr "Sformatowane dokumenty"
 
 #: src/config/options.inc:474
 msgid "Format cache options."
-msgstr "Ustawienia formatu pamiêci podrêcznej"
+msgstr "Ustawienia formatu pamiêci podrêcznej."
 
 #
 #: src/config/options.inc:476
@@ -2928,7 +2928,7 @@ msgstr "Kolor odno¶nika bêd±cego w zak³adce"
 
 #: src/config/options.inc:544
 msgid "Default bookmarked link color."
-msgstr "Domy¶lny kolor odno¶nika bêd±cego w zak³adce"
+msgstr "Domy¶lny kolor odno¶nika bêd±cego w zak³adce."
 
 #: src/config/options.inc:546
 msgid "Directory color"
@@ -3107,7 +3107,7 @@ msgstr "Historia"
 
 #: src/config/options.inc:635
 msgid "History options."
-msgstr "Ustawienia dotycz±ce historii"
+msgstr "Ustawienia dotycz±ce historii."
 
 #
 #: src/config/options.inc:637
@@ -3116,7 +3116,7 @@ msgstr "Zapamiêtuj historiê powrotów"
 
 #: src/config/options.inc:639
 msgid "Keep unhistory (\"forward history\")."
-msgstr "Czy pamiêtaæ historiê powrotów?"
+msgstr "Czy pamiêtaæ historiê powrotów."
 
 #
 #: src/config/options.inc:642
@@ -3145,7 +3145,7 @@ msgstr "Wy¶wietlanie tabel"
 #
 #: src/config/options.inc:652
 msgid "Display tables."
-msgstr "Wy¶wietlaj tabele"
+msgstr "Wy¶wietlaj tabele."
 
 #
 #: src/config/options.inc:654
@@ -3316,7 +3316,7 @@ msgstr "Terminale"
 #
 #: src/config/options.inc:738
 msgid "Terminal options."
-msgstr "Ustawienia terminala"
+msgstr "Ustawienia terminala."
 
 #: src/config/options.inc:742
 msgid "Options specific to this terminal type (according to $TERM value)."
@@ -3424,7 +3424,7 @@ msgid ""
 "it will be visible in ELinks as well. Note that this option makes\n"
 "sense only when colors are enabled."
 msgstr ""
-"Czy powinni¶my nie ustawiaæ t³a na czarno?. To jest szczególnie u¿yteczne, "
+"Czy powinni¶my nie ustawiaæ t³a na czarno. To jest szczególnie u¿yteczne, "
 "gdy\n"
 "mamy terminal (zwykle w ¶rodowisku okienkowym) z obrazkiem w tle\n"
 "lub przezroczystym t³em - bêdzie to widoczne tak¿e w ELinksie.\n"
@@ -3517,7 +3517,7 @@ msgstr "Niewybrany klawisz skrótu"
 
 #: src/config/options.inc:867
 msgid "Main menu unselected hotkey colors."
-msgstr "Kolory niewybranych klawiszy skrótu g³ównego menu"
+msgstr "Kolory niewybranych klawiszy skrótu g³ównego menu."
 
 #
 #: src/config/options.inc:869 src/config/options.inc:898
@@ -4004,7 +4004,7 @@ msgstr "Wy¶wietlanie paska statusu"
 
 #: src/config/options.inc:1133
 msgid "Show status bar on the screen."
-msgstr "Pokazuje pasek statusu na ekranie"
+msgstr "Pokazuje pasek statusu na ekranie."
 
 #
 #: src/config/options.inc:1135
@@ -5166,7 +5166,7 @@ msgstr "Ustawienia ECMAScript."
 
 #: src/ecmascript/ecmascript.c:43
 msgid "Whether to run those scripts inside of documents."
-msgstr "Czy wykonywaæ skrypty zawarte w dokumentach?"
+msgstr "Czy wykonywaæ skrypty zawarte w dokumentach."
 
 #: src/ecmascript/ecmascript.c:45
 msgid "Script error reporting"
@@ -5174,7 +5174,7 @@ msgstr "Raportowanie b³êdów skryptu"
 
 #: src/ecmascript/ecmascript.c:47
 msgid "Open a message box when a script reports an error."
-msgstr "Czy otwieraæ okienko dialogowe z raportem o b³êdzie skryptu?"
+msgstr "Czy otwieraæ okienko dialogowe z raportem o b³êdzie skryptu."
 
 #: src/ecmascript/ecmascript.c:49
 msgid "Maximum execution time"
@@ -5728,7 +5728,7 @@ msgstr "Skojarzenia rozszerzeñ plików"
 
 #: src/mime/backend/default.c:81
 msgid "Extension <-> MIME type association."
-msgstr "Rozszerzenie <-> skojarzenie typu MIME"
+msgstr "Rozszerzenie <-> skojarzenie typu MIME."
 
 #: src/mime/backend/default.c:85
 msgid ""
@@ -5750,7 +5750,7 @@ msgstr "Mailcap"
 
 #: src/mime/backend/mailcap.c:92
 msgid "Options for mailcap support."
-msgstr "Ustawienia obs³ugi Mailcap"
+msgstr "Ustawienia obs³ugi Mailcap."
 
 #: src/mime/backend/mailcap.c:96
 msgid "Enable mailcap support."
@@ -5827,7 +5827,7 @@ msgstr "W³±cz obs³ugê mime.types."
 
 #: src/mime/backend/mimetypes.c:59
 msgid "The search path for mime.types files. Colon-separated list of files."
-msgstr "Odzielona dwukropkami lista ¶cie¿ek do plików mime.types"
+msgstr "Odzielona dwukropkami lista ¶cie¿ek do plików mime.types."
 
 #: src/mime/dialogs.c:66
 msgid "Delete extension"
@@ -6330,7 +6330,7 @@ msgstr "Wysy³anie pola nag³ówka Accept-Language"
 
 #: src/protocol/http/http.c:133
 msgid "Send Accept-Language header."
-msgstr "Wy¶lij pole nag³ówka Accept-Language"
+msgstr "Wy¶lij pole nag³ówka Accept-Language."
 
 #: src/protocol/http/http.c:135
 msgid "Use UI language as Accept-Language"

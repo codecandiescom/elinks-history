@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.35 2003/11/09 14:24:13 jonas Exp $ */
+/* $Id: widget.h,v 1.36 2003/11/10 00:32:36 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -63,6 +63,7 @@ struct widget {
 		} button;
 		struct {
 			enum format_align align;
+			int is_label;
 		} text;
 	} info;
 

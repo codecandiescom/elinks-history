@@ -1,4 +1,4 @@
-/* $Id: text.h,v 1.14 2003/11/09 15:07:06 pasky Exp $ */
+/* $Id: text.h,v 1.15 2003/11/10 00:32:36 jonas Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
@@ -8,12 +8,13 @@
 #include "terminal/terminal.h"
 #include "util/color.h"
 
-#define add_dlg_text(dlg, text_, align_)				\
+#define add_dlg_text(dlg, text_, align_, bottom_pad_)			\
 	do {								\
 		int n = (dlg)->widgets_size;				\
 		(dlg)->widgets[n].type = WIDGET_TEXT;			\
 		(dlg)->widgets[n].text = (text_);			\
 		(dlg)->widgets[n].info.text.align = (align_);		\
+		(dlg)->widgets[n].info.text.is_label = (bottom_pad_);	\
 		(dlg)->widgets_size++;					\
 	} while (0)
 

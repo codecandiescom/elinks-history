@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.82 2003/11/09 14:55:22 jonas Exp $ */
+/* $Id: msgbox.c,v 1.83 2003/11/10 00:32:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	dlg->layout.padding_top = 1;
 	dlg->udata2 = udata;
 
-	add_dlg_text(dlg, text, align);
+	add_dlg_text(dlg, text, align, 0);
 
 	va_start(ap, buttons);
 

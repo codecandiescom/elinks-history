@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.118 2003/11/10 00:15:28 jonas Exp $ */
+/* $Id: options.c,v 1.119 2003/11/10 00:32:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,9 +122,9 @@ terminal_options_save(struct dialog_data *dlg_data,
 }
 
 #ifdef USE_256_COLORS
-#define TERMOPT_WIDGETS_COUNT 16
+#define TERMOPT_WIDGETS_COUNT 18
 #else
-#define TERMOPT_WIDGETS_COUNT 15
+#define TERMOPT_WIDGETS_COUNT 17
 #endif
 
 void
@@ -159,11 +159,13 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh = (void (*)(void *)) terminal_options_ok;
 	dlg->refresh_data = termopt_hop;
 
+	add_dlg_text(dlg, _("Frame handling:", term), AL_LEFT, 1);
 	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, termopt_hop->type);
 	add_dlg_radio(dlg, _("VT 100 frames", term), 1,  TERM_VT100, termopt_hop->type);
 	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, termopt_hop->type);
 	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, termopt_hop->type);
 
+	add_dlg_text(dlg, _("Color mode:", term), AL_LEFT, 1);
 	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, termopt_hop->colors);
 	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, termopt_hop->colors);
 #ifdef USE_256_COLORS

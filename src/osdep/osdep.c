@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.123 2004/01/22 18:19:01 jonas Exp $ */
+/* $Id: osdep.c,v 1.124 2004/02/10 18:45:47 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -528,7 +528,11 @@ get_output_handle(void)
 int
 get_ctl_handle()
 {
-	return 0;
+	static int fd = -1;
+
+	if (isatty(0)) return 0;
+	if (fd < 0) fd = open("/dev/tty", O_RDONLY);
+	return fd;
 }
 
 #if defined(BEOS)
@@ -542,7 +546,11 @@ get_ctl_handle()
 int
 get_input_handle(void)
 {
-	return 0;
+	static int fd = -1;
+
+	if (isatty(0)) return 0;
+	if (fd < 0) fd = open("/dev/tty", O_RDONLY);
+	return fd;
 }
 
 #endif /* defined(HAVE_BEGINTHREAD) && defined(HAVE_READ_KBD) */

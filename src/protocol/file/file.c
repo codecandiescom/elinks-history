@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.143 2004/01/24 22:45:25 jonas Exp $ */
+/* $Id: file.c,v 1.144 2004/02/10 18:45:46 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -508,10 +508,12 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 {
 	/* + 1 is there because of bug in Linux. Read returns -EACCES when
 	 * reading 0 bytes to invalid address */
-	unsigned char *fragment = mem_alloc(readsize + 1);
+	unsigned char *fragment;
 	int fragmentlen = 0;
 	int readlen;
 
+	if (!readsize) readsize = 4096;
+	fragment = mem_alloc(readsize + 1);
 	if (!fragment)
 		return S_OUT_OF_MEM;
 

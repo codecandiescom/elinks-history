@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.39 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: view.c,v 1.40 2002/05/10 13:26:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1244,7 +1244,16 @@ void encode_controls(struct list_head *l, unsigned char **data, int *len,
 		if (lst) add_to_str(data, len, "&"); else lst = 1;
 		encode_url_string(sv->name, data, len);
 		add_to_str(data, len, "=");
-		p2 = convert_string(convert_table, p, strlen(p));
+
+		/* Convert back to original encoding (see html_form_control()
+		 * for the original recoding). */
+		if (sv->type == FC_TEXT || sv->type == FC_PASSWORD ||
+		    sv->type == FC_TEXTAREA) {
+			p2 = convert_string(convert_table, p, strlen(p));
+		} else {
+			p2 = stracpy(p);
+		}
+
 		encode_url_string(p2, data, len);
 		mem_free(p2);
 		if (sv->type == FC_TEXTAREA) mem_free(p);
@@ -1294,7 +1303,17 @@ void encode_multipart(struct session *ses, struct list_head *l, unsigned char **
 			memset(&o, 0, sizeof(o));
 			o.plain = 1;
 			d_opt = &o;
-			p = convert_string(convert_table, sv->value, strlen(sv->value));
+
+			/* Convert back to original encoding (see
+			 * html_form_control() for the original recoding). */
+			if (sv->type == FC_TEXT || sv->type == FC_PASSWORD ||
+			    sv->type == FC_TEXTAREA) {
+				p = convert_string(convert_table, sv->value,
+						   strlen(sv->value));
+			} else {
+				p = stracpy(sv->value);
+			}
+
 			add_to_str(data, len, p);
 			mem_free(p);
 		} else {

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.21 2002/05/08 13:55:03 pasky Exp $ */
+/* $Id: renderer.c,v 1.22 2002/05/10 13:26:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1134,9 +1134,12 @@ void html_form_control(struct part *part, struct form_control *fc)
 
 	fc->g_ctrl_num = g_ctrl_num++;
 
-	/* if (fc->type == FC_TEXT || fc->type == FC_PASSWORD || fc->type == FC_TEXTAREA) */
-	{
+	/* We don't want to recode hidden fields. */
+	if (fc->type == FC_TEXT || fc->type == FC_PASSWORD ||
+	    fc->type == FC_TEXTAREA) {
+#if 0
 		int i;
+#endif
 		unsigned char *dv = convert_string(convert_table,
 						   fc->default_value,
 						   strlen(fc->default_value));
@@ -1146,6 +1149,7 @@ void html_form_control(struct part *part, struct form_control *fc)
 			fc->default_value = dv;
 		}
 
+#if 0
 		for (i = 0; i < fc->nvalues; i++) {
 			dv = convert_string(convert_table, fc->values[i], strlen(fc->values[i]));
 			if (dv) {
@@ -1153,6 +1157,7 @@ void html_form_control(struct part *part, struct form_control *fc)
 				fc->values[i] = dv;
 			}
 		}
+#endif
 	}
 
 	add_to_list(part->data->forms, fc);

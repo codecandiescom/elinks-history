@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.58 2004/02/01 15:11:53 zas Exp $ */
+/* $Id: socket.c,v 1.59 2004/02/01 15:56:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,11 +258,13 @@ sock_error:
 }
 #endif
 
+#ifdef IPV6
 static inline int
 check_if_local_address6(struct sockaddr_in6 *addr)
 {
 	return IN6_IS_ADDR_LOOPBACK(&(addr->sin6_addr));
 }
+#endif
 
 static inline int
 check_if_local_address4(struct sockaddr_in *addr)

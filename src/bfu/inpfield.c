@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.70 2003/10/28 09:29:02 zas Exp $ */
+/* $Id: inpfield.c,v 1.71 2003/10/28 09:45:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,14 +301,12 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
 	if (ev->y != widget_data->y || ev->x < widget_data->x
-	    || ev->x >= widget_data->x + widget_data->w)
+	    || ev->x >= widget_data->x + widget_data->w
+	    ||  !widget_has_history(widget_data))
 		return EVENT_NOT_PROCESSED;
 
 	switch (ev->b & BM_BUTT) {
 		case B_WHEEL_UP:
-			if (!widget_has_history(widget_data))
-				return EVENT_PROCESSED;
-
 			if ((ev->b & BM_ACT) == B_DOWN &&
 			    (void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
@@ -318,9 +316,6 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			return EVENT_PROCESSED;
 
 		case B_WHEEL_DOWN:
-			if (!widget_has_history(widget_data))
-				return EVENT_PROCESSED;
-
 			if ((ev->b & BM_ACT) == B_DOWN &&
 			    (void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
@@ -352,7 +347,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	switch (kbd_action(KM_EDIT, ev, NULL)) {
 		case ACT_UP:
 			if (!widget_has_history(widget_data))
-				return EVENT_PROCESSED;
+				return EVENT_NOT_PROCESSED;
 
 			if ((void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
@@ -363,7 +358,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 		case ACT_DOWN:
 			if (!widget_has_history(widget_data))
-				return EVENT_PROCESSED;
+				return EVENT_NOT_PROCESSED;
 
 			if ((void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
@@ -449,14 +444,14 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 		case ACT_AUTO_COMPLETE:
 			if (!widget_has_history(widget_data))
-				return EVENT_PROCESSED;
+				return EVENT_NOT_PROCESSED;
 
 			do_tab_compl(term, &widget_data->info.field.history, win);
 			goto dsp_f;
 
 		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
 			if (!widget_has_history(widget_data))
-				return EVENT_PROCESSED;
+				return EVENT_NOT_PROCESSED;
 
 			do_tab_compl_unambiguous(term, &widget_data->info.field.history, win);
 			goto dsp_f;

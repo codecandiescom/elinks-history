@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.23 2002/06/30 21:11:44 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.24 2002/07/01 14:53:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,53 +132,56 @@ strtonum(struct strtonum *table, char *s)
 	return -1;
 }
 
-static int
-parse_keymap(unsigned char *s)
-{
-	struct strtonum table[] = {
-		{ "main", KM_MAIN },
-		{ "edit", KM_EDIT },
-		{ "menu", KM_MENU },
-		{ NULL, 0 }
-	};
 
-	return strtonum(table, s);
+static struct strtonum keymap_table[] = {
+	{ "main", KM_MAIN },
+	{ "edit", KM_EDIT },
+	{ "menu", KM_MENU },
+	{ NULL, 0 }
+};
+
+static int
+parse_keymap(unsigned char *keymap)
+{
+
+	return strtonum(keymap_table, keymap);
 }
 
-long
-parse_key(unsigned char *s)
-{
-	struct strtonum table[] = {
-		{ "Enter", KBD_ENTER },
-		{ "Backspace", KBD_BS },
-		{ "Tab", KBD_TAB },
-		{ "Escape", KBD_ESC },
-		{ "Left", KBD_LEFT },
-		{ "Right", KBD_RIGHT },
-		{ "Up", KBD_UP },
-		{ "Down", KBD_DOWN },
-		{ "Insert", KBD_INS },
-		{ "Delete", KBD_DEL },
-		{ "Home", KBD_HOME },
-		{ "End", KBD_END },
-		{ "PageUp", KBD_PAGE_UP },
-		{ "PageDown", KBD_PAGE_DOWN },
-		{ "F1", KBD_F1 },
-		{ "F2", KBD_F2 },
-		{ "F3", KBD_F3 },
-		{ "F4", KBD_F4 },
-		{ "F5", KBD_F5 },
-		{ "F6", KBD_F6 },
-		{ "F7", KBD_F7 },
-		{ "F8", KBD_F8 },
-		{ "F9", KBD_F9 },
-		{ "F10", KBD_F10 },
-		{ "F11", KBD_F11 },
-		{ "F12", KBD_F12 },
-		{ NULL, 0 }
-	};
 
-	return (strlen(s) == 1) ? *s : strtonum(table, s);
+static struct strtonum key_table[] = {
+	{ "Enter", KBD_ENTER },
+	{ "Backspace", KBD_BS },
+	{ "Tab", KBD_TAB },
+	{ "Escape", KBD_ESC },
+	{ "Left", KBD_LEFT },
+	{ "Right", KBD_RIGHT },
+	{ "Up", KBD_UP },
+	{ "Down", KBD_DOWN },
+	{ "Insert", KBD_INS },
+	{ "Delete", KBD_DEL },
+	{ "Home", KBD_HOME },
+	{ "End", KBD_END },
+	{ "PageUp", KBD_PAGE_UP },
+	{ "PageDown", KBD_PAGE_DOWN },
+	{ "F1", KBD_F1 },
+	{ "F2", KBD_F2 },
+	{ "F3", KBD_F3 },
+	{ "F4", KBD_F4 },
+	{ "F5", KBD_F5 },
+	{ "F6", KBD_F6 },
+	{ "F7", KBD_F7 },
+	{ "F8", KBD_F8 },
+	{ "F9", KBD_F9 },
+	{ "F10", KBD_F10 },
+	{ "F11", KBD_F11 },
+	{ "F12", KBD_F12 },
+	{ NULL, 0 }
+};
+
+long
+parse_key(unsigned char *key)
+{
+	return (strlen(key) == 1) ? *key : strtonum(key_table, key);
 }
 
 static int
@@ -200,77 +203,79 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 	return (*key < 0) ? -1 : 0;
 }
 
-static int
-parse_act(unsigned char *s)
-{
-	/* Please keep this table in alphabetical order, and in sync with
-	 * the ACT_* constants in kbdbind.h.  */
-	struct strtonum table[] = {
-		{ "none", ACT_NONE },
-		{ "add-bookmark", ACT_ADD_BOOKMARK },
-		{ "auto-complete", ACT_AUTO_COMPLETE },
-		{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS },
-		{ "back", ACT_BACK },
-		{ "backspace", ACT_BACKSPACE },
-		{ "bookmark-manager", ACT_BOOKMARK_MANAGER },
-		{ "cookies-load", ACT_COOKIES_LOAD },
-		{ "copy-clipboard", ACT_COPY_CLIPBOARD },
-		{ "cut-clipboard", ACT_CUT_CLIPBOARD },
-		{ "delete", ACT_DELETE },
-		{ "document-info", ACT_DOCUMENT_INFO },
-		{ "down", ACT_DOWN },
-		{ "download", ACT_DOWNLOAD },
-		{ "download-image", ACT_DOWNLOAD_IMAGE },
-		{ "edit", ACT_EDIT },
-		{ "end", ACT_END },
-		{ "enter", ACT_ENTER },
-		{ "enter-reload", ACT_ENTER_RELOAD },
-		{ "file-menu", ACT_FILE_MENU },
-		{ "find-next", ACT_FIND_NEXT },
-		{ "find-next-back", ACT_FIND_NEXT_BACK },
-		{ "goto-url", ACT_GOTO_URL },
-		{ "goto-url-current", ACT_GOTO_URL_CURRENT },
-		{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK },
-		{ "header-info", ACT_HEADER_INFO },
-		{ "history-manager", ACT_HISTORY_MANAGER },
-		{ "home", ACT_HOME },
-		{ "kill-to-bol", ACT_KILL_TO_BOL },
-		{ "kill-to-eol", ACT_KILL_TO_EOL },
-		{ "left", ACT_LEFT },
-		{ "link-menu", ACT_LINK_MENU },
-		{ "jump-to-link", ACT_JUMP_TO_LINK },
-		{ "follow-link", ACT_FOLLOW_LINK },
-		{ "lua-console", ACT_LUA_CONSOLE },
-		{ " *lua-function*", ACT_LUA_FUNCTION }, /* internal use only */
-		{ "menu", ACT_MENU },
-		{ "next-frame", ACT_NEXT_FRAME },
-		{ "open-new-window", ACT_OPEN_NEW_WINDOW },
-		{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW },
-		{ "page-down", ACT_PAGE_DOWN },
-		{ "page-up", ACT_PAGE_UP },
-		{ "paste-clipboard", ACT_PASTE_CLIPBOARD },
-		{ "previous-frame", ACT_PREVIOUS_FRAME },
-		{ "quit", ACT_QUIT },
-		{ "really-quit", ACT_REALLY_QUIT },
-		{ "reload", ACT_RELOAD },
-		{ "right", ACT_RIGHT },
-		{ "scroll-down", ACT_SCROLL_DOWN },
-		{ "scroll-left", ACT_SCROLL_LEFT },
-		{ "scroll-right", ACT_SCROLL_RIGHT },
-		{ "scroll-up", ACT_SCROLL_UP },
-		{ "search", ACT_SEARCH },
-		{ "search-back", ACT_SEARCH_BACK },
-		{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES },
-		{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES },
-		{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN },
-		{ "unback", ACT_UNBACK },
-		{ "up", ACT_UP },
-		{ "view-image", ACT_VIEW_IMAGE },
-		{ "zoom-frame", ACT_ZOOM_FRAME },
-		{ NULL, 0 }
-	};
 
-	return strtonum(table, s);
+/* Please keep this table in alphabetical order, and in sync with
+ * the ACT_* constants in kbdbind.h.  */
+static struct strtonum action_table[] = {
+	{ "none", ACT_NONE },
+	{ "add-bookmark", ACT_ADD_BOOKMARK },
+	{ "auto-complete", ACT_AUTO_COMPLETE },
+	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS },
+	{ "back", ACT_BACK },
+	{ "backspace", ACT_BACKSPACE },
+	{ "bookmark-manager", ACT_BOOKMARK_MANAGER },
+	{ "cookies-load", ACT_COOKIES_LOAD },
+	{ "copy-clipboard", ACT_COPY_CLIPBOARD },
+	{ "cut-clipboard", ACT_CUT_CLIPBOARD },
+	{ "delete", ACT_DELETE },
+	{ "document-info", ACT_DOCUMENT_INFO },
+	{ "down", ACT_DOWN },
+	{ "download", ACT_DOWNLOAD },
+	{ "download-image", ACT_DOWNLOAD_IMAGE },
+	{ "edit", ACT_EDIT },
+	{ "end", ACT_END },
+	{ "enter", ACT_ENTER },
+	{ "enter-reload", ACT_ENTER_RELOAD },
+	{ "file-menu", ACT_FILE_MENU },
+	{ "find-next", ACT_FIND_NEXT },
+	{ "find-next-back", ACT_FIND_NEXT_BACK },
+	{ "goto-url", ACT_GOTO_URL },
+	{ "goto-url-current", ACT_GOTO_URL_CURRENT },
+	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK },
+	{ "header-info", ACT_HEADER_INFO },
+	{ "history-manager", ACT_HISTORY_MANAGER },
+	{ "home", ACT_HOME },
+	{ "kill-to-bol", ACT_KILL_TO_BOL },
+	{ "kill-to-eol", ACT_KILL_TO_EOL },
+	{ "left", ACT_LEFT },
+	{ "link-menu", ACT_LINK_MENU },
+	{ "jump-to-link", ACT_JUMP_TO_LINK },
+	{ "follow-link", ACT_FOLLOW_LINK },
+	{ "lua-console", ACT_LUA_CONSOLE },
+	{ " *lua-function*", ACT_LUA_FUNCTION }, /* internal use only */
+	{ "menu", ACT_MENU },
+	{ "next-frame", ACT_NEXT_FRAME },
+	{ "open-new-window", ACT_OPEN_NEW_WINDOW },
+	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW },
+	{ "page-down", ACT_PAGE_DOWN },
+	{ "page-up", ACT_PAGE_UP },
+	{ "paste-clipboard", ACT_PASTE_CLIPBOARD },
+	{ "previous-frame", ACT_PREVIOUS_FRAME },
+	{ "quit", ACT_QUIT },
+	{ "really-quit", ACT_REALLY_QUIT },
+	{ "reload", ACT_RELOAD },
+	{ "right", ACT_RIGHT },
+	{ "scroll-down", ACT_SCROLL_DOWN },
+	{ "scroll-left", ACT_SCROLL_LEFT },
+	{ "scroll-right", ACT_SCROLL_RIGHT },
+	{ "scroll-up", ACT_SCROLL_UP },
+	{ "search", ACT_SEARCH },
+	{ "search-back", ACT_SEARCH_BACK },
+	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES },
+	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES },
+	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN },
+	{ "unback", ACT_UNBACK },
+	{ "up", ACT_UP },
+	{ "view-image", ACT_VIEW_IMAGE },
+	{ "zoom-frame", ACT_ZOOM_FRAME },
+	{ NULL, 0 }
+};
+
+static int
+parse_action(unsigned char *action)
+{
+
+	return strtonum(action_table, action);
 }
 
 
@@ -290,7 +295,7 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 
 	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
 
-	action_= parse_act(action);
+	action_= parse_action(action);
 	if (action_ < 0) return 3;
 
 	add_keybinding(keymap_, action_, key_, meta_, LUA_NOREF);
@@ -308,17 +313,17 @@ bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 {
 	unsigned char *err = NULL;
 	long x, y;
-	int act;
+	int action;
 	int kmap = parse_keymap(ckmap);
 
 	if (kmap < 0)
 		err = "Unrecognised keymap";
 	else if (parse_keystroke(ckey, &x, &y) < 0)
 		err = "Error parsing keystroke";
-	else if ((act = parse_act(" *lua-function*")) < 0)
+	else if ((action = parse_action(" *lua-function*")) < 0)
 		err = "Unrecognised action (internal error)";
 	else
-		add_keybinding(kmap, act, x, y, func_ref);
+		add_keybinding(kmap, action, x, y, func_ref);
 
 	return err;
 }

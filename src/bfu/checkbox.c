@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.77 2004/11/17 21:53:52 zas Exp $ */
+/* $Id: checkbox.c,v 1.78 2004/11/17 22:03:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ init_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 }
 
 static t_handler_event_status
-mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
+mouse_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	       struct term_event *ev)
 {
 	struct terminal *term = dlg_data->win->term;

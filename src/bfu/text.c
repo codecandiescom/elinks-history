@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.108 2004/11/17 21:59:46 zas Exp $ */
+/* $Id: text.c,v 1.109 2004/11/17 22:03:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,7 +366,7 @@ kbd_text(struct dialog_data *dlg_data, struct widget_data *widget_data,
 }
 
 static t_handler_event_status
-mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
+mouse_text(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	   struct term_event *ev)
 {
 #ifdef CONFIG_MOUSE

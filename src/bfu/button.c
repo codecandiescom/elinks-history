@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.64 2004/11/17 21:53:52 zas Exp $ */
+/* $Id: button.c,v 1.65 2004/11/17 22:03:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,8 @@ display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, in
 }
 
 static t_handler_event_status
-mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, struct term_event *ev)
+mouse_button(struct dialog_data *dlg_data, struct widget_data *widget_data,
+	     struct term_event *ev)
 {
 	struct terminal *term = dlg_data->win->term;
 

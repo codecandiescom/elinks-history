@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.168 2004/11/17 21:59:46 zas Exp $ */
+/* $Id: dialog.c,v 1.169 2004/11/17 22:03:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,7 +219,7 @@ dialog_ev_mouse(struct dialog_data *dlg_data, struct term_event *ev)
 		struct widget_data *wdata = &dlg_data->widgets_data[i];
 
 		if (wdata->widget->ops->mouse
-		    && wdata->widget->ops->mouse(wdata, dlg_data, ev)
+		    && wdata->widget->ops->mouse(dlg_data, wdata, ev)
 		       == EVENT_PROCESSED)
 			break;
 	}

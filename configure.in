@@ -160,9 +160,9 @@ AC_ARG_WITH(gpm, [  --without-gpm           disable gpm (mouse) support],
 AC_MSG_CHECKING([for gpm support])
 
 if test -z "$disable_gpm"; then
-	AC_CHECK_HEADERS(gpm.h, cf_result=yes, cf_result=no)
+	AC_SEARCH_LIBS(Gpm_Open, gpm, cf_result=yes, cf_result=no)
 	if test "$cf_result" = yes; then
-		AC_CHECK_LIB(gpm, Gpm_Open, cf_result=yes, cf_result=no)
+		AC_CHECK_HEADERS(gpm.h, cf_result=yes, cf_result=no)
 	fi
 else
 	AC_MSG_RESULT(no)
@@ -176,7 +176,7 @@ AC_ARG_WITH(zlib, [  --without-zlib          disable zlib support],
 AC_MSG_CHECKING([for zlib support])
 
 if test -z "$disable_zlib"; then
-	AC_CHECK_LIB(z, gzdopen, cf_result=yes, cf_result=no)
+	AC_SEARCH_LIBS(gzdopen, z, cf_result=yes, cf_result=no)
 	if test "$cf_result" = yes; then
 		AC_CHECK_HEADERS(zlib.h, cf_result=yes, cf_result=no)
 	fi

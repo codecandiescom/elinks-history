@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.4 2002/07/05 20:42:13 pasky Exp $ */
+/* $Id: listbox.c,v 1.5 2002/07/08 20:16:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ display_listbox(struct widget_data *box_item_data, struct dialog_data *dlg,
 	n = 0;
 
 	fill_area(term, box_item_data->x, box_item_data->y, box_item_data->l,
-		  box_item_data->item->gid, COLOR_DIALOG_FIELD);
+		  box_item_data->item->gid, COLOR_MENU);
 
 	foreach (citem, box->items) {
 		int len; /* Length of the current text field. */
@@ -121,8 +121,8 @@ display_listbox(struct widget_data *box_item_data, struct dialog_data *dlg,
 			print_text(term, box_item_data->x,
 				   box_item_data->y + n - box->box_top,
 				   len, citem->text,
-				   n == box->sel ? COLOR_DIALOG_BUTTON_SELECTED
-						 : COLOR_DIALOG_FIELD_TEXT);
+				   n == box->sel ? COLOR_MENU_SELECTED
+						 : COLOR_MENU);
 		}
 		n++;
 	}

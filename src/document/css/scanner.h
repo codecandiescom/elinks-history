@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.38 2004/01/21 01:20:01 jonas Exp $ */
+/* $Id: scanner.h,v 1.39 2004/01/21 01:46:12 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -111,8 +111,7 @@ struct css_scanner {
 	int tokens;
 
 #ifdef CSS_SCANNER_DEBUG
-	/* Info about the caller. Entry point and position in the source tree */
-	unsigned char *function;
+	/* Debug info about the caller. */
 	unsigned char *file;
 	int line;
 #endif
@@ -167,9 +166,9 @@ skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type);
 #define skip_css_tokens(scanner, token)	skip_css_tokens_(scanner, token)
 #else
 struct css_token *get_css_token_debug(struct css_scanner *scanner);
-#define get_css_token(s) ((s)->file = __FILE__, (s)->line = __LINE__, (s)->function = "get_css_token", get_css_token_debug(s))
-#define get_next_css_token(s) ((s)->file = __FILE__, (s)->line = __LINE__, (s)->function = "get_next_css_token", get_next_css_token_(s))
-#define skip_css_tokens(s, t) ((s)->file = __FILE__, (s)->line = __LINE__, (s)->function = "skip_css_tokens", skip_css_tokens_(s, t))
+#define get_css_token(s)	((s)->file = __FILE__, (s)->line = __LINE__, get_css_token_debug(s))
+#define get_next_css_token(s)	((s)->file = __FILE__, (s)->line = __LINE__, get_next_css_token_(s))
+#define skip_css_tokens(s, t)	((s)->file = __FILE__, (s)->line = __LINE__, skip_css_tokens_(s, t))
 #endif /* CSS_SCANNER_DEBUG */
 
 #endif

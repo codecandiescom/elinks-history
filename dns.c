@@ -78,6 +78,9 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 		struct sockaddr_in6 *addr = (struct sockaddr_in6 *) &((struct sockaddr_storage *) *addrs)[i];
 		
 		memcpy(addr, ai_cur->ai_addr, ai_cur->ai_addrlen);
+#if 0
+		/* Seems the following is not needed and breaks things for
+		 * people w/o ipv6-enabled kernel. */
 		if (addr->sin6_family == AF_INET) {
 			/* We have to map IPv4 on IPv6 by ourselves :/ */
 			struct sockaddr_in addr4 = *((struct sockaddr_in *) addr);
@@ -89,6 +92,7 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 			memcpy(a + 12, &addr4.sin_addr, 4);
 			addr->sin6_family = AF_INET6;
 		}
+#endif
 	}
 #else
 	for (i = 0; hostent->h_addr_list[i] != NULL; i++) {

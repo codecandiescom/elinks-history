@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.39 2003/12/19 16:24:07 pasky Exp $ */
+/* $Id: options.inc,v 1.40 2003/12/19 16:27:16 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -768,40 +768,6 @@ struct option_info config_options_info[] = {
 		"%d in the string means path (everything after the port)\n"
 		"%s in the string means subject (?subject=<this>)\n"
 		"%u in the string means the whole URL")),
-
-
-	/* Start of mailcap compatibility aliases:
-	 * Added: 2003-05-07, 0.5pre0.CVS.
-	 * Estimated due time: ? */
-	INIT_OPT_TREE("protocol", N_("Mailcap"),
-		"mailcap", 0,
-		N_("Options for mailcap support. (Deprecated. Please use\n"
-		"mime.mailcap instead)")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"enable", 0, "mime.mailcap.enable",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the mime.mailcap.enable option instead.")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"path", 0, "mime.mailcap.path",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the mime.mailcap.path option instead.")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"ask", 0, "mime.mailcap.ask",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the mime.mailcap.ask option instead.")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"description", 0, "mime.mailcap.description",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use mime.mailcap.description option instead.")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"prioritize", 0, "mime.mailcap.prioritize",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the mime.mailcap.prioritize option instead.")),
 
 
 	INIT_OPT_STRING("protocol", N_("No-proxy domains"),

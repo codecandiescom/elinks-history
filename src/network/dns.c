@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.18 2002/09/17 14:28:07 zas Exp $ */
+/* $Id: dns.c,v 1.19 2002/12/02 14:36:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,7 +198,8 @@ void end_real_lookup(void *data)
 		goto done;
 
 	*query->addr = mem_alloc((*query->addrno + 1) * sizeof(struct sockaddr_storage));
-
+	if (!*query->addr) goto done;
+	
 	for (i = 0; i < *query->addrno; i++) {
 		int done = 0;
 
@@ -401,9 +402,11 @@ int find_host(unsigned char *name, struct sockaddr **addr, int *addrno,
 			goto timeout;
 
 		*addr = mem_alloc(sizeof(struct sockaddr_storage) * dnsentry->addrno);
-		memcpy(*addr, dnsentry->addr, sizeof(struct sockaddr_storage) * dnsentry->addrno);
-		*addrno = dnsentry->addrno;
-		fn(data, 0);
+		if (*addr) { 
+			memcpy(*addr, dnsentry->addr, sizeof(struct sockaddr_storage) * dnsentry->addrno);
+			*addrno = dnsentry->addrno;
+			fn(data, 0);
+		}
 		return 0;
 	}
 
@@ -430,7 +433,7 @@ void shrink_dns_cache(int whole)
 			d = d->prev;
 			del_from_list(e);
 
-			mem_free(e->addr);
+			if (e->addr) mem_free(e->addr);
 			mem_free(e);
 		}
 	}

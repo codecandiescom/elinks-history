@@ -70,97 +70,19 @@ dnl      AC_MSG_RESULT($nls_cv_force_use_gnu_gettext)
       nls_cv_force_use_gnu_gettext=yes
       nls_cv_use_gnu_gettext=yes
 
-      nls_cv_use_gnu_gettext="$nls_cv_force_use_gnu_gettext"
-      if test "$nls_cv_force_use_gnu_gettext" != "yes"; then
-        dnl User does not insist on using GNU NLS library.  Figure out what
-        dnl to use.  If GNU gettext is available we use this.  Else we have
-        dnl to fall back to GNU NLS library.
-	CATOBJEXT=NONE
-
-        dnl Add a version number to the cache macros.
-        define(gt_cv_func_gnugettext_libc, [gt_cv_func_gnugettext]ifelse([$2], need-ngettext, 2, 1)[_libc])
-        define(gt_cv_func_gnugettext_libintl, [gt_cv_func_gnugettext]ifelse([$2], need-ngettext, 2, 1)[_libintl])
-
-	AC_CHECK_HEADER(libintl.h,
-	  [AC_CACHE_CHECK([for GNU gettext in libc], gt_cv_func_gnugettext_libc,
-	    [AC_TRY_LINK([#include <libintl.h>
-extern int _nl_msg_cat_cntr;],
-	       [bindtextdomain ("", "");
-return (int) gettext ("")]ifelse([$2], need-ngettext, [ + (int) ngettext ("", "", 0)], [])[ + _nl_msg_cat_cntr],
-	       gt_cv_func_gnugettext_libc=yes,
-	       gt_cv_func_gnugettext_libc=no)])
-
-	   if test "$gt_cv_func_gnugettext_libc" != "yes"; then
-	     AC_CACHE_CHECK([for GNU gettext in libintl],
-	       gt_cv_func_gnugettext_libintl,
-	       [gt_save_LIBS="$LIBS"
-		LIBS="$LIBS -lintl $LIBICONV"
-		AC_TRY_LINK([#include <libintl.h>
-extern int _nl_msg_cat_cntr;],
-		  [bindtextdomain ("", "");
-return (int) gettext ("")]ifelse([$2], need-ngettext, [ + (int) ngettext ("", "", 0)], [])[ + _nl_msg_cat_cntr],
-		  gt_cv_func_gnugettext_libintl=yes,
-		  gt_cv_func_gnugettext_libintl=no)
-		LIBS="$gt_save_LIBS"])
-	   fi
-
-	   dnl If an already present or preinstalled GNU gettext() is found,
-	   dnl use it.  But if this macro is used in GNU gettext, and GNU
-	   dnl gettext is already preinstalled in libintl, we update this
-	   dnl libintl.  (Cf. the install rule in intl/Makefile.in.)
-	   if test "$gt_cv_func_gnugettext_libc" = "yes" \
-	      || { test "$gt_cv_func_gnugettext_libintl" = "yes" \
-		   && test "$PACKAGE" != gettext; }; then
-	     AC_DEFINE(HAVE_GETTEXT, 1,
-               [Define if the GNU gettext() function is already present or preinstalled.])
-
-	     if test "$gt_cv_func_gnugettext_libintl" = "yes"; then
-	       dnl If iconv() is in a separate libiconv library, then anyone
-	       dnl linking with libintl{.a,.so} also needs to link with
-	       dnl libiconv.
-	       INTLLIBS="-lintl $LIBICONV"
-	     fi
-
-	     gt_save_LIBS="$LIBS"
-	     LIBS="$LIBS $INTLLIBS"
-	     AC_CHECK_FUNCS(dcgettext)
-	     LIBS="$gt_save_LIBS"
-
-	     dnl Search for GNU msgfmt in the PATH.
-	     AM_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
-	       [$ac_dir/$ac_word --statistics /dev/null >/dev/null 2>&1], :)
-	     AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
-
-	     dnl Search for GNU xgettext in the PATH.
-	     AM_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
-	       [$ac_dir/$ac_word --omit-header /dev/null >/dev/null 2>&1], :)
-
-	     CATOBJEXT=.gmo
-	   fi
-	])
-
-        if test "$CATOBJEXT" = "NONE"; then
-	  dnl GNU gettext is not found in the C library.
-	  dnl Fall back on GNU gettext library.
-	  nls_cv_use_gnu_gettext=yes
-        fi
-      fi
-
-      if test "$nls_cv_use_gnu_gettext" = "yes"; then
-        dnl Mark actions used to generate GNU NLS library.
-        INTLOBJS="\$(GETTOBJS)"
-        AM_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
-	  [$ac_dir/$ac_word --statistics /dev/null >/dev/null 2>&1], :)
-        AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
-        AM_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
-	  [$ac_dir/$ac_word --omit-header /dev/null >/dev/null 2>&1], :)
-        AC_SUBST(MSGFMT)
-	BUILD_INCLUDED_LIBINTL=yes
-	USE_INCLUDED_LIBINTL=yes
-        CATOBJEXT=.gmo
-	INTLLIBS="ifelse([$3],[],\$(top_builddir)/src/intl/gettext,[$3])/libintl.ifelse([$1], use-libtool, [l], [])a $LIBICONV"
-	LIBS=`echo " $LIBS " | sed -e 's/ -lintl / /' -e 's/^ //' -e 's/ $//'`
-      fi
+      dnl Mark actions used to generate GNU NLS library.
+      INTLOBJS="\$(GETTOBJS)"
+      AM_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
+	[$ac_dir/$ac_word --statistics /dev/null >/dev/null 2>&1], :)
+      AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
+      AM_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
+	[$ac_dir/$ac_word --omit-header /dev/null >/dev/null 2>&1], :)
+      AC_SUBST(MSGFMT)
+      BUILD_INCLUDED_LIBINTL=yes
+      USE_INCLUDED_LIBINTL=yes
+      CATOBJEXT=.gmo
+      INTLLIBS="ifelse([$3],[],\$(top_builddir)/src/intl/gettext,[$3])/libintl.ifelse([$1], use-libtool, [l], [])a $LIBICONV"
+      LIBS=`echo " $LIBS " | sed -e 's/ -lintl / /' -e 's/^ //' -e 's/ $//'`
 
       dnl This could go away some day; the PATH_PROG_WITH_TEST already does it.
       dnl Test whether we really found GNU msgfmt.

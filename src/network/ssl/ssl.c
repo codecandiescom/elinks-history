@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.36 2003/10/27 23:38:26 jonas Exp $ */
+/* $Id: ssl.c,v 1.37 2003/10/27 23:43:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,19 +105,14 @@ const static int cert_type_priority[16] = { GNUTLS_CRT_X509, GNUTLS_CRT_OPENPGP,
 static void
 init_gnutls(struct module *module)
 {
-	int ret;
-
-	ret = gnutls_global_init();
-	if (ret < 0)
+	if (gnutls_global_init() < 0)
 		internal("GNUTLS init failed: %s", gnutls_strerror(ret));
 
-	ret = gnutls_anon_allocate_client_sc(&anon_cred);
-	if (ret < 0)
+	if (gnutls_anon_allocate_client_sc(&anon_cred) < 0)
 		internal("GNUTLS anon credentials alloc failed: %s",
 			 gnutls_strerror(ret));
 
-	ret = gnutls_certificate_allocate_sc(&xcred);
-	if (ret < 0)
+	if (gnutls_certificate_allocate_sc(&xcred) < 0)
 		internal("GNUTLS X509 credentials alloc failed: %s",
 			 gnutls_strerror(ret));
 

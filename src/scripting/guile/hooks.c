@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.3 2003/09/22 21:56:04 jonas Exp $ */
+/* $Id: hooks.c,v 1.4 2003/09/23 00:47:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,10 +168,8 @@ script_hook_quit(va_list ap)
 	return 0;
 }
 
-static struct {
-	unsigned char *name;
-	int (*callback)(va_list ap);
-} hooks[] = {
+
+struct scripting_hook guile_scripting_hooks[] = {
 	{ "goto-url", script_hook_goto_url },
 	{ "follow-url", script_hook_follow_url },
 	{ "pre-format-html", script_hook_pre_format_html },
@@ -179,33 +177,5 @@ static struct {
 	{ "quit", script_hook_quit },
 	{ NULL, NULL }
 };
-
-void
-register_guile_hooks(void)
-{
-	int i;
-
-	for (i = 0; hooks[i].name; i++) {
-		int id;
-
-		id = register_event(hooks[i].name);
-		if (id >= 0)
-			register_event_hook(id, hooks[i].callback, 0);
-	}
-}
-
-void
-unregister_guile_hooks(void)
-{
-	int i;
-
-	for (i = 0; hooks[i].name; i++) {
-		int id;
-
-		id = get_event_id(hooks[i].name);
-		if (id >= 0)
-			unregister_event_hook(id, hooks[i].callback);
-	}
-}
 
 #endif /* HAVE_GUILE */

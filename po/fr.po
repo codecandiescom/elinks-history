@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-19 09:26+0100\n"
+"POT-Creation-Date: 2003-12-19 15:28+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -14,11 +14,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
 
-#: src/bfu/hierbox.c:302
+#: src/bfu/hierbox.c:304
 msgid "Close"
 msgstr "Fermer"
 
-#: src/bfu/hierbox.c:399 src/cache/dialogs.c:145 src/config/dialogs.c:357
+#: src/bfu/hierbox.c:404 src/cache/dialogs.c:145 src/config/dialogs.c:357
 #: src/cookies/dialogs.c:131 src/dialogs/document.c:44
 #: src/dialogs/document.c:232 src/dialogs/download.c:408
 #: src/formhist/dialogs.c:170 src/globhist/dialogs.c:182
@@ -26,7 +26,7 @@ msgid "Info"
 msgstr "Info"
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
-#: src/bfu/hierbox.c:402 src/bfu/hierbox.c:476 src/bfu/inpfield.c:47
+#: src/bfu/hierbox.c:407 src/bfu/hierbox.c:482 src/bfu/inpfield.c:47
 #: src/bfu/inpfield.c:56 src/bfu/inpfield.c:76 src/bfu/msgbox.c:185
 #: src/bookmarks/dialogs.c:191 src/config/dialogs.c:45
 #: src/config/dialogs.c:203 src/config/dialogs.c:262 src/config/dialogs.c:292
@@ -54,64 +54,64 @@ msgstr "Info"
 msgid "OK"
 msgstr "OK"
 
-#: src/bfu/hierbox.c:444
+#: src/bfu/hierbox.c:450
 #, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Désolé, mais l'item \"%s\" ne peut être supprimé."
 
-#: src/bfu/hierbox.c:445
+#: src/bfu/hierbox.c:451
 #, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Désolé, mais l'item \"%s\" est actuellement utilisé ailleurs."
 
-#: src/bfu/hierbox.c:448
+#: src/bfu/hierbox.c:454
 #, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Désolé, mais le dossier \"%s\" ne peut être supprimé."
 
-#: src/bfu/hierbox.c:449
+#: src/bfu/hierbox.c:455
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Désolé, mais le dossier \"%s\" est actuellement utilisé ailleurs."
 
-#: src/bfu/hierbox.c:473
+#: src/bfu/hierbox.c:479
 msgid "Delete error"
 msgstr "Erreur de suppression"
 
-#: src/bfu/hierbox.c:564
+#: src/bfu/hierbox.c:570
 msgid "Delete marked items"
 msgstr "Supprimer les items sélectionnés"
 
-#: src/bfu/hierbox.c:565
+#: src/bfu/hierbox.c:571
 msgid "Delete marked items?"
 msgstr "Supprimer les items sélectionnés?"
 
-#: src/bfu/hierbox.c:567 src/bfu/hierbox.c:588 src/bfu/hierbox.c:602
-#: src/bfu/hierbox.c:661 src/dialogs/menu.c:179 src/dialogs/mime.c:86
+#: src/bfu/hierbox.c:573 src/bfu/hierbox.c:594 src/bfu/hierbox.c:608
+#: src/bfu/hierbox.c:668 src/dialogs/menu.c:179 src/dialogs/mime.c:86
 #: src/formhist/formhist.c:492 src/sched/task.c:169 src/terminal/tab.c:190
 msgid "Yes"
 msgstr "Oui"
 
-#: src/bfu/hierbox.c:568 src/bfu/hierbox.c:589 src/bfu/hierbox.c:603
-#: src/bfu/hierbox.c:662 src/dialogs/menu.c:180 src/dialogs/mime.c:87
+#: src/bfu/hierbox.c:574 src/bfu/hierbox.c:595 src/bfu/hierbox.c:609
+#: src/bfu/hierbox.c:669 src/dialogs/menu.c:180 src/dialogs/mime.c:87
 #: src/formhist/formhist.c:493 src/sched/task.c:170 src/terminal/tab.c:191
 msgid "No"
 msgstr "Non"
 
-#: src/bfu/hierbox.c:584
+#: src/bfu/hierbox.c:590
 msgid "Delete folder"
 msgstr "Supprimer un dossier"
 
-#: src/bfu/hierbox.c:585
+#: src/bfu/hierbox.c:591
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Supprimer le dossier \"%s\" et son contenu?"
 
-#: src/bfu/hierbox.c:597
+#: src/bfu/hierbox.c:603
 msgid "Delete item"
 msgstr "Supprimer un item"
 
-#: src/bfu/hierbox.c:598
+#: src/bfu/hierbox.c:604
 #, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -122,11 +122,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/bfu/hierbox.c:658
+#: src/bfu/hierbox.c:665
 msgid "Clear all items"
 msgstr "Effacer tous les items"
 
-#: src/bfu/hierbox.c:659
+#: src/bfu/hierbox.c:666
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items?"
 
@@ -562,9 +562,9 @@ msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
-"Cette option ne peut être modifiée. Cela signifie qu'il s'agit d'une option "
-"spéciale (comme un dossier), essayez de presser la touche ESPACE pour voir "
-"son contenu."
+"Cette option ne peut être modifiée.\n"
+"Il s'agit d'une option spéciale (comme un dossier),\n"
+"essayez de presser la touche ESPACE pour voir son contenu."
 
 #: src/config/dialogs.c:324 src/config/dialogs.c:338
 msgid "Add option"
@@ -759,15 +759,15 @@ msgstr "Oublier les informations d'authentification"
 
 #: src/config/kbdbind.c:405
 msgid "Open \"Go to URL\" dialog box"
-msgstr "Ouvrir le dialogue \"Aller à l'URL\""
+msgstr "Ouvrir le dialogue \"Atteindre l'URL\""
 
 #: src/config/kbdbind.c:406
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr "Ouvrir le dialogue \"Aller à l'URL\" avec l'URL courante"
+msgstr "Ouvrir le dialogue \"Atteindre l'URL\" avec l'URL courante"
 
 #: src/config/kbdbind.c:407
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr "Ouvrir le dialogue \"Aller à l'URL\" avec l'URL du lien courant"
+msgstr "Ouvrir le dialogue \"Atteindre l'URL\" avec l'URL du lien courant"
 
 #: src/config/kbdbind.c:408
 msgid "Go to the homepage"
@@ -807,7 +807,7 @@ msgstr "Ouvrir le menu contextuel du lien"
 
 #: src/config/kbdbind.c:417
 msgid "Jump to link"
-msgstr "Aller au lien"
+msgstr "Sauter au lien"
 
 #: src/config/kbdbind.c:419
 msgid "Open a Lua console"
@@ -1642,9 +1642,9 @@ msgid ""
 msgstr ""
 "Comment gérer les erreurs produites par l'absence de correspondance lors "
 "d'une préfrappe:\n"
-"0 signifie ne rien faire\n"
-"1 signifie produire un bip sur le terminal\n"
-"2 signifie afficher une boîte de dialogue"
+"0 ne rien faire\n"
+"1 produire un bip sur le terminal\n"
+"2 afficher une boîte de dialogue"
 
 #: src/config/options.inc:244
 msgid "Use tabindex"
@@ -1995,7 +1995,9 @@ msgstr "Options de téléchargement."
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.default_type option instead."
-msgstr "Option obsolète. Utilisez mime.default_type."
+msgstr ""
+"Option obsolète.\n"
+"Utilisez mime.default_type."
 
 #: src/config/options.inc:450
 msgid "Default download directory"
@@ -2052,7 +2054,7 @@ msgstr ""
 
 #: src/config/options.inc:475
 msgid "Dump output"
-msgstr "Sortie"
+msgstr "Sortie (dump)"
 
 #: src/config/options.inc:477
 msgid "Dump output options."
@@ -2630,19 +2632,25 @@ msgstr ""
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.enable option instead."
-msgstr "Option obsolète. Utilisez mime.mailcap.enable."
+msgstr ""
+"Option obsolète.\n"
+"Utilisez mime.mailcap.enable."
 
 #: src/config/options.inc:788
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.path option instead."
-msgstr "Option obsolète. Utilisez mime.mailcap.path."
+msgstr ""
+"Option obsolète.\n"
+"Utilisez mime.mailcap.path."
 
 #: src/config/options.inc:793
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.ask option instead."
-msgstr "Option obsolète. Utilisez mime.mailcap.ask."
+msgstr ""
+"Option obsolète.\n"
+"Utilisez mime.mailcap.ask."
 
 #: src/config/options.inc:796 src/mime/backend/mailcap.c:112
 msgid "Type query string"
@@ -2650,13 +2658,17 @@ msgstr "Chaîne de demande de type"
 
 #: src/config/options.inc:798
 msgid "This option is deprecated and will be removed very soon.\n"
-msgstr "Option obsolète. Ne pas utiliser.\n"
+msgstr ""
+"Option obsolète.\n"
+"Ne pas utiliser.\n"
 
 #: src/config/options.inc:802
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
-msgstr "Option obsolète. Utilisez mime.mailcap.prioritize."
+msgstr ""
+"Option obsolète.\n"
+"Utilisez mime.mailcap.prioritize."
 
 #: src/config/options.inc:806
 msgid "No-proxy domains"
@@ -3288,14 +3300,14 @@ msgstr "Configuration de l'apparence et du fonctionnement des dialogues."
 
 #: src/config/options.inc:1791
 msgid "Minimal height of listbox widget"
-msgstr "Hauteur minimale des boites liste"
+msgstr "Hauteur minimale des boîtes liste"
 
 #: src/config/options.inc:1793
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
-"Hauteur minimale des boites liste (utilisée par exemple pour les\n"
+"Hauteur minimale des boîtes liste (utilisée par exemple pour les\n"
 "signets ou l'historique global)."
 
 #: src/config/options.inc:1796
@@ -3414,13 +3426,15 @@ msgid ""
 "be extracted from the environment dynamically."
 msgstr ""
 "Langue de l'interface utilisateur. System signifie que la langue sera\n"
-"extraite de l'environnement"
+"dynamiquement extraite de l'environnement."
 
 #: src/config/options.inc:1864
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the ui.dialog.shadows option instead."
-msgstr "Option obsolète. Utilisez ui.dialog.shadows."
+msgstr ""
+"Option obsolète.\n"
+"Utilisez ui.dialog.shadows."
 
 #: src/config/options.inc:1867
 msgid "Display status bar"
@@ -3440,12 +3454,13 @@ msgstr "Montrer la barre de titre."
 
 #: src/config/options.inc:1875
 msgid "Display goto dialog on startup"
-msgstr "Afficher le dialogue 'Aller à' au démarrage"
+msgstr "Afficher le dialogue \"Atteindre l'URL\" au démarrage"
 
 #: src/config/options.inc:1877
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr ""
-"Afficher le dialogue 'Aller à' si aucune page de démarrage n'est définie."
+"Afficher le dialogue \"Atteindre l'URL\" si aucune page de démarrage n'est "
+"définie."
 
 #: src/config/options.inc:1880
 msgid "Set window title"
@@ -3465,7 +3480,9 @@ msgstr ""
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the config.saving_style option instead."
-msgstr "Option obsolète. Utilisez config.saving_style."
+msgstr ""
+"Option obsolète.\n"
+"Utilisez config.saving_style."
 
 #: src/config/options.inc:1895
 msgid "Use secure file saving"
@@ -3803,7 +3820,7 @@ msgstr "Cookies"
 
 #: src/cookies/cookies.c:93
 msgid "Cookies options."
-msgstr "Options des cookies"
+msgstr "Options des cookies."
 
 #: src/cookies/cookies.c:95
 msgid "Accept policy"
@@ -3817,9 +3834,9 @@ msgid ""
 "2 is accept all cookies"
 msgstr ""
 "Politique d'acceptation pour les cookies:\n"
-"0 Accepter aucun cookie\n"
-"1 Demander confirmation avant d'accepter un cookie\n"
-"2 Accepter tous les cookies"
+"0 refuser tous les cookies\n"
+"1 demander confirmation avant d'accepter un cookie\n"
+"2 accepter tous les cookies"
 
 #: src/cookies/cookies.c:103
 msgid "Maximum age"
@@ -3834,10 +3851,10 @@ msgid ""
 "1+ is use cookie's expiration date, but limit age to the given number of days"
 msgstr ""
 "Age maximal pour les cookies (en jours)\n"
-"-1  Utiliser si possible la date d'expiration du cookie.\n"
-" 0  Forcer l'expiration à la fin de la session courante, ignorant la date "
+"-1  utiliser si possible la date d'expiration du cookie.\n"
+" 0  forcer l'expiration à la fin de la session courante, ignorant la date "
 "d'expiration du cookie.\n"
-" 1+ Utiliser si possible la date d'expiration du cookie, mais limiter l'age "
+" 1+ utiliser si possible la date d'expiration du cookie, mais limiter l'age "
 "à ce nombre de jours."
 
 #: src/cookies/cookies.c:110
@@ -3861,7 +3878,7 @@ msgstr "Sauvegarde"
 
 #: src/cookies/cookies.c:118
 msgid "Load/save cookies from/to disk?"
-msgstr "Charger/sauvegarder les cookies sur disque ?"
+msgstr "Charger/sauver les cookies sur disque ?"
 
 #: src/cookies/cookies.c:120
 msgid "Resaving"
@@ -5038,10 +5055,11 @@ msgid ""
 "URI abbreviations, or smart ones, making it possible to pass\n"
 "arguments to them like search engine keywords."
 msgstr ""
-"Règles de ré-écriture des URIs entrées dans le dialog 'Aller à'.\n"
+"Règles de ré-écriture des URIs entrées dans le dialogue \"Atteindre l'URL"
+"\".\n"
 "Cela rend possible la définitition d'un ensemble de préfixes qui\n"
 "seront évaluer si une chaîne correspondante est entrée dans le\n"
-"dialog 'Aller à'.\n"
+"dialogue \"Atteindre l'URL\".\n"
 "Les préfixes peuvent être simples, c'est-à-dire qu'ils fonctionnent\n"
 "comme des abbrèviations d'URIs, ou plus intelligents, avec possibilité\n"
 "de passer des arguments, comme des mots clés pour moteur de recherche."
@@ -5320,7 +5338,7 @@ msgstr "HTTP 100 (???)"
 
 #: src/sched/error.c:58
 msgid "No content"
-msgstr "Pas de contenu"
+msgstr "Aucun contenu"
 
 #: src/sched/error.c:60
 msgid "Unknown file type"
@@ -5382,8 +5400,8 @@ msgid ""
 msgstr ""
 "Bienvenue dans ELinks !\n"
 "\n"
-"Pressez ESC pour accèder au menu. La documentation est accessible par le "
-"menu Aide."
+"Pressez ESC pour accèder au menu.\n"
+"La documentation est accessible par le menu Aide."
 
 #: src/sched/session.c:580 src/sched/session.c:600 src/sched/task.c:166
 msgid "Warning"
@@ -5400,8 +5418,8 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 "L'option protocol.http.user_agent contient une chaîne vide - c'était la "
-"valeur qui, dans le passé, était remplacé par la chaîne d'identification de "
-"client par défaut d'ELinks (User-Agent) string. Toutefois, maintenant cela "
+"valeur qui, dans le passé, était remplacée par la chaîne d'identification de "
+"client par défaut d'ELinks (User-Agent string). Toutefois, maintenant cela "
 "signifie qu'AUCUN entête User-Agent ne doit être envoyé - si c'est vraiment "
 "ce que vous désirez, utilisez la valeur \" \", sinon effacer la ligne "
 "concernée dans le fichier de configuration, ainsi la configuration par "
@@ -5453,7 +5471,7 @@ msgstr "Voulez-vous poster les données de formulaire à l'URL %s ?"
 #: src/sched/task.c:160
 #, c-format
 msgid "Do you want to repost form data to URL %s?"
-msgstr "Voulez-vous poster à nouveau les données de formulaire à l'URL %s ?"
+msgstr "Voulez-vous re-poster les données de formulaire à l'URL %s ?"
 
 #: src/scripting/lua/core.c:472
 msgid "User dialog"

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.185 2003/11/16 14:34:32 zas Exp $ */
+/* $Id: menu.c,v 1.186 2003/11/17 17:58:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "bfu/menu.h"
 #include "bfu/msgbox.h"
 #include "bookmarks/dialogs.h"
+#include "cache/dialogs.h"
 #include "config/conf.h"
 #include "config/dialogs.h"
 #include "config/options.h"
@@ -327,6 +328,7 @@ static struct menu_item file_menu12[] = {
 #ifdef BOOKMARKS
 	INIT_MENU_ITEM(N_("Bookmark~s"), "s", menu_bookmark_manager, NULL, 0),
 #endif
+	INIT_MENU_ITEM(N_("~Cache"), "", menu_cache_manager, NULL, 0),
 };
 
 static struct menu_item file_menu21[] = {

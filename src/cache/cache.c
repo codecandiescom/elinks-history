@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.94 2003/11/16 03:19:46 jonas Exp $ */
+/* $Id: cache.c,v 1.95 2003/11/17 17:58:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,9 @@
 
 #include "elinks.h"
 
+#include "bfu/listbox.h"
 #include "cache/cache.h"
+#include "cache/dialogs.h"
 #include "config/options.h"
 #include "main.h"
 #include "protocol/uri.h"
@@ -19,7 +21,11 @@
 #include "util/string.h"
 #include "util/types.h"
 
+/* The list of cache entries */
 static INIT_LIST_HEAD(cache);
+INIT_LIST_HEAD(cache_entry_box_items);
+INIT_LIST_HEAD(cache_entry_boxes);
+
 static long cache_size;
 static int id_tag_counter = 0;
 
@@ -137,6 +143,19 @@ get_cache_entry(unsigned char *url)
 	cache_entry_nolock(ce); /* Debugging purpose. */
 
 	add_to_list(cache, ce);
+
+	ce->box_item = mem_calloc(1, sizeof(struct listbox_item));
+	if (!ce->box_item) return ce;
+	init_list(ce->box_item->child);
+	ce->box_item->visible = 1;
+
+	ce->box_item->text = struri(ce->uri);
+	ce->box_item->box = &cache_entry_boxes;
+	ce->box_item->udata = (void *) ce;
+
+	add_to_list(cache_entry_box_items, ce->box_item);
+
+	update_all_cache_dialogs();
 
 	return ce;
 }
@@ -453,6 +472,11 @@ delete_cache_entry(struct cache_entry *ce)
 
 	delete_entry_content(ce);
 	del_from_list(ce);
+
+	if (ce->box_item) {
+		del_from_list(ce->box_item);
+		mem_free(ce->box_item);
+	}
 
 	if (get_cache_uri(ce)) mem_free(get_cache_uri(ce));
 	if (ce->head) mem_free(ce->head);

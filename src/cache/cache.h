@@ -1,7 +1,10 @@
-/* $Id: cache.h,v 1.56 2003/11/16 03:19:46 jonas Exp $ */
+/* $Id: cache.h,v 1.57 2003/11/17 17:58:57 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
+
+/* #include "bfu/listbox.h" */
+struct listbox_item;
 
 #include "protocol/uri.h"
 #include "util/lists.h"
@@ -23,6 +26,10 @@ enum cache_mode {
 
 struct cache_entry {
 	LIST_HEAD(struct cache_entry);
+
+	/* This is indeed maintained by cache.c, not dialogs.c; much easier
+	 * and simpler. */
+	struct listbox_item *box_item;
 
 	struct list_head frag;
 
@@ -54,6 +61,12 @@ struct cache_entry {
 
 	enum cache_mode cache_mode;
 };
+
+/* Cache entries lists */
+
+extern struct list_head cache_entry_box_items; /* struct listbox_item */
+extern struct list_head cache_entry_boxes; /* struct listbox_data */
+
 
 #if 0
 #define DEBUG_CACHE_ENTRIES_LOCKS

@@ -407,6 +407,8 @@ func(int a, int b)
   switch(), for()...
   Same thing apply for all iterators and tests (ie. foreach, foreachback).
 
+- Use assert() and assertm() where applicable. It will prevent hidden bugs.
+
 - If you see code in ELinks that doesn't follow these rules, fix it or tell
   us about it.
 
@@ -471,4 +473,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.9 2003/06/08 10:40:09 zas Exp $
+$Id: hacking.txt,v 1.10 2003/06/17 14:36:23 zas Exp $

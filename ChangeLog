@@ -1,3 +1,177 @@
+Sun Oct 17 21:36:25 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Fold a nested if statement with its container.  
+
+Sun Oct 17 21:34:56 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Fold two redundant return statements.  
+
+Sun Oct 17 21:33:27 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In try_form_action, reverse the outer if block and its implied else
+	block.  
+
+Sun Oct 17 21:31:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Revert; I wanted to go in a different direction...  
+
+Sun Oct 17 21:29:06 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In try_form_action, initialise status to FRAME_EVENT_IGNORED and
+	return status at the end of the routine instead of returning
+	FRAME_EVENT_IGNORED.  
+
+Sun Oct 17 21:25:56 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Factor the form-action code out from frame_ev to the new
+	try_form_action.  
+
+Sun Oct 17 21:05:34 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	In field_op, leave insert mode when submitting a form field.  This
+	eliminates an assertion failure and, more importantly, behaves as I
+	think that it should.  
+
+Sun Oct 17 20:45:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Rename frame_ev_kbd_number to try_prefix_key.  
+
+Sun Oct 17 20:44:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Move the check whether the key is a digit from the caller of
+	frame_ev_kbd_number to frame_ev_kbd_number.  
+
+Sun Oct 17 20:40:34 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Remove a superfluous assertion and fold two checks whether
+	|ses->kbdprefix.mark| in try_mark_key.  
+
+Sun Oct 17 20:38:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Swap an if block and its implicit else block to reduce indentation.  
+
+Sun Oct 17 20:34:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Remove a useless comment.  
+
+Sun Oct 17 20:33:17 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Move the #ifdef CONFIG_MARKS within try_mark_key to enclose the
+	routine, and enclose the call from frame_ev_kbd to try_mark_key
+	similarly.  
+
+Sun Oct 17 20:31:29 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Factor the mark code in frame_ev_kbd out to the new try_mark_key.  
+
+Sun Oct 17 20:21:14 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Unwrap a line.  
+
+Sun Oct 17 20:20:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: link.c, link.h, view.c:
+
+	Change the return type of try_document_key from int to enum
+	frame_event_status for uniformity.  
+
+Sun Oct 17 20:03:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: link.c, view.c:
+
+	Reset |ses->kbdprefix.repeat_count| in try_document_key rather than
+	in its callers.  
+
+Sun Oct 17 17:17:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, uri.c:
+
+	Set the free_syntax flag for unknown protocols and ditch the @known
+	variable in parse_uri(). It is a relic from back when we had
+	PROTOCOL_INVALID and the procotol backend accessors didn't work for
+	them.  
+
+Sun Oct 17 16:41:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix the 'too many slashed after protocol' trimming. For hostless
+	URIs like file:// URIs normalize_uri() should do the trimming so
+	only trim if the protocol needs a slash after the host.  
+
+Sun Oct 17 16:21:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix false assertion failures introduced in
+	src/viewer/text/view.c:1.618. Triggered when pasting stuff into
+	textareas so now only assert if the event was handled by field_op()
+	in frame_ev().  
+
+Sun Oct 17 15:38:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Add support for trimming off too many slashed after the protocol
+	name. Spotted at dictionary.com where the 'Thesaurus' and 'Web'
+	links at the top redirects to 'http:///...' leading to a 'Bad URL
+	syntax' error.  
+
+Sun Oct 17 15:32:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Cleanup and remove unnecessary goto usage.  
+
+Sun Oct 17 00:41:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Oops fix compile error.  
+
+Sat Oct 16 23:12:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Add bug 533 near the comment added in last patch.  
+
+Sat Oct 16 23:09:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Disable the error message about 'script ... lost in too full cache.'
+	and leave a big comment.  
+
 Sat Oct 16 20:20:37 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/tab.c:

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.21 2003/07/26 00:39:50 jonas Exp $ */
+/* $Id: screen.c,v 1.22 2003/07/26 01:10:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,33 +145,45 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
 	}
 
 	if (A != *attrib) {
+		unsigned char code[11];
+		int length;
+
 		*attrib = A;
-		add_bytes_to_string(screen, "\033[0", 3);
+
+		code[0] = '\033';
+		code[1] = '[';
+		code[2] = '0';
 
 		if (opt_cache->colors) {
-			unsigned char m[3];
+			code[3] = ';';
+			code[4] = '3';
+			code[5] = (*attrib & 7) + '0';
 
-			m[0] = ';';
-			m[1] = '3';
-			m[2] = (*attrib & 7) + '0';
-			add_bytes_to_string(screen, m, 3);
-
-			m[1] = '4';
-			m[2] = (*attrib >> 3 & 7) + '0';
-
-			if (!opt_cache->trans || m[2] != '0') {
-				add_bytes_to_string(screen, m, 3);
+			code[8] = (*attrib >> 3 & 7) + '0';
+			if (!opt_cache->trans || code[8] != '0') {
+				code[6] = ';';
+				code[7] = '4';
+				length = 9;
+			} else {
+				length = 6;
 			}
 
 		} else if (getcompcode(*attrib & 7) < getcompcode(*attrib >> 3 & 7)) {
-			add_bytes_to_string(screen, ";7", 2);
+			code[3] = ';';
+			code[4] = '7';
+			length = 5;
+		} else {
+			length = 3;
 		}
 
 		if (*attrib & 0100) {
-			add_bytes_to_string(screen, ";1", 2);
+			code[length++] = ';';
+			code[length++] = '1';
 		}
 
-		add_char_to_string(screen, 'm');
+		code[length++] = 'm';
+
+		add_bytes_to_string(screen, code, length);
 	}
 
 	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {

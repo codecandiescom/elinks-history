@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.264 2003/09/10 19:15:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.265 2003/09/10 19:23:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,10 +91,12 @@ void put_chars(struct part *, unsigned char *, int);
 #define LINES_GRANULARITY	0x7F
 #define LINE_GRANULARITY	0x0F
 #define LINK_GRANULARITY	0x7F
+#define SPACES_GRANULARITY	0x7F
 
 #define ALIGN_LINES(x, o, n) mem_align_alloc(x, o, n, sizeof(struct line), LINES_GRANULARITY)
 #define ALIGN_LINE(x, o, n)  mem_align_alloc(x, o, n, sizeof(struct screen_char), LINE_GRANULARITY)
 #define ALIGN_LINK(x, o, n)  mem_align_alloc(x, o, n, sizeof(struct link), LINK_GRANULARITY)
+#define ALIGN_SPACES(x, o, n)  mem_align_alloc(x, o, n, sizeof(unsigned char), SPACES_GRANULARITY)
 
 static int
 realloc_lines(struct document *document, int y)
@@ -161,24 +163,13 @@ expand_line(struct part *part, int y, int x)
 }
 
 static inline int
-realloc_spaces(struct part *p, int l)
+realloc_spaces(struct part *part, int length)
 {
-	unsigned char *c;
+	if (!ALIGN_SPACES(&part->spaces, part->spaces_len, length + 1))
+		return -1;
 
-	c = mem_realloc(p->spaces, l + 1);
-	if (!c) return -1;
-	memset(c + p->spaces_len, 0, l - p->spaces_len + 1);
+	part->spaces_len = length + 1;
 
-	p->spaces_len = l + 1;
-	p->spaces = c;
-
-	return 0;
-}
-
-static inline int
-xpand_spaces(struct part *p, int l)
-{
-	if (l >= p->spaces_len) return realloc_spaces(p, l);
 	return 0;
 }
 
@@ -345,7 +336,7 @@ set_hline(struct part *part, unsigned char *chars, int charslen)
 	assert(part);
 	if_assert_failed return;
 
-	if (xpand_spaces(part, x + charslen - 1))
+	if (realloc_spaces(part, x + charslen - 1))
 		return;
 
 	if (part->document) {

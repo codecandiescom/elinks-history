@@ -34,9 +34,6 @@ top/bottom of screen.
 
 	About dialog is containing garbage content during a transfer.
 
-	When pressed left mouse button on menu and released, menu is closed
-again.
-
-$Id: BUGS,v 1.19 2002/03/22 15:31:25 pasky Exp $
+$Id: BUGS,v 1.20 2002/03/22 18:05:05 pasky Exp $
 
 vim: textwidth=80

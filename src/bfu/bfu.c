@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.9 2002/03/21 18:35:14 pasky Exp $ */
+/* $Id: bfu.c,v 1.10 2002/03/22 18:05:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -576,11 +576,10 @@ void mainmenu_func(struct window *win, struct event *ev, int fwd)
 			break;
 
 		case EV_MOUSE:
-			if ((ev->b & BM_ACT) != B_DOWN) break;
-
-			if (ev->y) {
+			if ((ev->b & BM_ACT) == B_DOWN && ev->y) {
 				delete_window_ev(win, ev);
-			} else {
+
+			} else if (!ev->y) {
 				int p = 2;
 				int i;
 

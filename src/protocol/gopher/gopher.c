@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.2 2004/08/18 17:30:29 jonas Exp $ */
+/* $Id: gopher.c,v 1.3 2004/08/18 17:37:52 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -506,7 +506,7 @@ read_gopher_directory_data(struct connection *conn, struct read_buffer *rb)
 			"<pre>",
 			empty_string_or_(where), empty_string_or_(where));
 
-		mem_free(where);
+		mem_free_if(where);
 	}
 
 	while ((end = get_gopher_line_end(rb->data, rb->len))) {
@@ -548,9 +548,10 @@ init_gopher_cache_entry(struct connection *conn)
 
 	conn->cached = cached;
 
-	assert(gopher && gopher->entity);
-
-	if (!cached->content_type && gopher->entity->content_type) {
+	if (!cached->content_type
+	    && gopher
+	    && gopher->entity
+	    && gopher->entity->content_type) {
 		cached->content_type = stracpy(gopher->entity->content_type);
 		if (!cached->content_type) return NULL;
 	}
@@ -583,13 +584,17 @@ init_gopher_index_cache_entry(struct connection *conn)
 		"<p>Please enter search keywords.</p>\n",
 		empty_string_or_(where), empty_string_or_(where));
 
+	mem_free_if(where);
+
 	/* FIXME: I think this needs a form or something */
 
 	add_fragment(conn->cached, conn->from, buffer.source, buffer.length);
 	conn->from += buffer.length;
 	done_string(&buffer);
 
-	return S_OK;
+	conn->cached->content_type = stracpy("text/html");
+
+	return conn->cached->content_type ? S_OK : S_OUT_OF_MEM;
 }
 
 

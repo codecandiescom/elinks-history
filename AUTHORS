@@ -101,6 +101,7 @@ David D. Kilzer <ddkilzer@lubricants-oil.com>
 
 David Mediavilla Ezquibela <davidme.forum@bigfoot.com>
 	Spanish translation
+	Esperanto hacking
 	Example config file with all links-0.96 keybindings
 
 David Weinehall <tao@acc.umu.se>
@@ -410,4 +411,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.105 2002/12/10 22:52:15 pasky Exp $
+$Id: AUTHORS,v 1.106 2002/12/17 21:27:20 pasky Exp $

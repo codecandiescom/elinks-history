@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.68 2002/12/11 21:54:01 pasky Exp $ */
+/* $Id: conf.c,v 1.69 2002/12/11 22:02:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,7 +452,9 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 	if (!option_types[option->type].write)
 		return;
 
-	if (touching && !(option->flags & OPT_TOUCHED))
+	/* XXX: OPT_LANGUAGE shouldn't have any bussiness here, but we're just
+	 * weird in that area. */
+	if (touching && !(option->flags & OPT_TOUCHED) && option->type != OPT_LANGUAGE)
 		return;
 
 	switch (action) {

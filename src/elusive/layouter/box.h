@@ -1,11 +1,11 @@
-/* $Id: box.h,v 1.1 2003/01/17 21:48:34 pasky Exp $ */
+/* $Id: box.h,v 1.2 2003/01/17 22:04:41 pasky Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_BOX_H
 #define EL__USIVE_LAYOUTER_BOX_H
 
 /* This file describes the ELusive boxes tree structures and utility tools. The
  * boxes tree represents boxes grouped in larger boxes grouped in even larger
- * boxes. Each box has a lot of various attributes, which may or may not
+ * boxes. Each box has a lot of various properties, which may or may not
  * include position and size, in one or two dimensions.
  *
  * Usually, each box is associated with one element (syntax tree node).  It
@@ -48,14 +48,14 @@ struct layout_box {
 
 	struct syntree_node *syntree_node;
 
-	/* Attributes of the box. You know - colors, alignment and so on.
-	 * If the attribute is not here, you should also look to the
-	 * syntree_node if the attribute is not there (if syntree_node is not
+	/* Properties of the box. You know - colors, alignment and so on.
+	 * If the property is not here, you should also look to the
+	 * syntree_node if the property is not there (if syntree_node is not
 	 * NULL, obviously). We try to save memory, you know. */
-	/* For missing attributes, we will just ascend to the parent and look
+	/* For missing properties, we will just ascend to the parent and look
 	 * there, and we will keep doing this until we find something. */
-	/* See parser/attrib.h for a description of the struct attribute. The
-	 * approach of list of individual attribute structures may seem
+	/* See parser/property.h for a description of the struct property. The
+	 * approach of list of individual properte structures may seem
 	 * slightly ineffective - I decided on this in order to extend the
 	 * flexibility considerably; it's expected that renderers will wrap the
 	 * struct syntree_node in some their struct where they will cache the
@@ -63,7 +63,7 @@ struct layout_box {
 	 * should be minimal then (only memory and one move-around; the memory
 	 * thing can be a little painful, but see above). */
 
-	struct list_head attrs; /* -> struct attribute */
+	struct list_head properties; /* -> struct property */
 
 	/* This is a data container of the type - it depends on the type
 	 * modifier. See the enum declaration for information about possible
@@ -79,17 +79,17 @@ struct layout_box {
 struct layout_box *
 init_layout_box();
 
-/* Releases the box structure and all its attributes and leafs. It
+/* Releases the box structure and all its properties and leafs. It
  * doesn't release the corresponding syntax tree! */
 void
 done_layout_box(struct layout_box *box);
 
-/* Returns value string of an attribute with this name. NULL means there's no
- * such attribute set, otherwise a pointer is returned that points to
+/* Returns value string of an property with this name. NULL means there's no
+ * such property set, otherwise a pointer is returned that points to
  * dynamically allocated memory (which you have to free after doing what you
  * needed to, yes). */
-/* This automatically looks up the syntax tree attributes list if needed. */
+/* This automatically looks up the syntax tree properties list if needed. */
 unsigned char *
-get_box_attrib(struct layout_box *box, unsigned char *name);
+get_box_property(struct layout_box *box, unsigned char *name);
 
 #endif

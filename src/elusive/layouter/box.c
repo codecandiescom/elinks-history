@@ -1,5 +1,5 @@
 /* Layout box utility tools */
-/* $Id: box.c,v 1.1 2003/01/17 21:48:34 pasky Exp $ */
+/* $Id: box.c,v 1.2 2003/01/17 22:04:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 #include "elinks.h"
 
 #include "elusive/layouter/box.h"
-#include "elusive/parser/attrib.h"
+#include "elusive/parser/property.h"
 #include "elusive/parser/syntree.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -25,7 +25,7 @@ init_layout_box()
 	if (!box) return NULL;
 
 	init_list(box->leafs);
-	init_list(box->attrs);
+	init_list(box->properties);
 
 	return box;
 }
@@ -34,7 +34,7 @@ void
 done_layout_box(struct layout_box *box)
 {
 	struct layout_box *leaf = box->leafs.next;
-	struct attribute *attrib = box->attrs.next;
+	struct property *property = box->properties.next;
 
 	while ((struct list_head *) leaf != &box->leafs) {
 		struct layout_box *leaf_next = leaf->next;
@@ -43,12 +43,12 @@ done_layout_box(struct layout_box *box)
 		leaf = leaf_next;
 	}
 
-	while ((struct list_head *) attrib != &box->attrs) {
-		struct attribute *attrib_next = attrib->next;
+	while ((struct list_head *) property != &box->properties) {
+		struct property *property_next = property->next;
 
-		/* TODO: Implement free function in attrib.c. */
-		mem_free(attrib);
-		attrib = attrib_next;
+		/* TODO: Implement free function in property.c. */
+		mem_free(property);
+		property = property_next;
 	}
 
 	if (box->data)
@@ -61,16 +61,16 @@ done_layout_box(struct layout_box *box)
 
 /* TODO: Possibly ascend to the root. */
 unsigned char *
-get_box_attrib(struct layout_box *box, unsigned char *name)
+get_box_property(struct layout_box *box, unsigned char *name)
 {
-	struct attribute *attr = get_attrib(box->attrs, name);
+	struct property *property = get_property(box->properties, name);
 
 	/* XXX: When we'll be ascending to root, we won't want to let
-	 * get_syntree_attrib() ascend to root, will we? --pasky */
-	if (!attr) {
-		return box->syntree_node ? get_syntree_attrib(box->syntree_node, name)
+	 * get_syntree_property() ascend to root, will we? --pasky */
+	if (!property) {
+		return box->syntree_node ? get_syntree_property(box->syntree_node, name)
 					  : NULL;
 	}
 
-	return memacpy(attr->value, attr->valuelen);
+	return memacpy(property->value, property->valuelen);
 }

@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.8 2003/01/01 20:03:07 pasky Exp $ */
+/* $Id: syntree.h,v 1.9 2003/01/17 22:04:41 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -42,12 +42,12 @@ struct syntree_node {
 	enum syntree_node_special special;
 	void *special_data; /* Note that this is mem_free()d if non-NULL. */
 
-	/* Attributes of the node. You know - colors, alignment and so on.
-	 * For missing attributes, we will just ascend to the parent and look
+	/* Properties of the node. You know - colors, alignment and so on.
+	 * For missing properties, we will just ascend to the parent and look
 	 * there, and we will keep doing this until we will find something.
 	 * At the root node, we will default to something. */
-	/* See attrib.h for a description of the struct attribute. The approach
-	 * of list of individual attribute structures may seem slightly
+	/* See property.h for a description of the struct property. The
+	 * approach of list of individual property structures may seem slightly
 	 * ineffective - I decided on this in order to extend the flexibility
 	 * considerably; it's expected that renderers will wrap the struct
 	 * syntree_node in some their struct where they will cache the values
@@ -55,7 +55,7 @@ struct syntree_node {
 	 * be minimal then (only memory and one move-around; the memory thing
 	 * can be a little painful, but see above). */
 
-	struct list_head attrs; /* -> struct attribute */
+	struct list_head properties; /* -> struct property */
 
 	/* This is a string container of the node - this is usually pointer to
 	 * the tag name, but that can vary for specials (ie. for NODE_SPEC_TEXT
@@ -77,7 +77,7 @@ struct syntree_node {
 struct syntree_node *
 init_syntree_node();
 
-/* Releases the node structure and all its attributes and leafs. */
+/* Releases the node structure and all its properties and leafs. */
 void
 done_syntree_node(struct syntree_node *node);
 
@@ -88,11 +88,11 @@ done_syntree_node(struct syntree_node *node);
 struct syntree_node *
 spawn_syntree_node(struct parser_state *state);
 
-/* Returns value string of an attribute with this name. NULL means there's no
- * such attribute set, otherwise a pointer is returned that points to
+/* Returns value string of an property with this name. NULL means there's no
+ * such property set, otherwise a pointer is returned that points to
  * dynamically allocated memory (which you have to free after doing what you
  * needed to, yes). */
 unsigned char *
-get_syntree_attrib(struct syntree_node *node, unsigned char *name);
+get_syntree_property(struct syntree_node *node, unsigned char *name);
 
 #endif

@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.28 2003/01/01 20:03:08 pasky Exp $ */
+/* $Id: parser.c,v 1.29 2003/01/17 22:04:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,8 +10,8 @@
 #include "elinks.h"
 
 #include "elusive/parser/html/parser.h"
-#include "elusive/parser/attrib.h"
 #include "elusive/parser/parser.h"
+#include "elusive/parser/property.h"
 #include "elusive/parser/stack.h"
 #include "elusive/parser/syntree.h"
 #include "util/error.h"
@@ -444,7 +444,7 @@ tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 }
 
 /* This eats tag value, if there is any. It also adds the attribute to the
- * syntax tree node. */
+ * syntax tree node (as a property). */
 /* TODO: Parse entities inside of the attribute values! --pasky */
 static int
 tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
@@ -465,7 +465,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 		pstate = html_state_pop(state);
 	}
 	if (!pstate->data.attr.ate_eq && *html != '=') {
-		add_attrib(state->current->attrs,
+		add_property(state->current->properties,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			html, 0);
 		pstate = html_state_pop(state);
@@ -502,7 +502,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 
 		pstate = html_state_pop(state);
 
-		add_attrib(state->current->attrs,
+		add_property(state->current->properties,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			attr, attr_len - html_len);
 

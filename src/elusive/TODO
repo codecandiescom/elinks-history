@@ -126,7 +126,7 @@
     TODO:
 
       - Take document layout and format it to array of form items, links, lines
-        and line attributes, compatible with the current ELinks text viewer, if
+        and line properties, compatible with the current ELinks text viewer, if
         possible.
 
 
@@ -140,4 +140,4 @@
 
       - Take document layout and format it to array of form items, links and
         graphics "objects". Should just take adjusting of layout boxes to
-        the viewport dimensions and some attributes transformations.
+        the viewport dimensions and some properties transformations.

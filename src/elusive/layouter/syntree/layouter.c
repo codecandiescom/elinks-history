@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.5 2003/01/17 21:48:34 pasky Exp $ */
+/* $Id: layouter.c,v 1.6 2003/01/17 22:04:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,8 +11,8 @@
 #include "elinks.h"
 
 #include "elusive/layouter/syntree/layouter.h"
-#include "elusive/parser/attrib.h"
 #include "elusive/parser/parser.h"
+#include "elusive/parser/property.h"
 #include "elusive/parser/syntree.h"
 #include "util/memory.h"
 
@@ -40,10 +40,10 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 {
 	struct layout_box_text *text;
 	struct layout_box *box;
-	struct attribute *attrib;
+	struct property *property;
 	struct syntree_node *leaf;
 
-	/* TODO: Dream out some attributes. --pasky */
+	/* TODO: Dream out some properties. --pasky */
 	/* TODO: Then make it possible to tie the syntree output with some user
 	 * CSS. --pasky */
 
@@ -76,7 +76,7 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 		memcpy(text->str, numbuf, numbuflen);
 	}
 
-	foreach (attrib, node->attrs) {
+	foreach (property, node->properties) {
 		box = spawn_box(state);
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = " ";
@@ -84,8 +84,8 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 
 		box = spawn_box(state);
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
-		text->str = attrib->name;
-		text->len = attrib->namelen;
+		text->str = property->name;
+		text->len = property->namelen;
 
 		box = spawn_box(state);
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
@@ -94,8 +94,8 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 
 		box = spawn_box(state);
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
-		text->str = attrib->value;
-		text->len = attrib->valuelen;
+		text->str = property->value;
+		text->len = property->valuelen;
 
 		box = spawn_box(state);
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
@@ -106,7 +106,7 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 	foreach (leaf, node->leafs) {
 		box = spawn_box(state);
 		state->root = box;
-		add_attrib(state->current->attrs, "display", 7, "block", 5);
+		add_property(state->current->properties, "display", 7, "block", 5);
 		layout_node(state, leaf);
 	}
 }
@@ -126,7 +126,7 @@ syntree_layout(struct layouter_state *state, unsigned char **str, int *len)
 	elusive_parser_parse(state->parser_state, str, len);
 
 	node = state->parser_state->real_root;
-	add_attrib(state->current->attrs, "display", 7, "block", 5);
+	add_property(state->current->properties, "display", 7, "block", 5);
 	layout_node(state, node);
 }
 

@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.5 2003/01/01 18:19:53 pasky Exp $ */
+/* $Id: renderer.c,v 1.6 2003/01/17 22:04:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include "viewer/text/view.h"
 
 #include "elusive/layouter/syntree/layouter.h"
-#include "elusive/parser/attrib.h"
+#include "elusive/parser/property.h"
 #include "elusive/parser/syntree.h"
 #include "elusive/renderer/renderer.h"
 #include "util/memory.h"

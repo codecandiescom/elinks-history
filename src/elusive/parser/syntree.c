@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.10 2003/01/01 20:03:07 pasky Exp $ */
+/* $Id: syntree.c,v 1.11 2003/01/17 22:04:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,8 +9,8 @@
 
 #include "elinks.h"
 
-#include "elusive/parser/attrib.h"
 #include "elusive/parser/parser.h"
+#include "elusive/parser/property.h"
 #include "elusive/parser/syntree.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -25,7 +25,7 @@ init_syntree_node()
 	if (!node) return NULL;
 
 	init_list(node->leafs);
-	init_list(node->attrs);
+	init_list(node->properties);
 
 	return node;
 }
@@ -34,7 +34,7 @@ void
 done_syntree_node(struct syntree_node *node)
 {
 	struct syntree_node *leaf = node->leafs.next;
-	struct attribute *attrib = node->attrs.next;
+	struct property *property = node->properties.next;
 
 	while ((struct list_head *) leaf != &node->leafs) {
 		struct syntree_node *leaf_next = leaf->next;
@@ -43,12 +43,12 @@ done_syntree_node(struct syntree_node *node)
 		leaf = leaf_next;
 	}
 
-	while ((struct list_head *) attrib != &node->attrs) {
-		struct attribute *attrib_next = attrib->next;
+	while ((struct list_head *) property != &node->properties) {
+		struct property *property_next = property->next;
 
-		/* TODO: Implement free function in attrib.c. */
-		mem_free(attrib);
-		attrib = attrib_next;
+		/* TODO: Implement free function in property.c. */
+		mem_free(property);
+		property = property_next;
 	}
 
 	if (node->src)
@@ -84,11 +84,11 @@ spawn_syntree_node(struct parser_state *state)
 
 /* TODO: Possibly ascend to the root. */
 unsigned char *
-get_syntree_attrib(struct syntree_node *node, unsigned char *name)
+get_syntree_property(struct syntree_node *node, unsigned char *name)
 {
-	struct attribute *attr = get_attrib(node->attrs, name);
+	struct property *property = get_property(node->properties, name);
 
-	if (!attr) return NULL;
+	if (!property) return NULL;
 
-	return memacpy(attr->value, attr->valuelen);
+	return memacpy(property->value, property->valuelen);
 }

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.43 2003/10/17 14:02:51 jonas Exp $ */
+/* $Id: form.c,v 1.44 2003/10/17 14:08:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -781,19 +781,24 @@ static int
 submit_form_do(struct terminal *term, void *xxx, struct session *ses,
 	       int do_reload)
 {
-	struct document_view *fd;
+	struct document_view *doc_view;
 	struct link *link;
+	unsigned char *url;
 
 	assert(term && ses);
 	if_assert_failed return 1;
-	fd = current_frame(ses);
 
-	assert(fd && fd->vs && fd->document);
+	doc_view = current_frame(ses);
+
+	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return 1;
-	if (fd->vs->current_link == -1) return 1;
-	link = &fd->document->links[fd->vs->current_link];
 
-	return goto_link(get_form_url(ses, fd, link->form), link->target, ses, do_reload);
+	if (doc_view->vs->current_link == -1) return 1;
+
+	link = &doc_view->document->links[doc_view->vs->current_link];
+	url = get_form_url(ses, doc_view, link->form);
+
+	return goto_link(url, link->target, ses, do_reload);
 }
 
 int
@@ -814,21 +819,21 @@ submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
 
 
 int
-field_op(struct session *ses, struct document_view *f, struct link *l,
+field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 	 struct term_event *ev, int rep)
 {
 	struct form_control *frm;
 	struct form_state *fs;
 	int x = 1;
 
-	assert(ses && f && l && ev);
+	assert(ses && doc_view && l && ev);
 	if_assert_failed return 0;
 	frm = l->form;
 	assertm(frm, "link has no form control");
 	if_assert_failed return 0;
 
 	if (l->form->ro == 2) return 0;
-	fs = find_form_state(f, frm);
+	fs = find_form_state(doc_view, frm);
 	if (!fs || !fs->value) return 0;
 
 	if (ev->ev == EV_KBD) {
@@ -871,7 +876,7 @@ field_op(struct session *ses, struct document_view *f, struct link *l,
 				break;
 			case ACT_EDIT:
 				if (frm->type == FC_TEXTAREA && !frm->ro)
-				  	textarea_edit(0, ses->tab->term, frm, fs, f, l);
+				  	textarea_edit(0, ses->tab->term, frm, fs, doc_view, l);
 				break;
 			case ACT_COPY_CLIPBOARD:
 				set_clipboard_text(fs->value);
@@ -985,7 +990,7 @@ b:
 	} else x = 0;
 
 	if (x) {
-		draw_form_entry(ses->tab->term, f, l);
+		draw_form_entry(ses->tab->term, doc_view, l);
 		redraw_from_window(ses->tab);
 	}
 	return x;

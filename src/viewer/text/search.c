@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.182 2004/02/02 15:19:27 jonas Exp $ */
+/* $Id: search.c,v 1.183 2004/02/02 15:24:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -976,19 +976,15 @@ static inline int
 search_link_text(struct document *document, int current_link, int i,
 		 unsigned char *text, int direction)
 {
-	int textlen = strlen(text);
 	/* The link interval in which we are currently searching */
-	int upper_link, lower_link;
-	int case_sensitive;
+	/* Set up the range of links that should be search in first attempt */
+	int upper_link = (direction > 0) ? document->nlinks : i + 1;
+	int lower_link = (direction > 0) ? i - 1 : -1;
+	int case_sensitive = get_opt_bool("document.browse.search.case");
+	int textlen = strlen(text);
 
 	assert(textlen && direction);
 	assert(i >= 0 && i < document->nlinks);
-
-	/* Set up the range of links that should be search in first attempt */
-	upper_link = (direction > 0) ? document->nlinks : i + 1;
-	lower_link = (direction > 0) ? i - 1: -1;
-
-	case_sensitive = get_opt_bool("document.browse.search.case");
 
 #define case_compare_chars(c1, c2) \
 	(case_sensitive ? (c1) == (c2) : tolower(c1) == tolower(c2))

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.54 2004/12/10 18:16:33 zas Exp $ */
+/* $Id: link.c,v 1.55 2004/12/10 18:20:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,13 +321,14 @@ html_img(unsigned char *a)
 			put_image_label(a, label);
 
 			if (ismap) kill_html_stack_item(&html_top);
+			mem_free_set(&format.image, NULL);
+			mem_free_set(&format.title, NULL);
 		}
+
+		mem_free(label);
 	}
 
-	mem_free_set(&format.image, NULL);
-	mem_free_set(&format.title, NULL);
 	mem_free_if(src);
-	mem_free_if(label);
 	if (usemap) kill_html_stack_item(&html_top);
 }
 

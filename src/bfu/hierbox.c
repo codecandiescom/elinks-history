@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.66 2003/11/19 23:46:56 jonas Exp $ */
+/* $Id: hierbox.c,v 1.67 2003/11/19 23:52:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 				if (selected->type != BI_FOLDER)
 					return EVENT_NOT_PROCESSED;
 				selected->expanded = !selected->expanded;
-				goto display_dlg;
+				break;
 			}
 
 			/* Recursively unexpand all folders */
@@ -147,22 +147,21 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 				 * whole parent folder will be closed. */
 				if (list_empty(selected->child)
 				    || !selected->expanded) {
-					if (selected->root) {
-						struct ctx ctx = { selected, 1 };
+					struct ctx ctx = { selected, 1 };
 
-						traverse_listbox_items_list(
-								selected->root,
-								0, 1,
-								test_search,
-								&ctx);
-						box_sel_move(dlg_data->widgets_data,
-							     ctx.offset);
-					}
+					if (!selected->root) break;
+
+					traverse_listbox_items_list(
+							selected->root, 0, 1,
+							test_search, &ctx);
+					box_sel_move(dlg_data->widgets_data,
+						     ctx.offset);
+
 				} else if (selected->type == BI_FOLDER) {
 					recursively_set_expanded(selected, 0);
 				}
 
-				goto display_dlg;
+				break;
 			}
 
 			/* Recursively expand all folders */
@@ -171,22 +170,17 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 					return EVENT_PROCESSED;
 
 				recursively_set_expanded(box->sel, 1);
-				goto display_dlg;
+				break;
 			}
 
 			return EVENT_NOT_PROCESSED;
-
-display_dlg:
-			display_dlg_item(dlg_data, dlg_data->widgets_data, 1);
-
-			return EVENT_PROCESSED;
 		}
 
 		case EV_INIT:
 		case EV_RESIZE:
 		case EV_REDRAW:
 		case EV_MOUSE:
-			break;
+			return EVENT_NOT_PROCESSED;
 
 		case EV_ABORT:
 		{
@@ -206,11 +200,13 @@ display_dlg:
 					break;
 				}
 			}
-			break;
+			return EVENT_NOT_PROCESSED;
 		}
 	}
 
-	return EVENT_NOT_PROCESSED;
+	display_dlg_item(dlg_data, dlg_data->widgets_data, 1);
+
+	return EVENT_PROCESSED;
 }
 
 struct dialog_data *

@@ -727,6 +727,8 @@ if test -n "$ac_cv_prog_DOCTOOL"; then
 	DOCTOOL=
 	HTMLDOCTOOL=
 	MANDOCTOOL=
+	USE_DOCBOOK_XML="IGNORE"
+	USE_DOCBOOK_SGML="INCLUDE"
 	doctool_result=""
 	case "$ac_cv_prog_DOCTOOL" in
 		docbook2* | db2*)
@@ -748,6 +750,8 @@ if test -n "$ac_cv_prog_DOCTOOL"; then
 			DOCTOOL="$DOCTOOL --skip-validation"
 			HTMLDOCTOOL="$DOCTOOL html"
 			MANDOCTOOL="$DOCTOOL man"
+			USE_DOCBOOK_XML="INCLUDE"
+			USE_DOCBOOK_SGML="IGNORE"
 			doctool_result="cross your fingers that it will work"
 		;;
 	esac

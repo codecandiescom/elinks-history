@@ -1,5 +1,5 @@
 <!-- The DTD used for costumization and common entities. -->
-<!-- $Id: elinksbook.dtd,v 1.7 2003/06/10 21:39:55 jonas Exp $ -->
+<!-- $Id: elinksbook.dtd,v 1.8 2003/06/10 23:52:39 jonas Exp $ -->
 
 <!ENTITY version	"0.1">
 
@@ -9,10 +9,6 @@
 
 <!-- Default is to use system specific entities defined in config.ent. -->
 <!ENTITY % override-config-entities "IGNORE">
-
-<!-- TODO Ideally the following entities should be set by configure. -->
-<!ENTITY % use-xml-dtd "IGNORE">
-<!ENTITY % use-sgml-dtd "INCLUDE">
 
 <!-- ================================================================== -->
 <!-- Site specific entities						-->
@@ -31,6 +27,9 @@
 <!-- ================================================================== -->
 <!-- DocBook DTD inclusion section					-->
 <!-- ================================================================== -->
+
+<!-- Note: use-xml-dtd and use-sgml-dtd should be controlled by configure
+	   and declared in config.ent. -->
 
 <![%use-xml-dtd;[
 <!ENTITY % DocBookDTD PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"

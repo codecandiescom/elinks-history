@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.608 2004/10/10 01:53:43 miciah Exp $ */
+/* $Id: view.c,v 1.609 2004/10/10 01:58:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,6 +108,8 @@ move_page_down(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
 
+	ses->kbdprefix.repeat_count = 0;
+
 	if (!count) count = 1;
 
 	while (count--)
@@ -138,6 +140,8 @@ void
 move_page_up(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
+
+	ses->kbdprefix.repeat_count = 0;
 
 	if (!count) count = 1;
 
@@ -291,6 +295,8 @@ scroll_up(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
 
+	ses->kbdprefix.repeat_count = 0;
+
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
@@ -301,6 +307,8 @@ void
 scroll_down(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
+
+	ses->kbdprefix.repeat_count = 0;
 
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
@@ -313,6 +321,8 @@ scroll_left(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
 
+	ses->kbdprefix.repeat_count = 0;
+
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
@@ -323,6 +333,8 @@ void
 scroll_right(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
+
+	ses->kbdprefix.repeat_count = 0;
 
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
@@ -514,6 +526,8 @@ move_cursor_left(struct session *ses, struct document_view *view)
 {
 	int count = ses->kbdprefix.repeat_count;
 
+	ses->kbdprefix.repeat_count = 0;
+
 	int_lower_bound(&count, 1);
 
 	return move_cursor(ses, view, ses->tab->x - count, ses->tab->y);
@@ -523,6 +537,8 @@ enum frame_event_status
 move_cursor_right(struct session *ses, struct document_view *view)
 {
 	int count = ses->kbdprefix.repeat_count;
+
+	ses->kbdprefix.repeat_count = 0;
 
 	int_lower_bound(&count, 1);
 
@@ -534,6 +550,8 @@ move_cursor_up(struct session *ses, struct document_view *view)
 {
 	int count = ses->kbdprefix.repeat_count;
 
+	ses->kbdprefix.repeat_count = 0;
+
 	int_lower_bound(&count, 1);
 
 	return move_cursor(ses, view, ses->tab->x, ses->tab->y - count);
@@ -543,6 +561,8 @@ enum frame_event_status
 move_cursor_down(struct session *ses, struct document_view *view)
 {
 	int count = ses->kbdprefix.repeat_count;
+
+	ses->kbdprefix.repeat_count = 0;
 
 	int_lower_bound(&count, 1);
 

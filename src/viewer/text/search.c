@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.106 2003/11/07 22:20:48 jonas Exp $ */
+/* $Id: search.c,v 1.107 2003/11/08 00:56:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -968,24 +968,26 @@ search_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int w = dialog_max_width(term);
+	int rw = 0;
 	int y = -1;
 
-	int_upper_bound(&w, dlg_data->dlg->widgets->datalen);
-
 	dlg_format_field(NULL, dlg_data->widgets_data,
-			 0, &y, w, NULL, AL_LEFT);
+			 0, &y, w, &rw, AL_LEFT);
 
 	y++;
 	dlg_format_group(NULL, dlg_data->widgets_data + 1, 3, 0,
-			 &y, w, NULL);
+			 &y, w, &rw);
 
 	y++;
 	dlg_format_group(NULL, dlg_data->widgets_data + 4, 2, 0,
-			 &y, w, NULL);
+			 &y, w, &rw);
 
 	y++;
 	dlg_format_buttons(NULL, dlg_data->widgets_data + 6, 2, 0,
-			   &y, w, NULL, AL_CENTER);
+			   &y, w, &rw, AL_CENTER);
+
+	int_lower_bound(&rw, dlg_data->dlg->widgets->datalen);
+	int_upper_bound(&w, rw);
 
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 

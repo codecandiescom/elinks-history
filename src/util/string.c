@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.102 2004/07/03 14:13:45 zas Exp $ */
+/* $Id: string.c,v 1.103 2004/07/17 20:14:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,7 @@ add_char_to_string(struct string *string, unsigned char character)
 
 	check_string_magic(string);
 
-	if (!realloc_string(string,  string->length + 1))
+	if (!realloc_string(string, string->length + 1))
 		return NULL;
 
 	string->source[string->length++] = character;

@@ -1,3 +1,42 @@
+Wed Sep 18 17:23:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	When looking for zlib/bzlib, actually check for functions we even
+	use.  
+
+Wed Sep 18 16:35:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/links.h, src/document/download.c:
+
+	Some OS/2 fixes by <criguada@libero.it>.  
+
+Wed Sep 18 16:07:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/download.c, lowlevel/terminal.c,
+	lowlevel/terminal.h:
+
+	Optionally emit a bell when download is completed, patch by Andre
+	Valente.  
+
+Wed Sep 18 15:59:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/osdep/os_dep.c:
+
+	Include termios.h - compilation fix for diet-libc.  
+
+Wed Sep 18 14:08:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Some search-related comments and tidyups.  
+
+Wed Sep 18 12:58:55 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/encoding.c:
+
+	Minor compilation fix.  
+
 Tue Sep 17 21:43:30 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/dialog.c, bfu/listbox.c, dialogs/hierbox.c,

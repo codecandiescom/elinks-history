@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.215 2005/03/02 18:00:27 zas Exp $ */
+/* $Id: connection.c,v 1.216 2005/03/03 15:06:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,7 @@ static int keepalive_timeout = -1;
  * separate it to an own module and define operations on it (especially
  * foreach_queue or so). Ok ok, that's nothing important and I'm not even
  * sure I would really like it ;-). --pasky */
-INIT_LIST_HEAD(queue);
+INIT_LIST_HEAD(connection_queue);
 static INIT_LIST_HEAD(host_connections);
 static INIT_LIST_HEAD(keepalive_connections);
 
@@ -94,14 +94,14 @@ connect_info(int type)
 
 	switch (type) {
 		case INFO_FILES:
-			foreach (conn, queue) info++;
+			foreach (conn, connection_queue) info++;
 			break;
 		case INFO_CONNECTING:
-			foreach (conn, queue)
+			foreach (conn, connection_queue)
 				info += is_in_connecting_state(conn->state);
 			break;
 		case INFO_TRANSFER:
-			foreach (conn, queue)
+			foreach (conn, connection_queue)
 				info += is_in_transfering_state(conn->state);
 			break;
 		case INFO_KEEP:
@@ -117,7 +117,7 @@ connection_disappeared(struct connection *conn)
 {
 	struct connection *c;
 
-	foreach (c, queue)
+	foreach (c, connection_queue)
 		if (conn == c && conn->id == c->id)
 			return 0;
 
@@ -202,7 +202,7 @@ check_queue_bugs(void)
 	enum connection_priority prev_priority = 0;
 	int cc = 0;
 
-	foreach (conn, queue) {
+	foreach (conn, connection_queue) {
 		enum connection_priority priority = get_priority(conn);
 
 		cc += conn->running;
@@ -617,7 +617,7 @@ add_to_queue(struct connection *conn)
 	struct connection *c;
 	enum connection_priority priority = get_priority(conn);
 
-	foreach (c, queue)
+	foreach (c, connection_queue)
 		if (get_priority(c) > priority)
 			break;
 
@@ -633,8 +633,8 @@ sort_queue(void)
 		struct connection *conn;
 
 		swp = 0;
-		foreach (conn, queue) {
-			if (!list_has_next(queue, conn)) break;
+		foreach (conn, connection_queue) {
+			if (!list_has_next(connection_queue, conn)) break;
 
 			if (get_priority(conn->next) < get_priority(conn)) {
 				struct connection *c = conn->next;
@@ -730,7 +730,7 @@ try_to_suspend_connection(struct connection *conn, struct uri *uri)
 	enum connection_priority priority = get_priority(conn);
 	struct connection *c;
 
-	foreachback (c, queue) {
+	foreachback (c, connection_queue) {
 		if (get_priority(c) <= priority) return -1;
 		if (c->state == S_WAIT) continue;
 		if (c->uri->post && get_priority(c) < PRI_CANCEL) continue;
@@ -765,15 +765,15 @@ check_queue(void)
 	int max_conns = get_opt_int("connection.max_connections");
 
 again:
-	conn = queue.next;
+	conn = connection_queue.next;
 	check_queue_bugs();
 	check_keepalive_connections();
 
-	while (conn != (struct connection *) &queue) {
+	while (conn != (struct connection *) &connection_queue) {
 		struct connection *c;
 		enum connection_priority pri = get_priority(conn);
 
-		for (c = conn; c != (struct connection *) &queue && get_priority(c) == pri;) {
+		for (c = conn; c != (struct connection *) &connection_queue && get_priority(c) == pri;) {
 			struct connection *cc = c;
 
 			c = c->next;
@@ -782,7 +782,7 @@ again:
 				goto again;
 		}
 
-		for (c = conn; c != (struct connection *) &queue && get_priority(c) == pri;) {
+		for (c = conn; c != (struct connection *) &connection_queue && get_priority(c) == pri;) {
 			struct connection *cc = c;
 
 			c = c->next;
@@ -794,7 +794,7 @@ again:
 	}
 
 again2:
-	foreachback (conn, queue) {
+	foreachback (conn, connection_queue) {
 		if (get_priority(conn) < PRI_CANCEL) break;
 		if (conn->state == S_WAIT) {
 			set_connection_state(conn, S_INTERRUPTED);
@@ -824,7 +824,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	}
 
 #ifdef CONFIG_DEBUG
-	foreach (conn, queue) {
+	foreach (conn, connection_queue) {
 		struct download *assigned;
 
 		foreach (assigned, conn->downloads) {
@@ -882,7 +882,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		return -1;
 	}
 
-	foreach (conn, queue) {
+	foreach (conn, connection_queue) {
 		if (conn->detached
 		    || !compare_uri(conn->uri, proxy_uri, 0))
 			continue;
@@ -1086,8 +1086,8 @@ set_connection_timeout(struct connection *conn)
 void
 abort_all_connections(void)
 {
-	while (!list_empty(queue)) {
-		abort_conn_with_state(queue.next, S_INTERRUPTED);
+	while (!list_empty(connection_queue)) {
+		abort_conn_with_state(connection_queue.next, S_INTERRUPTED);
 	}
 
 	abort_all_keepalive_connections();
@@ -1098,7 +1098,7 @@ abort_background_connections(void)
 {
 	struct connection *conn;
 
-	foreach (conn, queue) {
+	foreach (conn, connection_queue) {
 		if (get_priority(conn) >= PRI_CANCEL) {
 			conn = conn->prev;
 			abort_conn_with_state(conn->next, S_INTERRUPTED);

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.197 2005/02/28 10:16:36 zas Exp $ */
+/* $Id: cache.c,v 1.198 2005/03/03 15:06:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ is_entry_used(struct cache_entry *cached)
 {
 	struct connection *conn;
 
-	foreach (conn, queue)
+	foreach (conn, connection_queue)
 		if (conn->cached == cached)
 			return 1;
 

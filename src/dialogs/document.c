@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.99 2004/10/19 04:54:22 miciah Exp $ */
+/* $Id: document.c,v 1.100 2004/10/19 05:01:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,18 +226,9 @@ document_info_dialog(struct session *ses)
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
-/* Headers info. message box. */
-void
-protocol_header_dialog(struct session *ses)
+static void
+cached_header_dialog(struct session *ses, struct cache_entry *cached)
 {
-	struct cache_entry *cached;
-
-	if (!have_location(ses)) {
-		nowhere_box(ses->tab->term, N_("Header info"));
-		return;
-	}
-
-	cached = find_in_cache(cur_loc(ses)->vs.uri);
 	if (cached && cached->head) {
 		int artificial;
 		unsigned char *headers = stracpy(cached->head);
@@ -303,4 +294,16 @@ protocol_header_dialog(struct session *ses)
 		N_("No header info."),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
+}
+
+/* Headers info. message box. */
+void
+protocol_header_dialog(struct session *ses)
+{
+	if (!have_location(ses)) {
+		nowhere_box(ses->tab->term, N_("Header info"));
+		return;
+	}
+
+	cached_header_dialog(ses, find_in_cache(cur_loc(ses)->vs.uri));
 }

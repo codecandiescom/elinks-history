@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.31 2002/07/09 21:27:51 pasky Exp $ */
+/* $Id: http.c,v 1.32 2002/07/09 22:03:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -758,7 +758,10 @@ next_chunk:
 			kill_buffer_data(rb, len);
 
 			if (!len && !info->chunk_remaining) {
-				/* Whole chunk loaded. */
+				/* We got here with chunk_remaining zero
+				 * already, so we finished decompression just
+				 * now and now we can happily finish reading
+				 * this stuff. */
 				info->chunk_remaining = CHUNK_DATA_END;
 				goto next_chunk;
 			}
@@ -782,7 +785,6 @@ next_chunk:
 				goto next_chunk;
 			}
 		}
-
 	}
 
 read_more:

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.77 2003/09/09 17:50:22 jonas Exp $ */
+/* $Id: screen.c,v 1.78 2003/09/12 10:48:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,7 @@ get_screen_driver(struct terminal *term)
 {
 	enum term_mode_type type = get_opt_int_tree(term->spec, "type");
 	unsigned char *name = term->spec->name;
-	int len = strlen(name); 
+	int len = strlen(name);
 	struct screen_driver *driver;
 
 	/* TODO: LRU? ;) */

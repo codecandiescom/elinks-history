@@ -1,5 +1,5 @@
 /* Tool for testing the CSS parser */
-/* $Id: test.c,v 1.1 2003/02/25 14:15:50 jonas Exp $ */
+/* $Id: test.c,v 1.2 2003/09/12 10:48:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ code2name(enum css_state_code code)
 		if (stateinfo[index].code == code)
 			return stateinfo[index].name;
 	}
-	return "UNKNOWN";	
+	return "UNKNOWN";
 }
 
 void

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.44 2003/09/01 13:01:51 zas Exp $ */
+/* $Id: dialogs.c,v 1.45 2003/09/12 10:48:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ add_ext_fn(struct dialog_data *dlg)
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
-	int_bounds(&w, 1, term->x - 2 * DIALOG_LB); 
+	int_bounds(&w, 1, term->x - 2 * DIALOG_LB);
 
 	rw = 0;
 	dlg_format_text(NULL, term,

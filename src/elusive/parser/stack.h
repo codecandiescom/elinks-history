@@ -1,11 +1,11 @@
-/* $Id: stack.h,v 1.2 2003/01/19 18:00:27 jonas Exp $ */
+/* $Id: stack.h,v 1.3 2003/09/12 10:48:40 zas Exp $ */
 
 #ifndef EL__USIVE_PARSER_STACK_H
 #define EL__USIVE_PARSER_STACK_H
 
 /* This is generic parser stack toolkit. It will allow you to manage a stack of
  * states... ie. for 'asdf&ent;<foo bar="baz&ent;">':
- * 
+ *
  * asdf   PLAIN
  * &ent;  PLAIN ENTITY
  * <      PLAIN TAG

@@ -1,5 +1,5 @@
 /* CSS ruleset parsing */
-/* $Id: ruleset.c,v 1.5 2003/07/07 00:12:23 jonas Exp $ */
+/* $Id: ruleset.c,v 1.6 2003/09/12 10:48:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ css_parse_ruleset(struct parser_state *state, unsigned char **src, int *len)
 	}
 
 	/* Get selectors */
-	while (css_len) { 
+	while (css_len) {
 		CSS_SKIP_WHITESPACE(css, css_len);
 		CSS_SKIP_COMMENT(state, src, len, css, css_len);
 
@@ -152,7 +152,7 @@ css_parse_selector(struct parser_state *state, unsigned char **src, int *len)
 		match_type = 0;
 	}
 
-	while (css_len) { 
+	while (css_len) {
 		CSS_SKIP_WHITESPACE(css, css_len);
 		CSS_SKIP_COMMENT(state, src, len, css, css_len);
 
@@ -249,7 +249,7 @@ css_parse_simple_selector(struct parser_state *state, unsigned char **src, int *
 		return PSTATE_CHANGE;
 	}
 
-	while (css_len) { 
+	while (css_len) {
 		/* Get the element name */
 		if (css_scan_table[*css] & IS_IDENT_START) {
 			unsigned char **name = &(pstate->data.simple_selector.name);
@@ -337,7 +337,7 @@ css_parse_selector_attr(struct parser_state *state, unsigned char **src, int *le
 	int css_len = *len;
 	enum attribute_match_type match_type;
 	struct attribute_matching *attr;
-	
+
 	match_type = pstate->data.simple_selector.match_type;
 	attr = pstate->data.simple_selector.attr;
 
@@ -477,7 +477,7 @@ css_parse_selector_attr(struct parser_state *state, unsigned char **src, int *le
  *
  * declarations:
  *	  declaration
- *	| declaration ';' declaration 
+ *	| declaration ';' declaration
  *
  */
 enum pstate_code
@@ -554,7 +554,7 @@ css_parse_declarations(struct parser_state *state, unsigned char **src, int *len
  * Declarations will be translated to attributes in the syntree_node therefore
  * we have to 'unfold' the compact way of writing some of the properties.
  * Example:
- * 
+ *
  * Some property declarations can be grouped together (padding, border etc.).
  * This is handled by 'unfolding' the compact form into an 'atomic' style
  * settings. Example:
@@ -575,7 +575,7 @@ css_parse_declaration(struct parser_state *state, unsigned char **src, int *len)
 	unsigned char *css = *src;
 	int css_len = *len;
 
-	while (css_len) { 
+	while (css_len) {
 		CSS_SKIP_WHITESPACE(css, css_len);
 		CSS_SKIP_COMMENT(state, src, len, css, css_len);
 
@@ -654,7 +654,7 @@ css_parse_expression(struct parser_state *state, unsigned char **src, int *len)
 	unsigned char *css = *src;
 	int css_len = *len;
 
-	while (css_len) { 
+	while (css_len) {
 		CSS_SKIP_WHITESPACE(css, css_len);
 		CSS_SKIP_COMMENT(state, src, len, css, css_len);
 
@@ -680,7 +680,7 @@ css_parse_expression(struct parser_state *state, unsigned char **src, int *len)
 }
 
 /* Function grammar:
- * 
+ *
  * function:
  *	  <ident> '(' expr ')'
  */
@@ -692,7 +692,7 @@ css_parse_function(struct parser_state *state, unsigned char **src, int *len)
 }
 
 /* The arguments to the rgb function has the following syntax:
- * 
+ *
  *	{w}{num}%?{w}","{w}{num}%?{w}","{w}{num}%?{w}
  *
  * First of all everything from 'rgb(' to ')' should be accepted

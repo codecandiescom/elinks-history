@@ -1,34 +1,34 @@
-/* $Id: ssl.h,v 1.11 2003/07/06 21:25:49 pasky Exp $ */
+/* $Id: ssl.h,v 1.12 2003/09/12 10:48:41 zas Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
 
 /* XXX: BIG BIG IMPORTANT FAT NOTE! :XXX
- * 
+ *
  * The first rule of fight club is:
  * 	You do not include ssl/ssl.h.
- * 
+ *
  * The second rule of fight club is:
  * 	You DO NOT include ssl/ssl.h.
- * 
+ *
  * The third rule of fight club is:
  * 	If you include util/error.h before ssl/ssl.h, the compilation is over!
- * 
+ *
  * The fourth rule of fight club is:
  * 	Only one inclusion of ssl/ssl.h at once.
- * 
+ *
  * The fifth rule of fight club is:
  * 	If you include ssl/ssl.h, it comes right after elinks.h.
- * 
+ *
  * The sixth rule of fight club is:
  * 	No ssl/ssl.h in other .h file, no complaints about the rules.
- * 
+ *
  * The seventh rule of fight club is:
  * 	The compilation will go as long as there is still something to compile.
- * 
+ *
  * The eight, and final rule of fight club is:
  * 	If this your first peek at this .h file, you HAVE TO COMPILE!
- * 
+ *
  * 					(Apologies to Chuck Palahniuk.) */
 
 /* *Always* include this header file as the first non-system one after

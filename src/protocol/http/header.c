@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.11 2003/07/27 17:43:51 zas Exp $ */
+/* $Id: header.c,v 1.12 2003/09/12 10:48:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,10 +67,10 @@ parse_http_header_param(unsigned char *str, unsigned char *name)
 {
 	register unsigned char *p = str;
 	int namelen, plen = 0;
-	
+
 	assert(str && *str && name && *name);
 	if_assert_failed return NULL;
-	
+
 	namelen = strlen(name);
 	do {
 		p = strchr(p, ';');
@@ -81,12 +81,12 @@ parse_http_header_param(unsigned char *str, unsigned char *name)
 	} while (strncasecmp(p, name, namelen));
 
 	p += namelen;
-	
+
 	while (*p && (*p <= ' ' || *p == '=')) p++;
 	if (!*p) return stracpy("");
-	
+
 	while (p[plen] >= ' ' && p[plen] != ';') plen++;
-	
+
 	return memacpy(p, plen);
 }
 

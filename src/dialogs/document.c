@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.52 2003/07/22 15:36:58 jonas Exp $ */
+/* $Id: document.c,v 1.53 2003/09/12 10:48:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ loc_msg(struct terminal *term, struct location *location,
 
 		if (ce->incomplete) {
 			add_format_to_string(&msg, "(%s)", _("incomplete", term));
-		}	
+		}
 
 		add_format_to_string(&msg, "\n%s: %s", _("Codepage", term),
 				get_cp_name(location->vs.view->document->cp));

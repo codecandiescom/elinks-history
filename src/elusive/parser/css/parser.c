@@ -1,5 +1,5 @@
 /* Parser CSS backend */
-/* $Id: parser.c,v 1.6 2003/07/07 00:12:23 jonas Exp $ */
+/* $Id: parser.c,v 1.7 2003/09/12 10:48:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,11 +30,11 @@
 /* Stylesheet grammer:
  *
  * Both @charset and @import rules need special handling:
- * 
+ *
  *  o charset rule is only valid if it's the first declaration
  *  o import rules have to precede all rule sets
  *
- * Moving them up here will happily ignore any 
+ * Moving them up here will happily ignore any
  *
  * stylesheet:
  * 	  <empty>

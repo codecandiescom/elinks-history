@@ -1,4 +1,4 @@
-/* $Id: tree.h,v 1.1 2003/02/25 14:17:25 jonas Exp $ */
+/* $Id: tree.h,v 1.2 2003/09/12 10:48:40 zas Exp $ */
 
 #ifndef EL__USIVE_PARSER_CSS_TREE_H
 #define EL__USIVE_PARSER_CSS_TREE_H
@@ -24,7 +24,7 @@ struct css_hash_item {
 /* The stylesheet structure is the root of all style_nodes */
 struct stylesheet {
 	/* The charset of the stylesheet. If none is specified with the
-	 * @charset rule the charset specified in the <link> tag is used. 
+	 * @charset rule the charset specified in the <link> tag is used.
 	 * If this is also not specified the charset of the markup document
 	 * is used. */
 

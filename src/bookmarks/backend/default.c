@@ -1,5 +1,5 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.10 2003/09/01 12:55:33 zas Exp $ */
+/* $Id: default.c,v 1.11 2003/09/12 10:48:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ read_bookmarks_default(FILE *f)
 			depth_str++;
 			depth = atoi(depth_str);
 			int_bounds(&depth, 0, last_bm ? last_depth + 1 : 0);
-		
+
 			/* Load flags. */
 
 			flags = strchr(depth_str, '\t');

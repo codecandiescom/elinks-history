@@ -1,5 +1,5 @@
 /* CSS atrule parsers */
-/* $Id: atrule.c,v 1.5 2003/07/07 00:12:23 jonas Exp $ */
+/* $Id: atrule.c,v 1.6 2003/09/12 10:48:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,7 +269,7 @@ css_parse_import(struct parser_state *state, unsigned char **src, int *len)
 
 	/* We have to get rid of whitespace and ';'. Let the skipping begin */
 	css_state_repush(state, CSS_SKIP);
-	return PSTATE_CHANGE;	
+	return PSTATE_CHANGE;
 }
 
 /* Media grammer:

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.134 2004/05/02 10:53:33 zas Exp $ */
+/* $Id: dialog.c,v 1.135 2004/05/09 21:17:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,23 +84,23 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 	}
 
 	if (!dlg_data->dlg->layout.only_widgets) {
-		x = dlg_data->x + DIALOG_LEFT_BORDER;
-		y = dlg_data->y + DIALOG_TOP_BORDER;
+		x = dlg_data->dimensions.x + DIALOG_LEFT_BORDER;
+		y = dlg_data->dimensions.y + DIALOG_TOP_BORDER;
 
 		draw_border(term, x, y,
-			    dlg_data->width - 2 * DIALOG_LEFT_BORDER,
-			    dlg_data->height - 2 * DIALOG_TOP_BORDER,
+			    dlg_data->dimensions.width - 2 * DIALOG_LEFT_BORDER,
+			    dlg_data->dimensions.height - 2 * DIALOG_TOP_BORDER,
 			    get_bfu_color(term, "dialog.frame"),
 			    DIALOG_FRAME);
 
 		assert(dlg_data->dlg->title);
 
 		title_color = get_bfu_color(term, "dialog.title");
-		if (title_color && dlg_data->width >= 2) {
+		if (title_color && dlg_data->dimensions.width >= 2) {
 			unsigned char *title = dlg_data->dlg->title;
-			int titlelen = int_min(dlg_data->width - 2, strlen(title));
+			int titlelen = int_min(dlg_data->dimensions.width - 2, strlen(title));
 
-			x = (dlg_data->width - titlelen) / 2 + dlg_data->x;
+			x = (dlg_data->dimensions.width - titlelen) / 2 + dlg_data->dimensions.x;
 			draw_text(term, x - 1, y, " ", 1, 0, title_color);
 			draw_text(term, x, y, title, titlelen, 0, title_color);
 			draw_text(term, x + titlelen, y, " ", 1, 0, title_color);
@@ -528,8 +528,8 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 
 	draw_dialog(dlg_data, w, y);
 
-	y = dlg_data->y + DIALOG_TB + dlg_data->dlg->layout.padding_top;
-	x = dlg_data->x + DIALOG_LB;
+	y = dlg_data->dimensions.y + DIALOG_TB + dlg_data->dlg->layout.padding_top;
+	x = dlg_data->dimensions.x + DIALOG_LB;
 
 	format_widgets(term, dlg_data, x, &y, w, height, NULL);
 }
@@ -540,14 +540,14 @@ draw_dialog(struct dialog_data *dlg_data, int width, int height)
 {
 	struct terminal *term = dlg_data->win->term;
 
-	dlg_data->width = int_min(term->width, width + 2 * DIALOG_LB);
-	dlg_data->height = int_min(term->height, height + 2 * DIALOG_TB);
-
-	dlg_data->x = (term->width - dlg_data->width) / 2;
-	dlg_data->y = (term->height - dlg_data->height) / 2;
-
-	draw_area(term, dlg_data->x, dlg_data->y,
-		  dlg_data->width, dlg_data->height, ' ', 0,
+	set_rect(dlg_data->dimensions,
+		 (term->width - dlg_data->dimensions.width) / 2,
+		 (term->height - dlg_data->dimensions.height) / 2,
+		 int_min(term->width, width + 2 * DIALOG_LB),
+		 int_min(term->height, height + 2 * DIALOG_TB));
+	
+	draw_area(term, dlg_data->dimensions.x, dlg_data->dimensions.y,
+		  dlg_data->dimensions.width, dlg_data->dimensions.height, ' ', 0,
 		  get_bfu_color(term, "dialog.generic"));
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
@@ -556,12 +556,14 @@ draw_dialog(struct dialog_data *dlg_data, int width, int height)
 								"dialog.shadow");
 
 		/* (horizontal) */
-		draw_area(term, dlg_data->x + 2, dlg_data->y + dlg_data->height,
-			  dlg_data->width - 2, 1, ' ', 0, shadow_color);
+		draw_area(term, dlg_data->dimensions.x + 2,
+			  dlg_data->dimensions.y + dlg_data->dimensions.height,
+			  dlg_data->dimensions.width - 2, 1, ' ', 0, shadow_color);
 
 		/* (vertical) */
-		draw_area(term, dlg_data->x + dlg_data->width, dlg_data->y + 1,
-			  2, dlg_data->height, ' ', 0, shadow_color);
+		draw_area(term, dlg_data->dimensions.x + dlg_data->dimensions.width,
+			  dlg_data->dimensions.y + 1, 2, dlg_data->dimensions.height,
+			  ' ', 0, shadow_color);
 	}
 }
 

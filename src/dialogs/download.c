@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.47 2004/04/23 20:44:27 pasky Exp $ */
+/* $Id: download.c,v 1.48 2004/05/09 21:17:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,8 +212,8 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 			url[--url_len] = '.';
 		}
 	}
-	y = dlg_data->y + DIALOG_TB + 1;
-	x = dlg_data->x + DIALOG_LB;
+	y = dlg_data->dimensions.y + DIALOG_TB + 1;
+	x = dlg_data->dimensions.x + DIALOG_LB;
 	dlg_format_text_do(term, url, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 

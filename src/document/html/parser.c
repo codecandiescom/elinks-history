@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.159 2003/07/22 01:30:16 jonas Exp $ */
+/* $Id: parser.c,v 1.160 2003/07/22 01:37:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2986,22 +2986,21 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	      struct memory_list **ml, unsigned char *href_base,
 	      unsigned char *target_base, int to, int def, int hdef)
 {
-	unsigned char *name, *attr, *al, *label, *href, *target, *hd;
+	unsigned char *name, *attr, *al, *label, *href, *target;
 	struct link_def *ld;
 	struct menu_item *nm;
 	struct conv_table *ct;
+	struct string hd;
 	int namelen, lblen;
 	int nmenu = 0;
 	int i;
-	int hdl = 0;
 
-	hd = init_str();
-	if (!hd) return -1;
+	if (!init_string(&hd)) return -1;
 
-	if (head) add_to_str(&hd, &hdl, head);
-	scan_http_equiv(pos, eof, &hd, &hdl, NULL);
-	ct = get_convert_table(hd, to, def, NULL, NULL, hdef);
-	mem_free(hd);
+	if (head) add_to_string(&hd, head);
+	scan_http_equiv(pos, eof, &hd.source, &hd.length, NULL);
+	ct = get_convert_table(hd.source, to, def, NULL, NULL, hdef);
+	done_string(&hd);
 
 	*menu = mem_calloc(1, sizeof(struct menu_item));
 	if (!*menu) return -1;

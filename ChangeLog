@@ -1,3 +1,207 @@
+Mon May 31 17:34:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Replace host_connection->connection with a struct object to improve
+	debugging.  
+
+Mon May 31 17:19:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Use URI struct in struct host_connection instead of the host string.
+	Altho' it could pin down the URI a little longer than otherwise it
+	is only temporarily and I think this is a bit cleaner.  
+
+Mon May 31 17:16:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/download.c, sched/history.c, sched/session.c,
+	sched/task.c, document/refresh.c, protocol/uri.c, protocol/uri.h:
+
+	Introduce compare_uri(uri, uri, uri_component) function to obsolete 
+	uris_compare(). It is a work in progress guarded by an assertion.  
+	Idea by Miciah.  
+
+Mon May 31 12:39:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, cookies.h, dialogs.c:
+
+	Three things (yeah I know it is a bit too aggressive): 
+	
+	- Remove cookie->id since nothing uses it 
+	
+	- Remove c_server->accept since nothing uses it 
+	
+	- Rename c_server->server to host. It should be less confusing 
+	
+	The only real code changes is in the dead code.  
+
+Mon May 31 12:19:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Fix COOKIES_DEBUG building.  
+
+Mon May 31 12:17:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Fix overly strict cookie policy. If !c_server->accept) we always
+	bailed out. I should not have reverted all the patch. ;) 
+
+Mon May 31 12:09:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, dialogs.c:
+
+	A few fixes of cookie->server usage.  
+
+Mon May 31 05:04:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, config/kbdbind.c:
+
+	add_listbox_item(): Add support for not updating browser dialogs by 
+	passing a NULL browser. Note the root item must be non-NULL in that
+	case.  Finally also add argument that controls where to add the new
+	item.  
+	
+	init_action_listboxes(): Use add_listbox_item(). A little cleanup
+	included to keep lines shorter.  
+
+Mon May 31 03:45:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, cache/cache.c,
+	config/kbdbind.c, cookies/cookies.c, formhist/formhist.c,
+	globhist/globhist.c, protocol/auth/auth.c, sched/download.c:
+
+	add_listbox_item() is now the name of the common backend. Remove
+	@text arg.  
+
+Mon May 31 03:36:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.h, config/kbdbind.c:
+
+	Remove listbox_item->translated flag. get_info() stuff should take
+	care of that now.  
+
+Mon May 31 03:34:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Use add_listbox_leaf() when setting up keybinding->box_item.  
+
+Mon May 31 03:33:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	A small fix for some late renaming bits in last patch.  
+
+Mon May 31 03:27:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.c, bfu/listbox.h,
+	bookmarks/bookmarks.c, config/dialogs.c, config/dialogs.h,
+	config/kbdbind.c, config/options.c, cookies/dialogs.c:
+
+	Remove listbox_item->text and only rely on get_info(...,
+	LISTBOX_TEXT) calls.  
+
+Mon May 31 02:38:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Cleanup and remove more code. Common backend moved to header again.
+	Macros now wrap it for the folder and leaf adders.  
+
+Mon May 31 02:33:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, listbox.h:
+
+	Remove unused listbox_item->free_empty flag.  
+
+Mon May 31 02:29:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, cookies/cookies.c:
+
+	add_listbox_item_at_pos() -> add_listbox_leaf(). add_listbox_item()
+	now simply wraps add_listbox_leaf().  
+
+Mon May 31 02:24:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Remove add_listbox_items(). It was a bad interface.  
+
+Mon May 31 02:22:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, cookies/cookies.c,
+	cookies/cookies.h, cookies/dialogs.c:
+
+	Use c_server struct for maintaining the 1st level box items in the
+	cookie manager and also to reduce the number of cookie server
+	strings to allocate.  
+
+Mon May 31 01:24:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Fix cookie debug code cookie->server is memacpy(uri->host,
+	uri->hostlen);.  
+
+Mon May 31 01:21:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Sorry revert last patch. I am gonna use that.  
+
+Mon May 31 01:19:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Outcomment c_servers which is always empty.  
+
+Mon May 31 00:58:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Add checks using listbox_item->depth. We could maybe just make them
+	into assertions.  
+
+Mon May 31 00:51:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: dialogs.c, kbdbind.c, kbdbind.h:
+
+	Bring listbox_ops to keybinding manager. Primarily used for delete
+	button. Note it might hurt usability a bit, but now all managers are
+	'equally' bad. ;-).  
+
+Sun May 30 23:43:50 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/uri.c:
+
+	Fix a bug that prevented cookies from being sent when requesting /
+	on a server.  
+	
+	In add_uri_to_string, when adding the path or filename to to string, 
+	we had these steps: 
+	
+	 - assign |uri->data| to |filename|; 
+	 - decrement |filename|; 
+	 - if |filename| does not begin with a '/', add '/' 
+	   to the string that will be returned; 
+	 - if |uri->datalen| is 0, return the string; and 
+	 - further steps to add the path or filename to the string.  
+	
+	Do not decrement |filename|: this would leave |filename| pointing at
+	"/", which would keep the "/" from being added to the return-value, 
+	but |uri->datalen| is 0 when the URI refers to /.  Therefore,
+	|get_uri_string(uri, URI_PATH);| would return an empty string, which
+	the cookie code didn't like.  
+
+Sun May 30 22:56:23 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cookies/dialogs.c:
+
+	Show the cookie's path in the cookie manager's info window.  
+
 Sun May 30 21:49:40 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.130 2004/06/11 19:21:09 jonas Exp $ */
+/* $Id: form.c,v 1.131 2004/06/11 19:32:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,20 +548,25 @@ encode_controls(struct list_head *l, struct string *data,
 #define realloc_bound_ptrs(bptrs, bptrs_size) \
 	mem_align_alloc(bptrs, bptrs_size, bptrs_size + 1, int, 0xFF)
 
+struct boundary_info {
+	int count;
+	int *offsets;
+};
+
 static inline void
 add_boundary(struct string *data, unsigned char *bound,
-	     int **bound_ptrs, int *nbound_ptrs)
+	     struct boundary_info *boundary)
 {
 	add_to_string(data, "--");
-	if (realloc_bound_ptrs(bound_ptrs, *nbound_ptrs))
-		*bound_ptrs[*nbound_ptrs++] = data->length;
+	if (realloc_bound_ptrs(&boundary->offsets, boundary->count))
+		boundary->offsets[boundary->count++] = data->length;
 
 	add_bytes_to_string(data, bound, BL);
 }
 
 static inline void
 check_boundary(struct string *data, unsigned char *bound,
-	       int *bound_ptrs, int nbound_ptrs)
+	       struct boundary_info *boundary)
 {
 	unsigned char *pos, *end = data->source + data->length - BL;
 	register int i;
@@ -584,8 +589,8 @@ again:
 		INTERNAL("Could not assing boundary");
 	}
 
-	for (i = 0; i < nbound_ptrs; i++)
-		memcpy(data->source + bound_ptrs[i], bound, BL);
+	for (i = 0; i < boundary->count; i++)
+		memcpy(data->source + boundary->offsets[i], bound, BL);
 }
 
 /* FIXME: shouldn't we encode data at send time (in http.c) ? --Zas */
@@ -595,8 +600,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 {
 	struct conv_table *convert_table = NULL;
 	struct submitted_value *sv;
-	int *bound_ptrs = NULL;
-	int nbound_ptrs = 0;
+	struct boundary_info boundary = { 0, NULL };
 
 	assert(ses && l && data && bound);
 	if_assert_failed return;
@@ -604,7 +608,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 	memset(bound, 'x', BL);
 
 	foreach (sv, *l) {
-		add_boundary(data, bound, &bound_ptrs, &nbound_ptrs);
+		add_boundary(data, bound, &boundary);
 
 		/* FIXME: name is not encoded.
 		 * from RFC 1867:
@@ -697,16 +701,16 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 		add_to_string(data, "\r\n");
 	}
 
-	add_boundary(data, bound, &bound_ptrs, &nbound_ptrs);
+	add_boundary(data, bound, &boundary);
 	add_to_string(data, "--\r\n");
 
-	check_boundary(data, bound, bound_ptrs, nbound_ptrs);
+	check_boundary(data, bound, &boundary);
 
-	mem_free(bound_ptrs);
+	mem_free_if(boundary.offsets);
 	return;
 
 encode_error:
-	mem_free(bound_ptrs);
+	mem_free_if(boundary.offsets);
 	done_string(data);
 
 	/* XXX: This error message should move elsewhere. --Zas */

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.2 2004/01/18 15:47:39 pasky Exp $ */
+/* $Id: scanner.c,v 1.3 2004/01/18 16:47:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,17 +144,18 @@ init_css_scan_table(void)
 
 	memset(css_scan_table, 0, sizeof(css_scan_table));
 
-	css_scan_table['\\'] = CSS_CHAR_IDENT_START;
-	css_scan_table['_'] |= CSS_CHAR_IDENT_START;
+	/* Unicode escape (that we do not handle yet) + other special chars */
+	css_scan_table['\\'] = CSS_CHAR_IDENT | CSS_CHAR_IDENT_START;
+	css_scan_table['_'] |= CSS_CHAR_IDENT | CSS_CHAR_IDENT_START;
 	css_scan_table['-'] |= CSS_CHAR_IDENT;
 
 	/* Whitespace chars */
-	css_scan_table[' ']  |= CSS_CHAR_WHITESPACE;		    /* space */
-	css_scan_table['\t'] |= CSS_CHAR_WHITESPACE;		    /* horizontal tab */
-	css_scan_table['\v'] |= CSS_CHAR_WHITESPACE;		    /* vertical tab */
-	css_scan_table['\r'] |= CSS_CHAR_WHITESPACE | CSS_CHAR_NEWLINE; /* carriage return */
-	css_scan_table['\n'] |= CSS_CHAR_WHITESPACE | CSS_CHAR_NEWLINE; /* line feed */
-	css_scan_table['\f'] |= CSS_CHAR_WHITESPACE | CSS_CHAR_NEWLINE; /* form feed */
+	css_scan_table[' ']  |= CSS_CHAR_WHITESPACE;
+	css_scan_table['\t'] |= CSS_CHAR_WHITESPACE;
+	css_scan_table['\v'] |= CSS_CHAR_WHITESPACE;
+	css_scan_table['\r'] |= CSS_CHAR_WHITESPACE | CSS_CHAR_NEWLINE;
+	css_scan_table['\n'] |= CSS_CHAR_WHITESPACE | CSS_CHAR_NEWLINE;
+	css_scan_table['\f'] |= CSS_CHAR_WHITESPACE | CSS_CHAR_NEWLINE;
 
 	for (index = 161; index <= 255; index++) {
 		css_scan_table[index] |= CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.439 2004/06/07 23:38:54 jonas Exp $ */
+/* $Id: view.c,v 1.440 2004/06/08 11:30:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -222,6 +222,9 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 			if (!cached || cached->incomplete)
 				break;
 
+			mem_free(vs->goto_position);
+			vs->goto_position = NULL;
+
 			msg_box(term, NULL, MSGBOX_FREE_TEXT,
 				N_("Missing fragment"), AL_CENTER,
 				msg_text(term, N_("The requested fragment "
@@ -236,10 +239,9 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 			int_bounds(&vy, 0, doc_view->document->height - 1);
 			vs->y = vy;
 			set_link(doc_view);
+			mem_free(vs->goto_position);
+			vs->goto_position = NULL;
 		}
-
-		mem_free(vs->goto_position);
-		vs->goto_position = NULL;
 	}
 	vx = vs->x;
 	vy = vs->y;

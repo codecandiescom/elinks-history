@@ -1,14 +1,14 @@
-/* $Id: session.h,v 1.74 2003/12/01 14:51:34 pasky Exp $ */
+/* $Id: session.h,v 1.75 2003/12/01 14:55:12 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
 
+/* We need to declare these first :/. Damn cross-dependencies. */
+struct session;
+
 #ifdef USE_LEDS
 #include "bfu/leds.h"
 #endif
-#include "util/lists.h"
-#include "viewer/text/vs.h"
-
 #include "cache/cache.h"
 #include "document/options.h"
 #include "document/view.h"
@@ -17,6 +17,8 @@
 #include "sched/connection.h"
 #include "sched/history.h"
 #include "sched/location.h"
+#include "util/lists.h"
+#include "viewer/text/vs.h"
 
 
 /* This is used to pass along the initial session parameters. */

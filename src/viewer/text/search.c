@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.184 2004/02/02 15:32:42 jonas Exp $ */
+/* $Id: search.c,v 1.185 2004/02/02 15:40:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -941,6 +941,8 @@ get_document_char(struct document *document, int x, int y)
 }
 
 
+/* Link typeahead */
+
 enum typeahead_code {
 	TYPEAHEAD_MATCHED,
 	TYPEAHEAD_STOP,
@@ -1005,6 +1007,7 @@ search_link_text(struct document *document, int current_link, int i,
 				break;
 		}
 
+		/* Did the text match? */
 		if (textlen == j) return i;
 
 		/* Check if we are at the end of the first range */
@@ -1035,8 +1038,6 @@ search_link_text(struct document *document, int current_link, int i,
 	return -1;
 }
 
-/* Link typeahead */
-/* XXX: This is a bit hackish for some developers taste. */
 static enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
 	     unsigned char *text, int action)
@@ -1084,6 +1085,9 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	doc_view->vs->current_link = i;
 	return TYPEAHEAD_MATCHED;
 }
+
+
+/* Typeahead */
 
 static enum input_line_code
 text_typeahead_handler(struct input_line *line, int action)

@@ -204,7 +204,7 @@ instead of
 if (!(foo = mem_alloc(1234))) panic("aaaaaaaaaaaaaaarrrrrrrggggggg");
 
 (note that thou shalt ALWAYS test for success on everything - we are supposed
-to handle our own death elegantly as well)
+to die with honor if we are to die)
 
 Use blank lines frequently to separate chunks of code.  And use magic "/*" and
 "*/" to give others an idea about what it does and about possible pitfalls.
@@ -408,7 +408,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.19 2003/11/26 21:33:15 pasky Exp $ */
+	/* $Id: hacking.txt,v 1.20 2004/12/16 08:16:34 pasky Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -530,4 +530,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.19 2003/11/26 21:33:15 pasky Exp $
+$Id: hacking.txt,v 1.20 2004/12/16 08:16:34 pasky Exp $

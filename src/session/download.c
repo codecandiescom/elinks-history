@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.176 2003/11/21 04:45:10 witekfl Exp $ */
+/* $Id: download.c,v 1.177 2003/11/21 04:47:50 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1014,13 +1014,13 @@ resume_download(void *ses, unsigned char *file)
 
 
 void tp_cancel(void *);
-void tp_free(struct session *);
+void tp_free(struct tq *);
 
 
 static void continue_download_do(struct terminal *, int, void *, int);
 
 struct codw_hop {
-	struct session *ses;
+	struct tq *tq;
 	unsigned char *real_file;
 	unsigned char *file;
 };
@@ -1028,34 +1028,34 @@ struct codw_hop {
 static void
 continue_download(void *data, unsigned char *file)
 {
-	struct session *ses = data;
+	struct tq *tq = data;
 	struct codw_hop *codw_hop;
 
-	if (!ses->tq.url) return;
+	if (!tq->url) return;
 
 	codw_hop = mem_calloc(1, sizeof(struct codw_hop));
 	if (!codw_hop) {
-		tp_cancel(ses);
+		tp_cancel(tq);
 		return;
 	}
 
-	if (ses->tq.prog) {
+	if (tq->prog) {
 		/* FIXME: get_temp_name() calls tempnam(). --Zas */
-		file = get_temp_name(ses->tq.url);
+		file = get_temp_name(tq->url);
 		if (!file) {
 			mem_free(codw_hop);
-			tp_cancel(ses);
+			tp_cancel(tq);
 			return;
 		}
 	}
 
-	codw_hop->ses = ses;
+	codw_hop->tq = tq;
 	codw_hop->file = file;
 
 	kill_downloads_to_file(file);
 
-	create_download_file(ses->tab->term, file, &codw_hop->real_file,
-			     !!ses->tq.prog, 0, continue_download_do, codw_hop);
+	create_download_file(tq->ses->tab->term, file, &codw_hop->real_file,
+			     !!tq->prog, 0, continue_download_do, codw_hop);
 }
 
 static void
@@ -1063,7 +1063,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct codw_hop *codw_hop = data;
 	struct file_download *file_download = NULL;
-	unsigned char *url = codw_hop->ses->tq.url;
+	unsigned char *url = codw_hop->tq->url;
 
 	if (!codw_hop->real_file) goto cancel;
 
@@ -1079,27 +1079,27 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->download.data = file_download;
 	file_download->last_pos = 0;
 	file_download->handle = fd;
-	file_download->ses = codw_hop->ses;
+	file_download->ses = codw_hop->tq->ses;
 
-	if (codw_hop->ses->tq.prog) {
-		file_download->prog = subst_file(codw_hop->ses->tq.prog, codw_hop->file);
+	if (codw_hop->tq->prog) {
+		file_download->prog = subst_file(codw_hop->tq->prog, codw_hop->file);
 		mem_free(codw_hop->file);
-		mem_free(codw_hop->ses->tq.prog);
-		codw_hop->ses->tq.prog = NULL;
+		mem_free(codw_hop->tq->prog);
+		codw_hop->tq->prog = NULL;
 	}
 
-	file_download->prog_flags = codw_hop->ses->tq.prog_flags;
+	file_download->prog_flags = codw_hop->tq->prog_flags;
 	add_to_list(downloads, file_download);
-	change_connection(&codw_hop->ses->tq.download, &file_download->download, PRI_DOWNLOAD, 0);
-	tp_free(codw_hop->ses);
-	display_download(codw_hop->ses->tab->term, file_download, codw_hop->ses);
+	change_connection(&codw_hop->tq->download, &file_download->download, PRI_DOWNLOAD, 0);
+	tp_free(codw_hop->tq);
+	display_download(codw_hop->tq->ses->tab->term, file_download, codw_hop->tq->ses);
 
 	mem_free(codw_hop);
 	return;
 
 cancel:
-	tp_cancel(codw_hop->ses);
-	if (codw_hop->ses->tq.prog && codw_hop->file) mem_free(codw_hop->file);
+	tp_cancel(codw_hop->tq);
+	if (codw_hop->tq->prog && codw_hop->file) mem_free(codw_hop->file);
 	if (file_download) {
 		if (file_download->url) mem_free(file_download->url);
 		mem_free(file_download);
@@ -1109,44 +1109,43 @@ cancel:
 
 
 void
-tp_free(struct session *ses)
+tp_free(struct tq *tq)
 {
-	object_unlock(ses->tq.ce);
-	mem_free(ses->tq.url);
-	ses->tq.url = NULL;
-	if (ses->tq.goto_position) {
-		mem_free(ses->tq.goto_position);
-		ses->tq.goto_position = NULL;
+	object_unlock(tq->ce);
+	mem_free(tq->url);
+	tq->url = NULL;
+	if (tq->goto_position) {
+		mem_free(tq->goto_position);
+		tq->goto_position = NULL;
 	}
-	ses->tq.ce = NULL;
+	tq->ce = NULL;
 }
-
 
 void
 tp_cancel(void *data)
 {
-	struct session *ses = data;
+	struct tq *tq = data;
 	/* XXX: Should we really abort? (1 vs 0 as the last param) --pasky */
-	change_connection(&ses->tq.download, NULL, PRI_CANCEL, 1);
-	tp_free(ses);
+	change_connection(&tq->download, NULL, PRI_CANCEL, 1);
+	tp_free(tq);
 }
 
 
 static void
-tp_save(struct session *ses)
+tp_save(struct tq *tq)
 {
-	if (ses->tq.prog) {
-		mem_free(ses->tq.prog);
-		ses->tq.prog = NULL;
+	if (tq->prog) {
+		mem_free(tq->prog);
+		tq->prog = NULL;
 	}
-	query_file(ses, ses->tq.url, ses, continue_download, tp_cancel, 1);
+	query_file(tq->ses, tq->url, tq, continue_download, tp_cancel, 1);
 }
 
 
 static void
-tp_open(struct session *ses)
+tp_open(struct tq *tq)
 {
-	continue_download(ses, "");
+	continue_download(tq, "");
 }
 
 
@@ -1154,60 +1153,51 @@ tp_open(struct session *ses)
  * want to use this function for frames as well (now, when frame has content
  * type text/plain, it is ignored and displayed as HTML). */
 static void
-tp_display(struct session *ses)
+tp_display(struct tq *tq)
 {
 	struct view_state *vs;
+	struct session *ses = tq->ses;
 	unsigned char *goto_position = ses->goto_position;
 	unsigned char *loading_url = ses->loading_url;
 
-	ses->goto_position = ses->tq.goto_position;
-	ses->loading_url = ses->tq.url;
+	ses->goto_position = tq->goto_position;
+	ses->loading_url = tq->url;
 	vs = ses_forward(ses);
 	if (vs) vs->plain = 1;
 	ses->goto_position = goto_position;
 	ses->loading_url = loading_url;
-	ses->tq.goto_position = NULL;
+	tq->goto_position = NULL;
 
 	cur_loc(ses)->download.end = (void (*)(struct download *, void *))
 				     doc_end_load;
 	cur_loc(ses)->download.data = ses;
 
-	if (ses->tq.download.state >= 0)
-		change_connection(&ses->tq.download, &cur_loc(ses)->download, PRI_MAIN, 0);
+	if (tq->download.state >= 0)
+		change_connection(&tq->download, &cur_loc(ses)->download, PRI_MAIN, 0);
 	else
-		cur_loc(ses)->download.state = ses->tq.download.state;
+		cur_loc(ses)->download.state = tq->download.state;
 
-#if 0
-	/* This fixes a crash with GCC 3.2.3-6 on Debian
-	 * when displaying a file of an unknown type.
-	 *
-	 * We used ...gcc_3_3 before I changed it to ...gcc_3_x,
-	 * so presumably this fixes a crash with that, too.
-	 *  -- Miciah
-	 */
-	do_not_optimize_here_gcc_3_x(ses);
-#endif
 	display_timer(ses);
-	tp_free(ses);
+	tp_free(tq);
 }
 
 
 static void
-type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
+type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 {
 	struct string filename;
 	unsigned char *content_type;
 
-	if (ses->tq.prog) {
-		mem_free(ses->tq.prog);
-		ses->tq.prog = NULL;
+	if (tq->prog) {
+		mem_free(tq->prog);
+		tq->prog = NULL;
 	}
 
 	if (handler) {
-		ses->tq.prog = stracpy(handler->program);
-		ses->tq.prog_flags = handler->block;
+		tq->prog = stracpy(handler->program);
+		tq->prog_flags = handler->block;
 		if (!handler->ask) {
-			tp_open(ses);
+			tp_open(tq);
 			return;
 		}
 	}
@@ -1216,30 +1206,30 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 	if (!content_type) return;
 
 	if (init_string(&filename))
-		add_string_uri_filename_to_string(&filename, ses->tq.url);
+		add_string_uri_filename_to_string(&filename, tq->url);
 
 	/* @filename.source should be last in the getml()s ! (It terminates the
 	 * pointers list in case of allocation failure.) */
 
 	if (!handler) {
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
-			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
+			msg_box(tq->ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
-				msg_text(ses->tab->term, N_("Would you like to "
+				msg_text(tq->ses->tab->term, N_("Would you like to "
 					 "save the file '%s' (type: %s) "
 					 "or display it?"),
 					 filename.source, content_type),
-				ses, 3,
+				tq, 3,
 				N_("Save"), tp_save, B_ENTER,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
+			msg_box(tq->ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
-				msg_text(ses->tab->term, N_("Would you like to "
+				msg_text(tq->ses->tab->term, N_("Would you like to "
 					 "display the file '%s' (type: %s)?"),
 					 filename.source, content_type),
-				ses, 2,
+				tq, 2,
 				N_("Display"), tp_display, B_ENTER,
 				N_("Cancel"), tp_cancel, B_ESC);
 		}
@@ -1257,27 +1247,27 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			/* TODO: Improve the dialog to let the user correct the
 			 * used program. */
-			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
+			msg_box(tq->ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
-				msg_text(ses->tab->term, N_("Would you like to "
+				msg_text(tq->ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', save it or display it?"),
 					 filename.source, content_type, desc_sep,
 					 description, handler->program),
-				ses, 4,
+				tq, 4,
 				N_("Open"), tp_open, B_ENTER,
 				N_("Save"), tp_save, 0,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
+			msg_box(tq->ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
-				msg_text(ses->tab->term, N_("Would you like to "
+				msg_text(tq->ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', or display it?"),
 					 filename.source, content_type, desc_sep,
 					 description, handler->program),
-				ses, 3,
+				tq, 3,
 				N_("Open"), tp_open, B_ENTER,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
@@ -1334,7 +1324,9 @@ ses_chktype(struct session *ses, struct download **download, struct cache_entry 
 	if (ses->tq.goto_position) mem_free(ses->tq.goto_position);
 
 	ses->tq.goto_position = ses->goto_position ? stracpy(ses->goto_position) : NULL;
-	type_query(ses, ctype, handler);
+	ses->tq.ses = ses;
+	
+	type_query(&ses->tq, ctype, handler);
 	mem_free(ctype);
 	if (handler) {
 		mem_free(handler->program);

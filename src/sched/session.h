@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.65 2003/11/17 16:59:19 pasky Exp $ */
+/* $Id: session.h,v 1.66 2003/11/21 04:47:50 witekfl Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -68,6 +68,7 @@ enum task_type {
 struct tq {
 	struct download download;
 	struct cache_entry *ce;
+	struct session *ses;
 	unsigned char *url;
 	unsigned char *target_frame;
 	unsigned char *goto_position;

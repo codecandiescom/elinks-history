@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.371 2004/11/20 02:50:18 jonas Exp $ */
+/* $Id: http.c,v 1.372 2004/11/27 17:53:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,9 +31,7 @@
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
-#ifdef CONFIG_SSL
 #include "protocol/auth/digest.h"
-#endif
 #include "protocol/header.h"
 #include "protocol/http/codes.h"
 #include "protocol/http/http.h"
@@ -400,7 +398,6 @@ http_send_header(struct connection *conn)
 		unsigned char *user = get_opt_str("protocol.http.proxy.user");
 		unsigned char *passwd = get_opt_str("protocol.http.proxy.passwd");
 
-#ifdef CONFIG_SSL_DIGEST
 		if (proxy_auth.digest) {
 			unsigned char *response;
 			int userlen = int_min(strlen(user), HTTP_AUTH_USER_MAXLEN - 1);
@@ -424,9 +421,7 @@ http_send_header(struct connection *conn)
 				mem_free(response);
 			}
 
-		} else
-#endif
-		{
+		} else {
 			if (user[0]) {
 				unsigned char *proxy_data;
 
@@ -625,7 +620,6 @@ http_send_header(struct connection *conn)
 
 	entry = find_auth(uri);
 	if (entry) {
-#ifdef CONFIG_SSL_DIGEST
 		if (entry->digest) {
 			unsigned char *response;
 
@@ -637,9 +631,8 @@ http_send_header(struct connection *conn)
 
 				mem_free(response);
 			}
-		} else
-#endif
-		{
+
+		} else {
 			/* RFC2617 section 2 [Basic Authentication Scheme]
 			 *
 			 * To receive authorization, the client sends the userid
@@ -1180,9 +1173,7 @@ check_http_authentication(struct uri *uri, unsigned char *header,
 				mem_free(d);
 				break;
 			}
-		}
-#ifdef CONFIG_SSL_DIGEST
-		else if (!strncasecmp(d, "Digest", 6)) {
+		} else if (!strncasecmp(d, "Digest", 6)) {
 			unsigned char *realm = get_header_param(d, "realm");
 			unsigned char *nonce = get_header_param(d, "nonce");
 			unsigned char *opaque = get_header_param(d, "opaque");
@@ -1195,7 +1186,7 @@ check_http_authentication(struct uri *uri, unsigned char *header,
 			mem_free(d);
 			break;
 		}
-#endif
+
 		mem_free(d);
 		d = parse_header(str, header_field, &str);
 	}
@@ -1409,9 +1400,8 @@ again:
 					mem_free(d);
 					break;
 				}
-			}
-#ifdef CONFIG_SSL_DIGEST
-			else if (!strncasecmp(d, "Digest", 6)) {
+
+			} else if (!strncasecmp(d, "Digest", 6)) {
 				unsigned char *realm = get_header_param(d, "realm");
 				unsigned char *nonce = get_header_param(d, "nonce");
 				unsigned char *opaque = get_header_param(d, "opaque");
@@ -1424,7 +1414,7 @@ again:
 				mem_free(d);
 				break;
 			}
-#endif
+
 			mem_free(d);
 			d = parse_header(str, "Proxy-Authenticate", &str);
 		}

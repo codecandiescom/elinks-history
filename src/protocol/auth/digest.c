@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.27 2004/11/22 17:07:37 jonas Exp $ */
+/* $Id: digest.c,v 1.28 2004/11/27 17:53:35 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -9,10 +9,14 @@
 #include <string.h>
 #include <time.h>
 
-#ifdef CONFIG_OPENSSL
+/* Optionally MD5 support can depend on external implementation when linking
+ * against a SSL library that supports it. */
+#ifndef CONFIG_MD5
+#if defined(CONFIG_OPENSSL)
 #include <openssl/md5.h>
-#else
+#elif defined(CONFIG_GNUTLS_OPENSSL_COMPAT)
 #include <gnutls/openssl.h>
+#endif
 #endif
 
 #include "elinks.h"
@@ -20,6 +24,7 @@
 #include "protocol/auth/auth.h"
 #include "protocol/auth/digest.h"
 #include "util/conv.h"
+#include "util/md5.h"
 #include "util/memory.h"
 
 /* GNU TLS doesn't define this */

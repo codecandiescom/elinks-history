@@ -1,13 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.43 2004/11/14 21:32:18 jonas Exp $
+## $Id: Makefile.am,v 1.44 2004/11/27 17:53:35 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
-authobj = auth/auth.o auth/dialogs.o
-
-if CONFIG_SSL_DIGEST
-authdigestobj = auth/digest.o
-endif
+authobj = auth/auth.o auth/dialogs.o auth/digest.o
 
 if CONFIG_CGI
 cgiobj = file/cgi.o
@@ -67,7 +63,6 @@ noinst_LIBRARIES = libprotocol.a
 EXTRA_libprotocol_a_SOURCES = data.c data.h
 libprotocol_a_LIBADD = \
  $(authobj) \
- $(authdigestobj) \
  $(dataobj) \
  $(cgiobj) \
  $(fileobj) \

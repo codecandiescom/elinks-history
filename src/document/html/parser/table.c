@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.16 2004/06/29 13:44:22 jonas Exp $ */
+/* $Id: table.c,v 1.17 2004/06/30 01:09:24 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -157,7 +157,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 	 * rules="all" and some default (non-zero) value for the border
 	 * attribute. */
 	table->border = get_num(attr, "border");
- 	if (table->border == -1) {
+	if (table->border == -1) {
 		table->border = has_attr(attr, "border")
 				|| has_attr(attr, "rules")
 				|| has_attr(attr, "frame");
@@ -442,7 +442,7 @@ skip_table(unsigned char *html, unsigned char *eof)
 
 		while (html < eof
 		       && (*html != '<'
-		           || parse_element(html, eof, &name, &namelen, NULL,
+			    || parse_element(html, eof, &name, &namelen, NULL,
 					    &html)))
 			html++;
 
@@ -577,10 +577,10 @@ see:
 	if (t_namelen == 3
 	    && t_name[0] == '/'
 	    && toupper(t_name[1]) == 'T') {
-	        unsigned char c = toupper(t_name[2]);
+		unsigned char c = toupper(t_name[2]);
 
 		if (c == 'R' || c == 'D' || c == 'H') {
-	 		if (c_span)
+			if (c_span)
 				new_columns(table, c_span, c_width, c_al, c_val, 1);
 
 			if (in_cell) {

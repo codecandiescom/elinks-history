@@ -1,3 +1,363 @@
+Thu Jul  3 22:08:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Bunch of miscelleanous cleanup, optimizations, assert(), ....  
+
+Thu Jul  3 21:51:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Use assertions instead of internal() calls.  
+
+Thu Jul  3 21:36:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	assert() and assertm()...  
+
+Thu Jul  3 21:30:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	check_queue_bugs() was greatly simplified. Don't try to sort and
+	check again.  
+
+Thu Jul  3 21:26:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	And a useless comment about previous stuff is gone...  
+
+Thu Jul  3 21:25:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	An unused parameter was removed from format_frame().  
+
+Thu Jul  3 21:22:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Rename: getpri() -> get_priority().  
+
+Thu Jul  3 21:20:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	if () internal() -> assertm().  
+
+Thu Jul  3 21:10:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Cleanup and if () internal() -> assertm().  
+
+Thu Jul  3 21:05:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/document.c, document/html/renderer.c,
+	document/html/renderer.h:
+
+	enum cp_status was introduced, long variables names are now used in
+	get_convert_table(), cleanup.  
+
+Thu Jul  3 21:04:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Use given connections id in connection_disappeared().  
+
+Thu Jul  3 20:52:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, connection.h:
+
+	Rename connection->count to connection->id.  
+
+Thu Jul  3 20:38:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, document/cache.h,
+	document/html/renderer.h, osdep/os_dep.c, sched/connection.c,
+	sched/connection.h, util/types.h:
+
+	Eliminate tcount typedef. Hope nobody minds.  
+
+Thu Jul  3 20:14:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Small cleanup.  
+
+Thu Jul  3 10:59:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/info.c, document/cache.c, document/html/renderer.c,
+	lowlevel/select.c, sched/connection.c, util/types.h:
+
+	Rename: CI_* -> INFO_*.  
+
+Thu Jul  3 10:45:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Moved check_queue_bugs() call to del_connection().  
+
+Thu Jul  3 10:32:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, connection.h:
+
+	Put PRI_* values in enum connection_priority.  
+
+Thu Jul  3 10:01:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, connection.h:
+
+	Improved and moved comments for load_url to header file 
+
+Thu Jul  3 09:00:05 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Thu Jul  3 08:47:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	Cleanup, optimizations, missing assertions...  
+
+Thu Jul  3 08:24:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Some missing assertions were added.  
+
+Thu Jul  3 08:19:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Minor optimization.  
+
+Thu Jul  3 03:10:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.h:
+
+	Only use one bit for boolean members.  
+
+Thu Jul  3 02:25:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, document/html/parser.c,
+	document/html/renderer.c:
+
+	The last few compile fixes. ELinks is back online again.  
+
+Thu Jul  3 02:18:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, link.h, search.c, view.c, view.h, vs.c:
+
+	Some more brute force compilation fixes. I hope you sleep tight zas
+	;) 
+
+Thu Jul  3 01:40:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, sched/session.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/link.h:
+
+	Some compilation fixes that I should apparently provide.  
+
+Thu Jul  3 01:26:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/finger.c, protocol/ftp.c,
+	protocol/http/http.c, sched/connection.c, sched/connection.h,
+	ssl/connect.c:
+
+	Rename: setcstate() -> set_connection_state().  
+
+Thu Jul  3 01:23:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/: Makefile.am, link.c, link.h, view.c, view.h:
+
+	Moved link-related stuff from viewer/text/view.* to
+	viewer/text/link.*. Jonas will do the compilation fixes associated.
+	Have fun, Jonas ;-).  
+
+Thu Jul  3 01:11:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, connection.h:
+
+	Remove (hopefully) dead code.  
+
+Thu Jul  3 01:03:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/finger.c, sched/download.c, sched/download.h,
+	sched/error.c, sched/history.c, sched/location.h, sched/session.c,
+	sched/session.h, ssl/connect.c, ssl/connect.h:
+
+	More #include sched/connection.h fixes.  
+
+Thu Jul  3 00:47:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, viewer/text/Makefile.am,
+	viewer/text/form.c, viewer/text/form.h, viewer/text/textarea.c,
+	viewer/text/textarea.h, viewer/text/view.c, viewer/text/view.h:
+
+	Moved forms drawing/handling from viewer/text/view.* to
+	viewer/text/form.*. Jonas will do the compilation fixes associated.  
+
+Thu Jul  3 00:28:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, dialogs/info.c, dialogs/menu.c, document/cache.c,
+	lowlevel/connect.c, lowlevel/connect.h, protocol/file.c,
+	protocol/ftp.c, protocol/protocol.c, protocol/protocol.h,
+	protocol/http/http.c, protocol/http/https.c, scripting/lua/hooks.h,
+	viewer/dump/dump.c, viewer/dump/dump.h:
+
+	sched/sched.h #includes changed to sched/connection.h 
+
+Thu Jul  3 00:18:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: textarea.c, textarea.h, view.c, view.h:
+
+	Compilation fixes.  
+
+Thu Jul  3 00:15:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: Makefile.am, connection.c, connection.h, sched.c,
+	sched.h:
+
+	sched/sched.* -> sched/connection.* 
+
+Thu Jul  3 00:14:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	Moved a static function before its caller.  
+
+Thu Jul  3 00:12:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: connection.c, connection.h, sched.c, sched.h:
+
+	Reverted the code move out of sched/sched.*. Don't panic, the change
+	is good, but we'll do it w/ preserving history.  
+
+Thu Jul  3 00:09:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: view.h, textarea.h:
+
+	Header file fix.  
+
+Thu Jul  3 00:07:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: terminal/terminal.c, viewer/text/Makefile.am,
+	viewer/text/textarea.c, viewer/text/textarea.h, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Moved textarea-related functions from viewer/text/view.* to
+	viewer/text/textarea.*. Zas will do the compilation fixes
+	associated.  
+
+Thu Jul  3 00:05:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Fix status message printing...  
+
+Thu Jul  3 00:02:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Stricter assertions.  
+
+Wed Jul  2 23:58:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Cleanup.  
+
+Wed Jul  2 23:56:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Missing variables fixes.  
+
+Wed Jul  2 23:49:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	The textarea fieldop handlers now take additional @rep parameter.  
+
+Wed Jul  2 23:47:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Moved format_text() call from encode_controls() to
+	encode_textarea().  
+
+Wed Jul  2 23:41:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Ambiguous else fixes.  
+
+Wed Jul  2 23:40:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: Makefile.am, connection.c, connection.h, sched.c,
+	sched.h:
+
+	Moved connection management to sched/connection.* 
+
+Wed Jul  2 23:38:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Textarea drawing moved from draw_form_entry() to draw_textarea().  
+
+Wed Jul  2 23:21:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Extracted out the textarea field_op handlers to separate functions.  
+
+Wed Jul  2 23:14:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: view.c, view.h:
+
+	Compilation fixes.  
+
+Wed Jul  2 23:03:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Namespace cleanup: _area_cursor() -> area_cursor().  
+
+Wed Jul  2 23:02:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Should include search.h. Thanks, zas.  
+
+Wed Jul  2 23:00:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Namespace cleanup: _search_for() -> search_for_do().  
+
+Wed Jul  2 22:59:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, viewer/text/Makefile.am,
+	viewer/text/search.c, viewer/text/search.h, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Moved searching-related functions from viewer/text/view.* to
+	viewer/text/search.*. Zas will do the compile fixes associated.  
+
+Wed Jul  2 22:36:41 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Hmmm, french syntax error...  
+
 Wed Jul  2 22:07:50 2003  Laurent Monin <zas@norz.org>:
 
 	* src/sched/session.c:
@@ -107,13 +467,13 @@ Wed Jul  2 16:18:37 2003  Laurent Monin <zas@norz.org>:
 
 Wed Jul  2 16:02:55 2003  Laurent Monin <zas@norz.org>:
 
-	* src/sched/sched.c:
+	* src/sched/: connection.c, sched.c:
 
 	Minor cleanup. Please do not write a = b == c but a = (b == c).  
 
 Wed Jul  2 12:05:14 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/sched.c:
+	* src/sched/: connection.c, sched.c:
 
 	Misc. small cleanups.  
 
@@ -132,13 +492,13 @@ Wed Jul  2 10:46:22 2003  Laurent Monin <zas@norz.org>:
 
 Wed Jul  2 10:23:31 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/sched.h:
+	* src/sched/: connection.h, sched.h:
 
 	Added comment by pasky of connection->pri + fix #includes.  
 
 Wed Jul  2 02:17:29 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/sched/sched.c:
+	* src/sched/: connection.c, sched.c:
 
 	Rename: h_conns -> host_connections.  
 
@@ -172,14 +532,15 @@ Wed Jul  2 00:47:45 2003  Jonas Fonseca <fonseca@diku.dk>:
 Wed Jul  2 00:44:53 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: elinks.h, document/cache.c, document/cache.h,
-	sched/sched.c, util/types.h:
+	sched/connection.c, sched/sched.c, util/types.h:
 
 	Move type declarations from elinks.h to util/types.h but pasky still
 	needs to rebuild *MUAHAHAHA* 
 
 Wed Jul  2 00:16:02 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: elinks.h, document/cache.h, sched/sched.h:
+	* src/: elinks.h, document/cache.h, sched/connection.h,
+	sched/sched.h:
 
 	Minor #include cleanups and move longlong #define to elinks.h 
 
@@ -655,8 +1016,8 @@ Thu Jun 26 21:34:17 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Jun 26 21:19:31 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: protocol/protocol.c, protocol/protocol.h, sched/sched.c,
-	sched/session.c:
+	* src/: protocol/protocol.c, protocol/protocol.h,
+	sched/connection.c, sched/sched.c, sched/session.c:
 
 	The protocol (external) handler function has now its own type
 	(protocol_(external_)handler) ! This could ease things a little for
@@ -671,8 +1032,8 @@ Thu Jun 26 21:15:44 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Jun 26 21:09:58 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: protocol/protocol.c, protocol/protocol.h, sched/sched.c,
-	sched/session.c:
+	* src/: protocol/protocol.c, protocol/protocol.h,
+	sched/connection.c, sched/sched.c, sched/session.c:
 
 	Normalize some methods: get_protocol_handle() ->
 	get_protocol_handler(), get_external_protocol_function() ->
@@ -743,7 +1104,7 @@ Thu Jun 26 18:14:40 2003  Jonas Fonseca <fonseca@diku.dk>:
 Thu Jun 26 17:06:39 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: protocol/Makefile.am, protocol/url.c, protocol/url.h,
-	sched/sched.c, sched/session.c:
+	sched/connection.c, sched/sched.c, sched/session.c:
 
 	Integrate and use file added by last commit.  
 
@@ -2542,10 +2903,11 @@ Sun Jun 15 22:53:12 2003  Jonas Fonseca <fonseca@diku.dk>:
 Sun Jun 15 22:44:12 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in, src/Makefile.am, src/main.c, src/config/kbdbind.c,
-	src/dialogs/menu.c, src/sched/sched.c, src/sched/session.c,
-	src/scripting/Makefile.am, src/scripting/lua/core.c,
-	src/scripting/lua/core.h, src/scripting/lua/hooks.c,
-	src/scripting/lua/hooks.h, src/viewer/text/view.c:
+	src/dialogs/menu.c, src/sched/connection.c, src/sched/sched.c,
+	src/sched/session.c, src/scripting/Makefile.am,
+	src/scripting/lua/core.c, src/scripting/lua/core.h,
+	src/scripting/lua/hooks.c, src/scripting/lua/hooks.h,
+	src/viewer/text/view.c:
 
 	src/lua/* -> src/scripting/lua/*, inspired by kuser.  
 
@@ -3391,7 +3753,8 @@ Wed Jun 11 15:29:23 2003  Petr Baudis <pasky@ucw.cz>:
 
 Wed Jun 11 15:27:53 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: protocol/http/http.c, sched/sched.c, sched/sched.h:
+	* src/: protocol/http/http.c, sched/connection.c,
+	sched/connection.h, sched/sched.c, sched/sched.h:
 
 	prev_url -> ref_url - Makes Grepping Easier.  
 
@@ -4401,8 +4764,8 @@ Sun Jun  8 10:49:25 2003  Laurent Monin <zas@norz.org>:
 	intl/gettext/localcharset.c, intl/gettext/localealias.c,
 	lowlevel/dns.c, lowlevel/select.c, mime/backend/mailcap.c,
 	mime/backend/mimetypes.c, osdep/os_dep.c, protocol/file.c,
-	protocol/mailcap.c, protocol/http/auth.c, sched/download.c,
-	sched/location.c, sched/sched.c, sched/session.c,
+	protocol/mailcap.c, protocol/http/auth.c, sched/connection.c,
+	sched/download.c, sched/location.c, sched/sched.c, sched/session.c,
 	terminal/terminal.c, util/blacklist.c, util/hash.c,
 	util/snprintf.c, viewer/dump/dump.c, viewer/text/view.c,
 	viewer/text/vs.c:
@@ -4808,7 +5171,8 @@ Sat Jun  7 14:40:13 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Sat Jun  7 14:40:01 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/sched/: error.c, sched.c, sched.h:
+	* src/sched/: connection.c, connection.h, error.c, sched.c,
+	sched.h:
 
 	Moved msg_dsc from sched/sched.* to sched/error.*.  
 
@@ -5462,9 +5826,10 @@ Thu Jun  5 14:38:16 2003  Laurent Monin <zas@norz.org>:
 	intl/gettext/localealias.c, lowlevel/home.c, lowlevel/select.c,
 	lowlevel/sysname.c, lowlevel/timer.c, lowlevel/ttime.c,
 	osdep/beos.c, osdep/os_dep.c, protocol/mailcap.c,
-	protocol/http/auth.c, sched/download.c, sched/sched.c,
-	sched/session.c, ssl/ssl.c, terminal/kbd.c, terminal/terminal.c,
-	util/blacklist.c, util/error.c, util/memdebug.c, util/string.c:
+	protocol/http/auth.c, sched/connection.c, sched/download.c,
+	sched/sched.c, sched/session.c, ssl/ssl.c, terminal/kbd.c,
+	terminal/terminal.c, util/blacklist.c, util/error.c,
+	util/memdebug.c, util/string.c:
 
 	type func() -> type func(void) in declarations.  
 
@@ -7466,10 +7831,10 @@ Thu May  8 23:03:06 2003  Laurent Monin <zas@norz.org>:
 	lowlevel/connect.c, lowlevel/dns.c, lowlevel/home.c,
 	lowlevel/timer.c, osdep/os_dep.c, protocol/url.c,
 	protocol/http/auth.c, protocol/http/date.c, protocol/http/http.c,
-	sched/download.c, sched/sched.c, scripting/lua/hooks.c,
-	sched/session.c, ssl/connect.c, util/encoding.c, util/error.c,
-	util/memdebug.h, util/snprintf.c, viewer/text/view.c,
-	viewer/text/view.h:
+	sched/connection.c, sched/download.c, sched/sched.c,
+	scripting/lua/hooks.c, sched/session.c, ssl/connect.c,
+	util/encoding.c, util/error.c, util/memdebug.h, util/snprintf.c,
+	viewer/text/view.c, viewer/text/view.h:
 
 	Many missing declarations + static. Big patch, sorry.  
 
@@ -7506,10 +7871,10 @@ Thu May  8 21:50:07 2003  Laurent Monin <zas@norz.org>:
 	lowlevel/af_unix.h, lowlevel/connect.c, lowlevel/home.h,
 	lowlevel/select.c, lowlevel/select.h, lowlevel/sysname.h,
 	lowlevel/timer.h, lowlevel/ttime.h, osdep/os_dep.c,
-	sched/download.h, sched/sched.c, sched/sched.h, sched/session.h,
-	ssl/ssl.h, terminal/kbd.h, terminal/terminal.c,
-	terminal/terminal.h, util/blacklist.h, util/encoding.c,
-	util/error.h, util/string.h:
+	sched/connection.c, sched/connection.h, sched/download.h,
+	sched/sched.c, sched/sched.h, sched/session.h, ssl/ssl.h,
+	terminal/kbd.h, terminal/terminal.c, terminal/terminal.h,
+	util/blacklist.h, util/encoding.c, util/error.h, util/string.h:
 
 	Strict prototypes. void func() -> void func(void).  
 
@@ -7981,8 +8346,8 @@ Wed May  7 09:49:01 2003  Laurent Monin <zas@norz.org>:
 
 Wed May  7 09:22:55 2003  Laurent Monin <zas@norz.org>:
 
-	* src/: sched/sched.c, sched/sched.h, sched/session.c,
-	viewer/text/view.c:
+	* src/: sched/connection.c, sched/connection.h, sched/sched.c,
+	sched/sched.h, sched/session.c, viewer/text/view.c:
 
 	Some structs were reorganized to prevent memory padding. There was a
 	badly initialized struct status, one field was missing, fixed now.  
@@ -8048,14 +8413,14 @@ Tue May  6 22:34:43 2003  Petr Baudis <pasky@ucw.cz>:
 
 Tue May  6 22:00:16 2003  Laurent Monin <zas@norz.org>:
 
-	* src/sched/sched.c:
+	* src/sched/: connection.c, sched.c:
 
 	check_queue() function was optimized, options are now cached.
 	try_connection() wins two parameters.  
 
 Tue May  6 21:48:47 2003  Laurent Monin <zas@norz.org>:
 
-	* src/sched/sched.c:
+	* src/sched/: connection.c, sched.c:
 
 	Minor optimizations and cleanup: in calloc() we trust (II).  
 
@@ -9969,11 +10334,12 @@ Thu Apr 24 08:23:38 2003  Laurent Monin <zas@norz.org>:
 	elusive/parser/syntree.h, globhist/dialogs.c, globhist/globhist.c,
 	globhist/globhist.h, lowlevel/dns.c, lowlevel/select.c,
 	lowlevel/terminal.c, lowlevel/terminal.h, osdep/os_dep.c,
-	protocol/http/auth.c, protocol/http/auth.h, sched/download.c,
-	sched/download.h, sched/location.h, sched/sched.c, sched/sched.h,
-	sched/session.c, sched/session.h, util/blacklist.c, util/error.c,
-	util/error.h, util/hash.c, util/hash.h, util/lists.h,
-	util/memdebug.c, viewer/text/view.c:
+	protocol/http/auth.c, protocol/http/auth.h, sched/connection.c,
+	sched/connection.h, sched/download.c, sched/download.h,
+	sched/location.h, sched/sched.c, sched/sched.h, sched/session.c,
+	sched/session.h, util/blacklist.c, util/error.c, util/error.h,
+	util/hash.c, util/hash.h, util/lists.h, util/memdebug.c,
+	viewer/text/view.c:
 
 	Lists debugging feature was implemented. It still needs some work
 	(and cleanup) but it already detects some bugs. To test edit
@@ -10177,7 +10543,7 @@ Sun Apr 20 08:27:28 2003  Laurent Monin <zas@norz.org>:
 
 Sun Apr 20 08:25:32 2003  Laurent Monin <zas@norz.org>:
 
-	* src/: config/options.c, sched/sched.c:
+	* src/: config/options.c, sched/connection.c, sched/sched.c:
 
 	connect.retries = 0 means unlimited retries (by mikulas, from
 	0.99pre3).  
@@ -10591,7 +10957,7 @@ Sun Jan 26 19:23:19 2003  Petr Baudis <pasky@ucw.cz>:
 
 Sun Jan 26 17:40:09 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/sched/sched.c:
+	* src/sched/: connection.c, sched.c:
 
 	Fixed possible removal of used cache_entry (altough I can't imagine
 	well how could it happen).  
@@ -10718,8 +11084,8 @@ Thu Jan 23 02:29:47 2003  Petr Baudis <pasky@ucw.cz>:
 
 Thu Jan 23 02:29:28 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: protocol/ftp.c, protocol/http/http.c, sched/download.c,
-	sched/sched.c, sched/sched.h:
+	* src/: protocol/ftp.c, protocol/http/http.c, sched/connection.c,
+	sched/connection.h, sched/download.c, sched/sched.c, sched/sched.h:
 
 	Moved one part of the download resuming core (seek()ing in the
 	stream) to much more appropriate place. Introduced
@@ -10906,7 +11272,7 @@ Sun Jan 19 14:28:41 2003  Petr Baudis <pasky@ucw.cz>:
 
 Sun Jan 19 14:24:19 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* AUTHORS, src/sched/sched.c:
+	* AUTHORS, src/sched/connection.c, src/sched/sched.c:
 
 	Fixes for extracting of proxy addresses from the variables - ignore
 	/^protocol:\/\// and /\/.*$/. Patch by Alexey Tourbin
@@ -11243,7 +11609,7 @@ Tue Jan  7 23:20:27 2003  Petr Baudis <pasky@ucw.cz>:
 	po/hr.po, po/hu.po, po/id.po, po/is.po, po/it.po, po/lt.po,
 	po/nl.po, po/no.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
 	po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
-	src/config/options.c, src/sched/sched.c:
+	src/config/options.c, src/sched/connection.c, src/sched/sched.c:
 
 	Introduced document.cache.cache_redirects, which controls whether we
 	should cache redirects received from server or not. By default we
@@ -11253,13 +11619,14 @@ Tue Jan  7 23:20:27 2003  Petr Baudis <pasky@ucw.cz>:
 
 Tue Jan  7 23:18:59 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/sched/sched.h:
+	* src/sched/: connection.h, sched.h:
 
 	Exported struct list_head queue (=> compilation fix).  
 
 Tue Jan  7 19:57:29 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: document/cache.c, sched/sched.c, sched/sched.h:
+	* src/: document/cache.c, sched/connection.c, sched/connection.h,
+	sched/sched.c, sched/sched.h:
 
 	Moved is_entry_used() from sched/sched.* to document/cache.c and
 	statified.  
@@ -11297,13 +11664,14 @@ Sun Jan  5 16:48:10 2003  Petr Baudis <pasky@ucw.cz>:
 	src/protocol/ftp.c, src/protocol/mailcap.c, src/protocol/url.c,
 	src/protocol/url.h, src/protocol/user.c, src/protocol/user.h,
 	src/protocol/http/auth.c, src/protocol/http/http.c,
-	src/sched/Makefile.am, src/sched/download.c, src/sched/download.h,
-	src/sched/history.c, src/sched/history.h, src/sched/location.c,
-	src/sched/location.h, src/sched/sched.c, src/sched/session.c,
-	src/sched/session.h, src/scripting/lua/core.c,
-	src/scripting/lua/core.h, src/scripting/lua/hooks.c,
-	src/scripting/lua/hooks.h, src/viewer/text/view.c,
-	src/viewer/text/view.h, src/viewer/text/vs.c:
+	src/sched/Makefile.am, src/sched/connection.c,
+	src/sched/download.c, src/sched/download.h, src/sched/history.c,
+	src/sched/history.h, src/sched/location.c, src/sched/location.h,
+	src/sched/sched.c, src/sched/session.c, src/sched/session.h,
+	src/scripting/lua/core.c, src/scripting/lua/core.h,
+	src/scripting/lua/hooks.c, src/scripting/lua/hooks.h,
+	src/viewer/text/view.c, src/viewer/text/view.h,
+	src/viewer/text/vs.c:
 
 	src/document/download.*,location.*,history.*,session.* ->
 	src/sched/.  
@@ -12013,8 +12381,8 @@ Fri Jan  3 02:23:53 2003  Petr Baudis <pasky@ucw.cz>:
 	dialogs/mime.c, dialogs/options.c, document/download.c,
 	document/session.c, globhist/dialogs.c, scripting/lua/core.c,
 	osdep/os_dep.c, protocol/url.c, protocol/user.c,
-	protocol/http/auth.c, protocol/http/http.c, sched/sched.c,
-	viewer/dump/dump.c, viewer/text/view.c:
+	protocol/http/auth.c, protocol/http/http.c, sched/connection.c,
+	sched/sched.c, viewer/dump/dump.c, viewer/text/view.c:
 
 	intl/language.h -> intl/gettext/libintl.h. Now the new gettext
 	translation system should be activated.  
@@ -12108,7 +12476,7 @@ Fri Jan  3 00:38:32 2003  Petr Baudis <pasky@ucw.cz>:
 	dialogs/edit.c, dialogs/info.c, dialogs/menu.c, dialogs/mime.c,
 	dialogs/options.c, document/download.c, document/session.c,
 	globhist/dialogs.c, intl/language.h, osdep/os_dep.c,
-	protocol/url.c, protocol/user.c, sched/sched.c,
+	protocol/url.c, protocol/user.c, sched/connection.c, sched/sched.c,
 	scripting/lua/core.c, viewer/text/view.c:
 
 	Use directly strings in the source instead of macros and magic
@@ -12150,7 +12518,7 @@ Thu Jan  2 23:59:51 2003  Petr Baudis <pasky@ucw.cz>:
 	dialogs/options.c, document/download.c, document/session.c,
 	globhist/dialogs.c, intl/language.h, osdep/os_dep.c,
 	scripting/lua/core.c, protocol/url.c, protocol/user.c,
-	sched/sched.c, viewer/text/view.c:
+	sched/connection.c, sched/sched.c, viewer/text/view.c:
 
 	_() -> N_() 
 
@@ -12364,7 +12732,7 @@ Thu Jan  2 05:37:42 2003  Petr Baudis <pasky@ucw.cz>:
 	dialogs/edit.c, dialogs/info.c, dialogs/menu.c, dialogs/mime.c,
 	dialogs/options.c, document/download.c, document/session.c,
 	globhist/dialogs.c, intl/language.h, osdep/os_dep.c,
-	protocol/url.c, protocol/user.c, sched/sched.c,
+	protocol/url.c, protocol/user.c, sched/connection.c, sched/sched.c,
 	scripting/lua/core.c, viewer/text/view.c:
 
 	Second step in the gettext transition - use a _() macro instead of
@@ -12425,8 +12793,9 @@ Wed Jan  1 20:30:33 2003  Petr Baudis <pasky@ucw.cz>:
 	protocol/finger.h, protocol/ftp.c, protocol/ftp.h, protocol/url.c,
 	protocol/url.h, scripting/lua/hooks.h, protocol/http/http.c,
 	protocol/http/http.h, protocol/http/https.c, protocol/http/https.h,
-	sched/Makefile.am, sched/sched.c, sched/sched.h, ssl/connect.c,
-	ssl/connect.h, viewer/dump/dump.c, viewer/dump/dump.h:
+	sched/Makefile.am, sched/connection.c, sched/connection.h,
+	sched/sched.c, sched/sched.h, ssl/connect.c, ssl/connect.h,
+	viewer/dump/dump.c, viewer/dump/dump.h:
 
 	Moved lowlevel/sched.* to sched/sched.*.  
 

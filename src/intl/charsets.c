@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.31 2003/05/28 08:41:40 zas Exp $ */
+/* $Id: charsets.c,v 1.32 2003/05/28 09:59:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,6 +380,7 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 #undef DEBUG_ENTITY_CACHE
 #endif
 
+
 #ifdef ENTITY_CACHE
 struct entity_cache {
 		unsigned int hits;
@@ -403,15 +404,24 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 {
 #ifdef ENTITY_CACHE
 #define ENTITY_CACHE_SIZE 10	/* 10 seems a good value. */
-	static struct entity_cache entity_cache[ENTITY_CACHE_SIZE];
-	static int nb_entity_cache = 0;
+#define ENTITY_CACHE_MAXLEN 9   /* entities with length >= ENTITY_CACHE_MAXLEN or == 1
+			           will go in [0] table */
+	static struct entity_cache entity_cache[ENTITY_CACHE_MAXLEN][ENTITY_CACHE_SIZE];
+	static unsigned int nb_entity_cache[ENTITY_CACHE_MAXLEN];
+	static int first_time = 1;
 	int i;
+	unsigned int slen;
 #endif
 	unsigned char *result = NULL;
 
 	if (strlen <= 0) return NULL;
 
 #ifdef ENTITY_CACHE
+	if (first_time) {
+		memset(&nb_entity_cache, 0, ENTITY_CACHE_MAXLEN * sizeof(unsigned int));
+		first_time = 0;
+	}
+
 	/* Check if cached. A test on many websites (freshmeat.net + whole ELinks website
 	 * + google + slashdot + websites that result from a search for test on google,
 	 * + various ones) show a quite impressive improvment:
@@ -428,18 +438,30 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 	 * 9: hits=1 l=6 st='middot'
 	 *
 	 * Most of the time cache hit ratio is near 95%.
+	 *
+	 * A long test shows: 15186 hits vs. 24 misses and mean iteration
+	 * count is kept < 2 (worst case 1.58). Not so bad ;)
+	 *
 	 * --Zas */
-	if (nb_entity_cache > 0) {
-		for (i = 0; i < nb_entity_cache; i++) {
-			if (entity_cache[i].strlen == strlen
-			    && entity_cache[i].encoding == encoding
-			    && !strncasecmp(str, entity_cache[i].str, strlen)) {
+
+	/* entities with length >= ENTITY_CACHE_MAXLEN or == 1 will go in [0] table */
+	slen = (strlen > 1 && strlen < ENTITY_CACHE_MAXLEN) ? strlen : 0;
+
+	if (strlen < ENTITY_CACHE_MAXLEN && nb_entity_cache[slen] > 0) {
+		for (i = 0; i < nb_entity_cache[slen]; i++) {
+			if (entity_cache[slen][i].encoding == encoding
+			    && !strncasecmp(str, entity_cache[slen][i].str, strlen)) {
 #ifdef DEBUG_ENTITY_CACHE
-				fprintf(stderr, "hit after %d iter.\n", i + 1);
+				static double total_iter = 0;
+				static unsigned long hit_count = 0;
+
+				total_iter += i + 1;
+				hit_count++;
+				fprintf(stderr, "hit after %d iter. (mean = %0.2f)\n", i + 1, total_iter / (double)hit_count);
 #endif
-				if (entity_cache[i].hits < (unsigned int) ~0)
-					entity_cache[i].hits++;
-				return entity_cache[i].result;
+				if (entity_cache[slen][i].hits < (unsigned int) ~0)
+					entity_cache[slen][i].hits++;
+				return entity_cache[slen][i].result;
 			}
 		}
 #ifdef DEBUG_ENTITY_CACHE
@@ -516,40 +538,36 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 end:
 #ifdef ENTITY_CACHE
 	/* Take care of potential buffer overflow. */
-	if (strlen < sizeof(entity_cache[0].str)) {
-
-		if (nb_entity_cache) /* We move previous cached entries (if any) by one step. */
-			memmove(&entity_cache[1], &entity_cache[0],
-				nb_entity_cache * sizeof(struct entity_cache));
-
-		/* Increment number of cache entries if possible. */
-		if (nb_entity_cache < ENTITY_CACHE_SIZE) nb_entity_cache++;
+	if (strlen < sizeof(entity_cache[slen][0].str)) {
 
 		/* Copy new entry to cache. */
-		entity_cache[0].hits = 1;
-		entity_cache[0].strlen = strlen;
-		entity_cache[0].encoding = encoding;
-		entity_cache[0].result = result;
-		memcpy(entity_cache[0].str, str, strlen);
-		entity_cache[0].str[strlen] = '\0';
+		entity_cache[slen][nb_entity_cache[slen]].hits = 1;
+		entity_cache[slen][nb_entity_cache[slen]].strlen = strlen;
+		entity_cache[slen][nb_entity_cache[slen]].encoding = encoding;
+		entity_cache[slen][nb_entity_cache[slen]].result = result;
+		memcpy(entity_cache[slen][nb_entity_cache[slen]].str, str, strlen);
+		entity_cache[slen][nb_entity_cache[slen]].str[strlen] = '\0';
+
+		/* Increment number of cache entries if possible. */
+		if (nb_entity_cache[slen] < ENTITY_CACHE_SIZE) nb_entity_cache[slen]++;
 
 #ifdef DEBUG_ENTITY_CACHE
-		fprintf(stderr, "Added: l=%d st='%s'\n",
-				entity_cache[0].strlen, entity_cache[0].str);
+		fprintf(stderr, "Added in [%d]: l=%d st='%s'\n", slen,
+				entity_cache[slen][0].strlen, entity_cache[slen][0].str);
 
 #endif
+
 		/* Sort entries by hit order. */
-		/* XXX: memmove() + qsort() perhaps aren't the better way. */
-		if (nb_entity_cache > 1)
-			qsort(&entity_cache[0], nb_entity_cache,
+		if (nb_entity_cache[slen] > 1)
+			qsort(&entity_cache[slen][0], nb_entity_cache[slen],
 			      sizeof(struct entity_cache), (void *)hits_cmp);
 
 #ifdef DEBUG_ENTITY_CACHE
-		fprintf(stderr, "- Cache entries -\n");
-		for (i = 0; i < nb_entity_cache; i++)
+		fprintf(stderr, "- Cache entries [%d] -\n", slen);
+		for (i = 0; i < nb_entity_cache[slen] ; i++)
 			fprintf(stderr, "%d: hits=%d l=%d st='%s'\n", i,
-				entity_cache[i].hits, entity_cache[i].strlen,
-				entity_cache[i].str);
+				entity_cache[slen][i].hits, entity_cache[slen][i].strlen,
+				entity_cache[slen][i].str);
 		fprintf(stderr, "-----------------\n");
 #endif
 	}

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.38 2003/07/09 23:03:10 jonas Exp $ */
+/* $Id: user.c,v 1.39 2003/07/09 23:56:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,10 +119,10 @@ user_func(struct session *ses, unsigned char *url)
 {
 	unsigned char *subj, *prog, *host;
 	struct uri uri;
+	unsigned char *uristring = stracpy(url);
 
-	uri.protocol = stracpy(url);
-	if (!uri.protocol) return;
-	if (!parse_uri(&uri)) {
+	if (!uristring) return;
+	if (!parse_uri(&uri, uristring)) {
 		msg_box(ses->tab->term, NULL, 0,
 			N_("Bad URL syntax"), AL_CENTER,
 			N_("Bad user protocol URL"),
@@ -136,7 +136,7 @@ user_func(struct session *ses, unsigned char *url)
 	if (!prog || !*prog) {
 		/* Shouldn't ever happen, but be paranoid. */
 		/* Happens when you're in X11 and you've no handler for it. */
-		msg_box(ses->tab->term, getml(uri.protocol, NULL), MSGBOX_FREE_TEXT,
+		msg_box(ses->tab->term, getml(uristring, NULL), MSGBOX_FREE_TEXT,
 			N_("No program"), AL_CENTER,
 			msg_text(ses->tab->term,
 				N_("No program specified for protocol %s."),
@@ -185,7 +185,7 @@ user_func(struct session *ses, unsigned char *url)
 	}
 
 	prog = subst_cmd(prog, url, host, uri.port, uri.data, subj);
-	mem_free(uri.protocol);
+	mem_free(uristring);
 	if (subj) mem_free(subj);
 	if (prog) {
 		exec_on_terminal(ses->tab->term, prog, "", 1);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.6 2003/07/09 01:23:27 jonas Exp $ */
+/* $Id: uri.c,v 1.7 2003/07/09 23:56:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,13 +22,12 @@
 
 
 int
-parse_uri(struct uri *uri)
+parse_uri(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *prefix_end, *host_end;
 #ifdef IPV6
 	unsigned char *lbracket, *rbracket;
 #endif
-	unsigned char *uristring = uri->protocol;
 	int protocol;
 
 	assertm(uristring, "No uri to parse.");

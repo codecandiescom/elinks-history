@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.81 2003/07/07 01:29:59 jonas Exp $ */
+/* $Id: url.c,v 1.82 2003/07/09 23:56:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,10 +36,8 @@ parse_url(unsigned char *url, int *prlen,
           unsigned char **post)
 {
 	struct uri uri;
-	int uricode;
+	int uricode = uricode = parse_uri(&uri, url);
 
-	uri.protocol = url;
-	uricode = parse_uri(&uri);
 #if 0
 	/* Temporary debug code */
 	debug("parse_uri returned [%d]", uricode);

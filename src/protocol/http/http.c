@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.169 2003/07/09 23:03:10 jonas Exp $ */
+/* $Id: http.c,v 1.170 2003/07/09 23:56:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -353,8 +353,7 @@ http_send_header(struct connection *conn)
 	/* Setup the real uri. */
 	if (IS_PROXY_URI(conn->uri) && conn->uri.data) {
 		uri = &real_uri;
-		uri->protocol = conn->uri.data;
-		if (!parse_uri(uri))
+		if (!parse_uri(uri, conn->uri.data))
 			uri = NULL;
 
 	} else {
@@ -1066,8 +1065,7 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	/* Setup the real uri. */
 	if (IS_PROXY_URI(conn->uri) && conn->uri.data) {
 		uri = &real_uri;
-		uri->protocol = conn->uri.data;
-		if (!parse_uri(uri))
+		if (!parse_uri(uri, conn->uri.data))
 			uri = NULL;
 
 	} else {

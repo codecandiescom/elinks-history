@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.344 2004/07/14 22:11:04 zas Exp $ */
+/* $Id: menu.c,v 1.345 2004/07/14 22:13:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,7 +471,7 @@ activate_bfu_technology(struct session *ses, int item)
 
 
 void
-dialog_goto_url(struct session *ses, char *url)
+dialog_goto_url(struct session *ses, unsigned char *url)
 {
 	input_field(ses->tab->term, NULL, 1,
 		    N_("Go to URL"), N_("Enter URL"),

@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.21 2005/03/27 21:55:57 jonas Exp $ */
+/* $Id: renderer.c,v 1.22 2005/03/30 21:10:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,8 +398,8 @@ render_dom_tree(struct dom_navigator *navigator, struct dom_node *node, void *da
 
 	render_dom_printf(renderer, template, "%-16s: %s\n", name, value);
 
-	if (name) mem_free(name);
-	if (value) mem_free(value);
+	mem_free_if(name);
+	mem_free_if(value);
 
 	return node;
 }
@@ -421,8 +421,8 @@ render_dom_tree_id_leaf(struct dom_navigator *navigator, struct dom_node *node, 
 	renderer->canvas_x += navigator->depth;
 	render_dom_printf(renderer, template, "%-16s: %s -> %s\n", id, name, value);
 
-	if (name) mem_free(name);
-	if (value) mem_free(value);
+	mem_free_if(name);
+	mem_free_if(value);
 
 	return node;
 }
@@ -443,8 +443,8 @@ render_dom_tree_leaf(struct dom_navigator *navigator, struct dom_node *node, voi
 	renderer->canvas_x += navigator->depth;
 	render_dom_printf(renderer, template, "%-16s: %s\n", name, value);
 
-	if (name) mem_free(name);
-	if (value) mem_free(value);
+	mem_free_if(name);
+	mem_free_if(value);
 
 	return node;
 }
@@ -465,7 +465,7 @@ render_dom_tree_branch(struct dom_navigator *navigator, struct dom_node *node, v
 	renderer->canvas_x += navigator->depth;
 	render_dom_printf(renderer, template, "%-16s: %s\n", id, name);
 
-	if (name) mem_free(name);
+	mem_free_if(name);
 
 	return node;
 }

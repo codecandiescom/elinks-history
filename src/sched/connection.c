@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.39 2003/07/03 10:59:27 jonas Exp $ */
+/* $Id: connection.c,v 1.40 2003/07/03 20:14:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,15 +289,12 @@ abort_all_keepalive_connections(void)
 static void
 free_connection_data(struct connection *c)
 {
-	struct h_conn *h;
+	assertm(c->running, "connection already suspended");
+	c->running = 0;
 
 	if (c->sock1 != -1) set_handlers(c->sock1, NULL, NULL, NULL, NULL);
 	if (c->sock2 != -1) set_handlers(c->sock2, NULL, NULL, NULL, NULL);
 	close_socket(NULL, &c->sock2);
-	if (!c->running) {
-		internal("connection already suspended");
-	}
-	c->running = 0;
 
 	/* XXX: See also protocol/http/http.c:uncompress_shutdown(). */
 	if (c->stream) {
@@ -331,22 +328,20 @@ free_connection_data(struct connection *c)
 	}
 
 	active_connections--;
-	if (active_connections < 0) {
-		internal("active connections underflow");
-		active_connections = 0;
-	}
+	assertm(active_connections >= 0, "active connections underflow");
 
 	if (c->state != S_WAIT) {
-		h = is_host_on_list(c);
-		if (h) {
-			h->conn--;
-			if (!h->conn) {
-				del_from_list(h);
-				if (h->host) mem_free(h->host);
-				mem_free(h);
-			}
-		} else {
-			internal("suspending connection that is not on the list (state %d)", c->state);
+		struct h_conn *h = is_host_on_list(c);
+
+		assertm(h, "suspending connection that is not on the list "
+			"(state %d)", c->state);
+		if (!h) return;
+
+		h->conn--;
+		if (!h->conn) {
+			del_from_list(h);
+			if (h->host) mem_free(h->host);
+			mem_free(h);
 		}
 	}
 }
@@ -354,7 +349,7 @@ free_connection_data(struct connection *c)
 void
 send_connection_info(struct connection *c)
 {
-	int st = c->state;
+	int state = c->state;
 	tcount count = c->count;
 	struct status *stat = c->statuss.next;
 
@@ -363,7 +358,7 @@ send_connection_info(struct connection *c)
 		stat = stat->next;
 		if (stat->prev->end)
 			stat->prev->end(stat->prev, stat->prev->data);
-		if (st >= 0 && connection_disappeared(c, count))
+		if (state >= 0 && connection_disappeared(c, count))
 			return;
 	}
 }

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.184 2004/01/25 00:21:13 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.185 2004/01/25 10:18:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -385,7 +385,10 @@ make_keystroke(struct string *str, long key, long meta, int escape)
 	if (!key_string) {
 		key_string = key_buffer + 1;
 		*key_string = (unsigned char) key;
-		if (key == '\\' && escape) key_string--;
+		if (key == '\\' && escape)
+			key_string--;
+		else if (key == ' ' && !escape)
+			key_string = "<space>";
 	}
 
 	add_to_string(str, key_string);

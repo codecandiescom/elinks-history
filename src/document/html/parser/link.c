@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.24 2004/07/30 16:04:19 zas Exp $ */
+/* $Id: link.c,v 1.25 2004/08/06 09:11:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,10 @@ html_img(unsigned char *a)
 
 	al = get_attr_val(a, "alt");
 	if (!al) al = get_attr_val(a, "title");
-	if (al) clr_spaces(al);
+	/* Little hack to preserve rendering of [   ], in directories listing,
+	 * but we still want to drop extra spaces in alt or title attribute
+	 * to limit display width on certain websites. --Zas */
+	if (al && strlen(al) > 5) clr_spaces(al);
 
 	if (!al || !*al) {
 		mem_free_if(al);

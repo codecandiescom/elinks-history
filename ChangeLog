@@ -1,3 +1,113 @@
+Fri Jul  5 13:16:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL:
+
+	Phrase the legal advice more tolerantly to OpenSSL and not making
+	the problem *so* fatal 
+
+Fri Jul  5 13:06:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL:
+
+	Notice about GNUTLS near OpenSSL legal notice.  
+
+Fri Jul  5 12:59:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/ssl/: connect.c, ssl.c:
+
+	GNUTLS support enhancements (it WORKS now), that is.. explicitly set
+	up the certificates, connection parameters etc; a lot of misc bug
+	fixes; better displaying of cipher string.  
+
+Fri Jul  5 11:16:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in, src/lowlevel/connect.c, src/lua/core.c,
+	src/ssl/connect.c, src/ssl/ssl.c, src/ssl/ssl.h:
+
+	Compilation fixes of GNUTLS support. GNUTLS is also already being
+	dected; it's only used when OpenSSL is not found, disabled, or
+	GNUTLS is explicitly enabled.  
+
+Fri Jul  5 09:24:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, elinks.1, src/lowlevel/home.c:
+
+	CONFIG_DIR -> ELINKS_CONFDIR 
+
+Fri Jul  5 09:17:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/ssl/TODO:
+
+	Support to what else SSL implementations would be nice to have.  
+
+Fri Jul  5 03:59:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in, src/links.h, src/bfu/msgbox.c,
+	src/lowlevel/connect.c, src/lowlevel/connect.h,
+	src/lowlevel/sched.c, src/protocol/ftp.c, src/ssl/connect.c,
+	src/ssl/connect.h, src/ssl/ssl.c, src/ssl/ssl.h:
+
+	Introduced GNU TLS support parallel to the OpenSSL one; completely
+	untested (I didn't even try to compile it), no possibility to enable
+	it yet.  
+
+Fri Jul  5 02:24:05 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/ssl/ssl.c:
+
+	get_ssl_cipher_str() does smt only when we HAVE_SSL.  
+
+Fri Jul  5 02:02:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/ssl/ssl.c:
+
+	Compilation fix.  
+
+Fri Jul  5 02:00:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: protocol/http/http.c, ssl/ssl.c, ssl/ssl.h:
+
+	Moved SSL cipher info generation from protocol/http/http.c to
+	ssl/ssl.c:get_ssl_cipher_str().  
+
+Fri Jul  5 01:54:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/sched.c, ssl/connect.c, ssl/ssl.c, ssl/ssl.h:
+
+	getSSL -> get_ssl(), introduced free_ssl().  
+
+Fri Jul  5 01:49:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, ssl/ssl.c, ssl/ssl.h:
+
+	Introduced init_ssl() and done_ssl().  
+
+Fri Jul  5 01:29:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, dialogs/document.c, document/cache.c,
+	document/cache.h, lowlevel/connect.c, lowlevel/sched.c,
+	lowlevel/sched.h, protocol/http/http.c, ssl/connect.c,
+	ssl/connect.h, ssl/ssl.c, ssl/ssl.h:
+
+	HAVE_SSL checks moved down by one layer; introduced meta-ssl-type
+	ssl_t.  
+
+Fri Jul  5 00:29:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/button.c, bfu/button.h, bfu/checkbox.c, bfu/checkbox.h,
+	bfu/dialog.c, bfu/group.h, bfu/inpfield.c, bfu/inpfield.h,
+	bfu/listbox.c, bfu/listbox.h, bfu/widget.c, bfu/widget.h,
+	bookmarks/dialogs.c, dialogs/globhist.c:
+
+	Introduced widget-specific handler lists; moved display handlers to
+	widget-specific files.  
+
+Thu Jul  4 22:25:38 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: dialog.c, widget.h:
+
+	Removed some duplicated code from bfu/dialog.c 
+
 Thu Jul  4 21:42:39 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/dialog.c:

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.146 2004/03/31 23:33:39 jonas Exp $ */
+/* $Id: connection.c,v 1.147 2004/03/31 23:38:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,7 +221,7 @@ check_queue_bugs(void)
 
 
 static struct connection *
-init_connection(unsigned char *url, unsigned char *ref_url, int start,
+init_connection(unsigned char *url, unsigned char *referrer, int start,
 		enum cache_mode cache_mode, enum connection_priority priority)
 {
 	struct connection *conn = mem_calloc(1, sizeof(struct connection));
@@ -241,7 +241,7 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 	}
 
 	conn->id = connection_id++;
-	conn->ref_url = ref_url;
+	conn->referrer = referrer;
 	conn->pri[priority] =  1;
 	conn->cache_mode = cache_mode;
 	conn->socket = conn->data_socket = -1;

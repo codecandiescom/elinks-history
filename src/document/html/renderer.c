@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.361 2003/11/05 22:51:27 zas Exp $ */
+/* $Id: renderer.c,v 1.362 2003/11/05 22:55:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1409,7 +1409,7 @@ static void
 format_html(struct cache_entry *ce, struct document *document)
 {
 	struct fragment *fr;
-	struct part *rp;
+	struct part *part;
 	unsigned char *url;
 	unsigned char *start = NULL;
 	unsigned char *end = NULL;
@@ -1453,10 +1453,10 @@ format_html(struct cache_entry *ce, struct document *document)
 	d_opt->plain = i;
 	done_string(&title);
 
-	rp = format_html_part(start, end, par_format.align,
+	part = format_html_part(start, end, par_format.align,
 			      par_format.leftmargin, document->options.width, document,
 			      0, 0, head.source, 1);
-	if (rp) mem_free(rp);
+	if (part) mem_free(part);
 
 	done_string(&head);
 

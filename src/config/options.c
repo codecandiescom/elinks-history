@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.298 2003/10/17 18:46:43 jonas Exp $ */
+/* $Id: options.c,v 1.299 2003/10/17 20:16:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,8 +100,8 @@ get_opt_rec(struct option *tree, unsigned char *name_)
 
 	if (!aname) return NULL;
 
-	/* We iteratively call get_opt_rec() each for path_elemets-1, getting
-	 * appropriate tree for it and then resolving [path_elemets]. */
+	/* We iteratively call get_opt_rec() each for path_elements-1, getting
+	 * appropriate tree for it and then resolving [path_elements]. */
 	if ((sep = strrchr(name, '.'))) {
 		*sep = '\0';
 

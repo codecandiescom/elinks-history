@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.10 2002/05/10 13:27:44 pasky Exp $ */
+/* $Id: terminal.c,v 1.11 2002/05/11 20:13:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -658,6 +658,16 @@ inline int getcompcode(int c)
 unsigned char frame_dumb[48] =	"   ||||++||++++++--|-+||++--|-+----++++++++     ";
 unsigned char frame_vt100[48] =	"aaaxuuukkuxkjjjkmvwtqnttmlvwtqnvvwwmmllnnjla    ";
 
+/* For UTF8 I/O */ 
+unsigned char frame_vt100_u[48] = {
+	177, 177, 177, 179, 180, 180, 180, 191,
+	191, 180, 179, 191, 217, 217, 217, 191,
+	192, 193, 194, 195, 196, 197, 195, 195,
+	192, 218, 193, 194, 195, 196, 197, 193,
+	193, 194, 194, 192, 192, 218, 218, 197,
+	197, 217, 218, 177,  32, 32,  32,  32
+};
+
 unsigned char frame_koi[48] = {
 	144,145,146,129,135,178,180,167,
 	166,181,161,168,174,173,172,131,
@@ -684,7 +694,7 @@ unsigned char frame_restrict[48] = {
 	unsigned char A = ch >> 8 & 0x7f;					\
 										\
 	if (s->mode == TERM_LINUX) {						\
-		if (s->m11_hack) {						\
+		if (s->m11_hack && !s->utf_8_io) {				\
 			if (ch >> 15 != mode) {					\
 				mode = ch >> 15;				\
 				if (!mode) add_to_str(&a, &l, "\033[10m");	\
@@ -697,13 +707,15 @@ unsigned char frame_restrict[48] = {
 					c = frame_restrict[c - 176];		\
 			}							\
 		}								\
-	} else if (s->mode == TERM_VT100) {					\
+	} else if (s->mode == TERM_VT100 && !s->utf_8_io) {			\
 		if (ch >> 15 != mode) {						\
 			mode = ch >> 15;					\
 			if (!mode) add_to_str(&a, &l, "\x0f");			\
 			else add_to_str(&a, &l, "\x0e");			\
 		}								\
 		if (mode && c >= 176 && c < 224) c = frame_vt100[c - 176];	\
+	} else if (s->mode == TERM_VT100 && (ch >> 15) && c >= 176 && c < 224) { \
+		c = frame_vt100_u[c - 176];					\
 	} else if (s->mode == TERM_KOI8 && (ch >> 15) && c >= 176 && c < 224) { \
 		c = frame_koi[c - 176];						\
 	} else if (s->mode == TERM_DUMB && (ch >> 15) && c >= 176 && c < 224)	\
@@ -733,7 +745,8 @@ unsigned char frame_restrict[48] = {
 		int charset = s->charset;					\
 										\
 		if (ch >> 15) {							\
-			int frames_charset = s->mode == TERM_LINUX		\
+			int frames_charset = (s->mode == TERM_LINUX ||		\
+					      s->mode == TERM_VT100)		\
 						? get_cp_index("cp437")		\
 						: s->mode == TERM_KOI8		\
 							? get_cp_index("koi8-r")\

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.108 2004/06/18 13:09:24 jonas Exp $ */
+/* $Id: textarea.c,v 1.109 2004/06/18 13:17:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,31 +419,28 @@ enum frame_event_status
 textarea_op_home(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
-	int current, state = 0;
+	int current, state;
 
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
 
+	state = fs->state;
 	line = format_text(fs->value, fc->cols, !!fc->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
 	current = get_textarea_line_number(line, fs->state);
-	if (current != -1) state = line[current].start;
+	if (current != -1) fs->state = line[current].start;
 
 	mem_free(line);
 
-	if (fs->state == state) return FRAME_EVENT_OK;
-
-	fs->state = state;
-
-	return FRAME_EVENT_REFRESH;
+	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status
 textarea_op_up(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
-	int current;
+	int current, state;
 
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
@@ -463,18 +460,19 @@ textarea_op_up(struct form_state *fs, struct form_control *fc)
 		return FRAME_EVENT_IGNORED;
 	}
 
+	state = fs->state;
 	fs->state -= line[current].start - line[current-1].start;
 	int_upper_bound(&fs->state, line[current-1].end);
 
 	mem_free(line);
-	return FRAME_EVENT_REFRESH;
+	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status
 textarea_op_down(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
-	int current;
+	int current, state;
 
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
@@ -493,23 +491,24 @@ textarea_op_down(struct form_state *fs, struct form_control *fc)
 		return FRAME_EVENT_IGNORED;
 	}
 
+	state = fs->state;
 	fs->state += line[current+1].start - line[current].start;
 	int_upper_bound(&fs->state, line[current+1].end);
 
 	mem_free(line);
-	return FRAME_EVENT_REFRESH;
+	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status
 textarea_op_end(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
-	int current;
-	int wrap;
+	int current, wrap, state;
 
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
 
+	state = fs->state;
 	line = format_text(fs->value, fc->cols, !!fc->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
@@ -527,7 +526,7 @@ textarea_op_end(struct form_state *fs, struct form_control *fc)
 	}
 
 	mem_free(line);
-	return FRAME_EVENT_REFRESH;
+	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
 }
 
 /* BEGINNING_OF_BUFFER */
@@ -535,27 +534,23 @@ enum frame_event_status
 textarea_op_bob(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
-	int current, state = 0;
+	int current, state;
 
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
 
+	state = fs->state;
 	line = format_text(fs->value, fc->cols, !!fc->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
 	current = get_textarea_line_number(line, fs->state);
 	if (current != -1) {
-		state = fs->state - line[current].start;
+		fs->state = fs->state - line[current].start;
 		int_upper_bound(&state, line[0].end);
 	}
 
 	mem_free(line);
-
-	if (fs->state == state) return FRAME_EVENT_OK;
-
-	fs->state = state;
-
-	return FRAME_EVENT_REFRESH;
+	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
 }
 
 /* END_OF_BUFFER */
@@ -563,11 +558,12 @@ enum frame_event_status
 textarea_op_eob(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
-	int current;
+	int current, state;
 
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
 
+	state = fs->state;
 	line = format_text(fs->value, fc->cols, !!fc->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
@@ -585,7 +581,7 @@ textarea_op_eob(struct form_state *fs, struct form_control *fc)
 	}
 
 	mem_free(line);
-	return FRAME_EVENT_REFRESH;
+	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.206 2005/03/23 14:16:13 zas Exp $ */
+/* $Id: dialogs.c,v 1.207 2005/03/30 09:38:46 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -561,19 +561,14 @@ bookmark_search_do(void *data)
 	unsigned char *search_title = dlg->widgets[0].data;
 	unsigned char *search_url = dlg->widgets[1].data;
 	struct bookmark_search_ctx ctx = NULL_BOOKMARK_SEARCH_CTX;
-	struct widget_data *widget_data = NULL;
-	struct listbox_data *box = NULL;
+	struct listbox_data *box;
 	struct dialog_data *dlg_data;
-
-	if (!search_title || !search_url)
-		return;
 
 	assertm(dlg->udata, "Bookmark search with NULL udata in dialog");
 	if_assert_failed return;
 
-	dlg_data = (struct dialog_data *) dlg->udata;
-	widget_data = dlg_data->widgets_data;
-	box = get_dlg_listbox_data(dlg_data);
+	if (!search_title || !search_url)
+		return;
 
 	/* Memorize last searched title */
 	mem_free_set(&bm_last_searched_name, stracpy(search_title));
@@ -589,10 +584,13 @@ bookmark_search_do(void *data)
 	ctx.search_url = search_url;
 	ctx.search_title = search_title;
 
+	dlg_data = (struct dialog_data *) dlg->udata;
+	box = get_dlg_listbox_data(dlg_data);
+
 	traverse_listbox_items_list(box->sel, box, 0, 0, test_search, &ctx);
 	if (!ctx.found) return;
 
-	listbox_sel_move(widget_data, ctx.ofs - 1);
+	listbox_sel_move(dlg_data->widgets_data, ctx.ofs - 1);
 }
 
 

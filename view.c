@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.37 2002/03/16 15:17:23 pasky Exp $ */
+/* $Id: view.c,v 1.38 2002/03/16 17:44:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,8 +24,11 @@
 #include "links.h"
 
 #include "cache.h"
+#include "charsets.h"
 #include "cookies.h"
 #include "error.h"
+#include "html.h"
+#include "html_r.h"
 #include "http.h"
 #include "main.h"
 #include "url.h"
@@ -55,7 +58,7 @@ void destroy_vs(struct view_state *vs)
 
 void init_formatted(struct f_data *scr)
 {
-	memset(((struct f_data **)scr) + 2, 0, SIZEOF_F_DATA - 2 * sizeof(struct f_data *));
+	memset(((struct f_data **)scr) + 2, 0, sizeof(struct f_data) - 2 * sizeof(struct f_data *));
 	scr->data = DUMMY;
 	scr->nlinks = 0;
 	scr->links = DUMMY;

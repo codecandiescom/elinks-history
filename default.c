@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.40 2002/03/16 15:17:22 pasky Exp $ */
+/* $Id: default.c,v 1.41 2002/03/16 17:44:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,8 +23,12 @@
 
 #include "links.h"
 
+#include "charsets.h"
 #include "dns.h"
+#include "html.h"
+#include "html_r.h"
 #include "main.h"
+#include "session.h"
 
 void get_system_name()
 {

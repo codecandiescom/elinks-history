@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: html_r.c,v 1.17 2002/03/16 15:17:22 pasky Exp $ */
+/* $Id: html_r.c,v 1.18 2002/03/16 17:44:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,10 +11,15 @@
 #include "links.h"
 
 #include "cache.h"
+#include "charsets.h"
 #include "error.h"
+#include "html.h"
+#include "html_r.h"
+#include "html_tbl.h"
 #include "http.h"
 #include "main.h"
 #include "select.h"
+#include "session.h"
 #include "url.h"
 
 static inline int color_distance(struct rgb *c1, struct rgb *c2)
@@ -906,7 +911,7 @@ void create_frame(struct frame_param *fp)
 	add_frameset_entry(fp->parent, NULL, fp->name, fp->url);
 }
 
-void *html_special(struct part *part, int c, ...)
+void *html_special(struct part *part, html_special_type c, ...)
 {
 	va_list l;
 	unsigned char *t;
@@ -967,6 +972,8 @@ void free_table_cache()
 {
 	free_list(table_cache);
 }
+
+int empty_format;
 
 struct part *format_html_part(unsigned char *start, unsigned char *end, int align, int m, int width, struct f_data *data, int xs, int ys, unsigned char *head, int link_num)
 {
@@ -1114,7 +1121,7 @@ void push_base_format(unsigned char *url, struct document_options *opt)
 	par_format.width = opt->xw;
 	par_format.list_level = par_format.list_number = 0;
 	par_format.dd_margin = opt->margin;
-	par_format.flags = 0;
+	par_format.flags = P_NONE;
 	memcpy(&par_format.bgcolor, &opt->default_bg, sizeof(struct rgb));
 	html_top.invisible = 0;
 	html_top.name = NULL; html_top.namelen = 0; html_top.options = NULL;
@@ -1335,7 +1342,7 @@ void cached_format_html(struct view_state *vs, struct f_data_c *screen, struct d
 	}
 	cee->refcount++;
 	shrink_memory(0);
-	if (!(ce = mem_alloc(SIZEOF_F_DATA))) {
+	if (!(ce = mem_alloc(sizeof(struct f_data)))) {
 		cee->refcount--;
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.26 2002/03/16 15:17:23 pasky Exp $ */
+/* $Id: menu.c,v 1.27 2002/03/16 17:44:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,11 +19,14 @@
 #include "links.h"
 
 #include "cache.h"
+#include "charsets.h"
 #ifdef LEAK_DEBUG
 #include "error.h"
 #endif
+#include "html_r.h"
 #include "main.h"
 #include "select.h"
+#include "session.h"
 #include "url.h"
 
 void menu_about(struct terminal *term, void *d, struct session *ses)

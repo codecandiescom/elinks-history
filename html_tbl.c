@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: html_tbl.c,v 1.9 2002/03/16 15:17:22 pasky Exp $ */
+/* $Id: html_tbl.c,v 1.10 2002/03/16 17:44:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,9 @@
 #include "links.h"
 
 #include "error.h"
+#include "html.h"
+#include "html_r.h"
+#include "html_tbl.h"
 
 #define AL_TR		-1
 
@@ -36,6 +39,8 @@
 #define R_COLS		2
 #define R_ALL		3
 #define R_GROUPS	4
+
+int table_level;
 
 void get_align(char *attr, int *a)
 {

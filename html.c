@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: html.c,v 1.33 2002/03/16 15:17:22 pasky Exp $ */
+/* $Id: html.c,v 1.34 2002/03/16 17:44:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,8 +15,13 @@
 
 #include "links.h"
 
+#include "charsets.h"
 #include "error.h"
+#include "html.h"
+#include "html_r.h"
+#include "html_tbl.h"
 #include "http.h"
+#include "session.h"
 #include "url.h"
 
 /* TODO: This needs rewrite. Yes, no kidding. */
@@ -512,8 +517,6 @@ int pos;
 int putsp;
 
 int was_br;
-int table_level;
-int empty_format;
 
 void ln_break(int n, void (*line_break)(void *), void *f)
 {
@@ -635,9 +638,11 @@ int get_width(unsigned char *a, unsigned char *n, int trunc)
 	return r;
 }
 
-/*int form_num;
+#if 0
+int form_num;
 struct form form = { 0, NULL, 0 };
-int g_ctrl_num;*/
+int g_ctrl_num;
+#endif
 
 struct form form = { NULL, NULL, 0, 0 };
 
@@ -885,6 +890,11 @@ void html_h(int h, char *a)
 			break;
 		case AL_BLOCK:
 			par_format.leftmargin = par_format.rightmargin = (h - 2) * 2;
+			break;
+		case AL_NO:
+		case AL_MASK:
+		case AL_EXTD_TEXT:
+			/* Silence compiler warnings */
 			break;
 	}
 }

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.29 2002/03/16 15:17:23 pasky Exp $ */
+/* $Id: session.c,v 1.30 2002/03/16 17:44:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,12 @@
 
 #include "cache.h"
 #include "error.h"
+#include "html.h"
+#include "html_r.h"
 #include "select.h"
+#include "session.h"
 #include "url.h"
+
 
 #ifdef HAVE_LONG_LONG
 #define longlong long long
@@ -52,11 +56,27 @@
 #define longlong long
 #endif
 
+
 int keep_unhistory;
 
 struct list_head downloads = {&downloads, &downloads};
 
 void check_questions_queue(struct session *ses);
+
+struct file_to_load {
+	struct file_to_load *next;
+	struct file_to_load *prev;
+	struct session *ses;
+	int req_sent;
+	int pri;
+	struct cache_entry *ce;
+	unsigned char *url;
+	struct status stat;
+};
+
+struct file_to_load *request_additional_file(struct session *, unsigned char *, int);
+struct file_to_load *request_additional_loading_file(struct session *, unsigned char *, struct status *, int);
+
 
 int are_there_downloads()
 {
@@ -1104,7 +1124,7 @@ void post_cancel(struct wtd_data *w)
 	reload(w->ses, NC_CACHE);
 }
 
-void ses_goto(struct session *ses, unsigned char *url, unsigned char *target, int pri, int cache, int wtd, unsigned char *pos, void (*fn)(struct status *, struct session *), int redir)
+void ses_goto(struct session *ses, unsigned char *url, unsigned char *target, int pri, int cache, session_wtd wtd, unsigned char *pos, void (*fn)(struct status *, struct session *), int redir)
 {
 	struct wtd_data *w;
 	unsigned char *m1, *m2;
@@ -1160,7 +1180,7 @@ int do_move(struct session *ses, struct status **stat)
 
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u, *p, *gp;
-		int w = ses->wtd;
+		session_wtd w = ses->wtd;
 		if (ses->wtd == WTD_BACK && (void *)cur_loc(ses)->next == &ses->history)
 			goto b;
 		if (!(u = join_urls(ses->loading_url, ce->redirect))) goto b;
@@ -1788,7 +1808,7 @@ unsigned char *follow_url_hook(struct session *ses, unsigned char *url)
 }
 #endif
 
-void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, int wtd)
+void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, session_wtd wtd)
 {
 	unsigned char *u;
 	unsigned char *pos;

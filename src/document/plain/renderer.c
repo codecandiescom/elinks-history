@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.48 2003/12/27 22:58:19 zas Exp $ */
+/* $Id: renderer.c,v 1.49 2003/12/28 01:06:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,11 +35,11 @@ realloc_line(struct document *document, int y, int x)
 
 	if (!line) return NULL;
 
-	if (line->length <= x) {
-		if (!ALIGN_LINE(&line->chars, line->length, x + 1))
+	if (x >= line->length) {
+		if (!ALIGN_LINE(&line->chars, line->length, x))
 			return NULL;
 
-		line->length = x + 1;
+		line->length = x;
 	}
 
 	return line->chars;
@@ -174,10 +174,13 @@ add_document_line(struct document *document, int lineno,
 	width += expanded;
 
 	pos = realloc_line(document, lineno, width);
-	if (!pos) return 0;
+	if (!pos) {
+		mem_free(line);
+		return 0;
+	}
 
 	expanded = 0;
-	for (line_pos = 0, end = pos + width; pos < end; pos++, line_pos++) {
+	for (line_pos = 0, end = pos + width; pos < end; line_pos++) {
 		unsigned char line_char = line[line_pos];
 
 		if (line_char == ASCII_TAB) {
@@ -186,11 +189,14 @@ add_document_line(struct document *document, int lineno,
 			template->data = ' ';
 			expanded += tab_width;
 
-			for (; tab_width; tab_width--, pos++)
-				copy_screen_chars(pos, template, 1);
+			copy_screen_chars(pos++, template, 1);
+
+			while (tab_width--)
+				copy_screen_chars(pos++, template, 1);
+
 		} else {
 			template->data = line_char;
-			copy_screen_chars(pos, template, 1);
+			copy_screen_chars(pos++, template, 1);
 		}
 	}
 
@@ -244,7 +250,7 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 			was_empty_line = 1;
 		} else
 			was_empty_line = 0;
-		
+
 		/* We will touch the supplied source, so better replicate it. */
 		xsource = memacpy(source, width);
 		if (!xsource) continue;

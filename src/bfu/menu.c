@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.10 2002/07/03 15:04:36 pasky Exp $ */
+/* $Id: menu.c,v 1.11 2002/07/05 20:42:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "links.h"
 
+#include "bfu/colors.h"
 #include "bfu/menu.h"
 #include "config/kbdbind.h"
 #include "intl/language.h"

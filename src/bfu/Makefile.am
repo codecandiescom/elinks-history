@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.17 2002/07/04 21:19:44 pasky Exp $
+## $Id: Makefile.am,v 1.18 2002/07/05 20:42:13 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -10,6 +10,7 @@ libbfu_a_SOURCES = \
  button.h \
  checkbox.c \
  checkbox.h \
+ colors.h \
  dialog.c \
  dialog.h \
  group.c \

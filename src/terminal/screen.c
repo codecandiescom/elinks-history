@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.65 2003/09/02 19:33:05 jonas Exp $ */
+/* $Id: screen.c,v 1.66 2003/09/02 19:54:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,6 +95,57 @@ struct screen_driver {
 	unsigned int trans:1;
 	unsigned int underline:1;
 };
+
+static inline void
+init_screen_driver(struct screen_driver *driver, struct terminal *term)
+{
+	int utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
+
+	memset(driver, 0, sizeof(struct screen_driver));
+
+	driver->type = get_opt_int_tree(term->spec, "type");
+	driver->colors = get_opt_bool_tree(term->spec, "colors");
+	driver->trans = get_opt_bool_tree(term->spec, "transparency");
+	driver->underline = get_opt_bool_tree(term->spec, "underline");
+
+	if (utf8_io) {
+		driver->charsets[0] = get_opt_int_tree(term->spec, "charset");
+	} else {
+		driver->charsets[0] = -1;
+	}
+
+	if (driver->type == TERM_LINUX) {
+		if (get_opt_bool_tree(term->spec, "restrict_852")) {
+			driver->frame = frame_restrict;
+		}
+
+		if (utf8_io) {
+			driver->charsets[1] = get_cp_index("cp437");
+
+		} else if (get_opt_bool_tree(term->spec, "m11_hack")) {
+			driver->frame_seqs = m11_hack_frame_seqs;
+		}
+
+	} else if (driver->type == TERM_VT100) {
+		if (utf8_io) {
+			driver->frame = frame_vt100_u;
+			driver->charsets[1] = get_cp_index("cp437");
+		} else {
+			driver->frame = frame_vt100;
+			driver->frame_seqs = vt100_frame_seqs;
+		}
+
+	} else if (driver->type == TERM_KOI8) {
+		driver->frame = frame_koi;
+
+		if (utf8_io) {
+			driver->charsets[1] = get_cp_index("koi8-r");
+		}
+	} else {
+		driver->frame = frame_dumb;
+		driver->charsets[1] = driver->charsets[0];
+	}
+}
 
 struct screen_state {
 	unsigned char color;
@@ -228,7 +279,6 @@ print_char(struct string *screen, struct screen_driver *driver,
 	}
 }
 
-
 /* Adds the term code for positioning the cursor at @x and @y to @string.
  * The template term code is: "\033[<@y>;<@x>H" */
 static inline struct string *
@@ -254,57 +304,6 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 	code[length++] = 'H';
 
 	return add_bytes_to_string(screen, code, length);
-}
-
-static inline void
-init_screen_driver(struct screen_driver *driver, struct terminal *term)
-{
-	int utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
-
-	memset(driver, 0, sizeof(struct screen_driver));
-
-	driver->type = get_opt_int_tree(term->spec, "type");
-	driver->colors = get_opt_bool_tree(term->spec, "colors");
-	driver->trans = get_opt_bool_tree(term->spec, "transparency");
-	driver->underline = get_opt_bool_tree(term->spec, "underline");
-
-	if (utf8_io) {
-		driver->charsets[0] = get_opt_int_tree(term->spec, "charset");
-	} else {
-		driver->charsets[0] = -1;
-	}
-
-	if (driver->type == TERM_LINUX) {
-		if (get_opt_bool_tree(term->spec, "restrict_852")) {
-			driver->frame = frame_restrict;
-		}
-
-		if (utf8_io) {
-			driver->charsets[1] = get_cp_index("cp437");
-
-		} else if (get_opt_bool_tree(term->spec, "m11_hack")) {
-			driver->frame_seqs = m11_hack_frame_seqs;
-		}
-
-	} else if (driver->type == TERM_VT100) {
-		if (utf8_io) {
-			driver->frame = frame_vt100_u;
-			driver->charsets[1] = get_cp_index("cp437");
-		} else {
-			driver->frame = frame_vt100;
-			driver->frame_seqs = vt100_frame_seqs;
-		}
-
-	} else if (driver->type == TERM_KOI8) {
-		driver->frame = frame_koi;
-
-		if (utf8_io) {
-			driver->charsets[1] = get_cp_index("koi8-r");
-		}
-	} else {
-		driver->frame = frame_dumb;
-		driver->charsets[1] = driver->charsets[0];
-	}
 }
 
 /* Updating of the driverinal screen is done by checking what needs to be updated

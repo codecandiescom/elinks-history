@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.135 2004/07/23 06:09:39 miciah Exp $ */
+/* $Id: uri.h,v 1.136 2004/08/01 20:33:51 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -117,7 +117,7 @@ enum uri_component {
 	URI_SPECIAL		= URI_DEFAULT_PORT | URI_PATH | URI_FILENAME | URI_QUERY,
 
 	/* The usual suspects */
-	URI_RARE		= URI_SPECIAL | URI_POST | URI_IDN,
+	URI_RARE		= URI_SPECIAL | URI_POST | URI_POST_INFO | URI_IDN,
 
 	/* Used for public display either in dialogs or sent over the Net */
 	URI_PUBLIC		= ~(URI_PASSWORD | URI_RARE) | URI_POST_INFO,

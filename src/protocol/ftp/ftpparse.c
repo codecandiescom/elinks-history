@@ -1,41 +1,40 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.15 2003/11/26 22:14:31 pasky Exp $ */
+/* $Id: ftpparse.c,v 1.16 2004/07/02 22:43:55 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
- * ChangeLog for details about changes we made here, comments bellow may give
+ * ChangeLog for details about changes we made here, comments below may give
  * you some indices as well. --pasky */
 
-/*** NOTE: the following source file has been modified to compile cleanly
- *** under gcc-2.95. The functionality should remain unchanged from the public
- *** distribution.
- ***
- *** Sources modified by akishan@cs.stanford.edu on January 3, 2002.
- ***/
+/* NOTE: the following source file has been modified to compile cleanly
+ * under gcc-2.95. The functionality should remain unchanged from the public
+ * distribution.
+ *
+ * Sources modified by akishan@cs.stanford.edu on January 3, 2002.
+ */
 
 /* ftpparse.c, ftpparse.h: library for parsing FTP LIST responses
-20001223
-D. J. Bernstein, djb@cr.yp.to
-http://cr.yp.to/ftpparse.html
-
-
-Commercial use is fine, if you let me know what programs you're using this in.
-
-Currently covered formats:
-EPLF.
-UNIX ls, with or without gid.
-Microsoft FTP Service.
-Windows NT FTP Server.
-VMS.
-WFTPD.
-NetPresenz (Mac).
-NetWare.
-MSDOS.
-
-Definitely not covered:
-Long VMS filenames, with information split across two lines.
-NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
-*/
+ * 20001223
+ * D. J. Bernstein, djb@cr.yp.to
+ * http://cr.yp.to/ftpparse.html
+ *
+ * Commercial use is fine, if you let me know what programs you're using this in.
+ *
+ * Currently covered formats:
+ * EPLF.
+ * UNIX ls, with or without gid.
+ * Microsoft FTP Service.
+ * Windows NT FTP Server.
+ * VMS.
+ * WFTPD.
+ * NetPresenz (Mac).
+ * NetWare.
+ * MSDOS.
+ *
+ * Definitely not covered:
+ * Long VMS filenames, with information split across two lines.
+ * NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
+ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

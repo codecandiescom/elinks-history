@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.39 2003/06/30 17:50:04 zas Exp $ */
+/* $Id: tables.c,v 1.40 2003/06/30 18:01:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -962,25 +962,35 @@ get_column_widths(struct table *t)
 static void
 get_table_width(struct table *t)
 {
-	int i, vl;
 	int min = 0;
 	int max = 0;
+	register int i = 0;
 
-	for (i = 0; i < t->x; i++) {
-		vl = get_vline_width(t, i) >= 0;
-		min += vl;
-		max += vl;
-		min += t->min_c[i];
-		if (t->xcols[i] > t->max_c[i]) max += t->xcols[i];
-		max += t->max_c[i];
+	while (i < t->x) {
+		int vl = (get_vline_width(t, i) >= 0);
+
+		min += vl + t->min_c[i];
+		max += vl + t->max_c[i];
+		if (t->xcols[i] > t->max_c[i])
+			max += t->xcols[i];
+		i++;
 	}
 
-	vl = (!!(t->frame & F_LHS) + !!(t->frame & F_RHS)) * !!t->border;
-	min += vl;
-	max += vl;
+	if (t->border) {
+		if (t->frame & F_LHS) {
+			min++;
+			max++;
+		}
+		if (t->frame & F_RHS) {
+			min++;
+			max++;
+		}
+	}
+
 	t->min_t = min;
 	t->max_t = max;
-	if (min > max) internal("min(%d) > max(%d)", min, max);
+	if (min > max)
+		internal("min(%d) > max(%d)", min, max);
 }
 
 static void

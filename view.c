@@ -2033,6 +2033,9 @@ void send_event(struct session *ses, struct event *ev)
 			case ACT_BOOKMARK_MANAGER:
 				if (!anonymous) menu_bookmark_manager(ses->term, NULL, ses);
 				goto x;
+			case ACT_COOKIES_LOAD:
+				if (!anonymous) load_cookies();
+				goto x;
 			case ACT_REALLYQUIT:
 				reallyquit:
 				exit_prog(ses->term, (void *)1, ses);

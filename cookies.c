@@ -1,5 +1,8 @@
 #include "links.h"
 
+/* #undef it defaultly */
+#define COOKIES_RESAVE	1
+
 #define ACCEPT_NONE	0
 #define ACCEPT_ASK	1
 #define ACCEPT_ALL	2
@@ -40,6 +43,8 @@ struct list_head c_servers = { &c_servers, &c_servers };
 
 void accept_cookie(struct cookie *);
 void delete_cookie(struct cookie *);
+
+void load_cookies(), save_cookies();
 
 void free_cookie(struct cookie *c)
 {
@@ -161,6 +166,9 @@ void accept_cookie(struct cookie *c)
 	if (!(cd = mem_alloc(sizeof(struct c_domain) + strlen(c->domain) + 1))) return;
 	strcpy(cd->domain, c->domain);
 	add_to_list(c_domains, cd);
+#ifdef COOKIES_RESAVE
+	save_cookies();
+#endif
 }
 
 void delete_cookie(struct cookie *c)
@@ -177,6 +185,9 @@ void delete_cookie(struct cookie *c)
 	del_from_list(c);
 	free_cookie(c);
 	mem_free(c);
+#ifdef COOKIES_RESAVE
+	save_cookies();
+#endif
 }
 
 struct cookie *find_cookie_id(void *idp)
@@ -261,6 +272,9 @@ void send_cookies(unsigned char **s, int *l, unsigned char *url)
 			del_from_list(d);
 			free_cookie(d);
 			mem_free(d);
+#ifdef COOKIES_RESAVE
+			save_cookies();
+#endif
 			continue;
 		}
 		if (c->secure) continue;
@@ -274,11 +288,11 @@ void send_cookies(unsigned char **s, int *l, unsigned char *url)
 	mem_free(server);
 }
 
-void init_cookies()
-{
+void load_cookies() {
 	unsigned char in_buffer[MAX_STR_LEN];
 	unsigned char *cookfile, *p, *q;
 	FILE *fp;
+	struct cookie *c;
 
 	/* must be called after init_home */
 	if (! links_home) return;
@@ -286,6 +300,13 @@ void init_cookies()
 	cookfile = stracpy(links_home);
 	if (! cookfile) return;
 	add_to_strn(&cookfile, "cookies");
+
+	/* do it here, as we will delete whole cookies list if the file was removed */
+	free_list(c_domains);
+
+	foreach(c, cookies)
+		free_cookie(c);
+	free_list(cookies);
 
 	fp = fopen(cookfile, "r");
 	mem_free(cookfile);
@@ -337,18 +358,17 @@ void init_cookies()
 
 inv:
 		free_cookie(cookie);
-		free(cookie);
+		mem_free(cookie);
 	}
 	fclose(fp);
 }
 
-void cleanup_cookies()
-{
+int cquit = 0; /* XXX */
+
+void save_cookies() {
 	struct cookie *c;
 	unsigned char *cookfile;
 	FILE *fp;
-	
-	free_list(c_domains);
 
 	cookfile = stracpy(links_home);
 	if (! cookfile) return;
@@ -364,11 +384,25 @@ void cleanup_cookies()
 			    c->server?c->server:(unsigned char *)"", c->path?c->path:(unsigned char *)"",
 			    c->domain?c->domain:(unsigned char *)"", c->expires, c->secure);
 
-		free_cookie(c);
+		if (cquit)
+			free_cookie(c);
 	}
 
 	fclose(fp);
+}
+
+void init_cookies()
+{
+	load_cookies();
+}
+
+void cleanup_cookies()
+{
+	free_list(c_domains);
+	
+	cquit = 1;
+	save_cookies();
+	cquit = 0;
 	
 	free_list(cookies);
 }
-

@@ -834,6 +834,7 @@ void kill_buffer_data(struct read_buffer *, int);
 
 int set_cookie(struct terminal *, unsigned char *, unsigned char *);
 void send_cookies(unsigned char **, int *, unsigned char *);
+void load_cookies();
 void init_cookies();
 void cleanup_cookies();
 
@@ -2120,6 +2121,7 @@ enum {
 	ACT_BACK,
 	ACT_BACKSPACE,
 	ACT_BOOKMARK_MANAGER,
+	ACT_COOKIES_LOAD,
 	ACT_COPY_CLIPBOARD,
 	ACT_CUT_CLIPBOARD,
 	ACT_DELETE,

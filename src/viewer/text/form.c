@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.259 2004/12/18 01:42:19 pasky Exp $ */
+/* $Id: form.c,v 1.260 2004/12/18 02:33:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1041,23 +1041,29 @@ submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 }
 
 void
-auto_submit_form(struct session *ses)
+submit_given_form(struct session *ses, struct document_view *doc_view, struct form *form)
 {
-	struct document *document = ses->doc_view->document;
-	struct form *form = document->forms.next;
+	struct document *document = doc_view->document;
 	int link;
 
 	for (link = 0; link < document->nlinks; link++) {
 		struct form_control *fc = get_link_form_control(&document->links[link]);
 
-		if (fc && fc->form == form)
-			break;
+		if (fc && fc->form == form) {
+			doc_view->vs->current_link = link;
+			submit_form(ses, doc_view, 0);
+			return;
+		}
 	}
+}
 
-	if (link >= document->nlinks) return;
+void
+auto_submit_form(struct session *ses)
+{
+	struct document *document = ses->doc_view->document;
 
-	ses->doc_view->vs->current_link = link;
-	submit_form(ses, ses->doc_view, 0);
+	if (!list_empty(document->forms))
+		submit_given_form(ses, ses->doc_view, document->forms.next);
 }
 
 

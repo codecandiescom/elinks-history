@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.111 2004/12/18 01:42:19 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.112 2004/12/18 02:33:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -693,27 +693,16 @@ form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
-	struct document *document = doc_view->document;
+	struct session *ses = doc_view->session;
 	struct form *form = JS_GetPrivate(ctx, obj);
-	int link;
 	VALUE_TO_JSVAL_START;
 
 	P_BOOLEAN(0);
 
 	assert(form);
-	for (link = 0; link < document->nlinks; link++) {
-		struct form_control *fc = get_link_form_control(&document->links[link]);
+	submit_given_form(ses, doc_view, form);
 
-		if (fc && fc->form == form) {
-			doc_view->vs->current_link = link;
-			submit_form(doc_view->session, doc_view, 0);
-
-			VALUE_TO_JSVAL_END(rval);
-			/* This returns. */
-		}
-	}
-
-	goto bye;
+	VALUE_TO_JSVAL_END(rval);
 }
 
 

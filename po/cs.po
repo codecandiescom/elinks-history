@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-16 15:15+0200\n"
-"PO-Revision-Date: 2003-10-16 16:00+0200\n"
+"PO-Revision-Date: 2003-10-17 00:21+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1337,6 +1337,8 @@ msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
 msgstr ""
+"Urèuje, jestli se mají pøi vyhledávání øetìzcù brát v potaz rozdíly mezi\n"
+"velikostí písmen."
 
 #: src/config/options.c:1173
 msgid "Overlapping matches"
@@ -1349,6 +1351,11 @@ msgid ""
 "1 means matches can overlap (CAUTION: can be cpu intensive with\n"
 "  some expressions!)"
 msgstr ""
+"Povolit pøekrývající se výskyty vyhledávaného øetìzce (relevantní pouze pro\n"
+"vyhledávání regulárních výrazù).\n"
+"0 znamená, ¾e by se výskyty nemìly pøekrývat.\n"
+"1 povoluje pøekrývání výskytù (POZOR: to mù¾e být pro nìkteré výrazy velmi\n"
+"  nároèné na výpoèetní èas!)"
 
 #: src/config/options.c:1181 src/config/options.c:1188
 msgid "Regular expressions"
@@ -1361,6 +1368,10 @@ msgid ""
 "1 for basic regular expression searches.\n"
 "2 for extended regular expression searches."
 msgstr ""
+"Zapíná vyhledávání pomocí regulárních výrazù.\n"
+"0 znamená vyhledávání èistého textu.\n"
+"1 znamená vyhledávání základních regulárních výrazù.\n"
+"2 znamená vyhledávání roz¹íøených regulárních výrazù."
 
 #: src/config/options.c:1190
 msgid ""
@@ -1369,6 +1380,10 @@ msgid ""
 "1 for basic regular expression searches. (DISABLED)\n"
 "2 for extended regular expression searches. (DISABLED)"
 msgstr ""
+"Zapíná vyhledávání pomocí regulárních výrazù.\n"
+"0 znamená vyhledávání èistého textu.\n"
+"1 znamená vyhledávání základních regulárních výrazù. (VYPNUTO)\n"
+"2 znamená vyhledávání roz¹íøených regulárních výrazù. (VYPNUTO)"
 
 #: src/config/options.c:1197
 msgid "Horizontal text margin"
@@ -1388,6 +1403,10 @@ msgid ""
 "refresh' tags). Web-page authors use these to instruct the browser\n"
 "to reload a document at a given interval or to load another page."
 msgstr ""
+"Automaticky následovat obnovovací direktivy specifikované v dokumentu\n"
+"('<meta> refresh' tagy). Autoøi webových stránek pou¾ívají tento\n"
+"mechanismus k automatickému znovunahrání dokumentu v daném intervalu\n"
+"èi pro pøesmìrování na jinou stránku."
 
 #: src/config/options.c:1207
 msgid "Scroll margin"
@@ -1398,6 +1417,8 @@ msgid ""
 "Size of the virtual margin - when you click inside of that margin,\n"
 "document scrolls in that direction."
 msgstr ""
+"Velikost virtuálního okraje - po kliknutí do tohoto citlivého okraje,\n"
+"dokument se odscrolluje v daném smìru."
 
 #: src/config/options.c:1212
 msgid "Scroll step"
@@ -1408,6 +1429,9 @@ msgid ""
 "Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 "down is pressed and no prefix was given."
 msgstr ""
+"Poèet øádek, o které by se mìl dokument odscrollovat po stisku klávesy\n"
+"odpovídající akci scroll-up a scroll-down, a nebyl této klávese dán ¾ádný\n"
+"èíselný prefix."
 
 #: src/config/options.c:1217
 msgid "Tables navigation order"
@@ -1460,6 +1484,9 @@ msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
 msgstr ""
+"Ignorovat hlavièky Cache-Control a Pragma, pøijaté od serveru.\n"
+"Pokud je tato volba nastavena, dokument je nacachován, i kdy¾ byl\n"
+"sta¾en s hlavièkou 'Cache-Control: no-cache'."
 
 #: src/config/options.c:1255
 msgid "Formatted documents"
@@ -1709,13 +1736,15 @@ msgstr "Stahování"
 
 #: src/config/options.c:1339
 msgid "Options regarding files downloading and handling."
-msgstr ""
+msgstr "Nastavení stahování souborù a jejich obsluhy."
 
 #: src/config/options.c:1344
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.default_type option instead."
 msgstr ""
+"Tato volba by se nemìla pou¾ívat a bude brzy odstranìna.\n"
+"Prosím pou¾ijte radìji volbu mime.default_type."
 
 #: src/config/options.c:1347
 msgid "Default download directory"
@@ -1734,6 +1763,8 @@ msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
 msgstr ""
+"Nastaví èas vytvoøení sta¾eného souboru na èas vytvoøení souboru,\n"
+"jak je ulo¾en na serveru."
 
 #. Does automatic resuming make sense as an option?
 #: src/config/options.c:1357
@@ -1747,10 +1778,15 @@ msgid ""
 "1 is add a suffix .{number} (for example '.1') to the name.\n"
 "2 is ask the user."
 msgstr ""
+"Zabrání pøepisování lokálních souborù:\n"
+"0 znamená, ¾e soubory budou ti¹e pøepisovány\n"
+"1 znamená, ¾e k souboru bude pøidána pøípona .<èíslo>, pokud soubor\n"
+"  s takovým jménem ji¾ existuje.\n"
+"2 znamená dotázat se u¾ivatele."
 
 #: src/config/options.c:1364
 msgid "Notify download completion by bell"
-msgstr "Upozornit na ukonèení stahování zvonkem"
+msgstr "Upozornit na ukonèení stahování pípnutím"
 
 #: src/config/options.c:1366
 msgid ""
@@ -1759,6 +1795,10 @@ msgid ""
 "1 is when background notification is active.\n"
 "2 is always"
 msgstr ""
+"Zvukové upozornìní ve chvíli dokonèení stahování:\n"
+"0 znamená nikdy.\n"
+"1 znamená upozornit, pokud je nastaveno upozornìní na ukonèení stahování.\n"
+"2 znamená v¾dy."
 
 #: src/config/options.c:1372
 msgid "Dump output"
@@ -1830,6 +1870,9 @@ msgid ""
 "0 is URLs\n"
 "1 is page titles"
 msgstr ""
+"Co zobrazovat ve správci globální historie:\n"
+"0 znamená URL adresy\n"
+"1 znamená titulky stránek"
 
 #: src/config/options.c:1409
 msgid "Auto-save interval"
@@ -1840,6 +1883,9 @@ msgid ""
 "Interval at which to write global history to disk if it\n"
 "has changed (seconds; 0 to disable)"
 msgstr ""
+"Interval, ve kterém bude zapisována globální historie na disk,\n"
+"pokud se od posledního zapsání na disk nìjak zmìnila (v sekundách;\n"
+"0 toto chování potlaèuje)."
 
 #: src/config/options.c:1416
 msgid "Keep unhistory"
@@ -1911,7 +1957,7 @@ msgstr "MIME"
 
 #: src/config/options.c:1459
 msgid "MIME-related options (handlers of various MIME types)."
-msgstr ""
+msgstr "Volby vztahující se k MIME (ovladaèe rùzných MIME typù)."
 
 #: src/config/options.c:1462
 msgid "Default MIME-type"
@@ -1922,6 +1968,8 @@ msgid ""
 "Document MIME-type to assume by default (when we are unable to\n"
 "guess it properly from known information about the document)."
 msgstr ""
+"Výchozí MIME typ pro dokumenty, jejich¾ MIME typ není známý a nelze\n"
+"zjistit z jiných indicií."
 
 #: src/config/options.c:1468
 msgid "MIME type associations"
@@ -1940,13 +1988,13 @@ msgstr ""
 msgid ""
 "Handler matching this MIME-type class ('*' is used here in place\n"
 "of '.')."
-msgstr ""
+msgstr "Ovladaèe odpovídající této MIME tøídì (místo '.' se pou¾ívá '*')."
 
 #: src/config/options.c:1483
 msgid ""
 "Handler matching this MIME-type name ('*' is used here in place\n"
 "of '.')."
-msgstr ""
+msgstr "Ovladaèe odpovídající tomuto MIME typu (místo '.' se pou¾ívá '*')."
 
 #: src/config/options.c:1487
 msgid "File type handlers"
@@ -1957,14 +2005,16 @@ msgid ""
 "Handler for certain MIME types (as specified in mime.type.*).\n"
 "Each handler usually serves family of MIME types (ie. images)."
 msgstr ""
+"Ovladaè pro urèitý MIME typ (jak je specifikováno v mime.type.*).\n"
+"Ka¾dý ovladaè obvykle obsluhuje urèitou rodinu MIME typù (napø. obrázky)."
 
 #: src/config/options.c:1494
 msgid "Description of this handler."
-msgstr ""
+msgstr "Popis tohoto ovladaèe."
 
 #: src/config/options.c:1498
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
-msgstr ""
+msgstr "Popis ovladaèe pro daný systém (napø. unix, unix-xwin, ...)."
 
 #: src/config/options.c:1500 src/config/options.c:1538
 msgid "Ask before opening"
@@ -1987,11 +2037,12 @@ msgid "Program"
 msgstr "Program"
 
 #: src/config/options.c:1510
-#, c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
 msgstr ""
+"Externí prohlí¾eè pro tento typ souboru. '%' bude v tomto øetìzci nahrazeno\n"
+"jménem souboru."
 
 #: src/config/options.c:1514
 msgid "File extension associations"
@@ -1999,13 +2050,14 @@ msgstr "Asociace pøípon souborù"
 
 #: src/config/options.c:1516
 msgid "Extension <-> MIME type association."
-msgstr ""
+msgstr "Asociace mezi pøíponou souboru a jeho MIME typem."
 
 #: src/config/options.c:1520
 msgid ""
 "MIME-type matching this file extension ('*' is used here in place\n"
 "of '.')."
 msgstr ""
+"MIME typ odpovídající této pøíponì (místo '.' se pou¾ívá '*')."
 
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
@@ -2016,11 +2068,11 @@ msgstr "Mailcap"
 
 #: src/config/options.c:1526
 msgid "Options for mailcap support."
-msgstr ""
+msgstr "Volby týkající se podpory mailcap souborù."
 
 #: src/config/options.c:1530
 msgid "Enable mailcap support."
-msgstr ""
+msgstr "Povolí podporu mailcap souborù."
 
 #: src/config/options.c:1532 src/config/options.c:1567
 msgid "Path"
@@ -2036,6 +2088,8 @@ msgstr ""
 #: src/config/options.c:1540
 msgid "Ask before using the handlers defined by mailcap."
 msgstr ""
+"Po¾ádat o potvrzení u¾ivatelem pøed pou¾itím ovladaèù specifikovaných\n"
+"v mailcapu."
 
 #: src/config/options.c:1542 src/config/options.c:1782
 msgid "Type query string"
@@ -2089,7 +2143,7 @@ msgstr "Protokoly"
 
 #: src/config/options.c:1578
 msgid "Protocol specific options."
-msgstr ""
+msgstr "Nastavení jednotlivých protokolù."
 
 #: src/config/options.c:1580
 msgid "HTTP"
@@ -2175,6 +2229,9 @@ msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
 msgstr ""
+"Hostitel a èíslo portu (host:port) HTTP proxy (pokud nepou¾íváte proxy,\n"
+"nechte tuto volbu nevyplnìnou). Pokud je tato volba nevyplnìna, ELinks\n"
+"se je¹tì pokusí pou¾ít hodnotu ulo¾enou v promìnné prostøedí HTTP_PROXY."
 
 #: src/config/options.c:1621
 msgid "Username"
@@ -2182,7 +2239,7 @@ msgstr "U¾ivatelské jméno"
 
 #: src/config/options.c:1623
 msgid "Proxy authentication username."
-msgstr ""
+msgstr "U¾ivatelské jméno pro proxy autentikaci."
 
 #: src/config/options.c:1625 src/dialogs/auth.c:36
 msgid "Password"
@@ -2190,7 +2247,7 @@ msgstr "Heslo"
 
 #: src/config/options.c:1627
 msgid "Proxy authentication password."
-msgstr ""
+msgstr "Heslo pro proxy autentikaci."
 
 #: src/config/options.c:1630
 msgid "Referer sending"
@@ -2286,13 +2343,16 @@ msgstr "Nastavení FTP."
 
 #: src/config/options.c:1684
 msgid "FTP proxy configuration."
-msgstr ""
+msgstr "Nastavení FTP proxy."
 
 #: src/config/options.c:1688
 msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
 msgstr ""
+"Hostitel a èíslo portu (host:port) FTP proxy (pokud nepou¾íváte proxy,\n"
+"nechte tuto volbu nevyplnìnou). Pokud je tato volba nevyplnìna, ELinks\n"
+"se je¹tì pokusí pou¾ít hodnotu ulo¾enou v promìnné prostøedí FTP_PROXY."
 
 #: src/config/options.c:1691
 msgid "Anonymous password"
@@ -2300,7 +2360,7 @@ msgstr "Anonymní heslo"
 
 #: src/config/options.c:1693
 msgid "FTP anonymous password to be sent."
-msgstr ""
+msgstr "Heslo pro anonymní FTP."
 
 #: src/config/options.c:1695
 msgid "Use passive mode (IPv4)"
@@ -2308,7 +2368,7 @@ msgstr "Pou¾ívat pasivní re¾im (IPv4)"
 
 #: src/config/options.c:1697
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
-msgstr ""
+msgstr "Pou¾ít místo pøíkazu PORT pøíkaz PASV (pasivní re¾im, pouze IPv4)."
 
 #: src/config/options.c:1699 src/config/options.c:1703
 msgid "Use passive mode (IPv6)"
@@ -2316,13 +2376,16 @@ msgstr "Pou¾ívat pasivní re¾im (IPv6)"
 
 #: src/config/options.c:1701
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
-msgstr ""
+msgstr "Pou¾ít místo pøíkazu EPRT pøíkaz EPSV (pasivní re¾im, pouze IPv6)."
 
 #: src/config/options.c:1705
 msgid ""
 "Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 "Works only with IPv6 enabled, so nothing interesting for you."
 msgstr ""
+"Pou¾ít místo pøíkazu EPRT pøíkaz EPSV (pasivní re¾im, pouze IPv6).\n"
+"Tato volba má význam pouze pro verzi ELinksu s podporou IPv6, to znamená,\n"
+"¾e se vás bohu¾el netýká."
 
 #: src/config/options.c:1711
 msgid "Local files"
@@ -2330,7 +2393,7 @@ msgstr "Lokální soubory"
 
 #: src/config/options.c:1713
 msgid "Options specific to local browsing."
-msgstr ""
+msgstr "Nastavení procházení souborového systému."
 
 #: src/config/options.c:1715
 msgid "Allow reading special files"
@@ -2398,6 +2461,8 @@ msgid ""
 "Options for mailcap support. (Deprecated. Please use\n"
 "mime.mailcap instead)"
 msgstr ""
+"Volby týkající se podpory mailcapu. (Nedoporuèuje se pou¾ívat. Prosíme\n"
+"pou¾ívejte radìji mime.mailcap)"
 
 #: src/config/options.c:1769
 msgid ""

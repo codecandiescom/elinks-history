@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.213 2004/06/26 10:21:32 zas Exp $ */
+/* $Id: tables.c,v 1.214 2004/06/26 10:33:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,7 +462,7 @@ parse_table(unsigned char *html, unsigned char *eof,
 	unsigned char *t_name, *t_attr, *en;
 	unsigned char *lbhp = NULL;
 	unsigned char *l_fragment_id = NULL;
-	color_t l_col = bgcolor;
+	color_t last_bgcolor = bgcolor;
 	int t_namelen;
 	int p = 0;
 	int l_al = AL_LEFT;
@@ -472,7 +472,7 @@ parse_table(unsigned char *html, unsigned char *eof,
 	int i, j, k;
 	int qqq;
 	int c_al = AL_TR, c_val = VALIGN_TR, c_width = WIDTH_AUTO, c_span = 0;
-	int x = 0, y = -1;
+	int col = 0, row = -1;
 
 	*end = html;
 
@@ -501,7 +501,7 @@ qwe:
 	while (html < eof && *html != '<') html++;
 
 	if (html >= eof) {
-		if (p) CELL(table, x, y)->end = html;
+		if (p) CELL(table, col, row)->end = html;
 		if (lbhp) (*bad_html)[*bhp-1].end = html;
 		goto scan_done;
 	}
@@ -523,7 +523,7 @@ qwe:
 
 	if (!strlcasecmp(t_name, t_namelen, "/TABLE", 6)) {
 		if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
-		if (p) CELL(table, x, y)->end = html;
+		if (p) CELL(table, col, row)->end = html;
 		if (lbhp) (*bad_html)[*bhp-1].end = html;
 		goto scan_done;
 	}
@@ -591,7 +591,7 @@ qwe:
 				new_columns(table, c_span, c_width, c_al, c_val, 1);
 
 			if (p) {
-				CELL(table, x, y)->end = html;
+				CELL(table, col, row)->end = html;
 				p = 0;
 			}
 			if (lbhp) {
@@ -609,7 +609,7 @@ qwe:
 		if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
 
 		if (p) {
-			CELL(table, x, y)->end = html;
+			CELL(table, col, row)->end = html;
 			p = 0;
 		}
 		if (lbhp) {
@@ -620,13 +620,13 @@ qwe:
 		if (group) group--;
 		l_al = AL_LEFT;
 		l_val = VALIGN_MIDDLE;
-		l_col = bgcolor;
+		last_bgcolor = bgcolor;
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
-		get_bgcolor(t_attr, &l_col);
+		get_bgcolor(t_attr, &last_bgcolor);
 		mem_free_set(&l_fragment_id, get_attr_val(t_attr, "id"));
-		y++;
-		x = 0;
+		row++;
+		col = 0;
 		goto see;
 	}
 
@@ -658,17 +658,17 @@ qwe:
 		lbhp = NULL;
 	}
 	if (p) {
-		CELL(table, x, y)->end = html;
+		CELL(table, col, row)->end = html;
 		p = 0;
 	}
 
-	if (y == -1) {
-		y = 0;
-		x = 0;
+	if (row == -1) {
+		row = 0;
+		col = 0;
 	}
 
-	for (;;x++) {
-		cell = new_cell(table, x, y);
+	for (;;col++) {
+		cell = new_cell(table, col, row);
 		if (!cell) goto see;
 
 		if (!cell->is_used) break;
@@ -677,8 +677,8 @@ qwe:
 
 	p = 1;
 
-	cell->mx = x;
-	cell->my = y;
+	cell->mx = col;
+	cell->my = row;
 	cell->is_used = 1;
 	cell->start = en;
 
@@ -695,14 +695,14 @@ qwe:
 
 	if (group == 1) cell->group = 1;
 
-	if (x < table->columns_count) {
-		if (table->columns[x].align != AL_TR)
-			cell->align = table->columns[x].align;
-		if (table->columns[x].valign != VALIGN_TR)
-			cell->valign = table->columns[x].valign;
+	if (col < table->columns_count) {
+		if (table->columns[col].align != AL_TR)
+			cell->align = table->columns[col].align;
+		if (table->columns[col].valign != VALIGN_TR)
+			cell->valign = table->columns[col].valign;
 	}
 
-	cell->bgcolor = l_col;
+	cell->bgcolor = last_bgcolor;
 
 	get_align(t_attr, &cell->align);
 	get_valign(t_attr, &cell->valign);
@@ -724,56 +724,56 @@ qwe:
 
 		get_column_width(t_attr, &width, sh);
 		if (width != WIDTH_AUTO)
-			set_td_width(table, x, width, 0);
+			set_td_width(table, col, width, 0);
 	}
 
 	qqq = table->x;
 
 	for (i = 1; colspan != -1 ? i < colspan : i < qqq; i++) {
-		struct table_cell *span_cell = new_cell(table, x + i, y);
+		struct table_cell *span_cell = new_cell(table, col + i, row);
 
 		if (!span_cell || span_cell->is_used) {
 			colspan = i;
 			for (k = 0; k < i; k++)
-				CELL(table, x + k, y)->colspan = colspan;
+				CELL(table, col + k, row)->colspan = colspan;
 			break;
 		}
 
 		span_cell->is_used = span_cell->is_spanned = 1;
 		span_cell->rowspan = rowspan;
 		span_cell->colspan = colspan;
-		span_cell->mx = x;
-		span_cell->my = y;
+		span_cell->mx = col;
+		span_cell->my = row;
 	}
 
 	qqq = table->y;
 	for (j = 1; rowspan != -1 ? j < rowspan : j < qqq; j++) {
 		for (k = 0; k < i; k++) {
-			struct table_cell *span_cell = new_cell(table, x + k, y + j);
+			struct table_cell *span_cell = new_cell(table, col + k, row + j);
 
 			if (!span_cell || span_cell->is_used) {
 				int l, m;
 
-				if (span_cell->mx == x && span_cell->my == y)
+				if (span_cell->mx == col && span_cell->my == row)
 					continue;
 
 				for (l = 0; l < k; l++)
-					memset(CELL(table, x + l, y + j), 0,
+					memset(CELL(table, col + l, row + j), 0,
 					       sizeof(struct table_cell));
 
 				rowspan = j;
 
 				for (l = 0; l < i; l++)
 					for (m = 0; m < j; m++)
-						CELL(table, x + l, y + m)->rowspan = j;
+						CELL(table, col + l, row + m)->rowspan = j;
 				goto see;
 			}
 
 			span_cell->is_used = span_cell->is_spanned = 1;
 			span_cell->rowspan = rowspan;
 			span_cell->colspan = colspan;
-			span_cell->mx = x;
-			span_cell->my = y;
+			span_cell->mx = col;
+			span_cell->my = row;
 		}
 	}
 
@@ -784,12 +784,12 @@ scan_done:
 
 	mem_free_if(l_fragment_id);
 
-	for (x = 0; x < table->x; x++) for (y = 0; y < table->y; y++) {
-		struct table_cell *cell = CELL(table, x, y);
+	for (col = 0; col < table->x; col++) for (row = 0; row < table->y; row++) {
+		struct table_cell *cell = CELL(table, col, row);
 
 		if (!cell->is_spanned) {
-			if (cell->colspan == -1) cell->colspan = table->x - x;
-			if (cell->rowspan == -1) cell->rowspan = table->y - y;
+			if (cell->colspan == -1) cell->colspan = table->x - col;
+			if (cell->rowspan == -1) cell->rowspan = table->y - row;
 		}
 	}
 
@@ -801,9 +801,9 @@ scan_done:
 		}
 	} else table->rows_heights = NULL;
 
-	for (x = 0; x < table->columns_count; x++)
-		if (table->columns[x].width != WIDTH_AUTO)
-			set_td_width(table, x, table->columns[x].width, 1);
+	for (col = 0; col < table->columns_count; col++)
+		if (table->columns[col].width != WIDTH_AUTO)
+			set_td_width(table, col, table->columns[col].width, 1);
 	set_td_width(table, table->x, WIDTH_AUTO, 0);
 
 	return table;

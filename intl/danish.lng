@@ -399,3 +399,4 @@ T_KEYSTROKE_HELP, "Genvejskombinationen angives med følgende format: [Præfiks-]T
 T_KEYSTROKE, "Genvejskombination",
 T_INVALID_KEYSTROKE, "Ugyldig genvejskombination",
 T_NO_HEADER_INFO, "Ingen info.",
+T_HK_KEYBINDING_MANAGER, NULL,

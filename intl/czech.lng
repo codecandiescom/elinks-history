@@ -399,3 +399,4 @@ T_KEYSTROKE_HELP, "Kombinace kláves by mìla být zapsána ve formátu: [Prefix-]Klá
 T_KEYSTROKE, "Kombinace kláves",
 T_INVALID_KEYSTROKE, "Neznámá kombinace kláves.",
 T_NO_HEADER_INFO, NULL,
+T_HK_KEYBINDING_MANAGER, NULL,

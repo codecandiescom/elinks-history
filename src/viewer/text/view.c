@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.588 2004/09/12 18:09:25 miciah Exp $ */
+/* $Id: view.c,v 1.589 2004/09/12 20:24:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -979,9 +979,9 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 			if (check_mouse_button(ev, B_MIDDLE)
 			    && term->current_tab == tab_num
 			    && mouse->y == term->prev_mouse_event.y) {
-				close_tab(term, tab->data);
+				if (tab->data == ses) ses = NULL;
 
-				if (tab->data == ses) return NULL;
+				close_tab(term, tab->data);
 			}
 
 			return ses;

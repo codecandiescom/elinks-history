@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.135 2004/07/14 18:08:48 zas Exp $ */
+/* $Id: bookmarks.c,v 1.136 2004/07/15 00:36:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,7 @@ bookmarks_are_dirty(void)
 #define check_bookmark_cache(url) (bookmark_cache && (url) && *(url))
 
 /* Deletes a bookmark. Returns 0 on failure (no such bm), 1 on success. */
-int
+void
 delete_bookmark(struct bookmark *bm)
 {
 	while (!list_empty(bm->child)) {
@@ -181,8 +181,6 @@ delete_bookmark(struct bookmark *bm)
 	mem_free(bm->title);
 	mem_free(bm->url);
 	mem_free(bm);
-
-	return 1;
 }
 
 /* Adds a bookmark to the bookmark list. Place 0 means top, place 1 means

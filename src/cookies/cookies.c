@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.41 2002/12/18 10:52:21 zas Exp $ */
+/* $Id: cookies.c,v 1.42 2002/12/18 11:35:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 
 #include "elinks.h"
 
-/* #define COOKIES_DEBUG */
+#define COOKIES_DEBUG
 
 #include "cookies/cookies.h"
 #include "cookies/parser.h"
@@ -71,12 +71,13 @@ struct c_server {
 
 static struct list_head c_servers = { &c_servers, &c_servers };
 
+static int cookies_dirty = 0;
 
 #ifdef COOKIES
 
-static void accept_cookie(struct cookie *);
-
 void load_cookies();
+
+static void accept_cookie(struct cookie *);
 static void save_cookies();
 
 
@@ -322,7 +323,9 @@ free_cookie_name:
 	}
 
 ok:
+	cookies_dirty = 1;
 	accept_cookie(cookie);
+
 	mem_free(server);
 	return 0;
 }
@@ -527,9 +530,7 @@ ok:
 			free_cookie(d);
 			mem_free(d);
 
-			if (get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
-				save_cookies();
-
+			cookies_dirty = 1;
 			continue;
 		}
 
@@ -554,6 +555,9 @@ ok:
 
 	if (nc)
 		add_to_str(s, l, "\r\n");
+
+	if (cookies_dirty && get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
+		save_cookies();
 
 	mem_free(server);
 }
@@ -655,7 +659,7 @@ save_cookies() {
 	unsigned char *cookfile;
 	struct secure_save_info *ssi;
 
-	if (cookies_nosave) return;
+	if (cookies_nosave || !cookies_dirty) return;
 
 	cookfile = straconcat(elinks_home, "cookies", NULL);
 	if (!cookfile) return;
@@ -675,7 +679,7 @@ save_cookies() {
 		}
 	}
 
-	secure_close(ssi);
+	if (!secure_close(ssi)) cookies_dirty = 0;
 }
 
 void

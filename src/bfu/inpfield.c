@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.113 2004/01/28 08:13:35 jonas Exp $ */
+/* $Id: inpfield.c,v 1.114 2004/01/29 07:15:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,8 +481,9 @@ struct widget_ops field_pass_ops = {
 static void
 input_line_layouter(struct dialog_data *dlg_data)
 {
+	struct input_line *input_line = dlg_data->dlg->udata;
+	struct session *ses = input_line->ses;
 	struct window *win = dlg_data->win;
-	struct session *ses = dlg_data->dlg->udata2;
 	int y = win->term->height - 1
 		- ses->status.show_status_bar
 		- ses->status.show_tabs_bar;
@@ -494,9 +495,8 @@ input_line_layouter(struct dialog_data *dlg_data)
 static int
 input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 {
-	input_line_handler handler = dlg_data->dlg->udata;
-	unsigned char *buffer = dlg_data->dlg->widgets->data;
-	struct session *ses = dlg_data->dlg->udata2;
+	struct input_line *input_line = dlg_data->dlg->udata;
+	input_line_handler handler = input_line->handler;
 	enum edit_action action;
 
 	if (ev->ev != EV_KBD) return EVENT_NOT_PROCESSED;
@@ -506,7 +506,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	switch (action) {
 		case ACT_EDIT_BACKSPACE:
 		case ACT_EDIT_ENTER:
-			if (*buffer) break;
+			if (*input_line->buffer) break;
 			/* Falling */
 		case ACT_EDIT_CANCEL:
 			cancel_dialog(dlg_data, NULL);
@@ -521,7 +521,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	update_dialog_data(dlg_data, NULL);
 
 	/* Then pass it on to the specialized handler */
-	switch (handler(ses, action, buffer)) {
+	switch (handler(input_line, action)) {
 		case INPUT_LINE_CANCEL:
 			cancel_dialog(dlg_data, NULL);
 			break;
@@ -540,19 +540,22 @@ input_field_line(struct session *ses, unsigned char *prompt,
 {
 	struct dialog *dlg;
 	unsigned char *buffer;
+	struct input_line *input_line;
 
 	assert(ses);
 
-	dlg = calloc_dialog(INPUT_LINE_WIDGETS, INPUT_LINE_BUFFER_SIZE);
+	dlg = calloc_dialog(INPUT_LINE_WIDGETS, sizeof(struct input_line));
 	if (!dlg) return;
 
-	buffer = get_dialog_offset(dlg, INPUT_LINE_WIDGETS);
+	input_line = (void *) get_dialog_offset(dlg, INPUT_LINE_WIDGETS);
+	input_line->ses = ses;
+	input_line->handler = handler;
+	buffer = input_line->buffer;
 
 	dlg->handle_event = input_line_event_handler;
 	dlg->layouter = input_line_layouter;
 	dlg->layout.only_widgets = 1;
-	dlg->udata = handler;
-	dlg->udata2 = ses;
+	dlg->udata = input_line;
 	dlg->widgets->info.field.float_label = 1;
 
 	add_dlg_field(dlg, prompt, 0, 0, NULL, INPUT_LINE_BUFFER_SIZE,

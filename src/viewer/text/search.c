@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.171 2004/01/28 10:39:25 jonas Exp $ */
+/* $Id: search.c,v 1.172 2004/01/29 07:15:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1070,8 +1070,10 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 }
 
 static enum input_line_code
-link_typeahead_handler(struct session *ses, int action, unsigned char *buffer)
+link_typeahead_handler(struct input_line *line, int action)
 {
+	struct session *ses = line->ses;
+	unsigned char *buffer = line->buffer;
 	struct document_view *doc_view = current_frame(ses);
 
 	assertm(doc_view, "document not formatted");
@@ -1102,8 +1104,10 @@ link_typeahead_handler(struct session *ses, int action, unsigned char *buffer)
 }
 
 static enum input_line_code
-text_typeahead_handler(struct session *ses, int action, unsigned char *buffer)
+text_typeahead_handler(struct input_line *line, int action)
 {
+	struct session *ses = line->ses;
+	unsigned char *buffer = line->buffer;
 	struct document_view *doc_view = current_frame(ses);
 
 	assertm(doc_view, "document not formatted");

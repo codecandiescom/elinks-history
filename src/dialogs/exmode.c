@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.32 2004/01/28 08:13:35 jonas Exp $ */
+/* $Id: exmode.c,v 1.33 2004/01/29 07:15:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,11 +167,11 @@ exmode_exec(struct session *ses, unsigned char buffer[INPUT_LINE_BUFFER_SIZE])
 
 
 static enum input_line_code
-exmode_input_handler(struct session *ses, int action, unsigned char *buffer)
+exmode_input_handler(struct input_line *input_line, int action)
 {
 	switch (action) {
 		case ACT_EDIT_ENTER:
-			exmode_exec(ses, buffer);
+			exmode_exec(input_line->ses, input_line->buffer);
 			return INPUT_LINE_CANCEL;
 
 		default:

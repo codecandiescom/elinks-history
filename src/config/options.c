@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.71 2002/07/11 16:14:56 pasky Exp $ */
+/* $Id: options.c,v 1.72 2002/07/11 20:22:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -967,8 +967,14 @@ register_options()
 		"Show title bar on the screen.");
 
 	add_opt_bool("ui",
-		"startup_goto_dialog", 0, 1,
-		"Pop up goto dialog on startup when there's no homepage.");
+		"startup_goto_dialog", 0, 0,
+		"Pop up goto dialog on startup when there's no homepage.\n"
+		"Note that this is surprisingly very strange-behaving\n"
+		"not-fully debugged feature and it can do very strange and\n"
+		"ugly things to you, including pushing you from very high\n"
+		"cliffs to sea full of another not-so-very-high but certainly\n"
+		"sharper cliffs, or visiting dungeons full of scorpions with you,\n"
+		"forgetting you there locked. Good luck and have fun!");
 
 	add_opt_bool("ui",
 		"window_title", 0, 1,

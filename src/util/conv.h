@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.22 2003/10/02 16:37:06 kuser Exp $ */
+/* $Id: conv.h,v 1.23 2003/11/05 11:30:33 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -16,7 +16,7 @@ upcase(unsigned char ch)
 static inline int
 is_safe_in_shell(unsigned char c)
 {
-	return c == '@' || c == '+' || c == '.' || c == '/' || isA(c);
+	return c == '@' || c == '+' || c == '.' || c == '/' || c == ':' || isA(c);
 }
 
 

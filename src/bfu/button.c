@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.16 2003/01/01 20:36:08 pasky Exp $ */
+/* $Id: button.c,v 1.17 2003/01/03 00:02:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@ max_buttons_width(struct terminal *term, struct widget_data *butt,
 	int i;
 
 	for (i = 0; i < n; i++)
-		w += strlen(GT((butt++)->item->text, term)) + 6;
+		w += strlen(_((butt++)->item->text, term)) + 6;
 	if (w > *width) *width = w;
 }
 
@@ -36,7 +36,7 @@ min_buttons_width(struct terminal *term, struct widget_data *butt,
 	int i;
 
 	for (i = 0; i < n; i++) {
-		int w = strlen(GT((butt++)->item->text, term)) + 4;
+		int w = strlen(_((butt++)->item->text, term)) + 4;
 
 		if (w > *width) *width = w;
 	}
@@ -74,7 +74,7 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 			for (i = i1; i < i2; i++) {
 				butt[i].x = p;
 				butt[i].y = *y;
-				butt[i].l = strlen(GT(butt[i].item->text, t2)) + 4;
+				butt[i].l = strlen(_(butt[i].item->text, t2)) + 4;
 				p += butt[i].l + 2;
 			}
 		}
@@ -94,7 +94,7 @@ display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 
 	co = sel ? get_bfu_color(term, "dialog.button-selected")
 		: get_bfu_color(term, "dialog.button");
-	text = GT(di->item->text, term);
+	text = _(di->item->text, term);
 	{
 		int len = strlen(text);
 		int x = di->x + 2;
@@ -113,7 +113,7 @@ static int
 mouse_button(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 {
 	if ((ev->b & BM_BUTT) >= B_WHEEL_UP || ev->y != di->y || ev->x < di->x
-	    || ev->x >= di->x + strlen(GT(di->item->text, dlg->win->term)) + 4)
+	    || ev->x >= di->x + strlen(_(di->item->text, dlg->win->term)) + 4)
 		return EVENT_NOT_PROCESSED;
 
 	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);

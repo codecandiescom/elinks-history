@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.26 2003/01/02 05:25:14 pasky Exp $ */
+/* $Id: menu.c,v 1.27 2003/01/03 00:02:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ static void mainmenu_func(struct window *, struct event *, int);
 static int
 is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
 {
-	unsigned char *occur = GT(item->text, term);
+	unsigned char *occur = _(item->text, term);
 	int tilde = 0;
 
 	/* Just in case... ;-) */
@@ -199,12 +199,12 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		unsigned char *tmptext;
 		int s;
 
-		tmptext = strip_tilde(GT(menu->items[my].text, term));
+		tmptext = strip_tilde(_(menu->items[my].text, term));
 
-		s = strlen(tmptext) + strlen(GT(menu->items[my].rtext, term))
+		s = strlen(tmptext) + strlen(_(menu->items[my].rtext, term))
 			+ 4;
 
-		if (GT(menu->items[my].rtext, term)[0] != 0)
+		if (_(menu->items[my].rtext, term)[0] != 0)
 			s += MENU_HOTKEY_SPACE;
 
 		if (s > mx) mx = s;
@@ -294,7 +294,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
-		unsigned char *tmptext = strip_tilde(GT(menu->items[p].text, term));
+		unsigned char *tmptext = strip_tilde(_(menu->items[p].text, term));
 		int h = 0;
 		int co = menu_normal_color;
 
@@ -311,12 +311,12 @@ display_menu(struct terminal *term, struct menu *menu)
 
 		if (menu->items[p].rtext != M_BAR || (tmptext && tmptext[0])) {
 			unsigned char c;
-			int l = strlen(GT(menu->items[p].rtext, term));
+			int l = strlen(_(menu->items[p].rtext, term));
 			int x;
 
 			for (x = l - 1;
 			     (x >= 0) && (menu->xw - 4 >= l - x) &&
-			     (c = GT(menu->items[p].rtext, term)[x]);
+			     (c = _(menu->items[p].rtext, term)[x]);
 			     x--) {
 				set_char(term, menu->x + menu->xw - 2 - l + x, s, c | co);
 			}
@@ -636,7 +636,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		int j;
 		int co;
 		unsigned char c;
-		unsigned char *tmptext = strip_tilde(GT(menu->items[i].text, term));
+		unsigned char *tmptext = strip_tilde(_(menu->items[i].text, term));
 
 		if (i == menu->selected) {
 			s = 1;
@@ -726,7 +726,7 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 					unsigned char *tmptext;
 
 					tmptext = strip_tilde(
-						    GT(menu->items[i].text,
+						    _(menu->items[i].text,
 						    win->term));
 					p += strlen(tmptext) + 4;
 

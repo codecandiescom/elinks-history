@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.25 2003/01/02 23:59:52 pasky Exp $ */
+/* $Id: document.c,v 1.26 2003/01/03 00:02:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ loc_msg(struct terminal *term, struct location *location,
 	if (!str) return;
 	strl = 0;
 
-	add_to_str(&str, &strl, GT(N_(T_URL), term));
+	add_to_str(&str, &strl, _(N_(T_URL), term));
 	add_to_str(&str, &strl, ": ");
 
 	url = strip_url_password(location->vs.url);
@@ -88,7 +88,7 @@ loc_msg(struct terminal *term, struct location *location,
 	add_to_str(&str, &strl, "\n");
 
 	if (frame) {
-		add_to_str(&str, &strl, GT(N_(T_TITLE), term));
+		add_to_str(&str, &strl, _(N_(T_TITLE), term));
 		add_to_str(&str, &strl, ": ");
 		add_to_str(&str, &strl, frame->f_data->title);
 	}
@@ -97,37 +97,37 @@ loc_msg(struct terminal *term, struct location *location,
 
 	if (!get_cache_entry(location->vs.url, &ce)) {
 		add_to_str(&str, &strl, "\n");
-		add_to_str(&str, &strl, GT(N_(T_SIZE), term));
+		add_to_str(&str, &strl, _(N_(T_SIZE), term));
 		add_to_str(&str, &strl, ": ");
 		add_num_to_str(&str, &strl, ce->length);
 
 		if (ce->incomplete) {
 			add_to_str(&str, &strl, " (");
-			add_to_str(&str, &strl, GT(N_(T_INCOMPLETE), term));
+			add_to_str(&str, &strl, _(N_(T_INCOMPLETE), term));
 			add_to_str(&str, &strl, ")");
 		}
 
 		add_to_str(&str, &strl, "\n");
-		add_to_str(&str, &strl, GT(N_(T_CODEPAGE), term));
+		add_to_str(&str, &strl, _(N_(T_CODEPAGE), term));
 		add_to_str(&str, &strl, ": ");
 		add_to_str(&str, &strl, get_cp_name(location->vs.f->f_data->cp));
 
 		if (location->vs.f->f_data->ass == 1) {
 			add_to_str(&str, &strl, " (");
-			add_to_str(&str, &strl, GT(N_(T_ASSUMED), term));
+			add_to_str(&str, &strl, _(N_(T_ASSUMED), term));
 			add_to_str(&str, &strl, ")");
 		}
 
 		if (location->vs.f->f_data->ass == 2) {
 			add_to_str(&str, &strl, " (");
-			add_to_str(&str, &strl, GT(N_(T_IGNORING_SERVER_SETTING), term));
+			add_to_str(&str, &strl, _(N_(T_IGNORING_SERVER_SETTING), term));
 			add_to_str(&str, &strl, ")");
 		}
 
 		a = parse_http_header(ce->head, "Server", NULL);
 		if (a) {
 			add_to_str(&str, &strl, "\n");
-			add_to_str(&str, &strl, GT(N_(T_SERVER), term));
+			add_to_str(&str, &strl, _(N_(T_SERVER), term));
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, a);
 			mem_free(a);
@@ -135,13 +135,13 @@ loc_msg(struct terminal *term, struct location *location,
 
 		if (ce->ssl_info) {
 			add_to_str(&str, &strl, "\n");
-			add_to_str(&str, &strl, GT(N_(T_SSL_CIPHER), term));
+			add_to_str(&str, &strl, _(N_(T_SSL_CIPHER), term));
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, ce->ssl_info);
 		}
 		if (ce->encoding_info) {
 			add_to_str(&str, &strl, "\n");
-			add_to_str(&str, &strl, GT(N_(T_ENCODING), term));
+			add_to_str(&str, &strl, _(N_(T_ENCODING), term));
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, ce->encoding_info);
 		}
@@ -149,7 +149,7 @@ loc_msg(struct terminal *term, struct location *location,
 		a = parse_http_header(ce->head, "Date", NULL);
 		if (a) {
 			add_to_str(&str, &strl, "\n");
-			add_to_str(&str, &strl, GT(N_(T_DATE), term));
+			add_to_str(&str, &strl, _(N_(T_DATE), term));
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, a);
 			mem_free(a);
@@ -157,7 +157,7 @@ loc_msg(struct terminal *term, struct location *location,
 
 		if (ce->last_modified) {
 			add_to_str(&str, &strl, "\n");
-			add_to_str(&str, &strl, GT(N_(T_LAST_MODIFIED), term));
+			add_to_str(&str, &strl, _(N_(T_LAST_MODIFIED), term));
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, ce->last_modified);
 		}
@@ -166,7 +166,7 @@ loc_msg(struct terminal *term, struct location *location,
 
 #ifdef GLOBHIST
 	add_to_str(&str, &strl, "\n");
-	add_to_str(&str, &strl, GT(N_(T_LAST_VISIT_TIME), term));
+	add_to_str(&str, &strl, _(N_(T_LAST_VISIT_TIME), term));
 	add_to_str(&str, &strl, ": ");
 	historyitem = get_global_history_item(location->vs.url);
 	if (historyitem) {
@@ -175,7 +175,7 @@ loc_msg(struct terminal *term, struct location *location,
 		a = ctime(&historyitem->last_visit);
 		add_bytes_to_str(&str, &strl, a, strlen(a) - 1);
 	} else {
-		add_to_str(&str, &strl, GT(N_(T_UNKNOWN), term));
+		add_to_str(&str, &strl, _(N_(T_UNKNOWN), term));
 	}
 #endif
 
@@ -184,7 +184,7 @@ loc_msg(struct terminal *term, struct location *location,
 		a = print_current_link_do(frame, term);
 		if (a) {
 			add_to_str(&str, &strl, "\n");
-			add_to_str(&str, &strl, GT(N_(T_LINK), term));
+			add_to_str(&str, &strl, _(N_(T_LINK), term));
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, a);
 			mem_free(a);
@@ -193,7 +193,7 @@ loc_msg(struct terminal *term, struct location *location,
 		a = print_current_link_title_do(frame, term);
 		if (a) {
 			add_to_str(&str, &strl, "\n");
-			add_to_str(&str, &strl, GT(N_(T_LINK_TITLE), term));
+			add_to_str(&str, &strl, _(N_(T_LINK_TITLE), term));
 			add_to_str(&str, &strl, ": ");
 			add_to_str(&str, &strl, a);
 			mem_free(a);

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.25 2003/01/01 20:36:08 pasky Exp $ */
+/* $Id: dialog.c,v 1.26 2003/01/03 00:02:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,10 +72,10 @@ redraw_dialog(struct dialog_data *dlg)
 		   dlg->yw - 2 * DIALOG_TOP_BORDER,
 		   get_bfu_color(term, "dialog.frame"), DIALOG_FRAME);
 
-	i = strlen(GT(dlg->dlg->title, term));
+	i = strlen(_(dlg->dlg->title, term));
 	x = (dlg->xw - i) / 2 + dlg->x;
 	print_text(term, x - 1, y, 1, " ", dialog_title_color);
-	print_text(term, x, y, i, GT(dlg->dlg->title, term), dialog_title_color);
+	print_text(term, x, y, i, _(dlg->dlg->title, term), dialog_title_color);
 	print_text(term, x + i, y, 1, " ", dialog_title_color);
 
 	for (i = 0; i < dlg->n; i++)
@@ -193,7 +193,7 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 			if (ev->x > ' ' && ev->x < 0x100) {
 				for (i = 0; i < dlg->n; i++)
 					if (dlg->dlg->items[i].type == D_BUTTON
-					    && upcase(GT(dlg->dlg->items[i].text, term)[0])
+					    && upcase(_(dlg->dlg->items[i].text, term)[0])
 					       == upcase(ev->x)) {
 						select_dlg_item(dlg, i);
 						return;

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.25 2003/01/02 23:59:52 pasky Exp $ */
+/* $Id: info.c,v 1.26 2003/01/03 00:02:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,10 +52,10 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 		")"
 #endif
 		"\n\n"
-		, GT(N_(T_LINKS__LYNX_LIKE), term),
+		, _(N_(T_LINKS__LYNX_LIKE), term),
 
 		"\n\n"
-		, GT(N_(T_FEATURES), term),
+		, _(N_(T_FEATURES), term),
 		": Default"
 #ifdef DEBUG
 		" Debug"
@@ -230,7 +230,7 @@ void memory_inf(struct terminal *term, void *d, struct session *ses)
 	if (!r) return;
 
 	snprintf(message, sizeof(message), "%ld %s.",
-		 mem_amount, GT(N_(T_MEMORY_ALLOCATED), term));
+		 mem_amount, _(N_(T_MEMORY_ALLOCATED), term));
 
 	p = stracpy(message);
 	if (!p) {

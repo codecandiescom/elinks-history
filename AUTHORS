@@ -154,7 +154,6 @@ Peter Gervai <grin@tolna.net>
 Petr Baudis <pasky@ji.cz>
 	Maintains elinks tree (CVS), integrates all reasonable patches
 	and bugfixes. Produces a links-current tarball for user testing.
-	His tree is usually a lot more feature-rich, but less stable.
 	http://pasky.ji.cz/elinks/
 
 Petr Cech <cech@atrey.karlin.mff.cuni.cz>

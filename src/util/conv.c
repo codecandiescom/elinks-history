@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.52 2004/03/16 09:14:39 zas Exp $ */
+/* $Id: conv.c,v 1.53 2004/04/04 03:09:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,25 +345,21 @@ strtolx(unsigned char *str, unsigned char **end)
 
 /* This is _NOT_ for what do you think it's for! We use this to make URL
  * shell-safe, nothing more. */
-unsigned char *
-encode_shell_safe_url(unsigned char *url)
+struct string *
+add_encoded_shell_safe_url(struct string *string, unsigned char *url)
 {
-	struct string u;
-
-	if (!init_string(&u)) return NULL;
-
 	for (; *url; url++) {
 		if (is_safe_in_shell(*url))
-			add_char_to_string(&u, *url);
+			add_char_to_string(string, *url);
 		else {
-			add_char_to_string(&u, '=');
-			add_char_to_string(&u, hx(*url >> 4));
-			add_char_to_string(&u, hx(*url & 0xf));
-			add_char_to_string(&u, '=');
+			add_char_to_string(string, '=');
+			add_char_to_string(string, hx(*url >> 4));
+			add_char_to_string(string, hx(*url & 0xf));
+			add_char_to_string(string, '=');
 		}
 	}
 
-	return u.source;
+	return string;
 }
 
 /* This is _NOT_ for what do you think it's for! We use this to recover from

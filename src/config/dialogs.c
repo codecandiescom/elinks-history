@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.171 2004/05/30 18:06:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.172 2004/05/30 18:52:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,16 +523,6 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	struct kbdbind_add_hop *hop = data;
 	int action;
 
-	/* TODO: This should maybe rather happen in a validation function? */
-	if (parse_keystroke(keystroke, &hop->key, &hop->meta) < 0) {
-		msg_box(hop->term, NULL, 0,
-			N_("Add keybinding"), AL_CENTER,
-			N_("Invalid keystroke."),
-			NULL, 1,
-			N_("OK"), NULL, B_ESC | B_ENTER);
-		return;
-	}
-
 	if (keybinding_exists(hop->keymap, hop->key, hop->meta, &action)
 	    && action != ACT_MAIN_NONE) {
 		struct kbdbind_add_hop *new_hop;
@@ -557,6 +547,23 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	}
 
 	really_really_add_keybinding((void *) hop);
+}
+
+int
+check_keystroke(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	struct kbdbind_add_hop *hop = dlg_data->dlg->udata2;
+	unsigned char *keystroke = widget_data->cdata;
+
+	if (parse_keystroke(keystroke, &hop->key, &hop->meta) >= 0)
+		return 0;
+
+	msg_box(hop->term, NULL, 0,
+		N_("Add keybinding"), AL_CENTER,
+		N_("Invalid keystroke."),
+		NULL, 1,
+		N_("OK"), NULL, B_ESC | B_ENTER);
+	return 1;
 }
 
 static int
@@ -606,7 +613,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 	input_field(term, getml(text, hop, NULL), 0,
 		_("Add keybinding", term), text,
 		_("OK", term), _("Cancel", term), hop, NULL,
-		MAX_STR_LEN, "", 0, 0, NULL,
+		MAX_STR_LEN, "", 0, 0, check_keystroke,
 		really_add_keybinding, NULL);
 	return 0;
 }

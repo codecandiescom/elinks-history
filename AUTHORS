@@ -95,6 +95,7 @@ Dmitry M. Klimov <dmk@gtrk.kmtn.ru>
 
 Dmitry Pinchukov <dpinch@mail.ru>
 	Ukrainian translation
+	Referred as Dmitry in ChangeLog etc.
 
 Doug Kearns <djkea2@mugca.its.monash.edu.au>
 	Fixes in linkskeys.5
@@ -322,4 +323,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.60 2002/05/17 20:13:19 pasky Exp $
+$Id: AUTHORS,v 1.61 2002/05/25 19:34:10 pasky Exp $

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.126 2004/01/24 23:58:42 pasky Exp $ */
+/* $Id: dialog.c,v 1.127 2004/01/26 05:36:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,8 +71,6 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *title_color;
 
-	assert(dlg_data->dlg->title);
-
 	if (layout) {
 		dlg_data->dlg->layouter(dlg_data);
 		/* This might not be the best place. We need to be able
@@ -83,24 +81,28 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 			cycle_widget_focus(dlg_data, 1);
 	}
 
-	x = dlg_data->x + DIALOG_LEFT_BORDER;
-	y = dlg_data->y + DIALOG_TOP_BORDER;
+	if (!dlg_data->dlg->layout.only_widgets) {
+		x = dlg_data->x + DIALOG_LEFT_BORDER;
+		y = dlg_data->y + DIALOG_TOP_BORDER;
 
-	draw_border(term, x, y,
-		    dlg_data->width - 2 * DIALOG_LEFT_BORDER,
-		    dlg_data->height - 2 * DIALOG_TOP_BORDER,
-		    get_bfu_color(term, "dialog.frame"),
-		    DIALOG_FRAME);
+		draw_border(term, x, y,
+			    dlg_data->width - 2 * DIALOG_LEFT_BORDER,
+			    dlg_data->height - 2 * DIALOG_TOP_BORDER,
+			    get_bfu_color(term, "dialog.frame"),
+			    DIALOG_FRAME);
 
-	title_color = get_bfu_color(term, "dialog.title");
-	if (title_color && dlg_data->width >= 2) {
-		unsigned char *title = dlg_data->dlg->title;
-		int titlelen = int_min(dlg_data->width - 2, strlen(title));
+		assert(dlg_data->dlg->title);
 
-		x = (dlg_data->width - titlelen) / 2 + dlg_data->x;
-		draw_text(term, x - 1, y, " ", 1, 0, title_color);
-		draw_text(term, x, y, title, titlelen, 0, title_color);
-		draw_text(term, x + titlelen, y, " ", 1, 0, title_color);
+		title_color = get_bfu_color(term, "dialog.title");
+		if (title_color && dlg_data->width >= 2) {
+			unsigned char *title = dlg_data->dlg->title;
+			int titlelen = int_min(dlg_data->width - 2, strlen(title));
+
+			x = (dlg_data->width - titlelen) / 2 + dlg_data->x;
+			draw_text(term, x - 1, y, " ", 1, 0, title_color);
+			draw_text(term, x, y, title, titlelen, 0, title_color);
+			draw_text(term, x + titlelen, y, " ", 1, 0, title_color);
+		}
 	}
 
 	for (i = 0; i < dlg_data->n; i++)

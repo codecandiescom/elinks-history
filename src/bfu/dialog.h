@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.36 2003/12/27 04:09:46 miciah Exp $ */
+/* $Id: dialog.h,v 1.37 2004/01/26 05:36:33 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -27,6 +27,8 @@ struct dialog_layout {
 	unsigned int fit_datalen:1;
 	/* Whether to float grouped widgets on one line. */
 	unsigned int float_groups:1;
+	/* Whether to draw all the fancy frames and backgrounds. */
+	unsigned int only_widgets:1;
 };
 
 enum dlg_refresh_code {

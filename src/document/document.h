@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.23 2003/11/08 16:28:01 zas Exp $ */
+/* $Id: document.h,v 1.24 2003/11/08 16:32:47 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -141,11 +141,11 @@ struct document {
 
 #ifdef DEBUG_DOCUMENT_LOCKS
 #define doc_lock_debug(doc, info) debug("document %p lock %s now %d url= %s", doc, info, (doc)->locks, (doc)->url)
-#define doc_sanity_check(doc) do { assert(doc); assertm((doc)->locks >= 0, "Document lock underflow."); } while (0)
 #else
 #define doc_lock_debug(ce, info)
-#define doc_sanity_check(ce)
 #endif
+
+#define doc_sanity_check(doc) do { assert(doc); assertm((doc)->locks >= 0, "Document lock underflow."); } while (0)
 
 #define get_document_locks(doc) ((doc)->locks)
 #define is_document_locked(doc) (!!(doc)->locks)

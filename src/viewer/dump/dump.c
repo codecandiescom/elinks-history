@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.40 2003/10/04 18:08:38 jonas Exp $ */
+/* $Id: dump.c,v 1.41 2003/10/17 13:05:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,7 @@ terminate:
 
 
 int
-dump_to_file(struct document *formatted, int fd)
+dump_to_file(struct document *document, int fd)
 {
 #define D_BUF	65536
 
@@ -227,16 +227,16 @@ dump_to_file(struct document *formatted, int fd)
 
 	if (!buf) return -1;
 
-	for (y = 0; y < formatted->y; y++) {
-		for (x = 0; x <= formatted->data[y].l; x++) {
+	for (y = 0; y < document->y; y++) {
+		for (x = 0; x <= document->data[y].l; x++) {
 			unsigned char c;
 
-			if (x == formatted->data[y].l) {
+			if (x == document->data[y].l) {
 				c = '\n';
 			} else {
-				unsigned char attr = formatted->data[y].d[x].attr;
+				unsigned char attr = document->data[y].d[x].attr;
 
-				c = formatted->data[y].d[x].data;
+				c = document->data[y].d[x].data;
 
 				if (c == 1)
 					c += ' ' - 1;

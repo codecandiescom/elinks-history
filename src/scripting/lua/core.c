@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.78 2003/10/04 14:01:32 jonas Exp $ */
+/* $Id: core.c,v 1.79 2003/10/17 13:04:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,18 +163,18 @@ l_current_document_formatted(LS)
 
 	if (init_string(&buffer)) {
 		extern unsigned char frame_dumb[];
-		struct document *fd = f->document;
+		struct document *document = f->document;
 		int x, y;
 
-		for (y = 0; y < fd->y; y++) for (x = 0; x <= fd->data[y].l; x++) {
+		for (y = 0; y < document->y; y++) for (x = 0; x <= document->data[y].l; x++) {
 			unsigned char c;
 
-			if (x == fd->data[y].l) {
+			if (x == document->data[y].l) {
 				c = '\n';
 			} else {
-				unsigned char attr = fd->data[y].d[x].attr;
+				unsigned char attr = document->data[y].d[x].attr;
 
-				c = fd->data[y].d[x].data;
+				c = document->data[y].d[x].data;
 				if (c == 1) c += ' ' - 1;
 
 				if ((attr & SCREEN_ATTR_FRAME)

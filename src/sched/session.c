@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.172 2003/10/06 20:58:49 miciah Exp $ */
+/* $Id: session.c,v 1.173 2003/10/17 13:00:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -852,10 +852,10 @@ request_frameset(struct session *ses, struct frameset_desc *fd)
 inline void
 load_frames(struct session *ses, struct document_view *fd)
 {
-	struct document *ff = fd->document;
+	struct document *document = fd->document;
 
-	if (!ff || !ff->frame_desc) return;
-	request_frameset(ses, ff->frame_desc);
+	if (!document || !document->frame_desc) return;
+	request_frameset(ses, document->frame_desc);
 }
 
 void

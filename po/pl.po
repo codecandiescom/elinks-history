@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-29 23:49+0200\n"
-"PO-Revision-Date: 2004-09-26 20:20+0200\n"
-"Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
+"POT-Creation-Date: 2004-09-30 23:15+0200\n"
+"PO-Revision-Date: 2004-09-30 22:15+0200\n"
+"Last-Translator: Adam Golebiowski <adamg@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
@@ -50,14 +50,14 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/dialogs/info.c:44 src/dialogs/info.c:133 src/dialogs/info.c:155
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:505 src/dialogs/menu.c:553
 #: src/dialogs/options.c:176 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:373 src/ecmascript/spidermonkey.c:843
-#: src/ecmascript/spidermonkey.c:860 src/formhist/dialogs.c:183
+#: src/ecmascript/spidermonkey.c:373 src/ecmascript/spidermonkey.c:854
+#: src/ecmascript/spidermonkey.c:871 src/formhist/dialogs.c:183
 #: src/mime/dialogs.c:134 src/protocol/auth/dialogs.c:92
 #: src/protocol/protocol.c:226 src/protocol/user.c:206
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:367
 #: src/sched/download.c:506 src/sched/download.c:600 src/sched/error.c:42
-#: src/sched/session.c:242 src/sched/session.c:647 src/sched/session.c:671
-#: src/sched/session.c:688 src/scripting/lua/core.c:400
+#: src/sched/session.c:242 src/sched/session.c:668 src/sched/session.c:692
+#: src/sched/session.c:709 src/scripting/lua/core.c:400
 #: src/scripting/lua/core.c:482 src/scripting/lua/core.c:599
 #: src/scripting/lua/core.c:723 src/viewer/text/draw.c:66
 #: src/viewer/text/form.c:841 src/viewer/text/search.c:949
@@ -4513,7 +4513,7 @@ msgid "Folder"
 msgstr "Folder"
 
 #. name:
-#: src/cookies/cookies.c:80 src/cookies/cookies.c:847
+#: src/cookies/cookies.c:80 src/cookies/cookies.c:854
 msgid "Cookies"
 msgstr "Ciasteczka"
 
@@ -4592,15 +4592,15 @@ msgstr ""
 "Czy zapisywaæ ciasteczka po ka¿dej zmianie na li¶cie ciasteczek?\n"
 "Bez efektu, gdy cookies_save jest wy³±czone."
 
-#: src/cookies/cookies.c:565
+#: src/cookies/cookies.c:572
 msgid "at quit time"
 msgstr "w momencie koñczenia dzia³ania"
 
-#: src/cookies/cookies.c:568
+#: src/cookies/cookies.c:575
 msgid "Accept cookie?"
 msgstr "Akceptujesz ciasteczko?"
 
-#: src/cookies/cookies.c:569
+#: src/cookies/cookies.c:576
 #, c-format
 msgid ""
 "Do you want to accept a cookie from %s?\n"
@@ -4619,19 +4619,19 @@ msgstr ""
 "Wa¿ne do: %s\n"
 "Bezpieczeñstwo: %s\n"
 
-#: src/cookies/cookies.c:578 src/cookies/dialogs.c:112
+#: src/cookies/cookies.c:585 src/cookies/dialogs.c:112
 msgid "yes"
 msgstr "tak"
 
-#: src/cookies/cookies.c:578 src/cookies/dialogs.c:112
+#: src/cookies/cookies.c:585 src/cookies/dialogs.c:112
 msgid "no"
 msgstr "nie"
 
-#: src/cookies/cookies.c:580
+#: src/cookies/cookies.c:587
 msgid "Accept"
 msgstr "Akceptacja"
 
-#: src/cookies/cookies.c:581
+#: src/cookies/cookies.c:588
 msgid "Reject"
 msgstr "Odrzucenie"
 
@@ -5139,9 +5139,8 @@ msgid "ELinks Cvs ~History"
 msgstr "~Historia CVS-u ELinksa"
 
 #: src/dialogs/menu.c:418
-#, fuzzy
 msgid "ELinks ~LXR"
-msgstr "ELinks C~VSWeb"
+msgstr "ELinks ~LXR"
 
 #: src/dialogs/menu.c:421
 msgid "~Copying"
@@ -5502,11 +5501,11 @@ msgstr "Czy otwieraæ okienko dialogowe z raportem o b³êdzie skryptu?"
 msgid "JavaScript Alert"
 msgstr "Alert JavaScriptu"
 
-#: src/ecmascript/spidermonkey.c:826
+#: src/ecmascript/spidermonkey.c:837
 msgid "JavaScript Error"
 msgstr "B³±d JavaScriptu"
 
-#: src/ecmascript/spidermonkey.c:829
+#: src/ecmascript/spidermonkey.c:840
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following exception: \n"
@@ -5523,7 +5522,7 @@ msgstr ""
 "%s\n"
 ".%*s^%*s."
 
-#: src/ecmascript/spidermonkey.c:837
+#: src/ecmascript/spidermonkey.c:848
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following exception: \n"
@@ -5534,11 +5533,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/ecmascript/spidermonkey.c:854
+#: src/ecmascript/spidermonkey.c:865
 msgid "JavaScript Emergency"
 msgstr "Wypadek JavaScriptu"
 
-#: src/ecmascript/spidermonkey.c:855
+#: src/ecmascript/spidermonkey.c:866
 msgid ""
 "A script embedded in the current document was running for more than 5 "
 "seconds in line. This probably means there is a bug in the script and it "
@@ -5624,6 +5623,8 @@ msgstr "Prze³±cz zapisywanie"
 msgid "Form history manager"
 msgstr "Menad¿er historii formularzy"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Poka¿ okno dialogowe historii formularzy"
@@ -6096,7 +6097,6 @@ msgstr "System konfiguracyjny"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"
@@ -6887,11 +6887,11 @@ msgstr "Protokó³ CSO phone-book nie jest obs³ugiwany."
 msgid "Unknown error"
 msgstr "Nieznany b³±d"
 
-#: src/sched/session.c:635 src/sched/session.c:655 src/sched/task.c:181
+#: src/sched/session.c:656 src/sched/session.c:676 src/sched/task.c:181
 msgid "Warning"
 msgstr "Ostrze¿enie"
 
-#: src/sched/session.c:636
+#: src/sched/session.c:657
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -6909,7 +6909,7 @@ msgstr ""
 "co mi chodzi, po prostu to zrób), tak ¿e domy¶lne ustawienie bêdzie u¿ywane. "
 "Przepraszamy za wszelkie niedogodno¶ci."
 
-#: src/sched/session.c:656
+#: src/sched/session.c:677
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -6931,11 +6931,11 @@ msgstr ""
 "saving_style na 3, by uzyskaæ \"w³a¶ciwe\" zachowanie. Przepraszamy za "
 "wszelkie niedogodno¶ci."
 
-#: src/sched/session.c:683
+#: src/sched/session.c:704
 msgid "Welcome"
 msgstr "Powitanie"
 
-#: src/sched/session.c:684
+#: src/sched/session.c:705
 msgid ""
 "Welcome to ELinks!\n"
 "\n"

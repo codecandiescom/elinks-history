@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.84 2004/01/29 13:21:39 jonas Exp $ */
+/* $Id: parser.c,v 1.85 2004/01/29 13:32:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,7 +276,8 @@ static void
 css_parse_ruleset(struct css_stylesheet *css, struct scanner *scanner)
 {
 	INIT_LIST_HEAD(selectors);
-	struct selector_pkg *pkg, *fpkg;
+	INIT_LIST_HEAD(properties);
+	struct selector_pkg *pkg;
 
 	css_parse_selector(css, scanner, &selectors);
 	if (list_empty(selectors)
@@ -299,17 +300,16 @@ css_parse_ruleset(struct css_stylesheet *css, struct scanner *scanner)
 	 * believe. --pasky */
 
 	pkg = selectors.next;
-	css_parse_properties(&pkg->selector->properties, scanner);
+	css_parse_properties(&properties, scanner);
 
 	skip_css_tokens(scanner, '}');
 
 	/* Mirror the properties to all the selectors. */
-	fpkg = pkg; pkg = pkg->next;
-	while ((struct list_head *) pkg != &selectors) {
-		mirror_css_selector(fpkg->selector, pkg->selector);
-		pkg = pkg->next;
+	foreach (pkg, selectors) {
+		add_selector_properties(pkg->selector, &properties);
 	}
 	free_list(selectors);
+	free_list(properties);
 }
 
 

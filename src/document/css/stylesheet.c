@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.22 2004/01/27 18:45:51 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.23 2004/01/29 13:32:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,18 +104,18 @@ copy_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 }
 
 void
-mirror_css_selector(struct css_selector *sel1, struct css_selector *sel2)
+add_selector_properties(struct css_selector *selector, struct list_head *properties)
 {
 	struct css_property *prop;
 
-	foreach (prop, sel1->properties) {
+	foreach (prop, *properties) {
 		struct css_property *newprop;
 
 		newprop = mem_calloc(1, sizeof(struct css_property));
 		if (!newprop)
 			continue;
 		*newprop = *prop;
-		add_to_list(sel2->properties, newprop);
+		add_to_list(selector->properties, newprop);
 	}
 }
 
@@ -129,7 +129,7 @@ clone_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 	copy = copy_css_selector(css, orig);
 	if (!copy)
 		return NULL;
-	mirror_css_selector(orig, copy);
+	add_selector_properties(copy, &orig->properties);
 	return copy;
 }
 

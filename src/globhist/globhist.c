@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.63 2004/01/04 11:57:35 jonas Exp $ */
+/* $Id: globhist.c,v 1.64 2004/01/04 14:40:01 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -138,8 +138,7 @@ get_global_history_item(unsigned char *url)
 {
 	struct hash_item *item;
 
-	if (!url) return NULL;
-	if (!globhist_cache) return NULL;
+	if (!url || !globhist_cache) return NULL;
 
 	/* Search for cached entry. */
 
@@ -179,10 +178,9 @@ free_globhist_cache(void)
 {
 	if (globhist_cache) {
 		free_hash(globhist_cache);
+		globhist_cache = NULL;
+		globhist_cache_entries = 0;
 	}
-
-	globhist_cache = NULL;
-	globhist_cache_entries = 0;
 }
 
 /* Add a new entry in history list, take care of duplicate, respect history
@@ -194,11 +192,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	unsigned char *text;
 	int max_globhist_items;
 
-	if (!get_globhist_enable())
-		return;
-
-	if (!url)
-		return;
+	if (!url || !get_globhist_enable()) return;
 
 	max_globhist_items = get_globhist_max_items();
 

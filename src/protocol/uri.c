@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.70 2003/11/29 00:47:33 pasky Exp $ */
+/* $Id: uri.c,v 1.71 2003/11/29 00:48:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -425,7 +425,7 @@ proceed: ;
  * 'file' protocol backend can understand. No host parts etc, that is what this
  * function is supposed to chew. */
 static void
-transform_file_uri(unsigned char **up, unsigned char *cwd)
+transform_file_url(unsigned char **up, unsigned char *cwd)
 {
 	unsigned char *url = *up;
 	unsigned char *path;
@@ -623,7 +623,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	if (parse_uri(&uri, url)) {
 		newurl = stracpy(url); /* XXX: Post data copy. */
 		if (newurl) {
-			transform_file_uri(&newurl, cwd);
+			transform_file_url(&newurl, cwd);
 			translate_directories(newurl);
 		}
 
@@ -634,7 +634,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	if (strstr(url, "//") && (newurl = stracpy(url))) { /* XXX: Post data copy. */
 		add_to_strn(&newurl, "/");
 		if (parse_uri(&uri, newurl)) {
-			transform_file_uri(&newurl, cwd);
+			transform_file_url(&newurl, cwd);
 			translate_directories(newurl);
 
 			return newurl;
@@ -712,7 +712,7 @@ http:				prefix = "http://";
 		if (not_file && !strchr(url, '/')) add_to_strn(&newurl, "/");
 
 		if (parse_uri(&uri, newurl)) {
-			transform_file_uri(&newurl, cwd);
+			transform_file_url(&newurl, cwd);
 			translate_directories(newurl);
 
 			return newurl;
@@ -730,7 +730,7 @@ http:				prefix = "http://";
 		add_to_strn(&newurl, "//");
 		add_to_strn(&newurl, ch + 1);
 		if (!parse_uri(&uri, newurl)) {
-			transform_file_uri(&newurl, cwd);
+			transform_file_url(&newurl, cwd);
 			translate_directories(newurl);
 
 			return newurl;
@@ -740,7 +740,7 @@ http:				prefix = "http://";
 	/* ..and with slash */
 	add_to_strn(&newurl, "/");
 	if (parse_uri(&uri, newurl)) {
-		transform_file_uri(&newurl, cwd);
+		transform_file_url(&newurl, cwd);
 		translate_directories(newurl);
 
 		return newurl;

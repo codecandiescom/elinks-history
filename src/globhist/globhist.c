@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.11 2002/11/29 09:49:03 zas Exp $ */
+/* $Id: globhist.c,v 1.12 2002/11/29 11:16:09 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -241,7 +241,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 	/* Deleted in history_dialog_clear_list() */
 	history_item->box_item = mem_calloc(1, sizeof(struct listbox_item)
 					       + strlen(history_item->url) + 1);
-	if (!history_item) return;
+	if (!history_item->box_item) return;
 	init_list(history_item->box_item->child);
 	history_item->box_item->visible = 1;
 

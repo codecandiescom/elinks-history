@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.52 2004/12/19 18:04:42 jonas Exp $ */
+/* $Id: css.c,v 1.53 2005/01/03 13:40:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,8 +44,8 @@ struct option_info css_options_info[] = {
 		"stylesheet", 0, "",
 		N_("The path to the file containing the default user defined\n"
 		"Cascading Style Sheet. It can be used to control the basic\n"
-		"layout of HTML documents. It is assumed to be relative to\n"
-		"ELinks' home directory.\n"
+		"layout of HTML documents. The path is assumed to be relative\n"
+		"to ELinks' home directory.\n"
 		"Leave as \"\" to use built-in document styling.")),
 
 	NULL_OPTION_INFO,

@@ -434,8 +434,15 @@ if test "$enable_perl" = "yes"; then
 	PERL_LIBS="`perl -MExtUtils::Embed -e ldopts`"
 	PERL_CFLAGS="`perl -MExtUtils::Embed -e ccopts`"
 	LIBS="$PERL_LIBS $LIBS"
+	CFLAGS="$PERL_CFLAGS $CFLAGS"
 	CPPFLAGS="$CPPFLAGS $PERL_CFLAGS"
-	cf_result="yes";
+	AC_TRY_LINK([
+#include <EXTERN.h>
+#include <perl.h>
+#include <perlapi.h>
+],
+		    [PerlInterpreter *my_perl = perl_alloc();],
+		    cf_result=yes, cf_result=no)
 fi
 
 if test "$cf_result" != "yes"; then
@@ -443,6 +450,7 @@ if test "$cf_result" != "yes"; then
 else
 	EL_CONFIG(CONFIG_PERL, [Perl])
 
+	CFLAGS="$CFLAGS_X"
 	AC_SUBST(PERL_LIBS)
 	AC_SUBST(PERL_CFLAGS)
 fi

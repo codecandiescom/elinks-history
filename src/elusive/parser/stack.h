@@ -1,4 +1,4 @@
-/* $Id: stack.h,v 1.1 2003/01/01 18:58:13 pasky Exp $ */
+/* $Id: stack.h,v 1.2 2003/01/19 18:00:27 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_STACK_H
 #define EL__USIVE_PARSER_STACK_H
@@ -34,7 +34,7 @@ struct parser_stack_item {
 
 /* This will insert a new state at the top of the stack. It returns pointer to
  * the new state or NULL if the insert failed (the stack is not modified then).
- * You can safely cast the return value to pointer to your parser state
+ * You can safely cast the return value to a pointer to your parser state
  * structure. */
 /* state_size indicates the size of your parser state structure - the newly
  * created parser_stack_item will be of that size. */
@@ -43,9 +43,17 @@ state_stack_push(struct parser_state *state, size_t state_size, int state_code);
 
 /* This will remove a state from the top of the stack. It returns pointer to
  * the new state at the top of the stack or NULL if the remove failed (the
- * stack is not modified then). You can safely cast the return value to pointer
- * to your parser state structure. */
+ * stack is not modified then). You can safely cast the return value to a
+ * pointer to your parser state structure. */
 struct parser_stack_item *
 state_stack_pop(struct parser_state *state);
+
+/* This will replace the state on the top of the stack with the state given in
+ * state_code. It returns pointer to the state at the top of the stack or NULL
+ * if the replacing failed (the stack is not modified then). You can safely
+ * cast the return value to a pointer to your parser state structure. */
+/* state_size indicates the size of your parser state structure. */
+struct parser_stack_item *
+state_stack_repush(struct parser_state *state, size_t state_size, int state_code);
 
 #endif

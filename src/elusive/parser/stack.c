@@ -1,5 +1,5 @@
 /* Parser stack toolkit */
-/* $Id: stack.c,v 1.1 2003/01/01 18:58:13 pasky Exp $ */
+/* $Id: stack.c,v 1.2 2003/01/19 18:00:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,4 +46,25 @@ state_stack_pop(struct parser_state *state)
 	state->data = item->up;
 	mem_free(item);
 	return state->data;
+}
+
+struct parser_stack_item *
+state_stack_repush(struct parser_state *state, size_t state_size, int state_code)
+{
+	struct parser_stack_item *item = state->data;
+	struct parser_stack_item *up;
+
+	if (!item) {
+		internal("Parser state stack underflow!");
+		return NULL;
+	}
+
+	/* debug("state_stack_repush [%d]", state_code); */
+
+	up = item->up;
+	memset(item, 0, state_size);
+
+	item->up = up;
+	item->state = state_code;
+	return item;
 }

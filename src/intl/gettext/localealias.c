@@ -189,8 +189,7 @@ read_alias_file(const unsigned char *fname, int fname_len)
 
 		cp = buf;
 		/* Ignore leading white space.  */
-		while (isspace(cp[0]))
-			++cp;
+		skip_whitespace(cp);
 
 		/* A leading '#' signals a comment line.  */
 		if (cp[0] != '\0' && cp[0] != '#') {

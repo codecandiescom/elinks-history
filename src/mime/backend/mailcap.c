@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.1 2003/05/06 17:24:40 jonas Exp $ */
+/* $Id: mailcap.c,v 1.2 2003/05/07 18:26:23 jonas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -22,7 +22,7 @@
 #include "config.h"
 #endif
 
-#ifdef MAILCAP 
+#ifdef MAILCAP
 
 #include <ctype.h>
 #include <stdio.h>
@@ -105,7 +105,6 @@ convert_command(unsigned char *command, int copiousoutput)
 {
 	int x = 0, y = 0; /* x used as command index, y as buffer index */
 	unsigned char buffer[MAX_STR_LEN];
-	unsigned char *converted;
 	int commandlen = strlen(command);
 
 	while (command[x] && x < commandlen && y < sizeof(buffer)) {
@@ -156,13 +155,8 @@ convert_command(unsigned char *command, int copiousoutput)
 			y += strlen(pager);
 		}
 	}
-	buffer[y++] = '\0';
 
-	converted = mem_alloc(y);
-	if (converted)
-		safe_strncpy(converted, buffer, y);
-
-	return converted;
+	return memacpy(buffer, y);
 }
 
 /*
@@ -463,7 +457,6 @@ expand_command(unsigned char *command, unsigned char *type)
 	int x = 0; /* command index */
 	int y = 0; /* buffer index */
 	unsigned char buffer[MAX_STR_LEN];
-	unsigned char *expanded;
 	int commandlen;
 	int typelen;
 
@@ -481,13 +474,8 @@ expand_command(unsigned char *command, unsigned char *type)
 			buffer[y++] = command[x++];
 		}
 	}
-	buffer[y++] = '\0';
 
-	expanded = mem_alloc(y);
-	if (expanded)
-		safe_strncpy(expanded, buffer, y);
-
-	return expanded;
+	return memacpy(buffer, y);
 }
 
 /* Checks a single linked list of entries by running test commands if any */
@@ -571,9 +559,9 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 
 			wildcardlen = ptr - type + 1; /* including '/' */
 
-			wildcardtype = mem_alloc(wildcardlen + 3);
+			wildcardtype = mem_alloc(wildcardlen + 2);
 			if (!wildcardtype) return NULL;
-			safe_strncpy(wildcardtype, type, wildcardlen + 1);
+			memcpy(wildcardtype, type, wildcardlen);
 
 			wildcardtype[wildcardlen++] = '*';
 			wildcardtype[wildcardlen] = '\0';

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-07 10:24+0200\n"
-"PO-Revision-Date: 2003-10-04 23:13+0200\n"
+"PO-Revision-Date: 2003-10-10 23:13+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1316,18 +1316,17 @@ msgstr "Czy wy¶wietlaæ liczby z prawej strony odno¶ników?"
 
 #: src/config/options.c:1144
 msgid "Use tabindex"
-msgstr ""
+msgstr "U¿ycie tabindex"
 
 #: src/config/options.c:1146
 msgid "Whether to navigate links using tabindex."
-msgstr ""
+msgstr "Czy do przemieszczania siê po odno¶nikach u¿ywaæ tabindex?"
 
 #: src/config/options.c:1148
 msgid "Number keys select links"
 msgstr "Klawisze z cyframi wybieraj± odno¶niki"
 
 #: src/config/options.c:1150
-#, fuzzy
 msgid ""
 "Number keys select links rather than specify command prefixes. This\n"
 "is a tristate:\n"
@@ -1357,28 +1356,27 @@ msgstr ""
 "i vice versa."
 
 #: src/config/options.c:1164
-#, fuzzy
 msgid "Searching"
-msgstr "Szukaj"
+msgstr "Szukanie"
 
 #: src/config/options.c:1166
-#, fuzzy
 msgid "Options for searching."
-msgstr "Ustawienia dotycz±ce obrazków."
+msgstr "Ustawienia dotycz±ce szukania."
 
 #: src/config/options.c:1168
 msgid "Case sensitivity"
-msgstr ""
+msgstr "Rozró¿nianie wielko¶ci liter"
 
 #: src/config/options.c:1170
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
 msgstr ""
+"Czy zaznaczaæ tekst ró¿ni±cy siê wielko¶ci± liter od poszukiwanego?"
 
 #: src/config/options.c:1173
 msgid "Overlapping matches"
-msgstr ""
+msgstr "Zachodz±ce na siebie dopasowania"
 
 #: src/config/options.c:1175
 msgid ""
@@ -1387,11 +1385,15 @@ msgid ""
 "1 means matches can overlap (CAUTION: can be cpu intensive with\n"
 "  some expressions!)"
 msgstr ""
+"Pozwól dopasowaniom zachodziæ na siebie (istotne tylko dla szukania\n"
+"z u¿yciem wyra¿eñ regularnych).\n"
+"0 - dopasowania nie powinny zachodziæ na siebie.\n"
+"1 - dopasowania mog± zachodziæ na siebie (UWAGA: mo¿e mocno obci±¿aæ\n"
+"  procesor dla niektórych wyra¿eñ!)"
 
 #: src/config/options.c:1181 src/config/options.c:1188
-#, fuzzy
 msgid "Regular expressions"
-msgstr "Wprowad¼ wyra¿enie"
+msgstr "Wyra¿enia regularne"
 
 #: src/config/options.c:1183
 msgid ""
@@ -1400,6 +1402,10 @@ msgid ""
 "1 for basic regular expression searches.\n"
 "2 for extended regular expression searches."
 msgstr ""
+"W³±cz szukanie z u¿yciem wyra¿eñ regularnych.\n"
+"0 - zwyk³e szukanie.\n"
+"1 - szukanie z u¿yciem prostych wyra¿eñ regularnych.\n"
+"2 - szukanie z u¿yciem rozszerzonych wyra¿eñ regularnych."
 
 #: src/config/options.c:1190
 msgid ""
@@ -1408,6 +1414,10 @@ msgid ""
 "1 for basic regular expression searches. (DISABLED)\n"
 "2 for extended regular expression searches. (DISABLED)"
 msgstr ""
+"W³±cz szukanie z u¿yciem wyra¿eñ regularnych.\n"
+"0 - zwyk³e szukanie.\n"
+"1 - szukanie z u¿yciem prostych wyra¿eñ regularnych. (WY£¡CZONE)\n"
+"2 - szukanie z u¿yciem rozszerzonych wyra¿eñ regularnych. (WY£¡CZONE)"
 
 #: src/config/options.c:1197
 msgid "Horizontal text margin"
@@ -2016,7 +2026,6 @@ msgid "Rendering of html link element"
 msgstr "Renderowania elementu odno¶nika html"
 
 #: src/config/options.c:1445
-#, fuzzy
 msgid ""
 "Html link rendering verbosity:\n"
 "0 is nothing\n"
@@ -2229,13 +2238,12 @@ msgid "Mimetypes files"
 msgstr "Pliki typu MIME"
 
 #: src/config/options.c:1559
-#, fuzzy
 msgid ""
 "Options for the support of mimetypes files. Mimetypes files\n"
 "can be used to find the content type of an URL by looking at the\n"
 "extension of the file name."
 msgstr ""
-"Opcje dla wsparcia dla plików MIME.  Pliki MIME mog± byæ u¿yte\n"
+"Opcje do obs³ugi plików MIME.  Pliki MIME mog± byæ u¿yte\n"
 "do znalezienia typu zawarto¶ci pliku URL-a po sprawdzeniu \n"
 "rozszerzenia pliku"
 
@@ -2933,14 +2941,12 @@ msgstr "Kolory wybranych elementów menu."
 
 #
 #: src/config/options.c:1979 src/config/options.c:2374
-#, fuzzy
 msgid "Marked menu item"
 msgstr "Pod¶wietlone elementy menu"
 
 #: src/config/options.c:1981 src/config/options.c:2376
-#, fuzzy
 msgid "Marked menu item colors."
-msgstr "Kolory wybranych elementów menu."
+msgstr "Kolory pod¶wietlonych elementów menu."
 
 #: src/config/options.c:1993 src/config/options.c:2388
 msgid "Menu item hotkey colors."
@@ -3880,7 +3886,6 @@ msgid "Keys"
 msgstr "Klawiszologia"
 
 #: src/dialogs/info.c:57
-#, fuzzy
 msgid ""
 "ESC      display menu\n"
 "^C, q    quit\n"
@@ -3907,13 +3912,14 @@ msgstr ""
 "góra, dó³ zaznacz odno¶nik\n"
 "->        wybierz odno¶nik\n"
 "<-        powrót\n"
-"g         przejd¼ do URL\n"
-"G         przejd¼ do URL bazuj±cego na aktualnym\n"
+"g         przejd¼ do URL-a\n"
+"G         przejd¼ do URL-a bazuj±cego na aktualnym\n"
 "/         szukaj\n"
 "?         szukaj wstecz\n"
 "n         znajd¼ nastêpny\n"
 "N         znajd¼ poprzedni\n"
 "=         informacje o dokumencie\n"
+"|         informacje o nag³ówku\n"
 "\\        ¼ród³o dokumentu\n"
 "d         pobierz"
 
@@ -4293,9 +4299,8 @@ msgid "16 colors"
 msgstr "16 kolorów"
 
 #: src/dialogs/options.c:131
-#, fuzzy
 msgid "256 colors"
-msgstr "16 kolorów"
+msgstr "256 kolorów"
 
 #: src/dialogs/options.c:133
 msgid "Use ^[[11m"
@@ -4409,11 +4414,13 @@ msgstr ""
 msgid ""
 "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
+"Opcja linii poleceñ -confdir ustawiona na %s, ale nie mo¿na utworzyæ\n"
+"katalogu %s."
 
 #: src/lowlevel/home.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "ELINKS_CONFDIR set to %s, but could not create directory %s."
-msgstr "ELINKS_CONFDIR ustawione na %s, ale katalog %s nie istnieje."
+msgstr "ELINKS_CONFDIR ustawione na %s, ale nie mo¿na utworzyæ katalogu %s."
 
 #: src/lowlevel/home.c:150
 msgid ""
@@ -4830,17 +4837,17 @@ msgid "No document"
 msgstr "Brak dokumentu"
 
 #: src/sched/session.c:635
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Czy chcesz i¶æ za przekierowaniem i wys³aæ dane formularza do %s?"
 
 #: src/sched/session.c:638
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Czy chcesz wys³aæ formularz do %s?"
 
 #: src/sched/session.c:640
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Czy chcesz ponownie wys³aæ formularz do %s?"
 
@@ -5149,25 +5156,24 @@ msgid "Search string '%s' not found"
 msgstr "Nie znaleziono wyra¿enia '%s'"
 
 #: src/viewer/text/search.c:879
-#, fuzzy
 msgid "Normal search"
-msgstr "Niczego wcze¶niej nie szukano"
+msgstr "Zwyk³e szukanie"
 
 #: src/viewer/text/search.c:880
 msgid "Regexp search"
-msgstr ""
+msgstr "Szukanie z u¿yciem wyra¿eñ regularnych"
 
 #: src/viewer/text/search.c:881
 msgid "Extended regexp search"
-msgstr ""
+msgstr "Szukanie z u¿yciem rozszerzonych wyra¿eñ regularnych"
 
 #: src/viewer/text/search.c:886
 msgid "Case sensitive"
-msgstr ""
+msgstr "Rozró¿nianie wielko¶ci liter"
 
 #: src/viewer/text/search.c:887
 msgid "Case insensitive"
-msgstr ""
+msgstr "Nierozró¿nianie wielko¶ci liter"
 
 #: src/viewer/text/search.c:1136
 msgid "Search backward"

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.4 2002/03/17 17:27:52 pasky Exp $ */
+/* $Id: osdep.c,v 1.5 2002/03/27 23:47:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,7 +279,7 @@ int can_twterm() /* Check if it make sense to call a twterm. */
 int is_xterm()
 {
 	static int xt = -1;
-	if (xt == -1) xt = !!getenv("DISPLAY");
+	if (xt == -1) xt = (getenv("DISPLAY") && *getenv("DISPLAY"));
 	return xt;
 }
 

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.89 2004/10/08 16:54:57 zas Exp $ */
+/* $Id: status.c,v 1.90 2004/10/10 15:31:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,6 +203,30 @@ update_status(void)
 	}
 }
 
+static unsigned char *
+get_current_link_info_and_title(struct session *ses,
+				struct document_view *doc_view)
+{
+	unsigned char *link_info, *link_title, *ret = NULL;
+
+	link_info = get_current_link_info(ses, doc_view);
+	if (!link_info) return NULL;
+
+	link_title = get_current_link_title(doc_view);
+	if (link_title) {
+		if (*link_title) {
+			ret = straconcat(link_info, " - ", link_title, NULL);
+			mem_free(link_info);
+		}
+
+		mem_free(link_title);
+	}
+
+	if (!ret) ret = link_info;
+
+	return ret;
+}
+
 static inline void
 display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 {
@@ -255,7 +279,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 
 			if (download->state == S_OK) {
 				if (get_current_link(doc_view)) {
-					msg = get_current_link_info(ses, doc_view);
+					msg = get_current_link_info_and_title(ses, doc_view);
 				} else if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
 					msg = msg_text(term, N_("Cursor position: %dx%d"),
 							ses->tab->x + 1, ses->tab->y + 1);

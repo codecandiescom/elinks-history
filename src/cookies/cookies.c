@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.162 2004/08/17 08:03:19 miciah Exp $ */
+/* $Id: cookies.c,v 1.163 2004/09/29 22:45:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,19 +434,26 @@ accept_cookie(struct cookie *c)
 	if (root)
 		c->box_item = add_listbox_leaf(&cookie_browser, root, c);
 
-	foreach (d, cookies) {
-		if (strcasecmp(d->name, c->name)
-		    || strcasecmp(d->domain, c->domain))
-			continue;
-		e = d;
-		d = d->prev;
-		del_from_list(e);
-		free_cookie(e);
+	/* Do not weed out duplicates when loading the cookie file. It doesn't
+	 * scale at all, being O(N^2) and taking about 2s with my 500 cookies
+	 * (so if you don't notice that 100ms with your 100 cookies, that's
+	 * not an argument). --pasky */
+	if (!cookies_nosave) {
+		foreach (d, cookies) {
+			if (strcasecmp(d->name, c->name)
+			    || strcasecmp(d->domain, c->domain))
+				continue;
+			e = d;
+			d = d->prev;
+			del_from_list(e);
+			free_cookie(e);
+		}
 	}
 
 	add_to_list(cookies, c);
 	cookies_dirty = 1;
 
+	/* XXX: This crunches CPU too. --pasky */
 	foreach (cd, c_domains)
 		if (!strcasecmp(cd->domain, c->domain))
 			return;

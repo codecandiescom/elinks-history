@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.332 2004/06/14 22:29:52 jonas Exp $ */
+/* $Id: menu.c,v 1.333 2004/06/14 22:32:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -671,9 +671,11 @@ add_new_win_to_menu(struct menu_item **mi, unsigned char *text,
 	if (!c) return;
 
 	/* The URI is saved as session info in the master and not sent to the
-	 * instance in the new window so with -no-connect enabled it is not
-	 * possible to open links URIs. */
+	 * instance in the new window so with -no-connect or -no-home enabled
+	 * it is not possible to open links URIs. For -anonymous one window
+	 * should be enough. */
 	if (get_opt_bool_tree(cmdline_options, "no-connect")
+	    || get_opt_bool_tree(cmdline_options, "no-home")
 	    || get_opt_bool_tree(cmdline_options, "anonymous"))
 		return;
 

@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.9 2003/05/02 12:10:03 pasky Exp $ */
+/* $Id: lists.h,v 1.10 2003/05/02 13:00:14 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -137,8 +137,9 @@ do { \
 } while (0)
 
 
-#define list_empty(x) ((((x).magic1 == LISTMAGIC && (x).magic2 == LISTMAGIC)\
-		       	|| (list_magic_error("list_empty"), 1)) && (x).next == &(x))
+#define list_empty(x) \
+	((((x).magic1 == LISTMAGIC && (x).magic2 == LISTMAGIC) \
+	  || (list_magic_error("list_empty"), 1)) && (x).next == &(x))
 
 #define del_from_list(x) \
 do { \

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.23 2004/01/18 16:44:36 pasky Exp $ */
+/* $Id: value.c,v 1.24 2004/01/18 16:59:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,6 @@ rgb_component_parser(unsigned char **string, unsigned char terminator)
 
 	/* FIXME: We should handle the % values as floats. */
 
-	(*string) += 4;
 	skip_whitespace(*string);
 	part = strtol(*string, (char **) &nstring, 10);
 	if (*string == nstring) {

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.248 2003/07/21 14:18:57 zas Exp $ */
+/* $Id: options.c,v 1.249 2003/07/21 22:13:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1355,7 +1355,7 @@ register_options(void)
 		"display_sups", 0, 1,
 		N_("Display superscripts (as ^thing)."));
 
-	add_opt_int("document.html", N_("Rendering of hmtl link element"),
+	add_opt_int("document.html", N_("Rendering of html link element"),
 		"link_display", 0, 0, 5, 2,
 		N_("Html link rendering verbosity:\n"
 		"0 nothing\n"

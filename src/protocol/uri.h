@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.97 2004/05/23 01:31:20 jonas Exp $ */
+/* $Id: uri.h,v 1.98 2004/05/23 02:39:01 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -77,6 +77,9 @@ enum uri_errno parse_uri(struct uri *uri, unsigned char *uristring);
  * with. Thus, chances are high that it is the original URI received, not any
  * cheap reconstruction. */
 #define struri(uri) ((uri)->protocol_str)
+
+/* Check if two URIs are equal */
+#define uris_compare(uri1, uri2) ((uri1) == (uri2))
 
 
 enum uri_component {

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.79 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: task.c,v 1.80 2004/05/23 02:39:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,7 +298,8 @@ do_move(struct session *ses, struct download **stat)
 		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
 
-		assertm(cached->uri == ses->loading_uri, "Redirecting using bad base URI");
+		assertm(uris_compare(cached->uri, ses->loading_uri),
+			"Redirecting using bad base URI");
 
 		if (cached->redirect->protocol == PROTOCOL_UNKNOWN)
 			return 0;
@@ -446,7 +447,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	ses->reloadlevel = cache_mode;
 
 	if (ses->task.type == task) {
-		if (ses->loading_uri == uri) {
+		if (uris_compare(ses->loading_uri, uri)) {
 			/* We're already loading the URL. */
 			done_uri(uri);
 			mem_free_set(&ses->goto_position, pos);

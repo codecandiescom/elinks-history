@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.18 2003/07/02 01:52:36 pasky Exp $ */
+/* $Id: align.h,v 1.19 2003/07/06 23:17:33 pasky Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -33,6 +33,7 @@ get_bfu_color(struct terminal *term, unsigned char *color_class)
 	int nofg;
 
 	assert(color_class && *color_class);
+	if_assert_failed return 0;
 
 	if (!term) return 0;
 

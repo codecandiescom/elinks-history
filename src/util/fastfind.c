@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.43 2003/06/17 23:04:52 zas Exp $ */
+/* $Id: fastfind.c,v 1.44 2003/07/06 23:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,6 +229,7 @@ add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 	int new_count = info->pointers_count + 1;
 
 	assert(new_count < FF_MAX_KEYS);
+	if_assert_failed return 0;
 
 	/* On error, cleanup is done by fastfind_done(). */
 
@@ -259,6 +260,7 @@ alloc_leafset(struct fastfind_info *info)
 	struct ff_node *leafset;
 
 	assert(info->leafsets_count < FF_MAX_LEAFSETS);
+	if_assert_failed return 0;
 
 	/* info->leafsets[0] is never used since l=0 marks no leaf
 	 * in struct ff_node. That's the reason of that + 2. */
@@ -314,6 +316,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 	if (!info) goto alloc_error;
 
 	assert(reset && next);
+	if_assert_failed goto alloc_error;
 
 	/* First search min, max, count and uniq_chars. */
 	(*reset)();
@@ -322,6 +325,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 		register int i;
 
 		assert(key_len); /* We do not want empty keys. */
+		if_assert_failed goto alloc_error;
 
 		if (key_len < info->min_key_len)
 			info->min_key_len = key_len;
@@ -335,6 +339,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			k = ifcase(p->key[i]);
 
 			assert(k < FF_MAX_CHARS);
+			if_assert_failed goto alloc_error;
 
 			/* ifcase() test should be moved outside loops but
 			 * remember we call this routine only once per list.
@@ -346,6 +351,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 
 			if (j >= info->uniq_chars_count) {
 				assert(info->uniq_chars_count < FF_MAX_CHARS);
+				if_assert_failed goto alloc_error;
 				info->uniq_chars[info->uniq_chars_count++] = k;
 			}
 		}
@@ -414,6 +420,7 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 	register int i = 0;
 
 	assert(info);
+	if_assert_failed return;
 
 	for (; i < info->uniq_chars_count; i++) {
 		if (leafset[i].c) continue;
@@ -459,6 +466,7 @@ void
 fastfind_index_compress(struct fastfind_info *info)
 {
 	assert(info);
+	if_assert_failed return;
 	fastfind_node_compress(info->root_leafset, info);
 }
 
@@ -502,6 +510,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	struct ff_node *current;
 
 	assert(info);
+	if_assert_failed return NULL;
 
 #ifdef FASTFIND_DEBUG
 	info->searches++;

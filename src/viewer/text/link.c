@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.5 2003/07/04 19:19:04 zas Exp $ */
+/* $Id: link.c,v 1.6 2003/07/06 23:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@ void
 set_link(struct f_data_c *f)
 {
 	assert(f);
+	if_assert_failed return;
 	if (c_in_view(f)) return;
 	find_link(f, 1, 0);
 }
@@ -52,6 +53,7 @@ static int
 comp_links(struct link *l1, struct link *l2)
 {
 	assert(l1 && l2);
+	if_assert_failed return 0;
 	return (l1->num - l2->num);
 }
 
@@ -61,9 +63,11 @@ sort_links(struct f_data *f)
 	int i;
 
 	assert(f);
+	if_assert_failed return;
 	if (!f->nlinks) return;
 
 	assert(f->links);
+	if_assert_failed return;
 
 	qsort(f->links, f->nlinks, sizeof(struct link),
 	      (void *) comp_links);
@@ -121,7 +125,9 @@ draw_link(struct terminal *t, struct f_data_c *scr, int l)
 	int f = 0;
 
 	assert(t && scr && scr->vs);
+	if_assert_failed return;
 	assertm(!scr->link_bg, "link background not empty");
+	if_assert_failed mem_free(scr->link_bg);
 
 	if (l == -1) return;
 
@@ -204,6 +210,7 @@ void
 free_link(struct f_data_c *scr)
 {
 	assert(scr);
+	if_assert_failed return;
 
 	if (scr->link_bg) mem_free(scr->link_bg), scr->link_bg = NULL;
 	scr->link_bg_n = 0;
@@ -214,6 +221,7 @@ void
 clear_link(struct terminal *t, struct f_data_c *scr)
 {
 	assert(t && scr);
+	if_assert_failed return;
 
 	if (scr->link_bg) {
 		int i;
@@ -230,6 +238,7 @@ void
 draw_current_link(struct terminal *t, struct f_data_c *scr)
 {
 	assert(t && scr && scr->vs);
+	if_assert_failed return;
 
 	draw_link(t, scr, scr->vs->current_link);
 	draw_searched(t, scr);
@@ -243,6 +252,7 @@ get_first_link(struct f_data_c *f)
 	register int i;
 
 	assert(f && f->f_data);
+	if_assert_failed return NULL;
 
 	if (!f->f_data->lines1) return NULL;
 
@@ -264,6 +274,7 @@ get_last_link(struct f_data_c *f)
 	register int i;
 
 	assert(f && f->f_data);
+	if_assert_failed return NULL;
 
 	if (!f->f_data->lines2) return NULL;
 
@@ -280,6 +291,7 @@ in_viewx(struct f_data_c *f, struct link *l)
 	register int i;
 
 	assert(f && l);
+	if_assert_failed return 0;
 
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].x >= f->vs->view_posx
@@ -295,6 +307,7 @@ in_viewy(struct f_data_c *f, struct link *l)
 	register int i;
 
 	assert(f && l);
+	if_assert_failed return 0;
 
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].y >= f->vs->view_pos
@@ -308,6 +321,7 @@ int
 in_view(struct f_data_c *f, struct link *l)
 {
 	assert(f && l);
+	if_assert_failed return 0;
 	return in_viewy(f, l) && in_viewx(f, l);
 }
 
@@ -315,6 +329,7 @@ int
 c_in_view(struct f_data_c *f)
 {
 	assert(f && f->vs);
+	if_assert_failed return 0;
 	return (f->vs->current_link != -1
 		&& in_view(f, &f->f_data->links[f->vs->current_link]));
 }
@@ -328,6 +343,7 @@ next_in_view(struct f_data_c *f, int p, int d,
 	int y, yl;
 
 	assert(f && f->f_data && f->vs && fn);
+	if_assert_failed return 0;
 
 	p1 = f->f_data->nlinks - 1;
 	yl = f->vs->view_pos + f->yw;
@@ -361,6 +377,7 @@ set_pos_x(struct f_data_c *f, struct link *l)
 	register int i;
 
 	assert(f && l);
+	if_assert_failed return;
 
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].y >= f->vs->view_pos
@@ -383,6 +400,7 @@ set_pos_y(struct f_data_c *f, struct link *l)
 	register int i;
 
 	assert(f && f->f_data && f->vs && l);
+	if_assert_failed return;
 
 	yl = f->f_data->y;
 	for (i = 0; i < l->n; i++) {
@@ -404,6 +422,7 @@ find_link(struct f_data_c *f, int p, int s)
 	int y, l;
 
 	assert(f && f->f_data && f->vs);
+	if_assert_failed return;
 
 	if (p == -1) {
 		line = f->f_data->lines2;
@@ -451,6 +470,7 @@ get_link_url(struct session *ses, struct f_data_c *f,
 	     struct link *l)
 {
 	assert(ses && f && l);
+	if_assert_failed return NULL;
 
 	if (l->type == L_LINK) {
 		if (!l->where) return stracpy(l->where_img);
@@ -467,6 +487,7 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 	  int do_reload)
 {
 	assert(url && ses);
+	if_assert_failed return 1;
 
 	/* if (strlen(url) > 4 && !strncasecmp(url, "MAP@", 4)) { */
 	if (((url[0]|32) == 'm') &&
@@ -505,6 +526,7 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 	struct link *link;
 
 	assert(ses && fd && fd->vs && fd->f_data);
+	if_assert_failed return 1;
 
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
@@ -575,9 +597,11 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	struct form_state *fs;
 
 	assert(term && ses);
+	if_assert_failed return;
 	f = current_frame(ses);
 
 	assert(f && f->vs && f->f_data);
+	if_assert_failed return;
 	if (f->vs->current_link == -1) return;
 	l = &f->f_data->links[f->vs->current_link];
 	if (l->type != L_SELECT) return;
@@ -612,9 +636,11 @@ get_current_state(struct session *ses)
 	struct form_state *fs;
 
 	assert(ses);
+	if_assert_failed return -1;
 	f = current_frame(ses);
 
 	assert(f && f->vs && f->f_data);
+	if_assert_failed return -1;
 	if (f->vs->current_link == -1) return -1;
 	l = &f->f_data->links[f->vs->current_link];
 	if (l->type != L_SELECT) return -1;
@@ -631,6 +657,7 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 	register int i;
 
 	assert(f && f->vs && f->f_data && ev);
+	if_assert_failed return NULL;
 
 	l1 = f->f_data->links + f->f_data->nlinks;
 	l2 = f->f_data->links;
@@ -664,6 +691,7 @@ void
 jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 {
 	assert(ses && fd && fd->vs);
+	if_assert_failed return;
 
 	if (n < 0 || n > fd->f_data->nlinks) return;
 	fd->vs->current_link = n;
@@ -677,6 +705,7 @@ goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 	struct link *link;
 
 	assert(ses && fd && fd->f_data);
+	if_assert_failed return;
 	if (n < 0 || n > fd->f_data->nlinks) return;
 	jump_to_link_number(ses, fd, n);
 
@@ -693,8 +722,10 @@ goto_link_number(struct session *ses, unsigned char *num)
 	struct f_data_c *fd;
 
 	assert(ses && num);
+	if_assert_failed return;
 	fd = current_frame(ses);
 	assert(fd);
+	if_assert_failed return;
 	goto_link_number_do(ses, fd, atoi(num) - 1);
 }
 
@@ -708,6 +739,7 @@ try_document_key(struct session *ses, struct f_data_c *fd,
 	int i; /* GOD I HATE C! --FF */ /* YEAH, BRAINFUCK RULEZ! --pasky */
 
 	assert(ses && fd && fd->f_data && fd->vs && ev);
+	if_assert_failed return 0;
 
 	x = (ev->x < 0x100) ? upcase(ev->x) : ev->x;
 	if (x >= 'A' && x <= 'Z' && ev->y != KBD_ALT) {
@@ -753,6 +785,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	int l = 0;
 
 	assert(term && ses);
+	if_assert_failed return;
 
 	fd = current_frame(ses);
 	mi = new_menu(FREE_LIST);
@@ -760,6 +793,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (!fd) goto end;
 
 	assert(fd->vs && fd->f_data);
+	if_assert_failed return;
 	if (fd->vs->current_link < 0) goto end;
 
 	link = &fd->f_data->links[fd->vs->current_link];
@@ -849,6 +883,7 @@ print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
 	struct link *link;
 
 	assert(term && fd && fd->f_data && fd->vs);
+	if_assert_failed return NULL;
 
 	if (fd->f_data->frame || fd->vs->current_link == -1
 	    || fd->vs->current_link >= fd->f_data->nlinks)
@@ -869,6 +904,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 	struct link *link;
 
 	assert(term && fd && fd->f_data && fd->vs);
+	if_assert_failed return NULL;
 
 	if (fd->f_data->frame || fd->vs->current_link == -1
 	    || fd->vs->current_link >= fd->f_data->nlinks) {
@@ -1028,8 +1064,10 @@ print_current_link(struct session *ses)
 	struct f_data_c *fd;
 
 	assert(ses && ses->tab && ses->tab->term);
+	if_assert_failed return NULL;
 	fd = current_frame(ses);
 	assert(fd);
+	if_assert_failed return NULL;
 
 	return print_current_link_do(fd, ses->tab->term);
 }

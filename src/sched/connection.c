@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.85 2003/07/06 21:25:48 pasky Exp $ */
+/* $Id: connection.c,v 1.86 2003/07/06 23:17:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,6 +84,7 @@ get_priority(struct connection *c)
 			break;
 
 	assertm(priority != PRIORITIES, "Connection has no owner");
+	/* Recovery path ;-). (XXX?) */
 
 	return priority;
 }
@@ -195,26 +196,49 @@ done_host_connection(struct connection *c)
 }
 
 
+static void sort_queue();
+
 #ifdef DEBUG
 static void
 check_queue_bugs(void)
 {
 	struct connection *d;
 	enum connection_priority prev_priority = 0;
-	int cc = 0;
+	int cc, ps = 0;
 
+again:
+	cc = 0;
 	foreach (d, queue) {
 		enum connection_priority priority = get_priority(d);
 
-		assertm(priority >= prev_priority, "queue is not sorted");
+		cc += d->running;
+
+		if (!ps) {
+			assertm(priority >= prev_priority, "queue is not sorted");
+			if_assert_failed {
+				sort_queue();
+				ps = 1;
+				goto again;
+			}
+		} else {
+			assertm(priority >= prev_priority, "queue is not sorted even after sort_queue!");
+			if_assert_failed break;
+		}
+
 		assertm(d->state >= 0, "interrupted connection on queue "
 			"(conn %s, state %d)", d->uri.protocol, d->state);
+		if_assert_failed {
+			d = d->prev;
+			abort_connection(d->next);
+		}
 
-		cc += d->running;
 		prev_priority = priority;
 	}
 
-	assertm(cc == active_connections, "%d - %d", cc, active_connections);
+	assertm(cc == active_connections,
+		"bad number of active connections (counted %d, stored %d)",
+		cc, active_connections);
+	if_assert_failed active_connections = cc;
 }
 #else
 #define check_queue_bugs()
@@ -335,6 +359,8 @@ static void
 free_connection_data(struct connection *c)
 {
 	assertm(c->running, "connection already suspended");
+	/* XXX: Recovery path? Originally, there was none. I think we'll get
+	 * at least active_connections underflows along the way. --pasky */
 	c->running = 0;
 
 	if (c->sock1 != -1) set_handlers(c->sock1, NULL, NULL, NULL, NULL);
@@ -373,6 +399,7 @@ free_connection_data(struct connection *c)
 
 	active_connections--;
 	assertm(active_connections >= 0, "active connections underflow");
+	if_assert_failed active_connections = 0;
 
 	if (c->state != S_WAIT)
 		done_host_connection(c);
@@ -423,6 +450,7 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 				  : uri->host + uri->hostlen - host);
 
 	assertm(uri->host);
+	if_assert_failed return NULL;
 
 	k = mem_alloc(sizeof(struct keepalive_connection) + hostlen);
 	if (!k) return NULL;
@@ -484,6 +512,7 @@ add_keepalive_connection(struct connection *c, ttime timeout)
 
 	free_connection_data(c);
 	assertm(c->sock1 != -1, "keepalive connection not connected");
+	if_assert_failed return;
 
 	k = init_keepalive_connection(c, timeout);
 	if (k)
@@ -525,6 +554,7 @@ check_keepalive_connections(void)
 
 	for (; p > MAX_KEEPALIVE_CONNECTIONS; p--) {
 		assert(!list_empty(keepalive_connections));
+		if_assert_failed return;
 		done_keepalive_connection(keepalive_connections.prev);
 	}
 
@@ -603,6 +633,7 @@ run_connection(struct connection *c)
 	protocol_handler *func = get_protocol_handler(&c->uri);
 
 	assertm(!c->running, "connection already running");
+	if_assert_failed return;
 
 	if (!add_host_connection(c)) {
 		set_connection_state(c, S_OUT_OF_MEM);
@@ -759,8 +790,10 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	foreach (c, queue) {
 		struct download *assigned;
 
-		foreach (assigned, c->downloads)
+		foreach (assigned, c->downloads) {
 			assert(assigned != download);
+			/* No recovery path should be necessary. */
+		}
 	}
 #endif
 
@@ -821,6 +854,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	}
 
 	assert(!e);
+	/* XXX: Recovery path...? */
 	c = init_connection(u, ref_url, start, cache_mode, pri);
 	if (!c) {
 		if (download) {
@@ -857,6 +891,7 @@ change_connection(struct download *old, struct download *new,
 	struct connection *c;
 
 	assert(old);
+	if_assert_failed return;
 
 	if (is_in_result_state(old->state)) {
 		if (new) {
@@ -874,6 +909,7 @@ change_connection(struct download *old, struct download *new,
 
 	c->pri[old->pri]--;
 	assertm(c->pri[old->pri] >= 0, "priority counter underflow");
+	if_assert_failed c->pri[old->pri] = 0;
 
 	c->pri[newpri]++;
 	del_from_list(old);
@@ -927,6 +963,7 @@ detach_connection(struct download *download, int pos)
 		for (i = 0; i < PRI_CANCEL; i++)
 			total_pri += conn->pri[i];
 		assertm(total_pri, "detaching free connection");
+		/* No recovery path should be necessary...? */
 
 		/* Pre-clean cache. */
 		delete_unused_format_cache_entries();

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.5 2003/07/04 10:57:16 zas Exp $ */
+/* $Id: search.c,v 1.6 2003/07/06 23:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@ add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
 	int n;
 
 	assert(f);
+	if_assert_failed return;
 
 	n = f->nsearch;
 
@@ -65,6 +66,7 @@ sort_srch(struct f_data *f)
 	int *min, *max;
 
 	assert(f);
+	if_assert_failed return;
 
 	f->slines1 = mem_calloc(f->y, sizeof(struct search *));
 	if (!f->slines1) return;
@@ -120,6 +122,7 @@ get_srch(struct f_data *f)
 	int cc;
 
 	assert(f);
+	if_assert_failed return 0;
 
 	cc = !f->search;
 
@@ -190,6 +193,7 @@ get_search_data(struct f_data *f)
 	int n;
 
 	assert(f);
+	if_assert_failed return;
 
 	if (f->search) return;
 
@@ -223,6 +227,7 @@ get_range(struct f_data *f, int y, int yw, int l,
 	register int i;
 
 	assert(f && s1 && s2);
+	if_assert_failed return -1;
 
 	*s1 = *s2 = NULL;
 	for (i = y < 0 ? 0 : y; i < y + yw && i < f->y; i++) {
@@ -256,6 +261,7 @@ is_in_range(struct f_data *f, int y, int yw, unsigned char *txt,
 	int l;
 
 	assert(f && txt && min && max);
+	if_assert_failed return 0;
 
 	*min = MAXINT, *max = 0;
 	l = strlen(txt);
@@ -305,6 +311,7 @@ get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 	unsigned char c;
 
 	assert(scr && scr->vs && pt && pl);
+	if_assert_failed return;
 
 	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
 		return;
@@ -379,6 +386,7 @@ draw_searched(struct terminal *term, struct f_data_c *scr)
 	register int i;
 
 	assert(term && scr);
+	if_assert_failed return;
 
 	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
 		return;
@@ -410,10 +418,12 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 	struct f_data_c *f;
 
 	assert(ses && str);
+	if_assert_failed return;
 
 	if (!*str) return;
 	f = current_frame(ses);
 	assert(f);
+	if_assert_failed return;
 
 	if (ses->search_word) mem_free(ses->search_word);
 	ses->search_word = stracpy(str);
@@ -433,6 +443,7 @@ void
 search_for_back(struct session *ses, unsigned char *str)
 {
 	assert(ses && str);
+	if_assert_failed return;
 	search_for_do(ses, str, -1);
 }
 
@@ -440,6 +451,7 @@ void
 search_for(struct session *ses, unsigned char *str)
 {
 	assert(ses && str);
+	if_assert_failed return;
 	search_for_do(ses, str, 1);
 }
 
@@ -454,6 +466,7 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 	static int first_time = 1;
 
 	assert(p1 && p2);
+	if_assert_failed return 0;
 
 	if (first_time) memset(hash, 0, HASH_SIZE), first_time = 0;
 
@@ -482,6 +495,7 @@ find_next_link_in_search(struct f_data_c *f, int d)
 	int len;
 
 	assert(f && f->vs);
+	if_assert_failed return 0;
 
 	if (d == -2 || d == 2) {
 		d /= 2;
@@ -508,6 +522,7 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 	int p, min, max, c = 0;
 
 	assert(ses && ses->tab && ses->tab->term && f && f->vs);
+	if_assert_failed return;
 
 	p = f->vs->view_pos;
 
@@ -577,6 +592,7 @@ void
 find_next_back(struct session *ses, struct f_data_c *f, int a)
 {
 	assert(ses && f);
+	if_assert_failed return;
 
 	ses->search_direction = -ses->search_direction;
 	find_next(ses, f, a);

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.3 2003/07/03 08:19:39 zas Exp $ */
+/* $Id: form.c,v 1.4 2003/07/06 23:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,7 @@ fixup_select_state(struct form_control *fc, struct form_state *fs)
 	register int i = 0;
 
 	assert(fc && fs);
+	if_assert_failed return;
 
 	if (fs->state >= 0
 	    && fs->state < fc->nvalues
@@ -74,6 +75,7 @@ static void
 init_ctrl(struct form_control *frm, struct form_state *fs)
 {
 	assert(frm && fs);
+	if_assert_failed return;
 
 	if (fs->value) mem_free(fs->value), fs->value = NULL;
 
@@ -118,6 +120,7 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 	int n;
 
 	assert(f && f->vs && frm);
+	if_assert_failed return NULL;
 
 	vs = f->vs;
 	n = frm->g_ctrl_num;
@@ -163,8 +166,10 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 	int vx, vy;
 
 	assert(t && f && f->f_data && f->vs && l);
+	if_assert_failed return;
 	frm = l->form;
 	assertm(frm, "link %d has no form", (int)(l - f->f_data->links));
+	if_assert_failed return;
 
 	fs = find_form_state(f, frm);
 	if (!fs) return;
@@ -252,12 +257,14 @@ draw_forms(struct terminal *t, struct f_data_c *f)
 	struct link *l1, *l2;
 
 	assert(t && f);
+	if_assert_failed return;
 
 	l1 = get_first_link(f);
 	l2 = get_last_link(f);
 
 	if (!l1 || !l2) {
 		assertm(!l1 && !l2, "get_first_link == %p, get_last_link == %p", l1, l2);
+		/* Return path :-). */
 		return;
 	}
 	do {
@@ -274,12 +281,14 @@ has_form_submit(struct f_data *f, struct form_control *frm)
 	int q = 0;
 
 	assert(f && frm);
+	if_assert_failed return 0;
 
 	foreach (i, f->forms) if (i->form_num == frm->form_num) {
 		if ((i->type == FC_SUBMIT || i->type == FC_IMAGE)) return 1;
 		q = 1;
 	}
 	assertm(q, "form is not on list");
+	/* Return path :-). */
 	return 0;
 }
 
@@ -290,6 +299,7 @@ free_succesful_controls(struct list_head *submit)
 	struct submitted_value *v;
 
 	assert(submit);
+	if_assert_failed return;
 
 	foreach (v, *submit) {
 		if (v->name) mem_free(v->name);
@@ -307,6 +317,7 @@ get_succesful_controls(struct f_data_c *f, struct form_control *fc,
 	int ch;
 
 	assert(f && f->f_data && fc && subm);
+	if_assert_failed return;
 
 	init_list(*subm);
 	foreach (frm, f->f_data->forms) {
@@ -402,6 +413,7 @@ strip_file_name(unsigned char *f)
 	unsigned char *n, *l;
 
 	assert(f);
+	if_assert_failed return NULL;
 
 	l = f - 1;
 	for (n = f; *n; n++) if (dir_sep(*n)) l = n;
@@ -417,6 +429,7 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 	int lst = 0;
 
 	assert(l && data && len);
+	if_assert_failed return;
 
 	*data = init_str();
 	if (!*data) return;
@@ -484,6 +497,7 @@ encode_multipart(struct session *ses, struct list_head *l,
 	register int i;
 
 	assert(ses && l && data && len && bound);
+	if_assert_failed return;
 
 	*data = init_str();
 	if (!*data) return;
@@ -621,6 +635,7 @@ reset_form(struct f_data_c *f, int form_num)
 	struct form_control *frm;
 
 	assert(f && f->f_data);
+	if_assert_failed return;
 
 	foreach (frm, f->f_data->forms) if (frm->form_num == form_num) {
 		struct form_state *fs = find_form_state(f, frm);
@@ -641,7 +656,9 @@ get_form_url(struct session *ses, struct f_data_c *f,
 	int len;
 
 	assert(ses && ses->tab && ses->tab->term);
+	if_assert_failed return NULL;
 	assert(f && f->f_data && frm);
+	if_assert_failed return NULL;
 
 	go = init_str();
 	if (!go) return NULL;
@@ -722,9 +739,11 @@ submit_form_do(struct terminal *term, void *xxx, struct session *ses,
 	struct link *link;
 
 	assert(term && ses);
+	if_assert_failed return 1;
 	fd = current_frame(ses);
 
 	assert(fd && fd->vs && fd->f_data);
+	if_assert_failed return 1;
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
 
@@ -735,6 +754,7 @@ int
 submit_form(struct terminal *term, void *xxx, struct session *ses)
 {
 	assert(term && ses);
+	if_assert_failed return 1;
 	return submit_form_do(term, xxx, ses, 0);
 }
 
@@ -742,6 +762,7 @@ int
 submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
 {
 	assert(term && ses);
+	if_assert_failed return 1;
 	return submit_form_do(term, xxx, ses, 1);
 }
 
@@ -755,8 +776,10 @@ field_op(struct session *ses, struct f_data_c *f, struct link *l,
 	int x = 1;
 
 	assert(ses && f && l && ev);
+	if_assert_failed return 0;
 	frm = l->form;
 	assertm(frm, "link has no form control");
+	if_assert_failed return 0;
 
 	if (l->form->ro == 2) return 0;
 	fs = find_form_state(f, frm);

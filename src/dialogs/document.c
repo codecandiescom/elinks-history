@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.44 2003/07/05 10:24:40 zas Exp $ */
+/* $Id: document.c,v 1.45 2003/07/06 23:17:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,8 @@ void
 nowhere_box(struct terminal *term, unsigned char *title)
 {
 	assert(term);
+	if_assert_failed return;
+
 	if (!title || !*title)
 		title = N_("Info");
 

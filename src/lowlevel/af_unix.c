@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.58 2003/06/21 08:54:53 zas Exp $ */
+/* $Id: af_unix.c,v 1.59 2003/07/06 23:17:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,6 +102,7 @@ static int
 get_sun_path(unsigned char **sun_path, int *sun_path_len)
 {
 	assert(sun_path && sun_path_len);
+	if_assert_failed return 0;
 
 	if (!elinks_home) return 0;
 
@@ -128,6 +129,7 @@ get_address(struct socket_info *info, enum addr_type type)
 	int pathl;
 
 	assert(info);
+	if_assert_failed return -1;
 
 	if (!get_sun_path(&path, &pathl)) return -1;
 
@@ -197,6 +199,7 @@ alloc_address(struct socket_info *info)
 	struct sockaddr_un *sa;
 
 	assert(info);
+	if_assert_failed return 0;
 
 	/* calloc() is safer there. */
 	sa = mem_calloc(1, sizeof(struct sockaddr_un));
@@ -212,6 +215,7 @@ static void
 unlink_unix(struct sockaddr *addr)
 {
 	assert(addr);
+	if_assert_failed return;
 
 	unlink(((struct sockaddr_un *) addr)->sun_path);
 }
@@ -244,6 +248,7 @@ get_address(struct socket_info *info, enum addr_type type)
 	unsigned short port;
 
 	assert(info);
+	if_assert_failed return -1;
 
 	/* Each ring is bind to ELINKS_PORT + ring number. */
 	port = ELINKS_PORT + get_opt_int_tree(&cmdline_options,
@@ -270,6 +275,7 @@ alloc_address(struct socket_info *info)
 	struct sockaddr_in *sa;
 
 	assert(info);
+	if_assert_failed return 0;
 
 	/* calloc() is safer there. */
 	sa = mem_calloc(1, sizeof(struct sockaddr_in));
@@ -321,6 +327,7 @@ af_unix_connection(struct socket_info *info)
 	int l = info->size;
 
 	assert(info);
+	if_assert_failed return;
 
 	memset(info->addr, 0, l);
 	ns = accept(info->fd, info->addr, &l);

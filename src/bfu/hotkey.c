@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.6 2003/06/11 09:25:26 miciah Exp $ */
+/* $Id: hotkey.c,v 1.7 2003/07/06 23:17:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,6 +130,7 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 	unsigned char *text;
 
 	assert(item);
+	if_assert_failed return 0;
 
 	text = item->text;
 

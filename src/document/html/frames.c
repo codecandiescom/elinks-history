@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.2 2003/07/04 09:45:39 zas Exp $ */
+/* $Id: frames.c,v 1.3 2003/07/06 23:17:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@ add_frameset_entry(struct frameset_desc *fsd,
 	int idx;
 
 	assert(fsd && fsd->yp < fsd->y);
+	if_assert_failed return;
 
 	idx = fsd->xp + fsd->yp * fsd->x;
 	fsd->f[idx].subframe = subframe;
@@ -49,8 +50,13 @@ create_frameset(struct f_data *fda, struct frameset_param *fp)
 	struct frameset_desc *fd;
 
 	assert(fp);
+	if_assert_failed return NULL;
 	assertm(fp->x > 0 && fp->y > 0,
 		"Bad size of frameset: x=%d y=%d", fp->x, fp->y);
+	if_assert_failed {
+		if (fp->x <= 0) fp->x = 1;
+		if (fp->y <= 0) fp->y = 1;
+	}
 
 	fd = mem_calloc(1, sizeof(struct frameset_desc)
 			   + fp->x * fp->y * sizeof(struct frame_desc));
@@ -80,6 +86,7 @@ void
 create_frame(struct frame_param *fp)
 {
 	assert(fp && fp->parent);
+	if_assert_failed return;
 
 	add_frameset_entry(fp->parent, NULL, fp->name, fp->url);
 }
@@ -90,6 +97,7 @@ add_frame_to_list(struct session *ses, struct f_data_c *fd)
 	struct f_data_c *f;
 
 	assert(ses && fd);
+	if_assert_failed return;
 
 	foreach (f, ses->scrn_frames) {
 		if (f->yp > fd->yp || (f->yp == fd->yp && f->xp > fd->xp)) {
@@ -108,6 +116,7 @@ find_fd(struct session *ses, unsigned char *name,
 	struct f_data_c *fd;
 
 	assert(ses && name);
+	if_assert_failed return NULL;
 
 	foreachback (fd, ses->scrn_frames) {
 		if (!fd->used && !strcasecmp(fd->name, name)) {
@@ -147,6 +156,7 @@ format_frame(struct session *ses, unsigned char *name,
 	struct frame *fr;
 
 	assert(ses && name && o);
+	if_assert_failed return NULL;
 
 repeat:
 	fr = ses_find_frame(ses, name);
@@ -180,6 +190,7 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 	register int j, n;
 
 	assert(ses && fsd && op);
+	if_assert_failed return;
 
 	if (depth > HTML_MAX_FRAME_DEPTH) return;
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.156 2003/07/06 21:51:21 jonas Exp $ */
+/* $Id: http.c,v 1.157 2003/07/06 23:17:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -682,9 +682,11 @@ http_send_header(struct connection *conn)
 
 			h1 = unhx(post[0]);
 			assert(h1 >= 0 && h1 < 16);
+			if_assert_failed h1 = 0;
 		
 			h2 = unhx(post[1]);
 			assert(h2 >= 0 && h2 < 16);
+			if_assert_failed h2 = 0;
 	
 			buffer[n++] = (h1<<4) + h2;
 			post += 2;

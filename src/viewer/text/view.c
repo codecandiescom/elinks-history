@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.155 2003/07/05 10:24:41 zas Exp $ */
+/* $Id: view.c,v 1.156 2003/07/06 23:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,6 +97,7 @@ clear_formatted(struct f_data *scr)
 	struct form_control *fc;
 
 	assert(scr);
+	if_assert_failed return;
 
 	if (!find_in_cache(scr->url, &ce) || !ce)
 		internal("no cache entry for document");
@@ -140,7 +141,9 @@ void
 destroy_formatted(struct f_data *scr)
 {
 	assert(scr);
+	if_assert_failed return;
 	assertm(!scr->refcount, "Attempt to free locked formatted data.");
+	if_assert_failed return;
 
 	clear_formatted(scr);
 	del_from_list(scr);
@@ -151,6 +154,7 @@ void
 detach_formatted(struct f_data_c *scr)
 {
 	assert(scr);
+	if_assert_failed return;
 
 	if (scr->f_data) {
 		format_cache_reactivate(scr->f_data);
@@ -160,6 +164,7 @@ detach_formatted(struct f_data_c *scr)
 		}
 		assertm(scr->f_data->refcount >= 0,
 			"format_cache refcount underflow");
+		if_assert_failed scr->f_data->refcount = 0;
 		scr->f_data = NULL;
 	}
 	scr->vs = NULL;
@@ -195,12 +200,14 @@ enum xchar_dir {
 	XD_UP
 };
 
+/* TODO: Whitespaces cleanup target. --pasky */
 static void
 set_xchar(struct terminal *t, int x, int y, enum xchar_dir dir)
 {
        unsigned int c, d;
 
        assert(t);
+	if_assert_failed return;
 
        if (x < 0 || x >= t->x || y < 0 || y >= t->y) return;
 
@@ -222,6 +229,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 	register int y, j;
 
 	assert(t && fsd && fsd->f);
+	if_assert_failed return;
 
 	y = yp - 1;
 	for (j = 0; j < fsd->y; j++) {
@@ -286,6 +294,7 @@ draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 	int y;
 
 	assert(t && scr);
+	if_assert_failed return;
 
 	xp = scr->xp;
 	yp = scr->yp;
@@ -358,6 +367,7 @@ draw_frames(struct session *ses)
 	int n, i, d, more;
 
 	assert(ses && ses->screen && ses->screen->f_data);
+	if_assert_failed return;
 
 	if (!ses->screen->f_data->frame) return;
 	n = 0;
@@ -385,6 +395,7 @@ void
 draw_formatted(struct session *ses)
 {
 	assert(ses && ses->tab);
+	if_assert_failed return;
 
 	if (ses->tab != get_current_tab(ses->tab->term))
 		return;
@@ -410,6 +421,7 @@ page_down(struct session *ses, struct f_data_c *f, int a)
 	int newpos;
 
 	assert(ses && f && f->vs);
+	if_assert_failed return;
 
 	newpos = f->vs->view_pos + f->f_data->opt.yw;
 	if (newpos < f->f_data->y) {
@@ -424,6 +436,7 @@ static void
 page_up(struct session *ses, struct f_data_c *f, int a)
 {
 	assert(ses && f && f->vs);
+	if_assert_failed return;
 
 	f->vs->view_pos -= f->yw;
 	find_link(f, -1, a);
@@ -437,6 +450,7 @@ down(struct session *ses, struct f_data_c *fd, int a)
 	int current_link;
 
 	assert(ses && fd && fd->vs && fd->f_data);
+	if_assert_failed return;
 
 	current_link = fd->vs->current_link;
 
@@ -465,6 +479,7 @@ up(struct session *ses, struct f_data_c *fd, int a)
 	int current_link;
 
 	assert(ses && fd && fd->vs && fd->f_data);
+	if_assert_failed return;
 
 	current_link = fd->vs->current_link;
 
@@ -494,6 +509,7 @@ static void
 scroll(struct session *ses, struct f_data_c *f, int a)
 {
 	assert(ses && f && f->vs && f->f_data);
+	if_assert_failed return;
 
 	if (f->vs->view_pos + f->f_data->opt.yw >= f->f_data->y && a > 0)
 		return;
@@ -509,6 +525,7 @@ static void
 hscroll(struct session *ses, struct f_data_c *f, int a)
 {
 	assert(ses && f && f->vs && f->f_data);
+	if_assert_failed return;
 
 	f->vs->view_posx += a;
 	if (f->vs->view_posx >= f->f_data->x)
@@ -523,6 +540,7 @@ static void
 home(struct session *ses, struct f_data_c *f, int a)
 {
 	assert(ses && f && f->vs);
+	if_assert_failed return;
 
 	f->vs->view_pos = f->vs->view_posx = 0;
 	find_link(f, 1, 0);
@@ -532,6 +550,7 @@ static void
 x_end(struct session *ses, struct f_data_c *f, int a)
 {
 	assert(ses && f && f->vs && f->f_data);
+	if_assert_failed return;
 
 	f->vs->view_posx = 0;
 	if (f->vs->view_pos < f->f_data->y - f->f_data->opt.yw)
@@ -544,9 +563,11 @@ inline void
 decrement_fc_refcount(struct f_data *f)
 {
 	assert(f);
+	if_assert_failed return;
 
 	if (!--f->refcount) format_cache_entries++;
 	assertm(f->refcount >= 0, "reference count underflow");
+	if_assert_failed f->refcount = 0;
 }
 
 
@@ -554,6 +575,8 @@ void
 set_frame(struct session *ses, struct f_data_c *f, int a)
 {
 	assert(ses && ses->screen && f && f->vs);
+	if_assert_failed return;
+
 	if (f == ses->screen) return;
 	goto_url(ses, f->vs->url);
 }
@@ -563,6 +586,7 @@ void
 toggle(struct session *ses, struct f_data_c *f, int a)
 {
 	assert(ses && f && ses->tab && ses->tab->term);
+	if_assert_failed return;
 
 	if (!f->vs) {
 		nowhere_box(ses->tab->term, NULL);
@@ -583,6 +607,7 @@ rep_ev(struct session *ses, struct f_data_c *fd,
 	register int i;
 
 	assert(ses && fd && f);
+	if_assert_failed return;
 
 	i = ses->kbdprefix.rep ? ses->kbdprefix.rep_num : 1;
 	while (i--) f(ses, fd, a);
@@ -597,6 +622,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 	int x = 1;
 
 	assert(ses && fd && fd->f_data && fd->vs && ev);
+	if_assert_failed return 1;
 
 	if (fd->vs->current_link >= 0
 	    && (fd->f_data->links[fd->vs->current_link].type == L_FIELD ||
@@ -817,6 +843,7 @@ current_frame(struct session *ses)
 	int i;
 
 	assert(ses);
+	if_assert_failed return NULL;
 
 	if (!have_location(ses)) return NULL;
 	i = cur_loc(ses)->vs.current_link;
@@ -837,8 +864,10 @@ send_to_frame(struct session *ses, struct event *ev)
 	int r;
 
 	assert(ses && ses->tab && ses->tab->term && ev);
+	if_assert_failed return 0;
 	fd = current_frame(ses);
 	assertm(fd, "document not formatted");
+	if_assert_failed return 0;
 
 	r = frame_ev(ses, fd, ev);
 	if (r == 1) {
@@ -858,8 +887,10 @@ do_for_frame(struct session *ses,
 	struct f_data_c *fd;
 
 	assert(ses && f);
+	if_assert_failed return;
 	fd = current_frame(ses);
 	assertm(fd, "document not formatted");
+	if_assert_failed return;
 
 	f(ses, fd, a);
 }
@@ -872,8 +903,10 @@ do_mouse_event(struct session *ses, struct event *ev)
 	struct document_options *o;
 
 	assert(ses && ev);
+	if_assert_failed return;
 	fd = current_frame(ses);
 	assert(fd && fd->f_data);
+	if_assert_failed return;
 
 	o = &fd->f_data->opt;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
@@ -883,6 +916,7 @@ r:
 	next_frame(ses, 1);
 	fdd = current_frame(ses);
 	assert(fdd && fdd->f_data);
+	if_assert_failed return;
 	o = &fdd->f_data->opt;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) {
@@ -908,6 +942,7 @@ send_event(struct session *ses, struct event *ev)
 	struct f_data_c *fd;
 
 	assert(ses && ev);
+	if_assert_failed return;
 	fd = current_frame(ses);
 
 	if (ev->ev == EV_KBD) {
@@ -1164,6 +1199,7 @@ send_enter(struct terminal *term, void *xxx, struct session *ses)
 	struct event ev = { EV_KBD, KBD_ENTER, 0, 0 };
 
 	assert(ses);
+	if_assert_failed return;
 	send_event(ses, &ev);
 }
 
@@ -1173,6 +1209,7 @@ send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 	struct event ev = { EV_KBD, KBD_ENTER, KBD_CTRL, 0 };
 
 	assert(ses);
+	if_assert_failed return;
 	send_event(ses, &ev);
 }
 
@@ -1182,6 +1219,7 @@ frm_download(struct session *ses, struct f_data_c *fd, int resume)
 	struct link *link;
 
 	assert(ses && fd && fd->vs && fd->f_data);
+	if_assert_failed return;
 
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) {
@@ -1216,8 +1254,10 @@ send_download_do(struct terminal *term, void *xxx, struct session *ses,
 	struct f_data_c *fd;
 
 	assert(term && ses);
+	if_assert_failed return;
 	fd = current_frame(ses);
 	assert(fd && fd->vs && fd->f_data);
+	if_assert_failed return;
 
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) {
@@ -1249,6 +1289,7 @@ void
 send_download_image(struct terminal *term, void *xxx, struct session *ses)
 {
 	assert(term && ses);
+	if_assert_failed return;
 	send_download_do(term, xxx, ses, IMAGE);
 }
 
@@ -1256,6 +1297,7 @@ void
 send_download(struct terminal *term, void *xxx, struct session *ses)
 {
 	assert(term && ses);
+	if_assert_failed return;
 	send_download_do(term, xxx, ses, URL);
 }
 
@@ -1265,6 +1307,7 @@ add_session_ring_to_str(unsigned char **str, int *len)
 	int ring;
 
 	assert(str && len);
+	if_assert_failed return 0;
 
 	ring = get_opt_int_tree(&cmdline_options, "session-ring");
 	if (ring) {
@@ -1284,8 +1327,10 @@ send_open_in_new_xterm(struct terminal *term,
 	struct f_data_c *fd;
 
 	assert(term && open_window && ses);
+	if_assert_failed return;
 	fd = current_frame(ses);
 	assert(fd && fd->vs && fd->f_data);
+	if_assert_failed return;
 
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
@@ -1308,6 +1353,7 @@ send_open_new_xterm(struct terminal *term,
 	int l = 0;
 
 	assert(term && open_window && ses);
+	if_assert_failed return;
 
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = init_str();
@@ -1329,6 +1375,7 @@ open_in_new_window(struct terminal *term,
 	struct open_in_new *oi, *oin;
 
 	assert(term && ses && xxx);
+	if_assert_failed return;
 
 	oin = get_open_in_new(term->environment);
 	if (!oin) return;
@@ -1356,6 +1403,7 @@ save_url(struct session *ses, unsigned char *url)
 	unsigned char *u;
 
 	assert(ses && ses->tab && ses->tab->term && url);
+	if_assert_failed return;
 	if (!*url) return;
 	u = translate_url(url, ses->tab->term->cwd);
 
@@ -1376,6 +1424,7 @@ save_url(struct session *ses, unsigned char *url)
 
 	fd = current_frame(ses);
 	assert(fd && fd->f_data && fd->f_data->url);
+	if_assert_failed return;
 
 	ses->ref_url = stracpy(fd->f_data->url);
 	query_file(ses, ses->dn_url, start_download, NULL, 1);
@@ -1388,8 +1437,10 @@ send_image(struct terminal *term, void *xxx, struct session *ses)
 	unsigned char *u;
 
 	assert(term && ses);
+	if_assert_failed return;
 	fd = current_frame(ses);
 	assert(fd && fd->f_data && fd->vs);
+	if_assert_failed return;
 
 	if (fd->vs->current_link == -1) return;
 	u = fd->f_data->links[fd->vs->current_link].where_img;
@@ -1403,6 +1454,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 	struct location *l;
 
 	assert(term && ses);
+	if_assert_failed return;
 
 	if (!have_location(ses)) return;
 	l = cur_loc(ses);
@@ -1412,6 +1464,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 		struct f_data_c *fd = current_frame(ses);
 
 		assert(fd && fd->f_data && fd->f_data->url);
+		if_assert_failed return;
 
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = stracpy(fd->f_data->url);
@@ -1425,6 +1478,7 @@ save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 	struct f_data *f_data = data;
 
 	assert(term && f_data);
+	if_assert_failed return;
 
 	if (h == -1) return;
 	if (dump_to_file(f_data, h)) {
@@ -1443,8 +1497,10 @@ save_formatted(struct session *ses, unsigned char *file)
 	struct f_data_c *fd;
 
 	assert(ses && ses->tab && ses->tab->term && file);
+	if_assert_failed return;
 	fd = current_frame(ses);
 	assert(fd && fd->f_data);
+	if_assert_failed return;
 
 	create_download_file(ses->tab->term, file, NULL, 0, 0,
 			     save_formatted_finish, fd->f_data);
@@ -1456,9 +1512,11 @@ menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 	struct f_data_c *fd;
 
 	assert(term && ses);
+	if_assert_failed return;
 	if (!have_location(ses)) return;
 	fd = current_frame(ses);
 	assert(fd && fd->vs);
+	if_assert_failed return;
 
 	query_file(ses, fd->vs->url, save_formatted, NULL, !((int) xxx));
 }
@@ -1473,6 +1531,7 @@ print_current_titlex(struct f_data_c *fd, int w)
 	unsigned char *p;
 
 	assert(fd);
+	if_assert_failed return NULL;
 
 	p = init_str();
 	if (!p) return NULL;
@@ -1527,8 +1586,10 @@ print_current_title(struct session *ses)
 	struct f_data_c *fd;
 
 	assert(ses && ses->tab && ses->tab->term);
+	if_assert_failed return NULL;
 	fd = current_frame(ses);
 	assert(fd);
+	if_assert_failed return NULL;
 
 	return print_current_titlex(fd, ses->tab->term->x);
 }

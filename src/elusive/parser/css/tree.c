@@ -1,5 +1,5 @@
 /* CSS tree utility tools */
-/* $Id: tree.c,v 1.5 2003/06/11 06:19:30 miciah Exp $ */
+/* $Id: tree.c,v 1.6 2003/07/06 23:17:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,6 +111,7 @@ add_css_node(struct parser_state *state)
 	struct css_node *node = state->current;
 
 	assert(node);
+	if_assert_failed return NULL;
 
 	/* Do we have to set up the root or just descend ? */
 	if (!state->root) {
@@ -201,6 +202,7 @@ add_css_attr(struct parser_state *state, unsigned char *name,
 	struct css_attr_match *other;
 
 	assert(node);
+	if_assert_failed return NULL;
 
 	if (!attr) return NULL;
 

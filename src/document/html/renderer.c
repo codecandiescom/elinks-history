@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.166 2003/07/04 10:57:16 zas Exp $ */
+/* $Id: renderer.c,v 1.167 2003/07/06 23:17:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,6 +102,7 @@ realloc_lines(struct part *p, int y)
 	int newsize = ALIGN(y + 1);
 
 	assert(p && p->data);
+	if_assert_failed return 0;
 
 	if (newsize >= ALIGN(p->data->y)
 	    && (!p->data->data || p->data->data->size < newsize)) {
@@ -132,6 +133,7 @@ realloc_line(struct part *p, int y, int x)
 	int newsize = ALIGN(x + 1);
 
 	assert(p && p->data);
+	if_assert_failed return 0;
 
 	if (newsize >= ALIGN(p->data->data[y].l)
 	    && (!p->data->data[y].d || p->data->data[y].dsize < newsize)) {
@@ -161,6 +163,7 @@ static inline int
 xpand_lines(struct part *p, int y)
 {
 	assert(p && p->data);
+	if_assert_failed return 0;
 
 	y += p->yp;
 	if (y >= p->data->y) return realloc_lines(p, y);
@@ -178,11 +181,13 @@ static inline int
 xpand_line(struct part *p, int y, int x)
 {
 	assert(p && p->data && p->data->data);
+	if_assert_failed return 0;
 
 	x += p->xp;
 	y += p->yp;
 
 	assertm(y < p->data->y, "line does not exist");
+	if_assert_failed return 0;
 
 	if (x < p->data->data[y].l)
 		return 0;
@@ -230,12 +235,14 @@ static inline void
 set_hchar(struct part *part, int x, int y, unsigned c)
 {
 	assert(part && part->data);
+	if_assert_failed return;
 
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x))
 		return;
 
 	assert(part->data->data);
+	if_assert_failed return;
 
 	POS(x, y) = c;
 }
@@ -244,12 +251,14 @@ static inline void
 set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
 	assert(part && part->data);
+	if_assert_failed return;
 
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 
 	assert(part->data->data);
+	if_assert_failed return;
 
 	for (; xl; xl--, x++) POS(x, y) = c;
 }
@@ -271,6 +280,7 @@ set_hline(struct part *part, int x, int y,
 	  unsigned char *chars, int charslen, unsigned attr)
 {
 	assert(part);
+	if_assert_failed return;
 
 	if (part->data) {
 		if (xpand_lines(part, y)
@@ -296,6 +306,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 	int matched = 0;
 
 	assert(part && part->data);
+	if_assert_failed return;
 	xpand_lines(part, yt);
 
 	for (nlink = last_link_to_move; nlink < part->data->nlinks; nlink++) {
@@ -357,6 +368,7 @@ static inline void
 copy_chars(struct part *part, int x, int y, int xl, chr *d)
 {
 	assert(xl > 0 && part && part->data && part->data->data);
+	if_assert_failed return;
 
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x + xl - 1))
@@ -369,6 +381,7 @@ static inline void
 move_chars(struct part *part, int x, int y, int nx, int ny)
 {
 	assert(part && part->data && part->data->data);
+	if_assert_failed return;
 
 	if (LEN(y) - x <= 0) return;
 	copy_chars(part, nx, ny, LEN(y) - x, &POS(x, y));
@@ -383,6 +396,7 @@ shift_chars(struct part *part, int y, int shift)
 	int len;
 
 	assert(part && part->data && part->data->data);
+	if_assert_failed return;
 
 	len = LEN(y);
 
@@ -411,6 +425,7 @@ static inline void
 del_chars(struct part *part, int x, int y)
 {
 	assert(part && part->data && part->data->data);
+	if_assert_failed return;
 
 	SLEN(y, x);
 	move_links(part, x, y, -1, -1);
@@ -425,6 +440,7 @@ split_line_at(struct part *part, register int x)
 	int new_x = x + par_format.rightmargin;
 
 	assert(part);
+	if_assert_failed return 0;
 
 	/* Make sure that we count the right margin to the total
 	 * actual box width. */
@@ -433,6 +449,7 @@ split_line_at(struct part *part, register int x)
 
 	if (part->data) {
 		assert(part->data->data);
+		if_assert_failed return 0;
 		assertm((POS(x, part->cy) & 0xff) == ' ',
 			"bad split: %c", (char) POS(x, part->cy));
 		move_chars(part, x + 1, part->cy, par_format.leftmargin, part->cy + 1);
@@ -448,11 +465,13 @@ split_line_at(struct part *part, register int x)
 	}
 
 	assert(tmp >= 0);
+	if_assert_failed tmp = 0;
 	memset(part->spaces + tmp, 0, x);
 
 	if (par_format.leftmargin > 0) {
 		tmp = part->spaces_len - par_format.leftmargin;
 		assertm(tmp > 0, "part->spaces_len - par_format.leftmargin == %d", tmp);
+		/* So tmp is zero, memmove() should survive that. Don't recover. */
 		memmove(part->spaces + par_format.leftmargin, part->spaces, tmp);
 	}
 
@@ -483,6 +502,7 @@ split_line(struct part *part)
 	register int x;
 
 	assert(part);
+	if_assert_failed return 0;
 
 	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
 		if (x < part->spaces_len && part->spaces[x])
@@ -516,6 +536,8 @@ justify_line(struct part *part, int y)
 	int spaces;
 
 	assert(part && part->data && part->data->data);
+	if_assert_failed return;
+
 	len = LEN(y);
 
 	line = fmem_alloc(len * sizeof(chr));
@@ -573,6 +595,7 @@ justify_line(struct part *part, int y)
 			int new_start;
 
 			assert(word_len >= 0);
+			if_assert_failed continue;
 			if (!word_len) continue;
 
 			word_shift = (word * insert) / (spaces - 1);
@@ -601,6 +624,7 @@ align_line(struct part *part, int y, int last)
 	int len;
 
 	assert(part && part->data && part->data->data);
+	if_assert_failed return;
 
 	len = LEN(y);
 
@@ -625,6 +649,7 @@ static struct link *
 new_link(struct f_data *f)
 {
 	assert(f);
+	if_assert_failed return NULL;
 
 	if (!(f->nlinks & (ALLOC_GR - 1))) {
 		struct link *l = mem_realloc(f->links,
@@ -647,6 +672,7 @@ html_tag(struct f_data *f, unsigned char *t, int x, int y)
 	int tsize;
 
 	assert(f);
+	if_assert_failed return;
 
 	tsize = strlen(t) + 1;
 	tag = mem_alloc(sizeof(struct tag) + tsize);
@@ -671,6 +697,7 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	int pp = 0;
 
 	assert(part && chars);
+	if_assert_failed return;
 
 	if (format.attr & AT_GRAPHICS) {
 		put_chars(part, chars, charslen);
@@ -767,6 +794,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	int tmp; /* used for temporary results. */
 
 	assert(part);
+	if_assert_failed return;
 
 	while (par_format.align != AL_NONE && part->cx == -1
 	       && charslen && *chars == ' ') {
@@ -777,6 +805,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (!charslen) return;
 
 	assert(chars);
+	if_assert_failed return;
 
 	if (chars[0] != ' ' || (chars[1] && chars[1] != ' ')) {
 		last_tag_for_newline = (void *)&part->data->tags;
@@ -851,13 +880,8 @@ process_link:
 	    && !xstrcmp(format.image, last_image)
 	    && format.form == last_form) {
 		if (part->data) {
-			/* XXX: There should be some way how to stick additional
-			 * code to the assert()ion failure, but how to do that?
-			 * --pasky */
-			if (part->data->nlinks <= 0) {
-				assertm(part->data->nlinks > 0, "no link");
-				goto no_link;
-			}
+			assertm(part->data->nlinks > 0, "no link");
+			if_assert_failed goto no_link;
 			link = &part->data->links[part->data->nlinks - 1];
 			goto set_link;
 		}
@@ -1030,6 +1054,7 @@ line_break(struct part *part)
 	struct tag *t;
 
 	assert(part);
+	if_assert_failed return;
 
 	if (part->cx + par_format.rightmargin > part->x)
 		part->x = part->cx + par_format.rightmargin;
@@ -1083,6 +1108,7 @@ destroy_fc(struct form_control *fc)
 	int i;
 
 	assert(fc);
+	if_assert_failed return;
 
 	if (fc->action) mem_free(fc->action);
 	if (fc->target) mem_free(fc->target);
@@ -1104,6 +1130,7 @@ static void
 html_form_control(struct part *part, struct form_control *fc)
 {
 	assert(part && fc);
+	if_assert_failed return;
 
 	if (!part->data) {
 #if 0
@@ -1156,6 +1183,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 	struct frame_param *fp;
 
 	assert(part);
+	if_assert_failed return NULL;
 
 	va_start(l, c);
 	switch (c) {
@@ -1279,6 +1307,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	}
 
 	assertm(ys >= 0, "format_html_part: ys == %d", ys);
+	if_assert_failed return NULL;
 
 	if (data) {
 		struct node *n = mem_alloc(sizeof(struct node));
@@ -1350,6 +1379,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		kill_html_stack_item(&html_top);
 		assertm(&html_top && (void *)&html_top != (void *)&html_stack,
 			"html stack trashed");
+		if_assert_failed break;
 	}
 
 	html_top.dontkill = 0;
@@ -1413,7 +1443,9 @@ push_base_format(unsigned char *url, struct document_options *opt)
 	struct html_element *e;
 
 	assert(url && opt);
+	if_assert_failed return;
 	assertm(html_stack.next == &html_stack, "something on html stack");
+	if_assert_failed init_list(html_stack);
 
 	e = mem_calloc(1, sizeof(struct html_element));
 	if (!e) return;
@@ -1470,6 +1502,7 @@ get_convert_table(unsigned char *head, int to_cp,
 	int from = -1;
 
 	assert(head);
+	if_assert_failed return NULL;
 
 	while (from == -1) {
 		a = parse_http_header(part, "Content-Type", &part);
@@ -1530,6 +1563,7 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 	int i;
 
 	assert(ce && screen);
+	if_assert_failed return;
 
 	head = init_str();
 	if (!head) return;
@@ -1599,6 +1633,7 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 
 	assertm(html_stack.next == &html_stack,
 		"html stack not empty after operation");
+	if_assert_failed init_list(html_stack);
 
 	sort_links(screen);
 
@@ -1631,6 +1666,7 @@ shrink_format_cache(int u)
 	delete_unused_format_cache_entries();
 
 	assertm(format_cache_entries >= 0, "format_cache_entries underflow");
+	if_assert_failed format_cache_entries = 0;
 
 	ce = format_cache.prev;
 	while ((u || format_cache_entries > get_opt_int("document.cache.format.size"))
@@ -1683,6 +1719,7 @@ void
 format_cache_reactivate(struct f_data *ce)
 {
 	assert(ce);
+	if_assert_failed return;
 
 	del_from_list(ce);
 	add_to_list(format_cache, ce);
@@ -1697,6 +1734,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	struct cache_entry *cee = NULL;
 
 	assert(vs && screen && opt);
+	if_assert_failed return;
 
 	n = screen->name;
 	screen->name = NULL;

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.6 2003/07/06 17:51:47 pasky Exp $ */
+/* $Id: textarea.c,v 1.7 2003/07/06 23:17:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,6 +45,7 @@ format_text(unsigned char *text, int width, int wrap)
 	int sk, ps = 0;
 
 	assert(text);
+	if_assert_failed return NULL;
 
 	while (*text) {
 		unsigned char *s;
@@ -101,6 +102,7 @@ area_cursor(struct form_control *frm, struct form_state *fs)
 	int y;
 
 	assert(frm && fs);
+	if_assert_failed return 0;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
@@ -140,8 +142,10 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	register int x, y;
 
 	assert(t && f && f->f_data && f->vs && l);
+	if_assert_failed return;
 	frm = l->form;
 	assertm(frm, "link %d has no form", (int)(l - f->f_data->links));
+	if_assert_failed return;
 
 	xp = f->xp;
 	yp = f->yp;
@@ -208,6 +212,7 @@ encode_textarea(struct submitted_value *sv)
 	register int i;
 
 	assert(sv && sv->value);
+	if_assert_failed return NULL;
 
 	/* We need to reformat text now if it has to be wrapped
 	 * hard, just before encoding it. */
@@ -257,7 +262,9 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	static unsigned char *fn = NULL;
 
 	assert (op == 0 || op == 1);
+	if_assert_failed return;
 	assert (op == 1 || term_);
+	if_assert_failed return;
 
 	if (op == 0 && !term_->master) {
 		msg_box(term_, NULL, 0,
@@ -359,6 +366,7 @@ textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 	int y;
 
 	assert(fs && fs->value && frm);
+	if_assert_failed return 0;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
@@ -384,6 +392,7 @@ textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 	int y;
 
 	assert(fs && fs->value && frm);
+	if_assert_failed return 0;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
@@ -418,6 +427,7 @@ textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 	int y;
 
 	assert(fs && fs->value && frm);
+	if_assert_failed return 0;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
@@ -451,6 +461,7 @@ textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 	int y;
 
 	assert(fs && fs->value && frm);
+	if_assert_failed return 0;
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
@@ -480,6 +491,7 @@ textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep)
 	int value_len;
 
 	assert(fs && fs->value && frm);
+	if_assert_failed return 0;
 
 	value_len = strlen(fs->value);
 	if (!frm->ro && value_len < frm->maxlength) {
@@ -500,6 +512,7 @@ void
 set_textarea(struct session *ses, struct f_data_c *f, int kbd)
 {
 	assert(ses && f && f->vs && f->f_data);
+	if_assert_failed return;
 
 	if (f->vs->current_link != -1
 	    && f->f_data->links[f->vs->current_link].type == L_AREA) {

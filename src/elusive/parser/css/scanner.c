@@ -1,5 +1,5 @@
 /* CSS scanner utilities */
-/* $Id: scanner.c,v 1.5 2003/06/11 06:19:30 miciah Exp $ */
+/* $Id: scanner.c,v 1.6 2003/07/06 23:17:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,10 +100,12 @@ css_scan_ident(struct parser_state *state, unsigned char **src, int *len)
 	int css_len = *len;
 
 	assert(pstate->data.token.str && pstate->data.token.len);
+	if_assert_failed goto error;
 
 	/* Signal error if expected <ident> token is not found */
 	if (css_len) {
 		if (!(css_scan_table[*css] & IS_IDENT_START)) {
+error:
 			*pstate->data.token.len = -1;
 			css_state_pop(state);
 			return PSTATE_CHANGE;
@@ -162,6 +164,7 @@ css_scan_name(struct parser_state *state, unsigned char **src, int *len)
 	int css_len = *len;
 
 	assert(pstate->data.token.str && pstate->data.token.len);
+	if_assert_failed goto error;
 
 	while (css_len) {
 		/* TODO investigate the currious '-' allowed in <name> tokens */
@@ -200,6 +203,7 @@ css_scan_name(struct parser_state *state, unsigned char **src, int *len)
 			return PSTATE_CHANGE;
 		}
 
+error:
 		/* Next char is not <name> and none where scanned.
 		 * Signal failure. */
 		*pstate->data.token.len = -1;
@@ -225,7 +229,11 @@ css_scan_string(struct parser_state *state, unsigned char **src, int *len)
 
 	assert(pstate->data.token.str && pstate->data.token.len
 		 && pstate->data.token.extra);
-
+	if_assert_failed {
+		*pstate->data.token.len = -1;
+		css_state_pop(state);
+		return PSTATE_CHANGE;
+	}
 
 	while (css_len) {
 		/* Handle the ending delimeter or unescaped newlines */
@@ -354,6 +362,7 @@ css_scan_escape(struct parser_state *state, unsigned char **src, int *len)
 	 * http://lxr.mozilla.org/seamonkey/source/content/html/style/src/nsCSSScanner.cpp#658 */
 
 	assert(pstate->data.token.str);
+	if_assert_failed goto error;
 
 	/* Assume the \ has been skipped already */
 	while (css_len && escaped == -1) {
@@ -366,6 +375,7 @@ css_scan_escape(struct parser_state *state, unsigned char **src, int *len)
 			 * below */
 		}
 
+error:
 	/* Signal failure. */
 	*pstate->data.token.len = -1;
 		css_state_pop(state);
@@ -398,8 +408,10 @@ css_scan_unicoderange(struct parser_state *state, unsigned char **src, int *len)
 	int hexdigits;
 
 	assert(pstate->data.unicoderange.from_len);
+	if_assert_failed goto error;
 
 	if (!css_len || *css != 'U') {
+error:
 		*pstate->data.unicoderange.from_len = -1;
 		css_state_pop(state);
 		return PSTATE_CHANGE;
@@ -477,8 +489,10 @@ css_scan_hexcolor(struct parser_state *state, unsigned char **src, int *len)
 	int hexdigits;
 
 	assert(pstate->data.token.len);
+	if_assert_failed goto error;
 
 	if (!css_len || *css != '#') {
+error:
 		*pstate->data.token.len = -1;
 		css_state_pop(state);
 		return PSTATE_CHANGE;

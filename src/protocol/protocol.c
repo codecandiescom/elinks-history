@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.17 2003/07/04 15:48:49 jonas Exp $ */
+/* $Id: protocol.c,v 1.18 2003/07/06 23:17:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,6 +111,7 @@ int
 get_protocol_port(enum protocol protocol)
 {
 	assert(protocol != PROTOCOL_UNKNOWN);
+	if_assert_failed return 0;
 	return protocol_backends[protocol]->port;
 }
 
@@ -118,6 +119,7 @@ int
 get_protocol_free_syntax(enum protocol protocol)
 {
 	assert(protocol != PROTOCOL_UNKNOWN);
+	if_assert_failed return 0;
 	return protocol_backends[protocol]->free_syntax;
 }
 
@@ -125,6 +127,7 @@ int
 get_protocol_need_slashes(enum protocol protocol)
 {
 	assert(protocol != PROTOCOL_UNKNOWN);
+	if_assert_failed return 0;
 	return protocol_backends[protocol]->need_slashes;
 }
 
@@ -132,6 +135,7 @@ int
 get_protocol_need_slash_after_host(enum protocol protocol)
 {
 	assert(protocol != PROTOCOL_UNKNOWN);
+	if_assert_failed return 0;
 	return protocol_backends[protocol]->need_slash_after_host;
 }
 
@@ -142,6 +146,7 @@ get_protocol_handler(struct uri *uri)
 	enum protocol protocol = check_protocol(uri->protocol, uri->protocollen);
 
 	assert(uri->protocollen && protocol != PROTOCOL_UNKNOWN);
+	if_assert_failed return NULL;
 	return protocol_backends[protocol]->handler;
 }
 

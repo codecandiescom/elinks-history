@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.30 2003/07/06 21:25:49 pasky Exp $ */
+/* $Id: connect.c,v 1.31 2003/07/06 23:17:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,6 +192,7 @@ ssl_connect(struct connection *conn, int sock)
 	int ret;
 
 	assertm(conn->ssl, "No ssl handle");
+	if_assert_failed goto ssl_error;
 	if (conn->no_tsl)
 		ssl_set_no_tls(conn);
 
@@ -230,9 +231,7 @@ ssl_connect(struct connection *conn, int sock)
 		default:
 			/* debug("sslerr %s", gnutls_strerror(ret)); */
 			conn->no_tsl = 1;
-#ifdef HAVE_GNUTLS
 ssl_error:
-#endif
 			set_connection_state(conn, S_SSL_ERROR);
 			close_socket(NULL, conn->conn_info->sock);
 			dns_found(conn, 0);

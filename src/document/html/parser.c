@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.148 2003/07/04 20:04:06 zas Exp $ */
+/* $Id: parser.c,v 1.149 2003/07/06 23:17:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -290,6 +290,7 @@ roman(unsigned char *p, unsigned n)
 		i++;
 		assertm(!(n && !roman_tbl[i].n),
 			"BUG in roman number convertor");
+		if_assert_failed break;
 	}
 }
 
@@ -338,8 +339,11 @@ void
 kill_html_stack_item(struct html_element *e)
 {
 	assert(e);
+	if_assert_failed return;
 	assertm((void *)e != &html_stack, "trying to free bad html element");
+	if_assert_failed return;
 	assertm(e->dontkill != 2, "trying to kill unkillable element");
+	if_assert_failed return;
 
 	if (e->attr.link) mem_free(e->attr.link);
 	if (e->attr.target) mem_free(e->attr.target);
@@ -396,6 +400,7 @@ html_stack_dup(void)
 	struct html_element *ep = html_stack.next;
 
 	assertm(ep && (void *)ep != &html_stack, "html stack empty");
+	if_assert_failed return;
 
 	e = mem_alloc(sizeof(struct html_element));
 	if (!e) return;
@@ -2354,10 +2359,12 @@ distribute:
 			q -= (-oo[i] * qq / d);
 		}
 		assertm(q >= 0, "parse_frame_widths: q < 0");
+		if_assert_failed q = 0;
 		for (i = 0; i < ol; i++) if (oo[i] < 0) {
 			if (q) o[i]++, q--;
 		}
 		assertm(q <= 0, "parse_frame_widths: q > 0");
+		if_assert_failed q = 0;
 		mem_free(oo);
 	}
 

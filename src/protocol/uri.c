@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.3 2003/07/04 15:53:23 jonas Exp $ */
+/* $Id: uri.c,v 1.4 2003/07/06 23:17:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@ parse_uri(struct uri *uri)
 	memset(uri, 0, sizeof(struct uri));
 
 	/* Nothing to do for an empty url. */
+	if_assert_failed return 0;
 	if (!*uristring) return 0;
 	uri->protocol = uristring;
 
@@ -181,5 +182,6 @@ get_uri_port(struct uri *uri)
 	}
 
 	assertm(port != -1, "Invalid uri");
+	/* Recovery path: we return -1 ;-). */
 	return port;
 }

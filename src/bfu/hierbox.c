@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.172 2004/07/02 10:34:11 zas Exp $ */
+/* $Id: hierbox.c,v 1.173 2004/07/02 11:22:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -568,13 +568,47 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 		   struct listbox_ops *ops, enum delete_error err)
 {
 	struct string msg;
-	unsigned char *errmsg = delete_messages[(item->type == BI_FOLDER)][err];
+	unsigned char *errmsg;
 	unsigned char *text = ops->get_info(item, term, LISTBOX_TEXT);
 
 	if (!text || !init_string(&msg)) {
 		mem_free_if(text);
 		return;
 	}
+
+	switch (err) {
+	case DELETE_IMPOSSIBLE:
+		if (item->type == BI_FOLDER) {
+			if (ops->messages && ops->messages->cant_delete_folder)
+				errmsg = ops->messages->cant_delete_folder;
+			else
+				errmsg = delete_messages[1][DELETE_IMPOSSIBLE];
+		} else {
+			if (ops->messages && ops->messages->cant_delete_item)
+				errmsg = ops->messages->cant_delete_item;
+			else
+				errmsg = delete_messages[0][DELETE_IMPOSSIBLE];
+		}
+		break;
+
+	case DELETE_LOCKED:
+		if (item->type == BI_FOLDER) {
+			if (ops->messages && ops->messages->cant_delete_used_folder)
+				errmsg = ops->messages->cant_delete_used_folder;
+			else
+				errmsg = delete_messages[1][DELETE_LOCKED];
+		} else {
+			if (ops->messages && ops->messages->cant_delete_used_item)
+				errmsg = ops->messages->cant_delete_used_item;
+			else
+				errmsg = delete_messages[0][DELETE_LOCKED];
+		}
+		break;
+
+	default:
+		errmsg = delete_messages[0][DELETE_IMPOSSIBLE];
+	}
+
 
 	add_format_to_string(&msg, _(errmsg, term), text);
 	mem_free(text);
@@ -691,9 +725,19 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 	context->widget_data = dlg_data->widgets_data;
 
 	if (!context->item) {
+		unsigned char *title = N_("Delete marked items");
+		unsigned char *message = N_("Delete marked items?");
+
+		if (box->ops->messages) {
+			if (box->ops->messages->delete_marked_items)
+				message = box->ops->messages->delete_marked_items;
+			if (box->ops->messages->delete_marked_items_title)
+				title = box->ops->messages->delete_marked_items_title;
+		}
+
 		msg_box(term, getml(context, NULL), 0,
-			N_("Delete marked items"), ALIGN_CENTER,
-			N_("Delete marked items?"),
+			title, ALIGN_CENTER,
+			message,
 			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_listbox_context, B_ESC);
@@ -716,25 +760,41 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 	}
 
 	if (context->item->type == BI_FOLDER) {
+		unsigned char *title = N_("Delete folder");
+		unsigned char *message = N_("Delete the folder \"%s\" and its content?");
+
+		if (box->ops->messages) {
+			if (box->ops->messages->delete_folder)
+				message = box->ops->messages->delete_folder;
+			if (box->ops->messages->delete_folder_title)
+				title = box->ops->messages->delete_folder_title;
+		}
+
 		box->ops->lock(context->item);
 		msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
-			N_("Delete folder"), ALIGN_CENTER,
-			msg_text(term, N_("Delete the folder \"%s\" and its content?"),
-				 text),
+			title, ALIGN_CENTER,
+			msg_text(term, message, text),
 			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_listbox_context, B_ESC);
 	} else {
+		unsigned char *title = N_("Delete item");
+		unsigned char *message = N_("Delete \"%s\"?\n\n%s");
 		unsigned char *msg;
+
+		if (box->ops->messages) {
+			if (box->ops->messages->delete_item)
+				message = box->ops->messages->delete_item;
+			if (box->ops->messages->delete_item_title)
+				title = box->ops->messages->delete_item_title;
+		}
 
 		msg = box->ops->get_info(context->item, term, LISTBOX_ALL);
 		box->ops->lock(context->item);
 
 		msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
-			N_("Delete item"), ALIGN_LEFT,
-			msg_text(term, N_("Delete \"%s\"?\n\n"
-				"%s"),
-				text, empty_string_or_(msg)),
+			title, ALIGN_LEFT,
+			msg_text(term, message, text, empty_string_or_(msg)),
 			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_listbox_context, B_ESC);

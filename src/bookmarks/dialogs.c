@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.165 2004/07/02 09:51:20 zas Exp $ */
+/* $Id: dialogs.c,v 1.166 2004/07/02 11:22:06 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -113,6 +113,29 @@ delete_bookmark_item(struct listbox_item *item, int last)
 #endif
 }
 
+static struct listbox_ops_messages bookmarks_messages = {
+	/* cant_delete_item */
+	N_("Sorry, but this bookmark \"%s\" cannot be deleted."),
+	/* cant_delete_used_item */
+	N_("Sorry, but this bookmark \"%s\" is being used by something else."),
+	/* cant_delete_folder */
+	N_("Sorry, but this bookmark's folder \"%s\" cannot be deleted."),
+	/* cant_delete_used_folder */
+	N_("Sorry, but this bookmark's folder \"%s\" is being used by something else."),
+	/* delete_marked_items_title */
+	N_("Delete marked bookmarks"),
+	/* delete_marked_items */
+	N_("Delete marked bookmarks?"),
+	/* delete_folder_title */
+	N_("Delete bookmark's folder"),
+	/* delete_folder */
+	N_("Delete this bookmark's folder and all bookmarks in it?"),
+	/* delete_item_title */
+	N_("Delete bookmark"),
+	/* delete_item */
+	N_("Delete this bookmark?"),
+};
+
 static struct listbox_ops bookmarks_listbox_ops = {
 	lock_bookmark,
 	unlock_bookmark,
@@ -122,6 +145,7 @@ static struct listbox_ops bookmarks_listbox_ops = {
 	can_delete_bookmark,
 	delete_bookmark_item,
 	NULL,
+	&bookmarks_messages,
 };
 
 /****************************************************************************

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.64 2004/06/08 19:33:50 jonas Exp $ */
+/* $Id: listbox.h,v 1.65 2004/07/02 11:22:06 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -54,6 +54,19 @@ struct listbox_context {
 	int offset;
 };
 
+struct listbox_ops_messages {
+	unsigned char *cant_delete_item;
+	unsigned char *cant_delete_used_item;
+	unsigned char *cant_delete_folder;
+	unsigned char *cant_delete_used_folder;
+	unsigned char *delete_marked_items_title;
+	unsigned char *delete_marked_items;
+	unsigned char *delete_folder_title;
+	unsigned char *delete_folder;
+	unsigned char *delete_item_title;
+	unsigned char *delete_item;
+};
+
 /* TODO: We can maybe find a better way of figuring out whether a user of a
  * generic button handler has implemented all the required functions. --jonas
  * */
@@ -80,6 +93,8 @@ struct listbox_ops {
 	 * line @y from @x and @width chars onwards. */
 	void (*draw)(struct listbox_item *, struct listbox_context *,
 		     int x, int y, int width);
+
+	struct listbox_ops_messages *messages;
 };
 
 /* Stores display information about a box. Kept in cdata. */

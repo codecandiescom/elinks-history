@@ -171,7 +171,8 @@ static struct expression plvar;
 static struct expression plone;
 static struct expression germanic_plural;
 
-static void init_germanic_plural()
+static void
+init_germanic_plural()
 {
 	if (plone.val.num == 0) {
 		plvar.nargs = 0;
@@ -195,10 +196,9 @@ static void init_germanic_plural()
 /* Initialize the codeset dependent parts of an opened message catalog.
    Return the header entry.  */
 const char *internal_function
-_nl_init_domain_conv(domain_file, domain, domainbinding)
-struct loaded_l10nfile *domain_file;
-struct loaded_domain *domain;
-struct binding *domainbinding;
+_nl_init_domain_conv(struct loaded_l10nfile *domain_file,
+		     struct loaded_domain *domain,
+		     struct binding *domainbinding)
 {
 	/* Find out about the character set the file is encoded with.
 	   This can be found (in textual form) in the entry "".  If this
@@ -307,9 +307,8 @@ struct binding *domainbinding;
 }
 
 /* Frees the codeset dependent parts of an opened message catalog.  */
-void
- internal_function _nl_free_domain_conv(domain)
-struct loaded_domain *domain;
+void internal_function
+_nl_free_domain_conv(struct loaded_domain *domain)
 {
 	if (domain->conv_tab != NULL && domain->conv_tab != (char **) -1)
 		free(domain->conv_tab);
@@ -386,10 +385,9 @@ source_tree_filename(struct loaded_l10nfile *domain_file)
 
 /* Load the message catalogs specified by FILENAME.  If it is no valid
    message catalog do nothing.  */
-void
- internal_function _nl_load_domain(domain_file, domainbinding)
-struct loaded_l10nfile *domain_file;
-struct binding *domainbinding;
+void internal_function
+_nl_load_domain(struct loaded_l10nfile *domain_file,
+		struct binding *domainbinding)
 {
 	int fd = -1;
 	size_t size;
@@ -435,7 +433,7 @@ struct binding *domainbinding;
 	if (fd == -1)
 		return;
 
-      source_success:
+source_success:
 
 	/* We must know about the size of the file.  */
 	if (
@@ -535,7 +533,7 @@ struct binding *domainbinding;
 				((char *) data +
 				 W(domain->must_swap, data->hash_tab_offset));
 			break;
-		default:
+default:
 			/* This is an invalid revision.  */
 #ifdef HAVE_MMAP
 			if (use_mmap)
@@ -596,7 +594,7 @@ struct binding *domainbinding;
 		/* By default we are using the Germanic form: singular form only
 		   for `one', the plural form otherwise.  Yes, this is also what
 		   English is using since English is a Germanic language.  */
-	      no_plural:
+no_plural:
 		INIT_GERMANIC_PLURAL();
 		domain->plural = &germanic_plural;
 		domain->nplurals = 2;
@@ -604,8 +602,8 @@ struct binding *domainbinding;
 }
 
 #ifdef _LIBC
-void internal_function _nl_unload_domain(domain)
-struct loaded_domain *domain;
+void internal_function
+_nl_unload_domain(struct loaded_domain *domain)
 {
 	if (domain->plural != &germanic_plural)
 		__gettext_free_exp(domain->plural);
@@ -630,9 +628,8 @@ struct loaded_domain *domain;
  * function is available, though.  Also allow the symbol HAVE_STPCPY
  * to be defined.  */
 #ifndef HAVE_STPCPY
-static char *stpcpy(dest, src)
-char *dest;
-const char *src;
+static char *
+stpcpy(char *dest, const char *src)
 {
 	while ((*dest++ = *src++) != '\0')
 		/* Do nothing. */ ;

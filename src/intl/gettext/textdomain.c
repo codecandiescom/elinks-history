@@ -74,8 +74,8 @@ __libc_rwlock_define(extern, _nl_state_lock)
 /* Set the current default message catalog to DOMAINNAME.
    If DOMAINNAME is null, return the current default.
    If DOMAINNAME is "", reset to the default of "messages".  */
-char *TEXTDOMAIN(domainname)
-const char *domainname;
+char *
+TEXTDOMAIN(const char *domainname)
 {
 	char *new_domain;
 	char *old_domain;

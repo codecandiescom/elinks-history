@@ -78,7 +78,8 @@
 static const char *volatile charset_aliases;
 
 /* Return a pointer to the contents of the charset.alias file.  */
-static const char *get_charset_aliases()
+static const char *
+get_charset_aliases()
 {
 	const char *cp;
 
@@ -194,7 +195,8 @@ static const char *get_charset_aliases()
 #ifdef STATIC
 STATIC
 #endif
-const char *locale_charset()
+const char *
+locale_charset()
 {
 	const char *codeset;
 	const char *aliases;

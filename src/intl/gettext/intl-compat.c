@@ -77,70 +77,58 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 #undef bindtextdomain
 #undef bind_textdomain_codeset
 
-char *gettext(msgid)
-const char *msgid;
+char *
+gettext(const char *msgid)
 {
 	return gettext__(msgid);
 }
 
-char *dgettext(domainname, msgid)
-const char *domainname;
-const char *msgid;
+char *
+dgettext(const char *domainname, const char *msgid)
 {
 	return dgettext__(domainname, msgid);
 }
 
-char *dcgettext(domainname, msgid, category)
-const char *domainname;
-const char *msgid;
-int category;
+char *
+dcgettext(const char *domainname, const char *msgid, int category)
 {
 	return dcgettext__(domainname, msgid, category);
 }
 
-char *ngettext(msgid1, msgid2, n)
-const char *msgid1;
-const char *msgid2;
-unsigned long int n;
+char *
+ngettext(const char *msgid1, const char *msgid2, unsigned long int n)
 {
 	return ngettext__(msgid1, msgid2, n);
 }
 
-char *dngettext(domainname, msgid1, msgid2, n)
-const char *domainname;
-const char *msgid1;
-const char *msgid2;
-unsigned long int n;
+char *
+dngettext(const char *domainname, const char *msgid1, const char *msgid2,
+	  unsigned long int n)
 {
 	return dngettext__(domainname, msgid1, msgid2, n);
 }
 
-char *dcngettext(domainname, msgid1, msgid2, n, category)
-const char *domainname;
-const char *msgid1;
-const char *msgid2;
-unsigned long int n;
-int category;
+char *
+dcngettext(const char *domainname, const char *msgid1, const char *msgid2,
+	   unsigned long int n, int category)
 {
 	return dcngettext__(domainname, msgid1, msgid2, n, category);
 }
 
-char *textdomain(domainname)
-const char *domainname;
+char *
+textdomain(const char *domainname)
 {
 	return textdomain__(domainname);
 }
 
-char *bindtextdomain(domainname, dirname)
-const char *domainname;
-const char *dirname;
+char *
+bindtextdomain(const char *domainname, const char *dirname)
 {
 	return bindtextdomain__(domainname, dirname);
 }
 
-char *bind_textdomain_codeset(domainname, codeset)
-const char *domainname;
-const char *codeset;
+char *
+bind_textdomain_codeset(const char *domainname, const char *codeset)
 {
 	return bind_textdomain_codeset__(domainname, codeset);
 }

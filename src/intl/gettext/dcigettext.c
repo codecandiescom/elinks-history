@@ -244,9 +244,10 @@ static void *root;
 
 /* Function to compare two entries in the table of known translations.  */
 static int transcmp PARAMS((const void *p1, const void *p2));
-static int transcmp(p1, p2)
-const void *p1;
-const void *p2;
+
+
+static int
+transcmp(const void *p1, const void *p2)
 {
 	const struct known_translation_t *s1;
 	const struct known_translation_t *s2;
@@ -393,13 +394,9 @@ static int enable_secure;
 /* Look up MSGID in the DOMAINNAME message catalog for the current
    CATEGORY locale and, if PLURAL is nonzero, search over string
    depending on the plural form determined by N.  */
-char *DCIGETTEXT(domainname, msgid1, msgid2, plural, n, category)
-const char *domainname;
-const char *msgid1;
-const char *msgid2;
-int plural;
-unsigned long int n;
-int category;
+char *
+DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
+	   int plural, unsigned long int n, int category)
 {
 #ifndef HAVE_ALLOCA
 	struct block_list *block_list = NULL;
@@ -669,11 +666,10 @@ int category;
 	/* NOTREACHED */
 }
 
-char *internal_function _nl_find_msg(domain_file, domainbinding, msgid, lengthp)
-struct loaded_l10nfile *domain_file;
-struct binding *domainbinding;
-const char *msgid;
-size_t *lengthp;
+char *
+internal_function _nl_find_msg(struct loaded_l10nfile *domain_file,
+			       struct binding *domainbinding,
+			       const char *msgid, size_t *lengthp)
 {
 	struct loaded_domain *domain;
 	size_t act;
@@ -753,7 +749,7 @@ size_t *lengthp;
 		return NULL;
 	}
 
-      found:
+found:
 	/* The translation was found at index ACT.  If we have to convert the
 	   string to use a different character set, this is the time.  */
 	result = ((char *) domain->data
@@ -875,7 +871,7 @@ size_t *lengthp;
 #endif
 #endif
 
-			      resize_freemem:
+resize_freemem:
 				/* We must allocate a new buffer or resize the old one.  */
 				if (malloc_count > 0) {
 					++malloc_count;
@@ -946,7 +942,7 @@ size_t *lengthp;
 		resultlen = *(size_t *) domain->conv_tab[act];
 	}
 
-      converted:
+converted:
 	/* The result string is converted.  */
 
 #endif /* _LIBC || HAVE_ICONV */
@@ -957,11 +953,8 @@ size_t *lengthp;
 
 /* Look up a plural variant.  */
 static char *internal_function
-plural_lookup(domain, n, translation, translation_len)
-struct loaded_l10nfile *domain;
-unsigned long int n;
-const char *translation;
-size_t translation_len;
+plural_lookup(struct loaded_l10nfile *domain, unsigned long int n,
+	      const char *translation, size_t translation_len)
 {
 	struct loaded_domain *domaindata =
 		(struct loaded_domain *) domain->data;
@@ -995,10 +988,8 @@ size_t translation_len;
 }
 
 /* Function to evaluate the plural expression and return an index value.  */
-static unsigned long int
- internal_function plural_eval(pexp, n)
-struct expression *pexp;
-unsigned long int n;
+static unsigned long int internal_function
+plural_eval(struct expression *pexp, unsigned long int n)
 {
 	switch (pexp->nargs) {
 		case 0:
@@ -1007,7 +998,7 @@ unsigned long int n;
 					return n;
 				case num:
 					return pexp->val.num;
-				default:
+default:
 					break;
 			}
 			/* NOTREACHED */
@@ -1070,7 +1061,7 @@ unsigned long int n;
 						case not_equal:
 							return leftarg !=
 								rightarg;
-						default:
+default:
 							break;
 					}
 				}
@@ -1091,8 +1082,8 @@ unsigned long int n;
 }
 
 /* Return string representation of locale CATEGORY.  */
-static const char *internal_function category_to_name(category)
-int category;
+static const char *internal_function
+category_to_name(int category)
 {
 	const char *retval;
 
@@ -1139,7 +1130,7 @@ int category;
 			retval = "LC_ALL";
 			break;
 #endif
-		default:
+default:
 			/* If you have a better idea for a default value let me know.  */
 			retval = "LC_XXX";
 	}
@@ -1149,9 +1140,7 @@ int category;
 
 /* Guess value of current locale from value of the environment variables.  */
 static const char *internal_function
-guess_category_value(category, categoryname)
-int category;
-const char *categoryname;
+guess_category_value(int category, const char *categoryname)
 {
 	const char *language;
 	const char *retval;
@@ -1206,9 +1195,8 @@ const char *categoryname;
    function is available, though.  Also allow the symbol HAVE_STPCPY
    to be defined.  */
 #if !_LIBC && !HAVE_STPCPY
-static char *stpcpy(dest, src)
-char *dest;
-const char *src;
+static char *
+stpcpy(char *dest, const char *src)
 {
 	while ((*dest++ = *src++) != '\0')
 		/* Do nothing. */ ;
@@ -1217,10 +1205,8 @@ const char *src;
 #endif
 
 #if !_LIBC && !HAVE_MEMPCPY
-static void *mempcpy(dest, src, n)
-void *dest;
-const void *src;
-size_t n;
+static void *
+mempcpy(void *dest, const void *src, size_t n)
 {
 	return (void *) ((char *) memcpy(dest, src, n) + n);
 }
@@ -1230,7 +1216,7 @@ size_t n;
 /* If we want to free all resources we have to do some work at
    program's end.  */
 static void __attribute__ ((unused))
-	free_mem(void)
+free_mem(void)
 {
 	void *old;
 

@@ -44,11 +44,8 @@ static struct loaded_l10nfile *_nl_loaded_domains;
    the DOMAINNAME and CATEGORY parameters with respect to the currently
    established bindings.  */
 struct loaded_l10nfile *internal_function
-_nl_find_domain(dirname, locale, domainname, domainbinding)
-const char *dirname;
-char *locale;
-const char *domainname;
-struct binding *domainbinding;
+_nl_find_domain(const char *dirname, char *locale, const char *domainname,
+		struct binding *domainbinding)
 {
 	struct loaded_l10nfile *retval;
 	const char *language;
@@ -176,7 +173,7 @@ struct binding *domainbinding;
 
 #ifdef _LIBC
 static void __attribute__ ((unused))
-	free_mem(void)
+free_mem(void)
 {
 	struct loaded_l10nfile *runp = _nl_loaded_domains;
 

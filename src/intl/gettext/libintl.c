@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.7 2003/04/17 11:58:38 zas Exp $ */
+/* $Id: libintl.c,v 1.8 2003/04/17 12:28:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,8 @@ struct language languages[] = {
 /* TODO: We should reflect this in name of this function and of the tag. On the
  * other side, it's ISO639 for gettext as well etc. So what?  --pasky */
 
-int iso639_to_language(unsigned char *iso639)
+int
+iso639_to_language(unsigned char *iso639)
 {
 	unsigned char *l = stracpy(iso639);
 	unsigned char *_;
@@ -126,7 +127,8 @@ int iso639_to_language(unsigned char *iso639)
 
 int system_language = 0;
 
-unsigned char *language_to_iso639(int language)
+unsigned char *
+language_to_iso639(int language)
 {
 	/* Language is "system", we need to extract the index from
 	 * the environment */
@@ -139,7 +141,8 @@ unsigned char *language_to_iso639(int language)
 	return languages[language].iso639;
 }
 
-int name_to_language(unsigned char *name)
+int
+name_to_language(unsigned char *name)
 {
 	int i;
 
@@ -151,12 +154,14 @@ int name_to_language(unsigned char *name)
 	return 1;
 }
 
-unsigned char *language_to_name(int language)
+unsigned char *
+language_to_name(int language)
 {
 	return languages[language].name;
 }
 
-int get_system_language_index()
+int
+get_system_language_index()
 {
 	unsigned char *l;
 
@@ -174,7 +179,8 @@ int get_system_language_index()
 
 int current_language = 0;
 
-void set_language(int language)
+void
+set_language(int language)
 {
 	unsigned char *_;
 

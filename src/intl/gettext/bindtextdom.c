@@ -89,10 +89,10 @@ static void set_binding_values PARAMS((const char *domainname,
    modified, only the current value is returned.
    If DIRNAMEP or CODESETP is NULL, the corresponding attribute is neither
    modified nor returned.  */
-static void set_binding_values(domainname, dirnamep, codesetp)
-const char *domainname;
-const char **dirnamep;
-const char **codesetp;
+static void
+set_binding_values(const char *domainname,
+		   const char **dirnamep,
+		   const char **codesetp)
 {
 	struct binding *binding;
 	int modified;
@@ -306,12 +306,12 @@ const char **codesetp;
 
 		/* Here we deal with memory allocation failures.  */
 		if (0) {
-		      failed_codeset:
+failed_codeset:
 			if (new_binding->dirname != _nl_default_dirname)
 				free(new_binding->dirname);
-		      failed_dirname:
+failed_dirname:
 			free(new_binding);
-		      failed:
+failed:
 			if (dirnamep)
 				*dirnamep = NULL;
 			if (codesetp)
@@ -328,9 +328,8 @@ const char **codesetp;
 
 /* Specify that the DOMAINNAME message catalog will be found
    in DIRNAME rather than in the system locale data base.  */
-char *BINDTEXTDOMAIN(domainname, dirname)
-const char *domainname;
-const char *dirname;
+char *
+BINDTEXTDOMAIN(const char *domainname, const char *dirname)
 {
 	set_binding_values(domainname, &dirname, NULL);
 	return (char *) dirname;
@@ -338,9 +337,8 @@ const char *dirname;
 
 /* Specify the character encoding in which the messages from the
    DOMAINNAME message catalog will be returned.  */
-char *BIND_TEXTDOMAIN_CODESET(domainname, codeset)
-const char *domainname;
-const char *codeset;
+char *
+BIND_TEXTDOMAIN_CODESET(const char *domainname, const char *codeset)
 {
 	set_binding_values(domainname, NULL, &codeset);
 	return (char *) codeset;

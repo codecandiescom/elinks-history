@@ -94,10 +94,8 @@ static void yyerror PARAMS((const char *str));
 
 /* Allocation of expressions.  */
 
-static struct expression *new_exp(nargs, op, args)
-int nargs;
-enum operator  op;
-struct expression *const *args;
+static struct expression *
+new_exp(int nargs, enum operator op, struct expression * const *args)
 {
 	int i;
 	struct expression *newp;
@@ -117,22 +115,21 @@ struct expression *const *args;
 		return newp;
 	}
 
-      fail:
+fail:
 	for(i = nargs - 1; i >= 0; i--)
 		FREE_EXPRESSION(args[i]);
 
 	return NULL;
 }
 
-static inline struct expression *new_exp_0(op)
-enum operator  op;
+static inline struct expression *
+new_exp_0(enum operator op)
 {
 	return new_exp(0, op, NULL);
 }
 
-static inline struct expression *new_exp_1(op, right)
-enum operator  op;
-struct expression *right;
+static inline struct expression *
+new_exp_1(enum operator op, struct expression *right)
 {
 	struct expression *args[1];
 
@@ -140,10 +137,8 @@ struct expression *right;
 	return new_exp(1, op, args);
 }
 
-static struct expression *new_exp_2(op, left, right)
-enum operator  op;
-struct expression *left;
-struct expression *right;
+static struct expression *
+new_exp_2(enum operator op, struct expression *left, struct expression *right)
 {
 	struct expression *args[2];
 
@@ -152,11 +147,9 @@ struct expression *right;
 	return new_exp(2, op, args);
 }
 
-static inline struct expression *new_exp_3(op, bexp, tbranch, fbranch)
-enum operator  op;
-struct expression *bexp;
-struct expression *tbranch;
-struct expression *fbranch;
+static inline struct expression *
+new_exp_3(enum operator  op, struct expression *bexp,
+	  struct expression *tbranch, struct expression *fbranch)
 {
 	struct expression *args[3];
 
@@ -610,7 +603,7 @@ int yyparse(YYPARSE_PARAM_ARG) YYPARSE_PARAM_DECL
 /* Push a new state, which is found in  yystate  .  */
 /* In all cases, when you get here, the value and location stacks
    have just been pushed. so pushing a state here evens the stacks.  */
-      yynewstate:
+yynewstate:
 
 	*++yyssp = yystate;
 
@@ -701,7 +694,7 @@ int yyparse(YYPARSE_PARAM_ARG) YYPARSE_PARAM_DECL
 #endif
 
 	goto yybackup;
-      yybackup:
+yybackup:
 
 /* Do appropriate processing given the current state.  */
 /* Read a lookahead token if we need one and don't already have one.  */
@@ -802,14 +795,14 @@ int yyparse(YYPARSE_PARAM_ARG) YYPARSE_PARAM_DECL
 	goto yynewstate;
 
 /* Do the default action for the current state.  */
-      yydefault:
+yydefault:
 
 	yyn = yydefact[yystate];
 	if (yyn == 0)
 		goto yyerrlab;
 
 /* Do a reduction.  yyn is the number of a rule to reduce with.  */
-      yyreduce:
+yyreduce:
 	yylen = yyr2[yyn];
 	if (yylen > 0)
 		yyval = yyvsp[1 - yylen];	/* implement default value of the action */
@@ -1092,7 +1085,7 @@ int yyparse(YYPARSE_PARAM_ARG) YYPARSE_PARAM_DECL
 	}
 #endif
 
-      yyerrhandle:
+yyerrhandle:
 
 	yyn = yypact[yystate];
 	if (yyn == YYFLAG)
@@ -1127,7 +1120,7 @@ int yyparse(YYPARSE_PARAM_ARG) YYPARSE_PARAM_DECL
 	yystate = yyn;
 	goto yynewstate;
 
-      yyacceptlab:
+yyacceptlab:
 	/* YYACCEPT comes here.  */
 	if (yyfree_stacks) {
 		free(yyss);
@@ -1138,7 +1131,7 @@ int yyparse(YYPARSE_PARAM_ARG) YYPARSE_PARAM_DECL
 	}
 	return 0;
 
-      yyabortlab:
+yyabortlab:
 	/* YYABORT comes here.  */
 	if (yyfree_stacks) {
 		free(yyss);
@@ -1169,7 +1162,7 @@ struct expression *exp;
 		case 1:
 			FREE_EXPRESSION(exp->val.args[0]);
 			/* FALLTHROUGH */
-		default:
+default:
 			break;
 	}
 
@@ -1304,7 +1297,7 @@ const char **pexp;
 			result = YYEOF;
 			break;
 
-		default:
+default:
 			result = YYERRCODE;
 #if YYDEBUG != 0
 			--exp;

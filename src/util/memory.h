@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.16 2003/09/28 19:55:35 jonas Exp $ */
+/* $Id: memory.h,v 1.17 2003/09/28 23:44:32 jonas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -111,15 +111,18 @@ mem_align_alloc__(
 	if (newsize > oldsize) {
 		unsigned char *data;
 
+		newsize *= objsize;
+		oldsize *= objsize;
+
 #ifdef LEAK_DEBUG
-		data = debug_mem_realloc(file, line, *ptr, newsize * objsize);
+		data = debug_mem_realloc(file, line, *ptr, newsize);
 #else
-		data = mem_realloc(*ptr, newsize * objsize);
+		data = mem_realloc(*ptr, newsize);
 #endif
 		if (!data) return NULL;
 
 		*ptr = (void *)data;
-		memset(&data[oldsize * objsize], 0, (newsize - oldsize) * objsize);
+		memset(&data[oldsize], 0, newsize - oldsize);
 	}
 
 	return *ptr;

@@ -1518,7 +1518,8 @@ void add_to_history(struct history *historylist, unsigned char *url, int check_d
 	memcpy(newhistoryitem->d, url, url_len);
 	newhistoryitem->d[url_len] = 0;
 	
-	if (check_duplicate) remove_duplicate_from_history(historylist, url);
+	if (check_duplicate)
+		remove_duplicate_from_history(historylist, newhistoryitem->d);
 	
 	/* add new entry to history list */
 	add_to_list(historylist->items, newhistoryitem);

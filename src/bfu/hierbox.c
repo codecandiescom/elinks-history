@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.126 2003/12/21 23:19:03 jonas Exp $ */
+/* $Id: hierbox.c,v 1.127 2003/12/21 23:56:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,7 +156,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			selected = box->sel;
 			action = kbd_action(KM_MENU, ev, NULL);
 
-			if (action == ACT_TOGGLE_EXPAND) {
+			if (action == ACT_SELECT) {
 				if (!selected) return EVENT_PROCESSED;
 				if (selected->type != BI_FOLDER)
 					return EVENT_NOT_PROCESSED;

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.127 2003/12/21 15:20:13 pasky Exp $ */
+/* $Id: menu.c,v 1.128 2003/12/21 23:56:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -543,6 +543,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 					break;
 #undef DIST
 				case ACT_ENTER:
+				case ACT_SELECT:
 					goto enter;
 
 				case ACT_CANCEL:

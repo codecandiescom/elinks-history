@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.118 2003/12/21 02:06:23 jonas Exp $ */
+/* $Id: dialog.c,v 1.119 2003/12/21 23:56:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,7 +239,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 				break;
 
 			/* Can we select? */
-			if (action == ACT_ENTER
+			if ((action == ACT_ENTER || action == ACT_SELECT)
 			    && widget_data->widget->ops->select) {
 				widget_data->widget->ops->select(widget_data, dlg_data);
 				break;

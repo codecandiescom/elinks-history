@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.121 2003/12/21 23:23:22 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.122 2003/12/21 23:56:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -455,13 +455,13 @@ static struct strtonum action_table[] = {
 	{ "search", ACT_SEARCH, DACT(N_("Search for a text pattern")) },
 	{ "search-back", ACT_SEARCH_BACK, DACT(N_("Search backwards for a text pattern")) },
 	{ "search-typeahead", ACT_SEARCH_TYPEAHEAD, DACT(N_("Search link text by typing ahead")) },
+	{ "select", ACT_SELECT, DACT(N_("Select current highlighted item")) },
 	{ "tab-close", ACT_TAB_CLOSE, DACT(N_("Close tab")) },
 	{ "tab-next", ACT_TAB_NEXT, DACT(N_("Next tab")) },
 	{ "tab-prev", ACT_TAB_PREV,DACT( N_("Previous tab")) },
 	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
 	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, DACT(N_("Toggle rendering of tables")) },
 	{ "toggle-document-colors", ACT_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
-	{ "toggle-expand", ACT_TOGGLE_EXPAND, DACT(N_("Toggle expansion of items")) },
 	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
 	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, DACT(N_("Toggle displaying of links numbers")) },
 	{ "unback", ACT_UNBACK, DACT(N_("Go forward in the unhistory")) },
@@ -796,9 +796,7 @@ static struct default_kb default_edit_keymap[] = {
 };
 
 static struct default_kb default_menu_keymap[] = {
-	{ ' ',		 0,		ACT_ENTER },
-	/* XXX: 2 users of ' ' but fear not, hierbox browser will behave! */
-	{ ' ',		 0,		ACT_TOGGLE_EXPAND },
+	{ ' ',		 0,		ACT_SELECT },
 	{ '*',		 0,		ACT_MARK_ITEM },
 	{ '+',		 0,		ACT_EXPAND },
 	{ '-',		 0,		ACT_UNEXPAND },

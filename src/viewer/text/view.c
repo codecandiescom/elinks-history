@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.316 2003/12/27 14:14:51 jonas Exp $ */
+/* $Id: view.c,v 1.317 2003/12/27 14:27:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1199,13 +1199,9 @@ quit:
 				ses = NULL; /* Disappeared in EV_ABORT handler. */
 				goto x;
 			case ACT_TAB_CLOSE_ALL_BUT_CURRENT:
-			{
-				struct window *tab = get_current_tab(ses->tab->term);
-
-				close_all_tabs_but_current(tab->term, tab, tab->data);
+				close_all_tabs_but_current(ses->tab->term, NULL, NULL);
 				ses = NULL;
 				goto x;
-			}
 			case ACT_TAB_MENU:
 			{
 				struct window *tab = get_current_tab(ses->tab->term);

@@ -761,22 +761,22 @@ msgstr "©ablonová slo¾ka"
 #: src/config/options.c:646
 #, c-format
 msgid "    %s%s%s %s (default: %d)"
-msgstr "    %s%s%s %s (výchozí: %d)\n"
+msgstr "    %s%s%s %s (výchozí: %d)"
 
 #: src/config/options.c:651 src/config/options.c:676
 #, c-format
 msgid "    %s%s%s %s (default: \"%s\")"
-msgstr "    %s%s%s %s (výchozí: \"%s\")\n"
+msgstr "    %s%s%s %s (výchozí: \"%s\")"
 
 #: src/config/options.c:656
 #, c-format
 msgid "    %s%s%s %s (alias for %s)"
-msgstr "    %s%s%s %s (alias pro %s)\n"
+msgstr "    %s%s%s %s (alias pro %s)"
 
 #: src/config/options.c:661
 #, c-format
 msgid "    %s%s%s %s (default: %s)"
-msgstr "    %s%s%s %s (výchozí: %s)\n"
+msgstr "    %s%s%s %s (výchozí: %s)"
 
 #: src/config/options.c:668
 #, c-format

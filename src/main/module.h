@@ -1,4 +1,4 @@
-/* $Id: module.h,v 1.2 2003/10/25 21:39:00 pasky Exp $ */
+/* $Id: module.h,v 1.3 2003/10/25 21:40:37 pasky Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
@@ -19,7 +19,11 @@ struct module {
 	struct module **submodules;
 
 	/* Lifecycle functions. */
+
+	/* This function should initialize the module. */
 	void (*init)(struct module *module);
+
+	/* This function should shutdown the module. */
 	void (*done)(struct module *module);
 };
 

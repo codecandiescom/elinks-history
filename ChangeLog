@@ -1,3 +1,118 @@
+Thu Sep 30 21:18:36 2004  Laurent Monin <zas@norz.org>:
+
+	* po/pl.po:
+
+	Polish translation was updated. Patch by Adam Golebiowski.  
+
+Thu Sep 30 21:11:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/renderer.c, sched/session.c, sched/session.h,
+	viewer/text/draw.c:
+
+	Fix for bug 516 - in draw_formatted() pass gradual_rerendering to
+	render_document_frames() if session_is_loading(), instead of doing
+	it in doc_loading_callback(), since we may call draw_formatted()
+	from multiple places during loading (anything, i.e. ^L,
+	tabswitching, ...).  
+
+Thu Sep 30 21:09:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	ecmascript_reset_state() only if we are going to add new snippets
+	there and so. Otherwise we might end up with an empty context during
+	rerendering.  
+
+Thu Sep 30 21:08:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Add some more commented-out debugging messages.  
+
+Thu Sep 30 19:52:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Make sure (thru new session_is_loading()) that draw_formatted() is
+	always called with 3 when still rerendering (i.e. when we just
+	finished loading of some aux file or there's still some aux file to
+	get which will cause another rerender).  
+
+Thu Sep 30 18:46:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix typo in command line info. Patch by Adam Golebiowski.  
+
+Thu Sep 30 18:27:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	add_document_line(): Fix out of bound array access in the plain
+	renderer. We need to review this code.  
+
+Thu Sep 30 10:51:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Use macro POST_CHAR_S instead of hardcoded \001 in strings.  
+
+Wed Sep 29 23:27:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	document.(location|url) now behaves same as location.url when
+	setting it. Necessary to support some broken sites.  
+
+Wed Sep 29 23:25:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	document.location is alias to document.url 
+
+Wed Sep 29 23:18:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/Makefile.am:
+
+	A few files missing from the doc/ dir. Now how am I supposed to
+	guide new users of ecmascript in the 0.10pre2 announcement.  
+
+Wed Sep 29 22:51:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/Makefile.am:
+
+	There's no such thing as ecmascript/*.js yet 
+
+Wed Sep 29 22:45:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	Do not weed out duplicate cookies when loading them, which is
+	horribly ineffective and doesn't scale. Ad maintainer position, qui
+	tacet, consentire videtur ;p.  
+
+Wed Sep 29 22:38:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: dom/Makefile.am, sgml/Makefile.am:
+
+	Doh. Add README in sgml dir and remove it from dom dir.  
+
+Wed Sep 29 22:12:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/frames.c:
+
+	When calling format_frames() recursively on a frameset newly
+	gathered by format_frame(), lock the document during its execution
+	because we could lose the underlying frames otherwise due to some
+	other bugs described in the comment. Fixes the last crash on
+	http://www.cinema-ostertor.de/ (but it still behaves very weird).  
+
+Wed Sep 29 22:04:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.10pre2.CVS 
+
 Wed Sep 29 21:56:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:
@@ -1087,13 +1202,6 @@ Fri Sep 24 22:11:01 2004  Petr Baudis <pasky@ucw.cz>:
 
 	Introduced error_reporter(), which is, well, an error reporter ;-).  
 
-Fri Sep 24 21:45:45 2004  Petr Baudis <pasky@ucw.cz>:
-
-	* test/ecmascript/inlinescript.html:
-
-	nice_href() needs to be called as nice_href(0). I'd love to know
-	why.  
-
 Fri Sep 24 21:29:53 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/ecmascript/spidermonkey.c:
@@ -1117,8 +1225,7 @@ Fri Sep 24 21:21:51 2004  Petr Baudis <pasky@ucw.cz>:
 
 Fri Sep 24 20:47:20 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* src/ecmascript/ecmascript.h, src/ecmascript/spidermonkey.c,
-	test/ecmascript/infinite.html:
+	* src/ecmascript/: ecmascript.h, spidermonkey.c:
 
 	A safeguard function introduced, which kills the script after 5
 	seconds of running. That has to be enough for anything.  
@@ -1217,19 +1324,6 @@ Fri Sep 24 18:01:49 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	Make HTML highlighting support official.  
 
-Fri Sep 24 13:48:19 2004  Petr Baudis <pasky@ucw.cz>:
-
-	* test/ecmascript/inlinescript.html:
-
-	Some nice_href() fixes.  
-
-Fri Sep 24 13:45:19 2004  Petr Baudis <pasky@ucw.cz>:
-
-	* test/ecmascript/inlinescript.html:
-
-	Oops, fix syntax errors in the code snippets ;-). So that's why the
-	testcases didn't work! 
-
 Fri Sep 24 13:07:23 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/html/: parser.c, parser/parse.c:
@@ -1238,12 +1332,6 @@ Fri Sep 24 13:07:23 2004  Petr Baudis <pasky@ucw.cz>:
 	Otherwise it would be difficult to skip the contents if we weren't
 	processing the element (and if we were processing it, it was broken
 	until now because we were calling html_skip() on its parent).  
-
-Fri Sep 24 12:58:40 2004  Petr Baudis <pasky@ucw.cz>:
-
-	* test/ecmascript/inlinescript.html:
-
-	Testcase for the inline <script> element.  
 
 Fri Sep 24 12:54:51 2004  Petr Baudis <pasky@ucw.cz>:
 
@@ -1353,12 +1441,6 @@ Fri Sep 24 01:45:11 2004  Petr Baudis <pasky@ucw.cz>:
 
 	Fixed initial adding to the snippets queue in process_snippets().
 	onLoad should work fine now.  
-
-Fri Sep 24 01:44:32 2004  Petr Baudis <pasky@ucw.cz>:
-
-	* test/ecmascript/onload.html:
-
-	onLoad testcase.  
 
 Fri Sep 24 01:43:51 2004  Petr Baudis <pasky@ucw.cz>:
 
@@ -1497,18 +1579,6 @@ Thu Sep 23 19:34:41 2004  Petr Baudis <pasky@ucw.cz>:
 	/usr/include/smjs as $spidermonkeydir makes no sense, try to check
 	it as $spidermonkeyinclude instead and see who gets enraged.  
 
-Thu Sep 23 19:31:31 2004  Petr Baudis <pasky@ucw.cz>:
-
-	* test/ecmascript/protocol.html:
-
-	Elaborate on the tests.  
-
-Thu Sep 23 19:23:21 2004  Petr Baudis <pasky@ucw.cz>:
-
-	* test/ecmascript/protocol.html:
-
-	Each link in a single paragraph.  
-
 Thu Sep 23 19:15:15 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* configure.in:
@@ -1541,12 +1611,6 @@ Thu Sep 23 16:14:19 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	Looks like freshmeat and slashdot redirects away from www host. Hit
 	them directly instead.  
-
-Thu Sep 23 15:43:31 2004  Jonas Fonseca <fonseca@diku.dk>:
-
-	* test/ecmascript/protocol.html:
-
-	Grow with separate tests for javascrip: URIs.  
 
 Thu Sep 23 15:40:33 2004  Laurent Monin <zas@norz.org>:
 
@@ -1587,7 +1651,7 @@ Thu Sep 23 15:04:07 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Sep 23 14:55:47 2004  Petr Baudis <pasky@ucw.cz>:
 
-	* test/: Makefile.am, ecmascript/protocol.html:
+	* test/Makefile.am:
 
 	Add a simple testcase for the javascript: protocol, document.title
 	and document.url.  
@@ -2678,16 +2742,16 @@ Sun Sep 19 17:21:26 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* AUTHORS:
-
-	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
-
-Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
-
 	* src/util/memory.c:
 
 	Fix mmap() usage on FreeBSD filed as bug 501. Patch by Lewis
 	Collard.  
+
+Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
 
 Sun Sep 19 09:56:02 2004  Petr Baudis <pasky@ucw.cz>:
 

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.204 2005/03/19 17:46:44 zas Exp $ */
+/* $Id: dialogs.c,v 1.205 2005/03/19 17:49:40 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -206,9 +206,6 @@ move_bookmark_after_selected(struct bookmark *bookmark, struct bookmark *selecte
 	add_at_pos(selected->box_item, bookmark->box_item);
 }
 
-
-/**** ADD FOLDER *****************************************************/
-
 static void
 focus_bookmark(struct widget_data *box_widget_data, struct listbox_data *box,
 		struct bookmark *bm)
@@ -262,18 +259,13 @@ do_add_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsigned char
 	}
 }
 
+
+/**** ADD FOLDER *****************************************************/
+
 static void
 do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 {
 	do_add_bookmark(dlg_data, name, NULL);
-}
-
-static widget_handler_status_T
-push_add_separator_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
-{
-	do_add_bookmark(dlg_data, "-", "");
-	redraw_dialog(dlg_data, 1);
-	return EVENT_PROCESSED;
 }
 
 static widget_handler_status_T
@@ -285,6 +277,17 @@ push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *widget_
 		    MAX_STR_LEN, NULL, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) do_add_folder,
 		    NULL);
+	return EVENT_PROCESSED;
+}
+
+
+/**** ADD SEPARATOR **************************************************/
+
+static widget_handler_status_T
+push_add_separator_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	do_add_bookmark(dlg_data, "-", "");
+	redraw_dialog(dlg_data, 1);
 	return EVENT_PROCESSED;
 }
 

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua,v 1.5 2002/05/19 19:34:56 pasky Exp $
+-- $Id: hooks.lua,v 1.6 2002/06/30 19:50:56 pasky Exp $
 
 ----------------------------------------------------------------------
 --  Local configuration
@@ -84,82 +84,80 @@ function match (prefix, url)
     return strsub (url, 1, strlen (prefix)) == prefix
 end
 
-function strip (str)
-    return gsub (str, "^%s*(.-)%s*$", "%1")
-end
-
 function plusify (str)
     return gsub (str, "%s", "+")
 end
 
+dumbbookmarks = {
+    g  = "http://www.google.com/",
+    gg = "http://www.google.com/",
+    go = "http://www.google.com/",
+    fm = "http://www.freshmeat.net/",
+    sf = "http://www.sourceforge.net/",
+    dbug = "http://bugs.debian.org/",
+    dpkg = "http://packages.debian.org/",
+    pycur = "http://www.python.org/doc/current/",
+    pydev = "http://www.python.org/dev/doc/devel/",
+    pyhelp = "http://starship.python.net/crew/theller/pyhelp.cgi",
+    e2 = "http://www.everything2.org/",
+}
+
+smartbookmarks = {
+    g  = "http://www.google.com/search?q=%s&btnG=Google+Search",
+    gg = "http://www.google.com/search?q=%s&btnG=Google+Search",
+    go = "http://www.google.com/search?q=%s&btnG=Google+Search",
+    fm = "http://www.freshmeat.net/search/?q=%s",
+    sf = "http://sourceforge.net/search/?q=%s",
+    sfp = "http://sourceforge.net/projects/%s",
+    dbug = "http://bugs.debian.org/%s",
+    dpkg = "http://packages.debian.org/%s",
+    py = "http://starship.python.net/crew/theller/pyhelp.cgi?keyword=%s&version=current",
+    pydev = "http://starship.python.net/crew/theller/pyhelp.cgi?keyword=%s&version=devel",
+    e2 = "http://www.everything2.org/?node=%s",
+    encz = "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=0&ecd_lines=15&ecd_hptxt=0",
+    czen = "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=1&ecd_lines=15&ecd_hptxt=0",
+    dict = "http://www.dictionary.com/cgi-bin/dict.pl?db=%%2A&term=%s",
+    whatis = "http://uptime.netcraft.com/up/graph/?host=%s",
+    -- rfc by number
+    rfc = "http://www.rfc-editor.org/rfc/rfc%s.txt",
+    -- rfc search
+    rfcs = "http://www.rfc-editor.org/cgi-bin/rfcsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25",
+    cr   = "http://www.rfc-editor.org/cgi-bin/rfcsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25",
+    -- Internet Draft search
+    rfcid = "http://www.rfc-editor.org/cgi-bin/idsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25",
+    id    = "http://www.rfc-editor.org/cgi-bin/idsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25",
+    draft = "http://www.rfc-editor.org/cgi-bin/idsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25",
+}
+
 function goto_url_hook (url, current_url)
+    if dumbbookmarks[url] then
+        return dumbbookmarks[url]
+    end
 
-    -- FIXME: Use a table instead of if ... else ... else ...
+    if strfind(url,'%s') or strfind(url, ':') then
+        local _,_,nick,val = strfind(url, "^([^%s]+)[:%s]%s*(.-)%s*$")
+        if smartbookmarks[nick] then
+            val = plusify(val)
+            return format(smartbookmarks[nick], val)
+        end
+    end
 
-    -- Google search.
-    if match ("gg:", url) then
-        url = plusify (strip (strsub (url, 4)))
-        return "http://www.google.com/search?q="..url.."&btnG=Google+Search"
- 
-    elseif match ("go:", url) then
-        url = plusify (strip (strsub (url, 4)))
-        return "http://www.google.com/search?q="..url.."&btnG=Google+Search"
- 
-    -- Freshmeat search.
-    elseif match ("fm:", url) then
-        url = plusify (strip (strsub (url, 4)))
-        return "http://www.freshmeat.net/search/?q="..url
-
-    -- E2 search.
-    elseif match ("e2:", url) then
-        url = plusify (strip (strsub (url, 4)))
-        return "http://www.everything2.org/?node="..url
- 
-    -- RFC retreiving by number.
-    elseif match ("rfc:", url) then
-        url = plusify (strip (strsub (url, 5)))
-        return "http://www.rfc-editor.org/rfc/rfc"..url..".txt"
- 
-    -- RFC search. (Comment Request ;-)
-    elseif match ("cr:", url) then
-        url = plusify (strip (strsub (url, 4)))
-        return "http://www.rfc-editor.org/cgi-bin/rfcsearch.pl?searchwords="..url.."&format=http&abstract=abson&keywords=keyon&num=25"
-
-    -- Slovnik.cz search (czech <-> english).
-    elseif match ("encz:", url) then
-        url = plusify (strip (strsub (url, 6)))
-	return "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb="..url.."&ecd_trn=translate&ecd_trn_dir=0&ecd_lines=15&ecd_hptxt=0"
- 
-    elseif match ("czen:", url) then
-        url = plusify (strip (strsub (url, 6)))
-	return "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb="..url.."&ecd_trn=translate&ecd_trn_dir=1&ecd_lines=15&ecd_hptxt=0"
- 
-    -- Dictionary.com search.
-    elseif match ("dict:", url) then
-        url = plusify (strip (strsub (url, 6)))
-        return "http://www.dictionary.com/cgi-bin/dict.pl?db=%2A&term="..url
-
-    -- Netcraft.com search.
-    elseif match ("whatis:", url) then
-        url = plusify (strip (strsub (url, 8)))
-        return "http://uptime.netcraft.com/up/graph/?host="..url
- 
     -- Expand ~ to home directories.
-    elseif match ("~", url) then
+    if match ("~", url) then
         if strsub(url, 2, 2) == "/" then    -- ~/foo
             return home_dir..strsub(url, 2)
         else                                -- ~foo/bar
             return "/home/"..strsub(url, 2)
         end
+    end
 
     -- Don't take localhost as directory name
-    elseif match("localhost", url) then
+    if match("localhost", url) then
 	return "http://"..url
+    end
 
     -- Unmatched.
-    else
-        return url
-    end
+    return url
 end
 
 

@@ -5,14 +5,14 @@
 # Kalle Olavi Niemitalo <kon@iki.fi> 2004-12-06: yhdistin CVS-versiosta
 # Kalle Olavi Niemitalo <kon@iki.fi> 2004-12-07: t‰ydensin
 # Kalle Olavi Niemitalo <kon@iki.fi> 2004-12-25: yhdistin CVS-versiosta ja korjasin
+# Kalle Olavi Niemitalo <kon@iki.fi> 2004-12-26: poistin vanhentuneita ja t‰ydensin
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-12-24 17:55+0100\n"
-"PO-Revision-Date: 2004-12-25 13:28+0200\n"
+"PO-Revision-Date: 2004-12-26 21:44+0200\n"
 "Last-Translator: Kalle Olavi Niemitalo <kon@iki.fi>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr "Tieto"
 
 #: src/bfu/hierbox.c:445
 msgid "Press space to expand this folder."
-msgstr ""
+msgstr "Voit laventaa kansion painamalla v‰lilyˆnti‰."
 
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:458 src/bfu/hierbox.c:638
 #: src/bfu/hierbox.c:945 src/bfu/hierbox.c:974 src/bfu/inpfield.c:69
@@ -133,21 +133,23 @@ msgid "Delete item"
 msgstr "Poista"
 
 #: src/bfu/hierbox.c:785
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete \"%s\"?\n"
 "\n"
 "%s"
-msgstr "Poista kirjanmerkki"
+msgstr ""
+"Poistatko kohdan \"%s\"?\n"
+"\n"
+"%s"
 
 #: src/bfu/hierbox.c:842
 msgid "Clear all items"
-msgstr ""
+msgstr "Tyhjenn‰ kaikki kohdat"
 
 #: src/bfu/hierbox.c:843
-#, fuzzy
 msgid "Do you really want to remove all items?"
-msgstr "Haluatko poistua Linksist‰?"
+msgstr "Haluatko tosiaan poistaa kaikki kohdat?"
 
 #: src/bfu/hierbox.c:940 src/bfu/hierbox.c:973 src/bookmarks/dialogs.c:451
 #: src/cache/dialogs.c:222 src/config/dialogs.c:523 src/config/dialogs.c:945
@@ -160,7 +162,7 @@ msgstr "Etsi"
 #: src/bfu/hierbox.c:942 src/viewer/text/search.c:987
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
-msgstr "Hakumerkkijonoa ei lˆytynyt"
+msgstr "Hakumerkkijonoa \"%s\" ei lˆytynyt"
 
 #: src/bfu/hierbox.c:973 src/config/dialogs.c:188 src/config/dialogs.c:209
 #: src/config/dialogs.c:376 src/config/dialogs.c:497 src/cookies/dialogs.c:137
@@ -704,7 +706,7 @@ msgstr ""
 
 #: src/config/cmdline.c:619
 msgid "Name of directory with configuration file"
-msgstr ""
+msgstr "Asetustiedoston sis‰lt‰v‰n hakemiston nimi"
 
 #: src/config/cmdline.c:621
 msgid ""
@@ -809,7 +811,7 @@ msgstr ""
 
 #: src/config/cmdline.c:682
 msgid "Only permit local connections"
-msgstr ""
+msgstr "Salli vain paikalliset yhteydet"
 
 #: src/config/cmdline.c:684
 msgid ""
@@ -882,7 +884,7 @@ msgstr ""
 
 #: src/config/cmdline.c:720
 msgid "Control an already running ELinks"
-msgstr ""
+msgstr "Ohjaa k‰ynniss‰ olevaa ELinksi‰"
 
 #: src/config/cmdline.c:722
 msgid ""
@@ -955,9 +957,10 @@ msgid ""
 "\t2 means show all messages"
 msgstr ""
 
+# "ja poistu"?
 #: src/config/cmdline.c:773
 msgid "Print version information and exit"
-msgstr ""
+msgstr "N‰yt‰ versiotiedot ja lopeta"
 
 #: src/config/cmdline.c:775
 msgid "Print ELinks version information and exit."
@@ -3495,17 +3498,15 @@ msgstr "Valitse kentt‰"
 msgid "Unselected tab colors."
 msgstr "Poista taustayhteydet"
 
-# vai "latautuva v‰lilehti"?
 #: src/config/options.inc:1030
 msgid "Loading tab"
-msgstr "Lataava v‰lilehti"
+msgstr "Latautuva v‰lilehti"
 
 #: src/config/options.inc:1032
 msgid "Tab colors for tabs that are loading in the background."
 msgstr ""
 
 #: src/config/options.inc:1034
-#, fuzzy
 msgid "Selected tab"
 msgstr "Valittu v‰lilehti"
 
@@ -4600,9 +4601,8 @@ msgid "Directories:"
 msgstr ""
 
 #: src/dialogs/menu.c:956
-#, fuzzy
 msgid "Files:"
-msgstr "Tiedosto"
+msgstr "Tiedostot:"
 
 #: src/dialogs/options.c:146
 msgid "Terminal options"
@@ -4610,7 +4610,7 @@ msgstr "Terminaaliasetukset"
 
 #: src/dialogs/options.c:151
 msgid "Frame handling:"
-msgstr ""
+msgstr "Kehysten k‰sittely:"
 
 #: src/dialogs/options.c:152
 msgid "No frames"
@@ -4618,39 +4618,35 @@ msgstr "Ei kehyksi‰"
 
 #: src/dialogs/options.c:153
 msgid "VT 100 frames"
-msgstr "VT 100 kehykset"
+msgstr "VT 100 -kehykset"
 
 #: src/dialogs/options.c:154
 msgid "Linux or OS/2 frames"
-msgstr "Linux tai OS/2 kehykset"
+msgstr "Linux- tai OS/2-kehykset"
 
 #: src/dialogs/options.c:155
-#, fuzzy
 msgid "FreeBSD frames"
-msgstr "Ei kehyksi‰"
+msgstr "FreeBSD-kehykset"
 
 #: src/dialogs/options.c:156
 msgid "KOI8-R frames"
-msgstr "KOI8-R kehykset"
+msgstr "KOI8-R-kehykset"
 
 #: src/dialogs/options.c:158
-#, fuzzy
 msgid "Color mode:"
-msgstr "V‰ri"
+msgstr "V‰rit:"
 
 #: src/dialogs/options.c:159
 msgid "No colors (mono)"
-msgstr ""
+msgstr "Ei v‰rej‰ (yksiv‰ri)"
 
 #: src/dialogs/options.c:160
-#, fuzzy
 msgid "16 colors"
-msgstr "Tekstialue"
+msgstr "16 v‰ri‰"
 
 #: src/dialogs/options.c:162
-#, fuzzy
 msgid "256 colors"
-msgstr "Tekstialue"
+msgstr "256 v‰ri‰"
 
 #: src/dialogs/options.c:165
 msgid "Use ^[[11m"
@@ -4662,7 +4658,7 @@ msgstr "Neliˆosoitin"
 
 #: src/dialogs/options.c:168
 msgid "Transparency"
-msgstr ""
+msgstr "L‰pin‰kyvyys"
 
 #: src/dialogs/options.c:170
 msgid "UTF-8 I/O"
@@ -5071,9 +5067,8 @@ msgid "Maximum number of entries in the global history."
 msgstr ""
 
 #: src/globhist/globhist.c:72
-#, fuzzy
 msgid "Display style"
-msgstr "N‰yt‰ kartta"
+msgstr "Esitysmuoto"
 
 #: src/globhist/globhist.c:74
 msgid ""
@@ -5088,10 +5083,10 @@ msgstr ""
 msgid "Global History"
 msgstr "Ei historiaa"
 
+# ymp‰ristˆmuuttujilla m‰‰r‰tty
 #: src/intl/gettext/libintl.c:24
-#, fuzzy
 msgid "System"
-msgstr "j‰rjestelm‰n"
+msgstr "j‰rjestelm‰n kieli"
 
 #: src/intl/gettext/libintl.c:25
 msgid "English"
@@ -5099,36 +5094,41 @@ msgstr "englanti"
 
 #: src/intl/gettext/libintl.c:27
 msgid "Belarusian"
-msgstr ""
+msgstr "valkoven‰j‰"
 
 #: src/intl/gettext/libintl.c:28
 msgid "Brazilian Portuguese"
 msgstr ""
 
 #: src/intl/gettext/libintl.c:29
+#, fuzzy
 msgid "Bulgarian"
 msgstr "bulgaria"
 
 #: src/intl/gettext/libintl.c:30
 msgid "Catalan"
-msgstr ""
+msgstr "katalaani"
 
 #: src/intl/gettext/libintl.c:31
 msgid "Croatian"
-msgstr ""
+msgstr "kroatia"
 
+# FIXME: T‰‰ll‰ pit‰isi olla sh:n sijasta U+0161, mutta ISO-8859-1 ei
+# tue koko merkki‰. ISO-8859-15 ja UTF-8 kyll‰ tukevat. Mieluummin
+# k‰ytt‰isin UTF-8:aa, koska sill‰ saisin myˆs hienommat lainausmerkit
+# (U+201D), mutta muunnoksissa tuntui viel‰ olevan jotakin h‰ikk‰‰.
+# ISO-8859-15:t‰ en viel‰ ole kokeillut.
 #: src/intl/gettext/libintl.c:32
-#, fuzzy
 msgid "Czech"
-msgstr "tsekki"
+msgstr "tshekki"
 
 #: src/intl/gettext/libintl.c:33
 msgid "Danish"
-msgstr ""
+msgstr "tanska"
 
 #: src/intl/gettext/libintl.c:34
 msgid "Dutch"
-msgstr ""
+msgstr "hollanti"
 
 #: src/intl/gettext/libintl.c:35
 msgid "Estonian"
@@ -5172,7 +5172,7 @@ msgstr "italia"
 
 #: src/intl/gettext/libintl.c:45
 msgid "Lithuanian"
-msgstr ""
+msgstr "liettua"
 
 #: src/intl/gettext/libintl.c:46
 msgid "Norwegian"
@@ -5187,7 +5187,6 @@ msgid "Portuguese"
 msgstr "portugali"
 
 #: src/intl/gettext/libintl.c:49
-#, fuzzy
 msgid "Romanian"
 msgstr "romania"
 
@@ -5197,7 +5196,7 @@ msgstr "ven‰j‰"
 
 #: src/intl/gettext/libintl.c:51
 msgid "Slovak"
-msgstr ""
+msgstr "slovakki"
 
 #: src/intl/gettext/libintl.c:52
 msgid "Spanish"
@@ -5213,7 +5212,7 @@ msgstr "turkki"
 
 #: src/intl/gettext/libintl.c:55
 msgid "Ukrainian"
-msgstr ""
+msgstr "ukraina"
 
 #: src/lowlevel/home.c:122
 #, c-format
@@ -5236,32 +5235,32 @@ msgstr ""
 #: src/lowlevel/interlink.c:340
 #, c-format
 msgid "accept() failed: %d (%s)"
-msgstr ""
+msgstr "accept() ep‰onnistui: %d (%s)"
 
 #: src/lowlevel/interlink.c:380 src/lowlevel/interlink.c:441
 #, c-format
 msgid "socket() failed: %d (%s)"
-msgstr ""
+msgstr "socket() ep‰onnistui: %d (%s)"
 
 #: src/lowlevel/interlink.c:389
 #, c-format
 msgid "bind() failed: %d (%s)"
-msgstr ""
+msgstr "bind() ep‰onnistui: %d (%s)"
 
 #: src/lowlevel/interlink.c:409
 #, c-format
 msgid "listen() failed: %d (%s)"
-msgstr ""
+msgstr "listen() ep‰onnistui: %d (%s)"
 
 #: src/lowlevel/interlink.c:454
 #, c-format
 msgid "connect() failed: %d (%s)"
-msgstr ""
+msgstr "connect() ep‰onnistui: %d (%s)"
 
 #: src/lowlevel/select.c:339
 #, c-format
 msgid "select() failed: %d (%s)"
-msgstr ""
+msgstr "select() ep‰onnistui: %d (%s)"
 
 #. Infinite loop prevention.
 #: src/lowlevel/select.c:342
@@ -5271,7 +5270,7 @@ msgstr ""
 
 #: src/main.c:145
 msgid "Cannot create a pipe for internal communication."
-msgstr ""
+msgstr "Sis‰ist‰ viestint‰‰ varten ei voi luoda putkea."
 
 #: src/main.c:205
 #, c-format
@@ -5285,7 +5284,7 @@ msgstr ""
 #. The remote session(s) can not be created
 #: src/main.c:220
 msgid "No remote session to connect to."
-msgstr ""
+msgstr "Ei ole et‰istuntoa mihin yhdist‰‰."
 
 #: src/main.c:229
 msgid "Unable to encode session info."
@@ -5346,14 +5345,13 @@ msgstr ""
 
 #: src/mime/backend/default.c:64 src/mime/backend/mailcap.c:104
 msgid "Ask before opening"
-msgstr ""
+msgstr "Kysy ennen avaamista"
 
 #: src/mime/backend/default.c:66
 msgid "Ask before opening."
-msgstr ""
+msgstr "Kysy ennen avaamista."
 
 #: src/mime/backend/default.c:68
-#, fuzzy
 msgid "Block terminal"
 msgstr "Varaa p‰‰te"
 
@@ -5367,11 +5365,12 @@ msgid "Program"
 msgstr "Ohjelma"
 
 #: src/mime/backend/default.c:74
-#, c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
 msgstr ""
+"Ulkoinen katseluohjelma t‰lle tiedostotyypille. Merkkijonossa oleva\n"
+"%-merkki korvataan tiedoston nimell‰."
 
 #: src/mime/backend/default.c:78
 #, fuzzy
@@ -5553,9 +5552,8 @@ msgid "No Backtrace"
 msgstr "Siirry takaisin"
 
 #: src/modules/version.c:120
-#, fuzzy
 msgid "No mouse"
-msgstr "documentit"
+msgstr "Ei hiirt‰"
 
 #: src/osdep/newwin.c:22
 msgid "~Xterm"
@@ -5600,9 +5598,8 @@ msgid "Realm"
 msgstr ""
 
 #: src/protocol/auth/dialogs.c:171
-#, fuzzy
 msgid "none"
-msgstr "Tieto"
+msgstr "ei mik‰‰n"
 
 #: src/protocol/auth/dialogs.c:174
 #, fuzzy
@@ -5626,7 +5623,7 @@ msgstr ""
 msgid "Sorry, but auth entry \"%s\" is being used by something else."
 msgstr ""
 
-# "tunnistetiedot" viittaisi enemm‰nkin palvelimelle j‰‰viin lokitietoihin.
+# "Tunnistetiedot" viittaisi enemm‰nkin palvelimelle j‰‰viin lokitietoihin.
 #. delete_marked_items_title
 #: src/protocol/auth/dialogs.c:220
 msgid "Delete marked auth entries"
@@ -5634,32 +5631,28 @@ msgstr "Poista merkityt tunnistustiedot"
 
 #. delete_marked_items
 #: src/protocol/auth/dialogs.c:222
-#, fuzzy
 msgid "Delete marked auth entries?"
-msgstr "Valitse kentt‰"
+msgstr "Poistatko merkityt tunnistustiedot?"
 
 #. delete_item_title
 #: src/protocol/auth/dialogs.c:228
-#, fuzzy
 msgid "Delete auth entry"
-msgstr "Poista"
+msgstr "Poista tunnistustieto"
 
 #. delete_item
 #: src/protocol/auth/dialogs.c:230
 msgid "Delete this auth entry?"
-msgstr ""
+msgstr "Poistatko t‰m‰n tunnistustiedon?"
 
 #. clear_all_items_title
 #: src/protocol/auth/dialogs.c:232
-#, fuzzy
 msgid "Clear all auth entries"
-msgstr "Lataa kuva"
+msgstr "Tyhjenn‰ kaikki tunnistustiedot"
 
 #. clear_all_items_title
 #: src/protocol/auth/dialogs.c:234
-#, fuzzy
 msgid "Do you really want to remove all auth entries?"
-msgstr "Haluatko poistua Linksist‰?"
+msgstr "Haluatko tosiaan poistaa kaikki tunnistustiedot?"
 
 #: src/protocol/auth/dialogs.c:261
 #, fuzzy
@@ -5667,18 +5660,16 @@ msgid "Authentication manager"
 msgstr "Kirjanmerkkimuokkain"
 
 #: src/protocol/file/file.c:38
-#, fuzzy
 msgid "Local files"
-msgstr "tiedostoa"
+msgstr "Paikalliset tiedostot"
 
 #: src/protocol/file/file.c:40
 msgid "Options specific to local browsing."
 msgstr ""
 
 #: src/protocol/file/file.c:43 src/protocol/file/file.c:55
-#, fuzzy
 msgid "Local CGI"
-msgstr "tiedostoa"
+msgstr "Paikallinen CGI"
 
 #: src/protocol/file/file.c:45
 #, fuzzy
@@ -5691,7 +5682,7 @@ msgstr ""
 
 #: src/protocol/file/file.c:51 src/protocol/file/file.c:63
 msgid "Allow local CGI"
-msgstr ""
+msgstr "Salli paikallinen CGI"
 
 #: src/protocol/file/file.c:53
 msgid "Whether to execute local CGI scripts."
@@ -5713,7 +5704,7 @@ msgstr ""
 
 #: src/protocol/file/file.c:68
 msgid "Allow reading special files"
-msgstr ""
+msgstr "Anna lukea erikoistiedostoja"
 
 #: src/protocol/file/file.c:70
 msgid ""
@@ -5721,9 +5712,12 @@ msgid ""
 "/dev/urandom or /dev/zero can ruin your day!)"
 msgstr ""
 
+# Unixissa tiedosto on piilossa, jos sen nimi alkaa pisteell‰.
+# Tiedostoa ei siis voi piilottaa muuttamatta sen nime‰.
+# Siksi t‰ss‰ ei ole "piilotetut tiedostot".
 #: src/protocol/file/file.c:73
 msgid "Show hidden files in directory listing"
-msgstr ""
+msgstr "N‰yt‰ piilotiedostot hakemistolistauksissa"
 
 #: src/protocol/file/file.c:75
 msgid ""
@@ -5746,7 +5740,6 @@ msgstr ""
 
 #. name:
 #: src/protocol/file/file.c:89
-#, fuzzy
 msgid "File"
 msgstr "Tiedosto"
 
@@ -5777,7 +5770,7 @@ msgstr ""
 #: src/protocol/http/http.c:175
 #, fuzzy
 msgid "Host and port-number"
-msgstr "Ei numero"
+msgstr "Palvelin ja portin numero"
 
 #: src/protocol/ftp/ftp.c:63
 msgid ""
@@ -5841,7 +5834,7 @@ msgstr ""
 #. name:
 #: src/protocol/http/http.c:57 src/protocol/http/http.c:185
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: src/protocol/http/http.c:59
 msgid "HTTP-specific options."
@@ -5849,7 +5842,7 @@ msgstr ""
 
 #: src/protocol/http/http.c:62
 msgid "Server bug workarounds"
-msgstr ""
+msgstr "Palvelinten vikojen kierto"
 
 #: src/protocol/http/http.c:64
 msgid "Server-side HTTP bugs workarounds."
@@ -5857,13 +5850,15 @@ msgstr ""
 
 #: src/protocol/http/http.c:66
 msgid "Do not send Accept-Charset"
-msgstr ""
+msgstr "ƒl‰ l‰het‰ Accept-Charseti‰"
 
 #: src/protocol/http/http.c:68
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 msgstr ""
+"Accept-Charset-otsake on aika pitk‰, ja sen saadessaan jotkin\n"
+"harvinaiset palvelimet voivat toimia v‰‰rin."
 
 #: src/protocol/http/http.c:71
 msgid "Allow blacklisting"
@@ -5911,9 +5906,8 @@ msgid ""
 msgstr ""
 
 #: src/protocol/http/http.c:98
-#, fuzzy
 msgid "Username"
-msgstr "nimi"
+msgstr "K‰ytt‰j‰tunnus"
 
 #: src/protocol/http/http.c:100
 msgid "Proxy authentication username."
@@ -6015,7 +6009,7 @@ msgstr ""
 
 #: src/protocol/http/http.c:167
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: src/protocol/http/http.c:169
 #, fuzzy
@@ -6188,7 +6182,7 @@ msgstr ""
 #. name:
 #: src/protocol/smb/smb.c:73 src/protocol/smb/smb.c:85
 msgid "SMB"
-msgstr ""
+msgstr "SMB"
 
 #: src/protocol/smb/smb.c:75
 #, fuzzy
@@ -6265,7 +6259,7 @@ msgid ""
 msgstr "Virhe ladattaessa"
 
 #: src/sched/download.c:366
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Download complete:\n"
 "%s"
@@ -6276,7 +6270,7 @@ msgstr ""
 #: src/sched/download.c:504
 #, c-format
 msgid "'%s' is a directory."
-msgstr ""
+msgstr "\"%s\" on hakemisto."
 
 #: src/sched/download.c:540
 msgid "File exists"
@@ -6294,15 +6288,15 @@ msgstr ""
 
 #: src/sched/download.c:548
 msgid "Save under the alternative name"
-msgstr ""
+msgstr "Tallenna vaihtoehtoisella nimell‰"
 
 #: src/sched/download.c:549
 msgid "Overwrite the original file"
-msgstr ""
+msgstr "Kirjoita alkuper‰isen tiedoston p‰‰lle"
 
 #: src/sched/download.c:550
 msgid "Resume download of the original file"
-msgstr ""
+msgstr "Jatka alkuper‰isen tiedoston latausta"
 
 #: src/sched/download.c:598
 #, fuzzy, c-format
@@ -6505,16 +6499,15 @@ msgstr "Tiedostoa ei lˆydy"
 
 #: src/sched/error.c:83
 msgid "FTP file error"
-msgstr "FTP tiedostovirhe"
+msgstr "FTP-tiedostovirhe"
 
 #: src/sched/error.c:87
 msgid "SSL error"
 msgstr "SSL-virhe"
 
 #: src/sched/error.c:89
-#, fuzzy
 msgid "This version of ELinks does not contain SSL/TLS support"
-msgstr "T‰m‰ Linksin versio ei  SSL/TSL:‰‰"
+msgstr "T‰ss‰ ELinksin versiossa ei ole SSL/TLS-tukea"
 
 #: src/sched/error.c:92
 msgid "JavaScript support is not enabled."
@@ -6573,14 +6566,14 @@ msgid "Welcome"
 msgstr "Tervetuloa"
 
 #: src/sched/session.c:744
-#, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
 "Press ESC for menu. Documentation is available in Help menu."
 msgstr ""
-"Paina ESC niin saat ohjeen. Valitse Ohje->Ohjekirja valikosta niin saat "
-"k‰yttˆohjeet."
+"Tervetuloa ELinksiin!\n"
+"\n"
+"Paina ESC niin saat valikon. Ohje-valikossa on k‰yttˆohjeita."
 
 #: src/sched/task.c:239
 #, c-format
@@ -6591,6 +6584,11 @@ msgid ""
 "\n"
 "Do you want to go to URL %s?"
 msgstr ""
+"Olit v‰h‰ll‰ seurata URL:‰‰, joka on ehk‰ laadittu harhauttamaan\n"
+"sinua. Seuraamalla t‰t‰ URL:‰‰ otat yhteyden palvelimeen \"%s\"\n"
+"k‰ytt‰j‰tunnuksella \"%s\".\n"
+"\n"
+"Haluatko menn‰ osoitteeseen %s?"
 
 #: src/sched/task.c:249
 #, fuzzy, c-format
@@ -6620,15 +6618,15 @@ msgstr ""
 
 #: src/scripting/lua/core.c:590
 msgid "Lua Error"
-msgstr ""
+msgstr "Lua-virhe"
 
 #: src/scripting/lua/core.c:716
 msgid "Lua Console"
-msgstr ""
+msgstr "Lua-konsoli"
 
 #: src/scripting/lua/core.c:716
 msgid "Enter expression"
-msgstr ""
+msgstr "Kirjoita lauseke"
 
 #. name:
 #: src/scripting/scripting.c:36
@@ -6637,7 +6635,7 @@ msgstr ""
 
 #: src/ssl/ssl.c:72 src/ssl/ssl.c:157
 msgid "Verify certificates"
-msgstr ""
+msgstr "Tarkista varmenteet"
 
 #: src/ssl/ssl.c:74
 msgid ""
@@ -6681,12 +6679,11 @@ msgstr ""
 #. name:
 #: src/ssl/ssl.c:178 src/ssl/ssl.c:195
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: src/ssl/ssl.c:180
-#, fuzzy
 msgid "SSL options."
-msgstr "Tallenna a~setukset"
+msgstr "SSL-asetukset."
 
 #: src/terminal/event.c:71
 #, c-format
@@ -6764,7 +6761,7 @@ msgstr "Tyhjenn‰ kaavake"
 
 #: src/viewer/text/form.c:1429
 msgid "Harmless button"
-msgstr ""
+msgstr "Harmiton painike"
 
 #: src/viewer/text/form.c:1437
 msgid "Submit form to"
@@ -6814,7 +6811,7 @@ msgstr ""
 #: src/viewer/text/form.c:1524
 #, c-format
 msgid "press %s to edit"
-msgstr ""
+msgstr "paina %s muokataksesi"
 
 #: src/viewer/text/form.c:1548
 #, fuzzy, c-format
@@ -6872,7 +6869,7 @@ msgstr "L‰het‰ kaavake"
 
 #: src/viewer/text/link.c:1179
 msgid "Submit form and rel~oad"
-msgstr ""
+msgstr "L‰het‰ kaavake ja lataa uudestaan"
 
 #: src/viewer/text/link.c:1183
 msgid "Submit form and open in new ~window"
@@ -6982,7 +6979,7 @@ msgstr ""
 
 #: src/viewer/text/textarea.c:373
 msgid "You can do this only on the master terminal"
-msgstr ""
+msgstr "Voit tehd‰ t‰m‰n vain p‰‰p‰‰tteell‰"
 
 #: src/viewer/text/view.c:722
 msgid "Go to link"
@@ -7000,31 +6997,11 @@ msgstr "Talletusvirhe"
 msgid "Error writing to file"
 msgstr "Virhe tiedostoon kirjoittaessa"
 
-#, fuzzy
-#~ msgid "Leet"
-#~ msgstr "Poista"
-
-#, fuzzy
-#~ msgid "Expand table columns"
-#~ msgstr "nimi"
-
 #~ msgid "Memory info"
 #~ msgstr "Tietoa muistista"
 
 #~ msgid "~Memory info"
 #~ msgstr "Tietoa ~muistista"
-
-#, fuzzy
-#~ msgid "Is the current link bookmarked"
-#~ msgstr "N‰yt‰ kuva"
-
-#, fuzzy
-#~ msgid "Is the current location bookmarked"
-#~ msgstr "N‰yt‰ kuva"
-
-#, fuzzy
-#~ msgid "Is the current link is the history"
-#~ msgstr "Avaa uuteen ikkunaan"
 
 #, fuzzy
 #~ msgid "Delete bookmark's folder"
@@ -7038,16 +7015,8 @@ msgstr "Virhe tiedostoon kirjoittaessa"
 #~ msgid "Save formatted document"
 #~ msgstr "Tallenna muotoiltu ~dokumentti"
 
-#, fuzzy
-#~ msgid "This version of ELinks does not contain finger protocol support"
-#~ msgstr "T‰m‰ Linksin versio ei  SSL/TSL:‰‰"
-
 #~ msgid "Number out of range"
 #~ msgstr "Numero yli lukualueen"
-
-#, fuzzy
-#~ msgid "Move the current tab one step back"
-#~ msgstr "Avaa uuteen ikkunaan"
 
 #, fuzzy
 #~ msgid "Default document codepage."

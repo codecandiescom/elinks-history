@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.4 2005/02/01 23:38:02 jonas Exp $
+## $Id: Makefile.am,v 1.5 2005/02/01 23:47:53 jonas Exp $
 
 EXTRA_DIST = README $(PACKAGE).pot $(POFILES) $(GMOFILES)
 
@@ -26,7 +26,7 @@ SUFFIXES = .po .gmo .mo
 .po.gmo:
 	@file=`echo $* | sed 's,.*/,,'`.gmo \
 	  && rm -f $$file && echo -n $*": " \
-	  && $(GMSGFMT) --check --verbose --statistics -o $$file $<
+	  && $(GMSGFMT) --statistics -o $$file $<
 
 
 ### The default rule
@@ -91,6 +91,21 @@ update-po: Makefile $(srcdir)/$(PACKAGE).pot
 update-gmo: Makefile $(GMOFILES)
 	@:
 
+
+### Check single or all po files
+#
+
+check-po:
+	if test -n "$(PO)"; then \
+	  lang=`echo $(PO) | sed 's/\.po//'`; \
+	  catalogs=$$lang.gmo; \
+	fi; \
+	if test -z "$$catalogs"; then catalogs='$(GMOFILES)'; fi; \
+	for cat in $$catalogs; do \
+	  cat=`basename $$cat`; \
+	  lang=`echo $$cat | sed 's/\.gmo$$//'`; \
+	  $(GMSGFMT) --check --verbose --statistics -o /dev/null $$lang.po; \
+	done
 
 ### (Un)installation and distribution
 #

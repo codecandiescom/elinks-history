@@ -1,3 +1,25 @@
+Fri Mar  8 14:42:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* http.c:
+	
+	reindent referer switch, handle REFERER_NONE (silence gcc warning)
+
+Fri Mar  8 14:41:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* language.inc, intl/french.lng:
+	
+	french translation updates by zas
+
+Fri Mar  8 12:17:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c, links.h, menu.c:
+	
+	moved REFERER_* into enum.. also fixed one bug - 1 wasn't
+	REFERER_TRUE but REFERER_SAME_URL and 2 wasn't REFERER_SAME_URL but
+	REFERER_FAKE and 3 wasn't REFERER_FAKE but REFERER_TRUE ;) i hope
+	it'll still work now, please tell me if it'll break backwards
+	compatibility with old config..
+
 Fri Mar  8 10:49:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c, default.c, links.h:

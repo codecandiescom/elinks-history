@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.32 2003/05/08 21:50:07 zas Exp $ */
+/* $Id: tables.c,v 1.33 2003/05/13 15:48:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -716,11 +716,13 @@ scan_done:
 		}
 	}
 
-	t->r_heights = mem_calloc(t->y, sizeof(int));
-	if (t->y && !t->r_heights) {
-		free_table(t);
-		return NULL;
-	}
+	if (t->y) {
+		t->r_heights = mem_calloc(t->y, sizeof(int));
+		if (!t->r_heights) {
+			free_table(t);
+			return NULL;
+		}
+	} else t->r_heights = NULL;
 
 	for (x = 0; x < t->c; x++)
 		if (t->cols[x].width != W_AUTO)
@@ -881,6 +883,8 @@ static int
 get_column_widths(struct table *t)
 {
 	int i, j, s, ns;
+
+	if (!t->x) return -1; /* prevents calloc(0, sizeof(int)) calls */
 
 	if (!t->min_c) {
 		t->min_c = mem_calloc(t->x, sizeof(int));

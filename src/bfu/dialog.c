@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.157 2004/11/17 00:58:00 zas Exp $ */
+/* $Id: dialog.c,v 1.158 2004/11/17 01:01:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,19 +240,20 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 		return;
 
 	/* Can we select? */
-	if (action == ACT_MENU_SELECT
-	    && widget_data->widget->ops->select) {
-		widget_data->widget->ops->select(widget_data, dlg_data);
-		return;
+	if (action == ACT_MENU_SELECT) {
+		if (widget_data->widget->ops->select) {
+			widget_data->widget->ops->select(widget_data, dlg_data);
+			return;
+		}
 	}
 
 	/* Submit button. */
 	if (action == ACT_MENU_ENTER) {
-		if (widget_data->widget->ops->select)
+		if (widget_data->widget->ops->select) {
 			widget_data->widget->ops->select(widget_data, dlg_data);
 			return;
 		}
-		
+
 		if (widget_is_textfield(widget_data)
 		    || check_kbd_modifier(ev, KBD_CTRL)
 		    || check_kbd_modifier(ev, KBD_ALT)) {
@@ -284,13 +285,15 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 
 	/* Cycle focus. */
 	if (action == ACT_MENU_NEXT_ITEM
-	    || action == ACT_MENU_DOWN || action == ACT_MENU_RIGHT) {
+	    || action == ACT_MENU_DOWN
+	    || action == ACT_MENU_RIGHT) {
 		cycle_widget_focus(dlg_data, 1);
 			return;
 	}
 
 	if (action == ACT_MENU_PREVIOUS_ITEM
-	    || action == ACT_MENU_UP || action == ACT_MENU_LEFT) {
+	    || action == ACT_MENU_UP
+	    || action == ACT_MENU_LEFT) {
 		cycle_widget_focus(dlg_data, -1);
 		return;
 	}

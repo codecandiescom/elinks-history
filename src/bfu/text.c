@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.51 2003/11/09 15:05:17 pasky Exp $ */
+/* $Id: text.c,v 1.52 2003/11/09 15:07:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,8 +76,8 @@ dlg_format_text_do(struct terminal *term, unsigned char *text,
 }
 
 void
-layout_text_widget(struct terminal *term, struct widget_data *widget_data,
-		   int x, int *y, int dlg_width, int *real_width)
+dlg_format_text(struct terminal *term, struct widget_data *widget_data,
+		int x, int *y, int dlg_width, int *real_width)
 {
 	dlg_format_text_do(term, widget_data->widget->text,
 			x, y, dlg_width, real_width,

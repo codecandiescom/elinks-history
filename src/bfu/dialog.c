@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.86 2003/11/09 15:01:39 pasky Exp $ */
+/* $Id: dialog.c,v 1.87 2003/11/09 15:07:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,7 +397,7 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 			break;
 
 		case WIDGET_TEXT:
-			layout_text_widget(term, wdata, x, y, w, rw);
+			dlg_format_text(term, wdata, x, y, w, rw);
 			break;
 
 		/* We assume that the buttons are all stuffed at the very end

@@ -1,4 +1,4 @@
-/* $Id: text.h,v 1.13 2003/11/09 15:05:17 pasky Exp $ */
+/* $Id: text.h,v 1.14 2003/11/09 15:07:06 pasky Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
@@ -23,7 +23,7 @@ void dlg_format_text_do(struct terminal *term,
 		    struct color_pair *scolor, enum format_align align);
 
 void
-layout_text_widget(struct terminal *term, struct widget_data *widget_data,
-		   int x, int *y, int dlg_width, int *real_width);
+dlg_format_text(struct terminal *term, struct widget_data *widget_data,
+		int x, int *y, int dlg_width, int *real_width);
 
 #endif

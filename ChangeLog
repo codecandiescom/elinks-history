@@ -1,3 +1,66 @@
+Sun Oct 12 21:53:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre7 
+
+Sun Oct 12 20:36:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Some random changes my xgettext did.  
+
+Sun Oct 12 20:33:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Another small step in cs.po updates.  
+
+Sun Oct 12 19:35:00 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation updated.  
+
+Sun Oct 12 19:19:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: book/manpages/elinkskeys.5.xml, man/man5/elinkskeys.5:
+
+	Sync documentation fixes mentioned in Debian Bug#210305: man page
+	typos: "each of this keys" by <agcosta@gis.net>.  
+
+Sun Oct 12 15:28:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fixed standards-violating behaviour when we ignored TITLE outside of
+	HEAD tags pair (the HEAD element has both start and end tag
+	optional). Pointed out by DerBenni.  
+
+Sun Oct 12 10:12:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/leet.po:
+
+	Unfuzzing.  
+
+Sun Oct 12 10:03:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Unfuzzy and translate a few oneliners.  
+
+Sat Oct 11 22:13:29 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	French translation was updated, .po files were resynced.  
+
 Sat Oct 11 18:57:23 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/README:

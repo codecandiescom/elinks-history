@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.7 2002/04/06 16:51:24 pasky Exp $ */
+/* $Id: interlink.c,v 1.8 2002/04/06 16:57:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,6 +78,7 @@ int get_address()
 		mem_free(path);
 		return -1;
 	}
+	memset(addr, 0, sizeof(struct sockaddr_un) + strlen(path) + 1);
 
 	s_unix_accept = mem_alloc(sizeof(struct sockaddr_un) + strlen(path) + 1);
 	if (!s_unix_accept) {
@@ -93,7 +94,7 @@ int get_address()
 	mem_free(path);
 
 	s_unix = (struct sockaddr *) addr;
-	s_unix_l = (char *) &addr->sun_path - (char *) addr + strlen(addr->sun_path);
+	s_unix_l = (char *) &addr->sun_path - (char *) addr + strlen(addr->sun_path) + 1;
 
 	return AF_UNIX;
 }
@@ -117,6 +118,7 @@ int get_address()
 
 	sin = mem_alloc(sizeof(struct sockaddr_in));
 	if (!sin) return -1;
+	memset(sin, 0, sizeof(struct sockaddr_in));
 
 	s_unix_accept = mem_alloc(sizeof(struct sockaddr_in));
 	if (!s_unix_accept) {
@@ -150,10 +152,10 @@ int bind_to_af_unix()
 	af = get_address();
 	if (af == -1) return -1;
 
+again:
+
 	s_unix_fd = socket(af, SOCK_STREAM, 0);
 	if (s_unix_fd == -1) return -1;
-
-again:
 
 #if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
 	setsockopt(s_unix_fd, SOL_SOCKET, SO_REUSEADDR, (void *) &reuse_addr, sizeof(int));
@@ -231,6 +233,7 @@ void af_unix_connection(void *dummy)
 	int l = s_unix_l;
 	int ns;
 
+	memset(s_unix_accept, 0, l);
 	ns = accept(s_unix_fd, (struct sockaddr *) s_unix_accept, &l);
 
 	init_term(ns, ns, win_func);

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.142 2003/12/25 08:09:05 jonas Exp $ */
+/* $Id: search.c,v 1.143 2003/12/25 08:17:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -876,18 +876,12 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 			find_next_link_in_search(doc_view, ses->search_direction * 2);
 
 			if (!show_hit_top_bottom) return;
-			if (hit_bottom)
-				msg_box(ses->tab->term, NULL, 0,
-					N_("Search"), AL_CENTER,
-					N_("Search hit bottom, continuing at top."),
-					NULL, 1,
-					N_("OK"), NULL, B_ENTER | B_ESC);
-			if (hit_top)
-				msg_box(ses->tab->term, NULL, 0,
-					N_("Search"), AL_CENTER,
-					N_("Search hit top, continuing at bottom."),
-					NULL, 1,
-					N_("OK"), NULL, B_ENTER | B_ESC);
+			msg_box(ses->tab->term, NULL, 0,
+				N_("Search"), AL_CENTER,
+				hit_top ? N_("Search hit top, continuing at bottom.")
+					: N_("Search hit bottom, continuing at top."),
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
 			return;
 		}
 		p += step;

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-28 07:38+0100\n"
-"PO-Revision-Date: 2004-12-29 20:57+0100"
+"POT-Creation-Date: 2004-12-29 23:37+0100\n"
+"PO-Revision-Date: 2004-12-30 00:27+0100"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -562,298 +562,330 @@ msgstr "Slet denne cache-indgang?"
 msgid "Cache manager"
 msgstr "Cachehåndtering"
 
-#: src/config/cmdline.c:91
+#: src/config/cmdline.c:92
 #, c-format
 msgid "Cannot parse option %s: %s"
 msgstr "Fejl ved parsning af indstilingen %s: %s"
 
-#: src/config/cmdline.c:109
+#: src/config/cmdline.c:110
 #, c-format
 msgid "Unknown option %s"
 msgstr "Ukendt indstilling %s"
 
-#: src/config/cmdline.c:127 src/config/cmdline.c:151 src/config/cmdline.c:217
+#: src/config/cmdline.c:128 src/config/cmdline.c:152 src/config/cmdline.c:218
 #: src/config/opttypes.c:39
 msgid "Parameter expected"
 msgstr "Parameter forventet"
 
-#: src/config/cmdline.c:152
+#: src/config/cmdline.c:153
 msgid "Too many parameters"
 msgstr "For mange parametre"
 
-#: src/config/cmdline.c:157
+#: src/config/cmdline.c:158
 msgid "error"
 msgstr "fejl"
 
-#: src/config/cmdline.c:159 src/sched/error.c:47
+#: src/config/cmdline.c:160 src/sched/error.c:47
 msgid "Host not found"
 msgstr "Værtsmaskinen kan ikke lokaliseres"
 
-#: src/config/cmdline.c:173
+#: src/config/cmdline.c:174
 msgid "Resolver error"
 msgstr "Fejl ved lokalisering"
 
-#: src/config/cmdline.c:305
+#: src/config/cmdline.c:306
 msgid "Remote method not supported"
 msgstr "Fjernmetode kendes ikke"
 
-#: src/config/cmdline.c:357
+#: src/config/cmdline.c:358
 msgid "Template option folder"
 msgstr "Skabelon indstillingsmappe"
 
-#: src/config/cmdline.c:380
+#: src/config/cmdline.c:381
 #, c-format
 msgid "(default: %ld)"
 msgstr "(standardværdi: %ld)"
 
-#: src/config/cmdline.c:387 src/config/cmdline.c:416
+#: src/config/cmdline.c:388 src/config/cmdline.c:417
 #, c-format
 msgid "(default: \"%s\")"
 msgstr "(standardværdi: \"%s\")"
 
-#: src/config/cmdline.c:392
+#: src/config/cmdline.c:393
 #, c-format
 msgid "(alias for %s)"
 msgstr "(alias til %s)"
 
-#: src/config/cmdline.c:397 src/config/cmdline.c:406
+#: src/config/cmdline.c:398 src/config/cmdline.c:407
 #, c-format
 msgid "(default: %s)"
 msgstr "(standardværdi: %s)"
 
-#: src/config/cmdline.c:537
+#: src/config/cmdline.c:541
 msgid "Configuration options"
 msgstr "Konfigurationsindstillinger"
 
-#: src/config/cmdline.c:541
+#: src/config/cmdline.c:545
 msgid "Usage: elinks [OPTION]... [URL]"
 msgstr "Brug: elinks [INDSTILLING]... [URL]"
 
-#: src/config/cmdline.c:542
+#: src/config/cmdline.c:546
 msgid "Options"
 msgstr "Indstillinger"
 
-#: src/config/cmdline.c:584
+#: src/config/cmdline.c:588
 msgid "Internal consistency error"
 msgstr "Intern konsistensfejl"
 
-#: src/config/cmdline.c:601
+#: src/config/cmdline.c:605
 msgid "Restrict to anonymous mode"
 msgstr "Begræns til anonym tilstand"
 
-#: src/config/cmdline.c:603
+#: src/config/cmdline.c:607
 msgid ""
-"Restrict ELinks so that it can run on an anonymous account.\n"
-"No local file browsing, no downloads. Execution of viewers\n"
-"is allowed, but user can't add or modify entries in\n"
-"association table."
+"Restricts ELinks so it can run on an anonymous account.\n"
+"Local file browsing, downloads, and modification of option and\n"
+"will be disabled. Execution of viewers is allowed, but entries\n"
+"in the association table can't be added or modified."
 msgstr ""
-"Begræns ELinks så den kan køres på en anonym brugerkonto.\n"
-"Ingen læsning af lokale filer, ingen filoverførelser. Afvikling\n"
-"af eksterne visualiseringsprogrammer er tilladt, men brugeren\n"
-"kan ikke tilføje eller ændre indgange i filtypehåndteringstabellen."
+"Begræns ELinks så kørsel via en anonym brugerkonto er mulig.\n"
+"Læsning af lokale filer og mapper, filoverførelser og ændring\n"
+"af indstillinger er deaktiveret. Afvikling af programmer til\n"
+"ekstern visning er tilladt, men brugeren kan ikke tilføje eller\n"
+"ændre hvilke programmer, der er tilgængelige."
 
-#: src/config/cmdline.c:608
+#: src/config/cmdline.c:612
 msgid "Autosubmit first form"
 msgstr "Send automatisk den første formular"
 
-#: src/config/cmdline.c:610
+#: src/config/cmdline.c:614
 msgid "Automatically submit the first form in the given URLs."
 msgstr "Send automatisk den første formular i de givne URLer."
 
-#: src/config/cmdline.c:612
+#: src/config/cmdline.c:616
 msgid "Clone internal session with given ID"
 msgstr "Klon intern session med det givne ID"
 
-#: src/config/cmdline.c:614
+#: src/config/cmdline.c:618
 msgid ""
 "Used internally when opening ELinks instances in new windows.\n"
-"The ID maps to information used when creating the new instance\n"
-"You don't want to use it."
+"The ID maps to information that will be used when creating the\n"
+"new instance. You don't want to use it."
 msgstr ""
 "Bruges internt, når ELinks instanser åbnes i nye terminalvinduer.\n"
 "Det givne ID henviser til information som den nye instans baseres på.\n"
 "Dette programargument bør ikke benyttes."
 
-#: src/config/cmdline.c:620
+#: src/config/cmdline.c:624
 msgid "Name of directory with configuration file"
 msgstr "Navn på mappen med konfigurationsfilen"
 
-#: src/config/cmdline.c:622
+#: src/config/cmdline.c:626
 msgid ""
-"ELinks will read and write its config files to the given\n"
-"directory instead of ~/.elinks. If the path begins with\n"
-"a '/' its used as an absolute path. Else it is assumed to\n"
-"be relative to your HOME dir."
+"Path of the directory ELinks will read and write its\n"
+"config and runtime state files to instead of ~/.elinks.\n"
+"If the path does not begin with a '/' it is assumed to be\n"
+"relative to your HOME directory."
 msgstr ""
 
-#: src/config/cmdline.c:629
+#: src/config/cmdline.c:633
 msgid "Name of configuration file"
 msgstr "Navnet på konfigurationsfilen"
 
-#: src/config/cmdline.c:631
+#: src/config/cmdline.c:635
 msgid ""
-"Name of the file with configuration, from which and to\n"
-"which all the configuration shall be written. It should be\n"
+"Name of the configuration file that all configuration\n"
+"options will be read from and written to. It should be\n"
 "relative to config-dir."
 msgstr ""
+"Navnet på konfigurationsfilen som alle konfigurationsindstillinger\n"
+"vil blive læst fra eller skrevet til. Den bør angives relativ til\n"
+"config-dir."
 
-#: src/config/cmdline.c:635
+#: src/config/cmdline.c:639
 msgid "Print help for configuration options"
 msgstr "Udskriv hjælp for konfigurationsindstillinger"
 
-#: src/config/cmdline.c:637
-msgid "Print help on configuration options and exit."
+#: src/config/cmdline.c:641
+msgid "Print help for configuration options and exit."
 msgstr "Udskriv hjælp for konfigurationsindstillinger og afslut."
 
-#: src/config/cmdline.c:639
-msgid "MIME type to assume for documents"
-msgstr "MIME-typen som antages for dokumenter"
-
-#: src/config/cmdline.c:641
-msgid "Default MIME type to assume for documents of unknown type."
-msgstr "Standard MIME-typen som antages for dokumenter med ukendt type."
-
 #: src/config/cmdline.c:643
+msgid "MIME type assumed for unknown document types"
+msgstr "MIME-typen som antages for dokumenter af ukendt type"
+
+#: src/config/cmdline.c:645
+msgid "The default MIME type used for documents of unknown type."
+msgstr "Standard MIME-typen som antages for dokumenter af ukendt type."
+
+#: src/config/cmdline.c:647
 msgid "Ignore user-defined keybindings"
 msgstr "Ignorer brugerdefinerede tasteturgenveje"
 
-#: src/config/cmdline.c:645
+#: src/config/cmdline.c:649
 msgid ""
-"If set, parse but don't set keybindings from configuration\n"
-"file. It forces use of default keybindings and will reset\n"
+"When set, all keybindings from configuration files will be\n"
+"ignored. It forces use of default keybindings and will reset\n"
 "user-defined ones on save."
 msgstr ""
-
-#: src/config/cmdline.c:649
-msgid "Write formatted versions of given URLs to stdout"
-msgstr "Udskriv optegnet versioner af de givne URLer til standarduddata"
-
-#: src/config/cmdline.c:651
-msgid "Write formatted plain-text versions of the given URLs to stdout."
-msgstr "Udskriv optegnede text-versioner af de givne URLer til standarduddata."
+"Hvis aktiveret vil all tasteturgenveje fra konfigurationsfiler\n"
+"blive ignoreret. Dette tvinger brug af standard tasteturgenveje\n"
+"og vil nulstille brugerdefinerede genveje ved gemning."
 
 #: src/config/cmdline.c:653
+msgid "Print formatted versions of given URLs to stdout"
+msgstr "Udskriv optegnede versioner af de givne URLer til standarduddata"
+
+#: src/config/cmdline.c:655
+msgid "Print formatted plain-text versions of given URLs to stdout."
+msgstr "Udskriv optegnede text-versioner af de givne URLer til standarduddata."
+
+#: src/config/cmdline.c:657
 msgid "Codepage to use with -dump"
 msgstr "Tegnopsætning bruf for -dump"
 
-#: src/config/cmdline.c:655
-msgid "Codepage used in dump output."
-msgstr "Tegnopsætning brugt for -dump."
+#: src/config/cmdline.c:659
+msgid "Codepage used when formatting dump output."
+msgstr "Tegnopsætning brugt ved udskrivning af optegning dokumenter."
 
-#: src/config/cmdline.c:657
+#: src/config/cmdline.c:661
 msgid "Width of document formatted with -dump"
 msgstr "Bredde af dokumenter optegnet med -dump"
 
-#: src/config/cmdline.c:659
+#: src/config/cmdline.c:663
 msgid "Width of the dump output."
 msgstr "Bredde for uddata skrevet med -dump."
 
-#: src/config/cmdline.c:661
-msgid "Evaluate given configuration option"
-msgstr "Evaluer given konfigurationsindstilling"
+#: src/config/cmdline.c:665
+msgid "Evaluate configuration file directive"
+msgstr "Evaluer konfigurationsdirektiv"
 
-#: src/config/cmdline.c:663
+#: src/config/cmdline.c:667
 msgid ""
-"Specify elinks.conf config options on the command-line:\n"
-"  -eval 'set protocol.file.allow_special_files = 1'"
+"Specify configuration file directives on the command-line\n"
+"which will be evaluated after all configuration files has been\n"
+"read. Example usage:\n"
+"\t-eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
+"Angiv direktiv fra konfigurationsfil via kommandolinjen, som vil\n"
+"blive evalueret efter at alle konfigurationsfiler er blevet indlæst.\n"
+"Eksempel på brug:\n"
+"\t-eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
-#: src/config/cmdline.c:667
-msgid "Assume the file is HTML"
-msgstr "Antag at givne URLer er HTML-dokumenter"
+#: src/config/cmdline.c:673
+msgid "Interpret documents of unknown types as HTML"
+msgstr "Fortolk dokumenter af ukendt type som HTML"
 
-#: src/config/cmdline.c:669
+#: src/config/cmdline.c:675
 msgid ""
-"This makes ELinks assume that the files it sees are HTML. This is\n"
-"equivalent to -default-mime-type text/html."
+"Makes ELinks assume documents of unknown types are HTML.\n"
+"Useful when using ELinks as an external viewer from MUAs.\n"
+"This is equivalent to -default-mime-type text/html."
 msgstr ""
+"Gør at ELinks antager at dokumenter af ukendt type er HTML.\n"
+"Brugbart når ELinks anvendes som ekstern fremviser fra MUAs.\n"
+"Svarer til -default-mime-type text/html."
 
-#: src/config/cmdline.c:678
+#: src/config/cmdline.c:685
 msgid "Print usage help and exit"
 msgstr "Print brugervejledning og afslut"
 
-#: src/config/cmdline.c:680
+#: src/config/cmdline.c:687
 msgid "Print usage help and exit."
 msgstr "Print brugervejledning og afslut."
 
-#: src/config/cmdline.c:682
+#: src/config/cmdline.c:689
 msgid "Only permit local connections"
 msgstr "Tillad kun lokale forbindelser"
 
-#: src/config/cmdline.c:684
+#: src/config/cmdline.c:691
 msgid ""
-"Restrict ELinks so that it can only open connections to\n"
-"local addresses (ie. 127.0.0.1), it will prevent any connection\n"
-"to distant servers."
+"Restricts ELinks to work offline and only connect to servers\n"
+"with local addresses (ie. 127.0.0.1). No connections to remote\n"
+"servers will be permitted."
 msgstr ""
+"Begræns ELinks til at afbejde i afkoblet tilstand og kun at oprette\n"
+"forbindelse til servere med lokale netadresser (ie. 127.0.0.1).\n"
+"Ingen forbindelser til fjernservere er tilladt."
 
-#: src/config/cmdline.c:688
+#: src/config/cmdline.c:695
 msgid "Print detailed usage help and exit"
 msgstr "Print detaljeret brugervejledning og afslut"
 
-#: src/config/cmdline.c:690
+#: src/config/cmdline.c:697
 msgid "Print detailed usage help and exit."
 msgstr "Print detaljeret brugervejledning og afslut."
 
-#: src/config/cmdline.c:692
+#: src/config/cmdline.c:699
 msgid "Look up specified host"
 msgstr "Slå den specificerede værtsmaskine op"
 
-#: src/config/cmdline.c:694
+#: src/config/cmdline.c:701
 msgid "Look up specified host."
 msgstr "Slå den specificerede værtsmaskine op."
 
-#: src/config/cmdline.c:696
+#: src/config/cmdline.c:703
 msgid "Run as separate instance"
 msgstr "Kør som separat instans"
 
-#: src/config/cmdline.c:698
+#: src/config/cmdline.c:705
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
-"(bookmarks, history and so on) are written to the disk when\n"
-"this option is used. See also -touch-files."
+"(bookmarks, history, etc.) are written to the disk when this\n"
+"option is used. See also -touch-files."
 msgstr ""
+"Kør ELinks som en separat instans i stedet for at forbinde til\n"
+"en eksisterende instans. Bemærk at under nomale omstændigheder\n"
+"vil ingen kørselstidstilstandsfiler (bogmærker, historik, osv.)\n"
+"blive skrevet til disken, når denne indstilling anvendes.\n"
+"Se også -touch-files"
 
-#: src/config/cmdline.c:703
-msgid "Don't use files in ~/.elinks"
+#: src/config/cmdline.c:710
+msgid "Disable use of files in ~/.elinks"
 msgstr "Brug ikke filer fra ~/.elinks"
 
-#: src/config/cmdline.c:705
+#: src/config/cmdline.c:712
 msgid ""
 "Disables creation and use of files in the user specific home\n"
 "configuration directory (~/.elinks). It forces default configuration\n"
 "values to be used and disables saving of runtime state files."
 msgstr ""
+"Deaktiver oprettelse og anvendelse af filer i brugerens hjemme\n"
+"konfigurationsmappe (~/.elinks). Dette tvinger brug af standard\n"
+"værdier for indstillinger og slår skrivning af køreselstids\n"
+"tilstandsfiler fra."
 
-#: src/config/cmdline.c:709
-msgid "Do not number links in dump output"
+#: src/config/cmdline.c:716
+msgid "Disable link numbering in dump output"
 msgstr "Numerer ikke henvisninger i uddata fra -dump"
 
-#: src/config/cmdline.c:711
+#: src/config/cmdline.c:718
 msgid ""
-"Prevents numbering of links in the -dump output; this was the\n"
-"default behaviour until 0.5pre12.\n"
+"Prevents printing of link number in dump output.\n"
 "Note that this really affects only -dump, nothing else."
 msgstr ""
+"Deaktiverer nummerering af henvisninger i uddata fra -dump."
 
-#: src/config/cmdline.c:715
-msgid "Do not dump links references in dump output"
-msgstr "Vis ikke henvisningsreferencer (URLer) i uddata fra -dump"
+#: src/config/cmdline.c:721
+msgid "Disable printing of link references in dump output"
+msgstr "Skriv ikke henvisningsreferencer (URLer) i uddata fra -dump"
 
-#: src/config/cmdline.c:717
+#: src/config/cmdline.c:723
 msgid ""
-"Prevents dumping of links references (URIs) in the -dump output.\n"
+"Prevents printing of references (URIs) of document links\n"
+"in dump output.\n"
 "Note that this really affects only -dump, nothing else."
 msgstr ""
+"Deaktiverer udskrivning af henvisningsreferencer i uddata\n"
+"fra -dump."
 
-#: src/config/cmdline.c:720
+#: src/config/cmdline.c:727
 msgid "Control an already running ELinks"
 msgstr "Kontroller en allerede kørende ELinks"
 
-#: src/config/cmdline.c:722
+#: src/config/cmdline.c:729
 msgid ""
 "Mozilla compliant support for controlling a remote ELinks instance.\n"
 "The command takes an additional argument containing the method which\n"
@@ -861,20 +893,20 @@ msgid ""
 "For ease of use the additional method argument can be omitted in which\n"
 "case any URL arguments will be opened in new tabs in the remote instance.\n"
 "Following is a list of the methods that are supported:\n"
-"  ping()                    -- check for remote instance\n"
-"  openURL()                 -- prompt URL in current tab\n"
-"  openURL(URL)              -- open URL in current tab\n"
-"  openURL(URL, new-tab)     -- open URL in new tab\n"
-"  openURL(URL, new-window)  -- open URL in new window\n"
-"  addBookmark(URL)          -- bookmark URL\n"
-"  xfeDoCommand(openBrowser) -- open new window"
+"\tping()                    -- check for remote instance\n"
+"\topenURL()                 -- prompt URL in current tab\n"
+"\topenURL(URL)              -- open URL in current tab\n"
+"\topenURL(URL, new-tab)     -- open URL in new tab\n"
+"\topenURL(URL, new-window)  -- open URL in new window\n"
+"\taddBookmark(URL)          -- bookmark URL\n"
+"\txfeDoCommand(openBrowser) -- open new window"
 msgstr ""
 
-#: src/config/cmdline.c:736
+#: src/config/cmdline.c:743
 msgid "Connect to session ring with given ID"
 msgstr "Forbind til sessionen med det givne ID"
 
-#: src/config/cmdline.c:738
+#: src/config/cmdline.c:745
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -892,30 +924,34 @@ msgid ""
 "-touch-files."
 msgstr ""
 
-#: src/config/cmdline.c:753
-msgid "Write the source of given URL to stdout"
-msgstr "Udskriv kildeteksten for de givne URLer til standarduddata"
+#: src/config/cmdline.c:760
+msgid "Print the source of given URLs to stdout"
+msgstr "Udskriv kildeteksten for givne URLer til standarduddata"
 
-#: src/config/cmdline.c:755
-msgid "Write the given HTML document in source form to stdout."
-msgstr "Udskriv kildeteksten for de givne URLer til standarduddata."
+#: src/config/cmdline.c:762
+msgid "Print given URLs in source form to stdout."
+msgstr "Udskriv kildeteksten for givne URLer til standarduddata."
 
-#: src/config/cmdline.c:759
+#: src/config/cmdline.c:766
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr "Rør filer i ~/.elinks ved kørsel med -no-connect/-session-ring"
 
-#: src/config/cmdline.c:761
+#: src/config/cmdline.c:768
 msgid ""
-"Set to 1 to have runtime state files (bookmarks, history, ...)\n"
-"changed even when -no-connect or -session-ring is used; has no\n"
-"effect if not used in connection with any of these options."
+"When enabled, runtime state files (bookmarks, history, etc.) are\n"
+"written to disk, even when -no-connect or -session-ring is used.\n"
+"It has no effect if not used in connection with any of these options."
 msgstr ""
+"Hvis aktiveret vil kørselstidstilstandsfiler (bogmærker, historik, osv.)\n"
+"skrives til disken selv når -no-connect or -session-ring er anvendt.\n"
+"Indstillingen har ingen effekt hvis den ikke bruges i forbindelse med\n"
+"en af de ovennævnte indstillinger."
 
-#: src/config/cmdline.c:765
+#: src/config/cmdline.c:772
 msgid "Verbose level"
 msgstr "Verbositetsniveau"
 
-#: src/config/cmdline.c:767
+#: src/config/cmdline.c:774
 msgid ""
 "The verbose level controls what messages are shown at\n"
 "start up and while running:\n"
@@ -924,11 +960,11 @@ msgid ""
 "\t2 means show all messages"
 msgstr ""
 
-#: src/config/cmdline.c:773
+#: src/config/cmdline.c:780
 msgid "Print version information and exit"
 msgstr "Udskriv versionsinformation og afslut"
 
-#: src/config/cmdline.c:775
+#: src/config/cmdline.c:782
 msgid "Print ELinks version information and exit."
 msgstr "Udskriv ELinks versionsinformation og afslut"
 
@@ -1049,6 +1085,7 @@ msgid "N/A"
 msgstr "Ingen"
 
 #: src/config/dialogs.c:189 src/config/dialogs.c:210 src/config/dialogs.c:377
+#: src/config/options.inc:738
 msgid "Type"
 msgstr "Type"
 
@@ -2173,7 +2210,8 @@ msgstr "Inverter farver"
 msgid "Invert the fore- and background color so the link stands out."
 msgstr ""
 
-#: src/config/options.inc:286 src/dialogs/options.c:170
+#: src/config/options.inc:286 src/config/options.inc:786
+#: src/dialogs/options.c:170
 msgid "Underline"
 msgstr ""
 
@@ -2900,10 +2938,6 @@ msgstr "Terminalindstillinger."
 msgid "Options specific to this terminal type (according to $TERM value)."
 msgstr ""
 
-#: src/config/options.inc:738
-msgid "Border type"
-msgstr ""
-
 #: src/config/options.inc:740
 msgid ""
 "Terminal type; matters mostly only when drawing frames and\n"
@@ -2915,7 +2949,7 @@ msgid ""
 "4 is FreeBSD"
 msgstr ""
 
-#: src/config/options.inc:748
+#: src/config/options.inc:748 src/dialogs/options.c:166
 msgid "Switch fonts for line drawing"
 msgstr ""
 
@@ -2927,8 +2961,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:754
-msgid "I/O in UTF8"
-msgstr ""
+msgid "UTF-8 I/0"
+msgstr "UTF-8 I/O"
 
 #: src/config/options.inc:756
 msgid ""
@@ -2946,7 +2980,7 @@ msgid ""
 "only with linux terminals using the cp850/852 character sets."
 msgstr ""
 
-#: src/config/options.inc:764
+#: src/config/options.inc:764 src/dialogs/options.c:168
 msgid "Block cursor"
 msgstr "Udfyld markør"
 
@@ -2970,9 +3004,9 @@ msgid ""
 "2 is 256 color mode, uses XTerm RGB codes"
 msgstr ""
 
-#: src/config/options.inc:778
-msgid "Enable transparency"
-msgstr "Aktiver gennemsigtighed"
+#: src/config/options.inc:778 src/dialogs/options.c:169
+msgid "Transparency"
+msgstr "Gennemsigtig"
 
 #: src/config/options.inc:780
 msgid ""
@@ -2982,10 +3016,6 @@ msgid ""
 "it will be visible in ELinks as well. Note that this option makes\n"
 "sense only when colors are enabled."
 msgstr ""
-
-#: src/config/options.inc:786
-msgid "Use underline"
-msgstr "Brug understregning"
 
 #: src/config/options.inc:788
 msgid "If we should use underline or enhance the color instead."
@@ -4434,18 +4464,6 @@ msgstr "16 farver"
 msgid "256 colors"
 msgstr "256 farver"
 
-#: src/dialogs/options.c:166
-msgid "Use ^[[11m"
-msgstr "Anvend ^[[11m"
-
-#: src/dialogs/options.c:168
-msgid "Block the cursor"
-msgstr "Udfyld markør"
-
-#: src/dialogs/options.c:169
-msgid "Transparency"
-msgstr "Gennemsigtig"
-
 #: src/dialogs/options.c:171
 msgid "UTF-8 I/O"
 msgstr "UTF-8 I/O"
@@ -5273,45 +5291,45 @@ msgid ""
 "guess it properly from known information about the document)."
 msgstr ""
 
-#: src/modules/version.c:81
+#: src/modules/version.c:80
 #, c-format
 msgid "Built on %s %s"
 msgstr ""
 
-#: src/modules/version.c:85
+#: src/modules/version.c:83
 msgid "Text WWW browser"
 msgstr "Lynx-lignende browser for WWW"
 
-#: src/modules/version.c:88
+#: src/modules/version.c:85
 #, c-format
 msgid " (built on %s %s)"
 msgstr ""
 
-#: src/modules/version.c:95
+#: src/modules/version.c:91
 msgid "Features:"
 msgstr "Egenskaber:"
 
-#: src/modules/version.c:97
+#: src/modules/version.c:93
 msgid "Standard"
 msgstr ""
 
-#: src/modules/version.c:99
+#: src/modules/version.c:95
 msgid "Debug"
 msgstr ""
 
-#: src/modules/version.c:102
+#: src/modules/version.c:98
 msgid "Fastmem"
 msgstr "Hurtighukommelse"
 
-#: src/modules/version.c:105
+#: src/modules/version.c:101
 msgid "Own Libc Routines"
 msgstr ""
 
-#: src/modules/version.c:108
+#: src/modules/version.c:104
 msgid "No Backtrace"
 msgstr "Ingen fejlsporing"
 
-#: src/modules/version.c:120
+#: src/modules/version.c:116
 msgid "No mouse"
 msgstr "Ingen mus"
 
@@ -6359,6 +6377,8 @@ msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "needs extensive configuration of OpenSSL by the user."
 msgstr ""
+"Verificer serverens SSL certifikat. Bemærk, dette\n"
+"kræver omfattende konfigurering af OpenSSL fra brugeren."
 
 #: src/ssl/ssl.c:77
 msgid "Client Certificates"
@@ -6373,10 +6393,12 @@ msgid ""
 "Enable or not the sending of X509 client certificates\n"
 "to servers which request them."
 msgstr ""
+"Aktivering for afsendelse af X509 klient certifikater\n"
+"til servere som forespørger dem."
 
 #: src/ssl/ssl.c:86
 msgid "Certificate File"
-msgstr "Certifikatfil"
+msgstr "Certifikatsfil"
 
 #: src/ssl/ssl.c:88
 msgid ""
@@ -6385,12 +6407,18 @@ msgid ""
 "file pointed to by the X509_CLIENT_CERT variable is used\n"
 "instead."
 msgstr ""
+"Stien til en fil indeholdende klientens certifikater og\n"
+"ukrypterede private nøgler i PEM format. Hvis deaktiveret\n"
+"vil filen angivet af miljøvariablen X509_CLIENT_CERT blive\n"
+"brugt i stedet."
 
 #: src/ssl/ssl.c:159
 msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "probably doesn't work properly at all with GnuTLS."
 msgstr ""
+"Verificer serverens SSL certifikat. Bemærk, dette virker\n"
+"sikkert ikke med GnuTLS."
 
 #. name:
 #: src/ssl/ssl.c:178 src/ssl/ssl.c:195

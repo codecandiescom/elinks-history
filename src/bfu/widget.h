@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.70 2004/11/19 15:40:20 zas Exp $ */
+/* $Id: widget.h,v 1.71 2004/11/19 16:08:24 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -7,6 +7,9 @@
 #include "bfu/style.h"
 #include "util/lists.h"
 #include "util/box.h"
+
+/* Dynamic widget #include area */
+#include "bfu/button.h"
 
 struct dialog_data;
 struct input_history;

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.4 2003/05/05 09:27:21 zas Exp $ */
+/* $Id: draw.c,v 1.5 2003/05/05 09:37:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,12 +57,11 @@ void
 set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
 	int i = (x >= 0) ? 0 : -x;
-	int end = (x + l <= t->x) ? l : t->x - x;
 	int offset = x + t->x * y;
 
 	t->dirty = 1;
 
-	for (; i < end; i++)
+	for (; i < ((x + l <= t->x) ? l : t->x - x); i++)
 		t->screen[i + offset] = line[i];
 }
 
@@ -70,12 +69,11 @@ void
 set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 {
 	int i = (x >= 0) ? 0 : -x;
-	int end = (x + l <= t->x) ? l : t->x - x;
 	int offset = x + t->x * y;
 
 	t->dirty = 1;
 
-	for (; i < end; i++) {
+	for (; i < ((x + l <= t->x) ? l : t->x - x); i++) {
 		int p = i + offset;
 
 		t->screen[p] = (t->screen[p] & 0x80ff) | (c & ~0x80ff);
@@ -90,12 +88,12 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 	t->dirty = 1;
 	for (; j < yw && y + j < t->y; j++) {
 		int offset = x + t->x * (y + j);
-		int i;
+		int i = (x >= 0) ? 0 : -x;
 
 		/* No, we can't use memset() here :(. It's int, not char. */
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
-		for (i = (x >= 0) ? 0 : -x; i < xw && x + i < t->x; i++)
+		for (; i < xw && x + i < t->x; i++)
 			t->screen[i + offset] = c;
 	}
 }

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.136 2004/08/19 07:12:05 miciah Exp $ */
+/* $Id: renderer.c,v 1.137 2004/08/19 07:16:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,7 +276,6 @@ add_document_line(struct plain_renderer *renderer,
 			*template = saved_renderer_template;
 
 		} else if (line_char == ASCII_BS) {
-
 			if (!(expanded + line_pos)) {
 				/* We've backspaced to the start
 				 * of the line */

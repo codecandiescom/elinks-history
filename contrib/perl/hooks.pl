@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.24 2005/03/26 13:38:59 pasky Exp $
+# $Id: hooks.pl,v 1.25 2005/03/26 13:40:09 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -642,9 +642,7 @@ sub loadrc
 	my $configperl = $ENV{'HOME'} . '/.elinks/config.pl';
 	my $answer = 'no';
 
-	return $answer unless -f $configperl;
-
-	open RC, "<$configperl";
+	open RC, "<$configperl" or return $answer;
 	while (<RC>) {
 		next if (m/^\#.*/);
 		next unless (m/(.*):\s*(.*)/);

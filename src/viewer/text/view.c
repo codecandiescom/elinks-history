@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.422 2004/06/01 00:39:02 jonas Exp $ */
+/* $Id: view.c,v 1.423 2004/06/01 04:25:06 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,9 +233,10 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 			int_bounds(&vy, 0, doc_view->document->height - 1);
 			vs->y = vy;
 			set_link(doc_view);
-			mem_free(vs->goto_position);
-			vs->goto_position = NULL;
 		}
+
+		mem_free(vs->goto_position);
+		vs->goto_position = NULL;
 	}
 	vx = vs->x;
 	vy = vs->y;

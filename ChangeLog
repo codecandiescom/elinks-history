@@ -1,3 +1,60 @@
+Thu Jul 29 15:58:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_border_char(): minor code optimization.  
+
+Thu Jul 29 15:56:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_box(): minor code optimization.  
+
+Thu Jul 29 15:47:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_char(): code simplification and optimization, assert
+	term->screen->image.  
+
+Thu Jul 29 10:21:04 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jul 29 10:02:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/encoding.c:
+
+	guess_encoding(): Fix comparison. Now that the extension contains
+	the '.' the filename isn't necessarily longer than the extension.  
+
+Thu Jul 29 09:45:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Another fix for the assertion that causes bug 477. Only check
+	@charslen chars.  
+
+Thu Jul 29 09:43:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/: bindtextdom.c, dcigettext.c:
+
+	Use offsetof() definition in osdep/generic.h 
+
+Thu Jul 29 09:43:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/generic.h:
+
+	Include <stddef.h> - it may contain offsetof() definition.  
+
+Wed Jul 28 23:43:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/README:
+
+	Something about selectors.  
+
 Wed Jul 28 16:25:03 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* SITES:

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.228 2004/06/27 08:36:17 zas Exp $ */
+/* $Id: tables.c,v 1.229 2004/06/27 08:43:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1073,15 +1073,15 @@ get_table_width(struct table *table)
 	struct table_frames table_frames;
 	int min = 0;
 	int max = 0;
-	int i;
+	int col;
 
-	for (i = 0; i < table->cols; i++) {
-		int vl = (get_vline_width(table, i) >= 0);
+	for (col = 0; col < table->cols; col++) {
+		int vl = (get_vline_width(table, col) >= 0);
 
-		min += vl + table->min_cols_widths[i];
-		max += vl + table->max_cols_widths[i];
-		if (table->cols_x[i] > table->max_cols_widths[i])
-			max += table->cols_x[i];
+		min += vl + table->min_cols_widths[col];
+		max += vl + table->max_cols_widths[col];
+		if (table->cols_x[col] > table->max_cols_widths[col])
+			max += table->cols_x[col];
 	}
 
 	get_table_frames(table, &table_frames);
@@ -1098,7 +1098,7 @@ get_table_width(struct table *table)
 static void
 distribute_widths(struct table *table, int width)
 {
-	int i;
+	int col;
 	int d = width - table->min_width;
 	int om = 0;
 	char *u;
@@ -1110,8 +1110,8 @@ distribute_widths(struct table *table, int width)
 
 	assertm(d >= 0, "too small width %d, required %d", width, table->min_width);
 
-	for (i = 0; i < table->cols; i++)
-		int_lower_bound(&max_cols_width, table->max_cols_widths[i]);
+	for (col = 0; col < table->cols; col++)
+		int_lower_bound(&max_cols_width, table->max_cols_widths[col]);
 
 	cols_size = table->cols * sizeof(int);
 	memcpy(table->cols_widths, table->min_cols_widths, cols_size);
@@ -1135,67 +1135,67 @@ distribute_widths(struct table *table, int width)
 		memset(w, 0, cols_size);
 		memset(mx, 0, cols_size);
 
-		for (i = 0; i < table->cols; i++) {
+		for (col = 0; col < table->cols; col++) {
 			switch (om) {
 				case 0:
-					if (table->cols_widths[i] < table->cols_x[i]) {
-						w[i] = 1;
-						mx[i] = int_min(table->cols_x[i],
-								table->max_cols_widths[i])
-							- table->cols_widths[i];
-						if (mx[i] <= 0) w[i] = 0;
+					if (table->cols_widths[col] < table->cols_x[col]) {
+						w[col] = 1;
+						mx[col] = int_min(table->cols_x[col],
+								table->max_cols_widths[col])
+							- table->cols_widths[col];
+						if (mx[col] <= 0) w[col] = 0;
 					}
 
 					break;
 				case 1:
-					if (table->cols_x[i] <= WIDTH_RELATIVE) {
-						w[i] = WIDTH_RELATIVE - table->cols_x[i];
-						mx[i] = table->max_cols_widths[i]
-							- table->cols_widths[i];
-						if (mx[i] <= 0) w[i] = 0;
+					if (table->cols_x[col] <= WIDTH_RELATIVE) {
+						w[col] = WIDTH_RELATIVE - table->cols_x[col];
+						mx[col] = table->max_cols_widths[col]
+							- table->cols_widths[col];
+						if (mx[col] <= 0) w[col] = 0;
 					}
 					break;
 				case 2:
-					if (table->cols_x[i] != WIDTH_AUTO)
+					if (table->cols_x[col] != WIDTH_AUTO)
 						break;
 					/* Fall-through */
 				case 3:
-					if (table->cols_widths[i] < table->max_cols_widths[i]) {
-						mx[i] = table->max_cols_widths[i]
-							- table->cols_widths[i];
+					if (table->cols_widths[col] < table->max_cols_widths[col]) {
+						mx[col] = table->max_cols_widths[col]
+							- table->cols_widths[col];
 						if (max_cols_width) {
-							w[i] = 5 + table->max_cols_widths[i] * 10 / max_cols_width;
+							w[col] = 5 + table->max_cols_widths[col] * 10 / max_cols_width;
 						} else {
-							w[i] = 1;
+							w[col] = 1;
 						}
 					}
 					break;
 				case 4:
-					if (table->cols_x[i] >= 0) {
-						w[i] = 1;
-						mx[i] = table->cols_x[i] - table->cols_widths[i];
-						if (mx[i] <= 0) w[i] = 0;
+					if (table->cols_x[col] >= 0) {
+						w[col] = 1;
+						mx[col] = table->cols_x[col] - table->cols_widths[col];
+						if (mx[col] <= 0) w[col] = 0;
 					}
 					break;
 				case 5:
-					if (table->cols_x[i] < 0) {
-						if (table->cols_x[i] <= WIDTH_RELATIVE) {
-							w[i] = WIDTH_RELATIVE - table->cols_x[i];
+					if (table->cols_x[col] < 0) {
+						if (table->cols_x[col] <= WIDTH_RELATIVE) {
+							w[col] = WIDTH_RELATIVE - table->cols_x[col];
 						} else {
-							w[i] = 1;
+							w[col] = 1;
 						}
-						mx[i] = MAXINT;
+						mx[col] = MAXINT;
 					}
 					break;
 				case 6:
-					w[i] = 1;
-					mx[i] = MAXINT;
+					w[col] = 1;
+					mx[col] = MAXINT;
 					break;
 				default:
 					INTERNAL("could not expand table");
 					goto end2;
 			}
-			p += w[i];
+			p += w[col];
 		}
 
 		if (!p) {
@@ -1210,16 +1210,16 @@ distribute_widths(struct table *table, int width)
 a:
 		mss = 0;
 		mii = -1;
-		for (i = 0; i < table->cols; i++) if (w[i]) {
+		for (col = 0; col < table->cols; col++) if (w[col]) {
 			int ss;
 
-			if (u && u[i]) continue;
-			ss = dd * w[i] / p;
+			if (u && u[col]) continue;
+			ss = dd * w[col] / p;
 			if (!ss) ss = 1;
-			if (ss > mx[i]) ss = mx[i];
+			if (ss > mx[col]) ss = mx[col];
 			if (ss > mss) {
 				mss = ss;
-				mii = i;
+				mii = col;
 			}
 		}
 

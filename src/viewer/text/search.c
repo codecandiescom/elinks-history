@@ -1,12 +1,14 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.24 2003/10/04 20:33:02 kuser Exp $ */
+/* $Id: search.c,v 1.25 2003/10/04 21:15:05 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <ctype.h> /* tolower() */
+#ifdef HAVE_REGEX_H
 #include <regex.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 
@@ -330,6 +332,7 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	return found;
 }
 
+#ifdef HAVE_REGEX_H
 static int
 is_in_range_plain(struct document *f, int y, int yy, unsigned char *text, int l,
 		  int *min, int *max, struct search *s1, struct search *s2)
@@ -369,6 +372,7 @@ srch_failed:
 
 	return found;
 }
+#endif /* HAVE_REGEX_H */
 
 static int
 is_in_range(struct document *f, int y, int yw, unsigned char *text,
@@ -386,9 +390,11 @@ is_in_range(struct document *f, int y, int yw, unsigned char *text,
 	if (get_range(f, y, yw, l, &s1, &s2))
 		return 0;
 
-	return get_opt_bool("document.browse.search.regex")
-	       ? is_in_range_regex(f, y, y + yw, text, l, min, max, s1, s2)
-	       : is_in_range_plain(f, y, y + yw, text, l, min, max, s1, s2);
+#ifdef HAVE_REGEX_H
+	if (get_opt_bool("document.browse.search.regex"))
+		return is_in_range_regex(f, y, y + yw, text, l, min, max, s1, s2);
+#endif
+	return is_in_range_plain(f, y, y + yw, text, l, min, max, s1, s2);
 }
 
 #define realloc_points(pts, size) \
@@ -455,6 +461,7 @@ srch_failed:
 	*pl = len;
 }
 
+#ifdef HAVE_REGEX_H
 static void
 get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 		   int l, struct search *s1, struct search *s2)
@@ -537,6 +544,7 @@ ret:
 	*pt = points;
 	*pl = len;
 }
+#endif /* HAVE_REGEX_H */
 
 static void
 get_searched(struct document_view *scr, struct point **pt, int *pl)
@@ -559,9 +567,11 @@ get_searched(struct document_view *scr, struct point **pt, int *pl)
 		return;
 	}
 
+#ifdef HAVE_REGEX_H
 	if (get_opt_bool("document.browse.search.regex"))
 		get_searched_regex(scr, pt, pl, l, s1, s2);
 	else
+#endif
 		get_searched_plain(scr, pt, pl, l, s1, s2);
 }
 

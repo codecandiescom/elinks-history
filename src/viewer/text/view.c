@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.168 2003/07/27 21:47:40 jonas Exp $ */
+/* $Id: view.c,v 1.169 2003/07/27 22:45:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,18 +190,18 @@ find_tag(struct document *f, unsigned char *name)
 }
 
 
-unsigned char fr_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5}, {0xc4, 0xc2, 0xc1, 0xc5}};
+unsigned char frame_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5}, {0xc4, 0xc2, 0xc1, 0xc5}};
 
 /* 0 -> 1 <- 2 v 3 ^ */
-enum xchar_dir {
-	XD_RIGHT = 0,
-	XD_LEFT,
-	XD_DOWN,
-	XD_UP
+enum frame_cross_direction {
+	FRAME_X_RIGHT = 0,
+	FRAME_X_LEFT,
+	FRAME_X_DOWN,
+	FRAME_X_UP
 };
 
 static void
-set_xchar(struct terminal *t, int x, int y, enum xchar_dir dir)
+set_xchar(struct terminal *t, int x, int y, enum frame_cross_direction dir)
 {
 	unsigned int c, d;
 
@@ -215,11 +215,11 @@ set_xchar(struct terminal *t, int x, int y, enum xchar_dir dir)
 
 	c &= 0xff;
 	d = dir>>1;
-	if (c == fr_trans[d][0])
-		set_only_char(t, x, y, fr_trans[d][1 + (dir & 1)] | ATTR_FRAME);
+	if (c == frame_trans[d][0])
+		set_only_char(t, x, y, frame_trans[d][1 + (dir & 1)] | ATTR_FRAME);
 	else
-		if (c == fr_trans[d][2 - (dir & 1)])
-			set_only_char(t, x, y, fr_trans[d][3] | ATTR_FRAME);
+		if (c == frame_trans[d][2 - (dir & 1)])
+			set_only_char(t, x, y, frame_trans[d][3] | ATTR_FRAME);
 }
 
 static void
@@ -242,17 +242,17 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 			if (i) {
 				fill_area(t, x, y + 1, 1, wwy, FRAMES_VLINE);
 				if (j == fsd->y - 1)
-					set_xchar(t, x, y + wwy + 1, XD_UP);
+					set_xchar(t, x, y + wwy + 1, FRAME_X_UP);
 			} else if (j) {
-				set_xchar(t, x, y, XD_RIGHT);
+				set_xchar(t, x, y, FRAME_X_RIGHT);
 			}
 
 			if (j) {
 				fill_area(t, x + 1, y, wwx, 1, FRAMES_HLINE);
 				if (i == fsd->x - 1)
-					set_xchar(t, x + wwx + 1, y, XD_LEFT);
+					set_xchar(t, x + wwx + 1, y, FRAME_X_LEFT);
 			} else if (i) {
-				set_xchar(t, x, y, XD_DOWN);
+				set_xchar(t, x, y, FRAME_X_DOWN);
 			}
 
 			if (i && j) set_char(t, x, y, FRAMES_CROSS);

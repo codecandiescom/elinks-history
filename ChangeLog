@@ -1,3 +1,54 @@
+Fri Aug 30 09:26:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/: bookmarks.c, bookmarks.h, dialogs.c:
+
+	Removed bookmark_id totally. At last. But this result in more work
+	which will need to be done..  
+
+Fri Aug 30 08:54:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/danish.lng, src/intl/language.inc:
+
+	Danish translation update by Jonas.  
+
+Fri Aug 30 08:53:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Added --without-gpm option.  
+
+Thu Aug 29 23:58:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/Makefile.am, src/main.c,
+	src/dialogs/Makefile.am, src/dialogs/document.c,
+	src/dialogs/globhist.c, src/dialogs/globhist.h, src/dialogs/menu.c,
+	src/document/Makefile.am, src/document/globhist.c,
+	src/document/globhist.h, src/document/session.c,
+	src/document/view.c, src/document/html/parser.c,
+	src/globhist/.cvsignore, src/globhist/.vimrc,
+	src/globhist/Makefile.am, src/globhist/dialogs.c,
+	src/globhist/dialogs.h, src/globhist/globhist.c,
+	src/globhist/globhist.h:
+
+	Moved global history stuff to src/globhist/*.  
+
+Thu Aug 29 23:26:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bookmarks/bookmarks.c,
+	bookmarks/bookmarks.h, bookmarks/dialogs.c, dialogs/globhist.c,
+	document/globhist.c, document/globhist.h:
+
+	Rewritten the 'search' feature (it works for global history now as
+	well); now, we don't readd listbox_items, just mark them by
+	unsetting visible attributed.  
+
+Thu Aug 29 22:36:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/bookmarks.c,
+	bookmarks/dialogs.c, document/globhist.c:
+
+	Added attribute visible to listbox_item.  
+
 Thu Aug 29 21:15:02 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/listbox.h, dialogs/globhist.c, document/globhist.c:

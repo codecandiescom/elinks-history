@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.119 2003/11/09 13:44:28 pasky Exp $ */
+/* $Id: core.c,v 1.120 2003/11/09 13:44:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,7 +481,7 @@ xdialog_layouter(struct dialog_data *dlg_data)
 			   0, &y, w, &rw, AL_CENTER);
 
 	w = rw;
-	draw_dialog(dlg_data, w ,y);
+	draw_dialog(dlg_data, w, y);
 
 	y = dlg_data->y + DIALOG_TB;
 	for (i = 0; i < nfields; i++) {

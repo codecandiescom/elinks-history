@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.117 2004/04/14 20:11:28 jonas Exp $ */
+/* $Id: dump.c,v 1.118 2004/04/14 20:12:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -296,8 +296,7 @@ dump_start(unsigned char *url)
 	dump_download.end = dump_end;
 	dump_pos = 0;
 
-	if (uri->protocol == PROTOCOL_UNKNOWN
-	    || load_uri(uri, NULL, &dump_download, PRI_MAIN, 0, -1)) {
+	if (load_uri(uri, NULL, &dump_download, PRI_MAIN, 0, -1)) {
 terminate:
 		dump_pre_start(NULL);
 		terminate = 1;

@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.1 2003/07/06 00:26:21 jonas Exp $ */
+/* $Id: proxy.c,v 1.2 2003/07/06 03:42:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "scripting/lua/hooks.h"
 #include "util/memory.h"
 #include "util/string.h"
 

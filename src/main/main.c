@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.18 2002/04/28 11:48:25 pasky Exp $ */
+/* $Id: main.c,v 1.19 2002/04/28 12:00:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include <config/conf.h>
 #include <config/kbdbind.h>
 #include <config/options.h>
+#include <config/urlhist.h>
 #include <cookies/cookies.h>
 #include <dialogs/menu.h>
 #include <document/cache.h>
@@ -382,7 +383,7 @@ terminate_all_subsystems()
 	free_blacklist();
 	if (init_b) cleanup_cookies();
 	check_bottom_halves();
-	end_config();
+	free_home();
 	free_strerror_buf();
 	shutdown_trans();
 	terminate_osdep();

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.1 2002/04/28 11:48:26 pasky Exp $ */
+/* $Id: home.c,v 1.2 2002/04/28 12:00:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,4 +147,10 @@ init_home()
 		sleep(3);
 		return;
 	}
+}
+
+void
+free_home()
+{
+	if (links_home) mem_free(links_home);
 }

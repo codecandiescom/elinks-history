@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.161 2004/08/03 08:43:12 jonas Exp $ */
+/* $Id: listbox.c,v 1.162 2004/08/15 09:54:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -536,7 +536,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		}
 	}
 
-	if (check_mouse_action(ev, B_UP)) {
+	if (check_mouse_action(ev, B_UP) || check_mouse_action(ev, B_DOWN)) {
 		if (check_mouse_wheel(ev))
 			return EVENT_NOT_PROCESSED;
 

@@ -61,6 +61,13 @@ to Unicode/ and intl/ directories, edit index.txt and remove any codepages or
 translations you don't like; especially for translations, it can significantly
 reduce resulting binary size as well. Good luck!
 
+  !BEWARE! If you link OpenSSL to ELinks binary (enabling https support), and
+OpenSSL library is not part of your base system, you are VIOLATING GPL!
+Unfortunately, there's probably nothing we can do about that except using
+differently licensed library than OpenSSL; so, we recommend people who are
+making ELinks binary for system with OpenSSL not in base system not to link
+ELinks with it, if they like to have everything legally perfect.
+
   The basic compilation looks like:
 
   Unix - just doing:
@@ -134,5 +141,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.11 2002/07/02 21:40:25 pasky Exp $
+$Id: INSTALL,v 1.12 2002/07/03 22:58:54 pasky Exp $
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.7 2002/05/08 13:55:00 pasky Exp $ */
+/* $Id: menu.c,v 1.8 2002/06/16 21:22:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "intl/language.h"
 #include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
+#include "util/conv.h"
 
 
 /* Types and structures */

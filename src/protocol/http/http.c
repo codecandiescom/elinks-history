@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.334 2004/09/26 15:10:32 pasky Exp $ */
+/* $Id: http.c,v 1.335 2004/09/28 11:57:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -363,6 +363,10 @@ http_send_header(struct connection *conn)
 	} else {
 		if (connection_is_https_proxy(conn) && conn->socket.ssl) {
 			add_url_to_http_string(&header, uri, URI_DATA);
+
+		} else if (IS_PROXY_URI(conn->uri)) {
+			add_url_to_http_string(&header, uri, URI_PROXY);
+
 		} else {
 			add_url_to_http_string(&header, conn->uri, URI_DATA);
 		}

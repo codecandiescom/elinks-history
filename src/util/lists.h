@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.46 2005/03/30 15:25:09 zas Exp $ */
+/* $Id: lists.h,v 1.47 2005/04/01 15:01:20 jonas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -210,7 +210,7 @@ list_size(struct list_head *list)
 }
 
 #define move_to_top_of_list(list, item) do { \
-	 if ((item) != (list).next) { \
+	if ((item) != (list).next) { \
 		del_from_list(item); \
 		add_to_list(list, item); \
 	} \

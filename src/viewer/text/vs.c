@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.48 2004/09/28 19:20:53 pasky Exp $ */
+/* $Id: vs.c,v 1.49 2004/10/10 20:36:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,8 @@ init_vs(struct view_state *vs, struct uri *uri, int plain)
 	vs->uri = uri ? get_uri_reference(uri) : NULL;
 	vs->did_fragment = !uri->fragmentlen;
 #ifdef CONFIG_ECMASCRIPT
-	vs->ecmascript = ecmascript_get_interpreter(vs);
+	/* If we ever get to render this vs, give it an interpreter. */
+	vs->ecmascript_fragile = 1;
 #endif
 }
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.52 2003/11/09 13:23:13 pasky Exp $ */
+/* $Id: hierbox.c,v 1.53 2003/11/09 13:28:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,6 +73,8 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 
 			if (ev->x == ' ') {
 				if (box->sel) {
+					if (box->sel->type != BI_FOLDER)
+						return EVENT_NOT_PROCESSED;
 					box->sel->expanded = !box->sel->expanded;
 					goto display_dlg;
 				}

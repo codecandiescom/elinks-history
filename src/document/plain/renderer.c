@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.32 2003/11/18 20:21:36 pasky Exp $ */
+/* $Id: renderer.c,v 1.33 2003/11/18 22:02:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ static struct line *
 realloc_lines(struct document *document, int y)
 {
 	assert(document);
-	if_assert_failed return 0;
+	if_assert_failed return NULL;
 
 	if (document->height <= y) {
 		if (!ALIGN_LINES(&document->data, document->height, y + 1))

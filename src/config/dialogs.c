@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.95 2003/11/05 20:08:16 jonas Exp $ */
+/* $Id: dialogs.c,v 1.96 2003/11/05 20:16:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,14 +235,14 @@ layout_edit_dialog(struct dialog_data *dlg_data)
 
 	rw = 0;
 
-	dlg_format_text(NULL, term, name, 0, &y,
+	dlg_format_text(NULL, name, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
-	dlg_format_text(NULL, term, type, 0, &y,
+	dlg_format_text(NULL, type, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
-	dlg_format_text(NULL, term, value, 0, &y,
+	dlg_format_text(NULL, value, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	y++;
-	dlg_format_text(NULL, term, desc, 0, &y,
+	dlg_format_text(NULL, desc, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	y++;
 	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, 2, 0,
@@ -255,22 +255,22 @@ layout_edit_dialog(struct dialog_data *dlg_data)
 	draw_dlg(dlg_data);
 
 	y = dlg_data->y + DIALOG_TB;
-	dlg_format_text(term, term, name, dlg_data->x + DIALOG_LB,
+	dlg_format_text(term, name, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
-	dlg_format_text(term, term, type, dlg_data->x + DIALOG_LB,
+	dlg_format_text(term, type, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 
 	/* XXX: We want the field on the same line. Could this be a problem
 	 * with extremely thin terminals? --pasky */
 	rw = 0;
-	dlg_format_text(term, term, value, dlg_data->x + DIALOG_LB,
+	dlg_format_text(term, value, dlg_data->x + DIALOG_LB,
 			&y, w, &rw, dialog_text_color, AL_LEFT);
 	y--;
 	dlg_format_field(NULL, term, &dlg_data->widgets_data[0], rw + dlg_data->x + DIALOG_LB,
 			 &y, w - rw, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_text(term, term, desc, dlg_data->x + DIALOG_LB,
+	dlg_format_text(term, desc, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, &dlg_data->widgets_data[1], 2, dlg_data->x + DIALOG_LB,

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.85 2003/11/05 20:08:16 jonas Exp $ */
+/* $Id: inpfield.c,v 1.86 2003/11/05 20:16:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ input_field_fn(struct dialog_data *dlg_data)
 	if (w < min) w = min;
 
 	rw = 0; /* !!! FIXME: input field */
-	dlg_format_text(NULL, term, dlg_data->dlg->udata, 0, &y, w, &rw,
+	dlg_format_text(NULL, dlg_data->dlg->udata, 0, &y, w, &rw,
 			text_color, AL_LEFT);
 	dlg_format_field(NULL, term, dlg_data->widgets_data, 0, &y, w, &rw,
 			 AL_LEFT);
@@ -158,7 +158,7 @@ input_field_fn(struct dialog_data *dlg_data)
 	draw_dlg(dlg_data);
 
 	y = dlg_data->y + DIALOG_TB;
-	dlg_format_text(term, term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
+	dlg_format_text(term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, text_color, AL_LEFT);
 	dlg_format_field(term, term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);

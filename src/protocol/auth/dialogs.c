@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.71 2003/11/05 20:08:17 jonas Exp $ */
+/* $Id: dialogs.c,v 1.72 2003/11/05 20:16:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,17 +48,17 @@ auth_layout(struct dialog_data *dlg_data)
 
 	rw = 0;
 	if (dlg_data->dlg->udata) {
-		dlg_format_text(NULL, term,
+		dlg_format_text(NULL,
 				dlg_data->dlg->udata, 0, &y, w, &rw,
 				dialog_text_color, AL_LEFT);
 		y++;
 	}
 
-	dlg_format_text(NULL, term,
+	dlg_format_text(NULL,
 			label_login, 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 	y += 2;
-	dlg_format_text(NULL, term,
+	dlg_format_text(NULL,
 			label_password, 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 	y += 2;
@@ -74,20 +74,20 @@ auth_layout(struct dialog_data *dlg_data)
 
 	y = dlg_data->y + DIALOG_TB;
 	if (dlg_data->dlg->udata) {
-		dlg_format_text(term, term,
+		dlg_format_text(term,
 				dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
 				&y, w, NULL,
 				dialog_text_color, AL_LEFT);
 		y++;
 	}
-	dlg_format_text(term, term,
+	dlg_format_text(term,
 			label_login, dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg_data->widgets_data[0],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term,
+	dlg_format_text(term,
 			label_password, dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,

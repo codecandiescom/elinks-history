@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.72 2003/11/05 20:08:16 jonas Exp $ */
+/* $Id: msgbox.c,v 1.73 2003/11/05 20:16:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ msg_box_fn(struct dialog_data *dlg_data)
 	int_bounds(&w, 1, term->width - 2 * DIALOG_LB);
 
 	rw = 0;
-	dlg_format_text(NULL, term, text, 0, &y, w, &rw, text_color,
+	dlg_format_text(NULL, text, 0, &y, w, &rw, text_color,
 			dlg_data->dlg->align);
 
 	y++;
@@ -56,7 +56,7 @@ msg_box_fn(struct dialog_data *dlg_data)
 	draw_dlg(dlg_data);
 
 	y = dlg_data->y + DIALOG_TB + 1;
-	dlg_format_text(term, term, text, dlg_data->x + DIALOG_LB, &y, w, NULL,
+	dlg_format_text(term, text, dlg_data->x + DIALOG_LB, &y, w, NULL,
 			text_color, dlg_data->dlg->align);
 
 	y++;

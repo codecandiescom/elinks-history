@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.129 2003/11/05 20:08:17 jonas Exp $ */
+/* $Id: download.c,v 1.130 2003/11/05 20:16:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,12 +367,12 @@ download_window_function(struct dialog_data *dlg_data)
 	int_lower_bound(&w, 1);
 
 	y = 0;
-	dlg_format_text(NULL, term, url, 0, &y, w, NULL,
+	dlg_format_text(NULL, url, 0, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
 	y++;
 	if (t && download->prg->size >= 0) y += 2;
-	dlg_format_text(NULL, term, msg.source, 0, &y, w, NULL,
+	dlg_format_text(NULL, msg.source, 0, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
 	y++;
@@ -387,7 +387,7 @@ download_window_function(struct dialog_data *dlg_data)
 
 	y = dlg_data->y + DIALOG_TB + 1;
 	x = dlg_data->x + DIALOG_LB;
-	dlg_format_text(term, term, url, x, &y, w, NULL,
+	dlg_format_text(term, url, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
 	if (t && download->prg->size >= 0)
@@ -396,7 +396,7 @@ download_window_function(struct dialog_data *dlg_data)
 			     	      get_bfu_color(term, "dialog.meter"));
 
 	y++;
-	dlg_format_text(term, term, msg.source, x, &y, w, NULL,
+	dlg_format_text(term, msg.source, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
 	y++;

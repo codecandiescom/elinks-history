@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.17 2003/11/04 22:01:27 zas Exp $ */
+/* $Id: text.c,v 1.18 2003/11/05 20:16:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ text_width(struct terminal *term, register unsigned char *text,
 /* TODO: Longer names for local variables. */
 /* TODO: Optimized version tha wont decode the color for every draw_char(). */
 void
-dlg_format_text(struct terminal *term, struct terminal *t2,
+dlg_format_text(struct terminal *term,
 		unsigned char *text, int x, int *y, int w, int *rw,
 		struct color_pair *color, enum format_align align)
 {

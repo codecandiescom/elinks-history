@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.96 2003/11/05 20:08:17 jonas Exp $ */
+/* $Id: search.c,v 1.97 2003/11/05 20:16:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -985,7 +985,7 @@ search_dlg_fn(struct dialog_data *dlg_data)
 	if (w < min) w = min;
 
 	rw = 0; /* !!! FIXME: input field */
-	dlg_format_text(NULL, term, dlg_data->dlg->udata, 0, &y, w, &rw,
+	dlg_format_text(NULL, dlg_data->dlg->udata, 0, &y, w, &rw,
 			text_color, AL_LEFT);
 	dlg_format_field(NULL, term, dlg_data->widgets_data, 0, &y, w, &rw,
 			 AL_LEFT);
@@ -1010,7 +1010,7 @@ search_dlg_fn(struct dialog_data *dlg_data)
 	draw_dlg(dlg_data);
 
 	y = dlg_data->y + DIALOG_TB;
-	dlg_format_text(term, term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
+	dlg_format_text(term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, text_color, AL_LEFT);
 	dlg_format_field(term, term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);

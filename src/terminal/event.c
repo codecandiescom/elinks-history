@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.47 2004/06/13 03:37:07 jonas Exp $ */
+/* $Id: event.c,v 1.48 2004/06/13 03:43:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,6 +115,39 @@ term_send_ucs(struct terminal *term, struct term_event *ev, unicode_val u)
 	}
 }
 
+static void
+check_terminal_name(struct terminal *term)
+{
+	unsigned char name[MAX_TERM_LEN + 10];
+	int i = 0, badchar = 0;
+
+	strcpy(name, "terminal.");
+
+	/* We check TERM env. var for sanity, and fallback to
+	 * _template_ if needed. This way we prevent
+	 * elinks.conf potential corruption. */
+	while (term->term[i]) {
+		if (!isA(term->term[i])) {
+			badchar = 1;
+			break;
+		}
+		i++;
+	}
+
+	if (badchar) {
+		usrerror(_("Warning: terminal name contains illicit chars.", term));
+	} else {
+		strcat(name, term->term);
+
+		/* Unlock the default _template_ option tree
+		 * that was asigned by init_term() and get the
+		 * correct one. */
+		object_unlock(term->spec);
+		term->spec = get_opt_rec(config_options, name);
+		object_lock(term->spec);
+	}
+}
+
 static int
 handle_interlink_event(struct terminal *term, struct term_event *ev)
 {
@@ -122,7 +155,6 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 
 	switch (ev->ev) {
 	case EV_INIT:
-	{
 		if (term->qlen < sizeof(struct terminal_info))
 			return 0;
 
@@ -133,37 +165,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 
 		memcpy(term->term, info->term, MAX_TERM_LEN);
 		term->term[MAX_TERM_LEN - 1] = 0;
-
-		{
-			unsigned char name[MAX_TERM_LEN + 10];
-			int i = 0, badchar = 0;
-
-			strcpy(name, "terminal.");
-
-			/* We check TERM env. var for sanity, and fallback to
-			 * _template_ if needed. This way we prevent
-			 * elinks.conf potential corruption. */
-			while (term->term[i]) {
-				if (!isA(term->term[i])) {
-					badchar = 1;
-					break;
-				}
-				i++;
-			}
-
-			if (badchar) {
-				usrerror(_("Warning: terminal name contains illicit chars.", term));
-			} else {
-				strcat(name, term->term);
-
-				/* Unlock the default _template_ option tree
-				 * that was asigned by init_term() and get the
-				 * correct one. */
-				object_unlock(term->spec);
-				term->spec = get_opt_rec(config_options, name);
-				object_lock(term->spec);
-			}
-		}
+		check_terminal_name(term);
 
 		memcpy(term->cwd, info->cwd, MAX_CWD_LEN);
 		term->cwd[MAX_CWD_LEN - 1] = 0;
@@ -184,7 +186,6 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 
 		ev->ev = EV_REDRAW;
 		/* Fall through */
-	}
 	case EV_REDRAW:
 	case EV_RESIZE:
 		term_send_event(term, ev);

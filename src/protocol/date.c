@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.7 2005/03/29 00:21:24 jonas Exp $ */
+/* $Id: date.c,v 1.8 2005/03/29 00:35:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,11 +108,16 @@ parse_day(const unsigned char **date_p)
 }
 
 /* Expects HH:MM[:SS] or HH:MM[P|A]M, with HH <= 23, MM <= 59, SS <= 59.
- * Updates tm and returns 0 on failure, otherwise 1. */
+ * Updates tm, updates src on success and returns 0 on failure, otherwise 1. */
 static int
-parse_time(const unsigned char *date, struct tm *tm)
+parse_time(const unsigned char **src, struct tm *tm, unsigned char *end)
 {
 	unsigned char h1, h2, m1, m2, s1, s2;
+	const unsigned char *date = *src;
+
+	/* Eat HH:MM */
+	if (end && date + 5 >= end)
+		return 0;
 
 	h1 = *date++; if (!isdigit(h1)) return 0;
 	h2 = *date++; if (!isdigit(h2)) return 0;
@@ -125,8 +130,15 @@ parse_time(const unsigned char *date, struct tm *tm)
 	tm->tm_hour = (h1 - '0') * 10 + h2 - '0';
 	tm->tm_min  = (m1 - '0') * 10 + m2 - '0';
 
+	/* Eat :SS or [PA]M */
+	if (end && date + 2 >= end)
+		return 0;
+
 	if (*date == ':') {
 		date++;
+
+		if (end && date + 2 >= end)
+			return 0;
 
 		s1 = *date++; if (!isdigit(s1)) return 0;
 		s2 = *date++; if (!isdigit(s2)) return 0;
@@ -145,6 +157,8 @@ parse_time(const unsigned char *date, struct tm *tm)
 		if (*date++ != 'M')
 			return 0;
 	}
+
+	*src = date;
 
 	return (tm->tm_hour <= 23 && tm->tm_min <= 59 && tm->tm_sec <= 59);
 }
@@ -266,7 +280,7 @@ parse_date(const unsigned char *date)
 
 		/* Eat time */
 
-		if (!parse_time(date, &tm)) return 0;
+		if (!parse_time(&date, &tm, NULL)) return 0;
 
 	} else {
 		/* ANSI C's asctime() format */
@@ -291,8 +305,7 @@ parse_date(const unsigned char *date)
 
 		/* Eat time */
 
-		if (!parse_time(date, &tm)) return 0;
-		date += 9;
+		if (!parse_time(&date, &tm, NULL)) return 0;
 
 		skip_time_sep();
 

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.18 2004/01/08 00:29:58 jonas Exp $ */
+/* $Id: action.c,v 1.19 2004/01/08 00:39:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,6 +88,16 @@ do_frame_action(struct session *ses,
 	func(ses, doc_view, 0);
 }
 
+void
+goto_url_home(struct session *ses)
+{
+	/* FIXME: No option for the homepage .. and this is supposed to be a
+	 * feature rich browser. --jonas */
+	unsigned char *url = getenv("WWW_HOME");
+
+	if (!url || !*url) url = WWW_HOME_URL;
+	goto_url_with_hook(ses, url);
+}
 
 /* This could gradually become some mulitplexor / switch noodle containing
  * most if not all default handling of actions (for the main mapping) that
@@ -193,13 +203,9 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_GOTO_URL_HOME:
-		{
-			unsigned char *url = getenv("WWW_HOME");
-
-			if (!url || !*url) url = WWW_HOME_URL;
-			goto_url_with_hook(ses, url);
+			goto_url_home(ses);
 			break;
-		}
+
 		case ACT_HEADER_INFO:
 			head_msg(ses);
 			break;

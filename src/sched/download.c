@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.34 2003/05/17 20:43:31 pasky Exp $ */
+/* $Id: download.c,v 1.35 2003/05/17 20:53:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -661,8 +661,9 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	/* !overwrite means always silently overwrite, which may be admitelly
 	 * indeed a little confusing ;-) */
 	int overwrite = get_opt_int("document.download.overwrite");
-	unsigned char *ofilex = expand_tilde(ofile);
 	unsigned char *file;
+
+	ofile = expand_tilde(ofile);
 
 	/* TODO: If the file already exists, possibly:
 	 * * inform the user
@@ -673,33 +674,33 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 
 	if (!overwrite || resume) {
 		/* Nothing special to do... */
-		callback(term, ofilex, data, resume);
+		callback(term, ofile, data, resume);
 		return;
 	}
 
-	/* If ofilex is unique -> file == ofilex */
-	file = get_unique_name(ofilex);
+	/* Check if the file already exists (file != ofile). */
+	file = get_unique_name(ofile);
 
-	if (!file || overwrite == 1 || !strcmp(ofilex, file)) {
+	if (!file || overwrite == 1 || !strcmp(ofile, file)) {
 		/* Still nothing special to do... */
-		if (file != ofilex) mem_free(ofilex);
+		if (file != ofile) mem_free(ofile);
 		callback(term, file, data, 0);
 		return;
 	}
 
-	/* overwrite == 2 (ask) and file != ofilex (=> original file already
+	/* overwrite == 2 (ask) and file != ofile (=> original file already
 	 * exists) */
 
 	lun_hop = mem_calloc(1, sizeof(struct lun_hop));
 	if (!lun_hop) {
-		if (file != ofilex) mem_free(file);
-		mem_free(ofilex);
+		if (file != ofile) mem_free(file);
+		mem_free(ofile);
 		callback(term, NULL, data, 0);
 		return;
 	}
 	lun_hop->term = term;
-	lun_hop->ofile = ofilex;
-	lun_hop->file = (file != ofilex) ? file : stracpy(ofilex);
+	lun_hop->ofile = ofile;
+	lun_hop->file = (file != ofile) ? file : stracpy(ofile);
 	lun_hop->callback = callback;
 	lun_hop->data = data;
 

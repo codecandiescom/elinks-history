@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.9 2005/03/27 14:50:31 jonas Exp $ */
+/* $Id: parse.c,v 1.10 2005/03/27 14:51:31 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -538,6 +538,110 @@ parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
 }
 
 
+/* Parser for the MSDOS-style format:
+ * "04-27-00  09:09PM       <DIR>          licensed"
+ * "07-18-00  10:16AM       <DIR>          pub"
+ * "04-14-00  03:47PM                  589 readme.htm"
+ */
+
+struct ftp_file_info *
+parse_ftp_winnt_response(struct ftp_file_info *info, unsigned char *src, int len)
+{
+	struct tm mtime;
+	unsigned char *end = src + len;
+
+	/* Extracting name is a bit of black magic and we have to do it
+	 * before `strtok' inserted extra \0 characters in the line
+	 * string. For the moment let us just suppose that the name starts at
+	 * column 39 of the listing. This way we could also recognize
+	 * filenames that begin with a series of space characters (but who
+	 * really wants to use such filenames anyway?). */
+	if (len < 40) return NULL;
+
+	info->name.source = src + 39;
+	info->name.length = end - src - 39;
+
+
+	/* First column: mm-dd-yy. Should number parsing of the month fail,
+	 * january will be assumed. */
+
+	memset(&mtime, 0, sizeof(mtime));
+	mtime.tm_isdst = -1;
+
+	mtime.tm_mon = parse_ftp_number(&src, end, 1, 12);
+	if (src + 2 >= end || *src != '-')
+		return NULL;
+
+	src++;
+	
+	mtime.tm_mday = parse_ftp_number(&src, end, 1, 31);
+	if (src + 2 >= end || *src != '-')
+		return NULL;
+
+	src++;
+
+	mtime.tm_year = parse_ftp_number(&src, end, 0, LONG_MAX);
+	if (src >= end)
+		return NULL;
+
+	/* Assuming the epoch starting at 1.1.1970 */
+	if (mtime.tm_year <= 70)
+		mtime.tm_year += 100;
+
+	skip_space_end(src, end);
+	if (src >= end) return NULL;
+
+
+	/* Second column: hh:mm[AP]M, listing does not contain value for
+	 * seconds */
+
+	mtime.tm_hour = parse_ftp_number(&src, end, 1, 12);
+	if (src >= end || *src != ':')
+		return NULL;
+
+	src++;
+
+	mtime.tm_min = parse_ftp_number(&src, end, 0, 59);
+	if (src + 2 >= end)
+		return NULL;
+
+	/* Adjust hour from AM/PM. Just for the record, the sequence goes
+	 * 11:00AM, 12:00PM, 01:00PM ... 11:00PM, 12:00AM, 01:00AM . */
+	if (mtime.tm_hour == 12)
+		mtime.tm_hour = 0;
+
+	if (*src == 'P')
+		mtime.tm_hour += 12;
+
+
+	/* Store the time-stamp. */
+	info->mtime = mktime (&mtime);
+
+	skip_nonspace_end(src, end);
+	skip_space_end(src, end);
+	if (src >= end) return NULL;
+
+
+	/* Third column: Either file length, or <DIR>. We also set the
+	 * permissions (guessed as 0644 for plain files and 0755 for directories
+	 * as the listing does not give us a clue) and filetype here. */
+
+	if (*src == '<') {
+		info->type = FTP_FILE_DIRECTORY;
+		info->permissions = 0755;
+
+	} else if (isdigit(*src)) {
+		info->type = FTP_FILE_PLAINFILE;
+		info->size = parse_ftp_number(&src, end, 0, LONG_MAX);
+		info->permissions = 0644;
+	} else {
+		info->type = FTP_FILE_UNKNOWN;
+	}
+
+	return info;
+}
+
+
 struct ftp_file_info *
 parse_ftp_file_info(struct ftp_file_info *info, unsigned char *src, int len)
 {
@@ -559,7 +663,9 @@ parse_ftp_file_info(struct ftp_file_info *info, unsigned char *src, int len)
 	default:
 		if (memchr(src, ';', len))
 			return parse_ftp_vms_response(info, src, len);
-		break;
+
+		if (isdigit(*src))
+			return parse_ftp_winnt_response(info, src, len);
 	}
 
 	memset(&ftpparse_info, 0, sizeof(ftpparse_info));

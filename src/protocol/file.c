@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.9 2002/04/28 10:55:45 pasky Exp $ */
+/* $Id: file.c,v 1.10 2002/04/28 14:51:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,12 +452,14 @@ dir:
 				} while (r == size);
 
 				mem_free(n);
-				if (r != -1 && buf) {
-					buf[r] = 0;
-			
-					lnk = buf;
-				} else {
-					if (buf) mem_free(buf);
+				if (buf) {
+					if (r != -1) {
+						buf[r] = '\0';
+
+						lnk = buf;
+					} else {
+						mem_free(buf);
+					}
 				}
 			}
 #endif

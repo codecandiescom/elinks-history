@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.23 2004/09/26 09:56:55 pasky Exp $ */
+/* $Id: vs.h,v 1.24 2004/09/26 10:03:45 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -7,7 +7,6 @@
 struct document_view;
 struct form_state;
 struct session;
-struct string_list_item;
 struct uri;
 
 struct view_state {
@@ -35,15 +34,6 @@ struct view_state {
 	 * until then the old document is still hanging there. */
 	int ecmascript_fragile:1;
 	struct ecmascript_interpreter *ecmascript;
-	/* This is a cross-rerenderings accumulator of
-	 * @document.onload_snippets (see its description for juicy details).
-	 * They enter this list as they continue to appear there, and they
-	 * never leave it (so that we can always find from where to look for
-	 * any new snippets in document.onload_snippets). Instead, as we
-	 * go through the list we maintain a pointer to the last processed
-	 * entry. */
-	struct list_head onload_snippets; /* -> struct string_list_item */
-	struct string_list_item *current_onload_snippet;
 #endif
 };
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.88 2004/09/26 09:56:55 pasky Exp $ */
+/* $Id: renderer.c,v 1.89 2004/09/26 10:03:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,10 +213,13 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	}
 #ifdef CONFIG_ECMASCRIPT
 	assert(vs->ecmascript);
+	/* Passing of the onload_snippets pointers gives process_snippets()
+	 * some feeling of universality, shall we ever get any other snippets
+	 * (?). */
 	process_snippets(vs->ecmascript,
 	                 &document->onload_snippets,
-	                 &vs->onload_snippets,
-	                 &vs->current_onload_snippet);
+	                 &vs->ecmascript->onload_snippets,
+	                 &vs->ecmascript->current_onload_snippet);
 #endif
 
 	/* If we do not care about the height and width of the document

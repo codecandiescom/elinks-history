@@ -1,4 +1,4 @@
-/* $Id: ecmascript.h,v 1.7 2004/09/26 09:56:55 pasky Exp $ */
+/* $Id: ecmascript.h,v 1.8 2004/09/26 10:03:45 pasky Exp $ */
 
 #ifndef EL__ECMASCRIPT_ECMASCRIPT_H
 #define EL__ECMASCRIPT_ECMASCRIPT_H
@@ -18,6 +18,16 @@ struct ecmascript_interpreter {
 	struct view_state *vs;
 	void *backend_data;
 	time_t exec_start;
+
+	/* This is a cross-rerenderings accumulator of
+	 * @document.onload_snippets (see its description for juicy details).
+	 * They enter this list as they continue to appear there, and they
+	 * never leave it (so that we can always find from where to look for
+	 * any new snippets in document.onload_snippets). Instead, as we
+	 * go through the list we maintain a pointer to the last processed
+	 * entry. */
+	struct list_head onload_snippets; /* -> struct string_list_item */
+	struct string_list_item *current_onload_snippet;
 };
 
 /* Why is the interpreter bound to {struct view_state} instead of {struct

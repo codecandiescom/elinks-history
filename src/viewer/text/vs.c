@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.42 2004/09/26 09:56:55 pasky Exp $ */
+/* $Id: vs.c,v 1.43 2004/09/26 10:03:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,6 @@ init_vs(struct view_state *vs, struct uri *uri, int plain)
 	vs->did_fragment = !uri->fragmentlen;
 #ifdef CONFIG_ECMASCRIPT
 	vs->ecmascript = ecmascript_get_interpreter(vs);
-	init_list(vs->onload_snippets);
 #endif
 }
 
@@ -50,7 +49,6 @@ destroy_vs(struct view_state *vs)
 #ifdef CONFIG_ECMASCRIPT
 	if (vs->ecmascript)
 		ecmascript_put_interpreter(vs->ecmascript);
-	free_string_list(&vs->onload_snippets);
 #endif
 }
 

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.72 2004/08/03 00:33:50 jonas Exp $ */
+/* $Id: socket.c,v 1.73 2004/08/03 00:35:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,14 +45,14 @@
 
 #ifdef CONFIG_OPENSSL
 
-#define ssl_do_connect(conn)		SSL_get_error(conn->socket.ssl, SSL_connect(conn->socket.ssl))
+#define ssl_do_connect(socket)		SSL_get_error(socket->ssl, SSL_connect(socket->ssl))
 #define ssl_do_write(conn, data, len)	SSL_write(conn->socket.ssl /* FIXME: Assuming ssl handle */, data, len)
 #define ssl_do_read(conn, rb)		SSL_read(conn->socket.ssl /* FIXME: Assuming ssl handle */, rb->data + rb->len, rb->freespace)
 #define ssl_do_close(conn)		/* Hmh? No idea.. */
 
 #elif defined(CONFIG_GNUTLS)
 
-#define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) conn->socket.ssl))
+#define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) socket->ssl))
 #define ssl_do_write(conn, data, len)	gnutls_record_send(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), data, len)
 #define ssl_do_read(conn, rb)		gnutls_record_recv(*((ssl_t *) conn->socket.ssl /* FIXME: Assuming ssl handle */), rb->data + rb->len, rb->freespace)
 /* We probably don't handle this entirely correctly.. */
@@ -158,7 +158,7 @@ ssl_want_read(struct connection *conn)
 	if (conn->no_tsl)
 		ssl_set_no_tls(b->socket);
 
-	switch (ssl_do_connect(conn)) {
+	switch (ssl_do_connect(b->socket)) {
 		case SSL_ERROR_NONE:
 #ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify")
@@ -228,7 +228,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 	/* TODO: Some certificates fuss. --pasky */
 #endif
 
-	ret = ssl_do_connect(conn);
+	ret = ssl_do_connect(socket);
 
 	switch (ret) {
 		case SSL_ERROR_WANT_READ:

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.35 2003/07/09 15:02:21 jonas Exp $ */
+/* $Id: user.c,v 1.36 2003/07/09 15:08:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,15 +119,14 @@ static void
 user_func(struct session *ses, unsigned char *url)
 {
 	unsigned char *urldata;
-	unsigned char *host, *port, *dir, *subj;
+	unsigned char *port, *dir, *subj;
 	unsigned char *prog;
 	unsigned char *proto = get_protocol_name(url);
+	unsigned char *host = get_host_and_pass(url, 0);
 
-	if (!proto) return;
-
-	host = get_host_and_pass(url, 0);
-	if (!host) {
-		mem_free(proto);
+	if (!proto || !host) {
+		if (proto) mem_free(proto);
+		if (host) mem_free(host);
 		msg_box(ses->tab->term, NULL, 0,
 			N_("Bad URL syntax"), AL_CENTER,
 			N_("Bad user protocol URL"),

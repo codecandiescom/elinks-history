@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.50 2003/10/20 15:39:06 pasky Exp $ */
+/* $Id: formhist.c,v 1.51 2003/10/26 18:41:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "formhist/formhist.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
+#include "modules/module.h"
 #include "util/base64.h"
 #include "util/file.h"
 #include "util/lists.h"
@@ -28,6 +29,16 @@
 
 
 #define FORMHIST_FILENAME		"formhist"
+
+static struct option_info forms_history_options[] = {
+	INIT_OPT_BOOL("document.browse.forms", N_("Show forms history dialog"),
+		"show_formhist", 0, 1,
+		N_("Ask if a login form should be saved to file or not.\n"
+		"This option only disables the dialog, already saved login\n"
+		"forms are unaffected.")),
+
+	NULL_OPTION_INFO,
+};
 
 INIT_LIST_HEAD(saved_forms);
 
@@ -347,8 +358,8 @@ fail:
 	free_form(form);
 }
 
-void
-done_form_history(void)
+static void
+done_form_history(struct module *module)
 {
 	struct formhist_data *form;
 
@@ -357,5 +368,15 @@ done_form_history(void)
 
 	free_list(saved_forms);
 }
+
+struct module forms_history_module = struct_module(
+	/* name: */		"forms history",
+	/* options: */		forms_history_options,
+	/* events: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		done_form_history
+);
 
 #endif /* FORMS_MEMORY */

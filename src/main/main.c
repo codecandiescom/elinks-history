@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.143 2003/10/26 15:24:00 jonas Exp $ */
+/* $Id: main.c,v 1.144 2003/10/26 18:41:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,6 @@
 #include "document/cache.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
-#include "formhist/formhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/dns.h"
@@ -240,9 +239,6 @@ terminate_all_subsystems(void)
 	check_bottom_halves();
 	free_home();
 	free_strerror_buf();
-#ifdef FORMS_MEMORY
-	done_form_history();
-#endif
 	done_screen_drivers();
 	done_bfu_colors();
 	done_timer();

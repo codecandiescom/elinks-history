@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.19 2003/10/26 18:13:18 jonas Exp $ */
+/* $Id: options.inc,v 1.20 2003/10/26 18:41:24 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -163,19 +163,6 @@ struct option_info config_options_info[] = {
 		"confirm_submit", 0, 1,
 		N_("Ask for confirmation when submitting a form.")),
 
-#ifdef FORMS_MEMORY
-	INIT_OPT_BOOL("document.browse.forms", N_("Show forms history dialog"),
-		"show_formhist", 0, 1,
-		N_("Ask if a login form should be saved to file or not.\n"
-		"This option only disables the dialog, already saved login\n"
-		"forms are unaffected.")),
-#else
-	INIT_OPT_BOOL("document.browse.forms", N_("Show forms history dialog"),
-		"show_formhist", 0, 1,
-		N_("Ask if a login form should be saved to file or not.\n"
-		"This option only disables the dialog, already saved login\n"
-		"forms are unaffected. (DISABLED)")),
-#endif
 
 	INIT_OPT_TREE("document.browse", N_("Images"),
 		"images", 0,

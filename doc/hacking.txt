@@ -408,7 +408,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.17 2003/10/24 13:36:51 zas Exp $ */
+	/* $Id: hacking.txt,v 1.18 2003/11/14 15:30:09 zas Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -452,6 +452,20 @@ you do so), or in similiar cases.
 
   struct example t = NULL_EXAMPLE;
 
+- Please try to keep order of fields from max. to min. of size of each type
+of fields, especially in structures:
+
+Prefer:
+	long a;
+	int b;
+	char c;
+
+Instead of:
+ 	char c;
+ 	int b;
+ 	long b;
+
+It will help to reduce memory padding on some architectures.
 
 
 4, Patches
@@ -513,4 +527,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.17 2003/10/24 13:36:51 zas Exp $
+$Id: hacking.txt,v 1.18 2003/11/14 15:30:09 zas Exp $

@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-03 03:04+0100\n"
-"PO-Revision-Date: 2005-01-03 03:05+0100\n"
+"POT-Creation-Date: 2005-01-03 05:02+0100\n"
+"PO-Revision-Date: 2005-01-03 05:01+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -43,8 +43,8 @@ msgstr "Tryk mellemrum for at åbne denne mappe."
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:515 src/dialogs/menu.c:566
 #: src/dialogs/options.c:174 src/dialogs/options.c:254
-#: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1929
-#: src/ecmascript/spidermonkey.c:1956 src/formhist/dialogs.c:179
+#: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1930
+#: src/ecmascript/spidermonkey.c:1957 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
 #: src/protocol/user.c:268 src/sched/download.c:231 src/sched/download.c:327
@@ -283,19 +283,19 @@ msgid "No URL"
 msgstr "Ingen URL"
 
 #. name:
-#: src/bookmarks/bookmarks.c:47 src/bookmarks/bookmarks.c:157
+#: src/bookmarks/bookmarks.c:48 src/bookmarks/bookmarks.c:158
 msgid "Bookmarks"
 msgstr "Bogmærker"
 
-#: src/bookmarks/bookmarks.c:49
+#: src/bookmarks/bookmarks.c:50
 msgid "Bookmark options."
 msgstr "Bogmærkeindstillinger."
 
-#: src/bookmarks/bookmarks.c:52 src/bookmarks/bookmarks.c:58
+#: src/bookmarks/bookmarks.c:53 src/bookmarks/bookmarks.c:59
 msgid "File format"
 msgstr "Filformat"
 
-#: src/bookmarks/bookmarks.c:54
+#: src/bookmarks/bookmarks.c:55
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default native ELinks format\n"
@@ -306,7 +306,7 @@ msgstr ""
 "1 er det universelle XBEL XML bogmærke format (nationale bogstaver "
 "understøttes ikke!)"
 
-#: src/bookmarks/bookmarks.c:60
+#: src/bookmarks/bookmarks.c:61
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default native ELinks format\n"
@@ -318,11 +318,11 @@ msgstr ""
 "1 er det universelle XBEL XML bogmærke format (nationale bogstaver "
 "understøttes ikke!) (anvendes ikke)"
 
-#: src/bookmarks/bookmarks.c:66
+#: src/bookmarks/bookmarks.c:67
 msgid "Periodic snapshotting"
 msgstr "Periodisk gemning af øjebliksbillede"
 
-#: src/bookmarks/bookmarks.c:68
+#: src/bookmarks/bookmarks.c:69
 msgid ""
 "Automatically save a snapshot of all tabs periodically.\n"
 "This will periodically bookmark the tabs of each terminal in a separate "
@@ -3806,6 +3806,8 @@ msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr ""
+"Når der flyttes til højre fra det sidste faneblad, hop til det\n"
+"første og omvendt."
 
 #: src/config/options.inc:1109
 msgid "Confirm tab closing"
@@ -3824,6 +3826,8 @@ msgid ""
 "Language of user interface. 'System' means that the language will\n"
 "be extracted from the environment dynamically."
 msgstr ""
+"Sproget for brugergrænsefladen. 'System' betyder at sproget vil\n"
+"blive sat dynamisk udfra miljøet."
 
 #: src/config/options.inc:1120
 msgid "Display status bar"
@@ -3850,6 +3854,9 @@ msgid ""
 "Pop up goto dialog in newly created tabs when there's no homepage\n"
 "set. This means also showing goto dialog on startup."
 msgstr ""
+"Åbn et gå til URL dialogvindue i ny-åbnede faneblade, når der ikke\n"
+"er sat nogen hjemmeside. Dette også indebærer visning af gå til URL\n"
+"dialog ved opstart."
 
 #: src/config/options.inc:1133
 msgid "Show a message box when file is saved successfully"
@@ -3861,6 +3868,9 @@ msgid ""
 "will make sure that a box confirming success of the operation will\n"
 "pop up."
 msgstr ""
+"Når du har trykket en [ Gem ] knap i en håndteringsdialog, denne\n"
+"indstilling sikrer at et dialogvindue, som bekræfter problemfri\n"
+"gemning åbnes."
 
 #: src/config/options.inc:1140
 msgid "Sessions"
@@ -3879,6 +3889,8 @@ msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
 msgstr ""
+"Automatisk gem sessionen, når der afsluttes.\n"
+"Denne egenskab kræver understøttelse af bogmærker."
 
 #: src/config/options.inc:1149
 msgid "Auto restore session"
@@ -3889,10 +3901,12 @@ msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
 msgstr ""
+"Automatisk gendan sessionen ved opstart.\n"
+"Denne egenskab kræver understøttelse af bogmærker."
 
 #: src/config/options.inc:1154
 msgid "Auto save and restore session folder name"
-msgstr ""
+msgstr "Mappenavnet for automatiske sessioner"
 
 #: src/config/options.inc:1156
 msgid ""
@@ -3900,6 +3914,10 @@ msgid ""
 "The name has to be unique. Any folders with the same name will be deleted.\n"
 "This only makes sense with bookmark support."
 msgstr ""
+"Navn på bogmærkemappen, der anvendes til at vedligeholde informationer\n"
+"til automatisk gemning og gendanning af sessioner. Navnet skal være\n"
+"unikt. Mapper med samme navn vil blive slettet.\n"
+"Denne egenskab kræver understøttelse af bogmærker."
 
 #: src/config/options.inc:1160
 msgid "Homepage URI"
@@ -3910,8 +3928,12 @@ msgid ""
 "The URI to load either at startup time when no URI was given\n"
 "on the command line or when requested by the goto-url-home action.\n"
 "Set to \"\" if the environment variable WWW_HOME should be used\n"
-"used as homepage URI instead."
+"as homepage URI instead."
 msgstr ""
+"URIen som vil blive indlæst enten ved opstart når ingen URI\n"
+"er givet eller ved udførelse af goto-url-home handlingen.\n"
+"Sæt til \"\" hvis miljøvariablen WWW_HOME skal anvendes som\n"
+"hjemmeside URI i stedet."
 
 #: src/config/options.inc:1168
 msgid "Date format"
@@ -3933,6 +3955,9 @@ msgid ""
 "in an xterm-like terminal. This way the document's title is\n"
 "shown on the window titlebar."
 msgstr ""
+"Sæt terminalvinduets titel ved kørsel i en xterm-lignende\n"
+"terminal i et vinduesmiljø. Derved vises dokumentets titel\n"
+"i terminalvinduets titellinje."
 
 #: src/config/opttypes.c:55
 msgid "Read error"
@@ -4952,34 +4977,20 @@ msgstr "Antal sekunder som et skript maksimalt må eksekveres."
 msgid "JavaScript Alert"
 msgstr "JavaScript advarsel"
 
-#: src/ecmascript/spidermonkey.c:1912
+#: src/ecmascript/spidermonkey.c:1911
 #, c-format
-msgid ""
-"A script embedded in the current document raised the following%s%s%s%s: \n"
-"\n"
-"%s\n"
-"\n"
-"%s\n"
-".%*s^%*s."
-msgstr ""
+msgid "A script embedded in the current document raised the following%s%s%s%s"
+msgstr "Et skript i det nuværende dokument rejste den følgende%s%s%s%s"
 
-#: src/ecmascript/spidermonkey.c:1920
-#, c-format
-msgid ""
-"A script embedded in the current document raised the following%s%s%s%s: \n"
-"\n"
-"%s"
-msgstr ""
-
-#: src/ecmascript/spidermonkey.c:1927
+#: src/ecmascript/spidermonkey.c:1928
 msgid "JavaScript Error"
 msgstr "JavaScript fejl"
 
-#: src/ecmascript/spidermonkey.c:1947
+#: src/ecmascript/spidermonkey.c:1948
 msgid "JavaScript Emergency"
 msgstr "JavaScript nødssituation"
 
-#: src/ecmascript/spidermonkey.c:1949
+#: src/ecmascript/spidermonkey.c:1950
 #, c-format
 msgid ""
 "A script embedded in the current document was running for more than %d "

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.308 2003/10/18 22:31:57 pasky Exp $ */
+/* $Id: options.c,v 1.309 2003/10/18 22:32:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1164,7 +1164,7 @@ register_options(void)
 
 	add_opt_bool("document.browse.links.active_link", N_("Bold"),
 		"bold", 0, 0,
-		N_("Make the active link test bold."));
+		N_("Make the active link text bold."));
 
 	add_opt_bool("document.browse.links.active_link", N_("Invert colors"),
 		"invert", 0, 1,

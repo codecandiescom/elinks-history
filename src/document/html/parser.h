@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.67 2004/07/13 16:54:37 zas Exp $ */
+/* $Id: parser.h,v 1.68 2004/07/21 23:15:44 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -55,8 +55,6 @@ struct text_attrib {
 	struct form_control *form;
 	color_t clink;
 	color_t vlink;
-	struct uri *href_base;
-	unsigned char *target_base;
 	unsigned char *select;
 	int select_disabled;
 	unsigned int tabindex;

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.36 2004/07/13 16:54:37 zas Exp $ */
+/* $Id: internal.h,v 1.37 2004/07/21 23:15:44 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -6,6 +6,8 @@
 #include "document/css/stylesheet.h"
 #include "document/html/parser.h"
 #include "util/lists.h"
+
+struct uri;
 
 /* For parser/parse.c: */
 
@@ -19,6 +21,11 @@ struct html_context {
 	 * added to it. */
 	struct css_stylesheet css_styles;
 #endif
+
+	/* These are global per-document base values, alterable by the <base>
+	 * element. */
+	struct uri *base_href;
+	unsigned char *base_target;
 
 	/* For:
 	 * html/parser/parse.c

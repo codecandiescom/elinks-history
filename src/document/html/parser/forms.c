@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.39 2004/07/15 15:24:06 jonas Exp $ */
+/* $Id: forms.c,v 1.40 2004/07/21 23:15:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,7 @@ get_html_form(unsigned char *a, struct form *form)
 
 	al = get_attr_val(a, "action");
 	if (al) {
-		form->action = join_urls(format.href_base, trim_chars(al, ' ', 0));
+		form->action = join_urls(html_context.base_href, trim_chars(al, ' ', 0));
 		mem_free(al);
 	} else {
 		enum uri_component components = URI_ORIGINAL;
@@ -96,7 +96,7 @@ get_html_form(unsigned char *a, struct form *form)
 		if (form->method == FORM_METHOD_GET)
 			components = URI_FORM_GET;
 
-		form->action = get_uri_string(format.href_base, components);
+		form->action = get_uri_string(html_context.base_href, components);
 
 		/* No action URI should contain post data */
 		assert(!form->action || !strchr(form->action, POST_CHAR));
@@ -105,12 +105,12 @@ get_html_form(unsigned char *a, struct form *form)
 		 * URI where the '?' is part of the filename. */
 		assert(!form->action
 			|| form->method != FORM_METHOD_GET
-			|| format.href_base->protocol == PROTOCOL_FILE
+			|| html_context.base_href->protocol == PROTOCOL_FILE
 			|| !strchr(form->action, '?'));
 	}
 
 	al = get_target(a);
-	form->target = al ? al : stracpy(format.target_base);
+	form->target = al ? al : stracpy(html_context.base_target);
 
 	/* This field is currently unused, why ? --Zas */
 	/* form->num = a - startf; */
@@ -339,7 +339,7 @@ no_type_attr:
 			al = get_url_val(a, "src");
 			if (!al) al = get_url_val(a, "dynsrc");
 			if (al) {
-				format.image = join_urls(format.href_base, al);
+				format.image = join_urls(html_context.base_href, al);
 				mem_free(al);
 			}
 			format.attr |= AT_BOLD;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.21 2004/07/15 06:53:56 miciah Exp $ */
+/* $Id: link.c,v 1.22 2004/07/21 23:15:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ html_a(unsigned char *a)
 		unsigned char *target;
 
 		mem_free_set(&format.link,
-			     join_urls(format.href_base,
+			     join_urls(html_context.base_href,
 				       trim_chars(href, ' ', 0)));
 
 		mem_free(href);
@@ -65,7 +65,7 @@ html_a(unsigned char *a)
 		if (target) {
 			mem_free_set(&format.target, target);
 		} else {
-			mem_free_set(&format.target, stracpy(format.target_base));
+			mem_free_set(&format.target, stracpy(html_context.base_target));
 		}
 
 		if (0)
@@ -168,7 +168,7 @@ html_img(unsigned char *a)
 		html_stack_dup(ELEMENT_KILLABLE);
 		mem_free_if(format.link);
 		if (format.form) format.form = NULL;
-		u = join_urls(format.href_base, al);
+		u = join_urls(html_context.base_href, al);
 		if (!u) {
 			mem_free(al);
 			return;
@@ -227,7 +227,7 @@ html_img(unsigned char *a)
 		if (!s) s = get_url_val(a, "src");
 		if (!s) s = get_url_val(a, "dynsrc");
 		if (s) {
-			format.image = join_urls(format.href_base, s);
+			format.image = join_urls(html_context.base_href, s);
 			mem_free(s);
 		}
 
@@ -280,7 +280,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	mem_free_set(&format.title, NULL);
 	format.form = NULL;
 	put_chrs(prefix, strlen(prefix), html_context.put_chars_f, html_context.part);
-	format.link = join_urls(format.href_base, link);
+	format.link = join_urls(html_context.base_href, link);
 	format.target = stracpy(target);
 	format.fg = format.clink;
 	put_chrs(linkname, strlen(linkname), html_context.put_chars_f, html_context.part);
@@ -743,10 +743,10 @@ html_link(unsigned char *a)
 only_title:
 	if (text.length)
 		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      text.source, link.href, format.target_base);
+			      text.source, link.href, html_context.base_target);
 	else
 		put_link_line((link.direction == LD_REL) ? link_rel_string : link_rev_string,
-			      name, link.href, format.target_base);
+			      name, link.href, html_context.base_target);
 
 	if (text.source) done_string(&text);
 

@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.18 2004/06/23 12:13:54 jonas Exp $ */
+/* $Id: stack.c,v 1.19 2004/07/21 23:15:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,9 +83,7 @@ kill_html_stack_item(struct html_element *e)
 	mem_free_if(e->attr.target);
 	mem_free_if(e->attr.image);
 	mem_free_if(e->attr.title);
-	mem_free_if(e->attr.target_base);
 	mem_free_if(e->attr.select);
-	done_uri(e->attr.href_base);
 	del_from_list(e);
 	mem_free(e);
 #if 0
@@ -115,7 +113,6 @@ html_stack_dup(enum html_element_type type)
 	if (ep->attr.target) e->attr.target = stracpy(ep->attr.target);
 	if (ep->attr.image) e->attr.image = stracpy(ep->attr.image);
 	if (ep->attr.title) e->attr.title = stracpy(ep->attr.title);
-	if (ep->attr.target_base) e->attr.target_base = stracpy(ep->attr.target_base);
 	if (ep->attr.select) e->attr.select = stracpy(ep->attr.select);
 
 #if 0
@@ -124,13 +121,10 @@ html_stack_dup(enum html_element_type type)
 		if (e->attr.target) set_mem_comment(e->attr.target, e->name, e->namelen);
 		if (e->attr.image) set_mem_comment(e->attr.image, e->name, e->namelen);
 		if (e->attr.title) set_mem_comment(e->attr.title, e->name, e->namelen);
-		if (e->attr.href_base) set_mem_comment(e->attr.href_base, e->name, e->namelen);
-		if (e->attr.target_base) set_mem_comment(e->attr.target_base, e->name, e->namelen);
 		if (e->attr.select) set_mem_comment(e->attr.select, e->name, e->namelen);
 	}
 #endif
 
-	e->attr.href_base = get_uri_reference(ep->attr.href_base);
 	e->name = e->options = NULL;
 	e->namelen = 0;
 	e->type = type;

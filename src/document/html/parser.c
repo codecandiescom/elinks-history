@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.483 2004/07/21 19:35:54 zas Exp $ */
+/* $Id: parser.c,v 1.484 2004/07/21 23:15:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,7 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 	if (!url) return;
 
 	/* HTML <head> urls should already be fine but we can.t detect them. */
-	import_url = join_urls(format.href_base, url);
+	import_url = join_urls(html_context.base_href, url);
 	mem_free(url);
 
 	if (!import_url) return;
@@ -621,32 +621,24 @@ html_td(unsigned char *a)
 void
 html_base(unsigned char *a)
 {
-	unsigned char *al = get_url_val(a, "href");
+	unsigned char *al;
 
+	al = get_url_val(a, "href");
 	if (al) {
-		struct html_element *element = html_context.stack.prev;
-		unsigned char *base = join_urls(element->attr.href_base, al);
+		unsigned char *base = join_urls(html_context.base_href, al);
 		struct uri *uri = base ? get_uri(base, 0) : NULL;
 
 		mem_free(al);
 		mem_free_if(base);
 
-		if (!uri) return;
-
-		/* Now distribute the base URL */
-		foreach (element, html_context.stack) {
-			if (compare_uri(element->attr.href_base, uri, 0))
-				continue;
-
-			done_uri(element->attr.href_base);
-			element->attr.href_base = get_uri_reference(uri);
+		if (uri) {
+			done_uri(html_context.base_href);
+			html_context.base_href = uri;
 		}
-
-		done_uri(uri);
 	}
 
 	al = get_target(a);
-	if (al) mem_free_set(&format.target_base, al);
+	if (al) mem_free_set(&html_context.base_target, al);
 }
 
 void
@@ -843,7 +835,7 @@ html_frame(unsigned char *a)
 	if (!src) {
 		url = stracpy("about:blank");
 	} else {
-		url = join_urls(format.href_base, src);
+		url = join_urls(html_context.base_href, src);
 		mem_free(src);
 	}
 	if (!url) return;
@@ -963,7 +955,7 @@ process_head(unsigned char *head)
 			if (errno || seconds > 7200) seconds = 0;
 
 			html_focusable(NULL);
-			url = join_urls(format.href_base, saved_url);
+			url = join_urls(html_context.base_href, saved_url);
 			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
 			html_context.special_f(html_context.part, SP_REFRESH, seconds, url);
 			mem_free(url);
@@ -1305,6 +1297,10 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_context.put_chars_f = put_chars;
 	html_context.line_break_f = line_break;
 	html_context.special_f = special;
+
+	html_context.base_href = get_uri_reference(uri);
+	html_context.base_target = null_or_stracpy(options->framename);
+
 	scan_http_equiv(start, end, head, title);
 
 	e = mem_calloc(1, sizeof(struct html_element));
@@ -1323,9 +1319,6 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	format.bg = options->default_bg;
 	format.clink = options->default_link;
 	format.vlink = options->default_vlink;
-
-	format.href_base = get_uri_reference(uri);
-	format.target_base = null_or_stracpy(options->framename);
 
 	par_format.align = ALIGN_LEFT;
 	par_format.leftmargin = options->margin;
@@ -1365,6 +1358,9 @@ done_html_parser(void)
 #endif
 
 	done_form();
+
+	mem_free(html_context.base_target);
+	done_uri(html_context.base_href);
 
 	kill_html_stack_item(html_context.stack.next);
 

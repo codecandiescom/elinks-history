@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.247 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: link.c,v 1.248 2004/06/26 13:06:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,6 +397,8 @@ next_in_view(struct document_view *doc_view, int current, int direction,
 	vs = doc_view->vs;
 	height = vs->y + doc_view->box.height;
 
+	/* Look for the first and the last link currently visible in our
+	 * viewport. */
 	for (y = int_max(0, vs->y);
 	     y < int_min(height, document->height);
 	     y++) {
@@ -409,6 +411,8 @@ next_in_view(struct document_view *doc_view, int current, int direction,
 					     - document->links);
 	}
 
+	/* And now go from the @current link in @direction until either
+	 * fn() is happy or we would leave the current viewport. */
 	while (current >= start && current <= end) {
 		if (fn(doc_view, &document->links[current])) {
 			vs->current_link = current;

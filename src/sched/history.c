@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.71 2004/04/02 16:53:35 jonas Exp $ */
+/* $Id: history.c,v 1.72 2004/04/03 03:06:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,7 +152,7 @@ go_history(struct session *ses, struct location *loc)
 
 	set_session_referrer(ses, NULL);
 
-	ses_goto(ses, get_uri_reference(loc->vs.uri), NULL, loc,
+	ses_goto(ses, loc->vs.uri, NULL, loc,
 		 PRI_MAIN, CACHE_MODE_ALWAYS, TASK_HISTORY,
 		 NULL, end_load, 0);
 }

@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.10 2003/11/26 21:39:21 jonas Exp $ */
+/* $Id: dialogs.c,v 1.11 2003/11/26 21:52:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,6 +112,21 @@ static struct listbox_ops formhist_listbox_ops = {
 };
 
 static int
+push_toggle_dontsave_button(struct dialog_data *dlg_data,
+			    struct widget_data *button)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct formhist_data *formhist_data;
+
+	if (!box->sel || !box->sel->udata) return 0;
+
+	formhist_data = box->sel->udata;
+
+	formhist_data->dontsave = !formhist_data->dontsave;
+	return 0;
+}
+
+static int
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	save_forms_to_file();
@@ -124,6 +139,7 @@ static struct hierbox_browser_button formhist_buttons[] = {
 	{ N_("Login"),		push_hierbox_goto_button,	1 },
 	{ N_("Info"),		push_hierbox_info_button,	1 },
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },
+	{ N_("Toggle enable"),	push_toggle_dontsave_button,	0 },
 	{ N_("Clear"),		push_hierbox_clear_button,	1 },
 	{ N_("Save"),		push_save_button,		0 },
 };
@@ -142,5 +158,6 @@ struct hierbox_browser formhist_browser = {
 void
 menu_formhist_manager(struct terminal *term, void *fcp, struct session *ses)
 {
+	load_forms_from_file();
 	hierbox_browser(&formhist_browser, ses);
 }

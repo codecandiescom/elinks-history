@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.36 2003/09/02 13:55:01 zas Exp $ */
+/* $Id: formhist.c,v 1.37 2003/09/02 14:01:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,7 +319,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 		}
 	}
 
-	if (form_already_saved(form)) { free_form(form); return; }
+	if (form_already_saved(form)) goto fail;
 
 	msg_box(ses->tab->term, NULL, 0,
 		N_("Form memory"), AL_CENTER,

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.274 2004/07/12 15:07:25 jonas Exp $ */
+/* $Id: link.c,v 1.275 2004/07/15 08:29:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -780,7 +780,6 @@ get_link_uri(struct session *ses, struct document_view *doc_view,
 	}
 }
 
-/* This is common backend for submit_form_do() and enter(). */
 struct link *
 goto_current_link(struct session *ses, struct document_view *doc_view, int do_reload)
 {

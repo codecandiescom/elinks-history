@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.98 2004/09/11 04:39:29 miciah Exp $ */
+/* $Id: charsets.c,v 1.99 2004/09/11 04:42:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,7 +208,7 @@ cp2utf_8(int from, int c)
 {
 	int j;
 
-	to &= ~SYSTEM_CHARSET_FLAG;
+	from &= ~SYSTEM_CHARSET_FLAG;
 
 	if (codepages[from].table == table_utf_8 || c < 128)
 		return strings[c];

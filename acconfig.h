@@ -30,6 +30,12 @@
 /* Define to 1 if we should use SSL */
 #undef HAVE_SSL
 
+/* Define to 1 if we should use OpenSSL */
+#undef HAVE_OPENSSL
+
+/* Define to 1 if we should use GNUTSL */
+#undef HAVE_GNUTSL
+
 /* Define to 1 if we have sockaddr_storage */
 #undef HAVE_SA_STORAGE
 

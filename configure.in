@@ -304,6 +304,7 @@ if test -z "$disable_ssl"; then
 	        CFLAGS="$CFLAGS_X"
         	LIBS="$LIBS_X"
 	else
+		AC_DEFINE(HAVE_OPENSSL)
 		AC_DEFINE(HAVE_SSL)
 	fi
 fi

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.35 2002/07/05 01:54:25 pasky Exp $ */
+/* $Id: sched.c,v 1.36 2002/07/05 03:59:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,7 +317,7 @@ free_connection_data(struct connection *c)
 
 	if (c->sock1 != -1) set_handlers(c->sock1, NULL, NULL, NULL, NULL);
 	if (c->sock2 != -1) set_handlers(c->sock2, NULL, NULL, NULL, NULL);
-	close_socket(&c->sock2);
+	close_socket(NULL, &c->sock2);
 	if (!c->running) {
 		internal("connection already suspended");
 	}
@@ -531,7 +531,7 @@ interrupt_connection(struct connection *c)
 		c->ssl=NULL;
 	}
 
-	close_socket(&c->sock1);
+	close_socket(c, &c->sock1);
 	free_connection_data(c);
 }
 

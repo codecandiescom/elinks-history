@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.7 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: socket.h,v 1.8 2002/07/05 03:59:40 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -37,7 +37,7 @@ struct write_buffer {
 	unsigned char data[1];
 };
 
-void close_socket(int *);
+void close_socket(struct connection *, int *);
 void make_connection(struct connection *, int, int *, void (*)(struct connection *));
 void dns_found(/* struct connection */ void *, int);
 int get_pasv_socket(struct connection *, int, unsigned char *);

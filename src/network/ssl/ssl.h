@@ -1,10 +1,20 @@
-/* $Id: ssl.h,v 1.6 2002/07/05 02:00:34 pasky Exp $ */
+/* $Id: ssl.h,v 1.7 2002/07/05 03:59:40 pasky Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
 
 #ifdef HAVE_SSL
+#if !(defined HAVE_OPENSSL) && !(defined HAVE_GNUTLS)
+#error "Huh?! You have SSL enabled, but not OPENSSL nor GNUTLS!! And then you want exactly *what* from me?"
+#endif
+#endif
+
+#ifdef HAVE_SSL
+#ifdef HAVE_OPENSSL
 #define	ssl_t	SSL
+#elif HAVE_GNUTLS
+#define	ssl_t	GNUTLS_STATE *
+#endif
 #else
 #define	ssl_t	void
 #endif

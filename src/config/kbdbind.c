@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.31 2002/07/08 17:19:39 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.32 2002/07/09 15:27:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,6 +294,7 @@ static struct strtonum action_table[] = {
 	{ "file-menu", ACT_FILE_MENU },
 	{ "find-next", ACT_FIND_NEXT },
 	{ "find-next-back", ACT_FIND_NEXT_BACK },
+	{ "forget-credentials", ACT_FORGET_CREDENTIALS },
 	{ "goto-url", ACT_GOTO_URL },
 	{ "goto-url-current", ACT_GOTO_URL_CURRENT },
 	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK },

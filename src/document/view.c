@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.60 2002/07/08 17:19:40 pasky Exp $ */
+/* $Id: view.c,v 1.61 2002/07/09 15:27:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,7 @@
 #include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
 #include "lua/core.h"
+#include "protocol/http/auth.h"
 #include "protocol/url.h"
 #include "util/conv.h"
 #include "util/error.h"
@@ -2549,6 +2550,9 @@ void send_event(struct session *ses, struct event *ev)
 				goto_url_with_hook(ses, url);
 				goto x;
 			}
+			case ACT_FORGET_CREDENTIALS:
+				free_auth();
+				goto x;
 			case ACT_SAVE_FORMATTED:
 				/* TODO: if (!anonymous) for non-HTTI ? --pasky */
 				menu_save_formatted(ses->term, NULL, ses);

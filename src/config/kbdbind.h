@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.18 2002/07/08 17:19:39 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.19 2002/07/09 15:27:38 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -38,6 +38,7 @@ enum keyact {
 	ACT_FILE_MENU,
 	ACT_FIND_NEXT,
 	ACT_FIND_NEXT_BACK,
+	ACT_FORGET_CREDENTIALS,
 	ACT_GOTO_URL,
 	ACT_GOTO_URL_CURRENT,
 	ACT_GOTO_URL_CURRENT_LINK,

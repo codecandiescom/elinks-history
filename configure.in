@@ -193,7 +193,7 @@ if test -z "$disable_lua"; then
 		if test "$cf_result" = no; then
 			if test ! -z "$luadir"; then
 				LIBS="-L$luadir/lib -llua -llualib -lm $LIBS_X"
-				CFLAGS="$CFLAGS_X -I$luadir/include"
+				CFLAGS="$CFLAGS_X -I$luadir/include -I$luadir/include/lua"
 			else
 				LIBS="-llua -llualib -lm $LIBS_X"
 			fi

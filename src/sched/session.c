@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.59 2003/05/09 13:23:26 pasky Exp $ */
+/* $Id: session.c,v 1.60 2003/05/09 13:43:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1323,7 +1323,7 @@ decode_url(unsigned char *url)
 struct initial_session_info *
 decode_session_info(const void *pdata)
 {
-	int *data = pdata;
+	int *data = (int *) pdata;
 	int len = *(data++);
 	struct initial_session_info *info;
 	int url_len;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.284 2004/04/22 21:02:21 pasky Exp $ */
+/* $Id: http.c,v 1.285 2004/04/22 21:32:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,9 +251,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 	if (conn->state == S_OK && conn->cached) {
 		if (!notrunc) truncate_entry(conn->cached, conn->from, 1);
 		conn->cached->incomplete = 0;
-#ifdef HAVE_SCRIPTING
-		conn->cached->done_pre_format_html_hook = 0;
-#endif
+		conn->cached->preformatted = 0;
 	}
 
 	if (conn->info && !((struct http_connection_info *) conn->info)->close

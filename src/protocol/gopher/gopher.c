@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.16 2004/09/13 00:18:47 miciah Exp $ */
+/* $Id: gopher.c,v 1.17 2004/09/13 01:11:41 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -409,7 +409,7 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 
 					/* Chop port if there is junk after the
 					 * number */
-					if (!*end) *end = 0;
+					*end = '\0';
 				}
 			}
 		}

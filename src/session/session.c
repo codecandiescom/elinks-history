@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.460 2004/06/10 22:56:45 jonas Exp $ */
+/* $Id: session.c,v 1.461 2004/06/10 23:22:53 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -542,11 +542,41 @@ process_file_requests(struct session *ses)
 	stop_recursion = 0;
 }
 
+
+static struct initial_session_info *
+init_session_info(struct session *base_session, struct uri *uri)
+{
+	struct initial_session_info *info;
+
+	info = mem_calloc(1, sizeof(struct initial_session_info));
+	if (!info) return NULL;
+
+	info->base_session = base_session;
+
+	if (uri) info->uri = get_uri_reference(uri);
+
+	return info;
+}
+
+static void
+free_session_info(struct initial_session_info *info)
+{
+	if (info->uri) done_uri(info->uri);
+	mem_free(info);
+}
+
+
 static void
 dialog_goto_url_open_first(void *data)
 {
 	dialog_goto_url((struct session *) data, NULL);
 	first_use = 0;
+}
+
+static void
+dialog_goto_url_open(void *data)
+{
+	dialog_goto_url((struct session *) data, NULL);
 }
 
 static void
@@ -607,7 +637,48 @@ setup_first_session(struct session *ses)
 	}
 }
 
-static struct session *process_session_info(struct session *ses, struct initial_session_info *info);
+static inline void
+copy_session(struct session *old, struct session *new)
+{
+	if (!have_location(old)) return;
+
+	goto_uri(new, cur_loc(old)->vs.uri);
+}
+
+static struct session *
+process_session_info(struct session *ses, struct initial_session_info *info)
+{
+	if (!info) return NULL;
+
+	if (info->base_session) {
+		copy_session(info->base_session, ses);
+	}
+
+	if (info->uri) {
+		goto_uri(ses, info->uri);
+
+#ifdef CONFIG_BOOKMARKS
+	} else if (!first_use
+		   && number_of_tabs(ses->tab->term) < 2
+		   && get_opt_bool("ui.sessions.auto_restore")) {
+		open_bookmark_folder(ses, get_opt_str("ui.sessions.auto_save_foldername"));
+
+#endif
+	} else {
+		if (!goto_url_home(ses)) {
+			if ((get_opt_int("ui.startup_goto_dialog")
+			    && !first_use)) {
+				/* We can't create new window in EV_INIT
+				 * handler! */
+				register_bottom_half(dialog_goto_url_open, ses);
+			}
+		}
+	}
+
+	free_session_info(info);
+
+	return ses;
+}
 
 static struct session *
 create_session(struct window *tab, struct initial_session_info *session_info)
@@ -639,16 +710,6 @@ create_session(struct window *tab, struct initial_session_info *session_info)
 	return process_session_info(ses, session_info);
 }
 
-static inline void
-copy_session(struct session *old, struct session *new)
-{
-	if (!have_location(old)) return;
-
-	goto_uri(new, cur_loc(old)->vs.uri);
-}
-
-static struct initial_session_info *
-init_session_info(struct session *base_session, struct uri *uri);
 
 void
 init_session(struct session *ses, struct terminal *term,
@@ -707,27 +768,6 @@ create_session_info(struct string *info, int cp, struct list_head *url_list)
 	return NULL;
 }
 
-static struct initial_session_info *
-init_session_info(struct session *base_session, struct uri *uri)
-{
-	struct initial_session_info *info;
-
-	info = mem_calloc(1, sizeof(struct initial_session_info));
-	if (!info) return NULL;
-
-	info->base_session = base_session;
-
-	if (uri) info->uri = get_uri_reference(uri);
-
-	return info;
-}
-
-
-static void
-dialog_goto_url_open(void *data)
-{
-	dialog_goto_url((struct session *) data, NULL);
-}
 
 static enum remote_session_flags
 handle_remote_session(struct session *ses, enum remote_session_flags remote,
@@ -892,48 +932,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	return info;
 }
 
-
-static void
-free_session_info(struct initial_session_info *info)
-{
-	if (info->uri) done_uri(info->uri);
-	mem_free(info);
-}
-
-static struct session *
-process_session_info(struct session *ses, struct initial_session_info *info)
-{
-	if (!info) return NULL;
-
-	if (info->base_session) {
-		copy_session(info->base_session, ses);
-	}
-
-	if (info->uri) {
-		goto_uri(ses, info->uri);
-
-#ifdef CONFIG_BOOKMARKS
-	} else if (!first_use
-		   && number_of_tabs(ses->tab->term) < 2
-		   && get_opt_bool("ui.sessions.auto_restore")) {
-		open_bookmark_folder(ses, get_opt_str("ui.sessions.auto_save_foldername"));
-
-#endif
-	} else {
-		if (!goto_url_home(ses)) {
-			if ((get_opt_int("ui.startup_goto_dialog")
-			    && !first_use)) {
-				/* We can't create new window in EV_INIT
-				 * handler! */
-				register_bottom_half(dialog_goto_url_open, ses);
-			}
-		}
-	}
-
-	free_session_info(info);
-
-	return ses;
-}
 
 void
 abort_loading(struct session *ses, int interrupt)

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.306 2004/07/23 15:09:08 zas Exp $ */
+/* $Id: http.c,v 1.307 2004/07/23 15:18:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -827,7 +827,11 @@ read_http_data_done(struct connection *conn)
 	http_end_request(conn, S_OK, 0);
 }
 
-static void
+/* Returns:
+ * -1 on error
+ * 0 if nothing left to do
+ * 1 if more to read */
+static int
 read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
@@ -845,17 +849,14 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 			if (l) {
 				if (l == -1) {
 					/* Invalid character in buffer. */
-					abort_conn_with_state(conn,
-							      S_HTTP_ERROR);
-					return;
+					return -1;
 				}
 
 				/* Remove everything to the EOLN. */
 				kill_buffer_data(rb, l);
 				if (l <= 2) {
 					/* Empty line. */
-					read_http_data_done(conn);
-					return;
+					return 0;
 				}
 				continue;
 			}
@@ -871,14 +872,12 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 					errno = 0;
 					n = strtol(rb->data, (char **) &de, 16);
 					if (errno || !*de) {
-						abort_conn_with_state(conn, S_HTTP_ERROR);
-						return;
+						return -1;
 					}
 				}
 
 				if (l == -1 || de == rb->data) {
-					abort_conn_with_state(conn, S_HTTP_ERROR);
-					return;
+					return -1;
 				}
 
 				/* Remove everything to the EOLN. */
@@ -931,8 +930,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 					if (rb->data[0] != ASCII_CR
 					    || (rb->len >= 2
 						&& rb->data[1] != ASCII_LF)) {
-						abort_conn_with_state(conn, S_HTTP_ERROR);
-						return;
+						return -1;
 					}
 					if (rb->len < 2) break;
 					kill_buffer_data(rb, 2);
@@ -944,7 +942,8 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 		break;
 	}
 
-	read_more_http_data(conn, rb);
+	/* More to read. */
+	return 1;
 }
 
 static void
@@ -992,12 +991,21 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 			return;
 		}
 
-		read_more_http_data(conn, rb);
-
 	} else {
+		int ret = read_chunked_http_data(conn, rb);
 
-		read_chunked_http_data(conn, rb);
+		if (ret < 0) {
+			abort_conn_with_state(conn, S_HTTP_ERROR);
+			return;
+		}
+
+		if (!ret) {
+			read_http_data_done(conn);
+			return;
+		}
 	}
+
+	read_more_http_data(conn, rb);
 }
 
 /* Returns offset of the header end, zero if more data is needed, -1 when

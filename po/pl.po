@@ -1,18 +1,18 @@
 # Polish ELinks translation.
 # Arkadiusz Sochala <jojoro@priv2.onet.pl>
 # Grzegorz Golawski <grzegol@pld.org.pl>
-# Jakub Bogusz <qboosh@pld-linux.org>, 2002-2003
+# Jakub Bogusz <qboosh@pld-linux.org>, 2002-2004
 # Wojtek Bojdo/l <wojboj@lp.net.pl>
 # Witold Filipczyk <witekfl@pld-linux.org>, 2001 - 2003
-# Adam Go³êbiowski <adamg@pld-linux.org>, 2003
+# Adam Go³êbiowski <adamg@pld-linux.org>, 2003-2004
 # Miko³aj Machowski <mikmach@wp.pl>, 2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.0.CVS\n"
 "POT-Creation-Date: 2004-07-18 14:33+0200\n"
-"PO-Revision-Date: 2004-04-18 09:30+0200\n"
-"Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
+"PO-Revision-Date: 2004-09-02 21:00+0200\n"
+"Last-Translator: Adam Golebiowski <adamg@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
@@ -206,9 +206,8 @@ msgid "Clock"
 msgstr "Zegar"
 
 #: src/bfu/leds.c:75
-#, fuzzy
 msgid "Digital clock in the status bar."
-msgstr "Cyfrowy zegar."
+msgstr "Cyfrowy zegar w pasku statusu."
 
 #
 #: src/bfu/leds.c:79 src/bfu/leds.c:85 src/bfu/leds.c:105
@@ -219,40 +218,35 @@ msgid "Enable"
 msgstr "W³±cz"
 
 #: src/bfu/leds.c:81
-#, fuzzy
 msgid ""
 "Whether to display a digital clock in the status bar.\n"
 "Note that the LED indicators must be enabled for this\n"
 "to take effect."
 msgstr ""
 "Czy w³±czyæ wy¶wietlanie cyfrowego zegara. Wiedz, ¿e\n"
-"stoper i wska¼niki LED powinny byæ w³±czone by zegar wy¶wietla³\n"
-"poprawnie czas."
+"wska¼niki LED powinny byæ w³±czone by zmiana ta odnios³a skutek\n"
 
 #: src/bfu/leds.c:87
-#, fuzzy
 msgid ""
 "Whether to display a digital clock in the status bar.\n"
 "Note that the LED indicators (DISABLED) must be enabled\n"
 "for this to take any effect."
 msgstr ""
 "Czy w³±czyæ wy¶wietlanie cyfrowego zegara. Wiedz, ¿e\n"
-"stoper i wska¼niki LED powinny byæ w³±czone by zegar wy¶wietla³\n"
-"poprawnie czas."
+"wska¼niki LED (WY£¡CZONE) powinny byæ w³±czone by\n"
+"zmiana ta odnios³a skutek."
 
 #: src/bfu/leds.c:92
 msgid "Format"
 msgstr "Format"
 
 #: src/bfu/leds.c:94
-#, fuzzy
 msgid ""
 "Format string for the digital clock. See the strftime(3)\n"
 "manpage for details."
 msgstr ""
-"£añcuch formatuj±cy dla cyfrowego zegara. Zobacz stronê podrêcznika strftime"
-"(3),\n"
-"¿eby dowiedzieæ siê szczegó³ów."
+"£añcuch formatuj±cy dla cyfrowego zegara. Zobacz stronê\n"
+"podrêcznika strftime(3) ¿eby dowiedzieæ siê szczegó³ów."
 
 #: src/bfu/leds.c:101
 msgid "LEDs"
@@ -276,9 +270,8 @@ msgid "LED indicators"
 msgstr "Wska¼niki LED"
 
 #: src/bfu/menu.c:698
-#, fuzzy
 msgid "Search menu/"
-msgstr "Szukanie"
+msgstr "Menu wyszukiwania/"
 
 #: src/bookmarks/backend/xbel.c:385 src/bookmarks/backend/xbel.c:406
 msgid "No title"
@@ -338,74 +331,68 @@ msgstr "URL"
 
 #. cant_delete_item
 #: src/bookmarks/dialogs.c:125
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but bookmark \"%s\" cannot be deleted."
-msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
+msgstr "Przykro mi, ale zak³adka \"%s\" nie mo¿e byæ usuniêta."
 
 #. cant_delete_used_item
 #: src/bookmarks/dialogs.c:127
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but bookmark \"%s\" is being used by something else."
-msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
+msgstr "Przykro mi, ale zak³adka \"%s\" jest u¿ywana przez co¶ innego."
 
 #. cant_delete_folder
 #: src/bookmarks/dialogs.c:129
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but bookmark's folder \"%s\" cannot be deleted."
-msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
+msgstr "Przykro mi, ale folder zak³adek \"%s\" nie mo¿e byæ usuniêty."
 
 #. cant_delete_used_folder
 #: src/bookmarks/dialogs.c:131
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but bookmark's folder \"%s\" is being used by something else."
-msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
+msgstr "Przykro mi, ale folder zak³adek \"%s\" jest u¿ywany przez co¶ innego."
 
 #. delete_marked_items_title
 #: src/bookmarks/dialogs.c:133
-#, fuzzy
 msgid "Delete marked bookmarks"
-msgstr "Usuwanie zaznaczonych elementów"
+msgstr "Usuwanie zaznaczonych zak³adek"
 
 #. delete_marked_items
 #: src/bookmarks/dialogs.c:135
-#, fuzzy
 msgid "Delete marked bookmarks?"
-msgstr "Czy usun±æ zaznaczone elementy?"
+msgstr "Czy usun±æ zaznaczone zak³adki?"
 
 #. delete_folder_title
 #: src/bookmarks/dialogs.c:137
-#, fuzzy
 msgid "Delete bookmark's folder"
-msgstr "Usuñ folder"
+msgstr "Usuñ folder zak³adek"
 
 #. delete_folder
 #: src/bookmarks/dialogs.c:139
-#, fuzzy, c-format
+#, c-format
 msgid "Delete folder \"%s\" and all bookmarks in it?"
 msgstr "Czy skasowaæ folder \"%s\" i jego zawarto¶æ?"
 
 #. delete_item_title
 #: src/bookmarks/dialogs.c:141
-#, fuzzy
 msgid "Delete bookmark"
-msgstr "Edytuj zak³adkê"
+msgstr "Skasuj zak³adkê"
 
 #. delete_item
 #: src/bookmarks/dialogs.c:143
 msgid "Delete this bookmark?"
-msgstr ""
+msgstr "Czy skasowac t± zak³adkê?"
 
 #. clear_all_items_title
 #: src/bookmarks/dialogs.c:145
-#, fuzzy
 msgid "Clear all bookmarks"
-msgstr "Przeszukaj zak³adki"
+msgstr "Wyczy¶æ wszystkie zak³adki"
 
 #. clear_all_items_title
 #: src/bookmarks/dialogs.c:147
-#, fuzzy
 msgid "Do you really want to remove all bookmarks?"
-msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
+msgstr "Czy na pewno chcesz skasowaæ wszystkie zak³adki?"
 
 #: src/bookmarks/dialogs.c:247 src/bookmarks/dialogs.c:433
 msgid "Add folder"
@@ -529,7 +516,7 @@ msgstr "nieprawid³owy"
 
 #: src/cache/dialogs.c:122
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: src/cache/dialogs.c:125 src/config/options.inc:533
 msgid "Header"
@@ -537,39 +524,35 @@ msgstr "Nag³ówek"
 
 #. cant_delete_item
 #: src/cache/dialogs.c:178
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cache entry \"%s\" cannot be deleted."
-msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
+msgstr "Przykro mi, ale wpis cache \"%s\" nie mo¿e byæ usuniêty."
 
 #. cant_delete_used_item
 #: src/cache/dialogs.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cache entry \"%s\" is being used by something else."
-msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
+msgstr "Przykro mi, ale wpis cache \"%s\" jest u¿ywany przez co¶ innego."
 
 #. delete_marked_items_title
 #: src/cache/dialogs.c:186
-#, fuzzy
 msgid "Delete marked cache entries"
-msgstr "Usuwanie zaznaczonych elementów"
+msgstr "Usuwanie zaznaczonych wpisów cache"
 
 #. delete_marked_items
 #: src/cache/dialogs.c:188
-#, fuzzy
 msgid "Delete marked cache entries?"
-msgstr "Czy usun±æ zaznaczone elementy?"
+msgstr "Czy usun±æ zaznaczone wpisy cache?"
 
 #. delete_item_title
 #: src/cache/dialogs.c:194
-#, fuzzy
 msgid "Delete cache entry"
-msgstr "Zwolnij nieu¿ywane pozycje pamiêci podrêcznej"
+msgstr "Usuñ wpis cache"
 
 #. delete_item
 #: src/cache/dialogs.c:196
-#, fuzzy
 msgid "Delete this cache entry?"
-msgstr "Zwolnij nieu¿ywane pozycje pamiêci podrêcznej"
+msgstr "Czy usun±æ zaznaczony wpis cache?"
 
 #: src/cache/dialogs.c:227
 msgid "Cache manager"
@@ -585,9 +568,8 @@ msgid "Too many parameters"
 msgstr "Zbyt wiele parametrów"
 
 #: src/config/cmdline.c:302
-#, fuzzy
 msgid "Remote method not supported"
-msgstr "Polecenie nie obs³ugiwane"
+msgstr "Zdalna metoda nie obs³ugiwana"
 
 #: src/config/cmdline.c:354
 msgid "Template option folder"
@@ -681,7 +663,7 @@ msgstr "Domy¶lny typ MIME dla dokumentów nieznanego typu."
 
 #: src/config/cmdline.c:638
 msgid "Ignore user-defined keybindings"
-msgstr ""
+msgstr "Ignoruj przypisania klawiszy zdefiniowane przez u¿ytkownika"
 
 #: src/config/cmdline.c:640
 msgid ""
@@ -689,6 +671,9 @@ msgid ""
 "file. It forces use of default keybindings and will reset\n"
 "user-defined ones on save."
 msgstr ""
+"Je¶li ustawione, przetwórz ale nie ustawiaj przypisañ klawiszy\n"
+"z pliku konfiguracyjnego. Wymusza u¿ycie domy¶lnych przypisañ\n"
+"oraz resetuje ustawienia u¿ytkownika w momencie zapisu."
 
 #: src/config/cmdline.c:644
 msgid "Write formatted version of given URL to stdout"
@@ -813,7 +798,6 @@ msgid "Do not number links in dump output"
 msgstr "Nie numeruj odno¶ników przy -dump"
 
 #: src/config/cmdline.c:705
-#, fuzzy
 msgid ""
 "Prevents numbering of links (and showing their list at the end of\n"
 "the dumped document) in the -dump output; this was the default behaviour\n"
@@ -905,7 +889,7 @@ msgstr ""
 
 #: src/config/cmdline.c:754
 msgid "Verbose level"
-msgstr ""
+msgstr "Poziom gadatliwo¶ci"
 
 #: src/config/cmdline.c:756
 msgid ""
@@ -915,6 +899,11 @@ msgid ""
 "\t1 means show serious errors and warnings\n"
 "\t2 means show all messages\n"
 msgstr ""
+"Poziom gadatliwo¶ci kontroluje które informacje s± pokazane\n"
+"w momencie uruchamiania i podczas dzia³ania:\n"
+"\t0 pokazuj tylko powa¿ne b³êdy\n"
+"\t1 pokazuj powa¿ne b³êdy i ostrze¿enia\n"
+"\t2 pokazuj wszysstkie informacje\n"
 
 #: src/config/cmdline.c:762
 msgid "Print version information and exit"
@@ -1190,9 +1179,8 @@ msgid "Bookmark all open tabs"
 msgstr "Zapisz informacje o wszystkich otwartych kartach"
 
 #: src/config/kbdbind.c:435
-#, fuzzy
 msgid "Open authentication manager"
-msgstr "Otwórz menad¿era historii"
+msgstr "Otwórz menad¿era autentykacji"
 
 #: src/config/kbdbind.c:436
 msgid "Open bookmark manager"
@@ -1297,9 +1285,8 @@ msgid "Return to the previous document in history"
 msgstr "Powrót do poprzedniego dokumentu w historii"
 
 #: src/config/kbdbind.c:461
-#, fuzzy
 msgid "Go forward in history"
-msgstr "Przejd¼ naprzód w \"antyhistorii\""
+msgstr "Przejd¼ naprzód w \"historii\""
 
 #: src/config/kbdbind.c:462
 msgid "Jump to link"
@@ -1327,7 +1314,7 @@ msgstr "Próba wznowienia pobierania bie¿±cego odno¶nika"
 
 #: src/config/kbdbind.c:468
 msgid "Pass URI of current link to external command"
-msgstr ""
+msgstr "Prze¶lij URI bie¿±cego odno¶nika do zewnêtrznego polecenia"
 
 #: src/config/kbdbind.c:469 src/config/kbdbind.c:561 src/config/kbdbind.c:583
 msgid "Follow the current link"
@@ -1362,64 +1349,52 @@ msgid "Activate the menu"
 msgstr "Uaktywnij menu"
 
 #: src/config/kbdbind.c:480
-#, fuzzy
 msgid "Move cursor down"
 msgstr "Przesuñ kursor w dó³"
 
 #: src/config/kbdbind.c:481
-#, fuzzy
 msgid "Move cursor left"
 msgstr "Przesuñ kursor w lewo"
 
 #: src/config/kbdbind.c:482
-#, fuzzy
 msgid "Move cursor right"
 msgstr "Przesuñ kursor w prawo"
 
 #: src/config/kbdbind.c:483
-#, fuzzy
 msgid "Move cursor up"
 msgstr "Przesuñ kursor w górê"
 
 #: src/config/kbdbind.c:484
-#, fuzzy
 msgid "Move to the end of the document"
-msgstr "Przejd¼ na koniec strony/linii"
+msgstr "Przejd¼ na koniec dokumentu"
 
 #: src/config/kbdbind.c:485
-#, fuzzy
 msgid "Move to the start of the document"
-msgstr "Przejd¼ do pocz±tku strony/linii"
+msgstr "Przejd¼ do pocz±tku dokumentu"
 
 #: src/config/kbdbind.c:486
-#, fuzzy
 msgid "Move one link down"
-msgstr "Przesuñ w górê o stronê"
+msgstr "Przejd¼ w dó³ o jeden odno¶nik"
 
 #: src/config/kbdbind.c:487
-#, fuzzy
 msgid "Move one link left"
-msgstr "Przesuñ w górê o stronê"
+msgstr "Przejd¼ w górê o jeden odno¶nik"
 
 #: src/config/kbdbind.c:488
-#, fuzzy
 msgid "Move to the next link"
-msgstr "Przesuñ do nastêpnej pozycji"
+msgstr "Przejd¼ do kolejnego odno¶nika"
 
 #: src/config/kbdbind.c:489
-#, fuzzy
 msgid "Move to the previous link"
-msgstr "Przesuñ do poprzedniej pozycji"
+msgstr "Przejd¼ do poprzedniego odno¶nika"
 
 #: src/config/kbdbind.c:490
-#, fuzzy
 msgid "Move one link right"
-msgstr "Przesuñ kursor w prawo"
+msgstr "Przejd¼ w prawo o jeden odno¶nik"
 
 #: src/config/kbdbind.c:491
-#, fuzzy
 msgid "Move one link up"
-msgstr "Przesuñ w górê o stronê"
+msgstr "Przejd¼ w górê o jeden odno¶nik"
 
 #: src/config/kbdbind.c:492 src/config/kbdbind.c:589
 msgid "Move downwards by a page"
@@ -1566,14 +1541,12 @@ msgid "Open the tab menu"
 msgstr "Otwórz menu kart"
 
 #: src/config/kbdbind.c:529
-#, fuzzy
 msgid "Move the current tab to the left"
-msgstr "Przesuñ bie¿±c± kartê o krok do przodu"
+msgstr "Przesuñ bie¿±c± kartê w lewo"
 
 #: src/config/kbdbind.c:530
-#, fuzzy
 msgid "Move the current tab to the right"
-msgstr "Przesuñ bie¿±c± kartê o krok do przodu"
+msgstr "Przesuñ bie¿±c± kartê w prawo"
 
 #: src/config/kbdbind.c:531
 msgid "Next tab"
@@ -2002,7 +1975,7 @@ msgstr "Domy¶lny rozmiar formularzy, je¶li nie podany w dokumencie."
 
 #: src/config/options.inc:150
 msgid "Insert mode"
-msgstr ""
+msgstr "Tryb insert"
 
 #: src/config/options.inc:152
 msgid ""
@@ -2253,34 +2226,29 @@ msgstr ""
 "i vice versa."
 
 #: src/config/options.inc:274
-#, fuzzy
 msgid "Scrolling"
-msgstr "Przewiñ w prawo"
+msgstr "Przewijanie"
 
 #
 #: src/config/options.inc:276
-#, fuzzy
 msgid "Scrolling options."
-msgstr "Ustawienia terminala"
+msgstr "Ustawienia przewijania"
 
 #: src/config/options.inc:278
-#, fuzzy
 msgid "Horizontal step"
-msgstr "Margines poziomy"
+msgstr "Krok poziomy"
 
 #: src/config/options.inc:280
-#, fuzzy
 msgid ""
 "Number of columns to scroll when a key bound to scroll-left or scroll-\n"
 "right is pressed and no prefix was given."
 msgstr ""
-"Liczba linii, o które przewijany jest ekran, gdy wybrano klawisz\n"
-"\"przewiñ w dó³\" albo \"przewiñ w górê\"."
+"Liczba kolumn, o które przewijany jest ekran, gdy wybrano klawisz\n"
+"\"przesuñ w lewo\" lub \"przesuñ w prawo\" i nie podano prefiksu."
 
 #: src/config/options.inc:283
-#, fuzzy
 msgid "Margin"
-msgstr "Ostrze¿enie"
+msgstr "Margines"
 
 #: src/config/options.inc:285
 msgid ""
@@ -2292,7 +2260,7 @@ msgstr ""
 
 #: src/config/options.inc:288
 msgid "Vertical step"
-msgstr ""
+msgstr "Krok pionowy"
 
 #: src/config/options.inc:290
 msgid ""
@@ -2561,6 +2529,8 @@ msgid ""
 "Default document codepage. 'System' stands for\n"
 "a codepage determined by a selected locale."
 msgstr ""
+"Domy¶lna strona kodowa dokumentu. 'System' oznacza,\n"
+"¿e strona kodowa bêdzie okre¶lana na podstawie locale."
 
 #: src/config/options.inc:421
 msgid "Ignore charset info from server"
@@ -2596,24 +2566,20 @@ msgid "Default visited link color."
 msgstr "Domy¶lny kolor odwiedzonego odno¶nika."
 
 #: src/config/options.inc:448
-#, fuzzy
 msgid "Image-link color"
-msgstr "Kolor odwiedzonego odno¶nika"
+msgstr "Kolor odno¶nika w obrazku"
 
 #: src/config/options.inc:450
-#, fuzzy
 msgid "Default image link color."
-msgstr "Domy¶lny kolor odno¶nika."
+msgstr "Domy¶lny kolor odno¶nika w obrazku."
 
 #: src/config/options.inc:452
-#, fuzzy
 msgid "Bookmarked-link color"
-msgstr "Kolor odwiedzonego odno¶nika"
+msgstr "Kolor odno¶nika bêd±cego w zak³adce"
 
 #: src/config/options.inc:454
-#, fuzzy
 msgid "Default bookmarked link color."
-msgstr "Domy¶lny kolor odno¶nika."
+msgstr "Domy¶lny kolor odno¶nika bêd±cego w zak³adce"
 
 #: src/config/options.inc:456
 msgid "Directory color"
@@ -2756,6 +2722,8 @@ msgid ""
 "Codepage used in dump output. 'System' stands for\n"
 "a codepage determined by a selected locale."
 msgstr ""
+"Strona kodowa u¿yta podczasu zrzutu. 'System' oznacza\n"
+"i¿ zostanie okre¶lona przez wybrane locale."
 
 #: src/config/options.inc:535
 #, c-format
@@ -2845,6 +2813,8 @@ msgid ""
 "This option is no longer in effect. It is obsoleted by changes\n"
 "to always expand table columns."
 msgstr ""
+"Ta opcja nie jest ju¿ u¿ywana. Zosta³a wyparta przez zmianê,\n"
+"aby zawsze rozszerzaæ kolumny tabeli."
 
 #
 #: src/config/options.inc:578
@@ -2937,48 +2907,45 @@ msgstr ""
 
 #: src/config/options.inc:620
 msgid "URI passing"
-msgstr ""
+msgstr "Przekazywanie URI"
 
 #: src/config/options.inc:622
 msgid "Rules for passing URIs to external commands."
-msgstr ""
+msgstr "Zasady przekazywania URI do zewnêtrznych poleceñ."
 
 #: src/config/options.inc:626
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
-"Zast±pienie URI dla g³upich przedrostków.\n"
+"Zasada przekazywania URI do zewnêtrznego polecenia.\n"
+"Format:\n"
 "%c w ³añcuchu oznacza bie¿±cy URL\n"
 "%% w ³añcuchu oznacza '%'"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:634
-#, fuzzy
 msgid "Information files"
-msgstr "Nazwa pliku konfiguracyjnego"
+msgstr "Pliki informacyjne"
 
 #: src/config/options.inc:636
-#, fuzzy
 msgid "Options for information files in ~/.elinks."
-msgstr "Ustawienia dotycz±ce aktywnego odno¶nika."
+msgstr "Ustawienia plików informacyjnych w ~/.elinks."
 
 #: src/config/options.inc:638
-#, fuzzy
 msgid "Save interval"
 msgstr "Przedzia³ czasu pomiêdzy automatycznymi zapisami"
 
 #: src/config/options.inc:640
-#, fuzzy
 msgid ""
 "Interval at which to trigger information files in ~/.elinks\n"
 "to be saved to disk if they has changed (seconds; 0 to disable)"
 msgstr ""
-"Przedzia³ czasu po którym nastêpuje zapis globalnej historii na dysk,\n"
-"je¶li nast±pi³a jaka¶ zmiana (w sekundach; 0 - wy³±cza)."
+"Przedzia³ czasu po krórym w razie potrzeby nastêpuje zapis\n"
+"plików informacyjnych w ~/.elinks (w sekundach: 0 aby wy³±czyæ)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:647
@@ -3406,7 +3373,6 @@ msgstr ""
 "ustawienia w tym drzewie zgodnie z Twoim systemem (np. unix, unix-xwin)."
 
 #: src/config/options.inc:871
-#, fuzzy
 msgid ""
 "Handler (external program) for this protocol and system.\n"
 "%f in the string means file name to include form data from\n"
@@ -3417,6 +3383,7 @@ msgid ""
 "%u in the string means the whole URL"
 msgstr ""
 "Uchwyt (zewnêtrzny program) dla danego protoko³u i systemu.\n"
+"%f - nazwa pliku zawieraj±cego dane formularza\n"
 "%h - nazwa hosta (albo adres email)\n"
 "%p - numer portu\n"
 "%d - ¶cie¿ka (wszystko za numerem portu)\n"
@@ -3576,11 +3543,13 @@ msgid "If we should use underline or enhance the color instead."
 msgstr "Czy powinno siê u¿ywaæ podkre¶lenia czy wzmocnienia koloru."
 
 #: src/config/options.inc:968
-#, fuzzy
 msgid ""
 "Codepage of charset used for displaying content on terminal.\n"
 "'System' stands for a codepage determined by a selected locale."
-msgstr "Strona kodowa u¿ywana do wy¶wietlania na terminalu."
+msgstr 
+""
+"Strona kodowa u¿ywana do wy¶wietlania na terminalu.\n"
+"'System' oznacza i¿ zostanie okreslona przez wybrane locale."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:975
@@ -4106,13 +4075,12 @@ msgid "Language"
 msgstr "Jêzyk"
 
 #: src/config/options.inc:1284
-#, fuzzy
 msgid ""
 "Language of user interface. 'System' means that the language will\n"
 "be extracted from the environment dynamically."
 msgstr ""
-"Jêzyk interfejsu u¿ytkownika. Jêzyk mo¿e byæ uzyskany ze ¶rodowiska\n"
-"w sposób dynamiczny."
+"Jêzyk interfejsu u¿ytkownika. 'System' oznacza i¿ jêzyk zostanie\n"
+"uzyskany ze ¶rodowiska w sposób dynamiczny."
 
 #
 #: src/config/options.inc:1287
@@ -4133,18 +4101,18 @@ msgid "Show title bar on the screen."
 msgstr "Pokazuje pasek tytu³owy na ekranie."
 
 #: src/config/options.inc:1295
-#, fuzzy
 msgid "Display goto dialog in new tabs"
-msgstr "Wy¶wietlanie okienka \"goto\" przy starcie"
+msgstr "Wy¶wietlanie okienka \"goto\" w nowych kartach"
 
 #: src/config/options.inc:1297
 msgid ""
 "Pop up goto dialog in newly created tabs when there's no homepage\n"
 "set. This means also showing goto dialog on startup."
 msgstr ""
+"Wy¶wietl okno goto w nowo stworzonej karcie je¶li strona domowa nie jest\n"
+"ustawiona. Oznacza to i¿ okno to bêdzie pokazywane tak¿e przy starcie."
 
 #: src/config/options.inc:1300
-#, fuzzy
 msgid "Show a message box when file is saved successfully"
 msgstr "Pokazuj okienko dialogowe, gdy plik zostanie pomy¶lnie zapisany"
 
@@ -4194,14 +4162,14 @@ msgid "Auto save and restore session folder name"
 msgstr "Nazwa foldera do automatycznego zapisywania i odtwarzania sesji"
 
 #: src/config/options.inc:1323
-#, fuzzy
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "The name has to be unique. Any folders with the same name will be deleted.\n"
 "This only makes sense with bookmark support."
 msgstr ""
 "Nazwa foldera zak³adek u¿ywanego do automatycznego zapisywania\n"
-"i odtwarzania sesji. Ma sens jedynie wtedy, gdy wkompilowana jest obs³uga\n"
+"i odtwarzania sesji. Nazwa musi byæ unikatowa. Foldery o takiej samej nazwie\n"
+"zostan± usuniête. Ma sens jedynie wtedy, gdy wkompilowana jest obs³uga\n"
 "zak³adek."
 
 #: src/config/options.inc:1327
@@ -4222,13 +4190,12 @@ msgstr ""
 
 #
 #: src/config/options.inc:1335
-#, fuzzy
 msgid "Date format"
-msgstr "Format pliku"
+msgstr "Format daty"
 
 #: src/config/options.inc:1337
 msgid "Date format to use in dialogs. See strftime(3)."
-msgstr ""
+msgstr "Format daty u¿ywany w dialog. Zobacz strftime(3)."
 
 #
 #: src/config/options.inc:1340
@@ -4478,75 +4445,68 @@ msgstr "Bezpieczne"
 
 #. cant_delete_item
 #: src/cookies/dialogs.c:163
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cookie \"%s\" cannot be deleted."
-msgstr "Przykro mi, ale element \"%s\" nie mo¿e byæ usuniêty."
+msgstr "Przykro mi, ale ciasteczko \"%s\" nie mo¿e byæ usuniête."
 
 #. cant_delete_used_item
 #: src/cookies/dialogs.c:165
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cookie \"%s\" is being used by something else."
-msgstr "Przykro mi, ale element \"%s\" jest u¿ywany przez co¶ innego."
+msgstr "Przykro mi, ale ciasteczko \"%s\" jest u¿ywane przez co¶ innego."
 
 #. cant_delete_folder
 #: src/cookies/dialogs.c:167
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cookie's folder \"%s\" cannot be deleted."
-msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
+msgstr "Przykro mi, ale folder ciasteczek \"%s\" nie mo¿e byæ usuniêty."
 
 #. cant_delete_used_folder
 #: src/cookies/dialogs.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cookie's folder \"%s\" is being used by something else."
-msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
+msgstr "Przykro mi, ale folder ciasteczek \"%s\" jest u¿ywany przez co¶ innego."
 
 #. delete_marked_items_title
 #: src/cookies/dialogs.c:171
-#, fuzzy
 msgid "Delete marked cookies"
-msgstr "Usuwanie zaznaczonych elementów"
+msgstr "Usuwanie zaznaczonych ciasteczek"
 
 #. delete_marked_items
 #: src/cookies/dialogs.c:173
-#, fuzzy
 msgid "Delete marked cookies?"
-msgstr "Czy usun±æ zaznaczone elementy?"
+msgstr "Czy usun±æ zaznaczone ciasteczka?"
 
 #. delete_folder_title
 #: src/cookies/dialogs.c:175
-#, fuzzy
 msgid "Delete domain's cookies"
-msgstr "Usuwanie zaznaczonych elementów"
+msgstr "Usuwanie ciasteczek z danej domeny"
 
 #. delete_folder
 #: src/cookies/dialogs.c:177
 #, c-format
 msgid "Delete all cookies from domain \"%s\"?"
-msgstr ""
+msgstr "Czy usun±æ wszystkie ciasteczka z domeny \"%s\"?"
 
 #. delete_item_title
 #: src/cookies/dialogs.c:179
-#, fuzzy
 msgid "Delete cookie"
-msgstr "Usuwanie pozycji"
+msgstr "Usuwanie ciasteczka"
 
 #. delete_item
 #: src/cookies/dialogs.c:181
-#, fuzzy
 msgid "Delete this cookie?"
-msgstr "Akceptujesz ciasteczko?"
+msgstr "Czy usun±æ to ciasteczko?"
 
 #. clear_all_items_title
 #: src/cookies/dialogs.c:183
-#, fuzzy
 msgid "Clear all cookies"
-msgstr "Skasowanie wszystkich pozycji"
+msgstr "Skasowanie wszystkich ciasteczek"
 
 #. clear_all_items_title
 #: src/cookies/dialogs.c:185
-#, fuzzy
 msgid "Do you really want to remove all cookies?"
-msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
+msgstr "Czy na pewno chcesz skasowaæ wszystkie ciasteczka?"
 
 #: src/cookies/dialogs.c:397
 msgid "Cookie manager"
@@ -4625,47 +4585,45 @@ msgstr "Przerwij i skasuj plik"
 
 #. cant_delete_item
 #: src/dialogs/download.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but download \"%s\" cannot be interrupted."
-msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
+msgstr "Przykro mi, ale ¶ci±ganie \"%s\" nie mo¿e byæ przerwane."
 
 #. cant_delete_used_item
 #: src/dialogs/download.c:408
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
-msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
+msgstr "Przykro mi, ale ¶ci±ganie \"%s\" jest u¿ywane przez co¶ innego."
 
 #. delete_marked_items_title
 #: src/dialogs/download.c:414
 msgid "Interrupt marked downloads"
-msgstr ""
+msgstr "Przerwij zaznaczone ¶ci±gania"
 
 #. delete_marked_items
 #: src/dialogs/download.c:416
 msgid "Interrupt marked downloads?"
-msgstr ""
+msgstr "Przerwaæ zaznaczone ¶ci±gania?"
 
 #. delete_item_title
 #: src/dialogs/download.c:422
-#, fuzzy
 msgid "Interrupt download"
-msgstr "Przerwano"
+msgstr "Przerwij ¶ci±ganie"
 
 #. delete_item
 #: src/dialogs/download.c:424
 msgid "Interrupt this download?"
-msgstr ""
+msgstr "Przerwaæ to ¶ci±ganie?"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:426
 msgid "Interrupt all downloads"
-msgstr ""
+msgstr "Przerwij wszystkie ¶ci±gania"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:428
-#, fuzzy
 msgid "Do you really want to interrupt all downloads?"
-msgstr "Czy na pewno chcesz wyj¶æ i przerwaæ wszystkie ¶ci±gania?"
+msgstr "Czy na pewno chcesz przerwaæ wszystkie ¶ci±gania?"
 
 #: src/dialogs/download.c:485
 msgid "Download manager"
@@ -4729,6 +4687,8 @@ msgid ""
 "Allocated      : %ld bytes\n"
 "Truly allocated: %ld bytes (x%0.2f)"
 msgstr ""
+"Zaalokowane		: %ld bajtów\n"
+"Naprawdê zaalokowane	: %ld bajtów (x%0.2f)"
 
 #: src/dialogs/info.c:195
 msgid "Memory info"
@@ -5019,9 +4979,8 @@ msgid "~Form history"
 msgstr "Historia ~formularzy"
 
 #: src/dialogs/menu.c:450
-#, fuzzy
 msgid "~Authentication"
-msgstr "Uwierzytelnienie HTTP"
+msgstr "~Autentykacja"
 
 #: src/dialogs/menu.c:464
 msgid "~File"
@@ -5057,16 +5016,15 @@ msgstr "Zapisz do pliku"
 
 #: src/dialogs/menu.c:818
 msgid "Pass URI to e~xternal command"
-msgstr ""
+msgstr "Przeka¿ URI do z~ewnêtrznego polecenia"
 
 #: src/dialogs/menu.c:867
 msgid "Directories:"
-msgstr ""
+msgstr "Katalogi:"
 
 #: src/dialogs/menu.c:880
-#, fuzzy
 msgid "Files:"
-msgstr "~Plik"
+msgstr "Pliki:"
 
 #: src/dialogs/options.c:150
 msgid "Terminal options"
@@ -5194,7 +5152,7 @@ msgstr "ETA"
 #: src/dialogs/status.c:230
 #, c-format
 msgid "Cursor position: %dx%d"
-msgstr ""
+msgstr "Pozycja kursora: %dx%d"
 
 #: src/dialogs/status.c:331
 msgid "Untitled"
@@ -5264,51 +5222,45 @@ msgstr "Formularze dla tego URL-a s± zapisywane."
 
 #. cant_delete_item
 #: src/formhist/dialogs.c:124
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but form \"%s\" cannot be deleted."
-msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
+msgstr "Przykro mi, ale formularz \"%s\" nie mo¿e byæ usuniêty."
 
 #. cant_delete_used_item
 #: src/formhist/dialogs.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but form \"%s\" is being used by something else."
-msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
+msgstr "Przykro mi, ale formularz \"%s\" jest u¿ywany przez co¶ innego."
 
 #. delete_marked_items_title
 #: src/formhist/dialogs.c:132
-#, fuzzy
 msgid "Delete marked forms"
-msgstr "Usuwanie zaznaczonych elementów"
+msgstr "Usuwanie zaznaczonych formularzy"
 
 #. delete_marked_items
 #: src/formhist/dialogs.c:134
-#, fuzzy
 msgid "Delete marked forms?"
-msgstr "Czy usun±æ zaznaczone elementy?"
+msgstr "Czy usun±æ zaznaczone formularze?"
 
 #. delete_item_title
 #: src/formhist/dialogs.c:140
-#, fuzzy
 msgid "Delete form"
-msgstr "Usuñ folder"
+msgstr "Usuñ formularz"
 
 #. delete_item
 #: src/formhist/dialogs.c:142
-#, fuzzy
 msgid "Delete this form?"
-msgstr "Usuñ folder"
+msgstr "Czy usun±æ ten formularz?"
 
 #. clear_all_items_title
 #: src/formhist/dialogs.c:144
-#, fuzzy
 msgid "Clear all forms"
-msgstr "Skasowanie wszystkich pozycji"
+msgstr "Skasowanie wszystkich formualrzy"
 
 #. clear_all_items_title
 #: src/formhist/dialogs.c:146
-#, fuzzy
 msgid "Do you really want to remove all forms?"
-msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
+msgstr "Czy na pewno chcesz skasowaæ wszystkie formularze?"
 
 #: src/formhist/dialogs.c:177
 msgid "Form not saved"
@@ -5382,50 +5334,45 @@ msgstr "Zapamiêtywanie formularzy"
 
 #. cant_delete_item
 #: src/globhist/dialogs.c:111
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but history entry \"%s\" cannot be deleted."
-msgstr "Przykro mi, ale element \"%s\" nie mo¿e byæ usuniêty."
+msgstr "Przykro mi, ale element historii \"%s\" nie mo¿e byæ usuniêty."
 
 #. cant_delete_used_item
 #: src/globhist/dialogs.c:113
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but history entry \"%s\" is being used by something else."
-msgstr "Przykro mi, ale element \"%s\" jest u¿ywany przez co¶ innego."
+msgstr "Przykro mi, ale element historii \"%s\" jest u¿ywany przez co¶ innego."
 
 #. delete_marked_items_title
 #: src/globhist/dialogs.c:119
-#, fuzzy
 msgid "Delete marked history entries"
-msgstr "Usuwanie zaznaczonych elementów"
+msgstr "Usuwanie zaznaczonych elementów historii"
 
 #. delete_marked_items
 #: src/globhist/dialogs.c:121
-#, fuzzy
 msgid "Delete marked history entries?"
-msgstr "Czy usun±æ zaznaczone elementy?"
+msgstr "Czy usun±æ zaznaczone elementy historii?"
 
 #. delete_item_title
 #: src/globhist/dialogs.c:127
-#, fuzzy
 msgid "Delete history entry"
-msgstr "Usuwanie pozycji"
+msgstr "Usuwanie elementów historii"
 
 #. delete_item
 #: src/globhist/dialogs.c:129
 msgid "Delete this history entry?"
-msgstr ""
+msgstr "Czy usun±æ ten element historii?"
 
 #. clear_all_items_title
 #: src/globhist/dialogs.c:131
-#, fuzzy
 msgid "Clear all history entries"
-msgstr "Skasowanie wszystkich pozycji"
+msgstr "Skasowanie wszystkich elementów historii"
 
 #. clear_all_items_title
 #: src/globhist/dialogs.c:133
-#, fuzzy
 msgid "Do you really want to remove all history entries?"
-msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
+msgstr "Czy na pewno chcesz skasowaæ wszystkie elementy historii?"
 
 #: src/globhist/dialogs.c:174
 msgid "Search history"
@@ -5881,7 +5828,7 @@ msgstr ""
 #: src/modules/version.c:81
 #, c-format
 msgid "Built on %s %s"
-msgstr ""
+msgstr "Zbudowany na %s %s"
 
 #: src/modules/version.c:85
 msgid "Text WWW browser"
@@ -5890,7 +5837,7 @@ msgstr "Tekstowa przegl±darka WWW"
 #: src/modules/version.c:88
 #, c-format
 msgid " (built on %s %s)"
-msgstr ""
+msgstr " (zbudowany na %s %s)"
 
 #
 #: src/modules/version.c:95
@@ -5960,14 +5907,12 @@ msgid "Realm"
 msgstr ""
 
 #: src/protocol/auth/dialogs.c:142
-#, fuzzy
 msgid "State"
-msgstr "Data"
+msgstr "Stan"
 
 #: src/protocol/auth/dialogs.c:143
-#, fuzzy
 msgid "valid"
-msgstr "nieprawid³owy"
+msgstr "poprawny"
 
 #. cant_delete_item
 #: src/protocol/auth/dialogs.c:180
@@ -6017,9 +5962,8 @@ msgid "Do you really want to remove all auth entries?"
 msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
 
 #: src/protocol/auth/dialogs.c:229
-#, fuzzy
 msgid "Authentication manager"
-msgstr "Uwierzytelnienie HTTP"
+msgstr "Zarz±dca autentykacji"
 
 #: src/protocol/http/codes.c:106
 #, c-format
@@ -6047,9 +5991,8 @@ msgstr ""
 
 #. name:
 #: src/protocol/protocol.c:198
-#, fuzzy
 msgid "Protocol"
-msgstr "Protoko³y"
+msgstr "Protokó³"
 
 #: src/protocol/rewrite/rewrite.c:45
 msgid "URI rewriting"
@@ -6175,7 +6118,7 @@ msgstr ""
 #: src/sched/download.c:500
 #, c-format
 msgid "'%s' is a directory."
-msgstr ""
+msgstr "'%s' to katalog."
 
 #
 #: src/sched/download.c:536
@@ -6364,6 +6307,10 @@ msgid ""
 "programs for handling it. Downloading URLs using external\n"
 "programs is not supported."
 msgstr ""
+"Ten URL zawiera protokó³ nie obs³ugiwany natywnie przez\n"
+"ELinks co oznacza i¿ ELinks bêdzie polega³ na zewnêtrznym\n"
+"programie do jego obs³ugi. ¦ci±ganie URLi za pomoc±\n"
+"zewnêtrznyc programów nie jest w tej chwili wspierane."
 
 #: src/sched/error.c:65
 msgid "Bad HTTP response"
@@ -6426,14 +6373,12 @@ msgid "JavaScript is currently not supported."
 msgstr "JavaScript nie jest na razie obs³ugiwana."
 
 #: src/sched/error.c:89
-#, fuzzy
 msgid "This version of ELinks does not contain finger protocol support"
-msgstr "Ta wersja ELinksa nie zawiera wsparcia dla SSL/TSL"
+msgstr "Ta wersja ELinksa nie zawiera wsparcia dla protoko³u finger"
 
 #: src/sched/error.c:93
-#, fuzzy
 msgid "This version of ELinks does not contain SMB protocol support"
-msgstr "Ta wersja ELinksa nie zawiera wsparcia dla SSL/TSL"
+msgstr "Ta wersja ELinksa nie zawiera wsparcia dla protoko³u SMB"
 
 #: src/sched/error.c:123
 msgid "Unknown error"
@@ -6509,6 +6454,8 @@ msgid ""
 "The form data you are about to post might be incomplete.\n"
 "Do you want to post to URL %s?"
 msgstr ""
+"Dane formularza który chcesz wys³aæ mog± byæ niekompletne.\n"
+"Czy chcesz wys³aæ formularz pod adres %s?"
 
 #: src/sched/task.c:173
 #, c-format
@@ -6630,14 +6577,13 @@ msgstr "Czy na pewno chcesz zamkn±æ wszystkie karty za wyj±tkiem bie¿±cej?"
 
 #
 #: src/viewer/text/draw.c:61
-#, fuzzy
 msgid "Missing fragment"
-msgstr "Ramka menu"
+msgstr "Brakuj±cy fragment"
 
 #: src/viewer/text/draw.c:62
 #, c-format
 msgid "The requested fragment \"#%s\" doesn't exist."
-msgstr ""
+msgstr "¯±dany fragment \"#%s\" nie istnieje."
 
 #: src/viewer/text/form.c:831
 msgid "Error while posting form"
@@ -6690,27 +6636,27 @@ msgstr "warto¶æ"
 
 #: src/viewer/text/form.c:1458
 msgid "read only"
-msgstr ""
+msgstr "tylko do odczytu"
 
 #: src/viewer/text/form.c:1469
 #, c-format
 msgid "press %s to navigate"
-msgstr ""
+msgstr "wci¶nij %s aby nawigowaæ"
 
 #: src/viewer/text/form.c:1471
 #, c-format
 msgid "press %s to edit"
-msgstr ""
+msgstr "wci¶nij %s aby edytowaæ"
 
 #: src/viewer/text/form.c:1491
-#, fuzzy, c-format
+#, -format
 msgid "press %s to submit to"
-msgstr "przes³aæ do"
+msgstr "wci¶nij %s aby wys³aæ do"
 
 #: src/viewer/text/form.c:1493
 #, c-format
 msgid "press %s to post to"
-msgstr ""
+msgstr "wci¶nij %s aby wys³aæ do"
 
 #: src/viewer/text/link.c:1047
 msgid "Display ~usemap"
@@ -6765,14 +6711,12 @@ msgid "Submit form and open in new ~window"
 msgstr "Prze¶lij ~formularz i otwórz w nowym oknie"
 
 #: src/viewer/text/link.c:1096
-#, fuzzy
 msgid "Submit form and open in new ~tab"
-msgstr "Prze¶lij ~formularz i otwórz w nowym oknie"
+msgstr "Prze¶lij formularz i otwórz w nowej zak³adce"
 
 #: src/viewer/text/link.c:1099
-#, fuzzy
-msgid "Submit form and open in new tab in ~background"
-msgstr "Prze¶lij ~formularz i otwórz w nowym oknie"
+msgid "Submit form and open in new tab in background"
+msgstr "Prze¶lij formularz i otwórz w tle w nowej zak³adce"
 
 #: src/viewer/text/link.c:1104
 msgid "Submit form and ~download"
@@ -6821,7 +6765,7 @@ msgstr "Nie mo¿na znale¼æ odno¶nika z tekstem '%s'."
 
 #: src/viewer/text/search.c:1284
 msgid "No links in current document"
-msgstr ""
+msgstr "Brak odno¶ników w bie¿±cym dokumencie"
 
 #: src/viewer/text/search.c:1363
 msgid "Search for text"

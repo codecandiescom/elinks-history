@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.102 2004/10/19 05:23:59 miciah Exp $ */
+/* $Id: document.c,v 1.103 2004/10/19 05:26:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,7 +231,7 @@ cached_header_dialog(struct session *ses, struct cache_entry *cached)
 {
 	if (cached && cached->head) {
 		int artificial;
-		unsigned char *headers = stracpy(cached->head);
+		unsigned char *headers = mem_alloc(strlen(cached->head) + 1);
 
 		if (!headers) return;
 

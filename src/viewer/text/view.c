@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.455 2004/06/13 22:02:23 zas Exp $ */
+/* $Id: view.c,v 1.456 2004/06/13 22:08:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -364,7 +364,7 @@ move_down(struct session *ses, struct document_view *doc_view, int type)
 }
 
 static void
-page_down(struct session *ses, struct document_view *doc_view, int xxxx)
+page_down(struct session *ses, struct document_view *doc_view)
 {
 	move_down(ses, doc_view, 0);
 }
@@ -386,13 +386,13 @@ move_up(struct session *ses, struct document_view *doc_view, int type)
 }
 
 static void
-page_up(struct session *ses, struct document_view *doc_view, int xxxx)
+page_up(struct session *ses, struct document_view *doc_view)
 {
 	move_up(ses, doc_view, 0);
 }
 
 void
-down(struct session *ses, struct document_view *doc_view, int xxxx)
+down(struct session *ses, struct document_view *doc_view)
 {
 	int current_link;
 
@@ -423,7 +423,7 @@ down(struct session *ses, struct document_view *doc_view, int xxxx)
 }
 
 static void
-up(struct session *ses, struct document_view *doc_view, int xxxx)
+up(struct session *ses, struct document_view *doc_view)
 {
 	int current_link;
 
@@ -477,7 +477,7 @@ scroll(struct session *ses, struct document_view *doc_view, int steps)
 }
 
 static void
-scroll_up(struct session *ses, struct document_view *doc_view, int xxxx)
+scroll_up(struct session *ses, struct document_view *doc_view)
 {
 	int steps;
 
@@ -490,7 +490,7 @@ scroll_up(struct session *ses, struct document_view *doc_view, int xxxx)
 }
 
 static void
-scroll_down(struct session *ses, struct document_view *doc_view, int xxxx)
+scroll_down(struct session *ses, struct document_view *doc_view)
 {
 	int steps;
 
@@ -504,13 +504,13 @@ scroll_down(struct session *ses, struct document_view *doc_view, int xxxx)
 
 #ifdef CONFIG_MOUSE
 static void
-scroll_mouse_up(struct session *ses, struct document_view *doc_view, int xxxx)
+scroll_mouse_up(struct session *ses, struct document_view *doc_view)
 {
 	scroll(ses, doc_view, -2);
 }
 
 static void
-scroll_mouse_down(struct session *ses, struct document_view *doc_view, int xxxx)
+scroll_mouse_down(struct session *ses, struct document_view *doc_view)
 {
 	scroll(ses, doc_view, 2);
 }
@@ -537,7 +537,7 @@ hscroll(struct session *ses, struct document_view *doc_view, int steps)
 
 /* TODO: "document.browse.hscroll_step" */
 static void
-scroll_left(struct session *ses, struct document_view *doc_view, int xxxx)
+scroll_left(struct session *ses, struct document_view *doc_view)
 {
 	int steps;
 
@@ -550,7 +550,7 @@ scroll_left(struct session *ses, struct document_view *doc_view, int xxxx)
 }
 
 static void
-scroll_right(struct session *ses, struct document_view *doc_view, int xxxx)
+scroll_right(struct session *ses, struct document_view *doc_view)
 {
 	int steps;
 
@@ -564,20 +564,20 @@ scroll_right(struct session *ses, struct document_view *doc_view, int xxxx)
 
 #ifdef CONFIG_MOUSE
 static void
-scroll_mouse_left(struct session *ses, struct document_view *doc_view, int xxxx)
+scroll_mouse_left(struct session *ses, struct document_view *doc_view)
 {
 	hscroll(ses, doc_view, -8);
 }
 
 static void
-scroll_mouse_right(struct session *ses, struct document_view *doc_view, int xxxx)
+scroll_mouse_right(struct session *ses, struct document_view *doc_view)
 {
 	hscroll(ses, doc_view, 8);
 }
 #endif /* CONFIG_MOUSE */
 
 static void
-home(struct session *ses, struct document_view *doc_view, int a)
+home(struct session *ses, struct document_view *doc_view)
 {
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
@@ -587,7 +587,7 @@ home(struct session *ses, struct document_view *doc_view, int a)
 }
 
 static void
-x_end(struct session *ses, struct document_view *doc_view, int a)
+x_end(struct session *ses, struct document_view *doc_view)
 {
 	int max_height;
 
@@ -643,8 +643,7 @@ toggle_wrap_text(struct session *ses, struct document_view *doc_view, int a)
 
 static inline void
 rep_ev(struct session *ses, struct document_view *doc_view,
-       void (*f)(struct session *, struct document_view *, int),
-       int a)
+       void (*f)(struct session *, struct document_view *))
 {
 	register int i;
 
@@ -652,7 +651,7 @@ rep_ev(struct session *ses, struct document_view *doc_view,
 	if_assert_failed return;
 
 	i = ses->kbdprefix.rep ? ses->kbdprefix.rep_num : 1;
-	while (i--) f(ses, doc_view, a);
+	while (i--) f(ses, doc_view);
 }
 
 /* We return |x| at the end of the function. */
@@ -756,10 +755,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {
-			case ACT_MAIN_PAGE_DOWN: rep_ev(ses, doc_view, page_down, 0); break;
-			case ACT_MAIN_PAGE_UP: rep_ev(ses, doc_view, page_up, 0); break;
-			case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down, 0); break;
-			case ACT_MAIN_UP: rep_ev(ses, doc_view, up, 0); break;
+			case ACT_MAIN_PAGE_DOWN: rep_ev(ses, doc_view, page_down); break;
+			case ACT_MAIN_PAGE_UP: rep_ev(ses, doc_view, page_up); break;
+			case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down); break;
+			case ACT_MAIN_UP: rep_ev(ses, doc_view, up); break;
 			case ACT_MAIN_COPY_CLIPBOARD: {
 				/* This looks bogus. Why print_current_link()
 				 * it adds all kins of stuff that is not part
@@ -775,13 +774,13 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			}
 
 			/* XXX: Code duplication of following for mouse */
-			case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view, 0); break;
-			case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view, 0); break;
-			case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, scroll_left, 0); break;
-			case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, scroll_right, 0); break;
+			case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;
+			case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view); break;
+			case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, scroll_left); break;
+			case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, scroll_right); break;
 
-			case ACT_MAIN_HOME: rep_ev(ses, doc_view, home, 0); break;
-			case ACT_MAIN_END:  rep_ev(ses, doc_view, x_end, 0); break;
+			case ACT_MAIN_HOME: rep_ev(ses, doc_view, home); break;
+			case ACT_MAIN_END:  rep_ev(ses, doc_view, x_end); break;
 			case ACT_MAIN_ENTER: status = enter(ses, doc_view, 0); break;
 			case ACT_MAIN_ENTER_RELOAD: status = enter(ses, doc_view, 1); break;
 			case ACT_MAIN_JUMP_TO_LINK: status = FRAME_EVENT_OK; break;
@@ -836,9 +835,9 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			if (!check_mouse_action(ev, B_DOWN)) {
 				/* We handle only B_DOWN case... */
 			} else if (check_mouse_button(ev, B_WHEEL_UP)) {
-				rep_ev(ses, doc_view, scroll_mouse_up, 0);
+				rep_ev(ses, doc_view, scroll_mouse_up);
 			} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
-				rep_ev(ses, doc_view, scroll_mouse_down, 0);
+				rep_ev(ses, doc_view, scroll_mouse_down);
 			}
 
 		} else if (link) {
@@ -867,17 +866,17 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			 * repeatcount-free here. */
 
 			if (ev->y < scrollmargin) {
-				rep_ev(ses, doc_view, scroll_mouse_up, 0);
+				rep_ev(ses, doc_view, scroll_mouse_up);
 			}
 			if (ev->y >= doc_view->box.height - scrollmargin) {
-				rep_ev(ses, doc_view, scroll_mouse_down, 0);
+				rep_ev(ses, doc_view, scroll_mouse_down);
 			}
 
 			if (ev->x < scrollmargin * 2) {
-				rep_ev(ses, doc_view, scroll_mouse_left, 0);
+				rep_ev(ses, doc_view, scroll_mouse_left);
 			}
 			if (ev->x >= doc_view->box.width - scrollmargin * 2) {
-				rep_ev(ses, doc_view, scroll_mouse_right, 0);
+				rep_ev(ses, doc_view, scroll_mouse_right);
 			}
 		} else {
 			status = FRAME_EVENT_IGNORED;

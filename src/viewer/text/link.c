@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.210 2004/06/13 18:08:16 zas Exp $ */
+/* $Id: link.c,v 1.211 2004/06/13 22:08:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -569,7 +569,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	} else if (link_is_textinput(link)) {
 		/* We won't get here if (has_form_submit() ||
 		 * 			 get_opt_int("..")) */
-		down(ses, doc_view, 0);
+		down(ses, doc_view);
 
 	} else if (link->type == LINK_CHECKBOX) {
 		struct form_state *fs = find_form_state(doc_view, link->form_control);

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.28 2003/12/26 08:53:55 jonas Exp $ */
+/* $Id: download.c,v 1.29 2003/12/26 10:10:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ download_abort_function(struct dialog_data *dlg_data)
 	file_download->dlg_data = NULL;
 }
 
-static void
+void
 download_progress_bar(struct terminal *term, int x, int y, int width,
 		      unsigned char *text, struct color_pair *meter_color,
 		      longlong current, longlong total)

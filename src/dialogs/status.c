@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.35 2003/12/26 09:56:05 jonas Exp $ */
+/* $Id: status.c,v 1.36 2003/12/26 10:10:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "bfu/style.h"
 #include "config/options.h"
 #include "cache/cache.h"
+#include "dialogs/download.h"
 #include "document/document.h"
 #include "document/renderer.h"
 #include "document/view.h"
@@ -268,6 +269,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 {
 	struct color_pair *normal_color = get_bfu_color(term, "tabs.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
+	struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
 	struct color_pair *fresh_color = get_bfu_color(term, "tabs.unvisited");
 	struct color_pair *tabsep_color = get_bfu_color(term, "tabs.separator");
 	struct session_status *status = &ses->status;
@@ -280,13 +282,13 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 	int xpos = 0;
 
 	for (tab_num = 0; tab_num < tabs_count; tab_num++) {
+		struct download *stat = NULL;
 		struct color_pair *color = normal_color;
 		struct window *tab = get_tab_by_number(term, tab_num);
 		struct document_view *doc_view;
 		struct session *tab_ses = tab->data;
 		int actual_tab_width = tab_width;
 		unsigned char *msg;
-		int msglen;
 
 		/* Adjust tab size to use full term width. */
 		if (tab_remain_width) {
@@ -316,8 +318,6 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 			color = selected_color;
 
 		} else {
-			struct download *stat;
-
 			stat = get_current_download(tab->data);
 
 			/* Set incomplete download to unvisited */
@@ -327,13 +327,24 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 
 			if (!tab_ses || !tab_ses->status.visited)
 				color = fresh_color;
+
+			if (!download_is_progressing(stat))
+				stat = NULL;
 		}
 
 		draw_area(term, xpos, ypos, actual_tab_width, 1, ' ', 0, color);
 
-		msglen = int_min(strlen(msg), actual_tab_width - 1);
+		if (stat) {
+			download_progress_bar(term, xpos, ypos,
+					      actual_tab_width - 1, msg,
+					      loading_color,
+					      stat->prg->pos, stat->prg->size);
+		} else {
+			int msglen = int_min(strlen(msg), actual_tab_width - 1);
 
-		draw_text(term, xpos, ypos, msg, msglen, 0, color);
+			draw_text(term, xpos, ypos, msg, msglen, 0, color);
+		}
+
 		tab->xpos = xpos;
 		tab->width = actual_tab_width;
 		xpos += actual_tab_width - 1;

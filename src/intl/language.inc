@@ -10404,7 +10404,7 @@ struct translation translation_ukrainian [] = {
   {T_SIZE, "Розм╕р"},
   {T_TITLE, "Назва"},
   {T_LAST_VISIT_TIME, "Востанн╓ в╕дв╕дано"},
-  {T_LINK_TITLE, NULL},
+  {T_LINK_TITLE, "Назва посилання"},
   {T_UNKNOWN, "Нев╕домо"},
   {T_INCOMPLETE, "не повн╕стю"},
   {T_CODEPAGE, "Кодова стор╕нка"},
@@ -10551,7 +10551,7 @@ struct translation translation_ukrainian [] = {
   {T_SEARCH_BOOKMARK, "Пошук по закладках"},
   {T_CLEAR, "Очистити"},
   {T_ADD_BOOKMARK_LINK, "Додати посилання до закладок"},
-  {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Бажана мова (список розд╕лених комою ISO-код╕в)"},
   {0, NULL}
 };

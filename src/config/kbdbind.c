@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.53 2002/12/20 21:52:46 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.54 2003/01/01 01:58:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,6 +211,7 @@ kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 struct strtonum {
 	unsigned char *str;
 	long num;
+	unsigned char *desc;
 };
 
 static long
@@ -238,11 +239,24 @@ numtostr(struct strtonum *table, long num)
 }
 
 
+static unsigned char *
+numtodesc(struct strtonum *table, long num)
+{
+	struct strtonum *rec;
+
+	for (rec = table; rec->str; rec++)
+		if (num == rec->num)
+			return (rec->desc) ? rec->desc : rec->str;
+
+	return NULL;
+}
+
+
 static struct strtonum keymap_table[] = {
-	{ "main", KM_MAIN },
-	{ "edit", KM_EDIT },
-	{ "menu", KM_MENU },
-	{ NULL, 0 }
+	{ "main", KM_MAIN, "Main mapping" },
+	{ "edit", KM_EDIT, "Edit mapping" },
+	{ "menu", KM_MENU, "Menu mapping" },
+	{ NULL, 0, NULL }
 };
 
 static int
@@ -346,75 +360,79 @@ make_keystroke(unsigned char **str, int *len, long key, long meta)
 /* Please keep this table in alphabetical order, and in sync with
  * the ACT_* constants in kbdbind.h.  */
 static struct strtonum action_table[] = {
-	{ "none", ACT_NONE },
-	{ "abort-connection", ACT_ABORT_CONNECTION },
-	{ "add-bookmark", ACT_ADD_BOOKMARK },
-	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK},
-	{ "auto-complete", ACT_AUTO_COMPLETE },
-	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS },
-	{ "back", ACT_BACK },
-	{ "backspace", ACT_BACKSPACE },
-	{ "bookmark-manager", ACT_BOOKMARK_MANAGER },
-	{ "cookies-load", ACT_COOKIES_LOAD },
-	{ "copy-clipboard", ACT_COPY_CLIPBOARD },
-	{ "cut-clipboard", ACT_CUT_CLIPBOARD },
-	{ "delete", ACT_DELETE },
-	{ "document-info", ACT_DOCUMENT_INFO },
-	{ "down", ACT_DOWN },
-	{ "download", ACT_DOWNLOAD },
-	{ "download-image", ACT_DOWNLOAD_IMAGE },
-	{ "edit", ACT_EDIT },
-	{ "end", ACT_END },
-	{ "enter", ACT_ENTER },
-	{ "enter-reload", ACT_ENTER_RELOAD },
-	{ "file-menu", ACT_FILE_MENU },
-	{ "find-next", ACT_FIND_NEXT },
-	{ "find-next-back", ACT_FIND_NEXT_BACK },
-	{ "forget-credentials", ACT_FORGET_CREDENTIALS },
-	{ "goto-url", ACT_GOTO_URL },
-	{ "goto-url-current", ACT_GOTO_URL_CURRENT },
-	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK },
-	{ "goto-url-home", ACT_GOTO_URL_HOME },
-	{ "header-info", ACT_HEADER_INFO },
-	{ "history-manager", ACT_HISTORY_MANAGER },
-	{ "home", ACT_HOME },
-	{ "kill-to-bol", ACT_KILL_TO_BOL },
-	{ "kill-to-eol", ACT_KILL_TO_EOL },
-	{ "keybinding-manager", ACT_KEYBINDING_MANAGER },
-	{ "left", ACT_LEFT },
-	{ "link-menu", ACT_LINK_MENU },
-	{ "jump-to-link", ACT_JUMP_TO_LINK },
-	{ "lua-console", ACT_LUA_CONSOLE },
-	{ " *lua-function*", ACT_LUA_FUNCTION }, /* internal use only */
-	{ "menu", ACT_MENU },
-	{ "next-frame", ACT_NEXT_FRAME },
-	{ "open-new-window", ACT_OPEN_NEW_WINDOW },
-	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW },
-	{ "options-manager", ACT_OPTIONS_MANAGER },
-	{ "page-down", ACT_PAGE_DOWN },
-	{ "page-up", ACT_PAGE_UP },
-	{ "paste-clipboard", ACT_PASTE_CLIPBOARD },
-	{ "previous-frame", ACT_PREVIOUS_FRAME },
-	{ "quit", ACT_QUIT },
-	{ "really-quit", ACT_REALLY_QUIT },
-	{ "reload", ACT_RELOAD },
-	{ "resume-download", ACT_RESUME_DOWNLOAD },
-	{ "right", ACT_RIGHT },
-	{ "save-formatted", ACT_SAVE_FORMATTED },
-	{ "scroll-down", ACT_SCROLL_DOWN },
-	{ "scroll-left", ACT_SCROLL_LEFT },
-	{ "scroll-right", ACT_SCROLL_RIGHT },
-	{ "scroll-up", ACT_SCROLL_UP },
-	{ "search", ACT_SEARCH },
-	{ "search-back", ACT_SEARCH_BACK },
-	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES },
-	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES },
-	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN },
-	{ "unback", ACT_UNBACK },
-	{ "up", ACT_UP },
-	{ "view-image", ACT_VIEW_IMAGE },
-	{ "zoom-frame", ACT_ZOOM_FRAME },
-	{ NULL, 0 }
+	{ "none", ACT_NONE, NULL },
+	{ "abort-connection", ACT_ABORT_CONNECTION, "Abort connection" },
+	{ "add-bookmark", ACT_ADD_BOOKMARK, "Add a new bookmark" },
+	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, "Add a new bookmark using current link" },
+	{ "auto-complete", ACT_AUTO_COMPLETE, "Attempt to auto-complete the input" },
+	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS, "Attempt to unambiguously auto-complete the input" },
+	{ "back", ACT_BACK, "Return to the previous document in history" },
+	{ "backspace", ACT_BACKSPACE, "Delete character in front of the cursor" },
+	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, "Open bookmark manager" },
+	{ "cookies-load", ACT_COOKIES_LOAD, "Reload cookies file" },
+	{ "copy-clipboard", ACT_COPY_CLIPBOARD, "Copy text to clipboard" },
+	{ "cut-clipboard", ACT_CUT_CLIPBOARD, "Delete text from clipboard" },
+	{ "delete", ACT_DELETE, "Delete character under cursor" },
+	{ "document-info", ACT_DOCUMENT_INFO, "Show informations about the current page" },
+	{ "down", ACT_DOWN, "Move cursor downwards" },
+	{ "download", ACT_DOWNLOAD, "Download the current link" },
+	{ "download-image", ACT_DOWNLOAD_IMAGE, "Download the current image" },
+	{ "edit", ACT_EDIT, "Begin editing" }, /* FIXME */
+	{ "end", ACT_END, "Go to the end of the page/line" },
+	{ "enter", ACT_ENTER, "Follow the current link" },
+	{ "enter-reload", ACT_ENTER_RELOAD, "Follow the current link, forcing reload of the target" },
+	{ "file-menu", ACT_FILE_MENU, "Open the File menu" },
+	{ "find-next", ACT_FIND_NEXT, "Find the next occurrence of the current search text" },
+	{ "find-next-back", ACT_FIND_NEXT_BACK, "Find the next occurrence of the current search text, in reverse" },
+	{ "forget-credentials", ACT_FORGET_CREDENTIALS, "Forget authentication credentials" },
+	{ "goto-url", ACT_GOTO_URL, "Open \"Go to URL\" dialog box" },
+	{ "goto-url-current", ACT_GOTO_URL_CURRENT, "Open \"Go to URL\" dialog box containing the current URL" },
+	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK, "Open \"Go to URL\" dialog box containing the current link URL" },
+	{ "goto-url-home", ACT_GOTO_URL_HOME, "Go to the homepage" },
+	{ "header-info", ACT_HEADER_INFO, "Show informations about the the current page HTTP headers" },
+	{ "history-manager", ACT_HISTORY_MANAGER, "Open history manager" },
+	{ "home", ACT_HOME, "Go to the start of the page/line" },
+	{ "kill-to-bol", ACT_KILL_TO_BOL, "Delete to beginning of line" },
+	{ "kill-to-eol", ACT_KILL_TO_EOL, "Delete to end of line" },
+	{ "keybinding-manager", ACT_KEYBINDING_MANAGER, "Open keybinding manager" },
+	{ "left", ACT_LEFT, "Move the cursor left" },
+	{ "link-menu", ACT_LINK_MENU, "Activate the link context menu" },
+	{ "jump-to-link", ACT_JUMP_TO_LINK, "Jump to link" },
+	{ "lua-console", ACT_LUA_CONSOLE, "Open a Lua console"
+#ifndef HAVE_LUA
+					  " (DISABLED)"
+#endif
+	},
+	{ " *lua-function*", ACT_LUA_FUNCTION, NULL }, /* internal use only */
+	{ "menu", ACT_MENU, "Activate the menu" },
+	{ "next-frame", ACT_NEXT_FRAME, "Move to the next frame" },
+	{ "open-new-window", ACT_OPEN_NEW_WINDOW, "Open in a new window" },
+	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, "Open the current link in a new window" },
+	{ "options-manager", ACT_OPTIONS_MANAGER, "Open options manager" },
+	{ "page-down", ACT_PAGE_DOWN, "Move downwards by a page" },
+	{ "page-up", ACT_PAGE_UP, "Move upwards by a page" },
+	{ "paste-clipboard", ACT_PASTE_CLIPBOARD, "Paste text from the clipboard" },
+	{ "previous-frame", ACT_PREVIOUS_FRAME, "Move to the previous frame" },
+	{ "quit", ACT_QUIT, "Open a quit confirmation dialog box" },
+	{ "really-quit", ACT_REALLY_QUIT, "Quit without confirmation" },
+	{ "reload", ACT_RELOAD, "Reload the current page" },
+	{ "resume-download", ACT_RESUME_DOWNLOAD, "Attempt to resume download of the current link" },
+	{ "right", ACT_RIGHT, "Move the cursor right" },
+	{ "save-formatted", ACT_SAVE_FORMATTED, "Save formatted document" },
+	{ "scroll-down", ACT_SCROLL_DOWN, "Scroll down" },
+	{ "scroll-left", ACT_SCROLL_LEFT, "Scroll left" },
+	{ "scroll-right", ACT_SCROLL_RIGHT, "Scroll right" },
+	{ "scroll-up", ACT_SCROLL_UP, "Scroll up" },
+	{ "search", ACT_SEARCH, "Search for a text pattern" },
+	{ "search-back", ACT_SEARCH_BACK, "Search backwards for a text pattern" },
+	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, "Toggle displaying of links to images" },
+	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, "Toggle rendering of tables" },
+	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, "Toggle rendering page as HTML / plain text" },
+	{ "unback", ACT_UNBACK, "Go forward in the unhistory" },
+	{ "up", ACT_UP, "Move cursor upwards" },
+	{ "view-image", ACT_VIEW_IMAGE, "View the current image" },
+	{ "zoom-frame", ACT_ZOOM_FRAME, "Maximize the current frame" },
+	{ NULL, 0, NULL }
 };
 
 static int
@@ -452,7 +470,7 @@ init_action_listboxes()
 		box_item->expanded = 0; /* Maybe you would like this being 1? */
 		box_item->depth = 0;
 		box_item->box = &kbdbind_boxes;
-		box_item->text = act->str;
+		box_item->text = act->desc;
 
 		for (i = 0; i < KM_MAX; i++) {
 			struct listbox_item *keymap;
@@ -469,7 +487,7 @@ init_action_listboxes()
 			keymap->expanded = 1;
 			keymap->depth = 1;
 			keymap->box = &kbdbind_boxes;
-			keymap->text = write_keymap(i);
+			keymap->text = numtodesc(keymap_table, i);
 		}
 	}
 }
@@ -488,6 +506,26 @@ free_action_listboxes()
 		free_list(action->child);
 	}
 	free_list(kbdbind_box_items);
+}
+
+
+void
+toggle_display_action_listboxes()
+{
+	struct listbox_item *action;
+	unsigned char *(*toggle)(struct strtonum *table, long num);
+	static int state = 1;
+
+	state = !state;
+	toggle = state ? numtodesc : numtostr;
+
+	foreach (action, kbdbind_box_items) {
+		struct listbox_item *keymap;
+
+		action->text = toggle(action_table, (int) action->udata);
+		foreach (keymap, action->child)
+			keymap->text = toggle(keymap_table, (int) keymap->udata);
+	}
 }
 
 

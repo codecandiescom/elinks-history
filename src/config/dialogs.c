@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.27 2002/12/19 12:18:38 pasky Exp $ */
+/* $Id: dialogs.c,v 1.28 2003/01/01 01:58:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -550,7 +550,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 ****************************************************************************/
 
 /* The location of the box in the keybinding manager */
-#define	KB_BOX_IND		4
+#define	KB_BOX_IND		5
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
@@ -653,6 +653,16 @@ push_kbdbind_add_button(struct dialog_data *dlg,
 }
 
 
+static int
+push_kbdbind_toggle_display_button(struct dialog_data *dlg,
+		struct widget_data *some_useless_info_button)
+{
+	toggle_display_action_listboxes();
+	clear_dialog(dlg, some_useless_info_button);
+	return 0;
+}
+
+
 /* FIXME: Races here, we need to lock the entry..? --pasky */
 
 static void
@@ -726,7 +736,6 @@ push_kbdbind_save_button(struct dialog_data *dlg,
 	return 0;
 }
 
-
 /* Builds the "Keybinding manager" dialog */
 void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -759,14 +768,20 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
-	d->items[2].fn = push_kbdbind_save_button;
+	d->items[2].fn = push_kbdbind_toggle_display_button;
 	d->items[2].udata = ses;
-	d->items[2].text = TEXT(T_SAVE);
+	d->items[2].text = TEXT(T_TOGGLE_DISPLAY);
 
 	d->items[3].type = D_BUTTON;
-	d->items[3].gid = B_ESC;
-	d->items[3].fn = cancel_dialog;
-	d->items[3].text = TEXT(T_CLOSE);
+	d->items[3].gid = B_ENTER;
+	d->items[3].fn = push_kbdbind_save_button;
+	d->items[3].udata = ses;
+	d->items[3].text = TEXT(T_SAVE);
+
+	d->items[4].type = D_BUTTON;
+	d->items[4].gid = B_ESC;
+	d->items[4].fn = cancel_dialog;
+	d->items[4].text = TEXT(T_CLOSE);
 
 	d->items[KB_BOX_IND].type = D_BOX;
 	d->items[KB_BOX_IND].gid = 12;

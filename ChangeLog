@@ -1,3 +1,256 @@
+Sun Oct  5 21:33:33 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Fix crash which showed then pressing 'n' after the searching pattern
+	has cleared.  
+
+Sun Oct  5 20:47:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/group.c, bfu/group.h, viewer/text/search.c:
+
+	Compress the search type selector to one line.  
+
+Sun Oct  5 20:18:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	Only display codepage info if @frame is not NULL. Catched by Miciah.  
+
+Sun Oct  5 20:13:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, viewer/text/search.c, viewer/text/search.h:
+
+	Add search history file support.  
+
+Sun Oct  5 20:07:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Added TODO about checkboxes on one line.  
+
+Sun Oct  5 20:03:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	load_input_history(): Rename fp -> file, url -> line.  
+
+Sun Oct  5 19:55:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: checkbox.c, checkbox.h:
+
+	Don't export dlg_format_checkbox().  
+
+Sun Oct  5 19:55:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inphist.c, bfu/inphist.h, config/urlhist.c:
+
+	Move input history file loading and saving.  
+
+Sun Oct  5 19:53:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Dirty stuff coming. Let the user choose search type (normal, regex,
+	...) in the search dialog. Unfortunately I had to clone
+	input_field() & co in order to do this :-(.  
+
+Sun Oct  5 19:44:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/urlhist.c:
+
+	Split url history load and save functions into a generic part and
+	...  
+
+Sun Oct  5 19:11:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/checkbox.c:
+
+	Reindent loop innards in select method.  
+
+Sun Oct  5 18:17:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/options.c:
+
+	assertm() without message? Converted to assert().  
+
+Sun Oct  5 16:36:44 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Fix a bug, where a regex matches string of length 0 e.g. '.*'.  
+
+Sun Oct  5 16:11:36 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Restrict regex so that '.' doesn't match a newline.  
+
+Sun Oct  5 16:02:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Tidyup.  
+
+Sun Oct  5 15:49:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	kuser is random hacker and implemented regex searches.  
+
+Sun Oct  5 15:48:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Make it possible to search empty string - it just cancels the
+	previous search, effectively unhighlighting it.  
+
+Sun Oct  5 15:40:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Include <sys/types.h> before <regex.h> to make off_t defined on
+	FreeBSD.  
+
+Sun Oct  5 15:09:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inpfield.c:
+
+	Removed nonsensical inlinization of display_field_(_pass)().  
+
+Sun Oct  5 14:07:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, SITES:
+
+	Update SITES - weed out out-of-date URIs etc. Patch by Frédéric L.
+	W. Meunier <0@pervalidus.tk>.  
+
+Sun Oct  5 14:05:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/renderer.c, sched/session.c,
+	viewer/text/vs.c, viewer/text/vs.h:
+
+	Remove view_state.view, it is useless now - nothing uses it anymore
+	(by mikulas, from 0.99pre9).  
+
+Sun Oct  5 13:58:55 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/document/html/parser.c:
+
+	Split get_img_map part 3: look_for_link. Splitting complete.  
+
+Sun Oct  5 13:55:30 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/document/html/parser.c:
+
+	Split get_img_map part 2: look_for_tag.  
+
+Sun Oct  5 13:37:08 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/document/html/parser.c:
+
+	Split get_img_map part 1: look_for_map.  
+
+Sun Oct  5 13:20:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* README:
+
+	Update URIs ... no need to mention how to request features or report
+	bugs twice.  
+
+Sun Oct  5 13:16:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Commented out some strange frameset test in request_frame() (by
+	mikulas, from 0.99pre9).  
+
+Sun Oct  5 12:54:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	Insert space between codepage string and notice in parentheses.  
+
+Sun Oct  5 12:54:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	In current_frame(), take @fd from ses->screen, not
+	cur_loc(ses)->vs.view (by mikulas; from 0.99pre9).  
+
+Sun Oct  5 12:48:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/document.c:
+
+	Use @frame instead of @location->vs.view (by mikulas, from
+	0.99pre9).  
+
+Sun Oct  5 12:40:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Removed some ancient linksherited commented out stuff from
+	request_frame(). Even Mikulas removed it in 0.99pre9 ;-).  
+
+Sun Oct  5 12:37:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: osdep/os_dep.c, osdep/os_depx.h, terminal/kbd.c:
+
+	Workaround broken cfmakeraw() on AIX (by mikulas, from 0.99pre9).  
+
+Sun Oct  5 11:34:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/cache.c:
+
+	DEBUG_CACHE cleanups - @f -> @frag, @e -> @entry, @c -> @comment.  
+
+Sun Oct  5 11:32:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/cache.c:
+
+	Macroize dump_frag*(), merge dump_all_frag() and dump_frags(),
+	change fprintf()s to debug()s. Hope zas will kill me fast and won't
+	let me suffer.  
+
+Sun Oct  5 05:26:53 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/elinks.spec.in:
+
+	Removed ncurses-devel from BuildRequires 
+
+Sun Oct  5 04:44:38 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Spelling fixes.  
+
+Sat Oct  4 23:16:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/README:
+
+	The manpages has been moved to the man/ dir already.  
+
+Sat Oct  4 22:31:31 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Fix a bug with regex searching.  
+
+Sat Oct  4 22:21:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, viewer/text/search.c,
+	viewer/text/search.h:
+
+	Moved search dialog functions from dialogs/menu.* to
+	viewer/text/search.*.  
+
+Sat Oct  4 22:19:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/urlhist.h:
+
+	Make config/urlhist.h standalone - it depends on bfu/inphist.h so
+	include it inside.  
+
 Sat Oct  4 21:44:46 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: config/options.c, document/options.c, document/options.h,

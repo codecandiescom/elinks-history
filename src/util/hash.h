@@ -1,0 +1,33 @@
+/* $Id: hash.h,v 1.1 2002/05/18 13:41:39 pasky Exp $ */
+
+#ifndef EL__UTIL_HASH_H
+#define EL__UTIL_HASH_H
+
+#include "links.h" /* list_head */
+
+/* This should be hopefully always 32bit at least. I'm not sure what will
+ * happen when this will be of other length, but it should still work ok.
+ * --pasky */
+typedef unsigned long hash_value;
+
+struct hash_item {
+	struct hash_item *next;
+	struct hash_item *prev;
+	unsigned char *key;
+	void *value;
+};
+
+struct hash {
+	int width; /* Number of bits - hash array must be 2^width long. */
+	struct list_head *hash;
+};
+
+
+struct hash *init_hash(int width);
+void free_hash(struct hash *hash);
+
+struct hash_item *add_hash_item(struct hash *hash, unsigned char *key, void *value);
+struct hash_item *get_hash_item(struct hash *hash, unsigned char *key);
+void del_hash_item(struct hash *hash, struct hash_item *item);
+
+#endif

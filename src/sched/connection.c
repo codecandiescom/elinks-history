@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.83 2003/07/06 03:42:29 jonas Exp $ */
+/* $Id: connection.c,v 1.84 2003/07/06 11:53:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,9 +67,6 @@ static INIT_LIST_HEAD(keepalive_connections);
 /* Prototypes */
 static void send_connection_info(struct connection *c);
 static void check_keepalive_connections(void);
-#ifdef DEBUG
-static void check_queue_bugs(void);
-#endif
 
 /* See connection_state description. */
 #define is_in_result_state(cstate)	(cstate < 0)
@@ -194,6 +191,32 @@ done_host_connection(struct connection *c)
 	del_from_list(h);
 	mem_free(h);
 }
+
+
+#ifdef DEBUG
+static void
+check_queue_bugs(void)
+{
+	struct connection *d;
+	enum connection_priority prev_priority = 0;
+	int cc = 0;
+
+	foreach (d, queue) {
+		enum connection_priority priority = get_priority(d);
+
+		assertm(priority >= prev_priority, "queue is not sorted");
+		assertm(d->state >= 0, "interrupted connection on queue "
+			"(conn %s, state %d)", d->uri.protocol, d->state);
+
+		cc += d->running;
+		prev_priority = priority;
+	}
+
+	assertm(cc == active_connections, "%d - %d", cc, active_connections);
+}
+#else
+#define check_queue_bugs()
+#endif
 
 
 static struct connection *
@@ -376,9 +399,7 @@ done_connection(struct connection *c)
 	send_connection_info(c);
 	mem_free(c->uri.protocol);
 	mem_free(c);
-#ifdef DEBUG
 	check_queue_bugs();
-#endif
 }
 
 
@@ -633,31 +654,6 @@ retry_conn_with_state(struct connection *conn, enum connection_state state)
 	retry_connection(conn);
 }
 
-#ifdef DEBUG
-static void
-check_queue_bugs(void)
-{
-	struct connection *d;
-	enum connection_priority prev_priority = 0;
-	int cc = 0;
-
-	foreach (d, queue) {
-		enum connection_priority priority = get_priority(d);
-
-		assertm(priority >= prev_priority, "queue is not sorted");
-		assertm(d->state >= 0, "interrupted connection on queue "
-			"(conn %s, state %d)", d->uri.protocol, d->state);
-
-		cc += d->running;
-		prev_priority = priority;
-	}
-
-	assertm(cc == active_connections,
-		"bad number of active connections (counted %d, stored %d)",
-		cc, active_connections);
-}
-#endif
-
 static int
 try_to_suspend_connection(struct connection *c, unsigned char *ho)
 {
@@ -700,9 +696,7 @@ check_queue(void)
 
 again:
 	c = queue.next;
-#ifdef DEBUG
 	check_queue_bugs();
-#endif
 	check_keepalive_connections();
 
 	while (c != (struct connection *)&queue) {
@@ -740,9 +734,7 @@ again2:
 		}
 	}
 
-#ifdef DEBUG
 	check_queue_bugs();
-#endif
 }
 
 int
@@ -822,9 +814,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 			add_to_list(c->downloads, download);
 			set_connection_state(c, c->state);
 		}
-#ifdef DEBUG
 		check_queue_bugs();
-#endif
 		return 0;
 	}
 
@@ -850,9 +840,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	add_to_queue(c);
 	set_connection_state(c, S_WAIT);
 
-#ifdef DEBUG
 	check_queue_bugs();
-#endif
 
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 	return 0;
@@ -878,9 +866,7 @@ change_connection(struct download *old, struct download *new,
 		return;
 	}
 
-#ifdef DEBUG
 	check_queue_bugs();
-#endif
 
 	c = old->c;
 
@@ -905,10 +891,7 @@ change_connection(struct download *old, struct download *new,
 	}
 
 	sort_queue();
-
-#ifdef DEBUG
 	check_queue_bugs();
-#endif
 
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }

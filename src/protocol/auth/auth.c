@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.14 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: auth.c,v 1.15 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,7 +278,7 @@ del_auth_entry(struct http_auth_basic *entry)
 
 /* Free all entries in auth list and questions in queue. */
 void
-free_auth()
+free_auth(void)
 {
         while (!list_empty(http_auth_basic_list))
                 del_auth_entry(http_auth_basic_list.next);

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.18 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: home.c,v 1.19 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ home_creat:
 }
 
 void
-init_home()
+init_home(void)
 {
 	elinks_home = get_home(&first_use);
 	if (!elinks_home) {
@@ -167,7 +167,7 @@ init_home()
 }
 
 void
-free_home()
+free_home(void)
 {
 	if (elinks_home) mem_free(elinks_home);
 }

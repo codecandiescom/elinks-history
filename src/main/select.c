@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.28 2003/05/24 20:26:46 pasky Exp $ */
+/* $Id: select.c,v 1.29 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ register_bottom_half(void (*fn)(void *), void *data)
 }
 
 void
-do_check_bottom_halves()
+do_check_bottom_halves(void)
 {
 	do {
 		struct bottom_half *bh = bottom_halves.prev;

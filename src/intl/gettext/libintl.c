@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.9 2003/04/28 15:34:22 zas Exp $ */
+/* $Id: libintl.c,v 1.10 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,7 +161,7 @@ language_to_name(int language)
 }
 
 int
-get_system_language_index()
+get_system_language_index(void)
 {
 	unsigned char *l;
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.72 2003/05/24 22:32:53 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.73 2003/06/05 14:38:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,13 +244,13 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 
 /* Loads the bookmarks from file */
 void
-read_bookmarks()
+read_bookmarks(void)
 {
 	bookmarks_read();
 }
 
 void
-write_bookmarks()
+write_bookmarks(void)
 {
 	bookmarks_write(&bookmarks);
 }
@@ -275,7 +275,7 @@ free_bookmarks(struct list_head *bookmarks_list,
 
 /* Does final cleanup and saving of bookmarks */
 void
-finalize_bookmarks()
+finalize_bookmarks(void)
 {
 	write_bookmarks();
 	free_bookmarks(&bookmarks, &bookmark_box_items);

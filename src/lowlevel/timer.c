@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.4 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: timer.c,v 1.5 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ count_down(void *xxx)
 }
 
 void
-reset_timer()
+reset_timer(void)
 {
 	if (countdown >= 0) kill_timer(countdown);
 
@@ -57,13 +57,13 @@ reset_timer()
 }
 
 void
-init_timer()
+init_timer(void)
 {
 	reset_timer();
 }
 
 void
-done_timer()
+done_timer(void)
 {
 	if (countdown >= 0) kill_timer(countdown);
 }

@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.4 2003/04/14 15:05:47 zas Exp $ */
+/* $Id: time.c,v 1.5 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 
 
 ttime
-get_time()
+get_time(void)
 {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);

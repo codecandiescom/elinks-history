@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.6 2003/05/24 09:38:53 zas Exp $ */
+/* $Id: version.c,v 1.7 2003/06/05 14:38:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 unsigned char full_static_version[1024];
 
 unsigned char *
-get_version()
+get_version(void)
 {
 	return (unsigned char *) "ELinks " VERSION_STRING;
 }
@@ -92,7 +92,7 @@ get_dyn_full_version(struct terminal *term, int more)
 
 /* This one is used to prevent usage of straconcat() at backtrace time. */
 void
-init_static_version()
+init_static_version(void)
 {
 	unsigned char *s = get_dyn_full_version((struct terminal *) NULL, 0);
 

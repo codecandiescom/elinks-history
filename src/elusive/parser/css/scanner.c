@@ -1,5 +1,5 @@
 /* CSS scanner utilities */
-/* $Id: scanner.c,v 1.1 2003/02/25 14:15:50 jonas Exp $ */
+/* $Id: scanner.c,v 1.2 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ int css_scan_table[SCAN_TABLE_SIZE];
 
 /* Initiate bitmaps */
 void
-css_init_scan_table()
+css_init_scan_table(void)
 {
 	int index;
 

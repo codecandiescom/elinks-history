@@ -1,5 +1,5 @@
 /* Layout box utility tools */
-/* $Id: box.c,v 1.6 2003/01/18 01:41:14 pasky Exp $ */
+/* $Id: box.c,v 1.7 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 
 
 struct layout_box *
-init_layout_box()
+init_layout_box(void)
 {
 	struct layout_box *box;
 

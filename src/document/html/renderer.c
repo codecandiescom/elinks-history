@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.92 2003/05/28 08:41:40 zas Exp $ */
+/* $Id: renderer.c,v 1.93 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1190,7 +1190,7 @@ do_format(char *start, char *end, struct part *part, unsigned char *head)
 }
 
 void
-free_table_cache()
+free_table_cache(void)
 {
 	if (table_cache) {
 		struct hash_item *item;
@@ -1626,7 +1626,7 @@ shrink_format_cache(int u)
 }
 
 void
-count_format_cache()
+count_format_cache(void)
 {
 	struct f_data *ce;
 
@@ -1637,7 +1637,7 @@ count_format_cache()
 }
 
 void
-delete_unused_format_cache_entries()
+delete_unused_format_cache_entries(void)
 {
 	struct f_data *ce;
 

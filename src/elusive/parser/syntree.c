@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.14 2003/01/18 01:32:06 pasky Exp $ */
+/* $Id: syntree.c,v 1.15 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 
 
 struct syntree_node *
-init_syntree_node()
+init_syntree_node(void)
 {
 	struct syntree_node *node;
 

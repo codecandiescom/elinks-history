@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.47 2003/06/03 20:23:35 zas Exp $ */
+/* $Id: string.c,v 1.48 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,7 @@ debug_init_str(unsigned char *file, int line)
 }
 #else
 inline unsigned char *
-init_str()
+init_str(void)
 {
 	unsigned char *p = mem_alloc(ALLOC_GR);
 

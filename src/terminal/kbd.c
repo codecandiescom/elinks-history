@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.14 2003/06/01 18:57:01 pasky Exp $ */
+/* $Id: kbd.c,v 1.15 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,14 +63,14 @@ static void in_kbd(struct itrm *);
 static void in_sock(struct itrm *);
 
 int
-is_blocked()
+is_blocked(void)
 {
 	return ditrm && ditrm->blocked;
 }
 
 
 void
-free_all_itrms()
+free_all_itrms(void)
 {
 	if (ditrm) free_trm(ditrm);
 }
@@ -142,7 +142,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 
 
 void
-kbd_ctrl_c()
+kbd_ctrl_c(void)
 {
 	struct event ev = { EV_KBD, KBD_CTRL_C, 0, 0 };
 
@@ -204,7 +204,7 @@ send_term_sequence(int h, int flags)
 
 
 void
-resize_terminal()
+resize_terminal(void)
 {
 	struct event ev = { EV_RESIZE, 0, 0, 0 };
 	int x, y;

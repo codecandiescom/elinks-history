@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.97 2003/05/21 11:44:46 zas Exp $ */
+/* $Id: menu.c,v 1.98 2003/06/05 14:38:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -713,7 +713,7 @@ search_dlg(struct session *ses, struct f_data_c *f, int a)
 }
 
 void
-free_history_lists()
+free_history_lists(void)
 {
 	free_list(goto_url_history.items);
 	free_list(file_history.items);

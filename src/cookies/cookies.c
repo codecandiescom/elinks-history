@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.53 2003/06/04 10:01:28 zas Exp $ */
+/* $Id: cookies.c,v 1.54 2003/06/05 14:38:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -687,7 +687,7 @@ save_cookies(void) {
 }
 
 void
-init_cookies()
+init_cookies(void)
 {
 	if (get_opt_int("cookies.save"))
 		load_cookies();
@@ -695,7 +695,7 @@ init_cookies()
 
 
 void
-cleanup_cookies()
+cleanup_cookies(void)
 {
 	struct cookie *c;
 

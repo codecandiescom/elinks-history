@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.11 2003/05/13 13:34:57 pasky Exp $ */
+/* $Id: common.c,v 1.12 2003/06/05 14:38:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ static struct bookmarks_backend *bookmarks_backends[] = {
 
 /* Loads the bookmarks from file */
 void
-bookmarks_read()
+bookmarks_read(void)
 {
 	int backend = get_opt_int("bookmarks.file_format");
 	unsigned char *file_name;

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.14 2003/05/01 00:22:02 zas Exp $ */
+/* $Id: mailcap.c,v 1.15 2003/06/05 14:38:18 zas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -380,7 +380,7 @@ mailcap_parse(unsigned char *filename, unsigned int priority)
  */
 
 void
-mailcap_init()
+mailcap_init(void)
 {
 	unsigned char *path;
 	unsigned int priority = 0;
@@ -423,7 +423,7 @@ mailcap_init()
 }
 
 void
-mailcap_exit()
+mailcap_exit(void)
 {
 	if (mailcap_map) {
 		struct hash_item *item;

@@ -288,7 +288,7 @@ read_alias_file(const unsigned char *fname, int fname_len)
 }
 
 static int
-extend_alias_table()
+extend_alias_table(void)
 {
 	size_t new_size;
 	struct alias_map *new_map;

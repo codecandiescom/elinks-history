@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.18 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: connection.c,v 1.19 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -691,7 +691,7 @@ retry_conn_with_state(struct connection *conn, int state)
 
 #ifdef DEBUG
 static void
-check_queue_bugs()
+check_queue_bugs(void)
 {
 	struct connection *d;
 	int p = 0, ps = 0;
@@ -749,7 +749,7 @@ try_connection(struct connection *c, int max_conns_to_host, int max_conns)
 }
 
 void
-check_queue()
+check_queue(void)
 {
 	struct connection *c;
 	int max_conns_to_host = get_opt_int("connection.max_connections_to_host");
@@ -1185,7 +1185,7 @@ set_timeout(struct connection *c)
 
 
 void
-abort_all_connections()
+abort_all_connections(void)
 {
 	while(queue.next != &queue) {
 		setcstate(queue.next, S_INTERRUPTED);
@@ -1196,7 +1196,7 @@ abort_all_connections()
 }
 
 void
-abort_background_connections()
+abort_background_connections(void)
 {
 	int i = 0;
 

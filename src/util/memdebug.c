@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.18 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: memdebug.c,v 1.19 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,7 +206,7 @@ bad_xflow_magic(struct alloc_header *ah, unsigned char *info,
 
 
 void
-check_memory_leaks()
+check_memory_leaks(void)
 {
 	struct alloc_header *ah;
 

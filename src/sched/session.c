@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.76 2003/06/04 10:23:10 zas Exp $ */
+/* $Id: session.c,v 1.77 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ struct file_to_load *request_additional_loading_file(struct session *,
 						     struct status *, int);
 
 void
-free_strerror_buf()
+free_strerror_buf(void)
 {
 	free_list(strerror_buf);
 }
@@ -1372,7 +1372,7 @@ destroy_session(struct session *ses)
 }
 
 void
-destroy_all_sessions()
+destroy_all_sessions(void)
 {
 	/*while (!list_empty(sessions)) destroy_session(sessions.next);*/
 }

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.68 2003/05/25 09:35:22 zas Exp $ */
+/* $Id: os_dep.c,v 1.69 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,7 +402,7 @@ can_twterm() /* Check if it make sense to call a twterm. */
 #if defined(UNIX) || defined(WIN32)
 
 int
-is_xterm()
+is_xterm(void)
 {
 	static int xt = -1;
 
@@ -414,7 +414,7 @@ is_xterm()
 #elif defined(BEOS)
 
 int
-is_xterm()
+is_xterm(void)
 {
 	return 0;
 }
@@ -422,7 +422,7 @@ is_xterm()
 #elif defined(RISCOS)
 
 int
-is_xterm()
+is_xterm(void)
 {
        return 1;
 }
@@ -572,7 +572,7 @@ catch_x_error(void)
 #endif
 
 unsigned char *
-get_window_title()
+get_window_title(void)
 {
 #ifdef HAVE_X11
 	/* Following code is stolen from our beloved vim. */
@@ -657,7 +657,7 @@ exe(char *path)
 }
 
 char *
-get_clipboard_text()
+get_clipboard_text(void)
 {
 	PTIB tib;
 	PPIB pib;
@@ -741,7 +741,7 @@ set_clipboard_text(char *data)
 }
 
 unsigned char *
-get_window_title()
+get_window_title(void)
 {
 #ifndef OS2_DEBUG
 	char *org_switch_title;
@@ -970,7 +970,7 @@ bgpt(struct tdata *t)
 #if defined(UNIX) || defined(OS2) || defined(RISCOS)
 
 void
-terminate_osdep()
+terminate_osdep(void)
 {
 }
 
@@ -979,12 +979,12 @@ terminate_osdep()
 #ifndef BEOS
 
 void
-block_stdin()
+block_stdin(void)
 {
 }
 
 void
-unblock_stdin()
+unblock_stdin(void)
 {
 }
 
@@ -1057,7 +1057,7 @@ rel:
 }
 
 void
-terminate_osdep()
+terminate_osdep(void)
 {
 	struct list_head *p;
 	struct active_thread *thrd;
@@ -1310,7 +1310,7 @@ unhandle_mouse(void *om)
 }
 
 void
-want_draw()
+want_draw(void)
 {
 	A_DECL(NOPTRRECT, pa);
 #ifdef HAVE_SYS_FMUTEX_H
@@ -1334,7 +1334,7 @@ want_draw()
 }
 
 void
-done_draw()
+done_draw(void)
 {
 #ifdef HAVE_SYS_FMUTEX_H
 	if (mouse_mutex_init) _fmutex_release(&mouse_mutex);
@@ -1511,18 +1511,18 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 
 #ifndef USING_OS2_MOUSE
 void
-want_draw()
+want_draw(void)
 {
 }
 
 void
-done_draw()
+done_draw(void)
 {
 }
 #endif
 
 int
-get_output_handle()
+get_output_handle(void)
 {
 	return 1;
 }
@@ -1530,7 +1530,7 @@ get_output_handle()
 #if defined(OS2)
 
 int
-get_ctl_handle()
+get_ctl_handle(void)
 {
 	return get_input_handle();
 }
@@ -1538,7 +1538,7 @@ get_ctl_handle()
 #else
 
 int
-get_ctl_handle()
+get_ctl_handle(void)
 {
 	return 0;
 }
@@ -1549,7 +1549,7 @@ get_ctl_handle()
 
 #elif defined(HAVE_BEGINTHREAD) && defined(HAVE_READ_KBD)
 int
-get_input_handle()
+get_input_handle(void)
 {
 	int fd[2];
 
@@ -1573,7 +1573,7 @@ void input_function(int fd);
 void set_proc_id(int id);
 
 int
-get_input_handle()
+get_input_handle(void)
 {
 	int	fd[2];
 	static int ti = -1, tp = -1;
@@ -1596,7 +1596,7 @@ get_input_handle()
 #else
 
 int
-get_input_handle()
+get_input_handle(void)
 {
 	return 0;
 }
@@ -1742,7 +1742,7 @@ get_common_env(void)
 #if defined(OS2)
 
 int
-get_system_env()
+get_system_env(void)
 {
 	int env = get_common_env();
 
@@ -1755,7 +1755,7 @@ get_system_env()
 #elif defined(BEOS)
 
 int
-get_system_env()
+get_system_env(void)
 {
 	int env = get_common_env();
 	unsigned char *term = getenv("TERM");
@@ -1769,7 +1769,7 @@ get_system_env()
 #elif defined(WIN32)
 
 int
-get_system_env()
+get_system_env(void)
 {
 	return get_common_env() | ENV_WIN32;
 }
@@ -1777,7 +1777,7 @@ get_system_env()
 #else
 
 int
-get_system_env()
+get_system_env(void)
 {
 	return get_common_env();
 }
@@ -1979,13 +1979,13 @@ can_open_os_shell(int environment)
 
 #ifndef OS2
 void
-set_highpri()
+set_highpri(void)
 {
 }
 
 #else
 void
-set_highpri()
+set_highpri(void)
 {
 	DosSetPriority(PRTYS_PROCESS, PRTYC_FOREGROUNDSERVER, 0, 0);
 }

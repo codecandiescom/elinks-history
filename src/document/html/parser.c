@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.95 2003/05/15 23:02:35 pasky Exp $ */
+/* $Id: parser.c,v 1.96 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -370,7 +370,7 @@ kill_elem(unsigned char *e)
 #endif
 /* Never called */
 void
-debug_stack()
+debug_stack(void)
 {
 	struct html_element *e;
 
@@ -389,7 +389,7 @@ debug_stack()
 #endif
 
 void
-html_stack_dup()
+html_stack_dup(void)
 {
 	struct html_element *e;
 	struct html_element *ep = html_stack.next;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.36 2003/06/04 08:56:58 zas Exp $ */
+/* $Id: download.c,v 1.37 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,7 +61,7 @@ INIT_LIST_HEAD(downloads);
 
 
 int
-are_there_downloads()
+are_there_downloads(void)
 {
 	struct download *down;
 
@@ -129,7 +129,7 @@ kill_downloads_to_file(unsigned char *file)
 
 
 void
-abort_all_downloads()
+abort_all_downloads(void)
 {
 	while (!list_empty(downloads))
 		abort_download(downloads.next, 0 /* does it matter? */);

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.67 2003/06/04 10:02:42 zas Exp $ */
+/* $Id: kbdbind.c,v 1.68 2003/06/05 14:38:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ delete_keybinding(enum keymap km, long key, long meta)
 
 
 void
-init_keymaps()
+init_keymaps(void)
 {
     	enum keymap i;
 
@@ -142,7 +142,7 @@ init_keymaps()
 }
 
 void
-free_keymaps()
+free_keymaps(void)
 {
 	enum keymap i;
 
@@ -514,7 +514,7 @@ free_action_listboxes(void)
 
 
 void
-toggle_display_action_listboxes()
+toggle_display_action_listboxes(void)
 {
 	struct listbox_item *action;
 	unsigned char *(*toggle)(struct strtonum *table, long num);

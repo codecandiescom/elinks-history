@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.14 2003/05/04 19:30:47 pasky Exp $ */
+/* $Id: leds.c,v 1.15 2003/06/05 14:38:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ static int drawing = 0;
 static void redraw_leds(void *);
 
 void
-init_leds()
+init_leds(void)
 {
 	int i;
 
@@ -71,7 +71,7 @@ init_leds()
 }
 
 void
-done_leds()
+done_leds(void)
 {
 	if (redraw_timer >= 0) kill_timer(redraw_timer);
 }
@@ -112,7 +112,7 @@ draw_leds(struct terminal *term)
 
 /* Determine if leds redrawing if neccessary. Returns non-zero if so. */
 static int
-sync_leds()
+sync_leds(void)
 {
 	int resync = 0;
 	int i;

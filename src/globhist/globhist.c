@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.29 2003/05/13 14:29:45 pasky Exp $ */
+/* $Id: globhist.c,v 1.30 2003/06/05 14:38:17 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -326,7 +326,7 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 
 
 void
-read_global_history()
+read_global_history(void)
 {
 	unsigned char in_buffer[MAX_STR_LEN];
 	unsigned char *file_name = "globhist";
@@ -430,7 +430,7 @@ free_global_history(void)
 }
 
 void
-finalize_global_history()
+finalize_global_history(void)
 {
 	write_global_history();
 	free_global_history();

@@ -1,5 +1,5 @@
 /* CSS tree utility tools */
-/* $Id: tree.c,v 1.1 2003/02/25 14:17:25 jonas Exp $ */
+/* $Id: tree.c,v 1.2 2003/06/05 14:38:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 #include "util/string.h"
 
 struct stylesheet *
-init_stylesheet()
+init_stylesheet(void)
 {
 	struct stylesheet *stylesheet;
 	struct css_hash_item *universal;
@@ -62,7 +62,7 @@ done_stylesheet(struct stylesheet *stylesheet)
 			printf("Deleting hash item ");
 			print_token("", element->name, element->namelen);
 
-			foreach (node, element->nodes) 
+			foreach (node, element->nodes)
 				done_css_node(node);
 
 			mem_free(element);
@@ -73,7 +73,7 @@ done_stylesheet(struct stylesheet *stylesheet)
 }
 
 struct css_node *
-init_css_node()
+init_css_node(void)
 {
 	struct css_node *node;
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.214 2003/06/04 22:43:37 pasky Exp $ */
+/* $Id: options.c,v 1.215 2003/06/05 14:38:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,7 +348,7 @@ copy_option(struct option *template)
 static void register_options(void);
 
 struct list_head *
-init_options_tree()
+init_options_tree(void)
 {
 	struct list_head *ptr = mem_alloc(sizeof(struct list_head));
 
@@ -357,7 +357,7 @@ init_options_tree()
 }
 
 void
-init_options()
+init_options(void)
 {
 	root_options.ptr = init_options_tree();
 	cmdline_options.ptr = init_options_tree();
@@ -377,7 +377,7 @@ free_options_tree(struct list_head *tree)
 }
 
 void
-done_options()
+done_options(void)
 {
 	free_options_tree(root_options.ptr);
 	mem_free(root_options.ptr);
@@ -861,7 +861,7 @@ change_hook_language(struct session *ses, struct option *current, struct option 
 **********************************************************************/
 
 static void
-register_options()
+register_options(void)
 {
 	/* TODO: The change hooks should be added more elegantly! --pasky */
 

@@ -223,7 +223,7 @@ input_handle_th(void *p)
 }
 
 int
-get_input_handle()
+get_input_handle(void)
 {
 	static int h = -1;
 
@@ -238,13 +238,13 @@ get_input_handle()
 }
 
 void
-block_stdin()
+block_stdin(void)
 {
 	suspend_thread(inth);
 }
 
 void
-unblock_stdin()
+unblock_stdin(void)
 {
 	resume_thread(inth);
 }
@@ -267,7 +267,7 @@ output_handle_th(void *p)
 }
 
 int
-get_output_handle()
+get_output_handle(void)
 {
 	static int h = -1;
 

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.50 2003/05/21 08:35:08 zas Exp $ */
+/* $Id: error.c,v 1.51 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ list_magic_error_(unsigned char *where, unsigned char *what, unsigned char *file
 }
 
 void
-force_dump()
+force_dump(void)
 {
 	fprintf(stderr,
 		"\n\033[1m%s\033[0m %s\n", "Forcing core dump!",

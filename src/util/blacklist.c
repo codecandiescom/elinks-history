@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.7 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: blacklist.c,v 1.8 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ get_blacklist_flags(unsigned char *host)
 }
 
 void
-free_blacklist()
+free_blacklist(void)
 {
 	free_list(blacklist);
 }

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.82 2003/06/04 20:05:55 zas Exp $ */
+/* $Id: conf.c,v 1.83 2003/06/05 14:38:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,7 +446,7 @@ load_config_file(unsigned char *prefix, unsigned char *name,
 }
 
 void
-load_config()
+load_config(void)
 {
 	static unsigned char *cf = "elinks.conf";
 

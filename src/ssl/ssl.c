@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.22 2003/06/04 10:24:41 zas Exp $ */
+/* $Id: ssl.c,v 1.23 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ GNUTLS_CERTIFICATE_CLIENT_CREDENTIALS xcred = NULL;
 #endif
 
 void
-init_ssl()
+init_ssl(void)
 {
 #ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.29 2003/05/27 21:57:53 pasky Exp $ */
+/* $Id: terminal.c,v 1.30 2003/06/05 14:38:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@
 
 /* TODO: move this function elsewhere... -- Zas */
 unsigned char *
-get_cwd()
+get_cwd(void)
 {
 	int bufsize = 128;
 	unsigned char *buf;
@@ -138,7 +138,7 @@ redraw_terminal_cls(struct terminal *term)
 }
 
 void
-cls_redraw_all_terminals()
+cls_redraw_all_terminals(void)
 {
 	struct terminal *term;
 
@@ -407,7 +407,7 @@ mm:
 }
 
 void
-redraw_all_terminals()
+redraw_all_terminals(void)
 {
 	struct terminal *term;
 
@@ -454,7 +454,7 @@ destroy_terminal(struct terminal *term)
 }
 
 void
-destroy_all_terminals()
+destroy_all_terminals(void)
 {
 	struct terminal *term;
 
@@ -463,7 +463,7 @@ destroy_all_terminals()
 }
 
 static void
-check_if_no_terminal()
+check_if_no_terminal(void)
 {
 	terminate = list_empty(terminals);
 }

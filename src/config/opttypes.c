@@ -1,10 +1,11 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.3 2002/05/23 19:26:34 pasky Exp $ */
+/* $Id: opttypes.c,v 1.4 2002/05/23 19:40:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdio.h>
 #include <string.h>
 
 #include "links.h"
@@ -12,6 +13,7 @@
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "config/opttypes.h"
+#include "document/html/colors.h"
 #include "intl/charsets.h"
 #include "intl/language.h"
 #include "protocol/types.h"
@@ -471,29 +473,46 @@ term_wr(struct option *o, unsigned char **s, int *l)
 
 
 int
-color_rd(struct option *opt, unsigned char **file)
+color_rd(struct option *opt, unsigned char **str)
 {
-#if 0
-	unsigned char *val = get_token(&c);
+	void *ptr;
+	int ret;
+	struct rgb color;
 
-	if (!val) {
-		return "Missing argument";
-	} else {
-		int err = decode_color(val, o->ptr);
+	/* XXX: We run string parser on this, simulating that this is a string
+	 * option. */
 
-		mem_free(val);
-		return (err) ? "Error decoding color" : NULL;
+	ptr = opt->ptr;
+	opt->ptr = init_str();
+	ret = str_rd(opt, str);
+	if (!ret) {
+		mem_free(opt->ptr);
+		ptr = opt->ptr;
+		return 0;
 	}
-#endif
+
+	ret = decode_color(opt->ptr, &color);
+	mem_free(opt->ptr);
+	opt->ptr = ptr;
+	*((struct rgb *) opt->ptr) = color;
+
+	if (ret) return 0;
+
+	return 1;
 }
 
 void
 color_wr(struct option *opt, unsigned char **str, int *len)
 {
-#if 0
-	unsigned char color[7]
-	add_quoted_to_str(str, len, language_name(current_language));
-#endif
+	struct rgb *color = (struct rgb *) opt->ptr;
+	unsigned char strcolor[8];
+
+	/* TODO: We should be clever boys and try to save color as name, not
+	 * always as RGB. --pasky */
+
+	snprintf(strcolor, 8, "#%02x%02x%02x", color->r, color->g, color->b);
+
+	add_quoted_to_str(str, len, strcolor);
 }
 
 
@@ -512,7 +531,7 @@ struct option_type_info option_types[] = {
 	{ NULL, term2_rd, NULL, "" },
 	{ NULL, bind_rd, NULL, "" },
 	{ NULL, unbind_rd, NULL, "" },
-	{ gen_cmd, color_rd, NULL, "<color|#rrggbb>" },
+	{ gen_cmd, color_rd, color_wr, "<color|#rrggbb>" },
 
 	{ exec_cmd, NULL, NULL, "[<...>]" },
 };

@@ -12,4 +12,7 @@ stamp-h.in
 install-sh
 missing
 mkinstalldirs
+depcomp
+autom4te.cache
+stamp-h1
 .deps

@@ -178,6 +178,9 @@ Grzegorz Golawski <grzegol@pld.org.pl>
 Gianluca Montecchi <gianluca@pluto.linux.it>
 	Italian translation
 
+Harold L Hunt II <huntharo@msu.edu>
+	Build system minor fixes
+
 Hugo Haas <hugo@larve.net>
 	Minor random hacking
 
@@ -476,4 +479,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.154 2003/12/22 01:12:41 pasky Exp $
+$Id: AUTHORS,v 1.155 2004/01/03 01:11:31 pasky Exp $

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.10 2002/11/29 22:18:42 pasky Exp $ */
+/* $Id: hash.c,v 1.11 2002/11/29 22:53:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,6 +119,14 @@ del_hash_item(struct hash *hash, struct hash_item *item)
 
 /* String hashing function follows; it is not written by me, somewhere below
  * are credits. I only hacked it a bit. --pasky */
+
+/* TODO: This is a big CPU hog, in fact:
+ *
+ *   %   cumulative   self              self     total-----------
+ *  time   seconds   seconds    calls  us/call  us/call  name----
+ *   6.00      0.35     0.06    10126     5.93     5.93  strhash
+ *
+ * It should be investigated whether we couldn't push this down a little. */
 
 /*
  *  --------------------------------------------------------------------

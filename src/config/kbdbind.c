@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.213 2004/05/31 03:27:06 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.214 2004/05/31 03:34:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ struct keybinding *
 add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 {
 	struct keybinding *kb;
-	struct listbox_item *box_item;
+	struct listbox_item *root;
 	int is_default;
 
 	is_default = delete_keybinding(km, key, meta) == 2;
@@ -84,38 +84,15 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 
 	if (action == ACT_MAIN_NONE) {
 		/* We don't want such a listbox_item, do we? */
-		kb->box_item = NULL;
 		return NULL; /* Or goto. */
 	}
 
-	kb->box_item = mem_calloc(1, sizeof(struct listbox_item));
-	if (!kb->box_item) {
-		return NULL; /* Or just goto after end of this if block. */
-	}
-
-	box_item = action_box_items[km][action];
-	if (!box_item) {
-		mem_free(kb->box_item);
-		kb->box_item = NULL;
+	root = action_box_items[km][action];
+	if (!root) {
 		return NULL; /* Or goto ;-). */
 	}
 
-	add_to_list(box_item->child, kb->box_item);
-	kb->box_item->root = box_item;
-	init_list(kb->box_item->child);
-	kb->box_item->visible = 1;
-#if 0
-	/* This is not the right way to do it. Trying to translating stuff like
-	 * 'k', ':' or 'Ctrl-Delete' makes no sense. The only thing it will
-	 * translate is string like 'Delete' already used in other parts of
-	 * ELinks. Question is should we translate Insert etc? --jonas */
-	kb->box_item->translated = 1;
-#endif
-	kb->box_item->udata = kb;
-	kb->box_item->type = BI_LEAF;
-	kb->box_item->depth = box_item->depth + 1;
-
-	update_hierbox_browser(&keybinding_browser);
+	kb->box_item = add_listbox_leaf(&keybinding_browser, root, "hi mummy", kb);
 
 	return kb;
 }

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.89 2003/07/09 13:41:16 jonas Exp $ */
+/* $Id: connection.c,v 1.90 2003/07/09 18:29:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -492,7 +492,7 @@ add_keepalive_connection(struct connection *c, ttime timeout)
 
 	free_connection_data(c);
 	assertm(c->sock1 != -1, "keepalive connection not connected");
-	if_assert_failed return;
+	if_assert_failed goto done;
 
 	k = init_keepalive_connection(c, timeout);
 	if (k)
@@ -500,6 +500,7 @@ add_keepalive_connection(struct connection *c, ttime timeout)
 	else
 		close(c->sock1);
 
+done:
 	done_connection(c);
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }

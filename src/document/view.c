@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.69 2002/08/29 23:58:22 pasky Exp $ */
+/* $Id: view.c,v 1.70 2002/08/30 10:00:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2381,24 +2381,24 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			 * with certain button?) will make the document scroll
 			 * automagically. */
 
-			/* TODO: Configurable! */
-			int margin = 3;
+			int margin = get_opt_int("document.browse.scroll_margin");
 
 			/* XXX: This is code duplication with kbd handlers. But
 			 * repeatcount-free here. */
+			if (margin) {
+				if (ev->y < margin) {
+					rep_ev(ses, fd, scroll, -2);
+				}
+				 if (ev->y >= fd->yw - margin) {
+					rep_ev(ses, fd, scroll, 2);
+				}
 
-			if (ev->y < margin) {
-				rep_ev(ses, fd, scroll, -2);
-			}
-		        if (ev->y >= fd->yw - margin) {
-				rep_ev(ses, fd, scroll, 2);
-			}
-
-			if (ev->x < margin * 2) {
-				rep_ev(ses, fd, hscroll, -8);
-			}
-		        if (ev->x >= fd->xw - margin * 2) {
-				rep_ev(ses, fd, hscroll, 8);
+				if (ev->x < margin * 2) {
+					rep_ev(ses, fd, hscroll, -8);
+				}
+				if (ev->x >= fd->xw - margin * 2) {
+					rep_ev(ses, fd, hscroll, 8);
+				}
 			}
 		}
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.94 2002/08/29 12:19:01 pasky Exp $ */
+/* $Id: options.c,v 1.95 2002/08/30 10:00:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -587,6 +587,12 @@ register_options()
 		"margin_width", 0, 0, 9, 3,
 		"Horizontal text margin.");
 
+	add_opt_int("document.browse",
+		"scroll_margin", 0, 0, 20, 3,
+		"When clicking in margin, document scrolls.\n"
+		"This value defines margin size, use 0 to disable.");
+
+	
 	add_opt_bool("document.browse",
 		"table_move_order", 0, 0,
 		"Move by columns in table.");

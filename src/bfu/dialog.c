@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.90 2003/11/10 00:15:27 jonas Exp $ */
+/* $Id: dialog.c,v 1.91 2003/11/10 15:08:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 
 #include "bfu/button.h"
 #include "bfu/dialog.h"
+#include "bfu/group.h"
 #include "bfu/inphist.h"
 #include "bfu/listbox.h"
 #include "bfu/style.h"
@@ -401,13 +402,33 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 			break;
 
 		case WIDGET_CHECKBOX:
-			dlg_format_checkbox(term, wdata, x, y, w, rw, AL_LEFT);
-			/* No horizontal space between checkboxes belonging to
-			 * the same group. */
-			if (widgets > 1
-			    && wdata[1].widget->type == WIDGET_CHECKBOX
-			    && wdata[1].widget->info.checkbox.gid == wdata->widget->info.checkbox.gid)
-				(*y)--;
+		{
+			int group = widget_has_group(wdata);
+
+			if (group && dlg_data->dlg->layout.float_groups) {
+				int size;
+
+				/* Find group size */
+				for (size = 1; widgets > 0; size++, widgets--) {
+					struct widget_data *next = &wdata[size];
+
+					if (group != widget_has_group(next))
+						break;
+				}
+
+				dlg_format_group(term, wdata, size, x, y, w, rw);
+				wdata += size - 1;
+
+			} else {
+
+				/* No horizontal space between checkboxes belonging to
+				 * the same group. */
+				dlg_format_checkbox(term, wdata, x, y, w, rw, AL_LEFT);
+				if (widgets > 1
+				    && group == widget_has_group(&wdata[1]))
+					(*y)--;
+			}
+		}
 			break;
 
 		/* We assume that the buttons are all stuffed at the very end

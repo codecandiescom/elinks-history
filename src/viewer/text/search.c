@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.108 2003/11/09 13:44:29 pasky Exp $ */
+/* $Id: search.c,v 1.109 2003/11/10 15:08:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -963,52 +963,6 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return 0;
 }
 
-void
-search_dialog_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = dialog_max_width(term);
-	int rw = 0;
-	int y = -1;
-
-	dlg_format_field(NULL, dlg_data->widgets_data,
-			 0, &y, w, &rw, AL_LEFT);
-
-	y++;
-	dlg_format_group(NULL, dlg_data->widgets_data + 1, 3, 0,
-			 &y, w, &rw);
-
-	y++;
-	dlg_format_group(NULL, dlg_data->widgets_data + 4, 2, 0,
-			 &y, w, &rw);
-
-	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data + 6, 2, 0,
-			   &y, w, &rw, AL_CENTER);
-
-	int_lower_bound(&rw, dlg_data->dlg->widgets->datalen);
-	int_upper_bound(&w, rw);
-
-	draw_dialog(dlg_data, w, y);
-
-	y = dlg_data->y + DIALOG_TB;
-
-	dlg_format_field(term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
-			 &y, w, NULL, AL_LEFT);
-
-	y++;
-	dlg_format_group(term, dlg_data->widgets_data + 1, 3,
-			 dlg_data->x + DIALOG_LB, &y, w, NULL);
-
-	y++;
-	dlg_format_group(term, dlg_data->widgets_data + 4, 2,
-			 dlg_data->x + DIALOG_LB, &y, w, NULL);
-
-	y++;
-	dlg_format_buttons(term, dlg_data->widgets_data + 6, 2, dlg_data->x + DIALOG_LB,
-			   &y, w, NULL, AL_CENTER);
-}
-
 /* XXX: @data is ignored. */
 void
 search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
@@ -1056,7 +1010,9 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	}
 
 	dlg->title = title;
-	dlg->layouter = search_dialog_layouter;
+	dlg->layouter = generic_dialog_layouter;
+	dlg->layout.fit_datalen = 1;
+	dlg->layout.float_groups = 1;
 	dlg->udata = text;
 	dlg->udata2 = hop;
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.139 2004/04/19 15:56:45 zas Exp $ */
+/* $Id: cache.c,v 1.140 2004/04/22 12:38:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -482,15 +482,7 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
 {
 	unsigned char *uristring;
 
-	/* XXX: I am a little puzzled whether we should only use the cache
-	 * entry's URI if it is valid. Hopefully always using it won't hurt.
-	 * Currently we handle direction redirects where "/" should be appended
-	 * special dunno if join_urls() could be made to handle that.
-	 * --jonas */
-	if (location[0] == '/' && location[1] == 0)
-		uristring = straconcat(struri(cached->uri), location, NULL);
-	else
-		uristring = join_urls(struri(cached->uri), location);
+	uristring = join_urls(struri(cached->uri), location);
 	if (!uristring) return NULL;
 
 	/* According to RFC2068 POST must not be redirected to GET,
@@ -501,6 +493,7 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
 	    && !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
 		/* XXX: Add POST_CHAR and post data assuming URI components
 		 * belong to one string. */
+
 		add_to_strn(&uristring, cached->uri->post - 1);
 	}
 

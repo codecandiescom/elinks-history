@@ -1,3 +1,132 @@
+Fri Jul 30 16:39:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	handle_trm(): use memset() + affectations to initialize @info, and
+	simplify code, dropping useless intermediate variables like @width,
+	@height.  
+
+Fri Jul 30 16:16:57 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Jul 30 16:11:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Drop trailing spaces.  
+
+Fri Jul 30 16:04:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	html_img(): trim whitespaces around alt or title attribute value.  
+
+Fri Jul 30 14:52:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/osdep.c:
+
+	Fixed smelly mouse-related #if condition.  
+
+Fri Jul 30 14:31:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	check_keepalive_connections(): Use foreachsafe().  
+
+Fri Jul 30 10:41:11 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/cmdline.c, viewer/dump/dump.c:
+
+	Add -no-references command line option that prevents dump of any
+	link reference when dumping a document to stdout.  
+
+Fri Jul 30 10:38:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Make send_mouse_event() return session for controlling event
+	cleanup. Remove goto stuff in send_event().  
+
+Fri Jul 30 10:36:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	send_kbd_event(): Reformat 
+
+Fri Jul 30 10:34:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	send_event(): Split out keyboard event handling to send_kbd_event().  
+
+Fri Jul 30 10:27:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/dump/dump.c:
+
+	dump_to_file(): always dump links even with -no-numbering, do not
+	print any number in this case. It fixes bug 485.  
+
+Fri Jul 30 10:26:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Hmm .. fix brain deadness in last patch.  
+
+Fri Jul 30 10:26:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	send_event(): Split out mouse event handling to send_mouse_event().  
+
+Fri Jul 30 10:17:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Use event union struct to shorten lines.  
+
+Fri Jul 30 10:09:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Use event union struct to shorten lines.  
+
+Fri Jul 30 10:01:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	set_cursor(): only call check_range() if needed.  
+
+Fri Jul 30 09:55:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_text(): drop useless memset() call.  
+
+Fri Jul 30 09:49:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Remove the assertion that causes bug 477. Introduce
+	html_has_non_space_chars() to properly check if the line has real
+	content in which case the last tag will be updated. All this was
+	initiated by the fix for bug 324 '<pre> tags with an ID don't behave
+	correctly'.  
+
+Fri Jul 30 09:46:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	try_document_key(): space fix.  
+
+Fri Jul 30 09:43:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	try_document_key(): fix bug introduced in rev 1.284 -> 1.285.  
+
 Thu Jul 29 15:58:41 2004  Laurent Monin <zas@norz.org>:
 
 	* src/terminal/draw.c:

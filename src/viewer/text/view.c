@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.220 2003/10/18 20:40:22 pasky Exp $ */
+/* $Id: view.c,v 1.221 2003/10/18 21:14:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1120,11 +1120,11 @@ quit:
 				draw_formatted(ses);
 				goto x;
 			case ACT_OPEN_NEW_WINDOW:
-				open_in_new_window(ses->tab->term, send_open_new_xterm, ses);
+				open_in_new_window(ses->tab->term, send_open_new_window, ses);
 				goto x;
 			case ACT_OPEN_LINK_IN_NEW_WINDOW:
 				if (!doc_view || doc_view->vs->current_link == -1) goto x;
-				open_in_new_window(ses->tab->term, send_open_in_new_xterm, ses);
+				open_in_new_window(ses->tab->term, send_open_in_new_window, ses);
 				goto x;
 			case ACT_TAB_CLOSE:
 				close_tab(ses->tab->term);
@@ -1298,7 +1298,7 @@ add_session_ring_to_string(struct string *str)
 
 /* open a link in a new xterm */
 void
-send_open_in_new_xterm(struct terminal *term,
+send_open_in_new_window(struct terminal *term,
 		       void (*open_window)(struct terminal *term, unsigned char *, unsigned char *),
 		       struct session *ses)
 {
@@ -1324,7 +1324,7 @@ send_open_in_new_xterm(struct terminal *term,
 }
 
 void
-send_open_new_xterm(struct terminal *term,
+send_open_new_window(struct terminal *term,
 		    void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
 		    struct session *ses)
 {

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.26 2003/10/17 14:21:15 zas Exp $ */
+/* $Id: view.h,v 1.27 2003/10/18 21:14:26 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -49,11 +49,11 @@ void send_image(struct terminal *term, void *xxx, struct session *ses);
 void send_download(struct terminal *term, void *xxx, struct session *ses);
 void send_download_image(struct terminal *term, void *xxx, struct session *ses);
 
-void send_open_new_xterm(struct terminal *,
+void send_open_new_window(struct terminal *,
 			 void (*)(struct terminal *, unsigned char *, unsigned char *),
 			 struct session *);
 
-void send_open_in_new_xterm(struct terminal *term,
+void send_open_in_new_window(struct terminal *term,
 			    void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
 			    struct session *ses);
 

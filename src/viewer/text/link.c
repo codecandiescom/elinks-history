@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.75 2003/10/18 21:10:52 pasky Exp $ */
+/* $Id: link.c,v 1.76 2003/10/18 21:14:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -889,14 +889,14 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 				add_to_menu(&mi, N_("Open in new ~window"),
 					     c - 1 ? M_SUBMENU : (unsigned char *) "",
 					     (menu_func) open_in_new_window,
-					     send_open_in_new_xterm, c - 1, 0);
+					     send_open_in_new_window, c - 1, 0);
 	
 			add_to_menu(&mi, N_("Open in new ~tab"), "",
-				     (menu_func) send_open_in_new_xterm,
+				     (menu_func) send_open_in_new_window,
 				     open_in_new_tab, 0, 0);
 	
 			add_to_menu(&mi, N_("Open in new tab in ~background"), "",
-				     (menu_func) send_open_in_new_xterm,
+				     (menu_func) send_open_in_new_window,
 				     open_in_new_tab_in_background, 0, 0);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous")) {
@@ -930,7 +930,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),
 					    c - 1 ? M_SUBMENU : (unsigned char *) "",
 					    (menu_func) open_in_new_window,
-					    send_open_in_new_xterm, c - 1, 0);
+					    send_open_in_new_window, c - 1, 0);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				add_to_menu(&mi, N_("Submit form and ~download"), "d",

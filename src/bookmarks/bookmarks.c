@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.149 2004/12/19 01:01:53 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.150 2004/12/19 01:47:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
+#include "modules/module.h"
 #include "protocol/uri.h"
 #include "sched/task.h"
 #include "terminal/tab.h"

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.3 2004/11/04 21:10:10 jonas Exp $ */
+/* $Id: finger.c,v 1.4 2004/12/19 01:47:17 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "cache/cache.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/connect.h"
+#include "modules/module.h"
 #include "protocol/finger/finger.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"

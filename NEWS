@@ -17,6 +17,7 @@ ELinks-0.4.0:
 * portability enhancements
 * performance enhancements
 * file/http gzip/bzip2 decompression support
+* downloads resuming support
 * mailcap support
 * hiearchic bookmarks support, XBEL bookmarks support
 * source layout was dramatically reorganized

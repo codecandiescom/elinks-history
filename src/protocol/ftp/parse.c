@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.28 2005/03/29 03:07:43 jonas Exp $ */
+/* $Id: parse.c,v 1.29 2005/03/29 03:35:49 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -299,7 +299,7 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 			break;
 
 		case FTP_UNIX_DAY:
-			mtime.tm_mday = parse_ftp_number(&src, pos, 1, 31);
+			mtime.tm_mday = parse_day((const unsigned char **) &src, pos);
 			fact = FTP_UNIX_TIME;
 			break;
 
@@ -517,7 +517,7 @@ parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
 	memset(&mtime, 0, sizeof(mtime));
 	mtime.tm_isdst = -1;
 
-	mtime.tm_mday = parse_ftp_number(&src, end, 1, 31);
+	mtime.tm_mday = parse_day((const unsigned char **) &src, end);
 	/* If the server produces garbage like
 	 * 'EA95_0PS.GZ;1      No privilege for attempted operation'
 	 * the check for '-' after the day will fail. */
@@ -616,7 +616,7 @@ parse_ftp_winnt_response(struct ftp_file_info *info, unsigned char *src, int len
 
 	src++;
 
-	mtime.tm_mday = parse_ftp_number(&src, end, 1, 31);
+	mtime.tm_mday = parse_day((const unsigned char **) &src, end);
 	if (src + 2 >= end || *src != '-')
 		return NULL;
 

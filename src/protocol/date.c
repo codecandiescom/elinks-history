@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.15 2005/03/29 03:29:06 jonas Exp $ */
+/* $Id: date.c,v 1.16 2005/03/29 03:35:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ parse_month(const unsigned char **buf, unsigned char *end)
 
 
 /* Return day number. */
-static int
+int
 parse_day(const unsigned char **date_p, unsigned char *end)
 {
 	const unsigned char *date = *date_p;

@@ -2,6 +2,94 @@ use strict;
 use warnings;
 use diagnostics;
 
+=sample configuration file
+# ~/.elinks/config.pl
+bork:       yep         (BORKify Google?)
+collapse:   okay        (collapse all XBEL bookmark folders on exit?)
+fortune:    elinks      (*fortune*, *elinks* tip, or *none* on quit?)
+googlebeta: hell no     (I miss DejaNews...)
+gotosearch: not yet     (Don't use this yet.  It's broken.)
+ipv6:       sure        (IPV4 or 6 address blocks with "ip" prefix?)
+language:   english     ("bf nl en" still works, but now "bf nl" does too)
+news:       msnbc       (agency to use for "news" and "n" prefixes)
+search:     elgoog      (engine for (search|find|www|web|s|f|go) prefixes)
+usenet:     google      (*google* or *standard* view for news:// URLs)
+weather:    cnn         (server for "weather" and "w" prefixes)
+# news:    bbc, msnbc, cnn, fox, google, yahoo, reuters, eff, wired, slashdot,
+#          newsforge, usnews, newsci, discover, sciam
+# search:  elgoog, google, yahoo, ask jeeves, a9, altavista, msn, dmoz, dogpile,
+#          mamma, webcrawler, netscape, lycos, hotbot, excite
+# weather: weather underground, google, yahoo, cnn, accuweather, ask jeeves
+=cut
+
+# Don't call them "dumb".  They hate that.  Rather, "interactivity challenged".
+# prefixes: bugmenot, bored, random, bofh, xyzzy, jack or handey
+# smart prefixes:
+#      web search:
+#           default engine:  search, find, www, web, s, f, go
+#                            also, anything in quotes with no prefix
+#           other:
+#                google:     g or google
+#                yahoo:      y or yahoo
+#                ask jeeves: ask or jeeves
+#                amazon a9:  a9
+#                altavista:  av or altavista
+#                microsoft:  msn or microsoft
+#                dmoz:       dmoz, odp, mozilla
+#                dogpile:    dp or dogpile
+#                mamma:      ma or mamma
+#                webcrawler: wc or webcrawler
+#                netscape:   ns or netscape
+#                lycos:      ly or lycos
+#                hotbot:     hb or hotbot
+#                excite:     ex or excite
+#                elgoog:     eg, elgoog, hcraes, dnif, bew, og
+#      news:
+#           default agency:  n, news
+#           other:
+#                British Broadcasting Corporation: bbc
+#                MSNBC: msnbc
+#                Cable News Network: cnn
+#                FOXNews: fox
+#                Google News: gn
+#                Yahoo News: yn
+#                Reuters: rs or reuters
+#                Electronic Frontier Foundation: eff
+#                Wired: wd or wired
+#                Slashdot: /. or sd or slashdot
+#                NewsForge: nf or newsforge
+#                U.S.News & World Report: us or usnews
+#                New Scientist: newsci or nsci
+#                Discover Magazine: dm
+#                Scientific American: sa or sciam
+#      locators:
+#           Internet Movie Database: imdb, movie, or flick
+#           US zip code search: zip or usps (# or address)
+#           IP address locator / address space: ip
+#           WHOIS / TLD list: whois (current url or specified)
+#           Request for Comments: rfc (# or search)
+#           weather: w or weather
+#           Yahoo! Finance / NASD Regulation: stock, ticker, or quote
+#           Snopes: ul, urban, or legend
+#           torrent search / ISOHunt: bt, torrent, or bittorrent
+#           Wayback Machine: ia, ar, arc, or archive (current url or specified)
+#           software:
+#                Freshmeat: fm or freshmeat
+#                SourceForge: sf or sourceforge
+#                Savannah: sv or savannah
+#                Gna!: gna
+#           Netcraft Uptime Survey: whatis or uptime (current url or specified)
+#           Who's Alive and Who's Dead: alive or dead
+#           Google Library / Project Gutenberg: book or read
+#           Internet Public Library: ipl
+#      other:
+#           usenet: deja, gg, groups, gr, nntp, usenet, nn
+#           page translation: babelfish, babel, bf, translate, trans, or b
+#           MirrorDot: md or mirrordot
+#           Coral cache: cc, coral, or nyud (requires URL)
+#           page validators: vhtml or vcss (current url or specified)
+# elinks: el / elinks, bz / bug (# or search optional), doc(|s|umentation), faq
+
 ################################################################################
 ### goto_url_hook ##############################################################
 sub goto_url_hook
@@ -36,49 +124,62 @@ sub goto_url_hook
 		return $url;
 	}
 
-	# Google/Yahoo!/Ask Jeeves/A9/AltaVista/MSN/etcetera, search
-	if ($url =~ '^((search|find|www|web|s|f)(| .*)|("|\'|`).*)$' ||
-		$url =~ '^(eg|elgoog|hcraes|dnif|bew)(| .*)$' ||
-		$url =~ '^(g|google)(| .*)$' ||
-		$url =~ '^(y|yahoo)(| .*)$' ||
-		$url =~ '^(ask|jeeves)(| .*)$' ||
-		$url =~ '^a9(| .*)$' ||
-		$url =~ '^(av|altavista)(| .*)$' ||
-		$url =~ '^(msn|microsoft)(| .*)$')
+	# search engines
+	if ($url =~ '^(search|find|www|web|s|f|go)(| .*)$'
+		or $url =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$'
+		or $url =~ '^(g|google)(| .*)$'
+		or $url =~ '^(y|yahoo)(| .*)$'
+		or $url =~ '^(ask|jeeves)(| .*)$'
+		or $url =~ '^a9(| .*)$'
+		or $url =~ '^(av|altavista)(| .*)$'
+		or $url =~ '^(msn|microsoft)(| .*)$'
+		or $url =~ '^(dmoz|odp|mozilla)(| .*)$'
+		or $url =~ '^(dp|dogpile|dp)(| .*)$'
+		or $url =~ '^(ma|mamma)(| .*)$'
+		or $url =~ '^(wc|webcrawler)(| .*)$'
+		or $url =~ '^(ns|netscape)(| .*)$'
+		or $url =~ '^(ly|lycos)(| .*)$'
+		or $url =~ '^(hb|hotbot)(| .*)$'
+		or $url =~ '^(ex|excite)(| .*)$'
+		or $url =~ '^("|\'|`).+$')
 	{
 		my $engine = $url;
 		my ($search) = $url =~ /^[a-z0-9]* (.*)/;
 		$url = search(loadrc("search"), $search);
-		$url = search("elgoog",         $search) if ($engine =~ '^(eg|elgoog|hcraes|dnif|bew)');
-		$url = search("google",         $search) if ($engine =~ '^(g|google)');
-		$url = search("yahoo",          $search) if ($engine =~ '^(y|yahoo)');
-		$url = search("jeeves",         $search) if ($engine =~ '^(ask|jeeves)');
-		$url = search("a9",             $search) if ($engine =~ '^a9');
-		$url = search("altavista",      $search) if ($engine =~ '^(av|altavista)');
-		$url = search("msn",            $search) if ($engine =~ '^(msn|microsoft)');
+		$url = search("elgoog",         $search) if ($engine =~ '^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$');
+		$url = search("google",         $search) if ($engine =~ '^(g|google)(| .*)$');
+		$url = search("yahoo",          $search) if ($engine =~ '^(y|yahoo)(| .*)$');
+		$url = search("ask jeeves",     $search) if ($engine =~ '^(ask|jeeves)(| .*)$');
+		$url = search("a9",             $search) if ($engine =~ '^a9(| .*)$');
+		$url = search("altavista",      $search) if ($engine =~ '^(av|altavista)(| .*)$');
+		$url = search("msn",            $search) if ($engine =~ '^(msn|microsoft)(| .*)$');
+		$url = search("dmoz",           $search) if ($engine =~ '^(dmoz|odp|mozilla)(| .*)$');
+		$url = search("dogpile",        $search) if ($engine =~ '^(dp|dogpile)(| .*)$');
+		$url = search("mamma",          $search) if ($engine =~ '^(ma|mamma)(| .*)$');
+		$url = search("webcrawler",     $search) if ($engine =~ '^(wc|webcrawler)(| .*)$');
+		$url = search("netscape",       $search) if ($engine =~ '^(ns|netscape)(| .*)$');
+		$url = search("lycos",          $search) if ($engine =~ '^(ly|lycos)(| .*)$');
+		$url = search("hotbot",         $search) if ($engine =~ '^(hb|hotbot)(| .*)$');
+		$url = search("excite",         $search) if ($engine =~ '^(ex|excite)(| .*)$');
 		$url = search(loadrc("search"), $engine) if ($engine =~ '^("|\'|`)');
 		return $url;
 	}
 
 	# Google Groups (DejaNews)
-	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet)(| .*)$')
+	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet|nn)(| .*)$')
 	{
 		my ($search) = $url =~ /^[a-z]* (.*)/;
 		my $beta = "groups.google.co.uk";
-		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") !~ 'yes');
-		if (-f $ENV{"HOME"} . '/.elinks/beta')
-		{
-			$beta = "groups-beta.google.com";
-		}
+		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") ne "yes");
 		my $bork = "";
 		if ($search)
 		{
-			$bork = "&hl=xx-bork" unless (loadrc("bork") !~ 'yes');
+			$bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
 			$url = 'http://' . $beta . '/groups?q=' . $search . $bork;
 		}
 		else
 		{
-			$bork = "/groups?hl=xx-bork" unless (loadrc("bork") !~ 'yes');
+			$bork = "/groups?hl=xx-bork" unless (loadrc("bork") ne "yes");
 			$url = 'http://' . $beta . $bork;
 		}
 		return $url;
@@ -117,18 +218,15 @@ sub goto_url_hook
 	}
 
 	# Babelfish ("babelfish german english"  or  "bf de en")
-	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$') ||
-		($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$' &&
-		(loadrc("language") !~ "no")) && $current_url)
+	if (($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]* [a-zA-Z]*)$') or
+		($url =~ '^(babelfish|babel|bf|translate|trans|b)(| [a-zA-Z]*(| [a-zA-Z]*))$' and
+		(loadrc("language") ne "no")) and $current_url)
 	{
-		if ($url =~ '^[a-z]*$')
-		{
-			$url = 'http://babelfish.altavista.com';
-		}
-		else
+		$url = 'http://babelfish.altavista.com' if ($url =~ '^[a-z]*$');
+		if ($url =~ '^[a-z]* ')
 		{
 			my $tongue = loadrc("language");
-			$url = $url . " " . $tongue if ($tongue !~ "no" && $url !~ /^[a-z]* [a-zA-Z]* [a-zA-Z]*$/);
+			$url = $url . " " . $tongue if ($tongue ne "no" and $url !~ /^[a-z]* [a-zA-Z]* [a-zA-Z]*$/);
 			$url =~ s/ chinese/ zt/i;
 			$url =~ s/ dutch/ nl/i;
 			$url =~ s/ english/ en/i;
@@ -142,7 +240,7 @@ sub goto_url_hook
 			$url =~ s/ russian/ ru/i;
 			$url =~ s/ spanish/ es/i;
 			my ($from_language, $to_language) = $url =~ /^[a-z]* (.*) (.*)$/;
-			(undef, $current_url) = $current_url =~ /^(.*):\/\/(.*)/;
+			($current_url) = $current_url =~ /^.*:\/\/(.*)/;
 			$url = 'http://babelfish.altavista.com/babelfish/urltrurl?lp=' . $from_language . '_' . $to_language . '&url=' . $current_url;
 		}
 		return $url;
@@ -166,66 +264,76 @@ sub goto_url_hook
 	}
 
 	# News
-	if ($url =~ '^(news|n)(| .*)$' ||
-		$url =~ '^bbc(| .*)$' ||
-		$url =~ '^msnbc(| .*)$' ||
-		$url =~ '^cnn(| .*)$' ||
-		$url =~ '^fox(| .*)$' ||
-		$url =~ '^gn(| .*)$' ||
-		$url =~ '^yn(| .*)$' ||
-		$url =~ '^(reuters|rs)(| .*)$' ||
-		$url =~ '^eff(| .*)$' ||
-		$url =~ '^(wired|wd)(| .*)$' ||
-		$url =~ '^(\/\.|slashdot|sd)(| .*)$')
+	if ($url =~ '^(news|n)(| .*)$'
+		or $url =~ '^bbc(| .*)$'
+		or $url =~ '^msnbc(| .*)$'
+		or $url =~ '^cnn(| .*)$'
+		or $url =~ '^fox(| .*)$'
+		or $url =~ '^gn(| .*)$'
+		or $url =~ '^yn(| .*)$'
+		or $url =~ '^(reuters|rs)(| .*)$'
+		or $url =~ '^eff(| .*)$'
+		or $url =~ '^(wired|wd)(| .*)$'
+		or $url =~ '^(\/\.|slashdot|sd)(| .*)$'
+		or $url =~ '^(newsforge|nf)(| .*)$'
+		or $url =~ '^(us|usnews)(| .*)$'
+		or $url =~ '^(nsci|newsci)(| .*)$'
+		or $url =~ '^dm(| .*)$'
+		or $url =~ '^(sa|sciam)(| .*)$')
 	{
-		my ($search) = $url =~ /^.* (.*)/;
-		my $news_bbc      = 'http://news.bbc.co.uk';  # British Broadcasting Corporation
-		my $news_msnbc    = 'http://msnbc.com';       # the bastard child of Microsoft and the National Broadcasting Corporation
-		my $news_cnn      = 'http://cnn.com';         # Cable News Network
-		my $news_fox      = 'http://foxnews.com';     # FOX
-		my $news_google   = 'http://news.google.com'; # Google
-		my $news_yahoo    = 'http://news.yahoo.com';  # Yahoo!
-		my $news_reuters  = 'http://reuters.com';     # Reuters
-		my $news_eff      = 'http://eff.org';         # Electronic Frontier Foundation
-		my $news_wired    = 'http://wired.com';       # Wired
-		my $news_slashdot = 'http://slashdot.org';    # /.
+		my ($search) = $url =~ /^[a-z0-9\/\.]* (.*)/;
+		my (%news_, $news_);
+		$news_{"bbc"}       = 'http://news.bbc.co.uk';
+		$news_{"msnbc"}     = 'http://msnbc.com'; # the bastard child of Microsoft and the National Broadcasting Corporation
+		$news_{"cnn"}       = 'http://cnn.com';
+		$news_{"fox"}       = 'http://foxnews.com';
+		$news_{"google"}    = 'http://news.google.com';
+		$news_{"yahoo"}     = 'http://news.yahoo.com';
+		$news_{"reuters"}   = 'http://reuters.com';
+		$news_{"eff"}       = 'http://eff.org';
+		$news_{"wired"}     = 'http://wired.com';
+		$news_{"slashdot"}  = 'http://slashdot.org';
+		$news_{"newsforge"} = 'http://newsforge.com';
+		$news_{"usnews"}    = 'http://usnews.com';
+		$news_{"newsci"}    = 'http://newscientist.com';
+		$news_{"discover"}  = 'http://discover.com';
+		$news_{"sciam"}     = 'http://sciam.com';
 		if ($search)
 		{
-			$news_bbc      = 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q=' . $search;
-			$news_msnbc    = 'http://msnbc.msn.com/?id=3053419&action=fulltext&querytext=' . $search;
-			$news_cnn      = 'http://search.cnn.com/pages/search.jsp?query=' . $search;
-			$news_fox      = 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw=' . $search;
-			$news_google   = 'http://news.google.com/news?q=' . $search;
-			$news_yahoo    = 'http://news.search.yahoo.com/search/news/?p=' . $search;
-			$news_reuters  = 'http://reuters.com/newsSearchResultsHome.jhtml?query=' . $search;
-			$news_eff      = 'http://google.com/custom?sitesearch=eff.org&q=' . $search;
-			$news_wired    = 'http://search.wired.com/wnews/default.asp?query=' . $search;
-			$news_slashdot = 'http://slashdot.org/search.pl?query=' . $search;
+			$news_{"bbc"}       = 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q=' . $search;
+			$news_{"msnbc"}     = 'http://msnbc.msn.com/?id=3053419&action=fulltext&querytext=' . $search;
+			$news_{"cnn"}       = 'http://search.cnn.com/pages/search.jsp?query=' . $search;
+			$news_{"fox"}       = 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw=' . $search;
+			$news_{"google"}    = 'http://news.google.com/news?q=' . $search;
+			$news_{"yahoo"}     = 'http://news.search.yahoo.com/search/news/?p=' . $search;
+			$news_{"reuters"}   = 'http://reuters.com/newsSearchResultsHome.jhtml?query=' . $search;
+			$news_{"eff"}       = 'http://google.com/search?sitesearch=' . $news_{"eff"} . '&q=' . $search;
+			$news_{"wired"}     = 'http://search.wired.com/wnews/default.asp?query=' . $search;
+			$news_{"slashdot"}  = 'http://slashdot.org/search.pl?query=' . $search;
+			$news_{"newsforge"} = 'http://newsforge.com/search.pl?query=' . $search;
+			$news_{"usnews"}    = 'http://www.usnews.com/search/Search?keywords=' . $search;
+			$news_{"newsci"}    = 'http://www.newscientist.com/search.ns?doSearch=true&articleQuery.queryString=' . $search;
+			$news_{"discover"}  = 'http://www.discover.com/search-results/?searchStr=' . $search;
+			$news_{"sciam"}     = 'http://sciam.com/search/index.cfm?QT=Q&SC=Q&Q=' . $search;
 		}
-		   if ($url =~ '^bbc')                { $url = $news_bbc; }
-		elsif ($url =~ '^msnbc')              { $url = $news_msnbc; }
-		elsif ($url =~ '^cnn')                { $url = $news_cnn; }
-		elsif ($url =~ '^fox')                { $url = $news_fox; }
-		elsif ($url =~ '^gn')                 { $url = $news_google; }
-		elsif ($url =~ '^yn')                 { $url = $news_yahoo; }
-		elsif ($url =~ '^(reuters|rs)')       { $url = $news_reuters; }
-		elsif ($url =~ '^eff')                { $url = $news_eff; }
-		elsif ($url =~ '^(wired|wd)')         { $url = $news_wired; }
-		elsif ($url =~ '^(\/\.|slashdot|sd)') { $url = $news_slashdot; }
-		else
-		{
-			$url = $news_bbc;
-			if (loadrc("news") =~ 'bbc')             { $url = $news_bbc; }
-			if (loadrc("news") =~ 'msnbc')           { $url = $news_msnbc; }
-			if (loadrc("news") =~ 'cnn')             { $url = $news_cnn; }
-			if (loadrc("news") =~ 'fox')             { $url = $news_fox; }
-			if (loadrc("news") =~ 'google')          { $url = $news_google; }
-			if (loadrc("news") =~ 'yahoo')           { $url = $news_yahoo; }
-			if (loadrc("news") =~ 'reuters')         { $url = $news_reuters; }
-			if (loadrc("news") =~ 'eff')             { $url = $news_eff; }
-			if (loadrc("news") =~ 'wired')           { $url = $news_wired; }
-			if (loadrc("news") =~ '(\/\.|slashdot)') { $url = $news_slashdot; }
-		}
+		my $agency = $url;
+		$url = $news_{"bbc"}; # default
+		$url = $news_{loadrc("news")} if $news_{loadrc("news")};
+		$url = $news_{"bbc"}       if ($agency =~ '^bbc(| .*)$');
+		$url = $news_{"msnbc"}     if ($agency =~ '^msnbc(| .*)$');
+		$url = $news_{"cnn"}       if ($agency =~ '^cnn(| .*)$');
+		$url = $news_{"fox"}       if ($agency =~ '^fox(| .*)$');
+		$url = $news_{"google"}    if ($agency =~ '^gn(| .*)$');
+		$url = $news_{"yahoo"}     if ($agency =~ '^yn(| .*)$');
+		$url = $news_{"reuters"}   if ($agency =~ '^(reuters|rs)(| .*)$');
+		$url = $news_{"eff"}       if ($agency =~ '^eff(| .*)$');
+		$url = $news_{"wired"}     if ($agency =~ '^(wired|wd)(| .*)$');
+		$url = $news_{"slashdot"}  if ($agency =~ '^(\/\.|slashdot|sd)(| .*)$');
+		$url = $news_{"newsforge"} if ($agency =~ '^(newsforge|nf)(| .*)$');
+		$url = $news_{"usnews"}    if ($agency =~ '^(us|usnews)(| .*)$');
+		$url = $news_{"newsci"}    if ($agency =~ '^(nsci|newsci)(| .*)$');
+		$url = $news_{"discover"}  if ($agency =~ '^dm(| .*)$');
+		$url = $news_{"sciam"}     if ($agency =~ '^(sa|sciam)(| .*)$');
 		return $url;
 	}
 
@@ -237,62 +345,146 @@ sub goto_url_hook
 	}
 
 	# locators
-	if ($url =~ '^(imdb|movie|flick)(| .*)$' ||
-		$url =~ '^zip(| .*)$' ||
-		$url =~ '^ip(| .*)$' ||
-		$url =~ '^whois(| .*)$' ||
-		$url =~ '^rfc(| .*)$' ||
-		$url =~ '^(weather|w)(| .*)$' ||
-		$url =~ '^(stock|ticker|quote)(| .*)$' ||
-		$url =~ '^(urban|legend|ul)(| .*)$' ||
-		$url =~ '^(bittorrent|torrent|bt)(| .*)$')
+	if (   $url =~ '^(imdb|movie|flick)(| .*)$'
+		or $url =~ '^(zip|usps)(| .*)$'
+		or $url =~ '^ip(| .*)$'
+		or $url =~ '^whois(| .*)$'
+		or $url =~ '^rfc(| .*)$'
+		or $url =~ '^(weather|w)(| .*)$'
+		or $url =~ '^(stock|ticker|quote)(| .*)$'
+		or $url =~ '^(urban|legend|ul)(| .*)$'
+		or $url =~ '^(bittorrent|torrent|bt)(| .*)$'
+		or $url =~ '^(archive|arc|ar|ia)(| .*)$'
+		or $url =~ '^(freshmeat|fm)(| .*)$'
+		or $url =~ '^(sourceforge|sf)(| .*)$'
+		or $url =~ '^(savannah|sv)(| .*)$'
+		or $url =~ '^gna(| .*)$'
+		or $url =~ '^(whatis|uptime)(| .*)$'
+		or $url =~ '^(alive|dead)(| .*)$'
+		or $url =~ '^(book|read)(| .*)$'
+		or $url =~ '^ipl(| .*)$')
 	{
 		my ($thingy) = $url =~ /^[a-z]* (.*)/;
-		my $ipv = "4"; $ipv = "6" if loadrc('ipv6') =~ "yes";
-		my $locator_imdb    = 'http://imdb.com';                                               # Internet Movie Database
-		my $locator_zip     = 'http://usps.com';                                               # United States Postal Service
-		my $locator_ip      = 'http://www.iana.org/assignments/ipv' . $ipv . '-address-space'; # Internet Protocol Version 4 address space
-		my $locator_whois   = 'http://www.iana.org/cctld/cctld-whois.htm';                     # Internet Assigned Numbers Authority
-		my $locator_rfc     = 'http://ietf.org';                                               # Internet Engineering Task Force
-		my $locator_weather = 'http://weather.noaa.gov';                                       # National Oceanic and Atmospheric Administration
-		my $locator_stock   = 'http://nasdr.com';                                              # NASD Regulation
-		my $locator_bs      = 'http://snopes.com';                                             # Snopes (urban legends)
-		my $locator_torrent = 'http://isohunt.com';                                            # ISO Hunt
+		my ($domain) = $current_url =~ /([a-z0-9-]+\.(com|net|org|edu|gov|mil))/;
+		my $whois = 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=';
+		my $locator_imdb        = 'http://imdb.com';
+		my $locator_zip         = 'http://usps.com';
+		my $ipv                 = "ipv4-address-space"; $ipv = "ipv6-address-space" if loadrc("ipv6") eq "yes";
+			my $locator_ip      = 'http://www.iana.org/assignments/' . $ipv;
+		my $locator_whois       = 'http://www.iana.org/cctld/cctld-whois.htm';
+			$locator_whois      = $whois . $domain if $domain;
+		my $locator_rfc         = 'http://ietf.org';
+		my $locator_weather     = 'http://weather.noaa.gov';
+		my $locator_stock       = 'http://nasdr.com';
+		my $locator_bs          = 'http://snopes.com';
+		my $locator_torrent     = 'http://isohunt.com';
+		my $locator_archive     = 'http://web.archive.org/web/*/' . $current_url;
+		my $locator_freshmeat   = 'http://freshmeat.net';
+		my $locator_sourceforge = 'http://sourceforge.net';
+		my $locator_savannah    = 'http://savannah.nongnu.org';
+		my $locator_gna         = 'http://gna.org';
+		my $locator_whatis      = 'http://uptime.netcraft.com';
+			$locator_whatis     = 'http://uptime.netcraft.com/up/graph/?host=' . $domain if $domain;
+		my $locator_dead        = 'http://www.whosaliveandwhosdead.com';
+		my $locator_book        = 'http://gutenberg.org';
+		my $locator_ipl         = 'http://ipl.org';
 		if ($thingy)
 		{
-			$locator_imdb        = 'http://imdb.com/Find?select=All&for=' . $thingy;                                # Internet Movie Database
-			$locator_zip         = 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;                # United States ZIP code search
-			$locator_ip          = 'http://melissadata.com/lookups/iplocation.asp?ipaddress=' . $thingy;            # IP address locator
-			$locator_whois       = 'http://reports.internic.net/cgi/whois?type=domain&whois_nic=' . $thingy;        # Internic WHOIS
-			$locator_rfc         = 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?searchwords=' . $thingy . '&num=25'; # Request for Comments
-				$locator_rfc     = 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless ($thingy !~ '^[0-9]*$');
-			my $weather          = loadrc('weather');
-				$locator_weather = 'http://wunderground.com/cgi-bin/findweather/getForecast?query=' . $thingy;      # Weather Underground
-				$locator_weather = 'http://google.com/search?q=weather+"' . $thingy . '"' if $weather =~ "google";
-				$locator_weather = 'http://search.yahoo.com/search?p=weather+"' . $thingy . '"' if $weather =~ "yahoo";
-				$locator_weather = 'http://weather.cnn.com/weather/search?wsearch=' . $thingy if $weather =~ "cnn";
-				$locator_weather = 'http://wwwa.accuweather.com/adcbin/public/us_getcity.asp?zipcode=' . $thingy if $weather =~ "accuweather";
-				$locator_weather = 'http://web.ask.com/web?&q=weather ' . $thingy if $weather =~ "(ask|jeeves|ask jeeves)";
-			$locator_stock       = 'http://finance.yahoo.com/l?s=' . $thingy;                                       # Yahoo! Finance
-			$locator_bs          = 'http://search.atomz.com/search/?sp-a=00062d45-sp00000000&sp-q=' . $thingy;      # urban legend search
-			my $bork = ""; $bork = "&hl=xx-bork" unless (loadrc("bork") !~ 'yes');
-				$locator_torrent = 'http://google.com/search?q=filetype:torrent ' . $thingy . $bork;                # torrent search
+			$locator_imdb        = 'http://imdb.com/Find?select=All&for=' . $thingy;
+			$locator_zip         = 'http://zip4.usps.com/zip4/zip_responseA.jsp?zipcode=' . $thingy;
+				$locator_zip     = 'http://zipinfo.com/cgi-local/zipsrch.exe?zip=' . $thingy if $thingy !~ '^[0-9]*$';
+			$locator_ip          = 'http://melissadata.com/lookups/iplocation.asp?ipaddress=' . $thingy;
+			$locator_whois       = $whois . $thingy;
+			$locator_rfc         = 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
+				$locator_rfc     = 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
+			my $weather          = loadrc("weather");
+				$locator_weather = 'http://wunderground.com/cgi-bin/findweather/getForecast?query=' . $thingy;
+				$locator_weather = 'http://google.com/search?q=weather+"' . $thingy . '"' if $weather eq 'google';
+				$locator_weather = 'http://search.yahoo.com/search?p=weather+"' . $thingy . '"' if $weather eq 'yahoo';
+				$locator_weather = 'http://weather.cnn.com/weather/search?wsearch=' . $thingy if $weather eq 'cnn';
+				$locator_weather = 'http://wwwa.accuweather.com/adcbin/public/us_getcity.asp?zipcode=' . $thingy if $weather eq 'accuweather';
+				$locator_weather = 'http://web.ask.com/web?&q=weather ' . $thingy if $weather =~ '^(ask|jeeves|ask jeeves)$';
+			$locator_stock       = 'http://finance.yahoo.com/l?s=' . $thingy;
+			$locator_bs          = 'http://search.atomz.com/search/?sp-a=00062d45-sp00000000&sp-q=' . $thingy;
+			my $bork = ""; $bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");
+				$locator_torrent = 'http://google.com/search?q=filetype:torrent ' . $thingy . $bork;
+			$locator_archive     = 'http://web.archive.org/web/*/' . $thingy;
+			$locator_freshmeat   = 'http://freshmeat.net/search/?q=' . $thingy;
+			$locator_sourceforge = 'http://sourceforge.net/search/?q=' . $thingy;
+			$locator_savannah    = 'http://savannah.nongnu.org/search/?type_of_search=soft&words=' . $thingy;
+			$locator_gna         = 'https://gna.org/search/?type_of_search=soft&words=' . $thingy;
+			$locator_whatis      = 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
+			$locator_dead        = 'http://google.com/search?btnI&sitesearch=' . $locator_dead . '&q=' . $thingy;
+			$locator_book        = 'http://google.com/search?q=book+"' . $thingy . '"';
+			$locator_ipl         = 'http://ipl.org/div/searchresults/?words=' . $thingy;
 		}
-		   if ($url =~ '^(imdb|movie|flick)')      { $url = $locator_imdb; }
-		elsif ($url =~ '^zip')                     { $url = $locator_zip; }
-		elsif ($url =~ '^ip')                      { $url = $locator_ip; }
-		elsif ($url =~ '^whois')                   { $url = $locator_whois; }
-		elsif ($url =~ '^rfc')                     { $url = $locator_rfc; }
-		elsif ($url =~ '^(weather|w)')             { $url = $locator_weather; }
-		elsif ($url =~ '^(stock|ticker|quote)')    { $url = $locator_stock; }
-		elsif ($url =~ '^(urban|legend|ul)')       { $url = $locator_bs; }
-		elsif ($url =~ '^(bittorrent|torrent|bt)') { $url = $locator_torrent; }
+		$url = $locator_imdb        if ($url =~ '^(imdb|movie|flick)(| .*)$');
+		$url = $locator_zip         if ($url =~ '^(zip|usps)(| .*)$');
+		$url = $locator_ip          if ($url =~ '^ip(| .*)$');
+		$url = $locator_whois       if ($url =~ '^whois(| .*)$');
+		$url = $locator_rfc         if ($url =~ '^rfc(| .*)$');
+		$url = $locator_weather     if ($url =~ '^(weather|w)(| .*)$');
+		$url = $locator_stock       if ($url =~ '^(stock|ticker|quote)(| .*)$');
+		$url = $locator_bs          if ($url =~ '^(urban|legend|ul)(| .*)$');
+		$url = $locator_torrent     if ($url =~ '^(bittorrent|torrent|bt)(| .*)$');
+		$url = $locator_archive     if ($url =~ '^(archive|arc|ar|ia)(| .*)$');
+		$url = $locator_freshmeat   if ($url =~ '^(freshmeat|fm)(| .*)$');
+		$url = $locator_sourceforge if ($url =~ '^(sourceforge|sf)(| .*)$');
+		$url = $locator_savannah    if ($url =~ '^(savannah|sv)(| .*)$');
+		$url = $locator_gna         if ($url =~ '^gna(| .*)$');
+		$url = $locator_whatis      if ($url =~ '^(whatis|uptime)(| .*)$');
+		$url = $locator_dead        if ($url =~ '^(alive|dead)(| .*)$');
+		$url = $locator_book        if ($url =~ '^(book|read)(| .*)$');
+		$url = $locator_ipl         if ($url =~ '^ipl(| .*)$');
+		return $url;
+	}
+
+	# page validators [<URL>]
+	if ($url =~ '^vhtml(| .*)$' or $url =~ '^vcss(| .*)$')
+	{
+		my ($page) = $url =~ /^.* (.*)/;
+		$page = $current_url unless $page;
+		$url = 'http://validator.w3.org/check?uri=' . $page if $url =~ 'html';
+		$url = 'http://jigsaw.w3.org/css-validator/validator?uri=' . $page if $url =~ 'css';
+		return $url;
+	}
+
+	# there's no place like home
+	if ($url =~ '^(el(|inks)|b(ug(|s)|z)(| .*)|doc(|umentation|s)|faq)$')
+	{
+		my ($bug) = $url =~ /^.* (.*)/;
+		if ($url =~ '^b')
+		{
+			my $bugzilla = 'http://bugzilla.elinks.or.cz';
+			if (!$bug)
+			{
+				$url = $bugzilla;
+			}
+			elsif ($bug =~ '^[0-9]*$')
+			{
+				$url = $bugzilla . '/show_bug.cgi?id=' . $bug;
+			}
+			else
+			{
+				$url = $bugzilla . '/buglist.cgi?short_desc_type=allwordssubstr&short_desc=' . $bug;
+			}
+		}
+		else
+		{
+			my $doc = '';
+			$doc = '/documentation' if $url =~ '^doc';
+			$doc = '/faq.html' if $url =~ '^faq$';
+			$url = 'http://elinks.or.cz' . $doc;
+		}
 		return $url;
 	}
 
 ################################################################################
 ### anything not otherwise useful is a search ##################################
-#	if ($current_url) { $url = search(loadrc("search"), $url); }
+	if ($current_url and loadrc("gotosearch") eq "yes")
+	{
+		$url = search(loadrc("search"), $url);
+	}
 	return $url;
 }
 
@@ -305,14 +497,14 @@ sub follow_url_hook
 	# Bork! Bork! Bork!
 	if ($url =~ 'google\.com')
 	{
-		if (loadrc("bork") =~ 'yes')
+		if (loadrc("bork") eq "yes")
 		{
 			if ($url =~ '^http://(|www\.|search\.)google\.com(|/search)(|/)$')
 			{
 				$url = 'http://google.com/webhp?hl=xx-bork';
 			}
 			elsif ($url =~ '^http://(|www\.)groups\.google\.com(|/groups)(|/)$'
-				|| $url =~ '^http://(|www\.|search\.)google\.com/groups(|/)$')
+				or $url =~ '^http://(|www\.|search\.)google\.com/groups(|/)$')
 			{
 				$url = 'http://google.com/groups?hl=xx-bork';
 			}
@@ -321,18 +513,14 @@ sub follow_url_hook
 	}
 
 	# nntp?  try Google Groups
-	if ($url =~ '^(nntp|news):')
+	if ($url =~ '^(nntp|news):' and loadrc("usenet") ne "standard")
 	{
 		my $beta = "groups.google.co.uk";
-		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") !~ 'yes');
-		if (-f $ENV{"HOME"} . '/.elinks/beta')
-		{
-			$beta = "groups-beta.google.com";
-		}
+		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") ne "yes");
 		$url =~ s/\///g;
 		my ($group) = $url =~ /[a-zA-Z]:(.*)/;
 		my $bork = "";
-		$bork = "hl=xx-bork&" unless (loadrc("bork") !~ 'yes');
+		$bork = "hl=xx-bork&" unless (loadrc("bork") ne "yes");
 		$url = 'http://' . $beta . '/groups?' . $bork . 'group=' . $group;
 		return $url;
 	}
@@ -403,8 +591,25 @@ sub proxy_for_hook
 ### quit_hook ##################################################################
 sub quit_hook
 {
+	# collapse XBEL bookmark folders (obsoleted by bookmarks.folder_state)
+	my $bookmarkfile = $ENV{"HOME"} . '/.elinks/bookmarks.xbel';
+	if (-f $bookmarkfile and loadrc("collapse") eq "yes")
+	{
+		open(BOOKMARKS, "+<$bookmarkfile");
+		my $bookmark;
+		while (<BOOKMARKS>)
+		{
+			s/<folder folded="no">/<folder folded="yes">/;
+			$bookmark .= $_;
+		}
+		seek(BOOKMARKS, 0, 0);
+		print(BOOKMARKS $bookmark);
+		truncate(BOOKMARKS, tell(BOOKMARKS));
+		close(BOOKMARKS);
+	}
+
 	# words of wisdom from ELinks the Sage
-	if (loadrc("fortune") =~ "fortune")
+	if (loadrc("fortune") eq "fortune")
 	{
 		system('echo ""; fortune -sa 2>/dev/null');
 		die
@@ -438,20 +643,9 @@ sub quit_hook
 ### configuration ##############################################################
 sub loadrc
 {
-	# # ~/.elinks/config.pl
-	# bork:       yep		(BORKify Google?)
-	# fortune:    fortune	(*fortune*, *elinks* tip, or *none* on quit?)
-	# googlebeta: hell no	(I miss DejaNews.)
-	# ipv6:       sure		(IPV4 or 6 address blocks with "ip" prefix?)
-	# language:   english	("bf nl en" still works, but now "bf nl" does too)
-	# news:       bbc		(agency to use for "news" and "n" prefixes)
-	# search:     yahoo		(engine for (search|find|www|web|s|f) prefixes)
-	# weather:    cnn		(server for "weather" and "w" prefixes)
-	# # news: bbc, msnbc, cnn, fox, google, yahoo, reuters, eff, wired, and slashdot
-	# # search: elgoog, google, yahoo, ask jeeves, a9, altavista, and msn
-	# # weather: weather underground, google, yahoo, cnn, accuweather, ask jeeves
 	my ($preference) = @_;
 	my $configperl = $ENV{"HOME"} . '/.elinks/config.pl';
+	my $answer = "no";
 	if (-f $configperl)
 	{
 		open RC, "<$configperl";
@@ -461,25 +655,25 @@ sub loadrc
 			next if (!m/(.*):\s*(.*)/);
 			my $setting = $1;
 			my $switch = $2;
-			if ($setting =~ $preference)
+			if ($setting eq $preference)
 			{
-				if ($switch =~ '^(yes|1|on|yea|yep|sure|ok|okay|yeah)$')
+				if ($switch =~ '^(yes|1|on|yea|yep|sure|ok|okay|yeah|why.*not)$')
 				{
-					return "yes";
+					$answer = "yes";
 				}
-				elsif ($switch =~ '^(no|0|off|nay|nope|nah|hell no)$')
+				elsif ($switch =~ '^(no|0|off|nay|nope|nah|hell.*no)$')
 				{
-					return "no";
+					$answer = "no";
 				}
 				else
 				{
-					return lc($switch);
+					$answer = lc($switch);
 				}
 			}
 		}
 		close RC;
 	}
-	return "no";
+	return $answer;
 }
 
 ################################################################################
@@ -487,54 +681,44 @@ sub loadrc
 sub search
 {
 	my ($engine, $search) = @_;
-	my $url;
-	my $bork = "";
-	if ($engine =~ '^elgoog')
-	{
-		$url = 'http://alltooflat.com/geeky/elgoog/m/index.cgi';
-		$url = 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q=' . $search if $search;
-	}
-	elsif ($engine =~ '^google')
-	{
-		$bork = "/webhp?hl=xx-bork" unless (loadrc("bork") !~ 'yes');
-		$url = 'http://google.com' . $bork;
-		$bork = "hl=xx-bork&" unless (loadrc("bork") !~ 'yes');
-		$url = 'http://google.com/search?' . $bork . 'q=' . $search if $search;
-	}
-	elsif ($engine =~ '^yahoo')
-	{
-		$url = 'http://yahoo.com';
-		$url = 'http://search.yahoo.com/search?p=' . $search if $search;
-	}
-	elsif ($engine =~ '^(ask|jeeves|ask jeeves)')
-	{
-		$url = 'http://ask.com';
-		$url = 'http://web.ask.com/web?q=' . $search if $search;
-	}
-	elsif ($engine =~ '^a9')
-	{
-		$url = 'http://a9.com';
-		$url = 'http://a9.com/?q=' . $search if $search;
-	}
-	elsif ($engine =~ '^(altavista|av)')
-	{
-		$url = 'http://altavista.com';
-		$url = 'http://altavista.com/web/results?q=' . $search if $search;
-	}
-	elsif ($engine =~ '^(msn|microsoft)')
-	{
-		$url = 'http://msn.com';
-		$url = 'http://search.msn.com/results.aspx?q=' . $search if $search;
-	}
-	else # default
-	{
-		$bork = "/webhp?hl=xx-bork" unless (loadrc("bork") !~ 'yes');
-		$url = 'http://google.com' . $bork;
-		$bork = "hl=xx-bork&" unless (loadrc("bork") !~ 'yes');
-		$url = 'http://google.com/search?' . $bork . 'q=' . $search if $search;
-	}
+	my (%url_, $url_);
+	my  $bork = '';
+		$bork = "/webhp?hl=xx-bork" if (loadrc("bork") eq "yes" and !$search);
+		$bork = "hl=xx-bork&" if (loadrc("bork") eq "yes" and $search);
+	$url_{"elgoog"} = 'http://alltooflat.com/geeky/elgoog/m/index.cgi';
+	$url_{"elgoog"} = 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q=' . $search if $search;
+	$url_{"google"} = 'http://google.com' . $bork;
+	$url_{"google"} = 'http://google.com/search?' . $bork . 'q=' . $search if $search;
+	$url_{"yahoo"} = 'http://yahoo.com';
+	$url_{"yahoo"} = 'http://search.yahoo.com/search?p=' . $search if $search;
+	$url_{"ask jeeves"} = 'http://ask.com';
+	$url_{"ask jeeves"} = 'http://web.ask.com/web?q=' . $search if $search;
+	$url_{"a9"} = 'http://a9.com';
+	$url_{"a9"} = 'http://a9.com/?q=' . $search if $search;
+	$url_{"altavista"} = 'http://altavista.com';
+	$url_{"altavista"} = 'http://altavista.com/web/results?q=' . $search if $search;
+	$url_{"msn"} = 'http://msn.com';
+	$url_{"msn"} = 'http://search.msn.com/results.aspx?q=' . $search if $search;
+	$url_{"dmoz"} = 'http://dmoz.org';
+	$url_{"dmoz"} = 'http://search.dmoz.org/cgi-bin/search?search=' . $search if $search;
+	$url_{"dogpile"} = 'http://dogpile.com';
+	$url_{"dogpile"} = 'http://dogpile.com/info.dogpl/search/web/' . $search if $search;
+	$url_{"mamma"} = 'http://mamma.com';
+	$url_{"mamma"} = 'http://mamma.com/Mamma?query=' . $search if $search;
+	$url_{"webcrawler"} = 'http://webcrawler.com';
+	$url_{"webcrawler"} = 'http://webcrawler.com/info.wbcrwl/search/web/' . $search if $search;
+	$url_{"netscape"} = 'http://search.netscape.com';
+	$url_{"netscape"} = 'http://channels.netscape.com/ns/search/default.jsp?query=' . $search if $search;
+	$url_{"lycos"} = 'http://lycos.com';
+	$url_{"lycos"} = 'http://search.lycos.com/default.asp?query=' . $search if $search;
+	$url_{"hotbot"} = 'http://hotbot.com';
+	$url_{"hotbot"} = 'http://hotbot.com/default.asp?query=' . $search if $search;
+	$url_{"excite"} = 'http://search.excite.com';
+	$url_{"excite"} = 'http://search.excite.com/info.xcite/search/web/' . $search if $search;
+	my $url = $url_{"google"}; # default
+	$url = $url_{$engine} if $url_{$engine};
 	return $url;
 }
 
 
-# vim: ts=4 sw=4 sts=0
+# vim: ts=4 sw=4 sts=0 nowrap

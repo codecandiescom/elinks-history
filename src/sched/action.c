@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.63 2004/05/05 12:26:58 jonas Exp $ */
+/* $Id: action.c,v 1.64 2004/05/25 06:46:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -371,7 +371,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_SAVE_AS:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				save_as(term, NULL, ses);
+				do_frame_action(ses, save_as, 0);
 			break;
 
 		case ACT_MAIN_SAVE_FORMATTED:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.416 2004/05/25 06:38:21 jonas Exp $ */
+/* $Id: view.c,v 1.417 2004/05/25 06:46:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1052,22 +1052,15 @@ view_image(struct session *ses, struct document_view *doc_view, int a)
 }
 
 void
-save_as(struct terminal *term, void *xxx, struct session *ses)
+save_as(struct session *ses, struct document_view *doc_view, int magic)
 {
-	struct document_view *doc_view = current_frame(ses);
-	struct location *loc;
-
-	assert(term && ses);
+	assert(ses);
 	if_assert_failed return;
 
 	if (!have_location(ses)) return;
 
-	loc = cur_loc(ses);
-
 	if (ses->download_uri) done_uri(ses->download_uri);
-	ses->download_uri = get_uri_reference(loc->vs.uri);
-
-	doc_view = current_frame(ses);
+	ses->download_uri = get_uri_reference(cur_loc(ses)->vs.uri);
 
 	assert(doc_view && doc_view->document && doc_view->document->uri);
 	if_assert_failed return;

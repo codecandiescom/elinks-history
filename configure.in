@@ -986,6 +986,8 @@ AC_OUTPUT([ \
  src/globhist/Makefile \
  src/intl/Makefile \
  src/intl/gettext/Makefile \
+ src/intl/gettext/ref-add.sed \
+ src/intl/gettext/ref-del.sed \
  src/lowlevel/Makefile \
  src/mime/Makefile \
  src/mime/backend/Makefile \

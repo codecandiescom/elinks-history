@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.230 2003/06/15 17:21:48 jonas Exp $ */
+/* $Id: options.c,v 1.231 2003/06/15 21:56:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,20 +183,16 @@ get_opt_(
 #endif
 	 struct option *tree, unsigned char *name)
 {
-	struct option *option = get_opt_rec(tree, name);
+	struct option *opt = get_opt_rec(tree, name);
 
-	if (option->type == OPT_ALIAS && option->ptr)
-		option = get_opt_rec(tree, (char *)option->ptr);
 #ifdef DEBUG
 	errfile = file;
 	errline = line;
-	if (!option)
-		elinks_internal("Attempted to fetch nonexisting option %s!", name);
-	if (!option->ptr)
-		elinks_internal("Option %s has no value!", name);
+	if (!opt) elinks_internal("Attempted to fetch nonexisting option %s!", name);
+	if (!opt->ptr) elinks_internal("Option %s has no value!", name);
 #endif
 
-	return option->ptr;
+	return opt->ptr;
 }
 
 /* Add option to tree. */

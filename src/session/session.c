@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.340 2004/04/01 16:01:47 jonas Exp $ */
+/* $Id: session.c,v 1.341 2004/04/01 16:19:19 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -184,8 +184,6 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 			}
 		}
 
-		url = stracpy(struri(frame->vs.uri));
-		if (!url) return;
 #if 0
 		/* This seems not to be needed anymore, it looks like this
 		 * condition should never happen. It's apparently what Mikulas
@@ -194,7 +192,6 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 		if (frame->vs.view && frame->vs.view->document
 		    && frame->vs.view->document->frame_desc)) {
 			request_frameset(ses, frame->vs.view->document->frame_desc);
-			if (url) mem_free(url);
 			return;
 		}
 #endif
@@ -221,14 +218,13 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	}
 
 	init_vs(&frame->vs, url, -1);
+	mem_free(url);
 	if (pos) frame->vs.goto_position = pos;
 
 	add_to_list(loc->frames, frame);
 
 found:
-	if (*url)
-		request_additional_file(ses, name, url, PRI_FRAME);
-	mem_free(url);
+	request_additional_file(ses, name, struri(frame->vs.uri), PRI_FRAME);
 }
 
 static void

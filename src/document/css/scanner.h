@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.53 2004/01/27 00:07:07 jonas Exp $ */
+/* $Id: scanner.h,v 1.54 2004/01/27 20:05:48 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -180,34 +180,23 @@ struct css_token *scan_css_tokens(struct css_scanner *scanner);
  * a rescan so any token pointers that has been stored in a local variable
  * might not be valid after the call. */
 static inline struct css_token *
-get_css_token_(struct css_scanner *scanner)
+get_css_token(struct css_scanner *scanner)
 {
 	return css_scanner_has_tokens(scanner) ? (scanner)->current : NULL;
 }
 
 /* Do a scanning if we do not have also have access to next token. */
 static inline struct css_token *
-get_next_css_token_(struct css_scanner *scanner)
+get_next_css_token(struct css_scanner *scanner)
 {
 	return (css_scanner_has_tokens(scanner)
 		&& (++(scanner)->current + 1 >= (scanner)->table + (scanner)->tokens)
-		? scan_css_tokens(scanner) : get_css_token_(scanner));
+		? scan_css_tokens(scanner) : get_css_token(scanner));
 }
 
 /* Removes tokens from the scanner until it meets a token of the given type.
  * This token will then also be skipped. */
 struct css_token *
-skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type);
-
-#ifndef CSS_SCANNER_DEBUG
-#define get_css_token(scanner)		get_css_token_(scanner)
-#define get_next_css_token(scanner)	get_next_css_token_(scanner)
-#define skip_css_tokens(scanner, token)	skip_css_tokens_(scanner, token)
-#else
-struct css_token *get_css_token_debug(struct css_scanner *scanner);
-#define get_css_token(s)	((s)->file = __FILE__, (s)->line = __LINE__, get_css_token_debug(s))
-#define get_next_css_token(s)	((s)->file = __FILE__, (s)->line = __LINE__, get_next_css_token_(s))
-#define skip_css_tokens(s, t)	((s)->file = __FILE__, (s)->line = __LINE__, skip_css_tokens_(s, t))
-#endif /* CSS_SCANNER_DEBUG */
+skip_css_tokens(struct css_scanner *scanner, enum css_token_type type);
 
 #endif

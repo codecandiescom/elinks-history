@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.68 2003/07/21 04:59:27 jonas Exp $ */
+/* $Id: cookies.c,v 1.69 2003/07/21 09:17:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,13 +223,15 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 	cookie->path = parse_http_header_param(str, "path");
 	if (!cookie->path) {
 		unsigned char *path_end;
-		struct string path = { stracpy("/"), 1 };
+		struct string path;
 
 		if (!path.source) {
 			free_cookie(cookie);
 			return 0;
 		}
 
+		init_string(&path);
+		add_char_to_string(&path, '/');
 		add_bytes_to_string(&path, uri->data, uri->datalen);
 
 		cookie->path = path.source;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.154 2004/01/24 23:25:06 pasky Exp $ */
+/* $Id: dialogs.c,v 1.155 2004/01/25 13:03:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,7 +516,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 
 static int
 push_kbdbind_add_button(struct dialog_data *dlg_data,
-		struct widget_data *some_useless_info_button)
+			struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.36 2003/09/25 16:42:09 jonas Exp $ */
+/* $Id: hooks.c,v 1.37 2003/09/25 18:53:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,13 +16,6 @@
 #include "scripting/scripting.h"
 #include "util/string.h"
 
-
-static inline int
-str_event_code(unsigned char **retval, unsigned char *value)
-{
-	*retval = value;
-	return value ? EHS_LAST : EHS_NEXT;
-}
 
 /* The events that will trigger the functions below and what they are expected
  * to do is explained in doc/events.txt */
@@ -161,7 +154,7 @@ script_hook_get_proxy(va_list ap)
 	lua_State *L = lua_state;
 	unsigned char **new_proxy_url = va_arg(ap, unsigned char **);
 	unsigned char *url = va_arg(ap, unsigned char *);
-	unsigned char *value = NULL;
+	int status;
 
 	lua_getglobal(L, "proxy_for_hook");
 	if (lua_isnil(L, -1)) {
@@ -171,22 +164,24 @@ script_hook_get_proxy(va_list ap)
 	}
 
 	lua_pushstring(L, url);
-	if (!prepare_lua(NULL)) {
-		int err = lua_call(L, 1, 1);
+	if (prepare_lua(NULL)) return EHS_NEXT;
 
-		finish_lua();
-		if (err) return str_event_code(new_proxy_url, NULL);
+	status = lua_call(L, 1, 1);
+	finish_lua();
+	if (status) return EHS_NEXT;
 
-		if (lua_isstring(L, -1)) {
-			value = stracpy((unsigned char *)lua_tostring(L, -1));
-		} else if (!lua_isnil(L, -1)) {
+	if (lua_isstring(L, -1)) {
+		*new_proxy_url = stracpy((unsigned char *)lua_tostring(L, -1));
+		status = EHS_LAST;
+	} else {
+		if (!lua_isnil(L, -1))
 			alert_lua_error("proxy_hook must return a string or nil");
-		}
-
-		lua_pop(L, 1);
+		status = EHS_NEXT;
 	}
 
-	return str_event_code(new_proxy_url, value);
+	lua_pop(L, 1);
+
+	return status;
 }
 
 static enum evhook_status

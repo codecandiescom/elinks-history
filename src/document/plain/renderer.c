@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.146 2004/08/19 08:08:27 miciah Exp $ */
+/* $Id: renderer.c,v 1.147 2004/08/19 08:10:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -363,13 +363,12 @@ add_document_line(struct plain_renderer *renderer,
 						width, expanded,
 						pos);
 
-				if (added_chars) {
-					line_pos += added_chars - 1;
-					pos += added_chars;
-				}
 			}
 
-			if (!added_chars) {
+			if (added_chars) {
+				line_pos += added_chars - 1;
+				pos += added_chars;
+			} else {
 				if (!isscreensafe(line_char))
 					line_char = '.';
 				template->data = line_char;

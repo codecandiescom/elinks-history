@@ -1,3 +1,129 @@
+Sat Dec 14 18:36:50 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Static + inline + strtoul errno check + char -> unsigned char 
+
+Sat Dec 14 18:17:41 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/colors.c:
+
+	Static + inline + errno test.  
+
+Sat Dec 14 18:11:10 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Staticfication, inlining and cleanups.  
+
+Sat Dec 14 17:57:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Short functions were inlined.  
+
+Sat Dec 14 17:44:17 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Staticfication and cleanups.  
+
+Sat Dec 14 17:11:40 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Cleanup, use of unsigned char vs char was generalized. strtoul()
+	calls are now checked for errors.  
+
+Sat Dec 14 16:21:26 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, config/options.h, protocol/mailcap.c:
+
+	A caption field was added to the option struct. Option macros has
+	been changed to deal with this. Captions has been written for all
+	options including command line options which will later be used to
+	introduce a brief help printing (-h).  
+	
+	Note: Captions for option aliases and "_template_" should be NULL.  
+
+Sat Dec 14 15:22:23 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Changed structure of the tree shown in keybinding manager. Now it's
+	action->keymap->key, named properly. Action is by default enfolded
+	while keymap is by default unrolled. Thanks to #ELinks crew for the
+	ideas.  
+
+Sat Dec 14 12:57:24 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	More memory allocation checks. Cleanup.  
+
+Sat Dec 14 12:07:35 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng:
+
+	French translation was updated.  
+
+Sat Dec 14 11:58:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fixed alphabetic order of the elements table. Fixes DIV bug reported
+	by Alexey Fayans <shadow@peterlink.ru>.  
+
+Sat Dec 14 11:42:15 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/find_unused_translations.sh:
+
+	Script was improved (a lot) by Miciah. Use patch option to generate
+	patches.  
+
+Sat Dec 14 11:33:49 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/align.h:
+
+	Minor tidy up.  
+
+Sat Dec 14 10:07:38 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/align.h:
+
+	Reverted bogus patch removing the required COL() macro.  
+
+Sat Dec 14 09:45:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Added Keybinding manager item to the Setup menu. Added keyboard
+	shortcuts to the manager items.  
+
+Sat Dec 14 00:42:08 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/align.h:
+
+	Minor cleanup.  
+
+Fri Dec 13 23:31:57 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/dialogs.c, src/config/dialogs.h, src/config/kbdbind.c,
+	src/config/kbdbind.h, src/document/view.c:
+
+	Introduced very simple keybinding manager (and keyboard action
+	keybinding-manager, by default bound to 'k').  
+
 Fri Dec 13 23:09:37 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/config/: kbdbind.c, kbdbind.h:

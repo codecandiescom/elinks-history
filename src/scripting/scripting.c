@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.15 2005/01/18 10:29:40 jonas Exp $ */
+/* $Id: scripting.c,v 1.16 2005/04/01 17:36:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 
 /* Backends dynamic area: */
 
-#include "scripting/guile/core.h"
+#include "scripting/guile/guile.h"
 #include "scripting/lua/lua.h"
 #include "scripting/perl/perl.h"
 #include "scripting/ruby/ruby.h"

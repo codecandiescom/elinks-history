@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.18 2005/04/01 09:11:37 zas Exp $ */
+/* $Id: core.c,v 1.19 2005/04/01 17:36:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,7 @@
 /* c_xdialog */
 
 
-static void
+void
 init_guile(struct module *module)
 {
 	SCM user_module;
@@ -81,14 +81,3 @@ init_guile(struct module *module)
 		scm_c_primitive_load_path(path);
 	mem_free(path);
 }
-
-
-struct module guile_scripting_module = struct_module(
-	/* name: */		"Guile",
-	/* options: */		NULL,
-	/* events: */		guile_scripting_hooks,
-	/* submodules: */	NULL,
-	/* data: */		NULL,
-	/* init: */		init_guile,
-	/* done: */		NULL
-);

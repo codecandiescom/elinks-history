@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.184 2003/01/17 16:47:54 zas Exp $ */
+/* $Id: options.c,v 1.185 2003/01/19 13:53:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2382,6 +2382,10 @@ register_options()
 		"base-session", 0, 0, MAXINT, 0,
 		N_("ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it."));
+
+	add_opt_alias_tree(&cmdline_options, "", N_("MIME type to assume for documents"),
+		"default-mime-type", 0, "document.download.default_mime_type",
+		N_("Default MIME type to assume for documents of unknown type."));
 
 	add_opt_bool_tree(&cmdline_options, "", N_("Write formatted version of given URL to stdout"),
 		"dump", 0, 0,

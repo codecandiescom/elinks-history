@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.2 2003/10/27 01:12:32 pasky Exp $ */
+/* $Id: os2.c,v 1.3 2003/10/27 01:19:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,6 +446,186 @@ resize_window(int x, int y)
 #endif
 	return 0;
 }
+
+
+#if USING_OS2_MOUSE
+
+#ifdef HAVE_SYS_FMUTEX_H
+_fmutex mouse_mutex;
+int mouse_mutex_init = 0;
+#endif
+int mouse_h = -1;
+
+struct os2_mouse_spec {
+	int p[2];
+	void (*fn)(void *, unsigned char *, int);
+	void *data;
+	unsigned char buffer[sizeof(struct term_event)];
+	int bufptr;
+	int terminate;
+};
+
+void
+mouse_thread(void *p)
+{
+	int status;
+	struct os2_mouse_spec *oms = p;
+	A_DECL(HMOU, mh);
+	A_DECL(MOUEVENTINFO, ms);
+	A_DECL(USHORT, rd);
+	A_DECL(USHORT, mask);
+	struct term_event ev;
+
+	signal(SIGPIPE, SIG_IGN);
+	ev.ev = EV_MOUSE;
+	if (MouOpen(NULL, mh)) goto ret;
+	mouse_h = *mh;
+	*mask = MOUSE_MOTION_WITH_BN1_DOWN | MOUSE_BN1_DOWN |
+		MOUSE_MOTION_WITH_BN2_DOWN | MOUSE_BN2_DOWN |
+		MOUSE_MOTION_WITH_BN3_DOWN | MOUSE_BN3_DOWN |
+		MOUSE_MOTION;
+	MouSetEventMask(mask, *mh);
+	*rd = MOU_WAIT;
+	status = -1;
+
+	while (1) {
+		int w, ww;
+
+		if (MouReadEventQue(ms, rd, *mh)) break;
+#ifdef HAVE_SYS_FMUTEX_H
+		_fmutex_request(&mouse_mutex, _FMR_IGNINT);
+#endif
+		if (!oms->terminate) MouDrawPtr(*mh);
+#ifdef HAVE_SYS_FMUTEX_H
+		_fmutex_release(&mouse_mutex);
+#endif
+		ev.x = ms->col;
+		ev.y = ms->row;
+		/*debug("status: %d %d %d", ms->col, ms->row, ms->fs);*/
+		if (ms->fs & (MOUSE_BN1_DOWN | MOUSE_BN2_DOWN | MOUSE_BN3_DOWN))
+			ev.b = status = B_DOWN | (ms->fs & MOUSE_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_BN2_DOWN ? B_MIDDLE : B_RIGHT);
+		else if (ms->fs & (MOUSE_MOTION_WITH_BN1_DOWN | MOUSE_MOTION_WITH_BN2_DOWN | MOUSE_MOTION_WITH_BN3_DOWN)) {
+			int b = ms->fs & MOUSE_MOTION_WITH_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_MOTION_WITH_BN2_DOWN ? B_MIDDLE : B_RIGHT;
+
+			if (status == -1)
+				b |= B_DOWN;
+			else
+				b |= B_DRAG;
+			ev.b = status = b;
+		} else {
+			if (status == -1) continue;
+			ev.b = (status & BM_BUTT) | B_UP;
+			status = -1;
+		}
+		if (hard_write(oms->p[1], (unsigned char *)&ev, sizeof(struct term_event)) != sizeof(struct term_event)) break;
+	}
+#ifdef HAVE_SYS_FMUTEX_H
+	_fmutex_request(&mouse_mutex, _FMR_IGNINT);
+#endif
+	mouse_h = -1;
+	MouClose(*mh);
+#ifdef HAVE_SYS_FMUTEX_H
+	_fmutex_release(&mouse_mutex);
+#endif
+
+ret:
+	close(oms->p[1]);
+	/*free(oms);*/
+}
+
+void
+mouse_handle(struct os2_mouse_spec *oms)
+{
+	int r = safe_read(oms->p[0], oms->buffer + oms->bufptr,
+		          sizeof(struct term_event) - oms->bufptr);
+
+	if (r <= 0) {
+		unhandle_mouse(oms);
+		return;
+	}
+
+	oms->bufptr += r;
+	if (oms->bufptr == sizeof(struct term_event)) {
+		oms->bufptr = 0;
+		oms->fn(oms->data, oms->buffer, sizeof(struct term_event));
+	}
+}
+
+void *
+handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
+	     void *data)
+{
+	struct os2_mouse_spec *oms;
+
+	if (is_xterm()) return NULL;
+#ifdef HAVE_SYS_FMUTEX_H
+	if (!mouse_mutex_init) {
+		if (_fmutex_create(&mouse_mutex, 0)) return NULL;
+		mouse_mutex_init = 1;
+	}
+#endif
+		/* This is never freed but it's allocated only once */
+	oms = malloc(sizeof(struct os2_mouse_spec));
+	if (!oms) return NULL;
+	oms->fn = fn;
+	oms->data = data;
+	oms->bufptr = 0;
+	oms->terminate = 0;
+	if (c_pipe(oms->p)) {
+		free(oms);
+		return NULL;
+	}
+	_beginthread(mouse_thread, NULL, 0x10000, (void *)oms);
+	set_handlers(oms->p[0], (void (*)(void *))mouse_handle, NULL, NULL, oms);
+
+	return oms;
+}
+
+void
+unhandle_mouse(void *om)
+{
+	struct os2_mouse_spec *oms = om;
+
+	want_draw();
+	oms->terminate = 1;
+	set_handlers(oms->p[0], NULL, NULL, NULL, NULL);
+	close(oms->p[0]);
+	done_draw();
+}
+
+void
+want_draw(void)
+{
+	A_DECL(NOPTRRECT, pa);
+#ifdef HAVE_SYS_FMUTEX_H
+	if (mouse_mutex_init) _fmutex_request(&mouse_mutex, _FMR_IGNINT);
+#endif
+	if (mouse_h != -1) {
+		static int x = -1, y = -1;
+		static int c = -1;
+
+		if (x == -1 || y == -1 || (c != resize_count)) {
+			get_terminal_size(1, &x, &y);
+			c = resize_count;
+		}
+
+		pa->row = 0;
+		pa->col = 0;
+		pa->cRow = y - 1;
+		pa->cCol = x - 1;
+		MouRemovePtr(pa, mouse_h);
+	}
+}
+
+void
+done_draw(void)
+{
+#ifdef HAVE_SYS_FMUTEX_H
+	if (mouse_mutex_init) _fmutex_release(&mouse_mutex);
+#endif
+}
+
+#endif /* USING_OS2_MOUSE */
 
 
 int

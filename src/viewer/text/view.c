@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.640 2004/11/09 14:42:42 zas Exp $ */
+/* $Id: view.c,v 1.641 2004/11/12 11:06:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1060,15 +1060,16 @@ quit:
 	}
 
 	if (check_kbd_key(ev, KBD_CTRL_C)) goto quit;
+
 	if (get_kbd_modifier(ev) & KBD_ALT) {
-		struct window *m;
+		struct window *win;
 
 		get_kbd_modifier(ev) &= ~KBD_ALT;
 		activate_bfu_technology(ses, -1);
-		m = ses->tab->term->windows.next;
-		m->handler(m, ev);
-		if (ses->tab->term->windows.next == m) {
-			delete_window(m);
+		win = ses->tab->term->windows.next;
+		win->handler(win, ev);
+		if (ses->tab->term->windows.next == win) {
+			delete_window(win);
 
 		} else if (doc_view
 			   && get_opt_int("document.browse.accesskey"
@@ -1080,10 +1081,13 @@ quit:
 
 			return NULL;
 		} else {
+
 			return ses;
 		}
 		get_kbd_modifier(ev) |= KBD_ALT;
+
 	} else if (!(get_kbd_modifier(ev) & KBD_CTRL)) {
+
 		switch (get_opt_int("document.browse.search.typeahead")) {
 			case 0:
 				return NULL;

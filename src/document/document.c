@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.11 2003/10/30 18:25:45 jonas Exp $ */
+/* $Id: document.c,v 1.12 2003/10/30 18:30:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,8 +25,8 @@
 #include "viewer/text/link.h"
 
 
-INIT_LIST_HEAD(format_cache);
-int format_cache_entries = 0;
+static INIT_LIST_HEAD(format_cache);
+static int format_cache_entries = 0;
 
 struct document *
 init_document(unsigned char *uristring, struct document_options *options)
@@ -50,38 +50,6 @@ init_document(unsigned char *uristring, struct document_options *options)
 	copy_opt(&document->options, options);
 
 	add_to_list(format_cache, document);
-
-	return document;
-}
-
-struct document *
-get_cached_document(unsigned char *uristring, struct document_options *options,
-		    int id_tag)
-{
-	struct document *document;
-
-	foreach (document, format_cache) {
-		if (strcmp(document->url, uristring)
-		    || compare_opt(&document->options, options))
-			continue;
-
-		if (id_tag != document->id_tag) {
-			if (!document->refcount) {
-				document = document->prev;
-				done_document(document->next);
-				format_cache_entries--;
-			}
-			continue;
-		}
-
-		format_cache_reactivate(document);
-
-		if (!document->refcount++) format_cache_entries--;
-		return document;
-	}
-
-	document = init_document(uristring, options);
-	if (document) add_to_list(format_cache, document);
 
 	return document;
 }
@@ -178,6 +146,35 @@ release_document(struct document *document)
 }
 
 /* Formatted document cache management */
+
+struct document *
+get_cached_document(unsigned char *uri, struct document_options *options, int id)
+{
+	struct document *document;
+
+	foreach (document, format_cache) {
+		if (strcmp(document->url, uri)
+		    || compare_opt(&document->options, options))
+			continue;
+
+		if (id != document->id_tag) {
+			if (!document->refcount) {
+				document = document->prev;
+				done_document(document->next);
+				format_cache_entries--;
+			}
+			continue;
+		}
+
+		format_cache_reactivate(document);
+
+		if (!document->refcount++) format_cache_entries--;
+
+		return document;
+	}
+
+	return NULL;
+}
 
 void
 shrink_format_cache(int whole)

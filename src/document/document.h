@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.13 2003/10/30 18:23:21 jonas Exp $ */
+/* $Id: document.h,v 1.14 2003/10/30 18:30:31 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -149,14 +149,10 @@ init_document(unsigned char *uristring, struct document_options *options);
 /* Releases the document and all it's resources. */
 void done_document(struct document *document);
 
-/*struct document *get_cached_document(unsigned char *uristring, struct document_options *options, int id);*/
+struct document *get_cached_document(unsigned char *uristring, struct document_options *options, int id);
 
 /* Release a reference to the document. */
 void release_document(struct document *document);
-
-/* TODO: Encapsulate these. --jonas */
-extern int format_cache_entries;
-extern struct list_head format_cache;
 
 long formatted_info(int);
 

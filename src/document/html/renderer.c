@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.349 2003/10/30 18:25:45 jonas Exp $ */
+/* $Id: renderer.c,v 1.350 2003/10/30 18:30:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1503,35 +1503,6 @@ format_html(struct cache_entry *ce, struct document *document)
 		fclose(f);
 	}
 #endif
-}
-
-static struct document *
-get_cached_document(unsigned char *uri, struct document_options *options, int id)
-{
-	struct document *document;
-
-	foreach (document, format_cache) {
-		if (strcmp(document->url, uri)
-		    || compare_opt(&document->options, options))
-			continue;
-
-		if (id != document->id_tag) {
-			if (!document->refcount) {
-				document = document->prev;
-				done_document(document->next);
-				format_cache_entries--;
-			}
-			continue;
-		}
-
-		format_cache_reactivate(document);
-
-		if (!document->refcount++) format_cache_entries--;
-
-		return document;
-	}
-
-	return NULL;
 }
 
 void

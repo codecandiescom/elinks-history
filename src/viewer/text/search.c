@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.18 2003/09/16 23:57:56 jonas Exp $ */
+/* $Id: search.c,v 1.19 2003/10/04 14:00:25 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,8 +314,8 @@ srch_failed:
 		for (i = 0; i < l; i++) {
 			if (!s1[i].n) continue;
 
-			*min = int_min(*min, s1[i].x);
-			*max = int_max(*max, s1[i].x + s1[i].n);
+			int_upper_bound(min, s1[i].x);
+			int_lower_bound(max, s1[i].x + s1[i].n);
 		}
 	}
 

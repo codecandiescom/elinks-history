@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.172 2003/11/16 11:41:53 zas Exp $ */
+/* $Id: download.c,v 1.173 2003/11/16 12:57:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1153,23 +1153,18 @@ tp_open(struct session *ses)
 static void
 tp_display(struct session *ses)
 {
-	struct location *l;
+	struct view_state *vs;
+	unsigned char *goto_position = ses->goto_position;
+	unsigned char *loading_url = ses->loading_url;
 
-	/* strlen() is ok here, NUL char is in struct view_state */
-	l = mem_alloc(sizeof(struct location) + strlen(ses->tq.url));
-	if (!l) return;
-	memset(l, 0, sizeof(struct location));
+	ses->goto_position = ses->tq.goto_position;
+	ses->loading_url = ses->tq.url;
+	vs = ses_forward(ses);
+	if (vs) vs->plain = 1;
+	ses->goto_position = goto_position;
+	ses->loading_url = loading_url;
+	ses->tq.goto_position = NULL;
 
-	init_list(l->frames);
-	memcpy(&l->download, &ses->tq.download, sizeof(struct download));
-
-	init_vs(&l->vs, ses->tq.url);
-	if (ses->tq.goto_position) {
-		l->vs.goto_position = ses->tq.goto_position;
-		ses->tq.goto_position = NULL;
-	}
-
-	add_to_history(&ses->history, l);
 	cur_loc(ses)->download.end = (void (*)(struct download *, void *))
 				     doc_end_load;
 	cur_loc(ses)->download.data = ses;
@@ -1179,6 +1174,7 @@ tp_display(struct session *ses)
 	else
 		cur_loc(ses)->download.state = ses->tq.download.state;
 
+#if 0
 	/* This fixes a crash with GCC 3.2.3-6 on Debian
 	 * when displaying a file of an unknown type.
 	 *
@@ -1187,7 +1183,7 @@ tp_display(struct session *ses)
 	 *  -- Miciah
 	 */
 	do_not_optimize_here_gcc_3_x(ses);
-	cur_loc(ses)->vs.plain = 1;
+#endif
 	display_timer(ses);
 	tp_free(ses);
 }
@@ -1300,6 +1296,7 @@ int
 ses_chktype(struct session *ses, struct download **download, struct cache_entry *ce)
 {
 	struct mime_handler *handler;
+	struct view_state *vs;
 	unsigned char *ctype = get_content_type(ce->head, get_cache_uri(ce));
 	int plaintext = 1;
 	int xwin, i;
@@ -1347,8 +1344,7 @@ free_ct:
 	mem_free(ctype);
 
 end:
-	if (plaintext && ses->task_target_frame) *ses->task_target_frame = 0;
-	ses_forward(ses);
-	cur_loc(ses)->vs.plain = plaintext;
+	vs = ses_forward(ses);
+	if (vs) vs->plain = plaintext;
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.274 2003/11/17 12:21:23 pasky Exp $ */
+/* $Id: parser.c,v 1.275 2003/11/17 13:18:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -382,7 +382,7 @@ kill_html_stack_item(struct html_element *e)
 	if_assert_failed return;
 	assertm((void *)e != &html_stack, "trying to free bad html element");
 	if_assert_failed return;
-	assertm(e->dontkill != 2, "trying to kill unkillable element");
+	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
 
 	if (e->attr.link) mem_free(e->attr.link);
@@ -434,7 +434,7 @@ debug_stack(void)
 #endif
 
 static void
-html_stack_dup(int dontkill)
+html_stack_dup(enum html_element_type type)
 {
 	struct html_element *e;
 	struct html_element *ep = html_stack.next;
@@ -465,7 +465,7 @@ html_stack_dup(int dontkill)
 #endif
 	e->name = e->options = NULL;
 	e->namelen = 0;
-	e->dontkill = dontkill;
+	e->type = type;
 	add_to_list(html_stack, e);
 }
 
@@ -545,7 +545,7 @@ kill_until(int ls, ...)
 				if (e->namelen == slen
 				    && !strncasecmp(e->name, s, slen)) {
 					if (!sk) {
-						if (e->dontkill) break;
+						if (e->type != ELEMENT_KILLABLE) break;
 						va_end(arg);
 						goto killll;
 					} else if (sk == 1) {
@@ -558,7 +558,11 @@ kill_until(int ls, ...)
 			}
 		}
 		va_end(arg);
-		if (e->dontkill || (e->namelen == 5 && !strncasecmp(e->name, "TABLE", 5))) break;
+
+		if (e->type != ELEMENT_KILLABLE
+		    || (e->namelen == 5 && !strncasecmp(e->name, "TABLE", 5)))
+			break;
+
 		if (e->namelen == 2 && upcase(e->name[0]) == 'T') {
 			unsigned char c = upcase(e->name[1]);
 
@@ -681,7 +685,7 @@ static void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      unsigned char *link, unsigned char *target)
 {
-	html_stack_dup(0);
+	html_stack_dup(ELEMENT_KILLABLE);
 	ln_break(1, line_break_f, ff);
 	if (format.link) mem_free(format.link),	format.link = NULL;
 	if (format.target) mem_free(format.target), format.target = NULL;
@@ -849,7 +853,7 @@ html_img(unsigned char *a)
 		unsigned char *u;
 
 		usemap = 1;
-		html_stack_dup(0);
+		html_stack_dup(ELEMENT_KILLABLE);
 		if (format.link) mem_free(format.link);
 		if (format.form) format.form = NULL;
 		u = join_urls(format.href_base, al);
@@ -974,7 +978,7 @@ html_img(unsigned char *a)
 		if (ismap) {
 			unsigned char *h;
 
-			html_stack_dup(0);
+			html_stack_dup(ELEMENT_KILLABLE);
 			h = stracpy(format.link);
 			if (h) {
 				add_to_strn(&h, "?0,0");
@@ -1016,13 +1020,13 @@ html_body(unsigned char *a)
 static void
 html_skip(unsigned char *a)
 {
-	html_top.invisible = html_top.dontkill = 1;
+	html_top.invisible = html_top.type = ELEMENT_DONT_KILL;
 }
 
 static void
 html_title(unsigned char *a)
 {
-	html_top.invisible = html_top.dontkill = 1;
+	html_top.invisible = html_top.type = ELEMENT_DONT_KILL;
 }
 
 static void
@@ -1180,7 +1184,7 @@ html_hr(unsigned char *a)
 	int q = get_num(a, "size");
 
 	if (q >= 0 && q < 2) r = (unsigned char)BORDER_SHLINE;
-	html_stack_dup(0);
+	html_stack_dup(ELEMENT_KILLABLE);
 	par_format.align = AL_CENTER;
 	if (format.link) mem_free(format.link), format.link = NULL;
 	format.form = NULL;
@@ -1272,7 +1276,7 @@ html_ul(unsigned char *a)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 
 	par_format.align = AL_LEFT;
-	html_top.dontkill = 1;
+	html_top.type = ELEMENT_DONT_KILL;
 }
 
 static void
@@ -1306,7 +1310,7 @@ html_ol(unsigned char *a)
 		int_upper_bound(&par_format.leftmargin, par_format.width / 2);
 
 	par_format.align = AL_LEFT;
-	html_top.dontkill = 1;
+	html_top.type = ELEMENT_DONT_KILL;
 }
 
 static void
@@ -1380,7 +1384,7 @@ html_dl(unsigned char *a)
 	par_format.list_number = 0;
 	par_format.align = AL_LEFT;
 	par_format.dd_margin = par_format.leftmargin;
-	html_top.dontkill = 1;
+	html_top.type = ELEMENT_DONT_KILL;
 	if (!(par_format.flags & P_COMPACT)) {
 		ln_break(2, line_break_f, ff);
 		html_top.linebreak = 2;
@@ -1649,7 +1653,7 @@ xxx:
 	if (fc->type == FC_HIDDEN) goto hid;
 
 	put_chrs(" ", 1, put_chars_f, ff);
-	html_stack_dup(0);
+	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	if (format.title) mem_free(format.title);
 	format.title = get_attr_val(a, "title");
@@ -1712,7 +1716,7 @@ html_select(unsigned char *a)
 
 	if (!al) return;
 	html_focusable(a);
-	html_top.dontkill = 1;
+	html_top.type = ELEMENT_DONT_KILL;
 	format.select = al;
 	format.select_disabled = 2 * has_attr(a, "disabled");
 }
@@ -1784,7 +1788,7 @@ x:
 	fc->ro = format.select_disabled;
 	if (has_attr(a, "disabled")) fc->ro = 2;
 	put_chrs(" ", 1, put_chars_f, ff);
-	html_stack_dup(0);
+	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	format.attr |= AT_BOLD;
 	put_chrs("[ ]", 3, put_chars_f, ff);
@@ -2151,7 +2155,7 @@ end_parse:
 
 	menu_labels(fc->menu, "", labels);
 	put_chrs("[", 1, put_chars_f, f);
-	html_stack_dup(0);
+	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	format.attr |= AT_BOLD;
 
@@ -2262,7 +2266,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (rows > 1) ln_break(1, line_break_f, f);
 	else put_chrs(" ", 1, put_chars_f, f);
 
-	html_stack_dup(0);
+	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	format.attr |= AT_BOLD;
 
@@ -3265,21 +3269,23 @@ ng:;
 
 						if (ei->nopair == 2) {
 							foreach (e, html_stack) {
-								if (e->dontkill) break;
+								if (e->type != ELEMENT_KILLABLE) break;
 								if (e->linebreak || !ei->linebreak) break;
 							}
 						} else foreach (e, html_stack) {
 							if (e->linebreak && !ei->linebreak) break;
-							if (e->dontkill) break;
+							if (e->type != ELEMENT_KILLABLE) break;
 							if (e->namelen == namelen && !strncasecmp(e->name, name, e->namelen)) break;
 						}
 						if (e->namelen == namelen && !strncasecmp(e->name, name, e->namelen)) {
 							while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
-							if (e->dontkill != 2) kill_html_stack_item(e);
+
+							if (e->type != ELEMENT_IMMORTAL)
+								kill_html_stack_item(e);
 						}
 					}
 					if (ei->nopair != 1) {
-						html_stack_dup(0);
+						html_stack_dup(ELEMENT_KILLABLE);
 						html_top.name = name;
 						html_top.namelen = namelen;
 						html_top.options = attr;
@@ -3301,7 +3307,7 @@ ng:;
 				foreach (e, html_stack) {
 					if (e->linebreak && !ei->linebreak && ei->name) xxx = 1;
 					if (e->namelen != namelen || strncasecmp(e->name, name, e->namelen)) {
-						if (e->dontkill)
+						if (e->type != ELEMENT_KILLABLE)
 							break;
 						else
 							continue;
@@ -3671,16 +3677,16 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 }
 
 struct html_element *
-init_html_parser_state(int dontkill, int align, int margin, int width)
+init_html_parser_state(enum html_element_type type, int align, int margin, int width)
 {
 	struct html_element *element;
 
-	html_stack_dup(dontkill);
+	html_stack_dup(type);
 	element = &html_top;
 
 	par_format.align = align;
 
-	if (dontkill == 2) {
+	if (type == ELEMENT_IMMORTAL) {
 		par_format.leftmargin = margin;
 		par_format.rightmargin = margin;
 		par_format.width = width;
@@ -3710,7 +3716,7 @@ done_html_parser_state(struct html_element *element)
 #endif
 	}
 
-	html_top.dontkill = 0;
+	html_top.type = ELEMENT_KILLABLE;
 	kill_html_stack_item(&html_top);
 
 }
@@ -3773,7 +3779,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
    	html_top.namelen = 0;
 	html_top.options = NULL;
 	html_top.linebreak = 1;
-	html_top.dontkill = 1;
+	html_top.type = ELEMENT_DONT_KILL;
 
 	table_level = 0;
 	last_form_tag = NULL;

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.51 2003/11/14 15:03:48 jonas Exp $ */
+/* $Id: parser.h,v 1.52 2003/11/17 13:18:27 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -86,8 +86,24 @@ struct par_attrib {
 	color_t bgcolor;
 };
 
+/* HTML parser stack mortality info */
+enum html_element_type {
+	/* Elements of this type can not be removed from the stack. This type
+	 * is created by the renderer when formatting a HTML part. */
+	ELEMENT_IMMORTAL,
+	/* Elements of this type can only be removed by elements of the start
+	 * type. This type is created whenever a HTML state is created using
+	 * init_html_parser_state(). */
+	/* The element has been created by*/
+	ELEMENT_DONT_KILL,
+	/* These elements can safely be removed from the stack by both */
+	ELEMENT_KILLABLE,
+};
+
 struct html_element {
 	LIST_HEAD(struct html_element);
+
+	enum html_element_type type;
 
 	struct text_attrib attr;
 	struct par_attrib parattr;
@@ -96,7 +112,6 @@ struct html_element {
 	int namelen;
 	unsigned char *options;
 	int linebreak;
-	int dontkill;
 	struct frameset_desc *frameset;
 };
 
@@ -135,7 +150,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 		 void *(*special)(void *, enum html_special_type, ...));
 
 void done_html_parser(void);
-struct html_element *init_html_parser_state(int dontkill, int align, int margin, int width);
+struct html_element *init_html_parser_state(enum html_element_type type, int align, int margin, int width);
 void done_html_parser_state(struct html_element *element);
 
 /* Interface for the table handling */

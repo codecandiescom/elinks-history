@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.126 2003/11/14 15:55:39 jonas Exp $ */
+/* $Id: tables.c,v 1.127 2003/11/17 13:18:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1399,7 +1399,8 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					}
 				}
 
-				state = init_html_parser_state(1, par_format.align, 0, 0);
+				state = init_html_parser_state(ELEMENT_DONT_KILL,
+							       par_format.align, 0, 0);
 
 				if (cell->is_header) format.attr |= AT_BOLD;
 

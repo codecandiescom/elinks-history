@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.74 2003/12/20 22:12:11 pasky Exp $ */
+/* $Id: charsets.c,v 1.75 2003/12/29 12:24:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -614,7 +614,7 @@ convert_string(struct conv_table *convert_table, unsigned char *chars,
 			translit = t[chars[i]].u.str;
 			charspos = i + 1;
 
-		} else if (global_doc_opts->plain || mode == CSM_FORM) {
+		} else if (mode == CSM_FORM || mode == CSM_NONE) {
 			PUTC;
 
 		} else {

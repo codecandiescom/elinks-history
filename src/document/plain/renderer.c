@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.58 2003/12/29 12:23:09 miciah Exp $ */
+/* $Id: renderer.c,v 1.59 2003/12/29 12:24:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,7 +154,7 @@ add_document_line(struct document *document, int lineno,
 			line[line_pos] = '.';
 	}
 
-	line = convert_string(convert_table, line, width, CSM_DEFAULT);
+	line = convert_string(convert_table, line, width, CSM_NONE);
 	if (!line) return 0;
 
 	if (!*line) {

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.82 2003/06/24 00:26:01 jonas Exp $ */
+/* $Id: file.c,v 1.83 2003/06/24 00:35:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,10 +316,16 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 		int rl = -1;
 		unsigned char *n = init_str();
 		int nl = 0;
+		struct stat st;
 
 		if (!n) return;
+
 		add_to_str(&n, &nl, path);
 		add_htmlesc_str(&n, &nl, name, namelen);
+
+		if (!stat(n, &st) && S_ISDIR(st.st_mode))
+			add_chr_to_str(&fragment, &fragmentlen, '/');
+
 		do {
 			if (buf) mem_free(buf);
 			bufsize += ALLOC_GR;
@@ -331,20 +337,9 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 		mem_free(n);
 
 		if (buf && rl != -1) {
-			struct stat st;
-			unsigned char *n = init_str();
-			int nl = 0;
-
 			buf[rl] = '\0';
 			lnk = buf;
 
-			if (n) {
-				add_to_str(&n, &nl, path);
-				add_htmlesc_str(&n, &nl, name, namelen);
-				if (!stat(n, &st) && S_ISDIR(st.st_mode))
-					add_chr_to_str(&fragment, &fragmentlen, '/');
-				mem_free(n);
-			}
 		} else if (buf) {
 			mem_free(buf);
 		}

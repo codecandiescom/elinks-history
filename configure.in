@@ -177,26 +177,20 @@ AC_DEFUN([EL_MSG_CONFIG],
 [
 	about="[$]ABOUT_$1"
 	value="[$]VALUE_$1"
-	message="`echo $about | sed 's/ /_/g'` "
+	[msgdots="`echo $about | sed 's/\([0-9]\|[a-z]\|[A-Z]\|[_ ]\)/./g'`"]
+	DOTS=".............................."
+	dots=`echo $DOTS | sed "s/$msgdots//"`
 
+	# $msgdots too big?
+	if test "$dots" = "$DOTS"; then
+		dots=""
+	fi
+		
 	if test -z "$value"; then
 		value="[$]$1"
 	fi
 
-	DOTS=". . . . . . . . . .  . . . . . . . . . .  . . . . . . . . . ."
-	for dot in $DOTS;
-	do
-		length="`echo $message | wc -c | sed 's/ //g'`"
-
-		if test "x$length" != "x30"; then
-			message="$message$dot"
-		else
-			break
-		fi
-	done
-
-	about="`echo $message | sed 's/_/ /g'` "
-	AC_MSG_RESULT($about: $value)
+	AC_MSG_RESULT($about $dots: $value)
 ])
 
 dnl EL_DEFINE(define, what)

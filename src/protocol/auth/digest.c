@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.13 2004/11/14 22:39:49 zas Exp $ */
+/* $Id: digest.c,v 1.14 2004/11/17 21:09:04 zas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@ convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1])
 		hex[j]   = hx(bin[i] >> 4 & 0xf);
 		hex[++j] = hx(bin[i] & 0xf);
 	}
-	
+
 	hex[MD5_DIGEST_LENGTH * 2] = '\0';
 	return hex;
 }
@@ -107,5 +107,5 @@ digest_calc_response(struct auth_entry *entry, struct uri *uri,
 	MD5_Update(&MD5Ctx, Ha2_hex, 32);
 	MD5_Final(Ha2, &MD5Ctx);
 	mem_free_if(Ha2_hex);
-	return convert_hex(Ha2); 
+	return convert_hex(Ha2);
 }

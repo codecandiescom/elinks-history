@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.299 2004/11/17 19:13:46 zas Exp $ */
+/* $Id: search.c,v 1.300 2004/11/17 21:09:04 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -250,7 +250,7 @@ get_search_region_from_search_nodes(struct search *s1, int doclen)
 {
 	unsigned char *doc;
 	int i;
-	
+
 	doc = mem_alloc(sizeof(unsigned char ) * (doclen + 1));
 	if (!doc) return NULL;
 
@@ -265,7 +265,7 @@ get_search_region_from_search_nodes(struct search *s1, int doclen)
 
 	return doc;
 }
-	
+
 #ifdef HAVE_REGEX_H
 static int
 is_in_range_regex(struct document *document, int y, int height,

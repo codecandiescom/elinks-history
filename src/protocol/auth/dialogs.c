@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.114 2004/11/15 15:08:54 jonas Exp $ */
+/* $Id: dialogs.c,v 1.115 2004/11/17 21:09:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ auth_ok(struct dialog *dlg)
 			uri = get_composed_uri(uri, URI_HTTP_AUTH | URI_DATA | URI_POST);
 			if (uri) {
 				goto_uri_frame(ses, uri, NULL, CACHE_MODE_INCREMENT);
-				done_uri(uri);			
+				done_uri(uri);
 				return;
 			}
 		}

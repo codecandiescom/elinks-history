@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.581 2004/11/14 22:54:56 jonas Exp $ */
+/* $Id: session.c,v 1.582 2004/11/17 21:09:04 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1040,7 +1040,7 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 			} else if (bad_url) {
 				print_error_dialog(ses, S_BAD_URL, PRI_MAIN);
 			}
-			
+
 		}
 
 		if (uri) done_uri(uri);

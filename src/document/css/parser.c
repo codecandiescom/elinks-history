@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.125 2004/09/21 00:30:49 pasky Exp $ */
+/* $Id: parser.c,v 1.126 2004/09/21 00:34:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,7 +341,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 			assert(prev_element_selector);
 			add_to_list(selector->leaves, prev_element_selector);
-			last_chained_selector = selector;
+			last_chained_selector = prev_element_selector;
 
 			prev_element_selector->relation = reltype;
 		}

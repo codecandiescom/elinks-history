@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.36 2003/06/29 22:13:40 zas Exp $ */
+/* $Id: tables.c,v 1.37 2003/06/29 22:20:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,18 +230,21 @@ free_table(struct table *t)
 static void
 expand_cells(struct table *t, int x, int y)
 {
-	int i, j;
-
 	if (x >= t->x) {
 		if (t->x) {
-			for (i = 0; i < t->y; i++) if (CELL(t, t->x - 1, i)->colspan == -1) {
+			int tx = t->x - 1;
+			register int i = 0;
+
+			for (; i < t->y; i++) if (CELL(t, tx, i)->colspan == -1) {
+				register int j;
+
 				for (j = t->x; j <= x; j++) {
 					CELL(t, j, i)->used = 1;
 					CELL(t, j, i)->spanned = 1;
-					CELL(t, j, i)->rowspan = CELL(t, t->x - 1, i)->rowspan;
+					CELL(t, j, i)->rowspan = CELL(t, tx, i)->rowspan;
 					CELL(t, j, i)->colspan = -1;
-					CELL(t, j, i)->mx = CELL(t, t->x - 1, i)->mx;
-					CELL(t, j, i)->my = CELL(t, t->x - 1, i)->my;
+					CELL(t, j, i)->mx = CELL(t, tx, i)->mx;
+					CELL(t, j, i)->my = CELL(t, tx, i)->my;
 				}
 			}
 		}
@@ -250,14 +253,19 @@ expand_cells(struct table *t, int x, int y)
 
 	if (y >= t->y) {
 		if (t->y) {
-			for (i = 0; i < t->x; i++) if (CELL(t, i, t->y - 1)->rowspan == -1) {
+			int ty = t->y - 1;
+			register int i = 0;
+
+			for (; i < t->x; i++) if (CELL(t, i, ty)->rowspan == -1) {
+				register int j;
+
 				for (j = t->y; j <= y; j++) {
 					CELL(t, i, j)->used = 1;
 					CELL(t, i, j)->spanned = 1;
 					CELL(t, i, j)->rowspan = -1;
-					CELL(t, i, j)->colspan = CELL(t, i, t->y - 1)->colspan;
-					CELL(t, i, j)->mx = CELL(t, i, t->y - 1)->mx;
-					CELL(t, i, j)->my = CELL(t, i, t->y - 1)->my;
+					CELL(t, i, j)->colspan = CELL(t, i, ty)->colspan;
+					CELL(t, i, j)->mx = CELL(t, i, ty)->mx;
+					CELL(t, i, j)->my = CELL(t, i, ty)->my;
 				}
 			}
 		}

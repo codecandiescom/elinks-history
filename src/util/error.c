@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.36 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: error.c,v 1.37 2003/04/19 17:20:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,11 +41,10 @@ do_not_optimize_here(void *p)
 void
 er(int bell, unsigned char *fmt, va_list params)
 {
-	if (bell) fprintf(stderr, "%c", (char)7);
+	if (bell) fputc(7, stderr);
 	vfprintf(stderr, fmt, params);
-	fprintf(stderr, "\n");
+	fputc('\n', stderr);
 	fflush(stderr);
-	sleep(1);
 }
 
 void

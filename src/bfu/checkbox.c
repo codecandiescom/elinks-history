@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.45 2003/10/26 12:26:04 zas Exp $ */
+/* $Id: checkbox.c,v 1.46 2003/10/26 12:52:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,9 +126,9 @@ display_checkbox(struct widget_data *di, struct dialog_data *dlg_data, int sel)
 	if (!color) return;
 
 	if (di->checked) {
-		text = (!di->item->gid) ? "[X]" : "(X)";
+		text = (!di->widget->gid) ? "[X]" : "(X)";
 	} else {
-		text = (!di->item->gid) ? "[ ]" : "( )";
+		text = (!di->widget->gid) ? "[ ]" : "( )";
 	}
 
 	draw_text(term, di->x,	di->y, text, 3, 0, color);
@@ -143,8 +143,8 @@ static void
 init_checkbox(struct widget_data *widget, struct dialog_data *dlg_data,
 	      struct term_event *ev)
 {
-	if (widget->item->gid) {
-		if (*((int *) widget->cdata) == widget->item->gnum)
+	if (widget->widget->gid) {
+		if (*((int *) widget->cdata) == widget->widget->gnum)
 			widget->checked = 1;
 	} else {
 		if (*((int *) widget->cdata))
@@ -162,26 +162,26 @@ mouse_checkbox(struct widget_data *di, struct dialog_data *dlg_data,
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = di - dlg_data->items;
 	display_dlg_item(dlg_data, di, 1);
-	if ((ev->b & BM_ACT) == B_UP && di->item->ops->select)
-		di->item->ops->select(di, dlg_data);
+	if ((ev->b & BM_ACT) == B_UP && di->widget->ops->select)
+		di->widget->ops->select(di, dlg_data);
 	return EVENT_PROCESSED;
 }
 
 static void
 select_checkbox(struct widget_data *di, struct dialog_data *dlg_data)
 {
-	if (!di->item->gid) {
+	if (!di->widget->gid) {
 		di->checked = *((int *) di->cdata)
 			    = !*((int *) di->cdata);
 	} else {
 		int i;
 
 		for (i = 0; i < dlg_data->n; i++) {
-			if (dlg_data->items[i].item->type != D_CHECKBOX
-			    || dlg_data->items[i].item->gid != di->item->gid)
+			if (dlg_data->items[i].widget->type != D_CHECKBOX
+			    || dlg_data->items[i].widget->gid != di->widget->gid)
 				continue;
 
-			*((int *) dlg_data->items[i].cdata) = di->item->gnum;
+			*((int *) dlg_data->items[i].cdata) = di->widget->gnum;
 			dlg_data->items[i].checked = 0;
 			display_dlg_item(dlg_data, &dlg_data->items[i], 0);
 		}

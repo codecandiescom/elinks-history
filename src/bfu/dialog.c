@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.47 2003/10/26 12:26:04 zas Exp $ */
+/* $Id: dialog.c,v 1.48 2003/10/26 12:52:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,11 +46,11 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	  struct memory_list *ml)
 {
 	struct dialog_data *dlg_data;
-	struct widget *d;
+	struct widget *widget;
 	int n = 0;
 
 	/* FIXME: maintain a counter, and don't recount each time. --Zas */
-	for (d = dlg->items; d->type != D_END; d++) n++;
+	for (widget = dlg->items; widget->type != D_END; widget++) n++;
 
 	dlg_data = mem_alloc(sizeof(struct dialog_data) +
 		             sizeof(struct widget_data) * n);
@@ -104,8 +104,8 @@ select_dlg_item(struct dialog_data *dlg_data, int i)
 		display_dlg_item(dlg_data, &dlg_data->items[i], 1);
 		dlg_data->selected = i;
 	}
-	if (dlg_data->items[i].item->ops->select)
-		dlg_data->items[i].item->ops->select(&dlg_data->items[i], dlg_data);
+	if (dlg_data->items[i].widget->ops->select)
+		dlg_data->items[i].widget->ops->select(&dlg_data->items[i], dlg_data);
 }
 
 static struct widget_ops *widget_type_to_ops[] = {
@@ -123,25 +123,25 @@ init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 	struct widget_data *widget = &dlg_data->items[i];
 
 	memset(widget, 0, sizeof(struct widget_data));
-	widget->item = &dlg_data->dlg->items[i];
+	widget->widget = &dlg_data->dlg->items[i];
 
-	if (widget->item->dlen) {
-		widget->cdata = mem_alloc(widget->item->dlen);
+	if (widget->widget->dlen) {
+		widget->cdata = mem_alloc(widget->widget->dlen);
 		if (widget->cdata) {
 			memcpy(widget->cdata,
-			       widget->item->data,
-			       widget->item->dlen);
+			       widget->widget->data,
+			       widget->widget->dlen);
 		} else {
 			return NULL;
 		}
 	}
 
-	widget->item->ops = widget_type_to_ops[widget->item->type];
+	widget->widget->ops = widget_type_to_ops[widget->widget->type];
 	init_list(widget->history);
 	widget->cur_hist = (struct input_history_item *) &widget->history;
 
-	if (widget->item->ops->init)
-		widget->item->ops->init(widget, dlg_data, ev);
+	if (widget->widget->ops->init)
+		widget->widget->ops->init(widget, dlg_data, ev);
 
 	return widget;
 }
@@ -176,8 +176,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 		case EV_MOUSE:
 #ifdef USE_MOUSE
 			for (i = 0; i < dlg_data->n; i++)
-				if (dlg_data->items[i].item->ops->mouse
-				    && dlg_data->items[i].item->ops->mouse(&dlg_data->items[i], dlg_data, ev)
+				if (dlg_data->items[i].widget->ops->mouse
+				    && dlg_data->items[i].widget->ops->mouse(&dlg_data->items[i], dlg_data, ev)
 				       == EVENT_PROCESSED)
 					break;
 #endif /* USE_MOUSE */
@@ -188,15 +188,15 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			struct widget_data *di = selected_widget(dlg_data);
 
 			/* First let the widget try out. */
-			if (di->item->ops->kbd
-			    && di->item->ops->kbd(di, dlg_data, ev)
+			if (di->widget->ops->kbd
+			    && di->widget->ops->kbd(di, dlg_data, ev)
 			       == EVENT_PROCESSED)
 				break;
 
 			/* Can we select? */
 			if ((ev->x == KBD_ENTER || ev->x == ' ')
-			    && di->item->ops->select) {
-				di->item->ops->select(di, dlg_data);
+			    && di->widget->ops->select) {
+				di->widget->ops->select(di, dlg_data);
 				break;
 			}
 
@@ -213,8 +213,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 			/* Submit button. */
 			if (ev->x == KBD_ENTER
-			    && (di->item->type == D_FIELD
-				|| di->item->type == D_FIELD_PASS
+			    && (di->widget->type == D_FIELD
+				|| di->widget->type == D_FIELD_PASS
 				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
 				for (i = 0; i < dlg_data->n; i++)
 					if (dlg_data->dlg->items[i].type == D_BUTTON

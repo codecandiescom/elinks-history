@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.15 2003/10/26 12:26:04 zas Exp $ */
+/* $Id: widget.h,v 1.16 2003/10/26 12:52:32 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -58,7 +58,7 @@ struct widget {
 struct widget_data {
 	struct list_head history;
 
-	struct widget *item;
+	struct widget *widget;
 	struct input_history_item *cur_hist;
 
 	unsigned char *cdata;

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.47 2003/10/25 12:45:09 zas Exp $ */
+/* $Id: dialogs.c,v 1.48 2003/10/26 12:52:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,7 @@ history_dialog_event_handler(struct dialog_data *dlg_data,
 		case EV_KBD:
 		{
 			struct widget_data *widget_data = &(dlg_data->items[HISTORY_BOX_IND]);
-			struct widget *widget = widget_data->item;
+			struct widget *widget = widget_data->widget;
 
 			if (widget->ops->kbd)
 				return widget->ops->kbd(widget_data, dlg_data, ev);
@@ -216,7 +216,7 @@ push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
 	if (box->sel) {
 		historyitem = box->sel->udata;
 		if (historyitem)
-			goto_url((struct session *) goto_btn->item->udata,
+			goto_url((struct session *) goto_btn->widget->udata,
 				 historyitem->url);
 	}
 

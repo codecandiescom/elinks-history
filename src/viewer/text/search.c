@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.65 2003/10/25 12:45:09 zas Exp $ */
+/* $Id: search.c,v 1.66 2003/10/26 12:52:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -940,7 +940,7 @@ struct search_dlg_hop {
 static int
 search_dlg_cancel(struct dialog_data *dlg_data, struct widget_data *di)
 {
-	void (*fn)(void *) = di->item->udata;
+	void (*fn)(void *) = di->widget->udata;
 	struct search_dlg_hop *hop = dlg_data->dlg->udata2;
 	void *data = hop->data;
 
@@ -953,7 +953,7 @@ search_dlg_cancel(struct dialog_data *dlg_data, struct widget_data *di)
 static int
 search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *di)
 {
-	void (*fn)(void *, unsigned char *) = di->item->udata;
+	void (*fn)(void *, unsigned char *) = di->widget->udata;
 	struct search_dlg_hop *hop = dlg_data->dlg->udata2;
 	void *data = hop->data;
 	unsigned char *text = dlg_data->items->cdata;

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.58 2003/10/26 12:26:04 zas Exp $ */
+/* $Id: inpfield.c,v 1.59 2003/10/26 12:52:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@ check_number(struct dialog_data *dlg_data, struct widget_data *di)
 		return 1;
 	}
 
-	if (l < di->item->gid || l > di->item->gnum) {
+	if (l < di->widget->gid || l > di->widget->gnum) {
 		msg_box(dlg_data->win->term, NULL, 0,
 			N_("Bad number"), AL_CENTER,
 			N_("Number out of range"),
@@ -93,7 +93,7 @@ dlg_format_field(struct terminal *term, struct terminal *t2,
 static int
 input_field_cancel(struct dialog_data *dlg_data, struct widget_data *di)
 {
-	void (*fn)(void *) = di->item->udata;
+	void (*fn)(void *) = di->widget->udata;
 	void *data = dlg_data->dlg->udata2;
 
 	if (fn) fn(data);
@@ -105,7 +105,7 @@ input_field_cancel(struct dialog_data *dlg_data, struct widget_data *di)
 static int
 input_field_ok(struct dialog_data *dlg_data, struct widget_data *di)
 {
-	void (*fn)(void *, unsigned char *) = di->item->udata;
+	void (*fn)(void *, unsigned char *) = di->widget->udata;
 	void *data = dlg_data->dlg->udata2;
 	unsigned char *text = dlg_data->items->cdata;
 
@@ -271,10 +271,10 @@ static void
 init_field(struct widget_data *widget, struct dialog_data *dlg_data,
 	   struct term_event *ev)
 {
-	if (widget->item->history) {
+	if (widget->widget->history) {
 		struct input_history_item *item;
 
-		foreach (item, widget->item->history->items) {
+		foreach (item, widget->widget->history->items) {
 			int dsize = strlen(item->d) + 1;
 			struct input_history_item *hi;
 
@@ -421,7 +421,7 @@ kbd_field(struct widget_data *di, struct dialog_data *dlg_data,
 
 				if (!clipboard) goto dsp_f;
 
-				safe_strncpy(di->cdata, clipboard, di->item->dlen);
+				safe_strncpy(di->cdata, clipboard, di->widget->dlen);
 				di->cpos = strlen(di->cdata);
 				mem_free(clipboard);
 				goto dsp_f;
@@ -439,7 +439,7 @@ kbd_field(struct widget_data *di, struct dialog_data *dlg_data,
 			if (ev->x >= ' ' && ev->x < 0x100 && !ev->y) {
 				int cdata_len = strlen(di->cdata);
 
-				if (cdata_len >= di->item->dlen - 1)
+				if (cdata_len >= di->widget->dlen - 1)
 					goto dsp_f;
 
 				memmove(di->cdata + di->cpos + 1,

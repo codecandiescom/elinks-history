@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.98 2003/10/25 12:20:47 zas Exp $ */
+/* $Id: dialogs.c,v 1.99 2003/10/26 12:52:32 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -139,7 +139,7 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 	struct widget_data *widget_data = &dlg_data->items[BM_BOX_IND];
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) widget_data->item->data;
+	box = (struct listbox_data *) widget_data->widget->data;
 
 	if (box->sel) {
 		if (box->sel->type == BI_FOLDER && box->sel->expanded) {
@@ -188,7 +188,7 @@ push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
 
 	/* Follow the bookmark */
 	if (box->sel)
-		goto_url((struct session *) goto_btn->item->udata,
+		goto_url((struct session *) goto_btn->widget->udata,
 			 ((struct bookmark *) box->sel->udata)->url);
 
 	/* Close the bookmark dialog */
@@ -235,7 +235,7 @@ push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 		bm->refcount++;
 		do_edit_dialog(dlg_data->win->term, 1, N_("Edit bookmark"),
 			       name, url,
-			       (struct session *) edit_btn->item->udata, dlg_data,
+			       (struct session *) edit_btn->widget->udata, dlg_data,
 			       bookmark_edit_done, bookmark_edit_cancel,
 			       (void *) bm, EDIT_DLG_ADD);
 	}
@@ -534,7 +534,7 @@ push_move_button(struct dialog_data *dlg_data,
 	struct bookmark *dest = NULL;
 	struct list_head *destb = NULL, *desti = NULL;
 	struct widget_data *widget_data = &dlg_data->items[BM_BOX_IND];
-	struct listbox_data *box = (struct listbox_data *) widget_data->item->data;
+	struct listbox_data *box = (struct listbox_data *) widget_data->widget->data;
 
 	if (!box->sel) return 0; /* nowhere to move to */
 
@@ -641,7 +641,7 @@ bookmark_add_add(struct dialog *dlg)
 		struct dialog_data *dlg_data = (struct dialog_data *) dlg->udata;
 
 		widget_data = &(dlg_data->items[BM_BOX_IND]);
-		box = (struct listbox_data *) widget_data->item->data;
+		box = (struct listbox_data *) widget_data->widget->data;
 
 		if (box->sel) {
 			if (box->sel->type == BI_FOLDER) {
@@ -721,7 +721,7 @@ bookmark_search_do(struct dialog *dlg)
 
 	dlg_data = (struct dialog_data *) dlg->udata;
 	widget_data = &(dlg_data->items[BM_BOX_IND]);
-	box = (struct listbox_data *) widget_data->item->data;
+	box = (struct listbox_data *) widget_data->widget->data;
 
 	/* Memorize last searched title */
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.95 2003/10/26 12:26:04 zas Exp $ */
+/* $Id: listbox.c,v 1.96 2003/10/26 12:52:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 	/* Height bussiness follows: */
 
 	/* We ignore this one happily now. Rather be Dynamic ;p. */
-	/* (*y) += item->item->gid; */
+	/* (*y) += item->widget->gid; */
 
 	/* This is only weird heuristic, it could scale well I hope. */
 	if (term) max_y = term->y;
@@ -286,7 +286,7 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 {
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) listbox_item_data->item->data;
+	box = (struct listbox_data *) listbox_item_data->widget->data;
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
 		if (!box->sel) box->sel = box->top;
@@ -420,7 +420,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_d
 		int sel)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct listbox_data *box = (struct listbox_data *) listbox_item_data->item->data;
+	struct listbox_data *box = (struct listbox_data *) listbox_item_data->widget->data;
 	struct box_context *data;
 
 	if (!list_empty(*box->items)) {
@@ -479,7 +479,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 	      struct term_event *ev)
 {
 #ifdef USE_MOUSE
-	struct listbox_data *box = (struct listbox_data *) di->item->data;
+	struct listbox_data *box = (struct listbox_data *) di->widget->data;
 
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
@@ -626,7 +626,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 			if (ev->x == KBD_INS || ev->x == '*') {
 				struct listbox_data *box;
 
-				box = (struct listbox_data *) dlg_item->item->data;
+				box = (struct listbox_data *) dlg_item->widget->data;
 				if (box->sel) {
 					box->sel->marked = !box->sel->marked;
 					box_sel_move(dlg_item, 1);
@@ -639,7 +639,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 			if (ev->x == KBD_DEL) {
 				struct listbox_data *box;
 
-				box = (struct listbox_data *) dlg_item->item->data;
+				box = (struct listbox_data *) dlg_item->widget->data;
 				if (box->ops && box->ops->del)
 					box->ops->del(dlg_data->win->term, box);
 

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.26 2003/10/25 11:31:30 zas Exp $ */
+/* $Id: group.c,v 1.27 2003/10/26 12:52:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,13 +22,13 @@
 static inline int
 base_group_width(struct terminal *term, struct widget_data *item)
 {
-	if (item->item->type == D_CHECKBOX)
+	if (item->widget->type == D_CHECKBOX)
 		return 4;
 
-	if (item->item->type == D_BUTTON)
-		return strlen(item->item->text) + 5;
+	if (item->widget->type == D_BUTTON)
+		return strlen(item->widget->text) + 5;
 
-	return item->item->dlen + 1;
+	return item->widget->dlen + 1;
 }
 
 /* TODO: We should join these two functions in one. --Zas */
@@ -106,7 +106,7 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 		}
 
 		if (term) {
-			int is_checkbox = (item->item->type == D_CHECKBOX);
+			int is_checkbox = (item->widget->type == D_CHECKBOX);
 			int xnx = x + nx;
 
 			draw_text(term, xnx + 4 * is_checkbox, *y,
@@ -114,9 +114,9 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 				  0, color);
 			item->x = xnx + !is_checkbox * (sl + 1);
 			item->y = *y;
-			if (item->item->type == D_FIELD ||
-			    item->item->type == D_FIELD_PASS)
-				item->l = item->item->dlen;
+			if (item->widget->type == D_FIELD ||
+			    item->widget->type == D_FIELD_PASS)
+				item->l = item->widget->dlen;
 		}
 
 		if (rw) int_bounds(rw, nx + wx, w);

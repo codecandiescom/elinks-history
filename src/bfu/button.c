@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.35 2003/10/26 12:26:04 zas Exp $ */
+/* $Id: button.c,v 1.36 2003/10/26 12:52:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@ buttons_width(struct terminal *term, struct widget_data *butt,
 	register int i;
 
 	for (i = 0; i < n; i++) {
-		int minw = strlen((butt++)->item->text) + 6;
+		int minw = strlen((butt++)->widget->text) + 6;
 
 		maxw += minw;
 		*minwidth = int_max(*minwidth, minw);
@@ -43,7 +43,7 @@ max_buttons_width(struct terminal *term, struct widget_data *butt,
 	register int i;
 
 	for (i = 0; i < n; i++)
-		w += strlen((butt++)->item->text) + 6;
+		w += strlen((butt++)->widget->text) + 6;
 
 	*width = int_max(*width, w);
 }
@@ -55,7 +55,7 @@ min_buttons_width(struct terminal *term, struct widget_data *butt,
 	register int i;
 
 	for (i = 0; i < n; i++)
-		*width = int_max(*width, strlen((butt++)->item->text) + 4);
+		*width = int_max(*width, strlen((butt++)->widget->text) + 4);
 }
 
 void
@@ -88,7 +88,7 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 			for (i = i1; i < i2; i++) {
 				butt[i].x = p;
 				butt[i].y = *y;
-				butt[i].l = strlen(butt[i].item->text) + 4;
+				butt[i].l = strlen(butt[i].widget->text) + 4;
 				p += butt[i].l + 2;
 			}
 		}
@@ -104,7 +104,7 @@ display_button(struct widget_data *di, struct dialog_data *dlg_data, int sel)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
-	int len = strlen(di->item->text);
+	int len = strlen(di->widget->text);
 	int x = di->x + 2;
 
 	color = get_bfu_color(term, sel ? "dialog.button-selected"
@@ -112,7 +112,7 @@ display_button(struct widget_data *di, struct dialog_data *dlg_data, int sel)
 	if (!color) return;
 
 	draw_text(term, di->x, di->y, "[ ", 2, 0, color);
-	draw_text(term, x, di->y, di->item->text, len, 0, color);
+	draw_text(term, x, di->y, di->widget->text, len, 0, color);
 	draw_text(term, x + len, di->y, " ]", 2, 0, color);
 
 	if (sel) {
@@ -125,21 +125,21 @@ static int
 mouse_button(struct widget_data *di, struct dialog_data *dlg_data, struct term_event *ev)
 {
 	if ((ev->b & BM_BUTT) >= B_WHEEL_UP || ev->y != di->y || ev->x < di->x
-	    || ev->x >= di->x + strlen(di->item->text) + 4)
+	    || ev->x >= di->x + strlen(di->widget->text) + 4)
 		return EVENT_NOT_PROCESSED;
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = di - dlg_data->items;
 	display_dlg_item(dlg_data, di, 1);
-	if ((ev->b & BM_ACT) == B_UP && di->item->ops->select)
-		di->item->ops->select(di, dlg_data);
+	if ((ev->b & BM_ACT) == B_UP && di->widget->ops->select)
+		di->widget->ops->select(di, dlg_data);
 	return EVENT_PROCESSED;
 }
 
 static void
 select_button(struct widget_data *di, struct dialog_data *dlg_data)
 {
-	di->item->fn(dlg_data, di);
+	di->widget->fn(dlg_data, di);
 }
 
 struct widget_ops button_ops = {

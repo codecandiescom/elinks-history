@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.68 2004/12/15 14:53:41 zas Exp $ */
+/* $Id: link.c,v 1.69 2004/12/15 15:06:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,9 +210,17 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 	int ismap, usemap = 0;
 	int add_brackets = 0;
 	unsigned char *src = NULL;
-	unsigned char *label;
-	unsigned char *usemap_attr = get_attr_val(a, "usemap");
+	unsigned char *label = NULL;
+	unsigned char *usemap_attr;
+	int display_style = get_opt_int("document.browse.images.display_style");
 
+	/* Note about display_style:
+	 * 0     means always display IMG
+	 * 1     means always display filename
+	 * 2     means display alt/title attribute if possible, IMG if not
+	 * 3     means display alt/title attribute if possible, filename if not */
+
+	usemap_attr = get_attr_val(a, "usemap");
 	if (usemap_attr) {
 		unsigned char *joined_urls = join_urls(html_context.base_href,
 						       usemap_attr);
@@ -233,13 +241,15 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 
 	ismap = format.link && has_attr(a, "ismap") && !usemap;
 
-	label = get_attr_val(a, "alt");
-	if (!label) label = get_attr_val(a, "title");
+	if (display_style == 2 || display_style == 3) {
+		label = get_attr_val(a, "alt");
+		if (!label) label = get_attr_val(a, "title");
 
-	/* Little hack to preserve rendering of [   ], in directories listing,
-	 * but we still want to drop extra spaces in alt or title attribute
-	 * to limit display width on certain websites. --Zas */
-	if (label && strlen(label) > 5) clr_spaces(label);
+		/* Little hack to preserve rendering of [   ], in directories listing,
+		 * but we still want to drop extra spaces in alt or title attribute
+		 * to limit display width on certain websites. --Zas */
+		if (label && strlen(label) > 5) clr_spaces(label);
+	}
 
 	src = null_or_stracpy(object_src);
 	if (!src) src = get_url_val(a, "src");
@@ -248,7 +258,7 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 	/* If we have no label yet (no title or alt), so
 	 * just use default ones, or image filename. */
 	if (!label || !*label) {
-		mem_free_if(label);
+		mem_free_set(&label, NULL);
 		/* Do we want to display images with no alt/title and with no
 		 * link on them ?
 		 * If not, just exit now. */
@@ -265,7 +275,8 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 		} else if (ismap) {
 			label = stracpy("ISMAP");
 		} else {
-			label = get_image_filename_from_src(src);
+			if (display_style == 3)
+				label = get_image_filename_from_src(src);
 		}
 
 	} else {
@@ -274,7 +285,10 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 
 	if (!label) {
 		add_brackets = 1;
-		label = stracpy("IMG");
+		if (display_style == 1)
+			label = get_image_filename_from_src(src);
+		if (!label)
+			label = stracpy("IMG");
 	}
 
 	mem_free_set(&format.image, NULL);

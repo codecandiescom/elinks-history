@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.152 2004/12/15 14:53:42 zas Exp $ */
+/* $Id: options.inc,v 1.153 2004/12/15 15:06:57 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -200,6 +200,14 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_TREE("document.browse", N_("Images"),
 		"images", 0,
 		N_("Options for handling of images.")),
+
+	INIT_OPT_INT("document.browse.images", N_("Display style for image tags"),
+		"display_style", 0, 0, 3, 2,
+		N_("Display style for image tags when displayed:\n"
+		"0     means always display IMG\n"
+		"1     means always display filename\n"
+		"2     means display alt/title attribute if possible, IMG if not\n"
+		"3     means display alt/title attribute if possible, filename if not\n")),
 
 	INIT_OPT_INT("document.browse.images", N_("Display style for image links"),
 		"file_tags", 0, -1, 500, -1,

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.164 2003/07/08 01:52:26 jonas Exp $ */
+/* $Id: http.c,v 1.165 2003/07/08 02:01:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 }
 
 static int
-check_http_server_bugs(unsigned char *url,
+check_http_server_bugs(struct uri *uri,
 		       struct http_connection_info *info,
 		       unsigned char *head)
 {
@@ -258,13 +258,9 @@ check_http_server_bugs(unsigned char *url,
 	for (s = buggy_servers; *s; s++) {
 		if (!strstr(server, *s)) continue;
 		mem_free(server);
-		server = get_host_name(url);
-		if (server) {
-			add_blacklist_entry(server, strlen(server), BL_HTTP10);
-			mem_free(server);
-			return 1;
-		}
-		return 0;
+
+		add_blacklist_entry(uri->host, uri->hostlen, BL_HTTP10);
+		return 1;
 	}
 
 	mem_free(server);
@@ -1136,7 +1132,7 @@ again:
 		return;
 	}
 
-	if (check_http_server_bugs(uri->protocol, conn->info, head)) {
+	if (check_http_server_bugs(uri, conn->info, head)) {
 		mem_free(head);
 		retry_conn_with_state(conn, S_RESTART);
 		return;

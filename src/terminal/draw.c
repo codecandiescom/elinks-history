@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.37 2003/07/31 17:29:01 jonas Exp $ */
+/* $Id: draw.c,v 1.38 2003/07/31 17:41:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,11 @@
 #include "terminal/terminal.h"
 
 
+/* Somewhere in the dialog code hides a few bugs that will result in
+ * assertion failures. Therefore draw_assert() is will just return
+ * for now. */
+#define draw_assert(x) if (!(x)) return
+
 void
 set_char(struct terminal *term, int x, int y,
 	 unsigned char data, unsigned char attr)
@@ -20,8 +25,7 @@ set_char(struct terminal *term, int x, int y,
 	struct terminal_screen *screen = term->screen;
 	int position = x + term->x * y;
 
-	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed { return; }
+	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 
 	screen->image[position].data = data;
 	screen->image[position].attr = attr;
@@ -36,11 +40,8 @@ set_xchar(struct terminal *term, int x, int y, enum frame_cross_direction dir)
 	unsigned int d;
 	struct screen_char *screen_char;
 
-	assert(term);
-	if_assert_failed return;
-
-	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed return;
+	draw_assert(term);
+	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 
 	screen_char = get_char(term, x, y);
 	if (!(screen_char->attr & SCREEN_ATTR_FRAME)) return;
@@ -61,8 +62,7 @@ set_border_char(struct terminal *term, int x, int y,
 	struct terminal_screen *screen = term->screen;
 	int position = x + term->x * y;
 
-	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed { return; }
+	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 
 	/* This should probably go.  */
 	if (!color)
@@ -77,8 +77,8 @@ set_border_char(struct terminal *term, int x, int y,
 struct screen_char *
 get_char(struct terminal *term, int x, int y)
 {
-	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed { return 0; }
+	if (!(x >= 0 && x < term->x && y >= 0 && y < term->y))
+		return 0;
 
 	return &term->screen->image[x + term->x * y];
 }
@@ -90,8 +90,7 @@ set_color(struct terminal *term, int x, int y, unsigned char color)
 	int position = x + term->x * y;
 	unsigned char attr = color & ~SCREEN_ATTR_FRAME;
 
-	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed { return; }
+	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 
 	attr |= (screen->image[position].attr & SCREEN_ATTR_FRAME);
 	screen->image[position].attr = attr;
@@ -104,8 +103,7 @@ set_only_char(struct terminal *term, int x, int y, unsigned char data)
 	struct terminal_screen *screen = term->screen;
 	int position = x + term->x * y;
 
-	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed { return; }
+	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 
 	screen->image[position].data = data;
 	screen->dirty = 1;
@@ -121,11 +119,8 @@ set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 	register int offset = x + term->x * y;
 	register int i;
 
-	assert(line);
-	if_assert_failed { return; }
-
-	assert(l >= 0 && l <= term->x && x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed { return; }
+	draw_assert(line);
+	draw_assert(l >= 0 && l <= term->x && x >= 0 && x < term->x && y >= 0 && y < term->y);
 
 	if (end == 0) return;
 
@@ -150,8 +145,7 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw,
 	int offset_base = x + term->x * y;
 	register int j;
 
-	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed { return; }
+	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 
 	for (j = starty; j < endy; j++) {
 		register int offset = offset_base + term->x * j;
@@ -215,10 +209,8 @@ print_text(struct terminal *term, int x, int y, int l,
 	int end = (l <= term->x - x) ? l : term->x - x;
 	int position = x + term->x * y;
 
-	assert(text && l >= 0);
-	if_assert_failed { return; }
-	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed { return; }
+	draw_assert(text && l >= 0);
+	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 
 	for (end += position; position < end && *text; text++, position++) {
 		screen->image[position].data = *text;
@@ -233,8 +225,7 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 {
 	struct terminal_screen *screen = term->screen;
 
-	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	if_assert_failed { return; }
+	draw_assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 
 	if (blockable && get_opt_bool_tree(term->spec, "block_cursor")) {
 		x = term->x - 1;

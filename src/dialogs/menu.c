@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.283 2004/01/25 00:23:35 pasky Exp $ */
+/* $Id: menu.c,v 1.284 2004/01/25 00:24:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -334,6 +334,7 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ACTION(N_("Toggle i~mages"), ACT_TOGGLE_DISPLAY_IMAGES),
 	INIT_MENU_ACTION(N_("Toggle ~link numbering"), ACT_TOGGLE_NUMBERED_LINKS),
 	INIT_MENU_ACTION(N_("Toggle ~document colors"), ACT_TOGGLE_DOCUMENT_COLORS),
+	BAR_MENU_ITEM,
 	INIT_MENU_ACTION(N_("Document ~info"), ACT_DOCUMENT_INFO),
 	INIT_MENU_ACTION(N_("H~eader info"), ACT_HEADER_INFO),
 	INIT_MENU_ACTION(N_("Rel~oad document"), ACT_RELOAD),

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.63 2003/07/23 12:51:45 pasky Exp $ */
+/* $Id: auth.c,v 1.64 2003/07/23 12:52:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 	return match;
 }
 
-#define set_auth_uid(e, u) \
+#define set_auth_user(e, u) \
 	do { \
 		int userlen = MIN((u)->userlen, HTTP_AUTH_USER_MAXLEN - 1); \
 		if (userlen) \
@@ -67,7 +67,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 		(e)->user[userlen] = 0; \
 	} while (0)
 
-#define set_auth_passwd(e, u) \
+#define set_auth_password(e, u) \
 	do { \
 		int passwordlen = MIN((u)->passwordlen, HTTP_AUTH_PASSWORD_MAXLEN - 1); \
 		if (passwordlen) \
@@ -103,8 +103,8 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 		return NULL;
 	}
 	entry->password = entry->user + HTTP_AUTH_USER_MAXLEN;
-	set_auth_uid(entry, uri);
-	set_auth_passwd(entry, uri);
+	set_auth_user(entry, uri);
+	set_auth_password(entry, uri);
 
 	return entry;
 }
@@ -154,13 +154,13 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		if (!*entry->user || strlen(entry->user) != uri->userlen
 		    || strncmp(entry->user, uri->user, uri->userlen)) {
 			entry->valid = 0;
-			set_auth_uid(entry, uri);
+			set_auth_user(entry, uri);
 		}
 
 		if (!*entry->password || strlen(entry->password) != uri->passwordlen
 		    || strncmp(entry->password, uri->password, uri->passwordlen)) {
 			entry->valid = 0;
-			set_auth_passwd(entry, uri);
+			set_auth_password(entry, uri);
 		}
 
 	} else {

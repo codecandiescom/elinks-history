@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.185 2004/04/19 15:56:48 zas Exp $ */
+/* $Id: uri.c,v 1.186 2004/04/22 22:37:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,8 @@
 
 #include "elinks.h"
 
+#include "cache/cache.h"		/* Needed by add_uri_filename_to_string() */
+#include "protocol/http/header.h"	/* Needed by add_uri_filename_to_string() */
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "util/conv.h"
@@ -805,15 +807,42 @@ get_translated_uri(unsigned char *uristring, unsigned char *cwd,
 }
 
 
+/* FIXME: Move to mime/ and give more appropriate name --jonas */
 struct string *
 add_uri_filename_to_string(struct string *string, struct uri *uri)
 {
+	struct cache_entry *cached = find_in_cache(uri);
 	unsigned char *filename;
 	unsigned char *pos;
 	int lo = (uri->protocol == PROTOCOL_FILE);
 
 	assert(uri->data);
 	/* dsep() *hint* *hint* */
+
+	while (cached && cached->head) {
+		pos = parse_http_header(cached->head, "Content-Disposition", NULL);
+		if (!pos) break;
+
+		filename = strchr(pos, ';');
+		if (!filename) {
+			mem_free(pos);
+			break;
+		}
+
+		filename++;
+		skip_whitespace(filename);
+
+		if (strncasecmp(filename, "filename=", 9)) {
+			mem_free(pos);
+			break;
+		}
+
+		filename += 9;
+		add_shell_safe_to_string(string, filename, strlen(filename));
+		mem_free(pos);
+
+		return string;
+	}
 
 	for (pos = filename = uri->data; *pos && !end_of_dir(*pos); pos++)
 		if (dsep(*pos))

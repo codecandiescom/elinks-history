@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.187 2005/03/21 11:26:16 zas Exp $ */
+/* $Id: options.inc,v 1.188 2005/03/22 05:25:54 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -728,6 +728,13 @@ static struct option_info config_options_info[] = {
 		"Warning: some systems (ie. OS/2, Win32) require that destination\n"
 		"file doesn't exist when rename(3) is called, breaking atomicity,\n"
 		"and reducing reliability of this feature.")),
+
+	INIT_OPT_BOOL("infofiles", N_("Use fsync(3) with secure file saving"),
+		"secure_save_fsync", 0, 1,
+		N_("When using secure file saving, call fsync(3), if the OS\n"
+		   "supports it, to force the OS immediately to write the data\n"
+		   "to permanent storage. This is optional for those who wish\n"
+		   "to avoid excessive disk I/O.")),
 
 	/* Keep options in alphabetical order. */
 

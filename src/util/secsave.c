@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.43 2005/02/28 10:07:49 zas Exp $ */
+/* $Id: secsave.c,v 1.44 2005/03/22 05:25:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,7 @@ secure_close(struct secure_save_info *ssi)
 #endif
 
 #ifdef HAVE_FSYNC
-		if (!fail)
+		if (!fail && get_opt_bool("infofiles.secure_save_fsync"))
 			fail = fsync(fileno(ssi->fp));
 #endif
 

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.41 2003/09/29 23:09:25 jonas Exp $ */
+/* $Id: renderer.h,v 1.42 2003/10/11 10:49:18 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -7,7 +7,6 @@
 #include "document/options.h"
 #include "document/html/parser.h"
 #include "terminal/draw.h"
-#include "terminal/screen.h"
 #include "lowlevel/ttime.h"
 #include "sched/session.h"
 #include "util/color.h"

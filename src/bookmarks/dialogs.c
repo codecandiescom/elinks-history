@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.44 2002/10/07 20:42:17 pasky Exp $ */
+/* $Id: dialogs.c,v 1.45 2002/10/07 20:43:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,13 +75,6 @@ bookmark_dialog_abort_handler(struct dialog_data *dlg)
 	/* Delete the box structure */
 	mem_free(box);
 }
-
-
-/* The titles to appear in the bookmark add dialog */
-unsigned char *bookmark_add_msg[] = {
-	TEXT(T_BOOKMARK_TITLE),
-	TEXT(T_URL),
-};
 
 
 /* The titles to appear in the bookmark manager */

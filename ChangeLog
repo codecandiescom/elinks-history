@@ -1,3 +1,209 @@
+Fri Apr 30 21:41:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix typo.  
+
+Fri Apr 30 14:30:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in:
+
+	Since we now rely on autoconf 2.13 lets also do these *DIR defines
+	the right way.  
+
+Fri Apr 30 13:56:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_char_color(): x += 1; -> ++x; 
+
+Fri Apr 30 13:53:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_char_color(): optimization and cleanup.  
+
+Fri Apr 30 13:46:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Try to clearify bitmembers.  
+
+Fri Apr 30 13:45:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	Remove empty line.  
+
+Fri Apr 30 13:33:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_char16(): if (ch->attr & SCREEN_ATTR_BOLD) -> if (bold).  
+
+Fri Apr 30 13:27:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_chars(): update comment.  
+
+Fri Apr 30 13:18:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_chars(): tidy up.  
+
+Fri Apr 30 12:44:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Revert wrong patch: even if nothing was redrawn, we possibly still
+	need to move cursor. It fixes issue reported by sstar on irc, thanks
+	to Jonas to pointed it out.  
+
+Fri Apr 30 12:25:56 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated, an hotkey conflict was fixed.  
+
+Fri Apr 30 09:26:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	update_screen_driver(): test for utf8_io only once.  
+
+Fri Apr 30 09:05:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Move cases more likely to occur first in switch().  
+
+Fri Apr 30 09:03:11 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Do not test @image.length if this is not needed.  
+
+Fri Apr 30 08:48:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Only call get_screen_driver() if needed.  
+
+Fri Apr 30 08:39:56 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Typo fix in add_chars() macro: @term -> @term_.  
+
+Fri Apr 30 08:38:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Indentation level reduction.  
+
+Fri Apr 30 03:44:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Cleanup.  
+
+Fri Apr 30 03:41:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Doh. Fix CONFIG_SSL dependency ;).  
+
+Fri Apr 30 03:13:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Be more conforming. Use AC_MSG_WARN() when guile configuration
+	fails.  
+
+Fri Apr 30 03:02:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix EL_CONFIG_DEPENDS() macro and a few tests.  
+
+Fri Apr 30 01:06:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in:
+
+	Add EL_CONFIG_DEPENDS() macro for handling scripting and SSL
+	CONFIG_* setup.  
+
+Fri Apr 30 00:19:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Use EL_CONFIG() for CONFIG_IPV6.  
+
+Fri Apr 30 00:17:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in:
+
+	Use EL_CONFIG() to define CONFIG_* variables.  
+
+Thu Apr 29 23:53:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h:
+
+	Remove seemingly unused defines.  
+
+Thu Apr 29 23:32:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, src/main.c, src/config/kbdbind.c,
+	src/config/kbdbind.h, src/dialogs/menu.c, src/modules/module.c,
+	src/protocol/proxy.c, src/sched/action.c, src/sched/session.c,
+	src/sched/task.c, src/scripting/scripting.c,
+	src/scripting/scripting.h, src/scripting/guile/core.c,
+	src/scripting/guile/core.h, src/scripting/guile/hooks.c,
+	src/scripting/guile/hooks.h, src/scripting/lua/core.c,
+	src/scripting/lua/core.h, src/scripting/lua/hooks.c,
+	src/scripting/lua/hooks.h, src/scripting/perl/core.c,
+	src/scripting/perl/core.h, src/scripting/perl/hooks.c,
+	src/scripting/perl/hooks.h, src/viewer/text/view.c:
+
+	HAVE_{SCRIPTING,LUA,PERL,GUILE} -> CONFIG_{...}.  
+
+Thu Apr 29 23:22:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, src/lowlevel/connect.c,
+	src/modules/module.c, src/protocol/http/http.c,
+	src/protocol/http/https.c, src/sched/connection.c,
+	src/sched/error.c, src/ssl/connect.c, src/ssl/connect.h,
+	src/ssl/ssl.c, src/ssl/ssl.h:
+
+	HAVE_{SSL,OPENSSL,GNUTLS} -> CONFIG_{SSL,OPENSSL,GNUTLS}.  
+
+Thu Apr 29 23:11:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/config/cmdline.c, src/lowlevel/connect.c,
+	src/lowlevel/connect.h, src/lowlevel/dns.c, src/modules/version.c,
+	src/osdep/getifaddrs.c, src/protocol/uri.c, src/protocol/ftp/ftp.c:
+
+	IPV6 -> CONFIG_IPV6.  
+
+Thu Apr 29 23:04:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/getifaddrs.c:
+
+	Fix HAVE_IPV6 to be IPV6.  
+
+Thu Apr 29 23:02:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, src/config/kbdbind.c,
+	src/config/options.h, src/modules/version.c, src/osdep/stub.h,
+	src/protocol/http/codes.c, src/util/color.c, src/util/error.h,
+	src/util/fastfind.h, src/util/memory.c, src/util/memory.h,
+	src/util/snprintf.h:
+
+	FASTMEM -> CONFIG_FASTMEM, USE_OWN_LIBC -> CONFIG_OWN_LIBC,
+	ELINKS_SMALL -> CONFIG_SMALL.  
+
 Thu Apr 29 17:04:08 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/man/man5/elinks.conf.5:

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.46 2003/09/14 02:15:56 miciah Exp $ */
+/* $Id: uri.c,v 1.47 2003/10/11 13:15:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,31 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+int
+end_with_known_tld(unsigned char *s, int slen)
+{
+	int i;
+	static const unsigned char *tld[] =
+	{ "com", "edu", "net",
+	  "org", "gov", "mil",
+	  "int", "biz", "arpa",
+	  "aero", "coop",
+	  "info", "museum",
+	  "name", "pro", NULL };
+
+	if (!slen) return -1;
+	if (slen < 0) slen = strlen(s);
+
+	for (i = 0; tld[i]; i++) {
+		int tldlen = strlen(tld[i]);
+		int pos = slen - tldlen;
+
+		if (pos >= 0 && !strncasecmp(&s[pos], tld[i], tldlen))
+			return pos;
+	}
+
+	return -1;
+}
 
 int
 parse_uri(struct uri *uri, unsigned char *uristring)
@@ -607,18 +632,8 @@ http:				prefix = "http://";
 
 			} else {
 				/* See above the braindead FIXME :^). */
-				unsigned char *tld[] = { "com", "edu", "net",
-							 "org", "gov", "mil",
-							 "int", "biz", "arpa",
-							 "aero", "coop",
-							 "info", "museum",
-							 "name", "pro", NULL };
-
-				for (i = 0; tld[i]; i++)
-					if (host_end - domain == strlen(tld[i])
-					    && !strncasecmp(tld[i], domain,
-						        host_end - domain))
-						goto http;
+				if (end_with_known_tld(domain, host_end - domain) >= 0)
+					goto http;
 			}
 		}
 

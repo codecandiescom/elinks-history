@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.37 2003/09/14 02:15:56 miciah Exp $ */
+/* $Id: uri.h,v 1.38 2003/10/11 13:15:37 zas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -114,6 +114,11 @@ unsigned char *join_urls(unsigned char *, unsigned char *);
 unsigned char *translate_url(unsigned char *, unsigned char *);
 unsigned char *extract_position(unsigned char *);
 unsigned char *extract_proxy(unsigned char *);
+
+/* Return position if end of string @s matches a known tld or -1 if not.
+ * If @slen < 0, then string length will be obtained by a strlen() call,
+ * else @slen is used as @s length. */
+int end_with_known_tld(unsigned char *s, int slen);
 
 
 static inline int

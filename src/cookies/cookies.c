@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.80 2003/10/11 12:30:11 zas Exp $ */
+/* $Id: cookies.c,v 1.81 2003/10/11 13:15:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,16 +141,12 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 		 * this cookie would be sent to all commercial servers in
 		 * Poland. */
 		need_dots = 2;
-		if (domain_len > 4 && domain[domain_len - 4] == '.') {
-			unsigned char *tld[] = { "com", "edu", "net", "org",
-						 "gov", "mil", "int", NULL };
 
-			for (i = 0; tld[i]; i++) {
-				if (!strncasecmp(tld[i], &domain[domain_len - 3], 3)) {
-					need_dots = 1;
-					break;
-				}
-			}
+		if (domain_len > 0) {
+			int pos = end_with_known_tld(domain, domain_len);
+
+			if (pos >= 1 && domain[pos - 1] == '.')
+				need_dots = 1;
 		}
 	}
 

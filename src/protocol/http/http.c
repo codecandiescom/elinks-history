@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.280 2004/04/19 15:56:49 zas Exp $ */
+/* $Id: http.c,v 1.281 2004/04/22 19:36:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1197,8 +1197,7 @@ again:
 	kill_buffer_data(rb, a);
 	info->close = 0;
 	info->length = -1;
-	info->recv_version.major = version.major;
-	info->recv_version.minor = version.minor;
+	info->recv_version = version;
 
 	if ((d = parse_http_header(conn->cached->head, "Connection", NULL))
 	     || (d = parse_http_header(conn->cached->head, "Proxy-Connection", NULL))) {

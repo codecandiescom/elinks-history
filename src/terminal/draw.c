@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.7 2003/06/23 21:47:23 zas Exp $ */
+/* $Id: draw.c,v 1.8 2003/07/27 15:19:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,19 +15,18 @@
 void
 set_char(struct terminal *t, int x, int y, unsigned c)
 {
-	if (x >= 0 && x < t->x && y >= 0 && y < t->y) {
-		t->screen[x + t->x * y] = c;
-		t->dirty = 1;
-	}
+	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	if_assert_failed { return; }
+
+	t->screen[x + t->x * y] = c;
+	t->dirty = 1;
 }
 
 unsigned
 get_char(struct terminal *t, int x, int y)
 {
-	if (x >= t->x) x = t->x - 1;
-	if (x < 0) x = 0;
-	if (y >= t->y) y = t->y - 1;
-	if (y < 0) y = 0;
+	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	if_assert_failed { return 0; }
 
 	return t->screen[x + t->x * y];
 }
@@ -35,37 +34,47 @@ get_char(struct terminal *t, int x, int y)
 void
 set_color(struct terminal *t, int x, int y, unsigned c)
 {
-	if (x >= 0 && x < t->x && y >= 0 && y < t->y) {
-		int p = x + t->x * y;
+	int position;
 
-		t->screen[p] = (t->screen[p] & 0x80ff) | (c & ~0x80ff);
-		t->dirty = 1;
-	}
+	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	if_assert_failed { return; }
+
+	position = x + t->x * y;
+	t->screen[position] = (t->screen[position] & 0x80ff) | (c & ~0x80ff);
+	t->dirty = 1;
 }
 
 void
 set_only_char(struct terminal *t, int x, int y, unsigned c)
 {
-	t->dirty = 1;
-	if (x >= 0 && x < t->x && y >= 0 && y < t->y) {
-		int p = x + t->x * y;
+	int position;
 
-		t->screen[p] = (t->screen[p] & ~0x80ff) | (c & 0x80ff);
-		t->dirty = 1;
-	}
+	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	if_assert_failed { return; }
+
+	position = x + t->x * y;
+	t->screen[position] = (t->screen[position] & ~0x80ff) | (c & 0x80ff);
+	t->dirty = 1;
 }
 
 void
 set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
-	register int i = (x >= 0) ? 0 : -x;
-	int end = (x + l <= t->x) ? l : t->x - x;
-	register int offset = x + t->x * y;
+	register int i = 0;
+	int end = l;
+	register int offset = t->x * y;
 
-	if (i < end) t->dirty = 1;
+	assert(l >= 0 && l <= t->x && x == 0 && y >= 0 && y < t->y);
+	if_assert_failed { return; }
+
+	if (i >= end) return;
+
+	assert(line);
+	if_assert_failed { return; }
 
 	for (; i < end; i++)
 		t->screen[i + offset] = line[i];
+	t->dirty = 1;
 }
 
 void
@@ -75,13 +84,14 @@ set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 	int end = (x + l <= t->x) ? l : t->x - x;
 	int offset = x + t->x * y;
 
-	if (i < end) t->dirty = 1;
+	if (i >= end) return;
 
 	for (; i < end; i++) {
 		register int p = i + offset;
 
 		t->screen[p] = (t->screen[p] & 0x80ff) | (c & ~0x80ff);
 	}
+	t->dirty = 1;
 }
 
 void
@@ -94,7 +104,8 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 	int offset_base =  x + t->x * y;
 	register int j;
 
-	t->dirty = 1;
+	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	if_assert_failed { return; }
 
 	for (j = starty; j < endy; j++) {
 		register int offset = offset_base + t->x * j;
@@ -106,6 +117,7 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 		for (i = startx; i < endx; i++)
 			t->screen[i + offset] = c;
 	}
+	t->dirty = 1;
 }
 
 void
@@ -153,6 +165,11 @@ void
 print_text(struct terminal *t, int x, int y, int l,
 		unsigned char *text, unsigned c)
 {
+	assert(text && l >= 0);
+	if_assert_failed { return; }
+	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
+	if_assert_failed { return; }
+
 	for (; l-- && *text; text++, x++)
 		set_char(t, x, y, *text + c);
 }
@@ -163,18 +180,18 @@ print_text(struct terminal *t, int x, int y, int l,
 void
 set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 {
-	term->dirty = 1;
+	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
+	assert(altx >= 0 && altx < term->x && alty >= 0 && alty < term->y);
+	if_assert_failed { return; }
 
 	if (get_opt_bool_tree(term->spec, "block_cursor")) {
 		x = altx;
 		y = alty;
 	}
-	if (x >= term->x) x = term->x - 1;
-	if (y >= term->y) y = term->y - 1;
-	if (x < 0) x = 0;
-	if (y < 0) y = 0;
+
 	term->cx = x;
 	term->cy = y;
+	term->dirty = 1;
 }
 
 void

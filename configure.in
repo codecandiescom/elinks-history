@@ -127,10 +127,6 @@ dnl ===================================================================
 dnl Checks for libraries.
 dnl ===================================================================
 
-dnl Replace `main' with a function in -lgpm:
-AC_CHECK_LIB(gpm, Gpm_Open)
-AC_CHECK_HEADERS(gpm.h)
-
 dnl Replace `main' with a function in -lsocket:
 AC_CHECK_FUNC(socket, cf_result=yes, cf_result=no)
 if test "$cf_result" = no; then
@@ -150,6 +146,23 @@ if test "$cf_result" = no; then
 	else
 		test -z "`echo $LIBS | grep -- -lsocket`" && LIBS="$LIBS -lsocket"
 	fi
+fi
+
+
+dnl ===================================================================
+dnl Checks for gpm, optional even if installed.
+dnl ===================================================================
+
+AC_ARG_WITH(gpm, [  --without-gpm           disable gpm (mouse) support],
+	[ if test "$withval" = no; then disable_gpm=yes; fi])
+AC_MSG_CHECKING([for gpm support])
+
+if test -z "$disable_gpm"; then
+	dnl Replace `main' with a function in -lgpm:
+	AC_CHECK_LIB(gpm, Gpm_Open)
+	AC_CHECK_HEADERS(gpm.h, cf_result=yes, cf_result=no)
+else
+	AC_MSG_RESULT(no)
 fi
 
 dnl ===================================================================

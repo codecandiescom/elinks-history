@@ -1,7 +1,13 @@
-/* $Id: event.h,v 1.4 2004/01/30 19:13:29 jonas Exp $ */
+/* $Id: event.h,v 1.5 2004/05/24 18:05:42 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
+
+/* Some constants for the strings inside of {struct terminal}. */
+
+#define MAX_TERM_LEN	32	/* this must be multiple of 8! (alignment problems) */
+#define MAX_CWD_LEN	256	/* this must be multiple of 8! (alignment problems) */
+
 
 enum term_event_type {
 	EV_INIT,
@@ -18,6 +24,15 @@ struct term_event {
 	long x;
 	long y;
 	long b;
+};
+
+struct terminal_info {
+	struct term_event event;
+	unsigned char term[MAX_TERM_LEN];
+	unsigned char cwd[MAX_CWD_LEN];
+	int system_env;
+	int length;
+	unsigned char data[0];
 };
 
 struct terminal;

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.58 2004/05/24 17:29:14 jonas Exp $ */
+/* $Id: kbd.c,v 1.59 2004/05/24 18:05:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,12 +250,16 @@ void
 handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	   void *init_string, int init_len)
 {
-	unsigned char buffer[MAX(MAX_TERM_LEN, MAX_CWD_LEN)];
-	int x = 0, y = 0, i;
 	struct itrm *itrm;
-	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 80, 24, 0);
+	int x = 80, y = 24;
+	struct terminal_info info = {
+		INIT_TERM_EVENT(EV_INIT, x, y, 0),
+		"",
+		"",
+		get_system_env(),
+		init_len,
+	};
 	unsigned char *ts;
-	int env;
 
 	if (get_terminal_size(ctl_in, &x, &y)) {
 		ERROR(G_("Could not get terminal size"));
@@ -273,6 +277,11 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm->ctl_in = ctl_in;
 	itrm->tm = -1;
 
+	/* FIXME: Combination altscreen + xwin does not work as it should,
+	 * mouse clicks are reportedly partially ignored. */
+	if (info.system_env & (ENV_SCREEN | ENV_XWIN))
+		itrm->flags |= USE_ALTSCREEN;
+
 	if (ctl_in >= 0) setraw(ctl_in, &itrm->t);
 	set_handlers(std_in, (void (*)(void *)) in_kbd,
 		     NULL, (void (*)(void *)) free_trm, itrm);
@@ -281,36 +290,25 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		set_handlers(sock_in, (void (*)(void *)) in_sock,
 			     NULL, (void (*)(void *)) free_trm, itrm);
 
-	ev.x = x;
-	ev.y = y;
+	info.event.x = x;
+	info.event.y = y;
 	handle_terminal_resize(ctl_in, resize_terminal);
-	queue_event(itrm, (char *)&ev, sizeof(struct term_event));
 
-	env = get_system_env();
-
-	memset(buffer, 0, sizeof(buffer));
 	ts = getenv("TERM");
 	if (ts) {
-		for (i = 0; ts[i] != 0 && i < sizeof(buffer); i++)
-			buffer[i] = isA(ts[i]) ? ts[i] : '-';
+		int i;
+
+		for (i = 0; ts[i] != 0 && i < MAX_TERM_LEN; i++)
+			info.term[i] = isA(ts[i]) ? ts[i] : '-';
 	}
-	queue_event(itrm, buffer, MAX_TERM_LEN);
 
-	/* FIXME: Combination altscreen + xwin does not work as it should,
-	 * mouse clicks are reportedly partially ignored. */
-	if (env & (ENV_SCREEN | ENV_XWIN))
-		itrm->flags |= USE_ALTSCREEN;
-
-	memset(buffer, 0, sizeof(buffer));
 	ts = get_cwd();
 	if (ts) {
-		memcpy(buffer, ts, int_min(strlen(ts), sizeof(buffer)));
+		memcpy(info.cwd, ts, int_min(strlen(ts), MAX_CWD_LEN));
 		mem_free(ts);
 	}
-	queue_event(itrm, buffer, MAX_CWD_LEN);
 
-	queue_event(itrm, (char *)&env, sizeof(int));
-	queue_event(itrm, (char *)&init_len, sizeof(int));
+	queue_event(itrm, (char *)&info, sizeof(struct terminal_info));
 	queue_event(itrm, (char *)init_string, init_len);
 	send_init_sequence(std_out, itrm->flags);
 

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.35 2004/04/14 23:35:55 jonas Exp $ */
+/* $Id: terminal.h,v 1.36 2004/05/24 18:05:42 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -8,11 +8,6 @@
 #include "terminal/event.h"
 #include "util/lists.h"
 
-
-/* Some constants for the strings inside of {struct terminal}. */
-
-#define MAX_TERM_LEN	32	/* this must be multiple of 8! (alignment problems) */
-#define MAX_CWD_LEN	256	/* this must be multiple of 8! (alignment problems) */
 
 /* The terminal type, meaningful for frames (lines) drawing. */
 enum term_mode_type {

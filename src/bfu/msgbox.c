@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.69 2003/10/31 21:33:40 pasky Exp $ */
+/* $Id: msgbox.c,v 1.70 2003/11/05 09:23:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,8 +49,9 @@ msg_box_fn(struct dialog_data *dlg_data)
 			   AL_CENTER);
 
 	w = rw;
-	dlg_data->xw = rw + 2 * DIALOG_LB;
-	dlg_data->yw = y + 2 * DIALOG_TB;
+	dlg_data->width = rw + 2 * DIALOG_LB;
+	dlg_data->height = y + 2 * DIALOG_TB;
+
 	center_dlg(dlg_data);
 	draw_dlg(dlg_data);
 

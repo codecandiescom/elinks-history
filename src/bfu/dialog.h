@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.13 2003/10/31 21:52:15 pasky Exp $ */
+/* $Id: dialog.h,v 1.14 2003/11/05 09:23:18 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -46,7 +46,7 @@ struct dialog_data {
 	struct memory_list *ml;
 
 	int x, y;
-	int xw, yw;
+	int width, height;
 	int n;
 	int selected;
 

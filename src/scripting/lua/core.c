@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.108 2003/10/31 22:18:16 pasky Exp $ */
+/* $Id: core.c,v 1.109 2003/11/05 09:23:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -390,10 +390,12 @@ dialog_fn(struct dialog_data *dlg_data)
 	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 3, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 	w = rw;
-	dlg_data->xw = w + 2 * DIALOG_LB;
-	dlg_data->yw = y + 2 * DIALOG_TB;
+	dlg_data->width = w + 2 * DIALOG_LB;
+	dlg_data->height = y + 2 * DIALOG_TB;
+
 	center_dlg(dlg_data);
 	draw_dlg(dlg_data);
+
 	y = dlg_data->y + DIALOG_TB;
 	dlg_format_text(term, term, dlg_msg[0], dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
@@ -531,10 +533,12 @@ xdialog_fn(struct dialog_data *dlg_data)
 	dlg_format_buttons(NULL, term, dlg_data->widgets_data + nfields, 2,
 			   0, &y, w, &rw, AL_CENTER);
 	w = rw;
-	dlg_data->xw = w + 2 * DIALOG_LB;
-	dlg_data->yw = y + 2 * DIALOG_TB;
+	dlg_data->width = w + 2 * DIALOG_LB;
+	dlg_data->height = y + 2 * DIALOG_TB;
+
 	center_dlg(dlg_data);
 	draw_dlg(dlg_data);
+
 	y = dlg_data->y + DIALOG_TB;
 	for (i = 0; i < nfields; i++) {
 		dlg_format_text(term, term, dlg_msg[0],

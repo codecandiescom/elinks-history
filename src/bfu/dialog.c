@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.66 2003/10/31 21:51:09 pasky Exp $ */
+/* $Id: dialog.c,v 1.67 2003/11/05 09:23:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,8 +69,8 @@ redraw_dialog(struct dialog_data *dlg_data)
 	struct color_pair *title_color;
 
 	draw_border(term, x, y,
-		    dlg_data->xw - 2 * DIALOG_LEFT_BORDER,
-		    dlg_data->yw - 2 * DIALOG_TOP_BORDER,
+		    dlg_data->width - 2 * DIALOG_LEFT_BORDER,
+		    dlg_data->height - 2 * DIALOG_TOP_BORDER,
 		    get_bfu_color(term, "dialog.frame"),
 		    DIALOG_FRAME);
 
@@ -79,7 +79,7 @@ redraw_dialog(struct dialog_data *dlg_data)
 		unsigned char *title = dlg_data->dlg->title;
 		int titlelen = strlen(title);
 
-		x = (dlg_data->xw - titlelen) / 2 + dlg_data->x;
+		x = (dlg_data->width - titlelen) / 2 + dlg_data->x;
 		draw_text(term, x - 1, y, " ", 1, 0, title_color);
 		draw_text(term, x, y, title, titlelen, 0, title_color);
 		draw_text(term, x + titlelen, y, " ", 1, 0, title_color);
@@ -359,15 +359,15 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 void
 center_dlg(struct dialog_data *dlg_data)
 {
-	dlg_data->x = (dlg_data->win->term->width - dlg_data->xw) / 2;
-	dlg_data->y = (dlg_data->win->term->height - dlg_data->yw) / 2;
+	dlg_data->x = (dlg_data->win->term->width - dlg_data->width) / 2;
+	dlg_data->y = (dlg_data->win->term->height - dlg_data->height) / 2;
 }
 
 void
 draw_dlg(struct dialog_data *dlg_data)
 {
-	draw_area(dlg_data->win->term, dlg_data->x, dlg_data->y, dlg_data->xw,
-		  dlg_data->yw, ' ', 0,
+	draw_area(dlg_data->win->term, dlg_data->x, dlg_data->y,
+		  dlg_data->width, dlg_data->height, ' ', 0,
 		  get_bfu_color(dlg_data->win->term, "dialog.generic"));
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
@@ -376,11 +376,11 @@ draw_dlg(struct dialog_data *dlg_data)
 								"dialog.shadow");
 
 		/* (horizontal) */
-		draw_area(dlg_data->win->term, dlg_data->x + 2, dlg_data->y + dlg_data->yw,
-			  dlg_data->xw - 2, 1, ' ', 0, shadow_color);
+		draw_area(dlg_data->win->term, dlg_data->x + 2, dlg_data->y + dlg_data->height,
+			  dlg_data->width - 2, 1, ' ', 0, shadow_color);
 
 		/* (vertical) */
-		draw_area(dlg_data->win->term, dlg_data->x + dlg_data->xw, dlg_data->y + 1,
-			  2, dlg_data->yw, ' ', 0, shadow_color);
+		draw_area(dlg_data->win->term, dlg_data->x + dlg_data->width, dlg_data->y + 1,
+			  2, dlg_data->height, ' ', 0, shadow_color);
 	}
 }

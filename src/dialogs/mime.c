@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.61 2003/10/31 21:33:41 pasky Exp $ */
+/* $Id: mime.c,v 1.62 2003/11/05 09:23:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,8 +77,8 @@ add_ext_fn(struct dialog_data *dlg_data)
 			   AL_CENTER);
 
 	w = rw;
-	dlg_data->xw = w + 2 * DIALOG_LB;
-	dlg_data->yw = y + 2 * DIALOG_TB;
+	dlg_data->width = w + 2 * DIALOG_LB;
+	dlg_data->height = y + 2 * DIALOG_TB;
 
 	center_dlg(dlg_data);
 	draw_dlg(dlg_data);

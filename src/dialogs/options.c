@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.106 2003/11/04 23:25:43 jonas Exp $ */
+/* $Id: options.c,v 1.107 2003/11/05 09:23:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,8 +146,8 @@ terminal_options_fn(struct dialog_data *dlg_data)
 			   &rw, AL_CENTER);
 
 	w = rw;
-	dlg_data->xw = rw + 2 * DIALOG_LB;
-	dlg_data->yw = y + 2 * DIALOG_TB;
+	dlg_data->width = rw + 2 * DIALOG_LB;
+	dlg_data->height = y + 2 * DIALOG_TB;
 
 	center_dlg(dlg_data);
 	draw_dlg(dlg_data);

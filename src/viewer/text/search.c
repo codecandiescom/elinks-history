@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.92 2003/11/04 23:25:43 jonas Exp $ */
+/* $Id: search.c,v 1.93 2003/11/05 09:23:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1024,8 +1024,8 @@ search_dlg_fn(struct dialog_data *dlg_data)
 			   AL_CENTER);
 
 	w = rw;
-	dlg_data->xw = rw + 2 * DIALOG_LB;
-	dlg_data->yw = y + 2 * DIALOG_TB;
+	dlg_data->width = rw + 2 * DIALOG_LB;
+	dlg_data->height = y + 2 * DIALOG_TB;
 
 	center_dlg(dlg_data);
 	draw_dlg(dlg_data);

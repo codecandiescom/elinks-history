@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.378 2004/12/19 02:46:24 miciah Exp $ */
+/* $Id: http.c,v 1.379 2004/12/19 02:49:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,36 +202,35 @@ static void
 init_accept_charset()
 {
 	struct string ac;
+	unsigned char *cs;
+	int i;
 
-	if (init_string(&ac)) {
-		unsigned char *cs;
-		int i;
+	if (!init_string(&ac)) return;
 
-		for (i = 0; (cs = get_cp_mime_name(i)); i++) {
-			if (ac.length) {
-				add_to_string(&ac, ", ");
-			} else {
-				add_to_string(&ac, "Accept-Charset: ");
-			}
-			add_to_string(&ac, cs);
-		}
-
+	for (i = 0; (cs = get_cp_mime_name(i)); i++) {
 		if (ac.length) {
-			add_crlf_to_string(&ac);
-		}
-
-		/* Never freed until exit(), if you found a  better solution,
-		 * let us now ;)
-		 * Do not use mem_alloc() here. */
-		accept_charset = malloc(ac.length + 1);
-		if (accept_charset) {
-			strcpy(accept_charset, ac.source);
+			add_to_string(&ac, ", ");
 		} else {
-			accept_charset = "";
+			add_to_string(&ac, "Accept-Charset: ");
 		}
-
-		done_string(&ac);
+		add_to_string(&ac, cs);
 	}
+
+	if (ac.length) {
+		add_crlf_to_string(&ac);
+	}
+
+	/* Never freed until exit(), if you found a  better solution,
+	 * let us now ;)
+	 * Do not use mem_alloc() here. */
+	accept_charset = malloc(ac.length + 1);
+	if (accept_charset) {
+		strcpy(accept_charset, ac.source);
+	} else {
+		accept_charset = "";
+	}
+
+	done_string(&ac);
 }
 
 

@@ -1,0 +1,107 @@
+			Introduction to the World of ELinks
+
+The goal of this introduction is to explain the basic concepts in ELinks, give
+an overview of how to get started and serve as an entry point to many of the
+(undocumented) features of ELinks. It won't tell you all the details, but
+should hopefully give you an idea of how things work and make it possible for
+you to even figure out how to go further.
+
+Allthough ELinks is text-based, the user interface has many of interaction
+methods normally found in graphical environments. There are menus, dialogs
+with buttons and hierarchic list boxes with folders. Care has been taken to
+make the interaction between various dialogs consistent, so the controls will
+quickly become familiar to new users.
+
+The user interface can be controlled using both mouse and keyboard, but
+currently it is only possible to configure keybindings. Looking back, the
+key-controls have been more advanced than the mouse support, but during the
+0.10 prereleases the mouse support has been much improved. You will now find
+find stuff like contextual menus when right-clicking in different document
+zones.
+
+
+Overview of the User Interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The most important dialogs, that you will meet, include the Main, Link and Tab
+menus and the different managers. The menus serve as entry points to the
+actions available from different contexts, while the managers let you check
+the state and control the various subsystems, such as loaded cookies and the
+global history. The utility menus and the manager tools are investigated
+further below.
+
+The document viewer in ELinks provides a feature-rich set of ways to browse
+documents. That is, multiple options exist for navigating, searching and
+displaying documents and you will hopefully figure in time what works best for
+you. The basic browsing possibilities are presented below.
+
+ELinks is highly configurable, so if there is something that you would like to
+change it is most likely possible. The best overview of the many options are
+given in the elinks.conf(5) man page. Keybindings are discussed in the
+elinkskeys(5) man page. It is not always up-to-date, so you should also check
+the keybinding manager and the overview of all the configured keybindings
+given in the Help -> Keys dialog. The Keys dialogs serves as a good
+introduction to the most common keybindings.
+
+
+The Main, Link and Tab Menus
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Main Menu gives you access to many of the features of ELinks via submenus
+and serves as a good entry point for performing actions on the different
+objects of interest such as links, documents and tabs. The Link menu and Tab
+menus are more specialized and targeted to a specific context, such as link
+handling or managing the tab bar. Actually the Link Menu is accessible from
+the Main Menu as a submenu.
+
+Once you have familiarized yourself with the menus you will have a good chance
+at gradually learning the most common keybinding, since all the configured
+keybindings are shown as right aligned text. Menu entries can also be quickly
+accessed using hotkeys. Hotkeys appear highlighted in the menu entry text. For
+example the key-combo: "<Alt>-v i" will open the document info dialog
+accessible from the View sub menu in the Main menu.
+
+
+Note: This is still a work in progress and from here on an below everything is
+marked TODO!
+
+
+The Managers
+~~~~~~~~~~~~
+
+The managers let you control the state of subsystems, such as cookies and the
+global history.
+
+List boxes and buttons.
+
+
+Useful Document Display Options
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Toggling color modes, plain/html and image link rendering.
+
+
+Navigation
+~~~~~~~~~~
+
+ELinks provides various ways to navigate documents.
+
+ - Link Oriented Navigation:
+   Directional and Up/Down.
+
+ - Cursor Routing
+
+ - Mouse?
+
+
+Searching (TODO)
+~~~~~~~~~
+
+ - Text searching using the normal search dialog
+
+ - Incremental document text searching
+
+ - Link searching
+
+
+$Id: introduction.txt,v 1.1 2004/12/21 23:34:32 jonas Exp $

@@ -5,16 +5,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-10 10:24+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-11-11 21:00+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Carles Sadurní Anguita <isard@ctv.es>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
-#: src/bfu/hierbox.c:215
+#: src/bfu/hierbox.c:213
 msgid "Close"
 msgstr "Tancar"
 
@@ -40,19 +40,19 @@ msgstr "S'hi esperava un nombre"
 #: src/dialogs/info.c:48 src/dialogs/info.c:75 src/dialogs/info.c:95
 #: src/dialogs/info.c:122 src/dialogs/info.c:188 src/dialogs/info.c:208
 #: src/dialogs/menu.c:533 src/dialogs/menu.c:544 src/dialogs/menu.c:575
-#: src/dialogs/mime.c:165 src/dialogs/options.c:182 src/dialogs/options.c:257
+#: src/dialogs/mime.c:165 src/dialogs/options.c:189 src/dialogs/options.c:264
 #: src/globhist/dialogs.c:208 src/globhist/dialogs.c:379
 #: src/protocol/protocol.c:60 src/protocol/user.c:157 src/protocol/user.c:173
 #: src/sched/download.c:450 src/sched/download.c:526 src/sched/download.c:552
-#: src/sched/download.c:825 src/sched/error.c:40 src/sched/session.c:395
-#: src/sched/session.c:1207 src/sched/session.c:1224 src/sched/session.c:1248
-#: src/scripting/lua/core.c:383 src/scripting/lua/core.c:464
-#: src/scripting/lua/core.c:571 src/scripting/lua/core.c:697
-#: src/viewer/text/form.c:659 src/viewer/text/search.c:824
+#: src/sched/download.c:827 src/sched/error.c:40 src/sched/session.c:395
+#: src/sched/session.c:1214 src/sched/session.c:1231 src/sched/session.c:1255
+#: src/scripting/lua/core.c:384 src/scripting/lua/core.c:467
+#: src/scripting/lua/core.c:574 src/scripting/lua/core.c:700
+#: src/viewer/text/form.c:652 src/viewer/text/search.c:824
 #: src/viewer/text/search.c:850 src/viewer/text/search.c:856
-#: src/viewer/text/search.c:878 src/viewer/text/search.c:1088
-#: src/viewer/text/search.c:1099 src/viewer/text/textarea.c:269
-#: src/viewer/text/view.c:731 src/viewer/text/view.c:1417
+#: src/viewer/text/search.c:878 src/viewer/text/search.c:1044
+#: src/viewer/text/search.c:1055 src/viewer/text/textarea.c:269
+#: src/viewer/text/view.c:729 src/viewer/text/view.c:1414
 msgid "OK"
 msgstr "D'acord"
 
@@ -136,13 +136,13 @@ msgstr ""
 #: src/config/dialogs.c:309 src/config/dialogs.c:380 src/config/dialogs.c:501
 #: src/config/dialogs.c:579 src/dialogs/auth.c:80 src/dialogs/edit.c:103
 #: src/dialogs/menu.c:533 src/dialogs/menu.c:544 src/dialogs/menu.c:575
-#: src/dialogs/mime.c:166 src/dialogs/options.c:184 src/dialogs/options.c:258
-#: src/sched/download.c:741 src/sched/download.c:1224
-#: src/sched/download.c:1233 src/sched/download.c:1260
-#: src/sched/download.c:1272 src/scripting/lua/core.c:384
-#: src/scripting/lua/core.c:465 src/scripting/lua/core.c:697
-#: src/viewer/text/search.c:1088 src/viewer/text/search.c:1099
-#: src/viewer/text/view.c:731
+#: src/dialogs/mime.c:166 src/dialogs/options.c:191 src/dialogs/options.c:265
+#: src/sched/download.c:743 src/sched/download.c:1226
+#: src/sched/download.c:1235 src/sched/download.c:1262
+#: src/sched/download.c:1274 src/scripting/lua/core.c:385
+#: src/scripting/lua/core.c:468 src/scripting/lua/core.c:700
+#: src/viewer/text/search.c:1044 src/viewer/text/search.c:1055
+#: src/viewer/text/view.c:729
 msgid "Cancel"
 msgstr "Anul·lació"
 
@@ -236,7 +236,7 @@ msgstr "Afegir"
 #: src/bookmarks/dialogs.c:587 src/globhist/dialogs.c:444
 #: src/viewer/text/search.c:821 src/viewer/text/search.c:847
 #: src/viewer/text/search.c:853 src/viewer/text/search.c:874
-#: src/viewer/text/search.c:1098
+#: src/viewer/text/search.c:1054
 msgid "Search"
 msgstr "Cercar"
 
@@ -258,7 +258,7 @@ msgstr "Error mentre escrivia al connector"
 msgid "Unknown option %s"
 msgstr "Connexions"
 
-#: src/config/conf.c:604
+#: src/config/conf.c:605
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -266,7 +266,7 @@ msgid ""
 "## and all your formatting, own comments etc will be kept as-is.\n"
 msgstr ""
 
-#: src/config/conf.c:612
+#: src/config/conf.c:613
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -277,7 +277,7 @@ msgid ""
 "## own comments and so on will be kept as-is.\n"
 msgstr ""
 
-#: src/config/conf.c:622
+#: src/config/conf.c:623
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so, but keep in mind that this file is overwritten\n"
@@ -285,38 +285,63 @@ msgid ""
 "## luck with your formatting and own comments then, so beware.\n"
 msgstr ""
 
-#: src/config/conf.c:635
+#: src/config/conf.c:634
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 
-#: src/config/conf.c:650
+#: src/config/conf.c:649
 msgid "Automatically saved options\n"
 msgstr ""
 
-#: src/config/conf.c:664
+#: src/config/conf.c:663
 msgid "Automatically saved keybindings\n"
 msgstr ""
 
-#: src/config/conf.c:706
+#: src/config/conf.c:701
+#, fuzzy
+msgid "Secure file error"
+msgstr "FTP file error"
+
+#: src/config/conf.c:707
+#, fuzzy
+msgid "Cannot read the file"
+msgstr "Error mentre escrivia el fitxer"
+
+#: src/config/conf.c:710
+#, fuzzy
+msgid "Cannot stat the file"
+msgstr "Error mentre escrivia el fitxer"
+
+#: src/config/conf.c:713
+#, fuzzy
+msgid "Cannot access the file"
+msgstr "Error mentre escrivia el fitxer"
+
+#: src/config/conf.c:716
+#, fuzzy
+msgid "Cannot create temp file"
+msgstr "Error mentre escrivia el fitxer"
+
+#: src/config/conf.c:719
+#, fuzzy
+msgid "Cannot rename the file"
+msgstr "Error mentre escrivia el fitxer"
+
+#: src/config/conf.c:722
 msgid "File saving disabled by option"
 msgstr ""
 
-#: src/config/conf.c:709 src/sched/error.c:44
+#: src/config/conf.c:725 src/sched/error.c:44
 msgid "Out of memory"
 msgstr "Memòria exhaurida"
 
-#: src/config/conf.c:712
+#: src/config/conf.c:728
 #, fuzzy
 msgid "Cannot write the file"
 msgstr "Error mentre escrivia el fitxer"
-
-#: src/config/conf.c:715
-#, fuzzy
-msgid "Secure open failed"
-msgstr "Error mentre obria el fitxer"
 
 #: src/config/dialogs.c:40
 msgid "Config error"
@@ -368,8 +393,8 @@ msgid "Bad option value."
 msgstr ""
 
 #: src/config/dialogs.c:208 src/config/dialogs.c:308 src/dialogs/edit.c:92
-#: src/scripting/lua/core.c:379 src/scripting/lua/core.c:380
-#: src/scripting/lua/core.c:460
+#: src/scripting/lua/core.c:380 src/scripting/lua/core.c:381
+#: src/scripting/lua/core.c:463
 msgid "Name"
 msgstr "Nom"
 
@@ -418,8 +443,8 @@ msgstr "Esborrar extensions"
 msgid "Option manager"
 msgstr "Agenda"
 
-#: src/config/dialogs.c:408 src/config/dialogs.c:606 src/dialogs/options.c:183
-#: src/sched/download.c:1222 src/sched/download.c:1258
+#: src/config/dialogs.c:408 src/config/dialogs.c:606 src/dialogs/options.c:190
+#: src/sched/download.c:1224 src/sched/download.c:1260
 msgid "Save"
 msgstr "Desar"
 
@@ -833,73 +858,73 @@ msgstr "Error mentre escrivia al connector"
 msgid "Unrecognised action (internal error)"
 msgstr ""
 
-#: src/config/options.c:724 src/config/options.c:748 src/config/opttypes.c:38
+#: src/config/options.c:721 src/config/options.c:745 src/config/opttypes.c:38
 msgid "Parameter expected"
 msgstr ""
 
-#: src/config/options.c:749
+#: src/config/options.c:746
 msgid "Too many parameters"
 msgstr ""
 
-#: src/config/options.c:754
+#: src/config/options.c:751
 #, fuzzy
 msgid "error"
 msgstr "Error"
 
-#: src/config/options.c:756 src/sched/error.c:45
+#: src/config/options.c:753 src/sched/error.c:45
 msgid "Host not found"
 msgstr "No s'ha trobat la màquina"
 
-#: src/config/options.c:770
+#: src/config/options.c:767
 #, fuzzy
 msgid "Resolver error"
 msgstr "Error mentre desava"
 
-#: src/config/options.c:792
+#: src/config/options.c:789
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr ""
 
-#: src/config/options.c:832
+#: src/config/options.c:829
 msgid "Template option folder"
 msgstr ""
 
-#: src/config/options.c:855
+#: src/config/options.c:852
 #, c-format
 msgid "(default: %ld)"
 msgstr ""
 
-#: src/config/options.c:860 src/config/options.c:884
+#: src/config/options.c:857 src/config/options.c:881
 #, c-format
 msgid "(default: \"%s\")"
 msgstr ""
 
-#: src/config/options.c:865
+#: src/config/options.c:862
 #, c-format
 msgid "(alias for %s)"
 msgstr ""
 
-#: src/config/options.c:870
+#: src/config/options.c:867
 #, c-format
 msgid "(default: %s)"
 msgstr ""
 
-#: src/config/options.c:875
+#: src/config/options.c:872
 #, c-format
 msgid "(default: #%06x)"
 msgstr ""
 
-#: src/config/options.c:1004
+#: src/config/options.c:997
 msgid "Configuration options:\n"
 msgstr ""
 
-#: src/config/options.c:1007
+#: src/config/options.c:1000
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
 
-#: src/config/options.c:1008
+#: src/config/options.c:1001
 msgid "Options:\n"
 msgstr ""
 
@@ -1393,7 +1418,7 @@ msgstr "Àrea de text"
 msgid "Invert the fore- and background color so the link stands out."
 msgstr ""
 
-#: src/config/options.inc:220 src/dialogs/options.c:179
+#: src/config/options.inc:220 src/dialogs/options.c:186
 msgid "Underline"
 msgstr ""
 
@@ -2339,7 +2364,7 @@ msgid ""
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
 
-#: src/config/options.inc:801 src/dialogs/options.c:176
+#: src/config/options.inc:801 src/dialogs/options.c:183
 msgid "Restrict frames in cp850/852"
 msgstr "Restringir marcs als de cp850/852"
 
@@ -2627,7 +2652,7 @@ msgid "Dialog text colors."
 msgstr ""
 
 #: src/config/options.inc:1059 src/config/options.inc:1480
-#: src/viewer/text/link.c:1053
+#: src/viewer/text/link.c:1049
 msgid "Checkbox"
 msgstr "Selecció"
 
@@ -2661,7 +2686,7 @@ msgid "Dialog selected button colors."
 msgstr ""
 
 #: src/config/options.inc:1107 src/config/options.inc:1528
-#: src/viewer/text/link.c:1059
+#: src/viewer/text/link.c:1055
 msgid "Text field"
 msgstr "Camp de text"
 
@@ -3408,7 +3433,7 @@ msgid "You are nowhere!"
 msgstr "No et trobes enlloc!"
 
 #: src/dialogs/document.c:65 src/dialogs/edit.c:96
-#: src/scripting/lua/core.c:381
+#: src/scripting/lua/core.c:382
 msgid "URL"
 msgstr "URL"
 
@@ -3895,66 +3920,66 @@ msgstr "Tipus de contingut"
 msgid "No extensions"
 msgstr "No hi ha extensions"
 
-#: src/dialogs/options.c:155
+#: src/dialogs/options.c:164
 msgid "Terminal options"
 msgstr "Opcions del terminal"
 
-#: src/dialogs/options.c:162
+#: src/dialogs/options.c:169
 msgid "Frame handling:"
 msgstr ""
 
-#: src/dialogs/options.c:163
+#: src/dialogs/options.c:170
 msgid "No frames"
 msgstr "Sense marcs"
 
-#: src/dialogs/options.c:164
+#: src/dialogs/options.c:171
 msgid "VT 100 frames"
 msgstr "Marcs VT 100"
 
-#: src/dialogs/options.c:165
+#: src/dialogs/options.c:172
 msgid "Linux or OS/2 frames"
 msgstr "Marcs Linux o OS/2"
 
-#: src/dialogs/options.c:166
+#: src/dialogs/options.c:173
 msgid "KOI8-R frames"
 msgstr "Marcs KOI8-R"
 
-#: src/dialogs/options.c:168
+#: src/dialogs/options.c:175
 #, fuzzy
 msgid "Color mode:"
 msgstr "Color"
 
-#: src/dialogs/options.c:169
+#: src/dialogs/options.c:176
 msgid "No colors (mono)"
 msgstr ""
 
-#: src/dialogs/options.c:170
+#: src/dialogs/options.c:177
 #, fuzzy
 msgid "16 colors"
 msgstr "Àrea de text"
 
-#: src/dialogs/options.c:172
+#: src/dialogs/options.c:179
 #, fuzzy
 msgid "256 colors"
 msgstr "Àrea de text"
 
-#: src/dialogs/options.c:175
+#: src/dialogs/options.c:182
 msgid "Use ^[[11m"
 msgstr "Usar ^[[11m"
 
-#: src/dialogs/options.c:177
+#: src/dialogs/options.c:184
 msgid "Block the cursor"
 msgstr "cursor de bloc"
 
-#: src/dialogs/options.c:178
+#: src/dialogs/options.c:185
 msgid "Transparency"
 msgstr ""
 
-#: src/dialogs/options.c:180
+#: src/dialogs/options.c:187
 msgid "UTF-8 I/O"
 msgstr ""
 
-#: src/dialogs/options.c:249
+#: src/dialogs/options.c:256
 #, fuzzy
 msgid "Resize terminal"
 msgstr "Modificació de les dimensions del ~terminal"
@@ -4137,13 +4162,13 @@ msgstr ""
 msgid "connect() failed: %d (%s)"
 msgstr ""
 
-#: src/lowlevel/select.c:341
+#: src/lowlevel/select.c:339
 #, c-format
 msgid "select() failed: %d (%s)"
 msgstr ""
 
 #. Infinite loop prevention.
-#: src/lowlevel/select.c:344
+#: src/lowlevel/select.c:342
 #, c-format
 msgid "%d select() failures."
 msgstr ""
@@ -4461,7 +4486,7 @@ msgstr ""
 msgid "Abort"
 msgstr "Avortament"
 
-#: src/sched/download.c:447 src/sched/download.c:523 src/sched/download.c:821
+#: src/sched/download.c:447 src/sched/download.c:523 src/sched/download.c:823
 msgid "Download error"
 msgstr "Error de descàrrega"
 
@@ -4485,12 +4510,12 @@ msgid ""
 "%s"
 msgstr "Descarregar imat~ge"
 
-#: src/sched/download.c:730
+#: src/sched/download.c:732
 #, fuzzy
 msgid "File exists"
 msgstr "~Extensions de fitxers"
 
-#: src/sched/download.c:731
+#: src/sched/download.c:733
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -4500,60 +4525,60 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/sched/download.c:738
+#: src/sched/download.c:740
 msgid "Save under the alternative name"
 msgstr ""
 
-#: src/sched/download.c:739
+#: src/sched/download.c:741
 msgid "Overwrite the original file"
 msgstr ""
 
-#: src/sched/download.c:740
+#: src/sched/download.c:742
 msgid "Resume download of the original file"
 msgstr ""
 
-#: src/sched/download.c:822
+#: src/sched/download.c:824
 #, fuzzy, c-format
 msgid ""
 "Could not create file '%s':\n"
 "%s"
 msgstr "No s'ha pogut crear el fitxer"
 
-#: src/sched/download.c:1216 src/sched/download.c:1227
+#: src/sched/download.c:1218 src/sched/download.c:1229
 msgid "Unknown type"
 msgstr "Tipus desconegut"
 
-#: src/sched/download.c:1217
+#: src/sched/download.c:1219
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 
-#: src/sched/download.c:1223 src/sched/download.c:1232
-#: src/sched/download.c:1259 src/sched/download.c:1271
+#: src/sched/download.c:1225 src/sched/download.c:1234
+#: src/sched/download.c:1261 src/sched/download.c:1273
 msgid "Display"
 msgstr "Mostrar"
 
-#: src/sched/download.c:1228
+#: src/sched/download.c:1230
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 
-#: src/sched/download.c:1250 src/sched/download.c:1263
+#: src/sched/download.c:1252 src/sched/download.c:1265
 msgid "What to do?"
 msgstr "Què en fem?"
 
-#: src/sched/download.c:1251
+#: src/sched/download.c:1253
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
 
-#: src/sched/download.c:1257 src/sched/download.c:1270
+#: src/sched/download.c:1259 src/sched/download.c:1272
 msgid "Open"
 msgstr "Obrir"
 
-#: src/sched/download.c:1264
+#: src/sched/download.c:1266
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4720,15 +4745,15 @@ msgstr "Voleu enviar les dades del formulari a la URL"
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Voleu reenviar les dades del formulari a la URL"
 
-#: src/sched/session.c:661 src/sched/session.c:1212 src/sched/session.c:1232
+#: src/sched/session.c:661 src/sched/session.c:1219 src/sched/session.c:1239
 msgid "Warning"
 msgstr "Alerta"
 
-#: src/sched/session.c:1202
+#: src/sched/session.c:1209
 msgid "Welcome"
 msgstr "Benvingut/da"
 
-#: src/sched/session.c:1203
+#: src/sched/session.c:1210
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -4737,7 +4762,7 @@ msgid ""
 msgstr ""
 "Premeu ESC per a veure el menú. Ajuda->Manual per a veure el manual d'usuari."
 
-#: src/sched/session.c:1213
+#: src/sched/session.c:1220
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -4748,7 +4773,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1233
+#: src/sched/session.c:1240
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -4761,24 +4786,19 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1712
-#, fuzzy
-msgid "Unknown event."
-msgstr "Tipus desconegut"
-
-#: src/scripting/lua/core.c:454
+#: src/scripting/lua/core.c:455
 msgid "User dialog"
 msgstr ""
 
-#: src/scripting/lua/core.c:568
+#: src/scripting/lua/core.c:571
 msgid "Lua Error"
 msgstr ""
 
-#: src/scripting/lua/core.c:696
+#: src/scripting/lua/core.c:699
 msgid "Lua Console"
 msgstr ""
 
-#: src/scripting/lua/core.c:696
+#: src/scripting/lua/core.c:699
 msgid "Enter expression"
 msgstr ""
 
@@ -4855,139 +4875,139 @@ msgstr ""
 msgid "URL expected after %s."
 msgstr ""
 
-#: src/viewer/text/form.c:655
+#: src/viewer/text/form.c:648
 msgid "Error while posting form"
 msgstr "Error durant la tramesa del formulari"
 
-#: src/viewer/text/form.c:656
+#: src/viewer/text/form.c:649
 #, fuzzy, c-format
 msgid "Could not get file %s: %s"
 msgstr "No ha estat possible obtenir el fitxer"
 
-#: src/viewer/text/link.c:875
+#: src/viewer/text/link.c:871
 msgid "Display ~usemap"
 msgstr "Mostrar ~usemap"
 
-#: src/viewer/text/link.c:880
+#: src/viewer/text/link.c:876
 msgid "~Follow link"
 msgstr "Seguir enllaç"
 
-#: src/viewer/text/link.c:883
+#: src/viewer/text/link.c:879
 msgid "Follow link and r~eload"
 msgstr ""
 
-#: src/viewer/text/link.c:887
+#: src/viewer/text/link.c:883
 msgid "Open in new ~window"
 msgstr "Obrir en una finestra nova"
 
-#: src/viewer/text/link.c:892
+#: src/viewer/text/link.c:888
 #, fuzzy
 msgid "Open in new ~tab"
 msgstr "Obrir en una finestra nova"
 
-#: src/viewer/text/link.c:895
+#: src/viewer/text/link.c:891
 #, fuzzy
 msgid "Open in new tab in ~background"
 msgstr "Segon pla"
 
-#: src/viewer/text/link.c:899
+#: src/viewer/text/link.c:895
 msgid "~Download link"
 msgstr "~Descarregar l'enllaç"
 
-#: src/viewer/text/link.c:903
+#: src/viewer/text/link.c:899
 msgid "~Add link to bookmarks"
 msgstr ""
 
-#: src/viewer/text/link.c:914
+#: src/viewer/text/link.c:910
 msgid "~Reset form"
 msgstr "~Refer formulari"
 
-#: src/viewer/text/link.c:919
+#: src/viewer/text/link.c:915
 msgid "~Submit form"
 msgstr "Enviar formulari"
 
-#: src/viewer/text/link.c:922
+#: src/viewer/text/link.c:918
 msgid "Submit form and rel~oad"
 msgstr ""
 
-#: src/viewer/text/link.c:926
+#: src/viewer/text/link.c:922
 msgid "Submit form and open in new ~window"
 msgstr ""
 
-#: src/viewer/text/link.c:932
+#: src/viewer/text/link.c:928
 msgid "Submit form and ~download"
 msgstr "Trametre formulari i ~descarregar"
 
-#: src/viewer/text/link.c:938
+#: src/viewer/text/link.c:934
 msgid "V~iew image"
 msgstr "Veure ~imatge"
 
-#: src/viewer/text/link.c:941
+#: src/viewer/text/link.c:937
 msgid "Download ima~ge"
 msgstr "Descarregar imat~ge"
 
-#: src/viewer/text/link.c:947
+#: src/viewer/text/link.c:943
 msgid "No link selected"
 msgstr "No heu seleccionat cap link"
 
-#: src/viewer/text/link.c:999
+#: src/viewer/text/link.c:995
 msgid "Image"
 msgstr "Imatge"
 
-#: src/viewer/text/link.c:1005
+#: src/viewer/text/link.c:1001
 msgid "Usemap"
 msgstr "Usemap"
 
-#: src/viewer/text/link.c:1025
+#: src/viewer/text/link.c:1021
 #, fuzzy
 msgid "Reset form"
 msgstr "~Refer formulari"
 
-#: src/viewer/text/link.c:1032
+#: src/viewer/text/link.c:1028
 msgid "Submit form to"
 msgstr "Enviar formulari a"
 
-#: src/viewer/text/link.c:1034
+#: src/viewer/text/link.c:1030
 msgid "Post form to"
 msgstr "Enviar (per correu) formulari a"
 
-#: src/viewer/text/link.c:1050
+#: src/viewer/text/link.c:1046
 msgid "Radio button"
 msgstr "Botó excloent"
 
-#: src/viewer/text/link.c:1056
+#: src/viewer/text/link.c:1052
 msgid "Select field"
 msgstr "Llista"
 
-#: src/viewer/text/link.c:1062
+#: src/viewer/text/link.c:1058
 msgid "Text area"
 msgstr "Àrea de text"
 
-#: src/viewer/text/link.c:1065
+#: src/viewer/text/link.c:1061
 msgid "File upload"
 msgstr "Trametre fitxer"
 
-#: src/viewer/text/link.c:1068
+#: src/viewer/text/link.c:1064
 msgid "Password field"
 msgstr "Camp de contrasenya"
 
-#: src/viewer/text/link.c:1077
+#: src/viewer/text/link.c:1073
 msgid "name"
 msgstr "nom"
 
-#: src/viewer/text/link.c:1087
+#: src/viewer/text/link.c:1083
 msgid "value"
 msgstr "valor"
 
-#: src/viewer/text/link.c:1096
+#: src/viewer/text/link.c:1092
 msgid "hit ENTER to"
 msgstr "premeu ENTER per"
 
-#: src/viewer/text/link.c:1099
+#: src/viewer/text/link.c:1095
 msgid "submit to"
 msgstr "presentar a"
 
-#: src/viewer/text/link.c:1101
+#: src/viewer/text/link.c:1097
 msgid "post to"
 msgstr "enviar a"
 
@@ -5008,32 +5028,32 @@ msgstr ""
 msgid "Search string '%s' not found"
 msgstr "No s'ha trobat la cadena"
 
-#: src/viewer/text/search.c:1067
+#: src/viewer/text/search.c:1023
 #, fuzzy
 msgid "Normal search"
 msgstr "No hi ha recerca prèvia"
 
-#: src/viewer/text/search.c:1068
+#: src/viewer/text/search.c:1024
 msgid "Regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1069
+#: src/viewer/text/search.c:1025
 msgid "Extended regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1070
+#: src/viewer/text/search.c:1026
 msgid "Case sensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1071
+#: src/viewer/text/search.c:1027
 msgid "Case insensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1087
+#: src/viewer/text/search.c:1043
 msgid "Search backward"
 msgstr "Cercar enrere"
 
-#: src/viewer/text/search.c:1087 src/viewer/text/search.c:1098
+#: src/viewer/text/search.c:1043 src/viewer/text/search.c:1054
 msgid "Search for text"
 msgstr "Cercar text"
 
@@ -5041,21 +5061,29 @@ msgstr "Cercar text"
 msgid "You can do this only on the master terminal"
 msgstr ""
 
-#: src/viewer/text/view.c:730
+#: src/viewer/text/view.c:728
 msgid "Go to link"
 msgstr "Anar a l'enllaç"
 
-#: src/viewer/text/view.c:730
+#: src/viewer/text/view.c:728
 msgid "Enter link number"
 msgstr "Introduïu número d'enllaç"
 
-#: src/viewer/text/view.c:1414
+#: src/viewer/text/view.c:1411
 msgid "Save error"
 msgstr "Error mentre desava"
 
-#: src/viewer/text/view.c:1415
+#: src/viewer/text/view.c:1412
 msgid "Error writing to file"
 msgstr "Error mentre escrivia el fitxer"
+
+#, fuzzy
+#~ msgid "Secure open failed"
+#~ msgstr "Error mentre obria el fitxer"
+
+#, fuzzy
+#~ msgid "Unknown event."
+#~ msgstr "Tipus desconegut"
 
 #~ msgid "Columns"
 #~ msgstr "Columnes"

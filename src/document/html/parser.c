@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.507 2004/10/21 20:54:22 pasky Exp $ */
+/* $Id: parser.c,v 1.508 2004/10/27 20:18:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,6 @@
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
-#include "util/fastfind.h"
 #include "util/memdebug.h"
 #include "util/memlist.h"
 #include "util/memory.h"

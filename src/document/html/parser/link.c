@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.32 2004/09/21 17:34:03 jonas Exp $ */
+/* $Id: link.c,v 1.33 2004/10/27 20:18:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,6 @@
 #include "protocol/uri.h"
 #include "util/conv.h"
 #include "util/error.h"
-#include "util/fastfind.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
 #include "util/string.h"

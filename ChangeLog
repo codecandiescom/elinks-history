@@ -1,3 +1,94 @@
+Fri Oct 22 20:15:05 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/renderer.c, document/html/parser/forms.c,
+	viewer/text/form.c, viewer/text/form.h:
+
+	Button (known as FC_BUTTON) is now a good member of the form
+	controls community! We want it to live as a regular button now
+	because there may be event hooks on it. (And I never really liked
+	magic executed on it.) 
+
+Fri Oct 22 18:49:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	s/exception/<appropriate_desc>/ for linebufless js errors too.  
+
+Fri Oct 22 18:47:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	JS_ClearPendingException() at the tail of error reported. This
+	might've helped with carrying over those exceptions, but it doesn't
+	quite work yet, seemingly.  
+
+Fri Oct 22 10:39:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/table.c:
+
+	Move code from parse_table_attributes() to new set_table_rules(),
+	reducing indentation and clarifying code.  
+
+Fri Oct 22 10:36:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/table.c:
+
+	Move code from parse_table_attributes() to new set_table_frame(),
+	reducing indentation and clarifying code.  
+
+Fri Oct 22 10:16:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/table.c:
+
+	Reduce indentation level.  
+
+Fri Oct 22 09:56:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c, src/ecmascript/spidermonkey.c,
+	src/protocol/http/README.timegm, NEWS:
+
+	Remove trailing spaces.  
+
+Fri Oct 22 07:59:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/stack.c:
+
+	Introduce kill_element() and drop two gotos.  
+
+Fri Oct 22 07:36:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Enhance error reporting to report what kind of thing it actually is,
+	and SetOptions VAROBJFIX and COMPILE_N_GO, which should improve
+	things and fix language-wise buggy behaviour. Sorry for combining
+	those two trivial patches, I'm in hurry.  
+
+Thu Oct 21 23:22:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/ecmascript.c:
+
+	If allocating vs->ecmascript doesn't work out, set
+	vs->ecmascript_fragile so that we try again the next time.  
+
+Thu Oct 21 23:18:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/ecmascript.c:
+
+	doc_view->vs->ecmascript is on-demand.  
+
+Thu Oct 21 23:11:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	In delayed_goto(), deg->vs->doc_view might get NULL.  
+
+Thu Oct 21 23:11:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Some semi-dirty document.cookie support.  
+
 Thu Oct 21 21:18:37 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/main.c:

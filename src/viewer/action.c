@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.19 2004/01/08 00:39:16 jonas Exp $ */
+/* $Id: action.c,v 1.20 2004/01/08 00:57:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,8 +199,35 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_GOTO_URL:
+goto_empty_url:
 			dialog_goto_url(ses, "");
 			break;
+
+		case ACT_GOTO_URL_CURRENT:
+		{
+			unsigned char *url;
+
+			if (!have_location(ses))
+				goto goto_empty_url;
+
+			url = get_no_post_url(cur_loc(ses)->vs.url, NULL);
+			if (!url) goto goto_empty_url;
+
+			dialog_goto_url(ses, url);
+			mem_free(url);
+			break;
+		}
+
+		case ACT_GOTO_URL_CURRENT_LINK:
+		{
+			unsigned char url[MAX_STR_LEN];
+
+			if (!get_current_link_url(ses, url, sizeof url))
+				goto goto_empty_url;
+
+			dialog_goto_url(ses, url);
+			break;
+		}
 
 		case ACT_GOTO_URL_HOME:
 			goto_url_home(ses);
@@ -397,8 +424,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_ENTER:
 		case ACT_ENTER_RELOAD:
 		case ACT_EXPAND:
-		case ACT_GOTO_URL_CURRENT:
-		case ACT_GOTO_URL_CURRENT_LINK:
 		case ACT_HOME:
 		case ACT_KILL_TO_BOL:
 		case ACT_KILL_TO_EOL:

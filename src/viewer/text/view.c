@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.343 2004/01/08 00:29:58 jonas Exp $ */
+/* $Id: view.c,v 1.344 2004/01/08 00:57:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -930,31 +930,6 @@ send_event(struct session *ses, struct term_event *ev)
 
 		/* TODO: Merge with do_action() */
 		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
-			case ACT_GOTO_URL_CURRENT: {
-				unsigned char *url;
-				struct location *loc;
-
-				if (!have_location(ses)) {
-quak:
-					dialog_goto_url(ses,"");
-					goto x;
-				}
-
-				loc = cur_loc(ses);
-				url = get_no_post_url(loc->vs.url, NULL);
-				if (url) {
-					dialog_goto_url(ses, url);
-					mem_free(url);
-				}
-				goto x;
-			}
-			case ACT_GOTO_URL_CURRENT_LINK: {
-				unsigned char url[MAX_STR_LEN];
-
-				if (!get_current_link_url(ses, url, sizeof url)) goto quak;
-				dialog_goto_url(ses, url);
-				goto x;
-			}
 			case ACT_LUA_CONSOLE:
 #ifdef HAVE_LUA
 				trigger_event_name("dialog-lua-console", ses);

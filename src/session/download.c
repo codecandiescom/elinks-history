@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.219 2004/03/22 01:08:22 jonas Exp $ */
+/* $Id: download.c,v 1.220 2004/03/22 01:18:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -617,7 +617,7 @@ finish:
 
 
 static unsigned char *
-get_temp_name(unsigned char *url)
+get_temp_name(struct uri *uri)
 {
 	struct string name;
 	unsigned char *extension;
@@ -637,7 +637,7 @@ get_temp_name(unsigned char *url)
 	add_to_string(&name, nm);
 	free(nm);
 
-	extension = get_extension_from_url(url);
+	extension = get_uri_extension(uri);
 	if (extension) {
 		add_char_to_string(&name, '.');
 		add_shell_safe_to_string(&name, extension, strlen(extension));
@@ -809,7 +809,7 @@ continue_download(void *data, unsigned char *file)
 
 	if (tq->prog) {
 		/* FIXME: get_temp_name() calls tempnam(). --Zas */
-		file = get_temp_name(struri(tq->uri));
+		file = get_temp_name(tq->uri);
 		if (!file) {
 			mem_free(codw_hop);
 			tp_cancel(tq);

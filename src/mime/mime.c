@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.40 2004/03/22 01:08:22 jonas Exp $ */
+/* $Id: mime.c,v 1.41 2004/03/22 01:18:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,10 +119,9 @@ check_encoding_type(unsigned char *extension)
 unsigned char *
 get_content_type(unsigned char *head, struct uri *uri)
 {
-	unsigned char *url = struri(uri);
 	unsigned char *extension, *ctype;
 
-	debug_get_content_type_params(head, url);
+	debug_get_content_type_params(head, struri(uri));
 
 	/* If there's one in header, it's simple.. */
 	if (head) {
@@ -147,7 +146,7 @@ get_content_type(unsigned char *head, struct uri *uri)
 	 * want to support also things like "ps.gz" - that'd never work, as we
 	 * would always compare only to "gz". */
 	/* Guess type accordingly to the extension */
-	extension = get_extension_from_url(url);
+	extension = get_uri_extension(uri);
 	debug_extension(extension);
 	if (extension) {
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.100 2004/03/21 22:48:31 jonas Exp $ */
+/* $Id: uri.c,v 1.101 2004/03/22 01:18:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -842,11 +842,14 @@ add_string_uri_filename_to_string(struct string *string, unsigned char *uristrin
 }
 
 unsigned char *
-get_extension_from_url(unsigned char *url)
+get_uri_extension(struct uri *uri)
 {
-	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
+	int lo = uri->protocol == PROTOCOL_FILE; /* dsep() *hint* *hint* */
+	unsigned char *url = uri->data.source;
 	unsigned char *extension = NULL;
 	int afterslash = 1;
+
+	assert(url);
 
  	for (; *url && !end_of_dir(*url); url++) {
 		if (!afterslash && !extension && *url == '.') {

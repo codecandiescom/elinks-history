@@ -449,7 +449,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.29 2005/01/03 21:51:07 pasky Exp $ */
+	/* $Id: hacking.txt,v 1.30 2005/02/28 11:25:15 zas Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -511,6 +511,31 @@ applies only if this will not affect logical division of the structure. The
 logical composition always takes precedence over this optimization, modulo
 some very rare critical structures.
 
+- Please do not use sizeof(struct item_struct_name) but instead sizeof(*item)
+  when possible:
+
+struct example {
+	int *integers;
+	void **pointers;
+}
+
+struct example *item;
+
+Prefer:
+item = mem_alloc(sizeof(*item));
+memset(item, 0, sizeof(*item));
+item->integers = mem_calloc(10, sizeof(*item->integers));
+item->pointers = mem_calloc(10, sizeof(*item->pointers));
+
+Instead of:
+item = mem_alloc(sizeof(struct example));
+memset(item, 0, sizeof(struct example));
+item->integers = mem_calloc(10, sizeof(int));
+item->pointers = mem_calloc(10, sizeof(void *));
+
+The preferred form eases futur changes in types, and maintain size vs type
+coherence.
+
 
 4, Patches
 ~~~~~~~~~~
@@ -571,4 +596,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.29 2005/01/03 21:51:07 pasky Exp $
+$Id: hacking.txt,v 1.30 2005/02/28 11:25:15 zas Exp $

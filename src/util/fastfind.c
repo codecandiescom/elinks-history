@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.55 2004/10/25 15:52:32 zas Exp $ */
+/* $Id: fastfind.c,v 1.56 2004/10/25 16:00:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -566,6 +566,7 @@ fastfind_done(struct fastfind_info *info)
 #ifdef DEBUG_FASTFIND
 	fprintf(stderr, "------ FastFind Statistics ------\n");
 	fprintf(stderr, "Comment     : %s\n", info->debug.comment);
+	fprintf(stderr, "Case        : %s\n", info->case_sensitive ? "sensitive" : "insensitive");
 	fprintf(stderr, "Uniq_chars  : %s\n", info->uniq_chars);
 	fprintf(stderr, "Uniq_chars #: %d/%d max.\n", info->uniq_chars_count, FF_MAX_CHARS);
 	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
@@ -592,6 +593,7 @@ fastfind_done(struct fastfind_info *info)
 	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search, %0.2f per iter.)\n",
 		info->debug.total_key_len, (double) info->debug.total_key_len / info->debug.searches,
 		(double) info->debug.total_key_len / info->debug.iterations);
+	fprintf(stderr, "\n");
 #endif
 
 	mem_free_if(info->pointers);

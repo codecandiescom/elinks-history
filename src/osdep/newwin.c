@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.9 2004/04/17 01:10:39 jonas Exp $ */
+/* $Id: newwin.c,v 1.10 2004/04/17 01:19:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,20 +59,20 @@ open_in_new_screen(struct terminal *term, unsigned char *exe_name,
 }
 
 struct open_in_new oinw[] = {
-	{ENV_XWIN, open_in_new_xterm, N_("~Xterm")},
-	{ENV_TWIN, open_in_new_twterm, N_("T~wterm")},
-	{ENV_SCREEN, open_in_new_screen, N_("~Screen")},
+	{ ENV_XWIN,	open_in_new_xterm,	N_("~Xterm") },
+	{ ENV_TWIN,	open_in_new_twterm,	N_("T~wterm") },
+	{ ENV_SCREEN,	open_in_new_screen,	N_("~Screen") },
 #ifdef OS2
-	{ENV_OS2VIO, open_in_new_vio, N_("~Window")},
-	{ENV_OS2VIO, open_in_new_fullscreen, N_("~Full screen")},
+	{ ENV_OS2VIO,	open_in_new_vio,	N_("~Window") },
+	{ ENV_OS2VIO,	open_in_new_fullscreen,	N_("~Full screen") },
 #endif
 #ifdef WIN32
-	{ENV_WIN32, open_in_new_win32, N_("~Window")},
+	{ ENV_WIN32,	open_in_new_win32,	N_("~Window") },
 #endif
 #ifdef BEOS
-	{ENV_BE, open_in_new_be, N_("~BeOS terminal")},
+	{ ENV_BE,	open_in_new_be,		N_("~BeOS terminal") },
 #endif
-	{0, NULL, NULL}
+	{ 0, NULL, NULL }
 };
 
 #define foreach_oinw(i, term_env) \

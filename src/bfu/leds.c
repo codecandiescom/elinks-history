@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.26 2003/10/30 16:15:14 zas Exp $ */
+/* $Id: leds.c,v 1.27 2003/11/17 10:34:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,8 +78,9 @@ done_leds(struct module *module)
 }
 
 void
-draw_leds(struct terminal *term)
+draw_leds(struct session *ses)
 {
+	struct terminal *term = ses->tab->term;
 	/* We need a working copy because changing members of @led_color is
 	 * bad since we might not be the only user. */
 	struct color_pair color;
@@ -154,7 +155,7 @@ sync_leds(void)
 static void
 redraw_leds(void *xxx)
 {
-	struct terminal *term;
+	struct session *ses;
 
 	redraw_timer = install_timer(100, redraw_leds, NULL);
 
@@ -166,9 +167,9 @@ redraw_leds(void *xxx)
 		return;
 	}
 
-	foreach (term, terminals) {
-		redraw_terminal(term);
-		draw_leds(term);
+	foreach (ses, sessions) {
+		redraw_terminal(ses->tab->term);
+		draw_leds(ses);
 	}
 	drawing = 0;
 }

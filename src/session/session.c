@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.237 2003/11/17 02:04:21 miciah Exp $ */
+/* $Id: session.c,v 1.238 2003/11/17 10:34:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -378,7 +378,7 @@ title_set:
 
 	redraw_from_window(ses->tab);
 #ifdef USE_LEDS
-	draw_leds(term);
+	draw_leds(ses);
 #endif
 }
 

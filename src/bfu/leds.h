@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.9 2003/10/26 14:30:51 jonas Exp $ */
+/* $Id: leds.h,v 1.10 2003/11/17 10:34:19 pasky Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -33,7 +33,7 @@ struct led {
 
 extern struct module leds_module;
 
-void draw_leds(struct terminal *);
+void draw_leds(struct session *ses);
 
 struct led *register_led(int);
 void unregister_led(struct led *);

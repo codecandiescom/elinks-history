@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.26 2002/09/09 15:58:43 zas Exp $ */
+/* $Id: file.c,v 1.27 2002/10/13 19:01:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,9 +412,9 @@ dir:
 		fl = 0;
 
 		add_to_str(&file, &fl, "<html>\n<head><title>");
-		add_to_str(&file, &fl, name);
+		add_htmlesc_str(&file, &fl, name, strlen(name));
 		add_to_str(&file, &fl, "</title></head>\n<body>\n<h2>Directory ");
-		add_to_str(&file, &fl, name);
+		add_htmlesc_str(&file, &fl, name, strlen(name));
 		add_to_str(&file, &fl, "</h2>\n<pre>");
 
 		while ((de = readdir(d))) {

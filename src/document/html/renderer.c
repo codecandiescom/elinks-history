@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.518 2004/12/29 15:43:31 zas Exp $ */
+/* $Id: renderer.c,v 1.519 2004/12/29 20:32:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1576,10 +1576,8 @@ format_html_part(unsigned char *start, unsigned char *end,
 		if (item) { /* We found it in cache, so just copy and return. */
 			part = mem_alloc(sizeof(struct part));
 			if (part)  {
-				memcpy(part,
-				       &((struct table_cache_entry *) item->value)->part,
-			       	       sizeof(struct part));
-
+				copy_struct(part, &((struct table_cache_entry *)
+						    item->value)->part);
 				return part;
 			}
 		}

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.71 2005/03/05 22:14:32 zas Exp $ */
+/* $Id: conv.c,v 1.72 2005/03/27 21:51:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -450,7 +450,7 @@ sanitize_title(unsigned char *title)
 	if (!len) return;
 
 	while (len--) {
-		if (title[len] < ' ')
+		if (title[len] < ' ' || title[len] == NBSP_CHAR)
 			title[len] = ' ';
 	}
 	trim_chars(title, ' ', NULL);

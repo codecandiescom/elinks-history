@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.14 2003/07/20 15:43:10 pasky Exp $ */
+/* $Id: uri.h,v 1.15 2003/07/20 15:43:46 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -28,17 +28,6 @@ struct uri {
 	unsigned char *post;
 };
 
-/* For use in get_uri_string(). */
-enum uri_component {
-	URI_PROTOCOL	= (1 << 0),
-	URI_USER	= (1 << 1),
-	URI_PASSWORD	= (1 << 2),
-	URI_HOST	= (1 << 3),
-	URI_PORT	= (1 << 4),
-	URI_DATA	= (1 << 5),
-	URI_POST	= (1 << 6),
-};
-
 /* Expects that uri->protocol contains the uri string. */
 /* Returns the length of the parsed uri or 0 if some error was found. */
 int parse_uri(struct uri *uri, unsigned char *uristring);
@@ -53,11 +42,24 @@ end_of_dir(unsigned char c)
 	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
 }
 
+
+/* For use in get_uri_string(). */
+enum uri_component {
+	URI_PROTOCOL	= (1 << 0),
+	URI_USER	= (1 << 1),
+	URI_PASSWORD	= (1 << 2),
+	URI_HOST	= (1 << 3),
+	URI_PORT	= (1 << 4),
+	URI_DATA	= (1 << 5),
+	URI_POST	= (1 << 6),
+};
+
 /* This function recreates the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for
  * construction of the URI string.  */
 /* Returns the new URI string or NULL upon an error. */
 unsigned char *get_uri_string(struct uri *uri, int components);
+
 
 unsigned char *join_urls(unsigned char *, unsigned char *);
 unsigned char *translate_url(unsigned char *, unsigned char *);

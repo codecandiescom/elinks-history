@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.10 2002/11/29 18:56:08 zas Exp $ */
+/* $Id: cmdline.c,v 1.11 2002/12/05 19:53:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@ _parse_options(int argc, unsigned char *argv[], struct list_head *opt)
 			unsigned char *argname = &argv[-1][1];
 			unsigned char *oname = stracpy(argname);
 
-			if (!oname) return NULL;
+			if (!oname) continue;
 
 			/* Treat --foo same as -foo. */
 			if (argname[0] == '-') argname++;
@@ -41,8 +41,9 @@ _parse_options(int argc, unsigned char *argv[], struct list_head *opt)
 
 			mem_free(oname);
 
-			if (!option)
-				continue;
+			if (!option) {
+				goto unknown_option;
+			}
 
 			if (option_types[option->type].cmdline
 			    && !(option->flags & OPT_HIDDEN)) {
@@ -56,22 +57,18 @@ _parse_options(int argc, unsigned char *argv[], struct list_head *opt)
 
 					return NULL;
 				}
-
-				goto found;
+			} else {
+				goto unknown_option;
 			}
-
-			goto unknown_option;
 
 		} else if (!location) {
 			location = argv[-1];
 
 		} else {
-unknown_option:		fprintf(stderr, "Unknown option %s\n", argv[-1]);
-
+unknown_option:	
+			fprintf(stderr, "Unknown option %s\n", argv[-1]);
 			return NULL;
 		}
-
-found: ;
 	}
 
 	return location ? location : (unsigned char *) "";

@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.4 2003/07/27 15:24:09 jonas Exp $ */
+/* $Id: draw.h,v 1.5 2003/07/27 17:23:53 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -45,7 +45,12 @@ void set_line(struct terminal *, int, int, int, chr *);
 void fill_area(struct terminal *, int, int, int, int, unsigned);
 void draw_frame(struct terminal *, int, int, int, int, unsigned, int);
 void print_text(struct terminal *, int, int, int, unsigned char *, unsigned);
-void set_cursor(struct terminal *, int, int, int, int);
+
+/* Updates the terminals cursor position. When @blockable is set the
+ * block_cursor terminal option decides whether the cursor should be put at the
+ * bottom right corner of the screen. */
+void set_cursor(struct terminal *term, int x, int y, int blockable);
+
 void clear_terminal(struct terminal *);
 
 #endif

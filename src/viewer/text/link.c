@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.16 2003/07/27 15:49:51 jonas Exp $ */
+/* $Id: link.c,v 1.17 2003/07/27 17:23:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,15 +184,19 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 					    || (link->type == L_BUTTON && i == 2)
 					    || ((link->type == L_FIELD ||
 						 link->type == L_AREA) && i == q)) {
-						int xx = x, yy = y;
+						int blockable = 0;
 
 						if (link->type != L_FIELD && link->type != L_AREA) {
 							if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
-								xx = xp + xw - 1;
-								yy = yp + yw - 1;
+								/* Temp. sanity check for set_cursor rewrite.
+								 * The +1 make up for what seems to be an
+								 * old off by one error. --jonas */
+								assert(xp + xw == t->x && yp + yw + 1 == t->y);
+								blockable = 1;
 							}
 						}
-						set_cursor(t, x, y, xx, yy);
+
+						set_cursor(t, x, y, blockable);
 						set_window_ptr(get_current_tab(t), x, y);
 						f = 1;
 					}

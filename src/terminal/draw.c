@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.9 2003/07/27 15:24:09 jonas Exp $ */
+/* $Id: draw.c,v 1.10 2003/07/27 17:23:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,6 +57,7 @@ set_only_char(struct terminal *t, int x, int y, unsigned c)
 	t->dirty = 1;
 }
 
+/* FIXME it seems we can just get rid of the @x args. */
 void
 set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
@@ -177,28 +178,27 @@ print_text(struct terminal *t, int x, int y, int l,
 }
 
 
-/* (altx,alty) is alternative location, when block_cursor terminal option is
- * set. It is usually bottom right corner of the screen. */
 void
-set_cursor(struct terminal *term, int x, int y, int altx, int alty)
+set_cursor(struct terminal *term, int x, int y, int blockable)
 {
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
-	assert(altx >= 0 && altx < term->x && alty >= 0 && alty < term->y);
 	if_assert_failed { return; }
 
-	if (get_opt_bool_tree(term->spec, "block_cursor")) {
-		x = altx;
-		y = alty;
+	if (blockable && get_opt_bool_tree(term->spec, "block_cursor")) {
+		x = term->x - 1;
+		y = term->y - 1;
 	}
 
-	term->cx = x;
-	term->cy = y;
-	term->dirty = 1;
+	if (term->cx != x || term->cy != y) {
+		term->cx = x;
+		term->cy = y;
+		term->dirty = 1;
+	}
 }
 
 void
 clear_terminal(struct terminal *term)
 {
 	fill_area(term, 0, 0, term->x, term->y, ' ');
-	set_cursor(term, 0, 0, 0, 0);
+	set_cursor(term, 0, 0, 0);
 }

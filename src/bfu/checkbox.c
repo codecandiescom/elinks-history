@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.32 2003/07/24 11:48:13 miciah Exp $ */
+/* $Id: checkbox.c,v 1.33 2003/07/27 17:23:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,8 +131,7 @@ display_checkbox(struct widget_data *di, struct dialog_data *dlg, int sel)
 				get_bfu_color(term, "dialog.checkbox"));
 	}
 	if (sel) {
-		set_cursor(term, di->x + 1, di->y, di->x + 1,
-				di->y);
+		set_cursor(term, di->x + 1, di->y, 0);
 		set_window_ptr(dlg->win, di->x, di->y);
 	}
 }

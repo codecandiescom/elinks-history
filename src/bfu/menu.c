@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.79 2003/07/25 13:21:10 pasky Exp $ */
+/* $Id: menu.c,v 1.80 2003/07/27 17:23:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,7 +274,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			co = menu_selected_color;
 			hkco = menu_selected_hotkey_color;
 
-			set_cursor(term, menu->x + 1, s, term->x - 1, term->y - 1);
+			set_cursor(term, menu->x + 1, s, 1);
 			set_window_ptr(menu->win, menu->x + menu->xw, s);
 			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, co);
 		}
@@ -663,7 +663,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 			fill_area(term, p, 0, 2, 1, co);
 			fill_area(term, p + tmptextlen + 2, 0, 2, 1, co);
 			menu->sp = p;
-			set_cursor(term, p, 0, term->x - 1, term->y - 1);
+			set_cursor(term, p, 0, 1);
 			set_window_ptr(menu->win, p, 1);
 		}
 

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.37 2003/06/27 20:42:37 zas Exp $ */
+/* $Id: inpfield.c,v 1.38 2003/07/27 17:23:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,7 +271,7 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 	if (sel) {
 		int x = di->x + di->cpos - di->vpos;
 
-		set_cursor(term, x, di->y, x, di->y);
+		set_cursor(term, x, di->y, 0);
 		set_window_ptr(dlg->win, di->x, di->y);
 	}
 }

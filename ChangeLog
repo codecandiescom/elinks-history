@@ -1,3 +1,72 @@
+Sun Jun 30 21:46:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/conf-links2elinks.awk:
+
+	Gawk script by Miciah for conversion links -> elinks config file
+	format.  
+
+Sun Jun 30 21:44:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* elinkskeys.5:
+
+	Updated bind command syntax.  
+
+Sun Jun 30 21:43:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: keybind-full.conf, user-keybindings.example:
+
+	Renamed user-keybindings.example to keybind-full.conf, updated bind
+	command syntax.  
+
+Sun Jun 30 21:30:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: keybind.conf, user.example:
+
+	Renamed user.example to keybind.conf, kept only keybindings, whose
+	syntax was updated.  
+
+Sun Jun 30 21:21:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* INSTALL:
+
+	Some tips about reducing elinks binary size.  
+
+Sun Jun 30 21:11:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/config/kbdbind.c, src/config/kbdbind.h,
+	src/document/view.c:
+
+	Introduced actions jump-to-link and follow-link, jump-to-link under
+	key 'l' (only 'L' for link menu now) - jumps to link with number
+	same as repeat count prefix. Patch by Miciah. Laalaa trala laaalaa
+	what a great music is this.. *cough* ;) 
+
+Sun Jun 30 19:50:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/hooks.lua:
+
+	Prefixes ('bookmarks') extended and stored in table, patch by
+	Matthew Mueller <donut@azstarnet.com>.  
+
+Sun Jun 30 15:18:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Added ACT_NONE "none" action (as substitute for unbind).  
+
+Sun Jun 30 15:16:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: conf.c, kbdbind.c, kbdbind.h, opttypes.c:
+
+	Introduced bind command in config file.  
+
+Sun Jun 30 11:49:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/conf.c:
+
+	Rewritten part of config file parser; now each command has own
+	parsing function.  
+
 Sat Jun 29 22:01:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/: conf.c, opttypes.c, opttypes.h:

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.50 2004/05/30 18:12:12 jonas Exp $ */
+/* $Id: dialogs.c,v 1.51 2004/05/30 22:56:23 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,6 +98,7 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 	add_format_to_string(&string, "\n%s: %s", _("Name", term), cookie->name);
 	add_format_to_string(&string, "\n%s: %s", _("Value", term), cookie->value);
 	add_format_to_string(&string, "\n%s: %s", _("Domain", term), cookie->domain);
+	add_format_to_string(&string, "\n%s: %s", _("Path", term), cookie->path);
 
 #ifdef HAVE_STRFTIME
 	if (cookie->expires) {

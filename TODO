@@ -18,70 +18,10 @@ ELusive:
 See src/elusive/TODO.
 
 
-Text HTML viewer:
-
-* Include search string in 'Search string not found' error box
-
-* Configurable highlight colour for text matched after a search
-
-
-User interface / terminal stuff:
-
-- Show selected link's title (which is specified by the title attribute) in the
-  statusbar
-
-- Support using the hardstatus line to display current page's title, URL, or
-  whatever. (The hardstatus line is a fixed line in mythical terminals which
-  GNU Screen emulates by using the last line of the terminal and people emulate
-  in XTerms by changing the XTerms' windows' titles.) This merely entails
-  sending the right escape sequences (the termcap/terminfo tsl/ts and fsl/fs
-  capabilities) for the appropriate terminals.
-
-- Copy URL to X clipboard (using X selections).
-
-
-Generic listboxes:
-
-- Easily togglable option for 'Search' in the bookmark mgr. to search
-  collapsed folders
-
-- Expand or collapse recursively and expand or collapse all folders in
-  hierarchical listboxes
-
-- Highlight marked listbox items in addition to putting asterisks next to them
-
-
-Bookmarks:
-
-- Sessions: Bookmark the current page of each tab or window under a single
-  folder.
-
-- Complementary 'open all bookmarks in folder' or 'open all marked bookmarks'
-  buttons in the bookmark mgr.
-
-- Support for bookmarked-link colour in addition to visited-link colour
-
-
 Global history:
 
 + Show any info that can be found in globhist for the selected link in the Info
   box (last-visit-time and possibly page-title)
-
-
-Options / keybindings / runtime configuration:
-
-- Improve keybinding so that it works more universally
-
-- Mouse buttonbinding ;)
-
-- Support prefixes for more bindings; candidates: goto-url-current-link,
-  add-bookmark-link, back, unback, document-info, next-frame, previous-frame,
-  tab-prev, tab-next, tab-close, zoom-frame
-
-- More tab-related bindings, such as select-tab (jump to the nth tab
-  where n is specified by the key prefix), select-other-tab (select
-  the previously selected tab), and move-tab-left and move-tab-right
-  (to change the current tab's position on the tab-bar)
 
 
 Downloads / scheduling:
@@ -89,46 +29,10 @@ Downloads / scheduling:
 - Allow multiple transfers to be queued up instead of cancelling the currently
   queued item when back is pressed
 
-- When calling external viewer on files, assign temporary files the suffix
-  appropriate to the file type (?)
-
-- Passing URL to external command (possibly make alt+[0-9] to pass current link
-  to external command (?)).
-
-- Bandwidth limiter for file downloads.
-
-
-MIME / mailcap:
-
-- Allow the output from MIME handlers to be displayed in ELinks
-
-
-Protocols / network:
-
-- HTTPS proxy support (!) (I have no idea how to do it so someone else will
-  have to; good job for a wannabe ELinks developer ;)
-
-- Optional support for meta-refresh (that is, <meta http-equiv="refresh"
-  content="5;url=http://foo.com/" />)
-
-
-Scripting:
-
-- Add Lua APIs to manipulate bookmarks and other things
-
-- Lua execution ought to be changed. It has to be done script-oriented, where
-  each script stands on his own, installs hooks handlers it wants etc.
-
-- Redesign the whole scripting interface from scratch, generalizing it at the
-  same time to multiple language backends. This should go hand-by-hand with
-  plugins interface definition
-
 
 Generic code changes:
 
 - Change msg_box to use printf-style formats
-
-- Optimize multiple _()s of the same strings by using temporary variables
 
 
 Build-time configuration / build:
@@ -142,10 +46,10 @@ Permanent goals:
 
 + Write some more documentation.. docs, a lot of docs!
 
-+ Speed optimizations
++ Speed/memory optimizations
 
 
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.58 2003/05/12 08:09:06 miciah Exp $
+$Id: TODO,v 1.59 2003/05/16 17:42:14 pasky Exp $

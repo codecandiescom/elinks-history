@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.94 2003/11/23 18:47:45 jonas Exp $ */
+/* $Id: hierbox.c,v 1.95 2003/11/23 22:48:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,15 +323,6 @@ scan_for_used(struct listbox_item *item, void *info_, int *offset)
 	if (action_info->box->ops->is_used(item)) {
 		action_info->item = item;
 		*offset = 0;
-	} else if (action_info->box->sel
-		   && action_info->item == action_info->box->sel) {
-		/* Small hack to ensure that action_info->item will end up
-		 * either being NULL if no items are being used or the first
-		 * used item found. */
-		if (!action_info->box->ops->is_used(action_info->item)) {
-			action_info->item = NULL;
-			*offset = 0;
-		}
 	}
 
 
@@ -340,6 +331,7 @@ scan_for_used(struct listbox_item *item, void *info_, int *offset)
 
 static struct hierbox_action_info *
 init_hierbox_action_info(struct listbox_data *box, struct terminal *term,
+			 struct listbox_item *item,
 			 int (*scanner)(struct listbox_item *, void *, int *))
 {
 	struct hierbox_action_info *action_info;
@@ -347,7 +339,7 @@ init_hierbox_action_info(struct listbox_data *box, struct terminal *term,
 	action_info = mem_alloc(sizeof(struct hierbox_action_info));
 	if (!action_info) return NULL;
 
-	action_info->item = box->sel;
+	action_info->item = item;;
 	action_info->term = term;
 	action_info->box = box;
 
@@ -384,7 +376,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 
 	assert(box->ops);
 
-	action_info = init_hierbox_action_info(box, term, 0);
+	action_info = init_hierbox_action_info(box, term, box->sel, NULL);
 	if (!action_info) return 0;
 
 	msg = box->ops->get_info(action_info->item, term, LISTBOX_ALL);
@@ -535,7 +527,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 
 	assert(box->ops);
 
-	delete_info = init_hierbox_action_info(box, term, scan_for_marks);
+	delete_info = init_hierbox_action_info(box, term, box->sel, scan_for_marks);
 	if (!delete_info) return 0;
 
 	if (!delete_info->item) {
@@ -611,7 +603,7 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 
 	assert(box->ops);
 
-	action_info = init_hierbox_action_info(box, term, scan_for_used);
+	action_info = init_hierbox_action_info(box, term, NULL, scan_for_used);
 	if (!action_info) return 0;
 
 	if (action_info->item) {

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.23 2002/10/04 19:05:19 zas Exp $ */
+/* $Id: kbdbind.h,v 1.24 2002/10/10 21:40:23 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -64,6 +64,7 @@ enum keyact {
 	ACT_QUIT,
 	ACT_REALLY_QUIT,
 	ACT_RELOAD,
+	ACT_RESUME_DOWNLOAD,
 	ACT_RIGHT,
 	ACT_SAVE_FORMATTED,
 	ACT_SCROLL_DOWN,

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.42 2002/09/18 16:35:42 pasky Exp $ */
+/* $Id: download.c,v 1.43 2002/10/10 21:40:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif
+#include <sys/stat.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -213,7 +214,7 @@ download_window_function(struct dialog_data *dlg)
 		t = 1;
 		add_to_str(&m, &l, _(TEXT(T_RECEIVED), term));
 		add_to_str(&m, &l, " ");
-		add_xnum_to_str(&m, &l, stat->prg->pos);
+		add_xnum_to_str(&m, &l, stat->prg->pos + stat->prg->start);
 
 		if (stat->prg->size >= 0) {
 			add_to_str(&m, &l, " ");
@@ -221,6 +222,13 @@ download_window_function(struct dialog_data *dlg)
 			add_to_str(&m, &l, " ");
 			add_xnum_to_str(&m, &l, stat->prg->size);
 			add_to_str(&m, &l, " ");
+		}
+		if (stat->prg->start) {
+			add_to_str(&m, &l, "(");
+			add_xnum_to_str(&m, &l, stat->prg->pos);
+			add_to_str(&m, &l, " ");
+			add_to_str(&m, &l, _(TEXT(T_AFTER_RESUME), term));
+			add_to_str(&m, &l, ")");
 		}
 		add_to_str(&m, &l, "\n");
 
@@ -258,7 +266,7 @@ download_window_function(struct dialog_data *dlg)
 						/ 1000 * stat->prg->loaded
 						- stat->prg->elapsed);
 #endif
-			add_time_to_str(&m, &l, (stat->prg->size - stat->prg->pos)
+			add_time_to_str(&m, &l, (stat->prg->size - stat->prg->pos - stat->prg->start)
 						/ ((longlong) stat->prg->loaded * 10
 						   / (stat->prg->elapsed / 100))
 						* 1000);
@@ -328,11 +336,11 @@ download_window_function(struct dialog_data *dlg)
 		set_only_char(term, x, y, '[');
 		set_only_char(term, x + w - 5, y, ']');
 		fill_area(term, x + 1, y,
-			  (int) ((longlong) p * (longlong) stat->prg->pos
+			  (int) ((longlong) p * (longlong) (stat->prg->pos + stat->prg->start)
 				 / (longlong) stat->prg->size),
 			  1, get_bfu_color(term, "dialog.meter"));
 		sprintf(q, "%3d%%",
-			  (int) ((longlong) 100 * (longlong) stat->prg->pos
+			  (int) ((longlong) 100 * (longlong) (stat->prg->pos + stat->prg->start)
 				 / (longlong) stat->prg->size));
 		print_text(term, x + w - 4, y, strlen(q), q, dialog_text_color);
 		y++;
@@ -441,7 +449,7 @@ download_data(struct status *stat, struct download *down)
 		}
 
 		load_url(down->url, ce->url, &down->stat, PRI_DOWNLOAD,
-			 NC_CACHE);
+			 NC_CACHE, stat->prg->start);
 
 		return;
 	}
@@ -576,7 +584,7 @@ end_store:
 
 
 int
-create_download_file(struct terminal *term, unsigned char *fi, int safe)
+create_download_file(struct terminal *term, unsigned char *fi, int safe, int resume)
 {
 	unsigned char *download_dir = get_opt_str("document.download.directory");
 	unsigned char *file = fi;
@@ -593,17 +601,16 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe)
 	wd = get_cwd();
 	set_cwd(term->cwd);
 
-	if (!get_opt_int("document.download.overwrite")) {
+	if (!get_opt_int("document.download.overwrite") || resume) {
 		file = expand_tilde(file);
 	} else {
 		/* The tilde will be expanded by get_unique_name() */
 		file = get_unique_name(file);
 	}
 
-	h = open(file, O_CREAT | O_WRONLY | O_TRUNC | (sf ? O_EXCL : 0),
+	h = open(file, O_CREAT | O_WRONLY | (resume ? O_APPEND : O_TRUNC) | (sf ? O_EXCL : 0),
 		 sf ? 0600 : 0666);
 	saved_errno = errno; /* Saved in case of ... --Zas */
-
 
 	if (wd) {
 		set_cwd(wd);
@@ -719,19 +726,19 @@ subst_file(unsigned char *prog, unsigned char *file)
 	return n;
 }
 
-
-void
-start_download(struct session *ses, unsigned char *file)
+static void
+common_download(struct session *ses, unsigned char *file, int resume)
 {
 	struct download *down;
 	int h;
+	struct stat buf;
 	unsigned char *url = ses->dn_url;
 
 	if (!url) return;
 
 	kill_downloads_to_file(file);
 
-	h = create_download_file(ses->term, file, 0);
+	h = create_download_file(ses->term, file, 0, resume);
 	if (h == -1) return;
 
 	down = mem_calloc(1, sizeof(struct download));
@@ -746,9 +753,23 @@ start_download(struct session *ses, unsigned char *file)
 	down->ses = ses;
 	down->remotetime = 0;
 
+	if (resume) fstat(h, &buf);
 	add_to_list(downloads, down);
-	load_url(url, ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE);
+	load_url(url, ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE,
+		 (resume ? (int) buf.st_size : 0));
 	display_download(ses->term, down, ses);
+}
+
+void
+start_download(struct session *ses, unsigned char *file)
+{
+	common_download(ses, file, 0);
+}
+
+void
+resume_download(struct session *ses, unsigned char *file)
+{
+	common_download(ses, file, 1);
 }
 
 
@@ -776,7 +797,7 @@ continue_download(struct session *ses, unsigned char *file)
 
 	kill_downloads_to_file(file);
 
-	h = create_download_file(ses->term, file, !!ses->tq_prog);
+	h = create_download_file(ses->term, file, !!ses->tq_prog, 0);
 	if (h == -1) {
 		tp_cancel(ses);
 		if (ses->tq_prog) mem_free(file);

@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.18 2002/09/13 16:05:49 zas Exp $ */
+/* $Id: sched.h,v 1.19 2002/10/10 21:40:24 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -43,6 +43,7 @@ struct remaining_info {
 	ttime dis_b;
 	int data_in_secs[CURRENT_SPD_SEC];
 	int timer;
+	int start;
 };
 
 struct connection {
@@ -169,7 +170,7 @@ void abort_connection(struct connection *);
 void abort_conn_with_state(struct connection *, int);
 void retry_conn_with_state(struct connection *, int);
 
-int load_url(unsigned char *, unsigned char *, struct status *, int, enum cache_mode);
+int load_url(unsigned char *, unsigned char *, struct status *, int, enum cache_mode, int start);
 
 void change_connection(struct status *, struct status *, int);
 void detach_connection(struct status *, int);

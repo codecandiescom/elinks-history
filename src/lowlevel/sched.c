@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.44 2002/09/17 14:30:53 zas Exp $ */
+/* $Id: sched.c,v 1.45 2002/10/10 21:40:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,8 +231,10 @@ setcstate(struct connection *c, int state)
 		if (r->timer == -1) {
 			tcount count = c->count;
 			if (!r->valid) {
+				int tmp = r->start;
 				memset(r, 0, sizeof(struct remaining_info));
 				r->valid = 1;
+				r->start = tmp;
 			}
 			r->last_time = get_time();
 			r->last_loaded = r->loaded;
@@ -812,7 +814,7 @@ get_proxy(unsigned char *url)
 
 int
 load_url(unsigned char *url, unsigned char *prev_url,
-	 struct status *stat, int pri, enum cache_mode cache_mode)
+	 struct status *stat, int pri, enum cache_mode cache_mode, int start)
 {
 	struct cache_entry *e = NULL;
 	struct connection *c;
@@ -832,6 +834,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 			if (st == stat) {
 				internal("status already assigned to '%s'", c->url);
 				stat->state = S_INTERNAL;
+				c->prg.start = start;
 				if (stat->end) stat->end(stat, stat->data);
 				return 0;
 			}
@@ -848,6 +851,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 		if (stat) {
 			stat->ce = e;
 			stat->state = S_OK;
+			stat->prg->start = start;
 			if (stat->end) stat->end(stat, stat->data);
 		}
 		return 0;
@@ -874,6 +878,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 			c->pri[pri]++;
 		}
 
+		c->prg.start = start;
 		if (stat) {
 			stat->prg = &c->prg;
 			stat->c = c;
@@ -920,6 +925,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 	init_list(c->statuss);
 	c->est_length = -1;
 	c->unrestartable = 0;
+	c->prg.start = start;
 	c->prg.timer = -1;
 	c->timer = -1;
 

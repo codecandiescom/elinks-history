@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.83 2002/10/05 09:20:05 pasky Exp $ */
+/* $Id: view.c,v 1.84 2002/10/10 21:40:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2465,7 +2465,7 @@ try_document_key(struct session *ses, struct f_data_c *fd,
 	return 0;
 }
 
-void frm_download(struct session *, struct f_data_c *);
+void frm_download(struct session *, struct f_data_c *, int resume);
 void send_image(struct terminal *term, void *xxx, struct session *ses);
 void send_download_image(struct terminal *term, void *xxx, struct session *ses);
 
@@ -2511,6 +2511,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_ENTER:
 			case ACT_ENTER_RELOAD:
 			case ACT_DOWNLOAD:
+			case ACT_RESUME_DOWNLOAD:
 			case ACT_VIEW_IMAGE:
 			case ACT_DOWNLOAD_IMAGE:
 			case ACT_LINK_MENU:
@@ -2549,7 +2550,8 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_END:  rep_ev(ses, fd, x_end, 0); break;
 			case ACT_ENTER: x = enter(ses, fd, 0); break;
 			case ACT_ENTER_RELOAD: x = enter(ses, fd, 1); break;
-			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd); break;
+			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd, 0); break;
+			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd, 1); break;
 			case ACT_SEARCH: search_dlg(ses, fd, 0); break;
 			case ACT_SEARCH_BACK: search_back_dlg(ses, fd, 0); break;
 			case ACT_FIND_NEXT: find_next(ses, fd, 0); break;
@@ -2957,7 +2959,7 @@ send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 }
 
 void
-frm_download(struct session *ses, struct f_data_c *fd)
+frm_download(struct session *ses, struct f_data_c *fd, int resume)
 {
 	struct link *link;
 	int l = 0;
@@ -2976,7 +2978,7 @@ frm_download(struct session *ses, struct f_data_c *fd)
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
-		query_file(ses, ses->dn_url, start_download, NULL, 1);
+		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
 	}
 }
 
@@ -3153,7 +3155,7 @@ save_formatted(struct session *ses, unsigned char *file)
 	struct f_data_c *f = current_frame(ses);
 
 	if (!f || !f->f_data) return;
-	h = create_download_file(ses->term, file, 0);
+	h = create_download_file(ses->term, file, 0, 0);
 	if (h == -1) return;
 	if (dump_to_file(f->f_data, h)) {
 		msg_box(ses->term, NULL,

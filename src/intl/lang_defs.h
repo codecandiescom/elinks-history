@@ -414,4 +414,5 @@
 #define T_ADD_FOLDER    410	
 #define T_FOLDER_NAME    411	
 #define T_MOVE    412	
-#define T__N_TEXTS    413	
+#define T_AFTER_RESUME    413	
+#define T__N_TEXTS    414	

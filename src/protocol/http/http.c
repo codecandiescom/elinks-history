@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.51 2002/09/17 14:37:54 zas Exp $ */
+/* $Id: http.c,v 1.52 2002/10/10 21:40:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -547,9 +547,9 @@ http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "Cache-Control: no-cache\r\n");
 	}
 
-	if (c->from) {
+	if (c->from + c->prg.start) {
 		add_to_str(&hdr, &l, "Range: bytes=");
-		add_num_to_str(&hdr, &l, c->from);
+		add_num_to_str(&hdr, &l, c->from + c->prg.start);
 		add_to_str(&hdr, &l, "-\r\n");
 	}
 

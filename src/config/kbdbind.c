@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.38 2002/10/04 19:05:19 zas Exp $ */
+/* $Id: kbdbind.c,v 1.39 2002/10/10 21:40:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,6 +332,7 @@ static struct strtonum action_table[] = {
 	{ "quit", ACT_QUIT },
 	{ "really-quit", ACT_REALLY_QUIT },
 	{ "reload", ACT_RELOAD },
+	{ "resume-download", ACT_RESUME_DOWNLOAD },
 	{ "right", ACT_RIGHT },
 	{ "save-formatted", ACT_SAVE_FORMATTED },
 	{ "scroll-down", ACT_SCROLL_DOWN },
@@ -516,9 +517,11 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_ENTER_RELOAD, KBD_ENTER, KBD_CTRL },
 	{ ACT_BACK, KBD_LEFT, 0 },
 	{ ACT_UNBACK, 'u', 0 },
-    	{ ACT_UNBACK, 'U', 0 },
+	{ ACT_UNBACK, 'U', 0 },
 	{ ACT_DOWNLOAD, 'd', 0 },
 	{ ACT_DOWNLOAD, 'D', 0 },
+	{ ACT_RESUME_DOWNLOAD, 'r', 0 },
+	{ ACT_RESUME_DOWNLOAD, 'R', 0 },
 	{ ACT_SEARCH, '/', 0 },
 	{ ACT_SEARCH_BACK, '?', 0 },
 	{ ACT_FIND_NEXT, 'n', 0 },
@@ -576,7 +579,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ ACT_DELETE, 'D', KBD_CTRL },
 	{ ACT_KILL_TO_BOL, 'U', KBD_CTRL },
 	{ ACT_KILL_TO_EOL, 'K', KBD_CTRL },
-    	{ ACT_AUTO_COMPLETE, 'W', KBD_CTRL },
+	{ ACT_AUTO_COMPLETE, 'W', KBD_CTRL },
 	{ ACT_AUTO_COMPLETE_UNAMBIGUOUS, 'R', KBD_CTRL },
 	{ 0, 0, 0 }
 };

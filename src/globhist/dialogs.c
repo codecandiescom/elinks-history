@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.83 2003/11/22 14:26:27 jonas Exp $ */
+/* $Id: dialogs.c,v 1.84 2003/11/22 15:50:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,35 +161,6 @@ push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
 }
 
 
-static void
-really_clear_history(struct listbox_data *box)
-{
-	while (global_history.n) {
-		if (is_object_used(
-		    (struct global_history_item *) global_history.items.prev))
-			break;
-		delete_global_history_item(global_history.items.prev);
-	}
-}
-
-static int
-push_clear_button(struct dialog_data *dlg_data,
-		  struct widget_data *some_useless_clear_button)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct terminal *term = dlg_data->win->term;
-
-	msg_box(term, NULL, 0,
-		N_("Clear global history"), AL_CENTER,
-		N_("Clear global history?"),
-		box, 2,
-		N_("Yes"), really_clear_history, B_ENTER,
-		N_("No"), NULL, B_ESC);
-
-	return 0;
-}
-
-
 #ifdef BOOKMARKS
 static int
 push_bookmark_button(struct dialog_data *dlg_data,
@@ -243,7 +214,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 			N_("Delete"), push_hierbox_delete_button, B_ENTER, NULL,
 			N_("Search"), push_search_button, B_ENTER, NULL,
 			N_("Toggle display"), push_toggle_display_button, B_ENTER, ses,
-			N_("Clear"), push_clear_button, B_ENTER, NULL);
+			N_("Clear"), push_hierbox_clear_button, B_ENTER, NULL);
 }
 
 #endif /* GLOBHIST */

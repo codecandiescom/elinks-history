@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.108 2004/11/03 17:19:21 zas Exp $ */
+/* $Id: string.c,v 1.109 2004/12/19 10:41:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 
 #ifdef DEBUG_MEMLEAK
 
-inline unsigned char *
+unsigned char *
 debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 {
 	unsigned char *m;
@@ -52,7 +52,7 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 	return m;
 }
 
-inline unsigned char *
+unsigned char *
 debug_stracpy(unsigned char *f, int l, unsigned char *src)
 {
 	string_assert(f, l, src, "stracpy");
@@ -63,7 +63,7 @@ debug_stracpy(unsigned char *f, int l, unsigned char *src)
 
 #else /* DEBUG_MEMLEAK */
 
-inline unsigned char *
+unsigned char *
 memacpy(unsigned char *src, int len)
 {
 	unsigned char *m;
@@ -80,7 +80,7 @@ memacpy(unsigned char *src, int len)
 	return m;
 }
 
-inline unsigned char *
+unsigned char *
 stracpy(unsigned char *src)
 {
 	assertm(src, "[stracpy]");

@@ -1,3 +1,5 @@
+/* $Id: connect.h,v 1.3 2002/03/16 22:03:09 pasky Exp $ */
+
 #ifndef EL__CONNECT_H
 #define EL__CONNECT_H
 

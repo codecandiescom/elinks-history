@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.42 2002/03/16 20:07:59 pasky Exp $ */
+/* $Id: default.c,v 1.43 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,13 +23,18 @@
 
 #include "links.h"
 
+#include "bfu.h"
 #include "charsets.h"
+#include "default.h"
 #include "dns.h"
 #include "html.h"
 #include "html_r.h"
+#include "kbdbind.h"
+#include "language.h"
 #include "main.h"
 #include "session.h"
 #include "terminal.h"
+#include "types.h"
 
 void get_system_name()
 {
@@ -1393,7 +1398,7 @@ struct option links_options[] = {
 		NULL },
 	 
 	{	NULL, "unbind",
-		NULL, bind_rd, NULL,
+		NULL, unbind_rd, NULL,
 	 	0, 0, NULL,
 		NULL },
 	 

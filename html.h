@@ -1,9 +1,11 @@
+/* $Id: html.h,v 1.3 2002/03/16 22:03:09 pasky Exp $ */
+
 #ifndef EL__HTML_H
 #define EL__HTML_H
 
+#include "bfu.h"
 #include "links.h"
-//#include "html_r.h"
-//#include "menu.h"
+/* #include "html_r.h" */
 
 /* XXX: This is just terible - this interface is from 75% only for other HTML
  * files - there's lack of any well defined interface and it's all randomly

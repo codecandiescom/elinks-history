@@ -1,3 +1,5 @@
+/* $Id: cache.h,v 1.2 2002/03/16 22:03:08 pasky Exp $ */
+
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
 

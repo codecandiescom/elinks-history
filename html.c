@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: html.c,v 1.35 2002/03/16 20:07:59 pasky Exp $ */
+/* $Id: html.c,v 1.36 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,12 +15,15 @@
 
 #include "links.h"
 
+#include "bfu.h"
 #include "charsets.h"
+#include "default.h"
 #include "error.h"
 #include "html.h"
 #include "html_r.h"
 #include "html_tbl.h"
 #include "http.h"
+#include "kbdbind.h"
 #include "session.h"
 #include "terminal.h"
 #include "url.h"

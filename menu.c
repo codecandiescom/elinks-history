@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.28 2002/03/16 20:07:59 pasky Exp $ */
+/* $Id: menu.c,v 1.29 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,17 +18,25 @@
 
 #include "links.h"
 
+#include "bfu.h"
+#include "bookmarks.h"
 #include "cache.h"
 #include "charsets.h"
+#include "default.h"
 #ifdef LEAK_DEBUG
 #include "error.h"
 #endif
 #include "html_r.h"
+#include "kbd.h"
+#include "language.h"
+#include "lua.h"
 #include "main.h"
+#include "menu.h"
 #include "sched.h"
 #include "select.h"
 #include "session.h"
 #include "terminal.h"
+#include "types.h"
 #include "url.h"
 #include "view.h"
 

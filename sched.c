@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.20 2002/03/16 20:07:59 pasky Exp $ */
+/* $Id: sched.c,v 1.21 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,9 +17,11 @@
 
 #include "cache.h"
 #include "connect.h"
+#include "default.h"
 #include "dns.h"
 #include "error.h"
 #include "html_r.h"
+#include "language.h"
 #include "select.h"
 #include "session.h"
 #include "url.h"

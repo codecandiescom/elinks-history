@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.9 2002/03/16 20:07:59 pasky Exp $ */
+/* $Id: file.c,v 1.10 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,7 @@
 #include "links.h"
 
 #include "cache.h"
+#include "default.h"
 #include "file.h"
 #include "sched.h"
 

@@ -1,5 +1,5 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.7 2002/03/16 20:07:59 pasky Exp $ */
+/* $Id: language.c,v 1.8 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "charsets.h"
 #include "error.h"
+#include "language.h"
 #include "terminal.h"
 
 struct translation {

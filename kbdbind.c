@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.10 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.11 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,11 @@
 
 #include "links.h"
 
+#include "default.h"
+#include "kbd.h"
+#include "kbdbind.h"
+#include "lua.h"
+
 #ifndef HAVE_LUA
 #define LUA_NOREF	0
 #endif
@@ -22,7 +27,7 @@ static void add_default_keybindings();
 struct keybinding {
 	struct keybinding *next;
 	struct keybinding *prev;
-	int act;
+	enum keyact act;
 	long x;
 	long y;
 	int func_ref;
@@ -30,7 +35,7 @@ struct keybinding {
 
 static struct list_head keymaps[KM_MAX];
 
-static void delete_keybinding(int km, long x, long y)
+static void delete_keybinding(enum keymap km, long x, long y)
 {
 	struct keybinding *kb;
 	foreach(kb, keymaps[km]) if (kb->x == x && kb->y == y) {
@@ -43,7 +48,7 @@ static void delete_keybinding(int km, long x, long y)
 	}
 }
 
-static void add_keybinding(int km, int act, long x, long y, int func_ref)
+static void add_keybinding(enum keymap km, int act, long x, long y, int func_ref)
 {
 	struct keybinding *kb;
 	delete_keybinding(km, x, y);
@@ -58,18 +63,18 @@ static void add_keybinding(int km, int act, long x, long y, int func_ref)
 
 void init_keymaps()
 {
-    	int i;	
+    	enum keymap i;
 	for (i = 0; i < KM_MAX; i++) init_list(keymaps[i]);
 	add_default_keybindings();
 }
 
 void free_keymaps() 
 {
-	int i;
+	enum keymap i;
 	for (i = 0; i < KM_MAX; i++) free_list(keymaps[i]);
 }
 
-int kbd_action(int kmap, struct event *ev, int *func_ref)
+int kbd_action(enum keymap kmap, struct event *ev, int *func_ref)
 {
 	struct keybinding *kb;
 	if (ev->ev == EV_KBD) foreach(kb, keymaps[kmap])

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: lua.c,v 1.11 2002/03/16 20:07:59 pasky Exp $ */
+/* $Id: lua.c,v 1.12 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,8 +13,13 @@
 
 #include "links.h"
 
+#include "bfu.h"
 #include "cache.h"
+#include "default.h"
 #include "html_r.h"
+#include "kbdbind.h"
+#include "language.h"
+#include "lua.h"
 #include "select.h"
 #include "session.h"
 #include "terminal.h"

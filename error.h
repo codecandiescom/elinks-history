@@ -1,3 +1,5 @@
+/* $Id: error.h,v 1.2 2002/03/16 22:03:09 pasky Exp $ */
+
 #ifndef EL__ERROR_H
 #define EL__ERROR_H
 

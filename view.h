@@ -1,3 +1,5 @@
+/* $Id: view.h,v 1.3 2002/03/16 22:03:10 pasky Exp $ */
+
 #ifndef EL__VIEW_H
 #define EL__VIEW_H
 

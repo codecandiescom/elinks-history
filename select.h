@@ -1,3 +1,5 @@
+/* $Id: select.h,v 1.3 2002/03/16 22:03:09 pasky Exp $ */
+
 #ifndef EL__SELECT_H
 #define EL__SELECT_H
 

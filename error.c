@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.7 2002/03/16 15:17:22 pasky Exp $ */
+/* $Id: error.c,v 1.8 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 
 #include "links.h"
 
+#include "bfu.h"
 #include "error.h"
 
 

@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.19 2002/03/16 20:07:58 pasky Exp $ */
+/* $Id: bfu.c,v 1.20 2002/03/16 22:03:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,9 +10,24 @@
 
 #include "links.h"
 
+#include "bfu.h"
 #include "error.h"
 #include "html.h"
+#include "kbd.h"
+#include "kbdbind.h"
+#include "language.h"
 #include "terminal.h"
+
+
+struct mainmenu {
+	int selected;
+	int sp;
+	int ni;
+	void *data;
+	struct window *win;
+	struct menu_item *items;
+};
+
 
 /*
  * memory_list is used to track information about all allocated memory
@@ -771,6 +786,9 @@ int dlg_mouse(struct dialog_data *dlg, struct dialog_item_data *di, struct event
 			} /*else if ((ev->b & BM_ACT) == B_DRAG) {
 				debug("drag");
 			}*/
+		case D_END:
+			/* Silence compiler warnings */
+			break;
 	}
 	return 0;
 }

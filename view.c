@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.40 2002/03/16 20:08:00 pasky Exp $ */
+/* $Id: view.c,v 1.41 2002/03/16 22:03:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,14 +23,22 @@
 
 #include "links.h"
 
+#include "bfu.h"
+#include "bookmarks.h"
 #include "cache.h"
 #include "charsets.h"
 #include "cookies.h"
+#include "default.h"
 #include "error.h"
 #include "html.h"
 #include "html_r.h"
 #include "http.h"
+#include "kbd.h"
+#include "kbdbind.h"
+#include "language.h"
+#include "lua.h"
 #include "main.h"
+#include "menu.h"
 #include "terminal.h"
 #include "url.h"
 

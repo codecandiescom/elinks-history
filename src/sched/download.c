@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.206 2003/12/22 02:12:13 pasky Exp $ */
+/* $Id: download.c,v 1.207 2003/12/22 02:15:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,7 +245,7 @@ static void
 download_data_store(struct download *download, struct file_download *file_download)
 {
 	struct session *ses = get_download_ses(file_download);
-	struct terminal *term;
+	struct terminal *term = NULL;
 
 	if (!ses) goto abort;
 	term = ses->tab->term;

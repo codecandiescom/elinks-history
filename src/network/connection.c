@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.45 2003/07/03 21:30:27 jonas Exp $ */
+/* $Id: connection.c,v 1.46 2003/07/03 21:51:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -378,10 +378,7 @@ add_keepalive_socket(struct connection *c, ttime timeout)
 	struct k_conn *k;
 
 	free_connection_data(c);
-	if (c->sock1 == -1) {
-		internal("keepalive connection not connected");
-		goto del;
-	}
+	assertm(c->sock1 != -1, "keepalive connection not connected");
 
 	k = mem_calloc(1, sizeof(struct k_conn));
 	if (!k) goto close;
@@ -407,7 +404,6 @@ free_and_close:
 	k->add_time = get_time();
 	add_to_list(keepalive_connections, k);
 
-del:
 	del_connection(c);
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 	return;
@@ -457,10 +453,10 @@ check_keepalive_connections(void)
 		}
 	}
 
-	for (; p > MAX_KEEPALIVE_CONNECTIONS; p--)
-		if (!list_empty(keepalive_connections))
-			del_keepalive_socket(keepalive_connections.prev);
-		else internal("keepalive list empty");
+	for (; p > MAX_KEEPALIVE_CONNECTIONS; p--) {
+		assert(!list_empty(keepalive_connections));
+		del_keepalive_socket(keepalive_connections.prev);
+	}
 
 	if (!list_empty(keepalive_connections))
 		keepalive_timeout = install_timer(KEEPALIVE_CHECK_TIME,
@@ -556,10 +552,7 @@ run_connection(struct connection *c)
 	struct h_conn *hc;
 	protocol_handler *func;
 
-	if (c->running) {
-		internal("connection already running");
-		return;
-	}
+	assertm(!c->running, "connection already running");
 
 	func = get_protocol_handler(c->url);
 	if (!func) {
@@ -840,14 +833,8 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 	foreach (c, queue) {
 		struct status *st;
 
-		foreach (st, c->statuss) {
-			if (st == stat) {
-				internal("status already assigned to '%s'", c->url);
-				stat->state = S_INTERNAL;
-				if (stat->end) stat->end(stat, stat->data);
-				return 0;
-			}
-		}
+		foreach (st, c->statuss)
+			assertm(st != stat, "Status assigned to '%s'", c->url);
 	}
 #endif
 
@@ -966,10 +953,7 @@ change_connection(struct status *oldstat, struct status *newstat,
 	struct connection *c;
 	int oldpri;
 
-	if (!oldstat) {
-		internal("change_connection: oldstat == NULL");
-		return;
-	}
+	assertm(oldstat, "change_connection: oldstat == NULL");
 
 	oldpri = oldstat->pri;
 	if (oldstat->state < 0) {
@@ -989,10 +973,7 @@ change_connection(struct status *oldstat, struct status *newstat,
 	c = oldstat->c;
 
 	c->pri[oldpri]--;
-	if (c->pri[oldpri] < 0) {
-		internal("priority counter underflow");
-		c->pri[oldpri] = 0;
-	}
+	assertm(c->pri[oldpri] >= 0, "priority counter underflow");
 
 	c->pri[newpri]++;
 	del_from_list(oldstat);
@@ -1049,8 +1030,7 @@ detach_connection(struct status *stat, int pos)
 
 		for (i = 0; i < PRI_CANCEL; i++)
 			total_pri += conn->pri[i];
-		if (!total_pri)
-			internal("detaching free connection");
+		assertm(total_pri, "detaching free connection");
 
 		/* Pre-clean cache. */
 		delete_unused_format_cache_entries();

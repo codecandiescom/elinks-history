@@ -1,3 +1,49 @@
+Tue Mar  9 17:44:18 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/cookies/dialogs.c:
+
+	New feature: editing cookies.  
+
+Tue Mar  9 15:24:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, bookmarks/backend/default.c,
+	cookies/cookies.c, formhist/formhist.c, globhist/globhist.c,
+	util/file.c, util/file.h:
+
+	Get rid of weird/useless safe_fgets(), just use fgets().  
+
+Tue Mar  9 15:05:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/apply.c:
+
+	Add note about broken text alignment in CSS apllier.  
+
+Tue Mar  9 14:09:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Minor tidy up.  
+
+Tue Mar  9 12:24:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, src/elinks.h, src/bfu/hotkey.c,
+	src/bfu/menu.c, src/cache/dialogs.c, src/config/options.c,
+	src/config/options.h, src/dialogs/menu.c, src/document/document.c,
+	src/modules/version.c, src/osdep/stub.h,
+	src/protocol/rewrite/rewrite.c, src/sched/connection.c,
+	src/util/error.c, src/util/error.h, src/util/lists.h,
+	src/util/memlist.h, src/util/object.h, src/util/profile.h,
+	src/util/string.h:
+
+	DEBUG -> CONFIG_DEBUG .. it seems that perl is a namespace polluter
+	.. like we didn't know that already! ;-) 
+
+Tue Mar  9 05:32:09 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation update.  
+
 Fri Mar  5 17:58:53 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/config/dialogs.c:

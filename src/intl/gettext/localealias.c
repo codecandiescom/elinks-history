@@ -29,19 +29,6 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <sys/types.h>
-
-#if defined HAVE_ALLOCA_H
-#include <alloca.h>
-#else
-#ifdef _AIX
-#pragma alloca
-#else
-#ifndef alloca
-unsigned char *alloca();
-#endif
-#endif
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -49,16 +36,6 @@ unsigned char *alloca();
 
 #include "intl/gettext/gettextP.h"
 #include "util/string.h"
-
-/* For those losing systems which don't have `alloca' we have to add
-   some additional code emulating it.  */
-#ifdef HAVE_ALLOCA
-#define freea(p)		/* nothing */
-#else
-#undef alloca	/* workaround for systems including alloca() from non-standard headers. */
-#define alloca(n) malloc (n)
-#define freea(p) free (p)
-#endif
 
 #ifdef HAVE_FGETS_UNLOCKED
 #undef fgets
@@ -149,12 +126,12 @@ read_alias_file(const unsigned char *fname, int fname_len)
 	size_t added;
 	static const unsigned char aliasfile[] = "/locale.alias";
 
-	full_fname = (unsigned char *) alloca(fname_len + sizeof aliasfile);
+	full_fname = (unsigned char *) fmem_alloc(fname_len + sizeof aliasfile);
 	mempcpy(mempcpy(full_fname, fname, fname_len),
 		aliasfile, sizeof aliasfile);
 
 	fp = fopen(full_fname, "r");
-	freea(full_fname);
+	fmem_free(full_fname);
 	if (fp == NULL)
 		return 0;
 

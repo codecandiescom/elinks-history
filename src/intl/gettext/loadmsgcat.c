@@ -31,19 +31,6 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#if defined HAVE_ALLOCA_H
-#include <alloca.h>
-#else
-#ifdef _AIX
-#pragma alloca
-#else
-#ifndef alloca
-unsigned char *alloca();
-#endif
-#endif
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 
@@ -64,18 +51,9 @@ unsigned char *alloca();
 
 #include "intl/gettext/gettext.h"
 #include "intl/gettext/gettextP.h"
+#include "util/memory.h"
 #include "util/string.h"
 
-
-/* For those losing systems which don't have `alloca' we have to add
-   some additional code emulating it.  */
-#ifdef HAVE_ALLOCA
-#define freea(p)		/* nothing */
-#else
-#undef alloca	/* workaround for systems including alloca() from non-standard headers. */
-#define alloca(n) malloc (n)
-#define freea(p) free (p)
-#endif
 
 /* For systems that distinguish between text and binary I/O.
    O_BINARY is usually declared in <fcntl.h>. */
@@ -166,7 +144,7 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 			charsetstr += strlen("charset=");
 			len = strcspn(charsetstr, " \t\n");
 
-			charset = (unsigned char *) alloca(len + 1);
+			charset = (unsigned char *) fmem_alloc(le*n + 1);
 			*((unsigned char *) mempcpy(charset, charsetstr, len)) = '\0';
 
 			/* The output charset should normally be determined by the
@@ -190,7 +168,7 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 #if _LIBICONV_VERSION >= 0x0105
 			len = strlen(outcharset);
 			{
-				unsigned char *tmp = (unsigned char *) alloca(len + 10 + 1);
+				unsigned char *tmp = (unsigned char *) fmem_alloc(len + 10 + 1);
 
 				memcpy(tmp, outcharset, len);
 				memcpy(tmp + len, "//TRANSLIT", 10 + 1);
@@ -199,10 +177,10 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 #endif
 			domain->conv = iconv_open(outcharset, charset);
 #if _LIBICONV_VERSION >= 0x0105
-			freea(outcharset);
+			fmem_free(outcharset);
 #endif
 
-			freea(charset);
+			fmem_free(charset);
 		}
 #endif /* HAVE_ICONV */
 	}

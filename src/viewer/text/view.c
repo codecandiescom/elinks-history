@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.527 2004/06/26 02:47:14 miciah Exp $ */
+/* $Id: view.c,v 1.528 2004/06/26 02:50:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,10 +488,12 @@ static enum frame_event_status
 frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 		    struct term_event *ev)
 {
+	struct document *document = doc_view->document;
+
 	if (ev->y
-	    || !doc_view->document->options.num_links_key
-	    || (doc_view->document->options.num_links_key == 1
-		&& !doc_view->document->options.num_links_display)) {
+	    || !document->options.num_links_key
+	    || (document->options.num_links_key == 1
+		&& !document->options.num_links_display)) {
 		/* Repeat count.
 		 * ses->kbdprefix.repeat_count is initialized to zero
 		 * the first time by init_session() calloc() call.
@@ -507,7 +509,6 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 
 		return 2;
 	} else if (ev->x >= '1' && !ev->y) {
-		struct document *document = doc_view->document;
 		int nlinks = document->nlinks, length;
 		unsigned char d[2] = { ev->x, 0 };
 

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.96 2004/07/28 14:35:56 jonas Exp $ */
+/* $Id: kbd.c,v 1.97 2004/07/28 14:37:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -831,16 +831,30 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 static void
 set_kbd_event(struct term_event *ev, int key, int modifier)
 {
+	switch (key) {
+	case ASCII_TAB:
+		key = KBD_TAB;
+		break;
+
+	case ASCII_BS:
+	case ASCII_DEL:
+		key = KBD_BS;
+		break;
+
+	case ASCII_LF:
+	case ASCII_CR:
+		key = KBD_ENTER;
+		break;
+
+	default:
+		if (key < ' ') {
+			key += 'A' - 1;
+			modifier = KBD_CTRL;
+		}
+	}
+
 	ev->x = key;
 	ev->y = modifier;
-
-	if (ev->x == ASCII_TAB) ev->x = KBD_TAB;
-	else if (ev->x == ASCII_BS || ev->x == ASCII_DEL) ev->x = KBD_BS;
-	else if (ev->x == ASCII_LF || ev->x == ASCII_CR) ev->x = KBD_ENTER;
-	if (ev->x < ' ') {
-		ev->x += 'A' - 1;
-		ev->y = KBD_CTRL;
-	}
 }
 
 /* I feeeeeel the neeeed ... to rewrite this ... --pasky */

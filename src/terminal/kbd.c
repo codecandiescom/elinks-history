@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.102 2004/07/30 10:09:00 jonas Exp $ */
+/* $Id: kbd.c,v 1.103 2004/07/30 16:39:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,25 +254,26 @@ void
 handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	   void *init_string, int init_len, int remote)
 {
-	int magic = remote ? INTERLINK_REMOTE_MAGIC : INTERLINK_NORMAL_MAGIC;
-	int session_info = remote ? remote : get_cmd_opt_int("base-session");
 	struct itrm *itrm;
-	int width, height;
-	int terminal_size_error = get_terminal_size(ctl_in, &width, &height);
-	struct terminal_info info = {
-		INIT_TERM_EVENT(EVENT_INIT, width, height, 0),
-		"",
-		"",
-		get_system_env(),
-		init_len,
-		session_info,
-		magic,
-	};
+	struct terminal_info info;
 	unsigned char *ts;
 
-	if (terminal_size_error) {
+	memset(&info, 0, sizeof(struct terminal_info));
+	if (get_terminal_size(ctl_in,
+			      &info.event.info.size.width,
+			      &info.event.info.size.height)) {
 		ERROR(G_("Could not get terminal size"));
 		return;
+	}
+	info.event.ev = EVENT_INIT;
+	info.system_env = get_system_env();
+	info.length = init_len;
+	if (remote) {
+		info.session_info = remote;
+		info.magic = INTERLINK_REMOTE_MAGIC;
+	} else {
+		info.session_info = get_cmd_opt_int("base-session");
+		info.magic = INTERLINK_NORMAL_MAGIC;
 	}
 
 	itrm = mem_calloc(1, sizeof(struct itrm));

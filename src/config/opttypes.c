@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.66 2003/10/22 20:13:11 jonas Exp $ */
+/* $Id: opttypes.c,v 1.67 2003/10/22 20:19:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,14 +200,7 @@ num_rd(struct option *opt, unsigned char **file)
 }
 
 static int
-int_set(struct option *opt, unsigned char *str)
-{
-	opt->value.number = *((long *) str);
-	return 1;
-}
-
-static int
-long_set(struct option *opt, unsigned char *str)
+num_set(struct option *opt, unsigned char *str)
 {
 	opt->value.number = *((long *) str);
 	return 1;
@@ -274,6 +267,8 @@ str_rd(struct option *opt, unsigned char **file)
 static int
 str_set(struct option *opt, unsigned char *str)
 {
+	assert(opt->value.string);
+
 	safe_strncpy(opt->value.string, str, MAX_STR_LEN);
 	return 1;
 }
@@ -297,9 +292,8 @@ str_dup(struct option *opt, struct option *template)
 static int
 cp_set(struct option *opt, unsigned char *str)
 {
-	int ret;
+	int ret = get_cp_index(str);
 
-	ret = get_cp_index(str);
 	if (ret < 0) return 0;
 
 	opt->value.number = ret;
@@ -319,10 +313,8 @@ static int
 lang_set(struct option *opt, unsigned char *str)
 {
 #ifdef ENABLE_NLS
-	int i = name_to_language(str);
-
-	opt->value.number = i;
-	set_language(i);
+	opt->value.number = name_to_language(str);
+	set_language(opt->value.number);
 #endif
 	return 1;
 }
@@ -398,9 +390,9 @@ tree_dup(struct option *opt, struct option *template)
 
 
 struct option_type_info option_types[] = {
-	{ N_("Boolean"), bool_cmd, num_rd, num_wr, NULL, int_set, NULL, NULL, N_("[0|1]") },
-	{ N_("Integer"), gen_cmd, num_rd, num_wr, NULL, int_set, NULL, NULL, N_("<num>") },
-	{ N_("Longint"), gen_cmd, num_rd, num_wr, NULL, long_set, NULL, NULL, N_("<num>") },
+	{ N_("Boolean"), bool_cmd, num_rd, num_wr, NULL, num_set, NULL, NULL, N_("[0|1]") },
+	{ N_("Integer"), gen_cmd, num_rd, num_wr, NULL, num_set, NULL, NULL, N_("<num>") },
+	{ N_("Longint"), gen_cmd, num_rd, num_wr, NULL, num_set, NULL, NULL, N_("<num>") },
 	{ N_("String"), gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, NULL, N_("<str>") },
 
 	{ N_("Codepage"), gen_cmd, str_rd, cp_wr, NULL, cp_set, NULL, NULL, N_("<codepage>") },

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.381 2003/11/18 21:55:52 pasky Exp $ */
+/* $Id: renderer.c,v 1.382 2003/11/18 22:04:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,20 +101,20 @@ void put_chars(struct part *, unsigned char *, int);
 #define ALIGN_LINK(x, o, n) mem_align_alloc(x, o, n, sizeof(struct link), LINK_GRANULARITY)
 #define ALIGN_SPACES(x, o, n) mem_align_alloc(x, o, n, sizeof(unsigned char), SPACES_GRANULARITY)
 
-static int
+static struct line *
 realloc_lines(struct document *document, int y)
 {
 	assert(document);
-	if_assert_failed return 0;
+	if_assert_failed return NULL;
 
 	if (document->height <= y) {
 		if (!ALIGN_LINES(&document->data, document->height, y + 1))
-			return -1;
+			return NULL;
 
 		document->height = y + 1;
 	}
 
-	return 0;
+	return &document->data[y];
 }
 
 static int
@@ -124,7 +124,7 @@ realloc_line(struct document *document, int y, int x)
 	struct screen_char *pos, *end;
 	struct line *line;
 
-	if (realloc_lines(document, y))
+	if (!realloc_lines(document, y))
 		return -1;
 
 	line = &document->data[y];
@@ -156,7 +156,7 @@ expand_lines(struct part *part, int y)
 	assert(part && part->document);
 	if_assert_failed return -1;
 
-	return realloc_lines(part->document, Y(y));
+	return -!realloc_lines(part->document, Y(y));
 }
 
 int
@@ -395,7 +395,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 	assert(part && part->document);
 	if_assert_failed return;
 
-	if (realloc_lines(part->document, Y(yt)))
+	if (!realloc_lines(part->document, Y(yt)))
 		return;
 
 	for (; nlink < part->document->nlinks; nlink++) {
@@ -1064,7 +1064,7 @@ line_break(struct part *part)
 
 	if (!part->document || !part->document->data) goto end;
 
-	if (realloc_lines(part->document, part->height + part->cy + 1))
+	if (!realloc_lines(part->document, part->height + part->cy + 1))
 		return;
 
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1

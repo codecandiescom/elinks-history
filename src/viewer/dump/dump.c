@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.146 2004/10/14 18:38:40 jonas Exp $ */
+/* $Id: dump.c,v 1.147 2004/10/19 08:32:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -333,6 +333,7 @@ add_document_to_string(struct string *string, struct document *document)
 
 	for (y = 0; y < document->height; y++) {
 		struct screen_char *pos = document->data[y].chars;
+		int white = 0;
 		int x;
 
 		for (x = 0; x < document->data[y].length; x++) {
@@ -340,12 +341,23 @@ add_document_to_string(struct string *string, struct document *document)
 			unsigned int frame = (pos->attr & SCREEN_ATTR_FRAME);
 
 			if (!isscreensafe(data)) {
-				data = ' ';
+				white++;
+				continue;
 			} else if (frame && data >= 176 && data < 224) {
 				data = frame_dumb[data - 176];
-			}
 
-			add_char_to_string(string, data);
+				if (data <= ' ') {
+					/* Count spaces. */
+					white++;
+				} else {
+					/* Print spaces if any. */
+					if (white) {
+						add_xchar_to_string(string, ' ', white);
+						white = 0;
+					}
+					add_char_to_string(string, data);
+				}
+			}
 		}
 
 		add_char_to_string(string, '\n');
@@ -354,11 +366,24 @@ add_document_to_string(struct string *string, struct document *document)
 	return string;
 }
 
+#define D_BUF	65536
+
+static int
+write_char(unsigned char c, int fd, unsigned char *buf, int *bptr)
+{
+	buf[(*bptr)++] = c;
+	if ((*bptr) >= D_BUF) {
+		if (hard_write(fd, buf, (*bptr)) != (*bptr))
+			return -1;
+		(*bptr) = 0;
+	}
+
+	return 0;
+}
+
 int
 dump_to_file(struct document *document, int fd)
 {
-#define D_BUF	65536
-
 	int y;
 	int bptr = 0;
 	unsigned char *buf = mem_alloc(D_BUF);
@@ -366,30 +391,40 @@ dump_to_file(struct document *document, int fd)
 	if (!buf) return -1;
 
 	for (y = 0; y < document->height; y++) {
+		int white = 0;
 		int x;
 
-		for (x = 0; x <= document->data[y].length; x++) {
+		for (x = 0; x < document->data[y].length; x++) {
 			unsigned char c;
+			unsigned char attr = document->data[y].chars[x].attr;
 
-			if (x == document->data[y].length) {
-				c = '\n';
-			} else {
-				unsigned char attr = document->data[y].chars[x].attr;
+			c = document->data[y].chars[x].data;
 
-				c = document->data[y].chars[x].data;
+			if ((attr & SCREEN_ATTR_FRAME)
+			    && c >= 176 && c < 224)
+				c = frame_dumb[c - 176];
 
-				if ((attr & SCREEN_ATTR_FRAME)
-				    && c >= 176 && c < 224)
-					c = frame_dumb[c - 176];
+			if (c <= ' ') {
+				/* Count spaces. */
+				white++;
+				continue;
 			}
 
-			buf[bptr++] = c;
-			if (bptr >= D_BUF) {
-				if (hard_write(fd, buf, bptr) != bptr)
+			/* Print spaces if any. */
+			while (white) {
+				if (write_char(' ', fd, buf, &bptr))
 					goto fail;
-				bptr = 0;
+				white--;
 			}
+
+			/* Print normal char. */
+			if (write_char(c, fd, buf, &bptr))
+				goto fail;
 		}
+
+		/* Print end of line. */
+		if (write_char('\n', fd, buf, &bptr))
+			goto fail;
 	}
 
 	if (hard_write(fd, buf, bptr) != bptr) {
@@ -435,6 +470,6 @@ fail:
 
 	mem_free(buf);
 	return 0;
+}
 
 #undef D_BUF
-}

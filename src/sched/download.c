@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.149 2003/11/09 22:41:51 zas Exp $ */
+/* $Id: download.c,v 1.150 2003/11/09 22:50:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -327,15 +327,12 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	if (!init_string(&msg)) return;
 	t = download_progress_string(term, download, &msg);
 
-	url = strchr(file_download->url, POST_CHAR);
-	url_len = url ? url - file_download->url : strlen(file_download->url);
-	url = memacpy(file_download->url, url_len);
-
+	url = get_no_post_url(file_download->url, &url_len);
 	if (!url) {
 		done_string(&msg);
 		return;
 	}
-
+	
 	if (t && download->prg->size >= 0) {
 		int_lower_bound(&w, DOWN_DLG_MIN);
 	}
@@ -519,7 +516,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 			unsigned char *errmsg = get_err_msg(download->state, term);
 
 			if (errmsg) {
-				unsigned char *url = get_no_post_url(file_download->url);
+				unsigned char *url = get_no_post_url(file_download->url, NULL);
 
 				if (url) {
 					msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
@@ -545,7 +542,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 
 			} else {
 				if (file_download->notify) {
-					unsigned char *url = get_no_post_url(file_download->url);
+					unsigned char *url = get_no_post_url(file_download->url, NULL);
 
 					if (url) {
 						msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,

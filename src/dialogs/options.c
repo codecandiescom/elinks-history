@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.131 2003/12/07 21:03:15 pasky Exp $ */
+/* $Id: options.c,v 1.132 2003/12/07 21:26:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,9 +137,9 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 }
 
 #ifdef USE_256_COLORS
-#define TERMOPT_WIDGETS_COUNT 18
+#define TERMOPT_WIDGETS_COUNT 19
 #else
-#define TERMOPT_WIDGETS_COUNT 17
+#define TERMOPT_WIDGETS_COUNT 18
 #endif
 
 void

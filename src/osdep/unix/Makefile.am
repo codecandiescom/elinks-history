@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2003/10/28 00:17:50 pasky Exp $
+## $Id: Makefile.am,v 1.2 2003/10/28 00:23:54 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -12,5 +12,6 @@ include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libsystem.a
 libsystem_a_SOURCES = \
+ sysinfo.h \
  unix.c \
  unix.h

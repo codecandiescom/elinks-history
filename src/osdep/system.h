@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.10 2003/10/27 23:46:55 pasky Exp $ */
+/* $Id: system.h,v 1.11 2003/10/28 00:23:52 pasky Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -31,11 +31,11 @@
 
 #include "osdep/beos/overrides.h"
 
-#include "osdep/sysinfo/unix.h"
-#include "osdep/sysinfo/os2.h"
-#include "osdep/sysinfo/win32.h"
-#include "osdep/sysinfo/beos.h"
-#include "osdep/sysinfo/riscos.h"
+#include "osdep/beos/sysinfo.h"
+#include "osdep/os2/sysinfo.h"
+#include "osdep/riscos/sysinfo.h"
+#include "osdep/unix/sysinfo.h"
+#include "osdep/win32/sysinfo.h"
 
 #ifndef HAVE_SA_STORAGE
 #define sockaddr_storage sockaddr

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2003/10/28 00:07:31 pasky Exp $
+## $Id: Makefile.am,v 1.2 2003/10/28 00:23:52 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -15,4 +15,5 @@ libsystem_a_SOURCES = \
  beos.c \
  beos.h \
  overrides.c \
- overrides.h
+ overrides.h \
+ sysinfo.h

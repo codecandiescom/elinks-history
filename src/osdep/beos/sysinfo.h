@@ -1,7 +1,7 @@
-/* $Id: sysinfo.h,v 1.2 2003/10/27 23:46:56 pasky Exp $ */
+/* $Id: sysinfo.h,v 1.3 2003/10/28 00:23:52 pasky Exp $ */
 
-#ifndef EL__OSDEP_BEOS_H
-#define EL__OSDEP_BEOS_H
+#ifndef EL__OSDEP_BEOS_SYSINFO_H
+#define EL__OSDEP_BEOS_SYSINFO_H
 
 #ifdef BEOS
 

@@ -1,7 +1,7 @@
-/* $Id: sysinfo.h,v 1.1 2003/10/27 23:40:24 pasky Exp $ */
+/* $Id: sysinfo.h,v 1.2 2003/10/28 00:23:54 pasky Exp $ */
 
-#ifndef EL__OSDEP_WIN32_H
-#define EL__OSDEP_WIN32_H
+#ifndef EL__OSDEP_WIN32_SYSINFO_H
+#define EL__OSDEP_WIN32_SYSINFO_H
 
 #ifdef WIN32
 

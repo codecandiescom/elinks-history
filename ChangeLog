@@ -1,3 +1,25 @@
+Fri Mar 22 19:19:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS, src/dialogs/info.c:
+	
+	fixed the about dialog bug
+
+Fri Mar 22 18:57:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/Makefile.am, bfu/bfu.c, bfu/bfu.h,
+	bookmarks/bookmarks.c, dialogs/menu.c, document/session.c,
+	document/view.c, document/html/parser.c, protocol/types.c,
+	bfu/menu.c, bfu/menu.h:
+	
+	move menu system implementation to bfu/menu.c
+
+Fri Mar 22 18:26:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/sched.c, util/Makefile.am, util/base64.c,
+	util/base64.h:
+	
+	moved base64 encoder to util/base64.c
+
 Fri Mar 22 18:12:03 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/hpux-pipe.diff:

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.41 2003/10/27 23:14:12 pasky Exp $ */
+/* $Id: socket.c,v 1.42 2003/11/13 09:17:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,6 +178,7 @@ ssl_want_read(struct connection *conn)
 int
 ssl_connect(struct connection *conn, int sock)
 {
+	unsigned char *client_cert = NULL;
 	int ret;
 
 	assertm(conn->ssl, "No ssl handle");
@@ -187,6 +188,17 @@ ssl_connect(struct connection *conn, int sock)
 
 #ifdef HAVE_OPENSSL
 	SSL_set_fd(conn->ssl, sock);
+
+	if (get_opt_bool("connection.ssl.client_cert.enable")) {
+		client_cert = get_opt_str("connection.ssl.client_cert.file");
+		if (!client_cert || !*client_cert) {
+			client_cert = getenv("X509_CLIENT_CERT");
+			if (client_cert && !*client_cert)
+				client_cert = NULL;
+		}
+	}
+
+
 #elif defined(HAVE_GNUTLS)
 	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), sock);
 #endif
@@ -196,6 +208,15 @@ ssl_connect(struct connection *conn, int sock)
 		SSL_set_verify(conn->ssl, SSL_VERIFY_PEER
 					  | SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
 				NULL);
+
+	if (client_cert) {
+		SSL_CTX *ctx = ((SSL *)conn->ssl)->ctx;
+
+		SSL_CTX_use_certificate_chain_file(ctx, client_cert);
+		SSL_CTX_use_PrivateKey_file(ctx, client_cert,
+					    SSL_FILETYPE_PEM);
+	}
+
 	ret = SSL_get_error(conn->ssl, SSL_connect(conn->ssl));
 #elif defined(HAVE_GNUTLS)
 	ret = gnutls_handshake(*((ssl_t *) conn->ssl));

@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.42 2003/10/30 15:29:57 pasky Exp $ */
+/* $Id: ssl.c,v 1.43 2003/11/13 09:17:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,6 +74,22 @@ static struct option_info openssl_options[] = {
 		"cert_verify", 0, 0,
 		N_("Verify the peer's SSL certificate. Note that this\n"
 		"needs extensive configuration of OpenSSL by the user.")),
+
+	INIT_OPT_TREE("connection.ssl", N_("Client Certificates"),
+        	"client_cert", OPT_SORT,
+        	N_("X509 client certificate options.")),
+
+	INIT_OPT_BOOL("connection.ssl.client_cert", N_("Enable"),
+		"enable", 0, 0,
+		 N_("Enable or not the sending of X509 client certificates\n"
+		    "to servers which request them.")),
+
+	INIT_OPT_STRING("connection.ssl.client_cert", N_("Certificate File"),
+		"file", 0, "",
+		 N_("The location of a file containing the client certificate\n"
+		    "and unencrypted private key in PEM format. If unset, the\n"
+		    "file pointed to by the X509_CLIENT_CERT variable is used\n"
+		    "instead.")),
 
 	NULL_OPTION_INFO,
 };
@@ -193,6 +209,7 @@ init_ssl_connection(struct connection *conn)
 	conn->ssl = SSL_new(context);
 	if (!conn->ssl) return S_SSL_ERROR;
 #elif defined(HAVE_GNUTLS)
+	const unsigned char server_name[] = "localhost";
 	ssl_t *state = mem_alloc(sizeof(GNUTLS_STATE));
 
 	if (!state) return S_SSL_ERROR;
@@ -224,7 +241,8 @@ init_ssl_connection(struct connection *conn)
 	gnutls_protocol_set_priority(*state, protocol_priority);
 	gnutls_mac_set_priority(*state, mac_priority);
 	gnutls_certificate_type_set_priority(*state, cert_type_priority);
-	gnutls_set_server_name(*state, GNUTLS_NAME_DNS, "localhost", strlen("localhost"));
+	gnutls_set_server_name(*state, GNUTLS_NAME_DNS, server_name,
+			       sizeof(server_name) - 1);
 
 	conn->ssl = state;
 #endif

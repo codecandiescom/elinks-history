@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.25 2004/09/24 23:19:03 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.26 2004/09/24 23:24:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,35 +55,46 @@ enum prop_type {
 	JSPT_STRING,
 	JSPT_ASTRING,
 	JSPT_BOOLEAN,
+	JSPT_OBJECT,
 };
 
 #define VALUE_TO_JSVAL_START \
 	enum prop_type prop_type; \
+	JSObject *object = NULL; \
 	unsigned char *string = NULL; \
  \
 	if (!JSVAL_IS_INT(id)) \
 		goto bye;
 
 #define VALUE_TO_JSVAL_END \
-	value_to_jsval(ctx, vp, prop_type, string); \
+	value_to_jsval(ctx, vp, prop_type, string, object); \
  \
 bye: \
 	return JS_TRUE;
 
 static void
 value_to_jsval(JSContext *ctx, jsval *vp, enum prop_type prop_type,
-	       unsigned char *string)
+	       unsigned char *string, JSObject *object)
 {
+	if (!string) {
+		*vp = JSVAL_NULL;
+		return;
+	}
+
 	switch (prop_type) {
 	case JSPT_STRING:
 	case JSPT_ASTRING:
-		if (string) {
-			*vp = STRING_TO_JSVAL(JS_NewStringCopyZ(ctx, string));
-		} else {
-			*vp = JSVAL_NULL;
-		}
+		*vp = STRING_TO_JSVAL(JS_NewStringCopyZ(ctx, string));
 		if (prop_type == JSPT_ASTRING)
 			mem_free(string);
+		break;
+
+	case JSPT_BOOLEAN:
+		*vp = BOOLEAN_TO_JSVAL(atoi(string));
+		break;
+
+	case JSPT_OBJECT:
+		*vp = OBJECT_TO_JSVAL(object);
 		break;
 
 	case JSPT_UNDEF:
@@ -191,7 +202,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		/* TODO: It will be a major PITA to implement this properly.
 		 * Well, perhaps not so much if we introduce reference tracking
 		 * for (struct session)? Still... --pasky */
-		boolean = 0; prop_type = JSPT_BOOLEAN; break;
+		string = "0"; prop_type = JSPT_BOOLEAN; break;
 	case JSP_WIN_SELF: object = obj; prop_type = JSPT_OBJECT; break;
 	case JSP_WIN_TOP:
 	{

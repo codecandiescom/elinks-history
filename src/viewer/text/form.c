@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.197 2004/06/16 21:33:51 zas Exp $ */
+/* $Id: form.c,v 1.198 2004/06/16 21:39:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,19 +142,19 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 }
 
 static void
-init_form_state(struct form_control *frm, struct form_state *fs)
+init_form_state(struct form_control *fc, struct form_state *fs)
 {
-	assert(frm && fs);
+	assert(fc && fs);
 	if_assert_failed return;
 
 	mem_free_set(&fs->value, NULL);
 
-	switch (frm->type) {
+	switch (fc->type) {
 		case FC_TEXT:
 		case FC_PASSWORD:
 		case FC_TEXTAREA:
-			fs->value = stracpy(frm->default_value);
-			fs->state = strlen(frm->default_value);
+			fs->value = stracpy(fc->default_value);
+			fs->state = strlen(fc->default_value);
 			fs->vpos = 0;
 			break;
 		case FC_FILE:
@@ -164,12 +164,12 @@ init_form_state(struct form_control *frm, struct form_state *fs)
 			break;
 		case FC_CHECKBOX:
 		case FC_RADIO:
-			fs->state = frm->default_state;
+			fs->state = fc->default_state;
 			break;
 		case FC_SELECT:
-			fs->value = stracpy(frm->default_value);
-			fs->state = frm->default_state;
-			fixup_select_state(frm, fs);
+			fs->value = stracpy(fc->default_value);
+			fs->state = fc->default_state;
+			fixup_select_state(fc, fs);
 			break;
 		case FC_SUBMIT:
 		case FC_IMAGE:
@@ -205,17 +205,17 @@ done_form_control(struct form_control *fc)
 }
 
 struct form_state *
-find_form_state(struct document_view *doc_view, struct form_control *frm)
+find_form_state(struct document_view *doc_view, struct form_control *fc)
 {
 	struct view_state *vs;
 	struct form_state *fs;
 	int n;
 
-	assert(doc_view && doc_view->vs && frm);
+	assert(doc_view && doc_view->vs && fc);
 	if_assert_failed return NULL;
 
 	vs = doc_view->vs;
-	n = frm->g_ctrl_num;
+	n = fc->g_ctrl_num;
 
 	if (n >= vs->form_info_len) {
 		int nn = n + 1;
@@ -229,21 +229,21 @@ find_form_state(struct document_view *doc_view, struct form_control *frm)
 	}
 	fs = &vs->form_info[n];
 
-	if (fs->form_num == frm->form_num
-	    && fs->ctrl_num == frm->ctrl_num
-	    && fs->g_ctrl_num == frm->g_ctrl_num
-	    && fs->position == frm->position
-	    && fs->type == frm->type)
+	if (fs->form_num == fc->form_num
+	    && fs->ctrl_num == fc->ctrl_num
+	    && fs->g_ctrl_num == fc->g_ctrl_num
+	    && fs->position == fc->position
+	    && fs->type == fc->type)
 		return fs;
 
 	mem_free_if(fs->value);
 	memset(fs, 0, sizeof(struct form_state));
-	fs->form_num = frm->form_num;
-	fs->ctrl_num = frm->ctrl_num;
-	fs->g_ctrl_num = frm->g_ctrl_num;
-	fs->position = frm->position;
-	fs->type = frm->type;
-	init_form_state(frm, fs);
+	fs->form_num = fc->form_num;
+	fs->ctrl_num = fc->ctrl_num;
+	fs->g_ctrl_num = fc->g_ctrl_num;
+	fs->position = fc->position;
+	fs->type = fc->type;
+	init_form_state(fc, fs);
 
 	return fs;
 }
@@ -275,7 +275,7 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 		struct link *link)
 {
 	struct form_state *fs;
-	struct form_control *frm;
+	struct form_control *fc;
 	struct view_state *vs;
 	struct box *box;
 	int dx, dy;
@@ -283,18 +283,18 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 	assert(term && doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
 
-	frm = link->form_control;
-	assertm(frm, "link %d has no form", (int)(link - doc_view->document->links));
+	fc = link->form_control;
+	assertm(fc, "link %d has no form control", (int)(link - doc_view->document->links));
 	if_assert_failed return;
 
-	fs = find_form_state(doc_view, frm);
+	fs = find_form_state(doc_view, fc);
 	if (!fs) return;
 
 	box = &doc_view->box;
 	vs = doc_view->vs;
 	dx = box->x - vs->x;
 	dy = box->y - vs->y;
-	switch (frm->type) {
+	switch (fc->type) {
 		unsigned char *s;
 		int len;
 		register int i, x, y;
@@ -302,18 +302,18 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 		case FC_TEXT:
 		case FC_PASSWORD:
 		case FC_FILE:
-			int_bounds(&fs->vpos, fs->state - frm->size + 1, fs->state);
+			int_bounds(&fs->vpos, fs->state - fc->size + 1, fs->state);
 			if (!link->npoints) break;
 
 			y = link->points[0].y + dy;
 			if (row_is_in_box(box, y)) {
 				len = strlen(fs->value) - fs->vpos;
 				x = link->points[0].x + dx;
-				for (i = 0; i < frm->size; i++, x++) {
+				for (i = 0; i < fc->size; i++, x++) {
 					if (!col_is_in_box(box, x)) continue;
 					if (fs->value && i >= -fs->vpos && i < len)
 						draw_char_data(term, x, y,
-							       frm->type != FC_PASSWORD
+							       fc->type != FC_PASSWORD
 							       ? fs->value[i + fs->vpos]
 							       : '*');
 					else
@@ -333,9 +333,9 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 				draw_char_data(term, x, y, fs->state ? 'X' : ' ');
 			break;
 		case FC_SELECT:
-			fixup_select_state(frm, fs);
-			if (fs->state < frm->nvalues)
-				s = frm->labels[fs->state];
+			fixup_select_state(fc, fs);
+			if (fs->state < fc->nvalues)
+				s = fc->labels[fs->state];
 			else
 				/* XXX: when can this happen? --pasky */
 				s = "";
@@ -393,18 +393,18 @@ draw_forms(struct terminal *term, struct document_view *doc_view)
 
 
 int
-has_form_submit(struct document *document, struct form_control *frm)
+has_form_submit(struct document *document, struct form_control *fc)
 {
-	struct form_control *fc;
+	struct form_control *fc2;
 	int found = 0;
 
-	assert(document && frm);
+	assert(document && fc);
 	if_assert_failed return 0;
 
-	foreach (fc, document->forms) {
-		if (fc->form_num != frm->form_num) continue;
+	foreach (fc2, document->forms) {
+		if (fc2->form_num != fc->form_num) continue;
 		found = 1;
-		if (fc->type == FC_SUBMIT || fc->type == FC_IMAGE)
+		if (fc2->type == FC_SUBMIT || fc2->type == FC_IMAGE)
 			break;
 	}
 
@@ -431,7 +431,7 @@ done_submitted_value_list(struct list_head *list)
 }
 
 static void
-add_submitted_value_to_list(struct form_control *frm,
+add_submitted_value_to_list(struct form_control *fc,
 		            struct form_state *fs,
 		            struct list_head *list)
 {
@@ -440,18 +440,18 @@ add_submitted_value_to_list(struct form_control *frm,
 	enum form_type type;
 	int position;
 
-	assert(frm && fs && list);
+	assert(fc && fs && list);
 
-	name = frm->name;
-	position = frm->form_num + frm->ctrl_num;
-	type = frm->type;
+	name = fc->name;
+	position = fc->form_num + fc->ctrl_num;
+	type = fc->type;
 
-	switch (frm->type) {
+	switch (fc->type) {
 	case FC_TEXT:
 	case FC_PASSWORD:
 	case FC_FILE:
 	case FC_TEXTAREA:
-		sub = init_submitted_value(name, fs->value, type, frm, position);
+		sub = init_submitted_value(name, fs->value, type, fc, position);
 		if (sub) add_to_list(*list, sub);
 		break;
 
@@ -463,29 +463,29 @@ add_submitted_value_to_list(struct form_control *frm,
 	case FC_SUBMIT:
 	case FC_HIDDEN:
 	case FC_RESET:
-		sub = init_submitted_value(name, frm->default_value, type, frm,
+		sub = init_submitted_value(name, fc->default_value, type, fc,
 					   position);
 		if (sub) add_to_list(*list, sub);
 		break;
 
 	case FC_SELECT:
-		if (!frm->nvalues) break;
+		if (!fc->nvalues) break;
 
-		fixup_select_state(frm, fs);
-		sub = init_submitted_value(name, fs->value, type, frm, position);
+		fixup_select_state(fc, fs);
+		sub = init_submitted_value(name, fs->value, type, fc, position);
 		if (sub) add_to_list(*list, sub);
 		break;
 
 	case FC_IMAGE:
-	        name = straconcat(frm->name, ".x", NULL);
+	        name = straconcat(fc->name, ".x", NULL);
 		if (!name) break;
-		sub = init_submitted_value(name, "0", type, frm, position);
+		sub = init_submitted_value(name, "0", type, fc, position);
 		mem_free(name);
 		if (sub) add_to_list(*list, sub);
 
-		name = straconcat(frm->name, ".y", NULL);
+		name = straconcat(fc->name, ".y", NULL);
 		if (!name) break;
-		sub = init_submitted_value(name, "0", type, frm, position);
+		sub = init_submitted_value(name, "0", type, fc, position);
 		mem_free(name);
 		if (sub) add_to_list(*list, sub);
 
@@ -525,22 +525,22 @@ static void
 get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
 		       struct list_head *list)
 {
-	struct form_control *frm;
+	struct form_control *fc2;
 
 	assert(doc_view && doc_view->document && fc && list);
 	if_assert_failed return;
 
-	foreach (frm, doc_view->document->forms) {
-		if (frm->form_num == fc->form_num
-		    && ((frm->type != FC_SUBMIT &&
-			 frm->type != FC_IMAGE &&
-			 frm->type != FC_RESET) || frm == fc)
-		    && frm->name && frm->name[0]) {
-			struct form_state *fs = find_form_state(doc_view, frm);
+	foreach (fc2, doc_view->document->forms) {
+		if (fc2->form_num == fc->form_num
+		    && ((fc2->type != FC_SUBMIT &&
+			 fc2->type != FC_IMAGE &&
+			 fc2->type != FC_RESET) || fc2 == fc)
+		    && fc2->name && fc2->name[0]) {
+			struct form_state *fs = find_form_state(doc_view, fc);
 
 			if (!fs) continue;
 
-			add_submitted_value_to_list(frm, fs, list);
+			add_submitted_value_to_list(fc, fs, list);
 		}
 	}
 
@@ -893,16 +893,16 @@ encode_text_plain(struct list_head *l, struct string *data,
 static void
 do_reset_form(struct document_view *doc_view, int form_num)
 {
-	struct form_control *frm;
+	struct form_control *fc;
 
 	assert(doc_view && doc_view->document);
 	if_assert_failed return;
 
-	foreach (frm, doc_view->document->forms)
-		if (frm->form_num == form_num) {
-			struct form_state *fs = find_form_state(doc_view, frm);
+	foreach (fc, doc_view->document->forms)
+		if (fc->form_num == form_num) {
+			struct form_state *fs = find_form_state(doc_view, fc);
 
-			if (fs) init_form_state(frm, fs);
+			if (fs) init_form_state(fc, fs);
 		}
 }
 
@@ -919,7 +919,7 @@ reset_form(struct session *ses, struct document_view *doc_view, int a)
 
 struct uri *
 get_form_uri(struct session *ses, struct document_view *doc_view,
-	     struct form_control *frm)
+	     struct form_control *fc)
 {
 	struct boundary_info boundary;
 	INIT_LIST_HEAD(submit);
@@ -930,23 +930,23 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
-	assert(doc_view && doc_view->document && frm);
+	assert(doc_view && doc_view->document && fc);
 	if_assert_failed return NULL;
 
-	if (frm->type == FC_RESET) {
-		do_reset_form(doc_view, frm->form_num);
+	if (fc->type == FC_RESET) {
+		do_reset_form(doc_view, fc->form_num);
 		return NULL;
 	}
 
-	if (!frm->action
+	if (!fc->action
 	    || !init_string(&data))
 		return NULL;
 
-	get_succesful_controls(doc_view, frm, &submit);
+	get_succesful_controls(doc_view, fc, &submit);
 
 	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
 	cp_to = doc_view->document->cp;
-	switch (frm->method) {
+	switch (fc->method) {
 	case FM_GET:
 	case FM_POST:
 		encode_controls(&submit, &data, cp_from, cp_to);
@@ -967,7 +967,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	 * these two classes of errors (is it worth it?). -- Miciah */
 	if (data.source
 	    && get_opt_bool("document.browse.forms.show_formhist"))
-		memorize_form(ses, &submit, frm);
+		memorize_form(ses, &submit, fc);
 #endif
 
 	done_submitted_value_list(&submit);
@@ -978,15 +978,15 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 		return NULL;
 	}
 
-	switch (frm->method) {
+	switch (fc->method) {
 	case FM_GET:
 	{
-		unsigned char *pos = strchr(frm->action, '#');
+		unsigned char *pos = strchr(fc->action, '#');
 
 		if (pos) {
-			add_bytes_to_string(&go, frm->action, pos - frm->action);
+			add_bytes_to_string(&go, fc->action, pos - fc->action);
 		} else {
-			add_to_string(&go, frm->action);
+			add_to_string(&go, fc->action);
 		}
 
 		if (strchr(go.source, '?'))
@@ -1005,12 +1005,12 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	{
 		register int i;
 
-		add_to_string(&go, frm->action);
+		add_to_string(&go, fc->action);
 		add_char_to_string(&go, POST_CHAR);
-		if (frm->method == FM_POST) {
+		if (fc->method == FM_POST) {
 			add_to_string(&go, "application/x-www-form-urlencoded\n");
 
-		} else if (frm->method == FM_POST_TEXT_PLAIN) {
+		} else if (fc->method == FM_POST_TEXT_PLAIN) {
 			/* Dunno about this one but we don't want the full
 			 * hextcat thingy. --jonas */
 			add_to_string(&go, "text/plain\n");
@@ -1071,7 +1071,7 @@ enum frame_event_status
 field_op(struct session *ses, struct document_view *doc_view,
 	 struct link *link, struct term_event *ev, int rep)
 {
-	struct form_control *frm;
+	struct form_control *fc;
 	struct form_state *fs;
 	enum edit_action action;
 	unsigned char *text;
@@ -1081,11 +1081,11 @@ field_op(struct session *ses, struct document_view *doc_view,
 	assert(ses && doc_view && link && ev);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	frm = link->form_control;
-	assertm(frm, "link has no form control");
+	fc = link->form_control;
+	assertm(fc, "link has no form control");
 	if_assert_failed return FRAME_EVENT_OK;
 
-	if (frm->ro == 2 || ev->ev != EV_KBD)
+	if (fc->ro == 2 || ev->ev != EV_KBD)
 		return FRAME_EVENT_IGNORED;
 
 	action = kbd_action(KM_EDIT, ev, NULL);
@@ -1098,7 +1098,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 		return FRAME_EVENT_IGNORED;
 	}
 
-	fs = find_form_state(doc_view, frm);
+	fs = find_form_state(doc_view, fc);
 	if (!fs || !fs->value) return FRAME_EVENT_OK;
 
 	switch (action) {
@@ -1109,50 +1109,50 @@ field_op(struct session *ses, struct document_view *doc_view,
 			fs->state = int_min(fs->state + 1, strlen(fs->value));
 			break;
 		case ACT_EDIT_HOME:
-			if (frm->type == FC_TEXTAREA) {
-				status = textarea_op_home(fs, frm, rep);
+			if (fc->type == FC_TEXTAREA) {
+				status = textarea_op_home(fs, fc, rep);
 			} else {
 				fs->state = 0;
 			}
 			break;
 		case ACT_EDIT_UP:
-			if (frm->type != FC_TEXTAREA)
+			if (fc->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
 			else
-				status = textarea_op_up(fs, frm, rep);
+				status = textarea_op_up(fs, fc, rep);
 			break;
 		case ACT_EDIT_DOWN:
-			if (frm->type != FC_TEXTAREA)
+			if (fc->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
 			else
-				status = textarea_op_down(fs, frm, rep);
+				status = textarea_op_down(fs, fc, rep);
 			break;
 		case ACT_EDIT_END:
-			if (frm->type == FC_TEXTAREA) {
-				status = textarea_op_end(fs, frm, rep);
+			if (fc->type == FC_TEXTAREA) {
+				status = textarea_op_end(fs, fc, rep);
 			} else {
 				fs->state = strlen(fs->value);
 			}
 			break;
 		case ACT_EDIT_BEGINNING_OF_BUFFER:
-			if (frm->type == FC_TEXTAREA) {
-				status = textarea_op_bob(fs, frm, rep);
+			if (fc->type == FC_TEXTAREA) {
+				status = textarea_op_bob(fs, fc, rep);
 			} else {
 				fs->state = 0;
 			}
 			break;
 		case ACT_EDIT_END_OF_BUFFER:
-			if (frm->type == FC_TEXTAREA) {
-				status = textarea_op_eob(fs, frm, rep);
+			if (fc->type == FC_TEXTAREA) {
+				status = textarea_op_eob(fs, fc, rep);
 			} else {
 				fs->state = strlen(fs->value);
 			}
 			break;
 		case ACT_EDIT_EDIT:
-			if (frm->ro)
+			if (fc->ro)
 				status = FRAME_EVENT_IGNORED;
-			else if (frm->type == FC_TEXTAREA && !frm->ro)
-				textarea_edit(0, ses->tab->term, frm, fs, doc_view, link);
+			else if (fc->type == FC_TEXTAREA && !fc->ro)
+				textarea_edit(0, ses->tab->term, fc, fs, doc_view, link);
 			break;
 		case ACT_EDIT_COPY_CLIPBOARD:
 			set_clipboard_text(fs->value);
@@ -1160,17 +1160,17 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 		case ACT_EDIT_CUT_CLIPBOARD:
 			set_clipboard_text(fs->value);
-			if (!frm->ro) fs->value[0] = 0;
+			if (!fc->ro) fs->value[0] = 0;
 			fs->state = 0;
 			break;
 		case ACT_EDIT_PASTE_CLIPBOARD:
-			if (frm->ro) break;
+			if (fc->ro) break;
 
 			text = get_clipboard_text();
 			if (!text) break;
 
 			length = strlen(text);
-			if (length <= frm->maxlength) {
+			if (length <= fc->maxlength) {
 				unsigned char *v = mem_realloc(fs->value, length + 1);
 
 				if (v) {
@@ -1182,13 +1182,13 @@ field_op(struct session *ses, struct document_view *doc_view,
 			mem_free(text);
 			break;
 		case ACT_EDIT_ENTER:
-			if (frm->type != FC_TEXTAREA)
+			if (fc->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
 			else
-				status = textarea_op_enter(fs, frm, rep);
+				status = textarea_op_enter(fs, fc, rep);
 			break;
 		case ACT_EDIT_BACKSPACE:
-			if (frm->ro) {
+			if (fc->ro) {
 				status = FRAME_EVENT_IGNORED;
 				break;
 			}
@@ -1205,7 +1205,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			fs->state--;
 			break;
 		case ACT_EDIT_DELETE:
-			if (frm->ro) {
+			if (fc->ro) {
 				status = FRAME_EVENT_IGNORED;
 				break;
 			}
@@ -1221,7 +1221,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			memmove(text, text + 1, length - fs->state);
 			break;
 		case ACT_EDIT_KILL_TO_BOL:
-			if (frm->ro) {
+			if (fc->ro) {
 				status = FRAME_EVENT_IGNORED;
 				break;
 			}
@@ -1247,7 +1247,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			fs->state = (int) (text - fs->value);
 			break;
 		case ACT_EDIT_KILL_TO_EOL:
-			if (frm->ro) {
+			if (fc->ro) {
 				status = FRAME_EVENT_IGNORED;
 				break;
 			}
@@ -1285,10 +1285,10 @@ field_op(struct session *ses, struct document_view *doc_view,
 				break;
 			}
 
-			if (frm->ro) break;
+			if (fc->ro) break;
 
 			length = strlen(fs->value);
-			if (length >= frm->maxlength) {
+			if (length >= fc->maxlength) {
 				status = FRAME_EVENT_OK;
 				break;
 			}

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.50 2004/05/09 23:33:13 jonas Exp $ */
+/* $Id: protocol.c,v 1.51 2004/06/08 16:13:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,28 +36,27 @@ struct protocol_backend {
 	unsigned char *name;
 	int port;
 	protocol_handler *handler;
-	unsigned int free_syntax:1;
 	unsigned int need_slashes:1;
 	unsigned int need_slash_after_host:1;
 };
 
 static const struct protocol_backend protocol_backends[] = {
-	{ "file",	   0, file_protocol_handler,	1, 1, 0 },
-	{ "finger",	  79, finger_protocol_handler,	0, 1, 1 },
-	{ "ftp",	  21, ftp_protocol_handler,	0, 1, 1 },
-	{ "http",	  80, http_protocol_handler,	0, 1, 1 },
-	{ "https",	 443, https_protocol_handler,	0, 1, 1 },
-	{ "smb",	 139, smb_protocol_handler,	0, 1, 1 },
-	{ "javascript",	   0, NULL,			0, 0, 0 },
-	{ "proxy",	3128, proxy_protocol_handler,	0, 1, 1 },
+	{ "file",	   0, file_protocol_handler,	1, 0 },
+	{ "finger",	  79, finger_protocol_handler,	1, 1 },
+	{ "ftp",	  21, ftp_protocol_handler,	1, 1 },
+	{ "http",	  80, http_protocol_handler,	1, 1 },
+	{ "https",	 443, https_protocol_handler,	1, 1 },
+	{ "smb",	 139, smb_protocol_handler,	1, 1 },
+	{ "javascript",	   0, NULL,			0, 0 },
+	{ "proxy",	3128, proxy_protocol_handler,	1, 1 },
 
 	/* Keep these last! */
-	{ NULL,		   0, NULL,			0, 0, 0 },
+	{ NULL,		   0, NULL,			0, 0 },
 
-	{ "user",	   0, NULL,			0, 0, 0 },
+	{ "user",	   0, NULL,			0, 0 },
 	/* Internal protocol for mapping to protocol.user.* handlers. Placed
 	 * last because it's checked first and else should be ignored. */
-	{ "custom",	   0, NULL,			0, 0, 0 },
+	{ "custom",	   0, NULL,			0, 0 },
 };
 
 
@@ -90,14 +89,6 @@ get_protocol_port(enum protocol protocol)
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
 	return protocol_backends[protocol].port;
-}
-
-int
-get_protocol_free_syntax(enum protocol protocol)
-{
-	assert(VALID_PROTOCOL(protocol));
-	if_assert_failed return 0;
-	return protocol_backends[protocol].free_syntax;
 }
 
 int

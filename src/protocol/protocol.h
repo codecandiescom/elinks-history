@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.28 2004/05/07 17:53:30 jonas Exp $ */
+/* $Id: protocol.h,v 1.29 2004/06/08 16:13:01 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -35,7 +35,6 @@ typedef void (protocol_external_handler)(struct session *, struct uri *);
 /* Accessors for the protocol backends. */
 
 int get_protocol_port(enum protocol protocol);
-int get_protocol_free_syntax(enum protocol protocol);
 int get_protocol_need_slashes(enum protocol protocol);
 int get_protocol_need_slash_after_host(enum protocol protocol);
 

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.60 2003/09/26 19:59:47 pasky Exp $ */
+/* $Id: charsets.c,v 1.61 2003/09/29 14:17:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -592,12 +592,12 @@ convert_string(struct conv_table *convert_table, unsigned char *chars,
 
 #define PUTC do { \
 		buffer[bufferpos++] = chars[charspos++]; \
-		e = ""; \
+		translit = ""; \
 		goto flush; \
 	} while (0)
 
 	while (charspos < charslen) {
-		unsigned char *e;
+		unsigned char *translit;
 
 		if (chars[charspos] != '&') {
 			struct conv_table *t;
@@ -609,7 +609,7 @@ convert_string(struct conv_table *convert_table, unsigned char *chars,
 			i = charspos;
 decode:
 			if (!t[chars[i]].t) {
-				e = t[chars[i]].u.str;
+				translit = t[chars[i]].u.str;
 			} else {
 				t = t[chars[i++]].u.tbl;
 				if (i >= charslen) PUTC;
@@ -635,7 +635,7 @@ decode:
 			 * appears to be relatively common! --pasky */
 			if ((mode != CSM_QUERY || (chars[i] != '&' && chars[i] != '='))
 			    && i > start && !isalnum(chars[i])) {
-				e = get_entity_string(&chars[start], i - start,
+				translit = get_entity_string(&chars[start], i - start,
 						      d_opt->cp);
 				if (chars[i] != ';') {
 					/* Eat &nbsp &nbsp<foo> happily, but
@@ -645,23 +645,23 @@ decode:
 					i--;
 				}
 
-				if (!e) PUTC;
+				if (!translit) PUTC;
 				charspos = i + (i < charslen);
 			} else PUTC;
 		}
 
-		if (!e[0]) continue;
+		if (!translit[0]) continue;
 
-		if (!e[1]) {
-			buffer[bufferpos++] = e[0];
-			e = "";
+		if (!translit[1]) {
+			buffer[bufferpos++] = translit[0];
+			translit = "";
 			goto flush;
 		}
 
-		while (*e) {
+		while (*translit) {
 			unsigned char *new;
 
-			buffer[bufferpos++] = *(e++);
+			buffer[bufferpos++] = *(translit++);
 flush:
 			if (bufferpos & (ALLOC_GR - 1)) continue;
 

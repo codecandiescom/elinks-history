@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.96 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: parser.c,v 1.97 2003/06/05 16:40:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2956,7 +2956,7 @@ look_for_map:
 		mem_free(al);
 	}
 
-	*ml = getml(NULL);
+	*ml = NULL;
 
 look_for_link:
 	while (pos < eof && *pos != '<') {

@@ -1,4 +1,4 @@
-			README for Translators
+			Guide for Translators
 
 1. Adding a new language:
 =========================
@@ -149,5 +149,5 @@ current status of each language file. Be proud if your language file rank higher
 or the same as the French one.
 
 
-$Id: README,v 1.4 2004/11/13 20:10:35 jonas Exp $
+$Id: README,v 1.5 2004/12/24 13:54:24 jonas Exp $
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.170 2004/01/28 08:23:57 jonas Exp $ */
+/* $Id: search.c,v 1.171 2004/01/28 10:39:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1070,7 +1070,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 }
 
 static enum input_line_code
-typeahead_input_handler(struct session *ses, int action, unsigned char *buffer)
+link_typeahead_handler(struct session *ses, int action, unsigned char *buffer)
 {
 	struct document_view *doc_view = current_frame(ses);
 
@@ -1078,7 +1078,13 @@ typeahead_input_handler(struct session *ses, int action, unsigned char *buffer)
 	if_assert_failed return INPUT_LINE_CANCEL;
 
 	/* If there is nothing to match with don't start searching */
-	if (!*buffer) return INPUT_LINE_CANCEL;
+	if (!*buffer) return INPUT_LINE_PROCEED;
+
+	/* Hack time .. should we change mode? */
+	if (*buffer == '/') {
+		search_typeahead(ses, NULL, 1);
+		return INPUT_LINE_CANCEL;
+	}
 
 	switch (do_typeahead(ses, doc_view, buffer, action)) {
 		case TYPEAHEAD_MATCHED:
@@ -1095,13 +1101,30 @@ typeahead_input_handler(struct session *ses, int action, unsigned char *buffer)
 	}
 }
 
-void
-search_typeahead(struct session *ses, struct document_view *doc_view, int a)
+static enum input_line_code
+text_typeahead_handler(struct session *ses, int action, unsigned char *buffer)
 {
-	input_field_line(ses, "#", NULL, typeahead_input_handler);
-	if (!a) draw_formatted(ses, 0);
-}
+	struct document_view *doc_view = current_frame(ses);
 
+	assertm(doc_view, "document not formatted");
+	if_assert_failed return INPUT_LINE_CANCEL;
+
+	switch (action) {
+		case ACT_EDIT_ENTER:
+			send_enter(ses->tab->term, NULL, ses);
+			return INPUT_LINE_CANCEL;
+
+		case ACT_EDIT_NEXT_ITEM:
+			find_next(ses, doc_view, 0);
+			break;
+
+		default:
+			search_for(ses, buffer);
+	}
+
+	draw_formatted(ses, 0);
+	return INPUT_LINE_PROCEED;
+}
 
 static struct input_history search_history = {
 	/* items: */	{ D_LIST_HEAD(search_history.entries) },
@@ -1109,6 +1132,19 @@ static struct input_history search_history = {
 	/* dirty: */	0,
 	/* nosave: */	0,
 };
+
+void
+search_typeahead(struct session *ses, struct document_view *doc_view, int a)
+{
+	struct input_history *history = a ? &search_history : NULL;
+	unsigned char *prompt = a ? "/" : "#";
+	input_line_handler handler = a ? text_typeahead_handler
+				       : link_typeahead_handler;
+
+	input_field_line(ses, prompt, history, handler);
+	if (!a) draw_formatted(ses, 0);
+}
+
 
 /* The dialog functions are clones of input_field() ones. Gross code
  * duplication. */

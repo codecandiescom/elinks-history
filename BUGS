@@ -9,9 +9,6 @@ Known bugs:
   main menu bar to open it, then click in the center of screen, some form
   fields will be printed over current screen, but disappear on next action...
 
-- Tilde doesn't expand as it should when used in goto dialog, ~ -> /home and ~/
-  -> current directory.
-
 + Frames don't work if there's more frames with same name. Turn them off in such
   case.
 
@@ -31,8 +28,6 @@ Known bugs:
 
 + Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
 
-- Tags inside <XMP> are still interpreted.
-
 - When switching between source view and rendered view, the position of the view
   is based on the page number of the previous view, not on the content of the
   previous view.
@@ -50,11 +45,8 @@ Known bugs:
 
 - Searches match links' prefixes (when document.browse.links.numbering = 1).
 
-- The newline displayed before a list is superfluous when that list is nested
-  under another list.
-
 
 Key: - nothing done + work in progress * almost fixed
      (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.53 2003/05/06 23:08:24 pasky Exp $
+$Id: BUGS,v 1.54 2003/05/06 23:09:51 pasky Exp $

@@ -38,8 +38,6 @@ See src/elusive/TODO.
 
 Original HTML engine:
 
-- Support for <xmp>
-
 - Better support for vlink - we have to update already rendered document
 
 - Support nested <sub>script tags. Maybe use parentheses to disambiguate
@@ -178,4 +176,4 @@ Permanent goals:
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.48 2003/05/03 23:43:07 pasky Exp $
+$Id: TODO,v 1.49 2003/05/06 23:09:51 pasky Exp $

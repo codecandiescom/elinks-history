@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.6 2003/08/02 15:51:03 jonas Exp $ */
+/* $Id: formhist.c,v 1.7 2003/08/02 15:59:20 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -31,12 +31,12 @@ INIT_LIST_HEAD(saved_forms);
 static int loaded = 0;
 
 static void
-done_form_history_item(struct form_history_item *form)
+done_form_history_item(struct form_history_item *item)
 {
-	if (form->url) mem_free(form->url);
+	if (item->url) mem_free(item->url);
 
-	while (!list_empty(form->submit)) {
-		struct submitted_value *sv = form->submit.next;
+	while (!list_empty(item->submit)) {
+		struct submitted_value *sv = item->submit.next;
 
 		del_from_list(sv);
 		if (sv->name) mem_free(sv->name);
@@ -44,7 +44,7 @@ done_form_history_item(struct form_history_item *form)
 		mem_free(sv);
 	}
 
-        mem_free(form);
+        mem_free(item);
 }
 
 static int

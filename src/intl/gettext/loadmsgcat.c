@@ -226,56 +226,21 @@ _nl_free_domain_conv(struct loaded_domain *domain)
 
 /* This is hacked for ELinks - we want to look up for the translations at the
  * correct place even if we are being ran from the source/build tree. */
-static unsigned char *
-source_tree_filename(struct loaded_l10nfile *domain_file)
+static struct string *
+add_filename_to_string(struct string *str, struct loaded_l10nfile *domain_file)
 {
-	unsigned char *language = malloc(domain_file->langdirnamelen + 1);
-	unsigned char *dirname = strdup(path_to_exe), *slash = NULL;
-	unsigned char *filename = NULL, *fp;
+	unsigned char *slash = strrchr(path_to_exe, '/');
+	size_t dirnamelen = (slash ? slash - path_to_exe + 1 : 0);
 
-	if (!language)
+	if ((dirnamelen && !add_bytes_to_string(str, path_to_exe, dirnamelen))
+	    || !add_to_string(str, "../po/")
+	    || !add_bytes_to_string(str,
+				    (unsigned char *) domain_file->langdirname,
+				    domain_file->langdirnamelen)
+	    || !add_to_string(str, ".gmo"))
 		return NULL;
-	strncpy(language, domain_file->langdirname,
-		domain_file->langdirnamelen);
-	language[domain_file->langdirnamelen] = 0;
 
-	if (dirname)
-		slash = strrchr(dirname, '/');
-
-	if (slash) {
-		*(++slash) = 0;
-		filename = malloc(strlen(dirname) + strlen(language)
-				  + 6 + 4 + 1);
-		if (!filename) {
-			free(dirname);
-			free(language);
-			return NULL;
-		}
-		fp = stpcpy(filename, dirname);
-		fp = stpcpy(fp, "../po/");
-		fp = stpcpy(fp, language);
-		fp = stpcpy(fp, ".gmo");
-		*fp = 0;
-
-	} else {
-		filename = malloc(strlen(language) + 6 + 4 + 1);
-		if (!filename) {
-			if (dirname)
-				free(dirname);
-			free(language);
-			return NULL;
-		}
-		fp = stpcpy(filename, "../po/");
-		fp = stpcpy(fp, language);
-		fp = stpcpy(fp, ".gmo");
-		*fp = 0;
-	}
-
-	if (dirname)
-		free(dirname);
-	free(language);
-
-	return filename;
+	return str;
 }
 
 /* Load the message catalogs specified by FILENAME.  If it is no valid
@@ -300,12 +265,14 @@ _nl_load_domain(struct loaded_l10nfile *domain_file,
 	   a call to bind_textdomain_codeset).  */
 
 	{
-		unsigned char *name = source_tree_filename(domain_file);
+		struct string filename;
 
-		if (name) {
-			fd = open(name, O_RDONLY | O_BINARY);
-			free(name);
+		if (init_string(&filename)
+		    && add_filename_to_string(&filename, domain_file)) {
+			fd = open(filename.source, O_RDONLY | O_BINARY);
 		}
+
+		done_string(&filename);
 
 		if (fd != -1)
 			goto source_success;

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.39 2004/06/11 14:12:48 jonas Exp $ */
+/* $Id: event.c,v 1.40 2004/06/11 14:43:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,7 +208,6 @@ test_queue:
 		/* Either the initialization of the first session failed or we
 		 * are doing a remote session so quit.*/
 		if (!decode_session_info(term, info->length, (int *) info->data)) {
-			destroy_terminal(term);
 			return;
 		}
 		/* Fall through */

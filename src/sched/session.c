@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.482 2004/06/11 14:39:27 jonas Exp $ */
+/* $Id: session.c,v 1.483 2004/06/11 14:43:27 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -651,6 +651,7 @@ init_session(struct session *base_session, struct terminal *term,
 	ses->tab = init_tab(term, in_background, ses, tabwin_func);
 	if (!ses->tab) {
 		mem_free(ses);
+		if (!first) destroy_terminal(term);
 		return NULL;
 	}
 
@@ -1016,10 +1017,6 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			if (!list_empty(sessions)) update_status();
 			break;
 		case EV_INIT:
-			if (!ses) {
-				register_bottom_half((void (*)(void *)) destroy_terminal, tab->term);
-				return;
-			}
 			update_status();
 			/* fall-through */
 		case EV_RESIZE:

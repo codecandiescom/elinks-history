@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.15 2003/11/14 03:17:15 jonas Exp $ */
+/* $Id: renderer.c,v 1.16 2003/11/14 03:27:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,15 +126,15 @@ get_uri_length(unsigned char *line, int length)
 {
 	int uri_end = 0;
 
-	while (uri_end < length && !isspace(line[uri_end]))
+	while (uri_end < length && !isspace(line[uri_end])
+	       && line[uri_end] != '"'
+	       && line[uri_end] != ')'
+	       && line[uri_end] != '>')
 		uri_end++;
 
 	for (; uri_end > 0; uri_end--) {
-		if (line[uri_end - 1] != '>'
-			&& line[uri_end - 1] != ')'
-			&& line[uri_end - 1] != '.'
-			&& line[uri_end - 1] != '"'
-			&& line[uri_end - 1] != ',')
+		if (line[uri_end - 1] != '.'
+		    && line[uri_end - 1] != ',')
 			break;
 	}
 

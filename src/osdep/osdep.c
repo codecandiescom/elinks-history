@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.138 2004/07/05 05:51:59 miciah Exp $ */
+/* $Id: osdep.c,v 1.139 2004/07/05 10:41:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,9 +388,13 @@ set_window_title(unsigned char *title)
 	/* Send terminal escape sequence + title string */
 	printf("\033]0;%s\a", s);
 
+#if 0
+	/* Miciah don't like this so it is disabled because it changes the
+	 * default window name. --jonas */
 	/* Set the GNU screen window name */
 	if (is_gnuscreen())
 		printf("\033k%s\033\134", s);
+#endif
 
 	fflush(stdout);
 

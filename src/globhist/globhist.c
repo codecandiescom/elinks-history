@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.92 2004/12/18 00:04:02 miciah Exp $ */
+/* $Id: globhist.c,v 1.93 2004/12/18 00:06:32 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -152,7 +152,7 @@ multiget_global_history_item(unsigned char *url, unsigned char *title, ttime tim
 }
 #endif
 
-static global_history_item *
+static struct global_history_item *
 init_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 {
 	struct global_history_item *history_item;

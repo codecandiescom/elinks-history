@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.96 2003/09/12 21:46:46 zas Exp $ */
+/* $Id: download.c,v 1.97 2003/09/12 22:00:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -796,10 +796,8 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 			int resume)
 {
 	struct cdf_hop *cdf_hop = data;
-	unsigned char *download_dir = get_opt_str("document.download.directory");
 	unsigned char *wd;
 	int h = -1;
-	int i;
 	int saved_errno;
 #ifdef NO_FILE_SECURITY
 	int sf = 0;
@@ -840,6 +838,9 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 		set_bin(h);
 
 		if (!cdf_hop->safe) {
+			unsigned char *download_dir = get_opt_str("document.download.directory");
+			int i;
+
 			safe_strncpy(download_dir, file, MAX_STR_LEN);
 
 			/* Find the used directory so it's available in history */

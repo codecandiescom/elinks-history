@@ -1,13 +1,13 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.1 2003/11/17 17:58:57 pasky Exp $ */
+/* $Id: dialogs.c,v 1.2 2003/11/17 18:03:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include "elinks.h"
-
 #include <string.h>
+
+#include "elinks.h"
 
 #include "bfu/button.h"
 #include "bfu/dialog.h"
@@ -15,10 +15,11 @@
 #include "bfu/listbox.h"
 #include "bfu/msgbox.h"
 #include "bfu/text.h"
-#include "dialogs/edit.h"
-#include "cache/dialogs.h"
 #include "cache/cache.h"
+#include "cache/dialogs.h"
+#include "dialogs/edit.h"
 #include "intl/gettext/libintl.h"
+#include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/memory.h"

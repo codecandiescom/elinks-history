@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.369 2003/11/12 07:46:12 miciah Exp $ */
+/* $Id: renderer.c,v 1.370 2003/11/12 09:17:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -863,8 +863,6 @@ process_link(struct part *part, enum link_state link_state,
 	struct link *link;
 
 	if (link_state == LINK_STATE_SAME) {
-		unsigned char *new_name;
-
 		if (!part->document) return;
 
 		assertm(part->document->nlinks > 0, "no link");
@@ -872,10 +870,14 @@ process_link(struct part *part, enum link_state link_state,
 
 		link = &part->document->links[part->document->nlinks - 1];
 
-		new_name = straconcat(link->name, chars, NULL);
-		if (new_name) {
-			mem_free(link->name);
-			link->name = new_name;
+		if (link->name) {
+			unsigned char *new_name;
+
+			new_name = straconcat(link->name, chars, NULL);
+			if (new_name) {
+				mem_free(link->name);
+				link->name = new_name;
+			}
 		}
 
 	} else {

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.9 2003/04/19 17:00:23 zas Exp $ */
+/* $Id: mailcap.c,v 1.10 2003/04/29 08:34:11 zas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -398,18 +398,18 @@ mailcap_init()
 	while (*path) {
 		unsigned char file[MAX_STR_LEN];
 		unsigned char *expanded;
-		int index = 0;
+		int indx = 0;
 
 		/* Extract file from path */
-		while (*path && *path != ':' && index < sizeof(file) - 1) {
-			file[index++] = *path;
+		while (*path && *path != ':' && indx < sizeof(file) - 1) {
+			file[indx++] = *path;
 			path++;
 		}
 		if (*path) path++;
 
-		if (!index) continue; /* No file extracted */
+		if (!indx) continue; /* No file extracted */
 
-		file[index] = '\0';
+		file[indx] = '\0';
 		expanded = expand_tilde(file);
 		if (!expanded) continue; /* Bad allocation */
 

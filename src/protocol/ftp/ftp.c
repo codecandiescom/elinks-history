@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.79 2003/01/23 02:29:28 pasky Exp $ */
+/* $Id: ftp.c,v 1.80 2003/04/29 08:33:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1056,11 +1056,11 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 		/* Process line whose end we've already found. */
 
 		if (ftpparse(&ftp_info, buf, bufp) == 1) {
-			int ret;
+			int retv;
 
-			ret = display_dir_entry(c_e, pos, tries, colorize_dir,
+			retv = display_dir_entry(c_e, pos, tries, colorize_dir,
 						dircolor, &ftp_info);
-			if (ret < 0) return ret;
+			if (retv < 0) return ret; /* FIXME: return ret or retv ??? */
 		}
 	}
 }

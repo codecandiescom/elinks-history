@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.33 2003/04/26 07:57:51 zas Exp $ */
+/* $Id: core.c,v 1.34 2003/04/29 08:20:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@
 
 lua_State *lua_state;
 
-static struct session *ses;
+static struct session *lua_ses;
 static struct terminal *errterm;
 static sigjmp_buf errjmp;
 
@@ -75,7 +75,7 @@ l_current_url(LS)
 {
 	struct view_state *vs;
 
-	if (have_location(ses) && (vs = ses ? &cur_loc(ses)->vs : 0)) {
+	if (have_location(lua_ses) && (vs = lua_ses ? &cur_loc(lua_ses)->vs : 0)) {
 		unsigned char *url = stracpy(vs->url);
 
 		if (url) {
@@ -97,7 +97,7 @@ l_current_url(LS)
 static int
 l_current_link(LS)
 {
-	struct f_data_c *fd = current_frame(ses);
+	struct f_data_c *fd = current_frame(lua_ses);
 
 	if (fd && fd->vs->current_link != -1) {
 		struct link *l = &fd->f_data->links[fd->vs->current_link];
@@ -115,7 +115,7 @@ l_current_link(LS)
 static int
 l_current_title(LS)
 {
-	struct f_data_c *fd = current_frame(ses);
+	struct f_data_c *fd = current_frame(lua_ses);
 
 	if (fd)
 		lua_pushstring(S, fd->f_data->title);
@@ -132,7 +132,7 @@ l_current_document(LS)
 	struct cache_entry *ce;
 	struct fragment *f;
 
-	if (ses && (url = cur_loc(ses)->vs.url)
+	if (lua_ses && (url = cur_loc(lua_ses)->vs.url)
 	    && find_in_cache(url, &ce) && (f = ce->frag.next))
 		lua_pushlstring(S, f->data, f->length);
 	else
@@ -157,10 +157,10 @@ l_current_document_formatted(LS)
 	else if (!lua_isnumber(S, 1)) goto error;
 	else if ((width = lua_tonumber(S, 1)) <= 0) goto error;
 
-	if (!ses || !(f = current_frame(ses))) goto error;
+	if (!lua_ses || !(f = current_frame(lua_ses))) goto error;
 	if (width > 0) {
-		old_width = ses->term->x, ses->term->x = width;
-		html_interpret(ses);
+		old_width = lua_ses->term->x, lua_ses->term->x = width;
+		html_interpret(lua_ses);
 	}
 	fd = f->f_data;
 	buf = init_str();
@@ -180,8 +180,8 @@ l_current_document_formatted(LS)
 	lua_pushlstring(S, buf, l);
 	mem_free(buf);
 	if (width > 0) {
-		ses->term->x = old_width;
-		html_interpret(ses);
+		lua_ses->term->x = old_width;
+		html_interpret(lua_ses);
 	}
 	return 1;
 
@@ -232,7 +232,7 @@ static int
 l_execute(LS)
 {
 	if (lua_isstring(S, 1)) {
-		exec_on_terminal(ses->term, (uchar *)lua_tostring(S, 1), "", 0);
+		exec_on_terminal(lua_ses->term, (uchar *)lua_tostring(S, 1), "", 0);
 		lua_pushnumber(S, 0);
 	} else {
 		lua_pushnil(L);
@@ -321,17 +321,17 @@ struct dlg_data {
 static void
 dialog_run_lua(struct dlg_data *data)
 {
-	lua_State *L = data->state;
+	lua_State *s = data->state;
 	int err;
 
-	lua_getref(L, data->func_ref);
-	lua_pushstring(L, data->cat);
-	lua_pushstring(L, data->name);
-	lua_pushstring(L, data->url);
-	if (prepare_lua(ses)) return;
-	err = lua_call(L, 3, 2);
+	lua_getref(s, data->func_ref);
+	lua_pushstring(s, data->cat);
+	lua_pushstring(s, data->name);
+	lua_pushstring(s, data->url);
+	if (prepare_lua(lua_ses)) return;
+	err = lua_call(s, 3, 2);
 	finish_lua();
-	lua_unref(L, data->func_ref);
+	lua_unref(s, data->func_ref);
 	handle_standard_lua_returns("post dialog function");
 }
 
@@ -442,7 +442,7 @@ l_edit_bookmark_dialog(LS)
 	d->items[4].fn = cancel_dialog;
 	d->items[4].text = N_("Cancel");
 	d->items[5].type = D_END;
-	do_dialog(ses->term, d, getml(d, NULL));
+	do_dialog(lua_ses->term, d, getml(d, NULL));
 
 	lua_pushnumber(S, 1);
 	return 1;
@@ -473,16 +473,16 @@ struct xdialog_data {
 static void
 xdialog_run_lua(struct xdialog_data *data)
 {
-	lua_State *L = data->state;
+	lua_State *s = data->state;
 	int err;
 	int i;
 
-	lua_getref(L, data->func_ref);
-	for (i = 0; i < data->nfields; i++) lua_pushstring(L, data->fields[i]);
-	if (prepare_lua(ses)) return;
-	err = lua_call(L, data->nfields, 2);
+	lua_getref(s, data->func_ref);
+	for (i = 0; i < data->nfields; i++) lua_pushstring(s, data->fields[i]);
+	if (prepare_lua(lua_ses)) return;
+	err = lua_call(s, data->nfields, 2);
 	finish_lua();
-	lua_unref(L, data->func_ref);
+	lua_unref(s, data->func_ref);
 	handle_standard_lua_returns("post xdialog function");
 }
 
@@ -587,7 +587,7 @@ l_xdialog(LS)
 	d->items[i].text = N_("Cancel");
 	i++;
 	d->items[i].type = D_END;
-	do_dialog(ses->term, d, getml(d, NULL));
+	do_dialog(lua_ses->term, d, getml(d, NULL));
 
 	lua_pushnumber(S, 1);
 	return 1;
@@ -655,10 +655,10 @@ handle_sigint(void *data)
 }
 
 int
-prepare_lua(struct session *_ses)
+prepare_lua(struct session *ses)
 {
-	ses = _ses;
-	errterm = ses ? ses->term : NULL;
+	lua_ses = ses;
+	errterm = lua_ses ? lua_ses->term : NULL;
 	/* XXX this uses the wrong term, I think */
 	install_signal_handler(SIGINT, (void (*)(void *))handle_sigint, NULL, 1);
 
@@ -698,12 +698,13 @@ alert_lua_error(unsigned char *msg)
 void
 alert_lua_error2(unsigned char *msg, unsigned char *msg2)
 {
-	unsigned char *tmp;
+	unsigned char *tmp = stracpy(msg);
 
-	tmp = stracpy(msg);
-	add_to_strn(&tmp, msg2);
-	alert_lua_error(tmp);
-	mem_free(tmp);
+	if (tmp) {
+		add_to_strn(&tmp, msg2);
+		alert_lua_error(tmp);
+		mem_free(tmp);
+	}
 }
 
 
@@ -761,11 +762,11 @@ handle_standard_lua_returns(unsigned char *from)
 
 	if (act) {
 		if (!strcmp(act, "eval"))
-			handle_ret_eval(ses);
+			handle_ret_eval(lua_ses);
 		else if (!strcmp(act, "run"))
-			handle_ret_run(ses);
+			handle_ret_run(lua_ses);
 		else if (!strcmp(act, "goto_url"))
-			handle_ret_goto_url(ses);
+			handle_ret_goto_url(lua_ses);
 		else
 			alert_lua_error2("unrecognised return value from ", from);
 	}

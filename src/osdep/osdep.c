@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.43 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: osdep.c,v 1.44 2003/04/29 08:25:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1751,17 +1751,18 @@ get_system_env()
 
 void
 exec_new_elinks(struct terminal *term, unsigned char *xterm,
-		unsigned char *exe, unsigned char *param)
+		unsigned char *exe_name, unsigned char *param)
 {
-	unsigned char *str = straconcat(xterm, " ", exe, " ", param, NULL);
+	unsigned char *str = straconcat(xterm, " ", exe_name, " ", param, NULL);
 
-	if (!str) return;
-	exec_on_terminal(term, str, "", 2);
-	mem_free(str);
+	if (str) {
+		exec_on_terminal(term, str, "", 2);
+		mem_free(str);
+	}
 }
 
 void
-open_in_new_twterm(struct terminal *term, unsigned char *exe,
+open_in_new_twterm(struct terminal *term, unsigned char *exe_name,
 		   unsigned char *param)
 {
 	unsigned char *twterm;
@@ -1769,11 +1770,11 @@ open_in_new_twterm(struct terminal *term, unsigned char *exe,
 	twterm = getenv("ELINKS_TWTERM");
 	if (!twterm) twterm = getenv("LINKS_TWTERM");
 	if (!twterm) twterm = "twterm -e";
-	exec_new_elinks(term, twterm, exe, param);
+	exec_new_elinks(term, twterm, exe_name, param);
 }
 
 void
-open_in_new_xterm(struct terminal *term, unsigned char *exe,
+open_in_new_xterm(struct terminal *term, unsigned char *exe_name,
 		  unsigned char *param)
 {
 	unsigned char *xterm;
@@ -1781,47 +1782,47 @@ open_in_new_xterm(struct terminal *term, unsigned char *exe,
 	xterm = getenv("ELINKS_XTERM");
 	if (!xterm) xterm = getenv("LINKS_XTERM");
 	if (!xterm) xterm = "xterm -e";
-	exec_new_elinks(term, xterm, exe, param);
+	exec_new_elinks(term, xterm, exe_name, param);
 }
 
 void
-open_in_new_screen(struct terminal *term, unsigned char *exe,
+open_in_new_screen(struct terminal *term, unsigned char *exe_name,
 		   unsigned char *param)
 {
-	exec_new_elinks(term, "screen", exe, param);
+	exec_new_elinks(term, "screen", exe_name, param);
 }
 
 #ifdef OS2
 void
-open_in_new_vio(struct terminal *term, unsigned char *exe,
+open_in_new_vio(struct terminal *term, unsigned char *exe_name,
 		unsigned char *param)
 {
-	exec_new_elinks(term, "cmd /c start /c /f /win", exe, param);
+	exec_new_elinks(term, "cmd /c start /c /f /win", exe_name, param);
 }
 
 void
-open_in_new_fullscreen(struct terminal *term, unsigned char *exe,
+open_in_new_fullscreen(struct terminal *term, unsigned char *exe_name,
 		       unsigned char *param)
 {
-	exec_new_elinks(term, "cmd /c start /c /f /fs", exe, param);
+	exec_new_elinks(term, "cmd /c start /c /f /fs", exe_name, param);
 }
 #endif
 
 #ifdef WIN32
 void
-open_in_new_win32(struct terminal *term, unsigned char *exe,
+open_in_new_win32(struct terminal *term, unsigned char *exe_name,
 		  unsigned char *param)
 {
-	exec_new_elinks(term, "", exe, param);
+	exec_new_elinks(term, "", exe_name, param);
 }
 #endif
 
 #ifdef BEOS
 void
-open_in_new_be(struct terminal *term, unsigned char *exe,
+open_in_new_be(struct terminal *term, unsigned char *exe_name,
 	       unsigned char *param)
 {
-	exec_new_elinks(term, "Terminal", exe, param);
+	exec_new_elinks(term, "Terminal", exe_name, param);
 }
 #endif
 

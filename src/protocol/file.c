@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.39 2003/01/01 20:30:34 pasky Exp $ */
+/* $Id: file.c,v 1.40 2003/04/29 08:30:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -465,7 +465,7 @@ dir:
 		add_to_str(&file, &fl, "</h2>\n<pre>");
 
 		while ((de = readdir(d))) {
-			struct stat stt, *stp;
+			struct stat st, *stp;
 			unsigned char **p;
 			int l;
 			struct dirs *nd;
@@ -490,13 +490,13 @@ dir:
 
 			add_to_strn(&n, de->d_name);
 #ifdef FS_UNIX_SOFTLINKS
-			if (lstat(n, &stt))
+			if (lstat(n, &st))
 #else
-			if (stat(n, &stt))
+			if (stat(n, &st))
 #endif
 				stp = NULL;
 			else
-				stp = &stt;
+				stp = &st;
 
 			mem_free(n);
 			stat_mode(p, &l, stp);
@@ -520,7 +520,7 @@ dir:
 
 				unsigned char *buf = NULL;
 				int size = 0;
-				int r = -1;
+				int rl = -1;
 				unsigned char *n = init_str();
 				int nl = 0;
 
@@ -533,13 +533,13 @@ dir:
 					size += ALLOC_GR;
 					buf = mem_alloc(size);
 					if (!buf) break;
-					r = readlink(n, buf, size);
-				} while (r == size);
+					rl = readlink(n, buf, size);
+				} while (rl == size);
 
 				mem_free(n);
 				if (buf) {
-					if (r != -1) {
-						buf[r] = '\0';
+					if (rl != -1) {
+						buf[rl] = '\0';
 
 						lnk = buf;
 					} else {

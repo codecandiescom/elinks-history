@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.103 2003/04/20 08:37:54 zas Exp $ */
+/* $Id: http.c,v 1.104 2003/04/29 08:27:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,7 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 	p = p1 = eurl;
 	while (*(p += strcspn(p, " \t\r\n\\"))) {
 		unsigned char ch = *p;
-		
+
 		*p = '\0';
 		add_to_str(hdr, l, p1);
 		if (ch == '\\')
@@ -1006,16 +1006,16 @@ http_got_header(struct connection *c, struct read_buffer *rb)
 	set_timeout(c);
 	info = c->info;
 	if (rb->close == 2) {
-		unsigned char *h;
+		unsigned char *hstr;
 
-		if (!c->tries && (h = get_host_name(host))) {
+		if (!c->tries && (hstr = get_host_name(host))) {
 			if (info->bl_flags & BL_NO_CHARSET) {
-				del_blacklist_entry(h, BL_NO_CHARSET);
+				del_blacklist_entry(hstr, BL_NO_CHARSET);
 			} else {
-				add_blacklist_entry(h, BL_NO_CHARSET);
+				add_blacklist_entry(hstr, BL_NO_CHARSET);
 				c->tries = -1;
 			}
-			mem_free(h);
+			mem_free(hstr);
 		}
 		retry_conn_with_state(c, S_CANT_READ);
 		return;
@@ -1054,9 +1054,9 @@ again:
 #ifdef COOKIES
 	ch = head;
 	while ((cookie = parse_http_header(ch, "Set-Cookie", &ch))) {
-		unsigned char *host = GET_REAL_URL(c->url);
+		unsigned char *hstr = GET_REAL_URL(c->url);
 
-		set_cookie(NULL, host, cookie);
+		set_cookie(NULL, hstr, cookie);
 		mem_free(cookie);
 	}
 #endif

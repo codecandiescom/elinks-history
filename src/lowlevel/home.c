@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.41 2003/10/03 17:47:43 kuser Exp $ */
+/* $Id: home.c,v 1.42 2003/10/03 18:28:01 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ test_confdir(unsigned char *home, unsigned char *path,
 	}
 
 	if (error_message) {
-		error(error_message, path, confdir);
+		error(gettext(error_message), path, confdir);
 		sleep(3);
 	}
 
@@ -118,14 +118,13 @@ get_home(void)
 
 	home_elinks = test_confdir(home, 
 				   get_opt_str_tree(cmdline_options, "confdir"),
-				   gettext("Commandline options -confdir "
-					   "set to %s, but "
-					   "could not create directory %s."));
+				   N_("Commandline options -confdir set to %s, "
+				      "but could not create directory %s."));
 	if (home_elinks) goto end;
 
 	home_elinks = test_confdir(home, getenv("ELINKS_CONFDIR"),
-				   gettext("ELINKS_CONFDIR set to %s, but "
-					   "could not create directory %s."));
+				   N_("ELINKS_CONFDIR set to %s, "
+				      "but could not create directory %s."));
 	if (home_elinks) goto end;
 
 	home_elinks = test_confdir(home, ".elinks", NULL);

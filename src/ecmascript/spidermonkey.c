@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.99 2004/12/17 14:10:14 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.100 2004/12/17 14:37:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,7 +449,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	static time_t ratelimit_start;
 	static int ratelimit_count;
 	VALUE_TO_JSVAL_START;
-	
+
 	if (argc < 1) goto bye;
 
 	/* Ratelimit window opening. Recursive window.open() is very nice.
@@ -764,7 +764,7 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	int counter = 0;
 	int index;
 	VALUE_TO_JSVAL_START;
-	
+
 	if (argc != 1)
 		goto bye;
 
@@ -1243,6 +1243,7 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 {
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
 	struct terminal *term;
+	unsigned char *strict, *exception, *warning, *error, *msg;
 
 	assert(interpreter && interpreter->vs && interpreter->vs->doc_view
 	       && interpreter->vs->doc_view->session
@@ -1258,32 +1259,31 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 	if (!get_opt_bool("ecmascript.error_reporting"))
 		goto reported;
 
+	strict	  = JSREPORT_IS_STRICT(report->flags) ? " strict" : "";
+	exception = JSREPORT_IS_EXCEPTION(report->flags) ? " exception" : "";
+	warning   = JSREPORT_IS_WARNING(report->flags) ? " warning" : "";
+	error	  = !report->flags ? " error" : "";
+
+	if (report->linebuf && report->tokenptr) {
+		int pos = report->tokenptr - report->linebuf;
+
+		msg = msg_text(term, N_("A script embedded in the current "
+			       "document raised the following%s%s%s%s: "
+			       "\n\n%s\n\n%s\n.%*s^%*s."),
+			       strict, exception, warning, error, message,
+			       report->linebuf,
+			       pos - 2, " ",
+			       strlen(report->linebuf) - pos - 1, " ");
+	} else {
+		msg = msg_text(term, N_("A script embedded in the current "
+			       "document raised the following%s%s%s%s: "
+			       "\n\n%s"),
+			       strict, exception, warning, error, message);
+	}
+
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("JavaScript Error"), ALIGN_CENTER,
-		report->linebuf && report->tokenptr
-		?
-		msg_text(term, N_("A script embedded in the current "
-		         "document raised the following%s%s%s%s: "
-		         "\n\n%s\n\n%s\n.%*s^%*s."),
-		         JSREPORT_IS_STRICT(report->flags) ? " strict" : "",
-		         JSREPORT_IS_EXCEPTION(report->flags) ? " exception" : "",
-		         JSREPORT_IS_WARNING(report->flags) ? " warning" : "",
-		         !report->flags ? " error" : "",
-		         message,
-			 report->linebuf,
-			 report->tokenptr - report->linebuf - 2, " ",
-			 strlen(report->linebuf) - (report->tokenptr - report->linebuf) - 1, " ")
-		:
-		msg_text(term, N_("A script embedded in the current "
-		         "document raised the following%s%s%s%s: "
-		         "\n\n%s"),
-		         JSREPORT_IS_STRICT(report->flags) ? " strict" : "",
-		         JSREPORT_IS_EXCEPTION(report->flags) ? " exception" : "",
-		         JSREPORT_IS_WARNING(report->flags) ? " warning" : "",
-		         !report->flags ? " error" : "",
-		         message)
-		,
-		NULL, 1,
+		msg, NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
 reported:

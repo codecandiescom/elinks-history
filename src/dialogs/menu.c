@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.130 2003/09/25 16:25:30 zas Exp $ */
+/* $Id: menu.c,v 1.131 2003/09/25 16:39:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -474,67 +474,44 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 }
 
 static struct menu_item view_menu[] = {
-	{N_("~Search"), "/", MENU_FUNC menu_for_frame, (void *)search_dlg, 0, 0},
-	{N_("Search ~backward"), "?", MENU_FUNC menu_for_frame, (void *)search_back_dlg, 0, 0},
-	{N_("Find ~next"), "n", MENU_FUNC menu_for_frame, (void *)find_next, 0, 0},
-	{N_("Find ~previous"), "N", MENU_FUNC menu_for_frame, (void *)find_next_back, 0, 0},
-	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_("Toggle ~html/plain"), "\\", MENU_FUNC menu_toggle, NULL, 0, 0},
-	{N_("Document ~info"), "=", MENU_FUNC menu_doc_info, NULL, 0, 0},
-	{N_("H~eader info"), "|", MENU_FUNC menu_header_info, NULL, 0, 0},
-	{N_("Frame at ~full-screen"), "f", MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
-	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_("Nex~t tab"), ">", MENU_FUNC menu_next_tab, NULL, 0, 0},
-	{N_("Pre~v tab"), "<", MENU_FUNC menu_prev_tab, NULL, 0, 0},
-	{N_("~Close tab"), "c", MENU_FUNC menu_close_tab, NULL, 0, 0},
-	{NULL, NULL, NULL, NULL, 0, 0}
+	INIT_MENU_ITEM(N_("~Search"), "/", menu_for_frame, (void *)search_dlg, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Search ~backward"), "?", menu_for_frame, (void *)search_back_dlg, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Find ~next"), "n", menu_for_frame, (void *)find_next, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Find ~previous"), "N", menu_for_frame, (void *)find_next_back, FREE_NOTHING, 0),
+	BAR_MENU_ITEM,
+	INIT_MENU_ITEM(N_("Toggle ~html/plain"), "\\", menu_toggle, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Document ~info"), "=", menu_doc_info, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("H~eader info"), "|", menu_header_info, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Frame at ~full-screen"), "f", menu_for_frame, (void *)set_frame, FREE_NOTHING, 0),
+	BAR_MENU_ITEM,
+	INIT_MENU_ITEM(N_("Nex~t tab"), ">", menu_next_tab, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Pre~v tab"), "<", menu_prev_tab, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~Close tab"), "c", menu_close_tab, NULL, FREE_NOTHING, 0),
+	NULL_MENU_ITEM
 };
 
-#if 0
-/* None of the items included in view_menu and excluded here seem dangerous,
- * so I've commented out this and its use by do_view_menu. -- Miciah */
-static struct menu_item view_menu_anon[] = {
-	{N_("~Search"), "/", MENU_FUNC menu_for_frame, (void *)search_dlg, 0, 0},
-	{N_("Search ~backward"), "?", MENU_FUNC menu_for_frame, (void *)search_back_dlg, 0, 0},
-	{N_("Find ~next"), "n", MENU_FUNC menu_for_frame, (void *)find_next, 0, 0},
-	{N_("Find ~previous"), "N", MENU_FUNC menu_for_frame, (void *)find_next_back, 0, 0},
-	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_("Toggle ~html/plain"), "\\", MENU_FUNC menu_toggle, NULL, 0, 0},
-	{N_("Document ~info"), "=", MENU_FUNC menu_doc_info, NULL, 0, 0},
-	{N_("Frame at ~full-screen"), "f", MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
-	{NULL, NULL, NULL, NULL, 0, 0}
-};
-#endif
 
 static struct menu_item help_menu[] = {
-	{N_("~ELinks homepage"), "", MENU_FUNC menu_url_shortcut, (void *)ELINKS_HOMEPAGE, 0, 0},
-	{N_("~Documentation"), "", MENU_FUNC menu_url_shortcut, (void *)ELINKS_DOC_URL, 0, 0},
-	{N_("~Keys"), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
-	{"", M_BAR, NULL, NULL, 0, 0},
+	INIT_MENU_ITEM(N_("~ELinks homepage"), "", menu_url_shortcut, ELINKS_HOMEPAGE, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~Documentation"), "", menu_url_shortcut, ELINKS_DOC_URL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~Keys"), "", menu_keys, NULL, FREE_NOTHING, 0),
+	BAR_MENU_ITEM,
 #ifdef DEBUG
-	{N_("~Bugs information"), "", MENU_FUNC menu_url_shortcut, (void *)ELINKS_BUGS_URL, 0, 0},
-	{N_("~ELinks CvsWeb"), "", MENU_FUNC menu_url_shortcut, (void *)ELINKS_CVSWEB_URL, 0, 0},
-	{"", M_BAR, NULL, NULL, 0, 0},
+	INIT_MENU_ITEM(N_("~Bugs information"), "", menu_url_shortcut, ELINKS_BUGS_URL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~ELinks CvsWeb"), "", menu_url_shortcut, ELINKS_CVSWEB_URL, FREE_NOTHING, 0),
+	BAR_MENU_ITEM,
 #endif
-	{N_("~Copying"), "", MENU_FUNC menu_copying, (void *)0, 0, 0},
-	{N_("~About"), "", MENU_FUNC menu_about, (void *)0, 0, 0},
-	{NULL, NULL, NULL, NULL, 0, 0}
+	INIT_MENU_ITEM(N_("~Copying"), "", menu_copying, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~About"), "", menu_about, NULL, FREE_NOTHING, 0),
+	NULL_MENU_ITEM
 };
 
-#if 0
-static struct menu_item assoc_menu[] = {
-	{N_("~Add"), "", MENU_FUNC menu_add_ct, NULL, 0, 0},
-	{N_("~Modify"), M_SUBMENU, MENU_FUNC menu_list_assoc, menu_add_ct, 1, 0},
-	{N_("~Delete"), M_SUBMENU, MENU_FUNC menu_list_assoc, menu_del_ct, 1, 0},
-	{NULL, NULL, 0, NULL, NULL, 0, 0}
-};
-#endif
 
 static struct menu_item ext_menu[] = {
-	{N_("~Add"), "", MENU_FUNC menu_add_ext, NULL, 0, 0},
-	{N_("~Modify"), M_SUBMENU, MENU_FUNC menu_list_ext, menu_add_ext, 0, 1},
-	{N_("~Delete"), M_SUBMENU, MENU_FUNC menu_list_ext, menu_del_ext, 0, 1},
-	{NULL, NULL, NULL, NULL, 0, 0}
+	INIT_MENU_ITEM(N_("~Add"), "", menu_add_ext, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~Modify"), M_SUBMENU, menu_list_ext, menu_add_ext, FREE_NOTHING, 1),
+	INIT_MENU_ITEM(N_("~Delete"), M_SUBMENU, menu_list_ext, menu_del_ext, FREE_NOTHING, 1),
+	NULL_MENU_ITEM
 };
 
 static inline void
@@ -545,24 +522,23 @@ do_ext_menu(struct terminal *term, void *xxx, struct session *ses)
 
 static struct menu_item setup_menu[] = {
 #ifdef ENABLE_NLS
-	{N_("~Language"), M_SUBMENU, MENU_FUNC menu_language_list, NULL, 0, 1},
+	INIT_MENU_ITEM(N_("~Language"), M_SUBMENU, menu_language_list, NULL, FREE_NOTHING, 1),
 #endif
-	{N_("C~haracter set"), M_SUBMENU, MENU_FUNC charset_list, (void *)1, 0, 1},
-	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
-/*	{N_("~Associations"), M_SUBMENU, MENU_FUNC do_menu, assoc_menu, 0, 1}, */
-	{N_("File ~extensions"), M_SUBMENU, MENU_FUNC do_ext_menu, NULL, 0, 1},
-	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_("~Options manager"), "o", MENU_FUNC menu_options_manager, NULL, 0, 0},
-	{N_("~Keybinding manager"), "k", MENU_FUNC menu_keybinding_manager, NULL, 0, 0},
-	{N_("~Save options"), "", MENU_FUNC write_config, NULL, 0, 0},
-	{NULL, NULL, NULL, NULL, 0, 0}
+	INIT_MENU_ITEM(N_("C~haracter set"), M_SUBMENU, charset_list, (void *)1, FREE_NOTHING, 1), /* FIXME: (void *)1 !! */
+	INIT_MENU_ITEM(N_("~Terminal options"), "", terminal_options, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("File ~extensions"), M_SUBMENU, do_ext_menu, NULL, FREE_NOTHING, 1),
+	BAR_MENU_ITEM,
+	INIT_MENU_ITEM(N_("~Options manager"), "o", menu_options_manager, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~Keybinding manager"), "k", menu_keybinding_manager, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~Save options"), "", write_config, NULL, FREE_NOTHING, 0),
+	NULL_MENU_ITEM
 };
 
 static struct menu_item setup_menu_anon[] = {
-	{N_("~Language"), M_SUBMENU, MENU_FUNC menu_language_list, NULL, 0, 1},
-	{N_("C~haracter set"), M_SUBMENU, MENU_FUNC charset_list, (void *)1, 0, 1},
-	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
-	{NULL, NULL, NULL, NULL, 0, 0}
+	INIT_MENU_ITEM(N_("~Language"), M_SUBMENU, menu_language_list, NULL, FREE_NOTHING, 1),
+	INIT_MENU_ITEM(N_("C~haracter set"), M_SUBMENU, charset_list, (void *)1, FREE_NOTHING, 1),
+	INIT_MENU_ITEM(N_("~Terminal options"), "", terminal_options, NULL, FREE_NOTHING, 0),
+	NULL_MENU_ITEM
 };
 
 static void
@@ -596,13 +572,13 @@ do_help_menu(struct terminal *term, void *xxx, struct session *ses)
 
 
 static struct menu_item main_menu[] = {
-	{N_("~File"), "", MENU_FUNC do_file_menu, NULL, 1, 1},
-	{N_("~View"), "", MENU_FUNC do_view_menu, NULL, 1, 1},
-	{N_("~Link"), "", MENU_FUNC link_menu, NULL, 1, 1},
-	{N_("~Downloads"), "", MENU_FUNC downloads_menu, NULL, 1, 1},
-	{N_("~Setup"), "", MENU_FUNC do_setup_menu, NULL, 1, 1},
-	{N_("~Help"), "", MENU_FUNC do_help_menu, NULL, 1, 1},
-	{NULL, NULL, NULL, NULL, 0, 0}
+	INIT_MENU_ITEM(N_("~File"), "", do_file_menu, NULL, FREE_LIST, 1),
+	INIT_MENU_ITEM(N_("~View"), "", do_view_menu, NULL, FREE_LIST, 1),
+	INIT_MENU_ITEM(N_("~Link"), "", link_menu, NULL, FREE_LIST, 1),
+	INIT_MENU_ITEM(N_("~Downloads"), "", downloads_menu, NULL, FREE_LIST, 1),
+	INIT_MENU_ITEM(N_("~Setup"), "", do_setup_menu, NULL, FREE_LIST, 1),
+	INIT_MENU_ITEM(N_("~Help"), "", do_help_menu, NULL, FREE_LIST, 1),
+	NULL_MENU_ITEM
 };
 
 

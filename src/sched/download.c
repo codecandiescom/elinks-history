@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.112 2003/10/24 23:08:44 pasky Exp $ */
+/* $Id: download.c,v 1.113 2003/10/24 23:31:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,9 +439,9 @@ found:
 	set_dlg_button(dlg, n, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);
 	set_dlg_button(dlg, n, 0, dkg_abort_download, _("Abort", term), NULL);
 
-	assert(n == DOWNLOAD_DLG_SIZE);
+	set_dlg_end(dlg, n);
 
-	dlg->items[n].type = D_END;
+	assert(n == DOWNLOAD_DLG_SIZE);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

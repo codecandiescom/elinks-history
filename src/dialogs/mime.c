@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.51 2003/10/24 23:19:44 pasky Exp $ */
+/* $Id: mime.c,v 1.52 2003/10/24 23:31:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,8 +244,9 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
 	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
+	set_dlg_end(dlg, n);
+
 	assert(n == MIME_DLG_SIZE);
-	dlg->items[n].type = D_END;
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 

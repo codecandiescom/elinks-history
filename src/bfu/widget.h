@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.12 2003/09/25 19:12:03 zas Exp $ */
+/* $Id: widget.h,v 1.13 2003/10/24 23:31:09 pasky Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -19,6 +19,11 @@ enum widget_type {
 	D_BUTTON,
 	D_BOX,
 };
+
+#define set_dlg_end(dlg, n)						\
+	do {								\
+		(dlg)->items[n].type = D_END;				\
+	} while (0)
 
 struct widget_ops {
 	/* XXX: Order matters here. --Zas */

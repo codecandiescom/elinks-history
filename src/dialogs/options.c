@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.89 2003/10/24 23:24:48 pasky Exp $ */
+/* $Id: options.c,v 1.90 2003/10/24 23:31:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,8 +243,9 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	set_dlg_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term), NULL);
 	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
+	set_dlg_end(dlg, n);
+
 	assert(n == TERMOPT_WIDGETS);
-	dlg->items[n].type = D_END;
 
 	do_dialog(term, dlg, getml(dlg, termopt_hop, NULL));
 }
@@ -326,8 +327,9 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
 	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
+	set_dlg_end(dlg, n);
+
 	assert(n == RESIZE_DLG_SIZE);
-	dlg->items[n].type = D_END;
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

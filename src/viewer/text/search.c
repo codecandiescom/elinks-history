@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.62 2003/10/24 23:19:45 pasky Exp $ */
+/* $Id: search.c,v 1.63 2003/10/24 23:31:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1127,8 +1127,9 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	set_dlg_button(dlg, n, B_ENTER, search_dlg_ok, okbutton, fn);
 	set_dlg_button(dlg, n, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);
 
+	set_dlg_end(dlg, n);
+
 	assert(n == SEARCH_DLG_SIZE);
-	dlg->items[n].type = D_END;
 
 	add_to_ml(&ml, dlg, NULL);
 	do_dialog(term, dlg, ml);

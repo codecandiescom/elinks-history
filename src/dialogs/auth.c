@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.57 2003/10/24 23:23:46 pasky Exp $ */
+/* $Id: auth.c,v 1.58 2003/10/24 23:31:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,9 +156,9 @@ do_auth_dialog(struct session *ses)
 	set_dlg_button(dlg, n, B_ENTER, auth_ok, _("OK", term), NULL);
 	set_dlg_button(dlg, n, B_ESC, auth_cancel, _("Cancel", term), NULL);
 
-	assert(n == AUTH_DLG_SIZE);
+	set_dlg_end(dlg, n);
 
-	dlg->items[n].type = D_END;
+	assert(n == AUTH_DLG_SIZE);
 
 	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 	/* When there's some username, but no password, automagically jump at

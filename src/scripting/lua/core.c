@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.85 2003/10/24 23:19:44 pasky Exp $ */
+/* $Id: core.c,v 1.86 2003/10/24 23:31:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -451,8 +451,9 @@ l_edit_bookmark_dialog(LS)
 	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
 	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
+	set_dlg_end(dlg, n);
+
 	assert(n == L_EDIT_BMK_DLG_SIZE);
-	dlg->items[n].type = D_END;
 
 	do_dialog(lua_ses->tab->term, dlg, getml(dlg, NULL));
 
@@ -591,8 +592,9 @@ l_xdialog(LS)
 	set_dlg_button(dlg, i, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
 	set_dlg_button(dlg, i, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
+	set_dlg_end(dlg, i);
+
 	assert(i == nitems - 1);
-	dlg->items[i].type = D_END;
 
 	do_dialog(lua_ses->tab->term, dlg, getml(dlg, NULL));
 

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.41 2003/05/09 16:30:15 zas Exp $ */
+/* $Id: file.c,v 1.42 2003/05/12 20:23:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,7 +215,7 @@ stat_size(unsigned char **p, int *l, struct stat *stp)
 	} else {
 		unsigned char size[9];
 
-		ulongcat(&size, NULL, stp->st_size, 8, ' ');
+		ulongcat(size, NULL, stp->st_size, 8, ' ');
 		add_to_str(p, l, size);
 		add_chr_to_str(p, l, ' ');
 	}

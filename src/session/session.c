@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.65 2003/05/12 19:09:46 pasky Exp $ */
+/* $Id: session.c,v 1.66 2003/05/12 20:23:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,7 @@ add_time_to_str(unsigned char **s, int *l, ttime t)
 
 	/* Days */
 	if (t >= (24 * 3600)) {
-		ulongcat(&q, &qlen, (t / (24 * 3600)), 5, 0);
+		ulongcat(q, &qlen, (t / (24 * 3600)), 5, 0);
 		q[qlen++] = 'd';
 		q[qlen++] = ' ';
 	}
@@ -166,17 +166,17 @@ add_time_to_str(unsigned char **s, int *l, ttime t)
 	/* Hours and minutes */
 	if (t >= 3600) {
 		t %= (24 * 3600);
-		ulongcat(&q, &qlen, (t / 3600), 4, 0);
+		ulongcat(q, &qlen, (t / 3600), 4, 0);
 		q[qlen++] = ':';
-		ulongcat(&q, &qlen, ((t / 60) % 60), 2, '0');
+		ulongcat(q, &qlen, ((t / 60) % 60), 2, '0');
 	} else {
 		/* Only minutes */
-		ulongcat(&q, &qlen, (t / 60), 2, 0);
+		ulongcat(q, &qlen, (t / 60), 2, 0);
 	}
 
 	/* Seconds */
 	q[qlen++] = ':';
-	ulongcat(&q, &qlen, (t % 60), 2, '0');
+	ulongcat(q, &qlen, (t % 60), 2, '0');
 
 	add_to_str(s, l, q);
 }
@@ -327,7 +327,7 @@ print_screen_status(struct session *ses)
 			unsigned char tab_info[8];
 
 			tab_info[tab_info_len++] = '[';
-			ulongcat(&tab_info, &tab_info_len, term->current_tab + 1, 4, 0);
+			ulongcat(tab_info, &tab_info_len, term->current_tab + 1, 4, 0);
 			tab_info[tab_info_len++] = ']';
 			tab_info[tab_info_len++] = ' ';
 			tab_info[tab_info_len] = '\0';

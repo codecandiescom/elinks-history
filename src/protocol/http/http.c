@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.108 2003/05/09 17:19:10 zas Exp $ */
+/* $Id: http.c,v 1.109 2003/05/12 20:23:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -410,9 +410,9 @@ http_send_header(struct connection *c)
 			unsigned int tslen = 0;
 			struct terminal *term = terminals.prev;
 
-			ulongcat(&ts, &tslen, term->x, 3, 0);
+			ulongcat(ts, &tslen, term->x, 3, 0);
 			ts[tslen++] = 'x';
-			ulongcat(&ts, &tslen, term->y, 3, 0);
+			ulongcat(ts, &tslen, term->y, 3, 0);
 		}
 		ustr = subst_user_agent(optstr, VERSION_STRING, system_name,
 					ts);

@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.36 2004/07/21 12:53:34 jonas Exp $ */
+/* $Id: proxy.c,v 1.37 2004/07/21 23:48:21 pasky Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -82,51 +82,39 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 	}
 
 	if (uri->protocol == PROTOCOL_HTTP) {
-		unsigned char *http_proxy;
+		protocol_proxy = get_opt_str("protocol.http.proxy.host");
+		if (!*protocol_proxy) protocol_proxy = getenv("HTTP_PROXY");
+		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("protocol_proxy");
 
-		http_proxy = get_opt_str("protocol.http.proxy.host");
-		if (!*http_proxy) http_proxy = getenv("HTTP_PROXY");
-		if (!http_proxy || !*http_proxy) http_proxy = getenv("http_proxy");
-
-		if (http_proxy && *http_proxy) {
-			if (!strncasecmp(http_proxy, "http://", 7))
-				http_proxy += 7;
-
-			protocol_proxy = http_proxy;
+		if (protocol_proxy && *protocol_proxy) {
+			if (!strncasecmp(protocol_proxy, "http://", 7))
+				protocol_proxy += 7;
 		}
 
 	} else if (uri->protocol == PROTOCOL_HTTPS) {
-		unsigned char *https_proxy;
+		protocol_proxy = get_opt_str("protocol.https.proxy.host");
+		if (!*protocol_proxy) protocol_proxy = getenv("HTTPS_PROXY");
+		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("protocol_proxy");
 
-		https_proxy = get_opt_str("protocol.https.proxy.host");
-		if (!*https_proxy) https_proxy = getenv("HTTPS_PROXY");
-		if (!https_proxy || !*https_proxy) https_proxy = getenv("https_proxy");
-
-		if (https_proxy && *https_proxy) {
-			if (!strncasecmp(https_proxy, "http://", 7))
-				https_proxy += 7;
-
-			protocol_proxy = https_proxy;
+		if (protocol_proxy && *protocol_proxy) {
+			if (!strncasecmp(protocol_proxy, "http://", 7))
+				protocol_proxy += 7;
 		}
 
 	} else if (uri->protocol == PROTOCOL_FTP) {
-		unsigned char *ftp_proxy;
+		protocol_proxy = get_opt_str("protocol.ftp.proxy.host");
+		if (!*protocol_proxy) protocol_proxy = getenv("FTP_PROXY");
+		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("protocol_proxy");
 
-		ftp_proxy = get_opt_str("protocol.ftp.proxy.host");
-		if (!*ftp_proxy) ftp_proxy = getenv("FTP_PROXY");
-		if (!ftp_proxy || !*ftp_proxy) ftp_proxy = getenv("ftp_proxy");
-
-		if (ftp_proxy && *ftp_proxy) {
-			if (!strncasecmp(ftp_proxy, "ftp://", 6))
-				ftp_proxy += 6;
-			else if (!strncasecmp(ftp_proxy, "http://", 7))
-				ftp_proxy += 7;
-
-			protocol_proxy = ftp_proxy;
+		if (protocol_proxy && *protocol_proxy) {
+			if (!strncasecmp(protocol_proxy, "ftp://", 6))
+				protocol_proxy += 6;
+			else if (!strncasecmp(protocol_proxy, "http://", 7))
+				protocol_proxy += 7;
 		}
 	}
 
-	if (protocol_proxy) {
+	if (protocol_proxy && *protocol_proxy) {
 		unsigned char *no_proxy;
 		unsigned char *slash = strchr(protocol_proxy, '/');
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.55 2003/10/16 08:31:39 zas Exp $ */
+/* $Id: cache.c,v 1.56 2003/10/16 08:35:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,7 @@ cache_info(int type)
 /* Return 1 and save cache entry to @f if there's matching one, otherwise
  * return 0. */
 int
-find_in_cache(unsigned char *url, struct cache_entry **f)
+find_in_cache(unsigned char *url, struct cache_entry **cep)
 {
 	struct cache_entry *e;
 
@@ -105,7 +105,7 @@ find_in_cache(unsigned char *url, struct cache_entry **f)
 		del_from_list(e);
 		add_to_list(cache, e);
 
-		*f = e;
+		*cep = e;
 		return 1;
 	}
 
@@ -113,11 +113,11 @@ find_in_cache(unsigned char *url, struct cache_entry **f)
 }
 
 int
-get_cache_entry(unsigned char *url, struct cache_entry **f)
+get_cache_entry(unsigned char *url, struct cache_entry **cep)
 {
 	struct cache_entry *e;
 
-	if (find_in_cache(url, f)) return 0;
+	if (find_in_cache(url, cep)) return 0;
 	shrink_memory(0);
 	url = extract_proxy(url);
 
@@ -135,7 +135,7 @@ get_cache_entry(unsigned char *url, struct cache_entry **f)
 	e->count = cache_count++;
 
 	add_to_list(cache, e);
-	*f = e;
+	*cep = e;
 
 	return 0;
 }

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.121 2004/04/22 16:13:08 jonas Exp $ */
+/* $Id: session.h,v 1.122 2004/04/23 22:05:20 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -30,6 +30,7 @@ struct initial_session_info {
 		SES_REMOTE_NEW_WINDOW = 2,
 		SES_REMOTE_CURRENT_TAB = 4,
 		SES_REMOTE_PROMPT_URL = 8,
+		SES_REMOTE_PING = 16,
 	} remote;
 
 	/* The URL we should load immediatelly. */

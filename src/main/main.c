@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.202 2004/04/23 19:38:09 pasky Exp $ */
+/* $Id: main.c,v 1.203 2004/04/23 22:05:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,7 +161,7 @@ init(void)
 		/* Dump the URL list */
 		dump_pre_start(&url_list);
 
-	} else if (get_opt_bool_tree(cmdline_options, "ping")) {
+	} else if (remote_session_flags & SES_REMOTE_PING) {
 		/* If no instance was running return ping failure */
 		if (fd == -1) {
 			usrerror(G_("ping: 0, no reply"));

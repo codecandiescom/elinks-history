@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.61 2004/04/23 19:32:49 pasky Exp $ */
+/* $Id: cmdline.c,v 1.62 2004/04/23 22:05:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,7 +261,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		}
 
 	} else if (!strlcasecmp(command, len, "ping", 4)) {
-		get_opt_bool_tree(cmdline_options, "ping") = 1;
+		remote_session_flags = SES_REMOTE_PING;
 
 	} else {
 		return gettext("Command not supported");
@@ -648,10 +648,6 @@ struct option_info cmdline_options_info[] = {
 		N_("Prevents numbering of links (and showing their list at the end of\n"
 		"the dumped document) in the -dump output; this was the default behaviour\n"
 		"until 0.5pre12. Note that this really affects only --dump, nothing else.")),
-
-	INIT_OPT_BOOL("", N_("Check if ELinks is currently running"),
-		"ping", 0, 0,
-		N_("Checks if ELinks is currently running by trying to connect the interlink socket.")),
 
 	INIT_OPT_COMMAND("", N_("Control an already running ELinks"),
 		"remote", 0, remote_cmd,

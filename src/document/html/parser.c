@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.292 2003/12/12 14:24:19 jonas Exp $ */
+/* $Id: parser.c,v 1.293 2003/12/20 18:59:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2472,7 +2472,8 @@ html_frameset(unsigned char *a)
 	unsigned char *cols, *rows;
 	int width, height;
 
-	if (!global_doc_opts->frames || !special_f(ff, SP_USED, NULL)) return;
+	if (!global_doc_opts->frames || !special_f(ff, SP_USED, NULL))
+		return;
 
 	cols = get_attr_val(a, "cols");
 	if (!cols) {
@@ -2497,16 +2498,20 @@ html_frameset(unsigned char *a)
 		struct frameset_desc *frameset_desc = html_top.frameset;
 		int offset;
 
-		if (frameset_desc->y >= frameset_desc->height) goto free_and_return;
-		offset = frameset_desc->x + frameset_desc->y * frameset_desc->width;
+		if (frameset_desc->y >= frameset_desc->height)
+			goto free_and_return;
+		offset = frameset_desc->x
+			 + frameset_desc->y * frameset_desc->width;
 		width = frameset_desc->frame_desc[offset].width;
 		height = frameset_desc->frame_desc[offset].height;
 	}
 
 	fp.width = fp.height = NULL;
 
-	parse_frame_widths(cols, width, HTML_FRAME_CHAR_WIDTH, &fp.width, &fp.x);
-	parse_frame_widths(rows, height, HTML_FRAME_CHAR_HEIGHT, &fp.height, &fp.y);
+	parse_frame_widths(cols, width, HTML_FRAME_CHAR_WIDTH,
+			   &fp.width, &fp.x);
+	parse_frame_widths(rows, height, HTML_FRAME_CHAR_HEIGHT,
+			   &fp.height, &fp.y);
 
 	fp.parent = html_top.frameset;
 	if (fp.x && fp.y) html_top.frameset = special_f(ff, SP_FRAMESET, &fp);
@@ -2518,7 +2523,7 @@ free_and_return:
 	mem_free(rows);
 }
 
-/* Link types
+/* Link types:
 
 Alternate
 	Designates substitute versions for the document in which the link
@@ -2584,8 +2589,8 @@ Bookmark
 	example, to label the bookmark. Note that several bookmarks may be
 	defined in each document.
 
-Some were added like top, ... --Zas
-*/
+Some more were added, like top. --Zas */
+
 enum hlink_type {
 	LT_UNKNOWN = 0,
 	LT_START,

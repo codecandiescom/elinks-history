@@ -58,3 +58,38 @@ just css_apply() like mad on various places to make sure the CSS attributes
 are stuffed through HTML engine's throat). These two problems will be solved
 when the HTML engine is converted to work with stylesheets natively (instead
 of format + par_format).
+
+
+			    The future of selectors
+
+Specificity
+
+111		a#id.nav
+.		    |
+.		.---'---.
+.		V	|
+101	       a#id	|
+.		|	|
+.		|	|
+.		|	|
+13		|	|		       div p a.nav
+.		|	|			    |
+.		|	|	    .--------------'|
+.		|	|	    V		    |
+12		|	|        p a.nav	    |
+.		|	|	    |		    |
+.		|	`-.---------'		    |
+.		|	  V			    |
+11		|	a.nav			    |
+.		|	  |			    |
+.		|	  |			    |
+.		|	  |			    |
+2		|	  |    p a		    |
+.		|	  |	|		    |
+.		`---------`-.---'---.		    |
+.			    V	    V		    |
+1			    a	    p	   img	   div
+.			    |	      |	    |	    |
+.			    `-------+---+---+-------'
+.					V
+0					* (universal selector)

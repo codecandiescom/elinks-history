@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.103 2004/10/19 05:26:22 miciah Exp $ */
+/* $Id: document.c,v 1.104 2004/10/19 05:34:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,71 +229,76 @@ document_info_dialog(struct session *ses)
 void
 cached_header_dialog(struct session *ses, struct cache_entry *cached)
 {
-	if (cached && cached->head) {
-		int artificial;
-		unsigned char *headers = mem_alloc(strlen(cached->head) + 1);
+	int artificial;
+	unsigned char *headers;
 
-		if (!headers) return;
-
-		/* If |cached->head| starts by a newline, it means that it
-		 * is artificially generated, usually to make ELinks-generated
-		 * documents (ie. file:// directory listings) text/html. */
-		artificial = (*cached->head == '\r');
-#ifdef CONFIG_DEBUG
-		if (*cached->head)  {
-#else
-		if (*cached->head && !artificial) {
-#endif
-			int i = 0, j = 0;
-			/* Sanitize headers string. */
-			/* XXX: Do we need to check length and limit
-			 * it to something reasonable ? */
-
-			while (cached->head[i]) {
-				/* Check for control chars. */
-				if (cached->head[i] < ' '
-				    && cached->head[i] != '\n') {
-					/* Ignore '\r' but replace
-					 * others control chars with
-					 * a visible char. */
-					if (cached->head[i] != '\r') {
-						 headers[j] = '*';
-						 j++;
-					}
-				} else {
-					headers[j] = cached->head[i];
-					j++;
-				}
-				i++;
-			}
-
-			/* Ensure null termination. */
-			headers[j] = '\0';
-
-			/* Remove all ending '\n' if any. */
-			while (j && headers[--j] == '\n')
-			headers[j] = '\0';
-
-
-			if (*headers)
-				/* Headers info message box. */
-				msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
-					artificial ?  N_("Artificial header info") : N_("Header info"), ALIGN_LEFT,
-					headers,
-					NULL, 1,
-					N_("OK"), NULL, B_ENTER | B_ESC);
-
-			return;
-		}
-
-		mem_free(headers);
+	if (!cached || !cached->head) {
+no_header_info:
+		msg_box(ses->tab->term, NULL, 0,
+			N_("Header info"), ALIGN_LEFT,
+			N_("No header info."),
+			NULL, 1,
+			N_("OK"), NULL, B_ENTER | B_ESC);
+		return;
 	}
 
-	msg_box(ses->tab->term, NULL, 0,
-		N_("Header info"), ALIGN_LEFT,
-		N_("No header info."),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	headers = mem_alloc(strlen(cached->head) + 1);
+	if (!headers) return;
+
+	/* If |cached->head| starts by a newline, it means that it
+	 * is artificially generated, usually to make ELinks-generated
+	 * documents (ie. file:// directory listings) text/html. */
+	artificial = (*cached->head == '\r');
+#ifdef CONFIG_DEBUG
+	if (*cached->head)  {
+#else
+	if (*cached->head && !artificial) {
+#endif
+		int i = 0, j = 0;
+		/* Sanitize headers string. */
+		/* XXX: Do we need to check length and limit
+		 * it to something reasonable ? */
+
+		while (cached->head[i]) {
+			/* Check for control chars. */
+			if (cached->head[i] < ' '
+			    && cached->head[i] != '\n') {
+				/* Ignore '\r' but replace
+				 * others control chars with
+				 * a visible char. */
+				if (cached->head[i] != '\r') {
+					 headers[j] = '*';
+					 j++;
+				}
+			} else {
+				headers[j] = cached->head[i];
+				j++;
+			}
+			i++;
+		}
+
+		/* Ensure null termination. */
+		headers[j] = '\0';
+
+		/* Remove all ending '\n' if any. */
+		while (j && headers[--j] == '\n')
+		headers[j] = '\0';
+
+
+		if (*headers)
+			/* Headers info message box. */
+			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
+				artificial ?  N_("Artificial header info") : N_("Header info"), ALIGN_LEFT,
+				headers,
+				NULL, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+
+		return;
+	}
+
+	mem_free(headers);
+
+	goto no_header_info;
 }
 
 /* Headers info. message box. */

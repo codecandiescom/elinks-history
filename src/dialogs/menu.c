@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.355 2004/07/18 04:44:49 jonas Exp $ */
+/* $Id: menu.c,v 1.356 2004/07/18 10:51:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -832,9 +832,9 @@ complete_file_menu(struct terminal *term, int no_elevator, void *data,
 		   unsigned char *dirname, unsigned char *filename)
 {
 	struct menu_item *menu = new_menu(FREE_LIST | NO_INTL);
-	struct directory_entry *entries = NULL;
+	struct directory_entry *entries, *entry;
 	int filenamelen = strlen(filename);
-	int i, direntries = 0, fileentries = 0;
+	int direntries = 0, fileentries = 0;
 
 	if (!menu) return;
 
@@ -844,32 +844,37 @@ complete_file_menu(struct terminal *term, int no_elevator, void *data,
 		return;
 	}
 
-	for (i = 0; entries[i].name; i++) {
-		unsigned char *path = entries[i].name;
-		unsigned char *attrib = entries[i].attrib;
-		unsigned char *text = get_filename_position(path);
+	for (entry = entries; entry->name; entry++) {
+		unsigned char *text;
+		int is_dir = (*entry->attrib == 'd');
+		int is_file = (*entry->attrib == '-');
 
-		if (strncmp(filename, text, filenamelen)
-		    || (no_elevator && !strcmp("..", text))
-		    || !file_can_read(path)) {
-			mem_free(path);
-			mem_free(attrib);
+		mem_free(entry->attrib);
+		if ((!is_dir && !is_file) || !file_can_read(entry->name)) {
+			mem_free(entry->name);
 			continue;
 		}
 
-		if (*attrib == 'd') {
+		text = get_filename_position(entry->name);
+		if (strncmp(filename, text, filenamelen)
+		    || (no_elevator && !strcmp("..", text))) {
+			mem_free(entry->name);
+			continue;
+		}
+
+		if (is_dir) {
 			if (!direntries) {
 				add_to_menu(&menu, _("Directories:", term), NULL,
 					    ACT_MAIN_NONE, NULL, NULL, NO_SELECT);
-				add_menu_separator(&menu); 
+				add_menu_separator(&menu);
 			}
 
 			add_to_menu(&menu, text, NULL, ACT_MAIN_NONE,
-				    dir_func, path, FREE_DATA | SUBMENU);
+				    dir_func, entry->name, FREE_DATA | SUBMENU);
 
 			direntries++;
 
-		} else if (*attrib == '-') {
+		} else {
 			if (!fileentries) {
 				if (direntries) add_menu_separator(&menu);
 				add_to_menu(&menu, _("Files:", term), NULL,
@@ -878,15 +883,11 @@ complete_file_menu(struct terminal *term, int no_elevator, void *data,
 			}
 
 			add_to_menu(&menu, text, NULL, ACT_MAIN_NONE,
-				    file_func, path, FREE_DATA);
+				    file_func, entry->name, FREE_DATA);
 
 			fileentries++;
 
-		} else {
-			mem_free(path);
 		}
-
-		mem_free(attrib);
 	}
 
 	mem_free(entries);

@@ -497,7 +497,7 @@ cf_result="no"
 if test "$disable_openssl"; then
 	cf_result="not used"
 else
-	for ssldir in "" "$openssl_withval" /usr /usr/local/openssl \
+	for ssldir in "$openssl_withval" "" /usr /usr/local/openssl \
 			 /usr/lib/openssl /usr/local/ssl \
 			 /usr/local/www /usr/lib/ssl /usr/local \
 			 /usr/pkg /opt /opt/openssl; do
@@ -553,7 +553,7 @@ else
 		# Sure, we maybe _could_ use their macro, but how to ensure
 		# that the ./configure script won't fail if the macro won't be
 		# found..? :( --pasky
-		for ssldir in "" "$gnutls_withval" /usr/local/gnutls /opt /opt/gnutls; do
+		for ssldir in "$gnutls_withval" "" /usr/local/gnutls /opt /opt/gnutls; do
 			if test "$cf_result" = no; then
 
 				if test "x$ssldir" != "x"; then

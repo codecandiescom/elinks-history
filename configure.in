@@ -793,7 +793,7 @@ EL_ARG_DEPEND(CONFIG_CGI, cgi, [HAVE_SETENV=yes], [Local CGI],
 AM_CONDITIONAL(CONFIG_CGI, test "$CONFIG_CGI" = yes)
 
 EL_ARG_ENABLE(CONFIG_FINGER, finger, [Finger protocol],
-	      [  --disable-finger        disable finger protocol support])
+	      [  --enable-finger         enable finger protocol support])
 AM_CONDITIONAL(CONFIG_FINGER, test "$CONFIG_FINGER" = yes)
 
 EL_ARG_ENABLE(CONFIG_GOPHER, gopher, [Gopher protocol],

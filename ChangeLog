@@ -1,3 +1,37 @@
+Thu Jul 17 08:56:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, bfu/align.h, config/cmdline.c, config/conf.c,
+	config/dialogs.c, config/options.c, config/options.h,
+	config/opttypes.c, config/urlhist.c, dialogs/menu.c,
+	dialogs/mime.c, dialogs/options.c, globhist/globhist.c,
+	lowlevel/interlink.c, mime/backend/default.c,
+	mime/backend/mailcap.c, mime/backend/mimetypes.c, protocol/file.c,
+	protocol/user.c, sched/download.c, sched/session.c,
+	terminal/terminal.c, util/secsave.c, viewer/dump/dump.c,
+	viewer/text/form.c, viewer/text/link.c, viewer/text/view.c:
+
+	Type of root_options and cmdline_options to struct option *. General
+	cleanup. Patch by Karsten Schölzel <kuser@gmx.de>.  
+
+Thu Jul 17 06:55:38 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/window.c:
+
+	Fix bug 33: Problems with drawing out of tabs. I'm hardly sure of
+	this change but it seems to work.  
+	
+	The problem was related to 'empty windows' used by image maps and
+	listboxes.  I first tried substituting register_bottom_half() for
+	add_empty_window() but that caused bad stuff with image maps so I
+	changed empty_window_handler() to call term_send_event() instead of
+	directly calling the next window's handler.  
+
+Thu Jul 17 04:23:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Fix off by one error.  
+
 Wed Jul 16 08:41:59 2003  Laurent Monin <zas@norz.org>:
 
 	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,

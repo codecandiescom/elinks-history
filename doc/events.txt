@@ -1,0 +1,118 @@
+				Events
+
+This file lists the events currently in use. When they are called, what they
+do and what arguments they expect.
+
+Below is a template showing how to read the event information
+
+Name:		<event name>
+Managed By:	<what part of the code registers and unregister the event>
+Arguments:
+
+ <the order and type of the arguments>
+
+Triggered:
+
+ <short description of when the event is triggered>
+
+Description:
+
+ <description of the arguments, what the event does etc.>
+
+Please keep in alphabetical order!
+
+-------------------------------------------------------------------------------
+Name:		goto-url
+Managed By:	The scripting subsystem/backends
+Triggered:
+
+ When user enters something into the goto URL dialog.
+
+Arguments:
+
+ unsigned char **new_url, struct session *ses, unsigned char *url
+
+Description:
+
+ If another URL than @url should be followed it is passed by setting @new_url.
+ Valid values for @new_url includes:
+ - @url if the original URL should be followed.
+ - NULL if no URL should be followed.
+ - a dynamically allocated new URL to be followed instead.
+
+-------------------------------------------------------------------------------
+Name:		follow-url
+Managed By:	The scripting subsystem/backends
+Triggered:
+
+ When user decided to let some document to load (followed a link, entered URL
+ in the goto URL dialog, is loading frames from a frameset (?) or whatever).
+
+Arguments:
+
+ unsigned char **new_url, struct session *ses, unsigned char *url
+
+Description:
+
+ If another URL than @url should be followed it is passed by setting @new_url.
+ Valid values for @new_url includes:
+ - @url if the original URL should be followed.
+ - NULL if no URL should be followed.
+ - a dynamically allocated new URL to be followed instead.
+
+-------------------------------------------------------------------------------
+Name:		get-proxy
+Managed By:	The scripting subsystem/backends
+Triggered:
+
+ When determining the how a request should be proxied.
+
+Arguments:
+
+ unsigned char **new_proxy_url, unsigned char *url
+
+Description:
+
+ Possible values for @new_proxy_url includes:
+ - a dynamically allocated string with the format proxy:port
+ - an empty string (dynamically allocated!) to use no proxy
+ - NULL to use default proxies
+
+-------------------------------------------------------------------------------
+Name:		pre-format-html
+Managed By:	The scripting subsystem/backends
+Triggered:
+
+ When a html document has been loaded before the document rendering begins.
+
+Arguments:
+
+ unsigned char **new_html_src, struct session *ses, unsigned char *url,
+ unsigned char *html_src, int *html_len
+
+Description:
+
+ Makes it possible to fix up bad html code, remove tags etc.
+ Possible values for @new_html_src includes:
+ - new document content in a dynamically allocated string.
+ - NULL to keep the content unchanged.
+ When @new_html_src is changed @html_len should be updated to the new length of
+ the document content.
+
+-------------------------------------------------------------------------------
+Name:		quit
+Managed By:	The scripting subsystem/backends
+Triggered:
+
+ When ELinks quits
+
+Arguments:
+
+ None
+
+Description:
+
+ Allows the user to do whatever clean up is required when ELinks quits.
+
+-------------------------------------------------------------------------------
+$Id: events.txt,v 1.1 2003/09/25 00:36:31 jonas Exp $

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.225 2004/06/03 13:27:52 zas Exp $ */
+/* $Id: search.c,v 1.226 2004/06/03 13:47:29 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -948,6 +948,7 @@ search_link_text(struct document *document, int current_link, int i,
 {
 	int upper_link, lower_link;
 	int case_sensitive = get_opt_bool("document.browse.search.case");
+	int wraparound = get_opt_bool("document.browse.search.wraparound");
 	int textlen = strlen(text);
 
 	assert(textlen && direction && offset);
@@ -980,25 +981,30 @@ search_link_text(struct document *document, int current_link, int i,
 			return i;
 		}
 
-		/* Check if we are at the end of the first range */
-		if (i == (direction > 0 ? upper_link - 1: lower_link + 1)
-		    && get_opt_bool("document.browse.search.wraparound")) {
-			/* Only wrap around one time. Initialize @i with
-			 * {+= direction} in mind. */
-			if (direction > 0) {
+		if (!wraparound) continue;
+
+		/* Check if we are at the end of the first range.
+		 * Only wrap around one time. Initialize @i with
+		 * {+= direction} in mind. */
+		if (direction > 0) {
+			 if (i == upper_link - 1) {
 				if (upper_link != document->nlinks
 				    || upper_link == current_link + 1)
 					break;
 
-				lower_link = i = -1;
 				upper_link = current_link + 1;
-			} else {
+				lower_link = -1;
+				i = lower_link;
+			}
+		} else {
+			if (i == lower_link + 1) {
 				if (lower_link != -1
 				    || lower_link == current_link - 1)
 					break;
 
+				upper_link = document->nlinks;
 				lower_link = current_link - 1;
-				upper_link = i = document->nlinks;
+				i = upper_link;
 			}
 		}
 	}

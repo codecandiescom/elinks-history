@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.48 2002/12/13 23:31:59 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.49 2002/12/14 15:22:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@
 
 struct list_head kbdbind_box_items = { &kbdbind_box_items, &kbdbind_box_items };
 struct list_head kbdbind_boxes = { &kbdbind_boxes, &kbdbind_boxes };
-static struct listbox_item *keymap_box_items[3];
+static struct listbox_item *keyact_box_items[ACT_ZOOM_FRAME + 1];
 
 
 static struct list_head keymaps[KM_MAX];
@@ -39,6 +39,9 @@ static int read_action(unsigned char *);
 static unsigned char *write_action(int);
 static unsigned char *write_keymap(enum keymap);
 
+static void init_action_listboxes();
+static void free_action_listboxes();
+
 
 static void
 add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
@@ -49,6 +52,10 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 
 	kb = mem_alloc(sizeof(struct keybinding));
 	if (kb) {
+		struct listbox_item *keymap;
+		unsigned char *keystroke = init_str();
+		int len = 0;
+
 		kb->action = action;
 		kb->key = key;
 		kb->meta = meta;
@@ -56,18 +63,43 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		kb->flags &= ~KBDB_WATERMARK;
 		add_to_list(keymaps[km], kb);
 
-		kb->box_item = mem_calloc(1, sizeof(struct listbox_item));
-		if (!kb->box_item || !keymap_box_items[km])
+		if (action == ACT_NONE) {
+			/* We don't want such a listbox_item, do we? */
+			kb->box_item = NULL;
+			return; /* Or goto. */
+		}
+		make_keystroke(&keystroke, &len, key, meta);
+		kb->box_item = mem_calloc(1, sizeof(struct listbox_item) + len + 1);
+		if (!kb->box_item) {
+			mem_free(keystroke);
 			return; /* Or just goto after end of this if block. */
-		add_to_list(keymap_box_items[km]->child, kb->box_item);
-		kb->box_item->root = keymap_box_items[km];
+		}
+		kb->box_item->text = ((unsigned char *) kb->box_item
+					+ sizeof(struct listbox_item));
+		strcpy(kb->box_item->text, keystroke);
+		mem_free(keystroke);
+
+		if (!keyact_box_items[action]) {
+boom:
+			mem_free(kb->box_item);
+			kb->box_item = NULL;
+			return; /* Or goto ;-). */
+		}
+		for (keymap = keyact_box_items[action]->child.next;
+		     keymap != (struct listbox_item *) &keyact_box_items[action]->child && km;
+		     km--)
+			keymap = keymap->next;
+		if (keymap == (struct listbox_item *) &keyact_box_items[action]->child)
+			goto boom;
+
+		add_to_list(keymap->child, kb->box_item);
+		kb->box_item->root = keymap;
 		init_list(kb->box_item->child);
 		kb->box_item->visible = 1;
 		kb->box_item->udata = kb;
 		kb->box_item->type = BI_LEAF;
-		kb->box_item->depth = keymap_box_items[km]->depth + 1;
+		kb->box_item->depth = keymap->depth + 1;
 		kb->box_item->box = &kbdbind_boxes;
-		kb->box_item->text = write_action(action);
 	}
 }
 
@@ -100,47 +132,22 @@ init_keymaps()
 {
     	enum keymap i;
 
-	for (i = 0; i < KM_MAX; i++) {
+	for (i = 0; i < KM_MAX; i++)
 		init_list(keymaps[i]);
 
-		keymap_box_items[i] = mem_calloc(1, sizeof(struct listbox_item));
-		if (!keymap_box_items[i])
-			continue;
-		add_to_list(kbdbind_box_items, keymap_box_items[i]);
-		keymap_box_items[i]->root = NULL;
-		init_list(keymap_box_items[i]->child);
-		keymap_box_items[i]->visible = 1;
-		keymap_box_items[i]->udata = NULL;
-		keymap_box_items[i]->type = BI_FOLDER;
-		keymap_box_items[i]->depth = 0;
-		keymap_box_items[i]->box = &kbdbind_boxes;
-		keymap_box_items[i]->text = write_keymap(i);
-	}
-
+	init_action_listboxes();
 	add_default_keybindings();
 }
 
 void
 free_keymaps()
 {
-	struct keybinding *kb;
 	enum keymap i;
 
-	for (i = 0; i < KM_MAX; i++) {
-		foreach (kb, keymaps[i]) {
-			if (!kb->box_item)
-				continue;
-			del_from_list(kb->box_item);
-			mem_free(kb->box_item);
-		}
+	free_action_listboxes();
 
+	for (i = 0; i < KM_MAX; i++)
 		free_list(keymaps[i]);
-
-		if (keymap_box_items[i]) {
-			del_from_list(keymap_box_items[i]);
-			mem_free(keymap_box_items[i]);
-		}
-	}
 }
 
 
@@ -419,6 +426,66 @@ write_action(int action)
 {
 
 	return numtostr(action_table, action);
+}
+
+static void
+init_action_listboxes()
+{
+	struct strtonum *act;
+
+	for (act = action_table + 1; act->str; act++) {
+		struct listbox_item *box_item;
+		int i;
+
+		keyact_box_items[act->num] = box_item =
+			mem_calloc(1, sizeof(struct listbox_item));
+		if (!box_item) continue;
+		add_at_pos((struct listbox_item *) kbdbind_box_items.prev,
+				box_item);
+		box_item->root = NULL;
+		init_list(box_item->child);
+		box_item->visible = 1;
+		box_item->udata = NULL;
+		box_item->type = BI_FOLDER;
+		box_item->expanded = 0; /* Maybe you would like this being 1? */
+		box_item->depth = 0;
+		box_item->box = &kbdbind_boxes;
+		box_item->text = act->str;
+
+		for (i = 0; i < KM_MAX; i++) {
+			struct listbox_item *keymap;
+
+			keymap = mem_calloc(1, sizeof(struct listbox_item));
+			if (!keymap) continue;
+			add_at_pos((struct listbox_item *) box_item->child.prev,
+					keymap);
+			keymap->root = box_item;
+			init_list(keymap->child);
+			keymap->visible = 1;
+			keymap->udata = NULL;
+			keymap->type = BI_FOLDER;
+			keymap->expanded = 1;
+			keymap->depth = 1;
+			keymap->box = &kbdbind_boxes;
+			keymap->text = write_keymap(i);
+		}
+	}
+}
+
+static void
+free_action_listboxes()
+{
+	struct listbox_item *action;
+
+	foreach (action, kbdbind_box_items) {
+		struct listbox_item *keymap;
+
+		foreach (keymap, action->child) {
+			free_list(keymap->child);
+		}
+		free_list(action->child);
+	}
+	free_list(kbdbind_box_items);
 }
 
 

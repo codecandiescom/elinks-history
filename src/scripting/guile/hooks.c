@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.7 2003/09/25 16:08:18 jonas Exp $ */
+/* $Id: hooks.c,v 1.8 2003/09/25 16:42:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,25 +67,20 @@ script_hook_follow_url(va_list ap)
 static int
 script_hook_pre_format_html(va_list ap)
 {
-	unsigned char **retval = va_arg(ap, unsigned char **);
+	unsigned char **html = va_arg(ap, unsigned char **);
+	int *html_len = va_arg(ap, int *);
 	struct session *ses = va_arg(ap, struct session *);
 	unsigned char *url = va_arg(ap, unsigned char *);
-	unsigned char *html = va_arg(ap, unsigned char *);
-	int *len = va_arg(ap, int *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%pre-format-html-hook");
 	SCM x = scm_call_2(SCM_VARIABLE_REF(proc), scm_makfrom0str(url),
-			   scm_mem2string(html, *len));
+			   scm_mem2string(*html, *len));
 
-	if (0 && ses);
+	if (!SCM_STRINGP(x)) return EHS_NEXT;
 
-	if (SCM_STRINGP(x)) {
-		*len = SCM_STRING_LENGTH(x);
-		*retval = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
-	} else {
-		*retval = NULL;
-	}
+	*html_len = SCM_STRING_LENGTH(x);
+	*html = memacpy(SCM_STRING_UCHARS(x), *html_len + 1);
 
-	return *retval ? 1 : 0;
+	return EHS_LAST;
 }
 
 /* The Guile function can return:

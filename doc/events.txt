@@ -89,17 +89,17 @@ Triggered When:
 
 Arguments:
 
- unsigned char **new_html_src, struct session *ses, unsigned char *url,
- unsigned char *html_src, int *html_len
+ unsigned char **html, int *html_len, struct session *ses, unsigned char *url
 
 Description:
 
- Makes it possible to fix up bad html code, remove tags etc.
- Possible values for @new_html_src includes:
+ Makes it possible to fix up bad HTML code, remove tags etc.  The HTML source
+ is changed by making @html point to the new source.  If @html is changed the
+ event propagation should be ended and @html_len should be updated to the new
+ length of the document content.
+ Possible values for @html includes:
  - new document content in a dynamically allocated string.
  - NULL to keep the content unchanged.
- If @new_html_src is changed @html_len should be updated to the new length
- of the document content.
 
 -------------------------------------------------------------------------------
 Name:		quit
@@ -117,4 +117,4 @@ Description:
  Allows a subsystem to do whatever clean up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.3 2003/09/25 16:00:57 jonas Exp $
+$Id: events.txt,v 1.4 2003/09/25 16:42:09 jonas Exp $

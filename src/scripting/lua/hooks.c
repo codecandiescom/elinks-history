@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.35 2003/09/25 16:02:46 jonas Exp $ */
+/* $Id: hooks.c,v 1.36 2003/09/25 16:42:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,12 +115,11 @@ static enum evhook_status
 script_hook_pre_format_html(va_list ap)
 {
 	lua_State *L = lua_state;
-	unsigned char **new_html_src = va_arg(ap, unsigned char **);
+	unsigned char **html = va_arg(ap, unsigned char **);
+	int *html_len = va_arg(ap, int *);
 	struct session *ses = va_arg(ap, struct session *);
 	unsigned char *url = va_arg(ap, unsigned char *);
-	unsigned char *html_src = va_arg(ap, unsigned char *);
-	int *html_len = va_arg(ap, int *);
-	unsigned char *value = NULL;
+	int status;
 
 	lua_getglobal(L, "pre_format_html_hook");
 	if (lua_isnil(L, -1)) {
@@ -130,25 +129,26 @@ script_hook_pre_format_html(va_list ap)
 	}
 
 	lua_pushstring(L, url);
-	lua_pushlstring(L, html_src, *html_len);
+	lua_pushlstring(L, *html, *html_len);
 
-	if (!prepare_lua(ses)) {
-		int err = lua_call(L, 2, 1);
+	if (prepare_lua(ses)) return EHS_NEXT;
 
-		finish_lua();
-		if (err) return str_event_code(new_html_src, NULL);
+	status = lua_call(L, 2, 1);
+	finish_lua();
+	if (status) return EHS_NEXT;
 
-		if (lua_isstring(L, -1)) {
-			*html_len = lua_strlen(L, -1);
-			value = memacpy((unsigned char *) lua_tostring(L, -1), *html_len);
-		} else if (!lua_isnil(L, -1)) {
-			alert_lua_error("pre_format_html_hook must return a string or nil");
-		}
-
-		lua_pop(L, 1);
+	if (lua_isstring(L, -1)) {
+		*html_len = lua_strlen(L, -1);
+		*html = memacpy((unsigned char *) lua_tostring(L, -1), *html_len);
+		status = EHS_LAST;
+	} else if (!lua_isnil(L, -1)) {
+		alert_lua_error("pre_format_html_hook must return a string or nil");
+		status = EHS_NEXT;
 	}
 
-	return str_event_code(new_html_src, value);
+	lua_pop(L, 1);
+
+	return status;
 }
 
 /* The Lua function can return:

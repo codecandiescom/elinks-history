@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.158 2003/09/25 16:00:57 jonas Exp $ */
+/* $Id: session.c,v 1.159 2003/09/25 16:42:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -947,7 +947,7 @@ static void
 maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 {
 	struct fragment *fr;
-	unsigned char *s = NULL;
+	unsigned char *src;
 	int len;
 	static int pre_format_html_event = EVENT_NONE;
 
@@ -955,15 +955,19 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 
 	defrag_entry(ce);
 	fr = ce->frag.next;
+	src = fr->data;
 	len = fr->length;
+
 	set_event_id(pre_format_html_event, "pre-format-html");
-	trigger_event(pre_format_html_event, &s, ses, ce->url, fr->data, &len);
-	if (s) {
-		add_fragment(ce, 0, s, len);
+	trigger_event(pre_format_html_event, &src, &len, ses, ce->url);
+
+	if (src && src != fr->data) {
+		add_fragment(ce, 0, src, len);
 		truncate_entry(ce, len, 1);
 		ce->incomplete = 0; /* XXX */
-		mem_free(s);
+		mem_free(src);
 	}
+
 	ce->done_pre_format_html_hook = 1;
 }
 #endif

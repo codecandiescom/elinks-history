@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.256 2004/12/18 00:27:53 pasky Exp $ */
+/* $Id: form.c,v 1.257 2004/12/18 00:43:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,7 +412,7 @@ add_submitted_value_to_list(struct form_control *fc,
 	assert(fc && fs && list);
 
 	name = fc->name;
-	position = fc->form_num + fc->ctrl_num;
+	position = fc->position;
 	type = fc->type;
 
 	switch (fc->type) {

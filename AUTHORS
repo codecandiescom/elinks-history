@@ -85,6 +85,9 @@ Dakshinamurthy Karra <kd@blr.vsnl.net.in>
 	Win NT port
 	Saving goto history
 
+David D. Kilzer <ddkilzer@lubricants-oil.com>
+	Part of -no-home support
+
 David Mediavilla Ezquibela <davidme.forum@bigfoot.com>
 	Spanish translation
 	Example config file with all links-0.96 keybindings
@@ -343,4 +346,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.72 2002/08/28 23:10:28 pasky Exp $
+$Id: AUTHORS,v 1.73 2002/08/28 23:20:41 pasky Exp $

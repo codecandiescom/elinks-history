@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.88 2002/08/27 15:45:06 pasky Exp $ */
+/* $Id: options.c,v 1.89 2002/08/28 23:20:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1660,6 +1660,10 @@ register_options()
 		"no-connect", 0, 0,
 		"Run ELinks as a separate instance - instead of connecting to\n"
 		"existing instance.");
+
+	add_opt_bool_tree(cmdline_options, "",
+		"no-home", 0, 0,
+		"Don't attempt to create and/or use home rc directory (~/.elinks).");
 
 	add_opt_bool_tree(cmdline_options, "",
 		"source", 0, 0,

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.47 2002/08/09 12:55:15 pasky Exp $ */
+/* $Id: main.c,v 1.48 2002/08/28 23:20:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,7 +260,6 @@ init()
 	init_trans();
 	set_sigcld();
 	get_system_name();
-	init_home();
 	init_keymaps();
 
 	/* XXX: OS/2 has some stupid bug and the pipe must be created before
@@ -277,7 +276,11 @@ init()
 		terminate = 1;
 		return;
 	}
-	
+
+	if (!get_opt_bool_tree(cmdline_options, "no-home")) {
+		init_home();
+	}
+
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
 	if (!get_opt_bool_tree(cmdline_options, "no-connect") &&

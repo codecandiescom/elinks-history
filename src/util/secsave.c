@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.38 2004/07/22 02:02:14 pasky Exp $ */
+/* $Id: secsave.c,v 1.39 2004/07/22 02:25:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,6 +77,9 @@ secure_open(unsigned char *file_name, mode_t mask)
 
 	secsave_errno = SS_ERR_NONE;
 
+	/* XXX: This is inherently evil and has no place in util/, which
+	 * should be independent on such stuff. What do we do, except blaming
+	 * Jonas for noticing it? --pasky */
 	if ((get_cmd_opt_bool("no-connect")
 	     || get_cmd_opt_int("session-ring"))
 	    && !get_cmd_opt_bool("touch-files")) {

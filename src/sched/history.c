@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.1 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: history.c,v 1.2 2003/06/07 19:07:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,10 +32,9 @@
 static inline void
 free_history(struct list_head *history)
 {
-	struct location *loc = history->next;
+	while (!list_empty(*history)) {
+		struct location *loc = history->next;
 
-	/* We can't do foreach() loop here, we access freed memory somehow. */
-	while ((struct list_head *) loc != history) {
 		destroy_location(loc);
 		loc = history->next;
 	}
@@ -72,13 +71,15 @@ ses_back(struct session *ses)
 	free_files(ses);
 
 	/* This is the current location. */
-	loc = cur_loc(ses);
 	if (ses->search_word) {
 		mem_free(ses->search_word);
 		ses->search_word = NULL;
 	}
+
 	if (!have_location(ses)) return;
+	loc = cur_loc(ses);
     	del_from_list(loc);
+
 	if (loc->unhist_jump) {
 		/* When going back by multiple steps, to order us properly. */
 		add_at_pos(loc->unhist_jump->prev, loc);
@@ -87,9 +88,11 @@ ses_back(struct session *ses)
 		add_to_list(ses->unhistory, loc);
 	}
 
+	if (!have_location(ses)) return;
+
 	/* This was the previous location (where we came back now). */
 	loc = ses->history.next;
-	if (!have_location(ses)) return;
+
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 
 	/* Remake that location. */
@@ -100,19 +103,20 @@ ses_back(struct session *ses)
 void
 ses_unback(struct session *ses)
 {
-	struct location *loc;
-
 	free_files(ses);
 
-	loc = ses->unhistory.next;
 	if (ses->search_word) {
 		mem_free(ses->search_word);
 		ses->search_word = NULL;
 	}
-	if (list_empty(ses->unhistory)) return;
-	del_from_list(loc);
-	/* Save it as the current location! */
-	add_to_list(ses->history, loc);
+
+	if (!list_empty(ses->unhistory)) {
+		struct location *loc = ses->unhistory.next;
+
+		del_from_list(loc);
+		/* Save it as the current location! */
+		add_to_list(ses->history, loc);
+	}
 }
 
 
@@ -121,7 +125,6 @@ go_back(struct session *ses)
 {
 	unsigned char *url;
 	struct f_data_c *fd = current_frame(ses);
-	int l = 0;
 
 	ses->reloadlevel = NC_CACHE;
 	if (ses->wtd) {
@@ -132,9 +135,11 @@ go_back(struct session *ses)
 		}
 		return;
 	}
+
 	if (!have_location(ses) || ses->history.next == ses->history.prev)
 		/* There's no history, maximally only current location. */
 		return;
+
 	abort_loading(ses, 0);
 
 	url = stracpy(((struct location *)ses->history.next)->next->vs.url);
@@ -144,7 +149,10 @@ go_back(struct session *ses)
 		mem_free(ses->ref_url);
 		ses->ref_url = NULL;
 	}
+
 	if (fd && fd->f_data && fd->f_data->url) {
+		int l = 0;
+
 		ses->ref_url = init_str();
 		if (ses->ref_url)
 			add_to_str(&ses->ref_url, &l, fd->f_data->url);
@@ -159,7 +167,6 @@ go_unback(struct session *ses)
 {
 	unsigned char *url;
 	struct f_data_c *fd = current_frame(ses);
-	int l = 0;
 
 	ses->reloadlevel = NC_CACHE;
 	/* XXX: why wtd checking is not here? --pasky */
@@ -174,7 +181,10 @@ go_unback(struct session *ses)
 		mem_free(ses->ref_url);
 		ses->ref_url = NULL;
 	}
+
 	if (fd && fd->f_data && fd->f_data->url) {
+		int l = 0;
+
 		ses->ref_url = init_str();
 		if (ses->ref_url)
 			add_to_str(&ses->ref_url, &l, fd->f_data->url);

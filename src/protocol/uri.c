@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.259 2004/07/04 16:29:03 jonas Exp $ */
+/* $Id: uri.c,v 1.260 2004/07/09 17:55:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -937,12 +937,29 @@ parse_uri:
 		if (uri.protocol == PROTOCOL_UNKNOWN) {
 			unsigned char *ipscan = newurl;
 
-			/* It's IP? */
+			/* FIXME: This is looking more and more like the code
+			 * for the URI_ERRNO_INVALID_PROTOCOL label and
+			 * find_uri_protocol(). Unite? --jonas */
+
+			/* Check if it could be just some local file with ':'
+			 * in its name. */
+			if (check_uri_file(newurl) >= 0) {
+				if (!dir_sep(*newurl))
+					insert_in_string(&newurl, 0, "./", 2);
+				insert_in_string(&newurl, 0, "file://", 7);
+				/* Work around the infinite loop prevention */
+				prev_errno = URI_ERRNO_EMPTY;
+				goto parse_uri;
+			}
+
+			/* Check if it's <IP-address>:<port> */
 			while (isdigit(*ipscan) || *ipscan == '.')
 				ipscan++;
 
 			if (!*ipscan || *ipscan == ':' || *ipscan == '/') {
 				insert_in_string(&newurl, 0, "http://", 7);
+				/* Work around the infinite loop prevention */
+				prev_errno = URI_ERRNO_EMPTY;
 				goto parse_uri;
 			}
 		}

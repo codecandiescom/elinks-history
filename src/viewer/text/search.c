@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.16 2003/08/28 18:17:46 zas Exp $ */
+/* $Id: search.c,v 1.17 2003/08/29 09:47:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,13 +102,14 @@ sort_srch(struct document *f)
 
 	for (i = 0; i < f->nsearch; i++) {
 		struct search *s = &f->search[i];
+		int sxn = s->x + s->n;
 
 		if (s->x < min[s->y]) {
 			min[s->y] = s->x;
 		   	f->slines1[s->y] = s;
 		}
-		if (s->x + s->n > max[s->y]) {
-			max[s->y] = s->x + s->n;
+		if (sxn > max[s->y]) {
+			max[s->y] = sxn;
 			f->slines2[s->y] = s;
 		}
 	}
@@ -130,7 +131,7 @@ get_srch(struct document *f)
 	cc = !f->search;
 
 	foreachback (n, f->nodes) {
-		int x, y;
+		register int x, y;
 		int xm = n->x + n->xw;
 		int ym = n->y + n->yw;
 
@@ -138,7 +139,7 @@ get_srch(struct document *f)
 		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
 		fflush(stdout);
 #endif
-#define ADD(cr, nn) if (!cc) add_srch_chr(f, (cr), x, y, (nn)); else cnt++;
+#define ADD(cr, nn) do { if (!cc) add_srch_chr(f, (cr), x, y, (nn)); else cnt++; } while (0)
 
 		for (y = n->y; y < ym && y < f->y; y++) {
 			int ns = 1;
@@ -187,6 +188,7 @@ get_srch(struct document *f)
 
 	}
 
+
 	return cnt;
 }
 
@@ -209,7 +211,7 @@ get_search_data(struct document *f)
 	if (!f->search) return;
 
 	get_srch(f);
-	while (f->nsearch && f->search[f->nsearch - 1].c == ' ') f->nsearch--;
+	while (f->nsearch && f->search[--f->nsearch].c == ' ');
 	sort_srch(f);
 }
 
@@ -223,7 +225,9 @@ get_range(struct document *f, int y, int yw, int l,
 	if_assert_failed return -1;
 
 	*s1 = *s2 = NULL;
-	for (i = y < 0 ? 0 : y; i < y + yw && i < f->y; i++) {
+	int_lower_bound(&y, 0);
+
+	for (i = y; i < y + yw && i < f->y; i++) {
 		if (f->slines1[i] && (!*s1 || f->slines1[i] < *s1))
 			*s1 = f->slines1[i];
 		if (f->slines2[i] && (!*s2 || f->slines2[i] > *s2))
@@ -245,6 +249,7 @@ get_range(struct document *f, int y, int yw, int l,
 	return 0;
 }
 
+/* Returns an allocated string which is a lowered copy of passed one. */
 static unsigned char *
 lowered_string(unsigned char *s, int l)
 {
@@ -264,8 +269,6 @@ lowered_string(unsigned char *s, int l)
 
 	return ret;
 }
-
-#define srch_cmp(c1, c2) (tolower(c1) != c2)
 
 static int
 is_in_range(struct document *f, int y, int yw, unsigned char *text,
@@ -294,13 +297,13 @@ is_in_range(struct document *f, int y, int yw, unsigned char *text,
 	for (; s1 <= s2; s1++) {
 		register int i;
 
-		if (srch_cmp(s1->c, txt[0])) {
+		if (tolower(s1->c) != txt[0]) {
 srch_failed:
 			continue;
 		}
 
 		for (i = 1; i < l; i++)
-			if (srch_cmp(s1[i].c, txt[i]))
+			if (tolower(s1[i].c) != txt[i])
 				goto srch_failed;
 
 		if (s1[i].y < y || s1[i].y >= yy)
@@ -363,13 +366,13 @@ get_searched(struct document_view *scr, struct point **pt, int *pl)
 	for (; s1 <= s2; s1++) {
 		register int i;
 
-		if (srch_cmp(s1[0].c, txt[0])) {
+		if (tolower(s1[0].c) != txt[0]) {
 srch_failed:
 			continue;
 		}
 
 		for (i = 1; i < l; i++)
-			if (srch_cmp(s1[i].c, txt[i]))
+			if (tolower(s1[i].c) != txt[i])
 				goto srch_failed;
 
 		for (i = 0; i < l; i++) {
@@ -414,7 +417,6 @@ draw_searched(struct terminal *term, struct document_view *scr)
 {
 	struct point *pt = NULL;
 	int len = 0;
-	register int i;
 
 	assert(term && scr);
 	if_assert_failed return;
@@ -424,13 +426,16 @@ draw_searched(struct terminal *term, struct document_view *scr)
 
 	get_searched(scr, &pt, &len);
 	if (len) {
+		register int i;
 		struct color_pair *color = get_bfu_color(term, "searched");
+		int xoffset = scr->xp - scr->vs->view_posx;
+		int yoffset = scr->yp - scr->vs->view_pos;
 
 		for (i = 0; i < len; i++) {
-			int x = pt[i].x + scr->xp - scr->vs->view_posx;
-			int y = pt[i].y + scr->yp - scr->vs->view_pos;
+			int x = pt[i].x + xoffset;
+			int y = pt[i].y + yoffset;
 
-#if 0 /* We should take in account orignal colors and combine them
+#if 0 /* We should take in account original colors and combine them
 	 with defined color. */
 			unsigned co = get_char(term, x, y);
 			co = ((co >> 3) & 0x0700) | ((co << 3) & 0x3800);
@@ -455,18 +460,21 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 
 	if (!*str) return;
 	f = current_frame(ses);
+
 	assert(f);
 	if_assert_failed return;
 
 	if (ses->search_word) mem_free(ses->search_word);
 	ses->search_word = stracpy(str);
 	if (!ses->search_word) return;
+
 	if (ses->last_search_word) mem_free(ses->last_search_word);
 	ses->last_search_word = stracpy(str);
 	if (!ses->last_search_word) {
 		mem_free(ses->search_word);
 		return;
 	}
+
 	ses->search_direction = direction;
 	find_next(ses, f, 1);
 }
@@ -477,6 +485,7 @@ search_for_back(struct session *ses, unsigned char *str)
 {
 	assert(ses && str);
 	if_assert_failed return;
+
 	search_for_do(ses, str, -1);
 }
 
@@ -485,6 +494,7 @@ search_for(struct session *ses, unsigned char *str)
 {
 	assert(ses && str);
 	if_assert_failed return;
+
 	search_for_do(ses, str, 1);
 }
 
@@ -492,9 +502,9 @@ static inline int
 point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 {
 #define HASH_SIZE	4096
-#define HASH(p) (((p.y << 6) + p.x) & (HASH_SIZE - 1))
+#define HASH(p) ((((p).y << 6) + (p).x) & (HASH_SIZE - 1))
 
-	register int i, j;
+	register int i;
 	static char hash[HASH_SIZE];
 	static int first_time = 1;
 
@@ -505,9 +515,18 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 
 	for (i = 0; i < l1; i++) hash[HASH(p1[i])] = 1;
 
-	for (j = 0; j < l2; j++) if (hash[HASH(p2[j])]) {
-		for (i = 0; i < l1; i++) if (p1[i].x == p2[j].x && p1[i].y == p2[j].y) {
-			for (i = 0; i < l1; i++) hash[HASH(p1[i])] = 0;
+	for (i = 0; i < l2; i++) {
+		register int j;
+
+		if (!hash[HASH(p2[i])]) continue;
+
+		for (j = 0; j < l1; j++) {
+			if (p1[j].x != p2[i].x) continue;
+			if (p1[j].y != p2[i].y) continue;
+
+			for (i = 0; i < l1; i++)
+				hash[HASH(p1[i])] = 0;
+
 			return 1;
 		}
 	}
@@ -553,16 +572,19 @@ void
 find_next(struct session *ses, struct document_view *f, int a)
 {
 	int p, min, max, c = 0;
+	int step;
 
 	assert(ses && ses->tab && ses->tab->term && f && f->vs);
 	if_assert_failed return;
 
 	p = f->vs->view_pos;
+	step = ses->search_direction * f->yw;
 
 	if (!a && ses->search_word) {
 		if (!(find_next_link_in_search(f, ses->search_direction))) return;
-		p += ses->search_direction * f->yw;
+		p += step;
 	}
+
 	if (!ses->search_word) {
 		if (!ses->last_search_word) {
 			msg_box(ses->tab->term, NULL, 0,
@@ -581,22 +603,16 @@ find_next(struct session *ses, struct document_view *f, int a)
 	do {
 		if (is_in_range(f->document, p, f->yw, ses->search_word, &min, &max)) {
 			f->vs->view_pos = p;
-			if (max >= min) {
-				if (max > f->vs->view_posx + f->xw)
-					f->vs->view_posx = max - f->xw;
-				if (min < f->vs->view_posx)
-					f->vs->view_posx = min;
-			}
+			if (max >= min)
+				f->vs->view_posx = int_min(int_max(f->vs->view_posx,
+								   max - f->xw),
+							   min);
+
 			set_link(f);
 			find_next_link_in_search(f, ses->search_direction * 2);
-#if 0
-			draw_doc(ses->tab->term, f, 1);
-			print_screen_status(ses);
-			redraw_from_window(ses->tab);
-#endif
 			return;
 		}
-		p += ses->search_direction * f->yw;
+		p += step;
 		if (p > f->document->y) {
 			/* TODO: A notice for user? --pasky */
 			p = 0;
@@ -606,13 +622,9 @@ find_next(struct session *ses, struct document_view *f, int a)
 			while (p < f->document->y) p += f->yw;
 			p -= f->yw;
 		}
-	} while ((c += f->yw) < f->document->y + f->yw);
+		c += f->yw;
+	} while (c < f->document->y + f->yw);
 
-#if 0
-	draw_doc(ses->tab->term, f, 1);
-	print_screen_status(ses);
-	redraw_from_window(ses->tab);
-#endif
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 		N_("Search"), AL_CENTER,
 		msg_text(ses->tab->term, N_("Search string '%s' not found"),

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.32 2003/07/10 22:44:31 jonas Exp $ */
+/* $Id: auth.c,v 1.33 2003/07/10 23:05:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,8 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 		mem_free(entry);
 		return NULL;
 	}
-	safe_strncpy(entry->uid, uri->user, min(uri->userlen + 1, MAX_UID_LEN));
+	safe_strncpy(entry->uid, uri->user,
+		     min(uri->userlen + 1, MAX_UID_LEN));
 
 	entry->passwd = mem_alloc(MAX_PASSWD_LEN);
 	if (!entry->passwd) {
@@ -98,9 +99,12 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 		mem_free(entry);
 		return NULL;
 	}
-	safe_strncpy(entry->uid, uri->user, min(uri->userlen + 1, MAX_UID_LEN));
+	safe_strncpy(entry->passwd, uri->password,
+		     min(uri->passwordlen + 1, MAX_UID_LEN));
 
 #undef min
+
+	entry->valid = (*entry->uid && *entry->passwd);
 
 	return entry;
 }
@@ -131,7 +135,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 		/* If we have user/pass info then check if identical to
 		 * those in entry. */
-		if (((uri->userlen || uri->passwordlen) && entry->uid && entry->passwd)
+		if (entry->valid
+		    && ((uri->userlen || uri->passwordlen) && entry->uid && entry->passwd)
 		    && ((!realm && !entry->realm) || (realm && entry->realm && !strcmp(realm, entry->realm)))
 		    && strlen(entry->uid) == uri->userlen
 		    && strlen(entry->passwd) == uri->passwordlen

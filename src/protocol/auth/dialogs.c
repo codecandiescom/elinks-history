@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.34 2003/07/10 22:44:31 jonas Exp $ */
+/* $Id: dialogs.c,v 1.35 2003/07/10 23:05:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,14 +135,7 @@ do_auth_dialog(struct session *ses)
 
 	d = mem_calloc(1, DLG_SIZE + strlen(sticker) + 1);
 	if (!d) {
-		if (a->uid) {
-			mem_free(a->uid);
-			a->uid = NULL;
-		}
-		if (a->passwd) {
-			mem_free(a->passwd);
-			a->passwd = NULL;
-		}
+		a->valid = 0;
 		return;
 	}
 

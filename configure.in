@@ -709,7 +709,7 @@ if test -z "$disable_ipv6" &&
    test "$HAVE_SA_IN6" = yes &&
    test "$HAVE_ADDRINFO" = yes &&
    test "$have_gai" = yes; then
-	EL_DEFINE(CONFIG_IPV6, [IPv6 support])
+	EL_CONFIG(CONFIG_IPV6, [IPv6 support])
 	cf_result=yes
 fi
 

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.25 2003/07/03 20:38:09 jonas Exp $ */
+/* $Id: renderer.h,v 1.26 2003/07/03 21:05:17 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -125,6 +125,13 @@ struct search {
 	unsigned char c;
 };
 
+enum cp_status {
+	CP_STATUS_NONE,
+	CP_STATUS_SERVER,
+	CP_STATUS_ASSUMED,
+	CP_STATUS_IGNORED
+};
+
 struct f_data {
 	LIST_HEAD(struct f_data);
 
@@ -153,12 +160,14 @@ struct f_data {
 	unsigned int use_tag;
 
 	int refcount;
-	int cp, ass;
+	int cp;
 	int x, y; /* size of document */
 	int frame;
 	int bg;
 	int nlinks;
 	int nsearch;
+
+	enum cp_status cp_status;
 };
 
 #include "viewer/text/vs.h"
@@ -228,6 +237,6 @@ struct part *format_html_part(unsigned char *, unsigned char *, int, int, int, s
 /* FIXME: Following probably breaks encapsulation of renderer? --pasky */
 extern int margin;
 
-struct conv_table *get_convert_table(unsigned char *, int, int, int *, int *, int);
+struct conv_table *get_convert_table(unsigned char *head, int to_cp, int default_cp, int *from_cp, enum cp_status *cp_status, int ignore_server_cp);
 
 #endif

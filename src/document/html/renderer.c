@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.159 2003/07/03 10:59:27 jonas Exp $ */
+/* $Id: renderer.c,v 1.160 2003/07/03 21:05:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1520,12 +1520,13 @@ push_base_format(unsigned char *url, struct document_options *opt)
 
 /* FIXME: hmmm, we can do better there, i hope. --Zas */
 struct conv_table *
-get_convert_table(unsigned char *head, int to,
-		  int def, int *frm, int *aa, int hard)
+get_convert_table(unsigned char *head, int to_cp,
+		  int default_cp, int *from_cp,
+		  enum cp_status *cp_status, int ignore_server_cp)
 {
-	int from = -1;
 	unsigned char *a, *b;
 	unsigned char *part = head;
+	int from = -1;
 
 	assert(head);
 
@@ -1557,15 +1558,21 @@ get_convert_table(unsigned char *head, int to,
 		}
 	}
 
-	if (aa) {
-		*aa = (from == -1);
-		if (hard && !*aa) *aa = 2;
+	if (cp_status) {
+		if (from == -1)
+			*cp_status = CP_STATUS_ASSUMED;
+		else {
+			if (ignore_server_cp)
+				*cp_status = CP_STATUS_IGNORED;
+			else
+				*cp_status = CP_STATUS_SERVER;
+		}
 	}
 
-	if (hard || from == -1) from = def;
-	if (frm) *frm = from;
+	if (ignore_server_cp || from == -1) from = default_cp;
+	if (from_cp) *from_cp = from;
 
-	return get_translation_table(from, to);
+	return get_translation_table(from, to_cp);
 }
 
 static void
@@ -1606,7 +1613,8 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 	scan_http_equiv(start, end, &head, &hdl, &t);
 	convert_table = get_convert_table(head, screen->opt.cp,
 					  screen->opt.assume_cp,
-					  &screen->cp, &screen->ass,
+					  &screen->cp,
+					  &screen->cp_status,
 					  screen->opt.hard_assume);
 	d_opt->plain = 0;
 	screen->title = convert_string(convert_table, t, strlen(t));

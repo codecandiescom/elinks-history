@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.41 2003/07/03 02:25:56 jonas Exp $ */
+/* $Id: document.c,v 1.42 2003/07/03 21:05:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,13 +113,13 @@ loc_msg(struct terminal *term, struct location *location,
 		add_to_str(&str, &strl, ": ");
 		add_to_str(&str, &strl, get_cp_name(location->vs.f->f_data->cp));
 
-		if (location->vs.f->f_data->ass == 1) {
+		if (location->vs.f->f_data->cp_status == CP_STATUS_ASSUMED) {
 			add_to_str(&str, &strl, " (");
 			add_to_str(&str, &strl, _("assumed", term));
 			add_chr_to_str(&str, &strl, ')');
 		}
 
-		if (location->vs.f->f_data->ass == 2) {
+		if (location->vs.f->f_data->cp_status == CP_STATUS_IGNORED) {
 			add_to_str(&str, &strl, " (");
 			add_to_str(&str, &strl, _("ignoring server setting", term));
 			add_chr_to_str(&str, &strl, ')');

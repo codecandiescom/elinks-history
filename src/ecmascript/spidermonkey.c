@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.130 2004/12/19 13:10:33 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.131 2004/12/19 13:47:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,9 @@
 #include "ecmascript/spidermonkey.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
+#include "lowlevel/sysname.h"
 #include "osdep/newwin.h"
+#include "protocol/http/http.h"
 #include "protocol/uri.h"
 #include "sched/task.h"
 #include "terminal/tab.h"
@@ -74,6 +76,7 @@ struct jsval_property {
 	union {
 		int boolean;
 		int number;
+		jsdouble floatnum;
 		JSObject *object;
 		unsigned char *string;
 	} value;
@@ -90,6 +93,7 @@ struct jsval_property {
 #define P_STRING(x) do { prop.value.string = (x); prop.type = JSPT_STRING; } while (0)
 #define P_ASTRING(x) do { prop.value.string = (x); prop.type = JSPT_ASTRING; } while (0)
 #define P_INT(x) do { prop.value.number = (x); prop.type = JSPT_INT; } while (0)
+#define P_DOUBLE(x) do { prop.value.floatnum = (x); prop.type = JSPT_DOUBLE; } while (0)
 
 
 #define VALUE_TO_JSVAL_START \
@@ -121,6 +125,10 @@ value_to_jsval(JSContext *ctx, jsval *vp, struct jsval_property *prop)
 
 	case JSPT_BOOLEAN:
 		*vp = BOOLEAN_TO_JSVAL(prop->value.boolean);
+		break;
+
+	case JSPT_DOUBLE:
+		*vp = DOUBLE_TO_JSVAL(prop->value.floatnum);
 		break;
 
 	case JSPT_INT:
@@ -1865,6 +1873,101 @@ unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 }
 
 
+static JSBool navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+
+static const JSClass navigator_class = {
+	"navigator",
+	JSCLASS_HAS_PRIVATE,
+	JS_PropertyStub, JS_PropertyStub,
+	navigator_get_property, JS_PropertyStub,
+	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+
+enum navigator_prop {
+	JSP_NAVIGATOR_APP_CODENAME,
+	JSP_NAVIGATOR_APP_NAME,
+	JSP_NAVIGATOR_APP_VERSION,
+	JSP_NAVIGATOR_LANGUAGE,
+	/* JSP_NAVIGATOR_MIME_TYPES, */
+	JSP_NAVIGATOR_PLATFORM,
+	/* JSP_NAVIGATOR_PLUGINS, */
+	JSP_NAVIGATOR_USER_AGENT,
+};
+static const JSPropertySpec navigator_props[] = {
+	{ "appCodeName",	JSP_NAVIGATOR_APP_CODENAME,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "appName",		JSP_NAVIGATOR_APP_NAME,		JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "appVersion",		JSP_NAVIGATOR_APP_VERSION,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "language",		JSP_NAVIGATOR_LANGUAGE,		JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "platform",		JSP_NAVIGATOR_PLATFORM,		JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "userAgent",		JSP_NAVIGATOR_USER_AGENT,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ NULL }
+};
+
+
+static JSBool
+navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	VALUE_TO_JSVAL_START;
+
+	if (!JSVAL_IS_INT(id))
+		goto bye;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_NAVIGATOR_APP_CODENAME:
+		P_STRING("Mozilla"); /* More like a constant nowadays. */
+		break;
+	case JSP_NAVIGATOR_APP_NAME:
+		/* This evil hack makes the compatibility checking .indexOf()
+		 * code find what it's looking for. */
+		P_STRING("ELinks (roughly compatible with Netscape Navigator, Mozilla and Microsoft Explorer)");
+		break;
+	case JSP_NAVIGATOR_APP_VERSION:
+		P_STRING(VERSION);
+		break;
+	case JSP_NAVIGATOR_LANGUAGE:
+		P_STRING(language_to_iso639(current_language));
+		break;
+	case JSP_NAVIGATOR_PLATFORM:
+		P_STRING(system_name);
+		break;
+	case JSP_NAVIGATOR_USER_AGENT:
+	{
+		/* FIXME: Code duplication. */
+		unsigned char *optstr = get_opt_str("protocol.http.user_agent");
+
+		if (*optstr && strcmp(optstr, " ")) {
+			unsigned char *ustr, ts[64] = "";
+
+			if (!list_empty(terminals)) {
+				unsigned int tslen = 0;
+				struct terminal *term = terminals.prev;
+
+				ulongcat(ts, &tslen, term->width, 3, 0);
+				ts[tslen++] = 'x';
+				ulongcat(ts, &tslen, term->height, 3, 0);
+			}
+			ustr = subst_user_agent(optstr, VERSION_STRING, system_name, ts);
+
+			if (ustr) {
+				P_STRING(ustr);
+			} else{
+				P_UNDEF();
+			}
+		}
+
+	}
+		break;
+	default:
+		INTERNAL("Invalid ID %d in navigator_get_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+
+	VALUE_TO_JSVAL_END(vp);
+}
+
+
 /*** The ELinks interface */
 
 static JSRuntime *jsrt;
@@ -1976,7 +2079,7 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 {
 	JSContext *ctx;
 	JSObject *window_obj, *document_obj, *forms_obj, *location_obj,
-	         *statusbar_obj, *menubar_obj;
+	         *statusbar_obj, *menubar_obj, *navigator_obj;
 
 	assert(interpreter);
 
@@ -2033,6 +2136,11 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 				     (JSPropertySpec *) unibar_props, NULL,
 				     NULL, NULL);
 	JS_SetPrivate(ctx, statusbar_obj, "s");
+
+	navigator_obj = JS_InitClass(ctx, window_obj, NULL,
+				     (JSClass *) &navigator_class, NULL, 0,
+				     (JSPropertySpec *) navigator_props, NULL,
+				     NULL, NULL);
 
 	return ctx;
 }

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.140 2003/07/02 23:14:16 zas Exp $ */
+/* $Id: view.c,v 1.141 2003/07/02 23:21:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2149,6 +2149,139 @@ close:
 }
 
 
+/* TODO: Unify the textarea field_op handlers to one trampoline function. */
+
+static int
+textarea_op_home(struct form_state *fs, struct form_control *frm)
+{
+	struct line_info *ln;
+	int y;
+
+	ln = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!ln) return 0;
+
+	for (y = 0; ln[y].st; y++) {
+		if (fs->value + fs->state >= ln[y].st &&
+		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
+			fs->state = ln[y].st - fs->value;
+			goto x;
+		}
+	}
+	fs->state = 0;
+
+x:
+	mem_free(ln);
+	return 0;
+}
+
+static int
+textarea_op_up(struct form_state *fs, struct form_control *frm)
+{
+	struct line_info *ln;
+	int y;
+
+	ln = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!ln) return 0;
+
+rep1:
+	for (y = 0; ln[y].st; y++) {
+		if (fs->value + fs->state >= ln[y].st &&
+		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
+			if (!y) {
+				mem_free(ln);
+				return 1;
+			}
+			fs->state -= ln[y].st - ln[y-1].st;
+			if (fs->value + fs->state > ln[y-1].en)
+				fs->state = ln[y-1].en - fs->value;
+			goto xx;
+		}
+	}
+	mem_free(ln);
+	return 1;
+
+xx:
+	if (rep) goto rep1;
+	mem_free(ln);
+	return 0;
+}
+
+static int
+textarea_op_down(struct form_state *fs, struct form_control *frm)
+{
+	struct line_info *ln;
+	int y;
+
+	ln = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!ln) return 0;
+
+rep2:
+	for (y = 0; ln[y].st; y++) {
+		if (fs->value + fs->state >= ln[y].st &&
+		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
+			if (!ln[y+1].st) {
+				mem_free(ln);
+				return 1;
+			}
+			fs->state += ln[y+1].st - ln[y].st;
+			if (fs->value + fs->state > ln[y+1].en)
+				fs->state = ln[y+1].en - fs->value;
+			goto yy;
+		}
+	}
+	mem_free(ln);
+	return 1;
+yy:
+	if (rep) goto rep2;
+	mem_free(ln);
+	return 0;
+}
+
+static int
+textarea_op_end(struct form_state *fs, struct form_control *frm)
+{
+	struct line_info *ln;
+	int y;
+
+	ln = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!ln) return 0;
+
+	for (y = 0; ln[y].st; y++) {
+		if (fs->value + fs->state >= ln[y].st &&
+		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
+			fs->state = ln[y].en - fs->value;
+
+			/* Don't jump to next line when wrapping. */
+			if (fs->state && fs->state < strlen(fs->value)
+			    && ln[y+1].st == ln[y].en)
+				fs->state--;
+
+			goto yyyy;
+		}
+	}
+	fs->state = strlen(fs->value);
+yyyy:
+	mem_free(ln);
+	return 0;
+}
+
+static int
+textarea_op_enter(struct form_state *fs, struct form_control *frm)
+{
+	if (!frm->ro && strlen(fs->value) < frm->maxlength) {
+		unsigned char *v = mem_realloc(fs->value, strlen(fs->value) + 2);
+
+		if (v) {
+			fs->value = v;
+			memmove(v + fs->state + 1, v + fs->state, strlen(v + fs->state) + 1);
+			v[fs->state++] = '\n';
+		}
+	}
+
+	return 0;
+}
+
+
 static int
 field_op(struct session *ses, struct f_data_c *f, struct link *l,
 	 struct event *ev, int rep)
@@ -2180,108 +2313,28 @@ field_op(struct session *ses, struct f_data_c *f, struct link *l,
 				}
 				break;
 			case ACT_HOME:
-				if (frm->type == FC_TEXTAREA) {
-					struct line_info *ln;
-					int y;
-
-					ln = format_text(fs->value, frm->cols, !!frm->wrap);
-					if (!ln) break;
-
-					for (y = 0; ln[y].st; y++) {
-						if (fs->value + fs->state >= ln[y].st &&
-						    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
-							fs->state = ln[y].st - fs->value;
-							goto x;
-						}
-					}
-					fs->state = 0;
-x:
-					mem_free(ln);
-				} else fs->state = 0;
+				if (frm->type == FC_TEXTAREA)
+					if (textarea_op_home(fs, frm))
+						goto b;
+				else fs->state = 0;
 				break;
 			case ACT_UP:
-				if (frm->type == FC_TEXTAREA) {
-					struct line_info *ln;
-					int y;
-
-					ln = format_text(fs->value, frm->cols, !!frm->wrap);
-					if (!ln) break;
-
-rep1:
-					for (y = 0; ln[y].st; y++) {
-						if (fs->value + fs->state >= ln[y].st &&
-						    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
-							if (!y) {
-								mem_free(ln);
-								goto b;
-							}
-							fs->state -= ln[y].st - ln[y-1].st;
-							if (fs->value + fs->state > ln[y-1].en)
-								fs->state = ln[y-1].en - fs->value;
-							goto xx;
-						}
-					}
-					mem_free(ln);
-					goto b;
-xx:
-					if (rep) goto rep1;
-					mem_free(ln);
-				} else x = 0;
+				if (frm->type == FC_TEXTAREA)
+					if (textarea_op_up(fs, frm))
+						goto b;
+				else x = 0;
 				break;
 			case ACT_DOWN:
-				if (frm->type == FC_TEXTAREA) {
-					struct line_info *ln;
-					int y;
-
-					ln = format_text(fs->value, frm->cols, !!frm->wrap);
-					if (!ln) break;
-
-rep2:
-					for (y = 0; ln[y].st; y++) {
-						if (fs->value + fs->state >= ln[y].st &&
-						    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
-							if (!ln[y+1].st) {
-								mem_free(ln);
-								goto b;
-							}
-							fs->state += ln[y+1].st - ln[y].st;
-							if (fs->value + fs->state > ln[y+1].en)
-								fs->state = ln[y+1].en - fs->value;
-							goto yy;
-						}
-					}
-					mem_free(ln);
-					goto b;
-yy:
-					if (rep) goto rep2;
-					mem_free(ln);
-				} else x = 0;
+				if (frm->type == FC_TEXTAREA)
+					if (textarea_op_down(fs, frm))
+						goto b;
+				else x = 0;
 				break;
 			case ACT_END:
-				if (frm->type == FC_TEXTAREA) {
-					struct line_info *ln;
-					int y;
-
-					ln = format_text(fs->value, frm->cols, !!frm->wrap);
-					if (!ln) break;
-
-					for (y = 0; ln[y].st; y++) {
-						if (fs->value + fs->state >= ln[y].st &&
-						    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
-							fs->state = ln[y].en - fs->value;
-
-							/* Don't jump to next line when wrapping. */
-							if (fs->state && fs->state < strlen(fs->value)
-							    && ln[y+1].st == ln[y].en)
-								fs->state--;
-
-							goto yyyy;
-						}
-					}
-					fs->state = strlen(fs->value);
-yyyy:
-					mem_free(ln);
-				} else fs->state = strlen(fs->value);
+				if (frm->type == FC_TEXTAREA)
+					if (textarea_op_end(fs, frm))
+						goto b;
+				else fs->state = strlen(fs->value);
 				break;
 			case ACT_EDIT:
 				if (frm->type == FC_TEXTAREA && !frm->ro)
@@ -2316,17 +2369,10 @@ yyyy:
 				break;
 			}
 			case ACT_ENTER:
-				if (frm->type == FC_TEXTAREA) {
-					if (!frm->ro && strlen(fs->value) < frm->maxlength) {
-						unsigned char *v = mem_realloc(fs->value, strlen(fs->value) + 2);
-
-						if (v) {
-							fs->value = v;
-							memmove(v + fs->state + 1, v + fs->state, strlen(v + fs->state) + 1);
-							v[fs->state++] = '\n';
-						}
-					}
-				} else x = 0;
+				if (frm->type == FC_TEXTAREA)
+					if (textarea_op_enter(fs, frm))
+						goto b;
+				else x = 0;
 				break;
 			case ACT_BACKSPACE:
 				if (!frm->ro && fs->state)

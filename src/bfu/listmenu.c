@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.11 2004/04/17 14:20:37 jonas Exp $ */
+/* $Id: listmenu.c,v 1.12 2004/04/17 14:29:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 		if (data == -1) {
 			SET_MENU_ITEM(item, name, NULL, ACT_MAIN_NONE, do_select_submenu,
-				      new_menu_item, SUBMENU | (fullname ? MENU_FULLNAME : 0) | NO_INTL,
+				      new_menu_item, SUBMENU | NO_INTL,
 				      0, 0);
 		} else {
 			SET_MENU_ITEM(item, name, NULL, ACT_MAIN_NONE, selected_item,
@@ -183,17 +183,16 @@ menu_labels(struct menu_item *items, unsigned char *base, unsigned char **lbls)
 	unsigned char *bs;
 
 	foreach_menu_item (item, items) {
-		if (item->func == (menu_func) do_select_submenu) {
-			bs = straconcat(base, item->text, " ", NULL);
-			if (!bs) continue;
+		bs = (item->flags & MENU_FULLNAME) ? (unsigned char *)"" : base;
+		bs = straconcat(bs, item->text, NULL);
+		if (!bs) continue;
 
+		if (item->func == (menu_func) do_select_submenu) {
+			add_to_strn(&bs, " ");
 			menu_labels(item->data, bs, lbls);
 			mem_free(bs);
 		} else {
 			assert(item->func == (menu_func) selected_item);
-			bs = stracpy((item->flags & MENU_FULLNAME)
-				     ? (unsigned char *)"" : base);
-			if (bs) add_to_strn(&bs, item->text);
 			lbls[(int)item->data] = bs;
 		}
 	}

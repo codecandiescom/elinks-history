@@ -1,3 +1,86 @@
+Fri Dec 24 17:01:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.10.0 
+
+Fri Dec 24 16:58:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	Update .po files 
+
+Fri Dec 24 14:55:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Moved draw_table_bad_html() before rendering the table itself. This
+	makes the tables with out-of-order bad html appear normal again
+	(mostly it's at the start of the table and it's drawn so now) and
+	fixes the issue with broken forms on some pages (<table><form><tr>).
+	OTOH it reopens bug 432 (<caption> handling), which is less grave
+	than this, though. It's not like I do it this way just because we
+	are a little in hurry now - I have no clue how to fix up this all
+	without rewriting the whole table processing to be non-perverse and
+	in-order with the rest of the HTML parsing. This commit should
+	unblock 0.10.0 release.  
+
+Fri Dec 24 14:09:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* features.conf:
+
+	CONFIG_LEDS by default on now. Minimal overhead, useful stuff.  
+
+Fri Dec 24 14:07:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, contrib/perl/hooks.pl:
+
+	Some meaningful Perl hooks by Apu aka Russ Rowan <rrowan@dandy.net>.  
+
+Fri Dec 24 13:59:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Reverted Miciah's 1.515 adding a link's numeric prefix as normal
+	link text. It induces some link offsets weirdness requiring complex
+	(and quite horribly-seeming) fixes all over the map and so.
+	Hopefully, you will meet with it in 0.10.1.  
+
+Fri Dec 24 13:54:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/README:
+
+	LXR is not keen on README headlines in README files. README -> Guide 
+
+Fri Dec 24 02:41:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/libintl.c, configure.in, po/leet.po:
+
+	Remove unmaintained leet translation. Requested by zas.  
+
+Fri Dec 24 02:37:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	Fix bad usage of _() in ERROR() messages. Instead use gettext().
+	This and last patch by Gisle Vanem.  
+
+Fri Dec 24 02:34:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/connection.h, terminal/color.c:
+
+	Workaround namespace clashes with Windows headers.  
+
+Fri Dec 24 02:33:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/util/lists.h:
+
+	Remove ending ';' for debug version of LIST_HEAD() that caused a
+	parse error in MSVC. Patch by Gisle Vanem.  
+
 Thu Dec 23 21:50:50 2004  Laurent Monin <zas@norz.org>:
 
 	* src/ecmascript/spidermonkey.c:
@@ -9571,7 +9654,7 @@ Sun Sep 19 17:38:19 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/README:
 
-	$Id$ tag.  
+	$Id: ChangeLog,v 1.939 2004/12/23 23:11:46 jonas Exp $ tag.  
 
 Sun Sep 19 17:35:23 2004  Petr Baudis <pasky@ucw.cz>:
 

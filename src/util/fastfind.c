@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.71 2004/11/05 15:31:08 zas Exp $ */
+/* $Id: fastfind.c,v 1.72 2004/11/05 15:35:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,8 +379,8 @@ init_idxtab(struct fastfind_info *info)
 }
 
 static inline void
-fastfind_new_cnode(struct ff_node *leafset, struct fastfind_info *info,
-		   int i, int pos)
+compress_node(struct ff_node *leafset, struct fastfind_info *info,
+	      int i, int pos)
 {
 	struct ff_node_c *new = mem_alloc(sizeof(struct ff_node_c));
 
@@ -399,7 +399,7 @@ fastfind_new_cnode(struct ff_node *leafset, struct fastfind_info *info,
 }
 
 static void
-fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
+compress_tree(struct ff_node *leafset, struct fastfind_info *info)
 {
 	int cnt = 0;
 	int pos = 0;
@@ -413,8 +413,7 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 
 		if (leafset[i].l) {
 			/* There's a leaf leafset, descend to it and recurse */
-			fastfind_node_compress(info->leafsets[leafset[i].l],
-					       info);
+			compress_tree(info->leafsets[leafset[i].l], info);
 		}
 
 		if (leafset[i].l || leafset[i].e) {
@@ -428,7 +427,7 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 	/* Compress if possible ;) */
 	for (i = 1; i < info->leafsets_count; i++) {
 		if (info->leafsets[i] == leafset) {
-			fastfind_new_cnode(leafset, info, i, pos);
+			compress_node(leafset, info, i, pos);
 			return;
 		}
 	}
@@ -534,7 +533,7 @@ fastfind_index(struct fastfind_index *index, enum fastfind_flags flags)
 	}
 
 	if (info->compress)
-		fastfind_node_compress(info->root_leafset, info);
+		compress_tree(info->root_leafset, info);
 
 	return index;
 

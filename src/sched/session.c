@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.488 2004/06/11 23:16:16 jonas Exp $ */
+/* $Id: session.c,v 1.489 2004/06/12 11:00:08 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -860,8 +860,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		struct uri *uri;
 		unsigned char *decoded;
 
-		if (!end) break;
-
 		decoded = decode_shell_safe_url(str, urilength);
 		uri = decoded ? get_hooked_uri(decoded, current_uri, term->cwd) : NULL;
 		mem_free_if(decoded);
@@ -883,8 +881,8 @@ decode_session_info(struct terminal *term, int len, const int *data)
 			done_uri(uri);
 		}
 
-		len -= end - str + 1;
-		str  = end + 1;
+		len -= urilength + 1;
+		str += urilength + 1;
 	}
 
 	return info;

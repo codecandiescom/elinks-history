@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.22 2004/07/21 23:15:44 pasky Exp $ */
+/* $Id: link.c,v 1.23 2004/07/21 23:25:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,14 +70,14 @@ html_a(unsigned char *a)
 
 		if (0)
 			/* Shut up compiler */ ;
+#ifdef CONFIG_GLOBHIST
+		else if (get_global_history_item(format.link))
+			format.fg = format.vlink;
+#endif
 #ifdef CONFIG_BOOKMARKS
 		else if (get_bookmark(format.link)) {
 			format.fg = get_opt_color("document.colors.bookmark");
 		}
-#endif
-#ifdef CONFIG_GLOBHIST
-		else if (get_global_history_item(format.link))
-			format.fg = format.vlink;
 #endif
 		else
 			format.fg = format.clink;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.220 2003/12/08 00:22:54 jonas Exp $ */
+/* $Id: http.c,v 1.221 2003/12/15 06:15:42 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1335,25 +1335,21 @@ http_error:
 		else mem_free(d);
 	}
 
-	d = parse_http_header(conn->cache->head, "Content-Type", NULL);
+	d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);
 	if (d) {
-		if (!strncmp(d, "text", 4)) {
-			mem_free(d);
-			d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);
-			if (d) {
 #ifdef HAVE_ZLIB_H
-				if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
-					conn->content_encoding = ENCODING_GZIP;
+		if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
+			if (uri->datalen < 2
+				|| strncasecmp(uri->data + uri->datalen - 2, "gz", 2))
+				conn->content_encoding = ENCODING_GZIP;
 #endif
 #ifdef HAVE_BZLIB_H
-				if (!strcasecmp(d, "bzip2") || !strcasecmp(d, "x-bzip2"))
-					conn->content_encoding = ENCODING_BZIP2;
+		if (!strcasecmp(d, "bzip2") || !strcasecmp(d, "x-bzip2"))
+			if (uri->datalen < 3
+				|| strncasecmp(uri->data + uri->datalen - 3, "bz2", 3))
+				conn->content_encoding = ENCODING_BZIP2;
 #endif
-				mem_free(d);
-			}
-		} else {
-			mem_free(d);
-		}
+		mem_free(d);
 	}
 
 	if (conn->content_encoding != ENCODING_NONE) {

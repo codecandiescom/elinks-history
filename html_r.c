@@ -405,30 +405,30 @@ int split_line(struct part *part)
 
 static void justify_line(struct part *part, int y)
 {
-	chr *a;
+	chr *line; /* we save original line here */
 	int shift;
 	int len = LEN(y);
 	int i = 0;
 	int *space_list;
 	int spaces = 1;
-	int q = 0;
+	int prev_end = 0;
 
 	shift = overlap(par_format) - len;
 	
-	a = mem_alloc(len * sizeof(chr));
-	if (!a) return;
+	line = mem_alloc(len * sizeof(chr));
+	if (!line) return;
 	space_list = mem_alloc(len * sizeof(int));
 	if (!space_list) return;
 
-	memcpy(a, &POS(0, y), len * sizeof(chr));
+	memcpy(line, &POS(0, y), len * sizeof(chr));
 	
-	while ((a[i] & 0xff) == ' ')
-		i++;
+	while ((line[i] & 0xff) == ' ')
+		i++; /* skip leading spaces*/
 	
 	space_list[0] = i - 1;
 	
 	for (; i < len; i++)
-		if ((a[i] & 0xff) == ' ')
+		if ((line[i] & 0xff) == ' ')
 			space_list[spaces++] = i;
 
 	space_list[spaces] = len;
@@ -437,20 +437,28 @@ static void justify_line(struct part *part, int y)
 		set_hchars(part, 0, y, overlap(par_format),
 			   (part->data->data[y].c << 11) | ' ');
 		
-		for (i = 0; i < spaces; i++, q += shift) {
-			int new_pos, last_end = 0, word_len, x;
+		for (i = 0; i < spaces; i++) {
+			int new_start, word_len, word_start, word_shift;
 			
-			x = space_list[i] + 1;
-			new_pos = x + (q / (spaces - 1));
-			word_len = space_list[i + 1] - x;
-			copy_chars(part, new_pos, y, word_len, &a[x]);
-			if (i) move_links(part, last_end + 1, y, new_pos, y);
-			last_end = new_pos + word_len;
-		};
+			/* We have to increase line length by shift characters
+			 * so we move i-th word word_shift characters right. */
+			word_start = space_list[i] + 1;
+			word_len = space_list[i + 1] - word_start;
+			word_shift = (i * shift) / (spaces - 1);
+
+			new_start = word_start + word_shift; 
+
+			copy_chars(part, new_start, y, word_len, &line[word_start]);
+
+			/* There are now (new_start - prev_end) spaces before the word. */
+			if (i != 0) move_links(part, prev_end + 1, y, new_start, y);
+			
+			prev_end = new_start + word_len;
+		}
 	}
-	
+
 	mem_free(space_list);
-	mem_free(a);
+	mem_free(line);
 }
 
 void align_line(struct part *part, int y, int last)

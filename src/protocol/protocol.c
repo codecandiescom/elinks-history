@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.11 2003/06/26 21:34:17 jonas Exp $ */
+/* $Id: protocol.c,v 1.12 2003/06/26 21:39:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ static struct protocol_backend lua_protocol_backend = {
 };
 
 
-enum uri_scheme
+enum protocol
 check_protocol(unsigned char *p, int l)
 {
 	int i;
@@ -114,40 +114,40 @@ int
 get_prot_info(unsigned char *prot, int *port, protocol_handler **handler,
 	      protocol_external_handler **external_handler)
 {
-	enum uri_scheme scheme = check_protocol(prot, strlen(prot));
+	enum protocol protocol = check_protocol(prot, strlen(prot));
 
-	if (scheme == PROTOCOL_UNKNOWN)
+	if (protocol == PROTOCOL_UNKNOWN)
 		return -1;
 
 	if (port)
-		*port = protocol_backends[scheme]->port;
+		*port = protocol_backends[protocol]->port;
 	if (handler)
-		*handler = protocol_backends[scheme]->handler;
+		*handler = protocol_backends[protocol]->handler;
 	if (external_handler)
-		*external_handler = protocol_backends[scheme]->external_handler;
+		*external_handler = protocol_backends[protocol]->external_handler;
 	return 0;
 }
 
 
 int
-get_protocol_free_syntax(enum uri_scheme scheme)
+get_protocol_free_syntax(enum protocol protocol)
 {
-	assert(scheme != PROTOCOL_UNKNOWN);
-	return protocol_backends[scheme]->free_syntax;
+	assert(protocol != PROTOCOL_UNKNOWN);
+	return protocol_backends[protocol]->free_syntax;
 }
 
 int
-get_protocol_need_slashes(enum uri_scheme scheme)
+get_protocol_need_slashes(enum protocol protocol)
 {
-	assert(scheme != PROTOCOL_UNKNOWN);
-	return protocol_backends[scheme]->need_slashes;
+	assert(protocol != PROTOCOL_UNKNOWN);
+	return protocol_backends[protocol]->need_slashes;
 }
 
 int
-get_protocol_need_slash_after_host(enum uri_scheme scheme)
+get_protocol_need_slash_after_host(enum protocol protocol)
 {
-	assert(scheme != PROTOCOL_UNKNOWN);
-	return protocol_backends[scheme]->need_slash_after_host;
+	assert(protocol != PROTOCOL_UNKNOWN);
+	return protocol_backends[protocol]->need_slash_after_host;
 }
 
 

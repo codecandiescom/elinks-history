@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.37 2003/12/26 09:54:38 zas Exp $ */
+/* $Id: menu.h,v 1.38 2003/12/26 12:01:16 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -20,6 +20,7 @@ enum menu_item_flags {
 	SUBMENU = 32,
 	NO_INTL = 64,
 	NO_SELECT = 128,	/* Mark unselectable item */
+	RIGHT_INTL = 256,	/* Force translation of right text. */
 };
 
 /*
@@ -49,9 +50,10 @@ enum menu_item_flags {
 #define mi_is_submenu(mi) ((mi).flags & SUBMENU)
 
 /*
- * Texts should be translated
+ * Texts should be translated or not.
  */
 #define mi_text_translate(mi) (!((mi).flags & NO_INTL))
+#define mi_rtext_translate(mi) ((mi).flags & RIGHT_INTL)
 
 /*
  * End of menu items list

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.137 2003/12/26 11:48:37 zas Exp $ */
+/* $Id: menu.c,v 1.138 2003/12/26 12:01:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		} else if (mi_has_right_text(menu->items[my])) {
 			unsigned char *rtext = menu->items[my].rtext;
 
-			if (mi_text_translate(menu->items[my]))
+			if (mi_rtext_translate(menu->items[my]))
 				rtext = _(rtext, term);
 
 			if (rtext[0])
@@ -393,7 +393,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			} else if (mi_has_right_text(menu->items[p])) {
 				unsigned char *rtext = menu->items[p].rtext;
 
-				if (mi_text_translate(menu->items[p]))
+				if (mi_rtext_translate(menu->items[p]))
 					rtext = _(rtext, term);
 
 				if (*rtext) {

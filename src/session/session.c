@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.511 2004/06/13 23:30:57 jonas Exp $ */
+/* $Id: session.c,v 1.512 2004/06/13 23:42:12 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -895,12 +895,19 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		break;
 
 	case INTERLINK_REMOTE_MAGIC:
+		/* This could mean some fatal bug but I am unsure if we can
+		 * actually assert it since people could pour all kinds of crap
+		 * down the socket. */
+		if (!info->session_info) {
+			INTERAL("Remote magic with no remote flags");
+			return 0;
+		}
+
 		remote = info->session_info;
 
-		/* If processing session info from a -remote instance we just
-		 * want to hook up with the master. */
-		if (!remote) break;
-
+		/* If processing session info from a -remote instance we want
+		 * to hook up with the master so we can handle request for
+		 * stuff in current tab. */
 		base_session = get_master_session();
 		if (!base_session) return 0;
 

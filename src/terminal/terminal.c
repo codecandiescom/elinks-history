@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.77 2004/08/14 23:08:25 jonas Exp $ */
+/* $Id: terminal.c,v 1.78 2004/08/15 00:27:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -281,8 +281,7 @@ exec_shell(struct terminal *term)
 
 	if (!can_open_os_shell(term->environment)) return;
 
-	sh = GETSHELL;
-	if (!sh || !*sh) sh = DEFAULT_SHELL;
+	sh = get_shell();
 	if (sh && *sh)
 		exec_on_terminal(term, sh, "", 1);
 }

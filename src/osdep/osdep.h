@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.40 2004/07/30 22:22:43 jonas Exp $ */
+/* $Id: osdep.h,v 1.41 2004/08/15 00:27:04 jonas Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
@@ -56,6 +56,8 @@ void set_ip_tos_throughput(int socket);
 
 unsigned char *get_cwd(void);
 void set_cwd(unsigned char *);
+
+unsigned char *get_shell(void);
 
 /* We define own cfmakeraw() wrapper because cfmakeraw() is broken on AIX,
  * thus we fix it right away. We can also emulate cfmakeraw() if it is not

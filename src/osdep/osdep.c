@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.149 2004/08/14 23:29:35 jonas Exp $ */
+/* $Id: osdep.c,v 1.150 2004/08/15 00:27:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,6 +160,16 @@ set_cwd(unsigned char *path)
 	if (path) while (chdir(path) && errno == EINTR);
 }
 
+unsigned char *
+get_shell(void)
+{
+	unsigned char *shell = GETSHELL;
+
+	if (!shell || !*shell)
+		shell = DEFAULT_SHELL;
+
+	return shell;
+}
 
 
 /* Terminal size */

@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.16 2004/08/14 23:29:36 jonas Exp $ */
+/* $Id: win32.c,v 1.17 2004/08/15 00:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,7 @@ int
 exe(unsigned char *path)
 {
 	int r;
-	unsigned char *x1 = !GETSHELL ? DEFAULT_SHELL : GETSHELL;
+	unsigned char *x1 = get_shell();
 	unsigned char *x = *path != '"' ? " /c start /wait " : " /c start /wait \"\" ";
 	unsigned char *p = malloc((strlen(x1) + strlen(x) + strlen(path)) * 2 + 1);
 

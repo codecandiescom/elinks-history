@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.27 2004/08/14 23:19:00 jonas Exp $ */
+/* $Id: os2.c,v 1.28 2004/08/15 00:27:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,10 +164,8 @@ exe(unsigned char *path)
 	int flags = P_SESSION;
 	int pid;
 	int ret = -1;
-	unsigned char *shell;
+	unsigned char *shell = get_shell();
 
-	shell = GETSHELL;
-	if (!shell) shell = DEFAULT_SHELL;
 	if (is_xterm()) flags |= P_BACKGROUND;
 
 	pid = spawnlp(flags, shell, shell, "/c", path, NULL);

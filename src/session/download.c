@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.282 2004/04/24 15:39:10 jonas Exp $ */
+/* $Id: download.c,v 1.283 2004/04/25 17:32:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -965,7 +965,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	struct string filename;
 
 	mem_free_set(&type_query->prog, NULL);
-	
+
 	if (handler) {
 		type_query->prog = stracpy(handler->program);
 		type_query->prog_flags = handler->block;

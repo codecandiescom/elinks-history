@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.77 2004/04/23 10:28:28 jonas Exp $ */
+/* $Id: task.c,v 1.78 2004/04/25 17:32:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ free_task(struct session *ses)
 	if_assert_failed return;
 
 	mem_free_set(&ses->goto_position, NULL);
-	
+
 	if (ses->loading_uri) {
 		done_uri(ses->loading_uri);
 		ses->loading_uri = NULL;

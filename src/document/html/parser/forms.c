@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.1 2004/04/24 14:39:13 pasky Exp $ */
+/* $Id: forms.c,v 1.2 2004/04/25 17:32:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,16 +307,21 @@ xxx:
 			break;
 		case FC_IMAGE:
 			mem_free_set(&format.image, NULL);
-			if ((al = get_url_val(a, "src"))
-			    || (al = get_url_val(a, "dynsrc"))) {
+			al = get_url_val(a, "src");
+			if (!al) al = get_url_val(a, "dynsrc");
+			if (al) {
 				format.image = join_urls(format.href_base, al);
 				mem_free(al);
 			}
 			format.attr |= AT_BOLD;
 			put_chrs("[&nbsp;", 7, put_chars_f, ff);
-			if (fc->alt) put_chrs(fc->alt, strlen(fc->alt), put_chars_f, ff);
-			else if (fc->name) put_chrs(fc->name, strlen(fc->name), put_chars_f, ff);
-			else put_chrs("Submit", 6, put_chars_f, ff);
+			if (fc->alt)
+				put_chrs(fc->alt, strlen(fc->alt), put_chars_f, ff);
+			else if (fc->name)
+				put_chrs(fc->name, strlen(fc->name), put_chars_f, ff);
+			else
+				put_chrs("Submit", 6, put_chars_f, ff);
+
 			put_chrs("&nbsp;]", 7, put_chars_f, ff);
 			break;
 		case FC_SUBMIT:
@@ -462,15 +467,15 @@ see:
 	while (html < eof && *html != '<') html++;
 
 	if (html >= eof) {
-		int j;
 
 abort:
 		*end = html;
 		if (lbl.source) done_string(&lbl);
 		if (val) {
+			int j;
+
 			for (j = 0; j < order; j++)
-				if (val[j])
-					mem_free(val[j]);
+				mem_free_if(val[j]);
 			mem_free(val);
 		}
 		destroy_menu(&lnk_menu);

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.60 2004/04/23 11:23:35 pasky Exp $ */
+/* $Id: action.c,v 1.61 2004/04/25 17:32:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -427,7 +427,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 		case ACT_MAIN_TAB_MOVE_BACK:
 			move_current_tab(ses, -1);
 			break;
-					
+
 		case ACT_MAIN_TAB_MENU:
 			assert(ses->tab == get_current_tab(term));
 

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.20 2004/04/24 23:48:57 pasky Exp $ */
+/* $Id: parse.c,v 1.21 2004/04/25 17:32:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -911,7 +911,7 @@ process_element(unsigned char *name, int namelen, int endingtag,
 	} else {
 		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
 	}
-}	
+}
 
 
 

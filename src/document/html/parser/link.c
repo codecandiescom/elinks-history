@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.1 2004/04/24 00:57:24 pasky Exp $ */
+/* $Id: link.c,v 1.2 2004/04/25 17:32:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,8 @@ html_a(unsigned char *a)
 		unsigned char *target;
 
 		mem_free_set(&format.link,
-				join_urls(format.href_base, trim_chars(href, ' ', 0)));
+			     join_urls(format.href_base,
+				       trim_chars(href, ' ', 0)));
 
 		mem_free(href);
 

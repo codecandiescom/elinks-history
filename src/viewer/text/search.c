@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.215 2004/04/23 20:44:30 pasky Exp $ */
+/* $Id: search.c,v 1.216 2004/04/25 17:32:44 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -716,7 +716,7 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 
 	mem_free_set(&ses->search_word, NULL);
 	mem_free_set(&ses->last_search_word, NULL);
-	
+
 	if (!*str) return;
 
 	/* We only set the last search word because we don.t want find_next()
@@ -724,7 +724,7 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 	 * initialized. find_next() will set ses->search_word for us. */
 	ses->last_search_word = stracpy(str);
 	if (!ses->last_search_word) return;
-	
+
 	ses->search_direction = direction;
 	find_next(ses, doc_view, 1);
 }

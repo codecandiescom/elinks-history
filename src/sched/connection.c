@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.157 2004/04/04 05:22:59 jonas Exp $ */
+/* $Id: connection.c,v 1.158 2004/04/05 16:06:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,6 +228,8 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	struct connection *conn = mem_calloc(1, sizeof(struct connection));
 
 	if (!conn) return NULL;
+
+	assert(proxied_uri->protocol != PROTOCOL_PROXY);
 
 	/* load_uri() gets the URI from get_proxy() which grabs a reference for
 	 * us. */

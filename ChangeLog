@@ -1,3 +1,73 @@
+Sun Jul 25 19:46:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	Fix stupid error i made, reported by Stephan Roh.  
+
+Sun Jul 25 11:57:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	free_entry_to(): @off -> @offset.  
+
+Sun Jul 25 11:51:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	add_fragment(): use @end_offset value instead of @offset + @length.  
+
+Sun Jul 25 11:48:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	add_fragment(): remove now useless affectation.  
+
+Sun Jul 25 11:45:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	add_fragment(): @f_end_offset is only used in loop, so declare it
+	where appropriate.  
+
+Sun Jul 25 11:44:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	add_fragment(): move @ret in loop.  
+
+Sun Jul 25 10:21:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: ftp/ftp.c, smb/smb.c:
+
+	Handle/ignore possible allocation failure when adding header to
+	@conn->cached->head.  
+
+Sun Jul 25 10:11:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/codes.c:
+
+	Content-type -> Content-Type in header.  
+
+Sun Jul 25 10:09:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/about.c:
+
+	about_protocol_handler(): reintroduce \r\n in header string, i
+	overlooked the fact that is a marker for artificial header.  
+
+Sun Jul 25 10:08:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	protocol_header_dialog(): show artificial header info in debug mode.  
+
+Sun Jul 25 05:03:20 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/about.c:
+
+	Remove a pointless #include "util/memory.h" and add #include
+	"util/string.h" for stracpy.  
+
 Sat Jul 24 18:52:45 2004  Laurent Monin <zas@norz.org>:
 
 	* src/cache/cache.c:

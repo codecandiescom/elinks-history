@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.128 2004/06/19 13:10:20 jonas Exp $ */
+/* $Id: textarea.c,v 1.129 2004/06/19 13:21:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -375,20 +375,12 @@ textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 		return;
 	}
 
-	if (fs_) fs = fs_;
-	if (doc_view_) doc_view = doc_view_;
-	if (link_) {
-		link = link_;
-		fc_maxlength = link_->form_control->maxlength;
-	}
-	if (term_) term = term_;
-
 	if (op == 0 && !textarea_editor) {
 		unsigned char *ed = getenv("EDITOR");
 		unsigned char *ex;
 
-		fn = save_textarea_file(fs->value);
-		if (!fn) goto free_and_return;
+		fn = save_textarea_file(fs_->value);
+		if (!fn) return;
 
 		if (!ed || !*ed) ed = "vi";
 
@@ -397,6 +389,14 @@ textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 			unlink(fn);
 			goto free_and_return;
 		}
+
+		if (fs_) fs = fs_;
+		if (doc_view_) doc_view = doc_view_;
+		if (link_) {
+			link = link_;
+			fc_maxlength = link_->form_control->maxlength;
+		}
+		if (term_) term = term_;
 
 		exec_on_terminal(term, ex, "", 1);
 		mem_free(ex);

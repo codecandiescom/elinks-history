@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.230 2003/09/01 23:53:15 jonas Exp $ */
+/* $Id: renderer.c,v 1.231 2003/09/03 16:21:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,7 +443,7 @@ shift_chars(struct part *part, int y, int shift)
 
 	len = LEN(y);
 
-	a = fmem_alloc(len * sizeof(struct screen_char));
+	a = mem_alloc(len * sizeof(struct screen_char));
 	if (!a) return;
 
 	memcpy(a, &POS(0, y), len * sizeof(struct screen_char));
@@ -453,7 +453,7 @@ shift_chars(struct part *part, int y, int shift)
 	 * colors in place. */
 	set_hchars(part, 0, y, shift, ' ', NULL, 0);
 	copy_chars(part, shift, y, len, a);
-	fmem_free(a);
+	mem_free(a);
 
 	move_links(part, 0, y, shift, y);
 }

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.208 2003/10/02 22:25:58 witekfl Exp $ */
+/* $Id: parser.c,v 1.209 2003/10/02 22:40:56 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,6 +481,7 @@ static void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
+/* Howtos look better without this */
 #if 0
 	if (was_li) {
 		was_li = 0;

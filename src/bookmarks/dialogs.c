@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.211 2005/03/30 09:52:37 zas Exp $ */
+/* $Id: dialogs.c,v 1.212 2005/03/30 09:55:40 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -531,7 +531,7 @@ struct bookmark_search_ctx {
 	unsigned char *search_url;
 	unsigned char *search_title;
 	int found;
-	int ofs;
+	int offset;
 };
 
 #define NULL_BOOKMARK_SEARCH_CTX {NULL, NULL, 0, 0}
@@ -540,7 +540,7 @@ static int
 test_search(struct listbox_item *item, void *data_, int *offset) {
 	struct bookmark_search_ctx *ctx = data_;
 
-	if (!ctx->ofs) {
+	if (!ctx->offset) {
 		ctx->found = 0; /* ignore possible match on first item */
 	} else {
 		struct bookmark *bm = item->udata;
@@ -554,7 +554,7 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 
 		if (ctx->found) *offset = 0;
 	}
-	ctx->ofs++;
+	ctx->offset++;
 
 	return 0;
 }
@@ -596,7 +596,7 @@ bookmark_search_do(void *data)
 	traverse_listbox_items_list(box->sel, box, 0, 0, test_search, &ctx);
 	if (!ctx.found) return;
 
-	listbox_sel_move(dlg_data->widgets_data, ctx.ofs - 1);
+	listbox_sel_move(dlg_data->widgets_data, ctx.offset - 1);
 }
 
 

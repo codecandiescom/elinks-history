@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.209 2004/06/25 13:36:43 zas Exp $ */
+/* $Id: tables.c,v 1.210 2004/06/25 14:27:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,17 +264,17 @@ expand_cells(struct table *table, int x, int y)
 {
 	if (x >= table->x) {
 		if (table->x) {
-			int tx = table->x - 1;
-			int i;
+			int last_col = table->x - 1;
+			int row;
 
-			for (i = 0; i < table->y; i++) {
-				int j;
-				struct table_cell *cellp = CELL(table, tx, i);
+			for (row = 0; row < table->y; row++) {
+				int col;
+				struct table_cell *cellp = CELL(table, last_col, row);
 
 				if (cellp->colspan != -1) continue;
 
-				for (j = table->x; j <= x; j++) {
-					struct table_cell *cell = CELL(table, j, i);
+				for (col = table->x; col <= x; col++) {
+					struct table_cell *cell = CELL(table, col, row);
 
 					cell->is_used = 1;
 					cell->is_spanned = 1;
@@ -290,17 +290,17 @@ expand_cells(struct table *table, int x, int y)
 
 	if (y >= table->y) {
 		if (table->y) {
-			int ty = table->y - 1;
-			int i;
+			int last_row = table->y - 1;
+			int col;
 
-			for (i = 0; i < table->x; i++) {
-				int j;
-				struct table_cell *cellp = CELL(table, i, ty);
+			for (col = 0; col < table->x; col++) {
+				int row;
+				struct table_cell *cellp = CELL(table, col, last_row);
 
 				if (cellp->rowspan != -1) continue;
 
-				for (j = table->y; j <= y; j++) {
-					struct table_cell *cell = CELL(table, i, j);
+				for (row = table->y; row <= y; row++) {
+					struct table_cell *cell = CELL(table, col, row);
 
 					cell->is_used = 1;
 					cell->is_spanned = 1;

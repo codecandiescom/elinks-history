@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.7 2003/07/09 23:56:36 jonas Exp $ */
+/* $Id: uri.c,v 1.8 2003/07/10 13:27:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
+#include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -183,3 +184,36 @@ get_uri_port(struct uri *uri)
 	/* Recovery path: we return -1 ;-). */
 	return port;
 }
+
+unsigned char *
+get_uri_string(struct uri *uri)
+{
+	unsigned char *str = init_str();
+	int len = 0;
+
+	if (!str) return NULL;
+	assert(uri->protocol && uri->protocollen && uri->host && uri->hostlen);
+	if_assert_failed { mem_free(str); return NULL; }
+
+	add_bytes_to_str(&str, &len, uri->protocol, uri->protocollen);
+	add_to_str(&str, &len, "://");
+	add_bytes_to_str(&str, &len, uri->host, uri->hostlen);
+	add_chr_to_str(&str, &len, ':');
+
+	if (uri->port && uri->portlen) {
+		add_bytes_to_str(&str, &len, uri->port, uri->portlen);
+	} else {
+		/* Should user protocols ports be configurable? */
+		enum protocol protocol = check_protocol(uri->protocol,
+							uri->protocollen);
+		int port = get_protocol_port(protocol);
+
+		/* RFC2616 section 3.2.2:
+		 * "If the port is empty or not given, port 80 is assumed." */
+		/* Port 0 comes from user protocol backend so be httpcentric. */
+		add_num_to_str(&str, &len, (port != 0 ? port : 80));
+	}
+
+	return str;
+}
+

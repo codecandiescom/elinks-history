@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.29 2003/07/10 13:16:36 jonas Exp $ */
+/* $Id: auth.c,v 1.30 2003/07/10 13:27:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,47 +17,12 @@
 #include "protocol/url.h"
 #include "sched/session.h"
 #include "util/base64.h"
-#include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
 
 
 INIT_LIST_HEAD(http_auth_basic_list);
-
-/* Returns a valid host url for http authentification or NULL. */
-/* FIXME: This really belongs to url.c, but it would look alien there. */
-static unsigned char *
-get_auth_url(struct uri *uri)
-{
-	unsigned char *str = init_str();
-	int len = 0;
-
-	if (!str) return NULL;
-	assert(uri->protocol && uri->protocollen && uri->host && uri->hostlen);
-	if_assert_failed { mem_free(str); return NULL; }
-
-	add_bytes_to_str(&str, &len, uri->protocol, uri->protocollen);
-	add_to_str(&str, &len, "://");
-	add_bytes_to_str(&str, &len, uri->host, uri->hostlen);
-	add_chr_to_str(&str, &len, ':');
-
-	if (uri->port && uri->portlen) {
-		add_bytes_to_str(&str, &len, uri->port, uri->portlen);
-	} else {
-		/* Should user protocols ports be configurable? */
-		enum protocol protocol = check_protocol(uri->protocol,
-							uri->protocollen);
-		int port = get_protocol_port(protocol);
-
-		/* RFC2616 section 3.2.2:
-		 * "If the port is empty or not given, port 80 is assumed." */
-		/* Port 0 comes from user protocol backend so be httpcentric. */
-		add_num_to_str(&str, &len, (port != 0 ? port : 80));
-	}
-
-	return str;
-}
 
 
 /* Find if url/realm is in auth list. If a matching url is found, but realm is
@@ -147,7 +112,7 @@ enum add_auth_code
 add_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
-	unsigned char *newurl = get_auth_url(uri);
+	unsigned char *newurl = get_uri_string(uri);
 
 	if (!newurl) return ADD_AUTH_ERROR;
 
@@ -206,7 +171,7 @@ find_auth(struct uri *uri)
 {
 	struct http_auth_basic *entry = NULL;
 	unsigned char *uid, *ret = NULL;
-	unsigned char *newurl = get_auth_url(uri);
+	unsigned char *newurl = get_uri_string(uri);
 	unsigned char *user = memacpy(uri->user, uri->userlen);
 	unsigned char *pass = memacpy(uri->password, uri->passwordlen);
 

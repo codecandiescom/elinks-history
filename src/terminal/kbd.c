@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.85 2004/07/28 10:19:12 jonas Exp $ */
+/* $Id: kbd.c,v 1.86 2004/07/28 10:31:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -785,8 +785,9 @@ process_queue(struct itrm *itrm)
 						xterm_button = itrm->kqueue[el] - ' ';
 						el += 5;
 					} else {
-						/* See kbd.h about details of the mouse reporting protocol
-						 * and ev->b bitmask structure. */
+						/* See terminal/mouse.h about details of the mouse reporting
+						 * protocol and {struct term_event_mouse->button} bitmask
+						 * structure. */
 						ev.x = itrm->kqueue[el+1] - ' ' - 1;
 						ev.y = itrm->kqueue[el+2] - ' ' - 1;
 

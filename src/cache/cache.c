@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.96 2003/11/17 18:39:14 jonas Exp $ */
+/* $Id: cache.c,v 1.97 2003/11/17 21:39:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -479,7 +479,7 @@ delete_cache_entry(struct cache_entry *ce)
 		mem_free(ce->box_item);
 	}
 
-	if (get_cache_uri(ce)) mem_free(get_cache_uri(ce));
+	if (struri(ce->uri)) mem_free(struri(ce->uri));
 	if (ce->head) mem_free(ce->head);
 	if (ce->last_modified) mem_free(ce->last_modified);
 	if (ce->redirect) mem_free(ce->redirect);

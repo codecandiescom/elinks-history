@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.255 2003/11/03 15:06:39 zas Exp $ */
+/* $Id: view.c,v 1.256 2003/11/05 10:56:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -719,36 +719,8 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 							    N_("OK"), N_("Cancel"), ses, NULL,
 							    lnl, d, 1, document->nlinks, check_number,
 							    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
-				}
-#if 0
-				else if (ev->x == 'x') {
-					struct node *node;
-					static int n = -1;
-					int i;
-					fd->xl = -1234;
-					draw_doc(ses->tab->term, fd, 1);
-					clear_link(ses->tab->term, fd);
-					n++;
-					i = n;
-					foreachback (node, fd->document->nodes) {
-						if (!i--) {
-							int x, y;
-							for (y = 0; y < node->yw; y++) for (x = 0; x < node->xw && x < 1000; x++) {
-								int rx = x + node->x + fd->xp - fd->vs->x;
-								int ry = y + node->y + fd->yp - fd->vs->y;
-								if (rx >= 0 && ry >= 0 && rx < ses->tab->term->x && ry < ses->tab->term->y) {
-									set_color(ses->tab->term, rx, ry, 0x3800);
-								}
-							}
-							break;
-						}
-					}
-					if (i >= 0) n = -1;
-					x = 0;
-				}
-#endif
-				else if (get_opt_int("document.browse.accesskey.priority") == 1
-					 && try_document_key(ses, doc_view, ev)) {
+				} else if (get_opt_int("document.browse.accesskey.priority") == 1
+					   && try_document_key(ses, doc_view, ev)) {
 					/* The document ate the key! */
 					return 1;
 

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.58 2003/11/04 23:25:42 jonas Exp $ */
+/* $Id: checkbox.c,v 1.59 2003/11/05 10:56:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,51 +68,6 @@ checkboxes_width(struct terminal *term,
 	*minwidth += 4;
 	*maxwidth += 4;
 }
-
-#if 0
-void
-checkbox_list_fn(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int max = 0, min = 0;
-	int w, rw;
-	int y = 0;
-	int n = dlg_data->n - 2;
-
-	checkboxes_width(term, 1, dlg_data->dlg->udata, &min, &max);
-	buttons_width(dlg_data->widgets_data + n, 2, &min, &max);
-
-	w = term->x * 9 / 10 - 2 * DIALOG_LB;
-	int_bounds(&w, min, max);
-	int_bounds(&w, 5, term->x - 2 * DIALOG_LB);
-
-	rw = 0;
-	dlg_format_checkboxes(NULL, term, 1, dlg_data->widgets_data, n, 0, &y, w,
-			      &rw, dlg_data->dlg->udata);
-
-	y++;
-	dlg_format_buttons(NULL, term, dlg_data->widgets_data + n, 2, 0, &y, w,
-			   &rw, AL_CENTER);
-
-	w = rw;
-	dlg_data->xw = rw + 2 * DIALOG_LB;
-	dlg_data->yw = y + 2 * DIALOG_TB;
-
-	center_dlg(dlg_data);
-	draw_dlg(dlg_data);
-
-	y = dlg_data->y + DIALOG_TB + 1;
-	dlg_format_checkboxes(term, term, 1, dlg_data->widgets_data, n,
-			      dlg_data->x + DIALOG_LB, &y, w, NULL,
-			      dlg_data->dlg->udata);
-
-	y++;
-	dlg_format_buttons(term, term, dlg_data->widgets_data + n, 2,
-			   dlg_data->x + DIALOG_LB, &y, w, &rw,
-			   AL_CENTER);
-}
-#endif
-
 
 static void
 display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)

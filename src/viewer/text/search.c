@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.93 2003/11/05 09:23:19 zas Exp $ */
+/* $Id: search.c,v 1.94 2003/11/05 10:56:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,23 +54,6 @@ add_srch_chr(struct document *document, unsigned char c, int x, int y, int nn)
 	document->search[n].n = nn;
 	document->nsearch++;
 }
-
-#if 0
-/* Debugging code, please keep it. */
-void
-sdbg(struct document *document)
-{
-	struct node *n;
-
-	foreachback (n, document->nodes) {
-		int xm = n->x + n->xw, ym = n->y + n->yw;
-		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
-		fflush(stdout);
-	}
-	debug("!");
-}
-#endif
-
 
 static void
 sort_srch(struct document *document)
@@ -144,10 +127,6 @@ get_srch(struct document *document)
 		register int x, y;
 		int height = int_min(node->y + node->height, document->height);
 
-#if 0
-		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
-		fflush(stdout);
-#endif
 #define ADD(cr, nn) do { \
 	if (!cc) add_srch_chr(document, (cr), x, y, (nn)); \
 	else cnt++; \

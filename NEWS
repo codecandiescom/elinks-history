@@ -10,7 +10,7 @@ ELinks-0.10.0: (codename Thelma)
 * tabs moving (press Alt-'>' or Alt-'<')
 * exmode CLI support (press ':' followed by action and args) (experimental)
 * cursor routing (aka w3m-style navigation)
-* modal text-input form-fields editing (disabled by default)
+* modal text-input form-fields editing (enabled by default)
 * manual cookies creating and editing
 * incremental searching (press '#/')
 * Perl scripting back-end (experimental)

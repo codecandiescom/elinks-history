@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.128 2004/04/04 20:51:58 jonas Exp $ */
+/* $Id: uri.c,v 1.129 2004/04/04 22:00:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1035,6 +1035,7 @@ get_uri(unsigned char *string, int length)
 		return NULL;
 	}
 
+	object_nolock(&entry->uri, "uri");
 	object_lock(&entry->uri);
 
 	return &entry->uri;

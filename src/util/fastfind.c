@@ -1,20 +1,5 @@
-/* Very fast search_keyword_in_list.
- * It replaces bsearch() + strcasecmp() + callback + ...
- *
- * Following conditions should be met:
- *
- * - list keys are C strings.
- * - keys should not be greater than 255 characters, and optimally < 20
- *   characters. It can work with greater keys but then memory usage will
- *   grow a lot.
- * - each key must be unique and non empty.
- * - list do not have to be ordered.
- * - total number of unique characters used in all keys should be <= 128
- * - idealy total number of keys should be <= 512 (but see below)
- *
- *  (c) 2003 Laurent MONIN (aka Zas)
- * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.19 2003/06/14 20:21:52 pasky Exp $ */
+/* Very fast search_keyword_in_list. */
+/* $Id: fastfind.c,v 1.20 2003/06/14 20:26:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +15,23 @@
 #include "util/fastfind.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
+
+
+/* It replaces bsearch() + strcasecmp() + callback + ...
+ *
+ * Following conditions should be met:
+ *
+ * - list keys are C strings.
+ * - keys should not be greater than 255 characters, and optimally < 20
+ *   characters. It can work with greater keys but then memory usage will
+ *   grow a lot.
+ * - each key must be unique and non empty.
+ * - list do not have to be ordered.
+ * - total number of unique characters used in all keys should be <= 128
+ * - idealy total number of keys should be <= 512 (but see below)
+ *
+ *  (c) 2003 Laurent MONIN (aka Zas)
+ * Feel free to do whatever you want with that code. */
 
 
 /* Define it to generate statistics to stderr. */

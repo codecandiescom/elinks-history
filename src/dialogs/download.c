@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.8 2003/11/28 03:49:08 jonas Exp $ */
+/* $Id: download.c,v 1.9 2003/11/29 18:33:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,79 +101,6 @@ download_abort_function(struct dialog_data *dlg_data)
 	file_download->win = NULL;
 }
 
-static int
-download_progress_string(struct terminal *term,
-			 struct download *download,
-			 struct string *msg)
-{
-	if (download->state != S_TRANS || !(download->prg->elapsed / 100)) {
-		add_to_string(msg, get_err_msg(download->state, term));
-		return 0;
-	}
-
-	/* FIXME: The following is a PITA from the l10n standpoint. A *big*
-	 * one, _("of")-like pearls are a nightmare. Format strings need to
-	 * be introduced to this fuggy corner of code as well. --pasky */
-
-	add_to_string(msg, _("Received", term));
-	add_char_to_string(msg, ' ');
-	add_xnum_to_string(msg, download->prg->pos);
-
-	if (download->prg->size >= 0) {
-		add_char_to_string(msg, ' ');
-		add_to_string(msg, _("of",term));
-		add_char_to_string(msg, ' ');
-		add_xnum_to_string(msg, download->prg->size);
-		add_char_to_string(msg, ' ');
-	}
-	if (download->prg->start > 0) {
-		add_char_to_string(msg, '(');
-		add_xnum_to_string(msg, download->prg->pos
-					- download->prg->start);
-		add_char_to_string(msg, ' ');
-		add_to_string(msg, _("after resume", term));
-		add_char_to_string(msg, ')');
-	}
-	add_char_to_string(msg, '\n');
-
-	if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
-		add_to_string(msg, _("Average speed", term));
-	else
-		add_to_string(msg, _("Speed", term));
-
-	add_char_to_string(msg, ' ');
-	add_xnum_to_string(msg, (longlong) download->prg->loaded * 10
-			        / (download->prg->elapsed / 100));
-	add_to_string(msg, "/s");
-
-	if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-		add_to_string(msg, ", ");
-		add_to_string(msg, _("current speed", term));
-		add_char_to_string(msg, ' ');
-		add_xnum_to_string(msg, download->prg->cur_loaded
-					/ (CURRENT_SPD_SEC *
-					   SPD_DISP_TIME / 1000));
-		add_to_string(msg, "/s");
-	}
-
-	add_char_to_string(msg, '\n');
-	add_to_string(msg, _("Elapsed time", term));
-	add_char_to_string(msg, ' ');
-	add_time_to_string(msg, download->prg->elapsed);
-
-	if (download->prg->size >= 0 && download->prg->loaded > 0) {
-		add_to_string(msg, ", ");
-		add_to_string(msg, _("estimated time", term));
-		add_char_to_string(msg, ' ');
-		add_time_to_string(msg, (download->prg->size - download->prg->pos)
-					/ ((longlong) download->prg->loaded * 10
-					   / (download->prg->elapsed / 100))
-					* 1000);
-	}
-
-	return 1;
-}
-
 static void
 download_progress_bar(struct terminal *term,
 	     	      int x, int *y, int width,
@@ -214,22 +141,21 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	int w = dialog_max_width(term);
 	int rw = w;
 	int x, y = 0;
-	int t = 0;
 	int url_len;
 	unsigned char *url;
-	struct string msg;
 	struct download *download = &file_download->download;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
+	int t = (download->state == S_TRANS && (download->prg->elapsed / 100));
+	unsigned char *msg = get_stat_msg(download, term, 1, 1, "\n");
 
 	redraw_below_window(dlg_data->win);
 	file_download->win = dlg_data->win;
 
-	if (!init_string(&msg)) return;
-	t = download_progress_string(term, download, &msg);
+	if (!msg) return;
 
 	url = get_no_post_url(file_download->url, &url_len);
 	if (!url) {
-		done_string(&msg);
+		mem_free(msg);
 		return;
 	}
 
@@ -242,7 +168,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	y++;
 	if (t && download->prg->size >= 0) y += 2;
-	dlg_format_text_do(NULL, msg.source, 0, &y, w, &rw,
+	dlg_format_text_do(NULL, msg, 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 
 	y++;
@@ -275,7 +201,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 				      download->prg->size);
 
 	y++;
-	dlg_format_text_do(term, msg.source, x, &y, w, NULL,
+	dlg_format_text_do(term, msg, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
 	y++;
@@ -283,7 +209,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 			   NULL, AL_CENTER);
 
 	mem_free(url);
-	done_string(&msg);
+	mem_free(msg);
 	file_download->dirty = 0;
 }
 

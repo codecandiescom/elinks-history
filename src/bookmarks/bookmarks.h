@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.17 2003/04/24 08:23:38 zas Exp $ */
+/* $Id: bookmarks.h,v 1.18 2003/05/07 12:54:03 zas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -13,15 +13,16 @@ struct bookmark {
 	LIST_HEAD(struct bookmark);
 
 	struct bookmark *root;
-	struct list_head child;
+
+	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
+	 * and simpler. */
+	struct listbox_item *box_item;
 
 	unsigned char *title;   /* title of bookmark */
 	unsigned char *url;     /* Location of bookmarked item */
 	int refcount;		/* Isn't anything else using this item now? */
 
-	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
-	 * and simpler. */
-	struct listbox_item *box_item;
+	struct list_head child;
 };
 
 extern struct list_head bookmarks;

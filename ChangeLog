@@ -1,3 +1,46 @@
+Thu May 15 21:43:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Download progress dialog was fixed and improved, it now uses
+	ulongcat().  
+
+Thu May 15 21:20:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: conv.c, conv.h:
+
+	elinks_ulongcat() now supports base choice. elinks_ulonghexcat()
+	function have disappear and is now a macro using elinks_ulongcat().  
+
+Thu May 15 12:53:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/conv.c:
+
+	ulongcat() recent changes were ported to ulonghexcat(),
+	add_[k]num_to_str() were fixed accordingly too.  
+
+Thu May 15 08:10:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/Makefile.am:
+
+	mime subdir was added to enable libmime.a building. Idea by fonseca
+	;) 
+
+Thu May 15 08:01:50 2003  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	stpcpu() detection will always fail, this is an error, removed ;).
+	Thanks to fonseca.  
+
+Wed May 14 22:48:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Fixed weirdness of go_unbackwards() add_to_list() ussage, it was
+	apparently incorrect. Now it is simpler but should be in fact
+	correct. And appears to work. Closes bug 114. Discovered by zas.  
+
 Wed May 14 21:08:45 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/renderer.c:

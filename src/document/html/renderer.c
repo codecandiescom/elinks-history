@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.33 2002/06/21 16:54:59 zas Exp $ */
+/* $Id: renderer.c,v 1.34 2002/07/03 23:15:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1077,10 +1077,10 @@ void line_break(struct part *part)
 	if (!part->data) goto end;
 	/* move_links(part, part->cx, part->cy, 0, part->cy + 1); */
 	xpand_lines(part, part->cy + 1);
-	if (part->cx > par_format.leftmargin
-		&& (POS(part->cx-1, part->cy) & 0xff) == ' ') {
-			del_chars(part, part->cx-1, part->cy);
-		   	part->cx--;
+	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
+	    && (POS(part->cx-1, part->cy) & 0xff) == ' ') {
+		del_chars(part, part->cx-1, part->cy);
+	   	part->cx--;
 	}
 
 	/*if (LEN(part->cy) > part->x) part->x = LEN(part->cy);*/

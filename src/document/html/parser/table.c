@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.5 2004/06/28 22:52:50 pasky Exp $ */
+/* $Id: table.c,v 1.6 2004/06/29 00:45:16 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -363,15 +363,12 @@ se:
 
 see:
 	html = en;
-	if (bad_html && !in_cell && !lbhp) {
-		if (!realloc_bad_html(bad_html, *bhp)) {
-			goto qwe;
-		}
+	if (bad_html && !in_cell && !lbhp
+	    && realloc_bad_html(bad_html, *bhp)) {
 		lbhp = html;
 		(*bad_html)[(*bhp)++].start = html;
 	}
 
-qwe:
 	while (html < eof && *html != '<') html++;
 
 	if (html >= eof) {

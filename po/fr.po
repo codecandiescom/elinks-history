@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-22 17:18+0100\n"
+"POT-Creation-Date: 2003-11-22 21:20+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 msgid "Close"
 msgstr "Fermer"
 
-#: src/bfu/hierbox.c:409 src/cache/dialogs.c:147 src/config/dialogs.c:98
+#: src/bfu/hierbox.c:409 src/cache/dialogs.c:145 src/config/dialogs.c:98
 #: src/config/dialogs.c:111 src/config/dialogs.c:381 src/cookies/dialogs.c:132
 #: src/dialogs/document.c:41 src/dialogs/document.c:229
 #: src/globhist/dialogs.c:210
@@ -87,23 +87,23 @@ msgstr "Supprimer les items sélectionnés"
 msgid "Delete marked items?"
 msgstr "Supprimer les items sélectionnés?"
 
-#: src/bfu/hierbox.c:539 src/bfu/hierbox.c:552 src/bfu/hierbox.c:565
+#: src/bfu/hierbox.c:539 src/bfu/hierbox.c:551 src/bfu/hierbox.c:565
 #: src/bfu/hierbox.c:618 src/dialogs/menu.c:151 src/dialogs/mime.c:86
 #: src/formhist/formhist.c:380 src/sched/session.c:701 src/terminal/tab.c:195
 msgid "Yes"
 msgstr "Oui"
 
-#: src/bfu/hierbox.c:540 src/bfu/hierbox.c:553 src/bfu/hierbox.c:566
+#: src/bfu/hierbox.c:540 src/bfu/hierbox.c:552 src/bfu/hierbox.c:566
 #: src/bfu/hierbox.c:619 src/dialogs/menu.c:152 src/dialogs/mime.c:87
 #: src/formhist/formhist.c:381 src/sched/session.c:702 src/terminal/tab.c:196
 msgid "No"
 msgstr "Non"
 
-#: src/bfu/hierbox.c:548
+#: src/bfu/hierbox.c:547
 msgid "Delete folder"
 msgstr "Supprimer un dossier"
 
-#: src/bfu/hierbox.c:549
+#: src/bfu/hierbox.c:548
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Supprimer le dossier \"%s\" et son contenu?"
@@ -151,8 +151,27 @@ msgstr "Mauvaise chaine"
 msgid "Empty string not allowed"
 msgstr "Chaine vide non autorisée"
 
+#: src/bfu/leds.c:64
+msgid "LEDs"
+msgstr "LEDs"
+
+#: src/bfu/leds.c:66
+msgid "LEDs options."
+msgstr "Options concernant les LEDs."
+
+#. XXX: Disable global history if -anonymous is given?
+#: src/bfu/leds.c:68 src/config/options.inc:1719 src/config/options.inc:1726
+#: src/globhist/globhist.c:73 src/mime/backend/mailcap.c:98
+#: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
+msgid "Enable"
+msgstr "Activation"
+
+#: src/bfu/leds.c:70
+msgid "Enable LEDs."
+msgstr "Activer les LEDs."
+
 #. name:
-#: src/bfu/leds.c:207
+#: src/bfu/leds.c:237
 msgid "LED indicators"
 msgstr "Indicateurs LED"
 
@@ -258,7 +277,7 @@ msgstr "Aller à"
 msgid "Edit"
 msgstr "Modifier"
 
-#: src/bookmarks/dialogs.c:412 src/cache/dialogs.c:148
+#: src/bookmarks/dialogs.c:412 src/cache/dialogs.c:146
 #: src/config/dialogs.c:384 src/config/dialogs.c:540 src/cookies/dialogs.c:133
 #: src/globhist/dialogs.c:214
 msgid "Delete"
@@ -329,16 +348,16 @@ msgstr "incomplet"
 msgid "invalid"
 msgstr "invalide"
 
-#: src/cache/dialogs.c:104
+#: src/cache/dialogs.c:102
 msgid "ID tag"
 msgstr "ID tag"
 
-#: src/cache/dialogs.c:108
+#: src/cache/dialogs.c:106
 msgid "Header"
 msgstr "Entêtes"
 
 #. Keep options in alphabetical order.
-#: src/cache/dialogs.c:144 src/config/options.inc:312
+#: src/cache/dialogs.c:142 src/config/options.inc:312
 msgid "Cache"
 msgstr "Cache"
 
@@ -1987,7 +2006,7 @@ msgid "Dump output options."
 msgstr "Options de sortie (dump)."
 
 #: src/config/options.inc:468 src/config/options.inc:834
-#: src/config/opttypes.c:395 src/dialogs/document.c:99
+#: src/config/opttypes.c:394 src/dialogs/document.c:99
 msgid "Codepage"
 msgstr "Jeu de caractères"
 
@@ -3182,13 +3201,6 @@ msgstr ""
 "Action après un certain temps d'inactivité de l'utilisateur. Certains\n"
 "peuvent trouver ceci utile ou non."
 
-#. XXX: Disable global history if -anonymous is given?
-#: src/config/options.inc:1719 src/config/options.inc:1726
-#: src/globhist/globhist.c:73 src/mime/backend/mailcap.c:98
-#: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
-msgid "Enable"
-msgstr "Activation"
-
 #: src/config/options.inc:1721
 msgid ""
 "Whether to enable the timer or not:\n"
@@ -3269,7 +3281,7 @@ msgstr "Confirmer la fermeture d'onglet"
 msgid "When closing a tab show confirmation dialog."
 msgstr "Lors de la fermeture d'un onglet, afficher un dialogue de confirmation"
 
-#: src/config/options.inc:1765 src/config/opttypes.c:396
+#: src/config/options.inc:1765 src/config/opttypes.c:395
 msgid "Language"
 msgstr "Langue"
 
@@ -3604,60 +3616,60 @@ msgstr "Afficher la version d'ELinks et quitter."
 msgid "Read error"
 msgstr "Erreur de lecture"
 
-#: src/config/opttypes.c:390
+#: src/config/opttypes.c:389
 msgid "Boolean"
 msgstr "Booléen"
 
-#: src/config/opttypes.c:390
+#: src/config/opttypes.c:389
 msgid "[0|1]"
 msgstr "[0|1]"
 
-#: src/config/opttypes.c:391
+#: src/config/opttypes.c:390
 msgid "Integer"
 msgstr "Entier"
 
-#: src/config/opttypes.c:391 src/config/opttypes.c:392
+#: src/config/opttypes.c:390 src/config/opttypes.c:391
 msgid "<num>"
 msgstr "<nombre>"
 
-#: src/config/opttypes.c:392
+#: src/config/opttypes.c:391
 msgid "Longint"
 msgstr "Entier long"
 
-#: src/config/opttypes.c:393
+#: src/config/opttypes.c:392
 msgid "String"
 msgstr "Chaîne"
 
-#: src/config/opttypes.c:393
+#: src/config/opttypes.c:392
 msgid "<str>"
 msgstr "<chaîne>"
 
-#: src/config/opttypes.c:395
+#: src/config/opttypes.c:394
 msgid "<codepage>"
 msgstr "<jeu de caractères>"
 
-#: src/config/opttypes.c:396
+#: src/config/opttypes.c:395
 msgid "<language>"
 msgstr "<langue>"
 
-#: src/config/opttypes.c:397
+#: src/config/opttypes.c:396
 msgid "Color"
 msgstr "Couleur"
 
-#: src/config/opttypes.c:397
+#: src/config/opttypes.c:396
 msgid "<color|#rrggbb>"
 msgstr "<couleur|#rrvvbb>"
 
-#: src/config/opttypes.c:399
+#: src/config/opttypes.c:398
 msgid "Special"
 msgstr "Spécial"
 
-#: src/config/opttypes.c:401
+#: src/config/opttypes.c:400
 msgid "Alias"
 msgstr "Alias"
 
 #. tree
-#: src/config/opttypes.c:404
+#: src/config/opttypes.c:403
 msgid "Folder"
 msgstr "Dossier"
 
@@ -5474,163 +5486,3 @@ msgstr "Erreur d'enregistrement"
 #: src/viewer/text/view.c:1416
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid ""
-#~ "Sorry, but this bookmark is already being used by something right now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\""
-#~ msgstr ""
-#~ "Désolé, mais ce signet est déjà en cours d'utilisation.\n"
-#~ "\n"
-#~ "Titre: \"%s\"\n"
-#~ "URL: \"%s\""
-
-#~ msgid "Delete marked bookmarks?"
-#~ msgstr "Effacer les signets sélectionnés ?"
-
-#~ msgid ""
-#~ "Delete bookmark \"%s\"?\n"
-#~ "\n"
-#~ "URL: \"%s\""
-#~ msgstr ""
-#~ "Supprimer le signet \"%s\" ?\n"
-#~ "\n"
-#~ "URL: \"%s\""
-
-#~ msgid ""
-#~ "Sorry, but this history entry is already being used by something right "
-#~ "now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\"\n"
-#~ msgstr ""
-#~ "Désolé, mais ce signet est déjà utilisé par quelque chose.\n"
-#~ "\n"
-#~ "Titre: \"%s\"\n"
-#~ "URL: \"%s\"\n"
-
-#~ msgid "Clear global history?"
-#~ msgstr "Effacer l'historique global ?"
-
-#~ msgid "No entry."
-#~ msgstr "Aucune entrée."
-
-#~ msgid "%ld more entries."
-#~ msgstr "%ld entrées supplémentaires."
-
-#~ msgid "Cache info"
-#~ msgstr "Info sur le cache"
-
-#~ msgid "Cache content: %s"
-#~ msgstr "Contenu du cache: %s"
-
-#~ msgid "~Cache info"
-#~ msgstr "Info sur le ~cache"
-
-#~ msgid "Overlapping matches"
-#~ msgstr "Correspondances se recouvrant"
-
-#~ msgid ""
-#~ "Let matches overlap (only relevant to regex search).\n"
-#~ "0 means matches should not overlap.\n"
-#~ "1 means matches can overlap (CAUTION: can be cpu intensive with\n"
-#~ "  some expressions!)"
-#~ msgstr ""
-#~ "Recouvrement des correspondances (concerne seulement\n"
-#~ "les expressions régulières).\n"
-#~ "0 les correspondances ne doivent pas se recouvrir.\n"
-#~ "1 les correspondances peuvent se recouvrir\n"
-#~ "  (ATTENTION: l'utilisation du processeur peut être\n"
-#~ "   très intensive avec certaines expressions!)"
-
-#~ msgid ""
-#~ "ESC      display menu\n"
-#~ "^C, q    quit\n"
-#~ "^P, ^N   scroll up, down\n"
-#~ "[, ]     scroll left, right\n"
-#~ "up, down select link\n"
-#~ "->       follow link\n"
-#~ "<-       go back\n"
-#~ "g        go to URL\n"
-#~ "G        go to URL based on current URL\n"
-#~ "/        search\n"
-#~ "?        search back\n"
-#~ "n        find next\n"
-#~ "N        find previous\n"
-#~ "=        document info\n"
-#~ "|        header info\n"
-#~ "\\        document source\n"
-#~ "d        download"
-#~ msgstr ""
-#~ "ESC      affichage du menu\n"
-#~ "^C, q    quitter\n"
-#~ "^P, ^N   paginer haut/bas\n"
-#~ "[, ]     paginer gauche/droite\n"
-#~ "haut/bas choix du lien\n"
-#~ "->       suivre le lien\n"
-#~ "<-       retour\n"
-#~ "g        atteindre l'URL\n"
-#~ "G        atteindre l'URL (de l'URL actuelle)\n"
-#~ "/        chercher\n"
-#~ "?        chercher en arrière\n"
-#~ "n        chercher le suivant\n"
-#~ "N        chercher le précédent\n"
-#~ "=        infos sur le document\n"
-#~ "|\t  infos sur les entêtes\n"
-#~ "\\        source du document\n"
-#~ "d        télécharger"
-
-#~ msgid "Secure open failed"
-#~ msgstr "Echec ouverture de fichier (mode fiable)"
-
-#~ msgid "Unknown event."
-#~ msgstr "Evénement inconnu."
-
-#~ msgid "A field"
-#~ msgstr "Un champ"
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "Internally allocated = %li KiB\n"
-#~ "Total program size = %li KiB\n"
-#~ "Resident set size = %li KiB\n"
-#~ "Shared pages = %li KiB\n"
-#~ "Text (code) = %li KiB\n"
-#~ "Data/stack = %li KiB\n"
-#~ "Libraries = %li KiB\n"
-#~ "Dirty pages = %li KiB"
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Allocation interne = %li KiB\n"
-#~ "Taille totale du programme = %li KiB\n"
-#~ "Taille résidents = %li KiB\n"
-#~ "Pages partagées = %li KiB\n"
-#~ "Texte (code) = %li KiB\n"
-#~ "Données/pile = %li KiB\n"
-#~ "Bibliothèques = %li KiB\n"
-#~ "Pages 'sales' = %li KiB"
-
-#~ msgid "Verify the peer's SSL certificate."
-#~ msgstr "Vérifier le certificat SSL du serveur."
-
-#~ msgid "Columns"
-#~ msgstr "Colonnes"
-
-#~ msgid "Rows"
-#~ msgstr "Lignes"
-
-#~ msgid ""
-#~ "Ask if a login form should be saved to file or not.\n"
-#~ "This option only disables the dialog, already saved login\n"
-#~ "forms are unaffected. (DISABLED)"
-#~ msgstr ""
-#~ "Demander si un formulaire d'authentification doit être\n"
-#~ "sauvegarder dans un fichier ou non.\n"
-#~ "Cette option désactive seulement le dialogue, les formulaires\n"
-#~ "déjà mémorisés ne sont pas affectés. (INACTIF)"
-
-#~ msgid "Resize ~terminal"
-#~ msgstr "Redimensionner le ~terminal"

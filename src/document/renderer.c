@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.46 2004/05/14 00:43:26 jonas Exp $ */
+/* $Id: renderer.c,v 1.47 2004/05/14 08:42:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,10 +94,10 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	copy_box(&doc_view->box, &document->options.box);
 
 	if (!document->options.needs_width)
-		document->options.box.width = options->box.width;
+		doc_view->box.width = options->box.width;
 
 	if (!document->options.needs_height)
-		document->options.box.height = options->box.height;
+		doc_view->box.height = options->box.height;
 }
 
 

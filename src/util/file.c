@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.22 2004/04/23 13:48:12 pasky Exp $ */
+/* $Id: file.c,v 1.23 2004/04/23 18:44:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 
 #include "elinks.h"
 
+#include "osdep/osdep.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/file.h"
@@ -55,6 +56,20 @@ file_can_read(const unsigned char *filename)
 #endif
 }
 
+
+unsigned char *
+get_filename_position(unsigned char *filename)
+{
+	unsigned char *pos;
+
+	assert(filename);
+	if_assert_failed return NULL;
+
+	for (pos = filename; *pos; pos++)
+		if (dir_sep(*pos)) filename = pos + 1;
+
+	return filename;
+}
 
 unsigned char *
 expand_tilde(unsigned char *filename)

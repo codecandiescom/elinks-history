@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.9 2004/04/23 13:47:58 pasky Exp $ */
+/* $Id: file.h,v 1.10 2004/04/23 18:44:00 jonas Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
@@ -7,6 +7,10 @@
 
 int file_exists(const unsigned char *filename);
 int file_can_read(const unsigned char *filename);
+
+/* Strips all directory stuff from @filename and returns the
+ * position of where the actual filename starts */
+unsigned char *get_filename_position(unsigned char *filename);
 
 /* Tilde is only expanded for the current users homedir (~/). */
 /* The returned file name is allocated. */

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.91 2004/04/23 18:40:08 jonas Exp $ */
+/* $Id: form.c,v 1.92 2004/04/23 18:44:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,20 +445,6 @@ fi_rep:
 
 }
 
-static inline unsigned char *
-strip_file_name(unsigned char *filename)
-{
-	unsigned char *pos;
-
-	assert(filename);
-	if_assert_failed return NULL;
-
-	for (pos = filename; *pos; pos++)
-		if (dir_sep(*pos)) filename = pos + 1;
-
-	return filename;
-}
-
 static void
 encode_controls(struct list_head *l, struct string *data,
 		int cp_from, int cp_to)
@@ -560,7 +546,7 @@ xx:
 			unsigned char buffer[F_BUFLEN];
 
 			add_to_string(data, "\"; filename=\"");
-			add_to_string(data, strip_file_name(sv->value));
+			add_to_string(data, get_filename_position(sv->value));
 			/* It sends bad data if the file name contains ", but
 			   Netscape does the same */
 			/* FIXME: is this a reason ? --Zas */

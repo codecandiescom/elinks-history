@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.27 2004/04/14 22:30:32 jonas Exp $ */
+/* $Id: event.c,v 1.28 2004/04/14 22:35:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,6 @@ term_send_event(struct terminal *term, struct term_event *ev)
 
 	switch (ev->ev) {
 	case EV_INIT:
-	case EV_REDRAW:
 	case EV_RESIZE:
 		if (ev->x < 0 || ev->y < 0) {
 			ERROR(_("Bad terminal size: %d, %d", term),
@@ -50,8 +49,11 @@ term_send_event(struct terminal *term, struct term_event *ev)
 		}
 
 		resize_screen(term, ev->x, ev->y);
-		clear_terminal(term);
 		erase_screen(term);
+		/* Fall through */
+
+	case EV_REDRAW:
+		clear_terminal(term);
 		term->redrawing = 1;
 		/* Note that you do NOT want to ever go and create new
 		 * window inside EV_INIT handler (it'll get second

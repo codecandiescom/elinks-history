@@ -1,14 +1,22 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.8 2003/10/23 22:16:08 jonas Exp $ */
-
-/* These function are called from register_options(). */
+/* $Id: options.inc,v 1.9 2003/10/23 22:35:40 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
+/* TODO: Make #ifdef FEATURE more consistent. */
 
 /* Ok so shoot me. It will probably do me good. --jonas */
 #define N_(msg) (gettext_noop(msg))
 
-/* Keep options in alphabetical order. */
+/* A few guidelines for this file: */
+/* 1. Keep options in alphabetical order.
+ * 2. Keep in mind that descriptions should be readable on 80 wide terminals
+ *    so insert appropriate line breaks and newlines.
+ * 3. If several command line options should share the same caption and
+ *    description they should be declared after another and only the last one
+ *    should have the caption and description defined. (ie. -h, -? and -help)
+ * 4. When adding an alias put a comment about the date the alias was added.
+ * 5. Love thy option system! :) */
+
 struct option_info config_options_info[] = {
 	INIT_OPT_TREE("", N_("Bookmarks"),
 		"bookmarks", 0,
@@ -2065,13 +2073,9 @@ struct option_info cmdline_options_info[] = {
 
 	/* XXX: -?, -h and -help share the same caption and should be kept in
 	 * the current order for usage help printing to be ok */
-	INIT_OPT_COMMAND("", NULL,
-		"?", 0, printhelp_cmd,
-		NULL),
+	INIT_OPT_COMMAND("", NULL, "?", 0, printhelp_cmd, NULL),
 
-	INIT_OPT_COMMAND("", NULL,
-		"h", 0, printhelp_cmd,
-		NULL),
+	INIT_OPT_COMMAND("", NULL, "h", 0, printhelp_cmd, NULL),
 
 	INIT_OPT_COMMAND("", N_("Print usage help and exit"),
 		"help", 0, printhelp_cmd,

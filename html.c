@@ -15,7 +15,7 @@ int parse_element(unsigned char *e, unsigned char *eof, unsigned char **name, in
 	while (e < eof && isA(*e)) e++;
 	if (e >= eof || (!WHITECHAR(*e) && *e != '>' && *e != '/' && *e != ':')) return -1;
 	if (name && namelen) *namelen = e - *name;
-	while (e < eof && (WHITECHAR(*e) || *e == '/') || *e == ':') e++;
+	while (e < eof && (WHITECHAR(*e) || *e == '/' || *e == ':')) e++;
 	if (e >= eof || (!atchr(*e) && *e != '>')) return -1;
 	if (attr) *attr = e;
 	nextattr:

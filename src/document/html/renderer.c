@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.312 2003/10/18 17:16:17 jonas Exp $ */
+/* $Id: renderer.c,v 1.313 2003/10/19 12:20:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -871,7 +871,7 @@ put_link_number(struct part *part)
 	put_chars(part, s, slen);
 
 	if (ff && ff->type == FC_TEXTAREA) line_break(part);
-	if (part->cx == -1) part->cx = par_format.leftmargin;
+
 	format.link = fl;
 	format.target = ft;
 	format.image = fi;
@@ -1021,11 +1021,10 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	assert(charslen > 0);
 	part->xa += charslen;
-	part->xmax = int_max(part->xmax, part->xa
-					 - (chars[charslen - 1] == ' '
-				            && par_format.align != AL_NONE)
-					 + par_format.leftmargin
-					 + par_format.rightmargin);
+	int_lower_bound(&part->xmax, part->xa
+			+ par_format.leftmargin + par_format.rightmargin
+			- (chars[charslen - 1] == ' '
+			   && par_format.align != AL_NONE));
 	return;
 
 }

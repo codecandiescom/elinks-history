@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-08 19:09+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-12-11 07:32+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Taniel Kirikal <taniel@colleduc.ee>\n"
 "Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:302
 msgid "Close"
@@ -20,8 +20,8 @@ msgstr "Sulge"
 
 #: src/bfu/hierbox.c:399 src/cache/dialogs.c:145 src/config/dialogs.c:357
 #: src/cookies/dialogs.c:131 src/dialogs/document.c:44
-#: src/dialogs/document.c:232 src/dialogs/download.c:413
-#: src/formhist/dialogs.c:143 src/globhist/dialogs.c:182
+#: src/dialogs/document.c:232 src/dialogs/download.c:408
+#: src/formhist/dialogs.c:170 src/globhist/dialogs.c:182
 msgid "Info"
 msgstr "Info"
 
@@ -35,21 +35,21 @@ msgstr "Info"
 #: src/config/dialogs.c:509 src/dialogs/auth.c:77 src/dialogs/document.c:50
 #: src/dialogs/document.c:235 src/dialogs/document.c:305
 #: src/dialogs/document.c:317 src/dialogs/edit.c:99 src/dialogs/info.c:48
-#: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:565
-#: src/dialogs/menu.c:576 src/dialogs/menu.c:607 src/dialogs/mime.c:159
+#: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:602
+#: src/dialogs/menu.c:613 src/dialogs/menu.c:644 src/dialogs/mime.c:159
 #: src/dialogs/options.c:190 src/dialogs/options.c:264
-#: src/protocol/protocol.c:63 src/protocol/user.c:158 src/protocol/user.c:174
-#: src/sched/download.c:170 src/sched/download.c:254 src/sched/download.c:280
-#: src/sched/download.c:551 src/sched/error.c:42 src/sched/session.c:121
-#: src/sched/session.c:569 src/sched/session.c:586 src/sched/session.c:610
-#: src/sched/session.c:855 src/scripting/lua/core.c:401
-#: src/scripting/lua/core.c:482 src/scripting/lua/core.c:589
-#: src/scripting/lua/core.c:718 src/viewer/text/form.c:657
-#: src/viewer/text/search.c:856 src/viewer/text/search.c:882
-#: src/viewer/text/search.c:888 src/viewer/text/search.c:910
-#: src/viewer/text/search.c:1076 src/viewer/text/search.c:1087
-#: src/viewer/text/textarea.c:272 src/viewer/text/view.c:788
-#: src/viewer/text/view.c:1496
+#: src/formhist/dialogs.c:135 src/protocol/protocol.c:63
+#: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:170
+#: src/sched/download.c:254 src/sched/download.c:280 src/sched/download.c:551
+#: src/sched/error.c:42 src/sched/session.c:121 src/sched/session.c:569
+#: src/sched/session.c:586 src/sched/session.c:610 src/sched/session.c:855
+#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
+#: src/scripting/lua/core.c:589 src/scripting/lua/core.c:718
+#: src/viewer/text/form.c:657 src/viewer/text/search.c:856
+#: src/viewer/text/search.c:882 src/viewer/text/search.c:888
+#: src/viewer/text/search.c:910 src/viewer/text/search.c:1076
+#: src/viewer/text/search.c:1087 src/viewer/text/textarea.c:272
+#: src/viewer/text/view.c:788 src/viewer/text/view.c:1498
 msgid "OK"
 msgstr "OK"
 
@@ -89,13 +89,13 @@ msgid "Delete marked items?"
 msgstr "Märgista väli"
 
 #: src/bfu/hierbox.c:567 src/bfu/hierbox.c:588 src/bfu/hierbox.c:602
-#: src/bfu/hierbox.c:661 src/dialogs/menu.c:205 src/dialogs/mime.c:86
+#: src/bfu/hierbox.c:661 src/dialogs/menu.c:179 src/dialogs/mime.c:86
 #: src/formhist/formhist.c:492 src/sched/task.c:169 src/terminal/tab.c:190
 msgid "Yes"
 msgstr "Jah"
 
 #: src/bfu/hierbox.c:568 src/bfu/hierbox.c:589 src/bfu/hierbox.c:603
-#: src/bfu/hierbox.c:662 src/dialogs/menu.c:206 src/dialogs/mime.c:87
+#: src/bfu/hierbox.c:662 src/dialogs/menu.c:180 src/dialogs/mime.c:87
 #: src/formhist/formhist.c:493 src/sched/task.c:170 src/terminal/tab.c:191
 msgid "No"
 msgstr "Ei"
@@ -244,8 +244,8 @@ msgstr ""
 
 #: src/bookmarks/dialogs.c:191 src/config/dialogs.c:263
 #: src/config/dialogs.c:339 src/config/dialogs.c:455 src/config/dialogs.c:510
-#: src/dialogs/auth.c:78 src/dialogs/edit.c:103 src/dialogs/menu.c:565
-#: src/dialogs/menu.c:576 src/dialogs/menu.c:607 src/dialogs/mime.c:160
+#: src/dialogs/auth.c:78 src/dialogs/edit.c:103 src/dialogs/menu.c:602
+#: src/dialogs/menu.c:613 src/dialogs/menu.c:644 src/dialogs/mime.c:160
 #: src/dialogs/options.c:193 src/dialogs/options.c:265
 #: src/sched/download.c:467 src/sched/download.c:963 src/sched/download.c:972
 #: src/sched/download.c:999 src/sched/download.c:1011
@@ -271,7 +271,7 @@ msgstr "Redigeeri"
 
 #: src/bookmarks/dialogs.c:376 src/cache/dialogs.c:147
 #: src/config/dialogs.c:360 src/config/dialogs.c:530 src/cookies/dialogs.c:132
-#: src/formhist/dialogs.c:144 src/globhist/dialogs.c:186
+#: src/formhist/dialogs.c:171 src/globhist/dialogs.c:186
 msgid "Delete"
 msgstr "Kustuta"
 
@@ -294,7 +294,7 @@ msgstr "Otsing"
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:383 src/config/dialogs.c:361
 #: src/config/dialogs.c:532 src/cookies/dialogs.c:134
-#: src/dialogs/options.c:192 src/formhist/dialogs.c:147
+#: src/dialogs/options.c:192 src/formhist/dialogs.c:174
 #: src/globhist/dialogs.c:192 src/sched/download.c:961
 #: src/sched/download.c:997
 msgid "Save"
@@ -2853,7 +2853,7 @@ msgid "Dialog text colors."
 msgstr ""
 
 #: src/config/options.inc:1116 src/config/options.inc:1561
-#: src/viewer/text/link.c:1090
+#: src/viewer/text/link.c:1092
 msgid "Checkbox"
 msgstr "Märkeruut"
 
@@ -2887,7 +2887,7 @@ msgid "Dialog selected button colors."
 msgstr ""
 
 #: src/config/options.inc:1164 src/config/options.inc:1609
-#: src/viewer/text/link.c:1096
+#: src/viewer/text/link.c:1098
 msgid "Text field"
 msgstr "Tekstiväli"
 
@@ -3671,8 +3671,8 @@ msgstr ""
 msgid "unknown"
 msgstr "Tundmatu tüüp"
 
-#: src/cookies/dialogs.c:133 src/dialogs/download.c:419 src/dialogs/edit.c:100
-#: src/formhist/dialogs.c:146 src/globhist/dialogs.c:189
+#: src/cookies/dialogs.c:133 src/dialogs/download.c:414 src/dialogs/edit.c:100
+#: src/formhist/dialogs.c:173 src/globhist/dialogs.c:189
 msgid "Clear"
 msgstr ""
 
@@ -3690,7 +3690,7 @@ msgstr "Sisesta kasutajanimi "
 msgid "HTTP Authentication"
 msgstr ""
 
-#: src/dialogs/auth.c:74 src/formhist/dialogs.c:142
+#: src/dialogs/auth.c:74 src/formhist/dialogs.c:169
 msgid "Login"
 msgstr "Kasutaja ID"
 
@@ -3748,29 +3748,29 @@ msgstr "Päise info"
 msgid "No header info."
 msgstr ""
 
-#: src/dialogs/download.c:240 src/dialogs/menu.c:606 src/sched/download.c:277
+#: src/dialogs/download.c:237 src/dialogs/menu.c:643 src/sched/download.c:277
 msgid "Download"
 msgstr "Alla laadimine"
 
-#: src/dialogs/download.c:247
+#: src/dialogs/download.c:244
 msgid "Background"
 msgstr "Taustale"
 
-#: src/dialogs/download.c:248
+#: src/dialogs/download.c:245
 msgid "Background with notify"
 msgstr ""
 
-#: src/dialogs/download.c:249 src/dialogs/download.c:414
+#: src/dialogs/download.c:246 src/dialogs/download.c:409
 msgid "Abort"
 msgstr "Katkestamine"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:250 src/dialogs/download.c:417
+#: src/dialogs/download.c:247 src/dialogs/download.c:412
 #, fuzzy
 msgid "Abort and delete file"
 msgstr "Viga faili kirjutamisel"
 
-#: src/dialogs/download.c:423
+#: src/dialogs/download.c:418
 #, fuzzy
 msgid "Download manager"
 msgstr "Laadi alla pilt"
@@ -3834,306 +3834,315 @@ msgstr "baiti mälust kasutatud"
 msgid "Memory info"
 msgstr "Info kasutatud mälu kohta"
 
-#: src/dialogs/menu.c:106 src/dialogs/menu.c:441
-msgid "Nex~t tab"
-msgstr ""
-
-#: src/dialogs/menu.c:109 src/dialogs/menu.c:442
-#, fuzzy
-msgid "Pre~v tab"
-msgstr "Eelnev otsing puudub"
-
-#: src/dialogs/menu.c:113 src/dialogs/menu.c:443
-#, fuzzy
-msgid "~Close tab"
-msgstr "Sulge"
-
-#: src/dialogs/menu.c:117
-msgid "Close ~all but this"
-msgstr ""
-
-#: src/dialogs/menu.c:199
+#: src/dialogs/menu.c:173
 msgid "Exit ELinks"
 msgstr "Välju Linksist"
 
-#: src/dialogs/menu.c:201
+#: src/dialogs/menu.c:175
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
 msgstr "Kas te tõesti tahate väljuda Linksist?"
 
-#: src/dialogs/menu.c:203
+#: src/dialogs/menu.c:177
 msgid "Do you really want to exit ELinks?"
 msgstr "Kas te tõesti tahate väljuda Linksist?"
 
-#: src/dialogs/menu.c:239
+#: src/dialogs/menu.c:213
 msgid "No history"
 msgstr "Ajalugu puudub"
 
-#: src/dialogs/menu.c:334
-#, fuzzy
-msgid "Open new ~tab"
-msgstr "Ava uues aknas"
-
-#: src/dialogs/menu.c:335
-#, fuzzy
-msgid "Open new tab in backgroun~d"
-msgstr "Taustale"
-
-#: src/dialogs/menu.c:337
-msgid "~Go to URL"
-msgstr "Ava URL"
-
-#: src/dialogs/menu.c:338
+#: src/dialogs/menu.c:322 src/dialogs/menu.c:374
 msgid "Go ~back"
 msgstr "Tagasi minek"
 
-#: src/dialogs/menu.c:339
-msgid "~Reload"
-msgstr "Laadi uuesti"
+#: src/dialogs/menu.c:325
+msgid "Go forward"
+msgstr ""
 
-#: src/dialogs/menu.c:340
-msgid "~History"
-msgstr "Ajalugu"
-
-#: src/dialogs/menu.c:341
-#, fuzzy
-msgid "~Unhistory"
-msgstr "Ajalugu"
-
-#: src/dialogs/menu.c:346
-#, fuzzy
-msgid "~Save as"
-msgstr "Sal~vesta"
-
-#: src/dialogs/menu.c:347
-#, fuzzy
-msgid "Save UR~L as"
-msgstr "Salvesta ~URL"
-
-#: src/dialogs/menu.c:348
-msgid "Save formatted ~document"
-msgstr "Salvesta vormindatu~d lehekülg"
-
-#: src/dialogs/menu.c:350
+#: src/dialogs/menu.c:331 src/dialogs/menu.c:387
 #, fuzzy
 msgid "Bookm~ark document"
 msgstr "documents"
 
-#: src/dialogs/menu.c:356
+#: src/dialogs/menu.c:335 src/dialogs/menu.c:376
+msgid "~Reload"
+msgstr "Laadi uuesti"
+
+#: src/dialogs/menu.c:339 src/dialogs/menu.c:476
+msgid "Frame at ~full-screen"
+msgstr "Paan täisekraanil"
+
+#: src/dialogs/menu.c:346 src/dialogs/menu.c:478
+msgid "Nex~t tab"
+msgstr ""
+
+#: src/dialogs/menu.c:349 src/dialogs/menu.c:479
+#, fuzzy
+msgid "Pre~v tab"
+msgstr "Eelnev otsing puudub"
+
+#: src/dialogs/menu.c:353 src/dialogs/menu.c:480
+#, fuzzy
+msgid "~Close tab"
+msgstr "Sulge"
+
+#: src/dialogs/menu.c:357
+msgid "Close ~all but this"
+msgstr ""
+
+#: src/dialogs/menu.c:370
+#, fuzzy
+msgid "Open new ~tab"
+msgstr "Ava uues aknas"
+
+#: src/dialogs/menu.c:371
+#, fuzzy
+msgid "Open new tab in backgroun~d"
+msgstr "Taustale"
+
+#: src/dialogs/menu.c:373
+msgid "~Go to URL"
+msgstr "Ava URL"
+
+#: src/dialogs/menu.c:375
+msgid "Go ~forward"
+msgstr ""
+
+#: src/dialogs/menu.c:377
+msgid "~History"
+msgstr "Ajalugu"
+
+#: src/dialogs/menu.c:378
+#, fuzzy
+msgid "~Unhistory"
+msgstr "Ajalugu"
+
+#: src/dialogs/menu.c:383
+#, fuzzy
+msgid "~Save as"
+msgstr "Sal~vesta"
+
+#: src/dialogs/menu.c:384
+#, fuzzy
+msgid "Save UR~L as"
+msgstr "Salvesta ~URL"
+
+#: src/dialogs/menu.c:385
+#, fuzzy
+msgid "Sa~ve formatted document"
+msgstr "Salvesta vormindatu~d lehekülg"
+
+#: src/dialogs/menu.c:393
 #, fuzzy
 msgid "~Kill background connections"
 msgstr "Eemalda taustaühendused"
 
-#: src/dialogs/menu.c:357
+#: src/dialogs/menu.c:394
 #, fuzzy
 msgid "Flush all ~caches"
 msgstr "Tühjenda mälupuhver"
 
-#: src/dialogs/menu.c:358
+#: src/dialogs/menu.c:395
 #, fuzzy
 msgid "Resource ~info"
 msgstr "~Info kasutatud ressurssidest"
 
-#: src/dialogs/menu.c:360
+#: src/dialogs/menu.c:397
 msgid "~Memory info"
 msgstr "Info kasutatud ~mälu kohta"
 
-#: src/dialogs/menu.c:367
+#: src/dialogs/menu.c:404
 msgid "E~xit"
 msgstr "Väljumine"
 
-#: src/dialogs/menu.c:386
+#: src/dialogs/menu.c:423
 msgid "~New window"
 msgstr "Uus ake~n"
 
-#: src/dialogs/menu.c:405
+#: src/dialogs/menu.c:442
 msgid "~OS shell"
 msgstr "~Opsüsteemi käsurida"
 
-#: src/dialogs/menu.c:412
+#: src/dialogs/menu.c:449
 #, fuzzy
 msgid "Resize t~erminal"
 msgstr "Muuda ~terminali suurus"
 
-#: src/dialogs/menu.c:428
+#: src/dialogs/menu.c:465
 msgid "~Search"
 msgstr "Ot~sing"
 
-#: src/dialogs/menu.c:429
+#: src/dialogs/menu.c:466
 msgid "Search ~backward"
 msgstr "Tagurpidi otsing"
 
-#: src/dialogs/menu.c:430
+#: src/dialogs/menu.c:467
 msgid "Find ~next"
 msgstr "Leia järgmi~ne vaste"
 
-#: src/dialogs/menu.c:431
+#: src/dialogs/menu.c:468
 msgid "Find ~previous"
 msgstr "Leia eelmine vaste"
 
-#: src/dialogs/menu.c:433
+#: src/dialogs/menu.c:470
 msgid "Toggle ~html/plain"
 msgstr "Vaata ~html lähtekoodi"
 
-#: src/dialogs/menu.c:434
+#: src/dialogs/menu.c:471
 #, fuzzy
 msgid "Toggle i~mages"
 msgstr "Vaata ~html lähtekoodi"
 
-#: src/dialogs/menu.c:435
+#: src/dialogs/menu.c:472
 #, fuzzy
 msgid "Toggle ~link numbering"
 msgstr "Sisesta lingi number"
 
-#: src/dialogs/menu.c:436
+#: src/dialogs/menu.c:473
 msgid "Toggle ~document colors"
 msgstr ""
 
-#: src/dialogs/menu.c:437
+#: src/dialogs/menu.c:474
 msgid "Document ~info"
 msgstr "Lehekülje ~info"
 
-#: src/dialogs/menu.c:438
+#: src/dialogs/menu.c:475
 msgid "H~eader info"
 msgstr "Päise info"
 
-#: src/dialogs/menu.c:439
-msgid "Frame at ~full-screen"
-msgstr "Paan täisekraanil"
-
-#: src/dialogs/menu.c:449
+#: src/dialogs/menu.c:486
 msgid "~ELinks homepage"
 msgstr ""
 
-#: src/dialogs/menu.c:450
+#: src/dialogs/menu.c:487
 #, fuzzy
 msgid "~Documentation"
 msgstr "Lehekülje ~info"
 
-#: src/dialogs/menu.c:451
+#: src/dialogs/menu.c:488
 msgid "~Keys"
 msgstr "~Klahvid"
 
-#: src/dialogs/menu.c:454
+#: src/dialogs/menu.c:491
 msgid "~Bugs information"
 msgstr ""
 
-#: src/dialogs/menu.c:455
+#: src/dialogs/menu.c:492
 msgid "~ELinks CvsWeb"
 msgstr ""
 
-#: src/dialogs/menu.c:458
+#: src/dialogs/menu.c:495
 msgid "~Copying"
 msgstr "Kopeerimisõigused"
 
-#: src/dialogs/menu.c:459
+#: src/dialogs/menu.c:496
 msgid "~About"
 msgstr "Programmi koht~a"
 
-#: src/dialogs/menu.c:465
+#: src/dialogs/menu.c:502
 msgid "~Add"
 msgstr "Lis~a"
 
-#: src/dialogs/menu.c:466
+#: src/dialogs/menu.c:503
 msgid "~Modify"
 msgstr "~Muuda"
 
-#: src/dialogs/menu.c:467
+#: src/dialogs/menu.c:504
 msgid "~Delete"
 msgstr "Kustuta"
 
-#: src/dialogs/menu.c:479 src/dialogs/menu.c:492
+#: src/dialogs/menu.c:516 src/dialogs/menu.c:529
 msgid "~Language"
 msgstr "Kee~l"
 
-#: src/dialogs/menu.c:481 src/dialogs/menu.c:493
+#: src/dialogs/menu.c:518 src/dialogs/menu.c:530
 msgid "C~haracter set"
 msgstr "Kooditabel"
 
-#: src/dialogs/menu.c:482 src/dialogs/menu.c:494
+#: src/dialogs/menu.c:519 src/dialogs/menu.c:531
 msgid "~Terminal options"
 msgstr "~Terminali seaded"
 
-#: src/dialogs/menu.c:483
+#: src/dialogs/menu.c:520
 msgid "File ~extensions"
 msgstr "Faililai~endid"
 
-#: src/dialogs/menu.c:485
+#: src/dialogs/menu.c:522
 msgid "~Options manager"
 msgstr ""
 
-#: src/dialogs/menu.c:486
+#: src/dialogs/menu.c:523
 msgid "~Keybinding manager"
 msgstr ""
 
-#: src/dialogs/menu.c:487
+#: src/dialogs/menu.c:524
 msgid "~Save options"
 msgstr "~Salvesta parameetrid"
 
-#: src/dialogs/menu.c:500
+#: src/dialogs/menu.c:537
 #, fuzzy
 msgid "Global ~history"
 msgstr "Ajalugu puudub"
 
-#: src/dialogs/menu.c:503
+#: src/dialogs/menu.c:540
 #, fuzzy
 msgid "~Bookmarks"
 msgstr "Järjehoidjad"
 
-#: src/dialogs/menu.c:505
+#: src/dialogs/menu.c:542
 #, fuzzy
 msgid "~Cache"
 msgstr "Tühista"
 
-#: src/dialogs/menu.c:506
+#: src/dialogs/menu.c:543
 msgid "~Downloads"
 msgstr "Allalaa~dimised"
 
-#: src/dialogs/menu.c:508
+#: src/dialogs/menu.c:545
 msgid "Coo~kies"
 msgstr ""
 
-#: src/dialogs/menu.c:511
+#: src/dialogs/menu.c:548
 #, fuzzy
 msgid "~Form history"
 msgstr "Mälu otsas"
 
-#: src/dialogs/menu.c:544
+#: src/dialogs/menu.c:581
 msgid "~File"
 msgstr "~Fail"
 
-#: src/dialogs/menu.c:545
+#: src/dialogs/menu.c:582
 msgid "~View"
 msgstr "~Vaade"
 
-#: src/dialogs/menu.c:546
+#: src/dialogs/menu.c:583
 msgid "~Link"
 msgstr "~Link"
 
-#: src/dialogs/menu.c:547
+#: src/dialogs/menu.c:584
 msgid "~Tools"
 msgstr ""
 
-#: src/dialogs/menu.c:548
+#: src/dialogs/menu.c:585
 msgid "~Setup"
 msgstr "~Seadistus"
 
-#: src/dialogs/menu.c:549
+#: src/dialogs/menu.c:586
 msgid "~Help"
 msgstr "~Abi"
 
-#: src/dialogs/menu.c:564
+#: src/dialogs/menu.c:601
 msgid "Go to URL"
 msgstr "Ava URL"
 
-#: src/dialogs/menu.c:564 src/dialogs/menu.c:575
+#: src/dialogs/menu.c:601 src/dialogs/menu.c:612
 msgid "Enter URL"
 msgstr "Sisesta URL"
 
-#: src/dialogs/menu.c:575
+#: src/dialogs/menu.c:612
 msgid "Save URL"
 msgstr "Salvesta URL"
 
-#: src/dialogs/menu.c:606
+#: src/dialogs/menu.c:643
 msgid "Save to file"
 msgstr "Salvesta faili"
 
@@ -4285,11 +4294,11 @@ msgstr "Kulunud aeg"
 msgid "estimated time"
 msgstr "hinnatud aeg"
 
-#: src/dialogs/status.c:279
+#: src/dialogs/status.c:288
 msgid "Untitled"
 msgstr ""
 
-#: src/dialogs/status.c:281
+#: src/dialogs/status.c:290
 #, fuzzy
 msgid "No document"
 msgstr "documents"
@@ -4302,12 +4311,19 @@ msgstr ""
 msgid "Forms are saved for this URL."
 msgstr ""
 
-#: src/formhist/dialogs.c:145
+#: src/formhist/dialogs.c:131
+msgid ""
+"No saved information for this URL.\n"
+"If you want to save passwords for this URL, enable it by the \"Toggle saving"
+"\" button."
+msgstr ""
+
+#: src/formhist/dialogs.c:172
 #, fuzzy
 msgid "Toggle saving"
 msgstr "Vaata ~html lähtekoodi"
 
-#: src/formhist/dialogs.c:151
+#: src/formhist/dialogs.c:178
 #, fuzzy
 msgid "Form history manager"
 msgstr "Mälu otsas"
@@ -4753,7 +4769,6 @@ msgid "Dumb prefixes."
 msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:64
-#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -4778,7 +4793,7 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/protocol/rewrite/rewrite.c:243
+#: src/protocol/rewrite/rewrite.c:248
 msgid "URI rewrite"
 msgstr ""
 
@@ -5239,122 +5254,122 @@ msgstr "Järgi linki"
 msgid "Follow link and r~eload"
 msgstr ""
 
-#: src/viewer/text/link.c:916
+#: src/viewer/text/link.c:917
 msgid "Open in new ~window"
 msgstr "Ava uues aknas"
 
-#: src/viewer/text/link.c:921
+#: src/viewer/text/link.c:922
 #, fuzzy
 msgid "Open in new ~tab"
 msgstr "Ava uues aknas"
 
-#: src/viewer/text/link.c:924
+#: src/viewer/text/link.c:925
 #, fuzzy
 msgid "Open in new tab in ~background"
 msgstr "Taustale"
 
-#: src/viewer/text/link.c:928
+#: src/viewer/text/link.c:930
 msgid "~Download link"
 msgstr "Laadi alla link"
 
-#: src/viewer/text/link.c:932
+#: src/viewer/text/link.c:934
 msgid "~Add link to bookmarks"
 msgstr ""
 
-#: src/viewer/text/link.c:943 src/viewer/text/link.c:969
+#: src/viewer/text/link.c:945 src/viewer/text/link.c:971
 msgid "~Reset form"
 msgstr "Nulli vorm"
 
-#: src/viewer/text/link.c:949
+#: src/viewer/text/link.c:951
 msgid "Open in ~external editor"
 msgstr ""
 
-#: src/viewer/text/link.c:953
+#: src/viewer/text/link.c:955
 msgid "~Submit form"
 msgstr "E~sita vorm"
 
-#: src/viewer/text/link.c:956
+#: src/viewer/text/link.c:958
 msgid "Submit form and rel~oad"
 msgstr ""
 
-#: src/viewer/text/link.c:960
+#: src/viewer/text/link.c:962
 msgid "Submit form and open in new ~window"
 msgstr "Esita vorm ja ava uues aknas"
 
-#: src/viewer/text/link.c:966
+#: src/viewer/text/link.c:968
 msgid "Submit form and ~download"
 msgstr "Esita vorm ja laadi alla"
 
-#: src/viewer/text/link.c:975
+#: src/viewer/text/link.c:977
 msgid "V~iew image"
 msgstr "Nä~ita pilti"
 
-#: src/viewer/text/link.c:978
+#: src/viewer/text/link.c:980
 msgid "Download ima~ge"
 msgstr "Laadi alla pilt"
 
-#: src/viewer/text/link.c:984
+#: src/viewer/text/link.c:986
 msgid "No link selected"
 msgstr "Link pole valitud"
 
-#: src/viewer/text/link.c:1036
+#: src/viewer/text/link.c:1038
 msgid "Image"
 msgstr "Pilt"
 
-#: src/viewer/text/link.c:1042
+#: src/viewer/text/link.c:1044
 msgid "Usemap"
 msgstr "Usemap"
 
-#: src/viewer/text/link.c:1062
+#: src/viewer/text/link.c:1064
 #, fuzzy
 msgid "Reset form"
 msgstr "Nulli vorm"
 
-#: src/viewer/text/link.c:1069
+#: src/viewer/text/link.c:1071
 msgid "Submit form to"
 msgstr "Esita vorm"
 
-#: src/viewer/text/link.c:1071
+#: src/viewer/text/link.c:1073
 msgid "Post form to"
 msgstr "Postita vorm"
 
-#: src/viewer/text/link.c:1087
+#: src/viewer/text/link.c:1089
 msgid "Radio button"
 msgstr "Raadio nupp"
 
-#: src/viewer/text/link.c:1093
+#: src/viewer/text/link.c:1095
 msgid "Select field"
 msgstr "Märgista väli"
 
-#: src/viewer/text/link.c:1099
+#: src/viewer/text/link.c:1101
 msgid "Text area"
 msgstr "Teksti ala"
 
-#: src/viewer/text/link.c:1102
+#: src/viewer/text/link.c:1104
 msgid "File upload"
 msgstr "Faili üles laadimine"
 
-#: src/viewer/text/link.c:1105
+#: src/viewer/text/link.c:1107
 msgid "Password field"
 msgstr "Parooliväli"
 
-#: src/viewer/text/link.c:1114
+#: src/viewer/text/link.c:1116
 msgid "name"
 msgstr "nimi"
 
-#: src/viewer/text/link.c:1124
+#: src/viewer/text/link.c:1126
 msgid "value"
 msgstr "väärtus"
 
-#: src/viewer/text/link.c:1133
+#: src/viewer/text/link.c:1135
 msgid "hit ENTER to"
 msgstr "vajuta ENTER et"
 
-#: src/viewer/text/link.c:1136
+#: src/viewer/text/link.c:1138
 msgid "submit to"
 msgstr "järgi"
 
-#: src/viewer/text/link.c:1138
+#: src/viewer/text/link.c:1140
 msgid "post to"
 msgstr "postita"
 
@@ -5416,13 +5431,16 @@ msgstr "Mine lingile"
 msgid "Enter link number"
 msgstr "Sisesta lingi number"
 
-#: src/viewer/text/view.c:1493
+#: src/viewer/text/view.c:1495
 msgid "Save error"
 msgstr "Salvestamise viga"
 
-#: src/viewer/text/view.c:1494
+#: src/viewer/text/view.c:1496
 msgid "Error writing to file"
 msgstr "Viga faili kirjutamisel"
+
+#~ msgid "Save formatted ~document"
+#~ msgstr "Salvesta vormindatu~d lehekülg"
 
 #, fuzzy
 #~ msgid "Stop"

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.72 2004/04/24 00:51:10 jonas Exp $ */
+/* $Id: cmdline.c,v 1.73 2004/04/24 01:05:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,8 +190,23 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 static unsigned char *
 remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
+	struct {
+		unsigned char *name;
+		enum {
+			REMOTE_METHOD_OPENURL,
+			REMOTE_METHOD_PING,
+			REMOTE_METHOD_XFEDOCOMMAND,
+			REMOTE_METHOD_NOT_SUPPORTED,
+		} type;
+	} remote_methods[] = {
+		{ "openURL",	  REMOTE_METHOD_OPENURL },
+		{ "mailto",	  REMOTE_METHOD_NOT_SUPPORTED },
+		{ "ping",	  REMOTE_METHOD_PING },
+		{ "xfeDoCommand", REMOTE_METHOD_XFEDOCOMMAND },
+		{ NULL,		  REMOTE_METHOD_NOT_SUPPORTED },
+	};
 	unsigned char *command, *arg, *argend = NULL;
-	int len = 0;
+	int method, len = 0;
 
 	if (*argc < 1) return gettext("Parameter expected");
 
@@ -216,7 +231,16 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	skipback_whitespace(arg, argend);
 
-	if (!strlcasecmp(command, len, "openURL", 7)) {
+	for (method = 0; remote_methods[method].name; method++) {
+		unsigned char *name = remote_methods[method].name;
+
+		if (!strlcasecmp(command, len, name, -1))
+			break;
+	}
+
+	switch (remote_methods[method].type) {
+	case REMOTE_METHOD_OPENURL:
+	{
 		unsigned char *comma = memchr(arg, ',', argend - arg);
 
 		if (arg == argend) {
@@ -247,12 +271,9 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 			remote_session_flags |= SES_REMOTE_CURRENT_TAB;
 			remote_url = memacpy(arg, argend - arg);
 		}
-
-	} else if (!strlcasecmp(command, len, "mailto", 6)) {
-		/* Ehh .. start porting mutt code! */
-		return gettext("Command not supported");
-
-	} else if (!strlcasecmp(command, len, "xfeDoCommand", 12)) {
+		break;
+	}
+	case REMOTE_METHOD_XFEDOCOMMAND:
 		len = argend - arg;
 
 		if (!strlcasecmp(arg, len, "openBrowser", 11)) {
@@ -261,10 +282,11 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 			return gettext("Remote method not supported");
 		}
 
-	} else if (!strlcasecmp(command, len, "ping", 4)) {
+	case REMOTE_METHOD_PING:
 		remote_session_flags = SES_REMOTE_PING;
+		break;
 
-	} else {
+	case REMOTE_METHOD_NOT_SUPPORTED:
 		return gettext("Remote method not supported");
 	}
 

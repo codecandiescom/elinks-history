@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.19 2004/08/21 15:16:47 jonas Exp $ */
+/* $Id: generic.h,v 1.20 2004/12/29 14:39:03 jonas Exp $ */
 
 /* This is... er, the OS-independent part of osdep/ ;-). */
 
@@ -33,11 +33,6 @@
 /* XXX: We could use util/types.h to determine something useful? --pasky */
 #define LONG_MAX 0x7fffffff
 #endif
-#endif
-
-/* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
-#ifndef offsetof
-#define offsetof(type, ident) ((size_t) &(((type *) 0)->ident))
 #endif
 
 #ifndef SA_RESTART
@@ -88,5 +83,16 @@ safe_write(int fd, const void *buf, size_t count) {
 
 #endif /* EINTR */
 
+
+/* Compiler area: */
+
+/* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
+#ifndef offsetof
+#define offsetof(type, ident) ((size_t) &(((type *) 0)->ident))
+#endif
+
+/* This structs copying is faster than memcpy(value1, value2, sizeof(value1)).
+ * Please, use this macro to improve readability. */
+#define copy_struct(value1, value2) *(value1) = *(value2);
 
 #endif

@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.45 2004/10/13 15:34:46 zas Exp $ */
+/* $Id: stylesheet.c,v 1.46 2004/12/29 14:39:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ add_selector_properties(struct css_selector *selector,
 		newprop = mem_calloc(1, sizeof(struct css_property));
 		if (!newprop)
 			continue;
-		*newprop = *prop;
+		copy_struct(newprop, prop);
 		add_to_list(selector->properties, newprop);
 	}
 }
@@ -165,7 +165,7 @@ merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2)
 		origprop = mem_calloc(1, sizeof(struct css_property));
 		if (!origprop)
 			continue;
-		*origprop = *prop;
+		copy_struct(origprop, prop);
 		add_to_list(sel1->properties, origprop);
 	}
 }

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.10 2003/12/13 05:22:47 miciah Exp $ */
+/* $Id: task.c,v 1.11 2003/12/13 05:29:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -520,23 +520,22 @@ static void
 follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	   enum task_type task, enum cache_mode cache_mode, int referrer)
 {
-	unsigned char *new_url = url;
 #ifdef HAVE_SCRIPTING
 	static int follow_url_event_id = EVENT_NONE;
 
-	new_url = stracpy(url);
-	if (!new_url) return;
+	url = stracpy(url);
+	if (!url) return;
 
 	set_event_id(follow_url_event_id, "follow-url");
-	trigger_event(follow_url_event_id, &new_url, ses);
-	if (!new_url) return;
+	trigger_event(follow_url_event_id, &url, ses);
+	if (!url) return;
 #endif
 
-	if (*new_url)
-		do_follow_url(ses, new_url, target, task, cache_mode, referrer);
+	if (*url)
+		do_follow_url(ses, url, target, task, cache_mode, referrer);
 
 #ifdef HAVE_SCRIPTING
-	mem_free(new_url);
+	mem_free(url);
 #endif
 }
 
@@ -569,22 +568,21 @@ goto_url(struct session *ses, unsigned char *url)
 void
 goto_url_with_hook(struct session *ses, unsigned char *url)
 {
-	unsigned char *new_url = url;
 #if defined(HAVE_SCRIPTING) || defined(URI_REWRITE)
 	static int goto_url_event_id = EVENT_NONE;
 
-	new_url = stracpy(url);
-	if (!new_url) return;
+	url = stracpy(url);
+	if (!url) return;
 
 	set_event_id(goto_url_event_id, "goto-url");
-	trigger_event(goto_url_event_id, &new_url, ses);
-	if (!new_url) return;
+	trigger_event(goto_url_event_id, &url, ses);
+	if (!url) return;
 #endif
 
-	if (*new_url) goto_url(ses, new_url);
+	if (*url) goto_url(ses, url);
 
 #if defined(HAVE_SCRIPTING) || defined(URI_REWRITE)
-	mem_free(new_url);
+	mem_free(url);
 #endif
 }
 

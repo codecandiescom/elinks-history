@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.7 2004/04/24 14:39:13 pasky Exp $ */
+/* $Id: internal.h,v 1.8 2004/06/22 21:39:01 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -25,7 +25,12 @@ void ln_break(int n, void (*line_break)(void *), void *f);
 void process_head(unsigned char *head);
 void put_chrs(unsigned char *start, int len, void (*put_chars)(void *, unsigned char *, int), void *f);
 
-extern unsigned char *eoff;
+struct html_context {
+	unsigned char *eoff;
+};
+
+extern struct html_context html_context;
+
 extern int line_breax;
 extern int position;
 extern int putsp;

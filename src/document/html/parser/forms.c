@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.21 2004/06/18 13:55:45 jonas Exp $ */
+/* $Id: forms.c,v 1.22 2004/06/22 21:39:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,15 +404,15 @@ html_option(unsigned char *a)
 		for (p = a - 1; *p != '<'; p--);
 
 		if (!init_string(&str)) goto end_parse;
-		if (parse_element(p, eoff, NULL, NULL, NULL, &p)) {
+		if (parse_element(p, html_context.eoff, NULL, NULL, NULL, &p)) {
 			INTERNAL("parse element failed");
 			val = str.source;
 			goto end_parse;
 		}
 
 se:
-		while (p < eoff && isspace(*p)) p++;
-		while (p < eoff && !isspace(*p) && *p != '<') {
+		while (p < html_context.eoff && isspace(*p)) p++;
+		while (p < html_context.eoff && !isspace(*p) && *p != '<') {
 
 sp:
 			add_char_to_string(&str, *p), p++;
@@ -421,13 +421,13 @@ sp:
 		r = p;
 		val = str.source; /* Has to be before the possible 'goto end_parse' */
 
-		while (r < eoff && isspace(*r)) r++;
-		if (r >= eoff) goto end_parse;
-		if (r - 2 <= eoff && (r[1] == '!' || r[1] == '?')) {
-			p = skip_comment(r, eoff);
+		while (r < html_context.eoff && isspace(*r)) r++;
+		if (r >= html_context.eoff) goto end_parse;
+		if (r - 2 <= html_context.eoff && (r[1] == '!' || r[1] == '?')) {
+			p = skip_comment(r, html_context.eoff);
 			goto se;
 		}
-		if (parse_element(r, eoff, &name, &namelen, NULL, &p)) goto sp;
+		if (parse_element(r, html_context.eoff, &name, &namelen, NULL, &p)) goto sp;
 		if (strlcasecmp(name, namelen, "OPTION", 6)
 		    && strlcasecmp(name, namelen, "/OPTION", 7)
 		    && strlcasecmp(name, namelen, "SELECT", 6)

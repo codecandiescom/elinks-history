@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.17 2002/06/20 11:05:32 pasky Exp $ */
+/* $Id: options.c,v 1.18 2002/06/21 13:35:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -520,7 +520,7 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 	d->items[7].dlen = sizeof(int);
 
 	d->items[8].type = D_CHECKBOX;
-	d->items[8].data = (unsigned char *) get_opt_ptr("document.download.download_utime");
+	d->items[8].data = (unsigned char *) get_opt_ptr("document.download.set_original_time");
 	d->items[8].dlen = sizeof(int);
 
 	d->items[9].type = D_BUTTON;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.19 2002/06/20 10:11:17 pasky Exp $ */
+/* $Id: download.c,v 1.20 2002/06/21 13:35:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -487,7 +487,7 @@ end_store:
 				mem_free(down->prog);
 				down->prog = NULL;
 
-			} else if (down->remotetime && get_opt_int("document.download.download_utime")) {
+			} else if (down->remotetime && get_opt_int("document.download.set_original_time")) {
 				struct utimbuf foo;
 
 				foo.actime = foo.modtime = down->remotetime;
@@ -512,7 +512,7 @@ end_store:
 int
 create_download_file(struct terminal *term, unsigned char *fi, int safe)
 {
-	unsigned char *download_dir = get_opt_str("document.download.download_dir");
+	unsigned char *download_dir = get_opt_str("document.download.directory");
 	unsigned char *file = fi;
 	unsigned char *wd;
 	int h;

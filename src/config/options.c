@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.53 2002/06/20 11:08:14 pasky Exp $ */
+/* $Id: options.c,v 1.54 2002/06/21 13:35:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -669,11 +669,11 @@ register_options()
 		"document).");
 
 	add_opt_string("document.download",
-		"download_dir", 0, "./",
+		"directory", 0, "./",
 		"Default download directory.");
 
 	add_opt_bool("document.download",
-		"download_utime", 0, 0,
+		"set_original_time", 0, 0,
 		"Set time of downloaded files accordingly to one stored on server.");
 
 

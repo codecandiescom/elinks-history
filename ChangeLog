@@ -1,3 +1,69 @@
+Thu Nov 28 22:51:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Let the lifeboats take less space.  
+
+Thu Nov 28 22:45:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memory.c:
+
+	Cleanups of the patience code, compilation fixes (thanks, Dmitry).
+	Here is the patience of the saints: here are they that keep the
+	commandments of God, and the faith of Jesus. --Rev14:12 
+
+Thu Nov 28 20:53:12 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Cleanups. An issue with backward/forward history menu was (perhaps)
+	fixed.  
+
+Thu Nov 28 15:22:40 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/user.c:
+
+	An untested return value is now tested.  
+
+Thu Nov 28 15:14:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mime.c:
+
+	Cleanup.  
+
+Thu Nov 28 13:45:22 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	{} aliases to [] and x alias to ctrl+enter, coming from lynx by
+	courtesy of José Luis González González <jlg80@mi.madritel.es>.  
+
+Thu Nov 28 13:42:47 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/options.c:
+
+	Minor optimization by tests reordering.  
+
+Thu Nov 28 13:39:08 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/view.c:
+
+	Cleanups, code redundancy was reduced, more return values are
+	tested.  
+
+Thu Nov 28 11:40:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/terminal.c, document/html/renderer.c:
+
+	Optimizations and cleanups.  
+
+Thu Nov 28 11:26:24 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/dump.c:
+
+	Fixed compilation failure on NetBSD 1.6D, thanks to John Fouhy
+	<John.Fouhy@mcs.vuw.ac.nz> for a report.  
+
 Wed Nov 27 17:46:56 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/session.c:

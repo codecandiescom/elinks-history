@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.84 2004/07/22 17:25:23 pasky Exp $ */
+/* $Id: socket.c,v 1.85 2004/07/28 03:36:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -611,7 +611,7 @@ read_select(struct connection *conn)
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
-		rb->freespace = size - sizeof(struct read_buffer);
+		rb->freespace = size - sizeof(struct read_buffer) - rb->len;
 		assert(rb->freespace > 0);
 		conn->buffer = rb;
 	}

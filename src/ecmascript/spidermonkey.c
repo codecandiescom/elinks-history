@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.139 2004/12/19 14:31:34 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.140 2004/12/19 14:49:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2203,4 +2203,30 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 	if (!v.string) return NULL;
 
 	return stracpy(v.string);
+}
+
+
+int
+spidermonkey_eval_boolback(struct ecmascript_interpreter *interpreter,
+			   struct string *code)
+{
+	JSContext *ctx;
+	jsval rval;
+	union jsval_union v;
+
+	assert(interpreter);
+	ctx = interpreter->backend_data;
+	setup_safeguard(interpreter, ctx);
+	if (JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
+			      code->source, code->length, "", 0, &rval)
+	    == JS_FALSE) {
+		return -1;
+	}
+	if (JSVAL_IS_VOID(rval)) {
+		/* Undefined value. */
+		return -1;
+	}
+
+	JSVAL_REQUIRE(&rval, BOOLEAN);
+	return v.boolean;
 }

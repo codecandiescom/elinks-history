@@ -1,4 +1,4 @@
-/* $Id: ecmascript.h,v 1.9 2004/12/16 23:48:43 pasky Exp $ */
+/* $Id: ecmascript.h,v 1.10 2004/12/19 14:49:26 pasky Exp $ */
 
 #ifndef EL__ECMASCRIPT_ECMASCRIPT_H
 #define EL__ECMASCRIPT_ECMASCRIPT_H
@@ -58,6 +58,8 @@ void ecmascript_reset_state(struct view_state *vs);
 
 void ecmascript_eval(struct ecmascript_interpreter *interpreter, struct string *code);
 unsigned char *ecmascript_eval_stringback(struct ecmascript_interpreter *interpreter, struct string *code);
+/* Returns -1 if undefined. */
+int ecmascript_eval_boolback(struct ecmascript_interpreter *interpreter, struct string *code);
 
 /* Takes line with the syntax javascript:<ecmascript code>. Activated when user
  * follows a link with this synstax. */

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.304 2004/12/18 01:42:19 pasky Exp $ */
+/* $Id: link.c,v 1.305 2004/12/19 14:49:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@
  * --pasky */
 
 
-static void
+static int
 current_link_evhook(struct document_view *doc_view, enum script_event_hook_type type)
 {
 #ifdef CONFIG_ECMASCRIPT
@@ -69,8 +69,11 @@ current_link_evhook(struct document_view *doc_view, enum script_event_hook_type 
 
 		if (evhook->type != type) continue;
 		/* TODO: Some even handlers return a bool. */
-		ecmascript_eval(doc_view->vs->ecmascript, &src);
+		if (!ecmascript_eval_boolback(doc_view->vs->ecmascript, &src))
+			return 0;
 	}
+
+	return 1;
 #endif
 }
 
@@ -893,8 +896,8 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 	link = get_current_link(doc_view);
 	if (!link) return FRAME_EVENT_REFRESH;
 
-	/* XXX: If the script returns false, we shall not proceed. */
-	current_link_evhook(doc_view, SEVHOOK_ONCLICK);
+	if (!current_link_evhook(doc_view, SEVHOOK_ONCLICK))
+		return FRAME_EVENT_REFRESH;
 
 	if (!link_is_form(link)
 	    || link_is_textinput(link)

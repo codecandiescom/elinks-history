@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.210 2003/12/05 08:38:53 zas Exp $ */
+/* $Id: http.c,v 1.211 2003/12/05 18:02:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@
 static void uncompress_shutdown(struct connection *);
 
 
-static unsigned char *
+unsigned char *
 subst_user_agent(unsigned char *fmt, unsigned char *version,
 		 unsigned char *sysname, unsigned char *termsize)
 {

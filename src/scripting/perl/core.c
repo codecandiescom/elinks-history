@@ -1,5 +1,5 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.4 2004/04/21 08:59:29 zas Exp $ */
+/* $Id: core.c,v 1.5 2004/04/21 09:07:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,9 +26,8 @@ extern char **environ;
 static char *
 get_global_hook_file(void)
 {
-	static char buf[256];
-
-	snprintf(buf, 256, "%s/%s", CONFDIR, PERL_HOOKS_FILENAME);
+	static char buf[] = CONFDIR "/" PERL_HOOKS_FILENAME;
+	
 	if (file_exists(buf)) return buf;
 	return NULL;
 }

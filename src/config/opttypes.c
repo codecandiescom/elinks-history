@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.77 2004/01/17 14:18:14 pasky Exp $ */
+/* $Id: opttypes.c,v 1.78 2004/02/06 12:49:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,8 +329,6 @@ color_wr(struct option *opt, struct string *str)
 	}
 
 	add_optstring_to_string(str, strcolor, strlen(strcolor));
-
-	if (strcolor != hexcolor) mem_free(strcolor);
 }
 
 static void

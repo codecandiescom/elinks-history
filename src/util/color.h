@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.4 2004/01/17 00:11:03 pasky Exp $ */
+/* $Id: color.h,v 1.5 2004/02/06 12:49:55 jonas Exp $ */
 
 #ifndef EL__UTIL_COLOR_H
 #define EL__UTIL_COLOR_H
@@ -44,7 +44,7 @@ struct color_pair {
  * color names. */
 int decode_color(unsigned char *str, int slen, color_t *color);
 
-/* Returns an allocated string containing name of the @color or NULL if there's
+/* Returns a string containing name of the @color or NULL if there's
  * no name for that color. */
 unsigned char *get_color_name(color_t color);
 

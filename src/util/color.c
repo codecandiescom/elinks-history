@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.10 2004/02/06 12:47:31 jonas Exp $ */
+/* $Id: color.c,v 1.11 2004/02/06 12:49:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,7 +268,7 @@ get_color_name(color_t color)
 
 	for (cs = color_specs; cs->name; cs++)
 		if (cs->rgb == color)
-			return stracpy(cs->name);
+			return cs->name;
 
 	return NULL;
 }

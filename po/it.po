@@ -144,7 +144,7 @@ msgstr ""
 
 #: src/bookmarks/dialogs.c:408
 msgid "Delete marked bookmarks?"
-msgstr "Cancellare i segnalibri selezionati?"
+msgstr "Eliminare i segnalibri selezionati?"
 
 #: src/bookmarks/dialogs.c:410 src/bookmarks/dialogs.c:418
 #: src/bookmarks/dialogs.c:427 src/dialogs/menu.c:147 src/dialogs/mime.c:162
@@ -165,7 +165,7 @@ msgstr "No"
 #: src/bookmarks/dialogs.c:415
 #, c-format
 msgid "Delete content of folder \"%s\"?"
-msgstr "Cancellare il contenuto della cartella \"%s\"?"
+msgstr "Eliminare il contenuto della cartella \"%s\"?"
 
 #: src/bookmarks/dialogs.c:423
 #, c-format
@@ -174,7 +174,7 @@ msgid ""
 "\n"
 "URL: \"%s\""
 msgstr ""
-"Cancellare il bookmark \"%s\"?\n"
+"Eliminare il segnalibro\"%s\"?\n"
 "\n"
 "URL: \"%s\""
 
@@ -194,7 +194,7 @@ msgstr "Modifica"
 #: src/bookmarks/dialogs.c:623 src/config/dialogs.c:530
 #: src/config/dialogs.c:778 src/globhist/dialogs.c:482
 msgid "Delete"
-msgstr "Cancella"
+msgstr "Elimina"
 
 #: src/bookmarks/dialogs.c:628
 msgid "Move"
@@ -245,7 +245,7 @@ msgstr "Memoria esaurita"
 
 #: src/config/conf.c:679
 msgid "Cannot write the file"
-msgstr "Non posso scrivere il file"
+msgstr "Impossibile scrivere il file"
 
 #: src/config/conf.c:682
 msgid "Secure open failed"
@@ -345,16 +345,16 @@ msgstr "Non si può aggiungere un'opzione qui."
 
 #: src/config/dialogs.c:456 src/config/dialogs.c:470
 msgid "Delete option"
-msgstr "Cancella opzione"
+msgstr "Elimina opzione"
 
 #: src/config/dialogs.c:457
 msgid "Cannot delete this option."
-msgstr "Impossibile cancellare questa opzione."
+msgstr "Impossibile eliminare questa opzione."
 
 #: src/config/dialogs.c:471
 #, c-format
 msgid "Really delete the option \"%s\"?"
-msgstr "Cancellare veramente l'opzione \"%s\"?"
+msgstr "Eliminare veramente l'opzione \"%s\"?"
 
 #: src/config/dialogs.c:502
 msgid "Options manager"
@@ -401,7 +401,7 @@ msgstr "Combinazione di tasti"
 
 #: src/config/dialogs.c:718 src/config/dialogs.c:729
 msgid "Delete keybinding"
-msgstr "Cancella associazione di tasti"
+msgstr "Elimina associazione di tasti"
 
 #: src/config/dialogs.c:719
 msgid ""
@@ -415,7 +415,7 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Cancellare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
 "\"%s\")?"
 
 #: src/config/dialogs.c:762
@@ -480,7 +480,7 @@ msgstr "Copia testo nella clipboard"
 
 #: src/config/kbdbind.c:377
 msgid "Delete text from clipboard"
-msgstr "Cancella testo dalla clipboard"
+msgstr "Elimina testo dalla clipboard"
 
 #: src/config/kbdbind.c:378
 msgid "Delete character under cursor"
@@ -2549,8 +2549,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.c:1751
 msgid ""
@@ -3235,8 +3235,9 @@ msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
-"Azioni temporizzate dopo un certo intervallo di inattività dell'utente."
-"Qualcuno lo può trovare persino utile, anche se puoi non crederci."
+"Azioni temporizzate dopo un certo intervallo di inattività "
+"dell'utente.Qualcuno lo può trovare persino utile, anche se puoi non "
+"crederci."
 
 #: src/config/options.c:2698
 msgid ""
@@ -3555,7 +3556,7 @@ msgid ""
 msgstr ""
 "Esegui ELinks come un'istanza separata invece di connettersi a\n"
 "un'istanza esistente. Notare che normalmente nessun file di stato\n"
-"runtime (bookmark, storico e così via) viene scritto su disco\n"
+"runtime (segnalibri, storico e così via) viene scritto su disco\n"
 "quando si usa questa opzione. Si veda -touch-files."
 
 #: src/config/options.c:2877
@@ -3590,7 +3591,7 @@ msgid ""
 msgstr ""
 "ID della sessione al quale questa sessione di ELinks dovrebbe connettersi.\n"
 "ELinks funziona con quelle che chiamiamo sessioni, in cui tutte le istanze\n"
-"di ELinks sono interconnesse e condividono lo stato (cache, bookmarks, "
+"di ELinks sono interconnesse e condividono lo stato (cache, segnalibri, "
 "cookie,\n"
 "e così via). Per default tutte le istanze di elinks si connettono alla "
 "sessione 0.\n"
@@ -3646,8 +3647,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
-"storico, ...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
+"...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in connessione con una di queste opzioni."
 
@@ -4097,7 +4098,7 @@ msgstr "~Modifica"
 
 #: src/dialogs/menu.c:502
 msgid "~Delete"
-msgstr "Cancella"
+msgstr "~Elimina"
 
 #: src/dialogs/menu.c:514 src/dialogs/menu.c:527
 msgid "~Language"
@@ -4177,16 +4178,16 @@ msgstr "Estensione(i)"
 
 #: src/dialogs/mime.c:40
 msgid "Content-Type"
-msgstr "Tipo contenuto"
+msgstr "Content-Type"
 
 #: src/dialogs/mime.c:159
 msgid "Delete extension"
-msgstr "Cancella estensioni"
+msgstr "Cancella estensione"
 
 #: src/dialogs/mime.c:160
 #, c-format
 msgid "Delete extension %s?"
-msgstr "Cancella estensione %s?"
+msgstr "Eliminare estensione %s?"
 
 #: src/dialogs/mime.c:233
 msgid "Extension"
@@ -4300,7 +4301,7 @@ msgstr ""
 
 #: src/globhist/dialogs.c:326
 msgid "Delete marked history items?"
-msgstr "Cancella le voci di storico selezionate?"
+msgstr "Eliminare le voci di storico selezionate?"
 
 #: src/globhist/dialogs.c:335
 #, c-format
@@ -4309,7 +4310,7 @@ msgid ""
 "\n"
 "URL: \"%s\""
 msgstr ""
-"Cancellare la voce \"%s\" dallo storico?\n"
+"Eliminare la voce \"%s\" dallo storico?\n"
 "\n"
 "URL: \"%s\""
 
@@ -4508,7 +4509,7 @@ msgstr "Errore download"
 #: src/sched/download.c:530
 #, c-format
 msgid "Could not create file %s: %s"
-msgstr "Non posso creare il file %s: %s"
+msgstr "Impossibile creare il file %s: %s"
 
 #: src/sched/download.c:612
 #, c-format
@@ -4567,7 +4568,7 @@ msgid ""
 "Could not create file '%s':\n"
 "%s"
 msgstr ""
-"Non posso creare il file '%s':\n"
+"Impossibile creare il file '%s':\n"
 "%s"
 
 #: src/sched/download.c:1247 src/sched/download.c:1258
@@ -4685,7 +4686,7 @@ msgstr "La richiesta deve essere riavviata"
 
 #: src/sched/error.c:52
 msgid "Can't get socket state"
-msgstr "Non posso prendere lo stato della socket"
+msgstr "Impossibile ottenere lo stato del socket"
 
 #: src/sched/error.c:54
 msgid "Bad HTTP response"
@@ -4818,9 +4819,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -4828,9 +4829,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1677
 msgid "Unknown event."
@@ -4976,7 +4977,7 @@ msgstr "~Aggiungi collegamento ai segnalibri"
 
 #: src/viewer/text/link.c:874
 msgid "~Reset form"
-msgstr "Cancella fo~rm"
+msgstr "~Cancella fo~rm"
 
 #: src/viewer/text/link.c:879
 msgid "~Submit form"
@@ -5072,11 +5073,11 @@ msgstr "Nessuna ricerca precedente"
 
 #: src/viewer/text/search.c:856
 msgid "Search hit bottom, continuing at top."
-msgstr ""
+msgstr "La ricerca è arrivata alla fine, continuo dall'inizio."
 
 #: src/viewer/text/search.c:862
 msgid "Search hit top, continuing at bottom."
-msgstr ""
+msgstr "La ricerca è arrivata all'inizio, continuo alla fine."
 
 #: src/viewer/text/search.c:884
 #, c-format

@@ -1,4 +1,4 @@
-/* $Id: fastfind.h,v 1.12 2003/10/20 08:42:30 zas Exp $ */
+/* $Id: fastfind.h,v 1.13 2004/02/13 17:52:48 zas Exp $ */
 
 #ifndef EL__UTIL_FASTFIND_H
 #define EL__UTIL_FASTFIND_H
@@ -28,7 +28,7 @@ struct fastfind_key_value {
  * returns a handle to the allocated structure. */
 struct fastfind_info *fastfind_index(void (*reset)(void),
 		struct fastfind_key_value *(*next)(void),
-		int case_sensitive);
+		int case_sensitive, unsigned char *comment);
 
 /* This one should be called to minimize memory usage of index. */
 /* @fastfind_handle	is the handle created with fastfind_index(). */

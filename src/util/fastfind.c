@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.47 2003/10/20 08:42:30 zas Exp $ */
+/* $Id: fastfind.c,v 1.48 2004/02/13 17:52:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,16 +165,21 @@ struct fastfind_info {
 	int leafsets_count;
 
 #ifdef FASTFIND_DEBUG
-	unsigned long searches;
-	unsigned long found;
-	unsigned long itertmp;
-	unsigned long iterdelta;
-	unsigned long iterations;
-	unsigned long tests;
-	unsigned long teststmp;
-	unsigned long testsdelta;
-	unsigned long memory_usage;
-	unsigned long total_key_len;
+	struct {
+		unsigned long searches;
+		unsigned long found;
+		unsigned long itertmp;
+		unsigned long iterdelta;
+		unsigned long itermax;
+		unsigned long iterations;
+		unsigned long tests;
+		unsigned long teststmp;
+		unsigned long testsdelta;
+		unsigned long testsmax;
+		unsigned long memory_usage;
+		unsigned long total_key_len;
+		unsigned char *comment;
+	} debug;
 #endif
 
 	unsigned char uniq_chars[FF_MAX_CHARS];
@@ -183,17 +188,25 @@ struct fastfind_info {
 
 #ifdef FASTFIND_DEBUG
 /* These are for performance testing. */
-#define meminc(x, size) (x)->memory_usage += (size)
-#define testinc(x) (x)->tests++
-#define iterinc(x) (x)->iterations++
+#define meminc(x, size) (x)->debug.memory_usage += (size)
+#define testinc(x) (x)->debug.tests++
+#define iterinc(x) (x)->debug.iterations++
 #define foundinc(x) \
 	do { \
-		(x)->iterdelta += (x)->iterations - (x)->itertmp;	\
-		(x)->testsdelta += (x)->tests - (x)->teststmp;		\
-		(x)->found++;						\
+		unsigned long iter = (x)->debug.iterations - (x)->debug.itertmp;	\
+		unsigned long tests = (x)->debug.tests - (x)->debug.teststmp;		\
+											\
+		(x)->debug.iterdelta += iter;						\
+		(x)->debug.testsdelta += tests;						\
+		if (iter > (x)->debug.itermax)						\
+			(x)->debug.itermax = iter;					\
+		if (tests > (x)->debug.testsmax)					\
+			(x)->debug.testsmax = tests;					\
+		(x)->debug.found++;							\
 	} while (0)
 /* ACCounted IF ;-) */
 #define accif(x) testinc(x); if
+#define setcomment(x, comment) do { (x)->debug.comment = empty_string_or_(comment); } while (0)
 
 #else /* !FASTFIND_DEBUG */
 
@@ -202,18 +215,21 @@ struct fastfind_info {
 #define iterinc(x)
 #define foundinc(x)
 #define accif(x) if
+#define setcomment(x, comment)
 
 #endif
 
 
 static struct fastfind_info *
-init_fastfind(int case_sensitive)
+init_fastfind(int case_sensitive, unsigned char *comment)
 {
 	struct fastfind_info *info = mem_calloc(1, sizeof(struct fastfind_info));
 
 	if (!info) return NULL;
 
-	meminc(info, sizeof(struct fastfind_info) - sizeof(unsigned long) * 10);
+	meminc(info, sizeof(struct fastfind_info) - sizeof(info->debug));
+	setcomment(info, comment);
+
 	/* Non sense to use that code if key length > 255 so... */
 	info->min_key_len = 255;
 	info->case_sensitive = case_sensitive;
@@ -284,7 +300,7 @@ alloc_leafset(struct fastfind_info *info)
 	return 1;
 }
 
-static int
+static inline int
 char2idx(unsigned char c, struct fastfind_info *info)
 {
 	register int idx;
@@ -296,7 +312,7 @@ char2idx(unsigned char c, struct fastfind_info *info)
 	return -1;
 }
 
-static void
+static inline void
 init_idxtab(struct fastfind_info *info)
 {
 	register int i;
@@ -305,14 +321,14 @@ init_idxtab(struct fastfind_info *info)
 		info->idxtab[i] = char2idx((unsigned char) i, info);
 }
 
-#define ifcase(c) (info->case_sensitive ? c : upcase(c))
+#define ifcase(c) ((info->case_sensitive) ? (c) : upcase(c))
 
 struct fastfind_info *
 fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
-	       int case_sensitive)
+	       int case_sensitive, unsigned char *comment)
 {
 	struct fastfind_key_value *p;
-	struct fastfind_info *info = init_fastfind(case_sensitive);
+	struct fastfind_info *info = init_fastfind(case_sensitive, comment);
 
 	if (!info) goto alloc_error;
 
@@ -348,11 +364,12 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			 * --Zas */
 			for (j = 0; j < info->uniq_chars_count; j++)
 				if (info->uniq_chars[j] == k)
-						break;
+					break;
 
 			if (j >= info->uniq_chars_count) {
 				assert(info->uniq_chars_count < FF_MAX_CHARS);
 				if_assert_failed goto alloc_error;
+
 				info->uniq_chars[info->uniq_chars_count++] = k;
 			}
 		}
@@ -501,7 +518,7 @@ fastfind_index_compress(struct fastfind_info *info)
 		}								\
 										\
 		accif(info) (!current->l)					\
-				return NULL;					\
+			return NULL;						\
 		current = (struct ff_node *) info->leafsets[current->l];	\
 	}									\
 } while (0)
@@ -515,10 +532,10 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	if_assert_failed return NULL;
 
 #ifdef FASTFIND_DEBUG
-	info->searches++;
-	info->total_key_len += key_len;
-	info->teststmp = info->tests;
-	info->itertmp = info->iterations;
+	info->debug.searches++;
+	info->debug.total_key_len += key_len;
+	info->debug.teststmp = info->debug.tests;
+	info->debug.itertmp = info->debug.iterations;
 #endif
 
    	accif(info) (!key) return NULL;
@@ -550,6 +567,7 @@ fastfind_done(struct fastfind_info *info)
 
 #ifdef FASTFIND_DEBUG
 	fprintf(stderr, "------ FastFind Statistics ------\n");
+	fprintf(stderr, "Comment     : %s\n", info->debug.comment);
 	fprintf(stderr, "Uniq_chars  : %s\n", info->uniq_chars);
 	fprintf(stderr, "Uniq_chars #: %d/%d max.\n", info->uniq_chars_count, FF_MAX_CHARS);
 	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
@@ -557,22 +575,25 @@ fastfind_done(struct fastfind_info *info)
 	fprintf(stderr, "Entries     : %d/%d max.\n", info->pointers_count, FF_MAX_KEYS);
 	fprintf(stderr, "FFleafsets  : %d/%d max.\n", info->leafsets_count, FF_MAX_LEAFSETS);
 	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
-		info->memory_usage, (double) info->memory_usage / info->pointers_count);
+		info->debug.memory_usage, (double) info->debug.memory_usage / info->pointers_count);
+	fprintf(stderr, "struct info : %d bytes\n", sizeof(struct fastfind_info) - sizeof(info->debug));
 	fprintf(stderr, "Struct node : %d bytes (normal) , %d bytes (compressed)\n",
 		sizeof(struct ff_node), sizeof(struct ff_node_c));
-	fprintf(stderr, "Searches    : %lu\n", info->searches);
+	fprintf(stderr, "Searches    : %lu\n", info->debug.searches);
 	fprintf(stderr, "Found       : %lu (%0.2f%%)\n",
-		info->found, 100 * (double) info->found / info->searches);
-	fprintf(stderr, "Iterations  : %lu (%0.2f per search, %0.2f before found)\n",
-		info->iterations, (double) info->iterations / info->searches,
-		(double) info->iterdelta / info->found);
-	fprintf(stderr, "Tests       : %lu (%0.2f per search, %0.2f per iter., %0.2f before found)\n",
-		info->tests, (double) info->tests / info->searches,
-		(double) info->tests / info->iterations,
-		(double) info->testsdelta / info->found);
+		info->debug.found, 100 * (double) info->debug.found / info->debug.searches);
+	fprintf(stderr, "Iterations  : %lu (%0.2f per search, %0.2f before found, %lu max)\n",
+		info->debug.iterations, (double) info->debug.iterations / info->debug.searches,
+		(double) info->debug.iterdelta / info->debug.found,
+		info->debug.itermax);
+	fprintf(stderr, "Tests       : %lu (%0.2f per search, %0.2f per iter., %0.2f before found, %lu max)\n",
+		info->debug.tests, (double) info->debug.tests / info->debug.searches,
+		(double) info->debug.tests / info->debug.iterations,
+		(double) info->debug.testsdelta / info->debug.found,
+		info->debug.testsmax);
 	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search, %0.2f per iter.)\n",
-		info->total_key_len, (double) info->total_key_len / info->searches,
-		(double) info->total_key_len / info->iterations);
+		info->debug.total_key_len, (double) info->debug.total_key_len / info->debug.searches,
+		(double) info->debug.total_key_len / info->debug.iterations);
 #endif
 
 	if (info->pointers) mem_free(info->pointers);

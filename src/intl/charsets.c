@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.75 2003/12/29 12:24:31 miciah Exp $ */
+/* $Id: charsets.c,v 1.76 2004/02/13 17:52:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -763,7 +763,7 @@ init_charsets_lookup(void)
 #ifdef USE_FASTFIND
 	ff_info_charsets = fastfind_index(&charsets_list_reset,
 					  &charsets_list_next,
-					  0);
+					  0, "charsets_lookup");
 	fastfind_index_compress(ff_info_charsets);
 #endif
 }

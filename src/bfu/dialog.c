@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.172 2004/11/18 00:23:48 zas Exp $ */
+/* $Id: dialog.c,v 1.173 2004/11/18 00:31:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,7 +216,7 @@ dialog_ev_init(struct dialog_data *dlg_data)
 
 #ifdef CONFIG_MOUSE
 static void
-dialog_ev_mouse(struct dialog_data *dlg_data, struct term_event *ev)
+dialog_ev_mouse(struct dialog_data *dlg_data)
 {
 	int i;
 
@@ -224,7 +224,7 @@ dialog_ev_mouse(struct dialog_data *dlg_data, struct term_event *ev)
 		struct widget_data *wdata = &dlg_data->widgets_data[i];
 
 		if (wdata->widget->ops->mouse
-		    && wdata->widget->ops->mouse(dlg_data, wdata, ev)
+		    && wdata->widget->ops->mouse(dlg_data, wdata)
 		       == EVENT_PROCESSED)
 			break;
 	}
@@ -369,9 +369,9 @@ dialog_func(struct window *win, struct term_event *ev)
 		return;
 	}
 
+	dlg_data->term_event = ev;
 	switch (ev->ev) {
 		case EVENT_INIT:
-			dlg_data->term_event = ev;
 			dialog_ev_init(dlg_data);
 			/* fallback */
 		case EVENT_RESIZE:
@@ -381,7 +381,7 @@ dialog_func(struct window *win, struct term_event *ev)
 
 		case EVENT_MOUSE:
 #ifdef CONFIG_MOUSE
-			dialog_ev_mouse(dlg_data, ev);
+			dialog_ev_mouse(dlg_data);
 #endif
 			break;
 

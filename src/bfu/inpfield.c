@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.174 2004/11/18 00:23:48 zas Exp $ */
+/* $Id: inpfield.c,v 1.175 2004/11/18 00:31:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,9 +303,10 @@ init_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 }
 
 static t_handler_event_status
-mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data,
-	    struct term_event *ev)
+mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
+	struct term_event *ev = dlg_data->term_event;
+
 	if (!widget_has_history(widget_data))
 		return EVENT_NOT_PROCESSED;
 

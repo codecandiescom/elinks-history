@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.63 2004/11/18 00:23:48 zas Exp $ */
+/* $Id: widget.h,v 1.64 2004/11/18 00:31:42 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -42,7 +42,7 @@ struct widget_ops {
 	/* XXX: Order matters here. --Zas */
 	t_handler_event_status (*display)(struct dialog_data *, struct widget_data *);
 	t_handler_event_status (*init)(struct dialog_data *, struct widget_data *);
-	t_handler_event_status (*mouse)(struct dialog_data *, struct widget_data *, struct term_event *);
+	t_handler_event_status (*mouse)(struct dialog_data *, struct widget_data *);
 	t_handler_event_status (*kbd)(struct dialog_data *, struct widget_data *, struct term_event *);
 	t_handler_event_status (*select)(struct dialog_data *, struct widget_data *);
 };

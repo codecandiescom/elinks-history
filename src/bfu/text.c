@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.111 2004/11/18 00:11:42 zas Exp $ */
+/* $Id: text.c,v 1.112 2004/11/18 00:31:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,8 +366,7 @@ kbd_text(struct dialog_data *dlg_data, struct widget_data *widget_data,
 }
 
 static t_handler_event_status
-mouse_text(struct dialog_data *dlg_data, struct widget_data *widget_data,
-	   struct term_event *ev)
+mouse_text(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 #ifdef CONFIG_MOUSE
 	int border = DIALOG_LEFT_BORDER + DIALOG_LEFT_INNER_BORDER;
@@ -377,6 +376,7 @@ mouse_text(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	int scroller_middle = scroller_y + scroller_height/2
 			      - widget_data->info.text.scroller_last_dir;
 	struct box scroller_box;
+	struct term_event *ev = dlg_data->term_event;
 
 	set_box(&scroller_box,
 		dlg_data->box.x + dlg_data->box.width - 1 - border,

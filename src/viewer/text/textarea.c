@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.74 2004/06/16 20:59:27 zas Exp $ */
+/* $Id: textarea.c,v 1.75 2004/06/16 21:07:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -394,7 +394,7 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 enum frame_event_status
 textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 {
-	unsigned char *position = fs->value + fs->state;
+	unsigned char *position;
 	unsigned char *prev_end = NULL;
 	struct line_info *line;
 	int y;
@@ -405,16 +405,22 @@ textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 	line = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!line) return FRAME_EVENT_OK;
 
+	position = fs->value + fs->state;
+
 	for (y = 0; line[y].start; prev_end = line[y].end, y++) {
-		if (position >= line[y].start &&
-		    position < line[y].end + (line[y].start != prev_end)) {
-			fs->state = line[y].start - fs->value;
-			goto x;
-		}
+		int wrap;
+
+		if (position < line[y].start) continue;
+
+		wrap = (line[y].start == prev_end);
+		if (position >= line[y].end + !wrap) continue;
+
+		fs->state = line[y].start - fs->value;
+		goto free_and_return;
 	}
 	fs->state = 0;
 
-x:
+free_and_return:
 	mem_free(line);
 	return FRAME_EVENT_REFRESH;
 }

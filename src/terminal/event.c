@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.49 2004/06/13 03:45:43 jonas Exp $ */
+/* $Id: event.c,v 1.50 2004/06/13 03:47:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,18 +119,15 @@ static void
 check_terminal_name(struct terminal *term)
 {
 	unsigned char name[MAX_TERM_LEN + 10];
-	int i = 0, badchar = 0;
-
-	strcpy(name, "terminal.");
+	int i, badchar = 0;
 
 	/* We check TERM env. var for sanity, and fallback to _template_ if
 	 * needed. This way we prevent elinks.conf potential corruption. */
-	while (term->term[i]) {
+	for (i = 0; term->term[i]; i++) {
 		if (!isA(term->term[i])) {
 			badchar = 1;
 			break;
 		}
-		i++;
 	}
 
 	if (badchar) {
@@ -138,6 +135,7 @@ check_terminal_name(struct terminal *term)
 		return;
 	}
 
+	strcpy(name, "terminal.");
 	strcat(name, term->term);
 
 	/* Unlock the default _template_ option tree that was asigned by

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.10 2003/10/30 17:53:15 jonas Exp $ */
+/* $Id: document.c,v 1.11 2003/10/30 18:25:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,6 +48,8 @@ init_document(unsigned char *uristring, struct document_options *options)
 	document->refcount = 1;
 
 	copy_opt(&document->options, options);
+
+	add_to_list(format_cache, document);
 
 	return document;
 }

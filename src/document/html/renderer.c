@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.348 2003/10/30 18:23:21 jonas Exp $ */
+/* $Id: renderer.c,v 1.349 2003/10/30 18:25:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1576,8 +1576,6 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 		cache_entry->refcount--;
 		return;
 	}
-
-	add_to_list(format_cache, document);
 
 	document_view->document = document;
 	format_html(cache_entry, document);

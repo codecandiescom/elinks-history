@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.27 2003/07/22 14:25:13 jonas Exp $ */
+/* $Id: uri.c,v 1.28 2003/07/22 14:53:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,15 +282,16 @@ get_uri_string(struct uri *uri, enum uri_component components)
 
 
 /* This reconstructs URI with password stripped. */
-unsigned char *
-strip_uri_password(unsigned char *uristring)
+struct string *
+add_string_uri_to_string(struct string *string, unsigned char *uristring,
+			 enum uri_component components)
 {
 	struct uri uri;
 
 	if (!parse_uri(&uri, uristring))
 		return NULL;
 
-	return get_uri_string(&uri, ~(URI_PASSWORD | URI_POST));
+	return add_uri_to_string(string, &uri, components);
 }
 
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.13 2003/07/22 02:39:42 jonas Exp $ */
+/* $Id: link.c,v 1.14 2003/07/22 14:53:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -914,46 +914,35 @@ print_current_link_do(struct document_view *fd, struct terminal *term)
 	link = &fd->document->links[fd->vs->current_link];
 
 	if (link->type == L_LINK) {
+		struct string str;
+		unsigned char *uristring;
+
+		if (!init_string(&str)) return NULL;
+
 		if (!link->where && link->where_img) {
-			unsigned char *url;
-			struct string str;
-
-			if (!init_string(&str)) return NULL;
-
 			add_to_string(&str, _("Image", term));
 			add_char_to_string(&str, ' ');
-			url = strip_uri_password(link->where_img);
-			if (url) {
-				add_to_string(&str, url);
-				mem_free(url);
-			}
-			return str.source;
-		}
+			uristring = link->where_img;
 
-		if (strlen(link->where) >= 4
-		    && !strncasecmp(link->where, "MAP@", 4)) {
-			unsigned char *url;
-			struct string str;
-
-			if (!init_string(&str)) return NULL;
-
+		} else if (strlen(link->where) >= 4
+			   && !strncasecmp(link->where, "MAP@", 4)) {
 			add_to_string(&str, _("Usemap", term));
 			add_char_to_string(&str, ' ');
-			url = strip_uri_password(link->where + 4);
-			if (url) {
-				add_to_string(&str, url);
-				mem_free(url);
-			}
-			return str.source;
+			uristring = link->where + 4;
+
+		} else {
+			uristring = link->where;
 		}
 
-		return strip_uri_password(link->where);
+		/* Add the uri with password and post info stripped */
+		add_string_uri_to_string(&str, uristring,
+					 ~(URI_PASSWORD | URI_POST));
+		return str.source;
 	}
 
 	if (!link->form) return NULL;
 
 	if (link->type == L_BUTTON) {
-		unsigned char *url;
 		struct string str;
 
 		if (link->form->type == FC_RESET)
@@ -969,11 +958,9 @@ print_current_link_do(struct document_view *fd, struct terminal *term)
 			add_to_string(&str, _("Post form to", term));
 		add_char_to_string(&str, ' ');
 
-		url = strip_uri_password(link->form->action);
-		if (url) {
-			add_to_string(&str, url);
-			mem_free(url);
-		}
+		/* Add the uri with password and post info stripped */
+		add_string_uri_to_string(&str, link->form->action,
+					 ~(URI_PASSWORD | URI_POST));
 		return str.source;
 	}
 
@@ -1029,8 +1016,6 @@ print_current_link_do(struct document_view *fd, struct terminal *term)
 		if (link->type == L_FIELD
 		    && !has_form_submit(fd->document, link->form)
 		    && link->form->action) {
-			unsigned char *url;
-
 			add_to_string(&str, ", ");
 			add_to_string(&str, _("hit ENTER to", term));
 			add_char_to_string(&str, ' ');
@@ -1039,11 +1024,10 @@ print_current_link_do(struct document_view *fd, struct terminal *term)
 			else
 				add_to_string(&str, _("post to", term));
 			add_char_to_string(&str, ' ');
-			url = strip_uri_password(link->form->action);
-			if (url) {
-				add_to_string(&str, url);
-				mem_free(url);
-			}
+
+			/* Add the uri with password and post info stripped */
+			add_string_uri_to_string(&str, link->form->action,
+						 ~(URI_PASSWORD | URI_POST));
 		}
 
 		return str.source;

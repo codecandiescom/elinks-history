@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.50 2003/07/21 05:20:36 jonas Exp $ */
+/* $Id: document.c,v 1.51 2003/07/22 14:53:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,6 @@ loc_msg(struct terminal *term, struct location *location,
 #endif
 	struct cache_entry *ce;
 	unsigned char *a;
-	unsigned char *url;
 	struct string msg;
 
 	if (!location) {
@@ -70,11 +69,9 @@ loc_msg(struct terminal *term, struct location *location,
 	add_to_string(&msg, _("URL", term));
 	add_to_string(&msg, ": ");
 
-	url = strip_uri_password(location->vs.url);
-	if (url) {
-		add_to_string(&msg, url);
-		mem_free(url);
-	}
+	/* Add the uri with password and post info stripped */
+	add_string_uri_to_string(&msg, location->vs.url,
+				 ~(URI_PASSWORD | URI_POST));
 
 	/* We don't preserve this in url. */
 	if (location->vs.goto_position) {

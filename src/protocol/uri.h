@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.18 2003/07/22 14:25:13 jonas Exp $ */
+/* $Id: uri.h,v 1.19 2003/07/22 14:53:48 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -63,6 +63,9 @@ enum uri_component {
 /* Adds the components to an already initialized string. */
 struct string *add_uri_to_string(struct string *string, struct uri *uri, enum uri_component components);
 
+/* Takes an uri string. Useful if there's no struct uri around. */
+struct string *add_string_uri_to_string(struct string *string, unsigned char *uristring, enum uri_component components);
+
 /* Returns the new URI string or NULL upon an error. */
 unsigned char *get_uri_string(struct uri *uri, enum uri_component components);
 
@@ -77,9 +80,6 @@ void get_filenamepart_from_url(unsigned char *, unsigned char **, int *);
 /* Returns allocated string containing the biggest possible extension.
  * If url is 'jabadaba.1.foo.gz' the returned extension is '1.foo.gz' */
 unsigned char *get_extension_from_url(unsigned char *url);
-
-/* Returns an URI string with any password removed. ;) */
-unsigned char *strip_uri_password(unsigned char *unstripped_uri);
 
 void encode_uri_string(struct string *, unsigned char *);
 void decode_uri_string(unsigned char *);

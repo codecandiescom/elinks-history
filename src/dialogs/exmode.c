@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.17 2004/01/26 08:05:08 jonas Exp $ */
+/* $Id: exmode.c,v 1.18 2004/01/26 08:05:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,9 +34,6 @@
  * config-file commands. */
 
 /* TODO: Compile-time configurable? */
-
-/* TODO: Backspace on empty field cancels the field. And so does <Esc>, for
- * that matter. --pasky */
 
 #define EXMODE_BUFFER_SIZE 80
 
@@ -213,6 +210,11 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 					/* Falling */
 				case ACT_EDIT_CANCEL:
 					cancel_dialog(dlg_data, NULL);
+					break;
+
+				case ACT_EDIT_BACKSPACE:
+					if (!*data->buffer)
+						cancel_dialog(dlg_data, NULL);
 					break;
 				default:
 					return EVENT_NOT_PROCESSED;

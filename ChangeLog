@@ -1,3 +1,272 @@
+Mon Sep 15 21:30:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Remove unused macros.  
+
+Mon Sep 15 21:29:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Tidyup.  
+
+Mon Sep 15 21:28:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Blast off xset_hchar() and use xset_hchars() instead. Less is more
+	;) Finally abuse that xset_[hv]chars() are specialized for table
+	border drawing so there's no need to pass the bgcolor (hint
+	par_format.bgcolor) and the attribute.  
+
+Mon Sep 15 21:25:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_frame_point(): Store [HV]_LINE_X() lookups in local variables
+	and general cleanup.  
+
+Mon Sep 15 21:23:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_frame_[hv]line(): Cleanup, use BORDER_* enums, add asserts." 
+
+Mon Sep 15 21:14:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Move static variables inside the user functions.  
+
+Mon Sep 15 21:13:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	See? It's all an illusion.  
+
+Mon Sep 15 21:11:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_frame_vline(): morphed to be static inline instead of a macro.  
+
+Mon Sep 15 21:11:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_frame_hline(): morphed to be static inline instead of a macro.  
+
+Mon Sep 15 21:10:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_frame_point(): morphed to be static inline instead of a macro.  
+
+Mon Sep 15 21:08:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	put_chars(): Assert @charslen.  
+
+Mon Sep 15 21:02:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	display_table_frames(): Store table frame pointers in an array and
+	allocate space in one snap.  
+
+Mon Sep 15 20:57:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Propagate the _table_ arg all the way down the frame drawing macro
+	hell. If you see any variables named 'term' it is an illusion ;) ...
+	Hmm apparently some whitespace clashing that makes the patch
+	slightly bigger.  
+
+Mon Sep 15 20:50:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Use macros to simplify the trivial code and make adding new term
+	options easier.  
+
+Mon Sep 15 20:47:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Bug fix: put_chars() asserts chars != NULL and put_chars_conv() call
+	it with chars == NULL. Instead assert that charslen != 0.  
+
+Mon Sep 15 20:45:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	in_viewy(): Cleanup (and a compile fix for free).  
+
+Mon Sep 15 20:44:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	in_viewx(): Cleanup and variable renaming.  
+
+Mon Sep 15 20:43:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_current_link(): Rename variables.  
+
+Mon Sep 15 20:42:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, link.h, view.c:
+
+	done_link_members(): Added. Free()s the link members.  
+
+Mon Sep 15 20:40:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	set_link(): Cleanup.  
+
+Mon Sep 15 20:40:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Add macro abstraction for clearing color.  
+
+Mon Sep 15 20:32:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Don't use INIT_SCREEN_CHAR().  
+
+Mon Sep 15 20:30:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.h:
+
+	Purge INIT_SCREEN_CHAR().  
+
+Mon Sep 15 20:29:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	draw_area(): Rewritten to not use INIT_SCREEN_CHAR().  
+
+Mon Sep 15 20:28:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	draw_text(): Use last char as template and abandon
+	INIT_SCREEN_CHAR() usage.  
+
+Mon Sep 15 20:27:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Fix bad merging.  
+
+Mon Sep 15 20:24:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	draw_link(): Allocate an extra link_bg element to work on to avoid
+	local variables.  
+
+Mon Sep 15 20:23:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	xset_vchars(): Use first char as template and abandon
+	INIT_SCREEN_CHAR() usage.  
+
+Mon Sep 15 20:22:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	xset_hchar(): Use local variable instead of multiple POS().  
+
+Mon Sep 15 20:19:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.h:
+
+	Doh! The patch monkey climped the wrong tree. Revert part of last
+	patch. :( 
+
+Mon Sep 15 20:17:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, terminal/draw.h:
+
+	set_hchars(): Abandon usage of INIT_SCREEN_CHAR().  
+
+Mon Sep 15 20:17:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	realloc_line(): Don't use local variable for initialization but the
+	last char.  
+
+Mon Sep 15 20:14:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Wipeout SLEN().  
+
+Mon Sep 15 16:59:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Introduce a link state type and get_link_state(). It is called
+	before doing any link handling (the old way) and takes care of
+	free()ing old link variables etc.  This patch fixes
+	test/tabindex.html which have been broken for a long time since the
+	old code didn't take the #targets into account. Sorry for taking so 
+	long to fix this.  
+
+Mon Sep 15 14:23:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	No need to allocate one byte for nul char, l was renamed to loc.  
+
+Mon Sep 15 14:15:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Use memacpy() instead of stracpy() since we have length. Use loc
+	name for location instead of l.  
+
+Mon Sep 15 14:11:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Use memacpy() instead of stracpy() since we have length.  
+
+Mon Sep 15 14:09:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Use memacpy() instead of stracpy() since we have length. Use loc
+	name for location instead of l.  
+
+Mon Sep 15 14:06:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/history.c:
+
+	Use memacpy() instead of stracpy() since we have length.  
+
+Mon Sep 15 13:54:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Use vs->url_len instead of strlen(vs->url).  
+
+Mon Sep 15 13:40:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Field url_len from struct view_state was not used as it should be.
+	Fixed.  
+
 Sun Sep 14 03:03:25 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/bfu/listbox.c:

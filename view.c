@@ -383,7 +383,10 @@ void clear_link(struct terminal *t, struct f_data_c *scr)
 	}
 }
 
-inline int srch_cmp(unsigned char c1, unsigned char c2)
+#ifdef __GNUCC__
+inline			/* solaris CC bug */
+#endif
+int srch_cmp(unsigned char c1, unsigned char c2)
 {
 	return casecmp(&c1, &c2, 1);
 }

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.25 2003/05/07 17:46:45 pasky Exp $ */
+/* $Id: globhist.c,v 1.26 2003/05/07 18:07:23 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -223,7 +223,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 		return;
 
 	history_item->last_visit = vtime;
-	history_item->title = stracpy(title ? title : "");
+	history_item->title = stracpy(title ? title : (unsigned char *) "");
 	if (!history_item->title) {
 		mem_free(history_item);
 		return;

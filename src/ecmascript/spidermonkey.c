@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.22 2004/09/24 22:12:26 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.23 2004/09/24 22:23:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,10 +295,21 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("JavaScript Error"), ALIGN_CENTER,
+		report->linebuf && report->tokenptr
+		?
+		msg_text(term, N_("A script embedded in the current "
+		         "document raised the following exception: "
+		         "\n\n%s\n\n%s\n.%*s^%*s."),
+		         message,
+			 report->linebuf,
+			 report->tokenptr - report->linebuf - 2, " ",
+			 strlen(report->linebuf) - (report->tokenptr - report->linebuf) - 1, " ")
+		:
 		msg_text(term, N_("A script embedded in the current "
 		         "document raised the following exception: "
 		         "\n\n%s"),
-		         message),
+		         message)
+		,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.58 2002/10/11 15:51:17 zas Exp $ */
+/* $Id: main.c,v 1.59 2002/10/17 20:15:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,13 +83,12 @@ sig_terminate(struct terminal *t)
 void
 sig_intr(struct terminal *t)
 {
-	if (!t) {
-		unhandle_basic_signals(t);
+	unhandle_basic_signals(t);
+
+	if (!t)
 		terminate = 1;
-	} else {
-		unhandle_basic_signals(t);
+	else 
 		exit_prog(t, NULL, NULL);
-	}
 }
 
 void

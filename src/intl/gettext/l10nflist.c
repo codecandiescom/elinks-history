@@ -15,11 +15,11 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 
-/* Tell glibc's <string.h> to provide a prototype for stpcpy().
+/* Tell glibc's <string.h> to provide a prototype for mempcpy().
    This must come before <config.h> because <config.h> may include
    <features.h>, and once <features.h> has been included, it's too late.  */
 #ifndef _GNU_SOURCE
-#define _GNU_SOURCE	1
+#define _GNU_SOURCE    1
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -28,7 +28,7 @@
 
 #include <string.h>
 
-#if defined _LIBC || defined HAVE_ARGZ_H
+#if defined HAVE_ARGZ_H
 #include <argz.h>
 #endif
 #include <ctype.h>
@@ -48,12 +48,9 @@
 #endif
 #endif
 
-/* @@ end of prolog @@ */
-
-
 /* Define function which are usually not available.  */
 
-#if !defined _LIBC && !defined HAVE___ARGZ_COUNT
+#if !defined HAVE___ARGZ_COUNT
 /* Returns the number of strings in ARGZ.  */
 static size_t argz_count__(const char *argz, size_t len);
 
@@ -74,9 +71,9 @@ argz_count__(const char *argz, size_t len)
 
 #undef __argz_count
 #define __argz_count(argz, len) argz_count__ (argz, len)
-#endif /* !_LIBC && !HAVE___ARGZ_COUNT */
+#endif /* !HAVE___ARGZ_COUNT */
 
-#if !defined _LIBC && !defined HAVE___ARGZ_STRINGIFY
+#if !defined HAVE___ARGZ_STRINGIFY
 /* Make '\0' separated arg vector ARGZ printable by converting all the '\0's
    except the last into the character SEP.  */
 static void argz_stringify__(char *argz, size_t len, int sep);
@@ -96,9 +93,9 @@ argz_stringify__(char *argz, size_t len, int sep)
 
 #undef __argz_stringify
 #define __argz_stringify(argz, len, sep) argz_stringify__ (argz, len, sep)
-#endif /* !_LIBC && !HAVE___ARGZ_STRINGIFY */
+#endif /* !HAVE___ARGZ_STRINGIFY */
 
-#if !defined _LIBC && !defined HAVE___ARGZ_NEXT
+#if !defined HAVE___ARGZ_NEXT
 static char *argz_next__(char *argz, size_t argz_len,
 			 const char *entry);
 
@@ -118,7 +115,7 @@ argz_next__(char *argz, size_t argz_len, const char *entry)
 
 #undef __argz_next
 #define __argz_next(argz, len, entry) argz_next__ (argz, len, entry)
-#endif /* !_LIBC && !HAVE___ARGZ_NEXT */
+#endif /* !HAVE___ARGZ_NEXT */
 
 /* Return number of bits set in X.  */
 static int pop(int x);

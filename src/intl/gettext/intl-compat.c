@@ -23,8 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 #include "libgnuintl.h"
 #include "gettextP.h"
 
-/* @@ end of prolog @@ */
-
 /* This file redirects the gettext functions (without prefix or suffix) to
    those defined in the included GNU gettext library (with "__" suffix).
    It is compiled into libintl when the included GNU gettext library is

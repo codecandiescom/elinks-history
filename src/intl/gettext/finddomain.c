@@ -25,20 +25,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#if defined HAVE_UNISTD_H || defined _LIBC
+#if defined HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 
 #include "gettextP.h"
-#ifdef _LIBC
-#include <libintl.h>
-#else
 #include "libgnuintl.h"
-#endif
-
 #include "util/string.h"
 
-/* @@ end of prolog @@ */
 /* List of already loaded domains.  */
 static struct loaded_l10nfile *_nl_loaded_domains;
 
@@ -163,7 +157,7 @@ _nl_find_domain(const char *dirname, char *locale, const char *domainname,
 	return retval;
 }
 
-#ifdef _LIBC
+#if 0
 static void __attribute__ ((unused))
 free_mem(void)
 {

@@ -18,11 +18,9 @@
 #ifndef _GETTEXT_H
 #define _GETTEXT_H 1
 
-#if HAVE_LIMITS_H || _LIBC
+#ifdef HAVE_LIMITS_H
 #include <limits.h>
 #endif
-
-/* @@ end of prolog @@ */
 
 /* The magic number of the GNU message catalog format.  */
 #define _MAGIC 0x950412de
@@ -91,7 +89,5 @@ struct string_desc {
 	/* Offset of string in file.  */
 	nls_uint32 offset;
 };
-
-/* @@ begin of epilog @@ */
 
 #endif /* gettext.h  */

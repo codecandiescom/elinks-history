@@ -36,7 +36,7 @@
 #define alloca __builtin_alloca
 #define HAVE_ALLOCA 1
 #else
-#if defined HAVE_ALLOCA_H || defined _LIBC
+#if defined HAVE_ALLOCA_H
 #include <alloca.h>
 #else
 #ifdef _AIX
@@ -52,17 +52,12 @@ char *alloca();
 #include <stdlib.h>
 #include <string.h>
 
-#if defined HAVE_UNISTD_H || defined _LIBC
+#if defined HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 
-#ifdef _LIBC
-#include <langinfo.h>
-#include <locale.h>
-#endif
 
-#if (defined HAVE_MMAP && defined HAVE_MUNMAP && !defined DISALLOW_MMAP) \
-    || (defined _LIBC && defined _POSIX_MAPPED_FILES)
+#if (defined HAVE_MMAP && defined HAVE_MUNMAP && !defined DISALLOW_MMAP)
 #include <sys/mman.h>
 #undef HAVE_MMAP
 #define HAVE_MMAP	1
@@ -72,11 +67,6 @@ char *alloca();
 
 #include "gettext.h"
 #include "gettextP.h"
-
-#ifdef _LIBC
-#include "../locale/localeinfo.h"
-#endif
-
 #include "util/string.h"
 
 
@@ -187,12 +177,8 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 	/* Preinitialize fields, to avoid recursion during _nl_find_msg.  */
 	domain->codeset_cntr =
 		(domainbinding != NULL ? domainbinding->codeset_cntr : 0);
-#ifdef _LIBC
-	domain->conv = (__gconv_t) - 1;
-#else
 #if HAVE_ICONV
 	domain->conv = (iconv_t) - 1;
-#endif
 #endif
 	domain->conv_tab = NULL;
 
@@ -200,7 +186,7 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 	nullentry = _nl_find_msg(domain_file, domainbinding, "", &nullentrylen);
 
 	if (nullentry != NULL) {
-#if defined _LIBC || HAVE_ICONV
+#if HAVE_ICONV
 		const char *charsetstr;
 
 		charsetstr = strstr(nullentry, "charset=");
@@ -226,31 +212,12 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 			else {
 				outcharset = getenv("OUTPUT_CHARSET");
 				if (outcharset == NULL || outcharset[0] == '\0') {
-#ifdef _LIBC
-					outcharset =
-						(*_nl_current[LC_CTYPE])->
-						values[_NL_ITEM_INDEX(CODESET)].
-						string;
-#else
-#if HAVE_ICONV
 					extern const char *locale_charset(void);
 
 					outcharset = locale_charset();
-#endif
-#endif
 				}
 			}
 
-#ifdef _LIBC
-			/* We always want to use transliteration.  */
-			outcharset = norm_add_slashes(outcharset, "TRANSLIT");
-			charset = norm_add_slashes(charset, NULL);
-			if (__gconv_open(outcharset, charset, &domain->conv,
-					 GCONV_AVOID_NOCONV)
-			    != __GCONV_OK)
-				domain->conv = (__gconv_t) - 1;
-#else
-#if HAVE_ICONV
 			/* When using GNU libiconv, we want to use transliteration.  */
 #if _LIBICONV_VERSION >= 0x0105
 			len = strlen(outcharset);
@@ -266,12 +233,10 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 #if _LIBICONV_VERSION >= 0x0105
 			freea(outcharset);
 #endif
-#endif
-#endif
 
 			freea(charset);
 		}
-#endif /* _LIBC || HAVE_ICONV */
+#endif /* HAVE_ICONV */
 	}
 
 	return nullentry;
@@ -283,15 +248,9 @@ _nl_free_domain_conv(struct loaded_domain *domain)
 {
 	if (domain->conv_tab != NULL && domain->conv_tab != (char **) -1)
 		free(domain->conv_tab);
-
-#ifdef _LIBC
-	if (domain->conv != (__gconv_t) - 1)
-		__gconv_close(domain->conv);
-#else
 #if HAVE_ICONV
 	if (domain->conv != (iconv_t) - 1)
 		iconv_close(domain->conv);
-#endif
 #endif
 }
 
@@ -362,12 +321,7 @@ _nl_load_domain(struct loaded_l10nfile *domain_file,
 {
 	int fd = -1;
 	size_t size;
-
-#ifdef _LIBC
-	struct stat64 st;
-#else
 	struct stat st;
-#endif
 	struct mo_file_header *data = (struct mo_file_header *) -1;
 	int use_mmap = 0;
 	struct loaded_domain *domain;
@@ -535,7 +489,7 @@ default:
 				++nplurals;
 
 /* TODO: move strtoul compat in string.h */
-#if defined HAVE_STRTOUL || defined _LIBC
+#if defined HAVE_STRTOUL
 			n = strtoul(nplurals, &endp, 10);
 #else
 			for(endp = nplurals, n = 0;
@@ -567,7 +521,7 @@ no_plural:
 	}
 }
 
-#ifdef _LIBC
+#if 0
 void
 _nl_unload_domain(struct loaded_domain *domain)
 {

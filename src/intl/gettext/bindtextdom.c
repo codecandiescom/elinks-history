@@ -23,21 +23,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef _LIBC
-#include <libintl.h>
-#else
 #include "libgnuintl.h"
-#endif
 #include "gettextP.h"
-
 #include "util/string.h"
 
 /* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
 #ifndef offsetof
 #define offsetof(type,ident) ((size_t)&(((type*)0)->ident))
 #endif
-
-/* @@ end of prolog @@ */
 
 /* Contains the default location of the message catalogs.  */
 extern const char _nl_default_dirname__[];

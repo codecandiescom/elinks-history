@@ -19,7 +19,7 @@
    This must come before <config.h> because <config.h> may include
    <features.h>, and once <features.h> has been included, it's too late.  */
 #ifndef _GNU_SOURCE
-#define _GNU_SOURCE	1
+#define _GNU_SOURCE    1
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -32,7 +32,7 @@
 #define alloca __builtin_alloca
 #define HAVE_ALLOCA 1
 #else
-#if defined HAVE_ALLOCA_H || defined _LIBC
+#if defined HAVE_ALLOCA_H
 #include <alloca.h>
 #else
 #ifdef _AIX
@@ -58,22 +58,18 @@ extern int errno;
 
 #include <string.h>
 
-#if defined HAVE_UNISTD_H || defined _LIBC
+#if defined HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 
 #include <locale.h>
 
-#if defined HAVE_SYS_PARAM_H || defined _LIBC
+#if defined HAVE_SYS_PARAM_H
 #include <sys/param.h>
 #endif
 
 #include "gettextP.h"
-#ifdef _LIBC
-#include <libintl.h>
-#else
 #include "libgnuintl.h"
-#endif
 #include "hash-string.h"
 #include "util/string.h"
 
@@ -89,24 +85,6 @@ extern int errno;
 /* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
 #ifndef offsetof
 #define offsetof(type,ident) ((size_t)&(((type*)0)->ident))
-#endif
-
-/* @@ end of prolog @@ */
-
-#ifdef _LIBC
-/* Rename the non ANSI C functions.  This is required by the standard
-   because some ANSI C functions will require linking with this object
-   file and the name space must not be polluted.  */
-#define getcwd __getcwd
-#define tfind __tfind
-#else
-#if !defined HAVE_GETCWD
-char *getwd();
-
-#define getcwd(buf, max) getwd (buf)
-#else
-char *getcwd();
-#endif
 #endif
 
 /* Amount to increase buffer size by in each try.  */
@@ -169,7 +147,7 @@ char *getcwd();
    However it does not specify the exact format.  Neither do SUSV2 and
    ISO C 99.  So we can use this feature only on selected systems (e.g.
    those using GNU C Library).  */
-#if defined _LIBC || (defined __GNU_LIBRARY__ && __GNU_LIBRARY__ >= 2)
+#if (defined __GNU_LIBRARY__ && __GNU_LIBRARY__ >= 2)
 #define HAVE_LOCALE_NULL
 #endif
 
@@ -198,14 +176,10 @@ struct known_translation_t {
 
 /* Root of the search tree with known translations.  We can use this
    only if the system provides the `tsearch' function family.  */
-#if defined HAVE_TSEARCH || defined _LIBC
+#if defined HAVE_TSEARCH
 #include <search.h>
 
 static void *root;
-
-#ifdef _LIBC
-#define tsearch __tsearch
-#endif
 
 /* Function to compare two entries in the table of known translations.  */
 static int transcmp(const void *p1, const void *p2);
@@ -298,35 +272,26 @@ struct block_list {
 #define alloca(size) (malloc (size))
 #endif /* have alloca */
 
-#ifdef _LIBC
-/* List of blocks allocated for translations.  */
-typedef struct transmem_list {
-	struct transmem_list *next;
-	char data[ZERO];
-} transmem_block_t;
-static struct transmem_list *transmem_list;
-#else
 typedef unsigned char transmem_block_t;
-#endif
 
 /* Checking whether the binaries runs SUID must be done and glibc provides
    easier methods therefore we make a difference here.  */
-#ifdef _LIBC
-#define ENABLE_SECURE __libc_enable_secure
-#define DETERMINE_SECURE
-#else
 #ifndef HAVE_GETUID
 #define getuid() 0
 #endif
+
 #ifndef HAVE_GETGID
 #define getgid() 0
 #endif
+
 #ifndef HAVE_GETEUID
 #define geteuid() getuid()
 #endif
+
 #ifndef HAVE_GETEGID
 #define getegid() getgid()
 #endif
+
 static int enable_secure;
 
 #define ENABLE_SECURE (enable_secure == 1)
@@ -338,7 +303,6 @@ static int enable_secure;
       else								      \
 	enable_secure = -1;						      \
     }
-#endif
 
 /* Look up MSGID in the DOMAINNAME message catalog for the current
    CATEGORY locale and, if PLURAL is nonzero, search over string
@@ -360,7 +324,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 	size_t retlen;
 	int saved_errno;
 
-#if defined HAVE_TSEARCH || defined _LIBC
+#if defined HAVE_TSEARCH
 	struct known_translation_t *search;
 	struct known_translation_t **foundp = NULL;
 	size_t msgid_len;
@@ -377,7 +341,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 	if (domainname == NULL)
 		domainname = _nl_current_default_domain__;
 
-#if defined HAVE_TSEARCH || defined _LIBC
+#if defined HAVE_TSEARCH
 	msgid_len = strlen(msgid1) + 1;
 
 	/* Try to find the translation among those which we found at
@@ -548,7 +512,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 				   starting at RETVAL, RETLEN bytes.  */
 				FREE_BLOCKS(block_list);
 				__set_errno(saved_errno);
-#if defined HAVE_TSEARCH || defined _LIBC
+#if defined HAVE_TSEARCH
 				if (foundp == NULL) {
 					/* Create a new entry and add it to the search tree.  */
 					struct known_translation_t *newp;
@@ -697,7 +661,7 @@ found:
 		  + W(domain->must_swap, domain->trans_tab[act].offset));
 	resultlen = W(domain->must_swap, domain->trans_tab[act].length) + 1;
 
-#if defined _LIBC || HAVE_ICONV
+#if HAVE_ICONV
 	if (domain->codeset_cntr
 	    != (domainbinding != NULL ? domainbinding->codeset_cntr : 0)) {
 		/* The domain's codeset has changed through bind_textdomain_codeset()
@@ -707,15 +671,7 @@ found:
 		_nl_init_domain_conv(domain_file, domain, domainbinding);
 	}
 
-	if (
-#ifdef _LIBC
-		   domain->conv != (__gconv_t) - 1
-#else
-#if HAVE_ICONV
-		   domain->conv != (iconv_t) - 1
-#endif
-#endif
-		) {
+	if (domain->conv != (iconv_t) - 1) {
 		/* We are supposed to do a conversion.  First allocate an
 		   appropriate table with the same structure as the table
 		   of translations in the file, where we can put the pointers
@@ -749,10 +705,7 @@ found:
 			const unsigned char *inbuf;
 			unsigned char *outbuf;
 			int malloc_count;
-
-#ifndef _LIBC
 			transmem_block_t *transmem_list = NULL;
-#endif
 
 			inbuf = (const unsigned char *) result;
 			outbuf = freemem + sizeof(size_t);
@@ -760,32 +713,6 @@ found:
 			malloc_count = 0;
 			while (1) {
 				transmem_block_t *newmem;
-
-#ifdef _LIBC
-				size_t non_reversible;
-				int res;
-
-				if (freemem_size < sizeof(size_t))
-					goto resize_freemem;
-
-				res = __gconv(domain->conv,
-					      &inbuf, inbuf + resultlen,
-					      &outbuf,
-					      outbuf + freemem_size -
-					      sizeof(size_t), &non_reversible);
-
-				if (res == __GCONV_OK
-				    || res == __GCONV_EMPTY_INPUT)
-					break;
-
-				if (res != __GCONV_FULL_OUTPUT) {
-					__libc_lock_unlock(lock);
-					goto converted;
-				}
-
-				inbuf = result;
-#else
-#if HAVE_ICONV
 				const char *inptr = (const char *) inbuf;
 				size_t inleft = resultlen;
 				char *outptr = (char *) outbuf;
@@ -805,8 +732,6 @@ found:
 				if (errno != E2BIG) {
 					goto converted;
 				}
-#endif
-#endif
 
 resize_freemem:
 				/* We must allocate a new buffer or resize the old one.  */
@@ -818,19 +743,6 @@ resize_freemem:
 					newmem = (transmem_block_t *)
 						realloc(transmem_list,
 							freemem_size);
-#ifdef _LIBC
-					if (newmem != NULL)
-						transmem_list =
-							transmem_list->next;
-					else {
-						struct transmem_list *old =
-							transmem_list;
-
-						transmem_list =
-							transmem_list->next;
-						free(old);
-					}
-#endif
 				} else {
 					malloc_count = 1;
 					freemem_size = INITIAL_BLOCK_SIZE;
@@ -842,20 +754,8 @@ resize_freemem:
 					freemem_size = 0;
 					goto converted;
 				}
-#ifdef _LIBC
-				/* Add the block to the list of blocks we have to free
-				   at some point.  */
-				newmem->next = transmem_list;
-				transmem_list = newmem;
-
-				freemem = newmem->data;
-				freemem_size -=
-					offsetof(struct transmem_list, data);
-#else
 				transmem_list = newmem;
 				freemem = newmem;
-#endif
-
 				outbuf = freemem + sizeof(size_t);
 			}
 
@@ -880,7 +780,7 @@ resize_freemem:
 converted:
 	/* The result string is converted.  */
 
-#endif /* _LIBC || HAVE_ICONV */
+#endif /* HAVE_ICONV */
 
 	*lengthp = resultlen;
 	return result;
@@ -1098,7 +998,7 @@ guess_category_value(int category, const char *categoryname)
 	/* We have to proceed with the POSIX methods of looking to `LC_ALL',
 	   `LC_xxx', and `LANG'.  On some systems this can be done by the
 	   `setlocale' function itself.  */
-#if defined _LIBC || (defined HAVE_SETLOCALE && defined HAVE_LC_MESSAGES && defined HAVE_LOCALE_NULL)
+#if (defined HAVE_SETLOCALE && defined HAVE_LC_MESSAGES && defined HAVE_LOCALE_NULL)
 	retval = setlocale(category, NULL);
 #else
 	/* Setting of LC_ALL overwrites all other.  */
@@ -1120,10 +1020,9 @@ guess_category_value(int category, const char *categoryname)
 	return retval;
 }
 
-/* @@ begin of epilog @@ */
 
 
-#ifdef _LIBC
+#if 0
 /* If we want to free all resources we have to do some work at
    program's end.  */
 static void __attribute__ ((unused))

@@ -23,23 +23,18 @@
 
 #include "util/string.h"	/* Get possible stubs.  */
 
-#ifdef _LIBC
-#include "../iconv/gconv_int.h"
-#else
-#if HAVE_ICONV
+#ifdef HAVE_ICONV
 #include <iconv.h>
-#endif
 #endif
 
 #include "loadinfo.h"
-
 #include "gettext.h"		/* Get nls_uint32.  */
 
 #ifndef W
 #define W(flag, data) ((flag) ? SWAP (data) : (data))
 #endif
 
-#ifdef _LIBC
+#if 0
 #include <byteswap.h>
 #define SWAP(i) bswap_32 (i)
 #else
@@ -103,12 +98,8 @@ struct loaded_domain {
 	nls_uint32 hash_size;
 	nls_uint32 *hash_tab;
 	int codeset_cntr;
-#ifdef _LIBC
-	__gconv_t conv;
-#else
 #if HAVE_ICONV
 	iconv_t conv;
-#endif
 #endif
 	char **conv_tab;
 

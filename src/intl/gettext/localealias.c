@@ -34,7 +34,7 @@
 #define alloca __builtin_alloca
 #define HAVE_ALLOCA 1
 #else
-#if defined HAVE_ALLOCA_H || defined _LIBC
+#if defined HAVE_ALLOCA_H
 #include <alloca.h>
 #else
 #ifdef _AIX
@@ -52,9 +52,6 @@ char *alloca();
 #include <string.h>
 
 #include "gettextP.h"
-
-/* @@ end of prolog @@ */
-
 #include "util/string.h"
 
 /* For those losing systems which don't have `alloca' we have to add
@@ -66,11 +63,11 @@ char *alloca();
 #define freea(p) free (p)
 #endif
 
-#if defined _LIBC_REENTRANT || defined HAVE_FGETS_UNLOCKED
+#ifdef HAVE_FGETS_UNLOCKED
 #undef fgets
 #define fgets(buf, len, s) fgets_unlocked (buf, len, s)
 #endif
-#if defined _LIBC_REENTRANT || defined HAVE_FEOF_UNLOCKED
+#ifdef HAVE_FEOF_UNLOCKED
 #undef feof
 #define feof(s) feof_unlocked (s)
 #endif
@@ -143,10 +140,6 @@ _nl_expand_alias(const char *name)
 		}
 	}
 	while (added != 0);
-
-#ifdef _LIBC
-	__libc_lock_unlock(lock);
-#endif
 
 	return result;
 }
@@ -318,7 +311,7 @@ extend_alias_table()
 	return 0;
 }
 
-#ifdef _LIBC
+#if 0
 static void __attribute__ ((unused))
 free_mem(void)
 {

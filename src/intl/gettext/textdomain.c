@@ -22,13 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef _LIBC
-#include <libintl.h>
-#else
 #include "libgnuintl.h"
-#endif
 #include "gettextP.h"
-
 #include "util/string.h"
 
 /* Name of the default text domain.  */

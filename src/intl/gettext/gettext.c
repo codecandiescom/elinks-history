@@ -19,19 +19,10 @@
 #include <config.h>
 #endif
 
-#ifdef _LIBC
-#define __need_NULL
-#include <stddef.h>
-#else
 #include <stdlib.h>		/* Just for NULL.  */
-#endif
 
 #include "gettextP.h"
-#ifdef _LIBC
-#include <libintl.h>
-#else
 #include "libgnuintl.h"
-#endif
 
 
 /* Look up MSGID in the current default message catalog for the current

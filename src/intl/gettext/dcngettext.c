@@ -20,11 +20,7 @@
 #endif
 
 #include "gettextP.h"
-#ifdef _LIBC
-#include <libintl.h>
-#else
 #include "libgnuintl.h"
-#endif
 
 /* Look up MSGID in the DOMAINNAME message catalog for the current CATEGORY
    locale.  */

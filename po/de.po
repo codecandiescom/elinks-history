@@ -1435,15 +1435,15 @@ msgstr ""
 #. Keep options in alphabetical order.
 #: src/config/options.c:1225
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 #: src/config/options.c:1227
 msgid "Cache options."
-msgstr ""
+msgstr "Cache-Optionen."
 
 #: src/config/options.c:1230
 msgid "Cache information about redirects"
-msgstr ""
+msgstr "Cache-Informationen über Weiterleitungen"
 
 #: src/config/options.c:1232
 msgid ""
@@ -1465,52 +1465,69 @@ msgid ""
 "it, even previous redirects will be taken from cache instead of\n"
 "asking the server."
 msgstr ""
+"Auch vom Server gesendete Weiterleitungen zwischenspeichern\n"
+"(normalerweise über HTTP mittels eines 302 HTTP Kode und eines\n"
+"Location-Header). Dies war eine gewisse Zeit lang das normale Verhalten,\n"
+"aber es führt bei einer bei Web-Anmelde-Systemen verbreiteten Situation\n"
+"zu Problemen. Wenn man eine bestimmte Seite aufruft, wird man häufig zu\n"
+"einer Anmelde-Seite weitergeleitet, wenn sie kein Cookie erhalten, dass\n"
+"die Identität des Benutzer bestätigt. Diese Seite sendet nun das\n"
+"entsprechende Cookie und man wird auf die ursprüngliche Seite weiter-\n"
+"geleitet, aber zu diesem Zeitpunkt wurde schon die Weiterleitung zurück\n"
+"zur Anmelde-Seite zwischengespeichert! Wenn diese Option den Wert 0 hat,\n"
+"so wird diese Fehlfunktion behoben, jedoch werden überflüssige (je nach\n"
+"Blickpunkt ;-) Anfragen an den Server. Wenn diese Option den Wert 1 hat,\n"
+"so können geübte Benutzer die Fehlfunktion durch den gezielten Einsatz\n"
+"von Neuladen, Verlauf und Drücken von Strg+Enter umgehen.\n"
+"Beachte, dass diese Option benutzt wird, wenn Informationen aus dem\n"
+"Cache geholt werden, und nicht beim Ablegen in den Cache. Also werden\n"
+"frühere Weiterleitungen aus dem Cache anstatt vom Server geholt, wenn\n"
+"diese Option eingeschaltet wird."
 
 #: src/config/options.c:1250
 msgid "Ignore cache-control info from server"
-msgstr ""
+msgstr "Ignoriere cache-control Informationen vom Server"
 
 #: src/config/options.c:1252
 msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
 msgstr ""
+"Ignoriere die Cache-Control und Pragma Header vom Server.\n"
+"Wenn eingeschaltet wird das Dokument immer zwischengespeichert,\n"
+"auch wenn 'Cache-Control: no-cache' angegeben wurde."
 
 #: src/config/options.c:1255
-#, fuzzy
 msgid "Formatted documents"
-msgstr "Cache für formatierte Dokumente"
+msgstr "Formatierte Dokumente"
 
 #: src/config/options.c:1257
 msgid "Format cache options."
 msgstr ""
 
 #: src/config/options.c:1259
-#, fuzzy
 msgid "Number"
-msgstr "fehlerhafte Zahl"
+msgstr "Anzahl"
 
 #: src/config/options.c:1261
 msgid "Number of cached formatted pages."
-msgstr ""
+msgstr "Anzahl der formatierten Seiten im Cache."
 
 #: src/config/options.c:1263
 msgid "Memory cache"
 msgstr "RAM-Cache"
 
 #: src/config/options.c:1265
-#, fuzzy
 msgid "Memory cache options."
-msgstr "RAM-Cache"
+msgstr "RAM-Cache-Optionen."
 
 #: src/config/options.c:1267 src/dialogs/document.c:104
 msgid "Size"
 msgstr "Größe"
 
 #: src/config/options.c:1269
-#, fuzzy
 msgid "Memory cache size (in bytes)."
-msgstr "RAM-Cache"
+msgstr "Größe des RAM-Cache (in Bytes)."
 
 #: src/config/options.c:1273
 msgid "Charset"
@@ -1518,24 +1535,23 @@ msgstr "~Zeichensatz"
 
 #: src/config/options.c:1275
 msgid "Charset options."
-msgstr ""
+msgstr "Zeichensatz-Optionen."
 
 #: src/config/options.c:1277
 msgid "Default codepage"
 msgstr ""
 
 #: src/config/options.c:1279
-#, fuzzy
 msgid "Default document codepage."
-msgstr "Cache für formatierte Dokumente"
+msgstr ""
 
 #: src/config/options.c:1281
 msgid "Ignore charset info from server"
-msgstr ""
+msgstr "Ignoriere Zeichensatz-Information vom Server"
 
 #: src/config/options.c:1283
 msgid "Ignore charset info sent by server."
-msgstr ""
+msgstr "Ignoriere Zeichensatz-Information vom Server."
 
 #: src/config/options.c:1287
 msgid "Default color settings"
@@ -1748,13 +1764,15 @@ msgstr ""
 
 #: src/config/options.c:1351
 msgid "Set original time"
-msgstr ""
+msgstr "Setze die Originalzeit"
 
 #: src/config/options.c:1353
 msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
 msgstr ""
+"Setze die Zeit jeder heruntergeladenen Datei auf die Zeit,\n"
+"die auf dem Server gespeichert ist."
 
 #. Does automatic resuming make sense as an option?
 #: src/config/options.c:1357
@@ -1775,7 +1793,7 @@ msgstr ""
 
 #: src/config/options.c:1364
 msgid "Notify download completion by bell"
-msgstr ""
+msgstr "Klingeln bei Ende des Downloads"
 
 #: src/config/options.c:1366
 msgid ""
@@ -1784,6 +1802,10 @@ msgid ""
 "1 is when background notification is active.\n"
 "2 is always"
 msgstr ""
+"Klingeln, wenn der Download beendet ist:\n"
+"0 niemals\n"
+"1 wenn Hintergrund-Benachrichtigung eingeschaltet ist.\n"
+"2 immer"
 
 #: src/config/options.c:1372
 msgid "Dump output"
@@ -1811,21 +1833,20 @@ msgid "Width of screen in characters when dumping a HTML document."
 msgstr ""
 
 #: src/config/options.c:1386
-#, fuzzy
 msgid "History"
-msgstr "~Verlauf"
+msgstr "Verlauf"
 
 #: src/config/options.c:1388
 msgid "History options."
-msgstr ""
+msgstr "Verlaufs-Optionen."
 
 #: src/config/options.c:1390 src/globhist/dialogs.c:462
 msgid "Global history"
-msgstr "Verlaufsmanager"
+msgstr "Umfassender Verlauf"
 
 #: src/config/options.c:1392
 msgid "Global history options."
-msgstr ""
+msgstr "Optionen für umfassenden Verlauf."
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/config/options.c:1395 src/config/options.c:1528
@@ -1836,7 +1857,7 @@ msgstr "Aktivieren"
 
 #: src/config/options.c:1397
 msgid "Enable global history (\"history of all pages visited\")."
-msgstr ""
+msgstr "Aktiviere den umfassenden Verlauf (\"Verlauf aller besuchter Seiten\")."
 
 #: src/config/options.c:1399
 msgid "Maximum number of entries"
@@ -1844,7 +1865,7 @@ msgstr "Maximale Anzahl von Einträgen"
 
 #: src/config/options.c:1401
 msgid "Maximum number of entries in the global history."
-msgstr ""
+msgstr "Maximale Anzahl von Einträgen im umfassenden Verlauf."
 
 #: src/config/options.c:1403
 msgid "Display style"
@@ -1859,7 +1880,7 @@ msgstr ""
 
 #: src/config/options.c:1409
 msgid "Auto-save interval"
-msgstr ""
+msgstr "Intervall für Auto-Speichern"
 
 #: src/config/options.c:1411
 msgid ""
@@ -1902,19 +1923,19 @@ msgstr "Tabellen anzeigen."
 
 #: src/config/options.c:1435
 msgid "Display subscripts"
-msgstr ""
+msgstr "Indizes anzeigen"
 
 #: src/config/options.c:1437
 msgid "Display subscripts (as [thing])."
-msgstr ""
+msgstr "Indizes anzeigen (als [Index])."
 
 #: src/config/options.c:1439
 msgid "Display superscripts"
-msgstr ""
+msgstr "Exponenten anzeigen"
 
 #: src/config/options.c:1441
 msgid "Display superscripts (as ^thing)."
-msgstr ""
+msgstr "Exponenten anzeigen (als ^Exponent)."
 
 #: src/config/options.c:1443
 msgid "Rendering of html link element"
@@ -1934,25 +1955,28 @@ msgstr ""
 #. Keep options in alphabetical order.
 #: src/config/options.c:1457
 msgid "MIME"
-msgstr ""
+msgstr "MIME"
 
 #: src/config/options.c:1459
 msgid "MIME-related options (handlers of various MIME types)."
-msgstr ""
+msgstr "Optionen zu MIME (Verarbeiter einiger MIME-Typen)."
 
 #: src/config/options.c:1462
 msgid "Default MIME-type"
-msgstr ""
+msgstr "Voreingestellter MIME-Typ"
 
 #: src/config/options.c:1464
 msgid ""
 "Document MIME-type to assume by default (when we are unable to\n"
 "guess it properly from known information about the document)."
 msgstr ""
+"Per Voreinstellung angenommener MIME-Typ (wenn wir nicht in der\n"
+"Lage sind, ihn aus vorhandenen Informationen über das Dokument\n"
+"zu erraten."
 
 #: src/config/options.c:1468
 msgid "MIME type associations"
-msgstr ""
+msgstr "MIME-Typ-Verbindungen"
 
 #: src/config/options.c:1470
 msgid ""
@@ -1962,52 +1986,65 @@ msgid ""
 "should contain (case-sensitive) name of the MIME handler (its\n"
 "properties are stored at mime.handler.<name>)."
 msgstr ""
+"Verarbeiter <-> MIME-Typ Verbindungen. Der erste Teilbaum ist die\n"
+"MIME-Klasse, während der zweite Teilbaum der MIME-Typ ist (d.h. der\n"
+"Verarbeiter für image/gif befindet sich bei mime.type.image.gif).\n"
+"Jede MIME-Typ-Option sollte den Namen (Groß-/Kleinschreibung beachten)\n"
+"des MIME-Verarbeiters enthalten (seine Eigenschaften werden unter\n"
+"mime.handler.<Name> gespeichert."
 
 #: src/config/options.c:1478
 msgid ""
 "Handler matching this MIME-type class ('*' is used here in place\n"
 "of '.')."
 msgstr ""
+"Verarbeiter, der zu dieser MIME-Typ-Klasse gehört ('*' wird an\n"
+"Stelle von '.' benutzt)."
 
 #: src/config/options.c:1483
 msgid ""
 "Handler matching this MIME-type name ('*' is used here in place\n"
 "of '.')."
 msgstr ""
+"Verarbeiter, der zu diesem MIME-Typ-Namen gehört ('*' wird an\n"
+"Stelle von '.' benutzt)."
 
 #: src/config/options.c:1487
 msgid "File type handlers"
-msgstr ""
+msgstr "Verarbeiter von Dateitypen"
 
 #: src/config/options.c:1489
 msgid ""
 "Handler for certain MIME types (as specified in mime.type.*).\n"
 "Each handler usually serves family of MIME types (ie. images)."
 msgstr ""
+"Verarbeiter für bestimmte MIME-Type (wie in mime.type.* angegeben).\n"
+"Üblicherweise ist jeder Verarbeiter für ein Familie von\n"
+"MIME-Typen verantwortlich (z.B. Bilder)."
 
 #: src/config/options.c:1494
 msgid "Description of this handler."
-msgstr ""
+msgstr "Beschreibung dieses Verarbeiters."
 
 #: src/config/options.c:1498
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
-msgstr ""
+msgstr "Systemspezifische Beschreibung des Verarbeiters (d.h. unix, unix-xwin, ...)."
 
 #: src/config/options.c:1500 src/config/options.c:1538
 msgid "Ask before opening"
-msgstr ""
+msgstr "Vor dem Öffnen fragen"
 
 #: src/config/options.c:1502
 msgid "Ask before opening."
-msgstr ""
+msgstr "Vor dem Öffnen fragen."
 
 #: src/config/options.c:1504
 msgid "Block terminal"
-msgstr ""
+msgstr "Bildschirm blockieren"
 
 #: src/config/options.c:1506
 msgid "Block the terminal when the handler is running."
-msgstr ""
+msgstr "Bildschirm blockieren, solange der Verarbeiter läuft."
 
 #: src/config/options.c:1508
 msgid "Program"
@@ -2023,17 +2060,19 @@ msgstr ""
 #: src/config/options.c:1514
 #, fuzzy
 msgid "File extension associations"
-msgstr "~Dateiendungen"
+msgstr "Verknüpfungen zu Dateiendungen"
 
 #: src/config/options.c:1516
 msgid "Extension <-> MIME type association."
-msgstr ""
+msgstr "Dateiendung <-> MIME-Typ Verknüpfung."
 
 #: src/config/options.c:1520
 msgid ""
 "MIME-type matching this file extension ('*' is used here in place\n"
 "of '.')."
 msgstr ""
+"Zu dieser Dateiendung passender MIME-Typ ('*' wird an Stelle von\n"
+"'.' benutzt)."
 
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
@@ -2052,7 +2091,7 @@ msgstr ""
 
 #: src/config/options.c:1532 src/config/options.c:1567
 msgid "Path"
-msgstr ""
+msgstr "Pfad"
 
 #: src/config/options.c:1534
 msgid ""
@@ -2113,19 +2152,19 @@ msgstr ""
 #. Keep options in alphabetical order.
 #: src/config/options.c:1576
 msgid "Protocols"
-msgstr ""
+msgstr "Protokolle"
 
 #: src/config/options.c:1578
 msgid "Protocol specific options."
-msgstr ""
+msgstr "Protokoll-spezifische Optionen."
 
 #: src/config/options.c:1580
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: src/config/options.c:1582
 msgid "HTTP-specific options."
-msgstr ""
+msgstr "HTTP-spezifische Optionen."
 
 #: src/config/options.c:1585
 msgid "Server bug workarounds"
@@ -2155,7 +2194,7 @@ msgstr ""
 
 #: src/config/options.c:1598
 msgid "Broken 302 redirects"
-msgstr ""
+msgstr "Beschädigte 302 Weiterleitungen"
 
 #: src/config/options.c:1600
 msgid ""
@@ -2163,6 +2202,9 @@ msgid ""
 "This is a problem for a lot of web discussion boards and the like.\n"
 "If they will do strange things to you, try to play with this."
 msgstr ""
+"Beschädigte 302 Weiterleitung (bricht RFC, ist aber kompatibel\n"
+"zu Netscape). Dies ist ein Problem vieler Web-Diskussions-Foren und\n"
+"Ähnlichem. Wenn diese komische Sachen machen, versuche diese Option."
 
 #: src/config/options.c:1604
 msgid "No keepalive after POST requests"
@@ -2174,11 +2216,11 @@ msgstr ""
 
 #: src/config/options.c:1608
 msgid "Use HTTP/1.0"
-msgstr ""
+msgstr "Benutze HTTP/1.0"
 
 #: src/config/options.c:1610
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
-msgstr ""
+msgstr "Benutze HTTP/1.0 Protokoll anstatt von HTTP/1.1."
 
 #: src/config/options.c:1612 src/config/options.c:1682
 msgid "Proxy configuration"
@@ -2224,7 +2266,7 @@ msgstr ""
 
 #: src/config/options.c:1634
 msgid "Policy"
-msgstr ""
+msgstr "Strategie"
 
 #: src/config/options.c:1637
 msgid ""
@@ -2245,11 +2287,11 @@ msgstr ""
 
 #: src/config/options.c:1648
 msgid "Send Accept-Language header"
-msgstr ""
+msgstr "Sende Accept-Language Header"
 
 #: src/config/options.c:1650
 msgid "Send Accept-Language header."
-msgstr ""
+msgstr "Sende Accept-Language Header"
 
 #: src/config/options.c:1652
 msgid "Use UI language as Accept-Language"
@@ -2292,11 +2334,11 @@ msgstr ""
 
 #: src/config/options.c:1678
 msgid "FTP"
-msgstr ""
+msgstr "FTP"
 
 #: src/config/options.c:1680
 msgid "FTP specific options."
-msgstr ""
+msgstr "FTP-spezifische Optionen."
 
 #: src/config/options.c:1684
 msgid "FTP proxy configuration."
@@ -2310,33 +2352,35 @@ msgstr ""
 
 #: src/config/options.c:1691
 msgid "Anonymous password"
-msgstr ""
+msgstr "Anonym-Passwort"
 
 #: src/config/options.c:1693
 msgid "FTP anonymous password to be sent."
-msgstr ""
+msgstr "Sende Passwort bei anonymen FTP."
 
 #: src/config/options.c:1695
 msgid "Use passive mode (IPv4)"
-msgstr ""
+msgstr "Benutze passiven Modus (IPv4)"
 
 #: src/config/options.c:1697
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
-msgstr ""
+msgstr "Benutze PASV anstatt von PORT (passiver oder aktiver Modus, nur IPv4)."
 
 #: src/config/options.c:1699 src/config/options.c:1703
 msgid "Use passive mode (IPv6)"
-msgstr ""
+msgstr "Benutze passiven Modus (IPv6)"
 
 #: src/config/options.c:1701
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
-msgstr ""
+msgstr "Benutze EPSV anstatt von EPRT (passiver oder aktiver Modus, nur IPv6)."
 
 #: src/config/options.c:1705
 msgid ""
 "Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 "Works only with IPv6 enabled, so nothing interesting for you."
 msgstr ""
+"Benutze EPSV anstatt von EPRT (passiver oder aktiver Modus, nur IPv6).\n"
+"Funktioniert nur, wenn IPv6 aktiviert ist, also uninteressant für dich."
 
 #: src/config/options.c:1711
 msgid "Local files"
@@ -2348,13 +2392,15 @@ msgstr ""
 
 #: src/config/options.c:1715
 msgid "Allow reading special files"
-msgstr ""
+msgstr "Lesen von speziellen Dateien erlauben"
 
 #: src/config/options.c:1717
 msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
 msgstr ""
+"Lesen von speziellen Dateien erlauben? (GEFÄHRLICH - von\n"
+"/dev/urandom oder /dev/zero zu lesen, kann dir den Tag ruinieren!)"
 
 #: src/config/options.c:1720
 msgid "Try encoding extensions"
@@ -2380,7 +2426,7 @@ msgstr ""
 
 #: src/config/options.c:1733
 msgid "User protocols"
-msgstr ""
+msgstr "Benutzer-Protokolle"
 
 #: src/config/options.c:1735
 msgid ""
@@ -2388,6 +2434,9 @@ msgid ""
 "handlers for the appropriate protocols. Ie.\n"
 "protocol.user.mailto.unix."
 msgstr ""
+"Benutzer-Protokolle. Optionen in diesem Baum geben die\n"
+"externen Verarbeiter für die entsprechenden Protokolle an.\n"
+"D.h. protocol.user.mailto.unix."
 
 #: src/config/options.c:1746
 msgid ""
@@ -2431,13 +2480,15 @@ msgstr ""
 
 #: src/config/options.c:1784
 msgid "This option is deprecated and will be removed very soon.\n"
-msgstr ""
+msgstr "Diese Option ist veraltet und wird bald entfernt.\n"
 
 #: src/config/options.c:1788
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
 msgstr ""
+"Diese Option ist veraltet und wird bald entfernt.\n"
+"Bitte benutze die Option mime.mailcap.prioritize dafür."
 
 #: src/config/options.c:1792
 msgid "No-proxy domains"
@@ -2491,13 +2542,16 @@ msgstr ""
 
 #: src/config/options.c:1827
 msgid "I/O in UTF8"
-msgstr ""
+msgstr "Ein-/Ausgabe mit UTF8"
 
 #: src/config/options.c:1829
 msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
+"Aktiviere Ein-/Ausgabe mit UTF8 für Unicode-Terminals. Beachte,\n"
+"dass zur Zeit nur der Teil des Terminal-Zeichensatzes für UTF8\n"
+"verwendet wird."
 
 #: src/config/options.c:1832 src/dialogs/options.c:134
 msgid "Restrict frames in cp850/852"
@@ -2534,9 +2588,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1851
-#, fuzzy
 msgid "Enable transparency"
-msgstr "Transparenz"
+msgstr "Aktiviere Transparenz"
 
 #: src/config/options.c:1853
 msgid ""
@@ -2549,11 +2602,11 @@ msgstr ""
 
 #: src/config/options.c:1859
 msgid "Use underline"
-msgstr ""
+msgstr "Benutze Unterstreichung"
 
 #: src/config/options.c:1861
 msgid "If we should use underline or enhance the color instead."
-msgstr ""
+msgstr "Soll unterstrichen oder die Farben verbessert werden."
 
 #: src/config/options.c:1865
 msgid "Codepage of charset used for displaying content on terminal."
@@ -2570,7 +2623,7 @@ msgstr ""
 
 #: src/config/options.c:1877
 msgid "Color settings"
-msgstr ""
+msgstr "Farb-Einstellungen"
 
 #: src/config/options.c:1879
 msgid "Default user interface color settings."

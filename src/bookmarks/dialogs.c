@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.184 2004/11/22 07:28:49 miciah Exp $ */
+/* $Id: dialogs.c,v 1.185 2004/11/23 13:08:29 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -219,7 +219,7 @@ focus_bookmark(struct widget_data *box_widget_data, struct listbox_data *box,
 
 	do {
 		sel2 = box->sel;
-		box_sel_move(box_widget_data, 1);
+		listbox_sel_move(box_widget_data, 1);
 	} while (box->sel->udata != bm && box->sel != sel2);
 }
 
@@ -599,7 +599,7 @@ bookmark_search_do(void *data)
 	traverse_listbox_items_list(box->sel, box, 0, 0, test_search, &ctx);
 	if (!ctx.found) return;
 
-	box_sel_move(widget_data, ctx.ofs - 1);
+	listbox_sel_move(widget_data, ctx.ofs - 1);
 }
 
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.197 2004/11/22 11:31:09 zas Exp $ */
+/* $Id: hierbox.c,v 1.198 2004/11/23 13:08:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,8 +193,8 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 				traverse_listbox_items_list(
 						root, box, 0, 1,
 						test_search, &ctx);
-				box_sel_move(dlg_data->widgets_data,
-					     ctx.offset);
+				listbox_sel_move(dlg_data->widgets_data,
+					         ctx.offset);
 			}
 
 		} else if (selected->type == BI_FOLDER) {
@@ -702,7 +702,8 @@ push_ok_delete_button(void *context_)
 
 	/* If removing the last item in a folder move focus to previous item in
 	 * the folder or the root. */
-	if (last) box_sel_move(context->widget_data, -1);
+	if (last)
+		listbox_sel_move(context->widget_data, -1);
 }
 
 t_handler_event_status

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.89 2004/11/22 11:31:09 zas Exp $ */
+/* $Id: widget.h,v 1.90 2004/11/23 13:08:29 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -46,7 +46,7 @@ struct widget {
 	union {
 		struct widget_info_checkbox checkbox;
 		struct widget_info_field field;
-		struct widget_info_listbox box;
+		struct widget_info_listbox listbox;
 		struct widget_info_button button;
 		struct widget_info_text text;
 	} info;

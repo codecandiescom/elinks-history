@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.182 2004/11/22 07:28:49 miciah Exp $ */
+/* $Id: listbox.c,v 1.183 2004/11/23 13:08:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ add_dlg_listbox(struct dialog *dlg, int height, void *box_data)
 
 	widget = &dlg->widgets[dlg->number_of_widgets++];
 	widget->type = WIDGET_LISTBOX;
-	widget->info.box.height = height;
+	widget->info.listbox.height = height;
 	widget->data = box_data;
 }
 
@@ -44,9 +44,9 @@ get_listbox_widget_data(struct widget_data *widget_data)
 
 /* Layout for generic boxes */
 void
-dlg_format_box(struct terminal *term, struct widget_data *widget_data,
-	       int x, int *y, int w, int max_height, int *rw,
-	       enum format_align align)
+dlg_format_listbox(struct terminal *term, struct widget_data *widget_data,
+	           int x, int *y, int w, int max_height, int *rw,
+	           enum format_align align)
 {
 	int min, optimal_h;
 
@@ -266,7 +266,7 @@ done_down:
 
 /* Takes care about listbox top moving. */
 static int
-box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
+listbox_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 {
 	struct listbox_context *data = data_;
 
@@ -298,7 +298,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 /* Moves the selected item by [dist] items. If [dist] is out of the current
  * range, the selected item is moved to the extreme (ie, the top or bottom) */
 void
-box_sel_move(struct widget_data *widget_data, int dist)
+listbox_sel_move(struct widget_data *widget_data, int dist)
 {
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
 
@@ -327,7 +327,8 @@ box_sel_move(struct widget_data *widget_data, int dist)
 		/* XXX: This is ugly, yes; but we don't want to call the
 		 * callback if we won't move on at all. */
 		box->sel = traverse_listbox_items_list(box->sel, box, dist, 1,
-						       box_sel_move_do, &data);
+						       listbox_sel_move_do,
+						       &data);
 	}
 }
 
@@ -457,7 +458,7 @@ display_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	if (moves > 0) {
 		/* Move selected listbox to visible and update box->top while we're
 		 * at it. Fixes bug 58. */
-		box_sel_move(widget_data, -moves);
+		listbox_sel_move(widget_data, -moves);
 
 	} else if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
@@ -546,12 +547,12 @@ mouse_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 		switch (get_mouse_button(ev)) {
 			case B_WHEEL_DOWN:
-				box_sel_move(dlg_item, 1);
+				listbox_sel_move(dlg_item, 1);
 				display_widget(dlg_data, dlg_item);
 				return EVENT_PROCESSED;
 
 			case B_WHEEL_UP:
-				box_sel_move(dlg_item, -1);
+				listbox_sel_move(dlg_item, -1);
 				display_widget(dlg_data, dlg_item);
 				return EVENT_PROCESSED;
 		}
@@ -605,42 +606,42 @@ kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 			/* Moving the box */
 			if (action == ACT_MENU_DOWN) {
-				box_sel_move(dlg_item, 1);
+				listbox_sel_move(dlg_item, 1);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_UP) {
-				box_sel_move(dlg_item, -1);
+				listbox_sel_move(dlg_item, -1);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_PAGE_DOWN) {
-				box_sel_move(dlg_item, dlg_item->box.height / 2);
+				listbox_sel_move(dlg_item, dlg_item->box.height / 2);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_PAGE_UP) {
-				box_sel_move(dlg_item, -dlg_item->box.height / 2);
+				listbox_sel_move(dlg_item, -dlg_item->box.height / 2);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_HOME) {
-				box_sel_move(dlg_item, -INT_MAX);
+				listbox_sel_move(dlg_item, -INT_MAX);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
 			}
 
 			if (action == ACT_MENU_END) {
-				box_sel_move(dlg_item, INT_MAX);
+				listbox_sel_move(dlg_item, INT_MAX);
 				display_widget(dlg_data, dlg_item);
 
 				return EVENT_PROCESSED;
@@ -652,7 +653,7 @@ kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 				box = get_listbox_widget_data(dlg_item);
 				if (box->sel) {
 					box->sel->marked = !box->sel->marked;
-					box_sel_move(dlg_item, 1);
+					listbox_sel_move(dlg_item, 1);
 				}
 				display_widget(dlg_data, dlg_item);
 

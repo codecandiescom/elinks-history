@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.408 2004/04/24 00:18:54 pasky Exp $ */
+/* $Id: parser.c,v 1.409 2004/04/24 00:36:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,42 +287,42 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	kill_html_stack_item(&html_top);
 }
 
-static inline void
+void
 html_span(unsigned char *a)
 {
 }
 
-static inline void
+void
 html_bold(unsigned char *a)
 {
 	format.attr |= AT_BOLD;
 }
 
-static inline void
+void
 html_italic(unsigned char *a)
 {
 	format.attr |= AT_ITALIC;
 }
 
-static inline void
+void
 html_underline(unsigned char *a)
 {
 	format.attr |= AT_UNDERLINE;
 }
 
-static inline void
+void
 html_fixed(unsigned char *a)
 {
 	format.attr |= AT_FIXED;
 }
 
-static inline void
+void
 html_subscript(unsigned char *a)
 {
 	format.attr |= AT_SUBSCRIPT;
 }
 
-static inline void
+void
 html_superscript(unsigned char *a)
 {
 	format.attr |= AT_SUPERSCRIPT;

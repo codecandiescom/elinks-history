@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.11 2003/05/20 21:27:41 pasky Exp $ */
+/* $Id: kbd.c,v 1.12 2003/05/26 08:51:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,6 +237,28 @@ setraw(int fd, struct termios *p)
 	return 0;
 }
 
+static int
+queue_ts(struct itrm *itrm, unsigned char *ts, int ts_len, int max_len)
+{
+	if (ts_len >= max_len) {
+		queue_event(itrm, ts, max_len);
+	} else {
+		unsigned char *mm;
+		int ll = max_len - ts_len;
+
+		queue_event(itrm, ts, ts_len);
+
+		mm = mem_calloc(1, ll);
+		if (!mm) {
+			free_trm(itrm);
+			return -1;
+		}
+
+		queue_event(itrm, mm, ll);
+		mem_free(mm);
+	}
+	return 0;
+}
 
 void
 handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
@@ -247,7 +269,6 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	struct event ev = { EV_INIT, 80, 24, 0 };
 	unsigned char *ts;
 	int env;
-	int ts_len;
 
 	if (get_terminal_size(ctl_in, &x, &y)) {
 		error("ERROR: could not get terminal size");
@@ -281,7 +302,9 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	env = get_system_env();
 
 	ts = getenv("TERM");
-	if (!ts) ts = "";
+	if (ts) ts = stracpy(ts);
+	else ts = stracpy("");
+	if (!ts) goto end;
 
 	for (i = 0; ts[i] != 0; ++i)
 		if (!isA(ts[i]))
@@ -290,24 +313,12 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	if ((env & ENV_TWIN) && !strcmp(ts, "linux"))
 		itrm->flags |= USE_TWIN_MOUSE;
 
-	ts_len = strlen(ts);
-	if (ts_len >= MAX_TERM_LEN) {
-		queue_event(itrm, ts, MAX_TERM_LEN);
-	} else {
-		unsigned char *mm;
-		int ll = MAX_TERM_LEN - ts_len;
-
-		queue_event(itrm, ts, ts_len);
-
-		mm = mem_calloc(1, ll);
-		if (!mm) {
-			free_trm(itrm);
-			return;
-		}
-
-		queue_event(itrm, mm, ll);
-		mem_free(mm);
+	if (queue_ts(itrm, ts, strlen(ts), MAX_TERM_LEN)) {
+		mem_free(ts);
+		return;
 	}
+
+	mem_free(ts);
 
 	ts = get_cwd();
 	if (!ts) {
@@ -315,25 +326,9 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		if (!ts) goto end;
 	}
 
-	/* FIXME: Duplicate code? --pasky */
-
-	ts_len = strlen(ts);
-	if (ts_len >= MAX_CWD_LEN) {
-		queue_event(itrm, ts, MAX_CWD_LEN);
-	} else {
-		unsigned char *mm;
-		int ll = MAX_CWD_LEN - ts_len;
-
-		queue_event(itrm, ts, ts_len);
-
-		mm = mem_calloc(1, ll);
-		if (!mm) {
-			free_trm(itrm);
-			return;
-		}
-
-		queue_event(itrm, mm, ll);
-		mem_free(mm);
+	if (queue_ts(itrm, ts, strlen(ts), MAX_CWD_LEN)) {
+		mem_free(ts);
+		return;
 	}
 
 	mem_free(ts);

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.23 2003/06/21 00:26:22 pasky Exp $ */
+/* $Id: dump.c,v 1.24 2003/06/21 00:33:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,16 +24,16 @@
 #include "main.h"
 #include "config/options.h"
 #include "document/cache.h"
-#include "document/options.h"
 #include "document/html/renderer.h"
+#include "document/options.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
-#include "terminal/hardio.h"
-#include "terminal/terminal.h"
 #include "osdep/os_dep.h"
 #include "protocol/url.h"
 #include "sched/error.h"
 #include "sched/sched.h"
+#include "terminal/hardio.h"
+#include "terminal/terminal.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/dump/dump.h"
@@ -47,11 +47,11 @@ static struct status dump_stat;
 static int dump_redir_count = 0;
 
 
-/* This dumps the given @ce's source onto @oh, nothing more. It returns 0 if it
+/* This dumps the given @ce's source onto @fd nothing more. It returns 0 if it
  * all went fine and 1 if something isn't quite right and we should terminate
  * ourselves ASAP. */
 static int
-dump_source(int oh, struct status *status, struct cache_entry *ce)
+dump_source(int fd, struct status *status, struct cache_entry *ce)
 {
 	struct fragment *frag;
 
@@ -66,7 +66,7 @@ nextfrag:
 			continue;
 
 		l = frag->length - d;
-		w = hard_write(oh, frag->data + d, l);
+		w = hard_write(fd, frag->data + d, l);
 
 		if (w != l) {
 			detach_connection(stat, dump_pos);
@@ -89,22 +89,24 @@ nextfrag:
 	return 0;
 }
 
-/* This dumps the given @ce's formatted output onto @oh, nothing more. It
- * returns 0 if it all went fine and 1 if something isn't quite right and we
- * should terminate ourselves ASAP. */
+/* This dumps the given @ce's formatted output onto @fd. It returns 0 if it all
+ * went fine and 1 if something isn't quite right and we should terminate
+ * ourselves ASAP. */
 static int
-dump_formatted(int oh, struct status *status, struct cache_entry *ce)
+dump_formatted(int fd, struct status *status, struct cache_entry *ce)
 {
 	struct document_options o;
-	struct f_data_c fd;
-	struct view_state *vs = mem_alloc(sizeof(struct view_state)
-					  + strlen(ce->url) + 1);
+	struct f_data_c formatted;
+	struct view_state *vs;
 
+	if (!ce) return 0;
+
+	vs = mem_alloc(sizeof(struct view_state) + strlen(ce->url) + 1);
 	if (!vs) return 1;
 
 	memset(&o, 0, sizeof(struct document_options));
 	memset(vs, 0, sizeof(struct view_state));
-	memset(&fd, 0, sizeof(struct f_data_c));
+	memset(&formatted, 0, sizeof(struct f_data_c));
 
 	o.xp = 0;
 	o.yp = 1;
@@ -122,9 +124,9 @@ dump_formatted(int oh, struct status *status, struct cache_entry *ce)
 	o.framename = "";
 
 	init_vs(vs, ce->url);
-	cached_format_html(vs, &fd, &o);
-	dump_to_file(fd.f_data, oh);
-	detach_formatted(&fd);
+	cached_format_html(vs, &formatted, &o);
+	dump_to_file(formatted.f_data, fd);
+	detach_formatted(&formatted);
 	destroy_vs(vs);
 	mem_free(vs);
 
@@ -135,9 +137,9 @@ void
 dump_end(struct status *stat, void *p)
 {
 	struct cache_entry *ce = stat->ce;
-	int oh = get_output_handle();
+	int fd = get_output_handle();
 
-	if (oh == -1) return;
+	if (fd == -1) return;
 	if (ce && ce->redirect && dump_redir_count++ < MAX_REDIRECTS) {
 		unsigned char *u;
 
@@ -165,14 +167,14 @@ dump_end(struct status *stat, void *p)
 		return;
 
 	if (get_opt_int_tree(&cmdline_options, "source")) {
-		if (dump_source(oh, status, ce) > 0)
+		if (dump_source(fd, status, ce) > 0)
 			goto terminate;
 
 		if (stat->state >= 0)
 			return;
 
-	} else if (ce) {
-		if (dump_formatted(oh, status, ce) > 0)
+	} else {
+		if (dump_formatted(fd, status, ce) > 0)
 			goto terminate;
 	}
 
@@ -187,11 +189,11 @@ terminate:
 }
 
 void
-dump_start(unsigned char *u)
+dump_start(unsigned char *url)
 {
-	unsigned char *uu, *wd;
+	unsigned char *real_url, *wd;
 
-	if (!*u) {
+	if (!*url) {
 		error(gettext("URL expected after %s."),
 			get_opt_int_tree(&cmdline_options, "source")
 			? "-source" : "-dump");
@@ -202,13 +204,14 @@ dump_start(unsigned char *u)
 	dump_pos = 0;
 
 	wd = get_cwd();
-	uu = translate_url(u, wd);
-	if (!uu) uu = stracpy(u);
-	if (!uu) goto terminate;
-	if (load_url(uu, NULL, &dump_stat, PRI_MAIN, 0, -1))
+	real_url = translate_url(url, wd);
+	if (!real_url) real_url = stracpy(url);
+	if (!real_url) goto terminate;
+
+	if (load_url(real_url, NULL, &dump_stat, PRI_MAIN, 0, -1))
 		goto terminate;
 
-	mem_free(uu);
+	mem_free(real_url);
 	if (wd) mem_free(wd);
 	return;
 
@@ -217,8 +220,9 @@ terminate:
 	retval = RET_SYNTAX;
 }
 
+
 int
-dump_to_file(struct f_data *fd, int h)
+dump_to_file(struct f_data *formatted, int fd)
 {
 #define D_BUF	65536
 
@@ -228,14 +232,14 @@ dump_to_file(struct f_data *fd, int h)
 
 	if (!buf) return -1;
 
-	for (y = 0; y < fd->y; y++) {
-		for (x = 0; x <= fd->data[y].l; x++) {
+	for (y = 0; y < formatted->y; y++) {
+		for (x = 0; x <= formatted->data[y].l; x++) {
 			int c;
 
-			if (x == fd->data[y].l) {
+			if (x == formatted->data[y].l) {
 				c = '\n';
 			} else {
-				c = fd->data[y].d[x];
+				c = formatted->data[y].d[x];
 				if ((c & 0xff) == 1) c += ' ' - 1;
 				if ((c >> 15) && (c & 0xff) >= 176
 				    && (c & 0xff) < 224)
@@ -243,15 +247,14 @@ dump_to_file(struct f_data *fd, int h)
 			}
 			buf[bptr++] = c;
 			if (bptr >= D_BUF) {
-				if (hard_write(h, buf, bptr) != bptr)
+				if (hard_write(fd, buf, bptr) != bptr)
 					goto fail;
 				bptr = 0;
 			}
 		}
 	}
 
-	if (hard_write(h, buf, bptr) != bptr) {
-
+	if (hard_write(fd, buf, bptr) != bptr) {
 fail:
 		mem_free(buf);
 		return -1;
@@ -259,5 +262,6 @@ fail:
 
 	mem_free(buf);
 	return 0;
+
 #undef D_BUF
 }

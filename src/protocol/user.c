@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.43 2003/07/21 04:14:33 jonas Exp $ */
+/* $Id: user.c,v 1.44 2003/07/21 16:24:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "sched/download.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -49,8 +50,7 @@ get_user_program(struct terminal *term, unsigned char *progid, int progidlen)
 
 
 static unsigned char *
-subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
-	  unsigned char *port, unsigned char *dir, unsigned char *subj)
+subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 {
 	struct string string;
 
@@ -64,34 +64,54 @@ subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
 		add_bytes_to_string(&string, cmd, p);
 		cmd += p;
 
-		if (*cmd == '%') {
-			cmd++;
-			switch (*cmd) {
-				case 'u':
-					add_to_string(&string, url);
-					break;
-				case 'h':
-					if (host)
-						add_to_string(&string, host);
-					break;
-				case 'p':
-					if (port)
-						add_to_string(&string, port);
-					break;
-				case 'd':
-					if (dir)
-						add_to_string(&string, dir);
-					break;
-				case 's':
-					if (subj)
-						add_to_string(&string, subj);
-					break;
-				default:
-					add_bytes_to_string(&string, cmd - 1, 2);
-					break;
-			}
-			if (*cmd) cmd++;
+		if (*cmd != '%') break;
+
+		cmd++;
+		switch (*cmd) {
+			case 'u':
+				add_shell_safe_to_string(&string, uri->protocol,
+							 strlen(uri->protocol));
+				break;
+			case 'h':
+				/* TODO	For some user protocols it would be
+				 *	better if substitution of each uri
+				 *	field was completely configurable. Now
+				 *	@host contains both the uri username
+				 *	field, (password field) and hostname
+				 *	field because it is useful for mailto
+				 *	protocol handling. */
+				/* It would break a lot of configurations so I
+				 * don't know. --jonas */
+				if (uri->userlen && uri->hostlen) {
+					int hostlen = uri->host + uri->hostlen - uri->user;
+
+					add_shell_safe_to_string(&string, uri->user,
+								 hostlen);
+				} else if (uri->host) {
+					add_shell_safe_to_string(&string, uri->host,
+								 uri->hostlen);
+				}
+				break;
+			case 'p':
+				if (uri->portlen)
+					add_shell_safe_to_string(&string, uri->port,
+								 uri->portlen);
+				break;
+			case 'd':
+				if (uri->datalen)
+					add_shell_safe_to_string(&string, uri->data,
+								 uri->datalen);
+				break;
+			case 's':
+				if (subj)
+					add_shell_safe_to_string(&string, subj,
+								 strlen(subj));
+				break;
+			default:
+				add_bytes_to_string(&string, cmd - 1, 2);
+				break;
 		}
+		if (*cmd) cmd++;
 	}
 
 	return string.source;
@@ -121,13 +141,10 @@ get_subject_from_query(unsigned char *query)
 static void
 user_func(struct session *ses, unsigned char *url)
 {
-	unsigned char *subj, *prog, *host;
+	unsigned char *subj, *prog;
 	struct uri uri;
-	unsigned char *uristring = stracpy(url);
 
-	if (!uristring) return;
-	if (!parse_uri(&uri, uristring)) {
-		mem_free(uristring);
+	if (!parse_uri(&uri, url)) {
 		msg_box(ses->tab->term, NULL, 0,
 			N_("Bad URL syntax"), AL_CENTER,
 			N_("Bad user protocol URL"),
@@ -136,61 +153,34 @@ user_func(struct session *ses, unsigned char *url)
 		return;
 	}
 
-	uri.protocol[uri.protocollen] = 0;
 	prog = get_user_program(ses->tab->term, uri.protocol, uri.protocollen);
 	if (!prog || !*prog) {
+		unsigned char *protocol = memacpy(uri.protocol, uri.protocollen);
+
 		/* Shouldn't ever happen, but be paranoid. */
 		/* Happens when you're in X11 and you've no handler for it. */
-		msg_box(ses->tab->term, getml(uristring, NULL), MSGBOX_FREE_TEXT,
+		msg_box(ses->tab->term, getml(protocol, NULL), MSGBOX_FREE_TEXT,
 			N_("No program"), AL_CENTER,
 			msg_text(ses->tab->term,
 				N_("No program specified for protocol %s."),
-				uri.protocol),
+				protocol),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
 		return;
 	}
 
-	/* XXX Order matters here. Prepare last fields first since the 'common'
-	 * uri string is modified by exchanging the field delimiters with
-	 * string delimiters. */
-
 	if (uri.data && uri.datalen) {
-		uri.data[uri.datalen] = 0;
-
 		/* Some mailto specific stuff follows... */
 		subj = strchr(uri.data, '?');
 		if (subj) {
 			subj++;
 			subj = get_subject_from_query(subj);
-			if (subj) check_shell_security(&subj);
 		}
-
-		/* After mailto subject extraction since we know out '?' */
-		check_shell_security(&uri.data);
 	} else {
 		subj = NULL;
 	}
 
-	if (uri.port && uri.portlen) {
-		uri.port[uri.portlen] = 0;
-		check_shell_security(&uri.port);
-	}
-
-	/* TODO	For some user protocols it would be better if substitution of
-	 *	each uri field was completely configurable. Now @host contains
-	 *	both the uri username field, (password field) and hostname
-	 *	field because it is useful for mailto protocol handling. */
-	/* It would break a lot of configurations so I don't know. --jonas */
-
-	host = (uri.user ? uri.user : uri.host);
-	if (host && *host) {
-		uri.host[uri.hostlen] = 0;
-		check_shell_security(&host);
-	}
-
-	prog = subst_cmd(prog, url, host, uri.port, uri.data, subj);
-	mem_free(uristring);
+	prog = subst_cmd(prog, &uri, subj);
 	if (subj) mem_free(subj);
 	if (prog) {
 		exec_on_terminal(ses->tab->term, prog, "", 1);

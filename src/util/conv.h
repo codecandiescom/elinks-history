@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.13 2003/07/21 04:00:39 jonas Exp $ */
+/* $Id: conv.h,v 1.14 2003/07/21 16:24:54 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -62,6 +62,9 @@ struct string *add_html_to_string(struct string *string, unsigned char *html, in
 
 /* Escapes \ and " with a \ */
 struct string *add_quoted_to_string(struct string *string, unsigned char *q, int qlen);
+
+/* Escapes non shell safe chars with '_'. */
+struct string *add_shell_safe_to_string(struct string *string, unsigned char *cmd, int cmdlen);
 
 
 /* These are fast functions to convert integers to string, or to hexadecimal string. */

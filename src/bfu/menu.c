@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.232 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: menu.c,v 1.233 2004/05/26 21:31:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,8 +249,6 @@ scroll_menu(struct menu *menu, int d)
 	int w = int_max(1, menu->box.height - MENU_BORDER_SIZE * 2);
 	int scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
 
-	if (!d) return;
-
 	int_lower_bound(&scr_i, 0);
 	int_lower_bound(&w, 0);
 
@@ -267,8 +265,9 @@ scroll_menu(struct menu *menu, int d)
 		menu->selected += menu->size;
 
 	int_bounds(&menu->selected, 0, menu->size - 1);
+
 	while (!mi_is_selectable(menu->items[menu->selected])) {
-		menu->selected += d/abs(d);
+		menu->selected += d ? d/abs(d) : 1;
 
 		if (menu->selected < 0 || menu->selected >= menu->size) {
 			menu->selected = -1;

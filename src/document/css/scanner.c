@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.114 2004/01/28 00:57:56 jonas Exp $ */
+/* $Id: scanner.c,v 1.115 2004/01/28 01:16:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,9 +83,12 @@ static struct scanner_string_mapping css_string_mappings[] = {
 	{ NULL, CSS_TOKEN_NONE, CSS_TOKEN_NONE },
 };
 
+static struct scanner_token *scan_css_tokens(struct scanner *scanner);
+
 static struct scanner_info css_scanner_info = {
 	css_string_mappings,
 	css_scan_table_info,
+	scan_css_tokens,
 };
 
 #define	check_css_table(c, bit)	(css_scanner_info.scan_table[(c)] & (bit))
@@ -388,9 +391,9 @@ init_css_scanner(struct scanner *scanner, unsigned char *string)
 
 	memset(scanner, 0, sizeof(struct scanner));
 
-	scanner->scan = scan_css_tokens;
 	scanner->string = string;
 	scanner->position = string;
 	scanner->current = scanner->table;
-	scan_css_tokens(scanner);
+	scanner->info = &css_scanner_info;
+	scanner->info->scan(scanner);
 }

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.2 2004/01/28 01:12:03 jonas Exp $ */
+/* $Id: scanner.h,v 1.3 2004/01/28 01:16:19 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -61,12 +61,20 @@ struct scanner_string_mapping {
 	int base_type;
 };
 
+struct scanner;
+
 struct scanner_info {
 	/* Table containing how to map strings to token types */
 	struct scanner_string_mapping *string_mappings;
 
 	/* Information for how to initialize the scanner table */
 	struct scan_table_info *scan_table_info;
+
+	/* Fills the scanner with tokens. Already scanned tokens which have not
+	 * been requested remain and are moved to the start of the scanners
+	 * token table. */
+	/* Returns the current token or NULL if there are none. */
+	struct scanner_token *(*scan)(struct scanner *scanner);
 
 	/* The scanner table */
 	/* Contains bitmaps for the various characters groups.
@@ -93,17 +101,14 @@ struct scanner {
 	 * can be retrieved from the string. */
 	unsigned char *string, *position;
 
-	/* Fills the scanner with tokens. Already scanned tokens which have not
-	 * been requested remain and are moved to the start of the scanners
-	 * token table. */
-	/* Returns the current token or NULL if there are none. */
-	struct scanner_token *(*scan)(struct scanner *scanner);
-
 	/* The current token and number of scanned tokens in the table.
 	 * If the number of scanned tokens is less than SCANNER_TOKENS
 	 * it is because there are no more tokens in the string. */
 	struct scanner_token *current;
 	int tokens;
+
+	/* The 'meta' scanner information */
+	struct scanner_info *info;
 
 #ifdef SCANNER_DEBUG
 	/* Debug info about the caller. */
@@ -152,7 +157,7 @@ get_next_scanner_token(struct scanner *scanner)
 {
 	return (scanner_has_tokens(scanner)
 		&& (++(scanner)->current + 1 >= (scanner)->table + (scanner)->tokens)
-		? scanner->scan(scanner) : get_scanner_token(scanner));
+		? scanner->info->scan(scanner) : get_scanner_token(scanner));
 }
 
 /* Removes tokens from the scanner until it meets a token of the given type.

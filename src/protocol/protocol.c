@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.72 2004/09/22 21:57:55 pasky Exp $ */
+/* $Id: protocol.c,v 1.73 2004/09/22 23:59:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,8 +219,9 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 		if (!redirect_uri)
 			return;
 		/* XXX: Is that safe to do at this point? --pasky */
-		goto_uri_frame(ses, uri, doc_view->name, CACHE_MODE_NORMAL);
-		done_uri(uri);
+		goto_uri_frame(ses, redirect_uri, doc_view->name,
+		               CACHE_MODE_NORMAL);
+		done_uri(redirect_uri);
 		return;
 	}
 #else

@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.34 2003/09/10 14:40:14 jonas Exp $ */
+/* $Id: draw.h,v 1.35 2003/09/15 20:17:53 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -32,6 +32,9 @@ struct screen_char {
 
 #define copy_screen_chars(to, from, amount) \
 	do { memcpy(to, from, (amount) * sizeof(struct screen_char)); } while (0)
+
+#define compare_screen_char_color(c1, c2) \
+	do { memcmp((c1)->color, (c2)->color, 2); } while (0)
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */
@@ -76,47 +79,54 @@ struct screen_char *get_char(struct terminal *, int xpos, int ypos);
 void draw_char_color(struct terminal *term, int x, int y,
 		     struct color_pair *color);
 
-/* Sets the data of a screen position. */
-void draw_char_data(struct terminal *term, int x, int y, unsigned char data);
+/* Sets the from_* SetscmDERo de* Set2 the from_* SetsSTANDOUT* Set4 the from_* Setsgn;
+	* Set8 th};har *O_DOmargin
+	mem_rt;
 
-/* Sets the data to @border and of a screen position. */
-void draw_border_char(struct terminal *term, int x, int y,
-		      enum border_char border, struct color_pair *color);
+t screeerminal's m == (struned charminal *tert x,ml_tORDeens eirt;ros);
+rm->t e_hash_chNE	 = ent cp, inions o;
+	strucshrink		 + phar(structe Olrminal *term, intbit.linebrions o;
+	struc, innk		 + coloar_conue;
 
-/* Sets the cross position of two borders. */
-void draw_border_cross(struct terminal *, int x, int y,
-		       enum border_cross_direction, struct color_pair *color);
+e-rt + w"html_spechar frinebrions o;
+	struc_view *};haDER_X_DOINIT_ from_*CHAR(shriaultin;
+_view+ *cshriaultin;
+_view }haDER_X_DO
+	if (shift > 0)
+	todetml stamink");\		}
+ *cm == -1todetml st(amink");ne_break(struct (shift > 0)EN_ }aligf (! || DER_X_DO
+	ckgrourminal *termx framcEN_c2);\		}
+ *cm ==bg mcE);
+	ofrast(c2);
+	ofrast2N_ }aligf (! ||  + LER_xhNE	 = symr os) {
+		p);
+'s  ==i,
+	Sname
 
-/* Draws a char. */
-void draw_char(struct terminal *term, int x, int y,
-	       unsigned char data, enum screen_char_attr attr,
-	       struct color_pair *color);
+		c;
+	t->ort;ro
+t screex).rig_cha	par_ford;
 
-/* Draws an area using the same colors and attributes. */
-void draw_area(struct terminal *term, int x, int y, int xw, int yw,
-	       unsigned char data, enum screen_char_attr attr,
-	       struct color_pair *color);
+ = fm_rt;
+rminal m == namement: NUchar(stru  from_* Setsgn;
+	; yout termindropamemm_cha		 + pam == -y of c3 ^ uter NUL*ter(ord;
 
-void draw_border(struct terminal *term, int x, int y, int xw, int yw,
-		 struct color_pair *color, int width);
+ = TODO:	int_low'et_supporces *
+#inc Uni_connamelen terminby);
 
-/* Draws @length chars from @text. */
-void draw_text(struct terminal *term, int x, int y,
-	       unsigned char *text, int length,
-	       enum screen_char_attr attr,
-	       struct color_pair *color);
+ng;
+	t->			m_chaUni_con
+	Bh"
+ncesturn;
+	}
 
-/* Draws @length chars from @line on the screen. */
-/* Used by viewer to copy over a document. */
-void draw_line(struct terminal *term, int x, int y, int length,
-	       struct screen_char *line);
+	/* ct teter NUL*tert x,ml_ of le-ad.secial	BORDER_SULCORNERe T21coloBORDER_SURCORNERe T191oloBORDER_SDLCORNERe T192oloBORDER_SDRCORNERe T217oloBORDER_SLTEE	e T18 t;
+	i=>_rt;
 
-/* Updates the terminals cursor position. When @blockable is set the
- * block_cursor terminal option decides whether the cursor should be put at the
- * bottom right corner of the screen. */
-void set_cursor(struct terminal *term, int x, int y, int blockable);
-
-/* Blanks the screen. */
-void clear_terminal(struct terminal *);
-
-#endif
+tDOmas *				 + parenk->> -|cial	BORDER_SRTEE	e T195oloBORDER_SVo de*e T179oloBORDER_SHo de*e T196oloBORDER_SCROSS*e T197t;
+	i+
+	/* ,ml_double-ad.secia;
+	iTODO:	coloTEE-> 0)
+!cial	BORDER_DULCORNERe T201oloBORDER_DURCORNERe T187oloBORDER_DDLCORNERe TrdeoloBORDER_DDRCORNERe T18coloBORDER_DVo de*e T186oloBORDER_DHo de*e T205th};har *0 -marg<- 2 v 3 ^struct teter NUL*ros (!p	BORn
+	m{loBORDER_X_RIGHT 		  loBORDER_X_= &s loBORDER_X_DOWN loBORDER_X_UPh};har *Ex *entlink*tertocumert;
+rminal(struned charminal *ter

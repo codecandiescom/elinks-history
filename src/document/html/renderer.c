@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.268 2003/09/15 20:17:17 jonas Exp $ */
+/* $Id: renderer.c,v 1.269 2003/09/15 20:17:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,12 +198,14 @@ set_hchars(struct part *part, int x, int y, int xl,
 
 	if (bgcolor) {
 		struct color_pair colors = INIT_COLOR_PAIR(*bgcolor, 0x0);
-		struct screen_char schar = INIT_SCREEN_CHAR(data, attr, 0);
+		struct screen_char *template = &POS(x, y);
 
-		set_term_color(&schar, &colors, COLOR_DEFAULT);
+		template->data = data;
+		template->attr = attr;
+		set_term_color(template, &colors, COLOR_DEFAULT);
 
-		for (; xl; xl--, x++) {
-			copy_screen_chars(&POS(x, y), &schar, 1);
+		for (xl -= 1, x += 1; xl; xl--, x++) {
+			copy_screen_chars(&POS(x, y), template, 1);
 		}
 	} else {
 		for (; xl; xl--, x++) {

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.79 2003/11/09 13:44:26 pasky Exp $ */
+/* $Id: msgbox.c,v 1.80 2003/11/09 14:24:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,14 +30,11 @@ msg_box_layouter(struct dialog_data *dlg_data)
 	int w = dialog_max_width(term);
 	int rw = 0;
 	int y = 0;
-	unsigned char *text = dlg_data->dlg->udata;
-	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
-	dlg_format_text(NULL, text, 0, &y, w, &rw, text_color,
-			dlg_data->dlg->align);
+	layout_text_widget(NULL, dlg_data->widgets_data, 0, &y, w, &rw);
 
 	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data, dlg_data->n, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, dlg_data->n - 1, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
@@ -45,11 +42,11 @@ msg_box_layouter(struct dialog_data *dlg_data)
 	draw_dialog(dlg_data, w, y);
 
 	y = dlg_data->y + DIALOG_TB + 1;
-	dlg_format_text(term, text, dlg_data->x + DIALOG_LB, &y, w, NULL,
-			text_color, dlg_data->dlg->align);
+
+	layout_text_widget(term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_buttons(term, dlg_data->widgets_data, dlg_data->n, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, dlg_data->widgets_data + 1, dlg_data->n - 1, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 
@@ -88,7 +85,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 		 * from @ap. */
 	}
 
-	dlg = calloc_dialog(buttons, 0);
+	dlg = calloc_dialog(buttons + 1, 0);
 	if (!dlg) {
 		freeml(ml);
 		return;
@@ -98,13 +95,13 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 
 	dlg->title = title;
 	dlg->layouter = msg_box_layouter;
-	dlg->udata = text;
 	dlg->udata2 = udata;
-	dlg->align = align;
+
+	add_dlg_text(dlg, text, align);
 
 	va_start(ap, buttons);
 
-	while (dlg->widgets_size < buttons) {
+	while (dlg->widgets_size < buttons + 1) {
 		unsigned char *label;
 		void (*fn)(void *);
 		int bflags;
@@ -127,7 +124,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 
 	va_end(ap);
 
-	add_dlg_end(dlg, buttons);
+	add_dlg_end(dlg, buttons + 1);
 
 	do_dialog(term, dlg, ml);
 }

@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.14 2003/12/30 18:45:27 zas Exp $ */
+/* $Id: hotkey.c,v 1.15 2004/03/09 12:24:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 {
 	int i;
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	/* hotkey debugging */
 	if (hotkeys) {
 		unsigned char used_hotkeys[255];
@@ -142,7 +142,7 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 
 	key_pos = item->hotkey_pos;
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	if (key_pos < 0) key_pos = -key_pos;
 #endif
 

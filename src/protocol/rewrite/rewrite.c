@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.17 2004/02/05 12:52:54 pasky Exp $ */
+/* $Id: rewrite.c,v 1.18 2004/03/09 12:24:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ static struct option_info uri_rewrite_options[] = {
 
 	INIT_OPT_SMART_PREFIX("bug", bugzilla_prefix("show_bug.cgi?id=%s")),
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	INIT_OPT_SMART_PREFIX("milestone-bugs", bugzilla_prefix("buglist.cgi?target_milestone=%s")),
 	INIT_OPT_SMART_PREFIX("search-bugs", bugzilla_prefix("buglist.cgi?short_desc_type=allwordssubstr&short_desc=%s")),
 #endif

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.194 2004/01/30 19:13:29 jonas Exp $ */
+/* $Id: menu.c,v 1.195 2004/03/09 12:24:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
 	int xbase = x + L_TEXT_SPACE;
 	int w = width - (L_TEXT_SPACE + R_TEXT_SPACE);
 	int hk = 0;
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	/* For redundant hotkeys highlighting. */
 	int double_hk = 0;
 
@@ -351,7 +351,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
 		}
 
 		if (hk == 1) {
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 			draw_char(term, xbase + x - 1, y, c, hk_attr,
 				  (double_hk ? hk_color_sel : hk_color));
 #else
@@ -403,7 +403,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	     p++, y++) {
 		struct color_pair *color = normal_color;
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 		/* Sanity check. */
 		if (mi_is_end_of_menu(menu->items[p]))
 			INTERNAL("Unexpected end of menu [%p:%d]", menu->items[p], p);
@@ -457,7 +457,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			} else if (menu->items[p].action != ACT_MAIN_NONE) {
 				struct string keystroke;
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 				/* Help to detect action + right text. --Zas */
 				if (mi_has_right_text(menu->items[p])) {
 					if (color == selected_color)
@@ -465,7 +465,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					else
 						color = selected_color;
 				}
-#endif /* DEBUG */
+#endif /* CONFIG_DEBUG */
 
 				if (init_string(&keystroke)) {
 					add_keystroke_to_string(&keystroke,

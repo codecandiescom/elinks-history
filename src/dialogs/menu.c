@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.289 2004/02/17 06:03:08 witekfl Exp $ */
+/* $Id: menu.c,v 1.290 2004/03/09 12:24:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ static struct menu_item help_menu[] = {
 	INIT_MENU_ITEM(N_("~Documentation"), NULL, ACT_MAIN_NONE, menu_url_shortcut, ELINKS_DOC_URL, 0),
 	INIT_MENU_ITEM(N_("~Keys"), NULL, ACT_MAIN_NONE, menu_keys, NULL, 0),
 	BAR_MENU_ITEM,
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	INIT_MENU_ITEM(N_("~Bugs information"), NULL, ACT_MAIN_NONE, menu_url_shortcut, ELINKS_BUGS_URL, 0),
 	INIT_MENU_ITEM(N_("ELinks C~vsWeb"), NULL, ACT_MAIN_NONE, menu_url_shortcut, ELINKS_CVSWEB_URL, 0),
 	BAR_MENU_ITEM,

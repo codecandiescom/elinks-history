@@ -1,4 +1,4 @@
-/* $Id: object.h,v 1.6 2003/12/21 14:51:21 zas Exp $ */
+/* $Id: object.h,v 1.7 2004/03/09 12:24:38 jonas Exp $ */
 
 #ifndef EL__UTIL_OBJECT_H
 #define EL__UTIL_OBJECT_H
@@ -15,7 +15,7 @@
 #define object_lock_debug(obj, info)
 #endif
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 #include "util/error.h"
 #define object_sanity_check(obj)					\
 	do {								\

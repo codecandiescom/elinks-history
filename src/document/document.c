@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.49 2004/01/25 09:33:29 jonas Exp $ */
+/* $Id: document.c,v 1.50 2004/03/09 12:24:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,7 +218,7 @@ shrink_format_cache(int whole)
 	struct document *document;
 	int format_cache_size = get_opt_int("document.cache.format.size");
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	{
 		int entries = 0;
 

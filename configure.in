@@ -864,7 +864,7 @@ hm_enabled_debug="no";
 
 AC_ARG_ENABLE(debug,
 	      [  --enable-debug          enable leak debug and internal error checking],
-	      [if test "$enableval" = yes; then hm_enabled_debug="yes"; AC_DEFINE(DEBUG) fi])
+	      [if test "$enableval" = yes; then hm_enabled_debug="yes"; AC_DEFINE(CONFIG_DEBUG) fi])
 
 AC_ARG_ENABLE(fastmem,
               [  --enable-fastmem        enable direct use of system allocation functions, not useable with --enable-debug],

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.81 2004/01/24 10:09:45 pasky Exp $ */
+/* $Id: error.c,v 1.82 2004/03/09 12:24:38 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -106,7 +106,7 @@ elinks_internal(unsigned char *fmt, ...)
 	er(1, 1, errbuf, params);
 
 	va_end(params);
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	force_dump();
 #endif
 }
@@ -131,7 +131,7 @@ elinks_assertm(int x, unsigned char *fmt, ...)
 }
 
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 void
 force_dump(void)
 {

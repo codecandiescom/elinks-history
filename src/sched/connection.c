@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.135 2003/12/21 14:51:20 zas Exp $ */
+/* $Id: connection.c,v 1.136 2004/03/09 12:24:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,7 +192,7 @@ done_host_connection(struct connection *conn)
 
 static void sort_queue();
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 static void
 check_queue_bugs(void)
 {
@@ -776,7 +776,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		download->prev_error = 0;
 	}
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	foreach (conn, queue) {
 		struct download *assigned;
 

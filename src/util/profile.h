@@ -1,4 +1,4 @@
-/* $Id: profile.h,v 1.1 2003/10/14 14:15:31 zas Exp $ */
+/* $Id: profile.h,v 1.2 2004/03/09 12:24:38 jonas Exp $ */
 
 #ifndef EL__UTIL_PROFILE_H
 #define EL__UTIL_PROFILE_H
@@ -8,7 +8,7 @@
 #endif
 
 /* Process' CPU time utilities */
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 #include <time.h>
 
 /* CLK_DECL(n) declares an array of @n clock_t to be used by CLK_* macros.

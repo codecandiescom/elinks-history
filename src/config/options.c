@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.437 2004/03/05 10:41:11 witekfl Exp $ */
+/* $Id: options.c,v 1.438 2004/03/09 12:24:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ struct option *cmdline_options;
 static void add_opt_rec(struct option *, unsigned char *, struct option *);
 static void free_options_tree(struct list_head *, int recursive);
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 /* Detect ending '.' (and some others) in options captions.
  * It will emit a message in debug mode only. --Zas */
 
@@ -208,14 +208,14 @@ get_opt_rec_real(struct option *tree, unsigned char *name)
  * NULL. Note that you are supposed to use wrapper get_opt(). */
 union option_value *
 get_opt_(
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	 unsigned char *file, int line,
 #endif
 	 struct option *tree, unsigned char *name)
 {
 	struct option *opt = get_opt_rec(tree, name);
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	errfile = file;
 	errline = line;
 	if (!opt) elinks_internal("Attempted to fetch nonexisting option %s!", name);

@@ -1,11 +1,11 @@
-/* $Id: stub.h,v 1.5 2004/02/19 14:39:39 pasky Exp $ */
+/* $Id: stub.h,v 1.6 2004/03/09 12:24:36 jonas Exp $ */
 
 #ifndef EL__OSDEP_STUB_H
 #define EL__OSDEP_STUB_H
 
 #include <string.h>
 #if 0
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 #define USE_OWN_LIBC
 #endif
 #endif

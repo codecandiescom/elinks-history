@@ -1,4 +1,4 @@
-/* $Id: memlist.h,v 1.5 2003/06/07 10:03:24 pasky Exp $ */
+/* $Id: memlist.h,v 1.6 2004/03/09 12:24:38 jonas Exp $ */
 
 #ifndef EL__UTIL_MEMLIST_H
 #define EL__UTIL_MEMLIST_H
@@ -9,7 +9,7 @@ struct memory_list {
 };
 
 #undef DEBUG_MEMLIST
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 #define DEBUG_MEMLIST
 #endif
 

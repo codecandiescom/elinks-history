@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.97 2004/03/05 10:41:10 witekfl Exp $ */
+/* $Id: options.h,v 1.98 2004/03/09 12:24:35 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -183,7 +183,7 @@ extern void checkout_option_values(struct option_resolver *resolvers,
 
 extern struct option *get_opt_rec(struct option *, unsigned char *);
 extern struct option *get_opt_rec_real(struct option *, unsigned char *);
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 extern union option_value *get_opt_(unsigned char *, int, struct option *, unsigned char *);
 #define get_opt(tree, name) get_opt_(__FILE__, __LINE__, tree, name)
 #else

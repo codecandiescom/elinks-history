@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.28 2004/01/01 16:34:41 jonas Exp $ */
+/* $Id: version.c,v 1.29 2004/03/09 12:24:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ get_dyn_full_version(struct terminal *term, int more)
 
 	add_to_string(&string, ELINKS_VERSION);
 	if (more) {
- #if defined(DEBUG) && defined(__DATE__) && defined(__TIME__)
+ #if defined(CONFIG_DEBUG) && defined(__DATE__) && defined(__TIME__)
 		add_to_string(&string, " (" __DATE__ " " __TIME__ ")");
  #endif
 		add_to_string(&string, "\n\n");
@@ -79,7 +79,7 @@ get_dyn_full_version(struct terminal *term, int more)
 	string_concat(&string,
 		"\n\n",
 		_("Features:", term), " ",
-#ifndef DEBUG
+#ifndef CONFIG_DEBUG
 		_("Standard", term),
 #else
 		_("Debug", term),

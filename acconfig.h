@@ -70,7 +70,7 @@
 #undef HAVE_X11
 
 /* Define to 1 if we should include leak debugger and internal error checking facilites */
-#undef DEBUG
+#undef CONFIG_DEBUG
 
 /* Directory containing default config */
 #undef CONFDIR

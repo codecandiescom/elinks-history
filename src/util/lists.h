@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.37 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: lists.h,v 1.38 2004/03/09 12:24:38 jonas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -13,7 +13,7 @@
  * Two unsigned int magic number will be put before and after the next and
  * prev pointers, these will be check on list operations.
  * Some pointers are set to specific values after action. */
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 #define LISTDEBUG
 #endif
 

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.45 2004/01/07 03:18:19 jonas Exp $ */
+/* $Id: dialogs.c,v 1.46 2004/03/09 12:24:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 		if (!ce->valid) add_to_string(&msg, _("invalid", term));
 	}
 
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 	add_format_to_string(&msg, "\n%s: %d", "Refcount", ce->refcount);
 	add_format_to_string(&msg, "\n%s: %d", _("ID tag", term),
 						ce->id_tag);

@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.41 2004/01/05 04:54:32 miciah Exp $ */
+/* $Id: error.h,v 1.42 2004/03/09 12:24:38 jonas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -40,7 +40,7 @@ void elinks_error(unsigned char *fmt, ...);
 
 /* @INTERNAL(format_string) is used to report fatal errors during the ELinks
  * run. It tries to draw user's attention to the error and dumps core if ELinks
- * is running in the DEBUG mode. */
+ * is running in the CONFIG_DEBUG mode. */
 #undef INTERNAL
 #define INTERNAL errfile = __FILE__, errline = __LINE__, elinks_internal
 void elinks_internal(unsigned char *fmt, ...);
@@ -91,7 +91,7 @@ do { if (!assert_failed && (assert_failed = !(x))) { \
  * variadic macros are not supported. */
 /* XXX: assertm() usage could generate warnings (we assume that the assert()ed
  * expression is int (and that's completely fine, I do *NOT* want to see any
- * stinking assert((int)pointer) ! ;-)), so DEBUG (-Werror) and
+ * stinking assert((int)pointer) ! ;-)), so CONFIG_DEBUG (-Werror) and
  * !HAVE_VARIADIC_MACROS won't play well together. Hrm. --pasky */
 #ifdef FASTMEM
 static inline
@@ -109,7 +109,7 @@ void elinks_assertm(int x, unsigned char *fmt, ...)
 
 
 /* To make recovery path possible (assertion failed may not mean end of the
- * world, the execution goes on if we're outside of DEBUG and FASTMEM),
+ * world, the execution goes on if we're outside of CONFIG_DEBUG and FASTMEM),
  * @assert_failed is set to true if the last assert() failed, otherwise it's
  * zero. Note that you must never change assert_failed value, sorry guys.
  *
@@ -144,7 +144,7 @@ extern int assert_failed;
 
 /* This will print some fancy message, version string and possibly do something
  * else useful. Then, it will dump core. */
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 void force_dump(void);
 #endif
 

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.66 2004/01/25 01:20:51 jonas Exp $ */
+/* $Id: string.h,v 1.67 2004/03/09 12:24:38 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -104,7 +104,7 @@ int elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 
 
 /* String debugging using magic number, it may catches some errors. */
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 #define DEBUG_STRING
 #endif
 

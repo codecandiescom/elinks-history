@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.13 2003/06/10 14:49:47 pasky Exp $ */
+/* $Id: history.c,v 1.14 2003/06/10 15:27:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ clean_unhistory(struct session *ses)
 /* @dir: 1 == forward (unback), -1 == back */
 /* Returns > 0 upon error, 0 if we should abort the movement and 1 if we should
  * proceed fearlessly. */
-static void
+static int
 ses_leave_location(struct session *ses, int dir)
 {
 	free_files(ses);

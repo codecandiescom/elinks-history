@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.94 2004/01/25 14:43:14 jonas Exp $ */
+/* $Id: info.c,v 1.95 2004/01/27 10:37:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,6 +114,11 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 			add_actions_to_string(&keys, actions, map, term);
 			if (map + 1 < KM_MAX)
 				add_to_string(&keys, "\n\n");
+
+			/* Just a little reminder that the following code takes
+			 * the easy way. */
+			assert(MAIN_ACTIONS > EDIT_ACTIONS);
+			assert(EDIT_ACTIONS > MENU_ACTIONS);
 
 			if (map == KM_MAIN) {
 				actions[EDIT_ACTIONS] = ACT_EDIT_NONE;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.141 2003/06/21 14:19:18 pasky Exp $ */
+/* $Id: parser.c,v 1.142 2003/06/26 13:55:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2665,6 +2665,15 @@ tags_list_next(void)
 #endif /* USE_FASTFIND */
 
 void
+init_tags_lookup(void)
+{
+#ifdef USE_FASTFIND
+	ff_info_tags = fastfind_index(&tags_list_reset, &tags_list_next, 0);
+	fastfind_index_compress(ff_info_tags);
+#endif
+}
+
+void
 free_tags_lookup(void)
 {
 #ifdef USE_FASTFIND
@@ -2846,18 +2855,7 @@ ng:;
 			name[namelen] = tmp;
 		}
 #else
-		{
-			static int do_index = 1;
-
-			if (do_index) {
-				ff_info_tags = fastfind_index(&tags_list_reset, &tags_list_next, 0);
-				fastfind_index_compress(ff_info_tags);
-				do_index = 0;
-			}
-
-			ei = (struct element_info *) fastfind_search(name, namelen, ff_info_tags);
-
-		}
+		ei = (struct element_info *) fastfind_search(name, namelen, ff_info_tags);
 #endif
 		while (ei) { /* This exists just to be able to conviently break; out. */
 			if (!inv) {

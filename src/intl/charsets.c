@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.40 2003/06/26 13:26:57 zas Exp $ */
+/* $Id: charsets.c,v 1.41 2003/06/26 13:55:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -734,20 +734,24 @@ charsets_list_next(void)
 int
 get_cp_index(unsigned char *name)
 {
-	static int do_index = 1;
-
-	if (do_index) {
-		ff_info_charsets = fastfind_index(&charsets_list_reset, &charsets_list_next, 0);
-		fastfind_index_compress(ff_info_charsets);
-		do_index = 0;
-	}
-
 	/* We assume sizeof(void *) == sizeof(unsigned int), it may cause
 	 * issue on 64bits platforms... How can we do better ? --Zas */
-	return ((unsigned int) fastfind_search(name, strlen(name), ff_info_charsets) - 1);
+	return ((unsigned int) fastfind_search(name, strlen(name),
+					       ff_info_charsets) - 1);
 }
 
 #endif /* USE_FASTFIND */
+
+void
+init_charsets_lookup(void)
+{
+#ifdef USE_FASTFIND
+	ff_info_charsets = fastfind_index(&charsets_list_reset,
+					  &charsets_list_next,
+					  0);
+	fastfind_index_compress(ff_info_charsets);
+#endif
+}
 
 void
 free_charsets_lookup(void)

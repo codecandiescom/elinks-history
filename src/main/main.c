@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.107 2003/06/26 13:26:57 zas Exp $ */
+/* $Id: main.c,v 1.108 2003/06/26 13:55:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,6 +93,10 @@ init(void)
 	textdomain(PACKAGE);
 	set_language(0);
 #endif
+
+	init_charsets_lookup();
+	init_colors_lookup();
+	init_tags_lookup();
 
 	init_options();
 	set_sigcld();

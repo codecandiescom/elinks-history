@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.21 2003/06/15 12:38:23 pasky Exp $ */
+/* $Id: colors.c,v 1.22 2003/06/26 13:55:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,18 @@ colors_list_next(void)
 #endif /* USE_FASTFIND */
 
 void
-free_colors_lookup(void) /* FIXME: new name for it ;) */
+init_colors_lookup(void)
+{
+#ifdef USE_FASTFIND
+	ff_info_colors = fastfind_index(&colors_list_reset,
+					&colors_list_next,
+					0);
+	fastfind_index_compress(ff_info_colors);
+#endif
+}
+
+void
+free_colors_lookup(void)
 {
 #ifdef USE_FASTFIND
 	fastfind_done(ff_info_colors);
@@ -241,13 +252,6 @@ decode_color(unsigned char *str, struct rgb *col)
 		}
 #else
 		struct color_spec *cs;
-		static int do_index = 1;
-
-		if (do_index) {
-			ff_info_colors = fastfind_index(&colors_list_reset, &colors_list_next, 0);
-			fastfind_index_compress(ff_info_colors);
-			do_index = 0;
-		}
 
 		cs = (struct color_spec *) fastfind_search(str, slen, ff_info_colors);
 

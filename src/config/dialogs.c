@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.124 2003/11/24 00:23:41 jonas Exp $ */
+/* $Id: dialogs.c,v 1.125 2003/11/24 00:33:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -358,13 +358,12 @@ static struct hierbox_browser_button option_buttons[] = {
 	{ N_("Add"),		push_add_button		},
 	{ N_("Delete"),		push_del_button		},
 	{ N_("Save"),		push_save_button	},
-
-	END_HIERBOX_BROWSER_BUTTONS,
 };
 
 struct hierbox_browser option_browser = {
 	N_("Option manager"),
 	option_buttons,
+	HIERBOX_BROWSER_BUTTONS_SIZE(option_buttons),
 
 	{ D_LIST_HEAD(option_browser.boxes) },
 	NULL,	/* Set in menu_options_manager() */
@@ -531,13 +530,12 @@ static struct hierbox_browser_button keybinding_buttons[] = {
 	{ N_("Delete"),		push_kbdbind_del_button			},
 	{ N_("Toggle display"),	push_kbdbind_toggle_display_button	},
 	{ N_("Save"),		push_kbdbind_save_button		},
-
-	END_HIERBOX_BROWSER_BUTTONS,
 };
 
 struct hierbox_browser keybinding_browser = {
 	N_("Keybinding manager"),
 	keybinding_buttons,
+	HIERBOX_BROWSER_BUTTONS_SIZE(keybinding_buttons),
 
 	{ D_LIST_HEAD(keybinding_browser.boxes) },
 	&kbdbind_box_items,

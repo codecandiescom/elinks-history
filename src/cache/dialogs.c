@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.38 2003/11/24 00:23:41 jonas Exp $ */
+/* $Id: dialogs.c,v 1.39 2003/11/24 00:33:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,13 +137,12 @@ static struct hierbox_browser_button cache_buttons[] = {
 	{ N_("Info"),		push_hierbox_info_button	},
 	{ N_("Goto"),		push_hierbox_goto_button	},
 	{ N_("Delete"),		push_hierbox_delete_button	},
-
-	END_HIERBOX_BROWSER_BUTTONS,
 };
 
 struct hierbox_browser cache_browser = {
 	N_("Cache manager"),
 	cache_buttons,
+	HIERBOX_BROWSER_BUTTONS_SIZE(cache_buttons),
 
 	{ D_LIST_HEAD(cache_browser.boxes) },
 	&cache_entry_box_items,

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.97 2003/11/24 00:23:40 jonas Exp $ */
+/* $Id: hierbox.c,v 1.98 2003/11/24 00:33:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,10 +262,7 @@ hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 
 	assert(ses);
 
-	while (browser->buttons[button].label)
-		button++;
-
-	dlg = calloc_dialog(button + 2, 0);
+	dlg = calloc_dialog(browser->buttons_size + 2, 0);
 	if (!dlg) return NULL;
 
 	dlg->title = _(browser->title, term);
@@ -278,7 +275,7 @@ hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 
 	add_dlg_listbox(dlg, 12);
 
-	for (button = 0; browser->buttons[button].label; button++) {
+	for (button = 0; button < browser->buttons_size; button++) {
 		hierbox_button_handler handler = browser->buttons[button].handler;
 		unsigned char *label = browser->buttons[button].label;
 

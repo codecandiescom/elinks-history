@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.135 2003/11/24 00:23:41 jonas Exp $ */
+/* $Id: dialogs.c,v 1.136 2003/11/24 00:33:55 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -374,13 +374,12 @@ static struct hierbox_browser_button bookmark_buttons[] = {
 	/* TODO: Would this be useful? --jonas */
 	{ N_("Save"),		push_save_button		},
 #endif
-
-	END_HIERBOX_BROWSER_BUTTONS,
 };
 
 struct hierbox_browser bookmark_browser = {
 	N_("Bookmark manager"),
 	bookmark_buttons,
+	HIERBOX_BROWSER_BUTTONS_SIZE(bookmark_buttons),
 
 	{ D_LIST_HEAD(bookmark_browser.boxes) },
 	&bookmark_box_items,

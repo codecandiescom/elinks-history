@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.92 2003/11/22 22:02:59 jonas Exp $ */
+/* $Id: hierbox.c,v 1.93 2003/11/23 17:33:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -255,11 +255,13 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 
 struct dialog_data *
 hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
-		struct hierbox_browser *browser, void *udata,
+		struct hierbox_browser *browser, struct session *ses,
 		size_t buttons, ...)
 {
 	struct dialog *dlg = calloc_dialog(buttons + 2, add_size);
 	va_list ap;
+
+	assert(ses && term == ses->tab->term);
 
 	if (!dlg) return NULL;
 
@@ -268,7 +270,7 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	dlg->layout.maximize_width = 1;
 	dlg->layout.padding_top = 1;
 	dlg->handle_event = hierbox_dialog_event_handler;
-	dlg->udata = udata;
+	dlg->udata = ses;
 	dlg->udata2 = browser;
 
 	add_dlg_listbox(dlg, 12);
@@ -278,13 +280,9 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	while (dlg->widgets_size < buttons + 1) {
 		unsigned char *label;
 		int (*handler)(struct dialog_data *, struct widget_data *);
-		void *data;
-		int key;
 
 		label = va_arg(ap, unsigned char *);
 		handler = va_arg(ap, void *);
-		key = va_arg(ap, int);
-		data = va_arg(ap, void *);
 
 		if (!label) {
 			/* Skip this button. */
@@ -292,7 +290,7 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 			continue;
 		}
 
-		add_dlg_button(dlg, key, handler, _(label, term), data);
+		add_dlg_button(dlg, B_ENTER, handler, _(label, term), NULL);
 	}
 
 	va_end(ap);
@@ -430,8 +428,6 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 	if (!box->sel || box->sel->type == BI_FOLDER) return 0;
 
 	/* Follow the bookmark */
-	/* FIXME: All hierbox browser store the session in dlg_data->udata
-	 * so make it official! --jonas */
 	uri = box->ops->get_info(box->sel, dlg_data->win->term, LISTBOX_URI);
 	if (!uri) return 0;
 

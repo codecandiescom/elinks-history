@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.32 2003/11/22 22:02:59 jonas Exp $ */
+/* $Id: hierbox.h,v 1.33 2003/11/23 17:33:03 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -40,8 +40,6 @@ void update_hierbox_browser(struct hierbox_browser *browser);
  *			o First the label text. It is automatically localized.
  *			  If NULL, this button is skipped.
  *			o Second a pointer to a widget handler.
- *			o Third any key flags.
- *			o Last any the button data.
  *		XXX: A close button will be installed by default.
  *
  * XXX: Note that the @listbox_data is detached and freed by the dialog handler.
@@ -50,7 +48,7 @@ void update_hierbox_browser(struct hierbox_browser *browser);
 
 struct dialog_data *
 hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
-		struct hierbox_browser *browser, void *udata,
+		struct hierbox_browser *browser, struct session *ses,
 		size_t buttons, ...);
 
 int push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *button);

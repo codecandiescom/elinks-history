@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.132 2003/11/23 17:06:36 jonas Exp $ */
+/* $Id: dialogs.c,v 1.133 2003/11/23 17:33:04 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -388,13 +388,13 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(term, N_("Bookmark manager"),
 			BOOKMARK_MANAGER_ADDSIZE, &bookmark_browser, ses,
 			BOOKMARK_MANAGER_BUTTONS,
-			N_("Goto"), push_hierbox_goto_button, B_ENTER, NULL,
-			N_("Edit"), push_edit_button, B_ENTER, NULL,
-			N_("Delete"), push_hierbox_delete_button, B_ENTER, NULL,
-			N_("Move"), push_move_button, B_ENTER, NULL,
-			N_("Add folder"), push_add_folder_button, B_ENTER, NULL,
-			N_("Add"), push_add_button, B_ENTER, NULL,
-			N_("Search"), push_search_button, B_ENTER, NULL);
+			N_("Goto"), push_hierbox_goto_button,
+			N_("Edit"), push_edit_button,
+			N_("Delete"), push_hierbox_delete_button,
+			N_("Move"), push_move_button,
+			N_("Add folder"), push_add_folder_button,
+			N_("Add"), push_add_button,
+			N_("Search"), push_search_button);
 }
 
 

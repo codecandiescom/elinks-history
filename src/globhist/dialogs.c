@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.87 2003/11/23 17:10:51 jonas Exp $ */
+/* $Id: dialogs.c,v 1.88 2003/11/23 17:33:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,15 +190,15 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(term, N_("Global history"),
 			GLOBHIST_MANAGER_ADDSIZE, &globhist_browser, ses,
 			GLOBHIST_MANAGER_BUTTONS,
-			N_("Goto"), push_hierbox_goto_button, B_ENTER, NULL,
-			N_("Info"), push_hierbox_info_button, B_ENTER, NULL,
+			N_("Goto"), push_hierbox_goto_button,
+			N_("Info"), push_hierbox_info_button,
 #ifdef BOOKMARKS
-			N_("Bookmark"), push_bookmark_button, B_ENTER, NULL,
+			N_("Bookmark"), push_bookmark_button,
 #endif
-			N_("Delete"), push_hierbox_delete_button, B_ENTER, NULL,
-			N_("Search"), push_search_button, B_ENTER, NULL,
-			N_("Toggle display"), push_toggle_display_button, B_ENTER, NULL,
-			N_("Clear"), push_hierbox_clear_button, B_ENTER, NULL);
+			N_("Delete"), push_hierbox_delete_button,
+			N_("Search"), push_search_button,
+			N_("Toggle display"), push_toggle_display_button,
+			N_("Clear"), push_hierbox_clear_button);
 }
 
 #endif /* GLOBHIST */

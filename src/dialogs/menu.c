@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.309 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: menu.c,v 1.310 2004/05/04 01:22:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,14 +554,14 @@ open_url_in_new_window(struct session *ses, unsigned char *url,
 
 /* open a link in a new xterm */
 void
-send_open_in_new_window(struct terminal *term, enum term_env_type env,
+send_open_in_new_window(struct terminal *term, const struct open_in_new *open,
 		       struct session *ses)
 {
 	struct document_view *doc_view;
 	struct link *link;
 	unsigned char *url;
 
-	assert(term && env && ses);
+	assert(term && open && ses);
 	if_assert_failed return;
 	doc_view = current_frame(ses);
 	assert(doc_view && doc_view->vs && doc_view->document);
@@ -573,15 +573,15 @@ send_open_in_new_window(struct terminal *term, enum term_env_type env,
 	url = get_link_url(ses, doc_view, link);
 	if (!url) return;
 
-	open_url_in_new_window(ses, url, env);
+	open_url_in_new_window(ses, url, open->env);
 	mem_free(url);
 }
 
 void
-send_open_new_window(struct terminal *term, enum term_env_type env,
+send_open_new_window(struct terminal *term, const struct open_in_new *open,
 		    struct session *ses)
 {
-	open_url_in_new_window(ses, NULL, env);
+	open_url_in_new_window(ses, NULL, open->env);
 }
 
 
@@ -614,7 +614,7 @@ open_in_new_window(struct terminal *term,
 	foreach_open_in_new (posibilities, term->environment) {
 		const struct open_in_new *oi = &open_in_new[posibilities];
 
-		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) xxx, (void *) oi->env, 0);
+		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) xxx, oi, 0);
 	}
 
 	do_menu(term, mi, ses, 1);

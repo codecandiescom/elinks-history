@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.207 2003/08/23 15:08:52 jonas Exp $ */
+/* $Id: renderer.c,v 1.208 2003/08/23 15:18:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,12 +243,11 @@ xpand_spaces(struct part *p, int l)
 #define SLEN(y, x)	do { LINE(y).l = X(x); } while (0)
 
 
+/* If @bgcolor is NULL don't touch any color. */
 static inline void
 set_hchars(struct part *part, int x, int y, int xl,
-	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
+	   unsigned char data, color_t *bgcolor, enum screen_char_attr attr)
 {
-	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
-
 	assert(part && part->document);
 	if_assert_failed return;
 
@@ -259,10 +258,19 @@ set_hchars(struct part *part, int x, int y, int xl,
 	assert(part->document->data);
 	if_assert_failed return;
 
-	for (; xl; xl--, x++) {
-		POS(x, y).data = data;
-		POS(x, y).color = color;
-		POS(x, y).attr = attr;
+	if (bgcolor) {
+		unsigned char color = find_nearest_color(*bgcolor, 8) << 3;
+
+		for (; xl; xl--, x++) {
+			POS(x, y).data = data;
+			POS(x, y).attr = attr;
+			POS(x, y).color = color;
+		}
+	} else {
+		for (; xl; xl--, x++) {
+			POS(x, y).data = data;
+			POS(x, y).attr = attr;
+		}
 	}
 }
 
@@ -289,7 +297,7 @@ void
 xset_hchars(struct part *part, int x, int y, int xl,
 	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
-	set_hchars(part, x, y, xl, data, bgcolor, attr);
+	set_hchars(part, x, y, xl, data, &bgcolor, attr);
 }
 
 void
@@ -443,17 +451,11 @@ shift_chars(struct part *part, int y, int shift)
 	if (!a) return;
 
 	memcpy(a, &POS(0, y), len * sizeof(struct screen_char));
-	/* XXX: This is fundamentally broken and it gives us those color stains
-	 * all over spanning from the colorful table cells. We asume that the
-	 * whole line is one-colored here, but we should take definitively more
-	 * care. But this looks like a fundamental design flaw and it'd require
-	 * us to rewrite big parts of code, I fear (but maybe I'm mistaken and
-	 * you need to just turn one bit somewhere in the code!)... Note that
-	 * using find_nearest_color(par_format.bgcolor, 8) doesn't work here, I
-	 * already got that idea; results in even more stains since we probably
-	 * shift chars even on surrounding lines when realigning tables
-	 * maniacally. --pasky */
-	set_hchars(part, 0, y, shift, ' ', find_nearest_color(part->document->data[y].bgcolor, 8) << 3, 0);
+	/* When we shift chars we want to preserve and use the background
+	 * colors already in place else we could end up ``staining'' the background
+	 * especial when drawing table cells. So make the shifted chars share the
+	 * colors in place. */
+	set_hchars(part, 0, y, shift, ' ', NULL, 0);
 	copy_chars(part, shift, y, len, a);
 	fmem_free(a);
 
@@ -617,9 +619,8 @@ justify_line(struct part *part, int y)
 		int prev_end = 0;
 		int word;
 
-		/* See shift_chars() about why this is broken. */
-		set_hchars(part, 0, y, overlap(par_format), ' ',
-			   find_nearest_color(part->document->data[y].bgcolor, 8) << 3, 0);
+		/* See shift_chars() about why we pass a NULL bg color. */
+		set_hchars(part, 0, y, overlap(par_format), ' ', NULL, 0);
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of

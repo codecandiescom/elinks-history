@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.4 2003/01/23 02:29:28 pasky Exp $ */
+/* $Id: download.c,v 1.5 2003/01/23 02:36:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -598,7 +598,7 @@ end_store:
 
 
 static void
-lookup_unique_name(struct terminal *term, unsigned char *file,
+lookup_unique_name(struct terminal *term, unsigned char *file, int resume,
 		void (*callback)(struct terminal *, unsigned char *, void *),
 		void *data)
 {
@@ -608,7 +608,17 @@ lookup_unique_name(struct terminal *term, unsigned char *file,
 	 * * allow to specify a new name
 	 * * allow to rename the old file
 	 * --pasky */
+
+	if (!get_opt_int("document.download.overwrite") || resume) {
+		/* Nothing special to do... */
+		file = expand_tilde(file);
+		callback(term, file, data);
+		return;
+	}
+
+	/* expand_tilde() lives inside! */
 	file = get_unique_name(file);
+
 	callback(term, file, data);
 }
 
@@ -647,18 +657,8 @@ create_download_file(struct terminal *term, unsigned char *fi,
 	wd = get_cwd();
 	set_cwd(term->cwd);
 
-	if (!get_opt_int("document.download.overwrite") || resume) {
-		/* This never needs asynchronous handling, so... */
-		/* TODO: Merge it to lookup_unique_name() in the future.
-		 * --pasky */
-		unsigned char *file = expand_tilde(fi);
-
-		create_download_file_do(term, file, cdf_hop);
-	} else {
-		/* The tilde will be expanded by get_unique_name() */
-		lookup_unique_name(term, fi, create_download_file_do,
-				   cdf_hop);
-	}
+	/* Also the tilde will be expanded here. */
+	lookup_unique_name(term, fi, resume, create_download_file_do, cdf_hop);
 
 	if (wd) {
 		set_cwd(wd);

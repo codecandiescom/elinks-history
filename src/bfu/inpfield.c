@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.206 2005/03/23 14:16:13 zas Exp $ */
+/* $Id: inpfield.c,v 1.207 2005/03/23 14:26:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ input_dialog(struct terminal *term, struct memory_list *ml,
 	     void (*fn)(void *, unsigned char *),
 	     void (*cancelfn)(void *))
 {
-	input_field(term, ml, 1, title, text, N_("OK"), N_("Cancel"),
+	input_field(term, ml, 1, title, text, N_("~OK"), N_("~Cancel"),
 		    data, history, l,
 		    def, min, max,
 		    check, fn, cancelfn);

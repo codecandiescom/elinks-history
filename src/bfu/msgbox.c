@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.99 2005/03/23 11:18:08 zas Exp $ */
+/* $Id: msgbox.c,v 1.100 2005/03/23 14:26:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,5 +189,5 @@ info_box(struct terminal *term, enum msgbox_flags flags,
 	 unsigned char *text)
 {
 	return msg_box(term, NULL, flags, title, align, text,
-		       NULL, 1, N_("OK"), NULL, B_ENTER | B_ESC);
+		       NULL, 1, N_("~OK"), NULL, B_ENTER | B_ESC);
 }

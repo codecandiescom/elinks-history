@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.177 2004/08/03 09:19:40 miciah Exp $ */
+/* $Id: cache.c,v 1.178 2004/08/03 09:23:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -435,6 +435,7 @@ truncate_entry(struct cache_entry *cached, int offset, int final)
 	foreach (f, cached->frag) {
 		long size = offset - f->offset;
 
+		/* XXX: is zero length fragment really legal here ? --Zas */
 		assert(f->length >= 0);
 
 		if (size >= f->length) continue;

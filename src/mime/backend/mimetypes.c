@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.26 2003/10/25 19:53:49 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.27 2003/10/25 22:11:08 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -35,6 +35,15 @@ struct mimetypes_entry {
 	unsigned char extension[1];
 };
 
+enum mimetypes_option {
+	MIMETYPES_TREE,
+
+	MIMETYPES_ENABLE,
+	MIMETYPES_PATH,
+
+	MIMETYPES_OPTIONS
+};
+
 /* Keep options in alphabetical order. */
 static struct option_info mimetypes_options[] = {
 	INIT_OPT_TREE("mime", N_("Mimetypes files"),
@@ -55,10 +64,14 @@ static struct option_info mimetypes_options[] = {
 	NULL_OPTION_INFO,
 };
 
+#define get_opt_mimetypes(which)		mimetypes_options[(which)].option
+#define get_mimetypes(which)		get_opt_mimetypes(which).value
+#define get_mimetypes_enable()		get_mimetypes(MIMETYPES_ENABLE).number
+#define get_mimetypes_path()		get_mimetypes(MIMETYPES_PATH).string
+
 /* State variables */
 static struct hash *mimetypes_map = NULL;
 static int mimetypes_map_size = 0;
-static struct option *mimetypes_tree = NULL;
 
 
 static void
@@ -169,9 +182,7 @@ init_mimetypes_map(void)
 {
 	unsigned char *path;
 
-	assert(mimetypes_tree);
-
-	if (!get_opt_bool_tree(mimetypes_tree, "enable"))
+	if (!get_mimetypes_enable())
 		return NULL;
 
 	mimetypes_map = init_hash(8, &strhash);
@@ -179,7 +190,7 @@ init_mimetypes_map(void)
 		return NULL;
 
 	/* Determine the path  */
-	path = get_opt_str_tree(mimetypes_tree, "path");
+	path = get_mimetypes_path();
 	if (!path || !*path)
 		path = DEFAULT_MIMETYPES_PATH;
 
@@ -218,9 +229,9 @@ done_mimetypes(struct module *module)
 static int
 change_hook_mimetypes(struct session *ses, struct option *current, struct option *changed)
 {
-	if (!strlcmp(changed->name, -1, "path", 4)
-	    || (!strlcmp(changed->name, -1, "enable", 6)
-		&& !changed->value.number)) {
+	if (changed == &get_opt_mimetypes(MIMETYPES_PATH)
+	    || (changed == &get_opt_mimetypes(MIMETYPES_ENABLE)
+		&& !get_mimetypes_enable())) {
 		done_mimetypes(&mimetypes_mime_module);
 	}
 
@@ -236,7 +247,6 @@ init_mimetypes(struct module *module)
 	};
 
 	register_change_hooks(mimetypes_change_hooks);
-	mimetypes_tree = get_opt_rec(config_options, "mime.mimetypes");
 }
 
 

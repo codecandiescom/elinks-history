@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.64 2003/09/02 19:25:26 jonas Exp $ */
+/* $Id: screen.c,v 1.65 2003/09/02 19:33:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,16 +77,20 @@ static struct frame_seq vt100_frame_seqs[] = {
 
 /* TODO: We should provide some generic mechanism for options caching. */
 struct screen_driver {
-	int type;
+	enum term_mode_type type;
 
 	/* Charsets when doing UTF8 I/O. */
 	/* [0] is the common charset and [1] is the frame charset.
-	 * Test wether to use utf8 using the use_utf8_io() macro. */
+	 * Test wether to use UTF8 I/O using the use_utf8_io() macro. */
 	int charsets[2];
 
+	/* The frame translation table. May be NULL. */
 	unsigned char *frame;
+
+	/* The frame mode setup and teardown sequences. May be NULL. */
 	struct frame_seq *frame_seqs;
 
+	/* These are directly derived from the terminal options. */
 	unsigned int colors:1;
 	unsigned int trans:1;
 	unsigned int underline:1;

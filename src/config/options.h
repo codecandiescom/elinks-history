@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.21 2002/05/25 13:46:03 pasky Exp $ */
+/* $Id: options.h,v 1.22 2002/05/25 20:05:05 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -27,7 +27,6 @@ enum option_type {
 	OPT_EXTENSION,
 	OPT_PROGRAM,
 	OPT_TERM,
-	OPT_TERM2,
 	OPT_KEYBIND,
 	OPT_KEYUNBIND,
 	OPT_COLOR,

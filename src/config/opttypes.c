@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.5 2002/05/25 13:46:03 pasky Exp $ */
+/* $Id: opttypes.c,v 1.6 2002/05/25 20:05:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,53 +402,6 @@ term_rd(struct option *o, unsigned char **c)
 #endif
 }
 
-/* terminal2 NAME(str) MODE(0-3) M11_HACK(0-1) RESTRICT_852(0-1) COL(0-1) CHARSET(str) [ UTF_8_IO("utf-8") ]*/
-int
-term2_rd(struct option *o, unsigned char **c)
-{
-#if 0
-	struct term_spec *ts;
-	unsigned char *w;
-	int i;
-	if (!(w = get_token(&c))) goto err;
-	if (!(ts = new_term_spec(w))) {
-		mem_free(w);
-		goto end;
-	}
-	ts->utf_8_io = 0;
-	mem_free(w);
-	if (!(w = get_token(&c))) goto err;
-	if (strlen(w) != 1 || w[0] < '0' || w[0] > '3') goto err_f;
-	ts->mode = w[0] - '0';
-	mem_free(w);
-	if (!(w = get_token(&c))) goto err;
-	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
-	ts->m11_hack = w[0] - '0';
-	mem_free(w);
-	if (!(w = get_token(&c))) goto err;
-	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
-	ts->restrict_852 = w[0] - '0';
-	mem_free(w);
-	if (!(w = get_token(&c))) goto err;
-	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
-	ts->col = w[0] - '0';
-	mem_free(w);
-	if (!(w = get_token(&c))) goto err;
-	if ((i = get_cp_index(w)) == -1) goto err_f;
-	ts->charset = i;
-	mem_free(w);
-	if (!(w = get_token(&c))) goto end;
-	if (!(strcasecmp(w, "utf-8"))) ts->utf_8_io = 1;
-	mem_free(w);
-	end:
-	return NULL;
-	err_f:
-	mem_free(w);
-	err:
-	return "Error reading terminal specification";
-#endif
-}
-
 void
 term_wr(struct option *o, unsigned char **s, int *l)
 {
@@ -528,7 +481,6 @@ struct option_type_info option_types[] = {
 	{ NULL, ext_rd, NULL /*ext_wr*/, "" },
 	{ NULL, prog_rd, NULL /*prog_wr*/, "" },
 	{ NULL, term_rd, NULL /*term_wr*/, "" },
-	{ NULL, term2_rd, NULL, "" },
 	{ NULL, bind_rd, NULL, "" },
 	{ NULL, unbind_rd, NULL, "" },
 	{ gen_cmd, color_rd, color_wr, "<color|#rrggbb>" },

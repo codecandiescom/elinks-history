@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.35 2002/05/25 19:18:09 pasky Exp $ */
+/* $Id: options.c,v 1.36 2002/05/25 20:06:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -818,10 +818,6 @@ register_options()
 
 	add_opt_void("",
 		"terminal", OPT_CFGFILE, OPT_TERM,
-		NULL);
-
-	add_opt_void("",
-		"terminal2", OPT_CFGFILE, OPT_TERM2,
 		NULL);
 
 	add_opt_void("",

@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-07-13 12:05+0200\n"
-"PO-Revision-Date: 2004-07-13 12:10+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-07-14 11:40+0200\n"
+"PO-Revision-Date: 2004-07-14 11:45+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:347
 msgid "Close"
@@ -35,7 +35,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/bfu/hierbox.c:438 src/bfu/hierbox.c:460 src/bfu/hierbox.c:638
 #: src/bfu/hierbox.c:944 src/bfu/hierbox.c:970 src/bfu/inpfield.c:49
 #: src/bfu/inpfield.c:60 src/bfu/inpfield.c:80 src/bfu/msgbox.c:172
-#: src/bookmarks/dialogs.c:235 src/bookmarks/dialogs.c:631
+#: src/bookmarks/dialogs.c:237 src/bookmarks/dialogs.c:635
 #: src/config/dialogs.c:65 src/config/dialogs.c:110 src/config/dialogs.c:326
 #: src/config/dialogs.c:396 src/config/dialogs.c:426 src/config/dialogs.c:463
 #: src/config/dialogs.c:475 src/config/dialogs.c:711 src/config/dialogs.c:731
@@ -48,7 +48,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/formhist/dialogs.c:175 src/mime/dialogs.c:134
 #: src/protocol/auth/dialogs.c:92 src/protocol/user.c:206
 #: src/sched/download.c:236 src/sched/download.c:320 src/sched/download.c:356
-#: src/sched/download.c:503 src/sched/download.c:631 src/sched/error.c:42
+#: src/sched/download.c:503 src/sched/download.c:597 src/sched/error.c:42
 #: src/sched/session.c:240 src/sched/session.c:652 src/sched/session.c:676
 #: src/sched/session.c:693 src/scripting/lua/core.c:400
 #: src/scripting/lua/core.c:482 src/scripting/lua/core.c:598
@@ -140,7 +140,7 @@ msgstr "Effacer tous les items"
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items ?"
 
-#: src/bfu/hierbox.c:939 src/bfu/hierbox.c:969 src/bookmarks/dialogs.c:424
+#: src/bfu/hierbox.c:939 src/bfu/hierbox.c:969 src/bookmarks/dialogs.c:426
 #: src/cache/dialogs.c:215 src/config/dialogs.c:498 src/config/dialogs.c:796
 #: src/globhist/dialogs.c:227 src/viewer/text/search.c:864
 #: src/viewer/text/search.c:891 src/viewer/text/search.c:915
@@ -161,15 +161,15 @@ msgstr "Chaîne recherchée '%s' introuvable"
 msgid "Name"
 msgstr "Nom"
 
-#: src/bfu/hierbox.c:970 src/bookmarks/dialogs.c:235
-#: src/bookmarks/dialogs.c:631 src/config/dialogs.c:397
+#: src/bfu/hierbox.c:970 src/bookmarks/dialogs.c:237
+#: src/bookmarks/dialogs.c:635 src/config/dialogs.c:397
 #: src/config/dialogs.c:475 src/config/dialogs.c:761 src/cookies/dialogs.c:302
 #: src/dialogs/edit.c:103 src/dialogs/menu.c:95 src/dialogs/menu.c:478
 #: src/dialogs/menu.c:526 src/dialogs/options.c:175 src/dialogs/options.c:246
 #: src/mime/dialogs.c:135 src/protocol/auth/dialogs.c:93
-#: src/sched/download.c:547 src/sched/download.c:1009
-#: src/sched/download.c:1018 src/sched/download.c:1038
-#: src/sched/download.c:1050 src/scripting/lua/core.c:401
+#: src/sched/download.c:547 src/sched/download.c:1002
+#: src/sched/download.c:1011 src/sched/download.c:1031
+#: src/sched/download.c:1043 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:722
 #: src/viewer/text/search.c:1390 src/viewer/text/view.c:578
 msgid "Cancel"
@@ -389,46 +389,46 @@ msgstr "Effacer tous les signets"
 msgid "Do you really want to remove all bookmarks?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les signets ?"
 
-#: src/bookmarks/dialogs.c:234 src/bookmarks/dialogs.c:422
+#: src/bookmarks/dialogs.c:236 src/bookmarks/dialogs.c:424
 msgid "Add folder"
 msgstr "Créer dossier"
 
-#: src/bookmarks/dialogs.c:234
+#: src/bookmarks/dialogs.c:236
 msgid "Folder name"
 msgstr "Nom du dossier"
 
-#: src/bookmarks/dialogs.c:278 src/scripting/lua/core.c:392
+#: src/bookmarks/dialogs.c:280 src/scripting/lua/core.c:392
 msgid "Edit bookmark"
 msgstr "Modifier"
 
-#: src/bookmarks/dialogs.c:418 src/cache/dialogs.c:213
+#: src/bookmarks/dialogs.c:420 src/cache/dialogs.c:213
 #: src/globhist/dialogs.c:221 src/protocol/auth/dialogs.c:214
 msgid "Goto"
 msgstr "Aller à"
 
-#: src/bookmarks/dialogs.c:419 src/config/dialogs.c:352
+#: src/bookmarks/dialogs.c:421 src/config/dialogs.c:352
 #: src/config/dialogs.c:421 src/config/dialogs.c:495 src/cookies/dialogs.c:263
 #: src/cookies/dialogs.c:368
 msgid "Edit"
 msgstr "Modifier"
 
-#: src/bookmarks/dialogs.c:420 src/cache/dialogs.c:214
+#: src/bookmarks/dialogs.c:422 src/cache/dialogs.c:214
 #: src/config/dialogs.c:497 src/config/dialogs.c:794 src/cookies/dialogs.c:369
 #: src/formhist/dialogs.c:209 src/globhist/dialogs.c:226
 #: src/protocol/auth/dialogs.c:216
 msgid "Delete"
 msgstr "Supprimer"
 
-#: src/bookmarks/dialogs.c:421
+#: src/bookmarks/dialogs.c:423
 msgid "Move"
 msgstr "Déplacer"
 
-#: src/bookmarks/dialogs.c:423 src/config/dialogs.c:496
+#: src/bookmarks/dialogs.c:425 src/config/dialogs.c:496
 #: src/config/dialogs.c:793 src/cookies/dialogs.c:367
 msgid "Add"
 msgstr "Ajouter"
 
-#: src/bookmarks/dialogs.c:425 src/cookies/dialogs.c:370
+#: src/bookmarks/dialogs.c:427 src/cookies/dialogs.c:370
 #: src/dialogs/download.c:472 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:211 src/globhist/dialogs.c:229
 #: src/protocol/auth/dialogs.c:217
@@ -436,35 +436,35 @@ msgid "Clear"
 msgstr "Effacer"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:428 src/config/dialogs.c:499
+#: src/bookmarks/dialogs.c:430 src/config/dialogs.c:499
 #: src/config/dialogs.c:797 src/cookies/dialogs.c:371
 #: src/dialogs/options.c:174 src/formhist/dialogs.c:212
-#: src/globhist/dialogs.c:232 src/sched/download.c:1007
-#: src/sched/download.c:1036
+#: src/globhist/dialogs.c:232 src/sched/download.c:1000
+#: src/sched/download.c:1029
 msgid "Save"
 msgstr "Enregistrer"
 
-#: src/bookmarks/dialogs.c:434
+#: src/bookmarks/dialogs.c:436
 msgid "Bookmark manager"
 msgstr "Gestionnaire de signets"
 
-#: src/bookmarks/dialogs.c:577
+#: src/bookmarks/dialogs.c:581
 msgid "Search bookmarks"
 msgstr "Recherche parmi les signets"
 
-#: src/bookmarks/dialogs.c:591
+#: src/bookmarks/dialogs.c:595
 msgid "Add bookmark"
 msgstr "Ajouter un signet"
 
-#: src/bookmarks/dialogs.c:622
+#: src/bookmarks/dialogs.c:626
 msgid "Saved session"
 msgstr "Session sauvée"
 
-#: src/bookmarks/dialogs.c:630
+#: src/bookmarks/dialogs.c:634
 msgid "Bookmark tabs"
 msgstr "Signets pour les onglets"
 
-#: src/bookmarks/dialogs.c:630
+#: src/bookmarks/dialogs.c:634
 msgid "Enter folder name"
 msgstr "Entrez un nom de dossier"
 
@@ -4078,17 +4078,18 @@ msgstr "Nom du dossier pour la session automatique"
 #: src/config/options.inc:1311
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
+"The name has to be unique. Any folders with the same name will be deleted.\n"
 "This only makes sense with bookmark support."
 msgstr ""
 "Nom du dossier dans les signets utilisé pour la sauvegarde et restauration\n"
-"automatique de la session.\n"
-"Cette option n'a de sens qu'avec le support des signets."
+"automatique de la session. Le nom doit être unique, tout dossier du même\n"
+"nom sera détruit. Cette option n'a de sens qu'avec le support des signets."
 
-#: src/config/options.inc:1314
+#: src/config/options.inc:1315
 msgid "Homepage URI"
 msgstr "URI de la page d'accueil"
 
-#: src/config/options.inc:1316
+#: src/config/options.inc:1317
 msgid ""
 "The URI to load either at startup time when no URI was given\n"
 "on the command line or when requested by the goto-url-home action.\n"
@@ -4100,19 +4101,19 @@ msgstr ""
 "Mettre \"\" si la variable d'environnement WWW_HOME doit être\n"
 "utilisée comme URI de page d'accueil."
 
-#: src/config/options.inc:1322
+#: src/config/options.inc:1323
 msgid "Date format"
 msgstr "Format des dates"
 
-#: src/config/options.inc:1324
+#: src/config/options.inc:1325
 msgid "Date format to use in dialogs. See strftime(3)."
 msgstr "Format utilisé pour les dates dans les dialogues. Voir strftime(3)."
 
-#: src/config/options.inc:1327
+#: src/config/options.inc:1328
 msgid "Set window title"
 msgstr "Modifier le titre de la fenêtre"
 
-#: src/config/options.inc:1329
+#: src/config/options.inc:1330
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
@@ -4122,11 +4123,11 @@ msgstr ""
 "environnement de type xterm. Cela permet d'avoir le titre du\n"
 "document courant en tant que titre de fenêtre."
 
-#: src/config/options.inc:1335
+#: src/config/options.inc:1336
 msgid "Use secure file saving"
 msgstr "Fiabiliser la sauvegarde des fichiers"
 
-#: src/config/options.inc:1337
+#: src/config/options.inc:1338
 msgid ""
 "First write data to unique temporary file, then rename this file\n"
 "upon successfully finishing this. Note that this relates only to\n"
@@ -5180,8 +5181,6 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -5585,6 +5584,7 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"
@@ -5990,7 +5990,7 @@ msgid "No program specified for protocol %s."
 msgstr "Aucun programme spécifié pour le protocole %s."
 
 #: src/sched/download.c:232 src/sched/download.c:317 src/sched/download.c:499
-#: src/sched/download.c:627
+#: src/sched/download.c:593
 msgid "Download error"
 msgstr "Erreur de téléchargement"
 
@@ -6055,7 +6055,7 @@ msgstr "Ecraser le fichier original"
 msgid "Resume download of the original file"
 msgstr "Reprendre le téléchargement du fichier original"
 
-#: src/sched/download.c:628
+#: src/sched/download.c:594
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -6064,30 +6064,30 @@ msgstr ""
 "Impossible de créer le fichier '%s':\n"
 "%s"
 
-#: src/sched/download.c:1001 src/sched/download.c:1012
+#: src/sched/download.c:994 src/sched/download.c:1005
 msgid "Unknown type"
 msgstr "Type inconnu"
 
-#: src/sched/download.c:1002
+#: src/sched/download.c:995
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher ?"
 
-#: src/sched/download.c:1008 src/sched/download.c:1017
-#: src/sched/download.c:1037 src/sched/download.c:1049
+#: src/sched/download.c:1001 src/sched/download.c:1010
+#: src/sched/download.c:1030 src/sched/download.c:1042
 msgid "Display"
 msgstr "Afficher"
 
-#: src/sched/download.c:1013
+#: src/sched/download.c:1006
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Voulez-vous afficher le fichier '%s' (type: %s) ?"
 
-#: src/sched/download.c:1028 src/sched/download.c:1041
+#: src/sched/download.c:1021 src/sched/download.c:1034
 msgid "What to do?"
 msgstr "Que faire ?"
 
-#: src/sched/download.c:1029
+#: src/sched/download.c:1022
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -6096,11 +6096,11 @@ msgstr ""
 "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
 "avec '%s', l'enregistrer ou l'afficher ?"
 
-#: src/sched/download.c:1035 src/sched/download.c:1048
+#: src/sched/download.c:1028 src/sched/download.c:1041
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/sched/download.c:1042
+#: src/sched/download.c:1035
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"

@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.15 2004/07/18 14:06:18 pasky Exp $ */
+/* $Id: hooks.c,v 1.16 2005/01/21 14:11:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,7 +205,7 @@ script_hook_get_proxy(va_list ap, void *data)
 	unsigned char **new_proxy_url = va_arg(ap, unsigned char **);
 	unsigned char *url = va_arg(ap, unsigned char *);
 
-	if (my_perl && new_proxy_url && *new_proxy_url && url)
+	if (my_perl && new_proxy_url && url)
 		do_script_hook_get_proxy(new_proxy_url, url);
 
 	return EVENT_HOOK_STATUS_NEXT;

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.62 2002/12/08 22:05:42 pasky Exp $ */
+/* $Id: menu.c,v 1.63 2002/12/11 15:06:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "bfu/msgbox.h"
 #include "bookmarks/dialogs.h"
 #include "config/conf.h"
+#include "config/dialogs.h"
 #include "config/options.h"
 #include "dialogs/document.h"
 #include "dialogs/info.h"
@@ -549,12 +550,10 @@ static struct menu_item setup_menu[] = {
 	{TEXT(T_LANGUAGE), ">", TEXT(T_HK_LANGUAGE), MENU_FUNC menu_language_list, NULL, 1, 0},
 	{TEXT(T_CHARACTER_SET), ">", TEXT(T_HK_CHARACTER_SET), MENU_FUNC charset_list, (void *)1, 1, 0},
 	{TEXT(T_TERMINAL_OPTIONS), "", TEXT(T_HK_TERMINAL_OPTIONS), MENU_FUNC terminal_options, NULL, 0, 0},
-	{TEXT(T_NETWORK_OPTIONS), "", TEXT(T_HK_NETWORK_OPTIONS), MENU_FUNC net_options, NULL, 0, 0},
-	{TEXT(T_CACHE), "", TEXT(T_HK_CACHE), MENU_FUNC cache_opt, NULL, 0, 0},
-	{TEXT(T_MAIL_AND_TELNEL), "", TEXT(T_HK_MAIL_AND_TELNEL), MENU_FUNC net_programs, NULL, 0, 0},
 /*	{TEXT(T_ASSOCIATIONS), ">", TEXT(T_HK_ASSOCIATIONS), MENU_FUNC do_menu, assoc_menu, 1, 0}, */
 	{TEXT(T_FILE_EXTENSIONS), ">", TEXT(T_HK_FILE_EXTENSIONS), MENU_FUNC do_menu, ext_menu, 1, 0},
 	{"", "", M_BAR, NULL, NULL, 0, 0},
+	{TEXT(T_OPTIONS_MANAGER), "", TEXT(T_HK_SAVE_OPTIONS), MENU_FUNC menu_options_manager, NULL, 0, 0},
 	{TEXT(T_SAVE_OPTIONS), "", TEXT(T_HK_SAVE_OPTIONS), MENU_FUNC write_config, NULL, 0, 0},
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };

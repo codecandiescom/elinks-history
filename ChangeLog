@@ -1,3 +1,147 @@
+Tue Jul  1 22:06:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	XD_TOP -> XD_UP, XD_BOTTOM -> XD_DOWN 
+
+Tue Jul  1 22:04:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Optimizations in set_xchar() and draw_frame_lines(). An enum was
+	introduced for direction parameter of set_xchar().  
+
+Tue Jul  1 21:36:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Last bits of draw_form_entry() cleanup.  
+
+Tue Jul  1 21:24:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Cleanup and optimization in draw_form_entry(), case FC_TEXTAREA.  
+
+Tue Jul  1 21:06:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Cleanup in draw_form_entry(), case FC_TEXTAREA, step 1.  
+
+Tue Jul  1 20:59:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Some declarations and one affectation were moved near where they are
+	used.  
+
+Tue Jul  1 20:51:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Reverted patches concerning get_last_link() and get_first_link(),
+	they are buggy and cause segfaults.  
+
+Tue Jul  1 20:22:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Oops, last patch was fixed. ;) 
+
+Tue Jul  1 20:16:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Optimization in draw_form_entry(), case FC_FILE. Please review
+	carefully.  
+
+Tue Jul  1 19:50:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Optimization in get_last_link(), tests against (locally) constant
+	values were moved out of the loop. Please review.  
+
+Tue Jul  1 19:47:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Optimization in get_first_link(), tests against (locally) constant
+	values were moved out of the loop. Please review.  
+
+Tue Jul  1 18:26:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Indentation fixed, and small cleanup.  
+
+Tue Jul  1 16:27:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h, url.c:
+
+	Use struct uri to pass uri component.  
+
+Tue Jul  1 15:22:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: Makefile.am, uri.c, uri.h, url.c:
+
+	Move parse_url() handling to new parse_uri().  
+
+Tue Jul  1 15:07:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	get_form_url() cleanup and optimization.  
+
+Tue Jul  1 14:28:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	encode_controls() cleanup and optimization.  
+
+Tue Jul  1 14:12:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	encode_multipart() cleanup and optimization.  
+
+Tue Jul  1 00:00:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/url.c:
+
+	Small optimization + use of assertm.  
+
+Mon Jun 30 23:23:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Minor optim. in get_c_width().  
+
+Mon Jun 30 23:20:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Minor optimizations in format_table().  
+
+Mon Jun 30 23:08:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Minor optimizations in display_table_frames().  
+
+Mon Jun 30 22:57:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Cleanup and optimizations in format_table().  
+
+Mon Jun 30 22:22:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Some major optimizations were done in display_table_frames().  
+
 Mon Jun 30 21:47:35 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/tables.c:

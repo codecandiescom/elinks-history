@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.403 2004/05/25 04:13:40 jonas Exp $ */
+/* $Id: session.c,v 1.404 2004/05/25 04:17:05 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -804,35 +804,33 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		foreach (str, info->url_list) {
 			unsigned char *source = str->string.source;
 			unsigned char *url = decode_shell_safe_url(source);
+			struct uri *uri;
 
 			if (!url) continue;
+			uri = get_uri(url, -1);
+			mem_free(url);
 
 			if (first) {
 				/* Open first url. */
-				goto_url_with_hook(ses, url);
+				goto_url_with_hook(ses, struri(uri));
 				first = 0;
 
 			} else if (info->remote & SES_REMOTE_ADD_BOOKMARK) {
 #ifdef CONFIG_BOOKMARKS
-				add_bookmark(NULL, 1, url, url);
+				add_bookmark(NULL, 1, struri(uri), struri(uri));
 #endif
 			} else if (info->remote & SES_REMOTE_NEW_WINDOW) {
 				/* FIXME: Else it is quite rude because we just
 				 * take the first possibility and should maybe
 				 * make it possible to specify new-screen etc
 				 * via -remote "openURL(..., new-*)" --jonas */
-				open_url_in_new_window(ses, url, term_env);
+				open_url_in_new_window(ses, struri(uri), term_env);
 
 			} else {
-				struct uri *uri = get_uri(url, -1);
-
 				/* Open next ones. */
-				if (uri) {
-					open_url_in_new_tab(ses, uri, 1);
-					done_uri(uri);
-				}
+				open_url_in_new_tab(ses, uri, 1);
 			}
-			mem_free(url);
+			done_uri(uri);
 		}
 
 	} else if (info->remote) {

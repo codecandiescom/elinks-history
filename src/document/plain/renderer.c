@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.46 2003/12/21 22:45:37 zas Exp $ */
+/* $Id: renderer.c,v 1.47 2003/12/22 02:10:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,6 +234,8 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 
 		/* We will touch the supplied source, so better replicate it. */
 		xsource = memacpy(source, width);
+		if (!xsource) continue;
+
 		added = add_document_line(document, lineno, xsource, width, &template,
 					  convert_table);
 		mem_free(xsource);

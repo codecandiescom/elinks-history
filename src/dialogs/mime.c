@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.30 2003/06/27 19:53:12 zas Exp $ */
+/* $Id: mime.c,v 1.31 2003/06/27 20:20:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,10 +54,8 @@ add_ext_fn(struct dialog_data *dlg)
 	int y = -1;
 	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
-	max_text_width(term, ext_msg[0], &max);
-	min_text_width(term, ext_msg[0], &min);
-	max_text_width(term, ext_msg[1], &max);
-	min_text_width(term, ext_msg[1], &min);
+	min_max_text_width(term, ext_msg[0], &min, &max);
+	min_max_text_width(term, ext_msg[1], &min, &max);
 	min_max_buttons_width(term, dlg->items + 2, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;

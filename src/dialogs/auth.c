@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.29 2003/06/27 19:48:13 zas Exp $ */
+/* $Id: auth.c,v 1.30 2003/06/27 20:17:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,10 +32,8 @@ auth_layout(struct dialog_data *dlg)
 	unsigned char *label_login = N_("Login");
 	unsigned char *label_password = N_("Password");
 
-	max_text_width(term, label_login, &max);
-	min_text_width(term, label_login, &min);
-	max_text_width(term, label_password, &max);
-	min_text_width(term, label_password, &min);
+	min_max_text_width(term, label_login, &min, &max);
+	min_max_text_width(term, label_password, &min, &max);
 	min_max_buttons_width(term, dlg->items + 2, 2, &min, &max);
 
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;

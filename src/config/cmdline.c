@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.75 2004/04/24 01:10:47 jonas Exp $ */
+/* $Id: cmdline.c,v 1.76 2004/04/24 01:13:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,7 +200,6 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		} type;
 	} remote_methods[] = {
 		{ "openURL",	  REMOTE_METHOD_OPENURL },
-		{ "mailto",	  REMOTE_METHOD_NOT_SUPPORTED },
 		{ "ping",	  REMOTE_METHOD_PING },
 		{ "xfeDoCommand", REMOTE_METHOD_XFEDOCOMMAND },
 		{ NULL,		  REMOTE_METHOD_NOT_SUPPORTED },
@@ -286,6 +285,8 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		break;
 	}
 
+	/* If no flags was applied it can only mean we are dealing with
+	 * unknown method. */
 	if (!remote_session_flags)
 		return gettext("Remote method not supported");
 

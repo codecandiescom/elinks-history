@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.19 2003/09/21 00:12:31 zas Exp $ */
+/* $Id: default.c,v 1.20 2003/09/21 00:15:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,8 @@ get_content_type_default(unsigned char *extension)
 
 		/* If we matched whole extension and it is really an
 		 * extension.. */
-		if ((namepos < opt->name))
+		if ((namepos < opt->name)
+		    && ((extpos < extension) || (*extpos == '.')))
 			return stracpy(opt->ptr);
 	}
 

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.21 2004/04/17 18:06:39 jonas Exp $ */
+/* $Id: listmenu.c,v 1.22 2004/04/18 00:10:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 		if (stack) {
 			menu->stack = stack;
-			new_menu_item = new_menu(NO_INTL | FREE_TEXT);
+			new_menu_item = new_menu(NO_INTL);
 			menu->stack[menu->stack_size] = new_menu_item;
 		}
 
@@ -107,7 +107,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 	if (data == -1) {
 		add_to_menu(items, name, NULL, ACT_MAIN_NONE,
 			    (menu_func) do_select_submenu,
-			    new_menu_item, SUBMENU | FREE_RECURSIVE_DATA);
+			    new_menu_item, SUBMENU);
 		menu->stack_size++;
 	} else {
 		add_to_menu(items, name, NULL, ACT_MAIN_NONE,
@@ -140,8 +140,8 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 	if (!m) return; /* XXX: Who knows... need to be verified */
 
 	foreach_menu_item (mm, m) {
-		if (mm->flags & FREE_TEXT) mem_free_if(mm->text);
-		if (mm->flags & FREE_RECURSIVE_DATA) free_menu(mm->data);
+		mem_free_if(mm->text);
+		if (mm->func == (menu_func) do_select_submenu) free_menu(mm->data);
 	}
 
 	mem_free(m);

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.56 2004/04/17 18:06:39 jonas Exp $ */
+/* $Id: menu.h,v 1.57 2004/04/18 00:10:29 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -18,13 +18,12 @@ enum menu_item_flags {
 	FREE_TEXT = 2,
 	FREE_RTEXT = 4, /* only for menu_item */
 	FREE_DATA = 8, /* for menu_item, see menu.c for remarks */
-	FREE_RECURSIVE_DATA = 16, /* for list_menu */
 
-	MENU_FULLNAME = 32,
-	SUBMENU = 64,
-	NO_INTL = 128,
-	NO_SELECT = 256,	/* Mark unselectable item */
-	RIGHT_INTL = 512,	/* Force translation of right text. */
+	MENU_FULLNAME = 16,
+	SUBMENU = 32,
+	NO_INTL = 64,
+	NO_SELECT = 128,	/* Mark unselectable item */
+	RIGHT_INTL = 256,	/* Force translation of right text. */
 };
 
 #define FREE_ANY (FREE_LIST|FREE_TEXT|FREE_RTEXT|FREE_DATA)

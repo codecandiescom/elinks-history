@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.309 2004/06/29 22:47:02 pasky Exp $ */
+/* $Id: tables.c,v 1.310 2004/06/29 22:48:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,7 +348,8 @@ get_table_width(struct table *table)
 }
 
 
-/* This function distributes spare @width space evenly between @table columns. */
+/* This function distributes space evenly between @table columns so that it
+ * stretches to @width. */
 /* TODO: understand and rewrite this thing... --Zas */
 static void
 distribute_widths(struct table *table, int width)

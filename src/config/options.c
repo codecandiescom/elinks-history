@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.146 2002/12/11 14:48:21 pasky Exp $ */
+/* $Id: options.c,v 1.147 2002/12/11 20:28:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,14 +20,20 @@
 
 #include "elinks.h"
 
+#include "main.h" /* shrink_memory() */
 #include "bfu/listbox.h"
 #include "config/conf.h"
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "document/html/colors.h"
+#include "document/html/parser.h"
+#include "document/cache.h"
+#include "document/session.h"
+#include "document/view.h"
 #include "intl/charsets.h"
 #include "intl/language.h"
 #include "lowlevel/dns.h"
+#include "lowlevel/select.h"
 #include "protocol/mime.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -234,6 +240,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *name,
 	option->max = max;
 	option->ptr = ptr;
 	option->desc = desc;
+	option->change_hook = NULL;
 
 	if (option->type == OPT_ALIAS || tree != &root_options) {
 		option->box_item = NULL;
@@ -642,6 +649,33 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 }
 
 
+static int
+change_hook_cache(struct session *ses, struct option *current, struct option *changed)
+{
+	count_format_cache();
+	shrink_memory(0);
+	return 0;
+}
+
+static int
+change_hook_connection(struct session *ses, struct option *current, struct option *changed)
+{
+	register_bottom_half((void (*)(void *)) check_queue, NULL);
+	return 0;
+}
+
+static int
+change_hook_html(struct session *ses, struct option *current, struct option *changed)
+{
+	html_interpret(ses);
+	draw_formatted(ses);
+	load_frames(ses, ses->screen);
+	process_file_requests(ses);
+	print_screen_status(ses);
+	return 0;
+}
+
+
 /**********************************************************************
  Options values
 **********************************************************************/
@@ -649,6 +683,8 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 static void
 register_options()
 {
+	/* TODO: The change hooks should be added more ellegantly! --pasky */
+
 	add_opt_tree("",
 		"bookmarks", 0,
 		"Bookmarks options.");
@@ -709,6 +745,7 @@ register_options()
 	add_opt_tree("",
 		"connection", 0,
 		"Connection options.");
+	get_opt_rec(&root_options, "connection")->change_hook = change_hook_connection;
 
 
 	add_opt_tree("connection",
@@ -794,6 +831,7 @@ register_options()
 	add_opt_tree("document",
 		"browse", 0,
 		"Document browsing options (mainly interactivity).");
+	get_opt_rec(&root_options, "document.browse")->change_hook = change_hook_html;
 
 
 	add_opt_tree("document.browse",
@@ -890,6 +928,7 @@ register_options()
 	add_opt_tree("document",
 		"cache", 0,
 		"Cache options.");
+	get_opt_rec(&root_options, "document.cache")->change_hook = change_hook_cache;
 
 	add_opt_bool("document.cache",
 		"ignore_cache_control", 0, 1,
@@ -931,6 +970,7 @@ register_options()
 	add_opt_tree("document",
 		"colors", 0,
 		"Default document color settings.");
+	get_opt_rec(&root_options, "document.colors")->change_hook = change_hook_html;
 
 	add_opt_color("document.colors",
 		"text", 0, "#bfbfbf",
@@ -1041,6 +1081,7 @@ register_options()
 	add_opt_tree("document",
 		"html", 0,
 		"Options concerning displaying of HTML pages.");
+	get_opt_rec(&root_options, "document.html")->change_hook = change_hook_html;
 
 	add_opt_bool("document.html",
 		"display_frames", 0, 1,

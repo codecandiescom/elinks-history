@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.42 2002/12/08 22:52:08 pasky Exp $ */
+/* $Id: options.h,v 1.43 2002/12/11 20:28:31 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -57,6 +57,8 @@ enum option_type {
 	OPT_TREE,
 };
 
+struct session;
+
 struct option {
 	struct option *next;
 	struct option *prev;
@@ -67,6 +69,11 @@ struct option {
 	int min, max;
 	void *ptr;
 	unsigned char *desc;
+
+	/* To be called when the option (or sub-option if it's a tree) is
+	 * changed. If it returns zero, we will continue descending the options
+	 * tree checking for change handlers. */
+	int (*change_hook)(struct session *, struct option *current, struct option *changed);
 
 	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
 	 * and simpler. */

@@ -1,3 +1,42 @@
+Thu Dec 11 12:03:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/smb/smb.c:
+
+	Wrap <sys/time.h> #include in HAVE_SYS_TIME_H.  
+
+Thu Dec 11 10:54:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/: guile/hooks.c, lua/hooks.c:
+
+	Free goto-url before setting it to NULL. Prevents ``Boom'' 
+
+Thu Dec 11 10:41:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Added hotkey to Tab::Go forward.  
+
+Thu Dec 11 10:41:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Thu Dec 11 10:27:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Removed useless prototype.  
+
+Thu Dec 11 06:42:40 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Updated .po and Italian translation.  
+
 Wed Dec 10 21:34:08 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/dialogs/menu.c:

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.136 2003/12/22 16:31:33 zas Exp $ */
+/* $Id: dialogs.c,v 1.137 2003/12/27 14:33:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,13 +387,23 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 struct kbdbind_add_hop {
 	struct terminal *term;
 	int action, keymap;
+	long key, meta;
 };
+
+static void
+really_really_add_keybinding(void *data)
+{
+	struct kbdbind_add_hop *hop = data;
+
+	add_keybinding(hop->keymap, hop->action, hop->key, hop->meta, 0);
+}
 
 static void
 really_add_keybinding(void *data, unsigned char *keystroke)
 {
 	struct kbdbind_add_hop *hop = data;
 	long key, meta;
+	int action;
 
 	/* TODO: This should maybe rather happen in a validation function? */
 	if (parse_keystroke(keystroke, &key, &meta) < 0) {
@@ -402,6 +412,26 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 			N_("Invalid keystroke."),
 			NULL, 1,
 			N_("OK"), NULL, B_ESC | B_ENTER);
+		return;
+	}
+
+	if (keybinding_exists(hop->keymap, key, meta, &action)) {
+		/* Same keystroke for same action, just return. */
+		if (action == hop->action) return;
+
+		hop->key = key;
+		hop->meta = meta;
+
+		msg_box(hop->term, NULL, MSGBOX_FREE_TEXT,
+			N_("Keystroke already used"), AL_CENTER,
+			msg_text(hop->term, N_("The keystroke \"%s\" "
+			"is currently used for \"%s\".\n"
+			"Are you sure you want to replace it?"),
+			keystroke, write_action(action)),
+			hop, 2,
+			N_("Yes"), really_really_add_keybinding, B_ENTER,
+			N_("No"), NULL, B_ESC);
+
 		return;
 	}
 

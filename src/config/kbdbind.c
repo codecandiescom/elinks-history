@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.131 2003/12/27 14:14:51 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.132 2003/12/27 14:33:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,6 +113,23 @@ free_keybinding(struct keybinding *kb)
 #endif
 	del_from_list(kb);
 	mem_free(kb);
+}
+
+int
+keybinding_exists(enum keymap km, long key, long meta, int *action)
+{
+	struct keybinding *kb;
+
+	foreach (kb, keymaps[km]) {
+		if (kb->key != key || kb->meta != meta)
+			continue;
+
+		if (action) *action = kb->action;
+
+		return 1;
+	}
+
+	return 0;
 }
 
 void

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.9 2003/08/02 16:06:45 jonas Exp $ */
+/* $Id: formhist.c,v 1.10 2003/08/02 16:08:53 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -56,7 +56,7 @@ init_form_history(void)
 	unsigned char tmp[MAX_STR_LEN], *file;
 	FILE *f;
 
-	file = straconcat(elinks_home, "password", NULL);
+	file = straconcat(elinks_home, "formhist", NULL);
 	if (!file) return 0;
 	
 	f = fopen(file, "a+");
@@ -176,7 +176,7 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 	return 0;
 }
 
-/* Appends form data to the password file
+/* Appends form data to the formhist file
  * (form data is url+submitted_value(s))
  * returns 1 on success
  *         0 on failure */
@@ -230,7 +230,7 @@ remember_form(struct form_history_item *fmem_data)
 
 	add_to_list(form_history, form);
 
-	/* Write the list to password file */
+	/* Write the list to formhist file */
 	foreach (tmpform, form_history) {
 		secure_fprintf(ssi, "%s\n", tmpform->url);
 		foreachback (sv, tmpform->submit) {

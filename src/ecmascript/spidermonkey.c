@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.8 2004/09/22 23:14:51 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.9 2004/09/22 23:21:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,6 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		JSVAL_REQUIRE(vp, STRING, string);
 		if (document->title) mem_free(document->title);
 		document->title = stracpy(string);
-		free(string);
 		break;
 	}
 
@@ -289,7 +288,6 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 	JSVAL_REQUIRE(&rval, STRING, string);
 	if (string) {
 		ret = stracpy(string);
-		free(string);
 	}
 	return ret;
 }

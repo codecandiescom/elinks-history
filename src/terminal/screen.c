@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.140 2004/04/30 13:56:21 zas Exp $ */
+/* $Id: screen.c,v 1.141 2004/05/01 10:01:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,6 +195,31 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 	int utf8_io = get_opt_bool_tree(term_spec, "utf_8_io");
 
 	driver->color_mode = get_opt_int_tree(term_spec, "colors");
+
+	/* Check for valid color mode. */
+	switch (driver->color_mode) {
+	case COLOR_MODE_MONO:
+	case COLOR_MODE_16:
+		break;
+	case COLOR_MODE_256:
+#ifndef CONFIG_256_COLORS
+		ERROR("256 colors mode is disabled, falling back to 16 colors mode. "
+		      "Resave your options to get rid of this message.");
+		driver->color_mode = COLOR_MODE_16; /* Fallback to 16 colors. */
+		get_opt_int_tree(term_spec, "colors") = driver->color_mode;
+#endif
+		break;
+	case COLOR_MODES:
+	case COLOR_MODE_DUMP:
+	default:
+		ERROR("Invalid color mode (%d), falling back to 16 colors mode. "
+		      "Resave your options to get rid of this message.",
+		      driver->color_mode);
+		driver->color_mode = COLOR_MODE_16; /* Fallback to 16 colors. */
+		get_opt_int_tree(term_spec, "colors") = driver->color_mode;
+		break;
+	}
+
 	driver->trans = get_opt_bool_tree(term_spec, "transparency");
 
 	if (get_opt_bool_tree(term_spec, "underline")) {
@@ -644,7 +669,8 @@ redraw_screen(struct terminal *term)
 #endif
 	case COLOR_MODES:
 	case COLOR_MODE_DUMP:
-		INTERNAL("Invalid color mode");
+	default:
+		INTERNAL("Invalid color mode (%d).", driver->color_mode);
 		return;
 	}
 

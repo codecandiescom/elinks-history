@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.37 2002/06/30 15:16:02 pasky Exp $ */
+/* $Id: conf.c,v 1.38 2002/07/01 13:19:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,9 @@
 
 /* Config file has only very simple grammar:
  * 
- * /set option *= *value/
- * /bind keymap *keystroke *= *action/
+ * /set *option *= *value/
+ * /bind *keymap *keystroke *= *action/
+ * /include *file/
  * /#.*$/
  * 
  * Where option consists from any number of categories separated by dots and
@@ -46,7 +47,7 @@
  * Value can consist from:
  * - number (it will be converted to int/long)
  * - enum (like on, off; true, fake, last_url; etc ;) - in planning state yet
- * - string - "blah blah" (keymap, keystroke and action looks like that too)
+ * - string - "blah blah" (keymap, keystroke and action and file looks like that too)
  * 
  * "set" command is parsed first, and then type-specific function is called,
  * with option as one parameter and value as a second. Usually it just assigns
@@ -187,6 +188,32 @@ parse_bind(unsigned char **file, int *line)
 	return error;
 }
 
+int load_config_file(unsigned char *, unsigned char *);
+
+enum parse_error
+parse_include(unsigned char **file, int *line)
+{
+	unsigned char *fname;
+
+	*file = skip_white(*file, line);
+	if (!*file) return ERROR_PARSE;
+
+	/* File name */
+	fname = option_types[OPT_STRING].read(NULL, file);
+	if (!fname)
+		return ERROR_VALUE;
+
+	/* XXX: We should try /etc/elinks/<file> when proceeding
+	 * /etc/elinks/<otherfile> ;). --pasky */
+	if (load_config_file(fname[0] == '/' ? "" : elinks_home, fname)) {
+		mem_free(fname);
+		return ERROR_VALUE;
+	}
+
+	mem_free(fname);
+	return ERROR_NONE;
+}
+
 
 struct parse_handler {
 	unsigned char *command;
@@ -196,6 +223,7 @@ struct parse_handler {
 struct parse_handler parse_handlers[] = {
 	{ "set", parse_set },
 	{ "bind", parse_bind },
+	{ "include", parse_include },
 	{ NULL, NULL }
 };
 
@@ -301,24 +329,25 @@ read_config_file(unsigned char *name)
 #undef FILE_BUF
 }
 
-void
+/* Return 0 on success. */
+int
 load_config_file(unsigned char *prefix, unsigned char *name)
 {
 	unsigned char *config_str, *config_file;
 
 	config_file = straconcat(prefix, name, NULL);
-	if (!config_file) return;
+	if (!config_file) return 1;
 
 	config_str = read_config_file(config_file);
 	if (!config_str) {
 		mem_free(config_file);
 		config_file = straconcat(prefix, ".", name, NULL);
-		if (!config_file) return;
+		if (!config_file) return 2;
 
 		config_str = read_config_file(config_file);
 		if (!config_str) {
 			mem_free(config_file);
-			return;
+			return 3;
 		}
 	}
 
@@ -326,6 +355,8 @@ load_config_file(unsigned char *prefix, unsigned char *name)
 
 	mem_free(config_str);
 	mem_free(config_file);
+
+	return 0;
 }
 
 void

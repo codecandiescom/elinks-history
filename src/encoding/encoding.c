@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.11 2003/05/21 09:46:24 miciah Exp $ */
+/* $Id: encoding.c,v 1.12 2003/05/21 10:00:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,11 @@
 /* TODO: When more decoders will join the game, we should probably move them
  * to separate files, maybe even to separate directory. --pasky */
 
+unsigned char *encoding_names[] = {
+	"none",
+	"gzip",
+	"bzip2",
+};
 
 struct decoding_handlers {
 	int (*open)(struct stream_encoded *stream, int fd);
@@ -225,12 +230,6 @@ struct decoding_handlers *handlers[] = {
 #else
 	&dummy_handlers,
 #endif
-};
-
-unsigned char *encoding_names[] = {
-	"none",
-	"gzip",
-	"bzip2",
 };
 
 

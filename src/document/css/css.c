@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.37 2004/01/30 15:25:01 jonas Exp $ */
+/* $Id: css.c,v 1.38 2004/01/31 00:43:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,9 @@ import_css(struct css_stylesheet *css, unsigned char *url)
 	struct cache_entry *cache_entry = find_in_cache(url);
 	struct fragment *fragment;
 
-	if (!cache_entry) return;
+	if (!cache_entry
+	    || css->import_level >= MAX_REDIRECTS)
+		return;
 
 	defrag_entry(cache_entry);
 	fragment = cache_entry->frag.next;
@@ -66,7 +68,9 @@ import_css(struct css_stylesheet *css, unsigned char *url)
 	    && fragment->length) {
 		unsigned char *end = fragment->data + fragment->length;
 
+		css->import_level++;
 		css_parse_stylesheet(css, fragment->data, end);
+		css->import_level--;
 	}
 }
 
@@ -78,7 +82,9 @@ import_css_file(struct css_stylesheet *css, unsigned char *url, int urllen)
 	struct string string;
 	int length = 0;
 
-	if (!*url) return;
+	if (!*url
+	    || css->import_level >= MAX_REDIRECTS)
+		return;
 
 	if (*url != '/' && elinks_home) {
 		length = strlen(elinks_home);
@@ -94,8 +100,10 @@ import_css_file(struct css_stylesheet *css, unsigned char *url, int urllen)
 	if (read_encoded_file(filename, length, &string) == S_OK) {
 		unsigned char *end = string.source + string.length;
 
+		css->import_level++;
 		css_parse_stylesheet(css, string.source, end);
 		done_string(&string);
+		css->import_level--;
 	}
 }
 

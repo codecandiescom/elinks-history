@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.18 2004/01/29 13:32:05 jonas Exp $ */
+/* $Id: stylesheet.h,v 1.19 2004/01/31 00:43:40 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -63,6 +63,9 @@ struct css_stylesheet {
 
 	/* The list of selectors. */
 	struct list_head selectors; /* -> struct css_selector */
+
+	/* How deeply nested are we. Limited by MAX_REDIRECTS. */
+	int import_level;
 };
 
 #define INIT_CSS_STYLESHEET(css, import)			\

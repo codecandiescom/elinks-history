@@ -242,6 +242,23 @@ void http_send_header(struct connection *c)
 	add_to_str(&hdr, &l, "User-Agent: Links (" VERSION_STRING "; ");
 	add_to_str(&hdr, &l, system_name);
 	add_to_str(&hdr, &l, ")\r\n");
+
+	switch (referer)
+	{
+		case REFERER_FAKE:
+		add_to_str(&hdr, &l, "Referer: ");
+		add_to_str(&hdr, &l, fake_referer);
+		add_to_str(&hdr, &l, "\r\n");
+		break;
+		
+		case REFERER_SAME_URL:
+		add_to_str(&hdr, &l, "Referer: ");
+		if (!post) add_to_str(&hdr, &l, u);
+		else add_bytes_to_str(&hdr, &l, u, post - u - 1);
+		add_to_str(&hdr, &l, "\r\n");
+		break;
+	}
+
 	add_to_str(&hdr, &l, "Accept: */*\r\n");
 	if (!(accept_charset)) {
 		int i;

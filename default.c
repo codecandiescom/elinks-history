@@ -854,6 +854,9 @@ int default_left_margin = HTML_LEFT_MARGIN;
 unsigned char http_proxy[MAX_STR_LEN] = "";
 unsigned char ftp_proxy[MAX_STR_LEN] = "";
 
+unsigned char fake_referer[MAX_STR_LEN] = "";
+int referer;   /* values: REFERER_NONE (default), REFERER_SAME_URL, REFERER_FAKE */
+
 unsigned char download_dir[MAX_STR_LEN] = "";
 
 unsigned char default_anon_pass[MAX_STR_LEN] = "somebody@host.domain";
@@ -896,6 +899,8 @@ struct option links_options[] = {
 	1, gen_cmd, num_rd, num_wr, 0, 1, &http_bugs.allow_blacklist, "http_bugs.allow_blacklist", "http-bugs.allow-blacklist",
 	1, gen_cmd, num_rd, num_wr, 0, 1, &http_bugs.bug_302_redirect, "http_bugs.bug_302_redirect", "http-bugs.bug-302-redirect",
 	1, gen_cmd, num_rd, num_wr, 0, 1, &http_bugs.bug_post_no_keepalive, "http_bugs.bug_post_no_keepalive", "http-bugs.bug_post-no-keepalive",
+	1, gen_cmd, num_rd, num_wr, 0, 2, &referer, "http_referer", "http-referer",
+	1, gen_cmd, str_rd, str_wr, 0, MAX_STR_LEN, fake_referer, "fake_referer", "fake-referer",
 	1, gen_cmd, str_rd, str_wr, 0, MAX_STR_LEN, default_anon_pass, "ftp.anonymous_password", "ftp.anonymous-password",
 	1, gen_cmd, cp_rd, NULL, 0, 0, &dds.assume_cp, "assume_codepage", "assume-codepage",
 	1, NULL, term_rd, term_wr, 0, 0, NULL, "terminal", NULL,

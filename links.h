@@ -1998,8 +1998,14 @@ extern struct rgb default_bg;
 extern struct rgb default_link;
 extern struct rgb default_vlink;
 
+#define REFERER_NONE 0
+#define REFERER_SAME_URL 1
+#define REFERER_FAKE 2
+
 extern unsigned char http_proxy[];
 extern unsigned char ftp_proxy[];
+extern unsigned char fake_referer[];
+extern int referer;
 extern unsigned char no_proxy_for[];
 extern unsigned char download_dir[];
 

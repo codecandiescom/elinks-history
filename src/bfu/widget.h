@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.50 2003/12/22 17:45:32 zas Exp $ */
+/* $Id: widget.h,v 1.51 2004/01/20 22:25:37 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -109,6 +109,20 @@ struct widget_data {
 			 * This is used to check whether the lines must be
 			 * rewrapped. */
 			int max_width;
+#ifdef CONFIG_MOUSE
+			/* For mouse scrollbar handling. See bfu/text.c.*/
+
+			/* Height of selected part of scrollbar. */
+			int scroller_height;
+
+			/* Position of selected part of scrollbar. */
+			int scroller_y;
+
+			/* Direction of last mouse scroll. Used to adjust
+			 * scrolling when selected bar part has a low height
+			 * (especially the 1 char height) */
+			int scroller_last_dir;
+#endif
 		} text;
 	} info;
 };

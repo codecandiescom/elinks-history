@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.81 2004/01/01 15:54:37 jonas Exp $ */
+/* $Id: text.c,v 1.82 2004/01/20 22:25:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,6 +273,13 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	}
 	y += step;
 
+#ifdef CONFIG_MOUSE
+	/* Save infos about selected scrollbar position and size.
+	 * We'll use it when handling mouse. */
+	widget_data->info.text.scroller_height = height;
+	widget_data->info.text.scroller_y = y;
+#endif
+
 	draw_area(win->term, x, y, 1, height, ' ', 0,
 		  get_bfu_color(win->term, "dialog.scrollbar-selected"));
 
@@ -364,17 +371,42 @@ mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	int y = widget_data->y;
 	int height = widget_data->h;
 	int current = widget_data->info.text.current;
+	int scroller_y = widget_data->info.text.scroller_y;
+	int scroller_height = widget_data->info.text.scroller_height;
+	int scroller_middle = scroller_y + scroller_height/2
+			      - widget_data->info.text.scroller_last_dir;
 
-	if ((ev->b & BM_BUTT) >= B_WHEEL_UP
-	    || ev->x != x
-	    || ev->y < y || ev->y >= y + height)
+	if (ev->x != x || ev->y < y || ev->y >= y + height)
 		return EVENT_NOT_PROCESSED;
 
-	/* If in upper half, scroll up else scroll down. */
-	if (ev->y < y + height/2)
+	/* Left click scrolls up or down by one step. */
+	if ((ev->b & BM_BUTT) ==  B_LEFT) {
+		/* Left click scrolls up or down by one step. */
+		if (ev->y <= scroller_middle)
+			current--;
+		else
+			current++;
+
+	} else if ((ev->b & BM_BUTT) == B_RIGHT) {
+		/* Right click scrolls up or down by more than one step.
+		 * Faster. */
+		if (ev->y <= scroller_middle)
+			current -= 5;
+		else
+			current += 5;
+	} else if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
+		/* Mouse wheel up scrolls up. */
 		current--;
-	else
+	} else if ((ev->b & BM_BUTT) == B_WHEEL_DOWN) {
+		/* Mouse wheel up scrolls down. */
 		current++;
+	} else return EVENT_NOT_PROCESSED;
+
+	/* Save last direction used. */
+	if (widget_data->info.text.current < current)
+		widget_data->info.text.scroller_last_dir = 1;
+	else
+		widget_data->info.text.scroller_last_dir = -1;
 
 	format_and_display_text(widget_data, dlg_data, current);
 

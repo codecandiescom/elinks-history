@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.3 2002/03/17 17:27:49 pasky Exp $ */
+/* $Id: cookies.c,v 1.4 2002/03/17 17:42:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include <config/default.h>
 #include <document/session.h>
 #include <lowlevel/terminal.h>
-#include <protocol/http.h>
+#include <protocol/http/http.h>
 #include <protocol/url.h>
 #ifdef COOKIES_DEBUG
 #include <util/error.h>

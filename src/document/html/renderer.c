@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.4 2002/03/17 17:27:50 pasky Exp $ */
+/* $Id: renderer.c,v 1.5 2002/03/17 17:42:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include <document/html/tables.h>
 #include <intl/charsets.h>
 #include <lowlevel/select.h>
-#include <protocol/http.h>
+#include <protocol/http/http.h>
 #include <protocol/url.h>
 #include <util/error.h>
 

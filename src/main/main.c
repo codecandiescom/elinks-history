@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.4 2002/03/17 14:39:12 pasky Exp $ */
+/* $Id: main.c,v 1.5 2002/03/17 17:42:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@
 #include <lowlevel/select.h>
 #include <lowlevel/terminal.h>
 #include <lua/lua.h>
-#include <protocol/https.h>
+#include <protocol/http/https.h>
 #include <protocol/types.h>
 #include <protocol/url.h>
 #include <util/error.h>

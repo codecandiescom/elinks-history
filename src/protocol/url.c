@@ -1,5 +1,5 @@
 /* URL parser and translator */
-/* $Id: url.c,v 1.3 2002/03/17 17:27:52 pasky Exp $ */
+/* $Id: url.c,v 1.4 2002/03/17 17:42:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,8 +14,8 @@
 #include <protocol/file.h>
 #include <protocol/finger.h>
 #include <protocol/ftp.h>
-#include <protocol/http.h>
-#include <protocol/https.h>
+#include <protocol/http/http.h>
+#include <protocol/http/https.h>
 #include <protocol/mailto.h>
 #include <protocol/url.h>
 #include <util/error.h>

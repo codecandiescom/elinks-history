@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.32 2004/07/22 01:56:50 pasky Exp $ */
+/* $Id: rewrite.c,v 1.33 2004/07/22 01:58:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,6 +147,7 @@ static struct option_info uri_rewrite_options[] = {
 	INIT_OPT_SMART_PREFIX("gi", "http://images.google.com/images?q=%s"),
 	INIT_OPT_SMART_PREFIX("gn", "http://news.google.com/news?q=%s"),
 	INIT_OPT_SMART_PREFIX("go", "http://www.google.com/search?q=%s&btnG=Google+Search"),
+	INIT_OPT_SMART_PREFIX("gr", "http://groups.google.com/groups?q=%s"),
 	INIT_OPT_SMART_PREFIX("google", "http://www.google.com/search?q=%s"),
 	INIT_OPT_SMART_PREFIX("gwho", "http://www.googlism.com/?ism=%s&name=1"),
 	INIT_OPT_SMART_PREFIX("gwhat", "http://www.googlism.com/?ism=%s&name=2"),

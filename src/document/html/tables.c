@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.220 2004/06/26 19:15:39 zas Exp $ */
+/* $Id: tables.c,v 1.221 2004/06/26 19:18:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -843,7 +843,7 @@ get_cell_width(unsigned char *start, unsigned char *end,
 
 	if (min) *min = part->box.width;
 	if (max) *max = part->max_width;
-	if (n_links) *new_link_num = part->link_num;
+	if (new_link_num) *new_link_num = part->link_num;
 
 	if (min && max) {
 		assertm(*min <= *max, "get_cell_width: %d > %d", *min, *max);

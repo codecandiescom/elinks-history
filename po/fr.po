@@ -3837,7 +3837,7 @@ msgid "Cache content: %s"
 msgstr "Contenu du cache: %s"
 
 #: src/dialogs/info.c:214
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "\n"
@@ -3852,14 +3852,14 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"allocation interne = %li KiB\n"
-"taille totale du programme = %li KiB\n"
-"taille résidents = %li KiB\n"
-"pages partagées = %li KiB\n"
-"texte (code) = %li KiB\n"
-"données/pile = %li KiB\n"
-"bibliothèques = %li KiB\n"
-"pages 'sales' = %li KiB"
+"Allocation interne = %li KiB\n"
+"Taille totale du programme = %li KiB\n"
+"Taille résidents = %li KiB\n"
+"Pages partagées = %li KiB\n"
+"Texte (code) = %li KiB\n"
+"Données/pile = %li KiB\n"
+"Bibliothèques = %li KiB\n"
+"Pages 'sales' = %li KiB"
 
 #: src/dialogs/info.c:237
 msgid "Memory info"
@@ -4256,7 +4256,7 @@ msgstr ""
 
 #: src/formhist/formhist.c:382
 msgid "Never for this site"
-msgstr ""
+msgstr "Jamais pour ce site"
 
 #. name:
 #: src/formhist/formhist.c:402

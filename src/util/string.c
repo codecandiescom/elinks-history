@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.24 2003/04/17 13:25:37 zas Exp $ */
+/* $Id: string.c,v 1.25 2003/04/20 15:05:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -447,19 +447,22 @@ memmove(char *dst, const char *src, size_t n)
 #endif
 
 /* Trim starting and ending chars from a string.
- * WARNING: string is modified, pointer to new start of the
- * string is returned. if len != NULL, it is set to length of
- * trimmed string.
+ * Pointer to the string is passed.
+ * WARNING: string is modified.
+ * If len != NULL, it is set to length of the new string.
  */
 inline unsigned char *
 trim_chars(unsigned char *s, unsigned char c, int *len)
 {
 	int l = strlen(s);
+	unsigned char *p = s;	
+	
+	while (*p == c) p++, l--;
+	while (l && p[l - 1] == c) p[--l] = '\0';
 
-	while (*s == c) s++, l--;
-	while (l && s[l - 1] == c) s[--l] = '\0';
-
+	memmove(s, p, l + 1);
 	if (len) *len = l;
+	
 	return s;
 }
 

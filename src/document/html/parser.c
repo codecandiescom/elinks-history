@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.69 2003/04/17 17:57:09 zas Exp $ */
+/* $Id: parser.c,v 1.70 2003/04/20 15:05:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,6 @@ a:
 
 ea:
 	if (!f) {
-		unsigned char *b;
 		int len;
 
 		add_chr(a, l, 0);
@@ -208,10 +207,7 @@ ea:
 			mem_free(aa);
 		}
 
-		b = trim_chars(a, ' ', &len);
-		if (b != a) memmove(a, b, len + 1);
-
-		set_mem_comment(a, name, strlen(name));
+		set_mem_comment(trim_chars(a, ' ', &len), name, strlen(name));
 		return a;
 	}
 

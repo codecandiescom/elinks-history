@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.12 2003/01/02 05:25:14 pasky Exp $ */
+/* $Id: inphist.c,v 1.13 2003/04/20 15:05:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,8 +167,7 @@ add_to_input_history(struct input_history *historylist, unsigned char *url,
 		return;
 
 	/* Strip spaces at the margins */
-
-	url = trim_chars(url, ' ', &url_len);
+	trim_chars(url, ' ', &url_len);
 	if (!url_len) return;
 
 	/* Copy it all etc. */

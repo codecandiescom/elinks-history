@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.36 2004/08/12 08:42:49 miciah Exp $ */
+/* $Id: file.c,v 1.37 2004/08/12 08:44:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -564,7 +564,7 @@ get_directory_entries(unsigned char *dirname, int get_hidden)
 	}
 
 	qsort(entries, size, sizeof(struct directory_entry),
-	      (int(*)(const void *, const void *)) compare_dir_entries);
+	      (int (*)(const void *, const void *)) compare_dir_entries);
 
 	memset(&entries[size], 0, sizeof(struct directory_entry));
 

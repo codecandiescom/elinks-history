@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.51 2003/06/20 12:04:10 zas Exp $ */
+/* $Id: af_unix.c,v 1.52 2003/06/20 12:06:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ get_address(struct s_addr_info *info, enum addr_type type)
 
 	/* Each ring is bind to ELINKS_PORT + ring number. */
 	port = ELINKS_PORT + get_opt_int_tree(&cmdline_options,
-						      "session-ring");
+					      "session-ring");
 	if (port < IPPORT_USERRESERVED || port > 65535)
 		return -1; /* Just in case of... */
 

@@ -7465,8 +7465,8 @@ struct translation translation_italian [] = {
   {T_SSL_CIPHER, "Chiper SSL"},
   {T_ENCODING, "Codifica"},
   {T_BOOKMARK_USED, "Spiacente, ma questo segnalibro è in uso, in questo momento"},
-  {T_ELINKS_HOME, NULL},
-  {T_HK_ELINKS_HOME, NULL},
+  {T_ELINKS_HOME, "Homepage di ELinks"},
+  {T_HK_ELINKS_HOME, "E"},
   {0, NULL}
 };
 

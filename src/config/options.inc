@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.60 2003/12/28 02:07:20 jonas Exp $ */
+/* $Id: options.inc,v 1.61 2003/12/28 02:12:54 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -897,13 +897,16 @@ struct option_info config_options_info[] = {
 #define INIT_OPT_COLORS(subtree, capt, name, bg, fg, desc)		\
 	DO_INIT_OPT_COLORS("ui.colors.color" subtree, capt, name, bg, fg, desc)
 
+#define INIT_OPT_COLOR_TREE(subtree, capt, name, desc)			\
+	INIT_OPT_TREE("ui.colors.color" subtree, capt, name, 0, desc)
+
 	INIT_OPT_TREE("ui.colors", N_("Color terminals"),
 		"color", 0,
 		N_("Color settings for color terminal.")),
 
 	/* FIXME: obsolete, how to alias them correctly ? --Zas */
-	INIT_OPT_TREE("ui.colors.color", N_("Main menu bar"),
-		"mainmenu", 0,
+	INIT_OPT_COLOR_TREE("", N_("Main menu bar"),
+		"mainmenu",
 		N_("Main menu bar colors.")),
 
 	INIT_OPT_COLORS(".mainmenu", N_("Unselected main menu bar item"),
@@ -914,8 +917,8 @@ struct option_info config_options_info[] = {
 		"selected", "black", "green",
 		N_("Selected main menu bar item colors.")),
 
-	INIT_OPT_TREE("ui.colors.color.mainmenu", N_("Hotkey"),
-		"hotkey", 0,
+	INIT_OPT_COLOR_TREE(".mainmenu", N_("Hotkey"),
+		"hotkey",
 		N_("Main menu hotkey colors.")),
 
 	INIT_OPT_COLORS(".mainmenu.hotkey", N_("Unselected hotkey"),
@@ -927,8 +930,8 @@ struct option_info config_options_info[] = {
 		N_("Main menu selected hotkey colors.")),
 
 
-	INIT_OPT_TREE("ui.colors.color", N_("Menu bar"),
-		"menu", 0,
+	INIT_OPT_COLOR_TREE("", N_("Menu bar"),
+		"menu",
 		N_("Menu bar colors.")),
 
 	INIT_OPT_COLORS(".menu", N_("Unselected menu item"),
@@ -943,8 +946,8 @@ struct option_info config_options_info[] = {
 		"marked", "white", "red",
 		N_("Marked menu item colors.")),
 
-	INIT_OPT_TREE("ui.colors.color.menu", N_("Hotkey"),
-		"hotkey", 0,
+	INIT_OPT_COLOR_TREE(".menu", N_("Hotkey"),
+		"hotkey",
 		N_("Menu item hotkey colors.")),
 
 	INIT_OPT_COLORS(".menu.hotkey", N_("Unselected hotkey"),
@@ -960,8 +963,8 @@ struct option_info config_options_info[] = {
 		N_("Menu frame colors.")),
 
 
-	INIT_OPT_TREE("ui.colors.color", N_("Dialog"),
-		"dialog", 0,
+	INIT_OPT_COLOR_TREE("", N_("Dialog"),
+		"dialog",
 		N_("Dialog colors.")),
 
 	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
@@ -1026,8 +1029,8 @@ struct option_info config_options_info[] = {
 		"shadow", "black", "black",
 		N_("Dialog shadow colors (see ui.shadows option).")),
 
-	INIT_OPT_TREE("ui.colors.color", N_("Title bar"),
-		"title", 0,
+	INIT_OPT_COLOR_TREE("", N_("Title bar"),
+		"title",
 		N_("Title bar colors.")),
 
 	INIT_OPT_COLORS(".title", N_("Generic title bar"),
@@ -1039,8 +1042,8 @@ struct option_info config_options_info[] = {
 		N_("Title bar text colors.")),
 
 
-	INIT_OPT_TREE("ui.colors.color", N_("Status bar"),
-		"status", 0,
+	INIT_OPT_COLOR_TREE("", N_("Status bar"),
+		"status",
 		N_("Status bar colors.")),
 
 	INIT_OPT_COLORS(".status", N_("Generic status bar"),
@@ -1052,8 +1055,8 @@ struct option_info config_options_info[] = {
 		N_("Status bar text colors.")),
 
 
-	INIT_OPT_TREE("ui.colors.color", N_("Tabs bar"),
-		"tabs", 0,
+	INIT_OPT_COLOR_TREE("", N_("Tabs bar"),
+		"tabs",
 		N_("Tabs bar colors.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Unvisited tab"),

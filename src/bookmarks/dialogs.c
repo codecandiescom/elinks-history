@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.104 2003/10/29 17:17:34 jonas Exp $ */
+/* $Id: dialogs.c,v 1.105 2003/10/31 21:33:40 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -618,7 +618,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	add_dlg_listbox(dlg, n, 12, bookmark_dlg_box_build());
 
-	dlg->widgets_size = n;
+	add_dlg_end(dlg, n);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

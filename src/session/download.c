@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.125 2003/10/30 17:01:42 pasky Exp $ */
+/* $Id: download.c,v 1.126 2003/10/31 21:33:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,7 +438,7 @@ found:
 	add_dlg_button(dlg, n, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);
 	add_dlg_button(dlg, n, 0, dlg_abort_download, _("Abort", term), NULL);
 
-	dlg->widgets_size = n;
+	add_dlg_end(dlg, n);
 
 	assert(n == DOWNLOAD_WIDGETS_COUNT);
 

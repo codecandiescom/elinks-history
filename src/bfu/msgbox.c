@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.68 2003/10/30 15:50:53 zas Exp $ */
+/* $Id: msgbox.c,v 1.69 2003/10/31 21:33:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,7 +139,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 
 	va_end(ap);
 
-	dlg->widgets_size = button;
+	add_dlg_end(dlg, button);
 
 	do_dialog(term, dlg, ml);
 }

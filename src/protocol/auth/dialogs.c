@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.67 2003/10/30 15:50:54 zas Exp $ */
+/* $Id: dialogs.c,v 1.68 2003/10/31 21:33:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,7 +152,7 @@ do_auth_dialog(struct session *ses)
 	add_dlg_button(dlg, n, B_ENTER, auth_ok, _("OK", term), NULL);
 	add_dlg_button(dlg, n, B_ESC, auth_cancel, _("Cancel", term), NULL);
 
-	dlg->widgets_size = n;
+	add_dlg_end(dlg, n);
 
 	assert(n == AUTH_WIDGETS_COUNT);
 

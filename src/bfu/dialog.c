@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.64 2003/10/30 15:50:53 zas Exp $ */
+/* $Id: dialog.c,v 1.65 2003/10/31 21:33:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,13 +46,18 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	  struct memory_list *ml)
 {
 	struct dialog_data *dlg_data;
+	struct widget *widget;
+	int n = 0;
+
+	/* FIXME: maintain a counter, and don't recount each time. --Zas */
+	for (widget = dlg->widgets; widget->type != WIDGET_END; widget++) n++;
 
 	dlg_data = mem_alloc(sizeof(struct dialog_data) +
-			     sizeof(struct widget_data) * dlg->widgets_size);
+		             sizeof(struct widget_data) * n);
 	if (!dlg_data) return NULL;
 
 	dlg_data->dlg = dlg;
-	dlg_data->n = dlg->widgets_size;
+	dlg_data->n = n;
 	dlg_data->ml = ml;
 	add_window(term, dialog_func, dlg_data);
 
@@ -104,6 +109,7 @@ select_dlg_item(struct dialog_data *dlg_data, int i)
 }
 
 static struct widget_ops *widget_type_to_ops[] = {
+	NULL,
 	&checkbox_ops,
 	&field_ops,
 	&field_pass_ops,

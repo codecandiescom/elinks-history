@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.11 2003/10/29 17:17:34 jonas Exp $ */
+/* $Id: dialog.h,v 1.12 2003/10/31 21:33:40 pasky Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -29,15 +29,12 @@ struct dialog {
 
 	enum format_align align;
 
-	size_t widgets_size;
 	struct widget widgets[1]; /* must be at end of struct */
 };
 
-/* Allocate a struct dialog for n - 1 widgets, one is already reserved in struct.
+/* Allocate a struct dialog for n widgets, one is already reserved in struct (for dialog end).
  * add_size bytes will be added. */
-#define sizeof_dialog(n, add_size) \
-	(sizeof(struct dialog) + ((n) - 1) * sizeof(struct widget) + (add_size))
-
+#define sizeof_dialog(n, add_size) (sizeof(struct dialog) + (n) * sizeof(struct widget) + (add_size))
 #define calloc_dialog(n, add_size) ((struct dialog *) mem_calloc(1, sizeof_dialog(n, add_size)))
 
 struct dialog_data {

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.106 2003/10/31 17:32:41 jonas Exp $ */
+/* $Id: core.c,v 1.107 2003/10/31 21:33:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -451,7 +451,7 @@ l_edit_bookmark_dialog(LS)
 	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
 	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
-	dlg->widgets_size = n;
+	add_dlg_end(dlg, n);
 
 	assert(n == L_EDIT_BMK_WIDGETS_COUNT);
 
@@ -591,7 +591,7 @@ l_xdialog(LS)
 	add_dlg_button(dlg, i, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
 	add_dlg_button(dlg, i, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
-	dlg->widgets_size = i;
+	add_dlg_end(dlg, i);
 
 	assert(i == nitems);
 

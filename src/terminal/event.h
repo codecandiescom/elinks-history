@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.14 2004/07/27 17:34:19 jonas Exp $ */
+/* $Id: event.h,v 1.15 2004/07/27 21:32:11 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -46,8 +46,12 @@ struct terminal_info {
 
 	/* In the master that is connected to all bytes after @data will be
 	 * interpreted as URI string information. */
-	unsigned char data[0];
+	unsigned char data[1];
 };
+
+/* The @data member has to have size of one for portability but it can be
+ * empty/zero so when reading and writing it we need to ignore the byte. */
+#define TERMINAL_INFO_SIZE offsetof(struct terminal_info, data)
 
 /* We use magic numbers to signal the identity of the dump client terminal.
  * Magic numbers are composed by the INTERLINK_MAGIC() macro. It is a negative

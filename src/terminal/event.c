@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.69 2004/07/15 15:38:22 jonas Exp $ */
+/* $Id: event.c,v 1.70 2004/07/27 21:32:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,12 +168,12 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 
 	switch (ev->ev) {
 	case EVENT_INIT:
-		if (interlink->qlen < sizeof(struct terminal_info))
+		if (interlink->qlen < TERMINAL_INFO_SIZE)
 			return 0;
 
 		info = (struct terminal_info *) ev;
 
-		if (interlink->qlen < sizeof(struct terminal_info) + info->length)
+		if (interlink->qlen < TERMINAL_INFO_SIZE + info->length)
 			return 0;
 
 		info->name[MAX_TERM_LEN - 1] = 0;
@@ -284,7 +284,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 	}
 
 	/* For EVENT_INIT we read a liitle more */
-	if (info) return sizeof(struct terminal_info) + info->length;
+	if (info) return TERMINAL_INFO_SIZE + info->length;
 	return sizeof(struct term_event);
 }
 

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.83 2004/07/15 15:35:42 jonas Exp $ */
+/* $Id: kbd.c,v 1.84 2004/07/27 21:32:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,7 +313,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		mem_free(ts);
 	}
 
-	queue_event(itrm, (char *) &info, sizeof(struct terminal_info));
+	queue_event(itrm, (char *) &info, TERMINAL_INFO_SIZE);
 	queue_event(itrm, (char *) init_string, init_len);
 	send_init_sequence(std_out, itrm->altscreen);
 

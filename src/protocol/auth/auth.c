@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.60 2003/07/23 08:21:22 zas Exp $ */
+/* $Id: auth.c,v 1.61 2003/07/23 08:29:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,10 +69,10 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define set_auth_passwd(e, u) \
 	do { \
-		int passwdlen = MIN((u)->passwordlen, MAX_PASSWD_LEN - 1); \
-		if (passwdlen) \
-			memcpy((e)->passwd, (u)->password, passwdlen); \
-		(e)->passwd[passwdlen] = 0; \
+		int passwordlen = MIN((u)->passwordlen, MAX_PASSWD_LEN - 1); \
+		if (passwordlen) \
+			memcpy((e)->password, (u)->password, passwordlen); \
+		(e)->password[passwordlen] = 0; \
 	} while (0)
 
 static struct http_auth_basic *
@@ -102,7 +102,7 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 		mem_free(entry);
 		return NULL;
 	}
-	entry->passwd = entry->user + MAX_UID_LEN;
+	entry->password = entry->user + MAX_UID_LEN;
 	set_auth_uid(entry, uri);
 	set_auth_passwd(entry, uri);
 
@@ -157,8 +157,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 			set_auth_uid(entry, uri);
 		}
 
-		if (!*entry->passwd || strlen(entry->passwd) != uri->passwordlen
-		    || strncmp(entry->passwd, uri->password, uri->passwordlen)) {
+		if (!*entry->password || strlen(entry->password) != uri->passwordlen
+		    || strncmp(entry->password, uri->password, uri->passwordlen)) {
 			entry->valid = 0;
 			set_auth_passwd(entry, uri);
 		}
@@ -203,9 +203,9 @@ find_auth(struct uri *uri)
 		/* FIXME BOOLEAN OVERLOAD! */
 		if (!entry
 		    || (auth_entry_has_userinfo(entry)
-			&& strlen(entry->passwd) == uri->passwordlen
+			&& strlen(entry->password) == uri->passwordlen
 		        && strlen(entry->user) == uri->userlen
-		        && !strncmp(entry->passwd, uri->password, uri->passwordlen)
+		        && !strncmp(entry->password, uri->password, uri->passwordlen)
 		        && !strncmp(entry->user, uri->user, uri->userlen))) {
 
 			entry = add_auth_entry(uri, NULL);
@@ -227,7 +227,7 @@ find_auth(struct uri *uri)
 	 * encoded string in the credentials. */
 
 	/* Create base64 encoded string. */
-	id = straconcat(entry->user, ":", entry->passwd, NULL);
+	id = straconcat(entry->user, ":", entry->password, NULL);
 	if (!id) return NULL;
 	ret = base64_encode(id);
 	mem_free(id);
@@ -242,6 +242,9 @@ del_auth_entry(struct http_auth_basic *entry)
 	if (entry->url) mem_free(entry->url);
 	if (entry->realm) mem_free(entry->realm);
 	if (entry->user) mem_free(entry->user);
+	/* if (entry->password) mem_free(entry->user); Allocated at the same
+	 * time as user field, so no need to free it. */
+
 	del_from_list(entry);
 	mem_free(entry);
 }

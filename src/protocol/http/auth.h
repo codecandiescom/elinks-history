@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.13 2003/07/23 08:21:22 zas Exp $ */
+/* $Id: auth.h,v 1.14 2003/07/23 08:29:19 zas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_AUTH_H
 #define EL__PROTOCOL_HTTP_AUTH_H
@@ -11,13 +11,13 @@ struct http_auth_basic {
 	unsigned char *url;
 	unsigned char *realm;
 	unsigned char *user;
-	unsigned char *passwd;
+	unsigned char *password;
 	unsigned int blocked:1;
 	unsigned int valid:1;
 };
 
 #define auth_entry_has_userinfo(_entry_) \
-	(*(_entry_)->user && *(_entry_)->passwd)
+	(*(_entry_)->user && *(_entry_)->password)
 
 unsigned char *find_auth(struct uri *);
 struct http_auth_basic *add_auth_entry(struct uri *, unsigned char *);

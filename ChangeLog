@@ -1,3 +1,40 @@
+Thu Apr 24 08:52:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Fix init_formatted() to be useable with listdebug feature. We should
+	not rely a fixed size for struct list_head.  
+
+Thu Apr 24 08:32:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/lists.h:
+
+	lists.h cleanup.  
+
+Thu Apr 24 08:23:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.h, bfu/listbox.h, bookmarks/bookmarks.c,
+	bookmarks/bookmarks.h, bookmarks/backend/xbel.c, config/kbdbind.c,
+	config/kbdbind.h, config/options.c, config/options.h,
+	cookies/cookies.c, dialogs/menu.c, document/cache.c,
+	document/cache.h, document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, document/html/renderer.h,
+	elusive/layouter/box.h, elusive/parser/property.h,
+	elusive/parser/syntree.h, globhist/dialogs.c, globhist/globhist.c,
+	globhist/globhist.h, lowlevel/dns.c, lowlevel/select.c,
+	lowlevel/terminal.c, lowlevel/terminal.h, osdep/os_dep.c,
+	protocol/http/auth.c, protocol/http/auth.h, sched/download.c,
+	sched/download.h, sched/location.h, sched/sched.c, sched/sched.h,
+	sched/session.c, sched/session.h, util/blacklist.c, util/error.c,
+	util/error.h, util/hash.c, util/hash.h, util/lists.h,
+	util/memdebug.c, viewer/text/view.c:
+
+	Lists debugging feature was implemented. It still needs some work
+	(and cleanup) but it already detects some bugs. To test edit
+	src/util/lists.h and define LISTDEBUG. As a side effect list headers
+	(next,prev pointers) are now defined as a macro providing a kind of
+	encapsulation. Feel free to improve the patch.  
+
 Tue Apr 22 15:51:57 2003  Laurent Monin <zas@norz.org>:
 
 	* BUGS:

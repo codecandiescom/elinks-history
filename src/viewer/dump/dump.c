@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.114 2004/04/14 00:35:42 jonas Exp $ */
+/* $Id: dump.c,v 1.115 2004/04/14 20:02:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,14 +96,14 @@ nextfrag:
 /* This dumps the given @cached's formatted output onto @fd. It returns 0 if it all
  * went fine and 1 if something isn't quite right and we should terminate
  * ourselves ASAP. */
-static int
+static void
 dump_formatted(int fd, struct download *status, struct cache_entry *cached)
 {
 	struct document_options o;
 	struct document_view formatted;
 	struct view_state vs;
 
-	if (!cached) return 0;
+	if (!cached) return;
 
 	memset(&vs, 0, sizeof(struct view_state));
 	memset(&formatted, 0, sizeof(struct document_view));
@@ -128,8 +128,6 @@ dump_formatted(int fd, struct download *status, struct cache_entry *cached)
 
 	detach_formatted(&formatted);
 	destroy_vs(&vs);
-
-	return 0;
 }
 
 static unsigned char *
@@ -263,8 +261,7 @@ dump_end(struct download *status, void *p)
 			return;
 
 	} else {
-		if (dump_formatted(fd, status, cached) > 0)
-			goto terminate;
+		dump_formatted(fd, status, cached);
 	}
 
 	if (status->state != S_OK) {

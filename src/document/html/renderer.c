@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.372 2003/11/13 17:22:27 jonas Exp $ */
+/* $Id: renderer.c,v 1.373 2003/11/13 22:40:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -679,13 +679,14 @@ justify_line(struct part *part, int y)
 			/* There are now (new_start - prev_end) spaces before
 			 * the word. */
 			if (word) {
+#if 0
 				int new_spaces = new_start - prev_end - 1;
 				struct link *link = part->document->nlinks > 0
 					? &part->document->links[part->document->nlinks - 1]
 					: NULL;
-
+#endif
 				move_links(part, prev_end + 1, y, new_start, y);
-
+#if 0
 				/* FIXME: Move to move_links() --jonas */
 				if (new_spaces
 				    && link
@@ -702,7 +703,7 @@ justify_line(struct part *part, int y)
 						point->y = y;
 					}
 				}
-
+#endif
 			}
 
 			prev_end = new_start + word_len;

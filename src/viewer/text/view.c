@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.83 2003/06/01 17:02:16 pasky Exp $ */
+/* $Id: view.c,v 1.84 2003/06/02 01:52:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2719,8 +2719,8 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 
 			case ACT_HOME: rep_ev(ses, fd, home, 0); break;
 			case ACT_END:  rep_ev(ses, fd, x_end, 0); break;
-			case ACT_ENTER: x = enter(ses, fd, 0); break;
-			case ACT_ENTER_RELOAD: x = enter(ses, fd, 1); break;
+			case ACT_ENTER: x = enter(ses, fd, 0); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
+			case ACT_ENTER_RELOAD: x = enter(ses, fd, 1); if (x == 2 && ses->kbdprefix.rep) x = 1; break;
 			case ACT_DOWNLOAD: if (!get_opt_int_tree(&cmdline_options, "anonymous")) frm_download(ses, fd, 0); break;
 			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(&cmdline_options, "anonymous")) frm_download(ses, fd, 1); break;
 			case ACT_SEARCH: search_dlg(ses, fd, 0); break;

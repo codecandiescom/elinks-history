@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.431 2004/06/10 13:46:55 jonas Exp $ */
+/* $Id: session.c,v 1.432 2004/06/10 13:51:05 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -513,15 +513,10 @@ dialog_goto_url_open_first(void *data)
 	first_use = 0;
 }
 
-static struct session *create_basic_session(struct window *tab);
-
-static struct session *
-create_session(struct window *tab)
+static void
+setup_first_session(struct session *ses)
 {
-	struct terminal *term = tab->term;
-	struct session *ses = create_basic_session(tab);
-
-	if (!ses) return NULL;
+	struct terminal *term = ses->tab->term;
 
 	if (first_use) {
 		msg_box(term, NULL, 0,
@@ -574,12 +569,10 @@ create_session(struct window *tab)
 				N_("OK"), NULL, B_ENTER | B_ESC);
 		}
 	}
-
-	return ses;
 }
 
 static struct session *
-create_basic_session(struct window *tab)
+create_session(struct window *tab)
 {
 	struct session *ses = mem_calloc(1, sizeof(struct session));
 
@@ -598,6 +591,10 @@ create_basic_session(struct window *tab)
 	init_led_panel(&ses->status.leds);
 	ses->status.ssl_led = register_led(ses, 0);
 #endif
+
+	/* Only do the setup for the first tab */
+	if (list_empty(sessions))
+		setup_first_session(ses);
 
 	add_to_list(sessions, ses);
 
@@ -999,11 +996,6 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			if (!list_empty(sessions)) update_status();
 			break;
 		case EV_INIT:
-			/* Perhaps we should call just create_base_session()
-			 * and then do the rest of create_session() stuff
-			 * (renamed to setup_first_session() or so) if this is
-			 * the first tab. But I don't think it is so urgent.
-			 * --pasky */
 			ses = tab->data = create_session(tab);
 			if (!ses || process_session_info(ses, (struct initial_session_info *) ev->b)) {
 				register_bottom_half((void (*)(void *)) destroy_terminal, tab->term);

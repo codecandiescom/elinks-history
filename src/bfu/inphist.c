@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.61 2003/11/18 10:55:15 pasky Exp $ */
+/* $Id: inphist.c,v 1.62 2003/11/18 10:55:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,6 +100,9 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
 	struct widget_data *widget_data = selected_widget(dlg_data);
 	int base_len = strlen(widget_data->cdata);
+	/* Maximum number of characters in a match. Characters after this
+	 * position are varying in other matches. Zero means that no max has
+	 * been set yet. */
 	int longest_match_len = 0;
 	int match_len = base_len;
 	unsigned char *match = widget_data->cdata;

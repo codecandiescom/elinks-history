@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.20 2005/03/26 13:26:46 pasky Exp $
+# $Id: hooks.pl,v 1.21 2005/03/26 13:35:22 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -666,44 +666,84 @@ sub loadrc
 
 ################################################################################
 ### Search engines #############################################################
+
+my %search_engines_ = (
+	"elgoog" => {
+		home => 'http://alltooflat.com/geeky/elgoog/m/index.cgi',
+		search => 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q='
+	},
+	"google" => {
+		home => 'http://google.com!bork!',
+		search => 'http://google.com/search?!bork!q='
+	},
+	"yahoo" => {
+		home => 'http://yahoo.com',
+		search => 'http://search.yahoo.com/search?p='
+	},
+	"ask jeeves" => {
+		home => 'http://ask.com',
+		search => 'http://web.ask.com/web?q='
+	},
+	"a9" => {
+		home => 'http://a9.com',
+		search => 'http://a9.com/?q='
+	},
+	"altavista" => {
+		home => 'http://altavista.com',
+		search => 'http://altavista.com/web/results?q='
+	},
+	"msn" => {
+		home => 'http://msn.com',
+		search => 'http://search.msn.com/results.aspx?q='
+	},
+	"dmoz" => {
+		home => 'http://dmoz.org',
+		search => 'http://search.dmoz.org/cgi-bin/search?search='
+	},
+	"dogpile" => {
+		home => 'http://dogpile.com',
+		search => 'http://dogpile.com/info.dogpl/search/web/'
+	},
+	"mamma" => {
+		home => 'http://mamma.com',
+		search => 'http://mamma.com/Mamma?query='
+	},
+	"webcrawler" => {
+		home => 'http://webcrawler.com',
+		search => 'http://webcrawler.com/info.wbcrwl/search/web/'
+	},
+	"netscape" => {
+		home => 'http://search.netscape.com',
+		search => 'http://channels.netscape.com/ns/search/default.jsp?query='
+	},
+	"lycos" => {
+		home => 'http://lycos.com',
+		search => 'http://search.lycos.com/default.asp?query='
+	},
+	"hotbot" => {
+		home => 'http://hotbot.com',
+		search => 'http://hotbot.com/default.asp?query='
+	},
+	"excite" => {
+		home => 'http://search.excite.com',
+		search => 'http://search.excite.com/info.xcite/search/web/'
+	},
+);
+
 sub search
 {
 	my ($engine, $search) = @_;
-	my (%url_, $url_);
-	my  $bork = '';
+
+	# Google is the default, Google is the best!
+	$engine = 'google' unless $search_engines_{$engine};
+	my $url = $search_engines_{$engine};
+
+	if ($engine eq 'google') {
+		my $bork = '';
 		$bork = "/webhp?hl=xx-bork" if (loadrc("bork") eq "yes" and !$search);
 		$bork = "hl=xx-bork&" if (loadrc("bork") eq "yes" and $search);
-	$url_{"elgoog"} = 'http://alltooflat.com/geeky/elgoog/m/index.cgi';
-	$url_{"elgoog"} = 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q=' . $search if $search;
-	$url_{"google"} = 'http://google.com' . $bork;
-	$url_{"google"} = 'http://google.com/search?' . $bork . 'q=' . $search if $search;
-	$url_{"yahoo"} = 'http://yahoo.com';
-	$url_{"yahoo"} = 'http://search.yahoo.com/search?p=' . $search if $search;
-	$url_{"ask jeeves"} = 'http://ask.com';
-	$url_{"ask jeeves"} = 'http://web.ask.com/web?q=' . $search if $search;
-	$url_{"a9"} = 'http://a9.com';
-	$url_{"a9"} = 'http://a9.com/?q=' . $search if $search;
-	$url_{"altavista"} = 'http://altavista.com';
-	$url_{"altavista"} = 'http://altavista.com/web/results?q=' . $search if $search;
-	$url_{"msn"} = 'http://msn.com';
-	$url_{"msn"} = 'http://search.msn.com/results.aspx?q=' . $search if $search;
-	$url_{"dmoz"} = 'http://dmoz.org';
-	$url_{"dmoz"} = 'http://search.dmoz.org/cgi-bin/search?search=' . $search if $search;
-	$url_{"dogpile"} = 'http://dogpile.com';
-	$url_{"dogpile"} = 'http://dogpile.com/info.dogpl/search/web/' . $search if $search;
-	$url_{"mamma"} = 'http://mamma.com';
-	$url_{"mamma"} = 'http://mamma.com/Mamma?query=' . $search if $search;
-	$url_{"webcrawler"} = 'http://webcrawler.com';
-	$url_{"webcrawler"} = 'http://webcrawler.com/info.wbcrwl/search/web/' . $search if $search;
-	$url_{"netscape"} = 'http://search.netscape.com';
-	$url_{"netscape"} = 'http://channels.netscape.com/ns/search/default.jsp?query=' . $search if $search;
-	$url_{"lycos"} = 'http://lycos.com';
-	$url_{"lycos"} = 'http://search.lycos.com/default.asp?query=' . $search if $search;
-	$url_{"hotbot"} = 'http://hotbot.com';
-	$url_{"hotbot"} = 'http://hotbot.com/default.asp?query=' . $search if $search;
-	$url_{"excite"} = 'http://search.excite.com';
-	$url_{"excite"} = 'http://search.excite.com/info.xcite/search/web/' . $search if $search;
-	my $url = $url_{"google"}; # default
-	$url = $url_{$engine} if $url_{$engine};
+		$url =~ s/!bork!/$bork/;
+	}
+
 	return $url;
 }

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.196 2004/04/14 21:17:40 jonas Exp $ */
+/* $Id: main.c,v 1.197 2004/04/15 00:55:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,6 +161,11 @@ init(void)
 		/* Dump the URL list */
 		dump_pre_start(&url_list);
 
+	} else if (get_opt_bool_tree(cmdline_options, "ping")) {
+		/* If no instance was running return ping failure */
+		if (fd == -1) retval = RET_PING;
+		terminate = 1;
+
 	} else {
 		int id = get_opt_int_tree(cmdline_options, "base-session");
 		struct string info;
@@ -177,7 +182,6 @@ init(void)
 
 			handle_trm(get_input_handle(), get_output_handle(),
 				   fd, fd, get_ctl_handle(), info.source, info.length);
-
 		} else {
 			/* Setup a master terminal */
 			term = attach_terminal(get_input_handle(), get_output_handle(),

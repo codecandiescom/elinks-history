@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.33 2004/04/15 00:36:46 jonas Exp $ */
+/* $Id: event.c,v 1.34 2004/04/15 00:55:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,6 +53,10 @@ term_send_event(struct terminal *term, struct term_event *ev)
 		/* Fall through */
 
 	case EV_REDRAW:
+		/* Nasty hack to avoid assertion failures when doing -remote
+		 * stuff and the client exits right away */
+		if (!term->screen->image) break;
+
 		clear_terminal(term);
 		term->redrawing = 2;
 		/* Note that you do NOT want to ever go and create new

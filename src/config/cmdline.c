@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.50 2004/04/02 18:41:02 jonas Exp $ */
+/* $Id: cmdline.c,v 1.51 2004/04/15 00:55:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -545,6 +545,10 @@ struct option_info cmdline_options_info[] = {
 	INIT_OPT_BOOL("", N_("Don't use files in ~/.elinks"),
 		"no-home", 0, 0,
 		N_("Don't attempt to create and/or use home rc directory (~/.elinks).")),
+
+	INIT_OPT_BOOL("", N_("Check if ELinks is currently running"),
+		"ping", 0, 0,
+		N_("Checks if ELinks is currently running by trying to connect the interlink socket.")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, MAXINT, 0,

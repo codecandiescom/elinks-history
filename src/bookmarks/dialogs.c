@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.50 2002/10/08 22:09:55 pasky Exp $ */
+/* $Id: dialogs.c,v 1.51 2002/10/14 16:07:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,6 +470,8 @@ push_move_button(struct dialog_data *dlg,
 	/* Traverse all expanded folders and move all marked items right
 	 * after bm_dest. */
 	do_move_bookmark(dest, destb, desti, &bookmarks, box);
+
+	bookmarks_dirty = 1;
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();

@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.4 2002/12/27 01:19:06 pasky Exp $ */
+/* $Id: syntree.c,v 1.5 2002/12/28 02:20:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,9 @@ init_syntree_node()
 
 	node = mem_calloc(1, sizeof(struct syntree_node));
 	if (!node) return NULL;
+
+	init_list(node->leafs);
+	init_list(node->attrs);
 
 	return node;
 }

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.172 2004/01/24 20:08:52 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.173 2004/01/24 20:28:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -903,35 +903,43 @@ bind_act(unsigned char *keymap, unsigned char *keystroke)
 	return straconcat("\"", action, "\"", NULL);
 }
 
+static void
+single_bind_config_string(struct string *file, enum keymap,
+			  struct keybinding *keybinding)
+{
+	unsigned char *keymap_str = write_keymap(keymap);
+	unsigned char *action_str =
+		write_action(keybinding->action);
+
+	if (!keymap_str || !action_str || action_str[0] == ' ')
+		continue;
+
+	if (keybinding->flags & KBDB_WATERMARK) {
+		keybinding->flags &= ~KBDB_WATERMARK;
+		continue;
+	}
+
+	/* TODO: Maybe we should use string.write.. */
+	add_to_string(file, "bind \"");
+	add_to_string(file, keymap_str);
+	add_to_string(file, "\" \"");
+	make_keystroke(file, keybinding->key, keybinding->meta, 1);
+	add_to_string(file, "\" = \"");
+	add_to_string(file, action_str);
+	add_char_to_string(file, '\"');
+	add_char_to_string(file, '\n');
+}
+
 void
 bind_config_string(struct string *file)
 {
 	enum keymap keymap;
-	struct keybinding *keybinding;
 
 	for (keymap = 0; keymap < KM_MAX; keymap++) {
+		struct keybinding *keybinding;
+
 		foreach (keybinding, keymaps[keymap]) {
-			unsigned char *keymap_str = write_keymap(keymap);
-			unsigned char *action_str =
-				write_action(keybinding->action);
-
-			if (!keymap_str || !action_str || action_str[0] == ' ')
-				continue;
-
-			if (keybinding->flags & KBDB_WATERMARK) {
-				keybinding->flags &= ~KBDB_WATERMARK;
-				continue;
-			}
-
-			/* TODO: Maybe we should use string.write.. */
-			add_to_string(file, "bind \"");
-			add_to_string(file, keymap_str);
-			add_to_string(file, "\" \"");
-			make_keystroke(file, keybinding->key, keybinding->meta, 1);
-			add_to_string(file, "\" = \"");
-			add_to_string(file, action_str);
-			add_char_to_string(file, '\"');
-			add_char_to_string(file, '\n');
+			single_bind_config_string(file, keymap, keybinding);
 		}
 	}
 }

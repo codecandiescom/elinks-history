@@ -28,9 +28,22 @@
 
 #include <string.h>
 
+/* Awful hack to permit compilation under cygwin and its broken configure.
+ * Configure script detects these functions, but compilation clashes on
+ * implicit declarations of them... So we force use of internal ones.
+ * Cygwin argz.h do not contain any declaration for these, nor any other
+ * header while they are available in some linked libs.
+ * Feel free to provide a better fix if any. --Zas */
+#ifdef HAVE_SYS_CYGWIN_H
+#undef HAVE___ARGZ_STRINGIFY
+#undef HAVE___ARGZ_COUNT
+#undef HAVE___ARGZ_NEXT
+#else
 #if defined HAVE_ARGZ_H
 #include <argz.h>
 #endif
+#endif
+
 #include <ctype.h>
 #include <sys/types.h>
 #include <stdlib.h>

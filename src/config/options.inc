@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.32 2003/11/27 00:05:06 jonas Exp $ */
+/* $Id: options.inc,v 1.33 2003/11/28 14:47:16 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -846,7 +846,7 @@ struct option_info config_options_info[] = {
 
 
 	INIT_OPT_TREE("", N_("User interface"),
-		"ui", 0,
+		"ui", OPT_SORT,
 		N_("User interface options.")),
 
 

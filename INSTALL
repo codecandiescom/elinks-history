@@ -23,8 +23,10 @@ latest tree from CVS.
 ./autogen.sh then! (It should be enough to do it once, automake should be smart
 enough to rerun itself when needed - however, if you'll have build problems, try
 to run this first.) Also, you obviously need automake and autoconf installed in
-your system. Otherwise, you have to use nightly CVS snapshot - you don't need to
-do this there.
+your system (note that autoconf-2.13 a automake-1.4p5 is supported, newer ones
+may cause problems thanks to auto* developers who don't know how to maintain
+backwards compatibility). Otherwise, you have to use nightly CVS snapshot - you
+don't need to do this there.
 
 
 ##########
@@ -83,5 +85,5 @@ want them ;) so just copy the hooks.lua to ~/.links, and edit the configuration
 part - it adds various nice functionality to elinks, like decompression of
 gzipped files or user-defined protocols.
 
-$Id: INSTALL,v 1.8 2002/03/17 18:52:38 pasky Exp $
+$Id: INSTALL,v 1.9 2002/05/04 12:50:49 pasky Exp $
 vim: textwidth=80

@@ -1,10 +1,11 @@
-/* $Id: module.h,v 1.1 2003/10/25 16:38:43 jonas Exp $ */
+/* $Id: module.h,v 1.2 2003/10/25 21:39:00 pasky Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
 
 struct module {
-	/* The (unique) name of the module. */
+	/* The name of the module. It needs to be unique in its class (ie. in
+	 * the scope of root modules or submodules of one parent module). */
 	unsigned char *name;
 
 	/* The options that should be registered for this module.

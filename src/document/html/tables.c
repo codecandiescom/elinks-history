@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.210 2004/06/25 14:27:43 zas Exp $ */
+/* $Id: tables.c,v 1.211 2004/06/25 14:32:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,7 +323,7 @@ new_cell(struct table *table, int x, int y)
 
 	while (1) {
 		struct table new_table;
-		int i = 0;
+		int col, row;
 
 		if (x < table->rx && y < table->ry) {
 			expand_cells(table, x, y);
@@ -344,15 +344,12 @@ new_cell(struct table *table, int x, int y)
 					     sizeof(struct table_cell));
 		if (!new_table.cells) return NULL;
 
-		while (i < table->x) {
-			int j = 0;
-
-			while (j < table->y) {
-				memcpy(CELL(&new_table, i, j), CELL(table, i, j),
+		for (col = 0; col < table->x; col++) {
+			for (row = 0; row < table->y; row++) {
+				memcpy(CELL(&new_table, col, row),
+				       CELL(table, col, row),
 				       sizeof(struct table_cell));
-				j++;
 			}
-			i++;
 		}
 
 		mem_free(table->cells);

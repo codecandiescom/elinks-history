@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.16 2002/07/06 09:07:28 pasky Exp $ */
+/* $Id: info.c,v 1.17 2002/07/23 10:01:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@
 void menu_about(struct terminal *term, void *d, struct session *ses)
 {
 	unsigned char *s = stracpy(_(TEXT(T_LINKS__LYNX_LIKE), term));
-	
+
 	add_to_strn(&s, "\n\n");
 	add_to_strn(&s, _(TEXT(T_FEATURES), term));
 	add_to_strn(&s, ":"
@@ -98,44 +98,40 @@ void menu_copying(struct terminal *term, void *d, struct session *ses)
 
 void res_inf(struct terminal *term, void *d, struct session *ses)
 {
-	unsigned char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9, *a10, *a11, *a12, *a13, *a14, *a15, *a16;
+	unsigned char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9, *a10,
+		      *a11, *a12, *a13, *a14, *a15, *a16;
 	int l = 0;
 	struct refresh *r;
 
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r)	return;
 
-	l = 0; a1 = init_str(); add_to_str(&a1, &l, ": ");
-				add_num_to_str(&a1, &l, select_info(CI_FILES)); add_to_str(&a1, &l, " ");
-	l = 0; a2 = init_str(); add_to_str(&a2, &l, ", ");
-				add_num_to_str(&a2, &l, select_info(CI_TIMERS)); add_to_str(&a2, &l, " ");
+#define create_str(x, s1, num)	l = 0; (x) = init_str(); \
+				add_to_str(&(x), &l, (s1)); \
+				add_num_to_str(&(x), &l, (num)); \
+				add_to_str(&(x), &l, " ");
+
+	create_str(a1, ": ", select_info(CI_FILES));
+	create_str(a2, ", ", select_info(CI_TIMERS));
 	l = 0; a3 = init_str(); add_to_str(&a3, &l, ".\n");
 
-	l = 0; a4 = init_str(); add_to_str(&a4, &l, ": ");
-				add_num_to_str(&a4, &l, connect_info(CI_FILES)); add_to_str(&a4, &l, " ");
-	l = 0; a5 = init_str(); add_to_str(&a5, &l, ", ");
-				add_num_to_str(&a5, &l, connect_info(CI_CONNECTING)); add_to_str(&a5, &l, " ");
-	l = 0; a6 = init_str(); add_to_str(&a6, &l, ", ");
-				add_num_to_str(&a6, &l, connect_info(CI_TRANSFER)); add_to_str(&a6, &l, " ");
-	l = 0; a7 = init_str(); add_to_str(&a7, &l, ", ");
-				add_num_to_str(&a7, &l, connect_info(CI_KEEP)); add_to_str(&a7, &l, " ");
+	create_str(a4, ": ", connect_info(CI_FILES));
+	create_str(a5, ", ", connect_info(CI_CONNECTING));
+	create_str(a6, ", ", connect_info(CI_TRANSFER));
+	create_str(a7, ", ", connect_info(CI_KEEP));
 	l = 0; a8 = init_str(); add_to_str(&a8, &l, ".\n");
 
-	l = 0; a9 = init_str(); add_to_str(&a9, &l, ": ");
-				add_num_to_str(&a9, &l, cache_info(CI_BYTES)); add_to_str(&a9, &l, " ");
-	l = 0; a10 =init_str(); add_to_str(&a10, &l, ", ");
-				add_num_to_str(&a10, &l, cache_info(CI_FILES)); add_to_str(&a10, &l, " ");
-	l = 0; a11 =init_str(); add_to_str(&a11, &l, ", ");
-				add_num_to_str(&a11, &l, cache_info(CI_LOCKED)); add_to_str(&a11, &l, " ");
-	l = 0; a12 =init_str(); add_to_str(&a12, &l, ", ");
-				add_num_to_str(&a12, &l, cache_info(CI_LOADING)); add_to_str(&a12, &l, " ");
-	l = 0; a13 =init_str(); add_to_str(&a13, &l, ".\n");
+	create_str(a9, ": ", cache_info(CI_BYTES));
+	create_str(a10, ", ", cache_info(CI_FILES));
+	create_str(a11, ", ", cache_info(CI_LOCKED));
+	create_str(a12, ", ", cache_info(CI_LOADING));
+	l = 0; a13 = init_str(); add_to_str(&a13, &l, ".\n");
 
-	l = 0; a14 =init_str(); add_to_str(&a14, &l, ": ");
-				add_num_to_str(&a14, &l, formatted_info(CI_FILES)); add_to_str(&a14, &l, " ");
-	l = 0; a15 =init_str(); add_to_str(&a15, &l, ", ");
-				add_num_to_str(&a15, &l, formatted_info(CI_LOCKED)); add_to_str(&a15, &l, " ");
-	l = 0; a16 =init_str(); add_to_str(&a16, &l, ".");
+	create_str(a14, ": ", formatted_info(CI_FILES));
+	create_str(a15, ", ", formatted_info(CI_LOCKED));
+	l = 0; a16 = init_str(); add_to_str(&a16, &l, ".");
+
+#undef create_str
 
 	msg_box(term, getml(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, NULL),
 		TEXT(T_RESOURCES), AL_LEFT | AL_EXTD_TEXT,

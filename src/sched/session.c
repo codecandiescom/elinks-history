@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.162 2003/09/28 22:17:29 zas Exp $ */
+/* $Id: session.c,v 1.163 2003/09/28 22:38:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -661,18 +661,20 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 static int
 do_move(struct session *ses, struct download **stat)
 {
-	struct cache_entry *ce = NULL;
+	struct cache_entry *ce;
 
+	assert(stat && *stat);
 	assertm(ses->loading_url, "no ses->loading_url");
 	if_assert_failed return 0;
 
-	ce = (*stat)->ce;
-	if (!ce || (ses->task == TASK_IMGMAP && (*stat)->state >= 0)) {
+	if (ses->task == TASK_IMGMAP && (*stat)->state >= 0)
 		return 0;
-	}
+
+	ce = (*stat)->ce;
+	if (!ce) return 0;
 
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
-		unsigned char *u, *p;
+		unsigned char *u;
 		enum task_type task = ses->task;
 
 		if (task == TASK_BACK && !have_location(ses))
@@ -683,7 +685,8 @@ do_move(struct session *ses, struct download **stat)
 
 		if (!ce->redirect_get &&
 		    !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
-			p = strchr(ses->loading_url, POST_CHAR);
+			unsigned char *p = strchr(ses->loading_url, POST_CHAR);
+
 			if (p) add_to_strn(&u, p);
 		}
 		/* ^^^^ According to RFC2068 POST must not be redirected to GET, but
@@ -695,31 +698,33 @@ do_move(struct session *ses, struct download **stat)
 		else
 			*stat = NULL;
 
-		if (ses->ref_url)
-			mem_free(ses->ref_url);
+		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = stracpy(ce->url);
 
-		if (task == TASK_FORWARD || task == TASK_IMGMAP) {
-			unsigned char *gp = ses->goto_position ?
-					    stracpy(ses->goto_position) : NULL;
+		switch (task) {
+		case TASK_FORWARD:
+		case TASK_IMGMAP:
+			{
+			unsigned char *gp = ses->goto_position
+					    ? stracpy(ses->goto_position)
+					    : NULL;
 
-			ses_goto(ses, u, ses->task_target_frame, PRI_MAIN, NC_CACHE,
-				 task, gp, end_load, 1);
-
+			ses_goto(ses, u, ses->task_target_frame, PRI_MAIN,
+				 NC_CACHE, task, gp, end_load, 1);
 			if (gp) mem_free(gp);
-
 			return 2;
-		}
-
-		if (task == TASK_BACK || task == TASK_UNBACK) {
+			}
+		case TASK_BACK:
+		case TASK_UNBACK:
 			ses_goto(ses, u, NULL, PRI_MAIN, NC_CACHE,
 				 TASK_RELOAD, NULL, end_load, 1);
 			return 2;
-		}
-		if (task == TASK_RELOAD) {
+		case TASK_RELOAD:
 			ses_goto(ses, u, NULL, PRI_MAIN, ses->reloadlevel,
 				 TASK_RELOAD, NULL, end_load, 1);
 			return 2;
+		default:
+			break;
 		}
 	} else {
 		ses->redirect_cnt = 0;

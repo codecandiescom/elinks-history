@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-30 22:00+0100\n"
+"POT-Creation-Date: 2004-01-04 18:14+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Karvinen Ilkka <ik@iki.fi>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -14,112 +14,117 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
 
-#: src/bfu/hierbox.c:308
+#: src/bfu/hierbox.c:356
 msgid "Close"
 msgstr "Sulje"
 
 #. | MSGBOX_SCROLLABLE
-#: src/bfu/hierbox.c:408 src/cache/dialogs.c:145 src/config/dialogs.c:357
-#: src/cookies/dialogs.c:129 src/dialogs/document.c:44
-#: src/dialogs/document.c:232 src/dialogs/download.c:420
-#: src/formhist/dialogs.c:167 src/globhist/dialogs.c:181
+#: src/bfu/hierbox.c:444 src/bfu/hierbox.c:466 src/cache/dialogs.c:145
+#: src/config/dialogs.c:410 src/cookies/dialogs.c:154
+#: src/dialogs/document.c:44 src/dialogs/document.c:232
+#: src/dialogs/download.c:418 src/formhist/dialogs.c:165
+#: src/globhist/dialogs.c:182
 msgid "Info"
 msgstr "Tieto"
 
+#: src/bfu/hierbox.c:445
+msgid "Press space to expand this folder."
+msgstr ""
+
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
-#: src/bfu/hierbox.c:411 src/bfu/hierbox.c:549 src/bfu/inpfield.c:47
-#: src/bfu/inpfield.c:56 src/bfu/inpfield.c:76 src/bfu/msgbox.c:185
-#: src/bookmarks/dialogs.c:191 src/bookmarks/dialogs.c:609
-#: src/config/dialogs.c:45 src/config/dialogs.c:203 src/config/dialogs.c:262
-#: src/config/dialogs.c:292 src/config/dialogs.c:327 src/config/dialogs.c:339
-#: src/config/dialogs.c:427 src/config/dialogs.c:471 src/config/dialogs.c:498
-#: src/config/dialogs.c:539 src/config/dialogs.c:552 src/dialogs/document.c:50
+#: src/bfu/hierbox.c:447 src/bfu/hierbox.c:469 src/bfu/hierbox.c:607
+#: src/bfu/inpfield.c:47 src/bfu/inpfield.c:56 src/bfu/inpfield.c:76
+#: src/bfu/msgbox.c:185 src/bookmarks/dialogs.c:191
+#: src/bookmarks/dialogs.c:605 src/config/dialogs.c:45 src/config/dialogs.c:57
+#: src/config/dialogs.c:240 src/config/dialogs.c:314 src/config/dialogs.c:344
+#: src/config/dialogs.c:379 src/config/dialogs.c:391 src/config/dialogs.c:474
+#: src/config/dialogs.c:518 src/config/dialogs.c:545 src/config/dialogs.c:586
+#: src/config/dialogs.c:599 src/dialogs/document.c:50
 #: src/dialogs/document.c:235 src/dialogs/document.c:305
 #: src/dialogs/document.c:317 src/dialogs/edit.c:99 src/dialogs/info.c:48
 #: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:116
-#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/mime.c:159
-#: src/dialogs/options.c:190 src/dialogs/options.c:263
-#: src/formhist/dialogs.c:132 src/protocol/auth/dialogs.c:77
-#: src/protocol/protocol.c:63 src/protocol/user.c:158 src/protocol/user.c:174
-#: src/sched/download.c:185 src/sched/download.c:273 src/sched/download.c:298
-#: src/sched/download.c:569 src/sched/error.c:42 src/sched/session.c:122
-#: src/sched/session.c:591 src/sched/session.c:608 src/sched/session.c:632
-#: src/sched/session.c:886 src/scripting/lua/core.c:401
-#: src/scripting/lua/core.c:482 src/scripting/lua/core.c:591
-#: src/scripting/lua/core.c:720 src/viewer/text/form.c:665
-#: src/viewer/text/search.c:861 src/viewer/text/search.c:889
-#: src/viewer/text/search.c:911 src/viewer/text/search.c:947
-#: src/viewer/text/search.c:1237 src/viewer/text/search.c:1248
-#: src/viewer/text/textarea.c:272 src/viewer/text/view.c:822
-#: src/viewer/text/view.c:1583
+#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/options.c:192
+#: src/dialogs/options.c:265 src/formhist/dialogs.c:132 src/mime/dialogs.c:159
+#: src/protocol/auth/dialogs.c:77 src/protocol/protocol.c:67
+#: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:185
+#: src/sched/download.c:273 src/sched/download.c:298 src/sched/download.c:569
+#: src/sched/error.c:42 src/sched/session.c:120 src/sched/session.c:590
+#: src/sched/session.c:607 src/sched/session.c:631 src/sched/session.c:885
+#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
+#: src/scripting/lua/core.c:591 src/scripting/lua/core.c:720
+#: src/viewer/text/form.c:666 src/viewer/text/search.c:861
+#: src/viewer/text/search.c:889 src/viewer/text/search.c:911
+#: src/viewer/text/search.c:947 src/viewer/text/search.c:1237
+#: src/viewer/text/search.c:1248 src/viewer/text/textarea.c:272
+#: src/viewer/text/view.c:822 src/viewer/text/view.c:1583
 msgid "OK"
 msgstr "OK"
 
-#: src/bfu/hierbox.c:517
+#: src/bfu/hierbox.c:575
 #, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr ""
 
-#: src/bfu/hierbox.c:518
+#: src/bfu/hierbox.c:576
 #, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr ""
 
-#: src/bfu/hierbox.c:521
+#: src/bfu/hierbox.c:579
 #, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr ""
 
-#: src/bfu/hierbox.c:522
+#: src/bfu/hierbox.c:580
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr ""
 
-#: src/bfu/hierbox.c:546
+#: src/bfu/hierbox.c:604
 #, fuzzy
 msgid "Delete error"
 msgstr "Poista kirjanmerkki"
 
-#: src/bfu/hierbox.c:637
+#: src/bfu/hierbox.c:695
 #, fuzzy
 msgid "Delete marked items"
 msgstr "Valitse kenttä"
 
-#: src/bfu/hierbox.c:638
+#: src/bfu/hierbox.c:696
 #, fuzzy
 msgid "Delete marked items?"
 msgstr "Valitse kenttä"
 
-#: src/bfu/hierbox.c:640 src/bfu/hierbox.c:661 src/bfu/hierbox.c:675
-#: src/bfu/hierbox.c:735 src/config/dialogs.c:447 src/dialogs/menu.c:163
-#: src/dialogs/mime.c:86 src/formhist/formhist.c:492 src/sched/task.c:169
+#: src/bfu/hierbox.c:698 src/bfu/hierbox.c:719 src/bfu/hierbox.c:733
+#: src/bfu/hierbox.c:793 src/config/dialogs.c:494 src/dialogs/menu.c:163
+#: src/formhist/formhist.c:492 src/mime/dialogs.c:86 src/sched/task.c:169
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
 msgid "Yes"
 msgstr "Kyllä"
 
-#: src/bfu/hierbox.c:641 src/bfu/hierbox.c:662 src/bfu/hierbox.c:676
-#: src/bfu/hierbox.c:736 src/config/dialogs.c:448 src/dialogs/menu.c:164
-#: src/dialogs/mime.c:87 src/formhist/formhist.c:493 src/sched/task.c:170
+#: src/bfu/hierbox.c:699 src/bfu/hierbox.c:720 src/bfu/hierbox.c:734
+#: src/bfu/hierbox.c:794 src/config/dialogs.c:495 src/dialogs/menu.c:164
+#: src/formhist/formhist.c:493 src/mime/dialogs.c:87 src/sched/task.c:170
 #: src/terminal/tab.c:193 src/terminal/tab.c:229
 msgid "No"
 msgstr "Ei"
 
-#: src/bfu/hierbox.c:657
+#: src/bfu/hierbox.c:715
 #, fuzzy
 msgid "Delete folder"
 msgstr "Poista kirjanmerkki"
 
-#: src/bfu/hierbox.c:658
+#: src/bfu/hierbox.c:716
 #, fuzzy, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Poista tiedostopääte"
 
-#: src/bfu/hierbox.c:670
+#: src/bfu/hierbox.c:728
 #, fuzzy
 msgid "Delete item"
 msgstr "Poista"
 
-#: src/bfu/hierbox.c:671
+#: src/bfu/hierbox.c:729
 #, fuzzy, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -127,11 +132,11 @@ msgid ""
 "%s"
 msgstr "Poista kirjanmerkki"
 
-#: src/bfu/hierbox.c:732
+#: src/bfu/hierbox.c:790
 msgid "Clear all items"
 msgstr ""
 
-#: src/bfu/hierbox.c:733
+#: src/bfu/hierbox.c:791
 #, fuzzy
 msgid "Do you really want to remove all items?"
 msgstr "Haluatko poistua Linksistä?"
@@ -165,7 +170,7 @@ msgid "LEDs (visual indicators) options."
 msgstr ""
 
 #: src/bfu/leds.c:69 src/config/options.inc:1149 src/config/options.inc:1156
-#: src/globhist/globhist.c:74 src/mime/backend/mailcap.c:98
+#: src/globhist/globhist.c:75 src/mime/backend/mailcap.c:96
 #: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
 #, fuzzy
 msgid "Enable"
@@ -208,29 +213,29 @@ msgid "No URL"
 msgstr "Valitse URL"
 
 #. name:
-#: src/bookmarks/bookmarks.c:44 src/bookmarks/bookmarks.c:101
+#: src/bookmarks/bookmarks.c:43 src/bookmarks/bookmarks.c:100
 #, fuzzy
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
-#: src/bookmarks/bookmarks.c:46
+#: src/bookmarks/bookmarks.c:45
 #, fuzzy
 msgid "Bookmark options."
 msgstr "Kirjanmerkit"
 
-#: src/bookmarks/bookmarks.c:49 src/bookmarks/bookmarks.c:55
+#: src/bookmarks/bookmarks.c:48 src/bookmarks/bookmarks.c:54
 #, fuzzy
 msgid "File format"
 msgstr "Tiedoston lähetys"
 
-#: src/bookmarks/bookmarks.c:51
+#: src/bookmarks/bookmarks.c:50
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 msgstr ""
 
-#: src/bookmarks/bookmarks.c:57
+#: src/bookmarks/bookmarks.c:56
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -239,12 +244,12 @@ msgid ""
 msgstr ""
 
 #: src/bookmarks/dialogs.c:76 src/config/options.inc:1018
-#: src/dialogs/document.c:84 src/globhist/dialogs.c:61
+#: src/dialogs/document.c:84 src/globhist/dialogs.c:62
 msgid "Title"
 msgstr ""
 
 #: src/bookmarks/dialogs.c:77 src/cache/dialogs.c:60 src/dialogs/document.c:68
-#: src/dialogs/edit.c:96 src/formhist/dialogs.c:62 src/globhist/dialogs.c:62
+#: src/dialogs/edit.c:96 src/formhist/dialogs.c:62 src/globhist/dialogs.c:63
 #: src/scripting/lua/core.c:399
 msgid "URL"
 msgstr "URL"
@@ -257,14 +262,14 @@ msgstr ""
 msgid "Folder name"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:191 src/bookmarks/dialogs.c:609
-#: src/config/dialogs.c:263 src/config/dialogs.c:339 src/config/dialogs.c:498
-#: src/config/dialogs.c:553 src/dialogs/edit.c:103 src/dialogs/menu.c:116
-#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/mime.c:160
-#: src/dialogs/options.c:193 src/dialogs/options.c:264
+#: src/bookmarks/dialogs.c:191 src/bookmarks/dialogs.c:605
+#: src/config/dialogs.c:315 src/config/dialogs.c:391 src/config/dialogs.c:545
+#: src/config/dialogs.c:600 src/dialogs/edit.c:103 src/dialogs/menu.c:116
+#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/options.c:195
+#: src/dialogs/options.c:266 src/mime/dialogs.c:160
 #: src/protocol/auth/dialogs.c:78 src/sched/download.c:485
-#: src/sched/download.c:984 src/sched/download.c:993 src/sched/download.c:1020
-#: src/sched/download.c:1032 src/scripting/lua/core.c:402
+#: src/sched/download.c:984 src/sched/download.c:993 src/sched/download.c:1013
+#: src/sched/download.c:1025 src/scripting/lua/core.c:402
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:720
 #: src/viewer/text/search.c:1237 src/viewer/text/search.c:1248
 #: src/viewer/text/view.c:822
@@ -276,18 +281,18 @@ msgid "Edit bookmark"
 msgstr "Muokkaa kirjanmerkkiä"
 
 #: src/bookmarks/dialogs.c:374 src/cache/dialogs.c:146
-#: src/globhist/dialogs.c:180
+#: src/globhist/dialogs.c:181
 msgid "Goto"
 msgstr "Mene"
 
-#: src/bookmarks/dialogs.c:375 src/config/dialogs.c:229
-#: src/config/dialogs.c:287 src/config/dialogs.c:358
+#: src/bookmarks/dialogs.c:375 src/config/dialogs.c:266
+#: src/config/dialogs.c:339 src/config/dialogs.c:411
 msgid "Edit"
 msgstr "Muokkaa"
 
 #: src/bookmarks/dialogs.c:376 src/cache/dialogs.c:147
-#: src/config/dialogs.c:360 src/config/dialogs.c:573 src/cookies/dialogs.c:130
-#: src/formhist/dialogs.c:168 src/globhist/dialogs.c:185
+#: src/config/dialogs.c:413 src/config/dialogs.c:620 src/cookies/dialogs.c:155
+#: src/formhist/dialogs.c:166 src/globhist/dialogs.c:186
 msgid "Delete"
 msgstr "Poista"
 
@@ -295,49 +300,49 @@ msgstr "Poista"
 msgid "Move"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:379 src/config/dialogs.c:359
-#: src/config/dialogs.c:572
+#: src/bookmarks/dialogs.c:379 src/config/dialogs.c:412
+#: src/config/dialogs.c:619
 msgid "Add"
 msgstr "Lisää"
 
-#: src/bookmarks/dialogs.c:380 src/globhist/dialogs.c:186
+#: src/bookmarks/dialogs.c:380 src/globhist/dialogs.c:187
 #: src/viewer/text/search.c:858 src/viewer/text/search.c:885
 #: src/viewer/text/search.c:907 src/viewer/text/search.c:1247
 msgid "Search"
 msgstr "Etsi"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:383 src/config/dialogs.c:361
-#: src/config/dialogs.c:575 src/cookies/dialogs.c:132
-#: src/dialogs/options.c:192 src/formhist/dialogs.c:171
-#: src/globhist/dialogs.c:191 src/sched/download.c:982
-#: src/sched/download.c:1018
+#: src/bookmarks/dialogs.c:383 src/config/dialogs.c:414
+#: src/config/dialogs.c:622 src/cookies/dialogs.c:157
+#: src/dialogs/options.c:194 src/formhist/dialogs.c:169
+#: src/globhist/dialogs.c:192 src/sched/download.c:982
+#: src/sched/download.c:1011
 msgid "Save"
 msgstr "Tallenna"
 
-#: src/bookmarks/dialogs.c:388
+#: src/bookmarks/dialogs.c:389
 msgid "Bookmark manager"
 msgstr "Kirjanmerkkimuokkain"
 
-#: src/bookmarks/dialogs.c:545
+#: src/bookmarks/dialogs.c:541
 msgid "Search bookmarks"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:559
+#: src/bookmarks/dialogs.c:555
 msgid "Add bookmark"
 msgstr "Lisää kirjanmerkki"
 
-#: src/bookmarks/dialogs.c:587
+#: src/bookmarks/dialogs.c:583
 #, fuzzy
 msgid "Saved session"
 msgstr "Tallenna a~setukset"
 
-#: src/bookmarks/dialogs.c:608
+#: src/bookmarks/dialogs.c:604
 #, fuzzy
 msgid "Bookmark tabs"
 msgstr "Kirjanmerkit"
 
-#: src/bookmarks/dialogs.c:608
+#: src/bookmarks/dialogs.c:604
 #, fuzzy
 msgid "Enter folder name"
 msgstr "Valitse linkkinumero"
@@ -387,7 +392,7 @@ msgstr ""
 msgid "Header"
 msgstr "Otsikkotieto"
 
-#: src/cache/dialogs.c:151
+#: src/cache/dialogs.c:152
 #, fuzzy
 msgid "Cache manager"
 msgstr "Kirjanmerkkimuokkain"
@@ -455,7 +460,7 @@ msgstr ""
 
 #: src/config/cmdline.c:275
 #, c-format
-msgid "(default: #%06x)"
+msgid "(default: #%06lx)"
 msgstr ""
 
 #: src/config/cmdline.c:401
@@ -708,7 +713,7 @@ msgstr ""
 msgid "Print ELinks version information and exit."
 msgstr ""
 
-#: src/config/conf.c:600
+#: src/config/conf.c:601
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -716,7 +721,7 @@ msgid ""
 "## and all your formatting, own comments etc will be kept as-is.\n"
 msgstr ""
 
-#: src/config/conf.c:608
+#: src/config/conf.c:609
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -727,7 +732,7 @@ msgid ""
 "## own comments and so on will be kept as-is.\n"
 msgstr ""
 
-#: src/config/conf.c:618
+#: src/config/conf.c:619
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so, but keep in mind that this file is overwritten\n"
@@ -735,313 +740,333 @@ msgid ""
 "## luck with your formatting and own comments then, so beware.\n"
 msgstr ""
 
-#: src/config/conf.c:629
+#: src/config/conf.c:630
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 
-#: src/config/conf.c:644
+#: src/config/conf.c:645
 msgid "Automatically saved options\n"
 msgstr ""
 
-#: src/config/conf.c:658
+#: src/config/conf.c:659
 msgid "Automatically saved keybindings\n"
 msgstr ""
 
-#: src/config/conf.c:696
+#: src/config/conf.c:697
 #, fuzzy
 msgid "Secure file error"
 msgstr "FTP tiedostovirhe"
 
-#: src/config/conf.c:702
+#: src/config/conf.c:703
 #, fuzzy
 msgid "Cannot read the file"
 msgstr "Virhe tiedostoon kirjoittaessa"
 
-#: src/config/conf.c:705
+#: src/config/conf.c:706
 #, fuzzy
 msgid "Cannot stat the file"
 msgstr "Virhe tiedostoon kirjoittaessa"
 
-#: src/config/conf.c:708
+#: src/config/conf.c:709
 #, fuzzy
 msgid "Cannot access the file"
 msgstr "Virhe tiedostoon kirjoittaessa"
 
-#: src/config/conf.c:711
+#: src/config/conf.c:712
 #, fuzzy
 msgid "Cannot create temp file"
 msgstr "Virhe tiedostoon kirjoittaessa"
 
-#: src/config/conf.c:714
+#: src/config/conf.c:715
 #, fuzzy
 msgid "Cannot rename the file"
 msgstr "Virhe tiedostoon kirjoittaessa"
 
-#: src/config/conf.c:717
+#: src/config/conf.c:718
 msgid "File saving disabled by option"
 msgstr ""
 
-#: src/config/conf.c:720 src/sched/error.c:46
+#: src/config/conf.c:721 src/sched/error.c:46
 msgid "Out of memory"
 msgstr "Muisti loppu"
 
-#: src/config/conf.c:723
+#: src/config/conf.c:724
 #, fuzzy
 msgid "Cannot write the file"
 msgstr "Virhe tiedostoon kirjoittaessa"
 
 #: src/config/dialogs.c:41
-msgid "Config error"
+#, fuzzy
+msgid "Write config error"
 msgstr "Asetuksissa virhe"
 
 #: src/config/dialogs.c:42
 #, fuzzy, c-format
-msgid "Unable to write to config file %s: %s"
+msgid ""
+"Unable to write to config file %s.\n"
+"%s"
 msgstr "Asetustiedoston kirjoitus ei onnistu"
 
-#: src/config/dialogs.c:89
+#: src/config/dialogs.c:53
+msgid "Write config success"
+msgstr ""
+
+#: src/config/dialogs.c:54
+#, c-format
+msgid "Options were saved successfully to config file %s."
+msgstr ""
+
+#: src/config/dialogs.c:116
 msgid "(expand by pressing space)"
 msgstr ""
 
-#: src/config/dialogs.c:92 src/config/dialogs.c:244
+#: src/config/dialogs.c:119 src/config/dialogs.c:281
 msgid "N/A"
 msgstr ""
 
-#: src/config/dialogs.c:104 src/config/dialogs.c:111 src/config/dialogs.c:238
-#: src/config/dialogs.c:338 src/cookies/dialogs.c:74 src/dialogs/edit.c:92
+#: src/config/dialogs.c:132 src/config/dialogs.c:148 src/config/dialogs.c:275
+#: src/config/dialogs.c:390 src/cookies/dialogs.c:86 src/dialogs/edit.c:92
 #: src/scripting/lua/core.c:397 src/scripting/lua/core.c:398
 #: src/scripting/lua/core.c:478
 msgid "Name"
 msgstr "Nimi"
 
-#: src/config/dialogs.c:105 src/config/dialogs.c:112 src/config/dialogs.c:239
+#: src/config/dialogs.c:133 src/config/dialogs.c:149 src/config/dialogs.c:276
 msgid "Type"
 msgstr ""
 
-#: src/config/dialogs.c:106 src/config/dialogs.c:241 src/cookies/dialogs.c:75
+#: src/config/dialogs.c:142 src/config/dialogs.c:278 src/cookies/dialogs.c:87
 #, fuzzy
 msgid "Value"
 msgstr "arvo"
 
-#: src/config/dialogs.c:108 src/config/dialogs.c:114 src/config/dialogs.c:242
+#: src/config/dialogs.c:145 src/config/dialogs.c:151 src/config/dialogs.c:279
 msgid "Description"
 msgstr ""
 
-#: src/config/dialogs.c:200 src/protocol/protocol.c:60 src/sched/session.c:119
-#: src/sched/session.c:882 src/viewer/text/textarea.c:269
+#: src/config/dialogs.c:237 src/protocol/protocol.c:64 src/sched/session.c:117
+#: src/sched/session.c:881 src/viewer/text/textarea.c:269
 msgid "Error"
 msgstr "Virhe"
 
-#: src/config/dialogs.c:201
+#: src/config/dialogs.c:238
 msgid "Bad option value."
 msgstr ""
 
-#: src/config/dialogs.c:288
+#: src/config/dialogs.c:340
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
 
-#: src/config/dialogs.c:324 src/config/dialogs.c:338
+#: src/config/dialogs.c:376 src/config/dialogs.c:390
 msgid "Add option"
 msgstr ""
 
-#: src/config/dialogs.c:325
+#: src/config/dialogs.c:377
 msgid "Cannot add an option here."
 msgstr ""
 
-#: src/config/dialogs.c:365
+#: src/config/dialogs.c:419
 #, fuzzy
 msgid "Option manager"
 msgstr "Kirjanmerkkimuokkain"
 
-#: src/config/dialogs.c:424 src/config/dialogs.c:468 src/config/dialogs.c:497
+#: src/config/dialogs.c:471 src/config/dialogs.c:515 src/config/dialogs.c:544
 msgid "Add keybinding"
 msgstr ""
 
-#: src/config/dialogs.c:425
+#: src/config/dialogs.c:472
 msgid "Invalid keystroke."
 msgstr ""
 
-#: src/config/dialogs.c:441
+#: src/config/dialogs.c:488
 msgid "Keystroke already used"
 msgstr ""
 
-#: src/config/dialogs.c:442
+#: src/config/dialogs.c:489
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
 "Are you sure you want to replace it?"
 msgstr ""
 
-#: src/config/dialogs.c:469
+#: src/config/dialogs.c:516
 msgid "Need to select a keymap."
 msgstr ""
 
-#: src/config/dialogs.c:484 src/config/options.inc:1168
+#: src/config/dialogs.c:531 src/config/options.inc:1168
 msgid "Action"
 msgstr ""
 
-#: src/config/dialogs.c:485
+#: src/config/dialogs.c:532
 msgid "Keymap"
 msgstr ""
 
-#: src/config/dialogs.c:486
+#: src/config/dialogs.c:533
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
 "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 msgstr ""
 
-#: src/config/dialogs.c:490
+#: src/config/dialogs.c:537
 msgid "Keystroke"
 msgstr ""
 
-#: src/config/dialogs.c:535 src/config/dialogs.c:546
+#: src/config/dialogs.c:582 src/config/dialogs.c:593
 msgid "Delete keybinding"
 msgstr ""
 
-#: src/config/dialogs.c:536
+#: src/config/dialogs.c:583
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr ""
 
-#: src/config/dialogs.c:547
+#: src/config/dialogs.c:594
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 
-#: src/config/dialogs.c:574 src/dialogs/info.c:126 src/globhist/dialogs.c:187
+#: src/config/dialogs.c:621 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
 msgstr ""
 
-#: src/config/dialogs.c:579
+#: src/config/dialogs.c:627
 msgid "Keybinding manager"
 msgstr ""
 
-#: src/config/kbdbind.c:288
+#: src/config/kbdbind.c:286
 msgid "Main mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:289
+#: src/config/kbdbind.c:287
 msgid "Edit mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:290
+#: src/config/kbdbind.c:288
 msgid "Menu mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:395
+#: src/config/kbdbind.c:393
 #, fuzzy
 msgid "Abort connection"
 msgstr "yhteydet"
 
-#: src/config/kbdbind.c:396
+#: src/config/kbdbind.c:394
 #, fuzzy
 msgid "Add a new bookmark"
 msgstr "Lisää kirjanmerkki"
 
-#: src/config/kbdbind.c:397
+#: src/config/kbdbind.c:395
 msgid "Add a new bookmark using current link"
 msgstr ""
 
-#: src/config/kbdbind.c:398
+#: src/config/kbdbind.c:396
 #, fuzzy
 msgid "Bookmark all open tabs"
 msgstr "Kirjanmerkit"
 
-#: src/config/kbdbind.c:399
+#: src/config/kbdbind.c:397
 msgid "Attempt to auto-complete the input"
 msgstr ""
 
-#: src/config/kbdbind.c:400
+#: src/config/kbdbind.c:398
 msgid "Attempt to unambiguously auto-complete the input"
 msgstr ""
 
-#: src/config/kbdbind.c:401
+#: src/config/kbdbind.c:399
 msgid "Return to the previous document in history"
 msgstr ""
 
-#: src/config/kbdbind.c:402
+#: src/config/kbdbind.c:400
 msgid "Delete character in front of the cursor"
 msgstr ""
 
-#: src/config/kbdbind.c:403
+#: src/config/kbdbind.c:401
+msgid "Go to the first line of the buffer."
+msgstr ""
+
+#: src/config/kbdbind.c:402
 #, fuzzy
 msgid "Open bookmark manager"
 msgstr "Kirjanmerkkimuokkain"
 
-#: src/config/kbdbind.c:404
+#: src/config/kbdbind.c:403
 #, fuzzy
 msgid "Open cache manager"
 msgstr "Kirjanmerkkimuokkain"
 
-#: src/config/kbdbind.c:405
+#: src/config/kbdbind.c:404
 #, fuzzy
 msgid "Cancel current state"
 msgstr "Töpselin tilaa ei saada"
 
-#: src/config/kbdbind.c:406
+#: src/config/kbdbind.c:405
 #, fuzzy
 msgid "Open cookie manager"
 msgstr "Kirjanmerkkimuokkain"
 
-#: src/config/kbdbind.c:407
+#: src/config/kbdbind.c:406
 msgid "Reload cookies file"
 msgstr ""
 
-#: src/config/kbdbind.c:408
+#: src/config/kbdbind.c:407
 msgid "Copy text to clipboard"
 msgstr ""
 
-#: src/config/kbdbind.c:409
+#: src/config/kbdbind.c:408
 msgid "Delete text from clipboard"
 msgstr ""
 
-#: src/config/kbdbind.c:410
+#: src/config/kbdbind.c:409
 msgid "Delete character under cursor"
 msgstr ""
 
-#: src/config/kbdbind.c:411
+#: src/config/kbdbind.c:410
 #, fuzzy
 msgid "Show information about the current page"
 msgstr "Lataa kuva"
 
-#: src/config/kbdbind.c:412
+#: src/config/kbdbind.c:411
 msgid "Move cursor downwards"
 msgstr ""
 
-#: src/config/kbdbind.c:413
+#: src/config/kbdbind.c:412
 #, fuzzy
 msgid "Download the current link"
 msgstr "Lataa linkki"
 
-#: src/config/kbdbind.c:414
+#: src/config/kbdbind.c:413
 #, fuzzy
 msgid "Download the current image"
 msgstr "Lataa kuva"
 
-#: src/config/kbdbind.c:415
+#: src/config/kbdbind.c:414
 #, fuzzy
 msgid "Open download manager"
 msgstr "Lataa kuva"
 
-#: src/config/kbdbind.c:416
+#: src/config/kbdbind.c:415
 msgid "Begin editing"
 msgstr ""
 
 #. FIXME
-#: src/config/kbdbind.c:417
+#: src/config/kbdbind.c:416
 #, fuzzy
 msgid "Expand item"
 msgstr "nimi"
 
-#: src/config/kbdbind.c:418
+#: src/config/kbdbind.c:417
 msgid "Go to the end of the page/line"
+msgstr ""
+
+#: src/config/kbdbind.c:418
+msgid "Go to the last line of the buffer."
 msgstr ""
 
 #: src/config/kbdbind.c:419
@@ -1779,7 +1804,7 @@ msgstr "Tekstialue"
 msgid "Invert the fore- and background color so the link stands out."
 msgstr ""
 
-#: src/config/options.inc:221 src/dialogs/options.c:187
+#: src/config/options.inc:221 src/dialogs/options.c:189
 msgid "Underline"
 msgstr ""
 
@@ -2649,7 +2674,7 @@ msgid "Local CGI specific options."
 msgstr "Ei ohjelmaa osoitettu"
 
 #: src/config/options.inc:741 src/config/options.inc:753
-#: src/mime/backend/mailcap.c:102 src/mime/backend/mimetypes.c:59
+#: src/mime/backend/mailcap.c:100 src/mime/backend/mimetypes.c:59
 msgid "Path"
 msgstr ""
 
@@ -2802,7 +2827,7 @@ msgid ""
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
 
-#: src/config/options.inc:845 src/dialogs/options.c:184
+#: src/config/options.inc:845 src/dialogs/options.c:186
 msgid "Restrict frames in cp850/852"
 msgstr "Rajoita kehykset näihin: cp850/852"
 
@@ -3202,7 +3227,7 @@ msgstr "Valitse kenttä"
 
 #: src/config/options.inc:1090
 msgid ""
-"Tab colors for tabs that have not completed or has not been\n"
+"Tab colors for tabs that have not been\n"
 "selected since they completed loading."
 msgstr ""
 
@@ -3412,61 +3437,72 @@ msgstr ""
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr ""
 
-#: src/config/options.inc:1213
+#: src/config/options.inc:1212
+msgid "Show a message box when file is saved sucessfully."
+msgstr ""
+
+#: src/config/options.inc:1214
+msgid ""
+"When you pressed a [ Save ] button in some manager, this option\n"
+"will make sure that a box confirming success of the operation will\n"
+"pop up."
+msgstr ""
+
+#: src/config/options.inc:1219
 #, fuzzy
 msgid "Sessions"
 msgstr "Tiedostopäätteet"
 
-#: src/config/options.inc:1215
+#: src/config/options.inc:1221
 msgid "Sessions settings."
 msgstr ""
 
-#: src/config/options.inc:1217
+#: src/config/options.inc:1223
 msgid "Auto save session"
 msgstr ""
 
-#: src/config/options.inc:1219
+#: src/config/options.inc:1225
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
 msgstr ""
 
-#: src/config/options.inc:1222
+#: src/config/options.inc:1228
 msgid "Auto restore session"
 msgstr ""
 
-#: src/config/options.inc:1224
+#: src/config/options.inc:1230
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
 msgstr ""
 
-#: src/config/options.inc:1227
+#: src/config/options.inc:1233
 msgid "Auto save and restore session folder name"
 msgstr ""
 
-#: src/config/options.inc:1229
+#: src/config/options.inc:1235
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "This only makes sense with bookmark support."
 msgstr ""
 
-#: src/config/options.inc:1233
+#: src/config/options.inc:1239
 msgid "Set window title"
 msgstr ""
 
-#: src/config/options.inc:1235
+#: src/config/options.inc:1241
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
 "shown on the window titlebar."
 msgstr ""
 
-#: src/config/options.inc:1241
+#: src/config/options.inc:1247
 msgid "Use secure file saving"
 msgstr ""
 
-#: src/config/options.inc:1243
+#: src/config/options.inc:1249
 msgid ""
 "First write data to 'file.tmp', then rename to 'file' upon\n"
 "successfully finishing this. Note that this relates only to\n"
@@ -3626,12 +3662,12 @@ msgstr ""
 msgid "at quit time"
 msgstr "laskettu aika"
 
-#: src/cookies/cookies.c:562 src/cookies/dialogs.c:81
+#: src/cookies/cookies.c:562 src/cookies/dialogs.c:93
 #, fuzzy
 msgid "yes"
 msgstr "tavua"
 
-#: src/cookies/cookies.c:562 src/cookies/dialogs.c:81
+#: src/cookies/cookies.c:562 src/cookies/dialogs.c:93
 #, fuzzy
 msgid "no"
 msgstr "Tieto"
@@ -3644,30 +3680,30 @@ msgstr ""
 msgid "Reject"
 msgstr ""
 
-#: src/cookies/dialogs.c:73 src/dialogs/document.c:116
+#: src/cookies/dialogs.c:85 src/dialogs/document.c:116
 msgid "Server"
 msgstr "Palvelin"
 
-#: src/cookies/dialogs.c:76
+#: src/cookies/dialogs.c:88
 #, fuzzy
 msgid "Domain"
 msgstr "Dokumentin t~iedot"
 
-#: src/cookies/dialogs.c:78
+#: src/cookies/dialogs.c:90
 msgid "Expires"
 msgstr ""
 
-#: src/cookies/dialogs.c:80
+#: src/cookies/dialogs.c:92
 #, fuzzy
 msgid "Secure"
 msgstr "nyk"
 
-#: src/cookies/dialogs.c:131 src/dialogs/download.c:426 src/dialogs/edit.c:100
-#: src/formhist/dialogs.c:170 src/globhist/dialogs.c:188
+#: src/cookies/dialogs.c:156 src/dialogs/download.c:424 src/dialogs/edit.c:100
+#: src/formhist/dialogs.c:168 src/globhist/dialogs.c:189
 msgid "Clear"
 msgstr ""
 
-#: src/cookies/dialogs.c:136
+#: src/cookies/dialogs.c:162
 #, fuzzy
 msgid "Cookie manager"
 msgstr "Kirjanmerkkimuokkain"
@@ -3688,7 +3724,7 @@ msgstr "hylkää palvelinasetukset"
 msgid "Date"
 msgstr "Päiväys"
 
-#: src/dialogs/document.c:152 src/globhist/dialogs.c:63
+#: src/dialogs/document.c:152 src/globhist/dialogs.c:64
 msgid "Last visit time"
 msgstr ""
 
@@ -3734,17 +3770,17 @@ msgstr "Taustalla"
 msgid "Background with notify"
 msgstr ""
 
-#: src/dialogs/download.c:260 src/dialogs/download.c:421
+#: src/dialogs/download.c:260 src/dialogs/download.c:419
 msgid "Abort"
 msgstr "Keskeytä"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:261 src/dialogs/download.c:424
+#: src/dialogs/download.c:261 src/dialogs/download.c:422
 #, fuzzy
 msgid "Abort and delete file"
 msgstr "Virhe tiedostoon kirjoittaessa"
 
-#: src/dialogs/download.c:430
+#: src/dialogs/download.c:429
 #, fuzzy
 msgid "Download manager"
 msgstr "Lataa kuva"
@@ -3767,7 +3803,7 @@ msgid ""
 "ELinks %s\n"
 "\n"
 "(C) 1999 - 2002 Mikulas Patocka\n"
-"(C) 2001 - 2003 Petr Baudis\n"
+"(C) 2001 - 2004 Petr Baudis and others\n"
 "\n"
 "This program is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -4127,96 +4163,71 @@ msgstr "Valitse URL"
 msgid "Save to file"
 msgstr "Tallenna tiedostoon"
 
-#: src/dialogs/mime.c:83
-msgid "Delete extension"
-msgstr "Poista tiedostopääte"
-
-#: src/dialogs/mime.c:84
-#, fuzzy, c-format
-msgid "Delete extension %s?"
-msgstr "Poista tiedostopääte"
-
-#: src/dialogs/mime.c:153
-msgid "Extension"
-msgstr "Tiedostopääte"
-
-#: src/dialogs/mime.c:156
-msgid "Extension(s)"
-msgstr "Tiedostopäätteet"
-
-#: src/dialogs/mime.c:157
-msgid "Content-Type"
-msgstr "Sisältötyyppi"
-
-#: src/dialogs/mime.c:171
-msgid "No extensions"
-msgstr "Ei tiedostopäätteitä"
-
-#: src/dialogs/options.c:164
+#: src/dialogs/options.c:166
 msgid "Terminal options"
 msgstr "Terminaaliasetukset"
 
-#: src/dialogs/options.c:169
+#: src/dialogs/options.c:171
 msgid "Frame handling:"
 msgstr ""
 
-#: src/dialogs/options.c:170
+#: src/dialogs/options.c:172
 msgid "No frames"
 msgstr "Ei kehyksiä"
 
-#: src/dialogs/options.c:171
+#: src/dialogs/options.c:173
 msgid "VT 100 frames"
 msgstr "VT 100 kehykset"
 
-#: src/dialogs/options.c:172
+#: src/dialogs/options.c:174
 msgid "Linux or OS/2 frames"
 msgstr "Linux tai OS/2 kehykset"
 
-#: src/dialogs/options.c:173
+#: src/dialogs/options.c:175
 #, fuzzy
 msgid "FreeBSD frames"
 msgstr "Ei kehyksiä"
 
-#: src/dialogs/options.c:174
+#: src/dialogs/options.c:176
 msgid "KOI8-R frames"
 msgstr "KOI8-R kehykset"
 
-#: src/dialogs/options.c:176
+#: src/dialogs/options.c:178
 #, fuzzy
 msgid "Color mode:"
 msgstr "Väri"
 
-#: src/dialogs/options.c:177
+#: src/dialogs/options.c:179
 msgid "No colors (mono)"
 msgstr ""
 
-#: src/dialogs/options.c:178
+#: src/dialogs/options.c:180
 #, fuzzy
 msgid "16 colors"
 msgstr "Tekstialue"
 
-#: src/dialogs/options.c:180
+#: src/dialogs/options.c:182
 #, fuzzy
 msgid "256 colors"
 msgstr "Tekstialue"
 
-#: src/dialogs/options.c:183
+#: src/dialogs/options.c:185
 msgid "Use ^[[11m"
 msgstr "Käytä ^[[11m"
 
-#: src/dialogs/options.c:185
+#: src/dialogs/options.c:187
 msgid "Block the cursor"
 msgstr "Neliöosoitin"
 
-#: src/dialogs/options.c:186
+#: src/dialogs/options.c:188
 msgid "Transparency"
 msgstr ""
 
-#: src/dialogs/options.c:188
+#: src/dialogs/options.c:190
 msgid "UTF-8 I/O"
 msgstr ""
 
-#: src/dialogs/options.c:257
+#: src/dialogs/options.c:259
 #, fuzzy
 msgid "Resize terminal"
 msgstr "Aseta ~terminaalin koko"
@@ -4224,74 +4235,74 @@ msgstr "Aseta ~terminaalin koko"
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/dialogs/status.c:75
+#: src/dialogs/status.c:73
 msgid "Received"
 msgstr "Vastaanotettu"
 
-#: src/dialogs/status.c:80
+#: src/dialogs/status.c:78
 msgid "of"
 msgstr "/"
 
-#: src/dialogs/status.c:89
+#: src/dialogs/status.c:87
 msgid "Average speed"
 msgstr "Keskinopeus"
 
-#: src/dialogs/status.c:90
+#: src/dialogs/status.c:88
 #, fuzzy
 msgid "average speed"
 msgstr "Keskinopeus"
 
-#: src/dialogs/status.c:91
+#: src/dialogs/status.c:89
 msgid "avg"
 msgstr "km"
 
-#: src/dialogs/status.c:94
+#: src/dialogs/status.c:92
 msgid "Speed"
 msgstr "Nopeus"
 
-#: src/dialogs/status.c:94
+#: src/dialogs/status.c:92
 #, fuzzy
 msgid "speed"
 msgstr "Nopeus"
 
-#: src/dialogs/status.c:105
+#: src/dialogs/status.c:103
 msgid "current speed"
 msgstr "nopeus nyt"
 
-#: src/dialogs/status.c:105
+#: src/dialogs/status.c:103
 msgid "cur"
 msgstr "nyk"
 
-#: src/dialogs/status.c:116
+#: src/dialogs/status.c:114
 msgid "Elapsed time"
 msgstr "Kulutettu aika"
 
-#: src/dialogs/status.c:117
+#: src/dialogs/status.c:115
 #, fuzzy
 msgid "elapsed time"
 msgstr "Kulutettu aika"
 
-#: src/dialogs/status.c:118
+#: src/dialogs/status.c:116
 msgid "ETT"
 msgstr ""
 
-#: src/dialogs/status.c:126
+#: src/dialogs/status.c:124
 msgid "estimated time"
 msgstr "laskettu aika"
 
-#: src/dialogs/status.c:127
+#: src/dialogs/status.c:125
 msgid "ETA"
 msgstr ""
 
-#: src/dialogs/status.c:214 src/viewer/text/search.c:942
+#: src/dialogs/status.c:212 src/viewer/text/search.c:942
 msgid "Typeahead"
 msgstr ""
 
-#: src/dialogs/status.c:329
+#: src/dialogs/status.c:327
 msgid "Untitled"
 msgstr ""
 
-#: src/dialogs/status.c:331
+#: src/dialogs/status.c:329
 #, fuzzy
 msgid "No document"
 msgstr "documentit"
@@ -4304,6 +4315,10 @@ msgstr ""
 msgid "Forms are saved for this URL."
 msgstr ""
 
+#: src/formhist/dialogs.c:127
+msgid "Form not saved"
+msgstr ""
+
 #: src/formhist/dialogs.c:128
 msgid ""
 "No saved information for this URL.\n"
@@ -4311,16 +4326,16 @@ msgid ""
 "\" button."
 msgstr ""
 
-#: src/formhist/dialogs.c:166 src/protocol/auth/dialogs.c:74
+#: src/formhist/dialogs.c:164 src/protocol/auth/dialogs.c:74
 msgid "Login"
 msgstr "Käyttäjän ID"
 
-#: src/formhist/dialogs.c:169
+#: src/formhist/dialogs.c:167
 #, fuzzy
 msgid "Toggle saving"
 msgstr "Valitse ~HTML/tavallinen"
 
-#: src/formhist/dialogs.c:175
+#: src/formhist/dialogs.c:174
 #, fuzzy
 msgid "Form history manager"
 msgstr "Muisti loppu"
@@ -4363,64 +4378,64 @@ msgstr ""
 msgid "Forms History"
 msgstr "Muisti loppu"
 
-#: src/globhist/dialogs.c:118
+#: src/globhist/dialogs.c:119
 msgid "Search history"
 msgstr ""
 
-#: src/globhist/dialogs.c:183
+#: src/globhist/dialogs.c:184
 #, fuzzy
 msgid "Bookmark"
 msgstr "Kirjanmerkit"
 
-#: src/globhist/dialogs.c:196
+#: src/globhist/dialogs.c:198
 #, fuzzy
 msgid "Global history manager"
 msgstr "Ei historiaa"
 
-#: src/globhist/globhist.c:70
+#: src/globhist/globhist.c:71
 msgid "Global history"
 msgstr ""
 
-#: src/globhist/globhist.c:72
+#: src/globhist/globhist.c:73
 msgid "Global history options."
 msgstr ""
 
-#: src/globhist/globhist.c:76
+#: src/globhist/globhist.c:77
 msgid "Enable global history (\"history of all pages visited\")."
 msgstr ""
 
-#: src/globhist/globhist.c:78
+#: src/globhist/globhist.c:79
 msgid "Maximum number of entries"
 msgstr ""
 
-#: src/globhist/globhist.c:80
+#: src/globhist/globhist.c:81
 msgid "Maximum number of entries in the global history."
 msgstr ""
 
-#: src/globhist/globhist.c:82
+#: src/globhist/globhist.c:83
 #, fuzzy
 msgid "Display style"
 msgstr "Näytä kartta"
 
-#: src/globhist/globhist.c:84
+#: src/globhist/globhist.c:85
 msgid ""
 "What to display in global history dialog:\n"
 "0 is URLs\n"
 "1 is page titles"
 msgstr ""
 
-#: src/globhist/globhist.c:88
+#: src/globhist/globhist.c:89
 msgid "Auto-save interval"
 msgstr ""
 
-#: src/globhist/globhist.c:90
+#: src/globhist/globhist.c:91
 msgid ""
 "Interval at which to write global history to disk if it\n"
 "has changed (seconds; 0 to disable)"
 msgstr ""
 
 #. name:
-#: src/globhist/globhist.c:496
+#: src/globhist/globhist.c:449
 #, fuzzy
 msgid "Global History"
 msgstr "Ei historiaa"
@@ -4658,7 +4673,7 @@ msgstr ""
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
 msgstr ""
 
-#: src/mime/backend/default.c:57 src/mime/backend/mailcap.c:108
+#: src/mime/backend/default.c:57 src/mime/backend/mailcap.c:106
 msgid "Ask before opening"
 msgstr ""
 
@@ -4703,42 +4718,42 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/mime/backend/default.c:227
+#: src/mime/backend/default.c:220
 msgid "Option system"
 msgstr ""
 
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#: src/mime/backend/mailcap.c:94 src/mime/backend/mailcap.c:130
-#: src/mime/backend/mailcap.c:718
+#: src/mime/backend/mailcap.c:92 src/mime/backend/mailcap.c:128
+#: src/mime/backend/mailcap.c:708
 msgid "Mailcap"
 msgstr ""
 
-#: src/mime/backend/mailcap.c:96
+#: src/mime/backend/mailcap.c:94
 msgid "Options for mailcap support."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:100
+#: src/mime/backend/mailcap.c:98
 msgid "Enable mailcap support."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:104
+#: src/mime/backend/mailcap.c:102
 msgid ""
 "Mailcap search path. Colon-separated list of files.\n"
 "Leave as \"\" to use MAILCAP environment variable or\n"
 "built-in defaults instead."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:110
+#: src/mime/backend/mailcap.c:108
 msgid "Ask before using the handlers defined by mailcap."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:112
+#: src/mime/backend/mailcap.c:110
 msgid "Type query string"
 msgstr ""
 
-#: src/mime/backend/mailcap.c:114
+#: src/mime/backend/mailcap.c:112
 msgid ""
 "Type of description to show in \"what shall I do with this file\"\n"
 "query dialog:\n"
@@ -4747,55 +4762,55 @@ msgid ""
 "2 is show mailcap description field if any; \"mailcap\" otherwise."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:120
+#: src/mime/backend/mailcap.c:118
 msgid "Prioritize entries by file"
 msgstr ""
 
-#: src/mime/backend/mailcap.c:122
+#: src/mime/backend/mailcap.c:120
 msgid ""
 "Prioritize entries by the order of the files in the mailcap\n"
 "path. This means that wildcard entries (like: image/*) will\n"
 "also be checked before deciding the handler."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:132
+#: src/mime/backend/mailcap.c:130
 msgid ""
 "Options for mailcap support. (Deprecated. Please use\n"
 "mime.mailcap instead)"
 msgstr ""
 
-#: src/mime/backend/mailcap.c:137
+#: src/mime/backend/mailcap.c:135
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.enable option instead."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:142
+#: src/mime/backend/mailcap.c:140
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.path option instead."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:147
+#: src/mime/backend/mailcap.c:145
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.ask option instead."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:152
+#: src/mime/backend/mailcap.c:150
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use mime.mailcap.description option instead."
 msgstr ""
 
-#: src/mime/backend/mailcap.c:157
+#: src/mime/backend/mailcap.c:155
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
 msgstr ""
 
 #. name:
-#: src/mime/backend/mimetypes.c:49 src/mime/backend/mimetypes.c:294
+#: src/mime/backend/mimetypes.c:49 src/mime/backend/mimetypes.c:291
 msgid "Mimetypes files"
 msgstr ""
 
@@ -4816,6 +4831,31 @@ msgid ""
 "Leave as \"\" to use built-in default instead."
 msgstr ""
 
+#: src/mime/dialogs.c:83
+msgid "Delete extension"
+msgstr "Poista tiedostopääte"
+
+#: src/mime/dialogs.c:84
+#, fuzzy, c-format
+msgid "Delete extension %s?"
+msgstr "Poista tiedostopääte"
+
+#: src/mime/dialogs.c:153
+msgid "Extension"
+msgstr "Tiedostopääte"
+
+#: src/mime/dialogs.c:156
+msgid "Extension(s)"
+msgstr "Tiedostopäätteet"
+
+#: src/mime/dialogs.c:157
+msgid "Content-Type"
+msgstr "Sisältötyyppi"
+
+#: src/mime/dialogs.c:171
+msgid "No extensions"
+msgstr "Ei tiedostopäätteitä"
+
 #. name:
 #: src/mime/mime.c:32 src/mime/mime.c:196
 msgid "MIME"
@@ -4835,37 +4875,37 @@ msgid ""
 "guess it properly from known information about the document)."
 msgstr ""
 
-#: src/modules/version.c:77
+#: src/modules/version.c:76
 msgid "Text WWW browser"
 msgstr "Lynxintapainen WWW-selain"
 
-#: src/modules/version.c:82
+#: src/modules/version.c:81
 msgid "Features:"
 msgstr ""
 
-#: src/modules/version.c:84
+#: src/modules/version.c:83
 msgid "Standard"
 msgstr ""
 
-#: src/modules/version.c:86
+#: src/modules/version.c:85
 msgid "Debug"
 msgstr ""
 
-#: src/modules/version.c:89
+#: src/modules/version.c:88
 #, fuzzy
 msgid "Fastmem"
 msgstr "nimi"
 
-#: src/modules/version.c:92
+#: src/modules/version.c:91
 msgid "Own Libc Routines"
 msgstr ""
 
-#: src/modules/version.c:95
+#: src/modules/version.c:94
 #, fuzzy
 msgid "No Backtrace"
 msgstr "Siirry takaisin"
 
-#: src/modules/version.c:107
+#: src/modules/version.c:106
 #, fuzzy
 msgid "No mouse"
 msgstr "documentit"
@@ -4904,7 +4944,7 @@ msgstr "Kirjoita kättäjänimi"
 msgid "HTTP Authentication"
 msgstr ""
 
-#: src/protocol/protocol.c:61
+#: src/protocol/protocol.c:65
 msgid "JavaScript is currently not supported."
 msgstr ""
 
@@ -5060,8 +5100,8 @@ msgstr "Tuntematon tyyppi"
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 
-#: src/sched/download.c:983 src/sched/download.c:992 src/sched/download.c:1019
-#: src/sched/download.c:1031
+#: src/sched/download.c:983 src/sched/download.c:992 src/sched/download.c:1012
+#: src/sched/download.c:1024
 msgid "Display"
 msgstr "Näytä"
 
@@ -5070,22 +5110,22 @@ msgstr "Näytä"
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 
-#: src/sched/download.c:1010 src/sched/download.c:1023
+#: src/sched/download.c:1003 src/sched/download.c:1016
 msgid "What to do?"
 msgstr "Mitä tehdä?"
 
-#: src/sched/download.c:1011
+#: src/sched/download.c:1004
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
 
-#: src/sched/download.c:1017 src/sched/download.c:1030
+#: src/sched/download.c:1010 src/sched/download.c:1023
 msgid "Open"
 msgstr "Avaa"
 
-#: src/sched/download.c:1024
+#: src/sched/download.c:1017
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5226,11 +5266,11 @@ msgstr "Tämä Linksin versio ei  SSL/TSL:ää"
 msgid "Unknown error"
 msgstr "Tuntematon virhe"
 
-#: src/sched/session.c:586
+#: src/sched/session.c:585
 msgid "Welcome"
 msgstr "Tervetuloa"
 
-#: src/sched/session.c:587
+#: src/sched/session.c:586
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -5240,11 +5280,11 @@ msgstr ""
 "Paina ESC niin saat ohjeen. Valitse Ohje->Ohjekirja valikosta niin saat "
 "käyttöohjeet."
 
-#: src/sched/session.c:596 src/sched/session.c:616 src/sched/task.c:166
+#: src/sched/session.c:595 src/sched/session.c:615 src/sched/task.c:166
 msgid "Warning"
 msgstr "Varoitus"
 
-#: src/sched/session.c:597
+#: src/sched/session.c:596
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5255,7 +5295,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:617
+#: src/sched/session.c:616
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5268,7 +5308,7 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:883
+#: src/sched/session.c:882
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."
@@ -5416,11 +5456,11 @@ msgstr ""
 msgid "URL expected after %s."
 msgstr ""
 
-#: src/viewer/text/form.c:661
+#: src/viewer/text/form.c:662
 msgid "Error while posting form"
 msgstr "Virhe kaavaketta lähetettäessä"
 
-#: src/viewer/text/form.c:662
+#: src/viewer/text/form.c:663
 #, fuzzy, c-format
 msgid "Could not get file %s: %s"
 msgstr "Tiedoston haku epäonnistui"

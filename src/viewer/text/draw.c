@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.12 2004/07/07 05:36:08 miciah Exp $ */
+/* $Id: draw.c,v 1.13 2004/07/07 05:45:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,8 +68,6 @@ check_document_fragment(struct session *ses, struct document_view *doc_view)
 		mem_free_if(fragment);
 	} else {
 		int_bounds(&vy, 0, document->height - 1);
-		doc_view->vs->y = vy;
-		set_link(doc_view);
 	}
 
 	return vy;
@@ -222,6 +220,10 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 		vy = check_document_fragment(ses, doc_view);
 
 		if (vy != -2) vs->did_fragment = 1;
+		if (vy >= 0) {
+			doc_view->vs->y = vy;
+			set_link(doc_view);
+		}
 	}
 	vx = vs->x;
 	vy = vs->y;

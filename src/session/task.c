@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.20 2004/03/21 16:30:12 jonas Exp $ */
+/* $Id: task.c,v 1.21 2004/03/21 22:26:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,7 +336,7 @@ do_move(struct session *ses, struct download **stat)
 		else
 			*stat = NULL;
 
-		set_referrer(ses, get_cache_uri(ce));
+		set_session_referrer(ses, get_cache_uri(ce));
 
 		switch (task) {
 		case TASK_NONE:
@@ -513,7 +513,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 			referrer = struri(doc_view->document->uri);
 	}
 
-	set_referrer(ses, referrer);
+	set_session_referrer(ses, referrer);
 
 	ses_goto(ses, u, target, NULL,
 		 PRI_MAIN, cache_mode, task,

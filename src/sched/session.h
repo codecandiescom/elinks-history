@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.95 2004/03/03 17:27:16 jonas Exp $ */
+/* $Id: session.h,v 1.96 2004/03/21 22:26:54 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -199,19 +199,7 @@ go_unback(struct session *ses)
 #include "util/memory.h"
 #include "util/string.h"
 
-static inline void
-set_referrer(struct session *ses, unsigned char *referrer)
-{
-	if (ses->ref_url) mem_free(ses->ref_url);
-
-	if (referrer) {
-		/* Don't set referrer for file protocol */
-		referrer = strncasecmp("file:", referrer, 5)
-			 ? stracpy(referrer) : NULL;
-	}
-
-	ses->ref_url = referrer;
-}
+void set_session_referrer(struct session *ses, unsigned char *referrer);
 
 void print_error_dialog(struct session *, struct download *);
 void print_unknown_protocol_dialog(struct session *);

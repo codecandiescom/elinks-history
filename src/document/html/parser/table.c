@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.19 2004/07/01 19:47:52 pasky Exp $ */
+/* $Id: table.c,v 1.20 2004/07/01 19:54:43 pasky Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -542,7 +542,8 @@ see:
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "/CAPTION", 8)) {
-		add_table_bad_html_end(table, html);
+		if (table->caption.start && !table->caption.end)
+			table->caption.end = html;
 		goto see;
 	}
 

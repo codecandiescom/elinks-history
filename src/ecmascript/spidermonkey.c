@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.126 2004/12/19 11:32:20 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.127 2004/12/19 11:42:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1186,17 +1186,7 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	VALUE_TO_JSVAL_START;
 
 	if (JSVAL_IS_STRING(id)) {
-		struct form *form;
-		JSVAL_TO_VALUE_START;
-
-		JSVAL_REQUIRE(&id, STRING);
-		foreach (form, document->forms) {
-			if (!form->name || strcasecmp(v.string, form->name))
-				continue;
-
-			P_OBJECT(get_form_object(ctx, parent_doc, find_form_view(doc_view, form)));
-			goto convert;
-		}
+		forms_namedItem(ctx, obj, 1, &id, vp);
 		goto bye;
 	} else if (!JSVAL_IS_INT(id))
 		goto bye;

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.9 2003/06/05 14:18:37 zas Exp $ */
+/* $Id: mailcap.c,v 1.10 2003/06/05 22:40:27 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -460,39 +460,34 @@ expand_command(unsigned char *command, unsigned char *type)
 	return memacpy(buffer, y);
 }
 
-/* Checks a single linked list of entries by running test commands if any */
+/* Returns first usable mailcap_entry from a list where @entry is the head.
+ * Use of @filename is not supported (yet). */
 static struct mailcap_entry *
-check_entries(struct mailcap_entry * entry, unsigned char *filename)
+check_entries(struct mailcap_entry *entry, unsigned char *filename)
 {
 	/* Use the list of entries to find a final match */
-	while (entry) {
-		if (entry->testcommand) {
-			/* This routine executes the given test command to
-			 * determine if this is the right match. */
+	for (; entry; entry = entry->next) {
+		unsigned char *testcommand;
 
-			/* Use filename as marker to wether test should run */
-			if (!entry->testneedsfile && !filename) filename = "";
+		/* Accept current if no test is needed */
+		if (!entry->testcommand)
+			break;
 
-			if (filename) {
-				int exitcode = 1;
-				unsigned char *testcommand;
+		if (entry->testneedsfile && !filename)
+			continue;
 
-				testcommand = subst_file(entry->testcommand, filename);
-				if (testcommand) {
-					exitcode = exe(testcommand);
-					mem_free(testcommand);
-				}
+		/* We have to run the test command */
+		testcommand = subst_file(entry->testcommand, filename);
+		if (testcommand) {
+			int exitcode = exe(testcommand);
 
-				/* A non-zero exit code means test failed */
-				if (!exitcode) return entry;
-			}
-		} else {
-			if (entry->command) return entry;
+			mem_free(testcommand);
+			if (!exitcode)
+				break;
 		}
-		entry = entry->next;
 	}
 
-	return NULL;
+	return entry;
 }
 
 /* Attempts to find the given type in the mailcap association map.  On success,

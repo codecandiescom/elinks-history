@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.24 2003/06/21 00:33:57 pasky Exp $ */
+/* $Id: dump.c,v 1.25 2003/06/21 08:06:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ nextfrag:
 		w = hard_write(fd, frag->data + d, l);
 
 		if (w != l) {
-			detach_connection(stat, dump_pos);
+			detach_connection(status, dump_pos);
 
 			if (w < 0)
 				error(gettext("Can't write to stdout: %s"),
@@ -82,7 +82,7 @@ nextfrag:
 		}
 
 		dump_pos += w;
-		detach_connection(stat, dump_pos);
+		detach_connection(status, dump_pos);
 		goto nextfrag;
 	}
 
@@ -134,17 +134,17 @@ dump_formatted(int fd, struct status *status, struct cache_entry *ce)
 }
 
 void
-dump_end(struct status *stat, void *p)
+dump_end(struct status *status, void *p)
 {
-	struct cache_entry *ce = stat->ce;
+	struct cache_entry *ce = status->ce;
 	int fd = get_output_handle();
 
 	if (fd == -1) return;
 	if (ce && ce->redirect && dump_redir_count++ < MAX_REDIRECTS) {
 		unsigned char *u;
 
-		if (stat->state >= 0)
-			change_connection(stat, NULL, PRI_CANCEL, 0);
+		if (status->state >= 0)
+			change_connection(status, NULL, PRI_CANCEL, 0);
 
 		u = join_urls(ce->url, ce->redirect);
 		if (!u) return;
@@ -156,13 +156,13 @@ dump_end(struct status *stat, void *p)
 			if (pc) add_to_strn(&u, pc);
 		}
 
-		load_url(u, ce->url, stat, PRI_MAIN, 0, -1);
+		load_url(u, ce->url, status, PRI_MAIN, 0, -1);
 		mem_free(u);
 		return;
 	}
 
-	if (stat->state >= 0 && stat->state < S_TRANS) return;
-	if (stat->state >= S_TRANS
+	if (status->state >= 0 && status->state < S_TRANS) return;
+	if (status->state >= S_TRANS
 	    && get_opt_int_tree(&cmdline_options, "dump"))
 		return;
 
@@ -170,7 +170,7 @@ dump_end(struct status *stat, void *p)
 		if (dump_source(fd, status, ce) > 0)
 			goto terminate;
 
-		if (stat->state >= 0)
+		if (status->state >= 0)
 			return;
 
 	} else {
@@ -178,8 +178,8 @@ dump_end(struct status *stat, void *p)
 			goto terminate;
 	}
 
-	if (stat->state != S_OK) {
-		error(get_err_msg(stat->state, NULL));
+	if (status->state != S_OK) {
+		error(get_err_msg(status->state, NULL));
 		retval = RET_ERROR;
 		goto terminate;
 	}

@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.6 2005/03/27 07:23:30 jonas Exp $ */
+/* $Id: parse.c,v 1.7 2005/03/27 14:24:58 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -398,6 +398,146 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 }
 
 
+/* Parser for VMS-style MultiNet (some spaces removed from examples):
+ * "00README.TXT;1      2 30-DEC-1996 17:44 [SYSTEM] (RWED,RWED,RE,RE)"
+ * "CORE.DIR;1          1  8-SEP-1996 16:09 [SYSTEM] (RWE,RWE,RE,RE)"
+ *
+ * And non-MutliNet VMS:
+ * "CII-MANUAL.TEX;1  213/216  29-JAN-1996 03:33:12  [ANONYMOU,ANONYMOUS]   (RWED,RWED,,)"
+ */
+static struct ftp_file_info *
+parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
+{
+	struct tm mtime;
+	unsigned char *end = src + len;
+	unsigned char *pos;
+
+	/* First column: Name. A bit of black magic again. The name maybe either
+	 * ABCD.EXT or ABCD.EXT;NUM and it might be on a separate line.
+	 * Therefore we will first try to get the complete name until the first
+	 * space character; if it fails, we assume that the name occupies the
+	 * whole line. After that we search for the version separator ";", we
+	 * remove it and check the extension of the file; extension .DIR denotes
+	 * directory. */
+
+	pos = memchr(src, ';', end - src);
+	if (!pos) return NULL;
+
+	info->name.source = src;
+	info->name.length = pos - src;
+
+	/* If the name ends on .DIR or .DIR;#, it's a directory. We also
+	 * set the file size to zero as the listing does tell us only
+	 * the size in filesystem blocks - for an integrity check (when
+	 * mirroring, for example) we would need the size in bytes. */
+
+	if (info->name.length > 4 && !memcmp(&pos[-4], ".DIR", 4)) {
+		info->type  = FTP_FILE_DIRECTORY;
+		info->name.length -= 4;
+	} else {
+		info->type  = FTP_FILE_PLAINFILE;
+	}
+
+	skip_nonspace_end(pos, end);
+	skip_space_end(pos, end);
+	src = pos;
+
+
+	/* Second column, if exists, or the first column of the next line
+	 * contain file size in blocks. We will skip it. */
+
+	if (src >= end) {
+		/* FIXME: Handle multi-lined views. */
+		return NULL;
+	}
+
+	skip_nonspace_end(src, end);
+	skip_space_end(src, end);
+	if (src >= end) return NULL;
+
+
+	/* Third/Second column: Date DD-MMM-YYYY. */
+
+	memset(&mtime, 0, sizeof(mtime));
+	mtime.tm_isdst = -1;
+
+	mtime.tm_mday = parse_ftp_number(&src, end, 1, 31);
+	/* If the server produces garbage like
+	 * 'EA95_0PS.GZ;1      No privilege for attempted operation'
+	 * the check for '-' after the day will fail. */
+	if (src + 2 >= end || *src != '-')
+		return NULL;
+
+	src++;
+
+	pos = memchr(src, '-', end - src);
+	if (!pos) return NULL;
+
+	if (pos - src == 3) {
+		mtime.tm_mon = month2num(src);
+	}
+
+	/* Unknown months are mapped to January */
+	if (mtime.tm_mon <= 0)
+		mtime.tm_mon = 1;
+
+	pos++;
+	mtime.tm_year = parse_ftp_number(&pos, end, 0, LONG_MAX) - 1900;
+
+	skip_space_end(pos, end);
+	if (pos >= end) return NULL;
+	src = pos;
+
+
+	/* Fourth/Third column: Time hh:mm[:ss] */
+
+	mtime.tm_hour = parse_ftp_number(&src, end, 0, 23);
+	if (src >= end || *src != ':')
+		return NULL;
+
+	src++;
+
+	mtime.tm_min = parse_ftp_number(&src, end, 0, 59);
+	if (src >= end) return NULL;
+
+	if (*src == ':') {
+		src++;
+		mtime.tm_sec = parse_ftp_number(&src, end, 0, 59);
+		if (src >= end) return NULL;
+	}
+
+	/* Store the time-stamp */
+	info->mtime = mktime(&mtime);
+
+	/* Be more tolerant from here on ... */
+
+
+	/* Skip the fifth column */
+
+	skip_space_end(src, end);
+	skip_nonspace_end(src, end);
+	skip_space_end(src, end);
+	if (src >= end) return info;
+
+
+	/* Sixth column: Permissions */
+
+	src = memchr(src, '(', end - src);
+	if (!src || src >= end)
+		return info;
+
+	src++;
+
+	pos = memchr(src, ')', end - src);
+	if (!pos) return info;
+
+	/* Permissons have the format "RWED,RWED,RE" */
+	info->permissions = parse_ftp_vms_permissions(src, pos - src);
+
+	return info;
+}
+
+
 struct ftp_file_info *
 parse_ftp_file_info(struct ftp_file_info *info, unsigned char *src, int len)
 {
@@ -417,6 +557,8 @@ parse_ftp_file_info(struct ftp_file_info *info, unsigned char *src, int len)
 		return parse_ftp_unix_response(info, src, len);
 
 	default:
+		if (memchr(src, ';', len))
+			return parse_ftp_vms_response(info, src, len);
 		break;
 	}
 

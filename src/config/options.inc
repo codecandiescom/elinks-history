@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.149 2004/11/17 23:02:07 zas Exp $ */
+/* $Id: options.inc,v 1.150 2004/11/18 08:15:30 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1281,9 +1281,14 @@ static struct option_info config_options_info[] = {
 		"adjust their color by ui.colors.*.dialog.shadow). You may\n"
 		"also want to eliminate the wide borders by adjusting setup.h.")),
 
-	INIT_OPT_BOOL("ui.dialogs", N_("Underline hotkeys"),
+	INIT_OPT_BOOL("ui.dialogs", N_("Underline menu hotkeys"),
 		"underline_hotkeys", 0, 0,
 		N_("Whether to underline hotkeys in menus to make them more\n"
+		"visible. Requires the underlining is enabled for the terminal.")),
+
+	INIT_OPT_BOOL("ui.dialogs", N_("Underline button shortcuts"),
+		"underline_button_shortcuts", 0, 0,
+		N_("Whether to underline button shortcuts to make them more\n"
 		"visible. Requires the underlining is enabled for the terminal.")),
 
 

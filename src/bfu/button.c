@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.69 2004/11/18 00:31:42 zas Exp $ */
+/* $Id: button.c,v 1.70 2004/11/18 08:15:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,12 @@ display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	draw_text(term, pos->x, pos->y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
 	if (len > 0) {
-		draw_text(term, x, pos->y, widget_data->widget->text, 1, 0, shortcut_color);
+		int attr;
+
+		attr = get_opt_bool("ui.dialogs.underline_button_shortcuts")
+		     ? SCREEN_ATTR_UNDERLINE : 0;
+
+		draw_text(term, x, pos->y, widget_data->widget->text, 1, attr, shortcut_color);
 		draw_text(term, x + 1, pos->y, &widget_data->widget->text[1], len - 1, 0, color);
 	}
 	draw_text(term, x + len, pos->y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.405 2004/01/16 16:29:00 jonas Exp $ */
+/* $Id: renderer.c,v 1.406 2004/01/16 16:30:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1026,7 +1026,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		 * put_chars() call which results in their process_link() call
 		 * will ``update'' the @link_state. */
 		if (link_state == LINK_STATE_NEW && is_drawing_subs_or_sups()) {
-			link_state = LINK_STATE_SAME;
+			link_state = get_link_state();
 		}
 
 		process_link(part, link_state, chars, charslen);

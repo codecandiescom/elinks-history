@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.85 2003/05/18 23:05:34 zas Exp $ */
+/* $Id: renderer.c,v 1.86 2003/05/18 23:09:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1217,7 +1217,9 @@ format_html_part(unsigned char *start, unsigned char *end,
 	/* Hash creation if needed. */
 	if (!table_cache) {
 		table_cache = init_hash(8, &strhash);
-	} else if (!data) {
+	}
+	
+	if (table_cache && !data) {
 		/* Search for cached entry. */
 		struct table_cache_entry_key key;
 		struct hash_item *item;

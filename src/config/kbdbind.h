@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.89 2004/01/24 21:08:06 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.90 2004/01/24 21:31:39 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -14,7 +14,7 @@ enum keymap {
 	KM_MAIN,
 	KM_EDIT,
 	KM_MENU,
-	KM_MAX,
+	KM_MAX
 };
 
 /* Note: if you add anything here, please keep it in alphabetical order,
@@ -132,7 +132,7 @@ enum action {
 	ACT_VIEW_IMAGE,
 	ACT_ZOOM_FRAME,
 
-	KEYACTS,
+	KEYACTS
 };
 
 enum kbdbind_flags {

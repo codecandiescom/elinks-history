@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.489 2004/08/20 14:22:40 jonas Exp $ */
+/* $Id: renderer.c,v 1.490 2004/08/20 15:19:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -477,9 +477,11 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 	if (yt < 0) return;
 
 	matched = 0;
-	tag = renderer_context.last_tag_to_move->next;
+	tag = renderer_context.last_tag_to_move;
 
-	for (; (void *) tag != &part->document->tags; tag = tag->next) {
+	while (list_has_next(part->document->tags, tag)) {
+		tag = tag->next;
+
 		if (tag->y == Y(yf)) {
 			matched = 1;
 			if (tag->x >= X(xf)) {

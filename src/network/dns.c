@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.48 2004/04/20 07:35:32 zas Exp $ */
+/* $Id: dns.c,v 1.49 2004/04/20 07:45:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,24 +253,23 @@ do_lookup(struct dnsquery *query, int force_async)
 {
 	int res;
 
-	/* DBG("starting lookup for %s", q->name); */
+	/* DBG("starting lookup for %s", query->name); */
 
 #ifndef NO_ASYNC_LOOKUP
-	if (!force_async && !get_opt_int("connection.async_dns")) {
-#endif
-		goto sync_lookup; /* To use label, even if NO_ASYNC_LOOKUP is defined. */
+	if (force_async || get_opt_int("connection.async_dns")) {
+		query->h = start_thread(lookup_fn, query->name,
+					strlen(query->name) + 1);
+		if (query->h != -1) {
+			/* async lookup */
+			set_handlers(query->h, end_real_lookup, NULL,
+				     failed_real_lookup, query);
 
-#ifndef NO_ASYNC_LOOKUP
-	} else {
-		query->h = start_thread(lookup_fn, query->name, strlen(query->name) + 1);
-		if (query->h == -1) goto sync_lookup;
-		set_handlers(query->h, end_real_lookup, NULL, failed_real_lookup, query);
-
-		return 1;
+			return 1;
+		}
 	}
 #endif
 
-sync_lookup:
+	/* sync lookup */
 	res = do_real_lookup(query->name, query->addr, query->addrno, 0);
 	query->xfn(query, res);
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.146 2003/07/03 22:08:31 zas Exp $ */
+/* $Id: parser.c,v 1.147 2003/07/03 22:31:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1826,8 +1826,11 @@ detach_menu(void)
 {
 	struct menu_item *i = NULL;
 
-	if (menu_stack_size) i = menu_stack[0];
-	if (menu_stack) mem_free(menu_stack);
+	if (menu_stack) {
+		if (menu_stack_size) i = menu_stack[0];
+		mem_free(menu_stack);
+	}
+
 	return i;
 }
 
@@ -2061,9 +2064,13 @@ end_parse:
 	format.attr |= AT_BOLD;
 	mw = 0;
 
-	for (i = 0; i < order; i++)
-		if (lbls[i] && strlen(lbls[i]) > mw)
-			mw = strlen(lbls[i]);
+	for (i = 0; i < order; i++) {
+		if (lbls[i]) {
+			int len = strlen(lbls[i]);
+
+			if (len > mw) mw = len;
+		}
+	}
 
 	for (i = 0; i < mw; i++)
 		put_chrs("_", 1, put_chars_f, f);
@@ -2263,10 +2270,11 @@ parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 {
 	unsigned char *aa;
 	unsigned long n;
-	int q, qq, i, d, nn;
+	int q, qq, d, nn;
 	int *oo;
 	int *o = NULL;
 	int ol = 0;
+	register int i;
 
 new_ch:
 	while (WHITECHAR(*a)) a++;
@@ -2280,7 +2288,10 @@ new_ch:
 	q = n;
 	if (*a == '%') q = q * ww / 100;
 	else if (*a != '*') q = (q + (www - 1) / 2) / www;
-	else if (!(q = -q)) q = -1;
+	else {
+		q = -q;
+		if (!q) q = -1;
+	}
 
 	oo = mem_realloc(o, (ol + 1) * sizeof(int));
 	if (oo) (o = oo)[ol++] = q;
@@ -2351,7 +2362,7 @@ distribute:
 	}
 
 	for (i = 0; i < ol; i++) if (!o[i]) {
-		int j;
+		register int j;
 		int m = 0;
 		int mj = 0;
 
@@ -2415,10 +2426,7 @@ html_link(unsigned char *a)
 
 	name = get_attr_val(a, "type");
 	if (name) {
-		/* FIXME? Shouldn't we cmp with 'name' here? I'm really
-		 * confused from this now, I'd like an explanation. Thanks ;).
-		 * --pasky */
-		if (strncasecmp(a, "text/css", 8)) {
+		if (strncasecmp(name, "text/css", 8)) {
 			mem_free(name);
 			return;
 		}
@@ -2583,7 +2591,8 @@ process_head(unsigned char *head)
 static int
 compar(const void *a, const void *b)
 {
-	return strcasecmp(((struct element_info *) a)->name, ((struct element_info *) b)->name);
+	return strcasecmp(((struct element_info *) a)->name,
+			  ((struct element_info *) b)->name);
 }
 
 #else
@@ -2669,20 +2678,22 @@ set_lt:
 	eoff = eof;
 	lt = html;
 	while (html < eof) {
+		struct element_info *ei;
 		unsigned char *name, *attr, *end, *prev_html;
 		int namelen;
-		struct element_info *ei;
 		int inv;
 		int dotcounter = 0;
 
 		if (WHITECHAR(*html) && par_format.align != AL_NONE) {
 			unsigned char *h = html;
 
-			/*if (putsp == -1) {
+#if 0
+			if (putsp == -1) {
 				while (html < eof && WHITECHAR(*html)) html++;
 				goto set_lt;
 			}
-			putsp = 0;*/
+			putsp = 0;
+#endif
 			while (h < eof && WHITECHAR(*h)) h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
@@ -2925,16 +2936,16 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	      struct memory_list **ml, unsigned char *href_base,
 	      unsigned char *target_base, int to, int def, int hdef)
 {
-	unsigned char *name, *attr, *al, *label, *href, *target;
-	int namelen, lblen;
+	unsigned char *name, *attr, *al, *label, *href, *target, *hd;
 	struct link_def *ld;
 	struct menu_item *nm;
+	struct conv_table *ct;
+	int namelen, lblen;
 	int nmenu = 0;
 	int i;
-	unsigned char *hd = init_str();
 	int hdl = 0;
-	struct conv_table *ct;
 
+	hd = init_str();
 	if (!hd) return -1;
 
 	if (head) add_to_str(&hd, &hdl, head);

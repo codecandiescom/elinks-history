@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.7 2002/04/20 09:49:44 zas Exp $ */
+/* $Id: globhist.c,v 1.8 2002/04/20 11:34:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include <config/default.h>
 #include <dialogs/globhist.h>
 #include <document/globhist.h>
+#include <util/secsave.h>
 
 
 #define GLOBHIST_MAX_ITEMS 4096
@@ -159,7 +160,7 @@ write_global_history()
 {
 	struct global_history_item *historyitem;
 	unsigned char *file_name;
-	FILE *out;
+	struct secure_save_info *ssi;
 
 	if (!enable_global_history)
 		return; 
@@ -167,9 +168,9 @@ write_global_history()
 	file_name = straconcat(links_home, "history", NULL);
 	if (!file_name) return;
 
-	out = fopen(file_name, "w");
+	ssi = secure_open(file_name, 0177); /* rw for user only */
 	mem_free(file_name);
-	if (!out) return;
+	if (!ssi) return;
 
 	foreachback (historyitem, global_history.items) {
 		unsigned char *p;
@@ -189,11 +190,13 @@ write_global_history()
 				p[i] = ' ';
 			}
 
-		fprintf(out, "%s\t%s\t%ld\n", historyitem->title,
-			historyitem->url, historyitem->last_visit);
+		if (secure_fprintf(ssi, "%s\t%s\t%ld\n",
+				   historyitem->title,
+				   historyitem->url,
+				   historyitem->last_visit) < 0) break;
 	}
 
-	fclose(out);
+	secure_close(ssi);
 }
 
 static void

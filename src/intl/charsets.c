@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.16 2002/11/29 22:46:38 pasky Exp $ */
+/* $Id: charsets.c,v 1.17 2002/11/29 23:19:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -547,6 +547,7 @@ get_cp_index(unsigned char *n)
 
 			if (!strcasecmp(n, codepages[i].aliases[a]))
 				return i;
+		}
 	}
 
 	return -1;

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.43 2002/10/07 20:37:47 pasky Exp $ */
+/* $Id: dialogs.c,v 1.44 2002/10/07 20:42:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ bookmark_dlg_box_build()
 
 
 /* Cleans up after the bookmark dialog */
-void
+static void
 bookmark_dialog_abort_handler(struct dialog_data *dlg)
 {
 	struct listbox_data *box;
@@ -95,7 +95,7 @@ void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *,
 
 
 /* Callback for the "add" button in the bookmark manager */
-int
+static int
 push_add_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	launch_bm_add_doc_dialog(dlg->win->term, dlg,
@@ -109,7 +109,7 @@ void launch_bm_search_doc_dialog(struct terminal *, struct dialog_data *,
 
 
 /* Callback for the "search" button in the bookmark manager */
-int
+static int
 push_search_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	launch_bm_search_doc_dialog(dlg->win->term, dlg,
@@ -118,7 +118,7 @@ push_search_button(struct dialog_data *dlg, struct widget_data *di)
 }
 
 
-void
+static void
 do_add_folder(struct dialog_data *dlg, unsigned char *name)
 {
 	struct widget_data *box_widget_data;
@@ -154,7 +154,7 @@ do_add_folder(struct dialog_data *dlg, unsigned char *name)
 #endif
 }
 
-int
+static int
 push_add_folder_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	input_field(dlg->win->term, NULL, TEXT(T_ADD_FOLDER), TEXT(T_FOLDER_NAME),
@@ -167,7 +167,7 @@ push_add_folder_button(struct dialog_data *dlg, struct widget_data *di)
 
 
 /* Called when the goto button is pushed */
-int
+static int
 push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 {
 	struct listbox_data *box;
@@ -186,7 +186,7 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 
 
 /* Called when an edit is complete. */
-void
+static void
 bookmark_edit_done(struct dialog *d) {
 	struct bookmark *bm = (struct bookmark *) d->udata2;
 
@@ -198,7 +198,7 @@ bookmark_edit_done(struct dialog *d) {
 #endif
 }
 
-void
+static void
 bookmark_edit_cancel(struct dialog *d) {
 	struct bookmark *bm = (struct bookmark *) d->udata2;
 
@@ -206,7 +206,7 @@ bookmark_edit_cancel(struct dialog *d) {
 }
 
 /* Called when the edit button is pushed */
-int
+static int
 push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 {
 	struct listbox_data *box;
@@ -240,7 +240,7 @@ struct push_del_button_hop_struct {
 
 
 /* Called to _really_ delete a bookmark (a confirm in the delete dialog) */
-void
+static void
 really_del_bookmark(void *vhop)
 {
 	struct push_del_button_hop_struct *hop;
@@ -301,7 +301,7 @@ really_del_bookmark(void *vhop)
 #endif
 }
 
-void
+static void
 cancel_del_bookmark(void *vhop)
 {	struct push_del_button_hop_struct *hop;
 
@@ -310,7 +310,7 @@ cancel_del_bookmark(void *vhop)
 }
 
 /* Callback for the "delete" button in the bookmark manager */
-int
+static int
 push_delete_button(struct dialog_data *dlg,
 		   struct widget_data *some_useless_delete_button)
 {
@@ -350,7 +350,7 @@ push_delete_button(struct dialog_data *dlg,
 	return 0;
 }
 
-int
+static int
 push_move_button(struct dialog_data *dlg,
 		 struct widget_data *blah)
 {
@@ -451,7 +451,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 \****************************************************************************/
 
 /* Adds the bookmark */
-void
+static void
 bookmark_add_add(struct dialog *d)
 {
 	struct widget_data *box_widget_data;
@@ -494,7 +494,7 @@ bookmark_add_add(struct dialog *d)
 
 
 /* Search bookmarks */
-void
+static void
 bookmark_search_do(struct dialog *d)
 {
 	struct listbox_item *item = bookmark_box_items.next;

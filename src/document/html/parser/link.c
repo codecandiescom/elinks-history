@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.28 2004/09/12 18:14:50 miciah Exp $ */
+/* $Id: link.c,v 1.29 2004/09/20 15:27:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,7 +251,7 @@ html_img(unsigned char *a)
 show_al:
 		/* This is not 100% appropriate for <img>, but well, accepting
 		 * accesskey and tabindex near <img> is just our little
-		 * extension to the standart. After all, it makes sense. */
+		 * extension to the standard. After all, it makes sense. */
 		html_focusable(a);
 
 		fg = format.fg;

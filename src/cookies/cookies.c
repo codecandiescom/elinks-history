@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.177 2004/11/10 19:24:09 jonas Exp $ */
+/* $Id: cookies.c,v 1.178 2004/11/10 21:20:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,7 @@ is_domain_security_ok(unsigned char *domain, unsigned char *server, int server_l
 
 	if (domain_len > server_len) return 0;
 
-	/* Ensure thay the domain is atleast a substring of the server before
+	/* Ensure that the domain is atleast a substring of the server before
 	 * continuing. */
 	if (strncasecmp(domain, server + server_len - domain_len, domain_len))
 		return 0;

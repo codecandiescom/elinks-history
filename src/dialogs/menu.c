@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.354 2004/07/18 04:01:55 jonas Exp $ */
+/* $Id: menu.c,v 1.355 2004/07/18 04:44:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -824,6 +824,8 @@ add_uri_command_to_menu(struct menu_item **mi)
  * start. First is the 'Directory:' or 'Files:' text and then a separator. */
 #define FILE_COMPLETION_MENU_OFFSET 2
 
+/* Builds the file completion menu. If there is only one item it is selected
+ * else the menu is launched. */
 static void
 complete_file_menu(struct terminal *term, int no_elevator, void *data,
 		   menu_func file_func, menu_func dir_func,
@@ -912,6 +914,8 @@ complete_file_menu(struct terminal *term, int no_elevator, void *data,
 	do_menu_selected(term, menu, data, FILE_COMPLETION_MENU_OFFSET, 0);
 }
 
+/* Prepares the launching of the file completion menu by expanding the @path
+ * and splitting it in directory and file name part. */
 void
 auto_complete_file(struct terminal *term, int no_elevator, unsigned char *path,
 		   menu_func file_func, menu_func dir_func, void *data)

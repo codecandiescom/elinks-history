@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.79 2004/09/28 16:28:25 pasky Exp $ */
+/* $Id: connection.h,v 1.80 2004/10/08 16:04:12 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -155,7 +155,6 @@ struct connection {
 
 	unsigned int id;
 
-	int pf; /* 1 == PF_INET, 2 == PF_INET6 */
 	enum connection_state state;
 	int prev_error;
 	int from;
@@ -174,6 +173,7 @@ struct connection {
 	int cgi_pipes[2];
 	int stream_pipes[2];
 
+	unsigned int protocol_family:1; /* 0 == PF_INET, 1 == PF_INET6 */
 	unsigned int running:1;
 	unsigned int unrestartable:1;
 	unsigned int detached:1;

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.172 2004/10/07 02:54:50 jonas Exp $ */
+/* $Id: ftp.c,v 1.173 2004/10/08 16:04:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -579,7 +579,7 @@ add_file_cmd_to_str(struct connection *conn)
 	if (get_opt_bool("protocol.ftp.use_epsv"))
 		c_i->use_epsv = 1;
 
-	if (!c_i->use_epsv && conn->pf == 2) {
+	if (!c_i->use_epsv && conn->protocol_family == 1) {
 		data_sock = get_pasv6_socket(conn, conn->socket.fd,
 		 	    (struct sockaddr_storage *) &data_addr);
 		if (data_sock < 0)
@@ -588,7 +588,7 @@ add_file_cmd_to_str(struct connection *conn)
 	}
 #endif
 
-	if (!c_i->use_pasv && conn->pf != 2) {
+	if (!c_i->use_pasv && conn->protocol_family != 1) {
 		data_sock = get_pasv_socket(conn, conn->socket.fd, pc);
 		if (data_sock < 0)
 			return NULL;
@@ -613,7 +613,7 @@ add_file_cmd_to_str(struct connection *conn)
 		add_crlf_to_string(&command);
 
 #ifdef CONFIG_IPV6
-		if (conn->pf == 2)
+		if (conn->protocol_family == 1)
 			if (c_i->use_epsv)
 				add_to_string(&command, "EPSV");
 			else
@@ -647,7 +647,7 @@ add_file_cmd_to_str(struct connection *conn)
 		add_crlf_to_string(&command);
 
 #ifdef CONFIG_IPV6
-		if (conn->pf == 2)
+		if (conn->protocol_family == 1)
 			if (c_i->use_epsv)
 				add_to_string(&command, "EPSV");
 			else
@@ -1128,9 +1128,9 @@ ftp_data_accept(struct connection *conn)
 
 	set_handlers(conn->data_socket.fd, NULL, NULL, NULL, NULL);
 
-	if ((conn->pf != 2 && c_i->use_pasv)
+	if ((conn->protocol_family != 1 && c_i->use_pasv)
 #ifdef CONFIG_IPV6
-	    || (conn->pf == 2 && c_i->use_epsv)
+	    || (conn->protocol_family == 1 && c_i->use_epsv)
 #endif
 	   ) {
 		newsock = conn->data_socket.fd;

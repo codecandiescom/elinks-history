@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.110 2004/10/07 02:54:50 jonas Exp $ */
+/* $Id: socket.c,v 1.111 2004/10/08 16:04:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,21 +440,21 @@ dns_found(void *data, int state)
 		addr.sin_port = htons(conn_info->port);
 #endif
 
-		/* We can set conn->pf here even if the connection will fail,
-		 * as we will use it only when it will be successfully
+		/* We can set conn->protocol_family here even if the connection
+		 * will fail, as we will use it only when it will be successfully
 		 * established. At least I hope that noone else will want to do
 		 * something else ;-). --pasky */
 
 #ifdef CONFIG_IPV6
 		if (addr.sin6_family == AF_INET6) {
-			conn->pf = 2;
+			conn->protocol_family = 1;
 			if (connect(sock, (struct sockaddr *) &addr,
 					sizeof(struct sockaddr_in6)) == 0)
 				break;
 		} else
 #endif
 		{
-			conn->pf = 1;
+			conn->protocol_family = 0;
 			if (connect(sock, (struct sockaddr *) &addr,
 					sizeof(struct sockaddr_in)) == 0)
 				break; /* success */

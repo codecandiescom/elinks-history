@@ -1,3 +1,309 @@
+Sun Oct 10 20:39:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/exmode.c:
+
+	Gee, can't you guys grep? 
+
+Sun Oct 10 20:36:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	To avoid stability (and relieve the memory and CPU a little), in
+	init_vs() just set ecmascript_fragile and let vs->ecmascript be
+	created magically on demand.  
+
+Sun Oct 10 20:33:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	assert(vs->ecmascript) only unless vs->ecmascript_fragile - in that
+	case vs->ecmascript might not be created yet, we do it on-demand for
+	copy_vs()'d vses.  
+
+Sun Oct 10 20:17:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/ecmascript.c:
+
+	assert() that at the time of ecmascript_protocol_handler(), the
+	associated vs will always have its ecmascript interpreter.  
+
+Sun Oct 10 20:17:15 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	In do_action, do not call the routines corresponding to the movement
+	and scrolling actions when |doc_view| is NULL.  
+	
+	This prevents crashes when using those actions before loading any
+	documents.  
+
+Sun Oct 10 20:12:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Resurrect the assert()ion commented out as a temporary bug 521
+	measure. I'm gonna trace it and find it out and nothing will stay in
+	my way to justice! 
+
+Sun Oct 10 20:08:22 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	try_jump_to_link_number: Return 0 if there is a prefix and
+	|doc_view| is NULL.  
+
+Sun Oct 10 19:31:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/inpfield.c, bfu/menu.c, viewer/text/search.c:
+
+	input_line_event_handler: 
+	
+	 - Give the input line's handler a shot at EVENT_RESIZE events,
+	   passing them ACT_EDIT_REDRAW, as we do for EVENT_REDRAW events.  
+	
+	 - Return EVENT_NOT_PROCESSED just the same, because we want 
+	   input_line_event_handler's caller to perform its redraw as well.  
+	
+	menu_search_handler: Return immediately on ACT_EDIT_REDRAW.  
+	
+	exmode_input_handler: No change necessary.  
+	
+	text_typeahead_handler: Return immediately on ACT_EDIT_REDRAW.  
+	
+	link_typeahead_handler: Handle ACT_EDIT_REDRAW by redrawing the
+	highlighting for search matches.  
+	
+	This fixes bug 530, 'Terminal resizing and Ctrl-L removes typeahead
+	search highlighting'.  
+
+Sun Oct 10 18:04:03 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inpfield.c:
+
+	In input_line_event_handler, when handling a redraw event, set
+	|action| to |ACT_EDIT_REDRAW| instead of to |ACT_EDIT_NONE| so as to
+	give the input-line handler a more semantically correct action
+	value.  
+
+Sun Oct 10 17:23:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Drop the inline keyword from draw_typeahead_match, which is big and
+	has only one caller.  
+
+Sun Oct 10 15:31:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/status.c:
+
+	Introduce get_current_link_info_and_title and use it in
+	print_screen_status to display the title of the selected link, if it
+	has one, in the status bar.  
+	
+	This fixes bug 127.  
+
+Sun Oct 10 08:53:35 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Sun Oct 10 04:40:58 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/options.inc, viewer/text/view.c:
+
+	Add an option document.browse.search.typeahead that allows one to
+	configure typeahead searching to start automatically whenever one
+	presses an unbound key with no modifier. The option can be set to
+	disabled, search link text, or search document text.  
+
+Sun Oct 10 04:02:44 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev_kbd, initialise |status| to |FRAME_EVENT_IGNORED| as it
+	was eventually assigned that value anyway at the end of the routine,
+	which assignment is now removed.  
+
+Sun Oct 10 03:56:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Delete the |if (status != FRAME_EVENT_IGNORED)
+	ses->kbdprefix.repeat_count| at the end of frame_ev_kbd and reset
+	|ses->kbdprefix.repeat_count| at the one point from which execution
+	could have flow to that if statement without |status| being
+	|FRAME_EVENT_IGNORED|.  
+
+Sun Oct 10 03:51:04 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev_kbd, now that it has only one case remaining, remove the
+	switch statement from around its single case.  
+
+Sun Oct 10 03:47:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Reset |ses->kbdprefix.repeat_count| to zero after handling a
+	document accesskey when document.browse.accesskey.priority = 2.  
+
+Sun Oct 10 03:12:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	Change do_frame_action to take a doc_view instead of calling 
+	current_frame itelf. Change do_action, the only caller of
+	do_frame_action, to pass do_frame_action doc_view.  
+
+Sun Oct 10 02:56:34 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: sched/action.c, viewer/text/view.c:
+
+	Handle ACT_MAIN_JUMP_TO_LINK, ACT_MAIN_MARK_SET, and
+	ACT_MAIN_MARK_SET in do_action instead of in frame_ev_kbd.  
+
+Sun Oct 10 02:51:55 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: sched/action.c, viewer/text/view.c:
+
+	Handle prefixes for ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, 
+	ACT_MAIN_OPEN_LINK_IN_NEW_TAB, ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW, and 
+	ACT_MAIN_LINK_MENU in do_action instead of in frame_ev_kbd.  
+
+Sun Oct 10 02:42:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	Change do_frame_action to return enum frame_event_status and to
+	return FRAME_EVENT_OK on error or else pass on the return of the
+	frame_action passed to it.  Further, remove the refresh code from
+	do_frame_action and let do_action handle it.  
+
+Sun Oct 10 02:27:18 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	Clean up the refresh code in do_action and, as a side effect, change
+	it to return FRAME_EVENT_REFRESH when a refresh is needed (even tho
+	none of do_action's callers will do anything about it, not that they
+	need to as do_action performs any necessary refresh).  
+
+Sun Oct 10 02:23:31 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	move_link and move_link_dir, too.  
+
+Sun Oct 10 01:58:58 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Zero |ses->kbdprefix.repeat_count| after using it in move_page_down, 
+	move_page_up, scroll_up, scroll_down, scroll_left, scroll_right, 
+	move_cursor_left, move_cursor_right, move_cursor_up, and
+	move_cursor_down.  
+	
+	This fixes refreshing when using a prefix with one of the actions 
+	that correspond to these routines. The repeat count was already 
+	being reset, but only after the status line was being updated.  
+
+Sun Oct 10 01:53:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Eliminate the kbdprefix_repeat_count_or_one macro.  
+
+Sun Oct 10 01:46:57 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: view.c, view.h:
+
+	Convert move_cursor_left, move_cursor_right, move_cursor_up, and
+	move_cursor_down from macros to C routines.  
+
+Sun Oct 10 00:43:33 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/exmode.c, sched/action.c, sched/action.h,
+	viewer/text/view.c, viewer/text/view.h:
+
+	Add FRAME_EVENT_SESSION_DESTROYED to enum frame_event_status.  
+	
+	Change do_action to return enum frame_event_status instead of enum
+	main_action, to use FRAME_EVENT_SESSION_DESTROYED as appropriate, 
+	and to use FRAME_EVENT_IGNORED instead of ACT_MAIN_NONE to indicate
+	that the action was not handled.  
+	
+	Change exmode_action_handler to cope.  
+	
+	Remove the hack in send_kbd_event that checks whether the action is
+	one that might close the tab and instead check whether do_action 
+	returns FRAME_EVENT_SESSION_DESTROYED.  
+
+Sat Oct  9 23:57:01 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Oops, I misindented some code in June (revision 1.477). Fix.  
+
+Sat Oct  9 23:36:33 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Nope, that wa'n't right. Revert.  
+
+Sat Oct  9 23:31:48 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In honour of Jonas' sledgehammer, crudely fix refreshing after
+	actions that are given numeric prefixes.  
+
+Sat Oct  9 23:00:33 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	In do_action, call copy_current_link_to_clipboard via
+	do_frame_action and drop the try_jump_to_link_number call from 
+	copy_current_link_to_clipboard as do_frame_action will do it.  
+
+Sat Oct  9 22:51:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	Handle ACT_MAIN_COPY_CLIPBOARD in do_action instead of in
+	frame_kbd_ev.  This requires that copy_current_link_to_clipboard be
+	exported.  
+
+Sat Oct  9 22:43:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Factor out the code in frame_ev_kbd to handle
+	ACT_MAIN_COPY_CLIPBOARD into a new procedure,
+	copy_current_link_to_clipboard.  
+
+Sat Oct  9 22:32:54 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.h:
+
+	Introduce the macro kbdprefix_repeat_count_or_one and use it in the
+	macros move_cursor_left, move_cursor_right, move_cursor_up, and
+	move_cursor_down to support prefixes for the corresponding actions.  
+
+Sat Oct  9 22:19:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	Handle the following in do_action instead of in frame_ev_kbd: 
+	
+	ACT_MAIN_MOVE_CURSOR_UP ACT_MAIN_MOVE_CURSOR_DOWN 
+	ACT_MAIN_MOVE_CURSOR_LEFT ACT_MAIN_MOVE_CURSOR_RIGHT 
+	
+	This required that move_cursor be exposed as well as the macros 
+	move_cursor_left, move_cursor_right, move_cursor_up, and
+	move_cursor_down.  
+
 Sat Oct  9 22:06:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.177 2004/07/20 19:01:15 jonas Exp $ */
+/* $Id: dialogs.c,v 1.178 2004/07/21 23:27:38 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -196,7 +196,7 @@ push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 
 
 static void
-add_bookmark_after_selected(struct bookmark *bookmark, struct bookmark *selected)
+move_bookmark_after_selected(struct bookmark *bookmark, struct bookmark *selected)
 {
 	if (selected == bookmark->root
 	    || !selected
@@ -249,7 +249,7 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 	bm = add_bookmark(bm, 1, name, NULL);
 	if (!bm) return;
 
-	add_bookmark_after_selected(bm, selected);
+	move_bookmark_after_selected(bm, selected);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -513,7 +513,7 @@ bookmark_add_add(struct dialog *dlg)
 	bm = add_bookmark(bm, 1, dlg->widgets[0].data, dlg->widgets[1].data);
 	if (!bm) return;
 
-	add_bookmark_after_selected(bm, selected);
+	move_bookmark_after_selected(bm, selected);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();

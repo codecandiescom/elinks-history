@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.59 2003/10/24 23:39:48 pasky Exp $ */
+/* $Id: auth.c,v 1.60 2003/10/25 12:31:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,18 +134,14 @@ do_auth_dialog(struct session *ses)
 		a->realm, a->url);
 
 #define AUTH_DLG_SIZE 4
-#define SIZEOF_DLG (sizeof(struct dialog) + (AUTH_DLG_SIZE + 1) * sizeof(struct widget))
-
-	dlg = mem_calloc(1, SIZEOF_DLG + strlen(sticker) + 1);
+	dlg = calloc_dialog(AUTH_DLG_SIZE, strlen(sticker) + 1);
 	if (!dlg) return;
 
 	dlg->title = _("HTTP Authentication", term);
 	dlg->fn = auth_layout;
 
-	dlg->udata = (char *)dlg + SIZEOF_DLG;
+	dlg->udata = (char *)dlg + sizeof_dialog(AUTH_DLG_SIZE, 0);
 	strcpy(dlg->udata, sticker);
-
-#undef SIZEOF_DLG
 
 	dlg->udata2 = a;
 	dlg->refresh_data = ses;

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.62 2003/05/03 21:00:25 pasky Exp $ */
+/* $Id: terminal.c,v 1.63 2003/05/03 22:42:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -522,6 +522,7 @@ init_term(int fdin, int fdout,
 
 	win = mem_calloc(1, sizeof(struct window));
 	if (!win) {
+		del_from_list(term);
 		mem_free(term);
 		check_if_no_terminal();
 		return NULL;

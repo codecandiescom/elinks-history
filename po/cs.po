@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-12 23:58+0100\n"
-"PO-Revision-Date: 2003-12-11 11:40+0100\n"
+"PO-Revision-Date: 2003-12-13 00:13+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4136,13 +4136,12 @@ msgid "Go ~back"
 msgstr "~Zpátky"
 
 #: src/dialogs/menu.c:325
-#, fuzzy
 msgid "Go for~ward"
-msgstr "K~upøedu"
+msgstr "~Kupøedu"
 
 #: src/dialogs/menu.c:331 src/dialogs/menu.c:387
 msgid "Bookm~ark document"
-msgstr "Boo~kmarknout dokument"
+msgstr "Bookmark~nout dokument"
 
 #: src/dialogs/menu.c:335 src/dialogs/menu.c:376
 msgid "~Reload"

@@ -1,5 +1,10 @@
 Known bugs:
 
+- Go to http://www.computing.net/mac/wwwboard/forum/6268.html [;-)]
+  Goto the end of page, put cursor in Image URL: field,
+  then press up key, cursor will loop in some of the fields, but will never
+  enter the textarea field.
+
 - With some opened tabs, go to freshmeat.net, when page is loaded,
   click on main menu bar to open it, then click in the center of screen,
   some form fields will be printed over current screen, but disappear on next action...
@@ -54,4 +59,4 @@ Known bugs:
 Key: - nothing done + work in progress * almost fixed
      (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.49 2003/05/06 08:38:09 zas Exp $
+$Id: BUGS,v 1.50 2003/05/06 09:00:44 zas Exp $

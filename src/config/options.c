@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.436 2004/02/11 10:12:34 zas Exp $ */
+/* $Id: options.c,v 1.437 2004/03/05 10:41:11 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -503,6 +503,25 @@ delete_option_do(struct option *option, int recursive)
 }
 
 void
+mark_option_as_deleted(struct option *option)
+{
+	switch (option->type) {
+		case OPT_TREE:
+			if (!option->value.tree) break;
+			free_options_tree(option->value.tree, 1);
+			break;
+		default:
+			break;
+	}
+
+	if (option->box_item) {
+		done_listbox_item(&option_browser, option->box_item);
+		option->box_item = NULL;
+	}
+	option->flags |= OPT_TOUCHED | OPT_DELETED;
+}
+
+void
 delete_option(struct option *option)
 {
 	delete_option_do(option, 1);
@@ -643,6 +662,19 @@ unmark_options_tree(struct list_head *tree)
 		option->flags &= ~OPT_WATERMARK;
 		if (option->type == OPT_TREE)
 			unmark_options_tree(option->value.tree);
+	}
+}
+
+void
+watermark_deleted_options(struct list_head *tree)
+{
+	struct option *option;
+
+	foreach (option, *tree) {
+		if (option->flags & OPT_DELETED)
+			option->flags |= OPT_WATERMARK;
+		else if (option->type == OPT_TREE)
+			watermark_deleted_options(option->value.tree);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.130 2004/02/04 23:13:56 pasky Exp $ */
+/* $Id: conf.c,v 1.131 2004/03/05 10:41:10 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,9 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 		struct option *opt;
 		unsigned char *val;
 
-		opt = get_opt_rec(opt_tree, optname);
+		if (mirror) {
+			opt = get_opt_rec_real(opt_tree, optname);
+		} else opt = get_opt_rec(opt_tree, optname);
 		mem_free(optname);
 
 		if (!opt || (opt->flags & OPT_HIDDEN))
@@ -136,7 +138,9 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 		if (!val) {
 			return ERROR_VALUE;
 		} else if (mirror) {
-			opt->flags |= OPT_WATERMARK;
+			if (opt->flags & OPT_DELETED)
+				opt->flags &= ~OPT_WATERMARK;
+			else opt->flags |= OPT_WATERMARK;
 			if (option_types[opt->type].write) {
 				option_types[opt->type].write(opt, mirror);
 			}
@@ -177,20 +181,26 @@ parse_unset(struct option *opt_tree, unsigned char **file, int *line,
 	optname = stracpy(optname);
 	if (!optname) return ERROR_NOMEM;
 	**file = bin;
-
+	
 	/* Mirror what we have */
 	if (mirror) add_bytes_to_string(mirror, orig_pos, *file - orig_pos);
-
 	{
 		struct option *opt;
 
-		opt = get_opt_rec(opt_tree, optname);
+		opt = get_opt_rec_real(opt_tree, optname);
 		mem_free(optname);
 
 		if (!opt || (opt->flags & OPT_HIDDEN))
 			return ERROR_OPTION;
 
-		delete_option(opt);
+		if (!mirror) {
+			if (opt->flags & OPT_ALLOC) delete_option(opt);
+		}
+		else {
+			if (opt->flags & OPT_DELETED) 
+				opt->flags |= OPT_WATERMARK;
+			else opt->flags &= ~OPT_WATERMARK;
+		}
 	}
 
 	return ERROR_NONE;
@@ -593,18 +603,23 @@ split:
 			if (depth)
 				add_xchar_to_string(string, ' ',
 						    depth * indentation);
+			if (option->flags & OPT_DELETED) {
+				add_to_string(string, "un");
+			}
 			add_to_string(string, "set ");
 			if (path) {
 				add_to_string(string, path);
 				add_char_to_string(string, '.');
 			}
 			add_to_string(string, option->name);
-			add_to_string(string, " = ");
+			if (!(option->flags & OPT_DELETED)) {
+				add_to_string(string, " = ");
 			/* OPT_ALIAS won't ever. OPT_TREE won't reach action 2.
 			 * OPT_SPECIAL makes no sense in the configuration
 			 * context. */
-			assert(option_types[option->type].write);
-			option_types[option->type].write(option, string);
+				assert(option_types[option->type].write);
+				option_types[option->type].write(option, string);
+			}
 			add_char_to_string(string, '\n');
 			if (do_print_comment) add_char_to_string(string, '\n');
 			break;
@@ -636,12 +651,14 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 		touching = 0;
 	}
 
+	if (savestyle == 2) watermark_deleted_options(options->value.tree);
+
 	/* Scaring. */
 	if (savestyle == 2
 	    || (savestyle < 2
 		&& (load_config_file(prefix, name, options, &config)
 		    || !config.length))) {
-		/* At first line, and in english, write ELinks version, may be
+		/* At first line, and in English, write ELinks version, may be
 		 * of some help in future. Please keep that format for it.
 		 * --Zas */
 		add_to_string(&config, "## ELinks " VERSION " configuration file\n\n");

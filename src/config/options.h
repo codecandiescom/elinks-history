@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.96 2004/02/06 12:31:08 jonas Exp $ */
+/* $Id: options.h,v 1.97 2004/03/05 10:41:10 witekfl Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -54,6 +54,8 @@ enum option_flags {
 	 * config_options root tree. Especially NOT RECOMMENDED to be used on
 	 * the template trees. */
 	OPT_SORT = 64,
+	/* This is used to mark option as deleted */
+	OPT_DELETED = 128
 };
 
 enum option_type {
@@ -149,13 +151,14 @@ extern void register_change_hooks(struct change_hook_info *change_hooks);
 
 extern struct list_head *init_options_tree(void);
 extern void unmark_options_tree(struct list_head *);
+void watermark_deleted_options(struct list_head *);
 
 extern void smart_config_string(struct string *, int, int, struct list_head *, unsigned char *, int,
 				void (*)(struct string *, struct option *, unsigned char *, int, int, int, int));
 
 extern struct option *copy_option(struct option *);
 extern void delete_option(struct option *);
-
+void mark_option_as_deleted(struct option *);
 
 /* Some minimal option cache */
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.315 2003/10/19 11:31:15 zas Exp $ */
+/* $Id: options.c,v 1.316 2003/10/19 13:31:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -891,19 +891,20 @@ register_options(void)
 		"bookmarks", 0,
 		N_("Bookmark options."));
 
+#ifdef HAVE_LIBEXPAT
 	add_opt_int("bookmarks", N_("File format"),
 		"file_format", 0, 0, 1, 0,
-#ifdef HAVE_LIBEXPAT
 		N_("File format for bookmarks (affects both reading and saving):\n"
 		"0 is the default ELinks (Links 0.9x compatible) format\n"
-		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)")
+		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"));
 #else
+	add_opt_int("bookmarks", N_("File format"),
+		"file_format", 0, 0, 1, 0,
 		N_("File format for bookmarks (affects both reading and saving):\n"
 		"0 is the default ELinks (Links 0.9x compatible) format\n"
 		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
-		" (DISABLED)")
+		" (DISABLED)"));
 #endif
-	);
 
 	add_opt_tree("", N_("Configuration system"),
 		"config", 0,

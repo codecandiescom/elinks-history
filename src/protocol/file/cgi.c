@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.46 2004/01/01 13:58:44 jonas Exp $ */
+/* $Id: cgi.c,v 1.47 2004/01/01 15:36:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ set_vars(struct connection *conn, unsigned char *script)
 	/* TODO: HTTP auth support. On the other side, it was weird over CGI
 	 * IIRC. --pasky */
 
-#ifdef COOKIES
+#ifdef CONFIG_COOKIES
 	{
 		struct string *cookies = send_cookies(&conn->uri);
 

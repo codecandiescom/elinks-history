@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.324 2004/01/01 14:24:10 jonas Exp $ */
+/* $Id: view.c,v 1.325 2004/01/01 15:36:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1105,7 +1105,7 @@ quak:
 				menu_cache_manager(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_COOKIE_MANAGER:
-#ifdef COOKIES
+#ifdef CONFIG_COOKIES
 				menu_cookie_manager(ses->tab->term, NULL, ses);
 #endif
 				goto x;
@@ -1132,7 +1132,7 @@ quak:
 					menu_keybinding_manager(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
-#ifdef COOKIES
+#ifdef CONFIG_COOKIES
 				if (!get_opt_int_tree(cmdline_options, "anonymous")
 				    && get_opt_int("cookies.save"))
 					load_cookies();

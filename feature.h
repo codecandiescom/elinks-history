@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.28 2004/01/01 15:14:47 pasky Exp $ */
+/* $Id: feature.h,v 1.29 2004/01/01 15:36:17 jonas Exp $ */
 
 #ifndef EL__DOTDOT_FEATURE_H
 #define EL__DOTDOT_FEATURE_H
@@ -99,7 +99,7 @@
  *
  * Default: enabled */
 
-#define COOKIES
+#define CONFIG_COOKIES
 
 
 /*** Global History

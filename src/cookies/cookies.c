@@ -1,9 +1,11 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.115 2003/12/23 12:08:34 jonas Exp $ */
+/* $Id: cookies.c,v 1.116 2004/01/01 15:36:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef CONFIG_COOKIES
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,8 +74,6 @@ struct c_server {
 static INIT_LIST_HEAD(c_servers);
 
 static int cookies_dirty = 0;
-
-#ifdef COOKIES
 
 enum cookies_option {
 	COOKIES_TREE,
@@ -824,4 +824,4 @@ struct module cookies_module = struct_module(
 	/* done: */		done_cookies
 );
 
-#endif /* COOKIES */
+#endif /* CONFIG_COOKIES */

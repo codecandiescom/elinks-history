@@ -1,12 +1,11 @@
 /* Tool for testing of cookies string parser */
-/* $Id: parsetst.c,v 1.5 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: parsetst.c,v 1.6 2004/01/01 15:36:18 jonas Exp $ */
 
-#if 0
-/* Dunno.. --pasky */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-#endif
+
+#ifdef CONFIG_COOKIES
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,3 +46,5 @@ main(int argc, char *argv[])
 		free(cstr.str);
 	}
 }
+
+#endif /* CONFIG_COOKIES */

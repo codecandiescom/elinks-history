@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.232 2003/12/26 23:53:24 zas Exp $ */
+/* $Id: http.c,v 1.233 2004/01/01 15:36:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -621,7 +621,7 @@ http_send_header(struct connection *conn)
 		add_to_string(&header, "\r\n");
 	}
 
-#ifdef COOKIES
+#ifdef CONFIG_COOKIES
 	{
 		struct string *cookies = send_cookies(uri);
 
@@ -1053,7 +1053,7 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
 	unsigned char *head;
-#ifdef COOKIES
+#ifdef CONFIG_COOKIES
 	unsigned char *cookie, *ch;
 #endif
 	unsigned char *d;
@@ -1137,7 +1137,7 @@ http_error:
 		if (h == 101) goto http_error;
 	}
 
-#ifdef COOKIES
+#ifdef CONFIG_COOKIES
 	ch = head;
 	while ((cookie = parse_http_header(ch, "Set-Cookie", &ch))) {
 		set_cookie(uri, cookie);

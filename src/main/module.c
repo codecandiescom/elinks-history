@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.23 2004/01/01 14:24:09 jonas Exp $ */
+/* $Id: module.c,v 1.24 2004/01/01 15:36:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@ struct module *builtin_modules[] = {
 #ifdef CONFIG_BOOKMARKS
 	&bookmarks_module,
 #endif
-#ifdef COOKIES
+#ifdef CONFIG_COOKIES
 	&cookies_module,
 #endif
 #ifdef CONFIG_FORMHIST

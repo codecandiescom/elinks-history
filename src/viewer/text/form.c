@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.106 2004/05/26 10:34:54 zas Exp $ */
+/* $Id: form.c,v 1.107 2004/05/28 16:50:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -767,6 +767,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 	uri = get_uri(go.source, -1);
 	done_string(&go);
+	if (uri) uri->form = 1;
 
 	return uri;
 }

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.101 2004/05/26 16:22:09 jonas Exp $ */
+/* $Id: uri.h,v 1.102 2004/05/28 16:50:43 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -51,7 +51,8 @@ struct uri {
 	int datalen:16;
 
 	/* Flags */
-	unsigned int ipv6:1;
+	unsigned int ipv6:1;	/* URI contains IPv6 host */
+	unsigned int form:1;	/* URI originated from form */
 
 	/* Usage count object. */
 	struct object object;

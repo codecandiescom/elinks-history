@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.87 2004/05/27 12:19:57 jonas Exp $ */
+/* $Id: task.c,v 1.88 2004/05/28 16:50:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,9 +106,10 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	 void (*fn)(struct download *, struct session *),
 	 int redir)
 {
-	struct task *task = mem_alloc(sizeof(struct task));
+	struct task *task = uri->form ? mem_alloc(sizeof(struct task)) : NULL;
 	unsigned char *m1, *m2;
-	struct cache_entry *cached;
+	struct cache_entry *referrer = NULL;
+	int confirm_submit = uri->form;
 
 	if (ses->doc_view
 	    && ses->doc_view->document
@@ -121,13 +122,36 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	/* Do it here because it might be ses->goto_position being passed */
 	pos = null_or_stracpy(pos);
 
-	if (!task
-	    || !uri->post
-	    || !get_opt_int("document.browse.forms.confirm_submit")
-	    || (cache_mode == CACHE_MODE_ALWAYS
-		&& (cached = find_in_cache(uri))
-		&& !cached->incomplete)) {
+	/* Figure out whether to confirm submit or not */
 
+	/* Only confirm submit if we are posting form data */
+	if (!task || !uri->form) {
+		confirm_submit = 0;
+
+	} else {
+		struct cache_entry *cached;
+
+		/* First check if the referring URI was incomplete. It
+		 * indicates that the posted form data might be incomplete too.
+		 * See bug 460. */
+		if (ses->referrer)
+			referrer = find_in_cache(ses->referrer);
+
+		if (!get_opt_int("document.browse.forms.confirm_submit")
+		    && (!referrer || !referrer->incomplete)) {
+			confirm_submit = 0;
+
+		} else {
+			/* Finally check the cache */
+			if (cache_mode == CACHE_MODE_ALWAYS
+			    && (cached = find_in_cache(uri))
+			    && !cached->incomplete) {
+				confirm_submit = 0;
+			}
+		}
+	}
+
+	if (!confirm_submit) {
 		mem_free_if(task);
 
 		mem_free_set(&ses->goto_position, pos);
@@ -159,8 +183,14 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	if (redir) {
 		m1 = N_("Do you want to follow redirect and post form data "
 			"to URL %s?");
+
+	} else if (referrer && referrer->incomplete) {
+		m1 = N_("The form data you are about to post might be incomplete.\n"
+			"Do you want to post to URL %s?");
+
 	} else if (task_type == TASK_FORWARD) {
 		m1 = N_("Do you want to post form data to URL %s?");
+
 	} else {
 		m1 = N_("Do you want to repost form data to URL %s?");
 	}

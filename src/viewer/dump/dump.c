@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.134 2004/06/12 18:05:54 zas Exp $ */
+/* $Id: dump.c,v 1.135 2004/06/17 09:01:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,8 +136,7 @@ subst_url(unsigned char *str, struct string *url)
 	while (*str) {
 		int p;
 
-		for (p = 0; str[p] && str[p] != '%' && str[p] != '\\'; p++)
-			;
+		for (p = 0; str[p] && str[p] != '%' && str[p] != '\\'; p++);
 
 		add_bytes_to_string(&string, str, p);
 		str += p;
@@ -358,13 +357,15 @@ dump_to_file(struct document *document, int fd)
 {
 #define D_BUF	65536
 
-	int x, y;
+	int y;
 	int bptr = 0;
 	unsigned char *buf = mem_alloc(D_BUF);
 
 	if (!buf) return -1;
 
 	for (y = 0; y < document->height; y++) {
+		int x;
+
 		for (x = 0; x <= document->data[y].length; x++) {
 			unsigned char c;
 
@@ -397,7 +398,8 @@ fail:
 
 	if (get_opt_bool("document.browse.links.numbering")
 	    && document->nlinks) {
-		char *header = "\nReferences\n\n   Visible links\n";
+		int x;
+		unsigned char *header = "\nReferences\n\n   Visible links\n";
 		int headlen = strlen(header);
 
 		if (hard_write(fd, header, headlen) != headlen)

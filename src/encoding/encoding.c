@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.9 2003/05/08 23:03:08 zas Exp $ */
+/* $Id: encoding.c,v 1.10 2003/05/20 10:07:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "util/encoding.h"
 #include "util/memory.h"
 
+unsigned char *encoding_names[NB_KNOWN_ENCODING];
 
 /* TODO: When more decoders will join the game, we should probably move them
  * to separate files, maybe even to separate directory. --pasky */

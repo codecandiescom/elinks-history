@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.95 2003/05/17 00:00:58 zas Exp $ */
+/* $Id: menu.c,v 1.96 2003/05/20 10:07:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "config/conf.h"
 #include "config/dialogs.h"
 #include "config/options.h"
+#include "config/urlhist.h"
 #include "dialogs/document.h"
 #include "dialogs/info.h"
 #include "dialogs/menu.h"
@@ -609,8 +610,6 @@ activate_bfu_technology(struct session *ses, int item)
 	do_mainmenu(ses->tab->term, main_menu, ses, item);
 }
 
-/* XXX: Used at foreign places. */
-struct input_history goto_url_history = { 0, {D_LIST_HEAD(goto_url_history.items)} };
 
 void
 dialog_goto_url(struct session *ses, char *url)

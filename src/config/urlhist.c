@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.21 2003/05/13 22:37:30 pasky Exp $ */
+/* $Id: urlhist.c,v 1.22 2003/05/20 10:07:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,8 +19,7 @@
 #include "util/string.h"
 
 
-/* FIXME: This should be in some .h file! */
-extern struct input_history goto_url_history;
+struct input_history goto_url_history;
 
 int history_dirty = 0;
 int history_nosave = 0;

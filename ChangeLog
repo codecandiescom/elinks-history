@@ -1,3 +1,25 @@
+Fri Sep 17 17:21:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Mention support for specifying IP family as protocol postfix.  
+
+Fri Sep 17 17:14:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Fix typo and reference the generated features.log.  
+
+Fri Sep 17 13:08:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Only send the "ProxyAuthorization" HTTP header if really talking to
+	a proxy.  Before it was sent always if protocol.http.proxy.user was
+	defined.  
+	
+	Patch by Timo Lindfors. Updated by me.  
+
 Fri Sep 17 12:23:07 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* po/pl.po:

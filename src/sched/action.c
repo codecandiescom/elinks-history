@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.110 2004/10/14 18:04:30 jonas Exp $ */
+/* $Id: action.c,v 1.111 2004/10/16 19:57:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -466,7 +466,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_TAB_NEXT:
-			switch_to_next_tab(term);
+			switch_current_tab(ses, 1);
 			break;
 
 		case ACT_MAIN_TAB_MOVE_LEFT:
@@ -491,7 +491,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_TAB_PREV:
-			switch_to_prev_tab(term);
+			switch_current_tab(ses, -1);
 			break;
 
 		case ACT_MAIN_TAB_CLOSE:

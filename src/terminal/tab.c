@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.73 2004/09/26 00:28:24 pasky Exp $ */
+/* $Id: tab.c,v 1.74 2004/10/16 19:57:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,25 +140,15 @@ switch_to_tab(struct terminal *term, int tab, int tabs)
 }
 
 void
-switch_to_next_tab(struct terminal *term)
+switch_current_tab(struct session *ses, int direction)
 {
+	struct terminal *term = ses->tab->term;
 	int num_tabs = number_of_tabs(term);
 
 	if (num_tabs < 2)
 		return;
 
-	switch_to_tab(term, term->current_tab + 1, num_tabs);
-}
-
-void
-switch_to_prev_tab(struct terminal *term)
-{
-	int num_tabs = number_of_tabs(term);
-
-	if (num_tabs < 2)
-		return;
-
-	switch_to_tab(term, term->current_tab - 1, num_tabs);
+	switch_to_tab(term, term->current_tab + direction, num_tabs);
 }
 
 static void

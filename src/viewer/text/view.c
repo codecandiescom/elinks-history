@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.620 2004/10/14 18:13:27 jonas Exp $ */
+/* $Id: view.c,v 1.621 2004/10/16 19:57:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -973,10 +973,10 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 		}
 
 		if (check_mouse_button(ev, B_WHEEL_UP)) {
-			switch_to_prev_tab(term);
+			switch_current_tab(ses, -1);
 
 		} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
-			switch_to_next_tab(term);
+			switch_current_tab(ses, 1);
 
 		} else if (tab_num != -1) {
 			switch_to_tab(term, tab_num, -1);

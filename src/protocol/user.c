@@ -1,10 +1,11 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.62 2004/04/02 22:04:04 jonas Exp $ */
+/* $Id: user.c,v 1.63 2004/04/05 01:17:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <stdlib.h>
 
 #include "elinks.h"
@@ -40,7 +41,12 @@ get_user_program(struct terminal *term, unsigned char *progid, int progidlen)
 	}
 
 	add_to_string(&name, "protocol.user.");
+
+	/* Now add lowercased progid part. Delicious. */
 	add_bytes_to_string(&name, progid, progidlen);
+	convert_to_lowercase(&name.source[14], progidlen);
+	assert(sizeof("protocol.user.") - 1 == 14);
+
 	add_char_to_string(&name, '.');
 	add_to_string(&name, system_str);
 	mem_free(system_str);

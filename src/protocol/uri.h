@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.84 2004/04/04 22:30:54 jonas Exp $ */
+/* $Id: uri.h,v 1.85 2004/04/05 01:17:20 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -95,6 +95,19 @@ enum uri_component {
 
 
 /* A small URI struct cache to increase reusability. */
+/* XXX: Now there are a few rules to abide.
+ *
+ * Any URI string that should be registered in the cache has to have lowercased
+ * both the protocol and hostname parts. This is strictly checked and will
+ * otherwise cause an assertion failure.
+ *
+ * However this will not be a problem if you either first call join_urls()
+ * which you want to do anyway to resolve relative references or use the
+ * get_translated_uri() interface.
+ *
+ * The remaining support for RFC 2391 section 3.1 is done through get_protocol()
+ * and get_user_program() which will treat upper case letters
+ * as equivalent to lower case in protocol names. */
 
 /* Register a new URI in the cache. If @length is -1 strlen(@string) is used as
  * the length. */

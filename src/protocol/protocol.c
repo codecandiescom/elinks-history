@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.37 2004/04/04 04:15:02 jonas Exp $ */
+/* $Id: protocol.c,v 1.38 2004/04/05 01:17:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ get_protocol(unsigned char *name, int namelen)
 		unsigned char *pname = protocol_backends[protocol]
 				     ? protocol_backends[protocol]->name : NULL;
 
-		if (pname && !strlcmp(pname, -1, name, namelen))
+		if (pname && !strlcasecmp(pname, -1, name, namelen))
 			break;
 	}
 

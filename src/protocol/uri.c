@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.130 2004/04/04 22:30:54 jonas Exp $ */
+/* $Id: uri.c,v 1.131 2004/04/05 01:17:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -347,6 +347,13 @@ translate_directories(unsigned char *uristring)
 	if (parse_uri(&uri, uristring) != URI_ERRNO_OK
 	    || !uri.data/* || *--url_data != '/'*/)
 		return;
+
+	/* This is a maybe not the right place but both join_urls() and
+	 * get_translated_uri() through translate_url() calls this function
+	 * and then it already works on and modifies an allocated copy. */
+	/* I don't think username and password should be lowercased. --jonas */
+	convert_to_lowercase(uri.protocol_str, uri.protocollen);
+	if (uri.hostlen) convert_to_lowercase(uri.host, uri.hostlen);
 
 	/* dsep() *hint* *hint* */
 	lo = (uri.protocol == PROTOCOL_FILE);
@@ -979,6 +986,26 @@ struct uri_cache {
 
 static struct uri_cache uri_cache;
 
+#ifdef CONFIG_DEBUG
+static inline void
+check_uri_sanity(struct uri *uri)
+{
+	int pos;
+
+	for (pos = 0; pos < uri->protocollen; pos++)
+		if (isupper(uri->protocol_str[pos])) goto error;
+
+	if (uri->hostlen)
+		for (pos = 0; pos < uri->hostlen; pos++)
+			if (isupper(uri->host[pos])) goto error;
+	return;
+error:
+	INTERNAL("Uppercase letters detected in protocol or host part.");
+}
+#else
+#define check_uri_sanity(uri)
+#endif
+
 static inline struct uri_cache_entry *
 get_uri_cache_entry(unsigned char *string, int length)
 {
@@ -988,8 +1015,6 @@ get_uri_cache_entry(unsigned char *string, int length)
 	assert(string && length > 0);
 	if_assert_failed return NULL;
 
-	/* TODO: We have to lower cache the scheme and hostname part of the
-	 * URI before checking the cache and adding a new URI. */
 	item = get_hash_item(uri_cache.map, string, length);
 	if (item) return item->value;
 
@@ -1036,6 +1061,7 @@ get_uri(unsigned char *string, int length)
 		return NULL;
 	}
 
+	check_uri_sanity(&entry->uri);
 	object_nolock(&entry->uri, "uri");
 	object_lock(&entry->uri);
 

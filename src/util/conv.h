@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.28 2004/04/04 03:09:19 jonas Exp $ */
+/* $Id: conv.h,v 1.29 2004/04/05 01:17:20 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -154,6 +154,15 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	if (len) *len = l;
 
 	return s;
+}
+
+/* Convert uppercase letters in @string with the given @length to lowercase. */
+static inline void
+convert_to_lowercase(unsigned char *string, int length)
+{
+	for (length--; length >= 0; length--)
+		if (isupper(string[length]))
+			string[length] = tolower(string[length]);
 }
 
 /* This function drops control chars, nbsp char and limit the number of consecutive

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.60 2003/11/17 02:04:21 miciah Exp $ */
+/* $Id: dump.c,v 1.61 2003/11/19 17:59:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ add_document_to_string(struct string *string, struct document *document)
 		struct screen_char *pos = document->data[y].d;
 		int x;
 
-		for (x = 0; x < document->data[y].l; x++) {
+		for (x = 0; x < document->data[y].length; x++) {
 			unsigned char data = pos->data;
 			unsigned int frame = (pos->attr & SCREEN_ATTR_FRAME);
 
@@ -265,10 +265,10 @@ dump_to_file(struct document *document, int fd)
 	if (!buf) return -1;
 
 	for (y = 0; y < document->height; y++) {
-		for (x = 0; x <= document->data[y].l; x++) {
+		for (x = 0; x <= document->data[y].length; x++) {
 			unsigned char c;
 
-			if (x == document->data[y].l) {
+			if (x == document->data[y].length) {
 				c = '\n';
 			} else {
 				unsigned char attr = document->data[y].d[x].attr;

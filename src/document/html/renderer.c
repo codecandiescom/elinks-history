@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.386 2003/11/18 23:05:35 pasky Exp $ */
+/* $Id: renderer.c,v 1.387 2003/11/19 17:59:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,10 +109,10 @@ realloc_line(struct document *document, int y, int x)
 
 	line = &document->data[y];
 
-	if (x < line->l)
+	if (x < line->length)
 		return 0;
 
-	if (!ALIGN_LINE(&line->d, line->l, x + 1))
+	if (!ALIGN_LINE(&line->d, line->length, x + 1))
 		return -1;
 
 	/* Make a template of the last char using that align alloc clears the
@@ -121,11 +121,11 @@ realloc_line(struct document *document, int y, int x)
 	end->data = ' ';
 	set_term_color(end, &colors, 0, document->options.color_mode);
 
-	for (pos = &line->d[line->l]; pos < end; pos++) {
+	for (pos = &line->d[line->length]; pos < end; pos++) {
 		copy_screen_chars(pos, end, 1);
 	}
 
-	line->l = x + 1;
+	line->length = x + 1;
 
 	return 0;
 }
@@ -165,7 +165,7 @@ realloc_spaces(struct part *part, int length)
 
 #define LINE(y_)	part->document->data[Y(y_)]
 #define POS(x_, y_)	LINE(y_).d[X(x_)]
-#define LEN(y_)		int_max(LINE(y_).l - part->x, 0)
+#define LEN(y_)		int_max(LINE(y_).length - part->x, 0)
 
 
 /* When we clear chars we want to preserve and use the background colors
@@ -447,7 +447,7 @@ move_chars(struct part *part, int x, int y, int nx, int ny)
 	if (LEN(y) - x <= 0) return;
 	copy_chars(part, nx, ny, LEN(y) - x, &POS(x, y));
 
-	LINE(y).l = X(x);
+	LINE(y).length = X(x);
 	move_links(part, x, y, nx, ny);
 }
 
@@ -480,7 +480,7 @@ del_chars(struct part *part, int x, int y)
 	assert(part && part->document && part->document->data);
 	if_assert_failed return;
 
-	LINE(y).l = X(x);
+	LINE(y).length = X(x);
 	move_links(part, x, y, -1, -1);
 }
 
@@ -1107,7 +1107,7 @@ color_link_lines(struct document *document)
 	for (y = 0; y < document->height; y++) {
 		int x;
 
-		for (x = 0; x < document->data[y].l; x++) {
+		for (x = 0; x < document->data[y].length; x++) {
 			struct screen_char *schar = &document->data[y].d[x];
 
 			set_term_color(schar, &colors, color_flags, color_mode);
@@ -1484,14 +1484,14 @@ render_html_document(struct cache_entry *ce, struct document *document)
 	document->width = 0;
 
 	for (i = document->height - 1; i >= 0; i--) {
-		if (!document->data[i].l) {
+		if (!document->data[i].length) {
 			if (document->data[i].d) mem_free(document->data[i].d);
 			document->height--;
 		} else break;
 	}
 
 	for (i = 0; i < document->height; i++)
-		document->width = int_max(document->width, document->data[i].l);
+		document->width = int_max(document->width, document->data[i].length);
 
 	document->bgcolor = par_format.bgcolor;
 

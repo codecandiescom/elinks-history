@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.35 2003/11/18 22:58:05 pasky Exp $ */
+/* $Id: document.h,v 1.36 2003/11/19 17:59:18 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -26,7 +26,7 @@ struct node {
 
 struct line {
 	struct screen_char *d;
-	int l;
+	int length;
 };
 
 enum cp_status {

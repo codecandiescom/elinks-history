@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.199 2005/03/18 14:41:12 zas Exp $ */
+/* $Id: dialogs.c,v 1.200 2005/03/18 23:21:01 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -223,8 +223,9 @@ focus_bookmark(struct widget_data *box_widget_data, struct listbox_data *box,
 	} while (box->sel->udata != bm && box->sel != sel2);
 }
 
+/* TODO: merge with bookmark_add_add() ? --Zas */
 static void
-do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
+do_add_special_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsigned char *url)
 {
 	struct widget_data *widget_data = dlg_data->widgets_data;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -241,7 +242,7 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 		}
 	}
 
-	bm = add_bookmark(bm, 1, name, NULL);
+	bm = add_bookmark(bm, 1, name, url);
 	if (!bm) return;
 
 	move_bookmark_after_selected(bm, selected);
@@ -253,6 +254,20 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 	/* We touch only the actual bookmark dialog, not all of them;
 	 * that's right, right? ;-) --pasky */
 	focus_bookmark(widget_data, box, bm);
+}
+
+static void
+do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
+{
+	do_add_special_bookmark(dlg_data, name, NULL);
+}
+
+static widget_handler_status_T
+push_add_separator_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	do_add_special_bookmark(dlg_data, "-", "");
+	redraw_dialog(dlg_data, 1);
+	return EVENT_PROCESSED;
 }
 
 static widget_handler_status_T
@@ -444,6 +459,7 @@ static struct hierbox_browser_button bookmark_buttons[] = {
 	{ N_("Edit"),		push_edit_button,		0 },
 	{ N_("Delete"),		push_hierbox_delete_button,	0 },
 	{ N_("Add"),		push_add_button,		0 },
+	{ N_("Add separator"),  push_add_separator_button,	0 },
 	{ N_("Add folder"),	push_add_folder_button,		0 },
 	{ N_("Move"),		push_move_button,		0 },
 	{ N_("Search"),		push_search_button,		1 },

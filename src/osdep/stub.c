@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.13 2004/06/22 07:10:19 jonas Exp $ */
+/* $Id: stub.c,v 1.14 2004/06/23 08:01:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,18 +23,19 @@
  * type mismatch in conditional expression", game over. */
 
 
+#define toupper_equal(s1, s2) (toupper(*((char *) s1)) == toupper(*((char *) s2)))
+#define toupper_delta(s1, s2) (toupper(*((char *) s1)) - toupper(*((char *) s2)))
+
 #ifndef HAVE_STRCASECMP
 inline int
 elinks_strcasecmp(const char *s1, const char *s2)
 {
-	while ((*s1 != '\0')
-		 && (toupper(*(char *) s1) == toupper(*(char *) s2)))
-	{
+	while (*s1 != '\0' && toupper_equal(s1, s2)) {
 		s1++;
 		s2++;
 	}
 
-	return toupper(*(char *) s1) - toupper(*(char *) s2);
+	return toupper_delta(s1, s2);
 }
 #endif /* !HAVE_STRCASECMP */
 
@@ -45,16 +46,14 @@ elinks_strncasecmp(const char *s1, const char *s2, size_t len)
 	if (len == 0)
 		return 0;
 
-	while ((len-- != 0)
-	       && (toupper(*(char *) s1) == toupper(*(char *) s2)))
-	{
+	while (len-- != 0 && toupper_equal(s1, s2)) {
 		if (len == 0 || *s1 == '\0' || *s2 == '\0')
 			return 0;
 		s1++;
 		s2++;
 	}
 
-	return toupper(*(char *) s1) - toupper(*(char *) s2);
+	return toupper_delta(s1, s2);
 }
 #endif /* !HAVE_STRNCASECMP */
 

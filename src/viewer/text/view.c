@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.120 2003/07/01 22:04:30 zas Exp $ */
+/* $Id: view.c,v 1.121 2003/07/01 22:06:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -906,8 +906,8 @@ unsigned char fr_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5}, {0xc4, 0xc2, 0xc1, 0xc
 enum xchar_dir {
 	XD_RIGHT = 0,
 	XD_LEFT,
-	XD_BOTTOM,
-	XD_TOP
+	XD_DOWN,
+	XD_UP
 };
 
 static void
@@ -948,7 +948,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 			if (i) {
 				fill_area(t, x, y + 1, 1, wwy, FRAMES_VLINE);
 				if (j == fsd->y - 1)
-					set_xchar(t, x, y + wwy + 1, XD_TOP);
+					set_xchar(t, x, y + wwy + 1, XD_UP);
 			} else if (j) {
 				set_xchar(t, x, y, XD_RIGHT);
 			}
@@ -958,7 +958,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 				if (i == fsd->x - 1)
 					set_xchar(t, x + wwx + 1, y, XD_LEFT);
 			} else if (i) {
-				set_xchar(t, x, y, XD_BOTTOM);
+				set_xchar(t, x, y, XD_DOWN);
 			}
 
 			if (i && j) set_char(t, x, y, FRAMES_CROSS);

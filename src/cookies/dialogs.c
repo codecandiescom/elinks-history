@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.33 2004/01/07 03:18:19 jonas Exp $ */
+/* $Id: dialogs.c,v 1.34 2004/03/09 17:44:18 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,7 @@
 
 #ifdef CONFIG_COOKIES
 
+#include <stdlib.h>
 #include <string.h>
 
 #include "elinks.h"
@@ -14,6 +15,7 @@
 #include "bfu/button.h"
 #include "bfu/dialog.h"
 #include "bfu/hierbox.h"
+#include "bfu/inpfield.h"
 #include "bfu/listbox.h"
 #include "bfu/msgbox.h"
 #include "bfu/text.h"
@@ -24,6 +26,7 @@
 #include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/object.h"
@@ -144,6 +147,155 @@ static struct listbox_ops cookies_listbox_ops = {
 };
 
 static int
+set_cookie_name(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	struct cookie *cookie = dlg_data->dlg->udata;
+	unsigned char *value = widget_data->cdata;
+
+	if (!value || !cookie) return 1;
+	if (cookie->name) mem_free(cookie->name);
+	cookie->name = stracpy(value);
+	return 0;
+}
+
+static int
+set_cookie_value(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	struct cookie *cookie = dlg_data->dlg->udata;
+	unsigned char *value = widget_data->cdata;
+
+	if (!value || !cookie) return 1;
+	if (cookie->value) mem_free(cookie->value);
+	cookie->value = stracpy(value);
+	return 0;
+}
+
+static int
+set_cookie_domain(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	struct cookie *cookie = dlg_data->dlg->udata;
+	unsigned char *value = widget_data->cdata;
+
+	if (!value || !cookie) return 1;
+	if (cookie->domain) mem_free(cookie->domain);
+	cookie->domain = stracpy(value);
+	return 0;
+}
+
+static int
+set_cookie_expires(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	struct cookie *cookie = dlg_data->dlg->udata;
+	unsigned char *value = widget_data->cdata;
+
+	if (!value || !cookie) return 1;
+	/* FIXME: check whether string is a number */
+	cookie->expires = atol(value);
+	return 0;
+}
+
+
+static int
+set_cookie_secure(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	struct cookie *cookie = dlg_data->dlg->udata;
+	unsigned char *value = widget_data->cdata;
+
+	if (!value || !cookie) return 1;
+	/* FIXME: check whether string is a number */
+	cookie->secure = !!atoi(value);
+	return 0;
+}
+
+static void
+build_edit_dialog(struct terminal *term, struct cookie *cookie)
+{
+#define EDIT_WIDGETS_COUNT 8
+	struct dialog *dlg;
+	unsigned char *name, *value, *domain, *expires, *secure;
+	unsigned char *dlg_server, *dlg_name, *dlg_value, *dlg_domain, *dlg_expires, *dlg_secure;
+	int length = 0;
+
+	dlg = calloc_dialog(EDIT_WIDGETS_COUNT, MAX_STR_LEN * 5);
+	if (!dlg) {
+		return;
+	}
+
+	dlg->title = _("Edit", term);
+	dlg->layouter = generic_dialog_layouter;
+	dlg->udata = cookie;
+	dlg->udata2 = NULL;
+
+	name = get_dialog_offset(dlg, EDIT_WIDGETS_COUNT);
+	value = name + MAX_STR_LEN;
+	domain = value + MAX_STR_LEN;
+	expires = domain + MAX_STR_LEN;
+	secure = expires + MAX_STR_LEN;
+	safe_strncpy(name, cookie->name, MAX_STR_LEN);
+	safe_strncpy(value, cookie->value, MAX_STR_LEN);
+	safe_strncpy(domain, cookie->domain, MAX_STR_LEN);
+	ulongcat(expires, &length, cookie->expires, MAX_STR_LEN, 0);
+	length = 0;
+	ulongcat(secure, &length, cookie->secure, MAX_STR_LEN, 0);
+
+	dlg_server = straconcat(_("Server", term), ": ", cookie->server, NULL);
+	dlg_name = straconcat("\n", _("Name", term), ": ", NULL);
+	dlg_value = straconcat(_("Value", term), ": ", NULL);
+	dlg_domain = straconcat(_("Domain", term), ": ", NULL);
+	dlg_expires = straconcat(_("Expires", term), ": ", NULL);
+	dlg_secure = straconcat(_("Secure", term), ": ", NULL);
+
+	if (!dlg_server || !dlg_name || !dlg_value || !dlg_domain ||
+		!dlg_expires || !dlg_secure) {
+		if (dlg_server) mem_free(dlg_server);
+		if (dlg_name) mem_free(dlg_name);
+		if (dlg_value) mem_free(dlg_value);
+		if (dlg_domain) mem_free(dlg_domain);
+		if (dlg_expires) mem_free(dlg_expires);
+		if (dlg_secure) mem_free(dlg_secure);
+		mem_free(dlg);
+		return;
+	}
+
+	add_dlg_text(dlg, dlg_server, AL_LEFT, 1);
+	add_dlg_field(dlg, dlg_name, 0, 0, set_cookie_name, MAX_STR_LEN, name, NULL);
+	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
+	add_dlg_field(dlg, dlg_value, 0, 0, set_cookie_value, MAX_STR_LEN, value, NULL);
+	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
+	add_dlg_field(dlg, dlg_domain, 0, 0, set_cookie_domain, MAX_STR_LEN, domain, NULL);
+	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
+	add_dlg_field(dlg, dlg_expires, 0, 0, set_cookie_expires, MAX_STR_LEN, expires, NULL);
+	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
+	add_dlg_field(dlg, dlg_secure, 0, 0, set_cookie_secure, MAX_STR_LEN, secure, NULL);
+	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
+
+	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+
+	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
+
+	do_dialog(term, dlg, getml(dlg, dlg_server, dlg_name, dlg_value, dlg_domain,
+		dlg_expires, dlg_secure, NULL));
+#undef EDIT_WIDGETS_COUNT
+}
+
+
+static int
+push_edit_button(struct dialog_data *dlg_data, struct widget_data *button)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct terminal *term = dlg_data->win->term;
+	struct cookie *cookie;
+
+	if (!box->sel) return 0;
+	if (box->sel->type == BI_FOLDER) return 0;
+	cookie = box->sel->udata;
+	if (!cookie) return 0;
+	build_edit_dialog(term, cookie);
+	return 0;
+}
+
+static int
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	save_cookies();
@@ -152,6 +304,7 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 
 static struct hierbox_browser_button cookie_buttons[] = {
 	{ N_("Info"),		push_hierbox_info_button,	1 },
+	{ N_("Edit"),		push_edit_button,	1 },
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },
 	{ N_("Clear"),		push_hierbox_clear_button,	1 },
 	{ N_("Save"),		push_save_button,		0 },

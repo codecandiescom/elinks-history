@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.30 2004/10/22 10:39:19 zas Exp $ */
+/* $Id: table.c,v 1.31 2004/10/25 09:59:09 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -355,7 +355,7 @@ new_cell(struct table *table, int dest_col, int dest_row)
 
 	while (1) {
 		struct table new_table;
-		int col, row;
+		int row;
 
 		if (dest_col < table->real_cols && dest_row < table->real_rows) {
 			expand_cells(table, dest_col, dest_row);
@@ -376,12 +376,10 @@ new_cell(struct table *table, int dest_col, int dest_row)
 					     sizeof(struct table_cell));
 		if (!new_table.cells) return NULL;
 
-		for (col = 0; col < table->cols; col++) {
-			for (row = 0; row < table->rows; row++) {
-				memcpy(CELL(&new_table, col, row),
-				       CELL(table, col, row),
-				       sizeof(struct table_cell));
-			}
+		for (row = 0; table->cols > 0 && row < table->rows; row++) {
+			memcpy(&new_table.cells[row * new_table.real_cols],
+			       &table->cells[row * table->real_cols],
+			       sizeof(struct table_cell) * table->cols);
 		}
 
 		mem_free(table->cells);

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.38 2003/12/22 09:49:06 jonas Exp $ */
+/* $Id: textarea.c,v 1.39 2003/12/22 09:53:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -494,17 +494,31 @@ yy:
 int
 textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 {
-	unsigned char *position = fs->value + fs->state;
-	unsigned char *end;
+	struct line_info *ln;
+	int y;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return 0;
 
-	end = strchr(position, '\n');
-	if (!end) end = position + strlen(position);
-	else end--;
+	ln = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!ln) return 0;
 
-	fs->state = end - fs->value;
+	for (y = 0; ln[y].st; y++) {
+		if (fs->value + fs->state >= ln[y].st &&
+		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
+			fs->state = ln[y].en - fs->value;
+
+			/* Don't jump to next line when wrapping. */
+			if (fs->state && fs->state < strlen(fs->value)
+			    && ln[y+1].st == ln[y].en)
+				fs->state--;
+
+			goto yyyy;
+		}
+	}
+	fs->state = strlen(fs->value);
+yyyy:
+	mem_free(ln);
 	return 0;
 }
 

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.12 2002/11/29 11:16:09 pasky Exp $ */
+/* $Id: globhist.c,v 1.13 2002/11/29 11:20:13 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -194,7 +194,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 	struct global_history_item *history_item;
 	int max_globhist_items;
 
-	if (!get_opt_int("document.history.global.enable"))
+	if (!get_opt_bool("document.history.global.enable"))
 		return;
 
 	if (!title || !url)
@@ -326,7 +326,7 @@ read_global_history()
 	unsigned char *title, *url, *last_visit;
 	FILE *f;
 
-	if (!get_opt_int("document.history.global.enable"))
+	if (!get_opt_bool("document.history.global.enable"))
 		return;
 
 	file_name = straconcat(elinks_home, "globhist", NULL);
@@ -367,7 +367,7 @@ write_global_history()
 	unsigned char *file_name;
 	struct secure_save_info *ssi;
 
-	if (!get_opt_int("document.history.global.enable"))
+	if (!get_opt_bool("document.history.global.enable"))
 		return;
 
 	file_name = straconcat(elinks_home, "globhist", NULL);

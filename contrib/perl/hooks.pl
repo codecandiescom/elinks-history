@@ -1,7 +1,7 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.45 2005/03/26 22:34:56 rrowan Exp $
+# $Id: hooks.pl,v 1.46 2005/03/26 22:48:31 rrowan Exp $
 #
-# This file is (c) Apu Nahasapeemapetilon and GPL'd.
+# This file is (c) Russ Rowan and GPL'd.
 
 
 use strict;
@@ -112,8 +112,7 @@ elinks: el / elinks, bz / bug (# or search optional), doc(|s|umentation), faq
 
 
 ################################################################################
-### goto_url_hook ##############################################################
-
+### prefixes ###################################################################
 my %search_prefixes_ = (
 	'^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$' => 'elgoog',
 	'^(g|google)(| .*)$' => 'google',
@@ -174,13 +173,17 @@ my %weather_locators_ = (
 	'ask jeeves' => 'http://web.ask.com/web?&q=weather !query!',
 );
 
+
+################################################################################
+### goto_url_hook ##############################################################
 sub goto_url_hook
 {
 	my $url = shift;
 	my $current_url = shift;
 
 	# "bugmenot" (no blood today, thank you)
-	if ($url =~ '^bugmenot$' && $current_url) {
+	if ($url =~ '^bugmenot$' && $current_url)
+	{
 		(undef, $current_url) = $current_url =~ /^(.*):\/\/(.*)/;
 		$url = 'http://bugmenot.com/view.php?url=' . $current_url;
 		return $url;
@@ -206,10 +209,8 @@ sub goto_url_hook
 		return $url;
 	}
 
-
-	my ($search) = $url =~ /^\S+\s+(.*)/;
-
 	# Search engines
+	my ($search) = $url =~ /^\S+\s+(.*)/;
 
 	if ($url =~ /^(search|find|www|web|s|f|go)(| .*)$/) {
 		return search(loadrc('search'), $search);
@@ -223,9 +224,7 @@ sub goto_url_hook
 		return search($search_prefixes_{$prefix}, $search);
 	}
 
-
 	# News
-
 	if ($url =~ /^(news|n)(| .*)$/) {
 		return news(loadrc('news'), $search);
 	}
@@ -234,9 +233,7 @@ sub goto_url_hook
 		return news($news_prefixes_{$prefix}, $search);
 	}
 
-
 	# Locators
-
 	foreach my $prefix (keys %locator_prefixes_) {
 		next unless $url =~ /$prefix/;
 		return location($locator_prefixes_{$prefix}, $search, $current_url);
@@ -283,7 +280,6 @@ sub goto_url_hook
 		$url = $locator_whatis      if ($url =~ '^(whatis|uptime)(| .*)$');
 		return $url;
 	}
-
 
 	# Google Groups (DejaNews)
 	if ($url =~ '^(deja|gg|groups|gr|nntp|usenet|nn)(| .*)$') {
@@ -513,7 +509,6 @@ sub proxy_for_hook
 sub quit_hook
 {
 	# Collapse XBEL bookmark folders (obsoleted by bookmarks.folder_state)
-
 	my $bookmarkfile = $ENV{'HOME'} . '/.elinks/bookmarks.xbel';
 	if (-f $bookmarkfile and loadrc('collapse') eq 'yes') {
 		open BOOKMARKS, "+<$bookmarkfile";
@@ -528,9 +523,7 @@ sub quit_hook
 		close BOOKMARKS;
 	}
 
-
 	# Words of wisdom from ELinks the Sage
-
 	if (loadrc('fortune') eq 'fortune') {
 		system('echo ""; fortune -sa 2>/dev/null');
 		die;
@@ -598,7 +591,6 @@ sub loadrc
 
 ################################################################################
 ### Search engines #############################################################
-
 my %search_engines_ = (
 	"elgoog" => {
 		home => 'http://alltooflat.com/geeky/elgoog/m/index.cgi',
@@ -691,7 +683,6 @@ sub search
 
 ################################################################################
 ### News servers ###############################################################
-
 my %news_servers_ = (
 	"bbc" => {
 		home => 'http://news.bbc.co.uk',
@@ -772,7 +763,6 @@ sub news
 
 ################################################################################
 ### Locators ###################################################################
-
 my %locators_ = (
 	'imdb' => {
 		home => 'http://imdb.com',

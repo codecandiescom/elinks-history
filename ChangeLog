@@ -1,3 +1,92 @@
+Thu Dec  4 19:40:15 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Updated translation.  
+
+Thu Dec  4 18:20:42 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/: config/options.c, cookies/dialogs.c:
+
+	Indentation and whitespace fixes.  
+
+Thu Dec  4 18:05:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/file.c:
+
+	Trivial tidyup.  
+
+Thu Dec  4 16:31:26 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Thu Dec  4 16:01:04 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Thu Dec  4 13:42:57 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Dec  4 12:28:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Bunch of minor fixes: split_line() is now clever in some rare cases
+	of unsplittable text. Some assertions were added, cleanup. Note that
+	more work is needed we still have weird issues here.  
+
+Thu Dec  4 11:11:03 2003  Laurent Monin <zas@norz.org>:
+
+	* acconfig.h, configure.in, src/config/options.inc,
+	src/protocol/file/cgi.c, src/protocol/file/file.c:
+
+	Support for local CGIs is now controlled by --enable-local-cgi
+	configure option. Whitespaces and ending dots were fixed too.  
+
+Thu Dec  4 09:27:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/leds.c, dialogs/status.c, document/renderer.c,
+	sched/session.c, sched/session.h, viewer/text/view.c:
+
+	Move session status info to new session_status struct.  
+
+Wed Dec  3 23:23:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Glorified Jonas a little.  
+
+Wed Dec  3 23:21:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Slightly updated Mikulas' record.  
+
+Wed Dec  3 23:20:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Removed BFU colorization from my record.  
+
+Wed Dec  3 23:19:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, NEWS:
+
+	Local CGI support.  
+
+Wed Dec  3 23:18:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
 Wed Dec  3 18:32:51 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/kbdbind.c:

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-22 14:55+0100\n"
-"PO-Revision-Date: 2005-01-23 21:52+0100\n"
+"POT-Creation-Date: 2005-01-25 23:50+0100\n"
+"PO-Revision-Date: 2005-01-26 00:46+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr "Luk"
 
 #. | MSGBOX_SCROLLABLE
 #: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/cache/dialogs.c:219
-#: src/config/dialogs.c:519 src/cookies/dialogs.c:421
+#: src/config/dialogs.c:516 src/cookies/dialogs.c:421
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
 #: src/dialogs/download.c:470 src/formhist/dialogs.c:212
 #: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
@@ -36,31 +36,31 @@ msgstr "Tast mellemrum for at udfolde denne mappe."
 #: src/bfu/inpfield.c:80 src/bfu/inpfield.c:100 src/bfu/leds.c:276
 #: src/bfu/msgbox.c:175 src/bookmarks/dialogs.c:263
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:56
-#: src/config/dialogs.c:101 src/config/dialogs.c:341 src/config/dialogs.c:410
-#: src/config/dialogs.c:440 src/config/dialogs.c:478 src/config/dialogs.c:498
-#: src/config/dialogs.c:850 src/config/dialogs.c:869 src/config/dialogs.c:908
+#: src/config/dialogs.c:101 src/config/dialogs.c:338 src/config/dialogs.c:407
+#: src/config/dialogs.c:437 src/config/dialogs.c:475 src/config/dialogs.c:495
+#: src/config/dialogs.c:847 src/config/dialogs.c:866 src/config/dialogs.c:908
 #: src/cookies/dialogs.c:356 src/dialogs/document.c:50
-#: src/dialogs/document.c:226 src/dialogs/document.c:243
-#: src/dialogs/document.c:301 src/dialogs/edit.c:98 src/dialogs/info.c:44
-#: src/dialogs/info.c:135 src/dialogs/info.c:157 src/dialogs/menu.c:97
-#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:174
-#: src/dialogs/options.c:254 src/ecmascript/spidermonkey.c:371
-#: src/ecmascript/spidermonkey.c:1937 src/ecmascript/spidermonkey.c:1963
-#: src/formhist/dialogs.c:179 src/mime/dialogs.c:130
-#: src/protocol/auth/dialogs.c:108 src/protocol/nntp/codes.c:132
-#: src/protocol/protocol.c:227 src/protocol/user.c:268
-#: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:368
-#: src/sched/download.c:507 src/sched/download.c:601 src/sched/error.c:42
-#: src/sched/session.c:239 src/sched/session.c:706 src/sched/session.c:730
-#: src/sched/session.c:747 src/scripting/lua/core.c:395
-#: src/scripting/lua/core.c:476 src/scripting/lua/core.c:593
-#: src/scripting/lua/core.c:717 src/scripting/ruby/core.c:63
-#: src/scripting/ruby/core.c:159 src/scripting/ruby/core.c:215
-#: src/viewer/text/draw.c:67 src/viewer/text/form.c:857
-#: src/viewer/text/search.c:953 src/viewer/text/search.c:1014
-#: src/viewer/text/search.c:1459 src/viewer/text/search.c:1570
-#: src/viewer/text/textarea.c:366 src/viewer/text/textarea.c:375
-#: src/viewer/text/view.c:730 src/viewer/text/view.c:1283
+#: src/dialogs/document.c:226 src/dialogs/document.c:297 src/dialogs/edit.c:98
+#: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
+#: src/dialogs/menu.c:97 src/dialogs/menu.c:520 src/dialogs/menu.c:571
+#: src/dialogs/options.c:174 src/dialogs/options.c:254
+#: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1937
+#: src/ecmascript/spidermonkey.c:1963 src/formhist/dialogs.c:179
+#: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
+#: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
+#: src/protocol/user.c:268 src/sched/download.c:231 src/sched/download.c:327
+#: src/sched/download.c:368 src/sched/download.c:507 src/sched/download.c:601
+#: src/sched/error.c:42 src/sched/session.c:239 src/sched/session.c:706
+#: src/sched/session.c:730 src/sched/session.c:747
+#: src/scripting/lua/core.c:395 src/scripting/lua/core.c:476
+#: src/scripting/lua/core.c:593 src/scripting/lua/core.c:717
+#: src/scripting/ruby/core.c:63 src/scripting/ruby/core.c:159
+#: src/scripting/ruby/core.c:215 src/viewer/text/draw.c:67
+#: src/viewer/text/form.c:857 src/viewer/text/search.c:953
+#: src/viewer/text/search.c:1014 src/viewer/text/search.c:1459
+#: src/viewer/text/search.c:1570 src/viewer/text/textarea.c:366
+#: src/viewer/text/textarea.c:375 src/viewer/text/view.c:730
+#: src/viewer/text/view.c:1283
 msgid "OK"
 msgstr "O.k."
 
@@ -99,14 +99,14 @@ msgid "Delete marked items?"
 msgstr "Slet markerede emner?"
 
 #: src/bfu/hierbox.c:745 src/bfu/hierbox.c:781 src/bfu/hierbox.c:802
-#: src/bfu/hierbox.c:873 src/config/dialogs.c:828 src/dialogs/menu.c:126
+#: src/bfu/hierbox.c:873 src/config/dialogs.c:825 src/dialogs/menu.c:126
 #: src/formhist/formhist.c:457 src/mime/dialogs.c:70 src/sched/task.c:274
 #: src/terminal/tab.c:191 src/terminal/tab.c:227
 msgid "Yes"
 msgstr "Ja"
 
 #: src/bfu/hierbox.c:746 src/bfu/hierbox.c:782 src/bfu/hierbox.c:803
-#: src/bfu/hierbox.c:874 src/config/dialogs.c:829 src/dialogs/menu.c:127
+#: src/bfu/hierbox.c:874 src/config/dialogs.c:826 src/dialogs/menu.c:127
 #: src/formhist/formhist.c:458 src/mime/dialogs.c:71 src/sched/task.c:275
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
 msgid "No"
@@ -146,7 +146,7 @@ msgid "Do you really want to remove all items?"
 msgstr "Vil du virkelig slette alle emner?"
 
 #: src/bfu/hierbox.c:940 src/bfu/hierbox.c:973 src/bookmarks/dialogs.c:451
-#: src/cache/dialogs.c:222 src/config/dialogs.c:523 src/config/dialogs.c:945
+#: src/cache/dialogs.c:222 src/config/dialogs.c:520 src/config/dialogs.c:945
 #: src/globhist/dialogs.c:230 src/viewer/text/search.c:986
 #: src/viewer/text/search.c:994 src/viewer/text/search.c:1011
 #: src/viewer/text/search.c:1589
@@ -158,17 +158,16 @@ msgstr "Søg"
 msgid "Search string '%s' not found"
 msgstr "Søgningen \"%s\" gav intet resultat"
 
-#: src/bfu/hierbox.c:973 src/config/dialogs.c:188 src/config/dialogs.c:209
-#: src/config/dialogs.c:376 src/config/dialogs.c:497 src/cookies/dialogs.c:35
-#: src/cookies/dialogs.c:350 src/dialogs/edit.c:92 src/dialogs/edit.c:94
-#: src/scripting/lua/core.c:391 src/scripting/lua/core.c:392
-#: src/scripting/lua/core.c:473
+#: src/bfu/hierbox.c:973 src/config/dialogs.c:169 src/config/dialogs.c:373
+#: src/config/dialogs.c:494 src/cookies/dialogs.c:35 src/cookies/dialogs.c:350
+#: src/dialogs/edit.c:92 src/dialogs/edit.c:94 src/scripting/lua/core.c:391
+#: src/scripting/lua/core.c:392 src/scripting/lua/core.c:473
 msgid "Name"
 msgstr "Navn"
 
 #: src/bfu/hierbox.c:974 src/bookmarks/dialogs.c:263
-#: src/bookmarks/dialogs.c:666 src/config/dialogs.c:411
-#: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:357
+#: src/bookmarks/dialogs.c:666 src/config/dialogs.c:408
+#: src/config/dialogs.c:495 src/config/dialogs.c:908 src/cookies/dialogs.c:357
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
 #: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:177
 #: src/dialogs/options.c:255 src/mime/dialogs.c:131
@@ -442,14 +441,14 @@ msgstr "Redigér bogmærke"
 msgid "Goto"
 msgstr "Gå til"
 
-#: src/bookmarks/dialogs.c:446 src/config/dialogs.c:367
-#: src/config/dialogs.c:435 src/config/dialogs.c:520 src/cookies/dialogs.c:323
+#: src/bookmarks/dialogs.c:446 src/config/dialogs.c:364
+#: src/config/dialogs.c:432 src/config/dialogs.c:517 src/cookies/dialogs.c:323
 #: src/cookies/dialogs.c:423
 msgid "Edit"
 msgstr "Redigér"
 
 #: src/bookmarks/dialogs.c:447 src/cache/dialogs.c:221
-#: src/config/dialogs.c:522 src/config/dialogs.c:943 src/cookies/dialogs.c:424
+#: src/config/dialogs.c:519 src/config/dialogs.c:943 src/cookies/dialogs.c:424
 #: src/formhist/dialogs.c:213 src/globhist/dialogs.c:229
 #: src/protocol/auth/dialogs.c:255
 msgid "Delete"
@@ -459,7 +458,7 @@ msgstr "Slet"
 msgid "Move"
 msgstr "Flyt"
 
-#: src/bookmarks/dialogs.c:450 src/config/dialogs.c:521
+#: src/bookmarks/dialogs.c:450 src/config/dialogs.c:518
 #: src/config/dialogs.c:942 src/cookies/dialogs.c:422
 msgid "Add"
 msgstr "Tilføj"
@@ -471,7 +470,7 @@ msgid "Clear"
 msgstr "Ryd"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:455 src/config/dialogs.c:524
+#: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:176 src/formhist/dialogs.c:216
 #: src/globhist/dialogs.c:235 src/sched/download.c:1019
@@ -1165,25 +1164,21 @@ msgstr ""
 msgid "modified"
 msgstr "ændret"
 
-#: src/config/dialogs.c:172
+#: src/config/dialogs.c:174
 msgid "(expand by pressing space)"
 msgstr "(udfold ved at taste mellemrum)"
 
-#: src/config/dialogs.c:175 src/config/dialogs.c:381
-msgid "N/A"
-msgstr "I/T"
-
-#: src/config/dialogs.c:189 src/config/dialogs.c:210 src/config/dialogs.c:377
+#: src/config/dialogs.c:177 src/config/dialogs.c:374
 #: src/config/options.inc:744
 msgid "Type"
 msgstr "Type"
 
-#: src/config/dialogs.c:198 src/config/dialogs.c:406 src/cookies/dialogs.c:36
+#: src/config/dialogs.c:202 src/config/dialogs.c:403 src/cookies/dialogs.c:36
 #: src/cookies/dialogs.c:351
 msgid "Value"
 msgstr "Værdi"
 
-#: src/config/dialogs.c:201
+#: src/config/dialogs.c:206
 msgid ""
 "\n"
 "\n"
@@ -1193,21 +1188,25 @@ msgstr ""
 "\n"
 "Denne værdi er ændret siden sidste gang du gemte din opsætning."
 
-#: src/config/dialogs.c:206 src/config/dialogs.c:212 src/config/dialogs.c:379
+#: src/config/dialogs.c:212 src/config/dialogs.c:378
+msgid "N/A"
+msgstr "I/T"
+
+#: src/config/dialogs.c:214 src/config/dialogs.c:376
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: src/config/dialogs.c:338 src/protocol/protocol.c:221
+#: src/config/dialogs.c:335 src/protocol/protocol.c:221
 #: src/sched/session.c:236 src/viewer/text/textarea.c:363
 #: src/viewer/text/textarea.c:372
 msgid "Error"
 msgstr "Fejl"
 
-#: src/config/dialogs.c:339
+#: src/config/dialogs.c:336
 msgid "Bad option value."
 msgstr "Ugyldig værdi for indstilling."
 
-#: src/config/dialogs.c:436
+#: src/config/dialogs.c:433
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
@@ -1215,36 +1214,36 @@ msgstr ""
 "Denne indstilling kan ikke ændres. Dette betyder det er en speciel "
 "indstilling eksempelvis en mappe - prøv at taste mellemrum for at åbne den. "
 
-#: src/config/dialogs.c:475 src/config/dialogs.c:497
+#: src/config/dialogs.c:472 src/config/dialogs.c:494
 msgid "Add option"
 msgstr "Tilføj indstilling"
 
-#: src/config/dialogs.c:476
+#: src/config/dialogs.c:473
 msgid "Cannot add an option here."
 msgstr "Indstillinger kan ikke tilføjes her."
 
-#: src/config/dialogs.c:529
+#: src/config/dialogs.c:526
 msgid "Option manager"
 msgstr "Opsætningshåndtering"
 
-#: src/config/dialogs.c:695 src/config/dialogs.c:900
+#: src/config/dialogs.c:692 src/config/dialogs.c:900
 msgid "Keystroke"
 msgstr "Tastetildeling"
 
-#: src/config/dialogs.c:697 src/config/dialogs.c:894
+#: src/config/dialogs.c:694 src/config/dialogs.c:894
 #: src/config/options.inc:1099
 msgid "Action"
 msgstr "Handling"
 
-#: src/config/dialogs.c:698 src/config/dialogs.c:895
+#: src/config/dialogs.c:695 src/config/dialogs.c:895
 msgid "Keymap"
 msgstr "Tasteoversigt"
 
-#: src/config/dialogs.c:822
+#: src/config/dialogs.c:819
 msgid "Keystroke already used"
 msgstr "Tastetildeling allerede i brug"
 
-#: src/config/dialogs.c:823
+#: src/config/dialogs.c:820
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
@@ -1253,15 +1252,15 @@ msgstr ""
 "Tastetildelingen \"%s\" bruges allerede af \"%s\".\n"
 "Er du sikker på at du vil erstatte den?"
 
-#: src/config/dialogs.c:847 src/config/dialogs.c:866 src/config/dialogs.c:907
+#: src/config/dialogs.c:844 src/config/dialogs.c:863 src/config/dialogs.c:907
 msgid "Add keybinding"
 msgstr "Tilføj tastetildeling"
 
-#: src/config/dialogs.c:848
+#: src/config/dialogs.c:845
 msgid "Invalid keystroke."
 msgstr "Ugyldig tastetildeling"
 
-#: src/config/dialogs.c:867
+#: src/config/dialogs.c:864
 msgid "Need to select a keymap."
 msgstr "Det er nødvendigt at vælge en tasteoversigt."
 
@@ -4384,18 +4383,17 @@ msgstr "Sidste besøgstidpunkt for link"
 msgid "Link title (from history)"
 msgstr "Linktitel (fra historik)"
 
-#: src/dialogs/document.c:240 src/dialogs/document.c:294
-#: src/dialogs/document.c:309
+#: src/dialogs/document.c:233 src/dialogs/document.c:305
 msgid "Header info"
 msgstr "Serverinformation om side"
 
-#: src/dialogs/document.c:241
-msgid "No header info."
-msgstr "Ingen serverinformation om side"
-
-#: src/dialogs/document.c:294
+#: src/dialogs/document.c:246
 msgid "Internal header info"
 msgstr "Intern serverinformation om side"
+
+#: src/dialogs/document.c:287
+msgid "No header info."
+msgstr "Ingen serverinformation om side"
 
 #: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:365
 msgid "Download"
@@ -7237,7 +7235,7 @@ msgstr "Åbn i nyt ~faneblad"
 
 #: src/viewer/text/link.c:1153
 msgid "Open in new tab in ~background"
-msgstr "Åbn nyt faneblad i ~baggrunden"
+msgstr "Åbn i nyt faneblad i ~baggrunden"
 
 #: src/viewer/text/link.c:1158
 msgid "~Download link"
@@ -7314,12 +7312,12 @@ msgstr "Ingen tidligere søgning"
 #: src/viewer/text/search.c:995
 #, c-format
 msgid "Could not compile regular expression '%s'"
-msgstr "Kunne ikke oversætte regulært udtryk '%s'"
+msgstr "Kunne ikke oversætte regulært udtryk \"%s\""
 
 #: src/viewer/text/search.c:1042
 #, c-format
 msgid "No further matches for '%s'."
-msgstr "Ikke flere træffere for '%s'."
+msgstr "Ikke flere træffere for \"%s\"."
 
 #: src/viewer/text/search.c:1044
 #, c-format

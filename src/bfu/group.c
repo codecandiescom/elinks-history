@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.70 2005/03/24 09:33:55 zas Exp $ */
+/* $Id: group.c,v 1.71 2005/03/24 10:03:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,6 @@ dlg_format_group(struct terminal *term,
 
 		if (term) {
 			int xnx = x + nx;
-			int width = 1;
 
 			if (widget_data->widget->type == WIDGET_CHECKBOX) {
 				if (sl > 0) {
@@ -67,10 +66,10 @@ dlg_format_group(struct terminal *term,
 						  text, sl,
 						  0, color);
 				}
-				width = 4;
-				set_box(&widget_data->box, xnx, *y, width, 1);
 
-			} else {
+				set_box(&widget_data->box, xnx, *y, 3, 1);
+
+			} else if (widget_is_textfield(widget_data)) {
 				if (sl > 0) {
 					/* Draw label at left of widget. */
 					draw_text(term, xnx, *y,
@@ -78,11 +77,8 @@ dlg_format_group(struct terminal *term,
 						  0, color);
 				}
 
-				if (widget_is_textfield(widget_data))
-					width = widget_data->widget->datalen;
-
 				set_box(&widget_data->box, xnx + sl + 1, *y,
-					width, 1);
+					widget_data->widget->datalen, 1);
 			}
 		}
 

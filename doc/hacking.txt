@@ -385,12 +385,6 @@ func(int a, int b)
 - Please remove useless spaces or tabs at the end of lines.  Vim has a syntax
   file called "Whitespace (add)" ...
 
-- If you see code in ELinks that doesn't follow these rules, fix it or tell
-  us about it.
-
-- There are obviously exceptions to these rules, but don't make a rule from
-  your exception and be prepared to defend your exception at anytime ;).
-
 - Please keep includes in alphabetical order unless a specific order is
   required for compilation on weird systems (then please at least make a proper
   comment about that).
@@ -408,6 +402,17 @@ func(int a, int b)
 		{
 			some_code();
 		}
+
+- Please write if (), while (), switch (), for (), .... instead of if(), while(),
+  switch(), for()...
+  Same thing apply for all iterators and tests (ie. foreach, foreachback).
+
+- If you see code in ELinks that doesn't follow these rules, fix it or tell
+  us about it.
+
+- There are obviously exceptions to these rules, but don't make a rule from
+  your exception and be prepared to defend your exception at anytime ;).
+
 
 Coding practices:
 ----------------
@@ -466,4 +471,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.8 2003/06/07 22:10:39 pasky Exp $
+$Id: hacking.txt,v 1.9 2003/06/08 10:40:09 zas Exp $

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.155 2003/11/12 06:03:16 witekfl Exp $ */
+/* $Id: download.c,v 1.156 2003/11/12 15:14:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1022,21 +1022,25 @@ static void
 continue_download(struct session *ses, unsigned char *file)
 {
 	struct codw_hop *codw_hop;
-	unsigned char *url = ses->tq_url;
 
-	if (!url) return;
+	if (!ses->tq_url) return;
+
+	codw_hop = mem_calloc(1, sizeof(struct codw_hop));
+	if (!codw_hop) {
+		tp_cancel(ses);
+		return;
+	}
 
 	if (ses->tq_prog) {
 		/* FIXME: get_temp_name() calls tempnam(). --Zas */
-		file = get_temp_name(url);
+		file = get_temp_name(ses->tq_url);
 		if (!file) {
+			mem_free(codw_hop);
 			tp_cancel(ses);
 			return;
 		}
 	}
 
-	codw_hop = mem_calloc(1, sizeof(struct codw_hop));
-	if (!codw_hop) return; /* XXX: Something for mem_free()...? --pasky */
 	codw_hop->ses = ses;
 	codw_hop->file = file;
 

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.14 2002/09/07 10:01:53 zas Exp $ */
+/* $Id: document.c,v 1.15 2002/09/13 16:23:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,10 +85,12 @@ loc_msg(struct terminal *term, struct location *location,
 
 	add_to_str(&str, &strl, "\n");
 
-	add_to_str(&str, &strl, _(TEXT(T_TITLE), term));
-	add_to_str(&str, &strl, ": ");
-	add_to_str(&str, &strl, frame->f_data->title);
-	add_to_str(&str, &strl, "\n");
+	if (frame) {
+		add_to_str(&str, &strl, _(TEXT(T_TITLE), term));
+		add_to_str(&str, &strl, ": ");
+		add_to_str(&str, &strl, frame->f_data->title);
+		add_to_str(&str, &strl, "\n");
+	}
 
 #ifdef GLOBHIST
 	add_to_str(&str, &strl, _(TEXT(T_LAST_VISIT_TIME), term));
@@ -171,22 +173,24 @@ loc_msg(struct terminal *term, struct location *location,
 		}
 	}
 
-	a = print_current_link_do(frame, term);
-	if (a) {
-		add_to_str(&str, &strl, "\n\n");
-		add_to_str(&str, &strl, _(TEXT(T_LINK), term));
-		add_to_str(&str, &strl, ": ");
-		add_to_str(&str, &strl, a);
-		mem_free(a);
-	}
+	if (frame) {
+		a = print_current_link_do(frame, term);
+		if (a) {
+			add_to_str(&str, &strl, "\n\n");
+			add_to_str(&str, &strl, _(TEXT(T_LINK), term));
+			add_to_str(&str, &strl, ": ");
+			add_to_str(&str, &strl, a);
+			mem_free(a);
+		}
 
-	a = print_current_link_title_do(frame, term);
-	if (a) {
-		add_to_str(&str, &strl, "\n");
-		add_to_str(&str, &strl, _(TEXT(T_LINK_TITLE), term));
-		add_to_str(&str, &strl, ": ");
-		add_to_str(&str, &strl, a);
-		mem_free(a);
+		a = print_current_link_title_do(frame, term);
+		if (a) {
+			add_to_str(&str, &strl, "\n");
+			add_to_str(&str, &strl, _(TEXT(T_LINK_TITLE), term));
+			add_to_str(&str, &strl, ": ");
+			add_to_str(&str, &strl, a);
+			mem_free(a);
+		}
 	}
 
 	msg_box(term, getml(str, NULL),

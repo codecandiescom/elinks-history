@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.18 2003/10/29 10:51:14 zas Exp $ */
+/* $Id: inpfield.h,v 1.19 2003/10/29 14:09:50 pasky Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -21,7 +21,6 @@
 		(dlg)->widgets[n].info.field.history = (hist);		\
 		(n)++;							\
 	} while (0)
-
 
 #define add_dlg_field(dlg, n, min, max, handler, len, field, history)	\
 	add_dlg_field_do(dlg, n, WIDGET_FIELD, min, max, handler, len, field, history)

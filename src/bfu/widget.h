@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.27 2003/10/29 10:51:14 zas Exp $ */
+/* $Id: widget.h,v 1.28 2003/10/29 14:09:50 pasky Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -46,12 +46,12 @@ struct widget {
 
 	union {
 		struct {
-			int gid;	/* zero means checkbox [X], else radio buttons (X). */
-			int gnum;	/* gnum is group number for radio buttons. */
+			int gid;
+			int gnum;
 		} checkbox;
 		struct {
-			int min;	/* minimal numeric value. */
-			int max;	/* maximal numeric value. */
+			int min;
+			int max;
 			struct input_history *history;
 		} field;
 		struct {

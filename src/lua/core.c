@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.31 2003/04/18 07:44:08 zas Exp $ */
+/* $Id: core.c,v 1.32 2003/04/19 18:41:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -690,7 +690,7 @@ alert_lua_error(unsigned char *msg)
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
 	} else {
-		fprintf(stderr, "Lua Error: %s\n", msg);
+		error(gettext("Lua Error: %s"), msg);
 		sleep(3);
 	}
 }

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.16 2002/12/07 20:05:56 pasky Exp $ */
+/* $Id: home.c,v 1.17 2003/04/19 18:39:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "elinks.h"
 
 #include "main.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -34,7 +35,6 @@ get_home(int *new)
 	unsigned char *home = envhome ? stracpy(envhome) : NULL;
 	unsigned char *envconfdir = getenv("ELINKS_CONFDIR");
 	unsigned char *config_dir = envconfdir ? stracpy(envconfdir) : NULL;
-
 
 	/* TODO: We want to use commandline option instead of environment
 	 * variable, especially one with so common name. */
@@ -82,9 +82,9 @@ get_home(int *new)
 			add_to_strn(&home_elinks, "/elinks");
 
 	    	} else {
-			fprintf(stderr, "ELINKS_CONFDIR set to %s, but "
-					"directory %s doesn't exist.\n\007",
-				config_dir, home_elinks);
+			error(gettext("ELINKS_CONFDIR set to %s, but "
+				      "directory %s doesn't exist."),
+			      config_dir, home_elinks);
 			sleep(3);
 			mem_free(home_elinks);
 			home_elinks = stracpy(home);
@@ -157,11 +157,10 @@ init_home()
 {
 	elinks_home = get_home(&first_use);
 	if (!elinks_home) {
-		fprintf(stderr, "Unable to find or create ELinks config "
-				"directory. Please check if you have $HOME "
-				"variable set correctly and if you have "
-				"write permission to your home directory."
-				"\n\007");
+		error(gettext("Unable to find or create ELinks config "
+			      "directory. Please check if you have $HOME "
+			      "variable set correctly and if you have "
+			      "write permission to your home directory."));
 		sleep(3);
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.362 2004/04/04 17:42:01 zas Exp $ */
+/* $Id: session.c,v 1.363 2004/04/11 00:40:11 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -629,6 +629,35 @@ copy_session(struct session *old, struct session *new)
 	goto_url(new, struri(cur_loc(old)->vs.uri));
 }
 
+/* The session info encoder and decoder:
+ *
+ * This is responsible for handling the initial connection between a dumb and
+ * master terminal. We might be connecting to an older or newer version of
+ * ELinks and has to be able to keep some kind of compatibility so that
+ * everything will work as expected while being able to change the format
+ * of the decoded session info. In order to avoid sending too much information
+ * we use magic numbers to signal the identity of the dump client terminal.
+ *
+ * Magic numbers are composed by the SESSION_MAGIC() macro. It is a negative
+ * magic to be able to distinguish the oldest format from the newer ones. */
+
+#define SESSION_MAGIC(major, minor) -(((major) << 8) + (minor))
+
+/* Older versions (up to and including 0.9.1) sends no magic variable and if
+ * this is detected we fallback to the old session info format. The format is
+ * the simplest possible one:
+ *
+ *	0: base-session ID <int>
+ *	1: URI length <int>
+ *	2: URI length bytes containing the URI <unsigned char>*
+ *
+ * SESSION_MAGIC(1, 0) supports multiple URIs and ofcourse magic variables:
+ *
+ *	0: base-session ID <int>
+ *	1: Session magic <int>
+ *	3: NUL terminated URIs <unsigned char>+
+ */
+
 void *
 create_session_info(int cp, struct list_head *url_list, int *ll)
 {
@@ -645,7 +674,7 @@ create_session_info(int cp, struct list_head *url_list, int *ll)
 	if (!i) return NULL;
 
 	i[0] = cp;
-	i[1] = l;
+	i[1] = SESSION_MAGIC(1, 0);
 	if (l) {
 		unsigned char *start = (unsigned char *)(i + 2);
 
@@ -657,14 +686,14 @@ create_session_info(int cp, struct list_head *url_list, int *ll)
 	return i;
 }
 
-
 struct initial_session_info *
 decode_session_info(const void *pdata)
 {
 	int *data = (int *) pdata;
 	int len = *(data++);
 	struct initial_session_info *info;
-	int url_len;
+	unsigned char *str;
+	int magic;
 
 	if (len < 2 * sizeof(int)) return NULL;
 
@@ -674,30 +703,36 @@ decode_session_info(const void *pdata)
 
 	info->base_session = *(data++);
 
-	url_len = *(data++);
-	if (url_len && len >= 2 * sizeof(int) + url_len) {
-		unsigned char *str = (unsigned char *) data;
-		int length = 0;
+	magic = *(data++);
+	str   = (unsigned char *) data;
+	len  -= 2 * sizeof(int);
 
-		while (url_len) {
-			unsigned char *url;
+	switch (magic) {
+	case SESSION_MAGIC(1, 0):
+		/* Extract multiple NUL terminated URIs */
+		while (len > 0) {
+			unsigned char *end = memchr(str, 0, len);
+ 
+			if (!end) break;
+ 
+			add_to_string_list(&info->url_list, str, end - str);
 
-			length = strlen(str) + 1;
+			len -= end - str + 1;
+			str  = end + 1;
+ 		}
+		break;
 
-			url = fmem_alloc(length);
-			if (!url) return info;
+	default:
+		/* The old format. Extract URI containing @magic bytes */
+		if (magic <= 0 || len <= 0 || magic > len)
+			break;
 
-			memcpy(url, str, length);
-			str += length;
-			url_len -= length;
-
-			add_to_string_list(&info->url_list, url, -1);
-			fmem_free(url);
-		}
+		add_to_string_list(&info->url_list, str, magic);
 	}
 
 	return info;
 }
+
 
 static void
 free_session_info(struct initial_session_info *info)

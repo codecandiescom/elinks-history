@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.52 2002/11/23 19:25:44 zas Exp $ */
+/* $Id: sched.c,v 1.53 2002/12/01 12:18:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -778,20 +778,62 @@ again2:
 #endif
 }
 
+static int
+proxy_probe_no_proxy(unsigned char *url, unsigned char *no_proxy)
+{
+	unsigned char *slash = strchr(url, '/');
+
+	if (slash) *slash = 0;
+
+	while (no_proxy && *no_proxy) {
+		unsigned char *jumper = strchr(no_proxy, ',');
+
+		if (jumper) *jumper = 0;
+		if (strstr(url, no_proxy)) {
+			if (jumper) *jumper = ',';
+			if (slash) *slash = '/';
+			return 1;
+		}
+		no_proxy = jumper;
+		if (jumper) {
+			*jumper = ',';
+			no_proxy++;
+		}
+	}
+
+	if (slash) *slash = '/';
+	return 0;
+}
+
 static unsigned char *
 get_proxy_worker(unsigned char *url, unsigned char *proxy)
 {
 	int l = strlen(url);
+	unsigned char *http_proxy, *ftp_proxy, *no_proxy;
+
+	http_proxy = get_opt_str("protocol.http.proxy.host");
+	if (!*http_proxy) http_proxy = getenv("HTTP_PROXY");
+	if (!http_proxy || !*http_proxy) http_proxy = getenv("http_proxy");
+
+	ftp_proxy = get_opt_str("protocol.ftp.proxy.host");
+	if (!*ftp_proxy) ftp_proxy = getenv("FTP_PROXY");
+	if (!ftp_proxy || !*ftp_proxy) ftp_proxy = getenv("ftp_proxy");
+
+	no_proxy = get_opt_str("protocol.no_proxy");
+	if (!*no_proxy) no_proxy = getenv("NO_PROXY");
+	if (!no_proxy || !*no_proxy) no_proxy = getenv("no_proxy");
 
 	if (proxy) {
 		if (!*proxy) proxy = NULL;  /* "" from script_hook_get_proxy() */
 	} else {
-		if (*get_opt_str("protocol.http.proxy.host") && l >= 7
-		    && !strncasecmp(url, "http://", 7))
-			proxy = get_opt_str("protocol.http.proxy.host");
-		if (*get_opt_str("protocol.ftp.proxy.host") && l >= 6
-		    && !strncasecmp(url, "ftp://", 6))
-			proxy = get_opt_str("protocol.ftp.proxy.host");
+		if (http_proxy && *http_proxy && l >= 7
+		    && !strncasecmp(url, "http://", 7)
+		    && !proxy_probe_no_proxy(url + 7, no_proxy))
+			proxy = http_proxy;
+		if (ftp_proxy && *ftp_proxy && l >= 6
+		    && !strncasecmp(url, "ftp://", 6)
+		    && !proxy_probe_no_proxy(url + 6, no_proxy))
+			proxy = ftp_proxy;
 	}
 
 	if (proxy) {

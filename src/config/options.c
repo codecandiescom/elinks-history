@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.125 2002/12/01 11:07:36 pasky Exp $ */
+/* $Id: options.c,v 1.126 2002/12/01 12:18:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1009,7 +1009,8 @@ register_options()
 
 	add_opt_string("protocol.http.proxy",
 		"host", 0, "",
-		"Host and port number (host:port) of the HTTP proxy, or blank.");
+		"Host and port number (host:port) of the HTTP proxy, or blank.\n"
+		"If it's blank, HTTP_PROXY environment variable is checked as well.");
 
 	add_opt_string("protocol.http.proxy",
 		"user", 0, "",
@@ -1080,7 +1081,8 @@ register_options()
 
 	add_opt_string("protocol.ftp.proxy",
 		"host", 0, "",
-		"Host and port number (host:port) of the FTP proxy, or blank.");
+		"Host and port number (host:port) of the FTP proxy, or blank.\n"
+		"If it's blank, FTP_PROXY environment variable is checked as well.");
 
 	add_opt_string("protocol.ftp",
 		"anon_passwd", 0, "some@host.domain",
@@ -1125,6 +1127,14 @@ register_options()
 		"%p in the string means port\n"
 		"%s in the string means subject (?subject=<this>)\n"
 		"%u in the string means the whole URL");
+
+
+	add_opt_string("protocol",
+		"no_proxy", 0, "",
+		"Comma separated list of domains for which the proxy (HTTP/FTP)\n"
+		"should be disabled. Optionally, port can be specified for some\n"
+		"domains as well. If it's blank, NO_PROXY environment variable is\n"
+	        "checked as well.");
 
 
 

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.98 2003/07/23 12:59:54 pasky Exp $ */
+/* $Id: connection.c,v 1.99 2003/07/23 13:08:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ get_host_connection(struct connection *c)
 
 	if (!host) return NULL;
 	foreach (connection, host_connections)
-		if (!strncmp(connection->host, -1, host, hostlen))
+		if (!strlcmp(connection->host, -1, host, hostlen))
 			return connection;
 
 	return NULL;

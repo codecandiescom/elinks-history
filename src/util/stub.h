@@ -1,8 +1,9 @@
-/* $Id: stub.h,v 1.1 2003/07/22 15:59:19 jonas Exp $ */
+/* $Id: stub.h,v 1.2 2003/09/13 00:32:32 zas Exp $ */
 
 #ifndef EL__UTIL_STUB_H
 #define EL__UTIL_STUB_H
 
+#include <string.h>
 #if 0
 #ifdef DEBUG
 #define USE_OWN_LIBC

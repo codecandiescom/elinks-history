@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.175 2003/07/20 23:42:10 pasky Exp $ */
+/* $Id: renderer.c,v 1.176 2003/07/20 23:56:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -690,9 +690,7 @@ html_tag(struct document *f, unsigned char *t, int x, int y)
 static void
 put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 {
-#define CH_BUF	256
-
-	static char buffer[CH_BUF];
+	unsigned char *buffer;
 	int bufferpos = 0;
 	int charspos = 0;
 
@@ -706,9 +704,15 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 		return;
 	}
 
+	if (!charslen) {
+		put_chars(part, NULL, 0);
+		return;
+	}
+
 	/* Buffer allocation */
 
-	if (!charslen) put_chars(part, NULL, 0);
+	buffer = mem_alloc(ALLOC_GR);
+	if (!buffer) return;
 
 	/* Iterate ;-) */
 
@@ -718,7 +722,6 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 		if (chars[charspos] < 128 && chars[charspos] != '&') {
 putc:
 			buffer[bufferpos++] = chars[charspos++];
-			if (bufferpos < CH_BUF) continue;
 			goto flush;
 		}
 
@@ -776,7 +779,6 @@ decode:
 
 		if (!e[1]) {
 			buffer[bufferpos++] = e[0];
-			if (bufferpos < CH_BUF) continue;
 flush:
 			e = "";
 			goto flush1;
@@ -784,18 +786,23 @@ flush:
 
 		while (*e) {
 			buffer[bufferpos++] = *(e++);
-			if (bufferpos < CH_BUF) continue;
 flush1:
-			put_chars(part, buffer, bufferpos);
-			bufferpos = 0;
+			if (!(bufferpos & (ALLOC_GR - 1))) {
+				unsigned char *b;
+
+				b = mem_realloc(buffer, bufferpos + ALLOC_GR);
+				if (b)
+					buffer = b;
+				else
+					bufferpos--;
+			}
 		}
 	}
 
 	/* Say bye */
 
 	if (bufferpos) put_chars(part, buffer, bufferpos);
-
-#undef CH_BUF
+	mem_free(buffer);
 }
 
 void

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.52 2005/03/27 00:35:10 rrowan Exp $
+# $Id: hooks.pl,v 1.53 2005/03/27 00:49:19 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -401,15 +401,15 @@ sub goto_url_hook
 			my $bugzilla = 'http://bugzilla.elinks.or.cz';
 			if (not $bug)
 			{
-				$url = $bugzilla;
+				return $bugzilla;
 			}
 			elsif ($bug =~ '^[0-9]*$')
 			{
-				$url = $bugzilla . '/show_bug.cgi?id=' . $bug;
+				return $bugzilla . '/show_bug.cgi?id=' . $bug;
 			}
 			else
 			{
-				$url = $bugzilla . '/buglist.cgi?short_desc_type=allwordssubstr&short_desc=' . $bug;
+				return $bugzilla . '/buglist.cgi?short_desc_type=allwordssubstr&short_desc=' . $bug;
 			}
 		}
 		else
@@ -417,9 +417,8 @@ sub goto_url_hook
 			my $doc = '';
 			$doc = '/documentation' if $url =~ '^doc';
 			$doc = '/faq.html' if $url =~ '^faq$';
-			$url = 'http://elinks.or.cz' . $doc;
+			return 'http://elinks.or.cz' . $doc;
 		}
-		return $url;
 	}
 
 	# the Dialectizer (dia <dialect> <url>)
@@ -442,8 +441,9 @@ sub goto_url_hook
 	# Anything not otherwise useful could be a search
 	if ($current_url and loadrc("gotosearch") eq "yes")
 	{
-		$url = search(loadrc("search"), $url);
+		return search(loadrc("search"), $url);
 	}
+
 	return $url;
 }
 
@@ -455,28 +455,32 @@ sub follow_url_hook
 	my $url = shift;
 
 	# Bork! Bork! Bork!
-	if ($url =~ 'google\.com') {
-		if (loadrc("bork") eq "yes") {
-			if ($url =~ '^http://(|www\.|search\.)google\.com(|/search)(|/)$') {
-				$url = 'http://google.com/webhp?hl=xx-bork';
-			} elsif ($url =~ '^http://(|www\.)groups\.google\.com(|/groups)(|/)$'
-			         or $url =~ '^http://(|www\.|search\.)google\.com/groups(|/)$') {
-				$url = 'http://google.com/groups?hl=xx-bork';
+	if ($url =~ 'google\.com')
+	{
+		if (loadrc("bork") eq "yes")
+		{
+			if ($url =~ '^http://(|www\.|search\.)google\.com(|/search)(|/)$')
+			{
+				return 'http://google.com/webhp?hl=xx-bork';
+			}
+			elsif ($url =~ '^http://(|www\.)groups\.google\.com(|/groups)(|/)$'
+				or $url =~ '^http://(|www\.|search\.)google\.com/groups(|/)$')
+			{
+				return 'http://google.com/groups?hl=xx-bork';
 			}
 		}
-		return $url;
 	}
 
 	# NNTP?  Try Google Groups
-	if ($url =~ '^(nntp|news):' and loadrc("usenet") ne "standard") {
+	if ($url =~ '^(nntp|news):' and loadrc("usenet") ne "standard")
+	{
 		my $beta = "groups.google.co.uk";
 		$beta = "groups-beta.google.com" unless (loadrc("googlebeta") ne "yes");
 		$url =~ s/\///g;
 		my ($group) = $url =~ /[a-zA-Z]:(.*)/;
 		my $bork = "";
 		$bork = "hl=xx-bork&" unless (loadrc("bork") ne "yes");
-		$url = 'http://' . $beta . '/groups?' . $bork . 'group=' . $group;
-		return $url;
+		return 'http://' . $beta . '/groups?' . $bork . 'group=' . $group;
 	}
 
 	# strip trailing spaces

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.62 2004/03/21 15:58:51 jonas Exp $ */
+/* $Id: uri.h,v 1.63 2004/03/21 16:16:11 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -44,6 +44,8 @@ struct uri {
 	 * to make form data handling more efficient. The data is marked by
 	 * POST_CHAR in the uri string. */
 	unsigned char *post;
+
+	unsigned int refcount;
 
 #ifdef IPV6
 	unsigned int ipv6:1;

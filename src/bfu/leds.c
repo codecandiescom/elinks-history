@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.58 2004/12/16 19:39:59 pasky Exp $ */
+/* $Id: leds.c,v 1.59 2004/12/27 21:59:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,20 +73,9 @@ static struct option_info led_options[] = {
 	INIT_OPT_TREE("ui", N_("Clock"),
 		"clock", 0, N_("Digital clock in the status bar.")),
 
-/* XXX */ /* #ifdef CONFIG_LEDS */
-#if 1
 	INIT_OPT_BOOL("ui.clock", N_("Enable"),
 		"enable", 0, 0,
-		N_("Whether to display a digital clock in the status bar.\n"
-		"Note that the LED indicators must be enabled for this\n"
-		"to take effect.")),
-#else
-	INIT_OPT_BOOL("ui.clock", N_("Enable"),
-		"enable", 0, 0,
-		N_("Whether to display a digital clock in the status bar.\n"
-		"Note that the LED indicators (DISABLED) must be enabled\n"
-		"for this to take any effect.")),
-#endif
+		N_("Whether to display a digital clock in the status bar.")),
 
 	INIT_OPT_STRING("ui.clock", N_("Format"),
 		"format", 0, "[%H:%M]",

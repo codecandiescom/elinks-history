@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.90 2003/07/14 18:48:59 jonas Exp $ */
+/* $Id: url.c,v 1.91 2003/07/14 19:14:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,16 +92,19 @@ get_url_data(unsigned char *url)
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 
 static void
-translate_directories(unsigned char *url)
+translate_directories(unsigned char *uristring)
 {
-	unsigned char *url_data = get_url_data(url);
-	unsigned char *src, *dest;
-	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
+	unsigned char *src, *dest, *path;
+	int lo = !strncasecmp(uristring, "file://", 7); /* dsep() *hint* *hint* */
+	struct uri uri;
 
-	if (!url_data || url_data == url/* || *--url_data != '/'*/) return;
-	if (!dsep(*url_data)) url_data--;
-	src = url_data;
-	dest = url_data;
+	if (!parse_uri(&uri, uristring) || !uri.data/* || *--url_data != '/'*/)
+		return;
+
+	path = uri.data;
+	if (!dsep(*path)) path--;
+	src = path;
+	dest = path;
 
 	do {
 		/* TODO: Rewrite this parser in sane way, gotos are ugly ;). */
@@ -120,7 +123,7 @@ repeat:
 
 			/* /./ - strip that.. */
 
-			if (src == url_data && (!src[2] || !src[3])) {
+			if (src == path && (!src[2] || !src[3])) {
 				/* ..if this is not the only URL (why?). */
 				goto proceed;
 			}
@@ -135,7 +138,7 @@ repeat:
 
 			/* /../ - strip that and preceding element. */
 
-			while (dest > url_data) {
+			while (dest > path) {
 				dest--;
 				if (dsep(*dest)) {
 					if (dest + 3 == orig_dest

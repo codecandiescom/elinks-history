@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.201 2004/02/05 19:47:05 jonas Exp $ */
+/* $Id: search.c,v 1.202 2004/02/05 23:19:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -979,7 +979,6 @@ search_link_text(struct document *document, int current_link, int i,
 	int textlen = strlen(text);
 
 	assert(textlen && direction);
-	assert(i >= 0 && i < document->nlinks);
 
 #define case_compare_chars(c1, c2) \
 	(case_sensitive ? (c1) == (c2) : tolower(c1) == tolower(c2))
@@ -1112,6 +1111,8 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 
 	i = search_link_text(doc_view->document, current, i, text, direction);
 	if (i < 0) return TYPEAHEAD_STOP;
+
+	assert(i >= 0 && i < doc_view->document->nlinks);
 
 	doc_view->vs->current_link = i;
 	return TYPEAHEAD_MATCHED;

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.3 2004/01/18 16:47:42 jonas Exp $ */
+/* $Id: scanner.c,v 1.4 2004/01/18 17:09:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,6 +130,62 @@ scan_css_tokens(struct css_scanner *scanner)
 
 	scanner->tokens = current;
 	scanner->current = 0;
+}
+
+
+/* Scanner table accessors and mutators */
+
+struct css_token *
+get_css_token_(struct css_scanner *scanner, unsigned char *file, int line)
+{
+	assert(scanner);
+
+#ifdef CSS_SCANNER_DEBUG
+	if (scanner->tokens) {
+		struct css_token *token = &scanner->table[scanner->current];
+
+		errfile = file, errline = line;
+		elinks_wdebug("%d %d [%s]", token->type, token->length, token->string);
+	}
+#endif
+
+	return scanner->tokens > 0 ? &scanner->table[scanner->current] : NULL;
+}
+
+struct css_token *
+get_next_css_token_(struct css_scanner *scanner, unsigned char *file, int line)
+{
+	scanner->current++;
+	if (scanner->current >= scanner->tokens) {
+		scan_css_tokens(scanner);
+	}
+	return get_css_token_(scanner, file, line);
+}
+
+struct css_token *
+skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type,
+		 unsigned char *file, int line)
+{
+	struct css_token *token = get_css_token_(scanner, file, line);
+
+	/* TODO: Precedens handling. Stop if ';' is encountered while skipping
+	 * for ':' and if '{' or '}' while skipping for ';' */
+	while (token && token->type != type)
+		token = get_next_css_token_(scanner, file, line);
+
+	return (token && token->type == type)
+		? get_next_css_token_(scanner, file, line) : NULL;
+}
+#define skip_css_tokens(scanner, type)  skip_css_tokens_(scanner, type, __FILE__, __LINE__)
+
+int
+check_next_css_token(struct css_scanner *scanner, enum css_token_type type)
+{
+	if (scanner->current + 1 >= scanner->tokens)
+		scan_css_tokens(scanner);
+
+	return scanner->current + 1 < scanner->tokens
+		&& scanner->table[scanner->current + 1].type == type;
 }
 
 

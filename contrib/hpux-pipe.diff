@@ -1,6 +1,6 @@
---- -	Fri Jan 18 12:11:36 2002
-+++ kbd.c	Fri Jan 18 12:07:58 2002
-@@ -58,7 +58,11 @@
+--- src/lowlevel/kbd.c.orig	Mon Mar 18 22:03:13 2002
++++ src/lowlevel/kbd.c	Fri Mar 22 16:32:53 2002
+@@ -77,7 +77,11 @@
  {
  	int w = 0;
  	if (!len) return;

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.2 2003/11/17 18:03:29 jonas Exp $ */
+/* $Id: dialogs.c,v 1.3 2003/11/17 18:17:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,6 +95,7 @@ push_info_button(struct dialog_data *dlg_data,
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
 	struct cache_entry *ce;
+	struct string msg;
 
 	/* Show history item info */
 	if (!box->sel) return 0;
@@ -104,13 +105,21 @@ push_info_button(struct dialog_data *dlg_data,
 	cache_entry_lock(ce);
 
 	/* TODO: More info */
+
+	add_to_string(&msg, _("URL", term));
+	add_to_string(&msg, ": ");
+
+	/* Add the uri with password and post info stripped */
+	add_uri_to_string(&msg, &ce->uri, ~(URI_PASSWORD | URI_POST));
+
+	add_format_to_string(&msg, "\n%s: %s", _("Last modified time", term),
+						ce->last_modified);
+
+	add_format_to_string(&msg, "\n%s: %d", _("Size", term), ce->data_size);
+	
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Info"), AL_LEFT,
-		msg_text(term, N_("URL: %s\n"
-			"Size: %d\n"
-			"Last modified time: %s"),
-			struri(ce->uri), ce->data_size,
-			ce->last_modified),
+		msg.source,
 		ce, 1,
 		N_("OK"), done_info_button, B_ESC | B_ENTER);
 

@@ -1,3 +1,28 @@
+Wed Aug  7 03:00:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in, src/bfu/Makefile.am, src/bfu/button.c,
+	src/bfu/checkbox.c, src/bfu/colors.h, src/bfu/dialog.c,
+	src/bfu/group.c, src/bfu/inpfield.c, src/bfu/leds.c,
+	src/bfu/listbox.c, src/bfu/menu.c, src/bfu/msgbox.c,
+	src/dialogs/auth.c, src/dialogs/edit.c, src/dialogs/options.c,
+	src/document/download.c, src/document/session.c, src/lua/core.c,
+	src/protocol/types.c:
+
+	Removed --enable-ui-colors configure parameter, config.h (now
+	useless).  
+
+Wed Aug  7 02:56:58 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/align.h, bfu/button.c, bfu/checkbox.c, bfu/colors.h,
+	bfu/dialog.c, bfu/group.c, bfu/inpfield.c, bfu/leds.c,
+	bfu/listbox.c, bfu/menu.c, bfu/msgbox.c, config/options.c,
+	dialogs/auth.c, dialogs/edit.c, dialogs/options.c,
+	document/download.c, document/session.c, document/html/colors.c,
+	document/html/colors.h, document/html/renderer.c, lua/core.c,
+	protocol/types.c:
+
+	User Interface colors are now configurable.  
+
 Wed Aug  7 00:57:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: config/options.c, config/options.h, document/dump.c,

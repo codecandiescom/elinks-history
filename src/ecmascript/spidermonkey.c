@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.59 2004/10/21 23:11:31 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.60 2004/10/21 23:11:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -748,10 +748,11 @@ delayed_goto(void *data)
 	struct delayed_goto *deg = data;
 
 	assert(deg);
-	assert(deg->vs->doc_view);
-	goto_uri_frame(deg->vs->doc_view->session, deg->uri,
-	               deg->vs->doc_view->name,
-		       CACHE_MODE_NORMAL);
+	if (deg->vs->doc_view) {
+		goto_uri_frame(deg->vs->doc_view->session, deg->uri,
+		               deg->vs->doc_view->name,
+			       CACHE_MODE_NORMAL);
+	}
 	done_uri(deg->uri);
 	mem_free(deg);
 }

@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.7 2002/11/27 10:15:39 zas Exp $ */
+/* $Id: sysname.c,v 1.8 2002/11/27 10:51:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,12 +46,12 @@ get_system_name()
 #endif
 
 #ifdef HAVE_POPEN
-	memset(system_name, 0, MAX_STR_LEN);
+	memset(system_name, 0, sizeof(system_name));
 
 	f = popen("uname -srm", "r");
 	if (!f) goto fail;
 
-	if (fread(system_name, 1, MAX_STR_LEN - 1, f) <= 0) {
+	if (fread(system_name, 1, sizeof(system_name) - 1, f) <= 0) {
 		pclose(f);
 		goto fail;
 	}

@@ -3,6 +3,7 @@ See ChangeLog for recent changes, bugfixes and new features.
 ELinks-now:
 
 * simple CSS support
+* simple JavaScript/ECMAScript support by the SpiderMonkey Mozilla JS engine
 * support plain-text mark-up (_^Hx to underline, x^Hx to embolden)
 * multiple URIs on the command line
 * tabs moving (press Alt-'>' or Alt-'<')

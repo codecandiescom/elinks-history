@@ -1,4 +1,4 @@
-/* $Id: module.h,v 1.8 2003/10/26 14:02:35 jonas Exp $ */
+/* $Id: module.h,v 1.9 2003/10/26 14:14:47 jonas Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
@@ -17,7 +17,7 @@ struct module {
 	 * The table should end with NULL_OPTION_INFO. */
 	struct option_info *options;
 
-	/* The event hookss that should be registered for this module.
+	/* The event hooks that should be registered for this module.
 	 * The table should end with NULL_EVENT_HOOK_INFO. */
 	struct event_hook_info *hooks;
 

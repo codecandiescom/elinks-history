@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.12 2004/01/18 02:40:02 jonas Exp $ */
+/* $Id: parser.c,v 1.13 2004/01/18 02:55:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,27 +20,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-
-struct css_property_info {
-	unsigned char *name;
-	int namelen;
-	enum css_decl_property property;
-	enum css_decl_valtype value_type;
-};
-
-#define CSS_PROPERTY(name, property, valtype) \
-	{ name, sizeof(name) - 1, property, valtype }
-
-/* TODO: Use fastfind when we get a lot of properties. */
-struct css_property_info css_property_info[] = {
-	CSS_PROPERTY("background-color", CSS_DP_BACKGROUND_COLOR, CSS_DV_COLOR),
-	CSS_PROPERTY("color", CSS_DP_COLOR, CSS_DV_COLOR),
-	CSS_PROPERTY("font-style", CSS_DP_FONT_STYLE, CSS_DV_FONT_ATTRIBUTE),
-	CSS_PROPERTY("font-weight", CSS_DP_FONT_WEIGHT, CSS_DV_FONT_ATTRIBUTE),
-	CSS_PROPERTY("text-align", CSS_DP_TEXT_ALIGN, CSS_DV_TEXT_ALIGN),
-
-	CSS_PROPERTY("", CSS_DP_NONE, CSS_DV_NONE),
-};
 
 void
 css_parse_decl(struct list_head *props, unsigned char *string)

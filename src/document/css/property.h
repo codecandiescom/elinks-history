@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.4 2004/01/17 21:17:22 pasky Exp $ */
+/* $Id: property.h,v 1.5 2004/01/18 02:55:59 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -52,5 +52,17 @@ struct css_property {
 		/* TODO: The size units will be fun yet. --pasky */
 	} value;
 };
+
+/* The {struct css_property_info} describes what values the properties can
+ * have and what internal type they have. */
+struct css_property_info {
+	unsigned char *name;
+	int namelen;
+	enum css_decl_property property;
+	enum css_decl_valtype value_type;
+};
+
+/* This table contains info about all the known CSS properties. */
+extern struct css_property_info css_property_info[];
 
 #endif

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.6 2004/01/17 16:36:16 pasky Exp $
+## $Id: Makefile.am,v 1.7 2004/01/18 02:55:59 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -19,6 +19,7 @@ libcss_a_SOURCES = \
  parser.c \
  parser.h \
  property.h \
+ property.c \
  value.c \
  value.h
 

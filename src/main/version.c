@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.10 2003/06/08 11:38:41 pasky Exp $ */
+/* $Id: version.c,v 1.11 2003/06/10 19:23:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "util/memory.h"
 #include "util/string.h"
 #include "util/version.h"
+
 
 unsigned char full_static_version[1024];
 
@@ -54,13 +55,13 @@ get_dyn_full_version(struct terminal *term, int more)
 		_("Fastmem", term), ", ",
 #endif
 #ifdef USE_OWN_LIBC
-		_("Own_libc", term), ", ",
+		_("Own Libc Routines", term), ", ",
 #endif
 #ifndef BACKTRACE
-		_("No backtrace", term), ", ",
+		_("No Backtrace", term), ", ",
 #endif
 #ifdef HAVE_SSL
-		_("SSL", term),
+		_("SSL", term), " ",
 #ifdef HAVE_OPENSSL
 		"(OpenSSL)",
 #elif defined(HAVE_GNUTLS)
@@ -81,7 +82,7 @@ get_dyn_full_version(struct terminal *term, int more)
 		_("Cookies", term), ", ",
 #endif
 #ifdef GLOBHIST
-		_("GlobHist", term), ", ",
+		_("Global History", term), ", ",
 #endif
 #ifdef HAVE_ZLIB_H
 		"gzip" ", ",

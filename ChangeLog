@@ -1,3 +1,100 @@
+Wed Apr 28 19:54:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Define macro for testing gpm, zlib and bzlib.  
+
+Wed Apr 28 19:27:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix size check of long long.  
+
+Wed Apr 28 19:22:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in:
+
+	Define macro for testing 'exotic' types. It also takes care of
+	registering the config variable.  
+
+Wed Apr 28 18:43:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/gettext.c:
+
+	Fix compilation with --disable-nls. Patch by Felix von Leitner.  
+
+Wed Apr 28 18:09:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	We don't use these GUILE_* make variables so why substitute them? 
+
+Wed Apr 28 18:05:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Doh, first search for guile-config in user supplied path.  
+
+Wed Apr 28 18:01:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Improve guile configuration by first checking guile-config (using
+	possible supplied path). If guile-config is not found simply emit
+	failure notice else emit the incomplete message.  
+
+Wed Apr 28 17:31:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Simplify guile autoconf.  
+
+Wed Apr 28 17:17:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/core.c:
+
+	A little tidyup.  
+
+Wed Apr 28 17:15:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/core.c:
+
+	Make it possible to start elinks with guile compiled in without
+	~/.elinks/internal-hooks.scm available.  
+
+Wed Apr 28 16:34:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	I should have known not to trust autoconf. Setup prefix and
+	exec_prefix before usage. Should make find it's .mo files.  
+
+Wed Apr 28 10:58:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	AC_{SAVE,RESTORE}_FLAGS: Add ending comma.  
+
+Wed Apr 28 08:45:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/Makefile.am:
+
+	Fix archive name.  
+
+Tue Apr 27 23:12:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	AC_{SAVE,RESTORE}_FLAGS introduced.  
+
+Tue Apr 27 22:30:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Cleanup LOCALEDIR and LIBDIR exporting. This is the way other
+	packages do and I think we should trust autoconf or who ever to set
+	up the variables for us. Oh yes and remove debug echo.  
+
 Tue Apr 27 17:46:02 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/intl/gettext/Makefile.am:

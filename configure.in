@@ -378,8 +378,10 @@ dnl ===================================================================
 dnl Compile-time features control
 dnl ===================================================================
 
+hm_enabled_debug="no";
+
 AC_ARG_ENABLE(debug, [  --enable-debug          enable leak debug and internal error checking],
-              [if test "$enableval" = yes; then AC_DEFINE(DEBUG) fi])
+              [if test "$enableval" = yes; then hm_enabled_debug="yes"; AC_DEFINE(DEBUG) fi])
 
 AC_ARG_ENABLE(bookmarks, [  --disable-bookmarks     disable internal bookmarks manager],
               [if test "$enableval" = yes; then AC_DEFINE(BOOKMARKS) fi],
@@ -418,7 +420,7 @@ AC_SUBST(CONFDIR)
 
 
 dnl gcc specific options (continue)
-if test "x$ac_cv_prog_gcc" = "xyes"; then
+if test "x$ac_cv_prog_gcc" = "xyes" && test "x$hm_enabled_debug" = "xyes"; then
   dnl We want to see all warnings and live with none.
   CFLAGS="$CFLAGS -Werror"
 fi

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.159 2005/03/29 10:39:15 zas Exp $ */
+/* $Id: screen.c,v 1.160 2005/03/29 15:25:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,7 +322,7 @@ static inline struct string *
 add_cursor_move_to_string(struct string *screen, int y, int x)
 {
 #define CURSOR_NUM_LEN 10 /* 10 chars for @y and @x numbers should be more than enough. */
-	unsigned char code[4 + 2 * CURSOR_NUM_LEN];
+	unsigned char code[4 + 2 * CURSOR_NUM_LEN + 1];
 	unsigned int length = 2;
 
 	code[0] = '\033';

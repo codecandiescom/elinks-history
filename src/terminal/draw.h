@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.1 2003/05/04 19:30:54 pasky Exp $ */
+/* $Id: draw.h,v 1.2 2003/05/04 19:36:42 pasky Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -45,5 +45,6 @@ void fill_area(struct terminal *, int, int, int, int, unsigned);
 void draw_frame(struct terminal *, int, int, int, int, unsigned, int);
 void print_text(struct terminal *, int, int, int, unsigned char *, unsigned);
 void set_cursor(struct terminal *, int, int, int, int);
+void clear_terminal(struct terminal *);
 
 #endif

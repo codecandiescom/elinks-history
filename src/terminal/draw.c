@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.1 2003/05/04 19:30:54 pasky Exp $ */
+/* $Id: draw.c,v 1.2 2003/05/04 19:36:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,4 +153,11 @@ set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 	if (y < 0) y = 0;
 	term->cx = x;
 	term->cy = y;
+}
+
+void
+clear_terminal(struct terminal *term)
+{
+	fill_area(term, 0, 0, term->x, term->y, ' ');
+	set_cursor(term, 0, 0, 0, 0);
 }

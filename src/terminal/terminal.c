@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.6 2003/05/04 19:30:54 pasky Exp $ */
+/* $Id: terminal.c,v 1.7 2003/05/04 19:36:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,13 +91,6 @@ alloc_term_screen(struct terminal *term, int x, int y)
 static void in_term(struct terminal *);
 static void check_if_no_terminal();
 
-
-static inline void
-clear_terminal(struct terminal *term)
-{
-	fill_area(term, 0, 0, term->x, term->y, ' ');
-	set_cursor(term, 0, 0, 0, 0);
-}
 
 #define IF_ACTIVE(win,term) if(!(win)->type || (win)==get_tab_by_number((term),(term)->current_tab))
 

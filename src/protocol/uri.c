@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.302 2004/12/17 22:59:00 jonas Exp $ */
+/* $Id: uri.c,v 1.303 2004/12/19 00:57:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,13 @@
 #include <sys/types.h>
 #ifdef HAVE_NETDB_H
 #include <netdb.h> /* OS/2 needs this after sys/types.h */
+#endif
+
+#ifdef HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
 #endif
 
 #include "elinks.h"
@@ -41,6 +48,42 @@ static inline int
 is_uri_dir_sep(struct uri *uri, unsigned char pos)
 {
 	return (uri->protocol == PROTOCOL_FILE ? dir_sep(pos) : pos == '/');
+}
+
+
+int
+is_ip_address(unsigned char *address, int addresslen)
+{
+	/* The @address has well defined limits so it would be a shame to
+	 * allocate it. */
+	unsigned char buffer[64];
+
+	if (addresslen >= sizeof(buffer))
+		return 0;
+
+	safe_strncpy(buffer, address, addresslen + 1);
+
+#ifdef HAVE_INET_PTON
+#ifdef CONFIG_IPV6
+	{
+		struct in6_addr addr6;
+
+		if (inet_pton(AF_INET6, buffer, &addr6) > 0)
+			return 1;
+	}
+#endif /* CONFIG_IPV6 */
+	{
+		struct in_addr addr4;
+
+		if (inet_pton(AF_INET, buffer, &addr4) > 0)
+			return 1;
+	}
+
+	return 0;
+#else
+	/* FIXME: Is this ever the case? */
+	return 0;
+#endif /* HAVE_INET_PTON */
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.153 2004/12/17 22:59:01 jonas Exp $ */
+/* $Id: uri.h,v 1.154 2004/12/19 00:57:48 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -298,5 +298,8 @@ get_real_uri_length(struct uri *uri)
 {
 	return uri->post ? uri->post - struri(uri) - 1 : strlen(struri(uri));
 }
+
+/* Checks if @address contains a valid IP address. */
+int is_ip_address(unsigned char *address, int addresslen);
 
 #endif

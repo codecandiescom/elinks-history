@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.191 2004/12/17 22:40:38 pasky Exp $ */
+/* $Id: cookies.c,v 1.192 2004/12/19 00:57:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,14 @@ is_domain_security_ok(unsigned char *domain, unsigned char *server, int server_l
 	if (server_len == domain_len)
 		return 1;
 
-	/* Also test if domain is secure enough.. */
+	/* Check whether the server is an IP address, and require an exact host
+	 * match for the cookie, so any chance of IP address funkiness is
+	 * eliminated (e.g. the alias 127.1 domain-matching 99.54.127.1). Idea
+	 * from mozilla. (bug 562) */
+	if (is_ip_address(server, server_len))
+		return 0;
+
+	/* Also test if domain is secure en ugh.. */
 
 	need_dots = 1;
 

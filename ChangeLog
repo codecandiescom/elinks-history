@@ -1,3 +1,28 @@
+Tue Jan  4 10:08:28 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Jan  4 01:49:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	The MSGBOX_FREE_TEXT flag will keep the text from being gettexted
+	here, right zas? 
+
+Mon Jan  3 23:43:26 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update. Safe head-start to hu and de.  
+
+Mon Jan  3 23:29:47 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	O\ne0, Jonas :-). Fixed UTF-8 I/O.  
+
 Mon Jan  3 23:10:24 2005  Petr Baudis <pasky@ucw.cz>:
 
 	* src/config/cmdline.c:

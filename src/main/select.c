@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.60 2005/03/03 17:16:47 zas Exp $ */
+/* $Id: select.c,v 1.61 2005/03/03 17:18:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@
 #define FD_SETSIZE 1024
 #endif
 
+/* TODO: move timers related code to lowlevel/timer.h --Zas */
 
 struct thread {
 	void (*read_func)(void *);

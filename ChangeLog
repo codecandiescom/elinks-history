@@ -1,3 +1,154 @@
+Mon Sep  1 21:11:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Revert fg_color[] white/bright white change that I applied to cure
+	symptoms of terminal color bugs.  
+
+Mon Sep  1 20:49:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Rename: rs_opt_cache -> screen_driver 
+
+Mon Sep  1 20:49:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Do fg_color correction before applying attribute color enhancements.  
+
+Mon Sep  1 20:46:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix link color mixing to be as in 0.5pre4.  
+
+Mon Sep  1 20:38:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Moved format_change put_chars() fragment into separate function
+	put_chars_format_change().  
+
+Mon Sep  1 20:32:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/: formhist.c, formhist.h:
+
+	Code cleanup and reordering. Statification. It fixes some issues
+	with formhist feature. Formhist dialog do not pop up twice anymore,
+	and multiple identical entries in formhist should not occur anymore.  
+
+Mon Sep  1 20:16:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, terminal/color.c,
+	terminal/color.h, viewer/text/link.c:
+
+	Fix hovering of links to be like pre4 (even though always having
+	bold links is more readable IMHO).  
+
+Mon Sep  1 19:38:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/color.c:
+
+	Fixed !allow_dark_on_black brokenness when lookup in the xlat
+	(@fg_color) table didn't reflect bold attribute being set. As a
+	result, the behaviour slightly deviated from the correct 0.5pre4 one
+	and there were dark colors on dark backgrounds. Fix based on
+	cooperation with jonas :-).  
+
+Mon Sep  1 19:32:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Fix: comparaison failed because test order was inverted, having for
+	effect to return false on form_already_saved() call. There are some
+	bugs left.  
+
+Mon Sep  1 13:17:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Use int_bounds().  
+
+Mon Sep  1 13:13:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: view.c, form.c, link.c:
+
+	Use int_bounds().  
+
+Mon Sep  1 13:06:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/download.c, terminal/draw.c:
+
+	Use int_bounds().  
+
+Mon Sep  1 13:02:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/options.c, document/html/tables.c:
+
+	Use int_bounds().  
+
+Mon Sep  1 12:59:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/: auth.c, edit.c, hierbox.c, mime.c:
+
+	Use int_bounds().  
+
+Mon Sep  1 12:55:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/backend/default.c, config/dialogs.c:
+
+	Use int_bounds().  
+
+Mon Sep  1 12:52:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: elinks.h, bfu/button.c, bfu/checkbox.c, bfu/group.c,
+	bfu/inpfield.c, bfu/listbox.c, bfu/menu.c, bfu/msgbox.c:
+
+	int_bounds() was introduced, it replaces int_lower_bound(&x, a) and
+	int_upper_bound(&x, b) with int_bounds(&x, a, b), and should be
+	faster.  
+
+Mon Sep  1 12:35:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	Optimization: struct widget_data *dlg_item = &dlg->items[dlg->n -
+	1]; 
+
+Mon Sep  1 12:15:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/hierbox.c:
+
+	Trivial optimization, cache dlg->n - 1.  
+
+Sun Aug 31 22:49:07 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, gl.po, hr.po, hu.po, id.po, is.po, it.po, leet.po,
+	lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Sun Aug 31 22:27:03 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Aug 31 22:21:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with options in 0.5pre4.CVS 
+
+Sun Aug 31 22:14:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Fix --(config|long)-help color printing.  
+
 Sun Aug 31 19:14:48 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/: color.c, screen.c:

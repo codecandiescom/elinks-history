@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.196 2004/03/17 09:08:22 zas Exp $ */
+/* $Id: menu.c,v 1.197 2004/04/13 23:43:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -711,7 +711,11 @@ enter:
 	}
 
 break2:
+	goto break4;
+break3:
 	return;
+break4:
+	goto break3;
 }
 
 static void

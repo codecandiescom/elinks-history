@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.163 2003/09/28 22:38:05 zas Exp $ */
+/* $Id: session.c,v 1.164 2003/09/28 22:55:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -925,20 +925,24 @@ end_load(struct download *stat, struct session *ses)
 
 	d = do_move(ses, &stat);
 	if (!stat) return;
+	if (d == 2) goto end;
+
 	if (d == 1) {
 		stat->end = (void (*)(struct download *, void *))doc_end_load;
 		display_timer(ses);
 	}
+
 	if (stat->state < 0) {
-		if (d != 2 && ses->task) {
-			free_task(ses);
-		}
+		if (ses->task) free_task(ses);
 		if (d == 1) doc_end_load(stat, ses);
 	}
-	if (stat->state < 0 && stat->state != S_OK && d != 2) {
+
+	if (stat->state < 0 && stat->state != S_OK) {
 		print_error_dialog(ses, stat);
-		if (!d) reload(ses, NC_CACHE);
+		if (d == 0) reload(ses, NC_CACHE);
 	}
+
+end:
 	check_questions_queue(ses);
 	print_screen_status(ses);
 }

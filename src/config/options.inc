@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.186 2005/01/14 18:45:22 zas Exp $ */
+/* $Id: options.inc,v 1.187 2005/03/21 11:26:16 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -943,6 +943,10 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_COLORS(".dialog", N_("Checkbox"),
 		"checkbox", "darkred", "white", "black", "white",
 		N_("Dialog checkbox colors.")),
+
+	INIT_OPT_COLORS(".dialog", N_("Selected checkbox"),
+		"checkbox-selected", "yellow", "green", "white", "black",
+		N_("Dialog selected checkbox colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Checkbox label"),
 		"checkbox-label", "black", "white", "black", "white",

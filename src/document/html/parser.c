@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.247 2003/10/31 18:16:07 jonas Exp $ */
+/* $Id: parser.c,v 1.248 2003/10/31 22:28:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3159,7 +3159,7 @@ next_break:
 			goto set_lt;
 		}
 
-		if (*html != '<' || parse_element(html, eof, &name, &namelen, &attr, &end)) {
+		if (*html != '<' || d_opt->plain == 1 || parse_element(html, eof, &name, &namelen, &attr, &end)) {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
 			html++;
@@ -3212,7 +3212,7 @@ ng:;
 			if (!inv) {
 				unsigned char *a;
 
-				if (ei->func == html_xmp) {
+				if (d_opt->plain) {
 					put_chrs("<", 1, put_chars_f, f);
 					html = prev_html + 1;
 					break;
@@ -3273,7 +3273,10 @@ ng:;
 				int lnb = 0;
 				int xxx = 0;
 
-				if (ei->func == html_xmp) d_opt->plain = 0;
+				if (d_opt->plain) {
+					if (ei->func == html_xmp) d_opt->plain = 0;
+					else break;
+				}
 				was_br = 0;
 				if (ei->nopair == 1 || ei->nopair == 3) break;
 				/*debug_stack();*/
@@ -3736,9 +3739,15 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	format.href_base = stracpy(url);
 	format.target_base = options->framename ? stracpy(options->framename) : NULL;
 
-	par_format.align = AL_LEFT;
-	par_format.leftmargin = options->margin;
-	par_format.rightmargin = options->margin;
+	if (options->plain) {
+		par_format.align = AL_NONE;
+		par_format.leftmargin = 0;
+		par_format.rightmargin = 0;
+	} else {
+		par_format.align = AL_LEFT;
+		par_format.leftmargin = options->margin;
+		par_format.rightmargin = options->margin;
+	}
 
 	par_format.width = options->width;
 	par_format.list_level = par_format.list_number = 0;

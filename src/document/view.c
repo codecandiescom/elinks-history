@@ -1,5 +1,5 @@
 /* Document view */
-/* $Id: view.c,v 1.122 2003/10/31 17:32:01 jonas Exp $ */
+/* $Id: view.c,v 1.123 2003/10/31 22:28:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,11 +8,9 @@
 #include "elinks.h"
 #include "main.h"
 
-#include "cache/cache.h"
 #include "document/document.h"
 #include "document/html/frames.h"
 #include "document/html/renderer.h"
-#include "document/plain.h"
 #include "document/view.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -224,39 +222,6 @@ draw_document_view(struct document_view *doc_view, struct terminal *t, int activ
 }
 
 void
-render_document(struct document *document, struct cache_entry *cache_entry)
-{
-	int i;
-
-	assert(cache_entry && document);
-	if_assert_failed return;
-
-	d_opt = &document->options;
-	document->id_tag = cache_entry->id_tag;
-	defrag_entry(cache_entry);
-
-	if (document->options.plain) {
-		render_plaintext_document(document, cache_entry);
-	} else {
-		render_html_document(document, cache_entry);
-	}
-
-	document->width = 0;
-
-	for (i = document->height - 1; i >= 0; i--) {
-		if (!document->data[i].l) {
-			if (document->data[i].d) mem_free(document->data[i].d);
-			document->height--;
-		} else break;
-	}
-
-	for (i = 0; i < document->height; i++)
-		document->width = int_max(document->width, document->data[i].l);
-
-	if (document->links) sort_links(document);
-}
-
-void
 cached_format_html(struct view_state *vs, struct document_view *document_view,
 		   struct document_options *options)
 {
@@ -295,7 +260,7 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 			return;
 		}
 
-		render_document(document, cache_entry);
+		render_html_document(document, cache_entry);
 	}
 
 	document_view->document = document;

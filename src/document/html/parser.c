@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.209 2003/10/02 22:40:56 witekfl Exp $ */
+/* $Id: parser.c,v 1.210 2003/10/02 22:51:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,8 +481,12 @@ static void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
-/* Howtos look better without this */
 #if 0
+	/* TODO: This (outcommented use of was_li) is related to and fixes bug
+	 * #208 "Rendering of paragraphs nested in listitems could be
+	 * improved". It makes rendering of pages like (DocBook generated)
+	 * HOWTOs better. */
+	/* Side effect is that <li><li> will be rendered as "* *". */
 	if (was_li) {
 		was_li = 0;
 		line_breax = 0;

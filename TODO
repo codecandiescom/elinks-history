@@ -1,55 +1,41 @@
-TODO list for ELinks (mostly unsorted):
+The ELinks TODO items are kept in Bugzilla (http://bugzilla.elinks.or.cz/),
+look for the bugs with 'enhancement' severity. Some generic goals are still
+kept here, though, to be more on the developers' eyes ;-).
 
 
-Major goals:
+What yet needs to take its way to Bugzilla:
 
-+ Rewrite HTML parser (see ELusive)
+  Show any info that can be found in globhist for the selected link in the Info
+box (last-visit-time and possibly page-title)
 
-+ Reorganization of user interface
+  Allow multiple transfers to be queued up instead of cancelling the currently
+queued item when back is pressed
 
+  Change msg_box to use printf-style formats
 
-Minor first-level goals:
-
-- Forward/backward history manager
-
-
-ELusive:
-
-See src/elusive/TODO.
+  Some rules for sane handling of texinfo documentation
 
 
-Global history:
-
-+ Show any info that can be found in globhist for the selected link in the Info
-  box (last-visit-time and possibly page-title)
 
 
-Downloads / scheduling:
-
-- Allow multiple transfers to be queued up instead of cancelling the currently
-  queued item when back is pressed
 
 
-Generic code changes:
+  Rewrite HTML parser (see ELusive, src/elusive/TODO)
 
-- Change msg_box to use printf-style formats
+  ECMAScript and CSS support
+
+  Much better scripting support
+
+  Modularization, plugins support
+
+  Reorganization of user interface (nothing particular at all, just an
+uncertain feel that it could be better and bear a look of some UI designer ;)
+
+  Write some more documentation.. docs, a lot of docs!
+
+  General code cleanup
+
+  Speed/memory optimizations
 
 
-Build-time configuration / build:
-
-+ Some rules for sane handling of texinfo documentation
-
-
-Permanent goals:
-
-+ General code cleanup
-
-+ Write some more documentation.. docs, a lot of docs!
-
-+ Speed/memory optimizations
-
-
-Key: - nothing done + work in progress * almost ready
-     (reflects only what is already committed to CVS)
-
-$Id: TODO,v 1.59 2003/05/16 17:42:14 pasky Exp $
+$Id: TODO,v 1.60 2003/05/16 17:47:00 pasky Exp $

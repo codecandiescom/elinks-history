@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.18 2003/12/30 18:26:43 zas Exp $ */
+/* $Id: renderer.c,v 1.19 2003/12/30 18:36:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,27 +32,27 @@
 
 
 void
-render_document(struct view_state *vs, struct document_view *document_view,
+render_document(struct view_state *vs, struct document_view *doc_view,
 		struct document_options *options)
 {
 	unsigned char *name;
 	struct document *document;
 	struct cache_entry *cache_entry;
 
-	assert(vs && document_view && options);
+	assert(vs && doc_view && options);
 	if_assert_failed return;
 
-	name = document_view->name;
-	document_view->name = NULL;
-	detach_formatted(document_view);
+	name = doc_view->name;
+	doc_view->name = NULL;
+	detach_formatted(doc_view);
 
-	document_view->name = name;
-	document_view->link_bg = NULL;
-	document_view->link_bg_n = 0;
+	doc_view->name = name;
+	doc_view->link_bg = NULL;
+	doc_view->link_bg_n = 0;
 
-	document_view->vs = vs;
-	document_view->last_x = document_view->last_y = -1;
-	document_view->document = NULL;
+	doc_view->vs = vs;
+	doc_view->last_x = doc_view->last_y = -1;
+	doc_view->document = NULL;
 
 	cache_entry = find_in_cache(vs->url);
 	if (!cache_entry) {
@@ -78,13 +78,13 @@ render_document(struct view_state *vs, struct document_view *document_view,
 		sort_links(document);
 	}
 
-	document_view->document = document;
-	document_view->x = document->options.x;
-	document_view->y = document->options.y;
-	document_view->width = document->options.width;
+	doc_view->document = document;
+	doc_view->x = document->options.x;
+	doc_view->y = document->options.y;
+	doc_view->width = document->options.width;
 	/* We allow the height to differ if the document do not use frames or
 	 * textareas. */
-	document_view->height = document->options.needs_height
+	doc_view->height = document->options.needs_height
 				? document->options.height : options->height;
 }
 

@@ -1,7 +1,9 @@
-/* $Id: urlhist.h,v 1.5 2003/05/20 10:07:25 zas Exp $ */
+/* $Id: urlhist.h,v 1.6 2003/10/04 22:19:23 pasky Exp $ */
 
 #ifndef EL__CONFIG_URLHIST_H
 #define EL__CONFIG_URLHIST_H
+
+#include "bfu/inphist.h"
 
 extern int history_dirty;
 extern int history_nosave;

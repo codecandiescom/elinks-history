@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.166 2003/10/01 22:18:35 zas Exp $ */
+/* $Id: session.c,v 1.167 2003/10/05 12:40:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -792,13 +792,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 		if (!url
 		    || (frm->vs.view && frm->vs.view->document
 		        && frm->vs.view->document->frame_desc)) {
-			/* del_from_list(frm); */
 			request_frameset(ses, frm->vs.view->document->frame_desc);
-#if 0
-			destroy_vs(&frm->vs);
-			mem_free(frm->name);
-			mem_free(frm);
-#endif
 			if (url) mem_free(url);
 			return;
 		}

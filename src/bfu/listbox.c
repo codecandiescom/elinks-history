@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.188 2005/03/02 13:22:38 zas Exp $ */
+/* $Id: listbox.c,v 1.189 2005/03/05 20:46:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,7 +446,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 }
 
 /* Displays a dialog box */
-static t_handler_event_status
+static widget_handler_status_T
 display_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -504,7 +504,7 @@ check_old_state(struct listbox_item *item, void *info_, int *offset)
 	return 0;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 init_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
@@ -530,7 +530,7 @@ init_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 mouse_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 #ifdef CONFIG_MOUSE
@@ -589,7 +589,7 @@ mouse_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_NOT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 kbd_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct widget_data *dlg_item = dlg_data->widgets_data;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.208 2005/02/28 10:21:10 zas Exp $ */
+/* $Id: dialogs.c,v 1.209 2005/03/05 20:46:47 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -290,7 +290,7 @@ static struct listbox_ops options_listbox_ops = {
 
 /* Button handlers */
 
-static t_handler_event_status
+static widget_handler_status_T
 check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -413,7 +413,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 #undef EDIT_WIDGETS_COUNT
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_edit_button(struct dialog_data *dlg_data,
 		 struct widget_data *some_useless_info_button)
 {
@@ -456,7 +456,7 @@ add_option_to_tree(void *data, unsigned char *name)
 	/* TODO: If the return value is NULL, we should pop up a msgbox. */
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_add_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
@@ -499,7 +499,7 @@ invalid_option:
 }
 
 
-static t_handler_event_status
+static widget_handler_status_T
 push_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
@@ -831,7 +831,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	really_really_add_keybinding((void *) hop);
 }
 
-t_handler_event_status
+widget_handler_status_T
 check_keystroke(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct kbdbind_add_hop *hop = dlg_data->dlg->udata2;
@@ -848,7 +848,7 @@ check_keystroke(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_NOT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_kbdbind_add_button(struct dialog_data *dlg_data,
 			struct widget_data *some_useless_info_button)
 {
@@ -912,7 +912,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 }
 
 
-static t_handler_event_status
+static widget_handler_status_T
 push_kbdbind_toggle_display_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
@@ -926,7 +926,7 @@ push_kbdbind_toggle_display_button(struct dialog_data *dlg_data,
 
 /* FIXME: Races here, we need to lock the entry..? --pasky */
 
-static t_handler_event_status
+static widget_handler_status_T
 push_kbdbind_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {

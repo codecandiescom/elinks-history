@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.173 2005/03/05 20:31:11 zas Exp $ */
+/* $Id: options.c,v 1.174 2005/03/05 20:46:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ static struct option_resolver resolvers[] = {
 	{ TERM_OPT_UNDERLINE,	 "underline"	},
 };
 
-static t_handler_event_status
+static widget_handler_status_T
 push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -117,7 +117,7 @@ push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	push_ok_button(dlg_data, button);

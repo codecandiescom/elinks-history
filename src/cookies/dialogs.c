@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.78 2005/02/28 10:25:04 zas Exp $ */
+/* $Id: dialogs.c,v 1.79 2005/03/05 20:46:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,7 +239,7 @@ static struct listbox_ops cookies_listbox_ops = {
 	&cookies_messages,
 };
 
-static t_handler_event_status
+static widget_handler_status_T
 set_cookie_name(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
@@ -250,7 +250,7 @@ set_cookie_name(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 set_cookie_value(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
@@ -261,7 +261,7 @@ set_cookie_value(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 set_cookie_domain(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
@@ -272,7 +272,7 @@ set_cookie_domain(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 set_cookie_expires(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
@@ -290,7 +290,7 @@ set_cookie_expires(struct dialog_data *dlg_data, struct widget_data *widget_data
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 set_cookie_secure(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
@@ -362,7 +362,7 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 #undef EDIT_WIDGETS_COUNT
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_edit_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -377,7 +377,7 @@ push_edit_button(struct dialog_data *dlg_data, struct widget_data *button)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -410,7 +410,7 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	save_cookies();

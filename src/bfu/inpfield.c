@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.200 2005/03/05 20:41:04 zas Exp $ */
+/* $Id: inpfield.c,v 1.201 2005/03/05 20:46:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,7 @@ add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label
 	widget->info.field.max     = max;
 }
 
-t_handler_event_status
+widget_handler_status_T
 check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct widget *widget = widget_data->widget;
@@ -82,7 +82,7 @@ check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-t_handler_event_status
+widget_handler_status_T
 check_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	unsigned char *p;
@@ -158,7 +158,7 @@ dlg_format_field(struct terminal *term,
 	(*y)++;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 input_field_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	void (*fn)(void *) = widget_data->widget->data;
@@ -169,7 +169,7 @@ input_field_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data
 	return cancel_dialog(dlg_data, widget_data);
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 input_field_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	void (*fn)(void *, unsigned char *) = widget_data->widget->data;
@@ -238,7 +238,7 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	do_dialog(term, dlg, ml);
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 display_field_do(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		 int hide)
 {
@@ -284,19 +284,19 @@ display_field_do(struct dialog_data *dlg_data, struct widget_data *widget_data,
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 display_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	return display_field_do(dlg_data, widget_data, 0);
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 display_field_pass(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	return display_field_do(dlg_data, widget_data, 1);
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 init_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	if (widget_has_history(widget_data)) {
@@ -319,7 +319,7 @@ init_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct term_event *ev = dlg_data->term_event;
@@ -358,7 +358,7 @@ mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct window *win = dlg_data->win;
@@ -508,7 +508,7 @@ display_field:
 }
 
 
-static t_handler_event_status
+static widget_handler_status_T
 clear_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	widget_data->info.field.cpos = 0;
@@ -554,7 +554,7 @@ input_line_layouter(struct dialog_data *dlg_data)
 			 &y, win->term->width, NULL, ALIGN_LEFT);
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 input_line_event_handler(struct dialog_data *dlg_data)
 {
 	struct input_line *input_line = dlg_data->dlg->udata;

@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.55 2005/03/05 20:19:19 zas Exp $ */
+/* $Id: dialog.h,v 1.56 2005/03/05 20:46:46 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -54,7 +54,7 @@ struct dialog {
 	struct dialog_refresh *refresh;
 
 	void (*layouter)(struct dialog_data *);
-	t_handler_event_status (*handle_event)(struct dialog_data *);
+	widget_handler_status_T (*handle_event)(struct dialog_data *);
 	void (*abort)(struct dialog_data *);
 
 	struct dialog_layout layout;
@@ -120,9 +120,9 @@ void draw_dialog(struct dialog_data *dlg_data, int width, int height);
  * dialog items are redisplayed. */
 void redraw_dialog(struct dialog_data *dlg_data, int layout);
 
-t_handler_event_status ok_dialog(struct dialog_data *, struct widget_data *);
-t_handler_event_status cancel_dialog(struct dialog_data *, struct widget_data *);
-t_handler_event_status clear_dialog(struct dialog_data *, struct widget_data *);
+widget_handler_status_T ok_dialog(struct dialog_data *, struct widget_data *);
+widget_handler_status_T cancel_dialog(struct dialog_data *, struct widget_data *);
+widget_handler_status_T clear_dialog(struct dialog_data *, struct widget_data *);
 int check_dialog(struct dialog_data *);
 int update_dialog_data(struct dialog_data *);
 void generic_dialog_layouter(struct dialog_data *dlg_data);

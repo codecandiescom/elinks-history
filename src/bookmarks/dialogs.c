@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.196 2005/02/23 22:02:36 jonas Exp $ */
+/* $Id: dialogs.c,v 1.197 2005/03/05 20:46:47 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -166,7 +166,7 @@ void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *,
 
 
 /* Callback for the "add" button in the bookmark manager */
-static t_handler_event_status
+static widget_handler_status_T
 push_add_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	launch_bm_add_doc_dialog(dlg_data->win->term, dlg_data,
@@ -181,7 +181,7 @@ void launch_bm_search_doc_dialog(struct terminal *, struct dialog_data *,
 
 
 /* Callback for the "search" button in the bookmark manager */
-static t_handler_event_status
+static widget_handler_status_T
 push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	launch_bm_search_doc_dialog(dlg_data->win->term, dlg_data,
@@ -255,7 +255,7 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 	focus_bookmark(widget_data, box, bm);
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	input_field(dlg_data->win->term, NULL, 1,
@@ -292,7 +292,7 @@ bookmark_edit_cancel(struct dialog *dlg) {
 }
 
 /* Called when the edit button is pushed */
-static t_handler_event_status
+static widget_handler_status_T
 push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -397,7 +397,7 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 	}
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_move_button(struct dialog_data *dlg_data,
 		 struct widget_data *blah)
 {

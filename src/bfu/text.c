@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.118 2005/03/02 13:22:38 zas Exp $ */
+/* $Id: text.c,v 1.119 2005/03/05 20:46:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,7 +252,7 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 	if (saved && saved_pos) *saved_pos = saved;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 display_text(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct window *win = dlg_data->win;
@@ -337,7 +337,7 @@ format_and_display_text(struct widget_data *widget_data,
 	redraw_from_window(dlg_data->win);
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 kbd_text(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	int current = widget_data->info.text.current;
@@ -377,7 +377,7 @@ kbd_text(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 mouse_text(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 #ifdef CONFIG_MOUSE

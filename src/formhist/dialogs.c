@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.39 2005/01/03 13:39:02 jonas Exp $ */
+/* $Id: dialogs.c,v 1.40 2005/03/05 20:46:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,7 @@ static struct listbox_ops formhist_listbox_ops = {
 	&formhist_messages,
 };
 
-static t_handler_event_status
+static widget_handler_status_T
 push_login_button(struct dialog_data *dlg_data,
 		  struct widget_data *button)
 {
@@ -185,7 +185,7 @@ push_login_button(struct dialog_data *dlg_data,
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_toggle_dontsave_button(struct dialog_data *dlg_data,
 			    struct widget_data *button)
 {
@@ -200,7 +200,7 @@ push_toggle_dontsave_button(struct dialog_data *dlg_data,
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	save_forms_to_file();

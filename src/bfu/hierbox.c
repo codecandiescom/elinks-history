@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.204 2005/02/28 15:32:36 zas Exp $ */
+/* $Id: hierbox.c,v 1.205 2005/03/05 20:46:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ test_search(struct listbox_item *item, void *data_, int *offset)
 	return 0;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 hierbox_ev_kbd(struct dialog_data *dlg_data)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
@@ -229,7 +229,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 hierbox_ev_init(struct dialog_data *dlg_data)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
@@ -251,7 +251,7 @@ hierbox_ev_init(struct dialog_data *dlg_data)
 	return EVENT_NOT_PROCESSED;	/* FIXME: is this correct ? --Zas */
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 hierbox_ev_abort(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -282,7 +282,7 @@ hierbox_ev_abort(struct dialog_data *dlg_data)
  * unselectable, instead one of the buttons below is always active. So, we
  * always first let the listbox catch the keypress and handle it, and if it
  * doesn't care, we pass it on to the button. */
-static t_handler_event_status
+static widget_handler_status_T
 hierbox_dialog_event_handler(struct dialog_data *dlg_data)
 {
 	struct term_event *ev = dlg_data->term_event;
@@ -421,7 +421,7 @@ done_listbox_context(void *context_)
 
 /* Info action */
 
-t_handler_event_status
+widget_handler_status_T
 push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -510,7 +510,7 @@ goto_marked(struct listbox_item *item, void *data_, int *offset)
 	return 0;
 }
 
-t_handler_event_status
+widget_handler_status_T
 push_hierbox_goto_button(struct dialog_data *dlg_data,
 			 struct widget_data *button)
 {
@@ -708,7 +708,7 @@ push_ok_delete_button(void *context_)
 		listbox_sel_move(context->widget_data, -1);
 }
 
-t_handler_event_status
+widget_handler_status_T
 push_hierbox_delete_button(struct dialog_data *dlg_data,
 			   struct widget_data *button)
 {
@@ -832,7 +832,7 @@ do_clear_browser(void *context_)
 				    delete_unused, context);
 }
 
-t_handler_event_status
+widget_handler_status_T
 push_hierbox_clear_button(struct dialog_data *dlg_data,
 			  struct widget_data *button)
 {
@@ -959,7 +959,7 @@ search_hierbox_browser(void *data, unsigned char *text)
 	mem_free(context);
 }
 
-t_handler_event_status
+widget_handler_status_T
 push_hierbox_search_button(struct dialog_data *dlg_data,
 			   struct widget_data *button)
 {

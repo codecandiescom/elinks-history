@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.350 2005/03/05 20:14:24 zas Exp $ */
+/* $Id: download.c,v 1.351 2005/03/05 20:46:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -945,7 +945,7 @@ tp_open(struct type_query *type_query)
 
 /* This button handler uses the add_dlg_button() interface so that pressing
  * 'Show header' will not close the type query dialog. */
-t_handler_event_status
+widget_handler_status_T
 tp_show_header(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct type_query *type_query = widget_data->widget->data;
@@ -994,7 +994,7 @@ tp_display(struct type_query *type_query)
 /* Wraps the standard check_nonempty() handler which only gets called
  * if the user pressed the button to open the queried URI with an external
  * handler. */
-t_handler_event_status
+widget_handler_status_T
 check_tp_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct widget_data *selected_widget_data = selected_widget(dlg_data);

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.126 2004/11/21 14:03:25 zas Exp $ */
+/* $Id: dialogs.c,v 1.127 2005/03/05 20:46:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,7 +172,7 @@ launch_search_dialog(struct terminal *term, struct dialog_data *parent,
 		       NULL, NULL, EDIT_DLG_SEARCH);
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	launch_search_dialog(dlg_data->win->term, dlg_data,
@@ -182,7 +182,7 @@ push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 
 /* Toggling: */
 
-static t_handler_event_status
+static widget_handler_status_T
 push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	int *display_type;
@@ -198,7 +198,7 @@ push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *wid
 /* Bookmarking: */
 
 #ifdef CONFIG_BOOKMARKS
-static t_handler_event_status
+static widget_handler_status_T
 push_bookmark_button(struct dialog_data *dlg_data,
 		     struct widget_data *some_useless_info_button)
 {

@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.50 2005/03/05 20:41:04 zas Exp $ */
+/* $Id: inpfield.h,v 1.51 2005/03/05 20:46:46 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -61,8 +61,8 @@ add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label
 extern struct widget_ops field_ops;
 extern struct widget_ops field_pass_ops;
 
-t_handler_event_status check_number(struct dialog_data *, struct widget_data *);
-t_handler_event_status check_nonempty(struct dialog_data *, struct widget_data *);
+widget_handler_status_T check_number(struct dialog_data *, struct widget_data *);
+widget_handler_status_T check_nonempty(struct dialog_data *, struct widget_data *);
 
 void dlg_format_field(struct terminal *, struct widget_data *, int, int *, int, int *, enum format_align);
 

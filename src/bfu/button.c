@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.84 2005/03/05 20:14:24 zas Exp $ */
+/* $Id: button.c,v 1.85 2005/03/05 20:46:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,7 +110,7 @@ dlg_format_buttons(struct terminal *term,
 	}
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -148,7 +148,7 @@ display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 mouse_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -170,7 +170,7 @@ mouse_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 select_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	return widget_data->widget->handler(dlg_data, widget_data);

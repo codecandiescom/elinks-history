@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.84 2005/03/05 20:14:24 zas Exp $ */
+/* $Id: edit.c,v 1.85 2005/03/05 20:46:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 /* TODO: Move to bfu/. It has no bussiness to do in dialogs/. --pasky */
 
 
-static t_handler_event_status
+static widget_handler_status_T
 my_cancel_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	((void (*)(struct dialog *)) widget_data->widget->data)(dlg_data->dlg);

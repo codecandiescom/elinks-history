@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.197 2005/03/05 20:19:19 zas Exp $ */
+/* $Id: dialog.c,v 1.198 2005/03/05 20:46:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -421,7 +421,7 @@ check_dialog(struct dialog_data *dlg_data)
 	return 0;
 }
 
-t_handler_event_status
+widget_handler_status_T
 cancel_dialog(struct dialog_data *dlg_data, struct widget_data *xxx)
 {
 	delete_window(dlg_data->win);
@@ -444,7 +444,7 @@ update_dialog_data(struct dialog_data *dlg_data)
 	return 0;
 }
 
-t_handler_event_status
+widget_handler_status_T
 ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	done_handler_T *done = widget_data->widget->info.button.done;
@@ -459,7 +459,7 @@ ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 }
 
 /* Clear dialog fields (if widget has clear callback). */
-t_handler_event_status
+widget_handler_status_T
 clear_dialog(struct dialog_data *dlg_data, struct widget_data *xxx)
 {
 	struct widget_data *widget_data;

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.312 2005/03/05 20:22:45 zas Exp $ */
+/* $Id: search.c,v 1.313 2005/03/05 20:46:47 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1489,7 +1489,7 @@ struct search_dlg_hop {
 	union option_value values[SEARCH_OPTIONS];
 };
 
-static t_handler_event_status
+static widget_handler_status_T
 search_dlg_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	void (*fn)(void *) = widget_data->widget->data;
@@ -1500,7 +1500,7 @@ search_dlg_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return cancel_dialog(dlg_data, widget_data);
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	void (*fn)(void *, unsigned char *) = widget_data->widget->data;

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.94 2005/03/02 13:22:38 zas Exp $ */
+/* $Id: checkbox.c,v 1.95 2005/03/05 20:46:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ dlg_format_checkbox(struct terminal *term,
 
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 display_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -82,7 +82,7 @@ display_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 init_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	int *cdata = (int *) widget_data->cdata;
@@ -99,7 +99,7 @@ init_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 mouse_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -119,7 +119,7 @@ mouse_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 select_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 

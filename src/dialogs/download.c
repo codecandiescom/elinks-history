@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.69 2005/03/03 15:31:57 zas Exp $ */
+/* $Id: download.c,v 1.70 2005/03/05 20:46:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ do_abort_download(struct file_download *file_download)
 	}
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 dlg_set_notify(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
@@ -60,7 +60,7 @@ dlg_set_notify(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
@@ -70,7 +70,7 @@ dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 push_delete_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
@@ -81,7 +81,7 @@ push_delete_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 	return EVENT_PROCESSED;
 }
 
-static t_handler_event_status
+static widget_handler_status_T
 dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
@@ -442,7 +442,7 @@ static struct listbox_ops downloads_listbox_ops = {
 };
 
 
-static t_handler_event_status
+static widget_handler_status_T
 push_info_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.46 2004/01/26 23:00:15 pasky Exp $ */
+/* $Id: apply.c,v 1.47 2004/01/27 00:16:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,8 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 	INIT_LIST_HEAD(props);
 	unsigned char *code;
 	struct css_property *property;
-	struct list_head *properties = &props;
+	struct css_selector *selector;
+	int shall_free_sel = 0;
 
 	assert(element && element->options && css);
 
@@ -93,13 +94,14 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 	if (code) {
 		struct css_scanner scanner;
 
+		selector = init_css_selector(NULL, NULL, NULL);
+		shall_free_sel = 1;
+
 		init_css_scanner(&scanner, code);
-		css_parse_properties(&props, &scanner);
+		css_parse_properties(&selector->properties, &scanner);
 		mem_free(code);
 
 	} else {
-		struct css_selector *selector = NULL;
-
 		if (!list_empty(css->selectors))
 			selector = find_css_selector(css, element->name,
 						    element->namelen);
@@ -109,12 +111,11 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 						    element->name,
 						    element->namelen);
 
-		if (!selector) return;
-
-		properties = &selector->properties;
+		if (!selector)
+			return;
 	}
 
-	foreach (property, *properties) {
+	foreach (property, selector->properties) {
 		assert(property->type < CSS_PT_LAST);
 		/* We don't assert general prop->value_type here because I
 		 * don't want hinder properties' ability to potentially make
@@ -123,6 +124,6 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 		css_appliers[property->type](element, property);
 	}
 
-	/* Only free non selector properties */
-	free_list(props);
+	if (shall_free_sel)
+		done_css_selector(selector);
 }

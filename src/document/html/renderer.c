@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.160 2003/07/03 21:05:17 zas Exp $ */
+/* $Id: renderer.c,v 1.161 2003/07/03 21:10:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1518,7 +1518,6 @@ push_base_format(unsigned char *url, struct document_options *opt)
 	html_top.dontkill = 1;
 }
 
-/* FIXME: hmmm, we can do better there, i hope. --Zas */
 struct conv_table *
 get_convert_table(unsigned char *head, int to_cp,
 		  int default_cp, int *from_cp,
@@ -1578,9 +1577,9 @@ get_convert_table(unsigned char *head, int to_cp,
 static void
 format_html(struct cache_entry *ce, struct f_data *screen)
 {
-	unsigned char *url;
 	struct fragment *fr;
 	struct part *rp;
+	unsigned char *url;
 	unsigned char *start = NULL;
 	unsigned char *end = NULL;
 	unsigned char *t;
@@ -1656,10 +1655,8 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 
 	kill_html_stack_item(html_stack.next);
 
-	if (html_stack.next != &html_stack) {
-		internal("html stack not empty after operation");
-		init_list(html_stack);
-	}
+	assertm(html_stack.next == &html_stack,
+		"html stack not empty after operation");
 
 	sort_links(screen);
 
@@ -1730,7 +1727,8 @@ delete_unused_format_cache_entries(void)
 		if (!ce->refcount) {
 			if (!find_in_cache(ce->url, &cee) || !cee
 			    || cee->count != ce->use_tag) {
-				if (!cee) internal("file %s disappeared from cache", ce->url);
+				assertm(cee, "file %s disappeared from cache",
+					ce->url);
 				ce = ce->prev;
 				destroy_formatted(ce->next);
 				format_cache_entries--;

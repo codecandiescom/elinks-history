@@ -18,6 +18,7 @@ ELinks-now:
 * -localhost option to only permit local connections
 * -config-dir replaces -confdir option
 * -config-file replaces -conffile option
+* -default-keys command line option to ignore user-defined keybindings
 
 ELinks-0.9.0:
 

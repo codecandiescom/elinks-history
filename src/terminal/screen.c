@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.40 2003/07/28 20:23:29 jonas Exp $ */
+/* $Id: screen.c,v 1.41 2003/07/28 20:28:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -376,7 +376,7 @@ init_screen(void)
  * are allocated in one chunk. */
 /* TODO: It seems allocation failure here is fatal. We should do something! */
 void
-alloc_screen(struct terminal *term, int x, int y)
+resize_screen(struct terminal *term, int x, int y)
 {
 	int size = x * y * sizeof(struct screen_char);
 	struct terminal_screen *screen = term->screen;

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.42 2003/07/28 10:14:41 jonas Exp $ */
+/* $Id: terminal.c,v 1.43 2003/07/28 20:28:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ void
 redraw_terminal_cls(struct terminal *term)
 {
 	erase_screen(term);
-	alloc_screen(term, term->x, term->y);
+	resize_screen(term, term->x, term->y);
 	redraw_terminal_all(term);
 }
 

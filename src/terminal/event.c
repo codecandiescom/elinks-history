@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.8 2003/07/26 11:26:50 zas Exp $ */
+/* $Id: event.c,v 1.9 2003/07/28 20:28:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,7 @@ send_redraw:
 			goto mm;
 		}
 
-		alloc_screen(term, ev->x, ev->y);
+		resize_screen(term, ev->x, ev->y);
 		clear_terminal(term);
 		erase_screen(term);
 		term->redrawing = 1;

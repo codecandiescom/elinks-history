@@ -1,4 +1,4 @@
-/* $Id: screen.h,v 1.9 2003/07/28 10:14:41 jonas Exp $ */
+/* $Id: screen.h,v 1.10 2003/07/28 20:28:23 jonas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
@@ -38,7 +38,7 @@ struct terminal_screen {
 #define set_screen_dirty(s) do { (s)->dirty = 1; } while (0)
 
 struct terminal_screen *init_screen(void);
-void alloc_screen(struct terminal *term, int x, int y);
+void resize_screen(struct terminal *term, int x, int y);
 void done_screen(struct terminal_screen *screen);
 void redraw_screen(struct terminal *);
 void erase_screen(struct terminal *);

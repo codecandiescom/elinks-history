@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.4 2002/03/26 18:10:52 pasky Exp $ */
+/* $Id: file.c,v 1.5 2002/03/26 18:49:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -363,24 +363,16 @@ void file_func(struct connection *c)
 			add_to_str(&file, &fl, "\">");
 			
 			if (dir[i].s[0] == 'd' && color_dirs) {
-				if (dds.use_document_colours) {
-					add_to_str(&file, &fl,
-							"<font color=\""
-							FILE_DIR_COLOR
-							"\">");
-				} else {
-					add_to_str(&file, &fl, "<b>");
-				}
+				/* The <b> is here for the case when we've
+				 * use_document_colors off. */
+				add_to_str(&file, &fl, "<font color=\""
+					   FILE_DIR_COLOR "\"><b>");
 			}
 			
 			add_to_str(&file, &fl, dir[i].f);
 
 			if (dir[i].s[0] == 'd' && color_dirs) {
-				if (dds.use_document_colours) {
-					add_to_str(&file, &fl, "</font>");
-				} else {
-					add_to_str(&file, &fl, "</b>");
-				}
+				add_to_str(&file, &fl, "</b></font>");
 			}
 			
 			add_to_str(&file, &fl, "</a>");

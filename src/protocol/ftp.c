@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.58 2002/10/12 23:36:55 zas Exp $ */
+/* $Id: ftp.c,v 1.59 2002/10/12 23:47:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1066,13 +1066,13 @@ got_something_from_data_connection(struct connection *conn)
 		c_i->has_data = 1;
 
 		set_handlers(conn->sock2, NULL, NULL, NULL, NULL);
-		if (c_i->use_pasv
+		if ((conn->pf != 2 && c_i->use_pasv)
 #ifdef IPV6
-	    	    || c_i->use_epsv
+	    	    || (conn->pf == 2 && c_i->use_epsv)
 #endif
-		   )
+		   ) {
 			newsock = conn->sock2;
-		else {
+		} else {
 			newsock = accept(conn->sock2, NULL, NULL);
 			if (newsock < 0) {
 error:

@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.25 2003/06/08 14:17:16 pasky Exp $ */
+/* $Id: error.h,v 1.26 2003/06/11 06:19:29 miciah Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -45,7 +45,7 @@ void elinks_internal(unsigned char *fmt, ...);
 #ifdef FASTMEM
 #define assert(x) /* We don't do anything in FASTMEM mode. */
 #else
-#define assert(x) do { if (x) internal("assertion " #x " failed!"); } while (0)
+#define assert(x) do { if (!(x)) internal("assertion " #x " failed!"); } while (0)
 #endif
 
 

@@ -1,5 +1,5 @@
 /* CSS atrule parsers */
-/* $Id: atrule.c,v 1.2 2003/06/08 12:29:31 jonas Exp $ */
+/* $Id: atrule.c,v 1.3 2003/06/11 06:19:30 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -368,7 +368,7 @@ css_parse_mediatypes(struct parser_state *state, unsigned char **src, int *len)
 	unsigned char *css = *src;
 	int css_len = *len;
 
-	assert(!pstate->data.mediatypes.matched);
+	assert(pstate->data.mediatypes.matched);
 
 	/* Handle error getting mediatype token */
 	if (pstate->data.mediatypes.name_len < 0) {

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.34 2004/07/02 23:04:34 pasky Exp $ */
+/* $Id: internal.h,v 1.35 2004/07/12 18:16:31 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -105,6 +105,9 @@ struct html_context {
 #define html_top (*(struct html_element *) html_context.stack.next)
 
 #define html_is_preformatted() (format.attr & AT_PREFORMATTED)
+
+#define get_html_max_width() \
+	int_max(par_format.width - (par_format.leftmargin + par_format.rightmargin), 0)
 
 extern struct html_context html_context;
 

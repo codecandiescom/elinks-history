@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.43 2004/01/24 17:31:18 jonas Exp $ */
+/* $Id: parser.c,v 1.44 2004/01/25 01:27:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,14 +202,22 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 
 		assert(token);
 
-		if (token->type == CSS_TOKEN_IDENT) {
+		switch (token->type) {
+		case CSS_TOKEN_IDENT:
 			/* TODO: Handle more selectors like '*' ':<ident>' */
 			css_parse_ruleset(css, &scanner);
+			break;
 
-		} else if (token->type == CSS_TOKEN_AT_KEYWORD) {
+		case CSS_TOKEN_AT_KEYWORD:
+		case CSS_TOKEN_CHARSET:
+		case CSS_TOKEN_FONT_FACE:
+		case CSS_TOKEN_IMPORT:
+		case CSS_TOKEN_MEDIA:
+		case CSS_TOKEN_PAGE:
 			css_parse_atrule(css, &scanner);
+			break;
 
-		} else {
+		default:
 			/* TODO: Skip to ';' or block if '{' */
 			skip_css_tokens(&scanner, token->type);
 		}

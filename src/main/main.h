@@ -1,4 +1,4 @@
-/* $Id: main.h,v 1.16 2004/04/14 19:43:02 jonas Exp $ */
+/* $Id: main.h,v 1.17 2004/04/14 21:17:40 jonas Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
@@ -14,8 +14,6 @@ enum retval {
 extern enum retval retval;
 extern int terminate;
 extern unsigned char *path_to_exe;
-extern int ac;
-extern unsigned char **av;
 
 void shrink_memory(int);
 

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.195 2004/04/14 19:43:02 jonas Exp $ */
+/* $Id: main.c,v 1.196 2004/04/14 21:17:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,8 +66,8 @@ int terminate = 0;
 enum retval retval = RET_OK;
 unsigned char *path_to_exe;
 
-int ac;
-unsigned char **av;
+static int ac;
+static unsigned char **av;
 static int init_b = 0;
 
 static void

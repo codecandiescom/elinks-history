@@ -1,5 +1,5 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.1 2004/03/02 17:06:15 witekfl Exp $ */
+/* $Id: core.c,v 1.2 2004/04/14 21:17:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,9 +66,11 @@ init_perl(struct module *module)
 	char *hook_local = get_local_hook_file();
 	char *global_argv[] = { "", hook_global};
 	char *local_argv[] = { "", hook_local};
+	char *my_argv[] = { "" };
+	int my_arc = 1;
 	int err = 1;
 
-	PERL_SYS_INIT3(&ac, &av, &environ);
+	PERL_SYS_INIT3(&my_argc, &my_argv, &environ);
 	my_perl = perl_alloc();
 	if (my_perl) {
 		perl_construct(my_perl);

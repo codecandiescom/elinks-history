@@ -1,13 +1,12 @@
-/* $Id: uri.h,v 1.32 2003/07/25 19:17:25 pasky Exp $ */
+/* $Id: uri.h,v 1.33 2003/07/25 19:22:29 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
 
+#include "protocol/protocol.h"
 #include "util/string.h"
 
 #define POST_CHAR 1
-
-enum protocol;
 
 /* The uri structure is used to store the start position and length of commonly
  * used uri fields. It is initialized by parse_uri(). It is possible that the

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.55 2004/05/31 12:39:04 jonas Exp $ */
+/* $Id: dialogs.c,v 1.56 2004/06/08 19:33:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,9 +87,6 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 
 		return stracpy(cookie->name);
 
-	case LISTBOX_URI:
-		return NULL;
-
 	case LISTBOX_ALL:
 		if (item->type == BI_FOLDER) return NULL;
 		break;
@@ -147,6 +144,7 @@ static struct listbox_ops cookies_listbox_ops = {
 	unlock_cookie,
 	is_cookie_used,
 	get_cookie_info,
+	NULL,
 	can_delete_cookie,
 	delete_cookie,
 	NULL

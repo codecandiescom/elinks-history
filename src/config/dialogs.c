@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.175 2004/05/31 03:27:06 jonas Exp $ */
+/* $Id: dialogs.c,v 1.176 2004/06/08 19:33:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,9 +162,6 @@ get_option_info(struct listbox_item *item, struct terminal *term,
 		desc = option->capt ? option->capt : option->name;
 		return stracpy(_(desc, term));
 
-	case LISTBOX_URI:
-		return NULL;
-
 	case LISTBOX_ALL:
 		break;
 	}
@@ -246,6 +243,7 @@ static struct listbox_ops options_listbox_ops = {
 	unlock_option,
 	is_option_used,
 	get_option_info,
+	NULL,
 	can_delete_option,
 	delete_option_item,
 	NULL,
@@ -541,9 +539,6 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term,
 		make_keystroke(&info, keybinding->key, keybinding->meta, 0);
 		return info.source;
 
-	case LISTBOX_URI:
-		return NULL;
-
 	case LISTBOX_ALL:
 		if (item->depth < 2) return NULL;
 	}
@@ -584,6 +579,7 @@ static struct listbox_ops keybinding_listbox_ops = {
 	unlock_keybinding,
 	is_keybinding_used,
 	get_keybinding_info,
+	NULL,
 	can_delete_keybinding,
 	delete_keybinding_item,
 	NULL,

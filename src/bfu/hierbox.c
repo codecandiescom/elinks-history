@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.164 2004/05/31 05:04:32 jonas Exp $ */
+/* $Id: hierbox.c,v 1.165 2004/06/08 19:33:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "config/kbdbind.h"
 #include "dialogs/download.h"
 #include "intl/gettext/libintl.h"
+#include "protocol/uri.h"
 #include "sched/task.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
@@ -460,23 +461,24 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 /* Goto action */
 
 static void
-recursively_goto_listbox(struct session *ses, struct terminal *term,
-			 struct listbox_item *root, struct listbox_data *box)
+recursively_goto_listbox(struct session *ses, struct listbox_item *root,
+			 struct listbox_data *box)
 {
 	struct listbox_item *item;
-	unsigned char *uri;
 
 	foreach (item, root->child) {
+		struct uri *uri;
+
 		if (item->type == BI_FOLDER) {
-			recursively_goto_listbox(ses, term, item, box);
+			recursively_goto_listbox(ses, item, box);
 			continue;
 		}
 
-		uri = box->ops->get_info(item, term, LISTBOX_URI);
+		uri = box->ops->get_uri(item);
 		if (!uri) continue;
 
-		open_url_in_new_tab(ses, uri, 1);
-		mem_free(uri);
+		open_url_in_new_tab(ses, struri(uri), 1);
+		done_uri(uri);
 	}
 }
 
@@ -488,18 +490,18 @@ goto_marked(struct listbox_item *item, void *data_, int *offset)
 	if (item->marked) {
 		struct session *ses = context->dlg_data->dlg->udata;
 		struct listbox_data *box = context->box;
-		unsigned char *uri;
+		struct uri *uri;
 
 		if (item->type == BI_FOLDER) {
-			recursively_goto_listbox(ses, ses->tab->term, item, box);
+			recursively_goto_listbox(ses, item, box);
 			return 0;
 		}
 
-		uri = box->ops->get_info(item, ses->tab->term, LISTBOX_URI);
+		uri = box->ops->get_uri(item);
 		if (!uri) return 0;
 
-		open_url_in_new_tab(ses, uri, 1);
-		mem_free(uri);
+		open_url_in_new_tab(ses, struri(uri), 1);
+		done_uri(uri);
 	}
 
 	return 0;
@@ -513,7 +515,6 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 	struct session *ses = dlg_data->dlg->udata;
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_context *context;
-	unsigned char *uri;
 
 	/* Do nothing with a folder */
 	if (!box->sel) return 0;
@@ -528,15 +529,15 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 					    goto_marked, context);
 
 	} else if (box->sel->type == BI_FOLDER) {
-		recursively_goto_listbox(ses, term, box->sel, box);
+		recursively_goto_listbox(ses, box->sel, box);
 
 	} else {
-		/* Follow the bookmark */
-		uri = box->ops->get_info(box->sel, term, LISTBOX_URI);
-		if (!uri) return 0;
+		struct uri *uri = box->ops->get_uri(box->sel);
 
-		goto_url(ses, uri);
-		mem_free(uri);
+		if (uri) {
+			goto_url_frame(ses, uri, NULL, CACHE_MODE_NORMAL);
+			done_uri(uri);
+		}
 	}
 
 	mem_free(context);

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.63 2004/05/31 03:36:10 jonas Exp $ */
+/* $Id: listbox.h,v 1.64 2004/06/08 19:33:50 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -9,6 +9,7 @@
 #include "util/lists.h"
 
 struct terminal;
+struct uri;
 
 
 #define add_dlg_listbox(dlg, height_, box_data)				\
@@ -26,7 +27,6 @@ struct listbox_item;
 
 enum listbox_info {
 	LISTBOX_TEXT,
-	LISTBOX_URI,
 	LISTBOX_ALL,
 };
 
@@ -65,6 +65,8 @@ struct listbox_ops {
 
 	unsigned char *(*get_info)(struct listbox_item *, struct terminal *,
 				   enum listbox_info);
+
+	struct uri *(*get_uri)(struct listbox_item *);
 
 	/* Before calling delete() thou shall call can_delete(). */
 	int (*can_delete)(struct listbox_item *);

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.99 2004/05/30 17:51:27 jonas Exp $ */
+/* $Id: dialogs.c,v 1.100 2004/06/08 19:33:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "intl/gettext/libintl.h"
 #include "protocol/auth/auth.h"
 #include "protocol/auth/dialogs.h"
+#include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
@@ -128,9 +129,6 @@ get_http_auth_basic_info(struct listbox_item *item, struct terminal *term,
 		add_string_uri_to_string(&info, http_auth_basic->url, URI_PUBLIC);
 		return info.source;
 
-	case LISTBOX_URI:
-		return stracpy(http_auth_basic->url);
-
 	case LISTBOX_ALL:
 		break;
 	}
@@ -143,6 +141,14 @@ get_http_auth_basic_info(struct listbox_item *item, struct terminal *term,
 		http_auth_basic->valid ? _("valid", term) : _("invalid", term));
 
 	return info.source;
+}
+
+static struct uri *
+get_http_auth_basic_uri(struct listbox_item *item)
+{
+	struct http_auth_basic *http_auth_basic = item->udata;
+
+	return get_uri(http_auth_basic->url, 0);
 }
 
 static int
@@ -166,6 +172,7 @@ static struct listbox_ops auth_listbox_ops = {
 	unlock_http_auth_basic,
 	is_http_auth_basic_used,
 	get_http_auth_basic_info,
+	get_http_auth_basic_uri,
 	can_delete_http_auth_basic,
 	delete_http_auth_basic,
 	NULL,

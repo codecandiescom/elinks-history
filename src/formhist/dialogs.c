@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.25 2004/05/30 17:51:27 jonas Exp $ */
+/* $Id: dialogs.c,v 1.26 2004/06/08 19:33:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "formhist/formhist.h"
 #include "dialogs/edit.h"
 #include "intl/gettext/libintl.h"
+#include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
@@ -56,7 +57,6 @@ get_formhist_data_info(struct listbox_item *item, struct terminal *term,
 
 	switch (listbox_info) {
 	case LISTBOX_TEXT:
-	case LISTBOX_URI:
 		return stracpy(formhist_data->url);
 
 	case LISTBOX_ALL:
@@ -90,6 +90,14 @@ get_formhist_data_info(struct listbox_item *item, struct terminal *term,
 	return info.source;
 }
 
+static struct uri *
+get_formhist_data_uri(struct listbox_item *item)
+{
+	struct formhist_data *formhist_data = item->udata;
+
+	return get_uri(formhist_data->url, 0);
+}
+
 static int
 can_delete_formhist_data(struct listbox_item *item)
 {
@@ -112,6 +120,7 @@ static struct listbox_ops formhist_listbox_ops = {
 	unlock_formhist_data,
 	is_formhist_data_used,
 	get_formhist_data_info,
+	get_formhist_data_uri,
 	can_delete_formhist_data,
 	delete_formhist_data,
 	NULL,

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.161 2004/05/30 17:51:27 jonas Exp $ */
+/* $Id: dialogs.c,v 1.162 2004/06/08 19:33:50 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -24,6 +24,7 @@
 #include "bookmarks/dialogs.h"
 #include "dialogs/edit.h"
 #include "intl/gettext/libintl.h"
+#include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
@@ -72,9 +73,6 @@ get_bookmark_info(struct listbox_item *item, struct terminal *term,
 	case LISTBOX_TEXT:
 		return stracpy(bookmark->title);
 
-	case LISTBOX_URI:
-		return stracpy(bookmark->url);
-
 	case LISTBOX_ALL:
 		break;
 	}
@@ -85,6 +83,15 @@ get_bookmark_info(struct listbox_item *item, struct terminal *term,
 	add_format_to_string(&info, "\n%s: %s", _("URL", term), bookmark->url);
 
 	return info.source;
+}
+
+static struct uri *
+get_bookmark_uri(struct listbox_item *item)
+{
+	struct bookmark *bookmark = item->udata;
+
+	return bookmark->url && *bookmark->url
+		? get_uri(bookmark->url, 0) : NULL;
 }
 
 static int
@@ -112,6 +119,7 @@ static struct listbox_ops bookmarks_listbox_ops = {
 	unlock_bookmark,
 	is_bookmark_used,
 	get_bookmark_info,
+	get_bookmark_uri,
 	can_delete_bookmark,
 	delete_bookmark_item,
 	NULL,

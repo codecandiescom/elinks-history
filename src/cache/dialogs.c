@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.66 2004/06/07 17:46:52 jonas Exp $ */
+/* $Id: dialogs.c,v 1.67 2004/06/08 19:33:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,9 +62,6 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 		if (cached->uri->post)
 			add_to_string(&msg, " (POST DATA)");
 		return msg.source;
-
-	case LISTBOX_URI:
-		return get_uri_string(cached->uri, URI_ORIGINAL);
 
 	case LISTBOX_ALL:
 		break;
@@ -136,6 +133,14 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 	return msg.source;
 }
 
+static struct uri *
+get_cache_entry_uri(struct listbox_item *item)
+{
+	struct cache_entry *cached = item->udata;
+
+	return get_uri_reference(cached->uri);
+}
+
 static int
 can_delete_cache_entry(struct listbox_item *item)
 {
@@ -157,6 +162,7 @@ static struct listbox_ops cache_entry_listbox_ops = {
 	unlock_cache_entry,
 	is_cache_entry_used,
 	get_cache_entry_info,
+	get_cache_entry_uri,
 	can_delete_cache_entry,
 	delete_cache_entry_item,
 	NULL,

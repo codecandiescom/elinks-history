@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.26 2002/05/19 17:02:18 pasky Exp $ */
+/* $Id: options.c,v 1.27 2002/05/19 17:03:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,6 +143,8 @@ add_opt(struct hash *hash, unsigned char *path, unsigned char *name,
 	option->desc = desc;
 
 	add_opt_rec(hash, path, option);
+
+	mem_free(option);
 }
 
 

@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.9 2003/09/07 20:04:25 zas Exp $ */
+/* $Id: signals.c,v 1.10 2003/09/07 20:09:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,7 +331,7 @@ set_sigcld(void)
 void
 clear_signal_mask_and_handlers(void)
 {
-	memset(signal_info, 0, sizeof(struct signal_info));
+	memset(signal_info, 0, sizeof(signal_info));
 }
 
 int

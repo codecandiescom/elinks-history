@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.8 2004/04/24 01:20:12 pasky Exp $ */
+/* $Id: parse.c,v 1.9 2004/04/24 01:23:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -571,6 +571,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	   void *f, unsigned char *head)
 {
 	unsigned char *base_pos;
+	int noupdate = 0;
 
 	putsp = -1;
 	line_breax = table_level ? 2 : 1;
@@ -581,14 +582,19 @@ parse_html(unsigned char *html, unsigned char *eof,
 	eoff = eof;
 	if (head) process_head(head);
 
-set_lt:
-	ff = f;
-	eoff = eof;
-	base_pos = html;
+main_loop:
 	while (html < eof) {
 		unsigned char *name, *attr, *end, *prev_html;
 		int namelen, inv;
 		int dotcounter = 0;
+
+		if (!noupdate) {
+			ff = f;
+			eoff = eof;
+			base_pos = html;
+		} else {
+			noupdate = 0;
+		}
 
 		if (isspace(*html) && par_format.align != AL_NONE) {
 			unsigned char *h = html;
@@ -608,8 +614,10 @@ set_lt:
 				goto skip_w; /* ??? */
 			if (isspace(*(html - 1))) {
 				/* BIG performance win; not sure if it doesn't cause any bug */
-				if (html < eof && !isspace(*html))
+				if (html < eof && !isspace(*html)) {
+					noupdate = 1;
 					continue;
+				}
 				put_chrs(base_pos, html - base_pos, put_chars_f, f);
 			} else {
 				put_chrs(base_pos, html - base_pos - 1, put_chars_f, f);
@@ -619,7 +627,7 @@ set_lt:
 skip_w:
 			while (html < eof && isspace(*html))
 				html++;
-			goto set_lt;
+			continue;
 
 put_sp:
 			put_chrs(" ", 1, put_chars_f, f);
@@ -631,7 +639,7 @@ put_sp:
 				put_chrs(base_pos, html - base_pos, put_chars_f, f);
 				put_chrs("        ", 8 - (position % 8), put_chars_f, f);
 				html++;
-				goto set_lt;
+				continue;
 
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
 				put_chrs(base_pos, html - base_pos, put_chars_f, f);
@@ -646,7 +654,7 @@ next_break:
 					line_breax = 0;
 					goto next_break;
 				}
-				goto set_lt;
+				continue;
 			}
 		}
 
@@ -662,18 +670,19 @@ next_break:
 					put_chrs(dots, dotcounter, put_chars_f, f);
 					fmem_free(dots);
 				}
-				goto set_lt;
+				goto main_loop;
 			}
 		}
 
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !was_xmp) {
 			put_chrs(base_pos, html - base_pos, put_chars_f, f);
 			html = skip_comment(html, eof);
-			goto set_lt;
+			continue;
 		}
 
 		if (*html != '<' || parse_element(html, eof, &name, &namelen, &attr, &end)) {
 			html++;
+			noupdate = 1;
 			continue;
 		}
 
@@ -699,7 +708,6 @@ ng:;
 		html = end;
 
 		process_element(name, namelen, inv, html, prev_html, eof, attr, f);
-		goto set_lt;
 	}
 
 	put_chrs(base_pos, html - base_pos, put_chars_f, f);

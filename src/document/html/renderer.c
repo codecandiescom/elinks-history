@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.341 2003/10/30 13:43:11 zas Exp $ */
+/* $Id: renderer.c,v 1.342 2003/10/30 14:04:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -509,39 +509,39 @@ del_chars(struct part *part, int x, int y)
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
 
 static int inline
-split_line_at(struct part *part, register int x)
+split_line_at(struct part *part, register int width)
 {
 	register int tmp;
-	int new_x = x + par_format.rightmargin;
+	int new_width = width + par_format.rightmargin;
 
 	assert(part);
 	if_assert_failed return 0;
 
 	/* Make sure that we count the right margin to the total
 	 * actual box width. */
-	if (new_x > part->x)
-		part->x = new_x;
+	if (new_width > part->width)
+		part->width = new_width;
 
 	if (part->document) {
 		assert(part->document->data);
 		if_assert_failed return 0;
-		assertm(POS(x, part->cy).data == ' ',
-			"bad split: %c", POS(x, part->cy).data);
-		move_chars(part, x + 1, part->cy, par_format.leftmargin, part->cy + 1);
-		del_chars(part, x, part->cy);
+		assertm(POS(width, part->cy).data == ' ',
+			"bad split: %c", POS(width, part->cy).data);
+		move_chars(part, width + 1, part->cy, par_format.leftmargin, part->cy + 1);
+		del_chars(part, width, part->cy);
 	}
 
-	x++; /* Since we were using (x + 1) only later... */
+	width++; /* Since we were using (x + 1) only later... */
 
-	tmp = part->spaces_len - x;
+	tmp = part->spaces_len - width;
 	if (tmp > 0) {
 		/* 0 is possible and I'm paranoid ... --Zas */
-		memmove(part->spaces, part->spaces + x, tmp);
+		memmove(part->spaces, part->spaces + width, tmp);
 	}
 
 	assert(tmp >= 0);
 	if_assert_failed tmp = 0;
-	memset(part->spaces + tmp, 0, x);
+	memset(part->spaces + tmp, 0, width);
 
 	if (par_format.leftmargin > 0) {
 		tmp = part->spaces_len - par_format.leftmargin;
@@ -552,13 +552,13 @@ split_line_at(struct part *part, register int x)
 
 	part->cy++;
 
-	if (part->cx == x) {
+	if (part->cx == width) {
 		part->cx = -1;
-		int_lower_bound(&part->y, part->cy);
+		int_lower_bound(&part->height, part->cy);
 		return 2;
 	} else {
-		part->cx -= x - par_format.leftmargin;
-		int_lower_bound(&part->y, part->cy + 1);
+		part->cx -= width - par_format.leftmargin;
+		int_lower_bound(&part->height, part->cy + 1);
 		return 1;
 	}
 }
@@ -589,7 +589,7 @@ split_line(struct part *part)
 
 	/* Make sure that we count the right margin to the total
 	 * actual box width. */
-	int_lower_bound(&part->x, part->cx + par_format.rightmargin);
+	int_lower_bound(&part->width, part->cx + par_format.rightmargin);
 
 	return 0;
 }
@@ -960,7 +960,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		last_tag_for_newline = (void *)&part->document->tags;
 	}
 
-	int_lower_bound(&part->y, part->cy + 1);
+	int_lower_bound(&part->height, part->cy + 1);
 
 	link_state = get_link_state();
 
@@ -1012,7 +1012,7 @@ line_break(struct part *part)
 	assert(part);
 	if_assert_failed return;
 
-	int_lower_bound(&part->x, part->cx + par_format.rightmargin);
+	int_lower_bound(&part->width, part->cx + par_format.rightmargin);
 
 	if (nobreak) {
 		nobreak = 0;
@@ -1023,7 +1023,7 @@ line_break(struct part *part)
 
 	if (!part->document || !part->document->data) goto end;
 
-	if (realloc_lines(part->document, part->y + part->cy + 1))
+	if (realloc_lines(part->document, part->height + part->cy + 1))
 		return;
 
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
@@ -1304,7 +1304,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	done_html_parser_state(html_state);
 
-	part->xmax = int_max(part->xmax, part->x);
+	part->xmax = int_max(part->xmax, part->width);
 
 	nobreak = 0;
 
@@ -1316,7 +1316,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	if (document) {
 		struct node *node = document->nodes.next;
 
-		node->height = ys - node->y + part->y;
+		node->height = ys - node->y + part->height;
 	}
 
 ret:

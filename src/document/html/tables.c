@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.98 2003/10/30 13:52:51 zas Exp $ */
+/* $Id: tables.c,v 1.99 2003/10/30 14:04:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -761,7 +761,7 @@ get_cell_width(unsigned char *start, unsigned char *end, int cellpd, int w,
 			     NULL, n_link);
 	if (!p) return;
 
-	if (min) *min = p->x;
+	if (min) *min = p->width;
 	if (max) *max = p->xmax;
 	if (n_links) *n_links = p->link_num;
 
@@ -1280,7 +1280,7 @@ get_table_heights(struct table *t)
 					     2, 2, NULL, cell->link_num);
 			if (!p) return;
 
-			cell->height = p->y;
+			cell->height = p->height;
 			/* debug("%d, %d.",xw, cell->height); */
 			mem_free(p);
 		}
@@ -1398,7 +1398,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				if (p) {
 					int yt;
 
-					for (yt = 0; yt < p->y; yt++) {
+					for (yt = 0; yt < p->height; yt++) {
 						expand_lines(t->p, yp + yt);
 						expand_line(t->p, yp + yt, xp + t->w_c[i]);
 					}
@@ -1777,7 +1777,7 @@ again:
 		int_lower_bound(&t->max_t, t->min_t);
 
 		p->xmax = int_max(p->xmax, t->max_t + margins);
-		p->x = int_max(p->x, t->min_t + margins);
+		p->width = int_max(p->width, t->min_t + margins);
 
 		goto ret2;
 	}
@@ -1806,7 +1806,7 @@ again:
 		int ww = t->rw + margins;
 
 		int_bounds(&ww, t->rw, par_format.width);
-		p->x = int_max(p->x, ww);
+		p->width = int_max(p->width, ww);
 		p->cy += t->rh;
 
 		goto ret2;
@@ -1834,7 +1834,7 @@ again:
 	get_table_heights(t);
 
 	if (!p->document) {
-		p->x = int_max(p->x, t->rw + margins);
+		p->width = int_max(p->width, t->rw + margins);
 		p->cy += t->rh;
 		goto ret2;
 	}
@@ -1861,7 +1861,7 @@ again:
 
 ret2:
 	p->link_num = t->link_num;
-	p->y = int_max(p->y, p->cy);
+	p->height = int_max(p->height, p->cy);
 	free_table(t);
 	kill_html_stack_item(&html_top);
 

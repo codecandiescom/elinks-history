@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.48 2003/10/30 01:53:33 jonas Exp $ */
+/* $Id: renderer.h,v 1.49 2003/10/30 14:04:57 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -30,7 +30,7 @@ struct part {
 	unsigned char *spaces;
 	int spaces_len;
 
-	int x, y;
+	int width, height;
 	int xp, yp;
 	int xmax;
 	int xa;

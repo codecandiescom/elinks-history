@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.204 2005/01/19 11:11:44 zas Exp $ */
+/* $Id: dialogs.c,v 1.205 2005/01/19 11:19:22 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -166,14 +166,19 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 
 	if (!init_string(&info)) return NULL;
 
+	add_format_to_string(&info, "%s: %s", _("Name", term), option->name);
+
 	type = _(option_types[option->type].name, term);
 	if (option->type == OPT_TREE) {
 		type = straconcat(type, " ",
 				_("(expand by pressing space)", term), NULL);
 	}
 
-	add_format_to_string(&info, "%s: %s", _("Name", term), option->name);
 	add_format_to_string(&info, "\n%s: %s", _("Type", term), type);
+
+	if (option->type == OPT_TREE) {
+		mem_free(type);
+	}
 
 	desc = _(option->desc  ? option->desc : (unsigned char *) "N/A", term);
 
@@ -208,10 +213,6 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 
 	if (*desc)
 		add_format_to_string(&info, "\n\n%s:\n%s", _("Description", term), desc);
-
-	if (option->type == OPT_TREE) {
-		mem_free(type);
-	}
 
 	return info.source;
 }

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.11 2003/12/02 14:58:10 pasky Exp $ */
+/* $Id: renderer.c,v 1.12 2003/12/02 20:53:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,6 @@
 #include "main.h"
 #include "cache/cache.h"
 #include "config/options.h"
-#include "dialogs/status.h"
 #include "document/document.h"
 #include "document/html/frames.h"
 #include "document/html/renderer.h"
@@ -105,9 +104,17 @@ render_document_frames(struct session *ses)
 
 	init_document_options(&doc_opts);
 
-	/* XXX: init_bars_status sets @doc_opts.height and @doc_opts.width,
-	 * so call it after init_document_options(). */
-	init_bars_status(ses, NULL, &doc_opts);
+	doc_opts.x = 0;
+	doc_opts.y = 0;
+	doc_opts.width = ses->tab->term->width;
+	doc_opts.height = ses->tab->term->height;
+
+	if (ses->visible_title_bar) {
+		doc_opts.y++;
+		doc_opts.height--;
+	}
+	if (ses->visible_status_bar) doc_opts.height--;
+	if (ses->visible_tabs_bar) doc_opts.height--;
 
 	doc_opts.color_mode = get_opt_int_tree(ses->tab->term->spec, "colors");
 	if (!get_opt_int_tree(ses->tab->term->spec, "underline"))

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.20 2003/12/02 20:18:23 jonas Exp $ */
+/* $Id: status.c,v 1.21 2003/12/02 20:53:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,6 @@
 #include "config/options.h"
 #include "cache/cache.h"
 #include "document/document.h"
-#include "document/options.h"
 #include "document/renderer.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
@@ -173,26 +172,6 @@ update_status(void)
 		if (!dirty) continue;
 
 		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
-	}
-}
-
-void
-init_bars_status(struct session *ses, int *tabs_count, struct document_options *doo)
-{
-	if (tabs_count) *tabs_count = number_of_tabs(ses->tab->term);
-
-	if (!doo && ses->doc_view && ses->doc_view->document)
-		doo = &ses->doc_view->document->options;
-
-	if (doo) {
-		doo->x = 0;
-		doo->y = 0;
-		if (ses->visible_title_bar) doo->y = 1;
-		doo->width = ses->tab->term->width;
-		doo->height = ses->tab->term->height;
-		if (ses->visible_title_bar) doo->height--;
-		if (ses->visible_status_bar) doo->height--;
-		if (ses->visible_tabs_bar) doo->height--;
 	}
 }
 
@@ -433,10 +412,8 @@ void
 print_screen_status(struct session *ses)
 {
 	struct terminal *term = ses->tab->term;
-	int tabs_count;
+	int tabs_count = number_of_tabs(term);
 	int ses_tab_is_current = (ses->tab == get_current_tab(ses->tab->term));
-
-	init_bars_status(ses, &tabs_count, NULL);
 
 	if (ses_tab_is_current) {
 		if (ses->set_window_title)

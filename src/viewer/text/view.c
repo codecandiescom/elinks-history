@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.282 2003/12/01 20:44:17 jonas Exp $ */
+/* $Id: view.c,v 1.283 2003/12/02 20:53:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1179,7 +1179,6 @@ quit:
 #ifdef USE_MOUSE
 	if (ev->ev == EV_MOUSE) {
 		int bars;
-		int nb_tabs;
 
 		if (ev->y == 0 && (ev->b & BM_ACT) == B_DOWN
 		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
@@ -1191,13 +1190,13 @@ quit:
 			goto x;
 		}
 
-		init_bars_status(ses, &nb_tabs, NULL);
 		bars = 0;
 		if (ses->visible_tabs_bar) bars++;
 		if (ses->visible_status_bar) bars++;
 
 		if (ev->y == ses->tab->term->height - bars && (ev->b & BM_ACT) == B_DOWN
 		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
+			int nb_tabs = number_of_tabs(ses->tab->term);
 			int tab = get_tab_number_by_xpos(ses->tab->term, ev->x);
 
 			if (tab != -1) switch_to_tab(ses->tab->term, tab, nb_tabs);

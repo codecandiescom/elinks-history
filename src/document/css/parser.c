@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.54 2004/01/26 23:03:13 pasky Exp $ */
+/* $Id: parser.c,v 1.55 2004/01/26 23:37:08 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,37 +202,37 @@ syntax_error:
 
 	/* Let's see if we will get anything else of this. */
 
-	token = get_next_css_token(css);
+	token = get_next_css_token(scanner);
 
 	if (token->type == CSS_TOKEN_HASH
 	    || token->type == CSS_TOKEN_HEX_COLOR) {
 		/* id */
-		token = get_next_css_token(css);
+		token = get_next_css_token(scanner);
 		if (token->type != CSS_TOKEN_IDENT) {
 			goto syntax_error;
 		}
 		selector->id = memacpy(token->string, token->length);
-		token = get_next_css_token(css);
+		token = get_next_css_token(scanner);
 	}
 
 	if (token->type == '.') {
 		/* class */
-		token = get_next_css_token(css);
+		token = get_next_css_token(scanner);
 		if (token->type != CSS_TOKEN_IDENT) {
 			goto syntax_error;
 		}
 		selector->class = memacpy(token->string, token->length);
-		token = get_next_css_token(css);
+		token = get_next_css_token(scanner);
 	}
 
 	if (token->type == ':') {
 		/* pseudo */
-		token = get_next_css_token(css);
+		token = get_next_css_token(scanner);
 		if (token->type != CSS_TOKEN_IDENT) {
 			goto syntax_error;
 		}
 		selector->pseudo = memacpy(token->string, token->length);
-		token = get_next_css_token(css);
+		token = get_next_css_token(scanner);
 	}
 
 	if (token->type != '{') {

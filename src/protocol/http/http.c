@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.128 2003/06/20 23:02:44 jonas Exp $ */
+/* $Id: http.c,v 1.129 2003/06/21 10:41:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,20 +50,23 @@ struct http_version {
 
 struct http_connection_info {
 	enum blacklist_flags bl_flags;
+	struct http_version recv_version;
+	struct http_version sent_version;
+
 	int close;
 
 #define LEN_CHUNKED -2 /* == we get data in unknown number of chunks */
 #define LEN_FINISHED 0
 	int length;
 
-	struct http_version recv_version;
-	struct http_version sent_version;
-
 	/* Either bytes coming in this chunk yet or "parser state". */
 #define CHUNK_DATA_END	-3
 #define CHUNK_ZERO_SIZE	-2
 #define CHUNK_SIZE	-1
 	int chunk_remaining;
+
+	int code;
+	int is_error;
 };
 
 static void uncompress_shutdown(struct connection *);
@@ -704,7 +707,7 @@ http_send_header(struct connection *conn)
  * compressed), which is long @len bytes. The uncompressed data block is given
  * back to the world as the return value and its length is stored into
  * @new_len.
- * 
+ *
  * In this function, value of either info->chunk_remaining or info->length is
  * being changed (it depends on if chunked mode is used or not).
  *
@@ -712,7 +715,7 @@ http_send_header(struct connection *conn)
  * lightly and don't mess with it without grave reason! If you dare to touch
  * this without testing the changes on slashdot, freshmeat and cvsweb
  * (including revision history), don't dare to send me any patches! ;) --pasky
- * 
+ *
  * This function gotta die. */
 static unsigned char *
 uncompress_data(struct connection *conn, unsigned char *data, int len,
@@ -860,6 +863,18 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 		} else {
 
 thats_all_folks:
+
+			/* There's no content but an error so just print
+			 * that instead of nothing. */
+			if (!conn->from && info->is_error) {
+				unsigned char data[] = "HTTP ERROR xxx";
+				int data_len = strlen(data);
+
+				ulongcat(data + (data_len - 3), NULL, info->code, 3, '0');
+				add_fragment(conn->cache, conn->from, data, data_len);
+				conn->from += data_len;
+			}
+
 			http_end_request(conn, S_OK);
 			return;
 		}
@@ -1128,6 +1143,8 @@ out_of_mem:
 		mem_free(cookie);
 	}
 #endif
+	info->code = h;
+	info->is_error = (h < 200 || h >= 400);
 
 	if (h == 100) {
 		mem_free(head);

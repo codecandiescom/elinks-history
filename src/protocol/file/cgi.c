@@ -1,9 +1,11 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.45 2004/01/01 13:54:57 jonas Exp $ */
+/* $Id: cgi.c,v 1.46 2004/01/01 13:58:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef CONFIG_CGI
 
 #include <errno.h>
 #include <stdio.h>
@@ -18,8 +20,6 @@
 #endif
 
 #include "elinks.h"
-
-#ifdef CONFIG_CGI
 
 #include "config/options.h"
 #include "cookies/cookies.h"

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.30 2004/01/01 13:54:14 jonas Exp $ */
+/* $Id: smb.c,v 1.31 2004/01/01 13:58:44 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -8,6 +8,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef CONFIG_SMB
 
 #include <errno.h>
 #include <stdio.h>
@@ -28,8 +30,6 @@
 #endif
 
 #include "elinks.h"
-
-#ifdef CONFIG_SMB
 
 #include "lowlevel/connect.h"
 #include "lowlevel/select.h"

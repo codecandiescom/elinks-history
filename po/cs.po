@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-23 11:55+0200\n"
-"PO-Revision-Date: 2003-10-23 10:43+0200\n"
+"PO-Revision-Date: 2003-10-23 12:21+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -849,29 +849,29 @@ msgid "Template option folder"
 msgstr "©ablonová slo¾ka"
 
 #: src/config/options.c:731
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %ld)"
-msgstr "    %s%s%s %s (výchozí: %ld)"
+msgstr "(výchozí: %ld)"
 
 #: src/config/options.c:736 src/config/options.c:759
-#, fuzzy, c-format
+#, c-format
 msgid "(default: \"%s\")"
-msgstr "    %s%s%s %s (výchozí: \"%s\")"
+msgstr "(výchozí: \"%s\")"
 
 #: src/config/options.c:741
-#, fuzzy, c-format
+#, c-format
 msgid "(alias for %s)"
-msgstr "    %s%s%s %s (alias pro %s)"
+msgstr "(alias pro %s)"
 
 #: src/config/options.c:746
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %s)"
-msgstr "    %s%s%s %s (výchozí: %s)"
+msgstr "(výchozí: %s)"
 
 #: src/config/options.c:751
-#, fuzzy, c-format
+#, c-format
 msgid "(default: #%06x)"
-msgstr "    %s%s%s %s (výchozí: #%06x)"
+msgstr "(výchozí: #%06x)"
 
 #: src/config/options.c:878
 msgid "Configuration options:\n"

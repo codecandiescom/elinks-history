@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.207 2004/04/17 14:14:47 jonas Exp $ */
+/* $Id: menu.c,v 1.208 2004/04/17 15:35:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,15 +227,14 @@ get_menuitem_width(struct terminal *term, struct menu_item *mi, int max_width)
 static void
 count_menu_size(struct terminal *term, struct menu *menu)
 {
+	struct menu_item *item;
 	int width = term->width - MENU_BORDER_SIZE * 2;
 	int height = term->height - MENU_BORDER_SIZE * 2;
+	int my = int_min(menu->size, height);
 	int mx = 0;
-	int my;
 
-	for (my = 0; my < menu->size; my++)
-		int_lower_bound(&mx, get_menuitem_width(term, &menu->items[my], width));
-
-	int_upper_bound(&my, height);
+	foreach_menu_item (item, menu->items)
+		int_lower_bound(&mx, get_menuitem_width(term, item, width));
 
 	menu->width = mx + MENU_BORDER_SIZE * 2;
 	menu->height = my + MENU_BORDER_SIZE * 2;

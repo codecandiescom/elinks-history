@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.9 2002/07/10 19:04:57 pasky Exp $ */
+/* $Id: dialog.c,v 1.10 2002/07/23 09:28:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,6 +156,7 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 		case EV_KBD:
 			{
 			struct widget_data *di;
+
 			di = &dlg->items[dlg->selected];
 			if (di->item->type == D_FIELD ||
 			    di->item->type == D_FIELD_PASS) {
@@ -202,11 +203,15 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 						goto dsp_f;
 
 					case ACT_DELETE:
-						if (di->cpos < strlen(di->cdata))
+						{
+						int cdata_len = strlen(di->cdata);
+
+						if (di->cpos < cdata_len)
 							memmove(di->cdata + di->cpos,
 								di->cdata + di->cpos + 1,
-								strlen(di->cdata) - di->cpos + 1);
+								cdata_len - di->cpos + 1);
 						goto dsp_f;
+						}
 
 					case ACT_KILL_TO_BOL:
 						memmove(di->cdata,
@@ -253,10 +258,12 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 
 					default:
 						if (ev->x >= ' ' && ev->x < 0x100 && !ev->y) {
-							if (strlen(di->cdata) < di->item->dlen - 1) {
+							int cdata_len = strlen(di->cdata);
+
+							if (cdata_len < di->item->dlen - 1) {
 								memmove(di->cdata + di->cpos + 1,
 									di->cdata + di->cpos,
-									strlen(di->cdata) - di->cpos + 1);
+									cdata_len - di->cpos + 1);
 								di->cdata[di->cpos++] = ev->x;
 							}
 							goto dsp_f;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.623 2004/10/17 20:03:02 miciah Exp $ */
+/* $Id: view.c,v 1.624 2004/10/17 20:20:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -701,10 +701,13 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 #endif
 
-	if (get_opt_int("document.browse.accesskey.priority") >= 2
-	    && try_document_key(ses, doc_view, ev)) {
-		/* The document ate the key! */
-		return FRAME_EVENT_REFRESH;
+	if (get_opt_int("document.browse.accesskey.priority") >= 2) {
+		status = try_document_key(ses, doc_view, ev);
+
+		if (status != FRAME_EVENT_IGNORED) {
+			/* The document ate the key! */
+			return status;
+		}
 	}
 
 	if (isdigit(get_kbd_key(ev))) {
@@ -715,11 +718,13 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			return status;
 	}
 
-	if (get_opt_int("document.browse.accesskey.priority") == 1
-	    && try_document_key(ses, doc_view, ev)) {
-		/* The document ate the key! */
-		status = FRAME_EVENT_REFRESH;
+	if (get_opt_int("document.browse.accesskey.priority") == 1) {
+		status = try_document_key(ses, doc_view, ev);
 
+		if (status != FRAME_EVENT_IGNORED) {
+			/* The document ate the key! */
+			return status;
+		}
 	}
 
 	return status;
@@ -1053,7 +1058,8 @@ quit:
 		} else if (doc_view
 			   && get_opt_int("document.browse.accesskey"
 					  ".priority") <= 0
-			   && try_document_key(ses, doc_view, ev)) {
+			   && try_document_key(ses, doc_view, ev)
+			       == FRAME_EVENT_REFRESH) {
 			/* The document ate the key! */
 			refresh_view(ses, doc_view, 0);
 

@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.45 2004/07/12 14:31:37 jonas Exp $ */
+/* $Id: link.h,v 1.46 2004/10/17 20:20:16 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -47,7 +47,9 @@ void goto_link_number(struct session *ses, unsigned char *num);
 
 /* Bruteforce compilation fixes */
 enum frame_event_status enter(struct session *ses, struct document_view *doc_view, int do_reload);
-int try_document_key(struct session *ses, struct document_view *doc_view, struct term_event *ev);
+enum frame_event_status try_document_key(struct session *ses,
+					 struct document_view *doc_view,
+					 struct term_event *ev);
 
 struct uri *get_link_uri(struct session *ses, struct document_view *doc_view, struct link *link);
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.292 2004/10/17 20:03:02 miciah Exp $ */
+/* $Id: link.c,v 1.293 2004/10/17 20:20:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -982,7 +982,7 @@ goto_link_number(struct session *ses, unsigned char *num)
 }
 
 /* See if this document is interested in the key user pressed. */
-int
+enum frame_event_status
 try_document_key(struct session *ses, struct document_view *doc_view,
 		 struct term_event *ev)
 {
@@ -991,11 +991,11 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 	int i; /* GOD I HATE C! --FF */ /* YEAH, BRAINFUCK RULEZ! --pasky */
 
 	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_IGNORED;
 
 	if (isasciialpha(get_kbd_key(ev)) && !check_kbd_modifier(ev, KBD_ALT)) {
 		/* We accept those only in alt-combo. */
-		return 0;
+		return FRAME_EVENT_IGNORED;
 	}
 
 	/* Run through all the links and see if one of them is bound to the
@@ -1014,7 +1014,7 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 			}
 			ses->kbdprefix.repeat_count = 0;
 			goto_link_number_do(ses, doc_view, i);
-			return 1;
+			return FRAME_EVENT_REFRESH;
 		}
 
 		if (i == doc_view->document->nlinks - 1 && passed >= 0) {
@@ -1023,7 +1023,7 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 		}
 	}
 
-	return 0;
+	return FRAME_EVENT_IGNORED;
 }
 
 /* Open a contextual menu on a link, form or image element. */

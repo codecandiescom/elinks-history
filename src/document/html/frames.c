@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.25 2003/10/30 11:41:16 zas Exp $ */
+/* $Id: frames.c,v 1.26 2003/10/30 11:51:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,12 +24,14 @@
 
 
 static void
-add_frameset_entry(struct frameset_desc *fsd, struct frameset_desc *subframe,
+add_frameset_entry(struct frameset_desc *frameset_desc,
+		   struct frameset_desc *subframe,
 		   unsigned char *name, unsigned char *url)
 {
-	int idx;
+	struct frame_desc *frame_desc;
+	int offset;
 
-	assert(fsd);
+	assert(frameset_desc);
 	if_assert_failed return;
 
 	/* FIXME: The following is triggered by
@@ -37,16 +39,19 @@ add_frameset_entry(struct frameset_desc *fsd, struct frameset_desc *subframe,
 	 * There may exist a true fix for this... --Zas */
 	/* May the one truly fixing this notify'n'close bug 237 in the
 	 * Bugzilla... --pasky */
-	if (fsd->yp >= fsd->height) return;
+	if (frameset_desc->y >= frameset_desc->height) return;
 
-	idx = fsd->xp + fsd->yp * fsd->width;
-	fsd->frame_desc[idx].subframe = subframe;
-	fsd->frame_desc[idx].name = name ? stracpy(name) : NULL;
-	fsd->frame_desc[idx].url = url ? stracpy(url) : NULL;
-	fsd->xp++;
-	if (fsd->xp >= fsd->width) {
-		fsd->xp = 0;
-		fsd->yp++;
+	offset = frameset_desc->x + frameset_desc->y * frameset_desc->width;
+	frame_desc = &frameset_desc->frame_desc[offset];
+	frame_desc->subframe = subframe;
+	frame_desc->name = name ? stracpy(name) : NULL;
+	frame_desc->url = url ? stracpy(url) : NULL;
+
+	frameset_desc->x++;
+	if (frameset_desc->x >= frameset_desc->width) {
+		frameset_desc->x = 0;
+		frameset_desc->y++;
+		/* FIXME: check y here ? --Zas */
 	}
 }
 

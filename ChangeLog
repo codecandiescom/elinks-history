@@ -1,3 +1,141 @@
+Sat Apr  6 22:19:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/main.c:
+	
+	Fix in merge of OS/2 fix pipe-before-socket from 0.97pre11.
+
+Sat Apr  6 22:10:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/polish.lng,
+	intl/romanian.lng, intl/russian.lng, intl/slovak.lng,
+	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
+	intl/ukrainian.lng, src/document/view.c, src/intl/lang_defs.h,
+	src/intl/language.inc:
+	
+	Show page title and last visit time in location info dialog, patch
+	by Miciah.
+
+Sat Apr  6 18:02:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+	
+	By now on, use '\t' as separator in the ~/.links/bookmarks file
+	rather than '|'. We still accept '|' as a separator in old
+	bookmarks files. Patch by Zas and me.
+
+Sat Apr  6 17:52:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+	
+	Safe bookmarks loading, patch by Zas.
+
+Sat Apr  6 17:46:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/cookies.c:
+	
+	Cookies tidyup, more secure loading of cookies (allocate enough
+	space). Patch by Zas.
+
+Sat Apr  6 17:38:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/main.c:
+	
+	Workaround for some subtle bug in OS/2 - create pipe before socket
+	(by mikulas, from 0.97pre11).
+
+Sat Apr  6 17:08:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+	
+	Fixed internal error: cell iw now wider. We don't allow overlapping
+	of hr linez anymore (by mikulas, from 0.97pre10)
+
+Sat Apr  6 16:57:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/: af_unix.c, connect.c:
+	
+	Zero all sockaddr structures before messing with them. Also some
+	various fixes in af_unix.c, probably causing some OS/2 problems (by
+	mikulas, from 0.97pre9)
+
+Sat Apr  6 16:51:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/af_unix.c, osdep/os_dep.c, osdep/os_dep.h:
+	
+	Increase priority on OS/2 (by mikulas, from 0.97pre9).
+
+Fri Apr  5 23:16:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, links.1, linkskeys.5:
+	
+	Added manpage linkskeys.5, contributed by Peter Wang.
+
+Wed Apr  3 20:52:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, contrib/user-keybindings.example:
+	
+	Added contrib/user-keybindings.example contributed by David
+	Mediavilla <r96x6a79yki40001@sneakemail.com>. Someone should go and
+	make it up-to-date.
+
+Wed Apr  3 17:32:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, contrib/README, contrib/elinks.spec:
+	
+	RPM spec file contributed by <zimon@niksula.hut.fi>.
+
+Wed Apr  3 15:29:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/Makefile.am:
+	
+	HPUX compilation fix by sc.
+
+Wed Apr  3 13:48:05 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/date.c:
+	
+	Fix in HTTP date parser by sc.
+
+Tue Apr  2 22:29:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in, src/bookmarks/bookmarks.c,
+	src/bookmarks/dialogs.c, src/cookies/cookies.c,
+	src/dialogs/globhist.c, src/dialogs/info.c, src/dialogs/menu.c,
+	src/document/globhist.c, src/document/view.c:
+	
+	Possibility not to include globhist/bookmarks/cookies in resulting
+	executablee by specifying parameter to ./configure.
+
+Tue Apr  2 21:51:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+	
+	Todo bit by David Mediavilla.
+
+Tue Apr  2 21:50:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/: Makefile.am, menu.c, options.c, options.h:
+	
+	Split settings dialogs from dialogs/menu.c to dialogs/options.c.
+	Also various tidyups there.
+
+Tue Apr  2 20:40:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/download.c:
+	
+	Cleanup of download.c, patch by Zas. Maybe expect problems..
+
+Tue Apr  2 19:55:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+	
+	Another TODO bit, now from muehlenhoff@gmx.de (Moritz Muehlenhoff).
+
 Tue Apr  2 17:40:31 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO, src/config/default.c, src/document/html/parser.c:

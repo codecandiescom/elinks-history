@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.103 2004/09/28 13:55:13 pasky Exp $ */
+/* $Id: renderer.c,v 1.104 2004/09/28 13:56:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,7 +230,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	}
 #ifdef CONFIG_ECMASCRIPT
 	assert(vs->ecmascript);
-	if (!document->options.gradual_rerendering) {
+	if (!options->gradual_rerendering) {
 		/* Passing of the onload_snippets pointers gives *_snippets()
 		 * some feeling of universality, shall we ever get any other
 		 * snippets (?). */

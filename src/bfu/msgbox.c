@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.39 2003/06/07 13:54:28 pasky Exp $ */
+/* $Id: msgbox.c,v 1.40 2003/06/07 23:00:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	int button;
 
 	/* Check if the info string is valid. */
-	if (!text) return;
+	if (!text || buttons < 0) return;
 
 	/* Use the @flags to determine whether @text should be free()d. */
 	if (flags & MSGBOX_EXTD_TEXT)

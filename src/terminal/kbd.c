@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.21 2003/08/24 12:01:28 zas Exp $ */
+/* $Id: kbd.c,v 1.22 2003/08/24 20:26:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,50 +156,22 @@ kbd_ctrl_c(void)
 		queue_event(ditrm, (unsigned char *)&ev, sizeof(struct event));
 }
 
-/*
-unsigned char *init_seq = "\033[?1000h\033[?47h\0337";
-unsigned char *term_seq = "\033[2J\033[?1000l\033[?47l\0338\b \b";
-*/
-
-static unsigned char init_seq[] = "\033)0\0337";
-static unsigned char init_seq_x_mouse[] = "\033[?1000h";
-static unsigned char init_seq_tw_mouse[] = "\033[?9h";
-static unsigned char init_seq_altscreen[] = "\033[?47h";
-
 #define seq_len(x) sizeof((x)) / sizeof(unsigned char) - 1
-
-static int init_seq_len = seq_len(init_seq);
-static int init_seq_x_mouse_len = seq_len(init_seq_x_mouse);
-static int init_seq_tw_mouse_len = seq_len(init_seq_tw_mouse);
-static int init_seq_altscreen_len = seq_len(init_seq_altscreen);
-
-static unsigned char term_seq[] = "\033[2J\0338\r \b";
-static unsigned char term_seq_x_mouse[] = "\033[?1000l";
-static unsigned char term_seq_tw_mouse[]= "\033[?9l";
-static unsigned char term_seq_altscreen[] = "\033[?47l";
-
-static int term_seq_len = seq_len(term_seq);
-static int term_seq_x_mouse_len = seq_len(term_seq_x_mouse);
-static int term_seq_tw_mouse_len = seq_len(term_seq_tw_mouse);
-static int term_seq_altscreen_len = seq_len(term_seq_altscreen);
-
-#undef seq_len
-
-/*unsigned char *term_seq = "\033[2J\033[?1000l\0338\b \b";*/
+#define write_sequence(fd, seq) hard_write(fd, seq, seq_len(seq))
 
 static void
 send_init_sequence(int h, int flags)
 {
-	hard_write(h, init_seq, init_seq_len);
+	write_sequence(h, "\033)0\0337");
 
 	if (flags & USE_TWIN_MOUSE) {
-		hard_write(h, init_seq_tw_mouse, init_seq_tw_mouse_len);
+		write_sequence(h, "\033[?9h");
 	} else {
-		hard_write(h, init_seq_x_mouse, init_seq_x_mouse_len);
+		write_sequence(h, "\033[?1000h");
 	}
 
 	if (flags & USE_ALTSCREEN) {
-		hard_write(h, init_seq_altscreen, init_seq_altscreen_len);
+		write_sequence(h, "\033[?47h");
 	}
 }
 
@@ -207,19 +179,20 @@ send_init_sequence(int h, int flags)
 static void
 send_term_sequence(int h, int flags)
 {
-	hard_write(h, term_seq, term_seq_len);
+	write_sequence(h, "\033[2J\0338\r \b");
 
 	if (flags & USE_TWIN_MOUSE) {
-		hard_write(h, term_seq_tw_mouse, term_seq_tw_mouse_len);
+		write_sequence(h, "\033[?9l");
 	} else {
-		hard_write(h, term_seq_x_mouse, term_seq_x_mouse_len);
+		write_sequence(h, "\033[?1000l");
 	}
 
 	if (flags & USE_ALTSCREEN) {
-		hard_write(h, term_seq_altscreen, term_seq_altscreen_len);
+		write_sequence(h, "\033[?47l");
 	}
 }
 
+#undef seq_len
 
 void
 resize_terminal(void)

@@ -1,3 +1,314 @@
+Wed Jun 11 22:05:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Make ses_unback() more consistent with ses_back() --- when
+	loc->vs.url ne ses->loading_url (when can that happen? only when we
+	would call ses_unback() w/o preceding go_unback(), it seems..?),
+	remake the current location.  
+
+Wed Jun 11 20:14:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/config/examples.xml:
+
+	More snippets ...  
+
+Wed Jun 11 20:08:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: elinksbook.dtd, config/elinks.conf.xml,
+	config/syntax.xml:
+
+	Adding snippets that will be used by both tools/help2docbook and
+	config/intro.xml.  
+
+Wed Jun 11 18:40:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/tools/help2docbook:
+
+	Cleanup the script, and fix handling of -? and -h special case.  
+
+Wed Jun 11 16:53:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Removed unused label no_mem in frm_download().  
+
+Wed Jun 11 16:42:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Removed unused variable @l from do_move().  
+
+Wed Jun 11 16:28:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Fixed typo in history movement backends return value description.  
+
+Wed Jun 11 16:22:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Oops, fixed errorneous commit --- the previous change was bogus,
+	sorry.  
+
+Wed Jun 11 16:20:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hotkey.h:
+
+	C++ style comments -> C comments 
+
+Wed Jun 11 15:38:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Simplify the get_opt_() declaration a little.  
+
+Wed Jun 11 15:35:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Be a little more paranoid regarding Heisenbugs (that's how they call
+	it in man assert(3)\! ;-) --- even in non-DEBUG mode, the real
+	function is get_opt_ and get_opt macro wraps around it.  
+
+Wed Jun 11 15:29:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	ses->ref_url may be NULL and it's no problem, so don't panic if its
+	allocation fails.  
+
+Wed Jun 11 15:27:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: protocol/http/http.c, sched/sched.c, sched/sched.h:
+
+	prev_url -> ref_url - Makes Grepping Easier.  
+
+Wed Jun 11 15:26:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/history.c, sched/session.c, viewer/text/view.c:
+
+	ref_url is now ordinary string, not the granural one (that is, we
+	alloc it by stracpy(), not init_str()). Inspiration by Jonas and
+	Miciah.  
+
+Wed Jun 11 14:59:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Rename get_field* -> get_mailcap_field* 
+
+Wed Jun 11 14:54:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Further conformance fixes: Correctly handle implicit wild type.  
+
+Wed Jun 11 14:43:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: setup.h, mime/backend/mailcap.c:
+
+	Improve of conformance. Triggered by Miciah's comment updates. :) 
+
+Wed Jun 11 14:40:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Compile fix of the heap to stack usage change.  
+
+Wed Jun 11 12:00:46 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/lua/core.c:
+
+	Check that memacpy did not return NULL. Miciah is a dunce.  
+
+Wed Jun 11 11:03:16 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/encoding.c:
+
+	Make some structures static.  
+
+Wed Jun 11 10:44:18 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/mime/backend/mailcap.c:
+
+	A few comment clean-ups for fun.  
+
+Wed Jun 11 10:23:15 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/dump/dump.c:
+
+	error("%s", m) is silly! 
+
+Wed Jun 11 10:05:03 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bookmarks/dialogs.c, globhist/dialogs.c:
+
+	Fix two more strings that had a space before a question mark.  
+
+Wed Jun 11 09:59:59 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Fix some line-breaks in the Options manager Info box which were
+	inadvertently changed the msg_text migration.  
+
+Wed Jun 11 09:30:38 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bookmarks/dialogs.c, config/dialogs.c:
+
+	Fix two strings where we had a space before a question mark.  
+
+Wed Jun 11 09:25:26 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hotkey.c:
+
+	is_hotkey: Test whether a pointer is NULL _before_ we dereference 
+	that pointer, and while I'm at it, use assert() for that test.  
+
+Wed Jun 11 09:09:10 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/error.c:
+
+	elinks_debug, elinks_error, and elinks_internal now print even if
+	they need to truncate the string.  The code is slightly simpler as a
+	side-effect of this change.  
+
+Wed Jun 11 08:39:05 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: options.c, options.h:
+
+	Don't pass line-numbers and file-names to get_opt in non-DEBUG
+	builds.  
+
+Wed Jun 11 07:21:20 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Wed Jun 11 06:19:29 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: util/error.h, elusive/parser/css/atrule.c,
+	elusive/parser/css/parser.c, elusive/parser/css/ruleset.c,
+	elusive/parser/css/scanner.c, elusive/parser/css/tree.c:
+
+	Fix assert() and all uses of it: Before, assert(foo) failed if foo
+	was true; now, assert(foo) fails if foo is false. (What do you think
+	'assert' *means*?) 
+
+Wed Jun 11 05:55:06 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/history.c:
+
+	go_away: As suggested by Jonas Fonseca a few days ago, replace a
+	init_str()/add_to_str() combination with stracpy().  
+
+Wed Jun 11 05:45:03 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/lua/core.c:
+
+	l_current_url: Instead of stracpying vs->url and replacing any
+	POST_CHAR with \0, now we memacpy vs->url up to POST_CHAR, or the
+	whole line if there is no POST_CHAR.  This improves memory usage and
+	performance, especially with file-uploads.  
+
+Wed Jun 11 05:19:26 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Use the stack instead of mem_allocing in parse_mimetypes_file.  
+
+Wed Jun 11 05:16:23 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/history.c:
+
+	Remove a pointless assignment in free_history().  
+
+Wed Jun 11 05:12:15 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/mime/backend/: default.c, mailcap.c:
+
+	'bool ? 1 : 0' is superfluous; just use 'bool'.  
+
+Wed Jun 11 05:08:42 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	Remove unnecessary strcmp in lookup_unique_name; pointer comparison
+	is sufficient.  
+
+Wed Jun 11 05:02:58 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/mime/mime.c:
+
+	try_extension_type: Replace safe_strncpy with memcpy; we just
+	allocated the necessary space, and the string is already
+	null-terminated, so memcpy is fine.  
+
+Wed Jun 11 03:04:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: mailcap.c, mimetypes.c:
+
+	Cleanups and small optimizations + fix of skip_whitespace macro 
+
+Wed Jun 11 03:01:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Tidy up.  
+
+Wed Jun 11 01:40:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: .cvsignore, Makefile.doc, config/cmdoptions.xml,
+	manpages/.cvsignore, manpages/elinks.1.xml,
+	manpages/elinkskeys.5.xml:
+
+	Varies adjustments. Make rule for building config/cmdoptions.xml so
+	it can be removed (again already).  
+
+Wed Jun 11 01:14:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/tools/help2docbook:
+
+	First part of doc autogenerator script.  
+
+Tue Jun 10 23:52:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, doc/book/config.ent.in, doc/book/elinksbook.dtd,
+	doc/man/man5/elinkskeys.5:
+
+	Make configure control wether to use DocBook XML or not.  
+
+Tue Jun 10 23:47:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: Makefile.am, Makefile.doc:
+
+	Generalize book build rules the same way as the manpages.  
+
+Tue Jun 10 23:45:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/book.xml:
+
+	s/manual/book/. Is this a good change? 
+
+Tue Jun 10 23:35:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: config/mime.xml, features/bookmarks.xml,
+	intro/installation.xml:
+
+	A lot of small fixes. Remove <chapterinfo> and unused links.  
+
+Tue Jun 10 23:31:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/info/: authors.xml, preface.xml, revision.xml:
+
+	Rest of the meta data.  
+
 Tue Jun 10 21:39:55 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/book/: book.xml, elinksbook.dtd:
@@ -6,7 +317,7 @@ Tue Jun 10 21:39:55 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Jun 10 21:29:43 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/book/: Makefile.am, elinksbook.dtd:
+	* doc/book/: Makefile.am, elinksbook.dtd, intro/installation.xml:
 
 	Installation docs. And declare entities for the current files. Put
 	features/* in EXTRA_DIST.  
@@ -18,9 +329,16 @@ Tue Jun 10 21:19:11 2003  Jonas Fonseca <fonseca@diku.dk>:
 	Remove now unused function get_extension_from_url() virtually
 	patched by Miciah.  
 
+Tue Jun 10 21:10:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/config/mime.xml:
+
+	Adding Jose' mime docs.  
+
 Tue Jun 10 20:32:48 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/book/manpages/: elinks.1.xml, elinkskeys.5.xml:
+	* doc/book/: features/bookmarks.xml, manpages/elinks.1.xml,
+	manpages/elinkskeys.5.xml:
 
 	Tiny. A few id renames. Give hint for html filename.  
 
@@ -61,7 +379,7 @@ Tue Jun 10 19:17:35 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Jun 10 18:16:50 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/book/elinksbook.dtd:
+	* doc/book/: elinksbook.dtd, features/bookmarks.xml:
 
 	Pasky ultimate bookmark guide.  
 
@@ -70,6 +388,12 @@ Tue Jun 10 17:26:44 2003  Jonas Fonseca <fonseca@diku.dk>:
 	* doc/book/: Makefile.doc, manpages/Makefile.am:
 
 	Test if *DOCTOOL is set before building docs. Moved manpage rules.  
+
+Tue Jun 10 16:34:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/tools/: .cvsignore, .vimrc:
+
+	Give me an F ... give me an A ... give me ...  
 
 Tue Jun 10 16:29:39 2003  Jonas Fonseca <fonseca@diku.dk>:
 
@@ -85,14 +409,15 @@ Tue Jun 10 16:17:09 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Tue Jun 10 16:15:44 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/book/: elinksbook.dtd, manpages/elinks.1.xml:
+	* doc/book/: elinksbook.dtd, config/cmdoptions.xml,
+	config/envvars.xml, manpages/elinks.1.xml:
 
 	More splitting and removed <?xml ...?> since docbook2man choked on
 	it :( 
 
 Tue Jun 10 16:05:07 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/book/manpages/elinks.1.xml:
+	* doc/book/: config/files.xml, manpages/elinks.1.xml:
 
 	First step of splitting and generalizing documentation. New concept:
 	object oriented documentation. ;) 
@@ -184,6 +509,13 @@ Tue Jun 10 00:24:11 2003  Jonas Fonseca <fonseca@diku.dk>:
 	* src/: config/options.c, document/html/parser.c:
 
 	Two felonies corrected by the whitespace police.  
+
+Mon Jun  9 23:56:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/: config/.cvsignore, config/.vimrc, info/.cvsignore,
+	info/.vimrc, intro/.cvsignore, intro/.vimrc:
+
+	Addedd fairies.  
 
 Mon Jun  9 23:23:50 2003  Jonas Fonseca <fonseca@diku.dk>:
 

@@ -1,6 +1,5 @@
 <para>
 
-
 	The <filename>elinks.conf</filename> file contains configuration
 	information for ELinks.  It can be used to configure the behaviour of
 	ELinks in a wide variety of ways: protocol behaviour, keybindings,

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.137 2003/08/23 03:31:42 jonas Exp $ */
+/* $Id: session.c,v 1.138 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
+#include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memlist.h"
@@ -184,7 +185,7 @@ print_screen_status(struct session *ses)
 		static int last_current_link;
 		unsigned int tab_info_len = 0;
 		struct download *stat = NULL;
-		struct screen_color *text_color = NULL;
+		struct color_pair *text_color = NULL;
 
 		if (ses->task)
 			stat = &ses->loading;
@@ -253,12 +254,12 @@ print_screen_status(struct session *ses)
 		int tab_width = term->x / tabs_count;
 		int tab_total_width = tab_width * tabs_count;
 		int tab_num;
-		struct screen_color *normal_color = get_bfu_color(term, "tabs.normal");
-		struct screen_color *selected_color = get_bfu_color(term, "tabs.selected");
+		struct color_pair *normal_color = get_bfu_color(term, "tabs.normal");
+		struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
 		unsigned char ypos = term->y - (ses->visible_status_bar ? 2 : 1);
 
 		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
-			struct screen_color *color;
+			struct color_pair *color;
 			struct window *tab = get_tab_by_number(term, tab_num);
 			int xpos = tab_num * tab_width;
 			int msglen;

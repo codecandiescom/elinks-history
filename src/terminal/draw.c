@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.49 2003/08/23 16:33:21 jonas Exp $ */
+/* $Id: draw.c,v 1.50 2003/08/23 16:44:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "terminal/draw.h"
 #include "terminal/screen.h"
 #include "terminal/terminal.h"
+#include "util/color.h"
 
 
 #define check_range(term, x, y) \
@@ -23,7 +24,7 @@
 	} while (0)
 
 static inline unsigned char
-encode_color(struct screen_color *color)
+encode_color(struct color_pair *color)
 {
 	unsigned char fg = find_nearest_color(color->foreground, 16);
 	unsigned char bg = find_nearest_color(color->background, 8);
@@ -58,7 +59,7 @@ draw_border_cross(struct terminal *term, int x, int y,
 
 void
 draw_border_char(struct terminal *term, int x, int y,
-	         enum border_char border, struct screen_color *color)
+	         enum border_char border, struct color_pair *color)
 {
 	int position;
 
@@ -85,7 +86,7 @@ get_char(struct terminal *term, int x, int y)
 }
 
 void
-draw_char_color(struct terminal *term, int x, int y, struct screen_color *color)
+draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 {
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return;
@@ -132,7 +133,7 @@ draw_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 
 void
 draw_border(struct terminal *term, int x, int y, int xw, int yw,
-	   struct screen_color *color, int width)
+	   struct color_pair *color, int width)
 {
 	static enum border_char p1[] = {
 		BORDER_SULCORNER,
@@ -174,7 +175,7 @@ draw_border(struct terminal *term, int x, int y, int xw, int yw,
 void
 draw_char(struct terminal *term, int x, int y,
 	  unsigned char data, enum screen_char_attr attr,
-	  struct screen_color *color)
+	  struct color_pair *color)
 {
 	int position;
 
@@ -192,7 +193,7 @@ draw_char(struct terminal *term, int x, int y,
 void
 draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	  unsigned char data, enum screen_char_attr attr,
-	  struct screen_color *color)
+	  struct color_pair *color)
 {
 	unsigned char enc_color;
 	int position;
@@ -230,7 +231,7 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 void
 draw_text(struct terminal *term, int x, int y,
 	  unsigned char *text, int length,
-	  enum screen_char_attr attr, struct screen_color *color)
+	  enum screen_char_attr attr, struct color_pair *color)
 {
 	int position, end;
 	unsigned char enc_color;

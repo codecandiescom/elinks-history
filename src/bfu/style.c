@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.3 2003/08/23 16:33:20 jonas Exp $ */
+/* $Id: style.c,v 1.4 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,16 +11,17 @@
 #include "config/options.h"
 #include "util/color.h"
 #include "terminal/draw.h"
+#include "util/color.h"
 #include "util/hash.h"
 
 
 static struct hash *bfu_colors = NULL;
 
-struct screen_color *
+struct color_pair *
 get_bfu_color(struct terminal *term, unsigned char *stylename)
 {
 	struct option *opt;
-	struct screen_color *color;
+	struct color_pair *color;
 	int stylenamelen;
 	struct hash_item *item;
 
@@ -46,7 +47,7 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 	opt = get_opt_rec_real(opt, stylename);
 	if (!opt) return NULL;
 
-	color = mem_alloc(sizeof(struct screen_color));
+	color = mem_alloc(sizeof(struct color_pair));
 	if (!color) return NULL;
 
 	item = add_hash_item(bfu_colors, stylename, stylenamelen, color);

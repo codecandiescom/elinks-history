@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.42 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: mime.c,v 1.43 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "dialogs/mime.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/terminal.h"
+#include "util/color.h"
 #include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -47,7 +48,7 @@ add_ext_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	struct screen_color *dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, ext_msg[0], &min, &max);
 	text_width(term, ext_msg[1], &min, &max);

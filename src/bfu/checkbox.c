@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.35 2003/08/23 03:31:40 jonas Exp $ */
+/* $Id: checkbox.c,v 1.36 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ static void
 display_checkbox(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	struct terminal *term = dlg->win->term;
-	struct screen_color *color;
+	struct color_pair *color;
 	unsigned char *text;
 
 	color = get_bfu_color(term, "dialog.checkbox");

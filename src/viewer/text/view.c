@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.184 2003/08/23 06:18:22 jonas Exp $ */
+/* $Id: view.c,v 1.185 2003/08/23 16:44:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
+#include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -263,7 +264,7 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	int xw, yw;
 	int vx, vy;
 	int y;
-	struct screen_color color;
+	struct color_pair color;
 
 	assert(t && scr);
 	if_assert_failed return;

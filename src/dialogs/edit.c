@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.37 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: edit.c,v 1.38 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
+#include "util/color.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -44,7 +45,7 @@ layout_add_dialog(struct dialog_data *dlg)
 	int w, rw;
 	int y = -1;
 	struct terminal *term = dlg->win->term;
-	struct screen_color *dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, edit_add_msg[0], &min, &max);
 	text_width(term, edit_add_msg[1], &min, &max);

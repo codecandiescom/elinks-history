@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.15 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: text.c,v 1.16 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
+#include "util/color.h"
 
 void
 text_width(struct terminal *term, register unsigned char *text,
@@ -75,7 +76,7 @@ min_text_width(struct terminal *term, unsigned char *text, int *width)
 void
 dlg_format_text(struct terminal *term, struct terminal *t2,
 		unsigned char *text, int x, int *y, int w, int *rw,
-		struct screen_color *color, enum format_align align)
+		struct color_pair *color, enum format_align align)
 {
 	do {
 		unsigned char *tx;

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.83 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: listbox.c,v 1.84 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
+#include "util/color.h"
 #include "util/lists.h"
 
 
@@ -327,7 +328,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	struct box_context *data = data_;
 	unsigned char *text = item->text;
 	int len; /* Length of the current text field. */
-	struct screen_color *color;
+	struct color_pair *color;
 	int depth = item->depth + 1;
 	int d;
 

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.44 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: inpfield.c,v 1.45 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
+#include "util/color.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 
@@ -127,7 +128,7 @@ input_field_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	struct screen_color *text_color = get_bfu_color(term, "dialog.text");
+	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, dlg->dlg->udata, &min, &max);
 	buttons_width(term, dlg->items + 1, 2, &min, &max);
@@ -243,7 +244,7 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 		 int hide)
 {
 	struct terminal *term = dlg->win->term;
-	struct screen_color *color;
+	struct color_pair *color;
 
 	int_lower_bound(&di->vpos, di->cpos - di->l + 1);
 	int_upper_bound(&di->vpos, di->cpos);

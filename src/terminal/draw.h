@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.23 2003/08/23 16:33:22 jonas Exp $ */
+/* $Id: draw.h,v 1.24 2003/08/23 16:44:43 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -24,11 +24,6 @@ struct screen_char {
 
 	/* Attributes are screen_char_attr bits. */
 	unsigned char attr;
-};
-
-struct screen_color {
-	color_t foreground;
-	color_t background;
 };
 
 /* Linux frame symbols table (it's magically converted to other terminals when
@@ -72,14 +67,14 @@ struct screen_char *get_char(struct terminal *, int xpos, int ypos);
 
 /* Sets the color of a screen position. */
 void draw_char_color(struct terminal *term, int x, int y,
-	       struct screen_color *color);
+	       struct color_pair *color);
 
 /* Sets the data of a screen position. */
 void draw_char_data(struct terminal *term, int x, int y, unsigned char data);
 
 /* Sets the data to @border and of a screen position. */
 void draw_border_char(struct terminal *term, int x, int y,
-		      enum border_char border, struct screen_color *color);
+		      enum border_char border, struct color_pair *color);
 
 /* Sets the cross position of two borders. */
 void draw_border_cross(struct terminal *, int x, int y,
@@ -88,21 +83,21 @@ void draw_border_cross(struct terminal *, int x, int y,
 /* Draws a char. */
 void draw_char(struct terminal *term, int x, int y,
 	       unsigned char data, enum screen_char_attr attr,
-	       struct screen_color *color);
+	       struct color_pair *color);
 
 /* Draws an area using the same colors and attributes. */
 void draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	       unsigned char data, enum screen_char_attr attr,
-	       struct screen_color *color);
+	       struct color_pair *color);
 
 void draw_border(struct terminal *term, int x, int y, int xw, int yw,
-		 struct screen_color *color, int width);
+		 struct color_pair *color, int width);
 
 /* Draws @length chars from @text. */
 void draw_text(struct terminal *term, int x, int y,
 	       unsigned char *text, int length,
 	       enum screen_char_attr attr,
-	       struct screen_color *color);
+	       struct color_pair *color);
 
 /* Draws @length chars from @line on the screen. */
 /* Used by viewer to copy over a document. */

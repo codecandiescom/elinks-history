@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.68 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: dialogs.c,v 1.69 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
+#include "util/color.h"
 #include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"
@@ -199,7 +200,7 @@ layout_edit_dialog(struct dialog_data *dlg)
 	int w, rw;
 	int y = -1;
 	struct terminal *term = dlg->win->term;
-	struct screen_color *dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 	struct option *option = dlg->dlg->udata;
 	unsigned char *name, *type, *value, *desc;
 

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.39 2003/08/23 03:31:40 jonas Exp $ */
+/* $Id: dialog.c,v 1.40 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
+#include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memlist.h"
@@ -70,7 +71,7 @@ redraw_dialog(struct dialog_data *dlg)
 	int x = dlg->x + DIALOG_LEFT_BORDER;
 	int y = dlg->y + DIALOG_TOP_BORDER;
 	struct terminal *term = dlg->win->term;
-	struct screen_color *title_color;
+	struct color_pair *title_color;
 
 	draw_border(term, x, y,
 		    dlg->xw - 2 * DIALOG_LEFT_BORDER,
@@ -370,7 +371,7 @@ draw_dlg(struct dialog_data *dlg)
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
-		struct screen_color * shadow_color;
+		struct color_pair * shadow_color;
 
 		shadow_color = get_bfu_color(dlg->win->term, "dialog.shadow");
 

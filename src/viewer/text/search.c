@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.14 2003/08/23 03:31:43 jonas Exp $ */
+/* $Id: search.c,v 1.15 2003/08/23 16:44:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
+#include "util/color.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -391,7 +392,7 @@ draw_searched(struct terminal *term, struct document_view *scr)
 
 	get_searched(scr, &pt, &len);
 	if (len) {
-		struct screen_color *color = get_bfu_color(term, "searched");
+		struct color_pair *color = get_bfu_color(term, "searched");
 
 		for (i = 0; i < len; i++) {
 			int x = pt[i].x + scr->xp - scr->vs->view_posx;

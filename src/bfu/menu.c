@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.90 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: menu.c,v 1.91 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
+#include "util/color.h"
 #include "util/conv.h"
 #include "util/memory.h"
 
@@ -243,11 +244,11 @@ static void
 display_menu(struct terminal *term, struct menu *menu)
 {
 	int p, s;
-	struct screen_color *normal_color = get_bfu_color(term, "menu.normal");
-	struct screen_color *selected_color = get_bfu_color(term, "menu.selected");
-	struct screen_color *frame_color = get_bfu_color(term, "menu.frame");
-	struct screen_color *hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
-	struct screen_color *selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
+	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
+	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
+	struct color_pair *frame_color = get_bfu_color(term, "menu.frame");
+	struct color_pair *hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
+	struct color_pair *selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
 
 	draw_area(term,	menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2,
 		  ' ', 0, normal_color);
@@ -257,8 +258,8 @@ display_menu(struct terminal *term, struct menu *menu)
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
-		struct screen_color *color = normal_color;
-		struct screen_color *hkcolor = hotkey_color;
+		struct color_pair *color = normal_color;
+		struct color_pair *hkcolor = hotkey_color;
 
 #ifdef DEBUG
 		/* Sanity check. */
@@ -626,17 +627,17 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
 	int i;
 	int p = 2;
-	struct screen_color *normal_color = get_bfu_color(term, "mainmenu.normal");
-	struct screen_color *selected_color = get_bfu_color(term, "mainmenu.selected");
-	struct screen_color *hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
-	struct screen_color *selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
+	struct color_pair *normal_color = get_bfu_color(term, "mainmenu.normal");
+	struct color_pair *selected_color = get_bfu_color(term, "mainmenu.selected");
+	struct color_pair *hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
+	struct color_pair *selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
 
 	draw_area(term, 0, 0, term->x, 1, ' ', 0, normal_color);
 
 	for (i = 0; i < menu->ni; i++) {
 		int j;
-		struct screen_color *co = normal_color;
-		struct screen_color *hkco = hotkey_color;
+		struct color_pair *co = normal_color;
+		struct color_pair *hkco = hotkey_color;
 		int hk = 0;
 		int key_pos = menu->items[i].hotkey_pos;
 		unsigned char c;

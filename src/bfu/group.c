@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.21 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: group.c,v 1.22 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
+#include "util/color.h"
 
 
 static inline int
@@ -83,7 +84,7 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 {
 	int nx = 0;
 	int base = base_group_width(t2, item);
-	struct screen_color *color = get_bfu_color(term, "dialog.text");
+	struct color_pair *color = get_bfu_color(term, "dialog.text");
 
 	while (n--) {
 		int sl;

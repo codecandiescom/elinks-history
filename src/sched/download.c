@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.91 2003/08/23 03:31:42 jonas Exp $ */
+/* $Id: download.c,v 1.92 2003/08/23 16:44:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,7 @@
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/terminal.h"
+#include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/file.h"
@@ -211,7 +212,7 @@ download_window_function(struct dialog_data *dlg)
 	unsigned char *u;
 	struct string msg;
 	struct download *download = &file_download->download;
-	struct screen_color *dialog_text_color = get_bfu_color(term, "dialog.text");
+	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	redraw_below_window(dlg->win);
 	file_download->win = dlg->win;

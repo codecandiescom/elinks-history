@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.40 2004/11/22 13:27:42 zas Exp $ */
+/* $Id: form.h,v 1.41 2004/11/23 17:12:57 witekfl Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -60,6 +60,7 @@ struct form_control {
 	enum form_mode mode;
 
 	enum form_method method;
+	unsigned char *formname;
 	unsigned char *action;
 	unsigned char *target;
 	unsigned char *name;
@@ -125,5 +126,6 @@ enum frame_event_status submit_form(struct session *ses, struct document_view *d
 void auto_submit_form(struct session *ses);
 
 void done_form_control(struct form_control *fc);
+void do_reset_form(struct document_view *doc_view, int form_num);
 
 #endif

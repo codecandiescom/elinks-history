@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.504 2004/11/08 19:27:22 jonas Exp $ */
+/* $Id: renderer.c,v 1.505 2004/11/23 17:12:57 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1139,6 +1139,14 @@ get_link_state(void)
 	done_link_state_info();
 
 	return state;
+}
+
+void
+process_hidden_link(struct part *part)
+{
+	enum link_state state = get_link_state();
+
+	process_link(part, state, NULL, 0);
 }
 
 #define is_drawing_subs_or_sups() \

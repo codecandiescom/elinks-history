@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.47 2004/11/08 00:31:27 jonas Exp $ */
+/* $Id: forms.c,v 1.48 2004/11/23 17:12:56 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,7 @@
 
 struct form {
 	unsigned char *action;
+	unsigned char *name;
 	unsigned char *target;
 	enum form_method method;
 	/* FIXME: This field is currently unused, why ? --Zas */
@@ -50,6 +51,7 @@ void
 done_form(void)
 {
 	mem_free_if(form.action);
+	mem_free_if(form.name);
 	mem_free_if(form.target);
 	memset(&form, 0, sizeof(form));
 }
@@ -83,6 +85,8 @@ get_html_form(unsigned char *a, struct form *form)
 		}
 		mem_free(al);
 	}
+	al = get_attr_val(a, "name");
+	if (al) form->name = al;
 
 	al = get_attr_val(a, "action");
 	if (al) {
@@ -189,6 +193,7 @@ init_form_control(enum form_type type, unsigned char *attr)
 	fc->position = attr - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
+	fc->formname = null_or_stracpy(form.name);
 	fc->mode = get_form_mode(attr);
 
 	return fc;
@@ -284,7 +289,11 @@ no_type_attr:
 	if (fc->maxlength == -1) fc->maxlength = INT_MAX;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
-	if (fc->type == FC_HIDDEN) goto hid;
+	if (fc->type == FC_HIDDEN) {
+		format.form = fc;
+		process_hidden_link(html_context.part);
+		goto hid;
+	}
 
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 	html_stack_dup(ELEMENT_KILLABLE);

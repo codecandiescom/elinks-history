@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.250 2004/11/22 13:27:41 zas Exp $ */
+/* $Id: form.c,v 1.251 2004/11/23 17:12:57 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,6 +200,7 @@ done_form_control(struct form_control *fc)
 	mem_free_if(fc->name);
 	mem_free_if(fc->alt);
 	mem_free_if(fc->default_value);
+	mem_free_if(fc->formname);
 
 	for (i = 0; i < fc->nvalues; i++) {
 		mem_free_if(fc->values[i]);
@@ -915,7 +916,7 @@ encode_text_plain(struct list_head *l, struct string *data,
 	}
 }
 
-static void
+void
 do_reset_form(struct document_view *doc_view, int form_num)
 {
 	struct form_control *fc;

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.61 2004/11/03 17:40:35 zas Exp $ */
+/* $Id: smb.c,v 1.62 2004/11/03 17:48:25 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -448,6 +448,7 @@ end_smb_connection(struct connection *conn)
 {
 	struct smb_connection_info *si = conn->info;
 	struct uri *uri;
+	enum connection_state state = S_OK;
 
 	if (smb_get_cache(conn)) return;
 
@@ -474,8 +475,8 @@ end_smb_connection(struct connection *conn)
 		struct string page;
 
 		if (!init_string(&page)) {
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
-			return;
+			state = S_OUT_OF_MEM;
+			goto bye;
 		}
 
 		parse_smbclient_output(uri, si, &page);
@@ -492,7 +493,7 @@ end_smb_connection(struct connection *conn)
 bye:
 	close_socket(conn, &conn->socket);
 	close_socket(conn, &conn->data_socket);
-	abort_conn_with_state(conn, S_OK);
+	abort_conn_with_state(conn, state);
 }
 
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.15 2002/04/06 17:52:09 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.16 2002/04/06 18:02:30 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -192,12 +192,18 @@ read_bookmarks()
 
 	title = in_buffer;
 
-	/* TODO: Use rather \t as a separator. */
-	/* TODO: Ignore lines with bad chars in title or url */
+	/* TODO: Ignore lines with bad chars in title or url (?). -- Zas */
 	while (fgets(in_buffer, INBUF_SIZE, f)) {
 		unsigned char *urlend;
 
-		url = strchr(in_buffer, '|');
+		url = strchr(in_buffer, '\t');
+		/* Compatibility hack to smoothly replace separator '|' with
+		 * '\t' */
+		/* TODO: Writing this while we're dating era of 0.4pre5-CVS.
+		 * You, people from the future, should remove this probably
+		 * around 0.7 or so.. -- pasky, zas */
+		if (!url) url = strchr(in_buffer, '|');
+
 		/* If separator is not found, or title is empty or too long,
 		 * skip that line -- Zas */
 		if (!url || url == in_buffer
@@ -238,16 +244,15 @@ write_bookmarks()
 	mem_free(file_name);
 	if (!out) return;
 
-	/* TODO: Use rather \t as a separator. */
 	foreachback(bm, bookmarks) {
 		unsigned char *p = stracpy(bm->title);
 		int i;
 
 		for (i = strlen(p) - 1; i >= 0; i--)
-			if (p[i] < ' '|| p[i] == '|')
+			if (p[i] < ' ')
 				p[i] = ' ';
 		fputs(p,out);
-		fputc('|', out);
+		fputc('\t', out);
 		fputs(bm->url,out);
 		fputc('\n',out);
 		mem_free(p);

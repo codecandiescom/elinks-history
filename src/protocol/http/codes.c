@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.23 2004/04/01 04:09:19 jonas Exp $ */
+/* $Id: codes.c,v 1.24 2004/04/02 17:45:28 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -166,7 +166,7 @@ show_http_error_document(struct session *ses, void *data)
 	struct http_error_info *info = data;
 	struct terminal *term = ses->tab->term;
 	struct cache_entry *cached = find_in_cache(struri(info->uri));
-	struct cache_entry *cache = cached ? cached : get_cache_entry(struri(info->uri));
+	struct cache_entry *cache = cached ? cached : get_cache_entry(info->uri);
 	unsigned char *str = NULL;
 
 	if (cache) str = get_http_error_document(term, info->uri, info->code);

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.80 2004/04/01 14:45:34 jonas Exp $ */
+/* $Id: document.c,v 1.81 2004/04/02 17:45:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,7 @@ loc_msg(struct terminal *term, struct location *location,
 
 	add_char_to_string(&msg, '\n');
 
-	ce = get_cache_entry(struri(location->vs.uri));
+	ce = get_cache_entry(location->vs.uri);
 	if (ce) {
 		unsigned char *a;
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.115 2004/04/02 16:35:41 jonas Exp $ */
+/* $Id: cache.c,v 1.116 2004/04/02 17:45:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,8 +116,9 @@ find_in_cache(unsigned char *url)
 }
 
 struct cache_entry *
-get_cache_entry(unsigned char *url)
+get_cache_entry(struct uri *uri)
 {
+	unsigned char *url = struri(uri);
 	struct cache_entry *ce = find_in_cache(url);
 
 	if (ce) return ce;

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.128 2004/04/01 04:15:48 jonas Exp $ */
+/* $Id: ftp.c,v 1.129 2004/04/02 17:45:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -909,7 +909,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 		 * File unavailable (e.g., file not found, no access). */
 
 		if (!conn->cache)
-			conn->cache = get_cache_entry(struri(conn->uri));
+			conn->cache = get_cache_entry(conn->uri);
 		if (!conn->cache) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
@@ -1102,7 +1102,6 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 static void
 got_something_from_data_connection(struct connection *conn)
 {
-	unsigned char *url;
 	struct ftp_connection_info *c_i = conn->info;
 	unsigned char dircolor[8];
 	int colorize_dir = 0;
@@ -1141,9 +1140,7 @@ conn_error:
 		return;
 	}
 
-	url = struri(conn->uri);
-
-	if (!conn->cache) conn->cache = get_cache_entry(url);
+	if (!conn->cache) conn->cache = get_cache_entry(conn->uri);
 	if (!conn->cache) {
 out_of_mem:
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
@@ -1163,6 +1160,7 @@ out_of_mem:
 		unsigned char *path = conn->uri->data;
 		int pathlen = conn->uri->datalen;
 		struct string string;
+		unsigned char *url = struri(conn->uri);
 		int url_len = strlen(url);
 
 		if (!path) {

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.28 2004/03/31 20:31:22 jonas Exp $ */
+/* $Id: finger.c,v 1.29 2004/04/02 17:45:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,7 +61,7 @@ finger_sent_request(struct connection *conn)
 static void
 finger_get_response(struct connection *conn, struct read_buffer *rb)
 {
-	struct cache_entry *ce = get_cache_entry(struri(conn->uri));
+	struct cache_entry *ce = get_cache_entry(conn->uri);
 	int l;
 
 	set_connection_timeout(conn);

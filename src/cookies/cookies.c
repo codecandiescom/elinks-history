@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.32 2002/09/01 11:57:04 pasky Exp $ */
+/* $Id: cookies.c,v 1.33 2002/09/07 09:32:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -670,15 +670,4 @@ cleanup_cookies()
 	free_list(cookies);
 }
 
-#else /* COOKIES */
-
-/* TODO: Disabling code calling these functions, instead of creating empty
- * ones.
- * Code bloat is a registered trademark of M$ Inc. ;) --Zas */
-int set_cookie(struct terminal *t, unsigned char *a, unsigned char *b) {}
-void send_cookies(unsigned char **u, int *i, unsigned char *c) {}
-void load_cookies() {}
-void init_cookies() {}
-void cleanup_cookies() {}
-
-#endif
+#endif /* COOKIES */

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.50 2002/08/29 23:58:22 pasky Exp $ */
+/* $Id: main.c,v 1.51 2002/09/07 09:32:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,7 +319,9 @@ init()
 	read_bookmarks();
 	read_global_history();
 	load_url_history();
+#ifdef COOKIES
 	init_cookies();
+#endif
 	init_ssl();
 #ifdef HAVE_LUA
     	init_lua();
@@ -390,7 +392,9 @@ terminate_all_subsystems()
 	free_keymaps();
 	free_conv_table();
 	free_blacklist();
+#ifdef COOKIES
 	if (init_b) cleanup_cookies();
+#endif
 	check_bottom_halves();
 	free_home();
 	free_strerror_buf();

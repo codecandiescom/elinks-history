@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.506 2004/06/13 18:43:31 jonas Exp $ */
+/* $Id: session.c,v 1.507 2004/06/13 18:45:50 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -864,11 +864,8 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 	enum remote_session_flags remote = 0;
 	struct uri *current_uri;
 	unsigned char *str;
-	int magic;
 
-	magic = info->magic;
-
-	switch (magic) {
+	switch (info->magic) {
 	case INTERLINK_NORMAL_MAGIC:
 		/* SESSION_MAGIC(1, 0) supports multiple URIs, remote opening
 		 * and magic variables:
@@ -918,10 +915,10 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		 */
 
 		/* Extract URI containing @magic bytes */
-		if (magic <= 0 || magic > len)
+		if (info->magic <= 0 || info->magic > len)
 			len = 0;
 		else
-			len = magic;
+			len = info->magic;
 	}
 
 	if (len <= 0) {

@@ -917,28 +917,12 @@ AC_SUBST(CONFDIR)
 
 
 # Create LOCALEDIR #define for config.h
-
-datadir_n=`(
-    test "x$prefix" = xNONE && prefix=$ac_default_prefix
-    test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
-    eval echo "$datadir"
-)`
-datadir=$datadir_n
-
-LOCALEDIR=${datadir}/locale
+LOCALEDIR=`eval echo "$datadir/locale"`
 AC_DEFINE_UNQUOTED(LOCALEDIR,"$LOCALEDIR")
 AC_SUBST(LOCALEDIR)
 
 # Create LIBDIR #define for config.h
-
-echo "$libdir"
-libdir=`(
-    test "x$prefix" = xNONE && prefix=$ac_default_prefix
-    test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
-    eval echo "$libdir"
-)`
-
-LIBDIR=${libdir}
+LIBDIR=`eval echo "$libdir"`
 AC_DEFINE_UNQUOTED(LIBDIR,"$LIBDIR")
 AC_SUBST(LIBDIR)
 

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.26 2003/05/07 10:47:26 zas Exp $ */
+/* $Id: listbox.h,v 1.27 2003/05/07 14:31:20 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -22,12 +22,12 @@ struct listbox_ops {
 struct listbox_data {
 	LIST_HEAD(struct listbox_data);
 
-	struct list_head *items; /* The list being displayed */
 	struct listbox_ops *ops; /* Backend-provided operations */
 	struct listbox_item *sel; /* Item currently selected */
 	struct listbox_item *top; /* Item which is on the top line of the box */
 
 	int sel_offset; /* Offset of selected item against the box top */
+	struct list_head *items; /* The list being displayed */
 };
 
 /* An item in a box */
@@ -36,18 +36,13 @@ struct listbox_item {
 
 	/* These may be NULL/empty list for root/leaf nodes or non-hiearchic
 	 * listboxes. */
+	struct listbox_item *root;
 	struct list_head child;
 
-	struct listbox_item *root;
+	/* The listbox this item is member of. */
 	struct list_head *box;
 
-	void *udata;
-
-	/* Run when this item is hilighted */
-	void (*on_hilight)(struct terminal *, struct listbox_data *, struct listbox_item *);
-	/* Run when the user selects on this item. Returns pointer to the
-	 * listbox_item that should be selected after execution. */
-	int (*on_selected)(struct terminal *, struct listbox_data *, struct listbox_item *);
+	enum { BI_LEAF, BI_FOLDER } type;
 
 	int expanded; /* Only valid if this is a BI_FOLDER */
 	int visible; /* Is this item visible? */
@@ -55,8 +50,15 @@ struct listbox_item {
 	int translated; /* Should we call gettext on this text? */
 	int depth;
 
+	/* Run when this item is hilighted */
+	void (*on_hilight)(struct terminal *, struct listbox_data *, struct listbox_item *);
+	/* Run when the user selects on this item. Returns pointer to the
+	 * listbox_item that should be selected after execution. */
+	int (*on_selected)(struct terminal *, struct listbox_data *, struct listbox_item *);
+
+	void *udata;
+
 	enum item_free item_free;
-	enum { BI_LEAF, BI_FOLDER } type;
 
 	/* Text to display (must be last) */
 	unsigned char *text;

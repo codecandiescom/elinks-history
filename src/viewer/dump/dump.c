@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.83 2004/02/10 06:35:44 witekfl Exp $ */
+/* $Id: dump.c,v 1.84 2004/02/10 23:40:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,20 +139,31 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 }
 
 void
-dump_pre_start(struct list_head *list)
+dump_pre_start(struct list_head *url_list)
 {
-	static struct list_head *url_list = NULL;
+	static INIT_LIST_HEAD(todo_list);
+	static INIT_LIST_HEAD(done_list);
+	struct string_list_item *item;
 
-	if (!url_list) url_list = list;
-	if (!url_list) return;
-	if (!list_empty(*url_list)) {
-		struct string_list_item *item = url_list->next;
+	if (url_list) {
+		/* Steal all them nice list items but keep the same order */
+		while (!list_empty(*url_list)) {
+			item = url_list->next;
+			del_from_list(item);
+			add_to_list_end(todo_list, item);
+		}
+	}
 
+	/* Dump each url list item one at a time */
+	if (!list_empty(todo_list)) {
+		item = todo_list.next;
 		terminate = 0;
 		del_from_list(item);
+		add_to_list(done_list, item);
 		dump_start(item->string.source);
-		done_string(&item->string);
-		mem_free(item);
+
+	} else {
+		free_string_list(&done_list);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.170 2004/02/10 20:25:06 jonas Exp $ */
+/* $Id: main.c,v 1.171 2004/02/10 23:40:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,12 +69,12 @@ unsigned char *path_to_exe;
 static int ac;
 static unsigned char **av;
 static int init_b = 0;
-INIT_LIST_HEAD(url_list);
 
 void
 init(void)
 {
 	unsigned char *url = NULL;
+	INIT_LIST_HEAD(url_list);
 
 	init_static_version();
 
@@ -111,7 +111,6 @@ init(void)
 	if (!url) {
 		retval = RET_SYNTAX;
 		terminate = 1;
-		free_string_list(&url_list);
 		goto end;
 	}
 
@@ -147,7 +146,6 @@ init(void)
 		 * installs it's own buggy TSTP handler. */
 		handle_basic_signals(NULL);
 		mem_free(info);
-		free_string_list(&url_list);
 		goto end;
 	}
 
@@ -197,6 +195,7 @@ fatal_error:
 	}
 end:
 	if (url) mem_free(url);	
+	if (!list_empty(url_list)) free_string_list(&url_list);
 }
 
 
@@ -242,7 +241,6 @@ terminate_all_subsystems(void)
 	done_options();
 	done_event();
 	terminate_osdep();
-	free_string_list(&url_list);
 }
 
 void

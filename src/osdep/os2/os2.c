@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.9 2003/10/27 03:29:08 pasky Exp $ */
+/* $Id: os2.c,v 1.10 2003/10/27 03:29:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -757,11 +757,6 @@ get_input_handle(void)
 	ti = fd[0];
 	tp = fd[1];
 	_beginthread(input_thread, NULL, 0x10000, (void *)tp);
-/*
-#if defined(HAVE_MOUOPEN) && !defined(GPM_MOUSE)
-	_beginthread(mouse_thread, NULL, 0x10000, (void *)tp);
-#endif
-*/
 	return fd[0];
 }
 

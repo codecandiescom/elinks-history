@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.443 2004/06/10 16:05:53 jonas Exp $ */
+/* $Id: session.c,v 1.444 2004/06/10 16:06:52 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -899,30 +899,6 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 	return ses;
 }
-
-
-struct session *
-init_session(struct terminal *term, struct session *ses, struct uri *uri, int in_background)
-{
-	struct window *tab;
-	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
-
-	assert(ses);
-
-	tab = init_tab(term, in_background);
-	if (!tab) return NULL;
-
-	ev.b = (long) init_session_info(ses, 0, uri);
-	if (!ev.b) {
-		mem_free(tab);
-		return NULL;
-	}
-
-	tab->handler(tab, &ev, 0);
-
-	return tab->data;
-}
-
 
 void
 abort_loading(struct session *ses, int interrupt)

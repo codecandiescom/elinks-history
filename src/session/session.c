@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.330 2004/04/01 01:09:40 jonas Exp $ */
+/* $Id: session.c,v 1.331 2004/04/01 01:20:38 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -66,7 +66,7 @@ struct file_to_load {
 	int pri;
 	struct cache_entry *ce;
 	unsigned char *target_frame;
-	unsigned char *url;
+	unsigned char *uri;
 	struct download stat;
 };
 
@@ -150,7 +150,7 @@ free_files(struct session *ses)
 	abort_files_load(ses, 0);
 	foreach (ftl, ses->more_files) {
 		if (ftl->ce) object_unlock(ftl->ce);
-		if (ftl->url) mem_free(ftl->url);
+		if (ftl->uri) mem_free(ftl->uri);
 		if (ftl->target_frame) mem_free(ftl->target_frame);
 	}
 	free_list(ses->more_files);
@@ -442,7 +442,7 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 		unsigned char *loading_uri = ses->loading_uri;
 		unsigned char *target_frame = ses->task.target_frame;
 
-		ses->loading_uri = ftl->url;
+		ses->loading_uri = ftl->uri;
 		ses->task.target_frame = ftl->target_frame;
 		ses_chktype(ses, &ftl->stat, ftl->ce, 1);
 		ses->loading_uri = loading_uri;
@@ -479,7 +479,7 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 	}
 
 	foreach (ftl, ses->more_files) {
-		if (!strcmp(ftl->url, url)) {
+		if (!strcmp(ftl->uri, url)) {
 			if (ftl->pri > pri) {
 				ftl->pri = pri;
 				change_connection(&ftl->stat, &ftl->stat, pri, 0);
@@ -491,8 +491,8 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 	ftl = mem_calloc(1, sizeof(struct file_to_load));
 	if (!ftl) return NULL;
 
-	ftl->url = stracpy(url);
-	if (!ftl->url) {
+	ftl->uri = stracpy(url);
+	if (!ftl->uri) {
 		mem_free(ftl);
 		return NULL;
 	}
@@ -553,7 +553,7 @@ process_file_requests(struct session *ses)
 			if (doc_view && doc_view->document)
 				referer = doc_view->document->uri;
 
-			load_url(ftl->url, referer,
+			load_url(ftl->uri, referer,
 				 &ftl->stat, ftl->pri, CACHE_MODE_NORMAL, -1);
 			more = 1;
 		}
@@ -917,7 +917,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 			if (doc_view && doc_view->document)
 				referer = doc_view->document->uri;
 
-			load_url(ftl->url, referer,
+			load_url(ftl->uri, referer,
 				 &ftl->stat, ftl->pri, cache_mode, -1);
 		}
 	}

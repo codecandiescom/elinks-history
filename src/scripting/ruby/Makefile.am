@@ -1,9 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2005/01/18 10:29:40 jonas Exp $
+## $Id: Makefile.am,v 1.2 2005/01/30 22:41:31 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
-
-EXTRA_DIST = README
 
 INCLUDES += $(RUBY_CFLAGS)
 

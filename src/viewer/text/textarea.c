@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.1 2003/07/03 00:07:02 pasky Exp $ */
+/* $Id: textarea.c,v 1.2 2003/07/03 00:14:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,42 +29,6 @@
 
 
 /* FIXME: Add comments!! --Zas */
-
-
-int
-area_cursor(struct form_control *frm, struct form_state *fs)
-{
-	struct line_info *ln;
-	int q = 0;
-	int y;
-
-	assert(frm && fs);
-
-	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return 0;
-
-	for (y = 0; ln[y].st; y++) {
-		int x = fs->value + fs->state - ln[y].st;
-
-		if (fs->value + fs->state < ln[y].st ||
-		    fs->value + fs->state >= ln[y].en + (ln[y + 1].st != ln[y].en))
-			continue;
-
-		if (frm->wrap && x == frm->cols) x--;
-		if (x >= frm->cols + fs->vpos) fs->vpos = x - frm->cols + 1;
-		if (x < fs->vpos) fs->vpos = x;
-		if (y >= frm->rows + fs->vypos) fs->vypos = y - frm->rows + 1;
-		if (y < fs->vypos) fs->vypos = y;
-		x -= fs->vpos;
-		y -= fs->vypos;
-		q = y * frm->cols + x;
-		break;
-	}
-	mem_free(ln);
-
-	return q;
-}
-
 
 struct line_info {
 	unsigned char *st;
@@ -128,6 +92,39 @@ put:
 	return ln;
 }
 
+int
+area_cursor(struct form_control *frm, struct form_state *fs)
+{
+	struct line_info *ln;
+	int q = 0;
+	int y;
+
+	assert(frm && fs);
+
+	ln = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!ln) return 0;
+
+	for (y = 0; ln[y].st; y++) {
+		int x = fs->value + fs->state - ln[y].st;
+
+		if (fs->value + fs->state < ln[y].st ||
+		    fs->value + fs->state >= ln[y].en + (ln[y + 1].st != ln[y].en))
+			continue;
+
+		if (frm->wrap && x == frm->cols) x--;
+		if (x >= frm->cols + fs->vpos) fs->vpos = x - frm->cols + 1;
+		if (x < fs->vpos) fs->vpos = x;
+		if (y >= frm->rows + fs->vypos) fs->vypos = y - frm->rows + 1;
+		if (y < fs->vypos) fs->vypos = y;
+		x -= fs->vpos;
+		y -= fs->vypos;
+		q = y * frm->cols + x;
+		break;
+	}
+	mem_free(ln);
+
+	return q;
+}
 
 void
 draw_textarea(struct terminal *t, struct form_state *fs,

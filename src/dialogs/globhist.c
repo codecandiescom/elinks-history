@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.1 2002/04/01 19:59:27 pasky Exp $ */
+/* $Id: globhist.c,v 1.2 2002/04/01 20:19:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include <lowlevel/kbd.h>
 
 
-#define HISTORY_BOX_IND 1
+#define HISTORY_BOX_IND 2
 
 static inline void
 history_dialog_list_clear(struct list_head *list)
@@ -87,6 +87,28 @@ history_dialog_box_build(struct dlg_data_item_data_box **box)
 	(*box)->list_len = history_dialog_list_update(&((*box)->items));
 	return *box;
 }
+
+/* Get the id of the currently selected history */
+static struct global_history_item *
+history_dialogue_get_selected_history_item(struct dlg_data_item_data_box *box)
+{
+	struct box_item *citem;
+	int sel = box->sel;
+
+	if (sel == -1)
+		return NULL;
+
+	/* sel is an index into the history list. Therefore, we spin thru until
+	 * sel equals zero, and return the id at that point. */
+	foreach (citem, box->items) {
+		if (sel == 0)
+			return (struct global_history_item *) citem->data;
+		sel--;
+	}
+
+	return NULL;
+}
+
 
 /* Cleans up after the history dialog */
 static void
@@ -235,6 +257,26 @@ layout_history_manager(struct dialog_data *dlg)
 	dlg_format_buttons(term, term, &dlg->items[0], HISTORY_BOX_IND, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }
 
+static int
+push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
+{
+	struct global_history_item *historyitem;
+	struct dlg_data_item_data_box *box;
+
+	box = (struct dlg_data_item_data_box *)
+	      dlg->dlg->items[HISTORY_BOX_IND].data;
+
+	/* Follow the history item */
+	historyitem = history_dialogue_get_selected_history_item(box);
+	if (historyitem)
+		goto_url((struct session *) goto_btn->item->udata,
+			 historyitem->url);
+
+	/* Close the history dialogue */
+	delete_window(dlg->win);
+	return 0;
+}
+
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
@@ -258,9 +300,15 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->udata = ses;
 
 	d->items[0].type = D_BUTTON;
-	d->items[0].gid = B_ESC;
-	d->items[0].fn = cancel_dialog;
-	d->items[0].text = TEXT(T_CLOSE);
+	d->items[0].gid = B_ENTER;
+	d->items[0].fn = push_goto_button;
+	d->items[0].udata = ses;
+	d->items[0].text = TEXT(T_GOTO);
+
+	d->items[1].type = D_BUTTON;
+	d->items[1].gid = B_ESC;
+	d->items[1].fn = cancel_dialog;
+	d->items[1].text = TEXT(T_CLOSE);
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;

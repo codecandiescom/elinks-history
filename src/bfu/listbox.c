@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.48 2002/12/01 11:07:36 pasky Exp $ */
+/* $Id: listbox.c,v 1.49 2002/12/05 20:43:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,8 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 /* Traverse through the hiearchic tree in specified direction by N items,
  * optionally calling user function for each of the items visited (basically,
  * each of the items we move _through_, that means from the input item to the
- * item _before_ the output item). */
+ * item _before_ the output item). If N is zero, we traverse thru the list
+ * (down) until we reach the end or fn() returns 0. */
 /* From the box structure, we should use only 'items' here. */
 struct listbox_item *
 traverse_listbox_items_list(struct listbox_item *item, int offset,
@@ -102,13 +103,19 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 	struct listbox_data *box;
 	int levmove = 0;
 	int stop = 0;
+	int infinite = !offset;
 
 	if (!item) return NULL;
 	box = item->box->next;
 
+	if (infinite)
+		offset = 1;
+
 	while (offset && !stop) {
-		if (fn && (!follow_visible || item->visible))
+		if (fn && (!follow_visible || item->visible)) {
 			offset = fn(item, d, offset);
+			if (!offset) infinite = 0;
+		}
 
 		if (offset > 0) {
 			/* Otherwise we climb back up when last item in root
@@ -117,7 +124,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 
 			/* Direction DOWN. */
 
-			offset--;
+			if (!infinite) offset--;
 
 			if (!list_empty(item->child) && item->expanded
 			    && (!follow_visible || item->visible)) {
@@ -156,7 +163,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 		} else {
 			/* Direction UP. */
 
-			offset++;
+			if (!infinite) offset++;
 
 			if (item->root
 			    && (void *) item->prev == &item->root->child) {

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.48 2004/04/02 21:22:00 jonas Exp $ */
+/* $Id: task.c,v 1.49 2004/04/02 21:52:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,33 +445,13 @@ static void
 do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
-	unsigned char *u;
-	unsigned char *pos;
+	unsigned char *u = translate_url(url, ses->tab->term->cwd);
+	unsigned char *pos = u ? extract_fragment(u) : NULL;
 	enum protocol protocol = known_protocol(url, NULL);
 	struct uri *referrer = NULL;
-	struct uri *uri;
+	struct uri *uri = u ? get_uri(u, -1) : NULL;
 
-	if (protocol == PROTOCOL_UNKNOWN) {
-		print_unknown_protocol_dialog(ses);
-		return;
-	}
-
-	if (protocol != PROTOCOL_INVALID) {
-		protocol_external_handler *fn =
-			get_protocol_external_handler(protocol);
-
-		if (fn) {
-			fn(ses, url);
-			return;
-		}
-	}
-
-	ses->reloadlevel = cache_mode;
-
-	u = translate_url(url, ses->tab->term->cwd);
-	pos = u ? extract_fragment(u) : NULL;
-	uri = u ? get_uri(u, -1) : NULL;
-	mem_free(u);
+	if (u) mem_free(u);
 
 	if (!u || !uri) {
 		int state = u == NULL ? S_BAD_URL : S_OUT_OF_MEM;
@@ -483,6 +463,27 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		print_error_dialog(ses, &stat);
 		return;
 	}
+
+	if (protocol == PROTOCOL_UNKNOWN) {
+		print_unknown_protocol_dialog(ses);
+		if (pos) mem_free(pos);
+		done_uri(uri);
+		return;
+	}
+
+	if (protocol != PROTOCOL_INVALID) {
+		protocol_external_handler *fn =
+			get_protocol_external_handler(protocol);
+
+		if (fn) {
+			fn(ses, struri(uri));
+			if (pos) mem_free(pos);
+			done_uri(uri);
+			return;
+		}
+	}
+
+	ses->reloadlevel = cache_mode;
 
 	if (ses->task.type == task) {
 		if (ses->loading_uri == uri) {

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.192 2004/06/24 15:36:28 zas Exp $ */
+/* $Id: tables.c,v 1.193 2004/06/24 15:43:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,7 @@ struct table {
 	color_t bordercolor;
 	int *min_c, *max_c;
 	int *cols_widths;
-	int *xcols;
+	int *cols_x;
 	int *rows_heights;
 	int x, y;
 	int rx, ry;
@@ -118,7 +118,7 @@ struct table {
 	int min_t, max_t;
 	int columns_count;
 	int real_columns_count;	/* Number of columns really allocated. */
-	int xc;
+	int cols_x_count;
 	int real_height;
 	int link_num;
 };
@@ -241,7 +241,7 @@ free_table(struct table *table)
 	mem_free_if(table->cols_widths);
 	mem_free_if(table->rows_heights);
 	mem_free_if(table->fragment_id);
-	mem_free_if(table->xcols);
+	mem_free_if(table->cols_x);
 
 	for (i = 0; i < table->x; i++)
 		for (j = 0; j < table->y; j++)
@@ -388,37 +388,38 @@ new_columns(struct table *table, int span, int width, int align,
 static void
 set_td_width(struct table *table, int x, int width, int f)
 {
-	if (x >= table->xc) {
-		int n = table->xc;
+	if (x >= table->cols_x_count) {
+		int n = table->cols_x_count;
 		register int i;
-		int *nc;
+		int *new_cols_x;
 
 		while (x >= n) if (!(n <<= 1)) break;
-		if (!n && table->xc) return;
+		if (!n && table->cols_x_count) return;
 		if (!n) n = x + 1;
 
-		nc = mem_realloc(table->xcols, n * sizeof(int));
-		if (!nc) return;
+		new_cols_x = mem_realloc(table->cols_x, n * sizeof(int));
+		if (!new_cols_x) return;
 
-		for (i = table->xc; i < n; i++) nc[i] = WIDTH_AUTO;
-		table->xc = n;
-		table->xcols = nc;
+		for (i = table->cols_x_count; i < n; i++)
+			new_cols_x[i] = WIDTH_AUTO;
+		table->cols_x_count = n;
+		table->cols_x = new_cols_x;
 	}
 
-	if (table->xcols[x] == WIDTH_AUTO || f) {
-		table->xcols[x] = width;
+	if (table->cols_x[x] == WIDTH_AUTO || f) {
+		table->cols_x[x] = width;
 		return;
 	}
 
 	if (width == WIDTH_AUTO) return;
 
-	if (width < 0 && table->xcols[x] >= 0) {
-		table->xcols[x] = width;
+	if (width < 0 && table->cols_x[x] >= 0) {
+		table->cols_x[x] = width;
 		return;
 	}
 
-	if (width >= 0 && table->xcols[x] < 0) return;
-	table->xcols[x] = (table->xcols[x] + width) >> 1;
+	if (width >= 0 && table->cols_x[x] < 0) return;
+	table->cols_x[x] = (table->cols_x[x] + width) >> 1;
 }
 
 static unsigned char *
@@ -1056,8 +1057,8 @@ get_table_width(struct table *table)
 
 		min += vl + table->min_c[i];
 		max += vl + table->max_c[i];
-		if (table->xcols[i] > table->max_c[i])
-			max += table->xcols[i];
+		if (table->cols_x[i] > table->max_c[i])
+			max += table->cols_x[i];
 	}
 
 	get_table_frames(table, &table_frames);
@@ -1114,23 +1115,23 @@ distribute_widths(struct table *table, int width)
 		for (i = 0; i < table->x; i++) {
 			switch (om) {
 				case 0:
-					if (table->cols_widths[i] < table->xcols[i]) {
+					if (table->cols_widths[i] < table->cols_x[i]) {
 						w[i] = 1;
-						mx[i] = int_min(table->xcols[i], table->max_c[i])
+						mx[i] = int_min(table->cols_x[i], table->max_c[i])
 							- table->cols_widths[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 
 					break;
 				case 1:
-					if (table->xcols[i] <= WIDTH_RELATIVE) {
-						w[i] = WIDTH_RELATIVE - table->xcols[i];
+					if (table->cols_x[i] <= WIDTH_RELATIVE) {
+						w[i] = WIDTH_RELATIVE - table->cols_x[i];
 						mx[i] = table->max_c[i] - table->cols_widths[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
 				case 2:
-					if (table->xcols[i] != WIDTH_AUTO)
+					if (table->cols_x[i] != WIDTH_AUTO)
 						break;
 					/* Fall-through */
 				case 3:
@@ -1144,16 +1145,16 @@ distribute_widths(struct table *table, int width)
 					}
 					break;
 				case 4:
-					if (table->xcols[i] >= 0) {
+					if (table->cols_x[i] >= 0) {
 						w[i] = 1;
-						mx[i] = table->xcols[i] - table->cols_widths[i];
+						mx[i] = table->cols_x[i] - table->cols_widths[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
 				case 5:
-					if (table->xcols[i] < 0) {
-						if (table->xcols[i] <= WIDTH_RELATIVE) {
-							w[i] = WIDTH_RELATIVE - table->xcols[i];
+					if (table->cols_x[i] < 0) {
+						if (table->cols_x[i] <= WIDTH_RELATIVE) {
+							w[i] = WIDTH_RELATIVE - table->cols_x[i];
 						} else {
 							w[i] = 1;
 						}
@@ -1617,7 +1618,7 @@ display_table_frames(struct table *table, int x, int y)
 
 	if (table->rules == TABLE_RULE_GROUPS) {
 		for (i = 1; i < table->x; i++) {
-			if (!table->xcols[i])
+			if (!table->cols_x[i])
 				memset(&V_FRAME_POSITION(table, i, 0), 0, table->y);
 		}
 

@@ -1,5 +1,5 @@
 #!/usr/bin/gawk -f
-# $Id: conf-links2elinks.awk,v 1.1 2002/06/30 21:46:59 pasky Exp $
+# $Id: conf-links2elinks.awk,v 1.1 2002/06/30 22:16:43 pasky Exp $
 #
 # (GAWK is necessary for bitwise operators.)
 #

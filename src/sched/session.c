@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.56 2003/05/08 01:27:25 pasky Exp $ */
+/* $Id: session.c,v 1.57 2003/05/08 01:28:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1717,7 +1717,7 @@ tabwin_func(struct window *tab, struct event *ev, int fw)
 			 * the first tab. But I don't think it is so urgent.
 			 * --pasky */
 			ses = tab->data = create_session(tab);
-			if (!ses || process_session_info(ses, (struct inital_session_info *) ev->b)) {
+			if (!ses || process_session_info(ses, (struct initial_session_info *) ev->b)) {
 				destroy_terminal(tab->term);
 				return;
 			}

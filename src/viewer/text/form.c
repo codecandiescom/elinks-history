@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.133 2004/06/11 21:48:50 jonas Exp $ */
+/* $Id: form.c,v 1.134 2004/06/11 21:56:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -590,12 +590,10 @@ check_boundary(struct string *data, struct boundary_info *boundary)
 	unsigned char *bound = boundary->string;
 	register int i;
 
-	memset(bound, '0', BL);
-
 	/* Search between all boundaries. There is a starting and an ending
-	 * boundary so assume the range of chars after and before the offsets.
-	 * If some string in the form data matches the boundary string it
-	 * is changed. */
+	 * boundary so only check the range of chars after the current offset
+	 * and before the next offset. If some string in the form data matches
+	 * the boundary string it is changed. */
 	for (i = 0; i < boundary->count - 1; i++) {
 		/* Start after the boundary string and also jump past the
 		 * "\r\nContent-Disposition: form-data; name=\"" string added
@@ -613,7 +611,9 @@ check_boundary(struct string *data, struct boundary_info *boundary)
 			if (memcmp(pos, bound, BL))
 				continue;
 
-			/* If incrementing causes overflow bail out */
+			/* If incrementing causes overflow bail out. There is
+			 * no need to reset the boundary string with '0' since
+			 * that is already done when incrementing. */
 			if (!increment_boundary_counter(boundary))
 				return;
 
@@ -641,7 +641,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 	assert(ses && l && data && bound);
 	if_assert_failed return;
 
-	memset(bound, 'x', BL);
+	memset(bound, '0', BL);
 
 	foreach (sv, *l) {
 		add_boundary(data, boundary);

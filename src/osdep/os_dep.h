@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.18 2003/07/21 23:52:05 jonas Exp $ */
+/* $Id: os_dep.h,v 1.19 2003/10/09 05:54:39 witekfl Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -23,7 +23,7 @@
 
 #if defined(__EMX__)
 #define OS2
-#elif defined(_WIN32) || defined (__CYGWIN__)
+#elif defined(_WIN32)
 #define WIN32
 #ifdef UNIX
 #undef UNIX

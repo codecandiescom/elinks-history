@@ -1,7 +1,7 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.6 2003/06/05 15:28:03 zas Exp $ */
+/* $Id: win32.c,v 1.7 2003/10/09 05:54:39 witekfl Exp $ */
 
-#if defined(_WIN32) || defined(__CYGWIN__)
+#if defined(_WIN32)
 
 #include <windows.h>
 #include <signal.h>

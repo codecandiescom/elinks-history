@@ -167,11 +167,129 @@ void add_utf_8(struct conv_table *ct, int u, unsigned char *str)
 	if (ct[*p].u.str == no_str) ct[*p].u.str = str;
 }
 
+struct conv_table utf_table[256];
+int utf_table_init = 1;
+
+void free_utf_table()
+{
+	int i;
+
+	for (i = 128; i < 256; i++)
+		mem_free(utf_table[i].u.str);
+}
+
+struct conv_table *get_translation_table_to_utf_8(int from)
+{
+	int i;
+	static int lfr = -1;
+
+	if (from == -1) return NULL;
+	if (from == lfr) return utf_table;
+	if (utf_table_init)
+		memset(utf_table, 0, sizeof(struct conv_table) * 256),
+		utf_table_init = 0;
+	else
+		free_utf_table();
+	for (i = 0; i < 128; i++) utf_table[i].u.str = strings[i];
+	if (codepages[from].table == table_utf_8) {
+		for (i = 128; i < 256; i++)
+			utf_table[i].u.str = stracpy(strings[i]);
+		return utf_table;
+	}
+	for (i = 128; i < 256; i++) utf_table[i].u.str = NULL;
+	for (i = 0; codepages[from].table[i].c; i++) {
+		int u = codepages[from].table[i].u;
+		
+		if (!utf_table[codepages[from].table[i].c].u.str)
+			utf_table[codepages[from].table[i].c].u.str =
+				stracpy(encode_utf_8(u));
+	}
+	for (i = 128; i < 256; i++)
+		if (!utf_table[i].u.str)
+			utf_table[i].u.str = stracpy(no_str);
+	return utf_table;
+}
+
+int utf8_2_uni_table[0x200] = {
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 128,   0, 0, 0, 192,   0,
+	0, 0, 256,      0, 0, 0, 320,   0, 0, 0, 384,   0, 0, 0, 448,   0,
+	0, 0, 512,      0, 0, 0, 576,   0, 0, 0, 640,   0, 0, 0, 704,   0,
+	0, 0, 768,      0, 0, 0, 832,   0, 0, 0, 896,   0, 0, 0, 960,   0,
+	0, 0, 1024,     0, 0, 0, 1088,  0, 0, 0, 1152,  0, 0, 0, 1216,  0,
+	0, 0, 1280,     0, 0, 0, 1344,  0, 0, 0, 1408,  0, 0, 0, 1472,  0,
+	0, 0, 1536,     0, 0, 0, 1600,  0, 0, 0, 1664,  0, 0, 0, 1728,  0,
+	0, 0, 1792,     0, 0, 0, 1856,  0, 0, 0, 1920,  0, 0, 0, 1984,  0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+	0, 0, 0,        0, 0, 0, 0,     0, 0, 0, 0,     0, 0, 0, 0,     0,
+};
+
+unsigned char utf_8_1[256] = {
+	0, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+	5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+	4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+	3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 0, 0,
+};
+
+int get_utf_8(unsigned char **s)
+{
+	int v, l;
+	unsigned char *p = *s;
+	
+	if (!(l = utf_8_1[p[0]])) {
+		(*s)++;
+		return 0;
+	}
+	v = p[0] & ((1 << l) - 1);
+	(*s)++;
+	while (l++ <= 5) {
+		int c = **s - 0x80;
+		if (c < 0 || c >= 0x40) return 0;
+		(*s)++;
+		v = (v << 6) + c;
+	}
+	return v;
+}
+
 struct conv_table table[256];
 static int first = 1;
 
 void free_conv_table()
 {
+	if (!utf_table_init) free_utf_table();
 	if (first) memset(table, 0, sizeof(struct conv_table) * 256), first = 0;
 	new_translation_table(table);
 	mem_free(no_str), no_str = NULL;
@@ -184,6 +302,7 @@ struct conv_table *get_translation_table(int from, int to)
 	static int lto = -1;
 	if (first) memset(table, 0, sizeof(struct conv_table) * 256), first = 0;
 	if (/*from == to ||*/ from == -1 || to == -1) return NULL;
+	if (codepages[to].table == table_utf_8) return get_translation_table_to_utf_8(from);
 	if (from == lfr && to == lto) return table;
 	lfr = from; lto = to;
 	new_translation_table(table);

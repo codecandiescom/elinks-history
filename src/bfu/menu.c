@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.144 2003/12/27 01:38:13 zas Exp $ */
+/* $Id: menu.c,v 1.145 2003/12/27 21:51:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -755,9 +755,6 @@ check:
 
 		textlen = strlen(text) - !!l;
 
-		if (p + textlen + 4 >= term->width - 1)
-			break;
-
 		p += 2;
 
 		if (i == menu->selected) {
@@ -782,6 +779,9 @@ check:
 		}
 
 		p += textlen;
+
+		if (p > term->width)
+			break;
 	}
 
 	menu->last_displayed = i - 1;

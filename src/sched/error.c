@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.3 2003/06/07 14:56:07 pasky Exp $ */
+/* $Id: error.c,v 1.4 2003/06/07 15:35:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 
 #include "elinks.h"
 
-#include "intl/gettext/intl.h"
+#include "intl/gettext/libintl.h"
 #include "sched/sched.h"
 #include "terminal/terminal.h"
 #include "util/lists.h"

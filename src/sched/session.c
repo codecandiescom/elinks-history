@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.89 2003/06/07 15:01:03 pasky Exp $ */
+/* $Id: session.c,v 1.90 2003/06/07 15:35:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,7 +332,7 @@ print_error_dialog(struct session *ses, struct status *stat)
 		_("Error", ses->tab->term), AL_CENTER,
 		t,
 		ses, 1,
-		N_("Cancel", ses->tab->term), NULL, B_ENTER | B_ESC /*,
+		_("Cancel", ses->tab->term), NULL, B_ENTER | B_ESC /*,
 		N_("Retry", ses->tab->term), NULL, 0 */ /* !!! TODO: retry */);
 }
 

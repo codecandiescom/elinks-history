@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.164 2003/07/24 10:48:49 miciah Exp $ */
+/* $Id: view.c,v 1.165 2003/07/24 10:55:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -896,16 +896,13 @@ do_for_frame(struct session *ses,
 }
 
 static void
-do_mouse_event(struct session *ses, struct event *ev)
+do_mouse_event(struct session *ses, struct event *ev, struct document_view *fd)
 {
 	struct event evv;
-	struct document_view *fdd, *fd; /* !!! FIXME: frames */
+	struct document_view *fdd; /* !!! FIXME: frames */
 	struct document_options *o;
 
-	assert(ses && ev);
-	if_assert_failed return;
-	fd = current_frame(ses);
-	assert(fd && fd->document);
+	assert(ses && ev && fd && fd->document);
 	if_assert_failed return;
 
 	o = &fd->document->opt;
@@ -1181,7 +1178,7 @@ quit:
 			switch_to_tab(ses->tab->term, tab, nb_tabs);
 			goto x;
 		}
-		if (fd) do_mouse_event(ses, ev);
+		if (fd) do_mouse_event(ses, ev, fd);
 	}
 
 	return;

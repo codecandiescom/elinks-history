@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.31 2003/05/09 15:11:40 zas Exp $ */
+/* $Id: string.c,v 1.32 2003/05/09 15:36:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,7 +359,7 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
  * s should point to a sufficient memory space (size >= width + 1).
  *
  */
-void
+void inline
 elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		unsigned long number, unsigned int width,
 		int zerofill)
@@ -373,18 +373,22 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 	while (q > 9) {
 		if (pos == width) break;
 		++pos;
-	q /= 10;
+		q /= 10;
 	}
+
+	if (slen) start = *slen;
 
 	if (zerofill) {
-		memset(&s[(slen ? *slen : 0)], '0', width - pos );
-		pos += (width - pos);
+		unsigned int pad =  width - pos;
+
+		if (pad) {
+			pos += pad;
+			while (--pad) s[start + pad] = '0';
+		}
 	}
 
-	if (slen) {
-		start = *slen;
-		*slen += pos;
-	}
+	if (slen) *slen += pos;
+
 	pos += start;
 
 	s[pos] = '\0';

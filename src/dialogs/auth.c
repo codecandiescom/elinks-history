@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.88 2003/11/27 02:14:28 jonas Exp $ */
+/* $Id: auth.c,v 1.89 2003/11/27 19:26:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,23 +25,20 @@
 
 
 static int
-auth_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
+auth_ok(struct dialog *dlg)
 {
-	struct http_auth_basic *entry = dlg_data->dlg->udata2;
+	struct http_auth_basic *entry = dlg->udata2;
 
 	entry->blocked = 0;
 	entry->valid = auth_entry_has_userinfo(entry);
-	reload(dlg_data->dlg->udata, CACHE_MODE_INCREMENT);
-
-	return cancel_dialog(dlg_data, widget_data);
+	reload(dlg->udata, CACHE_MODE_INCREMENT);
 }
 
 static int
-auth_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
+auth_cancel(struct http_auth_basic *entry)
 {
-	((struct http_auth_basic *)dlg_data->dlg->udata2)->blocked = 0;
-	del_auth_entry(dlg_data->dlg->udata2);
-	return cancel_dialog(dlg_data, widget_data);
+	entry->blocked = 0;
+	del_auth_entry(entry);
 }
 
 void
@@ -77,8 +74,8 @@ do_auth_dialog(struct session *ses)
 	add_dlg_field(dlg, _("Login", term), 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
 	add_dlg_field_pass(dlg, _("Password", term), 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
 
-	add_dlg_button(dlg, B_ENTER, auth_ok, _("OK", term), NULL);
-	add_dlg_button(dlg, B_ESC, auth_cancel, _("Cancel", term), NULL);
+	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), auth_ok, dlg);
+	add_dlg_ok_button(dlg, B_ESC, _("Cancel", term), auth_cancel, a);
 
 	add_dlg_end(dlg, AUTH_WIDGETS_COUNT);
 

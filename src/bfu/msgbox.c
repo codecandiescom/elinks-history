@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.98 2005/03/05 20:14:24 zas Exp $ */
+/* $Id: msgbox.c,v 1.99 2005/03/23 11:18:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,4 +181,13 @@ refreshed_msg_box(struct terminal *term, enum msgbox_flags flags,
 	dlg_data->dlg->udata = info;
 	dlg_data->dlg->abort = abort_refreshed_msg_box_handler;
 	refresh_dialog(dlg_data, refresh_msg_box, get_info);
+}
+
+struct dialog_data *
+info_box(struct terminal *term, enum msgbox_flags flags,
+	 unsigned char *title, enum format_align align,
+	 unsigned char *text)
+{
+	return msg_box(term, NULL, flags, title, align, text,
+		       NULL, 1, N_("OK"), NULL, B_ENTER | B_ESC);
 }

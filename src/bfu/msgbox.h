@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.27 2004/12/25 20:42:45 zas Exp $ */
+/* $Id: msgbox.h,v 1.28 2005/03/23 11:18:08 zas Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -109,5 +109,11 @@ refreshed_msg_box(struct terminal *term, enum msgbox_flags flags,
 		  unsigned char *title, enum format_align align,
 		  unsigned char *(get_info)(struct terminal *, void *),
 		  void *data);
+
+struct dialog_data *
+info_box(struct terminal *term, enum msgbox_flags flags,
+	 unsigned char *title, enum format_align align,
+	 unsigned char *text);
+
 
 #endif

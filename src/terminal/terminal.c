@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.14 2003/05/04 20:37:05 pasky Exp $ */
+/* $Id: terminal.c,v 1.15 2003/05/05 10:33:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 #include "util/string.h"
 #include "viewer/text/view.h"
 
-
+/* TODO: move this function elsewhere... -- Zas */
 unsigned char *
 get_cwd()
 {
@@ -56,6 +56,7 @@ get_cwd()
 	return NULL;
 }
 
+/* TODO: move this function elsewhere... -- Zas */
 void
 set_cwd(unsigned char *path)
 {
@@ -141,7 +142,7 @@ cls_redraw_all_terminals()
 {
 	struct terminal *term;
 
-	foreach (term, terminals)
+	foreach(term, terminals)
 		redraw_terminal_cls(term);
 }
 
@@ -160,24 +161,25 @@ init_term(int fdin, int fdout,
 	term->fdin = fdin;
 	term->fdout = fdout;
 	term->master = (term->fdout == get_output_handle());
-#if 0
+	term->lcx = -1;
+	term->lcy = -1;
+	term->dirty = 1;
+	term->blocked = -1;
+	term->spec = get_opt_rec(&root_options, "terminal._template_");
+
+#if 0	/* Done by calloc() call, hope NULL == 0 */
+	term->redrawing = 0;
 	term->x = 0;
 	term->y = 0;
 	term->cx = 0;
 	term->cy = 0;
-#endif
-	term->lcx = -1;
-	term->lcy = -1;
-	term->dirty = 1;
-	term->redrawing = 0;
-	term->blocked = -1;
 	term->screen = NULL;
 	term->last_screen = NULL;
-	term->spec = get_opt_rec(&root_options, "terminal._template_");
 	term->term[0] = 0;
 	term->cwd[0] = 0;
 	term->input_queue = NULL;
 	term->qlen = 0;
+#endif
 
 	/* alloc_term_screen(term, 80, 25); */
 	add_to_list(terminals, term);
@@ -221,11 +223,11 @@ term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
 
 	if (u == 0xA0) u = ' ';
 	recoded = u2cp(u, get_opt_int_tree(term->spec, "charset"));
-	if (! recoded) recoded = "*";
+	if (!recoded) recoded = "*";
 	while (*recoded) {
 		ev->x = *recoded;
 		term_send_event(term, ev);
-		recoded ++;
+		recoded++;
 	}
 }
 
@@ -478,9 +480,7 @@ destroy_all_terminals()
 static void
 check_if_no_terminal()
 {
-	if (list_empty(terminals)) {
-		terminate = 1;
-	}
+	terminate = list_empty(terminals);
 }
 
 void
@@ -497,12 +497,10 @@ exec_thread(unsigned char *path, int p)
 }
 
 void
-close_handle(void *p)
+close_handle(void *h)
 {
-	int h = (int)p;
-
-	close(h);
-	set_handlers(h, NULL, NULL, NULL, NULL);
+	close((int) h);
+	set_handlers((int) h, NULL, NULL, NULL, NULL);
 }
 
 static void
@@ -541,22 +539,25 @@ exec_on_terminal(struct terminal *term, unsigned char *path,
 		else {
 			int blockh;
 			unsigned char *param;
+			int param_size;
 
 			if (is_blocked() && fg) {
 				unlink(delete);
 				return;
 			}
 
-			param = mem_alloc(plen + dlen + 3);
+			param_size = plen + dlen + 2 /* 2 null char */ + 1 /* fg */;
+			param = mem_alloc(param_size);
 			if (!param) return;
 
 			param[0] = fg;
-			strcpy(param + 1, path);
-			strcpy(param + 1 + plen + 1, delete);
+			memcpy(param + 1, path, plen + 1);
+			memcpy(param + 1 + plen + 1, delete, dlen + 1);
+
 			if (fg == 1) block_itrm(term->fdin);
 
 			blockh = start_thread((void (*)(void *, int))exec_thread,
-					      param, plen + dlen + 3);
+					      param, param_size);
 			if (blockh == -1) {
 				if (fg == 1) unblock_itrm(term->fdin);
 				mem_free(param);
@@ -581,14 +582,15 @@ exec_on_terminal(struct terminal *term, unsigned char *path,
 			}
 		}
 	} else {
-		unsigned char *data = mem_alloc(plen + dlen + 4);
+		int data_size = plen + dlen + 1 /* 0 */ + 1 /* fg */ + 2 /* 2 null char */;
+		unsigned char *data = mem_alloc(data_size);
 
 		if (data) {
 			data[0] = 0;
 			data[1] = fg;
-			strcpy(data + 2, path);
-			strcpy(data + 3 + plen, delete);
-			hard_write(term->fdout, data, plen + dlen + 4);
+			memcpy(data + 2, path, plen + 1);
+			memcpy(data + 2 + plen + 1, delete, dlen + 1);
+			hard_write(term->fdout, data, data_size);
 			mem_free(data);
 		}
 #if 0
@@ -606,13 +608,14 @@ void
 do_terminal_function(struct terminal *term, unsigned char code,
 		     unsigned char *data)
 {
-	unsigned char *x_data = mem_alloc(strlen(data) + 2);
+	int data_len = strlen(data);
+	unsigned char *x_data = fmem_alloc(data_len + 1 /* code */ + 1 /* null char */);
 
 	if (!x_data) return;
 	x_data[0] = code;
-	strcpy(x_data + 1, data);
+	memcpy(x_data + 1, data, data_len + 1);
 	exec_on_terminal(term, NULL, x_data, 0);
-	mem_free(x_data);
+	fmem_free(x_data);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.3 2004/01/25 13:51:47 jonas Exp $ */
+/* $Id: exmode.c,v 1.4 2004/01/25 13:57:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,11 +92,11 @@ exmode_func(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_KBD:
 			field_ops.kbd(&data->inpfield_data, &data->dlg_data, ev);
-			switch (kbd_action(KM_MENU, ev, NULL)) {
-				case ACT_MENU_ENTER:
+			switch (kbd_action(KM_EDIT, ev, NULL)) {
+				case ACT_EDIT_ENTER:
 					exmode_exec(data);
 					/* Falling */
-				case ACT_MENU_CANCEL:
+				case ACT_EDIT_CANCEL:
 					delete_window(win);
 					break;
 				default:

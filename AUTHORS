@@ -192,6 +192,7 @@ Jonas Fonseca <fonseca@diku.dk>
 
 José Luis González González <jlg80@mi.madritel.es>
 	MIME types documentation
+	Referred as 'Jose'
 
 Julian Kinraid <jkinraid@clear.net.nz>
 	QNX-related fixes
@@ -403,4 +404,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.99 2002/11/26 22:46:20 pasky Exp $
+$Id: AUTHORS,v 1.100 2002/11/29 00:56:03 pasky Exp $

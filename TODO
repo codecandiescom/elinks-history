@@ -1,8 +1,21 @@
 TODO list for ELinks (sorted approximatelly by priority):
 
-	New options system user interface (URGENT).
-	
+	New options system user interface (URGENT) (WE ARE LAZY).
+
+	Speed optimalizations
+
+	Generic supports for adding of new protocols and external handlers
+for them; dummy javascript support (just an error message)
+
+	Use real lines instead of ASCII art for the hiearchic bookmarks
+
 	Show all downloads in one window, kind of "download manager"
+
+	Some way to tell ELinks to stop loading the page it's displaying
+
+	Better history manager (switch displaying of URLs/titles)
+
+	Forward/backward history manager
 
 	Rewrite html parser
 
@@ -23,6 +36,8 @@ TODO list for ELinks (sorted approximatelly by priority):
 	User interface for options changing
 
 	Reorganization of user interface
+
+	Use locale+gettext for translations instead of Mikulas' intl
 
 	When calling external viewer on files, assign temporary files the
 suffix appropriate to the file type (?)
@@ -45,6 +60,9 @@ current link to external command (?)).
 
 	Copy url to X clipboard (using X selections).
 
+	Support for mailcap when processing MIME types
+
+
 These are more long-term goals:
 
 
@@ -53,6 +71,8 @@ These are more long-term goals:
 	Then, support for proxy autoconfiguration
 (http://www.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html).
 
+	Graphics support
+
 	Multiple windows in one console
 
 	Possibility to use commandline-driven interface instead of BFU
@@ -60,7 +80,7 @@ optionally.
 
 	Generic code cleanup
 
-	Write some more documentation
+	Write some more documentation.. docs, a lot of docs!
 
 
-$Id: TODO,v 1.32 2002/11/16 19:46:26 zas Exp $
+$Id: TODO,v 1.33 2002/11/29 00:56:03 pasky Exp $

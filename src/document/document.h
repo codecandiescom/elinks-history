@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.44 2004/02/02 15:58:18 jonas Exp $ */
+/* $Id: document.h,v 1.45 2004/02/02 16:11:26 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -15,6 +15,8 @@ struct module;
 struct screen_char;
 
 
+/* Tags are used for ``id''s or anchors in the document referenced by the
+ * fragment part of the URI. */
 struct tag {
 	LIST_HEAD(struct tag);
 
@@ -22,6 +24,8 @@ struct tag {
 	unsigned char name[1]; /* must be last of struct. --Zas */
 };
 
+/* Nodes are used for marking areas of text on the document canvas as
+ * searchable. */
 struct node {
 	LIST_HEAD(struct node);
 
@@ -30,17 +34,26 @@ struct node {
 };
 
 
+/* The document line consisting of the chars ready to be copied to the terminal
+ * screen. */
 struct line {
 	struct screen_char *chars;
 	int length;
 };
 
+/* Codepage status */
 enum cp_status {
 	CP_STATUS_NONE,
 	CP_STATUS_SERVER,
 	CP_STATUS_ASSUMED,
 	CP_STATUS_IGNORED
 };
+
+
+struct point {
+	int x, y;
+};
+
 
 enum link_type {
 	LINK_HYPERTEXT,
@@ -49,13 +62,6 @@ enum link_type {
 	LINK_SELECT,
 	LINK_FIELD,
 	LINK_AREA,
-};
-
-#define link_is_textinput(link) \
-	((link)->type == LINK_FIELD || (link)->type == LINK_AREA)
-
-struct point {
-	int x, y;
 };
 
 struct link {
@@ -78,11 +84,16 @@ struct link {
 	struct color_pair color;
 };
 
+#define link_is_textinput(link) \
+	((link)->type == LINK_FIELD || (link)->type == LINK_AREA)
+
+
 struct search {
 	int x, y;
 	signed int n:24;	/* This structure is size-critical */
 	unsigned char c;
 };
+
 
 struct document {
 	LIST_HEAD(struct document);

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.36 2002/09/17 21:43:30 pasky Exp $ */
+/* $Id: listbox.c,v 1.37 2002/10/08 16:56:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,6 +308,8 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 				strcpy(str, "[+]- ");
 			}
 		}
+
+		if (item->marked) str[5] = '*';
 
 		print_text(data->term,
 			   data->listbox_item_data->x + (depth - 1) * 5,

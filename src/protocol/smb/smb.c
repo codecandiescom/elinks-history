@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.7 2003/12/08 22:45:33 zas Exp $ */
+/* $Id: smb.c,v 1.8 2003/12/08 22:57:53 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -391,7 +391,7 @@ close_all_non_term_fd(void)
 #ifdef RLIMIT_NOFILE
 	struct rlimit lim;
 
-	if (!getrlimit(RLIMIT_NOFILE, &lim));
+	if (!getrlimit(RLIMIT_NOFILE, &lim))
 		max = lim.rlim_max;
 #endif
 	for (n = 3; n < max; n++)

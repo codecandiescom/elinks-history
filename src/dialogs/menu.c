@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.325 2004/06/12 15:26:03 jonas Exp $ */
+/* $Id: menu.c,v 1.326 2004/06/12 19:23:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -692,7 +692,7 @@ format_command(unsigned char *format, struct uri *uri)
 			{
 				unsigned char *str = struri(uri);
 				int length = get_real_uri_length(uri);
-		
+
 				add_shell_safe_to_string(&string, str, length);
 				break;
 			}

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.24 2003/12/22 03:01:19 jonas Exp $ */
+/* $Id: cmdline.c,v 1.25 2003/12/22 11:45:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,8 +50,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt)
 			if (argname[0] == '-') argname++;
 
 			option = get_opt_rec(opt, argname);
-			if (!option && oname)
-				option = get_opt_rec(opt, oname);
+			if (!option) option = get_opt_rec(opt, oname);
 
 			mem_free(oname);
 

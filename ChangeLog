@@ -1,3 +1,46 @@
+Sun May  9 21:46:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/widget.h, util/Makefile.am, util/rect.h:
+
+	Add util/rect.h and move struct rect related stuff to it.  
+
+Sun May  9 21:38:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Fix set_rect() call.  
+
+Sun May  9 21:17:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/group.c, bfu/text.c,
+	dialogs/download.c:
+
+	Use struct rect in struct dialog_data.  
+
+Sun May  9 01:18:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/auth.c:
+
+	Semi-fix the HTTP auth related crash caused by http_send_header()
+	being called more times than before [from run_connection()] instead
+	of select_loop() which means more find_auth() calls that would end
+	up free()ing the entry and the dialog accessing freed memory.  
+	
+	I still don't know when the call pattern to changed and auth is
+	still pretty broken since I had to type user/password twice.  
+
+Sun May  9 00:59:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/: auth.c, auth.h:
+
+	Allocate http_auth_basic->{user,password} as part of the struct.  
+
+Sun May  9 00:56:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	Make connected() static.  
+
 Sat May  8 13:40:39 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/memdebug.c:

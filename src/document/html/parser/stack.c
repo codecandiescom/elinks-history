@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.3 2004/04/23 23:08:12 pasky Exp $ */
+/* $Id: stack.c,v 1.4 2004/04/23 23:10:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,9 +39,12 @@ dump_html_stack()
 {
 	struct html_element *element;
 
+	DBG("HTML stack debug:");
 	foreach (element, html_stack) {
-		DBG(":%p:%d:%.*s", element->name, element->namelen,
-				element->namelen, element->name);
+		DBG("&name/len:%p:%d name:%.*s type:%d",
+		    element->name, element->namelen,
+		    element->namelen, element->name,
+		    element->type);
 	}
 	WDBG("Did you enjoy it?");
 }

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.90 2004/06/20 16:15:37 pasky Exp $ */
+/* $Id: cmdline.c,v 1.91 2004/06/20 17:23:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -559,8 +559,15 @@ redir_cmd(struct option *option, unsigned char ***argv, int *argc)
 	} else if (!strcmp(option->name, "conffile")) {
 		target = "config-file";
 	} else if (!strcmp(option->name, "stdin")) {
+		static int complained;
+
+		if (complained)
+			return NULL;
+		complained = 1;
+
 		/* Emulate bool option, possibly eating following 0/1. */
-		if (((*argv)[0][0] == '0' || (*argv)[0][0] == '1')
+		if ((*argv)[0]
+		    && ((*argv)[0][0] == '0' || (*argv)[0][0] == '1')
 		    && !(*argv)[0][1])
 			(*argv)++, (*argc)--;
 		fprintf(stderr, "Warning: Deprecated option -stdin used!\n");

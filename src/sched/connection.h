@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.35 2003/07/06 17:53:17 pasky Exp $ */
+/* $Id: connection.h,v 1.36 2003/07/06 20:44:37 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -13,7 +13,6 @@ struct read_buffer;
 #include "lowlevel/connect.h"
 #include "lowlevel/ttime.h"
 #include "protocol/uri.h"
-#include "ssl/ssl.h"
 #include "util/encoding.h"
 #include "util/error.h"
 #include "util/lists.h"
@@ -121,7 +120,9 @@ struct connection {
 	void *info;
 	void *buffer;
 	struct cache_entry *cache;
-	ssl_t *ssl;
+	/* This is in fact (ssl_t *), but we don't want to know. Noone cares
+	 * and ssl.h inclusion costs a lot of compilation time. --pasky */
+	void *ssl;
 	struct stream_encoded *stream;
 
 	/* Only used by ftp in send_cmd/get_resp. Put here

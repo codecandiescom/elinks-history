@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.28 2003/07/05 19:09:32 jonas Exp $ */
+/* $Id: connect.c,v 1.29 2003/07/06 20:44:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,7 @@ static void
 ssl_set_no_tls(struct connection *conn)
 {
 #ifdef HAVE_OPENSSL
-	conn->ssl->options |= SSL_OP_NO_TLSv1;
+	((ssl_t *) conn->ssl)->options |= SSL_OP_NO_TLSv1;
 #elif defined(HAVE_GNUTLS)
 	/* We do a little more work here, setting up all these priorities (like
 	 * they couldn't have some reasonable defaults there).. */

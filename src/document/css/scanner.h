@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.14 2004/01/18 21:29:29 jonas Exp $ */
+/* $Id: scanner.h,v 1.15 2004/01/18 21:31:01 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -34,8 +34,6 @@ struct css_token {
 	unsigned char *string;
 	int length;
 };
-
-#define get_css_token_end(token) &(token)->string[(token)->length]
 
 /* The naming of these two macros is a bit odd .. we compare often with
  * "static" strings (I don't have a better word) so the macro name should

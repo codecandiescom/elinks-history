@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-29 23:09+0100\n"
+"POT-Creation-Date: 2004-12-29 23:36+0100\n"
 "PO-Revision-Date: 2004-12-29 23:10+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
@@ -563,86 +563,86 @@ msgstr "Supprimer cette entrée de cache ?"
 msgid "Cache manager"
 msgstr "Gestionnaire de cache"
 
-#: src/config/cmdline.c:91
+#: src/config/cmdline.c:92
 #, c-format
 msgid "Cannot parse option %s: %s"
 msgstr "Ne peut interpréter l'option %s: %s"
 
-#: src/config/cmdline.c:109
+#: src/config/cmdline.c:110
 #, c-format
 msgid "Unknown option %s"
 msgstr "Option %s inconnue"
 
-#: src/config/cmdline.c:127 src/config/cmdline.c:151 src/config/cmdline.c:217
+#: src/config/cmdline.c:128 src/config/cmdline.c:152 src/config/cmdline.c:218
 #: src/config/opttypes.c:39
 msgid "Parameter expected"
 msgstr "Paramètre attendu"
 
-#: src/config/cmdline.c:152
+#: src/config/cmdline.c:153
 msgid "Too many parameters"
 msgstr "Trop de paramètres"
 
-#: src/config/cmdline.c:157
+#: src/config/cmdline.c:158
 msgid "error"
 msgstr "erreur"
 
-#: src/config/cmdline.c:159 src/sched/error.c:47
+#: src/config/cmdline.c:160 src/sched/error.c:47
 msgid "Host not found"
 msgstr "Hôte introuvable"
 
-#: src/config/cmdline.c:173
+#: src/config/cmdline.c:174
 msgid "Resolver error"
 msgstr "Erreur du résolveur"
 
-#: src/config/cmdline.c:305
+#: src/config/cmdline.c:306
 msgid "Remote method not supported"
 msgstr "Méthode remote non supportée"
 
-#: src/config/cmdline.c:357
+#: src/config/cmdline.c:358
 msgid "Template option folder"
 msgstr "Dossier des modèles d'option"
 
-#: src/config/cmdline.c:380
+#: src/config/cmdline.c:381
 #, c-format
 msgid "(default: %ld)"
 msgstr "(défaut: %ld)"
 
-#: src/config/cmdline.c:387 src/config/cmdline.c:416
+#: src/config/cmdline.c:388 src/config/cmdline.c:417
 #, c-format
 msgid "(default: \"%s\")"
 msgstr "(défaut: \"%s\")"
 
-#: src/config/cmdline.c:392
+#: src/config/cmdline.c:393
 #, c-format
 msgid "(alias for %s)"
 msgstr "(alias for %s)"
 
-#: src/config/cmdline.c:397 src/config/cmdline.c:406
+#: src/config/cmdline.c:398 src/config/cmdline.c:407
 #, c-format
 msgid "(default: %s)"
 msgstr "(défaut: %s)"
 
-#: src/config/cmdline.c:537
+#: src/config/cmdline.c:541
 msgid "Configuration options"
 msgstr "Options de configuration"
 
-#: src/config/cmdline.c:541
+#: src/config/cmdline.c:545
 msgid "Usage: elinks [OPTION]... [URL]"
 msgstr "Usage: elinks [OPTION]... [URL]"
 
-#: src/config/cmdline.c:542
+#: src/config/cmdline.c:546
 msgid "Options"
 msgstr "Options"
 
-#: src/config/cmdline.c:584
+#: src/config/cmdline.c:588
 msgid "Internal consistency error"
 msgstr "Erreur interne"
 
-#: src/config/cmdline.c:601
+#: src/config/cmdline.c:605
 msgid "Restrict to anonymous mode"
 msgstr "Restriction au mode anonyme"
 
-#: src/config/cmdline.c:603
+#: src/config/cmdline.c:607
 msgid ""
 "Restricts ELinks so it can run on an anonymous account.\n"
 "Local file browsing, downloads, and modification of option and\n"
@@ -656,19 +656,19 @@ msgstr ""
 "L'utilisation de visualisateurs externes reste possible, mais\n"
 "les associations ne peuvent être modifiées."
 
-#: src/config/cmdline.c:608
+#: src/config/cmdline.c:612
 msgid "Autosubmit first form"
 msgstr "Envoyer automatiquement le premier formulaire"
 
-#: src/config/cmdline.c:610
+#: src/config/cmdline.c:614
 msgid "Automatically submit the first form in the given URLs."
 msgstr "Envoyer automatiquement le premier formulaire de l'URL donnée."
 
-#: src/config/cmdline.c:612
+#: src/config/cmdline.c:616
 msgid "Clone internal session with given ID"
 msgstr "Cloner la session interne ayant l'ID donné"
 
-#: src/config/cmdline.c:614
+#: src/config/cmdline.c:618
 msgid ""
 "Used internally when opening ELinks instances in new windows.\n"
 "The ID maps to information that will be used when creating the\n"
@@ -680,11 +680,11 @@ msgstr ""
 "nouvelle instance.\n"
 "N'utilisez pas cette option."
 
-#: src/config/cmdline.c:620
+#: src/config/cmdline.c:624
 msgid "Name of directory with configuration file"
 msgstr "Nom du répertoire contenant les fichiers de configuration"
 
-#: src/config/cmdline.c:622
+#: src/config/cmdline.c:626
 msgid ""
 "Path of the directory ELinks will read and write its\n"
 "config and runtime state files to instead of ~/.elinks.\n"
@@ -696,11 +696,11 @@ msgstr ""
 "Si le chemin ne commence pas par un '/', il sera considéré\n"
 "relatif à votre répertoire HOME."
 
-#: src/config/cmdline.c:629
+#: src/config/cmdline.c:633
 msgid "Name of configuration file"
 msgstr "Nom du fichier de configuration"
 
-#: src/config/cmdline.c:631
+#: src/config/cmdline.c:635
 msgid ""
 "Name of the configuration file that all configuration\n"
 "options will be read from and written to. It should be\n"
@@ -710,29 +710,29 @@ msgstr ""
 "et lues les options de configuration. Il doit être relatif\n"
 "à config-dir."
 
-#: src/config/cmdline.c:635
+#: src/config/cmdline.c:639
 msgid "Print help for configuration options"
 msgstr "Afficher l'aide pour les options de configuration"
 
-#: src/config/cmdline.c:637
+#: src/config/cmdline.c:641
 msgid "Print help for configuration options and exit."
 msgstr "Afficher l'aide pour les options de configuration et quitter."
 
-#: src/config/cmdline.c:639
+#: src/config/cmdline.c:643
 msgid "MIME type assumed for unknown document types"
 msgstr "Type MIME à supposer pour les documents de type inconnu"
 
-#: src/config/cmdline.c:641
+#: src/config/cmdline.c:645
 msgid "The default MIME type used for documents of unknown type."
 msgstr ""
 "Le type MIME par défaut à utiliser pour les documents dont\n"
 "le type est inconnu."
 
-#: src/config/cmdline.c:643
+#: src/config/cmdline.c:647
 msgid "Ignore user-defined keybindings"
 msgstr "Ignorer les associations de touches utilisateur"
 
-#: src/config/cmdline.c:645
+#: src/config/cmdline.c:649
 msgid ""
 "When set, all keybindings from configuration files will be\n"
 "ignored. It forces use of default keybindings and will reset\n"
@@ -744,38 +744,38 @@ msgstr ""
 "réinitialisera les associations de touches définies par\n"
 "l'utilisateur lors d'une nouvelle sauvegarde."
 
-#: src/config/cmdline.c:649
+#: src/config/cmdline.c:653
 msgid "Print formatted versions of given URLs to stdout"
 msgstr ""
 "Imprimer les versions formatées des URLs données sur la sortie standard"
 
-#: src/config/cmdline.c:651
+#: src/config/cmdline.c:655
 msgid "Print formatted plain-text versions of given URLs to stdout."
 msgstr ""
 "Imprimer les versions plein texte formatées des URLs données sur la \n"
 "sortie standard"
 
-#: src/config/cmdline.c:653
+#: src/config/cmdline.c:657
 msgid "Codepage to use with -dump"
 msgstr "Jeu de caractères à utiliser avec -dump"
 
-#: src/config/cmdline.c:655
+#: src/config/cmdline.c:659
 msgid "Codepage used when formatting dump output."
 msgstr "Jeu de caractères utilisé lors du formatage de la sortie (dump)."
 
-#: src/config/cmdline.c:657
+#: src/config/cmdline.c:661
 msgid "Width of document formatted with -dump"
 msgstr "Largeur de document formaté à utiliser avec -dump"
 
-#: src/config/cmdline.c:659
+#: src/config/cmdline.c:663
 msgid "Width of the dump output."
 msgstr "Largeur de sortie (dump)."
 
-#: src/config/cmdline.c:661
+#: src/config/cmdline.c:665
 msgid "Evaluate configuration file directive"
 msgstr "Evalue une directive de fichier de configuration"
 
-#: src/config/cmdline.c:663
+#: src/config/cmdline.c:667
 msgid ""
 "Specify configuration file directives on the command-line\n"
 "which will be evaluated after all configuration files has been\n"
@@ -788,11 +788,11 @@ msgstr ""
 "  -eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
-#: src/config/cmdline.c:669
+#: src/config/cmdline.c:673
 msgid "Interpret documents of unknown types as HTML"
 msgstr "Interprète les documents de type inconnu comme de l'HTML"
 
-#: src/config/cmdline.c:671
+#: src/config/cmdline.c:675
 msgid ""
 "Makes ELinks assume documents of unknown types are HTML.\n"
 "Useful when using ELinks as an external viewer from MUAs.\n"
@@ -803,19 +803,19 @@ msgstr ""
 "d'ELinks comme visualisateur pour les clients mail.\n"
 "C'est équivalent à -default-mime-type text/html."
 
-#: src/config/cmdline.c:681
+#: src/config/cmdline.c:685
 msgid "Print usage help and exit"
 msgstr "Afficher l'aide et quitter"
 
-#: src/config/cmdline.c:683
+#: src/config/cmdline.c:687
 msgid "Print usage help and exit."
 msgstr "Afficher l'aide et quitter."
 
-#: src/config/cmdline.c:685
+#: src/config/cmdline.c:689
 msgid "Only permit local connections"
 msgstr "Permettre seulement les connexions locales"
 
-#: src/config/cmdline.c:687
+#: src/config/cmdline.c:691
 msgid ""
 "Restricts ELinks to work offline and only connect to servers\n"
 "with local addresses (ie. 127.0.0.1). No connections to remote\n"
@@ -825,27 +825,27 @@ msgstr ""
 "connexions vers des adresses locales (par exemple, 127.0.0.1),\n"
 "cela rend impossible toute connexion vers des sites distants."
 
-#: src/config/cmdline.c:691
+#: src/config/cmdline.c:695
 msgid "Print detailed usage help and exit"
 msgstr "Afficher l'aide détaillée et quitter"
 
-#: src/config/cmdline.c:693
+#: src/config/cmdline.c:697
 msgid "Print detailed usage help and exit."
 msgstr "Afficher l'aide détaillée et quitter."
 
-#: src/config/cmdline.c:695
+#: src/config/cmdline.c:699
 msgid "Look up specified host"
 msgstr "Résolution du nom de l'hôte spécifié"
 
-#: src/config/cmdline.c:697
+#: src/config/cmdline.c:701
 msgid "Look up specified host."
 msgstr "Résolution du nom de l'hôte spécifié."
 
-#: src/config/cmdline.c:699
+#: src/config/cmdline.c:703
 msgid "Run as separate instance"
 msgstr "Exécuter en tant qu'instance séparée"
 
-#: src/config/cmdline.c:701
+#: src/config/cmdline.c:705
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
@@ -857,11 +857,11 @@ msgstr ""
 "(signets, historique, etc.) n'est modifié quand cette option est\n"
 "utilisée. Voir aussi -touch-files."
 
-#: src/config/cmdline.c:706
+#: src/config/cmdline.c:710
 msgid "Disable use of files in ~/.elinks"
 msgstr "Ne pas utiliser les fichiers dans ~/.elinks"
 
-#: src/config/cmdline.c:708
+#: src/config/cmdline.c:712
 msgid ""
 "Disables creation and use of files in the user specific home\n"
 "configuration directory (~/.elinks). It forces default configuration\n"
@@ -872,11 +872,11 @@ msgstr ""
 "Cela force l'utilisation des valeurs de configuration par défaut et\n"
 "désactive la sauvegarde des fichiers d'état lors de l'exécution."
 
-#: src/config/cmdline.c:712
+#: src/config/cmdline.c:716
 msgid "Disable link numbering in dump output"
 msgstr "Ne pas numéroter les liens en sortie (dump)"
 
-#: src/config/cmdline.c:714
+#: src/config/cmdline.c:718
 msgid ""
 "Prevents printing of link number in dump output.\n"
 "Note that this really affects only -dump, nothing else."
@@ -884,11 +884,11 @@ msgstr ""
 "Supprime l'affichage des numéros de liens dans la sortie de -dump.\n"
 "Notez que cette option ne concerne que -dump et rien d'autre."
 
-#: src/config/cmdline.c:717
+#: src/config/cmdline.c:721
 msgid "Disable printing of link references in dump output"
 msgstr "Ne pas afficher les références des liens dans la sortie (dump)"
 
-#: src/config/cmdline.c:719
+#: src/config/cmdline.c:723
 msgid ""
 "Prevents printing of references (URIs) of document links\n"
 "in dump output.\n"
@@ -897,11 +897,11 @@ msgstr ""
 "Supprime l'affichage des références des liens dans la sortie de -dump.\n"
 "Notez que cette option ne concerne que -dump et rien d'autre."
 
-#: src/config/cmdline.c:723
+#: src/config/cmdline.c:727
 msgid "Control an already running ELinks"
 msgstr "Contrôler une instance préexistante d'ELinks"
 
-#: src/config/cmdline.c:725
+#: src/config/cmdline.c:729
 msgid ""
 "Mozilla compliant support for controlling a remote ELinks instance.\n"
 "The command takes an additional argument containing the method which\n"
@@ -932,11 +932,11 @@ msgstr ""
 "\taddBookmark(URL)          -- ajoute un signet pour l'URL\n"
 "\txfeDoCommand(openBrowser) -- ouvre une nouvelle fenêtre"
 
-#: src/config/cmdline.c:739
+#: src/config/cmdline.c:743
 msgid "Connect to session ring with given ID"
 msgstr "Se connecter au groupe de sessions correspondant à cet ID"
 
-#: src/config/cmdline.c:741
+#: src/config/cmdline.c:745
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -967,22 +967,22 @@ msgstr ""
 "-no-connect. Dans tous les cas, les fichiers d'état ne sont pas modifiés\n"
 "sur le disque, sauf si vous utilisez conjointement l'option -touch-files."
 
-#: src/config/cmdline.c:756
+#: src/config/cmdline.c:760
 msgid "Print the source of given URLs to stdout"
 msgstr "Imprimer la source des URLs données sur la sortie standard"
 
-#: src/config/cmdline.c:758
+#: src/config/cmdline.c:762
 msgid "Print given URLs in source form to stdout."
 msgstr ""
 "Imprimer les URLs données dans leur forme source sur la sortie standard."
 
-#: src/config/cmdline.c:762
+#: src/config/cmdline.c:766
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 "Modifier les fichiers dans ~/.elinks avec les options -no-connect/-session-"
 "ring"
 
-#: src/config/cmdline.c:764
+#: src/config/cmdline.c:768
 msgid ""
 "When enabled, runtime state files (bookmarks, history, etc.) are\n"
 "written to disk, even when -no-connect or -session-ring is used.\n"
@@ -993,11 +993,11 @@ msgstr ""
 "sont utilisées. N'a aucun effet si n'est pas utilisé en conjonction\n"
 "avec ces options."
 
-#: src/config/cmdline.c:768
+#: src/config/cmdline.c:772
 msgid "Verbose level"
 msgstr "Niveau de verbosité"
 
-#: src/config/cmdline.c:770
+#: src/config/cmdline.c:774
 msgid ""
 "The verbose level controls what messages are shown at\n"
 "start up and while running:\n"
@@ -1011,11 +1011,11 @@ msgstr ""
 "\t1 pour ne montrer que les erreurs sérieuses et les alertes\n"
 "\t2 pour montrer tous les messages"
 
-#: src/config/cmdline.c:776
+#: src/config/cmdline.c:780
 msgid "Print version information and exit"
 msgstr "Afficher la version et quitter"
 
-#: src/config/cmdline.c:778
+#: src/config/cmdline.c:782
 msgid "Print ELinks version information and exit."
 msgstr "Afficher la version d'ELinks et quitter."
 
@@ -1154,6 +1154,7 @@ msgid "N/A"
 msgstr "N/A"
 
 #: src/config/dialogs.c:189 src/config/dialogs.c:210 src/config/dialogs.c:377
+#: src/config/options.inc:738
 msgid "Type"
 msgstr "Type"
 
@@ -2377,7 +2378,8 @@ msgid "Invert the fore- and background color so the link stands out."
 msgstr ""
 "Inverser les couleurs de fond et de texte pour mettre le lien en évidence."
 
-#: src/config/options.inc:286 src/dialogs/options.c:170
+#: src/config/options.inc:286 src/config/options.inc:786
+#: src/dialogs/options.c:170
 msgid "Underline"
 msgstr "Souligné"
 
@@ -3238,10 +3240,6 @@ msgstr ""
 "Options spécifiques à ce type de terminal (conformément à la valeur de "
 "$TERM)."
 
-#: src/config/options.inc:738
-msgid "Border type"
-msgstr "Type de bordure"
-
 #: src/config/options.inc:740
 msgid ""
 "Terminal type; matters mostly only when drawing frames and\n"
@@ -3259,7 +3257,7 @@ msgstr ""
 "3 KOI-8\n"
 "4 FreeBSD"
 
-#: src/config/options.inc:748
+#: src/config/options.inc:748 src/dialogs/options.c:166
 msgid "Switch fonts for line drawing"
 msgstr "Echanger les jeux de caractères pour le dessin des lignes"
 
@@ -3273,8 +3271,8 @@ msgstr ""
 "intéressant avec les terminaux de type linux."
 
 #: src/config/options.inc:754
-msgid "I/O in UTF8"
-msgstr "E/S en UTF8"
+msgid "UTF-8 I/0"
+msgstr "E/S UTF-8"
 
 #: src/config/options.inc:756
 msgid ""
@@ -3299,7 +3297,7 @@ msgstr ""
 "N'a du sens que pour les terminaux linux utilisant les jeux de\n"
 "caractères cp850/852"
 
-#: src/config/options.inc:764
+#: src/config/options.inc:764 src/dialogs/options.c:168
 msgid "Block cursor"
 msgstr "Bloquer le curseur"
 
@@ -3332,9 +3330,9 @@ msgstr ""
 "1 mode 16 couleurs, les couleurs ANSI sont utilisées\n"
 "2 mode 256 couleurs, utilise les codes RGB d'XTerm"
 
-#: src/config/options.inc:778
-msgid "Enable transparency"
-msgstr "Activer la transparence"
+#: src/config/options.inc:778 src/dialogs/options.c:169
+msgid "Transparency"
+msgstr "Transparence"
 
 #: src/config/options.inc:780
 msgid ""
@@ -3346,10 +3344,6 @@ msgid ""
 msgstr ""
 "Permet d'utiliser un fond image ou transparent au lieu d'un fond noir.\n"
 "Votre terminal doit supporter la transparence et les couleurs."
-
-#: src/config/options.inc:786
-msgid "Use underline"
-msgstr "Utiliser le souligné"
 
 #: src/config/options.inc:788
 msgid "If we should use underline or enhance the color instead."
@@ -4875,18 +4869,6 @@ msgstr "16 couleurs"
 msgid "256 colors"
 msgstr "256 couleurs"
 
-#: src/dialogs/options.c:166
-msgid "Use ^[[11m"
-msgstr "Utiliser ^[[11m"
-
-#: src/dialogs/options.c:168
-msgid "Block the cursor"
-msgstr "Bloquer le curseur"
-
-#: src/dialogs/options.c:169
-msgid "Transparency"
-msgstr "Transparence"
-
 #: src/dialogs/options.c:171
 msgid "UTF-8 I/O"
 msgstr "E/S UTF-8"
@@ -5806,45 +5788,45 @@ msgstr ""
 "Type MIME du document par défaut (quand il ne peut être\n"
 "deviner grâce aux informations connues concernant le document)."
 
-#: src/modules/version.c:81
+#: src/modules/version.c:80
 #, c-format
 msgid "Built on %s %s"
 msgstr "Compilé le %s à %s"
 
-#: src/modules/version.c:85
+#: src/modules/version.c:83
 msgid "Text WWW browser"
 msgstr "Navigateur web en mode texte"
 
-#: src/modules/version.c:88
+#: src/modules/version.c:85
 #, c-format
 msgid " (built on %s %s)"
 msgstr "(compilé le %s à %s)"
 
-#: src/modules/version.c:95
+#: src/modules/version.c:91
 msgid "Features:"
 msgstr "Fonctionnalités:"
 
-#: src/modules/version.c:97
+#: src/modules/version.c:93
 msgid "Standard"
 msgstr "Standart"
 
-#: src/modules/version.c:99
+#: src/modules/version.c:95
 msgid "Debug"
 msgstr "Debug"
 
-#: src/modules/version.c:102
+#: src/modules/version.c:98
 msgid "Fastmem"
 msgstr "Fastmem"
 
-#: src/modules/version.c:105
+#: src/modules/version.c:101
 msgid "Own Libc Routines"
 msgstr "Routines Libc Internes"
 
-#: src/modules/version.c:108
+#: src/modules/version.c:104
 msgid "No Backtrace"
 msgstr "Pas de Backtrace"
 
-#: src/modules/version.c:120
+#: src/modules/version.c:116
 msgid "No mouse"
 msgstr "Sans souris"
 
@@ -7423,6 +7405,24 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1267
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "Border type"
+#~ msgstr "Type de bordure"
+
+#~ msgid "I/O in UTF8"
+#~ msgstr "E/S en UTF8"
+
+#~ msgid "Enable transparency"
+#~ msgstr "Activer la transparence"
+
+#~ msgid "Use underline"
+#~ msgstr "Utiliser le souligné"
+
+#~ msgid "Use ^[[11m"
+#~ msgstr "Utiliser ^[[11m"
+
+#~ msgid "Block the cursor"
+#~ msgstr "Bloquer le curseur"
 
 #~ msgid "Assume the file is HTML"
 #~ msgstr "Considérer le fichier comme HTML"

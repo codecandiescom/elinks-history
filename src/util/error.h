@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.31 2003/07/06 22:15:27 pasky Exp $ */
+/* $Id: error.h,v 1.32 2003/07/06 22:15:55 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -40,7 +40,8 @@ void elinks_internal(unsigned char *fmt, ...);
 
 /* This is our smart assert(). It is basically equivalent to if (x) internal(),
  * but it generates a uniform message and mainly does not do the test if we are
- * supposed to be lightning fast. Use it, use it a lot! */
+ * supposed to be lightning fast. Use it, use it a lot! And never forget the
+ * recovery path, see below if_assert_failed. */
 
 #undef assert
 #ifdef FASTMEM

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.15 2002/07/05 00:29:57 pasky Exp $ */
+/* $Id: dialogs.c,v 1.16 2002/08/11 18:07:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,14 +88,14 @@ bookmark_dlg_list_update(struct list_head *bm_list)
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
-struct dlg_data_item_data_box *
-bookmark_dlg_box_build(struct dlg_data_item_data_box **box)
+struct listbox_data *
+bookmark_dlg_box_build(struct listbox_data **box)
 {
 	/* Deleted in abort */
-	*box = mem_alloc(sizeof(struct dlg_data_item_data_box));
+	*box = mem_alloc(sizeof(struct listbox_data));
 	if (!*box) return NULL;
 
-	memset(*box, 0, sizeof(struct dlg_data_item_data_box));
+	memset(*box, 0, sizeof(struct listbox_data));
 
 	init_list((*box)->items);
 
@@ -106,7 +106,7 @@ bookmark_dlg_box_build(struct dlg_data_item_data_box **box)
 
 /* Get the id of the currently selected bookmark */
 bookmark_id
-bookmark_dlg_box_id_get(struct dlg_data_item_data_box *box)
+bookmark_dlg_box_id_get(struct listbox_data *box)
 {
 	struct box_item *citem;
 	int sel = box->sel;
@@ -128,9 +128,9 @@ bookmark_dlg_box_id_get(struct dlg_data_item_data_box *box)
 void
 bookmark_dialog_abort_handler(struct dialog_data *dlg)
 {
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 
-	box = (struct dlg_data_item_data_box *)(dlg->dlg->items[BM_BOX_IND].data);
+	box = (struct listbox_data *)(dlg->dlg->items[BM_BOX_IND].data);
 
 	/* Zap the display list */
 	bookmark_dlg_list_clear(&(box->items));
@@ -318,9 +318,9 @@ int
 push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 {
 	bookmark_id id;
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 
-	box = (struct dlg_data_item_data_box*)(dlg->dlg->items[BM_BOX_IND].data);
+	box = (struct listbox_data*)(dlg->dlg->items[BM_BOX_IND].data);
 
 	/* Follow the bookmark */
 	id = bookmark_dlg_box_id_get(box);
@@ -349,7 +349,7 @@ bookmark_edit_done(struct dialog *d) {
 	/* Tell the bookmark dialog to redraw */
 	if (parent)
 		bookmark_dlg_list_update(
-			&((struct dlg_data_item_data_box *)
+			&((struct listbox_data *)
 			  parent->dlg->items[BM_BOX_IND].data)->items);
 
 #ifdef BOOKMARKS_RESAVE
@@ -364,9 +364,9 @@ push_edit_button(struct dialog_data *dlg,
 		 struct widget_data *edit_btn)
 {
 	bookmark_id id;
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 
-	box = (struct dlg_data_item_data_box*)(dlg->dlg->items[BM_BOX_IND].data);
+	box = (struct listbox_data*)(dlg->dlg->items[BM_BOX_IND].data);
 
 	/* Follow the bookmark */
 	id = bookmark_dlg_box_id_get(box);
@@ -387,7 +387,7 @@ push_edit_button(struct dialog_data *dlg,
  * really_del_bookmark() */
 struct push_del_button_hop_struct {
 	struct dialog *dlg;
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 	bookmark_id id;
 };
 
@@ -427,12 +427,12 @@ push_delete_button(struct dialog_data *dlg,
 	struct bookmark *bm;
 	struct push_del_button_hop_struct *hop;
 	struct terminal *term;
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 
 	/* FIXME There's probably a nicer way to do this */
 	term = dlg->win->term;
 
-	box = (struct dlg_data_item_data_box*)(dlg->dlg->items[BM_BOX_IND].data);
+	box = (struct listbox_data*)(dlg->dlg->items[BM_BOX_IND].data);
 
 	bm = get_bookmark_by_id(bookmark_dlg_box_id_get(box));
 	if (!bm) return 0;
@@ -535,7 +535,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[BM_BOX_IND].type = D_BOX;
 	d->items[BM_BOX_IND].gid = 12;
 
-	bookmark_dlg_box_build((struct dlg_data_item_data_box **) &(d->items[BM_BOX_IND].data));
+	bookmark_dlg_box_build((struct listbox_data **) &(d->items[BM_BOX_IND].data));
 
 	d->items[BM_BOX_IND + 1].type = D_END;
 	do_dialog(term, d, getml(d, NULL));
@@ -561,9 +561,9 @@ bookmark_add_add(struct dialog *d)
 	if (parent) {
 		int new, box_top = 0;
 		int gid = parent->dlg->items[BM_BOX_IND].gid;
-		struct dlg_data_item_data_box *box;
+		struct listbox_data *box;
 
-		box = (struct dlg_data_item_data_box *)
+		box = (struct listbox_data *)
 		      parent->dlg->items[BM_BOX_IND].data;
 		new = bookmark_dlg_list_update(&box->items);
 
@@ -592,9 +592,9 @@ bookmark_search_do(struct dialog *d)
 
 	/* Tell the bookmark dialog to redraw */
 	if (parent && res) {
-		struct dlg_data_item_data_box *box;
+		struct listbox_data *box;
 
-		box = (struct dlg_data_item_data_box *)
+		box = (struct listbox_data *)
 		      parent->dlg->items[BM_BOX_IND].data;
 
 		box->box_top = 0;

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
+/* $Id: listbox.h,v 1.4 2002/08/11 18:07:34 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -11,7 +11,7 @@
 
 
 /* Stores display information about a box. Kept in cdata. */
-struct dlg_data_item_data_box {
+struct listbox_data {
 	int sel;	/* Item currently selected */
 	int box_top;	/* Index into items of the item that is on the top
 			   line of the box */
@@ -33,10 +33,10 @@ struct box_item {
 	/* Text to display */
 	unsigned char *text;
 	/* Run when this item is hilighted */
-	void (*on_hilight)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *);
+	void (*on_hilight)(struct terminal *, struct listbox_data *, struct box_item *);
 	/* Run when the user selects on this item. Returns pointer to the
 	 * box_item that should be selected after execution. */
-	int (*on_selected)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *);
+	int (*on_selected)(struct terminal *, struct listbox_data *, struct box_item *);
 	void *data;
 	enum box_item_free free_i;
 };

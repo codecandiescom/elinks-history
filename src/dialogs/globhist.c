@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.24 2002/07/05 00:29:57 pasky Exp $ */
+/* $Id: globhist.c,v 1.25 2002/08/11 18:07:35 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -90,8 +90,8 @@ update_all_history_dialogs(void)
 	struct history_dialog_list_item *item;
 
 	foreach (item, history_dialog_list) {
-		struct dlg_data_item_data_box *box =
-			(struct dlg_data_item_data_box *)
+		struct listbox_data *box =
+			(struct listbox_data *)
 				item->dlg->dlg->items[HISTORY_BOX_IND].data;
 
 		history_dialog_list_update(&(box->items));
@@ -101,14 +101,14 @@ update_all_history_dialogs(void)
 }
 
 /* Creates the box display (holds everything EXCEPT the actual rendering data) */
-static struct dlg_data_item_data_box *
-history_dialog_box_build(struct dlg_data_item_data_box **box)
+static struct listbox_data *
+history_dialog_box_build(struct listbox_data **box)
 {
 	/* Deleted in abort */
-	*box = mem_alloc(sizeof(struct dlg_data_item_data_box));
+	*box = mem_alloc(sizeof(struct listbox_data));
 	if (!*box) return NULL;
 
-	memset(*box, 0, sizeof(struct dlg_data_item_data_box));
+	memset(*box, 0, sizeof(struct listbox_data));
 
 	init_list((*box)->items);
 
@@ -118,7 +118,7 @@ history_dialog_box_build(struct dlg_data_item_data_box **box)
 
 /* Get the id of the currently selected history */
 static struct global_history_item *
-history_dialog_get_selected_history_item(struct dlg_data_item_data_box *box)
+history_dialog_get_selected_history_item(struct listbox_data *box)
 {
 	struct box_item *citem;
 	int sel = box->sel;
@@ -142,10 +142,10 @@ history_dialog_get_selected_history_item(struct dlg_data_item_data_box *box)
 static void
 history_dialog_abort_handler(struct dialog_data *dlg)
 {
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 	struct history_dialog_list_item *item;
 
-	box = (struct dlg_data_item_data_box *)
+	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	foreach (item, history_dialog_list) {
@@ -294,7 +294,7 @@ layout_history_manager(struct dialog_data *dlg)
 static void
 history_search_do(struct dialog *d)
 {
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 	struct dialog_data *parent;
 
 	if (!d->items[0].data && !d->items[1].data)
@@ -309,7 +309,7 @@ history_search_do(struct dialog *d)
 	parent = d->udata;
 	if (!parent) return;
 
-	box = (struct dlg_data_item_data_box *)
+	box = (struct listbox_data *)
 	      parent->dlg->items[HISTORY_BOX_IND].data;
 	box->box_top = 0;
 	box->sel = 0;
@@ -338,9 +338,9 @@ static int
 push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 {
 	struct global_history_item *historyitem;
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 
-	box = (struct dlg_data_item_data_box *)
+	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	/* Follow the history item */
@@ -361,9 +361,9 @@ push_delete_button(struct dialog_data *dlg,
 {
 	struct global_history_item *historyitem;
 	struct terminal *term = dlg->win->term;
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 
-	box = (struct dlg_data_item_data_box *)
+	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	historyitem = history_dialog_get_selected_history_item(box);
@@ -383,7 +383,7 @@ push_delete_button(struct dialog_data *dlg,
 
 
 static void
-really_clear_history(struct dlg_data_item_data_box *box)
+really_clear_history(struct listbox_data *box)
 {
 	while (global_history.n) {
 		delete_global_history_item(global_history.items.prev);
@@ -397,9 +397,9 @@ push_clear_button(struct dialog_data *dlg,
 		  struct widget_data *some_useless_clear_button)
 {
 	struct terminal *term = dlg->win->term;
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 
-	box = (struct dlg_data_item_data_box *)
+	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	msg_box(term, NULL,
@@ -418,9 +418,9 @@ push_info_button(struct dialog_data *dlg,
 {
 	struct terminal *term = dlg->win->term;
 	struct global_history_item *historyitem;
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 
-	box = (struct dlg_data_item_data_box *)
+	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	/* Show history item info */
@@ -508,7 +508,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;
-	history_dialog_box_build((struct dlg_data_item_data_box **)
+	history_dialog_box_build((struct listbox_data **)
 				 &(d->items[HISTORY_BOX_IND].data));
 
 	d->items[HISTORY_BOX_IND + 1].type = D_END;

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.10 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: listbox.c,v 1.11 2002/08/11 18:07:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,10 +35,10 @@ void dlg_format_box(struct terminal *term, struct terminal *t2,
 /* Sets the selected item to one that is visible.*/
 void box_sel_set_visible(struct widget_data *box_item_data, int offset)
 {
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 	int sel;
 
-	box = (struct dlg_data_item_data_box *)(box_item_data->item->data);
+	box = (struct listbox_data *)(box_item_data->item->data);
 	if (offset > box_item_data->item->gid || offset < 0) {
 		return;
 	}
@@ -57,11 +57,11 @@ void box_sel_set_visible(struct widget_data *box_item_data, int offset)
  * range, the selected item is moved to the extreme (ie, the top or bottom) */
 void box_sel_move(struct widget_data *box_item_data, int dist)
 {
-    struct dlg_data_item_data_box *box;
+    struct listbox_data *box;
 	int new_sel;
 	int new_top;
 
-	box = (struct dlg_data_item_data_box *)(box_item_data->item->data);
+	box = (struct listbox_data *)(box_item_data->item->data);
 
 	new_sel = box->sel + dist;
 	new_top = box->box_top;
@@ -96,11 +96,11 @@ display_listbox(struct widget_data *box_item_data, struct dialog_data *dlg,
 		int sel)
 {
 	struct terminal *term = dlg->win->term;
-	struct dlg_data_item_data_box *box;
+	struct listbox_data *box;
 	struct box_item *citem;	/* Item currently being shown */
 	int n;	/* Index of item currently being displayed */
 
-	box = (struct dlg_data_item_data_box *)(box_item_data->item->data);
+	box = (struct listbox_data *)(box_item_data->item->data);
 	/* FIXME: Counting here SHOULD be unnecessary */
 	n = 0;
 
@@ -135,15 +135,15 @@ init_listbox(struct widget_data *widget, struct dialog_data *dialog,
 	     struct event *ev)
 {
 	/* Freed in bookmark_dialog_abort_handler() */
-	widget->cdata = mem_alloc(sizeof(struct dlg_data_item_data_box));
+	widget->cdata = mem_alloc(sizeof(struct listbox_data));
 	if (!widget->cdata)
 		return;
 
-	((struct dlg_data_item_data_box *) widget->cdata)->sel = -1;
-	((struct dlg_data_item_data_box *) widget->cdata)->box_top = 0;
-	((struct dlg_data_item_data_box *) widget->cdata)->list_len = -1;
+	((struct listbox_data *) widget->cdata)->sel = -1;
+	((struct listbox_data *) widget->cdata)->box_top = 0;
+	((struct listbox_data *) widget->cdata)->list_len = -1;
 
-	init_list(((struct dlg_data_item_data_box*) widget->cdata)->items);
+	init_list(((struct listbox_data*) widget->cdata)->items);
 }
 
 int

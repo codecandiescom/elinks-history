@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.279 2003/09/27 12:01:15 jonas Exp $ */
+/* $Id: renderer.c,v 1.280 2003/09/27 12:14:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1635,7 +1635,6 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 	}
 
 	foreach (document, format_cache) {
-		debug("%s =? %s", document->url, vs->url);
 		if (strcmp(document->url, vs->url)
 		    || compare_opt(&document->opt, options))
 			continue;

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.19 2003/06/21 00:16:29 pasky Exp $ */
+/* $Id: dump.c,v 1.20 2003/06/21 00:17:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,28 +60,30 @@ dump_source(int oh, struct status *status, struct cache_entry *ce)
 nextfrag:
 	foreach (frag, ce->frag) {
 		int d = dump_pos - frag->offset;
+		int l, w;
 
-		if (d >= 0 && frag->length > d) {
-			int l = frag->length - d;
-			int w = hard_write(oh, frag->data + d, l);
+		if (d < 0 || frag->length <= d)
+			continue;
 
-			if (w != l) {
-				detach_connection(stat, dump_pos);
+		l = frag->length - d;
+		w = hard_write(oh, frag->data + d, l);
 
-				if (w < 0)
-					error(gettext("Can't write to stdout: %s"),
-					      (unsigned char *) strerror(errno));
-				else
-					error(gettext("Can't write to stdout."));
-
-				retval = RET_ERROR;
-				return -2;
-			}
-
-			dump_pos += w;
+		if (w != l) {
 			detach_connection(stat, dump_pos);
-			goto nextfrag;
+
+			if (w < 0)
+				error(gettext("Can't write to stdout: %s"),
+				      (unsigned char *) strerror(errno));
+			else
+				error(gettext("Can't write to stdout."));
+
+			retval = RET_ERROR;
+			return -2;
 		}
+
+		dump_pos += w;
+		detach_connection(stat, dump_pos);
+		goto nextfrag;
 	}
 
 	return 0;

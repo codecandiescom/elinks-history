@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.88 2003/11/22 17:04:43 jonas Exp $ */
+/* $Id: hierbox.c,v 1.89 2003/11/22 20:39:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -424,7 +424,7 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("Deleting used folder"), AL_CENTER,
 			msg_text(term, N_("Sorry, but the folder \"%s\""
-				 "is being used by something else."),
+				 " is being used by something else."),
 				 item->text),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
@@ -437,7 +437,7 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 		msg_box(term, getml(msg, NULL), MSGBOX_FREE_TEXT,
 			N_("Deleting used item"), AL_CENTER,
 			msg_text(term, N_("Sorry, but the item \"%s\""
-				 "is being used by something else.\n\n"
+				 " is being used by something else.\n\n"
 				 "%s"),
 				item->text, msg),
 			NULL, 1,

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-18 18:34+0100\n"
+"POT-Creation-Date: 2003-11-22 21:26+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Muhamad Faizal <faizal@mfaizal.net>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
@@ -14,9 +14,122 @@ msgstr ""
 "Content-Type: text/plain; charset=us-ascii\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/bfu/hierbox.c:213
+#: src/bfu/hierbox.c:300
 msgid "Close"
 msgstr "Selesai"
+
+#: src/bfu/hierbox.c:409 src/cache/dialogs.c:145 src/config/dialogs.c:98
+#: src/config/dialogs.c:111 src/config/dialogs.c:381 src/cookies/dialogs.c:132
+#: src/dialogs/document.c:41 src/dialogs/document.c:229
+#: src/globhist/dialogs.c:210
+msgid "Info"
+msgstr "Info"
+
+#. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
+#: src/bfu/hierbox.c:412 src/bfu/hierbox.c:430 src/bfu/hierbox.c:444
+#: src/bfu/inpfield.c:47 src/bfu/inpfield.c:56 src/bfu/inpfield.c:76
+#: src/bookmarks/dialogs.c:186 src/config/dialogs.c:60
+#: src/config/dialogs.c:108 src/config/dialogs.c:119 src/config/dialogs.c:171
+#: src/config/dialogs.c:230 src/config/dialogs.c:260 src/config/dialogs.c:295
+#: src/config/dialogs.c:307 src/config/dialogs.c:339 src/config/dialogs.c:354
+#: src/config/dialogs.c:411 src/config/dialogs.c:433 src/config/dialogs.c:460
+#: src/config/dialogs.c:501 src/config/dialogs.c:514 src/dialogs/auth.c:79
+#: src/dialogs/document.c:47 src/dialogs/document.c:232
+#: src/dialogs/document.c:302 src/dialogs/document.c:314 src/dialogs/edit.c:99
+#: src/dialogs/info.c:49 src/dialogs/info.c:90 src/dialogs/info.c:110
+#: src/dialogs/info.c:137 src/dialogs/info.c:157 src/dialogs/menu.c:536
+#: src/dialogs/menu.c:547 src/dialogs/menu.c:578 src/dialogs/mime.c:162
+#: src/dialogs/options.c:189 src/dialogs/options.c:264
+#: src/protocol/protocol.c:60 src/protocol/user.c:157 src/protocol/user.c:173
+#: src/sched/download.c:453 src/sched/download.c:536 src/sched/download.c:564
+#: src/sched/download.c:834 src/sched/error.c:40 src/sched/session.c:416
+#: src/sched/session.c:1270 src/sched/session.c:1287 src/sched/session.c:1311
+#: src/sched/session.c:1565 src/scripting/lua/core.c:398
+#: src/scripting/lua/core.c:481 src/scripting/lua/core.c:588
+#: src/scripting/lua/core.c:714 src/viewer/text/form.c:652
+#: src/viewer/text/search.c:850 src/viewer/text/search.c:876
+#: src/viewer/text/search.c:882 src/viewer/text/search.c:904
+#: src/viewer/text/search.c:1070 src/viewer/text/search.c:1081
+#: src/viewer/text/textarea.c:268 src/viewer/text/view.c:729
+#: src/viewer/text/view.c:1418
+msgid "OK"
+msgstr "OK"
+
+#: src/bfu/hierbox.c:425
+msgid "Deleting used folder"
+msgstr ""
+
+#: src/bfu/hierbox.c:426
+#, c-format
+msgid "Sorry, but the folder \"%s\" is being used by something else."
+msgstr ""
+
+#: src/bfu/hierbox.c:438
+#, fuzzy
+msgid "Deleting used item"
+msgstr "Pilihan"
+
+#: src/bfu/hierbox.c:439
+#, c-format
+msgid ""
+"Sorry, but the item \"%s\" is being used by something else.\n"
+"\n"
+"%s"
+msgstr ""
+
+#: src/bfu/hierbox.c:536
+#, fuzzy
+msgid "Delete marked items"
+msgstr "Pilihan"
+
+#: src/bfu/hierbox.c:537
+#, fuzzy
+msgid "Delete marked items?"
+msgstr "Pilihan"
+
+#: src/bfu/hierbox.c:539 src/bfu/hierbox.c:551 src/bfu/hierbox.c:565
+#: src/bfu/hierbox.c:618 src/dialogs/menu.c:151 src/dialogs/mime.c:86
+#: src/formhist/formhist.c:380 src/sched/session.c:701 src/terminal/tab.c:195
+msgid "Yes"
+msgstr "Ya"
+
+#: src/bfu/hierbox.c:540 src/bfu/hierbox.c:552 src/bfu/hierbox.c:566
+#: src/bfu/hierbox.c:619 src/dialogs/menu.c:152 src/dialogs/mime.c:87
+#: src/formhist/formhist.c:381 src/sched/session.c:702 src/terminal/tab.c:196
+msgid "No"
+msgstr "Ngga"
+
+#: src/bfu/hierbox.c:547
+#, fuzzy
+msgid "Delete folder"
+msgstr "Hapus bookmark"
+
+#: src/bfu/hierbox.c:548
+#, fuzzy, c-format
+msgid "Delete the folder \"%s\" and its content?"
+msgstr "Hapus ekstensi"
+
+#: src/bfu/hierbox.c:560
+#, fuzzy
+msgid "Delete item"
+msgstr "Hapus"
+
+#: src/bfu/hierbox.c:561
+#, fuzzy, c-format
+msgid ""
+"Delete \"%s\"?\n"
+"\n"
+"%s"
+msgstr "Hapus bookmark"
+
+#: src/bfu/hierbox.c:615
+msgid "Clear all items"
+msgstr ""
+
+#: src/bfu/hierbox.c:616
+#, fuzzy
+msgid "Do you really want to remove all items?"
+msgstr "Yakin nih mau keluar dari ELinks?"
 
 #: src/bfu/inpfield.c:44 src/bfu/inpfield.c:53
 msgid "Bad number"
@@ -25,37 +138,6 @@ msgstr "Salah angka"
 #: src/bfu/inpfield.c:45
 msgid "Number expected in field"
 msgstr "Jumlah angka yang harus diisi"
-
-#. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
-#: src/bfu/inpfield.c:47 src/bfu/inpfield.c:56 src/bfu/inpfield.c:76
-#: src/bookmarks/dialogs.c:132 src/bookmarks/dialogs.c:233
-#: src/bookmarks/dialogs.c:243 src/cache/dialogs.c:154 src/config/dialogs.c:44
-#: src/config/dialogs.c:92 src/config/dialogs.c:103 src/config/dialogs.c:155
-#: src/config/dialogs.c:214 src/config/dialogs.c:244 src/config/dialogs.c:279
-#: src/config/dialogs.c:291 src/config/dialogs.c:346 src/config/dialogs.c:361
-#: src/config/dialogs.c:420 src/config/dialogs.c:442 src/config/dialogs.c:469
-#: src/config/dialogs.c:533 src/config/dialogs.c:546 src/cookies/dialogs.c:127
-#: src/dialogs/auth.c:79 src/dialogs/document.c:47 src/dialogs/document.c:232
-#: src/dialogs/document.c:302 src/dialogs/document.c:314 src/dialogs/edit.c:99
-#: src/dialogs/info.c:49 src/dialogs/info.c:90 src/dialogs/info.c:110
-#: src/dialogs/info.c:137 src/dialogs/info.c:157 src/dialogs/menu.c:534
-#: src/dialogs/menu.c:545 src/dialogs/menu.c:576 src/dialogs/mime.c:162
-#: src/dialogs/options.c:189 src/dialogs/options.c:264
-#: src/globhist/dialogs.c:192 src/globhist/dialogs.c:363
-#: src/protocol/protocol.c:60 src/protocol/user.c:157 src/protocol/user.c:173
-#: src/sched/download.c:453 src/sched/download.c:536 src/sched/download.c:564
-#: src/sched/download.c:834 src/sched/error.c:40 src/sched/session.c:413
-#: src/sched/session.c:1247 src/sched/session.c:1264 src/sched/session.c:1288
-#: src/sched/session.c:1536 src/scripting/lua/core.c:384
-#: src/scripting/lua/core.c:467 src/scripting/lua/core.c:574
-#: src/scripting/lua/core.c:700 src/viewer/text/form.c:652
-#: src/viewer/text/search.c:849 src/viewer/text/search.c:875
-#: src/viewer/text/search.c:881 src/viewer/text/search.c:903
-#: src/viewer/text/search.c:1069 src/viewer/text/search.c:1080
-#: src/viewer/text/textarea.c:268 src/viewer/text/view.c:727
-#: src/viewer/text/view.c:1411
-msgid "OK"
-msgstr "OK"
 
 #: src/bfu/inpfield.c:54
 msgid "Number out of range"
@@ -69,8 +151,30 @@ msgstr "Salah string"
 msgid "Empty string not allowed"
 msgstr "Tidak boleh string kosong"
 
+#: src/bfu/leds.c:64
+msgid "LEDs"
+msgstr ""
+
+#: src/bfu/leds.c:66
+#, fuzzy
+msgid "LEDs options."
+msgstr "~Simpan opsi"
+
+#. XXX: Disable global history if -anonymous is given?
+#: src/bfu/leds.c:68 src/config/options.inc:1719 src/config/options.inc:1726
+#: src/globhist/globhist.c:73 src/mime/backend/mailcap.c:98
+#: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
+#, fuzzy
+msgid "Enable"
+msgstr "nama"
+
+#: src/bfu/leds.c:70
+#, fuzzy
+msgid "Enable LEDs."
+msgstr "nama"
+
 #. name:
-#: src/bfu/leds.c:207
+#: src/bfu/leds.c:237
 msgid "LED indicators"
 msgstr ""
 
@@ -95,29 +199,29 @@ msgid "No title"
 msgstr ""
 
 #. name:
-#: src/bookmarks/bookmarks.c:43 src/bookmarks/bookmarks.c:100
+#: src/bookmarks/bookmarks.c:42 src/bookmarks/bookmarks.c:99
 #, fuzzy
 msgid "Bookmarks"
 msgstr "Bookmark"
 
-#: src/bookmarks/bookmarks.c:45
+#: src/bookmarks/bookmarks.c:44
 #, fuzzy
 msgid "Bookmark options."
 msgstr "Bookmark"
 
-#: src/bookmarks/bookmarks.c:48 src/bookmarks/bookmarks.c:54
+#: src/bookmarks/bookmarks.c:47 src/bookmarks/bookmarks.c:53
 #, fuzzy
 msgid "File format"
 msgstr "Upload file"
 
-#: src/bookmarks/bookmarks.c:50
+#: src/bookmarks/bookmarks.c:49
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 msgstr ""
 
-#: src/bookmarks/bookmarks.c:56
+#: src/bookmarks/bookmarks.c:55
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -125,191 +229,132 @@ msgid ""
 "(DISABLED)"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:131 src/bookmarks/dialogs.c:571
+#: src/bookmarks/dialogs.c:72
+#, c-format
+msgid "URL: \"%s\""
+msgstr ""
+
+#: src/bookmarks/dialogs.c:185 src/bookmarks/dialogs.c:414
 msgid "Add folder"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:131
+#: src/bookmarks/dialogs.c:185
 msgid "Folder name"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:132 src/config/dialogs.c:215
-#: src/config/dialogs.c:291 src/config/dialogs.c:362 src/config/dialogs.c:469
-#: src/config/dialogs.c:547 src/dialogs/auth.c:80 src/dialogs/edit.c:103
-#: src/dialogs/menu.c:534 src/dialogs/menu.c:545 src/dialogs/menu.c:576
+#: src/bookmarks/dialogs.c:186 src/config/dialogs.c:231
+#: src/config/dialogs.c:307 src/config/dialogs.c:355 src/config/dialogs.c:460
+#: src/config/dialogs.c:515 src/dialogs/auth.c:80 src/dialogs/edit.c:103
+#: src/dialogs/menu.c:536 src/dialogs/menu.c:547 src/dialogs/menu.c:578
 #: src/dialogs/mime.c:163 src/dialogs/options.c:191 src/dialogs/options.c:265
-#: src/sched/download.c:750 src/sched/download.c:1233
-#: src/sched/download.c:1242 src/sched/download.c:1269
-#: src/sched/download.c:1281 src/scripting/lua/core.c:385
-#: src/scripting/lua/core.c:468 src/scripting/lua/core.c:700
-#: src/viewer/text/search.c:1069 src/viewer/text/search.c:1080
-#: src/viewer/text/view.c:727
+#: src/sched/download.c:750 src/sched/download.c:1229
+#: src/sched/download.c:1238 src/sched/download.c:1265
+#: src/sched/download.c:1277 src/scripting/lua/core.c:399
+#: src/scripting/lua/core.c:482 src/scripting/lua/core.c:714
+#: src/viewer/text/search.c:1070 src/viewer/text/search.c:1081
+#: src/viewer/text/view.c:729
 msgid "Cancel"
 msgstr "Batal"
 
-#: src/bookmarks/dialogs.c:198 src/scripting/lua/core.c:374
+#: src/bookmarks/dialogs.c:252 src/scripting/lua/core.c:388
 msgid "Edit bookmark"
 msgstr "Ubah bookmark"
 
-#: src/bookmarks/dialogs.c:227 src/bookmarks/dialogs.c:236
-#: src/bookmarks/dialogs.c:370 src/bookmarks/dialogs.c:377
-#: src/bookmarks/dialogs.c:385
-msgid "Delete bookmark"
-msgstr "Hapus bookmark"
-
-#: src/bookmarks/dialogs.c:228
-#, c-format
-msgid ""
-"Sorry, but this bookmark is already being used by something right now.\n"
-"\n"
-"Title: \"%s\""
-msgstr ""
-
-#: src/bookmarks/dialogs.c:237
-#, c-format
-msgid ""
-"Sorry, but this bookmark is already being used by something right now.\n"
-"\n"
-"Title: \"%s\"\n"
-"URL: \"%s\""
-msgstr ""
-
-#: src/bookmarks/dialogs.c:371
-msgid "Delete marked bookmarks?"
-msgstr ""
-
-#: src/bookmarks/dialogs.c:373 src/bookmarks/dialogs.c:381
-#: src/bookmarks/dialogs.c:390 src/dialogs/menu.c:151 src/dialogs/mime.c:86
-#: src/formhist/formhist.c:380 src/globhist/dialogs.c:274
-#: src/globhist/dialogs.c:285 src/globhist/dialogs.c:326
-#: src/sched/session.c:688 src/terminal/tab.c:195
-msgid "Yes"
-msgstr "Ya"
-
-#: src/bookmarks/dialogs.c:374 src/bookmarks/dialogs.c:382
-#: src/bookmarks/dialogs.c:391 src/dialogs/menu.c:152 src/dialogs/mime.c:87
-#: src/formhist/formhist.c:381 src/globhist/dialogs.c:275
-#: src/globhist/dialogs.c:286 src/globhist/dialogs.c:327
-#: src/sched/session.c:689 src/terminal/tab.c:196
-msgid "No"
-msgstr "Ngga"
-
-#: src/bookmarks/dialogs.c:378
-#, fuzzy, c-format
-msgid "Delete content of folder \"%s\"?"
-msgstr "Hapus ekstensi"
-
-#: src/bookmarks/dialogs.c:386
-#, fuzzy, c-format
-msgid ""
-"Delete bookmark \"%s\"?\n"
-"\n"
-"URL: \"%s\""
-msgstr "Hapus bookmark"
-
-#: src/bookmarks/dialogs.c:560
+#: src/bookmarks/dialogs.c:407
 msgid "Bookmark manager"
 msgstr "Ngatur bookmark"
 
-#: src/bookmarks/dialogs.c:567 src/globhist/dialogs.c:425
+#: src/bookmarks/dialogs.c:410 src/globhist/dialogs.c:209
 msgid "Goto"
 msgstr "Pilih"
 
-#: src/bookmarks/dialogs.c:568 src/config/dialogs.c:181
-#: src/config/dialogs.c:239 src/config/dialogs.c:391
+#: src/bookmarks/dialogs.c:411 src/config/dialogs.c:197
+#: src/config/dialogs.c:255 src/config/dialogs.c:382
 msgid "Edit"
 msgstr "Ubah"
 
-#: src/bookmarks/dialogs.c:569 src/config/dialogs.c:393
-#: src/config/dialogs.c:576 src/globhist/dialogs.c:430
+#: src/bookmarks/dialogs.c:412 src/cache/dialogs.c:146
+#: src/config/dialogs.c:384 src/config/dialogs.c:540 src/cookies/dialogs.c:133
+#: src/globhist/dialogs.c:214
 msgid "Delete"
 msgstr "Hapus"
 
-#: src/bookmarks/dialogs.c:570
+#: src/bookmarks/dialogs.c:413
 msgid "Move"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:572 src/config/dialogs.c:392
-#: src/config/dialogs.c:575
+#: src/bookmarks/dialogs.c:415 src/config/dialogs.c:383
+#: src/config/dialogs.c:539
 msgid "Add"
 msgstr "Tambah"
 
-#: src/bookmarks/dialogs.c:573 src/globhist/dialogs.c:431
-#: src/viewer/text/search.c:846 src/viewer/text/search.c:872
-#: src/viewer/text/search.c:878 src/viewer/text/search.c:899
-#: src/viewer/text/search.c:1079
+#: src/bookmarks/dialogs.c:416 src/globhist/dialogs.c:215
+#: src/viewer/text/search.c:847 src/viewer/text/search.c:873
+#: src/viewer/text/search.c:879 src/viewer/text/search.c:900
+#: src/viewer/text/search.c:1080
 msgid "Search"
 msgstr "Cari"
 
-#: src/bookmarks/dialogs.c:705
+#: src/bookmarks/dialogs.c:548
 msgid "Search bookmarks"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:719
+#: src/bookmarks/dialogs.c:562
 msgid "Add bookmark"
 msgstr "Tambah bookmark"
 
-#: src/cache/dialogs.c:93 src/dialogs/document.c:65 src/dialogs/edit.c:96
-#: src/scripting/lua/core.c:382
+#: src/cache/dialogs.c:56 src/dialogs/document.c:65 src/dialogs/edit.c:96
+#: src/scripting/lua/core.c:396
 msgid "URL"
 msgstr "URL"
 
-#: src/cache/dialogs.c:98
+#: src/cache/dialogs.c:61
 msgid "Redirect"
 msgstr ""
 
-#: src/cache/dialogs.c:106 src/config/options.inc:353
-#: src/dialogs/document.c:92
+#: src/cache/dialogs.c:69 src/config/options.inc:353 src/dialogs/document.c:92
 msgid "Size"
 msgstr "Ukuran"
 
-#: src/cache/dialogs.c:107
+#: src/cache/dialogs.c:70
 msgid "Loaded size"
 msgstr ""
 
-#: src/cache/dialogs.c:110 src/dialogs/document.c:137
+#: src/cache/dialogs.c:73 src/dialogs/document.c:137
 msgid "Last modified"
 msgstr "Terakhir kali dimodifikasi"
 
-#: src/cache/dialogs.c:118 src/dialogs/document.c:119
+#: src/cache/dialogs.c:81 src/dialogs/document.c:119
 msgid "SSL Cipher"
 msgstr ""
 
-#: src/cache/dialogs.c:122 src/dialogs/document.c:124
+#: src/cache/dialogs.c:85 src/dialogs/document.c:124
 msgid "Encoding"
 msgstr ""
 
-#: src/cache/dialogs.c:128
+#: src/cache/dialogs.c:91
 msgid "Flags"
 msgstr ""
 
-#: src/cache/dialogs.c:131 src/dialogs/document.c:95
+#: src/cache/dialogs.c:94 src/dialogs/document.c:95
 msgid "incomplete"
 msgstr "blom lengkap"
 
-#: src/cache/dialogs.c:134
+#: src/cache/dialogs.c:97
 msgid "invalid"
 msgstr ""
 
-#: src/cache/dialogs.c:141
+#: src/cache/dialogs.c:102
 msgid "ID tag"
 msgstr ""
 
-#: src/cache/dialogs.c:145
+#: src/cache/dialogs.c:106
 #, fuzzy
 msgid "Header"
 msgstr "Info header"
 
-#: src/cache/dialogs.c:151 src/cache/dialogs.c:178 src/config/dialogs.c:82
-#: src/config/dialogs.c:95 src/config/dialogs.c:390 src/cookies/dialogs.c:124
-#: src/cookies/dialogs.c:156 src/dialogs/document.c:41
-#: src/dialogs/document.c:229 src/globhist/dialogs.c:356
-#: src/globhist/dialogs.c:426
-msgid "Info"
-msgstr "Info"
-
 #. Keep options in alphabetical order.
-#: src/cache/dialogs.c:171 src/config/options.inc:312
+#: src/cache/dialogs.c:142 src/config/options.inc:312
 #, fuzzy
 msgid "Cache"
 msgstr "Batal"
@@ -409,16 +454,16 @@ msgstr "Memory habis"
 msgid "Cannot write the file"
 msgstr "Kesalahan menulis ke file"
 
-#: src/config/dialogs.c:40
+#: src/config/dialogs.c:56
 msgid "Config error"
 msgstr "Kesalahan konfigurasi"
 
-#: src/config/dialogs.c:41
+#: src/config/dialogs.c:57
 #, fuzzy, c-format
 msgid "Unable to write to config file %s: %s"
 msgstr "Ngga bisa nulis ke file konfigurasi"
 
-#: src/config/dialogs.c:83
+#: src/config/dialogs.c:99
 #, c-format
 msgid ""
 "Name: %s\n"
@@ -429,11 +474,11 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/config/dialogs.c:89 src/config/dialogs.c:101 src/config/dialogs.c:196
+#: src/config/dialogs.c:105 src/config/dialogs.c:117 src/config/dialogs.c:212
 msgid "N/A"
 msgstr ""
 
-#: src/config/dialogs.c:96
+#: src/config/dialogs.c:112
 #, c-format
 msgid ""
 "Name: %s\n"
@@ -443,554 +488,559 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/config/dialogs.c:152 src/protocol/protocol.c:57 src/sched/session.c:410
-#: src/sched/session.c:1532 src/viewer/text/textarea.c:265
+#: src/config/dialogs.c:168 src/protocol/protocol.c:57 src/sched/session.c:413
+#: src/sched/session.c:1561 src/viewer/text/textarea.c:265
 msgid "Error"
 msgstr "Error"
 
-#: src/config/dialogs.c:153
+#: src/config/dialogs.c:169
 msgid "Bad option value."
 msgstr ""
 
-#: src/config/dialogs.c:190 src/config/dialogs.c:290 src/dialogs/edit.c:92
-#: src/scripting/lua/core.c:380 src/scripting/lua/core.c:381
-#: src/scripting/lua/core.c:463
+#: src/config/dialogs.c:206 src/config/dialogs.c:306 src/dialogs/edit.c:92
+#: src/scripting/lua/core.c:394 src/scripting/lua/core.c:395
+#: src/scripting/lua/core.c:477
 msgid "Name"
 msgstr "Nama"
 
-#: src/config/dialogs.c:191
+#: src/config/dialogs.c:207
 msgid "Type"
 msgstr ""
 
-#: src/config/dialogs.c:193
+#: src/config/dialogs.c:209
 #, fuzzy
 msgid "Value"
 msgstr "isi"
 
-#: src/config/dialogs.c:194
+#: src/config/dialogs.c:210
 msgid "Description"
 msgstr ""
 
-#: src/config/dialogs.c:240
+#: src/config/dialogs.c:256
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
 
-#: src/config/dialogs.c:276 src/config/dialogs.c:290
+#: src/config/dialogs.c:292 src/config/dialogs.c:306
 msgid "Add option"
 msgstr ""
 
-#: src/config/dialogs.c:277
+#: src/config/dialogs.c:293
 msgid "Cannot add an option here."
 msgstr ""
 
-#: src/config/dialogs.c:343 src/config/dialogs.c:357
+#: src/config/dialogs.c:336 src/config/dialogs.c:350
 msgid "Delete option"
 msgstr ""
 
-#: src/config/dialogs.c:344
+#: src/config/dialogs.c:337
 msgid "Cannot delete this option."
 msgstr ""
 
-#: src/config/dialogs.c:358
+#: src/config/dialogs.c:351
 #, fuzzy, c-format
 msgid "Really delete the option \"%s\"?"
 msgstr "Hapus ekstensi"
 
-#: src/config/dialogs.c:385
+#: src/config/dialogs.c:378
 #, fuzzy
 msgid "Option manager"
 msgstr "Ngatur bookmark"
 
-#: src/config/dialogs.c:394 src/config/dialogs.c:578 src/cookies/dialogs.c:157
-#: src/dialogs/options.c:190 src/sched/download.c:1231
-#: src/sched/download.c:1267
+#: src/config/dialogs.c:385 src/config/dialogs.c:542 src/cookies/dialogs.c:135
+#: src/dialogs/options.c:190 src/sched/download.c:1227
+#: src/sched/download.c:1263
 msgid "Save"
 msgstr "Simpan"
 
-#: src/config/dialogs.c:417 src/config/dialogs.c:439 src/config/dialogs.c:468
+#: src/config/dialogs.c:408 src/config/dialogs.c:430 src/config/dialogs.c:459
 msgid "Add keybinding"
 msgstr ""
 
-#: src/config/dialogs.c:418
+#: src/config/dialogs.c:409
 msgid "Invalid keystroke."
 msgstr ""
 
-#: src/config/dialogs.c:440
+#: src/config/dialogs.c:431
 msgid "Need to select a keymap."
 msgstr ""
 
-#: src/config/dialogs.c:455 src/config/options.inc:1738
+#: src/config/dialogs.c:446 src/config/options.inc:1738
 msgid "Action"
 msgstr ""
 
-#: src/config/dialogs.c:456
+#: src/config/dialogs.c:447
 msgid "Keymap"
 msgstr ""
 
-#: src/config/dialogs.c:457
+#: src/config/dialogs.c:448
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
 "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 msgstr ""
 
-#: src/config/dialogs.c:461
+#: src/config/dialogs.c:452
 msgid "Keystroke"
 msgstr ""
 
-#: src/config/dialogs.c:529 src/config/dialogs.c:540
+#: src/config/dialogs.c:497 src/config/dialogs.c:508
 msgid "Delete keybinding"
 msgstr ""
 
-#: src/config/dialogs.c:530
+#: src/config/dialogs.c:498
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr ""
 
-#: src/config/dialogs.c:541
+#: src/config/dialogs.c:509
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 
-#: src/config/dialogs.c:568
+#: src/config/dialogs.c:536
 msgid "Keybinding manager"
 msgstr ""
 
-#: src/config/dialogs.c:577 src/globhist/dialogs.c:432
+#: src/config/dialogs.c:541 src/globhist/dialogs.c:216
 msgid "Toggle display"
 msgstr ""
 
-#: src/config/kbdbind.c:273
+#: src/config/kbdbind.c:272
 msgid "Main mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:274
+#: src/config/kbdbind.c:273
 msgid "Edit mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:275
+#: src/config/kbdbind.c:274
 msgid "Menu mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:382
+#: src/config/kbdbind.c:379
 #, fuzzy
 msgid "Abort connection"
 msgstr "koneksi"
 
-#: src/config/kbdbind.c:383
+#: src/config/kbdbind.c:380
 #, fuzzy
 msgid "Add a new bookmark"
 msgstr "Tambah bookmark"
 
-#: src/config/kbdbind.c:384
+#: src/config/kbdbind.c:381
 msgid "Add a new bookmark using current link"
 msgstr ""
 
-#: src/config/kbdbind.c:385
+#: src/config/kbdbind.c:382
 msgid "Attempt to auto-complete the input"
 msgstr ""
 
-#: src/config/kbdbind.c:386
+#: src/config/kbdbind.c:383
 msgid "Attempt to unambiguously auto-complete the input"
 msgstr ""
 
-#: src/config/kbdbind.c:387
+#: src/config/kbdbind.c:384
 msgid "Return to the previous document in history"
 msgstr ""
 
-#: src/config/kbdbind.c:388
+#: src/config/kbdbind.c:385
 msgid "Delete character in front of the cursor"
 msgstr ""
 
-#: src/config/kbdbind.c:389
+#: src/config/kbdbind.c:386
 #, fuzzy
 msgid "Open bookmark manager"
 msgstr "Ngatur bookmark"
 
-#: src/config/kbdbind.c:390
+#: src/config/kbdbind.c:387
 #, fuzzy
 msgid "Open cache manager"
 msgstr "Ngatur bookmark"
 
-#: src/config/kbdbind.c:391
+#: src/config/kbdbind.c:388
+#, fuzzy
+msgid "Open cookie manager"
+msgstr "Ngatur bookmark"
+
+#: src/config/kbdbind.c:389
 msgid "Reload cookies file"
 msgstr ""
 
-#: src/config/kbdbind.c:392
+#: src/config/kbdbind.c:390
 msgid "Copy text to clipboard"
 msgstr ""
 
-#: src/config/kbdbind.c:393
+#: src/config/kbdbind.c:391
 msgid "Delete text from clipboard"
 msgstr ""
 
-#: src/config/kbdbind.c:394
+#: src/config/kbdbind.c:392
 msgid "Delete character under cursor"
 msgstr ""
 
-#: src/config/kbdbind.c:395
+#: src/config/kbdbind.c:393
 #, fuzzy
 msgid "Show information about the current page"
 msgstr "Download ima~ge"
 
-#: src/config/kbdbind.c:396
+#: src/config/kbdbind.c:394
 msgid "Move cursor downwards"
 msgstr ""
 
-#: src/config/kbdbind.c:397
+#: src/config/kbdbind.c:395
 #, fuzzy
 msgid "Download the current link"
 msgstr "~Download link"
 
-#: src/config/kbdbind.c:398
+#: src/config/kbdbind.c:396
 #, fuzzy
 msgid "Download the current image"
 msgstr "Download ima~ge"
 
-#: src/config/kbdbind.c:399
+#: src/config/kbdbind.c:397
 msgid "Begin editing"
 msgstr ""
 
 #. FIXME
-#: src/config/kbdbind.c:400
+#: src/config/kbdbind.c:398
 msgid "Go to the end of the page/line"
 msgstr ""
 
-#: src/config/kbdbind.c:401
+#: src/config/kbdbind.c:399
 #, fuzzy
 msgid "Follow the current link"
 msgstr "Ikuti link"
 
-#: src/config/kbdbind.c:402
+#: src/config/kbdbind.c:400
 msgid "Follow the current link, forcing reload of the target"
 msgstr ""
 
-#: src/config/kbdbind.c:403
+#: src/config/kbdbind.c:401
 msgid "Open the File menu"
 msgstr ""
 
-#: src/config/kbdbind.c:404
+#: src/config/kbdbind.c:402
 msgid "Find the next occurrence of the current search text"
 msgstr ""
 
-#: src/config/kbdbind.c:405
+#: src/config/kbdbind.c:403
 msgid "Find the previous occurrence of the current search text"
 msgstr ""
 
-#: src/config/kbdbind.c:406
+#: src/config/kbdbind.c:404
 msgid "Forget authentication credentials"
 msgstr ""
 
-#: src/config/kbdbind.c:407
+#: src/config/kbdbind.c:405
 msgid "Open \"Go to URL\" dialog box"
 msgstr ""
 
-#: src/config/kbdbind.c:408
+#: src/config/kbdbind.c:406
 msgid "Open \"Go to URL\" dialog box containing the current URL"
 msgstr ""
 
-#: src/config/kbdbind.c:409
+#: src/config/kbdbind.c:407
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
 msgstr ""
 
-#: src/config/kbdbind.c:410
+#: src/config/kbdbind.c:408
 msgid "Go to the homepage"
 msgstr ""
 
-#: src/config/kbdbind.c:411
+#: src/config/kbdbind.c:409
 msgid "Show information about the current page HTTP headers"
 msgstr ""
 
-#: src/config/kbdbind.c:412
+#: src/config/kbdbind.c:410
 msgid "Open history manager"
 msgstr ""
 
-#: src/config/kbdbind.c:413
+#: src/config/kbdbind.c:411
 msgid "Go to the start of the page/line"
 msgstr ""
 
-#: src/config/kbdbind.c:414
+#: src/config/kbdbind.c:412
 #, fuzzy
 msgid "Delete to beginning of line"
 msgstr "Hapus ekstensi"
 
-#: src/config/kbdbind.c:415
+#: src/config/kbdbind.c:413
 #, fuzzy
 msgid "Delete to end of line"
 msgstr "Hapus ekstensi"
 
-#: src/config/kbdbind.c:416
+#: src/config/kbdbind.c:414
 msgid "Open keybinding manager"
 msgstr ""
 
-#: src/config/kbdbind.c:417
+#: src/config/kbdbind.c:415
 #, fuzzy
 msgid "Move the cursor left"
 msgstr "Blok cursor"
 
-#: src/config/kbdbind.c:418
+#: src/config/kbdbind.c:416
 msgid "Open the link context menu"
 msgstr ""
 
-#: src/config/kbdbind.c:419
+#: src/config/kbdbind.c:417
 #, fuzzy
 msgid "Jump to link"
 msgstr "Pilih link"
 
-#: src/config/kbdbind.c:421
+#: src/config/kbdbind.c:419
 msgid "Open a Lua console"
 msgstr ""
 
-#: src/config/kbdbind.c:423
+#: src/config/kbdbind.c:421
 msgid "Open a Lua console (DISABLED)"
 msgstr ""
 
 #. internal use only
-#: src/config/kbdbind.c:426
+#: src/config/kbdbind.c:424
 msgid "Activate the menu"
 msgstr ""
 
-#: src/config/kbdbind.c:427
+#: src/config/kbdbind.c:425
 msgid "Move to the next frame"
 msgstr ""
 
-#: src/config/kbdbind.c:428
+#: src/config/kbdbind.c:426
 #, fuzzy
 msgid "Open a new tab"
 msgstr "Buka di jendela baru"
 
-#: src/config/kbdbind.c:429
+#: src/config/kbdbind.c:427
 #, fuzzy
 msgid "Open a new tab in background"
 msgstr "Background"
 
-#: src/config/kbdbind.c:430
+#: src/config/kbdbind.c:428
 #, fuzzy
 msgid "Open a new window"
 msgstr "Buka di jendela baru"
 
-#: src/config/kbdbind.c:431
+#: src/config/kbdbind.c:429
 #, fuzzy
 msgid "Open the current link in a new tab"
 msgstr "Buka di jendela baru"
 
-#: src/config/kbdbind.c:433
+#: src/config/kbdbind.c:431
 #, fuzzy
 msgid "Open the current link a new tab in background"
 msgstr "Buka di jendela baru"
 
-#: src/config/kbdbind.c:434
+#: src/config/kbdbind.c:432
 #, fuzzy
 msgid "Open the current link in a new window"
 msgstr "Buka di jendela baru"
 
-#: src/config/kbdbind.c:435
+#: src/config/kbdbind.c:433
 msgid "Open options manager"
 msgstr ""
 
-#: src/config/kbdbind.c:436
+#: src/config/kbdbind.c:434
 msgid "Move downwards by a page"
 msgstr ""
 
-#: src/config/kbdbind.c:437
+#: src/config/kbdbind.c:435
 msgid "Move upwards by a page"
 msgstr ""
 
-#: src/config/kbdbind.c:438
+#: src/config/kbdbind.c:436
 msgid "Paste text from the clipboard"
 msgstr ""
 
-#: src/config/kbdbind.c:439
+#: src/config/kbdbind.c:437
 msgid "Move to the previous frame"
 msgstr ""
 
-#: src/config/kbdbind.c:440
+#: src/config/kbdbind.c:438
 msgid "Open a quit confirmation dialog box"
 msgstr ""
 
-#: src/config/kbdbind.c:441
+#: src/config/kbdbind.c:439
 #, fuzzy
 msgid "Quit without confirmation"
 msgstr "Menunggu konfirmasi redirect"
 
-#: src/config/kbdbind.c:442
+#: src/config/kbdbind.c:440
 msgid "Reload the current page"
 msgstr ""
 
-#: src/config/kbdbind.c:443
+#: src/config/kbdbind.c:441
 msgid "Attempt to resume download of the current link"
 msgstr ""
 
-#: src/config/kbdbind.c:444
+#: src/config/kbdbind.c:442
 #, fuzzy
 msgid "Move the cursor right"
 msgstr "Blok cursor"
 
-#: src/config/kbdbind.c:445
+#: src/config/kbdbind.c:443
 #, fuzzy
 msgid "Save formatted document"
 msgstr "Simpan ~dokumen terformat"
 
-#: src/config/kbdbind.c:446
+#: src/config/kbdbind.c:444
 msgid "Scroll down"
 msgstr ""
 
-#: src/config/kbdbind.c:447
+#: src/config/kbdbind.c:445
 msgid "Scroll left"
 msgstr ""
 
-#: src/config/kbdbind.c:448
+#: src/config/kbdbind.c:446
 msgid "Scroll right"
 msgstr ""
 
-#: src/config/kbdbind.c:449
+#: src/config/kbdbind.c:447
 msgid "Scroll up"
 msgstr ""
 
-#: src/config/kbdbind.c:450
+#: src/config/kbdbind.c:448
 #, fuzzy
 msgid "Search for a text pattern"
 msgstr "Cari teks"
 
-#: src/config/kbdbind.c:451
+#: src/config/kbdbind.c:449
 #, fuzzy
 msgid "Search backwards for a text pattern"
 msgstr "Cari teks"
 
-#: src/config/kbdbind.c:452 src/terminal/tab.c:192
+#: src/config/kbdbind.c:450 src/terminal/tab.c:192
 #, fuzzy
 msgid "Close tab"
 msgstr "Selesai"
 
-#: src/config/kbdbind.c:453
+#: src/config/kbdbind.c:451
 msgid "Next tab"
 msgstr ""
 
-#: src/config/kbdbind.c:454
+#: src/config/kbdbind.c:452
 #, fuzzy
 msgid "Previous tab"
 msgstr "Ngga ada pencarian sebelumnya"
 
-#: src/config/kbdbind.c:455
+#: src/config/kbdbind.c:453
 msgid "Toggle displaying of links to images"
 msgstr ""
 
-#: src/config/kbdbind.c:456
+#: src/config/kbdbind.c:454
 msgid "Toggle rendering of tables"
 msgstr ""
 
-#: src/config/kbdbind.c:457
+#: src/config/kbdbind.c:455
 msgid "Toggle rendering page as HTML / plain text"
 msgstr ""
 
-#: src/config/kbdbind.c:458
+#: src/config/kbdbind.c:456
 msgid "Toggle displaying of links numbers"
 msgstr ""
 
-#: src/config/kbdbind.c:459
+#: src/config/kbdbind.c:457
 msgid "Toggle usage of document specific colors"
 msgstr ""
 
-#: src/config/kbdbind.c:460
+#: src/config/kbdbind.c:458
 msgid "Go forward in the unhistory"
 msgstr ""
 
-#: src/config/kbdbind.c:461
+#: src/config/kbdbind.c:459
 msgid "Move cursor upwards"
 msgstr ""
 
-#: src/config/kbdbind.c:462
+#: src/config/kbdbind.c:460
 #, fuzzy
 msgid "View the current image"
 msgstr "Tamp~ilkan image"
 
-#: src/config/kbdbind.c:463
+#: src/config/kbdbind.c:461
 msgid "Maximize the current frame"
 msgstr ""
 
-#: src/config/kbdbind.c:658
+#: src/config/kbdbind.c:656
 msgid "Unrecognised keymap"
 msgstr ""
 
-#: src/config/kbdbind.c:660
+#: src/config/kbdbind.c:658
 #, fuzzy
 msgid "Error parsing keystroke"
 msgstr "Ngga bisa nulis ke socket"
 
-#: src/config/kbdbind.c:662
+#: src/config/kbdbind.c:660
 msgid "Unrecognised action (internal error)"
 msgstr ""
 
-#: src/config/options.c:721 src/config/options.c:745 src/config/opttypes.c:38
+#: src/config/options.c:718 src/config/options.c:742 src/config/opttypes.c:38
 msgid "Parameter expected"
 msgstr ""
 
-#: src/config/options.c:746
+#: src/config/options.c:743
 msgid "Too many parameters"
 msgstr ""
 
-#: src/config/options.c:751
+#: src/config/options.c:748
 #, fuzzy
 msgid "error"
 msgstr "Error"
 
-#: src/config/options.c:753 src/sched/error.c:45
+#: src/config/options.c:750 src/sched/error.c:45
 msgid "Host not found"
 msgstr "Alamat ngga ketemu"
 
-#: src/config/options.c:767
+#: src/config/options.c:764
 #, fuzzy
 msgid "Resolver error"
 msgstr "Kesalahan penyimpanan"
 
-#: src/config/options.c:789
+#: src/config/options.c:786
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr ""
 
-#: src/config/options.c:829
+#: src/config/options.c:826
 msgid "Template option folder"
 msgstr ""
 
-#: src/config/options.c:852
+#: src/config/options.c:849
 #, c-format
 msgid "(default: %ld)"
 msgstr ""
 
-#: src/config/options.c:857 src/config/options.c:891
+#: src/config/options.c:854 src/config/options.c:888
 #, c-format
 msgid "(default: \"%s\")"
 msgstr ""
 
-#: src/config/options.c:862
+#: src/config/options.c:859
 #, c-format
 msgid "(alias for %s)"
 msgstr ""
 
-#: src/config/options.c:867 src/config/options.c:877
+#: src/config/options.c:864 src/config/options.c:874
 #, c-format
 msgid "(default: %s)"
 msgstr ""
 
-#: src/config/options.c:881
+#: src/config/options.c:878
 #, c-format
 msgid "(default: #%06x)"
 msgstr ""
 
-#: src/config/options.c:1007
+#: src/config/options.c:1004
 msgid "Configuration options:\n"
 msgstr ""
 
-#: src/config/options.c:1010
+#: src/config/options.c:1007
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
 
-#: src/config/options.c:1011
+#: src/config/options.c:1008
 msgid "Options:\n"
 msgstr ""
 
@@ -1877,7 +1927,7 @@ msgid "Dump output options."
 msgstr ""
 
 #: src/config/options.inc:468 src/config/options.inc:834
-#: src/config/opttypes.c:395 src/dialogs/document.c:99
+#: src/config/opttypes.c:394 src/dialogs/document.c:99
 msgid "Codepage"
 msgstr "Codepage"
 
@@ -2997,14 +3047,6 @@ msgid ""
 "even find this useful, although you may not believe that."
 msgstr ""
 
-#. XXX: Disable global history if -anonymous is given?
-#: src/config/options.inc:1719 src/config/options.inc:1726
-#: src/globhist/globhist.c:74 src/mime/backend/mailcap.c:98
-#: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
-#, fuzzy
-msgid "Enable"
-msgstr "nama"
-
 #: src/config/options.inc:1721
 msgid ""
 "Whether to enable the timer or not:\n"
@@ -3073,7 +3115,7 @@ msgstr ""
 msgid "When closing a tab show confirmation dialog."
 msgstr ""
 
-#: src/config/options.inc:1765 src/config/opttypes.c:396
+#: src/config/options.inc:1765 src/config/opttypes.c:395
 msgid "Language"
 msgstr ""
 
@@ -3360,80 +3402,80 @@ msgstr ""
 msgid "Read error"
 msgstr "Kesalahan penyimpanan"
 
-#: src/config/opttypes.c:390
+#: src/config/opttypes.c:389
 msgid "Boolean"
 msgstr ""
 
-#: src/config/opttypes.c:390
+#: src/config/opttypes.c:389
 msgid "[0|1]"
 msgstr ""
 
-#: src/config/opttypes.c:391
+#: src/config/opttypes.c:390
 msgid "Integer"
 msgstr ""
 
-#: src/config/opttypes.c:391 src/config/opttypes.c:392
+#: src/config/opttypes.c:390 src/config/opttypes.c:391
 msgid "<num>"
 msgstr ""
 
-#: src/config/opttypes.c:392
+#: src/config/opttypes.c:391
 msgid "Longint"
 msgstr ""
 
-#: src/config/opttypes.c:393
+#: src/config/opttypes.c:392
 msgid "String"
 msgstr ""
 
-#: src/config/opttypes.c:393
+#: src/config/opttypes.c:392
 msgid "<str>"
 msgstr ""
 
-#: src/config/opttypes.c:395
+#: src/config/opttypes.c:394
 #, fuzzy
 msgid "<codepage>"
 msgstr "Codepage"
 
-#: src/config/opttypes.c:396
+#: src/config/opttypes.c:395
 #, fuzzy
 msgid "<language>"
 msgstr "Bahasa"
 
-#: src/config/opttypes.c:397
+#: src/config/opttypes.c:396
 msgid "Color"
 msgstr "Warna"
 
-#: src/config/opttypes.c:397
+#: src/config/opttypes.c:396
 msgid "<color|#rrggbb>"
 msgstr ""
 
-#: src/config/opttypes.c:399
+#: src/config/opttypes.c:398
 msgid "Special"
 msgstr ""
 
-#: src/config/opttypes.c:401
+#: src/config/opttypes.c:400
 msgid "Alias"
 msgstr ""
 
 #. tree
-#: src/config/opttypes.c:404
+#: src/config/opttypes.c:403
 msgid "Folder"
 msgstr ""
 
 #. name:
-#: src/cookies/cookies.c:90 src/cookies/cookies.c:829 src/dialogs/menu.c:333
+#: src/cookies/cookies.c:88 src/cookies/cookies.c:808
 msgid "Cookies"
 msgstr ""
 
-#: src/cookies/cookies.c:92
+#: src/cookies/cookies.c:90
 #, fuzzy
 msgid "Cookies options."
 msgstr "~Simpan opsi"
 
-#: src/cookies/cookies.c:94
+#: src/cookies/cookies.c:92
 msgid "Accept policy"
 msgstr ""
 
-#: src/cookies/cookies.c:97
+#: src/cookies/cookies.c:95
 msgid ""
 "Cookies accepting policy:\n"
 "0 is accept no cookies\n"
@@ -3441,12 +3483,12 @@ msgid ""
 "2 is accept all cookies"
 msgstr ""
 
-#: src/cookies/cookies.c:102
+#: src/cookies/cookies.c:100
 #, fuzzy
 msgid "Maximum age"
 msgstr "Buat koneksi"
 
-#: src/cookies/cookies.c:104
+#: src/cookies/cookies.c:102
 msgid ""
 "Cookie maximum age (in days):\n"
 "-1 is use cookie's expiration date if any\n"
@@ -3455,41 +3497,41 @@ msgid ""
 "1+ is use cookie's expiration date, but limit age to the given number of days"
 msgstr ""
 
-#: src/cookies/cookies.c:109
+#: src/cookies/cookies.c:107
 msgid "Paranoid security"
 msgstr ""
 
-#: src/cookies/cookies.c:111
+#: src/cookies/cookies.c:109
 msgid ""
 "When enabled, we'll require three dots in cookies domain for all\n"
 "non-international domains (instead of just two dots). Please see\n"
 "code (cookies.c:check_domain_security()) for explanation."
 msgstr ""
 
-#: src/cookies/cookies.c:115
+#: src/cookies/cookies.c:113
 #, fuzzy
 msgid "Saving"
 msgstr "rata-rata"
 
-#: src/cookies/cookies.c:117
+#: src/cookies/cookies.c:115
 msgid "Load/save cookies from/to disk?"
 msgstr ""
 
-#: src/cookies/cookies.c:119
+#: src/cookies/cookies.c:117
 msgid "Resaving"
 msgstr ""
 
-#: src/cookies/cookies.c:121
+#: src/cookies/cookies.c:119
 msgid ""
 "Save cookies after each change in cookies list? No effect when\n"
 "cookies_save is off."
 msgstr ""
 
-#: src/cookies/cookies.c:566
+#: src/cookies/cookies.c:545
 msgid "Accept cookie?"
 msgstr ""
 
-#: src/cookies/cookies.c:567
+#: src/cookies/cookies.c:546
 #, c-format
 msgid ""
 "Do you want to accept a cookie from %s?\n"
@@ -3501,30 +3543,30 @@ msgid ""
 "Secure: %s\n"
 msgstr ""
 
-#: src/cookies/cookies.c:576 src/cookies/dialogs.c:91
+#: src/cookies/cookies.c:555 src/cookies/dialogs.c:78
 #, fuzzy
 msgid "unknown"
 msgstr "Tipe ngga dikenal"
 
-#: src/cookies/cookies.c:577 src/cookies/dialogs.c:92
+#: src/cookies/cookies.c:556 src/cookies/dialogs.c:79
 #, fuzzy
 msgid "yes"
 msgstr "bytes"
 
-#: src/cookies/cookies.c:577 src/cookies/dialogs.c:92
+#: src/cookies/cookies.c:556 src/cookies/dialogs.c:79
 #, fuzzy
 msgid "no"
 msgstr "Info"
 
-#: src/cookies/cookies.c:579
+#: src/cookies/cookies.c:558
 msgid "Accept"
 msgstr ""
 
-#: src/cookies/cookies.c:580
+#: src/cookies/cookies.c:559
 msgid "Reject"
 msgstr ""
 
-#: src/cookies/dialogs.c:83
+#: src/cookies/dialogs.c:70
 #, c-format
 msgid ""
 "Server: %s\n"
@@ -3535,10 +3577,14 @@ msgid ""
 "Secure: %s"
 msgstr ""
 
-#: src/cookies/dialogs.c:150
+#: src/cookies/dialogs.c:129
 #, fuzzy
 msgid "Cookie manager"
 msgstr "Ngatur bookmark"
+
+#: src/cookies/dialogs.c:134 src/dialogs/edit.c:100 src/globhist/dialogs.c:217
+msgid "Clear"
+msgstr ""
 
 #: src/dialogs/auth.c:59
 #, fuzzy, c-format
@@ -3605,10 +3651,6 @@ msgstr "Info header"
 
 #: src/dialogs/document.c:312
 msgid "No header info."
-msgstr ""
-
-#: src/dialogs/edit.c:100 src/globhist/dialogs.c:433
-msgid "Clear"
 msgstr ""
 
 #: src/dialogs/info.c:46
@@ -3733,222 +3775,227 @@ msgstr "Bookmark"
 msgid "~Cache"
 msgstr "Batal"
 
-#: src/dialogs/menu.c:338
+#: src/dialogs/menu.c:334
+msgid "Coo~kies"
+msgstr ""
+
+#: src/dialogs/menu.c:340
 msgid "Sa~ve as"
 msgstr "Simpan dengan nama lain"
 
-#: src/dialogs/menu.c:339
+#: src/dialogs/menu.c:341
 msgid "Save ~URL as"
 msgstr "Simpan ~URL"
 
-#: src/dialogs/menu.c:340
+#: src/dialogs/menu.c:342
 msgid "Save formatted ~document"
 msgstr "Simpan ~dokumen terformat"
 
-#: src/dialogs/menu.c:345
-msgid "~Kill background connections"
+#: src/dialogs/menu.c:347
+#, fuzzy
+msgid "Ki~ll background connections"
 msgstr "Habisi ~koneksi di background"
 
-#: src/dialogs/menu.c:346
+#: src/dialogs/menu.c:348
 msgid "~Flush all caches"
 msgstr "Buang semua cache"
 
-#: src/dialogs/menu.c:347
+#: src/dialogs/menu.c:349
 #, fuzzy
 msgid "Resource i~nfo"
 msgstr "~Info resource"
 
-#: src/dialogs/menu.c:349
+#: src/dialogs/menu.c:351
 msgid "~Memory info"
 msgstr "Info ~memory"
 
-#: src/dialogs/menu.c:356
+#: src/dialogs/menu.c:358
 msgid "E~xit"
 msgstr "Keluar"
 
-#: src/dialogs/menu.c:376
+#: src/dialogs/menu.c:378
 msgid "~New window"
 msgstr "Jendela baru"
 
-#: src/dialogs/menu.c:398
+#: src/dialogs/menu.c:400
 msgid "~OS shell"
 msgstr "~OS shell"
 
-#: src/dialogs/menu.c:405
+#: src/dialogs/menu.c:407
 #, fuzzy
 msgid "Resize t~erminal"
 msgstr "Ubah ukuran ~terminal"
 
-#: src/dialogs/menu.c:421
+#: src/dialogs/menu.c:423
 msgid "~Search"
 msgstr "Cari"
 
-#: src/dialogs/menu.c:422
+#: src/dialogs/menu.c:424
 msgid "Search ~backward"
 msgstr "Cari dari ~bawah ke atas"
 
-#: src/dialogs/menu.c:423
+#: src/dialogs/menu.c:425
 msgid "Find ~next"
 msgstr "Cari berikut~nya"
 
-#: src/dialogs/menu.c:424
+#: src/dialogs/menu.c:426
 msgid "Find ~previous"
 msgstr "Cari sebelumnya"
 
-#: src/dialogs/menu.c:426
+#: src/dialogs/menu.c:428
 msgid "Toggle ~html/plain"
 msgstr "Ganti ~html/teks"
 
-#: src/dialogs/menu.c:427
+#: src/dialogs/menu.c:429
 #, fuzzy
 msgid "Toggle i~mages"
 msgstr "Ganti ~html/teks"
 
-#: src/dialogs/menu.c:428
+#: src/dialogs/menu.c:430
 #, fuzzy
 msgid "Toggle ~link numbering"
 msgstr "Masukkan nomor link"
 
-#: src/dialogs/menu.c:429
+#: src/dialogs/menu.c:431
 msgid "Toggle ~document colors"
 msgstr ""
 
-#: src/dialogs/menu.c:430
+#: src/dialogs/menu.c:432
 msgid "Document ~info"
 msgstr "~Info dokumen"
 
-#: src/dialogs/menu.c:431
+#: src/dialogs/menu.c:433
 msgid "H~eader info"
 msgstr "Info header"
 
-#: src/dialogs/menu.c:432
+#: src/dialogs/menu.c:434
 msgid "Frame at ~full-screen"
 msgstr "Tampilin frame ~full-screen"
 
-#: src/dialogs/menu.c:434
+#: src/dialogs/menu.c:436
 msgid "Nex~t tab"
 msgstr ""
 
-#: src/dialogs/menu.c:435
+#: src/dialogs/menu.c:437
 #, fuzzy
 msgid "Pre~v tab"
 msgstr "Ngga ada pencarian sebelumnya"
 
-#: src/dialogs/menu.c:436
+#: src/dialogs/menu.c:438
 #, fuzzy
 msgid "~Close tab"
 msgstr "Selesai"
 
-#: src/dialogs/menu.c:442
+#: src/dialogs/menu.c:444
 msgid "~ELinks homepage"
 msgstr ""
 
-#: src/dialogs/menu.c:443
+#: src/dialogs/menu.c:445
 #, fuzzy
 msgid "~Documentation"
 msgstr "~Info dokumen"
 
-#: src/dialogs/menu.c:444
+#: src/dialogs/menu.c:446
 msgid "~Keys"
 msgstr "Tombol"
 
-#: src/dialogs/menu.c:447
+#: src/dialogs/menu.c:449
 msgid "~Bugs information"
 msgstr ""
 
-#: src/dialogs/menu.c:448
+#: src/dialogs/menu.c:450
 msgid "~ELinks CvsWeb"
 msgstr ""
 
-#: src/dialogs/menu.c:451
+#: src/dialogs/menu.c:453
 msgid "~Copying"
 msgstr "Meng~copy"
 
-#: src/dialogs/menu.c:452
+#: src/dialogs/menu.c:454
 msgid "~About"
 msgstr "Versi"
 
-#: src/dialogs/menu.c:458
+#: src/dialogs/menu.c:460
 msgid "~Add"
 msgstr "T~ambah"
 
-#: src/dialogs/menu.c:459
+#: src/dialogs/menu.c:461
 msgid "~Modify"
 msgstr "Ubah"
 
-#: src/dialogs/menu.c:460
+#: src/dialogs/menu.c:462
 msgid "~Delete"
 msgstr "Hapus"
 
-#: src/dialogs/menu.c:472 src/dialogs/menu.c:485
+#: src/dialogs/menu.c:474 src/dialogs/menu.c:487
 msgid "~Language"
 msgstr "Bahasa"
 
-#: src/dialogs/menu.c:474 src/dialogs/menu.c:486
+#: src/dialogs/menu.c:476 src/dialogs/menu.c:488
 msgid "C~haracter set"
 msgstr "Set karakter"
 
-#: src/dialogs/menu.c:475 src/dialogs/menu.c:487
+#: src/dialogs/menu.c:477 src/dialogs/menu.c:489
 msgid "~Terminal options"
 msgstr "Opsi ~terminal"
 
-#: src/dialogs/menu.c:476
+#: src/dialogs/menu.c:478
 msgid "File ~extensions"
 msgstr "~Ekstensi file"
 
-#: src/dialogs/menu.c:478
+#: src/dialogs/menu.c:480
 msgid "~Options manager"
 msgstr ""
 
-#: src/dialogs/menu.c:479
+#: src/dialogs/menu.c:481
 msgid "~Keybinding manager"
 msgstr ""
 
-#: src/dialogs/menu.c:480
+#: src/dialogs/menu.c:482
 msgid "~Save options"
 msgstr "~Simpan opsi"
 
-#: src/dialogs/menu.c:513
+#: src/dialogs/menu.c:515
 msgid "~File"
 msgstr "~File"
 
-#: src/dialogs/menu.c:514
+#: src/dialogs/menu.c:516
 msgid "~View"
 msgstr "~View"
 
-#: src/dialogs/menu.c:515
+#: src/dialogs/menu.c:517
 msgid "~Link"
 msgstr "~Link"
 
-#: src/dialogs/menu.c:516
+#: src/dialogs/menu.c:518
 msgid "~Downloads"
 msgstr "~Download"
 
-#: src/dialogs/menu.c:517
+#: src/dialogs/menu.c:519
 msgid "~Setup"
 msgstr "~Setup"
 
-#: src/dialogs/menu.c:518
+#: src/dialogs/menu.c:520
 msgid "~Help"
 msgstr "~Help"
 
-#: src/dialogs/menu.c:533
+#: src/dialogs/menu.c:535
 msgid "Go to URL"
 msgstr "Pilih URL"
 
-#: src/dialogs/menu.c:533 src/dialogs/menu.c:544
+#: src/dialogs/menu.c:535 src/dialogs/menu.c:546
 msgid "Enter URL"
 msgstr "Masukin URL"
 
-#: src/dialogs/menu.c:544
+#: src/dialogs/menu.c:546
 msgid "Save URL"
 msgstr "Simpan URL"
 
-#: src/dialogs/menu.c:575 src/sched/download.c:412 src/sched/download.c:561
+#: src/dialogs/menu.c:577 src/sched/download.c:412 src/sched/download.c:561
 msgid "Download"
 msgstr "Download"
 
-#: src/dialogs/menu.c:575
+#: src/dialogs/menu.c:577
 msgid "Save to file"
 msgstr "Simpan ke file"
 
@@ -4077,45 +4124,7 @@ msgstr ""
 msgid "Forms History"
 msgstr "Memory habis"
 
-#: src/globhist/dialogs.c:95
-msgid "Search history"
-msgstr ""
-
-#: src/globhist/dialogs.c:185 src/globhist/dialogs.c:271
-#: src/globhist/dialogs.c:280
-msgid "Delete history item"
-msgstr ""
-
-#: src/globhist/dialogs.c:186
-#, c-format
-msgid ""
-"Sorry, but this history entry is already being used by something right now.\n"
-"\n"
-"Title: \"%s\"\n"
-"URL: \"%s\"\n"
-msgstr ""
-
-#: src/globhist/dialogs.c:272
-msgid "Delete marked history items?"
-msgstr ""
-
-#: src/globhist/dialogs.c:281
-#, fuzzy, c-format
-msgid ""
-"Delete history item \"%s\"?\n"
-"\n"
-"URL: \"%s\""
-msgstr "Hapus bookmark"
-
-#: src/globhist/dialogs.c:323
-msgid "Clear global history"
-msgstr ""
-
-#: src/globhist/dialogs.c:324
-msgid "Clear global history?"
-msgstr ""
-
-#: src/globhist/dialogs.c:357
+#: src/globhist/dialogs.c:55
 #, c-format
 msgid ""
 "Title: %s\n"
@@ -4123,55 +4132,59 @@ msgid ""
 "Last visit time: %s"
 msgstr ""
 
-#: src/globhist/dialogs.c:419 src/globhist/globhist.c:69
+#: src/globhist/dialogs.c:109
+msgid "Search history"
+msgstr ""
+
+#: src/globhist/dialogs.c:206 src/globhist/globhist.c:68
 msgid "Global history"
 msgstr ""
 
-#: src/globhist/dialogs.c:428
+#: src/globhist/dialogs.c:212
 #, fuzzy
 msgid "Bookmark"
 msgstr "Bookmark"
 
-#: src/globhist/globhist.c:71
+#: src/globhist/globhist.c:70
 msgid "Global history options."
 msgstr ""
 
-#: src/globhist/globhist.c:76
+#: src/globhist/globhist.c:75
 msgid "Enable global history (\"history of all pages visited\")."
 msgstr ""
 
-#: src/globhist/globhist.c:78
+#: src/globhist/globhist.c:77
 msgid "Maximum number of entries"
 msgstr ""
 
-#: src/globhist/globhist.c:80
+#: src/globhist/globhist.c:79
 msgid "Maximum number of entries in the global history."
 msgstr ""
 
-#: src/globhist/globhist.c:82
+#: src/globhist/globhist.c:81
 #, fuzzy
 msgid "Display style"
 msgstr "Tampilkan ~usemap"
 
-#: src/globhist/globhist.c:84
+#: src/globhist/globhist.c:83
 msgid ""
 "What to display in global history dialog:\n"
 "0 is URLs\n"
 "1 is page titles"
 msgstr ""
 
-#: src/globhist/globhist.c:88
+#: src/globhist/globhist.c:87
 msgid "Auto-save interval"
 msgstr ""
 
-#: src/globhist/globhist.c:90
+#: src/globhist/globhist.c:89
 msgid ""
 "Interval at which to write global history to disk if it\n"
 "has changed (seconds; 0 to disable)"
 msgstr ""
 
 #. name:
-#: src/globhist/globhist.c:544
+#: src/globhist/globhist.c:493
 #, fuzzy
 msgid "Global History"
 msgstr "Ngga ada history"
@@ -4499,11 +4512,11 @@ msgstr "Ngga ada program yang dispesifikasikan untuk"
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
 #. * be introduced to this fuggy corner of code as well. --pasky
-#: src/sched/download.c:221 src/sched/session.c:90
+#: src/sched/download.c:221 src/sched/session.c:93
 msgid "Received"
 msgstr "Diterima"
 
-#: src/sched/download.c:227 src/sched/session.c:95
+#: src/sched/download.c:227 src/sched/session.c:98
 msgid "of"
 msgstr "dari"
 
@@ -4601,41 +4614,41 @@ msgid ""
 "%s"
 msgstr "Ngga bisa buat file"
 
-#: src/sched/download.c:1225 src/sched/download.c:1236
+#: src/sched/download.c:1221 src/sched/download.c:1232
 msgid "Unknown type"
 msgstr "Tipe ngga dikenal"
 
-#: src/sched/download.c:1226
+#: src/sched/download.c:1222
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 
-#: src/sched/download.c:1232 src/sched/download.c:1241
-#: src/sched/download.c:1268 src/sched/download.c:1280
+#: src/sched/download.c:1228 src/sched/download.c:1237
+#: src/sched/download.c:1264 src/sched/download.c:1276
 msgid "Display"
 msgstr "Tampilkan"
 
-#: src/sched/download.c:1237
+#: src/sched/download.c:1233
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 
-#: src/sched/download.c:1259 src/sched/download.c:1272
+#: src/sched/download.c:1255 src/sched/download.c:1268
 msgid "What to do?"
 msgstr "Apa yang harus dilakukan?"
 
-#: src/sched/download.c:1260
+#: src/sched/download.c:1256
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
 
-#: src/sched/download.c:1266 src/sched/download.c:1279
+#: src/sched/download.c:1262 src/sched/download.c:1275
 msgid "Open"
 msgstr "Buka"
 
-#: src/sched/download.c:1273
+#: src/sched/download.c:1269
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4772,47 +4785,47 @@ msgstr "Versi ELinks ini tidak mendukung SSL"
 msgid "Unknown error"
 msgstr "Kesalahan ngga dikenal"
 
-#: src/sched/session.c:101
+#: src/sched/session.c:104
 msgid "avg"
 msgstr "rata-rata"
 
-#: src/sched/session.c:109
+#: src/sched/session.c:112
 msgid "cur"
 msgstr "skrg"
 
-#: src/sched/session.c:296
+#: src/sched/session.c:299
 msgid "Untitled"
 msgstr ""
 
-#: src/sched/session.c:298
+#: src/sched/session.c:301
 #, fuzzy
 msgid "No document"
 msgstr "dokumen"
 
-#: src/sched/session.c:674
+#: src/sched/session.c:687
 #, fuzzy, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Apakah kamu mau mengirim data dan ikutin redirect"
 
-#: src/sched/session.c:677
+#: src/sched/session.c:690
 #, fuzzy, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Apakah kamu mau mengirim data"
 
-#: src/sched/session.c:679
+#: src/sched/session.c:692
 #, fuzzy, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Apakah kamu mau mengirim ulang data"
 
-#: src/sched/session.c:685 src/sched/session.c:1252 src/sched/session.c:1272
+#: src/sched/session.c:698 src/sched/session.c:1275 src/sched/session.c:1295
 msgid "Warning"
 msgstr "Awas"
 
-#: src/sched/session.c:1242
+#: src/sched/session.c:1265
 msgid "Welcome"
 msgstr "Selamat datang"
 
-#: src/sched/session.c:1243
+#: src/sched/session.c:1266
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -4821,7 +4834,7 @@ msgid ""
 msgstr ""
 "Tekan ESC untuk menu. Pilih Help->Manual di menu untuk manual penggunaan."
 
-#: src/sched/session.c:1253
+#: src/sched/session.c:1276
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -4832,7 +4845,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1273
+#: src/sched/session.c:1296
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -4845,25 +4858,25 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1533
+#: src/sched/session.c:1562
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."
 msgstr ""
 
-#: src/scripting/lua/core.c:455
+#: src/scripting/lua/core.c:469
 msgid "User dialog"
 msgstr ""
 
-#: src/scripting/lua/core.c:571
+#: src/scripting/lua/core.c:585
 msgid "Lua Error"
 msgstr ""
 
-#: src/scripting/lua/core.c:699
+#: src/scripting/lua/core.c:713
 msgid "Lua Console"
 msgstr ""
 
-#: src/scripting/lua/core.c:699
+#: src/scripting/lua/core.c:713
 msgid "Enter expression"
 msgstr ""
 
@@ -4926,21 +4939,21 @@ msgstr ""
 msgid "SSL options."
 msgstr "~Simpan opsi"
 
-#: src/terminal/event.c:90
+#: src/terminal/event.c:89
 #, fuzzy, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "Ngga bisa buat file"
 
-#: src/terminal/event.c:110
+#: src/terminal/event.c:109
 #, c-format
 msgid "Bad event %d"
 msgstr ""
 
-#: src/terminal/event.c:147
+#: src/terminal/event.c:146
 msgid "Warning: terminal name contains illicit chars."
 msgstr ""
 
-#: src/terminal/event.c:169
+#: src/terminal/event.c:168
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr ""
@@ -5109,49 +5122,49 @@ msgstr "kirim ke"
 msgid "post to"
 msgstr "kirim ke"
 
-#: src/viewer/text/search.c:847
+#: src/viewer/text/search.c:848
 msgid "No previous search"
 msgstr "Ngga ada pencarian sebelumnya"
 
-#: src/viewer/text/search.c:873
+#: src/viewer/text/search.c:874
 msgid "Search hit bottom, continuing at top."
 msgstr ""
 
-#: src/viewer/text/search.c:879
+#: src/viewer/text/search.c:880
 msgid "Search hit top, continuing at bottom."
 msgstr ""
 
-#: src/viewer/text/search.c:900
+#: src/viewer/text/search.c:901
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Kata yang dicari ngga ketemu"
 
-#: src/viewer/text/search.c:1048
+#: src/viewer/text/search.c:1049
 #, fuzzy
 msgid "Normal search"
 msgstr "Ngga ada pencarian sebelumnya"
 
-#: src/viewer/text/search.c:1049
+#: src/viewer/text/search.c:1050
 msgid "Regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1050
+#: src/viewer/text/search.c:1051
 msgid "Extended regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1051
+#: src/viewer/text/search.c:1052
 msgid "Case sensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1052
+#: src/viewer/text/search.c:1053
 msgid "Case insensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1068
+#: src/viewer/text/search.c:1069
 msgid "Search backward"
 msgstr "Cari dari bawah ke atas"
 
-#: src/viewer/text/search.c:1068 src/viewer/text/search.c:1079
+#: src/viewer/text/search.c:1069 src/viewer/text/search.c:1080
 msgid "Search for text"
 msgstr "Cari teks"
 
@@ -5159,21 +5172,28 @@ msgstr "Cari teks"
 msgid "You can do this only on the master terminal"
 msgstr ""
 
-#: src/viewer/text/view.c:726
+#: src/viewer/text/view.c:728
 msgid "Go to link"
 msgstr "Pilih link"
 
-#: src/viewer/text/view.c:726
+#: src/viewer/text/view.c:728
 msgid "Enter link number"
 msgstr "Masukkan nomor link"
 
-#: src/viewer/text/view.c:1408
+#: src/viewer/text/view.c:1415
 msgid "Save error"
 msgstr "Kesalahan penyimpanan"
 
-#: src/viewer/text/view.c:1409
+#: src/viewer/text/view.c:1416
 msgid "Error writing to file"
 msgstr "Kesalahan menulis ke file"
+
+#, fuzzy
+#~ msgid ""
+#~ "Delete history item \"%s\"?\n"
+#~ "\n"
+#~ "URL: \"%s\""
+#~ msgstr "Hapus bookmark"
 
 #, fuzzy
 #~ msgid "No entry."

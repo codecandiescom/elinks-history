@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.41 2003/11/12 00:29:45 zas Exp $ */
+/* $Id: cache.h,v 1.42 2003/11/12 00:33:30 zas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -9,6 +9,10 @@
  * under what conditions shall it be reloaded, if ever. The one with lowest
  * value is most agressively cached, however the cache is most reluctant to
  * cache the one with highest value. */
+/* I think that cache_mode is unintuitive in that incrementing _lowers_ the
+ * chance of using the cache. --Miciah */
+/* TODO: invert order to be more intuitive. But be careful many tests rely on
+ * current order. --Zas */
 enum cache_mode {
 	CACHE_MODE_INCREMENT = -1,
 	CACHE_MODE_ALWAYS,

@@ -1,9 +1,10 @@
-/* $Id: connection.h,v 1.1 2004/08/14 07:53:15 jonas Exp $ */
+/* $Id: connection.h,v 1.2 2004/08/17 13:39:19 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_NNTP_CONNECTION_H
 #define EL__PROTOCOL_NNTP_CONNECTION_H
 
 #include "protocol/nntp/codes.h"
+#include "protocol/protocol.h"
 #include "util/string.h"
 
 /* An NNTP target is a mapping from a given URI which in short form tells what
@@ -82,17 +83,11 @@ struct nntp_connection_info {
 };
 
 #ifdef CONFIG_NNTP
-
-#include "protocol/protocol.h"
-
 extern protocol_handler nntp_protocol_handler;
 extern protocol_handler news_protocol_handler;
-
 #else
-
 #define nntp_protocol_handler NULL
 #define news_protocol_handler NULL
-
 #endif
 
 #endif

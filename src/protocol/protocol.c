@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.25 2003/11/12 01:42:51 miciah Exp $ */
+/* $Id: protocol.c,v 1.26 2003/11/12 01:44:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ get_protocol_external_handler(unsigned char *url)
 		} else
 			break;
 
-	};
+	}
 
 	if (*end != ':' || end == url) return NULL; /* No valid protocol scheme. */
 

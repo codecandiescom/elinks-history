@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.63 2004/04/19 15:56:46 zas Exp $ */
+/* $Id: status.c,v 1.64 2004/04/22 17:48:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,6 +261,8 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		if (ses->status.show_leds)
 			xend -= LEDS_COUNT + 2;
 #endif
+		/* FIXME: Figure out how to substract with of the digital clock
+		 * so the progress bar is not drawn on top of it. --jonas */
 
 		if (xend - msglen < 6) return;
 		width = int_min(20, xend - msglen - 1);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.35 2003/05/17 20:53:55 pasky Exp $ */
+/* $Id: download.c,v 1.36 2003/06/04 08:56:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,31 +223,31 @@ download_window_function(struct dialog_data *dlg)
 
 		t = 1;
 		add_to_str(&m, &l, _("Received", term));
-		add_to_str(&m, &l, " ");
+		add_chr_to_str(&m, &l, ' ');
 		add_xnum_to_str(&m, &l, status->prg->pos);
 
 		if (status->prg->size >= 0) {
-			add_to_str(&m, &l, " ");
+			add_chr_to_str(&m, &l, ' ');
 			add_to_str(&m, &l, _("of",term));
-			add_to_str(&m, &l, " ");
+			add_chr_to_str(&m, &l, ' ');
 			add_xnum_to_str(&m, &l, status->prg->size);
-			add_to_str(&m, &l, " ");
+			add_chr_to_str(&m, &l, ' ');
 		}
 		if (status->prg->start > 0) {
-			add_to_str(&m, &l, "(");
+			add_chr_to_str(&m, &l, '(');
 			add_xnum_to_str(&m, &l, status->prg->pos
 						- status->prg->start);
-			add_to_str(&m, &l, " ");
+			add_chr_to_str(&m, &l, ' ');
 			add_to_str(&m, &l, _("after resume", term));
-			add_to_str(&m, &l, ")");
+			add_chr_to_str(&m, &l, ')');
 		}
-		add_to_str(&m, &l, "\n");
+		add_chr_to_str(&m, &l, '\n');
 
 		if (status->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
 			add_to_str(&m, &l, _("Average speed", term));
 		else add_to_str(&m, &l, _("Speed", term));
 
-		add_to_str(&m, &l, " ");
+		add_chr_to_str(&m, &l, ' ');
 		add_xnum_to_str(&m, &l, (longlong) status->prg->loaded * 10
 					/ (status->prg->elapsed / 100));
 		add_to_str(&m, &l, "/s");
@@ -255,22 +255,22 @@ download_window_function(struct dialog_data *dlg)
 		if (status->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 			add_to_str(&m, &l, ", ");
 			add_to_str(&m, &l, _("current speed", term));
-			add_to_str(&m, &l, " ");
+			add_chr_to_str(&m, &l, ' ');
 			add_xnum_to_str(&m, &l, status->prg->cur_loaded
 						/ (CURRENT_SPD_SEC *
 						   SPD_DISP_TIME / 1000));
 			add_to_str(&m, &l, "/s");
 		}
 
-		add_to_str(&m, &l, "\n");
+		add_chr_to_str(&m, &l, '\n');
 		add_to_str(&m, &l, _("Elapsed time", term));
-		add_to_str(&m, &l, " ");
+		add_chr_to_str(&m, &l, ' ');
 		add_time_to_str(&m, &l, status->prg->elapsed);
 
 		if (status->prg->size >= 0 && status->prg->loaded > 0) {
 			add_to_str(&m, &l, ", ");
 			add_to_str(&m, &l, _("estimated time", term));
-			add_to_str(&m, &l, " ");
+			add_chr_to_str(&m, &l, ' ');
 #if 0
 			add_time_to_str(&m, &l, stat->prg->elapsed
 						/ 1000 * stat->prg->size

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.157 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: dialogs.c,v 1.158 2004/05/22 13:06:00 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -27,6 +27,7 @@
 #include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/object.h"
@@ -568,31 +569,23 @@ launch_bm_add_link_dialog(struct terminal *term,
 void
 bookmark_terminal_tabs_dialog(struct terminal *term)
 {
-	unsigned char buffer[MAX_STR_LEN];
-	unsigned char *template = _("Saved session", term);
-	int length = strlen(template);
+	struct string string;
 
-	if (length + 4 >= MAX_STR_LEN) return;
+	if (!init_string(&string)) return;
 
-	memcpy(buffer, template, length + 1);
+	add_to_string(&string, _("Saved session", term));
 
 #ifdef HAVE_STRFTIME
-	{
-		ttime when_time = time(NULL);
-		struct tm *when_local = localtime(&when_time);
-		unsigned char *timepos = buffer + length + 3;
-		int timelength = sizeof(buffer) - length - 4;
-		int wr;
-
-		wr = strftime(timepos, timelength, "%b %e %H:%M", when_local);
-		if (wr > 0) memcpy(buffer + length, " - ", 3);
-	}
+	add_to_string(&string, " - ");
+	add_date_to_string(&string, "%b %e %H:%M", NULL);
 #endif
 
 	input_field(term, NULL, 1,
 		    N_("Bookmark tabs"), N_("Enter folder name"),
 		    N_("OK"), N_("Cancel"), term, NULL,
-		    MAX_STR_LEN, buffer, 0, 0, NULL,
+		    MAX_STR_LEN, string.source, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) bookmark_terminal_tabs,
 		    NULL);
+
+	done_string(&string);
 }

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.166 2004/05/21 11:57:50 jonas Exp $ */
+/* $Id: file.c,v 1.167 2004/05/22 13:06:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,10 +214,7 @@ stat_date(struct string *string, struct stat *stp)
 	if (stp) {
 		time_t current_time = time(NULL);
 		time_t when = stp->st_mtime;
-		struct tm *when_local = localtime(&when);
 		unsigned char *fmt;
-		unsigned char str[13];
-		int wr;
 
 		if (current_time > when + 6L * 30L * 24L * 60L * 60L
 		    || current_time < when - 60L * 60L)
@@ -225,11 +222,7 @@ stat_date(struct string *string, struct stat *stp)
 		else
 			fmt = "%b %e %H:%M";
 
-		wr = strftime(str, sizeof(str), fmt, when_local);
-
-		while (wr < sizeof(str) - 1) str[wr++] = ' ';
-		str[sizeof(str) - 1] = '\0';
-		add_to_string(string, str);
+		add_date_to_string(string, fmt, &when);
 		add_char_to_string(string, ' ');
 		return;
 	}

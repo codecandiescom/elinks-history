@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.133 2004/05/21 11:39:54 jonas Exp $ */
+/* $Id: cookies.c,v 1.134 2004/05/22 13:06:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -525,31 +525,23 @@ accept_cookie_never(void *idp)
 static void
 accept_cookie_dialog(struct session *ses, void *data)
 {
-#ifdef HAVE_STRFTIME
-	unsigned char str[14];
-#endif
 	struct cookie *cookie = cookie_queries.next;
-	unsigned char *expires = NULL;
+	struct string string;
 
 	assert(ses);
 
-	if (list_empty(cookie_queries)) return;
+	if (list_empty(cookie_queries)
+	    || !init_string(&string))
+		return;
 
 	del_from_list(cookie);
 
 #ifdef HAVE_STRFTIME
 	if (cookie->expires) {
-		struct tm *when_local = localtime(&cookie->expires);
-		int wr = strftime(str, sizeof(str) - 1, "%b %e %H:%M", when_local);
-
-		if (wr > 0) {
-			str[wr] = 0;
-			expires = str;
-		}
-	}
+		add_date_to_string(&string, "%b %e %H:%M", &cookie->expires);
+	} else
 #endif
-
-	if (!expires) expires = _("at quit time",  ses->tab->term);
+		add_to_string(&string, _("at quit time",  ses->tab->term));
 
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 		N_("Accept cookie?"), AL_LEFT,
@@ -561,11 +553,13 @@ accept_cookie_dialog(struct session *ses, void *data)
 		"Expires: %s\n"
 		"Secure: %s\n"),
 		cookie->server, cookie->name, cookie->value,
-		cookie->domain, expires,
+		cookie->domain, string.source,
 		_(cookie->secure ? N_("yes") : N_("no"), ses->tab->term)),
 		cookie, 2,
 		N_("Accept"), accept_cookie, B_ENTER,
 		N_("Reject"), free_cookie, B_ESC);
+
+	done_string(&string);
 }
 
 

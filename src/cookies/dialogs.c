@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.45 2004/05/20 23:02:54 jonas Exp $ */
+/* $Id: dialogs.c,v 1.46 2004/05/22 13:06:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,13 +82,8 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 
 #ifdef HAVE_STRFTIME
 	if (cookie->expires) {
-		struct tm *when_local = localtime(&cookie->expires);
-		unsigned char str[13];
-		int wr = strftime(str, sizeof(str), "%b %e %H:%M", when_local);
-
-		if (wr > 0)
-			add_format_to_string(&string,
-				"\n%s: %s", _("Expires", term), str);
+		add_format_to_string(&string, "\n%s: ", _("Expires", term));
+		add_date_to_string(&string, "%b %e %H:%M", &cookie->expires);
 	}
 #endif
 

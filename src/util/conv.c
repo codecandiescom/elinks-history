@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.53 2004/04/04 03:09:19 jonas Exp $ */
+/* $Id: conv.c,v 1.54 2004/05/22 13:06:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"
+#include "util/ttime.h"
 
 
 
@@ -233,6 +234,18 @@ add_time_to_string(struct string *string, ttime time)
 	return string;
 }
 
+struct string *
+add_date_to_string(struct string *string, unsigned char *fmt, ttime *date)
+{
+	unsigned char buffer[MAX_STR_LEN];
+	ttime when_time = date ? *date : time(NULL);
+	struct tm *when_local = localtime(&when_time);
+
+	if (strftime(buffer, sizeof(buffer), fmt, when_local) <= 0)
+		return NULL;
+
+	return add_to_string(string, buffer);
+}
 
 /* Encoders and string changers */
 

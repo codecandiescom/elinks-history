@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.29 2004/04/05 01:17:20 jonas Exp $ */
+/* $Id: conv.h,v 1.30 2004/05/22 13:06:00 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -52,6 +52,10 @@ struct string *add_long_to_string(struct string *string, long number);
 struct string *add_knum_to_string(struct string *string, long number);
 struct string *add_xnum_to_string(struct string *string, int number);
 struct string *add_time_to_string(struct string *string, ttime time);
+
+/* Uses strftime() to add @fmt time format to @string. If @time is NULL
+ * time(NULL) will be used. */
+struct string *add_date_to_string(struct string *string, unsigned char *format, ttime *time);
 
 
 /* Encoders: */

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.149 2003/07/04 13:34:48 jonas Exp $ */
+/* $Id: http.c,v 1.150 2003/07/04 19:27:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -669,31 +669,33 @@ http_send_header(struct connection *conn)
 
 	add_to_str(&hdr, &l, "\r\n");
 
-	while (post && post[0] && post[1]) {
-		int h1, h2;
+	if (post) {
+#define POST_BUFFER_SIZE 4096		
+		unsigned char buffer[POST_BUFFER_SIZE];
+		int n = 0;
+		
+		while (post[0] && post[1]) {
+			register int h1, h2;
 
-		h1 = post[0] <= '9' ? post[0] - '0'
-				    : post[0] >= 'A' ? upcase(post[0])
-				    		       - 'A' + 10
-						     : 0;
-
-		if (h1 < 0 || h1 >= 16) {
-			h1 = 0;
+			h1 = unhx(post[0]);
+			assert(h1 >= 0 && h1 < 16);
+		
+			h2 = unhx(post[1]);
+			assert(h2 >= 0 && h2 < 16);
+	
+			buffer[n++] = (h1<<4) + h2;
+			post += 2;
+			if (n == POST_BUFFER_SIZE) {
+				add_bytes_to_str(&hdr, &l, buffer, n);
+				n = 0;
+			}
 		}
-
-		h2 = post[1] <= '9' ? post[1] - '0'
-				    : post[1] >= 'A' ? upcase(post[1])
-				    		       - 'A' + 10
-						     : 0;
-
-		if (h2 < 0 || h2 >= 16) {
-			h2 = 0;
-		}
-
-		add_chr_to_str(&hdr, &l, h1 * 16 + h2);
-		post += 2;
+		
+		if (n)
+			add_bytes_to_str(&hdr, &l, buffer, n);
+#undef POST_BUFFER_SIZE
 	}
-
+		
 	write_to_socket(conn, conn->sock1, hdr, l, http_get_header);
 	mem_free(hdr);
 

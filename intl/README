@@ -8,4 +8,31 @@ Menu hotkeys are also translated via this interface. You can specify more
 hotkeys. When using normal letters as hotkeys, always use upper case. When using
 some characters above 128, specify both upper and lower letters.
 
+===
+
+There's a nice guide written by Petr Kulhavy <brain@artax.karlin.mff.cuni.cz>:
+
+Instructions how to add a new language to links:
+
+ 1) cd intl
+ 2) cp english.lng your_language.lng
+ 3) vi your language.lng
+ 4) change the string in quotes on the line T__CHAR_SET (first line of
+    the file) to the charset of your translation
+ 5) change the string in quotes on the line T__LANGUAGE (second line) to
+    name of your language
+ 6) translate all the texts (T_<something>) to your language, don't mangle
+    small and capital letters
+ 7) change the hotkeys (T_HK_<something>) to hotkey you want
+ 8) vi index.txt
+ 9) add your language (only the name without the .lng suffix) to
+    index.txt on single line
+10) ./synclang
+11) cd ..
+12) make
+13) check if the translation is correct
+14) send it to links-discuss
+
+===
+
 vim: textwidth=80

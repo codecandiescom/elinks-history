@@ -1,3 +1,24 @@
+Thu Sep 19 15:49:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/osdep/: os_dep.h, os_depx.h:
+
+	More OS/2 fixes - define USE_OPEN_PREALLOC soon enough; unify EMX
+	wrappers, define HAVE_STRNCASECMP because we wrap it to strnicmp. By
+	criguada.  
+
+Thu Sep 19 15:25:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/elinks.vim:
+
+	Update of elinks.vim by Jonas, based also on some suggestions by
+	Zas.  
+
+Thu Sep 19 15:24:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Depth has now 5 bytes, synced reading and writing; thanks, zas.  
+
 Wed Sep 18 17:23:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.133 2003/11/27 01:55:51 jonas Exp $ */
+/* $Id: search.c,v 1.134 2003/12/01 16:05:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,8 @@
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
 #include "bfu/text.h"
+#include "document/document.h"
+#include "document/view.h"
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.29 2003/11/26 22:26:30 pasky Exp $ */
+/* $Id: protocol.c,v 1.30 2003/12/01 16:05:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/session.h"
+#include "terminal/window.h"
 #include "util/memory.h"
 #include "util/string.h"
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.64 2003/12/01 15:35:51 pasky Exp $ */
+/* $Id: form.c,v 1.65 2003/12/01 16:05:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,8 @@
 
 #include "bfu/msgbox.h"
 #include "config/kbdbind.h"
+#include "document/document.h"
+#include "document/view.h"
 #include "intl/gettext/libintl.h"
 #include "formhist/formhist.h"
 #include "osdep/ascii.h"
@@ -28,6 +30,7 @@
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
+#include "terminal/window.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"

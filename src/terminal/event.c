@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.18 2003/11/27 14:05:21 jonas Exp $ */
+/* $Id: event.c,v 1.19 2003/12/01 16:05:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/timer.h"
 #include "sched/session.h"
+#include "terminal/draw.h"
 #include "terminal/event.h"
 #include "terminal/kbd.h"
 #include "terminal/tab.h"

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.58 2003/09/17 01:30:51 jonas Exp $ */
+/* $Id: charsets.c,v 1.59 2003/09/26 12:51:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,7 @@ u2cp(unicode_val u, int to)
 	BIN_SEARCH(unicode_7b, x, N_UNICODE_7B, u, s);
 	if (s != -1) return unicode_7b[s].s;
 
-	return NULL;
+	return "¤";
 }
 
 unsigned char utf_buffer[7];
@@ -464,7 +464,6 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 	}
 
 	if (*str == '#') { /* Numeric entity. */
-		/* Limit to 0xFFFF. Chinese/Korean Unicode may need greater value. */
 		int l = (int) strlen;
 		unsigned char *st = (unsigned char *) str;
 		unicode_val n = 0;
@@ -473,7 +472,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 		st++, l--;
 		if ((*st | 32) == 'x') { /* Hexadecimal */
 
-			if (l == 1 || l > 5) goto end; /* xFFFF max. */
+			if (l == 1 || l > 9) goto end; /* xFFFFFFFF max. */
 			st++, l--;
 			do {
 				unsigned char c = (*(st++) | 32);
@@ -486,7 +485,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 					goto end; /* Bad char. */
 			} while (--l);
 		} else { /* Decimal */
-			if (l > 5) goto end; /* 65535 max. */
+			if (l > 10) goto end; /* 4294967295 max. */
 			do {
 				unsigned char c = *(st++);
 
@@ -494,8 +493,9 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 					n = n * 10 + c - '0';
 				else
 					goto end; /* Bad char. */
-				/* Limit to 0xFFFF. */
-				if (n >= 0x10000) goto end;
+				/* Limit to 0xFFFFFFFF. */
+				if (n == (unicode_val) 0xFFFFFFFF)
+					goto end;
 			} while (--l);
 		}
 

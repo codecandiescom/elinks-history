@@ -255,8 +255,7 @@ EL_ARG_ENABLE(CONFIG_BOOKMARKS, bookmarks, [Bookmarks],
 AM_CONDITIONAL(CONFIG_BOOKMARKS, test "$CONFIG_BOOKMARKS" = yes)
 
 # Check whether --enable-xbel or --disable-xbel was given.
-if test "${enable_xbel+set}" = set &&
-   test "x$enable_xbel" = xyes; then
+if test "x${enable_xbel}" != xno; then
 	AC_CHECK_HEADERS(expat.h, HAVE_LIBEXPAT=yes, HAVE_LIBEXPAT=no)
 
 	if test "$HAVE_LIBEXPAT" = yes; then

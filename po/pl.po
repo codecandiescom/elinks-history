@@ -1,17 +1,17 @@
 # Polish ELinks translation.
 # Arkadiusz Sochala <jojoro@priv2.onet.pl>
 # Grzegorz Golawski <grzegol@pld.org.pl>
-# Jakub Bogusz <qboosh@pld.org.pl>, 2002
+# Jakub Bogusz <qboosh@pld-linux.org>, 2002-2003
 # Wojtek Bojdo/l <wojboj@lp.net.pl>
-# Witold Filipczyk <witekfl@poczta.onet.pl>, 2001 - 2002
+# Witold Filipczyk <witekfl@pld-linux.org>, 2001 - 2003
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-09-30 18:22+0200\n"
-"PO-Revision-Date: 2003-09-26 23:13+0200\n"
-"Last-Translator: Witold Filipczyk <witekfl@poczta.onet.pl>\n"
+"PO-Revision-Date: 2003-10-04 23:13+0200\n"
+"Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
@@ -542,7 +542,7 @@ msgstr "Otwórz okienko dialogowe \"Id¼ do\""
 
 #: src/config/kbdbind.c:395
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr "Otwórz okienko dialogowe \"Id¼ do\" z bie¿±cym URLem"
+msgstr "Otwórz okienko dialogowe \"Id¼ do\" z bie¿±cym URL-em"
 
 #: src/config/kbdbind.c:396
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
@@ -582,7 +582,7 @@ msgstr "Przesuñ kursor w lewo"
 
 #: src/config/kbdbind.c:405
 msgid "Open the link context menu"
-msgstr "Otwórz menu kontekstu odno¶nika"
+msgstr "Otwórz menu kontekstowe dla odno¶nika"
 
 #: src/config/kbdbind.c:406
 msgid "Jump to link"
@@ -731,7 +731,7 @@ msgstr "Powiêksz bie¿±c± ramkê"
 
 #: src/config/kbdbind.c:638
 msgid "Unrecognised keymap"
-msgstr "Nierozpozana mapa klawiszy"
+msgstr "Nierozpoznana mapa klawiszy"
 
 #: src/config/kbdbind.c:640
 msgid "Error parsing keystroke"
@@ -831,7 +831,7 @@ msgid ""
 msgstr ""
 "Format pliku zak³adek (dotyczy i odczytu, i zapisu):\n"
 "0 - domy¶lny format ELinksa (kompatybilny z Linksem 0.9x)\n"
-"1 - XBEL uniwersalny format XML(BEZ WSPARCIA DLA ZNAKÓW NARODOWYCH!)"
+"1 - XBEL uniwersalny format XML(BEZ OBS£UGI ZNAKÓW NARODOWYCH!)"
 
 #: src/config/options.c:900
 msgid ""
@@ -842,7 +842,7 @@ msgid ""
 msgstr ""
 "Format pliku zak³adek (dotyczy i odczytu, i zapisu):\n"
 "0 - domy¶lny format ELinksa (kompatybilny z Linksem 0.9x)\n"
-"1 - XBEL uniwersalny format XML(BEZ WSPARCIA DLA ZNAKÓW NARODOWYCH!) "
+"1 - XBEL uniwersalny format XML(BEZ OBS£UGI ZNAKÓW NARODOWYCH!) "
 "(WY£¡CZONE)"
 
 #
@@ -888,7 +888,7 @@ msgid ""
 "file. Zero means that no indentation is performed at all\n"
 "when saving the configuration."
 msgstr ""
-"Szeroko¶æ jednej tabulacji w pliku konfiguracujnym\n"
+"Szeroko¶æ jednej tabulacji w pliku konfiguracyjnym\n"
 "Zero oznacza brak wciêæ w pliku konfiguracyjnym."
 
 #: src/config/options.c:930
@@ -1322,7 +1322,7 @@ msgid ""
 "1 if document.browse.links.numbering = 1\n"
 "2 always"
 msgstr ""
-"Klawisze z cyframi raczej wybieraj± odno¶niki ni¿ stanowi± przedrostki\n"
+"Klawisze z cyframi wybieraj± odno¶niki, a nie stanowi± przedrostki\n"
 "dla komend. To jest trójstanowe:\n"
 "0 - nigdy\n"
 "1 - je¶li document.browse.links.numbering = 1\n"
@@ -1437,7 +1437,7 @@ msgstr ""
 "Takie by³o dotychczasowe zachowanie, ale mo¿e ono powodowaæ problemy\n"
 "z systemami logowania opartymi o www - czêsto, gdy odwiedzasz pewn±\n"
 "lokacjê, serwer przekierowuje Ciê do strony logowania, je¶li nie otrzyma\n"
-"autentykacyjnego ciasteczka, strona logowania ustala to ciasteczko\n"
+"uwierzytelniaj±cego ciasteczka, strona logowania ustala to ciasteczko\n"
 "i odsy³a Ciê z powrotem do poprzedniej strony, ale wtedy\n"
 "jest ju¿ zbuforowane przekierowanie do strony logowania!\n"
 "Gdy opcja ma warto¶æ 0 ta nieprawid³owo¶æ nie zachodzi, choæ czasami\n"
@@ -1895,7 +1895,7 @@ msgstr "Czy pamiêtaæ historiê powrotów?"
 #
 #: src/config/options.c:1372
 msgid "HTML rendering"
-msgstr "Renderowanie HTMLa"
+msgstr "Renderowanie HTML-a"
 
 #: src/config/options.c:1374
 msgid "Options concerning the display of HTML pages."
@@ -1993,10 +1993,10 @@ msgid ""
 "should contain (case-sensitive) name of the MIME handler (its\n"
 "properties are stored at mime.handler.<name>)."
 msgstr ""
-"Uchwyt <-> skojarzenie typu MIME . Pierwsze poddrzewo to typ MIME,\n"
-"drugie to podtyp MIME (np. image/gif\n"
-"uchwyt bêdzie w mime.type.image.gif). Ka¿da opcja typu MIME\n"
-"powinna zawieraæ (wielko¶æ liter ma znaczenie) nazwê uchwytu MIME (jego\n"
+"Skojarzenia program obs³ugi <-> typ MIME. Pierwsze poddrzewo to typ\n"
+"MIME, drugie to podtyp MIME (np. program obs³ugi image/gif bêdzie\n"
+"w mime.type.image.gif). Ka¿da opcja typu MIME powinna zawieraæ\n"
+"(wielko¶æ liter ma znaczenie) nazwê programu obs³ugi MIME (jego\n"
 "w³a¶ciwo¶ci s± zapisane w mime.handler.<nazwa>)."
 
 #: src/config/options.c:1425
@@ -2004,36 +2004,36 @@ msgid ""
 "Handler matching this MIME-type class ('*' is used here in place\n"
 "of '.')."
 msgstr ""
-"Uchwyt odpowiadaj±cy typowi MIME ('*' jest u¿ywana tutaj zamiast\n"
-"'.')."
+"Program obs³ugi odpowiadaj±cy typowi MIME ('*' jest u¿ywana tutaj\n"
+"zamiast '.')."
 
 #: src/config/options.c:1430
 msgid ""
 "Handler matching this MIME-type name ('*' is used here in place\n"
 "of '.')."
 msgstr ""
-"Uchwyt odpowiadaj±cy nazwie danego typu MIME ('*' jest u¿ywana tutaj\n"
-"zamiast '.')."
+"Program obs³ugi odpowiadaj±cy nazwie typu MIME ('*' jest u¿ywana\n"
+"tutaj zamiast '.')."
 
 #: src/config/options.c:1434
 msgid "File type handlers"
-msgstr "Handlery typów plików"
+msgstr "Programy obs³ugi typów plików"
 
 #: src/config/options.c:1436
 msgid ""
 "Handler for certain MIME types (as specified in mime.type.*).\n"
 "Each handler usually serves family of MIME types (ie. images)."
 msgstr ""
-"Uchwyt dla pewnego typu MIME (jak podane w mime.type.*).\n"
-"Ka¿dy uchwyt zwykle serwuje rodzinê typów MIME (np. images)."
+"Program obs³ugi dla pewnych typów MIME (jak podano w mime.type.*).\n"
+"Ka¿dy program obs³ugi zwykle s³u¿y rodzinie typów MIME (np. obrazkom)."
 
 #: src/config/options.c:1441
 msgid "Description of this handler."
-msgstr "Opis tego uchwytu."
+msgstr "Opis tego programu obs³ugi."
 
 #: src/config/options.c:1445
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
-msgstr "Specyficzny dla systemu opis uchwytu (np. unix, unix-xwin, ...)."
+msgstr "Specyficzny dla systemu opis programu obs³ugi (np. unix, unix-xwin, ...)."
 
 #: src/config/options.c:1447 src/config/options.c:1485
 msgid "Ask before opening"
@@ -2050,7 +2050,7 @@ msgstr "Blokowanie terminala"
 
 #: src/config/options.c:1453
 msgid "Block the terminal when the handler is running."
-msgstr "Zablokuj terminal, gdy uchwyt jest wykonywany."
+msgstr "Zablokuj terminal, gdy program obs³ugi jest wykonywany."
 
 #
 #: src/config/options.c:1455
@@ -2080,7 +2080,7 @@ msgid ""
 "MIME-type matching this file extension ('*' is used here in place\n"
 "of '.')."
 msgstr ""
-"Typ MIME odpowiadaj±cy temu rozszerzenu pliku ('*' jest u¿ywana tutaj\n"
+"Typ MIME odpowiadaj±cy temu rozszerzeniu pliku ('*' jest u¿ywana tutaj\n"
 "zamiast '.')."
 
 #. Start of mailcap compatibility aliases:
@@ -2160,7 +2160,7 @@ msgid ""
 "extension of the file name."
 msgstr ""
 "Opcje dla wsparcia dla plików MIME.  Pliki MIME mog± byæ u¿yte\n"
-"do znalezienie typu zawarto¶ci pliku URLa po sprawdzeniu \n"
+"do znalezienia typu zawarto¶ci pliku URL-a po sprawdzeniu \n"
 "rozszerzenia pliku"
 
 #: src/config/options.c:1512
@@ -2315,7 +2315,7 @@ msgstr ""
 "0 - nie wysy³aj Referer\n"
 "1 - wysy³aj bie¿±cy URL\n"
 "2 - wysy³aj z góry ustalony Referer\n"
-"3 - wysy³aj poprzedni URL (zgodne z RFC)\n"
+"3 - wysy³aj poprzedni URL (zgodne z RFC, ale niebezpieczne)\n"
 
 #: src/config/options.c:1588
 msgid "Fake referer URL"
@@ -2456,7 +2456,7 @@ msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
 msgstr ""
-"Czy zezwoliæ na czytanie z nieregularnych plików? (NIEBEZPIECZNE - czytanie\n"
+"Czy zezwoliæ na czytanie z plików innych ni¿ zwyk³e? (NIEBEZPIECZNE - czytanie\n"
 "/dev/urandom czy /dev/zero mo¿e zepsuæ Ci dzieñ!)"
 
 #
@@ -2484,7 +2484,7 @@ msgid ""
 "If set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
-"Czy pokazywaæ ukryte pliki przy wy¶wietlaniu katalogów ?\n"
+"Czy pokazywaæ ukryte pliki przy wy¶wietlaniu katalogów?\n"
 "Je¶li ustawione na 0, pliki zaczynaj±ce siê od kropki nie bêd±\n"
 "pokazywane."
 
@@ -2632,7 +2632,7 @@ msgid ""
 "terminal."
 msgstr ""
 "Zmienia font podczas rysowania linii, w³±czaj±c oba zestawy\n"
-"znaków. Ma sens jedynie na Linuksowym terminalu."
+"znaków. Ma sens jedynie na linuksowym terminalu."
 
 #: src/config/options.c:1770
 msgid "I/O in UTF8"
@@ -2818,7 +2818,7 @@ msgstr "Domy¶lny kolor t³a niewybranego klawisza skrótu g³ównego menu."
 
 #: src/config/options.c:1885
 msgid "Main menu selected hotkey text color."
-msgstr "Kolory tekstu wybranego klawisza skrótu g³ównego menu."
+msgstr "Kolor tekstu wybranego klawisza skrótu g³ównego menu."
 
 #
 #: src/config/options.c:1889 src/config/options.c:2272
@@ -2852,7 +2852,7 @@ msgstr "Kolory wybranych elementów menu."
 
 #: src/config/options.c:1922 src/config/options.c:2305
 msgid "Menu item hotkey colors."
-msgstr "Kolory klawisza skrótu menu."
+msgstr "Kolory klawiszy skrótu menu."
 
 #: src/config/options.c:1926
 msgid "Menu item unselected hotkey colors."
@@ -3123,7 +3123,7 @@ msgstr "Domy¶lny kolor tekstu wybranego klawisza skrótu g³ównego menu."
 
 #: src/config/options.c:2309
 msgid "Menu unselected hotkey colors."
-msgstr "Kolory niewybranych klawiszy skrótu."
+msgstr "Kolory niewybranych klawiszy skrótu menu."
 
 #: src/config/options.c:2313
 msgid "Menu selected hotkey colors."
@@ -3149,7 +3149,7 @@ msgstr "Domy¶lny kolor t³a wybranego klawisza skrótu menu."
 
 #: src/config/options.c:2348
 msgid "Dialog generic background color"
-msgstr "Zwyk³y kolot t³a"
+msgstr "Zwyk³y kolor t³a okna dialogowego"
 
 #: src/config/options.c:2438
 msgid "Dialog field colors."
@@ -3173,14 +3173,14 @@ msgstr "Ustawienia dotycz±ce wygl±du i zachowania okien dialogowych."
 
 #: src/config/options.c:2593
 msgid "Minimal height of listbox widget"
-msgstr "Minimalna wysoko¶æ listboksa"
+msgstr "Minimalna wysoko¶æ listy wyboru"
 
 #: src/config/options.c:2595
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
-"Minimalna wysoko¶æ listboksa (u¿ywany np. przy zak³adkach\n"
+"Minimalna wysoko¶æ listy wyboru (u¿ywanej np. przy zak³adkach\n"
 "czy globalnej historii)."
 
 #: src/config/options.c:2598
@@ -3264,7 +3264,7 @@ msgstr "Ustawienia tabów."
 #
 #: src/config/options.c:2639
 msgid "Display tabs bar"
-msgstr "Wy¶wietl paskek tabów"
+msgstr "Wy¶wietl pasek tabów"
 
 #: src/config/options.c:2641
 msgid ""
@@ -3297,8 +3297,8 @@ msgid ""
 "Language of user interface. System means that the language will\n"
 "be extracted from the environment dynamically."
 msgstr ""
-"Jêzyk interfejsu u¿ytkownika. Jêzyk mo¿e byæ uzyskany ze ¶rodowiska w sposób "
-"dynamiczny."
+"Jêzyk interfejsu u¿ytkownika. Jêzyk mo¿e byæ uzyskany ze ¶rodowiska\n"
+"w sposób dynamiczny."
 
 #: src/config/options.c:2663
 msgid ""
@@ -3373,9 +3373,10 @@ msgstr ""
 "Najpierw zapisuje do 'plik.tmp', potem zmienia nazwê na 'plik'\n"
 "pod warunkiem pomy¶lnego zapisu do pliku. Wiedz, ¿e to odnosi siê\n"
 "do plików konfiguracyjnych, a nie pobieranych.\n"
-"Mo¿esz chcieæ wy³±czyæ to, je¶li chcesz mieæ pliki konfigurayjne\n"
+"Mo¿esz chcieæ wy³±czyæ to, je¶li chcesz mieæ pliki konfiguracyjne\n"
 "z egzotycznymi uprawnieniami. Bezpieczne zapisywanie plików jest\n"
-"automatycznie wy³±czane, gdy plik konfiguracyjny jest symlinkiem."
+"automatycznie wy³±czane, gdy plik konfiguracyjny jest dowi±zaniem\n"
+"symbolicznym."
 
 #. Commandline options
 #: src/config/options.c:2706
@@ -3391,7 +3392,7 @@ msgid ""
 msgstr ""
 "Ogranicza ELinksa, tak ¿e mo¿e on byæ u¿ywany na anonimowym\n"
 "koncie. Bez przegl±dania lokalnych plików, bez pobierania plików.\n"
-"U¿ywanie viewerów jest dozwolone, ale bez mo¿liwo¶ci modyfikacji\n"
+"U¿ywanie przegl±darek jest dozwolone, ale bez mo¿liwo¶ci modyfikacji\n"
 "pozycji w tabeli skojarzeñ."
 
 #
@@ -3401,7 +3402,7 @@ msgstr "Automatyczne wysy³anie formularzy"
 
 #: src/config/options.c:2715
 msgid "Go and submit the first form you'll stumble upon."
-msgstr "Id¼ i wy¶lih pierwszy formularz na którym natkn±³e¶ siê na b³±d."
+msgstr "Id¼ i wy¶lij pierwszy formularz na którym natkn±³e¶ siê na b³±d."
 
 #: src/config/options.c:2717
 msgid "Clone session with given ID"
@@ -3425,7 +3426,7 @@ msgstr "Domy¶lny typ MIME dla dokumentów nieznanego typu."
 
 #: src/config/options.c:2726
 msgid "Write formatted version of given URL to stdout"
-msgstr "Wypisanie sformatowanej wersji danego URLa na standardowe wyj¶cie"
+msgstr "Wypisanie sformatowanej wersji danego URL-a na standardowe wyj¶cie"
 
 #: src/config/options.c:2728
 msgid ""
@@ -3469,7 +3470,7 @@ msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
-"To sprawia, ¿e Elinks przyjmuje, ¿e og³±dane pliki s± w HTMLu.\n"
+"To sprawia, ¿e Elinks przyjmuje, ¿e og³±dane pliki s± w HTML-u.\n"
 "Jest to równowa¿ne z -default-mime-type text/html."
 
 #: src/config/options.c:2760
@@ -3591,7 +3592,7 @@ msgstr ""
 " -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
 "U¿ywaj tego, które bardziej Ci siê podoba. Wiedz, ¿e czytanie\n"
 "ze standardowego wej¶cia DZIA£A TYLKO RAZEM z -dump LUB -source!!\n"
-"Chcia³bym wiedzieæ po co by¶ chia³ u¿ywaæ -source -stdin, chocia¿ ;-)"
+"Chcia³bym wiedzieæ po co by¶ chcia³ u¿ywaæ -source -stdin, chocia¿ ;-)"
 
 #: src/config/options.c:2816
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
@@ -3853,7 +3854,7 @@ msgstr ""
 "Po³±czenia: %d po³±czeñ, %d nawi±zuj±cych po³±czenie, %d przesy³aj±cych,\n"
 "            %d trwa³ych.\n"
 "Pamiêæ podrêczna: %d bajtów, %d plików, %d zablokowanych, %d ³adowanych.\n"
-"Sformatowane dokunenty: %d dokumentów, %d zablokownaych."
+"Sformatowane dokumenty: %d dokumentów, %d zablokownaych."
 
 #: src/dialogs/info.c:169
 msgid "No entry."
@@ -4262,7 +4263,7 @@ msgid ""
 msgstr ""
 "Przykro mi, ale ta pozycja historii jest obecnie u¿ywana.\n"
 "\n"
-"Tity³: \"%s\"\n"
+"Tytu³: \"%s\"\n"
 "URL: \"%s\"\n"
 
 #: src/globhist/dialogs.c:326
@@ -4276,7 +4277,7 @@ msgid ""
 "\n"
 "URL: \"%s\""
 msgstr ""
-"Usuñ pozycjê historiiCzy skasowaæ element historii \"%s\"?\n"
+"Czy skasowaæ element historii \"%s\"?\n"
 "\n"
 "URL: \"%s\""
 
@@ -4322,7 +4323,7 @@ msgstr "b³±d accept(): %d (%s)"
 #: src/lowlevel/interlink.c:372 src/lowlevel/interlink.c:431
 #, c-format
 msgid "socket() failed: %d (%s)"
-msgstr "b³±d socket: %d (%s)"
+msgstr "b³±d socket(): %d (%s)"
 
 #: src/lowlevel/interlink.c:381
 #, c-format
@@ -4348,7 +4349,7 @@ msgstr "b³±d select(): %d (%s)"
 #: src/lowlevel/select.c:344
 #, c-format
 msgid "%d select() failures."
-msgstr "%d b³êdy select."
+msgstr "%d b³êdów select()."
 
 #: src/lowlevel/signals.c:242
 #, c-format
@@ -4397,7 +4398,7 @@ msgstr "JavaScript nie jest na razie obs³ugiwana."
 
 #: src/protocol/user.c:153 src/sched/error.c:49
 msgid "Bad URL syntax"
-msgstr "Z³a sk³adnia URL"
+msgstr "Z³a sk³adnia URL-a"
 
 #: src/protocol/user.c:154
 msgid "Bad user protocol URL"
@@ -4558,7 +4559,7 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
-"Czy chesz otworzyæ plik '%s' (typu %s%s%s)\n"
+"Czy chcesz otworzyæ plik '%s' (typu %s%s%s)\n"
 "przy u¿yciu '%s', zapisaæ go, czy wy¶wietliæ?"
 
 #: src/sched/download.c:1269 src/sched/download.c:1282
@@ -4721,7 +4722,7 @@ msgstr "Brak dokumentu"
 #: src/sched/session.c:643
 #, c-format
 msgid "Do you want to follow redirect and post form data to url %s?"
-msgstr "Czy chcesz i¶c za przekierowaniem i wys³aæ dane formularza do %s?"
+msgstr "Czy chcesz i¶æ za przekierowaniem i wys³aæ dane formularza do %s?"
 
 #: src/sched/session.c:646
 #, c-format
@@ -4764,7 +4765,7 @@ msgid ""
 msgstr ""
 "Masz pusty ³añcuch w protocol.http.user_agent - to by³o domy¶lne w "
 "przesz³o¶ci, zamienione przez ³añcuch ELinks User-Agent. Aczkolwiek, teraz "
-"to oznacza, ¿e NIE BÊDZIE WYSY£ANYNO ¯ADEN NAG£ÓWEK User-Agent - je¶li jest "
+"to oznacza, ¿e NIE BÊDZIE WYSY£ANY ¯ADEN NAG£ÓWEK User-Agent - je¶li jest "
 "to dok³adnie to czego chcesz, ustaw tê warto¶æ na\" \", w przeciwnym "
 "przypadku skasuj liniê z tym ustawieniem z pliku konfiguracyjnego (je¶li nie "
 "wiesz o co mi chodzi, po prostu to zrób), tak ¿e domy¶lne ustawienie bêdzie "
@@ -4788,7 +4789,7 @@ msgstr ""
 "zapisywane w pliku konfiguracyjnym zamiast wszystkich opcji. To upraszcza "
 "nasz± sytuacjê zdecydowanie, gdy zauwa¿ymy, ¿e pewne opcje maj± niepoprawne "
 "domy¶lne warto¶ci lub gdy bêdziemy zmuszeni do zmiany semantyki jaki¶ "
-"ustwieñ w subtelny sposób. Zatem, zalecamy zmieniæ warto¶æ config."
+"ustawieñ w subtelny sposób. Zatem, zalecamy zmieniæ warto¶æ config."
 "saving_style na 3, by uzyskaæ \"w³a¶ciwe\" zachowanie. Przepraszamy za "
 "wszelkie niedogodno¶ci."
 
@@ -4867,7 +4868,7 @@ msgstr "Fastmem"
 
 #: src/util/version.c:60
 msgid "Own Libc Routines"
-msgstr "W³asny Libc"
+msgstr "W³asne funkcje Libc"
 
 #: src/util/version.c:63
 msgid "No Backtrace"

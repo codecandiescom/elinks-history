@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.6 2003/12/31 21:52:31 pasky Exp $ */
+/* $Id: feature.h,v 1.7 2003/12/31 22:01:24 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -189,6 +189,31 @@
  * Default: disabled */
 
 /* #define USE_256_COLORS */
+
+
+/*** Backtrace printing
+ *
+ * Once upon a time, a disaster happens and ELinks crashes. That is a very sad
+ * event and it would be very nice to have some means how to diagnose it. In
+ * the crash handler, ELinks prints out various helpful things, however the
+ * truly important information is _where_ did it crash. Usually, users do not
+ * have gdb installed and can't provide a backtrace. However, ELinks can print
+ * a backtrace on its own, if the system supports it (currently, it is
+ * implemented only for glibc). It is not always accurate, it is useless when
+ * the ELinks binary is stripped and it still misses a lot of important
+ * information, but it can be sometimes still an indispensable help for the
+ * developers.
+ *
+ * You should keep this, unless you will strip your ELinks binary anyway, you
+ * know you are not going to report back any failures and you care about each
+ * single wasted bit.
+ *
+ * Default: enabled if the libc supports it (only glibc) */
+
+#ifdef BACKTRACE
+/* Comment out the following line if you want to always have this disabled: */
+#undef BACKTRACE
+#endif
 
 
 #endif

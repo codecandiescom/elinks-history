@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.207 2004/05/29 18:28:05 jonas Exp $ */
+/* $Id: uri.c,v 1.208 2004/05/29 19:09:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,10 +261,8 @@ struct string *
 add_uri_to_string(struct string *string, struct uri *uri,
 		  enum uri_component components)
 {
-	/* Custom or unknown or free-syntax protocol;
-	 * keep the URI untouched. */
-	if (uri->protocol == PROTOCOL_UNKNOWN
-	    || get_protocol_free_syntax(uri->protocol))
+	/* Custom or unknown keep the URI untouched. */
+	if (uri->protocol == PROTOCOL_UNKNOWN)
 		return add_to_string(string, struri(uri));
 
 #define wants(x) (components & (x))
@@ -357,7 +355,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		assertm(wants(URI_PATH) == components,
 			"URI_PATH should be used alone %d", components);
 
-		if (is_uri_dir_sep(uri, *uri->data)) {
+		if (!is_uri_dir_sep(uri, *uri->data)) {
 			/* FIXME: Add correct separator */
 			add_char_to_string(string, '/');
 		}

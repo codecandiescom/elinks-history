@@ -901,21 +901,18 @@ EL_ARG_DEPEND(CONFIG_NO_ROOT_EXEC, backtrace, [have_getuid have_geteuid], [no ro
 	      [  --enable-backtrace      enable prevention of usage by root])
 
 
-AC_ARG_ENABLE(debug,
-	      [  --enable-debug          enable leak debug and internal error checking],
-	      [if test "$enableval" = yes; then EL_CONFIG(CONFIG_DEBUG, [leak debugging and error checking]) fi])
+EL_ARG_ENABLE(CONFIG_DEBUG, debug, [leak debugging and error checking],
+	      [  --enable-debug          enable leak debug and internal error checking])
 
 AC_ARG_ENABLE(fastmem,
               [  --enable-fastmem        enable direct use of system allocation functions, not usable with --enable-debug],
 	      [if test "$enableval" = yes && test "$CONFIG_DEBUG" != yes; then EL_CONFIG(CONFIG_FASTMEM, [fast memory and no error checking]) fi])
 
-AC_ARG_ENABLE(own-libc,
-              [  --enable-own-libc       force use of internal functions instead of those of system libc],
-	      [if test "$enableval" = yes; then EL_CONFIG(CONFIG_OWN_LIBC, [to test libc stubs]) fi])
+EL_ARG_ENABLE(CONFIG_OWN_LIBC, own-libc, [usage of own libc stubs],
+              [  --enable-own-libc       force use of internal functions instead of those of system libc])
 
-AC_ARG_ENABLE(small,
-              [  --enable-small          reduce binary size as far as possible],
-	      [if test "$enableval" = yes; then EL_CONFIG(CONFIG_SMALL, [reduce binary size]) fi])
+EL_ARG_ENABLE(CONFIG_SMALL, small, [reducing binary size],
+              [  --enable-small          reduce binary size as far as possible])
 
 
 AC_ARG_ENABLE(weehoofooboomookerchoo,

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.7 2003/01/23 13:03:49 pasky Exp $ */
+/* $Id: download.c,v 1.8 2003/01/23 13:07:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -610,7 +610,7 @@ static void
 lun_alternate(struct lun_hop *lun_hop)
 {
 	lun_hop->callback(lun_hop->term, lun_hop->file, lun_hop->data, 0);
-	mem_free(lun_hop->ofile);
+	if (lun_hop->ofile) mem_free(lun_hop->ofile);
 	mem_free(lun_hop);
 }
 
@@ -618,7 +618,7 @@ static void
 lun_overwrite(struct lun_hop *lun_hop)
 {
 	lun_hop->callback(lun_hop->term, lun_hop->ofile, lun_hop->data, 0);
-	mem_free(lun_hop->file);
+	if (lun_hop->file) mem_free(lun_hop->file);
 	mem_free(lun_hop);
 }
 
@@ -626,7 +626,16 @@ static void
 lun_resume(struct lun_hop *lun_hop)
 {
 	lun_hop->callback(lun_hop->term, lun_hop->ofile, lun_hop->data, 1);
-	mem_free(lun_hop->file);
+	if (lun_hop->file) mem_free(lun_hop->file);
+	mem_free(lun_hop);
+}
+
+static void
+lun_cancel(struct lun_hop *lun_hop)
+{
+	lun_hop->callback(lun_hop->term, NULL, lun_hop->data, 0);
+	if (lun_hop->ofile) mem_free(lun_hop->ofile);
+	if (lun_hop->file) mem_free(lun_hop->file);
 	mem_free(lun_hop);
 }
 
@@ -681,12 +690,14 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 
 	msg_box(term, NULL,
 		N_("File exists"), AL_CENTER | AL_EXTD_TEXT,
-		N_("This file already exists:\n"), lun_hop->ofile, "\n\n",
-		N_("The alternative filename is:\n"), file, NULL,
-		lun_hop, 3,
+		N_("This file already exists:\n"),
+		lun_hop->ofile ? lun_hop->ofile : (unsigned char *) "", "\n\n",
+		N_("The alternative filename is:\n"), file ? file : "", NULL,
+		lun_hop, 4,
 		N_("Save under the alternative name"), lun_alternate, B_ENTER,
 		N_("Overwrite the original file"), lun_overwrite, 0,
-		N_("Resume download of the original file"), lun_resume, B_ESC);
+		N_("Resume download of the original file"), lun_resume, 0,
+		N_("Cancel"), lun_cancel, B_ESC);
 }
 
 

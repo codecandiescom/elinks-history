@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.155 2004/04/07 13:29:44 jonas Exp $ */
+/* $Id: uri.c,v 1.156 2004/04/07 13:57:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -362,10 +362,10 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 	/* dsep() *hint* *hint* */
 	lo = (uri->protocol == PROTOCOL_FILE);
 
-	path = uri->data;
-	if (!dsep(*path)) path--;
-	src = path;
-	dest = path;
+	/* We want to start at the first slash to also reduce URIs like
+	 * http://host//index.html to http://host/index.html */
+	path = uri->data - !!get_protocol_need_slash_after_host(uri->protocol);
+	dest = src = path;
 
 	/* This loop mangles the URI string by removing directory elevators and
 	 * other cruft. Example: /.././etc////..//usr/ -> /usr/ */

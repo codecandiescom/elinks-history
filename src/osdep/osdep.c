@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.25 2002/07/03 23:40:49 pasky Exp $ */
+/* $Id: osdep.c,v 1.26 2002/09/09 12:36:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,6 +48,26 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #endif
+
+/* Set a file descriptor to non-blocking mode. It returns a negative value
+ * on error. */
+int set_nonblocking_fd(int fd)
+{
+	int flags = fcntl(fd, F_GETFL, 0);
+
+	if (flags < 0) return -1;
+	return fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+}
+
+/* Set a file descriptor to blocking mode. It returns a negative value on
+ * error. */
+int set_blocking_fd(int fd)
+{
+	int flags = fcntl(fd, F_GETFL, 0);
+
+	if (flags < 0) return -1;
+	return fcntl(fd, F_SETFL, flags & ~O_NONBLOCK);
+}
 
 int
 is_safe_in_shell(unsigned char c)

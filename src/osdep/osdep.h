@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.6 2002/07/03 23:40:49 pasky Exp $ */
+/* $Id: osdep.h,v 1.7 2002/09/09 12:36:45 zas Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -196,5 +196,8 @@ static inline void prealloc_truncate(int x, int y) { }
 #endif
 
 unsigned char *get_system_str(int);
+
+int set_nonblocking_fd(int);
+int set_blocking_fd(int);
 
 #endif

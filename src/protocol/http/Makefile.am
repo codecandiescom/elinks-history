@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.15 2004/05/07 17:47:05 jonas Exp $
+## $Id: Makefile.am,v 1.16 2004/05/21 11:39:54 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -19,9 +19,5 @@ libhttp_a_SOURCES = \
  blacklist.h \
  codes.c \
  codes.h \
- date.c \
- date.h \
- header.c \
- header.h \
  http.c \
  http.h

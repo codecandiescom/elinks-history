@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.27 2004/05/10 23:12:55 jonas Exp $
+## $Id: Makefile.am,v 1.28 2004/05/21 11:39:54 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -8,6 +8,12 @@ fingerobj = finger.o
 endif
 
 ftpobj = ftp/ftp.o ftp/ftpparse.o
+
+httpobj = http/blacklist.o http/codes.o http/http.o
+
+if CONFIG_SSL
+httpsobj = http/https.o
+endif
 
 if CONFIG_SMB
 smbdir = smb
@@ -27,10 +33,16 @@ EXTRA_libprotocol_a_SOURCES = finger.c finger.h
 libprotocol_a_LIBADD = \
  $(fingerobj) \
  $(ftpobj) \
+ $(httpobj) \
+ $(httpsobj) \
  $(rewriteobj) \
  $(smbobj)
 
 libprotocol_a_SOURCES = \
+ date.c \
+ date.h \
+ header.c \
+ header.h \
  protocol.c \
  protocol.h \
  proxy.c \

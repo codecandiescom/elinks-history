@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.86 2004/04/22 12:51:30 zas Exp $ */
+/* $Id: document.c,v 1.87 2004/05/21 11:39:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@
 #include "document/view.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
-#include "protocol/http/header.h"
+#include "protocol/header.h"
 #include "protocol/uri.h"
 #include "sched/location.h"
 #include "sched/session.h"

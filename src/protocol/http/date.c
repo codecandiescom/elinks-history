@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.21 2003/12/01 14:15:33 pasky Exp $ */
+/* $Id: date.c,v 1.22 2004/05/21 11:39:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

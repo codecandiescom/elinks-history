@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.14 2002/12/29 17:40:59 pasky Exp $ */
+/* $Id: parser.c,v 1.15 2002/12/30 01:08:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -333,6 +333,7 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 		pstate = html_state_push(state, HPT_TAG_WHITE);
 	}
 
+	*str = html, *len = html_len;
 	return 0;
 }
 
@@ -423,6 +424,8 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 					 * tag is pair or not. */
 					state->root = state->current;
 				}
+				pstate->data.tag.tagname = *str;
+				pstate->data.tag.taglen = name_len;
 			}
 		}
 

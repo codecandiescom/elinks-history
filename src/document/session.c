@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.18 2002/04/01 15:52:41 pasky Exp $ */
+/* $Id: session.c,v 1.19 2002/04/01 20:48:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -677,7 +677,8 @@ void doc_end_load(struct status *stat, struct session *ses)
 	check_questions_queue(ses);
 	print_screen_status(ses);
 
-	add_to_global_history(cur_loc(ses)->vs.url, ses->screen->f_data->title, time(NULL));
+	add_global_history_item(cur_loc(ses)->vs.url,
+				ses->screen->f_data->title, time(NULL));
 }
 
 void file_end_load(struct status *stat, struct file_to_load *ftl)

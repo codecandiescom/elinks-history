@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.2 2002/04/01 20:19:29 pasky Exp $ */
+/* $Id: globhist.c,v 1.3 2002/04/01 20:48:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,7 @@
 #include <lowlevel/kbd.h>
 
 
-#define HISTORY_BOX_IND 2
+#define HISTORY_BOX_IND 3
 
 static inline void
 history_dialog_list_clear(struct list_head *list)
@@ -257,6 +257,7 @@ layout_history_manager(struct dialog_data *dlg)
 	dlg_format_buttons(term, term, &dlg->items[0], HISTORY_BOX_IND, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }
 
+
 static int
 push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
 {
@@ -276,6 +277,78 @@ push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
 	delete_window(dlg->win);
 	return 0;
 }
+
+/* Used to carry extra info between push_delete_button() and 
+ * really_del_history() */
+struct push_del_button_hop_struct {
+	struct dialog *dlg;
+	struct dlg_data_item_data_box *box;
+	struct global_history_item *historyitem;
+};
+
+static void
+really_del_history(void *vhop)
+{
+	struct push_del_button_hop_struct *hop;
+	struct global_history_item *historyitem;
+	int last;
+
+	hop = (struct push_del_button_hop_struct *) vhop;
+
+	historyitem = get_global_history_item(hop->historyitem->url,
+					      hop->historyitem->title, 0);
+	if (!historyitem)
+		return;
+
+	delete_global_history_item(historyitem);
+
+	last = history_dialog_list_update(&hop->box->items);
+	/* In case we deleted the last history item */
+	if (hop->box->sel >= (last - 1))
+		hop->box->sel = last - 1;
+
+	/* Made in push_delete_button() */
+	/* mem_free(vhop); */
+}
+
+static int
+push_delete_button(struct dialog_data *dlg,
+		   struct dialog_item_data *some_useless_delete_button)
+{
+	struct global_history_item *historyitem;
+	struct push_del_button_hop_struct *hop;
+	struct terminal *term;
+	struct dlg_data_item_data_box *box;
+
+	term = dlg->win->term;
+
+	box = (struct dlg_data_item_data_box *)
+	      dlg->dlg->items[HISTORY_BOX_IND].data;
+
+	historyitem = history_dialogue_get_selected_history_item(box);
+	if (!historyitem)
+		return 0;
+
+	/* Deleted in really_del_history() */
+	hop = mem_alloc(sizeof(struct push_del_button_hop_struct));
+	if (!hop)
+		return 0;
+
+	hop->historyitem = historyitem;
+	hop->dlg = dlg->dlg;
+	hop->box = box;
+
+	msg_box(term, getml(hop, NULL),
+		TEXT(T_DELETE_HISTORY_ITEM), AL_CENTER | AL_EXTD_TEXT,
+		TEXT(T_DELETE_HISTORY_ITEM), " \"", historyitem->title, "\" (",
+		TEXT(T_URL), ": \"", historyitem->url, "\")?", NULL,
+		hop, 2,
+		TEXT(T_YES), really_del_history, B_ENTER,
+		TEXT(T_NO), NULL, B_ESC);
+
+	return 0;
+}
+
 
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -306,9 +379,14 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].text = TEXT(T_GOTO);
 
 	d->items[1].type = D_BUTTON;
-	d->items[1].gid = B_ESC;
-	d->items[1].fn = cancel_dialog;
-	d->items[1].text = TEXT(T_CLOSE);
+	d->items[1].gid = B_ENTER;
+	d->items[1].fn = push_delete_button;
+	d->items[1].text = TEXT(T_DELETE);
+
+	d->items[2].type = D_BUTTON;
+	d->items[2].gid = B_ESC;
+	d->items[2].fn = cancel_dialog;
+	d->items[2].text = TEXT(T_CLOSE);
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;

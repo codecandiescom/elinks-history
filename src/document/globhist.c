@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.1 2002/04/01 19:59:27 pasky Exp $ */
+/* $Id: globhist.c,v 1.2 2002/04/01 20:48:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,86 @@ struct global_history_list global_history = {
 	{ &global_history.items, &global_history.items }
 };
 
+
+void
+free_global_history_item(struct global_history_item *historyitem)
+{
+	mem_free(historyitem->title);
+	mem_free(historyitem->url);
+}
+
+void
+delete_global_history_item(struct global_history_item *historyitem)
+{
+	free_global_history_item(historyitem);
+	del_from_list(historyitem);
+	mem_free(historyitem);
+	global_history.n--;
+}
+
+/* Search global history for certain item. There must be full match with the
+ * parameter or the parameter must be NULL/zero. */
+struct global_history_item *
+get_global_history_item(unsigned char *url, unsigned char *title, time_t time)
+{
+	struct global_history_item *historyitem;
+
+	foreach (historyitem, global_history.items) {
+		if ((!url || !strcmp(historyitem->url, url)) &&
+		    (!title || !strcmp(historyitem->title, title)) &&
+		    (!time || historyitem->last_visit == time)) {
+			return historyitem;
+		}
+	}
+
+	return NULL;
+}
+
+
+/* Add a new entry in history list, take care of duplicate, and respect history
+ * size limit. add_to_history() doesn't handle last_visit, so I needed to make
+ * this new function. */
+void
+add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
+{
+	struct global_history_item *historyitem;
+
+	if (!enable_global_history)
+		return; 
+
+	if (!title || !url)
+		return;
+
+	foreach (historyitem, global_history.items) {
+		if (!strcmp(historyitem->url, url)) {
+			delete_global_history_item(historyitem);
+			break;
+		}
+	}
+
+	historyitem = mem_alloc(sizeof(struct global_history_item));
+	if (!historyitem)
+		return;
+
+	historyitem->last_visit = time;
+	historyitem->title = stracpy(title);
+	historyitem->url = stracpy(url);
+
+	add_to_list(global_history.items, historyitem);
+	global_history.n++;
+
+	while (global_history.n > GLOBHIST_MAX_ITEMS) {
+		historyitem = global_history.items.prev;
+
+		if ((void *) historyitem == &global_history.items) {
+			internal("global history is empty");
+			global_history.n = 0;
+			return;
+		}
+
+		delete_global_history_item(historyitem);
+	}
+}
 
 void
 read_global_history()
@@ -58,7 +138,7 @@ read_global_history()
 
 		/* Is using atol() in this way acceptable? It seems
 		 * non-portable to me; time_t might not be a long. -- Miciah */
-		add_to_global_history(url, title, atol(last_visit));
+		add_global_history_item(url, title, atol(last_visit));
 	}
 
 	fclose(f);
@@ -82,7 +162,7 @@ write_global_history()
 	mem_free(file_name);
 	if (!out) return;
 
-	foreachback(historyitem, global_history.items) {
+	foreachback (historyitem, global_history.items) {
 		unsigned char *p;
 		int i;
 
@@ -107,19 +187,12 @@ write_global_history()
 	fclose(out);
 }
 
-void
-free_global_history_item(struct global_history_item *historyitem)
-{
-	mem_free(historyitem->title);
-	mem_free(historyitem->url);
-}
-
 static void
 free_global_history()
 {
 	struct global_history_item *historyitem;
 
-	foreach(historyitem, global_history.items) {
+	foreach (historyitem, global_history.items) {
 		free_global_history_item(historyitem);
 	}
 
@@ -131,58 +204,4 @@ finalize_global_history()
 {
 	write_global_history();
 	free_global_history();
-}
-
-static void
-delete_global_history_item(struct global_history_item *historyitem)
-{
-	free_global_history_item(historyitem);
-	del_from_list(historyitem);
-	mem_free(historyitem);
-	global_history.n--;
-}
-
-/* Add a new entry in history list, take care of duplicate, and respect history
- * size limit. add_to_history() doesn't handle last_visit, so I needed to make
- * this new function. */
-void
-add_to_global_history(unsigned char *url, unsigned char *title, time_t time)
-{
-	struct global_history_item *historyitem;
-
-	if (!enable_global_history)
-		return; 
-
-	if (!title || !url)
-		return;
-
-	foreach(historyitem, global_history.items) {
-		if (!strcmp(historyitem->url, url)) {
-			delete_global_history_item(historyitem);
-			break;
-		}
-	}
-
-	historyitem = mem_alloc(sizeof(struct global_history_item));
-	if (!historyitem)
-		return;
-
-	historyitem->last_visit = time;
-	historyitem->title = stracpy(title);
-	historyitem->url = stracpy(url);
-
-	add_to_list(global_history.items, historyitem);
-	global_history.n++;
-
-	while (global_history.n > GLOBHIST_MAX_ITEMS) {
-		historyitem = global_history.items.prev;
-
-		if ((void *) historyitem == &global_history.items) {
-			internal("global history is empty");
-			global_history.n = 0;
-			return;
-		}
-
-		delete_global_history_item(historyitem);
-	}
 }

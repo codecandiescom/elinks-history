@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.6 2002/12/14 16:21:27 jonas Exp $ */
+/* $Id: mailcap.c,v 1.7 2002/12/21 18:51:22 zas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -42,9 +42,9 @@ struct mailcap_entry {
 	unsigned char *command;		/* Ready for ses->tq_prog ;) */
 	unsigned char *testcommand;	/* To verify if command qualifies */
 	unsigned char *description;	/* Used as name for the handler */
-	unsigned int needsterminal :1;	/* Assigned to "block" */
-	unsigned int copiousoutput :1;	/* If "| ${PAGER}" should be added */
-	unsigned int testneedsfile :1;	/* If testing requires a filename */
+	int needsterminal;		/* Assigned to "block" */
+	int copiousoutput;		/* If "| ${PAGER}" should be added */
+	int testneedsfile;		/* If testing requires a filename */
 	unsigned int priority;		/* Increased for each sourced file */
 	struct mailcap_entry *next;	/* If several handlers for one type */
 };
@@ -57,18 +57,11 @@ static struct hash *mailcap_map = NULL;
 static struct mailcap_entry *
 mailcap_new_entry(void)
 {
-	struct mailcap_entry *entry;
-
-	entry = mem_alloc(sizeof(struct mailcap_entry));
-	if (!entry) return NULL;
-
 	/*
 	 * Clear memory to make freeing it safer laterand we get
 	 * needsterminal and copiousoutput inialized for free.
 	 */
-	memset(entry, 0, sizeof(struct mailcap_entry));
-	return entry;
-
+	return  mem_calloc(1, sizeof(struct mailcap_entry));
 }
 
 static void
@@ -85,7 +78,7 @@ mailcap_free_entry(struct mailcap_entry *entry)
 
 /*
  * The command semantics include the following:
- * 
+ *
  * %s		is the filename that contains the mail body data
  * %t		is the content type, like text/plain
  * %{parameter} is replaced by the parameter value from the content-type
@@ -175,15 +168,14 @@ get_field(unsigned char **next)
 	unsigned char *field;
 	unsigned char *p;
 
-	if (!next) return NULL;
-	if (!*next) return NULL;
+	if (!next || !*next) return NULL;
 
 	field = *next;
 	while (0xfed) { /* with chars */
 		/* Get pointer to the next occurence of ; or \ */
 		*next = strpbrk(field, ";\\");
 
-		if (*next == NULL) break;
+		if (!*next) break;
 
 		if (**next == '\\') {
 			field = *next + 1;
@@ -216,8 +208,6 @@ get_field_text(unsigned char *field,
 	       unsigned char *filename,
 	       int lineno)
 {
-	unsigned char *text = NULL;
-
 	/* Skip whitespace */
 	while (*field && isspace(*field)) field++;
 
@@ -227,13 +217,14 @@ get_field_text(unsigned char *field,
 		/* Skip whitespace */
 		while (*field && isspace(*field)) field++;
 
-		text = stracpy(field);
-	} else {
-		fprintf(stderr,
-			"Bad formated entry for type %s in \"%s\" line %d\n",
-			type, filename, lineno);
+		return stracpy(field);
 	}
-	return text;
+
+	fprintf(stderr,
+		"Bad formated entry for type %s in \"%s\" line %d\n",
+		type, filename, lineno);
+
+	return NULL;
 }
 
 /*
@@ -244,7 +235,7 @@ get_field_text(unsigned char *field,
  * type can be * for matching all base with no /type is an implicit
  * wild command contains a %s for the filename to pass, default to pipe on
  * stdin extradefs are of the form:
- * 
+ *
  *	def1="definition"; def2="define \;";
  *
  * line wraps with a \ at the end of the line, # for comments.
@@ -257,16 +248,15 @@ mailcap_parse(unsigned char *filename, unsigned int priority)
 	unsigned char *line = NULL;
 	size_t linelen;
 	int lineno = 0;
-
 	struct mailcap_entry *entry = NULL;
 	size_t typelen;
 	unsigned char *field;	/* Points to the current field */
 	unsigned char *next;	/* Points to the next field */
 
 	file = fopen(filename, "r");
-	if (file == NULL) return;
+	if (!file) return;
 
-	while ((line = file_read_line(line, &linelen, file, &lineno)) != NULL) {
+	while ((line = file_read_line(line, &linelen, file, &lineno))) {
 		/* Ignore comments */
 		if (*line == '#') continue;
 
@@ -353,6 +343,7 @@ mailcap_parse(unsigned char *filename, unsigned int priority)
 				}
 			} else {
 				struct mailcap_entry *current = item->value;
+
 				if (!current) continue;
 
 				/* Add as the last item */
@@ -392,7 +383,7 @@ mailcap_parse(unsigned char *filename, unsigned int priority)
 void
 mailcap_init()
 {
-	unsigned char *path = NULL;
+	unsigned char *path;
 	unsigned int priority = 0;
 
 	if(!get_opt_bool("protocol.mailcap.enable"))
@@ -409,6 +400,7 @@ mailcap_init()
 		unsigned char file[MAX_STR_LEN];
 		unsigned char *expanded;
 		int index = 0;
+
 		/* Extract file from path */
 		while (*path && *path != ':' && index < sizeof(file) - 1) {
 			file[index++] = *path;
@@ -442,8 +434,10 @@ mailcap_exit()
 		foreach_hash_item(item, *mailcap_map, i)
 			if (item->value) {
 				struct mailcap_entry *entry = item->value;
+
 				while (entry) {
 					struct mailcap_entry *next = entry->next;
+
 					mailcap_free_entry(entry);
 					entry = next;
 				}
@@ -461,19 +455,22 @@ mailcap_exit()
 static unsigned char *
 expand_command(unsigned char *command, unsigned char *type)
 {
-	int x = 0, y = 0; /* x used as command index, y as buffer index */
+	int x = 0; /* command index */
+	int y = 0; /* buffer index */
 	unsigned char buffer[MAX_STR_LEN];
 	unsigned char *expanded;
 	int commandlen;
+	int typelen;
 
 	if (!command) return NULL;
 
+	typelen = strlen(type);
 	commandlen = strlen(command);
 
 	while (command[x] && x < commandlen && y < sizeof(buffer)) {
 		if (command[x] == '%' && command[x + 1] == 't') {
 			safe_strncpy(buffer + y, type, sizeof(buffer) - y);
-			y += strlen(type);
+			y += typelen;
 			x += 2;
 		} else {
 			buffer[y++] = command[x++];
@@ -497,8 +494,8 @@ expand_command(unsigned char *command, unsigned char *type)
 static struct option *
 convert2option(struct mailcap_entry *entry, unsigned char *type)
 {
-	struct option *association = NULL;
-	unsigned char *command = NULL;
+	struct option *association;
+	unsigned char *command;
 	int ask;
 	int block;
 
@@ -521,12 +518,20 @@ convert2option(struct mailcap_entry *entry, unsigned char *type)
 			association->name = stracpy("mailcap");
 	}
 
+	if (!association->name) {
+		mem_free(association);
+		return NULL;
+	}
+
 	association->box_item = NULL;
 	association->type     = OPT_TREE;
 	association->ptr      = init_options_tree();
 
 	command = expand_command(entry->command, type);
-	if (!command) return NULL;
+	if (!command) {
+		mem_free(association);
+		return NULL;
+	}
 
 	ask	= get_opt_bool("protocol.mailcap.ask");
 	block	= entry->needsterminal;
@@ -544,11 +549,10 @@ convert2option(struct mailcap_entry *entry, unsigned char *type)
 static struct mailcap_entry *
 check_entries(struct mailcap_entry * entry, unsigned char *filename)
 {
-	unsigned char *testcommand;
 	/* Use the list of entries to find a final match */
 	while (entry) {
 		if (entry->testcommand) {
-			/* 
+			/*
 			 * This routine executes the given test command to
 			 * determine if this is the right match.
 			 */
@@ -556,8 +560,9 @@ check_entries(struct mailcap_entry * entry, unsigned char *filename)
 			/* Use filename as marker to wether test should run */
 			if (!entry->testneedsfile && !filename) filename = "";
 
-			if (filename) {	
+			if (filename) {
 				int exitcode = 1;
+				unsigned char *testcommand;
 
 				testcommand = subst_file(entry->testcommand, filename);
 				if (testcommand) {
@@ -573,6 +578,7 @@ check_entries(struct mailcap_entry * entry, unsigned char *filename)
 		}
 		entry = entry->next;
 	}
+
 	return NULL;
 }
 
@@ -589,14 +595,14 @@ check_entries(struct mailcap_entry * entry, unsigned char *filename)
  * that needs a file will be taken as failed.
  */
 
-struct option * 
+struct option *
 mailcap_lookup(unsigned char *type, unsigned char *file)
 {
 	struct mailcap_entry *entry = NULL;
-	struct hash_item *item = NULL;
+	struct hash_item *item;
 
 	/* Check if mailcap support is disabled */
-	if (mailcap_map == NULL) return NULL;
+	if (!mailcap_map) return NULL;
 
 	/* First the given type is looked up. */
 	item = get_hash_item(mailcap_map, type, strlen(type));
@@ -613,16 +619,21 @@ mailcap_lookup(unsigned char *type, unsigned char *file)
 		ptr = strchr(type, '/');
 		if (ptr) {
 			struct mailcap_entry *wildcard = NULL;
-			unsigned char wildcardtype[256];
+			unsigned char *wildcardtype;
 			int wildcardlen;
 
 			wildcardlen = ptr - type + 1; /* including '/' */
+
+			wildcardtype = mem_alloc(wildcardlen + 3);
+			if (!wildcardtype) return NULL;
 			safe_strncpy(wildcardtype, type, wildcardlen + 1);
 
 			wildcardtype[wildcardlen++] = '*';
 			wildcardtype[wildcardlen] = '\0';
 
 			item = get_hash_item(mailcap_map, wildcardtype, wildcardlen);
+
+			mem_free(wildcardtype);
 
 			if (item && item->value)
 				wildcard = check_entries(item->value, file);
@@ -636,5 +647,6 @@ mailcap_lookup(unsigned char *type, unsigned char *file)
 			}
 		}
 	}
+
 	return convert2option(entry, type);
 }

@@ -998,7 +998,7 @@ struct option links_options[] = {
 	 	0, 1, &http_bugs.bug_302_redirect,
 		"Broken 302 redirect (violates RFC but compatible with Netscape)." },
 	 
-	{	"http-bugs.bug-post-no-keepalive", "http_bugs.bug_port_no_keepalive",
+	{	"http-bugs.bug-post-no-keepalive", "http_bugs.bug_post_no_keepalive",
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &http_bugs.bug_post_no_keepalive,
 		"No keepalive connection after POST request." },
@@ -1181,7 +1181,7 @@ struct option html_options[] = {
 	 
 	{	"html-margin", "html_margin",
 		gen_cmd, num_rd, num_wr,
-	 	0, 1, &dds.margin,
+	 	0, 9, &dds.margin,
 		"Text margin." },
 	 
 	{	"html-numbered-links", "html_numbered_links",

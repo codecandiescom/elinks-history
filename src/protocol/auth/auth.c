@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.85 2004/06/13 13:43:54 jonas Exp $ */
+/* $Id: auth.c,v 1.86 2004/06/13 13:57:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,17 +35,15 @@ static INIT_LIST_HEAD(http_auth_basic_list);
 static struct http_auth_basic *
 find_auth_entry(struct uri *uri, unsigned char *realm)
 {
-	unsigned char *url = get_uri_string(uri, URI_HTTP_AUTH);
 	struct http_auth_basic *match = NULL, *entry;
 
 #ifdef DEBUG_HTTP_AUTH
 	DBG("find_auth_entry: url=%s realm=%s", url, realm);
 #endif
 
-	if (!url) return NULL;
-
 	foreach (entry, http_auth_basic_list) {
-		if (strcasecmp(entry->url, url)) continue;
+		if (!compare_uri(entry->uri, uri, URI_HTTP_AUTH))
+			continue;
 
 		/* Found a matching url. */
 		match = entry;
@@ -65,8 +63,6 @@ find_auth_entry(struct uri *uri, unsigned char *realm)
 			break; /* Stop here. */
 		}
 	}
-
-	mem_free(url);
 
 	return match;
 }
@@ -99,11 +95,7 @@ init_auth_entry(struct uri *uri, unsigned char *realm)
 	entry = mem_calloc(1, sizeof(struct http_auth_basic));
 	if (!entry) return NULL;
 
-	entry->url = get_uri_string(uri, URI_HTTP_AUTH);
-	if (!entry->url) {
-		mem_free(entry);
-		return NULL;
-	}
+	entry->uri = get_uri_reference(uri);
 
 	if (realm) {
 		/* Copy realm value. */
@@ -256,7 +248,7 @@ del_auth_entry(struct http_auth_basic *entry)
 
 	if (entry->box_item)
 		done_listbox_item(&auth_browser, entry->box_item);
-	mem_free_if(entry->url);
+	done_uri(entry->uri);
 	mem_free_if(entry->realm);
 
 	del_from_list(entry);

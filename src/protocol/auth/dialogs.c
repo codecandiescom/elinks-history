@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.100 2004/06/08 19:33:51 jonas Exp $ */
+/* $Id: dialogs.c,v 1.101 2004/06/13 13:57:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,9 +60,13 @@ do_auth_dialog(struct session *ses, void *data)
 
 	if (!a || a->blocked) return;
 
+	text = get_uri_string(a->uri, URI_HTTP_AUTH);
+	if (!text) return;
+
 	snprintf(sticker, sizeof(sticker),
 		 _("Authentication required for %s at %s", term),
-		 a->realm, a->url);
+		 a->realm, text);
+	mem_free(text);
 
 #define AUTH_WIDGETS_COUNT 5
 	dlg = calloc_dialog(AUTH_WIDGETS_COUNT, strlen(sticker) + 1);
@@ -125,9 +129,7 @@ get_http_auth_basic_info(struct listbox_item *item, struct terminal *term,
 
 	switch (listbox_info) {
 	case LISTBOX_TEXT:
-		if (!init_string(&info)) return NULL;
-		add_string_uri_to_string(&info, http_auth_basic->url, URI_PUBLIC);
-		return info.source;
+		return get_uri_string(http_auth_basic->uri, URI_HTTP_AUTH);
 
 	case LISTBOX_ALL:
 		break;
@@ -135,8 +137,9 @@ get_http_auth_basic_info(struct listbox_item *item, struct terminal *term,
 
 	if (!init_string(&info)) return NULL;
 
-	add_format_to_string(&info, "%s: %s\n", _("URL", term), http_auth_basic->url);
-	add_format_to_string(&info, "%s: %s\n", _("Realm", term), http_auth_basic->realm);
+	add_format_to_string(&info, "%s: ", _("URL", term));
+	add_uri_to_string(&info, http_auth_basic->uri, URI_HTTP_AUTH);
+	add_format_to_string(&info, "\n%s: %s\n", _("Realm", term), http_auth_basic->realm);
 	add_format_to_string(&info, "%s: %s\n", _("State", term),
 		http_auth_basic->valid ? _("valid", term) : _("invalid", term));
 
@@ -148,7 +151,7 @@ get_http_auth_basic_uri(struct listbox_item *item)
 {
 	struct http_auth_basic *http_auth_basic = item->udata;
 
-	return get_uri(http_auth_basic->url, 0);
+	return get_composed_uri(http_auth_basic->uri, URI_HTTP_AUTH);
 }
 
 static int

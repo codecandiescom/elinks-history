@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.17 2004/05/29 04:25:24 jonas Exp $ */
+/* $Id: auth.h,v 1.18 2004/06/13 13:57:06 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
@@ -11,7 +11,7 @@ struct listbox_item;
 struct http_auth_basic {
 	LIST_HEAD(struct http_auth_basic);
 
-	unsigned char *url;
+	struct uri *uri;
 	unsigned char *realm;
 
 	struct listbox_item *box_item;

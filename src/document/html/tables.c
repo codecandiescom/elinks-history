@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.311 2004/06/29 22:49:54 pasky Exp $ */
+/* $Id: tables.c,v 1.312 2004/06/29 22:51:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,7 +357,7 @@ distribute_widths(struct table *table, int width)
 	int col;
 	int spare_width = width - table->min_width;
 	int om = 0;
-	char *u;
+	char *visited_cols;
 	int *widths, *max_widths;
 	int max_cols_width = 0;
 	int cols_size;
@@ -375,7 +375,7 @@ distribute_widths(struct table *table, int width)
 	table->real_width = width;
 
 	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
-	u = fmem_alloc(table->cols);
+	visited_cols = fmem_alloc(table->cols);
 
 	widths = fmem_alloc(cols_size);
 	if (!widths) goto end;
@@ -463,7 +463,7 @@ distribute_widths(struct table *table, int width)
 		}
 
 		wq = 0;
-		if (u) memset(u, 0, table->cols);
+		if (visited_cols) memset(visited_cols, 0, table->cols);
 		total_spare_width = spare_width;
 
 again:
@@ -473,7 +473,7 @@ again:
 			int max_width;
 
 			if (!widths[col]) continue;
-			if (u && u[col]) continue;
+			if (visited_cols && visited_cols[col]) continue;
 
 			max_width = total_spare_width * widths[col] / total_width;
 			int_bounds(&max_width, 1, max_widths[col]);
@@ -484,7 +484,7 @@ again:
 		}
 
 		if (max_index != -1) {
-			if (u) u[max_index] = 1;
+			if (visited_cols) visited_cols[max_index] = 1;
 
 			if (max > spare_width) max = spare_width;
 			assertm(max >= 0, "shrinking cell");

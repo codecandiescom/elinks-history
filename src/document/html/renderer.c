@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.77 2003/05/05 13:43:15 zas Exp $ */
+/* $Id: renderer.c,v 1.78 2003/05/06 08:02:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1495,7 +1495,7 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 
 	i = d_opt->plain;
 	d_opt->plain = 0;
-	screen->title = convert_string(convert_table, t, strlen(t));
+	if (!i) screen->title = convert_string(convert_table, t, strlen(t));
 	d_opt->plain = i;
 
 	mem_free(t);

@@ -835,11 +835,6 @@ AC_ARG_ENABLE(mouse,
 	      [if test "$enableval" = yes; then AC_DEFINE(USE_MOUSE) fi],
 	      AC_DEFINE(USE_MOUSE))
 
-AC_ARG_ENABLE(formsmemory,
-              [  --disable-formsmemory   disable login manager for HTML forms],
-              [if test "$enableval" = yes; then AC_DEFINE(FORMS_MEMORY) fi],
-             AC_DEFINE(FORMS_MEMORY))
-
 AC_ARG_ENABLE(fastmem,
               [  --enable-fastmem        enable direct use of system allocation functions, not useable with --enable-debug],
 	      [if test "$enableval" = yes && test "$hm_enabled_debug" = no; then AC_DEFINE(FASTMEM) fi])

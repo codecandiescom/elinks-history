@@ -85,9 +85,6 @@
 /* (you will still need some support from the libc) */
 #undef BACKTRACE
 
-/* Enable forms memory */
-#undef FORMS_MEMORY
-
 /* Define to 1 if we should support mouse */
 #undef USE_MOUSE
 

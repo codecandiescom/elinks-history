@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.12 2004/01/01 02:06:03 pasky Exp $ */
+/* $Id: feature.h,v 1.13 2004/01/01 02:22:21 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -258,6 +258,23 @@
  * Default: disabled */
 
 /* #define ELINKS_ROOT_EXEC */
+
+
+/*** Forms Memory
+ *
+ * The famous Competing Browser has that annoying thing which pops up when you
+ * submit a form, offering to remember it and pre-fill it the next time. And
+ * yes, ELinks can do that too! You will still need to also enable this manualy
+ * at document.browse.forms.show_formhist.
+ *
+ * Many people find it extremely annoying (including myself), however some
+ * others consider it extremely handy and will sacrifice almost anything to get
+ * it. It will not do any harm to have this compiled-in as long as you will
+ * leave it turned off (which is also the default configuration).
+ *
+ * Default: enabled */
+
+#define FORMS_MEMORY
 
 
 #endif

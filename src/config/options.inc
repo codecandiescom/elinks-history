@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.130 2004/07/22 01:47:00 pasky Exp $ */
+/* $Id: options.inc,v 1.131 2004/07/22 01:49:43 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -640,6 +640,17 @@ struct option_info config_options_info[] = {
 		"save_interval", 0, 0, INT_MAX, 300,
 		N_("Interval at which to trigger information files in ~/.elinks\n"
 		"to be saved to disk if they has changed (seconds; 0 to disable)")),
+
+	INIT_OPT_BOOL("infofiles", N_("Use secure file saving"),
+		"secure_save", 0, 1,
+		N_("First write data to unique temporary file, then rename this file\n"
+		"upon successfully finishing this. Note that this relates only to\n"
+		"config files, not downloaded files. You may want to disable\n"
+		"it if you are using some exotic permissions for concerned files.\n"
+		"Secure file saving is automagically disabled if file is symlink.\n"
+		"Warning: some systems (ie. OS/2, Win32) require that destination\n"
+		"file doesn't exist when rename() is called, breaking atomicity,\n"
+		"and reducing reliability of this feature.")),
 
 	/* Keep options in alphabetical order. */
 
@@ -1346,16 +1357,8 @@ struct option_info config_options_info[] = {
 
 
 
-	INIT_OPT_BOOL("", N_("Use secure file saving"),
-		"secure_file_saving", 0, 1,
-		N_("First write data to unique temporary file, then rename this file\n"
-		"upon successfully finishing this. Note that this relates only to\n"
-		"config files, not downloaded files. You may want to disable\n"
-		"it if you are using some exotic permissions for concerned files.\n"
-		"Secure file saving is automagically disabled if file is symlink.\n"
-		"Warning: some systems (ie. OS/2, Win32) require that destination\n"
-		"file doesn't exist when rename() is called, breaking atomicity,\n"
-		"and reducing reliability of this feature.")),
+	/* Compatibility alias: added by pasky at 2004-07-22, 0.9.CVS. */
+	INIT_OPT_ALIAS("", "secure_file_saving", "infofiles.secure_save"),
 
 	NULL_OPTION_INFO,
 };

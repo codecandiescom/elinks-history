@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.180 2004/01/14 17:10:00 jonas Exp $ */
+/* $Id: menu.c,v 1.181 2004/01/15 16:04:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -647,7 +647,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 
 		case ACT_PAGE_DOWN:
 		{
-			int i = menu->selected;
+			int i = int_max(0, menu->selected);
 			int found = 0;
 			int step = 1;
 

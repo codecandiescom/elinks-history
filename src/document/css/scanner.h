@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.12 2004/01/18 17:13:43 jonas Exp $ */
+/* $Id: scanner.h,v 1.13 2004/01/18 18:21:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -37,10 +37,17 @@ struct css_token {
 
 #define get_css_token_end(token) &(token)->string[(token)->length]
 
+/* The naming of these two macros is a bit odd .. we compare often with
+ * "static" strings (I don't have a better word) so the macro name should
+ * be short. --jonas */
+
 /* Compare the string of @token with @string */
-#define css_token_contains(token, str, len) \
+#define css_token_strlcasecmp(token, str, len) \
 	((token) && !strlcasecmp((token)->string, (token)->length, str, len))
 
+/* Also compares the token string but using a "static" string */
+#define css_token_contains(token, str) \
+	css_token_strlcasecmp(token, str, sizeof(str) - 1)
 
 /* The number of tokens in the scanners token table:
  * At best it should be big enough to contain properties with space separated

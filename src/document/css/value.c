@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.32 2004/01/18 18:11:15 jonas Exp $ */
+/* $Id: value.c,v 1.33 2004/01/18 18:21:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,11 +138,11 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 
 	if (token->type != CSS_TOKEN_IDENTIFIER) return 0;
 
-	if (css_token_contains(token, "italic", 6)
-	    || css_token_contains(token, "oblique", 7)) {
+	if (css_token_contains(token, "italic")
+	    || css_token_contains(token, "oblique")) {
 		value->font_attribute.add |= AT_ITALIC;
 
-	} else if (css_token_contains(token, "normal", 6)) {
+	} else if (css_token_contains(token, "normal")) {
 		value->font_attribute.rem |= AT_ITALIC;
 
 	} else {
@@ -166,16 +166,16 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
 	if (token->type == CSS_TOKEN_IDENTIFIER) {
-		if (css_token_contains(token, "bolder", 6)) {
+		if (css_token_contains(token, "bolder")) {
 			value->font_attribute.add |= AT_BOLD;
 
-		} else if (css_token_contains(token, "lighter", 7)) {
+		} else if (css_token_contains(token, "lighter")) {
 			value->font_attribute.rem |= AT_BOLD;
 
-		} else if (css_token_contains(token, "bold", 4)) {
+		} else if (css_token_contains(token, "bold")) {
 			value->font_attribute.add |= AT_BOLD;
 
-		} else if (css_token_contains(token, "normal", 6)) {
+		} else if (css_token_contains(token, "normal")) {
 			value->font_attribute.rem |= AT_BOLD;
 
 		} else {
@@ -216,16 +216,16 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 
 	if (token->type != CSS_TOKEN_IDENTIFIER) return 0;
 
-	if (css_token_contains(token, "left", 4)) {
+	if (css_token_contains(token, "left")) {
 		value->text_align = AL_LEFT;
 
-	} else 	if (css_token_contains(token, "right", 5)) {
+	} else 	if (css_token_contains(token, "right")) {
 		value->text_align = AL_RIGHT;
 
-	} else 	if (css_token_contains(token, "center", 6)) {
+	} else 	if (css_token_contains(token, "center")) {
 		value->text_align = AL_CENTER;
 
-	} else 	if (css_token_contains(token, "justify", 7)) {
+	} else 	if (css_token_contains(token, "justify")) {
 		value->text_align = AL_BLOCK;
 
 	} else {

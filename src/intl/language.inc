@@ -414,6 +414,7 @@ struct translation translation_english [] = {
   {T_HK_ELINKS_HOME, "E"},
   {T_ADD_FOLDER, "Add folder"},
   {T_FOLDER_NAME, "Folder name"},
+  {T_MOVE, "Move"},
   {0, NULL}
 };
 
@@ -831,6 +832,7 @@ struct translation translation_brazilian_portuguese [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -1248,6 +1250,7 @@ struct translation translation_bulgarian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -1665,6 +1668,7 @@ struct translation translation_catalan [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -2082,6 +2086,7 @@ struct translation translation_croatian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -2499,6 +2504,7 @@ struct translation translation_czech [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, "Pøidat slo¾ku"},
   {T_FOLDER_NAME, "Název slo¾ky"},
+  {T_MOVE, "Pøesunout"},
   {0, NULL}
 };
 
@@ -2916,6 +2922,7 @@ struct translation translation_danish [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -3333,6 +3340,7 @@ struct translation translation_dutch [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -3750,6 +3758,7 @@ struct translation translation_estonian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -4167,6 +4176,7 @@ struct translation translation_finnish [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -4584,6 +4594,7 @@ struct translation translation_french [] = {
   {T_HK_ELINKS_HOME, "S"},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -5001,6 +5012,7 @@ struct translation translation_galician [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -5418,6 +5430,7 @@ struct translation translation_german [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -5835,6 +5848,7 @@ struct translation translation_greek [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -6252,6 +6266,7 @@ struct translation translation_hungarian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -6669,6 +6684,7 @@ struct translation translation_icelandic [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -7086,6 +7102,7 @@ struct translation translation_indonesian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -7503,6 +7520,7 @@ struct translation translation_italian [] = {
   {T_HK_ELINKS_HOME, "E"},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -7920,6 +7938,7 @@ struct translation translation_lithuanian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -8337,6 +8356,7 @@ struct translation translation_norwegian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -8754,6 +8774,7 @@ struct translation translation_polish [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -9171,6 +9192,7 @@ struct translation translation_portuguese [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -9588,6 +9610,7 @@ struct translation translation_romanian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -10005,6 +10028,7 @@ struct translation translation_russian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -10422,6 +10446,7 @@ struct translation translation_slovak [] = {
   {T_HK_ELINKS_HOME, "E"},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -10839,6 +10864,7 @@ struct translation translation_spanish [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -11256,6 +11282,7 @@ struct translation translation_swedish [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -11673,6 +11700,7 @@ struct translation translation_turkish [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 
@@ -12090,6 +12118,7 @@ struct translation translation_ukrainian [] = {
   {T_HK_ELINKS_HOME, NULL},
   {T_ADD_FOLDER, NULL},
   {T_FOLDER_NAME, NULL},
+  {T_MOVE, NULL},
   {0, NULL}
 };
 

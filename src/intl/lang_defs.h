@@ -414,4 +414,5 @@
 #define T_HK_ELINKS_HOME    410	
 #define T_ADD_FOLDER    411	
 #define T_FOLDER_NAME    412	
-#define T__N_TEXTS    413	
+#define T_MOVE    413	
+#define T__N_TEXTS    414	

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.42 2002/10/03 11:38:06 pasky Exp $ */
+/* $Id: dialogs.c,v 1.43 2002/10/07 20:37:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 
 /* The location of the box in the bookmark manager */
 /* Duplicate with dialogs/hierbox.c. */
-#define	BM_BOX_IND		7
+#define	BM_BOX_IND		8
 
 
 #ifdef BOOKMARKS
@@ -350,6 +350,14 @@ push_delete_button(struct dialog_data *dlg,
 	return 0;
 }
 
+int
+push_move_button(struct dialog_data *dlg,
+		 struct widget_data *blah)
+{
+	/* XXX: We do nothing yet. A TODO. */
+	return 0;
+}
+
 
 /* Builds the "Bookmark manager" dialog */
 void
@@ -405,23 +413,28 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
-	d->items[3].fn = push_add_folder_button;
-	d->items[3].text = TEXT(T_ADD_FOLDER);
+	d->items[3].fn = push_move_button;
+	d->items[3].text = TEXT(T_MOVE);
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ENTER;
-	d->items[4].fn = push_add_button;
-	d->items[4].text = TEXT(T_ADD);
+	d->items[4].fn = push_add_folder_button;
+	d->items[4].text = TEXT(T_ADD_FOLDER);
 
 	d->items[5].type = D_BUTTON;
 	d->items[5].gid = B_ENTER;
-	d->items[5].fn = push_search_button;
-	d->items[5].text = TEXT(T_SEARCH);
+	d->items[5].fn = push_add_button;
+	d->items[5].text = TEXT(T_ADD);
 
 	d->items[6].type = D_BUTTON;
-	d->items[6].gid = B_ESC;
-	d->items[6].fn = cancel_dialog;
-	d->items[6].text = TEXT(T_CLOSE);
+	d->items[6].gid = B_ENTER;
+	d->items[6].fn = push_search_button;
+	d->items[6].text = TEXT(T_SEARCH);
+
+	d->items[7].type = D_BUTTON;
+	d->items[7].gid = B_ESC;
+	d->items[7].fn = cancel_dialog;
+	d->items[7].text = TEXT(T_CLOSE);
 
 	d->items[BM_BOX_IND].type = D_BOX;
 	d->items[BM_BOX_IND].gid = 12;

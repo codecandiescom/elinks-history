@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.207 2004/10/08 16:54:57 zas Exp $ */
+/* $Id: connection.c,v 1.208 2004/10/08 16:57:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,9 +267,9 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 static void stat_timer(struct connection *conn);
 
 static void
-update_remaining_info(struct connection *conn)
+update_progress(struct connection *conn)
 {
-	struct remaining_info *progress = &conn->progress;
+	struct progress *progress = &conn->progress;
 	ttime a = get_time() - progress->last_time;
 
 	progress->loaded = conn->received;
@@ -298,7 +298,7 @@ update_remaining_info(struct connection *conn)
 static void
 stat_timer(struct connection *conn)
 {
-	update_remaining_info(conn);
+	update_progress(conn);
 	notify_connection_callbacks(conn);
 }
 
@@ -306,7 +306,7 @@ void
 set_connection_state(struct connection *conn, enum connection_state state)
 {
 	struct download *download;
-	struct remaining_info *progress = &conn->progress;
+	struct progress *progress = &conn->progress;
 
 	if (is_in_result_state(conn->state) && is_in_progress_state(state))
 		conn->prev_error = conn->state;
@@ -318,14 +318,14 @@ set_connection_state(struct connection *conn, enum connection_state state)
 				int tmp = progress->start;
 				int tmp2 = progress->seek;
 
-				memset(progress, 0, sizeof(struct remaining_info));
+				memset(progress, 0, sizeof(struct progress));
 				progress->start = tmp;
 				progress->seek = tmp2;
 				progress->valid = 1;
 			}
 			progress->last_time = get_time();
 			progress->last_loaded = progress->loaded;
-			update_remaining_info(conn);
+			update_progress(conn);
 			if (connection_disappeared(conn))
 				return;
 		}

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.81 2004/10/08 16:54:57 zas Exp $ */
+/* $Id: connection.h,v 1.82 2004/10/08 16:57:52 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -94,7 +94,7 @@ enum connection_state {
 	S_NO_JAVASCRIPT		= -10600,
 };
 
-struct remaining_info {
+struct progress {
 	ttime elapsed;
 	ttime last_time;
 	ttime dis_b;
@@ -136,7 +136,7 @@ struct connection {
 	LIST_HEAD(struct connection);
 
 	struct list_head downloads;
-	struct remaining_info progress;
+	struct progress progress;
 
 	struct uri *uri;
 	struct uri *proxied_uri;
@@ -206,7 +206,7 @@ struct download {
 	 * the download starts receiving some data. */
 	void (*callback)(struct download *, void *);
 	void *data;
-	struct remaining_info *progress;
+	struct progress *progress;
 
 	enum connection_state state;
 	int prev_error;

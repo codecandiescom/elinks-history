@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.46 2004/12/10 17:31:23 zas Exp $ */
+/* $Id: link.c,v 1.47 2004/12/10 17:39:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,17 +205,18 @@ html_img(unsigned char *a)
 	int ismap, usemap = 0;
 	int add_brackets = 0;
 	unsigned char *src = NULL;
-	unsigned char *al = get_attr_val(a, "usemap");
+	unsigned char *label;
+	unsigned char *usemap_attr = get_attr_val(a, "usemap");
 
-	if (al) {
+	if (usemap_attr) {
 		unsigned char *url;
 
 		usemap = 1;
 		html_stack_dup(ELEMENT_KILLABLE);
 		mem_free_if(format.link);
 		if (format.form) format.form = NULL;
-		url = join_urls(html_context.base_href, al);
-		mem_free(al);
+		url = join_urls(html_context.base_href, usemap_attr);
+		mem_free(usemap_attr);
 		if (!url) return;
 
 		format.link = straconcat("MAP@", url, NULL);
@@ -226,13 +227,13 @@ html_img(unsigned char *a)
 	ismap = format.link && has_attr(a, "ismap") && !usemap;
 
 	/* Has image tag an attribute |alt| ? */
-	al = get_attr_val(a, "alt");
+	label = get_attr_val(a, "alt");
 	/* If not, let's see if there is a |title| */
-	if (!al) al = get_attr_val(a, "title");
+	if (!label) label = get_attr_val(a, "title");
 	/* Little hack to preserve rendering of [   ], in directories listing,
 	 * but we still want to drop extra spaces in alt or title attribute
 	 * to limit display width on certain websites. --Zas */
-	if (al && strlen(al) > 5) clr_spaces(al);
+	if (label && strlen(label) > 5) clr_spaces(label);
 
 	/* Get the |src| value for this tag if any. */
 	src = null_or_stracpy(object_src);
@@ -241,8 +242,8 @@ html_img(unsigned char *a)
 
 	/* If we have no label yet (no title or alt), so
 	 * just use default ones, or image filename. */
-	if (!al || !*al) {
-		mem_free_if(al);
+	if (!label || !*label) {
+		mem_free_if(label);
 		/* Do we want to display images with no link on them ?
 		 * If not, just exit now. */
 		if (!global_doc_opts->images && !format.link) {
@@ -254,21 +255,21 @@ html_img(unsigned char *a)
 		add_brackets = 1;
 
 		if (usemap) {
-			al = stracpy("USEMAP");
+			label = stracpy("USEMAP");
 		} else if (ismap) {
-			al = stracpy("ISMAP");
+			label = stracpy("ISMAP");
 		} else {
-			al = get_image_filename_from_src(src);
+			label = get_image_filename_from_src(src);
 		}
 	}
 
 	/* Get real label. */
-	if (al) al = get_image_label(al);
+	if (label) label = get_image_label(label);
 
 	mem_free_set(&format.image, NULL);
 	mem_free_set(&format.title, NULL);
 
-	if (al) {
+	if (label) {
 		int img_link_tag = get_opt_int("document.browse.images.image_link_tagging");
 		color_t fg;
 
@@ -276,18 +277,18 @@ html_img(unsigned char *a)
 		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
 			unsigned char *img_link_prefix = get_opt_str("document.browse.images.image_link_prefix");
 			unsigned char *img_link_suffix = get_opt_str("document.browse.images.image_link_suffix");
-			unsigned char *tmp = straconcat(img_link_prefix, al, img_link_suffix, NULL);
+			unsigned char *new_label = straconcat(img_link_prefix, label, img_link_suffix, NULL);
 
-			if (tmp) {
-				mem_free(al);
-				al = tmp;
+			if (new_label) {
+				mem_free(label);
+				label = new_label;
 			}
 		}
 
 		/* ??? */
 		if (!get_opt_bool("document.browse.images.show_any_as_links")) {
 			ismap = 0;
-			goto show_al;
+			goto show_label;
 		}
 
 		if (src) {
@@ -307,7 +308,7 @@ html_img(unsigned char *a)
 				format.link = h;
 			}
 		}
-show_al:
+show_label:
 		/* This is not 100% appropriate for <img>, but well, accepting
 		 * accesskey and tabindex near <img> is just our little
 		 * extension to the standard. After all, it makes sense. */
@@ -315,7 +316,7 @@ show_al:
 
 		fg = format.fg;
 		format.fg = get_opt_color("document.colors.image");
-		put_chrs(al, strlen(al), html_context.put_chars_f, html_context.part);
+		put_chrs(label, strlen(label), html_context.put_chars_f, html_context.part);
 		format.fg = fg;
 		if (ismap) kill_html_stack_item(&html_top);
 		/* Anything below must take care of properly handling the
@@ -327,7 +328,7 @@ show_al:
 	mem_free_set(&format.title, NULL);
 
 	mem_free_if(src);
-	mem_free_if(al);
+	mem_free_if(label);
 	if (usemap) kill_html_stack_item(&html_top);
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
 }

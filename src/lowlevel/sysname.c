@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.12 2003/07/21 22:19:02 jonas Exp $ */
+/* $Id: sysname.c,v 1.13 2003/09/07 21:03:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,52 +20,66 @@
 
 unsigned char system_name[MAX_STR_LEN];
 
-void
-get_system_name(void)
+#ifndef HAVE_POPEN
+static int
+got_it_from_uname_command(void)
 {
 	FILE *f;
 	unsigned char *p;
 
-#if defined(HAVE_SYS_UTSNAME_H) && defined(HAVE_UNAME)
-	struct utsname name;
-
-	memset(&name, 0, sizeof(struct utsname));
-	if (!uname(&name)) {
-		struct string str;
-		if (!init_string(&str)) goto fail;
-
-		add_format_to_string(&str, "%s %s %s",
-				     name.sysname, name.release, name.machine);
-		safe_strncpy(system_name, str.source, sizeof(system_name));
-		done_string(&str);
-		return;
-	}
-#endif
-
-#ifdef HAVE_POPEN
-	memset(system_name, 0, sizeof(system_name));
-
 	f = popen("uname -srm", "r");
-	if (!f) goto fail;
+	if (!f) return 0;
 
 	if (fread(system_name, 1, sizeof(system_name) - 1, f) <= 0) {
 		pclose(f);
-		goto fail;
+		return 0;
 	}
 
 	pclose(f);
 
-	for (p = system_name; *p; p++) {
-		if (*p >= ' ')
-			continue;
-		*p = 0;
-		break;
-	}
+	system_name[MAX_STR_LEN - 1] = '\0'; /* Safer. */
+	p = system_name;
+	while (*p >= ' ') p++;
+	*p = '\0';
 
 	if (system_name[0])
-		return;
+		return 1;
+
+	return 0;
+}
+#else
+#define got_it_from_uname_command() 0
 #endif
 
-fail:
+void
+get_system_name(void)
+{
+#if defined(HAVE_SYS_UTSNAME_H) && defined(HAVE_UNAME)
+	struct utsname name;
+
+	if (!uname(&name)) {
+		int len = 0;
+		int clen;
+
+#define APPEND(what, sep)					\
+		clen = strlen(what);				\
+		if (len + clen + 1 >= sizeof(system_name)) {	\
+			system_name[len] = '\0';		\
+			return;					\
+		}						\
+		memcpy(&system_name[len], what, clen); 		\
+		len += clen;					\
+		system_name[len++] = sep;
+
+		APPEND(name.sysname, ' ');
+		APPEND(name.release, ' ');
+		APPEND(name.machine, '\0');
+
+		return;
+	}
+#endif
+
+	if (got_it_from_uname_command()) return;
+
 	safe_strncpy(system_name, SYSTEM_NAME, sizeof(system_name));
 }

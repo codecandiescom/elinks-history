@@ -1,5 +1,8 @@
 Known bugs:
 
+	--enable-libc has some effects on the rendering of _all_ pages, this is
+	due to a bug in one the internal functions in string.c...
+
 	Tilde doesn't expand as it should when used in goto dialog, ~ -> /home
 	and ~/ -> current directory.
 	
@@ -29,6 +32,6 @@ top/bottom of screen.
 
 	Call to OS Shell doesn't release mouse handler.
 
-$Id: BUGS,v 1.35 2003/05/01 10:46:43 zas Exp $
+$Id: BUGS,v 1.36 2003/05/01 23:45:08 zas Exp $
 
 vim: textwidth=80

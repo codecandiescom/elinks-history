@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.10 2004/06/10 12:21:43 jonas Exp $ */
+/* $Id: link.c,v 1.11 2004/06/18 23:53:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,26 +45,6 @@
 
 static unsigned char *object_src;
 
-
-void
-put_link_line(unsigned char *prefix, unsigned char *linkname,
-	      unsigned char *link, unsigned char *target)
-{
-	has_link_lines = 1;
-	html_stack_dup(ELEMENT_KILLABLE);
-	ln_break(1, line_break_f, ff);
-	mem_free_set(&format.link, NULL);
-	mem_free_set(&format.target, NULL);
-	mem_free_set(&format.title, NULL);
-	format.form = NULL;
-	put_chrs(prefix, strlen(prefix), put_chars_f, ff);
-	format.link = join_urls(format.href_base, link);
-	format.target = stracpy(target);
-	format.fg = format.clink;
-	put_chrs(linkname, strlen(linkname), put_chars_f, ff);
-	ln_break(1, line_break_f, ff);
-	kill_html_stack_item(&html_top);
-}
 
 void
 html_a(unsigned char *a)
@@ -279,6 +259,28 @@ show_al:
 }
 
 
+
+void
+put_link_line(unsigned char *prefix, unsigned char *linkname,
+	      unsigned char *link, unsigned char *target)
+{
+	has_link_lines = 1;
+	html_stack_dup(ELEMENT_KILLABLE);
+	ln_break(1, line_break_f, ff);
+	mem_free_set(&format.link, NULL);
+	mem_free_set(&format.target, NULL);
+	mem_free_set(&format.title, NULL);
+	format.form = NULL;
+	put_chrs(prefix, strlen(prefix), put_chars_f, ff);
+	format.link = join_urls(format.href_base, link);
+	format.target = stracpy(target);
+	format.fg = format.clink;
+	put_chrs(linkname, strlen(linkname), put_chars_f, ff);
+	ln_break(1, line_break_f, ff);
+	kill_html_stack_item(&html_top);
+}
+
+
 void
 html_applet(unsigned char *a)
 {
@@ -398,6 +400,7 @@ html_embed(unsigned char *a)
 	mem_free(object_src);
 	object_src = NULL;
 }
+
 
 
 /* Link types:

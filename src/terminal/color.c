@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.15 2003/08/31 13:07:04 jonas Exp $ */
+/* $Id: color.c,v 1.16 2003/08/31 17:20:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,13 +215,16 @@ encode_color(struct color_pair *pair, enum screen_char_attr attr)
 		if (attr & SCREEN_ATTR_ITALIC)
 			fg ^= 0x01;
 
-		if (attr & SCREEN_ATTR_UNDERLINE)
-			fg ^= 0x04;
-
 		/* TODO: For terminals that support underline no enhancements
 		 *	 should be added. */
-		if (attr & (SCREEN_ATTR_BOLD | SCREEN_ATTR_UNDERLINE))
-			bold = TERM_COLOR_BOLD;
+		if (attr & SCREEN_ATTR_UNDERLINE) {
+			fg ^= 0x04;
+			bold = SCREEN_ATTR_BOLD;
+		}
+
+		if (attr & SCREEN_ATTR_BOLD) {
+			bold = SCREEN_ATTR_BOLD;
+		}
 	}
 
 	/* Adjusts the foreground color to be more visible. */
@@ -232,7 +235,7 @@ encode_color(struct color_pair *pair, enum screen_char_attr attr)
 	/* If foreground color is not contained within the mask ( it's >7 )
 	 * we are dealing with a bright (bold) color so mirror that. */
 	if (fg & ~TERM_COLOR_MASK) {
-		bold = TERM_COLOR_BOLD;
+		bold = SCREEN_ATTR_BOLD;
 		fg &= TERM_COLOR_MASK;
 	}
 

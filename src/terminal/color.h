@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.5 2003/08/31 15:51:33 jonas Exp $ */
+/* $Id: color.h,v 1.6 2003/08/31 17:20:15 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -6,7 +6,6 @@
 #include "terminal/draw.h"
 #include "util/color.h"
 
-#define TERM_COLOR_BOLD	0x40
 #define TERM_COLOR_MASK	0x07
 
 #define TERM_COLOR_FOREGROUND(color) (color & TERM_COLOR_MASK)

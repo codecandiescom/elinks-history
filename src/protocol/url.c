@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.56 2003/01/19 14:07:55 pasky Exp $ */
+/* $Id: url.c,v 1.57 2003/04/14 13:26:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,7 +210,7 @@ parse_url(unsigned char *url, int *prlen,
 	if (!*host_end && protocols[protocol].need_slash_after_host) return -1;
 
 #ifdef IPV6
-	if (lbracket && rbracket) {
+	if (lbracket && rbracket && rbracket - lbracket - 1) {
 		safe_strncpy(hostbuf, lbracket + 1, rbracket - lbracket - 1);
 	}
 #endif

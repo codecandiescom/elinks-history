@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.263 2005/01/12 16:32:56 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.264 2005/02/06 09:42:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -728,7 +728,6 @@ static struct default_kb default_main_keymap[] = {
 	{ '\'',		 0,		ACT_MAIN_MARK_GOTO },
 	{ '\\',		 0,		ACT_MAIN_TOGGLE_HTML_PLAIN },
 	{ ']',		 0,		ACT_MAIN_SCROLL_RIGHT },
-	{ '_',		 0,		ACT_MAIN_TOGGLE_CSS },
 	{ 'a',		 0,		ACT_MAIN_ADD_BOOKMARK },
 	{ 'b',		 0,		ACT_MAIN_MOVE_PAGE_UP },
 	{ 'c',		 0,		ACT_MAIN_TAB_CLOSE },
@@ -748,7 +747,6 @@ static struct default_kb default_main_keymap[] = {
 	{ 't',		 0,		ACT_MAIN_OPEN_NEW_TAB },
 	{ 'u',		 0,		ACT_MAIN_HISTORY_MOVE_FORWARD },
 	{ 'v',		 0,		ACT_MAIN_VIEW_IMAGE },
-	{ 'w',		 0,		ACT_MAIN_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES },
 	{ 'x',		 0,		ACT_MAIN_LINK_FOLLOW_RELOAD },
 	{ 'z',		 0,		ACT_MAIN_ABORT_CONNECTION },
 	{ '{',		 0,		ACT_MAIN_SCROLL_LEFT },

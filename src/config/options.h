@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.12 2002/05/19 11:06:25 pasky Exp $ */
+/* $Id: options.h,v 1.13 2002/05/19 14:12:41 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -78,6 +78,31 @@ extern void add_opt_rec(struct hash *, struct option *);
 extern void add_opt(struct hash *, unsigned char *name, enum option_flags flags,
 		    enum option_type type, int min, int max, void *ptr,
 		    unsigned char *desc);
+
+#define add_opt_bool(hash, name, flags, def, desc) do { \
+	add_opt(hash, name, flags, OPT_BOOL, 0, 1, mem_alloc(sizeof(int)), desc); \
+	*((int *) get_opt(hash, name)) = def; } while (0)
+
+#define add_opt_int(hash, name, flags, min, max, def, desc) do { \
+	add_opt(hash, name, flags, OPT_INT, min, max, mem_alloc(sizeof(int)), desc); \
+	*((int *) get_opt(hash, name)) = def; } while (0)
+
+#define add_opt_long(hash, name, flags, min, max, def, desc) do { \
+	add_opt(hash, name, flags, OPT_LONG, min, max, mem_alloc(sizeof(long)), desc); \
+	*((long *) get_opt(hash, name)) = def; } while (0)
+
+#define add_opt_string(hash, name, flags, def, desc) \
+	add_opt(hash, name, flags, OPT_STRING, 0, MAX_STR_LEN, stracpy(def), desc);
+
+#define add_opt_ptr(hash, name, flags, type, def, desc) \
+	add_opt(hash, name, flags, type, 0, 0, def, desc);
+
+#define add_opt_void(hash, name, flags, type, desc) \
+	add_opt(hash, name, flags, type, 0, 0, NULL, desc);
+
+#define add_opt_command(hash, name, flags, cmd, desc) \
+	add_opt(hash, name, flags, OPT_COMMAND, 0, 0, cmd, desc);
+
 
 extern unsigned char *cmd_name(unsigned char *);
 extern unsigned char *opt_name(unsigned char *);

@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.22 2002/05/19 11:06:25 pasky Exp $ */
+/* $Id: options.c,v 1.23 2002/05/19 14:12:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,6 +119,27 @@ init_options()
 void
 done_options()
 {
+	struct hash_item *item;
+	int i;
+
+	foreach_hash_item (links_options, item, i) {
+		struct option *option = item->value;
+
+		if (option->type & OPT_BOOL ||
+		    option->type & OPT_INT ||
+		    option->type & OPT_LONG ||
+		    option->type & OPT_STRING)
+			mem_free(option->ptr);
+	}
+
+#if 0
+	foreach_hash_item (html_options, item, i) {
+		struct option *option = item->value;
+
+		mem_free(option->ptr);
+	}
+#endif
+
 	free_hash(links_options);
 	free_hash(html_options);
 }
@@ -591,18 +612,6 @@ unsigned char *version_cmd(struct option *o, unsigned char ***argv, int *argc)
 	return "";
 }
 
-unsigned char *no_connect_cmd(struct option *o, unsigned char ***argv, int *argc)
-{
-	get_opt_int("no_connect") = 1;
-	return NULL;
-}
-
-unsigned char *anonymous_cmd(struct option *o, unsigned char ***argv, int *argc)
-{
-	get_opt_int("anonymous") = 1;
-	return NULL;
-}
-
 unsigned char *
 printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
@@ -704,76 +713,12 @@ struct option_type_info option_types[] = {
  Options values
 **********************************************************************/
 
-int anonymous = 0;
-
-int no_connect = 0;
-int base_session = 0;
-
-int source = 0;
-int dump = 0;
-int dump_width = 80;
-
-enum cookies_accept cookies_accept = COOKIES_ACCEPT_ALL;
-int cookies_save = 1;
-int cookies_resave = 1;
-int cookies_paranoid_security = 0;
-
-int secure_save = 1;
-
-int async_lookup = 1;
-int download_utime = 0;
-int max_connections = 10;
-int max_connections_to_host = 2;
-int max_tries = 3;
-int receive_timeout = 120;
-int unrestartable_receive_timeout = 600;
-
-int max_format_cache_entries = 5;
-long memory_cache_size = 1048576;
-
 struct document_setup dds = { 0, 0, 1, 1, 1, 1, 0, 3, 0, 0 };
 
 struct rgb default_fg = { 191, 191, 191 };
 struct rgb default_bg = { 0, 0, 0 };
 struct rgb default_link = { 0, 0, 255 };
 struct rgb default_vlink = { 255, 255, 0 };
-
-int color_dirs = 1;
-
-int show_status_bar = 1;
-int show_title_bar = 1;
-
-int form_submit_auto = 1;
-int form_submit_confirm = 1;
-int accesskey_enter = 0;
-int accesskey_priority = 1;
-int links_wraparound = 0;
-
-int allow_special_files = 0;
-int keep_unhistory = 1;
-
-int enable_global_history = 1;
-
-unsigned char fake_referer[MAX_STR_LEN] = "";
-enum referer referer = REFERER_NONE;
-
-unsigned char http_proxy[MAX_STR_LEN] = "";
-unsigned char ftp_proxy[MAX_STR_LEN] = "";
-
-unsigned char download_dir[MAX_STR_LEN] = "./";
-
-unsigned char default_mime_type[MAX_STR_LEN] = "text/plain";
-
-unsigned char default_anon_pass[MAX_STR_LEN] = "somebody@host.domain";
-
-unsigned char user_agent[MAX_STR_LEN] = "";
-
-unsigned char accept_language[MAX_STR_LEN] = "";
-
-unsigned char proxy_user[MAX_STR_LEN] = "";
-unsigned char proxy_passwd[MAX_STR_LEN] = "";
-
-int startup_goto_dialog = 1;
 
 /* These are workarounds for some CGI script bugs */
 struct http_bugs http_bugs = { 0, 1, 0, 0 };
@@ -787,177 +732,151 @@ struct http_bugs http_bugs = { 0, 1, 0, 0 };
 void
 register_options()
 {
-	add_opt(links_options,
-		"accept_language", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, accept_language,
+	add_opt_string(links_options,
+		"accept_language", OPT_CMDLINE | OPT_CFGFILE, "",
 		"Send Accept-Language header.");
 		
-	add_opt(links_options,
-		"accesskey_enter", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &accesskey_enter,
+	add_opt_bool(links_options,
+		"accesskey_enter", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Automatically follow link / submit form if appropriate accesskey\n"
 		"is pressed - this is standart behaviour, however dangerous.");
 
-	add_opt(links_options,
-		"accesskey_priority", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 0, 2, &accesskey_priority,
+	add_opt_int(links_options,
+		"accesskey_priority", OPT_CMDLINE | OPT_CFGFILE, 0, 2, 1,
 		"Priority of 'accesskey' HTML attribute:\n"
 		"0 is first try all normal bindings and if it fails, check accesskey\n"
 		"1 is first try only frame bindings and if it fails, check accesskey\n"
 		"2 is first check accesskey (that can be dangerous)");
 
-	add_opt(links_options,
-		"allow_special_files", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &allow_special_files,
+	add_opt_bool(links_options,
+		"allow_special_files", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Allow reading from non-regular files? (DANGEROUS - reading\n"
 		"/dev/urandom or /dev/zero can ruin your day!)");
 
-	add_opt(links_options,
-		"anonymous", OPT_CMDLINE,
-		OPT_BOOL, 0, 1, &anonymous,
+	add_opt_bool(links_options,
+		"anonymous", OPT_CMDLINE, 0,
 		"Restrict links so that it can run on an anonymous account.\n"
 		"No local file browsing, no downloads. Executing of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.");
 
-	add_opt(links_options,
-		"assume_codepage", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_CODEPAGE, 0, 0, &dds.assume_cp,
+	add_opt_ptr(links_options,
+		"assume_codepage", OPT_CMDLINE | OPT_CFGFILE, OPT_CODEPAGE, &dds.assume_cp,
 		"Use the given codepage when the webpage did not specify\n"
 		"its codepage.\n"
 		"Default: ISO 8859-1");
 
-	add_opt(links_options,
-		"async_dns", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &async_lookup,
+	add_opt_bool(links_options,
+		"async_dns", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Use asynchronous DNS resolver?");
 
-	add_opt(links_options,
-		"base_session", OPT_CMDLINE,
-		OPT_INT, 0, MAXINT, &base_session,
+	add_opt_int(links_options,
+		"base_session", OPT_CMDLINE, 0, MAXINT, 0,
 		"Run this links in separate session - instances of links with\n"
 		"same base_session will connect together and share runtime\n"
 		"informations. By default, base_session is 0.");
 
-	add_opt(links_options,
-		"color_dirs", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &color_dirs,
+	add_opt_bool(links_options,
+		"color_dirs", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Highlight directories when listing local disk content?");
 
-	add_opt(links_options,
+	add_opt_int(links_options,
 		"cookies_accept", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, &cookies_accept,
+		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, COOKIES_ACCEPT_ALL,
 		"Mode of accepting cookies:\n"
 		"0 is accept no cookies\n"
 		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
 		"2 is accept all cookies");
 
-	add_opt(links_options,
-		"cookies_paranoid_security", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &cookies_paranoid_security,
+	add_opt_bool(links_options,
+		"cookies_paranoid_security", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"When enabled, we'll require three dots in cookies domain for all\n"
 		"non-international domains (instead of just two dots). Please see\n"
 		"code (cookies.c:check_domain_security()) for further description");
 
-	add_opt(links_options,
-		"cookies_save", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &cookies_save,
+	add_opt_bool(links_options,
+		"cookies_save", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Load/save cookies from/to disk?");
 
-	add_opt(links_options,
-		"cookies_resave", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &cookies_resave,
+	add_opt_bool(links_options,
+		"cookies_resave", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Save cookies after each change in cookies list? No effect when\n"
 		"cookies_save is off.");
 
-	add_opt(links_options,
-		"default_fg", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_COLOR, 0, 1, &default_fg,
+	add_opt_ptr(links_options,
+		"default_fg", OPT_CMDLINE | OPT_CFGFILE, OPT_COLOR, &default_fg,
 		"Default foreground color.");
 
 	/* FIXME - this produces ugly results now */
-	add_opt(links_options,
-		"default_bg", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
-		OPT_COLOR, 0, 1, &default_bg,
+	add_opt_ptr(links_options,
+		"default_bg", /* OPT_CMDLINE | OPT_CFGFILE */ 0, OPT_COLOR, &default_bg,
 		"Default background color.");
 
-	add_opt(links_options,
-		"default_link", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_COLOR, 0, 1, &default_link,
+	add_opt_ptr(links_options,
+		"default_link", OPT_CMDLINE | OPT_CFGFILE, OPT_COLOR, &default_link,
 		"Default link color.");
 
-	add_opt(links_options,
-		"default_vlink", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_COLOR, 0, 1, &default_vlink,
+	add_opt_ptr(links_options,
+		"default_vlink", OPT_CMDLINE | OPT_CFGFILE, OPT_COLOR, &default_vlink,
 		"Default vlink color.");
 
-	add_opt(links_options,
-		"default_mime_type", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, default_mime_type,
+	add_opt_string(links_options,
+		"default_mime_type", OPT_CMDLINE | OPT_CFGFILE, "text/plain",
 		"MIME type for a document we should assume by default (when we are\n"
 		"unable to guess it properly from known informations about the\n"
 		"document).");
 
-	add_opt(links_options,
-		"download_dir", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, download_dir,
+	add_opt_string(links_options,
+		"download_dir", OPT_CMDLINE | OPT_CFGFILE, "./",
 		"Default download directory.");
 
-	add_opt(links_options,
-		"download_utime", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &download_utime,
+	add_opt_bool(links_options,
+		"download_utime", OPT_CMDLINE | OPT_CFGFILE, 0,
 		"Set time of downloaded files?");
 
-	add_opt(links_options,
-		"dump", OPT_CMDLINE,
-		OPT_BOOL, 0, 1, &dump,
+	add_opt_bool(links_options,
+		"dump", OPT_CMDLINE, 0,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout.");
 
-	add_opt(links_options,
-		"dump_width", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 40, 512, &dump_width,
+	add_opt_int(links_options,
+		"dump_width", OPT_CMDLINE | OPT_CFGFILE, 40, 512, 80,
 		"Size of screen in characters, when dumping a HTML document.");
 
-	add_opt(links_options,
-		"format_cache_size", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 0, 256, &max_format_cache_entries,
+	add_opt_int(links_options,
+		"format_cache_size", OPT_CMDLINE | OPT_CFGFILE, 0, 256, 5,
 		"Number of cached formatted pages.");
 
-	add_opt(links_options,
-		"form_submit_auto", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &form_submit_auto,
+	add_opt_bool(links_options,
+		"form_submit_auto", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Automagically submit a form when enter pressed on text field.");
 
-	add_opt(links_options,
-		"form_submit_confirm", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &form_submit_confirm,
+	add_opt_bool(links_options,
+		"form_submit_confirm", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Ask for confirmation when submitting a form.");
 
-	add_opt(links_options,
-		"ftp.anonymous_password", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, default_anon_pass,
+	add_opt_string(links_options,
+		"ftp.anonymous_password", OPT_CMDLINE | OPT_CFGFILE, "some@host.domain",
 		"FTP anonymous password to be sent.");
 
-	add_opt(links_options,
-		"ftp_proxy", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, ftp_proxy,
+	add_opt_string(links_options,
+		"ftp_proxy", OPT_CMDLINE | OPT_CFGFILE, "",
 		"Host and port number (host:port) of the FTP proxy, or blank.");
 
-	add_opt(links_options,
-		"?", OPT_CMDLINE,
-		OPT_COMMAND, 0, 0, printhelp_cmd,
+	add_opt_command(links_options,
+		"?", OPT_CMDLINE, printhelp_cmd,
 		NULL);
 
-	add_opt(links_options,
-		"h", OPT_CMDLINE,
-		OPT_COMMAND, 0, 0, printhelp_cmd,
+	add_opt_command(links_options,
+		"h", OPT_CMDLINE, printhelp_cmd,
 		NULL);
 
-	add_opt(links_options,
-		"help", OPT_CMDLINE,
-		OPT_COMMAND, 0, 0, printhelp_cmd,
+	add_opt_command(links_options,
+		"help", OPT_CMDLINE, printhelp_cmd,
 		"Print usage help and exit.");
+
+
+	/* FIXME: http_bugs need to disappear! */
 
 	add_opt(links_options,
 		"http_bugs.allow_blacklist", OPT_CMDLINE | OPT_CFGFILE,
@@ -979,189 +898,158 @@ register_options()
 		OPT_BOOL, 0, 1, &http_bugs.http10,
 		"Use HTTP/1.0 protocol?");
 
-	add_opt(links_options,
-		"http_proxy", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, http_proxy,
+
+	add_opt_string(links_options,
+		"http_proxy", OPT_CMDLINE | OPT_CFGFILE, "",
 		"Host and port number (host:port) of the HTTP proxy, or blank.");
 
-	add_opt(links_options,
+	/* TODO: REFERER_SAME_URL as default instead? */
+	add_opt_int(links_options,
 		"http_referer", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, REFERER_NONE, REFERER_TRUE, &referer,
+		REFERER_NONE, REFERER_TRUE, REFERER_NONE,
 		"Mode of sending HTTP referer:\n"
 		"0 is send no referer\n"
 		"1 is send current URL as referer\n"
 		"2 is send fixed fake referer\n"
 		"3 is send previous URL as referer (correct, but insecure)\n");
 
-	/* XXX: Exception to alphabetical order. */
-	add_opt(links_options,
-		"fake_referer", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, fake_referer,
+	add_opt_string(links_options,
+		"fake_referer", OPT_CMDLINE | OPT_CFGFILE, "",
 		"Fake referer to be sent when http_referer is 3.");
 
 	/* XXX: Disable global history if -anonymous is given? */
-	add_opt(links_options,
-		"enable_global_history", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &enable_global_history,
+	add_opt_bool(links_options,
+		"enable_global_history", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Enable global history (\"history of all pages visited\")?");
 
-	add_opt(links_options,
-		"keep_unhistory", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &keep_unhistory,
+	add_opt_bool(links_options,
+		"keep_unhistory", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Keep unhistory (\"forward history\")?");
 
-	add_opt(links_options,
-		"language", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_LANGUAGE, 0, 0, &current_language,
+	add_opt_ptr(links_options,
+		"language", OPT_CMDLINE | OPT_CFGFILE, OPT_LANGUAGE, &current_language,
 		"Language of user interface.");
 
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */
-	add_opt(links_options,
-		"links_wraparound", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
-		OPT_BOOL, 0, 1, &links_wraparound,
+	add_opt_bool(links_options,
+		"links_wraparound", /* OPT_CMDLINE | OPT_CFGFILE */ 0, 0,
 		"When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa.");
 
-	add_opt(links_options,
-		"lookup", OPT_CMDLINE,
-		OPT_COMMAND, 0, 0, lookup_cmd,
+	add_opt_command(links_options,
+		"lookup", OPT_CMDLINE, lookup_cmd,
 		"Make lookup for specified host.");
 
-	add_opt(links_options,
-		"max_connections", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 1, 16, &max_connections,
+	add_opt_int(links_options,
+		"max_connections", OPT_CMDLINE | OPT_CFGFILE, 1, 16, 10,
 		"Maximum number of concurrent connections.");
 
-	add_opt(links_options,
-		"max_connections_to_host", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 1, 8, &max_connections_to_host,
+	add_opt_int(links_options,
+		"max_connections_to_host", OPT_CMDLINE | OPT_CFGFILE, 1, 8, 2,
 		"Maximum number of concurrent connection to a given host.");
 
-	add_opt(links_options,
-		"memory_cache_size", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 0, MAXINT, &memory_cache_size,
+	add_opt_int(links_options,
+		"memory_cache_size", OPT_CMDLINE | OPT_CFGFILE, 0, MAXINT, 1048576,
 		"Memory cache size (in kilobytes).");
 
-	add_opt(links_options,
-		"no_connect", OPT_CMDLINE,
-		OPT_BOOL, 0, 1, &no_connect,
+	add_opt_bool(links_options,
+		"no_connect", OPT_CMDLINE, 0,
 		"Run links as a separate instance - instead of connecting to\n"
 		"existing instance.");
 
-	add_opt(links_options,
-		"proxy_user", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, proxy_user,
+	add_opt_string(links_options,
+		"proxy_user", OPT_CMDLINE | OPT_CFGFILE, "",
 		"Proxy authentication user");
 
-	add_opt(links_options,
-		"proxy_passwd", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, proxy_passwd,
+	add_opt_string(links_options,
+		"proxy_passwd", OPT_CMDLINE | OPT_CFGFILE, "",
 		"Proxy authentication passwd");
 
-	add_opt(links_options,
-		"receive_timeout", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 1, 1800, &receive_timeout,
+	add_opt_int(links_options,
+		"receive_timeout", OPT_CMDLINE | OPT_CFGFILE, 1, 1800, 120,
 		"Timeout on receive (in seconds).");
 
-	add_opt(links_options,
-		"retries", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 1, 16, &max_tries,
+	add_opt_int(links_options,
+		"retries", OPT_CMDLINE | OPT_CFGFILE, 1, 16, 3,
 		"Number of tries to estabilish a connection.");
 
-	add_opt(links_options,
-		"secure_save", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &secure_save,
+	add_opt_bool(links_options,
+		"secure_save", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"First write data to 'file.tmp', rename to 'file' upon\n"
 		"successful finishing this. Note that this relates only to\n"
 		"config files, not downloaded files. You may want to disable\n"
 		"it, if you want some config file with some exotic permissions.\n"
 		"Secure save is automagically disabled if file is symlink.");
 
-	add_opt(links_options,
-		"show_status_bar", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &show_status_bar,
+	add_opt_bool(links_options,
+		"show_status_bar", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Show status bar on the screen?");
 
-	add_opt(links_options,
-		"show_title_bar", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_BOOL, 0, 1, &show_title_bar,
+	add_opt_bool(links_options,
+		"show_title_bar", OPT_CMDLINE | OPT_CFGFILE, 1,
 		"Show title bar on the screen?");
 
-	add_opt(links_options,
-		"source", OPT_CMDLINE,
-		OPT_BOOL, 0, 1, &source,
+	add_opt_bool(links_options,
+		"source", OPT_CMDLINE, 0,
 		"Write the given HTML document in source form to stdout.");
 
 	/* TODO - this is implemented, but disabled for now as
 	 * it's buggy. */
-	add_opt(links_options,
-		"startup_goto_dialog", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
-		OPT_BOOL, 0, 1, &startup_goto_dialog,
+	add_opt_bool(links_options,
+		"startup_goto_dialog", /* OPT_CMDLINE | OPT_CFGFILE */ 0, 1,
 		"Pop up goto dialog on startup when there's no homepage?");
 
-	add_opt(links_options,
-		"unrestartable_receive_timeout", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_INT, 1, 1800, &unrestartable_receive_timeout,
+	add_opt_int(links_options,
+		"unrestartable_receive_timeout", OPT_CMDLINE | OPT_CFGFILE, 1, 1800, 600,
 		"Timeout on non restartable connections (in seconds).");
 
-	add_opt(links_options,
-		"user_agent", OPT_CMDLINE | OPT_CFGFILE,
-		OPT_STRING, 0, MAX_STR_LEN, user_agent,
+	add_opt_string(links_options,
+		"user_agent", OPT_CMDLINE | OPT_CFGFILE, "",
 		"Change the User Agent. That means identification string, which\n"
 		"is sent to HTTP server, when a document is requested.\n"
 		"If empty, defaults to: ELinks (<version>; <system_id>; <term_size>)");
 			
-	add_opt(links_options,
-		"version", OPT_CMDLINE,
-		OPT_COMMAND, 0, 0, version_cmd,
+	add_opt_command(links_options,
+		"version", OPT_CMDLINE, version_cmd,
 		"Print links version information and exit.");
 
 	/* config-file-only options */
 
-	add_opt(links_options,
-		"terminal", OPT_CFGFILE,
-		OPT_TERM, 0, 0, NULL,
+	add_opt_void(links_options,
+		"terminal", OPT_CFGFILE, OPT_TERM,
 		NULL);
 
-	add_opt(links_options,
-		"terminal2", OPT_CFGFILE,
-		OPT_TERM2, 0, 0, NULL,
+	add_opt_void(links_options,
+		"terminal2", OPT_CFGFILE, OPT_TERM2,
 		NULL);
 
-	add_opt(links_options,
-		"association", OPT_CFGFILE,
-		OPT_MIME_TYPE, 0, 0, NULL,
+	add_opt_void(links_options,
+		"association", OPT_CFGFILE, OPT_MIME_TYPE,
 		NULL);
 
-	add_opt(links_options,
-		"extension", OPT_CFGFILE,
-		OPT_EXTENSION, 0, 0, NULL,
+	add_opt_void(links_options,
+		"extension", OPT_CFGFILE, OPT_EXTENSION,
 		NULL);
 
-	add_opt(links_options,
-		"mailto", OPT_CFGFILE,
-		OPT_PROGRAM, 0, 0, &mailto_prog,
+	add_opt_ptr(links_options,
+		"mailto", OPT_CFGFILE, OPT_PROGRAM, &mailto_prog,
 		NULL);
 
-	add_opt(links_options,
-		"telnet", OPT_CFGFILE,
-		OPT_PROGRAM, 0, 0, &telnet_prog,
+	add_opt_ptr(links_options,
+		"telnet", OPT_CFGFILE, OPT_PROGRAM, &telnet_prog,
 		NULL);
 
-	add_opt(links_options,
-		"tn3270", OPT_CFGFILE,
-		OPT_PROGRAM, 0, 0, &tn3270_prog,
+	add_opt_ptr(links_options,
+		"tn3270", OPT_CFGFILE, OPT_PROGRAM, &tn3270_prog,
 		NULL);
 
-	add_opt(links_options,
-		"bind", OPT_CFGFILE,
-		OPT_KEYBIND, 0, 0, NULL,
+	add_opt_void(links_options,
+		"bind", OPT_CFGFILE, OPT_KEYBIND,
 		NULL);
 
-	add_opt(links_options,
-		"unbind", OPT_CFGFILE,
-		OPT_KEYUNBIND, 0, 0, NULL,
+	add_opt_void(links_options,
+		"unbind", OPT_CFGFILE, OPT_KEYUNBIND,
 		NULL);
 
 	/* HTML options */

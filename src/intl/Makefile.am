@@ -1,9 +1,13 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.10 2003/01/03 02:17:04 pasky Exp $
+## $Id: Makefile.am,v 1.11 2004/05/06 22:35:43 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
-SUBDIRS = gettext
+if ENABLE_NLS
+gettextdir = gettext
+endif
+
+SUBDIRS = $(gettextdir)
 
 noinst_LIBRARIES = libintl.a
 libintl_a_SOURCES = \

@@ -55,6 +55,8 @@ AC_DEFUN([AM_WITH_NLS],
     USE_INCLUDED_LIBINTL=no
     INTLLIBS=
 
+    AM_CONDITIONAL(ENABLE_NLS, test "$USE_NLS" = "yes")
+
     dnl If we use NLS figure out what method
     if test "$USE_NLS" = "yes"; then
       AC_DEFINE(ENABLE_NLS, 1,

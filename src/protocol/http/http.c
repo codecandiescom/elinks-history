@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.249 2004/03/21 15:29:12 jonas Exp $ */
+/* $Id: http.c,v 1.250 2004/03/21 15:39:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -472,7 +472,7 @@ http_send_header(struct connection *conn)
 			    || header.source[header.length - 1] != '/')
 				add_char_to_string(&header, '/');
 
-			if (uri->datastr)
+			if (uri->data.source)
 				add_url_to_http_string(&header, uri->data.source);
 
 			add_to_string(&header, "\r\n");

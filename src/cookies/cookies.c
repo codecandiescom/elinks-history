@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.127 2004/03/21 15:23:01 jonas Exp $ */
+/* $Id: cookies.c,v 1.128 2004/03/21 15:39:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -606,7 +606,7 @@ send_cookies(struct uri *uri)
 	struct string *data = NULL;
 	static struct string header;
 
-	if (string_is_empty(&uri->host) || !uri->datastr)
+	if (string_is_empty(&uri->host) || !uri->data.source)
 		return NULL;
 
 	foreach (cd, c_domains)

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.151 2003/10/23 14:51:21 zas Exp $ */
+/* $Id: menu.c,v 1.152 2003/10/23 15:18:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,6 +356,12 @@ menu_toggle_images(struct terminal *term, void *ddd, struct session *ses)
 	toggle_images(ses, ses->doc_view, 0);
 }
 
+static inline void
+menu_toggle_link_numbering(struct terminal *term, void *ddd, struct session *ses)
+{
+	toggle_link_numbering(ses, ses->doc_view, 0);
+}
+
 static void
 menu_shell(struct terminal *term, void *xxx, void *yyy)
 {
@@ -486,6 +492,7 @@ static struct menu_item view_menu[] = {
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("Toggle ~html/plain"), "\\", menu_toggle_plain_html, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("Toggle i~mages"), "*", menu_toggle_images, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Toggle ~link numbering"), ".", menu_toggle_images, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("Document ~info"), "=", menu_doc_info, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("H~eader info"), "|", menu_header_info, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("Frame at ~full-screen"), "f", menu_for_frame, (void *)set_frame, FREE_NOTHING, 0),

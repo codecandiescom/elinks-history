@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.225 2003/10/23 14:51:22 zas Exp $ */
+/* $Id: view.c,v 1.226 2003/10/23 15:18:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -602,6 +602,26 @@ toggle_images(struct session *ses, struct document_view *doc_view, int a)
 	draw_formatted(ses);
 }
 
+void
+toggle_link_numbering(struct session *ses, struct document_view *doc_view, int a)
+{
+	assert(ses && doc_view && ses->tab && ses->tab->term);
+	if_assert_failed return;
+
+	if (!doc_view->vs) {
+		nowhere_box(ses->tab->term, NULL);
+		return;
+	}
+
+	/* TODO: toggle per document. --Zas */
+	get_opt_int("document.browse.links.numbering") =
+		!get_opt_int("document.browse.links.numbering");
+
+	html_interpret(ses);
+	draw_formatted(ses);
+}
+
+
 static inline void
 rep_ev(struct session *ses, struct document_view *doc_view,
        void (*f)(struct session *, struct document_view *, int),
@@ -1118,10 +1138,7 @@ quit:
 				toggle_plain_html(ses, ses->doc_view, 0);
 				goto x;
 			case ACT_TOGGLE_NUMBERED_LINKS:
-				get_opt_int("document.browse.links.numbering") =
-					!get_opt_int("document.browse.links.numbering");
-				html_interpret(ses);
-				draw_formatted(ses);
+				toggle_link_numbering(ses, ses->doc_view, 0);
 				goto x;
 			case ACT_TOGGLE_DOCUMENT_COLORS:
 			{

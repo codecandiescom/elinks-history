@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.28 2003/10/23 14:51:22 zas Exp $ */
+/* $Id: view.h,v 1.29 2003/10/23 15:18:53 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -32,10 +32,13 @@ struct document_view *current_frame(struct session *);
 void down(struct session *ses, struct document_view *doc_view, int a);
 
 /* Used for changing between formatted and source (plain) view. */
-void toggle_plain_html(struct session *, struct document_view *doc_view, int);
+void toggle_plain_html(struct session *ses, struct document_view *doc_view, int a);
 
 /* Toggle images rendering */
-void toggle_images(struct session *, struct document_view *doc_view, int);
+void toggle_images(struct session *ses, struct document_view *doc_view, int a);
+
+/* Toggle link numbering */
+void toggle_link_numbering(struct session *ses, struct document_view *doc_view, int a);
 
 /* File menu handlers. */
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.495 2004/09/15 23:37:44 pasky Exp $ */
+/* $Id: renderer.c,v 1.496 2004/09/23 10:28:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -442,7 +442,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 		for (i = 0; i < link->npoints; i++) {
 			/* Fix for bug 479 (part one) */
 			/* The scenario that triggered it:
-			 * 
+			 *
 			 * Imagine a centered element containing a really long
 			 * word (over half of the screen width long) followed
 			 * by a few links with no spaces between them where all

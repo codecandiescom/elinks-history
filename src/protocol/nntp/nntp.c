@@ -1,6 +1,6 @@
 /* Network news transport protocol implementation (RFC 977 and 2980) */
 
-/* $Id: nntp.c,v 1.1 2004/08/14 07:53:15 jonas Exp $ */
+/* $Id: nntp.c,v 1.2 2004/09/23 10:28:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -16,7 +16,7 @@
 /* The official color for this planet is green,
  * which grows in pockets of them people willing to scheme. --delasoul */
 
-#define NNTP_HEADER_ENTRIES "Subject,From,Date,Message-ID,Newsgroups" 
+#define NNTP_HEADER_ENTRIES "Subject,From,Date,Message-ID,Newsgroups"
 
 /* Module and option stuff: */
 

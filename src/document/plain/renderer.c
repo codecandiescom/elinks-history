@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.154 2004/09/15 23:37:44 pasky Exp $ */
+/* $Id: renderer.c,v 1.155 2004/09/23 10:28:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,10 +280,10 @@ add_document_line(struct plain_renderer *renderer,
 						   : '\0';
 
 		if (line_char == ASCII_TAB
-		    && next_char != ASCII_BS) /* Do not expand tabs that 
+		    && next_char != ASCII_BS) /* Do not expand tabs that
 					       * precede back-spaces;
 					       * this saves the back-space
-					       * code some trouble. */ 
+					       * code some trouble. */
 		{
 			int tab_width = 7 - ((line_pos + expanded) & 7);
 

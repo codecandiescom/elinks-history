@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.211 2004/05/30 12:39:03 jonas Exp $ */
+/* $Id: uri.c,v 1.212 2004/05/30 12:42:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,6 @@
 
 #include "elinks.h"
 
-#include "mime/mime.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "util/conv.h"
@@ -910,24 +909,6 @@ get_translated_uri(unsigned char *uristring, unsigned char *cwd,
 	return uri;
 }
 
-
-/* FIXME: Move to mime/ and give more appropriate name --jonas */
-struct string *
-add_uri_filename_to_string(struct string *string, struct uri *uri)
-{
-	unsigned char *filename = get_content_filename(uri);
-
-	assert(uri->data);
-
-	if (filename) {
-		add_shell_safe_to_string(string, filename, strlen(filename));
-		mem_free(filename);
-
-		return string;
-	}
-
-	return add_uri_to_string(string, uri, URI_FILENAME);
-}
 
 unsigned char *
 get_extension_from_uri(struct uri *uri)

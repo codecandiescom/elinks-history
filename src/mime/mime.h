@@ -1,4 +1,4 @@
-/* $Id: mime.h,v 1.14 2004/04/24 16:03:23 jonas Exp $ */
+/* $Id: mime.h,v 1.15 2004/05/30 12:42:25 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
@@ -29,5 +29,10 @@ get_mime_type_handler(unsigned char *content_type, int xwin);
 
 /* Checks protocols headers for a suitable filename */
 unsigned char *get_content_filename(struct uri *uri);
+
+/* Extracts strictly the filename part (the crap between path and query) and
+ * adds it to the @string. Note that there are cases where the string will be
+ * empty ("") (ie. http://example.com/?crash=elinks). */
+struct string *add_mime_filename_to_string(struct string *string, struct uri *uri);
 
 #endif

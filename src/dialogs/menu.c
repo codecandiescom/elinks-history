@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.318 2004/05/29 15:41:13 jonas Exp $ */
+/* $Id: menu.c,v 1.319 2004/05/30 12:42:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "lowlevel/select.h"
 #include "main.h"
 #include "mime/dialogs.h"
+#include "mime/mime.h"
 #include "osdep/osdep.h"
 #include "osdep/newwin.h"
 #include "protocol/protocol.h"
@@ -518,7 +519,7 @@ query_file(struct session *ses, struct uri *uri, void *data,
 	if (def.length && !dir_sep(def.source[def.length - 1]))
 		add_char_to_string(&def, '/');
 
-	add_uri_filename_to_string(&def, uri);
+	add_mime_filename_to_string(&def, uri);
 
 	if (interactive) {
 		input_field(ses->tab->term, NULL, 1,

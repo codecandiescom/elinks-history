@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.287 2004/05/23 02:39:01 jonas Exp $ */
+/* $Id: download.c,v 1.288 2004/05/30 12:42:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -991,7 +991,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	}
 
 	if (init_string(&filename))
-		add_uri_filename_to_string(&filename, type_query->uri);
+		add_mime_filename_to_string(&filename, type_query->uri);
 
 	if (!handler) {
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {

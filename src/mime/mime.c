@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.50 2004/05/21 11:39:54 jonas Exp $ */
+/* $Id: mime.c,v 1.51 2004/05/30 12:42:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "modules/module.h"
 #include "protocol/header.h"	/* For parse_http_header() */
 #include "protocol/uri.h"
+#include "util/conv.h"
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -225,6 +226,23 @@ get_content_filename(struct uri *uri)
 		memmove(filename, pos, strlen(pos) + 1);
 
 	return filename;
+}
+
+struct string *
+add_mime_filename_to_string(struct string *string, struct uri *uri)
+{
+	unsigned char *filename = get_content_filename(uri);
+
+	assert(uri->data);
+
+	if (filename) {
+		add_shell_safe_to_string(string, filename, strlen(filename));
+		mem_free(filename);
+
+		return string;
+	}
+
+	return add_uri_to_string(string, uri, URI_FILENAME);
 }
 
 /* Backends dynamic area: */

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.108 2004/05/30 12:39:04 jonas Exp $ */
+/* $Id: uri.h,v 1.109 2004/05/30 12:42:25 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -220,11 +220,6 @@ struct string *add_uri_to_string(struct string *string, struct uri *uri, enum ur
 /* Takes an uri string, parses it and adds the desired components. Useful if
  * there is no struct uri around. */
 struct string *add_string_uri_to_string(struct string *string, unsigned char *uristring, enum uri_component components);
-
-/* Extracts strictly the filename part (the crap between path and query) and
- * adds it to the @string. Note that there are cases where the string will be
- * empty ("") (ie. http://example.com/?crash=elinks). */
-struct string *add_uri_filename_to_string(struct string *string, struct uri *uri);
 
 /* Returns the new URI string or NULL upon an error. */
 unsigned char *get_uri_string(struct uri *uri, enum uri_component components);

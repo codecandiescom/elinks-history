@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-11-13 15:33+0100\n"
-"PO-Revision-Date: 2003-11-12 22:17+0100\n"
+"PO-Revision-Date: 2003-11-13 22:39+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -5127,6 +5127,8 @@ msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."
 msgstr ""
+"Tato URL obsahuje protokol, který je¹tì ELinks nezná.\n"
+"Mù¾ete si pro nìj nastavit externí obslu¾ný program."
 
 #: src/scripting/lua/core.c:455
 msgid "User dialog"
@@ -5162,25 +5164,24 @@ msgstr ""
 "je tøeba odpovídajícím zpùsobem nakonfigurovat OpenSSL."
 
 #: src/ssl/ssl.c:78
-#, fuzzy
 msgid "Client Certificates"
-msgstr "Kontrolovat certifikáty"
+msgstr "Klientské certifikáty"
 
 #: src/ssl/ssl.c:80
-#, fuzzy
 msgid "X509 client certificate options."
-msgstr "Nastavení u¾ivatelského rozhraní."
+msgstr "Nastavení klientského certifikátu X509."
 
 #: src/ssl/ssl.c:84
 msgid ""
 "Enable or not the sending of X509 client certificates\n"
 "to servers which request them."
 msgstr ""
+"Zapnout posílání klientského certifikátu X509 serverùm, které si ho\n"
+"vy¾ádají."
 
 #: src/ssl/ssl.c:87
-#, fuzzy
 msgid "Certificate File"
-msgstr "pøedpokládaný èas"
+msgstr "Soubor s certifikátem"
 
 #: src/ssl/ssl.c:89
 msgid ""
@@ -5189,6 +5190,9 @@ msgid ""
 "file pointed to by the X509_CLIENT_CERT variable is used\n"
 "instead."
 msgstr ""
+"Umístìní souboru obsahujícího klientský certifikát a neza¹ifrovaný soukromý\n"
+"klíè ve formátu PEM. Pokud tato volba není nastavena, zkusím alespoò pou¾ít\n"
+"soubor, na který ukazuje promìnná prostøedí X509_CLIENT_CERT."
 
 #: src/ssl/ssl.c:160
 msgid ""

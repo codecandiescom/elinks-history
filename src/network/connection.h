@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.28 2003/07/04 21:41:46 jonas Exp $ */
+/* $Id: connection.h,v 1.29 2003/07/04 23:20:21 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -135,11 +135,11 @@ struct connection {
 	int est_length;
 	int unrestartable;
 	int timer;
-	int no_tsl;
 	int stream_pipes[2];
 
 	unsigned int running:1;
 	unsigned int detached:1;
+	unsigned int no_tsl:1;
 
 	/* Each document is downloaded with some priority. When downloading a
 	 * document, the existing connections are checked to see if a

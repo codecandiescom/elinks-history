@@ -20,7 +20,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.8 2003/07/20 21:19:45 pasky Exp $
+# $Id: elinks.spec.in,v 1.9 2003/09/27 16:10:00 pasky Exp $
 
 Summary: Enhanced version of Links (Lynx-like text WWW browser)
 Name: elinks
@@ -52,11 +52,11 @@ provide good rock-solid releases inside stable branches.
 make
 
 %install
-rm -rf $RPM_BUILD_ROOT
+[ "$RPM_BUILD_ROOT" != "/" ] && [ -d $RPM_BUILD_ROOT ] && rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+[ "$RPM_BUILD_ROOT" != "/" ] && [ -d $RPM_BUILD_ROOT ] && rm -rf $RPM_BUILD_ROOT
 
 %files 
 %doc [A-Z]*
@@ -65,6 +65,10 @@ rm -rf $RPM_BUILD_ROOT
 
 # date +"%a %b %d %Y"
 %changelog
+* Sat Sep 27 2003 Petr Baudis <pasky@ucw.cz>
+- sanity checks of $RPM_BUILD_ROOT before rm -rf'ing it, based on darix's
+  suggestion
+
 * Sun Jan 26 2003 Petr Baudis <pasky@ucw.cz>
 - elinks.pld.org.pl -> elinks.or.cz, based on Bennett's suggestion
 

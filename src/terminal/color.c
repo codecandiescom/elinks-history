@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.72 2004/05/25 16:29:00 jonas Exp $ */
+/* $Id: color.c,v 1.73 2004/05/25 18:05:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,6 @@ static struct color_mode_info color_mode_256 = {
 #endif
 
 static struct color_mode_info *color_modes[] = {
-	/* COLOR_MODE_DUMP */	NULL,
 	/* COLOR_MODE_MONO */	&color_mode_16,
 	/* COLOR_MODE_16 */	&color_mode_16,
 #ifdef CONFIG_256_COLORS

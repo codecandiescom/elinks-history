@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.35 2004/04/23 20:44:30 pasky Exp $ */
+/* $Id: vs.c,v 1.36 2004/06/08 13:49:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,6 @@ destroy_vs(struct view_state *vs)
 		mem_free_if(vs->form_info[i].value);
 
 	if (vs->uri) done_uri(vs->uri);
-	mem_free_if(vs->goto_position);
 	mem_free_if(vs->form_info);
 }
 
@@ -50,8 +49,8 @@ copy_vs(struct view_state *dst, struct view_state *src)
 	memcpy(dst, src, sizeof(struct view_state));
 
 	dst->uri = get_uri_reference(src->uri);
-	dst->goto_position = src->goto_position ?
-			     stracpy(src->goto_position) : NULL;
+	/* Redo fragment if there is one? */
+	dst->did_fragment = !src->uri->fragment;
 
 	if (src->form_info_len) {
 		dst->form_info = mem_alloc(src->form_info_len

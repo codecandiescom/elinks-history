@@ -1,4 +1,4 @@
-/* $Id: task.h,v 1.10 2004/05/29 02:44:27 jonas Exp $ */
+/* $Id: task.h,v 1.11 2004/06/08 13:49:10 jonas Exp $ */
 
 #ifndef EL__SCHED_TASK_H
 #define EL__SCHED_TASK_H
@@ -21,8 +21,8 @@ struct link_def {
 
 void abort_preloading(struct session *, int);
 
-void ses_goto(struct session *, struct uri *, unsigned char *, struct location *,
-	      enum cache_mode, enum task_type, unsigned char *, int);
+void ses_goto(struct session *, struct uri *, unsigned char *,
+	      struct location *, enum cache_mode, enum task_type, int);
 struct view_state *ses_forward(struct session *, int);
 
 void end_load(struct download *, struct session *);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.419 2004/06/04 13:27:01 jonas Exp $ */
+/* $Id: session.c,v 1.420 2004/06/08 13:49:09 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -206,24 +206,7 @@ request_frame(struct session *ses, unsigned char *name, struct uri *uri)
 		return;
 	}
 
-	/* If there is no fragment part we can take a shortcut */
-	if (!memchr(uri->data, '#', uri->datalen)) {
-		init_vs(&frame->vs, uri, -1);
-
-	} else {
-		unsigned char *pos = NULL;
-
-		uri = get_translated_uri(struri(uri), ses->tab->term->cwd, &pos);
-		if (!uri) {
-			mem_free(frame->name);
-			mem_free(frame);
-			return;
-		}
-
-		init_vs(&frame->vs, uri, -1);
-		if (pos) frame->vs.goto_position = pos;
-		done_uri(uri);
-	}
+	init_vs(&frame->vs, uri, -1);
 
 	add_to_list(loc->frames, frame);
 
@@ -904,8 +887,8 @@ destroy_session(struct session *ses)
 	set_session_referrer(ses, NULL);
 
 	if (ses->loading_uri) done_uri(ses->loading_uri);
+	if (ses->goto_uri) done_uri(ses->goto_uri);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
-	mem_free_if(ses->goto_position);
 	if (ses->imgmap_href_base) done_uri(ses->imgmap_href_base);
 	mem_free_if(ses->imgmap_target_base);
 

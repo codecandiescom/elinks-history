@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.19 2004/04/01 16:42:43 jonas Exp $ */
+/* $Id: vs.h,v 1.20 2004/06/08 13:49:10 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -11,7 +11,6 @@ struct uri;
 
 struct view_state {
 	struct uri *uri;
-	unsigned char *goto_position;
 
 	struct form_state *form_info;
 	int form_info_len;
@@ -21,6 +20,7 @@ struct view_state {
 
 	int plain;
 	int wrap:1;
+	int did_fragment:1;
 };
 
 void init_vs(struct view_state *, struct uri *uri, int);

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.154 2004/06/08 13:34:36 jonas Exp $ */
+/* $Id: cache.c,v 1.155 2004/06/08 13:49:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,8 +103,8 @@ find_in_cache(struct uri *uri)
 
 	foreach (cached, cache_entries) {
 		if (!cached->valid
-		    || (proxy && !compare_uri(cached->proxy_uri, uri, 0))
-		    || (!proxy && !compare_uri(cached->uri, uri, 0)))
+		    || (proxy && !compare_uri(cached->proxy_uri, uri, URI_BASE))
+		    || (!proxy && !compare_uri(cached->uri, uri, URI_BASE)))
 			continue;
 
 		/* Move it on the top of the list. */
@@ -121,6 +121,8 @@ struct cache_entry *
 get_cache_entry(struct uri *uri)
 {
 	struct cache_entry *cached = find_in_cache(uri);
+
+	assertm(!uri->fragment, "Fragment in URI (%s)", struri(uri));
 
 	if (cached) return cached;
 

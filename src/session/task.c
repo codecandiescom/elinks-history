@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.97 2004/06/07 23:38:54 jonas Exp $ */
+/* $Id: task.c,v 1.98 2004/06/08 13:49:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,10 @@ free_task(struct session *ses)
 	assertm(ses->task.type, "Session has no task");
 	if_assert_failed return;
 
-	mem_free_set(&ses->goto_position, NULL);
+	if (ses->goto_uri) {
+		done_uri(ses->goto_uri);
+		ses->goto_uri = NULL;
+	}
 
 	if (ses->loading_uri) {
 		done_uri(ses->loading_uri);
@@ -61,11 +64,11 @@ abort_preloading(struct session *ses, int interrupt)
 struct task {
 	struct session *ses;
 	struct uri *uri;
+	struct uri *goto_uri;
 	enum cache_mode cache_mode;
 	enum task_type type;
 	unsigned char *target_frame;
 	struct location *target_location;
-	unsigned char *pos;
 };
 
 static void
@@ -74,12 +77,11 @@ post_yes(struct task *task)
 	struct session *ses = task->ses;
 
 	abort_preloading(task->ses, 0);
-	mem_free_if(task->ses->goto_position);
 
-	ses->goto_position = null_or_stracpy(task->pos);
 	ses->loading.end = (void (*)(struct download *, void *)) end_load;
 	ses->loading.data = task->ses;
 	ses->loading_uri = task->uri; /* XXX: Make the session inherit the URI. */
+	ses->goto_uri = task->goto_uri; /* XXX: Make the session inherit the URI. */
 
 	ses->task.type = task->type;
 	ses->task.target_frame = task->target_frame;
@@ -94,12 +96,13 @@ post_no(struct task *task)
 {
 	reload(task->ses, CACHE_MODE_NORMAL);
 	done_uri(task->uri);
+	done_uri(task->goto_uri);
 }
 
 void
 ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	 struct location *target_location, enum cache_mode cache_mode,
-	 enum task_type task_type, unsigned char *pos, int redir)
+	 enum task_type task_type, int redir)
 {
 	struct task *task = uri->form ? mem_alloc(sizeof(struct task)) : NULL;
 	unsigned char *m1, *m2;
@@ -113,9 +116,6 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	}
 
 	assertm(!ses->loading_uri, "Buggy URI reference counting");
-
-	/* Do it here because it might be ses->goto_position being passed */
-	pos = null_or_stracpy(pos);
 
 	/* Figure out whether to confirm submit or not */
 
@@ -148,11 +148,10 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	if (!confirm_submit) {
 		mem_free_if(task);
 
-		mem_free_set(&ses->goto_position, pos);
-
 		ses->loading.end = (void (*)(struct download *, void *)) end_load;
 		ses->loading.data = ses;
-		ses->loading_uri = get_uri_reference(uri);
+		ses->loading_uri = get_composed_uri(uri, URI_BASE);
+		ses->goto_uri = get_uri_reference(uri);
 
 		ses->task.type = task_type;
 		ses->task.target_frame = target_frame;
@@ -165,12 +164,12 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	}
 
 	task->ses = ses;
-	task->uri = get_uri_reference(uri);
+	task->uri = get_composed_uri(uri, URI_BASE);
+	task->goto_uri = get_uri_reference(uri);
 	task->cache_mode = cache_mode;
 	task->type = task_type;
 	task->target_frame = target_frame;
 	task->target_location = target_location;
-	task->pos = pos;
 
 	if (redir) {
 		m1 = N_("Do you want to follow redirect and post form data "
@@ -188,7 +187,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	}
 
 	m2 = get_uri_string(uri, URI_PUBLIC);
-	msg_box(ses->tab->term, getml(task, task->pos, NULL), MSGBOX_FREE_TEXT,
+	msg_box(ses->tab->term, getml(task, NULL), MSGBOX_FREE_TEXT,
 		N_("Warning"), AL_CENTER,
 		msg_text(ses->tab->term, m1, m2),
 		task, 2,
@@ -239,25 +238,16 @@ x:
 
 		vs = &frame->vs;
 		done_uri(vs->uri);
-		vs->uri = get_uri_reference(ses->loading_uri);
+		vs->uri = get_uri_reference(ses->goto_uri);
 		if (!loaded_in_frame) {
 			destroy_vs(vs);
-			init_vs(vs, ses->loading_uri, vs->plain);
-			if (ses->goto_position) {
-				frame->vs.goto_position = ses->goto_position;
-				ses->goto_position = NULL;
-			}
+			init_vs(vs, ses->goto_uri, vs->plain);
 		}
 	} else {
 		init_list(loc->frames);
 		vs = &loc->vs;
-		init_vs(vs, ses->loading_uri, vs->plain);
+		init_vs(vs, ses->goto_uri, vs->plain);
 		add_to_history(&ses->history, loc);
-
-		if (ses->goto_position) {
-			loc->vs.goto_position = ses->goto_position;
-			ses->goto_position = NULL;
-		}
 	}
 
 	ses->status.visited = 0;
@@ -276,6 +266,8 @@ ses_imgmap(struct session *ses)
 	struct fragment *fr;
 	struct memory_list *ml;
 	struct menu_item *menu;
+	struct uri *uri = ses->goto_uri;
+	unsigned char *pos = NULL;
 
 	if (!cached) {
 		INTERNAL("can't find cache entry");
@@ -285,8 +277,13 @@ ses_imgmap(struct session *ses)
 	fr = cached->frag.next;
 	if ((void *)fr == &cached->frag) return;
 
+	/* FIXME: It must be possible to unify ses->imgmap_href_base
+	 * and ses->goto_uri and only pass the latter. */
+	if (uri && uri->fragment)
+		pos = memacpy(uri->fragment, uri->fragmentlen);
+
 	if (get_image_map(cached->head, fr->data, fr->data + fr->length,
-			  ses->goto_position, &menu, &ml,
+			  pos, &menu, &ml,
 			  ses->imgmap_href_base, ses->imgmap_target_base,
 			  get_opt_int_tree(ses->tab->term->spec, "charset"),
 			  get_opt_int("document.codepage.assume"),
@@ -353,15 +350,15 @@ do_move(struct session *ses, struct download **stat)
 			/* Fall through. */
 		case TASK_IMGMAP:
 			ses_goto(ses, cached->redirect, ses->task.target_frame, NULL,
-				 CACHE_MODE_NORMAL, task, ses->goto_position, 1);
+				 CACHE_MODE_NORMAL, task, 1);
 			return 2;
 		case TASK_HISTORY:
 			ses_goto(ses, cached->redirect, NULL, ses->task.target_location,
-				 CACHE_MODE_NORMAL, TASK_RELOAD, NULL, 1);
+				 CACHE_MODE_NORMAL, TASK_RELOAD, 1);
 			return 2;
 		case TASK_RELOAD:
 			ses_goto(ses, cached->redirect, NULL, NULL,
-				 ses->reloadlevel, TASK_RELOAD, NULL, 1);
+				 ses->reloadlevel, TASK_RELOAD, 1);
 			return 2;
 		}
 	} else {
@@ -446,12 +443,10 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
 	struct uri *referrer = NULL;
-	unsigned char *pos = NULL;
-	struct uri *uri = get_translated_uri(url, ses->tab->term->cwd, &pos);
+	struct uri *uri = get_translated_uri(url, ses->tab->term->cwd, NULL);
 	protocol_external_handler *external_handler;
 
 	if (!uri) {
-		mem_free_if(pos);
 		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);
 		return;
 	}
@@ -459,7 +454,6 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	external_handler = get_protocol_external_handler(uri->protocol);
 	if (external_handler) {
 		external_handler(ses, uri);
-		if (pos) mem_free(pos);
 		done_uri(uri);
 		return;
 	}
@@ -467,11 +461,9 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	ses->reloadlevel = cache_mode;
 
 	if (ses->task.type == task) {
-		if (compare_uri(ses->loading_uri, uri, 0)) {
+		if (compare_uri(ses->goto_uri, uri, 0)) {
 			/* We're already loading the URL. */
 			done_uri(uri);
-			mem_free_set(&ses->goto_position, pos);
-
 			return;
 		}
 	}
@@ -487,10 +479,8 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 
 	set_session_referrer(ses, referrer);
 
-	ses_goto(ses, uri, target, NULL, cache_mode, task, pos, 0);
+	ses_goto(ses, uri, target, NULL, cache_mode, task, 0);
 	done_uri(uri);
-	mem_free_if(pos);
-	/* abort_loading(ses); */
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.308 2004/12/19 17:02:51 pasky Exp $ */
+/* $Id: link.c,v 1.309 2004/12/20 23:52:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,10 +178,13 @@ init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 	if (doc_opts->color_active_link) {
 		colors.foreground = doc_opts->active_link_fg;
 		colors.background = doc_opts->active_link_bg;
+	} else {
+		colors.foreground = link->color.foreground;
+		colors.background = link->color.background;
+	}
 
-	} else if (doc_opts->invert_active_link && invert) {
-		colors.foreground = link->color.background;
-		colors.background = link->color.foreground;
+	if (doc_opts->invert_active_link && invert) {
+		swap_values(colors.foreground, colors.background);
 
 		/* Highlight text-input form-fields correctly if contrast
 		 * correction is needed. */
@@ -201,10 +204,6 @@ init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 			/* Make contrast correction invert things properly */
 			color_flags |= COLOR_ENSURE_INVERTED_CONTRAST;
 		}
-
-	} else {
-		colors.foreground = link->color.foreground;
-		colors.background = link->color.background;
 	}
 
 	set_term_color(template, &colors, color_flags, color_mode);

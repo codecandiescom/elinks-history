@@ -1,10 +1,9 @@
-/* $Id: session.h,v 1.5 2002/03/28 21:38:51 pasky Exp $ */
+/* $Id: session.h,v 1.6 2002/03/28 22:25:43 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
 
 /* We need to declare these first :/. Damn cross-dependencies. */
-struct location;
 struct session;
 
 #include <document/cache.h>
@@ -14,16 +13,6 @@ struct session;
 #include <document/html/renderer.h>
 #include <lowlevel/sched.h>
 #include <lowlevel/terminal.h>
-
-struct location {
-	struct location *next;
-	struct location *prev;
-	struct list_head frames;
-	struct status stat;
-	struct view_state vs;
-};
-
-#define cur_loc(x) ((struct location *) ((x)->history.next))
 
 /* For map_selected() */
 struct link_def {
@@ -161,7 +150,6 @@ struct frame *ses_change_frame_url(struct session *, unsigned char *, unsigned c
 
 void map_selected(struct terminal *, struct link_def *, struct session *);
 
-void destroy_location(struct location *);
 /* void destroy_session(struct session *); */
 void destroy_all_sessions();
 void abort_all_downloads();

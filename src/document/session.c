@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.14 2002/03/28 21:38:51 pasky Exp $ */
+/* $Id: session.c,v 1.15 2002/03/28 22:25:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,7 @@
 #include <config/default.h>
 #include <document/cache.h>
 #include <document/history.h>
+#include <document/location.h>
 #include <document/options.h>
 #include <document/session.h>
 #include <document/view.h>
@@ -306,18 +307,6 @@ void free_files(struct session *ses)
 	free_list(ses->more_files);
 }
 
-void destroy_location(struct location *loc)
-{
-	struct frame *frame;
-	del_from_list(loc);
-	foreach(frame, loc->frames) {
-		destroy_vs(&frame->vs);
-		mem_free(frame->name);
-	}
-	free_list(loc->frames);
-	destroy_vs(&loc->vs);
-	mem_free(loc);
-}
 
 void ses_forward(struct session *ses)
 {

@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.14 2002/03/28 21:38:51 pasky Exp $ */
+/* $Id: view.c,v 1.15 2002/03/28 22:25:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,7 @@
 #include <document/cache.h>
 #include <document/dump.h>
 #include <document/history.h>
+#include <document/location.h>
 #include <document/options.h>
 #include <document/session.h>
 #include <document/html/parser.h>

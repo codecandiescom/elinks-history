@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.10 2002/03/28 21:38:51 pasky Exp $
+## $Id: Makefile.am,v 1.11 2002/03/28 22:25:43 pasky Exp $
 
 INCLUDES = \
  -I$(srcdir)/..
@@ -14,6 +14,8 @@ libdocument_a_SOURCES = \
  dump.h \
  history.c \
  history.h \
+ location.c \
+ location.h \
  options.c \
  options.h \
  session.c \

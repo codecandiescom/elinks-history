@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.3 2002/03/18 06:19:58 pasky Exp $ */
+/* $Id: view.h,v 1.4 2002/03/28 22:25:43 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
@@ -19,6 +19,7 @@ struct view_state {
 	unsigned char url[1];
 };
 
+#include <document/location.h>
 #include <document/session.h>
 
 extern int textarea_editor;

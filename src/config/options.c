@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.4 2002/04/28 14:24:51 pasky Exp $ */
+/* $Id: options.c,v 1.5 2002/04/28 14:33:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -589,7 +589,7 @@ int anonymous = 0;
 int no_connect = 0;
 int base_session = 0;
 
-int dmp = 0;
+enum dump_type dmp = D_NONE;
 int dump_width = 80;
 
 

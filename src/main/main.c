@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.19 2002/04/28 12:00:27 pasky Exp $ */
+/* $Id: main.c,v 1.20 2002/04/28 14:33:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -320,7 +320,7 @@ init()
 		return;
 	}
 	
-	if (dmp) {
+	if (dmp != D_NONE) {
 		dump_start(u);
 		if (terminate) {
 			/* XXX? */

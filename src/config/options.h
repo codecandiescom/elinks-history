@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.3 2002/04/28 14:24:51 pasky Exp $ */
+/* $Id: options.h,v 1.4 2002/04/28 14:33:27 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -38,9 +38,13 @@ extern unsigned char user_agent[];
 extern int no_connect;
 extern int base_session;
 
-#define D_DUMP		1
-#define D_SOURCE	2
-extern int dmp;
+enum dump_type {
+	D_NONE,
+	D_DUMP,
+	D_SOURCE,
+};
+
+extern enum dump_type dmp;
 extern int dump_width;
 
 enum cookies_accept {

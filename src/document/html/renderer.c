@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.40 2002/09/10 14:11:27 zas Exp $ */
+/* $Id: renderer.c,v 1.41 2002/09/10 15:12:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -684,7 +684,8 @@ put_chars(struct part *part, unsigned char *c, int l)
 no_l:
 	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning)))
 		goto format_change;
-	bg = bg_cache, fg = fg_cache;
+	bg = bg_cache;
+	fg = fg_cache;
 
 end_format_change:
 	if (part->cx == par_format.leftmargin && *c == ' ' && par_format.align != AL_NO) {
@@ -711,7 +712,8 @@ end_format_change:
 				if (c[l - 1] == ' ') part->x--;
 			}
 #endif
-			if (!(x = split_line(part))) break;
+			x = split_line(part);
+			if (!x) break;
 
 			/* if (LEN(part->cy-1) > part->x) part->x = LEN(part->cy-1); */
 
@@ -800,20 +802,20 @@ x:;
 				case FC_TEXT:
 				case FC_PASSWORD:
 				case FC_FILE:
-							link->type = L_FIELD;
-							break;
+						link->type = L_FIELD;
+						break;
 				case FC_TEXTAREA:
-							link->type = L_AREA;
-							break;
+						link->type = L_AREA;
+						break;
 				case FC_CHECKBOX:
 				case FC_RADIO:
-							link->type = L_CHECKBOX;
-							break;
+						link->type = L_CHECKBOX;
+						break;
 				case FC_SELECT:
-							link->type = L_SELECT;
-							break;
+						link->type = L_SELECT;
+						break;
 				default:
-							link->type = L_BUTTON;
+						link->type = L_BUTTON;
 			}
 			link->form = last_form;
 			link->target = stracpy(last_form->target);
@@ -863,7 +865,7 @@ format_change:
 	fg_cache = fg;
 	bg_cache = bg;
 
-	if (get_opt_bool("document.html.display_subs")) {
+	if (d_opt->display_subs) {
 		if (format.attr & AT_SUBSCRIPT) {
 			if (!sub) {
 				sub = 1;
@@ -877,7 +879,7 @@ format_change:
 		}
 	}
 
-	if (get_opt_bool("document.html.display_sups")) {
+	if (d_opt->display_sups) {
 		if (format.attr & AT_SUPERSCRIPT) {
 			if (!super) {
 				super = 1;

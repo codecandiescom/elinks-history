@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.8 2002/07/23 12:58:12 zas Exp $ */
+/* $Id: options.c,v 1.9 2002/09/10 15:12:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,8 @@ mk_document_options(struct document_options *doo)
 	doo->num_links_display = get_opt_int("document.browse.links.numbering");
 	doo->num_links_key = get_opt_int("document.browse.links.number_keys_select_link");
 	doo->table_order = get_opt_int("document.browse.table_move_order");
+	doo->display_subs = get_opt_bool("document.html.display_subs");
+	doo->display_sups = get_opt_bool("document.html.display_sups");
 }
 
 int
@@ -52,6 +54,8 @@ compare_opt(struct document_options *o1, struct document_options *o2)
 	    o1->images == o2->images &&
 	    o1->margin == o2->margin &&
 	    o1->plain == o2->plain &&
+	    o1->display_subs == o2->display_subs &&
+	    o1->display_sups == o2->display_sups &&
 	    !memcmp(&o1->default_fg, &o2->default_fg, sizeof(struct rgb)) &&
 	    !memcmp(&o1->default_bg, &o2->default_bg, sizeof(struct rgb)) &&
 	    !memcmp(&o1->default_link, &o2->default_link, sizeof(struct rgb)) &&

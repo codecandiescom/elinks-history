@@ -1,5 +1,5 @@
 /* Pseudo about: protocol implementation */
-/* $Id: about.c,v 1.2 2004/06/27 21:37:42 jonas Exp $ */
+/* $Id: about.c,v 1.3 2004/07/23 15:49:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@ about_protocol_handler(struct connection *conn)
 		cached->incomplete = 0;
 
 		/* Set content to known type */
-		cached->head = stracpy("\r\nContent-Type: text/html\r\n");
+		cached->head = stracpy("Content-Type: text/html\r\n");
 	}
 
 	abort_conn_with_state(conn, S_OK);

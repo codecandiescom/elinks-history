@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.123 2003/12/21 22:20:59 pasky Exp $ */
+/* $Id: screen.c,v 1.124 2003/12/29 07:34:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -725,8 +725,7 @@ resize_screen(struct terminal *term, int width, int height)
 
 	term->width = width;
 	term->height = height;
-	screen->dirty_from = 0;
-	screen->dirty_to = height;
+	set_screen_dirty(screen, 0, height);
 }
 
 void

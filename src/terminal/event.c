@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.5 2003/07/26 10:55:40 zas Exp $ */
+/* $Id: event.c,v 1.6 2003/07/26 10:58:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,7 +232,8 @@ send_redraw:
 				term_send_event(term, ev);
 				goto mm;
 			} else if ((ev->x & 0xC0) == 0xC0 && (ev->x & 0xFE) != 0xFE) {
-				int mask, len = 0, cov = 0x80;
+				register unsigned int mask, cov = 0x80;
+				int len = 0;
 
 				for (mask = 0x80; ev->x & mask; mask >>= 1) {
 					len++;

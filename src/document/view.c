@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.65 2002/08/11 18:25:49 pasky Exp $ */
+/* $Id: view.c,v 1.66 2002/08/26 23:40:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1478,8 +1478,8 @@ void set_frame(struct session *ses, struct f_data_c *f, int a)
 }
 
 /* This is common backend for submit_form_do() and enter(). */
-static int
-goto_link(unsigned char *url, struct link *link, struct session *ses,
+int
+goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 	  int reload)
 {
 	if (!url) return 1;
@@ -1487,12 +1487,12 @@ goto_link(unsigned char *url, struct link *link, struct session *ses,
 	if (strlen(url) >= 4 && !casecmp(url, "MAP@", 4)) {
 		/* TODO: Test reload? */
 		goto_imgmap(ses, url + 4, stracpy(url + 4),
-			    stracpy(link->target));
+			    stracpy(target));
 	} else {
 		if (reload) {
-			goto_url_frame_reload(ses, url, link->target);
+			goto_url_frame_reload(ses, url, target);
 		} else {
-			goto_url_frame(ses, url, link->target);
+			goto_url_frame(ses, url, target);
 		}
 	}
 
@@ -1512,7 +1512,7 @@ submit_form_do(struct terminal *term, void *xxx, struct session *ses,
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
 
-	return goto_link(get_form_url(ses, fd, link->form), link, ses, reload);
+	return goto_link(get_form_url(ses, fd, link->form), link->target, ses, reload);
 }
 
 static int
@@ -1541,7 +1541,7 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& (link->type == L_FIELD || link->type == L_AREA))) {
 
-		return goto_link(get_link_url(ses, fd, link), link, ses, a);
+		return goto_link(get_link_url(ses, fd, link), link->target, ses, a);
 
 	} else if (link->type == L_FIELD || link->type == L_AREA) {
 		/* We won't get here if (has_form_submit() ||

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.85 2002/08/10 10:41:24 zas Exp $ */
+/* $Id: options.c,v 1.86 2002/08/26 23:40:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1624,6 +1624,10 @@ register_options()
 		"No local file browsing, no downloads. Executing of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.");
+
+	add_opt_bool_tree(cmdline_options, "",
+		"auto-submit", 0, 0,
+		"Go and submit the first form you'll stumble upon.");
 
 	add_opt_int_tree(cmdline_options, "",
 		"base-session", 0, 0, MAXINT, 0,

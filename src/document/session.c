@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.56 2002/08/18 13:17:08 pasky Exp $ */
+/* $Id: session.c,v 1.57 2002/08/26 23:40:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -859,6 +859,12 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 void
 doc_end_load(struct status *stat, struct session *ses)
 {
+	unsigned char *get_form_url(struct session *, struct f_data_c *,
+				    struct form_control *);
+	int goto_link(unsigned char *, unsigned char *, struct session *, int);
+	int submit = 0;
+	struct form_control *fc = NULL;
+
 	if (stat->state < 0) {
 #ifdef HAVE_SCRIPTING
 		maybe_pre_format_html(stat->ce, ses);
@@ -869,6 +875,15 @@ doc_end_load(struct status *stat, struct session *ses)
 		}
 		html_interpret(ses);
 		draw_formatted(ses);
+		if (get_opt_bool_tree(cmdline_options, "auto-submit")) {
+			fc = (struct form_control *)
+				ses->screen->f_data->forms.next;
+			if (fc != fc->next) {
+				get_opt_bool_tree(cmdline_options,
+						  "auto-submit") = 0;
+				submit = 1;
+			}
+		}
 		load_frames(ses, ses->screen);
 		process_file_requests(ses);
 		if (stat->state != S_OK)
@@ -881,6 +896,11 @@ doc_end_load(struct status *stat, struct session *ses)
 
 	add_global_history_item(cur_loc(ses)->vs.url,
 				ses->screen->f_data->title, time(NULL));
+
+	if (submit) {
+		goto_link(get_form_url(ses, ses->screen, fc), fc->target, ses,
+			  1);
+	}
 }
 
 void

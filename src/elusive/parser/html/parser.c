@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.8 2002/12/27 23:58:29 pasky Exp $ */
+/* $Id: parser.c,v 1.9 2002/12/29 11:30:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@ enum state_code {
 	HPT_ENTITY,
 	HPT_TAG,
 	HPT_TAG_WHITE,
+	HPT_TAG_NAME,
 	HPT_TAG_COMMENT,
 	HPT_NO,
 };
@@ -90,7 +91,7 @@ spawn_syntree_node(struct parser_state *state)
 	} else {
 		/* We've spawned non-leaf node right before. So we will fit
 		 * under it (not along it) nicely. */
-		add_to_list(state->root, node);
+		add_to_list(state->root->leafs, node);
 	}
 	state->current = node;
 
@@ -122,7 +123,7 @@ spawn_syntree_node(struct parser_state *state)
  *
  * TAG -> PLAIN
  * TAG +> TAG_COMMENT
- * TAG +> TAG_NAME
+ * TAG +> TAG_NAME ( +> TAG_WHITE -> TAG_NAME )
  *
  * TAG_COMMENT -> TAG
  *
@@ -276,6 +277,7 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	if (*html == '/') {
 		pstate->data.tag.type = *html;
 		pstate = html_state_push(state, HPT_TAG_NAME);
+		pstate->data.tag.type = *html;
 
 		html++, html_len--;
 		*str = html, *len = html_len;
@@ -288,7 +290,9 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 		return -1;
 	}
 	if (*html == '?' || (*html == '!' && !strncmp(html + 1, "--", 2))) {
-		pstate->data.tag.tagname = ""; /* blah */
+		/* The next time we'll visit you, we will be at the end of our
+		 * way. */
+		pstate->data.tag.tagname = "";
 
 		pstate->data.tag.type = *html;
 		pstate = html_state_push(state, HPT_TAG_COMMENT);
@@ -305,12 +309,90 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 
 	/* Ordinary tag. *yawn* */
 	pstate = html_state_push(state, HPT_TAG_NAME);
-	/* Let's save one parser turn: */
+	/* Let's try to save one parser turn: */
 	if (WHITECHAR(*html)) {
 		pstate = html_state_push(state, HPT_TAG_WHITE);
 	}
 
 	return 0;
+}
+
+/* This eats name of the tag. Also, it maintains the corresponding struct
+ * syntree_node. */
+static int
+tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
+{
+	struct html_parser_state *pstate = state->data;
+	unsigned char *html = *str;
+	int html_len = *len;
+
+	if (WHITECHAR(*html)) {
+		pstate = html_state_push(state, HPT_TAG_WHITE);
+		return 0;
+	}
+
+	while (html_len) {
+		if (isA(*html)) {
+			html++, html_len--;
+			continue;
+		}
+
+		pstate = html_state_pop(state);
+
+		if (*len - html_len) {
+			int name_len = *len - html_len;
+
+			/* Non-empty tag name. */
+			if (pstate->data.tag.type == '/') {
+				/* Closing tag */
+				struct syntree_node *node = state->root;
+
+				while (node) {
+					/* XXX: We rely on the fact that all
+					 * non-leaf nodes are tags here. */
+					if (node->str &&
+					    !strncmp(node->str, *str,
+						name_len > node->strlen
+							? node->strlen
+							: name_len))
+						break;
+					node = node->root;
+				}
+
+				if (node) {
+					if (node->root) {
+						state->current = node->root;
+					} else {
+						/* The root node is special. */
+						state->current = node;
+					}
+					state->root = state->current->root;
+				}
+
+			} else {
+				/* Opening tag */
+
+				spawn_syntree_node(state);
+
+				state->current->str = *str;
+				state->current->strlen = name_len;
+				if (**str != '!') {
+					/* TODO: Look up the DTD whether the
+					 * tag is pair or not. */
+					state->root = state->current;
+				}
+			}
+		}
+
+		pstate = html_state_push(state, HPT_TAG_ATTR);
+		if (WHITESPACE(*html)) {
+			pstate = html_state_push(state, HPT_TAG_WHITE);
+		}
+		*str = html, *len = html_len;
+		return 0;
+	}
+
+	return -1;
 }
 
 /* This skips sequence of whitespaces inside of a tag. */
@@ -347,7 +429,7 @@ comment_parse(struct parser_state *state, unsigned char **str, int *len)
 	int endp = 0;
 
 	while (html_len) {
-		if (*html == '?') {
+		if (pstate->data.tag.type == '?' && *html == '?') {
 			if (html_len == 1) {
 				*str = html, *len = html_len;
 				return -1;
@@ -366,7 +448,7 @@ comment_end:
 				return 0;
 			}
 
-		} else if (*html == end[endp]) {
+		} else if (pstate->data.tag.type == '!' && *html == end[endp]) {
 			if (!endp) {
 				/* Checkpoint. */
 				*str = html, *len = html_len;
@@ -497,6 +579,7 @@ static int (*state_parsers)(struct parser_state *, unsigned char *, int *)
 	entity_parse,
 	tag_parse,
 	tag_white_parse,
+	tag_name_parse,
 	comment_parse,
 };
 

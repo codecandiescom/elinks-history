@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.6 2003/08/24 13:35:57 jonas Exp $ */
+/* $Id: style.c,v 1.7 2003/08/24 13:55:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,42 +29,42 @@ static struct hash *bfu_colors = NULL;
 struct color_pair *
 get_bfu_color(struct terminal *term, unsigned char *stylename)
 {
-	static unsigned int color_term;
+	static unsigned int color_mode; /* mono or color term mode. */
 	struct bfu_color_entry *entry;
 	int stylenamelen;
 	struct hash_item *item;
 
 	if (!term) return NULL;
 
-	/* Initialize the style hash. */
 	if (!bfu_colors) {
+		/* Initialize the style hash. */
 		bfu_colors = init_hash(8, &strhash);
 		if (!bfu_colors) return NULL;
 
 		color_term = get_opt_bool_tree(term->spec, "colors");
 
-	} else if (get_opt_bool_tree(term->spec, "colors") != color_term) {
+	} else if (get_opt_bool_tree(term->spec, "colors") != color_mode) {
 		int i;
 
-		/* Empty the cache. */
+		/* Change mode by emptying the cache so mono/color colors
+		 * aren't mixed. */
 		foreach_hash_item (item, *bfu_colors, i) {
 			if (item->value) mem_free(item->value);
 			item = item->prev;
 			del_hash_item(bfu_colors, item->next);
 		}
 
-		color_term = !color_term;
+		color_mode = !color_mode;
 	}
 
 	stylenamelen = strlen(stylename);
-
 	item = get_hash_item(bfu_colors, stylename, stylenamelen);
 	entry = item ? item->value : NULL;
 
 	if (!entry) {
 		struct option *opt;
 
-		/* Construct a the style. */
+		/* Construct the color entry. */
 		opt = get_opt_rec_real(config_options, color_term
 				       ? "ui.colors.color" : "ui.colors.mono");
 		if (!opt) return NULL;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.423 2003/12/21 14:51:19 zas Exp $ */
+/* $Id: options.c,v 1.424 2003/12/28 01:31:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -811,6 +811,7 @@ static struct change_hook_info change_hooks[] = {
 	{ "document.cache",		change_hook_cache },
 	{ "document.colors",		change_hook_html },
 	{ "document.html",		change_hook_html },
+	{ "document.plain",		change_hook_html },
 	{ "terminal",			change_hook_terminal },
 	{ "ui.language",		change_hook_language },
 	{ "ui",				change_hook_ui },

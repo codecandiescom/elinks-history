@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.67 2003/11/29 00:40:57 pasky Exp $ */
+/* $Id: uri.c,v 1.68 2003/11/29 00:44:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,8 +419,13 @@ proceed: ;
 	} while ((*dest++ = *src++));
 }
 
+/* The standard URI comes in, and if the URI is not of the 'file' scheme, the
+ * same URI comes out. However, for the file scheme, bastardized URI comes out
+ * which consists of just the complete path to file/directory, which the dumb
+ * 'file' protocol backend can understand. No host parts etc, that is what this
+ * function is supposed to chew. */
 static void
-insert_wd(unsigned char **up, unsigned char *cwd)
+transform_file_uri(unsigned char **up, unsigned char *cwd)
 {
 	unsigned char *url = *up;
 	unsigned char *path;
@@ -619,7 +624,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	if (parse_uri(&uri, url)) {
 		newurl = stracpy(url); /* XXX: Post data copy. */
 		if (newurl) {
-			insert_wd(&newurl, cwd);
+			transform_file_uri(&newurl, cwd);
 			translate_directories(newurl);
 		}
 
@@ -630,7 +635,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	if (strstr(url, "//") && (newurl = stracpy(url))) { /* XXX: Post data copy. */
 		add_to_strn(&newurl, "/");
 		if (parse_uri(&uri, newurl)) {
-			insert_wd(&newurl, cwd);
+			transform_file_uri(&newurl, cwd);
 			translate_directories(newurl);
 
 			return newurl;
@@ -708,7 +713,7 @@ http:				prefix = "http://";
 		if (not_file && !strchr(url, '/')) add_to_strn(&newurl, "/");
 
 		if (parse_uri(&uri, newurl)) {
-			insert_wd(&newurl, cwd);
+			transform_file_uri(&newurl, cwd);
 			translate_directories(newurl);
 
 			return newurl;
@@ -726,7 +731,7 @@ http:				prefix = "http://";
 		add_to_strn(&newurl, "//");
 		add_to_strn(&newurl, ch + 1);
 		if (!parse_uri(&uri, newurl)) {
-			insert_wd(&newurl, cwd);
+			transform_file_uri(&newurl, cwd);
 			translate_directories(newurl);
 
 			return newurl;
@@ -736,7 +741,7 @@ http:				prefix = "http://";
 	/* ..and with slash */
 	add_to_strn(&newurl, "/");
 	if (parse_uri(&uri, newurl)) {
-		insert_wd(&newurl, cwd);
+		transform_file_uri(&newurl, cwd);
 		translate_directories(newurl);
 
 		return newurl;

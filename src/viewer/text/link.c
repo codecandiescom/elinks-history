@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.299 2004/12/02 16:34:02 zas Exp $ */
+/* $Id: link.c,v 1.300 2004/12/17 05:06:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,6 +129,10 @@ get_link_cursor_offset(struct document_view *doc_view, struct link *link)
 	return 0;
 }
 
+/* Allocate doc_view->link_bg with enough space to save the colour
+ * and attributes of each point of the given link plus one byte
+ * for the template character. Initialise that template character
+ * with the colour and attributes appropriate for an active link. */
 static inline struct screen_char *
 init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 {
@@ -204,6 +208,8 @@ init_link_drawing(struct document_view *doc_view, struct link *link, int invert)
 	return template;
 }
 
+/* Save the current link's colours and attributes to doc_view->link_bg
+ * and give it the appropriate colour and attributes for an active link. */
 void
 draw_current_link(struct session *ses, struct document_view *doc_view)
 {
@@ -283,6 +289,8 @@ free_link(struct document_view *doc_view)
 	doc_view->link_bg_n = 0;
 }
 
+/* Restore the colours and attributes that the active link had
+ * before it was selected. */
 void
 clear_link(struct terminal *term, struct document_view *doc_view)
 {

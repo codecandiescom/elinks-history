@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.135 2004/12/19 13:53:55 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.136 2004/12/19 13:59:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1938,6 +1938,7 @@ navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 		if (*optstr && strcmp(optstr, " ")) {
 			unsigned char *ustr, ts[64] = "";
+			static unsigned char custr[256];
 
 			if (!list_empty(terminals)) {
 				unsigned int tslen = 0;
@@ -1950,7 +1951,9 @@ navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			ustr = subst_user_agent(optstr, VERSION_STRING, system_name, ts);
 
 			if (ustr) {
-				P_STRING(ustr);
+				safe_strncpy(custr, ustr, 256);
+				mem_free(ustr);
+				P_STRING(custr);
 			} else{
 				P_UNDEF();
 			}

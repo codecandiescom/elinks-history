@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.126 2002/12/01 12:18:04 pasky Exp $ */
+/* $Id: options.c,v 1.127 2002/12/01 17:28:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1110,11 +1110,10 @@ register_options()
 		"user", OPT_AUTOCREATE,
 		"User protocols options.");
 
-	/* TODO: Only mailto, telnet and tn3270 subtrees are supported now. We
-	 * need to rewrite protocols/user.c.
-	 * --pasky */
+	/* TODO: Poorly designed options structure. Ought to be able to specify
+	 * need_slashes, free_form and similiar options as well :-(. --pasky */
 
-	/* Basically, it will look like protocol.user.mailto.win32 = "blah" */
+	/* Basically, it looks like protocol.user.mailto.win32 = "blah" */
 
 	add_opt_tree("protocol.user",
 		"_template_", OPT_AUTOCREATE,

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.38 2002/11/25 14:24:49 zas Exp $ */
+/* $Id: url.c,v 1.39 2002/12/01 17:28:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,12 +14,14 @@
 
 #include "links.h"
 
+#include "config/options.h"
 #include "lowlevel/sched.h"
 #include "protocol/file.h"
 #include "protocol/finger.h"
 #include "protocol/ftp.h"
 #include "protocol/http/http.h"
 #include "protocol/http/https.h"
+#include "protocol/mime.h" /* get_prog() */
 #include "protocol/url.h"
 #include "protocol/user.h"
 #include "util/conv.h"
@@ -38,16 +40,14 @@ struct {
 	int need_slash_after_host;
 } protocols[] =
 {
+		{"custom", 0, NULL, user_func, 0, 0, 0}, /* protocol.user.* */ /* DO NOT MOVE! */
 		{"file", 0, file_func, NULL, 1, 1, 0},
-		{"https", 443, https_func, NULL, 0, 1, 1},
 		{"http", 80, http_func, NULL, 0, 1, 1},
+		{"https", 443, https_func, NULL, 0, 1, 1},
 		{"proxy", 3128, proxy_func, NULL, 0, 1, 1},
 		{"ftp", 21, ftp_func, NULL, 0, 1, 1},
 		{"finger", 79, finger_func, NULL, 0, 1, 1},
-		{"mailto", 0, NULL, mailto_func, 0, 0, 0},
-		{"telnet", 0, NULL, telnet_func, 0, 0, 0},
-		{"tn3270", 0, NULL, tn3270_func, 0, 0, 0},
-		{"user", 0, NULL, NULL, 0, 0, 0},
+		{"user", 0, NULL, NULL, 0, 0, 0}, /* lua */
 		{NULL, 0, NULL}
 };
 
@@ -56,6 +56,17 @@ int
 check_protocol(unsigned char *p, int l)
 {
 	int i;
+
+	/* First check if this isn't some custom (protocol.user) protocol. It
+	 * has higher precedence than builtin handlers. */
+	p[l] = 0;
+	if (get_prog(NULL, p)) {
+		p[l] = ':';
+		/* XXX: We rely on the fact that custom is at the top of the
+		 * protocols table. */
+		return 0;
+	}
+	p[l] = ':';
 
 	for (i = 0; protocols[i].prot; i++)
 		if (!strncasecmp(protocols[i].prot, p, l)) {
@@ -73,15 +84,13 @@ get_prot_info(unsigned char *prot, int *port,
 {
 	int i;
 
-	for (i = 0; protocols[i].prot; i++)
-		if (!strcasecmp(protocols[i].prot, prot)) {
-			if (port) *port = protocols[i].port;
-			if (func) *func = protocols[i].func;
-			if (nc_func) *nc_func = protocols[i].nc_func;
-			return 0;
-		}
+	i = check_protocol(prot, strlen(prot));
+	if (i < 0) return -1;
 
-	return -1;
+	if (port) *port = protocols[i].port;
+	if (func) *func = protocols[i].func;
+	if (nc_func) *nc_func = protocols[i].nc_func;
+	return 0;
 }
 
 /* If url is invalid, it will return -1. */
@@ -256,20 +265,20 @@ get_protocol_name(unsigned char *url)
 unsigned char *
 get_host_and_pass(unsigned char *url)
 {
-	unsigned char *u, *h, *p, *z, *k;
-	int hl, pl;
+	unsigned char *user, *host, *port, *start, *end;
+	int hostlen, portlen;
 
 	if (parse_url(url, NULL,
-		      &u, NULL,
+		      &user, NULL,
 		      NULL, NULL,
-		      &h, &hl,
-		      &p, &pl,
+		      &host, &hostlen,
+		      &port, &portlen,
 		      NULL, NULL,
 		      NULL)) return NULL;
 	
-	z = u ? u : h;
-	k = p ? p + pl : h + hl;
-	return memacpy(z, k - z);
+	start = user ? user : host;
+	end = port ? port + portlen : host + hostlen;
+	return memacpy(start, end - start);
 }
 
 
@@ -441,16 +450,25 @@ strip_url_password(unsigned char *url)
 	if (!str) return NULL;
 
 	if (parse_url(url, &prlen, &user, &uslen, &pass, &palen, &host, &holen,
-			   &port, &polen, &data, &dalen, NULL))
-		return str;
+			   &port, &polen, &data, &dalen, NULL)) {
+		mem_free(str);
+		return stracpy(url);
+	}
 
 	if (prlen) {
 		/* We've some protocol specified. */
+
+		protocol = check_protocol(url, prlen);
+		if (!protocol) {
+			/* Custom protocol; keep the URL untouched. */
+			mem_free(str);
+			return stracpy(url);
+		}
+
 		add_bytes_to_str(&str, &l, url, prlen);
 		add_chr_to_str(&str, &l, ':');
 
-		protocol = check_protocol(url, prlen);
-		if (protocol >= 0) {
+		if (protocol > 0) {
 			if (protocols[protocol].need_slashes)
 				add_to_str(&str, &l, "//");
 
@@ -481,6 +499,11 @@ strip_url_password(unsigned char *url)
 					add_chr_to_str(&str, &l, '/');
 			}
 		}
+	} else {
+		/* Unknown protocol. Keep the URL untouched. */
+		/* We probably never get here, but let's be safe. */
+		mem_free(str);
+		return stracpy(url);
 	}
 
 	if (dalen) {
@@ -714,8 +737,6 @@ prx:
 		return NULL;
 	}
 
-	/* debug("%s :: %s :: %s", base, rel, path); */
-
 	/* Either is path blank, but we've slash char before, or path is not
 	 * blank, but doesn't start by a slash (if we'd just stay along with
 	 * dsep(path[-1]) w/o all the surrounding crap, it should be enough,
@@ -757,7 +778,6 @@ prx:
 	strcpy(n + (path - base) + add_slash, rel);
 
 	translate_directories(n);
-	/* debug("%s :: %s :: %s :: %s", base, rel, path, n); */
 	return n;
 }
 

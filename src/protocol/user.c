@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.7 2002/11/28 15:22:40 zas Exp $ */
+/* $Id: user.c,v 1.8 2002/12/01 17:28:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,18 +64,20 @@ subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
 	return n;
 }
 
-void
-prog_func(struct terminal *term, unsigned char *progid,
-	  unsigned char *url, unsigned char *host, unsigned char *port,
-	  unsigned char *subj, unsigned char *name)
+/* TODO: Merge with user_func() ? --pasky */
+static void
+prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
+	  unsigned char *host, unsigned char *port, unsigned char *subj)
 {
 	unsigned char *cmd;
-	unsigned char *prog = get_prog(term, progid);
+	unsigned char *prog = get_prog(term, proto);
 
 	if (!prog || !*prog) {
+		/* Shouldn't ever happen, but be paranoid. */
+		/* Happens when you're in X11 and you've no handler for it. */
 		msg_box(term, NULL,
 			TEXT(T_NO_PROGRAM), AL_CENTER | AL_EXTD_TEXT,
-			TEXT(T_NO_PROGRAM_SPECIFIED_FOR), " ", name, ".", NULL,
+			TEXT(T_NO_PROGRAM_SPECIFIED_FOR), " ", proto, ".", NULL,
 			NULL, 1,
 			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 		return;
@@ -90,32 +92,37 @@ prog_func(struct terminal *term, unsigned char *progid,
 
 
 void
-mailto_func(struct session *ses, unsigned char *url)
+user_func(struct session *ses, unsigned char *url)
 {
-	unsigned char *user, *host, *param, *urldata = NULL, *subj;
-	int f = 1;
+	unsigned char *urldata;
+	unsigned char *proto, *host, *port, *subj = NULL;
 
-	user = get_user_name(url);
-	if (!user) goto fail;
+	/* I know this may be NULL and I don't care. --pasky */
+	proto = get_protocol_name(url);
 
-	host = get_host_name(url);
-	if (!host) goto fail1;
+	/* FIXME: We have port in here as well! Is that *BAD*? --pasky */
+	host = get_host_and_pass(url);
+	if (!host) {
+		if (proto) mem_free(proto);
+		msg_box(ses->term, NULL,
+			TEXT(T_BAD_URL_SYNTAX), AL_CENTER,
+			TEXT(T_BAD_USER_URL),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		return;
+	}
+	if (*host) check_shell_security(&host);
 
-	param = straconcat(user, "@", host, NULL);
-	if (!param) goto fail2;
+	port = get_port_str(url);
+	if (port && *port) check_shell_security(&port);
 
-	subj = strchr(param, '?');
-	if (subj) {
-		*subj = 0;
-	} else {
-		urldata = get_url_data(url);
-		if (urldata) {
-			urldata = stracpy(urldata);
-			if (!urldata) goto fail3;
-			subj = strchr(urldata, '?');
-		}
+	urldata = get_url_data(url);
+	if (urldata) {
+		urldata = stracpy(urldata);
+		if (urldata) subj = strchr(urldata, '?');
 	}
 
+	/* Some mailto specific stuff follows... */
 	/* Stay silent about complete RFC 2368 support or do it yourself! ;-).
 	 * --pasky */
 
@@ -139,71 +146,11 @@ mailto_func(struct session *ses, unsigned char *url)
 		}
 	}
 
-	check_shell_security(&param);
-
-	f = 0;
-
-	prog_func(ses->term, "mailto", url, param, NULL, subj, TEXT(T_MAIL));
+	prog_func(ses->term, url, proto, host, port, subj);
 
 	if (urldata) mem_free(urldata);
 
-fail3:
-	mem_free(param);
-
-fail2:
-	mem_free(host);
-
-fail1:
-	mem_free(user);
-
-fail:
-	if (f) {
-		msg_box(ses->term, NULL,
-			TEXT(T_BAD_URL_SYNTAX), AL_CENTER,
-			TEXT(T_BAD_MAILTO_URL),
-			NULL, 1,
-			TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
-	}
-}
-
-
-void
-tn_func(struct session *ses, unsigned char *url, unsigned char *prog,
-	unsigned char *t1, unsigned char *t2)
-{
-	unsigned char *host, *port;
-
-	host = get_host_name(url);
-	if (!host) goto fail;
-	if (*host) check_shell_security(&host);
-
-	port = get_port_str(url);
-	if (port && *port) check_shell_security(&port);
-
-	prog_func(ses->term, prog, url, host, port, NULL, t1);
-
-	mem_free(host);
 	if (port) mem_free(port);
-
-	return;
-fail:
-	msg_box(ses->term, NULL,
-		TEXT(T_BAD_URL_SYNTAX), AL_CENTER,
-		t2,
-		NULL, 1,
-		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
-}
-
-
-void
-telnet_func(struct session *ses, unsigned char *url)
-{
-	tn_func(ses, url, "telnet", TEXT(T_TELNET), TEXT(T_BAD_TELNET_URL));
-}
-
-
-void
-tn3270_func(struct session *ses, unsigned char *url)
-{
-	tn_func(ses, url, "tn3270", TEXT(T_TN3270), TEXT(T_BAD_TN3270_URL));
+	mem_free(host);
+	if (proto) mem_free(proto);
 }

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.5 2002/11/28 15:14:15 zas Exp $ */
+/* $Id: mime.c,v 1.6 2002/12/01 17:28:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,12 +199,13 @@ get_mime_type_handler(struct terminal *term, unsigned char *type)
 }
 
 
-
+/* TODO: Move this *AWAY*! To protocol/user.c, if possible ;-). --pasky */
 unsigned char *
 get_prog(struct terminal *term, unsigned char *progid)
 {
 	struct option *opt;
-	unsigned char *system_str = get_system_str(term->environment & ENV_XWIN);
+	unsigned char *system_str =
+		get_system_str(term ? term->environment & ENV_XWIN : 0);
 	unsigned char *name;
 
 	if (!system_str) return NULL;

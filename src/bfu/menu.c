@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.151 2004/01/01 15:54:37 jonas Exp $ */
+/* $Id: menu.c,v 1.152 2004/01/06 21:00:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "bfu/menu.h"
 #include "bfu/style.h"
 #include "config/kbdbind.h"
+#include "dialogs/menu.h"		/* For do_action() */
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
 #include "terminal/event.h"
@@ -110,6 +111,7 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 	/* We save these values due to delete_window() call below. */
 	menu_func func = it->func;
 	void *it_data = it->data;
+	enum keyact action = it->action;
 
 	if (mi_is_unselectable(*it)) return;
 
@@ -126,6 +128,13 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 
 			delete_window(win);
 		}
+	}
+
+	if (action != ACT_NONE && !func) {
+		struct session *ses = data;
+
+		do_action(ses, action, it_data);
+		return;
 	}
 
 	assertm(func, "No menu function");

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.43 2003/12/27 04:29:58 miciah Exp $ */
+/* $Id: menu.h,v 1.44 2004/01/06 21:00:56 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -145,8 +145,19 @@ struct menu {
 
 
 struct menu_item *new_menu(enum menu_item_flags);
-void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, enum keyact action, menu_func, void *, enum menu_item_flags flags);
-#define add_separator_to_menu(menu) add_to_menu(menu, "", NULL, ACT_NONE, NULL, NULL, NO_SELECT)
+
+void
+add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
+	    enum keyact action, menu_func func, void *data,
+	    enum menu_item_flags flags);
+
+#define add_separator_to_menu(menu) \
+	add_to_menu(menu, "", NULL, ACT_NONE, NULL, NULL, NO_SELECT)
+
+/* Implies that the action will be handled by do_action() */
+#define add_menu_action(menu, text, action, data, flags) \
+	add_to_menu(menu, text, NULL, action, NULL, data, flags)
+
 void do_menu(struct terminal *, struct menu_item *, void *, int);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int, int);
 void do_mainmenu(struct terminal *, struct menu_item *, void *, int);

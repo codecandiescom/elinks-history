@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.249 2004/01/01 15:36:18 jonas Exp $ */
+/* $Id: menu.c,v 1.250 2004/01/06 21:00:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,24 +52,6 @@
 #include "viewer/text/search.h"
 #include "viewer/text/view.h"
 
-
-static void
-menu_next_tab(struct terminal *term, void *d, struct session *ses)
-{
-	switch_to_next_tab(term);
-}
-
-static void
-menu_prev_tab(struct terminal *term, void *d, struct session *ses)
-{
-	switch_to_prev_tab(term);
-}
-
-static void
-menu_close_tab(struct terminal *term, void *d, struct session *ses)
-{
-	close_tab(term, ses);
-}
 
 /* Helper for url items in help menu. */
 static void
@@ -310,11 +292,8 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	menu = new_menu(FREE_LIST);
 	if (!menu) return;
 
-	add_to_menu(&menu, N_("Go ~back"), NULL, ACT_BACK,
-		    (menu_func) menu_go_back, NULL, 0);
-
-	add_to_menu(&menu, N_("Go for~ward"), NULL, ACT_UNBACK,
-		    (menu_func) menu_go_unback, NULL, 0);
+	add_menu_action(&menu, N_("Go ~back"), ACT_BACK, NULL, 0);
+	add_menu_action(&menu, N_("Go for~ward"), ACT_UNBACK, NULL, 0);
 
 	add_separator_to_menu(&menu);
 
@@ -334,15 +313,11 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	add_separator_to_menu(&menu);
 
 	if (tabs > 1) {
-		add_to_menu(&menu, N_("Nex~t tab"), NULL, ACT_TAB_NEXT,
-			    (menu_func) menu_next_tab, NULL, 0);
-
-		add_to_menu(&menu, N_("Pre~v tab"), NULL, ACT_TAB_PREV,
-			    (menu_func) menu_prev_tab, NULL, 0);
+		add_menu_action(&menu, N_("Nex~t tab"), ACT_TAB_NEXT, NULL, 0);
+		add_menu_action(&menu, N_("Pre~v tab"), ACT_TAB_PREV, NULL, 0);
 	}
 
-	add_to_menu(&menu, N_("~Close tab"), NULL, ACT_TAB_CLOSE,
-		    (menu_func) menu_close_tab, NULL, 0);
+	add_menu_action(&menu, N_("~Close tab"), ACT_TAB_CLOSE, NULL, 0);
 
 	if (tabs > 1) {
 		add_to_menu(&menu, N_("C~lose all tabs but the current"), "",
@@ -480,9 +455,9 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ITEM(N_("H~eader info"), NULL, ACT_HEADER_INFO, menu_header_info, NULL, 0),
 	INIT_MENU_ITEM(N_("Frame at ~full-screen"), NULL, ACT_ZOOM_FRAME, menu_for_frame, (void *)set_frame, 0),
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("Nex~t tab"), NULL, ACT_TAB_NEXT, menu_next_tab, NULL, 0),
-	INIT_MENU_ITEM(N_("Pre~v tab"), NULL, ACT_TAB_PREV, menu_prev_tab, NULL, 0),
-	INIT_MENU_ITEM(N_("~Close tab"), NULL, ACT_TAB_CLOSE, menu_close_tab, NULL, 0),
+	INIT_MENU_ITEM(N_("Nex~t tab"), NULL, ACT_TAB_NEXT, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("Pre~v tab"), NULL, ACT_TAB_PREV, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("~Close tab"), NULL, ACT_TAB_CLOSE, NULL, NULL, 0),
 	NULL_MENU_ITEM
 };
 
@@ -654,4 +629,41 @@ free_history_lists(void)
 #ifdef HAVE_SCRIPTING
 	trigger_event_name("free-history");
 #endif
+}
+
+/* TODO: This might belong in its own file. Maybe config/action.* since actions
+ * are more than just keybinding stuff or maybe sched/task.c --jonas */
+/* This could gradually become some mulitplexor / switch noodle containing
+ * most if not all default handling of actions (for the main mapping) that
+ * frame_ev() and/or send_event() could use as a backend. */
+void
+do_action(struct session *ses, enum keyact action, void *data)
+{
+	struct terminal *term = ses->tab->term;
+
+	switch (action) {
+		case ACT_TAB_PREV:
+			switch_to_prev_tab(term);
+			break;
+
+		case ACT_TAB_NEXT:
+			switch_to_next_tab(term);
+			break;
+
+		case ACT_TAB_CLOSE:
+			close_tab(term, ses);
+			break;
+
+		case ACT_BACK:
+			go_back(ses);
+			break;
+
+		case ACT_UNBACK:
+			go_unback(ses);
+			break;
+
+		default:
+			INTERNAL("No action handling defined for '%s'.",
+				 write_action(action));
+	}
 }

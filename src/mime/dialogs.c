@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.95 2004/04/13 22:42:15 jonas Exp $ */
+/* $Id: dialogs.c,v 1.96 2004/04/13 22:47:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,10 +103,8 @@ add_mime_extension(struct extension *ext)
 void
 menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	struct option *opt = NULL;
 	struct extension *new;
 	struct dialog *dlg;
-	struct string translated;
 
 #define MIME_WIDGETS_COUNT 4
 	dlg = calloc_dialog(MIME_WIDGETS_COUNT, sizeof(struct extension));
@@ -117,18 +115,20 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 	new = (struct extension *) get_dialog_offset(dlg, MIME_WIDGETS_COUNT);
 
-	if (fcp && init_string(&translated)
-	    && add_optname_to_string(&translated, fcp, strlen(fcp))) {
-		opt = get_real_opt("mime.extension", translated.source);
-	}
-
-	if (opt) {
-		safe_strncpy(new->ext, fcp, MAX_STR_LEN);
-		safe_strncpy(new->ct, opt->value.string, MAX_STR_LEN);
-		safe_strncpy(new->ext_orig, translated.source, MAX_STR_LEN);
-	}
-
 	if (fcp) {
+		struct option *opt = NULL;
+		struct string translated;
+
+		if (init_string(&translated)
+		    && add_optname_to_string(&translated, fcp, strlen(fcp)))
+			opt = get_real_opt("mime.extension", translated.source);
+
+		if (opt) {
+			safe_strncpy(new->ext, fcp, MAX_STR_LEN);
+			safe_strncpy(new->ct, opt->value.string, MAX_STR_LEN);
+			safe_strncpy(new->ext_orig, translated.source, MAX_STR_LEN);
+		}
+
 		done_string(&translated);
 		mem_free(fcp);
 	}

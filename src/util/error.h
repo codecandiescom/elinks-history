@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.29 2003/07/06 20:28:43 pasky Exp $ */
+/* $Id: error.h,v 1.30 2003/07/06 22:04:03 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -44,7 +44,14 @@ void elinks_internal(unsigned char *fmt, ...);
 /* To make recovery path possible (assertion failed may not mean end of the
  * world, the execution goes on if we're outside of DEBUG and FASTMEM),
  * @assert_failed is set to true if the last assert() failed, otherwise it's
- * zero. Note that you must never change assert_failed value, sorry guys. */
+ * zero. Note that you must never change assert_failed value, sorry guys.
+ *
+ * You should never test assert_failed directly anyway. Use if_assert_failed
+ * instead, it will attempt to hint compiler to optimize out the recovery path
+ * if we're FASTMEM. So it should go like:
+ *
+ * assertm(1 == 1, "The world's gonna blow up!");
+ * if_assert_failed { schedule_time_machine(); return; } */
 
 /* In-depth explanation: this restriction is here because in the FASTMEM mode,
  * assert_failed is initially initialized to zero and then not ever touched
@@ -52,9 +59,19 @@ void elinks_internal(unsigned char *fmt, ...);
  * paths will get hit (and since developers usually don't test FASTMEM mode
  * extensively...). So better don't mess with it, even if you would do that
  * with awareness of this fact. We don't want to iterate over tens of spots all
- * over the code when we chane one detail regarding FASTMEM operation. */
+ * over the code when we chane one detail regarding FASTMEM operation.
+ *
+ * This is not that actual after introduction of if_assert_failed, but it's
+ * a safe recommendation anyway, so... ;-) */
 
 extern int assert_failed;
+
+#undef if_assert_failed
+#ifdef FASTMEM
+#define if_assert_failed if (0) /* This should be optimalized away. */
+#else
+#define if_assert_failed if (assert_failed)
+#endif
 
 #undef assert
 #ifdef FASTMEM

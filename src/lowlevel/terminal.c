@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.34 2002/11/30 00:12:05 pasky Exp $ */
+/* $Id: terminal.c,v 1.35 2002/12/02 15:37:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,7 +258,7 @@ add_window_at_pos(struct terminal *term,
 
 	win = mem_alloc(sizeof(struct window));
 	if (!win) {
-		mem_free(data);
+		if (data) mem_free(data);
 		return;
 	}
 
@@ -927,11 +927,11 @@ destroy_terminal(struct terminal *term)
 
 	/* if (term->cwd) mem_free(term->cwd); */
 	if (term->title) mem_free(term->title);
-	mem_free(term->screen);
-	mem_free(term->last_screen);
+	if (term->screen) mem_free(term->screen);
+	if (term->last_screen) mem_free(term->last_screen);
 
 	set_handlers(term->fdin, NULL, NULL, NULL, NULL);
-	mem_free(term->input_queue);
+	if (term->input_queue) mem_free(term->input_queue);
 
 	if (term->blocked != -1) {
 		close(term->blocked);

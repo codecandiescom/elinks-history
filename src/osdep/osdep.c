@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.33 2002/11/29 16:26:13 zas Exp $ */
+/* $Id: osdep.c,v 1.34 2002/12/02 15:41:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1685,6 +1685,8 @@ unhandle_mouse(void *h)
 {
 	struct gpm_mouse_spec *gms = h;
 
+	if (!gms) return;
+	
 	set_handlers(gms->h, NULL, NULL, NULL, NULL);
 	Gpm_Close();
 	mem_free(gms);

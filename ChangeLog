@@ -1,3 +1,9 @@
+Fri Aug 16 17:32:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/user.c:
+
+	Fix of infinite loop if % is at the end of the cmd string.  
+
 Mon Aug 12 01:40:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/listbox.c:

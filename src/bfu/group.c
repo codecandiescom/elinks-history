@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.44 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: group.c,v 1.45 2003/11/06 20:11:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ dlg_format_group(struct terminal *term,
 }
 
 void
-group_fn(struct dialog_data *dlg_data)
+group_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.99 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: dialogs.c,v 1.100 2003/11/06 20:11:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,7 +194,7 @@ check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data
 }
 
 static void
-layout_edit_dialog(struct dialog_data *dlg_data)
+edit_dialog_layouter(struct dialog_data *dlg_data)
 {
 	int max = 0, min = 0;
 	int w, rw;
@@ -297,7 +297,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	}
 
 	dlg->title = _("Edit", term);
-	dlg->fn = layout_edit_dialog;
+	dlg->layouter = edit_dialog_layouter;
 	dlg->udata = option;
 	dlg->udata2 = ses;
 
@@ -486,7 +486,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	if (!dlg) return;
 
 	dlg->title = _("Options manager", term);
-	dlg->fn = layout_hierbox_browser;
+	dlg->layouter = hierbox_browser_layouter;
 	dlg->handle_event = hierbox_dialog_event_handler;
 	dlg->abort = option_dialog_abort_handler;
 	dlg->udata = ses;
@@ -717,7 +717,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	if (!dlg) return;
 
 	dlg->title = _("Keybinding manager", term);
-	dlg->fn = layout_hierbox_browser;
+	dlg->layouter = hierbox_browser_layouter;
 	dlg->handle_event = hierbox_dialog_event_handler;
 	dlg->abort = kbdbind_dialog_abort_handler;
 	dlg->udata = ses;

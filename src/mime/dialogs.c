@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.69 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: dialogs.c,v 1.70 2003/11/06 20:11:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@ static unsigned char *ext_msg[] = {
 
 
 static void
-add_ext_fn(struct dialog_data *dlg_data)
+add_ext_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
@@ -228,7 +228,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	if (fcp) done_string(&translated);
 
 	dlg->title = _("Extension", term);
-	dlg->fn = add_ext_fn;
+	dlg->layouter = add_ext_layouter;
 	dlg->refresh = (void (*)(void *)) really_add_ext;
 	dlg->refresh_data = new;
 

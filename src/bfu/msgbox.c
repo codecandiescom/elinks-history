@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.75 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: msgbox.c,v 1.76 2003/11/06 20:11:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 
 
 static void
-msg_box_fn(struct dialog_data *dlg_data)
+msg_box_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
@@ -105,7 +105,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	add_one_to_ml(&ml, dlg);
 
 	dlg->title = title;
-	dlg->fn = msg_box_fn;
+	dlg->layouter = msg_box_layouter;
 	dlg->udata = text;
 	dlg->udata2 = udata;
 	dlg->align = align;

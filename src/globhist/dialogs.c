@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.55 2003/11/05 14:23:15 jonas Exp $ */
+/* $Id: dialogs.c,v 1.56 2003/11/06 20:11:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -459,7 +459,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	if (!dlg) return;
 
 	dlg->title = _("Global history", term);
-	dlg->fn = layout_hierbox_browser;
+	dlg->layouter = hierbox_browser_layouter;
 	dlg->handle_event = history_dialog_event_handler;
 	dlg->abort = history_dialog_abort_handler;
 	dlg->udata = ses;

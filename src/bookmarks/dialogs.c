@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.106 2003/11/05 14:23:14 jonas Exp $ */
+/* $Id: dialogs.c,v 1.107 2003/11/06 20:11:19 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -599,7 +599,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	if (!dlg) return;
 
 	dlg->title = _("Bookmark manager", term);
-	dlg->fn = layout_hierbox_browser;
+	dlg->layouter = hierbox_browser_layouter;
 	dlg->handle_event = hierbox_dialog_event_handler;
 	dlg->abort = bookmark_dialog_abort_handler;
 	dlg->udata = ses;

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.75 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: dialogs.c,v 1.76 2003/11/06 20:11:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 
 
 static void
-auth_layout(struct dialog_data *dlg_data)
+auth_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
@@ -136,7 +136,7 @@ do_auth_dialog(struct session *ses)
 	if (!dlg) return;
 
 	dlg->title = _("HTTP Authentication", term);
-	dlg->fn = auth_layout;
+	dlg->layouter = auth_dialog_layouter;
 
 	dlg->udata = (char *)dlg + sizeof_dialog(AUTH_WIDGETS_COUNT, 0);
 	strcpy(dlg->udata, sticker);

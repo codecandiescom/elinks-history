@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.70 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: dialog.c,v 1.71 2003/11/06 20:11:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,7 +167,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_RESIZE:
 		case EV_REDRAW:
-			dlg_data->dlg->fn(dlg_data);
+			dlg_data->dlg->layouter(dlg_data);
 			redraw_dialog(dlg_data);
 			break;
 

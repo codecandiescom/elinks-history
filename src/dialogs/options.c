@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.112 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: options.c,v 1.113 2003/11/06 20:11:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,7 @@ terminal_options_save(struct dialog_data *dlg_data,
 
 /* Stolen checkbox_list_fn(). Code duplication forever. */
 static void
-terminal_options_fn(struct dialog_data *dlg_data)
+terminal_options_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
@@ -192,7 +192,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop->utf_8_io = get_opt_int_tree(term->spec, "utf_8_io");
 
 	dlg->title = _("Terminal options", term);
-	dlg->fn = terminal_options_fn;
+	dlg->layouter = terminal_options_layouter;
 	dlg->udata = termopt_hop;
 	dlg->refresh = (void (*)(void *)) terminal_options_ok;
 	dlg->refresh_data = termopt_hop;
@@ -283,7 +283,7 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	if (!dlg) return;
 
 	dlg->title = _("Resize terminal", term);
-	dlg->fn = group_fn;
+	dlg->layouter = group_layouter;
 	dlg->refresh = (void (*)(void *)) do_resize_terminal;
 	dlg->refresh_data = term;
 

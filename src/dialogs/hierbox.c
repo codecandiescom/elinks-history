@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.39 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: hierbox.c,v 1.40 2003/11/06 20:11:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ display_dlg:
 
 
 void
-layout_hierbox_browser(struct dialog_data *dlg_data)
+hierbox_browser_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;

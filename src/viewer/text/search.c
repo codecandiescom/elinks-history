@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.101 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: search.c,v 1.102 2003/11/06 20:11:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -964,7 +964,7 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 }
 
 void
-search_dlg_fn(struct dialog_data *dlg_data)
+search_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
@@ -1072,7 +1072,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	}
 
 	dlg->title = title;
-	dlg->fn = search_dlg_fn;
+	dlg->layouter = search_dialog_layouter;
 	dlg->udata = text;
 	dlg->udata2 = hop;
 

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.113 2003/11/06 17:29:23 zas Exp $ */
+/* $Id: core.c,v 1.114 2003/11/06 20:11:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,7 +357,7 @@ dialog_run_lua(struct lua_dlg_data *data)
 }
 
 static void
-dialog_fn(struct dialog_data *dlg_data)
+dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
@@ -437,7 +437,7 @@ l_edit_bookmark_dialog(LS)
 	data->func_ref = lua_ref(S, 1);
 
 	dlg->title = _("Edit bookmark", lua_ses->tab->term);
-	dlg->fn = dialog_fn;
+	dlg->layouter = dialog_layouter;
 	dlg->refresh = (void (*)(void *))dialog_run_lua;
 	dlg->refresh_data = data;
 
@@ -495,7 +495,7 @@ xdialog_run_lua(struct lua_xdialog_data *data)
 }
 
 static void
-xdialog_fn(struct dialog_data *dlg_data)
+xdialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
@@ -572,7 +572,7 @@ l_xdialog(LS)
 	data->func_ref = lua_ref(S, 1);
 
 	dlg->title = _("User dialog", lua_ses->tab->term);
-	dlg->fn = xdialog_fn;
+	dlg->layouter = xdialog_layouter;
 	dlg->refresh = (void (*)(void *))xdialog_run_lua;
 	dlg->refresh_data = data;
 

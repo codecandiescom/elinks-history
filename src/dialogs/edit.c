@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.63 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: edit.c,v 1.64 2003/11/06 20:11:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,7 @@ my_cancel_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 /* Called to setup the edit dialog */
 static void
-layout_add_dialog(struct dialog_data *dlg_data)
+add_dialog_layouter(struct dialog_data *dlg_data)
 {
 	int max = 0, min = 0;
 	int w, rw;
@@ -137,7 +137,7 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	}
 
 	dlg->title = title;
-	dlg->fn = layout_add_dialog;
+	dlg->layouter = add_dialog_layouter;
 	dlg->refresh = (void (*)(void *)) when_done;
 	dlg->refresh_data = dlg;
 	dlg->udata = parent;

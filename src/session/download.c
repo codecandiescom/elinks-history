@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.135 2003/11/06 16:59:09 jonas Exp $ */
+/* $Id: download.c,v 1.136 2003/11/06 20:11:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,7 +307,7 @@ download_progress_bar(struct terminal *term,
 }
 
 static void
-download_window_function(struct dialog_data *dlg_data)
+download_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
 	struct terminal *term = dlg_data->win->term;
@@ -426,7 +426,7 @@ found:
 	undisplay_download(down);
 	down->ses = ses;
 	dlg->title = _("Download", term);
-	dlg->fn = download_window_function;
+	dlg->layouter = download_dialog_layouter;
 	dlg->abort = download_abort_function;
 	dlg->udata = down;
 	dlg->align = AL_CENTER;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.113 2002/11/20 09:15:11 pasky Exp $ */
+/* $Id: options.c,v 1.114 2002/11/21 11:15:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -977,6 +977,11 @@ register_options()
 		"Allow reading from non-regular files? (DANGEROUS - reading\n"
 		"/dev/urandom or /dev/zero can ruin your day!)");
 
+	add_opt_bool("protocol.file",
+		"try_encoding_extensions", 0, 1,
+		"When set, if we can't open a file named 'filename', we'll try\n"
+		"to open 'filename' + some encoding extensions.\n"
+		"(ie. 'filename.gz', it depends of supported encoding)");
 
 
 	add_opt_tree("protocol",

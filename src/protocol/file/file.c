@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.28 2002/11/19 22:06:19 zas Exp $ */
+/* $Id: file.c,v 1.29 2002/11/21 11:15:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -284,19 +284,19 @@ guess_encoding(unsigned char *fname)
 {
 	int fname_len = strlen(fname);
 	unsigned char *fname_end = fname + fname_len;
+	unsigned char **ext;
+	int enc;
 
-	/* Case-insensitive?! */
+	for (enc = 1; enc < NB_KNOWN_ENCODING; enc++) {
+		ext = listext_encoded(enc);
+		while (ext && *ext) {
+			int len = strlen(*ext);
 
-	if (fname_len > 3 && !strcmp(fname_end - 3, ".gz")) {
-		return ENCODING_GZIP;
-	}
-
-	if (fname_len > 4 && !strcmp(fname_end - 4, ".tgz")) {
-		return ENCODING_GZIP;
-	}
-
-	if (fname_len > 4 && !strcmp(fname_end - 4, ".bz2")) {
-		return ENCODING_BZIP2;
+			if (fname_len > len
+			    && !strcmp(fname_end - len, *ext))
+				return enc;
+			ext++;
+		}
 	}
 
 	return ENCODING_NONE;
@@ -334,6 +334,9 @@ file_func(struct connection *c)
 	int saved_errno;
 	unsigned char dircolor[8];
 	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
+	unsigned char **ext;
+	int enc;
+	enum stream_encoding encoding = ENCODING_NONE;
 
 	if (colorize_dir) {
 		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
@@ -351,10 +354,38 @@ file_func(struct connection *c)
 		return;
 	}
 
+	/* First, we try with name as is. */
 	h = open(name, O_RDONLY | O_NOCTTY);
-	if (h == -1) {
-		saved_errno = errno;
+	saved_errno = errno;
+	if (h == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
+		/* No file of that name was found, try some others names. */
+		for (enc = 1; enc < NB_KNOWN_ENCODING; enc++) {
+			ext = listext_encoded(enc);
+			while (ext && *ext) {
+				unsigned char *tname = init_str();
+				int tname_len = 0;
 
+				add_to_str(&tname, &tname_len, name);
+				add_to_str(&tname, &tname_len, *ext);
+
+				/* We try with some extensions. */
+				h = open(tname, O_RDONLY | O_NOCTTY);
+				if (h >= 0) {
+					/* Ok, found one, use it. */
+					mem_free(name);
+					name = tname;
+					namelen = strlen(tname);
+					encoding = enc;
+					enc = NB_KNOWN_ENCODING;
+					break;
+				}
+				mem_free(tname);
+				ext++;
+			}
+		}
+	}
+
+	if (h == -1) {
 		d = opendir(name);
 		if (d) goto dir;
 
@@ -366,8 +397,16 @@ file_func(struct connection *c)
 	set_bin(h);
 	if (fstat(h, &stt)) {
 		saved_errno = errno;
-		mem_free(name);
 		close(h);
+		mem_free(name);
+		abort_conn_with_state(c, -saved_errno);
+		return;
+	}
+
+	if (encoding != ENCODING_NONE && !S_ISREG(stt.st_mode)) {
+		/* We only want to open regular encoded files. */
+		close(h);
+		mem_free(name);
 		abort_conn_with_state(c, -saved_errno);
 		return;
 	}
@@ -379,7 +418,6 @@ file_func(struct connection *c)
 		struct dirent *de;
 
 		d = opendir(name);
-
 
 		close(h);
 
@@ -592,7 +630,9 @@ dir:
 
 	} else {
 		struct stream_encoded *stream;
-		enum stream_encoding encoding = guess_encoding(name);
+
+		if (encoding == ENCODING_NONE)
+			encoding = guess_encoding(name);
 
 		mem_free(name);
 

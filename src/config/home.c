@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.26 2003/10/02 16:42:14 kuser Exp $ */
+/* $Id: home.c,v 1.27 2003/10/03 15:17:13 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,18 @@
 
 unsigned char *elinks_home = NULL;
 int first_use = 0;
+
+static inline void
+strip_trailing_dir_sep(unsigned char *path)
+{
+	int i;
+
+	for (i = strlen(path) - 1; i > 0; i--)
+		if (!dir_sep(path[i]))
+			break;
+	
+	path[i + 1] = 0;
+}
 
 static unsigned char *
 test_confdir(unsigned char *confdir)
@@ -85,7 +97,6 @@ get_home(void)
 	unsigned char *envhome = getenv("HOME");
 	unsigned char *home = envhome ? stracpy(envhome) : NULL;
 	unsigned char *envconfdir = getenv("ELINKS_CONFDIR");
-	unsigned char *pos;
 
 	/* TODO: We want to use commandline option instead of environment
 	 * variable, especially one with so common name. */
@@ -95,8 +106,7 @@ get_home(void)
 		if (!home) return NULL;
 	}
 
-	for (pos = home + strlen(home) - 1; *home && dir_sep(*pos); pos--)
-		*pos  = 0;
+	strip_trailing_dir_sep(home);
 
 	if (home[0]) add_to_strn(&home, "/");
 
@@ -109,9 +119,7 @@ get_home(void)
 	if (envconfdir) {
 		add_to_strn(&home_elinks, envconfdir);
 
-		for (pos = home_elinks + strlen(home_elinks) - 1;
-		     *home_elinks && dir_sep(*pos); pos--)
-			*pos = 0;
+		strip_trailing_dir_sep(elinks_home);
 
 		if (stat(home_elinks, &st) != -1 && S_ISDIR(st.st_mode)) {
 			add_to_strn(&home_elinks, "/elinks");

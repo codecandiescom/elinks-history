@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.162 2004/09/27 00:43:43 pasky Exp $ */
+/* $Id: session.h,v 1.163 2004/09/28 16:33:33 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -238,7 +238,7 @@ void done_saved_session_info(void);
 struct session *init_session(struct session *ses, struct terminal *term,
 	     struct uri *uri, int in_background);
 
-void doc_end_load(struct download *, struct session *);
+void doc_loading_callback(struct download *, struct session *);
 
 void abort_loading(struct session *, int);
 void reload(struct session *, enum cache_mode);

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2003-10-17 09:39+0200\n"
-"PO-Revision-Date: 2003-10-17 20:10+0200\n"
+"PO-Revision-Date: 2003-10-17 20:48+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2130,7 +2130,7 @@ msgstr ""
 
 #: src/config/options.c:1557 src/util/version.c:104
 msgid "Mimetypes files"
-msgstr ""
+msgstr "Mimetype fájlok"
 
 #: src/config/options.c:1559
 msgid ""
@@ -2138,16 +2138,21 @@ msgid ""
 "can be used to find the content type of an URL by looking at the\n"
 "extension of the file name."
 msgstr ""
+"A mimetype kezeléssel kapcsolatos beállítások. A mimetype fáljokat\n"
+"az URL-ek által mutatott fáljok tartalmának megállapításához lehet\n"
+"használni. Ez a fáljkiterjesztés alapján mûködik."
 
 #: src/config/options.c:1565
 msgid "Enable mime.types support."
-msgstr ""
+msgstr "A mime.type támogatás engedélyezése."
 
 #: src/config/options.c:1569
 msgid ""
 "Mimetypes search path. Colon-separated list of files.\n"
 "Leave as \"\" to use built-in default instead."
 msgstr ""
+"Mimetype keresési útvonal. Fáljok listája kettõspontokkal elválasztva.\n"
+"Ha üresen hagyod (\"\"), a beépített lesz érvényes."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1576
@@ -2274,6 +2279,11 @@ msgid ""
 "can unfortunately considerably affect privacy and can lead even to a\n"
 "security problem on some badly designed web pages."
 msgstr ""
+"A HTTP referer egy speciális fejléc, amit a böngészõ a HTTP lekérdezésekkor\n"
+"küld, és az elõzõleg látogatott oldal URL-jét tartalmazza, ezáltal a szerver\n"
+"képes meghatározni melyik linket követve került az adott oldalra a böngészõ.\n"
+"Sajnos ez nem túl pozitív a magánszférára, és rosszul elkészített\n"
+"oldalaknál biztonsági veszélyt is jelenthet."
 
 #: src/config/options.c:1639
 msgid "Policy"
@@ -2303,7 +2313,7 @@ msgstr "A hamis referer ami a 2-es beállításkor kerül küldésre."
 
 #: src/config/options.c:1653
 msgid "Send Accept-Language header"
-msgstr ""
+msgstr "Accept-Language fejléc küldése"
 
 #: src/config/options.c:1655
 msgid "Send Accept-Language header."
@@ -2346,7 +2356,7 @@ msgstr ""
 
 #: src/config/options.c:1672
 msgid "User-agent identification"
-msgstr ""
+msgstr "User Agent beállítása"
 
 #: src/config/options.c:1674
 msgid ""
@@ -2357,6 +2367,12 @@ msgid ""
 "%t in the string means size of the terminal\n"
 "Use \" \" if you don't want any User-Agent header to be sent at all."
 msgstr ""
+"A User Agent beállítás megváltoztatása. Ez egy azonosító karaktersor,\n"
+"amit a böngészõ küld a HTTP kiszolgálónak, ha az egy oldalt kér le.\n"
+"%v a karaktersorban az ELinks verziója\n"
+"%s a karaktersorban a renszer azonosítót jelenti\n"
+"%t a terminál méretét adja vissza\n"
+"Ha nem akarsz User Agent fejlécet küldeni, irj ide \" \"-t."
 
 #: src/config/options.c:1683
 msgid "FTP"
@@ -2375,6 +2391,8 @@ msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
 msgstr ""
+"Az FTP proxy paraméterei (host:port). Ha üresen hagyod, akkor az\n"
+"FTP_PROXY környezeti változó is megvizsgálásra kerül."
 
 #: src/config/options.c:1696
 msgid "Anonymous password"
@@ -2382,7 +2400,7 @@ msgstr "Anonymus jelszava"
 
 #: src/config/options.c:1698
 msgid "FTP anonymous password to be sent."
-msgstr ""
+msgstr "FTP anonymus jelszó."
 
 #: src/config/options.c:1700
 msgid "Use passive mode (IPv4)"
@@ -2414,21 +2432,24 @@ msgstr "Helyi fájlok"
 
 #: src/config/options.c:1718
 msgid "Options specific to local browsing."
-msgstr ""
+msgstr "Lokális böngészéssel kapcsolatos beállítások."
 
 #: src/config/options.c:1720
 msgid "Allow reading special files"
-msgstr ""
+msgstr "Nem reguláris fáljok olvasása"
 
 #: src/config/options.c:1722
 msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
 msgstr ""
+"Olvasás engedélyezése, nem csak a reguláris fáljokból?\n"
+"(VESZÉLYES - pl a /dev/urandom vagy /dev/zero olvasása nem várt\n"
+"következményekkel járhat!)"
 
 #: src/config/options.c:1725
 msgid "Try encoding extensions"
-msgstr ""
+msgstr "Típusfüggõ fájlnévkiterjesztések használata"
 
 #: src/config/options.c:1727
 msgid ""
@@ -2436,10 +2457,13 @@ msgid ""
 "to open 'filename' with some encoding extension appended\n"
 "(ie. 'filename.gz'); it depends on the supported encodings."
 msgstr ""
+"Ha be van állítva, akkor amennyiben egy fájlt nem lehet megnyitni\n"
+"'filename' névvel, akkor a típusának megfelelõ kiterjesztéssel (pl.\n"
+"'filename.gz) is megkiséreljük megnyitni."
 
 #: src/config/options.c:1731
 msgid "Show hidden files in directory listing"
-msgstr ""
+msgstr "Rejtett fáljok megjelenítése"
 
 #: src/config/options.c:1733
 msgid ""
@@ -2447,6 +2471,9 @@ msgid ""
 "If set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
+"Rejtett fáljok megjelenítése a listában?\n"
+"Ha ki van kapcsolva, akkor a ponttal kezdõdõ nevû fáljok nem jelennek\n"
+"meg a lokális könyvtárlistákban."
 
 #: src/config/options.c:1738
 msgid "User protocols"
@@ -2491,34 +2518,44 @@ msgid ""
 "Options for mailcap support. (Deprecated. Please use\n"
 "mime.mailcap instead)"
 msgstr ""
+"Mailcap beállítások (Elavult, használd a\n"
+"mime.mailcap-et helyette)"
 
 #: src/config/options.c:1774
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.enable option instead."
 msgstr ""
+"Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
+"Használd a mime.mailcap.enable beállítást helyette."
 
 #: src/config/options.c:1779
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.path option instead."
 msgstr ""
+"Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
+"Használd a mime.mailcap.path beállítást helyette."
 
 #: src/config/options.c:1784
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.ask option instead."
 msgstr ""
+"Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
+"Használd a mime.mailcap.ask beállítást helyette."
 
 #: src/config/options.c:1789
 msgid "This option is deprecated and will be removed very soon.\n"
-msgstr ""
+msgstr "Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
 
 #: src/config/options.c:1793
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
 msgstr ""
+"Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
+"Használd a mime.mailcap.prioritize beállítást helyette."
 
 #: src/config/options.c:1797
 msgid "No-proxy domains"
@@ -2909,7 +2946,7 @@ msgstr "Kiválasztott gomb"
 
 #: src/config/options.c:2119 src/config/options.c:2514
 msgid "Dialog selected button colors."
-msgstr ""
+msgstr "Dialógusablak kiválasztott nyomógombjainak a színei."
 
 #: src/config/options.c:2129 src/config/options.c:2524
 #: src/viewer/text/link.c:1019
@@ -2918,7 +2955,7 @@ msgstr "Szöveg mezö"
 
 #: src/config/options.c:2131
 msgid "Dialog text field colors."
-msgstr ""
+msgstr "Dialógusablak szövegmezõjének színei."
 
 #: src/config/options.c:2141 src/config/options.c:2536
 msgid "Text field text"
@@ -2926,7 +2963,7 @@ msgstr "Szövegmezõ szöveg"
 
 #: src/config/options.c:2143 src/config/options.c:2538
 msgid "Dialog field text colors."
-msgstr ""
+msgstr "Dialógusablak szövegmezõjének színei."
 
 #: src/config/options.c:2153 src/config/options.c:2548
 msgid "Meter"

@@ -1,4 +1,4 @@
-/* $Id: status.h,v 1.1 2003/11/30 19:45:00 jonas Exp $ */
+/* $Id: status.h,v 1.2 2003/12/02 19:16:34 jonas Exp $ */
 
 #ifndef EL__DIALOGS_STATUS_H
 #define EL__DIALOGS_STATUS_H
@@ -10,6 +10,7 @@
 
 void print_screen_status(struct session *);
 
+void update_status(void);
 void init_bars_status(struct session *, int *, struct document_options *);
 
 unsigned char *

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.17 2003/12/02 14:49:27 pasky Exp $ */
+/* $Id: status.c,v 1.18 2003/12/02 19:16:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,6 +124,35 @@ get_stat_msg(struct download *stat, struct terminal *term,
 	return msg.source;
 }
 
+
+void
+update_status(void)
+{
+	int show_title_bar = get_opt_int("ui.show_title_bar");
+	int show_status_bar = get_opt_int("ui.show_status_bar");
+	int set_window_title = get_opt_bool("ui.window_title");
+	struct session *ses;
+
+	foreach (ses, sessions) {
+		int dirty = 0;
+
+		if (ses->visible_title_bar != show_title_bar) {
+			ses->visible_title_bar = show_title_bar;
+			dirty = 1;
+		}
+
+		if (ses->visible_status_bar != show_status_bar) {
+			ses->visible_status_bar = show_status_bar;
+			dirty = 1;
+		}
+
+		ses->set_window_title = set_window_title;
+
+		if (!dirty) continue;
+
+		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
+	}
+}
 
 void
 init_bars_status(struct session *ses, int *tabs_count, struct document_options *doo)

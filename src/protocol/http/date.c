@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.13 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: date.c,v 1.14 2003/09/21 12:02:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,13 +36,14 @@
 
 /* Return year or -1 if failure and move cursor after the year. */
 static int
-parse_year(const char **date_p)
+parse_year(const unsigned char **date_p)
 {
-	const char *date = *date_p;
+	const unsigned char *date = *date_p;
 	int year;
-	char c;
+	unsigned char c;
 
-	/* TODO: Use strtol() ? ;)) --pasky */
+	/* TODO: Use strtol() ? ;)) --pasky
+	 * Well, if faster only... --Zas */
 
 	c = *date++;
 	if (c < '0' || c > '9') return -1;
@@ -74,9 +75,9 @@ parse_year(const char **date_p)
 
 /* Return 0 for January, 11 for december, -1 for failure. */
 static int
-parse_month(const char *date)
+parse_month(const unsigned char *date)
 {
-	const char *months[12] =
+	const unsigned char *months[12] =
 		{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 		 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	int i;
@@ -90,11 +91,11 @@ parse_month(const char *date)
 
 /* Return day number. */
 static int
-parse_day(const char **date_p)
+parse_day(const unsigned char **date_p)
 {
-	const char *date = *date_p;
+	const unsigned char *date = *date_p;
 	int day;
-	char c;
+	unsigned char c;
 
 	/* TODO: Use strtol() ? ;)) --pasky */
 
@@ -115,9 +116,9 @@ parse_day(const char **date_p)
 /* Expects HH:MM:SS, with HH <= 23, MM <= 59, SS <= 59.
  * Updates tm and returns 0 on failure, otherwise 1. */
 static int
-parse_time(const char *date, struct tm *tm)
+parse_time(const unsigned char *date, struct tm *tm)
 {
-	char h1, h2, m1, m2, s1, s2;
+	unsigned char h1, h2, m1, m2, s1, s2;
 
 	h1 = *date++; if (h1 < '0' || h1 > '9') return 0;
 	h2 = *date++; if (h2 < '0' || h2 > '9') return 0;
@@ -139,7 +140,7 @@ parse_time(const char *date, struct tm *tm)
 
 
 static time_t
-my_timegm(struct tm tm)
+my_timegm(struct tm *tm)
 {
 	time_t t = 0;
 
@@ -149,29 +150,29 @@ my_timegm(struct tm tm)
 	 * portable, it's faster and it's shorter. */
 #if 0
 #ifdef HAVE_TIMEGM
-	t = timegm(&tm);
+	t = timegm(tm);
 #else
 	/* Since mktime thinks we have localtime, we need a wrapper
 	 * to handle GMT. */
 	/* FIXME: It was reported that it doesn't work somewhere :/. */
 	{
-		char *tz = getenv("TZ");
+		unsigned char *tz = getenv("TZ");
 
 		if (tz && *tz) {
 			/* Temporary disable timezone in-place. */
-			char tmp = *tz;
+			unsigned char tmp = *tz;
 
 			*tz = '\0';
 			tzset();
 
-			t = mktime(&tm);
+			t = mktime(tm);
 
 			*tz = tmp;
 			tzset();
 
 		} else {
 			/* Already GMT, cool! */
-			t = mktime(&tm);
+			t = mktime(tm);
 		}
 	}
 #endif
@@ -181,42 +182,40 @@ my_timegm(struct tm tm)
 	 * to mention that. */ /* Actually, same code appears to be in lynx as
 	 * well.. oh well. :) */
 	/* See README.timegm for explanation about how this works. */
-	tm.tm_mon -= 2;
-	if (tm.tm_mon < 0) {
-		tm.tm_mon += 12;
-		tm.tm_year--;
+	tm->tm_mon -= 2;
+	if (tm->tm_mon < 0) {
+		tm->tm_mon += 12;
+		tm->tm_year--;
 	}
-	tm.tm_mon *= 153; tm.tm_mon += 2;
-	tm.tm_year -= 68;
+	tm->tm_mon *= 153; tm->tm_mon += 2;
+	tm->tm_year -= 68;
 
-	tm.tm_mday += tm.tm_year * 1461 / 4;
-	tm.tm_mday += ((tm.tm_mon / 5) - 672);
+	tm->tm_mday += tm->tm_year * 1461 / 4;
+	tm->tm_mday += ((tm->tm_mon / 5) - 672);
 
-	t = ((tm.tm_mday * 60 * 60 * 24) +
-	     (tm.tm_hour * 60 * 60) +
-	     (tm.tm_min * 60) +
-	     tm.tm_sec);
+	t = ((tm->tm_mday * 60 * 60 * 24) +
+	     (tm->tm_hour * 60 * 60) +
+	     (tm->tm_min * 60) +
+	     tm->tm_sec);
 #endif
 
-	if (t == (time_t) -1)
-		return 0;
-	else
-		return t;
+	if (t == (time_t) -1) return 0;
+
+	return t;
 }
 
 
 ttime
-parse_http_date(const char *date)
+parse_http_date(const unsigned char *date)
 {
 #define skip_time_sep() \
 	if (c != ' ' && c != '-') return 0; \
 	while ((c = *date) == ' ' || c == '-') date++;
 
 	struct tm tm;
-	char c;
+	unsigned char c;
 
-	if (!date)
-		return 0;
+	if (!date) return 0;
 
 	/* Skip day-of-week */
 
@@ -293,5 +292,5 @@ parse_http_date(const char *date)
 	}
 #undef skip_time_sep
 
-	return (ttime) my_timegm(tm);
+	return (ttime) my_timegm(&tm);
 }

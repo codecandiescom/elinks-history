@@ -1,3 +1,73 @@
+Mon Aug  9 09:16:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Wrap some lines.  
+
+Mon Aug  9 08:47:34 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, viewer/text/search.c:
+
+	Add search-toggle-regex in the edit map to toggle
+	document.browse.search.regex in the type-ahead input field. Bind to
+	alt-r by default, like in EMACS.  
+
+Mon Aug  9 08:38:07 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	In text_typeahead_handler, introduce the local variable
+	|report_errors|.  Initialise it to and use it instead of |action ==
+	-1|.  
+
+Mon Aug  9 07:00:35 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	In search_for_do, add a parameter |report_errors| to search_for_do,
+	and use find_next_do instead of find_next when that parameter is
+	given a zero argument.  
+	
+	In search_for_back and search_for, pass search_for_do |1| for its
+	new |report_errors| parameter, preserving the behaviour from before
+	this change.  
+	
+	In text_typeahead_handler, pass search_for_do |1| only when the user
+	presses a key that is not bound, and pass |0| otherwise. This avoids
+	repeated errors when the user enters a string that is not found and
+	presses further keys that do not change the buffer to contain a
+	string that matches something.  
+
+Mon Aug  9 06:19:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	In find_next, introduce local variables |message| and |free_text| 
+	and use them to eliminate all calls to msg_box but one.  
+
+Mon Aug  9 05:58:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Divide find_next into two routines, find_next and find_next_do, with
+	the former handling error reporting and using the latter as a
+	back-end.  
+
+Mon Aug  9 05:18:09 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/inpfield.c, bfu/menu.c, viewer/text/search.c:
+
+	input_line_event_handler: Allow ACT_EDIT_ENTER to fall thru to the
+	handler given to input_field_line even if the input buffer is empty.  
+	
+	text_typeahead_handler: Unhighlight any matches from the previous
+	search on ACT_EDIT_ENTER with an empty buffer.  
+	
+	menu_search_handler: Cope with the above change and return
+	INPUT_LINE_CANCEL for ACT_EDIT_ENTER even if the buffer is empty.  
+	
+	exmode_input_handler needed no changes.  
+
 Sun Aug  8 06:33:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/scripting/lua/core.c:

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.60 2003/10/24 22:38:08 pasky Exp $ */
+/* $Id: search.c,v 1.61 2003/10/24 23:08:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1131,21 +1131,8 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	set_dlg_checkbox(dlg, n, 2, 1, hop->cases);
 	set_dlg_checkbox(dlg, n, 2, 0, hop->cases);
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = search_dlg_ok;
-	dlg->items[n].dlen = 0;
-	dlg->items[n].text = okbutton;
-	dlg->items[n].udata = fn;
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].fn = search_dlg_cancel;
-	dlg->items[n].dlen = 0;
-	dlg->items[n].text = cancelbutton;
-	dlg->items[n].udata = cancelfn;
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, search_dlg_ok, okbutton, fn);
+	set_dlg_button(dlg, n, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);
 
 	assert(n == SEARCH_DLG_SIZE);
 	dlg->items[n].type = D_END;

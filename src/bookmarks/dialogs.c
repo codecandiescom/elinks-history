@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.93 2003/10/24 16:14:36 zas Exp $ */
+/* $Id: dialogs.c,v 1.94 2003/10/24 23:08:42 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -607,55 +607,14 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = bookmark_dialog_abort_handler;
 	dlg->udata = ses;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_goto_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Goto", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_edit_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Edit", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_delete_button;
-	dlg->items[n].text = _("Delete", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_move_button;
-	dlg->items[n].text = _("Move", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_add_folder_button;
-	dlg->items[n].text = _("Add folder", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_add_button;
-	dlg->items[n].text = _("Add", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_search_button;
-	dlg->items[n].text = _("Search", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].fn = cancel_dialog;
-	dlg->items[n].text = _("Close", term);
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, push_goto_button, _("Goto", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_delete_button, _("Delete", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER, push_move_button, _("Move", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER, push_add_folder_button, _("Add folder", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER, push_add_button, _("Add", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER, push_search_button, _("Search", term), NULL);
+	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
 	assert(n == BM_BOX_IND);
 

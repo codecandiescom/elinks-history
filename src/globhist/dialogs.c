@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.41 2003/10/24 17:12:38 zas Exp $ */
+/* $Id: dialogs.c,v 1.42 2003/10/24 23:08:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -467,48 +467,13 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = history_dialog_abort_handler;
 	dlg->udata = ses;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_goto_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Goto", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_info_button;
-	dlg->items[n].text = _("Info", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_delete_button;
-	dlg->items[n].text = _("Delete", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_search_button;
-	dlg->items[n].text = _("Search", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_toggle_display_button;
-	dlg->items[n].text = _("Toggle display", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_clear_button;
-	dlg->items[n].text = _("Clear", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].fn = cancel_dialog;
-	dlg->items[n].text = _("Close", term);
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, push_goto_button, _("Goto", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_info_button, _("Info", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER, push_delete_button, _("Delete", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER, push_search_button, _("Search", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER, push_toggle_display_button, _("Toggle display", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER, push_clear_button, _("Clear", term), NULL);
+	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
 	assert(n == HISTORY_BOX_IND);
 	dlg->items[n].type = D_BOX;

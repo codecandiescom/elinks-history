@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.54 2003/10/24 16:44:32 zas Exp $ */
+/* $Id: auth.c,v 1.55 2003/10/24 23:08:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,17 +160,8 @@ do_auth_dialog(struct session *ses)
 	dlg->items[n].data = a->password;
 	n++;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = auth_ok;
-	dlg->items[n].text = _("OK", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].fn = auth_cancel;
-	dlg->items[n].text = _("Cancel", term);
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, auth_ok, _("OK", term), NULL);
+	set_dlg_button(dlg, n, B_ESC, auth_cancel, _("Cancel", term), NULL);
 
 	assert(n == AUTH_DLG_SIZE);
 

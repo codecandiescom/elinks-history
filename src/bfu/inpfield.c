@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.52 2003/10/24 16:26:46 zas Exp $ */
+/* $Id: inpfield.c,v 1.53 2003/10/24 23:08:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,21 +219,8 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	dlg->items[n].data = field;
 	n++;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = input_field_ok;
-	dlg->items[n].dlen = 0;
-	dlg->items[n].text = okbutton;
-	dlg->items[n].udata = fn;
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].fn = input_field_cancel;
-	dlg->items[n].dlen = 0;
-	dlg->items[n].text = cancelbutton;
-	dlg->items[n].udata = cancelfn;
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, input_field_ok, okbutton, fn);
+	set_dlg_button(dlg, n, B_ESC, input_field_cancel, cancelbutton, cancelfn);
 
 	assert(n == INPUT_DLG_SIZE);
 

@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.42 2003/10/24 16:47:41 zas Exp $ */
+/* $Id: edit.c,v 1.43 2003/10/24 23:08:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,24 +161,12 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	/* if (dialog_type == EDIT_DLG_ADD) d->items[n].fn = check_nonempty; */
 	n++;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = ok_dialog;
-	dlg->items[n].text = _("OK", term);
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
+	set_dlg_button(dlg, n, 0, clear_dialog, _("Clear", term), NULL);
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = 0;
-	dlg->items[n].text = _("Clear", term);
-	dlg->items[n].fn = clear_dialog;
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].text = _("Cancel", term);
-	dlg->items[n].data = (void *) when_cancel;
-	dlg ->items[n].fn = when_cancel ? my_cancel_dialog : cancel_dialog;
-	n++;
+	set_dlg_button(dlg, n, B_ESC, when_cancel ? my_cancel_dialog : cancel_dialog,
+			_("Cancel", term), NULL);
+	dlg->items[n - 1].data = (void *) when_cancel;
 
 	assert(n == EDIT_DIALOG_FIELDS_NB);
 	dlg->items[n].type = D_END;

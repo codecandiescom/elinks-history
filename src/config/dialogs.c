@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.75 2003/10/24 16:36:21 zas Exp $ */
+/* $Id: dialogs.c,v 1.76 2003/10/24 23:08:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,17 +317,8 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	dlg->items[n].fn = check_valid_option;
 	n++;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = ok_dialog;
-	dlg->items[n].text = _("OK", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].text = _("Cancel", term);
-	dlg->items[n].fn = cancel_dialog;
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
+	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
 	assert(n == EDIT_DIALOG_FIELDS_NB);
 
@@ -514,46 +505,13 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = option_dialog_abort_handler;
 	dlg->udata = ses;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_info_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Info", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_edit_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Edit", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_add_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Add", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_del_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Delete", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_save_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Save", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].fn = cancel_dialog;
-	dlg->items[n].text = _("Close", term);
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, push_info_button, _("Info", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_add_button, _("Add", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_del_button, _("Delete", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_save_button, _("Save", term), ses);
+	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
 	assert(n == OP_BOX_IND);
 
@@ -786,39 +744,11 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = kbdbind_dialog_abort_handler;
 	dlg->udata = ses;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_kbdbind_add_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Add", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_kbdbind_del_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Delete", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_kbdbind_toggle_display_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Toggle display", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = push_kbdbind_save_button;
-	dlg->items[n].udata = ses;
-	dlg->items[n].text = _("Save", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].fn = cancel_dialog;
-	dlg->items[n].text = _("Close", term);
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, push_kbdbind_add_button, _("Add", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_kbdbind_del_button, _("Delete", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_kbdbind_toggle_display_button, _("Toggle display", term), ses);
+	set_dlg_button(dlg, n, B_ENTER, push_kbdbind_save_button, _("Save", term), ses);
+	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
 
 	assert(n == KB_BOX_IND);
 

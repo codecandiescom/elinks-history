@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.83 2003/10/24 20:02:16 zas Exp $ */
+/* $Id: core.c,v 1.84 2003/10/24 23:08:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -459,17 +459,8 @@ l_edit_bookmark_dialog(LS)
 	dlg->items[n].data = data->url;
 	n++;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER;
-	dlg->items[n].fn = ok_dialog;
-	dlg->items[n].text = _("OK", lua_ses->tab->term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ESC;
-	dlg->items[n].fn = cancel_dialog;
-	dlg->items[n].text = _("Cancel", lua_ses->tab->term);
-	n++;
+	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
+	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
 	assert(n == L_EDIT_BMK_DLG_SIZE);
 	dlg->items[n].type = D_END;
@@ -601,22 +592,15 @@ l_xdialog(LS)
 	dlg->fn = xdialog_fn;
 	dlg->refresh = (void (*)(void *))xdialog_run_lua;
 	dlg->refresh_data = data;
+
 	for (i = 0; i < nfields; i++) {
 		dlg->items[i].type = D_FIELD;
 		dlg->items[i].dlen = MAX_STR_LEN;
 		dlg->items[i].data = data->fields[i];
 	}
-	dlg->items[i].type = D_BUTTON;
-	dlg->items[i].gid = B_ENTER;
-	dlg->items[i].fn = ok_dialog;
-	dlg->items[i].text = _("OK", lua_ses->tab->term);
-	i++;
 
-	dlg->items[i].type = D_BUTTON;
-	dlg->items[i].gid = B_ESC;
-	dlg->items[i].fn = cancel_dialog;
-	dlg->items[i].text = _("Cancel", lua_ses->tab->term);
-	i++;
+	set_dlg_button(dlg, i, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
+	set_dlg_button(dlg, i, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
 	assert(i == nitems - 1);
 	dlg->items[i].type = D_END;

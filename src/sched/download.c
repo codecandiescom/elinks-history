@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.111 2003/10/24 17:25:22 zas Exp $ */
+/* $Id: download.c,v 1.112 2003/10/24 23:08:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -435,23 +435,9 @@ found:
 	dlg->udata = down;
 	dlg->align = AL_CENTER;
 
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER | B_ESC;
-	dlg->items[n].fn = dlg_undisplay_download;
-	dlg->items[n].text = _("Background", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = B_ENTER | B_ESC;
-	dlg->items[n].fn = dlg_set_notify;
-	dlg->items[n].text = _("Background with notify", term);
-	n++;
-
-	dlg->items[n].type = D_BUTTON;
-	dlg->items[n].gid = 0;
-	dlg->items[n].fn = dlg_abort_download;
-	dlg->items[n].text = _("Abort", term);
-	n++;
+	set_dlg_button(dlg, n, B_ENTER | B_ESC, dlg_undisplay_download, _("Background", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);
+	set_dlg_button(dlg, n, 0, dkg_abort_download, _("Abort", term), NULL);
 
 	assert(n == DOWNLOAD_DLG_SIZE);
 

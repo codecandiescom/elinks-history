@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.54 2003/07/30 16:14:36 jonas Exp $ */
+/* $Id: tables.c,v 1.55 2003/07/31 01:34:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,8 +292,8 @@ new_cell(struct table *t, int x, int y)
 		nt.rx = t->rx;
 		nt.ry = t->ry;
 
-		while (x >= nt.rx) if (!(nt.rx *= 2)) return NULL;
-		while (y >= nt.ry) if (!(nt.ry *= 2)) return NULL;
+		while (x >= nt.rx) if (!(nt.rx <<= 1)) return NULL;
+		while (y >= nt.ry) if (!(nt.ry <<= 1)) return NULL;
 
 		nt.cells = mem_calloc(nt.rx * nt.ry, sizeof(struct table_cell));
 		if (!nt.cells) return NULL;
@@ -324,7 +324,7 @@ new_columns(struct table *t, int span, int width, int align,
 		int n = t->rc;
 		struct table_column *nc;
 
-		while (t->c + span > n) if (!(n *= 2)) return;
+		while (t->c + span > n) if (!(n <<= 1)) return;
 
 		nc = mem_realloc(t->cols, n * sizeof(struct table_column));
 		if (!nc) return;
@@ -347,10 +347,10 @@ set_td_width(struct table *t, int x, int width, int f)
 {
 	if (x >= t->xc) {
 		int n = t->xc;
-		int i;
+		register int i;
 		int *nc;
 
-		while (x >= n) if (!(n *= 2)) break;
+		while (x >= n) if (!(n <<= 1)) break;
 		if (!n && t->xc) return;
 		if (!n) n = x + 1;
 
@@ -375,7 +375,7 @@ set_td_width(struct table *t, int x, int width, int f)
 	}
 
 	if (width >= 0 && t->xcols[x] < 0) return;
-	t->xcols[x] = (t->xcols[x] + width) / 2;
+	t->xcols[x] = (t->xcols[x] + width) >> 1;
 }
 
 static unsigned char *
@@ -406,21 +406,21 @@ parse_table(unsigned char *html, unsigned char *eof,
 	    unsigned char **end, struct rgb *bgcolor,
 	    int sh, struct s_e **bad_html, int *bhp)
 {
-	int qqq;
 	struct table *t;
 	struct table_cell *cell;
 	unsigned char *t_name, *t_attr, *en;
-	int t_namelen;
-	int x = 0, y = -1;
-	int p = 0;
 	unsigned char *lbhp = NULL;
+	struct rgb l_col;
+	int t_namelen;
+	int p = 0;
 	int l_al = AL_LEFT;
 	int l_val = VAL_MIDDLE;
 	int csp, rsp;
 	int group = 0;
 	int i, j, k;
-	struct rgb l_col;
+	int qqq;
 	int c_al = AL_TR, c_val = VAL_TR, c_width = W_AUTO, c_span = 0;
+	register int x = 0, y = -1;
 
 	memcpy(&l_col, bgcolor, sizeof(struct rgb));
 	*end = html;
@@ -532,21 +532,32 @@ qwe:
 		goto see;
 	}
 
+	/* /TR /TD /TH */
 	if (t_namelen == 3
-	    && (!strncasecmp(t_name, "/TR", 3) || !strncasecmp(t_name, "/TD", 3) ||
-		!strncasecmp(t_name, "/TH", 3))) {
-		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
-		if (p) {
-			CELL(t, x, y)->end = html;
-			p = 0;
-		}
-		if (lbhp) {
-			(*bad_html)[*bhp-1].e = html;
-			lbhp = NULL;
+	    && t_name[0] == '/'
+	    && upcase(t_name[1]) == 'T') {
+	        unsigned char c = upcase(t_name[2]);
+
+		if (c == 'R' || c == 'D' || c == 'H') {
+	 		if (c_span)
+				new_columns(t, c_span, c_width, c_al, c_val, 1);
+
+			if (p) {
+				CELL(t, x, y)->end = html;
+				p = 0;
+			}
+			if (lbhp) {
+				(*bad_html)[*bhp-1].e = html;
+				lbhp = NULL;
+			}
 		}
 	}
 
-	if (t_namelen == 2 && !strncasecmp(t_name, "TR", 2)) {
+	/* All following tags have T as first letter. */
+	if (upcase(t_name[0]) != 'T') goto see;
+
+	/* TR */
+	if (t_namelen == 2 && upcase(t_name[1]) == 'R') {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 
 		if (p) {
@@ -570,10 +581,11 @@ qwe:
 		goto see;
 	}
 
+	/* THEAD TBODY TFOOT */
 	if (t_namelen == 5
-	    && ((!strncasecmp(t_name, "THEAD", 5)) ||
-		(!strncasecmp(t_name, "TBODY", 5)) ||
-		(!strncasecmp(t_name, "TFOOT", 5)))) {
+	    && ((!strncasecmp(&t_name[1], "HEAD", 4)) ||
+		(!strncasecmp(&t_name[1], "BODY", 4)) ||
+		(!strncasecmp(&t_name[1], "FOOT", 4)))) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 
 		if (lbhp) {
@@ -584,7 +596,10 @@ qwe:
 		group = 2;
 	}
 
-	if (t_namelen != 2 || (strncasecmp(t_name, "TD", 2) && strncasecmp(t_name, "TH", 2)))
+	/* TD TH */
+	if (t_namelen != 2
+	    || (upcase(t_name[1]) != 'D'
+		&& upcase(t_name[1]) != 'H'))
 		goto see;
 
 	if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
@@ -643,11 +658,11 @@ nc:
 
 	csp = get_num(t_attr, "colspan");
 	if (csp == -1) csp = 1;
-	if (!csp) csp = -1;
+	else if (!csp) csp = -1;
 
 	rsp = get_num(t_attr, "rowspan");
 	if (rsp == -1) rsp = 1;
-	if (!rsp) rsp = -1;
+	else if (!rsp) rsp = -1;
 
 	cell->colspan = csp;
 	cell->rowspan = rsp;
@@ -757,7 +772,8 @@ get_cell_width(unsigned char *start, unsigned char *end, int cellpd, int w,
 	if (max) *max = p->xmax;
 	if (n_links) *n_links = p->link_num;
 
-	if (min && max && *min > *max) internal("get_cell_width: %d > %d", *min, *max);
+	assertm(!((min && max && *min > *max)), "get_cell_width: %d > %d",
+		*min, *max);
 
 	mem_free(p);
 }
@@ -776,8 +792,8 @@ check_cell_widths(struct table *t)
 		get_cell_width(c->start, c->end, t->cellpd, 0, 0,
 			       &min, &max, c->link_num, NULL);
 
-		if (min != c->min_width || max < c->max_width)
-			internal("check_cell_widths failed");
+		assertm(!(min != c->min_width || max < c->max_width),
+			"check_cell_widths failed");
 	}
 }
 
@@ -785,7 +801,7 @@ static inline void
 get_cell_widths(struct table *t)
 {
 	int nl = t->p->link_num;
-	int i, j;
+	register int i, j;
 
 	if (!d_opt->table_order)
 		for (j = 0; j < t->y; j++)
@@ -814,7 +830,8 @@ get_cell_widths(struct table *t)
 static inline void
 dst_width(int *p, int n, int w, int *lim)
 {
-	int i, s = 0, d, r;
+	register int i;
+	int s = 0, d, r;
 
 	for (i = 0; i < n; i++) s += p[i];
 	if (s >= w) return;
@@ -824,11 +841,17 @@ again:
 	r = (w - s) % n;
 	w = 0;
 
-	for (i = 0; i < n; i++) {
-		p[i] += d + (i < r);
-		if (lim && p[i] > lim[i]) {
-			w += p[i] - lim[i];
-			p[i] = lim[i];
+	if (lim) {
+		for (i = 0; i < n; i++) {
+			p[i] += d + (i < r);
+			if (p[i] > lim[i]) {
+				w += p[i] - lim[i];
+				p[i] = lim[i];
+			}
+		}
+	} else {
+		for (i = 0; i < n; i++) {
+			p[i] += d + (i < r);
 		}
 	}
 
@@ -998,7 +1021,7 @@ get_table_width(struct table *t)
 static void
 distribute_widths(struct table *t, int width)
 {
-	int i;
+	register int i;
 	int d = width - t->min_t;
 	int om = 0;
 	char *u;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.327 2004/03/31 23:17:59 jonas Exp $ */
+/* $Id: session.c,v 1.328 2004/03/31 23:32:45 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1012,11 +1012,11 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 void
 set_session_referrer(struct session *ses, struct uri *referrer)
 {
-	if (ses->referrer) mem_free(ses->referrer);
+	if (ses->referrer) done_uri(ses->referrer);
 
 	if (referrer && referrer->protocol != PROTOCOL_FILE) {
 		/* Don't set referrer for file protocol */
-		ses->referrer = stracpy(struri(referrer));
+		ses->referrer = get_uri_reference(referrer);
 	} else {
 		ses->referrer = NULL;
 	}

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.104 2004/03/31 23:17:59 jonas Exp $ */
+/* $Id: session.h,v 1.105 2004/03/31 23:32:45 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -135,7 +135,7 @@ struct session {
 
 	unsigned char *dn_url;
 
-	unsigned char *referrer;
+	struct uri *referrer;
 
 	unsigned char *goto_position;
 

@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.25 2004/07/15 16:20:42 jonas Exp $ */
+/* $Id: blacklist.c,v 1.26 2004/07/16 06:13:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ get_blacklist_entry(struct uri *uri)
 	struct blacklist_entry *entry;
 
 	assert(uri && uri->hostlen > 0);
-	if_assert_failed return 0;
+	if_assert_failed return NULL;
 
 	foreach (entry, blacklist)
 		if (!strncasecmp(entry->host, uri->host, uri->hostlen))

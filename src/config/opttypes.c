@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.29 2002/12/05 20:24:26 pasky Exp $ */
+/* $Id: opttypes.c,v 1.30 2002/12/07 00:16:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,19 +446,19 @@ tree_dup(struct option *opt)
 
 
 struct option_type_info option_types[] = {
-	{ bool_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "[0|1]" },
-	{ gen_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "<num>" },
-	{ gen_cmd, num_rd, num_wr, long_dup, long_set, NULL, NULL, "<num>" },
-	{ gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, NULL, "<str>" },
+	{ "Boolean", bool_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "[0|1]" },
+	{ "Integer", gen_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "<num>" },
+	{ "Longint", gen_cmd, num_rd, num_wr, long_dup, long_set, NULL, NULL, "<num>" },
+	{ "String",  gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, NULL, "<str>" },
 
-	{ gen_cmd, str_rd, cp_wr, int_dup, cp_set, NULL, NULL, "<codepage>" },
-	{ gen_cmd, str_rd, lang_wr, NULL, lang_set, NULL, NULL, "<language>" },
-	{ gen_cmd, str_rd, color_wr, color_dup, color_set, NULL, NULL, "<color|#rrggbb>" },
+	{ "Codepage",gen_cmd, str_rd, cp_wr, int_dup, cp_set, NULL, NULL, "<codepage>" },
+	{ "Language",gen_cmd, str_rd, lang_wr, NULL, lang_set, NULL, NULL, "<language>" },
+	{ "Color",   gen_cmd, str_rd, color_wr, color_dup, color_set, NULL, NULL, "<color|#rrggbb>" },
 
-	{ exec_cmd, NULL, NULL, NULL, NULL, NULL, NULL, "[<...>]" },
+	{ "Special", exec_cmd, NULL, NULL, NULL, NULL, NULL, NULL, "[<...>]" },
 
-	{ redir_cmd, redir_rd, NULL, NULL, redir_set, redir_add, redir_remove, "" },
+	{ "Alias",   redir_cmd, redir_rd, NULL, NULL, redir_set, redir_add, redir_remove, "" },
 
 	/* tree */
-	{ NULL, NULL, NULL, tree_dup, NULL, NULL, NULL, "" },
+	{ "Folder",  NULL, NULL, NULL, tree_dup, NULL, NULL, NULL, "" },
 };

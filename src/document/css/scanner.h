@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.29 2004/01/20 06:22:24 jonas Exp $ */
+/* $Id: scanner.h,v 1.30 2004/01/20 06:25:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -15,22 +15,22 @@ enum css_token_type {
 	/* Char tokens from 0-255 have their char value as type and non string
 	 * tokens have values from 256 and up. */
 
-	CSS_TOKEN_ATRULE = 256, /* @<identifier> */
-	CSS_TOKEN_ANGLE,	/* <number>rad, <number>grad or <number>deg */
+	CSS_TOKEN_ANGLE = 256,	/* <number>rad, <number>grad or <number>deg */
+	CSS_TOKEN_ATRULE,	/* @<identifier> */
 	CSS_TOKEN_COMMENT,	/* C comments */
 	CSS_TOKEN_DIMENSION,	/* <number><ident> */
 	CSS_TOKEN_EM,		/* <number>em */
 	CSS_TOKEN_EX,		/* <number>ex */
-	CSS_TOKEN_NUMBER,	/* [0-9]+|[0-9]*"."[0-9]+ */
-	CSS_TOKEN_IMPORTANT,	/* !<whitespace>important */
-	CSS_TOKEN_FUNCTION,	/* <identifier>( */
 	CSS_TOKEN_FREQUENCY,	/* <number>Hz or <number>kHz */
+	CSS_TOKEN_FUNCTION,	/* <identifier>( */
 	CSS_TOKEN_HASH,		/* #<name> */
 	CSS_TOKEN_HEX_COLOR,	/* #[0-9a-f]\{3,6} */
 	CSS_TOKEN_IDENTIFIER,	/* [a-z_]|{nonascii} followed by *_NAME chars */
-	CSS_TOKEN_NAME,		/* [a-z0-9_-]|{nonascii}+ */
-	CSS_TOKEN_PERCENTAGE,	/* <number>% */
+	CSS_TOKEN_IMPORTANT,	/* !<whitespace>important */
 	CSS_TOKEN_LENGTH,	/* <number>{px,cm,mm,in,pt,pc} */
+	CSS_TOKEN_NAME,		/* [a-z0-9_-]|{nonascii}+ */
+	CSS_TOKEN_NUMBER,	/* [0-9]+|[0-9]*"."[0-9]+ */
+	CSS_TOKEN_PERCENTAGE,	/* <number>% */
 	CSS_TOKEN_STRING,	/* Char sequence delimted by matching ' or " */
 	CSS_TOKEN_TIME,		/* <number>ms or <number>s */
 

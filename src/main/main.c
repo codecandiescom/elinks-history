@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.44 2002/07/06 21:53:00 pasky Exp $ */
+/* $Id: main.c,v 1.45 2002/07/08 15:20:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,9 @@
 #include "links.h"
 
 #include "main.h"
+#ifdef USE_LEDS
 #include "bfu/leds.h"
+#endif
 #include "bookmarks/bookmarks.h"
 #include "config/cmdline.h"
 #include "config/conf.h"
@@ -306,7 +308,9 @@ init()
 
 	load_config();
 	init_b = 1;
+#ifdef USE_LEDS
 	init_leds();
+#endif
 	read_bookmarks();
 	read_global_history();
 	load_url_history();
@@ -386,7 +390,9 @@ terminate_all_subsystems()
 	free_home();
 	free_strerror_buf();
 	shutdown_trans();
+#ifdef USE_LEDS
 	done_leds();
+#endif
 	done_options();
 	terminate_osdep();
 }

@@ -1,9 +1,11 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.4 2002/07/07 11:10:19 pasky Exp $ */
+/* $Id: leds.c,v 1.5 2002/07/08 15:20:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef USE_LEDS
 
 #include <stdlib.h>
 #include <string.h>
@@ -141,3 +143,5 @@ unregister_led(struct led *led)
 	led->value = '-';
 	led->color = COL(070);
 }
+
+#endif

@@ -54,6 +54,9 @@
 /* Define to 1 if we should use colors in ELinks user interface */
 #undef COLOR_UI
 
+/* Define to 1 if we should support the tiny LEDs-like indicators */
+#undef USE_LEDS
+
 /* Define to 1 if we should include internal bookmark manager */
 #undef BOOKMARKS
 

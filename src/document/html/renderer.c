@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.409 2004/01/21 15:36:01 jonas Exp $ */
+/* $Id: renderer.c,v 1.410 2004/01/21 15:49:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,13 @@ enum link_state {
 	LINK_STATE_SAME,
 };
 
+struct link_state_info {
+	unsigned char *link;
+	unsigned char *target;
+	unsigned char *image;
+	struct form_control *form;
+};
+
 struct table_cache_entry_key {
 	unsigned char *start;
 	unsigned char *end;
@@ -76,10 +83,7 @@ static int table_cache_entries = 0;
 static int last_link_to_move;
 static struct tag *last_tag_to_move;
 static struct tag *last_tag_for_newline;
-static unsigned char *last_link;
-static unsigned char *last_target;
-static unsigned char *last_image;
-static struct form_control *last_form;
+static struct link_state_info link_state_info;
 static int nobreak;
 static int nosearchable;
 static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
@@ -887,6 +891,29 @@ put_link_number(struct part *part)
 	assertm(!(old), "Old link value [%s]. New value [%s]", old, new);
 
 static inline void
+init_link_state_info(unsigned char *link, unsigned char *target,
+		     unsigned char *image, struct form_control *form)
+{
+	assert_link_variable(link_state_info.image, image);
+	assert_link_variable(link_state_info.target, target);
+	assert_link_variable(link_state_info.link, link);
+
+	link_state_info.link = null_or_stracpy(link);
+	link_state_info.target = null_or_stracpy(target);
+	link_state_info.image = null_or_stracpy(image);
+	link_state_info.form = format.form;
+}
+
+static inline void
+done_link_state_info(void)
+{
+	if (link_state_info.link) mem_free(link_state_info.link);
+	if (link_state_info.target) mem_free(link_state_info.target);
+	if (link_state_info.image) mem_free(link_state_info.image);
+	memset(&link_state_info, 0, sizeof(struct link_state_info));
+}
+
+static inline void
 process_link(struct part *part, enum link_state link_state,
 	     unsigned char *chars, int charslen)
 {
@@ -915,15 +942,8 @@ process_link(struct part *part, enum link_state link_state,
 
 		part->link_num++;
 
-		assert_link_variable(last_image, format.image);
-		assert_link_variable(last_target, format.target);
-		assert_link_variable(last_link, format.link);
-
-		last_link = null_or_stracpy(format.link);
-		last_target = null_or_stracpy(format.target);
-		last_image = null_or_stracpy(format.image);
-		last_form = format.form;
-
+		init_link_state_info(format.link, format.target,
+				     format.image, format.form);
 		if (!part->document) return;
 
 		link = new_link(part->document, part->link_num, chars, charslen);
@@ -953,11 +973,11 @@ get_link_state(void)
 	if (!(format.link || format.image || format.form)) {
 		state = LINK_STATE_NONE;
 
-	} else if ((last_link || last_image || last_form)
-		   && !xstrcmp(format.link, last_link)
-		   && !xstrcmp(format.target, last_target)
-		   && !xstrcmp(format.image, last_image)
-		   && format.form == last_form) {
+	} else if ((link_state_info.link || link_state_info.image || link_state_info.form)
+		   && !xstrcmp(format.link, link_state_info.link)
+		   && !xstrcmp(format.target, link_state_info.target)
+		   && !xstrcmp(format.image, link_state_info.image)
+		   && format.form == link_state_info.form) {
 
 		return LINK_STATE_SAME;
 
@@ -965,12 +985,7 @@ get_link_state(void)
 		state = LINK_STATE_NEW;
 	}
 
-	if (last_link) mem_free(last_link);
-	if (last_target) mem_free(last_target);
-	if (last_image) mem_free(last_image);
-
-	last_link = last_target = last_image = NULL;
-	last_form = NULL;
+	done_link_state_info();
 
 	return state;
 }
@@ -1332,12 +1347,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	margin = m;
 	empty_format = !document;
 
-	if (last_link) mem_free(last_link);
-	if (last_image) mem_free(last_image);
-	if (last_target) mem_free(last_target);
-
-	last_link = last_image = last_target = NULL;
-	last_form = NULL;
+	done_link_state_info();
 	nobreak = 1;
 
 	part = mem_calloc(1, sizeof(struct part));
@@ -1360,9 +1370,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	nobreak = 0;
 
-	if (last_link) mem_free(last_link);
-	if (last_image) mem_free(last_image);
-	if (last_target) mem_free(last_target);
+	done_link_state_info();
 	if (part->spaces) mem_free(part->spaces);
 
 	if (document) {
@@ -1406,8 +1414,6 @@ ret:
 	}
 
 end:
-	last_link = last_image = last_target = NULL;
-	last_form = NULL;
 
 	return part;
 }

@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.21 2004/01/01 10:04:03 jonas Exp $ */
+/* $Id: feature.h,v 1.22 2004/01/01 10:12:01 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -257,7 +257,10 @@
  *
  * Default: disabled */
 
-/* #define ELINKS_ROOT_EXEC */
+#if defined(HAVE_GETUID) && defined(HAVE_GETEUID)
+/* Uncomment the following line if you want to enable this: */
+/* #define CONFIG_NO_ROOT_EXEC */
+#endif
 
 
 /*** Form History

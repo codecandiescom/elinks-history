@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.157 2003/12/21 14:13:19 zas Exp $ */
+/* $Id: main.c,v 1.158 2004/01/01 10:12:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,7 +249,7 @@ shrink_memory(int whole)
 	garbage_collection(whole);
 }
 
-#if !defined(ELINKS_ROOT_EXEC) && defined(HAVE_GETUID) && defined(HAVE_GETEUID)
+#ifdef CONFIG_NO_ROOT_EXEC
 static void
 check_if_root(void)
 {

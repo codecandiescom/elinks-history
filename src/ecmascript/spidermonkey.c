@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.127 2004/12/19 11:42:18 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.128 2004/12/19 12:17:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -897,6 +897,7 @@ static const JSClass form_class = {
 enum form_prop {
 	JSP_FORM_ACTION,
 	JSP_FORM_ENCODING,
+	JSP_FORM_LENGTH,
 	JSP_FORM_METHOD,
 	JSP_FORM_NAME,
 	JSP_FORM_TARGET
@@ -905,6 +906,7 @@ enum form_prop {
 static const JSPropertySpec form_props[] = {
 	{ "action",	JSP_FORM_ACTION,	JSPROP_ENUMERATE },
 	{ "encoding",	JSP_FORM_ENCODING,	JSPROP_ENUMERATE },
+	{ "length",	JSP_FORM_LENGTH,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "method",	JSP_FORM_METHOD,	JSPROP_ENUMERATE },
 	{ "name",	JSP_FORM_NAME,		JSPROP_ENUMERATE },
 	{ "target",	JSP_FORM_TARGET,	JSPROP_ENUMERATE },
@@ -996,6 +998,17 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			break;
 		}
 		break;
+
+	case JSP_FORM_LENGTH:
+	{
+		struct form_control *fc;
+		int counter;
+
+		foreach (fc, form->items)
+			counter++;
+		P_INT(counter);
+		break;
+	}
 
 	case JSP_FORM_METHOD:
 		switch (form->method) {

@@ -432,8 +432,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione "
+"config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:645
@@ -627,8 +627,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:531 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -672,7 +672,7 @@ msgstr "Tenta l'autocompletamento non ambiguo dell'input"
 
 #: src/config/kbdbind.c:383
 msgid "Return to the previous document in history"
-msgstr "Ritorna al documento precedente nello storico"
+msgstr "Ritorna al documento precedente nella cronologia"
 
 #: src/config/kbdbind.c:384
 msgid "Delete character in front of the cursor"
@@ -783,7 +783,7 @@ msgstr "Mostra informazioni sugli header della pagina corrente"
 
 #: src/config/kbdbind.c:410
 msgid "Open history manager"
-msgstr "Gestore storico"
+msgstr "Gestore cronologia"
 
 #: src/config/kbdbind.c:411
 msgid "Go to the start of the page/line"
@@ -964,7 +964,7 @@ msgstr "Usa colori specificati nel documento"
 
 #: src/config/kbdbind.c:460
 msgid "Go forward in the unhistory"
-msgstr "Vai avanti nello storico inverso"
+msgstr "Vai avanti nella cronologia inversa"
 
 #: src/config/kbdbind.c:461
 msgid "Move cursor upwards"
@@ -1824,7 +1824,7 @@ msgstr ""
 "1,\n"
 "gli utenti esperti potranno ovviare a questo combinando l'uso del "
 "ricaricamento\n"
-"della pagina, dello storico della sessione e di Ctrl+invio.\n"
+"della pagina, dello cronologia della sessione e di Ctrl+invio.\n"
 "Si noti che questa opzione è usata nel momento del prelevamento "
 "dell'informazione\n"
 "dalla cache, non quando si salva nella cache, quindi, se si abilita, anche "
@@ -2081,15 +2081,15 @@ msgstr "Storico"
 
 #: src/config/options.inc:480
 msgid "History options."
-msgstr "Opzioni storico."
+msgstr "Opzioni cronologia."
 
 #: src/config/options.inc:482
 msgid "Keep unhistory"
-msgstr "Mantieni lo storico inverso"
+msgstr "Mantieni la cronologia inversa"
 
 #: src/config/options.inc:484
 msgid "Keep unhistory (\"forward history\")?"
-msgstr "Mantenere lo storico inverso?"
+msgstr "Mantenere lo cronologia inversa?"
 
 #: src/config/options.inc:488
 msgid "HTML rendering"
@@ -2560,21 +2560,18 @@ msgstr ""
 "Lista di directory separate da due punti nelle quali cercare gli script CGI."
 
 #: src/config/options.inc:725
-#, fuzzy
 msgid "Local CGI specific options. (DISABLED)"
-msgstr "Opzioni specifiche dei CGI locali."
+msgstr "Opzioni specifiche dei CGI locali. (DISABILITATO)"
 
 #: src/config/options.inc:729
-#, fuzzy
 msgid "Whether to execute local CGI scripts. (DISABLED)"
-msgstr "Abilita esecuzione degli script CGI locali."
+msgstr "Abilita esecuzione degli script CGI locali. (DISABILITATO)"
 
 #: src/config/options.inc:733
-#, fuzzy
 msgid ""
 "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
-"Lista di directory separate da due punti nelle quali cercare gli script CGI."
+"Lista di directory separate da due punti nelle quali cercare gli script CGI. (DISABILITATO)"
 
 #: src/config/options.inc:736
 msgid "User protocols"
@@ -2596,8 +2593,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.inc:754
 msgid ""
@@ -3305,7 +3302,7 @@ msgid ""
 "or global history)."
 msgstr ""
 "Altezza minima del widget listbox (usato ad esempio per i bookmark\n"
-"o per lo storico)."
+"o per la cronologia)."
 
 #: src/config/options.inc:1785
 msgid "Drop shadows"
@@ -3654,7 +3651,7 @@ msgid ""
 msgstr ""
 "Esegui ELinks come un'istanza separata invece di connettersi a\n"
 "un'istanza esistente. Notare che normalmente nessun file di stato\n"
-"runtime (segnalibri, storico e così via) viene scritto su disco\n"
+"runtime (segnalibri, cronologia e così via) viene scritto su disco\n"
 "quando si usa questa opzione. Si veda -touch-files."
 
 #: src/config/options.inc:1979
@@ -3745,8 +3742,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
-"storico, ...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, cronologia, "
+"...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in combinazione con una di queste opzioni."
 
@@ -4136,7 +4133,7 @@ msgstr "Chiudi scheda"
 
 #: src/dialogs/menu.c:117
 msgid "Close ~all but this"
-msgstr ""
+msgstr "Chiudi ~tutti tranne questo"
 
 #: src/dialogs/menu.c:199
 msgid "Exit ELinks"
@@ -4152,14 +4149,13 @@ msgstr "Vuoi veramente uscire da ELinks?"
 
 #: src/dialogs/menu.c:239
 msgid "No history"
-msgstr "Nessuno storico"
+msgstr "Nessuna cronologia"
 
 #: src/dialogs/menu.c:334
 msgid "Open new ~tab"
 msgstr "Apri nuova sche~da"
 
 #: src/dialogs/menu.c:335
-#, fuzzy
 msgid "Open new tab in backgroun~d"
 msgstr "Apri nuova scheda in ~background"
 
@@ -4180,17 +4176,14 @@ msgid "~History"
 msgstr "S~torico"
 
 #: src/dialogs/menu.c:341
-#, fuzzy
 msgid "~Unhistory"
-msgstr "Stori~co inverso"
+msgstr "~Cronologia inversa"
 
 #: src/dialogs/menu.c:346
-#, fuzzy
 msgid "~Save as"
 msgstr "Sal~va come"
 
 #: src/dialogs/menu.c:347
-#, fuzzy
 msgid "Save UR~L as"
 msgstr "Salva ~URL come"
 
@@ -4199,22 +4192,18 @@ msgid "Save formatted ~document"
 msgstr "Salva documento ~formattato"
 
 #: src/dialogs/menu.c:350
-#, fuzzy
 msgid "Bookm~ark document"
-msgstr "Nessun documento"
+msgstr "~Aggiungi ai segnalibri"
 
 #: src/dialogs/menu.c:356
-#, fuzzy
 msgid "~Kill background connections"
 msgstr "Uccidi connessioni in bac~kground"
 
 #: src/dialogs/menu.c:357
-#, fuzzy
 msgid "Flush all ~caches"
 msgstr "Svuota tutte le cache"
 
 #: src/dialogs/menu.c:358
-#, fuzzy
 msgid "Resource ~info"
 msgstr "~Informazioni risorse"
 
@@ -4460,9 +4449,8 @@ msgid "Linux or OS/2 frames"
 msgstr "Cornici Linux o OS/2"
 
 #: src/dialogs/options.c:173
-#, fuzzy
 msgid "FreeBSD frames"
-msgstr "Non utilizzare cornici"
+msgstr "Cornici FreeBSD"
 
 #: src/dialogs/options.c:174
 msgid "KOI8-R frames"
@@ -4637,7 +4625,7 @@ msgstr ""
 
 #: src/globhist/dialogs.c:119
 msgid "Search history"
-msgstr "Ricerca nello storico"
+msgstr "Ricerca nella cronologia"
 
 #: src/globhist/dialogs.c:184
 msgid "Bookmark"
@@ -4645,11 +4633,11 @@ msgstr "Segnalibro"
 
 #: src/globhist/dialogs.c:197
 msgid "Global history manager"
-msgstr "Gestore storico"
+msgstr "Gestore cronologia"
 
 #: src/globhist/globhist.c:70
 msgid "Global history"
-msgstr "Gestione storico"
+msgstr "Gestione cronologia"
 
 #: src/globhist/globhist.c:72
 msgid "Global history options."
@@ -4657,7 +4645,7 @@ msgstr "Opzioni della cronologia."
 
 #: src/globhist/globhist.c:76
 msgid "Enable global history (\"history of all pages visited\")."
-msgstr "Abilita lo storico globale (\"storico di tutte le pagine visitate\")"
+msgstr "Abilita la cronologia (\"storico di tutte le pagine visitate\")"
 
 #: src/globhist/globhist.c:78
 msgid "Maximum number of entries"
@@ -4665,7 +4653,7 @@ msgstr "Numero massimo di voci"
 
 #: src/globhist/globhist.c:80
 msgid "Maximum number of entries in the global history."
-msgstr "Numero massimo di voci nello storico globale."
+msgstr "Numero massimo di voci nella cronologia ."
 
 #: src/globhist/globhist.c:82
 msgid "Display style"
@@ -4677,7 +4665,7 @@ msgid ""
 "0 is URLs\n"
 "1 is page titles"
 msgstr ""
-"Cosa mostrare nella finestra storico globale:\n"
+"Cosa mostrare nella finestra cronologia:\n"
 "0 è URL\n"
 "1 è titoli delle pagine"
 
@@ -4690,8 +4678,8 @@ msgid ""
 "Interval at which to write global history to disk if it\n"
 "has changed (seconds; 0 to disable)"
 msgstr ""
-"Intervallo di tempo che trascorre tra le scritture dello\n"
-"storico su disco se è cambiato (in secondi, 0 per disabilitare)"
+"Intervallo di tempo che trascorre tra le scritture della\n"
+"cronologia su disco se è cambiata (in secondi, 0 per disabilitare)"
 
 #. name:
 #: src/globhist/globhist.c:496
@@ -4777,8 +4765,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
-"minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le "
+"maiuscole/minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -4918,8 +4906,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
-"*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come "
+"image/*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #. name:
@@ -5032,7 +5020,7 @@ msgstr "JavaScript non è ancora supportato."
 
 #: src/protocol/rewrite/rewrite.c:41
 msgid "URI rewriting"
-msgstr ""
+msgstr "Riscrittura URI"
 
 #: src/protocol/rewrite/rewrite.c:43
 msgid ""
@@ -5043,30 +5031,36 @@ msgid ""
 "URI abbreviations, or smart ones, making it possible to pass\n"
 "arguments to them like search engine keywords."
 msgstr ""
+"Regole per la riscrittura degli URI immessi nel dialogo \"Apri URL\".\n"
+"Rende possibile definire un insieme di prefissi che saranno espansi\n"
+"se corrispondono alla stringa immessa nel dialogo \"Apri URL\".I prefissi "
+"possono essere semplici, vale a dire che funzionano solo come\n"
+"abbreviazioni degli URI o intelligenti, rendendo possibile il passaggio\n"
+"di argomenti in modo simile alle parole chiave dei motori di ricerca."
 
 #: src/protocol/rewrite/rewrite.c:50
 msgid "Enable dumb prefixes"
-msgstr ""
+msgstr "Abilita prefissi semplici"
 
 #: src/protocol/rewrite/rewrite.c:52
 msgid "Enable dumb prefixes."
-msgstr ""
+msgstr "Abilita prefissi semplici."
 
 #: src/protocol/rewrite/rewrite.c:54
 msgid "Enable smart prefixes"
-msgstr ""
+msgstr "Abilita prefissi intelligenti"
 
 #: src/protocol/rewrite/rewrite.c:56
 msgid "Enable smart prefixes."
-msgstr ""
+msgstr "Abilita prefissi intelligenti."
 
 #: src/protocol/rewrite/rewrite.c:58
 msgid "Dumb Prefixes"
-msgstr ""
+msgstr "Prefissi semplici"
 
 #: src/protocol/rewrite/rewrite.c:60
 msgid "Dumb prefixes."
-msgstr ""
+msgstr "Prefissi semplici."
 
 #: src/protocol/rewrite/rewrite.c:64
 #, c-format
@@ -5075,14 +5069,17 @@ msgid ""
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
+"URI sostituito a questo prefisso semplice.\n"
+"%c nella stringa significa l'URL corrente\n"
+"%% nella stringa significa '%'"
 
 #: src/protocol/rewrite/rewrite.c:68
 msgid "Smart Prefixes"
-msgstr ""
+msgstr "Prefissi intelligenti"
 
 #: src/protocol/rewrite/rewrite.c:70
 msgid "Smart prefixes."
-msgstr ""
+msgstr "Prefissi intelligenti."
 
 #: src/protocol/rewrite/rewrite.c:76
 msgid ""
@@ -5092,11 +5089,16 @@ msgid ""
 "%0,%1,...,%9 means argument 0, 1, ..., 9\n"
 "%% in the string means '%'"
 msgstr ""
+"URI sostituito a questo prefisso intelligente.\n"
+"%c nella stringa significa l'URL corrente\n"
+"%s nella stringa significa l'intero argomento del prefisso intelligente\n"
+"%0,%1,...,%9 significa l'argomento 0, 1, ..., 9\n"
+"%% nella stringa significa '%'"
 
 #. name:
 #: src/protocol/rewrite/rewrite.c:243
 msgid "URI rewrite"
-msgstr ""
+msgstr "Riscrittura URI"
 
 #: src/protocol/user.c:155 src/sched/error.c:51
 msgid "Bad URL syntax"
@@ -5405,9 +5407,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5415,9 +5417,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:852
 msgid ""

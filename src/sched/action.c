@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.126 2004/11/14 00:11:28 jonas Exp $ */
+/* $Id: action.c,v 1.127 2004/11/14 00:15:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,9 +129,9 @@ do_action(struct session *ses, enum main_action action, int verbose)
 	struct link *link = has_vs ? get_current_link(doc_view) : NULL;
 	int anonymous = get_cmd_opt_int("anonymous");
 
+	/* Please keep in alphabetical order for now. Later we can sort by most
+	 * used or something. */
 	switch (action) {
-		/* Please keep in alphabetical order for now. Later we can sort
-		 * by most used or something. */
 		case ACT_MAIN_ABORT_CONNECTION:
 			abort_loading(ses, 1);
 			print_screen_status(ses);
@@ -697,6 +697,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 			status = FRAME_EVENT_IGNORED;
 	}
+
+	/* XXX: At this point the session may have been destroyed */
 
 	if (status != FRAME_EVENT_SESSION_DESTROYED
 	    && ses->insert_mode == INSERT_MODE_ON

@@ -1,3 +1,48 @@
+Fri Feb 11 22:38:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, de.po, el.po, es.po, et.po,
+	fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po, lt.po,
+	nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po, sv.po,
+	tr.po, uk.po:
+
+	Update .po files.  
+
+Fri Feb 11 22:33:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Fri Feb 11 20:09:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	--dump is a boolean option.  
+
+Fri Feb 11 20:04:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, osdep/osdep.c, osdep/win32/win32.c:
+
+	Move setlocale() to the recently added init_osdep(). Fixes gettext
+	declaration clashes on SunOS. Big fat note left near the <locale.h>
+	include. Reported by Stephane Chazelas.  
+
+Fri Feb 11 19:07:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/stub.c:
+
+	Fix issue with missing includes reported by Stephane Chazelas and
+	s/inet_ntop4/elinks_inet_ntop4/ (how was it even possible to compile
+	this crap I merged). Spiced up with a little cleanups to make Miciah
+	happy.  
+
+Fri Feb 11 19:04:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/Makefile.am:
+
+	Only create .../lib directory if the gettext code is going to
+	install a new charset.alias file.  
+
 Wed Feb  9 09:42:20 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

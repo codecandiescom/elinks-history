@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.312 2004/01/01 09:56:02 jonas Exp $ */
+/* $Id: parser.c,v 1.313 2004/01/01 14:28:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3585,8 +3585,10 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 
 
 	ld->target = target;
-	for (i = 0; i < nmenu; i++) {
+	for (i = 0; !mi_is_end_of_menu((*menu)[i]); i++) {
 		struct link_def *ll = (*menu)[i].data;
+
+		nmenu++;
 
 		if (!strcmp(ll->link, ld->link) &&
 		    !strcmp(ll->target, ld->target)) {
@@ -3622,11 +3624,9 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 		*menu = nm;
 		memset(&nm[nmenu], 0, 2 * sizeof(struct menu_item));
 		nm[nmenu].text = label;
-		nm[nmenu].rtext = "";
 		nm[nmenu].func = (menu_func) map_selected;
 		nm[nmenu].data = ld;
 		nm[nmenu].flags = NO_INTL;
-		nm[++nmenu].text = NULL;
 	}
 
 	add_to_ml(ml, ld, ld->link, ld->target, label, NULL);

@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.37 2005/04/05 12:45:16 jonas Exp $ */
+/* $Id: parse.c,v 1.38 2005/04/05 15:41:12 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -444,7 +444,7 @@ parse_ftp_vms_permissions(const unsigned char *src, int len)
 		switch (src[pos]) {
 		case ',': perms <<= 3; break;
 		case 'R': perms  |= 4; break;
-		case 'W': perms  |= 2; break;
+		case 'W':
 		case 'D': perms  |= 2; break;
 		case 'E': perms  |= 1; break;
 		default:

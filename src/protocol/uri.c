@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.117 2004/04/04 03:46:27 jonas Exp $ */
+/* $Id: uri.c,v 1.118 2004/04/04 04:15:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ end_with_known_tld(unsigned char *s, int slen)
 	return -1;
 }
 
-unsigned char *
+static inline unsigned char *
 get_protocol_end(const unsigned char *url)
 {
 	register unsigned char *end = (unsigned char *) url;
@@ -65,7 +65,6 @@ get_protocol_end(const unsigned char *url)
 			end++;
 		} else
 			break;
-
 	}
 
 	if (*end != ':' || end == url) return NULL; /* No valid protocol scheme. */
@@ -93,14 +92,18 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	/* Nothing to do for an empty url. */
 	if_assert_failed return 0;
 	if (!*uristring) return 0;
+
 	uri->protocol_str = uristring;
+	prefix_end = get_protocol_end(uristring);
+	if (!prefix_end) return 0;
+
+	uri->protocollen = prefix_end - uristring;
 
 	/* Check if protocol is known, and retrieve prefix_end. */
-	protocol = known_protocol(uristring, &prefix_end);
+	protocol = get_protocol(struri(uri), uri->protocollen);
 	if (protocol == PROTOCOL_INVALID) return 0;
 
 	known = (protocol != PROTOCOL_UNKNOWN);
-	uri->protocollen = prefix_end - uristring;
 
 	/* Set protocol */
 	uri->protocol = protocol;

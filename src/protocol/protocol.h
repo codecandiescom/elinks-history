@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.22 2004/04/02 22:04:04 jonas Exp $ */
+/* $Id: protocol.h,v 1.23 2004/04/04 04:15:02 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -50,9 +50,9 @@ int get_protocol_need_slash_after_host(enum protocol protocol);
 protocol_handler *get_protocol_handler(enum protocol protocol);
 protocol_external_handler *get_protocol_external_handler(enum protocol protocol);
 
-/* Resolves the given protocol @url to a known protocol, PROTOCOL_UNKOWN or
- * PROTOCOL_INVALID if no protocol part could be identified. */
-/* User defined protocols (configurable via protocol.user) takes precedence. */
-enum protocol known_protocol(unsigned char *url, unsigned char **end);
+/* Resolves the given protocol @name with length @namelen to a known protocol,
+ * PROTOCOL_UNKOWN or PROTOCOL_INVALID if no protocol part could be identified.
+ * User defined protocols (configurable via protocol.user) takes precedence. */
+enum protocol get_protocol(unsigned char *name, int namelen);
 
 #endif

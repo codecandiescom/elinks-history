@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.79 2004/04/04 03:46:27 jonas Exp $ */
+/* $Id: uri.h,v 1.80 2004/04/04 04:15:02 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -154,9 +154,6 @@ int get_no_post_url_length(unsigned char *url);
 /* Return an allocated string containing url without postdata.
  * If @url_len is non-NULL, then *url_len is set to length of new string. */
 unsigned char *get_no_post_url(unsigned char *url, int *url_len);
-
-/* Return a pointer to end of protocol scheme (':') in url, if any. */
-unsigned char *get_protocol_end(const unsigned char *url);
 
 
 static inline int

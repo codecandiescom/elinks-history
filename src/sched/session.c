@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.436 2004/06/10 14:27:56 jonas Exp $ */
+/* $Id: session.c,v 1.437 2004/06/10 14:54:29 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -807,9 +807,11 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		struct string_list_item *str;
 
 		foreach (str, info->url_list) {
+			unsigned char *cwd = ses->tab->term->cwd;
 			unsigned char *source = str->string.source;
 			unsigned char *url = decode_shell_safe_url(source);
-			struct uri *uri = url ? get_hooked_uri(ses, url) : NULL;
+			struct uri *current_uri = have_location(ses) ? cur_loc(ses)->vs.uri : NULL;
+			struct uri *uri = url ? get_hooked_uri(url, current_uri, cwd) : NULL;
 
 			mem_free_if(url);
 

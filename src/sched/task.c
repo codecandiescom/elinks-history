@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.112 2004/06/10 01:12:28 jonas Exp $ */
+/* $Id: task.c,v 1.113 2004/06/10 14:54:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -527,17 +527,13 @@ goto_url(struct session *ses, unsigned char *url)
 }
 
 struct uri *
-get_hooked_uri(struct session *ses, unsigned char *uristring)
+get_hooked_uri(unsigned char *uristring, struct uri *uri, unsigned char *cwd)
 {
-	unsigned char *cwd = ses->tab->term->cwd;
-	struct uri *uri;
 #if defined(CONFIG_SCRIPTING) || defined(CONFIG_URI_REWRITE)
 	static int goto_url_event_id = EVENT_NONE;
 
 	uristring = stracpy(uristring);
 	if (!uristring) return NULL;
-
-	uri = have_location(ses) ? cur_loc(ses)->vs.uri : NULL;
 
 	set_event_id(goto_url_event_id, "goto-url");
 	trigger_event(goto_url_event_id, &uristring, uri);
@@ -555,12 +551,13 @@ get_hooked_uri(struct session *ses, unsigned char *uristring)
 void
 goto_url_with_hook(struct session *ses, unsigned char *url)
 {
-	struct uri *uri;
+	unsigned char *cwd = ses->tab->term->cwd;
+	struct uri *uri = have_location(ses) ? cur_loc(ses)->vs.uri : NULL;
 
 	/* Bail out if passed empty string from goto-url dialog */
 	if (!*url) return;
 
-	uri = get_hooked_uri(ses, url);
+	uri = get_hooked_uri(url, uri, cwd);
 	goto_uri(ses, uri);
 	if (uri) done_uri(uri);
 }

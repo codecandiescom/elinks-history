@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.357 2004/07/08 13:32:34 jonas Exp $ */
+/* $Id: tables.c,v 1.358 2004/07/08 13:53:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -880,7 +880,7 @@ draw_table_cells(struct table *table, int x, int y)
 	/* Finish the table drawing by aligning the right and bottom edge of
 	 * the table */
 	par_format.bgcolor = table->bgcolor;
-	expand_lines(table->part, x + table->real_width - 1, y, table->real_height);
+	expand_lines(table->part, x + table->real_width, y, table->real_height);
 
 	/* Do a sanity check whether the height is correct */
 	check_table_height(table, &table_frames, y);

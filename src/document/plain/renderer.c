@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.152 2004/08/20 03:43:17 jonas Exp $ */
+/* $Id: renderer.c,v 1.153 2004/09/15 10:13:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,14 +379,14 @@ add_document_line(struct plain_renderer *renderer,
 					line_char = '.';
 				template->data = line_char;
 				copy_screen_chars(pos++, template, 1);
+
+				/* Detect copy of nul chars to screen, this
+				 * should not occur. --Zas */
+				assert(line_char);
 			}
 
 			*template = saved_renderer_template;
 		}
-
-		/* Detect copy of nul chars to screen, this should not occur.
-		 * --Zas */
-		assert(pos[-1].data);
 	}
 
 	mem_free(line);

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.170 2004/12/30 04:00:18 jonas Exp $ */
+/* $Id: options.inc,v 1.171 2004/12/30 20:09:46 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -385,17 +385,16 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_INT("document.browse.search", N_("Show not found"),
 		"show_not_found", 0, 0, 2, 2,
-		N_("How to handle errors when nothing is matched.\n"
-		"Currently only used for typeahead:\n"
+		N_("How to inform the user when nothing is matched:\n"
 		"0 means do nothing\n"
 		"1 means beep the terminal\n"
 		"2 means pop up message box")),
 
 	INIT_OPT_INT("document.browse.search", N_("Typeahead searching"),
 		"typeahead", 0, 0, 2, 0,
-		N_("Start typeahead searching when an unbound key is pressed without any modifiers.\n\n"
-		"Note that most keys have default bindings, so this feature will not be useful\n"
-		"unless you unbind them.\n\n"
+		N_("Start typeahead searching when an unbound key is pressed without\n"
+		"any modifiers. Note that most keys have default bindings, so this\n"
+		"feature will not be useful unless you unbind them.\n\n"
 		"0 disables this feature; typeahead searching will only be used\n"
 		"  when you press a key bound to search-typeahead or similar\n"
 		"1 automatically starts typeahead searching thru link text\n"

@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.20 2003/10/24 21:15:26 pasky Exp $ */
+/* $Id: history.h,v 1.21 2003/10/24 21:17:56 pasky Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -55,20 +55,6 @@ del_from_history(struct ses_history *history, struct location *loc)
  * handler. So, you MUST NOT depend on cur_loc() having an arbitrary value
  * after call to this function (or the regents go_(un)back(), of course). */
 void go_history(struct session *ses, struct location *loc);
-
-static inline void
-go_back(struct session *ses)
-{
-	if (!ses->history.current) return;
-	go_history(ses, ses->history.current->prev);
-}
-
-static inline void
-go_unback(struct session *ses)
-{
-	if (!ses->history.current) return;
-	go_history(ses, ses->history.current->next);
-}
 
 void ses_history_move(struct session *ses);
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-06 23:56+0100\n"
-"PO-Revision-Date: 2003-12-05 17:04+0100\n"
+"PO-Revision-Date: 2003-12-06 23:59+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -2557,20 +2557,17 @@ msgid "Colon separated list of directories, where CGI scripts are stored."
 msgstr "Seznam adresáøù (oddìlených dvojteèkou), kde jsou ulo¾eny CGI skripty."
 
 #: src/config/options.inc:725
-#, fuzzy
 msgid "Local CGI specific options. (DISABLED)"
-msgstr "Nastavení spou¹tìní lokálních CGI skriptù."
+msgstr "Nastavení spou¹tìní lokálních CGI skriptù. (VYPNUTO)"
 
 #: src/config/options.inc:729
-#, fuzzy
 msgid "Whether to execute local CGI scripts. (DISABLED)"
-msgstr "Zdalipak se mají spou¹tìt lokální CGI skripty."
+msgstr "Zdalipak se mají spou¹tìt lokální CGI skripty. (VYPNUTO)"
 
 #: src/config/options.inc:733
-#, fuzzy
 msgid ""
 "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
-msgstr "Seznam adresáøù (oddìlených dvojteèkou), kde jsou ulo¾eny CGI skripty."
+msgstr "Seznam adresáøù (oddìlených dvojteèkou), kde jsou ulo¾eny CGI skripty. (VYPNUTO)"
 
 #: src/config/options.inc:736
 msgid "User protocols"
@@ -4130,7 +4127,7 @@ msgstr "Za~vøít tab"
 
 #: src/dialogs/menu.c:117
 msgid "Close ~all but this"
-msgstr ""
+msgstr "~Zavøít v¹echny kromì tohohle"
 
 #: src/dialogs/menu.c:199
 msgid "Exit ELinks"

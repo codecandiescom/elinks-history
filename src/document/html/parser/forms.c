@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.22 2004/06/22 21:39:02 zas Exp $ */
+/* $Id: forms.c,v 1.23 2004/06/22 22:05:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ done_form(void)
 void
 html_form(unsigned char *a)
 {
-	was_br = 1;
+	html_context.was_br = 1;
 }
 
 static void

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.445 2004/06/22 21:53:16 zas Exp $ */
+/* $Id: parser.c,v 1.446 2004/06/22 22:05:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,6 @@ struct html_context html_context;
 unsigned char *eofff;
 unsigned char *startf;
 
-int was_br;
 int was_li;
 int was_xmp;
 int has_link_lines;
@@ -197,7 +196,7 @@ put_chrs(unsigned char *start, int len,
 	}
 	if (isspace(start[len - 1])) html_context.putsp = -1;
 	if (par_format.align == AL_NONE) html_context.putsp = 0;
-	was_br = 0;
+	html_context.was_br = 0;
 	put_chars(f, start, len);
 	html_context.position += len;
 	html_context.line_breax = 0;
@@ -449,10 +448,10 @@ void
 html_br(unsigned char *a)
 {
 	html_linebrk(a);
-	if (was_br)
+	if (html_context.was_br)
 		ln_break(2, line_break_f, ff);
 	else
-		was_br = 1;
+		html_context.was_br = 1;
 }
 
 void

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.54 2004/06/22 21:53:16 zas Exp $ */
+/* $Id: parse.c,v 1.55 2004/06/22 22:05:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -575,7 +575,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	html_context.putsp = -1;
 	html_context.line_breax = table_level ? 2 : 1;
 	html_context.position = 0;
-	was_br = 0;
+	html_context.was_br = 0;
 	was_li = 0;
 	ff = f;
 	html_context.eoff = eof;
@@ -717,7 +717,7 @@ ng:;
 	ln_break(1, line_break_f, f);
 	html_context.putsp = -1;
 	html_context.position = 0;
-	was_br = 0;
+	html_context.was_br = 0;
 }
 
 static unsigned char *
@@ -826,7 +826,7 @@ start_element(struct element_info *ei,
 	}
 #endif
 
-	if (ei->func != html_br) was_br = 0;
+	if (ei->func != html_br) html_context.was_br = 0;
 
 	if (restore_format) par_format = old_format;
 
@@ -849,7 +849,7 @@ end_element(struct element_info *ei,
 		was_xmp = 0;
 	}
 
-	was_br = 0;
+	html_context.was_br = 0;
 	if (ei->nopair == 1 || ei->nopair == 3)
 		return html;
 

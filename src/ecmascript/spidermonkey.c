@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.115 2004/12/18 20:31:58 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.116 2004/12/18 20:36:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -863,7 +863,7 @@ get_input_object(JSContext *ctx, JSObject *jsform, struct form_control *fc)
 		/* jsform ('form') is input's parent */
 		/* FIXME: That is NOT correct since the real containing element
 		 * should be its parent, but gimme DOM first. --pasky */
-		JSObject *jsinput = JS_NewObject(ctx, (JSClass *) &input_class, NULL, jsinput);
+		JSObject *jsinput = JS_NewObject(ctx, (JSClass *) &input_class, NULL, jsform);
 
 		JS_DefineFunctions(ctx, jsinput, (JSFunctionSpec *)&input_funcs);
 		JS_SetPrivate(ctx, jsinput, fc);

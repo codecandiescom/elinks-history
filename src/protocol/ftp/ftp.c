@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.181 2004/11/20 03:52:28 jonas Exp $ */
+/* $Id: ftp.c,v 1.182 2004/12/16 15:34:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1224,7 +1224,7 @@ out_of_mem:
 	}
 
 	if (c_i->dir) {
-		colorize_dir = get_opt_int("document.browse.links.color_dirs");
+		colorize_dir = get_opt_bool("document.browse.links.color_dirs");
 
 		if (colorize_dir) {
 			color_to_string(get_opt_color("document.colors.dirs"),

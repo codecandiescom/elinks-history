@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.160 2004/12/02 16:34:01 zas Exp $ */
+/* $Id: options.c,v 1.161 2004/12/16 15:34:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@ charset_list(struct terminal *term, void *xxx, void *ses_)
 {
 	struct session *ses = ses_;
 	int i;
-	int sel = int_max(0, get_opt_int_tree(term->spec, "charset"));
+	int sel = int_max(0, get_opt_codepage_tree(term->spec, "charset"));
 	struct menu_item *mi = new_menu(FREE_LIST);
 
 	if (!mi) return;

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.190 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: cache.c,v 1.191 2004/12/16 15:34:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,7 @@ get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode)
 	 * cache mode and we don't want the most aggressive mode or we have to
 	 * remove the redirect. Please enlighten me. --jonas */
 	if ((cached->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
-	    || (cached->redirect && !get_opt_int("document.cache.cache_redirects"))) {
+	    || (cached->redirect && !get_opt_bool("document.cache.cache_redirects"))) {
 		delete_cache_entry(cached);
 		return NULL;
 	}

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.369 2004/01/20 04:33:37 miciah Exp $ */
+/* $Id: parser.c,v 1.370 2004/01/20 04:37:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1840,13 +1840,12 @@ pppp:
 			goto rrrr;
 		}
 		if (parse_element(r, eoff, &name, &namelen, NULL, &p)) goto pppp;
-		if (strlcasecmp(name, namelen, "OPTION", 6) &&
-		    strlcasecmp(name, namelen, "/OPTION", 7) &&
-		    strlcasecmp(name, namelen, "SELECT", 6) &&
-		    strlcasecmp(name, namelen, "/SELECT", 7) &&
-		    strlcasecmp(name, namelen, "OPTGROUP", 8) &&
-		    strlcasecmp(name, namelen, "/OPTGROUP", 9)
-		      )
+		if (strlcasecmp(name, namelen, "OPTION", 6)
+		    && strlcasecmp(name, namelen, "/OPTION", 7)
+		    && strlcasecmp(name, namelen, "SELECT", 6)
+		    && strlcasecmp(name, namelen, "/SELECT", 7)
+		    && strlcasecmp(name, namelen, "OPTGROUP", 8)
+		    && strlcasecmp(name, namelen, "/OPTGROUP", 9))
 			goto rrrr;
 	}
 
@@ -3472,12 +3471,12 @@ look_for_tag(unsigned char **pos, unsigned char *eof,
 
 	if (parse_element(*pos, eof, NULL, NULL, NULL, &pos2)) return 1;
 
-	if (strlcasecmp(name, namelen, "A", 1) &&
-	    strlcasecmp(name, namelen, "/A", 2) &&
-	    strlcasecmp(name, namelen, "MAP", 3) &&
-	    strlcasecmp(name, namelen, "/MAP", 4) &&
-	    strlcasecmp(name, namelen, "AREA", 4) &&
-	    strlcasecmp(name, namelen, "/AREA", 5)) {
+	if (strlcasecmp(name, namelen, "A", 1)
+	    && strlcasecmp(name, namelen, "/A", 2)
+	    && strlcasecmp(name, namelen, "MAP", 3)
+	    && strlcasecmp(name, namelen, "/MAP", 4)
+	    && strlcasecmp(name, namelen, "AREA", 4)
+	    && strlcasecmp(name, namelen, "/AREA", 5)) {
 		*pos = pos2;
 		return 1;
 	}

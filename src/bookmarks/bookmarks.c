@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.39 2002/09/07 09:40:13 zas Exp $ */
+/* $Id: bookmarks.c,v 1.40 2002/09/12 17:02:46 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -58,7 +58,8 @@ delete_bookmark(struct bookmark *bm)
 
 /* Adds a bookmark to the bookmark list. */
 struct bookmark *
-add_bookmark(const unsigned char *title, const unsigned char *url)
+add_bookmark(struct bookmark *root, const unsigned char *title,
+	     const unsigned char *url)
 {
 	struct bookmark *bm = mem_alloc(sizeof(struct bookmark));
 
@@ -77,10 +78,13 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 		return NULL;
 	}
 
+	bm->root = root;
+	init_list(bm->child);
+
 	bm->refcount = 0;
 
 	/* Actually add it */
-	add_to_list(bookmarks, bm);
+	add_to_list(root ? root->child : bookmarks, bm);
 	bookmarks_dirty = 1;
 
 	/* Setup box_item */
@@ -132,6 +136,24 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 	return 1;
 }
 
+void
+set_bookmarks_visible(struct list_head bookmark_list,
+		      int (*test)(struct bookmark *, void *), void *data)
+{
+	struct bookmark *bm;
+
+	foreach (bm, bookmark_list) {
+		bm->box_item->visible = test(bm, data);
+		if (!list_empty(bm->child))
+			set_bookmarks_visible(bm->child, test, data);
+	}
+}
+
+int
+test_true(struct bookmark *bm, void *d) {
+	return 1;
+}
+
 /* Searchs a substring either in title or url fields (ignoring
  * case).  If search_title and search_url are not empty, it selects bookmarks
  * matching the first OR the second.
@@ -141,10 +163,26 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
  * opening search dialog will have fields corresponding to that page, so
  * pressing ok will find any bookmark with that title or url, permitting a
  * rapid search of an already existing bookmark. --Zas */
+
+struct bookmark_search_ctx {
+	unsigned char *search_url;
+	unsigned char *search_title;
+};
+
+int
+test_search(struct bookmark *bm, void *d) {
+	struct bookmark_search_ctx *ctx = d;
+
+	return ((ctx->search_title && *ctx->search_title
+		 && strcasestr(bm->title, ctx->search_title)) ||
+		(ctx->search_url && *ctx->search_url
+		 && strcasestr(bm->url, ctx->search_url)));
+}
+
 int
 bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 {
-	struct bookmark *bm;
+	struct bookmark_search_ctx ctx;
 
 	if (!search_title || !search_url)
 		return 0;
@@ -158,22 +196,15 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 	bm_last_searched_url = stracpy(search_url);
 
 	if (!*search_title && !*search_url) {
-		foreach (bm, bookmarks) {
-			bm->box_item->visible = 1;
-		}
+		set_bookmarks_visible(bookmarks, test_true, NULL);
 	        return 1;
 	}
 
-	foreach (bm, bookmarks) {
-		if ((search_title && *search_title
-		     && strcasestr(bm->title, search_title)) ||
-		    (search_url && *search_url
-		     && strcasestr(bm->url, search_url))) {
-			bm->box_item->visible = 1;
-		} else {
-			bm->box_item->visible = 0;
-		}
-	}
+	ctx.search_url = search_url;
+	ctx.search_title = search_title;
+
+	set_bookmarks_visible(bookmarks, test_search, &ctx);
+
 	return 1;
 }
 
@@ -223,7 +254,7 @@ read_bookmarks()
 			continue;
 		*urlend = '\0';
 
-		add_bookmark(title, url);
+		add_bookmark(NULL, title, url);
 	}
 
 	fclose(f);

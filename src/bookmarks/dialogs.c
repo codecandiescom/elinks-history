@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.29 2002/09/10 20:20:15 pasky Exp $ */
+/* $Id: dialogs.c,v 1.30 2002/09/12 17:02:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -527,7 +527,7 @@ bookmark_add_add(struct dialog *d)
 	struct bookmark *bm;
 	struct listbox_data *box;
 
-	bm = add_bookmark(d->items[0].data, d->items[1].data);
+	bm = add_bookmark(NULL, d->items[0].data, d->items[1].data);
 	foreach (box, *bm->box_item->box) {
 		box->sel = bm->box_item;
 

@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.12 2002/08/30 23:21:02 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.13 2002/09/12 17:02:46 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -12,6 +12,9 @@ struct listbox_item;
 struct bookmark {
 	struct bookmark *next;
 	struct bookmark *prev;
+
+	struct bookmark *root;
+	struct list_head child;
 
 	unsigned char *title;   /* title of bookmark */
 	unsigned char *url;     /* Location of bookmarked item */
@@ -38,7 +41,7 @@ void write_bookmarks();
 void finalize_bookmarks();
 
 int delete_bookmark(struct bookmark *);
-struct bookmark *add_bookmark(const unsigned char *, const unsigned char *);
+struct bookmark *add_bookmark(struct bookmark *, const unsigned char *, const unsigned char *);
 int update_bookmark(struct bookmark *, const unsigned char *, const unsigned char *);
 
 int bookmark_simple_search(unsigned char *, unsigned char *);

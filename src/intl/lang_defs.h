@@ -414,4 +414,5 @@
 #define T_TOGGLE_DISPLAY    410	
 #define T_OPTIONS_MANAGER    411	
 #define T_DELETE_FOLDER    412	
-#define T__N_TEXTS    413	
+#define T_DELETE_MARKED_BOOKMARKS    413	
+#define T__N_TEXTS    414	

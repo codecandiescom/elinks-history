@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.58 2002/12/06 23:27:21 pasky Exp $ */
+/* $Id: dialogs.c,v 1.59 2002/12/06 23:45:32 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -246,7 +246,7 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
  * really_del_bookmark() */
 struct push_del_button_hop_struct {
 	struct terminal *term;
-	struct bookmark *bm;
+	struct bookmark *bm; /* NULL -> destroy marked bookmarks */
 };
 
 /* Do the job needed for really deleting a bookmark. */
@@ -318,6 +318,16 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 		delete_bookmark(bookmark);
 }
 
+static int
+delete_marked(struct listbox_item *item, void *data_, int offset)
+{
+	struct push_del_button_hop_struct *hop = data_;
+
+	if (item->marked)
+		do_del_bookmark(hop->term, item->udata);
+	return offset;
+}
+
 /* Called to _really_ delete a bookmark (a confirm in the delete dialog) */
 static void
 really_del_bookmark(void *vhop)
@@ -325,9 +335,14 @@ really_del_bookmark(void *vhop)
 	struct push_del_button_hop_struct *hop;
 
 	hop = (struct push_del_button_hop_struct *) vhop;
-	if (hop->bm->refcount) hop->bm->refcount--;
 
-	do_del_bookmark(hop->term, hop->bm);
+	if (hop->bm) {
+		if (hop->bm->refcount) hop->bm->refcount--;
+		do_del_bookmark(hop->term, hop->bm);
+	} else {
+		traverse_listbox_items_list(bookmark_box_items.next, 0, 0,
+						delete_marked, hop);
+	}
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -339,7 +354,19 @@ cancel_del_bookmark(void *vhop)
 {	struct push_del_button_hop_struct *hop;
 
 	hop = (struct push_del_button_hop_struct *) vhop;
-	hop->bm->refcount--;
+	if (hop->bm) hop->bm->refcount--;
+}
+
+static int
+scan_for_marks(struct listbox_item *item, void *data_, int offset)
+{
+	struct push_del_button_hop_struct *hop = data_;
+
+	if (item->marked) {
+		hop->bm = NULL;
+		return 0;
+	}
+	return offset;
 }
 
 static void
@@ -359,9 +386,21 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	hop->bm = bm;
 	hop->term = term;
 
-	bm->refcount++;
+	/* Look if it wouldn't be more interesting to blast off the marked
+	 * bookmarks. */
+	traverse_listbox_items_list(box->items->next, 0, 0, scan_for_marks, hop);
+	bm = hop->bm;
 
-	if (bm->box_item->type == BI_FOLDER)
+	if (bm) bm->refcount++;
+
+	if (!bm)
+	msg_box(term, getml(hop, NULL),
+		TEXT(T_DELETE_BOOKMARK), AL_CENTER,
+		TEXT(T_DELETE_MARKED_BOOKMARKS),
+		hop, 2,
+		TEXT(T_YES), really_del_bookmark, B_ENTER,
+		TEXT(T_NO), cancel_del_bookmark, B_ESC);
+	else if (bm->box_item->type == BI_FOLDER)
 	msg_box(term, getml(hop, NULL),
 		TEXT(T_DELETE_BOOKMARK), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_DELETE_FOLDER), " \"", bm->title, "\" ?", NULL,
@@ -682,7 +721,7 @@ struct bookmark_search_ctx {
 	int ofs;
 };
 
-int
+static int
 test_search(struct listbox_item *item, void *data_, int offset) {
 	struct bookmark_search_ctx *ctx = data_;
 	struct bookmark *bm = item->udata;

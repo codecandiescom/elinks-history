@@ -414,6 +414,7 @@ struct translation translation_english [] = {
   {T_TOGGLE_DISPLAY, "Toggle display"},
   {T_OPTIONS_MANAGER, "Options manager"},
   {T_DELETE_FOLDER, "Delete folder content"},
+  {T_DELETE_MARKED_BOOKMARKS, "Delete marked bookmarks?"},
   {0, NULL}
 };
 
@@ -831,6 +832,7 @@ struct translation translation_brazilian_portuguese [] = {
   {T_TOGGLE_DISPLAY, "Trocar display"},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -1248,6 +1250,7 @@ struct translation translation_bulgarian [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -1665,6 +1668,7 @@ struct translation translation_catalan [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -2082,6 +2086,7 @@ struct translation translation_croatian [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -2499,6 +2504,7 @@ struct translation translation_czech [] = {
   {T_TOGGLE_DISPLAY, "Pøepnout URL/název"},
   {T_OPTIONS_MANAGER, "Správce nastavení"},
   {T_DELETE_FOLDER, "Smazat obsah slo¾ky"},
+  {T_DELETE_MARKED_BOOKMARKS, "Smazat oznaèené bookmarky?"},
   {0, NULL}
 };
 
@@ -2916,6 +2922,7 @@ struct translation translation_danish [] = {
   {T_TOGGLE_DISPLAY, "Skifte mellem visning"},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -3333,6 +3340,7 @@ struct translation translation_dutch [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -3750,6 +3758,7 @@ struct translation translation_estonian [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -4167,6 +4176,7 @@ struct translation translation_finnish [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -4584,6 +4594,7 @@ struct translation translation_french [] = {
   {T_TOGGLE_DISPLAY, "Commuter affich."},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -5001,6 +5012,7 @@ struct translation translation_galician [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -5418,6 +5430,7 @@ struct translation translation_german [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -5835,6 +5848,7 @@ struct translation translation_greek [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -6252,6 +6266,7 @@ struct translation translation_hungarian [] = {
   {T_TOGGLE_DISPLAY, "Váltás URL/cím"},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -6669,6 +6684,7 @@ struct translation translation_icelandic [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -7086,6 +7102,7 @@ struct translation translation_indonesian [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -7503,6 +7520,7 @@ struct translation translation_italian [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -7920,6 +7938,7 @@ struct translation translation_lithuanian [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -8337,6 +8356,7 @@ struct translation translation_norwegian [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -8754,6 +8774,7 @@ struct translation translation_polish [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -9171,6 +9192,7 @@ struct translation translation_portuguese [] = {
   {T_TOGGLE_DISPLAY, "Trocar display"},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -9588,6 +9610,7 @@ struct translation translation_romanian [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -10005,6 +10028,7 @@ struct translation translation_russian [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -10422,6 +10446,7 @@ struct translation translation_slovak [] = {
   {T_TOGGLE_DISPLAY, "Prepnú» URL/názov"},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -10839,6 +10864,7 @@ struct translation translation_spanish [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -11256,6 +11282,7 @@ struct translation translation_swedish [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -11673,6 +11700,7 @@ struct translation translation_turkish [] = {
   {T_TOGGLE_DISPLAY, NULL},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 
@@ -12090,6 +12118,7 @@ struct translation translation_ukrainian [] = {
   {T_TOGGLE_DISPLAY, "ðÅÒÅÍÉËÎÕÔÉ URL/ÎÁÚ×Á"},
   {T_OPTIONS_MANAGER, NULL},
   {T_DELETE_FOLDER, NULL},
+  {T_DELETE_MARKED_BOOKMARKS, NULL},
   {0, NULL}
 };
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.312 2003/10/19 07:12:06 pasky Exp $ */
+/* $Id: options.c,v 1.313 2003/10/19 11:12:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,6 @@
 #include "util/string.h"
 #include "viewer/text/view.h"
 
-
 /* TODO? In the past, covered by shadow and legends, remembered only by the
  * ELinks Elders now, options were in hashes (it was not for a long time, after
  * we started to use dynamic options lists and before we really started to use
@@ -65,7 +64,7 @@ static struct option options_root = {
 	/* type: */	OPT_TREE,
 	/* min, max: */	0, 0,
 	/* ptr: */	NULL,
-	/* desc: */	"",
+	/* desc: */	DESC(""),
 	/* capt: */	NULL,
 };
 
@@ -892,25 +891,20 @@ register_options(void)
 		"bookmarks", 0,
 		N_("Bookmark options."));
 
-	{
-	unsigned char *bff =
+	add_opt_int("bookmarks", N_("File format"),
+		"file_format", 0, 0, 1, 0,
 #ifdef HAVE_LIBEXPAT
 		N_("File format for bookmarks (affects both reading and saving):\n"
 		"0 is the default ELinks (Links 0.9x compatible) format\n"
-		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)");
+		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)")
 #else
 		N_("File format for bookmarks (affects both reading and saving):\n"
 		"0 is the default ELinks (Links 0.9x compatible) format\n"
 		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
-		" (DISABLED)");
+		" (DISABLED)")
 #endif
-
-	add_opt_int("bookmarks", N_("File format"),
-		"file_format", 0, 0, 1, 0,
-		bff);
-	}
-
-
+	);
+	
 	add_opt_tree("", N_("Configuration system"),
 		"config", 0,
 		N_("Configuration handling options."));

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.72 2003/09/15 21:02:19 jonas Exp $ */
+/* $Id: tables.c,v 1.73 2003/09/15 21:10:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1453,20 +1453,22 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 #define H_LINE(term, xx, yy) int_max(H_LINE_X(term, (xx), (yy)), 0)
 #define V_LINE(term, xx, yy) int_max(V_LINE_X(term, (xx), (yy)), 0)
 
-#define draw_frame_point(term, xx, yy, ii, jj)				\
-{									\
-	if (H_LINE_X(term, (ii) - 1, (jj)) >= 0				\
-	    || H_LINE_X(term, (ii), (jj)) >= 0				\
-	    || V_LINE_X(term, (ii), (jj) - 1) >= 0				\
-	    || V_LINE_X(term, (ii), (jj)) >= 0) {				\
-		register int pos = V_LINE(term, (ii), (jj) - 1)		\
-				 + 3 * H_LINE(term, (ii), (jj))		\
-				 + 9 * H_LINE(term, (ii) - 1, (jj)) 		\
-				 + 27 * V_LINE(term, (ii), (jj));		\
-									\
-		xset_hchar((term)->p, (xx), (yy), frame_table[pos],	\
-			   par_format.bgcolor, SCREEN_ATTR_FRAME);	\
-	}								\
+static inline void
+draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
+		 int i, int j)
+{
+	if (H_LINE_X(table, i - 1, j) >= 0
+	    || H_LINE_X(table, i, j) >= 0
+	    || V_LINE_X(table, i, j - 1) >= 0
+	    || V_LINE_X(table, i, j) >= 0) {
+		register int pos = V_LINE(table, i, j - 1)
+				 + 3 * H_LINE(table, i, j)
+				 + 9 * H_LINE(table, i - 1, j)
+				 + 27 * V_LINE(table, i, j);
+
+		xset_hchar(table->p, x, y, frame_table[pos],
+			   par_format.bgcolor, SCREEN_ATTR_FRAME);
+	}
 }
 
 #define draw_frame_hline(term, xx, yy, ii, jj)				\
@@ -1580,7 +1582,7 @@ cont2:
 					w = get_vline_width(t, i);
 
 				if (w >= 0) {
-					draw_frame_point(t, cx, cy, i, j);
+					draw_frame_point(t, frame, cx, cy, i, j);
 					if (j < t->y)
 						draw_frame_vline(t, cx, cy + 1, i, j);
 					cx++;
@@ -1591,7 +1593,7 @@ cont2:
 			}
 
 			if (fr) {
-				draw_frame_point(t, cx, cy, i, j);
+				draw_frame_point(t, frame, cx, cy, i, j);
 				if (j < t->y)
 					draw_frame_vline(t, cx, cy + 1, i, j);
 				cx++;

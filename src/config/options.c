@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.194 2003/04/20 08:25:32 zas Exp $ */
+/* $Id: options.c,v 1.195 2003/04/20 08:33:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1417,6 +1417,11 @@ register_options()
 	add_opt_tree("protocol.http", N_("Server bug workarounds"),
 		"bugs", 0,
 		N_("Server-side HTTP bugs workarounds."));
+
+	add_opt_bool("protocol.http.bugs", N_("Do not send Accept-Charset"),
+		"accept_charset", 0, 1,
+		N_("The Accept-Charset header is quite long and sending it can trigger\n"
+		"bugs in some rarely found servers."));
 
 	add_opt_bool("protocol.http.bugs", N_("Allow blacklisting"),
 		"allow_blacklist", 0, 1,

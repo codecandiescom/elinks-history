@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.101 2003/04/17 15:07:59 zas Exp $ */
+/* $Id: http.c,v 1.102 2003/04/20 08:33:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -527,7 +527,8 @@ http_send_header(struct connection *c)
 		}
 	}
 
-	if (!(info->bl_flags & BL_NO_CHARSET)) {
+	if (!(info->bl_flags & BL_NO_CHARSET)
+	    && !get_opt_int("protocol.http.bugs.accept_charset")) {
 		add_to_str(&hdr, &l, accept_charset);
 	}
 

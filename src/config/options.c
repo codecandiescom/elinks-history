@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.277 2003/10/03 17:36:13 kuser Exp $ */
+/* $Id: options.c,v 1.278 2003/10/03 17:47:44 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2722,7 +2722,8 @@ register_options(void)
 	add_opt_str_tree(cmdline_options, "", N_("Set config dir to given string."),
 		"confdir", 0, "",
 		N_("Set the config dir to the given path. ELinks will read\n"
-		"its config files and writes to it. It is assumed to\n"
+		"its config files and writes to it. If the path begins with\n"
+		"a '/' its used as an absolute path. Else it is assumed to\n"
 		"be relative to your HOME dir."));
 
 	add_opt_alias_tree(cmdline_options, "", N_("MIME type to assume for documents"),

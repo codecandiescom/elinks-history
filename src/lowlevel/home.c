@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.40 2003/10/03 17:36:13 kuser Exp $ */
+/* $Id: home.c,v 1.41 2003/10/03 17:47:43 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,11 @@ test_confdir(unsigned char *home, unsigned char *path,
 
 	if (!path || !*path) return NULL;
 
-	confdir = straconcat(home, "/", path, NULL);
+	if (home && *home && !dir_sep(*path))
+		confdir = straconcat(home, "/", path, NULL);
+	else
+		confdir = stracpy(path);
+
 	if (!confdir) return NULL;
 
 	strip_trailing_dir_sep(confdir);
@@ -109,12 +113,8 @@ get_home(void)
 	unsigned char *home = envhome ? stracpy(envhome)
 				      : elinks_dirname(path_to_exe);
 
-	/* TODO: We want to use commandline option instead of environment
-	 * variable, especially one with so common name. */
-
-	if (!home) return NULL;
-
-	strip_trailing_dir_sep(home);
+	if (home)
+		strip_trailing_dir_sep(home);
 
 	home_elinks = test_confdir(home, 
 				   get_opt_str_tree(cmdline_options, "confdir"),

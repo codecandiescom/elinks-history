@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.37 2003/12/26 13:57:44 jonas Exp $ */
+/* $Id: status.c,v 1.38 2003/12/26 14:02:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,8 +274,8 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 			xend -= LEDS_COUNT + 2;
 #endif
 
-		if (xend - msglen < 0) return;
-		width = int_min(20, xend - msglen);
+		if (xend - msglen < 6) return;
+		width = int_min(20, xend - msglen - 1);
 
 		download_progress_bar(term, xend - width, term->height - 1,
 				      width, NULL, NULL,

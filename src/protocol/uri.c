@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.280 2004/09/23 22:14:43 pasky Exp $ */
+/* $Id: uri.c,v 1.281 2004/09/23 22:15:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1073,7 +1073,7 @@ parse_uri:
 					add_to_string(&str, "./");
 		}
 
-		if (protocol == PROTOCOL_HTTP || protocol == PROTOCOL_FTP) {
+		if (protocol == PROTOCOL_HTTP) {
 			add_to_string(&str, newurl);
 		} else {
 			encode_uri_string(&str, newurl, 0);

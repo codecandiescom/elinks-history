@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.119 2005/03/05 20:46:46 zas Exp $ */
+/* $Id: text.c,v 1.120 2005/03/24 16:03:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,17 +182,20 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 	unsigned char *text = widget_data->widget->text;
 	unsigned char saved = 0;
 	unsigned char *saved_pos = NULL;
+	int height;
+
+	height = int_max(0, max_height - 3);
 
 	/* If we are drawing set up the box before setting up the
 	 * scrolling. */
 	set_box(&widget_data->box, x, *y,
-		widget_data->box.width, int_max(0, max_height - 3));
-	if (widget_data->box.height == 0) return;
+		widget_data->box.width, height);
+	if (height == 0) return;
 
 	/* Can we scroll and do we even have to? */
 	if (widget_data->widget->info.text.is_scrollable
 	    && (widget_data->info.text.max_width != width
-		|| widget_data->box.height < widget_data->info.text.lines))
+		|| height < widget_data->info.text.lines))
 	{
 		unsigned char **lines;
 		int current;
@@ -207,8 +210,8 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 		lines = (unsigned char **) widget_data->cdata;
 
 		/* Make maximum number of lines available */
-		visible = int_max(widget_data->info.text.lines - widget_data->box.height,
-				  widget_data->box.height);
+		visible = int_max(widget_data->info.text.lines - height,
+				  height);
 
 		int_bounds(&widget_data->info.text.current, 0, visible);
 		current = widget_data->info.text.current;
@@ -218,8 +221,8 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 
 		/* Do we have to force a text end ? */
 		visible = widget_data->info.text.lines - current;
-		if (visible > widget_data->box.height) {
-			int lines_pos = current + widget_data->box.height;
+		if (visible > height) {
+			int lines_pos = current + height;
 
 			saved_pos = lines[lines_pos];
 

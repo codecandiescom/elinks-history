@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.138 2004/12/19 14:24:24 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.139 2004/12/19 14:31:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -780,6 +780,7 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	case JSP_INPUT_VALUE:
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(&fs->value, stracpy(v.string));
+		fs->vpos = fs->vypos = 0;
 		break;
 
 	default:

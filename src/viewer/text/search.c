@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.25 2003/10/04 21:15:05 kuser Exp $ */
+/* $Id: search.c,v 1.26 2003/10/04 21:40:58 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,6 +273,7 @@ lowered_string(unsigned char *s, int l)
 	return ret;
 }
 
+#ifdef HAVE_REGEX_H
 static int
 is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 		  int *min, int *max, struct search *s1, struct search *s2)
@@ -281,6 +282,8 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	unsigned char *doctmp;
 	int doclen;
 	int found = 0;
+	int reg_extended = get_opt_int("document.browse.search.regex") == 2
+			   ? REG_EXTENDED : 0;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	register int i;
 	regex_t regex;
@@ -294,7 +297,7 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 		doc[i] = s1[i].c;
 	doc[doclen] = 0;
 
-	if (regcomp(&regex, text, REG_ICASE)) {
+	if (regcomp(&regex, text, REG_ICASE | reg_extended)) {
 		mem_free(doc);
 		return 0;
 	}
@@ -331,8 +334,8 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 
 	return found;
 }
+#endif /* HAVE_REGEX_H */
 
-#ifdef HAVE_REGEX_H
 static int
 is_in_range_plain(struct document *f, int y, int yy, unsigned char *text, int l,
 		  int *min, int *max, struct search *s1, struct search *s2)
@@ -372,7 +375,6 @@ srch_failed:
 
 	return found;
 }
-#endif /* HAVE_REGEX_H */
 
 static int
 is_in_range(struct document *f, int y, int yw, unsigned char *text,
@@ -391,7 +393,7 @@ is_in_range(struct document *f, int y, int yw, unsigned char *text,
 		return 0;
 
 #ifdef HAVE_REGEX_H
-	if (get_opt_bool("document.browse.search.regex"))
+	if (get_opt_int("document.browse.search.regex"))
 		return is_in_range_regex(f, y, y + yw, text, l, min, max, s1, s2);
 #endif
 	return is_in_range_plain(f, y, y + yw, text, l, min, max, s1, s2);
@@ -474,6 +476,8 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	int xx, yy;
 	int xpv, ypv;
 	int len = 0;
+	int reg_extended = get_opt_int("document.browse.search.regex") == 2
+			   ? REG_EXTENDED : 0;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	register int i;
 	regex_t regex;
@@ -489,7 +493,7 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	doc[doclen] = 0;
 
 	/* TODO: show error message */
-	if (regcomp(&regex, *scr->search_word, REG_ICASE)) {
+	if (regcomp(&regex, *scr->search_word, REG_ICASE | reg_extended)) {
 		mem_free(doc);
 		goto ret;
 	}
@@ -568,7 +572,7 @@ get_searched(struct document_view *scr, struct point **pt, int *pl)
 	}
 
 #ifdef HAVE_REGEX_H
-	if (get_opt_bool("document.browse.search.regex"))
+	if (get_opt_int("document.browse.search.regex"))
 		get_searched_regex(scr, pt, pl, l, s1, s2);
 	else
 #endif

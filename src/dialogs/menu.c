@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.305 2004/04/23 20:44:27 pasky Exp $ */
+/* $Id: menu.c,v 1.306 2004/04/24 12:21:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #include "mime/dialogs.h"
 #include "osdep/osdep.h"
 #include "osdep/newwin.h"
+#include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/download.h"
@@ -460,6 +461,16 @@ query_file(struct session *ses, struct uri *uri, void *data,
 	   void (*cancel)(void *), int interactive)
 {
 	struct string def;
+
+	if (ses->download_uri->protocol == PROTOCOL_UNKNOWN) {
+		print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
+		return;
+	}
+
+	if (get_protocol_external_handler(uri->protocol)) {
+		print_error_dialog(ses, S_EXTERNAL_PROTOCOL, PRI_CANCEL);
+		return;
+	}
 
 	if (!init_string(&def)) return;
 

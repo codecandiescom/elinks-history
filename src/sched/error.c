@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.23 2004/04/14 00:09:22 jonas Exp $ */
+/* $Id: error.c,v 1.24 2004/04/24 12:21:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,6 +56,11 @@ struct s_msg_dsc {
 	{S_UNKNOWN_PROTOCOL,	N_("This URL contains a protocol not yet known by ELinks.\n"
 				   "You can configure an external handler for it through\n"
 				   "the options system.")},
+
+	{S_EXTERNAL_PROTOCOL,	N_("This URL contains a protocol that is not natively known\n"
+				   "by ELinks which means that ELinks relies on external\n"
+				   "programs for handling it. Downloading URLs using external\n"
+				   "is not supported.")},
 
 	{S_HTTP_ERROR,		N_("Bad HTTP response")},
 	{S_HTTP_100,		N_("HTTP 100 (\?\?\?)")},

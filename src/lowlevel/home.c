@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.22 2003/09/10 00:26:43 jonas Exp $ */
+/* $Id: home.c,v 1.23 2003/09/10 00:33:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,13 @@ test_confdir(unsigned char *confdir, int *new)
 
 	if (stat(confdir, &st)) {
 		if (!mkdir(confdir, 0700)) {
+#if 0
+		/* I've no idea if following is needed for newly created
+		 * directories.  It's bad thing to do it everytime. --pasky */
+#ifdef HAVE_CHMOD
+			chmod(home_elinks, 0700);
+#endif
+#endif
 			return confdir;
 		}
 
@@ -127,35 +134,25 @@ get_home(int *new)
 		add_to_strn(&home_elinks, ".elinks");
 	}
 
-	if (test_confdir(home_elinks, new))
-		goto home_creat;
+	if (!test_confdir(home_elinks, new)) {
+		mem_free(home_elinks);
 
-	mem_free(home_elinks);
+		home_elinks = stracpy(home);
+		if (!home_elinks) {
+			mem_free(home);
+			return NULL;
+		}
 
-	home_elinks = stracpy(home);
-	if (!home_elinks) {
-		mem_free(home);
-		return NULL;
+		add_to_strn(&home_elinks, "elinks");
+
+		if (!test_confdir(home_elinks, new)) {
+			mem_free(home_elinks);
+			mem_free(home);
+
+			return NULL;
+		}
 	}
 
-	add_to_strn(&home_elinks, "elinks");
-
-	if (test_confdir(home_elinks, new))
-		goto home_creat;
-
-	mem_free(home_elinks);
-	mem_free(home);
-
-	return NULL;
-
-home_creat:
-#if 0
-	/* I've no idea if following is needed for newly created directories.
-	 * It's bad thing to do it everytime. --pasky */
-#ifdef HAVE_CHMOD
-	chmod(home_elinks, 0700);
-#endif
-#endif
 	add_to_strn(&home_elinks, "/");
 	mem_free(home);
 

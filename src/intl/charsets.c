@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.96 2004/09/09 10:13:13 witekfl Exp $ */
+/* $Id: charsets.c,v 1.97 2004/09/11 04:32:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,6 +133,8 @@ static const unicode_val strange_chars[32] = {
 0x007e, 0x2122, 0x0161, 0x003e, 0x0153, 0x0000, 0x0000, 0x0000,
 };
 
+#define SYSTEM_CHARSET_FLAG 128
+
 unsigned char *
 u2cp_(unicode_val u, int to, int no_nbsp_hack)
 {
@@ -150,6 +152,7 @@ u2cp_(unicode_val u, int to, int no_nbsp_hack)
 		if (!strange) return NULL;
 		return u2cp_(strange, to, no_nbsp_hack);
 	}
+
 	for (j = 0; codepages[to].table[j].c; j++)
 		if (codepages[to].table[j].u == u)
 			return strings[codepages[to].table[j].c];
@@ -254,8 +257,6 @@ free_utf_table(void)
 	for (i = 128; i < 256; i++)
 		mem_free(utf_table[i].u.str);
 }
-
-#define SYSTEM_CHARSET_FLAG 128
 
 static struct conv_table *
 get_translation_table_to_utf_8(int from)

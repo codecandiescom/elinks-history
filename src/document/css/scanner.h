@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.55 2004/01/27 23:51:08 jonas Exp $ */
+/* $Id: scanner.h,v 1.56 2004/01/27 23:54:12 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -86,7 +86,7 @@ enum css_token_type {
 };
 
 /* Define if you want a talking scanner */
-/* #define CSS_SCANNER_DEBUG */
+/* #define SCANNER_DEBUG */
 
 #define get_css_precedence(token_type) \
 	((token_type) == '}' ? (1 << 10) : \
@@ -136,7 +136,7 @@ check_css_precedence(int type, int skipto)
  * values and function calls with up to 3 variables like rgb(). At worst it
  * should be no less than 2 in order to be able to peek at the next token in
  * the scanner. */
-#define CSS_SCANNER_TOKENS 10
+#define SCANNER_TOKENS 10
 
 /* The {struct css_scanner} describes the current state of the CSS scanner. */
 struct css_scanner {
@@ -151,7 +151,7 @@ struct css_scanner {
 	struct css_token *current;
 	int tokens;
 
-#ifdef CSS_SCANNER_DEBUG
+#ifdef SCANNER_DEBUG
 	/* Debug info about the caller. */
 	unsigned char *file;
 	int line;
@@ -161,7 +161,7 @@ struct css_scanner {
 	 * order to optimize the scanning a bit and make it possible to look
 	 * ahead at the next token. You should always use the accessors
 	 * (defined below) for getting tokens from the scanner. */
-	struct css_token table[CSS_SCANNER_TOKENS];
+	struct css_token table[SCANNER_TOKENS];
 };
 
 

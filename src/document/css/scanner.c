@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.107 2004/01/27 23:51:08 jonas Exp $ */
+/* $Id: scanner.c,v 1.108 2004/01/27 23:54:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,7 +196,7 @@ static struct scanner_info css_scanner_info = {
  * or get_next_css_token() call made it possible to get the type of the next
  * token. */
 #define check_css_scanner(scanner) \
-	(scanner->tokens < CSS_SCANNER_TOKENS \
+	(scanner->tokens < SCANNER_TOKENS \
 	 || scanner->current + 1 < scanner->table + scanner->tokens)
 
 #define	skip_css(s, skipto)							\
@@ -406,7 +406,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	scanner->position = string;
 }
 
-#define CSS_SCANNER_TABLE_SIZE (sizeof(struct css_token) * CSS_SCANNER_TOKENS)
+#define SCANNER_TABLE_SIZE (sizeof(struct css_token) * SCANNER_TOKENS)
 
 /* Fills the scanner with tokens. Already scanned tokens that has not been
  * requested remains and are moved to the start of the scanners token table. */
@@ -422,7 +422,7 @@ scan_css_tokens(struct css_scanner *scanner)
 
 	assert(scanner->current);
 
-#ifdef CSS_SCANNER_DEBUG
+#ifdef SCANNER_DEBUG
 	if (scanner->tokens > 0) WDBG("Rescanning");
 #endif
 
@@ -434,7 +434,7 @@ scan_css_tokens(struct css_scanner *scanner)
 	}
 
 	/* Set all unused tokens to CSS_TOKEN_NONE */
-	memset(current, 0, CSS_SCANNER_TABLE_SIZE - moved_size);
+	memset(current, 0, SCANNER_TABLE_SIZE - moved_size);
 
 	if (!scanner->position) {
 		scanner->tokens = move_to_front ? move_to_front : -1;
@@ -444,7 +444,7 @@ scan_css_tokens(struct css_scanner *scanner)
 	}
 
 	/* Scan tokens until we fill the table */
-	for (table_end = table + CSS_SCANNER_TOKENS;
+	for (table_end = table + SCANNER_TOKENS;
 	     current < table_end && *scanner->position;
 	     current++) {
 		scan_css(scanner->position, CSS_CHAR_WHITESPACE);
@@ -477,7 +477,7 @@ scan_css_tokens(struct css_scanner *scanner)
 
 /* Scanner table accessors and mutators */
 
-#ifdef CSS_SCANNER_DEBUG
+#ifdef SCANNER_DEBUG
 void
 dump_css_scanner(struct css_scanner *scanner)
 {

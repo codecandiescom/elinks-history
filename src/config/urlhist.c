@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.19 2003/05/13 12:27:44 zas Exp $ */
+/* $Id: urlhist.c,v 1.20 2003/05/13 13:29:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,6 @@ load_url_history(void)
 	history_nosave = 0;
 
 	fclose(fp);
-	mem_free(history_file);
 	return 0;
 }
 
@@ -68,6 +67,7 @@ save_url_history(void)
 	int ret;
 
 	if (!history_dirty
+	    || !elinks_home
 	    || get_opt_int_tree(&cmdline_options, "anonymous"))
 		return 0;
 

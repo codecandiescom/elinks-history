@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.122 2003/07/21 10:39:03 pasky Exp $ */
+/* $Id: session.c,v 1.123 2003/07/21 23:11:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,37 +79,38 @@ static unsigned char *
 get_stat_msg(struct download *stat, struct terminal *term)
 {
 	if (stat->state == S_TRANS && stat->prg->elapsed / 100) {
-		unsigned char *m = init_str();
-		int l = 0;
+		struct string msg;
 
-		add_to_str(&m, &l, _("Received", term));
-		add_chr_to_str(&m, &l, ' ');
-		add_xnum_to_str(&m, &l, stat->prg->pos + stat->prg->start);
+		if (!init_string(&msg)) return NULL;
+
+		add_to_string(&msg, _("Received", term));
+		add_char_to_string(&msg, ' ');
+		add_xnum_to_string(&msg, stat->prg->pos + stat->prg->start);
 		if (stat->prg->size >= 0) {
-			add_chr_to_str(&m, &l, ' ');
-			add_to_str(&m, &l, _("of", term));
-			add_chr_to_str(&m, &l, ' ');
-			add_xnum_to_str(&m, &l, stat->prg->size);
+			add_char_to_string(&msg, ' ');
+			add_to_string(&msg, _("of", term));
+			add_char_to_string(&msg, ' ');
+			add_xnum_to_string(&msg, stat->prg->size);
 		}
-		add_to_str(&m, &l, ", ");
+		add_to_string(&msg, ", ");
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-			add_to_str(&m, &l, _("avg", term));
-			add_chr_to_str(&m, &l, ' ');
+			add_to_string(&msg, _("avg", term));
+			add_char_to_string(&msg, ' ');
 		}
-		add_xnum_to_str(&m, &l, (longlong)stat->prg->loaded * 10
-					/ (stat->prg->elapsed / 100));
-		add_to_str(&m, &l, "/s");
+		add_xnum_to_string(&msg, (longlong)stat->prg->loaded * 10
+					 / (stat->prg->elapsed / 100));
+		add_to_string(&msg, "/s");
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _("cur", term));
-			add_chr_to_str(&m, &l, ' '),
-			add_xnum_to_str(&m, &l, stat->prg->cur_loaded
-						/ (CURRENT_SPD_SEC
-						   * SPD_DISP_TIME / 1000));
-			add_to_str(&m, &l, "/s");
+			add_to_string(&msg, ", ");
+			add_to_string(&msg, _("cur", term));
+			add_char_to_string(&msg, ' '),
+			add_xnum_to_string(&msg, stat->prg->cur_loaded
+						 / (CURRENT_SPD_SEC
+						 * SPD_DISP_TIME / 1000));
+			add_to_string(&msg, "/s");
 		}
 
-		return m;
+		return msg.source;
 	}
 
 	/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */

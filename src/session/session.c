@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.448 2004/06/10 17:19:52 jonas Exp $ */
+/* $Id: session.c,v 1.449 2004/06/10 17:57:23 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -817,45 +817,77 @@ dialog_goto_url_open(void *data)
 	dialog_goto_url((struct session *) data, NULL);
 }
 
+static enum remote_session_flags
+handle_remote_session(struct session *ses, enum remote_session_flags remote,
+		      struct uri *uri)
+{
+	if (remote & SES_REMOTE_CURRENT_TAB) {
+		goto_uri(ses, uri);
+		/* Mask out the current tab flag */
+		return remote & ~SES_REMOTE_CURRENT_TAB;
+
+	} else if (remote & SES_REMOTE_NEW_TAB) {
+		/* FIXME: This is not perfect. Doing multiple -remote
+		 * with no URLs will make the goto dialogs
+		 * inaccessible. Maybe we should not support this kind
+		 * of thing or make the window focus detecting code
+		 * more intelligent. --jonas */
+		open_uri_in_new_tab(ses, uri, 0);
+
+		if (remote & SES_REMOTE_PROMPT_URL) {
+			/* We can't create new window in EV_INIT handler! */
+			register_bottom_half(dialog_goto_url_open, ses);
+		}
+
+	} else if (remote & SES_REMOTE_NEW_WINDOW) {
+		/* FIXME: It is quite rude because we just take the first
+		 * possibility and should maybe make it possible to specify
+		 * new-screen etc via -remote "openURL(..., new-*)" --jonas */
+		if (can_open_in_new(ses->tab->term))
+			return remote;
+
+		open_uri_in_new_window(ses, uri, ses->tab->term->environment);
+
+	} else if (remote & SES_REMOTE_ADD_BOOKMARK) {
+#ifdef CONFIG_BOOKMARKS
+		if (!uri) return remote;
+		add_bookmark(NULL, 1, struri(uri), struri(uri));
+#endif
+
+	} else if (remote & SES_REMOTE_PROMPT_URL) {
+		/* We can't create new window in EV_INIT handler! */
+		register_bottom_half(dialog_goto_url_open, ses);
+	}
+
+	return remote;
+}
+
 static struct session *
 process_session_info(struct session *ses, struct initial_session_info *info)
 {
-	enum term_env_type term_env = 0;
-
 	if (!info) return NULL;
 
 	if (info->remote) {
 		assert(info->base_session);
 		ses = info->base_session;
 
-		if (can_open_in_new(ses->tab->term))
-			term_env = ses->tab->term->environment;
-
 	} else if (info->base_session) {
 		copy_session(info->base_session, ses);
 	}
 
 	if (info->uri_list.size) {
-		int first = !info->remote || (info->remote & SES_REMOTE_CURRENT_TAB);
+		int first = 1;
 		struct uri *uri;
 		int index;
 
 		foreach_uri (uri, index, &info->uri_list) {
-			if (first) {
+			if (info->remote) {
+				info->remote = handle_remote_session(ses, info->remote, uri);
+
+			} else if (first) {
 				/* Open first url. */
 				goto_uri(ses, uri);
 				first = 0;
-
-			} else if (info->remote & SES_REMOTE_ADD_BOOKMARK) {
-#ifdef CONFIG_BOOKMARKS
-				add_bookmark(NULL, 1, struri(uri), struri(uri));
-#endif
-			} else if (info->remote & SES_REMOTE_NEW_WINDOW) {
-				/* FIXME: Else it is quite rude because we just
-				 * take the first possibility and should maybe
-				 * make it possible to specify new-screen etc
-				 * via -remote "openURL(..., new-*)" --jonas */
-				open_uri_in_new_window(ses, uri, term_env);
 
 			} else {
 				/* Open next ones. */
@@ -864,28 +896,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		}
 
 	} else if (info->remote) {
-		/* TODO: SES_REMOTE_NEW_WINDOW */
-		if (info->remote & SES_REMOTE_NEW_TAB) {
-			/* FIXME: This is not perfect. Doing multiple -remote
-			 * with no URLs will make the goto dialogs
-			 * inaccessible. Maybe we should not support this kind
-			 * of thing or make the window focus detecting code
-			 * more intelligent. --jonas */
-			open_uri_in_new_tab(ses, NULL, 0);
-
-			if (info->remote & SES_REMOTE_PROMPT_URL) {
-				/* We can't create new window in EV_INIT handler! */
-				register_bottom_half(dialog_goto_url_open, ses);
-			}
-
-		} else if (info->remote & SES_REMOTE_NEW_WINDOW) {
-			/* FIXME: See the url list loop */
-			open_uri_in_new_window(ses, NULL, term_env);
-
-		} else if (info->remote & SES_REMOTE_PROMPT_URL) {
-			/* We can't create new window in EV_INIT handler! */
-			register_bottom_half(dialog_goto_url_open, ses);
-		}
+		handle_remote_session(ses, info->remote, NULL);
 
 #ifdef CONFIG_BOOKMARKS
 	} else if (!first_use

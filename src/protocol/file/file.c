@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.24 2002/06/22 21:20:53 pasky Exp $ */
+/* $Id: file.c,v 1.25 2002/09/04 15:43:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-#define FILE_DIR_COLOR   "yellow"
 
 #ifdef FS_UNIX_RIGHTS
 void
@@ -333,7 +332,14 @@ file_func(struct connection *c)
 	struct stat stt;
 	int namelen;
 	int saved_errno;
-	
+	unsigned char dircolor[8];	
+	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
+
+	if (colorize_dir) {
+		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"), 
+				(unsigned char *) &dircolor);
+	}
+
 	if (get_opt_int_tree(cmdline_options, "anonymous")) {
 		abort_conn_with_state(c, S_BAD_URL);
 		return;
@@ -406,11 +412,11 @@ dir:
 		file = init_str();
 		fl = 0;
 
-		add_to_str(&file, &fl, "<html><head><title>");
+		add_to_str(&file, &fl, "<html>\n<head><title>");
 		add_to_str(&file, &fl, name);
-		add_to_str(&file, &fl, "</title></head><body><h2>Directory ");
+		add_to_str(&file, &fl, "</title></head>\n<body>\n<h2>Directory ");
 		add_to_str(&file, &fl, name);
-		add_to_str(&file, &fl, "</h2><pre>");
+		add_to_str(&file, &fl, "</h2>\n<pre>");
 
 		while ((de = readdir(d))) {
 			struct stat stt, *stp;
@@ -513,17 +519,18 @@ dir:
 			}
 			add_to_str(&file, &fl, "\">");
 			
-			if (dir[i].s[0] == 'd' && get_opt_int("document.browse.links.color_dirs")) {
+			if (dir[i].s[0] == 'd' && colorize_dir) {
 				/* The <b> is here for the case when we've
 				 * use_document_colors off. */
-				add_to_str(&file, &fl, "<font color=\""
-					   FILE_DIR_COLOR "\"><b>");
+				add_to_str(&file, &fl, "<font color=\"");
+				add_to_str(&file, &fl, dircolor);
+				add_to_str(&file, &fl, "\"><b>");
 			}
 			
 			add_htmlesc_str(&file, &fl,
 					dir[i].f, strlen(dir[i].f));
 
-			if (dir[i].s[0] == 'd' && get_opt_int("document.browse.links.color_dirs")) {
+			if (dir[i].s[0] == 'd' && colorize_dir) {
 				add_to_str(&file, &fl, "</b></font>");
 			}
 			
@@ -544,7 +551,7 @@ dir:
 		}
 		mem_free(dir);
 		
-		add_to_str(&file, &fl, "</pre></body></html>\n");
+		add_to_str(&file, &fl, "</pre>\n<hr>\n</body>\n</html>\n");
 		head = stracpy("\r\nContent-Type: text/html\r\n");
 	
 	} else if (!S_ISREG(stt.st_mode)) {

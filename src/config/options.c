@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.96 2002/08/30 10:12:00 pasky Exp $ */
+/* $Id: options.c,v 1.97 2002/09/04 15:43:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -655,6 +655,11 @@ register_options()
 		"vlink", 0, "#ffff00",
 		"Default vlink color.");
 
+	add_opt_color("document.colors",
+		"dirs", 0, "#ffff00",
+		"Default directories color.\n"
+	       	"See document.browse.links.color_dirs option.");
+	
 	add_opt_bool("document.colors",
 		"allow_dark_on_black", 0, 0,
 		"Allow dark colors on black background.");
@@ -662,7 +667,7 @@ register_options()
 	add_opt_bool("document.colors",
 		"use_document_colors", 0, 1,
 		"Use colors specified in document.");
-
+	
 
 
 	add_opt_tree("document",

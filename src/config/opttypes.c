@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.24 2002/08/30 15:00:01 zas Exp $ */
+/* $Id: opttypes.c,v 1.25 2002/09/04 15:43:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -381,7 +381,7 @@ color_wr(struct option *opt, unsigned char **str, int *len)
 	if (!strcolor) {
 		strcolor = (unsigned char *) mem_alloc(8 * sizeof(unsigned char));
 		if (!strcolor) return;
-		snprintf(strcolor, 8, "#%02x%02x%02x", color->r, color->g, color->b);
+		color_to_string(color, strcolor);
 	}
 
 	add_quoted_to_str(str, len, strcolor);

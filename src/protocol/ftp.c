@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.23 2002/07/05 03:59:40 pasky Exp $ */
+/* $Id: ftp.c,v 1.24 2002/09/04 15:43:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,6 @@
 /* Constants */
 
 #define FTP_BUF_SIZE	16384
-#define FTP_DIR_COLOR	"yellow"
 
 
 /* Types and structs */
@@ -51,9 +50,10 @@ struct ftp_connection_info {
 
 
 /* Global variables */
-unsigned char ftp_dirlist_head[] = "<html><head><title>/";
-unsigned char ftp_dirlist_head2[] = "</title></head><body><h2>Directory /";
-unsigned char ftp_dirlist_head3[] = "</h2><pre>";
+unsigned char ftp_dirlist_head[] = "<html>\n<head><title>/";
+unsigned char ftp_dirlist_head2[] = "</title></head>\n<body>\n<h2>Directory /";
+unsigned char ftp_dirlist_head3[] = "</h2>\n<pre>";
+unsigned char ftp_dirlist_end[] = "</pre>\n<hr>\n</body>\n</html>";
 
 
 /* Prototypes */
@@ -732,7 +732,14 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 		    int *tries)
 {
 	int ret = 0;
+	unsigned char dircolor[8];	
+	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
 
+	if (colorize_dir) {
+		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"), 
+				(unsigned char *) &dircolor);
+	}
+	
 	while (1) {
 		unsigned char *str;
 		unsigned char *buf = buffer + ret;
@@ -789,17 +796,18 @@ direntry:
 				add_chr_to_str(&str, &strl, '/');
 			add_to_str(&str, &strl, "\">");
 
-			if (buf[0] == 'd' && get_opt_int("document.browse.links.color_dirs")) {
+			if (buf[0] == 'd' && colorize_dir) {
 				/* The <b> is here for the case when we've
 				 * use_document_colors off. */
-				add_to_str(&str, &strl, "<font color=\""
-					   FTP_DIR_COLOR "\"><b>");
+				add_to_str(&str, &strl, "<font color=\"");
+				add_to_str(&str, &strl, dircolor);
+				add_to_str(&str, &strl, "\"><b>");
 			}
 
 			add_htmlesc_str(&str, &strl, buf + *dpos,
 					symlinkpos - *dpos);
 
-			if (buf[0] == 'd' && get_opt_int("document.browse.links.color_dirs")) {
+			if (buf[0] == 'd' && colorize_dir) {
 				add_to_str(&str, &strl, "</b></font>");
 			}
 
@@ -886,14 +894,14 @@ out_of_mem:
 		return;
 	}
 
-	if (c_i->dir && !conn->from) {
-		unsigned char *url_data;
-		unsigned char *postchar;
-
 #define A(str) { \
 	int slen = strlen(str); \
 	add_fragment(conn->cache, conn->from, str, slen); \
 	conn->from += slen; }
+
+	if (c_i->dir && !conn->from) {
+		unsigned char *url_data;
+		unsigned char *postchar;
 
 		url_data = stracpy(get_url_data(conn->url));
 		if (!url_data) goto out_of_mem;
@@ -916,8 +924,6 @@ out_of_mem:
 		}
 
 		add_to_strn(&conn->cache->head, "Content-Type: text/html\r\n");
-
-#undef A
 	}
 
 	len = read(conn->sock2, c_i->ftp_buffer + c_i->buf_pos,
@@ -951,11 +957,15 @@ out_of_mem:
 
 			memmove(c_i->ftp_buffer, c_i->ftp_buffer + proceeded,
 				c_i->buf_pos);
+			
+			A(ftp_dirlist_end);
 		}
 
 		setcstate(conn, S_TRANS);
 		return;
 	}
+
+#undef A
 
 	if (ftp_process_dirlist(conn->cache, &conn->from, &c_i->dpos,
 				c_i->ftp_buffer, c_i->buf_pos, 1,

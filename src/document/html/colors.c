@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.6 2002/08/30 15:00:02 zas Exp $ */
+/* $Id: colors.c,v 1.7 2002/09/04 15:43:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,6 +209,13 @@ unsigned char * get_color_name(struct rgb *col)
 }
 
 #undef endof
+
+/* Translate rgb color to string in #rrggbb format. str should be a pointer to
+ * a 8 bytes memory space. */
+void color_to_string(struct rgb *color, unsigned char *str)
+{
+	snprintf(str, 8, "#%02x%02x%02x", color->r, color->g, color->b);
+}
 
 
 #include "document/options.h"

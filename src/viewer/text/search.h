@@ -1,9 +1,8 @@
-/* $Id: search.h,v 1.1 2003/07/02 22:59:38 pasky Exp $ */
+/* $Id: search.h,v 1.2 2003/07/04 10:57:16 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
 
-#include "document/html/renderer.h"
 #include "terminal/terminal.h"
 #include "sched/session.h"
 

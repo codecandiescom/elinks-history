@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.4 2003/07/03 02:18:54 jonas Exp $ */
+/* $Id: search.c,v 1.5 2003/07/04 10:57:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,6 @@
 #include "elinks.h"
 
 #include "bfu/msgbox.h"
-#include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -23,9 +22,189 @@
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
 
-
 /* FIXME: Add comments!! --Zas */
 
+static inline void
+add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
+{
+	int n;
+
+	assert(f);
+
+	n = f->nsearch;
+
+	if (c == ' ' && (!n || f->search[n - 1].c == ' ')) return;
+	f->search[n].c = c;
+	f->search[n].x = x;
+	f->search[n].y = y;
+	f->search[n].n = nn;
+	f->nsearch++;
+}
+
+#if 0
+/* Debugging code, please keep it. */
+void
+sdbg(struct f_data *f)
+{
+	struct node *n;
+
+	foreachback (n, f->nodes) {
+		int xm = n->x + n->xw, ym = n->y + n->yw;
+		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
+		fflush(stdout);
+	}
+	debug("!");
+}
+#endif
+
+
+static void
+sort_srch(struct f_data *f)
+{
+	int i;
+	int *min, *max;
+
+	assert(f);
+
+	f->slines1 = mem_calloc(f->y, sizeof(struct search *));
+	if (!f->slines1) return;
+
+	f->slines2 = mem_calloc(f->y, sizeof(struct search *));
+	if (!f->slines2) {
+		mem_free(f->slines1);
+		return;
+	}
+
+	min = mem_calloc(f->y, sizeof(int));
+	if (!min) {
+		mem_free(f->slines1);
+		mem_free(f->slines2);
+		return;
+	}
+
+	max = mem_calloc(f->y, sizeof(int));
+	if (!max) {
+		mem_free(f->slines1);
+		mem_free(f->slines2);
+		mem_free(min);
+		return;
+	}
+
+	for (i = 0; i < f->y; i++) {
+		min[i] = MAXINT;
+		max[i] = 0;
+	}
+
+	for (i = 0; i < f->nsearch; i++) {
+		struct search *s = &f->search[i];
+
+		if (s->x < min[s->y]) {
+			min[s->y] = s->x;
+		   	f->slines1[s->y] = s;
+		}
+		if (s->x + s->n > max[s->y]) {
+			max[s->y] = s->x + s->n;
+			f->slines2[s->y] = s;
+		}
+	}
+
+	mem_free(min);
+	mem_free(max);
+}
+
+static int
+get_srch(struct f_data *f)
+{
+	struct node *n;
+	int cnt = 0;
+	int cc;
+
+	assert(f);
+
+	cc = !f->search;
+
+	foreachback (n, f->nodes) {
+		int x, y;
+		int xm = n->x + n->xw;
+		int ym = n->y + n->yw;
+
+#if 0
+		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
+		fflush(stdout);
+#endif
+#define ADD(cr, nn) if (!cc) add_srch_chr(f, (cr), x, y, (nn)); else cnt++;
+
+		for (y = n->y; y < ym && y < f->y; y++) {
+			int ns = 1;
+
+			for (x = n->x; x < xm && x < f->data[y].l; x++) {
+				unsigned char c = f->data[y].d[x];
+
+				if (c < ' ') c = ' ';
+				if (c == ' ' && ns) continue;
+
+				if (ns) {
+					ADD(c, 1);
+					ns = 0;
+					continue;
+				}
+
+				if (c != ' ') {
+					ADD(c, 1);
+				} else {
+					int xx;
+					int found = 0;
+
+					for (xx = x + 1;
+					     xx < xm && xx < f->data[y].l;
+					     xx++) {
+						if ((unsigned char) f->data[y].d[xx] >= ' ') {
+							found = 1;
+							break;
+						}
+					}
+
+					if (found) {
+						ADD(' ', xx - x);
+						x = xx - 1;
+					} else {
+						ADD(' ', 0);
+						break;
+					}
+				}
+
+			}
+
+			ADD(' ', 0);
+		}
+#undef ADD
+
+	}
+
+	return cnt;
+}
+
+static void
+get_search_data(struct f_data *f)
+{
+	int n;
+
+	assert(f);
+
+	if (f->search) return;
+
+	n = get_srch(f);
+	if (!n) return;
+
+	f->nsearch = 0;
+
+	f->search = mem_alloc(n * sizeof(struct search));
+	if (!f->search) return;
+
+	get_srch(f);
+	while (f->nsearch && f->search[f->nsearch - 1].c == ' ') f->nsearch--;
+	sort_srch(f);
+}
 
 static
 #ifdef __GNUCC__
@@ -41,7 +220,7 @@ static int
 get_range(struct f_data *f, int y, int yw, int l,
 	  struct search **s1, struct search **s2)
 {
-	int i;
+	register int i;
 
 	assert(f && s1 && s2);
 

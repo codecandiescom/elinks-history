@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.27 2003/07/04 09:39:32 zas Exp $ */
+/* $Id: renderer.h,v 1.28 2003/07/04 10:57:16 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -110,7 +110,6 @@ void format_cache_reactivate(struct f_data *);
 
 void cached_format_html(struct view_state *, struct f_data_c *, struct document_options *);
 void html_interpret(struct session *);
-void get_search_data(struct f_data *);
 
 void destroy_fc(struct form_control *);
 

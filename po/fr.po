@@ -5,24 +5,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"POT-Creation-Date: 2004-04-07 23:48+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-12 10:18+0200\n"
 "PO-Revision-Date: 2004-03-04 11:48+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: Laurent Monin <zas@norz.org>\n"
 
 #: src/bfu/hierbox.c:361
 msgid "Close"
 msgstr "Fermer"
 
 #. | MSGBOX_SCROLLABLE
-#: src/bfu/hierbox.c:449 src/bfu/hierbox.c:471 src/cache/dialogs.c:146
-#: src/config/dialogs.c:425 src/cookies/dialogs.c:352
+#: src/bfu/hierbox.c:449 src/bfu/hierbox.c:471 src/cache/dialogs.c:151
+#: src/config/dialogs.c:459 src/cookies/dialogs.c:352
 #: src/dialogs/document.c:44 src/dialogs/document.c:226
-#: src/dialogs/download.c:416 src/formhist/dialogs.c:165
+#: src/dialogs/download.c:420 src/formhist/dialogs.c:165
 #: src/globhist/dialogs.c:182
 msgid "Info"
 msgstr "Info"
@@ -35,28 +35,28 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/bfu/hierbox.c:452 src/bfu/hierbox.c:474 src/bfu/hierbox.c:612
 #: src/bfu/inpfield.c:48 src/bfu/inpfield.c:57 src/bfu/inpfield.c:77
 #: src/bfu/msgbox.c:185 src/bookmarks/dialogs.c:192
-#: src/bookmarks/dialogs.c:606 src/config/dialogs.c:45 src/config/dialogs.c:71
-#: src/config/dialogs.c:255 src/config/dialogs.c:327 src/config/dialogs.c:357
-#: src/config/dialogs.c:394 src/config/dialogs.c:406 src/config/dialogs.c:489
-#: src/config/dialogs.c:534 src/config/dialogs.c:561 src/config/dialogs.c:602
-#: src/config/dialogs.c:615 src/cookies/dialogs.c:287
+#: src/bookmarks/dialogs.c:606 src/config/dialogs.c:59
+#: src/config/dialogs.c:104 src/config/dialogs.c:289 src/config/dialogs.c:361
+#: src/config/dialogs.c:391 src/config/dialogs.c:428 src/config/dialogs.c:440
+#: src/config/dialogs.c:523 src/config/dialogs.c:568 src/config/dialogs.c:595
+#: src/config/dialogs.c:636 src/config/dialogs.c:649 src/cookies/dialogs.c:287
 #: src/dialogs/document.c:50 src/dialogs/document.c:229
 #: src/dialogs/document.c:299 src/dialogs/document.c:311 src/dialogs/edit.c:99
-#: src/dialogs/info.c:48 src/dialogs/info.c:137 src/dialogs/info.c:158
+#: src/dialogs/info.c:44 src/dialogs/info.c:133 src/dialogs/info.c:153
 #: src/dialogs/menu.c:64 src/dialogs/menu.c:446 src/dialogs/menu.c:473
 #: src/dialogs/options.c:169 src/dialogs/options.c:242
-#: src/formhist/dialogs.c:132 src/mime/dialogs.c:159
-#: src/protocol/auth/dialogs.c:98 src/protocol/user.c:171
-#: src/sched/download.c:188 src/sched/download.c:276 src/sched/download.c:311
-#: src/sched/download.c:570 src/sched/error.c:42 src/sched/session.c:120
+#: src/formhist/dialogs.c:132 src/mime/dialogs.c:150
+#: src/protocol/auth/dialogs.c:94 src/protocol/user.c:171
+#: src/sched/download.c:228 src/sched/download.c:312 src/sched/download.c:348
+#: src/sched/download.c:608 src/sched/error.c:42 src/sched/session.c:120
 #: src/sched/session.c:576 src/sched/session.c:593 src/sched/session.c:617
 #: src/scripting/lua/core.c:400 src/scripting/lua/core.c:481
 #: src/scripting/lua/core.c:599 src/scripting/lua/core.c:723
-#: src/viewer/text/form.c:664 src/viewer/text/search.c:859
+#: src/viewer/text/form.c:658 src/viewer/text/search.c:859
 #: src/viewer/text/search.c:887 src/viewer/text/search.c:912
 #: src/viewer/text/search.c:943 src/viewer/text/search.c:1392
 #: src/viewer/text/textarea.c:270 src/viewer/text/textarea.c:279
-#: src/viewer/text/view.c:707 src/viewer/text/view.c:1213
+#: src/viewer/text/view.c:707 src/viewer/text/view.c:1215
 msgid "OK"
 msgstr "OK"
 
@@ -93,15 +93,15 @@ msgid "Delete marked items?"
 msgstr "Supprimer les items sélectionnés?"
 
 #: src/bfu/hierbox.c:703 src/bfu/hierbox.c:724 src/bfu/hierbox.c:738
-#: src/bfu/hierbox.c:798 src/config/dialogs.c:510 src/dialogs/menu.c:93
-#: src/formhist/formhist.c:497 src/mime/dialogs.c:86 src/sched/task.c:176
+#: src/bfu/hierbox.c:799 src/config/dialogs.c:544 src/dialogs/menu.c:93
+#: src/formhist/formhist.c:497 src/mime/dialogs.c:75 src/sched/task.c:177
 #: src/terminal/tab.c:194 src/terminal/tab.c:230
 msgid "Yes"
 msgstr "Oui"
 
 #: src/bfu/hierbox.c:704 src/bfu/hierbox.c:725 src/bfu/hierbox.c:739
-#: src/bfu/hierbox.c:799 src/config/dialogs.c:511 src/dialogs/menu.c:94
-#: src/formhist/formhist.c:498 src/mime/dialogs.c:87 src/sched/task.c:177
+#: src/bfu/hierbox.c:800 src/config/dialogs.c:545 src/dialogs/menu.c:94
+#: src/formhist/formhist.c:498 src/mime/dialogs.c:76 src/sched/task.c:178
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "No"
 msgstr "Non"
@@ -130,11 +130,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/bfu/hierbox.c:795
+#: src/bfu/hierbox.c:796
 msgid "Clear all items"
 msgstr "Effacer tous les items"
 
-#: src/bfu/hierbox.c:796
+#: src/bfu/hierbox.c:797
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items?"
 
@@ -269,16 +269,15 @@ msgid "Folder name"
 msgstr "Nom du dossier"
 
 #: src/bookmarks/dialogs.c:192 src/bookmarks/dialogs.c:606
-#: src/config/dialogs.c:328 src/config/dialogs.c:406 src/config/dialogs.c:561
-#: src/config/dialogs.c:616 src/cookies/dialogs.c:288 src/dialogs/edit.c:103
+#: src/config/dialogs.c:362 src/config/dialogs.c:440 src/config/dialogs.c:595
+#: src/config/dialogs.c:650 src/cookies/dialogs.c:288 src/dialogs/edit.c:103
 #: src/dialogs/menu.c:64 src/dialogs/menu.c:446 src/dialogs/menu.c:473
-#: src/dialogs/options.c:172 src/dialogs/options.c:243 src/mime/dialogs.c:160
-#: src/protocol/auth/dialogs.c:99 src/sched/download.c:486
-#: src/sched/download.c:993 src/sched/download.c:1002
-#: src/sched/download.c:1022 src/sched/download.c:1034
-#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
-#: src/scripting/lua/core.c:723 src/viewer/text/search.c:1392
-#: src/viewer/text/view.c:707
+#: src/dialogs/options.c:172 src/dialogs/options.c:243 src/mime/dialogs.c:151
+#: src/protocol/auth/dialogs.c:95 src/sched/download.c:524
+#: src/sched/download.c:974 src/sched/download.c:983 src/sched/download.c:1003
+#: src/sched/download.c:1015 src/scripting/lua/core.c:401
+#: src/scripting/lua/core.c:482 src/scripting/lua/core.c:723
+#: src/viewer/text/search.c:1392 src/viewer/text/view.c:707
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -286,19 +285,19 @@ msgstr "Annuler"
 msgid "Edit bookmark"
 msgstr "Modifier"
 
-#: src/bookmarks/dialogs.c:375 src/cache/dialogs.c:147
+#: src/bookmarks/dialogs.c:375 src/cache/dialogs.c:152
 #: src/globhist/dialogs.c:181
 msgid "Goto"
 msgstr "Aller à"
 
-#: src/bookmarks/dialogs.c:376 src/config/dialogs.c:281
-#: src/config/dialogs.c:352 src/config/dialogs.c:426 src/cookies/dialogs.c:238
+#: src/bookmarks/dialogs.c:376 src/config/dialogs.c:315
+#: src/config/dialogs.c:386 src/config/dialogs.c:460 src/cookies/dialogs.c:238
 #: src/cookies/dialogs.c:354
 msgid "Edit"
 msgstr "Modifier"
 
-#: src/bookmarks/dialogs.c:377 src/cache/dialogs.c:148
-#: src/config/dialogs.c:428 src/config/dialogs.c:636 src/cookies/dialogs.c:355
+#: src/bookmarks/dialogs.c:377 src/cache/dialogs.c:153
+#: src/config/dialogs.c:462 src/config/dialogs.c:670 src/cookies/dialogs.c:355
 #: src/formhist/dialogs.c:166 src/globhist/dialogs.c:186
 msgid "Delete"
 msgstr "Supprimer"
@@ -307,8 +306,8 @@ msgstr "Supprimer"
 msgid "Move"
 msgstr "Déplacer"
 
-#: src/bookmarks/dialogs.c:380 src/config/dialogs.c:427
-#: src/config/dialogs.c:635 src/cookies/dialogs.c:353
+#: src/bookmarks/dialogs.c:380 src/config/dialogs.c:461
+#: src/config/dialogs.c:669 src/cookies/dialogs.c:353
 msgid "Add"
 msgstr "Ajouter"
 
@@ -319,11 +318,11 @@ msgid "Search"
 msgstr "Chercher"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:384 src/config/dialogs.c:429
-#: src/config/dialogs.c:638 src/cookies/dialogs.c:357
+#: src/bookmarks/dialogs.c:384 src/config/dialogs.c:463
+#: src/config/dialogs.c:672 src/cookies/dialogs.c:357
 #: src/dialogs/options.c:171 src/formhist/dialogs.c:169
-#: src/globhist/dialogs.c:192 src/sched/download.c:991
-#: src/sched/download.c:1020
+#: src/globhist/dialogs.c:192 src/sched/download.c:972
+#: src/sched/download.c:1001
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -352,50 +351,54 @@ msgid "Enter folder name"
 msgstr "Entrez un nom de dossier"
 
 #: src/cache/dialogs.c:66
+msgid "Proxy URL"
+msgstr "URL du proxy"
+
+#: src/cache/dialogs.c:71
 msgid "Redirect"
 msgstr "Redirection"
 
-#: src/cache/dialogs.c:74 src/config/options.inc:387 src/dialogs/document.c:94
+#: src/cache/dialogs.c:79 src/config/options.inc:387 src/dialogs/document.c:94
 msgid "Size"
 msgstr "Taille"
 
-#: src/cache/dialogs.c:75
+#: src/cache/dialogs.c:80
 msgid "Loaded size"
 msgstr "Taille (chargé)"
 
-#: src/cache/dialogs.c:78 src/dialogs/document.c:139
+#: src/cache/dialogs.c:83 src/dialogs/document.c:139
 msgid "Last modified"
 msgstr "Dernière modification"
 
-#: src/cache/dialogs.c:86 src/dialogs/document.c:121
+#: src/cache/dialogs.c:91 src/dialogs/document.c:121
 msgid "SSL Cipher"
 msgstr "Chiffrement SSL"
 
-#: src/cache/dialogs.c:90 src/dialogs/document.c:126
+#: src/cache/dialogs.c:95 src/dialogs/document.c:126
 msgid "Encoding"
 msgstr "Encodage"
 
-#: src/cache/dialogs.c:96
+#: src/cache/dialogs.c:101
 msgid "Flags"
 msgstr "Drapeaux"
 
-#: src/cache/dialogs.c:99 src/dialogs/document.c:97
+#: src/cache/dialogs.c:104 src/dialogs/document.c:97
 msgid "incomplete"
 msgstr "incomplet"
 
-#: src/cache/dialogs.c:102
+#: src/cache/dialogs.c:107
 msgid "invalid"
 msgstr "invalide"
 
-#: src/cache/dialogs.c:107
+#: src/cache/dialogs.c:112
 msgid "ID tag"
 msgstr "ID tag"
 
-#: src/cache/dialogs.c:111 src/config/options.inc:504
+#: src/cache/dialogs.c:116 src/config/options.inc:504
 msgid "Header"
 msgstr "Entête"
 
-#: src/cache/dialogs.c:153
+#: src/cache/dialogs.c:158
 msgid "Cache manager"
 msgstr "Gestionnaire de cache"
 
@@ -459,10 +462,12 @@ msgid "(default: %s)"
 msgstr "(défaut: %s)"
 
 #: src/config/cmdline.c:404
+#, c-format
 msgid "Configuration options:\n"
 msgstr "Options de configuration:\n"
 
 #: src/config/cmdline.c:407
+#, c-format
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
@@ -471,6 +476,7 @@ msgstr ""
 "\n"
 
 #: src/config/cmdline.c:408
+#, c-format
 msgid "Options:\n"
 msgstr "Options:\n"
 
@@ -816,47 +822,60 @@ msgstr "Options sauvées automatiquement\n"
 msgid "Automatically saved keybindings\n"
 msgstr "Associations de touches sauvées automatiquement\n"
 
-#: src/config/conf.c:777
-msgid "Secure file error"
-msgstr "Erreur de fichier fiable"
+#: src/config/dialogs.c:55
+msgid "Write config success"
+msgstr "Succès d'écriture de configuration"
 
-#: src/config/conf.c:783
+#: src/config/dialogs.c:56
+#, c-format
+msgid "Options were saved successfully to config file %s."
+msgstr "Les options ont été sauvées avec succès dans le fichier %s."
+
+#: src/config/dialogs.c:60
+msgid "Do not show anymore"
+msgstr "Ne plus montrer"
+
+#: src/config/dialogs.c:66
 msgid "Cannot read the file"
 msgstr "Échec de lecture du fichier"
 
-#: src/config/conf.c:786
+#: src/config/dialogs.c:69
 msgid "Cannot stat the file"
 msgstr "Échec d'obtention du statut du fichier"
 
-#: src/config/conf.c:789
+#: src/config/dialogs.c:72
 msgid "Cannot access the file"
 msgstr "Échec d'accès au fichier"
 
-#: src/config/conf.c:792
+#: src/config/dialogs.c:75
 msgid "Cannot create temp file"
 msgstr "Échec de création de fichier temporaire"
 
-#: src/config/conf.c:795
+#: src/config/dialogs.c:78
 msgid "Cannot rename the file"
 msgstr "Échec du renommage du fichier"
 
-#: src/config/conf.c:798
+#: src/config/dialogs.c:81
 msgid "File saving disabled by option"
 msgstr "Sauvegarde de fichier désactivée par option"
 
-#: src/config/conf.c:801 src/sched/error.c:46
+#: src/config/dialogs.c:84 src/sched/error.c:46
 msgid "Out of memory"
 msgstr "Mémoire saturée"
 
-#: src/config/conf.c:804
+#: src/config/dialogs.c:87
 msgid "Cannot write the file"
 msgstr "Ecriture du fichier impossible"
 
-#: src/config/dialogs.c:41
+#: src/config/dialogs.c:92
+msgid "Secure file error"
+msgstr "Erreur de fichier fiable"
+
+#: src/config/dialogs.c:100
 msgid "Write config error"
 msgstr "Erreur d'écriture de configuration"
 
-#: src/config/dialogs.c:42
+#: src/config/dialogs.c:101
 #, c-format
 msgid ""
 "Unable to write to config file %s.\n"
@@ -865,57 +884,44 @@ msgstr ""
 "Impossible d'écrire dans le fichier de configuration %s.\n"
 "%s"
 
-#: src/config/dialogs.c:67
-msgid "Write config success"
-msgstr "Succès d'écriture de configuration"
-
-#: src/config/dialogs.c:68
-#, c-format
-msgid "Options were saved successfully to config file %s."
-msgstr "Les options ont été sauvées avec succès dans le fichier %s."
-
-#: src/config/dialogs.c:72
-msgid "Do not show anymore"
-msgstr "Ne plus montrer"
-
-#: src/config/dialogs.c:131
+#: src/config/dialogs.c:165
 msgid "(expand by pressing space)"
 msgstr "(déployer en pressant espace)"
 
-#: src/config/dialogs.c:134 src/config/dialogs.c:296
+#: src/config/dialogs.c:168 src/config/dialogs.c:330
 msgid "N/A"
 msgstr "N/A"
 
-#: src/config/dialogs.c:147 src/config/dialogs.c:163 src/config/dialogs.c:290
-#: src/config/dialogs.c:405 src/cookies/dialogs.c:90 src/cookies/dialogs.c:257
+#: src/config/dialogs.c:181 src/config/dialogs.c:197 src/config/dialogs.c:324
+#: src/config/dialogs.c:439 src/cookies/dialogs.c:90 src/cookies/dialogs.c:257
 #: src/dialogs/edit.c:92 src/scripting/lua/core.c:396
 #: src/scripting/lua/core.c:397 src/scripting/lua/core.c:477
 msgid "Name"
 msgstr "Nom"
 
-#: src/config/dialogs.c:148 src/config/dialogs.c:164 src/config/dialogs.c:291
+#: src/config/dialogs.c:182 src/config/dialogs.c:198 src/config/dialogs.c:325
 msgid "Type"
 msgstr "Type"
 
-#: src/config/dialogs.c:157 src/config/dialogs.c:293 src/cookies/dialogs.c:91
+#: src/config/dialogs.c:191 src/config/dialogs.c:327 src/cookies/dialogs.c:91
 #: src/cookies/dialogs.c:258
 msgid "Value"
 msgstr "Valeur"
 
-#: src/config/dialogs.c:160 src/config/dialogs.c:166 src/config/dialogs.c:294
+#: src/config/dialogs.c:194 src/config/dialogs.c:200 src/config/dialogs.c:328
 msgid "Description"
 msgstr "Description"
 
-#: src/config/dialogs.c:252 src/sched/session.c:117
+#: src/config/dialogs.c:286 src/sched/session.c:117
 #: src/viewer/text/textarea.c:267 src/viewer/text/textarea.c:276
 msgid "Error"
 msgstr "Erreur"
 
-#: src/config/dialogs.c:253
+#: src/config/dialogs.c:287
 msgid "Bad option value."
 msgstr "Mauvaise valeur"
 
-#: src/config/dialogs.c:353
+#: src/config/dialogs.c:387
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
@@ -924,31 +930,31 @@ msgstr ""
 "Il s'agit d'une option spéciale (comme un dossier),\n"
 "essayez de presser la touche ESPACE pour voir son contenu."
 
-#: src/config/dialogs.c:391 src/config/dialogs.c:405
+#: src/config/dialogs.c:425 src/config/dialogs.c:439
 msgid "Add option"
 msgstr "Ajouter option"
 
-#: src/config/dialogs.c:392
+#: src/config/dialogs.c:426
 msgid "Cannot add an option here."
 msgstr "Impossible d'ajouter une option ici."
 
-#: src/config/dialogs.c:434
+#: src/config/dialogs.c:468
 msgid "Option manager"
 msgstr "Gestionnaire d'options"
 
-#: src/config/dialogs.c:486 src/config/dialogs.c:531 src/config/dialogs.c:560
+#: src/config/dialogs.c:520 src/config/dialogs.c:565 src/config/dialogs.c:594
 msgid "Add keybinding"
 msgstr "Ajouter une association de touches"
 
-#: src/config/dialogs.c:487
+#: src/config/dialogs.c:521
 msgid "Invalid keystroke."
 msgstr "Touche invalide."
 
-#: src/config/dialogs.c:504
+#: src/config/dialogs.c:538
 msgid "Keystroke already used"
 msgstr "Touche déjà utilisée"
 
-#: src/config/dialogs.c:505
+#: src/config/dialogs.c:539
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
@@ -957,19 +963,19 @@ msgstr ""
 "La combinaison de touches \"%s\" est déjà utilisée pour l'action \"%s\".\n"
 "Etes-vous sûr de vouloir remplacer ?"
 
-#: src/config/dialogs.c:532
+#: src/config/dialogs.c:566
 msgid "Need to select a keymap."
 msgstr "Vous devez sélectionner une table."
 
-#: src/config/dialogs.c:547 src/config/options.inc:1186
+#: src/config/dialogs.c:581 src/config/options.inc:1186
 msgid "Action"
 msgstr "Action"
 
-#: src/config/dialogs.c:548
+#: src/config/dialogs.c:582
 msgid "Keymap"
 msgstr "Table"
 
-#: src/config/dialogs.c:549
+#: src/config/dialogs.c:583
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
@@ -979,15 +985,15 @@ msgstr ""
 "Préfixe: Shift, Ctrl, Alt\n"
 "Touche: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
-#: src/config/dialogs.c:553
+#: src/config/dialogs.c:587
 msgid "Keystroke"
 msgstr "Touches"
 
-#: src/config/dialogs.c:598 src/config/dialogs.c:609
+#: src/config/dialogs.c:632 src/config/dialogs.c:643
 msgid "Delete keybinding"
 msgstr "Supprimer l'association de touches"
 
-#: src/config/dialogs.c:599
+#: src/config/dialogs.c:633
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
@@ -995,17 +1001,17 @@ msgstr ""
 "Cet objet n'est pas une association de touches.\n"
 "Essayez de presser espace pour obtenir les associations de touches."
 
-#: src/config/dialogs.c:610
+#: src/config/dialogs.c:644
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 "Supprimer l'association de touches \"%s\" (action \"%s\", keymap \"%s\")?"
 
-#: src/config/dialogs.c:637 src/dialogs/info.c:138 src/globhist/dialogs.c:188
+#: src/config/dialogs.c:671 src/dialogs/info.c:134 src/globhist/dialogs.c:188
 msgid "Toggle display"
 msgstr "Commuter affich."
 
-#: src/config/dialogs.c:643
+#: src/config/dialogs.c:677
 msgid "Keybinding manager"
 msgstr "Gestionnaire d'assoc. de touches"
 
@@ -3380,7 +3386,7 @@ msgstr "Texte"
 msgid "Dialog text colors."
 msgstr "Couleurs du texte des dialogues."
 
-#: src/config/options.inc:1045 src/viewer/text/link.c:1004
+#: src/config/options.inc:1045 src/viewer/text/link.c:1002
 msgid "Checkbox"
 msgstr "Case à cocher"
 
@@ -3412,7 +3418,7 @@ msgstr "Bouton sélectionné"
 msgid "Dialog selected button colors."
 msgstr "Couleurs du bouton sélectionné dans les dialogues."
 
-#: src/config/options.inc:1061 src/viewer/text/link.c:1010
+#: src/config/options.inc:1061 src/viewer/text/link.c:1008
 msgid "Text field"
 msgstr "Champ texte"
 
@@ -3935,7 +3941,7 @@ msgid "Folder"
 msgstr "Dossier"
 
 #. name:
-#: src/cookies/cookies.c:91 src/cookies/cookies.c:816
+#: src/cookies/cookies.c:91 src/cookies/cookies.c:821
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -4013,11 +4019,15 @@ msgstr ""
 "Sauvegarde des cookies après chaque modification ?\n"
 "Aucun effet si la sauvegarde est désactivée."
 
-#: src/cookies/cookies.c:549
+#: src/cookies/cookies.c:552
+msgid "at quit time"
+msgstr "au moment de quitter"
+
+#: src/cookies/cookies.c:555
 msgid "Accept cookie?"
 msgstr "Accepter le cookie ?"
 
-#: src/cookies/cookies.c:550
+#: src/cookies/cookies.c:556
 #, c-format
 msgid ""
 "Do you want to accept a cookie from %s?\n"
@@ -4036,23 +4046,19 @@ msgstr ""
 "Expiration: %s\n"
 "Securisé: %s\n"
 
-#: src/cookies/cookies.c:559
-msgid "at quit time"
-msgstr "au moment de quitter"
-
-#: src/cookies/cookies.c:560 src/cookies/dialogs.c:97
+#: src/cookies/cookies.c:565 src/cookies/dialogs.c:97
 msgid "yes"
 msgstr "oui"
 
-#: src/cookies/cookies.c:560 src/cookies/dialogs.c:97
+#: src/cookies/cookies.c:565 src/cookies/dialogs.c:97
 msgid "no"
 msgstr "non"
 
-#: src/cookies/cookies.c:562
+#: src/cookies/cookies.c:567
 msgid "Accept"
 msgstr "Accepter"
 
-#: src/cookies/cookies.c:563
+#: src/cookies/cookies.c:568
 msgid "Reject"
 msgstr "Rejeter"
 
@@ -4073,7 +4079,7 @@ msgstr "Expiration"
 msgid "Secure"
 msgstr "Sécurisé"
 
-#: src/cookies/dialogs.c:356 src/dialogs/download.c:422 src/dialogs/edit.c:100
+#: src/cookies/dialogs.c:356 src/dialogs/download.c:426 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:168 src/globhist/dialogs.c:189
 msgid "Clear"
 msgstr "Effacer"
@@ -4131,44 +4137,44 @@ msgstr "Info. entêtes"
 msgid "No header info."
 msgstr "Aucune information d'entête."
 
-#: src/dialogs/download.c:249 src/dialogs/menu.c:472 src/sched/download.c:308
+#: src/dialogs/download.c:253 src/dialogs/menu.c:472 src/sched/download.c:345
 msgid "Download"
 msgstr "Téléchargement"
 
-#: src/dialogs/download.c:256
+#: src/dialogs/download.c:260
 msgid "Background"
 msgstr "Arrière-plan"
 
-#: src/dialogs/download.c:257
+#: src/dialogs/download.c:261
 msgid "Background with notify"
 msgstr "Arrière-plan et notifier"
 
-#: src/dialogs/download.c:258 src/dialogs/download.c:417
+#: src/dialogs/download.c:262 src/dialogs/download.c:421
 msgid "Abort"
 msgstr "Arrêter"
 
 #. This requires more work to make locking work and query the user
-#: src/dialogs/download.c:259 src/dialogs/download.c:420
+#: src/dialogs/download.c:263 src/dialogs/download.c:424
 msgid "Abort and delete file"
 msgstr "Arrêter et supprimer fichier"
 
-#: src/dialogs/download.c:427
+#: src/dialogs/download.c:431
 msgid "Download manager"
 msgstr "Gestionnaire de téléchargements"
 
-#: src/dialogs/info.c:45
+#: src/dialogs/info.c:41
 msgid "About"
 msgstr "Info"
 
-#: src/dialogs/info.c:134
+#: src/dialogs/info.c:130
 msgid "Keys"
 msgstr "Touches"
 
-#: src/dialogs/info.c:146
+#: src/dialogs/info.c:141
 msgid "Copying"
 msgstr "Licence"
 
-#: src/dialogs/info.c:147
+#: src/dialogs/info.c:142
 #, c-format
 msgid ""
 "ELinks %s\n"
@@ -4189,7 +4195,7 @@ msgstr ""
 "selon les termes de la GNU General Public License version 2 publiée par la "
 "Free Software Foundation."
 
-#: src/dialogs/info.c:165
+#: src/dialogs/info.c:160
 #, c-format
 msgid ""
 "Resources: %d handles, %d timers.\n"
@@ -4203,16 +4209,16 @@ msgstr ""
 "Cache mémoire: %d octets, %d fichiers, %d verrouillés, %d en chargement.\n"
 "Cache documents formatés: %d documents, %d verrouillés."
 
-#: src/dialogs/info.c:182
+#: src/dialogs/info.c:177
 msgid "Resources"
 msgstr "Ressources"
 
-#: src/dialogs/info.c:191
+#: src/dialogs/info.c:186
 #, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "%ld octets alloués en mémoire."
 
-#: src/dialogs/info.c:197
+#: src/dialogs/info.c:192
 msgid "Memory info"
 msgstr "État de la mémoire vive"
 
@@ -4741,8 +4747,6 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:36
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -5153,6 +5157,7 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:92 src/mime/backend/mailcap.c:128
 #: src/mime/backend/mailcap.c:688
 msgid "Mailcap"
@@ -5250,28 +5255,28 @@ msgstr ""
 "Liste de fichiers séparés par des virgules.\n"
 "Mettre \"\" pour utiliser la valeur interne par défaut."
 
-#: src/mime/dialogs.c:83
+#: src/mime/dialogs.c:71
 msgid "Delete extension"
 msgstr "Supprimer l'extension"
 
-#: src/mime/dialogs.c:84
+#: src/mime/dialogs.c:72
 #, c-format
-msgid "Delete extension %s?"
-msgstr "Supprimer l'extension %s ?"
+msgid "Delete extension %s -> %s?"
+msgstr "Supprimer l'extension %s -> %s?"
 
-#: src/mime/dialogs.c:153
+#: src/mime/dialogs.c:144
 msgid "Extension"
 msgstr "Extension"
 
-#: src/mime/dialogs.c:156
+#: src/mime/dialogs.c:147
 msgid "Extension(s)"
 msgstr "Extension(s)"
 
-#: src/mime/dialogs.c:157
+#: src/mime/dialogs.c:148
 msgid "Content-Type"
 msgstr "Type de contenu"
 
-#: src/mime/dialogs.c:171
+#: src/mime/dialogs.c:162
 msgid "No extensions"
 msgstr "Aucune extension"
 
@@ -5438,7 +5443,6 @@ msgid "Dumb prefixes."
 msgstr "Préfixes simples."
 
 #: src/protocol/rewrite/rewrite.c:70
-#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -5484,16 +5488,16 @@ msgstr "Aucun programme"
 msgid "No program specified for protocol %s."
 msgstr "Aucun programme spécifié pour le protocole %s."
 
-#: src/sched/download.c:185 src/sched/download.c:273 src/sched/download.c:566
+#: src/sched/download.c:224 src/sched/download.c:309 src/sched/download.c:604
 msgid "Download error"
 msgstr "Erreur de téléchargement"
 
-#: src/sched/download.c:186
+#: src/sched/download.c:225
 #, c-format
 msgid "Could not create file %s: %s"
 msgstr "Impossible de créer le fichier %s: %s"
 
-#: src/sched/download.c:274
+#: src/sched/download.c:310
 #, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -5504,7 +5508,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/sched/download.c:309
+#: src/sched/download.c:346
 #, c-format
 msgid ""
 "Download complete:\n"
@@ -5513,11 +5517,11 @@ msgstr ""
 "Téléchargement terminé:\n"
 "%s"
 
-#: src/sched/download.c:475
+#: src/sched/download.c:513
 msgid "File exists"
 msgstr "Fichier existant"
 
-#: src/sched/download.c:476
+#: src/sched/download.c:514
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -5532,19 +5536,19 @@ msgstr ""
 "Le nom alternatif est:\n"
 "%s"
 
-#: src/sched/download.c:483
+#: src/sched/download.c:521
 msgid "Save under the alternative name"
 msgstr "Sauver sous un autre nom"
 
-#: src/sched/download.c:484
+#: src/sched/download.c:522
 msgid "Overwrite the original file"
 msgstr "Ecraser le fichier original"
 
-#: src/sched/download.c:485
+#: src/sched/download.c:523
 msgid "Resume download of the original file"
 msgstr "Reprendre le téléchargement du fichier original"
 
-#: src/sched/download.c:567
+#: src/sched/download.c:605
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -5553,30 +5557,30 @@ msgstr ""
 "Impossible de créer le fichier '%s':\n"
 "%s"
 
-#: src/sched/download.c:985 src/sched/download.c:996
+#: src/sched/download.c:966 src/sched/download.c:977
 msgid "Unknown type"
 msgstr "Type inconnu"
 
-#: src/sched/download.c:986
+#: src/sched/download.c:967
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher?"
 
-#: src/sched/download.c:992 src/sched/download.c:1001
-#: src/sched/download.c:1021 src/sched/download.c:1033
+#: src/sched/download.c:973 src/sched/download.c:982 src/sched/download.c:1002
+#: src/sched/download.c:1014
 msgid "Display"
 msgstr "Afficher"
 
-#: src/sched/download.c:997
+#: src/sched/download.c:978
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Voulez-vous afficher le fichier '%s' (type: %s)?"
 
-#: src/sched/download.c:1012 src/sched/download.c:1025
+#: src/sched/download.c:993 src/sched/download.c:1006
 msgid "What to do?"
 msgstr "Que faire ?"
 
-#: src/sched/download.c:1013
+#: src/sched/download.c:994
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5585,11 +5589,11 @@ msgstr ""
 "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
 "avec '%s', l'enregistrer ou l'afficher ?"
 
-#: src/sched/download.c:1019 src/sched/download.c:1032
+#: src/sched/download.c:1000 src/sched/download.c:1013
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/sched/download.c:1026
+#: src/sched/download.c:1007
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5767,7 +5771,7 @@ msgstr ""
 "Pressez ESC pour accèder au menu.\n"
 "La documentation est accessible par le menu Aide."
 
-#: src/sched/session.c:581 src/sched/session.c:601 src/sched/task.c:173
+#: src/sched/session.c:581 src/sched/session.c:601 src/sched/task.c:174
 msgid "Warning"
 msgstr "Avertissement"
 
@@ -5811,19 +5815,19 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/task.c:162
+#: src/sched/task.c:164
 #, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr ""
 "Voulez-vous suivre la redirection et poster les données de formulaire à "
 "l'URL %s ?"
 
-#: src/sched/task.c:165
+#: src/sched/task.c:167
 #, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Voulez-vous poster les données de formulaire à l'URL %s ?"
 
-#: src/sched/task.c:167
+#: src/sched/task.c:169
 #, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Voulez-vous re-poster les données de formulaire à l'URL %s ?"
@@ -5929,11 +5933,11 @@ msgstr "Attention: le nom du terminal contient des caractères illicites."
 msgid "Bad terminal size: %d, %d"
 msgstr "Mauvaise taille de terminal: %d, %d"
 
-#: src/terminal/kbd.c:280
+#: src/terminal/kbd.c:283
 msgid "Could not get terminal size"
 msgstr "Impossible d'obtenir la taille du terminal"
 
-#: src/terminal/kbd.c:1003
+#: src/terminal/kbd.c:1006
 msgid "Too many bytes read from the itrm!"
 msgstr "Trop d'octets lus en provenance de l'itrm!"
 
@@ -5959,11 +5963,11 @@ msgstr "Ne peut écrire sur la sortie standard."
 msgid "URL expected after %s."
 msgstr "URL attendue après %s."
 
-#: src/viewer/text/form.c:660
+#: src/viewer/text/form.c:654
 msgid "Error while posting form"
 msgstr "Erreur lors de l'envoi du formulaire"
 
-#: src/viewer/text/form.c:661
+#: src/viewer/text/form.c:655
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "Impossible d'obtenir le fichier %s: %s"
@@ -6044,55 +6048,55 @@ msgstr "Image"
 msgid "Usemap"
 msgstr "Usemap"
 
-#: src/viewer/text/link.c:976
+#: src/viewer/text/link.c:975
 msgid "Reset form"
 msgstr "Réinitialiser le formulaire"
 
-#: src/viewer/text/link.c:983
+#: src/viewer/text/link.c:982
 msgid "Submit form to"
 msgstr "Envoi du formulaire à"
 
-#: src/viewer/text/link.c:985
+#: src/viewer/text/link.c:984
 msgid "Post form to"
 msgstr "Transfert du formulaire à"
 
-#: src/viewer/text/link.c:1001
+#: src/viewer/text/link.c:999
 msgid "Radio button"
 msgstr "Bouton radio"
 
-#: src/viewer/text/link.c:1007
+#: src/viewer/text/link.c:1005
 msgid "Select field"
 msgstr "Liste"
 
-#: src/viewer/text/link.c:1013
+#: src/viewer/text/link.c:1011
 msgid "Text area"
 msgstr "Champ texte multiligne"
 
-#: src/viewer/text/link.c:1016
+#: src/viewer/text/link.c:1014
 msgid "File upload"
 msgstr "Envoi de fichier"
 
-#: src/viewer/text/link.c:1019
+#: src/viewer/text/link.c:1017
 msgid "Password field"
 msgstr "Champ mot de passe"
 
-#: src/viewer/text/link.c:1028
+#: src/viewer/text/link.c:1026
 msgid "name"
 msgstr "Nom"
 
-#: src/viewer/text/link.c:1038
+#: src/viewer/text/link.c:1036
 msgid "value"
 msgstr "Valeur"
 
-#: src/viewer/text/link.c:1047
+#: src/viewer/text/link.c:1045
 msgid "hit ENTER to"
 msgstr "Pressez Entrée pour"
 
-#: src/viewer/text/link.c:1050
+#: src/viewer/text/link.c:1048
 msgid "submit to"
 msgstr "Envoi à"
 
-#: src/viewer/text/link.c:1052
+#: src/viewer/text/link.c:1050
 msgid "post to"
 msgstr "Transfert à"
 
@@ -6166,11 +6170,11 @@ msgstr "Aller au lien"
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1210
+#: src/viewer/text/view.c:1212
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1211
+#: src/viewer/text/view.c:1213
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 

@@ -4,7 +4,7 @@
 " Last Change:	Dec 12th 2002
 " Description:	This file covers elinks version 0.4pre15
 
-" $Id: elinks.vim,v 1.6 2003/06/04 21:47:44 jonas Exp $
+" $Id: elinks.vim,v 1.7 2003/09/30 23:18:35 jonas Exp $
 
 " For version 5.x: Clear all syntax items
 " For version 6.x: Quit when a syntax file was already loaded
@@ -65,7 +65,7 @@ syn keyword	elinksAction	contained page-down page-up paste-clipboard previous-fr
 syn keyword	elinksAction	contained really-quit reload resume-download right
 syn keyword	elinksAction	contained save-formatted scroll-down scroll-left
 syn keyword	elinksAction	contained scroll-right scroll-up search search-back
-syn keyword	elinksAction	contained tab-close tab-next tab-prev toggle-display-images
+syn keyword	elinksAction	contained tab-close tab-next tab-prev toggle-display-images toggle-document-colors
 syn keyword	elinksAction	contained toggle-numbered-links toggle-display-tables toggle-html-plain
 syn keyword	elinksAction	contained unback up view-image zoom-frame
 

@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.5 2004/08/14 23:34:21 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.6 2004/08/14 23:36:45 jonas Exp $ */
 
 #ifndef EL__OSDEP_OS2_SYSINFO_H
 #define EL__OSDEP_OS2_SYSINFO_H
@@ -23,7 +23,6 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define OS2_MOUSE
 #endif
 
-#ifdef __EMX__
 #define strcasecmp stricmp
 #define strncasecmp strnicmp
 #ifndef HAVE_STRCASECMP
@@ -36,7 +35,6 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define write _write
 #ifdef O_SIZE
 #define USE_OPEN_PREALLOC
-#endif
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.81 2004/07/13 16:54:37 zas Exp $ */
+/* $Id: parse.c,v 1.82 2004/07/18 16:34:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,12 @@ quoted_value:
 		next_char();
 		while (*e != quote) next_char();
 		next_char();
-		if (*e == quote) goto quoted_value;
+		/* The following apparently handles the case of <foo
+		 * id="a""b">, however that is very rare and probably not
+		 * conforming. More frequent (and mishandling it more fatal) is
+		 * probably the typo of <foo id="a""> - we can handle it as
+		 * long as this is commented out. --pasky */
+		/* if (*e == quote) goto quoted_value; */
 	} else {
 		while (!isspace(*e) && !end_of_tag(*e)) next_char();
 	}

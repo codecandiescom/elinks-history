@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.48 2002/12/01 15:50:54 zas Exp $ */
+/* $Id: parser.c,v 1.49 2002/12/03 00:14:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2929,7 +2929,6 @@ look_for_tag:
 	if (!target) target = stracpy("");
 	if (!target) {
 		if (label) mem_free(label);
-		mem_free(target);
 		goto look_for_link;
 	}
 	

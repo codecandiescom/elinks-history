@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.73 2002/07/11 21:28:15 pasky Exp $ */
+/* $Id: options.c,v 1.74 2002/07/23 12:30:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -692,6 +692,10 @@ register_options()
 		"enable", 0, 1,
 		"Enable global history (\"history of all pages visited\")?");
 
+	add_opt_int("document.history.global",
+		"max_items", 0, 1, MAXINT, 4096,
+		"Maximum number of entries in the global history.");
+
 	add_opt_bool("document.history",
 		"keep_unhistory", 0, 1,
 		"Keep unhistory (\"forward history\")?");
@@ -837,7 +841,7 @@ register_options()
 	add_opt_string("protocol.http",
 		"accept_language", 0, "",
 		"Send Accept-Language header.");
-	
+
 	add_opt_bool("protocol.http",
 		"accept_ui_language", 0, 1,
 		"Use the language of the interface as Accept-Language.");
@@ -1037,7 +1041,7 @@ register_options()
 	add_opt_bool_tree(cmdline_options, "",
 		"source", 0, 0,
 		"Write the given HTML document in source form to stdout.");
-			
+
 	add_opt_command_tree(cmdline_options, "",
 		"version", 0, version_cmd,
 		"Print ELinks version information and exit.");

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.19 2002/06/22 22:39:35 pasky Exp $ */
+/* $Id: globhist.c,v 1.20 2002/07/23 12:30:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,8 +21,6 @@
 #include "util/string.h"
 #include "util/lists.h"
 
-
-#define GLOBHIST_MAX_ITEMS 4096
 
 struct global_history_list global_history = {
 	0,
@@ -82,7 +80,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 	struct global_history_item *historyitem;
 
 	if (!get_opt_int("document.history.global.enable"))
-		return; 
+		return;
 
 	if (!title || !url)
 		return;
@@ -105,7 +103,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 	add_to_list(global_history.items, historyitem);
 	global_history.n++;
 
-	while (global_history.n > GLOBHIST_MAX_ITEMS) {
+	while (global_history.n > get_opt_int("document.history.global.max_items")) {
 		historyitem = global_history.items.prev;
 
 		if ((void *) historyitem == &global_history.items) {
@@ -129,7 +127,7 @@ read_global_history()
 	FILE *f;
 
 	if (!get_opt_int("document.history.global.enable"))
-		return; 
+		return;
 
 	file_name = straconcat(elinks_home, "globhist", NULL);
 	if (!file_name) return;
@@ -170,7 +168,7 @@ write_global_history()
 	struct secure_save_info *ssi;
 
 	if (!get_opt_int("document.history.global.enable"))
-		return; 
+		return;
 
 	file_name = straconcat(elinks_home, "globhist", NULL);
 	if (!file_name) return;

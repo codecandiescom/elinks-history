@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.55 2004/06/27 13:09:47 jonas Exp $ */
+/* $Id: socket.c,v 1.56 2004/06/27 13:13:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,12 +48,15 @@
 #define ssl_do_connect(conn)		SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
 #define ssl_do_write(conn, data, len)	SSL_write(conn->ssl, data, len)
 #define ssl_do_read(conn, rb)		SSL_read(conn->ssl, rb->data + rb->len, rb->freespace)
+#define ssl_do_close(conn)		/* Hmh? No idea.. */
 
 #elif defined(CONFIG_GNUTLS)
 
 #define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) conn->ssl))
 #define ssl_do_write(conn, data, len)	gnutls_record_send(*((ssl_t *) conn->ssl), data, len)
 #define ssl_do_read(conn, rb)		gnutls_record_recv(*((ssl_t *) conn->ssl), rb->data + rb->len, rb->freespace)
+/* We probably doesn't handle this entirely correctly.. */
+#define ssl_do_close(conn)		gnutls_bye(*((ssl_t *) conn->ssl), GNUTLS_SHUT_RDWR);
 
 #endif
 
@@ -339,12 +342,7 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 int
 ssl_close(struct connection *conn)
 {
-#ifdef CONFIG_OPENSSL
-	/* Hmh? No idea.. */
-#elif defined(CONFIG_GNUTLS)
-	/* We probably doesn't handle this entirely correctly.. */
-	gnutls_bye(*((ssl_t *) conn->ssl), GNUTLS_SHUT_RDWR);
-#endif
+	ssl_do_close(conn);
 	done_ssl_connection(conn);
 
 	return 0;

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.286 2004/11/30 06:30:24 miciah Exp $ */
+/* $Id: menu.c,v 1.287 2004/12/29 14:51:49 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1190,7 +1190,7 @@ add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
 	item += n;
 
 	/* Shift current last item by one place. */
-	memcpy(item + 1, item, sizeof(struct menu_item));
+	copy_struct(item + 1, item);
 
 	/* Setup the new item. All menu items share the item_free value. */
 	SET_MENU_ITEM(item, text, rtext, action, func, data,

@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.28 2004/12/19 16:23:22 pasky Exp $ */
+/* $Id: stack.c,v 1.29 2004/12/29 14:51:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,7 +137,7 @@ html_stack_dup(enum html_element_type type)
 	e = mem_alloc(sizeof(struct html_element));
 	if (!e) return;
 
-	memcpy(e, ep, sizeof(struct html_element));
+	copy_struct(e, ep);
 
 	if (ep->attr.link) e->attr.link = stracpy(ep->attr.link);
 	if (ep->attr.target) e->attr.target = stracpy(ep->attr.target);

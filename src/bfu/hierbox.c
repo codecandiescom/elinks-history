@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.201 2004/12/17 01:22:10 miciah Exp $ */
+/* $Id: hierbox.c,v 1.202 2004/12/29 14:51:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,7 +261,7 @@ hierbox_ev_abort(struct dialog_data *dlg_data)
 	/* Save state and delete the box structure */
 	/* FIXME: It's workaround for bug 397. Real fix is needed. */
 	if (browser != &download_browser)
-		memcpy(&browser->box_data, box, sizeof(struct listbox_data));
+		copy_struct(&browser->box_data, box);
 	del_from_list(box);
 
 	/* Delete the dialog list entry */

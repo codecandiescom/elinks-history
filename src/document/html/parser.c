@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.277 2003/11/17 14:34:21 zas Exp $ */
+/* $Id: parser.c,v 1.278 2003/11/18 09:48:38 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,6 +117,7 @@ next_attr:
 
 	while (atchr(*e)) next_char();
 	while (WHITECHAR(*e)) next_char();
+	while (!*e && e < eof) next_char();
 
 	if (*e != '=') {
 		if (end_of_tag(*e)) goto end;

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.60 2004/10/26 21:04:49 zas Exp $ */
+/* $Id: fastfind.c,v 1.61 2004/10/26 21:32:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -284,34 +284,37 @@ init_fastfind(int case_sensitive, unsigned char *comment)
 
 /* Return 1 on success, 0 on allocation failure */
 static int
-add_to_pointers(void *p, int key_len, struct fastfind_info *info)
+alloc_pointers(struct fastfind_info *info)
 {
 	void **pointers;
 	int *keylen_list;
-	int new_count = info->pointers_count + 1;
 
-	assert(new_count < FF_MAX_KEYS);
+	assert(info->count < FF_MAX_KEYS);
 	if_assert_failed return 0;
 
 	/* On error, cleanup is done by fastfind_done(). */
 
-	pointers = mem_realloc(info->pointers, new_count * sizeof(void *));
+	pointers = mem_calloc(info->count, sizeof(void *));
 	if (!pointers) return 0;
 	info->pointers = pointers;
+	FF_DBG_mem(info, info->count * sizeof(void *));
 
-	keylen_list = mem_realloc(info->keylen_list, new_count * sizeof(int));
+	keylen_list = mem_calloc(info->count, sizeof(int));
 	if (!keylen_list) return 0;
 	info->keylen_list = keylen_list;
+	FF_DBG_mem(info, info->count * sizeof(int));
 
-	FF_DBG_mem(info, sizeof(int) + sizeof(void *));
+	return 1;
+}
 
+/* Add pointer and its key length to array at position @pos. */
+static void
+add_to_pointers(void *p, int key_len, struct fastfind_info *info)
+{
 	/* Record new pointer and key len, used in search */
 	info->pointers[info->pointers_count] = p;
 	info->keylen_list[info->pointers_count] = key_len;
-
-	info->pointers_count = new_count;
-
-	return 1;
+	info->pointers_count++;
 }
 
 /* Return 1 on success, 0 on allocation failure */
@@ -423,6 +426,8 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 
 	info->root_leafset = info->leafsets[info->leafsets_count];
 
+	if (!alloc_pointers(info)) goto alloc_error;
+
 	/* Build the tree */
 	(*reset)();
 	while ((p = (*next)())) {
@@ -456,8 +461,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 
 		/* Memorize pointer to data */
 		leafset[i].p = info->pointers_count;
-		if (!add_to_pointers(p->data, key_len, info))
-			goto alloc_error;
+		add_to_pointers(p->data, key_len, info);
 	}
 
 	return info;

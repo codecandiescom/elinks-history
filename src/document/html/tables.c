@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.327 2004/06/30 05:33:56 jonas Exp $ */
+/* $Id: tables.c,v 1.328 2004/06/30 08:43:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -650,7 +650,7 @@ end:
 }
 #endif
 
-static inline void
+static void
 check_table_height(struct table *table, struct table_frames *frames, int y)
 {
 #ifndef CONFIG_FASTMEM
@@ -758,7 +758,7 @@ get_table_heights(struct table *table)
 	table->real_height = get_table_real_height(table);
 }
 
-static inline void
+static void
 draw_table_cell(struct table *table, int col, int row, int x, int y)
 {
 	struct table_cell *cell = CELL(table, col, row);

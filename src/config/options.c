@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.75 2002/07/23 12:58:11 zas Exp $ */
+/* $Id: options.c,v 1.76 2002/08/06 22:54:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -734,11 +734,13 @@ register_options()
 
 	add_opt_tree("mime.type",
 		"_template_", OPT_AUTOCREATE,
-		"Handler matching this MIME-type class.");
+		"Handler matching this MIME-type class ('*' is used here in place\n"
+		"of '.').");
 
 	add_opt_string("mime.type._template_",
 		"_template_", 0, "",
-		"Handler matching this MIME-type name.");
+		"Handler matching this MIME-type name ('*' is used here in place\n"
+		"of '.').");
 
 
 	add_opt_tree("mime",
@@ -772,8 +774,8 @@ register_options()
 
 	add_opt_string("mime.extension",
 		"_template_", 0, "",
-		"MIME-type matching this file extension (dashes are used here\n"
-		"instead of dots).");
+		"MIME-type matching this file extension ('*' is used here in place\n"
+		"of '.').");
 
 
 

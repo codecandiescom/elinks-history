@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.51 2002/07/04 01:07:13 pasky Exp $ */
+/* $Id: conf.c,v 1.52 2002/08/06 22:54:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,9 @@
  * 
  * Where option consists from any number of categories separated by dots and
  * name of the option itself. Both category and option name consists from
- * [a-zA-Z0-9_-] - using uppercase letters is not recommended, though.
+ * [a-zA-Z0-9_-*] - using uppercase letters is not recommended, though. '*' is
+ * reserved and is used only as escape character in place of '.' originally in
+ * option name.
  * 
  * Value can consist from:
  * - number (it will be converted to int/long)
@@ -103,7 +105,7 @@ parse_set(struct list_head *opt_tree, unsigned char **file, int *line,
 
 	/* Option name */
 	optname = *file;
-	while (isA(**file) || **file == '.') (*file)++;
+	while (isA(**file) || **file == '*' || **file == '.') (*file)++;
 
 	bin = **file;
 	**file = '\0';

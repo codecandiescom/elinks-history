@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.41 2002/07/05 20:42:14 pasky Exp $ */
+/* $Id: types.c,v 1.42 2002/08/06 22:54:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 			for (i = strlen(url) - 1, j = strlen(opt->name) - 1;
 			     i >= 0 && j >= 0
-			     && url[i] == (opt->name[j] == '-' ? '.'
+			     && url[i] == (opt->name[j] == '*' ? '.'
 				     			       : opt->name[j]);
 			     i--, j--)
 				/* */ ;
@@ -155,6 +155,14 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 
 
+unsigned char *
+rmdots(unsigned char *tok)
+{
+	while (*tok) {
+		if (*tok == '.') *tok = '*';
+	}
+	return tok;
+}
 
 unsigned char *
 get_mime_type_name(unsigned char *type)
@@ -170,7 +178,8 @@ get_mime_type_name(unsigned char *type)
 
 	*(id++) = '\0';
 
-	name = straconcat("mime.type", ".", class, ".", id, NULL);
+	name = straconcat("mime.type", ".", rmdots(class), ".", rmdots(id),
+			  NULL);
 	mem_free(class);
 
 	return name;
@@ -680,7 +689,7 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 		
 		for (i = strlen(translated) - 1; i >= 0; i--)
 			if (translated[i] == '.')
-				translated[i] = '-';
+				translated[i] = '*';
 	} else {
 		mem_free(fcp);
 		return;
@@ -725,7 +734,7 @@ really_add_ext(void *fcp)
 
 		for (i = strlen(translated) - 1; i >= 0; i--)
 			if (translated[i] == '.')
-				translated[i] = '-';
+				translated[i] = '*';
 	} else return;
 
 	name = straconcat("mime.extension", ".", translated, NULL);
@@ -753,7 +762,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 		for (i = strlen(translated) - 1; i >= 0; i--)
 			if (translated[i] == '.')
-				translated[i] = '-';
+				translated[i] = '*';
 	}
 
 	if (translated) opt = get_real_opt("mime.extension", translated);
@@ -839,7 +848,7 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 			int i;
 
 			for (i = strlen(translated) - 1; i >= 0; i--)
-				if (translated[i] == '-')
+				if (translated[i] == '*')
 					translated[i] = '.';
 		} else continue;
 

@@ -1,5 +1,5 @@
 #!/usr/bin/gawk -f
-# $Id: conf-links2elinks.awk,v 1.3 2002/07/03 11:29:54 pasky Exp $
+# $Id: conf-links2elinks.awk,v 1.4 2002/08/06 22:54:24 pasky Exp $
 #
 # (GAWK is necessary for bitwise operators.)
 #
@@ -108,8 +108,10 @@ $1 == "terminal" {
 }
 $1 == "extension" {
 	num_exts = split(substr($2, 2, length($2) - 2), ext, /,/)
-	for (i = num_exts; i; --i)
+	for (i = num_exts; i; --i) {
+		gsub(/\./, "*", ext[i])
 		print "set mime.extension." ext[i] " = " $3
+	}
 }
 $1 == "association" {
 	pos = length($1) + 2
@@ -122,6 +124,7 @@ $1 == "association" {
 
 	mimelist = get_token()
 	mimelist = substr(mimelist, 2, length(mimelist) - 2)
+	gsub(/\./, "*", mimelist)
 	gsub(/\//, ".", mimelist)
 	num_mimetypes = split(mimelist, mimetype, /,/)
 

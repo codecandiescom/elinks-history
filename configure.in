@@ -502,7 +502,7 @@ if test -z "$disable_lua"; then
 	if test ! -d "$withval"; then
 		withval="";
 	fi
-	for luadir in "$withval" "$withval" "" /usr /usr /usr/local /usr/local; do
+	for luadir in "$withval" "" /usr /usr /usr/local /usr/local; do
 		for suffix in "" 50 40; do
 			if test "$cf_result" = no; then
 				LUA_LIBS="-llua$suffix -llualib$suffix -lm"

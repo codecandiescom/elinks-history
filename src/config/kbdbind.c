@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.35 2002/08/08 20:46:53 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.36 2002/08/18 11:53:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -549,6 +549,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_LUA_CONSOLE, ',' },
 	{ ACT_LINK_MENU, 'L' },
 	{ ACT_JUMP_TO_LINK, 'l' },
+	{ ACT_VIEW_IMAGE, 'v' },
 	{ 0, 0, 0 }
 };
 

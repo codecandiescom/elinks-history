@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.306 2004/04/24 12:21:01 jonas Exp $ */
+/* $Id: menu.c,v 1.307 2004/04/26 09:05:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -461,6 +461,9 @@ query_file(struct session *ses, struct uri *uri, void *data,
 	   void (*cancel)(void *), int interactive)
 {
 	struct string def;
+
+	assert(ses && ses->download_uri);
+	if_assert_failed return;
 
 	if (ses->download_uri->protocol == PROTOCOL_UNKNOWN) {
 		print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);

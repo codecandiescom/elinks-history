@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.70 2003/10/22 19:46:46 jonas Exp $ */
+/* $Id: options.h,v 1.71 2003/10/22 20:44:58 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -173,6 +173,7 @@ extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 #define DESC(x) ((unsigned char *) "")
 #endif
 
+
 #define add_opt_bool_tree(tree, path, capt, name, flags, def, desc) \
 	add_opt(tree, path, capt, name, flags, OPT_BOOL, 0, 1, (void *) def, DESC(desc))
 
@@ -183,7 +184,11 @@ extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 	add_opt(tree, path, capt, name, flags, OPT_LONG, min, max, (void *) def, DESC(desc))
 
 #define add_opt_str_tree(tree, path, capt, name, flags, def, desc) \
-	add_opt(tree, path, capt, name, flags, OPT_STRING, 0, MAX_STR_LEN, memacpy(def, MAX_STR_LEN - 1), DESC(desc))
+do { \
+	unsigned char *ptr = mem_alloc(MAX_STR_LEN); \
+	safe_strncpy(ptr, def, MAX_STR_LEN); \
+	add_opt(tree, path, capt, name, flags, OPT_STRING, 0, MAX_STR_LEN, ptr, DESC(desc)); \
+} while (0)
 
 #define add_opt_codepage_tree(tree, path, capt, name, flags, def, desc) \
 	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, (void *) def, DESC(desc))
@@ -198,13 +203,14 @@ extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 	add_opt(tree, path, capt, name, flags, OPT_COMMAND, 0, 0, cmd, DESC(desc));
 
 #define add_opt_alias_tree(tree, path, capt, name, flags, def, desc) \
-	add_opt(tree, path, capt, name, flags, OPT_ALIAS, 0, strlen(def),  stracpy(def), DESC(desc))
+	add_opt(tree, path, capt, name, flags, OPT_ALIAS, 0, strlen(def), stracpy(def), DESC(desc))
 
 #define add_opt_tree_tree(tree, path, capt, name, flags, desc) \
 	add_opt(tree, path, capt, name, flags, OPT_TREE, 0, 0, init_options_tree(), DESC(desc));
 
 #define add_opt_bool(path, capt, name, flags, def, desc) \
 	add_opt_bool_tree(config_options, path, capt, name, flags, def, DESC(desc))
+
 
 #define add_opt_int(path, capt, name, flags, min, max, def, desc) \
 	add_opt_int_tree(config_options, path, capt, name, flags, min, max, def, DESC(desc))
@@ -235,6 +241,7 @@ extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 
 #define add_opt_tree(path, capt, name, flags, desc) \
 	add_opt_tree_tree(config_options, path, capt, name, flags, DESC(desc))
+
 
 /* TODO: We need to do *something* with this ;). */
 

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.83 2004/01/22 19:31:47 jonas Exp $ */
+/* $Id: scanner.c,v 1.84 2004/01/22 21:11:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,6 @@ ident2type(unsigned char *ident, unsigned char *end,
 		{ "grad",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
 		{ "in",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
 		{ "kHz",	CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
-		{ "mm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
 		{ "mm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
 		{ "ms",		CSS_TOKEN_TIME,		CSS_TOKEN_DIMENSION },
 		{ "pc",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },

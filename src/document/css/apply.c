@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.66 2004/09/20 08:37:35 pasky Exp $ */
+/* $Id: apply.c,v 1.67 2004/09/20 08:39:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,26 +90,31 @@ examine_element(struct css_selector *base, struct list_head *selectors,
 	struct css_selector *altsel;
 	unsigned char *code;
 
+#define process_found_selector(sel, base) \
+	if (altsel) merge_css_selectors(base, sel);
+
 	altsel = find_css_selector(selectors, CST_ELEMENT,
 	                           element->name, element->namelen);
-	if (altsel) merge_css_selectors(selector, altsel);
+	process_found_selector(altsel, selector);
 
 	code = get_attr_val(element->options, "id");
 	if (code) {
 		altsel = find_css_selector(selectors, CST_ID, code, -1);
-		if (altsel) merge_css_selectors(selector, altsel);
+		process_found_selector(altsel, selector);
 		mem_free(code);
 	}
 
 	code = get_attr_val(element->options, "class");
 	if (code) {
 		altsel = find_css_selector(selectors, CST_CLASS, code, -1);
-		if (altsel) merge_css_selectors(selector, altsel);
+		process_found_selector(altsel, selector);
 		mem_free(code);
 	}
 
 	/* TODO: Somehow handle pseudo-classess. The css_apply() caller will
 	 * have to tell us about those. --pasky */
+
+#undef process_found_selector
 }
 
 void

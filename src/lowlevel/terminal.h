@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.17 2002/09/11 15:33:32 zas Exp $ */
+/* $Id: terminal.h,v 1.18 2002/09/11 16:31:30 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -97,6 +97,7 @@ unsigned char *get_cwd();
 void set_cwd(unsigned char *);
 struct terminal *init_term(int, int, void (*)(struct window *, struct event *, int));
 void destroy_terminal(struct terminal *);
+void redraw_terminal_ev(struct terminal *, int);
 #define redraw_terminal(term) redraw_terminal_ev((term), EV_REDRAW)
 #define redraw_terminal_all(term) redraw_terminal_ev((term), EV_RESIZE)
 void redraw_terminal_cls(struct terminal *);

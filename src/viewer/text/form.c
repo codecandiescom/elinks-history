@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.14 2003/07/22 02:17:45 jonas Exp $ */
+/* $Id: form.c,v 1.15 2003/07/22 02:23:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -422,19 +422,17 @@ strip_file_name(unsigned char *f)
 }
 
 static void
-encode_controls(struct list_head *l, unsigned char **data, int *len,
+encode_controls(struct list_head *l, struct string *data,
 		int cp_from, int cp_to)
 {
 	struct submitted_value *sv;
 	struct conv_table *convert_table = NULL;
 	int lst = 0;
 
-	assert(l && data && len);
+	assert(l && data);
 	if_assert_failed return;
 
-	*data = init_str();
-	if (!*data) return;
-	*len = 0;
+	if (!init_string(data)) return;
 
 	foreach (sv, *l) {
 		unsigned char *p2 = NULL;
@@ -444,9 +442,13 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 		o.plain = 1;
 		d_opt = &o;
 
-		if (lst) add_chr_to_str(data, len, '&'); else lst = 1;
-		encode_uri_string(sv->name, data, len);
-		add_chr_to_str(data, len, '=');
+		if (lst)
+			add_char_to_string(data, '&');
+		else
+			lst = 1;
+
+		encode_uri_string(sv->name, &data->source, &data->length);
+		add_char_to_string(data, '=');
 
 		/* Convert back to original encoding (see html_form_control()
 		 * for the original recoding). */
@@ -474,7 +476,7 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 		}
 
 		if (p2) {
-			encode_uri_string(p2, data, len);
+			encode_uri_string(p2, &data->source, &data->length);
 			mem_free(p2);
 		}
 	}
@@ -670,7 +672,7 @@ get_form_url(struct session *ses, struct document_view *f,
 	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
 	cp_to = f->document->cp;
 	if (frm->method == FM_GET || frm->method == FM_POST)
-		encode_controls(&submit, &data.source, &data.length, cp_from, cp_to);
+		encode_controls(&submit, &data, cp_from, cp_to);
 	else
 		encode_multipart(ses, &submit, &data, bound, cp_from, cp_to);
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.174 2003/10/24 21:11:12 pasky Exp $ */
+/* $Id: menu.c,v 1.175 2003/10/24 21:11:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,6 +220,8 @@ loop_done: \
 
 history_menu_model(history_menu, prev);
 history_menu_model(unhistory_menu, next);
+
+#undef history_menu_model
 
 
 static struct menu_item no_downloads_menu[] = {

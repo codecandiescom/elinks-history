@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.2 2002/05/23 18:50:36 pasky Exp $ */
+/* $Id: cmdline.c,v 1.3 2002/05/23 20:44:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,13 +12,12 @@
 #include "config/cmdline.h"
 #include "config/options.h"
 #include "config/opttypes.h"
-#include "util/hash.h"
 
 
-/* TODO: This ought to be rewritten - we want special hash for commandline
+/* TODO: This ought to be rewritten - we want special tree for commandline
  * options as "aliases" there. */
 unsigned char *
-_parse_options(int argc, unsigned char *argv[], struct hash *opt)
+_parse_options(int argc, unsigned char *argv[], struct list_head *opt)
 {
 	unsigned char *location = NULL;
 

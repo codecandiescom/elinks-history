@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.32 2002/05/23 19:50:59 pasky Exp $ */
+/* $Id: options.c,v 1.33 2002/05/23 20:44:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,116 +27,90 @@
 #include "lowlevel/dns.h"
 #include "protocol/types.h"
 #include "util/error.h"
-#include "util/hash.h"
 
 
-struct hash *root_options;
+/* TODO? In the past, covered by shadow and legends, remembered only by the
+ * ELinks Elders now, options were in hashes (it was not for a long time, after
+ * we started to use dynamic options lists and before we really started to use
+ * hiearchic options). Hashes might be swift and deft, but they had a flaw and
+ * the flaw showed up as the fatal flaw. They were unsorted, and it was
+ * unfriendly to mere mortal users, without pasky's options handlers in their
+ * brain, but their own poor-written software. And thus pasky went and rewrote
+ * options so that they were in lists from then to now and for all the ages of
+ * men, to the glory of mankind. However, one true hero may arise in future
+ * fabulous and implement possibility to have both lists and hashes for trees,
+ * as it may be useful for some supernatural entities. And when that age will
+ * come... */
+
+struct list_head *root_options;
 
 /**********************************************************************
  Options interface
 **********************************************************************/
 
 /* If option name contains dots, they are created as "categories" - first,
- * first category is retrieved from hash, taken as a hash, second category
+ * first category is retrieved from list, taken as a list, second category
  * is retrieved etc. */
 
 /* Get record of option of given name, or NULL if there's no such option. */
 struct option *
-get_opt_rec(struct hash *hash, unsigned char *_name)
+get_opt_rec(struct list_head *tree, unsigned char *name)
 {
-	struct hash_item *item;
-	unsigned char *aname = stracpy(_name);
-	unsigned char *name = aname;
+	struct option *option;
 	unsigned char *sep;
 
-	while ((sep = strchr(name, '|'))) {
+	/* Thou shalt read name of following function carefully. */
+	if ((sep = strrchr(name, '|'))) {
 		struct option *cat;
 
 		*sep = 0;
 
-		item = get_hash_item(hash, name, strlen(name));
-		if (!item) {
-			mem_free(aname);
+		cat = get_opt_rec(tree, name);
+		if (!cat || cat->type != OPT_TREE) {
 			return NULL;
 		}
 
-		cat = (struct option *) item->value;
-		if (cat->type != OPT_HASH) {
-			mem_free(aname);
-			return NULL;
-		}
+		tree = (struct list_head *) cat->ptr;
 
-		hash = (struct hash *) cat->ptr;
-
+		*sep = '|';
 		name = sep + 1;
 	}
 
-	item = get_hash_item(hash, name, strlen(name));
-	mem_free(aname);
-	if (!item) return NULL;
+	foreach (option, *tree) {
+		if (!strcmp(option->name, name)) {
+			return option;
+		}
+	}
 
-	return (struct option *) item->value;
+	return NULL;
 }
 
 /* Fetch pointer to value of certain option. It is guaranteed to never return
  * NULL. */
 void *
-get_opt(struct hash *hash, unsigned char *name)
+get_opt(struct list_head *tree, unsigned char *name)
 {
-	struct option *opt = get_opt_rec(hash, name);
+	struct option *opt = get_opt_rec(tree, name);
 
 	if (!opt) internal("Attempted to fetch unexistent option %s!", name);
 	if (!opt->ptr) internal("Option %s has no value!", name);
 	return opt->ptr;
 }
 
-/* Add option to hash. */
+/* Add option to tree. */
 void
-add_opt_rec(struct hash *hash, unsigned char *path, struct option *option)
+add_opt_rec(struct list_head *tree, unsigned char *path, struct option *option)
 {
-	struct option *aopt = mem_alloc(sizeof(struct option));
-	unsigned char *aname = stracpy(path);
-	unsigned char *name = aname;
-	unsigned char *sep;
+	struct list_head *cat = tree;
 
-	if (!aopt) return;
-	memcpy(aopt, option, sizeof(struct option));
+	if (*path) cat = get_opt(tree, path);
+	if (!cat) return;
 
-	while (*name) {
-		struct option *cat;
-		struct hash_item *item;
-
-		/* We take even the last element of path (ended not by '.'
-		 * but by '\0'). */
-		sep = strchr(name, '|');
-		if (sep) *sep = 0;
-		else sep = name + strlen(name) - 1;
-
-		item = get_hash_item(hash, name, strlen(name));
-		if (!item) {
-			mem_free(aname);
-			mem_free(aopt);
-			return;
-		}
-
-		cat = (struct option *) item->value;
-		if (cat->type != OPT_HASH) {
-			mem_free(aname);
-			mem_free(aopt);
-			return;
-		}
-
-		hash = (struct hash *) cat->ptr;
-
-		name = sep + 1;
-	}
-	mem_free(aname);
-
-	add_hash_item(hash, stracpy(option->name), strlen(option->name), aopt);
+	add_to_list(*cat, option);
 }
 
 void
-add_opt(struct hash *hash, unsigned char *path, unsigned char *name,
+add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 	enum option_flags flags, enum option_type type,
 	int min, int max, void *ptr,
 	unsigned char *desc)
@@ -151,40 +125,35 @@ add_opt(struct hash *hash, unsigned char *path, unsigned char *name,
 	option->ptr = ptr;
 	option->desc = desc;
 
-	add_opt_rec(hash, path, option);
-
-	mem_free(option);
+	add_opt_rec(tree, path, option);
 }
 
 
 void register_options();
 
-struct hash *
-init_options_hash()
+struct list_head *
+init_options_tree()
 {
-	/* 6 bits == 64 entries; I guess it's the best number for options
-	 * hash. --pasky */
-	struct hash *hash = init_hash(6, &strhash);
+	struct list_head *list = mem_alloc(sizeof(struct list_head));
 
-	return hash;
+	init_list(*list);
+
+	return list;
 }
 
 void
 init_options()
 {
-	root_options = init_options_hash();
+	root_options = init_options_tree();
 	register_options();
 }
 
 void
-free_options_hash(struct hash *hash)
+free_options_tree(struct list_head *tree)
 {
-	struct hash_item *item;
-	int i;
+	struct option *option;
 
-	foreach_hash_item (hash, item, i) {
-		struct option *option = item->value;
-
+	foreach (option, *tree) {
 		if (option->type == OPT_BOOL ||
 		    option->type == OPT_INT ||
 		    option->type == OPT_LONG ||
@@ -192,17 +161,18 @@ free_options_hash(struct hash *hash)
 		    option->type == OPT_CODEPAGE)
 			mem_free(option->ptr);
 
-		else if (option->type == OPT_HASH)
-			free_options_hash((struct hash *) option->ptr);
+		else if (option->type == OPT_TREE)
+			free_options_tree((struct list_head *) option->ptr);
 	}
 
-	free_hash(hash);
+	free_list(*tree);
+	mem_free(tree);
 }
 
 void
 done_options()
 {
-	free_options_hash(root_options);
+	free_options_tree(root_options);
 }
 
 
@@ -290,11 +260,8 @@ unsigned char *version_cmd(struct option *o, unsigned char ***argv, int *argc)
 }
 
 unsigned char *
-printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
+printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 {
-	struct hash_item *item;
-	int i;
-
 	version_cmd(NULL, NULL, NULL);
 	printf("\n");
 
@@ -302,8 +269,7 @@ printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 	printf("Options:\n\n");
 
 	/* TODO: Alphabetical order! */
-	foreach_hash_item (root_options, item, i) {
-		struct option *option = item->value;
+	foreach (option, *root_options) {
 
 		if (option->flags & OPT_CMDLINE) {
 			unsigned char *cname = cmd_name(option->name);

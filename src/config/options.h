@@ -1,11 +1,10 @@
-/* $Id: options.h,v 1.19 2002/05/23 18:50:36 pasky Exp $ */
+/* $Id: options.h,v 1.20 2002/05/23 20:44:54 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
 
 #include "document/html/colors.h"
-/* Possibly, there should be util/hash.h included as well, but it somehow works
- * without it and I'm glad that 2/3 of ELinks files don't depend on it ;). */
+#include "links.h" /* lists stuff */
 
 #define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 
@@ -35,10 +34,13 @@ enum option_type {
 
 	OPT_COMMAND,
 
-	OPT_HASH,
+	OPT_TREE,
 };
 
 struct option {
+	struct option *next;
+	struct option *prev;
+
 	unsigned char *name;
 	enum option_flags flags;
 	enum option_type type;
@@ -48,17 +50,17 @@ struct option {
 };
 
 
-extern struct hash *root_options;
+extern struct list_head *root_options;
 
 
 extern void init_options();
 extern void done_options();
 
-extern struct hash *init_options_hash();
-extern void free_options_hash(struct hash *);
+extern struct list_head *init_options_tree();
+extern void free_options_tree(struct list_head *);
 
-extern struct option *get_opt_rec(struct hash *, unsigned char *);
-extern void *get_opt(struct hash *, unsigned char *);
+extern struct option *get_opt_rec(struct list_head *, unsigned char *);
+extern void *get_opt(struct list_head *, unsigned char *);
 
 #define get_opt_int(name) *((int *) get_opt(root_options, name))
 #define get_opt_long(name) *((long *) get_opt(root_options, name))
@@ -66,8 +68,8 @@ extern void *get_opt(struct hash *, unsigned char *);
 #define get_opt_str(name) ((unsigned char *) get_opt(root_options, name))
 #define get_opt_ptr(name) ((void *) get_opt(root_options, name))
 
-extern void add_opt_rec(struct hash *, unsigned char *path, struct option *);
-extern void add_opt(struct hash *, unsigned char *path, unsigned char *name,
+extern void add_opt_rec(struct list_head *, unsigned char *path, struct option *);
+extern void add_opt(struct list_head *, unsigned char *path, unsigned char *name,
 		    enum option_flags flags, enum option_type type,
 		    int min, int max, void *ptr,
 		    unsigned char *desc);
@@ -100,8 +102,8 @@ extern void add_opt(struct hash *, unsigned char *path, unsigned char *name,
 #define add_opt_command(path, name, flags, cmd, desc) \
 	add_opt(root_options, path, name, flags, OPT_COMMAND, 0, 0, cmd, desc);
 
-#define add_opt_hash(path, name, flags, desc) \
-	add_opt(root_options, path, name, flags, OPT_HASH, 0, 0, init_options_hash(), desc);
+#define add_opt_tree(path, name, flags, desc) \
+	add_opt(root_options, path, name, flags, OPT_TREE, 0, 0, init_options_tree(), desc);
 
 
 extern unsigned char *cmd_name(unsigned char *);

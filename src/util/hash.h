@@ -1,4 +1,4 @@
-/* $Id: hash.h,v 1.3 2002/05/21 18:54:54 zas Exp $ */
+/* $Id: hash.h,v 1.4 2002/05/23 20:44:54 pasky Exp $ */
 
 #ifndef EL__UTIL_HASH_H
 #define EL__UTIL_HASH_H
@@ -35,8 +35,8 @@ struct hash_item *get_hash_item(struct hash *hash, unsigned char *key, unsigned 
 void del_hash_item(struct hash *hash, struct hash_item *item);
 hash_value strhash(unsigned char *k, unsigned int length, hash_value initval);
 
-#define foreach_hash_item(hash_table, item, iterator) \
-	for (iterator = 0; iterator < hash_size(hash_table->width); iterator++) \
-		foreach (item, hash_table->hash[iterator])
+#define foreach_hash_item(item, hash_table, iterator) \
+	for (iterator = 0; iterator < hash_size((hash_table).width); iterator++) \
+		foreach (item, (hash_table).hash[iterator])
 
 #endif

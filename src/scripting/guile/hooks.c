@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.8 2003/09/25 16:42:09 jonas Exp $ */
+/* $Id: hooks.c,v 1.9 2003/09/25 19:18:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,13 +95,15 @@ script_hook_get_proxy(va_list ap)
 	SCM proc = scm_c_module_lookup(internal_module(), "%get-proxy-hook");
 	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
 
-	if (SCM_STRINGP(x))
+	if (SCM_STRINGP(x)) {
 		*retval = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
-	else if (SCM_NULLP(x))
-		*retval = stracpy("");
-	else
+		return EHS_LAST;
+	} else if (SCM_NULLP(x)) {
 		*retval = NULL;
-	return *retval ? 1 : 0;
+		return EHS_LAST;
+	} else {
+		return EHS_NEXT;
+	}
 }
 
 static int
@@ -111,7 +113,7 @@ script_hook_quit(va_list ap)
 
 	scm_call_0(SCM_VARIABLE_REF(proc));
 
-	return 0;
+	return EHS_NEXT;
 }
 
 struct scripting_hook guile_scripting_hooks[] = {

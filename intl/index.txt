@@ -8,7 +8,6 @@ dutch
 estonian
 finnish
 galician
-german
 greek
 hungarian
 icelandic

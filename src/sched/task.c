@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.80 2004/05/23 02:39:02 jonas Exp $ */
+/* $Id: task.c,v 1.81 2004/05/25 00:26:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,7 @@ ses_imgmap(struct session *ses)
 
 	if (get_image_map(cached->head, fr->data, fr->data + fr->length,
 			  ses->goto_position, &menu, &ml,
-			  ses->imgmap_href_base, ses->imgmap_target_base,
+			  struri(ses->imgmap_href_base), ses->imgmap_target_base,
 			  get_opt_int_tree(ses->tab->term->spec, "charset"),
 			  get_opt_int("document.codepage.assume"),
 			  get_opt_int("document.codepage.force_assumed")))
@@ -548,10 +548,10 @@ goto_url_with_hook(struct session *ses, unsigned char *url)
 /* TODO: Should there be goto_imgmap_reload() ? */
 
 void
-goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
-	    unsigned char *target)
+goto_imgmap(struct session *ses, struct uri *uri, unsigned char *target)
 {
-	mem_free_set(&ses->imgmap_href_base, href);
+	if (ses->imgmap_href_base) done_uri(ses->imgmap_href_base);
+	ses->imgmap_href_base = get_uri_reference(uri);
 	mem_free_set(&ses->imgmap_target_base, target);
-	follow_url(ses, url, target, TASK_IMGMAP, CACHE_MODE_NORMAL, 1);
+	follow_url(ses, struri(uri), target, TASK_IMGMAP, CACHE_MODE_NORMAL, 1);
 }

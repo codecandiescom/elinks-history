@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.176 2004/05/25 00:19:30 jonas Exp $ */
+/* $Id: link.c,v 1.177 2004/05/25 00:26:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -503,11 +503,7 @@ goto_link(struct uri *uri, unsigned char *target, struct session *ses,
 
 	if (is_map) {
 		/* TODO: Test reload? */
-		unsigned char *s = stracpy(struri(uri));
-
-		if (!s) return 1;
-
-		goto_imgmap(ses, struri(uri), s, null_or_stracpy(target));
+		goto_imgmap(ses, uri, null_or_stracpy(target));
 
 	} else {
 		if (do_reload) {

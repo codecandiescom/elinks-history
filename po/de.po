@@ -286,7 +286,7 @@ msgstr ""
 
 #: src/config/dialogs.c:126 src/config/dialogs.c:138 src/config/dialogs.c:213
 msgid "N/A"
-msgstr ""
+msgstr "Nicht verfügbar"
 
 #: src/config/dialogs.c:133
 #, c-format
@@ -380,7 +380,7 @@ msgstr ""
 
 #: src/config/dialogs.c:644 src/config/options.c:2715
 msgid "Action"
-msgstr ""
+msgstr "Aktion"
 
 #: src/config/dialogs.c:645
 msgid "Keymap"
@@ -452,11 +452,11 @@ msgstr "Aktuellen Link als Lesezeichen hinzufügen"
 
 #: src/config/kbdbind.c:370
 msgid "Attempt to auto-complete the input"
-msgstr ""
+msgstr "Versuche die Eingabe zu vervollständigen"
 
 #: src/config/kbdbind.c:371
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr ""
+msgstr "Versuche die Eingabe eindeutig zu vervollständigen"
 
 #: src/config/kbdbind.c:372
 msgid "Return to the previous document in history"
@@ -467,13 +467,12 @@ msgid "Delete character in front of the cursor"
 msgstr "Lösche das Zeichen vor dem Cursor"
 
 #: src/config/kbdbind.c:374
-#, fuzzy
 msgid "Open bookmark manager"
-msgstr "Lesezeichenverwaltung"
+msgstr "Öffne die Lesezeichenverwaltung"
 
 #: src/config/kbdbind.c:375
 msgid "Reload cookies file"
-msgstr ""
+msgstr "Cookie-Datei erneut laden"
 
 #: src/config/kbdbind.c:376
 msgid "Copy text to clipboard"
@@ -513,13 +512,12 @@ msgid "Go to the end of the page/line"
 msgstr "Gehe zum Ende der Seite/Zeile"
 
 #: src/config/kbdbind.c:385
-#, fuzzy
 msgid "Follow the current link"
-msgstr "~Link folgen"
+msgstr "Aktuellem Link folgen"
 
 #: src/config/kbdbind.c:386
 msgid "Follow the current link, forcing reload of the target"
-msgstr ""
+msgstr "Aktuellem Link folgen und das Ziel neu laden"
 
 #: src/config/kbdbind.c:387
 msgid "Open the File menu"
@@ -539,15 +537,15 @@ msgstr ""
 
 #: src/config/kbdbind.c:391
 msgid "Open \"Go to URL\" dialog box"
-msgstr ""
+msgstr "Öffne \"URL öffnen\"-Dialog"
 
 #: src/config/kbdbind.c:392
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr ""
+msgstr "Öffne \"URL öffnen\"-Dialog mit der aktuellen URL"
 
 #: src/config/kbdbind.c:393
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
+msgstr "Öffne \"URL öffnen\"-Dialog mit der URL des aktuellen Links"
 
 #: src/config/kbdbind.c:394
 msgid "Go to the homepage"
@@ -574,9 +572,8 @@ msgid "Delete to end of line"
 msgstr "Alle Zeichen bis zum Zeilenende löschen"
 
 #: src/config/kbdbind.c:400
-#, fuzzy
 msgid "Open keybinding manager"
-msgstr "Tastenbelegungsmanager"
+msgstr "Öffne Tastenbelegungsmanager"
 
 #: src/config/kbdbind.c:401
 msgid "Move the cursor left"
@@ -587,9 +584,8 @@ msgid "Open the link context menu"
 msgstr ""
 
 #: src/config/kbdbind.c:403
-#, fuzzy
 msgid "Jump to link"
-msgstr "Link öffnen"
+msgstr "Springe zum Link"
 
 #: src/config/kbdbind.c:405
 msgid "Open a Lua console"
@@ -597,7 +593,7 @@ msgstr "Öffne eine Lua-Konsole"
 
 #: src/config/kbdbind.c:407
 msgid "Open a Lua console (DISABLED)"
-msgstr "Öffne eine Lua-Konsole (NICHT VERFÜGBAR)"
+msgstr "Öffne eine Lua-Konsole (ABGESCHALTET)"
 
 #. internal use only
 #: src/config/kbdbind.c:410
@@ -609,17 +605,14 @@ msgid "Move to the next frame"
 msgstr "Wechsel zum nächsten Rahmen"
 
 #: src/config/kbdbind.c:412
-#, fuzzy
 msgid "Open a new window"
-msgstr "~In neuem Fenster öffnen"
+msgstr "Öffne ein neues Fenster"
 
 #: src/config/kbdbind.c:413
-#, fuzzy
 msgid "Open the current link in a new window"
-msgstr "~In neuem Fenster öffnen"
+msgstr "Öffne den aktuellen Link in einem neuem Fenster"
 
 #: src/config/kbdbind.c:414
-#, fuzzy
 msgid "Open options manager"
 msgstr "Öffne Optionsmanager"
 
@@ -653,32 +646,31 @@ msgstr "Lade die aktuelle Seite erneut"
 
 #: src/config/kbdbind.c:422
 msgid "Attempt to resume download of the current link"
-msgstr ""
+msgstr "Versuche den Download des aktuellen Links wieder zu starten"
 
 #: src/config/kbdbind.c:423
 msgid "Move the cursor right"
 msgstr "Bewege den Cursor nach rechts"
 
 #: src/config/kbdbind.c:424
-#, fuzzy
 msgid "Save formatted document"
-msgstr "Formatiertes ~Dokument speichern"
+msgstr "Formatiertes Dokument speichern"
 
 #: src/config/kbdbind.c:425
 msgid "Scroll down"
-msgstr ""
+msgstr "Nach unten rollen"
 
 #: src/config/kbdbind.c:426
 msgid "Scroll left"
-msgstr ""
+msgstr "Nach links rollen"
 
 #: src/config/kbdbind.c:427
 msgid "Scroll right"
-msgstr ""
+msgstr "Nach rechts rollen"
 
 #: src/config/kbdbind.c:428
 msgid "Scroll up"
-msgstr ""
+msgstr "Nach oben rollen"
 
 #: src/config/kbdbind.c:429
 msgid "Search for a text pattern"
@@ -689,9 +681,8 @@ msgid "Search backwards for a text pattern"
 msgstr "Suche rückwärts nach einem Textmuster"
 
 #: src/config/kbdbind.c:431
-#, fuzzy
 msgid "Close tab"
-msgstr "Schließen"
+msgstr ""
 
 #: src/config/kbdbind.c:432
 msgid "Next tab"
@@ -703,36 +694,35 @@ msgstr ""
 
 #: src/config/kbdbind.c:434
 msgid "Toggle displaying of links to images"
-msgstr ""
+msgstr "Umschalten der Darstellung von Links zu Bildern"
 
 #: src/config/kbdbind.c:435
 msgid "Toggle rendering of tables"
-msgstr ""
+msgstr "Umschalten der Darstellung von Tabellen"
 
 #: src/config/kbdbind.c:436
 msgid "Toggle rendering page as HTML / plain text"
-msgstr ""
+msgstr "Umschalten der Darstellung der Seite als HTML / einfacher Text"
 
 #: src/config/kbdbind.c:437
 msgid "Toggle displaying of links numbers"
-msgstr ""
+msgstr "Umschalten  der Darstellung von Nummern neben Links"
 
 #: src/config/kbdbind.c:438
 msgid "Toggle usage of document specific colors"
-msgstr ""
+msgstr "Umschalten der Benutzung von dokument-spezifischen Farben"
 
 #: src/config/kbdbind.c:439
 msgid "Go forward in the unhistory"
-msgstr ""
+msgstr "Gehe im späteren Verlauf vorwärts"
 
 #: src/config/kbdbind.c:440
 msgid "Move cursor upwards"
 msgstr "Bewege den Cursor nach oben"
 
 #: src/config/kbdbind.c:441
-#, fuzzy
 msgid "View the current image"
-msgstr "B~ild anzeigen"
+msgstr "Aktuelles Bild anzeigen"
 
 #: src/config/kbdbind.c:442
 msgid "Maximize the current frame"
@@ -773,7 +763,7 @@ msgstr ""
 #: src/config/options.c:594
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
-msgstr ""
+msgstr "ELinks %s - Textmodus-Webbrowser\n"
 
 #: src/config/options.c:636
 msgid "Template option folder"
@@ -792,7 +782,7 @@ msgstr ""
 #: src/config/options.c:662
 #, c-format
 msgid "    %s%s%s %s (alias for %s)"
-msgstr ""
+msgstr "    %s%s%s %s (Alias für %s)"
 
 #: src/config/options.c:667
 #, c-format
@@ -813,6 +803,8 @@ msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
+"Benutzung: elinks [OPTION]... [URL]\n"
+"\n"
 
 #: src/config/options.c:796
 msgid "Options:\n"
@@ -821,13 +813,12 @@ msgstr "Optionen:\n"
 #. TODO: The change hooks should be added more elegantly! --pasky
 #. Keep options in alphabetical order.
 #: src/config/options.c:891 src/util/version.c:83
-#, fuzzy
 msgid "Bookmarks"
-msgstr "~Lesezeichen"
+msgstr "Lesezeichen"
 
 #: src/config/options.c:893
 msgid "Bookmark options."
-msgstr ""
+msgstr "Lesezeichen-Optionen."
 
 #: src/config/options.c:898
 msgid ""
@@ -908,13 +899,16 @@ msgstr ""
 
 #: src/config/options.c:943
 msgid "Saving style warnings"
-msgstr ""
+msgstr "Warnungen zur Speicher-Art"
 
 #: src/config/options.c:945
 msgid ""
 "This is internal option used when displaying a warning about\n"
 "obsolete config.saving_style. You shouldn't touch it."
 msgstr ""
+"Diese interne Option wird bei der Anzeige einer Warnung bei\n"
+"einem veralteten Wert der Option config.saving_style benutzt.\n"
+"Sie sollte nicht verändert werden."
 
 #: src/config/options.c:948
 msgid "Show template"
@@ -937,7 +931,7 @@ msgstr "Verbindungs-Optionen"
 
 #: src/config/options.c:963 src/util/version.c:66
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: src/config/options.c:965
 msgid "SSL options."
@@ -1023,15 +1017,15 @@ msgstr "Timeout für nicht-wiederstartbare Verbindungen (in Sekunden)."
 #. Keep options in alphabetical order.
 #: src/config/options.c:1013 src/util/version.c:86
 msgid "Cookies"
-msgstr ""
+msgstr "Cookies"
 
 #: src/config/options.c:1015
 msgid "Cookies options."
-msgstr ""
+msgstr "Cookie-Optionen."
 
 #: src/config/options.c:1017
 msgid "Accept policy"
-msgstr ""
+msgstr "Anerkennungs-Strategie"
 
 #: src/config/options.c:1020
 msgid ""
@@ -1040,6 +1034,11 @@ msgid ""
 "1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
 "2 is accept all cookies"
 msgstr ""
+"Anerkennungs-Strategie für Cookies:\n"
+"0 keine Cookies anerkennen.\n"
+"1 Cookies nur anerkennen, wenn der Benutzer gefragt wurde\n"
+"    (NICHT IMPLEMENTIERT)\n"
+"2 alle Cookies anerkennen"
 
 #: src/config/options.c:1025
 msgid "Maximum age"
@@ -1053,6 +1052,12 @@ msgid ""
 "date\n"
 "1+ is use cookie's expiration date, but limit age to the given number of days"
 msgstr ""
+"Maximales Alter von Cookies (in Tagen):\n"
+"-1 benutze, falls vorhanden, das Verfallsdatum des Cookies\n"
+"0  Cookie verfällt am Ende der Sitzung. Das Verfallsdatum des Cookies\n"
+"   wird ignoriert\n"
+"1+ benutze das Verfallsdatum des Cookies, begrenze das Alter aber auf\n"
+"   die angegebene Anzahl von Tagen"
 
 #: src/config/options.c:1032
 msgid "Paranoid security"
@@ -1064,6 +1069,9 @@ msgid ""
 "non-international domains (instead of just two dots). Please see\n"
 "code (cookies.c:check_domain_security()) for explanation."
 msgstr ""
+"Wenn eingeschaltet, werden für alle nicht-internationale Domainnamen\n"
+"drei Punkte im Domainnamen des Cookies verlangt (sonst nur zwei). Siehe\n"
+"Quelltext (cookies.c:check_domain_security()) für eine Erklärung."
 
 #: src/config/options.c:1038
 msgid "Saving"
@@ -1071,7 +1079,7 @@ msgstr "Speichere"
 
 #: src/config/options.c:1040
 msgid "Load/save cookies from/to disk?"
-msgstr ""
+msgstr "Lade/speicher Cookies von der/auf die Platte?"
 
 #: src/config/options.c:1042
 msgid "Resaving"
@@ -1082,6 +1090,8 @@ msgid ""
 "Save cookies after each change in cookies list? No effect when\n"
 "cookies_save is off."
 msgstr ""
+"Speicher Cookies nach jeder Änderung der Cookie-Liste?\n"
+"Hat keine Wirkung, wenn cookies_save ausgeschaltet ist."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1051
@@ -1135,7 +1145,7 @@ msgstr ""
 
 #: src/config/options.c:1080
 msgid "Forms"
-msgstr ""
+msgstr "Formulare"
 
 #: src/config/options.c:1082
 msgid "Options for handling of the forms interaction."
@@ -1150,6 +1160,8 @@ msgid ""
 "Automagically submit a form when enter is pressed with a text\n"
 "field selected."
 msgstr ""
+"Ein Formular automagisch senden, wenn Enter in einem Textfeld\n"
+"gedrückt wird."
 
 #: src/config/options.c:1089
 msgid "Confirm submission"
@@ -1161,7 +1173,7 @@ msgstr "Vor dem Absenden eines Formulars fragen."
 
 #: src/config/options.c:1093
 msgid "Show forms history dialog"
-msgstr ""
+msgstr "Zeige Verlaufsdialog für Formulare"
 
 #: src/config/options.c:1095
 msgid ""
@@ -1169,6 +1181,9 @@ msgid ""
 "This option only disables the dialog, already saved login\n"
 "forms are unaffected."
 msgstr ""
+"Fragen, ob ein Anmeldeformular gespeichert werden soll oder nicht.\n"
+"Diese Option schaltet nur den Dialog ab. Bereits abgespeicherte\n"
+"Anmeldeformulare bleiben bestehen."
 
 #: src/config/options.c:1100
 msgid "Images"
@@ -1180,7 +1195,7 @@ msgstr ""
 
 #: src/config/options.c:1104
 msgid "Display style for image links"
-msgstr ""
+msgstr "Anzeige-Art für Links zu Bildern"
 
 #: src/config/options.c:1106
 msgid ""
@@ -1190,10 +1205,15 @@ msgid ""
 "1-500 means display target filename with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 msgstr ""
+"Zeige [Ziel-Dateiname] anstatt [IMG] als sichtbare Bild-Kennzeichnung:\n"
+"-1    zeige immer nur [IMG]\n"
+"0     zeige immer den vollen Ziel-Dateinamen an\n"
+"1-500 zeige den Ziel-Dateinamen, maximal aber die angegebene Anzahl von\n"
+"      Zeichen. Ist er länger, so wird der Mittelteil durch einen Stern ersetzt"
 
 #: src/config/options.c:1112
 msgid "Image links tagging"
-msgstr ""
+msgstr "Kennzeichnung von Links zu Bildern"
 
 #: src/config/options.c:1114
 msgid ""
@@ -1202,35 +1222,39 @@ msgid ""
 "1     means never if alt or title are provided (old behavior)\n"
 "2     means always"
 msgstr ""
+"Wann sollen Links zu Bildern eingefasst werden:\n"
+"0     niemals\n"
+"1     niemals wenn alt oder Titel vorhanden sind\n"
+"      (ursprüngliches Verhalten)\n"
+"2     immer"
 
 #: src/config/options.c:1119
 msgid "Image link prefix"
-msgstr ""
+msgstr "Prefix von Links zu Bildern"
 
 #: src/config/options.c:1121
 msgid "Prefix string to use to mark image links."
-msgstr ""
+msgstr "Prefix, um Links zu Bildern zu kennzeichnen."
 
 #: src/config/options.c:1123
 msgid "Image link suffix"
-msgstr ""
+msgstr "Suffix von Links zu Bildern"
 
 #: src/config/options.c:1125
 msgid "Suffix string to use to mark image links."
-msgstr ""
+msgstr "Suffix, um Links zu Bildern zu kennzeichnen."
 
 #: src/config/options.c:1127
 msgid "Display image links"
-msgstr ""
+msgstr "Zeige Links zu Bildern an"
 
 #: src/config/options.c:1129
 msgid "Display links to images."
-msgstr ""
+msgstr "Zeige Links zu Bildern an."
 
 #: src/config/options.c:1132
-#, fuzzy
 msgid "Links"
-msgstr "~Link"
+msgstr "Links"
 
 #: src/config/options.c:1134
 msgid "Options for handling of links to other documents."
@@ -1238,11 +1262,11 @@ msgstr ""
 
 #: src/config/options.c:1136
 msgid "Directory highlighting"
-msgstr ""
+msgstr "Hervorhebung von Verzeichnissen"
 
 #: src/config/options.c:1138
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
+msgstr "Hebe Links zu Verzeichnissen in FTP oder lokalen Verzeichnisanzeigen hervor."
 
 #: src/config/options.c:1140
 msgid "Number links"
@@ -1262,7 +1286,7 @@ msgstr ""
 
 #: src/config/options.c:1148
 msgid "Number keys select links"
-msgstr ""
+msgstr "Ziffertasten wählen Links aus"
 
 #: src/config/options.c:1150
 msgid ""
@@ -1272,6 +1296,11 @@ msgid ""
 "1 means if document.browse.links.numbering = 1\n"
 "2 means always"
 msgstr ""
+"Ziffertasten wählen Links aus und bezeichnen keine Kommandoprefixe.\n"
+"Diese Option hat drei Zustände:\n"
+"0 niemals\n"
+"1 wenn document.browse.links.numbering = 1\n"
+"2 immer"
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
@@ -1285,29 +1314,31 @@ msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
 msgstr ""
+"Drückt man auf dem letzten Link nach unten, so springt man auf den\n"
+"ersten Link, und umgekehrt."
 
 #: src/config/options.c:1164
-#, fuzzy
 msgid "Searching"
 msgstr "Suche"
 
 #: src/config/options.c:1166
 msgid "Options for searching."
-msgstr ""
+msgstr "Optionen für die Suche."
 
 #: src/config/options.c:1168
 msgid "Case sensitivity"
-msgstr ""
+msgstr "Groß-/Kleinscreibung beachten"
 
 #: src/config/options.c:1170
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
 msgstr ""
+"Gibt an, ob bei der Suche Groß-/Kleinschreibung beachtet werden soll."
 
 #: src/config/options.c:1173
 msgid "Overlapping matches"
-msgstr ""
+msgstr "Überschneidende Treffer"
 
 #: src/config/options.c:1175
 msgid ""
@@ -1316,6 +1347,11 @@ msgid ""
 "1 means matches can overlap (CAUTION: can be cpu intensive with\n"
 "  some expressions!)"
 msgstr ""
+"Treffer dürfen sich überscheiden (nur für die Suche mit regulären\n"
+"Ausdrücken relevant).\n"
+"0 Treffer sollen sich nicht überschneiden.\n"
+"1 Treffer dürfen sich überschneiden (ACHTUNG: dies kann\n"
+"  mit einigen Ausdrücken rechenzeitintensiv sein!)"
 
 #: src/config/options.c:1181 src/config/options.c:1188
 msgid "Regular expressions"
@@ -1328,6 +1364,10 @@ msgid ""
 "1 for basic regular expression searches.\n"
 "2 for extended regular expression searches."
 msgstr ""
+"Schalte die Suche mit regulären Ausdrücken ein.\n"
+"0 für einfache Textsuche.\n"
+"1 für Suche mit einfachen regulären Ausdrücken.\n"
+"2 für Suche mit erweiterten regulären Ausdrücken."
 
 #: src/config/options.c:1190
 msgid ""
@@ -1336,14 +1376,18 @@ msgid ""
 "1 for basic regular expression searches. (DISABLED)\n"
 "2 for extended regular expression searches. (DISABLED)"
 msgstr ""
+"Schalte die Suche mit regulären Ausdrücken ein.\n"
+"0 für einfache Textsuche.\n"
+"1 für Suche mit einfachen regulären Ausdrücken. (ABGESCHALTET)\n"
+"2 für Suche mit erweiterten regulären Ausdrücken. (ABGESCHALTET)"
 
 #: src/config/options.c:1197
 msgid "Horizontal text margin"
-msgstr ""
+msgstr "Horizontale Textbegrenzung"
 
 #: src/config/options.c:1199
 msgid "Horizontal text margin."
-msgstr ""
+msgstr "Horizontale Textbegrenzung."
 
 #: src/config/options.c:1201
 msgid "Document meta refresh"
@@ -1358,23 +1402,27 @@ msgstr ""
 
 #: src/config/options.c:1207
 msgid "Scroll margin"
-msgstr ""
+msgstr "Roll-Seitenrand"
 
 #: src/config/options.c:1209
 msgid ""
 "Size of the virtual margin - when you click inside of that margin,\n"
 "document scrolls in that direction."
 msgstr ""
+"Größe des virtuellen Seitenrandes - wenn man in diesen Seitenrand klickt,\n"
+"so wird das Dokument in die entspechende Richtung gerollt."
 
 #: src/config/options.c:1212
 msgid "Scroll step"
-msgstr ""
+msgstr "Roll-Weite"
 
 #: src/config/options.c:1214
 msgid ""
 "Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 "down is pressed and no prefix was given."
 msgstr ""
+"Anzahl der zu rollenden Zeilen, wenn eine mit scroll-up oder scroll-\n"
+"down verbundene Taste gedrückt und kein Prefix angegeben wurde."
 
 #: src/config/options.c:1217
 msgid "Tables navigation order"
@@ -3450,9 +3498,8 @@ msgid "Unknown"
 msgstr "Unbekannt"
 
 #: src/dialogs/document.c:192
-#, fuzzy
 msgid "Link"
-msgstr "~Link"
+msgstr "Link"
 
 #: src/dialogs/document.c:199
 msgid "Link title"

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.276 2003/09/19 13:48:32 jonas Exp $ */
+/* $Id: renderer.c,v 1.277 2003/09/22 15:10:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -740,17 +740,18 @@ static void
 html_tag(struct document *f, unsigned char *t, int x, int y)
 {
 	struct tag *tag;
-	int tsize;
+	int tag_len;
 
 	assert(f);
 	if_assert_failed return;
 
-	tsize = strlen(t) + 1;
-	tag = mem_alloc(sizeof(struct tag) + tsize);
+	tag_len = strlen(t);
+	/* One byte is reserved for name in struct tag. */
+	tag = mem_alloc(sizeof(struct tag) + tag_len);
 	if (tag) {
 		tag->x = x;
 		tag->y = y;
-		memcpy(tag->name, t, tsize);
+		memcpy(tag->name, t, tag_len + 1);
 		add_to_list(f->tags, tag);
 		if ((void *) last_tag_for_newline == &f->tags)
 			last_tag_for_newline = tag;

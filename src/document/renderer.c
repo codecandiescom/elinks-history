@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.121 2004/10/14 12:48:04 jonas Exp $ */
+/* $Id: renderer.c,v 1.122 2004/10/14 13:51:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,13 +125,11 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 		if (*string->source == '^') {
 			/* External reference! */
 
-			unsigned char *url = memacpy(string->source + 1,
-			                             string->length - 1);
-			struct uri *uri = url ? get_uri(url, URI_BASE) : NULL;
+			unsigned char *uristring = string->source + 1;
+			struct uri *uri = get_uri(uristring, URI_BASE);
 			struct cache_entry *cached = uri ? find_in_cache(uri) : NULL;
 			struct fragment *fragment;
 
-			if (url) mem_free(url);
 			if (uri) done_uri(uri);
 
 			if (!cached) {
@@ -140,7 +138,7 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 				 * it must've been that it went away because
 				 * unused and the cache was already too full. */
 				ERROR("The script of %s was lost "
-				      "in too full a cache!", string->source + 1);
+				      "in too full a cache!", uristring);
 				continue;
 			}
 

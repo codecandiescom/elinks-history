@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.205 2004/06/13 00:46:40 jonas Exp $ */
+/* $Id: link.c,v 1.206 2004/06/13 17:22:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,54 +57,17 @@ set_link(struct document_view *doc_view)
 		find_link(doc_view, 1, 0);
 }
 
-static void
-draw_link(struct terminal *term, struct document_view *doc_view, int l)
+static inline void
+draw_link_do(struct terminal *term, struct document_view *doc_view,
+	     struct link *link, int cursor_offset)
 {
-	struct link *link;
-	int xpos, ypos;
-	int i;
-	int cursor_offset = 0;
 	struct screen_char *template;
 	enum color_flags color_flags;
 	enum color_mode color_mode;
 	struct document_options *doc_opts;
 	struct color_pair colors;
-
-	assert(term && doc_view && doc_view->vs);
-	if_assert_failed return;
-	assertm(!doc_view->link_bg, "link background not empty");
-	if_assert_failed mem_free(doc_view->link_bg);
-
-	if (l == -1) return;
-
-	link = &doc_view->document->links[l];
-
-	switch (link->type) {
-		struct form_state *fs;
-
-		case LINK_HYPERTEXT:
-		case LINK_MAP:
-		case LINK_SELECT:
-			break;
-
-		case LINK_CHECKBOX:
-			cursor_offset = 1;
-			break;
-
-		case LINK_BUTTON:
-			cursor_offset = 2;
-			break;
-
-		case LINK_FIELD:
-			fs = find_form_state(doc_view, link->form_control);
-			if (fs) cursor_offset = fs->state - fs->vpos;
-			break;
-
-		case LINK_AREA:
-			fs = find_form_state(doc_view, link->form_control);
-			if (fs) cursor_offset = area_cursor(link->form_control, fs);
-			break;
-	}
+	int xpos, ypos;
+	int i;
 
 	/* Allocate an extra background char to work on here. */
 	doc_view->link_bg = mem_alloc((1 + link->npoints) * sizeof(struct link_bg));
@@ -179,6 +142,54 @@ draw_link(struct terminal *term, struct document_view *doc_view, int l)
  		template->data = co->data;
  		copy_screen_chars(co, template, 1);
 	}
+}
+
+static void
+draw_link(struct terminal *term, struct document_view *doc_view, int number)
+{
+	struct link *link;
+	int cursor_offset = 0;
+
+	assert(term && doc_view && doc_view->vs);
+	if_assert_failed return;
+	assertm(!doc_view->link_bg, "link background not empty");
+	if_assert_failed mem_free(doc_view->link_bg);
+
+	if (number == -1) return;
+
+	assert(number >=0 && number < doc_view->document->nlinks);
+	if_assert_failed return;
+
+	link = &doc_view->document->links[number];
+
+	switch (link->type) {
+		struct form_state *fs;
+
+		case LINK_HYPERTEXT:
+		case LINK_MAP:
+		case LINK_SELECT:
+			break;
+
+		case LINK_CHECKBOX:
+			cursor_offset = 1;
+			break;
+
+		case LINK_BUTTON:
+			cursor_offset = 2;
+			break;
+
+		case LINK_FIELD:
+			fs = find_form_state(doc_view, link->form_control);
+			if (fs) cursor_offset = fs->state - fs->vpos;
+			break;
+
+		case LINK_AREA:
+			fs = find_form_state(doc_view, link->form_control);
+			if (fs) cursor_offset = area_cursor(link->form_control, fs);
+			break;
+	}
+
+	draw_link_do(term, doc_view, link, cursor_offset);
 }
 
 void

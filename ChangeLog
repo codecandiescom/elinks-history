@@ -1,3 +1,131 @@
+Thu Jan 29 13:32:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, stylesheet.c, stylesheet.h:
+
+	Make the selector mirroring function take only the property list of
+	the original selector so that the ruleset parser can use an empty
+	list. Should fix properties of already known selectors being added
+	to others in the grouping.  
+
+Thu Jan 29 13:21:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/parser.c, util/scanner.h:
+
+	Some lame way of skipping current token.  
+
+Thu Jan 29 13:10:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h:
+
+	Eh .. revert feature.h change.  
+
+Thu Jan 29 13:08:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* feature.h, src/document/css/parser.c, test/css/styletags.html:
+
+	Add testing of the handling of selector groupings. It should that we
+	need to pass css_parse_properties() an empty list head so that
+	previous values do not end up being added to all other selectors.  
+
+Thu Jan 29 13:02:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/garbage.html:
+
+	Add selector grouping without block.  
+
+Thu Jan 29 12:58:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Always check the returned value of get_scanner_token(). Don't check
+	whether we skip to next ',' since the check at the start of the loop
+	should catch it for us.  
+
+Thu Jan 29 12:47:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Make the selector parsing a little less ambitious (don't allocate
+	anything) and more tolerant.  
+
+Thu Jan 29 12:16:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Raise the document.dump.width/-dump-width limits from 40/512 to
+	1/65536.  
+
+Thu Jan 29 11:09:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Only check if control char for the first char that is typed ahead.  
+
+Thu Jan 29 07:54:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	'#?' now means search back.  
+
+Thu Jan 29 07:49:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Make '##' mean that no more control chars should be checked .. so
+	that '/' can be typed as first char in link typeahead.  
+
+Thu Jan 29 07:31:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: inpfield.c, inpfield.h:
+
+	Add prompt member to struct input_line.  
+
+Thu Jan 29 07:21:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Move text_typeahead_handler() up before link_typeahead_handler.  
+
+Thu Jan 29 07:18:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, dialogs/exmode.c,
+	viewer/text/search.c:
+
+	Add data member to struct input_line.  
+
+Thu Jan 29 07:15:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/inpfield.h, dialogs/exmode.c,
+	viewer/text/search.c:
+
+	(Re)introduce a struct for maintaining input line data.  
+
+Thu Jan 29 04:19:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Move selector lookup to end of loop so we don.t have to handle
+	allocation if there is a syntax error.  
+
+Thu Jan 29 04:16:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Make selector variable local.  
+
+Thu Jan 29 04:13:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Use while loop instead of gotos so a lot of indenting.  
+
+Thu Jan 29 04:05:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Don.t use static list head but simple pass it from the ruleset
+	parser.  
+
 Wed Jan 28 22:03:51 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/main.c:

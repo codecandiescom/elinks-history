@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.29 2003/05/10 01:29:08 zas Exp $ */
+/* $Id: string.h,v 1.30 2003/05/11 19:49:47 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -48,23 +48,37 @@ int xstrcmp(unsigned char *, unsigned char *);
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
 unsigned char *trim_chars(unsigned char *, unsigned char, int *);
 
-int elinks_ulongcat(unsigned char *s, unsigned int *slen, unsigned long number, unsigned int width, unsigned char fillchar);
+/* These are fast functions to convert integers to string, or to hexadecimal string. */
+int elinks_ulongcat(unsigned char *s, unsigned int *slen, unsigned long number,
+		    unsigned int width, unsigned char fillchar);
 /* Type casting is enforced, to shorten calls. --Zas */
 #define ulongcat(s, slen, number, width, fillchar) \
-       (elinks_ulongcat((unsigned char *) (s), \
+	elinks_ulongcat((unsigned char *) (s), \
 			(unsigned int *) (slen), \
 			(unsigned long) (number), \
 			(unsigned int) (width), \
-			(unsigned char) (fillchar)))
+			(unsigned char) (fillchar))
 
-int elinks_longcat(unsigned char *s, unsigned int *slen, long number, unsigned int width, unsigned char fillchar);
+int elinks_longcat(unsigned char *s, unsigned int *slen, long number,
+		   unsigned int width, unsigned char fillchar);
 /* Type casting is enforced, to shorten calls. --Zas */
 #define longcat(s, slen, number, width, fillchar) \
-	(elinks_longcat((unsigned char *) (s), \
+	 elinks_longcat((unsigned char *) (s), \
 			(unsigned int *) (slen), \
 			(long) (number), \
 			(unsigned int) (width), \
-			(unsigned char) (fillchar)))
+			(unsigned char) (fillchar))
+
+int elinks_ulonghexcat(unsigned char *s, unsigned int *slen, unsigned long number,
+		       unsigned int width, unsigned char fillchar, unsigned int upper);
+/* Type casting is enforced, to shorten calls. --Zas */
+#define ulonghexcat(s, slen, number, width, fillchar, upper) \
+	elinks_ulonghexcat((unsigned char *) (s), \
+			   (unsigned int *) (slen), \
+			   (unsigned long) (number), \
+			   (unsigned int) (width), \
+			   (unsigned char) (fillchar), \
+			   (unsigned int) (upper))
 
 
 #define WHITECHAR(x) ((x) == ' ' || ((x) >= ASCII_TAB && (x) <= ASCII_CR))

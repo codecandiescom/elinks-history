@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.36 2003/05/10 00:27:59 zas Exp $ */
+/* $Id: string.c,v 1.37 2003/05/11 19:49:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,6 +325,9 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 	return dst;
 }
 
+
+/* String conversion functions */
+
 /* Trim starting and ending chars from a string.
  * Pointer to the string is passed.
  * WARNING: string is modified.
@@ -429,6 +432,65 @@ elinks_longcat(unsigned char *s, unsigned int *slen,
 	return elinks_ulongcat(p, slen, number, width, fillchar);
 }
 
+
+/* This function is similar to elinks_ulongcat() but convert a long to
+ * hexadecimal format.
+ * An additionnal parameter 'upper' permits to choose between
+ * uppercased and lowercased hexa numbers. */
+int inline
+elinks_ulonghexcat(unsigned char *s, unsigned int *slen,
+		   unsigned long number, unsigned int width,
+		   unsigned char fillchar, unsigned int upper)
+{
+	static unsigned char uhex[]= "0123456789ABCDEF";
+	static unsigned char lhex[]= "0123456789abcdef";
+	unsigned char *hex = (unsigned char *) (upper ? &uhex : &lhex);
+	unsigned int start = 0;
+	unsigned int pos = 1;
+	unsigned long q = number;
+	int ret = 0;
+
+	if (width < 1 || !s) return 2;
+
+	while (q > 15) {
+		if (pos == width) {
+			ret = 1;
+			break;
+		}
+		++pos;
+		q /= 16;
+	}
+
+	if (slen) start = *slen;
+
+	if (fillchar) {
+		unsigned int pad = width - pos;
+
+		if (pad) {
+			unsigned int tmp = start;
+
+			start += pad;
+			if (slen) *slen += pad;
+			while (pad) s[--pad + tmp] = fillchar;
+		}
+	}
+
+	if (slen) *slen += pos;
+
+	pos += start;
+
+	s[pos] = '\0';
+
+	while (pos > start) {
+		s[--pos] = hex[(number % 16)];
+		number /= 16;
+	}
+
+	return ret;
+}
+
+
+/* libc stub functions */
 
 #ifndef HAVE_STRCASECMP
 inline int

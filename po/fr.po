@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-20 00:14+0100\n"
-"PO-Revision-Date: 2004-12-19 18:09+0100\n"
+"POT-Creation-Date: 2004-12-22 23:31+0100\n"
+"PO-Revision-Date: 2004-12-22 23:32+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -882,7 +882,7 @@ msgstr ""
 "Désactive la création et l'utilisation des fichiers dans le répertoire\n"
 "où se trouve la configuration propre à l'utilisateur (~/.elinks).\n"
 "Cela force l'utilisation des valeurs de configuration par défaut et\n"
-"désactive la sauvegarde des fichiers d'état lors de l'éxecution."
+"désactive la sauvegarde des fichiers d'état lors de l'exécution."
 
 #: src/config/cmdline.c:709
 msgid "Do not number links in dump output"
@@ -4873,7 +4873,7 @@ msgstr "Options du terminal"
 
 #: src/dialogs/options.c:151
 msgid "Frame handling:"
-msgstr "Gestion des cadres (frames):"
+msgstr "Gestion des cadres:"
 
 #: src/dialogs/options.c:152
 msgid "No frames"
@@ -5019,7 +5019,7 @@ msgstr "Aucun document"
 #. name:
 #: src/document/css/css.c:29 src/document/css/css.c:156
 msgid "Cascading Style Sheets"
-msgstr "Cascading Style Sheets (CSS)"
+msgstr "Feuilles de style (CSS)"
 
 #: src/document/css/css.c:31
 msgid "Options concerning how to use CSS for styling documents."
@@ -5043,8 +5043,9 @@ msgid ""
 "either CSS itself using the @import keyword or from the HTML using\n"
 "<link> tags in the document header will also be downloaded."
 msgstr ""
-"Toute feuille de style qui sont importées soit via @import ou\n"
-"via un tag <link> sera effectivement téléchargée."
+"Quand cette option est activée, toute feuille de style qui est importée\n"
+"soit par le mot clé @import soit par une balise <link> dans l'en-tête du\n"
+"document sera effectivement téléchargée."
 
 #: src/document/css/css.c:43
 msgid "Default style sheet"
@@ -5131,7 +5132,7 @@ msgstr "Erreur Javascript"
 
 #: src/ecmascript/spidermonkey.c:2072
 msgid "JavaScript Emergency"
-msgstr "Urgence JavaScript"
+msgstr "Alerte JavaScript"
 
 #: src/ecmascript/spidermonkey.c:2074
 #, c-format
@@ -5343,7 +5344,7 @@ msgstr "Nombre max. d'entrées"
 
 #: src/globhist/globhist.c:70
 msgid "Maximum number of entries in the global history."
-msgstr "Nombre maximum d'entrées dans l'historique global."
+msgstr "Nombre maximal d'entrées dans l'historique global."
 
 #: src/globhist/globhist.c:72
 msgid "Display style"
@@ -5356,11 +5357,11 @@ msgid ""
 "1 is page titles"
 msgstr ""
 "Labels à afficher dans le dialogue historique global:\n"
-"0 URLs\n"
-"1 titres des pages"
+"0 afficher les URLs\n"
+"1 afficher les titres des pages"
 
 #. name:
-#: src/globhist/globhist.c:391
+#: src/globhist/globhist.c:422
 msgid "Global History"
 msgstr "Historique Global"
 
@@ -5553,16 +5554,16 @@ msgstr "%d échecs de select()."
 
 #: src/main.c:145
 msgid "Cannot create a pipe for internal communication."
-msgstr "Ne peut créer un pipe pour la communication interne."
+msgstr "Ne peut créer un tube pour la communication interne."
 
 #: src/main.c:205
 #, c-format
 msgid "URL expected after -%s"
-msgstr "URL attendue après -%s."
+msgstr "URL attendue après -%s"
 
 #: src/main.c:213
 msgid "No running ELinks found."
-msgstr "Aucun ELinks en cours d'éxecution."
+msgstr "Aucun ELinks en cours d'exécution."
 
 #. The remote session(s) can not be created
 #: src/main.c:220
@@ -5635,7 +5636,7 @@ msgstr ""
 "mime.type.image.jpeg, etc.; ou définir un gestionnaire pour un type\n"
 "plus spécifique comme les fichiers PDF, par exemple.\n"
 "Notez que vous devez définir un gestionnaire MIME et une association\n"
-"de type MIME pour que cela fonctionne"
+"de type MIME pour que cela fonctionne."
 
 #: src/mime/backend/default.c:58
 msgid "Description of this handler."
@@ -5661,7 +5662,7 @@ msgstr "Bloquer le terminal"
 
 #: src/mime/backend/default.c:70
 msgid "Block the terminal when the handler is running."
-msgstr "Bloquer le terminal lorsque le programme externe est exécuté."
+msgstr "Bloquer le terminal pendant l'exécution d'un programme externe."
 
 #: src/mime/backend/default.c:72
 msgid "Program"
@@ -5674,7 +5675,7 @@ msgid ""
 "substituted by a file name."
 msgstr ""
 "Visualisateur externe pour ce type de fichier. '%' dans la chaîne sera\n"
-"remplacé par le nom du fichier."
+"remplacé par un nom de fichier."
 
 #: src/mime/backend/default.c:78
 msgid "File extension associations"
@@ -5704,11 +5705,11 @@ msgstr "Mailcap"
 
 #: src/mime/backend/mailcap.c:92
 msgid "Options for mailcap support."
-msgstr "Options concernant le support mailcap."
+msgstr "Options concernant le support de mailcap."
 
 #: src/mime/backend/mailcap.c:96
 msgid "Enable mailcap support."
-msgstr "Activer le support mailcap."
+msgstr "Activer le support de mailcap."
 
 #: src/mime/backend/mailcap.c:100
 msgid ""
@@ -5740,8 +5741,8 @@ msgstr ""
 "Type de description à montrer dans le dialogue \"que devons-nous faire avec "
 "ce fichier\"\n"
 "0 montrer \"mailcap\".\n"
-"1 montrer le programme à éxécuter.\n"
-"2 montrer le champ de description mailcap si existent; \"mailcap\" sinon."
+"1 montrer le programme à exécuter.\n"
+"2 montrer le champ de description mailcap si existant; \"mailcap\" sinon."
 
 #: src/mime/backend/mailcap.c:116
 msgid "Prioritize entries by file"
@@ -5780,7 +5781,7 @@ msgstr ""
 
 #: src/mime/backend/mimetypes.c:55
 msgid "Enable mime.types support."
-msgstr "Activer le support des fichiers mime.types"
+msgstr "Activer le support des fichiers mime.types."
 
 #: src/mime/backend/mimetypes.c:59
 msgid ""
@@ -6188,7 +6189,7 @@ msgstr "Options du protocole HTTP."
 
 #: src/protocol/http/http.c:62
 msgid "Server bug workarounds"
-msgstr "Contourner les bogues de certains serveurs"
+msgstr "Contournement des bogues des serveurs"
 
 #: src/protocol/http/http.c:64
 msgid "Server-side HTTP bugs workarounds."
@@ -6301,7 +6302,7 @@ msgstr ""
 "Politique d'envoi de référent HTTP:\n"
 "0 ne pas envoyer de référent\n"
 "1 envoyer l'URL courante comme référent\n"
-"2 envoyer un référent fixé\n"
+"2 envoyer un référent fixe\n"
 "3 envoyer l'URL précédente comme référent (correct, mais risqué)"
 
 #: src/protocol/http/http.c:125
@@ -6449,7 +6450,7 @@ msgid ""
 "Used when resolving news: URIs. If set to the empty string\n"
 "the value of the NNTPSERVER environment variable will be used."
 msgstr ""
-"Utilisé lors de la résolution des URIs de type news:.\n"
+"Utilisé lors de la résolution des URIs news:.\n"
 "Si chaîne vide, la valeur de la variable d'environnement\n"
 "NNTPSERVER sera utilisée."
 
@@ -6732,7 +6733,7 @@ msgstr ""
 
 #: src/sched/download.c:548
 msgid "Save under the alternative name"
-msgstr "Sauver sous un autre nom"
+msgstr "Sauver sous un nom alternatif"
 
 #: src/sched/download.c:549
 msgid "Overwrite the original file"
@@ -6987,7 +6988,7 @@ msgstr ""
 
 #: src/sched/error.c:102
 msgid "The CSO phone-book protocol is not supported."
-msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté"
+msgstr "Le protocole de carnet d'adresse CSO n'est pas supporté."
 
 #: src/sched/error.c:126
 msgid "Unknown error"
@@ -7082,7 +7083,7 @@ msgid ""
 "Do you want to post to URL %s?"
 msgstr ""
 "Le formulaire que vous tentez de soumettre est peut-être incomplet.\n"
-"Voulez-vous le soumettre à l'URL %s ?"
+"Voulez-vous tout de même le soumettre à l'URL %s ?"
 
 #: src/sched/task.c:257
 #, c-format
@@ -7192,12 +7193,12 @@ msgstr "Echec de création de session."
 #: src/terminal/event.c:316
 #, c-format
 msgid "Bad event %d"
-msgstr "Mauvais évenement %d"
+msgstr "Mauvais évènement %d"
 
 #: src/terminal/event.c:356
 #, c-format
 msgid "Could not read event: %d (%s)"
-msgstr "Impossible de lire l'évenement: %d (%s)"
+msgstr "Impossible de lire l'évènement: %d (%s)"
 
 #: src/terminal/kbd.c:988
 msgid "Too many bytes read from the itrm!"
@@ -7209,7 +7210,7 @@ msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant ?"
 
 #: src/terminal/tab.c:225
 msgid "Do you really want to close all except the current tab?"
-msgstr "Êtes-vous sûr de vouloir fermer tous les onglets sauf celui-ci ?"
+msgstr "Êtes-vous sûr de vouloir fermer tout sauf l'onglet courant ?"
 
 #: src/viewer/dump/dump.c:79
 #, c-format
@@ -7311,87 +7312,87 @@ msgstr "pressez %s pour soumettre à"
 msgid "press %s to post to"
 msgstr "pressez %s pour poster à"
 
-#: src/viewer/text/link.c:1128
+#: src/viewer/text/link.c:1127
 msgid "Display ~usemap"
 msgstr "Afficher ~usemap"
 
-#: src/viewer/text/link.c:1131
+#: src/viewer/text/link.c:1130
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/link.c:1133
+#: src/viewer/text/link.c:1132
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/link.c:1137
+#: src/viewer/text/link.c:1136
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1139
+#: src/viewer/text/link.c:1138
 msgid "Open in new ~tab"
 msgstr "Ouvrir dans un nouvel ongle~t"
 
-#: src/viewer/text/link.c:1141
+#: src/viewer/text/link.c:1140
 msgid "Open in new tab in ~background"
 msgstr "Ouvrir dans un nouvel onglet en arrière-~plan"
 
-#: src/viewer/text/link.c:1146
+#: src/viewer/text/link.c:1145
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/link.c:1149
+#: src/viewer/text/link.c:1148
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:1161 src/viewer/text/link.c:1196
+#: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:1173
+#: src/viewer/text/link.c:1172
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:1179
+#: src/viewer/text/link.c:1178
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:1180
+#: src/viewer/text/link.c:1179
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1183
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1186
+#: src/viewer/text/link.c:1185
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:1189
+#: src/viewer/text/link.c:1188
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:1194
+#: src/viewer/text/link.c:1193
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:1201
+#: src/viewer/text/link.c:1200
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:1203
+#: src/viewer/text/link.c:1202
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:1211
+#: src/viewer/text/link.c:1210
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:1263
+#: src/viewer/text/link.c:1262
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:1268
+#: src/viewer/text/link.c:1267
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -7481,23 +7482,3 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1267
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
-#~ msgstr "Ne pas essayer de créer et/ou d'utiliser le répertoire ~/.elinks."
-
-#~ msgid "Expand table columns"
-#~ msgstr "Etendre les colonnes de tableau"
-
-#~ msgid ""
-#~ "This option is no longer in effect. It is obsoleted by changes\n"
-#~ "to always expand table columns."
-#~ msgstr ""
-#~ "Cette option n'a plus d'effet. Elle est devenue obsolète suite\n"
-#~ "aux changements forçant l'expansion des colonnes de table."
-
-#~ msgid ""
-#~ "Options for mailcap support. (Deprecated. Please use\n"
-#~ "mime.mailcap instead)"
-#~ msgstr ""
-#~ "Options pour le support de mailcap. (Obsolète. Utilisez\n"
-#~ "mime.mailcap)"

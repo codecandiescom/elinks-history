@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.68 2003/11/18 07:52:48 miciah Exp $ */
+/* $Id: dialogs.c,v 1.69 2003/11/18 23:17:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,11 +29,6 @@
 
 #ifdef GLOBHIST
 
-struct history_dialog_list_item {
-	LIST_HEAD(struct history_dialog_list_item);
-	struct dialog_data *dlg_data;
-};
-
 static INIT_LIST_HEAD(history_dialog_list);
 
 static void listbox_delete_historyitem(struct terminal *,
@@ -46,7 +41,7 @@ static struct listbox_ops gh_listbox_ops = {
 void
 update_all_history_dialogs(void)
 {
-	struct history_dialog_list_item *item;
+	struct hierbox_dialog_list_item *item;
 
 	foreach (item, history_dialog_list) {
 		struct widget_data *widget_data =
@@ -61,7 +56,7 @@ update_all_history_dialogs(void)
 static void
 history_dialog_abort_handler(struct dialog_data *dlg_data)
 {
-	struct history_dialog_list_item *item;
+	struct hierbox_dialog_list_item *item;
 
 	foreach (item, history_dialog_list) {
 		if (item->dlg_data == dlg_data) {
@@ -399,7 +394,7 @@ void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog_data *dlg_data;
-	struct history_dialog_list_item *item;
+	struct hierbox_dialog_list_item *item;
 	struct global_history_item *litem;
 
 	foreach (litem, global_history.items) {
@@ -435,7 +430,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	if (!dlg_data) return;
 	dlg_data->dlg->abort = history_dialog_abort_handler;
 
-	item = mem_alloc(sizeof(struct history_dialog_list_item));
+	item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
 	if (item) {
 		item->dlg_data = dlg_data;
 		add_to_list(history_dialog_list, item);

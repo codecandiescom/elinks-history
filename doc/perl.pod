@@ -211,7 +211,7 @@ B<TODO>
 =item ELinks::conf_eval($string)
 
 This function takes the supplied I<$string> and evaluates it as a [set of]
-configuration command[s] (like the B<-eval> configuration option). It
+configuration command[s] (like the B<-eval> commandline option). It
 returns an array of errors encountered during the evaluation; empty
 array signifies successful evaluation.
 

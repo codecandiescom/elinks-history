@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.103 2003/10/29 17:47:44 zas Exp $ */
+/* $Id: core.c,v 1.104 2003/10/30 15:50:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,7 +155,8 @@ l_current_document_formatted(LS)
 
 	if (!lua_ses || !(doc_view = current_frame(lua_ses))) goto lua_error;
 	if (width > 0) {
-		old_width = lua_ses->tab->term->x, lua_ses->tab->term->x = width;
+		old_width = lua_ses->tab->term->width;
+		lua_ses->tab->term->width = width;
 		html_interpret(lua_ses);
 	}
 
@@ -166,7 +167,7 @@ l_current_document_formatted(LS)
 	}
 
 	if (width > 0) {
-		lua_ses->tab->term->x = old_width;
+		lua_ses->tab->term->width = old_width;
 		html_interpret(lua_ses);
 	}
 	return 1;
@@ -369,10 +370,10 @@ dialog_fn(struct dialog_data *dlg_data)
 	text_width(term, dlg_msg[2], &min, &max);
 	buttons_width(dlg_data->widgets_data + 3, 2, &min, &max);
 
-	w = dlg_data->win->term->x * 9 / 10 - 2 * DIALOG_LB;
+	w = dlg_data->win->term->width * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
-	int_upper_bound(&w, dlg_data->win->term->x - 2 * DIALOG_LB);
+	int_upper_bound(&w, dlg_data->win->term->width - 2 * DIALOG_LB);
 	if (w < 1) w = 1;
 
 	/*rw = 0;*/
@@ -515,10 +516,10 @@ xdialog_fn(struct dialog_data *dlg_data)
 	text_width(term, dlg_msg[0], &min, &max);
 	buttons_width(dlg_data->widgets_data + nfields, 2, &min, &max);
 
-	w = dlg_data->win->term->x * 9 / 10 - 2 * DIALOG_LB;
+	w = dlg_data->win->term->width * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
-	int_upper_bound(&w, dlg_data->win->term->x - 2 * DIALOG_LB);
+	int_upper_bound(&w, dlg_data->win->term->width - 2 * DIALOG_LB);
 	if (w < 1) w = 1;
 	/*rw = 0;*/
 	/*HACK*/ w = rw = 50;

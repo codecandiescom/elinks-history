@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.78 2003/10/17 17:37:07 jonas Exp $ */
+/* $Id: draw.c,v 1.79 2003/10/30 15:50:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,8 +18,8 @@
 /* Makes sure that @x and @y are within the dimensions of the terminal. */
 #define check_range(term, x, y) \
 	do { \
-		int_bounds(&(x), 0, (term)->x - 1); \
-		int_bounds(&(y), 0, (term)->y - 1); \
+		int_bounds(&(x), 0, (term)->width - 1); \
+		int_bounds(&(y), 0, (term)->height - 1); \
 	} while (0)
 
 #ifdef USE_256_COLORS
@@ -69,7 +69,7 @@ draw_border_char(struct terminal *term, int x, int y,
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	position = x + term->x * y;
+	position = x + term->width * y;
 	term->screen->image[position].data = (unsigned char) border;
 	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
 	set_term_color(&term->screen->image[position], color, 0,
@@ -85,7 +85,7 @@ get_char(struct terminal *term, int x, int y)
 	if_assert_failed return 0;
 	check_range(term, x, y);
 
-	return &term->screen->image[x + term->x * y];
+	return &term->screen->image[x + term->width * y];
 }
 
 void
@@ -97,7 +97,7 @@ draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	position = x + term->x * y;
+	position = x + term->width * y;
 	set_term_color(&term->screen->image[position], color, 0,
 		       get_opt_int_tree(term->spec, "colors"));
 	set_screen_dirty(term->screen, y, y);
@@ -110,7 +110,7 @@ draw_char_data(struct terminal *term, int x, int y, unsigned char data)
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	term->screen->image[x + term->x * y].data = data;
+	term->screen->image[x + term->width * y].data = data;
 	set_screen_dirty(term->screen, y, y);
 }
 
@@ -125,10 +125,10 @@ draw_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	size = int_min(l, term->x - x);
+	size = int_min(l, term->width - x);
 	if (size == 0) return;
 
-	position = x + term->x * y;
+	position = x + term->width * y;
 	copy_screen_chars(&term->screen->image[position], line, size);
 	set_screen_dirty(term->screen, y, y);
 }
@@ -187,7 +187,7 @@ draw_char(struct terminal *term, int x, int y,
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	position = x + term->x * y;
+	position = x + term->width * y;
 	term->screen->image[position].data = data;
 	term->screen->image[position].attr = attr;
 	set_term_color(&term->screen->image[position], color, 0,
@@ -208,12 +208,12 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	height = int_min(yw, term->y - y);
-	width = int_min(xw, term->x - x);
+	height = int_min(yw, term->height - y);
+	width = int_min(xw, term->width - x);
 
 	if (height <= 0 || width <= 0) return;
 
-	line = &term->screen->image[x + term->x * y];
+	line = &term->screen->image[x + term->width * y];
 
 	/* Compose off the ending screen position in the areas first line. */
 	end = &line[width - 1];
@@ -233,7 +233,9 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 
 	/* Now make @end point to the last line */
 	/* For the rest of the area use the first area line. */
-	for (pos = line + term->x, height -= 1; height; height--, pos += term->x) {
+	for (pos = line + term->width, height -= 1;
+	     height;
+	     height--, pos += term->width) {
 		copy_screen_chars(pos, line, width);
 	}
 
@@ -254,10 +256,10 @@ draw_text(struct terminal *term, int x, int y,
 
 	check_range(term, x, y);
 
-	pos = &term->screen->image[x + term->x * y];
+	pos = &term->screen->image[x + term->width * y];
 
 	/* Use the last char as template. */
-	end = &pos[int_min(length, term->x - x) - 1];
+	end = &pos[int_min(length, term->width - x) - 1];
 	memset(end, 0, sizeof(struct screen_char));
 	end->attr = attr;
 	if (color) {
@@ -285,8 +287,8 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 	check_range(term, x, y);
 
 	if (blockable && get_opt_bool_tree(term->spec, "block_cursor")) {
-		x = term->x - 1;
-		y = term->y - 1;
+		x = term->width - 1;
+		y = term->height - 1;
 	}
 
 	if (term->screen->cx != x || term->screen->cy != y) {
@@ -300,6 +302,6 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 void
 clear_terminal(struct terminal *term)
 {
-	draw_area(term, 0, 0, term->x, term->y, ' ', 0, NULL);
+	draw_area(term, 0, 0, term->width, term->height, ' ', 0, NULL);
 	set_cursor(term, 0, 0, 1);
 }

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.10 2003/09/25 19:45:49 zas Exp $ */
+/* $Id: window.c,v 1.11 2003/10/30 15:50:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@ void
 redraw_from_window(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->x, term->y, 0);
+	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->width, term->height, 0);
 	struct window *end = (void *) &term->windows;
 
 	if (term->redrawing != 0) return;
@@ -36,7 +36,7 @@ void
 redraw_below_window(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->x, term->y, 0);
+	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->width, term->height, 0);
 	struct window *end = win;
 	int tr = term->redrawing;
 
@@ -56,7 +56,7 @@ add_window_at_pos(struct terminal *term,
 		  void *data, struct window *at)
 {
 	struct window *win = mem_calloc(1, sizeof(struct window));
-	struct term_event ev = INIT_TERM_EVENT(EV_INIT, term->x, term->y, 0);
+	struct term_event ev = INIT_TERM_EVENT(EV_INIT, term->width, term->height, 0);
 
 	if (!win) {
 		if (data) mem_free(data);

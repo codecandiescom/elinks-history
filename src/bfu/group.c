@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.35 2003/10/29 23:58:11 jonas Exp $ */
+/* $Id: group.c,v 1.36 2003/10/30 15:50:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,9 +137,9 @@ group_fn(struct dialog_data *dlg_data)
 	min_group_width(term, 1, dlg_data->widgets_data, n, &min);
 	buttons_width(dlg_data->widgets_data + n, 2, &min, &max);
 
-	w = term->x * 9 / 10 - 2 * DIALOG_LB;
+	w = term->width * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
-	int_bounds(&w, 1, term->x - 2 * DIALOG_LB);
+	int_bounds(&w, 1, term->width - 2 * DIALOG_LB);
 
 	rw = 0;
 	dlg_format_group(NULL, term, dlg_data->widgets_data, n,

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.102 2003/10/29 23:59:18 jonas Exp $ */
+/* $Id: options.c,v 1.103 2003/10/30 15:50:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,9 +133,9 @@ terminal_options_fn(struct dialog_data *dlg_data)
 	checkboxes_width(term, 1, dlg_data->widgets_data, dlg_data->n - 3, &min, &max);
 	buttons_width(dlg_data->widgets_data + dlg_data->n - 3, 3, &min, &max);
 
-	w = term->x * 9 / 10 - 2 * DIALOG_LB;
+	w = term->width * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
-	int_bounds(&w, 5, term->x - 2 * DIALOG_LB);
+	int_bounds(&w, 5, term->width - 2 * DIALOG_LB);
 
 	rw = 0;
 	dlg_format_checkboxes(NULL, term, dlg_data->widgets_data, dlg_data->n - 3, 0, &y, w,
@@ -283,8 +283,8 @@ void
 dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct dialog *dlg;
-	int x = term->x > 999 ? 999 : term->x;
-	int y = term->y > 999 ? 999 : term->y;
+	int x = int_min(term->width, 999);
+	int y = int_min(term->height, 999);
 	int n = 0;
 
 	sprintf(x_str, "%d", x);

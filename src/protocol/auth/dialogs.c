@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.66 2003/10/29 17:17:35 jonas Exp $ */
+/* $Id: dialogs.c,v 1.67 2003/10/30 15:50:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,9 +42,9 @@ auth_layout(struct dialog_data *dlg_data)
 	text_width(term, label_password, &min, &max);
 	buttons_width(dlg_data->widgets_data + 2, 2, &min, &max);
 
-	w = term->x * 9 / 10 - 2 * DIALOG_LB;
+	w = term->width * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
-	int_bounds(&w, 1, term->x - 2 * DIALOG_LB);
+	int_bounds(&w, 1, term->width - 2 * DIALOG_LB);
 
 	rw = 0;
 	if (dlg_data->dlg->udata) {

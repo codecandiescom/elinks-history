@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.88 2003/10/30 12:04:59 zas Exp $ */
+/* $Id: search.c,v 1.89 2003/10/30 15:50:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1003,7 +1003,7 @@ search_dlg_fn(struct dialog_data *dlg_data)
 
 	int_lower_bound(&max, dlg_data->dlg->widgets->datalen);
 
-	w = term->x * 9 / 10 - 2 * DIALOG_LB;
+	w = term->width * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
 

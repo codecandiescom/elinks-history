@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.25 2003/09/25 19:11:33 zas Exp $ */
+/* $Id: terminal.h,v 1.26 2003/10/30 15:50:55 zas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -100,7 +100,8 @@ struct terminal {
 	 * this terminal. */
 	int fdin, fdout;
 
-	int x, y;
+	/* Terminal dimensions. */
+	int width, height;
 
 	/* Indicates whether we are currently in the process of redrawing the
 	 * stuff being displayed on the terminal. It is typically used to

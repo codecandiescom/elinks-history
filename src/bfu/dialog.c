@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.63 2003/10/29 17:17:34 jonas Exp $ */
+/* $Id: dialog.c,v 1.64 2003/10/30 15:50:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,8 +359,8 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 void
 center_dlg(struct dialog_data *dlg_data)
 {
-	dlg_data->x = (dlg_data->win->term->x - dlg_data->xw) / 2;
-	dlg_data->y = (dlg_data->win->term->y - dlg_data->yw) / 2;
+	dlg_data->x = (dlg_data->win->term->width - dlg_data->xw) / 2;
+	dlg_data->y = (dlg_data->win->term->height - dlg_data->yw) / 2;
 }
 
 void

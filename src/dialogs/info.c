@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.61 2003/10/27 02:17:51 jonas Exp $ */
+/* $Id: info.c,v 1.62 2003/10/30 15:50:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,7 +143,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 
 	cache = (struct cache_entry *) cache_info(INFO_LIST);
 	foreach (ce, *cache) {
-		if (count++ < term->y - 10) { /* 10 seems a kool value. --Zas */
+		if (count++ < term->height - 10) { /* 10 seems a kool value. --Zas */
 			add_char_to_string(&info, '\n');
 #ifdef DEBUG
 			if (ce->incomplete)

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.246 2003/10/30 13:43:11 zas Exp $ */
+/* $Id: view.c,v 1.247 2003/10/30 15:50:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 				draw_area(t, x + 1, y, width, 1, BORDER_SHLINE,
 					  SCREEN_ATTR_FRAME, &colors);
 				if (i == frameset_desc->width - 1
-				    && x + width + 1 < t->x)
+				    && x + width + 1 < t->width)
 					draw_border_cross(t, x + width + 1, y,
 							  BORDER_X_LEFT, &colors);
 			} else if (i) {
@@ -312,8 +312,8 @@ draw_formatted(struct session *ses)
 
 	if (!ses->doc_view || !ses->doc_view->document) {
 		/*internal("document not formatted");*/
-		draw_area(ses->tab->term, 0, 1, ses->tab->term->x,
-			  ses->tab->term->y - 2, ' ', 0, NULL);
+		draw_area(ses->tab->term, 0, 1, ses->tab->term->width,
+			  ses->tab->term->height - 2, ' ', 0, NULL);
 		return;
 	}
 
@@ -1157,7 +1157,7 @@ quit:
 		if (ses->visible_tabs_bar) bars++;
 		if (ses->visible_status_bar) bars++;
 
-		if (ev->y == ses->tab->term->y - bars && (ev->b & BM_ACT) == B_DOWN
+		if (ev->y == ses->tab->term->height - bars && (ev->b & BM_ACT) == B_DOWN
 		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
 			int tab = get_tab_number_by_xpos(ses->tab->term, ev->x);
 
@@ -1498,7 +1498,7 @@ print_current_title(struct session *ses)
 	if (!init_string(&title)) return NULL;
 
 	document = doc_view->document;
-	width = ses->tab->term->x;
+	width = ses->tab->term->width;
 
 	/* Set up the document page info string: '(' %page '/' %pages ')' */
 	if (doc_view->height < document->height) {

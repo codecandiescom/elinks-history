@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.15 2003/10/26 19:49:02 zas Exp $ */
+/* $Id: event.c,v 1.16 2003/10/30 15:50:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,8 +208,8 @@ send_redraw:
 
 		if (ev->y == KBD_CTRL && upcase(ev->x) == 'L') {
 			ev->ev = EV_REDRAW;
-			ev->x = term->x;
-			ev->y = term->y;
+			ev->x = term->width;
+			ev->y = term->height;
 			goto send_redraw;
 		}
 		else if (ev->x == KBD_CTRL_C)

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.123 2003/10/29 17:17:36 jonas Exp $ */
+/* $Id: download.c,v 1.124 2003/10/30 15:50:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,7 +326,7 @@ download_window_function(struct dialog_data *dlg_data)
 	if (!init_string(&msg)) return;
 	t = download_progress_string(term, download, &msg);
 
-	w = term->x * 9 / 10 - 2 * DIALOG_LB;
+	w = term->width * 9 / 10 - 2 * DIALOG_LB;
 	int_lower_bound(&w, 0);
 
 	url_len = strlen(file_download->url);
@@ -358,7 +358,7 @@ download_window_function(struct dialog_data *dlg_data)
 	text_width(term, msg.source, &min, &max);
 	buttons_width(dlg_data->widgets_data, dlg_data->n, &min, &max);
 
-	int_bounds(&w, min, term->x - 2 * DIALOG_LB);
+	int_bounds(&w, min, term->width - 2 * DIALOG_LB);
 	if (t && download->prg->size >= 0) {
 		int_lower_bound(&w, DOWN_DLG_MIN);
 	} else {
@@ -451,8 +451,8 @@ set_file_download_win_handler(struct file_download *file_download)
 	if (file_download->win) {
 		struct term_event ev = INIT_TERM_EVENT(
 					EV_REDRAW,
-				   	file_download->win->term->x,
-				    	file_download->win->term->y,
+				   	file_download->win->term->width,
+				    	file_download->win->term->height,
 				    	0);
 
 		file_download->win->handler(file_download->win, &ev, 0);

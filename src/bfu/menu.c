@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.116 2003/10/22 17:23:50 jonas Exp $ */
+/* $Id: menu.c,v 1.117 2003/10/30 15:50:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,8 +144,8 @@ select_menu(struct terminal *term, struct menu *menu)
 static void
 count_menu_size(struct terminal *term, struct menu *menu)
 {
-	int sx = term->x;
-	int sy = term->y;
+	int width = term->width;
+	int height = term->height;
 	int mx = 4;
 	int my;
 
@@ -174,8 +174,8 @@ count_menu_size(struct terminal *term, struct menu *menu)
 
 	my += 2;
 
-	int_upper_bound(&mx, sx);
-	int_upper_bound(&my, sy);
+	int_upper_bound(&mx, width);
+	int_upper_bound(&my, height);
 
 	menu->xw = mx;
 	menu->yw = my;
@@ -183,8 +183,8 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	menu->x = menu->xp;
 	menu->y = menu->yp;
 
-	int_bounds(&menu->x, 0, sx - mx);
-	int_bounds(&menu->y, 0, sy - my);
+	int_bounds(&menu->x, 0, width - mx);
+	int_bounds(&menu->y, 0, height - my);
 }
 
 static void
@@ -623,7 +623,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	int p = 2;
 	int i;
 
-	draw_area(term, 0, 0, term->x, 1, ' ', 0, normal_color);
+	draw_area(term, 0, 0, term->width, 1, ' ', 0, normal_color);
 
 	for (i = 0; i < menu->ni; i++) {
 		struct color_pair *co = normal_color;

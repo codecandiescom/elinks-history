@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.115 2003/10/27 23:58:31 pasky Exp $ */
+/* $Id: screen.c,v 1.116 2003/10/30 15:50:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -533,19 +533,19 @@ add_char256(struct string *screen, struct screen_driver *driver,
 #define add_chars(image_, term_, driver_, state_, ADD_CHAR)			\
 {										\
 	register int y = (term_)->screen->dirty_from;				\
-	int ypos = y * term->x;							\
+	int ypos = y * term->width;						\
 	register struct screen_char *current = &(term_)->screen->last_image[ypos]; \
 	register struct screen_char *pos = &(term_)->screen->image[ypos];	\
 	register struct screen_char *prev_pos = NULL;				\
 	int prev_y = -1;							\
 										\
-	if ((term_)->screen->dirty_to >= (term_)->y)				\
-		(term_)->screen->dirty_to = (term_)->y - 1;			\
+	if ((term_)->screen->dirty_to >= (term_)->height)			\
+		(term_)->screen->dirty_to = (term_)->height - 1;		\
 										\
 	for (; y <= (term_)->screen->dirty_to; y++) {				\
 		register int x = 0;						\
 										\
-		for (; x < (term_)->x; x++, current++, pos++) {			\
+		for (; x < (term_)->width; x++, current++, pos++) {		\
 			if (compare_bg_color(pos->color, current->color)) {	\
 				/* No update for exact match. */		\
 				if (compare_fg_color(pos->color, current->color)\
@@ -633,8 +633,8 @@ redraw_screen(struct terminal *term)
 
 	done_string(&image);
 
-	copy_screen_chars(screen->last_image, screen->image, term->x * term->y);
-	screen->dirty_from = term->y;
+	copy_screen_chars(screen->last_image, screen->image, term->width * term->height);
+	screen->dirty_from = term->height;
 	screen->dirty_to = 0;
 }
 
@@ -673,9 +673,9 @@ init_screen(void)
 /* The two images are allocated in one chunk. */
 /* TODO: It seems allocation failure here is fatal. We should do something! */
 void
-resize_screen(struct terminal *term, int x, int y)
+resize_screen(struct terminal *term, int width, int height)
 {
-	int size = x * y;
+	int size = width * height;
 	int bsize = size * sizeof(struct screen_char);
 	struct terminal_screen *screen = term->screen;
 	struct screen_char *image;
@@ -691,10 +691,10 @@ resize_screen(struct terminal *term, int x, int y)
 	memset(screen->image, 0, bsize);
 	memset(screen->last_image, 0xFF, bsize);
 
-	term->x = x;
-	term->y = y;
+	term->width = width;
+	term->height = height;
 	screen->dirty_from = 0;
-	screen->dirty_to = y;
+	screen->dirty_to = height;
 }
 
 void

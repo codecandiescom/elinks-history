@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.197 2003/10/30 13:43:11 zas Exp $ */
+/* $Id: session.c,v 1.198 2003/10/30 15:50:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,25 +144,25 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 
 	if (prev_title_bar != ses->visible_title_bar) {
 		prev_title_bar = ses->visible_title_bar;
-		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->y);
+		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
 	}
 
 	if (prev_status_bar != ses->visible_status_bar) {
 		prev_status_bar = ses->visible_status_bar;
-		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->y);
+		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
 	}
 
 	if (prev_tabs_bar != ses->visible_tabs_bar) {
 		prev_tabs_bar = ses->visible_tabs_bar;
-		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->y);
+		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
 	}
 
 	if (doo) {
 		doo->x = 0;
 		doo->y = 0;
 		if (ses->visible_title_bar) doo->y = 1;
-		doo->width = ses->tab->term->x;
-		doo->height = ses->tab->term->y;
+		doo->width = ses->tab->term->width;
+		doo->height = ses->tab->term->height;
 		if (ses->visible_title_bar) doo->height--;
 		if (ses->visible_status_bar) doo->height--;
 		if (ses->visible_tabs_bar) doo->height--;
@@ -230,7 +230,7 @@ print_screen_status(struct session *ses)
 				msg = get_stat_msg(stat, term);
 		}
 
-		draw_area(term, 0, term->y - 1, term->x, 1, ' ', 0,
+		draw_area(term, 0, term->height - 1, term->width, 1, ' ', 0,
 			  get_bfu_color(term, "status.status-bar"));
 
 		if (!ses->visible_tabs_bar && tabs_count > 1) {
@@ -243,7 +243,7 @@ print_screen_status(struct session *ses)
 			tab_info[tab_info_len] = '\0';
 
 			text_color = get_bfu_color(term, "status.status-text");
-			draw_text(term, 0, term->y - 1, tab_info, tab_info_len,
+			draw_text(term, 0, term->height - 1, tab_info, tab_info_len,
 				  0, text_color);
 		}
 
@@ -251,7 +251,7 @@ print_screen_status(struct session *ses)
 			if (!text_color)
 				text_color = get_bfu_color(term, "status.status-text");
 
-			draw_text(term, 0 + tab_info_len, term->y - 1,
+			draw_text(term, 0 + tab_info_len, term->height - 1,
 				  msg, strlen(msg), 0, text_color);
 			mem_free(msg);
 		}
@@ -261,11 +261,11 @@ print_screen_status(struct session *ses)
 		struct color_pair *normal_color = get_bfu_color(term, "tabs.normal");
 		struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
 		struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
-		int tab_width = term->x / tabs_count;
+		int tab_width = term->width / tabs_count;
 		int tab_total_width = tab_width * tabs_count;
-		int tab_remain_width = int_max(0, term->x - tab_total_width);
+		int tab_remain_width = int_max(0, term->width - tab_total_width);
 		int tab_num;
-		int ypos = term->y - (ses->visible_status_bar ? 2 : 1);
+		int ypos = term->height - (ses->visible_status_bar ? 2 : 1);
 		int xpos = 0;
 
 		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
@@ -329,14 +329,14 @@ print_screen_status(struct session *ses)
 	}
 
 	if (ses_tab_is_current && ses->visible_title_bar) {
-		draw_area(term, 0, 0, term->x, 1, ' ', 0,
+		draw_area(term, 0, 0, term->width, 1, ' ', 0,
 			  get_bfu_color(term, "title.title-bar"));
 
 		if (current_frame(ses)) {
 			msg = print_current_title(ses);
 			if (msg) {
 				int msglen = strlen(msg);
-				int pos = term->x - 1 - msglen;
+				int pos = term->width - 1 - msglen;
 
 				if (pos < 0) pos = 0;
 				draw_text(term, pos, 0, msg, msglen, 0,

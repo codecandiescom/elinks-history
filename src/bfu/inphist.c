@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.51 2003/10/29 15:38:44 zas Exp $ */
+/* $Id: inphist.c,v 1.52 2003/10/30 15:50:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@ static void
 tab_compl_n(struct terminal *term, unsigned char *item, int len,
 	    struct window *win)
 {
-	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->x, term->y, 0);
+	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->width, term->height, 0);
 	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
 	struct widget_data *widget_data = selected_widget(dlg_data);
 

@@ -482,30 +482,47 @@ void display_download(struct terminal *term, struct download *down, struct sessi
 
 time_t parse_http_date(const char *date)
 {
+	/* Mon, 03 Jan 2000 21:29:33 GMT */
 	const char *months[12] =
 		{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
 		 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-
-	time_t t = 0;
-	/* Mon, 03 Jan 2000 21:29:33 GMT */
 	struct tm tm;
-	if (!date || strlen(date) < 28) return 0;
+	time_t t = 0;
+	int year_2dgt = 0;
+	
+	if (!date || strlen(date) < 26) return 0;
+	year_2dgt = (strlen(date) < 28);
 	date += 5;
+	
 	tm.tm_mday = (date[0] - '0') * 10 + date[1] - '0';
 	date += 3;
+	
 	for (tm.tm_mon = 0; tm.tm_mon < 12; tm.tm_mon++)
 		if (!strncmp(date, months[tm.tm_mon], 3)) break;
 	date += 4;
-	tm.tm_year = (date[0] - '0') * 1000 + (date[1] - '0') * 100 + (date[2] - '0') * 10 + date[3] - '0' - 1900;
-	date += 5;
+	
+	if (!year_2dgt) {
+		tm.tm_year = (date[0] - '0') * 1000 + (date[1] - '0') * 100 + (date[2] - '0') * 10 + date[3] - '0' - 1900;
+		date += 5;
+	} else {
+		tm.tm_year = (date[0] - '0') * 10 + (date[1] - '0');
+		if (tm.tm_year < 60) tm.tm_year += 100;
+		date += 3;
+	}
+	
 	tm.tm_hour = (date[0] - '0') * 10 + date[1] - '0';
 	date += 3;
+	
 	tm.tm_min = (date[0] - '0') * 10 + date[1] - '0';
 	date += 3;
+	
 	tm.tm_sec = (date[0] - '0') * 10 + date[1] - '0';
+	
 	t = mktime(&tm);
-	if (t == (time_t) - 1) return 0;
-	else return t;
+	if (t == (time_t) - 1)
+		return 0;
+	else
+		return t;
 }
 
 void download_data(struct status *stat, struct download *down)

@@ -193,6 +193,9 @@ Sergei Borushevsky <b_sp@usa.net>
 Simos Xenitellis <simos@hellug.gr>
 	Greek codepages & translation
 
+Stepan Roh <stepan@srnet.cz>
+	Set-Cookie expires attribute proper parsing bugfixes
+
 Suveg Gabor <gsuveg@sgmobil2000.hu>
 	Hungarian translation
 

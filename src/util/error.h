@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.27 2003/06/16 16:11:27 pasky Exp $ */
+/* $Id: error.h,v 1.28 2003/06/22 15:44:46 jonas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -106,6 +106,12 @@ void do_not_optimize_here(void *x);
 #define do_not_optimize_here_gcc_2_7(x) do_not_optimize_here(x)
 #else
 #define do_not_optimize_here_gcc_2_7(x)
+#endif
+
+#if defined(__GNUC__) && __GNUC__ == 3 && __GNUC_MINOR__ == 3
+#define do_not_optimize_here_gcc_3_3(x) do_not_optimize_here(x)
+#else
+#define do_not_optimize_here_gcc_3_3(x)
 #endif
 
 

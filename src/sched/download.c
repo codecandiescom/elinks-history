@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.64 2003/06/18 11:46:42 pasky Exp $ */
+/* $Id: download.c,v 1.65 2003/06/22 15:44:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1153,6 +1153,7 @@ tp_display(struct session *ses)
 	else
 		cur_loc(ses)->stat.state = ses->tq.state;
 
+	do_not_optimize_here_gcc_3_3(ses);
 	cur_loc(ses)->vs.plain = 1;
 	display_timer(ses);
 	tp_free(ses);

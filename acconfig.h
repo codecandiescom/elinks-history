@@ -65,4 +65,7 @@
 #undef HAVE_GAI
 
 /* */
+#undef IPV6
+
+/* */
 #undef X2

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.52 2004/06/13 03:57:11 jonas Exp $ */
+/* $Id: event.c,v 1.53 2004/06/13 04:03:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,10 +197,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 		reset_timer();
 
 		if (ev->y == KBD_CTRL && upcase(ev->x) == 'L') {
-			ev->ev = EV_RESIZE;
-			ev->x = term->width;
-			ev->y = term->height;
-			term_send_event(term, ev);
+			redraw_terminal_cls(term);
 			break;
 
 		} else if (ev->x == KBD_CTRL_C) {

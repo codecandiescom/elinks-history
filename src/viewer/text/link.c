@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.114 2003/12/01 15:35:51 pasky Exp $ */
+/* $Id: link.c,v 1.115 2003/12/03 15:30:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -930,7 +930,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			int c = can_open_in_new(term);
 
 			if (link->form->type == FC_TEXTAREA && !link->form->ro) {
-				add_to_menu(&mi, N_("Open in ~external editor"), "Ctrl-E",
+				add_to_menu(&mi, N_("Open in ~external editor"), "Ctrl-T",
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}
 

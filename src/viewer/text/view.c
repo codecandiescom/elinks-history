@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.109 2003/07/01 14:28:48 zas Exp $ */
+/* $Id: view.c,v 1.110 2003/07/01 15:07:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1735,49 +1735,53 @@ get_form_url(struct session *ses, struct f_data_c *f,
 	unsigned char *data;
 	unsigned char bound[BL];
 	int len;
-	unsigned char *go = NULL;
+	unsigned char *go = init_str();
 	int cp_from, cp_to;
 
-	if (!frm) return NULL;
+	if (!frm || !go) return NULL;
+
 	if (frm->type == FC_RESET) {
 		reset_form(f, frm->form_num);
 		return NULL;
 	}
 	if (!frm->action) return NULL;
+
 	get_succesful_controls(f, frm, &submit);
+
 	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
 	cp_to = f->f_data->cp;
 	if (frm->method == FM_GET || frm->method == FM_POST)
 		encode_controls(&submit, &data, &len, cp_from, cp_to);
 	else
 		encode_multipart(ses, &submit, &data, &len, bound, cp_from, cp_to);
-	if (!data) goto ff;
+
+	if (!data) {
+		free_succesful_controls(&submit);
+		return NULL;
+	}
+
 	if (frm->method == FM_GET) {
-		go = mem_alloc(strlen(frm->action) + 1 + len + 1);
-		if (go) {
-			unsigned char *pos;
+		int l = 0;
+		unsigned char *pos = strchr(frm->action, '#');
 
-			strcpy(go, frm->action);
-			pos = strchr(go, '#');
-			if (pos) {
-				unsigned char *poss = pos;
-
-				pos = stracpy(pos);
-				*poss = 0;
-			}
-			if (strchr(go, '?'))
-				strcat(go, "&");
-			else
-				strcat(go, "?");
-			strcat(go, data);
-			if (pos) strcat(go, pos), mem_free(pos);
+		if (pos) {
+			add_bytes_to_str(&go, &l, frm->action, pos - frm->action);
+		} else {
+			add_to_str(&go, &l, frm->action);
 		}
+
+		if (strchr(go, '?'))
+			add_chr_to_str(&go, &l, '&');
+		else
+			add_chr_to_str(&go, &l, '?');
+
+		add_to_str(&go, &l, data);
+
+		if (pos) add_to_str(&go, &l, pos);
 	} else {
 		int l = 0;
 		int i;
 
-		go = init_str();
-		if (!go) goto x;
 		add_to_str(&go, &l, frm->action);
 		add_chr_to_str(&go, &l, POST_CHAR);
 		if (frm->method == FM_POST) {
@@ -1790,15 +1794,12 @@ get_form_url(struct session *ses, struct f_data_c *f,
 		for (i = 0; i < len; i++) {
 			unsigned char p[3];
 
-			sprintf(p, "%02x", (int)data[i]);
+			ulonghexcat(p, NULL, (int) data[i], 2, '0', 0);
 			add_to_str(&go, &l, p);
 		}
 	}
 
-x:
 	mem_free(data);
-
-ff:
 	free_succesful_controls(&submit);
 	return go;
 }

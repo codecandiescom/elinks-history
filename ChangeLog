@@ -1,3 +1,38 @@
+Fri Feb 25 18:40:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/finger/finger.h:
+
+	Normalize the header guards.  
+
+Fri Feb 25 17:05:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: renderer.c, html/renderer.c, plain/renderer.c:
+
+	Fix honouring of the Refresh-header when the loaded document is
+	empty. The fix requires assertions to be removed in the renderers.
+	It also fixes things like document->bgcolor not being set for empty
+	documents. Reported by Daniel on elinks-users. (bug 625) 
+
+Fri Feb 25 16:55:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	process_head(): Tidy up.  
+
+Fri Feb 25 16:53:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Oops. Fix last patch. A little rusty. ;) 
+
+Fri Feb 25 16:52:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	According to http://wp.netscape.com/assist/net_sites/pushpull.html a
+	missing URL parameter to the Refresh HTTP-equiv indicates the
+	current document should be refreshed.  
+
 Thu Feb 24 21:51:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/sched/download.c:

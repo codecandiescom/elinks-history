@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.64 2003/12/02 10:54:12 zas Exp $ */
+/* $Id: text.c,v 1.65 2003/12/02 17:31:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/draw.h"
+#include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
 
@@ -303,10 +304,35 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	return EVENT_PROCESSED;
 }
 
+static int
+mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
+	   struct term_event *ev)
+{
+	int x = dlg_data->x + dlg_data->width - DIALOG_LEFT_BORDER - 1;
+	int y = widget_data->y;
+	int height = widget_data->h;
+	int current = widget_data->info.text.current;
+
+	if ((ev->b & BM_BUTT) >= B_WHEEL_UP
+	    || ev->x != x
+	    || ev->y < y || ev->y >= y + height)
+		return EVENT_NOT_PROCESSED;
+
+	/* If in upper half, scroll up else scroll down. */
+	if (ev->y < y + height/2)
+		current--;
+	else
+		current++;
+
+	format_and_display_text(widget_data, dlg_data, current);
+	return EVENT_PROCESSED;
+}
+
+
 struct widget_ops text_ops = {
 	display_text,
 	NULL,
-	NULL,
+	mouse_text,
 	kbd_text,
 	NULL,
 };

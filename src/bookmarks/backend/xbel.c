@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.51 2005/03/20 10:40:54 jonas Exp $ */
+/* $Id: xbel.c,v 1.52 2005/03/22 04:43:44 miciah Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -218,8 +218,7 @@ write_bookmarks_list(struct secure_save_info *ssi,
 		indentation(ssi, n + 1);
 
 		if (bm->box_item->type == BI_FOLDER) {
-			int expanded = folder_state
-				     ? bm->box_item->expanded : 0;
+			int expanded = folder_state && bm->box_item->expanded;
 
 			secure_fputs(ssi, "<folder folded=\"");
 			secure_fputs(ssi, expanded ? "no" : "yes");

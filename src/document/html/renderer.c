@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.62 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: renderer.c,v 1.63 2003/04/28 13:22:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1494,7 +1494,6 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 
 	i = d_opt->plain;
 	d_opt->plain = 0;
-
 	screen->title = convert_string(convert_table, t, strlen(t));
 	d_opt->plain = i;
 
@@ -1886,9 +1885,11 @@ html_interpret(struct session *ses)
 
 	mk_document_options(&o);
 
-	/* FIXME: enigmatic code by Mikulas Corp. -- Zas*/
-	if ((o.plain = l ? l->plain : 1) == -1) o.plain = 0;
-	if (l) l->plain = o.plain;
+	o.plain = 1;
+	if (l) {
+		if (l->plain != 1) o.plain = 0;
+		l->plain = o.plain;
+	};
 
 	memcpy(&o.default_fg, get_opt_ptr("document.colors.text"), sizeof(struct rgb));
 	memcpy(&o.default_bg, get_opt_ptr("document.colors.background"), sizeof(struct rgb));

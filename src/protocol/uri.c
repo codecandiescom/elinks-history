@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.157 2004/04/07 14:24:19 jonas Exp $ */
+/* $Id: uri.c,v 1.158 2004/04/07 15:03:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -692,7 +692,7 @@ parse_uri:
 
 			/* Process the hostname */
 			for (domain = ch + 1;
-			     *(host_end = domain + strcspn(domain, ".:/")) == '.';
+			     *(host_end = domain + strcspn(domain, ".:/?")) == '.';
 			     domain = host_end + 1);
 
 			/* It's IP? */
@@ -724,7 +724,6 @@ end:
 			insert_in_string(&newurl, 0, prefix, strlen(prefix));
 		} else {
 			insert_in_string(&newurl, 0, prefix, strlen(prefix));
-			if (!strchr(url, '/')) add_to_strn(&newurl, "/");
 		}
 
 		goto parse_uri;

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.85 2003/11/28 00:17:34 jonas Exp $ */
+/* $Id: msgbox.c,v 1.86 2003/11/28 16:32:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,6 +59,8 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	dlg->layout.padding_top = 1;
 	dlg->udata2 = udata;
 
+	if (flags & MSGBOX_SCROLLABLE)
+		dlg->widgets->info.text.is_scrollable = 1;
 	add_dlg_text(dlg, text, align, 0);
 
 	va_start(ap, buttons);

@@ -43,6 +43,40 @@ TODO: Algoritms for finding the nearest good color combination.
 TODO: How to cache the result and integrate it with the current color system.
 TODO: How to make the configuration easy but still powerful.
 
+Implementation
+--------------
+
+There is some sample code for RGB <-> HSL conversion posted to the elinks-dev
+mailing list. It is expected to be merged to CVS when the color model itself
+implementation will draw nearer.
+
+Availability
+------------
+
+The color model idea sounds great, however its usability is probably rather
+limited and most of the people could live fine without it (that is not to
+dispute that it can prove to be unique and invaluable for the others). Thus,
+it should be fully optional both at compile time and runtime.
+
+It should still be possible to use only the original 16 colors fg_color xlat
+table (which is so trivial that its inclusion probably need not be configurable
+at the compile time), because its value is indisputably greater by orders of
+magnitude for the whole (or most of the) scale of users - the approximation to
+16 colors is so imprecise that the result is too often far from what the page
+author intended. Pasky believes that the 256 colors already provide much
+preciser transformation of the RGB triplet and thus it is quite unlikely the
+color combinations shown would differ dramatically from the intended look.
+
+Of course some people want to always force readibility over the web page's
+author color choice (there is some really sick stuff color-wise around the web;
+and of course there are the "secret" black-on-black or white-on-white texts
+;-), and the people will all sorts of color disabilities (which are quite
+frequent in the population, AFAIK). This would be a killer feature for them and
+that is the reason why Pasky thinks that the compile time option for including
+of color models implementation should be by default enabled. Pasky is still not
+sure whether the color models should be by default enabled or disabled at the
+runtime, pros and cons welcomed.
+
 Further reading
 ---------------
 
@@ -63,4 +97,4 @@ http://www.lighthouse.org/color_contrast.htm
 
 	Basic introduction to usage of HSL colors.
 
-$Id: color-model.txt,v 1.3 2003/10/07 20:21:03 pasky Exp $
+$Id: color-model.txt,v 1.4 2003/10/07 20:42:28 pasky Exp $

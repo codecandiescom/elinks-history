@@ -2534,7 +2534,7 @@ msgstr "Sensibilité à la casse"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr "Respecter ou non de la casse lors des recherches dans le document."
+msgstr "Respecter ou non la casse lors des recherches dans le document."
 
 #: src/config/options.inc:369
 msgid "Regular expressions"

@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.18 2004/11/19 17:46:05 zas Exp $ */
+/* $Id: property.h,v 1.19 2005/03/05 21:06:35 zas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -61,7 +61,7 @@ struct css_property {
 
 struct css_property_info;
 struct scanner;
-typedef int (*css_property_value_parser)(struct css_property_info *propinfo,
+typedef int (*css_property_value_parser_T)(struct css_property_info *propinfo,
 					 union css_property_value *value,
 					 struct scanner *scanner);
 
@@ -81,7 +81,7 @@ struct css_property_info {
 	 * can share a parser, it is expected that most properties will either
 	 * use a custom one or use a generic parser with property-specific
 	 * backend specified in @parser_data. */
-	css_property_value_parser parser;
+	css_property_value_parser_T parser;
 
 	/* In case you use a generic @parser, it can be useful to still give
 	 * it some specific data. You can do so through @parser_data. The

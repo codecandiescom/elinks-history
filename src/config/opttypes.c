@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.75 2003/12/26 08:33:49 jonas Exp $ */
+/* $Id: opttypes.c,v 1.76 2004/01/17 00:11:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,7 +313,7 @@ lang_wr(struct option *o, struct string *s)
 static int
 color_set(struct option *opt, unsigned char *str)
 {
-	return !decode_color(str, &opt->value.color);
+	return !decode_color(str, strlen(str), &opt->value.color);
 }
 
 static void

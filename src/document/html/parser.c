@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.328 2004/01/16 18:51:02 zas Exp $ */
+/* $Id: parser.c,v 1.329 2004/01/17 00:11:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,7 +348,7 @@ get_color(unsigned char *a, unsigned char *c, color_t *rgb)
 	at = get_attr_val(a, c);
 	if (!at) return -1;
 
-	r = decode_color(at, rgb);
+	r = decode_color(at, strlen(at), rgb);
 	mem_free(at);
 
 	return r;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.431 2004/01/08 17:14:41 zas Exp $ */
+/* $Id: options.c,v 1.432 2004/01/17 00:11:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,7 +434,8 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 			option->value.number = (long) value;
 			break;
 		case OPT_COLOR:
-			decode_color(value, &option->value.color);
+			decode_color(value, strlen((unsigned char *) value),
+					&option->value.color);
 			break;
 		case OPT_COMMAND:
 			option->value.command = value;
@@ -913,7 +914,8 @@ register_options(struct option_info info[], struct option *tree)
 			case OPT_COLOR:
 				string = option->value.string;
 				assert(string);
-				decode_color(string, &option->value.color);
+				decode_color(string, strlen(string),
+						&option->value.color);
 				break;
 			case OPT_CODEPAGE:
 				string = option->value.string;

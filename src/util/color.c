@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.5 2004/01/17 00:05:52 pasky Exp $ */
+/* $Id: color.c,v 1.6 2004/01/17 00:11:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,10 +217,8 @@ free_colors_lookup(void)
 }
 
 int
-decode_color(unsigned char *str, color_t *color)
+decode_color(unsigned char *str, int slen, color_t *color)
 {
-	int slen = strlen(str);
-
 	if (*str == '#' && slen == 7) {
 		unsigned char *end;
 		color_t string_color;

@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.3 2003/08/31 12:48:36 jonas Exp $ */
+/* $Id: color.h,v 1.4 2004/01/17 00:11:03 pasky Exp $ */
 
 #ifndef EL__UTIL_COLOR_H
 #define EL__UTIL_COLOR_H
@@ -42,7 +42,7 @@ struct color_pair {
 /* Decode the color string. */
 /* The color string can either contain '#FF0044' style declarations or
  * color names. */
-int decode_color(unsigned char *str, color_t *color);
+int decode_color(unsigned char *str, int slen, color_t *color);
 
 /* Returns an allocated string containing name of the @color or NULL if there's
  * no name for that color. */

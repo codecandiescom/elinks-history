@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.97 2004/03/21 15:39:10 jonas Exp $ */
+/* $Id: uri.c,v 1.98 2004/03/21 15:58:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,7 +215,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 unsigned char *
 unparse_uri(struct uri *uri)
 {
-	unsigned char *uristr = struri(*uri);
+	unsigned char *uristr = struri(uri);
 
 	memset(uri, 0, sizeof(struct uri));
 
@@ -259,7 +259,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
  	if (!known || get_protocol_free_syntax(uri->protocol)) {
  		/* Custom or unknown or free-syntax protocol;
  		 * keep the URI untouched. */
-		add_to_string(string, struri(*uri));
+		add_to_string(string, struri(uri));
 
 		return string;
  	}
@@ -1040,7 +1040,7 @@ get_uri(unsigned char *string)
 void
 done_uri(struct uri *uri)
 {
-	unsigned char *string = struri(*uri);
+	unsigned char *string = struri(uri);
 	int length = strlen(string);
 	struct hash_item *item;
 	struct uri_cache_entry *entry;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.250 2004/03/21 15:39:10 jonas Exp $ */
+/* $Id: http.c,v 1.251 2004/03/21 15:58:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 	if (conn->info && !((struct http_connection_info *) conn->info)->close
 	    && (!conn->ssl) /* We won't keep alive ssl connections */
 	    && (!get_opt_int("protocol.http.bugs.post_no_keepalive")
-		|| !conn->uri.post)) {
+		|| !conn->uri->post)) {
 		add_keepalive_connection(conn, HTTP_KEEPALIVE_TIMEOUT);
 	} else {
 		abort_connection(conn);
@@ -278,7 +278,7 @@ http_func(struct connection *conn)
 	set_connection_timeout(conn);
 
 	if (!has_keepalive_connection(conn)) {
-		int p = get_uri_port(&conn->uri);
+		int p = get_uri_port(conn->uri);
 
 		if (p == -1) {
 			abort_conn_with_state(conn, S_INTERNAL);
@@ -299,7 +299,7 @@ proxy_func(struct connection *conn)
 
 static void http_get_header(struct connection *);
 
-#define IS_PROXY_URI(x) ((x).protocol == PROTOCOL_PROXY)
+#define IS_PROXY_URI(x) ((x)->protocol == PROTOCOL_PROXY)
 
 static void
 http_send_header(struct connection *conn)
@@ -318,13 +318,13 @@ http_send_header(struct connection *conn)
 
 	/* Setup the real uri. */
 	if (IS_PROXY_URI(conn->uri)) {
-		assertm(!string_is_empty(&conn->uri.data), "No proxy data");
+		assertm(!string_is_empty(&conn->uri->data), "No proxy data");
 		uri = &real_uri;
-		if (!parse_uri(uri, conn->uri.data.source))
+		if (!parse_uri(uri, conn->uri->data.source))
 			uri = NULL;
 
 	} else {
-		uri = &conn->uri;
+		uri = conn->uri;
 	}
 
 	/* Sanity check for a host */
@@ -381,7 +381,7 @@ http_send_header(struct connection *conn)
 		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->ssl) {
 			add_url_to_http_string(&header, uri->data.source);
 		} else {
-			add_url_to_http_string(&header, conn->uri.data.source);
+			add_url_to_http_string(&header, conn->uri->data.source);
 		}
 	}
 
@@ -1062,15 +1062,15 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	set_connection_timeout(conn);
 
 	/* Setup the real uri. */
-	if (IS_PROXY_URI(conn->uri) && !string_is_empty(&conn->uri.data)) {
+	if (IS_PROXY_URI(conn->uri) && !string_is_empty(&conn->uri->data)) {
 		uri = &real_uri;
-		if (!parse_uri(uri, conn->uri.data.source)) {
+		if (!parse_uri(uri, conn->uri->data.source)) {
 			abort_conn_with_state(conn, S_BAD_URL);
 			return;
 		}
 
 	} else {
-		uri = &conn->uri;
+		uri = conn->uri;
 	}
 
 	if (rb->close == 2) {
@@ -1386,7 +1386,7 @@ again:
 
 	d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);
 	if (d) {
-		unsigned char *extension = get_extension_from_url(struri(*uri));
+		unsigned char *extension = get_extension_from_url(struri(uri));
 		enum stream_encoding file_encoding;
 
 		file_encoding = extension ? guess_encoding(extension) : ENCODING_NONE;

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.53 2004/03/21 15:39:10 jonas Exp $ */
+/* $Id: cgi.c,v 1.54 2004/03/21 15:58:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,7 @@ static void
 send_post_data(struct connection *conn)
 {
 #define POST_BUFFER_SIZE 4096
-	unsigned char *post = conn->uri.post;
+	unsigned char *post = conn->uri->post;
 	unsigned char *postend;
 	unsigned char buffer[POST_BUFFER_SIZE];
 	struct string data;
@@ -104,7 +104,7 @@ send_post_data(struct connection *conn)
 static void
 send_request(struct connection *conn)
 {
-	if (conn->uri.post) send_post_data(conn);
+	if (conn->uri->post) send_post_data(conn);
 	else close_pipe_and_read(conn);
 }
 
@@ -112,8 +112,8 @@ send_request(struct connection *conn)
 static int
 set_vars(struct connection *conn, unsigned char *script)
 {
-	unsigned char *post = conn->uri.post;
-	unsigned char *question_mark = string_strchr(&conn->uri.data, '?');
+	unsigned char *post = conn->uri->post;
+	unsigned char *question_mark = string_strchr(&conn->uri->data, '?');
 	unsigned char *query_string = question_mark
 				    ? question_mark + 1 : (unsigned char *) "";
 	unsigned char *optstr;
@@ -236,7 +236,7 @@ set_vars(struct connection *conn, unsigned char *script)
 
 #ifdef CONFIG_COOKIES
 	{
-		struct string *cookies = send_cookies(&conn->uri);
+		struct string *cookies = send_cookies(conn->uri);
 
 		if (cookies) {
 			setenv("HTTP_COOKIE", cookies->source, 1);
@@ -279,8 +279,8 @@ execute_cgi(struct connection *conn)
 {
 	unsigned char *last_slash;
 	unsigned char *question_mark;
-	unsigned char *script = conn->uri.data.source;
-	int scriptlen = conn->uri.data.length;
+	unsigned char *script = conn->uri->data.source;
+	int scriptlen = conn->uri->data.length;
 	struct stat buf;
 	int res;
 	enum connection_state state = S_OK;
@@ -293,7 +293,7 @@ execute_cgi(struct connection *conn)
 		return 1;
 	}
 
-	question_mark = string_strchr(&conn->uri.data, '?');
+	question_mark = string_strchr(&conn->uri->data, '?');
 	if (question_mark) scriptlen = question_mark - script;
 
 	script = memacpy(script, scriptlen);

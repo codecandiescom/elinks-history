@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.58 2004/03/21 15:08:35 jonas Exp $ */
+/* $Id: user.c,v 1.59 2004/03/21 15:58:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,8 +73,8 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 		cmd++;
 		switch (*cmd) {
 			case 'u':
-				substr = struri(*uri);
-				sublen = strlen(struri(*uri));
+				substr = struri(uri);
+				sublen = strlen(struri(uri));
 				break;
 
 			case 'h':

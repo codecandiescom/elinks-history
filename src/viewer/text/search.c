@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.252 2004/07/12 11:58:02 jonas Exp $ */
+/* $Id: search.c,v 1.253 2004/07/12 12:00:40 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1097,7 +1097,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	     unsigned char *text, int action, int *offset)
 {
 	int current = int_max(doc_view->vs->current_link, 0);
-	int direction, i = current;
+	int direction, match, i = current;
 	struct document *document = doc_view->document;
 
 	switch (action) {
@@ -1131,12 +1131,12 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			direction = 1;
 	}
 
-	i = search_link_text(document, current, i, text, direction, offset);
-	if (i < 0) return TYPEAHEAD_ERROR;
+	match = search_link_text(document, current, i, text, direction, offset);
+	if (match < 0) return TYPEAHEAD_ERROR;
 
-	assert(i >= 0 && i < doc_view->document->nlinks);
+	assert(match >= 0 && match < doc_view->document->nlinks);
 
-	doc_view->vs->current_link = i;
+	doc_view->vs->current_link = match;
 	return TYPEAHEAD_MATCHED;
 }
 

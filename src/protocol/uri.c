@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.197 2004/05/23 16:56:14 jonas Exp $ */
+/* $Id: uri.c,v 1.198 2004/05/24 00:52:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -335,8 +335,10 @@ add_uri_to_string(struct string *string, struct uri *uri,
 	if (wants(URI_DATA) && uri->datalen)
 		add_bytes_to_string(string, uri->data, uri->datalen);
 
-	if (wants(URI_POST) && uri->post)
-		add_bytes_to_string(string, uri->post, strlen(uri->post));
+	if (wants(URI_POST) && uri->post) {
+		add_char_to_string(string, POST_CHAR);
+		add_to_string(string, uri->post);
+	}
 
 #undef wants
 

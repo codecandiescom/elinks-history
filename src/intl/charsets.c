@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.57 2003/08/21 13:03:55 zas Exp $ */
+/* $Id: charsets.c,v 1.58 2003/09/17 01:30:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -666,7 +666,10 @@ flush:
 			if (bufferpos & (ALLOC_GR - 1)) continue;
 
 			new = mem_realloc(buffer, bufferpos + ALLOC_GR);
-			if (!new) return NULL;
+			if (!new) {
+				mem_free(buffer);
+				return NULL;
+			}
 			buffer = new;
 		}
 	}

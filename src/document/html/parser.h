@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.17 2003/05/02 22:16:18 zas Exp $ */
+/* $Id: parser.h,v 1.18 2003/05/07 10:07:23 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -52,35 +52,42 @@ enum form_type {
 struct form_control {
 	LIST_HEAD(struct form_control);
 
+	struct menu_item *menu;
+
+	unsigned char *name;
+	unsigned char *alt;
+	unsigned char *action;
+	unsigned char *target;
+	unsigned char *default_value;
+
+	unsigned char **values;
+	unsigned char **labels;
+
 	int form_num;
 	int ctrl_num;
 	int g_ctrl_num;
 	int position;
-	enum form_method method;
-	unsigned char *action;
-	unsigned char *target;
-	enum form_type type;
-	unsigned char *name;
-	unsigned char *alt;
 	int ro;
-	unsigned char *default_value;
 	int default_state;
 	int size;
-	int cols, rows, wrap;
+	int cols, rows;
+	int wrap;
 	int maxlength;
 	int nvalues;
-	unsigned char **values;
-	unsigned char **labels;
-	struct menu_item *menu;
+
+	enum form_method method;
+	enum form_type type;
+
 };
 
 struct form_state {
+	unsigned char *value;
+
 	int form_num;
 	int ctrl_num;
 	int g_ctrl_num;
 	int position;
 	int type;
-	unsigned char *value;
 	int state;
 	int vpos;
 	int vypos;
@@ -103,23 +110,29 @@ struct text_attrib_beginning {
 };
 
 struct text_attrib {
-	enum format_attr attr;
-	struct rgb fg;
-	struct rgb bg;
-	int fontsize;
+	long accesskey;
+
+	struct form_control *form;
+
 	unsigned char *link;
 	unsigned char *target;
 	unsigned char *image;
 	unsigned char *title;
-	struct form_control *form;
-	struct rgb clink;
-	struct rgb vlink;
 	unsigned char *href_base;
 	unsigned char *target_base;
 	unsigned char *select;
+
+	int fontsize;
 	int select_disabled;
+
 	unsigned int tabindex;
-	long accesskey;
+
+	enum format_attr attr;
+
+	struct rgb fg;
+	struct rgb bg;
+	struct rgb clink;
+	struct rgb vlink;
 };
 
 /* This enum is pretty ugly, yes ;). */
@@ -142,29 +155,35 @@ enum format_list_flag {
 };
 
 struct par_attrib {
-	enum format_align align;
 	int leftmargin;
 	int rightmargin;
 	int width;
 	int list_level;
-	unsigned list_number;
 	int dd_margin;
+
+	unsigned list_number;
+
+	enum format_align align;
 	enum format_list_flag flags;
+
 	struct rgb bgcolor;
 };
 
 struct html_element {
 	LIST_HEAD(struct html_element);
 
-	struct text_attrib attr;
-	struct par_attrib parattr;
-	int invisible;
+	struct frameset_desc *frameset;
+
 	unsigned char *name;
-	int namelen;
 	unsigned char *options;
+
+	int invisible;
+	int namelen;
 	int linebreak;
 	int dontkill;
-	struct frameset_desc *frameset;
+
+	struct text_attrib attr;
+	struct par_attrib parattr;
 };
 
 extern struct list_head html_stack;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.110 2003/06/16 15:13:40 pasky Exp $ */
+/* $Id: renderer.c,v 1.111 2003/06/16 15:15:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -399,9 +399,12 @@ split_line(struct part *part)
 		if (x < part->spaces_len && part->spaces[x])
 			goto split;
 
-	tmp = part->cx + par_format.rightmargin;
-	if (tmp > part->x)
-		part->x = tmp;
+	{
+		int new_x = part->cx + par_format.rightmargin;
+
+		if (new_x > part->x)
+			part->x = new_x;
+	}
 
 	return 0;
 

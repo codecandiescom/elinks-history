@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.376 2003/10/25 16:05:13 pasky Exp $ */
+/* $Id: options.c,v 1.377 2003/10/25 16:19:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,8 +235,14 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 		option->box_item->visible = get_opt_int("config.show_template");
 
 	if (tree->box_item && option->box_item) {
-		option->box_item->depth = tree->box_item->depth + 1;
-		option->box_item->root = tree->box_item;
+		/* The config_root tree is a just a placeholder for the
+		 * box_items, it actually isn't a real box_item by itself;
+		 * these ghosts are indicated by the fact that they have
+		 * NULL @next. */
+		if (tree->box_item->next) {
+			option->box_item->depth = tree->box_item->depth + 1;
+			option->box_item->root = tree->box_item;
+		}
 
 		add_to_list_end(tree->box_item->child, option->box_item);
 	}

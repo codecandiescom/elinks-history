@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.210 2004/06/20 13:11:34 jonas Exp $ */
+/* $Id: form.c,v 1.211 2004/06/22 04:54:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -529,8 +529,8 @@ sort_submitted_values(struct list_head *list)
 }
 
 static void
-get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
-		       struct list_head *list)
+get_successful_controls(struct document_view *doc_view,
+			struct form_control *fc, struct list_head *list)
 {
 	struct form_control *fc2;
 
@@ -949,7 +949,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	    || !init_string(&data))
 		return NULL;
 
-	get_succesful_controls(doc_view, fc, &submit);
+	get_successful_controls(doc_view, fc, &submit);
 
 	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
 	cp_to = doc_view->document->cp;

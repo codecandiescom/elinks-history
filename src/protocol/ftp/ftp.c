@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.209 2005/03/27 14:24:58 jonas Exp $ */
+/* $Id: ftp.c,v 1.210 2005/03/27 14:25:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1133,13 +1133,6 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 		    int *tries, int colorize_dir, unsigned char *dircolor)
 {
 	int ret = 0;
- 	static int asdf;
-
-	if (!asdf) {
-		buffer = stracpy("00README.TXT;1      2 30-DEC-1996 17:44 [SYSTEM] (RWED,RWED,RE,RE)\r\nCORE.DIR;1          1  8-SEP-1996 16:09 [SYSTEM] (RWE,RWE,RE,RE)\r\nCII-MANUAL.TEX;1  213/216  29-JAN-1996 03:33:12  [ANONYMOU,ANONYMOUS]   (RWED,RWED,,)\r\n");
-		buflen = strlen(buffer);
-		asdf = 1;
-	}
 
 	while (1) {
 		struct ftp_file_info ftp_info = INIT_FTP_FILE_INFO;

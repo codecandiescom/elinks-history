@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.75 2004/07/12 10:59:24 zas Exp $ */
+/* $Id: interlink.c,v 1.76 2004/07/17 22:21:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -472,6 +472,11 @@ free_and_error:
 	return -1;
 }
 
+static void safe_close(int *fd) {
+	if (*fd == -1) return;
+	close(*fd);
+	*fd = -1;
+}
 
 /* Free all allocated memory and close all descriptors if
  * needed. */
@@ -483,32 +488,20 @@ af_unix_close(void)
 	 * initialized and we don't want to close
 	 * fd 0 ;). --Zas */
 	if (s_info_listen.addr) {
-		if (s_info_listen.fd != -1) {
-			close(s_info_listen.fd);
-			s_info_listen.fd = -1;
-		}
-
+		safe_close(&s_info_listen.fd);
 		unlink_unix(s_info_listen.addr);
 		mem_free(s_info_listen.addr);
 		s_info_listen.addr = NULL;
 	}
 
 	if (s_info_connect.addr) {
-		if (s_info_connect.fd != -1) {
-			close(s_info_connect.fd);
-			s_info_connect.fd = -1;
-		}
-
+		safe_close(&s_info_connect.fd);
 		mem_free(s_info_connect.addr);
 		s_info_connect.addr = NULL;
 	}
 
 	if (s_info_accept.addr) {
-		if (s_info_accept.fd != -1) {
-			close(s_info_accept.fd);
-			s_info_accept.fd = -1;
-		}
-
+		safe_close(&s_info_accept.fd);
 		mem_free(s_info_accept.addr);
 		s_info_accept.addr = NULL;
 	}

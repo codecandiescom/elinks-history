@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.26 2003/12/04 18:20:42 fabio Exp $ */
+/* $Id: dialogs.c,v 1.27 2003/12/21 14:39:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,17 +70,15 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 	}
 #endif
 
-	add_format_to_string(&string,
-		_("Server: %s\n"
-		"Name: %s\n"
-		"Value: %s\n"
-		"Domain: %s\n"
-		"Expires: %s\n"
-		"Secure: %s", term),
-		cookie->server, cookie->name, cookie->value,
-		cookie->domain,
-		expires ? expires : _("unknown",  term),
-		_(cookie->secure ? N_("yes") : N_("no"), term));
+	add_format_to_string(&string, "%s: %s", _("Server", term), cookie->server);
+	add_format_to_string(&string, "\n%s: %s", _("Name", term), cookie->name);
+	add_format_to_string(&string, "\n%s: %s", _("Value", term), cookie->value);
+	add_format_to_string(&string, "\n%s: %s", _("Domain", term), cookie->domain);
+	if (expires) {
+		add_format_to_string(&string, "\n%s: %s", _("Expires", term), expires);
+	}
+	add_format_to_string(&string, "\n%s: %s", _("Secure", term),
+				_(cookie->secure ? N_("yes") : N_("no"), term));
 
 	if (expires) mem_free(expires);
 	return string.source;

@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.17 2003/12/09 22:13:30 pasky Exp $ */
+/* $Id: dialogs.c,v 1.18 2003/12/21 14:39:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,15 +59,13 @@ get_formhist_data_info(struct listbox_item *item, struct terminal *term,
 
 	if (!init_string(&info)) return NULL;
 
-	add_to_string(&info, _("URL", term));
-	add_to_string(&info, ": ");
-	add_to_string(&info, formhist_data->url);
+	add_format_to_string(&info, "%s: %s", _("URL", term), formhist_data->url);
 	add_char_to_string(&info, '\n');
 
 	if (formhist_data->dontsave)
-		add_to_string(&info,  _("Forms are never saved for this URL.", term));
+		add_to_string(&info, _("Forms are never saved for this URL.", term));
 	else
-		add_to_string(&info,  _("Forms are saved for this URL.", term));
+		add_to_string(&info, _("Forms are saved for this URL.", term));
 
 	foreach (sv, *formhist_data->submit) {
 		add_char_to_string(&info, '\n');

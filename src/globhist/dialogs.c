@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.97 2003/11/27 01:06:41 jonas Exp $ */
+/* $Id: dialogs.c,v 1.98 2003/12/21 14:39:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,11 +58,10 @@ get_globhist_item_info(struct listbox_item *box_item, struct terminal *term,
 
 	if (!init_string(&info)) return NULL;
 
-	add_format_to_string(&info, _("Title: %s\n"
-			"URL: %s\n"
-			"Last visit time: %s", term),
-			item->title, item->url,
-			ctime(&item->last_visit));
+	add_format_to_string(&info, "%s: %s", _("Title", term), item->title);
+	add_format_to_string(&info, "\n%s: %s", _("URL", term), item->url);
+	add_format_to_string(&info, "\n%s: %s", _("Last visit time", term),
+				citem(&item->last_visit));
 
 	return info.source;
 }

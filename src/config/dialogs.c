@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.134 2003/11/27 11:34:45 pasky Exp $ */
+/* $Id: dialogs.c,v 1.135 2003/12/21 14:39:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,17 +101,15 @@ get_option_info(struct listbox_item *item, struct terminal *term,
 
 		option_types[option->type].write(option, &value);
 
-		add_format_to_string(&info, _("Name: %s\n"
-				"Type: %s\n"
-				"Value: %s\n\n"
-				"Description:\n%s", term),
-				option->name, type, value.source, desc);
+		add_format_to_string(&info, "%s: %s", _("Name", term), option->name);
+		add_format_to_string(&info, "\n%s: %s", _("Type", term), type);
+		add_format_to_string(&info, "\n%s: %s", _("Value", term), value.source);
+		add_format_to_string(&info, "\n%s: %s", _("Description", term), desc);
 		done_string(&value);
 	} else {
-		add_format_to_string(&info, _("Name: %s\n"
-				"Type: %s\n\n"
-				"Description:\n%s", term),
-				option->name, type, desc);
+		add_format_to_string(&info, "%s: %s", _("Name", term), option->name);
+		add_format_to_string(&info, "\n%s: %s", _("Type", term), type);
+		add_format_to_string(&info, "\n%s: %s", _("Description", term), desc);
 	}
 
 	if (option->type == OPT_TREE) {

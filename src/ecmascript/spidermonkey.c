@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.155 2004/12/25 14:40:14 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.156 2004/12/25 14:51:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,9 +249,19 @@ jsval_to_value(JSContext *ctx, jsval *vp, JSType type, union jsval_union *var)
 }
 
 #define jsval_to_string(ctx, val, var) jsval_to_value(ctx, val, JSTYPE_STRING, var)
-#define jsval_to_boolean(ctx, val, var) jsval_to_value(ctx, val, JSTYPE_BOOLEAN, var)
 #define jsval_to_number(ctx, val, var) jsval_to_value(ctx, val, JSTYPE_NUMBER, var)
 
+static JSBool
+jsval_to_boolean(JSContext *ctx, jsval *vp)
+{
+	jsval val;
+
+	if (JS_ConvertValue(ctx, *vp, JSTYPE_BOOLEAN, &val) == JS_FALSE) {
+		return JS_FALSE;
+	}
+
+	return JSVAL_TO_BOOLEAN(val);
+}
 
 static JSBool window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 static JSBool window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
@@ -812,13 +822,11 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	case JSP_INPUT_CHECKED:
 		if (fc->type != FC_CHECKBOX && fc->type != FC_RADIO)
 			break;
-		jsval_to_boolean(ctx, vp, &v);
-		fs->state = v.boolean;
+		fs->state = jsval_to_boolean(ctx, vp);
 		break;
 	case JSP_INPUT_DISABLED:
 		/* FIXME: <input readonly disabled> --pasky */
-		jsval_to_boolean(ctx, vp, &v);
-		fc->mode = (v.boolean ? FORM_MODE_DISABLED
+		fc->mode = (jsval_to_boolean(ctx, vp) ? FORM_MODE_DISABLED
 		                      : fc->mode == FORM_MODE_READONLY ? FORM_MODE_READONLY
 		                                                       : FORM_MODE_NORMAL);
 		break;
@@ -832,8 +840,7 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 	case JSP_INPUT_READONLY:
 		/* FIXME: <input readonly disabled> --pasky */
-		jsval_to_boolean(ctx, vp, &v);
-		fc->mode = (v.boolean ? FORM_MODE_READONLY
+		fc->mode = (jsval_to_boolean(ctx, vp) ? FORM_MODE_READONLY
 		                      : fc->mode == FORM_MODE_DISABLED ? FORM_MODE_DISABLED
 		                                                       : FORM_MODE_NORMAL);
 		break;
@@ -1961,29 +1968,23 @@ unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = vs->doc_view;
 	struct session_status *status = &doc_view->session->status;
 	unsigned char *bar = JS_GetPrivate(ctx, obj);
-	union jsval_union v;
 
 	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_UNIBAR_VISIBLE:
-		jsval_to_boolean(ctx, vp, &v);
-#define unibar_set(bar) \
-	status->force_show_##bar##_bar = v.boolean;
 		switch (*bar) {
 		case 's':
-			unibar_set(status);
+			status->force_show_status_bar = jsval_to_boolean(ctx, vp);
 			break;
 		case 't':
-			unibar_set(title);
+			status->force_show_title_bar = jsval_to_boolean(ctx, vp);
 			break;
 		default:
-			v.boolean = 0;
 			break;
 		}
 		register_bottom_half((void (*)(void*)) update_status, NULL);
-#undef unibar_set
 		break;
 	default:
 		INTERNAL("Invalid ID %d in unibar_set_property().", JSVAL_TO_INT(id));
@@ -2336,7 +2337,6 @@ spidermonkey_eval_boolback(struct ecmascript_interpreter *interpreter,
 {
 	JSContext *ctx;
 	jsval rval;
-	union jsval_union v;
 
 	assert(interpreter);
 	ctx = interpreter->backend_data;
@@ -2351,6 +2351,5 @@ spidermonkey_eval_boolback(struct ecmascript_interpreter *interpreter,
 		return -1;
 	}
 
-	jsval_to_boolean(ctx, &rval, &v);
-	return v.boolean;
+	return jsval_to_boolean(ctx, &rval);
 }

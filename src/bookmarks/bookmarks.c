@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.77 2003/10/23 22:22:48 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.78 2003/10/24 23:46:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,6 +272,12 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 	return 1;
 }
 
+
+void
+init_bookmarks(void)
+{
+	read_bookmarks();
+}
 
 /* Loads the bookmarks from file */
 void

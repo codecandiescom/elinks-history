@@ -1,3 +1,16 @@
+Tue Mar  5 14:54:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c:
+	
+	undefine COOKIES_DEBUG ;)
+
+Tue Mar  5 11:48:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c, links.h, main.c, AUTHORS:
+	
+	dump-width option - based on patch by Edwin Groothuis
+	<edwin@mavetju.org>
+
 Tue Mar  5 09:57:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* lua.c, types.c:

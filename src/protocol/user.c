@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.36 2003/07/09 15:08:02 jonas Exp $ */
+/* $Id: user.c,v 1.37 2003/07/09 17:28:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,6 @@
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/terminal.h"
-#include "protocol/url.h"
 #include "protocol/user.h"
 #include "sched/download.h"
 #include "sched/session.h"
@@ -118,15 +117,12 @@ get_subject_from_query(unsigned char *query)
 static void
 user_func(struct session *ses, unsigned char *url)
 {
-	unsigned char *urldata;
-	unsigned char *port, *dir, *subj;
-	unsigned char *prog;
-	unsigned char *proto = get_protocol_name(url);
-	unsigned char *host = get_host_and_pass(url, 0);
+	unsigned char *subj, *prog, *host;
+	struct uri uri;
 
-	if (!proto || !host) {
-		if (proto) mem_free(proto);
-		if (host) mem_free(host);
+	uri.protocol = stracpy(url);
+	if (!uri.protocol) return;
+	if (!parse_uri(&uri)) {
 		msg_box(ses->tab->term, NULL, 0,
 			N_("Bad URL syntax"), AL_CENTER,
 			N_("Bad user protocol URL"),
@@ -134,53 +130,67 @@ user_func(struct session *ses, unsigned char *url)
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
 		return;
 	}
-	if (*host) check_shell_security(&host);
 
-	port = get_port_str(url);
-	if (port && *port) check_shell_security(&port);
+	uri.protocol[uri.protocollen] = 0;
+	prog = get_user_program(ses->tab->term, uri.protocol, uri.protocollen);
+	if (!prog || !*prog) {
+		/* Shouldn't ever happen, but be paranoid. */
+		/* Happens when you're in X11 and you've no handler for it. */
+		msg_box(ses->tab->term, getml(uri.protocol, NULL), MSGBOX_FREE_TEXT,
+			N_("No program"), AL_CENTER,
+			msg_text(ses->tab->term,
+				N_("No program specified for protocol %s."),
+				uri.protocol),
+			NULL, 1,
+			N_("Cancel"), NULL, B_ENTER | B_ESC);
+		return;
+	}
 
-	urldata = get_url_data(url);
-	if (urldata && *urldata) {
-		dir = stracpy(urldata);
-		if (dir) check_shell_security(&dir);
+	/* XXX Order matters here. Prepare last fields first since the 'common'
+	 * uri string is modified by exchanging the field delimiters with
+	 * string delimiters. */
+
+	if (uri.data && uri.datalen) {
+		uri.data[uri.datalen] = 0;
 
 		/* Some mailto specific stuff follows... */
-		subj = strchr(urldata, '?');
+		subj = strchr(uri.data, '?');
 		if (subj) {
 			subj++;
 			subj = get_subject_from_query(subj);
 			if (subj) check_shell_security(&subj);
 		}
+
+		/* After mailto subject extraction since we know out '?' */
+		check_shell_security(&uri.data);
 	} else {
-		dir = NULL;
 		subj = NULL;
 	}
 
-	prog = get_user_program(ses->tab->term, proto, strlen(proto));
-	if (!prog || !*prog) {
-		/* Shouldn't ever happen, but be paranoid. */
-		/* Happens when you're in X11 and you've no handler for it. */
-		msg_box(ses->tab->term, getml(proto, NULL), MSGBOX_FREE_TEXT,
-			N_("No program"), AL_CENTER,
-			msg_text(ses->tab->term,
-				N_("No program specified for protocol %s."),
-				proto),
-			NULL, 1,
-			N_("Cancel"), NULL, B_ENTER | B_ESC);
-	} else {
-		unsigned char *cmd = subst_cmd(prog, url, host, port, dir, subj);
-
-		mem_free(proto);
-		if (cmd) {
-			exec_on_terminal(ses->tab->term, cmd, "", 1);
-			mem_free(cmd);
-		}
+	if (uri.port && uri.portlen) {
+		uri.port[uri.portlen] = 0;
+		check_shell_security(&uri.port);
 	}
 
-	if (dir) mem_free(dir);
+	/* TODO	For some user protocols it would be better if substitution of
+	 *	each uri field was completely configurable. Now @host contains
+	 *	both the uri username field, (password field) and hostname
+	 *	field because it is useful for mailto protocol handling. */
+	/* It would break a lot of configurations so I don't know. --jonas */
+
+	host = (uri.user ? uri.user : uri.host);
+	if (host && *host) {
+		uri.host[uri.hostlen] = 0;
+		check_shell_security(&host);
+	}
+
+	prog = subst_cmd(prog, url, host, uri.port, uri.data, subj);
+	mem_free(uri.protocol);
 	if (subj) mem_free(subj);
-	if (port) mem_free(port);
-	mem_free(host);
+	if (prog) {
+		exec_on_terminal(ses->tab->term, prog, "", 1);
+		mem_free(prog);
+	}
 }
 
 struct protocol_backend user_protocol_backend = {

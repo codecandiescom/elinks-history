@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.77 2004/04/24 01:30:27 jonas Exp $ */
+/* $Id: cmdline.c,v 1.78 2004/04/24 01:31:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,7 +239,6 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	switch (remote_methods[method].type) {
 	case REMOTE_METHOD_OPENURL:
-	{
 		if (arg == argend) {
 			/* Prompt for a URL with a dialog box */
 			remote_session_flags |= SES_REMOTE_PROMPT_URL;
@@ -270,7 +269,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 			remote_url = memacpy(arg, argend - arg);
 		}
 		break;
-	}
+
 	case REMOTE_METHOD_XFEDOCOMMAND:
 		len = argend - arg;
 

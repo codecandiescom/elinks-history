@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.2 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: parser.h,v 1.3 2004/09/24 02:08:14 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_SGML_PARSER_H
 #define EL__DOCUMENT_SGML_PARSER_H
@@ -9,6 +9,7 @@
 
 struct cache_entry;
 struct document;
+struct string;
 
 enum sgml_parser_flags {
 	SGML_PARSER_ADD_ELEMENT_ENDS = 1,
@@ -31,6 +32,6 @@ struct sgml_parser_state {
 };
 
 struct dom_node *
-parse_sgml(struct cache_entry *ce, struct document *document);
+parse_sgml(struct cache_entry *ce, struct document *document, struct string *buffer);
 
 #endif

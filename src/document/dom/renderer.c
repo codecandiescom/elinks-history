@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.3 2004/09/24 01:16:52 jonas Exp $ */
+/* $Id: renderer.c,v 1.4 2004/09/24 02:08:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,10 +593,11 @@ static dom_navigator_callback_T dom_source_renderer_callbacks[DOM_NODES] = {
 
 /* Shared multiplexor between renderers */
 void
-render_dom_document(struct cache_entry *cached, struct document *document)
+render_dom_document(struct cache_entry *cached, struct document *document,
+		    struct string *buffer)
 {
 	unsigned char *head = empty_string_or_(cached->head);
-	struct dom_node *root = parse_sgml(cached, document);
+	struct dom_node *root = parse_sgml(cached, document, buffer);
 	struct dom_renderer renderer;
 	struct conv_table *convert_table;
 	dom_navigator_callback_T *callbacks = document->options.plain

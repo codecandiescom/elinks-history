@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.77 2004/09/24 01:45:11 pasky Exp $ */
+/* $Id: renderer.c,v 1.78 2004/09/24 02:08:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ render_encoded_document(struct cache_entry *cached, struct document *document)
 #ifdef CONFIG_DOM
 		if (cached->content_type
 		    && !strlcasecmp("text/html", 9, cached->content_type, -1))
-			render_dom_document(cached, document);
+			render_dom_document(cached, document, &buffer);
 		else
 #endif
 			render_plain_document(cached, document, &buffer);

@@ -1,5 +1,5 @@
 /* SGML node handling */
-/* $Id: parser.c,v 1.2 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: parser.c,v 1.3 2004/09/24 02:08:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,11 +289,11 @@ parse_sgml_document(struct dom_navigator *navigator, struct scanner *scanner)
 
 static inline void
 init_sgml_parser(struct sgml_parser *parser, struct document *document,
-		 struct cache_entry *cache_entry, struct sgml_info *info)
+		 struct cache_entry *cache_entry, struct sgml_info *info,
+		 struct string *buffer)
 {
-	struct fragment *fr = cache_entry->frag.next;
-	unsigned char *source = fr->data;
-	unsigned char *end = source + fr->length;
+	unsigned char *source = buffer->source;
+	unsigned char *end = source + buffer->length;
 
 	memset(parser, 0, sizeof(struct sgml_parser));
 
@@ -308,17 +308,14 @@ init_sgml_parser(struct sgml_parser *parser, struct document *document,
 }
 
 struct dom_node *
-parse_sgml(struct cache_entry *ce, struct document *document)
+parse_sgml(struct cache_entry *cached, struct document *document,
+	   struct string *buffer)
 {
-	struct fragment *fr = ce->frag.next;
 	struct dom_navigator navigator;
 	struct sgml_parser parser;
 	size_t obj_size = sizeof(struct sgml_parser_state);
 
-	if (list_empty(ce->frag) || fr->offset || !fr->length)
-		return NULL;
- 
-	init_sgml_parser(&parser, document, ce, &sgml_html_info);
+	init_sgml_parser(&parser, document, cached, &sgml_html_info, buffer);
 	init_dom_navigator(&navigator, &parser, parser.info->callbacks, obj_size);
 
 	parser.root = add_sgml_document(&navigator, document->uri);

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.146 2004/07/19 22:52:37 jonas Exp $ */
+/* $Id: screen.c,v 1.147 2004/07/24 07:03:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,7 @@ struct screen_driver {
 	enum color_mode color_mode;
 
 	/* These are directly derived from the terminal options. */
-	unsigned int trans:1;
+	unsigned int transparent:1;
 
 	/* The terminal._template_ name. */
 	unsigned char name[1]; /* XXX: Keep last! */
@@ -132,7 +132,7 @@ static struct screen_driver dumb_screen_driver = {
 	/* frame_seqs: */	NULL,
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* trans: */		1,
+	/* transparent: */		1,
 };
 
 static struct screen_driver vt100_screen_driver = {
@@ -143,7 +143,7 @@ static struct screen_driver vt100_screen_driver = {
 	/* frame_seqs: */	vt100_frame_seqs, /* No UTF8 I/O */
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* trans: */		1,
+	/* transparent: */		1,
 };
 
 static struct screen_driver linux_screen_driver = {
@@ -154,7 +154,7 @@ static struct screen_driver linux_screen_driver = {
 	/* frame_seqs: */	NULL,		/* No m11_hack */
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* trans: */		1,
+	/* transparent: */		1,
 };
 
 static struct screen_driver koi8_screen_driver = {
@@ -165,7 +165,7 @@ static struct screen_driver koi8_screen_driver = {
 	/* frame_seqs: */	NULL,
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* trans: */		1,
+	/* transparent: */		1,
 };
 
 static struct screen_driver freebsd_screen_driver = {
@@ -176,7 +176,7 @@ static struct screen_driver freebsd_screen_driver = {
 	/* frame_seqs: */	NULL,		/* No m11_hack */
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* trans: */		1,
+	/* transparent: */		1,
 };
 
 /* XXX: Keep in sync with enum term_mode_type. */
@@ -196,7 +196,7 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 	int utf8_io = get_opt_bool_tree(term_spec, "utf_8_io");
 
 	driver->color_mode = get_opt_int_tree(term_spec, "colors");
-	driver->trans = get_opt_bool_tree(term_spec, "transparency");
+	driver->transparent = get_opt_bool_tree(term_spec, "transparency");
 
 	if (get_opt_bool_tree(term_spec, "underline")) {
 		driver->underline = underline_seqs;
@@ -425,7 +425,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 
 			code[2] = '0' + TERM_COLOR_FOREGROUND(ch->color);
 
-			if (!driver->trans || bgcolor != 0) {
+			if (!driver->transparent || bgcolor != 0) {
 				code[5] = '0' + bgcolor;
 				add_bytes_to_string(screen, code, 6);
 			} else {
@@ -539,7 +539,7 @@ add_char256(struct string *screen, struct screen_driver *driver,
 		copy_color(state->color, ch->color);
 
 		add_foreground_color(screen, color256_seqs, ch);
-		if (!driver->trans || ch->color[1] != 0) {
+		if (!driver->transparent || ch->color[1] != 0) {
 			add_background_color(screen, color256_seqs, ch);
 		}
 

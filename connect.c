@@ -265,7 +265,7 @@ void connected(void *data)
 {
         struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = conn->conn_info;
-	void (*func)(struct connection *) = c_i->func;
+	void (*func)(struct connection *) = c_i ? c_i->func : NULL;
 	int err = 0;
 	int len = sizeof(int);
 

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.29 2002/12/13 23:09:37 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.30 2002/12/13 23:31:59 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -53,6 +53,7 @@ enum keyact {
 	ACT_HOME,
 	ACT_KILL_TO_BOL,
 	ACT_KILL_TO_EOL,
+	ACT_KEYBINDING_MANAGER,
 	ACT_LEFT,
 	ACT_LINK_MENU,
 	ACT_JUMP_TO_LINK,
@@ -112,6 +113,9 @@ void init_keymaps();
 void free_keymaps();
 
 long read_key(unsigned char *);
+
+int parse_keystroke(unsigned char *, long *, long *);
+void make_keystroke(unsigned char **, int *, long, long);
 
 int kbd_action(enum keymap, struct event *, int *);
 struct keybinding *kbd_ev_lookup(enum keymap, long, long, int *);

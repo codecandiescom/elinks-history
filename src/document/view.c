@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.110 2002/12/13 12:42:09 zas Exp $ */
+/* $Id: view.c,v 1.111 2002/12/13 23:31:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2914,6 +2914,10 @@ quak:
 			case ACT_OPTIONS_MANAGER:
 				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 					menu_options_manager(ses->term, NULL, ses);
+				goto x;
+			case ACT_KEYBINDING_MANAGER:
+				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+					menu_keybinding_manager(ses->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
 #ifdef COOKIES

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.21 2002/12/13 18:44:21 pasky Exp $ */
+/* $Id: dialogs.c,v 1.22 2002/12/13 23:31:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "bfu/text.h"
 #include "config/conf.h"
 #include "config/dialogs.h"
+#include "config/kbdbind.h"
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "dialogs/hierbox.h"
@@ -28,9 +29,6 @@
 #include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"
-
-/* The location of the box in the options manager */
-#define	OP_BOX_IND		6
 
 
 void
@@ -44,9 +42,14 @@ write_config_error(struct terminal *term, unsigned char *config_file, int ret)
 		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
 }
 
+
+
 /****************************************************************************
-  Bookmark manager stuff.
+  Option manager stuff.
 ****************************************************************************/
+
+/* The location of the box in the options manager */
+#define	OP_BOX_IND		6
 
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
@@ -524,5 +527,139 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[OP_BOX_IND].data = (void *) option_dlg_box_build();
 
 	d->items[OP_BOX_IND + 1].type = D_END;
+	do_dialog(term, d, getml(d, NULL));
+}
+
+
+
+/****************************************************************************
+  Keybinding manager stuff.
+****************************************************************************/
+
+/* The location of the box in the keybinding manager */
+#define	KB_BOX_IND		3
+
+/* Creates the box display (holds everything EXCEPT the actual rendering
+ * data) */
+static struct listbox_data *
+kbdbind_dlg_box_build()
+{
+	struct listbox_data *box;
+
+	/* Deleted in abort */
+	box = mem_calloc(1, sizeof(struct listbox_data));
+	if (!box) return NULL;
+
+	box->items = &kbdbind_box_items;
+	add_to_list(kbdbind_boxes, box);
+
+	return box;
+}
+
+
+/* Cleans up after the keybinding dialog */
+static void
+kbdbind_dialog_abort_handler(struct dialog_data *dlg)
+{
+	struct listbox_data *box;
+
+	box = (struct listbox_data *) dlg->dlg->items[KB_BOX_IND].data;
+
+	del_from_list(box);
+	/* Delete the box structure */
+	mem_free(box);
+}
+
+
+static void
+done_kbdbind_info_button(void *vhop)
+{
+#if 0
+	struct option *option = vhop;
+
+#endif
+}
+
+static int
+push_kbdbind_info_button(struct dialog_data *dlg,
+		struct widget_data *some_useless_info_button)
+{
+	struct terminal *term = dlg->win->term;
+	struct keybinding *kb;
+	struct listbox_data *box;
+
+	box = (struct listbox_data *) dlg->dlg->items[KB_BOX_IND].data;
+
+	/* Show history item info */
+	if (!box->sel) return 0;
+	kb = box->sel->udata;
+
+	if (kb) {
+		unsigned char *value = init_str();
+		int val_len = 0;
+
+		make_keystroke(&value, &val_len, kb->key, kb->meta);
+
+		msg_box(term, getml(value, NULL),
+			TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
+			TEXT(T_NNAME), ": ", box->sel->text, "\n",
+			TEXT(T_VALUE), ": ", value, NULL,
+			kb, 1,
+			TEXT(T_OK), done_kbdbind_info_button, B_ESC | B_ENTER);
+	}
+
+	return 0;
+}
+
+
+static int
+push_kbdbind_save_button(struct dialog_data *dlg,
+		struct widget_data *some_useless_info_button)
+{
+	write_config(dlg->win->term);
+	return 0;
+}
+
+
+/* Builds the "Keybinding manager" dialog */
+void
+menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
+{
+	struct dialog *d;
+
+	/* Create the dialog */
+	d = mem_calloc(1, sizeof(struct dialog)
+			  + (KB_BOX_IND + 2) * sizeof(struct widget)
+			  + sizeof(struct option) + 2 * MAX_STR_LEN);
+	if (!d) return;
+
+	d->title = TEXT(T_KEYBINDING_MANAGER);
+	d->fn = layout_hierbox_browser;
+	d->handle_event = hierbox_dialog_event_handler;
+	d->abort = kbdbind_dialog_abort_handler;
+	d->udata = ses;
+
+	d->items[0].type = D_BUTTON;
+	d->items[0].gid = B_ENTER;
+	d->items[0].fn = push_kbdbind_info_button;
+	d->items[0].udata = ses;
+	d->items[0].text = TEXT(T_INFO);
+
+	d->items[1].type = D_BUTTON;
+	d->items[1].gid = B_ENTER;
+	d->items[1].fn = push_kbdbind_save_button;
+	d->items[1].udata = ses;
+	d->items[1].text = TEXT(T_SAVE);
+
+	d->items[2].type = D_BUTTON;
+	d->items[2].gid = B_ESC;
+	d->items[2].fn = cancel_dialog;
+	d->items[2].text = TEXT(T_CLOSE);
+
+	d->items[KB_BOX_IND].type = D_BOX;
+	d->items[KB_BOX_IND].gid = 12;
+	d->items[KB_BOX_IND].data = (void *) kbdbind_dlg_box_build();
+
+	d->items[KB_BOX_IND + 1].type = D_END;
 	do_dialog(term, d, getml(d, NULL));
 }

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.47 2002/12/13 23:09:37 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.48 2002/12/13 23:31:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,7 +301,7 @@ write_key(long key)
 }
 
 
-static int
+int
 parse_keystroke(unsigned char *s, long *key, long *meta)
 {
 	*meta = 0;
@@ -320,7 +320,7 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 	return (*key < 0) ? -1 : 0;
 }
 
-static void
+void
 make_keystroke(unsigned char **str, int *len, long key, long meta)
 {
 	if (meta & KBD_SHIFT)
@@ -371,6 +371,7 @@ static struct strtonum action_table[] = {
 	{ "home", ACT_HOME },
 	{ "kill-to-bol", ACT_KILL_TO_BOL },
 	{ "kill-to-eol", ACT_KILL_TO_EOL },
+	{ "keybinding-manager", ACT_KEYBINDING_MANAGER },
 	{ "left", ACT_LEFT },
 	{ "link-menu", ACT_LINK_MENU },
 	{ "jump-to-link", ACT_JUMP_TO_LINK },
@@ -601,6 +602,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_BOOKMARK_MANAGER, 'S' },
 	{ ACT_HISTORY_MANAGER, 'h' },
 	{ ACT_OPTIONS_MANAGER, 'o' },
+	{ ACT_KEYBINDING_MANAGER, 'k' },
 	{ ACT_COOKIES_LOAD, 'K', KBD_CTRL },
 	{ ACT_QUIT, 'q' },
 	{ ACT_REALLY_QUIT, 'Q' },

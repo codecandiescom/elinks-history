@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.106 2003/06/26 21:19:31 pasky Exp $ */
+/* $Id: session.c,v 1.107 2003/06/29 12:37:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,39 +240,52 @@ print_screen_status(struct session *ses)
 
 	if (ses->visible_tabs_bar) {
 		int tab_width = term->x / tabs_count;
+		int tab_total_width = tab_width * tabs_count;
 		int tab_num;
-		int msglen;
 		int normal_color = get_bfu_color(term, "tabs.normal");
 		int selected_color = get_bfu_color(term, "tabs.selected");
+		int ypos = term->y - (ses->visible_status_bar ? 2 : 1);
+		int color = normal_color;
 
 		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
 			struct window *tab = get_tab_by_number(term, tab_num);
-			int ypos = term->y - (ses->visible_status_bar ? 2 : 1);
-			int color = (tab_num == term->current_tab)
-					? selected_color : normal_color;
+			int xpos = tab_num * tab_width;
+			int msglen;
 
-			if (tab->data
-			    && current_frame(tab->data)
-			    && current_frame(tab->data)->f_data->title
-			    && strlen(current_frame(tab->data)->f_data->title))
-				msg = current_frame(tab->data)->f_data->title;
-			else
-				msg = _("Untitled", term);
+			color = (tab_num == term->current_tab)
+				? selected_color : normal_color;
+
+			if (tab->data && current_frame(tab->data)) {
+				if (current_frame(tab->data)->f_data->title &&
+				    *(current_frame(tab->data)->f_data->title))
+					msg = current_frame(tab->data)->f_data->title;
+				else
+					msg = _("Untitled", term);
+			} else {
+				msg = _("Loading...", term);
+			}
 
 			msglen = strlen(msg);
 			if (msglen >= tab_width)
 				msglen = tab_width - 1;
 
-			fill_area(term, tab_num * tab_width, ypos, tab_width, 1,
-				  color);
-			print_text(term, tab_num * tab_width, ypos, msglen, msg,
-				   color);
-			if (tab_width * tabs_count < term->x)
-				fill_area(term, (tab_num + 1) * tab_width, ypos,
-					  term->x - (tab_width * tabs_count), 1,
-				  	  color);
+			if (tab_num)
+				print_text(term, xpos, ypos, 1, "|", normal_color);
+
+			fill_area(term, xpos + !!tab_num, ypos, tab_width, 1, color);
+
+			print_text(term, xpos + !!tab_num, ypos, msglen, msg, color);
+
+			if (tab_total_width < term->x)
+				fill_area(term, xpos + tab_total_width, ypos,
+					  term->x - tab_total_width, 1, color);
 
 		}
+
+		if (tab_total_width < term->x)
+			fill_area(term, tab_total_width, ypos,
+				  term->x - tab_total_width, 1, color);
+
 	}
 
 	if (ses->visible_title_bar && ses_tab_is_current) {

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.12 2003/06/14 23:42:46 zas Exp $ */
+/* $Id: tab.c,v 1.13 2003/06/24 10:03:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,8 +110,7 @@ switch_to_tab(struct terminal *term, int num, int nbtabs)
 
 	if (num != term->current_tab) {
 		term->current_tab = num;
-		term->dirty = 1; /* XXX: needed ??? unsure about it --Zas */
-
+		term->dirty = 1;
 		redraw_terminal(term);
 	}
 }

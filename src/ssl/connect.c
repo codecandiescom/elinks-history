@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.76 2004/08/03 00:44:17 jonas Exp $ */
+/* $Id: connect.c,v 1.77 2004/08/03 08:14:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,13 +71,11 @@ ssl_set_no_tls(struct connection_socket *socket)
 	 * they couldn't have some reasonable defaults there).. */
 
 	{
-		int protocol_priority[3];
-		int i = 0;
-
-		if (!conn->no_tsl)
-			protocol_priority[i++] = GNUTLS_TLS1;
-		protocol_priority[i++] = GNUTLS_SSL3;
-		protocol_priority[i++] = 0;
+		int protocol_priority[3] = {
+			GNUTLS_TLS1,
+			GNUTLS_SSL3,
+			0
+		};
 
 		gnutls_protocol_set_priority(*((ssl_t *) socket->ssl), protocol_priority);
 	}
@@ -88,7 +86,7 @@ ssl_set_no_tls(struct connection_socket *socket)
 	 * thanks in advance. --pasky */
 
 	{
-		int cipher_priority[6] = {
+		int cipher_priority[5] = {
 			GNUTLS_CIPHER_RIJNDAEL_128_CBC,
 			GNUTLS_CIPHER_3DES_CBC,
 			GNUTLS_CIPHER_ARCFOUR,

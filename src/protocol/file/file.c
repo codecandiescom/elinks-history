@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.178 2004/08/18 20:02:19 jonas Exp $ */
+/* $Id: file.c,v 1.179 2004/09/27 11:40:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,16 +249,23 @@ file_protocol_handler(struct connection *connection)
 				state = S_OUT_OF_MEM;
 
 		} else {
-			unsigned char *content_type = null_or_stracpy(type);
+			if (!cached->content_type) {
+				unsigned char *ctype = null_or_stracpy(type);
 
-			/* Not so gracefully handle failed memory allocation */
-			if (type && !content_type)
-				state = S_OUT_OF_MEM;
-			else
+				/* Not so gracefully handle failed memory
+				 * allocation. */
+				if (type && !ctype)
+					state = S_OUT_OF_MEM;
+				else
+					cached->incomplete = 0;
+
+				/* Setup file read or directory listing for
+				 * viewing. */
+				mem_free_set(&cached->content_type, ctype);
+
+			} else {
 				cached->incomplete = 0;
-
-			/* Setup file read or directory listing for viewing. */
-			mem_free_set(&cached->content_type, content_type);
+			}
 
 			add_fragment(cached, 0, page.source, page.length);
 			truncate_entry(cached, page.length, 1);

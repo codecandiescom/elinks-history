@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-25 23:50+0100\n"
-"PO-Revision-Date: 2005-01-31 23:27+0100\n"
+"POT-Creation-Date: 2005-02-04 00:22+0100\n"
+"PO-Revision-Date: 2005-02-04 00:43+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -172,11 +172,9 @@ msgstr "Navn"
 #: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
 #: src/dialogs/options.c:283 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
-#: src/sched/download.c:1022 src/sched/download.c:1032
-#: src/sched/download.c:1053 src/sched/download.c:1066
-#: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
-#: src/scripting/lua/core.c:717 src/viewer/text/search.c:1571
-#: src/viewer/text/view.c:730
+#: src/sched/download.c:1130 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
+#: src/viewer/text/search.c:1571 src/viewer/text/view.c:730
 msgid "Cancel"
 msgstr "Annuller"
 
@@ -473,8 +471,7 @@ msgstr "Ryd"
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:204 src/formhist/dialogs.c:216
-#: src/globhist/dialogs.c:235 src/sched/download.c:1019
-#: src/sched/download.c:1050
+#: src/globhist/dialogs.c:235 src/sched/download.c:1114
 msgid "Save"
 msgstr "Gem"
 
@@ -1217,7 +1214,7 @@ msgid ""
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
 "Denne indstilling kan ikke ændres. Dette betyder det er en speciel "
-"indstilling eksempelvis en mappe - prøv at taste mellemrum for at åbne den. "
+"indstilling eksempelvis en mappe - prøv at taste mellemrum for at åbne den."
 
 #: src/config/dialogs.c:472 src/config/dialogs.c:494
 msgid "Add option"
@@ -1294,7 +1291,7 @@ msgstr "Primære tastetildelinger"
 
 #: src/config/kbdbind.c:258
 msgid "Edit mapping"
-msgstr "Redigerings tastetildelinger"
+msgstr "Redigér tastetildelinger"
 
 #: src/config/kbdbind.c:259
 msgid "Menu mapping"
@@ -5244,8 +5241,6 @@ msgstr "Gemning fra/til"
 msgid "Form history manager"
 msgstr "Formularhistorikhåndtering"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show form history dialog"
 msgstr "Vis dialogboks for formularhistorik"
@@ -6681,55 +6676,40 @@ msgstr "Overskriv originalfilen"
 msgid "Resume download of the original file"
 msgstr "Genoptag overførsel af originalfilen"
 
-#: src/sched/download.c:1013 src/sched/download.c:1025
-msgid "Unknown type"
-msgstr "Ukendt type"
-
-#: src/sched/download.c:1014
-#, c-format
-msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr "Vil du gemme filen \"%s\" (type: %s) eller vise den?"
-
-#: src/sched/download.c:1020 src/sched/download.c:1030
-#: src/sched/download.c:1051 src/sched/download.c:1064
-msgid "Display"
-msgstr "Vis"
-
-#: src/sched/download.c:1021 src/sched/download.c:1031
-#: src/sched/download.c:1052 src/sched/download.c:1065
-msgid "Show header"
-msgstr "Vis protokolhoved"
-
-#: src/sched/download.c:1026
-#, c-format
-msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr "Vil du vise filen \"%s\" (type: %s)?"
-
-#: src/sched/download.c:1042 src/sched/download.c:1056
+#: src/sched/download.c:1033
 msgid "What to do?"
 msgstr "Hvad skal der ske med filen?"
 
-#: src/sched/download.c:1043
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', save it or display it?"
-msgstr ""
-"Vil du åbne filen \"%s\" (type: %s%s%s)\n"
-"med \"%s\", gemme den eller vise den?"
+#: src/sched/download.c:1036
+msgid "Unknown type"
+msgstr "Ukendt type"
 
-#: src/sched/download.c:1049 src/sched/download.c:1063
+#: src/sched/download.c:1053
+#, c-format
+msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
+msgstr "Hvad vil du gøre med filen \"%s\" (type: %s%s%s)?"
+
+#: src/sched/download.c:1083
+#, no-c-format
+msgid "Program ('%' will be replaced by the filename)"
+msgstr "Program (\"%\" vil blive erstattet med filnavnet)"
+
+#: src/sched/download.c:1090
+#, c-format
+msgid "The file will be opened with the program '%s'."
+msgstr "Filen vil blive åbnet med programmet \"%s\"."
+
+#: src/sched/download.c:1107
 msgid "Open"
 msgstr "Åbn"
 
-#: src/sched/download.c:1057
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', or display it?"
-msgstr ""
-"Vil du åbne filen \"%s\" (type: %s%s%s)\n"
-"med \"%s\" eller vise den?"
+#: src/sched/download.c:1120
+msgid "Display"
+msgstr "Vis"
+
+#: src/sched/download.c:1124
+msgid "Show header"
+msgstr "Vis protokolhoved"
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"
@@ -6920,7 +6900,21 @@ msgstr ""
 msgid "The CSO phone-book protocol is not supported."
 msgstr "Telefonbogsprotokollen CSO understøttes ikke."
 
-#: src/sched/error.c:126
+#: src/sched/error.c:105
+msgid ""
+"The proxy configuration encountered an error.\n"
+"This usually means that either an environment\n"
+"variable with proxy info or a proxy scripting\n"
+"hook did not provide proxy configuration info\n"
+"in the correct format."
+msgstr ""
+"Der opstod en fejl under proxy-konfigureringen.\n"
+"Dette betyder ofte enten at en miljøvariabel med\n"
+"proxy-information eller at en proxy-script-kald\n"
+"ikke returnerede proxy-konfigurerings information\n"
+"i det korrekte format."
+
+#: src/sched/error.c:132
 msgid "Unknown error"
 msgstr "Ukendt fejl"
 
@@ -7414,3 +7408,20 @@ msgstr "Fejl ved skrivning"
 #: src/viewer/text/view.c:1281
 msgid "Error writing to file"
 msgstr "Fejl ved skrivning til fil"
+
+#~ msgid "Would you like to save the file '%s' (type: %s) or display it?"
+#~ msgstr "Vil du gemme filen \"%s\" (type: %s) eller vise den?"
+
+#~ msgid ""
+#~ "Would you like to open the file '%s' (type: %s%s%s)\n"
+#~ "with '%s', save it or display it?"
+#~ msgstr ""
+#~ "Vil du åbne filen \"%s\" (type: %s%s%s)\n"
+#~ "med \"%s\", gemme den eller vise den?"
+
+#~ msgid ""
+#~ "Would you like to open the file '%s' (type: %s%s%s)\n"
+#~ "with '%s', or display it?"
+#~ msgstr ""
+#~ "Vil du åbne filen \"%s\" (type: %s%s%s)\n"
+#~ "med \"%s\" eller vise den?"

@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.21 2005/02/05 06:27:30 jonas Exp $ */
+/* $Id: win32.c,v 1.22 2005/02/05 17:36:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,21 +53,25 @@ init_osdep(void)
 #endif
 }
 
-void terminate_osdep(void)
+void
+terminate_osdep(void)
 {
 }
 
 
-int get_system_env(void)
+int
+get_system_env(void)
 {
-  return (0);
+	return (0);
 }
 
-void handle_terminal_resize(int fd, void (*fn)())
+void
+handle_terminal_resize(int fd, void (*fn)())
 {
 }
 
-void unhandle_terminal_resize(int fd)
+void
+unhandle_terminal_resize(int fd)
 {
 }
 
@@ -76,7 +80,7 @@ get_terminal_size(int fd, int *x, int *y)
 {
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 
-	GetConsoleScreenBufferInfo (GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
 
 	if (!*x) {
 		*x = get_e("COLUMNS");
@@ -206,7 +210,7 @@ gettimeofday(struct timeval* p, void* tz)
 	GetSystemTimeAsFileTime (&_now.ft);
 	p->tv_usec = (long) ((_now.ns100 / 10LL) % 1000000LL);
 	p->tv_sec  = (long) ((_now.ns100 - 116444736000000000LL) / 10000000LL);
-	return (0);
+	return 0;
 }
 
 
@@ -225,24 +229,27 @@ mkstemp(char *template)
 	return open(tempname, O_CREAT | O_WRONLY | O_EXCL | O_BINARY);
 }
 
-int tcgetattr(int fd, struct termios *_termios_p)
+int
+tcgetattr(int fd, struct termios *_termios_p)
 {
-  (void) fd;
-  (void) _termios_p;
-  return 0;
+	(void) fd;
+	(void) _termios_p;
+	return 0;
 }
 
-int tcsetattr(int fd, int _optional_actions, const struct termios *_termios_p)
+int
+tcsetattr(int fd, int _optional_actions, const struct termios *_termios_p)
 {
-  (void) fd;
-  (void) _optional_actions;
-  (void) _termios_p;
-  return 0;
+	(void) fd;
+	(void) _optional_actions;
+	(void) _termios_p;
+	return 0;
 }
 
 #ifdef ENABLE_NLS
-int gettext__parse(void *arg)
+int
+gettext__parse(void *arg)
 {
-  return (0);
+	return 0;
 }
 #endif

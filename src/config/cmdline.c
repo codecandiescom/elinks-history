@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.113 2005/01/02 22:47:56 jonas Exp $ */
+/* $Id: cmdline.c,v 1.114 2005/01/03 23:10:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -605,7 +605,7 @@ struct option_info cmdline_options_info[] = {
 	INIT_OPT_BOOL("", N_("Restrict to anonymous mode"),
 		"anonymous", 0, 0,
 		N_("Restricts ELinks so it can run on an anonymous account.\n"
-		"Local file browsing, downloads, and modification of option and\n"
+		"Local file browsing, downloads, and modification of options\n"
 		"will be disabled. Execution of viewers is allowed, but entries\n"
 		"in the association table can't be added or modified.")),
 

@@ -1,10 +1,9 @@
-/* $Id: file.h,v 1.7 2004/01/24 22:45:25 jonas Exp $ */
+/* $Id: file.h,v 1.8 2004/04/13 16:00:28 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_FILE_FILE_H
 #define EL__PROTOCOL_FILE_FILE_H
 
 #include "protocol/protocol.h"
-#include "sched/connection.h"
 struct string;
 
 extern struct protocol_backend file_protocol_backend;

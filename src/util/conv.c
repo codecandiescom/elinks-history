@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.28 2003/05/14 11:49:52 pasky Exp $ */
+/* $Id: conv.c,v 1.29 2003/05/14 12:00:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,8 @@
  *
  * ulongcat(s, NULL, 123, 5, '0') : s = "001234"
  */
-/* The function returns 0 if OK, 1 if truncated, other values sign an error. */
-/* TODO: Sane return value. --pasky */
+/* The function returns 0 if OK or ideal desired width if truncated. A negative
+ * value signs an error. */
 /* TODO: Align to right, left, center... --Zas */
 int inline
 elinks_ulongcat(unsigned char *s, unsigned int *slen,
@@ -48,15 +48,17 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 	unsigned long q = number;
 	int ret = 0;
 
-	if (width < 1 || !s) return 2;
+	if (width < 1 || !s)
+		return -1;
 
 	while (q > 9) {
-		if (pos >= width) {
-			ret = 1;
-			break;
-		}
 		pos++;
 		q /= 10;
+	}
+
+	if (pos > width) {
+		ret = pos;
+		pos = width;
 	}
 
 	if (fillchar) {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.124 2003/07/22 01:05:20 miciah Exp $ */
+/* $Id: session.c,v 1.125 2003/07/22 01:09:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,11 +286,11 @@ print_screen_status(struct session *ses)
 
 	}
 
-	if (ses->visible_title_bar) {
+	if (ses_tab_is_current && ses->visible_title_bar) {
 		fill_area(term, 0, 0, term->x, 1,
 			  get_bfu_color(term, "title.title-bar"));
 
-		if (ses_tab_is_current && current_frame(ses)) {
+		if (current_frame(ses)) {
 			msg = print_current_title(ses);
 			if (msg) {
 				int msglen = strlen(msg);

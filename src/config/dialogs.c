@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.181 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: dialogs.c,v 1.182 2004/07/07 01:37:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,21 +150,20 @@ get_range_string(struct option *option)
 }
 
 static unsigned char *
-get_option_info(struct listbox_item *item, struct terminal *term,
-		  enum listbox_info listbox_info)
+get_option_text(struct listbox_item *item, struct terminal *term)
+{
+	struct option *option = item->udata;
+	unsigned char *desc = option->capt ? option->capt : option->name;
+
+	return stracpy(_(desc, term));
+}
+
+static unsigned char *
+get_option_info(struct listbox_item *item, struct terminal *term)
 {
 	struct option *option = item->udata;
 	unsigned char *desc, *type;
 	struct string info;
-
-	switch (listbox_info) {
-	case LISTBOX_TEXT:
-		desc = option->capt ? option->capt : option->name;
-		return stracpy(_(desc, term));
-
-	case LISTBOX_ALL:
-		break;
-	}
 
 	if (!init_string(&info)) return NULL;
 
@@ -247,6 +246,7 @@ static struct listbox_ops options_listbox_ops = {
 	lock_option,
 	unlock_option,
 	is_option_used,
+	get_option_text,
 	get_option_info,
 	NULL,
 	can_delete_option,
@@ -523,30 +523,33 @@ is_keybinding_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_keybinding_info(struct listbox_item *item, struct terminal *term,
-		  enum listbox_info listbox_info)
+get_keybinding_text(struct listbox_item *item, struct terminal *term)
+{
+	struct keybinding *keybinding = item->udata;
+	unsigned char *keymap;
+	struct string info;
+
+	if (item->depth < 2) {
+		struct strtonum *strtonum = item->udata;
+
+		keymap = keybinding_text_toggle
+			? strtonum->str : _(strtonum->desc, term);
+		return stracpy(keymap);
+	}
+
+	if (!init_string(&info)) return NULL;
+	make_keystroke(&info, keybinding->key, keybinding->meta, 0);
+	return info.source;
+}
+
+static unsigned char *
+get_keybinding_info(struct listbox_item *item, struct terminal *term)
 {
 	struct keybinding *keybinding = item->udata;
 	unsigned char *action, *keymap;
 	struct string info;
 
-	switch (listbox_info) {
-	case LISTBOX_TEXT:
-		if (item->depth < 2) {
-			struct strtonum *strtonum = item->udata;
-
-			keymap = keybinding_text_toggle
-			       ? strtonum->str : _(strtonum->desc, term);
-			return stracpy(keymap);
-		}
-
-		if (!init_string(&info)) return NULL;
-		make_keystroke(&info, keybinding->key, keybinding->meta, 0);
-		return info.source;
-
-	case LISTBOX_ALL:
-		if (item->depth < 2) return NULL;
-	}
+	if (item->depth < 2) return NULL;
 
 	if (!init_string(&info))
 		return NULL;
@@ -583,6 +586,7 @@ static struct listbox_ops keybinding_listbox_ops = {
 	lock_keybinding,
 	unlock_keybinding,
 	is_keybinding_used,
+	get_keybinding_text,
 	get_keybinding_info,
 	NULL,
 	can_delete_keybinding,

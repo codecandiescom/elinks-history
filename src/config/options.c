@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.455 2004/07/07 02:44:15 jonas Exp $ */
+/* $Id: options.c,v 1.456 2004/07/10 13:02:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -610,19 +610,6 @@ register_autocreated_options(void)
 	get_opt_int("terminal.xterm-256color.colors") = COLOR_MODE_256;
 	get_opt_int("terminal.xterm-256color.underline") = 1;
 #endif
-
-	strcpy(get_opt_str("protocol.user.mailto.unix"), DEFAULT_AC_OPT_MAILTO);
-	strcpy(get_opt_str("protocol.user.mailto.unix-xwin"),DEFAULT_AC_OPT_MAILTO);
-	strcpy(get_opt_str("protocol.user.telnet.unix"), DEFAULT_AC_OPT_TELNET);
-	strcpy(get_opt_str("protocol.user.telnet.unix-xwin"), DEFAULT_AC_OPT_TELNET);
-	strcpy(get_opt_str("protocol.user.tn3270.unix"), DEFAULT_AC_OPT_TN3270);
-	strcpy(get_opt_str("protocol.user.tn3270.unix-xwin"), DEFAULT_AC_OPT_TN3270);
-	strcpy(get_opt_str("protocol.user.gopher.unix"), DEFAULT_AC_OPT_GOPHER);
-	strcpy(get_opt_str("protocol.user.gopher.unix-xwin"), DEFAULT_AC_OPT_GOPHER);
-	strcpy(get_opt_str("protocol.user.news.unix"), DEFAULT_AC_OPT_NEWS);
-	strcpy(get_opt_str("protocol.user.news.unix-xwin"), DEFAULT_AC_OPT_NEWS);
-	strcpy(get_opt_str("protocol.user.irc.unix"), DEFAULT_AC_OPT_IRC);
-	strcpy(get_opt_str("protocol.user.irc.unix-xwin"), DEFAULT_AC_OPT_IRC);
 }
 
 static struct option_info config_options_info[];

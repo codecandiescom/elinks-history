@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.125 2004/07/08 11:30:22 jonas Exp $ */
+/* $Id: options.inc,v 1.126 2004/07/10 13:02:23 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -864,6 +864,21 @@ struct option_info config_options_info[] = {
 		"%s in the string means subject (?subject=<this>)\n"
 		"%u in the string means the whole URL")),
 
+#define INIT_OPT_USER_PROTOCOL(scheme, system, cmd) \
+	INIT_OPT_STRING("protocol.user." scheme, NULL, system, 0, cmd, NULL)
+
+	INIT_OPT_USER_PROTOCOL("gopher", "unix",	DEFAULT_AC_OPT_GOPHER),
+	INIT_OPT_USER_PROTOCOL("gopher", "unix-xwin",	DEFAULT_AC_OPT_GOPHER),
+	INIT_OPT_USER_PROTOCOL("irc",	 "unix",	DEFAULT_AC_OPT_IRC),
+	INIT_OPT_USER_PROTOCOL("irc",	 "unix-xwin",	DEFAULT_AC_OPT_IRC),
+	INIT_OPT_USER_PROTOCOL("mailto", "unix",	DEFAULT_AC_OPT_MAILTO),
+	INIT_OPT_USER_PROTOCOL("mailto", "unix-xwin",	DEFAULT_AC_OPT_MAILTO),
+	INIT_OPT_USER_PROTOCOL("news",	 "unix",	DEFAULT_AC_OPT_NEWS),
+	INIT_OPT_USER_PROTOCOL("news",	 "unix-xwin",	DEFAULT_AC_OPT_NEWS),
+	INIT_OPT_USER_PROTOCOL("telnet", "unix",	DEFAULT_AC_OPT_TELNET),
+	INIT_OPT_USER_PROTOCOL("telnet", "unix-xwin",	DEFAULT_AC_OPT_TELNET),
+	INIT_OPT_USER_PROTOCOL("tn3270", "unix",	DEFAULT_AC_OPT_TN3270),
+	INIT_OPT_USER_PROTOCOL("tn3270", "unix-xwin",	DEFAULT_AC_OPT_TN3270),
 
 	INIT_OPT_STRING("protocol", N_("No-proxy domains"),
 		"no_proxy", 0, "",

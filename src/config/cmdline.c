@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.95 2004/06/26 10:12:55 zas Exp $ */
+/* $Id: cmdline.c,v 1.96 2004/06/26 23:09:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -633,10 +633,11 @@ struct option_info cmdline_options_info[] = {
 		"default-mime-type", 0, "mime.default_type",
 		N_("Default MIME type to assume for documents of unknown type.")),
 
-	INIT_OPT_BOOL("", N_("Whether to load keybindings from configuration or not"),
+	INIT_OPT_BOOL("", N_("Ignore user-defined keybindings"),
 		"default-keys", 0, 0,
 		N_("If set, parse but don't set keybindings from configuration\n"
-		   "file. It forces use of default keybindings.")),
+		   "file. It forces use of default keybindings and will reset\n"
+		   "user-defined ones on save.")),
 
 	INIT_OPT_BOOL("", N_("Write formatted version of given URL to stdout"),
 		"dump", 0, 0,

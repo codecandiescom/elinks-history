@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.75 2003/11/08 02:10:15 pasky Exp $ */
+/* $Id: cache.c,v 1.76 2003/11/08 02:13:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,14 +294,14 @@ ff:;
 void
 defrag_entry(struct cache_entry *ce)
 {
-	struct fragment *f, *g, *h, *nf;
+	struct fragment *first_frag, *g, *h, *nf;
 	int l;
 
 	if (list_empty(ce->frag)) return;
-	f = ce->frag.next;
-	if (f->offset) return;
+	first_frag = ce->frag.next;
+	if (first_frag->offset) return;
 
-	for (g = f->next; g != (void *)&ce->frag; g = g->next) {
+	for (g = first_frag->next; g != (void *) &ce->frag; g = g->next) {
 		long overlay = g->prev->offset - g->prev->length - g->offset;
 
 		if (overlay < 0) continue;
@@ -311,9 +311,9 @@ defrag_entry(struct cache_entry *ce)
 		return;
 	}
 
-	if (g == f->next) return;
+	if (g == first_frag->next) return;
 
-	for (l = 0, h = f; h != g; h = h->next)
+	for (l = 0, h = first_frag; h != g; h = h->next)
 		l += h->length;
 
 	/* One byte is reserved for data in struct fragment. */
@@ -322,15 +322,17 @@ defrag_entry(struct cache_entry *ce)
 	nf->length = l;
 	nf->real_length = l;
 
-	for (l = 0, h = f; h != g; h = h->next) {
+	for (l = 0, h = first_frag; h != g; h = h->next) {
 		struct fragment *tmp = h;
 
 		memcpy(nf->data + l, h->data, h->length);
 		l += h->length;
+
 		h = h->prev;
 		del_from_list(tmp);
 		mem_free(tmp);
 	}
+
 	add_to_list(ce->frag, nf);
 
 	dump_frags(ce, "defrag_entry");

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.25 2003/01/02 05:37:44 pasky Exp $ */
+/* $Id: core.c,v 1.26 2003/01/02 23:59:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,9 +289,9 @@ error:
 /* XXX: Add history and generalise.  */
 
 static unsigned char *dlg_msg[] = {
-	_(T_NNAME),
-	_(T_NNAME),
-	_(T_URL),
+	N_(T_NNAME),
+	N_(T_NNAME),
+	N_(T_URL),
 	""
 };
 
@@ -405,7 +405,7 @@ l_edit_bookmark_dialog(LS)
 	lua_pushvalue(S, 4);
 	data->func_ref = lua_ref(S, 1);
 
-	d->title = _(T_EDIT_BOOKMARK);
+	d->title = N_(T_EDIT_BOOKMARK);
 	d->fn = dialog_fn;
 	d->refresh = (void (*)(void *))dialog_run_lua;
 	d->refresh_data = data;
@@ -421,11 +421,11 @@ l_edit_bookmark_dialog(LS)
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = ok_dialog;
-	d->items[3].text = _(T_OK);
+	d->items[3].text = N_(T_OK);
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ESC;
 	d->items[4].fn = cancel_dialog;
-	d->items[4].text = _(T_CANCEL);
+	d->items[4].text = N_(T_CANCEL);
 	d->items[5].type = D_END;
 	do_dialog(ses->term, d, getml(d, NULL));
 
@@ -443,7 +443,7 @@ l_edit_bookmark_dialog(LS)
 
 #if 0
 static unsigned char *xdialog_msg[] = {
-	_(T_XDIALOG_FIELD),
+	N_(T_XDIALOG_FIELD),
 	""
 };
 #endif
@@ -552,7 +552,7 @@ l_xdialog(LS)
 	lua_pushvalue(S, nargs);
 	data->func_ref = lua_ref(S, 1);
 
-	d->title = _(T_XDIALOG_TITLE);
+	d->title = N_(T_XDIALOG_TITLE);
 	d->fn = xdialog_fn;
 	d->refresh = (void (*)(void *))xdialog_run_lua;
 	d->refresh_data = data;
@@ -564,12 +564,12 @@ l_xdialog(LS)
 	d->items[i].type = D_BUTTON;
 	d->items[i].gid = B_ENTER;
 	d->items[i].fn = ok_dialog;
-	d->items[i].text = _(T_OK);
+	d->items[i].text = N_(T_OK);
 	i++;
 	d->items[i].type = D_BUTTON;
 	d->items[i].gid = B_ESC;
 	d->items[i].fn = cancel_dialog;
-	d->items[i].text = _(T_CANCEL);
+	d->items[i].text = N_(T_CANCEL);
 	i++;
 	d->items[i].type = D_END;
 	do_dialog(ses->term, d, getml(d, NULL));
@@ -670,10 +670,10 @@ alert_lua_error(unsigned char *msg)
 {
 	if (errterm) {
 		msg_box(errterm, NULL,
-			_(T_LUA_ERROR), AL_LEFT,
+			N_(T_LUA_ERROR), AL_LEFT,
 			msg,
 			NULL, 1,
-			_(T_OK), NULL, B_ENTER | B_ESC);
+			N_(T_OK), NULL, B_ENTER | B_ESC);
 	} else {
 		fprintf(stderr, "Lua Error: %s\n", msg);
 		sleep(3);
@@ -791,10 +791,10 @@ void
 dialog_lua_console(struct session *ses)
 {
 	input_field(ses->term, NULL,
-		    _(T_LUA_CONSOLE),
-		    _(T_ENTER_EXPRESSION),
-		    _(T_OK),
-		    _(T_CANCEL), ses, &lua_console_history,
+		    N_(T_LUA_CONSOLE),
+		    N_(T_ENTER_EXPRESSION),
+		    N_(T_OK),
+		    N_(T_CANCEL), ses, &lua_console_history,
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) lua_console, NULL);
 }

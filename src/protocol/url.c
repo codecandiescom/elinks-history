@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.51 2003/01/02 05:37:44 pasky Exp $ */
+/* $Id: url.c,v 1.52 2003/01/02 23:59:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,10 +61,10 @@ static void
 dummyjs_func(struct session *ses, unsigned char *url)
 {
 	msg_box(ses->term, NULL,
-		_(T_ERROR), AL_CENTER,
-		_(T_JS_NOT_SUPPORTED),
+		N_(T_ERROR), AL_CENTER,
+		N_(T_JS_NOT_SUPPORTED),
 		NULL, 1,
-		_(T_CANCEL), NULL, B_ENTER | B_ESC);
+		N_(T_CANCEL), NULL, B_ENTER | B_ESC);
 }
 
 

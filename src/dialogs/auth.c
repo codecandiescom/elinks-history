@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.17 2003/01/02 05:37:43 pasky Exp $ */
+/* $Id: auth.c,v 1.18 2003/01/02 23:59:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,10 +30,10 @@ auth_layout(struct dialog_data *dlg)
 	int y = -1;
 	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
-	max_text_width(term, _(T_USERID), &max);
-	min_text_width(term, _(T_USERID), &min);
-	max_text_width(term, _(T_PASSWORD), &max);
-	min_text_width(term, _(T_PASSWORD), &min);
+	max_text_width(term, N_(T_USERID), &max);
+	min_text_width(term, N_(T_USERID), &min);
+	max_text_width(term, N_(T_PASSWORD), &max);
+	min_text_width(term, N_(T_PASSWORD), &min);
 	max_buttons_width(term, dlg->items + 2, 2,  &max);
 	min_buttons_width(term, dlg->items + 2, 2,  &min);
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;
@@ -49,11 +49,11 @@ auth_layout(struct dialog_data *dlg)
 	}
 
 	dlg_format_text(NULL, term,
-			_(T_USERID), 0, &y, w, &rw,
+			N_(T_USERID), 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 	y += 2;
 	dlg_format_text(NULL, term,
-			_(T_PASSWORD), 0, &y, w, &rw,
+			N_(T_PASSWORD), 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 	y += 2;
 	dlg_format_buttons(NULL, term,
@@ -72,14 +72,14 @@ auth_layout(struct dialog_data *dlg)
 		y++;
 	}
 	dlg_format_text(term, term,
-			_(T_USERID), dlg->x + DIALOG_LB, &y, w, NULL,
+			N_(T_USERID), dlg->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[0],
 			 dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_text(term, term,
-			_(T_PASSWORD), dlg->x + DIALOG_LB, &y, w, NULL,
+			N_(T_PASSWORD), dlg->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
 			 &dlg->items[1],
@@ -144,9 +144,9 @@ do_auth_dialog(struct session *ses)
 #define DLG_SIZE sizeof(struct dialog) + 5 * sizeof(struct widget)
 
 	d = mem_calloc(1, DLG_SIZE
-			 + strlen(GT(_(T_ENTER_USERNAME), term))
+			 + strlen(GT(N_(T_ENTER_USERNAME), term))
 			 + (a->realm ? strlen(a->realm) : 0)
-			 + strlen(GT(_(T_AT), term)) + strlen(a->url) + 1);
+			 + strlen(GT(N_(T_AT), term)) + strlen(a->url) + 1);
 	if (!d) {
 		if (a->uid) {
 			mem_free(a->uid);
@@ -159,13 +159,13 @@ do_auth_dialog(struct session *ses)
 		return;
 	}
 
-	d->title = _(T_AUTHEN);
+	d->title = N_(T_AUTHEN);
 	d->fn = auth_layout;
 
 	d->udata = (char *)d + DLG_SIZE;
-	strcpy(d->udata, GT(_(T_ENTER_USERNAME), term));
+	strcpy(d->udata, GT(N_(T_ENTER_USERNAME), term));
 	if (a->realm) strcat(d->udata, a->realm);
-	strcat(d->udata, GT(_(T_AT), term));
+	strcat(d->udata, GT(N_(T_AT), term));
 	strcat(d->udata, a->url);
 
 #undef DLG_SIZE
@@ -184,11 +184,11 @@ do_auth_dialog(struct session *ses)
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = auth_ok;
-	d->items[2].text = _(T_OK);
+	d->items[2].text = N_(T_OK);
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ESC;
 	d->items[3].fn = auth_cancel;
-	d->items[3].text = _(T_CANCEL);
+	d->items[3].text = N_(T_CANCEL);
 
 	d->items[4].type = D_END;
 	dd = do_dialog(term, d, getml(d, NULL));

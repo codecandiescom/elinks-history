@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.13 2003/01/02 05:37:43 pasky Exp $ */
+/* $Id: dialogs.c,v 1.14 2003/01/02 23:59:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,7 +115,7 @@ history_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 
 /* The titles to appear in the history dialog */
 static unsigned char *history_dialog_msg[] = {
-	_(T_GLOBAL_HISTORY),
+	N_(T_GLOBAL_HISTORY),
 };
 
 /* Called to setup the history dialog */
@@ -184,7 +184,7 @@ static void
 launch_search_dialog(struct terminal *term, struct dialog_data *parent,
 		     struct session *ses)
 {
-	do_edit_dialog(term, _(T_SEARCH_HISTORY), gh_last_searched_title,
+	do_edit_dialog(term, N_(T_SEARCH_HISTORY), gh_last_searched_title,
 		       gh_last_searched_url, ses, parent, history_search_do,
 		       NULL, NULL, 0);
 }
@@ -279,10 +279,10 @@ di_delete_global_history_item(void *vhop)
 	ctx->history_item->refcount--;
 	if (ctx->history_item->refcount > 0) {
 		msg_box(ctx->term, NULL,
-			_(T_DELETE_HISTORY_ITEM), AL_CENTER,
-			_(T_BOOKMARK_USED),
+			N_(T_DELETE_HISTORY_ITEM), AL_CENTER,
+			N_(T_BOOKMARK_USED),
 			NULL, 1,
-			_(T_CANCEL), NULL, B_ENTER | B_ESC);
+			N_(T_CANCEL), NULL, B_ENTER | B_ESC);
 		return;
 	}
 
@@ -319,12 +319,12 @@ push_delete_button(struct dialog_data *dlg,
 	ctx->term = term;
 
 	msg_box(term, getml(ctx, NULL),
-		_(T_DELETE_HISTORY_ITEM), AL_CENTER | AL_EXTD_TEXT,
-		_(T_DELETE_HISTORY_ITEM), " \"", historyitem->title, "\" ?\n\n",
-		_(T_URL), ": \"", historyitem->url, "\"", NULL,
+		N_(T_DELETE_HISTORY_ITEM), AL_CENTER | AL_EXTD_TEXT,
+		N_(T_DELETE_HISTORY_ITEM), " \"", historyitem->title, "\" ?\n\n",
+		N_(T_URL), ": \"", historyitem->url, "\"", NULL,
 		ctx, 2,
-		_(T_YES), di_delete_global_history_item, B_ENTER,
-		_(T_NO), cancel_delete_globhist_item, B_ESC);
+		N_(T_YES), di_delete_global_history_item, B_ENTER,
+		N_(T_NO), cancel_delete_globhist_item, B_ESC);
 
 	return 0;
 }
@@ -352,11 +352,11 @@ push_clear_button(struct dialog_data *dlg,
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	msg_box(term, NULL,
-		_(T_CLEAR_GLOBAL_HISTORY), AL_CENTER | AL_EXTD_TEXT,
-		_(T_CLEAR_GLOBAL_HISTORY), "?", NULL,
+		N_(T_CLEAR_GLOBAL_HISTORY), AL_CENTER | AL_EXTD_TEXT,
+		N_(T_CLEAR_GLOBAL_HISTORY), "?", NULL,
 		box, 2,
-		_(T_YES), really_clear_history, B_ENTER,
-		_(T_NO), NULL, B_ESC);
+		N_(T_YES), really_clear_history, B_ENTER,
+		N_(T_NO), NULL, B_ESC);
 
 	return 0;
 }
@@ -388,12 +388,12 @@ push_info_button(struct dialog_data *dlg,
 	historyitem->refcount++;
 
 	msg_box(term, NULL,
-		_(T_INFO), AL_LEFT | AL_EXTD_TEXT,
-		_(T_TITLE), ": ", historyitem->title, "\n",
-		_(T_URL), ": ", historyitem->url, "\n",
-		_(T_LAST_VISIT_TIME), ": ", ctime(&historyitem->last_visit), NULL,
+		N_(T_INFO), AL_LEFT | AL_EXTD_TEXT,
+		N_(T_TITLE), ": ", historyitem->title, "\n",
+		N_(T_URL), ": ", historyitem->url, "\n",
+		N_(T_LAST_VISIT_TIME), ": ", ctime(&historyitem->last_visit), NULL,
 		historyitem, 1,
-		_(T_OK), done_info_button, B_ESC | B_ENTER);
+		N_(T_OK), done_info_button, B_ESC | B_ENTER);
 
 	return 0;
 }
@@ -430,7 +430,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 			  + 2 * MAX_STR_LEN);
 	if (!d) return;
 
-	d->title = _(T_HISTORY_MANAGER);
+	d->title = N_(T_HISTORY_MANAGER);
 	d->fn = layout_history_manager;
 	d->handle_event = history_dialog_event_handler;
 	d->abort = history_dialog_abort_handler;
@@ -440,37 +440,37 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].gid = B_ENTER;
 	d->items[0].fn = push_goto_button;
 	d->items[0].udata = ses;
-	d->items[0].text = _(T_GOTO);
+	d->items[0].text = N_(T_GOTO);
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = push_info_button;
-	d->items[1].text = _(T_INFO);
+	d->items[1].text = N_(T_INFO);
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = push_delete_button;
-	d->items[2].text = _(T_DELETE);
+	d->items[2].text = N_(T_DELETE);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = push_search_button;
-	d->items[3].text = _(T_SEARCH);
+	d->items[3].text = N_(T_SEARCH);
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ENTER;
 	d->items[4].fn = push_toggle_display_button;
-	d->items[4].text = _(T_TOGGLE_DISPLAY);
+	d->items[4].text = N_(T_TOGGLE_DISPLAY);
 
 	d->items[5].type = D_BUTTON;
 	d->items[5].gid = B_ENTER;
 	d->items[5].fn = push_clear_button;
-	d->items[5].text = _(T_CLEAR);
+	d->items[5].text = N_(T_CLEAR);
 
 	d->items[6].type = D_BUTTON;
 	d->items[6].gid = B_ESC;
 	d->items[6].fn = cancel_dialog;
-	d->items[6].text = _(T_CLOSE);
+	d->items[6].text = N_(T_CLOSE);
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;

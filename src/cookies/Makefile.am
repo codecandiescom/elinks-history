@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.10 2002/06/16 23:38:22 pasky Exp $
+## $Id: Makefile.am,v 1.11 2003/01/02 19:36:56 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -10,13 +10,13 @@ libcookies_a_SOURCES = \
  parser.c \
  parser.h
 
-noinst_PROGRAMS = parsetst
+TESTS = parsetst
+
+EXTRA_PROGRAMS = parsetst
+
 parsetst_SOURCES = \
  parser.h \
  parser.c \
  parsetst.c
-
-# I'm not sure about this.. --pasky
-# Compilation failure when enabled. --Zas
-#parsetst_DEPENDENCIES = \
-# ../util/libutil.a
+parsetst_DEPENDENCIES = testutils
+parsetst_LDADD = $(top_srcdir)/src/util/libutil.a

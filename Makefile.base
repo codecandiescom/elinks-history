@@ -1,5 +1,5 @@
 ## Base file for Makefile.am files in the tree, contains common stuff.
-## $Id: Makefile.base,v 1.1 2002/06/16 23:38:20 pasky Exp $
+## $Id: Makefile.base,v 1.2 2003/01/02 19:36:55 jonas Exp $
 
 INCLUDES = -I$(top_srcdir)/src
 
@@ -11,3 +11,7 @@ INCLUDES = -I$(top_srcdir)/src
 COMPILE = $(CC) @DEFS@ -I`dirname $(CONFIG_HEADER)` $(INCLUDES) \
 $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 
+# Rule for getting test dependencies right. This is a workaround since
+# automake don't support defining subdirs sources
+testutils:
+	cd $(top_srcdir) ; make -C src/util CPPFLAGS="-DDEBUG"

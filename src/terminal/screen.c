@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.147 2004/07/24 07:03:19 miciah Exp $ */
+/* $Id: screen.c,v 1.148 2004/07/24 07:05:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ static struct screen_driver dumb_screen_driver = {
 	/* frame_seqs: */	NULL,
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* transparent: */		1,
+	/* transparent: */	1,
 };
 
 static struct screen_driver vt100_screen_driver = {
@@ -143,7 +143,7 @@ static struct screen_driver vt100_screen_driver = {
 	/* frame_seqs: */	vt100_frame_seqs, /* No UTF8 I/O */
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* transparent: */		1,
+	/* transparent: */	1,
 };
 
 static struct screen_driver linux_screen_driver = {
@@ -154,7 +154,7 @@ static struct screen_driver linux_screen_driver = {
 	/* frame_seqs: */	NULL,		/* No m11_hack */
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* transparent: */		1,
+	/* transparent: */	1,
 };
 
 static struct screen_driver koi8_screen_driver = {
@@ -165,7 +165,7 @@ static struct screen_driver koi8_screen_driver = {
 	/* frame_seqs: */	NULL,
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* transparent: */		1,
+	/* transparent: */	1,
 };
 
 static struct screen_driver freebsd_screen_driver = {
@@ -176,7 +176,7 @@ static struct screen_driver freebsd_screen_driver = {
 	/* frame_seqs: */	NULL,		/* No m11_hack */
 	/* underline: */	underline_seqs,
 	/* color_mode: */	COLOR_MODE_16,
-	/* transparent: */		1,
+	/* transparent: */	1,
 };
 
 /* XXX: Keep in sync with enum term_mode_type. */

@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.6 2004/01/28 00:35:22 pasky Exp $ */
+/* $Id: stub.c,v 1.7 2004/01/28 00:42:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,8 +13,8 @@
 
 #include "elinks.h"
 
+#include "osdep/stub.h"
 #include "util/conv.h"
-#include "util/stub.h"
 
 
 #ifndef HAVE_STRCASECMP

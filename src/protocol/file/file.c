@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.65 2003/06/23 02:27:32 jonas Exp $ */
+/* $Id: file.c,v 1.66 2003/06/23 02:43:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -643,7 +643,7 @@ file_func(struct connection *c)
 		struct stat stt;
 		enum stream_encoding encoding = ENCODING_NONE;
 		int fd = open(filename, O_RDONLY | O_NOCTTY);
-		int state;
+		int state = S_OK;
 		int saved_errno = errno;
 
 		if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
@@ -661,38 +661,25 @@ file_func(struct connection *c)
 		}
 
 		set_bin(fd);
-		if (fstat(fd, &stt)) {
-			saved_errno = errno;
-			mem_free(info);
-			close(fd);
-			abort_conn_with_state(c, -saved_errno);
-			return;
+		if (fstat(fd, &stt))
+			state = -errno;
+
+		if (state == S_OK && !S_ISREG(stt.st_mode)) {
+			if (encoding != ENCODING_NONE)
+				/* We only want to open regular encoded files. */
+				state = -saved_errno;
+		    	else if (!get_opt_int("protocol.file.allow_special_files"))
+				state = S_FILE_TYPE;
 		}
 
-		if (encoding != ENCODING_NONE && !S_ISREG(stt.st_mode)) {
-			/* We only want to open regular encoded files. */
-			mem_free(info);
-			close(fd);
-			abort_conn_with_state(c, -saved_errno);
-			return;
-		}
-
-		if (!S_ISREG(stt.st_mode) &&
-		    !get_opt_int("protocol.file.allow_special_files")) {
+		if (state != S_OK) {
 			close(fd);
 			mem_free(info);
-			abort_conn_with_state(c, S_FILE_TYPE);
+			abort_conn_with_state(c, state);
 			return;
 		}
 
 		stream = open_encoded(fd, encoding);
-		if (!stream) {
-			close(fd);
-			mem_free(info);
-			abort_conn_with_state(c, S_OUT_OF_MEM);
-			return;
-		}
-
 		state = read_file(stream, stt.st_size, info);
 
 		close_encoded(stream);

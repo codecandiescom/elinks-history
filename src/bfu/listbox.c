@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.64 2003/04/26 09:41:47 zas Exp $ */
+/* $Id: listbox.c,v 1.65 2003/04/29 13:18:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 struct listbox_item *
 traverse_listbox_items_list(struct listbox_item *item, int offset,
 			    int follow_visible,
-			    int (*fn)(struct listbox_item *, void *, int),
+			    int (*fn)(struct listbox_item *, void *, int *),
 			    void *d)
 {
 	struct listbox_item *visible_item = item;
@@ -114,7 +114,14 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 
 	while (offset && !stop) {
 		if (fn && (!follow_visible || item->visible)) {
-			offset = fn(item, d, offset);
+			struct listbox_item *prev = item->prev;
+			struct listbox_item *next = item->next;
+			int deleted = fn(item, d, &offset);
+
+			if (deleted) {
+				item = (offset >= 0 ? prev : next);
+				continue;
+			}
 			if (!offset) {
 				infinite = 0; /* safety (matches) */
 				continue;
@@ -218,7 +225,7 @@ struct box_context {
 
 /* Takes care about listbox top moving. */
 static int
-box_sel_move_do(struct listbox_item *item, void *data_, int offset)
+box_sel_move_do(struct listbox_item *item, void *data_, int *off)
 {
 	struct box_context *data = data_;
 
@@ -244,7 +251,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int offset)
 		}
 	}
 
-	return offset;
+	return 0;
 }
 
 /* Moves the selected item by [dist] items. If [dist] is out of the current
@@ -292,7 +299,7 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 /* Takes care about rendering of each listbox item. */
 static int
-display_listbox_item(struct listbox_item *item, void *data_, int offset)
+display_listbox_item(struct listbox_item *item, void *data_, int *off)
 {
 	struct box_context *data = data_;
 	unsigned char *text = item->text;
@@ -390,7 +397,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 
 	data->offset++;
 
-	return offset;
+	return 0;
 }
 
 /* Displays a dialog box */

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.23 2003/04/24 08:23:38 zas Exp $ */
+/* $Id: listbox.h,v 1.24 2003/04/29 13:18:22 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -62,7 +62,7 @@ extern struct widget_ops listbox_ops;
 
 void dlg_format_box(struct terminal *, struct terminal *, struct widget_data *, int, int *, int, int *, enum format_align);
 
-struct listbox_item *traverse_listbox_items_list(struct listbox_item *, int, int, int (*)(struct listbox_item *, void *, int), void *);
+struct listbox_item *traverse_listbox_items_list(struct listbox_item *, int, int, int (*)(struct listbox_item *, void *, int *), void *);
 
 void box_sel_move(struct widget_data *, int);
 

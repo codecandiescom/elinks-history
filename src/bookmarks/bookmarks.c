@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.69 2003/04/28 15:37:31 zas Exp $ */
+/* $Id: bookmarks.c,v 1.70 2003/04/29 13:18:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,19 +30,6 @@ INIT_LIST_HEAD(bookmark_boxes);
 /* Set to 1, if bookmarks have changed. */
 int bookmarks_dirty = 0;
 
-
-/* FIXME: stupid workaround for bookmarks/globhist segfault */
-/* I don't like this way, this workaround should be replaced by
- * an in-depth fix. */
-static void
-box_item_mem_free(void *p)
-{
-	static void *tmp = NULL;
-
-	if (tmp) mem_free(tmp);
-	tmp = p;
-}
-
 /* Deletes a bookmark. Returns 0 on failure (no such bm), 1 on success. */
 int
 delete_bookmark(struct bookmark *bm)
@@ -63,11 +50,8 @@ delete_bookmark(struct bookmark *bm)
 
 	/* Now wipe the bookmark */
 	del_from_list(bm->box_item);
-	/* FIXME: Segfault was caused by mem_free(bm->box_item).
-	 * This pointer was needed in traverse_listbox_item_list.
-	 * We suspend mem_free(), box_item is freed next time
-	 * when it is no longer needed. */
-	box_item_mem_free(bm->box_item);
+
+	mem_free(bm->box_item);
 
 	mem_free(bm->title);
 	mem_free(bm->url);

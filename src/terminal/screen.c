@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.20 2003/07/26 00:12:02 jonas Exp $ */
+/* $Id: screen.c,v 1.21 2003/07/26 00:39:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,10 +91,9 @@ struct rs_opt_cache {
 
 /* Time critical section. */
 static inline void
-print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
-	   struct string *screen, int p, int *mode, int *attrib)
+print_char(struct string *screen, struct rs_opt_cache *opt_cache, unsigned ch,
+	   int *mode, int *attrib)
 {
-	unsigned ch = term->screen[p];
 	unsigned char c = ch & 0xff;
 	unsigned char A = ch >> 8 & 0x7f;
 	unsigned char B = ch >> 15;
@@ -282,39 +281,40 @@ redraw_screen(struct terminal *term)
 		register int x = 0;
 
 		for (; x < term->x; x++, p++) {
-#define TSP term->screen[p]
-#define TLSP term->last_screen[p]
-			if (TSP == TLSP) continue;
-			if ((TSP & 0x3800) == (TLSP & 0x3800)) {
-				int a = (TSP & 0xff);
+			register unsigned tsp = term->screen[p];
+			register unsigned tlsp = term->last_screen[p];
+
+			if (tsp == tlsp) continue;
+			if ((tsp & 0x3800) == (tlsp & 0x3800)) {
+				int a = (tsp & 0xff);
 
 				if (a == 0 || a == 1 || a == ' ') {
-					a = (TLSP & 0xff);
+					a = (tlsp & 0xff);
 
 					if (a == 0 || a == 1 || a == ' ')
 						continue;
 				}
 			}
-#undef TSP
-#undef TLSP
+
 			if (cx == x && cy == y) {
-				print_char(term, &opt_cache, &screen,
-					   p, &mode, &attrib);
+				print_char(&screen, &opt_cache, tsp,
+					   &mode, &attrib);
 				cx++;
 			} else if (cy == y && x - cx < 10) {
 				register int i = x - cx;
 
 				for (; i >= 0; i--) {
-					print_char(term, &opt_cache, &screen,
-						   p - i, &mode, &attrib);
+					print_char(&screen, &opt_cache,
+						   term->screen[p - i],
+						   &mode, &attrib);
 					cx++;
 				}
 			} else {
 				add_cursor_move_to_string(&screen, y + 1, x + 1);
 
 				cx = x; cy = y;
-				print_char(term, &opt_cache, &screen,
-					   p, &mode, &attrib);
+				print_char(&screen, &opt_cache, tsp,
+					   &mode, &attrib);
 				cx++;
 			}
 		}

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.13 2003/07/03 00:18:36 zas Exp $ */
+/* $Id: view.h,v 1.14 2003/07/03 00:47:29 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -7,23 +7,6 @@
 #include "document/html/renderer.h"
 #include "terminal/terminal.h"
 #include "sched/session.h"
-
-#include "util/lists.h" /* LIST_HEAD */
-
-struct submitted_value {
-	LIST_HEAD(struct submitted_value);
-
-	unsigned char *name;
-	unsigned char *value;
-
-	struct form_control *frm;
-
-	void *file_content;
-
-	int fc_len;
-	int type;
-	int position;
-};
 
 
 void open_in_new_window(struct terminal *, void (*)(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *), struct session *);
@@ -72,10 +55,5 @@ int in_view(struct f_data_c *f, struct link *l);
 int next_in_view(struct f_data_c *f, int p, int d, int (*fn)(struct f_data_c *, struct link *), void (*cntr)(struct f_data_c *, struct link *));
 
 int goto_link(unsigned char *, unsigned char *, struct session *, int);
-unsigned char *get_form_url(struct session *, struct f_data_c *,
-			    struct form_control *);
-
-void draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l);
-int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct event *ev, int rep);
 
 #endif

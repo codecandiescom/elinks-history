@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.113 2003/07/03 00:05:27 zas Exp $ */
+/* $Id: session.c,v 1.114 2003/07/03 00:47:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,6 +45,7 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/form.h"
 #include "viewer/text/view.h"
 
 
@@ -921,10 +922,6 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 	}
 }
 #endif
-
-unsigned char *get_form_url(struct session *, struct f_data_c *,
-				    struct form_control *);
-int goto_link(unsigned char *, unsigned char *, struct session *, int);
 
 void
 doc_end_load(struct status *stat, struct session *ses)

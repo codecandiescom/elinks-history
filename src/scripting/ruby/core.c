@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.5 2005/01/20 13:12:00 jonas Exp $ */
+/* $Id: core.c,v 1.6 2005/01/20 16:40:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ erb_report_error(struct session *ses, int error)
 	unsigned char buff[MAX_STR_LEN];
 	unsigned char *msg;
 
-	/* These are from the Ruby internals. */
+	/* XXX: Ew. These are from the Ruby internals. */
 #define TAG_RETURN	0x1
 #define TAG_BREAK	0x2
 #define TAG_NEXT	0x3
@@ -132,6 +132,8 @@ erb_report_error(struct session *ses, int error)
 
 /* The ELinks module: */
 
+/* Inspired by Vim this is used to hook into the stdout write method so written
+ * data is displayed in a nice message box. */
 static VALUE
 erb_module_message(VALUE self, VALUE str)
 {
@@ -158,6 +160,11 @@ erb_module_message(VALUE self, VALUE str)
 	return Qnil;
 }
 
+/* ELinks::method_missing() is a catch all method that will be called when a
+ * hook is not defined. It might not be so elegant but it removes NoMethodErrors
+ * from popping up. */
+/* FIXME: It might be useful for user to actually display them to debug scripts,
+ * so maybe it should be optional. --jonas */
 static VALUE
 erb_module_method_missing(VALUE self, VALUE arg)
 {
@@ -180,6 +187,12 @@ init_erb_module(void)
 }
 
 
+/* The global Kernel::p method will for each object, directly write
+ * object.inspect() followed by the current output record separator to the
+ * program's standard output and will bypass the Ruby I/O libraries.
+ *
+ * Inspired by Vim we hook into the method and pop up a nice message box so it
+ * can be used to easily debug scripts without dirtying the screen. */
 static VALUE
 erb_stdout_p(int argc, VALUE *argv, VALUE self)
 {
@@ -243,10 +256,6 @@ init_ruby(struct module *module)
 	ruby_init_loadpath();
 
 	/* ``Trap'' debug prints from scripts. */
-#if 0
-	/* Vim does this */
-	rb_stdout = rb_obj_alloc(rb_cObject);
-#endif
 	rb_define_singleton_method(rb_stdout, "write", erb_module_message, 1);
 	rb_define_global_function("p", erb_stdout_p, -1);
 

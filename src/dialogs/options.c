@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.119 2003/11/10 00:32:36 jonas Exp $ */
+/* $Id: options.c,v 1.120 2003/11/11 13:19:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,16 +66,38 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
  * captions not to lose translations and so on. 0.5 stuff or even later.
  * --pasky */
 
+enum termopt {
+	TERM_OPT_TYPE,
+	TERM_OPT_M11_HACK,
+	TERM_OPT_RESTRICT_852,
+	TERM_OPT_BLOCK_CURSOR,
+	TERM_OPT_COLORS,
+	TERM_OPT_UTF_8_IO,
+	TERM_OPT_TRANSPARENCY,
+	TERM_OPT_UNDERLINE,
+
+	TERM_OPTIONS,
+};
+
 struct termopt_hop {
 	struct terminal *term;
-	int type;
-	int m11_hack;
-	int restrict_852;
-	int block_cursor;
-	int colors;
-	int utf_8_io;
-	int trans;
-	int underline;
+	int values[TERM_OPTIONS];
+};
+
+struct termopt_info {
+	enum termopt id;
+	unsigned char *name;
+};
+
+static struct termopt_info termopt_info[] = {
+	{ TERM_OPT_TYPE,	 "type"		},
+	{ TERM_OPT_M11_HACK,	 "m11_hack"	},
+	{ TERM_OPT_RESTRICT_852, "restrict_852"	},
+	{ TERM_OPT_BLOCK_CURSOR, "block_cursor"	},
+	{ TERM_OPT_COLORS,	 "colors"	},
+	{ TERM_OPT_UTF_8_IO,	 "transparency"	},
+	{ TERM_OPT_TRANSPARENCY, "utf_8_io"	},
+	{ TERM_OPT_UNDERLINE,	 "underline"	},
 };
 
 static void
@@ -84,25 +106,19 @@ terminal_options_ok(void *p)
 	struct termopt_hop *termopt_hop = p;
 	struct terminal *term = termopt_hop->term;
 	int touched = 0;
+	int i;
 
-#define maybe_update(val, name) 					\
-{ 									\
-	struct option *o = get_opt_rec(term->spec, name);	 	\
-	if (o->value.number != val) {					\
-		o->value.number = val;	 				\
-		o->flags |= OPT_TOUCHED; 				\
-		touched++;						\
-	} 								\
-}
-	maybe_update(termopt_hop->type, "type");
-	maybe_update(termopt_hop->m11_hack, "m11_hack");
-	maybe_update(termopt_hop->restrict_852, "restrict_852");
-	maybe_update(termopt_hop->block_cursor, "block_cursor");
-	maybe_update(termopt_hop->colors, "colors");
-	maybe_update(termopt_hop->trans, "transparency");
-	maybe_update(termopt_hop->utf_8_io, "utf_8_io");
-	maybe_update(termopt_hop->underline, "underline");
-#undef maybe_update
+	for (i = 0; i < TERM_OPTIONS; i++) {
+		unsigned char *name = termopt_info[i].name;
+		struct option *o = get_opt_rec(term->spec, name);
+		int value = termopt_hop->values[i];
+
+		if (o->value.number != value) {
+			o->value.number = value;
+			o->flags |= OPT_TOUCHED;
+			touched++;
+		}
+	}
 
 	if (touched)
 		term->spec->change_hook(NULL, term->spec, NULL);
@@ -132,6 +148,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct termopt_hop *termopt_hop;
 	struct dialog *dlg;
+	int i;
 
 	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
 	if (!termopt_hop) return;
@@ -143,14 +160,11 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	}
 
 	termopt_hop->term = term;
-	termopt_hop->type = get_opt_int_tree(term->spec, "type");
-	termopt_hop->m11_hack = get_opt_int_tree(term->spec, "m11_hack");
-	termopt_hop->restrict_852 = get_opt_int_tree(term->spec, "restrict_852");
-	termopt_hop->block_cursor = get_opt_int_tree(term->spec, "block_cursor");
-	termopt_hop->colors = get_opt_int_tree(term->spec, "colors");
-	termopt_hop->trans = get_opt_int_tree(term->spec, "transparency");
-	termopt_hop->underline = get_opt_int_tree(term->spec, "underline");
-	termopt_hop->utf_8_io = get_opt_int_tree(term->spec, "utf_8_io");
+	for (i = 0; i < TERM_OPTIONS; i++) {
+		unsigned char *name = termopt_info[i].name;
+
+		termopt_hop->values[i] = get_opt_int_tree(term->spec, name);
+	}
 
 	dlg->title = _("Terminal options", term);
 	dlg->layouter = generic_dialog_layouter;
@@ -160,24 +174,24 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh_data = termopt_hop;
 
 	add_dlg_text(dlg, _("Frame handling:", term), AL_LEFT, 1);
-	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, termopt_hop->type);
-	add_dlg_radio(dlg, _("VT 100 frames", term), 1,  TERM_VT100, termopt_hop->type);
-	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, termopt_hop->type);
-	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, termopt_hop->type);
+	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, termopt_hop->values[TERM_OPT_TYPE]);
+	add_dlg_radio(dlg, _("VT 100 frames", term), 1,  TERM_VT100, termopt_hop->values[TERM_OPT_TYPE]);
+	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, termopt_hop->values[TERM_OPT_TYPE]);
+	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, termopt_hop->values[TERM_OPT_TYPE]);
 
 	add_dlg_text(dlg, _("Color mode:", term), AL_LEFT, 1);
-	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, termopt_hop->colors);
-	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, termopt_hop->colors);
+	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, termopt_hop->values[TERM_OPT_COLORS]);
+	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, termopt_hop->values[TERM_OPT_COLORS]);
 #ifdef USE_256_COLORS
-	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, termopt_hop->colors);
+	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, ttermopt_hop->values[TERM_OPT_COLORS]);
 #endif
 
-	add_dlg_checkbox(dlg, _("Use ^[[11m", term), termopt_hop->m11_hack);
-	add_dlg_checkbox(dlg, _("Restrict frames in cp850/852", term), termopt_hop->restrict_852);
-	add_dlg_checkbox(dlg, _("Block the cursor", term), termopt_hop->block_cursor);
-	add_dlg_checkbox(dlg, _("Transparency", term), termopt_hop->trans);
-	add_dlg_checkbox(dlg, _("Underline", term), termopt_hop->underline);
-	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), termopt_hop->utf_8_io);
+	add_dlg_checkbox(dlg, _("Use ^[[11m", term), termopt_hop->values[TERM_OPT_M11_HACK]);
+	add_dlg_checkbox(dlg, _("Restrict frames in cp850/852", term), termopt_hop->values[TERM_OPT_RESTRICT_852]);
+	add_dlg_checkbox(dlg, _("Block the cursor", term), termopt_hop->values[TERM_OPT_BLOCK_CURSOR]);
+	add_dlg_checkbox(dlg, _("Transparency", term), termopt_hop->values[TERM_OPT_TRANSPARENCY]);
+	add_dlg_checkbox(dlg, _("Underline", term), termopt_hop->values[TERM_OPT_UNDERLINE]);
+	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), termopt_hop->values[TERM_OPT_UTF_8_IO]);
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ENTER, terminal_options_save, _("Save", term), NULL);

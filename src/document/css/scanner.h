@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.23 2004/01/19 21:17:20 jonas Exp $ */
+/* $Id: scanner.h,v 1.24 2004/01/19 23:52:01 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -90,10 +90,6 @@ struct css_scanner {
 
 /* Initializes the scanner. */
 void init_css_scanner(struct css_scanner *scanner, unsigned char *string);
-
-/* Fills the scanner with tokens. Already scanned tokens that has not been
- * requested remains and are moved to the start of the scanners token table. */
-void scan_css_tokens(struct css_scanner *scanner);
 
 #define css_scanner_has_tokens(scanner) \
 	((scanner)->tokens > 0 && (scanner)->current <= (scanner)->tokens)

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.50 2003/07/12 17:29:31 jonas Exp $ */
+/* $Id: auth.c,v 1.51 2003/07/12 17:38:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,8 +113,8 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 }
 
 /* Add a Basic Auth entry if needed. */
-/* Returns the new entry or updates an existing one. Sets the @valid member
- * if both @uid and @passwd are non empty. */
+/* Returns the new entry or updates an existing one. Sets the @valid member if
+ * updating is required so it can be tested if the user should be queried. */
 struct http_auth_basic *
 add_auth_entry(struct uri *uri, unsigned char *realm)
 {
@@ -177,7 +177,6 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		add_to_list(http_auth_basic_list, entry);
 	}
 
-	/* Return whether entry was added with user/pass from url. */
 	return entry;
 }
 
@@ -186,9 +185,9 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 /* Find an entry in auth list by url. If url contains user/pass information
  * and entry does not exist then entry is created.
  * If entry exists but user/pass passed in url is different, then entry is
- * updated (but not if user/pass is set in dialog).  It returns NULL on
- * failure, or a base 64 encoded user + pass suitable to use in Authorization
- * header. */
+ * updated (but not if user/pass is set in dialog). */
+/* It returns a base 64 encoded user + pass suitable to use in Authorization
+ * header, or NULL on failure. */
 unsigned char *
 find_auth(struct uri *uri)
 {
@@ -268,8 +267,8 @@ get_invalid_auth_entry(void)
 	struct http_auth_basic *entry;
 
 	foreach (entry, http_auth_basic_list)
-	    if (!auth_entry_has_userinfo(entry))
-		    return entry;
+		if (!auth_entry_has_userinfo(entry))
+			return entry;
 
 	return NULL;
 }

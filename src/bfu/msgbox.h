@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.10 2003/06/07 13:42:31 pasky Exp $ */
+/* $Id: msgbox.h,v 1.11 2003/06/07 13:45:08 pasky Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -47,13 +47,13 @@ enum msgbox_flags {
  *
  * @text	The info text of the message box. If the text requires
  *		formatting use msg_text(format, args...). This will allocate
- *		a string so remember to @align |= AL_EXTD_TEXT.
+ *		a string so remember to @align |= MSGBOX_EXTD_TEXT.
  *
  *		If no formatting is needed just pass the string and don't
- *		@align |= AL_EXTD_TEXT or you will get in trouble. ;)
+ *		@align |= MSGBOX_EXTD_TEXT or you will get in trouble. ;)
  *
  *		The @text is automatically localized inside of msg_box(),
- *		unless MSGBOX_NO_INTL or AL_EXTD_TEXT is passed. That is
+ *		unless MSGBOX_NO_INTL or MSGBOX_EXTD_TEXT is passed. That is
  *		because you do NOT want to localize output of msg_text(),
  *		but rather individually the format string and parameters to
  *		its string conversions.
@@ -88,8 +88,8 @@ void msg_box(struct terminal *term, struct memory_list *mem_list,
 /* This is basically an equivalent to asprintf(), specifically to be used
  * inside of message boxes. Please always use msg_text() instead of asprintf()
  * in msg_box() parameters (ie. own format conversions can be introduced later
- * specifically crafted for message boxes, and so on).
- * The returned string is allocated and may be NULL! */
+ * specifically crafted for message boxes, and so on). */
+/* The returned string is allocated and may be NULL! */
 unsigned char *msg_text(unsigned char *format, ...);
 
 #endif

@@ -1,3 +1,255 @@
+Mon Jun 21 21:43:45 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Minor fixes: in french, a space has to be inserted before
+	question/exclamation marks. This rule do not apply to english,
+	german or french as used in french-speaking Switzerland.  
+
+Mon Jun 21 21:28:33 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Minor fixes.  
+
+Mon Jun 21 21:24:26 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Jun 21 19:43:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	How many characters does your English alphabet have? 
+
+Mon Jun 21 18:23:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	usrerror() now prefixes the messages with 'ELinks' instead of
+	'elinks', because that's the real name of what we are developing,
+	after all.  
+
+Mon Jun 21 18:10:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Mon Jun 21 17:11:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	get_width(): polish the description comment.  
+
+Mon Jun 21 17:08:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	get_width(): @limit_it -> @limited 
+
+Mon Jun 21 16:56:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/file.h:
+
+	Remove string declaration.  
+
+Mon Jun 21 15:00:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Mon Jun 21 14:40:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Internationalize cursor position status message.  
+
+Mon Jun 21 14:24:19 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Use int_lower_bound in get_width.  
+
+Mon Jun 21 14:21:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Oops off by one error as usual.  
+
+Mon Jun 21 14:21:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Show cursor coordinates when doing cursor routing and cursor is not
+	over a link.  
+
+Mon Jun 21 14:19:21 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/parse.c:
+
+	Use int_upper_bound in get_width.  
+
+Mon Jun 21 14:03:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	If removing the last item in a folder move focus to previous item in
+	the folder or the root.  
+
+Mon Jun 21 13:56:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Rearrange the blank lines slightly.  
+
+Mon Jun 21 13:26:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	get_width(): Store allocated attribute value in @value variable
+	since we modify the original @str variable. Should fix bug when
+	parsing value string with space chars in it reported by Steven
+	Stocker.  
+
+Mon Jun 21 12:55:44 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Explain the meaning of draw_doc's |active| parameter.  
+
+Mon Jun 21 12:52:50 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Correct and expand the description of move_cursor.  
+
+Mon Jun 21 12:43:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Fix move_document_end to really go to the last line in
+	cursor-routing navigation mode.  
+
+Mon Jun 21 12:23:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	s/RFC 2391/RFC 2396/. Spotted by pasky.  
+
+Mon Jun 21 12:20:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Comment the behaviour of move_document_start and move_document_end 
+	when in cursor-routing navigation mode.  
+
+Mon Jun 21 12:08:35 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	When the user presses move-document-start or move-document-end while
+	using the cursor navigation mode (cursor routing), move the cursor,
+	respectively, to the first line and column, or to the last line
+	while preserving the column.  
+	
+	This required either re-ordering some routines or introducing a
+	prototype; I chose the latter.  
+
+Mon Jun 21 12:05:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Don't #include terminal/screen.h, it was used by initial cursor
+	routing patch but no more. Spotted by Miciah.  
+
+Mon Jun 21 12:01:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	add_opt_rec(): Split out the sorting algorithm to add_opt_sort().  
+
+Mon Jun 21 11:08:54 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	In draw_current_link, do not call get_link_cursor_offset if we do
+	not need its return value.  
+
+Mon Jun 21 11:02:53 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Sort main_action, edit_action, menu_action, main_action_table, 
+	edit_action_table, and menu_action_table.  
+
+Mon Jun 21 09:59:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	Tidy up the comments in get_link_at_coordinates.  
+
+Mon Jun 21 09:54:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	In get_link_at_coordinates, update comments to reflect that |x| and
+	|y| are not necessarily the coordinates of the mouse pointer. (Part
+	of this change was included in the last commit; sorry.) 
+
+Mon Jun 21 09:50:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	Fix last patch.  
+
+Mon Jun 21 09:49:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	In get_link_at_coordinates, modify the arguments |x| and |y| instead
+	of using the temporary variables |mouse_x| and |mouse_y|.  
+
+Mon Jun 21 09:49:19 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Jun 21 09:47:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: link.c, link.h, view.c:
+
+	Rename choose_mouse_link to get_link_at_coordinates as the new name
+	is clearer and the routine is not mouse-specific and is now used
+	with cursor navigation.  
+
+Mon Jun 21 07:23:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Fix bug 328 and change the wording of ui.startup_goto_dialog option
+	to say '... new tabs'.  
+
+Mon Jun 21 07:03:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	redirect_cache(): Don't test existence of cache->uri. If it wasn't
+	there we'd never be here.  
+
+Mon Jun 21 00:22:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	Microtidyup.  
+
 Sun Jun 20 21:37:21 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/cmdline.c:

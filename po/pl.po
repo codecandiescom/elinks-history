@@ -1339,12 +1339,12 @@ msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
 msgstr ""
-"Gdy wci¶niêty jest 'dó³' na ostatnim odno¶niku, skocz do pierwszego i vice "
-"versa."
+"Gdy wci¶niêty jest 'dó³' na ostatnim odno¶niku, skocz do pierwszego\n"
+"i vice versa."
 
 #: src/config/options.c:1151
 msgid "Document meta refresh"
-msgstr ""
+msgstr "Obs³uga meta refresh"
 
 #: src/config/options.c:1153
 msgid ""
@@ -1352,6 +1352,10 @@ msgid ""
 "refresh' tags). Web-page authors use these to instruct the browser\n"
 "to reload a document at a given interval or to load another page."
 msgstr ""
+"Automatycznie pod±¿aj za podan± w dokumencie dyrektyw± refresh\n"
+"(tagi '<meta> refresh'). Autorzy stron u¿ywaj± jej do poinstruowania\n"
+"przegl±darki, ¿eby po danym okresie czasu prze³adowa³a dokument\n"
+"lub za³adowa³a inn± stronê."
 
 #: src/config/options.c:1157
 msgid "Horizontal text margin"

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-18 23:48+0100\n"
-"PO-Revision-Date: 2005-01-19 15:29+0100\n"
+"PO-Revision-Date: 2005-01-21 20:56+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -62,7 +62,7 @@ msgstr "Tast mellemrum for at udfolde denne mappe."
 #: src/viewer/text/textarea.c:366 src/viewer/text/textarea.c:375
 #: src/viewer/text/view.c:730 src/viewer/text/view.c:1283
 msgid "OK"
-msgstr "Ok"
+msgstr "O.k."
 
 #: src/bfu/hierbox.c:564
 #, c-format
@@ -246,13 +246,13 @@ msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
 msgstr ""
-"Aktivér LEDs indikatorer.\n"
+"Aktivér LED-indikatorer.\n"
 "Disse visuelle indikatorer bruges til at markere forskellige tilstande."
 
 #. name:
 #: src/bfu/leds.c:262 src/bfu/leds.c:303
 msgid "LED indicators"
-msgstr "LED indikatorer"
+msgstr "LED-indikatorer"
 
 #: src/bfu/leds.c:263
 msgid ""
@@ -269,7 +269,7 @@ msgid ""
 "\n"
 "'-' generally indicates that the LED is off."
 msgstr ""
-"Betydningen af de forskellige LEDs indikatorer:\n"
+"Betydningen af de forskellige LED-indikatorer:\n"
 "\n"
 "[SIJ---]\n"
 " |||||`- Bruges ikke\n"
@@ -280,7 +280,7 @@ msgstr ""
 " |       'I' betyder ingen modus, 'i' betyder indsætning aktiveret\n"
 " `------ Om en SSL forbindelse blev brugt\n"
 "\n"
-"'-' i almindelighed betyder at LED indikatoreren er deaktiveret."
+"'-' i almindelighed betyder at LED-indikatoreren er deaktiveret."
 
 #: src/bfu/menu.c:746
 msgid "Search menu/"
@@ -747,7 +747,7 @@ msgstr "MIME-typen som antages for dokumenter af ukendt type"
 
 #: src/config/cmdline.c:645
 msgid "The default MIME type used for documents of unknown type."
-msgstr "Standard MIME-typen som antages for dokumenter af ukendt type."
+msgstr "Standard MIME-typen for dokumenter af ukendt type."
 
 #: src/config/cmdline.c:647
 msgid "Ignore user-defined keybindings"
@@ -852,12 +852,12 @@ msgstr "Udskriv detaljeret brugervejledning og afslut."
 
 #: src/config/cmdline.c:699
 msgid "Look up specified host"
-msgstr "Slå den specificerede værtsmaskine op"
+msgstr "Kontakt den specificerede værtsmaskine"
 
 #: src/config/cmdline.c:701
 msgid "Look up specified host and print all DNS resolved IP addresses."
 msgstr ""
-"Slå den specificerede værtsmaskine op og udskriv alle IP adresser\n"
+"Kontakt den specificerede værtsmaskine og udskriv alle IP adresser\n"
 "fundet ved DNS opslag"
 
 #: src/config/cmdline.c:703
@@ -1006,9 +1006,9 @@ msgid ""
 "The option has no effect if not used in conjunction with any of\n"
 "these options."
 msgstr ""
-"Hvis aktiveret vil kørselstidstilstandsfiler (bogmærker, historik, osv.)\n"
-"skrives til disken selv når -no-connect or -session-ring er anvendt.\n"
-"Indstillingen har ingen effekt hvis den ikke bruges i forbindelse med\n"
+"Hvis aktiveret tillades ændringer af tilstandsfiler såsom bogmærker\n"
+"og historik selv når -no-connect or -session-ring er anvendt.\n"
+"Indstillingen har kun effekt hvis den bruges i forbindelse med\n"
 "en af de ovennævnte indstillinger."
 
 #: src/config/cmdline.c:774
@@ -1319,7 +1319,7 @@ msgstr "Tilføj alle faneblade som bogmærker"
 
 #: src/config/kbdbind.c:436
 msgid "Open authentication manager"
-msgstr "Åbn identitetsbekræftelseshåndtering"
+msgstr "Åbn autentifikationshåndtering"
 
 #: src/config/kbdbind.c:437
 msgid "Open bookmark manager"
@@ -1801,7 +1801,7 @@ msgstr "Flyt til næste emne"
 
 #: src/config/kbdbind.c:569
 msgid "Open in external editor"
-msgstr "Åbn i en ekstern tekstbehandler"
+msgstr "Åbn i en ekstern editor"
 
 #: src/config/kbdbind.c:570
 msgid "Paste text from the clipboard"
@@ -1979,23 +1979,23 @@ msgstr "Om der skal bruges asynkron DNS opslag."
 
 #: src/config/options.inc:80
 msgid "Maximum connections"
-msgstr "Maksimal antal forbindelser"
+msgstr "Maksimalt antal forbindelser"
 
 #: src/config/options.inc:82
 msgid "Maximum number of concurrent connections."
-msgstr "Maksimal antal sideløbende forbindelser."
+msgstr "Maksimalt antal sideløbende forbindelser."
 
 #: src/config/options.inc:84
 msgid "Maximum connections per host"
-msgstr "Maksimal antal forbindelser pr. værtsmaskine"
+msgstr "Maksimalt antal forbindelser pr. værtsmaskine"
 
 #: src/config/options.inc:86
 msgid "Maximum number of concurrent connections to a given host."
-msgstr "Maksimal antal sideløbende forbindelser til en given værtsmaskine."
+msgstr "Maksimalt antal sideløbende forbindelser til en given værtsmaskine."
 
 #: src/config/options.inc:88
 msgid "Connection retries"
-msgstr "Forbindelsesgenetableringsforsøg"
+msgstr "Antal kontaktforsøg"
 
 #: src/config/options.inc:90
 msgid ""
@@ -3065,7 +3065,7 @@ msgstr "Separator"
 
 #: src/config/options.inc:625
 msgid "String which separates two dumps."
-msgstr "Streng som adskiller udskirft af to dumpede adresser"
+msgstr "Streng som adskiller udskrift af to dumpede dokumenter."
 
 #: src/config/options.inc:627
 msgid "Width"
@@ -3182,7 +3182,7 @@ msgstr ""
 
 #: src/config/options.inc:683
 msgid "Plain rendering"
-msgstr "Klartekst gengivelse"
+msgstr "Gengivelse af klartekst"
 
 #: src/config/options.inc:685
 msgid "Options concerning the display of plain text pages."
@@ -3762,11 +3762,11 @@ msgstr "Farver for aktivt faneblad."
 
 #: src/config/options.inc:1030
 msgid "Tab separator"
-msgstr "Fanebladsadskiller"
+msgstr "Fanebladsskilletegn"
 
 #: src/config/options.inc:1032
 msgid "Tab separator colors."
-msgstr "Farver på fanebladsadskiller"
+msgstr "Farver for skilletegn mellem faneblade."
 
 #: src/config/options.inc:1035
 msgid "Searched strings"
@@ -4198,10 +4198,10 @@ msgstr ""
 "Hvis aktiveret kræves det at der for alle ikke nationale domæner\n"
 "er tre punktummer i cookie domænet (i stedet for kun to). Nogle\n"
 "lande har generiske anden niveaus domæner (eksempelvis .co.uk og\n"
-".com.pl) og det kan potentielt være farligt at tillade websteder\n"
+".com.pl) og det kan potentielt være farligt at tillade netsteder\n"
 "at sætte cookies for disse generiske domæner. Bemærk, at denne\n"
 "indstilling er deaktiveret som standard, da denne egenskab gør\n"
-"flere websteder utilgængelige."
+"flere netsteder utilgængelige."
 
 #: src/cookies/cookies.c:110
 msgid "Saving"
@@ -5245,7 +5245,7 @@ msgstr ""
 
 #: src/formhist/formhist.c:459
 msgid "Never for this site"
-msgstr "Aldrig for dette websted"
+msgstr "Aldrig for dette netsted"
 
 #. name:
 #: src/formhist/formhist.c:484
@@ -5681,7 +5681,7 @@ msgid ""
 "1 is show program to be run\n"
 "2 is show mailcap description field if any; \"mailcap\" otherwise"
 msgstr ""
-"Hvilken beskrivelse der vises i dialogvinduet, som foresørger om hvordan\n"
+"Hvilken beskrivelse der vises i dialogvinduet, som forespørger om hvordan\n"
 "eksterne filtype håndteres:\n"
 "0 betyder vis \"mailcap\"\n"
 "1 betyder vis det program som vil blive kørt\n"
@@ -5846,11 +5846,11 @@ msgstr "~BeOS-terminal"
 #: src/protocol/auth/dialogs.c:85
 #, c-format
 msgid "Authentication required for %s at %s"
-msgstr "Bekræftelse af identitet kræves for %s hos %s"
+msgstr "Autentifikation påkrævet for %s hos %s"
 
 #: src/protocol/auth/dialogs.c:95
 msgid "HTTP Authentication"
-msgstr "HTTP-godkendelse"
+msgstr "HTTP-autentifikation"
 
 #: src/protocol/auth/dialogs.c:106 src/protocol/http/http.c:103
 msgid "Password"
@@ -5876,44 +5876,44 @@ msgstr "gyldig"
 #: src/protocol/auth/dialogs.c:212
 #, c-format
 msgid "Sorry, but auth entry \"%s\" cannot be deleted."
-msgstr "Desværre, identitetsbekræftelsesemnet \"%s\" kan ikke slettes."
+msgstr "Desværre, autentifikationsemnet \"%s\" kan ikke slettes."
 
 #. cant_delete_used_item
 #: src/protocol/auth/dialogs.c:214
 #, c-format
 msgid "Sorry, but auth entry \"%s\" is being used by something else."
 msgstr ""
-"Desværre, identitetsbekræftelsesemnet \"%s\" er optaget af en anden proces.."
+"Desværre, autentifikationsemnet \"%s\" er optaget af en anden proces.."
 
 #. delete_marked_items_title
 #: src/protocol/auth/dialogs.c:220
 msgid "Delete marked auth entries"
-msgstr "Slet markerede identitetsbekræftelsesemner"
+msgstr "Slet markerede autentifikationsemner"
 
 #. delete_marked_items
 #: src/protocol/auth/dialogs.c:222
 msgid "Delete marked auth entries?"
-msgstr "Slet markerede identitetsbekræftelsesemner?"
+msgstr "Slet markerede autentifikationsemner?"
 
 #. delete_item_title
 #: src/protocol/auth/dialogs.c:228
 msgid "Delete auth entry"
-msgstr "Slet identitetsbekræftelsesemne"
+msgstr "Slet autentifikationsemne"
 
 #. delete_item
 #: src/protocol/auth/dialogs.c:230
 msgid "Delete this auth entry?"
-msgstr "Slet denne identitetsbekræftelsesemne"
+msgstr "Slet denne autentifikationsemne"
 
 #. clear_all_items_title
 #: src/protocol/auth/dialogs.c:232
 msgid "Clear all auth entries"
-msgstr "Slet alle identitetsbekræftelsesemner"
+msgstr "Slet alle autentifikationsemner"
 
 #. clear_all_items_title
 #: src/protocol/auth/dialogs.c:234
 msgid "Do you really want to remove all auth entries?"
-msgstr "Vil du virkelig slette alle identitetsbekræftelsesemner?"
+msgstr "Vil du virkelig slette alle autentifikationsemner?"
 
 #: src/protocol/auth/dialogs.c:261
 msgid "Authentication manager"
@@ -6701,7 +6701,7 @@ msgstr "Venter i kø"
 
 #: src/sched/error.c:32
 msgid "Looking up host"
-msgstr "Lokaliserer værtsmaskine"
+msgstr "Kontakter værtsmaskine"
 
 #: src/sched/error.c:33
 msgid "Making connection"
@@ -6925,7 +6925,7 @@ msgstr ""
 "Den algoritme som ELinks bruger til at gemme opsætningen er blevet ændret "
 "siden sidste opgradering. Nu er det kun de indstillinger som ændres der "
 "bliver gemt i opsætningsfilen, i stedet for alle indstillingerne. Dette "
-"forenkler tingene meget i de tilfælde hvor en indstilling har en upassende "
+"forenkler tingene meget i de tilfælde hvor en indstilling har en uhensigtsmæssig "
 "standardværdi, eller hvor betydningen af en indstilling ændres. Derfor "
 "anbefales det at sætte værdien af config.saving_style til 3 for at det "
 "fungerer korrekt."

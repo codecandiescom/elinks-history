@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.93 2003/10/22 10:09:59 jonas Exp $ */
+/* $Id: tables.c,v 1.94 2003/10/25 14:41:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,9 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-#define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
+
+/* Fix namespace clash on MacOS. */
+#define table table_elinks
 
 #define AL_TR		-1
 

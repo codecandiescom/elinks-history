@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.88 2003/10/23 22:22:49 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.89 2003/10/25 14:41:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,8 +20,9 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-#define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 
+/* Fix namespace clash on MacOS. */
+#define table table_elinks
 
 INIT_LIST_HEAD(kbdbind_box_items);
 INIT_LIST_HEAD(kbdbind_boxes);

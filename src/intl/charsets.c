@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.62 2003/09/29 14:18:20 pasky Exp $ */
+/* $Id: charsets.c,v 1.63 2003/10/25 14:41:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,9 @@
 #include "util/string.h"
 #include "util/types.h"
 
-#define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
+
+/* Fix namespace clash on MacOS. */
+#define table table_elinks
 
 struct table_entry {
 	unsigned char c;

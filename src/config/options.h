@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.85 2003/10/25 14:09:41 jonas Exp $ */
+/* $Id: options.h,v 1.86 2003/10/25 14:41:42 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -10,10 +10,8 @@
 
 /* TODO: We should provide some generic mechanism for options caching. */
 
-/* This in particular is *not* a nice occassion for putting in any funny
- * replacement as we want our keyboards to survive debugging sessions, which
- * frequently involve typing this substituted token all the time. --pasky */
-#define option option_cygwin_workaround
+/* Fix namespace clash on Cygwin. */
+#define option option_elinks
 
 
 enum option_flags {

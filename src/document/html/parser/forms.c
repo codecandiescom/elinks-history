@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.23 2004/06/22 22:05:29 zas Exp $ */
+/* $Id: forms.c,v 1.24 2004/06/22 22:21:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ sp:
 		s++;
 	}
 	if (s >= i) goto end_parse;
-	if (s + 2 <= eofff && (s[1] == '!' || s[1] == '?')) {
+	if (s + 2 <= html_context.eofff && (s[1] == '!' || s[1] == '?')) {
 		s = skip_comment(s, i);
 		goto se;
 	}

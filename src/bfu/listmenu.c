@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.1 2004/01/03 15:08:47 zas Exp $ */
+/* $Id: listmenu.c,v 1.2 2004/01/04 00:56:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,10 @@
 #include "util/error.h"
 #include "util/string.h"
 #include "viewer/text/link.h" /* get_current_state() */
+
+/* TODO: massive cleanup, merging, code redundancy tracking between this file
+ * and bfu/menu.c (and perhaps others.)
+ * We should unify and clarify menu-related code. */
 
 static int
 menu_contains(struct menu_item *m, int f)
@@ -124,6 +128,7 @@ init_menu(struct list_menu *menu)
 	new_menu_item(menu, stracpy(""), -1, 0);
 }
 
+/* TODO: merge with free_menu_items() in bfu/menu.h --Zas */
 void
 free_menu(struct menu_item *m) /* Grrr. Recursion */
 {

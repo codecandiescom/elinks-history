@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.186 2004/04/14 05:35:03 jonas Exp $ */
+/* $Id: main.c,v 1.187 2004/04/14 05:44:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,15 +184,15 @@ init(void)
 			 * installs it's own buggy TSTP handler. */
 			handle_basic_signals(NULL);
 			mem_free(info);
-			goto end;
-		}
 
-		fd = attach_terminal(get_input_handle(), get_output_handle(),
-				     get_ctl_handle(), info, len);
-		if (fd == -1) {
+		} else {
+			fd = attach_terminal(get_input_handle(), get_output_handle(),
+					     get_ctl_handle(), info, len);
+			if (fd == -1) {
 fatal_error:
-			retval = RET_FATAL;
-			terminate = 1;
+				retval = RET_FATAL;
+				terminate = 1;
+			}
 		}
 	}
 end:

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.15 2002/09/14 12:09:44 pasky Exp $ */
+/* $Id: listbox.h,v 1.16 2002/09/14 20:53:18 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -22,9 +22,6 @@ struct listbox_data {
 	struct listbox_item *top; /* Item which is on the top line of the box */
 	int sel_offset; /* Offset of selected item against the box top */
 	struct list_head *items; /* The list being displayed */
-
-	int order; /* The order of the displayed list:
-		      0 == next->prev, 1 == prev->next */
 };
 
 /* An item in a box */

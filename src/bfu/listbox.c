@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.28 2002/09/14 19:56:48 pasky Exp $ */
+/* $Id: listbox.c,v 1.29 2002/09/14 20:53:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,6 @@ struct box_context {
 	struct listbox_data *box;
 	int dist;
 	int offset;
-	int dir;
 };
 
 /* Takes care about listbox top moving. */
@@ -189,7 +188,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int offset)
 		} else {
 			data->box->top =
 				traverse_listbox_items_list(data->box->top,
-					1 * data->dir, 1, NULL, NULL);
+					1, 1, NULL, NULL);
 		}
 	} else if (data->dist < 0) {
 		if (data->box->sel_offset > 0) {
@@ -197,7 +196,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int offset)
 		} else {
 			data->box->top = 
 				traverse_listbox_items_list(data->box->top,
-					-1 * data->dir, 1, NULL, NULL);
+					-1, 1, NULL, NULL);
 		}
 	}
 
@@ -211,12 +210,10 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 {
 	struct listbox_data *box;
 	struct box_context *data;
-	int ofs;
 
 	box = (struct listbox_data *) listbox_item_data->item->data;
 	if (!list_empty(*box->items)) {
-		if (!box->top) box->top = box->order ? box->items->prev
-						     : box->items->next;
+		if (!box->top) box->top = box->items->next;
 		if (!box->sel) box->sel = box->top;
 	}
 
@@ -225,20 +222,18 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 	data->listbox_item_data = listbox_item_data;
 	data->dist = dist;
 
-	data->dir = ofs = 1 - box->order * 2;
-
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {
 		box->top = traverse_listbox_items_list(box->top,
-				ofs, 1, NULL, NULL);
+				1, 1, NULL, NULL);
 		box->sel = box->top;
 	}
 
-	if (traverse_listbox_items_list(box->sel, dist * ofs, 1, NULL, NULL)
+	if (traverse_listbox_items_list(box->sel, dist, 1, NULL, NULL)
 	    != box->sel) {
 		/* XXX: This is ugly, yes; but we don't want to call the
 		 * callback if we won't move on at all. */
-		box->sel = traverse_listbox_items_list(box->sel, dist * ofs, 1,
+		box->sel = traverse_listbox_items_list(box->sel, dist, 1,
 						       box_sel_move_do, data);
 	}
 
@@ -304,12 +299,10 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 	struct terminal *term = dlg->win->term;
 	struct listbox_data *box;
 	struct box_context *data;
-	int ofs;
 
 	box = (struct listbox_data *) listbox_item_data->item->data;
 	if (!list_empty(*box->items)) {
-		if (!box->top) box->top = box->order ? box->items->prev
-						     : box->items->next;
+		if (!box->top) box->top = box->items->next;
 		if (!box->sel) box->sel = box->top;
 	}
 
@@ -323,17 +316,15 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 	data->box = box;
 	data->offset = 0;
 
-	ofs = 1 - box->order * 2;
-
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {
 /*		debug("top: %s - (%d) %p\n", box->top->text, box->top->visible, box->top); */
-		box->top = traverse_listbox_items_list(box->top, ofs,
+		box->top = traverse_listbox_items_list(box->top, 1,
 				1, NULL, NULL);
 		box->sel = box->top;
 	}
 
-	traverse_listbox_items_list(box->top, listbox_item_data->item->gid * ofs,
+	traverse_listbox_items_list(box->top, listbox_item_data->item->gid,
 				    1, display_listbox_item, data);
 
 	mem_free(data);
@@ -363,16 +354,12 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	      struct event *ev)
 {
 	struct listbox_data *box;
-	int ofs;
 
 	box = (struct listbox_data *) di->item->data;
 	if (!list_empty(*box->items)) {
-		if (!box->top) box->top = box->order ? box->items->prev
-						     : box->items->next;
+		if (!box->top) box->top = box->items->next;
 		if (!box->sel) box->sel = box->top;
 	}
-
-	ofs = 1 - box->order * 2;
 
 	if ((ev->b & BM_ACT) == B_UP) {
 		if ((ev->y >= di->y && ev->y < di->y + di->item->gid) &&
@@ -383,7 +370,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 			offset = ev->y - di->y;
 			box->sel_offset = offset;
 			box->sel = traverse_listbox_items_list(box->top,
-							       offset * ofs, 1,
+							       offset, 1,
 							       NULL, NULL);
 			display_dlg_item(dlg, di, 1);
 			return 1;

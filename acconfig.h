@@ -53,3 +53,6 @@
 
 /* Define to 1 if we should include global history */
 #undef GLOBHIST
+
+/* Directory containing default config */
+#undef CONFDIR

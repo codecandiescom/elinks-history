@@ -391,6 +391,17 @@ dnl == EMX hack
 
 test "$have_emx" = yes && LDFLAGS="$LDFLAGS -Zexe"
 
+# Create CONFDIR #define for config.h
+CONFDIR=$sysconfdir
+CONFDIR=`(
+    test "x$prefix" = xNONE && prefix=$ac_default_prefix
+    test "x$exec_prefix" = xNONE && exec_prefix=${prefix}
+    eval echo "$CONFDIR"
+)`
+AC_DEFINE_UNQUOTED(CONFDIR,"$CONFDIR")
+AC_SUBST(CONFDIR)
+
+
 
 AC_OUTPUT([ \
  Makefile \

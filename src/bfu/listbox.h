@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.57 2004/01/03 10:58:50 jonas Exp $ */
+/* $Id: listbox.h,v 1.58 2004/01/03 11:07:32 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -108,6 +108,7 @@ struct listbox_item {
 	unsigned int visible:1; /* Is this item visible? */
 	unsigned int marked:1;
 	unsigned int translated:1; /* Should we call gettext on this text? */
+	unsigned int free_empty_folder:1; /* Only valid for BI_FOLDERs */
 
 	void *udata;
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.135 2004/01/02 19:33:09 jonas Exp $ */
+/* $Id: hierbox.c,v 1.136 2004/01/03 11:07:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,6 +99,13 @@ done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box_item
 
 	/* The option dialog needs this test */
 	if (box_item->next) del_from_list(box_item);
+
+	if (box_item->root
+	    && box_item->root->free_empty_folder
+	    && box_item->root->type == BI_FOLDER
+	    && list_empty(box_item->root->child))
+		done_listbox_item(browser, box_item->root);
+
 	mem_free(box_item);
 	update_hierbox_browser(browser);
 }

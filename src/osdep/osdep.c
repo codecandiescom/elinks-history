@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.44 2003/04/29 08:25:28 zas Exp $ */
+/* $Id: osdep.c,v 1.45 2003/05/02 11:15:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,16 +27,6 @@
 #include <unistd.h>
 #endif
 
-#include "elinks.h"
-
-#include "intl/gettext/libintl.h"
-#include "lowlevel/kbd.h"
-#include "lowlevel/select.h"
-#include "lowlevel/terminal.h"
-#include "util/conv.h"
-#include "util/memory.h"
-#include "util/string.h"
-
 #if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
 #define USE_GPM
 #endif
@@ -49,6 +39,19 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #endif
+
+
+#include "elinks.h"
+
+#include "intl/gettext/libintl.h"
+#include "lowlevel/kbd.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "sched/session.h"
+#include "util/conv.h"
+#include "util/memory.h"
+#include "util/string.h"
+
 
 /* Set a file descriptor to non-blocking mode. It returns a non-zero value
  * on error. */
@@ -1758,6 +1761,54 @@ exec_new_elinks(struct terminal *term, unsigned char *xterm,
 	if (str) {
 		exec_on_terminal(term, str, "", 2);
 		mem_free(str);
+        }
+}
+
+void
+open_in_new_tab(struct terminal *term, unsigned char *exe_name,
+                unsigned char *param)
+{
+	int base = 0;
+	unsigned char *url = "";
+
+	if (!strncmp(param, "-base-session ",13)) {
+		base = atoi(param + strlen("-base-session "));
+	} else
+		url = param;
+
+	{
+		/* Now lets create new session... */
+		struct event ev = {EV_RESIZE, 0, 0, 0};
+		struct window *	win = mem_alloc(sizeof (struct window));
+
+		win->handler = get_root_window(term)->handler;
+		win->data = NULL;
+		win->term = term;
+		/* Root window */
+		win->type = 1;
+
+		add_to_list(term->windows, win);
+                term->current_tab = get_tab_number(win);
+
+                win->data = create_basic_session(win);
+
+                win->handler(win, &ev, 0);
+
+		if(*url) {
+                        unsigned char *u = decode_url(url);
+
+			if (u) {
+				goto_url((struct session *)win->data, u);
+			        mem_free(u);
+			}
+		}
+		else {
+			unsigned char *h = getenv("WWW_HOME");
+			if (!h || !*h)
+				h = WWW_HOME_URL;
+			if (h && *h)
+				goto_url((struct session *)win->data, h);
+		}
 	}
 }
 
@@ -1831,8 +1882,9 @@ struct {
 	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
 	unsigned char *text;
 } oinw[] = {
+	{ENV_XWIN, open_in_new_tab, N_("~Tab")},
 	{ENV_XWIN, open_in_new_xterm, N_("~Xterm")},
-	{ENV_TWIN, open_in_new_twterm, N_("~Twterm")},
+	{ENV_TWIN, open_in_new_twterm, N_("T~wterm")},
 	{ENV_SCREEN, open_in_new_screen, N_("~Screen")},
 #ifdef OS2
 	{ENV_OS2VIO, open_in_new_vio, N_("~Window")},

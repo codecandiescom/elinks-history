@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.59 2003/04/24 08:23:38 zas Exp $ */
+/* $Id: kbdbind.c,v 1.60 2003/05/02 11:15:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -427,6 +427,9 @@ static struct strtonum action_table[] = {
 	{ "scroll-up", ACT_SCROLL_UP, N_("Scroll up") },
 	{ "search", ACT_SEARCH, N_("Search for a text pattern") },
 	{ "search-back", ACT_SEARCH_BACK, N_("Search backwards for a text pattern") },
+	{ "tab-close", ACT_TAB_CLOSE, N_("Close tab") },
+	{ "tab-next", ACT_TAB_NEXT, N_("Next tab") },
+	{ "tab-prev", ACT_TAB_PREV, N_("Previous tab") },
 	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, N_("Toggle displaying of links to images") },
 	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, N_("Toggle rendering of tables") },
 	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, N_("Toggle rendering page as HTML / plain text") },
@@ -435,7 +438,7 @@ static struct strtonum action_table[] = {
 	{ "up", ACT_UP, N_("Move cursor upwards") },
 	{ "view-image", ACT_VIEW_IMAGE, N_("View the current image") },
 	{ "zoom-frame", ACT_ZOOM_FRAME, N_("Maximize the current frame") },
-	{ NULL, 0, NULL }
+        { NULL, 0, NULL }
 };
 
 static int
@@ -716,7 +719,10 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_REALLY_QUIT, 'Q' },
 	{ ACT_DOCUMENT_INFO, '=' },
 	{ ACT_HEADER_INFO, '|' },
-	{ ACT_TOGGLE_HTML_PLAIN, '\\' },
+        { ACT_TAB_CLOSE, 'c' },
+        { ACT_TAB_NEXT, '>' },
+        { ACT_TAB_PREV, '<' },
+        { ACT_TOGGLE_HTML_PLAIN, '\\' },
 	{ ACT_TOGGLE_NUMBERED_LINKS, '.' },
 	{ ACT_TOGGLE_DISPLAY_IMAGES, '*' },
 	{ ACT_NEXT_FRAME, KBD_TAB },

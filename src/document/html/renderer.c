@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.63 2003/04/28 13:22:11 zas Exp $ */
+/* $Id: renderer.c,v 1.64 2003/05/02 11:15:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1879,7 +1879,8 @@ html_interpret(struct session *ses)
 	o.xp = 0;
 	o.yp = 1;
 	o.xw = ses->term->x;
-	o.yw = ses->term->y - 2;
+        o.yw = ses->term->y - 2;
+        o.yw--; /* One more line for tabbar */
 	o.col = get_opt_bool_tree(ses->term->spec, "colors");
 	o.cp = get_opt_int_tree(ses->term->spec, "charset");
 

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.2 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: session.h,v 1.3 2003/05/02 11:15:10 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -86,7 +86,7 @@ struct session {
 extern struct list_head sessions;
 
 unsigned char *encode_url(unsigned char *);
-/* unsigned char *decode_url(unsigned char *); */
+unsigned char *decode_url(unsigned char *);
 
 void add_xnum_to_str(unsigned char **, int *, int);
 void add_time_to_str(unsigned char **, int *, ttime);
@@ -101,6 +101,7 @@ void process_file_requests(struct session *);
 
 /* int read_session_info(int, struct session *, void *, int); */
 void *create_session_info(int, unsigned char *, int *);
+struct session *create_basic_session(struct window *);
 
 void win_func(struct window *, struct event *, int);
 

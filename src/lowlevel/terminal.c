@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.47 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: terminal.c,v 1.48 2003/05/02 11:15:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,6 +148,8 @@ clear_terminal(struct terminal *term)
 	set_cursor(term, 0, 0, 0, 0);
 }
 
+#define IF_ACTIVE(win,term) if(!(win)->type || (win)==get_tab_by_number((term),(term)->current_tab))
+
 void
 redraw_terminal_ev(struct terminal *term, int e)
 {
@@ -161,7 +163,7 @@ redraw_terminal_ev(struct terminal *term, int e)
 	term->redrawing = 2;
 
 	foreachback(win, term->windows)
-		win->handler(win, &ev, 0);
+		IF_ACTIVE(win,term) win->handler(win, &ev, 0);
 
 	term->redrawing = 0;
 }
@@ -224,7 +226,7 @@ redraw_from_window(struct window *win)
 
 	term->redrawing = 1;
 	for (win = win->prev; win != end; win = win->prev) {
-		win->handler(win, &ev, 0);
+		IF_ACTIVE(win,term) win->handler(win, &ev, 0);
 	}
 	term->redrawing = 0;
 }
@@ -243,7 +245,7 @@ redraw_below_window(struct window *win)
 	tr = term->redrawing;
 	win->term->redrawing = 2;
 	for (win = term->windows.prev; win != end; win = win->prev) {
-		win->handler(win, &ev, 0);
+		IF_ACTIVE(win,term) win->handler(win, &ev, 0);
 	}
 	term->redrawing = tr;
 }
@@ -269,7 +271,9 @@ add_window_at_pos(struct terminal *term,
 	win->data = data;
 	win->term = term;
 	win->xp = win->yp = 0;
-	add_at_pos(at, win);
+        /* Ordinary (not root) window */
+        win->type = 0;
+        add_at_pos(at, win);
 	win->handler(win, &ev, 0);
 }
 
@@ -278,8 +282,7 @@ add_window(struct terminal *term,
 	   void (*handler)(struct window *, struct event *, int),
 	   void *data)
 {
-	add_window_at_pos(term, handler, data,
-			  (struct window *) &term->windows);
+	add_window_at_pos(term, handler, data, (struct window *) &term->windows);
 }
 
 void
@@ -317,26 +320,101 @@ set_window_ptr(struct window *win, int x, int y)
 void
 get_parent_ptr(struct window *win, int *x, int *y)
 {
-	if ((void *)win->next != &win->term->windows) {
-		*x = win->next->xp;
-		*y = win->next->yp;
+	struct window *parent = win->next;
+
+#if 0
+	if ((void*)parent == &win->term->windows)
+                parent=NULL;
+	else
+#endif
+	if (parent->type)
+                parent = get_tab_by_number(win->term, win->term->current_tab);
+
+	if (parent) {
+		*x = parent->xp;
+		*y = parent->yp;
 	} else {
 		*x = 0;
 		*y = 0;
 	}
 }
 
+/* Number of tabs - just number of root windows in term->windows */
+int
+number_of_tabs(struct terminal *term)
+{
+	int result = 0;
+	struct window *win;
+
+	foreach(win, term->windows)
+		result += win->type;
+
+        return result;
+}
+
+/* Number of tab */
+int
+get_tab_number(struct window *window)
+{
+	struct terminal *term = window->term;
+	struct window *win;
+        int current = 0;
+	int num = 0;
+
+	foreachback(win, term->windows)
+		if(win == window)
+			num = current;
+		else
+			current += win->type;
+
+	return num;
+}
+
+/* Get root window of a given tab */
+struct window *
+get_tab_by_number(struct terminal *term, int num)
+{
+	struct window *win = NULL;
+
+	foreachback(win,term->windows)
+		if(win->type && !num)
+			break;
+		else
+                        num -= win->type;
+
+	return win;
+}
+
+/* Get root window */
 struct window *
 get_root_window(struct terminal *term)
 {
-	if (list_empty(term->windows)) {
-		internal("terminal has no windows");
-		return NULL;
-	}
-
-	return (struct window *)term->windows.prev;
+	return (struct window *) get_tab_by_number(term,term->current_tab);
 }
 
+void
+switch_to_tab(struct terminal *term, int num)
+{
+	if(num >= number_of_tabs(term))
+		num--;
+	if(num < 0)
+		num = 0;
+
+	term->current_tab = num;
+
+	redraw_terminal_cls(term);
+}
+
+void
+close_tab(struct terminal *term)
+{
+	if(number_of_tabs(term) < 2)
+		return;
+
+	delete_window(get_root_window(term));
+
+	switch_to_tab(term, term->current_tab);
+}
 
 struct ewd {
 	void (*fn)(void *);
@@ -437,6 +515,8 @@ init_term(int fdin, int fdout,
 	win->handler = root_window;
 	win->data = NULL;
 	win->term = term;
+        /* Root window */
+        win->type = 1;
 
 	add_to_list(term->windows, win);
 	/*alloc_term_screen(term, 80, 25);*/
@@ -447,15 +527,17 @@ init_term(int fdin, int fdout,
 	return term;
 }
 
-#if 0
-/* Converted to macro - see terminal.h */
+/* We need to send event to correct root window, not to first one --karpov */
 void
 term_send_event(struct terminal *term, struct event *ev)
 {
-	((struct window *) &term->windows)->next->handler(term->windows.next,
-							  ev, 0);
+	struct window *first_win = term->windows.next;
+	struct window *win = first_win->type
+			     ? get_tab_by_number(term,term->current_tab)
+			     : first_win;
+
+	win->handler(win, ev, 0);
 }
-#endif
 
 static void
 term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
@@ -585,7 +667,7 @@ send_redraw:
 			 * window inside EV_INIT handler (it'll get second
 			 * EV_INIT here). Work out some hack, like me ;-).
 			 * --pasky */
-			win->handler(win, ev, 0);
+			 IF_ACTIVE(win,term) win->handler(win, ev, 0);
 		}
 		{
 			extern int startup_goto_dialog_paint;

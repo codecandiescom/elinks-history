@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.23 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: terminal.h,v 1.24 2003/05/02 11:15:10 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -70,13 +70,14 @@ struct terminal {
 	unsigned char *input_queue;
 	int qlen;
 	int qfreespace;
-	struct list_head windows;
+        int current_tab;
+        struct list_head windows;
 	unsigned char *title;
 	struct {
 		unicode_val ucs;
 		int len;
 		int min;
-	} utf_8;
+        } utf_8;
 };
 
 struct window {
@@ -86,6 +87,7 @@ struct window {
 	void *data;
 	int xp, yp;
 	struct terminal *term;
+        int type; /* 0 means ordinary window, 1 means root window (one per tab) */
 };
 
 extern struct list_head terminals;
@@ -111,6 +113,13 @@ void delete_window(struct window *);
 void delete_window_ev(struct window *, struct event *ev);
 #define set_window_ptr(window, x, y) 	(window)->xp = (x), (window)->yp = (y)
 void get_parent_ptr(struct window *, int *, int *);
+
+int number_of_tabs(struct terminal *term);
+int get_tab_number(struct window *window);
+struct window *get_tab_by_number(struct terminal *term, int num);
+void switch_to_tab(struct terminal *term, int num);
+void close_tab(struct terminal *term);
+
 struct window *get_root_window(struct terminal *);
 void add_empty_window(struct terminal *, void (*)(void *), void *);
 void redraw_screen(struct terminal *);
@@ -167,6 +176,9 @@ void set_terminal_title(struct terminal *, unsigned char *);
 void do_terminal_function(struct terminal *, unsigned char, unsigned char *);
 void beep_terminal(struct terminal *);
 
+void term_send_event(struct terminal *, struct event *);
+/*
 #define term_send_event(terminal, event) ((struct window *) &(terminal)->windows)->next->handler((terminal)->windows.next, (event), 0)
+*/
 
 #endif

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.27 2003/05/25 01:39:46 zas Exp $ */
+/* $Id: terminal.c,v 1.28 2003/05/25 10:01:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -608,3 +608,44 @@ do_terminal_function(struct terminal *term, unsigned char code,
 
 	return 0;
 }
+
+static int terminal_pipe[2];
+
+int
+check_terminal_pipes(void)
+{
+	return c_pipe(terminal_pipe);
+}
+
+void
+close_terminal_pipes(void)
+{
+	close(terminal_pipe[0]);
+	close(terminal_pipe[1]);
+}
+
+int
+attach_terminal(int in, int out, int ctl, void *info, int len)
+{
+	struct terminal *term;
+
+	if (set_nonblocking_fd(terminal_pipe[0]) < 0) return -1;
+	if (set_nonblocking_fd(terminal_pipe[1]) < 0) return -1;
+	handle_trm(in, out, out, terminal_pipe[1], ctl, info, len);
+
+	mem_free(info);
+
+	term = init_term(terminal_pipe[0], out, tabwin_func);
+	if (!term) {
+		close_terminal_pipes();
+		return -1;
+	}
+
+	/* OK, this is race condition, but it must be so; GPM installs it's own
+	 * buggy TSTP handler. */
+	handle_basic_signals(term);
+
+	return terminal_pipe[1];
+}
+
+

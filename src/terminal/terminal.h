@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.15 2003/05/25 01:39:46 zas Exp $ */
+/* $Id: terminal.h,v 1.16 2003/05/25 10:01:29 zas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -190,4 +190,8 @@ int do_terminal_function(struct terminal *term, unsigned char code, unsigned cha
 
 void term_send_event(struct terminal *, struct event *);
 
-#endif
+int check_terminal_pipes(void);
+void close_terminal_pipes(void);
+int attach_terminal(int in, int out, int ctl, void *info, int len);
+
+#endif /* EL__TERMINAL_TERMINAL_H */

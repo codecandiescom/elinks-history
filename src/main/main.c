@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.92 2003/05/24 20:16:54 pasky Exp $ */
+/* $Id: main.c,v 1.93 2003/05/25 10:01:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,38 +68,6 @@
 
 int terminate = 0;
 enum retval retval = RET_OK;
-
-/* TODO: I'd like to have this rather somewhere in lowlevel/. --pasky */
-
-static int terminal_pipe[2];
-
-static int
-attach_terminal(int in, int out, int ctl, void *info, int len)
-{
-	struct terminal *term;
-
-	if (set_nonblocking_fd(terminal_pipe[0]) < 0) return -1;
-	if (set_nonblocking_fd(terminal_pipe[1]) < 0) return -1;
-	handle_trm(in, out, out, terminal_pipe[1], ctl, info, len);
-
-	mem_free(info);
-
-	term = init_term(terminal_pipe[0], out, tabwin_func);
-	if (!term) {
-		close(terminal_pipe[0]);
-		close(terminal_pipe[1]);
-
-		return -1;
-	}
-
-	/* OK, this is race condition, but it must be so; GPM installs it's own
-	 * buggy TSTP handler. */
-	handle_basic_signals(term);
-
-	return terminal_pipe[1];
-}
-
-
 unsigned char *path_to_exe;
 
 static int ac;
@@ -133,7 +101,7 @@ init(void)
 
 	/* XXX: OS/2 has some stupid bug and the pipe must be created before
 	 * socket :-/. -- Mikulas */
-	if (c_pipe(terminal_pipe)) {
+	if (check_terminal_pipes()) {
 		error("ERROR: can't create pipe for internal communication");
 		goto fatal_error;
 	}
@@ -161,8 +129,7 @@ init(void)
 		uh = bind_to_af_unix();
 		if (uh < 0) break;
 
-		close(terminal_pipe[0]);
-		close(terminal_pipe[1]);
+		close_terminal_pipes();
 
 		info = create_session_info(get_opt_int_tree(&cmdline_options,
 							    "base-session"),
@@ -226,8 +193,7 @@ init(void)
 		mem_free(u), u = NULL;
 		if (terminate) {
 			/* XXX? */
-			close(terminal_pipe[0]);
-			close(terminal_pipe[1]);
+			close_terminal_pipes();
 		}
 		return;
 
@@ -308,6 +274,14 @@ terminate_all_subsystems(void)
 	terminate_osdep();
 }
 
+void
+shrink_memory(int u)
+{
+	shrink_dns_cache(u);
+	shrink_format_cache(u);
+	garbage_collection(u);
+	delete_unused_format_cache_entries();
+}
 
 int
 main(int argc, char *argv[])
@@ -323,14 +297,4 @@ main(int argc, char *argv[])
 	check_memory_leaks();
 #endif
 	return retval;
-}
-
-
-void
-shrink_memory(int u)
-{
-	shrink_dns_cache(u);
-	shrink_format_cache(u);
-	garbage_collection(u);
-	delete_unused_format_cache_entries();
 }

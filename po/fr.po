@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-11 07:32+0100\n"
+"POT-Creation-Date: 2003-12-12 09:11+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -41,8 +41,8 @@ msgstr "Info"
 #: src/formhist/dialogs.c:135 src/protocol/protocol.c:63
 #: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:170
 #: src/sched/download.c:254 src/sched/download.c:280 src/sched/download.c:551
-#: src/sched/error.c:42 src/sched/session.c:121 src/sched/session.c:569
-#: src/sched/session.c:586 src/sched/session.c:610 src/sched/session.c:855
+#: src/sched/error.c:42 src/sched/session.c:121 src/sched/session.c:575
+#: src/sched/session.c:592 src/sched/session.c:616 src/sched/session.c:862
 #: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:589 src/scripting/lua/core.c:718
 #: src/viewer/text/form.c:657 src/viewer/text/search.c:856
@@ -526,7 +526,7 @@ msgstr ""
 "%s"
 
 #: src/config/dialogs.c:200 src/protocol/protocol.c:60 src/sched/session.c:118
-#: src/sched/session.c:851 src/viewer/text/textarea.c:269
+#: src/sched/session.c:858 src/viewer/text/textarea.c:269
 msgid "Error"
 msgstr "Erreur"
 
@@ -4088,8 +4088,8 @@ msgid "Go ~back"
 msgstr "Ret~our"
 
 #: src/dialogs/menu.c:325
-msgid "Go forward"
-msgstr ""
+msgid "Go for~ward"
+msgstr "A~ller en avant"
 
 #: src/dialogs/menu.c:331 src/dialogs/menu.c:387
 msgid "Bookm~ark document"
@@ -4133,7 +4133,7 @@ msgstr "~Atteindre l'URL"
 
 #: src/dialogs/menu.c:375
 msgid "Go ~forward"
-msgstr ""
+msgstr "A~ller en avant"
 
 #: src/dialogs/menu.c:377
 msgid "~History"
@@ -4152,9 +4152,8 @@ msgid "Save UR~L as"
 msgstr "Enregistrer l'URL so~us"
 
 #: src/dialogs/menu.c:385
-#, fuzzy
 msgid "Sa~ve formatted document"
-msgstr "Enregistrer le document formaté"
+msgstr "Enregistrer le document ~formaté"
 
 #: src/dialogs/menu.c:393
 msgid "~Kill background connections"
@@ -4162,7 +4161,7 @@ msgstr "Tuer les conne~xions en arrière-plan"
 
 #: src/dialogs/menu.c:394
 msgid "Flush all ~caches"
-msgstr "E~ffacer les caches"
+msgstr "Effacer les ~caches"
 
 #: src/dialogs/menu.c:395
 msgid "Resource ~info"
@@ -4522,6 +4521,9 @@ msgid ""
 "If you want to save passwords for this URL, enable it by the \"Toggle saving"
 "\" button."
 msgstr ""
+"Aucune information sauvée pour cette URL.\n"
+"Si vous désirez sauver les mots de passe pour cette URL,\n"
+"utilisez le bouton \"Bascule sauvegarde\"."
 
 #: src/formhist/dialogs.c:172
 msgid "Toggle saving"
@@ -5329,11 +5331,11 @@ msgstr "Cette version de ELinks ne supporte ni SSL ni TLS"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: src/sched/session.c:564
+#: src/sched/session.c:570
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: src/sched/session.c:565
+#: src/sched/session.c:571
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -5344,11 +5346,11 @@ msgstr ""
 "Pressez ESC pour accèder au menu. La documentation est accessible par le "
 "menu Aide."
 
-#: src/sched/session.c:574 src/sched/session.c:594 src/sched/task.c:166
+#: src/sched/session.c:580 src/sched/session.c:600 src/sched/task.c:166
 msgid "Warning"
 msgstr "Avertissement"
 
-#: src/sched/session.c:575
+#: src/sched/session.c:581
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5367,7 +5369,7 @@ msgstr ""
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "
 "faites juste ça. Toutes nos excuses pour ce désagrément."
 
-#: src/sched/session.c:595
+#: src/sched/session.c:601
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5388,7 +5390,7 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/session.c:852
+#: src/sched/session.c:859
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."

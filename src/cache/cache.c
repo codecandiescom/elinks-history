@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.161 2004/06/25 09:54:46 jonas Exp $ */
+/* $Id: cache.c,v 1.162 2004/07/24 14:23:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,6 +206,59 @@ enlarge_entry(struct cache_entry *cached, int size)
 /* One byte is reserved for data in struct fragment. */
 #define FRAGSIZE(x) (sizeof(struct fragment) + (x) - 1)
 
+/* Contatenate overlapping fragments. */
+static void
+remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
+{
+	int f_end_offset = f->offset + f->length;
+
+	/* Iterate thru all fragments we still overlap to. */
+	while (list_has_next(cached->frag, f)
+		&& f_end_offset > f->next->offset) {
+		struct fragment *nf;
+		int end_offset = f->next->offset + f->next->length;
+
+		if (f_end_offset < end_offset) {
+			/* We end before end of the following fragment, though.
+			 * So try to append overlapping part of that fragment
+			 * to us. */
+			nf = mem_realloc(f, FRAGSIZE(end_offset - f->offset));
+			if (!nf) goto ff;
+
+			nf->prev->next = nf;
+			nf->next->prev = nf;
+			f = nf;
+
+			if (memcmp(f->data + f->next->offset - f->offset,
+				   f->next->data,
+				   f->offset + f->length - f->next->offset))
+				*trunc = 1;
+
+			memcpy(f->data + f->length,
+			       f->next->data + f_end_offset - f->next->offset,
+			       end_offset - f_end_offset);
+
+			enlarge_entry(cached, end_offset - f_end_offset);
+			f->length = f->real_length = end_offset - f->offset;
+
+ff:;
+		} else {
+			/* We will just discard this, it's complete subset of
+			 * our new fragment. */
+			if (memcmp(f->data + f->next->offset - f->offset,
+				   f->next->data,
+				   f->next->length))
+				*trunc = 1;
+		}
+
+		/* Remove the fragment, it influences our new one! */
+		nf = f->next;
+		enlarge_entry(cached, -nf->length);
+		del_from_list(nf);
+		mem_free(nf);
+	}
+}
+
 /* Add fragment to cache. Returns -1 upon error, 1 if cache entry was enlarged,
  * 0 if only old data were overwritten. Maybe. And maybe not. */
 /* Note that this function is maybe overcommented, but I'm certainly not
@@ -289,55 +342,7 @@ add_fragment(struct cache_entry *cached, int offset,
 	enlarge_entry(cached, length);
 
 remove_overlaps:
-	/* Contatenate overlapping fragments. */
-
-	f_end_offset = f->offset + f->length;
-	/* Iterate thru all fragments we still overlap to. */
-	while (list_has_next(cached->frag, f)
-		&& f_end_offset > f->next->offset) {
-
-		end_offset = f->next->offset + f->next->length;
-
-		if (f_end_offset < end_offset) {
-			/* We end before end of the following fragment, though.
-			 * So try to append overlapping part of that fragment
-			 * to us. */
-			nf = mem_realloc(f, FRAGSIZE(end_offset - f->offset));
-			if (!nf) goto ff;
-
-			nf->prev->next = nf;
-			nf->next->prev = nf;
-			f = nf;
-
-			if (memcmp(f->data + f->next->offset - f->offset,
-				   f->next->data,
-				   f->offset + f->length - f->next->offset))
-				trunc = 1;
-
-			memcpy(f->data + f->length,
-			       f->next->data + f_end_offset - f->next->offset,
-			       end_offset - f_end_offset);
-
-			enlarge_entry(cached, end_offset - f_end_offset);
-			f->length = f->real_length = end_offset - f->offset;
-
-ff:;
-		} else {
-			/* We will just discard this, it's complete subset of
-			 * our new fragment. */
-			if (memcmp(f->data + f->next->offset - f->offset,
-				   f->next->data,
-				   f->next->length))
-				trunc = 1;
-		}
-
-		/* Remove the fragment, it influences our new one! */
-		nf = f->next;
-		enlarge_entry(cached, -nf->length);
-		del_from_list(nf);
-		mem_free(nf);
-	}
-
+	remove_overlaps(cached, f, &trunc);
 	if (trunc) truncate_entry(cached, offset + length, 0);
 
 	dump_frags(cached, "add_fragment");

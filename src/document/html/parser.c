@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.444 2004/06/22 21:47:14 zas Exp $ */
+/* $Id: parser.c,v 1.445 2004/06/22 21:53:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,8 +158,6 @@ struct html_context html_context;
 unsigned char *eofff;
 unsigned char *startf;
 
-int putsp;
-
 int was_br;
 int was_li;
 int was_xmp;
@@ -174,31 +172,31 @@ ln_break(int n, void (*line_break)(void *), void *f)
 		line_break(f);
 	}
 	html_context.position = 0;
-	putsp = -1;
+	html_context.putsp = -1;
 }
 
 void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
-	if (par_format.align == AL_NONE) putsp = 0;
+	if (par_format.align == AL_NONE) html_context.putsp = 0;
 	if (!len || html_top.invisible) return;
-	if (putsp == 1) {
+	if (html_context.putsp == 1) {
 		put_chars(f, " ", 1);
 		html_context.position++;
-		putsp = -1;
+		html_context.putsp = -1;
 	}
-	if (putsp == -1) {
+	if (html_context.putsp == -1) {
 		if (isspace(start[0])) start++, len--;
-		putsp = 0;
+		html_context.putsp = 0;
 	}
 	if (!len) {
-		putsp = -1;
-		if (par_format.align == AL_NONE) putsp = 0;
+		html_context.putsp = -1;
+		if (par_format.align == AL_NONE) html_context.putsp = 0;
 		return;
 	}
-	if (isspace(start[len - 1])) putsp = -1;
-	if (par_format.align == AL_NONE) putsp = 0;
+	if (isspace(start[len - 1])) html_context.putsp = -1;
+	if (par_format.align == AL_NONE) html_context.putsp = 0;
 	was_br = 0;
 	put_chars(f, start, len);
 	html_context.position += len;
@@ -776,7 +774,7 @@ html_li(unsigned char *a)
 		par_format.list_number = 0;
 	}
 
-	putsp = -1;
+	html_context.putsp = -1;
 	html_context.line_breax = 2;
 	was_li = 1;
 }

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.53 2004/06/22 21:47:14 zas Exp $ */
+/* $Id: parse.c,v 1.54 2004/06/22 21:53:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -572,7 +572,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	unsigned char *base_pos = html;
 	int noupdate = 0;
 
-	putsp = -1;
+	html_context.putsp = -1;
 	html_context.line_breax = table_level ? 2 : 1;
 	html_context.position = 0;
 	was_br = 0;
@@ -604,7 +604,7 @@ main_loop:
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
 					put_chrs(base_pos, html - base_pos, put_chars_f, f);
 					base_pos = html = h;
-					putsp = 1;
+					html_context.putsp = 1;
 					goto element;
 				}
 			}
@@ -633,7 +633,7 @@ put_sp:
 		}
 
 		if (par_format.align == AL_NONE) {
-			putsp = 0;
+			html_context.putsp = 0;
 			if (*html == ASCII_TAB) {
 				put_chrs(base_pos, html - base_pos, put_chars_f, f);
 				put_chrs("        ", 8 - (html_context.position % 8),
@@ -691,10 +691,10 @@ next_break:
 
 element:
 		endingtag = *name == '/'; name += endingtag; namelen -= endingtag;
-		if (!endingtag && putsp == 1 && !html_top.invisible)
+		if (!endingtag && html_context.putsp == 1 && !html_top.invisible)
 			goto put_sp;
 		put_chrs(base_pos, html - base_pos, put_chars_f, f);
-		if (par_format.align != AL_NONE && !endingtag && !putsp) {
+		if (par_format.align != AL_NONE && !endingtag && !html_context.putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
 
@@ -715,7 +715,7 @@ ng:;
 
 	if (noupdate) put_chrs(base_pos, html - base_pos, put_chars_f, f);
 	ln_break(1, line_break_f, f);
-	putsp = -1;
+	html_context.putsp = -1;
 	html_context.position = 0;
 	was_br = 0;
 }

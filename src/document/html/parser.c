@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.222 2003/10/16 13:08:41 zas Exp $ */
+/* $Id: parser.c,v 1.223 2003/10/18 19:49:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -923,6 +923,11 @@ html_img(unsigned char *a)
 			}
 		}
 
+		if (!get_opt_bool("document.browse.images.show_any_as_links")) {
+			ismap = 0;
+			goto show_al;
+		}
+
 		/* This is not 100% appropriate for <img>, but well, accepting
 		 * accesskey and tabindex near <img> is just our little
 		 * extension to the standart. After all, it makes sense. */
@@ -946,8 +951,11 @@ html_img(unsigned char *a)
 				format.link = h;
 			}
 		}
+show_al:
 		put_chrs(al, strlen(al), put_chars_f, ff);
 		if (ismap) kill_html_stack_item(&html_top);
+		/* Anything below must take care of properly handling the
+		 * show_any_as_links variable being off! */
 	}
 	if (format.image) mem_free(format.image), format.image = NULL;
 	if (format.title) mem_free(format.title), format.title = NULL;

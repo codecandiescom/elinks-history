@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.306 2003/10/18 13:08:06 jonas Exp $ */
+/* $Id: options.c,v 1.307 2003/10/18 19:49:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1124,9 +1124,17 @@ register_options(void)
 		"image_link_suffix", 0, "]",
 		N_("Suffix string to use to mark image links."));
 
-	add_opt_bool("document.browse.images", N_("Display image links"),
+	add_opt_bool("document.browse.images", N_("Display links to images w/o alt"),
 		"show_as_links", 0, 0,
-		N_("Display links to images."));
+		N_("Display links to images without an alt attribute. If this option\n"
+		"is off, these images are completely invisible."));
+
+	add_opt_bool("document.browse.images", N_("Display links to images"),
+		"show_any_as_links", 0, 1,
+		N_("Display links to any images in the document, regardless of them\n"
+		"having an alt attribute or not. If this option is off, the alt\n"
+		"attribute contents is shown, but as normal text, not selectable\n"
+		"as a link."));
 
 
 	add_opt_tree("document.browse", N_("Links"),

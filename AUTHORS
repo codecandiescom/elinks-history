@@ -208,6 +208,9 @@ Jonas Fonseca <fonseca@diku.dk>
 John <martian202002@yahoo.com>
 	Tab browsing initial patch
 
+Johannes Zellner <johannes@zellner.org>
+	Minor misc hacking
+
 José Luis González González <jlg80@mi.madritel.es>
 	MIME types documentation
 	Referred as 'Jose'
@@ -451,4 +454,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.141 2003/10/16 13:14:36 zas Exp $
+$Id: AUTHORS,v 1.142 2003/10/18 19:49:47 pasky Exp $

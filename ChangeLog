@@ -1,3 +1,65 @@
+Wed Jun 25 10:30:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Optimization: memmove(p, p, n) is useless.  
+
+Wed Jun 25 10:27:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file.c:
+
+	Minor cleanup.  
+
+Wed Jun 25 10:15:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Simplify and optimize stat_date().  
+
+Wed Jun 25 09:57:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Cleanup stat_user() and split it up.  
+
+Wed Jun 25 09:06:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Bug 214 was fixed. It was introduced by last "viewport - 1" patch.
+	Pasky, please review the fix ;).  
+
+Wed Jun 25 08:39:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, intl/charsets.c:
+
+	Bug 213 was fixed. We eat &nsbp &nbsp<foo>, but not &nbsp&nbsp123 or
+	&nbsp=123 ...  
+
+Tue Jun 24 23:55:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Inline stat_* functions + group them.  
+
+Tue Jun 24 23:00:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Include the set*() functions in stat_mode().  
+
+Tue Jun 24 22:43:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Split up stat_mode().  
+
+Tue Jun 24 22:21:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Cleanup stat_* functions.  
+
 Tue Jun 24 21:44:41 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:

@@ -1,4 +1,4 @@
-/* $Id: math.h,v 1.4 2004/12/20 23:51:25 pasky Exp $ */
+/* $Id: math.h,v 1.5 2004/12/29 14:24:57 jonas Exp $ */
 
 #ifndef EL__UTIL_MATH_H
 #define EL__UTIL_MATH_H
@@ -71,26 +71,12 @@ int_bounds(register int *what, register int lower_limit,
 }
 
 
-/* Give us the best you can. */
-/* longlong is not defined now and we have to be careful about #includes
- * since we are in every .c file. math.c ensures this and longlong
- * stays in sync. */
-extern
-#ifdef HAVE_LONG_LONG
-long long
-#else
-long
-#endif
-swap_register_;
-
-#define swap_values(a,b) do { \
-	/* These are supposed to evaluate at the compile time, giving us
-	 * no performance hit. */ \
-	assert(sizeof(a) == sizeof(b)); \
-	assert(sizeof(a) <= sizeof(longlong)); \
-	swap_register_ = (longlong) a; \
-	a = b; \
-	b = (longlong) swap_register_; \
-} while (0)
+/* This is supposed to evaluate at compile time, giving no performance hit. */
+#define swap_values(type, a, b)			\
+	do {					\
+		type swap_register_ = (a);	\
+		(a) = (b);			\
+		(b) = (swap_register_);		\
+	} while (0)
 
 #endif

@@ -89,13 +89,13 @@ Your mileage will definitely vary on other platforms.
 
 
 @c ----------------------------------------------------------------------
-@node Installing, Using Links-Lua, Introduction, Top
+@node Installing, Using ELinks with Lua, Introduction, Top
 @chapter Installing
 
 @menu
-* Installing Lua::              
-* Installing Links-Lua::        
-* Running Links-Lua::           
+* Installing Lua::
+* Installing ELinks::
+* Running ELinks with Lua::
 @end menu
 
 
@@ -120,7 +120,7 @@ install} instead.
 
 
 @c ----------------------------------------------------------------------
-@node Installing ELinks, Running ELinks, Installing Lua, Installing
+@node Installing ELinks, Running ELinks with Lua, Installing Lua, Installing
 @section Installing ELinks
 
 Follow the instructions for building ELinks (it is the standard
@@ -129,7 +129,7 @@ step make sure that Lua has been detected on your system.
 
 
 @c ----------------------------------------------------------------------
-@node Running ELinks,  , Installing ELinks, Installing
+@node Running ELinks with Lua, , Installing ELinks, Installing
 @section Running ELinks with Lua
 
 Simply start ELinks as you normally would.  To check you have Lua support
@@ -140,7 +140,7 @@ the command-line.
 
 
 @c ----------------------------------------------------------------------
-@node Using ELinks, Example recipes, Installing, Top
+@node Using ELinks with Lua, Example recipes, Installing, Top
 @chapter Using ELinks with Lua
 
 Out of the box, ELinks with Lua will do nothing different from regular ELinks.
@@ -156,7 +156,7 @@ You need to write some scripts.
 
 
 @c ----------------------------------------------------------------------
-@node ELinks additions, Config file, Using ELinks with Lua, Using ELinks with Lua
+@node ELinks Lua additions, Config file, Using ELinks with Lua, Using ELinks with Lua
 @section ELinks Lua additions
 
 The Lua support is based on the idea of @dfn{hooks}.  A hook is a function that
@@ -701,11 +701,14 @@ hook or function, contact me (Peter Wang) and I'll see what I can do.
 @node Document history,  , Example recipes, Top
 @chapter Document history
 
-$Id: elinks-lua.texi,v 1.2 2002/11/29 13:08:27 pasky Exp $
+$Id: elinks-lua.texi,v 1.3 2005/01/13 13:20:07 jonas Exp $
 
 Current history:
 
 $Log: elinks-lua.texi,v $
+Revision 1.3  2005/01/13 13:20:07  jonas
+Fix nodes so makeinfo don't choke on it.
+
 Revision 1.2  2002/11/29 13:08:27  pasky
 ELinksified.
 

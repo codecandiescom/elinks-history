@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.35 2004/01/19 00:30:55 jonas Exp $ */
+/* $Id: value.c,v 1.36 2004/01/19 00:43:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,27 +36,38 @@ css_parse_color_value(struct css_property_info *propinfo,
 
 		token = get_next_css_token(scanner);
 
+		/* First color component is shifted 16, next is shifted 8 and
+		 * last is not shifted. */
 		for (shift = 16; token && shift >= 0; shift -= 8) {
+			/* The two first two args are terminated by ',' and the
+			 * last one by ')'. */
 			unsigned char paskynator = shift ? ',' : ')';
 			unsigned char *nstring = token->string;
 			int part;
 
-			if (token->type != CSS_TOKEN_DIGIT
-			    && token->type != CSS_TOKEN_PERCENTAGE)
-				return 0;
-
-			part = strtol(token->string, (char **)&nstring, 10);
-
-			if (token->string == nstring
+			/* Is the current and next token valid? */
+			if ((token->type != CSS_TOKEN_DIGIT
+			     && token->type != CSS_TOKEN_PERCENTAGE)
 			    || !check_next_css_token(scanner, paskynator))
 				return 0;
 
+			/* Parse the digit */
+			part = strtol(token->string, (char **)&nstring, 10);
+			if (token->string == nstring)
+				return 0;
+
+			/* Adjust percentage values */
 			if (token->type == CSS_TOKEN_PERCENTAGE) {
-				part *= 255; part /= 100;
+				int_bounds(&part, 0, 100);
+				part *= 255;
+				part /= 100;
 			}
 
+			/* Adjust color component value and add it */
 			int_bounds(&part, 0, 255);
 			value->color |= part << shift;
+
+			/* Paskynate the token arg and separator */
 			token = skip_css_tokens(scanner, paskynator);
 		}
 

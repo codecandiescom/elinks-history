@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.135 2003/06/17 13:42:36 zas Exp $ */
+/* $Id: renderer.c,v 1.136 2003/06/17 14:13:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1448,7 +1448,7 @@ push_base_format(unsigned char *url, struct document_options *opt)
 {
 	struct html_element *e;
 
-	assert(url);
+	assert(url && opt);
 	assertm(html_stack.next == &html_stack, "something on html stack");
 
 	e = mem_calloc(1, sizeof(struct html_element));
@@ -1496,14 +1496,18 @@ push_base_format(unsigned char *url, struct document_options *opt)
 	html_top.dontkill = 1;
 }
 
+/* FIXME: hmmm, we can do better there, i hope. --Zas */
 struct conv_table *
 get_convert_table(unsigned char *head, int to,
 		  int def, int *frm, int *aa, int hard)
 {
 	int from = -1;
 	unsigned char *a, *b;
-	unsigned char *part = head;
+	unsigned char *part;
 
+	assert(head);
+
+	part = head;
 	while (from == -1 && part) {
 		a = parse_http_header(part, "Content-Type", &part);
 		if (a) {
@@ -1546,7 +1550,7 @@ get_convert_table(unsigned char *head, int to,
 static void
 format_html(struct cache_entry *ce, struct f_data *screen)
 {
-	unsigned char *url = ce->url;
+	unsigned char *url;
 	struct fragment *fr;
 	struct part *rp;
 	unsigned char *start = NULL;
@@ -1556,7 +1560,10 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 	int hdl = 0;
 	int i;
 
+	assert(ce && screen);
 	if (!head) return;
+
+	url = ce->url;
 
 	d_opt = &screen->opt;
 	screen->use_tag = ce->count;
@@ -1654,10 +1661,7 @@ shrink_format_cache(int u)
 
 	delete_unused_format_cache_entries();
 
-	if (format_cache_entries < 0) {
-		internal("format_cache_entries underflow");
-		format_cache_entries = 0;
-	}
+	assertm(format_cache_entries >= 0, "format_cache_entries underflow");
 
 	ce = format_cache.prev;
 	while ((u || format_cache_entries > get_opt_int("document.cache.format.size"))
@@ -1708,6 +1712,8 @@ delete_unused_format_cache_entries(void)
 void
 format_cache_reactivate(struct f_data *ce)
 {
+	assert(ce);
+
 	del_from_list(ce);
 	add_to_list(format_cache, ce);
 }
@@ -1720,7 +1726,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	struct f_data *ce;
 	struct cache_entry *cee = NULL;
 
-	if (!vs) return;
+	assert(vs && screen && opt);
 
 	n = screen->name;
 	screen->name = NULL;
@@ -1821,6 +1827,8 @@ add_frame_to_list(struct session *ses, struct f_data_c *fd)
 {
 	struct f_data_c *f;
 
+	assert(ses && fd);
+
 	foreach (f, ses->scrn_frames) {
 		if (f->yp > fd->yp || (f->yp == fd->yp && f->xp > fd->xp)) {
 			add_at_pos(f->prev, fd);
@@ -1836,6 +1844,8 @@ find_fd(struct session *ses, unsigned char *name,
 	int depth, int x, int y)
 {
 	struct f_data_c *fd;
+
+	assert(ses && name);
 
 	foreachback (fd, ses->scrn_frames) {
 		if (!fd->used && !strcasecmp(fd->name, name)) {
@@ -1865,6 +1875,7 @@ find_fd(struct session *ses, unsigned char *name,
 	return fd;
 }
 
+/* FIXME: url parameter is not used ... --Zas */
 static struct f_data_c *
 format_frame(struct session *ses, unsigned char *name,
 	     unsigned char *url, struct document_options *o,
@@ -1874,6 +1885,8 @@ format_frame(struct session *ses, unsigned char *name,
 	struct view_state *vs;
 	struct f_data_c *fd;
 	struct frame *fr;
+
+	assert(ses && name && o);
 
 repeat:
 	fr = ses_find_frame(ses, name);
@@ -1905,6 +1918,8 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 {
 	int i, j, n;
 	struct document_options o;
+
+	assert(ses && fsd && op);
 
 	if (depth > HTML_MAX_FRAME_DEPTH) return;
 
@@ -1986,7 +2001,7 @@ html_interpret(struct session *ses)
 
 	foreach (fd, ses->scrn_frames) fd->used = 0;
 
-	cached_format_html(l, ses->screen, &o);
+	if (l) cached_format_html(l, ses->screen, &o);
 
 	if (ses->screen->f_data && ses->screen->f_data->frame) {
 		cf = current_frame(ses);
@@ -2020,7 +2035,11 @@ html_interpret(struct session *ses)
 static inline void
 add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
 {
-	int n = f->nsearch;
+	int n;
+
+	assert(f);
+
+	n = f->nsearch;
 
 	if (c == ' ' && (!n || f->search[n - 1].c == ' ')) return;
 	f->search[n].c = c;
@@ -2052,6 +2071,8 @@ sort_srch(struct f_data *f)
 {
 	int i;
 	int *min, *max;
+
+	assert(f);
 
 	f->slines1 = mem_calloc(f->y, sizeof(struct search *));
 	if (!f->slines1) return;
@@ -2104,7 +2125,11 @@ get_srch(struct f_data *f)
 {
 	struct node *n;
 	int cnt = 0;
-	int cc = !f->search;
+	int cc;
+
+	assert(f);
+
+	cc = !f->search;
 
 	foreachback (n, f->nodes) {
 		int x, y;
@@ -2171,6 +2196,8 @@ void
 get_search_data(struct f_data *f)
 {
 	int n;
+
+	assert(f);
 
 	if (f->search) return;
 

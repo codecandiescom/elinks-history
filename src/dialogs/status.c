@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.93 2004/11/19 16:54:21 zas Exp $ */
+/* $Id: status.c,v 1.94 2004/12/16 15:17:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,11 +134,11 @@ get_download_msg(struct download *download, struct terminal *term,
 void
 update_status(void)
 {
-	int show_title_bar = get_opt_int("ui.show_title_bar");
-	int show_status_bar = get_opt_int("ui.show_status_bar");
-	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
+	int show_title_bar = get_opt_bool("ui.show_title_bar");
+	int show_status_bar = get_opt_bool("ui.show_status_bar");
+	int show_tabs_bar = get_opt_bool("ui.tabs.show_bar");
 #ifdef CONFIG_LEDS
-	int show_leds = get_opt_int("ui.leds.enable");
+	int show_leds = get_opt_bool("ui.leds.enable");
 #endif
 	int set_window_title = get_opt_bool("ui.window_title");
 	int insert_mode = get_opt_bool("document.browse.forms.insert_mode");

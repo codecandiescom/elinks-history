@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.134 2004/12/16 15:05:12 zas Exp $ */
+/* $Id: renderer.c,v 1.135 2004/12/16 15:14:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,7 +388,7 @@ render_document_frames(struct session *ses, int no_cache)
 	if (ses->status.show_tabs_bar) doc_opts.box.height--;
 
 	doc_opts.color_mode = get_opt_int_tree(ses->tab->term->spec, "colors");
-	if (!get_opt_int_tree(ses->tab->term->spec, "underline"))
+	if (!get_opt_bool_tree(ses->tab->term->spec, "underline"))
 		doc_opts.color_flags |= COLOR_ENHANCE_UNDERLINE;
 
 	doc_opts.cp = get_opt_codepage_tree(ses->tab->term->spec, "charset");

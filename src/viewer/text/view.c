@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.664 2004/11/19 16:16:27 zas Exp $ */
+/* $Id: view.c,v 1.665 2004/12/16 15:12:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 	} else {
 		/* We only bother this option is there's some links
 		 * in document. */
-		wraparound = get_opt_int("document.browse.links.wraparound");
+		wraparound = get_opt_bool("document.browse.links.wraparound");
 	}
 
 	count = ses->kbdprefix.repeat_count;

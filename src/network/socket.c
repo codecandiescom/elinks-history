@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.113 2004/11/04 21:10:10 jonas Exp $ */
+/* $Id: socket.c,v 1.114 2004/12/16 15:12:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,7 +356,7 @@ dns_found(void *data, int state)
 	struct conn_info *conn_info = conn->conn_info;
 	int i;
 	int trno = conn_info->triedno;
-	int only_local = get_cmd_opt_int("localhost");
+	int only_local = get_cmd_opt_bool("localhost");
 	int saved_errno = 0;
 	int at_least_one_remote_ip = 0;
 	/* We tried something but we failed in such a way that we would rather

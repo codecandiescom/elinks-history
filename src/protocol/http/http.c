@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.372 2004/11/27 17:53:35 jonas Exp $ */
+/* $Id: http.c,v 1.373 2004/12/16 15:10:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,7 @@ check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
 		NULL
 	};
 
-	if (!get_opt_int("protocol.http.bugs.allow_blacklist")
+	if (!get_opt_bool("protocol.http.bugs.allow_blacklist")
 	    || HTTP_1_0(info->sent_version))
 		return 0;
 
@@ -269,7 +269,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 
 	if (conn->info && !((struct http_connection_info *) conn->info)->close
 	    && (!conn->socket.ssl) /* We won't keep alive ssl connections */
-	    && (!get_opt_int("protocol.http.bugs.post_no_keepalive")
+	    && (!get_opt_bool("protocol.http.bugs.post_no_keepalive")
 		|| !conn->uri->post)) {
 		add_keepalive_connection(conn, HTTP_KEEPALIVE_TIMEOUT, NULL);
 	} else {
@@ -341,7 +341,7 @@ http_send_header(struct connection *conn)
 	info->bl_flags = get_blacklist_flags(uri);
 
 	if (info->bl_flags & SERVER_BLACKLIST_HTTP10
-	    || get_opt_int("protocol.http.bugs.http10")) {
+	    || get_opt_bool("protocol.http.bugs.http10")) {
 		info->sent_version.major = 1;
 		info->sent_version.minor = 0;
 	}
@@ -554,7 +554,7 @@ http_send_header(struct connection *conn)
 	}
 
 	if (!(info->bl_flags & SERVER_BLACKLIST_NO_CHARSET)
-	    && !get_opt_int("protocol.http.bugs.accept_charset")) {
+	    && !get_opt_bool("protocol.http.bugs.accept_charset")) {
 		add_to_string(&header, accept_charset);
 	}
 
@@ -584,7 +584,7 @@ http_send_header(struct connection *conn)
 			add_to_string(&header, "Proxy-Connection: ");
 		}
 
-		if (!uri->post || !get_opt_int("protocol.http.bugs.post_no_keepalive")) {
+		if (!uri->post || !get_opt_bool("protocol.http.bugs.post_no_keepalive")) {
 			add_to_string(&header, "Keep-Alive");
 		} else {
 			add_to_string(&header, "close");
@@ -1372,7 +1372,7 @@ again:
 			/* So POST must not be redirected to GET, but some
 			 * BUGGY message boards rely on it :-( */
 	    		if (h == 302
-			    && get_opt_int("protocol.http.bugs.broken_302_redirect"))
+			    && get_opt_bool("protocol.http.bugs.broken_302_redirect"))
 				use_get_method = 1;
 
 			redirect_cache(conn->cached, d, use_get_method, -1);

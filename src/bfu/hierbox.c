@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.150 2004/05/02 09:56:58 zas Exp $ */
+/* $Id: hierbox.c,v 1.151 2004/05/02 10:29:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,130 +180,70 @@ test_search(struct listbox_item *item, void *data_, int *offset)
 	return 0;
 }
 
-/* We install own dialog event handler, so that we can give the listbox widget
- * an early chance to catch the event. Basically, the listbox widget is itself
- * unselectable, instead one of the buttons below is always active. So, we
- * always first let the listbox catch the keypress and handle it, and if it
- * doesn't care, we pass it on to the button. */
 static int
-hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
+hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 {
-	switch (ev->ev) {
-		case EV_KBD:
-		{
-			struct widget_data *widget_data =
-						dlg_data->widgets_data;
-			struct widget *widget = widget_data->widget;
-			struct listbox_data *box;
-			struct listbox_item *selected;
-			enum menu_action action;
+	struct widget_data *widget_data = dlg_data->widgets_data;
+	struct widget *widget = widget_data->widget;
+	struct listbox_data *box;
+	struct listbox_item *selected;
+	enum menu_action action;
 
-			/* Check if listbox has something to say to this */
-                        if (widget->ops->kbd
-			    && widget->ops->kbd(widget_data, dlg_data, ev)
-			       == EVENT_PROCESSED)
-				return EVENT_PROCESSED;
+	/* Check if listbox has something to say to this */
+	if (widget->ops->kbd
+	    && widget->ops->kbd(widget_data, dlg_data, ev)
+	       == EVENT_PROCESSED)
+		return EVENT_PROCESSED;
 
-			box = get_dlg_listbox_data(dlg_data);
-			selected = box->sel;
-			action = kbd_action(KM_MENU, ev, NULL);
+	box = get_dlg_listbox_data(dlg_data);
+	selected = box->sel;
+	action = kbd_action(KM_MENU, ev, NULL);
 
-			if (action == ACT_MENU_SELECT) {
-				if (!selected) return EVENT_PROCESSED;
-				if (selected->type != BI_FOLDER)
-					return EVENT_NOT_PROCESSED;
-				selected->expanded = !selected->expanded;
-				break;
-			}
-
-			/* Recursively unexpand all folders */
-			if (action == ACT_MENU_UNEXPAND) {
-				if (!selected) return EVENT_PROCESSED;
-
-				/* Special trick: if the folder is already
-				 * folded, jump at the parent folder, so the
-				 * next time when user presses the key, the
-				 * whole parent folder will be closed. */
-				if (list_empty(selected->child)
-				    || !selected->expanded) {
-					struct listbox_context ctx;
-
-					if (!selected->root) break;
-
-					memset(&ctx, 0, sizeof(struct listbox_context));
-					ctx.box = box;
-					ctx.offset = 1;
-
-					traverse_listbox_items_list(
-							selected->root, box, 0, 1,
-							test_search, &ctx);
-					box_sel_move(dlg_data->widgets_data,
-						     ctx.offset);
-
-				} else if (selected->type == BI_FOLDER) {
-					recursively_set_expanded(selected, 0);
-				}
-
-				break;
-			}
-
-			/* Recursively expand all folders */
-			if (action == ACT_MENU_EXPAND) {
-				if (!selected || box->sel->type != BI_FOLDER)
-					return EVENT_PROCESSED;
-
-				recursively_set_expanded(box->sel, 1);
-				break;
-			}
-
+	if (action == ACT_MENU_SELECT) {
+		if (!selected) return EVENT_PROCESSED;
+		if (selected->type != BI_FOLDER)
 			return EVENT_NOT_PROCESSED;
+		selected->expanded = !selected->expanded;
+
+	} else if (action == ACT_MENU_UNEXPAND) {
+		/* Recursively unexpand all folders */
+		if (!selected) return EVENT_PROCESSED;
+
+		/* Special trick: if the folder is already
+		 * folded, jump at the parent folder, so the
+		 * next time when user presses the key, the
+		 * whole parent folder will be closed. */
+		if (list_empty(selected->child)
+		    || !selected->expanded) {
+			if (selected->root) {
+				struct listbox_context ctx;
+
+				memset(&ctx, 0, sizeof(struct listbox_context));
+				ctx.box = box;
+				ctx.offset = 1;
+
+				traverse_listbox_items_list(
+						selected->root, box, 0, 1,
+						test_search, &ctx);
+				box_sel_move(dlg_data->widgets_data,
+					     ctx.offset);
+			}
+
+		} else if (selected->type == BI_FOLDER) {
+			recursively_set_expanded(selected, 0);
 		}
 
-		case EV_INIT:
-		{
-			struct hierbox_browser *browser = dlg_data->dlg->udata2;
-			struct hierbox_dialog_list_item *item;
-			struct listbox_item *litem;
+	} else if (action == ACT_MENU_EXPAND) {
+		/* Recursively expand all folders */
 
-			/* If we fail here it only means automatic updating
-			 * will not be possible so no need to panic. */
-			item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
-			if (item) {
-				item->dlg_data = dlg_data;
-				add_to_list(browser->dialogs, item);
-			}
+		if (!selected || box->sel->type != BI_FOLDER)
+			return EVENT_PROCESSED;
 
-			foreach (litem, browser->root.child) {
-				litem->visible = 1;
-			}
-		}
-		case EV_RESIZE:
-		case EV_REDRAW:
-		case EV_MOUSE:
-			return EVENT_NOT_PROCESSED;
+		recursively_set_expanded(box->sel, 1);
 
-		case EV_ABORT:
-		{
-			struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-			struct hierbox_browser *browser = dlg_data->dlg->udata2;
-			struct hierbox_dialog_list_item *item;
+	} else {
+		return EVENT_NOT_PROCESSED;
 
-			/* Save state and delete the box structure */
-			/* FIXME: It's workaround for bug 397. Real fix is needed. */
-			if (browser != &download_browser)
-				memcpy(&browser->box_data, box, sizeof(struct listbox_data));
-			del_from_list(box);
-
-			/* Delete the dialog list entry */
-			foreach (item, browser->dialogs) {
-				if (item->dlg_data == dlg_data) {
-					del_from_list(item);
-					mem_free(item);
-					break;
-				}
-			}
-			return EVENT_NOT_PROCESSED;
-		}
 	}
 
 #ifdef CONFIG_BOOKMARKS
@@ -316,6 +256,81 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 	display_dlg_item(dlg_data, dlg_data->widgets_data, 1);
 
 	return EVENT_PROCESSED;
+}
+
+static int
+hierbox_ev_init(struct dialog_data *dlg_data, struct term_event *ev)
+{
+	struct hierbox_browser *browser = dlg_data->dlg->udata2;
+	struct hierbox_dialog_list_item *item;
+	struct listbox_item *litem;
+
+	/* If we fail here it only means automatic updating
+	 * will not be possible so no need to panic. */
+	item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
+	if (item) {
+		item->dlg_data = dlg_data;
+		add_to_list(browser->dialogs, item);
+	}
+
+	foreach (litem, browser->root.child) {
+		litem->visible = 1;
+	}
+
+	return EVENT_NOT_PROCESSED;
+}
+
+static int
+hierbox_ev_abort(struct dialog_data *dlg_data, struct term_event *ev)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct hierbox_browser *browser = dlg_data->dlg->udata2;
+	struct hierbox_dialog_list_item *item;
+
+	/* Save state and delete the box structure */
+	/* FIXME: It's workaround for bug 397. Real fix is needed. */
+	if (browser != &download_browser)
+		memcpy(&browser->box_data, box, sizeof(struct listbox_data));
+	del_from_list(box);
+
+	/* Delete the dialog list entry */
+	foreach (item, browser->dialogs) {
+		if (item->dlg_data == dlg_data) {
+			del_from_list(item);
+			mem_free(item);
+			break;
+		}
+	}
+
+	return EVENT_NOT_PROCESSED;
+}
+
+
+/* We install own dialog event handler, so that we can give the listbox widget
+ * an early chance to catch the event. Basically, the listbox widget is itself
+ * unselectable, instead one of the buttons below is always active. So, we
+ * always first let the listbox catch the keypress and handle it, and if it
+ * doesn't care, we pass it on to the button. */
+static int
+hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
+{
+	switch (ev->ev) {
+		case EV_KBD:
+			return hierbox_ev_kbd(dlg_data, ev);
+
+		case EV_INIT:
+			return hierbox_ev_init(dlg_data, ev);
+
+		case EV_RESIZE:
+		case EV_REDRAW:
+		case EV_MOUSE:
+			return EVENT_NOT_PROCESSED;
+
+		case EV_ABORT:
+			return hierbox_ev_abort(dlg_data, ev);
+	}
+
+	return EVENT_NOT_PROCESSED;
 }
 
 

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.11 2003/06/27 20:11:15 zas Exp $ */
+/* $Id: text.c,v 1.12 2003/06/27 20:42:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 #include "terminal/terminal.h"
 
 void
-min_max_text_width(struct terminal *term, register unsigned char *text,
+text_width(struct terminal *term, register unsigned char *text,
 		   int *minwidth, int *maxwidth)
 {
 	do {

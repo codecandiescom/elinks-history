@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.28 2003/06/27 20:39:32 zas Exp $ */
+/* $Id: checkbox.c,v 1.29 2003/06/27 20:42:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,7 @@ min_max_checkboxes_width(struct terminal *term, int intl, unsigned char **texts,
 		if (intl) text = _(text, term);
 		*minwidth -= 4;
 		*maxwidth -= 4;
-		min_max_text_width(term, text, minwidth, maxwidth);
+		text_width(term, text, minwidth, maxwidth);
 		*minwidth += 4;
 		*maxwidth += 4;
 		texts++;

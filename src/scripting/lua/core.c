@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.53 2003/06/27 20:39:33 zas Exp $ */
+/* $Id: core.c,v 1.54 2003/06/27 20:42:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,9 +341,9 @@ dialog_fn(struct dialog_data *dlg)
 	int y = -1;
 	int dialog_text_color =  get_bfu_color(term, "dialog.text");
 
-	min_max_text_width(term, dlg_msg[0], &min, &max);
-	min_max_text_width(term, dlg_msg[1], &min, &max);
-	min_max_text_width(term, dlg_msg[2], &min, &max);
+	text_width(term, dlg_msg[0], &min, &max);
+	text_width(term, dlg_msg[1], &min, &max);
+	text_width(term, dlg_msg[2], &min, &max);
 	buttons_width(term, dlg->items + 3, 2, &min, &max);
 
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;
@@ -493,7 +493,7 @@ xdialog_fn(struct dialog_data *dlg)
 
 	for (nfields = 0; dlg->items[nfields].item->type == D_FIELD; nfields++);
 
-	min_max_text_width(term, dlg_msg[0], &min, &max);
+	text_width(term, dlg_msg[0], &min, &max);
 	buttons_width(term, dlg->items + nfields, 2, &min, &max);
 
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;

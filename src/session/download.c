@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.68 2003/06/27 20:39:33 zas Exp $ */
+/* $Id: download.c,v 1.69 2003/06/27 20:42:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,8 +297,8 @@ download_window_function(struct dialog_data *dlg)
 		if (p) *p = '\0';
 	}
 
-	min_max_text_width(term, u, &min, &max);
-	min_max_text_width(term, m, &min, &max);
+	text_width(term, u, &min, &max);
+	text_width(term, m, &min, &max);
 	buttons_width(term, dlg->items, dlg->n, &min, &max);
 
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;

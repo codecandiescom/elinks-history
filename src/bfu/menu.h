@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.13 2003/05/03 00:41:40 pasky Exp $ */
+/* $Id: menu.h,v 1.14 2003/05/03 01:07:46 pasky Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -11,6 +11,9 @@
 extern unsigned char m_submenu[];
 #define M_SUBMENU ((unsigned char *) m_submenu)
 
+extern unsigned char m_bar;
+#define M_BAR ((unsigned char *) &m_bar)
+
 
 /* Which fields to free when zapping a list item - bitwise. */
 enum item_free {
@@ -22,16 +25,16 @@ enum item_free {
 };
 
 /* menu item with no right part :
- * text != NULL and text[0] and rtext == NULL
+ * text != NULL and text[0] and rtext != NULL and !rtext[0]
  *
  * menu item with right part:
  * text != NULL and text[0] and rtext != NULL and rtext[0]
  *
  * unselectable menu item:
- * text != NULL and text[0] and rtext != NULL and !rtext[0]
+ * text != NULL and text[0] and rtext == M_BAR
  *
  * horizontal bar
- * text != NULL and !text[0]
+ * text != NULL and !text[0] and rtext == M_BAR
  *
  * end of menu items list
  * text == NULL

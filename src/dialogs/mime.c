@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.20 2003/04/30 17:13:18 zas Exp $ */
+/* $Id: mime.c,v 1.21 2003/05/03 01:07:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,7 +288,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 
 static struct menu_item mi_no_ext[] = {
-	{N_("No extensions"), "", NULL, NULL, 0, 0},
+	{N_("No extensions"), M_BAR, NULL, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
@@ -322,8 +322,8 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 		optptr2 = stracpy(opt->ptr);
 
 		if (translated2 && optptr2) {
-			add_to_menu(&mi, translated,
-				    *optptr2 ? optptr2 : NULL, MENU_FUNC fn, translated2, 0);
+			add_to_menu(&mi, translated, optptr2,
+				    MENU_FUNC fn, translated2, 0);
 		} else {
 			if (optptr2) mem_free(optptr2);
 			if (translated2) mem_free(translated2);

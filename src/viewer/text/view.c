@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.38 2003/05/03 00:41:41 pasky Exp $ */
+/* $Id: view.c,v 1.39 2003/05/03 01:07:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3298,7 +3298,7 @@ open_in_new_window(struct terminal *term,
 		return;
 	}
 	for (oi = oin; oi->text; oi++)
-		add_to_menu(&mi, oi->text, NULL, MENU_FUNC xxx, oi->fn, 0);
+		add_to_menu(&mi, oi->text, "", MENU_FUNC xxx, oi->fn, 0);
 	mem_free(oin);
 	do_menu(term, mi, ses, 1);
 }
@@ -3428,15 +3428,15 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		else {
 			int c = can_open_in_new(term);
 
-			add_to_menu(&mi, N_("~Follow link"),
-				    NULL, MENU_FUNC send_enter, NULL, 0);
+			add_to_menu(&mi, N_("~Follow link"), "",
+				    MENU_FUNC send_enter, NULL, 0);
 
-			add_to_menu(&mi, N_("Follow link and r~eload"), NULL,
+			add_to_menu(&mi, N_("Follow link and r~eload"), "",
 				    MENU_FUNC send_enter_reload, NULL, 0);
 
 			if (c)
 				add_to_menu(&mi, N_("Open in new ~window"),
-					     c - 1 ? M_SUBMENU : NULL,
+					     c - 1 ? M_SUBMENU : "",
 					     MENU_FUNC open_in_new_window,
 					     send_open_in_new_xterm, c - 1);
 
@@ -3456,20 +3456,20 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (link->form) {
 		l = 1;
 		if (link->form->type == FC_RESET) {
-			add_to_menu(&mi, N_("~Reset form"), NULL,
+			add_to_menu(&mi, N_("~Reset form"), "",
 				    MENU_FUNC send_enter, NULL, 0);
 		} else {
 			int c = can_open_in_new(term);
 
-			add_to_menu(&mi, N_("~Submit form"), NULL,
+			add_to_menu(&mi, N_("~Submit form"), "",
 				    MENU_FUNC submit_form, NULL, 0);
 
-			add_to_menu(&mi, N_("Submit form and rel~oad"), NULL,
+			add_to_menu(&mi, N_("Submit form and rel~oad"), "",
 				    MENU_FUNC submit_form_reload, NULL, 0);
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),
-					    c - 1 ? M_SUBMENU : NULL,
+					    c - 1 ? M_SUBMENU : "",
 					    MENU_FUNC open_in_new_window,
 					    send_open_in_new_xterm, c - 1);
 
@@ -3481,16 +3481,16 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (link->where_img) {
 		l = 1;
-		add_to_menu(&mi, N_("V~iew image"), NULL,
+		add_to_menu(&mi, N_("V~iew image"), "",
 			    MENU_FUNC send_image, NULL, 0);
 		if (!get_opt_int_tree(&cmdline_options, "anonymous"))
-			add_to_menu(&mi, N_("Download ima~ge"), NULL,
+			add_to_menu(&mi, N_("Download ima~ge"), "",
 				    MENU_FUNC send_download_image, NULL, 0);
 	}
 
 end:
 	if (!l) {
-		add_to_menu(&mi, N_("No link selected"), "",
+		add_to_menu(&mi, N_("No link selected"), M_BAR,
 			    NULL, NULL, 0);
 	}
 	do_menu(term, mi, ses, 1);

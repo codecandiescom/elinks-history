@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.37 2004/06/08 16:36:13 jonas Exp $ */
+/* $Id: vs.c,v 1.38 2004/06/13 22:37:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ check_vs(struct document_view *doc_view)
 			set_pos_y(doc_view, &links[vs->current_link]);
 		}
 	} else {
-		find_link(doc_view, 1, 0);
+		find_link_page_down(doc_view);
 	}
 }
 

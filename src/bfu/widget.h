@@ -1,10 +1,11 @@
-/* $Id: widget.h,v 1.52 2004/05/07 11:24:21 zas Exp $ */
+/* $Id: widget.h,v 1.53 2004/05/09 21:46:23 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
 
 #include "bfu/style.h"
 #include "util/lists.h"
+#include "util/rect.h"
 
 struct dialog_data;
 struct input_history;
@@ -79,28 +80,6 @@ struct widget {
 
 	enum widget_type type;
 };
-
-
-struct rect {
-	int x;
-	int y;
-	int width;
-	int height;
-};
-
-#define is_in_rect(rect, x_, y_) ((x_) >= (rect).x && (y_) >= (rect).y	\
-		                  && (x_) < (rect).x + (rect).width	\
-				  && (y_) < (rect).y + (rect).height)
-
-#define set_rect(rect, x_, y_, width_, height_) do { \
-	(rect).x = (x_); \
-	(rect).y = (y_); \
-	(rect).width = (width_); \
-	(rect).height = (height_); \
-} while (0)
-
-#define dbg_show_rect(rect) DBG("x=%i y=%i width=%i height=%i", (rect).x, (rect).y, (rect).width, (rect).height)
-#define dbg_show_xy(x_, y_) DBG("x=%i y=%i", x_, y_)
 
 struct widget_data {
 	struct widget *widget;

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.10 2002/04/06 17:46:40 pasky Exp $ */
+/* $Id: cookies.c,v 1.11 2002/04/07 13:55:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,12 +67,9 @@ struct list_head c_servers = { &c_servers, &c_servers };
 void accept_cookie(struct cookie *);
 void delete_cookie(struct cookie *);
 
-void load_cookies();
-void save_cookies();
+void load_cookies(), save_cookies();
 
-
-void
-free_cookie(struct cookie *c)
+void free_cookie(struct cookie *c)
 {
 	if (c->name) mem_free(c->name);
 	if (c->value) mem_free(c->value);
@@ -81,9 +78,7 @@ free_cookie(struct cookie *c)
 	if (c->domain) mem_free(c->domain);
 }
 
-
-static int
-check_domain_security(unsigned char *server, unsigned char *domain)
+static int check_domain_security(unsigned char *server, unsigned char *domain)
 {
 	int i, j, domain_len;
 	int need_dots;
@@ -148,18 +143,13 @@ check_domain_security(unsigned char *server, unsigned char *domain)
 	return 1;
 }
 
-
-int
-set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
+int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 {
 	struct cookie *cookie;
 	struct c_server *cs;
 	unsigned char *server, *document, *date, *secure;
-	unsigned char *pos;
-	unsigned char *nam_end = NULL;
-	unsigned char *val_start = NULL, *val_end = NULL;
-	int last_was_eq = 0;
-	int last_was_ws = 0;
+	unsigned char *pos, *nam_end = NULL, *val_start = NULL, *val_end = NULL;
+	int last_was_eq = 0, last_was_ws = 0;
 
 	if (cookies_accept == COOKIES_ACCEPT_NONE)
 		return 0;
@@ -331,32 +321,20 @@ ok:
 	return 0;
 }
 
-
-void
-accept_cookie(struct cookie *c)
+void accept_cookie(struct cookie *c)
 {
 	struct c_domain *cd;
 	struct cookie *d, *e;
-
-	foreach(d, cookies) {
-		if (!strcasecmp(d->name, c->name)
-		    && !strcasecmp(d->domain, c->domain)) {
-			e = d;
-			d = d->prev;
-			del_from_list(e);
-			free_cookie(e);
-			mem_free(e);
-		}
+	foreach(d, cookies) if (!strcasecmp(d->name, c->name) && !strcasecmp(d->domain, c->domain)) {
+		e = d;
+		d = d->prev;
+		del_from_list(e);
+		free_cookie(e);
+		mem_free(e);
 	}
-
 	add_to_list(cookies, c);
-
-	foreach(cd, c_domains)
-		if (!strcasecmp(cd->domain, c->domain))
-			return;
-
-	cd = mem_alloc(sizeof(struct c_domain) + strlen(c->domain) + 1);
-	if (!cd) return;
+	foreach(cd, c_domains) if (!strcasecmp(cd->domain, c->domain)) return;
+	if (!(cd = mem_alloc(sizeof(struct c_domain) + strlen(c->domain) + 1))) return;
 	strcpy(cd->domain, c->domain);
 	add_to_list(c_domains, cd);
 
@@ -368,20 +346,13 @@ void delete_cookie(struct cookie *c)
 {
 	struct c_domain *cd;
 	struct cookie *d;
-
-	foreach(d, cookies)
-		if (!strcasecmp(d->domain, c->domain))
-			goto end;
-
-	foreach(cd, c_domains) {
-	       	if (!strcasecmp(cd->domain, c->domain)) {
-			del_from_list(cd);
-			mem_free(cd);
-			break;
-		}
+	foreach(d, cookies) if (!strcasecmp(d->domain, c->domain)) goto x;
+	foreach(cd, c_domains) if (!strcasecmp(cd->domain, c->domain)) {
+		del_from_list(cd);
+		mem_free(cd);
+		break;
 	}
-
-end:
+	x:
 	del_from_list(c);
 	free_cookie(c);
 	mem_free(c);
@@ -390,132 +361,85 @@ end:
 		save_cookies();
 }
 
-
-struct
-cookie *find_cookie_id(void *idp)
+struct cookie *find_cookie_id(void *idp)
 {
 	int id = (int)idp;
 	struct cookie *c;
-
-	foreach(c, cookies)
-		if (c->id == id)
-			return c;
-
+	foreach(c, cookies) if (c->id == id) return c;
 	return NULL;
 }
 
-
-void
-reject_cookie(void *idp)
+void reject_cookie(void *idp)
 {
-	struct cookie *c = find_cookie_id(idp);
-
-	if (!c) return;
+	struct cookie *c;
+	if (!(c = find_cookie_id(idp))) return;
 	delete_cookie(c);
 }
 
-
-void
-cookie_default(void *idp, int a)
+void cookie_default(void *idp, int a)
 {
+	struct cookie *c;
 	struct c_server *s;
-	struct cookie *c = find_cookie_id(idp);
-
-	if (!c) return;
-
-	foreach(s, c_servers)
-		if (!strcasecmp(s->server, c->server))
-			goto found;
-
-	s = mem_alloc(sizeof(struct c_server) + strlen(c->server) + 1);
-	if (s) {
+	if (!(c = find_cookie_id(idp))) return;
+	foreach(s, c_servers) if (!strcasecmp(s->server, c->server)) goto found;
+	if ((s = mem_alloc(sizeof(struct c_server) + strlen(c->server) + 1))) {
 		strcpy(s->server, c->server);
 		add_to_list(c_servers, s);
-found:
+		found:
 		s->accept = a;
 	}
 }
 
-
-void
-accept_cookie_always(void *idp)
+void accept_cookie_always(void *idp)
 {
 	cookie_default(idp, 1);
 }
 
-
-void
-accept_cookie_never(void *idp)
+void accept_cookie_never(void *idp)
 {
 	cookie_default(idp, 0);
 	reject_cookie(idp);
 }
 
-
-int
-is_in_domain(unsigned char *d, unsigned char *s)
+int is_in_domain(unsigned char *d, unsigned char *s)
 {
 	int dl = strlen(d);
 	int sl = strlen(s);
-
-	if (dl > sl)
-		return 0;
-	if (dl == sl)
-		return !strcasecmp(d, s);
-	if (s[sl - dl - 1] != '.')
-		return 0;
-
+	if (dl > sl) return 0;
+	if (dl == sl) return !strcasecmp(d, s);
+	if (s[sl - dl - 1] != '.') return 0;
 	return !casecmp(d, s + sl - dl, dl);
 }
 
-
-int
-is_path_prefix(unsigned char *d, unsigned char *s)
+int is_path_prefix(unsigned char *d, unsigned char *s)
 {
 	int dl = strlen(d);
 	int sl = strlen(s);
-
-	if (dl > sl)
-		return 0;
-
+	if (dl > sl) return 0;
 	return !memcmp(d, s, dl);
 }
 
-
-int
-cookie_expired(struct cookie *c)
+int cookie_expired(struct cookie *c)
 {
   	return (c->expires && c->expires < time(NULL));
 }
 
-
-void
-send_cookies(unsigned char **s, int *l, unsigned char *url)
+void send_cookies(unsigned char **s, int *l, unsigned char *url)
 {
 	int nc = 0;
 	struct c_domain *cd;
 	struct cookie *c, *d;
 	unsigned char *server = get_host_name(url);
 	unsigned char *data = get_url_data(url);
-
 	if (data > url) data--;
-	foreach (cd, c_domains)
-		if (is_in_domain(cd->domain, server))
-			goto ok;
-
+	foreach (cd, c_domains) if (is_in_domain(cd->domain, server)) goto ok;
 	mem_free(server);
 	return;
-
-ok:
-	foreach (c, cookies) {
-		if (!is_in_domain(c->domain, server)
-		    || !is_path_prefix(c->path, data))
-			return;
-
+	ok:
+	foreach (c, cookies) if (is_in_domain(c->domain, server)) if (is_path_prefix(c->path, data)) {
 		if (cookie_expired(c)) {
 #ifdef COOKIES_DEBUG
-			debug("Cookie %s=%s (exp %d) expired.\n",
-			      c->name, c->value, c->expires);
+			debug("Cookie %s=%s (exp %d) expired.\n", c->name, c->value, c->expires);
 #endif
 			d = c;
 			c = c->prev;
@@ -527,49 +451,31 @@ ok:
 				save_cookies();
 			continue;
 		}
-
 		if (c->secure) continue;
-
-		if (!nc) {
-			add_to_str(s, l, "Cookie: ");
-			nc = 1;
-		} else {
-			add_to_str(s, l, "; ");
-		}
-
+		if (!nc) add_to_str(s, l, "Cookie: "), nc = 1;
+		else add_to_str(s, l, "; ");
 		add_to_str(s, l, c->name);
 		add_to_str(s, l, "=");
 		add_to_str(s, l, c->value);
 	}
-
-	if (nc)
-		add_to_str(s, l, "\r\n");
-
+	if (nc) add_to_str(s, l, "\r\n");
 	mem_free(server);
 }
 
-
-void
-load_cookies() {
-	/* Buffer size is set to be enough to read long lines that
-	 * save_cookies() may write. 7 is choosen after the fprintf(..) call
-	 * in save_cookies(). --Zas */
-	unsigned char in_buffer[7 * MAX_STR_LEN];
+void load_cookies() {
+	unsigned char in_buffer[MAX_STR_LEN];
 	unsigned char *cookfile, *p, *q;
 	FILE *fp;
 	struct cookie *c;
 
-	/* Must be called after init_home */
-	if (!links_home)
-		return;
+	/* must be called after init_home */
+	if (! links_home) return;
 
 	cookfile = stracpy(links_home);
-	if (!cookfile)
-		return;
+	if (! cookfile) return;
 	add_to_strn(&cookfile, "cookies");
 
-	/* Do it here, as we will delete whole cookies list if the file was
-	 * removed */
+	/* do it here, as we will delete whole cookies list if the file was removed */
 	free_list(c_domains);
 
 	foreach(c, cookies)
@@ -578,48 +484,41 @@ load_cookies() {
 
 	fp = fopen(cookfile, "r");
 	mem_free(cookfile);
-	if (!fp) return;
+	if (fp == NULL) return;
 
-	while (fgets(in_buffer, 7 * MAX_STR_LEN, fp)) {
-		struct cookie *cookie = mem_alloc(sizeof(struct cookie));
+	while (fgets(in_buffer, MAX_STR_LEN, fp)) {
+		struct cookie *cookie;
 
-		if (!cookie)
-			return;
+		if (!(cookie = mem_alloc(sizeof(struct cookie)))) return;
 		memset(cookie, 0, sizeof(struct cookie));
 
-		q = in_buffer;
-		p = strchr(in_buffer, ' ');
-		if (!p) goto inv;
+		q = in_buffer; p = strchr(in_buffer, ' ');
+		if (p == NULL) goto inv;
 		*p++ = '\0';
 		cookie->name = stracpy(q);
 
-		q = p;
-		p = strchr(p, ' ');
-		if (!p) goto inv;
+		q = p; p = strchr(p, ' ');
+		if (p == NULL) goto inv;
 		*p++ = '\0';
 		cookie->value = stracpy(q);
 
-		q = p;
-		p = strchr(p, ' ');
-		if (!p) goto inv;
+		q = p; p = strchr(p, ' ');
+		if (p == NULL) goto inv;
 		*p++ = '\0';
 		cookie->server = stracpy(q);
 
-		q = p;
-		p = strchr(p, ' ');
-		if (!p) goto inv;
+		q = p; p = strchr(p, ' ');
+		if (p == NULL) goto inv;
 		*p++ = '\0';
 		cookie->path = stracpy(q);
 
-		q = p;
-		p = strchr(p, ' ');
-		if (!p) goto inv;
+		q = p; p = strchr(p, ' ');
+		if (p == NULL) goto inv;
 		*p++ = '\0';
 		cookie->domain = stracpy(q);
 
-		q = p;
-		p = strchr(p, ' ');
-		if (!p) goto inv;
+		q = p; p = strchr(p, ' ');
+		if (p == NULL) goto inv;
 		*p++ = '\0';
 		cookie->expires = atol(q);
 
@@ -646,48 +545,39 @@ inv:
 	fclose(fp);
 }
 
-
-void
-save_cookies() {
+void save_cookies() {
 	struct cookie *c;
 	unsigned char *cookfile;
 	FILE *fp;
 	mode_t mask;
 
 	cookfile = stracpy(links_home);
-	if (!cookfile) return;
+	if (! cookfile) return;
 	add_to_strn(&cookfile, "cookies");
 
 	mask = umask(066); /* 0600 permissions for cookies file */
 	fp = fopen(cookfile, "w");
-	umask(mask); /* Restore umask */
+	umask(mask);
 	mem_free(cookfile);
-	if (!fp)
-		return;
+	if (fp == NULL) return;
 
 	foreach (c, cookies) {
-		if (c->expires && !cookie_expired(c))
-			fprintf(fp, "%s %s %s %s %s %ld %d\n",
-				c->name, c->value,
-				c->server ? c->server : (unsigned char *) "",
-				c->path ? c->path : (unsigned char *) "",
-				c->domain ? c->domain : (unsigned char *) "",
-				c->expires, c->secure);
+		if (c->expires && ! cookie_expired(c))
+			fprintf(fp, "%s %s %s %s %s %ld %d\n", c->name, c->value,
+			    c->server?c->server:(unsigned char *)"", c->path?c->path:(unsigned char *)"",
+			    c->domain?c->domain:(unsigned char *)"", c->expires, c->secure);
 	}
 
 	fclose(fp);
 }
 
-void
-init_cookies()
+void init_cookies()
 {
 	if (cookies_save)
 		load_cookies();
 }
 
-
-void
-cleanup_cookies()
+void cleanup_cookies()
 {
 	struct cookie *c;
 

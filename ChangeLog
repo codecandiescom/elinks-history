@@ -1,3 +1,98 @@
+Mon Mar 28 19:09:19 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Safeguard EPLF parsing; if no more fact separators are found set
+	@pos to @end.  
+
+Sun Mar 27 23:01:07 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Completed the documentation clarification.  
+
+Sun Mar 27 22:59:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/: bm.lua, hooks.lua.in, md5check.lua, remote.lua:
+
+	Update some scripts to use the proper function and table names for
+	Lua 5.  
+	
+	Add dostring and read from Lua's compat.lua to hooks.lua.in.  
+
+Sun Mar 27 22:44:05 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/: bm.lua, md5check.lua:
+
+	Drop some uses of upval now that we've moved to Lua 5.  
+
+Sun Mar 27 22:36:46 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/config.lua:
+
+	Add a reminder to copy any scripts that one wishes to use to one's
+	home directory.  
+
+Sun Mar 27 22:35:46 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/config.pl:
+
+	Properly comment config.pl so it's readable.  
+
+Sun Mar 27 22:31:16 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/config.lua:
+
+	Delete another reference to bookmark_addon.  
+
+Sun Mar 27 22:30:05 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/config.lua:
+
+	Update the section for the bookmarks addon to reflect that it is now 
+	enabled by loading bm.lua rather than by enabling bookmark_addon and
+	it the section with the other load commands.  
+
+Sun Mar 27 22:27:08 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/config.lua:
+
+	Update the section for highlighting to reflect that one now must
+	load highlight.lua instead of enabling highlight_enable and move it
+	with the other load commands.  
+
+Sun Mar 27 22:25:04 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/config.lua:
+
+	Fix some grammar and spelling errors in the description for
+	highlight_enable.  
+
+Sun Mar 27 22:21:58 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/config.lua:
+
+	Drop the comments about enable_systems_functions, which has been
+	removed.  
+
+Sun Mar 27 22:20:27 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/config.pl:
+
+	And here's config.pl.  
+
+Sun Mar 27 22:20:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/elinks.fortune:
+
+	Mention the history auto-completion.  
+
+Sun Mar 27 22:18:02 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/Makefile.am:
+
+	Added a sample config.pl containing the default values for hooks.pl.  
+
 Sun Mar 27 22:01:28 2005  Russ Rowan <rrowan@dandy.net>:
 
 	* contrib/perl/hooks.pl:

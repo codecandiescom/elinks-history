@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.209 2003/05/10 04:07:28 pasky Exp $ */
+/* $Id: options.c,v 1.210 2003/05/18 12:37:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1437,6 +1437,9 @@ register_options()
 		"http10", 0, 0,
 		N_("Use HTTP/1.0 protocol instead of HTTP/1.1."));
 
+	add_opt_bool("protocol.http.bugs", N_("Use HTTP/0.9"),
+		"http09", 0, 0,
+		N_("Use HTTP/0.9 protocol instead of HTTP/1.1."));
 
 	add_opt_tree("protocol.http", N_("Proxy configuration"),
 		"proxy", 0,

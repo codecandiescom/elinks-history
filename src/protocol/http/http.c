@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.110 2003/05/18 11:43:50 zas Exp $ */
+/* $Id: http.c,v 1.111 2003/05/18 12:37:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,7 +331,6 @@ http_send_header(struct connection *c)
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
 	unsigned char *post = NULL;
-
 	struct cache_entry *e = NULL;
 	unsigned char *hdr;
 	unsigned char *host_data, *url_data;
@@ -366,13 +365,12 @@ http_send_header(struct connection *c)
 		http_end_request(c, S_OUT_OF_MEM);
 		return;
 	}
-#if 0 /* Not yet supported. */
+
 	if (get_opt_int("protocol.http.bugs.http09")) {
 		info->sent_version.major = 0;
 		info->sent_version.minor = 9;
 		goto get_only; /* GET is the only valid method in HTTP/0.9 */
 	}
-#endif
 
 	post = strchr(c->url, POST_CHAR);
 
@@ -383,6 +381,7 @@ http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "POST ");
 		c->unrestartable = 2;
 	} else {
+get_only:
 		add_to_str(&hdr, &l, "GET ");
 	}
 
@@ -1068,6 +1067,22 @@ http_got_header(struct connection *c, struct read_buffer *rb)
 
 	set_timeout(c);
 	info = c->info;
+
+	if (info->sent_version.major < 1) {
+		/* HTTP/0.9 */
+		c->from = 0;
+		c->cache = NULL;
+		c->content_encoding = ENCODING_NONE;
+		info->length = -1;
+		info->recv_version.major = info->sent_version.major;
+		info->recv_version.minor = info->sent_version.minor;
+		if (get_cache_entry(c->url, &c->cache)) {
+			abort_conn_with_state(c, S_OUT_OF_MEM);
+			return;
+		}
+		goto end;
+	}
+
 	if (rb->close == 2) {
 		unsigned char *hstr;
 
@@ -1201,6 +1216,7 @@ again:
 	info->length = -1;
 	info->recv_version.major = version.major;
 	info->recv_version.minor = version.minor;
+
 	if ((d = parse_http_header(e->head, "Connection", NULL))
 	     || (d = parse_http_header(e->head, "Proxy-Connection", NULL))) {
 		if (!strcasecmp(d, "close")) info->close = 1;
@@ -1320,12 +1336,6 @@ again:
 		else mem_free(d);
 	}
 
-	if (info->length == -1 ||
-	    ((version.major < 1 ||
-	      (version.major == 1 && version.minor == 0))
-	     && info->close))
-		rb->close = 1;
-
 	d = parse_http_header(e->head, "Content-Type", NULL);
 	if (d) {
 		if (!strncmp(d, "text", 4)) {
@@ -1346,10 +1356,18 @@ again:
 			mem_free(d);
 		}
 	}
+
 	if (c->content_encoding != ENCODING_NONE) {
 		if (e->encoding_info) mem_free(e->encoding_info);
 		e->encoding_info = stracpy(encoding_names[c->content_encoding]);
 	}
+
+end:
+	if (info->length == -1 ||
+	    ((info->recv_version.major < 1 ||
+	      (info->recv_version.major == 1 && info->recv_version.minor == 0))
+	     && info->close))
+		rb->close = 1;
 
 	read_http_data(c, rb);
 }

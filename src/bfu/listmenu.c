@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.17 2004/04/17 15:11:47 jonas Exp $ */
+/* $Id: listmenu.c,v 1.18 2004/04/17 17:49:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,8 +75,23 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 	}
 
 	if (data == -1) {
-		new_menu_item = mem_calloc(1, sizeof(struct menu_item));
-		if (!new_menu_item) {
+		int size = (menu->stack_size + 1) * sizeof(struct menu_item *);
+		struct menu_item **stack = mem_realloc(menu->stack, size);
+
+		if (stack) {
+			menu->stack = stack;
+			new_menu_item = mem_calloc(1, sizeof(struct menu_item));
+			menu->stack[menu->stack_size] = new_menu_item;
+		}
+
+		if (!stack || !new_menu_item) {
+			if (new_menu_item) mem_free(new_menu_item);
+			mem_free(name);
+			return;
+		}
+
+		if (!menu->stack_size) {
+			menu->stack_size++;
 			mem_free(name);
 			return;
 		}
@@ -110,6 +125,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 			SET_MENU_ITEM(item, name, NULL, ACT_MAIN_NONE, do_select_submenu,
 				      new_menu_item, SUBMENU | NO_INTL,
 				      0, 0);
+			menu->stack_size++;
 		} else {
 			SET_MENU_ITEM(item, name, NULL, ACT_MAIN_NONE, selected_item,
 				      data, (fullname ? MENU_FULLNAME : 0) | NO_INTL,
@@ -121,15 +137,6 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		memset(item, 0, sizeof(struct menu_item));
 
 	} else mem_free(name);
-
-	if (data == -1) {
-		int size = (menu->stack_size + 1) * sizeof(struct menu_item *);
-		struct menu_item **ms = mem_realloc(menu->stack, size);
-
-		if (!ms) return;
-		menu->stack = ms;
-		menu->stack[menu->stack_size++] = new_menu_item;
-	}
 }
 
 void

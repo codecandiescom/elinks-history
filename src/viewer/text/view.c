@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.559 2004/07/23 02:24:37 miciah Exp $ */
+/* $Id: view.c,v 1.560 2004/07/23 02:27:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -656,16 +656,16 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			 * it adds all kins of stuff that is not part
 			 * of the current link. I'd propose to use
 			 * get_link_uri() or something. --jonas */
-			char *current_link;
+			unsigned char *uristring;
 
 			if (try_jump_to_link_number(ses, doc_view))
 				return FRAME_EVENT_OK;
 
-			current_link = get_current_link_info(ses, doc_view);
+			uristring = get_current_link_info(ses, doc_view);
 
-			if (current_link) {
-				set_clipboard_text(current_link);
-				mem_free(current_link);
+			if (uristring) {
+				set_clipboard_text(uristring);
+				mem_free(uristring);
 			}
 			break;
 		}

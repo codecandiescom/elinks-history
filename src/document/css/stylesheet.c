@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.42 2004/09/21 18:23:30 jonas Exp $ */
+/* $Id: stylesheet.c,v 1.43 2004/09/21 19:38:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,9 +35,9 @@ find_css_selector(struct list_head *sels, enum css_selector_type type,
 	assert(sels && name);
 
 	foreach (selector, *sels) {
-		if (strlcasecmp(name, namelen, selector->name, -1))
-			continue;
 		if (type != selector->type || rel > selector->relation)
+			continue;
+		if (strlcasecmp(name, namelen, selector->name, -1))
 			continue;
 		return selector;
 	}

@@ -1,18 +1,20 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.3 2002/03/17 17:27:51 pasky Exp $ */
+/* $Id: af_unix.c,v 1.4 2002/03/26 17:16:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#include <netinet/in.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+
+/* Blame BSD for position of this include. */
+#include <netinet/in.h>
 
 #include <links.h>
 

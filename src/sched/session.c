@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.594 2004/12/25 20:42:45 zas Exp $ */
+/* $Id: session.c,v 1.595 2005/01/22 13:54:57 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -27,7 +27,6 @@
 #include "document/html/renderer.h"
 #include "document/refresh.h"
 #include "document/view.h"
-#include "ecmascript/ecmascript.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
@@ -810,6 +809,7 @@ init_session(struct session *base_session, struct terminal *term,
 	ses->status.ssl_led = register_led(ses, 0);
 	ses->status.insert_mode_led = register_led(ses, 1);
 	ses->status.ecmascript_led = register_led(ses, 2);
+	ses->status.popup_led = register_led(ses, 3);
 #endif
 	ses->status.force_show_status_bar = -1;
 	ses->status.force_show_title_bar = -1;

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.61 2005/01/05 03:33:55 miciah Exp $ */
+/* $Id: leds.c,v 1.62 2005/01/22 13:54:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
  * 0 - SSL connection indicator
  * 1 - Insert-mode indicator
  * 2 - JavaScript Error indicator
- * 3 - unused, reserved for Lua
+ * 3 - JavaScript pop-up blocking indicator
  * 4 - unused, reserved for Lua
  * 5 - unused */
 
@@ -262,10 +262,10 @@ menu_leds_info(struct terminal *term, void *xxx, void *xxxx)
 		N_("LED indicators"), ALIGN_LEFT,
 		msg_text(term, N_("What the different LEDs indicate:\n"
 			"\n"
-			"[SIJ---]\n"
+			"[SIJP--]\n"
 			" |||||`- Unused\n"
 			" ||||`-- Unused\n"
-			" |||`--- Unused\n"
+			" |||`--- A JavaScript pop-up window was blocked\n"
 			" ||`---- A JavaScript error has occured\n"
 			" |`----- The state of insert mode for text-input form-fields\n"
 			" |       'I' means modeless, 'i' means insert mode is on\n"

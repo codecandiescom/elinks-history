@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.188 2005/01/05 14:37:44 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.189 2005/01/22 13:54:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -400,6 +400,13 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct uri *uri;
 	static time_t ratelimit_start;
 	static int ratelimit_count;
+
+	if (get_opt_bool("ecmascript.block_window_opening")) {
+#ifdef CONFIG_LEDS
+		ses->status.popup_led->value = 'P';
+#endif
+		return JS_TRUE;
+	}
 
 	if (argc < 1) return JS_TRUE;
 

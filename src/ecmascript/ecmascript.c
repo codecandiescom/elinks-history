@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.26 2004/12/31 02:30:02 jonas Exp $ */
+/* $Id: ecmascript.c,v 1.27 2005/01/22 13:54:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,10 @@ static struct option_info ecmascript_options[] = {
 	INIT_OPT_INT("ecmascript", N_("Maximum execution time"),
 		"max_exec_time", 0, 1, 3600, 5,
 		N_("Maximum execution time in seconds for a script.")),
+
+	INIT_OPT_BOOL("ecmascript", N_("Pop-up window blocking"),
+		"block_window_opening", 0, 0,
+		N_("Whether to disallow scripts to open new windows or tabs.")),
 
 	NULL_OPTION_INFO,
 };

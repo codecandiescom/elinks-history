@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.73 2003/07/05 00:47:55 jonas Exp $ */
+/* $Id: connection.c,v 1.74 2003/07/05 03:20:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,8 +516,6 @@ sort_queue(void)
 static void
 interrupt_connection(struct connection *c)
 {
-	/* FIXME: can we get rid of that -1 pointer ? */
-	if (c->ssl == (void *)-1) c->ssl = 0;
 	if (c->ssl) {
 		free_ssl(c->ssl);
 		c->ssl = NULL;

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.112 2004/05/30 17:51:27 jonas Exp $ */
+/* $Id: dialogs.c,v 1.113 2004/05/30 19:25:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,8 @@ get_globhist_item_info(struct listbox_item *box_item, struct terminal *term,
 
 	switch (listbox_info) {
 	case LISTBOX_TEXT:
-		if (get_opt_int("document.history.global.display_type"))
+		if (get_opt_int("document.history.global.display_type")
+		    && *item->title)
 			return stracpy(item->title);
 
 		if (!init_string(&info)) return NULL;
@@ -146,18 +147,10 @@ push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 static int
 push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	struct global_history_item *item;
 	int *display_type;
 
 	display_type = &get_opt_int("document.history.global.display_type");
 	*display_type = !*display_type;
-
-	foreach (item, global_history.entries) {
-		unsigned char *text = *display_type ? item->title : item->url;
-
-		if (!*text) text = item->url;
-		item->box_item->text = text;
-	}
 
 	update_hierbox_browser(&globhist_browser);
 

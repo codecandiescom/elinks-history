@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.81 2003/06/24 00:07:45 jonas Exp $ */
+/* $Id: file.c,v 1.82 2003/06/24 00:26:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,8 +301,16 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	unsigned char *fragment = data->fragment;
 	int fragmentlen = data->fragmentlen;
 
+	/* add_to_str(&fragment, &fragmentlen, "   "); */
+	add_htmlesc_str(&fragment, &fragmentlen, attrib, attriblen);
+	add_to_str(&fragment, &fragmentlen, "<a href=\"");
+	add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
+
+	if (attrib[0] == 'd') {
+		add_chr_to_str(&fragment, &fragmentlen, '/');
+
 #ifdef FS_UNIX_SOFTLINKS
-	if (attrib[0] == 'l') {
+	} else if (attrib[0] == 'l') {
 		unsigned char *buf = NULL;
 		int bufsize = 0;
 		int rl = -1;
@@ -321,36 +329,28 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 		} while (rl == bufsize);
 
 		mem_free(n);
-		if (buf) {
-			if (rl != -1) {
-				buf[rl] = '\0';
 
-				lnk = buf;
-			} else {
-				mem_free(buf);
+		if (buf && rl != -1) {
+			struct stat st;
+			unsigned char *n = init_str();
+			int nl = 0;
+
+			buf[rl] = '\0';
+			lnk = buf;
+
+			if (n) {
+				add_to_str(&n, &nl, path);
+				add_htmlesc_str(&n, &nl, name, namelen);
+				if (!stat(n, &st) && S_ISDIR(st.st_mode))
+					add_chr_to_str(&fragment, &fragmentlen, '/');
+				mem_free(n);
 			}
+		} else if (buf) {
+			mem_free(buf);
 		}
-	}
 #endif
-	/* add_to_str(&fragment, &fragmentlen, "   "); */
-	add_htmlesc_str(&fragment, &fragmentlen, attrib, attriblen);
-	add_to_str(&fragment, &fragmentlen, "<a href=\"");
-	add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
-	if (attrib[0] == 'd') {
-		add_chr_to_str(&fragment, &fragmentlen, '/');
-	} else if (lnk) {
-		struct stat st;
-		unsigned char *n = init_str();
-		int nl = 0;
-
-		if (n) {
-			add_to_str(&n, &nl, path);
-			add_htmlesc_str(&n, &nl, name, namelen);
-			if (!stat(n, &st) && S_ISDIR(st.st_mode))
-				add_chr_to_str(&fragment, &fragmentlen, '/');
-			mem_free(n);
-		}
 	}
+
 	add_to_str(&fragment, &fragmentlen, "\">");
 
 	if (attrib[0] == 'd' && *dircolor) {

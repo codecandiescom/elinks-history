@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.348 2004/01/18 15:14:43 zas Exp $ */
+/* $Id: parser.c,v 1.349 2004/01/18 15:19:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2330,10 +2330,13 @@ distribute:
 		for (i = 0; i < values_count; i++) divisor += values[i];
 		tmp_val = val;
 		for (i = 0; i < values_count; i++) {
-			val -= values[i] - values[i] * (divisor - tmp_val) / divisor;
+			int tmp;
+		
 			/* SIGH! gcc 2.7.2.* has an optimizer bug! */
 			do_not_optimize_here_gcc_2_7(&divisor);
-			values[i] = values[i] * (divisor - tmp_val) / divisor;
+			tmp = values[i] * (divisor - tmp_val) / divisor;
+			val -= values[i] - tmp;
+			values[i] = tmp;
 		}
 		while (val) {
 			int flag = 0;
@@ -2363,8 +2366,10 @@ distribute:
 		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) divisor += -tmp_values[i];
 		tmp_val = val;
 		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) {
-			values[i] += (-tmp_values[i] * tmp_val / divisor);
-			val -= (-tmp_values[i] * tmp_val / divisor);
+			int tmp = (-tmp_values[i] * tmp_val / divisor);
+			
+			values[i] += tmp;
+			val -= tmp;
 		}
 		assertm(val >= 0, "parse_frame_widths: val < 0");
 		if_assert_failed val = 0;

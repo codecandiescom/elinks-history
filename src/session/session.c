@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.4 2003/04/29 17:11:07 zas Exp $ */
+/* $Id: session.c,v 1.5 2003/05/02 08:25:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ unknown_error:
 		return N_("Unknown error");
 	}
 
-	e = strerror(-state);
+	e = (unsigned char *) strerror(-state);
 	if (!e || !*e) goto unknown_error;
 
 	foreach(s, strerror_buf)

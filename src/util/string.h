@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.17 2003/05/01 23:21:29 zas Exp $ */
+/* $Id: string.h,v 1.18 2003/05/02 08:25:30 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -99,7 +99,7 @@ isA(unsigned char c)
 #ifndef HAVE_STRERROR
 #undef strerror
 #define strerror(e) elinks_strerror(e)
-char *elinks_strerror(int);
+const char *elinks_strerror(int);
 #endif
 
 /** strstr() */

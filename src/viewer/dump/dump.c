@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.10 2003/04/29 08:47:31 zas Exp $ */
+/* $Id: dump.c,v 1.11 2003/05/02 08:25:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,7 @@ nextfrag:
 
 						if (w < 0)
 							error(gettext("Error writing to stdout: %s."),
-								strerror(errno));
+							      (unsigned char *) strerror(errno));
 						else
 							error(gettext("Can't write to stdout."));
 

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.27 2003/05/01 23:21:29 zas Exp $ */
+/* $Id: string.c,v 1.28 2003/05/02 08:25:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,27 +348,36 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 
 #ifndef HAVE_STRCASECMP
 inline int
-elinks_strcasecmp(const unsigned char *c1, const unsigned char *c2)
+elinks_strcasecmp(const unsigned char *s1, const unsigned char *s2)
 {
-	for (; *c1 && *c2; c1++, c2++)
-		if (upcase(*c1) != upcase(*c2))
-			return 1;
+	while ((*s1 != '\0')
+		 && (upcase(*(unsigned char *)s1) == upcase(*(unsigned char *)s2)))
+	{
+		s1++;
+		s2++;
+	}
 
-	return 0;
+	return upcase(*(unsigned char *) s1) - upcase(*(unsigned char *) s2);
 }
 #endif /* !HAVE_STRCASECMP */
 
 #ifndef HAVE_STRNCASECMP
 inline int
-elinks_strncasecmp(const unsigned char *c1, const unsigned char *c2, size_t len)
+elinks_strncasecmp(const unsigned char *s1, const unsigned char *s2, size_t len)
 {
-	int i;
+	if (len == 0)
+		return 0;
 
-	for (i = 0; i < len; i++)
-		if (upcase(c1[i]) != upcase(c2[i]))
-			return 1;
+	while ((len-- != 0)
+	       && (upcase(*(unsigned char *)s1) == upcase(*(unsigned char *)s2)))
+	{
+		if (len == 0 || *s1 == '\0' || *s2 == '\0')
+			return 0;
+		s1++;
+		s2++;
+	}
 
-	return 0;
+	return upcase(*(unsigned char *) s1) - upcase(*(unsigned char *) s2);
 }
 #endif /* !HAVE_STRNCASECMP */
 
@@ -412,16 +421,17 @@ elinks_strdup(const unsigned char *str)
 #ifndef HAVE_STRERROR
 /* Many older systems don't have this, but have the global sys_errlist array
  * instead. */
-inline char *
-elinks_strerror(int errno)
+#if 0
+extern int sys_nerr;
+extern const char *const sys_errlist[];
+#endif
+inline const char *
+elinks_strerror(int err_no)
 {
-	extern int sys_nerr;
-	extern char *sys_errlist[];
-
-	if (errno < 0 || errno > sys_nerr)
-		return "Unknown Error";
+	if (err_no < 0 || err_no > sys_nerr)
+		return (const char *)"Unknown Error";
 	else
-		return sys_errlist[errno];
+		return (const char *)sys_errlist[err_no];
 }
 #endif
 

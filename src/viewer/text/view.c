@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.30 2003/05/01 17:09:13 zas Exp $ */
+/* $Id: view.c,v 1.31 2003/05/02 08:25:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1638,7 +1638,7 @@ error:
 	*data = NULL;
 	m1 = stracpy(sv->value);
 	if (!m1) return;
-	m2 = stracpy(strerror(errno));
+	m2 = stracpy((unsigned char *) strerror(errno));
 	msg_box(ses->term, getml(m1, m2, NULL),
 		N_("Error while posting form"), AL_CENTER | AL_EXTD_TEXT,
 		N_("Could not get file"), " ", m1, ": ", m2, NULL,

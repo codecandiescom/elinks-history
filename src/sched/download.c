@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.17 2003/05/01 10:43:14 zas Exp $ */
+/* $Id: download.c,v 1.18 2003/05/02 08:25:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -501,7 +501,7 @@ write_error:
 				detach_connection(sts, down->last_pos);
 				if (!list_empty(sessions)) {
 					unsigned char *msg = stracpy(down->file);
-					unsigned char *emsg = stracpy(strerror(saved_errno));
+					unsigned char *emsg = stracpy((unsigned char *) strerror(saved_errno));
 
 					if (msg && emsg) {
 						msg_box(get_download_ses(down)->term, getml(msg, emsg, NULL),
@@ -777,7 +777,7 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 
 	if (h == -1) {
 		unsigned char *msg = stracpy(file);
-		unsigned char *msge = stracpy(strerror(saved_errno));
+		unsigned char *msge = stracpy((unsigned char *) strerror(saved_errno));
 
 		if (msg && msge) {
 			msg_box(term, getml(msg, msge, NULL),

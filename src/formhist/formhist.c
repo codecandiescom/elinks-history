@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.29 2003/08/29 21:26:22 pasky Exp $ */
+/* $Id: formhist.c,v 1.30 2003/08/29 21:29:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,8 +114,6 @@ fail:
 	return 0;
 }
 
-/* Look up @name form of @url document in the form history. Returns the saved
- * value if present, NULL upon an error. */
 unsigned char *
 get_form_history_value(unsigned char *url, unsigned char *name)
 {
@@ -136,8 +134,6 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 	return NULL;
 }
 
-/* Check whether the form (chain of @submit submitted_values at @url document)
- * is already present in the form history. */
 int
 form_already_saved(unsigned char *url, struct list_head *submit)
 {
@@ -172,8 +168,6 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 	return 0;
 }
 
-/* Appends form data @form1 (url and submitted_value(s)) to the password file.
- * Returns 1 on success, 0 otherwise. */
 int
 remember_form(struct formhist_data *form1)
 {

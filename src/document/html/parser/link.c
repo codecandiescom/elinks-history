@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.38 2004/12/05 21:54:20 miciah Exp $ */
+/* $Id: link.c,v 1.39 2004/12/05 21:59:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,6 +139,7 @@ truncate_title(unsigned char *title)
 {
 	unsigned char *text;
 	int max_len = get_opt_int("document.browse.images.file_tags");
+	int len;
 
 #if 0
 	/* This should be maybe whole terminal width? */
@@ -148,25 +149,26 @@ truncate_title(unsigned char *title)
 	 * --pasky */
 #endif
 
-	if (max_len >= 0 && title) {
-		int len = strlen(title);
-
-		if (max_len && len > max_len) {
-			int max_part_len = max_len / 2;
-
-			text = mem_alloc(max_part_len * 2 + 2);
-			if (!text) goto free_title;
-
-			/* TODO: Faster way ?? sprintf() is quite expensive. */
-			sprintf(text, "%.*s*%.*s",
-					max_part_len, title,
-					max_part_len, title + len - max_part_len);
-
-		} else {
-			text = memacpy(title, len);
-		}
-	} else {
+	if (max_len < 0 || !title) {
 		text = stracpy("IMG");
+		goto free_title;
+	}
+
+	len = strlen(title);
+
+	if (max_len && len > max_len) {
+		int max_part_len = max_len / 2;
+
+		text = mem_alloc(max_part_len * 2 + 2);
+		if (!text) goto free_title;
+
+		/* TODO: Faster way ?? sprintf() is quite expensive. */
+		sprintf(text, "%.*s*%.*s",
+				max_part_len, title,
+				max_part_len, title + len - max_part_len);
+
+	} else {
+		text = memacpy(title, len);
 	}
 
 free_title:

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.106 2004/08/03 10:41:05 jonas Exp $ */
+/* $Id: connect.c,v 1.107 2004/09/14 17:10:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,6 +372,13 @@ dns_found(void *data, int state)
 #else
 		struct sockaddr_in addr = *((struct sockaddr_in *) &conn_info->addr[i]);
 #endif
+		int family;
+
+#ifdef CONFIG_IPV6
+		family = addr.sin6_family;
+#else
+		family = addr.sin_family;
+#endif
 
 		conn_info->triedno++;
 
@@ -391,11 +398,7 @@ dns_found(void *data, int state)
 			}
 		}
 
-#ifdef CONFIG_IPV6
-		sock = socket(addr.sin6_family, SOCK_STREAM, IPPROTO_TCP);
-#else
-		sock = socket(addr.sin_family, SOCK_STREAM, IPPROTO_TCP);
-#endif
+		sock = socket(family, SOCK_STREAM, IPPROTO_TCP);
 		if (sock == -1) {
 			if (errno && !saved_errno) saved_errno = errno;
 			continue;

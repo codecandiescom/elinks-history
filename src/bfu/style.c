@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.4 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: style.c,v 1.5 2003/08/24 02:30:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,13 +15,21 @@
 #include "util/hash.h"
 
 
+struct bfu_color_entry {
+	/* Pointers to the options tree values. */
+	color_t *background;
+	color_t *foreground;
+
+	/* The copy of "text" and "background" colors. */
+	struct color_pair colors;
+};
+
 static struct hash *bfu_colors = NULL;
 
 struct color_pair *
 get_bfu_color(struct terminal *term, unsigned char *stylename)
 {
-	struct option *opt;
-	struct color_pair *color;
+	struct bfu_color_entry *entry;
 	int stylenamelen;
 	struct hash_item *item;
 
@@ -36,30 +44,41 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 	stylenamelen = strlen(stylename);
 
 	item = get_hash_item(bfu_colors, stylename, stylenamelen);
-	if (item && item->value) return item->value;
+	entry = item ? item->value : NULL;
 
-	/* Construct a the style. */
-	opt = get_opt_rec_real(config_options,
-			       get_opt_bool_tree(term->spec, "colors")
-			       ? "ui.colors.color" : "ui.colors.mono");
-	if (!opt) return NULL;
+	if (!entry) {
+		struct option *opt;
 
-	opt = get_opt_rec_real(opt, stylename);
-	if (!opt) return NULL;
+		/* Construct a the style. */
+		/* Do we need to flag wether entries are for mono or color?
+		 * That is can it happen that both mono and colors lookups
+		 * occur? --jonas */
+		opt = get_opt_rec_real(config_options,
+				       get_opt_bool_tree(term->spec, "colors")
+				       ? "ui.colors.color" : "ui.colors.mono");
+		if (!opt) return NULL;
 
-	color = mem_alloc(sizeof(struct color_pair));
-	if (!color) return NULL;
+		opt = get_opt_rec_real(opt, stylename);
+		if (!opt) return NULL;
 
-	item = add_hash_item(bfu_colors, stylename, stylenamelen, color);
-	if (!item) {
-		mem_free(color);
-		return NULL;
+		entry = mem_calloc(1, sizeof(struct bfu_color_entry));
+		if (!entry) return NULL;
+
+		item = add_hash_item(bfu_colors, stylename, stylenamelen, entry);
+		if (!item) {
+			mem_free(entry);
+			return NULL;
+		}
+
+		entry->foreground = &get_opt_color_tree(opt, "text");
+		entry->background = &get_opt_color_tree(opt, "background");
 	}
 
-	color->foreground = get_opt_color_tree(opt, "text");
-	color->background = get_opt_color_tree(opt, "background");
+	/* Always update the color pair. */
+	entry->colors.background = *entry->background;
+	entry->colors.foreground = *entry->foreground;
 
-	return color;
+	return &entry->colors;
 }
 
 void

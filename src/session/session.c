@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.483 2004/06/11 14:43:27 jonas Exp $ */
+/* $Id: session.c,v 1.484 2004/06/11 14:55:39 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -643,15 +643,14 @@ init_session(struct session *base_session, struct terminal *term,
 	     struct uri *uri, int in_background)
 {
 	struct session *ses = mem_calloc(1, sizeof(struct session));
-	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
-	int first = list_empty(term->windows);
 
 	if (!ses) return NULL;
 
 	ses->tab = init_tab(term, in_background, ses, tabwin_func);
 	if (!ses->tab) {
 		mem_free(ses);
-		if (!first) destroy_terminal(term);
+		if (list_empty(term->windows))
+			destroy_terminal(term);
 		return NULL;
 	}
 
@@ -678,9 +677,10 @@ init_session(struct session *base_session, struct terminal *term,
 
 	add_to_list(sessions, ses);
 
-	if (first) return ses;
+	update_status();
 
-	ses->tab->handler(ses->tab, &ev, 0);
+	if (!in_background)
+		switch_to_tab(term, get_tab_number(ses->tab), -1);
 
 	return ses;
 }
@@ -836,7 +836,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 	if (len <= 0) {
 		if (!remote)
-			return init_session(base_session, term, NULL, 1);
+			return init_session(base_session, term, NULL, 0);
 
 		/* Even though there are no URIs we still have to
 		 * handle remote stuff. */
@@ -870,7 +870,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 				remote = init_remote_session(base_session, remote, uri);
 
 			} else if (!info) {
-				info = init_session(base_session, term, uri, 1);
+				info = init_session(base_session, term, uri, 0);
 				if (!info) return NULL;
 
 			} else {
@@ -1017,8 +1017,7 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			if (!list_empty(sessions)) update_status();
 			break;
 		case EV_INIT:
-			update_status();
-			/* fall-through */
+			break;
 		case EV_RESIZE:
 			tab->resize = 1;
 			/* fall-through */

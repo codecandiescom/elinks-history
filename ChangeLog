@@ -1,3 +1,61 @@
+Mon Feb  9 12:06:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	input_line_event_handler(): Catch redraw events from the history tab
+	completion so new buffer data is propagated to the line handlers.  
+
+Mon Feb  9 11:51:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	get_unique_name(): Replace sprintf() with longcat().  
+
+Mon Feb  9 11:33:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Cl33nup.  
+
+Mon Feb  9 11:13:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	A little almost-spring cleaning.  
+
+Mon Feb  9 09:29:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/secsave.c:
+
+	Cleanup and simplification of secure_close(), error handling was
+	improved and a potential file-not-closed-on-flush-errore was fixed.  
+
+Mon Feb  9 02:59:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: inpfield.c, inphist.c, inphist.h:
+
+	Minor simplification to make history completion functions work on
+	dialog_data so it looks a bit higher level.  
+
+Mon Feb  9 01:41:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Minor simplification.  
+
+Mon Feb  9 01:33:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	Add input line buffer to history when cycling next and previous
+	item.  
+
+Mon Feb  9 01:25:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	Fight badly written spaghetti code with gotos.  
+
 Sun Feb  8 20:36:15 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/inpfield.c:

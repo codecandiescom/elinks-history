@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.36 2003/10/05 20:47:34 pasky Exp $ */
+/* $Id: search.c,v 1.37 2003/10/05 21:33:33 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -648,6 +648,18 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 	assert(f);
 	if_assert_failed return;
 
+	if (!*str) {
+		if (ses->search_word) {
+			mem_free(ses->search_word);
+			ses->search_word = NULL;
+		}
+		if (ses->last_search_word) {
+			mem_free(ses->last_search_word);
+			ses->last_search_word = NULL;
+		}
+		return;
+	}
+	
 	if (ses->search_word) mem_free(ses->search_word);
 	ses->search_word = stracpy(str);
 	if (!ses->search_word) return;
@@ -660,7 +672,7 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 	}
 
 	ses->search_direction = direction;
-	if (*str) find_next(ses, f, 1);
+	find_next(ses, f, 1);
 }
 
 

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.67 2003/06/23 02:55:32 jonas Exp $ */
+/* $Id: file.c,v 1.68 2003/06/23 03:04:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -581,7 +581,7 @@ read_file(struct stream_encoded *stream, int readsize, struct file_info *info)
 void
 file_func(struct connection *connection)
 {
-	struct cache_entry *e;
+	struct cache_entry *cache;
 	unsigned char *filename;
 	DIR *d;
 	int filenamelen;
@@ -614,16 +614,16 @@ file_func(struct connection *connection)
 			mem_free(info);
 			closedir(d);
 
-			if (get_cache_entry(connection->url, &e)) {
+			if (get_cache_entry(connection->url, &cache)) {
 				abort_conn_with_state(connection, S_OUT_OF_MEM);
 				return;
 			}
 
-			connection->cache = e;
+			connection->cache = cache;
 
-			if (e->redirect) mem_free(e->redirect);
-			e->redirect_get = 1;
-			e->redirect = straconcat(connection->url, "/", NULL);
+			if (cache->redirect) mem_free(cache->redirect);
+			cache->redirect_get = 1;
+			cache->redirect = straconcat(connection->url, "/", NULL);
 
 			goto end;
 		}
@@ -692,18 +692,18 @@ file_func(struct connection *connection)
 		}
 	}
 
-	if (get_cache_entry(connection->url, &e)) {
+	if (get_cache_entry(connection->url, &cache)) {
 		mem_free(info->fragment);
 		mem_free(info);
 		abort_conn_with_state(connection, S_OUT_OF_MEM);
 		return;
 	}
 
-	if (e->head) mem_free(e->head);
-	e->head = info->head;
-	connection->cache = e;
-	add_fragment(e, 0, info->fragment, info->fragmentlen);
-	truncate_entry(e, info->fragmentlen, 1);
+	if (cache->head) mem_free(cache->head);
+	cache->head = info->head;
+	connection->cache = cache;
+	add_fragment(cache, 0, info->fragment, info->fragmentlen);
+	truncate_entry(cache, info->fragmentlen, 1);
 
 	mem_free(info->fragment);
 	mem_free(info);

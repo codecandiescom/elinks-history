@@ -20,7 +20,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.7 2003/07/20 21:15:49 pasky Exp $
+# $Id: elinks.spec.in,v 1.8 2003/07/20 21:19:45 pasky Exp $
 
 Summary: Enhanced version of Links (Lynx-like text WWW browser)
 Name: elinks
@@ -28,7 +28,7 @@ Version: @VERSION@
 Release: 1
 Prefix: /usr
 License: GPL
-Vendor: ELinks project <pasky@ucw.cz>
+Vendor: ELinks project <elinks-users@linuxfromscratch.org>
 #Packager: Petr Baudis <pasky@ucw.cz>
 Group: Applications/Internet
 Source: http://elinks.or.cz/download/%{name}-%{version}.tar.bz2

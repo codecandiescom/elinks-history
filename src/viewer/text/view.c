@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.197 2003/09/01 13:13:32 zas Exp $ */
+/* $Id: view.c,v 1.198 2003/09/05 13:40:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,6 +122,7 @@ done_document(struct document *document)
 	if (document->url) mem_free(document->url);
 	if (document->title) mem_free(document->title);
 	if (document->frame_desc) free_frameset_desc(document->frame_desc);
+	if (document->refresh) done_document_refresh(document->refresh);
 
 	for (pos = 0; pos < document->nlinks; pos++) {
 		struct link *link = &document->links[pos];

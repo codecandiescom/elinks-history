@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.270 2003/09/04 12:31:04 pasky Exp $ */
+/* $Id: options.c,v 1.271 2003/09/05 13:40:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1148,6 +1148,9 @@ register_options(void)
 		N_("When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa."));
 
+	add_opt_bool("document.browse", N_("Document meta refresh"),
+		"refresh", 0, 0,
+		N_("Enable the use of document meta refresh."));
 
 	add_opt_int("document.browse", N_("Horizontal text margin"),
 		"margin_width", 0, 0, 9, 3,

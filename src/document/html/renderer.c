@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.233 2003/09/05 13:25:35 jonas Exp $ */
+/* $Id: renderer.c,v 1.234 2003/09/05 13:40:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1107,6 +1107,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 	va_list l;
 	unsigned char *t;
 	struct document *document = part->document;
+	unsigned long seconds;
 	struct form_control *fc;
 	struct frameset_param *fsp;
 	struct frame_param *fp;
@@ -1145,6 +1146,12 @@ html_special(struct part *part, enum html_special_type c, ...)
 		case SP_NOWRAP:
 			nowrap = va_arg(l, int);
 			va_end(l);
+			break;
+		case SP_REFRESH:
+			seconds = va_arg(l, unsigned long);
+			t = va_arg(l, unsigned char *);
+			va_end(l);
+			document->refresh = init_document_refresh(t, seconds);
 			break;
 		default:
 			va_end(l);

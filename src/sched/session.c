@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.140 2003/09/05 12:02:10 jonas Exp $ */
+/* $Id: session.c,v 1.141 2003/09/05 13:40:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -570,6 +570,12 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	struct cache_entry *e;
 	unsigned char *post_char_pos = strchr(url, POST_CHAR);
 
+	if (ses->screen
+	    && ses->screen->document
+	    && ses->screen->document->refresh) {
+		kill_document_refresh(ses->screen->document->refresh);
+	}
+
 	if (!task || !get_opt_int("document.browse.forms.confirm_submit")
 	    || !post_char_pos
 	    || (cache_mode == NC_ALWAYS_CACHE && find_in_cache(url, &e)
@@ -955,6 +961,12 @@ doc_end_load(struct download *stat, struct session *ses)
 
 		load_frames(ses, ses->screen);
 		process_file_requests(ses);
+
+		if (ses->screen->document->refresh
+		    && get_opt_bool("document.browse.refresh")) {
+			start_document_refresh(ses->screen->document->refresh,
+					       ses);
+		}
 
 		if (stat->state != S_OK) {
 			print_error_dialog(ses, stat);
@@ -1714,3 +1726,56 @@ get_current_link(struct session *ses)
 
 	return NULL;
 }
+
+
+struct document_refresh *
+init_document_refresh(unsigned char *url, unsigned long seconds)
+{
+	struct document_refresh *refresh;
+	int url_len = strlen(url) + 1;
+
+	refresh = mem_alloc(sizeof(struct document_refresh) + url_len);
+	if (refresh) {
+		memcpy(refresh->url, url, url_len);
+		refresh->seconds = seconds;
+		refresh->timer = -1;
+	}
+
+	return refresh;
+};
+
+void
+kill_document_refresh(struct document_refresh *refresh)
+{
+	if (refresh->timer != -1) {
+		kill_timer(refresh->timer);
+		refresh->timer = -1;
+	}
+};
+
+void
+done_document_refresh(struct document_refresh *refresh)
+{
+	kill_document_refresh(refresh);
+	mem_free(refresh);
+}
+
+static void
+do_document_refresh(void *data)
+{
+	struct session *ses = data;
+	struct document_refresh *refresh = ses->screen->document->refresh;
+
+	assert(refresh);
+
+	refresh->timer = -1;
+	goto_url(ses, refresh->url);
+};
+
+void
+start_document_refresh(struct document_refresh *refresh, struct session *ses)
+{
+	int time = 1000 * refresh->seconds;
+
+	refresh->timer = install_timer(time, do_document_refresh, ses);
+};

@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.12 2003/08/25 06:56:06 jonas Exp $ */
+/* $Id: frames.h,v 1.13 2003/09/05 13:40:32 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -40,6 +40,12 @@ enum cp_status {
 	CP_STATUS_IGNORED
 };
 
+struct document_refresh {
+	int timer;
+	unsigned long seconds;
+	unsigned char url[1]; /* XXX: Keep last! */
+};
+
 struct document {
 	LIST_HEAD(struct document);
 
@@ -53,6 +59,7 @@ struct document {
 	unsigned char *title;
 
 	struct frameset_desc *frame_desc;
+	struct document_refresh *refresh;
 
 	struct line *data;
 

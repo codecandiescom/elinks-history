@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.11 2002/12/07 20:05:58 pasky Exp $ */
+/* $Id: memory.c,v 1.12 2002/12/08 17:00:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 #include "util/memory.h"
 
 
-#if !defined(LEAK_DEBUG) && defined(DEBUG)
+#if !defined(LEAK_DEBUG) && !defined(FASTMEM)
 
 static int alloc_try = 0;
 
@@ -46,31 +46,27 @@ patience(unsigned char *of)
 inline void *
 mem_alloc(size_t size)
 {
-	void *p;
+	if (size)
+		do {
+			void *p = malloc(size);
 
-	if (!size) return NULL;
+			if (p) return p;
+		} while (patience("malloc"));
 
-	do {
-		p = malloc(size);
-		if (p) break;
-	} while (patience("malloc"));
-
-	return p;
+	return NULL;
 }
 
 inline void *
 mem_calloc(size_t count, size_t eltsize)
 {
-	void *p;
+	if (eltsize && count)
+		do {
+			void *p = calloc(count, eltsize);
 
-	if (!eltsize || !count) return NULL;
+			if (p) return p;
+		} while (patience("calloc"));
 
-	do {
-		p = calloc(count, eltsize);
-		if (p) break;
-	} while (patience("calloc"));
-
-	return p;
+	return NULL;
 }
 
 inline void
@@ -87,25 +83,18 @@ mem_free(void *p)
 inline void *
 mem_realloc(void *p, size_t size)
 {
-	void *p2;
-
 	if (!p) return mem_alloc(size);
 
-	if (!size) {
+	if (size)
+		do {
+			void *p2 = realloc(p, size);
+
+			if (p2) return p2;
+		} while (patience("realloc"));
+	else
 		mem_free(p);
-		return NULL;
-	}
 
-	do {
-		p2 = realloc(p, size);
-		if (p2) {
-			p = p2;
-			break;
-		}
-	} while (patience("realloc"));
-	if (!p2) return NULL;
-
-	return p;
+	return NULL;
 }
 
-#endif /* !LEAK_DEBUG && DEBUG */
+#endif

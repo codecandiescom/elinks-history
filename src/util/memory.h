@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.5 2002/12/03 22:00:56 zas Exp $ */
+/* $Id: memory.h,v 1.6 2002/12/08 17:00:42 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -23,7 +23,7 @@
 
 #else
 
-#ifdef DEBUG
+#ifndef FASTMEM
 void *mem_alloc(size_t);
 void *mem_calloc(size_t, size_t);
 void mem_free(void *);
@@ -46,7 +46,7 @@ void *mem_realloc(void *, size_t);
 # define mem_free(p) free(p)
 # define mem_realloc(p, size) realloc(p, size)
 
-#endif /* DEBUG */
+#endif /* FASTMEM */
 
 #endif /* LEAK_DEBUG */
 

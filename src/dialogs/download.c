@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.36 2004/01/15 04:41:22 miciah Exp $ */
+/* $Id: download.c,v 1.37 2004/01/15 05:01:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,26 +230,26 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 }
 
 void
-display_download(struct terminal *term, struct file_download *down,
+display_download(struct terminal *term, struct file_download *file_download,
 		 struct session *ses)
 {
 	struct dialog *dlg;
 
-	if (!is_in_downloads_list(down))
+	if (!is_in_downloads_list(file_download))
 		return;
 
 #define DOWNLOAD_WIDGETS_COUNT 4
 	dlg = calloc_dialog(DOWNLOAD_WIDGETS_COUNT, 0);
 	if (!dlg) return;
 
-	undisplay_download(down);
-	down->ses = ses;
+	undisplay_download(file_download);
+	file_download->ses = ses;
 	dlg->title = _("Download", term);
 	dlg->layouter = download_dialog_layouter;
 	dlg->abort = download_abort_function;
-	dlg->udata = down;
+	dlg->udata = file_download;
 
-	object_lock(down);
+	object_lock(file_download);
 
 	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_undisplay_download, _("Background", term), NULL);
 	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);

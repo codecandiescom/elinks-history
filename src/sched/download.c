@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.213 2004/01/15 04:41:22 miciah Exp $ */
+/* $Id: download.c,v 1.214 2004/01/15 05:01:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,10 +65,10 @@ INIT_LIST_HEAD(downloads);
 int
 are_there_downloads(void)
 {
-	struct file_download *down;
+	struct file_download *file_download;
 
-	foreach (down, downloads)
-		if (!down->prog)
+	foreach (file_download, downloads)
+		if (!file_download->prog)
 			return 1;
 
 	return 0;
@@ -76,16 +76,16 @@ are_there_downloads(void)
 
 
 static struct session *
-get_download_ses(struct file_download *down)
+get_download_ses(struct file_download *file_download)
 {
 	struct session *ses;
 
 	foreach (ses, sessions)
-		if (ses == down->ses)
+		if (ses == file_download->ses)
 			return ses;
 
 	foreach (ses, sessions)
-		if (ses->tab->term == down->term)
+		if (ses->tab->term == file_download->term)
 			return ses;
 
 	if (!list_empty(sessions))
@@ -96,27 +96,30 @@ get_download_ses(struct file_download *down)
 
 
 void
-abort_download(struct file_download *down, int stop)
+abort_download(struct file_download *file_download, int stop)
 {
-	if (down->box_item)
-		done_listbox_item(&download_browser, down->box_item);
-	if (down->dlg_data) cancel_dialog(down->dlg_data, NULL);
-	if (down->download.state >= 0)
-		change_connection(&down->download, NULL, PRI_CANCEL, stop);
-	if (down->url) mem_free(down->url);
+	if (file_download->box_item)
+		done_listbox_item(&download_browser, file_download->box_item);
+	if (file_download->dlg_data)
+		cancel_dialog(file_download->dlg_data, NULL);
+	if (file_download->download.state >= 0)
+		change_connection(&file_download->download, NULL, PRI_CANCEL,
+				  stop);
+	if (file_download->url) mem_free(file_download->url);
 
-	if (down->handle != -1) {
-		prealloc_truncate(down->handle, down->last_pos);
-		close(down->handle);
+	if (file_download->handle != -1) {
+		prealloc_truncate(file_download->handle,
+				  file_download->last_pos);
+		close(file_download->handle);
 	}
 
-	if (down->prog) mem_free(down->prog);
-	if (down->file) {
-		if (down->delete) unlink(down->file);
-		mem_free(down->file);
+	if (file_download->prog) mem_free(file_download->prog);
+	if (file_download->file) {
+		if (file_download->delete) unlink(file_download->file);
+		mem_free(file_download->file);
 	}
-	del_from_list(down);
-	mem_free(down);
+	del_from_list(file_download);
+	mem_free(file_download);
 }
 
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.80 2004/12/17 00:21:56 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.81 2004/12/17 00:25:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,25 +493,25 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 }
 
 
-static JSBool form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
-static JSBool form_control_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+static JSBool form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+static JSBool form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 
-static const JSClass form_control_class = {
+static const JSClass form_class = {
 	"form",
 	JSCLASS_HAS_PRIVATE,
 	JS_PropertyStub, JS_PropertyStub,
-	form_control_get_property, form_control_set_property,
+	form_get_property, form_set_property,
 	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
 };
 
-enum form_control_prop {
+enum form_prop {
 	JSP_FORM_CONTROL_NAME,
 	JSP_FORM_CONTROL_ACTION,
 	JSP_FORM_CONTROL_METHOD,
 	JSP_FORM_CONTROL_TARGET
 };
 
-static const JSPropertySpec form_control_props[] = {
+static const JSPropertySpec form_props[] = {
 	{ "name",	JSP_FORM_CONTROL_NAME,	JSPROP_ENUMERATE },
 	{ "action",	JSP_FORM_CONTROL_ACTION,	JSPROP_ENUMERATE },
 	{ "method",	JSP_FORM_CONTROL_METHOD,	JSPROP_ENUMERATE },
@@ -519,17 +519,17 @@ static const JSPropertySpec form_control_props[] = {
 	{ NULL }
 };
 
-static JSBool form_control_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
-static JSBool form_control_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
 
-static const JSFunctionSpec form_control_funcs[] = {
-	{ "reset",	form_control_reset,	0 },
-	{ "submit",	form_control_submit,	0 },
+static const JSFunctionSpec form_funcs[] = {
+	{ "reset",	form_reset,	0 },
+	{ "submit",	form_submit,	0 },
 	{ NULL }
 };
 
 static JSBool
-form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
 
@@ -568,7 +568,7 @@ form_control_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		prop_type = JSPT_STRING;
 		break;
 	default:
-		INTERNAL("Invalid ID %d in form_control_get_property().", JSVAL_TO_INT(id));
+		INTERNAL("Invalid ID %d in form_get_property().", JSVAL_TO_INT(id));
 		goto bye;
 	}
 end:
@@ -576,7 +576,7 @@ end:
 }
 
 static JSBool
-form_control_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
 
@@ -612,14 +612,14 @@ form_control_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		mem_free_set(fc->target, stracpy(v.string));
 		break;
 	default:
-		INTERNAL("Invalid ID %d in form_control_get_property().", JSVAL_TO_INT(id));
+		INTERNAL("Invalid ID %d in form_get_property().", JSVAL_TO_INT(id));
 		goto bye;
 	}
 	JSVAL_TO_VALUE_END;
 }
 
 static JSBool
-form_control_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
@@ -634,7 +634,7 @@ form_control_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval
 }
 
 static JSBool
-form_control_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
@@ -684,11 +684,11 @@ static const JSPropertySpec forms_props[] = {
 };
 
 static JSObject *
-get_form_control_object(JSContext *ctx, JSObject *parent, struct form_control *fc)
+get_form_object(JSContext *ctx, JSObject *parent, struct form_control *fc)
 {
-	JSObject *form = JS_NewObject(ctx, (JSClass *) &form_control_class, NULL, parent);
+	JSObject *form = JS_NewObject(ctx, (JSClass *) &form_class, NULL, parent);
 
-	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
+	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_funcs);
 	JS_SetPrivate(ctx, form, fc);
 	return form;
 }
@@ -713,7 +713,7 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		p.number = counter;
 		prop_type = JSPT_INT;
 	} else {
-		INTERNAL("Invalid ID %d in form_control_get_property().", JSVAL_TO_INT(id));
+		INTERNAL("Invalid ID %d in forms_get_property().", JSVAL_TO_INT(id));
 		goto bye;
 	}
 	VALUE_TO_JSVAL_END(vp);
@@ -739,7 +739,7 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	}
 	if (index > counter) return JS_FALSE;
 
-	*rval = OBJECT_TO_JSVAL(get_form_control_object(ctx, obj, fc));
+	*rval = OBJECT_TO_JSVAL(get_form_object(ctx, obj, fc));
 	return JS_TRUE;
 }
 
@@ -763,7 +763,7 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 	return JS_FALSE;
 
 ok:
-	*rval = OBJECT_TO_JSVAL(get_form_control_object(ctx, obj, fc));
+	*rval = OBJECT_TO_JSVAL(get_form_object(ctx, obj, fc));
 	return JS_TRUE;
 }
 
@@ -826,7 +826,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			success = JS_GetProperty(ctx, obj, "forms", &forms);
 			assert(success == JS_TRUE);
 
-			p.object = get_form_control_object(ctx, JSVAL_TO_OBJECT(forms), fc);
+			p.object = get_form_object(ctx, JSVAL_TO_OBJECT(forms), fc);
 			prop_type = JSPT_OBJECT;
 			goto convert;
 		}

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.82 2004/01/29 12:58:44 jonas Exp $ */
+/* $Id: parser.c,v 1.83 2004/01/29 13:08:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,10 +261,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		 * when we will start supporting the id/class/pseudo. */
 		add_to_list(*selectors, pkg);
 
-		if (token->type != ',') break;
-
 		/* Multiple elements hooked up to this ruleset. */
-		token = get_next_scanner_token(scanner);
+		if (token->type == ',') skip_css_tokens(scanner, ',');
 	}
 }
 

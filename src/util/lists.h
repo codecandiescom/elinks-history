@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.15 2003/05/03 01:38:14 pasky Exp $ */
+/* $Id: lists.h,v 1.16 2003/05/03 02:25:28 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -202,7 +202,7 @@ do { \
 do { \
 	do_not_optimize_here(&l); \
 	while ((l).next != &(l)) { \
-		struct list_head **a__ = &(l).next; \
+		struct list_head **a__ = (struct list_head **) &(l).next; \
 		del_from_list(*a__); \
 		mem_free(*a__); \
 		*a__ = NULL; \

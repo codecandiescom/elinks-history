@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.27 2003/07/30 00:22:41 jonas Exp $ */
+/* $Id: draw.c,v 1.28 2003/07/30 21:38:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,10 +45,12 @@ set_xchar(struct terminal *term, int x, int y, enum frame_cross_direction dir)
 	if (!(screen_char->attr & SCREEN_ATTR_FRAME)) return;
 
 	d = dir>>1;
-	if (screen_char->data == frame_trans[d][0])
-		screen_char->data = frame_trans[d][1 + (dir & 1)] | ATTR_FRAME;
-	else if (screen_char->data == frame_trans[d][2 - (dir & 1)])
-		screen_char->data = frame_trans[d][3] | ATTR_FRAME;
+	if (screen_char->data == frame_trans[d][0]) {
+		screen_char->data = frame_trans[d][1 + (dir & 1)];
+
+	} else if (screen_char->data == frame_trans[d][2 - (dir & 1)]) {
+		screen_char->data = frame_trans[d][3];
+	}
 }
 
 

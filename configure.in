@@ -398,6 +398,7 @@ AC_ARG_ENABLE(globhist, [  --disable-globhist      disable global history],
 dnl == EMX hack
 
 test "$have_emx" = yes && LDFLAGS="$LDFLAGS -Zexe"
+test "$have_emx" = yes && LDFLAGS=`echo "$LDFLAGS" | sed "s/-Zbin-files//g"`
 
 
 # Create CONFDIR #define for config.h

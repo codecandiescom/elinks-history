@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.273 2004/09/12 03:56:42 miciah Exp $ */
+/* $Id: menu.c,v 1.274 2004/09/12 04:02:22 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -475,67 +475,68 @@ display_menu(struct terminal *term, struct menu *menu)
 			draw_border_char(term, box.x + box.width, box.y,
 					 BORDER_SLTEE, frame_color);
 
-		} else {
-			if (mi_has_left_text(mi)) {
-				int l = mi->hotkey_pos;
-				unsigned char *text = mi->text;
+			continue;
+		}
 
-				if (mi_text_translate(mi))
-					text = _(text, term);
+		if (mi_has_left_text(mi)) {
+			int l = mi->hotkey_pos;
+			unsigned char *text = mi->text;
 
-				if (!mi_is_selectable(mi))
-					l = 0;
+			if (mi_text_translate(mi))
+				text = _(text, term);
 
-				if (l) {
-					draw_menu_left_text_hk(term, text, l,
-							       box.x, box.y, box.width, color,
-							       selected);
+			if (!mi_is_selectable(mi))
+				l = 0;
 
-				} else {
-					draw_menu_left_text(term, text, -1,
-							    box.x, box.y, box.width, color);
-		  		}
+			if (l) {
+				draw_menu_left_text_hk(term, text, l,
+						       box.x, box.y, box.width, color,
+						       selected);
+
+			} else {
+				draw_menu_left_text(term, text, -1,
+						    box.x, box.y, box.width, color);
 			}
+		}
 
-			if (mi_is_submenu(mi)) {
-				draw_menu_right_text(term, m_submenu, m_submenu_len,
-						     menu->box.x, box.y, box.width, color);
-			} else if (mi->action != ACT_MAIN_NONE) {
-				struct string keystroke;
+		if (mi_is_submenu(mi)) {
+			draw_menu_right_text(term, m_submenu, m_submenu_len,
+					     menu->box.x, box.y, box.width, color);
+		} else if (mi->action != ACT_MAIN_NONE) {
+			struct string keystroke;
 
 #ifdef CONFIG_DEBUG
-				/* Help to detect action + right text. --Zas */
-				if (mi_has_right_text(mi)) {
-					if (color == selected_color)
-						color = normal_color;
-					else
-						color = selected_color;
-				}
+			/* Help to detect action + right text. --Zas */
+			if (mi_has_right_text(mi)) {
+				if (color == selected_color)
+					color = normal_color;
+				else
+					color = selected_color;
+			}
 #endif /* CONFIG_DEBUG */
 
-				if (init_string(&keystroke)) {
-					add_keystroke_to_string(&keystroke,
-								mi->action,
-								KEYMAP_MAIN);
-					draw_menu_right_text(term, keystroke.source,
-							     keystroke.length,
-							     menu->box.x, box.y,
-							     box.width, color);
-					done_string(&keystroke);
-				}
+			if (init_string(&keystroke)) {
+				add_keystroke_to_string(&keystroke,
+							mi->action,
+							KEYMAP_MAIN);
+				draw_menu_right_text(term, keystroke.source,
+						     keystroke.length,
+						     menu->box.x, box.y,
+						     box.width, color);
+				done_string(&keystroke);
+			}
 
-			} else if (mi_has_right_text(mi)) {
-				unsigned char *rtext = mi->rtext;
+		} else if (mi_has_right_text(mi)) {
+			unsigned char *rtext = mi->rtext;
 
-				if (mi_rtext_translate(mi))
-					rtext = _(rtext, term);
+			if (mi_rtext_translate(mi))
+				rtext = _(rtext, term);
 
-				if (*rtext) {
-					/* There's a right text, so print it */
-					draw_menu_right_text(term, rtext, -1,
-							     menu->box.x,
-							     box.y, box.width, color);
-				}
+			if (*rtext) {
+				/* There's a right text, so print it */
+				draw_menu_right_text(term, rtext, -1,
+						     menu->box.x,
+						     box.y, box.width, color);
 			}
 		}
 	}

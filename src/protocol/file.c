@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.78 2003/06/23 23:12:35 jonas Exp $ */
+/* $Id: file.c,v 1.79 2003/06/23 23:29:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,6 +282,97 @@ struct file_info {
 	int fragmentlen;
 };
 
+static void
+add_dir_entry(struct directory_entry *entry, struct file_info *info,
+	      unsigned char *path, unsigned char *dircolor)
+{
+	unsigned char *lnk = NULL;
+	unsigned char *name = entry->name;
+	int namelen = strlen(name);
+	unsigned char *attrib = entry->attrib;
+	int attriblen = strlen(attrib);
+	unsigned char *fragment = info->fragment;
+	int fragmentlen = info->fragmentlen;
+
+#ifdef FS_UNIX_SOFTLINKS
+	if (attrib[0] == 'l') {
+		unsigned char *buf = NULL;
+		int bufsize = 0;
+		int rl = -1;
+		unsigned char *n = init_str();
+		int nl = 0;
+
+		if (!n) return;
+		add_to_str(&n, &nl, path);
+		add_htmlesc_str(&n, &nl, name, namelen);
+		do {
+			if (buf) mem_free(buf);
+			bufsize += ALLOC_GR;
+			buf = mem_alloc(bufsize);
+			if (!buf) break;
+			rl = readlink(n, buf, bufsize);
+		} while (rl == bufsize);
+
+		mem_free(n);
+		if (buf) {
+			if (rl != -1) {
+				buf[rl] = '\0';
+
+				lnk = buf;
+			} else {
+				mem_free(buf);
+			}
+		}
+	}
+#endif
+	/* add_to_str(&fragment, &fragmentlen, "   "); */
+	add_htmlesc_str(&fragment, &fragmentlen, attrib, attriblen);
+	add_to_str(&fragment, &fragmentlen, "<a href=\"");
+	add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
+	if (attrib[0] == 'd') {
+		add_chr_to_str(&fragment, &fragmentlen, '/');
+	} else if (lnk) {
+		struct stat st;
+		unsigned char *n = init_str();
+		int nl = 0;
+
+		if (n) {
+			add_to_str(&n, &nl, path);
+			add_htmlesc_str(&n, &nl, name, namelen);
+			if (!stat(n, &st) && S_ISDIR(st.st_mode))
+				add_chr_to_str(&fragment, &fragmentlen, '/');
+			mem_free(n);
+		}
+	}
+	add_to_str(&fragment, &fragmentlen, "\">");
+
+	if (attrib[0] == 'd' && *dircolor) {
+		/* The <b> is here for the case when we've
+		 * use_document_colors off. */
+		add_to_str(&fragment, &fragmentlen, "<font color=\"");
+		add_to_str(&fragment, &fragmentlen, dircolor);
+		add_to_str(&fragment, &fragmentlen, "\"><b>");
+	}
+
+	add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
+
+	if (attrib[0] == 'd' && *dircolor) {
+		add_to_str(&fragment, &fragmentlen, "</b></font>");
+	}
+
+	add_to_str(&fragment, &fragmentlen, "</a>");
+	if (lnk) {
+		add_to_str(&fragment, &fragmentlen, " -> ");
+		add_htmlesc_str(&fragment, &fragmentlen, lnk, strlen(lnk));
+		mem_free(lnk);
+	}
+
+	add_chr_to_str(&fragment, &fragmentlen, '\n');
+
+	info->fragment = fragment;
+	info->fragmentlen = fragmentlen;
+}
+
 /* First information such as permissions is gathered for each directory entry.
  * All entries are then sorted and finally the sorted entries are added to the
  * fragment one by one. */
@@ -289,8 +380,6 @@ static void
 add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_info *info)
 {
 	struct directory_entry *entries = NULL;
-	unsigned char *fragment = info->fragment;
-	int fragmentlen = info->fragmentlen;
 	int size = 0;
 	int i;
 	struct dirent *entry;
@@ -301,6 +390,8 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_info *info)
 	if (colorize_dir) {
 		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
 			(unsigned char *) &dircolor);
+	} else {
+		dircolor[0] = 0;
 	}
 
 	last_uid = -1;
@@ -361,96 +452,12 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_info *info)
 	}
 
 	for (i = 0; i < size; i++) {
-		unsigned char *lnk = NULL;
-		unsigned char *name = entries[i].name;
-		int namelen = strlen(name);
-		unsigned char *attrib = entries[i].attrib;
-		int attriblen = strlen(attrib);
-
-#ifdef FS_UNIX_SOFTLINKS
-		if (attrib[0] == 'l') {
-			unsigned char *buf = NULL;
-			int bufsize = 0;
-			int rl = -1;
-			unsigned char *n = init_str();
-			int nl = 0;
-
-			if (!n) continue;
-			add_to_str(&n, &nl, dirpath);
-			add_htmlesc_str(&n, &nl, name, namelen);
-			do {
-				if (buf) mem_free(buf);
-				bufsize += ALLOC_GR;
-				buf = mem_alloc(bufsize);
-				if (!buf) break;
-				rl = readlink(n, buf, bufsize);
-			} while (rl == bufsize);
-
-			mem_free(n);
-			if (buf) {
-				if (rl != -1) {
-					buf[rl] = '\0';
-
-					lnk = buf;
-				} else {
-					mem_free(buf);
-				}
-			}
-		}
-#endif
-		/* add_to_str(&fragment, &fragmentlen, "   "); */
-		add_htmlesc_str(&fragment, &fragmentlen, attrib, attriblen);
-		add_to_str(&fragment, &fragmentlen, "<a href=\"");
-		add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
-		if (attrib[0] == 'd') {
-			add_chr_to_str(&fragment, &fragmentlen, '/');
-		} else if (lnk) {
-			struct stat st;
-			unsigned char *n = init_str();
-			int nl = 0;
-
-			if (n) {
-				add_to_str(&n, &nl, dirpath);
-				add_htmlesc_str(&n, &nl, name, namelen);
-				if (!stat(n, &st) && S_ISDIR(st.st_mode))
-					add_chr_to_str(&fragment, &fragmentlen, '/');
-				mem_free(n);
-			}
-		}
-		add_to_str(&fragment, &fragmentlen, "\">");
-
-		if (attrib[0] == 'd' && colorize_dir) {
-			/* The <b> is here for the case when we've
-			 * use_document_colors off. */
-			add_to_str(&fragment, &fragmentlen, "<font color=\"");
-			add_to_str(&fragment, &fragmentlen, dircolor);
-			add_to_str(&fragment, &fragmentlen, "\"><b>");
-		}
-
-		add_htmlesc_str(&fragment, &fragmentlen, name, namelen);
-
-		if (attrib[0] == 'd' && colorize_dir) {
-			add_to_str(&fragment, &fragmentlen, "</b></font>");
-		}
-
-		add_to_str(&fragment, &fragmentlen, "</a>");
-		if (lnk) {
-			add_to_str(&fragment, &fragmentlen, " -> ");
-			add_htmlesc_str(&fragment, &fragmentlen, lnk, strlen(lnk));
-			mem_free(lnk);
-		}
-
-		add_chr_to_str(&fragment, &fragmentlen, '\n');
-	}
-
-	for (i = 0; i < size; i++) {
+		add_dir_entry(&entries[i], info, dirpath, dircolor);
 		if (entries[i].attrib) mem_free(entries[i].attrib);
 		if (entries[i].name) mem_free(entries[i].name);
 	}
-	mem_free(entries);
 
-	info->fragment = fragment;
-	info->fragmentlen = fragmentlen;
+	mem_free(entries);
 }
 
 /* Generates a HTML page listing the content of @directory with the path

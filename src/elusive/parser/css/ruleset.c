@@ -1,5 +1,5 @@
 /* CSS ruleset parsing */
-/* $Id: ruleset.c,v 1.1 2003/02/25 14:15:50 jonas Exp $ */
+/* $Id: ruleset.c,v 1.2 2003/06/08 12:29:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -487,10 +487,7 @@ css_parse_declarations(struct parser_state *state, unsigned char **src, int *len
 	unsigned char *css = *src;
 	int css_len = *len;
 
-#ifdef CSS_DEBUG
-	if (!pstate->data.declarations.nodes)
-		internal("Declarations misses nodes");
-#endif
+	assert(!pstate->data.declarations.nodes);
 
 	while (css_len) {
 		struct css_node *node;

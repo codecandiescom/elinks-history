@@ -1,5 +1,5 @@
 /* CSS atrule parsers */
-/* $Id: atrule.c,v 1.1 2003/02/25 14:15:50 jonas Exp $ */
+/* $Id: atrule.c,v 1.2 2003/06/08 12:29:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -368,10 +368,7 @@ css_parse_mediatypes(struct parser_state *state, unsigned char **src, int *len)
 	unsigned char *css = *src;
 	int css_len = *len;
 
-#ifdef CSS_DEBUG
-	if (!pstate->data.mediatypes.matched)
-		internal("Mediatype pointer not initialized");
-#endif
+	assert(!pstate->data.mediatypes.matched);
 
 	/* Handle error getting mediatype token */
 	if (pstate->data.mediatypes.name_len < 0) {

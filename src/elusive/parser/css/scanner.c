@@ -1,5 +1,5 @@
 /* CSS scanner utilities */
-/* $Id: scanner.c,v 1.3 2003/06/08 10:49:26 zas Exp $ */
+/* $Id: scanner.c,v 1.4 2003/06/08 12:29:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,10 +99,7 @@ css_scan_ident(struct parser_state *state, unsigned char **src, int *len)
 	unsigned char *css = *src;
 	int css_len = *len;
 
-#ifdef DEBUG
-	if (!pstate->data.token.str || !pstate->data.token.len)
-		internal("token pointers not initialized");
-#endif
+	assert(!pstate->data.token.str || !pstate->data.token.len);
 
 	/* Signal error if expected <ident> token is not found */
 	if (css_len) {
@@ -164,10 +161,7 @@ css_scan_name(struct parser_state *state, unsigned char **src, int *len)
 	unsigned char *css = *src;
 	int css_len = *len;
 
-#ifdef DEBUG
-	if (!pstate->data.token.str || !pstate->data.token.len)
-		internal("token pointers not initialized");
-#endif
+	assert(!pstate->data.token.str || !pstate->data.token.len);
 
 	while (css_len) {
 		/* TODO investigate the currious '-' allowed in <name> tokens */
@@ -229,12 +223,8 @@ css_scan_string(struct parser_state *state, unsigned char **src, int *len)
 	int css_len = *len;
 	unsigned char delimiter = pstate->data.token.extra;
 
-#ifdef DEBUG
-	if (!pstate->data.token.str
-		|| !pstate->data.token.len
-		|| !pstate->data.token.extra)
-		internal("token pointers not initialized");
-#endif
+	assert(!pstate->data.token.str || !pstate->data.token.len
+		|| !pstate->data.token.extra);
 
 
 	while (css_len) {
@@ -294,10 +284,7 @@ css_scan_url(struct parser_state *state, unsigned char **src, int *len)
 	unsigned char *css = *src;
 	int css_len = *len;
 
-#ifdef DEBUG
-	if (!pstate->data.token.str || !pstate->data.token.len)
-		internal("token pointers not initialized");
-#endif
+	bug_on(pstate->data.token.str && !pstate->data.token.len);
 
 	/* Handle no url string */
 	if (*pstate->data.token.len == -1) {
@@ -366,10 +353,7 @@ css_scan_escape(struct parser_state *state, unsigned char **src, int *len)
 	/* More state variables to keep track of what is escaped
 	 * http://lxr.mozilla.org/seamonkey/source/content/html/style/src/nsCSSScanner.cpp#658 */
 
-#ifdef DEBUG
-	if (!pstate->data.token.str)
-		internal("token pointer not initialized");
-#endif
+	assert(!pstate->data.token.str);
 
 	/* Assume the \ has been skipped already */
 	while (css_len && escaped == -1) {
@@ -413,10 +397,7 @@ css_scan_unicoderange(struct parser_state *state, unsigned char **src, int *len)
 	int css_len = *len;
 	int hexdigits;
 
-#ifdef DEBUG
-	if (!pstate->data.unicoderange.from_len)
-		internal("signal pointer not initialized");
-#endif
+	assert(!pstate->data.unicoderange.from_len);
 
 	if (!css_len || *css != 'U') {
 		*pstate->data.unicoderange.from_len = -1;
@@ -495,10 +476,7 @@ css_scan_hexcolor(struct parser_state *state, unsigned char **src, int *len)
 	int css_len = *len;
 	int hexdigits;
 
-#ifdef DEBUG
-	if (!pstate->data.token.len)
-		internal("token pointer not initialized");
-#endif
+	assert(!pstate->data.token.len);
 
 	if (!css_len || *css != '#') {
 		*pstate->data.token.len = -1;

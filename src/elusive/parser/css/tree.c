@@ -1,5 +1,5 @@
 /* CSS tree utility tools */
-/* $Id: tree.c,v 1.3 2003/06/08 10:49:26 zas Exp $ */
+/* $Id: tree.c,v 1.4 2003/06/08 12:29:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,9 +110,7 @@ add_css_node(struct parser_state *state)
 {
 	struct css_node *node = state->current;
 
-#ifdef CSS_DEBUG
-	if (!node) internal("Trying to add non-existing css node");
-#endif
+	assert(!node);
 
 	/* Do we have to set up the root or just descend ? */
 	if (!state->root) {
@@ -202,9 +200,7 @@ add_css_attr(struct parser_state *state, unsigned char *name,
 	struct css_attr_match *attr = mem_calloc(1, sizeof(struct css_attr));
 	struct css_attr_match *other;
 
-#ifdef CSS_DEBUG
-	if (!node) internal("Trying to add attribute to nonexisting css node");
-#endif
+	assert(!node);
 
 	if (!attr) return NULL;
 

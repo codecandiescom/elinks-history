@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.41 2003/04/30 21:30:53 zas Exp $ */
+/* $Id: menu.c,v 1.42 2003/05/01 11:08:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,8 @@ find_hotkey_pos(unsigned char *text)
 }
 
 static void
-init_hotkeys(struct terminal *term, struct menu_item *items, int ni, int hotkeys)
+init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
+	     int hotkeys)
 {
 	int i;
 
@@ -188,8 +189,6 @@ select_menu(struct terminal *term, struct menu *menu)
 	void *data2 = menu->data;
 
 	func = it->func;
-
-	refresh_hotkeys(term, menu);
 
 	if (menu->selected < 0 ||
 	    menu->selected >= menu->ni ||
@@ -320,8 +319,6 @@ display_menu(struct terminal *term, struct menu *menu)
 	int menu_selected_color = get_bfu_color(term, "menu.selected");
 	int menu_hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
 	int menu_selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
-
-	refresh_hotkeys(term, menu);
 
 	fill_area(term,	menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2,
 		  menu_normal_color);

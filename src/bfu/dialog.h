@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.42 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: dialog.h,v 1.43 2004/11/17 19:07:28 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -12,10 +12,6 @@
 
 struct dialog_data;
 struct term_event;
-
-/* Event handlers return this values */
-#define	EVENT_PROCESSED		0
-#define EVENT_NOT_PROCESSED	1
 
 struct dialog_layout {
 	/* Whether to adjust the dialog width to the maximal width. If not set
@@ -57,7 +53,7 @@ struct dialog {
 	struct dialog_refresh *refresh;
 
 	void (*layouter)(struct dialog_data *);
-	int (*handle_event)(struct dialog_data *, struct term_event *);
+	t_handler_event_status (*handle_event)(struct dialog_data *, struct term_event *);
 	void (*abort)(struct dialog_data *);
 
 	struct dialog_layout layout;
@@ -122,9 +118,9 @@ void draw_dialog(struct dialog_data *dlg_data, int width, int height);
  * dialog items are redisplayed. */
 void redraw_dialog(struct dialog_data *dlg_data, int layout);
 
-int ok_dialog(struct dialog_data *, struct widget_data *);
-int cancel_dialog(struct dialog_data *, struct widget_data *);
-int clear_dialog(struct dialog_data *, struct widget_data *);
+t_handler_event_status ok_dialog(struct dialog_data *, struct widget_data *);
+t_handler_event_status cancel_dialog(struct dialog_data *, struct widget_data *);
+t_handler_event_status clear_dialog(struct dialog_data *, struct widget_data *);
 int check_dialog(struct dialog_data *);
 int update_dialog_data(struct dialog_data *, struct widget_data *);
 void generic_dialog_layouter(struct dialog_data *dlg_data);

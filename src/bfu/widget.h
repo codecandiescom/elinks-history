@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.55 2004/05/26 16:43:31 zas Exp $ */
+/* $Id: widget.h,v 1.56 2004/11/17 19:07:28 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -28,13 +28,23 @@ enum widget_type {
 		assert(n == (dlg)->widgets_size);			\
 	} while (0)
 
+
+/* Event handlers return this values */
+typedef enum t_handler_event_status {
+	EVENT_PROCESSED	= 0,
+	EVENT_NOT_PROCESSED = 1
+} t_handler_event_status;
+
+/* TODO: wrapper for handler functions */
+
+
 struct widget_ops {
 	/* XXX: Order matters here. --Zas */
-	void (*display)(struct widget_data *, struct dialog_data *, int);
-	void (*init)(struct widget_data *, struct dialog_data *, struct term_event *);
-	int (*mouse)(struct widget_data *, struct dialog_data *, struct term_event *);
-	int (*kbd)(struct widget_data *, struct dialog_data *, struct term_event *);
-	void (*select)(struct widget_data *, struct dialog_data *);
+	t_handler_event_status (*display)(struct widget_data *, struct dialog_data *, int);
+	t_handler_event_status (*init)(struct widget_data *, struct dialog_data *, struct term_event *);
+	t_handler_event_status (*mouse)(struct widget_data *, struct dialog_data *, struct term_event *);
+	t_handler_event_status (*kbd)(struct widget_data *, struct dialog_data *, struct term_event *);
+	t_handler_event_status (*select)(struct widget_data *, struct dialog_data *);
 };
 
 
@@ -46,7 +56,7 @@ struct widget {
 
 	void *udata;
 
-	int (*fn)(struct dialog_data *, struct widget_data *);
+	t_handler_event_status (*fn)(struct dialog_data *, struct widget_data *);
 
 	union {
 		struct {

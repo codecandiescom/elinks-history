@@ -1,16 +1,24 @@
 # To build rpm: rpmbuild -bb elinks.spec
 # Debug version: rpmbuild -bb elinks.spec --debug
 # Console version without X11 dependency: rpmbuild -bb elinks.spec --without x
+# by default all features are enabled
+# Conditional builds:
+# --without 256 # build without support for 256 colors on xterm
+# --without bzlib
+# --without cgi # build without local cgi support
+# --without gpm # build without GPM support
+# --without leds # disable leds support
+# --without lua # build without lua scripting engine
+# --without openssl
+# --without smb # build without support for SMB protocol
+# --without x # without X11 dependency (X11 libs are used only for restoring title
+# in xterm)
+# --without zlib #
+# --with guile # build with guile scripting engine
+# --with perl # build with Perl scripting engine
 #
 # This file was contributed by <zimon@niksula.hut.fi> and
 # <yanek@yankuv.koniec.sk>.
-#
-#
-# If you want to update this file, I'd like you to push your change through at
-# least one of these people:
-#
-# * <bet@rahul.net>
-# * <yanek@yankuv.koniec.sk>
 #
 # Just try to send the patch/new version to them and wait few days if they will
 # do anything. If yes, they'll approve it or forward it to me (don't fear, the
@@ -20,7 +28,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.16 2003/12/10 00:24:09 witekfl Exp $
+# $Id: elinks.spec.in,v 1.17 2004/03/25 17:34:59 witekfl Exp $
 
 Summary:	Enhanced version of Links (Lynx-like text WWW browser)
 Name:		elinks
@@ -63,10 +71,20 @@ provide good rock-solid releases inside stable branches.
 %configure \
 %{?debug:	--enable-debug} \
 %{!?debug:	--enable-fastmem} \
-	--enable-256-colors \
 %{?_without_x: --without-x} \
-	--enable-leds \
-	--enable-local-cgi
+%{?_without_lua: --without-lua} \
+%{?_without_zlib: --without-zlib} \
+%{?_without_bzlib: --without-bzlib} \
+%{?_without_gpm: --without-gpm} \
+%{?_without_openssl: --without-openssl} \
+%{?_with_guile: --with-guile} \
+%{?_with_perl: --with-perl}
+
+%{!?_without_leds: echo "#define CONFIG_LEDS" >> feature.h}
+%{!?_without_256:	echo "#define CONFIG_256_COLORS" >> feature.h}
+%{?_without_smb: echo "#undef CONFIG_SMB" >> feature.h}
+%{!?_without_cgi: echo -e "#ifdef HAVE_SETENV\n#define CONFIG_CGI\n#endif" >> feature.h}
+
 %{__make}
 
 cd doc
@@ -76,7 +94,7 @@ cd ..
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/{contrib,conv,lua,guile}
+install -d $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/{contrib,conv,lua,guile,perl}
 install \
 	AUTHORS* BUGS* ChangeLog* COPYING* README* SITES* TODO* THANKS* \
 	INSTALL* NEWS* $RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/
@@ -93,6 +111,9 @@ install \
 install \
 	contrib/guile/*scm \
 	$RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/guile/
+install \
+	contrib/perl/hooks.pl \
+	$RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/perl
 install \
 	doc/*.txt doc/*.html \
 	$RPM_BUILD_ROOT/%{_defaultdocdir}/%{name}/
@@ -112,6 +133,10 @@ rm -rf $RPM_BUILD_ROOT
 
 # date +"%a %b %d %Y"
 %changelog
+* Thu Mar 25 2004 Witold Filipczyk <witekfl@pld-linux.org>
+- a lot of bconds
+- added hooks.pl
+
 * Wed Dec 10 2003 Witold Filipczyk <witekfl@pld-linux.org>
 - enabled leds and local-cgi
 

@@ -1,1 +1,53 @@
 See ChangeLog for recent changes, bugfixes and new features.
+
+ELinks-0.4pre:
+
+* Merged HTTP_AUTH
+* Rewritten part of cookies parsing
+* cookies parser rewritten
+* support for tabindex,accesskey attribute
+* source layout was dramatically reorganized
+* FTP works now even with servers not requiring/supporting PASS command and
+servers not able to proccess more commands at once (Novell, MS IIS, ..)
+* Global history support (+vlink support)
+* show URL being visited in xterm title bar
+* make some modules (cookies,bookmarks,globhistm,,) optional at compile time
+* basic proxy auth support
+* secure saving support (see secure_save option desc. if you're doing weird
+  things with your links files like symlinking or nonstandart permissions!!!)
+* support for utf8 i/o
+* clicking on the edges of screen will make the document scroll in that dir
+* win32/cygwin support enhancements
+* parsing/rendering performance enhancements
+* internal gzip/bzip2 decompression support
+
+ELinks-0.3.0:
+
+* unhistory
+* external textarea editor
+* DNS rewrite - we handle multi RR per host correctly
+* IPv6 support
+* rewritten options handling
+* bookmarks filtering (aka bookmarks search)
+* bookmarks resaving (save on the disk after every change)
+* added possibility to change default colors settings
+
+Links-0.96-pb3:
+
+* secured cookies file creation
+* support for title attribute of img tag
+* Catalan translation
+* Romanian translation
+* changing of User-Agent string sent to webserver
+* <listing> tag support
+
+Links-0.96-pb2:
+
+* cookies expiration, saving and resaving
+* do NOT strip everything after ? in form action
+* http referer, true http referer
+* limited textarea external editor support
+* partial fix of &#13;
+* enhanced manual page
+* fixed multi-level HTTP moved when using -dump/-source
+* fixed keybindings

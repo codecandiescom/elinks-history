@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.142 2003/07/02 23:38:28 pasky Exp $ */
+/* $Id: view.c,v 1.143 2003/07/02 23:41:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2321,28 +2321,28 @@ field_op(struct session *ses, struct f_data_c *f, struct link *l,
 				}
 				break;
 			case ACT_HOME:
-				if (frm->type == FC_TEXTAREA)
+				if (frm->type == FC_TEXTAREA) {
 					if (textarea_op_home(fs, frm))
 						goto b;
-				else fs->state = 0;
+				} else fs->state = 0;
 				break;
 			case ACT_UP:
-				if (frm->type == FC_TEXTAREA)
+				if (frm->type == FC_TEXTAREA) {
 					if (textarea_op_up(fs, frm))
 						goto b;
-				else x = 0;
+				} else x = 0;
 				break;
 			case ACT_DOWN:
-				if (frm->type == FC_TEXTAREA)
+				if (frm->type == FC_TEXTAREA) {
 					if (textarea_op_down(fs, frm))
 						goto b;
-				else x = 0;
+				} else x = 0;
 				break;
 			case ACT_END:
-				if (frm->type == FC_TEXTAREA)
+				if (frm->type == FC_TEXTAREA) {
 					if (textarea_op_end(fs, frm))
 						goto b;
-				else fs->state = strlen(fs->value);
+				} else fs->state = strlen(fs->value);
 				break;
 			case ACT_EDIT:
 				if (frm->type == FC_TEXTAREA && !frm->ro)
@@ -2377,10 +2377,10 @@ field_op(struct session *ses, struct f_data_c *f, struct link *l,
 				break;
 			}
 			case ACT_ENTER:
-				if (frm->type == FC_TEXTAREA)
+				if (frm->type == FC_TEXTAREA) {
 					if (textarea_op_enter(fs, frm))
 						goto b;
-				else x = 0;
+				} else x = 0;
 				break;
 			case ACT_BACKSPACE:
 				if (!frm->ro && fs->state)

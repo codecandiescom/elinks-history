@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.5 2003/05/05 09:37:51 zas Exp $ */
+/* $Id: draw.c,v 1.6 2003/05/06 20:25:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,11 +57,12 @@ void
 set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
 	int i = (x >= 0) ? 0 : -x;
+	int end = (x + l <= t->x) ? l : t->x - x;
 	int offset = x + t->x * y;
 
 	t->dirty = 1;
 
-	for (; i < ((x + l <= t->x) ? l : t->x - x); i++)
+	for (; i < end; i++)
 		t->screen[i + offset] = line[i];
 }
 
@@ -69,11 +70,12 @@ void
 set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 {
 	int i = (x >= 0) ? 0 : -x;
+	int end = (x + l <= t->x) ? l : t->x - x;
 	int offset = x + t->x * y;
 
 	t->dirty = 1;
 
-	for (; i < ((x + l <= t->x) ? l : t->x - x); i++) {
+	for (; i < end; i++) {
 		int p = i + offset;
 
 		t->screen[p] = (t->screen[p] & 0x80ff) | (c & ~0x80ff);

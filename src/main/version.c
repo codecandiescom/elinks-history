@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.14 2003/08/01 17:28:38 zas Exp $ */
+/* $Id: version.c,v 1.15 2003/09/04 12:31:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@ get_version(void)
 	return (unsigned char *) "ELinks " VERSION_STRING;
 }
 
-/* @more will add longer informations especially for info box. */
+/* @more will add more information especially for info box. */
 unsigned char *
 get_dyn_full_version(struct terminal *term, int more)
 {

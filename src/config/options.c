@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.269 2003/09/03 22:34:56 zas Exp $ */
+/* $Id: options.c,v 1.270 2003/09/04 12:31:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1174,7 +1174,7 @@ register_options(void)
 		N_("Cache options."));
 	get_opt_rec(config_options, "document.cache")->change_hook = change_hook_cache;
 
-	add_opt_bool("document.cache", N_("Cache informations about redirects"),
+	add_opt_bool("document.cache", N_("Cache information about redirects"),
 		"cache_redirects", 0, 0,
 		N_("Cache even redirects sent by server (usually thru HTTP by a 302\n"
 		"HTTP code and a Location header). This was the original behaviour\n"

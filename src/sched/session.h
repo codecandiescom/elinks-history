@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.40 2003/07/28 16:18:56 zas Exp $ */
+/* $Id: session.h,v 1.41 2003/09/04 12:31:09 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -26,7 +26,7 @@ struct initial_session_info {
 	unsigned char *url;
 };
 
-/* This is for map_selected(), it is used to pass around informations about
+/* This is for map_selected(), it is used to pass around information about
  * in-imagemap links. */
 struct link_def {
 	unsigned char *link;

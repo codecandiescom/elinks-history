@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.76 2003/08/24 14:30:56 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.77 2003/09/04 12:31:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,7 +379,7 @@ static struct strtonum action_table[] = {
 	{ "copy-clipboard", ACT_COPY_CLIPBOARD, N_("Copy text to clipboard") },
 	{ "cut-clipboard", ACT_CUT_CLIPBOARD, N_("Delete text from clipboard") },
 	{ "delete", ACT_DELETE, N_("Delete character under cursor") },
-	{ "document-info", ACT_DOCUMENT_INFO, N_("Show informations about the current page") },
+	{ "document-info", ACT_DOCUMENT_INFO, N_("Show information about the current page") },
 	{ "down", ACT_DOWN, N_("Move cursor downwards") },
 	{ "download", ACT_DOWNLOAD, N_("Download the current link") },
 	{ "download-image", ACT_DOWNLOAD_IMAGE, N_("Download the current image") },
@@ -395,7 +395,7 @@ static struct strtonum action_table[] = {
 	{ "goto-url-current", ACT_GOTO_URL_CURRENT, N_("Open \"Go to URL\" dialog box containing the current URL") },
 	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK, N_("Open \"Go to URL\" dialog box containing the current link URL") },
 	{ "goto-url-home", ACT_GOTO_URL_HOME, N_("Go to the homepage") },
-	{ "header-info", ACT_HEADER_INFO, N_("Show informations about the current page HTTP headers") },
+	{ "header-info", ACT_HEADER_INFO, N_("Show information about the current page HTTP headers") },
 	{ "history-manager", ACT_HISTORY_MANAGER, N_("Open history manager") },
 	{ "home", ACT_HOME, N_("Go to the start of the page/line") },
 	{ "kill-to-bol", ACT_KILL_TO_BOL, N_("Delete to beginning of line") },

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.41 2002/11/27 17:14:18 zas Exp $ */
+/* $Id: kbdbind.c,v 1.42 2002/11/28 13:45:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -508,6 +508,8 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_SCROLL_DOWN, 'N', KBD_CTRL },
 	{ ACT_SCROLL_LEFT, '[', 0 },
 	{ ACT_SCROLL_RIGHT, ']', 0 },
+	{ ACT_SCROLL_LEFT, '{', 0 },
+	{ ACT_SCROLL_RIGHT, '}', 0 },
 	{ ACT_HOME, KBD_HOME, 0 },
 	{ ACT_HOME, 'A', KBD_CTRL },
 	{ ACT_END, KBD_END, 0 },
@@ -516,6 +518,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_ENTER, KBD_ENTER, 0 },
 	{ ACT_ENTER_RELOAD, KBD_RIGHT, KBD_CTRL },
 	{ ACT_ENTER_RELOAD, KBD_ENTER, KBD_CTRL },
+	{ ACT_ENTER_RELOAD, 'x', 0 },
 	{ ACT_BACK, KBD_LEFT, 0 },
 	{ ACT_UNBACK, 'u', 0 },
 	{ ACT_UNBACK, 'U', 0 },

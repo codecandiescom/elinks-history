@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.40 2004/09/25 17:40:24 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.41 2004/09/25 17:52:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,29 +238,19 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	VALUE_TO_JSVAL_END(vp);
 }
 
-static JSBool location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+static void location_goto(struct document_view *doc_view, unsigned char *url);
 
 static JSBool
 window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
+	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+
 	JSVAL_TO_VALUE_START;
 	if (JSVAL_IS_STRING(id)) {
 		JSVAL_REQUIRE(&id, STRING);
 		if (!strcmp(v.string, "location")) {
-			jsval location;
-			JSObject *locobj;
-
-			if (!JS_GetProperty(ctx, obj, "location", &location)) {
-				goto bye;
-			}
-			locobj = JSVAL_TO_OBJECT(location);
-			if (!locobj) {
-				INTERNAL("Asking for window's location yielded "
-				         "NULL object.");
-				goto bye;
-			}
-			location_set_property(ctx, locobj,
-					      /* JSP_LOC_HREF */ 0, vp);
+			JSVAL_REQUIRE(vp, STRING);
+			location_goto(doc_view, v.string);
 		}
 		goto bye;
 	} else if (!JSVAL_IS_INT(id))
@@ -371,6 +361,7 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 
 static JSBool location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+static JSBool location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 
 static const JSClass location_class = {
 	"location",
@@ -420,21 +411,8 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_LOC_HREF:
 	{
-		unsigned char *new_abs_url;
-		struct uri *new_uri;
-
 		JSVAL_REQUIRE(vp, STRING);
-		new_abs_url = join_urls(doc_view->document->uri,
-		                        trim_chars(v.string, ' ', 0));
-		if (!new_abs_url)
-			break;
-		new_uri = get_uri(new_abs_url, 0);
-		mem_free(new_abs_url);
-		if (!new_uri)
-			break;
-		goto_uri_frame(doc_view->session, new_uri, doc_view->name,
-			       CACHE_MODE_NORMAL);
-		done_uri(new_uri);
+		location_goto(doc_view, v.string);
 		break;
 	}
 	}
@@ -454,6 +432,25 @@ static JSBool
 location_toString(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
 	return JS_GetProperty(ctx, obj, "href", rval);
+}
+
+static void
+location_goto(struct document_view *doc_view, unsigned char *url)
+{
+	unsigned char *new_abs_url;
+	struct uri *new_uri;
+
+	new_abs_url = join_urls(doc_view->document->uri,
+	                        trim_chars(url, ' ', 0));
+	if (!new_abs_url)
+		return;
+	new_uri = get_uri(new_abs_url, 0);
+	mem_free(new_abs_url);
+	if (!new_uri)
+		return;
+	goto_uri_frame(doc_view->session, new_uri, doc_view->name,
+		       CACHE_MODE_NORMAL);
+	done_uri(new_uri);
 }
 
 

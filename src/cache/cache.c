@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.86 2003/11/08 12:34:15 zas Exp $ */
+/* $Id: cache.c,v 1.87 2003/11/08 13:03:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,7 +135,8 @@ get_cache_entry(unsigned char *url, struct cache_entry **cep)
 	ce->incomplete = 1;
 	init_list(ce->frag);
 	ce->id_tag = id_tag_counter++;
-
+	cache_entry_nolock(ce); /* Debugging purpose. */
+	
 	add_to_list(cache, ce);
 	*cep = ce;
 

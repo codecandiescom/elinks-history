@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.30 2003/11/08 12:48:33 pasky Exp $ */
+/* $Id: cache.h,v 1.31 2003/11/08 13:03:50 zas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -46,10 +46,25 @@ struct cache_entry {
 	enum cache_mode cache_mode;
 };
 
+#if 0
+#define DEBUG_CACHE_ENTRIES_LOCKS
+#endif
+
+#ifdef DEBUG_CACHE_ENTRIES_LOCKS
+#define ce_lock_debug(ce, info) debug("cache entry %p lock %s url=%s", ce, info, ce->url)
+#define ce_sanity_check(ce) do { assert(ce); assertm((ce)->locks >= 0, "Cache entry lock underflow."); } while (0)
+#else
+#define ce_lock_debug(ce, info)
+#define ce_sanity_check(ce)
+#endif
+
 #define get_cache_entry_locks(ce) ((ce)->locks)
 #define is_cache_entry_locked(ce) (!!(ce)->locks)
-#define cache_entry_lock(ce) do { (ce)->locks++; } while (0)
-#define cache_entry_unlock(ce) do { (ce)->locks--; } while (0)
+#define cache_entry_lock(ce) do { ce_sanity_check(ce); (ce)->locks++; ce_lock_debug(ce, "+1"); } while (0)
+#define cache_entry_unlock(ce) do { (ce)->locks--; ce_lock_debug(ce, "-1"); ce_sanity_check(ce);} while (0)
+
+/* Please keep this one. It serves for debugging. --Zas */
+#define cache_entry_nolock(ce) do { ce_sanity_check(ce); ce_lock_debug(ce, "0"); } while (0)
 
 struct fragment {
 	LIST_HEAD(struct fragment);

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-01-18 00:13+0100\n"
-"PO-Revision-Date: 2004-01-17 23:49+0100\n"
+"PO-Revision-Date: 2004-01-18 00:20+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -515,23 +515,21 @@ msgstr ""
 
 #: src/config/cmdline.c:441
 msgid "Name of directory with configuration file"
-msgstr ""
+msgstr "Jméno adresáøe s konfiguraèním souborem"
 
 #: src/config/cmdline.c:443
-#, fuzzy
 msgid ""
 "ELinks will read and write its config files to the given\n"
 "directory instead of ~/.elinks. If the path begins with\n"
 "a '/' its used as an absolute path. Else it is assumed to\n"
 "be relative to your HOME dir."
 msgstr ""
-"ELinks bude pou¾ívat daný adresáø s konfigurací, místo toho aby ho zkusil\n"
-"najít sám v závislosti na výchozím nastavení. Pokud cesta zaèíná lomítkem,\n"
-"je pova¾ována za absolutní cestu, jinak se pøedpokládá, ¾e je relativní\n"
-"k va¹emu domovskému adresáøi."
+"ELinks bude pou¾ívat daný adresáø s konfigurací místo standardního\n"
+"~/.elinks. Pokud cesta zaèíná lomítkem, je pova¾ována za absolutní\n"
+"cestu, jinak se pøedpokládá, ¾e je relativní k va¹emu domovskému\n"
+"adresáøi."
 
 #: src/config/cmdline.c:448
-#, fuzzy
 msgid "Name of configuration file"
 msgstr "Jméno konfiguraèního souboru"
 
@@ -1028,9 +1026,8 @@ msgid "Menu mapping"
 msgstr "Meòátka"
 
 #: src/config/kbdbind.c:392
-#, fuzzy
 msgid "Do nothing"
-msgstr "Stahování"
+msgstr "Neudìlej nic"
 
 #: src/config/kbdbind.c:393
 msgid "Abort connection"
@@ -1065,7 +1062,6 @@ msgid "Delete character in front of the cursor"
 msgstr "Smazání znaku pøed kurzorem"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Go to the first line of the buffer"
 msgstr "Jít na první øádku bufferu."
 
@@ -1135,7 +1131,6 @@ msgid "Go to the end of the page/line"
 msgstr "Jít na konec stránky èi øádky"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Go to the last line of the buffer"
 msgstr "Jít na poslední øádku bufferu."
 
@@ -4093,7 +4088,7 @@ msgid "Copying"
 msgstr "Kopírování"
 
 #: src/dialogs/info.c:134
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -4112,7 +4107,7 @@ msgstr ""
 "\n"
 "Tento program je volné programové vybavení; mù¾ete jej ¹íøit a modifikovat "
 "podle ustanovení Obecné veøejné licence GNU, vydávané Free Software "
-"Foundation; a to verze 2 a vý¹e této licence."
+"Foundation; a to konkrétnì verze 2 této licence."
 
 #: src/dialogs/info.c:152
 #, c-format

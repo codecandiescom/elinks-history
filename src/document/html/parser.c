@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.427 2004/05/26 16:32:00 jonas Exp $ */
+/* $Id: parser.c,v 1.428 2004/06/05 21:03:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,7 +232,7 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 	if (!url) return;
 
 	/* HTML <head> urls should already be fine but we can.t detect them. */
-	import_url = join_urls(format.href_base, url);
+	import_url = join_urls(struri(format.href_base), url);
 	mem_free(url);
 
 	if (!import_url) return;
@@ -623,22 +623,24 @@ html_base(unsigned char *a)
 
 	if (al) {
 		struct html_element *element = html_stack.prev;
-		unsigned char *base = join_urls(element->attr.href_base, al);
+		unsigned char *base = join_urls(struri(element->attr.href_base), al);
+		struct uri *uri = base ? get_uri(base, -1) : NULL;
 
 		mem_free(al);
+		mem_free_if(base);
 
-		if (!base) return;
-		mem_free_set(&element->attr.href_base, base);
+		if (!uri) return;
 
 		/* Now distribute the base URL */
 		foreach (element, html_stack) {
-			if (format.href_base != base) {
-				unsigned char *url = stracpy(base);
+			if (compare_uri(element->attr.href_base, uri, 0))
+				continue;
 
-				if (!url) continue;
-				mem_free_set(&element->attr.href_base, url);
-			}
+			done_uri(element->attr.href_base);
+			element->attr.href_base = uri;
 		}
+
+		done_uri(uri);
 	}
 
 	al = get_target(a);
@@ -828,7 +830,7 @@ html_frame(unsigned char *a)
 	if (!src) {
 		url = stracpy("");
 	} else {
-		url = join_urls(format.href_base, src);
+		url = join_urls(struri(format.href_base), src);
 		mem_free(src);
 	}
 	if (!url) return;
@@ -940,7 +942,7 @@ process_head(unsigned char *head)
 			if (errno || seconds > 7200) seconds = 0;
 
 			html_focusable(NULL);
-			url = join_urls(format.href_base, saved_url);
+			url = join_urls(struri(format.href_base), saved_url);
 			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
 			special_f(ff, SP_REFRESH, seconds, url);
 			mem_free(url);
@@ -1296,7 +1298,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	format.clink = options->default_link;
 	format.vlink = options->default_vlink;
 
-	format.href_base = stracpy(struri(uri));
+	format.href_base = get_uri_reference(uri);
 	format.target_base = null_or_stracpy(options->framename);
 
 	par_format.align = AL_LEFT;

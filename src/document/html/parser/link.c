@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.7 2004/05/30 19:56:09 jonas Exp $ */
+/* $Id: link.c,v 1.8 2004/06/05 21:03:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	mem_free_set(&format.title, NULL);
 	format.form = NULL;
 	put_chrs(prefix, strlen(prefix), put_chars_f, ff);
-	format.link = join_urls(format.href_base, link);
+	format.link = join_urls(struri(format.href_base), link);
 	format.target = stracpy(target);
 	format.fg = format.clink;
 	put_chrs(linkname, strlen(linkname), put_chars_f, ff);
@@ -75,7 +75,7 @@ html_a(unsigned char *a)
 		unsigned char *target;
 
 		mem_free_set(&format.link,
-			     join_urls(format.href_base,
+			     join_urls(struri(format.href_base),
 				       trim_chars(href, ' ', 0)));
 
 		mem_free(href);
@@ -126,7 +126,7 @@ html_img(unsigned char *a)
 		html_stack_dup(ELEMENT_KILLABLE);
 		mem_free_if(format.link);
 		if (format.form) format.form = NULL;
-		u = join_urls(format.href_base, al);
+		u = join_urls(struri(format.href_base), al);
 		if (!u) {
 			mem_free(al);
 			return;
@@ -238,7 +238,7 @@ html_img(unsigned char *a)
 		if (!s) s = get_url_val(a, "src");
 		if (!s) s = get_url_val(a, "dynsrc");
 		if (s) {
-			format.image = join_urls(format.href_base, s);
+			format.image = join_urls(struri(format.href_base), s);
 			mem_free(s);
 		}
 

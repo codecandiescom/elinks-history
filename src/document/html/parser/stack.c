@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.10 2004/04/24 00:18:33 pasky Exp $ */
+/* $Id: stack.c,v 1.11 2004/06/05 21:03:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 
 #include "document/html/parser/stack.h"
 #include "document/html/parser.h"
+#include "protocol/uri.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/lists.h"
@@ -85,9 +86,9 @@ kill_html_stack_item(struct html_element *e)
 	mem_free_if(e->attr.target);
 	mem_free_if(e->attr.image);
 	mem_free_if(e->attr.title);
-	mem_free_if(e->attr.href_base);
 	mem_free_if(e->attr.target_base);
 	mem_free_if(e->attr.select);
+	done_uri(e->attr.href_base);
 	del_from_list(e);
 	mem_free(e);
 #if 0
@@ -116,7 +117,6 @@ html_stack_dup(enum html_element_type type)
 	if (ep->attr.target) e->attr.target = stracpy(ep->attr.target);
 	if (ep->attr.image) e->attr.image = stracpy(ep->attr.image);
 	if (ep->attr.title) e->attr.title = stracpy(ep->attr.title);
-	if (ep->attr.href_base) e->attr.href_base = stracpy(ep->attr.href_base);
 	if (ep->attr.target_base) e->attr.target_base = stracpy(ep->attr.target_base);
 	if (ep->attr.select) e->attr.select = stracpy(ep->attr.select);
 
@@ -132,6 +132,7 @@ html_stack_dup(enum html_element_type type)
 	}
 #endif
 
+	e->attr.href_base = get_uri_reference(ep->attr.href_base);
 	e->name = e->options = NULL;
 	e->namelen = 0;
 	e->type = type;

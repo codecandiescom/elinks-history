@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.13 2004/05/29 00:53:48 jonas Exp $ */
+/* $Id: forms.c,v 1.14 2004/06/05 21:03:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,10 +84,10 @@ get_html_form(unsigned char *a, struct form *form)
 
 	al = get_attr_val(a, "action");
 	if (al) {
-		form->action = join_urls(format.href_base, trim_chars(al, ' ', 0));
+		form->action = join_urls(struri(format.href_base), trim_chars(al, ' ', 0));
 		mem_free(al);
 	} else {
-		form->action = stracpy(format.href_base);
+		form->action = stracpy(struri(format.href_base));
 		if (form->action) {
 			int len = get_no_post_url_length(form->action);
 
@@ -323,7 +323,7 @@ no_type_attr:
 			al = get_url_val(a, "src");
 			if (!al) al = get_url_val(a, "dynsrc");
 			if (al) {
-				format.image = join_urls(format.href_base, al);
+				format.image = join_urls(struri(format.href_base), al);
 				mem_free(al);
 			}
 			format.attr |= AT_BOLD;

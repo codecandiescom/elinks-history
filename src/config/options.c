@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.274 2003/09/19 22:30:07 jonas Exp $ */
+/* $Id: options.c,v 1.275 2003/09/29 23:44:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1783,9 +1783,13 @@ register_options(void)
 		"This is particularly useful when we have a block cursor,\n"
 		"so that inversed text is displayed correctly."));
 
-	add_opt_bool("terminal._template_", N_("Use colors"),
-		"colors", 0, 0,
-		N_("If we should use colors."));
+	add_opt_int("terminal._template_", N_("Color mode"),
+		"colors", 0, 0, 2, 0,
+		N_("The color mode controls what colors are used and how they are"
+		"output to the terminal. The color modes are:\n"
+		"0 is mono mode, only 2 colors are used\n"
+		"1 is 16 color mode, uses the common ANSI colors\n"
+		"2 is 256 color mode, requires that xterm256 is used\n"));
 
 	add_opt_bool("terminal._template_", N_("Enable transparency"),
 		"transparency", 0, 1,

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.75 2003/05/16 23:44:51 pasky Exp $ */
+/* $Id: view.c,v 1.76 2003/05/17 00:09:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1358,6 +1358,8 @@ struct submitted_value {
 	unsigned char *name;
 	unsigned char *value;
 
+	struct form_control *frm;
+
 	void *file_content;
 
 	int fc_len;
@@ -1452,8 +1454,12 @@ fi_rep:
 					mem_free(sub);
 					continue;
 			}
+
+			sub->frm = frm;
 			sub->position = frm->form_num + frm->ctrl_num;
+
 			add_to_list(*subm, sub);
+
 			if (frm->type == FC_IMAGE && !fi) {
 				fi = 1;
 				goto fi_rep;
@@ -1515,7 +1521,18 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 		memset(&o, 0, sizeof(o));
 		o.plain = 1;
 		d_opt = &o;
-		if (sv->type == FC_TEXTAREA) p = encode_textarea(sv->value);
+
+		if (sv->type == FC_TEXTAREA) {
+			/* We need to reformat text now if it has to be wrapped
+			 * hard, just before encoding it. */
+			void *blabla;
+			
+			blabla = format_text(sv->value, sv->frm->cols, sv->frm->wrap);
+			if (blabla) mem_free(blabla);
+
+			p = encode_textarea(sv->value);
+		}
+
 		if (lst) add_to_str(data, len, "&"); else lst = 1;
 		encode_url_string(sv->name, data, len);
 		add_to_str(data, len, "=");
@@ -1533,7 +1550,9 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 			encode_url_string(p2, data, len);
 			mem_free(p2);
 		}
-		if (sv->type == FC_TEXTAREA) mem_free(p);
+		if (sv->type == FC_TEXTAREA) {
+			mem_free(p);
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.173 2003/10/17 13:00:58 jonas Exp $ */
+/* $Id: session.c,v 1.174 2003/10/17 13:42:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,7 +271,7 @@ print_screen_status(struct session *ses)
 		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
 			struct color_pair *color;
 			struct window *tab = get_tab_by_number(term, tab_num);
-			struct document_view *fd;
+			struct document_view *doc_view;
 			int actual_tab_width = tab_width;
 			int msglen;
 
@@ -284,12 +284,12 @@ print_screen_status(struct session *ses)
 				}
 			}
 
-			fd = tab->data ? current_frame(tab->data) : NULL;
+			doc_view = tab->data ? current_frame(tab->data) : NULL;
 
-			if (fd) {
-				if (fd->document->title
-				    && *(fd->document->title))
-					msg = fd->document->title;
+			if (doc_view) {
+				if (doc_view->document->title
+				    && *(doc_view->document->title))
+					msg = doc_view->document->title;
 				else
 					msg = _("Untitled", term);
 			} else {
@@ -850,9 +850,9 @@ request_frameset(struct session *ses, struct frameset_desc *fd)
 }
 
 inline void
-load_frames(struct session *ses, struct document_view *fd)
+load_frames(struct session *ses, struct document_view *doc_view)
 {
-	struct document *document = fd->document;
+	struct document *document = doc_view->document;
 
 	if (!document || !document->frame_desc) return;
 	request_frameset(ses, document->frame_desc);
@@ -1110,7 +1110,7 @@ process_file_requests(struct session *ses)
 {
 	static int stop_recursion = 0;
 	struct file_to_load *ftl;
-	struct document_view *fd = current_frame(ses);
+	struct document_view *doc_view = current_frame(ses);
 	int more = 1;
 
 	if (stop_recursion) return;
@@ -1119,12 +1119,16 @@ process_file_requests(struct session *ses)
 	while (more) {
 		more = 0;
 		foreach (ftl, ses->more_files) {
+			unsigned char *referer = NULL;
+
 			if (ftl->req_sent)
 				continue;
 
 			ftl->req_sent = 1;
-			load_url(ftl->url, (fd && fd->document) ? fd->document->url
-							        : NULL,
+			if (doc_view && doc_view->document)
+				referer = doc_view->document->url;
+
+			load_url(ftl->url, referer,
 				 &ftl->stat, ftl->pri, NC_CACHE, -1);
 			more = 1;
 		}
@@ -1358,7 +1362,7 @@ abort_loading(struct session *ses, int interrupt)
 static void
 destroy_session(struct session *ses)
 {
-	struct document_view *fdc;
+	struct document_view *doc_view;
 
 	assert(ses);
 	if_assert_failed return;
@@ -1371,8 +1375,8 @@ destroy_session(struct session *ses)
 		mem_free(ses->screen);
 	}
 
-	foreach (fdc, ses->scrn_frames)
-		detach_formatted(fdc);
+	foreach (doc_view, ses->scrn_frames)
+		detach_formatted(doc_view);
 
 	free_list(ses->scrn_frames);
 
@@ -1412,16 +1416,22 @@ reload(struct session *ses, enum cache_mode cache_mode)
 	if (have_location(ses)) {
 		struct location *l = cur_loc(ses);
 		struct file_to_load *ftl;
-		struct document_view *fd = current_frame(ses);
+		struct document_view *doc_view = current_frame(ses);
 
 		l->download.data = ses;
 		l->download.end = (void *)doc_end_load;
 		load_url(l->vs.url, ses->ref_url, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
+			unsigned char *referer = NULL;
+
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
-			load_url(ftl->url, (fd && fd->document) ? fd->document->url : NULL,
+
+			if (doc_view && doc_view->document)
+				referer = doc_view->document->url;
+
+			load_url(ftl->url, referer,
 				 &ftl->stat, PRI_FRAME, cache_mode, -1);
 		}
 	}
@@ -1452,7 +1462,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	unsigned char *u;
 	unsigned char *pos;
 	protocol_external_handler *fn;
-	struct document_view *fd;
+	struct document_view *doc_view;
 
 	fn = get_protocol_external_handler(url);
 	if (fn) {
@@ -1493,9 +1503,9 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 		ses->ref_url = NULL;
 	}
 
-	fd = current_frame(ses);
-	if (fd && fd->document && fd->document->url)
-		ses->ref_url = stracpy(fd->document->url);
+	doc_view = current_frame(ses);
+	if (doc_view && doc_view->document && doc_view->document->url)
+		ses->ref_url = stracpy(doc_view->document->url);
 
 	ses_goto(ses, u, target, PRI_MAIN, cache_mode, task, pos, end_load, 0);
 
@@ -1608,7 +1618,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 		if (strcasecmp(frm->name, name)) continue;
 
 		if (url_len > frm->vs.url_len) {
-			struct document_view *fd;
+			struct document_view *doc_view;
 			struct frame *nf = frm;
 
 			/* struct view_state reserves 1 byte for url, so
@@ -1618,9 +1628,9 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 
 			nf->prev->next = nf->next->prev = nf;
 
-			foreach (fd, ses->scrn_frames)
-				if (fd->vs == &frm->vs)
-					fd->vs = &nf->vs;
+			foreach (doc_view, ses->scrn_frames)
+				if (doc_view->vs == &frm->vs)
+					doc_view->vs = &nf->vs;
 
 			frm = nf;
 		}
@@ -1720,11 +1730,11 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct document_view *fd = current_frame(ses);
+	struct document_view *doc_view = current_frame(ses);
 
 	/* Ensure that the title is defined */
-	if (fd && fd->document->title)
-		return safe_strncpy(str, fd->document->title, str_size);
+	if (doc_view && doc_view->document->title)
+		return safe_strncpy(str, doc_view->document->title, str_size);
 
 	return NULL;
 }
@@ -1760,13 +1770,15 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 struct link *
 get_current_link(struct session *ses)
 {
-	struct document_view *fd = current_frame(ses); /* What the hell is an 'fd'? */
+	struct document_view *doc_view = current_frame(ses);
 
-	if (fd && fd->vs->current_link != -1) {
-		struct link *l = &fd->document->links[fd->vs->current_link];
+	if (doc_view && doc_view->vs->current_link != -1) {
+		struct link *link;
+
+		link = &doc_view->document->links[doc_view->vs->current_link];
 
 		/* Only return a link */
-		if (l->type == L_LINK) return l;
+		if (link->type == L_LINK) return link;
 	}
 
 	return NULL;

@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.11 2003/06/08 18:47:01 jonas Exp $ */
+/* $Id: common.h,v 1.12 2003/06/10 21:19:11 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -43,8 +43,6 @@ get_mime_handler_backends(unsigned char *content_type, int have_x);
  * with the general unix PATH style strings. */
 unsigned char *
 get_next_path_filename(unsigned char **path_ptr, unsigned char separator);
-
-int get_extension_from_url(unsigned char *url, unsigned char **extension);
 
 /* Returns allocated string containing the biggest possible extension.
  * If url is 'jabadaba.1.foo.gz' the extensionpart is '1.foo.gz' */

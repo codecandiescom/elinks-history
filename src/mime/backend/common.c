@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.10 2003/06/08 18:47:01 jonas Exp $ */
+/* $Id: common.c,v 1.11 2003/06/10 21:19:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,38 +121,6 @@ get_next_path_filename(unsigned char **path_ptr, unsigned char separator)
 	return filename;
 }
 
-int
-get_extension_from_url(unsigned char *url, unsigned char **ext)
-{
-	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
-	unsigned char *extension = NULL;
-	int extensionlen = 0;
-
-#define dsep(x) (lo ? dir_sep(x) : (x) == '/')
-
-	/* Hmmm, well, can we do better there ? --Zas */
-	for (; *url && !end_of_dir(*url); url++) {
-		if (*url == '.') {
-			extension = url + 1;
-		} else if (dsep(*url)) {
-			extension = NULL;
-		}
-	}
-
-	if (extension) {
-		while (extension[extensionlen]
-		       && !dsep(extension[extensionlen])
-		       && !end_of_dir(extension[extensionlen])) {
-			extensionlen++;
-		}
-	}
-
-#undef dsep
-
-	*ext = extension;
-	return extensionlen;
-}
-
 unsigned char *
 get_extensionpart_from_url(unsigned char *url)
 {
@@ -170,9 +138,8 @@ get_extensionpart_from_url(unsigned char *url)
 
 #undef dsep
 
-	if (extensionpart && extensionpart < url) {
+	if (extensionpart && extensionpart < url)
 		return memacpy(extensionpart, url - extensionpart);
-	}
 
 	return NULL;
 }

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.72 2003/11/07 13:55:26 jonas Exp $ */
+/* $Id: dialog.c,v 1.73 2003/11/08 18:44:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,6 +147,22 @@ init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 	return widget_data;
 }
 
+static inline void
+cycle_widget_focus(struct dialog_data *dlg_data, int direction)
+{
+	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
+
+	dlg_data->selected += direction;
+
+	if (dlg_data->selected >= dlg_data->n)
+		dlg_data->selected = 0;
+	else if (dlg_data->selected < 0)
+		dlg_data->selected = dlg_data->n - 1;
+
+	display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
+	redraw_from_window(dlg_data->win);
+}
+
 /* TODO: This is too long and ugly. Rewrite and split. */
 void
 dialog_func(struct window *win, struct term_event *ev, int fwd)
@@ -238,27 +254,13 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 			if ((ev->x == KBD_TAB && !ev->y) || ev->x == KBD_DOWN
 			    || ev->x == KBD_RIGHT) {
-				display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-
-				dlg_data->selected++;
-				if (dlg_data->selected >= dlg_data->n)
-					dlg_data->selected = 0;
-
-				display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
-				redraw_from_window(dlg_data->win);
+				cycle_widget_focus(dlg_data, 1);
 				break;
 			}
 
 			if ((ev->x == KBD_TAB && ev->y) || ev->x == KBD_UP
 			    || ev->x == KBD_LEFT) {
-				display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-
-				dlg_data->selected--;
-				if (dlg_data->selected < 0)
-					dlg_data->selected = dlg_data->n - 1;
-
-				display_dlg_item(dlg_data, selected_widget(dlg_data), 1);
-				redraw_from_window(dlg_data->win);
+				cycle_widget_focus(dlg_data, -1);
 				break;
 			}
 

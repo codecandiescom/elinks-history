@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.55 2004/02/26 16:12:35 jonas Exp $ */
+/* $Id: action.c,v 1.56 2004/02/26 16:48:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,6 +130,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 	struct document_view *doc_view = current_frame(ses);
 
 	switch (action) {
+		int magic = 1;
+
 		/* Please keep in alphabetical order for now. Later we can sort
 		 * by most used or something. */
 		case ACT_MAIN_ABORT_CONNECTION:
@@ -207,11 +209,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_ENTER:
-			do_frame_action(ses, (frame_action) enter, 0);
-			break;
-
+			/* @magic defaults to 1 so set no reloading */
+			magic = 0;
 		case ACT_MAIN_ENTER_RELOAD:
-			do_frame_action(ses, (frame_action) enter, 1);
+			do_frame_action(ses, (frame_action) enter, magic);
 			break;
 
 		case ACT_MAIN_EXMODE:
@@ -224,12 +225,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			activate_bfu_technology(ses, 0);
 			break;
 
-		case ACT_MAIN_FIND_NEXT:
-			do_frame_action(ses, find_next, 1);
-			break;
-
 		case ACT_MAIN_FIND_NEXT_BACK:
-			do_frame_action(ses, find_next, -1);
+			/* @magic defaults to 1 so set reverse direction */
+			magic = -1;
+		case ACT_MAIN_FIND_NEXT:
+			do_frame_action(ses, find_next, magic);
 			break;
 
 		case ACT_MAIN_FORGET_CREDENTIALS:
@@ -297,11 +297,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
-			open_current_link_in_new_tab(ses, 0);
-			break;
-
+			/* @magic defaults to 1 so set no background */
+			magic = 0;
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-			open_current_link_in_new_tab(ses, 1);
+			open_current_link_in_new_tab(ses, magic);
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
@@ -311,11 +310,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_OPEN_NEW_TAB:
-			open_url_in_new_tab(ses, NULL, 0);
-			break;
-
+			/* @magic defaults to 1 so set no background */
+			magic = 0;
 		case ACT_MAIN_OPEN_NEW_TAB_IN_BACKGROUND:
-			open_url_in_new_tab(ses, NULL, 1);
+			open_url_in_new_tab(ses, NULL, magic);
 			break;
 
 		case ACT_MAIN_OPEN_NEW_WINDOW:
@@ -332,16 +330,19 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_PREVIOUS_FRAME:
+			/* Change frame because @magic defaults to 1 set no
+			 * forced rerendering. */
 			next_frame(ses, -1);
-			draw_formatted(ses, 0);
-			break;
-
-		case ACT_MAIN_QUIT:
-			exit_prog(ses, 1);
+			magic = 0;
+		case ACT_MAIN_RERENDER:
+			draw_formatted(ses, magic);
 			break;
 
 		case ACT_MAIN_REALLY_QUIT:
-			exit_prog(ses, 0);
+			/* @magic defaults to 1 so set no questioning */
+			magic = 0;
+		case ACT_MAIN_QUIT:
+			exit_prog(ses, magic);
 			break;
 
 		case ACT_MAIN_REDRAW:
@@ -350,10 +351,6 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_RELOAD:
 			reload(ses, CACHE_MODE_INCREMENT);
-			break;
-
-		case ACT_MAIN_RERENDER:
-			draw_formatted(ses, 1);
 			break;
 
 		case ACT_MAIN_RESET_FORM:
@@ -389,12 +386,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 				write_config(term);
 			break;
 
-		case ACT_MAIN_SEARCH:
-			do_frame_action(ses, search_dlg, 1);
-			break;
-
 		case ACT_MAIN_SEARCH_BACK:
-			do_frame_action(ses, search_dlg, -1);
+			/* @magic defaults to 1 so set reverse direction */
+			magic = -1;
+		case ACT_MAIN_SEARCH:
+			do_frame_action(ses, search_dlg, magic);
 			break;
 
 		case ACT_MAIN_SEARCH_TYPEAHEAD:
@@ -409,23 +405,23 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_SUBMIT_FORM:
-			do_frame_action(ses, submit_form, 0);
-			break;
-
+			/* @magic defaults to 1 so set no reloading */
+			magic = 0;
 		case ACT_MAIN_SUBMIT_FORM_RELOAD:
-			do_frame_action(ses, submit_form, 1);
+			do_frame_action(ses, submit_form, magic);
 			break;
 
 		case ACT_MAIN_TAB_NEXT:
 			switch_to_next_tab(term);
 			break;
 
-		case ACT_MAIN_TAB_MOVE:
 		case ACT_MAIN_TAB_MOVE_BACK:
-			move_current_tab(ses,
-				action == ACT_MAIN_TAB_MOVE ? 1 : -1);
+			/* @magic defaults to 1 so set reverse direction */
+			magic = -1;
+		case ACT_MAIN_TAB_MOVE:
+			move_current_tab(ses, magic);
 			break;
-					
+
 		case ACT_MAIN_TAB_MENU:
 			assert(ses->tab == get_current_tab(term));
 

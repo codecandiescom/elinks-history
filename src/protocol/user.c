@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.29 2003/07/08 18:46:40 jonas Exp $ */
+/* $Id: user.c,v 1.30 2003/07/08 19:04:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,24 +161,19 @@ user_func(struct session *ses, unsigned char *url)
 	/* Stay silent about complete RFC 2368 support or do it yourself! ;-).
 	 * --pasky */
 
-	if (subj) {
+	if (subj && *subj) {
+		unsigned char *subj_end;
+
 		subj++;
 		if (strncmp(subj, "subject=", 8)) {
 			subj = strstr(subj, "&subject=");
-			if (subj) {
-				unsigned char *t;
-
-				subj += 9;
-				t = strchr(subj, '&');
-				if (t) *t = 0;
-			}
+			if (subj) subj += 9;
 		} else {
-			unsigned char *t;
-
 			subj += 8;
-			t = strchr(subj, '&');
-			if (t) *t = 0;
 		}
+
+		subj_end = strchr(subj, '&');
+		if (subj_end) *subj_end = 0;
 	}
 
 	prog_func(ses->tab->term, url, proto, host, port, dir, subj);

@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.1 2003/05/06 19:54:25 jonas Exp $ */
+/* $Id: default.c,v 1.2 2003/05/16 22:49:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,9 +23,12 @@
 
 unsigned char *
 get_content_type_default(unsigned char *url)
-{	
+{
 	struct option *opt_tree;
 	struct option *opt;
+	int url_len = strlen(url);
+
+	if (!url_len) return NULL;
 
 	opt_tree = get_opt_rec_real(&root_options, "mime.extension");
 
@@ -35,7 +38,7 @@ get_content_type_default(unsigned char *url)
 
 		/* Match the longest possible part of URL.. */
 
-		for (i = strlen(url) - 1, j = strlen(opt->name) - 1;
+		for (i = url_len - 1, j = strlen(opt->name) - 1;
 			i >= 0 && j >= 0
 			&& url[i] == (opt->name[j] == '*' ? '.'
 				: opt->name[j]);
@@ -118,7 +121,6 @@ get_mime_handler_default(unsigned char *type, int have_x)
 	if (!name) return NULL;
 
 	opt_tree = get_opt_rec_real(&root_options, name);
-	mem_free(name);
 
 	if (opt_tree) {
 		struct mime_handler *handler;
@@ -127,7 +129,7 @@ get_mime_handler_default(unsigned char *type, int have_x)
 		/* Try to find some description to assing to @name */
 		if (mt) {
 			struct option *opt;
-			
+
 			opt = get_opt_rec_real(&root_options, mt);
 			mem_free(mt);
 
@@ -145,11 +147,13 @@ get_mime_handler_default(unsigned char *type, int have_x)
 			handler->flags |= MIME_ASK;
 
 		handler->program = stracpy(get_opt_str_tree(opt_tree, "program"));
-		handler->description = name ? name : NULL;
+		handler->description = name;
 		handler->backend_name = BACKEND_NAME;
 
 		return handler;
 	}
+
+	mem_free(name);
 
 	return NULL;
 }

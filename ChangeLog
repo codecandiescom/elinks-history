@@ -1,3 +1,50 @@
+Thu Oct 17 20:26:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/config/kbdbind.c, src/config/kbdbind.h,
+	src/document/view.c:
+
+	Here you are a little patch, makes A work properly. Adds
+	add-bookmark-link action by default bound to 'A', guess its
+	functionality for a homework. Patch by Fabio.  
+
+Thu Oct 17 20:15:12 2002  Laurent Monin <zas@norz.org>:
+
+	* src/main.c:
+
+	Minor simplification in sig_intr().  
+
+Thu Oct 17 19:56:18 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Minor simplification in write_bookmarks_do() code.  
+
+Thu Oct 17 16:18:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Fixed problem with loading bookmarks in old format, reported by
+	Dmitry.  
+
+Thu Oct 17 15:42:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Partial fix of bookmarks search.  
+
+Thu Oct 17 15:35:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Errorneous commits to rule the world.  
+
+Thu Oct 17 15:34:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* doc/bookmarks.txt, src/bookmarks/bookmarks.c:
+
+	Some preliminary bookmarks documentation. Hey, I thought that I
+	already added it..? 
+
 Wed Oct 16 15:26:59 2002  Petr Baudis <pasky@ji.cz>:
 
 	* test/color.html:

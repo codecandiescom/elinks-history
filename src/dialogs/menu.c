@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.212 2003/12/10 03:38:24 jonas Exp $ */
+/* $Id: menu.c,v 1.213 2003/12/10 11:21:20 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,8 +104,10 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	menu = new_menu(FREE_LIST);
 	if (!menu) return;
 
+#ifdef BOOKMARKS
 	add_to_menu(&menu, N_("Bookm~ark document"), "a",
 		    (menu_func) launch_bm_add_doc_dialog, NULL, 0);
+#endif
 
 	if (tabs > 1) {
 		add_to_menu(&menu, N_("Nex~t tab"), ">",

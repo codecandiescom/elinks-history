@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.364 2004/01/18 17:00:50 zas Exp $ */
+/* $Id: parser.c,v 1.365 2004/01/18 17:09:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2257,8 +2257,6 @@ html_frame(unsigned char *a)
 	mem_free(url);
 }
 
-#define foreach_values(i) for (i = 0; i < values_count; i++)
-
 /* Returns 0 on error. */
 static int
 distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
@@ -2268,14 +2266,17 @@ distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 	int tmp_val;
 	int val = *val_;
 
-	foreach_values(i) if (values[i] < 1) values[i] = 1;
+	for (i = 0; i < values_count; i++)
+		if (values[i] < 1)
+			values[i] = 1;
 	val -= max_value;
 
-	foreach_values(i) divisor += values[i];
+	for (i = 0; i < values_count; i++)
+		divisor += values[i];
 	assert(divisor);
 
 	tmp_val = val;
-	foreach_values(i) {
+	for (i = 0; i < values_count; i++) {
 		int tmp;
 
 		/* SIGH! gcc 2.7.2.* has an optimizer bug! */
@@ -2288,7 +2289,7 @@ distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 	while (val) {
 		int flag = 0;
 
-		foreach_values(i) {
+		for (i = 0; i < values_count; i++) {
 			if (val < 0) values[i]++, val++, flag = 1;
 			if (val > 0 && values[i] > 1) values[i]--, val--, flag = 1;
 			if (!val) break;
@@ -2314,23 +2315,30 @@ distribute_rows_or_cols_that_left(int *val_, int max_value, int *values, int val
 	if (!tmp_values) return 0;
 	memcpy(tmp_values, values, values_count * sizeof(int));
 
-	foreach_values(i) if (values[i] < 1) values[i] = 1;
+	for (i = 0; i < values_count; i++)
+		if (values[i] < 1)
+			values[i] = 1;
 	val = max_value - val;
 
-	foreach_values(i) if (tmp_values[i] < 0) divisor += -tmp_values[i];
+	for (i = 0; i < values_count; i++)
+		if (tmp_values[i] < 0)
+			divisor += -tmp_values[i];
 	assert(divisor);
 
 	tmp_val = val;
-	foreach_values(i) if (tmp_values[i] < 0) {
-		int tmp = (-tmp_values[i] * tmp_val / divisor);
+	for (i = 0; i < values_count; i++)
+		if (tmp_values[i] < 0) {
+			int tmp = (-tmp_values[i] * tmp_val / divisor);
 
-		values[i] += tmp;
-		val -= tmp;
-	}
+			values[i] += tmp;
+			val -= tmp;
+		}
 	assertm(val >= 0, "distribute_rows_or_cols_that_left: val < 0");
 	if_assert_failed val = 0;
 
-	foreach_values(i) if (tmp_values[i] < 0 && val) values[i]++, val--;
+	for (i = 0; i < values_count; i++)
+		if (tmp_values[i] < 0 && val)
+			values[i]++, val--;
 
 	assertm(val <= 0, "distribute_rows_or_cols_that_left: val > 0");
 	if_assert_failed val = 0;
@@ -2424,19 +2432,23 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
 	 * Be warn, this is Mikulas's black magic ;) */
 
 	val = 2 * values_count - 1;
-	foreach_values(i) if (values[i] > 0) val += values[i] - 1;
+	for (i = 0; i < values_count; i++)
+		if (values[i] > 0)
+			val += values[i] - 1;
 
 	if (val >= max_value) {
 		ret = distribute_rows_or_cols(&val, max_value, values, values_count);
 	} else {
 		int neg = 0;
 
-		foreach_values(i) if (values[i] < 0) neg = 1;
-		if (!neg) {
-			ret = distribute_rows_or_cols(&val, max_value, values, values_count);
-		} else {
+		for (i = 0; i < values_count; i++)
+			if (values[i] < 0)
+				neg = 1;
+
+		if (neg)
 			ret = distribute_rows_or_cols_that_left(&val, max_value, values, values_count);
-		}
+		else
+			ret = distribute_rows_or_cols(&val, max_value, values, values_count);
 	}
 
 	if (!ret) {
@@ -2444,17 +2456,19 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
 		return;
 	}
 
-	foreach_values(i) if (!values[i]) {
-		register int j;
-		int maxval = 0;
-		int maxpos = 0;
+	for (i = 0; i < values_count; i++)
+		if (!values[i]) {
+			register int j;
+			int maxval = 0;
+			int maxpos = 0;
 
-		foreach_values(j) if (values[j] > maxval) maxval = values[j], maxpos = j;
-		if (maxval) values[i] = 1, values[maxpos]--;
-	}
+			for (j = 0; j < values_count; j++)
+				if (values[j] > maxval)
+					maxval = values[j], maxpos = j;
+			if (maxval)
+				values[i] = 1, values[maxpos]--;
+		}
 }
-
-#undef foreach_values
 
 static void
 html_frameset(unsigned char *a)

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.288 2004/05/30 12:42:26 jonas Exp $ */
+/* $Id: download.c,v 1.289 2004/05/31 03:45:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,8 +105,8 @@ init_file_download(struct uri *uri, struct session *ses, unsigned char *file, in
 	file_download = mem_calloc(1, sizeof(struct file_download));
 	if (!file_download) return NULL;
 
-	file_download->box_item = add_listbox_item(&download_browser,
-						   struri(uri), file_download);
+	file_download->box_item = add_listbox_leaf(&download_browser, NULL,
+						   file_download);
 
 	file_download->uri = get_uri_reference(uri);
 	file_download->file = file;

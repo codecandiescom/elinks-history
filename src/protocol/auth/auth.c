@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.83 2004/05/30 16:11:26 jonas Exp $ */
+/* $Id: auth.c,v 1.84 2004/05/31 03:45:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 	set_auth_user(entry, uri);
 	set_auth_password(entry, uri);
 
-	entry->box_item = add_listbox_item(&auth_browser, entry->url, entry);
+	entry->box_item = add_listbox_leaf(&auth_browser, NULL, entry);
 
 	return entry;
 }

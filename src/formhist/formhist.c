@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.81 2004/05/20 12:49:45 jonas Exp $ */
+/* $Id: formhist.c,v 1.82 2004/05/31 03:45:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,8 +144,7 @@ new_form(unsigned char *url)
 
 	object_nolock(form, "formhist");
 	init_list(*form->submit);
-	form->box_item = add_listbox_item(&formhist_browser, form->url,
-					  form);
+	form->box_item = add_listbox_leaf(&formhist_browser, NULL, form);
 
 	return form;
 }

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.144 2004/05/31 02:29:50 jonas Exp $ */
+/* $Id: cookies.c,v 1.145 2004/05/31 03:45:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ get_cookie_server(unsigned char *host, int hostlen)
 	memcpy(cs->server, host, hostlen);
 	object_nolock(cs, "cookie_server");
 
-	cs->box_item = add_listbox_folder(&cookie_browser, NULL, cs->server, cs);
+	cs->box_item = add_listbox_folder(&cookie_browser, NULL, cs);
 
 	object_lock(cs);
 	add_to_list(c_servers, cs);
@@ -414,7 +414,7 @@ accept_cookie(struct cookie *c)
 	struct cookie *d, *e;
 	int domain_len;
 
-	c->box_item = add_listbox_leaf(&cookie_browser, c->server->box_item, c->name, c);
+	c->box_item = add_listbox_leaf(&cookie_browser, c->server->box_item, c);
 
 	foreach (d, cookies) {
 		if (strcasecmp(d->name, c->name)

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.215 2004/05/31 03:36:10 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.216 2004/05/31 03:45:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		return NULL; /* Or goto ;-). */
 	}
 
-	kb->box_item = add_listbox_leaf(&keybinding_browser, root, "hi mummy", kb);
+	kb->box_item = add_listbox_leaf(&keybinding_browser, root, kb);
 
 	return kb;
 }

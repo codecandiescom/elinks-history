@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.162 2004/05/31 03:33:26 jonas Exp $ */
+/* $Id: hierbox.c,v 1.163 2004/05/31 03:45:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,9 +47,8 @@ update_hierbox_browser(struct hierbox_browser *browser)
 
 /* Common backend for listbox adding */
 struct listbox_item *
-add_listbox_item_at_pos(struct hierbox_browser *browser,
-			struct listbox_item *root, enum listbox_item_type type,
-			unsigned char *text, void *data)
+add_listbox_item(struct hierbox_browser *browser, struct listbox_item *root,
+		 enum listbox_item_type type, void *data)
 {
 	struct listbox_item *item;
 

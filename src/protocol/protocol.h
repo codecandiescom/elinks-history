@@ -1,9 +1,8 @@
-/* $Id: protocol.h,v 1.16 2003/07/25 16:01:18 jonas Exp $ */
+/* $Id: protocol.h,v 1.17 2003/07/25 16:57:24 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
 
-#include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 
@@ -43,7 +42,7 @@ int get_protocol_free_syntax(enum protocol protocol);
 int get_protocol_need_slashes(enum protocol protocol);
 int get_protocol_need_slash_after_host(enum protocol protocol);
 
-protocol_handler *get_protocol_handler(struct uri *uri);
+protocol_handler *get_protocol_handler(enum protocol protocol);
 protocol_external_handler *get_protocol_external_handler(unsigned char *url);
 
 /* Resolves the given protocol @name to a known protocol or PROTOCOL_UNKOWN */

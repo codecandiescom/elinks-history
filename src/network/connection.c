@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.101 2003/07/24 14:02:02 jonas Exp $ */
+/* $Id: connection.c,v 1.102 2003/07/25 16:57:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,7 +434,7 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 
 	memcpy(k->host, host, hostlen);
 	k->port = get_uri_port(uri);
-	k->protocol = get_protocol_handler(uri);
+	k->protocol = get_protocol_handler(uri->protocol);
 	k->pf = c->pf;
 	k->socket = c->sock1;
 	k->timeout = timeout;
@@ -448,7 +448,7 @@ get_keepalive_connection(struct connection *c)
 {
 	struct keepalive_connection *connection;
 	struct uri *uri = &c->uri;
-	protocol_handler *handler = get_protocol_handler(uri);
+	protocol_handler *handler = get_protocol_handler(uri->protocol);
 	int port = get_uri_port(uri);
 	unsigned char *host = uri->user ? uri->user : uri->host;
 	int hostlen  = (uri->port ? uri->port + uri->portlen - host
@@ -608,7 +608,7 @@ suspend_connection(struct connection *c)
 static void
 run_connection(struct connection *c)
 {
-	protocol_handler *func = get_protocol_handler(&c->uri);
+	protocol_handler *func = get_protocol_handler(c->uri.protocol);
 
 	assertm(!c->running, "connection already running");
 	if_assert_failed return;

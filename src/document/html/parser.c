@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.199 2003/09/09 13:11:53 zas Exp $ */
+/* $Id: parser.c,v 1.200 2003/09/09 18:58:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -698,7 +698,7 @@ html_underline(unsigned char *a)
 static inline void
 html_fixed(unsigned char *a)
 {
-       format.attr |= AT_FIXED;
+	format.attr |= AT_FIXED;
 }
 
 static inline void
@@ -710,7 +710,7 @@ html_subscript(unsigned char *a)
 static inline void
 html_superscript(unsigned char *a)
 {
-       format.attr |= AT_SUPERSCRIPT;
+	format.attr |= AT_SUPERSCRIPT;
 }
 
 /* Extract the extra information that is available for elements which can

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.63 2004/07/01 15:20:39 jonas Exp $ */
+/* $Id: event.c,v 1.64 2004/07/01 17:22:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -222,8 +222,8 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 			break;
 
 		} else if (ev->x == KBD_CTRL_C) {
-			terminate = 1;
-			break;
+			destroy_terminal(term);
+			return 0;
 		}
 
 		if (interlink->utf_8.len) {

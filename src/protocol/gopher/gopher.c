@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.15 2004/09/12 23:34:20 miciah Exp $ */
+/* $Id: gopher.c,v 1.16 2004/09/13 00:18:47 miciah Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -91,14 +91,14 @@ struct gopher_entity_info {
 	unsigned char *content_type;
 };
 
-/* Lynx uses some hardcoded content types for various entities:
+/* This table provides some hard-coded associations between entity type
+ * and MIME type. A NULL MIME type in this table indicates
+ * that the MIME type should be deduced from the extension.
  *
- * - GOPHER_FILE has "text/plain" but really it can be anything including
- *   images so rely on the MIME system being able to determine it by looking at
- *   the extension.
- * - GOPHER_IMAGE and GOPHER_PLUS_IMAGE which Lynx assigns "image/gif" but it
- *   really can be anything.
- * - GOPHER_BINARY can for example be a tar ball so using
+ * - Lynx uses "text/plain" for GOPHER_FILE, but it can be anything.
+ * - Lynx uses "image/gif" for GOPHER_IMAGE and GOPHER_PLUS_IMAGE,
+ *   but they really can be anything.
+ * - GOPHER_BINARY can be, for example, a tar ball, so using
  *   "application/octet-stream" is a bad idea.
  */
 static struct gopher_entity_info gopher_entity_info[] = {

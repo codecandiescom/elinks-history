@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.74 2003/12/22 09:49:06 jonas Exp $ */
+/* $Id: dump.c,v 1.75 2003/12/22 13:13:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,7 +310,7 @@ fail:
 		if (hard_write(fd, header, headlen) != headlen)
 			goto fail;
 
-		for (x = 1; x < document->nlinks; x++) {
+		for (x = 1; x <= document->nlinks; x++) {
 			l = &document->links[x];
 			if (!l->where)
 				continue;

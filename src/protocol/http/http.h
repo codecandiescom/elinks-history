@@ -1,4 +1,4 @@
-/* $Id: http.h,v 1.9 2004/02/27 11:20:08 zas Exp $ */
+/* $Id: http.h,v 1.10 2004/05/07 17:27:46 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
@@ -42,8 +42,8 @@ struct http_connection_info {
 	int http_code;
 };
 
-extern struct protocol_backend http_protocol_backend;
-extern struct protocol_backend proxy_protocol_backend;
+extern protocol_handler http_protocol_handler;
+extern protocol_handler proxy_protocol_handler;
 
 void http_got_header(struct connection *, struct read_buffer *);
 

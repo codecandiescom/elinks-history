@@ -1,10 +1,10 @@
-/* $Id: ftp.h,v 1.6 2003/11/26 22:14:31 pasky Exp $ */
+/* $Id: ftp.h,v 1.7 2004/05/07 17:27:46 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_FTP_FTP_H
 #define EL__PROTOCOL_FTP_FTP_H
 
 #include "protocol/protocol.h"
 
-extern struct protocol_backend ftp_protocol_backend;
+extern protocol_handler ftp_protocol_handler;
 
 #endif

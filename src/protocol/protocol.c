@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.41 2004/05/07 01:46:09 jonas Exp $ */
+/* $Id: protocol.c,v 1.42 2004/05/07 17:27:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,71 +31,36 @@
 #include "protocol/smb/smb.h"
 #include "protocol/user.h"
 
-static struct protocol_backend dummyjs_protocol_backend;
-static struct protocol_backend lua_protocol_backend;
-
 static void
-unknown_protocol_func(struct session *ses, struct uri *uri)
+unknown_protocol_handler(struct session *ses, struct uri *uri)
 {
 	print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
 }
 
-static struct protocol_backend unknown_protocol_backend = {
-	/* name: */			NULL,
-	/* port: */			0,
-	/* handler: */			NULL,
-	/* external_handler: */		unknown_protocol_func,
-	/* free_syntax: */		0,
-	/* need_slashes: */		0,
-	/* need_slash_after_host: */	0,
-};
-
-
-static struct protocol_backend *protocol_backends[] = {
-	/* PROTOCOL_FILE */	&file_protocol_backend,
-	/* PROTOCOL_FINGER */	&finger_protocol_backend,
-	/* PROTOCOL_FTP */	&ftp_protocol_backend,
-	/* PROTOCOL_HTTP */	&http_protocol_backend,
-	/* PROTOCOL_HTTPS */	&https_protocol_backend,
-	/* PROTOCOL_SMB */	&smb_protocol_backend,
-	/* PROTOCOL_JAVASCRIPT */	&dummyjs_protocol_backend,
-	/* PROTOCOL_LUA */	&lua_protocol_backend,
-	/* PROTOCOL_PROXY */	&proxy_protocol_backend,
-
-	/* Keep these two last! */
-	/* PROTOCOL_UNKNOWN */	&unknown_protocol_backend,
-
-	/* Internal protocol for mapping to protocol.user.* handlers. Placed
-	 * last because it's checked first and else should be ignored. */
-	/* PROTOCOL_USER */	&user_protocol_backend,
-};
-
-
 static void
-dummyjs_func(struct session *ses, struct uri *uri)
+dummyjs_protocol_handler(struct session *ses, struct uri *uri)
 {
 	print_error_dialog(ses, S_NO_JAVASCRIPT, PRI_CANCEL);
 }
 
-static struct protocol_backend dummyjs_protocol_backend = {
-	/* name: */			"javascript",
-	/* port: */			0,
-	/* handler: */			NULL,
-	/* external_handler: */		dummyjs_func,
-	/* free_syntax: */		0,
-	/* need_slashes: */		0,
-	/* need_slash_after_host: */	0,
-};
 
+static const struct protocol_backend protocol_backends[] = {
+	{ "file",	 0, file_protocol_handler,	NULL,	1, 1, 0 },
+	{ "finger",	79, finger_protocol_handler,	NULL,	0, 1, 1 },
+	{ "ftp",	21, ftp_protocol_handler,	NULL,	0, 1, 1 },
+	{ "http",	80, http_protocol_handler,	NULL,	0, 1, 1 },
+	{ "https",     443, https_protocol_handler,	NULL,	0, 1, 1 },
+	{ "smb",       139, smb_protocol_handler,	NULL,	0, 1, 1 },
+	{ "javascript",	 0, NULL,   dummyjs_protocol_handler,	0, 0, 0 },
+	{ "user",	 0, NULL,			NULL,	0, 0, 0 },
+	{ "proxy",    3128, proxy_protocol_handler,	NULL,	0, 1, 1 },
 
-static struct protocol_backend lua_protocol_backend = {
-	/* name: */			"user",
-	/* port: */			0,
-	/* handler: */			NULL,
-	/* external_handler: */		NULL,
-	/* free_syntax: */		0,
-	/* need_slashes: */		0,
-	/* need_slash_after_host: */	0,
+	/* Keep these two last! */
+	{ NULL,		 0, NULL,   unknown_protocol_handler,	0, 0, 0 },
+
+	/* Internal protocol for mapping to protocol.user.* handlers. Placed
+	 * last because it's checked first and else should be ignored. */
+	{ "custom",	 0, NULL,      user_protocol_handler,	0, 0, 0 },
 };
 
 
@@ -113,7 +78,7 @@ get_protocol(unsigned char *name, int namelen)
 
 	/* Abuse that we iterate until protocol is PROTOCOL_UNKNOWN */
 	for (protocol = 0; protocol < PROTOCOL_UNKNOWN; protocol++) {
-		unsigned char *pname = protocol_backends[protocol]->name;
+		unsigned char *pname = protocol_backends[protocol].name;
 
 		if (pname && !strlcasecmp(pname, -1, name, namelen))
 			break;
@@ -127,7 +92,7 @@ get_protocol_port(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
-	return protocol_backends[protocol]->port;
+	return protocol_backends[protocol].port;
 }
 
 int
@@ -135,7 +100,7 @@ get_protocol_free_syntax(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
-	return protocol_backends[protocol]->free_syntax;
+	return protocol_backends[protocol].free_syntax;
 }
 
 int
@@ -143,7 +108,7 @@ get_protocol_need_slashes(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
-	return protocol_backends[protocol]->need_slashes;
+	return protocol_backends[protocol].need_slashes;
 }
 
 int
@@ -151,7 +116,7 @@ get_protocol_need_slash_after_host(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
-	return protocol_backends[protocol]->need_slash_after_host;
+	return protocol_backends[protocol].need_slash_after_host;
 }
 
 protocol_handler *
@@ -159,7 +124,7 @@ get_protocol_handler(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return NULL;
-	return protocol_backends[protocol]->handler;
+	return protocol_backends[protocol].handler;
 }
 
 protocol_external_handler *
@@ -167,7 +132,7 @@ get_protocol_external_handler(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return NULL;
-	return protocol_backends[protocol]->external_handler;
+	return protocol_backends[protocol].external_handler;
 }
 
 

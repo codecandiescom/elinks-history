@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.287 2004/04/29 23:22:14 jonas Exp $ */
+/* $Id: http.c,v 1.288 2004/05/07 17:27:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,8 +265,8 @@ http_end_request(struct connection *conn, enum connection_state state,
 
 static void http_send_header(struct connection *);
 
-static void
-http_func(struct connection *conn)
+void
+http_protocol_handler(struct connection *conn)
 {
 	/* setcstate(conn, S_CONN); */
 	set_connection_timeout(conn);
@@ -285,10 +285,10 @@ http_func(struct connection *conn)
 	}
 }
 
-static void
-proxy_func(struct connection *conn)
+void
+proxy_protocol_handler(struct connection *conn)
 {
-	http_func(conn);
+	http_protocol_handler(conn);
 }
 
 static void http_get_header(struct connection *);
@@ -1380,24 +1380,3 @@ http_get_header(struct connection *conn)
 	rb->close = 1;
 	read_from_socket(conn, conn->socket, rb, http_got_header);
 }
-
-
-struct protocol_backend http_protocol_backend = {
-	/* name: */			"http",
-	/* port: */			80,
-	/* handler: */			http_func,
-	/* external_handler: */		NULL,
-	/* free_syntax: */		0,
-	/* need_slashes: */		1,
-	/* need_slash_after_host: */	1,
-};
-
-struct protocol_backend proxy_protocol_backend = {
-	/* name: */			"proxy",
-	/* port: */			3128,
-	/* handler: */			proxy_func,
-	/* external_handler: */		NULL,
-	/* free_syntax: */		0,
-	/* need_slashes: */		1,
-	/* need_slash_after_host: */	1,
-};

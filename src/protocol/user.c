@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.67 2004/04/16 16:34:44 zas Exp $ */
+/* $Id: user.c,v 1.68 2004/05/07 17:27:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,8 +144,8 @@ get_subject_from_query(unsigned char *query)
 		       subject_end ? subject_end - subject : strlen(subject));
 }
 
-static void
-user_func(struct session *ses, struct uri *uri)
+void
+user_protocol_handler(struct session *ses, struct uri *uri)
 {
 	unsigned char *subj, *prog;
 
@@ -185,13 +185,3 @@ user_func(struct session *ses, struct uri *uri)
 		mem_free(prog);
 	}
 }
-
-struct protocol_backend user_protocol_backend = {
-	/* name: */			"custom",
-	/* port: */			0,
-	/* handler: */			NULL,
-	/* external_handler: */		user_func,
-	/* free_syntax: */		0,
-	/* need_slashes: */		0,
-	/* need_slash_after_host: */	0,
-};

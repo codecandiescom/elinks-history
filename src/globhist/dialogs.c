@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.77 2003/11/22 02:28:30 jonas Exp $ */
+/* $Id: dialogs.c,v 1.78 2003/11/22 02:40:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,18 +177,6 @@ cancel_delete_globhist_item(void *vhop)
 		object_unlock((struct global_history_item *)ctx->item->udata);
 }
 
-static int
-scan_for_marks(struct listbox_item *item, void *data_, int *offset)
-{
-	if (item->marked) {
-		struct delete_hierbox_item_info *ctx = data_;
-
-		ctx->item = NULL;
-		*offset = 0;
-	}
-	return 0;
-}
-
 static void
 listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 {
@@ -196,14 +184,7 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 
 	if (!box->sel || !box->sel->udata) return;
 
- 	ctx = mem_alloc(sizeof(struct delete_hierbox_item_info));
-	if (!ctx) return;
-
- 	ctx->item = box->sel;
- 	ctx->term = term;
-
-	traverse_listbox_items_list(box->items->next, 0, 0,
-				    scan_for_marks, ctx);
+ 	ctx = get_hierbox_delete_info(box, term);
 
 	if (!ctx->item) {
 		msg_box(term, getml(ctx, NULL), 0,

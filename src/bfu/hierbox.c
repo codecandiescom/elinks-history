@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.77 2003/11/22 01:48:49 jonas Exp $ */
+/* $Id: hierbox.c,v 1.78 2003/11/22 02:40:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,6 +300,38 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	add_dlg_end(dlg, buttons + 2);
 
 	return do_dialog(term, dlg, getml(dlg, NULL));
+}
+
+static int
+scan_for_marks(struct listbox_item *item, void *info, int *offset)
+{
+	if (item->marked) {
+		struct delete_hierbox_item_info *delete_info = info;
+
+		delete_info->item = NULL;
+		*offset = 0;
+	}
+
+	return 0;
+}
+
+struct delete_hierbox_item_info *
+get_hierbox_delete_info(struct listbox_data *box, struct terminal *term)
+{
+	struct delete_hierbox_item_info *delete_info;
+
+	delete_info = mem_alloc(sizeof(struct delete_hierbox_item_info));
+	if (!delete_info) return NULL;
+
+	delete_info->item = box->sel;
+	delete_info->term = term;
+
+	/* Look if it wouldn't be more interesting to blast off the marked
+	 * item. */
+	traverse_listbox_items_list(box->items->next, 0, 0,
+				    scan_for_marks, delete_info);
+
+	return delete_info;
 }
 
 int

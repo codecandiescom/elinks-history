@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.124 2003/11/22 02:30:09 jonas Exp $ */
+/* $Id: dialogs.c,v 1.125 2003/11/22 02:40:02 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -294,18 +294,6 @@ cancel_del_bookmark(void *vhop)
 	if (bm) object_unlock(bm);
 }
 
-static int
-scan_for_marks(struct listbox_item *item, void *data_, int *offset)
-{
-	if (item->marked) {
-		struct delete_hierbox_item_info *hop = data_;
-
-		hop->item = NULL;
-		*offset = 0;
-	}
-	return 0;
-}
-
 static void
 listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 {
@@ -315,15 +303,8 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	if (!box->sel || !box->sel->udata) return;
 
 	/* Deleted in really_del_bookmark() */
-	hop = mem_alloc(sizeof(struct delete_hierbox_item_info));
+	hop = get_hierbox_delete_info(box, term);
 	if (!hop) return;
-
-	hop->item = box->sel;
-	hop->term = term;
-
-	/* Look if it wouldn't be more interesting to blast off the marked
-	 * bookmarks. */
-	traverse_listbox_items_list(box->items->next, 0, 0, scan_for_marks, hop);
 
 	if (!hop->item) {
 		msg_box(term, getml(hop, NULL), 0,

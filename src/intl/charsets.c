@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.51 2003/07/21 23:28:34 pasky Exp $ */
+/* $Id: charsets.c,v 1.52 2003/07/25 10:03:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -622,6 +622,8 @@ decode:
 			 * appears to be relatively common! --pasky */
 			if (chars[i] != '&' && chars[i] != '='
 			    && !isalnum(chars[i]) && i > start) {
+				e = get_entity_string(&chars[start], i - start,
+						      d_opt->cp);
 				if (chars[i] != ';') {
 					/* Eat &nbsp &nbsp<foo> happily, but
 					 * pull back from the character after
@@ -629,8 +631,7 @@ decode:
 					 * terminator. */
 					i--;
 				}
-				e = get_entity_string(&chars[start], i - start,
-						      d_opt->cp);
+
 				if (!e) goto putc;
 				charspos = i + (i < charslen);
 			} else goto putc;

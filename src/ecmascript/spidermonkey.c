@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.52 2004/09/29 16:42:11 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.53 2004/09/29 17:02:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,7 +433,10 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	mem_free(url);
 	if (!uri) goto bye;
 
-	if (can_open_in_new(ses->tab->term)) {
+	if (!get_cmd_opt_bool("no-connect")
+	    && !get_cmd_opt_bool("no-home")
+	    && !get_cmd_opt_bool("anonymous")
+	    && can_open_in_new(ses->tab->term)) {
 		open_uri_in_new_window(ses, uri, ~0 /* any env */);
 		done_uri(uri);
 		p.boolean = 1; prop_type = JSPT_BOOLEAN;

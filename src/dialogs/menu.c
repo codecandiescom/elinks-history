@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.369 2004/09/28 22:35:19 jonas Exp $ */
+/* $Id: menu.c,v 1.370 2004/09/29 17:02:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,7 +329,14 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (!file_menu) return;
 
 	e = file_menu;
-	o = !anonymous && can_open_in_new(term);
+
+	if (!anonymous
+	    && !get_cmd_opt_bool("no-connect")
+	    && !get_cmd_opt_bool("no-home"))
+		o = can_open_in_new(term);
+	else
+		o = 0;
+
 	if (o) {
 		SET_MENU_ITEM(e, N_("~New window"), NULL, ACT_MAIN_OPEN_NEW_WINDOW,
 			      (menu_func) open_in_new_window, send_open_new_window,

@@ -59,4 +59,7 @@
 #undef HAVE_SA_STORAGE
 
 /* */
+#undef HAVE_GAI
+
+/* */
 #undef X2

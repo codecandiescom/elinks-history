@@ -62,6 +62,10 @@ AC_FUNC_VPRINTF
 AC_HAVE_FUNCS(gettimeofday mkdir select strcspn strerror strstr strtol strtoul alarm chmod)
 AC_HAVE_FUNCS(getpid setpgid getpgid setpgrp getpgrp)
 
+AC_CHECK_FUNC(getaddrinfo, AC_DEFINE(HAVE_GAI),
+  AC_CHECK_LIB(inet6, getaddrinfo, AC_DEFINE(HAVE_GAI) LIBS="$LIBS -linet6",)
+)
+
 dnl Checks for libraries.
 dnl Replace `main' with a function in -lgpm:
 AC_CHECK_LIB(gpm, Gpm_Open)

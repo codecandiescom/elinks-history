@@ -1,3 +1,112 @@
+Tue Jul 15 22:15:56 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	Fix bug 99: ^K in textareas should kill to end-of-line, not
+	end-of-buffer, and ^U should kill to beginning-of-line, not
+	beginning-of-buffer.  Please review my super-funky code.  
+
+Tue Jul 15 21:53:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Link: information now contains hreflang and type if they are
+	provided.  
+
+Tue Jul 15 21:33:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Simplification in check_encoding_type() composed by Miciah and me.  
+
+Tue Jul 15 20:37:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Fix logic in check_encoding_type().  
+
+Tue Jul 15 20:18:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, dialogs/menu.c, dialogs/menu.h,
+	document/html/frames.c, document/html/frames.h,
+	document/html/renderer.c, document/html/renderer.h,
+	elusive/renderer/text/renderer.c, sched/history.c, sched/session.c,
+	sched/session.h, scripting/lua/core.c, viewer/dump/dump.c,
+	viewer/text/form.c, viewer/text/form.h, viewer/text/link.c,
+	viewer/text/link.h, viewer/text/search.c, viewer/text/search.h,
+	viewer/text/textarea.c, viewer/text/textarea.h, viewer/text/view.c,
+	viewer/text/view.h, viewer/text/vs.c, viewer/text/vs.h:
+
+	Another big rename: struct f_data_c -> struct document_view. Idea by
+	pasky.  
+
+Tue Jul 15 17:48:44 2003  Laurent Monin <zas@norz.org>:
+
+	* po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po, po/de.po,
+	po/el.po, po/es.po, po/et.po, po/fi.po, po/fr.po, po/gl.po,
+	po/hr.po, po/hu.po, po/id.po, po/is.po, po/it.po, po/leet.po,
+	po/lt.po, po/nl.po, po/no.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
+	src/viewer/text/link.c:
+
+	Typo fix. ~ char was removed from title of reset button. .po files
+	were updated.  
+
+Tue Jul 15 16:52:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	Missing renames pasted by Zas.  
+
+Tue Jul 15 12:52:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, document/html/frames.c,
+	document/html/frames.h, document/html/renderer.c,
+	document/html/renderer.h, document/html/tables.c,
+	elusive/renderer/text/renderer.c, sched/history.c, sched/session.c,
+	viewer/dump/dump.c, viewer/dump/dump.h, viewer/text/form.c,
+	viewer/text/form.h, viewer/text/link.c, viewer/text/link.h,
+	viewer/text/search.c, viewer/text/textarea.c, viewer/text/view.c,
+	viewer/text/view.h, viewer/text/vs.c:
+
+	Rename: struct f_data -> struct document and (f_)data member names
+	to document. Idea by pasky.  
+
+Tue Jul 15 06:32:22 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/http/http.c:
+
+	Removed an unnecessary test.  
+
+Tue Jul 15 06:17:22 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/file.c:
+
+	If we're using snprintf to truncate, we might as well use it to pad
+	as well, thus saving a variable, a loop, and some calls to
+	add_chr_to_str.  
+
+Tue Jul 15 06:07:44 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/lowlevel/interlink.c:
+
+	Make MAX_(BIND|CONNECT)_TRIES attempts rather than
+	MAX_(BIND|CONNECT)_TRIES - 1 attempts.  
+
+Tue Jul 15 06:02:05 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/file.c:
+
+	Declare list_directory() and read_file() as returning values of type 
+	enum connection_state.  
+
+Tue Jul 15 05:52:50 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/file.c:
+
+	When protocol.file.show_hidden_files is enabled, hide even files
+	with names beginning with multiple dots.  
+
 Mon Jul 14 20:03:41 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:

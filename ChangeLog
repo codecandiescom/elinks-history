@@ -1,3 +1,55 @@
+Wed Jan 12 16:50:29 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jan 12 16:37:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	More Danish translation merging.  
+
+Wed Jan 12 16:32:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/dialogs.c, config/kbdbind.c, dialogs/menu.c:
+
+	A few clarifications. Use 'Open new window' to better match 'Open
+	new tab'.  
+
+Wed Jan 12 15:18:53 2005  Laurent Monin <zas@norz.org>:
+
+	* .cvsignore, Makefile.am, autogen.sh:
+
+	Revert http://www.nitro.dk/~jonas/no_need_for_acinlude.patch. It
+	fixes autogen.sh with old autotools.  
+
+Wed Jan 12 03:46:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Fix a few hotkey conflicts.  
+
+Wed Jan 12 02:44:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Follow up patch for the last one. Fix a few comments. Remove
+	unnecessary usage of foreachsafe() iterator.  
+
+Wed Jan 12 02:35:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: forms.c, forms.h, html/renderer.c,
+	html/renderer.h, html/tables.c, html/parser/forms.c:
+
+	Rearrange form items so they are added to the correct forms after
+	table rendering. The bug occurs because tables are rendered
+	column-wise which leads to problems when a form element is in a
+	columns greater than its form items. It was introduced in the recent
+	form changes. I am unsure if it the changed usage of form->form_num
+	is a problem for code that is relying on sequencial values. The 
+	patch fixes bug 602.  
+
 Tue Jan 11 19:33:38 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/conf.c:

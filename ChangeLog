@@ -1,3 +1,171 @@
+Thu Mar 24 21:50:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the gzip decompression code from pre_format_html_hook_ to its
+	own hook.  Remove pre_format_html_hook_.  
+
+Thu Mar 24 21:45:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the allmusic.com mangler from pre_format_html_hook_ to its own
+	hook.  
+
+Thu Mar 24 21:43:01 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the dictionary.com mangler from pre_format_html_hook_ to its
+	own hook.  
+
+Thu Mar 24 21:38:04 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the linuxtoday.com mangler from pre_format_html_hook_ to its
+	own hook.  
+
+Thu Mar 24 21:33:14 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the unclosed-a tags mangler from pre_format_html_hook_ to its
+	own hook.  
+
+Thu Mar 24 21:31:06 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the unclosed-input tags mangler from pre_format_html_hook_ to
+	its own hook.  
+
+Thu Mar 24 21:28:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the blank img alt mangler from pre_format_html_hook_ to its own
+	hook.  
+
+Thu Mar 24 21:23:59 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Hook highlight directly from pre_format_html_hooks.  
+
+Thu Mar 24 21:18:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Add Lua hooks to call hooks. Convert the old hooks into hooks for
+	the new hooks.  
+
+Thu Mar 24 16:52:53 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_cursor_move_to_string(): simplify and handle oversized numbers
+	in a gentle way.  
+
+Thu Mar 24 16:03:40 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	dlg_format_text(): shorten lines using a temporary variable for
+	height.  
+
+Thu Mar 24 15:49:45 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	dlg_format_listbox(): simplify code.  
+
+Thu Mar 24 15:33:12 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Thu Mar 24 15:23:47 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Define few constants for input fields formatting and use them
+	instead of hardcoded stuff.  
+
+Thu Mar 24 15:10:11 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.c:
+
+	Define CHECKBOX_HEIGHT, make dlg_format_checkbox() works correctly
+	even without label to display, and fix its box (off by one).  
+
+Thu Mar 24 14:56:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	Define BUTTON_HEIGHT, make code clearer.  
+
+Thu Mar 24 14:49:33 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/button.c:
+
+	display_button(): shorten lines a bit.  
+
+Thu Mar 24 11:44:42 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	dlg_format_group(): rewrite it using explicit variables names, drop
+	base_group_width(), clarify calculations.  
+
+Thu Mar 24 10:03:59 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	dlg_format_group(): drop @width, and make clearer we handle only
+	checkboxes and inputfields.  
+
+Thu Mar 24 09:39:07 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	field_next_history(): fix last patch.  
+
+Thu Mar 24 09:33:55 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	dlg_format_group(): try to clarify even more.  
+
+Thu Mar 24 09:21:16 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	dlg_format_group(): expand code a bit.  
+
+Thu Mar 24 09:15:07 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	base_group_width(),dlg_format_group(): clarifications and comments.  
+
+Thu Mar 24 08:42:41 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Reduce code redundancy introducing field_prev_history() and
+	field_next_history().  
+
+Thu Mar 24 08:12:11 2005  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	Po files were resynced, french translation was updated.  
+
 Wed Mar 23 22:48:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* contrib/lua/hooks.lua.in:

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.93 2003/07/04 20:25:30 zas Exp $ */
+/* $Id: ftp.c,v 1.94 2003/07/04 20:55:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,7 +142,7 @@ static int
 get_ftp_response(struct connection *conn, struct read_buffer *rb, int part,
 		 struct sockaddr_storage *sa)
 {
-	int pos;
+	register int pos;
 
 	set_connection_timeout(conn);
 
@@ -513,13 +513,13 @@ add_file_cmd_to_str(struct connection *conn)
 #ifdef IPV6
 	struct sockaddr_in6 data_addr;
 #endif
-	unsigned char pc[6];
+	struct ftp_connection_info *c_i;
 	unsigned char *data;
 	unsigned char *data_end;
-	int data_sock;
-	struct ftp_connection_info *c_i;
 	unsigned char *str;
 	int strl = 0;
+	int data_sock;
+	unsigned char pc[6];
 
 	c_i = mem_calloc(1, sizeof(struct ftp_connection_info));
 	if (!c_i) {
@@ -702,7 +702,8 @@ static long int
 get_filesize_from_RETR(unsigned char *data, int data_len)
 {
 	long int file_len;
-	int pos, pos_file_len = 0;
+	register int pos;
+	int pos_file_len = 0;
 
 	/* Getting file size from text response.. */
 	/* 150 Opening BINARY mode data connection for hello-1.0-1.1.diff.gz (16452 bytes). */
@@ -746,10 +747,10 @@ static void
 ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 {
 	struct ftp_connection_info *c_i = conn->info;
+	struct sockaddr_storage sa;
 	int response;
 	int fd;
-	struct sockaddr_storage sa;
-
+	
 	if (c_i->pending_commands > 1) {
 		response = get_ftp_response(conn, rb, 0, &sa);
 
@@ -1033,11 +1034,11 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 	int ret = 0;
 
 	while (1) {
+		struct ftpparse ftp_info;
 		unsigned char *buf = buffer + ret;
 		int bufl = buflen - ret;
-		int bufp;
+		register int bufp;
 		int newline = 0;
-		struct ftpparse ftp_info;
 
 		/* Newline quest. */
 
@@ -1079,9 +1080,9 @@ static void
 got_something_from_data_connection(struct connection *conn)
 {
 	struct ftp_connection_info *c_i = conn->info;
-	int len;
 	unsigned char dircolor[8];
 	int colorize_dir = 0;
+	int len;
 
 	/* XXX: This probably belongs rather to connect.c ? */
 
@@ -1137,12 +1138,17 @@ out_of_mem:
 	conn->from += slen; }
 
 	if (c_i->dir && !conn->from) {
-		unsigned char *url_data;
+		unsigned char *url_data = get_url_data(conn->url);
 		unsigned char *postchar;
 		unsigned char *str;
 		int strl = 0;
 
-		url_data = stracpy(get_url_data(conn->url));
+		if (!url_data) {
+			abort_conn_with_state(conn, S_FTP_ERROR);
+			return;
+		}
+		
+		url_data = stracpy(url_data);
 		if (!url_data) goto out_of_mem;
 
 		str = init_str();

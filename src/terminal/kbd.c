@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.10 2003/05/14 20:58:05 zas Exp $ */
+/* $Id: kbd.c,v 1.11 2003/05/20 21:27:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ void
 handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	   void *init_string, int init_len)
 {
-	int x, y;
+	int x, y, i;
 	struct itrm *itrm;
 	struct event ev = { EV_INIT, 80, 24, 0 };
 	unsigned char *ts;
@@ -282,6 +282,10 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 	ts = getenv("TERM");
 	if (!ts) ts = "";
+
+	for (i = 0; ts[i] != 0; ++i)
+		if (!isA(ts[i]))
+			ts[i] = '-';
 
 	if ((env & ENV_TWIN) && !strcmp(ts, "linux"))
 		itrm->flags |= USE_TWIN_MOUSE;

@@ -221,6 +221,9 @@ Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 	Fixed compile incompatibility
 	One of Links authors; a lot of misc. features & code
 
+Karsten Schölzel <kuser@gmx.de>
+	Random minor fixes
+
 Karvinen Ilkka <ik@iki.fi>
 	Finnish translation
 
@@ -439,4 +442,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.124 2003/05/11 21:28:06 jonas Exp $
+$Id: AUTHORS,v 1.125 2003/05/20 21:27:40 pasky Exp $

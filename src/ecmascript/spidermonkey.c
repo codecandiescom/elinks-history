@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.16 2004/09/24 20:23:47 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.17 2004/09/24 20:24:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,7 +313,7 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 		return NULL;
 	}
 	JS_InitStandardClasses(ctx, global_obj);
-	JS_SetContextPrivate(ctx, interpreter->doc_view);
+	JS_SetContextPrivate(ctx, interpreter);
 
 	document_obj = JS_InitClass(ctx, global_obj, NULL,
 				    (JSClass *) &document_class, NULL, 0,

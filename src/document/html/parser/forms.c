@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.15 2004/06/05 21:14:33 jonas Exp $ */
+/* $Id: forms.c,v 1.16 2004/06/10 15:21:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,8 @@ struct form {
 	unsigned char *action;
 	unsigned char *target;
 	enum form_method method;
-	int num;
+	/* FIXME: This field is currently unused, why ? --Zas */
+	/* int num; */
 };
 
 static struct form form;
@@ -105,7 +106,9 @@ get_html_form(unsigned char *a, struct form *form)
 
 	al = get_target(a);
 	form->target = al ? al : stracpy(format.target_base);
-	form->num = a - startf;
+
+	/* This field is currently unused, why ? --Zas */
+	/* form->num = a - startf; */
 }
 
 static void

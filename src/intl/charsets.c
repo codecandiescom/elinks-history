@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.79 2004/04/22 19:46:39 pasky Exp $ */
+/* $Id: charsets.c,v 1.80 2004/04/22 19:50:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -689,10 +689,12 @@ int
 get_cp_index(unsigned char *n)
 {
 	register int i, a;
+	int syscp = 0;
 
 	if (!strcasecmp(n, "System")) {
 #if HAVE_LANGINFO_CODESET
 		n = nl_langinfo(CODESET);
+		syscp = 1;
 #else
 		n = "us-ascii";
 #endif
@@ -717,7 +719,11 @@ get_cp_index(unsigned char *n)
 		}
 	}
 
-	return -1;
+	if (syscp) {
+		return get_cp_index("us-ascii");
+	} else {
+		return -1;
+	}
 }
 
 #else
@@ -762,10 +768,12 @@ int
 get_cp_index(unsigned char *name)
 {
 	void *found;
+	int syscp = 0;
 
 	if (!strcasecmp(name, "System")) {
 #if HAVE_LANGINFO_CODESET
 		name = nl_langinfo(CODESET);
+		syscp = 1;
 #else
 		name = "us-ascii";
 #endif
@@ -776,6 +784,10 @@ get_cp_index(unsigned char *name)
 	found = fastfind_search(name, strlen(name), ff_info_charsets);
 	if (found) {
 		return ((unsigned int) found) - 1;
+
+	} else if (syscp) {
+		return get_cp_index("us-ascii");
+
 	} else {
 		return -1;
 	}

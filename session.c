@@ -526,6 +526,8 @@ void display_download(struct terminal *term, struct download *down, struct sessi
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
 
+/* TODO: I guess this needs a bit more of rewrite. We can't cope with broken
+ * dates (one superfluous/missing character here or there) well enough. */
 time_t parse_http_date(const char *date)
 {
 	/* Mon, 03 Jan 2000 21:29:33 GMT */
@@ -534,42 +536,78 @@ time_t parse_http_date(const char *date)
 		 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	struct tm tm;
 	time_t t = 0;
-	int year_2dgt = 0;
 	
-	if (!date || strlen(date) < 26) return 0;
-	year_2dgt = (strlen(date) < 28);
-	date += 5;
+	if (!date)
+		return 0;
+
+	/* Skip day-of-week */
+
+	while (*date && *date != ' ') date++;
+	date++;
+	
+	if (strlen(date) < 21) {
+		/* It's too short! */
+		return 0;
+	}
+
+	/* Eat day */
 	
 	tm.tm_mday = (date[0] - '0') * 10 + date[1] - '0';
 	date += 3;
+
+	/* Eat month */
 	
 	for (tm.tm_mon = 0; tm.tm_mon < 12; tm.tm_mon++)
-		if (!strncmp(date, months[tm.tm_mon], 3)) break;
+		if (!strncmp(date, months[tm.tm_mon], 3))
+			break;
 	date += 4;
+
+	/* Eat year */
+
+	tm.year = 0;
 	
-	if (!year_2dgt) {
-		tm.tm_year = (date[0] - '0') * 1000 + (date[1] - '0') * 100 + (date[2] - '0') * 10 + date[3] - '0' - 1900;
-		date += 5;
-	} else {
-		tm.tm_year = (date[0] - '0') * 10 + (date[1] - '0');
-		if (tm.tm_year < 60) tm.tm_year += 100;
-		date += 3;
+	if (date[3] == '0' && date[4] == '0') {
+		/* Four-digit year */
+		tm.tm_year = (date[0] - '0') * 1000 + (date[1] - '0') * 100;
+		date += 2;
+		/* We take off the 1900 later. */
 	}
+	
+	tm.tm_year += (date[0] - '0') * 10 + (date[1] - '0');
+	date += 3;
+	
+	if (tm.tm_year < 60) {
+		/* It's already next century. */
+		tm.tm_year += 100;
+	}
+	
+	if (tm.tm_year >= 200) {
+		/* Four-digit year, saga continues */
+		tm.tm_year -= 1900;
+	}
+
+	/* Eat hour */
 	
 	tm.tm_hour = (date[0] - '0') * 10 + date[1] - '0';
 	date += 3;
+
+	/* Eat minute */
 	
 	tm.tm_min = (date[0] - '0') * 10 + date[1] - '0';
 	date += 3;
+
+	/* Eat second */
 	
 	tm.tm_sec = (date[0] - '0') * 10 + date[1] - '0';
+
+	/* TODO: Maybe we should accept non-GMT times as well? */
 
 #ifdef HAVE_TIMEGM
 	t = timegm(&tm);
 #else
 	/* Since mktime thinks we have localtime, we need a wrapper
 	 * to handle GMT. */
-	{	
+	{
 		char *tz = getenv("TZ");
  		
 		if (tz && *tz) {
@@ -590,7 +628,7 @@ time_t parse_http_date(const char *date)
 	}
 #endif
        
-	if (t == (time_t) - 1)
+	if (t == (time_t) -1)
 		return 0;
 	else
 		return t;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.60 2004/12/13 04:22:02 miciah Exp $ */
+/* $Id: link.c,v 1.61 2004/12/13 04:49:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,7 +172,6 @@ truncate_label(unsigned char *label, int max_len)
 		memcpy(new_label + left_part_len + 1,
 		       label + len - right_part_len, right_part_len);
 
-	/* For great safety! */
 	new_label[max_len] = '\0';
 
 	return new_label;

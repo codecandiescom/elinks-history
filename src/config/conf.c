@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.72 2003/01/01 14:01:30 pasky Exp $ */
+/* $Id: conf.c,v 1.73 2003/04/19 17:33:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "config/opttypes.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/terminal.h"
 #include "util/error.h"
@@ -292,7 +293,7 @@ parse_config_file(struct option *options, unsigned char *name,
 {
 	int line = 1;
 	int error_occured = 0;
-	enum parse_error error = 0;
+	enum parse_error err = 0;
 	unsigned char error_msg[][80] = {
 		"no error",
 		"parse error",
@@ -335,11 +336,11 @@ parse_config_file(struct option *options, unsigned char *name,
 					}
 
 					file += cmdlen;
-					error = handler->handler(options,
-								 &file, &line,
-								 str?&s2:NULL,
-								 &l2);
-					if (!error && str && s2) {
+					err = handler->handler(options,
+							       &file, &line,
+							       str?&s2:NULL,
+							       &l2);
+					if (!err && str && s2) {
 						add_to_str(str, len, s2);
 					}
 					if (s2)	mem_free(s2);
@@ -348,7 +349,7 @@ parse_config_file(struct option *options, unsigned char *name,
 			}
 		}
 
-		error = ERROR_COMMAND;
+		err = ERROR_COMMAND;
 		orig_pos = file;
 		/* Jump over this crap we can't understand. */
 		while (!WHITECHAR(*file) && *file != '#' && *file)
@@ -363,15 +364,13 @@ test_end:
 			/* TODO: Make this a macro and report error directly
 			 * as it's stumbled upon; line info may not be accurate
 			 * anymore now (?). --pasky */
-			fprintf(stderr, "%s:%d: %s\n",
-				name, line, error_msg[error]);
+			error("%s:%d: %s", name, line, error_msg[err]);
 			error_occured = 1;
-			error = 0;
+			err = 0;
 		}
 	}
 
 	if (error_occured) {
-		fprintf(stderr, "\007");
 		sleep(1);
 	}
 }

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.18 2003/07/20 15:30:20 jonas Exp $ */
+/* $Id: uri.c,v 1.19 2003/07/20 15:44:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ get_uri_port(struct uri *uri)
 
 /* We might need something more intelligent than this Swiss army knife. */
 unsigned char *
-get_uri_string(struct uri *uri, int components)
+get_uri_string(struct uri *uri, enum uri_component components)
 {
 	unsigned char *str = init_str();
 	int len = 0;

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.15 2003/07/20 15:43:46 pasky Exp $ */
+/* $Id: uri.h,v 1.16 2003/07/20 15:44:24 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -58,7 +58,7 @@ enum uri_component {
 /* The @components bitmask describes the set of URI components used for
  * construction of the URI string.  */
 /* Returns the new URI string or NULL upon an error. */
-unsigned char *get_uri_string(struct uri *uri, int components);
+unsigned char *get_uri_string(struct uri *uri, enum uri_component components);
 
 
 unsigned char *join_urls(unsigned char *, unsigned char *);

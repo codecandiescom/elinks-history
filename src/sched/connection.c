@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.226 2005/03/04 17:55:36 zas Exp $ */
+/* $Id: connection.c,v 1.227 2005/03/04 18:33:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,7 +287,7 @@ update_progress(struct connection *conn)
 	progress->last_loaded = progress->loaded;
 	progress->last_time += a;
 	progress->elapsed += a;
-	progress->timer = install_timer(SPD_DISP_TIME, (void (*)(void *)) stat_timer, conn);
+	install_timer(&progress->timer, SPD_DISP_TIME, (void (*)(void *)) stat_timer, conn);
 }
 
 static void
@@ -585,8 +585,8 @@ check_keepalive_connections(void)
 	}
 
 	if (!list_empty(keepalive_connections))
-		keepalive_timeout = install_timer(KEEPALIVE_CHECK_TIME,
-						  keepalive_timer, NULL);
+		install_timer(&keepalive_timeout, KEEPALIVE_CHECK_TIME,
+			      keepalive_timer, NULL);
 }
 
 static inline void
@@ -1060,10 +1060,11 @@ connection_timeout(struct connection *conn)
 static void
 connection_timeout_1(struct connection *conn)
 {
-	conn->timer = install_timer((conn->unrestartable
-				     ? get_opt_int("connection.unrestartable_receive_timeout")
-				     : get_opt_int("connection.receive_timeout"))
-				    * 500, (void (*)(void *)) connection_timeout, conn);
+	install_timer(&conn->timer,
+			(conn->unrestartable
+			 ? get_opt_int("connection.unrestartable_receive_timeout")
+			 : get_opt_int("connection.receive_timeout"))
+			* 500, (void (*)(void *)) connection_timeout, conn);
 }
 
 void
@@ -1071,10 +1072,11 @@ set_connection_timeout(struct connection *conn)
 {
 	kill_timer(&conn->timer);
 
-	conn->timer = install_timer((conn->unrestartable
-				     ? get_opt_int("connection.unrestartable_receive_timeout")
-				     : get_opt_int("connection.receive_timeout"))
-				    * 500, (void (*)(void *)) connection_timeout_1, conn);
+	install_timer(&conn->timer,
+			(conn->unrestartable
+			 ? get_opt_int("connection.unrestartable_receive_timeout")
+			 : get_opt_int("connection.receive_timeout"))
+			* 500, (void (*)(void *)) connection_timeout_1, conn);
 }
 
 

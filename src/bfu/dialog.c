@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.194 2005/03/04 17:55:36 zas Exp $ */
+/* $Id: dialog.c,v 1.195 2005/03/04 18:33:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -611,8 +611,8 @@ do_refresh_dialog(struct dialog_data *dlg_data)
 		redraw_dialog(dlg_data, 1);
 	}
 
-	refresh->timer = install_timer(RESOURCE_INFO_REFRESH,
-				(void (*)(void *)) do_refresh_dialog, dlg_data);
+	install_timer(&refresh->timer, RESOURCE_INFO_REFRESH,
+		      (void (*)(void *)) do_refresh_dialog, dlg_data);
 }
 
 void
@@ -632,6 +632,6 @@ refresh_dialog(struct dialog_data *dlg_data, dialog_refresh_handler handler, voi
 
 	refresh->handler = handler;
 	refresh->data = data;
-	refresh->timer = install_timer(RESOURCE_INFO_REFRESH,
-				(void (*)(void *)) do_refresh_dialog, dlg_data);
+	install_timer(&refresh->timer, RESOURCE_INFO_REFRESH,
+		      (void (*)(void *)) do_refresh_dialog, dlg_data);
 }

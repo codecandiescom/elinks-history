@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.43 2005/03/04 17:55:36 zas Exp $ */
+/* $Id: refresh.c,v 1.44 2005/03/04 18:33:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,5 +108,5 @@ start_document_refresh(struct document_refresh *refresh, struct session *ses)
 		if (compare_uri(refresh->uri, type_query->uri, URI_BASE))
 			return;
 
-	refresh->timer = install_timer(time, do_document_refresh, ses);
+	install_timer(&refresh->timer, time, do_document_refresh, ses);
 }

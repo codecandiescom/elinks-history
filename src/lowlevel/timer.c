@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.19 2005/03/04 17:55:36 zas Exp $ */
+/* $Id: timer.c,v 1.20 2005/03/04 18:33:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,7 @@ count_down(void *xxx)
 
 	timer_duration--;
 	if (timer_duration) {
-		countdown = install_timer(1000, count_down, NULL);
+		install_timer(&countdown, 1000, count_down, NULL);
 		return;
 	} else {
 		countdown = TIMER_ID_UNDEF;
@@ -66,7 +66,7 @@ reset_timer(void)
 	if (!get_opt_int("ui.timer.enable")) return;
 
 	timer_duration = get_opt_int("ui.timer.duration");
-	countdown = install_timer(1000, count_down, NULL);
+	install_timer(&countdown, 1000, count_down, NULL);
 }
 
 static void
@@ -86,7 +86,7 @@ periodic_save_handler(void *xxx)
 	interval = get_opt_int("infofiles.save_interval") * 1000;
 	if (!interval) return;
 
-	periodic_save_timer = install_timer(interval, periodic_save_handler, NULL);
+	install_timer(&periodic_save_timer, interval, periodic_save_handler, NULL);
 }
 
 static int

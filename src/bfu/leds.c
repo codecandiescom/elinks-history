@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.66 2005/03/04 17:55:36 zas Exp $ */
+/* $Id: leds.c,v 1.67 2005/03/04 18:33:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,7 +200,7 @@ draw_leds(struct session *ses)
 end:
 	/* Redraw each 100ms. */
 	if (!drawing && redraw_timer == TIMER_ID_UNDEF)
-		redraw_timer = install_timer(100, redraw_leds, NULL);
+		install_timer(&redraw_timer, 100, redraw_leds, NULL);
 }
 
 /* Determine if leds redrawing is necessary. Returns non-zero if so. */
@@ -240,7 +240,7 @@ redraw_leds(void *xxx)
 		return;
 	}
 
-	redraw_timer = install_timer(100, redraw_leds, NULL);
+	install_timer(&redraw_timer, 100, redraw_leds, NULL);
 
 	if (drawing) return;
 	drawing = 1;

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.123 2005/03/04 17:55:36 zas Exp $ */
+/* $Id: kbd.c,v 1.124 2005/03/04 18:33:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -962,8 +962,8 @@ end:
 	return el;
 
 ret:
-	itrm->timer = install_timer(ESC_TIMEOUT, (void (*)(void *)) kbd_timeout,
-				    itrm);
+	install_timer(&itrm->timer, ESC_TIMEOUT, (void (*)(void *)) kbd_timeout,
+			itrm);
 
 	return 0;
 }

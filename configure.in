@@ -17,7 +17,8 @@ AC_PROG_RANLIB
 
 dnl gcc specific options
 if test "x$ac_cv_prog_gcc" = "xyes"; then
-  CFLAGS="$CFLAGS -Wall"
+  dnl We want to see all warnings and live with none.
+  CFLAGS="$CFLAGS -Wall -Werror"
 fi
 
 dnl ===================================================================

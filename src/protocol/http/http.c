@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.117 2003/05/18 15:56:36 pasky Exp $ */
+/* $Id: http.c,v 1.118 2003/05/18 15:59:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1065,21 +1065,6 @@ http_got_header(struct connection *c, struct read_buffer *rb)
 	set_timeout(c);
 	info = c->info;
 
-	if (info->sent_version.major < 1) {
-		/* HTTP/0.9 */
-		c->from = 0;
-		c->cache = NULL;
-		c->content_encoding = ENCODING_NONE;
-		info->length = -1;
-		info->recv_version.major = info->sent_version.major;
-		info->recv_version.minor = info->sent_version.minor;
-		if (get_cache_entry(c->url, &c->cache)) {
-			abort_conn_with_state(c, S_OUT_OF_MEM);
-			return;
-		}
-		goto end;
-	}
-
 	if (rb->close == 2) {
 		unsigned char *hstr;
 
@@ -1359,7 +1344,6 @@ again:
 		e->encoding_info = stracpy(encoding_names[c->content_encoding]);
 	}
 
-end:
 	if (info->length == -1 ||
 	    ((info->recv_version.major < 1 ||
 	      (info->recv_version.major == 1 && info->recv_version.minor == 0))

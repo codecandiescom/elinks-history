@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.83 2004/07/02 00:24:08 pasky Exp $ */
+/* $Id: action.c,v 1.84 2004/07/13 15:09:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -354,7 +354,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_RERENDER:
-			draw_formatted(ses, 1);
+			draw_formatted(ses, 2);
 			break;
 
 		case ACT_MAIN_RESET_FORM:

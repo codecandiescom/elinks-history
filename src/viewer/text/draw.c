@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.14 2004/07/13 14:48:58 jonas Exp $ */
+/* $Id: draw.c,v 1.15 2004/07/13 15:09:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,7 +305,7 @@ draw_formatted(struct session *ses, int rerender)
 	assert(ses && ses->tab);
 	if_assert_failed return;
 
-	if (rerender) render_document_frames(ses);
+	if (rerender) render_document_frames(ses, rerender > 1);
 
 	if (ses->tab != get_current_tab(ses->tab->term))
 		return;

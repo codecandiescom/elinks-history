@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.75 2004/07/03 16:28:02 jonas Exp $ */
+/* $Id: status.c,v 1.76 2004/07/13 15:09:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,7 +174,7 @@ update_status(void)
 			/* Force the current document to be rerendered so the
 			 * document view and document height is updated to fit
 			 * into the new dimensions. Related to bug 87. */
-			render_document_frames(ses);
+			render_document_frames(ses, 1);
 			dirty = 1;
 		}
 #ifdef CONFIG_LEDS

@@ -1,4 +1,5 @@
 # translation of hu.po to 
+# translation of hu.po to
 # translation of hu.po to Hungarian
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
@@ -10,7 +11,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-10-08 16:43+0200\n"
-"PO-Revision-Date: 2003-10-08 09:39+0200\n"
+"PO-Revision-Date: 2003-10-08 18:59+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +253,7 @@ msgstr "A fáljt nem lehet írni"
 
 #: src/config/conf.c:682
 msgid "Secure open failed"
-msgstr ""
+msgstr "Biztononságos mentés sikertelen"
 
 #: src/config/dialogs.c:40
 msgid "Config error"
@@ -417,8 +418,7 @@ msgstr ""
 #: src/config/dialogs.c:730
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -426,7 +426,7 @@ msgstr "Billentyûparancsok"
 
 #: src/config/dialogs.c:784 src/globhist/dialogs.c:492
 msgid "Toggle display"
-msgstr "Váltás URL/cím"
+msgstr "Nézetváltás"
 
 #: src/config/kbdbind.c:257
 msgid "Main mapping"
@@ -547,8 +547,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:393
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:394
 msgid "Go to the homepage"
@@ -872,12 +871,13 @@ msgid ""
 msgstr ""
 "A konfigurációs állományba kerülõ megjegyzések mennyisége:\n"
 "0 - nem kerülnek megjegyzések az állományba \n"
-"1 - csak a név és a típus íródik bele2 - csak a leírások kerülnek bele 3 - "
-"teljes megjegyzések kerülnek az állományba"
+"1 - csak a név és a típus íródik bele\n"
+"2 - csak a leírások kerülnek bele\n"
+"3 - teljes megjegyzések kerülnek az állományba"
 
 #: src/config/options.c:926
 msgid "Indentation"
-msgstr ""
+msgstr "Behúzás"
 
 #: src/config/options.c:928
 msgid ""
@@ -888,7 +888,7 @@ msgstr ""
 
 #: src/config/options.c:932
 msgid "Saving style"
-msgstr ""
+msgstr "Mentési mód"
 
 #: src/config/options.c:934
 msgid ""
@@ -1016,8 +1016,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.c:1007
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1013 src/util/version.c:86
@@ -1073,6 +1072,9 @@ msgid ""
 "non-international domains (instead of just two dots). Please see\n"
 "code (cookies.c:check_domain_security()) for explanation."
 msgstr ""
+"Ha engedélyezve van, minden cookie-ban kötelezõen lennie kell\n"
+"három pontnak (kettõ helyett), amennyiben nem nemzetkozi domain.\n"
+"Bõvebb magyarázatért nézd meg: cookies.c:check_domain_security()"
 
 #: src/config/options.c:1038
 msgid "Saving"
@@ -1091,6 +1093,8 @@ msgid ""
 "Save cookies after each change in cookies list? No effect when\n"
 "cookies_save is off."
 msgstr ""
+"Minden cookie-val kapcsolatos változás után mentsük a listát?\n"
+"Hatástalan ha a cookies_save ki van kapcsolva."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1051
@@ -1129,7 +1133,7 @@ msgid ""
 "accesskey is pressed - this is the standard behaviour, but it's\n"
 "considered dangerous."
 msgstr ""
-"Autómatikusan koveti a linket, vagy elküld egy adatlapot.\n"
+"Autómatikusan követi a linket, vagy elküld egy adatlapot.\n"
 "Ez az alapértelmezett üzemmód, de veszélyes lehet."
 
 #: src/config/options.c:1072
@@ -1252,7 +1256,7 @@ msgstr "Linkek"
 
 #: src/config/options.c:1134
 msgid "Options for handling of links to other documents."
-msgstr ""
+msgstr "Más dokumentumokra mutató linkek kezelése."
 
 #: src/config/options.c:1136
 msgid "Directory highlighting"
@@ -1691,9 +1695,9 @@ msgstr ""
 "0 - az alapértelmezett beállítások használata\n"
 "1 - a dokumentum által elõírt színek használata,\n"
 "    kivéve a háttérszínt. 2 - a dokumentum által elõírt színek használata,\n"
-"    beleértve a háttérszínt is. Ez legtöbbször nagyon jól     néz ki, de "
-"néhány oldal csúnyán jelenhet meg (mint pl.:\n"
-"    a slashdot). Megjegyzés: ha a háttér színe nem fekete,\n"
+"    beleértve a háttérszínt is. Ez legtöbbször nagyon jól néz ki, de\n"
+"    néhány oldal csúnyán jelenhet meg (mint pl.: a slashdot)\n"
+"     Megjegyzés: ha a háttér színe nem fekete,\n"
 "    az áttetszõség beállítás hatástalan lesz."
 
 #. Keep options in alphabetical order.
@@ -1818,7 +1822,7 @@ msgstr "Engedélyezés"
 
 #: src/config/options.c:1397
 msgid "Enable global history (\"history of all pages visited\")."
-msgstr "Látogatott oldalak teljes listájának egedélyezése."
+msgstr "Látogatott oldalak teljes listájának engedélyezése."
 
 #: src/config/options.c:1399
 msgid "Maximum number of entries"
@@ -2403,7 +2407,7 @@ msgstr ""
 
 #: src/config/options.c:1733
 msgid "User protocols"
-msgstr ""
+msgstr "Felhasználói protokollok"
 
 #: src/config/options.c:1735
 msgid ""
@@ -2411,12 +2415,17 @@ msgid ""
 "handlers for the appropriate protocols. Ie.\n"
 "protocol.user.mailto.unix."
 msgstr ""
+"Felhasználói protokollok. Az itt található beállítások külsõ\n"
+"programokat rendelnek a megfelelõ protokollokhoz.\n"
+"pl: protocol.user.mailto.unix."
 
 #: src/config/options.c:1746
 msgid ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
+"Kezelõprogram (külsõ program) ehhez a protokollhoz.\n"
+"Határozd meg az opciót a rendszered alapján (pl. unix, unix-xwin)."
 
 #: src/config/options.c:1751
 msgid ""
@@ -2427,6 +2436,12 @@ msgid ""
 "%s in the string means subject (?subject=<this>)\n"
 "%u in the string means the whole URL"
 msgstr ""
+"Kezelõprogram (külsõ program) ehhez a rendszerhez, es protokollhoz.\n"
+"%h a szövegben hostname-et (vagy email címet) jelent\n"
+"%p a szövegben portot jelöl\n"
+"%d a szövegben elérési útvonalat jelöl (minden a port utáni rész)\n"
+"%s a szövegben subject-et jelent (?subject=<this>)\n"
+"%u a szövegben az egész URL-t jelenti"
 
 #: src/config/options.c:1764
 msgid ""
@@ -3652,8 +3667,7 @@ msgstr "Kilépés"
 
 #: src/dialogs/menu.c:143
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr ""
-"Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
+msgstr "Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
 
 #: src/dialogs/menu.c:145
 msgid "Do you really want to exit ELinks?"
@@ -3717,7 +3731,7 @@ msgstr "Gyorsí~tó memória kiürítése"
 
 #: src/dialogs/menu.c:389
 msgid "Resource ~info"
-msgstr "Eröforrás ~információ"
+msgstr "Erõforrás ~információ"
 
 #: src/dialogs/menu.c:391
 msgid "~Cache info"
@@ -3733,7 +3747,7 @@ msgstr "~Kilépés"
 
 #: src/dialogs/menu.c:421
 msgid "~New window"
-msgstr "Uj ablak"
+msgstr "Új ablak"
 
 #: src/dialogs/menu.c:443
 msgid "~OS shell"
@@ -3753,7 +3767,7 @@ msgstr "Keresés ~visszafelé"
 
 #: src/dialogs/menu.c:468
 msgid "Find ~next"
-msgstr "Következõ ~keresése"
+msgstr "~Következõ keresése"
 
 #: src/dialogs/menu.c:469
 msgid "Find ~previous"
@@ -4061,8 +4075,7 @@ msgstr ""
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 
 #: src/lowlevel/home.c:126
@@ -4921,3 +4934,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.147 2004/04/06 01:34:20 jonas Exp $ */
+/* $Id: uri.c,v 1.148 2004/04/06 01:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -650,7 +650,7 @@ parse_uri:
 		unsigned char *ch = url + strcspn(url, ".:/@");
 		int not_file = 0;
 
-		if (!expanded) return NULL;
+		if (!expanded) break;
 		mem_free(newurl);
 		newurl = expanded;
 		if (file_exists(newurl)) goto end;

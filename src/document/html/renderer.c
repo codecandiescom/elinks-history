@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.78 2003/05/06 08:02:57 zas Exp $ */
+/* $Id: renderer.c,v 1.79 2003/05/07 08:42:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,9 +50,9 @@ struct table_cache_entry_key {
 };
 
 struct table_cache_entry {
+	LIST_HEAD(struct table_cache_entry);
+
 	struct table_cache_entry_key key;
-	struct table_cache_entry *next;
-	struct table_cache_entry *prev;
 	struct part part;
 };
 
@@ -263,8 +263,8 @@ set_hline(struct part *part, int x, int y,int xl,
 		return;
 
 	for (; xl; xl--, x++, d++) {
-		if (spc) part->spaces[x] = *d == ' ';
-		if (part->data) POS(x, y) = *d | c;
+		if (spc) part->spaces[x] = (*d == ' ');
+		if (part->data) POS(x, y) = (*d | c);
 	}
 }
 
@@ -358,7 +358,7 @@ shift_chars(struct part *part, int y, int shift)
 	chr *a;
 	int len = LEN(y);
 
-	a = mem_alloc(len * sizeof(chr));
+	a = fmem_alloc(len * sizeof(chr));
 	if (!a) return;
 
 	memcpy(a, &POS(0, y), len * sizeof(chr));
@@ -374,7 +374,7 @@ shift_chars(struct part *part, int y, int shift)
 	 * maniacally. --pasky */
 	set_hchars(part, 0, y, shift, (part->data->data[y].c << 11) | ' ');
 	copy_chars(part, shift, y, len, a);
-	mem_free(a);
+	fmem_free(a);
 
 	move_links(part, 0, y, shift, y);
 }
@@ -446,7 +446,8 @@ split:
 	memmove(part->spaces, part->spaces + i + 1, part->spl - i - 1);
 	memset(part->spaces + part->spl - i - 1, 0, i + 1);
 	memmove(part->spaces + par_format.leftmargin, part->spaces, part->spl - par_format.leftmargin);
-	part->cy++; part->cx -= i - par_format.leftmargin + 1;
+	part->cx -= i - par_format.leftmargin + 1;
+	part->cy++;
 
 	/*return 1 + (part->cx == par_format.leftmargin);*/
 
@@ -589,14 +590,16 @@ static void
 html_tag(struct f_data *f, unsigned char *t, int x, int y)
 {
 	struct tag *tag;
+	int tsize;
 
 	if (!f) return;
 
-	tag = mem_alloc(sizeof(struct tag) + strlen(t) + 1);
+	tsize = strlen(t) + 1;
+	tag = mem_alloc(sizeof(struct tag) + tsize);
 	if (tag) {
 		tag->x = x;
 		tag->y = y;
-		strcpy(tag->name, t);
+		memcpy(tag->name, t, tsize);
 		add_to_list(f->tags, tag);
 		if ((void *) last_tag_for_newline == &f->tags)
 			last_tag_for_newline = tag;
@@ -749,7 +752,8 @@ end_format_change:
 		}
 	}
 
-#define TMP	part->xa - (c[l-1] == ' ' && par_format.align != AL_NO) + par_format.leftmargin + par_format.rightmargin
+#define TMP	part->xa - (c[l - 1] == ' ' && par_format.align != AL_NO) \
+		+ par_format.leftmargin + par_format.rightmargin
 	part->xa += l;
 	if (TMP > part->xmax) part->xmax = TMP;
 #undef TMP
@@ -1044,12 +1048,14 @@ add_frameset_entry(struct frameset_desc *fsd,
 		   struct frameset_desc *subframe,
 		   unsigned char *name, unsigned char *url)
 {
+	int idx;
+
 	if (fsd->yp >= fsd->y) return;
-#define TMP fsd->f[fsd->xp + fsd->yp * fsd->x]
-	TMP.subframe = subframe;
-	TMP.name = name ? stracpy(name) : NULL;
-	TMP.url = url ? stracpy(url) : NULL;
-#undef TMP
+
+	idx = fsd->xp + fsd->yp * fsd->x;
+	fsd->f[idx].subframe = subframe;
+	fsd->f[idx].name = name ? stracpy(name) : NULL;
+	fsd->f[idx].url = url ? stracpy(url) : NULL;
 	fsd->xp++;
 	if (fsd->xp >= fsd->x) {
 		fsd->xp = 0;
@@ -1256,16 +1262,12 @@ uncached:
 	last_form = NULL;
 	nobreak = 1;
 
-	part = mem_alloc(sizeof(struct part));
+	part = mem_calloc(1, sizeof(struct part));
 	if (!part) goto ret;
 
-	part->x = part->y = 0;
 	part->data = data;
 	part->xp = xs;
 	part->yp = ys;
-	part->xmax = part->xa = 0;
-	part->spaces = NULL;
-	part->spl = 0;
 	part->link_num = link_num;
 
 	init_list(part->uf);
@@ -1328,14 +1330,12 @@ ret:
 	if (table_level > 1 && !data && table_cache
 	    && table_cache_entries < MAX_TABLE_CACHE_ENTRIES) {
 		/* Create a new entry. */
-		tce = mem_alloc(sizeof(struct table_cache_entry));
+		/* Clear memory to prevent bad key comparaison due to alignment
+		 * of key fields. */
+		tce = mem_calloc(1, sizeof(struct table_cache_entry));
 		/* A goto is used here to prevent a test or code
 		 * redundancy. */
 		if (!tce) goto end;
-
-		/* Clear memory to prevent bad key comparaison due to alignment
-		 * of key fields. */
-		memset(&tce->key, 0, sizeof(struct table_cache_entry_key));
 
 		tce->key.start = start;
 		tce->key.end = end;
@@ -1769,7 +1769,8 @@ find_fd(struct session *ses, unsigned char *name,
 		return NULL;
 	}
 	fd->depth = depth;
-	fd->xp = x, fd->yp = y;
+	fd->xp = x;
+	fd->yp = y;
 	fd->search_word = &ses->search_word;
 
 	/*add_to_list(ses->scrn_frames, fd);*/
@@ -1807,9 +1808,8 @@ repeat:
 	}
 
 	fd = find_fd(ses, name, depth, o->xp, o->yp);
-	if (!fd) return NULL;
+	if (fd) cached_format_html(vs, fd, o);
 
-	cached_format_html(vs, fd, o);
 	return fd;
 }
 
@@ -2084,6 +2084,8 @@ get_search_data(struct f_data *f)
 	if (f->search) return;
 
 	n = get_srch(f);
+	if (!n) return;
+
 	f->nsearch = 0;
 
 	f->search = mem_alloc(n * sizeof(struct search));

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.20 2003/05/04 19:30:52 pasky Exp $ */
+/* $Id: renderer.h,v 1.21 2003/05/07 08:42:03 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -14,12 +14,28 @@
  * declarations. */
 /* #include "vs.h" */
 
+
+/* XXX: Please try to keep order of fields from max. to min. of size
+ * of each type of fields:
+ *
+ * Prefer:
+ *	long a;
+ *	int b;
+ *	char c;
+ * Instead of:
+ *	char c;
+ *	int b;
+ *	long b;
+ *
+ * It will help to reduce memory padding on some architectures.
+ * It's not a perfect solution, but better than worse.
+ */
+
 struct tag {
 	LIST_HEAD(struct tag);
 
-	int x;
-	int y;
-	unsigned char name[1];
+	int x, y;
+	unsigned char name[1]; /* must be last of struct. --Zas */
 };
 
 struct node {
@@ -33,8 +49,10 @@ struct frameset_desc;
 
 struct frame_desc {
 	struct frameset_desc *subframe;
+
 	unsigned char *name;
 	unsigned char *url;
+
 	int line;
 	int xw, yw;
 };
@@ -43,16 +61,19 @@ struct frameset_desc {
 	int n;
 	int x, y;
 	int xp, yp;
-	struct frame_desc f[1];
+
+	struct frame_desc f[1]; /* must be last of struct. --Zas */
 };
 
 /* For struct f_data */
 struct line {
+	chr *d;
+
 	int l;
 	int size;
 	int dsize;
+
 	chr c;
-	chr *d;
 };
 
 /* For struct link */
@@ -67,24 +88,28 @@ enum link_type {
 
 /* For struct link */
 struct point {
-	int x;
-	int y;
+	int x, y;
 };
 
 /* For struct f_data */
 struct link {
-	enum link_type type;
-	int num;
 	long accesskey;
+
+	enum link_type type;
+
 	unsigned char *where;
 	unsigned char *target;
 	unsigned char *where_img;
 	unsigned char *title;
 	unsigned char *name;
+
 	struct form_control *form;
-	unsigned sel_color;
-	int n;
 	struct point *pos;
+
+	int n;
+	int num;
+
+	unsigned sel_color;
 };
 
 /* For struct f_data_c */
@@ -95,37 +120,45 @@ struct link_bg {
 
 /* For struct f_data */
 struct search {
-	unsigned char c;
-	int n:24;	/* This structure is size-critical */
 	int x, y;
+	int n:24;	/* This structure is size-critical */
+	unsigned char c;
 };
 
 struct f_data {
 	LIST_HEAD(struct f_data);
 
-	int refcount;
-	unsigned char *url;
 	struct document_options opt;
-	unsigned char *title;
-	int cp, ass;
-	int x, y; /* size of document */
-	ttime time_to_get;
-	tcount use_tag;
-	int frame;
-	struct frameset_desc *frame_desc;
-	int bg;
-	struct line *data;
-	struct link *links;
-	int nlinks;
-	struct link **lines1;
-	struct link **lines2;
+
 	struct list_head forms;
 	struct list_head tags;
 	struct list_head nodes;
+
+	unsigned char *url;
+	unsigned char *title;
+
+	struct frameset_desc *frame_desc;
+
+	struct line *data;
+
+	struct link *links;
+	struct link **lines1;
+	struct link **lines2;
+
 	struct search *search;
-	int nsearch;
 	struct search **slines1;
 	struct search **slines2;
+
+	ttime time_to_get;
+	tcount use_tag;
+
+	int refcount;
+	int cp, ass;
+	int x, y; /* size of document */
+	int frame;
+	int bg;
+	int nlinks;
+	int nsearch;
 };
 
 #include "viewer/text/vs.h"
@@ -133,17 +166,20 @@ struct f_data {
 struct f_data_c {
 	LIST_HEAD(struct f_data_c);
 
-	int used;
 	unsigned char *name;
+	unsigned char **search_word;
+
 	struct f_data *f_data;
+	struct view_state *vs;
+	struct link_bg *link_bg;
+
+	int link_bg_n;
 	int xw, yw; /* size of window */
 	int xp, yp; /* pos of window */
 	int xl, yl; /* last pos of window */
-	struct link_bg *link_bg;
-	int link_bg_n;
-	unsigned char **search_word;
-	struct view_state *vs;
 	int depth;
+	int used;
+
 };
 
 extern int format_cache_entries;
@@ -164,16 +200,17 @@ void destroy_fc(struct form_control *);
 /* Interface with html_tbl.c */
 
 struct part {
+	struct list_head uf;
+	unsigned char *spaces;
+	struct f_data *data;
+
 	int x, y;
 	int xp, yp;
 	int xmax;
 	int xa;
 	int cx, cy;
-	struct f_data *data;
-	unsigned char *spaces;
 	int spl;
 	int link_num;
-	struct list_head uf;
 };
 
 int expand_line(struct part *, int, int);

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.56 2004/06/27 13:13:13 jonas Exp $ */
+/* $Id: socket.c,v 1.57 2004/06/27 13:13:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@
 #define ssl_do_connect(conn)		gnutls_handshake(*((ssl_t *) conn->ssl))
 #define ssl_do_write(conn, data, len)	gnutls_record_send(*((ssl_t *) conn->ssl), data, len)
 #define ssl_do_read(conn, rb)		gnutls_record_recv(*((ssl_t *) conn->ssl), rb->data + rb->len, rb->freespace)
-/* We probably doesn't handle this entirely correctly.. */
+/* We probably don't handle this entirely correctly.. */
 #define ssl_do_close(conn)		gnutls_bye(*((ssl_t *) conn->ssl), GNUTLS_SHUT_RDWR);
 
 #endif

@@ -88,7 +88,10 @@ void end_real_lookup(void *data)
 	}
 
 	res = 0;
+	
 done:
+	if (res < 0 && *query->addr) mem_free(*query->addr);
+		
 	set_handlers(query->h, NULL, NULL, NULL, NULL);
 	close(query->h);
 	query->xfn(query, res);

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.87 2004/06/07 17:46:52 jonas Exp $ */
+/* $Id: cache.h,v 1.88 2004/08/14 05:56:23 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -34,6 +34,7 @@ struct cache_entry {
 	struct uri *redirect;		/* Location we were redirected to */
 
 	unsigned char *head;		/* The protocol header */
+	unsigned char *content_type;	/* MIME type: <type> "/" <subtype> */
 	unsigned char *last_modified;	/* Latest modification date */
 	unsigned char *etag;		/* ETag value from the HTTP header */
 	unsigned char *ssl_info;	/* SSL ciphers used during transfer */

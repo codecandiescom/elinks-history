@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.310 2004/07/22 22:23:19 zas Exp $ */
+/* $Id: download.c,v 1.311 2004/08/14 05:56:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1099,14 +1099,11 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 		do_type_query(type_query, ctype, handler);
 	}
 
-	mem_free(ctype);
 	mem_free_if(handler);
 
 	return ret;
 
 plaintext_follow:
-	mem_free_if(ctype);
-
 	vs = ses_forward(ses, frame);
 	if (vs) vs->plain = plaintext;
 	return 0;

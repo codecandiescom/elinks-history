@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.77 2004/07/22 02:06:02 pasky Exp $ */
+/* $Id: dialogs.c,v 1.78 2004/08/14 05:56:23 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -90,6 +90,10 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term)
 	add_format_to_string(&msg, "\n%s: %d", _("Size", term), cached->length);
 	add_format_to_string(&msg, "\n%s: %d", _("Loaded size", term),
 						cached->data_size);
+	if (cached->content_type) {
+		add_format_to_string(&msg, "\n%s: %s", _("Content type", term),
+				     cached->content_type);
+	}
 	if (cached->last_modified) {
 		add_format_to_string(&msg, "\n%s: %s", _("Last modified", term),
 				     cached->last_modified);

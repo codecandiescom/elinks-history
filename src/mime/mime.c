@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.59 2004/07/20 07:39:10 miciah Exp $ */
+/* $Id: mime.c,v 1.60 2004/08/14 05:56:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,6 +176,9 @@ get_content_type(struct cache_entry *cached)
 
 	debug_get_content_type_params(cached);
 
+	if (cached->content_type)
+		return cached->content_type;
+
 	/* If there's one in header, it's simple.. */
 	if (cached->head) {
 		ctype = parse_header(cached->head, "Content-Type", NULL);
@@ -191,7 +194,11 @@ get_content_type(struct cache_entry *cached)
 
 			debug_ctype(ctype);
 
-			if (*ctype) return ctype;
+			if (*ctype) {
+				cached->content_type = ctype;
+				return ctype;
+			}
+
 			mem_free(ctype);
 		}
 
@@ -201,7 +208,10 @@ get_content_type(struct cache_entry *cached)
 		if (extension) {
 			ctype = get_extension_content_type(extension);
 			mem_free(extension);
-			if (ctype) return ctype;
+			if (ctype) {
+				cached->content_type = ctype;
+				return ctype;
+			}
 		}
 	}
 
@@ -214,13 +224,18 @@ get_content_type(struct cache_entry *cached)
 	if (extension) {
 		ctype = get_extension_content_type(extension);
 		mem_free(extension);
-		if (ctype) return ctype;
+		if (ctype) {
+			cached->content_type = ctype;
+			return ctype;
+		}
 	}
 
 	debug_ctype(get_default_mime_type());
 
 	/* Fallback.. use some hardwired default */
-	return stracpy(get_default_mime_type());
+	cached->content_type = stracpy(get_default_mime_type());
+
+	return cached->content_type;
 }
 
 struct mime_handler *

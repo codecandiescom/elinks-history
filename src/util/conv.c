@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.36 2003/05/14 15:11:57 pasky Exp $ */
+/* $Id: conv.c,v 1.37 2003/05/14 17:20:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,20 +76,20 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		/* ie. width = 4 nlen = 2 -> pad = 2 */
 		unsigned int pad = width - nlen;
 
-		if (pad) {
+		if (pad > 0) {
 			/* Relocate the start of number. */
 			if (slen) *slen += pad;
 			pos += pad;
 
 			/* Pad. */
-			while (pad) s[--pad + start] = fillchar;
+			while (pad > 0) s[--pad + start] = fillchar;
 		}
 	}
 
 	s[pos + nlen] = '\0';
 
 	/* Now write number starting from end. */
-	while (nlen) {
+	while (nlen > 0) {
 		s[--nlen + pos] = '0' + (number % 10);
 		number /= 10;
 	}

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.33 2004/06/18 21:24:33 zas Exp $ */
+/* $Id: parse.c,v 1.34 2004/06/19 00:13:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -884,10 +884,11 @@ process_element(unsigned char *name, int namelen, int endingtag,
 #endif
 	if (!ei) return html;
 
-	if (!endingtag)
+	if (!endingtag) {
 		return start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
-
-	return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
+	} else {
+		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
+	}
 }
 
 void

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.522 2005/02/24 12:07:06 jonas Exp $ */
+/* $Id: parser.c,v 1.523 2005/02/25 16:52:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1139,6 +1139,12 @@ process_head(unsigned char *head)
 	refresh = parse_header(head, "Refresh", NULL);
 	if (refresh) {
 		url = parse_header_param(refresh, "URL");
+		if (!url) {
+			/* If the URL parameter is missing assume that the
+			 * document being processed should be refreshed. */
+			url = get_uri_string(html_context.base_href, URI_ORIGINAL);
+		}
+
 		if (url) {
 			unsigned char *saved_url = url;
 			/* Extraction of refresh time. */
@@ -1149,8 +1155,8 @@ process_head(unsigned char *head)
 			if (errno || seconds > 7200) seconds = 0;
 
 			html_focusable(NULL);
-			url = join_urls(html_context.base_href, saved_url);
 			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
+			url = join_urls(html_context.base_href, saved_url);
 			html_context.special_f(html_context.part, SP_REFRESH, seconds, url);
 			mem_free(url);
 			mem_free(saved_url);

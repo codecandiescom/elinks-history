@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.20 2004/01/18 15:29:10 pasky Exp $ */
+/* $Id: value.c,v 1.21 2004/01/18 15:30:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,6 +56,8 @@ css_parse_color_value(struct css_property_info *propinfo,
 {
 	int pos;
 
+	assert(propinfo->value_type == CSS_VT_COLOR);
+
 	if (!strncasecmp(*string, "rgb(", 4)) {
 		/* RGB function */
 		int part;
@@ -96,6 +98,8 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 	unsigned char *nstring;
 	int weight;
 
+	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
+
 	if (!strncasecmp(*string, "normal", 6)) {
 		(*string) += 6;
 		value->font_attribute.rem |= AT_ITALIC;
@@ -120,6 +124,8 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 {
 	unsigned char *nstring;
 	int weight;
+
+	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
 	if (!strncasecmp(*string, "bolder", 6)) {
 		(*string) += 6;
@@ -169,6 +175,8 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   unsigned char **string)
 {
+	assert(propinfo->value_type == CSS_VT_TEXT_ALIGN);
+
 	if (!strncasecmp(*string, "left", 4)) {
 		(*string) += 4;
 		value->text_align = AL_LEFT;

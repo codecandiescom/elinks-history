@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.88 2004/05/26 13:45:52 jonas Exp $ */
+/* $Id: cmdline.c,v 1.89 2004/06/20 15:44:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,8 @@ print_full_help(struct option *tree, unsigned char *path)
 				      ? (unsigned char *) gettext(option->desc)
 				      : (unsigned char *) "N/A";
 
-		/* Don't print deprecated aliases and command line options */
+		/* Don't print deprecated aliases (if we don't walk command
+		 * line options which use aliases for legitimate options). */
 		if (type == OPT_ALIAS && tree != cmdline_options)
 			continue;
 
@@ -557,6 +558,16 @@ redir_cmd(struct option *option, unsigned char ***argv, int *argc)
 		target = "config-dir";
 	} else if (!strcmp(option->name, "conffile")) {
 		target = "config-file";
+	} else if (!strcmp(option->name, "stdin")) {
+		/* Emulate bool option, possibly eating following 0/1. */
+		if (((*argv)[0][0] == '0' || (*argv)[0][0] == '1')
+		    && !(*argv)[0][1])
+			(*argv)++, (*argc)--;
+		fprintf(stderr, "Warning: Deprecated option -stdin used!\n");
+		fprintf(stderr, "ELinks now determines the -stdin option value automatically.\n");
+		fprintf(stderr, "In the future versions ELinks will report error when you will\n");
+		fprintf(stderr, "continue to use this option.\a\n");
+
 	} else {
 		return gettext("Internal consistency error");
 	}
@@ -717,6 +728,8 @@ struct option_info cmdline_options_info[] = {
 	INIT_OPT_BOOL("", N_("Write the source of given URL to stdout"),
 		"source", 0, 0,
 		N_("Write the given HTML document in source form to stdout.")),
+
+	INIT_OPT_COMMAND("", NULL, "stdin", 0, redir_cmd, NULL),
 
 	INIT_OPT_BOOL("", N_("Touch files in ~/.elinks when running with -no-connect/-session-ring"),
 		"touch-files", 0, 0,

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.52 2003/10/16 08:16:40 zas Exp $ */
+/* $Id: cache.c,v 1.53 2003/10/16 08:20:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,7 +338,7 @@ defrag_entry(struct cache_entry *e)
 void
 truncate_entry(struct cache_entry *e, int off, int final)
 {
-	struct fragment *f, *g;
+	struct fragment *f;
 
 	if (e->length > off) {
 		e->length = off;
@@ -352,11 +352,12 @@ truncate_entry(struct cache_entry *e, int off, int final)
 
 del:
 			while ((void *)f != &e->frag) {
+				struct fragment *tmp = f->next;
+
 				resize_entry(e, -f->length);
-				g = f->next;
 				del_from_list(f);
 				mem_free(f);
-				f = g;
+				f = tmp;
 			}
 			dump_frags(e, "truncate_entry");
 			return;
@@ -367,13 +368,15 @@ del:
 			f->length = size;
 
 			if (final) {
-				g = mem_realloc(f, sizeof(struct fragment)
+				struct fragment *nf;
+
+				nf = mem_realloc(f, sizeof(struct fragment)
 						   + f->length
 						   - 1); /* One byte is in struct fragment. */
-				if (g) {
-					g->next->prev = g;
-					g->prev->next = g;
-					f = g;
+				if (nf) {
+					nf->next->prev = nf;
+					nf->prev->next = nf;
+					f = nf;
 					f->real_length = f->length;
 				}
 			}

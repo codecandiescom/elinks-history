@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.84 2003/09/16 18:08:16 jonas Exp $ */
+/* $Id: tables.c,v 1.85 2003/09/16 18:11:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1476,6 +1476,7 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
  	int pos = H_FRAME_POSITION(table, i, j);
  
  	assertm(pos < 3, "Horizontal table position out of bound [%d]", pos);
+	if_assert_failed return;
  
  	if (pos < 0 || table->w_c[i] <= 0) return;
  
@@ -1490,6 +1491,7 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
  	int pos = V_FRAME_POSITION(table, i, j);
  
  	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);
+	if_assert_failed return;
  
  	if (pos < 0 || table->r_heights[j] <= 0) return;
  

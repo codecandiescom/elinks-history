@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.115 2004/11/14 03:10:31 jonas Exp $ */
+/* $Id: info.c,v 1.116 2004/11/14 03:14:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ get_resource_info(struct terminal *term, void *data)
 		"transferring, %d keepalive.\n"
 		"Memory cache: %d bytes, %d files, %d locked, %d "
 		"loading.\n"
-		"Formatted document cache: %d documents, %d locked.\n"
+		"Document cache: %d formatted, %d locked.\n"
 		"Interlinking: %s terminal, %d terminals, %d sessions.", term),
 		select_info(INFO_FILES), select_info(INFO_TIMERS),
 		connect_info(INFO_FILES), connect_info(INFO_CONNECTING),

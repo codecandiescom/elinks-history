@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.148 2004/11/11 18:59:00 miciah Exp $ */
+/* $Id: options.inc,v 1.149 2004/11/17 23:02:07 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1176,6 +1176,14 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_COLORS(".dialog", N_("Selected button"),
 		"button-selected", "yellow", "green", "white", "black",
+		N_("Dialog selected button colors.")),
+
+	INIT_OPT_COLORS(".dialog", N_("Button shortcut"),
+		"button-shortcut", "yellow", "blue", "white", "black",
+		N_("Dialog button colors.")),
+
+	INIT_OPT_COLORS(".dialog", N_("Selected button shortcut"),
+		"button-shortcut-selected", "white", "blue", "black", "white",
 		N_("Dialog selected button colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Text field"),

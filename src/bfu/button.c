@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.66 2004/11/17 22:13:43 zas Exp $ */
+/* $Id: button.c,v 1.67 2004/11/17 23:02:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,17 +97,25 @@ static t_handler_event_status
 display_button(struct dialog_data *dlg_data, struct widget_data *widget_data, int sel)
 {
 	struct terminal *term = dlg_data->win->term;
-	struct color_pair *color;
+	struct color_pair *color, *shortcut_color;
 	struct box *pos = &widget_data->box;
 	int len = widget_data->box.width - BUTTON_LR_LEN;
 	int x = pos->x + BUTTON_LEFT_LEN;
 
-	color = get_bfu_color(term, sel ? "dialog.button-selected"
-					: "dialog.button");
-	if (!color) return EVENT_PROCESSED;
+	if (sel) {
+		shortcut_color = get_bfu_color(term, "dialog.button-shortcut-selected");
+		color =  get_bfu_color(term, "dialog.button-selected");
+	} else {
+		shortcut_color = get_bfu_color(term, "dialog.button-shortcut");
+		color =  get_bfu_color(term, "dialog.button");
+	}
+	if (!color || !shortcut_color) return EVENT_PROCESSED;
 
 	draw_text(term, pos->x, pos->y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
-	draw_text(term, x, pos->y, widget_data->widget->text, len, 0, color);
+	if (len > 0) {
+		draw_text(term, x, pos->y, widget_data->widget->text, 1, 0, shortcut_color);
+		draw_text(term, x + 1, pos->y, &widget_data->widget->text[1], len - 1, 0, color);
+	}
 	draw_text(term, x + len, pos->y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);
 
 	if (sel) {

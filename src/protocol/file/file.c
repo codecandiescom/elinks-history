@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.35 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: file.c,v 1.36 2002/12/07 21:56:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,7 +432,27 @@ dir:
 		add_to_str(&file, &fl, "<html>\n<head><title>");
 		add_htmlesc_str(&file, &fl, name, strlen(name));
 		add_to_str(&file, &fl, "</title></head>\n<body>\n<h2>Directory ");
-		add_htmlesc_str(&file, &fl, name, strlen(name));
+		{
+			unsigned char *pslash, *slash = name - 1;
+
+			while (pslash = ++slash, slash = strchr(slash, '/')) {
+				if (slash == name) {
+					add_chr_to_str(&file, &fl, '/');
+					continue;
+				}
+
+				slash[0] = 0;
+				add_to_str(&file, &fl, "<a href=\"");
+				/* FIXME: htmlesc? At least we should escape quotes. --pasky */
+				add_to_str(&file, &fl, name);
+				add_chr_to_str(&file, &fl, '/');
+				add_to_str(&file, &fl, "\">");
+				add_htmlesc_str(&file, &fl, pslash, strlen(pslash));
+				add_to_str(&file, &fl, "</a>");
+				add_chr_to_str(&file, &fl, '/');
+				slash[0] = '/';
+			}
+		}
 		add_to_str(&file, &fl, "</h2>\n<pre>");
 
 		while ((de = readdir(d))) {

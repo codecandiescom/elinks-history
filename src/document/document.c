@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.69 2004/06/12 17:28:43 zas Exp $ */
+/* $Id: document.c,v 1.70 2004/06/30 03:26:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,6 +170,22 @@ release_document(struct document *document)
 
 /* Formatted document cache management */
 
+unsigned long
+get_document_css_magic(struct document *document)
+{
+	unsigned long css_magic = 0;
+	struct uri *uri;
+	int index;
+
+	foreach_uri (uri, index, &document->css_imports) {
+		struct cache_entry *cached = find_in_cache(uri);
+
+		if (cached) css_magic += cached->id;
+	}
+
+	return css_magic;
+}
+
 struct document *
 get_cached_document(struct cache_entry *cached, struct document_options *options)
 {
@@ -180,7 +196,8 @@ get_cached_document(struct cache_entry *cached, struct document_options *options
 		    || compare_opt(&document->options, options))
 			continue;
 
-		if (cached->id != document->id) {
+		if (cached->id != document->id
+		    || document->css_magic != get_document_css_magic(document)) {
 			if (!is_object_used(document)) {
 				document = document->prev;
 				done_document(document->next);

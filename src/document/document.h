@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.70 2004/06/26 21:25:20 pasky Exp $ */
+/* $Id: document.h,v 1.71 2004/06/30 03:26:41 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -119,6 +119,9 @@ struct document {
 	 * dependencies between the various entries so nothing gets removed
 	 * unneeded. */
 	struct uri_list css_imports;
+	/* Calculated from the id's of all the cache entries in css_imports.
+	 * Used for checking rerendering for available CSS imports. */
+	unsigned long css_magic;
 
 	struct uri *uri;
 	unsigned char *title;
@@ -161,6 +164,10 @@ void done_document(struct document *document);
 
 /* Free's the allocated members of the link. */
 void done_link_members(struct link *link);
+
+/* Calculates css magic from available CSS imports. Used for determining
+ * validity of formatted documents in the cache. */
+unsigned long get_document_css_magic(struct document *document);
 
 struct document *get_cached_document(struct cache_entry *cached, struct document_options *options);
 

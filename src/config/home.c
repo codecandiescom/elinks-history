@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.9 2002/06/22 21:20:53 pasky Exp $ */
+/* $Id: home.c,v 1.10 2002/07/05 09:24:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ get_home(int *new)
 	struct stat st;
 	unsigned char *home = stracpy(getenv("HOME"));
 	unsigned char *home_elinks;
-	unsigned char *config_dir = stracpy(getenv("CONFIG_DIR"));
+	unsigned char *config_dir = stracpy(getenv("ELINKS_CONFDIR"));
 
 	/* TODO: We want to use commandline option instead of environment
 	 * variable, especially one with so common name. */
@@ -75,8 +75,8 @@ get_home(int *new)
 			add_to_strn(&home_elinks, "/elinks");
 
 	    	} else {
-			fprintf(stderr, "CONFIG_DIR set to %s. But directory "
-					"%s doesn't exist.\n\007",
+			fprintf(stderr, "ELINKS_CONFDIR set to %s, but "
+					"directory %s doesn't exist.\n\007",
 				config_dir, home_elinks);
 			sleep(3);
 			mem_free(home_elinks);

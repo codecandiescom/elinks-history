@@ -177,7 +177,7 @@ Laurent Monin <zas@norz.org>
 	Referred as 'Zas' or 'zas' in the code
 
 Lukasz Dobrek <dobrek@student.ifpan.edu.pl>
-	$CONFIG_DIR for config directory
+	$CONFIG_DIR for config directory (later changed to $ELINKS_CONFDIR)
 
 Len Lattanzi <Len_Lattanzi@StanfordAlumni.org>
 	Allow reading of special (non-regular) files
@@ -337,4 +337,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.68 2002/07/03 22:20:02 pasky Exp $
+$Id: AUTHORS,v 1.69 2002/07/05 09:24:36 pasky Exp $

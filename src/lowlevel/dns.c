@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.43 2004/04/16 16:34:11 zas Exp $ */
+/* $Id: dns.c,v 1.44 2004/04/19 08:50:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,22 +423,22 @@ find_host(unsigned char *name, struct sockaddr_storage **addr, int *addrno,
 	if (query_p) *query_p = NULL;
 
 	if (find_in_dns_cache(name, &dnsentry) >= 0) {
-		if (dnsentry->get_time + DNS_TIMEOUT < get_time())
-			goto timeout;
+		assert(dnsentry && dnsentry->addrno > 0);
 
-		assert(dnsentry && dnsentry->addrno);
+		if (dnsentry->get_time + DNS_TIMEOUT >= get_time()) {
+			int size = sizeof(struct sockaddr_storage)
+				   * dnsentry->addrno;
 
-		*addr = mem_calloc(dnsentry->addrno, sizeof(struct sockaddr_storage));
-		if (*addr) {
-			memcpy(*addr, dnsentry->addr, sizeof(struct sockaddr_storage)
-						      * dnsentry->addrno);
-			*addrno = dnsentry->addrno;
-			fn(data, 0);
+			*addr = mem_alloc(size);
+			if (*addr) {
+				memcpy(*addr, dnsentry->addr, size);
+				*addrno = dnsentry->addrno;
+				fn(data, 0);
+			}
+			return 0;
 		}
-		return 0;
 	}
 
-timeout:
 	return find_host_no_cache(name, addr, addrno, query_p, fn, data);
 }
 

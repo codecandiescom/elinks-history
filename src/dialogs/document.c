@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.101 2004/10/19 05:08:16 miciah Exp $ */
+/* $Id: document.c,v 1.102 2004/10/19 05:23:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,14 +235,14 @@ cached_header_dialog(struct session *ses, struct cache_entry *cached)
 
 		if (!headers) return;
 
-		/* If the headers string starts by a newline, it means that it
+		/* If |cached->head| starts by a newline, it means that it
 		 * is artificially generated, usually to make ELinks-generated
 		 * documents (ie. file:// directory listings) text/html. */
-		artificial = (*headers == '\r');
+		artificial = (*cached->head == '\r');
 #ifdef CONFIG_DEBUG
-		if (*headers)  {
+		if (*cached->head)  {
 #else
-		if (*headers && !artificial) {
+		if (*cached->head && !artificial) {
 #endif
 			int i = 0, j = 0;
 			/* Sanitize headers string. */

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.27 2003/09/23 00:45:56 jonas Exp $ */
+/* $Id: hooks.c,v 1.28 2003/09/23 14:03:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@ str_event_code(unsigned char **retval, unsigned char *value)
 /* Returns NULL if the original @url should be followed, or dynamically
  * allocated new URL to be followed instead ("" means that no URL should be
  * followed at all). */
-static int
+static enum evhook_status
 script_hook_goto_url(va_list ap)
 {
 	lua_State *L = lua_state;
@@ -84,7 +84,7 @@ script_hook_goto_url(va_list ap)
 /* Returns NULL if the original @url should be followed, or dynamically
  * allocated new URL to be followed instead ("" means that no URL should be
  * followed at all). */
-static int
+static enum evhook_status
 script_hook_follow_url(va_list ap)
 {
 	lua_State *L = lua_state;
@@ -127,7 +127,7 @@ script_hook_follow_url(va_list ap)
  * allocated string, or NULL to keep the content unchanged.
  */
 
-static int
+static enum evhook_status
 script_hook_pre_format_html(va_list ap)
 {
 	lua_State *L = lua_state;
@@ -181,7 +181,7 @@ script_hook_pre_format_html(va_list ap)
  *  - NULL to use default proxies
  */
 
-static int
+static enum evhook_status
 script_hook_get_proxy(va_list ap)
 {
 	lua_State *L = lua_state;
@@ -217,7 +217,7 @@ script_hook_get_proxy(va_list ap)
 
 /* This function should allow the user to do whatever clean up is
  * required when ELinks quits. */
-static int
+static enum evhook_status
 script_hook_quit(va_list ap)
 {
 	if (!prepare_lua(NULL)) {

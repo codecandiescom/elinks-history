@@ -1,4 +1,4 @@
-/* $Id: scripting.h,v 1.1 2003/09/23 00:45:18 jonas Exp $ */
+/* $Id: scripting.h,v 1.2 2003/09/23 14:03:06 pasky Exp $ */
 
 #ifndef EL__SCRIPTING_SCRIPTING_H
 #define EL__SCRIPTING_SCRIPTING_H
@@ -9,7 +9,7 @@
 
 struct scripting_hook {
 	unsigned char *name;
-	int (*callback)(va_list ap);
+	enum evhook_status (*callback)(va_list ap);
 };
 
 /* Plugs hooks into the event system. */

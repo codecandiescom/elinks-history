@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.4 2003/09/23 13:53:53 pasky Exp $ */
+/* $Id: event.h,v 1.5 2003/09/23 14:03:06 pasky Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -6,6 +6,15 @@
 #include <stdarg.h>
 
 #define EVENT_NONE (-1)
+
+
+/* This enum is returned by each event hook and determines whether we should
+ * go on in the chain or finish the event processing. You want to always
+ * return EHS_NEXT. */
+enum evhook_status {
+	EHS_NEXT,
+	EHS_LAST,
+};
 
 
 /*** The life of events */
@@ -19,9 +28,10 @@ int register_event(unsigned char *name);
  * further recyclation. */
 int unregister_event(int event);
 
-int register_event_hook(int id, int (*callback)(va_list ap), int priority);
+int register_event_hook(int id, enum evhook_status (*callback)(va_list ap),
+			int priority);
 
-void unregister_event_hook(int id, int (*callback)(va_list ap));
+void unregister_event_hook(int id, enum evhook_status (*callback)(va_list ap));
 
 
 /*** The events resolver */

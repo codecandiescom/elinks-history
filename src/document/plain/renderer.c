@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.156 2004/09/30 18:27:39 jonas Exp $ */
+/* $Id: renderer.c,v 1.157 2004/10/07 16:44:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,9 +260,12 @@ add_document_line(struct plain_renderer *renderer,
 				expanded--;
 #endif
 			/* Don't count the back-space character */
-			expanded--;
+			if (expanded > 0)
+				expanded--;
 		}
 	}
+
+	assert(expanded >= 0);
 
 	pos = realloc_line(document, width + expanded, lineno);
 	if (!pos) {

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.10 2002/12/10 20:58:47 pasky Exp $ */
+/* $Id: mime.c,v 1.11 2002/12/21 19:00:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,7 +124,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 
 
-void
+static inline void
 rmdots(unsigned char *tok)
 {
 	while (*tok) {
@@ -157,7 +157,7 @@ get_mime_type_name(unsigned char *type)
 	return name;
 }
 
-unsigned char *
+static inline unsigned char *
 get_mime_handler_name(unsigned char *type, int xwin)
 {
 	struct option *opt;

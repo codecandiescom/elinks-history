@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.59 2003/05/06 09:56:10 zas Exp $ */
+/* $Id: view.c,v 1.60 2003/05/06 10:03:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2533,9 +2533,10 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 static void
 jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 {
-	if (n < 0 || n > fd->f_data->nlinks) return;
-	fd->vs->current_link = n;
-	check_vs(fd);
+	if (n >= 0 && n <= fd->f_data->nlinks) {
+		fd->vs->current_link = n;
+		check_vs(fd);
+	}
 }
 
 /* This is common backend for goto_link_number() and try_document_key(). */
@@ -2556,10 +2557,8 @@ static void
 goto_link_number(struct session *ses, unsigned char *num)
 {
 	struct f_data_c *fd = current_frame(ses);
-	int n = atoi(num);
 
-	if (!fd) return;
-	goto_link_number_do(ses, fd, n - 1);
+	if (fd) goto_link_number_do(ses, fd, atoi(num) - 1);
 }
 
 /* See if this document is interested in the key user pressed. */

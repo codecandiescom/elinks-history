@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.97 2003/10/30 13:50:20 zas Exp $ */
+/* $Id: tables.c,v 1.98 2003/10/30 13:52:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,6 +88,7 @@ struct table_column {
 	int width;
 };
 
+/* TODO: rename fields. --Zas */
 struct table {
 	struct part *p;
 	struct table_cell *cells;

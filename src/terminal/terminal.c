@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.21 2003/05/09 13:23:26 pasky Exp $ */
+/* $Id: terminal.c,v 1.22 2003/05/16 23:31:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,18 +326,11 @@ send_redraw:
 		foreachback(win, term->windows) {
 			/* Note that you do NOT want to ever go and create new
 			 * window inside EV_INIT handler (it'll get second
-			 * EV_INIT here). Work out some hack, like me ;-).
+			 * EV_INIT here). Perhaps the best thing you could do
+			 * is registering a bottom-half handler which will open
+			 * additional windows.
 			 * --pasky */
 			IF_ACTIVE(win,term) win->handler(win, ev, 0);
-		}
-		{
-			extern int startup_goto_dialog_paint;
-			extern struct session *startup_goto_dialog_ses;
-
-			if (startup_goto_dialog_paint) {
-				dialog_goto_url(startup_goto_dialog_ses, "");
-				startup_goto_dialog_paint = 0;
-			}
 		}
 		term->redrawing = 0;
 	}

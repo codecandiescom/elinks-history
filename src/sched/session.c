@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.67 2003/05/13 23:57:39 pasky Exp $ */
+/* $Id: session.c,v 1.68 2003/05/16 23:31:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1374,8 +1374,13 @@ free_session_info(struct initial_session_info *info)
 	mem_free(info);
 }
 
-int startup_goto_dialog_paint = 0;
-struct session *startup_goto_dialog_ses;
+static void
+dialog_goto_url_open(void *data)
+{
+	struct session *ses = data;
+
+	dialog_goto_url(ses, NULL);
+}
 
 static int
 process_session_info(struct session *ses, struct initial_session_info *info)
@@ -1405,10 +1410,8 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		if (!h || !*h) {
 			if (get_opt_int("ui.startup_goto_dialog")) {
 				/* We can't create new window in EV_INIT
-				 * handler. Stupid. This should be regarded
-				 * only as a very temporary hack. --pasky */
-				startup_goto_dialog_paint = 1;
-				startup_goto_dialog_ses = ses;
+				 * handler! */
+				register_bottom_half(dialog_goto_url_open, ses);
 			}
 		} else {
 			goto_url(ses, h);

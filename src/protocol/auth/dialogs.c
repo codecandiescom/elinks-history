@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.36 2003/07/11 04:35:47 jonas Exp $ */
+/* $Id: dialogs.c,v 1.37 2003/07/11 17:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ auth_ok(struct dialog_data *dlg, struct widget_data *di)
 	struct http_auth_basic *entry = dlg->dlg->udata2;
 
 	entry->blocked = 0;
-	entry->valid = 1;
+	entry->valid = (*entry->uid && *entry->passwd);
 	reload(dlg->dlg->refresh_data, -1);
 	return ok_dialog(dlg, di);
 }

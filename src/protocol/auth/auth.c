@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.38 2003/07/11 14:26:38 jonas Exp $ */
+/* $Id: auth.c,v 1.39 2003/07/11 17:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,6 +62,14 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define min(x, y) ((x) < (y) ? (x) : (y))
 
+#define set_auth_uid(_entry_, _uri_) \
+	(!(_uri_)->userlen	? *(_entry_)->uid = 0 \
+	 			: min((_uri_)->userlen + 1, MAX_UID_LEN))
+
+#define set_auth_passwd(_entry_, _uri_) \
+	(!(_uri_)->passwordlen	? *(_entry_)->passwd = 0 \
+	 			: min((_uri_)->passwordlen + 1, MAX_PASSWD_LEN))
+
 static struct http_auth_basic *
 init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 {
@@ -89,8 +97,7 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 		mem_free(entry);
 		return NULL;
 	}
-	safe_strncpy(entry->uid, uri->user,
-		     min(uri->userlen + 1, MAX_UID_LEN));
+	set_auth_uid(entry, uri);
 
 	entry->passwd = mem_alloc(MAX_PASSWD_LEN);
 	if (!entry->passwd) {
@@ -99,8 +106,7 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 		mem_free(entry);
 		return NULL;
 	}
-	safe_strncpy(entry->passwd, uri->password,
-		     min(uri->passwordlen + 1, MAX_UID_LEN));
+	set_auth_passwd(entry, uri);
 
 	return entry;
 }
@@ -124,7 +130,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	if (entry) {
 		mem_free(newurl);
 
-		assert(entry->valid && entry->uid && entry->passwd);
+		assert(entry->uid && entry->passwd);
 		if_assert_failed { return ADD_AUTH_ERROR; }
 
 		/* Found an entry. */
@@ -157,15 +163,13 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		if (!entry->valid || strlen(entry->uid) != uri->userlen
 		    || strncmp(entry->uid, uri->user, uri->userlen)) {
 			entry->valid = 0;
-			safe_strncpy(entry->uid, uri->user,
-				     min(uri->userlen + 1, MAX_UID_LEN));
+			set_auth_uid(entry, uri);
 		}
 
 		if (!entry->valid || strlen(entry->passwd) != uri->passwordlen
 		    || strncmp(entry->passwd, uri->password, uri->passwordlen)) {
 			entry->valid = 0;
-			safe_strncpy(entry->passwd, uri->password,
-				     min(uri->passwordlen + 1, MAX_UID_LEN));
+			set_auth_passwd(entry, uri);
 		}
 
 		/* If all was matched exactly we have an existing entry. */

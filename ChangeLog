@@ -1,3 +1,81 @@
+Tue Oct 14 21:52:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/tools/: .cvsignore, .vimrc, help2doc:
+
+	help2doc was moved to doc/tools so kill the fairies.  
+
+Tue Oct 14 20:06:05 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	translation updated to 84.68% 
+
+Tue Oct 14 18:43:54 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Fixed typos in Italian translation.  
+
+Tue Oct 14 18:43:02 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/document/html/parser.c:
+
+	Move mem_free(href) where it belongs, pasky sees everything.  
+
+Tue Oct 14 15:57:27 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/ssl/connect.c:
+
+	Removed unreached goto.  
+
+Tue Oct 14 14:15:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: util/Makefile.am, util/profile.h, elinks.h:
+
+	Moved CLK_* macros to util/profile.h 
+
+Tue Oct 14 14:00:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elinks.h:
+
+	Remove useless ; at end of CLK_STA() and CLK_STO() definitions.  
+
+Tue Oct 14 13:59:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elinks.h:
+
+	Fix stupid stuff in last patch. No need to use do {} while (0) with
+	CLK_STA() and CLK_STO().  
+
+Tue Oct 14 13:52:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elinks.h:
+
+	Process cpu time gathering utilities to help developpers in
+	profiling ELinks functions. These tools are not so hi-resolution as
+	possible but they should be portable since only clock() is used.
+	These macros are only effective in debug mode. Feel free to improve.  
+
+Tue Oct 14 11:16:30 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/document/html/parser.c:
+
+	Prevent a memory leak if !label, 'cause every byte is sacred, every
+	byte is great, if a byte is wasted god gets quite irate.  
+
+Tue Oct 14 10:27:36 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Translation fixes.  
+
+Mon Oct 13 22:40:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/README:
+
+	Trim a few tags and use | for the markup .. we can use the
+	indentation to figure out what's a section title.  
+
 Mon Oct 13 21:49:16 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/util/version.c:

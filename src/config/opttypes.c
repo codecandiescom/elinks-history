@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.71 2003/11/22 17:05:24 jonas Exp $ */
+/* $Id: opttypes.c,v 1.72 2003/11/25 12:51:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,12 +357,11 @@ color_wr(struct option *opt, struct string *str)
 static void
 tree_dup(struct option *opt, struct option *template)
 {
-	struct list_head *new = mem_alloc(sizeof(struct list_head));
+	struct list_head *new = init_options_tree();
 	struct list_head *tree = template->value.tree;
 	struct option *option;
 
 	if (!new) return;
-	init_list(*new);
 	opt->value.tree = new;
 
 	foreachback (option, *tree) {

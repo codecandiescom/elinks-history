@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.91 2004/09/26 20:24:52 pasky Exp $ */
+/* $Id: renderer.c,v 1.92 2004/09/27 02:27:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,6 +67,11 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 		doc_current = doc_snippets->next;
 		assert(!list_empty(*queued_snippets));
 		while (iterator != *current) {
+			assert(!strlcmp(iterator->string.source,
+			                iterator->string.length,
+					doc_current->string.source,
+			                doc_current->string.length));
+
 			doc_current = doc_current->next;
 			iterator = iterator->next;
 
@@ -174,6 +179,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 #ifdef CONFIG_ECMASCRIPT
 	if (vs->ecmascript_fragile)
 		ecmascript_reset_state(vs);
+	assert(vs->ecmascript);
 #endif
 
 	cached = find_in_cache(vs->uri);

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.54 2004/03/21 00:04:16 jonas Exp $ */
+/* $Id: uri.h,v 1.55 2004/03/21 00:21:13 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -38,8 +38,7 @@ struct uri {
 	unsigned char *hoststr;
 	int hostlen;
 
-	unsigned char *port;
-	int portlen;
+	struct string port;
 
 	/* @data can contain both the path and query uri fields.
 	 * It can never be NULL but can have zero length. */
@@ -121,8 +120,8 @@ get_uri_host(struct uri *uri)
 static inline int
 get_uri_host_length(struct uri *uri, enum uri_component components)
 {
-	return ((components & URI_PORT) && uri->port)
-		? uri->port + uri->portlen - get_uri_host(uri)
+	return ((components & URI_PORT) && !string_is_empty(&uri->port))
+		? uri->port.source + uri->port.length - get_uri_host(uri)
 		: uri->hoststr + uri->hostlen - get_uri_host(uri);
 }
 

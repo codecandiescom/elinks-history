@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.243 2004/03/20 23:53:06 jonas Exp $ */
+/* $Id: http.c,v 1.244 2004/03/21 00:21:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,7 +373,7 @@ http_send_header(struct connection *conn)
 
 	if (use_connect) {
 		add_uri_to_string(&header, uri, URI_HOST | URI_PORT);
-		if (!uri->port) {
+		if (string_is_empty(&uri->port)) {
 			add_char_to_string(&header, ':');
 			add_long_to_string(&header, get_protocol_port(uri->protocol));
 		}

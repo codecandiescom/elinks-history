@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.89 2004/03/21 00:04:16 jonas Exp $ */
+/* $Id: uri.c,v 1.90 2004/03/21 00:21:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,6 +95,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	set_string_magic(&uri->user);
 	set_string_magic(&uri->password);
+	set_string_magic(&uri->port);
 
 	known = (protocol != PROTOCOL_UNKNOWN);
 	uri->protocollen = prefix_end - uristring;
@@ -187,8 +188,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 		host_end++;
 
-		uri->port = host_end;
-		uri->portlen = port_end - host_end;
+		uri->port.source = host_end;
+		uri->port.length = port_end - host_end;
 
 		/* test if port is number */
 		/* TODO: possibly lookup for the service otherwise? --pasky */
@@ -224,11 +225,11 @@ get_uri_port(struct uri *uri)
 {
 	int port = -1;
 
-	if (uri->port && uri->portlen) {
+	if (!string_is_empty(&uri->port)) {
 		int n;
 
 		errno = 0;
-		n = strtol(uri->port, NULL, 10);
+		n = strtol(uri->port.source, NULL, 10);
 		if (!errno && n > 0) port = n;
 	}
 
@@ -290,9 +291,9 @@ add_uri_to_string(struct string *string, struct uri *uri,
  	}
 
  	if (wants(URI_PORT)) {
- 		if (uri->portlen) {
+ 		if (!string_is_empty(&uri->port)) {
 			add_char_to_string(string, ':');
-			add_bytes_to_string(string, uri->port, uri->portlen);
+			add_string_to_string(string, &uri->port);
  		}
 #if 0
 		/* We needs to add possibility to only add port if it's

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.54 2004/03/20 23:35:08 jonas Exp $ */
+/* $Id: user.c,v 1.55 2004/03/21 00:21:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,9 +98,10 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 				break;
 			}
 			case 'p':
-				if (uri->portlen)
-					add_shell_safe_to_string(&string, uri->port,
-								 uri->portlen);
+				if (!string_is_empty(&uri->port))
+					add_shell_safe_to_string(&string,
+								 uri->port.source,
+								 uri->port.length);
 				break;
 			case 'd':
 				if (uri->datalen)

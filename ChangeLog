@@ -1,3 +1,45 @@
+Mon Jun  7 17:46:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, cache/dialogs.c,
+	document/document.c, document/document.h:
+
+	id_tag -> id.  
+
+Mon Jun  7 17:39:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	delete_cache_entry(): Group done_uri()s.  
+
+Mon Jun  7 16:36:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: marks.c, marks.h, view.c:
+
+	goto_mark(): Introduced to make marks interface 'cleaner'. Stuff
+	from frame_ev() moved to it.  
+
+Mon Jun  7 16:25:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/dialogs.c, sched/connection.c,
+	viewer/text/view.c:
+
+	More compare_uri() usage. Hmm 
+
+Mon Jun  7 16:18:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, document.h, renderer.c:
+
+	Simplify init_document() and get_cached_document() by passing
+	cache_entry.  
+
+Mon Jun  7 15:58:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/events.txt, src/protocol/rewrite/rewrite.c, src/sched/task.c,
+	src/scripting/guile/hooks.c, src/scripting/lua/hooks.c,
+	src/scripting/perl/hooks.c:
+
+	Pass current URI to goto-url event instead of current session.  
+
 Sun Jun  6 13:19:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/parser.c:

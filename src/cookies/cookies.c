@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.51 2003/05/13 12:27:45 zas Exp $ */
+/* $Id: cookies.c,v 1.52 2003/05/13 13:38:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -660,18 +660,16 @@ inv:
 static void
 save_cookies(void) {
 	struct cookie *c;
-	unsigned char *cookfile = "cookies";
+	unsigned char *cookfile;
 	struct secure_save_info *ssi;
 
-	if (cookies_nosave || !cookies_dirty) return;
+	if (cookies_nosave || !elinks_home || !cookies_dirty) return;
 
-	if (elinks_home) {
-		cookfile = straconcat(elinks_home, "cookies", NULL);
-		if (!cookfile) return;
-	}
+	cookfile = straconcat(elinks_home, "cookies", NULL);
+	if (!cookfile) return;
 
 	ssi = secure_open(cookfile, 0177); /* rw for user only */
-	if (elinks_home) mem_free(cookfile);
+	mem_free(cookfile);
 	if (!ssi) return;
 
 	foreach (c, cookies) {

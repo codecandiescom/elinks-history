@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.28 2002/11/27 10:22:04 zas Exp $ */
+/* $Id: terminal.c,v 1.29 2002/11/28 11:40:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ alloc_term_screen(struct terminal *term, int x, int y)
 
 	s = mem_realloc(term->screen, space);
 	if (!s) return;
-	
+
 	t = mem_realloc(term->last_screen, space);
 	if (!t) {
 		mem_free(s);
@@ -698,57 +698,51 @@ unsigned char frame_restrict[48] = {
 
 /* TODO: We should provide some generic mechanism for options caching. */
 struct rs_opt_cache {
-	int type, m11_hack, utf_8_io, colors, charset, restrict_852;
+	int type, m11_hack, utf_8_io, colors, charset, restrict_852, cp437, koi8r;
 };
 
 static inline void
 print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 	   unsigned char **a, int *l, int p, int *mode, int *attrib)
 {
-	static int cp437 = -1, koi8r = -1;
 	unsigned ch = term->screen[p];
 	unsigned char c = ch & 0xff;
 	unsigned char A = ch >> 8 & 0x7f;
-
-	/* Cache these values as they don't change and get_cp_index() is pretty
-	 * CPU-intensive. */
-	if (cp437 < 0) cp437 = get_cp_index("cp437");
-	if (koi8r < 0) koi8r = get_cp_index("koi8-r");
+	unsigned char B = ch >> 15;
 
 	if (opt_cache->type == TERM_LINUX) {
 		if (opt_cache->m11_hack &&
 		    !opt_cache->utf_8_io) {
-			if (ch >> 15 != *mode) {
-				*mode = ch >> 15;
+			if (B != *mode) {
+				*mode = B;
 				if (!*mode) add_to_str(a, l, "\033[10m");
 				else add_to_str(a, l, "\033[11m");
 			}
 		}
-		if (opt_cache->restrict_852) {
-			if ((ch >> 15) && c >= 176 && c < 224) {
-				if (frame_restrict[c - 176])
-					c = frame_restrict[c - 176];
-			}
-		}
+		if (opt_cache->restrict_852
+		    && B && c >= 176 && c < 224
+		    && frame_restrict[c - 176])
+			c = frame_restrict[c - 176];
 	} else if (opt_cache->type == TERM_VT100
 		   && !opt_cache->utf_8_io) {
-		if (ch >> 15 != *mode) {
-			*mode = ch >> 15;
-			if (!*mode) add_to_str(a, l, "\x0f");
-			else add_to_str(a, l, "\x0e");
+		if (B != *mode) {
+			*mode = B;
+			if (!*mode) add_chr_to_str(a, l, '\x0f');
+			else add_chr_to_str(a, l, '\x0e');
 		}
 		if (*mode && c >= 176 && c < 224) c = frame_vt100[c - 176];
-	} else if (opt_cache->type == TERM_VT100
-		   && (ch >> 15) && c >= 176 && c < 224) {
-		c = frame_vt100_u[c - 176];
-	} else if (opt_cache->type == TERM_KOI8
-		   && (ch >> 15) && c >= 176 && c < 224) {
-		c = frame_koi[c - 176];
-	} else if (opt_cache->type == TERM_DUMB
-		   && (ch >> 15) && c >= 176 && c < 224)
-		c = frame_dumb[c - 176];
+	} else if (B && c >= 176 && c < 224) {
+		if (opt_cache->type == TERM_VT100)
+		   	c = frame_vt100_u[c - 176];
+		else if (opt_cache->type == TERM_KOI8)
+			c = frame_koi[c - 176];
+		else if (opt_cache->type == TERM_DUMB)
+		   	c = frame_dumb[c - 176];
+	}
 
-	if (!(A & 0100) && (A >> 3) == (A & 7)) A = (A & 070) | 7 * !(A & 020);
+	if (!(A & 0100) && (A >> 3) == (A & 7))
+		A = (A & 070) | 7 * !(A & 020);
+
 	if (A != *attrib) {
 		*attrib = A;
 		add_to_str(a, l, "\033[0");
@@ -766,18 +760,18 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 		} else if (getcompcode(*attrib & 7) < getcompcode(*attrib >> 3 & 7))
 			add_to_str(a, l, ";7");
 		if (*attrib & 0100) add_to_str(a, l, ";1");
-		add_to_str(a, l, "m");
+		add_chr_to_str(a, l, 'm');
 	}
 	if (c >= ' ' && c != 127/* && c != 155*/) {
 		int charset = opt_cache->charset;
 		int type = opt_cache->type;
 
-		if (ch >> 15) {
+		if (B) {
 			int frames_charset = (type == TERM_LINUX ||
 					      type == TERM_VT100)
-						? cp437
+						? opt_cache->cp437
 						: type == TERM_KOI8
-							? koi8r
+							? opt_cache->koi8r
 							: -1;
 			if (frames_charset != -1) charset = frames_charset;
 		}
@@ -823,6 +817,10 @@ redraw_screen(struct terminal *term)
 	opt_cache.colors = get_opt_bool_tree(opt_tree, "colors");
 	opt_cache.charset = get_opt_int_tree(opt_tree, "charset");
 	opt_cache.restrict_852 = get_opt_bool_tree(opt_tree, "restrict_852");
+	/* Cache these values as they don't change and
+	 * get_cp_index() is pretty CPU-intensive. */
+	opt_cache.cp437 = get_cp_index("cp437");
+	opt_cache.koi8r = get_cp_index("koi8-r");
 
 	for (y = 0; y < term->y; y++)
 		for (x = 0; x < term->x; x++, p++) {

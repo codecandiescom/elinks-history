@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.44 2002/11/23 19:24:27 zas Exp $ */
+/* $Id: renderer.c,v 1.45 2002/11/28 11:41:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -451,7 +451,10 @@ justify_line(struct part *part, int y)
 	 * char is space - then we're going to write to both [0] and [1], but
 	 * we allocated only one field. Thus, we've to do (len + 1). --pasky */
 	space_list = mem_alloc((len + 1) * sizeof(int));
-	if (!space_list) return;
+	if (!space_list) {
+		mem_free(line);
+		return;
+	}
 
 	memcpy(line, &POS(0, y), len * sizeof(chr));
 
@@ -1439,9 +1442,12 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 	struct part *rp;
 	unsigned char *start = NULL;
 	unsigned char *end = NULL;
-	unsigned char *head, *t;
-	int hdl;
+	unsigned char *t;
+	unsigned char *head = init_str();
+	int hdl = 0;
 	int i;
+
+	if (!head) return;
 
 	d_opt = &screen->opt;
 	screen->use_tag = ce->count;
@@ -1456,8 +1462,6 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 	startf = start;
 	eofff = end;
 
-	head = init_str();
-	hdl = 0;
 	if (ce->head) add_to_str(&head, &hdl, ce->head);
 
 	scan_http_equiv(start, end, &head, &hdl, &t);
@@ -1575,7 +1579,9 @@ count_format_cache()
 	struct f_data *ce;
 
 	format_cache_entries = 0;
-	foreach(ce, format_cache) if (!ce->refcount) format_cache_entries++;
+	foreach(ce, format_cache)
+		if (!ce->refcount)
+			format_cache_entries++;
 }
 
 void
@@ -1611,7 +1617,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 {
 	unsigned char *n;
 	struct f_data *ce;
-	struct cache_entry *cee;
+	struct cache_entry *cee = NULL;
 
 	if (!vs) return;
 
@@ -1622,19 +1628,22 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	screen->name = n;
 	screen->link_bg = NULL;
 	screen->link_bg_n = 0;
-	if (vs) vs->f = screen;
+	vs->f = screen;
 
 	screen->vs = vs;
 	screen->xl = screen->yl = -1;
 	screen->f_data = NULL;
 
+	if (!find_in_cache(vs->url, &cee) || !cee) {
+		internal("document %s to format not found", vs->url);
+		return;
+	}
+
 	foreach(ce, format_cache) {
 		if (strcmp(ce->url, vs->url)) continue;
 		if (compare_opt(&ce->opt, opt)) continue;
 
-		cee = NULL;
-		if (!find_in_cache(vs->url, &cee) || !cee || cee->count != ce->use_tag) {
-			if (!cee) internal("file %s disappeared from cache", ce->url);
+		if (cee->count != ce->use_tag) {
 			if (!ce->refcount) {
 				ce = ce->prev;
 				destroy_formatted(ce->next);
@@ -1651,11 +1660,6 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 		goto sx;
 	}
 
-	if (!find_in_cache(vs->url, &cee) || !cee) {
-		internal("document to format not found");
-		return;
-	}
-
 	cee->refcount++;
 	shrink_memory(0);
 
@@ -1668,14 +1672,13 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	init_formatted(ce);
 	ce->refcount = 1;
 
-	ce->url = mem_alloc(strlen(vs->url) + 1);
+	ce->url = stracpy(vs->url);
 	if (!ce->url) {
 		mem_free(ce);
 		cee->refcount--;
 		return;
 	}
 
-	strcpy(ce->url, vs->url);
 	copy_opt(&ce->opt, opt);
 	add_to_list(format_cache, ce);
 
@@ -1733,7 +1736,7 @@ find_fd(struct session *ses, unsigned char *name,
 	struct f_data_c *fd;
 
 	foreachback(fd, ses->scrn_frames) {
-		if (!strcasecmp(fd->name, name) && !fd->used) {
+		if (!fd->used && !strcasecmp(fd->name, name)) {
 			fd->used = 1;
 			fd->depth = depth;
 			return fd;
@@ -1745,6 +1748,10 @@ find_fd(struct session *ses, unsigned char *name,
 
 	fd->used = 1;
 	fd->name = stracpy(name);
+	if (!fd->name) {
+		mem_free(fd);
+		return NULL;
+	}
 	fd->depth = depth;
 	fd->xp = x, fd->yp = y;
 	fd->search_word = &ses->search_word;

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.107 2003/11/17 21:48:03 kuser Exp $ */
+/* $Id: link.c,v 1.108 2003/11/17 22:10:36 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,8 +457,8 @@ set_pos_x(struct document_view *doc_view, struct link *link)
 		if (link->pos[i].y >= doc_view->vs->y
 		    && link->pos[i].y < doc_view->vs->y + doc_view->height) {
 			/* XXX: bug ?? if l->pos[i].x == xm => xm = xm + 1 --Zas*/
-			if (link->pos[i].x >= xm) xm = link->pos[i].x + 1;
-			xl = int_min(xl, link->pos[i].x);
+			int_lower_bound(&xm, link->pos[i].x + 1);
+			int_upper_bound(&xl, link->pos[i].x);
 		}
 	}
 	if (xl != MAXINT)
@@ -477,8 +477,8 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 
 	yl = doc_view->document->height;
 	for (i = 0; i < link->n; i++) {
-		if (link->pos[i].y >= ym) ym = link->pos[i].y + 1;
-		yl = int_min(yl, link->pos[i].y);
+		int_lower_bound(&ym, link->pos[i].y + 1);
+		int_upper_bound(&yl, link->pos[i].y);
 	}
 	doc_view->vs->y = (ym + yl) / 2 - doc_view->document->options.height / 2;
 	int_bounds(&doc_view->vs->y, 0,
@@ -500,13 +500,13 @@ find_link(struct document_view *doc_view, int p, int s)
 		line = doc_view->document->lines2;
 		if (!line) goto nolink;
 		y = doc_view->vs->y + doc_view->height - 1;
-		if (y >= doc_view->document->height) y = doc_view->document->height - 1;
+		int_upper_bound(&y, doc_view->document->height - 1);
 		if (y < 0) goto nolink;
 	} else {
 		line = doc_view->document->lines1;
 		if (!line) goto nolink;
 		y = doc_view->vs->y;
-		if (y < 0) y = 0;
+		int_lower_bound(&y, 0);
 		if (y >= doc_view->document->height) goto nolink;
 	}
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.522 2005/01/12 02:35:21 jonas Exp $ */
+/* $Id: renderer.c,v 1.523 2005/01/12 02:44:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1338,16 +1338,16 @@ html_special_form(struct part *part, struct form *form)
 	if (!list_empty(part->document->forms)) {
 		struct form *nform;
 
-		/* Make sure the this new form ``claims'' its slice of the form
-		 * range maintained in the form_num and form_end variables. */
+		/* Make sure the new form ``claims'' its slice of the form range
+		 * maintained in the form_num and form_end variables. */
 		foreach (nform, part->document->forms) {
 			if (form->form_num < nform->form_num
 			    || nform->form_end < form->form_num)
 				continue;
 
 			/* The form start is inside an already added form, so
-			 * split the existing form space, so we get |new|old|
-			 * partition. */
+			 * partition the space of the existing form and get
+			 * |old|new|. */
 			nform->form_end = form->form_num - 1;
 			assertm(nform->form_num <= nform->form_end,
 				"%d %d", nform->form_num, nform->form_end);
@@ -1399,25 +1399,26 @@ html_special_form_control(struct part *part, struct form_control *fc)
 	add_to_list(form->items, fc);
 }
 
+/* Reparents form items based on position in the source. */
 void
 check_html_form_hierarchy(struct part *part)
 {
 	struct document *document = part->document;
 	INIT_LIST_HEAD(form_controls);
-	struct form *form, *next;
-	struct form_control *fc, *next_item;
+	struct form *form;
+	struct form_control *fc, *next;
 
 	if (list_empty(document->forms))
 		return;
 
-	/* Take out all badly placed forms. */
+	/* Take out all badly placed form items. */
 
-	foreachsafe (form, next, document->forms) {
+	foreach (form, document->forms) {
 
 		assertm(form->form_num <= form->form_end,
 			"%p [%d : %d]", form, form->form_num, form->form_end);
 
-		foreachsafe (fc, next_item, form->items) {
+		foreachsafe (fc, next, form->items) {
 			if (form->form_num <= fc->position
 			    && fc->position <= form->form_end)
 				continue;
@@ -1427,11 +1428,11 @@ check_html_form_hierarchy(struct part *part)
 		}
 	}
 
-	/* Re-Insert them the correct places. */
+	/* Re-insert the form items the correct places. */
 
-	foreachsafe (fc, next_item, form_controls) {
+	foreachsafe (fc, next, form_controls) {
 
-		foreachsafe (form, next, document->forms) {
+		foreach (form, document->forms) {
 			if (fc->position < form->form_num
 			    || form->form_end < fc->position)
 				continue;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.411 2004/05/28 23:43:35 jonas Exp $ */
+/* $Id: session.c,v 1.412 2004/05/29 11:38:45 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1049,8 +1049,10 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			break;
 		case EV_KBD:
 		case EV_MOUSE:
-			if (ses && ses->tab == get_current_tab(ses->tab->term))
-				send_event(ses, ev);
+			if (!ses) break;
+			/* This check is related to bug 296 */
+			assert(ses->tab == get_current_tab(ses->tab->term));
+			send_event(ses, ev);
 			break;
 	}
 }

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.142 2004/07/02 23:30:41 zas Exp $ */
+/* $Id: ftp.c,v 1.143 2004/07/02 23:51:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -733,6 +733,29 @@ next:
 }
 
 static void
+ftp_data_connect(struct connection *conn, int family, struct sockaddr_storage *sa,
+		 int size_of_sockaddr)
+{
+	int fd = socket(family, SOCK_STREAM, 0);
+
+	if (fd < 0 || set_nonblocking_fd(fd) < 0) {
+		abort_conn_with_state(conn, S_FTP_ERROR);
+		return;
+	}
+
+#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
+	{
+		int on = IPTOS_THROUGHPUT;
+
+		setsockopt(fd, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
+	}
+#endif
+
+	conn->data_socket = fd;
+	connect(fd, (struct sockaddr *) sa, size_of_sockaddr);
+}
+
+static void
 ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 {
 	struct ftp_connection_info *c_i = conn->info;
@@ -753,48 +776,13 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			return;
 		}
 
-		/* XXX: Ugly code duplication. --pasky */
-
 		if (response == 227) {
-			/* TODO: move that to ... ?? */
-			int fd = socket(PF_INET, SOCK_STREAM, 0);
-
-			if (fd < 0 || set_nonblocking_fd(fd) < 0) {
-				abort_conn_with_state(conn, S_FTP_ERROR);
-				return;
-			}
-
-#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
-			{
-				int on = IPTOS_THROUGHPUT;
-
-				setsockopt(fd, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
-			}
-#endif
-
-			conn->data_socket = fd;
-			connect(fd, (struct sockaddr *) &sa, sizeof(struct sockaddr_in));
+			ftp_data_connect(conn, PF_INET, &sa, sizeof(struct sockaddr_in));
 		}
 
 #ifdef CONFIG_IPV6
 		if (response == 229) {
-			int fd = socket(PF_INET6, SOCK_STREAM, 0);
-
-			if (fd < 0 || set_nonblocking_fd(fd) < 0) {
-				abort_conn_with_state(conn, S_FTP_ERROR);
-				return;
-			}
-
-#if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
-			{
-				int on = IPTOS_THROUGHPUT;
-
-				setsockopt(fd, IPPROTO_IP, IP_TOS, (char *) &on, sizeof(int));
-			}
-#endif
-
-			conn->data_socket = fd;
-			connect(fd, (struct sockaddr *) &sa, sizeof(struct sockaddr_in6));
+			ftp_data_connect(conn, PF_INET6, &sa, sizeof(struct sockaddr_in6));
 		}
 #endif
 

@@ -1,4 +1,4 @@
-/* $Id: text.h,v 1.20 2004/07/02 15:51:38 zas Exp $ */
+/* $Id: text.h,v 1.21 2004/07/02 16:00:46 zas Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
@@ -11,11 +11,13 @@ struct terminal;
 
 #define add_dlg_text(dlg, text_, align_, bottom_pad_)			\
 	do {								\
-		struct widget *widget = &(dlg)->widgets[(dlg)->widgets_size++];\
-		widget->type = WIDGET_TEXT;			\
-		widget->text = (text_);				\
-		widget->info.text.align = (align_);		\
-		widget->info.text.is_label = (bottom_pad_);	\
+		struct widget *widget;					\
+									\
+		widget = &(dlg)->widgets[(dlg)->widgets_size++];	\
+		widget->type = WIDGET_TEXT;				\
+		widget->text = (text_);					\
+		widget->info.text.align = (align_);			\
+		widget->info.text.is_label = (bottom_pad_);		\
 	} while (0)
 
 extern struct widget_ops text_ops;

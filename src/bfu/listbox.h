@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.67 2004/07/02 15:46:24 zas Exp $ */
+/* $Id: listbox.h,v 1.68 2004/07/02 16:00:46 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -14,7 +14,9 @@ struct uri;
 
 #define add_dlg_listbox(dlg, height_, box_data)				\
 	do {								\
-		struct widget *widget = &(dlg)->widgets[(dlg)->widgets_size++];\
+		struct widget *widget;					\
+									\
+		widget = &(dlg)->widgets[(dlg)->widgets_size++];	\
 		widget->type = WIDGET_LISTBOX;				\
 		widget->info.box.height = (height_);			\
 		widget->data = (void *) box_data;			\

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.63 2004/11/19 17:46:05 zas Exp $ */
+/* $Id: group.c,v 1.64 2004/11/24 22:16:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ dlg_format_group(struct terminal *term,
 	while (n--) {
 		int sl;
 		int wx = base;
-		unsigned char *text = widget_data->widget->text;
+		unsigned char *text = empty_string_or_(widget_data->widget->text);
 
 		if (text[0]) {
 			sl = strlen(text);

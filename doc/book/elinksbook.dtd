@@ -1,12 +1,12 @@
 <!-- The DTD used for costumization and common entities. -->
-<!-- $Id: elinksbook.dtd,v 1.4 2003/06/10 18:16:50 jonas Exp $ -->
+<!-- $Id: elinksbook.dtd,v 1.5 2003/06/10 19:17:35 jonas Exp $ -->
 
 <!-- ================================================================== -->
 <!-- Costumize section							-->
 <!-- ================================================================== -->
 
 <!-- Default is to use system specific entities defined in config.ent. -->
-<!ENTITY % use-config-entities "INCLUDE">
+<!ENTITY % override-config-entities "IGNORE">
 
 <!-- TODO Ideally the following entities should be set by configure. -->
 <!ENTITY % use-xml-dtd "IGNORE">
@@ -16,15 +16,15 @@
 <!-- Site specific entities						-->
 <!-- ================================================================== -->
 
-<![%use-config-entities;[
-<!ENTITY % config-entities SYSTEM "config.ent">
-%config-entities;
-]]>
-
-<!-- Declaration of the non site specific versions. -->
+<![%override-config-entities;[
 
 <!-- For distributed manpages we want sysconfdir unexpanded. -->
 <!ENTITY sysconfdir "@sysconfdir@">
+
+]]>
+
+<!ENTITY % config-entities SYSTEM "config.ent">
+%config-entities;
 
 <!-- ================================================================== -->
 <!-- DocBook DTD inclusion section					-->

@@ -1,7 +1,8 @@
 <!-- Entities that configure should provide. -->
-<!-- $Id: config.ent.in,v 1.2 2003/06/10 16:02:40 jonas Exp $ -->
+<!-- $Id: config.ent.in,v 1.3 2003/06/10 19:17:35 jonas Exp $ -->
 
 <!-- XXX For each entry in this file there should also exist one together
   -- with a description in the site specific section of elinksbook.dtd. -->
 
+<!ENTITY elinks-version "@VERSION@">
 <!ENTITY sysconfdir "@sysconfdir@">

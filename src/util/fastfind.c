@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.64 2004/10/27 16:45:28 zas Exp $ */
+/* $Id: fastfind.c,v 1.65 2004/10/27 16:52:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,7 +372,7 @@ init_idxtab(struct fastfind_info *info)
 
 struct fastfind_info *
 fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
-	       int case_sensitive, unsigned char *comment)
+	       int case_sensitive, int compress, unsigned char *comment)
 {
 	struct fastfind_key_value *p;
 	struct fastfind_info *info = init_fastfind(case_sensitive, comment);
@@ -464,6 +464,8 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 		leafset[i].p = info->pointers_count;
 		add_to_pointers(p->data, key_len, info);
 	}
+
+	if (compress) fastfind_index_compress(info);
 
 	return info;
 

@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.20 2004/07/19 12:57:49 jonas Exp $ */
+/* $Id: color.c,v 1.21 2004/10/27 16:52:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,8 +68,7 @@ init_colors_lookup(void)
 #ifdef USE_FASTFIND
 	ff_info_colors = fastfind_index(&colors_list_reset,
 					&colors_list_next,
-					0, "colors_lookup");
-	fastfind_index_compress(ff_info_colors);
+					0, 1, "colors_lookup");
 #endif
 }
 

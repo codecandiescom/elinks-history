@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.66 2003/09/02 19:54:46 jonas Exp $ */
+/* $Id: screen.c,v 1.67 2003/09/02 20:27:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,25 +96,71 @@ struct screen_driver {
 	unsigned int underline:1;
 };
 
+static struct screen_driver dumb_screen_driver = {
+	/* type: */		TERM_DUMB,
+	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
+	/* frame: */		frame_dumb,
+	/* frame_seqs: */	NULL,
+	/* colors: */		1,
+	/* trans: */		1,
+	/* underline: */	1,
+};
+
+static struct screen_driver vt100_screen_driver = {
+	/* type: */		TERM_VT100,
+	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
+	/* frame: */		frame_vt100,	/* No UTF8 I/O */
+	/* frame_seqs: */	vt100_frame_seqs, /* No UTF8 I/O */
+	/* colors: */		1,
+	/* trans: */		1,
+	/* underline: */	1,
+};
+
+static struct screen_driver linux_screen_driver = {
+	/* type: */		TERM_LINUX,
+	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
+	/* frame: */		NULL,		/* No restrict_852 */
+	/* frame_seqs: */	NULL,		/* No m11_hack */
+	/* colors: */		1,
+	/* trans: */		1,
+	/* underline: */	1,
+};
+
+static struct screen_driver koi8_screen_driver = {
+	/* type: */		TERM_KOI8,
+	/* charsets: */		{ -1, -1 },	/* No UTF8 I/O */
+	/* frame: */		frame_koi,
+	/* frame_seqs: */	NULL,
+	/* colors: */		1,
+	/* trans: */		1,
+	/* underline: */	1,
+};
+
+/* XXX: Keep in sync with enum term_mode_type. */
+static struct screen_driver *screen_drivers[] = {
+	/* TERM_DUMB: */	&dumb_screen_driver,
+	/* TERM_VT100: */	&vt100_screen_driver,
+	/* TERM_LINUX: */	&linux_screen_driver,
+	/* TERM_KOI8: */	&koi8_screen_driver,
+};
+
 static inline void
 init_screen_driver(struct screen_driver *driver, struct terminal *term)
 {
 	int utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
+	enum term_mode_type type = get_opt_int_tree(term->spec, "type");
 
-	memset(driver, 0, sizeof(struct screen_driver));
+	memcpy(driver, screen_drivers[type], sizeof(struct screen_driver));
 
-	driver->type = get_opt_int_tree(term->spec, "type");
 	driver->colors = get_opt_bool_tree(term->spec, "colors");
 	driver->trans = get_opt_bool_tree(term->spec, "transparency");
 	driver->underline = get_opt_bool_tree(term->spec, "underline");
 
 	if (utf8_io) {
 		driver->charsets[0] = get_opt_int_tree(term->spec, "charset");
-	} else {
-		driver->charsets[0] = -1;
 	}
 
-	if (driver->type == TERM_LINUX) {
+	if (type == TERM_LINUX) {
 		if (get_opt_bool_tree(term->spec, "restrict_852")) {
 			driver->frame = frame_restrict;
 		}
@@ -126,24 +172,20 @@ init_screen_driver(struct screen_driver *driver, struct terminal *term)
 			driver->frame_seqs = m11_hack_frame_seqs;
 		}
 
-	} else if (driver->type == TERM_VT100) {
+	} else if (type == TERM_VT100) {
 		if (utf8_io) {
 			driver->frame = frame_vt100_u;
 			driver->charsets[1] = get_cp_index("cp437");
-		} else {
-			driver->frame = frame_vt100;
-			driver->frame_seqs = vt100_frame_seqs;
 		}
 
-	} else if (driver->type == TERM_KOI8) {
-		driver->frame = frame_koi;
-
+	} else if (type == TERM_KOI8) {
 		if (utf8_io) {
 			driver->charsets[1] = get_cp_index("koi8-r");
 		}
 	} else {
-		driver->frame = frame_dumb;
-		driver->charsets[1] = driver->charsets[0];
+		if (utf8_io) {
+			driver->charsets[1] = driver->charsets[0];
+		}
 	}
 }
 
@@ -176,7 +218,7 @@ print_char(struct string *screen, struct screen_driver *driver,
 
 		state->border = border;
 		add_bytes_to_string(screen, seq->src, seq->len);
- 	}
+	}
 
 	/* This is optimized for the (common) case that underlines are rare. */
 	if (underline != state->underline) {

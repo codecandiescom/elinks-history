@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.23 2003/07/28 09:05:26 jonas Exp $ */
+/* $Id: terminal.h,v 1.24 2003/09/02 20:27:00 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -16,7 +16,7 @@
 
 /* The terminal type, meaningful for frames (lines) drawing. */
 enum term_mode_type {
-	TERM_DUMB,
+	TERM_DUMB = 0,
 	TERM_VT100,
 	TERM_LINUX,
 	TERM_KOI8,

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.61 2003/09/28 13:43:56 jonas Exp $ */
+/* $Id: link.c,v 1.62 2003/09/28 18:38:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -820,7 +820,6 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	struct document_view *fd;
 	struct link *link;
 	struct menu_item *mi;
-	int l = 0;
 
 	assert(term && ses);
 	if_assert_failed return;
@@ -836,7 +835,6 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	link = &fd->document->links[fd->vs->current_link];
 	if (link->type == L_LINK && link->where) {
-		l = 1;
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
 			add_to_menu(&mi, N_("Display ~usemap"), M_SUBMENU,
@@ -871,7 +869,6 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	}
 
 	if (link->form) {
-		l = 1;
 		if (link->form->type == FC_RESET) {
 			add_to_menu(&mi, N_("~Reset form"), "",
 				    (menu_func) send_enter, NULL, 0, 0);
@@ -897,7 +894,6 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	}
 
 	if (link->where_img) {
-		l = 1;
 		add_to_menu(&mi, N_("V~iew image"), "",
 			    (menu_func) send_image, NULL, 0, 0);
 		if (!get_opt_int_tree(cmdline_options, "anonymous"))
@@ -906,10 +902,11 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	}
 
 end:
-	if (!l) {
+	if (!mi->text) {
 		add_to_menu(&mi, N_("No link selected"), M_BAR,
 			    NULL, NULL, 0, 0);
 	}
+
 	do_menu(term, mi, ses, 1);
 }
 

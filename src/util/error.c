@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.14 2002/06/16 13:47:23 pasky Exp $ */
+/* $Id: error.c,v 1.15 2002/06/16 15:15:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,8 @@ struct alloc_header {
 };
 #endif
 
-#define SIZE_AH_ALIGNED ((sizeof(struct alloc_header) + 7) & ~7)
+/* Size is set to be a multiple of 16, forcing aligment by the way. */
+#define SIZE_AH_ALIGNED ((sizeof(struct alloc_header) + 15) & ~15)
 
 #endif
 
@@ -144,7 +145,8 @@ check_memory_leaks()
 			(char *) ah + SIZE_AH_ALIGNED,
 			ah->size, ah->file, ah->line);
 		comma = 1;
-		if (ah->comment) fprintf(stderr, ":\"%s\"", ah->comment);
+		if (ah->comment)
+			fprintf(stderr, ":\"%s\"", ah->comment);
 	}
 	fprintf(stderr, "\n");
 #endif
@@ -157,23 +159,18 @@ void *
 debug_mem_alloc(unsigned char *file, int line, size_t size)
 {
 	struct alloc_header *ah;
-	void *ptr;
 
 	if (!size) return DUMMY;
 
-	mem_amount += size;
-	size += SIZE_AH_ALIGNED;
-
-	ptr = malloc(size);
-	if (!ptr) {
+	ah = malloc(size + SIZE_AH_ALIGNED);
+	if (!ah) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
 	}
 
-	ah = ptr;
-	ptr = (char *) ptr + SIZE_AH_ALIGNED;
+	mem_amount += size;
 
-	ah->size = size - SIZE_AH_ALIGNED;
+	ah->size = size;
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
@@ -182,14 +179,14 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 	add_to_list(memory_list, ah);
 #endif
 
-	return ptr;
+	return (void *) ((char *) ah + SIZE_AH_ALIGNED);
 }
 
 void *
-debug_mem_calloc(unsigned char *file, int line, size_t size, size_t eltsize)
+debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 {
 	struct alloc_header *ah;
-	void *ptr;
+	size_t size = eltcount * eltsize;
 
 	if (!size) return DUMMY;
 
@@ -201,19 +198,15 @@ debug_mem_calloc(unsigned char *file, int line, size_t size, size_t eltsize)
 	 * comment, it means YOU should help us and do the benchmarks! :)
 	 * Thanks a lot. --pasky */
 
-	mem_amount += size * eltsize;
-	size += SIZE_AH_ALIGNED;
-
-	ptr = calloc(1, size);
-	if (!ptr) {
+	ah = calloc(1, size + SIZE_AH_ALIGNED);
+	if (!ah) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
 	}
 
-	ah = ptr;
-	ptr = (char *) ptr + SIZE_AH_ALIGNED;
+	mem_amount += size;
 
-	ah->size = size - SIZE_AH_ALIGNED;
+	ah->size = size;
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
@@ -222,7 +215,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t size, size_t eltsize)
 	add_to_list(memory_list, ah);
 #endif
 
-	return ptr;
+	return (void *) ((char *) ah + SIZE_AH_ALIGNED);
 }
 
 void
@@ -238,17 +231,16 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 		return;
 	}
 
-	ptr = (char *) ptr - SIZE_AH_ALIGNED;
-	ah = ptr;
+	ah = (struct alloc_header *) ((char *) ptr - SIZE_AH_ALIGNED);
 
 #ifdef LEAK_DEBUG_LIST
-	del_from_list(ah);
 	if (ah->comment)
 		free(ah->comment);
+	del_from_list(ah);
 #endif
 
 	mem_amount -= ah->size;
-	free(ptr);
+	free(ah);
 }
 
 void *
@@ -256,26 +248,36 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 {
 	struct alloc_header *ah;
 
-	if (ptr == DUMMY) return debug_mem_alloc(file, line, size);
+#ifdef CHECK_REALLOC_NULL
+	/* Disabled by default since glibc realloc() behaves like malloc(size)
+	 * when passed pointer is NULL. */
 	if (!ptr) {
 		errfile = file;
 		errline = line;
 		int_error("mem_realloc(NULL, %d)", size);
 		return NULL;
 	}
+#endif
 
+	if (!ptr || ptr == DUMMY) return debug_mem_alloc(file, line, size);
+
+	/* Frees memory if size is zero. */
 	if (!size) {
 		debug_mem_free(file, line, ptr);
 		return DUMMY;
 	}
 
-	ptr = realloc((char *) ptr - SIZE_AH_ALIGNED, size + SIZE_AH_ALIGNED);
-	if (!ptr) {
+	/* We compare oldsize to new size, and if equal we just return ptr
+	 * and change nothing, this is conform to most realloc() behavior. */
+	ah = (struct alloc_header *) ((char *) ptr - SIZE_AH_ALIGNED);
+	if (ah->size == size) return (void *) ptr;
+
+	ah = realloc(ah, size + SIZE_AH_ALIGNED);
+	if (!ah) {
 		error("ERROR: out of memory (realloc returned NULL)\n");
 		return NULL;
 	}
 
-	ah = ptr;
 	mem_amount += size - ah->size;
 
 	ah->size = size;
@@ -284,7 +286,7 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	ah->next->prev = ah;
 #endif
 
-	return (char *) ptr + SIZE_AH_ALIGNED;
+	return (void *) ((char *) ah + SIZE_AH_ALIGNED);
 }
 
 void
@@ -292,7 +294,7 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 {
 #ifdef LEAK_DEBUG_LIST
 	struct alloc_header *ah;
-	
+
 	ah = (struct alloc_header *) ((char *) ptr - SIZE_AH_ALIGNED);
 
 	if (ah->comment)

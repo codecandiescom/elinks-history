@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.123 2003/12/21 14:39:41 pasky Exp $ */
+/* $Id: link.c,v 1.124 2003/12/21 14:46:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ sort_links(struct document *document)
 		q = link->pos[link->n - 1].y;
 		if (p > q) j = p, p = q, q = j;
 		for (j = p; j <= q; j++) {
-			assertm(j < document_height, "link out of screen");
+			assertm(j < document->height, "link out of screen");
 			if_assert_failed continue;
 			document->lines2[j] = &document->links[i];
 			if (!document->lines1[j])

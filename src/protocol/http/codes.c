@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.9 2003/06/21 13:15:52 pasky Exp $ */
+/* $Id: codes.c,v 1.10 2003/06/21 13:16:52 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -97,7 +97,7 @@ http_error_document(int code)
 
 	if (!codestr) codestr = "Unknown error";
 
-	if (asprintf(&str, 
+	if (asprintf((char **) &str,
 "<html>\n"
 " <head>\n"
 "  <title>HTTP error %03d</title>\n"

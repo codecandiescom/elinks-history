@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.88 2003/01/03 00:02:27 pasky Exp $ */
+/* $Id: session.c,v 1.89 2003/01/03 00:04:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,18 +174,18 @@ get_stat_msg(struct status *stat, struct terminal *term)
 		unsigned char *m = init_str();
 		int l = 0;
 
-		add_to_str(&m, &l, _(N_(T_RECEIVED), term));
+		add_to_str(&m, &l, _(T_RECEIVED, term));
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, stat->prg->pos + stat->prg->start);
 		if (stat->prg->size >= 0) {
 			add_to_str(&m, &l, " ");
-			add_to_str(&m, &l, _(N_(T_OF), term));
+			add_to_str(&m, &l, _(T_OF, term));
 			add_to_str(&m, &l, " ");
 			add_xnum_to_str(&m, &l, stat->prg->size);
 		}
 		add_to_str(&m, &l, ", ");
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-			add_to_str(&m, &l, _(N_(T_AVG), term));
+			add_to_str(&m, &l, _(T_AVG, term));
 			add_to_str(&m, &l, " ");
 		}
 		add_xnum_to_str(&m, &l, (longlong)stat->prg->loaded * 10
@@ -193,7 +193,7 @@ get_stat_msg(struct status *stat, struct terminal *term)
 		add_to_str(&m, &l, "/s");
 		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _(N_(T_CUR), term));
+			add_to_str(&m, &l, _(T_CUR, term));
 			add_to_str(&m, &l, " "),
 			add_xnum_to_str(&m, &l, stat->prg->cur_loaded
 						/ (CURRENT_SPD_SEC

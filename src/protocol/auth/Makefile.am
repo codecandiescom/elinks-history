@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2003/12/20 19:00:44 pasky Exp $
+## $Id: Makefile.am,v 1.3 2004/11/14 14:17:18 witekfl Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -8,5 +8,6 @@ libauth_a_SOURCES = \
  auth.h \
  auth.c \
  dialogs.h \
- dialogs.c
-
+ dialogs.c \
+ digest.h \
+ digest.c

@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.39 2004/10/13 00:12:41 jonas Exp $
+## $Id: Makefile.am,v 1.40 2004/11/14 14:17:18 witekfl Exp $
 
 include $(top_srcdir)/Makefile.base
 
-authobj = auth/auth.o auth/dialogs.o
+authobj = auth/auth.o auth/dialogs.o auth/digest.o
 
 if CONFIG_CGI
 cgiobj = file/cgi.o

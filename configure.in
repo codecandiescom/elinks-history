@@ -900,7 +900,6 @@ AC_OUTPUT([ \
  src/intl/Makefile \
  src/intl/gettext/Makefile \
  src/lowlevel/Makefile \
- src/lua/Makefile \
  src/mime/Makefile \
  src/mime/backend/Makefile \
  src/osdep/Makefile \
@@ -908,6 +907,7 @@ AC_OUTPUT([ \
  src/protocol/http/Makefile \
  src/sched/Makefile \
  src/scripting/Makefile \
+ src/scripting/lua/Makefile \
  src/ssl/Makefile \
  src/terminal/Makefile \
  src/util/Makefile \

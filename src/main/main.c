@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.103 2003/06/15 11:18:14 zas Exp $ */
+/* $Id: main.c,v 1.104 2003/06/15 22:44:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,8 +48,6 @@
 #include "lowlevel/signals.h"
 #include "lowlevel/sysname.h"
 #include "lowlevel/timer.h"
-#include "lua/core.h"
-#include "lua/hooks.h"
 #include "main.h"
 #include "protocol/mailcap.h"
 #include "protocol/mime.h"
@@ -58,6 +56,8 @@
 #include "sched/error.h"
 #include "sched/sched.h"
 #include "sched/session.h"
+#include "scripting/lua/core.h"
+#include "scripting/lua/hooks.h"
 #include "ssl/ssl.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"

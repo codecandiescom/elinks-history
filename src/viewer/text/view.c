@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.103 2003/06/11 16:53:18 pasky Exp $ */
+/* $Id: view.c,v 1.104 2003/06/15 22:44:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,13 +37,13 @@
 #include "globhist/dialogs.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
-#include "lua/core.h"
 #include "protocol/http/auth.h"
 #include "protocol/url.h"
 #include "sched/download.h"
 #include "sched/history.h"
 #include "sched/location.h"
 #include "sched/session.h"
+#include "scripting/lua/core.h"
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/tab.h"

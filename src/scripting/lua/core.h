@@ -1,7 +1,7 @@
-/* $Id: core.h,v 1.4 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: core.h,v 1.5 2003/06/15 22:44:14 pasky Exp $ */
 
-#ifndef EL__LUA_CORE_H
-#define EL__LUA_CORE_H
+#ifndef EL__SCRIPTING_LUA_CORE_H
+#define EL__SCRIPTING_LUA_CORE_H
 
 #ifdef HAVE_LUA
 

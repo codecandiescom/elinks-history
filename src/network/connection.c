@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.22 2003/06/11 15:27:54 pasky Exp $ */
+/* $Id: connection.c,v 1.23 2003/06/15 22:44:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,10 +21,10 @@
 #include "lowlevel/dns.h"
 #include "lowlevel/select.h"
 #include "lowlevel/ttime.h"
-#include "lua/hooks.h"
 #include "protocol/url.h"
 #include "sched/sched.h"
 #include "sched/session.h"
+#include "scripting/lua/hooks.h"
 #include "ssl/ssl.h"
 #include "util/base64.h"
 #include "util/encoding.h"

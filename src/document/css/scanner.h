@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.2 2004/01/18 15:52:07 pasky Exp $ */
+/* $Id: scanner.h,v 1.3 2004/01/18 15:53:49 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -7,12 +7,7 @@
 #include "util/error.h"
 
 enum css_token_type {
-	CSS_TOKEN_NONE = 0,
-
-	/* Tokens can contain chars that have special meaning like '*'. Their
-	 * type are simply their char value. This marks the end of such token
-	 * types. */
-	CSS_TOKEN_NON_ASCII_END = 255,
+	CSS_TOKEN_NONE,
 
 	CSS_TOKEN_DIGIT,
 	CSS_TOKEN_HEX_COLOR,
@@ -21,6 +16,11 @@ enum css_token_type {
 	CSS_TOKEN_PERCENTAGE,
 
 	CSS_TOKEN_GARBAGE,
+
+	/* Tokens can contain chars that have special meaning like '*'. Their
+	 * type are simply their char value. This marks the end of such token
+	 * types. */
+	CSS_TOKEN_NON_ASCII_END = 255,
 };
 
 /* This is a token and scanner state */

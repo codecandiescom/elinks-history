@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.35 2003/11/18 22:18:13 pasky Exp $ */
+/* $Id: renderer.c,v 1.36 2003/11/18 22:19:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 
 
 #define realloc_document_links(doc, size) \
-	mem_align_alloc(&(doc)->links, (doc)->nlinks, size, sizeof(struct link), LINK_GRANULARITY)
+	ALIGN_LINK(&(doc)->links, (doc)->nlinks, size)
 
 #define realloc_points(link, size) \
 	mem_align_alloc(&(link)->pos, (link)->n, size, sizeof(struct point), 0)

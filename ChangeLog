@@ -1,3 +1,119 @@
+Wed Mar  2 23:02:35 2005  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/libintl.h:
+
+	Introduce n_() as a wrapper for ngettext().  
+
+Wed Mar  2 23:01:25 2005  Laurent Monin <zas@norz.org>:
+
+	* po/Makefile.am:
+
+	Add keyword n_ for xgettext, to be used for plural forms.  
+
+Wed Mar  2 18:00:27 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	sched/session.c, sched/task.c, viewer/dump/dump.c:
+
+	Introduce type download_callback to ease casts.  
+
+Wed Mar  2 17:35:38 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	Drop useless initialization to NULL.  
+
+Wed Mar  2 17:29:35 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	Use memcpy() to copy struct session_task.  
+
+Wed Mar  2 16:37:50 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: download.c, history.c, session.c, session.h, task.c:
+
+	Use an inlined struct for target in struct session_task.  
+
+Wed Mar  2 16:31:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	Use struct session_task field in struct task.  
+
+Wed Mar  2 16:06:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	Move test from do_move() to do_redirect().  
+
+Wed Mar  2 15:59:55 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	Move code from do_move() to new do_redirect() and drop a goto.  
+
+Wed Mar  2 15:39:12 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/task.c:
+
+	Remove a superfluous |mem_free_if(task)|.  
+
+Wed Mar  2 15:17:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/task.c:
+
+	Typo fix in comment.  
+
+Wed Mar  2 15:11:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Oops. Finalize last patch.  
+
+Wed Mar  2 15:09:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	do_move(): Return a do_move enum which maps current 0 ->
+	DO_MOVE_ABORT, 1 -> DO_MOVE_DISPLAY and 2 -> DO_MOVE_DONE. Patch by
+	Miciah, zas and me.  
+
+Wed Mar  2 14:30:05 2005  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: download.c, download.h, session.c, task.c:
+
+	Rename ses_chktype() to setup_download_handler().  
+
+Wed Mar  2 13:55:39 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Drop inline keyword for link_in_view_x(), let's trust the compiler.  
+
+Wed Mar  2 13:50:02 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.c, link.h, search.c, view.c:
+
+	Rename next_link_in_view() to next_link_in_view_() and make it
+	static. Introduce two wrappers named next_link_in_view() and
+	next_link_in_view_y() and make link_in_view(), link_in_view_y()
+	static.  
+
+Wed Mar  2 13:22:38 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, listbox.c, text.c:
+
+	When block cursor terminal option is set, keep cursor at lower right
+	of screen in dialogs too. It fixes bug 583.  
+
+Wed Mar  2 09:36:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/encoding/encoding.c:
+
+	Fix reading from /dev/stdin on Mac OS X. Patch by <otto@duke.edu>.
+	(bug 616) 
+
 Tue Mar  1 22:04:27 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* po/da.po:

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.284 2003/12/28 01:34:54 jonas Exp $ */
+/* $Id: session.c,v 1.285 2003/12/29 21:02:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -732,8 +732,8 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 #ifdef BOOKMARKS
 	} else if (!first_use
 		   && number_of_tabs(ses->tab->term) < 2
-		   && get_opt_bool("ui.auto_save_restore_session") == 2) {
-		open_bookmark_folder(ses, _("Auto saved session", ses->tab->term));
+		   && get_opt_bool("ui.sessions.auto_restore")) {
+		open_bookmark_folder(ses, get_opt_str("ui.sessions.auto_save_foldername"));
 
 #endif
 	} else {

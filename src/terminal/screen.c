@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.84 2003/09/29 23:49:07 jonas Exp $ */
+/* $Id: screen.c,v 1.85 2003/09/30 11:47:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -337,53 +337,39 @@ add_char16(struct string *screen, struct screen_driver *driver,
 	}
 
 	if (color != state->color) {
-		unsigned char code[13];
-		int length;
-
 		state->color = color;
 
-		code[0] = '\033';
-		code[1] = '[';
-		code[2] = '0';
+		add_bytes_to_string(screen, "\033[0", 3);
 
 		if (driver->color_mode) {
-			code[3] = ';';
-			code[4] = '3';
-			code[5] = '0' + TERM_COLOR_FOREGROUND(color);
+			static unsigned char code[6] = ";30;40";
+			unsigned char bgcolor = TERM_COLOR_BACKGROUND(color);
 
-			code[8] = '0' + TERM_COLOR_BACKGROUND(color);
-			if (!driver->trans || code[8] != '0') {
-				code[6] = ';';
-				code[7] = '4';
-				length = 9;
+			code[2] = '0' + TERM_COLOR_FOREGROUND(color);
+
+			if (!driver->trans || bgcolor != 0) {
+				code[5] = '0' + bgcolor;
+				add_bytes_to_string(screen, code, 6);
 			} else {
-				length = 6;
+				add_bytes_to_string(screen, code, 3);
 			}
 		} else if (ch->attr & SCREEN_ATTR_STANDOUT) {
 			/* Flip the fore- and background colors for highlighing
 			 * purposes. */
-			code[3] = ';';
-			code[4] = '7';
-			length = 5;
-		} else {
-			length = 3;
+			add_bytes_to_string(screen, ";7", 2);
 		}
 
 		if (underline) {
-			code[length++] = ';';
-			code[length++] = '4';
+			add_bytes_to_string(screen, ";4", 2);
 		}
 
 		/* Check if the char should be rendered bold. */
 		/* TODO: Don't use @color but @attr here. */
 		if (color & SCREEN_ATTR_BOLD) {
-			code[length++] = ';';
-			code[length++] = '1';
+			add_bytes_to_string(screen, ";1", 2);
 		}
 
-		code[length++] = 'm';
-
-		add_bytes_to_string(screen, code, length);
+		add_bytes_to_string(screen, "m", 1);
 	}
 
 	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {

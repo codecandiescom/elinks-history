@@ -55,35 +55,28 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" can not be deleted."
-msgstr ""
-"Spiacente, ma questo elemento è in uso, in questo momento.\n"
-"\n"
-"%s"
+msgstr "Spiacente, ma l'elemento \"%s\" non può essere rimosso."
 
 #: src/bfu/hierbox.c:438
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
-msgstr ""
-"Spiacente, ma questo elemento è in uso, in questo momento.\n"
-"\n"
-"%s"
+msgstr "Spiacente, ma l'elemento \"%s\" è in uso in questo momento."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" can not be deleted."
-msgstr "Spiacente, ma questa cartella è in uso, in questo momento."
+msgstr "Spiacente, ma la cartella \"%s\" non può essere rimossa."
 
 #: src/bfu/hierbox.c:442
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
-msgstr "Spiacente, ma questa cartella è in uso, in questo momento."
+msgstr "Spiacente, ma la cartella \"%s\" è in uso in questo momento."
 
 #: src/bfu/hierbox.c:466
-#, fuzzy
 msgid "Delete error"
-msgstr "Elimina cartella"
+msgstr "Errore nella rimozione"
 
 #: src/bfu/hierbox.c:559
 msgid "Delete marked items"
@@ -163,7 +156,7 @@ msgstr "LED"
 
 #: src/bfu/leds.c:66
 msgid "LEDs (visual indicators) options."
-msgstr ""
+msgstr "Opzioni LED (indicatori visuali)."
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/bfu/leds.c:68 src/config/options.inc:1725 src/config/options.inc:1732
@@ -177,6 +170,8 @@ msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
 msgstr ""
+"Abilita LED.\n"
+"Questi indicatori visuali ti informeranno sui vari stati."
 
 #. name:
 #: src/bfu/leds.c:239
@@ -438,8 +433,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione "
+"config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:645
@@ -497,7 +492,7 @@ msgstr "Impossible scrivere il file di configurazione %s: %s"
 
 #: src/config/dialogs.c:89
 msgid "(expand by pressing space)"
-msgstr ""
+msgstr "(espandi premendo spazio)"
 
 #: src/config/dialogs.c:92 src/config/dialogs.c:244
 msgid "N/A"
@@ -633,8 +628,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:531 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -825,13 +820,12 @@ msgstr "Apri una console Lua (DISABILITATO)"
 
 #. internal use only
 #: src/config/kbdbind.c:423
-#, fuzzy
 msgid "Set a mark"
-msgstr "Ricerca segnalibro"
+msgstr "Imposta un segnaposto"
 
 #: src/config/kbdbind.c:424
 msgid "Go at a specified mark"
-msgstr ""
+msgstr "Vai al segnaposto specificato"
 
 #: src/config/kbdbind.c:425
 msgid "Activate the menu"
@@ -2177,7 +2171,7 @@ msgstr "Sottolinea collegamenti."
 
 #: src/config/options.inc:530
 msgid "Wrap non breaking space"
-msgstr ""
+msgstr "A capo"
 
 #: src/config/options.inc:532
 msgid ""
@@ -2185,6 +2179,10 @@ msgid ""
 "but allow to wrap the text. This can help keeping the width\n"
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
+"Se impostato non rispetta lo spazio di non interruzione (l'entità\n"
+"nbsp) consentendo di andare a capo. Questo può aiutare a\n"
+"mantenere piccola la larghezza dei documenti per non avere\n"
+"bisogno di scorrerli orizzontalmente."
 
 #: src/config/options.inc:537
 msgid "Plain rendering"
@@ -2544,8 +2542,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.inc:729
 msgid ""
@@ -3677,8 +3675,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
-"storico, ...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
+"...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in combinazione con una di queste opzioni."
 
@@ -3853,9 +3851,8 @@ msgstr ""
 "Sicuro: %s\n"
 
 #: src/cookies/cookies.c:559
-#, fuzzy
 msgid "at quit time"
-msgstr "Orario ultima visita"
+msgstr "alla chiusura"
 
 #: src/cookies/cookies.c:560 src/cookies/dialogs.c:83
 msgid "yes"
@@ -4021,14 +4018,12 @@ msgid "Abort"
 msgstr "Interrompi"
 
 #: src/dialogs/download.c:431
-#, fuzzy
 msgid "Stop"
-msgstr "Impo~stazioni"
+msgstr "Interrompi"
 
 #: src/dialogs/download.c:436
-#, fuzzy
 msgid "Download manager"
-msgstr "Scarica imma~gine"
+msgstr "Gestore download"
 
 #: src/dialogs/info.c:46
 msgid "About"
@@ -4136,18 +4131,16 @@ msgid "Unh~istory"
 msgstr "Stori~co inverso"
 
 #: src/dialogs/menu.c:294
-#, fuzzy
 msgid "Global ~history"
-msgstr "Gestione storico"
+msgstr "C~ronologia"
 
 #: src/dialogs/menu.c:297
-#, fuzzy
 msgid "~Bookmarks"
-msgstr "Segnalibri"
+msgstr "~Segnalibri"
 
 #: src/dialogs/menu.c:299
 msgid "~Cache"
-msgstr "Cac~he"
+msgstr "~Cache"
 
 #: src/dialogs/menu.c:300
 msgid "~Downloads"
@@ -4158,9 +4151,8 @@ msgid "Coo~kies"
 msgstr "C~ookie"
 
 #: src/dialogs/menu.c:305
-#, fuzzy
 msgid "~Form history"
-msgstr "Storico Form"
+msgstr "Storico ~Form"
 
 #: src/dialogs/menu.c:312
 msgid "Sa~ve as"
@@ -4344,7 +4336,7 @@ msgstr "~Collegamento"
 
 #: src/dialogs/menu.c:492
 msgid "~Tools"
-msgstr ""
+msgstr "S~trumenti"
 
 #: src/dialogs/menu.c:493
 msgid "~Setup"
@@ -4457,16 +4449,15 @@ msgstr "Ridimensiona terminale"
 
 #: src/formhist/dialogs.c:68
 msgid "Forms are never saved for this URL."
-msgstr ""
+msgstr "Non salva form per questo URL."
 
 #: src/formhist/dialogs.c:70
 msgid "Forms are saved for this URL."
-msgstr ""
+msgstr "Salva form per questo URL."
 
 #: src/formhist/dialogs.c:145
-#, fuzzy
 msgid "Toggle saving"
-msgstr "Abilita/Disabilita i~mmagini"
+msgstr "Abilita/Disabilita salvataggio"
 
 #: src/formhist/dialogs.c:151
 msgid "Form history manager"
@@ -4675,8 +4666,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
-"minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le "
+"maiuscole/minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -4820,8 +4811,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
-"*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come "
+"image/*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #. name:
@@ -5266,9 +5257,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5276,9 +5267,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1562
 msgid ""
@@ -5612,137 +5603,3 @@ msgstr "Errore salvataggio"
 #: src/viewer/text/view.c:1466
 msgid "Error writing to file"
 msgstr "Errore scrittura del file"
-
-#~ msgid "Deleting used folder"
-#~ msgstr "Cancellazione cartella in uso"
-
-#~ msgid "Deleting used item"
-#~ msgstr "Elimina elemento usato"
-
-#~ msgid "Cannot delete \"%s\""
-#~ msgstr "Impossibile eliminare \"%s\""
-
-#~ msgid "LEDs options."
-#~ msgstr "Opzioni dei LED."
-
-#~ msgid "Enable LEDs."
-#~ msgstr "Abilita LED"
-
-#~ msgid "No downloads"
-#~ msgstr "Nessun download"
-
-#~ msgid "Global histor~y"
-#~ msgstr "~Gestione storico"
-
-#~ msgid "Bookmark~s"
-#~ msgstr "~Segnalibri"
-
-#~ msgid "Delete option"
-#~ msgstr "Elimina opzione"
-
-#~ msgid "Really delete the option \"%s\"?"
-#~ msgstr "Eliminare veramente l'opzione \"%s\"?"
-
-#~ msgid ""
-#~ "Sorry, but this bookmark is already being used by something right now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\""
-#~ msgstr ""
-#~ "Spiacente, ma questo segnalibro è in uso, in questo momento.\n"
-#~ "Titolo: \"%s\"\n"
-#~ "URL: \"%s\""
-
-#~ msgid "Delete marked bookmarks?"
-#~ msgstr "Eliminare i segnalibri selezionati?"
-
-#~ msgid ""
-#~ "Sorry, but this history entry is already being used by something right "
-#~ "now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\"\n"
-#~ msgstr ""
-#~ "Spiacente, ma questa voce dello storico è in uso in questo momento.\n"
-#~ "\n"
-#~ "Titolo: \"%s\"\n"
-#~ "URL: \"%s\"\n"
-
-#~ msgid ""
-#~ "Delete history item \"%s\"?\n"
-#~ "\n"
-#~ "URL: \"%s\""
-#~ msgstr ""
-#~ "Eliminare la voce \"%s\" dallo storico?\n"
-#~ "\n"
-#~ "URL: \"%s\""
-
-#~ msgid "Clear global history?"
-#~ msgstr "Svuotare lo storico?"
-
-#~ msgid "No entry."
-#~ msgstr "Nessuna voce."
-
-#~ msgid "%ld more entries."
-#~ msgstr "ancora %ld voci."
-
-#~ msgid "Cache info"
-#~ msgstr "Informazioni cache"
-
-#~ msgid "Cache content: %s"
-#~ msgstr "Contenuto cache: %s"
-
-#~ msgid "~Cache info"
-#~ msgstr "Informazioni cac~he"
-
-#~ msgid "Overlapping matches"
-#~ msgstr "Corrispondenze sovrapposte"
-
-#~ msgid ""
-#~ "Let matches overlap (only relevant to regex search).\n"
-#~ "0 means matches should not overlap.\n"
-#~ "1 means matches can overlap (CAUTION: can be cpu intensive with\n"
-#~ "  some expressions!)"
-#~ msgstr ""
-#~ "Permetti corrispondenze sovrapposte (solo durante ricerche\n"
-#~ "con espressioni regolari).\n"
-#~ "0 le corrispondenze non si sovrappongono.\n"
-#~ "1 le corrispondenze possono sovrapporsi (ATTENZIONE: può essere\n"
-#~ "  costoso in termini di CPU con alcune espressioni!)"
-
-#~ msgid ""
-#~ "ESC      display menu\n"
-#~ "^C, q    quit\n"
-#~ "^P, ^N   scroll up, down\n"
-#~ "[, ]     scroll left, right\n"
-#~ "up, down select link\n"
-#~ "->       follow link\n"
-#~ "<-       go back\n"
-#~ "g        go to URL\n"
-#~ "G        go to URL based on current URL\n"
-#~ "/        search\n"
-#~ "?        search back\n"
-#~ "n        find next\n"
-#~ "N        find previous\n"
-#~ "=        document info\n"
-#~ "|        header info\n"
-#~ "\\        document source\n"
-#~ "d        download"
-#~ msgstr ""
-#~ "ESC      mostra menu\n"
-#~ "^C, q    esci\n"
-#~ "^P, ^N   scorri su, giù\n"
-#~ "[, ]     scorri sinistra, destra\n"
-#~ "up, down seleziona link\n"
-#~ "->       segui link\n"
-#~ "<-       indietro\n"
-#~ "g        apri URL\n"
-#~ "G        apri URL relativo a URL corrente\n"
-#~ "/        cerca\n"
-#~ "?        cerca indietro\n"
-#~ "n        trova successivo\n"
-#~ "N        trova precedente\n"
-#~ "|        informazioni header\n"
-#~ "=        informazioni documento\n"
-#~ "\\        sorgente documento\n"
-#~ "d        scarica"

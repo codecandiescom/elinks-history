@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.224 2003/11/12 06:03:16 witekfl Exp $ */
+/* $Id: session.c,v 1.225 2003/11/12 09:19:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1456,7 +1456,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 	} else {
 		ses->reloadlevel = cache_mode;
 	}
-	
+
 	if (have_location(ses)) {
 		struct location *l = cur_loc(ses);
 		struct file_to_load *ftl;
@@ -1571,7 +1571,7 @@ follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	if (!new_url) return;
 #endif
 
-	if (*new_url) 
+	if (*new_url)
 		do_follow_url(ses, new_url, target, task, cache_mode, referrer);
 
 #ifdef HAVE_SCRIPTING

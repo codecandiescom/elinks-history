@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.290 2003/10/08 17:01:10 jonas Exp $ */
+/* $Id: options.c,v 1.291 2003/10/15 10:55:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1266,7 +1266,7 @@ register_options(void)
 
 	add_opt_int("document.cache.memory", N_("Size"),
 		"size", 0, 0, MAXINT, 1048576,
-		N_("Memory cache size (in kilobytes)."));
+		N_("Memory cache size (in bytes)."));
 
 
 

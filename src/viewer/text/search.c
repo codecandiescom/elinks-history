@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.181 2004/02/02 15:12:45 jonas Exp $ */
+/* $Id: search.c,v 1.182 2004/02/02 15:19:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1055,24 +1055,22 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_UP:
 			direction = -1;
 			i--;
-			if (i < 0) {
-				if (!get_opt_bool("document.browse.search.wraparound"))
-					return TYPEAHEAD_STOP;
+			if (i >= 0) break;
+			if (!get_opt_bool("document.browse.search.wraparound"))
+				return TYPEAHEAD_STOP;
 
-				i = doc_view->document->nlinks - 1;
-			}
+			i = doc_view->document->nlinks - 1;
 			break;
 
 		case ACT_EDIT_NEXT_ITEM:
 		case ACT_EDIT_DOWN:
 			direction = 1;
 			i++;
-			if (i >= doc_view->document->nlinks) {
-				if (!get_opt_bool("document.browse.search.wraparound"))
-					return TYPEAHEAD_STOP;
+			if (i < doc_view->document->nlinks) break;
+			if (!get_opt_bool("document.browse.search.wraparound"))
+				return TYPEAHEAD_STOP;
 
-				i = 0;
-			}
+			i = 0;
 			break;
 
  		case ACT_EDIT_ENTER:

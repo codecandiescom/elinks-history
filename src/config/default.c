@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.5 2002/03/18 11:34:02 pasky Exp $ */
+/* $Id: default.c,v 1.6 2002/03/18 20:52:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -857,7 +857,7 @@ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 unsigned char *version_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	printf("Elinks " VERSION_STRING " - Text WWW browser\n");
+	printf("ELinks " VERSION_STRING " - Text WWW browser\n");
 	fflush(stdout);
 	return "";
 }
@@ -1343,7 +1343,7 @@ struct option links_options[] = {
 	 	0, MAX_STR_LEN, user_agent,
 	        "Change the User Agent. That means identification string, which\n"
 		"is sent to HTTP server, when a document is requested.\n"
-		"If empty, defaults to: Elinks (<version>; <system_id>; <term_size>)" },
+		"If empty, defaults to: ELinks (<version>; <system_id>; <term_size>)" },
 
 	{	"version", NULL,
 		version_cmd, NULL, NULL,

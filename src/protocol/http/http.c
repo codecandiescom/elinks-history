@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.3 2002/03/17 18:14:08 pasky Exp $ */
+/* $Id: http.c,v 1.4 2002/03/18 20:52:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,7 +233,7 @@ void http_send_header(struct connection *c)
 
 	if (!strcmp(user_agent, "")) {
                 add_to_str(&hdr, &l,
-			   "User-Agent: Elinks (" VERSION_STRING "; ");
+			   "User-Agent: ELinks (" VERSION_STRING "; ");
                 add_to_str(&hdr, &l, system_name);
 
 		if (!list_empty(terminals)) {

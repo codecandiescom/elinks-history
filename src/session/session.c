@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.424 2004/06/08 23:05:21 jonas Exp $ */
+/* $Id: session.c,v 1.425 2004/06/08 23:22:22 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -796,7 +796,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 			} else {
 				/* Open next ones. */
-				open_url_in_new_tab(ses, struri(uri), 1);
+				open_uri_in_new_tab(ses, uri, 1);
 			}
 
 			done_uri(uri);
@@ -810,7 +810,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 			 * inaccessible. Maybe we should not support this kind
 			 * of thing or make the window focus detecting code
 			 * more intelligent. --jonas */
-			open_url_in_new_tab(ses, NULL, 0);
+			open_uri_in_new_tab(ses, NULL, 0);
 
 			if (info->remote & SES_REMOTE_PROMPT_URL) {
 				/* We can't create new window in EV_INIT handler! */

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.57 2004/05/29 03:40:53 jonas Exp $ */
+/* $Id: tab.c,v 1.58 2004/06/08 23:22:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ close_all_tabs_but_current(struct session *ses)
 
 
 void
-open_url_in_new_tab(struct session *ses, unsigned char *url, int in_background)
+open_uri_in_new_tab(struct session *ses, struct uri *uri, int in_background)
 {
 	struct window *tab;
 	struct initial_session_info *info;
@@ -253,7 +253,7 @@ open_url_in_new_tab(struct session *ses, unsigned char *url, int in_background)
 
 	info->base_session = ses->id;
 	init_list(info->url_list);
-	if (url) add_to_string_list(&info->url_list, url, -1);
+	if (uri) add_to_string_list(&info->url_list, struri(uri), -1);
 
 	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
@@ -272,7 +272,7 @@ open_current_link_in_new_tab(struct session *ses, int in_background)
 	link = get_current_link(doc_view);
 	if (link) uri = get_link_uri(ses, doc_view, link);
 
-	open_url_in_new_tab(ses, uri ? struri(uri) : NULL, in_background);
+	open_uri_in_new_tab(ses, uri, in_background);
 	if (uri) done_uri(uri);
 }
 

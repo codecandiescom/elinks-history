@@ -228,6 +228,7 @@ fi
 dnl ===================================================================
 dnl Checks for zlib, optional even if installed.
 dnl ===================================================================
+
 AC_ARG_WITH(zlib, [  --without-zlib          disable zlib support],
 	[ if test "$withval" = no; then disable_zlib=yes; fi])
 AC_MSG_CHECKING([for zlib support])
@@ -245,6 +246,7 @@ fi
 dnl ===================================================================
 dnl Checks for bzlib, optional even if installed.
 dnl ===================================================================
+
 AC_ARG_WITH(bzlib, [  --without-bzlib         disable bzlib support],
 	[ if test "$withval" = no; then disable_bzlib=yes; fi])
 AC_MSG_CHECKING([for bzlib support])
@@ -261,9 +263,11 @@ else
 	AC_MSG_RESULT(no)
 fi
 
-dnl
-dnl XBEL
-dnl
+
+dnl ===================================================================
+dnl XBEL support
+dnl ===================================================================
+
 AC_ARG_WITH(xbel, [  --without-xbel          disable XBEL bookmarks],
         [ if test "$withval" = no; then disable_xbel=yes; fi])
 AC_MSG_CHECKING([for xbel support])
@@ -275,7 +279,6 @@ if test -z "$disable_xbel"; then
 else
         AC_MSG_RESULT(no)
 fi
-
 
 
 dnl ===================================================================

@@ -207,7 +207,6 @@ if test x"$el_cv_HAVE_C99_VSNPRINTF" = x"yes"; then
 fi
 
 AC_CHECK_LIB(dl, dlopen) # OpenSSL and Lua frequently needs it
-AC_CHECK_LIB(m, rint)
 
 dnl ===================================================================
 dnl Checks for libraries.
@@ -491,9 +490,9 @@ if test -z "$disable_lua"; then
 	for luadir in "$withval" "$withval" "" /usr /usr /usr/local /usr/local; do
 		if test "$cf_result" = no; then
 			if test "$xyz_piggyswitch" = "cow"; then
-				LUA_LIBS="-llua40 -llualib40"
+				LUA_LIBS="-llua40 -llualib40 -lm"
 			else
-				LUA_LIBS="-llua -llualib"
+				LUA_LIBS="-llua -llualib -lm"
 			fi
 
 			if test ! -z "$luadir"; then

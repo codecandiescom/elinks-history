@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"POT-Creation-Date: 2003-12-24 02:23+0100\n"
+"POT-Creation-Date: 2003-12-24 17:51+0100\n"
 "PO-Revision-Date: 2003-10-20 18:36+0200\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
@@ -16,6 +16,7 @@ msgstr ""
 msgid "Close"
 msgstr "(1053"
 
+#. | MSGBOX_SCROLLABLE
 #: src/bfu/hierbox.c:406 src/cache/dialogs.c:145 src/config/dialogs.c:355
 #: src/cookies/dialogs.c:129 src/dialogs/document.c:44
 #: src/dialogs/document.c:232 src/dialogs/download.c:408
@@ -1858,7 +1859,7 @@ msgstr "Enable (0l0r"
 #: src/config/options.inc:209
 msgid ""
 "Enable use of the active link background and text color\n"
-"settings instead of browse.links from the document."
+"settings instead of the link colors from the document."
 msgstr ""
 
 #: src/config/options.inc:212

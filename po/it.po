@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-24 02:23+0100\n"
+"POT-Creation-Date: 2003-12-24 17:51+0100\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -19,6 +19,7 @@ msgstr ""
 msgid "Close"
 msgstr "Chiudi"
 
+#. | MSGBOX_SCROLLABLE
 #: src/bfu/hierbox.c:406 src/cache/dialogs.c:145 src/config/dialogs.c:355
 #: src/cookies/dialogs.c:129 src/dialogs/document.c:44
 #: src/dialogs/document.c:232 src/dialogs/download.c:408
@@ -735,8 +736,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, cronologia, "
-"...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, "
+"cronologia, ...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in combinazione con una di queste opzioni."
 
@@ -799,8 +800,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione "
-"config.saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione config."
+"saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:644
@@ -963,8 +964,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
-"\"%s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
+"s\")?"
 
 #: src/config/dialogs.c:529 src/dialogs/info.c:126 src/globhist/dialogs.c:187
 msgid "Toggle display"
@@ -1869,9 +1870,10 @@ msgid "Enable color"
 msgstr "Abilita colore"
 
 #: src/config/options.inc:209
+#, fuzzy
 msgid ""
 "Enable use of the active link background and text color\n"
-"settings instead of browse.links from the document."
+"settings instead of the link colors from the document."
 msgstr ""
 "Abilita l'uso del colore dello sfondo e del testo per il collegamento\n"
 "attivo invece di browse.links dal documento."
@@ -2937,8 +2939,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
-"unix-xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
+"xwin)."
 
 #: src/config/options.inc:779
 msgid ""
@@ -4557,11 +4559,6 @@ msgstr "tempo trascorso"
 msgid "estimated time"
 msgstr "tempo stimato"
 
-#: src/dialogs/status.c:204
-#, c-format
-msgid "Typeahead: %s [%s]"
-msgstr "Trova: %s [%s]"
-
 #: src/dialogs/status.c:206 src/viewer/text/search.c:1034
 msgid "Typeahead"
 msgstr "Trova mentre scrivi"
@@ -4585,8 +4582,8 @@ msgstr "Salva form per questo URL."
 #: src/formhist/dialogs.c:128
 msgid ""
 "No saved information for this URL.\n"
-"If you want to save passwords for this URL, enable it by the \"Toggle "
-"saving\" button."
+"If you want to save passwords for this URL, enable it by the \"Toggle saving"
+"\" button."
 msgstr ""
 "Non ci sono informazioni salvate per questo URL.\n"
 "Se desideri salvare le password per questo URL, abilitale tramite il "
@@ -4919,8 +4916,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le "
-"maiuscole/minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
+"minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -5072,8 +5069,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come "
-"image/*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
+"*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #: src/mime/backend/mailcap.c:132
@@ -5630,9 +5627,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of "
-"config.saving_style option to 3 in order to get the \"right\" behaviour. "
-"Apologies for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of config."
+"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
+"for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5640,9 +5637,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
-"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
-"mie scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
+"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
+"scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:874
 msgid ""
@@ -6001,3 +5998,5 @@ msgstr "Errore salvataggio"
 msgid "Error writing to file"
 msgstr "Errore scrittura del file"
 
+#~ msgid "Typeahead: %s [%s]"
+#~ msgstr "Trova: %s [%s]"

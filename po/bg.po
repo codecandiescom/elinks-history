@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-24 02:23+0100\n"
+"POT-Creation-Date: 2003-12-24 17:51+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dimitar Dimitrov <mitaka_ddd@yahoo.com>\n"
 "Language-Team: Bulgarian <bg-team@bash.info>\n"
@@ -22,6 +22,7 @@ msgstr ""
 msgid "Close"
 msgstr "Затвори"
 
+#. | MSGBOX_SCROLLABLE
 #: src/bfu/hierbox.c:406 src/cache/dialogs.c:145 src/config/dialogs.c:355
 #: src/cookies/dialogs.c:129 src/dialogs/document.c:44
 #: src/dialogs/document.c:232 src/dialogs/download.c:408
@@ -1818,7 +1819,7 @@ msgstr "име"
 #: src/config/options.inc:209
 msgid ""
 "Enable use of the active link background and text color\n"
-"settings instead of browse.links from the document."
+"settings instead of the link colors from the document."
 msgstr ""
 
 #: src/config/options.inc:212

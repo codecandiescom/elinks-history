@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.49 2003/07/15 20:18:08 jonas Exp $ */
+/* $Id: document.c,v 1.50 2003/07/21 05:20:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,162 +58,159 @@ loc_msg(struct terminal *term, struct location *location,
 	struct cache_entry *ce;
 	unsigned char *a;
 	unsigned char *url;
-	unsigned char *str;
-	int strl;
+	struct string msg;
 
 	if (!location) {
 		nowhere_box(term, NULL);
 		return;
 	}
 
-	str = init_str();
-	if (!str) return;
-	strl = 0;
+	if (!init_string(&msg)) return;
 
-	add_to_str(&str, &strl, _("URL", term));
-	add_to_str(&str, &strl, ": ");
+	add_to_string(&msg, _("URL", term));
+	add_to_string(&msg, ": ");
 
 	url = strip_uri_password(location->vs.url);
 	if (url) {
-		add_to_str(&str, &strl, url);
+		add_to_string(&msg, url);
 		mem_free(url);
 	}
 
 	/* We don't preserve this in url. */
 	if (location->vs.goto_position) {
-		add_chr_to_str(&str, &strl, '#');
-		add_to_str(&str, &strl, location->vs.goto_position);
+		add_char_to_string(&msg, '#');
+		add_to_string(&msg, location->vs.goto_position);
 	}
 
 #if 0
 	/* strip_url_password() takes care about this now */
 	if (strchr(location->vs.url, POST_CHAR)) {
-		add_bytes_to_str(&str, &strl, location->vs.url,
+		add_bytes_to_string(&msg, location->vs.url,
 				 (unsigned char *) strchr(location->vs.url,
 							  POST_CHAR)
 				 - (unsigned char *) location->vs.url);
 
 	} else {
-		add_to_str(&str, &strl, location->vs.url);
+		add_to_string(&msg, location->vs.url);
 	}
 #endif
 
-	add_chr_to_str(&str, &strl, '\n');
+	add_char_to_string(&msg, '\n');
 
 	if (frame && frame->document->title) {
-		add_to_str(&str, &strl, _("Title", term));
-		add_to_str(&str, &strl, ": ");
-		add_to_str(&str, &strl, frame->document->title);
+		add_to_string(&msg, _("Title", term));
+		add_to_string(&msg, ": ");
+		add_to_string(&msg, frame->document->title);
 	}
 
-	add_chr_to_str(&str, &strl, '\n');
+	add_char_to_string(&msg, '\n');
 
 	if (!get_cache_entry(location->vs.url, &ce)) {
-		add_chr_to_str(&str, &strl, '\n');
-		add_to_str(&str, &strl, _("Size", term));
-		add_to_str(&str, &strl, ": ");
-		add_num_to_str(&str, &strl, ce->length);
+		add_char_to_string(&msg, '\n');
+		add_to_string(&msg, _("Size", term));
+		add_to_string(&msg, ": ");
+		add_long_to_string(&msg, ce->length);
 
 		if (ce->incomplete) {
-			add_to_str(&str, &strl, " (");
-			add_to_str(&str, &strl, _("incomplete", term));
-			add_chr_to_str(&str, &strl, ')');
+			add_to_string(&msg, " (");
+			add_to_string(&msg, _("incomplete", term));
+			add_char_to_string(&msg, ')');
 		}
 
-		add_chr_to_str(&str, &strl, '\n');
-		add_to_str(&str, &strl, _("Codepage", term));
-		add_to_str(&str, &strl, ": ");
-		add_to_str(&str, &strl, get_cp_name(location->vs.view->document->cp));
+		add_char_to_string(&msg, '\n');
+		add_to_string(&msg, _("Codepage", term));
+		add_to_string(&msg, ": ");
+		add_to_string(&msg, get_cp_name(location->vs.view->document->cp));
 
 		if (location->vs.view->document->cp_status == CP_STATUS_ASSUMED) {
-			add_to_str(&str, &strl, " (");
-			add_to_str(&str, &strl, _("assumed", term));
-			add_chr_to_str(&str, &strl, ')');
+			add_to_string(&msg, " (");
+			add_to_string(&msg, _("assumed", term));
+			add_char_to_string(&msg, ')');
 		} else if (location->vs.view->document->cp_status == CP_STATUS_IGNORED) {
-			add_to_str(&str, &strl, " (");
-			add_to_str(&str, &strl, _("ignoring server setting", term));
-			add_chr_to_str(&str, &strl, ')');
+			add_to_string(&msg, " (");
+			add_to_string(&msg, _("ignoring server setting", term));
+			add_char_to_string(&msg, ')');
 		}
 
 		a = parse_http_header(ce->head, "Server", NULL);
 		if (a) {
-			add_chr_to_str(&str, &strl, '\n');
-			add_to_str(&str, &strl, _("Server", term));
-			add_to_str(&str, &strl, ": ");
-			add_to_str(&str, &strl, a);
+			add_char_to_string(&msg, '\n');
+			add_to_string(&msg, _("Server", term));
+			add_to_string(&msg, ": ");
+			add_to_string(&msg, a);
 			mem_free(a);
 		}
 
 		if (ce->ssl_info) {
-			add_chr_to_str(&str, &strl, '\n');
-			add_to_str(&str, &strl, _("SSL Cipher", term));
-			add_to_str(&str, &strl, ": ");
-			add_to_str(&str, &strl, ce->ssl_info);
+			add_char_to_string(&msg, '\n');
+			add_to_string(&msg, _("SSL Cipher", term));
+			add_to_string(&msg, ": ");
+			add_to_string(&msg, ce->ssl_info);
 		}
 		if (ce->encoding_info) {
-			add_chr_to_str(&str, &strl, '\n');
-			add_to_str(&str, &strl, _("Encoding", term));
-			add_to_str(&str, &strl, ": ");
-			add_to_str(&str, &strl, ce->encoding_info);
+			add_char_to_string(&msg, '\n');
+			add_to_string(&msg, _("Encoding", term));
+			add_to_string(&msg, ": ");
+			add_to_string(&msg, ce->encoding_info);
 		}
 
 		a = parse_http_header(ce->head, "Date", NULL);
 		if (a) {
-			add_chr_to_str(&str, &strl, '\n');
-			add_to_str(&str, &strl, _("Date", term));
-			add_to_str(&str, &strl, ": ");
-			add_to_str(&str, &strl, a);
+			add_char_to_string(&msg, '\n');
+			add_to_string(&msg, _("Date", term));
+			add_to_string(&msg, ": ");
+			add_to_string(&msg, a);
 			mem_free(a);
 		}
 
 		if (ce->last_modified) {
-			add_chr_to_str(&str, &strl, '\n');
-			add_to_str(&str, &strl, _("Last modified", term));
-			add_to_str(&str, &strl, ": ");
-			add_to_str(&str, &strl, ce->last_modified);
+			add_char_to_string(&msg, '\n');
+			add_to_string(&msg, _("Last modified", term));
+			add_to_string(&msg, ": ");
+			add_to_string(&msg, ce->last_modified);
 		}
 
 	}
 
 #ifdef GLOBHIST
-	add_chr_to_str(&str, &strl, '\n');
-	add_to_str(&str, &strl, _("Last visit time", term));
-	add_to_str(&str, &strl, ": ");
+	add_char_to_string(&msg, '\n');
+	add_to_string(&msg, _("Last visit time", term));
+	add_to_string(&msg, ": ");
 	historyitem = get_global_history_item(location->vs.url);
 	if (historyitem) {
 		/* Stupid ctime() adds a newline, and we don't want that, so we
 		 * use add_bytes_to_str. -- Miciah */
 		a = ctime(&historyitem->last_visit);
-		add_bytes_to_str(&str, &strl, a, strlen(a) - 1);
+		add_bytes_to_string(&msg, a, strlen(a) - 1);
 	} else {
-		add_to_str(&str, &strl, _("Unknown", term));
+		add_to_string(&msg, _("Unknown", term));
 	}
 #endif
 
 	if (frame) {
-		add_chr_to_str(&str, &strl, '\n');
+		add_char_to_string(&msg, '\n');
 		a = print_current_link_do(frame, term);
 		if (a) {
-			add_chr_to_str(&str, &strl, '\n');
-			add_to_str(&str, &strl, _("Link", term));
-			add_to_str(&str, &strl, ": ");
-			add_to_str(&str, &strl, a);
+			add_char_to_string(&msg, '\n');
+			add_to_string(&msg, _("Link", term));
+			add_to_string(&msg, ": ");
+			add_to_string(&msg, a);
 			mem_free(a);
 		}
 
 		a = print_current_link_title_do(frame, term);
 		if (a) {
-			add_chr_to_str(&str, &strl, '\n');
-			add_to_str(&str, &strl, _("Link title", term));
-			add_to_str(&str, &strl, ": ");
-			add_to_str(&str, &strl, a);
+			add_char_to_string(&msg, '\n');
+			add_to_string(&msg, _("Link title", term));
+			add_to_string(&msg, ": ");
+			add_to_string(&msg, a);
 			mem_free(a);
 		}
 	}
 
-	msg_box(term, getml(str, NULL), 0,
+	msg_box(term, getml(msg.source, NULL), 0,
 		N_("Info"), AL_LEFT,
-		str,
+		msg.source,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }

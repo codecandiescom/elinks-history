@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.38 2002/10/08 18:41:40 pasky Exp $ */
+/* $Id: listbox.c,v 1.39 2002/10/08 20:48:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,6 +137,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 			if (!item->root && (void *) item->prev == box->items) {
 				/* First item in the root list, quit. */
 				stop = 1;
+				levmove = 1;
 			}
 
 			/* We're not at the start of anything, go on. */

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.45 2002/10/07 20:43:12 pasky Exp $ */
+/* $Id: dialogs.c,v 1.46 2002/10/08 20:48:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,11 +343,134 @@ push_delete_button(struct dialog_data *dlg,
 	return 0;
 }
 
+
+static struct bookmark *move_cache_root_avoid;
+
+static void
+update_depths(struct listbox_item *parent)
+{
+	struct listbox_item *item;
+
+	foreach (item, parent->child) {
+		item->depth = parent->depth + 1;
+		if (item->type == BI_FOLDER)
+			update_depths(item);
+	}
+}
+
+static void
+do_move_bookmark(struct bookmark *dest, struct list_head *destb,
+		 struct list_head *desti, struct list_head *src,
+		 struct listbox_data *box) {
+	struct bookmark *bm = (struct bookmark *) src; /* piggy */
+	struct bookmark *bm_next = bm->next;
+	int blind_insert = (destb && desti);
+
+	/* Like foreach(), but foreach() hates when we delete actual items
+	 * from the list. */
+	while ((struct list_head *) bm_next != src) {
+		bm = bm_next;
+		bm_next = bm->next;
+
+		if (bm == dest || bm == move_cache_root_avoid) {
+			/* We WON'T ever try to proceed ourselves - saves us
+			 * from insanities like moving a folder into itself
+			 * and so on. */
+			continue;
+		}
+
+		if (bm->box_item->marked) {
+			bm->box_item->marked = 0;
+
+			if (box->top == bm->box_item) {
+				/* It's theoretically impossible that bm->next
+				 * would be invalid (point to list_head), as it
+				 * would be case only when there would be only
+				 * one item in the list, and then bm != dest
+				 * will save us already. */
+				box->top = bm->box_item->next;
+			}
+
+			del_from_list(bm->box_item);
+			del_from_list(bm);
+			add_at_pos((!blind_insert ? dest
+						 : (struct bookmark *) destb),
+				   bm);
+			add_at_pos((!blind_insert ? dest->box_item
+						 : (struct listbox_item *) desti),
+				   bm->box_item);
+
+			if (blind_insert) {
+				bm->root = dest;
+				bm->box_item->root = dest->box_item;
+			} else {
+				bm->root = dest->root;
+				bm->box_item->root = dest->box_item->root;
+			}
+			bm->box_item->depth = bm->root ? bm->root->box_item->depth + 1 : 0;
+			if (bm->box_item->type == BI_FOLDER)
+				update_depths(bm->box_item);
+
+			dest = bm;
+			blind_insert = 0;
+
+			/* We don't want to care about anything marked inside
+			 * of the marked folder, let's move it as a whole
+			 * directly. I believe that this is more intuitive.
+			 * --pasky */
+			continue;
+		}
+
+		if (bm->box_item->type == BI_FOLDER) {
+			do_move_bookmark(dest, blind_insert ? destb : NULL,
+					 blind_insert ? desti : NULL,
+					 &bm->child, box);
+		}
+	}
+}
+
 static int
 push_move_button(struct dialog_data *dlg,
 		 struct widget_data *blah)
 {
-	/* XXX: We do nothing yet. A TODO. */
+	struct widget_data *box_widget_data;
+	struct listbox_data *box;
+	struct bookmark *dest = NULL;
+	struct list_head *destb = NULL, *desti = NULL;
+
+	box_widget_data = &dlg->items[BM_BOX_IND];
+	box = (struct listbox_data *) box_widget_data->item->data;
+
+	if (!box->sel) return 0; /* nowhere to move to */
+
+	if (box->sel->type == BI_FOLDER) {
+		dest = box->sel->udata;
+		destb = &((struct bookmark *) box->sel->udata)->child;
+		desti = &box->sel->child;
+	} else {
+		dest = box->sel->udata;
+	}
+
+	/* Avoid recursion headaches (prevents moving a folder into itself). */
+	move_cache_root_avoid = NULL;
+	{
+		struct bookmark *bm = dest->root;
+
+		while (bm) {
+			if (bm->box_item->marked)
+				move_cache_root_avoid = bm;
+			bm = bm->root;
+		}
+	}
+
+	/* Traverse all expanded folders and move all marked items right
+	 * after bm_dest. */
+	do_move_bookmark(dest, destb, desti, &bookmarks, box);
+
+#ifdef BOOKMARKS_RESAVE
+	write_bookmarks();
+#endif
+	display_dlg_item(dlg, box_widget_data, 1);
 	return 0;
 }
 

@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.10 2004/01/26 23:00:32 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.11 2004/01/26 23:22:31 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -47,6 +47,10 @@ struct css_selector {
 };
 
 
+struct css_stylesheet;
+typedef void (*css_stylesheet_importer)(struct css_stylesheet *,
+					unsigned char *url, int urllen);
+
 /* The {struct css_stylesheet} describes all the useful data that was extracted from
  * the CSS source. Currently we don't cache anything other than the default
  * user stylesheet so it can contain stuff from both <style> tags and
@@ -55,7 +59,7 @@ struct css_stylesheet {
 	/* The import callback function. */
 	/* TODO: Maybe we need some CSS parser struct for these and the
 	 * possibility to have some import data as well. --jonas */
-	void (*import)(struct css_stylesheet *, unsigned char *url, int urllen);
+	css_stylesheet_importer import;
 
 	/* The list of selectors. */
 	struct list_head selectors; /* -> struct css_selector */
@@ -67,8 +71,11 @@ struct css_stylesheet {
 		{ D_LIST_HEAD(css.selectors) },			\
 	}
 
+/* Dynamically allocates a stylesheet. */
+struct css_stylesheet *
+init_css_stylesheet(css_stylesheet_importer importer)
 
-/* Releases all the content of the stylesheet. */
+/* Releases all the content of the stylesheet (but not the stylesheet itself). */
 void done_css_stylesheet(struct css_stylesheet *css);
 
 

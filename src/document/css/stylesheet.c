@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.8 2004/01/26 23:03:13 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.9 2004/01/26 23:22:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,6 +63,19 @@ get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 	if (selector) return selector;
 
 	return NULL;
+}
+
+
+struct css_stylesheet *
+init_css_stylesheet(css_stylesheet_importer importer)
+{
+	struct css_stylesheet *css;
+
+	css = mem_calloc(1, sizeof(struct css_stylesheet));
+	if (!css)
+		return NULL;
+	css->import = importer;
+	return css;
 }
 
 void

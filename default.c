@@ -722,14 +722,14 @@ unsigned char *gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	ip *addr;
+	struct sockaddr *addrs;
 	int addrno, i;
 	
 	if (!*argc) return "Parameter expected";
 	if (*argc > 1) return "Too many parameters";
 	
 	(*argv)++; (*argc)--;
-	if (do_real_lookup(*(*argv - 1), &addr, &addrno)) {
+	if (do_real_lookup(*(*argv - 1), &addrs, &addrno)) {
 #ifdef HAVE_HERROR
 		herror("error");
 #else
@@ -739,13 +739,14 @@ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	}
 	
 	for (i = 0; i < addrno; i++) {
-		unsigned char *p = (unsigned char *) &addr[i];
+		struct sockaddr_in addr = *((struct sockaddr_in *) &addrs[i]);
+		unsigned char *p = (unsigned char *) &addr.sin_addr.s_addr;
 		
 		printf("%d.%d.%d.%d\n", (int) p[0], (int) p[1],
 				        (int) p[2], (int) p[3]); 
 	}
 
-	mem_free(addr);
+	mem_free(addrs);
 	
 	fflush(stdout);
 	

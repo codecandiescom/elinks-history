@@ -39,8 +39,8 @@ void connected(/* struct connection */ void *);
 
 struct conn_info {
 	/* Note that we MUST start with addr - free_connection_info() relies on it */
-	ip *addr; /* array of addresses */
-	int addrno; /* array len / sizeof(ip) */
+	struct sockaddr *addr; /* array of addresses */
+	int addrno; /* array len / sizeof(sockaddr) */
 	int port;
 	struct sockaddr_in sa;
 	int *sock;
@@ -170,11 +170,13 @@ void dns_found(void *data, int state)
 	fcntl(sock, F_SETFL, O_NONBLOCK);
 
 	memset(&c_i->sa, 0, sizeof(struct sockaddr_in));
-	c_i->sa.sin_family = AF_INET;
 	c_i->sa.sin_port = htons(c_i->port);
 
 	for (i = 0; i < c_i->addrno; i++) {
-		c_i->sa.sin_addr.s_addr = c_i->addr[i];
+		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
+		
+		c_i->sa.sin_family = addr.sin_family;
+		c_i->sa.sin_addr.s_addr = addr.sin_addr.s_addr;
 			
 		if (connect(sock, (struct sockaddr *) &c_i->sa, sizeof(c_i->sa)) == 0)
 			break; /* success */

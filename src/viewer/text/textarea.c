@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.18 2003/10/06 00:27:31 zas Exp $ */
+/* $Id: textarea.c,v 1.19 2003/10/17 13:25:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ area_cursor(struct form_control *frm, struct form_state *fs)
 
 void
 draw_textarea(struct terminal *t, struct form_state *fs,
-	      struct document_view *f, struct link *l)
+	      struct document_view *doc_view, struct link *l)
 {
 	struct line_info *ln, *lnx;
 	struct form_control *frm;
@@ -138,18 +138,18 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	int sl, ye;
 	register int x, y;
 
-	assert(t && f && f->document && f->vs && l);
+	assert(t && doc_view && doc_view->document && doc_view->vs && l);
 	if_assert_failed return;
 	frm = l->form;
-	assertm(frm, "link %d has no form", (int)(l - f->document->links));
+	assertm(frm, "link %d has no form", (int)(l - doc_view->document->links));
 	if_assert_failed return;
 
-	xp = f->xp;
-	yp = f->yp;
-	xw = f->xw;
-	yw = f->yw;
-	vx = f->vs->view_posx;
-	vy = f->vs->view_pos;
+	xp = doc_view->xp;
+	yp = doc_view->yp;
+	xw = doc_view->xw;
+	yw = doc_view->yw;
+	vx = doc_view->vs->view_posx;
+	vy = doc_view->vs->view_pos;
 
 	if (!l->n) return;
 	area_cursor(frm, fs);
@@ -247,12 +247,12 @@ int textarea_editor = 0;
 
 void
 textarea_edit(int op, struct terminal *term_, struct form_control *form_,
-	      struct form_state *fs_, struct document_view *f_, struct link *l_)
+	      struct form_state *fs_, struct document_view *doc_view_, struct link *l_)
 {
 	static int form_maxlength;
 	static struct form_state *fs;
 	static struct terminal *term;
-	static struct document_view *f;
+	static struct document_view *doc_view;
 	static struct link *l;
 	static unsigned char *fn;
 
@@ -272,7 +272,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 
 	if (form_) form_maxlength = form_->maxlength;
 	if (fs_) fs = fs_;
-	if (f_) f = f_;
+	if (doc_view_) doc_view = doc_view_;
 	if (l_) l = l_;
 	if (term_) term = term_;
 
@@ -338,8 +338,8 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 				fs->value[bread] = 0;
 				fs->state = bread;
 
-				if (f && l)
-					draw_form_entry(term, f, l);
+				if (doc_view && l)
+					draw_form_entry(term, doc_view, l);
 			}
 
 close:
@@ -511,16 +511,16 @@ textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep)
 
 
 void
-set_textarea(struct session *ses, struct document_view *f, int kbd)
+set_textarea(struct session *ses, struct document_view *doc_view, int kbd)
 {
-	assert(ses && f && f->vs && f->document);
+	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	if (f->vs->current_link != -1
-	    && f->document->links[f->vs->current_link].type == L_AREA) {
+	if (doc_view->vs->current_link != -1
+	    && doc_view->document->links[doc_view->vs->current_link].type == L_AREA) {
 		struct term_event ev = INIT_TERM_EVENT(EV_KBD, 0, 0, 0);
 
 		ev.x = kbd;
-		field_op(ses, f, &f->document->links[f->vs->current_link], &ev, 1);
+		field_op(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link], &ev, 1);
 	}
 }

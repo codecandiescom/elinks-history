@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.35 2004/06/18 09:33:50 miciah Exp $ */
+/* $Id: form.h,v 1.36 2004/06/18 13:55:45 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -42,6 +42,12 @@ enum form_mode {
 
 #define form_field_is_readonly(field) ((field)->mode != FORM_MODE_NORMAL)
 
+enum form_wrap {
+	FORM_WRAP_NONE,
+	FORM_WRAP_SOFT,
+	FORM_WRAP_HARD,
+};
+
 struct form_control {
 	LIST_HEAD(struct form_control);
 
@@ -60,7 +66,8 @@ struct form_control {
 	unsigned char *default_value;
 	int default_state;
 	int size;
-	int cols, rows, wrap;
+	int cols, rows;
+	enum form_wrap wrap;
 	int maxlength;
 	int nvalues;
 	unsigned char **values;

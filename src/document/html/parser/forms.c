@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.20 2004/06/17 00:35:33 jonas Exp $ */
+/* $Id: forms.c,v 1.21 2004/06/18 13:55:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -706,17 +706,17 @@ pp:
 	if (wrap_attr) {
 		if (!strcasecmp(wrap_attr, "hard")
 		    || !strcasecmp(wrap_attr, "physical")) {
-			fc->wrap = 2;
+			fc->wrap = FORM_WRAP_HARD;
 		} else if (!strcasecmp(wrap_attr, "soft")
 			   || !strcasecmp(wrap_attr, "virtual")) {
-			fc->wrap = 1;
+			fc->wrap = FORM_WRAP_SOFT;
 		} else if (!strcasecmp(wrap_attr, "none")
 			   || !strcasecmp(wrap_attr, "off")) {
-			fc->wrap = 0;
+			fc->wrap = FORM_WRAP_NONE;
 		}
 		mem_free(wrap_attr);
 	} else {
-		fc->wrap = 1;
+		fc->wrap = FORM_WRAP_SOFT;
 	}
 
 	fc->maxlength = get_num(attr, "maxlength");

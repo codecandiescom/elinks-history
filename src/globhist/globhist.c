@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.17 2002/12/07 20:05:55 pasky Exp $ */
+/* $Id: globhist.c,v 1.18 2002/12/18 12:07:07 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -54,11 +54,12 @@ struct globhist_cache_entry {
 	struct global_history_item *item;
 };
 
-struct hash *globhist_cache = NULL;
-int globhist_cache_entries = 0;
+static struct hash *globhist_cache = NULL;
+static int globhist_cache_entries = 0;
+static int globhist_dirty = 0;
+static int globhist_nosave = 0;
 
-
-void
+static void
 free_global_history_item(struct global_history_item *historyitem)
 {
 	if (globhist_cache) {
@@ -121,6 +122,7 @@ delete_global_history_item(struct global_history_item *historyitem)
 	global_history.n--;
 
 	update_all_history_dialogs();
+	globhist_dirty = 1;
 }
 
 /* Search global history for item matching url. */
@@ -258,6 +260,8 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 
 	update_all_history_dialogs();
 
+	if (!globhist_nosave) globhist_dirty = 1;
+
 	/* Hash creation if needed. */
 	if (!globhist_cache)
 		globhist_cache = init_hash(8, &strhash);
@@ -340,6 +344,7 @@ read_global_history()
 		return;
 
 	title = in_buffer;
+	globhist_nosave = 1;
 
 	while (fgets(in_buffer, MAX_STR_LEN, f)) {
 		url = strchr(in_buffer, '\t');
@@ -360,16 +365,17 @@ read_global_history()
 	}
 
 	fclose(f);
+	globhist_nosave = 0;
 }
 
-void
+static void
 write_global_history()
 {
 	struct global_history_item *historyitem;
 	unsigned char *file_name;
 	struct secure_save_info *ssi;
 
-	if (!get_opt_bool("document.history.global.enable"))
+	if (!globhist_dirty || !get_opt_bool("document.history.global.enable"))
 		return;
 
 	file_name = straconcat(elinks_home, "globhist", NULL);

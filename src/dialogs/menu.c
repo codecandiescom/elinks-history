@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.181 2003/10/29 14:47:13 zas Exp $ */
+/* $Id: menu.c,v 1.182 2003/11/09 22:56:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,11 +203,8 @@ name__(struct terminal *term, void *ddd, struct session *ses) \
 			if (!mi) return; \
 		} \
  \
-		url = memacpy(loc->vs.url, loc->vs.url_len); \
+		url = get_no_post_url(loc->vs.url, NULL); \
 		if (url) { \
-			unsigned char *pc = strchr(url, POST_CHAR); \
-			if (pc) *pc = '\0'; \
- \
 			add_to_menu(&mi, url, "", (menu_func) go_historywards, \
 			    	    (void *) loc, 0, 1); \
 		} \
@@ -246,11 +243,8 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 			if (!mi) return;
 		}
 
-		url = stracpy(d->url);
+		url = get_no_post_url(d->url, NULL);
 		if (url) {
-			unsigned char *pc = strchr(url, POST_CHAR);
-			if (pc) *pc = '\0';
-
 			add_to_menu(&mi, url, "", (menu_func) display_download,
 			    	    d, 0, 1);
 			n++;

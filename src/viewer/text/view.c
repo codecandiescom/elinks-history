@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.258 2003/11/08 05:09:24 miciah Exp $ */
+/* $Id: view.c,v 1.259 2003/11/09 22:59:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -938,18 +938,16 @@ quak:
 				dialog_goto_url(ses,"");
 				goto x;
 			case ACT_GOTO_URL_CURRENT: {
-				unsigned char *s, *postchar;
+				unsigned char *url;
 				struct location *loc;
 
 				if (!have_location(ses)) goto quak;
 
 				loc = cur_loc(ses);
-				s = memacpy(loc->vs.url, loc->vs.url_len);
-				if (s) {
-					postchar = strchr(s, POST_CHAR);
-					if (postchar) *postchar = 0;
-					dialog_goto_url(ses, s);
-					mem_free(s);
+				url = get_no_post_url(loc->vs.url, NULL);
+				if (url) {
+					dialog_goto_url(ses, url);
+					mem_free(url);
 				}
 				goto x;
 			}

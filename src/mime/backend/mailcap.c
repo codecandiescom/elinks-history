@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.48 2003/10/03 11:53:16 jonas Exp $ */
+/* $Id: mailcap.c,v 1.49 2003/10/03 12:05:30 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -336,7 +336,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 }
 
 
-/* When initializing mailcap subsystem we read, parse and build a hash mapping
+/* When initializing the mailcap map/hash read, parse and build a hash mapping
  * content type to handlers. Map is built from a list of mailcap files.
  *
  * The RFC1524 specifies that a path of mailcap files should be used.
@@ -345,20 +345,11 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
  *	o Finally fall back to reasonable default
  */
 
-static int
-mailcap_change_hook(struct session *, struct option *, struct option *);
-
 static void
-init_mailcap(void)
+init_mailcap_map(void)
 {
 	unsigned char *path;
 	unsigned int priority = 0;
-
-	/* Check and do stuff that should only be done once. */
-	if (!mailcap_tree) {
-		mailcap_tree = get_opt_rec(config_options, "mime.mailcap");
-		mailcap_tree->change_hook = mailcap_change_hook;
-	}
 
 	if (!get_opt_bool_tree(mailcap_tree, "enable"))
 		return;
@@ -417,12 +408,12 @@ mailcap_change_hook(struct session *ses, struct option *current,
 	if (!strncasecmp(changed->name, "path", 4)) {
 		/* Brute forcing reload! */
 		done_mailcap();
-		init_mailcap();
+		init_mailcap_map();
 	} else if (!strncasecmp(changed->name, "enable", 6)) {
 		int enable = *((int *) changed->ptr);
 
 		if (enable && !mailcap_map)
-			init_mailcap();
+			init_mailcap_map();
 		else if (!enable && mailcap_map)
 			done_mailcap();
 	}
@@ -430,6 +421,13 @@ mailcap_change_hook(struct session *ses, struct option *current,
 	return 0;
 }
 
+static void
+init_mailcap(void)
+{
+	mailcap_tree = get_opt_rec(config_options, "mime.mailcap");
+	mailcap_tree->change_hook = mailcap_change_hook;
+	init_mailcap_map();
+}
 
 /* The command semantics include the following:
  *

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.172 2003/07/22 13:35:39 zas Exp $ */
+/* $Id: parser.c,v 1.173 2003/07/22 13:46:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2686,9 +2686,6 @@ html_link_parse(unsigned char *a, struct hlink *link)
 	else if (strcasestr(link->name, "icon") ||
 		 (link->content_type && strcasestr(link->content_type, "icon")))
 		link->type = LT_ICON;
-	else if (!strcasecmp(link->name, "stylesheet") ||
-		 (link->content_type && strcasestr(link->content_type, "css")))
-		link->type = LT_STYLESHEET;
 	else if (strcasestr(link->name, "alternate")) {
 		link->type = LT_ALTERNATE;
 		if (link->lang)
@@ -2699,6 +2696,10 @@ html_link_parse(unsigned char *a, struct hlink *link)
 		else if (link->media)
 			link->type = LT_ALTERNATE_MEDIA;
 	}
+	else if (!strcasecmp(link->name, "stylesheet") ||
+		 (link->content_type && strcasestr(link->content_type, "css")))
+		link->type = LT_STYLESHEET;
+
 
 	return 1;
 }
@@ -2719,7 +2720,8 @@ html_link(unsigned char *a)
 	     link.type == LT_STYLESHEET ||
 	     link.type == LT_ALTERNATE_STYLESHEET)) goto free_and_return;
 
-	if (link.type != LT_UNKNOWN)
+
+	if (!link.name || link.type != LT_UNKNOWN)
 		/* Give preference to our default names for known types. */
 		name = get_lt_default_name(&link);
 	else
@@ -2732,9 +2734,10 @@ html_link(unsigned char *a)
 
 		html_focusable(a);
 
-		if (link.title) {
+		if (link.title)
 			add_to_string(&text, link.title);
-		}
+		else
+			add_to_string(&text, link.name);
 
 		if (link_display == 1) goto only_title;
 
@@ -2754,6 +2757,11 @@ html_link(unsigned char *a)
 		if (link.type == LT_ALTERNATE_LANG && link.lang) {
 			add_to_string(&text, ", ");
 			add_to_string(&text, link.lang);
+		}
+
+		if (link.media) {
+			add_to_string(&text, ", ");
+			add_to_string(&text, link.media);
 		}
 
 		add_char_to_string(&text, ')');

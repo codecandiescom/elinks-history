@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.26 2003/08/02 15:03:31 jonas Exp $ */
+/* $Id: form.c,v 1.27 2003/08/02 15:22:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -680,7 +680,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 	if (!save || form_already_saved(frm->action, submit)) return NULL;
 
 	fm_data = mem_alloc(sizeof(struct form_history_item));
-	if (!fm_data) goto fail;
+	if (!fm_data) return NULL;
 
 	init_list(fm_data->submit);
 
@@ -695,7 +695,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 	fm_data->url = stracpy(frm->action);
 	if (!fm_data->url) {
 		mem_free(fm_data);
-		goto fail;
+		return NULL;
 	}
 
 	msg_box(ses->tab->term, NULL, 0,
@@ -709,10 +709,6 @@ memorize_form(struct session *ses, struct list_head *submit,
 		N_("No"), free_form, NULL);
 
 	return sb;
-
-fail:
-	free_succesful_controls(submit);
-	return NULL;
 }
 #endif /* FORMS_MEMORY */
 

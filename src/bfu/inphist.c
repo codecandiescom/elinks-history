@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.79 2004/02/09 02:59:33 jonas Exp $ */
+/* $Id: inphist.c,v 1.80 2004/02/09 11:13:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,8 @@ tab_compl_n(struct dialog_data *dlg_data, unsigned char *item, int len)
 	struct terminal *term = dlg_data->win->term;
 	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->width, term->height, 0);
 	struct widget_data *widget_data = selected_widget(dlg_data);
+
+	assert(widget_is_textfield(widget_data));
 
 	int_upper_bound(&len, widget_data->widget->datalen - 1);
 	memcpy(widget_data->cdata, item, len);
@@ -202,7 +204,7 @@ add_to_input_history(struct input_history *history, unsigned char *data,
 
 	/* limit size of history to MAX_INPUT_HISTORY_ENTRIES
 	 * removing first entries if needed */
-	for (; history->size > MAX_INPUT_HISTORY_ENTRIES; history->size--) {
+	while (history->size > MAX_INPUT_HISTORY_ENTRIES) {
 		if (list_empty(history->entries)) {
 			INTERNAL("history is empty");
 			history->size = 0;
@@ -210,7 +212,7 @@ add_to_input_history(struct input_history *history, unsigned char *data,
 		}
 
 		entry = history->entries.prev;
-		del_from_list(entry);
+		del_from_history_list(history, entry);
 		mem_free(entry);
 	}
 }

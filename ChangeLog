@@ -1,3 +1,132 @@
+Sun Aug  1 20:54:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.h, file/cgi.c, http/http.c:
+
+	Introduce URI_HTTP_REFERRER flag. Now URI_PUBLIC is only used for
+	dialogs and coument titles and never for URI strings sent over the
+	net.  
+
+Sun Aug  1 20:51:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Add leading slash always when we want URI_PATH. This fixes
+	determining default value of the action attribute of <form>.  
+
+Sun Aug  1 20:46:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	Helper URI_SERVER bitmask enum.  
+
+Sun Aug  1 20:43:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	We do not use URI_POST_INFO now, it must not be sent over the net.  
+
+Sun Aug  1 20:40:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	Separate the parts of enum uri_component.  
+
+Sun Aug  1 20:33:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.h:
+
+	Prevent the horrible URI_POST_INFO sneaking all around into various
+	URIs like <form> action URI, URI coming over clipboard,
+	in-Lua-processing URIs and so on, by sticking it to URI_RARE. Let's
+	see what did I break.  
+
+Sun Aug  1 20:12:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Hrmpf. Indeed use the conn->data_socket.fd for passing
+	conn->cgi_pipes[1].  
+
+Sun Aug  1 20:08:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/cgi.c:
+
+	Compilation fix (call me dirty...), and Jonas should better do test
+	compilations on full-featured ELinks configurations or I'll give him
+	hard time.  
+
+Sun Aug  1 10:00:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/http/http.c, ssl/connect.c,
+	ssl/connect.h:
+
+	ssl_connect(): Take connection_socket struct.  
+
+Sun Aug  1 09:51:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/finger.c,
+	protocol/ftp/ftp.c, protocol/http/http.c, ssl/connect.c:
+
+	read_from_socket(): Take struct connection_socket instead of socket
+	fd. Describe it and rename @read_func to @done to reflect the
+	change. Well actually also @buf is renamed to @buffer. To further
+	overload the patch also struct read_buffer now holds the
+	connection_socket struct.  
+
+Sun Aug  1 09:18:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	struct write_buffer: Replace |int sock| member with |struct
+	connection_socket *socket| member.  
+
+Sun Aug  1 09:14:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/finger.c,
+	protocol/ftp/ftp.c, protocol/http/http.c:
+
+	write_to_socket(): Take struct connection_socket instead of socket
+	fd. Describe it and rename write_func to done to reflect the change.  
+
+Sun Aug  1 09:08:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.h:
+
+	struct connection: Update @data_socket comment. SMB is also using
+	it.  
+
+Sun Aug  1 09:07:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/ftp/ftp.c,
+	protocol/smb/smb.c, sched/connection.c, ssl/connect.c:
+
+	close_socket(): Take struct connection_socket instead of socket
+	descriptor pointer.  
+
+Sun Aug  1 09:01:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/http/http.c, ssl/connect.c:
+
+	struct conn_info: Replace |int *sock| member with |struct
+	connection_socket *socket| member.  
+
+Sun Aug  1 08:55:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/finger.c,
+	protocol/ftp/ftp.c, protocol/http/http.c:
+
+	make_connection(): Take struct connection_socket pointer.  
+
+Sun Aug  1 08:45:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/finger.c, protocol/ftp/ftp.c,
+	protocol/http/http.c, protocol/smb/smb.c, sched/connection.c,
+	sched/connection.h:
+
+	Introduce struct connection_socket. For now only holding the socket
+	descriptor.  
+
 Sat Jul 31 18:29:11 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.112 2004/10/17 23:15:10 jonas Exp $ */
+/* $Id: action.c,v 1.113 2004/10/20 01:27:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -670,7 +670,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 #ifdef CONFIG_MARKS
 			ses->kbdprefix.mark = KP_MARK_SET;
 #endif
-			status = FRAME_EVENT_OK;
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MARK_GOTO:
@@ -680,7 +680,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			 * still choose a mark directly! --pasky */
 			ses->kbdprefix.mark = KP_MARK_GOTO;
 #endif
-			status = FRAME_EVENT_OK;
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_SCRIPTING_FUNCTION:

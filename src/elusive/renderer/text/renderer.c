@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.17 2003/04/29 07:53:08 zas Exp $ */
+/* $Id: renderer.c,v 1.18 2003/05/02 14:22:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,7 +137,7 @@ render_box(struct renderer_state *state, struct layout_box *box)
 	struct f_data *frame_data = console_frame_data->f_data;
 	int y = frame_data->y;
 	struct layout_box *leaf_box;
-	int leftpad = rstate->leftpad;
+	int orig_leftpad = rstate->leftpad;
 
 	{
 		unsigned char *display = get_only_box_property(box, "display");
@@ -156,12 +156,12 @@ render_box(struct renderer_state *state, struct layout_box *box)
 	}
 
 	{
-		unsigned char *leftpad2;
+		unsigned char *leftpad;
 
 		/* XXX: Assuming em unit. */
-		leftpad2 = get_only_box_property(box, "padding-left");
-		if (leftpad2) {
-			int lp = atoi(leftpad2);
+		leftpad = get_only_box_property(box, "padding-left");
+		if (leftpad) {
+			int lp = atoi(leftpad);
 
 			rstate->leftpad += lp;
 			rstate->x_pos += lp;
@@ -189,7 +189,7 @@ render_box(struct renderer_state *state, struct layout_box *box)
 		render_box(state, leaf_box);
 	}
 
-	rstate->leftpad = leftpad;
+	rstate->leftpad = orig_leftpad;
 }
 
 

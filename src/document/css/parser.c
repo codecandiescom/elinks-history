@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.68 2004/01/27 02:28:03 pasky Exp $ */
+/* $Id: parser.c,v 1.69 2004/01/27 18:43:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,6 +181,7 @@ struct selector_pkg {
 static struct list_head *
 css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 {
+	unsigned char *id = NULL, *class = NULL, *pseudo = NULL;
 	struct css_token *token = get_css_token(scanner);
 	static struct list_head selectors;
 	struct selector_pkg *pkg;
@@ -220,7 +221,7 @@ next_one:
 	if (token->type == CSS_TOKEN_HASH
 	    || token->type == CSS_TOKEN_HEX_COLOR) {
 		/* id */
-		selector->id = memacpy(token->string + 1, token->length - 1);
+		id = memacpy(token->string + 1, token->length - 1);
 		token = get_next_css_token(scanner);
 	}
 
@@ -230,7 +231,7 @@ next_one:
 		if (token->type != CSS_TOKEN_IDENT) {
 			goto syntax_error;
 		}
-		selector->class = memacpy(token->string, token->length);
+		class = memacpy(token->string, token->length);
 		token = get_next_css_token(scanner);
 	}
 
@@ -240,7 +241,7 @@ next_one:
 		if (token->type != CSS_TOKEN_IDENT) {
 			goto syntax_error;
 		}
-		selector->pseudo = memacpy(token->string, token->length);
+		pseudo = memacpy(token->string, token->length);
 		token = get_next_css_token(scanner);
 	}
 
@@ -248,9 +249,12 @@ next_one:
 	 * spoil our whole stylesheet until we support them, and we always
 	 * favour the general selectors instead. Keep just the add_to_list()
 	 * when we will start supporting the id/class/pseudo. */
-	if (!selector->id && !selector->class && !selector->pseudo) {
+	if (!id && !class && !pseudo) {
 		add_to_list(selectors, pkg);
 	} else {
+		if (id) mem_free(id), id = NULL;
+		if (class) mem_free(class), class = NULL;
+		if (pseudo) mem_free(pseudo), pseudo = NULL;
 		mem_free(pkg); pkg = NULL;
 	}
 
@@ -267,6 +271,11 @@ syntax_error:
 				del_from_list(pkg);
 			mem_free(pkg);
 		}
+
+		if (id) mem_free(id), id = NULL;
+		if (class) mem_free(class), class = NULL;
+		if (pseudo) mem_free(pseudo), pseudo = NULL;
+
 		free_list(selectors);
 
 		skip_css_block(scanner);

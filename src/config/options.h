@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.46 2003/05/08 21:45:43 zas Exp $ */
+/* $Id: options.h,v 1.47 2003/06/11 08:39:05 miciah Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -110,8 +110,12 @@ extern void free_option_value(struct option *);
 
 extern struct option *get_opt_rec(struct option *, unsigned char *);
 extern struct option *get_opt_rec_real(struct option *, unsigned char *);
+#ifdef DEBUG
 extern void *get_opt_(unsigned char *, int, struct option *, unsigned char *);
 #define get_opt(tree, name) get_opt_(__FILE__, __LINE__, tree, name)
+#else
+extern void *get_opt(struct option *, unsigned char *);
+#endif
 
 #define get_opt_bool_tree(tree, name) *((int *) get_opt(tree, name))
 #define get_opt_int_tree(tree, name) *((int *) get_opt(tree, name))

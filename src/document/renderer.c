@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.58 2004/06/22 15:45:52 zas Exp $ */
+/* $Id: renderer.c,v 1.59 2004/06/22 15:47:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,6 @@ get_convert_table(unsigned char *head, int to_cp,
 		  int default_cp, int *from_cp,
 		  enum cp_status *cp_status, int ignore_server_cp)
 {
-	unsigned char *a;
 	unsigned char *part = head;
 	int cp_index = -1;
 
@@ -256,8 +255,8 @@ get_convert_table(unsigned char *head, int to_cp,
 
 	while (cp_index == -1) {
 		unsigned char *ct_charset;
+		unsigned char *a = parse_http_header(part, "Content-Type", &part);
 
-		a = parse_http_header(part, "Content-Type", &part);
 		if (!a) break;
 
 		ct_charset = parse_http_header_param(a, "charset");
@@ -269,7 +268,8 @@ get_convert_table(unsigned char *head, int to_cp,
 	}
 
 	if (cp_index == -1) {
-		a = parse_http_header(head, "Content-Charset", NULL);
+		unsigned char *a = parse_http_header(head, "Content-Charset", NULL);
+
 		if (a) {
 			cp_index = get_cp_index(a);
 			mem_free(a);
@@ -277,7 +277,8 @@ get_convert_table(unsigned char *head, int to_cp,
 	}
 
 	if (cp_index == -1) {
-		a = parse_http_header(head, "Charset", NULL);
+		unsigned char *a = parse_http_header(head, "Charset", NULL);
+
 		if (a) {
 			cp_index = get_cp_index(a);
 			mem_free(a);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.260 2003/11/14 11:51:13 zas Exp $ */
+/* $Id: parser.c,v 1.261 2003/11/14 12:00:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1438,7 +1438,7 @@ get_html_form(unsigned char *a, struct form *form)
 			/* We have to do following for GET method, because we would end
 			 * up with two '?' otherwise. */
 			if (form->method == FM_GET) {
-				ch = strchr(form->action, '?');
+				unsigned char *ch = strchr(form->action, '?');
 				if (ch) *ch = '\0';
 			}
 		}

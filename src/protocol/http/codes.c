@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.14 2003/10/16 13:08:44 zas Exp $ */
+/* $Id: codes.c,v 1.15 2003/10/19 11:23:27 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -124,6 +124,7 @@ http_error_document(int code)
 "  \n"
 "  <center><hr /></center>\n"
 "  \n"
+#ifndef ELINKS_SMALL
 "  <p>An error occurred on the server while fetching the document you\n"
 "  requested. Moreover, the server did not send back any explanation of what\n"
 "  happenned whatsoever - it would be nice if you notified the web server\n"
@@ -135,6 +136,7 @@ http_error_document(int code)
 "  server administrator if you believe that this error should not occur.</p>\n"
 "  \n"
 "  <p align=\"right\">Have a nice day.</p>\n"
+#endif
 " </body>\n"
 "</html>\n",
 			code, code, codestr);

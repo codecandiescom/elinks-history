@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.29 2003/04/22 10:09:24 zas Exp $ */
+/* $Id: tables.c,v 1.30 2003/04/29 07:49:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1517,25 +1517,32 @@ display_table_frames(struct table *t, int x, int y)
 #define V_LINE(xx, yy) (V_LINE_X((xx), (yy)) == -1 ? 0 : V_LINE_X((xx), (yy)))
 
 	for (j = 0; j < t->y; j++) for (i = 0; i < t->x; i++) {
-		int x, y;
 		int xsp, ysp;
 		struct table_cell *cell = CELL(t, i, j);
 
 		if (!cell->used || cell->spanned) continue;
-		if ((xsp = cell->colspan) == 0) xsp = t->x - i;
-		if ((ysp = cell->rowspan) == 0) ysp = t->y - j;
+		xsp = cell->colspan;
+		if (!xsp) xsp = t->x - i;
+		ysp = cell->rowspan;
+		if (!ysp) ysp = t->y - j;
 
-		if (t->rules != R_NONE && t->rules != R_COLS)
-			for (x = 0; x < xsp; x++) {
-				H_LINE_X(i + x, j) = t->cellsp;
-				H_LINE_X(i + x, j + ysp) = t->cellsp;
+		if (t->rules != R_NONE && t->rules != R_COLS) {
+			int lx;
+			
+			for (lx = 0; lx < xsp; lx++) {
+				H_LINE_X(i + lx, j) = t->cellsp;
+				H_LINE_X(i + lx, j + ysp) = t->cellsp;
 			}
+		}
 
-		if (t->rules != R_NONE && t->rules != R_ROWS)
-			for (y = 0; y < ysp; y++) {
-				V_LINE_X(i, j + y) = t->cellsp;
-				V_LINE_X(i + xsp, j + y) = t->cellsp;
+		if (t->rules != R_NONE && t->rules != R_ROWS) {
+			int ly;
+			
+			for (ly = 0; ly < ysp; ly++) {
+				V_LINE_X(i, j + ly) = t->cellsp;
+				V_LINE_X(i + xsp, j + ly) = t->cellsp;
 			}
+		}
 	}
 
 	if (t->rules == R_GROUPS) {

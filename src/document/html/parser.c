@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.74 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: parser.c,v 1.75 2003/04/29 07:49:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -436,7 +436,7 @@ unsigned char *eofff;
 unsigned char *startf;
 
 int line_breax;
-static int pos;
+static int position;
 static int putsp;
 
 static int was_br;
@@ -446,7 +446,7 @@ ln_break(int n, void (*line_break)(void *), void *f)
 {
 	if (!n || html_top.invisible) return;
 	while (n > line_breax) line_breax++, line_break(f);
-	pos = 0;
+	position = 0;
 	putsp = -1; /* ??? */
 }
 
@@ -456,7 +456,7 @@ put_chrs(unsigned char *start, int len,
 {
 	if (par_format.align == AL_NO) putsp = 0;
 	if (!len || html_top.invisible) return;
-	if (putsp == 1) put_chars(f, " ", 1), pos++, putsp = -1;
+	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
 	if (putsp == -1) {
 		if (start[0] == ' ') start++, len--;
 		putsp = 0;
@@ -470,7 +470,7 @@ put_chrs(unsigned char *start, int len,
 	if (par_format.align == AL_NO) putsp = 0;
 	was_br = 0;
 	put_chars(f, start, len);
-	pos += len;
+	position += len;
 	line_breax = 0;
 }
 
@@ -1308,21 +1308,21 @@ html_dd(unsigned char *a)
 }
 
 static void
-get_html_form(unsigned char *a, struct form *form)
+get_html_form(unsigned char *a, struct form *frm)
 {
 	unsigned char *al;
 
-	form->method = FM_GET;
+	frm->method = FM_GET;
 
 	al = get_attr_val(a, "method");
 	if (al) {
 		if (!strcasecmp(al, "post")) {
 			char *ax = get_attr_val(a, "enctype");
 
-			form->method = FM_POST;
+			frm->method = FM_POST;
 			if (ax) {
 				if (!strcasecmp(ax, "multipart/form-data"))
-					form->method = FM_POST_MP;
+					frm->method = FM_POST_MP;
 				mem_free(ax);
 			}
 		}
@@ -1331,18 +1331,18 @@ get_html_form(unsigned char *a, struct form *form)
 
 	al = get_attr_val(a, "action");
 	if (al) {
-		form->action = join_urls(format.href_base, trim_chars(al, ' ', 0));
+		frm->action = join_urls(format.href_base, trim_chars(al, ' ', 0));
 		mem_free(al);
 	} else {
-		form->action = stracpy(format.href_base);
-		if (form->action) {
-			unsigned char *ch = strchr(form->action, POST_CHAR);
+		frm->action = stracpy(format.href_base);
+		if (frm->action) {
+			unsigned char *ch = strchr(frm->action, POST_CHAR);
 			if (ch) *ch = 0;
 
 			/* We have to do following for GET method, because we would end
 			 * up with two '?' otherwise. */
-			if (form->method == FM_GET) {
-				ch = strchr(form->action, '?');
+			if (frm->method == FM_GET) {
+				ch = strchr(frm->action, '?');
 				if (ch) *ch = 0;
 			}
 		}
@@ -1350,12 +1350,12 @@ get_html_form(unsigned char *a, struct form *form)
 
 	al = get_target(a);
 	if (al) {
-		form->target = al;
+		frm->target = al;
 	} else {
-		form->target = stracpy(format.target_base);
+		frm->target = stracpy(format.target_base);
 	}
 
-	form->num = a - startf;
+	frm->num = a - startf;
 }
 
 static void
@@ -1886,15 +1886,15 @@ see:
 	while (html < eof && *html != '<') html++;
 
 	if (html >= eof) {
-		int i;
+		int j;
 
 abort:
 		*end = html;
 		if (lbl) mem_free(lbl);
 		if (val) {
-			for (i = 0; i < order; i++)
-				if (val[i])
-					mem_free(val[i]);
+			for (j = 0; j < order; j++)
+				if (val[j])
+					mem_free(val[j]);
 			mem_free(val);
 		}
 		destroy_menu();
@@ -2274,10 +2274,10 @@ distribute:
 			if (!nn) break;
 		}
 	} else {
-		int nn = 0;
+		int neg = 0;
 
-		for (i = 0; i < ol; i++) if (o[i] < 0) nn = 1;
-		if (!nn) goto distribute;
+		for (i = 0; i < ol; i++) if (o[i] < 0) neg = 1;
+		if (!neg) goto distribute;
 
 		oo = mem_alloc(ol * sizeof(int));
 		if (!oo) {
@@ -2580,7 +2580,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 
 	putsp = -1;
 	line_breax = table_level ? 2 : 1;
-	pos = 0;
+	position = 0;
 	was_br = 0;
 	put_chars_f = put_chars;
 	line_break_f = line_break;
@@ -2623,7 +2623,7 @@ set_lt:
 				}
 			}
 			html++;
-			if (!(pos + (html-lt-1))) goto skip_w; /* ??? */
+			if (!(position + (html - lt - 1))) goto skip_w; /* ??? */
 			if (*(html - 1) == ' ') {
 				/* BIG performance win; not sure if it doesn't cause any bug */
 				if (html < eof && !WHITECHAR(*html)) continue;
@@ -2647,7 +2647,7 @@ put_sp:
 			putsp = 0;
 			if (*html == 9) {
 				put_chrs(lt, html - lt, put_chars, f);
-				put_chrs("        ", 8 - pos%8, put_chars, f);
+				put_chrs("        ", 8 - (position % 8), put_chars, f);
 				html++;
 				goto set_lt;
 			} else if (*html == 13 || *html == 10) {
@@ -2738,7 +2738,7 @@ ng:;
 					mem_free(a);
 				}
 				if (!html_top.invisible) {
-					int a = par_format.align == AL_NO;
+					int ali = (par_format.align == AL_NO);
 					struct par_attrib pa = par_format;
 
 					if (ei->func == html_table && d_opt->tables && table_level < HTML_MAX_TABLE_LEVEL) {
@@ -2781,10 +2781,10 @@ ng:;
 					}
 					if (ei->func) ei->func(attr);
 					if (ei->func != html_br) was_br = 0;
-					if (a) par_format = pa;
+					if (ali) par_format = pa;
 				}
 			} else {
-				struct html_element *e, *ff;
+				struct html_element *e, *elt;
 				int lnb = 0;
 				int xxx = 0;
 
@@ -2803,8 +2803,8 @@ ng:;
 						kill_html_stack_item(e);
 						break;
 					}
-					for (ff = e; ff != (void *)&html_stack; ff = ff->prev)
-						if (ff->linebreak > lnb) lnb = ff->linebreak;
+					for (elt = e; elt != (void *)&html_stack; elt = elt->prev)
+						if (elt->linebreak > lnb) lnb = elt->linebreak;
 					ln_break(lnb, line_break, f);
 					while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
 					kill_html_stack_item(e);
@@ -2820,7 +2820,7 @@ ng:;
 	put_chrs(lt, html - lt, put_chars, f);
 	ln_break(1, line_break, f);
 	putsp = -1;
-	pos = 0;
+	position = 0;
 	/*line_breax = 1;*/
 	was_br = 0;
 }

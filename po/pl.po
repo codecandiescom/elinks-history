@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "POT-Creation-Date: 2003-12-08 19:09+0100\n"
-"PO-Revision-Date: 2003-12-03 02:06+0200\n"
+"PO-Revision-Date: 2003-12-09 11:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -2593,22 +2593,19 @@ msgstr ""
 "skrypty CGI."
 
 #: src/config/options.inc:725
-#, fuzzy
 msgid "Local CGI specific options. (DISABLED)"
-msgstr "Ustawienia dotycz±ce lokalnych skryptów CGI."
+msgstr "Ustawienia dotycz±ce lokalnych skryptów CGI. (WY£¡CZONE)"
 
 #: src/config/options.inc:729
-#, fuzzy
 msgid "Whether to execute local CGI scripts. (DISABLED)"
-msgstr "Czy uruchamiaæ skrypty CGI."
+msgstr "Czy uruchamiaæ skrypty CGI. (WY£¡CZONE)"
 
 #: src/config/options.inc:733
-#, fuzzy
 msgid ""
 "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "Oddzielona dwukropkami lista katalogów, z których mo¿na wykonywaæ\n"
-"skrypty CGI."
+"skrypty CGI. (WY£¡CZONE)"
 
 #
 #: src/config/options.inc:736
@@ -4206,7 +4203,7 @@ msgstr "~Zamknij tab"
 
 #: src/dialogs/menu.c:117
 msgid "Close ~all but this"
-msgstr ""
+msgstr "Z~amknij wszystkie za wyj±tekiem tego"
 
 #: src/dialogs/menu.c:199
 msgid "Exit ELinks"
@@ -4229,9 +4226,8 @@ msgid "Open new ~tab"
 msgstr "Otwórz w nowym ~tabie"
 
 #: src/dialogs/menu.c:335
-#, fuzzy
 msgid "Open new tab in backgroun~d"
-msgstr "Otwórz nowy t~ab w tle"
+msgstr "Otwórz nowy tab w t~le"
 
 #: src/dialogs/menu.c:337
 msgid "~Go to URL"
@@ -4250,41 +4246,34 @@ msgid "~History"
 msgstr "~Historia"
 
 #: src/dialogs/menu.c:341
-#, fuzzy
 msgid "~Unhistory"
 msgstr "His~toria powrotów"
 
 #: src/dialogs/menu.c:346
-#, fuzzy
 msgid "~Save as"
 msgstr "Zapi~sz jako"
 
 #: src/dialogs/menu.c:347
-#, fuzzy
 msgid "Save UR~L as"
-msgstr "Z~apisz URL jako"
+msgstr "Zapisz UR~L jako"
 
 #: src/dialogs/menu.c:348
 msgid "Save formatted ~document"
 msgstr "Zapisz sformatowany ~dokument"
 
 #: src/dialogs/menu.c:350
-#, fuzzy
 msgid "Bookm~ark document"
-msgstr "Brak dokumentu"
+msgstr "Dodaj dokument do z~ak³adek"
 
 #: src/dialogs/menu.c:356
-#, fuzzy
 msgid "~Kill background connections"
 msgstr "~Przerwij wszystkie po³±czenia w tle"
 
 #: src/dialogs/menu.c:357
-#, fuzzy
 msgid "Flush all ~caches"
 msgstr "Wyczy¶æ ca³± pamiêæ pod~rêczn±"
 
 #: src/dialogs/menu.c:358
-#, fuzzy
 msgid "Resource ~info"
 msgstr "~Informacje o zasobach"
 
@@ -4533,9 +4522,8 @@ msgid "Linux or OS/2 frames"
 msgstr "Ramki typu Linux lub OS/2"
 
 #: src/dialogs/options.c:173
-#, fuzzy
 msgid "FreeBSD frames"
-msgstr "Brak ramek"
+msgstr "Ramki FreeBSD"
 
 #: src/dialogs/options.c:174
 msgid "KOI8-R frames"
@@ -5107,7 +5095,7 @@ msgstr "JavaScript nie jest na razie obs³ugiwana."
 
 #: src/protocol/rewrite/rewrite.c:41
 msgid "URI rewriting"
-msgstr ""
+msgstr "Przepisywanie URI"
 
 #: src/protocol/rewrite/rewrite.c:43
 msgid ""
@@ -5118,30 +5106,36 @@ msgid ""
 "URI abbreviations, or smart ones, making it possible to pass\n"
 "arguments to them like search engine keywords."
 msgstr ""
+"Zasady przepisywanie URI wprowadzonego w okienku dialogowym.\n"
+"Mo¿liwe jest zdefiniowanie zestawu przedrostków, które zostan±\n"
+"rozwiniête je¶li bêd± pasowa³y do ³añcucha znaków wprowdzonego\n"
+"w okienku dialogowym. Przedrostki mog± byæ \"g³upie\", tzn.\n"
+"dzia³aj± tylko jako skróty URI lub inteligentne, takie do których\n"
+"mo¿na dodawaæ argumenty, np. s³owa kluczowe dla wyszukiwarek." 
 
 #: src/protocol/rewrite/rewrite.c:50
 msgid "Enable dumb prefixes"
-msgstr ""
+msgstr "W³±czenie g³upich przedrostków"
 
 #: src/protocol/rewrite/rewrite.c:52
 msgid "Enable dumb prefixes."
-msgstr ""
+msgstr "W³±czenie g³upich przedrostków."
 
 #: src/protocol/rewrite/rewrite.c:54
 msgid "Enable smart prefixes"
-msgstr ""
+msgstr "W³±czenie inteligentnych przedrostków"
 
 #: src/protocol/rewrite/rewrite.c:56
 msgid "Enable smart prefixes."
-msgstr ""
+msgstr "W³±czenie inteligentnych przedrostków."
 
 #: src/protocol/rewrite/rewrite.c:58
 msgid "Dumb Prefixes"
-msgstr ""
+msgstr "G³upie przedrostki"
 
 #: src/protocol/rewrite/rewrite.c:60
 msgid "Dumb prefixes."
-msgstr ""
+msgstr "G³upie przedrostki."
 
 #: src/protocol/rewrite/rewrite.c:64
 #, c-format
@@ -5150,14 +5144,17 @@ msgid ""
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
+"Zast±pienie URI dla g³upich przedrostków.\n"
+"%c w ³añcuchu oznacza bie¿±cy URL\n"
+"%% w ³añcuchu oznacza '%'"
 
 #: src/protocol/rewrite/rewrite.c:68
 msgid "Smart Prefixes"
-msgstr ""
+msgstr "Inteligentne przedrostki"
 
 #: src/protocol/rewrite/rewrite.c:70
 msgid "Smart prefixes."
-msgstr ""
+msgstr "Inteligentne przedrostki."
 
 #: src/protocol/rewrite/rewrite.c:76
 msgid ""
@@ -5167,11 +5164,16 @@ msgid ""
 "%0,%1,...,%9 means argument 0, 1, ..., 9\n"
 "%% in the string means '%'"
 msgstr ""
+"Zast±pienie URI dla inteligentnych przedrostków.\n"
+"%c w ³añcuchu oznacza bie¿±cy URL\n"
+"%s w ³añcuchu oznacza ca³y argument do inteligentnego przedrostka\n"
+"%0,%1,...,%9 oznacza argunent 0, 1, ..., 9\n"
+"%% w ³añcuchu oznacza '%'"
 
 #. name:
 #: src/protocol/rewrite/rewrite.c:243
 msgid "URI rewrite"
-msgstr ""
+msgstr "Przepisywanie URI"
 
 #: src/protocol/user.c:155 src/sched/error.c:51
 msgid "Bad URL syntax"

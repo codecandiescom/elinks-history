@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.62 2002/06/23 13:00:27 pasky Exp $ */
+/* $Id: options.c,v 1.63 2002/06/23 18:27:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,7 +471,7 @@ register_options()
 
 	add_opt_int("connection",
 		"retries", 0, 1, 16, 3,
-		"Number of tries to estabilish a connection.");
+		"Number of tries to establish a connection.");
 
 	add_opt_int("connection",
 		"receive_timeout", 0, 1, 1800, 120,
@@ -528,7 +528,7 @@ register_options()
 	add_opt_bool("document.browse.accesskey",
 		"auto_follow", 0, 0,
 		"Automatically follow link / submit form if appropriate accesskey\n"
-		"is pressed - this is standart behaviour, however dangerous.");
+		"is pressed - this is standard behaviour, however dangerous.");
 
 	add_opt_int("document.browse.accesskey",
 		"priority", 0, 0, 2, 1,
@@ -834,7 +834,7 @@ register_options()
 
 	add_opt_string("protocol.http.proxy",
 		"passwd", 0, "",
-		"Proxy authentication passwd.");
+		"Proxy authentication password.");
 
 
 	add_opt_tree("protocol.http",
@@ -953,7 +953,7 @@ register_options()
 	add_opt_bool("terminal._template_",
 		"block_cursor", 0, 0,
 		"This means that we always move cursor to bottom right corner\n"
-		"when done drawing. This is particularily useful when we are\n"
+		"when done drawing. This is particularly useful when we are\n"
 		"using block cursor, as inversed stuff is displayed correctly.");
 
 	add_opt_bool("terminal._template_",

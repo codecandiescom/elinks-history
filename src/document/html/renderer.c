@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.179 2003/07/22 01:52:59 jonas Exp $ */
+/* $Id: renderer.c,v 1.180 2003/07/24 11:23:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1385,7 +1385,7 @@ push_base_format(unsigned char *url, struct document_options *opt)
 
 	assert(url && opt);
 	if_assert_failed return;
-	assertm(html_stack.next == &html_stack, "something on html stack");
+	assertm(list_empty(html_stack), "something on html stack");
 	if_assert_failed init_list(html_stack);
 
 	e = mem_calloc(1, sizeof(struct html_element));
@@ -1570,7 +1570,7 @@ format_html(struct cache_entry *ce, struct document *screen)
 
 	kill_html_stack_item(html_stack.next);
 
-	assertm(html_stack.next == &html_stack,
+	assertm(list_empty(html_stack),
 		"html stack not empty after operation");
 	if_assert_failed init_list(html_stack);
 

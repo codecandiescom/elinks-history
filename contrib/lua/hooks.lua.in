@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.17 2003/05/20 22:41:46 zas Exp $
+-- $Id: hooks.lua.in,v 1.18 2003/07/02 00:47:45 jonas Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -64,6 +64,7 @@ end
 dumbprefixes = {
     b = "http://babelfish.altavista.com/babelfish/tr",
     bz = "http://bugzilla.elinks.or.cz",
+    d = "http://www.dict.org",
     g  = "http://www.google.com/",
     gg = "http://www.google.com/",
     go = "http://www.google.com/",
@@ -74,6 +75,7 @@ dumbprefixes = {
     pycur = "http://www.python.org/doc/current/",
     pydev = "http://www.python.org/dev/doc/devel/",
     pyhelp = "http://starship.python.net/crew/theller/pyhelp.cgi",
+    pyvault = "http://www.vex.net/parnassus/",
     e2 = "http://www.everything2.org/",
     sd = "http://www.slashdot.org/",
     vhtml = "http://validator.w3.org/check?uri=%c",
@@ -88,6 +90,7 @@ smartprefixes = {
     bb_fr_en = "http://babelfish.altavista.com/babelfish/tr?lp=fr_en&submit=1&urltext=%s",
     bb_en_fr = "http://babelfish.altavista.com/babelfish/tr?lp=en_fr&submit=1&urltext=%s",
     bug = "http://bugzilla.elinks.or.cz/show_bug.cgi?id=%s",
+    d = "http://www.dict.org/bin/Dict?Query=%s&Form=Dict1&Strategy=*&Database=*&submit=Submit+query",
     g  = "http://www.google.com/search?q=%s&btnG=Google+Search",
     gg = "http://www.google.com/search?q=%s&btnG=Google+Search",
     go = "http://www.google.com/search?q=%s&btnG=Google+Search",
@@ -103,6 +106,7 @@ smartprefixes = {
     dpkg = "http://packages.debian.org/%s",
     py = "http://starship.python.net/crew/theller/pyhelp.cgi?keyword=%s&version=current",
     pydev = "http://starship.python.net/crew/theller/pyhelp.cgi?keyword=%s&version=devel",
+    pyvault = "http://py.vaults.ca/apyllo.py?find=%s",
     e2 = "http://www.everything2.org/?node=%s",
     encz = "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=0&ecd_lines=15&ecd_hptxt=0",
     czen = "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=1&ecd_lines=15&ecd_hptxt=0",

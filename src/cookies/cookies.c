@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.65 2003/07/08 15:10:54 jonas Exp $ */
+/* $Id: cookies.c,v 1.66 2003/07/08 15:31:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -592,9 +592,9 @@ load_cookies(void) {
 		/* Prepare cookie if all members and fields was read. */
 		cookie = (p ? mem_calloc(1, sizeof(struct cookie)) : NULL);
 
-		if (1 || !cookie) {
+		if (!cookie) {
 			/* Something went wrong so clean up. */
-			for (member -= 1; member >= NAME; member--)
+			for (member -= 1; member >= 0; member--)
 				mem_free(members[member]);
 			continue;
 		}

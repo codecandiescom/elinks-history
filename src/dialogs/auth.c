@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.27 2003/06/07 15:25:37 pasky Exp $ */
+/* $Id: auth.c,v 1.28 2003/06/07 15:29:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,6 +118,7 @@ do_auth_dialog(struct session *ses)
 	struct dialog_data *dd;
 	struct terminal *term = ses->tab->term;
 	struct http_auth_basic *a = NULL;
+	unsigned char sticker[MAX_STR_LEN];
 
 	if (!list_empty(http_auth_basic_list)
 	    && !((struct http_auth_basic *) http_auth_basic_list.next)->valid)
@@ -143,12 +144,13 @@ do_auth_dialog(struct session *ses)
 		*a->passwd = 0;
 	}
 
+	snprintf(sticker, MAX_STR_LEN,
+		_("Authentication required for %s at %s", term),
+		a->realm, a->url);
+
 #define DLG_SIZE sizeof(struct dialog) + 5 * sizeof(struct widget)
 
-	d = mem_calloc(1, DLG_SIZE
-			 + strlen(_("Authentication required for ", term))
-			 + (a->realm ? strlen(a->realm) : 0)
-			 + strlen(_(" at ", term)) + strlen(a->url) + 1);
+	d = mem_calloc(1, DLG_SIZE + strlen(sticker) + 1);
 	if (!d) {
 		if (a->uid) {
 			mem_free(a->uid);
@@ -165,10 +167,7 @@ do_auth_dialog(struct session *ses)
 	d->fn = auth_layout;
 
 	d->udata = (char *)d + DLG_SIZE;
-	strcpy(d->udata, _("Authentication required for ", term));
-	if (a->realm) strcat(d->udata, a->realm);
-	strcat(d->udata, _(" at ", term));
-	strcat(d->udata, a->url);
+	strcpy(d->udata, sticker);
 
 #undef DLG_SIZE
 

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.6 2005/02/01 23:51:06 jonas Exp $
+## $Id: Makefile.am,v 1.7 2005/03/02 23:01:25 zas Exp $
 
 EXTRA_DIST = README $(PACKAGE).pot $(POFILES) $(GMOFILES)
 
@@ -55,7 +55,7 @@ $(srcdir)/$(PACKAGE).pot: $(POTFILES_REL)
 	$(XGETTEXT) --default-domain=$(PACKAGE) \
 		    --directory=$(top_srcdir) \
 		    --add-comments --language=C \
-		    --keyword=_ --keyword=N_ $(POTFILES_ABS) \
+		    --keyword=_ --keyword=N_ --keyword=n_:1,2 $(POTFILES_ABS) \
 	&& test ! -f $(PACKAGE).po \
 	   || ( rm -f $(srcdir)/$(PACKAGE).pot \
 		&& mv $(PACKAGE).po $(srcdir)/$(PACKAGE).pot )

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.132 2003/07/02 18:05:33 zas Exp $ */
+/* $Id: view.c,v 1.133 2003/07/02 18:17:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1361,19 +1361,24 @@ nolink:
 static void
 page_down(struct session *ses, struct f_data_c *f, int a)
 {
-	int newpos = f->vs->view_pos + f->f_data->opt.yw;
-	int direction = -1;
+	int newpos;
 
+	assert(ses && f && f->vs);
+
+	newpos = f->vs->view_pos + f->f_data->opt.yw;
 	if (newpos < f->f_data->y) {
 		f->vs->view_pos = newpos;
-		direction = 1;
+		find_link(f, 1, a);
+	} else {
+		find_link(f, -1, a);
 	}
-	find_link(f, direction, a);
 }
 
 static void
 page_up(struct session *ses, struct f_data_c *f, int a)
 {
+	assert(ses && f && f->vs);
+
 	f->vs->view_pos -= f->yw;
 	find_link(f, -1, a);
 	if (f->vs->view_pos < 0) f->vs->view_pos = 0/*, find_link(f, 1, a)*/;
@@ -1387,7 +1392,11 @@ static void jump_to_link_number(struct session *, struct f_data_c *, int);
 static void
 down(struct session *ses, struct f_data_c *fd, int a)
 {
-	int current_link = fd->vs->current_link;
+	int current_link;
+
+	assert(ses && fd && fd->vs && fd->f_data);
+
+	current_link = fd->vs->current_link;
 
 	if (get_opt_int("document.browse.links.wraparound")
 	    && current_link >= fd->f_data->nlinks - 1) {
@@ -1398,7 +1407,7 @@ down(struct session *ses, struct f_data_c *fd, int a)
 	}
 
 	if (current_link == -1
-	    || !next_in_view(fd, fd->vs->current_link + 1, 1, in_viewy,
+	    || !next_in_view(fd, current_link + 1, 1, in_viewy,
 		    	     set_pos_x)) {
 		page_down(ses, fd, 1);
 	}
@@ -1411,7 +1420,11 @@ down(struct session *ses, struct f_data_c *fd, int a)
 static void
 up(struct session *ses, struct f_data_c *fd, int a)
 {
-	int current_link = fd->vs->current_link;
+	int current_link;
+
+	assert(ses && fd && fd->vs && fd->f_data);
+
+	current_link = fd->vs->current_link;
 
 	if (get_opt_int("document.browse.links.wraparound")
 	    && current_link == 0) {
@@ -1422,7 +1435,7 @@ up(struct session *ses, struct f_data_c *fd, int a)
 	}
 
 	if (current_link == -1
-	    || !next_in_view(fd, fd->vs->current_link - 1, -1, in_viewy,
+	    || !next_in_view(fd, current_link - 1, -1, in_viewy,
 		    	     set_pos_x)) {
 		page_up(ses, fd, 1);
 	}
@@ -1438,6 +1451,8 @@ up(struct session *ses, struct f_data_c *fd, int a)
 static void
 scroll(struct session *ses, struct f_data_c *f, int a)
 {
+	assert(ses && f && f->vs && f->f_data);
+
 	if (f->vs->view_pos + f->f_data->opt.yw >= f->f_data->y && a > 0)
 		return;
 	f->vs->view_pos += a;
@@ -1451,6 +1466,8 @@ scroll(struct session *ses, struct f_data_c *f, int a)
 static void
 hscroll(struct session *ses, struct f_data_c *f, int a)
 {
+	assert(ses && f && f->vs && f->f_data);
+
 	f->vs->view_posx += a;
 	if (f->vs->view_posx >= f->f_data->x)
 		f->vs->view_posx = f->f_data->x - 1;
@@ -1463,6 +1480,8 @@ hscroll(struct session *ses, struct f_data_c *f, int a)
 static void
 home(struct session *ses, struct f_data_c *f, int a)
 {
+	assert(ses && f && f->vs);
+
 	f->vs->view_pos = f->vs->view_posx = 0;
 	find_link(f, 1, 0);
 }
@@ -1470,6 +1489,8 @@ home(struct session *ses, struct f_data_c *f, int a)
 static void
 x_end(struct session *ses, struct f_data_c *f, int a)
 {
+	assert(ses && f && f->vs && f->f_data);
+
 	f->vs->view_posx = 0;
 	if (f->vs->view_pos < f->f_data->y - f->f_data->opt.yw)
 		f->vs->view_pos = f->f_data->y - f->f_data->opt.yw;
@@ -1483,18 +1504,23 @@ has_form_submit(struct f_data *f, struct form_control *frm)
 	struct form_control *i;
 	int q = 0;
 
+	assert(f && frm);
+
 	foreach (i, f->forms) if (i->form_num == frm->form_num) {
 		if ((i->type == FC_SUBMIT || i->type == FC_IMAGE)) return 1;
 		q = 1;
 	}
-	if (!q) internal("form is not on list");
+	assertm(q, "form is not on list");
 	return 0;
 }
 
 static inline void
 decrement_fc_refcount(struct f_data *f)
 {
+	assert(f);
+
 	if (!--f->refcount) format_cache_entries++;
+	assertm(f->refcount >= 0, "reference count underflow");
 }
 
 struct submitted_value {

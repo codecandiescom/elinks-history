@@ -1,5 +1,5 @@
 /* Parses and converts NNTP responses to enum values and cache entry HTML */
-/* $Id: response.c,v 1.1 2004/08/14 07:53:15 jonas Exp $ */
+/* $Id: response.c,v 1.2 2004/11/09 13:59:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -242,7 +242,7 @@ add_nntp_html_start(struct string *html, struct connection *conn)
 				continue;
 			}
 
-			add_format_to_string(html, "<i>%s</i>: %s\n", entry, value);
+			add_format_to_string(html, "<b>%s</b>: %s\n", entry, value);
 			mem_free(value);
 			mem_free(entry);
 		}

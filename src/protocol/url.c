@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.9 2002/03/27 21:30:25 pasky Exp $ */
+/* $Id: url.c,v 1.10 2002/03/28 02:37:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -715,7 +715,7 @@ void encode_url_string(unsigned char *name, unsigned char **data, int *len)
 			add_chr_to_str(data, len, *name);
 		} else {
 			unsigned char n[4];
-			snprintf(n, 3, "%%%02X", *name);
+			snprintf(n, 4, "%%%02X", *name);
 			add_to_str(data, len, n);
 		}
 	}

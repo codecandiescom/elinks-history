@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.119 2004/09/20 23:32:25 pasky Exp $ */
+/* $Id: parser.c,v 1.120 2004/09/20 23:33:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,20 +340,20 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		/* What to do next */
 
+		if (last_fragment) {
+			/* Next selector coming, clean up. */
+			pkg = NULL; last_fragment = 0;
+			prev_element_selector = NULL;
+			prev_specific_selector = NULL;
+			last_chained_selector = NULL;
+		}
+
 		if (token->type == ',') {
 			/* Another selector hooked to these properties. */
 			skip_scanner_token(scanner);
-			pkg = NULL; last_fragment = 0;
-			prev_element_selector = NULL;
-			prev_specific_selector = NULL;
-			last_chained_selector = NULL;
 
 		} else if (token->type == '{') {
 			/* End of selector list. */
-			pkg = NULL; last_fragment = 0;
-			prev_element_selector = NULL;
-			prev_specific_selector = NULL;
-			last_chained_selector = NULL;
 			break;
 
 		} /* else Another selector fragment probably coming up. */

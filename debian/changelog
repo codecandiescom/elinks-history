@@ -1,3 +1,11 @@
+elinks (0.11.0-0) unstable; urgency=low
+
+  * Only remove CVS files from packaging directory
+  * Install elinks.conf from contrib/
+  * Install documentation files about using ELinks from doc/
+
+ -- Jonas Fonseca <fonseca@diku.dk>  Sun, 11 Jan 2005 01:42:45 +0100
+
 elinks (0.9.3-1) unstable; urgency=low
 
   * New upstream release
@@ -6,16 +14,16 @@ elinks (0.9.3-1) unstable; urgency=low
 
 elinks (0.9.1+0.9.2rc4-2) unstable; urgency=low
 
-  * fix naming (it's rc [release candidate] and not pre[release])
-  * fix rules to use /etc/elinks for configure (closes: #267962)
+  * Fix naming (it's rc [release candidate] and not pre[release])
+  * Fix rules to use /etc/elinks for configure (closes: #267962)
 
  -- Peter Gervai <grin@tolna.net>  Wed, 11 Aug 2004 15:57:53 +0200
 
 elinks (0.9.1+0.9.2pre4-1) unstable; urgency=low
 
-  * new upstream version 0.9.2pre4
-  * remove kderemove from menu (closes: #264402)
-  * recompiled with gnutls11 (closes: #263633)
+  * New upstream version 0.9.2pre4
+  * Remove kderemove from menu (closes: #264402)
+  * Recompiled with gnutls11 (closes: #263633)
   * FTBFS on GNU/Hurd (and GNU/k*BSD) (closes: #262350)
 
  -- Peter Gervai <grin@tolna.net>  Sun,  8 Aug 2004 23:48:47 +0200

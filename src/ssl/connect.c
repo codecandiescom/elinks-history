@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.15 2002/09/12 21:12:40 pasky Exp $ */
+/* $Id: connect.c,v 1.16 2002/09/14 09:16:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,10 +44,10 @@
 #endif
 
 
+#ifdef HAVE_SSL
 static void
 ssl_set_no_tls(struct connection *conn)
 {
-#ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 	conn->ssl->options |= SSL_OP_NO_TLSv1;
 #elif defined(HAVE_GNUTLS)
@@ -131,8 +131,8 @@ ssl_set_no_tls(struct connection *conn)
 
 	gnutls_dh_set_prime_bits(*conn->ssl, 1024);
 #endif
-#endif
 }
+#endif
 
 
 void
@@ -174,7 +174,9 @@ ssl_error:
 	}
 #endif
 	return;
+#ifdef HAVE_SSL
 	goto ssl_error; /* XXX */
+#endif
 }
 
 /* Return -1 on error, 0 or success. */

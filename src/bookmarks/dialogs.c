@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.6 2002/04/02 22:29:46 pasky Exp $ */
+/* $Id: dialogs.c,v 1.7 2002/04/16 21:25:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -553,11 +553,21 @@ bookmark_add_add(struct dialog *d)
 	parent = d->udata;
 
 	/* Tell the bookmark dialog to redraw */
-	if (parent)
-		bookmark_dlg_list_update(
-			&((struct dlg_data_item_data_box *)
-			  parent->dlg->items[BM_BOX_IND].data)->items);
+	if (parent) {
+		int new, box_top = 0;
+		int gid = parent->dlg->items[BM_BOX_IND].gid;
+		struct dlg_data_item_data_box *box;
 
+		box = (struct dlg_data_item_data_box *)
+		      parent->dlg->items[BM_BOX_IND].data;
+		new = bookmark_dlg_list_update(&box->items);
+
+		box->sel = new - 1;
+
+		if (new >= gid) box_top = new - gid;
+		box->box_top = box_top;
+
+	}
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
 #endif
@@ -575,17 +585,17 @@ bookmark_search_do(struct dialog *d)
 
 	parent = d->udata;
 
-	/* XXX! How to split these long lines ??? --Zas */
 	/* Tell the bookmark dialog to redraw */
 	if (parent && res) {
-		((struct dlg_data_item_data_box *)
-		 parent->dlg->items[BM_BOX_IND].data)->box_top = 0;
-		((struct dlg_data_item_data_box *)
-		 parent->dlg->items[BM_BOX_IND].data)->sel = 0;
+		struct dlg_data_item_data_box *box;
 
-		bookmark_dlg_list_update(
-			&((struct dlg_data_item_data_box *)
-			  parent->dlg->items[BM_BOX_IND].data)->items);
+		box = (struct dlg_data_item_data_box *)
+		      parent->dlg->items[BM_BOX_IND].data;
+
+		box->box_top = 0;
+		box->sel = 0;
+
+		bookmark_dlg_list_update(&box->items);
 	}
 }
 

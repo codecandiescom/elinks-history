@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.17 2004/12/26 20:26:56 jonas Exp $ */
+/* $Id: libintl.c,v 1.18 2004/12/27 10:51:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,10 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+
+/* See libintl.h for comments.  */
+int current_charset = -1;
 
 /* This is a language lookup table. Indexed by code. */
 /* Update this everytime you add a new translation. */
@@ -213,6 +217,3 @@ set_language(int language)
 		_nl_msg_cat_cntr++;
 	}
 }
-
-/* See libintl.h for comments.  */
-int el_gettext_current_charset = -1;

@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.23 2004/12/26 20:14:47 jonas Exp $ */
+/* $Id: libintl.h,v 1.24 2004/12/27 10:51:19 jonas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -23,7 +23,7 @@
  * cannot be a static variable in _(), because then it would get
  * duplicated in every translation unit, even though the actual
  * binding is global.  */
-extern int el_gettext_current_charset;
+extern int current_charset;
 
 /* Define it to find redundant useless calls */
 /* #define DEBUG_IT */
@@ -50,10 +50,10 @@ _(unsigned char *msg, struct terminal *term)
 
 	new_charset = get_opt_codepage_tree(term->spec, "charset");
 	/* Prevent useless switching. */
-	if (el_gettext_current_charset != new_charset) {
+	if (current_charset != new_charset) {
 		bind_textdomain_codeset( /* PACKAGE */ "elinks",
 					get_cp_mime_name(new_charset));
-		el_gettext_current_charset = new_charset;
+		current_charset = new_charset;
 	}
 
 do_lookup:

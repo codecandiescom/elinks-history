@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.80 2003/11/09 14:24:29 jonas Exp $ */
+/* $Id: msgbox.c,v 1.81 2003/11/09 14:30:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,33 +22,6 @@
 #include "util/snprintf.h"
 #include "util/string.h"
 
-
-static void
-msg_box_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = dialog_max_width(term);
-	int rw = 0;
-	int y = 0;
-
-	layout_text_widget(NULL, dlg_data->widgets_data, 0, &y, w, &rw);
-
-	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, dlg_data->n - 1, 0, &y, w, &rw,
-			   AL_CENTER);
-
-	w = rw;
-
-	draw_dialog(dlg_data, w, y);
-
-	y = dlg_data->y + DIALOG_TB + 1;
-
-	layout_text_widget(term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB, &y, w, NULL);
-
-	y++;
-	dlg_format_buttons(term, dlg_data->widgets_data + 1, dlg_data->n - 1, dlg_data->x + DIALOG_LB,
-			   &y, w, NULL, AL_CENTER);
-}
 
 static int
 msg_box_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
@@ -94,7 +67,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	add_one_to_ml(&ml, dlg);
 
 	dlg->title = title;
-	dlg->layouter = msg_box_layouter;
+	dlg->layouter = generic_dialog_layouter;
 	dlg->udata2 = udata;
 
 	add_dlg_text(dlg, text, align);

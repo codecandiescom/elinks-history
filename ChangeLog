@@ -1,3 +1,62 @@
+Wed Feb  4 16:24:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Command line options for redirects should not be listed with -help.
+	Besides it looks hella ugly.  
+
+Wed Feb  4 14:12:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/getifaddrs.c:
+
+	max()? What max()? 
+
+Wed Feb  4 13:58:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/exmode.c:
+
+	Include the needed files.  
+
+Wed Feb  4 13:58:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/conf.c, dialogs/exmode.c:
+
+	Compilation fix.  
+
+Wed Feb  4 13:57:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/conf.c, config/conf.h, dialogs/exmode.c:
+
+	Allow config file commands (set, bind) to be executed from exmode.
+	This involves exporting of parse_config_command() and enum
+	parse_error.  
+
+Wed Feb  4 13:27:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Random tidyup.  
+
+Wed Feb  4 13:00:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Simplification of parse_config_file() --- removed the test_end label
+	+ goto.  
+
+Wed Feb  4 12:59:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Surged out the very command parsing multiplexer from
+	parse_config_file() to parse_config_command().  
+
+Wed Feb  4 12:51:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/exmode.h:
+
+	Trailing whitespaces police strikes.  
+
 Tue Feb  3 20:37:34 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/plain/renderer.c:

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.71 2003/07/04 00:52:32 jonas Exp $ */
+/* $Id: download.c,v 1.72 2003/07/04 00:54:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,8 +24,8 @@
 
 #include "elinks.h"
 
-#include "bfu/dialog.h"
 #include "bfu/button.h"
+#include "bfu/dialog.h"
 #include "bfu/msgbox.h"
 #include "bfu/text.h"
 #include "config/options.h"
@@ -37,11 +37,11 @@
 #include "mime/mime.h"
 #include "protocol/http/date.h"
 #include "protocol/url.h"
+#include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/error.h"
 #include "sched/history.h"
 #include "sched/location.h"
-#include "sched/connection.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/screen.h"

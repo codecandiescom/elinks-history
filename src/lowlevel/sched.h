@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.7 2002/04/21 19:12:35 pasky Exp $ */
+/* $Id: sched.h,v 1.8 2002/05/04 08:23:40 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -16,6 +16,14 @@
 #define PRI_PRELOAD	4
 #define PRI_CANCEL	5
 #define N_PRI		6
+
+enum cache_mode {
+	NC_ALWAYS_CACHE,
+	NC_CACHE,
+	NC_IF_MOD,
+	NC_RELOAD,
+	NC_PR_NO_CACHE,
+};
 
 #ifdef HAVE_LONG_LONG
 #define longlong long long
@@ -45,7 +53,7 @@ struct connection {
 	int prev_error;
 	int from;
 	int pri[N_PRI];
-	int no_cache;
+	enum cache_mode cache_mode;
 	int sock1;
 	int sock2;
 	void *dnsquery;
@@ -67,12 +75,6 @@ struct connection {
 	int no_tsl;
 #endif
 };
-
-#define NC_ALWAYS_CACHE	0
-#define NC_CACHE	1
-#define NC_IF_MOD	2
-#define NC_RELOAD	3
-#define NC_PR_NO_CACHE	4
 
 #define S_WAIT		0
 #define S_DNS		1

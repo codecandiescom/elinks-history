@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.25 2002/05/04 08:14:44 pasky Exp $ */
+/* $Id: session.c,v 1.26 2002/05/04 08:23:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -941,26 +941,26 @@ void destroy_all_sessions()
 	/*while (!list_empty(sessions)) destroy_session(sessions.next);*/
 }
 
-void reload(struct session *ses, int no_cache)
+void reload(struct session *ses, int cache_mode)
 {
 	struct location *l;
 	struct f_data_c *fd = current_frame(ses);
 	
 	abort_loading(ses);
-	if (no_cache == -1) no_cache = ++ses->reloadlevel;
-	else ses->reloadlevel = no_cache;
+	if (cache_mode == -1) cache_mode = ++ses->reloadlevel;
+	else ses->reloadlevel = cache_mode;
 	l = cur_loc(ses);
 	if (have_location(ses)) {
 		struct file_to_load *ftl;
 
 		l->stat.data = ses;
 		l->stat.end = (void *)doc_end_load;
-		load_url(l->vs.url, ses->ref_url, &l->stat, PRI_MAIN, no_cache);
+		load_url(l->vs.url, ses->ref_url, &l->stat, PRI_MAIN, cache_mode);
 		foreach(ftl, ses->more_files) {
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
-			load_url(ftl->url, fd?fd->f_data?fd->f_data->url:NULL:NULL, &ftl->stat, PRI_FRAME, no_cache);
+			load_url(ftl->url, fd?fd->f_data?fd->f_data->url:NULL:NULL, &ftl->stat, PRI_FRAME, cache_mode);
 		}
 	}
 }

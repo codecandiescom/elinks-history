@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.19 2002/05/04 08:14:45 pasky Exp $ */
+/* $Id: sched.c,v 1.20 2002/05/04 08:23:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -803,7 +803,7 @@ unsigned char *get_proxy(unsigned char *url)
 
 /* load_url() */
 int load_url(unsigned char *url, unsigned char *prev_url,
-	     struct status *stat, int pri, int no_cache)
+	     struct status *stat, int pri, int cache_mode)
 {
 	struct cache_entry *e = NULL;
 	struct connection *c;
@@ -835,7 +835,7 @@ int load_url(unsigned char *url, unsigned char *prev_url,
 		stat->prev_error = 0;
 	}
 
-	if (no_cache <= NC_CACHE && find_in_cache(url, &e) && !e->incomplete) {
+	if (cache_mode <= NC_CACHE && find_in_cache(url, &e) && !e->incomplete) {
 		if (stat) {
 			stat->ce = e;
 			stat->state = S_OK;
@@ -891,7 +891,7 @@ int load_url(unsigned char *url, unsigned char *prev_url,
 	c->prev_url = prev_url;
 	c->running = 0;
 	c->prev_error = 0;
-	if (no_cache >= NC_RELOAD || !e || e->frag.next == &e->frag
+	if (cache_mode >= NC_RELOAD || !e || e->frag.next == &e->frag
 	    || ((struct fragment *) e->frag.next)->offset) {
 		c->from = 0;
 	} else {
@@ -900,7 +900,7 @@ int load_url(unsigned char *url, unsigned char *prev_url,
 
 	memset(c->pri, 0, sizeof c->pri);
 	c->pri[pri] = 1;
-	c->no_cache = no_cache;
+	c->cache_mode = cache_mode;
 	c->sock1 = c->sock2 = -1;
 	c->dnsquery = NULL;
 	c->conn_info = NULL;

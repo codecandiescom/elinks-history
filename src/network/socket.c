@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.13 2002/04/06 16:57:06 pasky Exp $ */
+/* $Id: socket.c,v 1.14 2002/05/04 08:23:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,7 +122,7 @@ void make_connection(struct connection *conn, int port, int *sock,
 	log_data(host, strlen(host));
 	log_data("\n", 1);
 
-	if (conn->no_cache >= NC_RELOAD)
+	if (conn->cache_mode >= NC_RELOAD)
 		async = find_host_no_cache(host, &c_i->addr, &c_i->addrno,
 					   &conn->dnsquery, dns_found, conn);
 	else

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.12 2002/04/28 11:48:27 pasky Exp $ */
+/* $Id: http.c,v 1.13 2002/05/04 08:23:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -450,14 +450,14 @@ void http_send_header(struct connection *c)
 
 	if ((e = c->cache)) {
 		if (!e->incomplete && e->head && e->last_modified
-		    && c->no_cache <= NC_IF_MOD) {
+		    && c->cache_mode <= NC_IF_MOD) {
 			add_to_str(&hdr, &l, "If-Modified-Since: ");
 			add_to_str(&hdr, &l, e->last_modified);
 			add_to_str(&hdr, &l, "\r\n");
 		}
 	}
 
-	if (c->no_cache >= NC_PR_NO_CACHE) {
+	if (c->cache_mode >= NC_PR_NO_CACHE) {
 		add_to_str(&hdr, &l, "Pragma: no-cache\r\n");
 		add_to_str(&hdr, &l, "Cache-Control: no-cache\r\n");
 	}

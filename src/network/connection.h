@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.84 2005/02/02 17:33:15 jonas Exp $ */
+/* $Id: connection.h,v 1.85 2005/02/05 04:08:50 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -25,9 +25,11 @@ enum connection_priority {
 	PRIORITIES,
 };
 
-/* Numbers < 0 and > -10000 are reserved for system errors reported via
+/* Numbers < 0 and > -100000 are reserved for system errors reported via
  * errno/strerror(), see session.c and connection.c for further information. */
-/* WARNING: an errno value <= -10000 may cause some bad things... */
+/* WARNING: an errno value <= -100000 may cause some bad things... */
+/* NOTE: Winsock errors are in range 10000..11004. Hence our abs. values are
+ * above this. */
 
 #define is_system_error(state)		(S_OK < (state) && (state) < S_WAIT)
 #define is_in_result_state(state)	((state) < 0)
@@ -54,49 +56,49 @@ enum connection_state {
 
 	/* State < 0 are used for the final result of a connection
 	 * (it's finished already and it ended up like this) */
-	S_OK			= -10000,
-	S_INTERRUPTED		= -10001,
-	S_EXCEPT		= -10002,
-	S_INTERNAL		= -10003,
-	S_OUT_OF_MEM		= -10004,
-	S_NO_DNS		= -10005,
-	S_CANT_WRITE		= -10006,
-	S_CANT_READ		= -10007,
-	S_MODIFIED		= -10008,
-	S_BAD_URL		= -10009,
-	S_TIMEOUT		= -10010,
-	S_RESTART		= -10011,
-	S_STATE			= -10012,
-	S_WAIT_REDIR		= -10013,
-	S_LOCAL_ONLY		= -10014,
-	S_UNKNOWN_PROTOCOL	= -10015,
-	S_EXTERNAL_PROTOCOL	= -10016,
-	S_ENCODE_ERROR		= -10017,
-	S_SSL_ERROR		= -10018,
+	S_OK			= -100000,
+	S_INTERRUPTED		= -100001,
+	S_EXCEPT		= -100002,
+	S_INTERNAL		= -100003,
+	S_OUT_OF_MEM		= -100004,
+	S_NO_DNS		= -100005,
+	S_CANT_WRITE		= -100006,
+	S_CANT_READ		= -100007,
+	S_MODIFIED		= -100008,
+	S_BAD_URL		= -100009,
+	S_TIMEOUT		= -100010,
+	S_RESTART		= -100011,
+	S_STATE			= -100012,
+	S_WAIT_REDIR		= -100013,
+	S_LOCAL_ONLY		= -100014,
+	S_UNKNOWN_PROTOCOL	= -100015,
+	S_EXTERNAL_PROTOCOL	= -100016,
+	S_ENCODE_ERROR		= -100017,
+	S_SSL_ERROR		= -100018,
 
-	S_HTTP_ERROR		= -10100,
-	S_HTTP_100		= -10101,
-	S_HTTP_204		= -10102,
+	S_HTTP_ERROR		= -100100,
+	S_HTTP_100		= -100101,
+	S_HTTP_204		= -100102,
 
-	S_FILE_TYPE		= -10200,
-	S_FILE_ERROR		= -10201,
-	S_FILE_CGI_BAD_PATH	= -10202,
+	S_FILE_TYPE		= -100200,
+	S_FILE_ERROR		= -100201,
+	S_FILE_CGI_BAD_PATH	= -100202,
 
-	S_FTP_ERROR		= -10300,
-	S_FTP_UNAVAIL		= -10301,
-	S_FTP_LOGIN		= -10302,
-	S_FTP_PORT		= -10303,
-	S_FTP_NO_FILE		= -10304,
-	S_FTP_FILE_ERROR	= -10305,
+	S_FTP_ERROR		= -100300,
+	S_FTP_UNAVAIL		= -100301,
+	S_FTP_LOGIN		= -100302,
+	S_FTP_PORT		= -100303,
+	S_FTP_NO_FILE		= -100304,
+	S_FTP_FILE_ERROR	= -100305,
 
-	S_NNTP_ERROR		= -10400,
-	S_NNTP_NEWS_SERVER	= -10401,
+	S_NNTP_ERROR		= -100400,
+	S_NNTP_NEWS_SERVER	= -100401,
 
-	S_GOPHER_CSO_ERROR	= -10500,
+	S_GOPHER_CSO_ERROR	= -100500,
 
-	S_NO_JAVASCRIPT		= -10600,
+	S_NO_JAVASCRIPT		= -100600,
 
-	S_PROXY_ERROR		= -10700,
+	S_PROXY_ERROR		= -100700,
 };
 
 struct progress {

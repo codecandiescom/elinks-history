@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.39 2003/12/01 18:55:14 pasky Exp $ */
+/* $Id: document.c,v 1.40 2003/12/01 19:01:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,26 +219,32 @@ shrink_format_cache(int whole)
 	}
 #endif
 
+	foreach (document, format_cache) {
+		struct cache_entry *ce;
+
+		if (is_object_used(document)) continue;
+
+		/* Destroy obsolete renderer documents which are already
+		 * out-of-sync. */
+		ce = find_in_cache(document->url);
+		assertm(ce, "cached formatted document has no cache entry");
+		if (ce->id_tag -= document->id_tag) continue;
+
+		document = document->prev;
+		done_document(document->next);
+		format_cache_entries--;
+	}
+
 	assertm(format_cache_entries >= 0, "format_cache_entries underflow on entry");
 	if_assert_failed format_cache_entries = 0;
 
 	foreachback (document, format_cache) {
 		if (is_object_used(document)) continue;
 
-		if (!whole) {
-			struct cache_entry *ce;
-
-			/* If we are not purging the whole format cache, stop
-			 * once we are below the maximum number of entries. */
-			if (format_cache_entries <= format_cache_size)
-				break;
-
-			/* Keep unreferenced documents that are in sync with
-			 * the (resource) cache entry. */
-			ce = find_in_cache(document->url);
-			if (ce && ce->id_tag == document->id_tag)
-				continue;
-		}
+		/* If we are not purging the whole format cache, stop
+		 * once we are below the maximum number of entries. */
+		if (!whole && format_cache_entries <= format_cache_size)
+			break;
 
 		/* Jump back to already processed entry (or list head), and let
 		 * the foreachback move it to the next entry to go. */

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.47 2004/12/10 17:39:25 zas Exp $ */
+/* $Id: link.c,v 1.48 2004/12/10 17:44:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,15 +298,12 @@ html_img(unsigned char *a)
 		format.title = get_attr_val(a, "title");
 
 		if (ismap) {
-			unsigned char *h;
+			unsigned char *new_link;
 
 			html_stack_dup(ELEMENT_KILLABLE);
-			h = stracpy(format.link);
-			if (h) {
-				add_to_strn(&h, "?0,0");
-				mem_free(format.link);
-				format.link = h;
-			}
+			new_link = straconcat(format.link, "?0,0", NULL);
+			if (new_link)
+				mem_free_set(&format.link, new_link);
 		}
 show_label:
 		/* This is not 100% appropriate for <img>, but well, accepting

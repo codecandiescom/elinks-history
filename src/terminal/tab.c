@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.77 2004/10/25 19:14:01 pasky Exp $ */
+/* $Id: tab.c,v 1.78 2004/10/25 19:41:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ init_tab(struct terminal *term, void *data, window_handler handler)
 	for (last_tab = term->windows.next;
 	     (struct list_head *) last_tab->next != &term->windows;
 	     last_tab = last_tab->next) {
-		if (last_tab->type != WINDOW_TAB) {
+		if (last_tab->type == WINDOW_TAB) {
 			last_tab = last_tab->prev;
 			break;
 		}

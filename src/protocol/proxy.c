@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.39 2004/07/22 00:05:18 pasky Exp $ */
+/* $Id: proxy.c,v 1.40 2004/07/22 00:15:55 pasky Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -68,6 +68,31 @@ proxy_uri(struct uri *uri, unsigned char *proxy)
 	return uri;
 }
 
+/* TODO: We could of course significantly simplify the calling convention by
+ * autogenerating most of the parameters from protocol name. Having a function
+ * exported by protocol/protocol.* dedicated to that would be nice too.
+ * --pasky */
+static unsigned char *
+get_protocol_proxy(unsigned char *opt,
+                   unsigned char *env1, unsigned char *env2,
+		   unsigned char *strip1, unsigned char *strip2)
+{
+	unsigned char *protocol_proxy;
+
+	protocol_proxy = get_opt_str(opt);
+	if (!*protocol_proxy) protocol_proxy = getenv(env1);
+	if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv(env2);
+
+	if (protocol_proxy && *protocol_proxy) {
+		if (!strncasecmp(protocol_proxy, strip1, strlen(strip1)))
+			protocol_proxy += strlen(strip1);
+		else if (strip2 && !strncasecmp(protocol_proxy, strip2, strlen(strip2)))
+			protocol_proxy += strlen(strip2);
+	}
+
+	return protocol_proxy;
+}
+
 static struct uri *
 get_proxy_worker(struct uri *uri, unsigned char *proxy)
 {
@@ -83,38 +108,21 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 
 	switch (uri->protocol) {
 	case PROTOCOL_HTTP:
-		protocol_proxy = get_opt_str("protocol.http.proxy.host");
-		if (!*protocol_proxy) protocol_proxy = getenv("HTTP_PROXY");
-		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("http_proxy");
-
-		if (protocol_proxy && *protocol_proxy) {
-			if (!strncasecmp(protocol_proxy, "http://", 7))
-				protocol_proxy += 7;
-		}
+		protocol_proxy = get_protocol_proxy("protocol.http.proxy.host",
+						    "HTTP_PROXY", "http_proxy",
+						    "http://", NULL);
 		break;
 
 	case PROTOCOL_HTTPS:
-		protocol_proxy = get_opt_str("protocol.https.proxy.host");
-		if (!*protocol_proxy) protocol_proxy = getenv("HTTPS_PROXY");
-		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("https_proxy");
-
-		if (protocol_proxy && *protocol_proxy) {
-			if (!strncasecmp(protocol_proxy, "http://", 7))
-				protocol_proxy += 7;
-		}
+		protocol_proxy = get_protocol_proxy("protocol.https.proxy.host",
+						    "HTTPS_PROXY", "https_proxy",
+						    "https://", NULL);
 		break;
 
 	case PROTOCOL_FTP:
-		protocol_proxy = get_opt_str("protocol.ftp.proxy.host");
-		if (!*protocol_proxy) protocol_proxy = getenv("FTP_PROXY");
-		if (!protocol_proxy || !*protocol_proxy) protocol_proxy = getenv("ftp_proxy");
-
-		if (protocol_proxy && *protocol_proxy) {
-			if (!strncasecmp(protocol_proxy, "ftp://", 6))
-				protocol_proxy += 6;
-			else if (!strncasecmp(protocol_proxy, "http://", 7))
-				protocol_proxy += 7;
-		}
+		protocol_proxy = get_protocol_proxy("protocol.ftp.proxy.host",
+						    "FTP_PROXY", "ftp_proxy",
+						    "ftp://", "http://");
 		break;
 	}
 

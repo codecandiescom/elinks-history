@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.33 2003/06/12 00:47:47 jonas Exp $ */
+/* $Id: session.h,v 1.34 2003/06/12 01:06:51 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -162,23 +162,6 @@ extern struct list_head sessions; /* -> struct session */
 static inline int
 have_location(struct session *ses) {
 	return !list_empty(ses->history);
-}
-
-/* Set the location of the session and add the previous to correct history. */
-/* @direction: 1 == forward, -1 == back */
-static inline void
-set_location(struct session *ses, struct location *loc, int direction)
-{
-	if (ses->location) {
-		if (direction == 1)
-			add_to_history(ses, ses->location);
-		else if (direction == -1)
-			add_to_unhistory(ses, ses->location);
-	}
-
-	/* Just to be sure not to have any loose ends */
-	init_list(*loc);
-	ses->location = loc;
 }
 
 

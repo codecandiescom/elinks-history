@@ -1,8 +1,8 @@
 Known bugs:
 
-- Go to freshmeat.net, when page is loaded, click on main menu bar to open it,
-  then click in the center of screen, some form fields will be printed over
-  current screen, but disappear on next action...
+- With some opened tabs, go to freshmeat.net, when page is loaded,
+  click on main menu bar to open it, then click in the center of screen,
+  some form fields will be printed over current screen, but disappear on next action...
 
 - Tilde doesn't expand as it should when used in goto dialog, ~ -> /home and ~/
   -> current directory.
@@ -54,4 +54,4 @@ Known bugs:
 Key: - nothing done + work in progress * almost fixed
      (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.47 2003/05/06 08:27:27 zas Exp $
+$Id: BUGS,v 1.48 2003/05/06 08:35:02 zas Exp $

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.12 2003/12/19 22:01:24 pasky Exp $ */
+/* $Id: task.c,v 1.13 2003/12/19 23:21:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,6 +324,9 @@ do_move(struct session *ses, struct download **stat)
 		}
 		/* ^^^^ According to RFC2068 POST must not be redirected to GET, but
 			some BUGGY message boards rely on it :-( */
+
+		protocol = known_protocol(u, NULL);
+		if (protocol == PROTOCOL_UNKNOWN) return 0;
 
 		abort_loading(ses, 0);
 		if (have_location(ses))

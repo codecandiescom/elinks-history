@@ -274,6 +274,9 @@ Mario Lorenz <ml@vdazone.org>
 Marius Gedminas <marius.gedminas@uosis.mif.vu.lt>
 	Fixed reversed HOME/END on RXVT
 
+Martin Bays <elinks-dev@zugzwang.port5.com>
+	Redirect-to-mailto crash bugfix
+
 Martin Kavalec <martin@penguin.cz>
 	Fixed redundant ':' in host header
 
@@ -462,4 +465,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.149 2003/12/07 16:45:15 pasky Exp $
+$Id: AUTHORS,v 1.150 2003/12/19 23:21:24 pasky Exp $

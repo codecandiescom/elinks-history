@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-21 17:20+0100\n"
-"PO-Revision-Date: 2003-12-17 15:53+0100\n"
+"PO-Revision-Date: 2003-12-21 17:26+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -985,9 +985,8 @@ msgid "Open cache manager"
 msgstr "Správce cache"
 
 #: src/config/kbdbind.c:387
-#, fuzzy
 msgid "Cancel current state"
-msgstr "Nemù¾u zjistit stav socketu"
+msgstr "Zru¹it aktuální stav"
 
 #: src/config/kbdbind.c:388
 msgid "Open cookie manager"
@@ -1133,9 +1132,8 @@ msgid "Go at a specified mark"
 msgstr "Pøejít na zadanou znaèku"
 
 #: src/config/kbdbind.c:427
-#, fuzzy
 msgid "Mark item"
-msgstr "Oznaèená polo¾ka menu"
+msgstr "Oznaèit polo¾ku"
 
 #: src/config/kbdbind.c:428
 msgid "Activate the menu"
@@ -1143,12 +1141,11 @@ msgstr "Aktivovat menu"
 
 #: src/config/kbdbind.c:429
 msgid "Move to the next frame"
-msgstr "Pøesnuout se do následujícího rámce"
+msgstr "Pøesunout se do následujícího rámce"
 
 #: src/config/kbdbind.c:430
-#, fuzzy
 msgid "Move to the next item"
-msgstr "Pøesnuout se do následujícího rámce"
+msgstr "Pøesunout se na následující polo¾ku"
 
 #: src/config/kbdbind.c:431
 msgid "Open a new tab"
@@ -1203,9 +1200,8 @@ msgid "Quit without confirmation"
 msgstr "Skonèit bez ptaní"
 
 #: src/config/kbdbind.c:445
-#, fuzzy
 msgid "Redraw the terminal"
-msgstr "Zmìò velikost terminálu"
+msgstr "Pøekresli terminál"
 
 #: src/config/kbdbind.c:446
 msgid "Reload the current page"
@@ -1884,7 +1880,6 @@ msgid "Typeahead error handling"
 msgstr "Obsluha chyb pøi interaktivním vyhledávání"
 
 #: src/config/options.inc:239
-#, fuzzy
 msgid ""
 "How to handle errors when typeahead doesn't match any links:\n"
 "0 means do nothing\n"
@@ -2710,29 +2705,25 @@ msgstr ""
 "(samotnou mezeru)."
 
 #: src/config/options.inc:666
-#, fuzzy
 msgid "HTTPS"
-msgstr "HTTP"
+msgstr "HTTPS"
 
 #: src/config/options.inc:668
-#, fuzzy
 msgid "HTTPS-specific options."
-msgstr "Nastavení HTTP."
+msgstr "Nastavení HTTPS."
 
 #: src/config/options.inc:672
-#, fuzzy
 msgid "HTTPS proxy configuration."
-msgstr "Nastavení HTTP proxy."
+msgstr "Nastavení HTTPS proxy."
 
 #: src/config/options.inc:676
-#, fuzzy
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
 msgstr ""
-"Hostitel a èíslo portu (host:port) HTTP proxy (pokud nepou¾íváte proxy,\n"
+"Hostitel a èíslo portu (host:port) HTTPS CONNECT proxy (pokud nepou¾íváte proxy,\n"
 "nechte tuto volbu nevyplnìnou). Pokud je tato volba nevyplnìna, ELinks\n"
-"se je¹tì pokusí pou¾ít hodnotu ulo¾enou v promìnné prostøedí HTTP_PROXY."
+"se je¹tì pokusí pou¾ít hodnotu ulo¾enou v promìnné prostøedí HTTPS_PROXY."
 
 #: src/config/options.inc:680
 msgid "FTP"
@@ -3931,18 +3922,16 @@ msgid "Server"
 msgstr "Server"
 
 #: src/cookies/dialogs.c:76
-#, fuzzy
 msgid "Domain"
-msgstr "~Dokumentace"
+msgstr "Doména"
 
 #: src/cookies/dialogs.c:78
 msgid "Expires"
-msgstr ""
+msgstr "Vypr¹í"
 
 #: src/cookies/dialogs.c:80
-#, fuzzy
 msgid "Secure"
-msgstr "momentálnì"
+msgstr "Zabezpeèená"
 
 #: src/cookies/dialogs.c:131 src/dialogs/download.c:414 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:171 src/globhist/dialogs.c:188
@@ -4931,13 +4920,12 @@ msgstr ""
 "Prosím pou¾ijte radìji volbu mime.mailcap.ask."
 
 #: src/mime/backend/mailcap.c:152
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use mime.mailcap.description option instead."
 msgstr ""
 "Tato volba by se nemìla pou¾ívat a bude brzy odstranìna.\n"
-"Prosím pou¾ijte radìji volbu mime.mailcap.path."
+"Prosím pou¾ijte radìji volbu mime.mailcap.description."
 
 #: src/mime/backend/mailcap.c:157
 msgid ""

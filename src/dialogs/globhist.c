@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.13 2002/06/11 15:20:38 zas Exp $ */
+/* $Id: globhist.c,v 1.14 2002/06/16 23:13:16 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -17,6 +17,7 @@
 #include "document/globhist.h"
 #include "intl/language.h"
 #include "lowlevel/kbd.h"
+#include "util/string.h"
 
 
 #ifdef GLOBHIST

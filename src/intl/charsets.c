@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.8 2002/06/16 21:22:12 pasky Exp $ */
+/* $Id: charsets.c,v 1.9 2002/06/16 23:13:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "intl/charsets.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/string.h"
 
 #define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 

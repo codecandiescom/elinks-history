@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.4 2002/05/17 20:04:56 pasky Exp $ */
+/* $Id: sysname.c,v 1.5 2002/06/16 23:13:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "links.h"
 
 #include "lowlevel/sysname.h"
+#include "util/string.h"
 
 
 unsigned char system_name[MAX_STR_LEN];

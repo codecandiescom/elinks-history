@@ -1,5 +1,5 @@
 /* HTTP Authentication support */ 
-/* $Id: auth.c,v 1.2 2002/05/12 20:15:25 pasky Exp $ */
+/* $Id: auth.c,v 1.3 2002/06/16 23:13:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "protocol/http/auth.h"
 #include "protocol/url.h"
 #include "util/base64.h"
+#include "util/string.h"
 
 
 struct list_head http_auth_basic_list = { &http_auth_basic_list, &http_auth_basic_list };

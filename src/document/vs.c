@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.2 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: vs.c,v 1.3 2002/06/16 23:13:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "document/view.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
+#include "util/string.h"
 
 
 void

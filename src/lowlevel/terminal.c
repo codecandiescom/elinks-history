@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.13 2002/06/16 21:22:12 pasky Exp $ */
+/* $Id: terminal.c,v 1.14 2002/06/16 23:13:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "lowlevel/terminal.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/string.h"
 
 
 /* TODO: We must use termcap/terminfo if available! --pasky */

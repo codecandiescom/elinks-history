@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.13 2002/05/19 19:34:59 pasky Exp $ */
+/* $Id: secsave.c,v 1.14 2002/06/16 23:13:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 
 #include "config/options.h"
 #include "util/secsave.h"
+#include "util/string.h"
 
 
 /* If secure_save is set:

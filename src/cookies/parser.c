@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.3 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: parser.c,v 1.4 2002/06/16 23:13:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include "links.h"
 
 #include "cookies/parser.h"
+#include "util/string.h"
 
 
 /* In order to be able to compile parsetst, you should try to use minimum

@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.3 2002/05/25 13:46:04 pasky Exp $ */
+/* $Id: options.c,v 1.4 2002/06/16 23:13:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "config/options.h"
 #include "document/options.h"
 #include "document/html/colors.h"
+#include "util/string.h"
 
 
 struct document_options *d_opt;

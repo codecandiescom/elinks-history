@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.4 2002/06/10 19:00:46 pasky Exp $ */
+/* $Id: core.c,v 1.5 2002/06/16 23:13:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
 #include "lua/core.h"
+#include "util/string.h"
 
 
 lua_State *lua_state;

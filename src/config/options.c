@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.47 2002/06/11 20:23:37 pasky Exp $ */
+/* $Id: options.c,v 1.48 2002/06/16 23:13:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #include "lowlevel/dns.h"
 #include "protocol/types.h"
 #include "util/error.h"
+#include "util/string.h"
 
 
 /* TODO? In the past, covered by shadow and legends, remembered only by the

@@ -1,15 +1,20 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.5 2002/06/16 21:22:13 pasky Exp $ */
+/* $Id: conv.c,v 1.6 2002/06/16 23:13:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <ctype.h>
+#ifdef HAVE_LIMITS_H
+#include <limits.h>
+#endif
+#include <string.h>
 
 #include "links.h"
 
 #include "util/conv.h"
+#include "util/string.h"
 
 
 unsigned char

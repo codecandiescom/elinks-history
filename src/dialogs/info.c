@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.11 2002/05/11 11:49:00 pasky Exp $ */
+/* $Id: info.c,v 1.12 2002/06/16 23:13:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,10 +26,12 @@
 #include "lowlevel/sched.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
+#include "util/conv.h"
 #ifdef LEAK_DEBUG
 #include "util/error.h"
 #endif
 #include "util/memlist.h"
+#include "util/string.h"
 
 
 void menu_about(struct terminal *term, void *d, struct session *ses)

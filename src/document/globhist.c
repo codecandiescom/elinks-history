@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.14 2002/05/25 13:46:04 pasky Exp $ */
+/* $Id: globhist.c,v 1.15 2002/06/16 23:13:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "document/globhist.h"
 #include "lowlevel/home.h"
 #include "util/secsave.h"
+#include "util/string.h"
 
 
 #define GLOBHIST_MAX_ITEMS 4096

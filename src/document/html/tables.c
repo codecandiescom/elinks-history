@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.12 2002/05/10 17:53:20 pasky Exp $ */
+/* $Id: tables.c,v 1.13 2002/06/16 23:13:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,9 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
+#include "util/conv.h"
 #include "util/error.h"
+#include "util/string.h"
 
 #define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 

@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.21 2002/06/16 21:22:10 pasky Exp $ */
+/* $Id: bfu.c,v 1.22 2002/06/16 23:13:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memlist.h"
+#include "util/string.h"
 
 
 /* Prototypes */

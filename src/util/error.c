@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.26 2002/06/16 20:41:01 pasky Exp $ */
+/* $Id: error.c,v 1.27 2002/06/16 23:13:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -16,6 +17,7 @@
 
 #include "util/error.h"
 #include "util/memlist.h"
+#include "util/string.h"
 
 
 #ifdef LEAK_DEBUG

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.21 2002/06/08 09:57:46 pasky Exp $ */
+/* $Id: url.c,v 1.22 2002/06/16 23:13:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "protocol/url.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/string.h"
 
 
 struct {
@@ -812,7 +813,8 @@ proxy:
 		/* Yes, it would be simpler to make test for IPv6 address first,
 		 * but it would result in confusing mix of ifdefs ;-). */
 
-		if (*ch == '@' || (*ch == ':' && *url != '[') || !cmpbeg(url, "ftp.")) {
+		if (*ch == '@' || (*ch == ':' && *url != '[')
+		    || !casecmp(url, "ftp.", 4)) {
 			/* Contains user/password/ftp-hostname */
 			prefix = "ftp://";
 			not_file = 1;

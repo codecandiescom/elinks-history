@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.10 2002/05/25 13:46:04 pasky Exp $ */
+/* $Id: cache.c,v 1.11 2002/06/16 23:13:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "document/cache.h"
 #include "lowlevel/sched.h"
 #include "util/error.h"
+#include "util/string.h"
 
 struct list_head cache = {&cache, &cache};
 

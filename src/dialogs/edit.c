@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.4 2002/06/10 15:54:51 pasky Exp $ */
+/* $Id: edit.c,v 1.5 2002/06/16 23:13:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "lowlevel/terminal.h"
 #include "intl/language.h"
 #include "protocol/types.h"
+#include "util/string.h"
 
 
 unsigned char *edit_add_msg[] = {

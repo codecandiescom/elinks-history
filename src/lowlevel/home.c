@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.6 2002/05/19 19:34:58 pasky Exp $ */
+/* $Id: home.c,v 1.7 2002/06/16 23:13:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include "lowlevel/home.h"
+#include "util/string.h"
 
 
 unsigned char *elinks_home = NULL;

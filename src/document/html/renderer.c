@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.29 2002/06/11 15:09:07 zas Exp $ */
+/* $Id: renderer.c,v 1.30 2002/06/16 23:13:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,8 +26,10 @@
 #include "lowlevel/ttime.h"
 #include "protocol/http/header.h"
 #include "protocol/url.h"
+#include "util/conv.h"
 #include "util/error.h"
 #include "util/hash.h"
+#include "util/string.h"
 
 /* This is here in order not to break the cross-deps. */
 #include "document/history.h"

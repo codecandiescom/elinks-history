@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.572 2004/10/10 23:09:26 pasky Exp $ */
+/* $Id: session.c,v 1.573 2004/10/13 21:57:06 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -362,19 +362,6 @@ load_css_imports(struct session *ses, struct document_view *doc_view)
 #define load_css_imports(ses, doc_view)
 #endif
 
-inline void
-load_frames(struct session *ses, struct document_view *doc_view)
-{
-	struct document *document = doc_view->document;
-
-	if (!document || !document->frame_desc) return;
-	request_frameset(ses, document->frame_desc, 0);
-
-	foreach (doc_view, ses->scrn_frames) {
-		load_css_imports(ses, doc_view);
-	}
-}
-
 #ifdef CONFIG_ECMASCRIPT
 static inline void
 load_ecmascript_imports(struct session *ses, struct document_view *doc_view)
@@ -392,6 +379,20 @@ load_ecmascript_imports(struct session *ses, struct document_view *doc_view)
 #else
 #define load_ecmascript_imports(ses, doc_view)
 #endif
+
+inline void
+load_frames(struct session *ses, struct document_view *doc_view)
+{
+	struct document *document = doc_view->document;
+
+	if (!document || !document->frame_desc) return;
+	request_frameset(ses, document->frame_desc, 0);
+
+	foreach (doc_view, ses->scrn_frames) {
+		load_css_imports(ses, doc_view);
+		load_ecmascript_imports(ses, doc_view);
+	}
+}
 
 void
 display_timer(struct session *ses)

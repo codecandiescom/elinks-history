@@ -7,6 +7,7 @@ EXTRA_DIST = TODO VERSION config.charset locale.alias plural.y
 DISTCLEANFILES = charset.alias
 
 localedir = $(datadir)/locale
+builddir = $(top_builddir)/src/intl/gettext
 
 noinst_LIBRARIES = libintl.a
 libintl_a_SOURCES = \
@@ -36,9 +37,9 @@ libintl_a_SOURCES = \
  plural.c \
  textdomain.c
 
-charset.alias: config.charset
-	$(SHELL) $(srcdir)/config.charset '@host@' > t-$@
-	mv t-$@ $@
+$(builddir)/charset.alias: $(srcdir)/config.charset
+	$(SHELL) $(srcdir)/config.charset '@host@' > $@.new
+	mv $@.new $@
 
 # FIXME: Building plural.c from plural.y on the fly doesn't work
 
@@ -49,7 +50,7 @@ plural.c: plural.y
 	$(YACC) $(YFLAGS) --output $@ $<
 	rm -f $*.h
 
-install-data-local: charset.alias all
+install-data-local: $(builddir)/charset.alias all
 	@if test '@USE_INCLUDED_LIBINTL@' = yes; then \
 	  $(mkinstalldirs) $(DESTDIR)$(libdir); \
 	  temp=$(DESTDIR)$(libdir)/t-charset.alias; \

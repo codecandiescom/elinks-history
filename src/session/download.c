@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.346 2005/02/28 14:30:00 zas Exp $ */
+/* $Id: download.c,v 1.347 2005/03/02 14:30:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1165,7 +1165,8 @@ struct {
 };
 
 int
-ses_chktype(struct session *ses, struct download *loading, struct cache_entry *cached, int frame)
+setup_download_handler(struct session *ses, struct download *loading,
+		       struct cache_entry *cached, int frame)
 {
 	struct mime_handler *handler;
 	struct view_state *vs;

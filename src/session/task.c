@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.149 2005/02/28 14:31:31 zas Exp $ */
+/* $Id: task.c,v 1.150 2005/03/02 14:30:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -473,7 +473,7 @@ b:
 		case TASK_NONE:
 			break;
 		case TASK_FORWARD:
-			if (ses_chktype(ses, &ses->loading, cached, 0)) {
+			if (setup_download_handler(ses, &ses->loading, cached, 0)) {
 				free_task(ses);
 				reload(ses, CACHE_MODE_NORMAL);
 				return 2;

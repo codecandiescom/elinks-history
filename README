@@ -4,38 +4,43 @@ Enhanced/Extended Links (ELinks)
 Development version of Links (Lynx-like text WWW browser), with more liberal
 features policy and development style.
 
-This is the ELinks tree - intended to provide feature-rich version of Links.
-Its purpuose is to make alternative to Links, and to test and tune various new
-features, but still provide good rock-solid releases inside stable branches.
+This is the ELinks tree - intended to provide a feature-rich version of Links.
+Its purpuose is to provide an alternative to Links, and to test and tune various
+new features, but still provide good rock-solid releases inside stable branches.
 
-See the manpage for detailed description of ELinks and its features.  If you are
-more interested, you can examine Links website at http://links.sf.net/. For new
-Links/ELinks versions announcements and bug reports, please see links-list
-mailing list at linuxfromscratch.org.  If you have any feature request or hint
-for developers, please post it at links-discuss mailing list at the same place.
+See the manpage for a detailed description of ELinks and its features.  If you
+are more interested, you can examine thye Links website at http://links.sf.net/.
+For new Links/ELinks version announcements and bug reports, please see the
+links-list mailing list at linuxfromscratch.org.  If you have any feature
+requests or hints for developers, please post it to the links-discuss mailing
+list at the same place.
 
 The ELinks site with some basic information is available at
-http://elinks.or.cz/. Please see SITES file for mirrors or other recommended
-sites. If you want even to install ELinks on your computer, see
-INSTALL file for instructions.
+http://elinks.or.cz/.  Please see the SITES file for mirrors or other
+recommended sites. If you want to install ELinks on your computer, see the
+INSTALL file for further instructions.
 
-Why not contribute to Links instead? Well, first I made a bunch of patches for
-original Links, but significant number of them got refused, because Mikulas did
-not like them, as he just wouldn't have use for them himself. He wants to keep
-Links with relatively closed feature set and merge only new features which he
-itself needs. It has advantages that the tree is very narrow and the code is
-small and only very little bloated. ELinks, on the contrary, aims to provide
-full-featured web browser, superior to both lynx and w3m and with possibilites
-of konqueror and similiar browser. However, to prevent drastical bloating of the
-code, the development is driven in the course of modularization and separation
-of add-on modules (like cookies, bookmarks, ssl, lua etc).
+Why not contribute to Links instead?  Well, first I made a bunch of patches for
+the original Links, but a significant number of them got refused  because
+Mikulas did not like them, as he just wouldn't have any use for them himself.
+He wants to keep Links with a relatively closed feature set and merge only new
+features which he himself needs.  It has advantages that the tree is very narrow
+and the code is small and contains very little bloat.  ELinks, on the contrary,
+aims to provide a full-featured web browser, superior to both lynx and w3m and
+with the possibilites of Konqueror and similiar browsers. However, to prevent
+drastic bloating of the code, the development is driven in the course of
+modularization and separation of add-on modules (like cookies, bookmarks, ssl,
+lua etc).
 
 If you want to write some patches, please read the HACKING document.
-If you want to add a new language, please read intl/README document.
-If you want to write some documentation, well you're welcomed ;)
-If you want to request features, report bugs, use the mailing list as mentionned
-above, or come and see us on irc.openprojects.net #elinks.
 
-$Id: README,v 1.9 2002/09/12 20:11:24 zas Exp $
+If you want to add a new language, please read intl/README document.
+
+If you want to write some documentation, well you're welcomed ;)
+
+If you want to request features or report bugs, use the mailing list as
+mentionned above, or come and see us on irc.openprojects.net #elinks.
+
+$Id: README,v 1.10 2002/09/12 21:54:19 pasky Exp $
 
 vim: textwidth=80

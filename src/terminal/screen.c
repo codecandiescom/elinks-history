@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.88 2003/10/01 23:48:23 jonas Exp $ */
+/* $Id: screen.c,v 1.89 2003/10/02 00:06:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,7 +288,9 @@ struct screen_state {
 	unsigned char underline;
 };
 
-#define use_utf8_io(driver) ((driver)->charsets[0] != -1)
+#define compare_color(a, b)	((a) == (b))
+#define copy_color(a, b)	((a) = (b))
+#define use_utf8_io(driver)	((driver)->charsets[0] != -1)
 
 /* Time critical section. */
 static inline void
@@ -296,7 +298,6 @@ add_char16(struct string *screen, struct screen_driver *driver,
 	   struct screen_char *ch, struct screen_state *state)
 {
 	unsigned char c = ch->data;
-	unsigned char color = ch->color;
 	unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
 	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
 
@@ -310,13 +311,14 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		add_term_string(screen, driver->underline[!!underline]);
 	}
 
-	if (color != state->color) {
-		state->color = color;
+	if (!compare_color(ch->color, state->color)) {
+		copy_color(state->color, ch->color);
 
 		add_bytes_to_string(screen, "\033[0", 3);
 
 		if (driver->color_mode == COLOR_MODE_16) {
 			static unsigned char code[6] = ";30;40";
+			unsigned char color = ch->color;
 			unsigned char bgcolor = TERM_COLOR_BACKGROUND(color);
 
 			code[2] = '0' + TERM_COLOR_FOREGROUND(color);
@@ -406,7 +408,7 @@ add_chars16(struct string *image, struct terminal *term,
 
 		for (; x < term->x; x++, current++, pos++) {
 
-			if (pos->color == current->color) {
+			if (compare_color(pos->color, current->color)) {
 				/* No update for exact match. */
 				if (pos->data == current->data
 				    && pos->attr == current->attr)

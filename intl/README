@@ -51,22 +51,16 @@ using ./synclang script.
 
 ===
 
-FINDING and REMOVING unused translations:
+Synchronising translations and sources:
 
-A script named find_unused_translations.sh can help you:
+Just run the ./sync_vs_source.sh script from intl/
 
-./find_unused_translations.sh
-	will list unused entries.
-	It checks all c and h files in src directory.
-
-./find_unused_translations.sh patch
-	will list unused entries and generate a patch against english.lng.
-	On patching, all unused entries will be commented in english.lng file.
-	After running ./synclang all unused entries will be commented in all
-	.lng files.
+It will generate a patch against english.lng.
+Patch english.lng then edit english.lng if needed.
+Run ./synclang
 
 ===
 
-$Id: README,v 1.8 2002/12/15 01:16:13 zas Exp $
+$Id: README,v 1.9 2002/12/16 15:07:31 zas Exp $
 
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.23 2002/05/19 19:34:57 pasky Exp $ */
+/* $Id: cookies.c,v 1.24 2002/05/19 21:27:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -552,37 +552,37 @@ load_cookies() {
 		memset(cookie, 0, sizeof(struct cookie));
 
 		q = in_buffer;
-		p = strchr(in_buffer, ' ');
+		p = strchr(in_buffer, '\t');
 		if (!p)	goto inv;
 		*p++ = '\0';
 		cookie->name = stracpy(q);
 
 		q = p;
-		p = strchr(p, ' ');
+		p = strchr(p, '\t');
 		if (!p) goto inv;
 		*p++ = '\0';
 		cookie->value = stracpy(q);
 
 		q = p;
-		p = strchr(p, ' ');
+		p = strchr(p, '\t');
 		if (!p) goto inv;
 		*p++ = '\0';
 		cookie->server = stracpy(q);
 
 		q = p;
-		p = strchr(p, ' ');
+		p = strchr(p, '\t');
 		if (!p) goto inv;
 		*p++ = '\0';
 		cookie->path = stracpy(q);
 
 		q = p;
-		p = strchr(p, ' ');
+		p = strchr(p, '\t');
 		if (!p) goto inv;
 		*p++ = '\0';
 		cookie->domain = stracpy(q);
 
 		q = p;
-		p = strchr(p, ' ');
+		p = strchr(p, '\t');
 		if (!p) goto inv;
 		*p++ = '\0';
 		cookie->expires = atol(q);
@@ -625,7 +625,7 @@ save_cookies() {
 
 	foreach (c, cookies) {
 		if (c->expires && !cookie_expired(c)) {
-			if (secure_fprintf(ssi, "%s %s %s %s %s %ld %d\n",
+			if (secure_fprintf(ssi, "%s\t%s\t%s\t%s\t%s\t%ld\t%d\n",
 					   c->name, c->value,
 					   c->server ? c->server : (unsigned char *) "",
 					   c->path ? c->path : (unsigned char *) "",

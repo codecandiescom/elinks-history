@@ -1,3 +1,25 @@
+Wed Dec  1 17:54:22 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated: typo fix and cleanup.  
+
+Wed Dec  1 17:52:12 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Dec  1 03:37:37 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Indicate in the options manager and the option info box whether an
+	option has been modified since the configuration was last saved.  
+	
+	Inspired by bug 357: Show default values for selected option in Info 
+	dialog from Options manager.  
+
 Tue Nov 30 17:47:11 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/: inpfield.c, inpfield.h:

@@ -1,7 +1,7 @@
-/* $Id: view.h,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
+/* $Id: view.h,v 1.3 2002/03/18 06:19:58 pasky Exp $ */
 
-#ifndef EL__VIEW_H
-#define EL__VIEW_H
+#ifndef EL__DOCUMENT_VIEW_H
+#define EL__DOCUMENT_VIEW_H
 
 #include <document/html/parser.h>
 #include <document/html/renderer.h>
@@ -41,7 +41,6 @@ void destroy_vs(struct view_state *);
 void copy_location(struct location *, struct location *);
 
 /* void draw_doc(struct terminal *, struct f_data_c *, int); */
-int dump_to_file(struct f_data *, int);
 void draw_formatted(struct session *);
 
 void send_event(struct session *, struct event *);

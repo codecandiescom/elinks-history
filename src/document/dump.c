@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.1 2002/03/17 22:32:24 pasky Exp $ */
+/* $Id: dump.c,v 1.2 2002/03/18 06:19:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,6 @@
 #include <config/default.h>
 #include <document/cache.h>
 #include <document/dump.h>
-#include <document/view.h>
 #include <document/html/renderer.h>
 #include <intl/language.h>
 #include <lowlevel/sched.h>
@@ -155,4 +154,37 @@ ttt:
 	if (load_url(uu, NULL, &dump_stat, PRI_MAIN, 0)) goto ttt;
 	mem_free(uu);
 	if (wd) mem_free(wd);
+}
+
+int dump_to_file(struct f_data *fd, int h)
+{
+#define D_BUF	65536
+
+	int x, y;
+	unsigned char *buf;
+	int bptr = 0;
+
+	if (!(buf = mem_alloc(D_BUF))) return -1;
+	for (y = 0; y < fd->y; y++) for (x = 0; x <= fd->data[y].l; x++) {
+		int c;
+
+		if (x == fd->data[y].l) c = '\n';
+		else {
+			if (((c = fd->data[y].d[x]) & 0xff) == 1) c += ' ' - 1;
+			if ((c >> 15) && (c & 0xff) >= 176 && (c & 0xff) < 224) c = frame_dumb[(c & 0xff) - 176];
+		}
+		buf[bptr++] = c;
+		if (bptr >= D_BUF) {
+			if (hard_write(h, buf, bptr) != bptr) goto fail;
+			bptr = 0;
+		}
+	}
+	if (hard_write(h, buf, bptr) != bptr) {
+		fail:
+		mem_free(buf);
+		return -1;
+	}
+	mem_free(buf);
+	return 0;
+#undef D_BUF
 }

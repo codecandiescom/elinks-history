@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.7 2002/03/17 18:14:07 pasky Exp $ */
+/* $Id: view.c,v 1.8 2002/03/18 06:19:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include <config/default.h>
 #include <config/kbdbind.h>
 #include <document/cache.h>
+#include <document/dump.h>
 #include <document/html/parser.h>
 #include <document/html/renderer.h>
 #include <intl/charsets.h>
@@ -915,41 +916,6 @@ void draw_formatted(struct session *ses)
 	draw_frames(ses);
 	print_screen_status(ses);
 	redraw_from_window(ses->win);
-}
-
-extern unsigned char frame_dumb[];
-
-int dump_to_file(struct f_data *fd, int h)
-{
-#define D_BUF	65536
-
-	int x, y;
-	unsigned char *buf;
-	int bptr = 0;
-
-	if (!(buf = mem_alloc(D_BUF))) return -1;
-	for (y = 0; y < fd->y; y++) for (x = 0; x <= fd->data[y].l; x++) {
-		int c;
-
-		if (x == fd->data[y].l) c = '\n';
-		else {
-			if (((c = fd->data[y].d[x]) & 0xff) == 1) c += ' ' - 1;
-			if ((c >> 15) && (c & 0xff) >= 176 && (c & 0xff) < 224) c = frame_dumb[(c & 0xff) - 176];
-		}
-		buf[bptr++] = c;
-		if (bptr >= D_BUF) {
-			if (hard_write(h, buf, bptr) != bptr) goto fail;
-			bptr = 0;
-		}
-	}
-	if (hard_write(h, buf, bptr) != bptr) {
-		fail:
-		mem_free(buf);
-		return -1;
-	}
-	mem_free(buf);
-	return 0;
-#undef D_BUF
 }
 
 int in_viewx(struct f_data_c *f, struct link *l)

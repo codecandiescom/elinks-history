@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.14 2003/10/28 01:18:32 pasky Exp $ */
+/* $Id: os2.c,v 1.15 2003/12/21 14:51:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ get_terminal_size(int fd, int *x, int *y)
 		arc = ptioctl(1, TIOCGWINSZ, &win);
 		if (arc) {
 /*
-			debug("%d", errno);
+			DBG("%d", errno);
 */
 			*x = 80;
 			*y = 24;
@@ -135,7 +135,7 @@ get_terminal_size(int fd, int *x, int *y)
 		*y = win.ws_row;
 		*x = win.ws_col;
 /*
-		debug("%d %d", *x, *y);
+		DBG("%d %d", *x, *y);
 */
 
 		return 0;

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.131 2003/12/20 23:54:11 jonas Exp $ */
+/* $Id: listbox.c,v 1.132 2003/12/21 14:51:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ dlg_format_box(struct terminal *term, struct widget_data *widget_data,
 		widget_data->h = optimal_h;
 	}
 
-	/* debug("::%d(%d)::%d::%d::", max_y, term?1:2, widget_data->h, *y); */
+	/* DBG("::%d(%d)::%d::%d::", max_y, term?1:2, widget_data->h, *y); */
 
 	(*y) += widget_data->h;
 }
@@ -447,7 +447,7 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {
-		/* debug("top: %s - (%d) %p\n", box->top->text, box->top->visible, box->top); */
+		/* DBG("top: %s - (%d) %p\n", box->top->text, box->top->visible, box->top); */
 		box->top = traverse_listbox_items_list(box->top, box, 1,
 				1, NULL, NULL);
 		box->sel = box->top;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.131 2003/12/01 15:35:51 pasky Exp $ */
+/* $Id: tables.c,v 1.132 2003/12/21 14:51:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1318,7 +1318,7 @@ get_table_heights(struct table *t)
 			if (!p) return;
 
 			cell->height = p->height;
-			/* debug("%d, %d.",xw, cell->height); */
+			/* DBG("%d, %d.",xw, cell->height); */
 			mem_free(p);
 		}
 	}
@@ -1837,7 +1837,7 @@ again:
 		goto again;
 	}
 
-	/* debug("%d %d %d", t->min_t, t->max_t, width); */
+	/* DBG("%d %d %d", t->min_t, t->max_t, width); */
 	if (t->min_t >= width)
 		distribute_widths(t, t->min_t);
 	else if (t->max_t < width && wf)

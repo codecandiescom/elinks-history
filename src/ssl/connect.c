@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.43 2003/11/14 00:25:30 miciah Exp $ */
+/* $Id: connect.c,v 1.44 2003/12/21 14:51:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,7 @@ ssl_connect(struct connection *conn, int sock)
 			break;
 
 		default:
-			/* debug("sslerr %s", gnutls_strerror(ret)); */
+			/* DBG("sslerr %s", gnutls_strerror(ret)); */
 			conn->no_tsl = 1;
 ssl_error:
 			set_connection_state(conn, S_SSL_ERROR);

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.102 2003/12/19 12:03:38 pasky Exp $ */
+/* $Id: cache.c,v 1.103 2003/12/21 14:51:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,7 +39,7 @@ static int id_tag_counter = 0;
 
 #define dump_frag(frag, count) \
 do { \
-	debug(" [%d] f=%p offset=%li length=%li real_length=%li", \
+	DBG(" [%d] f=%p offset=%li length=%li real_length=%li", \
 	      count, frag, frag->offset, frag->length, frag->real_length); \
 } while (0)
 
@@ -48,7 +48,7 @@ do { \
 	struct fragment *frag; \
         int count = 0;	\
  \
-	debug("%s: url=%s, cache_size=%li", comment, entry->url, cache_size); \
+	DBG("%s: url=%s, cache_size=%li", comment, entry->url, cache_size); \
 	foreach (frag, entry->frag) \
 		dump_frag(frag, ++count); \
 } while (0)
@@ -504,7 +504,7 @@ garbage_collection(int whole)
 #endif
 
 #ifdef DEBUG_CACHE
-	debug("gc whole=%d opt_cache_size=%ld gc_cache_size=%ld",
+	DBG("gc whole=%d opt_cache_size=%ld gc_cache_size=%ld",
 	      whole, opt_cache_size,gc_cache_size);
 #endif
 
@@ -620,7 +620,7 @@ shrinked_enough:
 
 #ifdef DEBUG_CACHE
 	if ((whole || !obstacle_entry) && cache_size > gc_cache_size) {
-		debug("garbage collection doesn't work, cache size %ld > %ld, "
+		DBG("garbage collection doesn't work, cache size %ld > %ld, "
 		      "document.cache.memory.size set to: %ld bytes",
 		      cache_size, gc_cache_size,
 		      get_opt_long("document.cache.memory.size"));

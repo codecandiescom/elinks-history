@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.29 2003/12/18 20:52:34 fabio Exp $ */
+/* $Id: status.c,v 1.30 2003/12/21 14:51:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,7 @@ get_stat_msg(struct download *stat, struct terminal *term,
 
 	if (stat->state != S_TRANS || !(stat->prg->elapsed / 100)) {
 
-		/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
+		/* DBG("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
 		return stracpy(get_err_msg(stat->state, term));
 	}
 

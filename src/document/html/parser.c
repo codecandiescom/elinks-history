@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.297 2003/12/21 11:32:35 pasky Exp $ */
+/* $Id: parser.c,v 1.298 2003/12/21 14:51:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -394,7 +394,7 @@ kill_html_stack_item(struct html_element *e)
 	mem_free(e);
 #if 0
 	if (list_empty(html_stack) || !html_stack.next) {
-		debug("killing last element");
+		DBG("killing last element");
 	}
 #endif
 }

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.37 2003/12/20 18:48:30 pasky Exp $ */
+/* $Id: mime.c,v 1.38 2003/12/21 14:51:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,9 +107,9 @@ check_encoding_type(unsigned char *extension)
 
 #ifdef DEBUG_CONTENT_TYPE
 #define debug_get_content_type_params(head__, url__) \
-	debug("get_content_type(head, url)\n=== head ===\n%s\n=== url ===\n%s\n", head__, url__)
-#define debug_ctype(ctype__) debug("ctype= %s", (ctype__))
-#define debug_extension(extension__) debug("extension= %s", (extension__))
+	DBG("get_content_type(head, url)\n=== head ===\n%s\n=== url ===\n%s\n", head__, url__)
+#define debug_ctype(ctype__) DBG("ctype= %s", (ctype__))
+#define debug_extension(extension__) DBG("extension= %s", (extension__))
 #else
 #define debug_get_content_type_params(head__, url__)
 #define debug_ctype(ctype__)

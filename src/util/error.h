@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.37 2003/12/21 14:13:21 zas Exp $ */
+/* $Id: error.h,v 1.38 2003/12/21 14:51:21 zas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -18,17 +18,17 @@ extern unsigned char *errfile;
 /* @debug(format_string) is used for printing of debugging information. It
  * should not be used anywhere in the official codebase (although it is often
  * lying there commented out, as it may get handy). */
-#undef debug
-#define debug errfile = __FILE__, errline = __LINE__, elinks_debug
+#undef DBG
+#define DBG errfile = __FILE__, errline = __LINE__, elinks_debug
 void elinks_debug(unsigned char *fmt, ...);
 
 /* @wdebug(format_string) is used for printing of debugging information, akin
- * to debug(). However, it sleep(1)s, therefore being useful when it is going
+ * to DBG(). However, it sleep(1)s, therefore being useful when it is going
  * to be overdrawn or so. It should not be used anywhere in the official
  * codebase (although it is often lying there commented out, as it may get
  * handy). */
-#undef wdebug
-#define wdebug errfile = __FILE__, errline = __LINE__, elinks_wdebug
+#undef WDBG
+#define WDBG errfile = __FILE__, errline = __LINE__, elinks_wdebug
 void elinks_wdebug(unsigned char *fmt, ...);
 
 /* @error(format_string) is used to report non-fatal errors during the ELinks

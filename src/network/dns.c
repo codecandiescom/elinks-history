@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.39 2003/12/01 14:15:32 pasky Exp $ */
+/* $Id: dns.c,v 1.40 2003/12/21 14:51:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,7 +238,7 @@ do_lookup(struct dnsquery *query, int force_async)
 {
 	int res;
 
-	/* debug("starting lookup for %s", q->name); */
+	/* DBG("starting lookup for %s", q->name); */
 
 #ifndef NO_ASYNC_LOOKUP
 	if (!force_async && !get_opt_int("connection.async_dns")) {
@@ -270,11 +270,11 @@ do_queued_lookup(struct dnsquery *query)
 
 	if (!dns_queue) {
 		dns_queue = query;
-		/* debug("direct lookup"); */
+		/* DBG("direct lookup"); */
 		return do_lookup(query, 0);
 
 	} else {
-		/* debug("queuing lookup for %s", q->name); */
+		/* DBG("queuing lookup for %s", q->name); */
 		assertm(!dns_queue->next_in_queue, "DNS queue corrupted");
 		dns_queue->next_in_queue = query;
 		dns_queue = query;
@@ -308,11 +308,11 @@ end_dns_lookup(struct dnsquery *q, int res)
 	void *data;
 	int namelen;
 
-	/* debug("end lookup %s (%d)", q->name, res); */
+	/* DBG("end lookup %s (%d)", q->name, res); */
 
 #ifdef THREAD_SAFE_LOOKUP
 	if (q->next_in_queue) {
-		/* debug("processing next in queue: %s", q->next_in_queue->name); */
+		/* DBG("processing next in queue: %s", q->next_in_queue->name); */
 		do_lookup(q->next_in_queue, 1);
 	} else {
 	       	dns_queue = NULL;

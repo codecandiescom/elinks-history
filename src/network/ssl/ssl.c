@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.43 2003/11/13 09:17:23 zas Exp $ */
+/* $Id: ssl.c,v 1.44 2003/12/21 14:51:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,20 +215,20 @@ init_ssl_connection(struct connection *conn)
 	if (!state) return S_SSL_ERROR;
 
 	if (gnutls_init(state, GNUTLS_CLIENT) < 0) {
-		/* debug("sslinit %s", gnutls_strerror(ret)); */
+		/* DBG("sslinit %s", gnutls_strerror(ret)); */
 		mem_free(state);
 		return S_SSL_ERROR;
 	}
 
 	if (gnutls_cred_set(*state, GNUTLS_CRD_ANON, anon_cred) < 0) {
-		/* debug("sslanoncred %s", gnutls_strerror(ret)); */
+		/* DBG("sslanoncred %s", gnutls_strerror(ret)); */
 		gnutls_deinit(*state);
 		mem_free(state);
 		return S_SSL_ERROR;
 	}
 
 	if (gnutls_cred_set(*state, GNUTLS_CRD_CERTIFICATE, xcred) < 0) {
-		/* debug("sslx509cred %s", gnutls_strerror(ret)); */
+		/* DBG("sslx509cred %s", gnutls_strerror(ret)); */
 		gnutls_deinit(*state);
 		mem_free(state);
 		return S_SSL_ERROR;

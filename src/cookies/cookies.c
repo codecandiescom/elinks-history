@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.112 2003/12/19 12:03:38 pasky Exp $ */
+/* $Id: cookies.c,v 1.113 2003/12/21 14:51:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,7 +226,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		return;
 
 #ifdef COOKIES_DEBUG
-	debug("set_cookie -> (%s) %s", struri(*uri), str);
+	DBG("set_cookie -> (%s) %s", struri(*uri), str);
 #endif
 
 	cstr.str = str;
@@ -347,7 +347,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	{
 		unsigned char *server = memacpy(uri->host, uri->hostlen);
 
-		debug("Got cookie %s = %s from %s (%s), domain %s, "
+		DBG("Got cookie %s = %s from %s (%s), domain %s, "
 		      "expires at %d, secure %d\n", cookie->name,
 		      cookie->value, cookie->server, server, cookie->domain,
 		      cookie->expires, cookie->secure);
@@ -357,7 +357,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	if (!check_domain_security(cookie->domain, uri->host, uri->hostlen)) {
 #ifdef COOKIES_DEBUG
-		debug("Domain security violated.");
+		DBG("Domain security violated.");
 #endif
 		mem_free(cookie->domain);
 		cookie->domain = memacpy(uri->host, uri->hostlen);
@@ -372,7 +372,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		if (cs->accept)	goto ok;
 
 #ifdef COOKIES_DEBUG
-		debug("Dropped.");
+		DBG("Dropped.");
 #endif
 		free_cookie(cookie);
 		return;
@@ -623,7 +623,7 @@ send_cookies(struct uri *uri)
 
 		if (is_expired(c->expires)) {
 #ifdef COOKIES_DEBUG
-			debug("Cookie %s=%s (exp %d) expired.\n",
+			DBG("Cookie %s=%s (exp %d) expired.\n",
 			      c->name, c->value, c->expires);
 #endif
 			d = c;
@@ -647,7 +647,7 @@ send_cookies(struct uri *uri)
 		add_char_to_string(&header, '=');
 		add_to_string(&header, c->value);
 #ifdef COOKIES_DEBUG
-		debug("Cookie: %s=%s", c->name, c->value);
+		DBG("Cookie: %s=%s", c->name, c->value);
 #endif
 	}
 

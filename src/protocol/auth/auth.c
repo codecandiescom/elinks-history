@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.69 2003/12/20 16:59:02 pasky Exp $ */
+/* $Id: auth.c,v 1.70 2003/12/21 14:51:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 	struct http_auth_basic *match = NULL, *entry;
 
 #ifdef DEBUG_HTTP_AUTH
-	debug("find_auth_entry: url=%s realm=%s", url, realm);
+	DBG("find_auth_entry: url=%s realm=%s", url, realm);
 #endif
 
 	if (!url || !*url) return NULL;
@@ -89,7 +89,7 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 	struct http_auth_basic *entry;
 
 #ifdef DEBUG_HTTP_AUTH
-	debug("init_auth_entry: auth_url=%s realm=%s uri=%p", auth_url, realm, uri);
+	DBG("init_auth_entry: auth_url=%s realm=%s uri=%p", auth_url, realm, uri);
 #endif
 
 	entry = mem_calloc(1, sizeof(struct http_auth_basic));
@@ -131,7 +131,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	unsigned char *newurl = get_uri_string(uri, ~(URI_DATA | URI_POST));
 
 #ifdef DEBUG_HTTP_AUTH
-	debug("add_auth_entry: newurl=%s realm=%s uri=%p", newurl, realm, uri);
+	DBG("add_auth_entry: newurl=%s realm=%s uri=%p", newurl, realm, uri);
 #endif
 
 	if (!newurl) return NULL;
@@ -209,7 +209,7 @@ find_auth(struct uri *uri)
 	unsigned char *newurl = get_uri_string(uri, ~(URI_DATA | URI_POST));
 
 #ifdef DEBUG_HTTP_AUTH
-	debug("find_auth: newurl=%s uri=%p", newurl, uri);
+	DBG("find_auth: newurl=%s uri=%p", newurl, uri);
 #endif
 
 	if (!newurl) return NULL;
@@ -259,7 +259,7 @@ void
 del_auth_entry(struct http_auth_basic *entry)
 {
 #ifdef DEBUG_HTTP_AUTH
-	debug("del_auth_entry: url=%s realm=%s user=%p",
+	DBG("del_auth_entry: url=%s realm=%s user=%p",
 	      entry->url, entry->realm, entry->user);
 #endif
 
@@ -278,7 +278,7 @@ void
 free_auth(void)
 {
 #ifdef DEBUG_HTTP_AUTH
-	debug("free_auth");
+	DBG("free_auth");
 #endif
 
 	while (!list_empty(http_auth_basic_list))
@@ -293,7 +293,7 @@ get_invalid_auth_entry(void)
 	struct http_auth_basic *entry;
 
 #ifdef DEBUG_HTTP_AUTH
-	debug("get_invalid_auth_entry");
+	DBG("get_invalid_auth_entry");
 #endif
 
 	foreach (entry, http_auth_basic_list)

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.180 2003/07/25 16:36:40 zas Exp $ */
+/* $Id: parser.c,v 1.181 2003/07/25 20:24:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -705,6 +705,9 @@ html_focusable(unsigned char *a)
 	unsigned char *accesskey;
 	int tabindex;
 
+	format.accesskey = 0;
+	format.tabindex = 0x80000000;
+
 	if (!a) return;
 
 	accesskey = get_attr_val(a, "accesskey");
@@ -712,15 +715,11 @@ html_focusable(unsigned char *a)
 		accesskey[0] = upcase(accesskey[0]);
 		format.accesskey = read_key(accesskey);
 		mem_free(accesskey);
-	} else {
-		format.accesskey = 0;
 	}
 
 	tabindex = get_num(a, "tabindex");
 	if (tabindex > 0) {
 		format.tabindex = (tabindex & 0x7fff) << 16;
-	} else {
-		format.tabindex = 0x80000000;
 	}
 }
 

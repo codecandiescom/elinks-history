@@ -1,3 +1,10 @@
+Wed Jun 19 13:26:07 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/terminal.c:
+
+	TERM environnement variable is now checked for sanity to prevent
+	potential configuration file corruption.  
+
 Tue Jun 18 19:52:22 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/http/header.c:

@@ -959,6 +959,9 @@ struct rgb default_bg = { 0, 0, 0 };
 struct rgb default_link = { 0, 0, 255 };
 struct rgb default_vlink = { 255, 255, 0 };
 
+int show_status_bar = 1;
+int show_title_bar = 1;
+
 int color_dirs = 1;
 int allow_special_files = 0;
 int keep_unhistory = 0;
@@ -1032,7 +1035,7 @@ struct option links_options[] = {
 	{	"color-dirs", "color_dirs",
 	       	gen_cmd, num_rd, num_wr,
 		0, 1, &color_dirs,
-		"Highlight directories when listing local disk content." },
+		"Highlight directories when listing local disk content?" },
 
 	{	"cookies-accept", "cookies_accept",
 	       	gen_cmd, num_rd, num_wr,
@@ -1045,13 +1048,13 @@ struct option links_options[] = {
 	{	"cookies-save", "cookies_save",
 	       	gen_cmd, num_rd, num_wr,
 		0, 1, &cookies_save,
-		"Load/save cookies from/to disk." },
+		"Load/save cookies from/to disk?" },
 
 	{	"cookies-resave", "cookies_resave",
 	       	gen_cmd, num_rd, num_wr,
 		0, 1, &cookies_resave,
-		"Save cookies after each change in cookies list. No effect when\n"
-		"cookies-save is turned off." },
+		"Save cookies after each change in cookies list? No effect when\n"
+		"cookies-save is off." },
 
 	{	"default-fg", "default_fg",
 	       	gen_cmd, color_rd, NULL,
@@ -1133,22 +1136,22 @@ struct option links_options[] = {
 	{	"http-bugs.allow-blacklist", "http_bugs.allow_blacklist",
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &http_bugs.allow_blacklist,
-		"Allow blacklist of buggy servers." },
+		"Allow blacklist of buggy servers?" },
 	 
 	{	"http-bugs.bug-302-redirect", "http_bugs.bug_302_redirect",
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &http_bugs.bug_302_redirect,
-		"Broken 302 redirect (violates RFC but compatible with Netscape)." },
+		"Broken 302 redirect (violates RFC but compatible with Netscape)?" },
 	 
 	{	"http-bugs.bug-post-no-keepalive", "http_bugs.bug_post_no_keepalive",
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &http_bugs.bug_post_no_keepalive,
-		"No keepalive connection after POST request." },
+		"No keepalive connection after POST request?" },
 	 
 	{	"http-bugs.http10", "http_bugs.http10",
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &http_bugs.http10,
-		"Use HTTP/1.0 protocol." },
+		"Use HTTP/1.0 protocol?" },
 	 
 	{	"http-proxy", "http_proxy",
 		gen_cmd, str_rd, str_wr,
@@ -1172,7 +1175,7 @@ struct option links_options[] = {
 	{	"keep_unhistory", "keep_unhistory",
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &keep_unhistory,
-	 	"Keep unhistory (\"forward history\")." },
+	 	"Keep unhistory (\"forward history\")?" },
 	 
 	{	"language", "language",
 		gen_cmd, lang_rd, lang_wr,
@@ -1219,6 +1222,16 @@ struct option links_options[] = {
 		dump_cmd, NULL, NULL,
 	 	D_SOURCE, 0, NULL,
 		"Write the given HTML document in source form to stdout." },
+	 
+	{	"show-status-bar", "show_status_bar",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &show_status_bar,
+		"Show status bar on the screen?" },
+	 
+	{	"show-title-bar", "show_title_bar",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &show_title_bar,
+		"Show title bar on the screen?" },
 	 
 		/* TODO - this is implemented, but commented out for now as
 		 * it's buggy. */

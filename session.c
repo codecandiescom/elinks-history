@@ -99,7 +99,7 @@ unsigned char *get_stat_msg(struct status *stat, struct terminal *term)
 	return stracpy(_(get_err_msg(stat->state), term));
 }
 
-/* Print statusbar and titlebar. */
+/* Print statusbar and titlebar, set terminal title. */
 void print_screen_status(struct session *ses)
 {
 	struct terminal *term = ses->term;
@@ -108,8 +108,10 @@ void print_screen_status(struct session *ses)
 
 	/* TODO: Make this optionally switchable off. */
 	
-	fill_area(term, 0, 0, term->x, 1, COLOR_TITLE_BG);
-	fill_area(term, 0, term->y - 1, term->x, 1, COLOR_STATUS_BG);
+	if (show_title_bar)
+		fill_area(term, 0, 0, term->x, 1, COLOR_TITLE_BG);
+	if (show_status_bar)
+		fill_area(term, 0, term->y - 1, term->x, 1, COLOR_STATUS_BG);
 	
 	if (ses->wtd)
 		stat = &ses->loading;
@@ -128,24 +130,28 @@ void print_screen_status(struct session *ses)
 	}
 	
 	if (stat) {
-		if (stat->state == S_OK)
-			msg = print_current_link(ses);
-		if (!msg)
-			msg = get_stat_msg(stat, term);
-		if (msg) {
-			print_text(term, 0, term->y - 1, strlen(msg), msg,
-				   COLOR_STATUS);
-			mem_free(msg);
+		if (show_status_bar) {
+			if (stat->state == S_OK)
+				msg = print_current_link(ses);
+			if (!msg)
+				msg = get_stat_msg(stat, term);
+			if (msg) {
+				print_text(term, 0, term->y - 1, strlen(msg),
+					   msg, COLOR_STATUS);
+				mem_free(msg);
+			}
 		}
 		
-		msg = print_current_title(ses);
-		if (msg) {
-			int pos = term->x - 1 - strlen(msg);
-		
-			if (pos < 0) pos = 0;
-			print_text(term, pos, 0, strlen(msg), msg,
-				   COLOR_TITLE);
-			mem_free(msg);
+		if (show_title_bar) {
+			msg = print_current_title(ses);
+			if (msg) {
+				int pos = term->x - 1 - strlen(msg);
+			
+				if (pos < 0) pos = 0;
+				print_text(term, pos, 0, strlen(msg),
+					   msg, COLOR_TITLE);
+				mem_free(msg);
+			}
 		}
 	
 		msg = stracpy("Links");

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.53 2003/05/03 17:13:40 pasky Exp $ */
+/* $Id: menu.c,v 1.54 2003/05/03 17:17:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,7 +338,7 @@ display_menu(struct terminal *term, struct menu *menu)
 		}
 
 		if (menu->items[p].rtext != M_BAR ||
-		    _(menu->items[p].text, term) && _(menu->items[p].text, term)[0]) {
+		    (_(menu->items[p].text, term) && _(menu->items[p].text, term)[0])) {
 			unsigned char c;
 			int l = menu->items[p].hotkey_pos;
 			int x;

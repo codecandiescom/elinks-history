@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.19 2003/09/13 04:41:08 miciah Exp $
+-- $Id: hooks.lua.in,v 1.20 2003/09/13 04:50:36 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -85,6 +85,51 @@ dumbprefixes = {
     vcss = "http://jigsaw.w3.org/css-validator/validator?uri=%c",
 }
 
+function debian_contents (url)
+	local t = {}
+
+	url = gsub(url, '(%w+):(%w+)', function (key, val) %t[key] = val end)
+
+	return 'http://packages.debian.org/cgi-bin/search_contents.pl?word='
+	..escape(gsub(url, '%s*([^%s]+)%s*', '%1'))
+	..'&searchmode='..(t.searchmode or 'searchfilesanddirs')
+	..'&case='..(t.case or 'insensitive')
+	..'&version='..(t.version or pipe_read('cut -d/ -f1 /etc/debian_version | tr -d \\\\n') or 'stable')
+	..'&arch='..(t.arch or gsub(pipe_read('uname -m | tr -d \\\\n'), 'i%d86', 'i386') or 'i386') -- like this'll work...
+end
+
+function cvsweb (base, project, url)
+	local t = {n=0}
+	local file, old, new
+	local replacements
+	
+	-- allow <file>:<revision>[-><revision>]
+	url,replacements = gsub(url, "^(.*):(.*)->(.*)$", "%1 %2 %3")
+	if replacements == 0 then url = gsub(url, "^(.*):(.*)$", "%1 %2") end
+
+	-- split into words
+	gsub(url, "([^%s]+)", function (w) tinsert(%t, w) end)
+	file, old, new = t[1], t[2], t[3]
+
+	if t[4] then error('this smartprefix takes only two to three arguments') return nil end
+	if not file then error('no file given') return nil end
+
+	if     new then return base..project.."/"..file..".diff?r1="..old.."&r2="..new.."&f=u"
+	elseif old then return base.."~checkout~/"..project.."/"..file..(old ~= "latest" and "?rev="..old or "")
+	else            return base..project.."/"..file
+	end
+end
+
+function gmane (url)
+	local group, words
+
+	_,_,group,words = strfind(url, "([^%s]+)%s%s*(.*)$")
+
+	if not words then return nil end
+
+	return "http://search.gmane.org/search.php?query="..words.."&group="..group
+end
+
 -- You can write "gg:foo" or "gg foo" to goto URL dialog and it'll ask google
 -- for it automagically.
 
@@ -95,7 +140,11 @@ smartprefixes = {
     bb_en_fr = "http://babelfish.altavista.com/babelfish/tr?lp=en_fr&submit=1&urltext=%s",
     bug = "http://bugzilla.elinks.or.cz/show_bug.cgi?id=%s",
     cliki = "http://www.cliki.net/admin/search?words=%s",
+    -- If you want to add a smartprefix for another project's CVSweb,
+    -- just create a lambda like this. Aren't high-level languages fun?
+    cvs = function (x) return cvsweb ("http://cvsweb.elinks.or.cz/cvsweb.cgi/", "elinks", x) end,
     d = "http://www.dict.org/bin/Dict?Query=%s&Form=Dict1&Strategy=*&Database=*&submit=Submit+query",
+    debcontents = debian_contents,
     foldoc = "http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?%s",
     g  = "http://www.google.com/search?q=%s&btnG=Google+Search",
     gd = "http://www.google.com/search?q=%s&cat=gwd/Top",
@@ -103,6 +152,7 @@ smartprefixes = {
     -- Whose idea was it to use 'gg' for websearches? -- Miciah
     --gg = "http://groups.google.com/groups?q=%s",
     gi = "http://images.google.com/images?q=%s",
+    gmane = gmane,
     gn = "http://news.google.com/news?q=%s",
     go = "http://www.google.com/search?q=%s&btnG=Google+Search",
     gwho = "http://www.googlism.com/?ism=%s&name=1",
@@ -162,8 +212,15 @@ function goto_url_hook (url, current_url)
     if strfind(url,'%s') or strfind(url, ':') then
         local _,_,nick,val = strfind(url, "^([^%s:]+)[:%s]%s*(.-)%s*$")
         if nick and smartprefixes[nick] then
-            val = escape(val)
-            return format(smartprefixes[nick], val)
+            if type(smartprefixes[nick]) == 'function' then
+                return smartprefixes[nick](val)
+            elseif type(smartprefixes[nick]) == 'string' then
+                return format(smartprefixes[nick], escape(val))
+            else
+                error('smartprefix "'..nick..'" has unsupported type "'
+                      ..type(smartprefixes[nick])..'".')
+                return nil
+            end
         end
     end
 

@@ -79,3 +79,6 @@ To move a bookmark, press <insert> or '*' on it, move the cursor
 above where you'd like it to be, and press the 'Move' button.
 %
 hooks.pl: take THAT hooks.lua - *pimp slap*
+%
+Pressing Ctrl-W in most text-input fields will auto-complete the entered
+text from history or display a menu with possible completions.

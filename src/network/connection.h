@@ -1,9 +1,10 @@
-/* $Id: connection.h,v 1.9 2003/06/11 15:27:54 pasky Exp $ */
+/* $Id: connection.h,v 1.10 2003/07/02 00:16:03 jonas Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
 
 #include "elinks.h" /* tcount */
+
 #include "document/cache.h"
 #include "lowlevel/ttime.h"
 #include "ssl/ssl.h"
@@ -19,12 +20,6 @@
 #define PRI_PRELOAD	4
 #define PRI_CANCEL	5
 #define N_PRI		6
-
-#ifdef HAVE_LONG_LONG
-#define longlong long long
-#else
-#define longlong long
-#endif
 
 struct remaining_info {
 	ttime elapsed;
@@ -93,7 +88,6 @@ struct connection {
 
 	enum cache_mode cache_mode;
 	enum stream_encoding content_encoding;
-
 };
 
 /* Connection states */

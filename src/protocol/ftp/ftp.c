@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.105 2003/09/22 14:52:28 zas Exp $ */
+/* $Id: ftp.c,v 1.106 2003/10/17 22:45:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -921,58 +921,67 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 		  int colorize_dir, unsigned char *dircolor,
 		  struct ftpparse *ftp_info)
 {
-	unsigned char tmp[128];
 	struct string string;
 
 	if (!init_string(&string)) return -1;
 
 	if (ftp_info->flagtrycwd) {
 		if (ftp_info->flagtryretr) {
-			add_to_string(&string, "[LNK] ");
+			add_char_to_string(&string, 'l');
 		} else {
-			if (colorize_dir) {
-				/* The <b> is here for the case when we've
-				 * use_document_colors off. */
-				add_to_string(&string, "<font color=\"");
-				add_to_string(&string, dircolor);
-				add_to_string(&string, "\"><b>");
-			}
-			add_to_string(&string, "[DIR] ");
-			if (colorize_dir) {
-				add_to_string(&string, "</b></font>");
-			}
+			add_char_to_string(&string, 'd');
 		}
 	} else {
-		add_to_string(&string, "[   ] ");
+		add_char_to_string(&string, '-');
 	}
 
 	if (ftp_info->perm && ftp_info->permlen)
 		add_bytes_to_string(&string, ftp_info->perm, ftp_info->permlen);
 	else
-		add_to_string(&string, "-        ");
+		add_to_string(&string, "r-xr-xr-x");
 	add_char_to_string(&string, ' ');
 
-
-	if (ftp_info->mtime) {
-		if (ftp_info->mtime == -1)
-			strcpy(tmp, "-           -     -   ");
-		else
-		if (FTPPARSE_MTIME_LOCAL == ftp_info->mtimetype)
-			strftime(tmp, 128, "%d-%b-%Y %H:%M loc ",
-					localtime(&ftp_info->mtime));
-		else
-			strftime(tmp, 128, "%d-%b-%Y %H:%M -   ",
-					gmtime(&ftp_info->mtime));
-
-		add_to_string(&string, tmp);
-	}
+	add_to_string(&string, "   1 ftp      ftp ");
 
 	if (ftp_info->sizetype != FTPPARSE_SIZE_UNKNOWN) {
-		snprintf(tmp, 128, "%12lu ",ftp_info->size);
+		unsigned char tmp[128];
+
+		snprintf(tmp, 128, "%12lu ", ftp_info->size);
 		add_to_string(&string, tmp);
 	} else {
 		add_to_string(&string, "           - ");
 	}
+
+#ifdef HAVE_STRFTIME
+	if (ftp_info->mtime && ftp_info->mtime != -1) {
+		time_t current_time = time(NULL);
+		time_t when = ftp_info->mtime;
+		struct tm *when_tm;
+	       	unsigned char *fmt;
+		unsigned char date[13];
+		int wr;
+
+		if (FTPPARSE_MTIME_LOCAL == ftp_info->mtimetype)
+			when_tm = localtime(&when);
+		else
+			when_tm = gmtime(&when);
+
+		if (current_time > when + 6L * 30L * 24L * 60L * 60L
+		    || current_time < when - 60L * 60L)
+			fmt = "%b %e  %Y";
+		else
+			fmt = "%b %e %H:%M";
+
+		wr = strftime(date, sizeof(date), fmt, when_tm);
+
+		while (wr < sizeof(date) - 1) date[wr++] = ' ';
+		date[sizeof(date) - 1] = '\0';
+		add_to_string(&string, date);
+	} else
+#endif
+	add_to_string(&string, "            ");
+
+	add_char_to_string(&string, ' ');
 
 	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr && colorize_dir) {
 		add_to_string(&string, "<font color=\"");
@@ -1058,10 +1067,12 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 static void
 got_something_from_data_connection(struct connection *conn)
 {
+	unsigned char *url;
 	struct ftp_connection_info *c_i = conn->info;
 	unsigned char dircolor[8];
 	int colorize_dir = 0;
 	int len;
+	int url_len;
 
 	/* XXX: This probably belongs rather to connect.c ? */
 
@@ -1096,7 +1107,10 @@ conn_error:
 		return;
 	}
 
-	if (!conn->cache && get_cache_entry(struri(conn->uri), &conn->cache)) {
+	url = struri(conn->uri);
+	url_len = strlen(url);
+
+	if (!conn->cache && get_cache_entry(url, &conn->cache)) {
 out_of_mem:
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
@@ -1121,30 +1135,26 @@ out_of_mem:
 			return;
 		}
 
-		if (pathlen) {
-			if (!init_string(&string))
-				goto out_of_mem;
+		if (!init_string(&string))
+			goto out_of_mem;
 
-			add_html_to_string(&string, path, pathlen);
-		}
+		add_html_to_string(&string, url, url_len);
 
 #define ADD_CONST(str) { \
 	add_fragment(conn->cache, conn->from, str, sizeof(str) - 1); \
 	conn->from += (sizeof(str) - 1); }
 
-		ADD_CONST("<html>\n<head><title>/");
-		if (pathlen) {
-			add_fragment(conn->cache, conn->from,
-				     string.source, string.length);
-			conn->from += string.length;
-		}
-		ADD_CONST("</title></head>\n<body>\n<h2>Directory /");
-		if (pathlen) {
-			add_fragment(conn->cache, conn->from,
-				     string.source, string.length);
-			conn->from += string.length;
-			done_string(&string);
-		}
+#define ADD_STRING() { \
+	add_fragment(conn->cache, conn->from, string.source, string.length); \
+	conn->from += string.length; }
+
+		ADD_CONST("<html>\n<head><title>");
+		ADD_STRING();
+		ADD_CONST("</title></head>\n<body>\n<h2>FTP directory ");
+		ADD_STRING();
+
+		done_string(&string);
+
 		ADD_CONST("</h2>\n<pre>");
 
 		if (pathlen) {

@@ -1,5 +1,5 @@
 /* CSS property info */
-/* $Id: property.c,v 1.6 2004/01/18 16:44:36 pasky Exp $ */
+/* $Id: property.c,v 1.7 2004/01/18 16:45:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 
 
 /* TODO: Use fastfind when we get a lot of properties. */
-struct css_property_info css_property_info[] = {
+struct css_property_info css_property_info[CSS_PT_LAST] = {
 	{ "background",		CSS_PT_BACKGROUND,	 CSS_VT_COLOR,		css_parse_background_value },
 	{ "background-color",	CSS_PT_BACKGROUND_COLOR, CSS_VT_COLOR,		css_parse_color_value },
 	{ "color",		CSS_PT_COLOR,		 CSS_VT_COLOR,		css_parse_color_value },

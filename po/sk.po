@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-11-27 13:23+0100\n"
-"PO-Revision-Date: 2003-11-26 18:28+0100\n"
+"PO-Revision-Date: 2003-11-28 11:55+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -54,23 +54,19 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" can not be deleted."
-msgstr ""
-"Smola, ale polo¾ku \"%s\" práve pou¾íva nieèo iné.\n"
-"%s"
+msgstr "Smola, ale polo¾ka \"%s\" nemô¾e by» vymazaná."
 
 #: src/bfu/hierbox.c:438
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
-msgstr ""
-"Smola, ale polo¾ku \"%s\" práve pou¾íva nieèo iné.\n"
-"%s"
+msgstr "Smola, ale polo¾ku \"%s\" práve pou¾íva nieèo iné."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" can not be deleted."
-msgstr "Smola, ale zlo¾ku \"%s\" práve pou¾íva nieèo iné."
+msgstr "Smola, ale zlo¾ka \"%s\" nemô¾e by» vymazaná."
 
 #: src/bfu/hierbox.c:442
 #, c-format
@@ -78,9 +74,8 @@ msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Smola, ale zlo¾ku \"%s\" práve pou¾íva nieèo iné."
 
 #: src/bfu/hierbox.c:466
-#, fuzzy
 msgid "Delete error"
-msgstr "Zmaza» zlo¾ku"
+msgstr ""
 
 #: src/bfu/hierbox.c:559
 msgid "Delete marked items"
@@ -127,9 +122,8 @@ msgstr ""
 "%s"
 
 #: src/bfu/hierbox.c:650
-#, fuzzy
 msgid "Clear all items"
-msgstr "Zmaza» globálnu históriu"
+msgstr ""
 
 #: src/bfu/hierbox.c:651
 msgid "Do you really want to remove all items?"
@@ -817,9 +811,8 @@ msgstr "Otvori» Lua konzolu (VYPNUTÉ)"
 
 #. internal use only
 #: src/config/kbdbind.c:423
-#, fuzzy
 msgid "Set a mark"
-msgstr "Hµada» v zálo¾kách"
+msgstr ""
 
 #: src/config/kbdbind.c:424
 msgid "Go at a specified mark"
@@ -3526,9 +3519,9 @@ msgid "Cookie manager"
 msgstr "Správca cookie"
 
 #: src/dialogs/auth.c:60
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication required for %s at %s"
-msgstr "Zadaj login "
+msgstr "Pre %s na %s je potrebná autentizácia"
 
 #: src/dialogs/auth.c:67
 msgid "HTTP Authentication"
@@ -3643,14 +3636,12 @@ msgid "Abort"
 msgstr "Ukonèi»"
 
 #: src/dialogs/download.c:431
-#, fuzzy
 msgid "Stop"
-msgstr "~Nastavenie"
+msgstr "Stop"
 
 #: src/dialogs/download.c:436
-#, fuzzy
 msgid "Download manager"
-msgstr "Stiahnu» o~brázok"
+msgstr ""
 
 #: src/dialogs/info.c:46
 msgid "About"
@@ -3726,18 +3717,16 @@ msgid "No history"
 msgstr "®iadna história"
 
 #: src/dialogs/menu.c:282
-#, fuzzy
 msgid "Open new ~tab"
-msgstr "Otvori» v ~novom okne"
+msgstr "Otvori» nový tab"
 
 #: src/dialogs/menu.c:283
-#, fuzzy
 msgid "Open new t~ab in background"
-msgstr "Na pozadí"
+msgstr "Otvori» nový tab na pozadí"
 
 #: src/dialogs/menu.c:285
 msgid "~Go to URL"
-msgstr "Choï na URL"
+msgstr "Ís» na URL"
 
 #: src/dialogs/menu.c:286
 msgid "Go ~back"
@@ -3745,16 +3734,15 @@ msgstr "Spa»"
 
 #: src/dialogs/menu.c:287
 msgid "~Reload"
-msgstr "Nah~raj znova"
+msgstr "Nahra» znovu"
 
 #: src/dialogs/menu.c:288
 msgid "~History"
 msgstr "~História"
 
 #: src/dialogs/menu.c:289
-#, fuzzy
 msgid "Unh~istory"
-msgstr "An~tihistória"
+msgstr "Antihistória"
 
 #: src/dialogs/menu.c:294
 #, fuzzy
@@ -3762,14 +3750,12 @@ msgid "Global ~history"
 msgstr "Správca histórie"
 
 #: src/dialogs/menu.c:297
-#, fuzzy
 msgid "~Bookmarks"
 msgstr "Zálo¾ky"
 
 #: src/dialogs/menu.c:299
-#, fuzzy
 msgid "~Cache"
-msgstr "Zru¹i»"
+msgstr ""
 
 #: src/dialogs/menu.c:300
 msgid "~Downloads"
@@ -3780,9 +3766,8 @@ msgid "Coo~kies"
 msgstr ""
 
 #: src/dialogs/menu.c:305
-#, fuzzy
 msgid "~Form history"
-msgstr "Do¹la pamä»"
+msgstr "História formulárov"
 
 #: src/dialogs/menu.c:312
 msgid "Sa~ve as"
@@ -3797,9 +3782,8 @@ msgid "Save formatted ~document"
 msgstr "Ulo¾ sformátovaný ~dokument"
 
 #: src/dialogs/menu.c:319
-#, fuzzy
 msgid "Ki~ll background connections"
-msgstr "Ukonèi» v¹et~ky spojenia na pozadí"
+msgstr "Ukonèi» spojenia na pozadí"
 
 #: src/dialogs/menu.c:320
 msgid "~Flush all caches"
@@ -3827,9 +3811,8 @@ msgid "~OS shell"
 msgstr "~Odskoè do shell-u"
 
 #: src/dialogs/menu.c:375
-#, fuzzy
 msgid "Resize t~erminal"
-msgstr "Zmeò veµkos» ~terminálu"
+msgstr "Zmeni» veµkos» ~terminálu"
 
 #: src/dialogs/menu.c:391
 msgid "~Search"
@@ -3852,14 +3835,12 @@ msgid "Toggle ~html/plain"
 msgstr "Prepnú» htm~l/zdroják"
 
 #: src/dialogs/menu.c:397
-#, fuzzy
 msgid "Toggle i~mages"
-msgstr "Prepnú» URL/názov"
+msgstr "Prepnú» obrázky"
 
 #: src/dialogs/menu.c:398
-#, fuzzy
 msgid "Toggle ~link numbering"
-msgstr "Zadaj èíslo linku"
+msgstr "Prepnú» èíslovanie odkazov"
 
 #: src/dialogs/menu.c:399
 msgid "Toggle ~document colors"
@@ -3882,23 +3863,20 @@ msgid "Nex~t tab"
 msgstr ""
 
 #: src/dialogs/menu.c:405
-#, fuzzy
 msgid "Pre~v tab"
-msgstr "®iadne predchádzajúce hµadania"
+msgstr "Predchádzajúci tab"
 
 #: src/dialogs/menu.c:406
-#, fuzzy
 msgid "~Close tab"
-msgstr "Zavri"
+msgstr "Zavrie» tab"
 
 #: src/dialogs/menu.c:412
 msgid "~ELinks homepage"
 msgstr "Domovská stránka ~ELinks"
 
 #: src/dialogs/menu.c:413
-#, fuzzy
 msgid "~Documentation"
-msgstr "~Informácie o dokumente"
+msgstr "~Dokumentácia"
 
 #: src/dialogs/menu.c:414
 msgid "~Keys"
@@ -3909,9 +3887,8 @@ msgid "~Bugs information"
 msgstr ""
 
 #: src/dialogs/menu.c:418
-#, fuzzy
 msgid "~ELinks CvsWeb"
-msgstr "Domovská stránka ~ELinks"
+msgstr "~ELinks CvsWeb"
 
 #: src/dialogs/menu.c:421
 msgid "~Copying"
@@ -4096,9 +4073,8 @@ msgid "Forms are saved for this URL."
 msgstr ""
 
 #: src/formhist/dialogs.c:145
-#, fuzzy
 msgid "Toggle saving"
-msgstr "Prepnú» URL/názov"
+msgstr "Prepnú» ukladanie"
 
 #: src/formhist/dialogs.c:151
 msgid "Form history manager"
@@ -4983,14 +4959,12 @@ msgid "Open in new ~window"
 msgstr "Otvori» v ~novom okne"
 
 #: src/viewer/text/link.c:902
-#, fuzzy
 msgid "Open in new ~tab"
-msgstr "Otvori» v ~novom okne"
+msgstr "Otvori» v ~novom tabe"
 
 #: src/viewer/text/link.c:905
-#, fuzzy
 msgid "Open in new tab in ~background"
-msgstr "Na pozadí"
+msgstr "Otvori» v novom tabe na pozadí"
 
 #: src/viewer/text/link.c:909
 msgid "~Download link"

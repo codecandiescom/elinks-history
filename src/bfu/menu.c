@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.76 2003/06/07 21:33:38 pasky Exp $ */
+/* $Id: menu.c,v 1.77 2003/06/07 21:33:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -753,7 +753,7 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 					int o = p;
 					unsigned char *text = menu->items[i].text;
 
-					if (!menu->items[i].no_intl) text = _(text, term);
+					if (!menu->items[i].no_intl) text = _(text, win->term);
 
 					if (text && text[0])
 						p += strlen(text) + 4

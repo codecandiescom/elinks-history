@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.139 2003/07/02 23:03:14 pasky Exp $ */
+/* $Id: view.c,v 1.140 2003/07/02 23:14:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,7 +174,7 @@ detach_formatted(struct f_data_c *scr)
 	}
 }
 
-static inline void
+void
 set_link(struct f_data_c *f)
 {
 	if (c_in_view(f)) return;
@@ -1024,7 +1024,7 @@ in_viewy(struct f_data_c *f, struct link *l)
 	return 0;
 }
 
-static inline int
+int
 in_view(struct f_data_c *f, struct link *l)
 {
 	assert(f && l);
@@ -1039,7 +1039,7 @@ c_in_view(struct f_data_c *f)
 		&& in_view(f, &f->f_data->links[f->vs->current_link]));
 }
 
-static int
+int
 next_in_view(struct f_data_c *f, int p, int d,
 	     int (*fn)(struct f_data_c *, struct link *),
 	     void (*cntr)(struct f_data_c *, struct link *))

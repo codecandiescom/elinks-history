@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.9 2003/07/02 22:59:38 pasky Exp $ */
+/* $Id: view.h,v 1.10 2003/07/02 23:14:17 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -21,6 +21,7 @@ void destroy_formatted(struct f_data *);
 /* void clear_formatted(struct f_data *); */
 void init_formatted(struct f_data *);
 void detach_formatted(struct f_data_c *);
+void set_link(struct f_data_c *f);
 
 /* void draw_doc(struct terminal *, struct f_data_c *, int); */
 void draw_formatted(struct session *);
@@ -52,6 +53,8 @@ void set_pos_x(struct f_data_c *, struct link *);
 void set_pos_y(struct f_data_c *, struct link *);
 void find_link(struct f_data_c *, int, int);
 int c_in_view(struct f_data_c *);
+int in_view(struct f_data_c *f, struct link *l);
+int next_in_view(struct f_data_c *f, int p, int d, int (*fn)(struct f_data_c *, struct link *), void (*cntr)(struct f_data_c *, struct link *));
 
 int goto_link(unsigned char *, unsigned char *, struct session *, int);
 unsigned char *get_form_url(struct session *, struct f_data_c *,

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.73 2003/12/30 21:49:26 pasky Exp $ */
+/* $Id: options.inc,v 1.74 2003/12/30 22:20:42 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1000,55 +1000,55 @@ struct option_info config_options_info[] = {
 		"Please use ui.colors.mono.dialog.generic.background instead.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Generic"),
-		"generic", "white", "black", "white", "black",
+		"generic", "black", "white", "black", "white",
 		N_("Generic dialog colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Frame"),
-		"frame", "white", "black", "white", "black",
+		"frame", "black", "white", "black", "white",
 		N_("Dialog frame colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Scrollbar"),
-		"scrollbar", "blue", "black", "black", "white",
+		"scrollbar", "black", "blue", "white", "black",
 		N_("Scrollbar colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Scrollbar selected"),
-		"scrollbar-selected", "green", "black", "white", "black",
+		"scrollbar-selected", "black", "green", "black", "white",
 		N_("Scrollbar selected colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Title"),
-		"title", "white", "darkred", "black", "gray",
+		"title", "darkred", "white", "gray", "black",
 		N_("Dialog title colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Text"),
-		"text", "white", "black", "white", "black",
+		"text", "black", "white", "black", "white",
 		N_("Dialog text colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Checkbox"),
-		"checkbox", "white", "darkred", "white", "black",
+		"checkbox", "darkred", "white", "black", "white",
 		N_("Dialog checkbox colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Checkbox label"),
-		"checkbox-label", "white", "black", "white", "black",
+		"checkbox-label", "black", "white", "black", "white",
 		N_("Dialog checkbox label colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Button"),
-		"button", "blue", "white", "white", "black",
+		"button", "white", "blue", "black", "white",
 		N_("Dialog button colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Selected button"),
-		"button-selected", "green", "yellow", "black", "white",
+		"button-selected", "yellow", "green", "white", "black",
 		N_("Dialog selected button colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Text field"),
-		"field", "blue", "white", "black", "gray",
+		"field", "white", "blue", "gray", "black",
 		N_("Dialog text field colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Text field text"),
-		"field-text", "blue", "yellow", "black", "gray",
+		"field-text", "yellow", "blue", "gray", "black",
 		N_("Dialog field text colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Meter"),
-		"meter", "blue", "white", "black", "gray",
+		"meter", "white", "blue", "gray", "black",
 		N_("Dialog meter colors.")),
 
 	INIT_OPT_COLORS(".dialog", N_("Shadow"),
@@ -1060,11 +1060,11 @@ struct option_info config_options_info[] = {
 		N_("Title bar colors.")),
 
 	INIT_OPT_COLORS(".title", N_("Generic title bar"),
-		"title-bar", "white", "black", "black", "gray",
+		"title-bar", "black", "white", "gray", "black",
 		N_("Generic title bar colors.")),
 
 	INIT_OPT_COLORS(".title", N_("Title bar text"),
-		"title-text", "white", "black", "black", "gray",
+		"title-text", "black", "white", "gray", "black",
 		N_("Title bar text colors.")),
 
 
@@ -1073,11 +1073,11 @@ struct option_info config_options_info[] = {
 		N_("Status bar colors.")),
 
 	INIT_OPT_COLORS(".status", N_("Generic status bar"),
-		"status-bar", "white", "black", "white", "black",
+		"status-bar", "black", "white", "black", "white",
 		N_("Generic status bar colors.")),
 
 	INIT_OPT_COLORS(".status", N_("Status bar text"),
-		"status-text", "white", "black", "white", "black",
+		"status-text", "black", "white", "black", "white",
 		N_("Status bar text colors.")),
 
 
@@ -1091,24 +1091,24 @@ struct option_info config_options_info[] = {
 		   "selected since they completed loading.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Unselected tab"),
-		"normal", "white", "black", "white", "black",
+		"normal", "black", "white", "black", "white",
 		N_("Unselected tab colors.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Loading tab"),
-		"loading", "white", "darkred", "white", "gray",
+		"loading", "darkred", "white", "gray", "white",
 		N_("Tab colors for tabs that are loading in the background.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Selected tab"),
-		"selected", "green", "black", "black", "gray",
+		"selected", "black", "green", "gray", "black",
 		N_("Selected tab colors.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Tab separator"),
-		"separator", "white", "brown", "white", "gray",
+		"separator", "brown", "white", "gray", "white",
 		N_("Tab separator colors.")),
 
 
 	INIT_OPT_COLORS("", N_("Searched strings"),
-		"searched", "lime", "black", "white", "black",
+		"searched", "black", "lime", "black", "white",
 		N_("Searched string highlight colors.")),
 
 

@@ -357,10 +357,11 @@ else
 			if test ! -z "$ssldir"; then
 				LIBS="-L$ssldir/lib -lssl -lcrypto $LIBS_X"
 				CFLAGS="$CFLAGS_X -I$ssldir/include"
-				if test "$CC" == "gcc"; then
-					# I'm not sure about compatibility here. --pasky
-					LIBS="$LIBS -R$ssldir/lib"
-				fi
+#				# FIXME: This created serious portability problems. --pasky
+#				if test "$CC" == "gcc"; then
+#					# I'm not sure about compatibility here. --pasky
+#					LIBS="$LIBS -R$ssldir/lib"
+#				fi
 			else
 				LIBS="-lssl -lcrypto $LIBS_X"
 			fi

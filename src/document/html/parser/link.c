@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.14 2004/06/22 23:08:32 zas Exp $ */
+/* $Id: link.c,v 1.15 2004/06/22 23:16:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,7 +266,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 {
 	html_context.has_link_lines = 1;
 	html_stack_dup(ELEMENT_KILLABLE);
-	ln_break(1, line_break_f, html_context.ff);
+	ln_break(1, html_context.line_break_f, html_context.ff);
 	mem_free_set(&format.link, NULL);
 	mem_free_set(&format.target, NULL);
 	mem_free_set(&format.title, NULL);
@@ -276,7 +276,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	format.target = stracpy(target);
 	format.fg = format.clink;
 	put_chrs(linkname, strlen(linkname), html_context.put_chars_f, html_context.ff);
-	ln_break(1, line_break_f, html_context.ff);
+	ln_break(1, html_context.line_break_f, html_context.ff);
 	kill_html_stack_item(&html_top);
 }
 

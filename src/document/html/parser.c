@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.457 2004/06/22 23:08:32 zas Exp $ */
+/* $Id: parser.c,v 1.458 2004/06/22 23:16:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,6 @@ get_target(unsigned char *a)
 	return v;
 }
 
-void (*line_break_f)(void *);
 void *(*special_f)(void *, enum html_special_type, ...);
 
 struct html_context html_context;
@@ -438,7 +437,7 @@ html_br(unsigned char *a)
 {
 	html_linebrk(a);
 	if (html_context.was_br)
-		ln_break(2, line_break_f, html_context.ff);
+		ln_break(2, html_context.line_break_f, html_context.ff);
 	else
 		html_context.was_br = 1;
 }
@@ -573,7 +572,7 @@ html_hr(unsigned char *a)
 		put_chrs(&r, 1, html_context.put_chars_f, html_context.ff);
 	}
 	special_f(html_context.ff, SP_NOWRAP, 0);
-	ln_break(2, line_break_f, html_context.ff);
+	ln_break(2, html_context.line_break_f, html_context.ff);
 	kill_html_stack_item(&html_top);
 }
 
@@ -709,7 +708,7 @@ html_li(unsigned char *a)
 	 * for us. */
 	if (html_context.was_li) {
 		html_context.line_breax = 0;
-		ln_break(1, line_break_f, html_context.ff);
+		ln_break(1, html_context.line_break_f, html_context.ff);
 	}
 
 	/*kill_html_stack_until(0, "", "UL", "OL", NULL);*/
@@ -784,7 +783,7 @@ html_dl(unsigned char *a)
 	par_format.dd_margin = par_format.leftmargin;
 	html_top.type = ELEMENT_DONT_KILL;
 	if (!(par_format.flags & P_COMPACT)) {
-		ln_break(2, line_break_f, html_context.ff);
+		ln_break(2, html_context.line_break_f, html_context.ff);
 		html_top.linebreak = 2;
 	}
 }
@@ -796,7 +795,7 @@ html_dt(unsigned char *a)
 	par_format.align = AL_LEFT;
 	par_format.leftmargin = par_format.dd_margin;
 	if (!(par_format.flags & P_COMPACT) && !has_attr(a, "compact"))
-		ln_break(2, line_break_f, html_context.ff);
+		ln_break(2, html_context.line_break_f, html_context.ff);
 }
 
 void
@@ -1295,7 +1294,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	html_context.startf = start;
 	html_context.eofff = end;
 	html_context.put_chars_f = put_chars;
-	line_break_f = line_break;
+	html_context.line_break_f = line_break;
 	special_f = special;
 	scan_http_equiv(start, end, head, title);
 

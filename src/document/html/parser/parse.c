@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.60 2004/06/22 23:08:32 zas Exp $ */
+/* $Id: parse.c,v 1.61 2004/06/22 23:16:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -648,7 +648,7 @@ next_break:
 				if (*html == ASCII_CR && html < eof - 1
 				    && html[1] == ASCII_LF)
 					html++;
-				ln_break(1, line_break_f, f);
+				ln_break(1, html_context.line_break_f, f);
 				html++;
 				if (*html == ASCII_CR || *html == ASCII_LF) {
 					html_context.line_breax = 0;
@@ -714,7 +714,7 @@ ng:;
 	}
 
 	if (noupdate) put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
-	ln_break(1, line_break_f, f);
+	ln_break(1, html_context.line_break_f, f);
 	html_context.putsp = -1;
 	html_context.position = 0;
 	html_context.was_br = 0;
@@ -736,7 +736,7 @@ start_element(struct element_info *ei,
 		return html;
 	}
 
-	ln_break(ei->linebreak, line_break_f, f);
+	ln_break(ei->linebreak, html_context.line_break_f, f);
 
 	a = get_attr_val(attr, "id");
 	if (a) {
@@ -758,7 +758,7 @@ start_element(struct element_info *ei,
 	if (ei->func == html_table && global_doc_opts->tables
 	    && html_context.table_level < HTML_MAX_TABLE_LEVEL) {
 		format_table(attr, html, eof, &html, f);
-		ln_break(2, line_break_f, f);
+		ln_break(2, html_context.line_break_f, f);
 		return html;
 	}
 	if (ei->func == html_select) {
@@ -869,7 +869,7 @@ end_element(struct element_info *ei,
 		for (elt = e; elt != (void *) &html_stack; elt = elt->prev)
 			if (elt->linebreak > lnb)
 				lnb = elt->linebreak;
-		ln_break(lnb, line_break_f, f);
+		ln_break(lnb, html_context.line_break_f, f);
 		while (e->prev != (void *) &html_stack)
 			kill_html_stack_item(e->prev);
 		kill_html_stack_item(e);

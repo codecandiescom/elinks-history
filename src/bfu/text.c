@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.54 2003/11/28 16:32:36 jonas Exp $ */
+/* $Id: text.c,v 1.55 2003/11/28 16:55:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,8 +229,9 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	}
 
 	if (current != widget_data->info.text.current) {
-		widget_data->info.text.current = current;
 		int y = widget_data->y;
+
+		widget_data->info.text.current = current;
 
 		draw_area(term, widget_data->x, widget_data->y,
 			  widget_data->w, widget_data->h, ' ', 0,

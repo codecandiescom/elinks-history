@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.55 2004/09/25 01:04:12 jonas Exp $ */
+/* $Id: leds.c,v 1.56 2004/10/06 13:48:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,6 +154,8 @@ draw_leds(struct session *ses)
 	int ypos = term->height - 1;
 	int timerlen = 0;
 
+	term->leds_length = 0;
+
 	/* This should be done elsewhere, but this is very nice place where we
 	 * could do that easily. */
 	if (get_opt_int("ui.timer.enable") == 2) {
@@ -164,6 +166,7 @@ draw_leds(struct session *ses)
 		led_color = get_bfu_color(term, "status.status-text");
 		if (!led_color) goto end;
 
+		term->leds_length += timerlen;
 		for (i = timerlen - 1; i >= 0; i--)
 			draw_char(term, xpos - (timerlen - i), ypos, s[i], 0, led_color);
 	}
@@ -181,10 +184,11 @@ draw_leds(struct session *ses)
 		time_t curtime = time(NULL);
 		struct tm *loctime = localtime(&curtime);
 		int i, length;
-		int basepos = xpos - timerlen - 1;
+		int basepos = xpos - timerlen;
 
 		length = strftime(s, 30, get_leds_clock_format(), loctime);
 		s[length] = '\0';
+		term->leds_length += length;
 		for (i = length - 1; i >= 0; i--)
 			draw_char(term, basepos - (length - i), ypos, s[i], 0, led_color);
 	}
@@ -202,6 +206,8 @@ draw_leds(struct session *ses)
 	}
 
 	draw_char(term, xpos + LEDS_COUNT + 1, ypos, ']', 0, led_color);
+
+	term->leds_length += LEDS_COUNT + 2;
 
 end:
 	/* Redraw each 100ms. */

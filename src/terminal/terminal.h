@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.43 2004/09/12 00:38:28 miciah Exp $ */
+/* $Id: terminal.h,v 1.44 2004/10/06 13:48:31 zas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -107,6 +107,11 @@ struct terminal {
 
 	/* The current tab number. */
 	int current_tab;
+
+#ifdef CONFIG_LEDS
+	/* Current length of leds part of status bar. */
+	int leds_length;
+#endif
 
 	/* The type of environment this terminal lives in. */
 	enum term_env_type environment;

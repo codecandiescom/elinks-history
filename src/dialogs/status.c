@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.86 2004/09/29 15:49:27 jonas Exp $ */
+/* $Id: status.c,v 1.87 2004/10/06 13:48:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,6 +264,8 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		}
 
 		if (!msg) {
+			/* FIXME: improve that, values should depend on
+			 * context (leds, digital clock, ...). --Zas */
 			int full = term->width > 130;
 			int wide = term->width > 80;
 
@@ -304,14 +306,12 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 
 #ifdef CONFIG_LEDS
 		if (ses->status.show_leds)
-			xend -= LEDS_COUNT + 2;
+			xend -= term->leds_length;
 #endif
-		/* FIXME: Figure out how to substract with of the digital clock
-		 * so the progress bar is not drawn on top of it. --jonas */
 
-		if (xend - msglen < 6) return;
-		width = int_min(20, xend - msglen - 1);
-
+		width = int_max(0, xend - msglen - tab_info_len - 1);
+		if (width < 6) return;
+		int_upper_bound(&width, 20);
 		download_progress_bar(term, xend - width, term->height - 1,
 				      width, NULL, NULL,
 				      stat->prg->pos, stat->prg->size);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.218 2004/06/01 00:03:41 jonas Exp $ */
+/* $Id: uri.c,v 1.219 2004/06/01 00:09:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -868,9 +868,9 @@ parse_uri:
 
 	case URI_ERRNO_NO_HOST_SLASH:
 	{
-		int offset = uri->port
-			   ? uri->port + uri->portlen - struri(&uri)
-			   : uri->host + uri->hostlen - struri(&uri);
+		int offset = uri.port
+			   ? uri.port + uri.portlen - struri(&uri)
+			   : uri.host + uri.hostlen - struri(&uri);
 
 		assertm(uri.host, "uri.host not set after no host slash error");
 		insert_in_string(&newurl, offset, "/", 1);

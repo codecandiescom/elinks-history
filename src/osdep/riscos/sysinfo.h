@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.3 2004/08/14 23:00:08 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.4 2004/08/14 23:34:21 jonas Exp $ */
 
 #ifndef EL__OSDEP_RISCOS_SYSINFO_H
 #define EL__OSDEP_RISCOS_SYSINFO_H
@@ -6,7 +6,6 @@
 #ifdef CONFIG_RISCOS
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
-#define SYSTEM_ID SYS_RISCOS
 #define SYSTEM_NAME "RISC OS"
 #define SYSTEM_STR "riscos"
 #define DEFAULT_SHELL "gos"

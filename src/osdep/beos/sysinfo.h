@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.4 2004/08/14 23:08:24 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.5 2004/08/14 23:34:20 jonas Exp $ */
 
 #ifndef EL__OSDEP_BEOS_SYSINFO_H
 #define EL__OSDEP_BEOS_SYSINFO_H
@@ -11,7 +11,6 @@ static inline int dir_sep(char x) { return x == '/'; }
 #define FS_UNIX_USERS
 #include <pwd.h>
 #include <grp.h>
-#define SYSTEM_ID SYS_BEOS
 #define SYSTEM_NAME "BeOS"
 #define SYSTEM_STR "beos"
 #define DEFAULT_SHELL "/bin/sh"

@@ -1,15 +1,7 @@
-/* $Id: system.h,v 1.18 2004/08/14 23:29:35 jonas Exp $ */
+/* $Id: system.h,v 1.19 2004/08/14 23:34:19 jonas Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
-
-
-/* System-type identifier */
-#define SYS_UNIX	1
-#define SYS_OS2		2
-#define SYS_WIN32	3
-#define SYS_BEOS	4
-#define SYS_RISCOS	5
 
 #if !defined(CONFIG_BEOS) \
      && !defined(CONFIG_OS2) \

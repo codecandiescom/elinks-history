@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.3 2004/08/14 23:29:36 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.4 2004/08/14 23:34:23 jonas Exp $ */
 
 #ifndef EL__OSDEP_WIN32_SYSINFO_H
 #define EL__OSDEP_WIN32_SYSINFO_H
@@ -7,7 +7,6 @@
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 /*#define NO_ASYNC_LOOKUP*/
-#define SYSTEM_ID SYS_WIN32
 #define SYSTEM_NAME "Win32"
 #define SYSTEM_STR "win32"
 #define DEFAULT_SHELL "cmd.exe"

@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.4 2004/08/14 23:23:47 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.5 2004/08/14 23:34:22 jonas Exp $ */
 
 #ifndef EL__OSDEP_UNIX_SYSINFO_H
 #define EL__OSDEP_UNIX_SYSINFO_H
@@ -12,7 +12,6 @@ static inline int dir_sep(char x) { return x == '/'; }
 #define FS_UNIX_USERS
 #include <pwd.h>
 #include <grp.h>
-#define SYSTEM_ID SYS_UNIX
 #define SYSTEM_NAME "Unix"
 #define SYSTEM_STR "unix"
 #define DEFAULT_SHELL "/bin/sh"

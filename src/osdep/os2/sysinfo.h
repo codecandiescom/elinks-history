@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.4 2004/08/14 23:19:00 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.5 2004/08/14 23:34:21 jonas Exp $ */
 
 #ifndef EL__OSDEP_OS2_SYSINFO_H
 #define EL__OSDEP_OS2_SYSINFO_H
@@ -7,7 +7,6 @@
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 /*#define NO_ASYNC_LOOKUP*/
-#define SYSTEM_ID SYS_OS2
 #define SYSTEM_NAME "OS/2"
 #define SYSTEM_STR "os2"
 #define DEFAULT_SHELL "cmd.exe"

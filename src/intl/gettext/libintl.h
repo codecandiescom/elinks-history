@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.21 2004/09/04 11:19:11 jonas Exp $ */
+/* $Id: libintl.h,v 1.22 2004/12/16 15:05:12 zas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -42,7 +42,7 @@ _(unsigned char *msg, struct terminal *term)
 
 	if (!term) goto do_lookup;
 
-	new_charset = get_opt_int_tree(term->spec, "charset");
+	new_charset = get_opt_codepage_tree(term->spec, "charset");
 	/* Prevent useless switching. */
 	if (current_charset != new_charset) {
 		current_charset = new_charset;

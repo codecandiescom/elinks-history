@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.133 2004/11/26 17:23:45 witekfl Exp $ */
+/* $Id: renderer.c,v 1.134 2004/12/16 15:05:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -391,7 +391,7 @@ render_document_frames(struct session *ses, int no_cache)
 	if (!get_opt_int_tree(ses->tab->term->spec, "underline"))
 		doc_opts.color_flags |= COLOR_ENHANCE_UNDERLINE;
 
-	doc_opts.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
+	doc_opts.cp = get_opt_codepage_tree(ses->tab->term->spec, "charset");
 	doc_opts.no_cache = no_cache & 1;
 	doc_opts.gradual_rerendering = !!(no_cache & 2);
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.259 2004/01/07 00:21:48 jonas Exp $ */
+/* $Id: menu.c,v 1.260 2004/01/07 00:38:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,6 +260,12 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	do_menu(term, menu, ses, 1);
 }
 
+static void
+do_submenu(struct terminal *term, void *menu, struct session *ses)
+{
+	do_menu(term, menu, ses, 1);
+}
+
 
 static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("Open new ~tab"), NULL, ACT_OPEN_NEW_TAB, open_in_new_tab, (void *) 0, 0),
@@ -405,19 +411,13 @@ static struct menu_item ext_menu[] = {
 	NULL_MENU_ITEM
 };
 
-static inline void
-do_ext_menu(struct terminal *term, void *xxx, struct session *ses)
-{
-	do_menu(term, ext_menu, ses, 1);
-}
-
 static struct menu_item setup_menu[] = {
 #ifdef ENABLE_NLS
 	INIT_MENU_ITEM(N_("~Language"), NULL, ACT_NONE, menu_language_list, NULL, SUBMENU),
 #endif
 	INIT_MENU_ITEM(N_("C~haracter set"), NULL, ACT_NONE, charset_list, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("~Terminal options"), NULL, ACT_SHOW_TERM_OPTIONS, terminal_options, NULL, 0),
-	INIT_MENU_ITEM(N_("File ~extensions"), NULL, ACT_NONE, do_ext_menu, NULL, SUBMENU),
+	INIT_MENU_ITEM(N_("File ~extensions"), NULL, ACT_NONE, do_submenu, ext_menu, SUBMENU),
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("~Options manager"), NULL, ACT_OPTIONS_MANAGER, menu_options_manager, NULL, 0),
 	INIT_MENU_ITEM(N_("~Keybinding manager"), NULL, ACT_KEYBINDING_MANAGER, menu_keybinding_manager, NULL, 0),
@@ -451,18 +451,6 @@ static struct menu_item tools_menu[] = {
 };
 
 static void
-do_tools_menu(struct terminal *term, void *xxx, struct session *ses)
-{
-	do_menu(term, tools_menu, ses, 1);
-}
-
-static void
-do_view_menu(struct terminal *term, void *xxx, struct session *ses)
-{
-	do_menu(term, view_menu, ses, 1);
-}
-
-static void
 do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	if (!get_opt_int_tree(cmdline_options, "anonymous"))
@@ -471,19 +459,13 @@ do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
 		do_menu(term, setup_menu_anon, ses, 1);
 }
 
-static inline void
-do_help_menu(struct terminal *term, void *xxx, struct session *ses)
-{
-	do_menu(term, help_menu, ses, 1);
-}
-
 static struct menu_item main_menu[] = {
 	INIT_MENU_ITEM(N_("~File"), NULL, ACT_NONE, do_file_menu, NULL, FREE_LIST | SUBMENU),
-	INIT_MENU_ITEM(N_("~View"), NULL, ACT_NONE, do_view_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~View"), NULL, ACT_NONE, do_submenu, view_menu, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Link"), NULL, ACT_NONE, link_menu, NULL, FREE_LIST | SUBMENU),
-	INIT_MENU_ITEM(N_("~Tools"), NULL, ACT_NONE, do_tools_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~Tools"), NULL, ACT_NONE, do_submenu, tools_menu, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Setup"), NULL, ACT_NONE, do_setup_menu, NULL, FREE_LIST | SUBMENU),
-	INIT_MENU_ITEM(N_("~Help"), NULL, ACT_NONE, do_help_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~Help"), NULL, ACT_NONE, do_submenu, help_menu, FREE_LIST | SUBMENU),
 	NULL_MENU_ITEM
 };
 

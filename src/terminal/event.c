@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.57 2004/06/13 12:29:02 jonas Exp $ */
+/* $Id: event.c,v 1.58 2004/06/13 17:42:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,7 +171,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 
 		/* Either the initialization of the first session failed or we
 		 * are doing a remote session so quit.*/
-		if (!decode_session_info(term, info->length, (int *) info->data)) {
+		if (!decode_session_info(term, info)) {
 			destroy_terminal(term);
 			return 0;
 		}

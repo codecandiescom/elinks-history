@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.151 2004/06/13 12:48:57 jonas Exp $ */
+/* $Id: session.h,v 1.152 2004/06/13 17:42:00 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -15,6 +15,7 @@ struct link;
 struct location;
 struct session_status;
 struct term_event;
+struct terminal_info;
 struct terminal;
 struct uri;
 struct window;
@@ -191,7 +192,7 @@ struct string *encode_session_info(struct string *info, struct list_head *url_li
 
 /* Returns zero if the info was remote sessions or if it failed to create any
  * sessions. */
-int decode_session_info(struct terminal *term, int len, const int *data);
+int decode_session_info(struct terminal *term, struct terminal_info *info);
 
 /* Registers a base session and returns it's id. Value <= 0 means error. */
 int add_session_info(struct session *ses, struct uri *uri);

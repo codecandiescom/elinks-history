@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.34 2004/07/20 22:05:58 zas Exp $ */
+/* $Id: proxy.c,v 1.35 2004/07/20 22:07:47 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -120,7 +120,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		if (ftp_proxy && *ftp_proxy) {
 			if (!strncasecmp(ftp_proxy, "ftp://", 6))
 				ftp_proxy += 6;
-			else if(!strncasecmp(ftp_proxy, "http://", 7))
+			else if (!strncasecmp(ftp_proxy, "http://", 7))
 				ftp_proxy += 7;
 
 			protocol_proxy = ftp_proxy;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.188 2003/10/24 22:30:50 pasky Exp $ */
+/* $Id: session.c,v 1.189 2003/10/24 22:57:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1492,7 +1492,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	fn = get_protocol_external_handler(url);
 	if (fn) {
 		fn(ses, url);
-		goto end;
+		return;
 	}
 
 	ses->reloadlevel = cache_mode;
@@ -1504,7 +1504,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 					 S_BAD_URL, PRI_CANCEL, 0 };
 
 		print_error_dialog(ses, &stat);
-		goto end;
+		return;
 	}
 
 	pos = extract_position(u);
@@ -1518,7 +1518,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 				mem_free(ses->goto_position);
 			ses->goto_position = pos;
 
-			goto end;
+			return;
 		}
 	}
 
@@ -1537,8 +1537,6 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 		 pos, end_load, 0);
 
 	/* abort_loading(ses); */
-
-end:
 }
 
 static void

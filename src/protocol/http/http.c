@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.29 2002/07/09 17:32:49 pasky Exp $ */
+/* $Id: http.c,v 1.30 2002/07/09 21:08:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,12 +33,21 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+
 struct http_connection_info {
 	enum blacklist_flags bl_flags;
 	int http10;
 	int close;
+
+#define LEN_CHUNKED -2 /* == we get data in unknown number of chunks */
+#define LEN_FINISHED 0
 	int length;
+
 	int version;
+
+	/* Either bytes coming in this chunk yet or "parser state". */
+#define CHUNK_DATA_END	-2
+#define CHUNK_SIZE	-1
 	int chunk_remaining;
 };
 
@@ -124,10 +133,11 @@ void http_end_request(struct connection *c)
 #endif
 		}
 	}
-	if (c->info && !((struct http_connection_info *)c->info)->close
-	&& (!c->ssl) /* We won't keep alive ssl connections */
-	&& (!get_opt_int("protocol.http.bugs.post_no_keepalive")
-	    || !strchr(c->url, POST_CHAR))) {
+
+	if (c->info && !((struct http_connection_info *) c->info)->close
+	    && (!c->ssl) /* We won't keep alive ssl connections */
+	    && (!get_opt_int("protocol.http.bugs.post_no_keepalive")
+	        || !strchr(c->url, POST_CHAR))) {
 		add_keepalive_socket(c, HTTP_KEEPALIVE_TIMEOUT);
 	} else {
 		abort_connection(c);
@@ -548,7 +558,6 @@ int is_line_in_buffer(struct read_buffer *rb)
  *		info->length is being changed (it depends on if chunked mode is
  *		used or not).
  */
-
 static unsigned char *
 uncompress_data(struct connection *conn, unsigned char *data, int len,
 		int *new_len)
@@ -564,8 +573,8 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 	int finishing = 0;
 	unsigned char *output;
 
-	length_of_block = (info->length == -2 ? &info->chunk_remaining
-					      : &info->length);
+	length_of_block = (info->length == LEN_CHUNKED ? &info->chunk_remaining
+						       : &info->length);
 	if (!*length_of_block) finishing = 1;
 
 	if (conn->content_encoding == ENCODING_NONE) {
@@ -643,108 +652,152 @@ finish:
 	return output;
 }
 
-void read_http_data(struct connection *c, struct read_buffer *rb)
+void read_http_data(struct connection *conn, struct read_buffer *rb)
 {
-	struct http_connection_info *info = c->info;
+	struct http_connection_info *info = conn->info;
 
-	set_timeout(c);
+	set_timeout(conn);
 
 	if (rb->close == 2) {
-		/* flush uncompression */
-		if (c->content_encoding && info->length == -1) {
+		if (conn->content_encoding && info->length == -1) {
+			/* Flush uncompression first. */
 			info->length = 0;
 		} else {
-			setcstate(c, S_OK);
-			http_end_request(c);
+thats_all_folks:
+			setcstate(conn, S_OK);
+			http_end_request(conn);
 			return;
 		}
 	}
 
-	if (info->length != -2) {
+	if (info->length != LEN_CHUNKED) {
 		unsigned char *data;
-		int dl;
-		int l = rb->len;
+		int data_len;
+		int len = rb->len;
 
-		if (info->length >= 0 && info->length < l) l = info->length;
-		c->received += l;
-		data = uncompress_data(c, rb->data, l, &dl);
-		if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
-		if (data && data != rb->data) mem_free(data);
-		c->from += dl;
-		kill_buffer_data(rb, l);
-		if (!info->length && !rb->close) {
-			setcstate(c, S_OK);
-			http_end_request(c);
-			return;
+		if (info->length >= 0 && info->length < len) {
+			/* We won't read more than we have to go. */
+			len = info->length;
 		}
+
+		conn->received += len;
+
+		data = uncompress_data(conn, rb->data, len, &data_len);
+
+		if (add_fragment(conn->cache, conn->from, data, data_len) == 1)
+			conn->tries = 0;
+
+		if (data && data != rb->data) mem_free(data);
+
+		conn->from += data_len;
+
+		kill_buffer_data(rb, len);
+
+		if (!info->length && !rb->close)
+			goto thats_all_folks;
+
 	} else {
-		next_chunk:
-		if (info->chunk_remaining == -2) {
-			int l;
-			if ((l = is_line_in_buffer(rb))) {
+		/* Chunked. Good luck! */
+		/* See RFC2616, section 3.6.1. Basically, it looks like:
+		 * 1234 ; a = b ; c = d\r\n
+		 * aklkjadslkfjalkfjlkajkljfdkljdsfkljdf*1234\r\n
+		 * 0\r\n
+		 * \r\n */
+next_chunk:
+		if (info->chunk_remaining == CHUNK_DATA_END) {
+			int l = is_line_in_buffer(rb);
+
+			if (l) {
 				if (l == -1) {
-					setcstate(c, S_HTTP_ERROR);
-					abort_connection(c);
+					/* Invalid character in buffer. */
+					setcstate(conn, S_HTTP_ERROR);
+					abort_connection(conn);
 					return;
 				}
+
+				/* Remove everything to the EOLN. */
 				kill_buffer_data(rb, l);
 				if (l <= 2) {
-					setcstate(c, S_OK);
-					http_end_request(c);
-					return;
+					/* Empty line. */
+					goto thats_all_folks;
 				}
 				goto next_chunk;
 			}
-		} else if (info->chunk_remaining == -1) {
-			int l;
-			if ((l = is_line_in_buffer(rb))) {
+
+		} else if (info->chunk_remaining == CHUNK_SIZE) {
+			int l = is_line_in_buffer(rb);
+
+			if (l) {
 				unsigned char *de;
 				int n = 0;
-				if (l != -1) n = strtol(rb->data, (char **)&de, 16);
+
+				if (l != -1)
+					n = strtol(rb->data, (char **)&de, 16);
+
 				if (l == -1 || de == rb->data) {
-					setcstate(c, S_HTTP_ERROR);
-					abort_connection(c);
+					setcstate(conn, S_HTTP_ERROR);
+					abort_connection(conn);
 					return;
 				}
+
+				/* Remove everything to the EOLN. */
 				kill_buffer_data(rb, l);
 				info->chunk_remaining = n;
 				goto next_chunk;
 			}
+
 		} else {
 			unsigned char *data;
-			int dl;
-			int l = info->chunk_remaining;
-			if (l > rb->len) l = rb->len;
-			c->received += l;
-			data = uncompress_data(c, rb->data, l, &dl);
-			if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
+			int data_len;
+			int len = info->chunk_remaining;
+
+			/* Maybe everything neccessary didn't come yet.. */
+			if (len > rb->len) len = rb->len;
+			conn->received += len;
+
+			data = uncompress_data(conn, rb->data, len, &data_len);
+
+			if (add_fragment(conn->cache, conn->from,
+					 data, data_len) == 1)
+				conn->tries = 0;
+
 			if (data && data != rb->data) mem_free(data);
-			c->from += dl;
-			kill_buffer_data(rb, l);
-			if (!l && !info->chunk_remaining) {
-				info->chunk_remaining = -2;
+
+			conn->from += data_len;
+
+			kill_buffer_data(rb, len);
+
+			if (!len && !info->chunk_remaining) {
+				/* Whole chunk loaded. */
+				info->chunk_remaining = CHUNK_DATA_END;
 				goto next_chunk;
 			}
+
 			if (!info->chunk_remaining && rb->len >= 1) {
-				if (rb->data[0] == 10) kill_buffer_data(rb, 1);
-				else {
-					if (rb->data[0] != 13 || (rb->len >= 2 && rb->data[1] != 10)) {
-						setcstate(c, S_HTTP_ERROR);
-						abort_connection(c);
+				/* Eat newline succeeding each chunk. */
+				if (rb->data[0] == 10) {
+					kill_buffer_data(rb, 1);
+				} else {
+					if (rb->data[0] != 13
+					    || (rb->len >= 2
+					        && rb->data[1] != 10)) {
+						setcstate(conn, S_HTTP_ERROR);
+						abort_connection(conn);
 						return;
 					}
 					if (rb->len < 2) goto read_more;
 					kill_buffer_data(rb, 2);
 				}
-				info->chunk_remaining = -1;
+				info->chunk_remaining = CHUNK_SIZE;
 				goto next_chunk;
 			}
 		}
 
 	}
-	read_more:
-	read_from_socket(c, c->sock1, rb, read_http_data);
-	setcstate(c, S_TRANS);
+
+read_more:
+	read_from_socket(conn, conn->sock1, rb, read_http_data);
+	setcstate(conn, S_TRANS);
 }
 
 int get_header(struct read_buffer *rb)
@@ -934,8 +987,8 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 	} else if (!c->unrestartable && !c->from) c->unrestartable = 1;
 	if ((d = parse_http_header(e->head, "Transfer-Encoding", NULL))) {
 		if (!strcasecmp(d, "chunked")) {
-			info->length = -2;
-			info->chunk_remaining = -1;
+			info->length = LEN_CHUNKED;
+			info->chunk_remaining = CHUNK_SIZE;
 		}
 		mem_free(d);
 	}
@@ -982,11 +1035,14 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 	read_http_data(c, rb);
 }
 
-void http_get_header(struct connection *c)
+void http_get_header(struct connection *conn)
 {
 	struct read_buffer *rb;
-	set_timeout(c);
-	if (!(rb = alloc_read_buffer(c))) return;
+
+	set_timeout(conn);
+
+	rb = alloc_read_buffer(conn);
+	if (!rb) return;
 	rb->close = 1;
-	read_from_socket(c, c->sock1, rb, http_got_header);
+	read_from_socket(conn, conn->sock1, rb, http_got_header);
 }

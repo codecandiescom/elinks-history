@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.24 2004/06/22 22:21:08 zas Exp $ */
+/* $Id: forms.c,v 1.25 2004/06/22 22:24:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,7 +135,7 @@ find_form_for_input(unsigned char *i)
 	if (last_input_tag && i > last_input_tag)
 		s = last_form_tag;
 	else
-		s = startf;
+		s = html_context.startf;
 
 se:
 	while (s < i && *s != '<') {
@@ -226,9 +226,9 @@ no_type_attr:
 	if (!fc) return;
 
 	fc->type = type;
-	fc->form_num = last_form_tag - startf;
+	fc->form_num = last_form_tag - html_context.startf;
 	fc->ctrl_num = a - last_form_tag;
-	fc->position = a - startf;
+	fc->position = a - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(a, "name");
@@ -282,9 +282,9 @@ no_type_attr:
 	if (!fc) return;
 
 	fc->type = type;
-	fc->form_num = last_form_tag - startf;
+	fc->form_num = last_form_tag - html_context.startf;
 	fc->ctrl_num = a - last_form_tag;
-	fc->position = a - startf;
+	fc->position = a - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
 	fc->target = null_or_stracpy(form.target);
@@ -438,9 +438,9 @@ sp:
 	}
 
 end_parse:
-	fc->form_num = last_form_tag - startf;
+	fc->form_num = last_form_tag - html_context.startf;
 	fc->ctrl_num = a - last_form_tag;
-	fc->position = a - startf;
+	fc->position = a - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
 	fc->type = FC_CHECKBOX;
@@ -591,9 +591,9 @@ end_parse:
 		goto abort;
 	}
 
-	fc->form_num = last_form_tag - startf;
+	fc->form_num = last_form_tag - html_context.startf;
 	fc->ctrl_num = attr - last_form_tag;
-	fc->position = attr - startf;
+	fc->position = attr - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(attr, "name");
@@ -663,9 +663,9 @@ pp:
 	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) return;
 
-	fc->form_num = last_form_tag - startf;
+	fc->form_num = last_form_tag - html_context.startf;
 	fc->ctrl_num = attr - last_form_tag;
-	fc->position = attr - startf;
+	fc->position = attr - html_context.startf;
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(attr, "name");

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.450 2004/06/22 22:21:08 zas Exp $ */
+/* $Id: parser.c,v 1.451 2004/06/22 22:24:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,7 +155,6 @@ void *(*special_f)(void *, enum html_special_type, ...);
 
 struct html_context html_context;
 
-unsigned char *startf;
 
 inline void
 ln_break(int n, void (*line_break)(void *), void *f)
@@ -1290,7 +1289,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	assertm(list_empty(html_stack), "something on html stack");
 	if_assert_failed init_list(html_stack);
 
-	startf = start;
+	html_context.startf = start;
 	html_context.eofff = end;
 	put_chars_f = put_chars;
 	line_break_f = line_break;

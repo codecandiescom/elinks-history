@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.16 2004/06/22 22:21:08 zas Exp $ */
+/* $Id: internal.h,v 1.17 2004/06/22 22:24:18 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -40,6 +40,7 @@ struct html_context {
 
 	/* For parser/forms.c: */
 	unsigned char *eofff;
+	unsigned char *startf;
 };
 
 extern struct html_context html_context;
@@ -54,8 +55,6 @@ unsigned char *get_target(unsigned char *a);
 void import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len);
 
 /* For parser/forms.c: */
-
-extern unsigned char *startf;
 
 extern unsigned char *last_form_tag;
 extern unsigned char *last_form_attr;

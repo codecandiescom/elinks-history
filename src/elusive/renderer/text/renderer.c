@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.9 2003/01/17 23:16:15 pasky Exp $ */
+/* $Id: renderer.c,v 1.10 2003/01/18 00:36:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,11 @@
 /* TODO: Support for incremental rendering! --pasky */
 
 
+struct text_renderer_state {
+	int last_display_type; /* 0 -> inline, 1 -> block */
+};
+
+
 /* FIXME: Code duplication with Mikulas' renderer! */
 
 #ifdef ALIGN
@@ -42,7 +47,7 @@ realloc_lines(struct f_data *f_data, int y)
 	int newsize = ALIGN(y + 1);
 
 	if (newsize >= ALIGN(f_data->y)
-			&& (!f_data->data || f_data->data->size < newsize)) {
+	    && (!f_data->data || f_data->data->size < newsize)) {
 		struct line *l;
 
 		l = mem_realloc(f_data->data, newsize * sizeof(struct line));
@@ -71,7 +76,7 @@ realloc_line(struct f_data *f_data, int y, int x)
 	int newsize = ALIGN(x + 1);
 
 	if (newsize >= ALIGN(f_data->data[y].l)
-			&& (!f_data->data[y].d || f_data->data[y].dsize < newsize)) {
+	    && (!f_data->data[y].d || f_data->data[y].dsize < newsize)) {
 		chr *l;
 
 		l = mem_realloc(f_data->data[y].d, newsize * sizeof(chr));
@@ -101,34 +106,43 @@ realloc_line(struct f_data *f_data, int y, int x)
 static void
 render_box(struct renderer_state *state, struct layout_box *box)
 {
+	struct text_renderer_state *rstate = state->data;
 	struct f_data_c *console_frame_data = state->output;
 	struct f_data *frame_data = console_frame_data->f_data;
+	int y = frame_data->y;
 	struct layout_box *leaf_box;
 
+	{
+		unsigned char *display = get_box_property(box, "display");
+
+		if (display && !strcmp(display, "block")) {
+			if (!rstate->last_display_type)
+				realloc_lines(frame_data, ++y);
+			rstate->last_display_type = 1;
+		} else {
+			rstate->last_display_type = 0;
+		}
+	}
+
+	y--;
 	switch (box->data_type) {
 		case RECT_NONE:
 			break;
 		case RECT_TEXT:
 			{
 				struct layout_box_text *data = box->data;
-				int y = frame_data->y, i;
+				int i, l = frame_data->data[y].l;
 
-				if (!strcmp(get_box_property(box, "display"),
-					    "block")) {
-					realloc_lines(frame_data, y + 1);
-				}
+				realloc_line(frame_data, y, l + data->len);
 
-				realloc_line(frame_data, y,
-					     frame_data->data[y].l + data->len);
-
-				for (i = frame_data->data[y].l - data->len;
-				     i < data->len; i++) {
-					frame_data->data[y].d[i] =
-						data->str[i - frame_data->data[y].l];
+				for (i = 0; i < data->len; i++) {
+					frame_data->data[y].d[i + l] =
+								data->str[i];
 				}
 			}
 			break;
 	}
+	y++;
 
 	foreach (leaf_box, box->leafs) {
 		render_box(state, leaf_box);
@@ -141,6 +155,9 @@ text_init(struct renderer_state *state)
 {
 	struct document_options *document_options = state->input;
 	struct f_data_c *console_frame_data;
+
+	state->data = mem_calloc(1, sizeof(struct text_renderer_state));
+	if (!state->data) return;
 
 	state->layouter_state = elusive_layouter_init(state->layouter,
 							state->parser);

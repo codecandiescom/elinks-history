@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.29 2003/01/17 22:04:41 pasky Exp $ */
+/* $Id: parser.c,v 1.30 2003/01/18 00:36:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -465,7 +465,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 		pstate = html_state_pop(state);
 	}
 	if (!pstate->data.attr.ate_eq && *html != '=') {
-		add_property(state->current->properties,
+		add_property(&state->current->properties,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			html, 0);
 		pstate = html_state_pop(state);
@@ -502,7 +502,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 
 		pstate = html_state_pop(state);
 
-		add_property(state->current->properties,
+		add_property(&state->current->properties,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			attr, attr_len - html_len);
 

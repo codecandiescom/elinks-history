@@ -1,5 +1,5 @@
 /* Properties utility tools */
-/* $Id: property.c,v 1.1 2003/01/17 22:04:41 pasky Exp $ */
+/* $Id: property.c,v 1.2 2003/01/18 00:36:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,11 +15,11 @@
 
 
 struct property *
-get_property(struct list_head properties, unsigned char *name)
+get_property(struct list_head *properties, unsigned char *name)
 {
 	struct property *property;
 
-	foreach (property, properties) {
+	foreach (property, *properties) {
 		if (strncasecmp(name, property->name, property->namelen))
 			continue;
 
@@ -30,7 +30,7 @@ get_property(struct list_head properties, unsigned char *name)
 }
 
 struct property *
-add_property(struct list_head properties, unsigned char *name, int namelen,
+add_property(struct list_head *properties, unsigned char *name, int namelen,
              unsigned char *value, int valuelen)
 {
 	struct property *property = mem_calloc(1, sizeof(struct property));
@@ -39,7 +39,7 @@ add_property(struct list_head properties, unsigned char *name, int namelen,
 
 	property->name = name, property->namelen = namelen;
 	property->value = value, property->valuelen = valuelen;
-	add_to_list(properties, property);
+	add_to_list(*properties, property);
 
 	return property;
 }

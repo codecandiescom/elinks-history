@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.6 2003/01/17 22:04:41 pasky Exp $ */
+/* $Id: layouter.c,v 1.7 2003/01/18 00:36:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,16 +48,19 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 	 * CSS. --pasky */
 
 	box = spawn_box(state);
+	box->data_type = RECT_TEXT;
 	box->data = text = mem_alloc(sizeof(struct layout_box_text));
 	text->str = "[NODE] ";
 	text->len = 7;
 
 	box = spawn_box(state);
+	box->data_type = RECT_TEXT;
 	box->data = text = mem_alloc(sizeof(struct layout_box_text));
 	text->str = node->str;
 	text->len = node->strlen;
 
 	box = spawn_box(state);
+	box->data_type = RECT_TEXT;
 	box->data = text = mem_alloc(sizeof(struct layout_box_text));
 	text->str = " ";
 	text->len = 1;
@@ -70,6 +73,7 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 		numbuflen = strlen(numbuf) + 1;
 
 		box = spawn_box(state);
+		box->data_type = RECT_TEXT;
 		box->data = text = mem_alloc(sizeof(struct layout_box_text) + numbuflen);
 		text->str = box->data + sizeof(struct layout_box_text);
 		text->len = numbuflen - 1;
@@ -78,36 +82,45 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 
 	foreach (property, node->properties) {
 		box = spawn_box(state);
+		box->data_type = RECT_TEXT;
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = " ";
 		text->len = 1;
 
 		box = spawn_box(state);
+		box->data_type = RECT_TEXT;
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = property->name;
 		text->len = property->namelen;
 
 		box = spawn_box(state);
+		box->data_type = RECT_TEXT;
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = "->\"";
 		text->len = 3;
 
 		box = spawn_box(state);
+		box->data_type = RECT_TEXT;
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = property->value;
 		text->len = property->valuelen;
 
 		box = spawn_box(state);
+		box->data_type = RECT_TEXT;
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
 		text->str = "\"";
 		text->len = 1;
 	}
 
 	foreach (leaf, node->leafs) {
+		struct layout_box *root_box = state->root;
+
 		box = spawn_box(state);
 		state->root = box;
-		add_property(state->current->properties, "display", 7, "block", 5);
+		add_property(&state->current->properties, "display", 7, "block", 5);
 		layout_node(state, leaf);
+		state->root = root_box;
+		state->current = box;
 	}
 }
 
@@ -126,7 +139,7 @@ syntree_layout(struct layouter_state *state, unsigned char **str, int *len)
 	elusive_parser_parse(state->parser_state, str, len);
 
 	node = state->parser_state->real_root;
-	add_property(state->current->properties, "display", 7, "block", 5);
+	add_property(&state->current->properties, "display", 7, "block", 5);
 	layout_node(state, node);
 }
 

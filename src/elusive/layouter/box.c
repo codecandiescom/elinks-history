@@ -1,5 +1,5 @@
 /* Layout box utility tools */
-/* $Id: box.c,v 1.2 2003/01/17 22:04:41 pasky Exp $ */
+/* $Id: box.c,v 1.3 2003/01/18 00:36:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ done_layout_box(struct layout_box *box)
 unsigned char *
 get_box_property(struct layout_box *box, unsigned char *name)
 {
-	struct property *property = get_property(box->properties, name);
+	struct property *property = get_property(&box->properties, name);
 
 	/* XXX: When we'll be ascending to root, we won't want to let
 	 * get_syntree_property() ascend to root, will we? --pasky */

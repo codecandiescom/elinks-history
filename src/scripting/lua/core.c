@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.162 2004/07/13 16:24:02 zas Exp $ */
+/* $Id: core.c,v 1.163 2004/07/13 16:28:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ l_current_document_formatted(LS)
 	if (width > 0) {
 		old_width = lua_ses->tab->term->width;
 		lua_ses->tab->term->width = width;
-		render_document_frames(lua_ses, 1);
+		render_document_frames(lua_ses, 0);
 	}
 
 	if (init_string(&buffer)) {
@@ -180,7 +180,7 @@ l_current_document_formatted(LS)
 
 	if (width > 0) {
 		lua_ses->tab->term->width = old_width;
-		render_document_frames(lua_ses, 1);
+		render_document_frames(lua_ses, 0);
 	}
 	return 1;
 

@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.7 2002/05/06 14:12:13 pasky Exp $ */
+/* $Id: conf.c,v 1.8 2002/05/08 13:55:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,17 +16,17 @@
 #include <unistd.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/align.h>
-#include <bfu/bfu.h>
-#include <config/conf.h>
-#include <config/kbdbind.h>
-#include <config/options.h>
-#include <intl/language.h>
-#include <lowlevel/home.h>
-#include <lowlevel/terminal.h>
-#include <util/secsave.h>
+#include "bfu/align.h"
+#include "bfu/bfu.h"
+#include "config/conf.h"
+#include "config/kbdbind.h"
+#include "config/options.h"
+#include "intl/language.h"
+#include "lowlevel/home.h"
+#include "lowlevel/terminal.h"
+#include "util/secsave.h"
 
 
 unsigned char *_parse_options(int argc, unsigned char *argv[], struct option **opt)

@@ -1,11 +1,11 @@
-/* $Id: language.h,v 1.1 2002/03/17 14:05:26 pasky Exp $ */
+/* $Id: language.h,v 1.2 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifndef EL__LANGUAGE_H
 #define EL__LANGUAGE_H
 
-#include <lowlevel/terminal.h>
+#include "lowlevel/terminal.h"
 
-#include <intl/lang_defs.h>
+#include "intl/lang_defs.h"
 
 extern unsigned char dummyarray[];
 

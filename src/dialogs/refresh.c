@@ -1,5 +1,5 @@
 /* Periodic refresh of dialogs */
-/* $Id: refresh.c,v 1.2 2002/05/07 13:19:43 pasky Exp $ */
+/* $Id: refresh.c,v 1.3 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,13 +12,13 @@
 #include <unistd.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/bfu.h>
-#include <dialogs/refresh.h>
-#include <document/session.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
+#include "bfu/bfu.h"
+#include "dialogs/refresh.h"
+#include "document/session.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
 
 
 void refresh(struct refresh *r)

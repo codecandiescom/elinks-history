@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.1 2002/05/07 13:19:44 pasky Exp $ */
+/* $Id: core.c,v 1.2 2002/05/08 13:55:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,23 +17,23 @@
 #include <lua.h>
 #include <lualib.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/align.h>
-#include <bfu/bfu.h>
-#include <config/kbdbind.h>
-#include <document/cache.h>
-#include <document/history.h>
-#include <document/location.h>
-#include <document/session.h>
-#include <document/view.h>
-#include <document/vs.h>
-#include <document/html/renderer.h>
-#include <intl/language.h>
-#include <lowlevel/home.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
-#include <lua/core.h>
+#include "bfu/align.h"
+#include "bfu/bfu.h"
+#include "config/kbdbind.h"
+#include "document/cache.h"
+#include "document/history.h"
+#include "document/location.h"
+#include "document/session.h"
+#include "document/view.h"
+#include "document/vs.h"
+#include "document/html/renderer.h"
+#include "intl/language.h"
+#include "lowlevel/home.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "lua/core.h"
 
 
 lua_State *lua_state;

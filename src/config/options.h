@@ -1,10 +1,10 @@
-/* $Id: options.h,v 1.5 2002/04/28 18:03:41 pasky Exp $ */
+/* $Id: options.h,v 1.6 2002/05/08 13:55:01 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
 
-#include <document/options.h>
-#include <document/html/colors.h>
+#include "document/options.h"
+#include "document/html/colors.h"
 
 #define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 

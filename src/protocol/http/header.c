@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.1 2002/03/17 18:14:08 pasky Exp $ */
+/* $Id: header.c,v 1.2 2002/05/08 13:55:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,9 +7,9 @@
 
 #include <string.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <protocol/http/header.h>
+#include "protocol/http/header.h"
 
 unsigned char *parse_http_header(unsigned char *head, unsigned char *item, unsigned char **ptr)
 {

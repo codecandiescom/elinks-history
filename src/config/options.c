@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.10 2002/05/06 14:12:13 pasky Exp $ */
+/* $Id: options.c,v 1.11 2002/05/08 13:55:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,18 +18,18 @@
 #include <arpa/inet.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <config/conf.h>
-#include <config/kbdbind.h>
-#include <config/options.h>
-#include <document/options.h>
-#include <document/html/colors.h>
-#include <intl/charsets.h>
-#include <intl/language.h>
-#include <lowlevel/dns.h>
-#include <protocol/types.h>
-#include <util/error.h>
+#include "config/conf.h"
+#include "config/kbdbind.h"
+#include "config/options.h"
+#include "document/options.h"
+#include "document/html/colors.h"
+#include "intl/charsets.h"
+#include "intl/language.h"
+#include "lowlevel/dns.h"
+#include "protocol/types.h"
+#include "util/error.h"
 
 
 /* TODO: We should store options in a hash, in order to have the searching

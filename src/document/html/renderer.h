@@ -1,15 +1,15 @@
-/* $Id: renderer.h,v 1.7 2002/03/28 22:53:35 pasky Exp $ */
+/* $Id: renderer.h,v 1.8 2002/05/08 13:55:03 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
-#include <links.h> /* list_head */
-#include <intl/charsets.h>
-#include <document/options.h>
-#include <document/session.h>
-#include <document/html/parser.h>
-#include <lowlevel/terminal.h>
-#include <lowlevel/ttime.h>
+#include "links.h" /* list_head */
+#include "intl/charsets.h"
+#include "document/options.h"
+#include "document/session.h"
+#include "document/html/parser.h"
+#include "lowlevel/terminal.h"
+#include "lowlevel/ttime.h"
 /* We need this included later, otherwise it will miss some our
  * declarations. */
 /* #include "vs.h" */
@@ -124,7 +124,7 @@ struct f_data {
 	struct search **slines2;
 };
 
-#include <document/vs.h>
+#include "document/vs.h"
 
 struct f_data_c {
 	struct f_data_c *next;

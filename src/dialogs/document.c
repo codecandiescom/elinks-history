@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.3 2002/05/04 17:06:15 zas Exp $ */
+/* $Id: document.c,v 1.4 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,20 +10,20 @@
 #include <sys/types.h>
 #include <time.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/bfu.h>
-#include <document/cache.h>
-#include <document/history.h>
-#include <document/globhist.h>
-#include <document/location.h>
-#include <document/session.h>
-#include <document/view.h>
-#include <document/html/renderer.h>
-#include <intl/language.h>
-#include <lowlevel/terminal.h>
-#include <protocol/http/header.h>
-#include <protocol/url.h>
+#include "bfu/bfu.h"
+#include "document/cache.h"
+#include "document/history.h"
+#include "document/globhist.h"
+#include "document/location.h"
+#include "document/session.h"
+#include "document/view.h"
+#include "document/html/renderer.h"
+#include "intl/language.h"
+#include "lowlevel/terminal.h"
+#include "protocol/http/header.h"
+#include "protocol/url.h"
 
 /* Location info. message box. */
 void

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.8 2002/05/07 13:19:43 pasky Exp $ */
+/* $Id: info.c,v 1.9 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,24 +12,24 @@
 #include <unistd.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/align.h>
-#include <bfu/bfu.h>
-#include <dialogs/info.h>
-#include <dialogs/refresh.h>
-#include <config/options.h>
-#include <document/cache.h>
-#include <document/session.h>
-#include <document/html/renderer.h>
-#include <intl/language.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
+#include "bfu/align.h"
+#include "bfu/bfu.h"
+#include "dialogs/info.h"
+#include "dialogs/refresh.h"
+#include "config/options.h"
+#include "document/cache.h"
+#include "document/session.h"
+#include "document/html/renderer.h"
+#include "intl/language.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
 #ifdef LEAK_DEBUG
-#include <util/error.h>
+#include "util/error.h"
 #endif
-#include <util/memlist.h>
+#include "util/memlist.h"
 
 
 void menu_about(struct terminal *term, void *d, struct session *ses)

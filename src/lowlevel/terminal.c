@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.8 2002/04/26 17:26:48 pasky Exp $ */
+/* $Id: terminal.c,v 1.9 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,17 +12,17 @@
 #include <unistd.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <main.h>
+#include "main.h"
 /* We don't require this ourselves, but view.h does, and directly including
  * view.h w/o session.h already loaded doesn't work :/. --pasky */
-#include <document/session.h>
-#include <document/view.h>
-#include <lowlevel/kbd.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
-#include <util/error.h>
+#include "document/session.h"
+#include "document/view.h"
+#include "lowlevel/kbd.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "util/error.h"
 
 
 /* TODO: We must use termcap/terminfo if available! --pasky */

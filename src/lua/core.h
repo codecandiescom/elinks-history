@@ -1,4 +1,4 @@
-/* $Id: core.h,v 1.1 2002/05/07 13:19:44 pasky Exp $ */
+/* $Id: core.h,v 1.2 2002/05/08 13:55:05 pasky Exp $ */
 
 #ifndef EL__LUA_CORE_H
 #define EL__LUA_CORE_H
@@ -6,7 +6,7 @@
 #ifdef HAVE_LUA
 
 #include <lua.h> /* This is standart include. */
-#include <document/session.h>
+#include "document/session.h"
 
 extern lua_State *lua_state;
 

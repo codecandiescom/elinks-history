@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.24 2002/05/07 13:19:42 pasky Exp $ */
+/* $Id: main.c,v 1.25 2002/05/08 13:55:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,39 +20,39 @@
 #include <unistd.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <main.h>
-#include <bookmarks/bookmarks.h>
-#include <config/conf.h>
-#include <config/kbdbind.h>
-#include <config/options.h>
-#include <config/urlhist.h>
-#include <cookies/cookies.h>
-#include <dialogs/menu.h>
-#include <document/cache.h>
-#include <document/download.h>
-#include <document/dump.h>
-#include <document/globhist.h>
-#include <document/session.h>
-#include <document/html/colors.h>
-#include <document/html/renderer.h>
-#include <intl/charsets.h>
-#include <intl/language.h>
-#include <lowlevel/af_unix.h>
-#include <lowlevel/dns.h>
-#include <lowlevel/home.h>
-#include <lowlevel/kbd.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/select.h>
-#include <lowlevel/sysname.h>
-#include <lowlevel/terminal.h>
-#include <lua/core.h>
-#include <lua/hooks.h>
-#include <protocol/types.h>
-#include <ssl/ssl.h>
-#include <util/blacklist.h>
-#include <util/error.h>
+#include "main.h"
+#include "bookmarks/bookmarks.h"
+#include "config/conf.h"
+#include "config/kbdbind.h"
+#include "config/options.h"
+#include "config/urlhist.h"
+#include "cookies/cookies.h"
+#include "dialogs/menu.h"
+#include "document/cache.h"
+#include "document/download.h"
+#include "document/dump.h"
+#include "document/globhist.h"
+#include "document/session.h"
+#include "document/html/colors.h"
+#include "document/html/renderer.h"
+#include "intl/charsets.h"
+#include "intl/language.h"
+#include "lowlevel/af_unix.h"
+#include "lowlevel/dns.h"
+#include "lowlevel/home.h"
+#include "lowlevel/kbd.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/select.h"
+#include "lowlevel/sysname.h"
+#include "lowlevel/terminal.h"
+#include "lua/core.h"
+#include "lua/hooks.h"
+#include "protocol/types.h"
+#include "ssl/ssl.h"
+#include "util/blacklist.h"
+#include "util/error.h"
 
 enum retval retval = RET_OK;
 

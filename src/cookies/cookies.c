@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.20 2002/05/06 14:12:13 pasky Exp $ */
+/* $Id: cookies.c,v 1.21 2002/05/08 13:55:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,24 +13,24 @@
 #include <time.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
 /* #define COOKIES_DEBUG */
 
-#include <cookies/cookies.h>
-#include <cookies/parser.h>
-#include <config/kbdbind.h>
-#include <config/options.h>
-#include <document/session.h>
-#include <lowlevel/home.h>
-#include <lowlevel/terminal.h>
-#include <protocol/http/date.h>
-#include <protocol/http/header.h>
-#include <protocol/url.h>
+#include "cookies/cookies.h"
+#include "cookies/parser.h"
+#include "config/kbdbind.h"
+#include "config/options.h"
+#include "document/session.h"
+#include "lowlevel/home.h"
+#include "lowlevel/terminal.h"
+#include "protocol/http/date.h"
+#include "protocol/http/header.h"
+#include "protocol/url.h"
 #ifdef COOKIES_DEBUG
-#include <util/error.h>
+#include "util/error.h"
 #endif
-#include <util/secsave.h>
+#include "util/secsave.h"
 
 tcount cookie_id = 0;
 

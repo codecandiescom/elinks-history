@@ -1,15 +1,15 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.4 2002/04/26 17:26:47 pasky Exp $ */
+/* $Id: charsets.c,v 1.5 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <document/options.h>
-#include <intl/charsets.h>
-#include <util/error.h>
+#include "document/options.h"
+#include "intl/charsets.h"
+#include "util/error.h"
 
 struct table_entry {
 	unsigned char c;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.18 2002/05/06 14:12:14 pasky Exp $ */
+/* $Id: url.c,v 1.19 2002/05/08 13:55:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,18 +10,18 @@
 #include <sys/types.h>
 #include <netdb.h> /* OS/2 needs this after sys/types.h */
 
-#include <links.h>
+#include "links.h"
 
-#include <lowlevel/sched.h>
-#include <protocol/file.h>
-#include <protocol/finger.h>
-#include <protocol/ftp.h>
-#include <protocol/http/http.h>
-#include <protocol/http/https.h>
-#include <protocol/mailto.h>
-#include <protocol/url.h>
-#include <util/conv.h>
-#include <util/error.h>
+#include "lowlevel/sched.h"
+#include "protocol/file.h"
+#include "protocol/finger.h"
+#include "protocol/ftp.h"
+#include "protocol/http/http.h"
+#include "protocol/http/https.h"
+#include "protocol/mailto.h"
+#include "protocol/url.h"
+#include "util/conv.h"
+#include "util/error.h"
 
 
 struct {

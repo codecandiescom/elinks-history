@@ -1,12 +1,12 @@
-/* $Id: hooks.h,v 1.1 2002/05/07 13:19:44 pasky Exp $ */
+/* $Id: hooks.h,v 1.2 2002/05/08 13:55:05 pasky Exp $ */
 
 #ifndef EL__LUA_HOOKS_H
 #define EL__LUA_HOOKS_H
 
 #ifdef HAVE_LUA
 
-#include <document/session.h>
-#include <lowlevel/sched.h>
+#include "document/session.h"
+#include "lowlevel/sched.h"
 
 void script_hook_goto_url(struct session *, unsigned char *);
 unsigned char *script_hook_follow_url(struct session *, unsigned char *);

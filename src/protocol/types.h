@@ -1,10 +1,10 @@
-/* $Id: types.h,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
+/* $Id: types.h,v 1.3 2002/05/08 13:55:05 pasky Exp $ */
 
 #ifndef EL__TYPES_H
 #define EL__TYPES_H
 
-#include <links.h> /* list_head, tcount */
-#include <lowlevel/terminal.h>
+#include "links.h" /* list_head, tcount */
+#include "lowlevel/terminal.h"
 
 struct assoc {
 	struct assoc *next;

@@ -1,9 +1,9 @@
-/* $Id: bookmarks.h,v 1.5 2002/04/02 13:36:53 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.6 2002/05/08 13:55:01 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_H
 #define EL__BOOKMARKS_H
 
-#include <links.h> /* list_head */
+#include "links.h" /* list_head */
 
 /* A pointer independent id that bookmarks can be identified by. Guarenteed to
  * be unique between all bookmarks. */

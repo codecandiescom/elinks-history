@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.23 2002/05/07 13:19:43 pasky Exp $ */
+/* $Id: sched.c,v 1.24 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,21 +13,21 @@
 #include <unistd.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <config/options.h>
-#include <document/cache.h>
-#include <document/session.h>
-#include <document/html/renderer.h>
-#include <intl/language.h>
-#include <lowlevel/connect.h>
-#include <lowlevel/dns.h>
-#include <lowlevel/select.h>
-#include <lowlevel/ttime.h>
-#include <lua/hooks.h>
-#include <protocol/url.h>
-#include <util/base64.h>
-#include <util/error.h>
+#include "config/options.h"
+#include "document/cache.h"
+#include "document/session.h"
+#include "document/html/renderer.h"
+#include "intl/language.h"
+#include "lowlevel/connect.h"
+#include "lowlevel/dns.h"
+#include "lowlevel/select.h"
+#include "lowlevel/ttime.h"
+#include "lua/hooks.h"
+#include "protocol/url.h"
+#include "util/base64.h"
+#include "util/error.h"
 
 /* Types and structs */
 struct list_head queue = {&queue, &queue};

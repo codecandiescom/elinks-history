@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.3 2002/03/25 18:38:54 pasky Exp $ */
+/* $Id: connect.c,v 1.4 2002/05/08 13:55:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,14 +10,14 @@
 #include <openssl/ssl.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <lowlevel/connect.h>
-#include <lowlevel/dns.h>
-#include <ssl/connect.h>
-#include <ssl/ssl.h>
-#include <lowlevel/select.h>
-#include <lowlevel/sched.h>
+#include "lowlevel/connect.h"
+#include "lowlevel/dns.h"
+#include "ssl/connect.h"
+#include "ssl/ssl.h"
+#include "lowlevel/select.h"
+#include "lowlevel/sched.h"
 
 
 #ifdef HAVE_SSL

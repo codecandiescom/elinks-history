@@ -1,21 +1,21 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: mailto.c,v 1.7 2002/04/29 17:28:01 zas Exp $ */
+/* $Id: mailto.c,v 1.8 2002/05/08 13:55:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/align.h>
-#include <bfu/bfu.h>
-#include <document/download.h>
-#include <document/session.h>
-#include <intl/language.h>
-#include <lowlevel/terminal.h>
-#include <protocol/mailto.h>
-#include <protocol/types.h>
-#include <protocol/url.h>
+#include "bfu/align.h"
+#include "bfu/bfu.h"
+#include "document/download.h"
+#include "document/session.h"
+#include "intl/language.h"
+#include "lowlevel/terminal.h"
+#include "protocol/mailto.h"
+#include "protocol/types.h"
+#include "protocol/url.h"
 
 void
 prog_func(struct terminal *term, struct list_head *list,

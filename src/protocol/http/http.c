@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.14 2002/05/07 13:19:44 pasky Exp $ */
+/* $Id: http.c,v 1.15 2002/05/08 13:55:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,23 +11,23 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <dialogs/menu.h>
-#include <config/options.h>
-#include <cookies/cookies.h>
-#include <document/cache.h>
-#include <document/session.h>
-#include <intl/charsets.h>
-#include <lowlevel/connect.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/sysname.h>
-#include <lowlevel/terminal.h>
-#include <protocol/http/header.h>
-#include <protocol/http/http.h>
-#include <protocol/url.h>
-#include <util/base64.h>
-#include <util/blacklist.h>
+#include "dialogs/menu.h"
+#include "config/options.h"
+#include "cookies/cookies.h"
+#include "document/cache.h"
+#include "document/session.h"
+#include "intl/charsets.h"
+#include "lowlevel/connect.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/sysname.h"
+#include "lowlevel/terminal.h"
+#include "protocol/http/header.h"
+#include "protocol/http/http.h"
+#include "protocol/url.h"
+#include "util/base64.h"
+#include "util/blacklist.h"
 
 struct http_connection_info {
 	enum blacklist_flags bl_flags;

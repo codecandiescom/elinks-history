@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.5 2002/04/27 13:15:52 pasky Exp $ */
+/* $Id: options.c,v 1.6 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,28 +9,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <main.h>
-#include <bfu/align.h>
-#include <bfu/bfu.h>
-#include <bfu/menu.h>
-#include <config/conf.h>
-#include <config/options.h>
-#include <dialogs/options.h>
-#include <document/download.h>
-#include <document/options.h>
-#include <document/session.h>
-#include <document/view.h>
-#include <document/html/renderer.h>
-#include <intl/charsets.h>
-#include <intl/language.h>
-#include <lowlevel/kbd.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
-#include <protocol/types.h>
-#include <util/memlist.h>
+#include "main.h"
+#include "bfu/align.h"
+#include "bfu/bfu.h"
+#include "bfu/menu.h"
+#include "config/conf.h"
+#include "config/options.h"
+#include "dialogs/options.h"
+#include "document/download.h"
+#include "document/options.h"
+#include "document/session.h"
+#include "document/view.h"
+#include "document/html/renderer.h"
+#include "intl/charsets.h"
+#include "intl/language.h"
+#include "lowlevel/kbd.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "protocol/types.h"
+#include "util/memlist.h"
 
 
 void

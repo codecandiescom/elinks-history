@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.14 2002/04/28 17:28:31 zas Exp $ */
+/* $Id: ftp.c,v 1.15 2002/05/08 13:55:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,17 +14,17 @@
 #include <unistd.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <config/options.h>
-#include <document/cache.h>
-#include <lowlevel/connect.h>
-#include <lowlevel/select.h>
-#include <lowlevel/sched.h>
-#include <protocol/ftp.h>
-#include <protocol/url.h>
-#include <util/conv.h>
-#include <util/error.h>
+#include "config/options.h"
+#include "document/cache.h"
+#include "lowlevel/connect.h"
+#include "lowlevel/select.h"
+#include "lowlevel/sched.h"
+#include "protocol/ftp.h"
+#include "protocol/url.h"
+#include "util/conv.h"
+#include "util/error.h"
 
 /* Constants */
 

@@ -1,5 +1,5 @@
 /* Time operations */
-/* $Id: time.c,v 1.1 2002/03/18 10:55:38 pasky Exp $ */
+/* $Id: time.c,v 1.2 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,9 +12,9 @@
 #include <time.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <lowlevel/ttime.h>
+#include "lowlevel/ttime.h"
 
 
 ttime get_time()

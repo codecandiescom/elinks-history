@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.20 2002/05/04 08:14:45 pasky Exp $ */
+/* $Id: renderer.c,v 1.21 2002/05/08 13:55:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,29 +8,29 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <main.h>
-#include <bfu/align.h>
-#include <config/options.h>
-#include <document/cache.h>
-#include <document/options.h>
-#include <document/session.h>
-#include <document/view.h>
-#include <document/vs.h>
-#include <document/html/colors.h>
-#include <document/html/parser.h>
-#include <document/html/renderer.h>
-#include <document/html/tables.h>
-#include <intl/charsets.h>
-#include <lowlevel/ttime.h>
-#include <protocol/http/header.h>
-#include <protocol/url.h>
-#include <util/error.h>
+#include "main.h"
+#include "bfu/align.h"
+#include "config/options.h"
+#include "document/cache.h"
+#include "document/options.h"
+#include "document/session.h"
+#include "document/view.h"
+#include "document/vs.h"
+#include "document/html/colors.h"
+#include "document/html/parser.h"
+#include "document/html/renderer.h"
+#include "document/html/tables.h"
+#include "intl/charsets.h"
+#include "lowlevel/ttime.h"
+#include "protocol/http/header.h"
+#include "protocol/url.h"
+#include "util/error.h"
 
 /* This is here in order not to break the cross-deps. */
-#include <document/history.h>
-#include <document/location.h>
+#include "document/history.h"
+#include "document/location.h"
 
 /* Types and structs */
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.7 2002/04/16 21:25:42 zas Exp $ */
+/* $Id: dialogs.c,v 1.8 2002/05/08 13:55:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,18 +7,18 @@
 
 #include <string.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/align.h>
-#include <bfu/bfu.h>
-#include <bookmarks/bookmarks.h>
-#include <bookmarks/dialogs.h>
-#include <dialogs/edit.h>
-#include <document/session.h>
-#include <lowlevel/kbd.h>
-#include <lowlevel/terminal.h>
-#include <intl/language.h>
-#include <util/error.h>
+#include "bfu/align.h"
+#include "bfu/bfu.h"
+#include "bookmarks/bookmarks.h"
+#include "bookmarks/dialogs.h"
+#include "dialogs/edit.h"
+#include "document/session.h"
+#include "lowlevel/kbd.h"
+#include "lowlevel/terminal.h"
+#include "intl/language.h"
+#include "util/error.h"
 
 
 /* Whether to save bookmarks after each modification of their list

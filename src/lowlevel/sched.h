@@ -1,12 +1,12 @@
-/* $Id: sched.h,v 1.9 2002/05/04 08:30:20 pasky Exp $ */
+/* $Id: sched.h,v 1.10 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
 
-#include <links.h> /* tcount, list_head */
-#include <document/cache.h>
-#include <lowlevel/ttime.h>
-#include <util/error.h>
+#include "links.h" /* tcount, list_head */
+#include "document/cache.h"
+#include "lowlevel/ttime.h"
+#include "util/error.h"
 
 #define PRI_MAIN	0
 #define PRI_DOWNLOAD	0

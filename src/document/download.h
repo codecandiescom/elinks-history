@@ -1,12 +1,12 @@
-/* $Id: download.h,v 1.1 2002/03/29 10:36:56 pasky Exp $ */
+/* $Id: download.h,v 1.2 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOWNLOAD_H
 #define EL__DOCUMENT_DOWNLOAD_H
 
-#include <document/cache.h>
-#include <document/session.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/terminal.h>
+#include "document/cache.h"
+#include "document/session.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/terminal.h"
 
 struct download {
 	struct download *next;

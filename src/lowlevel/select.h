@@ -1,9 +1,9 @@
-/* $Id: select.h,v 1.2 2002/03/18 10:55:38 pasky Exp $ */
+/* $Id: select.h,v 1.3 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifndef EL__SELECT_H
 #define EL__SELECT_H
 
-#include <lowlevel/ttime.h>
+#include "lowlevel/ttime.h"
 
 extern int terminate;
 

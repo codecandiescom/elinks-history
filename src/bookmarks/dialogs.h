@@ -1,11 +1,11 @@
-/* $Id: dialogs.h,v 1.1 2002/04/01 22:20:00 pasky Exp $ */
+/* $Id: dialogs.h,v 1.2 2002/05/08 13:55:01 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
 
-#include <bfu/bfu.h>
-#include <document/session.h>
-#include <lowlevel/terminal.h>
+#include "bfu/bfu.h"
+#include "document/session.h"
+#include "lowlevel/terminal.h"
 
 /* Launches bookmark manager */
 void menu_bookmark_manager(struct terminal *, void *, struct session *);

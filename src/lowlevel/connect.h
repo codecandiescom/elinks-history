@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.6 2002/05/06 14:12:14 pasky Exp $ */
+/* $Id: connect.h,v 1.7 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 
-#include <lowlevel/sched.h>
+#include "lowlevel/sched.h"
 
 #define READ_SIZE 16384
 

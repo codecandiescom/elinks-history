@@ -1,5 +1,5 @@
 /* Format conversion functions */
-/* $Id: conv.c,v 1.3 2002/04/28 15:42:57 zas Exp $ */
+/* $Id: conv.c,v 1.4 2002/05/08 13:55:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,9 +7,9 @@
 
 #include <ctype.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <util/conv.h>
+#include "util/conv.h"
 
 
 unsigned char

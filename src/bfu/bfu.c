@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.16 2002/04/19 14:02:16 pasky Exp $ */
+/* $Id: bfu.c,v 1.17 2002/05/08 13:55:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,17 +8,17 @@
 #include <stdarg.h>
 #include <string.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/align.h>
-#include <bfu/bfu.h>
-#include <bfu/menu.h>
-#include <config/kbdbind.h>
-#include <intl/language.h>
-#include <lowlevel/kbd.h>
-#include <lowlevel/terminal.h>
-#include <util/error.h>
-#include <util/memlist.h>
+#include "bfu/align.h"
+#include "bfu/bfu.h"
+#include "bfu/menu.h"
+#include "config/kbdbind.h"
+#include "intl/language.h"
+#include "lowlevel/kbd.h"
+#include "lowlevel/terminal.h"
+#include "util/error.h"
+#include "util/memlist.h"
 
 
 /* Prototypes */

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.38 2002/05/07 13:19:43 pasky Exp $ */
+/* $Id: view.c,v 1.39 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,36 +17,36 @@
 #include <unistd.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <main.h>
-#include <bfu/bfu.h>
-#include <bfu/menu.h>
-#include <dialogs/menu.h>
-#include <bookmarks/dialogs.h>
-#include <cookies/cookies.h>
-#include <config/options.h>
-#include <config/kbdbind.h>
-#include <dialogs/document.h>
-#include <dialogs/globhist.h>
-#include <document/cache.h>
-#include <document/download.h>
-#include <document/dump.h>
-#include <document/history.h>
-#include <document/location.h>
-#include <document/options.h>
-#include <document/session.h>
-#include <document/view.h>
-#include <document/vs.h>
-#include <document/html/parser.h>
-#include <document/html/renderer.h>
-#include <intl/charsets.h>
-#include <intl/language.h>
-#include <lowlevel/kbd.h>
-#include <lowlevel/terminal.h>
-#include <lua/core.h>
-#include <protocol/url.h>
-#include <util/error.h>
+#include "main.h"
+#include "bfu/bfu.h"
+#include "bfu/menu.h"
+#include "dialogs/menu.h"
+#include "bookmarks/dialogs.h"
+#include "cookies/cookies.h"
+#include "config/options.h"
+#include "config/kbdbind.h"
+#include "dialogs/document.h"
+#include "dialogs/globhist.h"
+#include "document/cache.h"
+#include "document/download.h"
+#include "document/dump.h"
+#include "document/history.h"
+#include "document/location.h"
+#include "document/options.h"
+#include "document/session.h"
+#include "document/view.h"
+#include "document/vs.h"
+#include "document/html/parser.h"
+#include "document/html/renderer.h"
+#include "intl/charsets.h"
+#include "intl/language.h"
+#include "lowlevel/kbd.h"
+#include "lowlevel/terminal.h"
+#include "lua/core.h"
+#include "protocol/url.h"
+#include "util/error.h"
 
 
 /* FIXME: Add comments!! --Zas */

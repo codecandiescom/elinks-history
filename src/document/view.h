@@ -1,13 +1,13 @@
-/* $Id: view.h,v 1.7 2002/04/28 11:17:30 pasky Exp $ */
+/* $Id: view.h,v 1.8 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
 
-#include <document/location.h>
-#include <document/session.h>
-#include <document/html/parser.h>
-#include <document/html/renderer.h>
-#include <lowlevel/terminal.h>
+#include "document/location.h"
+#include "document/session.h"
+#include "document/html/parser.h"
+#include "document/html/renderer.h"
+#include "lowlevel/terminal.h"
 
 extern int textarea_editor;
 void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *, struct f_data_c *, struct link *);

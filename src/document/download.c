@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.7 2002/05/08 13:39:00 pasky Exp $ */
+/* $Id: download.c,v 1.8 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,26 +18,26 @@
 #endif
 #include <utime.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/bfu.h>
-#include <config/options.h>
-#include <dialogs/menu.h>
-#include <document/cache.h>
-#include <document/download.h>
-#include <document/history.h>
-#include <document/location.h>
-#include <document/session.h>
-#include <intl/language.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
-#include <lowlevel/ttime.h>
-#include <protocol/http/date.h>
-#include <protocol/types.h>
-#include <protocol/url.h>
-#include <util/error.h>
-#include <util/memlist.h>
+#include "bfu/bfu.h"
+#include "config/options.h"
+#include "dialogs/menu.h"
+#include "document/cache.h"
+#include "document/download.h"
+#include "document/history.h"
+#include "document/location.h"
+#include "document/session.h"
+#include "intl/language.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "lowlevel/ttime.h"
+#include "protocol/http/date.h"
+#include "protocol/types.h"
+#include "protocol/url.h"
+#include "util/error.h"
+#include "util/memlist.h"
 
 
 /* TODO: tp_*() should be in separate file, I guess? --pasky */

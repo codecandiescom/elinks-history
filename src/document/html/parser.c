@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.19 2002/05/01 19:34:28 pasky Exp $ */
+/* $Id: parser.c,v 1.20 2002/05/08 13:55:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,25 +13,25 @@
 #include <unistd.h> /* XXX: only for debug_stack() */
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/align.h>
-#include <bfu/menu.h>
-#include <config/options.h>
-#include <config/kbdbind.h>
-#include <document/globhist.h>
-#include <document/session.h>
-#include <document/view.h>
-#include <document/html/colors.h>
-#include <document/html/parser.h>
-#include <document/html/renderer.h>
-#include <document/html/tables.h>
-#include <intl/charsets.h>
-#include <lowlevel/terminal.h>
-#include <protocol/http/header.h>
-#include <protocol/url.h>
-#include <util/error.h>
-#include <util/memlist.h>
+#include "bfu/align.h"
+#include "bfu/menu.h"
+#include "config/options.h"
+#include "config/kbdbind.h"
+#include "document/globhist.h"
+#include "document/session.h"
+#include "document/view.h"
+#include "document/html/colors.h"
+#include "document/html/parser.h"
+#include "document/html/renderer.h"
+#include "document/html/tables.h"
+#include "intl/charsets.h"
+#include "lowlevel/terminal.h"
+#include "protocol/http/header.h"
+#include "protocol/url.h"
+#include "util/error.h"
+#include "util/memlist.h"
 
 /* TODO: This needs rewrite. Yes, no kidding. */
 

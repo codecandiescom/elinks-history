@@ -1,5 +1,5 @@
 /* Tool for testing of cookies string parser */
-/* $Id: parsetst.c,v 1.4 2002/04/23 08:25:45 pasky Exp $ */
+/* $Id: parsetst.c,v 1.5 2002/05/08 13:55:01 pasky Exp $ */
 
 #if 0
 /* Dunno.. --pasky */
@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <cookies/parser.h>
+#include "cookies/parser.h"
 
 
 int

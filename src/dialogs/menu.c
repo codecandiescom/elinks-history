@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.20 2002/05/07 13:19:43 pasky Exp $ */
+/* $Id: menu.c,v 1.21 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,35 +8,35 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <main.h>
-#include <bfu/align.h>
-#include <bfu/bfu.h>
-#include <bfu/menu.h>
-#include <bookmarks/dialogs.h>
-#include <config/conf.h>
-#include <config/options.h>
-#include <dialogs/document.h>
-#include <dialogs/globhist.h>
-#include <dialogs/info.h>
-#include <dialogs/menu.h>
-#include <dialogs/options.h>
-#include <document/download.h>
-#include <document/history.h>
-#include <document/location.h>
-#include <document/session.h>
-#include <document/view.h>
-#include <intl/language.h>
-#include <lowlevel/kbd.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
-#include <lua/core.h>
-#include <lua/hooks.h>
-#include <protocol/types.h>
-#include <protocol/url.h>
-#include <util/memlist.h>
+#include "main.h"
+#include "bfu/align.h"
+#include "bfu/bfu.h"
+#include "bfu/menu.h"
+#include "bookmarks/dialogs.h"
+#include "config/conf.h"
+#include "config/options.h"
+#include "dialogs/document.h"
+#include "dialogs/globhist.h"
+#include "dialogs/info.h"
+#include "dialogs/menu.h"
+#include "dialogs/options.h"
+#include "document/download.h"
+#include "document/history.h"
+#include "document/location.h"
+#include "document/session.h"
+#include "document/view.h"
+#include "intl/language.h"
+#include "lowlevel/kbd.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "lua/core.h"
+#include "lua/hooks.h"
+#include "protocol/types.h"
+#include "protocol/url.h"
+#include "util/memlist.h"
 
 
 

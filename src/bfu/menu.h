@@ -1,9 +1,9 @@
-/* $Id: menu.h,v 1.5 2002/04/17 08:24:02 pasky Exp $ */
+/* $Id: menu.h,v 1.6 2002/05/08 13:55:00 pasky Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
 
-#include <lowlevel/terminal.h>
+#include "lowlevel/terminal.h"
 
 
 #define MENU_FUNC (void (*)(struct terminal *, void *, void *))

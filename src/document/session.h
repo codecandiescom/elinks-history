@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.10 2002/05/04 08:42:55 pasky Exp $ */
+/* $Id: session.h,v 1.11 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -6,13 +6,13 @@
 /* We need to declare these first :/. Damn cross-dependencies. */
 struct session;
 
-#include <document/cache.h>
-#include <document/options.h>
-#include <document/vs.h>
-#include <document/html/parser.h>
-#include <document/html/renderer.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/terminal.h>
+#include "document/cache.h"
+#include "document/options.h"
+#include "document/vs.h"
+#include "document/html/parser.h"
+#include "document/html/renderer.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/terminal.h"
 
 /* For map_selected() */
 struct link_def {

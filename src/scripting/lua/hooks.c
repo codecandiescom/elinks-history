@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.1 2002/05/07 13:19:44 pasky Exp $ */
+/* $Id: hooks.c,v 1.2 2002/05/08 13:55:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,11 +7,11 @@
 
 #ifdef HAVE_LUA
 
-#include <links.h>
+#include "links.h"
 
-#include <document/location.h>
-#include <document/session.h>
-#include <lua/core.h>
+#include "document/location.h"
+#include "document/session.h"
+#include "lua/core.h"
 
 
 /* Theoretically, you should be able to implement a links-lua style

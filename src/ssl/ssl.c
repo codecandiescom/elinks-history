@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.1 2002/03/17 23:16:52 pasky Exp $ */
+/* $Id: ssl.c,v 1.2 2002/05/08 13:55:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,10 +9,10 @@
 #include <openssl/ssl.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-/* #include <lowlevel/sched.h> */
-#include <ssl/ssl.h>
+/* #include "lowlevel/sched.h" */
+#include "ssl/ssl.h"
 
 /* FIXME: As you can see, SSL is currently implemented in very, erm,
  * decentralized manner. */

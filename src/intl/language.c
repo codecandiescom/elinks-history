@@ -1,16 +1,16 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.1 2002/03/17 14:05:26 pasky Exp $ */
+/* $Id: language.c,v 1.2 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <lowlevel/terminal.h>
-#include <intl/charsets.h>
-#include <intl/language.h>
-#include <util/error.h>
+#include "lowlevel/terminal.h"
+#include "intl/charsets.h"
+#include "intl/language.h"
+#include "util/error.h"
 
 struct translation {
 	int code;

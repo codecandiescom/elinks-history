@@ -1,9 +1,9 @@
-/* $Id: conf.h,v 1.2 2002/04/28 12:00:27 pasky Exp $ */
+/* $Id: conf.h,v 1.3 2002/05/08 13:55:01 pasky Exp $ */
 
 #ifndef EL__CONFIG_CONF_H
 #define EL__CONFIG_CONF_H
 
-#include <lowlevel/terminal.h>
+#include "lowlevel/terminal.h"
 
 void init_home();
 unsigned char *parse_options(int, unsigned char *[]);

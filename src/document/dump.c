@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.10 2002/05/07 13:19:43 pasky Exp $ */
+/* $Id: dump.c,v 1.11 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,22 +19,22 @@
 #include <unistd.h>
 #endif
 
-#include <links.h>
+#include "links.h"
 
-#include <main.h>
-#include <config/options.h>
-#include <document/cache.h>
-#include <document/dump.h>
-#include <document/options.h>
-#include <document/view.h>
-#include <document/vs.h>
-#include <document/html/renderer.h>
-#include <intl/language.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
-#include <osdep/os_dep.h>
-#include <protocol/url.h>
+#include "main.h"
+#include "config/options.h"
+#include "document/cache.h"
+#include "document/dump.h"
+#include "document/options.h"
+#include "document/view.h"
+#include "document/vs.h"
+#include "document/html/renderer.h"
+#include "intl/language.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "osdep/os_dep.h"
+#include "protocol/url.h"
 
 
 struct status dump_stat;

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.11 2002/05/06 14:12:14 pasky Exp $ */
+/* $Id: af_unix.c,v 1.12 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,14 +27,14 @@
 #endif
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 
-#include <links.h>
+#include "links.h"
 
-#include <document/session.h>
-#include <lowlevel/af_unix.h>
-#include <lowlevel/home.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
-#include <util/error.h>
+#include "document/session.h"
+#include "lowlevel/af_unix.h"
+#include "lowlevel/home.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "util/error.h"
 
 #ifdef DONT_USE_AF_UNIX
 

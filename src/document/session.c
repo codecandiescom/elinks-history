@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.32 2002/05/08 13:39:00 pasky Exp $ */
+/* $Id: session.c,v 1.33 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,33 +9,33 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/bfu.h>
-#include <bfu/menu.h>
-#include <config/options.h>
-#include <document/cache.h>
-#include <document/download.h>
-#include <document/history.h>
-#include <document/location.h>
-#include <document/options.h>
-#include <document/session.h>
-#include <document/globhist.h>
-#include <document/view.h>
-#include <document/html/parser.h>
-#include <document/html/renderer.h>
-#include <intl/language.h>
-#include <lowlevel/home.h>
-#include <lowlevel/sched.h>
-#include <lowlevel/select.h>
-#include <lowlevel/terminal.h>
-#include <lowlevel/ttime.h>
-#include <lua/hooks.h>
-#include <protocol/types.h>
-#include <protocol/url.h>
-#include <util/conv.h>
-#include <util/error.h>
-#include <util/memlist.h>
+#include "bfu/bfu.h"
+#include "bfu/menu.h"
+#include "config/options.h"
+#include "document/cache.h"
+#include "document/download.h"
+#include "document/history.h"
+#include "document/location.h"
+#include "document/options.h"
+#include "document/session.h"
+#include "document/globhist.h"
+#include "document/view.h"
+#include "document/html/parser.h"
+#include "document/html/renderer.h"
+#include "intl/language.h"
+#include "lowlevel/home.h"
+#include "lowlevel/sched.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "lowlevel/ttime.h"
+#include "lua/hooks.h"
+#include "protocol/types.h"
+#include "protocol/url.h"
+#include "util/conv.h"
+#include "util/error.h"
+#include "util/memlist.h"
 
 
 void check_questions_queue(struct session *ses);

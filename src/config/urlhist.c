@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.1 2002/04/28 12:00:27 pasky Exp $ */
+/* $Id: urlhist.c,v 1.2 2002/05/08 13:55:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,12 +7,12 @@
 
 #include <string.h>
 
-#include <links.h>
+#include "links.h"
 
-#include <bfu/bfu.h>
-#include <config/options.h>
-#include <lowlevel/home.h>
-#include <util/secsave.h>
+#include "bfu/bfu.h"
+#include "config/options.h"
+#include "lowlevel/home.h"
+#include "util/secsave.h"
 
 
 /* FIXME: This should be in some .h file! */

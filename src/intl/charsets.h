@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.2 2002/04/26 17:26:47 pasky Exp $ */
+/* $Id: charsets.h,v 1.3 2002/05/08 13:55:04 pasky Exp $ */
 
 #ifndef EL__CHARSETS_H
 #define EL__CHARSETS_H
@@ -6,7 +6,7 @@
 /* UCS/Unicode replacement character */
 #define UCS_NO_CHAR 0xFFFD
 
-#include <intl/codepage.h>
+#include "intl/codepage.h"
 
 struct conv_table {
 	int t;

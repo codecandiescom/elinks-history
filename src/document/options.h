@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.1 2002/03/18 11:34:03 pasky Exp $ */
+/* $Id: options.h,v 1.2 2002/05/08 13:55:02 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -12,7 +12,7 @@ struct document_setup {
 	int num_links, table_order;
 };
 
-#include <document/html/colors.h>
+#include "document/html/colors.h"
 
 struct document_options {
 	int xw, yw; /* size of window */

@@ -467,12 +467,36 @@ unsigned char *translate_url(unsigned char *url, unsigned char *cwd)
 proxy:
 	/* No protocol name */
 	ch = url + strcspn(url, ".:/@");
+#ifdef IPV6
+	if (*ch != ':' || *url == '[' || url[strcspn(url, "/@")] == '@') {
+#else
 	if (*ch != ':' || url[strcspn(url, "/@")] == '@') {
+#endif
 		unsigned char *prefix = "file://";
 		int not_file = 0;
 		
-		/* Contains domain name? */
-		if (*url != '.' && *ch == '.') {
+		/* Yes, it would be simpler to make test for IPv6 address first,
+		 * but it would result in confusing mix of ifdefs ;-). */
+
+		if (*ch == '@' || (*ch == ':' && *url != '[') || !cmpbeg(url, "ftp.")) {
+			/* Contains user/password/ftp-hostname */
+			prefix = "ftp://";
+			not_file = 1;
+					
+#ifdef IPV6	
+		} else if (*url == '[' && *ch == ':') {
+			/* Candidate for IPv6 address */
+			char *bracket2, *colon2;
+			
+			ch++;
+			bracket2 = strchr(ch, ']');
+			colon2 = strchr(ch, ':');
+			if (bracket2 && colon2 && bracket2 > colon2)
+				goto http;
+#endif
+
+		} else if (*url != '.' && *ch == '.') {
+			/* Contains domain name? */
 			unsigned char *host_end, *domain;
 			int i;
 			
@@ -486,7 +510,10 @@ proxy:
 				if (domain[i] >= '0' && domain[i] <= '9')
 					goto http;
 
-			/* FIXME: Following is completely braindead. TODO: Remove it. */
+			/* FIXME: Following is completely braindead.
+			 * TODO: Remove it. We should rather first try file:// and
+			 * then http://, if failed. But this will require wider
+			 * modifications. :| --pasky */
 		
 			/* It's two-letter TLD? */
 			if (host_end - domain == 2) {
@@ -500,11 +527,6 @@ http:				prefix = "http://";
 					if (!casecmp(tld[i], domain, 3))
 						goto http;
 			}
-		}
-		
-		if (*ch == '@' || *ch == ':' || !cmpbeg(url, "ftp.")) {
-			prefix = "ftp://";
-			not_file = 1;
 		}
 		
 		newurl = stracpy(prefix);

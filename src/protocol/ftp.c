@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.55 2002/10/12 14:17:19 pasky Exp $ */
+/* $Id: ftp.c,v 1.56 2002/10/12 17:55:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -924,9 +924,13 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 	strl = 0;
 
 	if (ftp_info->flagtrycwd) {
-		if (ftp_info->flagtryretr)
+		if (ftp_info->flagtryretr) {
 			add_to_str(&str, &strl, "[LNK] ");
-		else {
+			if (!ftp_info->perm) {
+				ftp_info->perm = "rwxrwxrwx";
+				ftp_info->permlen = 9;
+			}
+		} else {
 			if (colorize_dir) {
 				/* The <b> is here for the case when we've
 				 * use_document_colors off. */
@@ -938,9 +942,17 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 			if (colorize_dir) {
 				add_to_str(&str, &strl, "</b></font>");
 			}
+			if (!ftp_info->perm) {
+				ftp_info->perm = "r-xr-xr-x";
+				ftp_info->permlen = 9;
+			}
 		}
 	} else {
 		add_to_str(&str, &strl, "[   ] ");
+		if (!ftp_info->perm) {
+			ftp_info->perm = "r--r--r--";
+			ftp_info->permlen = 9;
+		}
 	}
 
 	if (ftp_info->perm) {
@@ -948,19 +960,19 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 			add_bytes_to_str(&str, &strl, ftp_info->perm,
 					 ftp_info->permlen);
 		else
-			add_to_str(&str, &strl, "         ");
+			add_to_str(&str, &strl, "-        ");
 		add_to_str(&str, &strl, " ");
 	}
 
 	if (ftp_info->mtime) {
 		if (ftp_info->mtime == -1)
-			sprintf(tmp, "%-21s ", "-");
+			strcpy(tmp, "-           -     -   ");
 		else
 		if (FTPPARSE_MTIME_LOCAL == ftp_info->mtimetype)
-			strftime(tmp, 128, "%d-%b-%Y %H:%M LOC ",
+			strftime(tmp, 128, "%d-%b-%Y %H:%M loc ",
 					localtime(&ftp_info->mtime));
 		else
-			strftime(tmp, 128, "%d-%b-%Y %H:%M     ",
+			strftime(tmp, 128, "%d-%b-%Y %H:%M -   ",
 					gmtime(&ftp_info->mtime));
 
 		add_to_str(&str, &strl, tmp);

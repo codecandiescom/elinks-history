@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.53 2003/08/25 23:52:19 jonas Exp $ */
+/* $Id: draw.c,v 1.54 2003/08/29 03:33:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ draw_border_char(struct terminal *term, int x, int y,
 
 	position = x + term->x * y;
 	term->screen->image[position].data = (unsigned char) border;
-	term->screen->image[position].color = mix_color_pair(color);
+	term->screen->image[position].color = color ? mix_color_pair(color) : 0;
 	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
 	term->screen->dirty = 1;
 }

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.170 2005/01/28 19:00:16 jonas Exp $ */
+/* $Id: options.c,v 1.171 2005/02/03 23:36:58 adamg Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,7 +213,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 static void
 menu_set_language(struct terminal *term, void *pcp_, void *xxx)
 {
-	int pcp = (int) pcp_;
+	int pcp = (long) pcp_;
 
 	set_language(pcp);
 	cls_redraw_all_terminals();
@@ -230,7 +230,7 @@ menu_language_list(struct terminal *term, void *xxx, void *ses)
 	if (!mi) return;
 	for (i = 0; languages[i].name; i++) {
 		add_to_menu(&mi, languages[i].name, language_to_iso639(i), ACT_MAIN_NONE,
-			    menu_set_language, (void *) i, 0);
+			    menu_set_language, (void *) (long) i, 0);
 	}
 
 	do_menu_selected(term, mi, ses, current_language, 0);

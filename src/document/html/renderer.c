@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.524 2005/01/28 14:10:44 jonas Exp $ */
+/* $Id: renderer.c,v 1.525 2005/02/03 23:36:58 adamg Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1513,7 +1513,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 			return renderer_context.convert_table;
 		case SP_USED:
 			va_end(l);
-			return (void *) !!document;
+			return (void *) (long) !!document;
 		case SP_FRAMESET:
 		{
 			struct frameset_param *fsp = va_arg(l, struct frameset_param *);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.595 2005/01/22 13:54:57 jonas Exp $ */
+/* $Id: session.c,v 1.596 2005/02/03 23:36:59 adamg Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -163,7 +163,7 @@ add_session_info(struct session *ses, struct uri *uri)
 	/* I don't know what a reasonable start up time for a new instance is
 	 * but it won't hurt to have a few seconds atleast. --jonas */
 	info->timer = install_timer(10000, (void (*)(void *)) session_info_timeout,
-					   (void *) info->id);
+					   (void *) (long) info->id);
 	info->ses = ses;
 	if (uri) info->uri = get_uri_reference(uri);
 	add_to_list(session_info, info);

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.121 2005/01/01 13:15:27 pasky Exp $ */
+/* $Id: info.c,v 1.122 2005/02/03 23:36:58 adamg Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,13 +54,13 @@ push_toggle_keys_display_button(void *data)
 {
 	struct keys_toggle_info *info = data;
 
-	menu_keys(info->term, (void *) !info->toggle, NULL);
+	menu_keys(info->term, (void *) (long) !info->toggle, NULL);
 }
 
 void
 menu_keys(struct terminal *term, void *d_, void *xxx)
 {
-	int d = (int) d_;
+	int d = (long) d_;
 
 	/* We scale by main mapping because it has the most actions */
 	int actions[MAIN_ACTIONS] = {

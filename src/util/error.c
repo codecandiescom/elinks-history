@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.86 2004/06/21 18:23:07 pasky Exp $ */
+/* $Id: error.c,v 1.87 2005/02/03 23:36:59 adamg Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -215,7 +215,7 @@ dump_backtrace(FILE *f, int trouble)
 
 	strings = backtrace_symbols(stack, size);
 
-	fprintf(f, "Obtained %d stack frames:\n", size);
+	fprintf(f, "Obtained %d stack frames:\n", (int) size);
 
 	for (i = 0; i < size; i++)
 		fprintf(f, "[%p] %s\n", stack[i], strings[i]);

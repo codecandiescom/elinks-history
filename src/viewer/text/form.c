@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.266 2005/01/07 21:51:46 jonas Exp $ */
+/* $Id: form.c,v 1.267 2005/02/03 23:36:59 adamg Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ void
 selected_item(struct terminal *term, void *item_, void *ses_)
 {
 	struct session *ses = ses_;
-	int item = (int) item_;
+	int item = (long) item_;
 	struct document_view *doc_view;
 	struct link *link;
 	struct form_state *fs;

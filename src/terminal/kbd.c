@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.114 2004/12/29 15:04:21 zas Exp $ */
+/* $Id: kbd.c,v 1.115 2005/02/03 23:36:59 adamg Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -562,11 +562,11 @@ has_nul_byte:
 		if (fg == 1) {
 			set_handlers(blockh, (void (*)(void *)) unblock_itrm_x,
 				     NULL, (void (*)(void *)) unblock_itrm_x,
-				     (void *) blockh);
+				     (void *) (long) blockh);
 			/* block_itrm(itrm->ctl_in); */
 		} else {
 			set_handlers(blockh, close_handle, NULL, close_handle,
-				     (void *) blockh);
+				     (void *) (long) blockh);
 		}
 	}
 

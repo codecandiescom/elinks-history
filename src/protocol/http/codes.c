@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.37 2005/01/03 14:02:24 jonas Exp $ */
+/* $Id: codes.c,v 1.38 2005/02/03 23:36:59 adamg Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -79,7 +79,7 @@ static struct http_code http_code[] = {
 static int
 compare_http_codes(const void *key, const void *element)
 {
-	int first = (int) key;
+	int first = (long) key;
 	int second = ((struct http_code *) element)->num;
 
 	return first - second;
@@ -88,7 +88,7 @@ compare_http_codes(const void *key, const void *element)
 static unsigned char *
 http_code_to_string(int code)
 {
-	struct http_code *element = bsearch((void *) code, http_code,
+	struct http_code *element = bsearch((void *) (long) code, http_code,
 					    count(http_code),
 					    sizeof(struct http_code),
 					    compare_http_codes);

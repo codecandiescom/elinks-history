@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.175 2004/12/30 23:50:40 jonas Exp $ */
+/* $Id: core.c,v 1.176 2005/02/03 23:36:59 adamg Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,7 +269,7 @@ static enum evhook_status
 run_lua_func(va_list ap, void *data)
 {
 	struct session *ses = va_arg(ap, struct session *);
-	int func_ref = (int) data;
+	int func_ref = (long) data;
 	int err;
 
 	if (func_ref == LUA_NOREF) {
@@ -306,7 +306,7 @@ l_bind_key(LS)
 	ref = lua_ref(S, 1);
 	add_format_to_string(&event_name, "lua-run-func %i", ref);
 	event_id = register_event(event_name.source);
-	event_id = register_event_hook(event_id, run_lua_func, 0, (void *) ref);
+	event_id = register_event_hook(event_id, run_lua_func, 0, (void *) (long) ref);
 	done_string(&event_name);
 	if (event_id == EVENT_NONE) goto lua_error;
 

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.78 2004/08/15 00:27:07 jonas Exp $ */
+/* $Id: terminal.c,v 1.79 2005/02/03 23:36:59 adamg Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,14 +169,14 @@ exec_thread(unsigned char *path, int p)
 void
 close_handle(void *h)
 {
-	close((int) h);
-	set_handlers((int) h, NULL, NULL, NULL, NULL);
+	close((long) h);
+	set_handlers((long) h, NULL, NULL, NULL, NULL);
 }
 
 static void
 unblock_terminal(struct terminal *term)
 {
-	close_handle((void *) term->blocked);
+	close_handle((void *) (long) term->blocked);
 	term->blocked = -1;
 	set_handlers(term->fdin, (void (*)(void *)) in_term, NULL,
 		     (void (*)(void *)) destroy_terminal, term);
@@ -248,7 +248,7 @@ exec_on_terminal(struct terminal *term, unsigned char *path,
 				/* block_itrm(term->fdin); */
 			} else {
 				set_handlers(blockh, close_handle, NULL,
-					     close_handle, (void *) blockh);
+					     close_handle, (void *) (long) blockh);
 			}
 		}
 	} else {

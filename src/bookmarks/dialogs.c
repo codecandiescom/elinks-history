@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.88 2003/09/25 14:29:04 zas Exp $ */
+/* $Id: dialogs.c,v 1.89 2003/09/25 21:08:17 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -78,9 +78,8 @@ bookmark_dlg_box_build(void)
 static void
 bookmark_dialog_abort_handler(struct dialog_data *dlg)
 {
-	struct listbox_data *box;
-
-	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
+	struct widget *widget = &(dlg->dlg->items[BM_BOX_IND]);
+	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	del_from_list(box);
 	/* Delete the box structure */
@@ -136,12 +135,11 @@ focus_bookmark(struct widget_data *box_widget_data, struct listbox_data *box,
 static void
 do_add_folder(struct dialog_data *dlg, unsigned char *name)
 {
-	struct widget_data *box_widget_data;
-	struct listbox_data *box;
 	struct bookmark *bm = NULL;
+	struct widget_data *widget_data = &dlg->items[BM_BOX_IND];
+	struct listbox_data *box;
 
-	box_widget_data = &dlg->items[BM_BOX_IND];
-	box = (struct listbox_data *) box_widget_data->item->data;
+	box = (struct listbox_data *) widget_data->item->data;
 
 	if (box->sel) {
 		if (box->sel->type == BI_FOLDER && box->sel->expanded) {
@@ -159,7 +157,7 @@ do_add_folder(struct dialog_data *dlg, unsigned char *name)
 
 	/* We touch only the actual bookmark dialog, not all of them;
 	 * that's right, right? ;-) --pasky */
-	focus_bookmark(box_widget_data, box, bm);
+	focus_bookmark(widget_data, box, bm);
 }
 
 static int
@@ -181,9 +179,8 @@ push_add_folder_button(struct dialog_data *dlg, struct widget_data *di)
 static int
 push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 {
-	struct listbox_data *box;
-
-	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
+	struct widget *widget = &(dlg->dlg->items[BM_BOX_IND]);
+	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	/* Do nothing with a folder */
 	if (box->sel && box->sel->type == BI_FOLDER)
@@ -226,9 +223,8 @@ bookmark_edit_cancel(struct dialog *d) {
 static int
 push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 {
-	struct listbox_data *box;
-
-	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
+	struct widget *widget = &(dlg->dlg->items[BM_BOX_IND]);
+	struct listbox_data *box = (struct listbox_data *) widget->data;
 
 	/* Follow the bookmark */
 	if (box->sel) {
@@ -439,10 +435,10 @@ static int
 push_delete_button(struct dialog_data *dlg,
 		   struct widget_data *some_useless_delete_button)
 {
-	struct listbox_data *box;
 	struct terminal *term = dlg->win->term;
+	struct widget *widget = &(dlg->dlg->items[BM_BOX_IND]);
+	struct listbox_data *box = (struct listbox_data *) widget->data;
 
-	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
 	listbox_delete_bookmark(term, box);
 	return 0;
 }
@@ -534,13 +530,10 @@ static int
 push_move_button(struct dialog_data *dlg,
 		 struct widget_data *blah)
 {
-	struct widget_data *box_widget_data;
-	struct listbox_data *box;
 	struct bookmark *dest = NULL;
 	struct list_head *destb = NULL, *desti = NULL;
-
-	box_widget_data = &dlg->items[BM_BOX_IND];
-	box = (struct listbox_data *) box_widget_data->item->data;
+	struct widget_data *widget_data = &dlg->items[BM_BOX_IND];
+	struct listbox_data *box = (struct listbox_data *) widget_data->item->data;
 
 	if (!box->sel) return 0; /* nowhere to move to */
 
@@ -570,7 +563,7 @@ push_move_button(struct dialog_data *dlg,
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
 #endif
-	display_dlg_item(dlg, box_widget_data, 1);
+	display_dlg_item(dlg, widget_data, 1);
 	return 0;
 }
 
@@ -672,14 +665,15 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 static void
 bookmark_add_add(struct dialog *d)
 {
-	struct widget_data *box_widget_data = NULL; /* silence stupid gcc */
+	struct widget_data *widget_data = NULL; /* silence stupid gcc */
 	struct listbox_data *box = NULL;
 	struct bookmark *bm = NULL;
 
 	if (d->udata) {
-		box_widget_data =
-			&((struct dialog_data *) d->udata)->items[BM_BOX_IND];
-		box = (struct listbox_data *) box_widget_data->item->data;
+		struct dialog_data *dlg = (struct dialog_data *) d->udata;
+
+		widget_data = &(dlg->items[BM_BOX_IND]);
+		box = (struct listbox_data *) widget_data->item->data;
 
 		if (box->sel) {
 			if (box->sel->type == BI_FOLDER) {
@@ -699,7 +693,7 @@ bookmark_add_add(struct dialog *d)
 	if (d->udata) {
 		/* We touch only the actual bookmark dialog, not all of them;
 		 * that's right, right? ;-) --pasky */
-		focus_bookmark(box_widget_data, box, bm);
+		focus_bookmark(widget_data, box, bm);
 	}
 }
 
@@ -745,8 +739,9 @@ bookmark_search_do(struct dialog *d)
 	unsigned char *search_title = d->items[0].data;
 	unsigned char *search_url = d->items[1].data;
 	struct bookmark_search_ctx ctx = { NULL, NULL, 0, 0 };
-	struct widget_data *box_widget_data = NULL;
+	struct widget_data *widget_data = NULL;
 	struct listbox_data *box = NULL;
+	struct dialog_data *dlg;
 
 	if (!search_title || !search_url)
 		return;
@@ -754,9 +749,9 @@ bookmark_search_do(struct dialog *d)
 	if (!d->udata)
 		internal("Bookmarks search without udata in dialog! Let's panic.");
 
-	box_widget_data =
-		&((struct dialog_data *) d->udata)->items[BM_BOX_IND];
-	box = (struct listbox_data *) box_widget_data->item->data;
+	dlg = (struct dialog_data *) d->udata;
+	widget_data = &(dlg->items[BM_BOX_IND]);
+	box = (struct listbox_data *) widget_data->item->data;
 
 	/* Memorize last searched title */
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);
@@ -777,7 +772,7 @@ bookmark_search_do(struct dialog *d)
 	traverse_listbox_items_list(box->sel, 0, 0, test_search, &ctx);
 	if (!ctx.found) return;
 
-	box_sel_move(box_widget_data, ctx.ofs - 1);
+	box_sel_move(widget_data, ctx.ofs - 1);
 }
 
 

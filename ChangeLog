@@ -1,3 +1,147 @@
+Sat Mar 30 21:30:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/lowlevel/select.c:
+	
+	Include <inttypes.h> only when system has it (cygwin doesn't).
+	Thanks to Stephane Lentz <Stephane.Lentz@ansf.alcatel.fr> for
+	report.
+
+Sat Mar 30 21:23:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/polish.lng,
+	intl/romanian.lng, intl/russian.lng, intl/slovak.lng,
+	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
+	intl/ukrainian.lng, src/document/view.c, src/intl/lang_defs.h,
+	src/intl/language.inc:
+	
+	Special label for the action 'Add link to bookmarks'
+
+Sat Mar 30 21:17:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	document/view.c:
+	
+	Re-enable 'Add link to bookmarks' menu field in Link menu. Tidyup
+	of link_menu(). Patch by Zas.
+
+Sat Mar 30 20:50:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+	
+	Removed another one stale function noone has probably idea it was
+	meant for. Patch by Zas.
+
+Sat Mar 30 20:49:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+	
+	Removed one stale function noone has probably idea it was meant
+	for. Patch by Zas.
+
+Sat Mar 30 20:48:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+	
+	Basic bookmarks code tidyup. Patch by Zas and me.
+
+Sat Mar 30 09:10:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+	
+	another TODO bit
+
+Fri Mar 29 21:38:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+	
+	updated TODO list accordingly to people's wishlists
+
+Fri Mar 29 10:56:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/session.c:
+	
+	Fixed mistake when moving history stuff around. Thanks to Zas for
+	pointing that out.
+
+Fri Mar 29 10:36:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, dialogs/menu.c, document/Makefile.am,
+	document/download.c, document/download.h, document/session.c,
+	document/session.h, document/view.c, lowlevel/sched.h,
+	protocol/mailto.c:
+	
+	Moved download stuff to document/download.c
+
+Thu Mar 28 22:59:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/: location.c, location.h, view.c, view.h:
+	
+	Moved copy_location to document/location.c.
+
+Thu Mar 28 22:53:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/Makefile.am, document/dump.c, document/history.c,
+	document/location.c, document/location.h, document/session.h,
+	document/view.c, document/view.h, document/vs.c, document/vs.h,
+	document/html/renderer.c, document/html/renderer.h, lua/lua.c:
+	
+	Moved struct view_state to document/vs.c, thus helping repairing
+	various perverted crossdeps.
+
+Thu Mar 28 22:26:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/: history.c, history.h:
+	
+	Move location per-session history to document/history.c, and made
+	some appropriate encapsulation for all history stuff. Renamed
+	struct history* to struct input_history*, as it's only inputbox'
+	history.
+
+Thu Mar 28 22:25:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/menu.c, document/Makefile.am, document/session.c,
+	document/session.h, document/view.c, document/view.h,
+	document/html/renderer.c, lua/lua.c, document/location.c,
+	document/location.h:
+	
+	Move location stuff to document/location.c. This is pathetic :).
+
+Thu Mar 28 21:38:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/bfu.c, bfu/bfu.h, config/default.c, dialogs/menu.c,
+	document/Makefile.am, document/session.c, document/session.h,
+	document/view.c, document/html/renderer.c, lua/lua.c:
+	
+	Move location per-session history to document/history.c, and made
+	some appropriate encapsulation for all history stuff. Renamed
+	struct history* to struct input_history*, as it's only inputbox'
+	history.
+
+Thu Mar 28 17:35:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/sched.c, lowlevel/sched.h, protocol/ftp.c:
+	
+	Many minor RFC-compilance fixes, now we're a bit more strict, more
+	commends added, introduced abort_conn_with_state(). Patch by Zas.
+
+Thu Mar 28 02:42:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/default.c:
+	
+	keep_unhistory is now 1 by default
+
+Thu Mar 28 02:37:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/url.c:
+	
+	erm.. don't tell anyone ;) (from %xy encoded char only %x got into
+	encoded string)
+
 Thu Mar 28 01:22:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.162 2004/01/09 10:39:17 pasky Exp $ */
+/* $Id: menu.c,v 1.163 2004/01/09 10:40:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -715,6 +715,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 	}
 }
 
+
 void
 do_mainmenu(struct terminal *term, struct menu_item *items,
 	    void *data, int sel)
@@ -844,6 +845,7 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 	select_menu_item(term, &menu->items[menu->selected], menu->data);
 }
+
 
 static void
 mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
@@ -976,10 +978,12 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 	}
 }
 
+
 #undef L_MENU_SPACE
 #undef R_MENU_SPACE
 #undef L_TEXT_SPACE
 #undef R_TEXT_SPACE
+
 
 /* For dynamic menus the last (cleared) item is used to mark the end. */
 #define realloc_menu_items(mi_, size) \

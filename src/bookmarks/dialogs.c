@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.107 2003/11/06 20:11:19 jonas Exp $ */
+/* $Id: dialogs.c,v 1.108 2003/11/08 05:21:14 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -743,18 +743,6 @@ bookmark_search_do(struct dialog *dlg)
 }
 
 
-/* launch_bm_add_doc_dialog() */
-void
-launch_bm_add_doc_dialog(struct terminal *term,
-			 struct dialog_data *parent,
-			 struct session *ses)
-{
-	do_edit_dialog(term, 1, N_("Add bookmark"), NULL, NULL,
-		       ses, parent, bookmark_add_add, NULL, NULL,
-		       EDIT_DLG_ADD);
-}
-
-
 /* launch_bm_search_doc_dialog() */
 static void
 launch_bm_search_doc_dialog(struct terminal *term,
@@ -768,7 +756,25 @@ launch_bm_search_doc_dialog(struct terminal *term,
 }
 
 
-/* Called to launch an add dialog on the current link */
+void
+launch_bm_add_dialog(struct terminal *term,
+		     struct dialog_data *parent,
+		     struct session *ses,
+		     unsigned char *title,
+		     unsigned char *url)
+{
+	do_edit_dialog(term, 1, N_("Add bookmark"), title, url, ses,
+		       parent, bookmark_add_add, NULL, NULL, EDIT_DLG_ADD);
+}
+
+void
+launch_bm_add_doc_dialog(struct terminal *term,
+			 struct dialog_data *parent,
+			 struct session *ses)
+{
+	launch_bm_add_dialog(term, parent, ses, NULL, NULL);
+}
+
 void
 launch_bm_add_link_dialog(struct terminal *term,
 			  struct dialog_data *parent,
@@ -776,10 +782,9 @@ launch_bm_add_link_dialog(struct terminal *term,
 {
 	unsigned char title[MAX_STR_LEN], url[MAX_STR_LEN];
 
-	do_edit_dialog(term, 1, N_("Add bookmark"),
-		       get_current_link_name(ses, title, MAX_STR_LEN),
-		       get_current_link_url(ses, url, MAX_STR_LEN), ses,
-		       parent, bookmark_add_add, NULL, NULL, EDIT_DLG_ADD);
+	launch_bm_add_dialog(term, parent, ses,
+			     get_current_link_name(ses, title, MAX_STR_LEN),
+			     get_current_link_url(ses, url, MAX_STR_LEN));
 }
 
 #endif

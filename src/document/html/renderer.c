@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.152 2003/06/17 16:26:47 pasky Exp $ */
+/* $Id: renderer.c,v 1.153 2003/06/18 17:21:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ xpand_line(struct part *p, int y, int x)
 	y += p->yp;
 
 	assertm(y < p->data->y, "line does not exist");
-	
+
 	if (x < p->data->data[y].l)
 		return 0;
 
@@ -1025,9 +1025,7 @@ line_break(struct part *part)
 		return;
 	}
 
-	if (!part->data) goto end;
-
-	assert(part->data->data);
+	if (!part->data || !part->data->data) goto end;
 
 	/* move_links(part, part->cx, part->cy, 0, part->cy + 1); */
 	xpand_lines(part, part->cy + 1);

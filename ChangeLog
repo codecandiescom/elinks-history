@@ -1,3 +1,391 @@
+Thu Apr  1 18:34:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/proxy.c, protocol/proxy.h, sched/connection.c:
+
+	Make get_proxy() return URI struct. Move proxy_uri validation to
+	load_uri() and thus closer to the let-me-get-the-hell-out-of-here
+	handler. Fix a few possible leaks in the error paths.  
+
+Thu Apr  1 17:13:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Make the task struct use URIs.  
+
+Thu Apr  1 16:42:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/task.c, viewer/dump/dump.c,
+	viewer/text/vs.c, viewer/text/vs.h:
+
+	Pass URI struct to init_vs() so it can never fail.  
+
+Thu Apr  1 16:31:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Cleanup.  
+
+Thu Apr  1 16:21:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Cleanup dead code.  
+
+Thu Apr  1 16:19:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Remove useless allocation.  
+
+Thu Apr  1 16:01:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	More crazy stuff.  
+
+Thu Apr  1 15:59:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/location.c, sched/location.h, sched/session.c,
+	sched/session.h, sched/task.c, viewer/dump/dump.c,
+	viewer/text/marks.c, viewer/text/vs.c, viewer/text/vs.h:
+
+	Blast vs.url and vs.url_len and flush out all the crazy code that
+	made it work.  
+
+Thu Apr  1 15:45:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Improve zas' fix and just allow current_url to be NULL if we are
+	lost.  
+
+Thu Apr  1 15:29:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Use have_location() to prevent segfault in goto_url_hook().  
+
+Thu Apr  1 15:05:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	Muddle up.  
+
+Thu Apr  1 14:56:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, scripting/lua/core.c,
+	scripting/lua/hooks.c, scripting/perl/hooks.c, viewer/text/view.c:
+
+	XPUSHs(sv_2mortal(newSVpvn(struri(cur_loc(ses)->vs.uri),
+	strlen(struri(cur_loc(ses)->vs.uri))))); 
+
+Thu Apr  1 14:45:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, protocol/rewrite/rewrite.c,
+	sched/history.c:
+
+	Convert a few vs.url to struri(vs.uri).  
+
+Thu Apr  1 14:44:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: renderer.c, plain/renderer.c:
+
+	If no document title set it to the current URI.  
+
+Thu Apr  1 14:35:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/renderer.c, document/html/frames.c,
+	scripting/guile/core.c, viewer/text/view.c:
+
+	Convert all vs->url to struri(vs->uri).  
+
+Thu Apr  1 07:56:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/proxy.c:
+
+	Cleanup.  
+
+Thu Apr  1 07:53:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Pass URI struct to get_proxy().  
+
+Thu Apr  1 06:22:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: proxy.c, proxy.h:
+
+	get_proxy() and friends using URI structs.  
+
+Thu Apr  1 06:08:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	ALittleCleanup.  
+
+Thu Apr  1 06:06:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	sched/session.c, sched/task.c, viewer/dump/dump.c:
+
+	load_url() -> load_uri() and take URI struct as arg.  
+
+Thu Apr  1 05:57:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/smb/smb.c:
+
+	Compile fixes. Thanks to Zardoz.  
+
+Thu Apr  1 05:18:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Translate real_url to an URI struct.  
+
+Thu Apr  1 05:09:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, document.h, renderer.c:
+
+	Pass vs->uri to get_cached_document() and init_document().  
+
+Thu Apr  1 05:03:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, dialogs/menu.c, scripting/lua/core.c:
+
+	Tune a few view state URI composing.  
+
+Thu Apr  1 05:02:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/history.c, viewer/text/view.c:
+
+	View state comparing optimizations.  
+
+Thu Apr  1 05:01:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: viewer/text/vs.c, viewer/text/vs.h, sched/session.c:
+
+	Add URI struct member to view_state.  
+
+Thu Apr  1 04:15:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/dialogs.c, protocol/ftp/ftp.c, protocol/smb/smb.c:
+
+	More get_uri_string() usage.  
+
+Thu Apr  1 04:09:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/codes.c:
+
+	Rename http_error_info->url to ->uri and change to point to an URI
+	struct.  
+
+Thu Apr  1 03:56:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	No good patch.  
+
+Thu Apr  1 03:22:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix the leak introduced in file:/// fallback for non existing files
+	fix.  
+
+Thu Apr  1 02:59:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, sched/download.c,
+	sched/task.c, viewer/dump/dump.c:
+
+	get_cache_redirect_uri(): Take URI struct.  
+
+Thu Apr  1 02:48:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, sched/download.c, sched/history.c,
+	sched/session.c, sched/session.h, sched/task.c:
+
+	Change session->loading_uri to point to an URI struct.  
+
+Thu Apr  1 01:51:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Cleanup return type checking.  
+
+Thu Apr  1 01:47:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, sched/download.c, sched/session.c,
+	sched/session.h:
+
+	type_query->url -> type_query->uri 
+
+Thu Apr  1 01:30:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, sched/download.c, sched/session.c,
+	sched/session.h:
+
+	type_query->url -> type_query->uri 
+
+Thu Apr  1 01:25:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Change file_to_load->uri to point to an URI struct.  
+
+Thu Apr  1 01:20:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	file_to_load->url -> file_to_load->uri 
+
+Thu Apr  1 01:09:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, sched/download.c, sched/history.c,
+	sched/session.c, sched/session.h, sched/task.c:
+
+	session->loading_url -> session->loading_uri 
+
+Thu Apr  1 01:01:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, sched/download.c,
+	sched/task.c, viewer/dump/dump.c:
+
+	get_cache_redirect_uri(): Generalized redirect URI composer.  
+
+Thu Apr  1 00:37:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, sched/download.c, sched/download.h:
+
+	Change file_download->uri to point to an URI struct. BTW there seem
+	to have sneaked in a leak when aborting downloads. Well well 
+
+Thu Apr  1 00:13:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, sched/download.c, sched/download.h:
+
+	file_download->url -> file_download->uri 
+
+Thu Apr  1 00:09:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/plain/renderer.c, protocol/file/cgi.c:
+
+	get_no_post_url() -> get_uri_string(..., ~URI_POST) 
+
+Wed Mar 31 23:47:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/file/cgi.c, protocol/http/http.c,
+	sched/connection.c, sched/connection.h:
+
+	Change connection referrer to point to an URI struct.  
+
+Wed Mar 31 23:40:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	get_uri_reference(): Be lazy and handle NULL URIs too.  
+
+Wed Mar 31 23:38:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/file/cgi.c, protocol/http/http.c,
+	sched/connection.c, sched/connection.h:
+
+	connection->ref_url -> connection->referrer 
+
+Wed Mar 31 23:33:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	sched/session.c, viewer/dump/dump.c:
+
+	load_url(): Take referrer as URI struct.  
+
+Wed Mar 31 23:32:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h:
+
+	Change session referrer to point to an URI struct.  
+
+Wed Mar 31 23:17:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, session.c, session.h, task.c:
+
+	session->ref_url -> session->referrer 
+
+Wed Mar 31 22:42:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/status.c, document/document.c, document/document.h,
+	document/refresh.c, document/renderer.c, document/plain/renderer.c,
+	sched/session.c, sched/session.h, sched/task.c:
+
+	Use URI cache for documents. set_session_referrer() now takes URI
+	struct.  
+
+Wed Mar 31 22:39:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.h:
+
+	Add macro to get the cache entry URI struct.  
+
+Wed Mar 31 22:00:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/status.c, document/document.c, document/document.h,
+	document/refresh.c, document/renderer.c, document/plain/renderer.c,
+	sched/session.c, sched/task.c, viewer/text/view.c:
+
+	document->url -> document->uri 
+
+Wed Mar 31 21:50:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	get_uri_reference(): Returned the locked URI.  
+
+Wed Mar 31 20:31:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, cache/dialogs.c,
+	lowlevel/connect.c, protocol/finger.c, protocol/uri.c,
+	protocol/uri.h, protocol/user.c, protocol/file/cgi.c,
+	protocol/file/file.c, protocol/ftp/ftp.c, protocol/http/http.c,
+	protocol/smb/smb.c, sched/connection.c, sched/connection.h,
+	sched/session.c:
+
+	Make the connection struct use the URI cache. Make struri() take URI
+	pointer.  
+
+Wed Mar 31 20:29:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/download.c, document/renderer.c,
+	protocol/http/codes.c, sched/task.c:
+
+	Fix URI utility includes.  
+
+Wed Mar 31 16:53:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/uri.c:
+
+	Assert parameters in get_uri_cache_entry(), safer for now, imho.  
+
+Wed Mar 31 16:47:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, cache/dialogs.c,
+	protocol/uri.c, protocol/uri.h, viewer/dump/dump.c:
+
+	Reintroduce the URI cache. Used for cache entries only.  
+
+Wed Mar 31 00:11:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/scripting/lua/core.c:
+
+	Test file existence to avoid Lua error reporting (under version
+	5.x).  Fixes debian bug #231760 ('dbug 231760' using URI rewrite).  
+	Patch by Kevin B. McCarty. Untested.  
+
+Tue Mar 30 23:05:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/history.c, sched/session.c, sched/session.h,
+	sched/task.c, viewer/text/view.c:
+
+	set_referrer(): Move to C file and rename to set_session_referrer().  
+
 Tue Mar 30 15:42:24 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/view.c:

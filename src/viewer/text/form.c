@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.110 2004/05/29 01:08:05 jonas Exp $ */
+/* $Id: form.c,v 1.111 2004/05/29 02:26:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -453,8 +453,6 @@ encode_controls(struct list_head *l, struct string *data,
 	assert(l && data);
 	if_assert_failed return;
 
-	if (!init_string(data)) return;
-
 	foreach (sv, *l) {
 		unsigned char *p2 = NULL;
 
@@ -528,8 +526,6 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 
 	assert(ses && l && data && bound);
 	if_assert_failed return;
-
-	if (!init_string(data)) return;
 
 	memset(bound, 'x', BL);
 
@@ -680,8 +676,6 @@ encode_text_plain(struct list_head *l, struct string *data,
 	assert(l && data);
 	if_assert_failed return;
 
-	if (!init_string(data)) return;
-
 	foreach (sv, *l) {
 		unsigned char *area51 = NULL;
 		unsigned char *value = sv->value;
@@ -764,7 +758,10 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 		do_reset_form(doc_view, frm->form_num);
 		return NULL;
 	}
-	if (!frm->action) return NULL;
+
+	if (!frm->action
+	    || !init_string(&data))
+		return NULL;
 
 	get_succesful_controls(doc_view, frm, &submit);
 
@@ -796,9 +793,11 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 	free_succesful_controls(&submit);
 
-	if (!data.source) return NULL;
-
-	if (!init_string(&go)) return NULL;
+	if (!data.source
+	    || !init_string(&go)) {
+		done_string(&data);
+		return NULL;
+	}
 
 	switch (frm->method) {
 	case FM_GET:

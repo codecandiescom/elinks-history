@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.59 2004/03/21 14:30:25 jonas Exp $ */
+/* $Id: uri.h,v 1.60 2004/03/21 14:59:16 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -38,6 +38,7 @@ struct uri {
 
 	/* @data can contain both the path and query uri fields.
 	 * It can never be NULL but can have zero length. */
+	struct string data;
 	unsigned char *datastr;
 	int datalen;
 

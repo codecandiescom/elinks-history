@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.237 2003/06/28 23:34:29 jonas Exp $ */
+/* $Id: options.c,v 1.238 2003/07/05 13:06:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1286,7 +1286,7 @@ register_options(void)
 		N_("Options regarding files downloading and handling."));
 
 	/* Compatibility alias. Added: 2003-05-07, 0.5pre1.CVS. */
-	add_opt_alias("document.download", N_("Default MIME-type"),
+	add_opt_alias("document.download", NULL,
 		"default_mime_type", 0, "mime.default_type",
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use the mime.default_type option instead."));
@@ -1690,17 +1690,17 @@ register_options(void)
 		N_("Options for mailcap support. (Deprecated. Please use\n"
 		"mime.mailcap instead)"));
 
-	add_opt_alias("protocol.mailcap", N_("Enable"),
+	add_opt_alias("protocol.mailcap", NULL,
 		"enable", 0, "mime.mailcap.enable",
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use the mime.mailcap.enable option instead."));
 
-	add_opt_alias("protocol.mailcap", N_("Path"),
+	add_opt_alias("protocol.mailcap", NULL,
 		"path", 0, "mime.mailcap.path",
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use the mime.mailcap.path option instead."));
 
-	add_opt_alias("protocol.mailcap", N_("Ask before opening"),
+	add_opt_alias("protocol.mailcap", NULL,
 		"ask", 0, "mime.mailcap.ask",
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use the mime.mailcap.ask option instead."));
@@ -1709,7 +1709,7 @@ register_options(void)
 		"description", 0, 0, 2, 0,
 		N_("This option is deprecated and will be removed very soon.\n"));
 
-	add_opt_alias("protocol.mailcap", N_("Prioritize entries by file"),
+	add_opt_alias("protocol.mailcap", NULL,
 		"prioritize", 0, "mime.mailcap.prioritize",
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use the mime.mailcap.prioritize option instead."));

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.74 2003/07/05 03:20:32 jonas Exp $ */
+/* $Id: connection.c,v 1.75 2003/07/05 13:06:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ add_host_connection(struct connection *c)
 }
 
 static void
-del_host_connection(struct connection *c)
+done_host_connection(struct connection *c)
 {
 	struct host_connection *h = get_host_connection(c);
 
@@ -314,7 +314,7 @@ free_connection_data(struct connection *c)
 	assertm(active_connections >= 0, "active connections underflow");
 
 	if (c->state != S_WAIT)
-		del_host_connection(c);
+		done_host_connection(c);
 }
 
 void
@@ -334,7 +334,7 @@ send_connection_info(struct connection *c)
 }
 
 static void
-del_connection(struct connection *c)
+done_connection(struct connection *c)
 {
 	del_from_list(c);
 	send_connection_info(c);
@@ -426,7 +426,7 @@ add_keepalive_connection(struct connection *c, ttime timeout)
 	else
 		close(c->sock1);
 
-	del_connection(c);
+	done_connection(c);
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 
@@ -541,7 +541,7 @@ run_connection(struct connection *c)
 
 	if (!add_host_connection(c)) {
 		set_connection_state(c, S_OUT_OF_MEM);
-		del_connection(c);
+		done_connection(c);
 		return;
 	}
 
@@ -558,7 +558,7 @@ retry_connection(struct connection *c)
 	interrupt_connection(c);
 	if (c->uri.post || !max_tries || ++c->tries >= max_tries) {
 		/*send_connection_info(c);*/
-		del_connection(c);
+		done_connection(c);
 		register_bottom_half((void (*)(void *))check_queue, NULL);
 	} else {
 		c->prev_error = c->state;
@@ -571,7 +571,7 @@ abort_connection(struct connection *c)
 {
 	if (c->running) interrupt_connection(c);
 	/* send_connection_info(c); */
-	del_connection(c);
+	done_connection(c);
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 
@@ -693,7 +693,7 @@ again2:
 		if (get_priority(c) < PRI_CANCEL) break;
 		if (c->state == S_WAIT) {
 			set_connection_state(c, S_INTERRUPTED);
-			del_connection(c);
+			done_connection(c);
 			goto again2;
 		}
 	}

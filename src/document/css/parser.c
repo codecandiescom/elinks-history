@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.5 2004/01/17 21:17:22 pasky Exp $ */
+/* $Id: parser.c,v 1.6 2004/01/18 01:48:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,15 +51,6 @@ struct css_property_info css_property_info[] = {
 	CSS_PROPERTY("", CSS_DP_NONE),
 };
 
-/* This function takes a declaration from the given string, parses it to atoms,
- * and possibly creates {struct css_property} and chains it up to the specified
- * list. The function returns positive value in case it recognized a property
- * in the given string, or zero in case of an error. */
-/* This function is recursive, therefore if you give it a string containing
- * multiple declarations separated by a semicolon, it will call itself for each
- * of the following declarations. Then it returns success in case at least one
- * css_parse_decl() run succeeded. In case of failure, it tries to do an error
- * recovery by simply looking at the nearest semicolon ahead. */
 int
 css_parse_decl(struct list_head *props, unsigned char *string)
 {

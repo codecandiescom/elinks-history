@@ -1,3 +1,275 @@
+Fri Jul  4 21:41:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/ftp.c, protocol/http/http.c, sched/connection.c,
+	sched/connection.h:
+
+	Rename: add_keepalive_socket() -> add_keepalive_connection().  
+
+Fri Jul  4 21:11:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	More connection uri usage and a small keepalive_connection
+	allocation optimization.  
+
+Fri Jul  4 20:55:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Potential bug fixed, get_url_data() may return NULL, causing
+	stracpy() to fail. Minor cleanup and optimizations.  
+
+Fri Jul  4 20:45:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Small cleanup and move try_to_suspend_connection() closer to the
+	user.  
+
+Fri Jul  4 20:25:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Do not print . or .. directories in ftp listing, this bug was
+	introduced recently.  
+
+Fri Jul  4 20:18:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* test/README:
+
+	Grammar fixes. 13! 
+
+Fri Jul  4 20:04:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Do not print link of type text/css or image/x-icon, but let links of
+	other types to be print. It clarifies a point discussed on #elinks.  
+
+Fri Jul  4 19:27:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	A buffer is now used for post data decoding, it prevents repeated
+	calls to add_chr_to_str(). add_bytes_to_str() is now used instead.
+	unhx() replaces equivalent code. As a side effect it fixes a warning
+	(add_chr_to_str a=0) issued in debug mode when calling
+	add_chr_to_str() with a nul char.  
+
+Fri Jul  4 19:19:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	A assertion failure was fixed. goto_url() should only be called if
+	url is not NULL.  
+
+Fri Jul  4 19:02:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Rename: keepalive_connection->conn -> keepalive_connection->socket.  
+
+Fri Jul  4 18:57:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Rename: host_connection->conn -> host_connection->connections.  
+
+Fri Jul  4 18:50:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Remove useless test: get_protocol_handler() always returns handler.  
+
+Fri Jul  4 18:45:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Reorganize host_connection management. Connection with no hosts
+	(file protocol) are not in the list. Introduce accessors for the
+	list. Uh and finally fix the buggy uri usage from previous patch.  
+
+Fri Jul  4 15:53:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.c, protocol/uri.h, sched/connection.c:
+
+	Introduce and use get_uri_port().  
+
+Fri Jul  4 15:48:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	Change policy so all struct uri validation is done in accessors.  
+
+Fri Jul  4 15:01:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/protocol.c, protocol/protocol.h,
+	sched/connection.c:
+
+	Use struct uri when getting protocol handler.  
+
+Fri Jul  4 14:50:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Move out initialization of keepalive connections. Makes way for
+	removal of evil gotos. But now we always del_connection().  
+
+Fri Jul  4 14:11:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Slightly alter done_keepalive_connection() to make socket closing
+	optional. Use it in has_keepalive.connection().  
+
+Fri Jul  4 13:34:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/ftp.c, protocol/http/http.c, sched/connection.c,
+	sched/connection.h:
+
+	Rename: get_keepalive_socket() -> has_keepalive_connection() +
+	altered it's semantics to match the name.  
+
+Fri Jul  4 13:14:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Rename: del_keepalive_socket() -> done_keepalive_connection() + and
+	use it when aborting all.  
+
+Fri Jul  4 12:58:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Some initial usage of connection->uri introduced. Uri helpers has to
+	be added to go further.  
+
+Fri Jul  4 12:12:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, connection.h:
+
+	Add struct uri member to struct connection. It is not used yet but
+	bad uris are detected by initialization.  
+
+Fri Jul  4 11:56:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/finger.c, protocol/ftp.c, protocol/http/http.c,
+	sched/connection.c, sched/connection.h:
+
+	Rename: set_timeout() -> set_connection_timeout().  
+
+Fri Jul  4 10:57:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, document/html/renderer.h,
+	viewer/text/search.c, viewer/text/search.h:
+
+	get_search_data() and associate functions were moved from renderer.c
+	to viewer/text/search.c, and becomes static.  
+
+Fri Jul  4 09:45:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/frames.c:
+
+	Minor optimizations.  
+
+Fri Jul  4 09:39:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: Makefile.am, parser.h, renderer.c,
+	renderer.h, frames.c, frames.h:
+
+	Frame and frameset functions were moved to frames.{c,h}.  
+
+Fri Jul  4 02:16:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/cache.h, sched/connection.h, sched/download.h,
+	sched/session.h:
+
+	Reorder and trim #includes.  
+
+Fri Jul  4 01:49:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/connection.c, sched/connection.h, sched/download.c,
+	sched/download.h, sched/location.h, sched/session.c,
+	sched/session.h, viewer/dump/dump.c, viewer/dump/dump.h,
+	viewer/text/view.c:
+
+	Monster patch. Rename: struct status -> struct download. Idea by
+	pasky. Also contains some variable renames, sorry.  
+
+Fri Jul  4 00:54:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, download.h:
+
+	Reorder #includes.  
+
+Fri Jul  4 00:52:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, sched/download.c, sched/download.h:
+
+	Rename: struct download -> struct file_download. Idea by pasky.  
+
+Fri Jul  4 00:46:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Added macros for testing connection state 'groups'.  
+
+Fri Jul  4 00:25:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/file.c, protocol/finger.c, protocol/ftp.c,
+	protocol/http/http.c, sched/connection.c, sched/connection.h:
+
+	Put connection states in enum connection_state. Added paskys
+	description of values.  
+
+Thu Jul  3 23:30:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Group together keepalive functions.  
+
+Thu Jul  3 22:55:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Rename: is_host_on_keepalive_list() -> get_keepalive_connection().  
+
+Thu Jul  3 22:49:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Rename: is_host_on_list() -> get_host_connection().  
+
+Thu Jul  3 22:43:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Rename: h_conn -> host_connection, k_conn -> keepalive_connection.  
+
+Thu Jul  3 22:42:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	Useless test prevention.  
+
+Thu Jul  3 22:37:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Split up stat_timer() to get rid of @st_r variable.  
+
+Thu Jul  3 22:31:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Minor cleanup, optimizations, assert(), ....  
+
+Thu Jul  3 22:26:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	A few cleanups.  
+
 Thu Jul  3 22:08:31 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser.c:

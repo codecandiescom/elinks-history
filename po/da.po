@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -96,8 +96,9 @@ msgstr "Mappe navn"
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "Ok"
 
@@ -223,6 +224,24 @@ msgstr "Fejl ved parsning af konfigurations variabel %s: %s"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Forbindelser"
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Hukommelse opbrugt"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "Fejl ved skrivning til fil"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "Fejl ved åbning af fil"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -958,7 +977,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Ventetid udløbet for overførsel"
 
@@ -3807,7 +3826,7 @@ msgstr "Intet program"
 msgid "No program specified for protocol %s."
 msgstr "Intet program angivet for"
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Fejl i URL-syntaks"
 
@@ -3954,6 +3973,138 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "Venter i kø"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Lokaliserer vært"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Forbinder"
+
+#: src/sched/error.c:32
+msgid "SSL negotiation"
+msgstr "SSL forhandling"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "Forespørgsel sent"
+
+#: src/sched/error.c:34
+msgid "Logging in"
+msgstr "Logger på"
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Henter dokumenthoved"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "Serveren behandler forespørgsel"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Overfører"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Venter på bekræftelse på omdirigering"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "Afbrudt"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "Sokkelfejl"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "Intern fejl"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Værtsmaskinen kan ikke lokaliseres"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "Fejl ved skrivning til sokkel"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "Fejl ved læsning fra sokkel"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Data ændret"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "Forespørgsel skal genstartes"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Kan ikke aflæse sokkeltilstand"
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Fejl i HTTP-svar"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "Intet indhold"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Ukendt filtype"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "Fejl ved åbning af fil"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Fejl i FTP-svar"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "FTP-tjeneste ikke tilgængelig"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Fejl ved FTP-indlogning"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "FTP PORT kommando mislykkedes"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "Filen findes ikke"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "FTP filfejl"
+
+#: src/sched/error.c:68
+msgid "SSL error"
+msgstr "SSL-fejl"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Denne version af ELinks understøtter ikke SSL/TSL"
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Ukendt fejl"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4225,105 +4376,6 @@ msgstr "send til"
 
 #~ msgid " at "
 #~ msgstr " på "
-
-#~ msgid "Waiting in queue"
-#~ msgstr "Venter i kø"
-
-#~ msgid "Looking up host"
-#~ msgstr "Lokaliserer vært"
-
-#~ msgid "Making connection"
-#~ msgstr "Forbinder"
-
-#~ msgid "SSL negotiation"
-#~ msgstr "SSL forhandling"
-
-#~ msgid "Request sent"
-#~ msgstr "Forespørgsel sent"
-
-#~ msgid "Logging in"
-#~ msgstr "Logger på"
-
-#~ msgid "Getting headers"
-#~ msgstr "Henter dokumenthoved"
-
-#~ msgid "Server is processing request"
-#~ msgstr "Serveren behandler forespørgsel"
-
-#~ msgid "Transferring"
-#~ msgstr "Overfører"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Venter på bekræftelse på omdirigering"
-
-#~ msgid "Interrupted"
-#~ msgstr "Afbrudt"
-
-#~ msgid "Socket exception"
-#~ msgstr "Sokkelfejl"
-
-#~ msgid "Internal error"
-#~ msgstr "Intern fejl"
-
-#~ msgid "Out of memory"
-#~ msgstr "Hukommelse opbrugt"
-
-#~ msgid "Host not found"
-#~ msgstr "Værtsmaskinen kan ikke lokaliseres"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "Fejl ved skrivning til sokkel"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "Fejl ved læsning fra sokkel"
-
-#~ msgid "Data modified"
-#~ msgstr "Data ændret"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "Forespørgsel skal genstartes"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Kan ikke aflæse sokkeltilstand"
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Fejl i HTTP-svar"
-
-#~ msgid "No content"
-#~ msgstr "Intet indhold"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Ukendt filtype"
-
-#~ msgid "Error opening file"
-#~ msgstr "Fejl ved åbning af fil"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Fejl i FTP-svar"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "FTP-tjeneste ikke tilgængelig"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Fejl ved FTP-indlogning"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "FTP PORT kommando mislykkedes"
-
-#~ msgid "File not found"
-#~ msgstr "Filen findes ikke"
-
-#~ msgid "FTP file error"
-#~ msgstr "FTP filfejl"
-
-#~ msgid "SSL error"
-#~ msgstr "SSL-fejl"
-
-#~ msgid "This version of ELinks does not contain SSL/TSL support"
-#~ msgstr "Denne version af ELinks understøtter ikke SSL/TSL"
-
-#~ msgid "Unknown error"
-#~ msgstr "Ukendt fejl"
 
 #~ msgid "action"
 #~ msgstr "handling"

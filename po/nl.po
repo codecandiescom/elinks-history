@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Stefan de Groot <stefan@nllinux.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
@@ -95,8 +95,9 @@ msgstr ""
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "OK"
 
@@ -213,6 +214,24 @@ msgstr "Schrijven naar socket mislukt"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Verbindingen"
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Te weinig geheugen"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "Schrijffout bij opslaan"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "Fout bij openen bestand"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -938,7 +957,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Onvangst buiten tijd"
 
@@ -3771,7 +3790,7 @@ msgstr "Geen programma"
 msgid "No program specified for protocol %s."
 msgstr "Geen programma gespecificieerd voor"
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "BSlechtead URL syntaxis"
 
@@ -3918,6 +3937,139 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "In wachtrij"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Zoeken naar host"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Verbinding maken"
+
+#: src/sched/error.c:32
+msgid "SSL negotiation"
+msgstr "SSL onderhandeling"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "Verzoek verzonden"
+
+#: src/sched/error.c:34
+#, fuzzy
+msgid "Logging in"
+msgstr "Gebruikers ID"
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Ontvangen hoofden"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "Server verwerkt verzoek"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Overzetten"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Wachten voor indirecte bevestiging"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "Onderschept"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "Socket uitzondering"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "Interne fout"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Host niet gevonden"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "Schrijven naar socket mislukt"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "Lezen van socket mislukt"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Data gemodificeerd"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "Verzoek moet opnieuw"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Kan geen socket status krijgen"
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Slechte HTTP respons"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "Geen content"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Onbekende bestandstype"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "Fout bij openen bestand"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Slechte FTP antwoord"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "FTP service niet beschikbaar"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Slechte FTP login"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "FTP PORT commando gefaald"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "Bestand niet gevonden"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "FTP bestand fout"
+
+#: src/sched/error.c:68
+msgid "SSL error"
+msgstr "SSL fout"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Deze versie van Links heeft geen SSL/TSL ondersteuning"
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Onbekende fout"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4188,102 +4340,6 @@ msgstr "Verzenden aan"
 
 #~ msgid " at "
 #~ msgstr " van "
-
-#~ msgid "Waiting in queue"
-#~ msgstr "In wachtrij"
-
-#~ msgid "Looking up host"
-#~ msgstr "Zoeken naar host"
-
-#~ msgid "Making connection"
-#~ msgstr "Verbinding maken"
-
-#~ msgid "SSL negotiation"
-#~ msgstr "SSL onderhandeling"
-
-#~ msgid "Request sent"
-#~ msgstr "Verzoek verzonden"
-
-#~ msgid "Getting headers"
-#~ msgstr "Ontvangen hoofden"
-
-#~ msgid "Server is processing request"
-#~ msgstr "Server verwerkt verzoek"
-
-#~ msgid "Transferring"
-#~ msgstr "Overzetten"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Wachten voor indirecte bevestiging"
-
-#~ msgid "Interrupted"
-#~ msgstr "Onderschept"
-
-#~ msgid "Socket exception"
-#~ msgstr "Socket uitzondering"
-
-#~ msgid "Internal error"
-#~ msgstr "Interne fout"
-
-#~ msgid "Out of memory"
-#~ msgstr "Te weinig geheugen"
-
-#~ msgid "Host not found"
-#~ msgstr "Host niet gevonden"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "Schrijven naar socket mislukt"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "Lezen van socket mislukt"
-
-#~ msgid "Data modified"
-#~ msgstr "Data gemodificeerd"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "Verzoek moet opnieuw"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Kan geen socket status krijgen"
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Slechte HTTP respons"
-
-#~ msgid "No content"
-#~ msgstr "Geen content"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Onbekende bestandstype"
-
-#~ msgid "Error opening file"
-#~ msgstr "Fout bij openen bestand"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Slechte FTP antwoord"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "FTP service niet beschikbaar"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Slechte FTP login"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "FTP PORT commando gefaald"
-
-#~ msgid "File not found"
-#~ msgstr "Bestand niet gevonden"
-
-#~ msgid "FTP file error"
-#~ msgstr "FTP bestand fout"
-
-#~ msgid "SSL error"
-#~ msgstr "SSL fout"
-
-#~ msgid "This version of ELinks does not contain SSL/TSL support"
-#~ msgstr "Deze versie van Links heeft geen SSL/TSL ondersteuning"
-
-#~ msgid "Unknown error"
-#~ msgstr "Onbekende fout"
 
 #~ msgid "handles"
 #~ msgstr "afhandelen"

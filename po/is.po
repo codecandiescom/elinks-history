@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Armon Red <armon@islandia.is>\n"
 "Language-Team: Icelandic <kde-isl@mmedia.is>\n"
@@ -95,8 +95,9 @@ msgstr ""
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "Í lagi"
 
@@ -213,6 +214,24 @@ msgstr "Villa við ritun til nets"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Tengingar"
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Minni á þrotum"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "Villa við ritun skráar"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "Villa við opnun skráar"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -937,7 +956,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Sóknarfrestur útrunninn"
 
@@ -3769,7 +3788,7 @@ msgstr "Ekkert forrit"
 msgid "No program specified for protocol %s."
 msgstr "Ekkert forrit skilgreint fyrir"
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Ógild slóð"
 
@@ -3916,6 +3935,140 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "Bíð í röð"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Leita að miðlara"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Opna tengingu"
+
+#: src/sched/error.c:32
+#, fuzzy
+msgid "SSL negotiation"
+msgstr "V~ista stillingar"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "Fyrirspurn send"
+
+#: src/sched/error.c:34
+msgid "Logging in"
+msgstr ""
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Næ í hausa"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "Miðlari er að vinna úr fyrirspurn"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Flyt gögn"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Bíð eftir staðfestingu endurkasts"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "Truflun"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "Villa í gagnaflutningi"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "Innri villa"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Miðlari ekki fundinn"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "Villa við ritun til nets"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "Villa við lestur nets"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Gögnum breytt"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "Endurgera verður fyrirspurn"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Finn ekki stöðu gáttar"
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Ógilt HTTP svar"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "Ekkert efni"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Óþekkt skráartegund"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "Villa við opnun skráar"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Ógilt FTP svar"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "FTP þjónusta ekki tiltæk"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Ógild FTP innstimplun"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "FTP PORT skipun mistókst"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "Skrá ekki fundin"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "FTP skráarvilla"
+
+#: src/sched/error.c:68
+#, fuzzy
+msgid "SSL error"
+msgstr "Vistunarvilla"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr ""
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Óþekkt villa"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4182,93 +4335,6 @@ msgstr "senda til"
 #: src/viewer/text/view.c:3725
 msgid "post to"
 msgstr "senda til"
-
-#~ msgid "Waiting in queue"
-#~ msgstr "Bíð í röð"
-
-#~ msgid "Looking up host"
-#~ msgstr "Leita að miðlara"
-
-#~ msgid "Making connection"
-#~ msgstr "Opna tengingu"
-
-#~ msgid "Request sent"
-#~ msgstr "Fyrirspurn send"
-
-#~ msgid "Getting headers"
-#~ msgstr "Næ í hausa"
-
-#~ msgid "Server is processing request"
-#~ msgstr "Miðlari er að vinna úr fyrirspurn"
-
-#~ msgid "Transferring"
-#~ msgstr "Flyt gögn"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Bíð eftir staðfestingu endurkasts"
-
-#~ msgid "Interrupted"
-#~ msgstr "Truflun"
-
-#~ msgid "Socket exception"
-#~ msgstr "Villa í gagnaflutningi"
-
-#~ msgid "Internal error"
-#~ msgstr "Innri villa"
-
-#~ msgid "Out of memory"
-#~ msgstr "Minni á þrotum"
-
-#~ msgid "Host not found"
-#~ msgstr "Miðlari ekki fundinn"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "Villa við ritun til nets"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "Villa við lestur nets"
-
-#~ msgid "Data modified"
-#~ msgstr "Gögnum breytt"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "Endurgera verður fyrirspurn"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Finn ekki stöðu gáttar"
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Ógilt HTTP svar"
-
-#~ msgid "No content"
-#~ msgstr "Ekkert efni"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Óþekkt skráartegund"
-
-#~ msgid "Error opening file"
-#~ msgstr "Villa við opnun skráar"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Ógilt FTP svar"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "FTP þjónusta ekki tiltæk"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Ógild FTP innstimplun"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "FTP PORT skipun mistókst"
-
-#~ msgid "File not found"
-#~ msgstr "Skrá ekki fundin"
-
-#~ msgid "FTP file error"
-#~ msgstr "FTP skráarvilla"
-
-#~ msgid "Unknown error"
-#~ msgstr "Óþekkt villa"
 
 #~ msgid "handles"
 #~ msgstr "handföng"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Denis Lackovic <delacko@fly.srk.fer.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -95,8 +95,9 @@ msgstr ""
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "OK"
 
@@ -213,6 +214,24 @@ msgstr "Gre¹ka pri pisanju u socket"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Veze"
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Nedovoljno memorije"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "Gre¹ka pri pisanju u file"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "Gre¹ka pri otvaranju datoteke"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -938,7 +957,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Primi timeout"
 
@@ -3774,7 +3793,7 @@ msgstr "Nema programa"
 msgid "No program specified for protocol %s."
 msgstr "Nema programa za"
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Neispravana URL sintaksa"
 
@@ -3921,6 +3940,138 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "Èekam u redu"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Tra¾im raèunalo"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Zapoèinjem vezu"
+
+#: src/sched/error.c:32
+msgid "SSL negotiation"
+msgstr "SSL pregovaranje"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "Zahtjev poslan"
+
+#: src/sched/error.c:34
+msgid "Logging in"
+msgstr "Prijavljujem se"
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Dobivam zaglavlja"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "Server obraðuje zahtjev"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Prenosim"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Èekam podatke o redirekciji"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "Prekinuto"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "Socket gre¹ka"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "Interna gre¹ka"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Raèunalo nije naðeno"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "Gre¹ka pri pisanju u socket"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "Gre¹ka pri èitanju iz socketa"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Podaci promijenjeni"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "Zahtjev mora biti ponovljen"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Ne mogu dobiti stanje socketa "
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Neispravan HTTP odgovor"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "Nema sadr¾aja"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Nepoznati tip datoteke"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "Gre¹ka pri otvaranju datoteke"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Neispravan FTP odgovor"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "Nemoguæ pristup FTP usluzi"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Neispravan FTP login"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "FTP PORT naredba nije uspjela"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "Datoteka nije pronaðena"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "gre¹ka u FTP datoteci"
+
+#: src/sched/error.c:68
+msgid "SSL error"
+msgstr "SSL gre¹ka"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Ova inaèica Linksa nema SSL/TSL podr¹ku"
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Nepoznata gre¹ka"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4191,105 +4342,6 @@ msgstr "postaj na"
 
 #~ msgid " at "
 #~ msgstr " pri "
-
-#~ msgid "Waiting in queue"
-#~ msgstr "Èekam u redu"
-
-#~ msgid "Looking up host"
-#~ msgstr "Tra¾im raèunalo"
-
-#~ msgid "Making connection"
-#~ msgstr "Zapoèinjem vezu"
-
-#~ msgid "SSL negotiation"
-#~ msgstr "SSL pregovaranje"
-
-#~ msgid "Request sent"
-#~ msgstr "Zahtjev poslan"
-
-#~ msgid "Logging in"
-#~ msgstr "Prijavljujem se"
-
-#~ msgid "Getting headers"
-#~ msgstr "Dobivam zaglavlja"
-
-#~ msgid "Server is processing request"
-#~ msgstr "Server obraðuje zahtjev"
-
-#~ msgid "Transferring"
-#~ msgstr "Prenosim"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Èekam podatke o redirekciji"
-
-#~ msgid "Interrupted"
-#~ msgstr "Prekinuto"
-
-#~ msgid "Socket exception"
-#~ msgstr "Socket gre¹ka"
-
-#~ msgid "Internal error"
-#~ msgstr "Interna gre¹ka"
-
-#~ msgid "Out of memory"
-#~ msgstr "Nedovoljno memorije"
-
-#~ msgid "Host not found"
-#~ msgstr "Raèunalo nije naðeno"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "Gre¹ka pri pisanju u socket"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "Gre¹ka pri èitanju iz socketa"
-
-#~ msgid "Data modified"
-#~ msgstr "Podaci promijenjeni"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "Zahtjev mora biti ponovljen"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Ne mogu dobiti stanje socketa "
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Neispravan HTTP odgovor"
-
-#~ msgid "No content"
-#~ msgstr "Nema sadr¾aja"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Nepoznati tip datoteke"
-
-#~ msgid "Error opening file"
-#~ msgstr "Gre¹ka pri otvaranju datoteke"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Neispravan FTP odgovor"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "Nemoguæ pristup FTP usluzi"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Neispravan FTP login"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "FTP PORT naredba nije uspjela"
-
-#~ msgid "File not found"
-#~ msgstr "Datoteka nije pronaðena"
-
-#~ msgid "FTP file error"
-#~ msgstr "gre¹ka u FTP datoteci"
-
-#~ msgid "SSL error"
-#~ msgstr "SSL gre¹ka"
-
-#~ msgid "This version of ELinks does not contain SSL/TSL support"
-#~ msgstr "Ova inaèica Linksa nema SSL/TSL podr¹ku"
-
-#~ msgid "Unknown error"
-#~ msgstr "Nepoznata gre¹ka"
 
 #~ msgid "handles"
 #~ msgstr "handleri"

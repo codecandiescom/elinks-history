@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dmitry Pinchukov <dpinch@mail.ru>\n"
 "Language-Team: Ukrainian <translation-team-uk@lists.sourceforge.net>\n"
@@ -97,8 +97,9 @@ msgstr "╤м'я папки"
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "Угу"
 
@@ -215,6 +216,24 @@ msgstr "Помилка запису в сокет"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "З'╓днання"
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Нестача пам'ят╕"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "Помилка запису до файлу"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "Помилка в╕дкриття файлу"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -942,7 +961,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Тайм-аут п╕д час читання"
 
@@ -3781,7 +3800,7 @@ msgstr "Нема╓ програми"
 msgid "No program specified for protocol %s."
 msgstr "Не вказано програму для"
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Неправильний синтаксис URL"
 
@@ -3928,6 +3947,138 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "Оч╕кування в черз╕"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Визначення ╕мен╕ серверу"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Створення з'╓днання"
+
+#: src/sched/error.c:32
+msgid "SSL negotiation"
+msgstr "Встановлення SSL з'╓днання"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "Запит над╕слано"
+
+#: src/sched/error.c:34
+msgid "Logging in"
+msgstr "Входження"
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Отримання заголовк╕в"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "Сервер оброблю╓ запит"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Передача"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Оч╕кування п╕дтвердження перенапрямлення"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "Перервано"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "Виключення в сокет╕"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "Внутр╕шня помилка"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Сервер не знайдено"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "Помилка запису в сокет"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "Помилка читання з сокету"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Дату зм╕нено"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "Запит потр╕бно повторити"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Неможливо отримати стан сокету"
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Неправильна в╕дпов╕дь HTTP"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "╤нформац╕╖ нема╓"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Нев╕домий тип файлу"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "Помилка в╕дкриття файлу"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Неправильна в╕дпов╕дь FTP"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "Серв╕с FTP недоступний"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Невдале FTP-з'╓днання"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "Команда FTP PORT зак╕нчилася невдало"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "Файл не знайдено"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "Помилка файлу на FTP"
+
+#: src/sched/error.c:68
+msgid "SSL error"
+msgstr "Помилка SSL"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Ця верс╕я ELinks не п╕дтриму╓ SSL/TSL"
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Нев╕дома помилка"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4202,105 +4353,6 @@ msgstr "в╕дправити за адресою"
 
 #~ msgid " at "
 #~ msgstr " на "
-
-#~ msgid "Waiting in queue"
-#~ msgstr "Оч╕кування в черз╕"
-
-#~ msgid "Looking up host"
-#~ msgstr "Визначення ╕мен╕ серверу"
-
-#~ msgid "Making connection"
-#~ msgstr "Створення з'╓днання"
-
-#~ msgid "SSL negotiation"
-#~ msgstr "Встановлення SSL з'╓днання"
-
-#~ msgid "Request sent"
-#~ msgstr "Запит над╕слано"
-
-#~ msgid "Logging in"
-#~ msgstr "Входження"
-
-#~ msgid "Getting headers"
-#~ msgstr "Отримання заголовк╕в"
-
-#~ msgid "Server is processing request"
-#~ msgstr "Сервер оброблю╓ запит"
-
-#~ msgid "Transferring"
-#~ msgstr "Передача"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Оч╕кування п╕дтвердження перенапрямлення"
-
-#~ msgid "Interrupted"
-#~ msgstr "Перервано"
-
-#~ msgid "Socket exception"
-#~ msgstr "Виключення в сокет╕"
-
-#~ msgid "Internal error"
-#~ msgstr "Внутр╕шня помилка"
-
-#~ msgid "Out of memory"
-#~ msgstr "Нестача пам'ят╕"
-
-#~ msgid "Host not found"
-#~ msgstr "Сервер не знайдено"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "Помилка запису в сокет"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "Помилка читання з сокету"
-
-#~ msgid "Data modified"
-#~ msgstr "Дату зм╕нено"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "Запит потр╕бно повторити"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Неможливо отримати стан сокету"
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Неправильна в╕дпов╕дь HTTP"
-
-#~ msgid "No content"
-#~ msgstr "╤нформац╕╖ нема╓"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Нев╕домий тип файлу"
-
-#~ msgid "Error opening file"
-#~ msgstr "Помилка в╕дкриття файлу"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Неправильна в╕дпов╕дь FTP"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "Серв╕с FTP недоступний"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Невдале FTP-з'╓днання"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "Команда FTP PORT зак╕нчилася невдало"
-
-#~ msgid "File not found"
-#~ msgstr "Файл не знайдено"
-
-#~ msgid "FTP file error"
-#~ msgstr "Помилка файлу на FTP"
-
-#~ msgid "SSL error"
-#~ msgstr "Помилка SSL"
-
-#~ msgid "This version of ELinks does not contain SSL/TSL support"
-#~ msgstr "Ця верс╕я ELinks не п╕дтриму╓ SSL/TSL"
-
-#~ msgid "Unknown error"
-#~ msgstr "Нев╕дома помилка"
 
 #~ msgid "handles"
 #~ msgstr "хендл╕в"

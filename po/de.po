@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Josef 'Jupp' Schugt <jupp@gmx.de>\n"
 "Language-Team: German <de@li.org>\n"
@@ -98,8 +98,9 @@ msgstr "Name des Ordners"
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "OK"
 
@@ -216,6 +217,24 @@ msgstr "Fehler bei der Ausgabe auf Socket"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Verbindungen"
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Kein RAM mehr verfügbar"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "Fehler beim Schreiben in Datei"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "Fehler beim Öffnen der Datei"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -955,7 +974,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Timeout bei Empfang aufgetreten"
 
@@ -3800,7 +3819,7 @@ msgstr "Kein Programm"
 msgid "No program specified for protocol %s."
 msgstr "Kein Programm definiert für "
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Unzulässige URL-Syntax"
 
@@ -3947,6 +3966,138 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "in Warteschlange"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Host wird gesucht"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Verbindungsaufbau"
+
+#: src/sched/error.c:32
+msgid "SSL negotiation"
+msgstr "SSL-Verbindungsaufbau"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "Anforderung wird gesendet"
+
+#: src/sched/error.c:34
+msgid "Logging in"
+msgstr "Login wird durchgeführt"
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Header wird empfangen"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "Anforderung wird von Server verarbeitet"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Übertragung"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Weiterleitungsbestätigung wird erwartet"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "unterbrochen"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "Socket-Exception"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "Interner Fehler"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Host nicht gefunden"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "Fehler bei der Ausgabe auf Socket"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "Fehler beim Lesen von Socket"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Daten geändert"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "Anforderung wird neu gesendet"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Status von Socket kann nicht bestimmt werden"
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Fehlerhafte HTTP-Antwort"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "Keine Daten empfangen"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Unbekannter Dateityp"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "Fehler beim Öffnen der Datei"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Fehlerhafte FTP-Antwort"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "FTP-Dienst nicht verfügbar"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Fehlerhafte FTP-Anmeldung"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "FTP PORT-Befehl ist fehlgeschlagen"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "Datei nicht gefunden"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "FTP-Dateifehler"
+
+#: src/sched/error.c:68
+msgid "SSL error"
+msgstr "SSL-Fehler"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "SSL/TSL wird von diese Elinks-Version nicht unterstützt."
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Unbekannter Fehler"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4217,105 +4368,6 @@ msgstr "Senden an"
 
 #~ msgid " at "
 #~ msgstr " bei "
-
-#~ msgid "Waiting in queue"
-#~ msgstr "in Warteschlange"
-
-#~ msgid "Looking up host"
-#~ msgstr "Host wird gesucht"
-
-#~ msgid "Making connection"
-#~ msgstr "Verbindungsaufbau"
-
-#~ msgid "SSL negotiation"
-#~ msgstr "SSL-Verbindungsaufbau"
-
-#~ msgid "Request sent"
-#~ msgstr "Anforderung wird gesendet"
-
-#~ msgid "Logging in"
-#~ msgstr "Login wird durchgeführt"
-
-#~ msgid "Getting headers"
-#~ msgstr "Header wird empfangen"
-
-#~ msgid "Server is processing request"
-#~ msgstr "Anforderung wird von Server verarbeitet"
-
-#~ msgid "Transferring"
-#~ msgstr "Übertragung"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Weiterleitungsbestätigung wird erwartet"
-
-#~ msgid "Interrupted"
-#~ msgstr "unterbrochen"
-
-#~ msgid "Socket exception"
-#~ msgstr "Socket-Exception"
-
-#~ msgid "Internal error"
-#~ msgstr "Interner Fehler"
-
-#~ msgid "Out of memory"
-#~ msgstr "Kein RAM mehr verfügbar"
-
-#~ msgid "Host not found"
-#~ msgstr "Host nicht gefunden"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "Fehler bei der Ausgabe auf Socket"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "Fehler beim Lesen von Socket"
-
-#~ msgid "Data modified"
-#~ msgstr "Daten geändert"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "Anforderung wird neu gesendet"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Status von Socket kann nicht bestimmt werden"
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Fehlerhafte HTTP-Antwort"
-
-#~ msgid "No content"
-#~ msgstr "Keine Daten empfangen"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Unbekannter Dateityp"
-
-#~ msgid "Error opening file"
-#~ msgstr "Fehler beim Öffnen der Datei"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Fehlerhafte FTP-Antwort"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "FTP-Dienst nicht verfügbar"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Fehlerhafte FTP-Anmeldung"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "FTP PORT-Befehl ist fehlgeschlagen"
-
-#~ msgid "File not found"
-#~ msgstr "Datei nicht gefunden"
-
-#~ msgid "FTP file error"
-#~ msgstr "FTP-Dateifehler"
-
-#~ msgid "SSL error"
-#~ msgstr "SSL-Fehler"
-
-#~ msgid "This version of ELinks does not contain SSL/TSL support"
-#~ msgstr "SSL/TSL wird von diese Elinks-Version nicht unterstützt."
-
-#~ msgid "Unknown error"
-#~ msgstr "Unbekannter Fehler"
 
 #~ msgid "action"
 #~ msgstr "action"

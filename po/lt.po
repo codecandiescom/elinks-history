@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Aurimas Mikalauskas <inner@dammit.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
@@ -97,8 +97,9 @@ msgstr ""
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "Gerai"
 
@@ -215,6 +216,24 @@ msgstr "Nesigauna áraðyti á soket'à"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Prisijungimai"
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Nebër atminties"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "Klaida bandant áraðyti á failà"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "Klaida bandant atidaryti failà"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -939,7 +958,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Gavimo timeout'as"
 
@@ -3771,7 +3790,7 @@ msgstr "Nër programos"
 msgid "No program specified for protocol %s."
 msgstr "Nër programos"
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Bloga adreso sintaksë"
 
@@ -3918,6 +3937,140 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "Laukiam eilëje"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Ieðkom hosto"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Jungiamës"
+
+#: src/sched/error.c:32
+#, fuzzy
+msgid "SSL negotiation"
+msgstr "Ið~saugoti pakeitimus"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "Praðymas iðsiøstas"
+
+#: src/sched/error.c:34
+msgid "Logging in"
+msgstr ""
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Gaunam antraðtes"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "Serveris kramto uþklausà"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Siunèiam"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Laukiam permetimo patvirtinimo"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "Nutraukta"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "Soket'o iðimtis"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "Vidinë klaida"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Hostas nerastas"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "Nesigauna áraðyti á soket'à"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "Neisaugna skaityti ið soket'o"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Duomenys pakeisti"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "Uþklausa turi bûti pakartota"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Negaunu soket'o bûsenos"
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Blogas HTTP atsakymas"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "Nëra turinio"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Neþinomas failo tipas"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "Klaida bandant atidaryti failà"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Blogas FTP atsakymas"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "Nepaleistas FTP servisas"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Neteisingas FTP vartotojas"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "FTP PORT komanda nepavyko"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "Failas nerastas"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "FTP failo klaida"
+
+#: src/sched/error.c:68
+#, fuzzy
+msgid "SSL error"
+msgstr "Iðsaugojimo klaida"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr ""
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Neþinoma klaida"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4185,93 +4338,6 @@ msgstr "patvirtinti"
 #: src/viewer/text/view.c:3725
 msgid "post to"
 msgstr "iðsiøsti"
-
-#~ msgid "Waiting in queue"
-#~ msgstr "Laukiam eilëje"
-
-#~ msgid "Looking up host"
-#~ msgstr "Ieðkom hosto"
-
-#~ msgid "Making connection"
-#~ msgstr "Jungiamës"
-
-#~ msgid "Request sent"
-#~ msgstr "Praðymas iðsiøstas"
-
-#~ msgid "Getting headers"
-#~ msgstr "Gaunam antraðtes"
-
-#~ msgid "Server is processing request"
-#~ msgstr "Serveris kramto uþklausà"
-
-#~ msgid "Transferring"
-#~ msgstr "Siunèiam"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Laukiam permetimo patvirtinimo"
-
-#~ msgid "Interrupted"
-#~ msgstr "Nutraukta"
-
-#~ msgid "Socket exception"
-#~ msgstr "Soket'o iðimtis"
-
-#~ msgid "Internal error"
-#~ msgstr "Vidinë klaida"
-
-#~ msgid "Out of memory"
-#~ msgstr "Nebër atminties"
-
-#~ msgid "Host not found"
-#~ msgstr "Hostas nerastas"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "Nesigauna áraðyti á soket'à"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "Neisaugna skaityti ið soket'o"
-
-#~ msgid "Data modified"
-#~ msgstr "Duomenys pakeisti"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "Uþklausa turi bûti pakartota"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Negaunu soket'o bûsenos"
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Blogas HTTP atsakymas"
-
-#~ msgid "No content"
-#~ msgstr "Nëra turinio"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Neþinomas failo tipas"
-
-#~ msgid "Error opening file"
-#~ msgstr "Klaida bandant atidaryti failà"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Blogas FTP atsakymas"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "Nepaleistas FTP servisas"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Neteisingas FTP vartotojas"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "FTP PORT komanda nepavyko"
-
-#~ msgid "File not found"
-#~ msgstr "Failas nerastas"
-
-#~ msgid "FTP file error"
-#~ msgstr "FTP failo klaida"
-
-#~ msgid "Unknown error"
-#~ msgstr "Neþinoma klaida"
 
 #~ msgid "handles"
 #~ msgstr "valdikliai"

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-04 12:06+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@poczta.onet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -103,8 +103,9 @@ msgstr "Nazwa foldera"
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "OK"
 
@@ -222,6 +223,24 @@ msgstr "B³±d przy zapisywaniu do gniazda"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Ustawienia po³±czeñ."
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Brak pamiêci"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "B³±d zapisu do pliku"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "B³±d przy otwieraniu pliku"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -1002,7 +1021,7 @@ msgid ""
 "Zero means try forever."
 msgstr "Ilo¶æ prób nawi±zania po³±czenia"
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Limit czasu pobierania"
 
@@ -4132,7 +4151,7 @@ msgstr "Nie okre¶lono programu"
 msgid "No program specified for protocol %s."
 msgstr "Nie okre¶lono programu do obs³ugi"
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Z³a sk³adnia URL"
 
@@ -4279,6 +4298,138 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "Oczekuj±ce w kolejce"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Szukam serwera"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Nawi±zywanie po³±czenia"
+
+#: src/sched/error.c:32
+msgid "SSL negotiation"
+msgstr "Negocjacja SSL"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "¯±danie wys³ane"
+
+#: src/sched/error.c:34
+msgid "Logging in"
+msgstr "Logujê siê"
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Pobieranie nag³ówków"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "Serwer przetwarza ¿±danie"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Przesy³anie"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Oczekiwanie na potwierdzenie przekierowania"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "Przerwano"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "B³±d gniazda"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "B³±d wewnêtrzny"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Nie znaleziono serwera"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "B³±d przy zapisywaniu do gniazda"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "B³±d przy czytaniu z gniazda"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Dane zosta³y zmodyfikowane"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "¯±danie musi byæ powtórzone"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Nie mo¿na zbadaæ stanu gniazda"
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Nieprawid³owa odpowied¼ HTTP"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "Brak zawarto¶ci"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Nieznany typ pliku"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "B³±d przy otwieraniu pliku"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Nieprawid³owa odpowied¼ FTP"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "Us³uga FTP jest niedostêpna"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Nieprawid³owy login"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "Polecenie PORT nie powiod³o siê"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "Nie znaleziono pliku"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "B³±d plikowy FTP"
+
+#: src/sched/error.c:68
+msgid "SSL error"
+msgstr "B³±d SSL"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Ta wersja ELinksa nie posiada wsparcia dla SSL/TSL"
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Nieznany b³±d"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4574,105 +4725,6 @@ msgstr "wys³aæ do"
 
 #~ msgid "ELinks "
 #~ msgstr "Elinks "
-
-#~ msgid "Waiting in queue"
-#~ msgstr "Oczekuj±ce w kolejce"
-
-#~ msgid "Looking up host"
-#~ msgstr "Szukam serwera"
-
-#~ msgid "Making connection"
-#~ msgstr "Nawi±zywanie po³±czenia"
-
-#~ msgid "SSL negotiation"
-#~ msgstr "Negocjacja SSL"
-
-#~ msgid "Request sent"
-#~ msgstr "¯±danie wys³ane"
-
-#~ msgid "Logging in"
-#~ msgstr "Logujê siê"
-
-#~ msgid "Getting headers"
-#~ msgstr "Pobieranie nag³ówków"
-
-#~ msgid "Server is processing request"
-#~ msgstr "Serwer przetwarza ¿±danie"
-
-#~ msgid "Transferring"
-#~ msgstr "Przesy³anie"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Oczekiwanie na potwierdzenie przekierowania"
-
-#~ msgid "Interrupted"
-#~ msgstr "Przerwano"
-
-#~ msgid "Socket exception"
-#~ msgstr "B³±d gniazda"
-
-#~ msgid "Internal error"
-#~ msgstr "B³±d wewnêtrzny"
-
-#~ msgid "Out of memory"
-#~ msgstr "Brak pamiêci"
-
-#~ msgid "Host not found"
-#~ msgstr "Nie znaleziono serwera"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "B³±d przy zapisywaniu do gniazda"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "B³±d przy czytaniu z gniazda"
-
-#~ msgid "Data modified"
-#~ msgstr "Dane zosta³y zmodyfikowane"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "¯±danie musi byæ powtórzone"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Nie mo¿na zbadaæ stanu gniazda"
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Nieprawid³owa odpowied¼ HTTP"
-
-#~ msgid "No content"
-#~ msgstr "Brak zawarto¶ci"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Nieznany typ pliku"
-
-#~ msgid "Error opening file"
-#~ msgstr "B³±d przy otwieraniu pliku"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Nieprawid³owa odpowied¼ FTP"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "Us³uga FTP jest niedostêpna"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Nieprawid³owy login"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "Polecenie PORT nie powiod³o siê"
-
-#~ msgid "File not found"
-#~ msgstr "Nie znaleziono pliku"
-
-#~ msgid "FTP file error"
-#~ msgstr "B³±d plikowy FTP"
-
-#~ msgid "SSL error"
-#~ msgstr "B³±d SSL"
-
-#~ msgid "This version of ELinks does not contain SSL/TSL support"
-#~ msgstr "Ta wersja ELinksa nie posiada wsparcia dla SSL/TSL"
-
-#~ msgid "Unknown error"
-#~ msgstr "Nieznany b³±d"
 
 #~ msgid "action"
 #~ msgstr "akcja"

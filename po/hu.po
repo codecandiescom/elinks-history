@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Varga Balázs <vinnui@broadband.hu>\n"
 "Language-Team: Hungarian <translation-team-hu@lists.sourceforge.net>\n"
@@ -97,8 +97,9 @@ msgstr "Mappa neve"
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "OK"
 
@@ -215,6 +216,24 @@ msgstr "Hiba a csatornára irás közben"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Kapcsolatok"
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Kevés a memória"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "Hiba a fájl irása közben"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "Hiba a fájl megnyitásakor"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -942,7 +961,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Idötúllépés vételkor"
 
@@ -3785,7 +3804,7 @@ msgstr "Nincs program"
 msgid "No program specified for protocol %s."
 msgstr "Nincs program beállitva"
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Hibás URL forma"
 
@@ -3932,6 +3951,138 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "Sorban állás"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Kiszolgáló keresése"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Kapcsolat létrehozása"
+
+#: src/sched/error.c:32
+msgid "SSL negotiation"
+msgstr "SSL kapcsolatfelvétel"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "Kérés elküldve"
+
+#: src/sched/error.c:34
+msgid "Logging in"
+msgstr "Bejelentkezés folyamatban"
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Fejléc fogadása"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "A kiszolgáló feldogozza a kérést"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Átvitel folyamatban"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Várakozás az átirányítás elfogadására"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "Megszakítva"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "Csatorna elhagyás"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "Belsö hiba"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Kiszolgáló nem található"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "Hiba a csatornára irás közben"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "Hiba a csatorna olvasása közben"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Adat megváltozott"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "A kérést újra kellett indítani"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Nem lehet a csatorna állapotát megállapítani"
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Hibás HTTP válasz"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "A lap üres"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Ismeretlen fájlformátum"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "Hiba a fájl megnyitásakor"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Hibás FTP válasz"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "FTP szolgáltatás nem elérhetö"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Hibás FTP bejelentkezés"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "FTP PORT parancs hiba"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "A fájl nem található"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "FTP fájl hiba"
+
+#: src/sched/error.c:68
+msgid "SSL error"
+msgstr "SSL hiba"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Az Elinks ezen verziója nem támogatja az SSL/TSL-t"
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Ismeretlen hiba"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4204,105 +4355,6 @@ msgstr "elküld"
 
 #~ msgid " at "
 #~ msgstr " itt:"
-
-#~ msgid "Waiting in queue"
-#~ msgstr "Sorban állás"
-
-#~ msgid "Looking up host"
-#~ msgstr "Kiszolgáló keresése"
-
-#~ msgid "Making connection"
-#~ msgstr "Kapcsolat létrehozása"
-
-#~ msgid "SSL negotiation"
-#~ msgstr "SSL kapcsolatfelvétel"
-
-#~ msgid "Request sent"
-#~ msgstr "Kérés elküldve"
-
-#~ msgid "Logging in"
-#~ msgstr "Bejelentkezés folyamatban"
-
-#~ msgid "Getting headers"
-#~ msgstr "Fejléc fogadása"
-
-#~ msgid "Server is processing request"
-#~ msgstr "A kiszolgáló feldogozza a kérést"
-
-#~ msgid "Transferring"
-#~ msgstr "Átvitel folyamatban"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Várakozás az átirányítás elfogadására"
-
-#~ msgid "Interrupted"
-#~ msgstr "Megszakítva"
-
-#~ msgid "Socket exception"
-#~ msgstr "Csatorna elhagyás"
-
-#~ msgid "Internal error"
-#~ msgstr "Belsö hiba"
-
-#~ msgid "Out of memory"
-#~ msgstr "Kevés a memória"
-
-#~ msgid "Host not found"
-#~ msgstr "Kiszolgáló nem található"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "Hiba a csatornára irás közben"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "Hiba a csatorna olvasása közben"
-
-#~ msgid "Data modified"
-#~ msgstr "Adat megváltozott"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "A kérést újra kellett indítani"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Nem lehet a csatorna állapotát megállapítani"
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Hibás HTTP válasz"
-
-#~ msgid "No content"
-#~ msgstr "A lap üres"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Ismeretlen fájlformátum"
-
-#~ msgid "Error opening file"
-#~ msgstr "Hiba a fájl megnyitásakor"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Hibás FTP válasz"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "FTP szolgáltatás nem elérhetö"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Hibás FTP bejelentkezés"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "FTP PORT parancs hiba"
-
-#~ msgid "File not found"
-#~ msgstr "A fájl nem található"
-
-#~ msgid "FTP file error"
-#~ msgstr "FTP fájl hiba"
-
-#~ msgid "SSL error"
-#~ msgstr "SSL hiba"
-
-#~ msgid "This version of ELinks does not contain SSL/TSL support"
-#~ msgstr "Az Elinks ezen verziója nem támogatja az SSL/TSL-t"
-
-#~ msgid "Unknown error"
-#~ msgstr "Ismeretlen hiba"
 
 #~ msgid "handles"
 #~ msgstr "fogantyúk"

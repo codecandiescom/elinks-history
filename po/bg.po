@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 00:41+0200\n"
+"POT-Creation-Date: 2003-06-08 01:40+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dimitar Dimitrov <mitaka_ddd@yahoo.com>\n"
 "Language-Team: Bulgarian <bg-team@bash.info>\n"
@@ -99,8 +99,9 @@ msgstr ""
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
 #: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
 #: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
-#: src/sched/download.c:586 src/sched/session.c:1101 src/sched/session.c:1118
-#: src/sched/session.c:1142 src/viewer/text/view.c:2756
+#: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
+#: src/sched/session.c:1118 src/sched/session.c:1142
+#: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "ОК"
 
@@ -217,6 +218,24 @@ msgstr "Грешка при писането в socket"
 #, fuzzy, c-format
 msgid "Unknown option %s"
 msgstr "Връзка(и)"
+
+#: src/config/conf.c:670
+msgid "File saving disabled by option"
+msgstr ""
+
+#: src/config/conf.c:673 src/sched/error.c:44
+msgid "Out of memory"
+msgstr "Паметта е недостатъчна"
+
+#: src/config/conf.c:676
+#, fuzzy
+msgid "Cannot write the file"
+msgstr "Грешка при запис във файл"
+
+#: src/config/conf.c:679
+#, fuzzy
+msgid "Secure open failed"
+msgstr "Грешка при отварянето на файл"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
@@ -944,7 +963,7 @@ msgid ""
 "Zero means try forever."
 msgstr ""
 
-#: src/config/options.c:976
+#: src/config/options.c:976 src/sched/error.c:50
 msgid "Receive timeout"
 msgstr "Таймаут при получаване"
 
@@ -3790,7 +3809,7 @@ msgstr "Няма програма"
 msgid "No program specified for protocol %s."
 msgstr "Не е посочена програма за"
 
-#: src/protocol/user.c:134
+#: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
 msgstr "Невалиден URL синтаксис"
 
@@ -3937,6 +3956,138 @@ msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, or display it?"
 msgstr ""
+
+#: src/sched/error.c:29
+msgid "Waiting in queue"
+msgstr "Чакане на опашка"
+
+#: src/sched/error.c:30
+msgid "Looking up host"
+msgstr "Търси се хостът"
+
+#: src/sched/error.c:31
+msgid "Making connection"
+msgstr "Връзката се установява"
+
+#: src/sched/error.c:32
+msgid "SSL negotiation"
+msgstr "SSL преговаряне"
+
+#: src/sched/error.c:33
+msgid "Request sent"
+msgstr "Заявката е изпратена"
+
+#: src/sched/error.c:34
+msgid "Logging in"
+msgstr "Влизам в"
+
+#: src/sched/error.c:35
+msgid "Getting headers"
+msgstr "Получава се заглавната част"
+
+#: src/sched/error.c:36
+msgid "Server is processing request"
+msgstr "Сървърът обработва заявката"
+
+#: src/sched/error.c:37
+msgid "Transferring"
+msgstr "Предаване"
+
+#: src/sched/error.c:39
+msgid "Waiting for redirect confirmation"
+msgstr "Очаква се потвръждение на препращането"
+
+#: src/sched/error.c:41
+msgid "Interrupted"
+msgstr "Прекъснато"
+
+#: src/sched/error.c:42
+msgid "Socket exception"
+msgstr "Изключение в socket"
+
+#: src/sched/error.c:43
+msgid "Internal error"
+msgstr "Вътрешна грешка"
+
+#: src/sched/error.c:45
+msgid "Host not found"
+msgstr "Хостът не е открит"
+
+#: src/sched/error.c:46
+msgid "Error writing to socket"
+msgstr "Грешка при писането в socket"
+
+#: src/sched/error.c:47
+msgid "Error reading from socket"
+msgstr "Грешка при четенето от socket"
+
+#: src/sched/error.c:48
+msgid "Data modified"
+msgstr "Датата е променена"
+
+#: src/sched/error.c:51
+msgid "Request must be restarted"
+msgstr "Заявката трябва да се повтори"
+
+#: src/sched/error.c:52
+msgid "Can't get socket state"
+msgstr "Не може да се получи състоянието на socket-а"
+
+#: src/sched/error.c:54
+msgid "Bad HTTP response"
+msgstr "Невалиден HTTP отговор"
+
+#: src/sched/error.c:55
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/error.c:56
+msgid "No content"
+msgstr "Няма данни"
+
+#: src/sched/error.c:58
+msgid "Unknown file type"
+msgstr "Неизвестен тип файл"
+
+#: src/sched/error.c:59
+msgid "Error opening file"
+msgstr "Грешка при отварянето на файл"
+
+#: src/sched/error.c:61
+msgid "Bad FTP response"
+msgstr "Невалиден FTP отговор"
+
+#: src/sched/error.c:62
+msgid "FTP service unavailable"
+msgstr "Услугата FTP е недостъпна"
+
+#: src/sched/error.c:63
+msgid "Bad FTP login"
+msgstr "Невалиден FTP login"
+
+#: src/sched/error.c:64
+msgid "FTP PORT command failed"
+msgstr "Командата FTP PORT завърши неуспешно"
+
+#: src/sched/error.c:65
+msgid "File not found"
+msgstr "Файлът не е открит"
+
+#: src/sched/error.c:66
+msgid "FTP file error"
+msgstr "Грешка в FTP файл"
+
+#: src/sched/error.c:68
+msgid "SSL error"
+msgstr "SSL грешка"
+
+#: src/sched/error.c:70
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Тази версия на Links не поддържа SSL/TSL"
+
+#: src/sched/error.c:98
+msgid "Unknown error"
+msgstr "Непозната грешка"
 
 #: src/sched/session.c:93
 msgid "avg"
@@ -4212,105 +4363,6 @@ msgstr "изпратете към адрес"
 
 #~ msgid " at "
 #~ msgstr " на "
-
-#~ msgid "Waiting in queue"
-#~ msgstr "Чакане на опашка"
-
-#~ msgid "Looking up host"
-#~ msgstr "Търси се хостът"
-
-#~ msgid "Making connection"
-#~ msgstr "Връзката се установява"
-
-#~ msgid "SSL negotiation"
-#~ msgstr "SSL преговаряне"
-
-#~ msgid "Request sent"
-#~ msgstr "Заявката е изпратена"
-
-#~ msgid "Logging in"
-#~ msgstr "Влизам в"
-
-#~ msgid "Getting headers"
-#~ msgstr "Получава се заглавната част"
-
-#~ msgid "Server is processing request"
-#~ msgstr "Сървърът обработва заявката"
-
-#~ msgid "Transferring"
-#~ msgstr "Предаване"
-
-#~ msgid "Waiting for redirect confirmation"
-#~ msgstr "Очаква се потвръждение на препращането"
-
-#~ msgid "Interrupted"
-#~ msgstr "Прекъснато"
-
-#~ msgid "Socket exception"
-#~ msgstr "Изключение в socket"
-
-#~ msgid "Internal error"
-#~ msgstr "Вътрешна грешка"
-
-#~ msgid "Out of memory"
-#~ msgstr "Паметта е недостатъчна"
-
-#~ msgid "Host not found"
-#~ msgstr "Хостът не е открит"
-
-#~ msgid "Error writing to socket"
-#~ msgstr "Грешка при писането в socket"
-
-#~ msgid "Error reading from socket"
-#~ msgstr "Грешка при четенето от socket"
-
-#~ msgid "Data modified"
-#~ msgstr "Датата е променена"
-
-#~ msgid "Request must be restarted"
-#~ msgstr "Заявката трябва да се повтори"
-
-#~ msgid "Can't get socket state"
-#~ msgstr "Не може да се получи състоянието на socket-а"
-
-#~ msgid "Bad HTTP response"
-#~ msgstr "Невалиден HTTP отговор"
-
-#~ msgid "No content"
-#~ msgstr "Няма данни"
-
-#~ msgid "Unknown file type"
-#~ msgstr "Неизвестен тип файл"
-
-#~ msgid "Error opening file"
-#~ msgstr "Грешка при отварянето на файл"
-
-#~ msgid "Bad FTP response"
-#~ msgstr "Невалиден FTP отговор"
-
-#~ msgid "FTP service unavailable"
-#~ msgstr "Услугата FTP е недостъпна"
-
-#~ msgid "Bad FTP login"
-#~ msgstr "Невалиден FTP login"
-
-#~ msgid "FTP PORT command failed"
-#~ msgstr "Командата FTP PORT завърши неуспешно"
-
-#~ msgid "File not found"
-#~ msgstr "Файлът не е открит"
-
-#~ msgid "FTP file error"
-#~ msgstr "Грешка в FTP файл"
-
-#~ msgid "SSL error"
-#~ msgstr "SSL грешка"
-
-#~ msgid "This version of ELinks does not contain SSL/TSL support"
-#~ msgstr "Тази версия на Links не поддържа SSL/TSL"
-
-#~ msgid "Unknown error"
-#~ msgstr "Непозната грешка"
 
 #~ msgid "handles"
 #~ msgstr "handles"

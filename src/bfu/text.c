@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.79 2003/12/29 07:58:07 jonas Exp $ */
+/* $Id: text.c,v 1.80 2003/12/29 08:04:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,7 +261,7 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 
 	/* Scale the offset of @current */
 	step = (current + 1) * scale / 100;
-	int_bounds(&step, 0, widget_data->h);
+	int_bounds(&step, 0, widget_data->h - 1);
 
 	/* Scale the number of visible lines */
 	height = (height + 1) * scale / 100;

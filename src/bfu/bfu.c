@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.12 2002/03/27 23:39:14 pasky Exp $ */
+/* $Id: bfu.c,v 1.13 2002/03/28 21:38:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,7 +295,7 @@ void do_tab_compl(struct terminal *term, struct list_head *history,
 	unsigned char *cdata =
 		((struct dialog_data *) win->data)->items[((struct dialog_data *) win->data)->selected].cdata;
 	int l = strlen(cdata), n = 0;
-	struct history_item *hi;
+	struct input_history_item *hi;
 	struct menu_item *items = DUMMY, *i;
 
 	foreach(hi, *history) {
@@ -391,17 +391,17 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 				}
 
 				init_list(di->history);
-				di->cur_hist = (struct history_item *) &di->history;
+				di->cur_hist = (struct input_history_item *) &di->history;
 
 				if (di->item->type == D_FIELD ||
 				    di->item->type == D_FIELD_PASS) {
 					if (di->item->history) {
-						struct history_item *j;
+						struct input_history_item *j;
 
 						foreach(j, di->item->history->items) {
-							struct history_item *hi;
+							struct input_history_item *hi;
 
-							hi = mem_alloc(sizeof(struct history_item)
+							hi = mem_alloc(sizeof(struct input_history_item)
 								       + strlen(j->d) + 1);
 							if (!hi) continue;
 
@@ -1324,16 +1324,16 @@ void msg_box(struct terminal *term, struct memory_list *ml,
 }
 
 /* Search duplicate entries in history list and remove older ones. */
-static void remove_duplicate_from_history(struct history *historylist,
+static void remove_duplicate_from_history(struct input_history *historylist,
 					  unsigned char *url)
 {
-	struct history_item *historyitem;
+	struct input_history_item *historyitem;
 
 	if (!historylist || !url || !*url) return;
 
 	foreach(historyitem, historylist->items) {
 		if (!strcmp(historyitem->d, url)) {
-			struct history_item *tmphistoryitem = historyitem;
+			struct input_history_item *tmphistoryitem = historyitem;
 
 			/* found a duplicate -> remove it from history list */
 			historyitem = historyitem->prev;
@@ -1344,12 +1344,12 @@ static void remove_duplicate_from_history(struct history *historylist,
 	}
 }
 
-/* Add a new entry in history list, take care of duplicate if (check_duplicate)
- * and respect history size limit. */
-void add_to_history(struct history *historylist, unsigned char *url,
-		    int check_duplicate)
+/* Add a new entry in inputbox history list, take care of duplicate if
+ * check_duplicate and respect history size limit. */
+void add_to_input_history(struct input_history *historylist, unsigned char *url,
+			  int check_duplicate)
 {
-	struct history_item *newhistoryitem;
+	struct input_history_item *newhistoryitem;
 	int url_len;
 
 	if (!historylist || !url)
@@ -1366,7 +1366,7 @@ void add_to_history(struct history *historylist, unsigned char *url,
 
 	/* Copy it all etc. */
 
-	newhistoryitem = mem_alloc(sizeof(struct history_item) + url_len + 1);
+	newhistoryitem = mem_alloc(sizeof(struct input_history_item) + url_len + 1);
 	if (!newhistoryitem) return;
 
 	memcpy(newhistoryitem->d, url, url_len);
@@ -1382,7 +1382,7 @@ void add_to_history(struct history *historylist, unsigned char *url,
 	/* limit size of history to MAX_HISTORY_ITEMS
 	 * removing first entries if needed */
 	while (historylist->n > MAX_HISTORY_ITEMS) {
-		struct history_item *tmphistoryitem = historylist->items.prev;
+		struct input_history_item *tmphistoryitem = historylist->items.prev;
 
 		if ((void *) tmphistoryitem == &historylist->items) {
 			internal("history is empty");
@@ -1417,7 +1417,7 @@ int input_field_ok(struct dialog_data *dlg, struct dialog_item_data *di)
 
 	if (check_dialog(dlg)) return 1;
 
-	add_to_history(dlg->dlg->items->history, text, 1);
+	add_to_input_history(dlg->dlg->items->history, text, 1);
 
 	if (fn) fn(data, text);
 	ok_dialog(dlg, di);
@@ -1477,7 +1477,7 @@ void input_field(struct terminal *term, struct memory_list *ml,
 		 unsigned char *text,
 		 unsigned char *okbutton,
 		 unsigned char *cancelbutton,
-		 void *data, struct history *history, int l,
+		 void *data, struct input_history *history, int l,
 		 unsigned char *def, int min, int max,
 		 int (*check)(struct dialog_data *, struct dialog_item_data *),
 		 void (*fn)(void *, unsigned char *),

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.12 2002/03/27 23:39:15 pasky Exp $ */
+/* $Id: renderer.c,v 1.13 2002/03/28 21:38:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include <bfu/align.h>
 #include <config/default.h>
 #include <document/cache.h>
+#include <document/history.h>
 #include <document/options.h>
 #include <document/session.h>
 #include <document/view.h>
@@ -1956,7 +1957,7 @@ void html_interpret(struct session *ses)
 		ses->screen->search_word = &ses->search_word;
 	}
 
-	if (!list_empty(ses->history)) l = &cur_loc(ses)->vs;
+	if (have_location(ses)) l = &cur_loc(ses)->vs;
 
 	o.xp = 0;
 	o.yp = 1;

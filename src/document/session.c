@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.13 2002/03/27 21:43:23 pasky Exp $ */
+/* $Id: session.c,v 1.14 2002/03/28 21:38:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,9 +46,10 @@
 #include <dialogs/menu.h>
 #include <config/default.h>
 #include <document/cache.h>
-#include <document/view.h>
+#include <document/history.h>
 #include <document/options.h>
 #include <document/session.h>
+#include <document/view.h>
 #include <document/html/parser.h>
 #include <document/html/renderer.h>
 #include <intl/language.h>
@@ -71,8 +72,6 @@
 #define longlong long
 #endif
 
-
-int keep_unhistory;
 
 struct list_head downloads = {&downloads, &downloads};
 
@@ -202,7 +201,7 @@ void print_screen_status(struct session *ses)
 
 	if (ses->wtd)
 		stat = &ses->loading;
-	else if (!list_empty(ses->history))
+	else if (have_location(ses))
 		stat = &cur_loc(ses)->stat;
 
 	if (stat && stat->state == S_OK) {
@@ -325,7 +324,7 @@ void ses_forward(struct session *ses)
 	struct location *l;
 	int len;
 	free_files(ses);
-	if (!list_empty(ses->history)) {
+	if (have_location(ses)) {
 		struct frame *frm;
 		l = cur_loc(ses);
 		foreach(frm, l->frames) frm->vs.f = NULL;
@@ -334,19 +333,19 @@ void ses_forward(struct session *ses)
 	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
 	x:
 	len = strlen(ses->loading_url);
-	if (!list_empty(ses->history) && len < strlen(cur_loc(ses)->vs.url))
+	if (have_location(ses) && len < strlen(cur_loc(ses)->vs.url))
 		len = strlen(cur_loc(ses)->vs.url);
 	if (!(l = mem_alloc(sizeof(struct location) + len + 1))) return;
 	memset(l, 0, sizeof(struct location));
 	memcpy(&l->stat, &ses->loading, sizeof(struct status));
 	if (ses->wtd_target && *ses->wtd_target) {
 		struct frame *frm;
-		if (list_empty(ses->history)) {
-			internal("no history");
+		if (!have_location(ses)) {
+			internal("no location yet");
 			return;
 		}
 		copy_location(l, cur_loc(ses));
-		add_to_list(ses->history, l);
+		add_to_history(ses, l);
 		frm = ses_change_frame_url(ses, ses->wtd_target, ses->loading_url);
 		if (!frm) {
 			destroy_location(l);
@@ -360,11 +359,11 @@ void ses_forward(struct session *ses)
 			frm->vs.goto_position = ses->goto_position;
 			ses->goto_position = NULL;
 		}
-		/*request_additional_loading_file(ses, ses->loading_url, &ses->loading, PRI_FRAME);*/
+		/* request_additional_loading_file(ses, ses->loading_url, &ses->loading, PRI_FRAME); */
 	} else {
 		init_list(l->frames);
 		init_vs(&l->vs, ses->loading_url);
-		add_to_list(ses->history, l);
+		add_to_history(ses, l);
 		if (ses->goto_position) {
 			l->vs.goto_position = ses->goto_position;
 			ses->goto_position = NULL;
@@ -396,43 +395,6 @@ void map_selected(struct terminal *term, struct link_def *ld, struct session *se
 	goto_url_f(ses, ld->link, ld->target);
 }
 
-void ses_back(struct session *ses)
-{
-	struct location *loc;
-
-	free_files(ses);
-
-	/* This is the current location. */
-	loc = ses->history.next;
-	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
-	if ((void *)loc == &ses->history) return;
-    	del_from_list(loc);
-	add_to_list(ses->unhistory, loc);
-
-	/* This was the previous location (where we came back now). */
-	loc = ses->history.next;
-	if ((void *)loc == &ses->history) return;
-	if (!strcmp(loc->vs.url, ses->loading_url)) return;
-	destroy_location(loc);
-
-	ses_forward(ses);
-}
-
-void ses_unback(struct session *ses)
-{
-	struct location *loc;
-
-	free_files(ses);
-
-	loc = ses->unhistory.next;
-	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
-	if ((void *)loc == &ses->unhistory) return;
-	del_from_list(loc);
-	/* Save it as the current location! */
-	add_to_list(ses->history, loc);
-}
-
-void end_load(struct status *, struct session *);
 void doc_end_load(struct status *, struct session *);
 void file_end_load(struct status *, struct file_to_load *);
 void abort_loading(struct session *);
@@ -900,7 +862,7 @@ void tp_display(struct session *ses)	/* !!! FIXME: frames */
 		l->vs.goto_position = ses->tq_goto_position;
 		ses->tq_goto_position = NULL;
 	}
-	add_to_list(ses->history, l);
+	add_to_history(ses, l);
 	cur_loc(ses)->stat.end = (void (*)(struct status *, void *))doc_end_load;
 	cur_loc(ses)->stat.data = ses;
 	if (ses->tq.state >= 0) change_connection(&ses->tq, &cur_loc(ses)->stat, PRI_MAIN);
@@ -1088,7 +1050,7 @@ int do_move(struct session *ses, struct status **stat)
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u, *p, *gp;
 		enum session_wtd w = ses->wtd;
-		if (ses->wtd == WTD_BACK && (void *)cur_loc(ses)->next == &ses->history)
+		if (ses->wtd == WTD_BACK && !have_location(ses))
 			goto b;
 		if (!(u = join_urls(ses->loading_url, ce->redirect))) goto b;
 		if (!http_bugs.bug_302_redirect) if (!ce->redirect_get && (p = strchr(ses->loading_url, POST_CHAR))) add_to_strn(&u, p);
@@ -1096,7 +1058,7 @@ int do_move(struct session *ses, struct status **stat)
 			some BUGGY message boards rely on it :-( */
 		gp = stracpy(ses->goto_position);
 		abort_loading(ses);
-		if (!list_empty(ses->history)) *stat = &cur_loc(ses)->stat;
+		if (have_location(ses)) *stat = &cur_loc(ses)->stat;
 		else *stat = NULL;
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
@@ -1141,7 +1103,7 @@ void request_frame(struct session *ses, unsigned char *name, unsigned char *uurl
 	struct location *loc = cur_loc(ses);
 	struct frame *frm;
 	unsigned char *url, *pos;
-	if (list_empty(ses->history)) {
+	if (!have_location(ses)) {
 		internal("request_frame: no location");
 		return;
 	}
@@ -1401,8 +1363,7 @@ struct session *create_session(struct window *win)
 	struct session *ses;
 	if ((ses = mem_alloc(sizeof(struct session)))) {
 		memset(ses, 0, sizeof(struct session));
-		init_list(ses->history);
-	    	init_list(ses->unhistory);
+		create_history(ses);
 		init_list(ses->scrn_frames);
 		init_list(ses->more_files);
 		ses->term = term;
@@ -1430,24 +1391,7 @@ struct session *create_session(struct window *win)
 
 void copy_session(struct session *old, struct session *new)
 {
-	/*struct location *l;
-	foreachback(l, old->history) {
-		struct location *nl;
-		if ((nl = mem_alloc(sizeof(struct location) + strlen(l->vs.url) + 1))) {
-			struct frame *frm;
-			memcpy(nl, l, sizeof(struct location) + strlen(l->vs.url) + 1);
-			init_list(nl->frames);
-			foreachback(frm, l->frames) {
-				struct frame *nfrm;
-				if ((nfrm = mem_alloc(sizeof(struct frame) + strlen(frm->vs.url) + 1))) {
-					memcpy(nfrm, frm, sizeof(struct frame) + strlen(frm->vs.url) + 1);
-					add_to_list(nl->frames, nfrm);
-				}
-			}
-			add_to_list(new->history, nl);
-		}
-	}*/
-	if (!list_empty(old->history)) {
+	if (have_location(old)) {
 		goto_url(new, cur_loc(old)->vs.url);
 	}
 }
@@ -1542,7 +1486,7 @@ void abort_preloading(struct session *ses)
 void abort_loading(struct session *ses)
 {
 	struct location *l = cur_loc(ses);
-	if ((void *)l != &ses->history) {
+	if (have_location(ses)) {
 		if (l->stat.state >= 0)
 			change_connection(&l->stat, NULL, PRI_CANCEL);
 		abort_files_load(ses);
@@ -1554,7 +1498,6 @@ void destroy_session(struct session *ses)
 {
 	struct f_data_c *fdc;
 	struct download *d;
-	struct location *l;
 	if (!ses) return;
 	foreach(d, downloads) if (d->ses == ses && d->prog) {
 		d = d->prev;
@@ -1565,8 +1508,7 @@ void destroy_session(struct session *ses)
 	if (ses->screen) detach_formatted(ses->screen), mem_free(ses->screen);
 	foreach(fdc, ses->scrn_frames) detach_formatted(fdc);
 	free_list(ses->scrn_frames);
-	foreach(l, ses->history) destroy_location(l);
-	foreach(l, ses->unhistory) destroy_location(l);
+	destroy_history(ses);
 	if (ses->loading_url) mem_free(ses->loading_url);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
 	if (ses->goto_position) mem_free(ses->goto_position);
@@ -1601,11 +1543,13 @@ void reload(struct session *ses, int no_cache)
 {
 	struct location *l;
 	struct f_data_c *fd = current_frame(ses);
+	
 	abort_loading(ses);
 	if (no_cache == -1) no_cache = ++ses->reloadlevel;
 	else ses->reloadlevel = no_cache;
-	if ((void *)(l = ses->history.next) != &ses->history) {
+	if (have_location(ses)) {
 		struct file_to_load *ftl;
+
 		l->stat.data = ses;
 		l->stat.end = (void *)doc_end_load;
 		load_url(l->vs.url, ses->ref_url, &l->stat, PRI_MAIN, no_cache);
@@ -1618,7 +1562,8 @@ void reload(struct session *ses, int no_cache)
 	}
 }
 
-/*void ses_load_notify(struct status *stat, struct session *ses)
+#if 0
+void ses_load_notify(struct status *stat, struct session *ses)
 {
 	if (stat->state == S_TRANS || stat->state == S_OK) {
 		stat->end = (void (*)(struct status *, void *))end_load;
@@ -1631,60 +1576,8 @@ void reload(struct session *ses, int no_cache)
 	}
 	if (stat->state >= 0) print_screen_status(ses);
 	if (stat->state < 0) print_error_dlg(ses, stat);
-}*/
-
-void go_back(struct session *ses)
-{
-	unsigned char *url;
-	struct f_data_c *fd = current_frame(ses);
-	int l = 0;
-
-	ses->reloadlevel = NC_CACHE;
-	if (ses->wtd) {
-		if (1 || ses->wtd != WTD_BACK) {
-			abort_loading(ses);
-			print_screen_status(ses);
-			reload(ses, NC_CACHE);
-		}
-		return;
-	}
-	if (ses->history.next == &ses->history || ses->history.next == ses->history.prev)
-		return;
-	abort_loading(ses);
-	if (!(url = stracpy(((struct location *)ses->history.next)->next->vs.url)))
-		return;
-
-	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
-	if (fd && fd->f_data && fd->f_data->url) {
-		ses->ref_url = init_str();
-		add_to_str(&ses->ref_url, &l, fd->f_data->url);
-	}
-
-	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL, end_load, 0);
 }
-
-void go_unback(struct session *ses)
-{
-	unsigned char *url;
-	struct f_data_c *fd = current_frame(ses);
-	int l = 0;
-
-	ses->reloadlevel = NC_CACHE;
-	/* XXX: why wtd checking is not here? --pasky */
-	if (ses->unhistory.next == &ses->unhistory)
-		return;
-	abort_loading(ses);
-	if (!(url = stracpy(((struct location *)ses->unhistory.next)->vs.url)))
-		return;
-
-	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
-	if (fd && fd->f_data && fd->f_data->url) {
-		ses->ref_url = init_str();
-		add_to_str(&ses->ref_url, &l, fd->f_data->url);
-	}
-
-	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL, end_load, 1);
-}
+#endif
 
 #ifdef HAVE_LUA
 unsigned char *follow_url_hook(struct session *ses, unsigned char *url)
@@ -1727,7 +1620,6 @@ void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, 
 		goto end;
 	}
 	ses->reloadlevel = NC_CACHE;
-	/*struct location *l = ses->history.next;*/
 	if (!(u = translate_url(url, ses->term->cwd))) {
 		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL, PRI_CANCEL, 0, NULL, NULL };
 		print_error_dialog(ses, &stat, TEXT(T_ERROR));
@@ -1751,11 +1643,8 @@ void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, 
 	ses_goto(ses, u, target, PRI_MAIN, NC_CACHE, wtd, pos, end_load, 0);
 	/*abort_loading(ses);*/
 
-	end:
-        if (!keep_unhistory) {
-		struct location *l;
-        	foreach(l, ses->unhistory) destroy_location(l);
-        }
+end:
+	clean_unhistory(ses);
 #ifdef HAVE_LUA
 	if (tofree) mem_free(tofree);
 #endif
@@ -1784,8 +1673,9 @@ struct frame *ses_find_frame(struct session *ses, unsigned char *name)
 {
 	struct location *l = cur_loc(ses);
 	struct frame *frm;
-	if (list_empty(ses->history)) {
-		internal("ses_request_frame: history empty");
+	
+	if (!have_location(ses)) {
+		internal("ses_request_frame: no location yet");
 		return NULL;
 	}
 	foreachback(frm, l->frames) if (!strcasecmp(frm->name, name)) return frm;
@@ -1797,8 +1687,9 @@ struct frame *ses_change_frame_url(struct session *ses, unsigned char *name, uns
 {
 	struct location *l = cur_loc(ses);
 	struct frame *frm;
-	if (list_empty(ses->history)) {
-		internal("ses_change_frame_url: history empty");
+	
+	if (!have_location(ses)) {
+		internal("ses_change_frame_url: no location yet");
 		return NULL;
 	}
 	foreachback(frm, l->frames) if (!strcasecmp(frm->name, name)) {
@@ -1861,7 +1752,7 @@ unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t s
 	size_t url_len = 0;
 
 	/* Not looking at anything */
-	if (list_empty(ses->history))
+	if (!have_location(ses))
 		return NULL;
 
 	here = cur_loc(ses)->vs.url;

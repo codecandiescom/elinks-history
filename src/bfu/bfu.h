@@ -1,4 +1,4 @@
-/* $Id: bfu.h,v 1.6 2002/03/22 18:57:19 pasky Exp $ */
+/* $Id: bfu.h,v 1.7 2002/03/28 21:38:50 pasky Exp $ */
 
 #ifndef EL__BFU_H
 #define EL__BFU_H
@@ -8,18 +8,18 @@
 #include <lowlevel/terminal.h>
 
 
-struct history_item {
-	struct history_item *next;
-	struct history_item *prev;
+struct input_history_item {
+	struct input_history_item *next;
+	struct input_history_item *prev;
 	unsigned char d[1];
 };
 
-struct history {
+struct input_history {
 	int n;
 	struct list_head items;
 };
 
-void add_to_history(struct history *, unsigned char *, int);
+void add_to_input_history(struct input_history *, unsigned char *, int);
 
 
 struct dialog_item_data;
@@ -45,7 +45,7 @@ struct dialog_item {
 	 * for box:	gid is box height */
 	int gid, gnum;
 	int (*fn)(struct dialog_data *, struct dialog_item_data *);
-	struct history *history;
+	struct input_history *history;
 	int dlen;
 	unsigned char *data;
 	/* for box:	holds list */
@@ -59,7 +59,7 @@ struct dialog_item_data {
 	int checked;
 	struct dialog_item *item;
 	struct list_head history;
-	struct history_item *cur_hist;
+	struct input_history_item *cur_hist;
 	unsigned char *cdata;
 };
 
@@ -165,7 +165,12 @@ int clear_dialog(struct dialog_data *, struct dialog_item_data *);
 void msg_box(struct terminal *, struct memory_list *, unsigned char *, enum format_align, /*unsigned char *, void *, int,*/ ...);
 
 void input_field_fn(struct dialog_data *);
-void input_field(struct terminal *, struct memory_list *, unsigned char *, unsigned char *, unsigned char *, unsigned char *, void *, struct history *, int, unsigned char *, int, int, int (*)(struct dialog_data *, struct dialog_item_data *), void (*)(void *, unsigned char *), void (*)(void *));
+void input_field(struct terminal *, struct memory_list *, unsigned char *,
+		 unsigned char *, unsigned char *, unsigned char *, void *,
+		 struct input_history *, int, unsigned char *, int, int,
+		 int (*)(struct dialog_data *, struct dialog_item_data *),
+		 void (*)(void *, unsigned char *),
+		 void (*)(void *));
 
 void box_sel_move(struct dialog_item_data *, int );
 void show_dlg_item_box(struct dialog_data *, struct dialog_item_data *);

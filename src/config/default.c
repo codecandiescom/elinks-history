@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.10 2002/03/28 02:42:13 pasky Exp $ */
+/* $Id: default.c,v 1.11 2002/03/28 21:38:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1470,7 +1470,8 @@ struct option html_options[] = {
 		NULL },
 };
 
-extern struct history goto_url_history;
+/* FIXME: This should be in some .h file! */
+extern struct input_history goto_url_history;
 
 /* Load history file */
 int load_url_history()
@@ -1495,7 +1496,7 @@ int load_url_history()
 
 	while (fgets(url, MAX_INPUT_URL_LEN, fp)) {
 		url[strlen(url) - 1] = 0;
-		add_to_history(&goto_url_history, url, 0);
+		add_to_input_history(&goto_url_history, url, 0);
 	}
 
 	fclose(fp);
@@ -1506,7 +1507,7 @@ int load_url_history()
 /* Write history list to file */
 int save_url_history()
 {
-	struct history_item* historyitem;
+	struct input_history_item* historyitem;
 	unsigned char *history_file;
 	int i = 0;
 	FILE *fp;

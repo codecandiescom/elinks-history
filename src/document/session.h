@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.4 2002/03/18 11:34:03 pasky Exp $ */
+/* $Id: session.h,v 1.5 2002/03/28 21:38:51 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -121,6 +121,8 @@ unsigned char *encode_url(unsigned char *);
 
 unsigned char *subst_file(unsigned char *, unsigned char *);
 
+void free_files(struct session *);
+
 int are_there_downloads();
 
 void free_strerror_buf();
@@ -142,8 +144,13 @@ void win_func(struct window *, struct event *, int);
 void goto_url_f(struct session *, unsigned char *, unsigned char *);
 void goto_url(struct session *, unsigned char *);
 void goto_imgmap(struct session *, unsigned char *, unsigned char *, unsigned char *);
-void go_back(struct session *);
-void go_unback(struct session *);
+
+void ses_forward(struct session *);
+void ses_goto(struct session *, unsigned char *, unsigned char *, int, int,
+	      enum session_wtd, unsigned char *, void (*)(struct status *,
+		      struct session *), int);
+
+void end_load(struct status *, struct session *);
 
 void abort_loading(struct session *);
 void reload(struct session*, int);
@@ -154,7 +161,7 @@ struct frame *ses_change_frame_url(struct session *, unsigned char *, unsigned c
 
 void map_selected(struct terminal *, struct link_def *, struct session *);
 
-/* void destroy_location(struct location *); */
+void destroy_location(struct location *);
 /* void destroy_session(struct session *); */
 void destroy_all_sessions();
 void abort_all_downloads();

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: lua.c,v 1.5 2002/03/19 20:40:05 pasky Exp $ */
+/* $Id: lua.c,v 1.6 2002/03/28 21:38:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include <config/default.h>
 #include <config/kbdbind.h>
 #include <document/cache.h>
+#include <document/history.h>
 #include <document/session.h>
 #include <document/view.h>
 #include <document/html/renderer.h>
@@ -48,7 +49,7 @@ static int l_alert(LS)
 static int l_current_url(LS)
 {
 	struct view_state *vs;
-	if (list_empty(ses->history) || !(vs = ses ? &cur_loc(ses)->vs : 0))
+	if (!have_location(ses) || !(vs = ses ? &cur_loc(ses)->vs : 0))
 		lua_pushnil(S);
 	else
 		lua_pushstring(S, vs->url);

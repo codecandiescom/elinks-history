@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.13 2002/03/27 13:32:35 pasky Exp $ */
+/* $Id: view.c,v 1.14 2002/03/28 21:38:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,9 @@
 #include <config/kbdbind.h>
 #include <document/cache.h>
 #include <document/dump.h>
+#include <document/history.h>
 #include <document/options.h>
+#include <document/session.h>
 #include <document/html/parser.h>
 #include <document/html/renderer.h>
 #include <intl/charsets.h>
@@ -912,7 +914,7 @@ void draw_formatted(struct session *ses)
 		fill_area(ses->term, 0, 1, ses->term->x, ses->term->y - 2, ' ');
 		return;
 	}
-	if (!ses->screen->vs && !list_empty(ses->history))
+	if (!ses->screen->vs && have_location(ses))
 		ses->screen->vs = &cur_loc(ses)->vs;
 	ses->screen->xl = ses->screen->yl = -1;
 	draw_doc(ses->term, ses->screen, 1);
@@ -2331,7 +2333,7 @@ struct f_data_c *current_frame(struct session *ses)
 	struct f_data_c *fd = NULL;
 	int i;
 
-	if (ses->history.next == &ses->history) return NULL;
+	if (!have_location(ses)) return NULL;
 	i = cur_loc(ses)->vs.current_link;
 	foreach(fd, ses->scrn_frames) {
 		if (fd->f_data && fd->f_data->frame) continue;
@@ -2368,7 +2370,7 @@ void next_frame(struct session *ses, int p)
 	struct view_state *vs;
 	struct f_data_c *fd;
 
-	if (list_empty(ses->history) || (ses->screen && ses->screen->f_data && !ses->screen->f_data->frame))
+	if (!have_location(ses) || (ses->screen && ses->screen->f_data && !ses->screen->f_data->frame))
 		return;
 	vs = &cur_loc(ses)->vs;
 	n = 0;
@@ -2482,7 +2484,7 @@ void send_event(struct session *ses, struct event *ev)
 			case ACT_GOTO_URL_CURRENT: {
 				unsigned char *s;
 
-				if (list_empty(ses->history)) goto quak;
+				if (!have_location(ses)) goto quak;
 				s = stracpy(cur_loc(ses)->vs.url);
 				if (strchr(s, POST_CHAR)) *strchr(s, POST_CHAR) = 0;
 				dialog_goto_url(ses, s);
@@ -2755,7 +2757,7 @@ void save_as(struct terminal *term, void *xxx, struct session *ses)
 	struct location *l;
 	int len = 0;
 
-	if (list_empty(ses->history)) return;
+	if (!have_location(ses)) return;
 	l = cur_loc(ses);
 	if (ses->dn_url) mem_free(ses->dn_url);
 	if ((ses->dn_url = stracpy(l->vs.url))) {
@@ -3157,7 +3159,7 @@ void loc_msg(struct terminal *term, struct location *location,
 
 void state_msg(struct session *ses)
 {
-	if (list_empty(ses->history)) loc_msg(ses->term, NULL, NULL);
+	if (!have_location(ses)) loc_msg(ses->term, NULL, NULL);
 	else loc_msg(ses->term, cur_loc(ses), current_frame(ses));
 }
 
@@ -3167,7 +3169,7 @@ void head_msg(struct session *ses)
 	unsigned char *s, *ss;
 	int len;
 
-	if (list_empty(ses->history)) {
+	if (!have_location(ses)) {
 		msg_box(ses->term, NULL,
 			TEXT(T_HEADER_INFO), AL_LEFT,
 			TEXT(T_YOU_ARE_NOWHERE),

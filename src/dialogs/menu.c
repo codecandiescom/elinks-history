@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.8 2002/03/26 16:45:07 pasky Exp $ */
+/* $Id: menu.c,v 1.9 2002/03/28 21:38:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include <dialogs/menu.h>
 #include <bookmarks/bookmarks.h>
 #include <config/default.h>
+#include <document/history.h>
 #include <document/options.h>
 #include <document/session.h>
 #include <document/view.h>
@@ -1185,7 +1186,7 @@ void activate_bfu_technology(struct session *ses, int item)
 	do_mainmenu(term, main_menu, ses, item);
 }
 
-struct history goto_url_history = { 0, {&goto_url_history.items, &goto_url_history.items} };
+struct input_history goto_url_history = { 0, {&goto_url_history.items, &goto_url_history.items} };
 
 void goto_url_with_hook(struct session *ses, unsigned char *url)
 {
@@ -1227,7 +1228,7 @@ void dialog_save_url(struct session *ses)
 	input_field(ses->term, NULL, TEXT(T_SAVE_URL), TEXT(T_ENTER_URL), TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history, MAX_INPUT_URL_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) save_url, NULL);
 }
 
-struct history file_history = { 0, {&file_history.items, &file_history.items} };
+struct input_history file_history = { 0, {&file_history.items, &file_history.items} };
 
 void query_file(struct session *ses, unsigned char *url, void (*std)(struct session *, unsigned char *), void (*cancel)(struct session *))
 {
@@ -1243,7 +1244,7 @@ void query_file(struct session *ses, unsigned char *url, void (*std)(struct sess
 	mem_free(def);
 }
 
-struct history search_history = { 0, {&search_history.items, &search_history.items} };
+struct input_history search_history = { 0, {&search_history.items, &search_history.items} };
 
 void search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 {
@@ -1257,7 +1258,7 @@ void search_dlg(struct session *ses, struct f_data_c *f, int a)
 
 #ifdef HAVE_LUA
 
-struct history lua_console_history = { 0, {&lua_console_history.items, &lua_console_history.items} };
+struct input_history lua_console_history = { 0, {&lua_console_history.items, &lua_console_history.items} };
 
 void dialog_lua_console(struct session *ses)
 {

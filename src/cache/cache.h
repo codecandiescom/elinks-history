@@ -1,10 +1,9 @@
-/* $Id: cache.h,v 1.19 2003/07/03 20:38:08 jonas Exp $ */
+/* $Id: cache.h,v 1.20 2003/07/04 02:16:35 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CACHE_H
 #define EL__DOCUMENT_CACHE_H
 
 #include "util/lists.h"
-#include "util/types.h"
 
 enum cache_mode {
 	NC_ALWAYS_CACHE,

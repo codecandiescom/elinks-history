@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.12 2003/07/04 01:49:03 jonas Exp $ */
+/* $Id: download.h,v 1.13 2003/07/04 02:16:35 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -6,11 +6,11 @@
 #include <sys/types.h>
 
 #include "document/cache.h"
-#include "terminal/terminal.h"
 #include "lowlevel/ttime.h"
-#include "terminal/window.h"
 #include "sched/connection.h"
 #include "sched/session.h"
+#include "terminal/terminal.h"
+#include "terminal/window.h"
 #include "util/lists.h"
 
 struct file_download {

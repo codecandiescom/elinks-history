@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.23 2003/07/04 01:49:03 jonas Exp $ */
+/* $Id: connection.h,v 1.24 2003/07/04 02:16:35 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -11,7 +11,6 @@
 #include "util/encoding.h"
 #include "util/error.h"
 #include "util/lists.h"
-#include "util/types.h"
 
 enum connection_priority {
 	PRI_MAIN	= 0,

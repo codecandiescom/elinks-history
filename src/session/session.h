@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.36 2003/07/04 01:49:03 jonas Exp $ */
+/* $Id: session.h,v 1.37 2003/07/04 02:16:35 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -7,13 +7,13 @@
 struct session;
 
 #include "document/cache.h"
-#include "document/options.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
+#include "document/options.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
-#include "sched/location.h"
 #include "sched/connection.h"
+#include "sched/location.h"
 #include "util/lists.h"
 #include "viewer/text/vs.h"
 

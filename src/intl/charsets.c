@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.80 2004/04/22 19:50:01 pasky Exp $ */
+/* $Id: charsets.c,v 1.81 2004/04/22 19:50:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -686,17 +686,17 @@ flush:
 
 #ifndef USE_FASTFIND
 int
-get_cp_index(unsigned char *n)
+get_cp_index(unsigned char *name)
 {
 	register int i, a;
 	int syscp = 0;
 
-	if (!strcasecmp(n, "System")) {
+	if (!strcasecmp(name, "System")) {
 #if HAVE_LANGINFO_CODESET
-		n = nl_langinfo(CODESET);
+		name = nl_langinfo(CODESET);
 		syscp = 1;
 #else
-		n = "us-ascii";
+		name = "us-ascii";
 #endif
 	}
 
@@ -714,7 +714,7 @@ get_cp_index(unsigned char *n)
 			 * once. So we will do a simple strcasecmp() here.
 			 */
 
-			if (!strcasecmp(n, codepages[i].aliases[a]))
+			if (!strcasecmp(name, codepages[i].aliases[a]))
 				return i;
 		}
 	}

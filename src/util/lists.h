@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.7 2003/04/26 09:01:49 zas Exp $ */
+/* $Id: lists.h,v 1.8 2003/04/26 09:47:03 zas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -9,10 +9,13 @@
  * because they are likely to take & of the parameter. Worst of all, it will
  * work with gcc. But nowhere else (at least not w/ tcc). */
 
-/* Define to activate lists debugging
+/* Lists debugging
  * Two unsigned int magic number will be put before and after the next and
- * prev pointers, these will be check on list operations. */
-#undef LISTDEBUG
+ * prev pointers, these will be check on list operations.
+ * Some pointers are set to specific values after action. */
+#ifdef DEBUG
+#define LISTDEBUG
+#endif
 
 #ifndef LISTDEBUG
 

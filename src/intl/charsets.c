@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.14 2002/08/27 03:00:08 pasky Exp $ */
+/* $Id: charsets.c,v 1.15 2002/09/17 13:21:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,9 +218,8 @@ add_utf_8(struct conv_table *ct, unicode_val u, unsigned char *str)
 				internal("bad utf encoding #1");
 				return;
 			}
-			nct = mem_alloc(sizeof(struct conv_table) * 256);
+			nct = mem_calloc(256, sizeof(struct conv_table));
 			if (!nct) return;
-			memset(nct, 0, sizeof(struct conv_table) * 256);
 			new_translation_table(nct);
 			ct[*p].t = 1;
 			ct[*p].u.tbl = nct;

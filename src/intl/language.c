@@ -1,5 +1,5 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.10 2002/09/03 08:05:37 zas Exp $ */
+/* $Id: language.c,v 1.11 2002/09/17 13:21:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,13 +96,11 @@ tr:
 	} else {
 		if (current_lang_charset
 		    && charset != current_lang_charset) {
-			current_tra = mem_alloc(sizeof (unsigned char **) * T__N_TEXTS);
+			current_tra = mem_calloc(T__N_TEXTS, sizeof (unsigned char **));
 			translation_array[current_language][charset] = current_tra;
 
-			if (current_tra) {
-				memset(current_tra, 0, sizeof (unsigned char **) * T__N_TEXTS);
+			if (current_tra)
 				goto tr;
-			}
 		}
 
 		trn = translations[current_language].t[text - dummyarray].name;

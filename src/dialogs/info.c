@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.2 2002/03/18 22:20:31 pasky Exp $ */
+/* $Id: info.c,v 1.3 2002/03/18 22:26:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 
 #include <bfu/bfu.h>
 #include <dialogs/info.h>
+#include <dialogs/refresh.h>
 #include <config/default.h>
 #include <document/cache.h>
 #include <document/session.h>
@@ -78,53 +79,6 @@ void menu_copying(struct terminal *term, void *d, struct session *ses)
 		TEXT(T_COPYING_DESC),
 		NULL, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-}
-
-
-
-typedef void (*refresh_handler)(struct terminal *, void *, struct session *);
-
-struct refresh {
-	struct terminal *term;
-	struct window *win;
-	struct session *ses;
-	refresh_handler fn;
-	void *data;
-	int timer;
-};
-
-void refresh(struct refresh *r)
-{
-	struct refresh rr;
-	
-	r->timer = -1;
-	memcpy(&rr, r, sizeof(struct refresh));
-	delete_window(r->win);
-	rr.fn(rr.term, rr.data, rr.ses);
-}
-
-void refresh_end(struct refresh *r)
-{
-	if (r->timer != -1) kill_timer(r->timer);
-	mem_free(r);
-}
-
-void refresh_abort(struct dialog_data *dlg)
-{
-	refresh_end(dlg->dlg->udata2);
-}
-
-void refresh_init(struct refresh *r, struct terminal *term,
-		  struct session *ses, void *data, refresh_handler fn)
-{
-	r->term = term;
-	r->win = term->windows.next;
-	r->ses = ses;
-	r->fn = fn;
-	r->data = data;
-
-	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
 }
 
 

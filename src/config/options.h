@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.86 2003/10/25 14:41:42 jonas Exp $ */
+/* $Id: options.h,v 1.87 2003/10/25 14:49:17 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -38,8 +38,8 @@ enum option_flags {
 	 * being useful if you want to save only the options whose value
 	 * changed. */
 	OPT_TOUCHED = 8,
-	/* This is used to mark options which are in config_options. If set
-	 * on the tree argument to add_opt, it will create the listbox (options
+	/* If set on the tree argument to add_opt (not necessarily the direct
+	 * parent) or on the option itself, it will create the listbox (options
 	 * manager) item for the option. */
 	OPT_LISTBOX = 16,
 	/* This is used to mark that the option _and_ the option name is

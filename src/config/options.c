@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.370 2003/10/25 14:09:41 jonas Exp $ */
+/* $Id: options.c,v 1.371 2003/10/25 14:49:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ static INIT_LIST_HEAD(options_root_tree);
 
 static struct option options_root = INIT_OPTION(
 	/* name: */	"",
-	/* flags: */	OPT_LISTBOX,
+	/* flags: */	0,
 	/* type: */	OPT_TREE,
 	/* min, max: */	0, 0,
 	/* value: */	&options_root_tree,
@@ -534,6 +534,7 @@ init_options(void)
 	config_options = add_opt_tree_tree(&options_root, "", "",
 					 "config", OPT_LISTBOX | OPT_SORT, "");
 	register_options(config_options_info, config_options);
+
 	register_autocreated_options();
 	register_change_hooks(change_hooks);
 }
@@ -1086,7 +1087,9 @@ register_options(struct option_info info[], struct option *tree)
 		struct option *option = &info[i].option;
 		unsigned char *string;
 
-		if (option->type != OPT_ALIAS && (tree->flags & OPT_LISTBOX)) {
+		if (option->type != OPT_ALIAS
+		    && ((tree->flags & OPT_LISTBOX)
+			|| (option->flags & OPT_LISTBOX))) {
 			option->box_item = init_option_listbox_item(option);
 			if (!option->box_item) {
 				delete_option(option);

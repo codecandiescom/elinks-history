@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.8 2002/04/27 13:15:53 pasky Exp $ */
+/* $Id: dns.c,v 1.9 2002/04/28 11:49:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,8 +181,6 @@ void end_real_lookup(void *data)
 	struct dnsquery *query = (struct dnsquery *) data;
 	int res = -1;
 	int i;
-
-//	debug("end_real_lookup");
 
 	if (!query->addr || !query->addrno)
 		goto done;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.28 2002/04/28 11:17:30 pasky Exp $ */
+/* $Id: view.c,v 1.29 2002/04/28 11:49:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <sys/types.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -49,7 +48,6 @@
 #include <lowlevel/kbd.h>
 #include <lowlevel/terminal.h>
 #include <lua/lua.h>
-//#include <protocol/http/header.h>
 #include <protocol/url.h>
 #include <util/error.h>
 

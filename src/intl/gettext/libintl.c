@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.2 2003/01/03 02:04:15 pasky Exp $ */
+/* $Id: libintl.c,v 1.3 2003/01/03 02:28:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 
 #include "elinks.h"
 
-#include "src/intl/gettext/libintl.h"
+#include "intl/gettext/libintl.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -106,7 +106,8 @@ iso639_to_language(unsigned char *iso639)
 	for (i = 0; languages[i].name; i++) {
 		int il = strcspn(languages[i].iso639, "-");
 
-		if (strncmp(languages[i].iso639, il > ll ? ll : il)) continue;
+		if (strncmp(languages[i].iso639, l, il > ll ? ll : il))
+			continue;
 		mem_free(l);
 		return i;
 	}

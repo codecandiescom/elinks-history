@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.34 2004/01/01 15:14:12 pasky Exp $ */
+/* $Id: xbel.c,v 1.35 2004/01/09 13:12:12 miciah Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -409,9 +409,6 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 
 			/* Out of memory */
 			if (!tmp) return 0;
-
-			tmp->root = current_parent;
-			tmp->box_item->type = BI_FOLDER;
 
 			folded = get_attribute_value(node->attrs, "folded");
 			if (folded && !strcmp(folded, "no"))

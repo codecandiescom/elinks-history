@@ -79,7 +79,7 @@ dnl ===================================================================
 dnl Macros for various checks. (TODO: Move to m4/)
 dnl ===================================================================
 
-dnl TODO: Make EL_CONFIG* macros assume CONFIG_* defines so it is poosible
+dnl TODO: Make EL_CONFIG* macros assume CONFIG_* defines so it is possible
 dnl to write EL_CONFIG_DEPENDS(SCRIPTING, [GUILE LUA PERL], [...])
 
 dnl EL_CONFIG(define, what)

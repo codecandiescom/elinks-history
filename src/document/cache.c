@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.29 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: cache.c,v 1.30 2003/05/07 09:49:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,31 +104,16 @@ get_cache_entry(unsigned char *url, struct cache_entry **f)
 		mem_free(e);
 		return -1;
 	}
-	e->length = 0;
+
 	e->incomplete = 1;
-	e->data_size = 0;
-
 	init_list(e->frag);
-
 	e->count = cache_count++;
-	e->refcount = 0;
+
 	add_to_list(cache, e);
 	*f = e;
 
 	return 0;
 }
-
-#if 0
-int get_cache_data(struct cache_entry *e, unsigned char **d, int *l)
-{
-	struct fragment *frag;
-	*d = NULL; *l = 0;
-	if ((void *)(frag = e->frag.next) == &e->frag) return -1;
-	*d = frag->data;
-	*l = frag->length;
-	return 0;
-}
-#endif
 
 #define enlarge(e, x) e->data_size += x, cache_size += x
 
@@ -205,7 +190,7 @@ add_fragment(struct cache_entry *e, int offset,
 
 	/* Make up new fragment. */
 
-	nf = mem_alloc(sizeof(struct fragment) + CACHE_PAD(length));
+	nf = mem_calloc(1, sizeof(struct fragment) + CACHE_PAD(length));
 	if (!nf) return -1;
 
 	ret = 1;
@@ -234,6 +219,7 @@ remove_overlaps:
 			nf = mem_realloc(f, sizeof(struct fragment)
 					    + end_offset - f->offset);
 			if (!nf) goto ff;
+			
 			nf->prev->next = nf;
 			nf->next->prev = nf;
 			f = nf;
@@ -303,9 +289,8 @@ defrag_entry(struct cache_entry *e)
 	for (l = 0, h = f; h != g; h = h->next)
 		l += h->length;
 
-	n = mem_alloc(sizeof(struct fragment) + l);
+	n = mem_calloc(1, sizeof(struct fragment) + l);
 	if (!n) return;
-	n->offset = 0;
 	n->length = l;
 	n->real_length = l;
 #if 0

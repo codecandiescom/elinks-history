@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.12 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: cache.h,v 1.13 2003/05/07 09:49:01 zas Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
@@ -17,25 +17,30 @@ enum cache_mode {
 struct cache_entry {
 	LIST_HEAD(struct cache_entry);
 
+	struct list_head frag;
+
 	unsigned char *url;
 	unsigned char *head;
 	unsigned char *redirect;
+	unsigned char *encoding_info;
+	unsigned char *last_modified;
+	unsigned char *etag;
+	unsigned char *ssl_info;
+	
+	tcount count;
+
 	int redirect_get;
 	int length;
 	int incomplete;
 	int tgc;
-	enum cache_mode cache_mode;
-	unsigned char *last_modified;
-	unsigned char *etag;
 	int data_size;
-	struct list_head frag;
-	tcount count;
 	int refcount;
-	unsigned char *ssl_info;
-	unsigned char *encoding_info;
 #ifdef HAVE_SCRIPTING
 	int done_pre_format_html_hook;
 #endif
+
+	enum cache_mode cache_mode;
+	
 };
 
 struct fragment {
@@ -44,13 +49,12 @@ struct fragment {
 	int offset;
 	int length;
 	int real_length;
-	unsigned char data[1];
+	unsigned char data[1]; /* must be at end of struct */
 };
 
 long cache_info(int);
 int find_in_cache(unsigned char *, struct cache_entry **);
 int get_cache_entry(unsigned char *, struct cache_entry **);
-/* int get_cache_data(struct cache_entry *e, unsigned char **, int *); */
 int add_fragment(struct cache_entry *, int, unsigned char *, int);
 void defrag_entry(struct cache_entry *);
 void truncate_entry(struct cache_entry *, int, int);

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.144 2004/04/23 20:44:27 pasky Exp $ */
+/* $Id: options.c,v 1.145 2004/05/04 01:21:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,12 +32,15 @@
 
 
 static void
-display_codepage(struct terminal *term, void *pcp, struct session *ses)
+display_codepage(struct terminal *term, unsigned char *name, struct session *ses)
 {
 	struct option *opt = get_opt_rec(term->spec, "charset");
+	int index = get_cp_index(name);
 
-	if (opt->value.number != (int) pcp) {
-		opt->value.number = (int) pcp;
+	assert(index != -1);
+
+	if (opt->value.number != index) {
+		opt->value.number = index;
 		opt->flags |= OPT_TOUCHED;
 	}
 
@@ -54,9 +57,12 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 	if (!mi) return;
 
 	for (i = 0; (n = get_cp_name(i)); i++) {
+		unsigned char *name;
+
 		if (is_cp_special(i)) continue;
-		add_to_menu(&mi, get_cp_name(i), NULL, ACT_MAIN_NONE,
-			    (menu_func) display_codepage, (void *)i, 0);
+		name = get_cp_name(i);
+		add_to_menu(&mi, name, NULL, ACT_MAIN_NONE,
+			    (menu_func) display_codepage, name, 0);
 	}
 
 	do_menu_selected(term, mi, ses, sel, 0);

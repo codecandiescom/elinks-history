@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: gen-cp,v 1.12 2005/03/05 21:49:29 zas Exp $
+# $Id: gen-cp,v 1.13 2005/03/05 22:08:22 zas Exp $
 
 echo
 echo Generating code page translation tables.
@@ -30,7 +30,7 @@ for i in $codepages; do
 	# form, and my aesthetical feeling shivers upon glancing at it. However
 	# we should handle commentless records. A loop with read inside would
 	# be ideal, I suppose. --pasky
-	tail -n 3 $i.cp | sed 's/# *\(.*\) *$/\/* \1 *\/ /' | grep '^0x[89a-zA-Z]' \
+	tail -n +3 $i.cp | sed 's/# *\(.*\) *$/\/* \1 *\/ /' | grep '^0x[89a-zA-Z]' \
 	| sed 's/[ 	][ 	]*/ /g' | sed 's/[ 	]*$/ },/' | sed 's/ /, /' \
 	| sed 's/^[ 	]*/	{/' | grep '.*,.*,'
 
@@ -39,7 +39,7 @@ for i in $codepages; do
 	echo
 
 	echo 'unsigned char *aliases_'$i' [] = {'
-	head -n 2 $i.cp | tail -n 2 | sed 's/ \+/ /g; s/ $//; s/\", /\",£/g; s/$/,/' | tr "£" "\n" \
+	head -n 2 $i.cp | tail -n +2 | sed 's/ \+/ /g; s/ $//; s/\", /\",£/g; s/$/,/' | tr "£" "\n" \
 	| sed 's/^/£/g' | tr "£" "\t" 
 	echo '	NULL
 };'

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.199 2005/03/11 15:11:14 zas Exp $ */
+/* $Id: ftp.c,v 1.200 2005/03/11 15:13:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -620,8 +620,11 @@ add_file_cmd_to_str(struct connection *conn)
 		memset(&data_addr, 0, sizeof(data_addr));
 		data_sock = get_pasv6_socket(conn, conn->socket.fd,
 		 	    (struct sockaddr_storage *) &data_addr);
-		if (data_sock < 0)
-			return NULL;	/* FIXME: free!! */
+		if (data_sock < 0) {
+			INTERNAL("Failed to create IPv6 ftp data socket");
+			abort_conn_with_state(conn, S_INTERNAL);
+			return NULL;
+		}
 		conn->data_socket.fd = data_sock;
 	}
 #endif
@@ -631,8 +634,11 @@ add_file_cmd_to_str(struct connection *conn)
 	if (!c_i->use_pasv && conn->protocol_family != 1) {
 		memset(pc, 0, sizeof(pc));
 		data_sock = get_pasv_socket(conn, conn->socket.fd, pc);
-		if (data_sock < 0)
-			return NULL;	/* FIXME: free!! */
+		if (data_sock < 0) {
+			INTERNAL("Failed to create IPv4 ftp data socket");
+			abort_conn_with_state(conn, S_INTERNAL);
+			return NULL;
+		}
 		conn->data_socket.fd = data_sock;
 	}
 

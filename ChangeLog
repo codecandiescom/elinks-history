@@ -1,3 +1,70 @@
+Wed Sep  3 22:05:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/options.c, terminal/screen.c:
+
+	Update screen_drivers change_hook style.  
+
+Wed Sep  3 21:17:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, terminal/screen.c, terminal/screen.h:
+
+	Dynamically allocate screen drivers ... getting ready for
+	change_hook updating.  
+
+Wed Sep  3 20:14:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Silence gcc 3.3.* warnings even for --disable-debug builds.  
+
+Wed Sep  3 16:21:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Do not use fmem_alloc() since using alloca() (fastmem only) prevents
+	the function to be inlined.  
+
+Wed Sep  3 16:15:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	A segfault produced at exit in normal or fastmem mode was fixed. Why
+	does it work with --enable-debug and segfault in other modes? 
+
+Wed Sep  3 16:03:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: snprintf.c, snprintf.h, string.c, string.h:
+
+	Changes were made to be able to compile ELinks with -Winline flag.
+	Some functions were not inlined as it should. A bit hacky so feel
+	free to improve.  
+
+Wed Sep  3 12:20:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, config/cmdline.c:
+
+	elinks -dump <somefile and elinks -dump - <somefile are now
+	accepted. It works with -source too.  
+
+Wed Sep  3 09:27:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Minor code simplification.  
+
+Wed Sep  3 09:24:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Use url_size ;).  
+
+Wed Sep  3 09:22:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	forget_forms_with_url() was introduced. It replaces previous
+	get_form_with_url() + a loop.  
+
 Tue Sep  2 21:21:13 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

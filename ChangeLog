@@ -1,3 +1,135 @@
+Thu Jul 10 13:53:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Try to cleanup the complicated auth entry comparison.  
+
+Thu Jul 10 13:27:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h, http/auth.c:
+
+	Rename: get_auth_url() -> get_uri_string(), and move it to
+	protocol/uri.* 
+
+Thu Jul 10 13:19:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.h:
+
+	Make @valid and @blocked members boolean fields.  
+
+Thu Jul 10 13:17:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.h:
+
+	Whitespace fix.  
+
+Thu Jul 10 13:16:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: auth.c, auth.h:
+
+	Remove unused url_len member.  
+
+Thu Jul 10 13:02:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Split out auth entry initialization and get rid of gotos.  
+
+Thu Jul 10 12:50:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Writeout @ret usage.  
+
+Thu Jul 10 12:38:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Simplify the code path in auth adding.  
+
+Thu Jul 10 12:30:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Remove allocation of username and password when adding an entry.  
+
+Thu Jul 10 12:05:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Fix leak in the alloc failure code path.  
+
+Thu Jul 10 04:38:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Generalize get_auth_url() to use protocol system for getting port
+	number.  
+
+Thu Jul 10 04:28:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Use struct uri in get_auth_entry(), 
+
+Thu Jul 10 03:02:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: auth.c, auth.h, http.c:
+
+	Urify add_auth_entry(). Add missing #include.  
+
+Thu Jul 10 02:51:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/auth.c:
+
+	Update comment to use enum names.  
+
+Thu Jul 10 02:46:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: auth.c, auth.h, http.c:
+
+	Use enum for add_auth_entry().  
+
+Thu Jul 10 00:59:01 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/lowlevel/interlink.c:
+
+	assert(info) _before_ dereferencing it.  
+
+Thu Jul 10 00:35:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: auth.c, auth.h, http.c:
+
+	Urify find_auth().  
+
+Thu Jul 10 00:00:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	Fix leak when parse_uri() failed.  
+
+Wed Jul  9 23:56:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.c, protocol/uri.h, protocol/url.c,
+	protocol/user.c, protocol/http/http.c, sched/connection.c:
+
+	Passing uristring to parse_uri() seems more natural.  
+
+Wed Jul  9 23:03:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/leds.c, bookmarks/dialogs.c, config/dialogs.c,
+	config/dialogs.h, dialogs/auth.c, dialogs/document.c,
+	dialogs/edit.c, dialogs/edit.h, dialogs/hierbox.c,
+	dialogs/hierbox.h, dialogs/info.c, dialogs/info.h, dialogs/menu.c,
+	dialogs/menu.h, dialogs/options.c, dialogs/options.h,
+	dialogs/refresh.c, globhist/dialogs.c, lowlevel/interlink.c,
+	lowlevel/timer.c, mime/backend/default.c, osdep/os_dep.c,
+	protocol/user.c, protocol/http/http.c, scripting/lua/core.c,
+	ssl/connect.c, viewer/text/form.h, viewer/text/link.h,
+	viewer/text/search.h, viewer/text/view.h:
+
+	Misc. #include reordering all over the map.  
+
 Wed Jul  9 20:21:20 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/sched/connection.c:

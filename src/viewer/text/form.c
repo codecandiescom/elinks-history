@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.60 2003/11/18 15:09:13 kuser Exp $ */
+/* $Id: form.c,v 1.61 2003/11/26 13:13:23 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -699,7 +699,7 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 	else
 		encode_multipart(ses, &submit, &data, bound, cp_from, cp_to);
 
-	if (!data.source) {
+	if (!data.source || !init_string(&go)) {
 		free_succesful_controls(&submit);
 		return NULL;
 	}
@@ -708,8 +708,6 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 	if (get_opt_bool("document.browse.forms.show_formhist"))
 		memorize_form(ses, &submit, frm);
 #endif
-
-	if (!init_string(&go)) return NULL;
 
 	if (frm->method == FM_GET) {
 		unsigned char *pos = strchr(frm->action, '#');

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.535 2004/07/26 17:17:31 zas Exp $ */
+/* $Id: session.c,v 1.536 2004/07/26 17:24:22 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -808,20 +808,17 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 struct string *
 encode_session_info(struct string *info, struct list_head *url_list)
 {
-	if (init_string(info)) {
-		struct string_list_item *url;
+	struct string_list_item *url;
 
-		foreach (url, *url_list) {
-			struct string *str = &url->string;
+	if (!init_string(info)) return NULL;
 
-			add_bytes_to_string(info, str->source, str->length + 1);
-		}
+	foreach (url, *url_list) {
+		struct string *str = &url->string;
 
-		return info;
+		add_bytes_to_string(info, str->source, str->length + 1);
 	}
 
-	done_string(info);
-	return NULL;
+	return info;
 }
 
 /* Older elinks versions (up to and including 0.9.1) sends no magic variable and if

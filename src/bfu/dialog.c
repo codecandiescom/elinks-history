@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.109 2003/12/03 07:29:55 miciah Exp $ */
+/* $Id: dialog.c,v 1.110 2003/12/03 14:08:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -517,7 +517,7 @@ draw_dialog(struct dialog_data *dlg_data, int width, int height)
 	}
 }
 
-void
+static void
 do_refresh_dialog(struct dialog_data *dlg_data)
 {
 	struct dialog_refresh *refresh = dlg_data->dlg->refresh;

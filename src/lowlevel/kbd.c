@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.3 2002/03/17 17:27:51 pasky Exp $ */
+/* $Id: kbd.c,v 1.4 2002/03/18 21:03:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -425,7 +425,10 @@ void kbd_timeout(struct itrm *itrm)
 int get_esc_code(char *str, int len, char *code, int *num, int *el)
 {
 	int pos;
+	
 	*num = 0;
+	*code = '\0';
+	
 	for (pos = 2; pos < len; pos++) {
 		if (str[pos] < '0' || str[pos] > '9' || pos > 7) {
 			*el = pos + 1;
@@ -507,12 +510,15 @@ int process_queue(struct itrm *itrm)
 {
 	struct event ev = {EV_KBD, -1, 0, 0};
 	int el = 0;
+
 	if (!itrm->qlen) goto end;
 	if (itrm->kqueue[0] == '\033') {
 		if (itrm->qlen < 2) goto ret;
 		if (itrm->kqueue[1] == '[' || itrm->kqueue[1] == 'O') {
 			char c;
 			int v;
+
+			if (itrm->qlen < 3) goto ret;
 
 			get_esc_code(itrm->kqueue, itrm->qlen, &c, &v, &el);
 
@@ -529,14 +535,14 @@ int process_queue(struct itrm *itrm)
 			}
 
 			else switch (c) {
+				case 0: goto ret;
 				case 'A': ev.x = KBD_UP; break;
 				case 'B': ev.x = KBD_DOWN; break;
 				case 'C': ev.x = KBD_RIGHT; break;
 				case 'D': ev.x = KBD_LEFT; break;
 				case 'F':
 				case 'e': ev.x = KBD_END; break;
-				case 'H':
-				case 0: ev.x = KBD_HOME; break;
+				case 'H': ev.x = KBD_HOME; break;
 				case 'I': ev.x = KBD_PAGE_UP; break;
 				case 'G': ev.x = KBD_PAGE_DOWN; break;
 

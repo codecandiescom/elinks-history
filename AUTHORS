@@ -249,6 +249,7 @@ Stepan Roh <stepan@srnet.cz>
 Stephane Chazelas <stephane.chazelas@free.fr>
 	Cookies fixes
 	HTTP Date parsing rewrite
+	Random hacking
 
 Suveg Gabor <gsuveg@sgmobil2000.hu>
 	Hungarian translation
@@ -275,4 +276,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.39 2002/03/18 13:01:58 pasky Exp $
+$Id: AUTHORS,v 1.40 2002/03/18 21:03:12 pasky Exp $

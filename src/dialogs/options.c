@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.3 2002/04/16 18:34:57 pasky Exp $ */
+/* $Id: options.c,v 1.4 2002/04/26 17:26:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,6 +94,7 @@ unsigned char *td_labels[] = {
 	TEXT(T_RESTRICT_FRAMES_IN_CP850_852),
 	TEXT(T_BLOCK_CURSOR),
 	TEXT(T_COLOR),
+	TEXT(T_UTF_8_IO),
 	NULL
 };
 
@@ -105,9 +106,9 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 
 	if (!ts) return;
 
-	d = mem_alloc(sizeof(struct dialog) + 11 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 12 * sizeof(struct dialog_item));
 	if (!d) return;
-	memset(d, 0, sizeof(struct dialog) + 11 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 12 * sizeof(struct dialog_item));
 
 	d->title = TEXT(T_TERMINAL_OPTIONS);
 	d->fn = checkbox_list_fn;
@@ -158,17 +159,22 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[7].dlen = sizeof(int);
 	d->items[7].data = (void *) &ts->col;
 
-	d->items[8].type = D_BUTTON;
-	d->items[8].gid = B_ENTER;
-	d->items[8].fn = ok_dialog;
-	d->items[8].text = TEXT(T_OK);
+	d->items[8].type = D_CHECKBOX;
+	d->items[8].gid = 0;
+	d->items[8].dlen = sizeof(int);
+	d->items[8].data = (void *) &ts->utf_8_io;
 
 	d->items[9].type = D_BUTTON;
-	d->items[9].gid = B_ESC;
-	d->items[9].fn = cancel_dialog;
-	d->items[9].text = TEXT(T_CANCEL);
+	d->items[9].gid = B_ENTER;
+	d->items[9].fn = ok_dialog;
+	d->items[9].text = TEXT(T_OK);
 
-	d->items[10].type = D_END;
+	d->items[10].type = D_BUTTON;
+	d->items[10].gid = B_ESC;
+	d->items[10].fn = cancel_dialog;
+	d->items[10].text = TEXT(T_CANCEL);
+
+	d->items[11].type = D_END;
 
 	do_dialog(term, d, getml(d, NULL));
 }

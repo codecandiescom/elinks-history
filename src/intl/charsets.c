@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.3 2002/03/18 11:34:04 pasky Exp $ */
+/* $Id: charsets.c,v 1.4 2002/04/26 17:26:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ int strange_chars[32] = {
 0x007e, 0x2122, 0x0161, 0x003e, 0x0153, 0x0000, 0x0000, 0x0000,
 };
 
-static inline unsigned char *u2cp(int u, int to)
+unsigned char *u2cp(int u, int to)
 {
 	int j, s;
 	if (u < 128) return strings[u];
@@ -149,6 +149,22 @@ unsigned char *encode_utf_8(int u)
 		utf_buffer[4] = 0x80 | ((u >> 6) & 0x3f),
 		utf_buffer[5] = 0x80 | (u & 0x3f);
 	return utf_buffer;
+}
+
+/* This slow and ugly code is used by the terminal utf_8_io */
+unsigned char *cp2utf_8(int from, int c)
+{
+	int j;
+
+	if (codepages[from].table == table_utf_8) return strings[c];
+	for (j = 0; codepages[from].table[j].c; j++) {
+		if (codepages[from].table[j].c == c)
+		{
+			return encode_utf_8(codepages[from].table[j].u);
+		}
+	}
+	if (c < 128) return strings[c];
+	return encode_utf_8(UCS_NO_CHAR);
 }
 
 void add_utf_8(struct conv_table *ct, int u, unsigned char *str)

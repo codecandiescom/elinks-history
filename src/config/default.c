@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.19 2002/04/20 12:52:13 zas Exp $ */
+/* $Id: default.c,v 1.20 2002/04/26 17:26:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -700,6 +700,7 @@ void prog_wr(struct option *o, unsigned char **s, int *l)
 	}
 }
 
+/* terminal NAME(str) MODE(0-3) M11_HACK(0-1) BLOCK_CURSOR.RESTRICT_852.COL(0-7) CHARSET(str) [ UTF_8_IO("utf-8") ]*/
 unsigned char *term_rd(struct option *o, unsigned char *c)
 {
 	struct term_spec *ts;
@@ -710,6 +711,7 @@ unsigned char *term_rd(struct option *o, unsigned char *c)
 		mem_free(w);
 		goto end;
 	}
+	ts->utf_8_io = 0;
 	mem_free(w);
 	if (!(w = get_token(&c))) goto err;
 	if (strlen(w) != 1 || w[0] < '0' || w[0] > '3') goto err_f;
@@ -729,6 +731,9 @@ unsigned char *term_rd(struct option *o, unsigned char *c)
 	if ((i = get_cp_index(w)) == -1) goto err_f;
 	ts->charset = i;
 	mem_free(w);
+	if (!(w = get_token(&c))) goto end;
+	if (!(strcasecmp(w, "utf-8"))) ts->utf_8_io = 1;
+	mem_free(w);
 	end:
 	return NULL;
 	err_f:
@@ -737,6 +742,7 @@ unsigned char *term_rd(struct option *o, unsigned char *c)
 	return "Error reading terminal specification";
 }
 
+/* terminal2 NAME(str) MODE(0-3) M11_HACK(0-1) RESTRICT_852(0-1) COL(0-1) CHARSET(str) [ UTF_8_IO("utf-8") ]*/
 unsigned char *term2_rd(struct option *o, unsigned char *c)
 {
 	struct term_spec *ts;
@@ -747,6 +753,7 @@ unsigned char *term2_rd(struct option *o, unsigned char *c)
 		mem_free(w);
 		goto end;
 	}
+	ts->utf_8_io = 0;
 	mem_free(w);
 	if (!(w = get_token(&c))) goto err;
 	if (strlen(w) != 1 || w[0] < '0' || w[0] > '3') goto err_f;
@@ -767,6 +774,9 @@ unsigned char *term2_rd(struct option *o, unsigned char *c)
 	if (!(w = get_token(&c))) goto err;
 	if ((i = get_cp_index(w)) == -1) goto err_f;
 	ts->charset = i;
+	mem_free(w);
+	if (!(w = get_token(&c))) goto end;
+	if (!(strcasecmp(w, "utf-8"))) ts->utf_8_io = 1;
 	mem_free(w);
 	end:
 	return NULL;
@@ -790,6 +800,9 @@ void term_wr(struct option *o, unsigned char **s, int *l)
 		add_num_to_str(s, l, !!ts->col + !!ts->restrict_852 * 2 + !!ts->block_cursor * 4);
 		add_to_str(s, l, " ");
 		add_to_str(s, l, get_cp_mime_name(ts->charset));
+		if (ts->utf_8_io) {
+			add_to_str(s, l, " utf-8");
+		}
 	}
 }
 

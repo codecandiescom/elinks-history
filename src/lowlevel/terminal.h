@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.6 2002/04/09 08:07:03 pasky Exp $ */
+/* $Id: terminal.h,v 1.7 2002/04/26 17:26:48 pasky Exp $ */
 
 #ifndef EL__TERMINAL_H
 #define EL__TERMINAL_H
@@ -42,6 +42,7 @@ struct term_spec {
 	unsigned char term[MAX_TERM_LEN];
 	enum term_mode_type mode;
 	int m11_hack;
+	int utf_8_io;
 	int restrict_852;
 	/* This means we always move cursor to (altx,alty) in set_cursor(),
 	 * which is usually bottom right corner. */
@@ -83,6 +84,11 @@ struct terminal {
 	int qlen;
 	struct list_head windows;
 	unsigned char *title;
+	struct {
+		int ucs;
+		int len;
+		int min;
+	} utf_8;
 };
 
 struct window {

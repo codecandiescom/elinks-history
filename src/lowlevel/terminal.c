@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.7 2002/04/16 12:43:25 pasky Exp $ */
+/* $Id: terminal.c,v 1.8 2002/04/26 17:26:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -492,6 +492,25 @@ struct terminal *init_term(int fdin, int fdout,
 }
 
 
+static inline void term_send_event(struct terminal *term, struct event *ev)
+{
+	((struct window *)&term->windows)->next->handler(term->windows.next, ev, 0);
+}
+
+static inline void term_send_ucs(struct terminal *term, struct event *ev, int u)
+{
+	unsigned char *recoded;
+
+	if (u == 0xA0) u = ' ';
+	recoded = u2cp(u, term->spec->charset);
+	if (! recoded) recoded = "*";
+	while (*recoded) {
+		ev->x = *recoded;
+		term_send_event(term, ev);
+		recoded ++;
+	}
+}
+
 /* in_term() */
 void in_term(struct terminal *term)
 {
@@ -583,7 +602,40 @@ send_redraw:
 		}
 		else if (ev->ev == EV_KBD && ev->x == KBD_CTRL_C)
 			((struct window *) &term->windows)->prev->handler(term->windows.prev, ev, 0);
-		else ((struct window *)&term->windows)->next->handler(term->windows.next, ev, 0);
+		else if (ev->ev == EV_KBD) {
+			if (term->utf_8.len) {
+				if ((ev->x & 0xC0) == 0x80 && term->spec->utf_8_io) {
+					term->utf_8.ucs <<= 6;
+					term->utf_8.ucs |= ev->x & 0x3F;
+					if (! --term->utf_8.len) {
+						int u = term->utf_8.ucs;
+
+						if (u < term->utf_8.min) u = UCS_NO_CHAR;
+						term_send_ucs(term, ev, u);
+					}
+					goto mm;
+				} else {
+					term->utf_8.len = 0;
+					term_send_ucs(term, ev, UCS_NO_CHAR);
+				}
+			}
+			if (ev->x < 0x80 || ev->x > 0xFF || ! term->spec->utf_8_io) {
+				term_send_event(term, ev);
+				goto mm;
+			} else if ((ev->x & 0xC0) == 0xC0 && (ev->x & 0xFE) != 0xFE) {
+				int mask, len = 0, cov = 0x80;
+
+				for (mask = 0x80; ev->x & mask; mask >>= 1) {
+					len++;
+					term->utf_8.min = cov;
+					cov = 1 << (1 + 5 * len);
+				}
+				term->utf_8.len = len - 1;
+				term->utf_8.ucs = ev->x & (mask - 1);
+				goto mm;
+			}
+			term_send_ucs(term, ev, UCS_NO_CHAR);
+		} else term_send_event(term, ev);
 	}
 
 	if (ev->ev == EV_ABORT) destroy_terminal(term);
@@ -677,7 +729,20 @@ unsigned char frame_restrict[48] = {
 		if (attrib & 0100) add_to_str(&a, &l, ";1");			\
 		add_to_str(&a, &l, "m");					\
 	}									\
-	if (c >= ' ' && c != 127/* && c != 155*/) add_chr_to_str(&a, &l, c);	\
+	if (c >= ' ' && c != 127/* && c != 155*/) {				\
+		int charset = s->charset;					\
+										\
+		if (ch >> 15) {							\
+			int frames_charset = s->mode == TERM_LINUX		\
+						? get_cp_index("cp437")		\
+						: s->mode == TERM_KOI8		\
+							? get_cp_index("koi8-r")\
+							: -1;			\
+			if (frames_charset != -1) charset = frames_charset;	\
+		}								\
+		if (s->utf_8_io) add_to_str(&a, &l, cp2utf_8(charset, c));	\
+		else add_chr_to_str(&a, &l, c);					\
+	}									\
 	else if (!c || c == 1) add_chr_to_str(&a, &l, ' ');			\
 	else add_chr_to_str(&a, &l, '.');					\
 	cx++;									\

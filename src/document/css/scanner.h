@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.42 2004/01/21 04:44:29 jonas Exp $ */
+/* $Id: scanner.h,v 1.43 2004/01/21 06:19:22 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -73,6 +73,13 @@ enum css_token_type {
 
 /* Define if you want a talking scanner */
 /* #define CSS_SCANNER_DEBUG */
+
+/* Check whéther it is safe to skip the char @c when looking for @skipto */
+#define check_css_precedence(c, skipto)						\
+	!(((skipto) == ':' && ((c) == ';' || (c) == '{' || (c) == '}'))		\
+	  || ((skipto) == ')' && ((c) == ';' || (c) == '{' || (c) == '}'))	\
+	  || ((skipto) == ';' && ((c) == '{' || (c) == '}'))			\
+	  || ((skipto) == '{' && (c) == '}'))
 
 /* The {struct css_token} describes one CSS scanner state. There are two kinds
  * of tokens: char and non-char tokens. Char tokens contains only one char and

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.74 2004/01/21 06:11:02 jonas Exp $ */
+/* $Id: scanner.c,v 1.75 2004/01/21 06:19:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,13 +102,6 @@ ident2type(unsigned char *ident, unsigned char *end,
 #define check_css_scanner(scanner) \
 	(scanner->tokens < CSS_SCANNER_TOKENS \
 	 || scanner->current + 1 < scanner->table + scanner->tokens)
-
-/* Check whéther it is safe to skip the char @c when looking for @skipto */
-#define check_css_precedence(c, skipto)						\
-	!(((skipto) == ':' && ((c) == ';' || (c) == '{' || (c) == '}'))		\
-	  || ((skipto) == ')' && ((c) == ';' || (c) == '{' || (c) == '}'))	\
-	  || ((skipto) == ';' && ((c) == '{' || (c) == '}'))			\
-	  || ((skipto) == '{' && (c) == '}'))
 
 #define	skip_css(s, skipto)							\
 	while (*(s) && *(s) != (skipto) && check_css_precedence(*(s), skipto)) {\

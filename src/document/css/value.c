@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.41 2004/01/20 17:49:41 jonas Exp $ */
+/* $Id: value.c,v 1.42 2004/01/21 06:19:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,7 @@ css_parse_background_value(struct css_property_info *propinfo,
 	/* This is pretty naive, we just jump space by space, trying to parse
 	 * each token as a color. */
 
-	while (token && token->type != ';') {
+	while (token && check_css_precedence(token->type, ';')) {
 		if (!css_parse_color_value(propinfo, value, scanner)) {
 			token = get_next_css_token(scanner);
 			continue;

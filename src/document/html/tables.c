@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.245 2004/06/28 18:17:25 zas Exp $ */
+/* $Id: tables.c,v 1.246 2004/06/28 18:28:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1619,7 +1619,7 @@ display_table_frames(struct table *table, int x, int y)
 {
 	struct table_frames table_frames;
  	signed char *frame[2];
-  	int i, j;
+  	int col, row;
   	int cx, cy;
   	int fh_size = (table->cols + 2) * (table->rows + 1);
   	int fv_size = (table->cols + 1) * (table->rows + 2);
@@ -1632,38 +1632,38 @@ display_table_frames(struct table *table, int x, int y)
 
 	if (table->rules == TABLE_RULE_NONE) goto cont2;
 
-	for (j = 0; j < table->rows; j++) for (i = 0; i < table->cols; i++) {
+	for (row = 0; row < table->rows; row++) for (col = 0; col < table->cols; col++) {
 		int xsp, ysp;
-		struct table_cell *cell = CELL(table, i, j);
+		struct table_cell *cell = CELL(table, col, row);
 
 		if (!cell->is_used || cell->is_spanned) continue;
 
-		xsp = cell->colspan ? cell->colspan : table->cols - i;
-		ysp = cell->rowspan ? cell->rowspan : table->rows - j;
+		xsp = cell->colspan ? cell->colspan : table->cols - col;
+		ysp = cell->rowspan ? cell->rowspan : table->rows - row;
 
 		if (table->rules != TABLE_RULE_COLS) {
-			memset(&H_FRAME_POSITION(table, i, j), table->cellspacing, xsp);
-			memset(&H_FRAME_POSITION(table, i, j + ysp), table->cellspacing, xsp);
+			memset(&H_FRAME_POSITION(table, col, row), table->cellspacing, xsp);
+			memset(&H_FRAME_POSITION(table, col, row + ysp), table->cellspacing, xsp);
 		}
 
 		if (table->rules != TABLE_RULE_ROWS) {
-			memset(&V_FRAME_POSITION(table, i, j), table->cellspacing, ysp);
-			memset(&V_FRAME_POSITION(table, i + xsp, j), table->cellspacing, ysp);
+			memset(&V_FRAME_POSITION(table, col, row), table->cellspacing, ysp);
+			memset(&V_FRAME_POSITION(table, col + xsp, row), table->cellspacing, ysp);
 		}
 	}
 
 	if (table->rules == TABLE_RULE_GROUPS) {
-		for (i = 1; i < table->cols; i++) {
-			if (!table->cols_x[i])
-				memset(&V_FRAME_POSITION(table, i, 0), 0, table->rows);
+		for (col = 1; col < table->cols; col++) {
+			if (!table->cols_x[col])
+				memset(&V_FRAME_POSITION(table, col, 0), 0, table->rows);
 		}
 
-		for (j = 1; j < table->rows; j++) {
-			for (i = 0; i < table->cols; i++)
-				if (CELL(table, i, j)->group)
+		for (row = 1; row < table->rows; row++) {
+			for (col = 0; col < table->cols; col++)
+				if (CELL(table, col, row)->group)
 					goto cont;
 
-			memset(&H_FRAME_POSITION(table, 0, j), 0, table->cols);
+			memset(&H_FRAME_POSITION(table, 0, row), 0, table->cols);
 cont:;
 		}
 	}
@@ -1677,56 +1677,56 @@ cont2:
 	memset(&V_FRAME_POSITION(table, table->cols, 0), table_frames.right, table->rows);
 
 	cy = y;
-	for (j = 0; j <= table->rows; j++) {
+	for (row = 0; row <= table->rows; row++) {
 		cx = x;
-		if ((j > 0 && j < table->rows && get_hline_width(table, j) >= 0)
-		    || (j == 0 && table_frames.top)
-		    || (j == table->rows && table_frames.bottom)) {
+		if ((row > 0 && row < table->rows && get_hline_width(table, row) >= 0)
+		    || (row == 0 && table_frames.top)
+		    || (row == table->rows && table_frames.bottom)) {
 			int w = table_frames.left ? table->border : -1;
 
-			for (i = 0; i < table->cols; i++) {
-				if (i > 0)
-					w = get_vline_width(table, i);
+			for (col = 0; col < table->cols; col++) {
+				if (col > 0)
+					w = get_vline_width(table, col);
 
 				if (w >= 0) {
-					draw_frame_point(table, frame, cx, cy, i, j,
+					draw_frame_point(table, frame, cx, cy, col, row,
 							 par_format.bgcolor, table->bordercolor);
-					if (j < table->rows)
-						draw_frame_vline(table, frame, cx, cy + 1, i, j,
+					if (row < table->rows)
+						draw_frame_vline(table, frame, cx, cy + 1, col, row,
 								 par_format.bgcolor, table->bordercolor);
 					cx++;
 				}
 
-				draw_frame_hline(table, frame, cx, cy, i, j,
+				draw_frame_hline(table, frame, cx, cy, col, row,
 						 par_format.bgcolor, table->bordercolor);
-				cx += table->cols_widths[i];
+				cx += table->cols_widths[col];
 			}
 
 			if (table_frames.right) {
-				draw_frame_point(table, frame, cx, cy, i, j,
+				draw_frame_point(table, frame, cx, cy, col, row,
 						 par_format.bgcolor, table->bordercolor);
-				if (j < table->rows)
-					draw_frame_vline(table, frame, cx, cy + 1, i, j,
+				if (row < table->rows)
+					draw_frame_vline(table, frame, cx, cy + 1, col, row,
 							 par_format.bgcolor, table->bordercolor);
 				cx++;
 			}
 
 			cy++;
 
-		} else if (j < table->rows) {
-			for (i = 0; i <= table->cols; i++) {
-				if ((i > 0 && i < table->cols && get_vline_width(table, i) >= 0)
-				    || (i == 0 && table_frames.left)
-				    || (i == table->cols && table_frames.right)) {
-					draw_frame_vline(table, frame, cx, cy, i, j,
+		} else if (row < table->rows) {
+			for (col = 0; col <= table->cols; col++) {
+				if ((col > 0 && col < table->cols && get_vline_width(table, col) >= 0)
+				    || (col == 0 && table_frames.left)
+				    || (col == table->cols && table_frames.right)) {
+					draw_frame_vline(table, frame, cx, cy, col, row,
 							 par_format.bgcolor, table->bordercolor);
 					cx++;
 				}
-				if (i < table->cols) cx += table->cols_widths[i];
+				if (col < table->cols) cx += table->cols_widths[col];
 			}
 		}
 
-		if (j < table->rows) cy += table->rows_heights[j];
+		if (row < table->rows) cy += table->rows_heights[row];
 		/*for (cyy = cy1; cyy < cy; cyy++) expand_line(table->p, cyy, cx - 1);*/
 	}
 

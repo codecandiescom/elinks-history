@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.17 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: hash.c,v 1.18 2003/05/02 13:31:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,8 +67,7 @@ free_hash(struct hash *hash)
 
 /* I've no much idea about what to set here.. I think it doesn't matter much
  * anyway.. ;) --pasky */
-#define hashmagic 0xdeadbeef
-
+#define HASH_MAGIC 0xdeadbeef
 
 /* Returns hash_item if ok, NULL if error. */
 struct hash_item *
@@ -80,7 +79,7 @@ add_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen,
 
 	if (!item) return NULL;
 
-	hashval = hash->func(key, keylen, hashmagic) & hash_mask(hash->width);
+	hashval = hash->func(key, keylen, HASH_MAGIC) & hash_mask(hash->width);
 
 	item->key = key;
 	item->keylen = keylen;
@@ -95,7 +94,7 @@ inline struct hash_item *
 get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 {
 	struct hash_item *item;
-	hash_value hashval = hash->func(key, keylen, hashmagic)
+	hash_value hashval = hash->func(key, keylen, HASH_MAGIC)
 			     & hash_mask(hash->width);
 
 	foreach (item, hash->hash[hashval]) {
@@ -115,7 +114,7 @@ get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 	return NULL;
 }
 
-#undef hashmagic
+#undef HASH_MAGIC
 
 /* If key and/or value were dynamically allocated, think about freeing them.
  * This function doesn't do that. */

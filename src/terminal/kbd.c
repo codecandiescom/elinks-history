@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.23 2003/08/25 02:46:33 jonas Exp $ */
+/* $Id: kbd.c,v 1.24 2003/08/25 07:28:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,39 +159,51 @@ kbd_ctrl_c(void)
 #define write_sequence(fd, seq) \
 	hard_write(fd, seq, sizeof(seq) / sizeof(unsigned char) - 1)
 
+#define INIT_TERMINAL_SEQ	"\033)0\0337"
+#define INIT_TWIN_MOUSE_SEQ	"\033[?9h"
+#define INIT_XWIN_MOUSE_SEQ	"\033[?1000h"
+#define INIT_ALT_SCREEN_SEQ	"\033[?47h"
+
 static void
 send_init_sequence(int h, int flags)
 {
-	write_sequence(h, "\033)0\0337");
+	write_sequence(h, INIT_TERMINAL_SEQ);
 
 	if (flags & USE_TWIN_MOUSE) {
-		write_sequence(h, "\033[?9h");
+		write_sequence(h, INIT_TWIN_MOUSE_SEQ);
 	} else {
-		write_sequence(h, "\033[?1000h");
+		write_sequence(h, INIT_XWIN_MOUSE_SEQ);
 	}
 
+	/* If alternate screen is supported switch to it. */
 	if (flags & USE_ALTSCREEN) {
-		write_sequence(h, "\033[?47h");
+		write_sequence(h, INIT_ALT_SCREEN_SEQ);
 	}
 }
 
+#define DONE_TERMINAL_SEQ	"\033[2J\0338\r \b"
+#define DONE_TWIN_MOUSE_SEQ	"\033[?9l"
+#define DONE_XWIN_MOUSE_SEQ	"\033[?1000l"
+#define DONE_ALT_SCREEN_SEQ	"\033[?47l"
 
 static void
 send_term_sequence(int h, int flags)
 {
-	write_sequence(h, "\033[2J\0338\r \b");
+	write_sequence(h, DONE_TERMINAL_SEQ);
 
 	if (flags & USE_TWIN_MOUSE) {
-		write_sequence(h, "\033[?9l");
+		write_sequence(h, DONE_TWIN_MOUSE_SEQ);
 	} else {
-		write_sequence(h, "\033[?1000l");
+		write_sequence(h, DONE_XWIN_MOUSE_SEQ);
 	}
 
+	/* Switch from alternate screen. */
 	if (flags & USE_ALTSCREEN) {
-		write_sequence(h, "\033[?47l");
+		write_sequence(h, DONE_ALT_SCREEN_SEQ);
 	}
 }
 
+#undef write_sequence
 
 void
 resize_terminal(void)

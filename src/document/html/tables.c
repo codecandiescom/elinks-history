@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.190 2004/06/24 15:26:07 zas Exp $ */
+/* $Id: tables.c,v 1.191 2004/06/24 15:29:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1354,7 +1354,7 @@ get_table_heights(struct table *table)
 					for (k = 1; k < s; k++)
 						p += (get_hline_width(table, j + k) >= 0);
 
-					dst_width(table->rows_height + j, s,
+					dst_width(&table->rows_height[j], s,
 						  cell->height - p, NULL);
 
 				} else if (cell->rowspan > s &&

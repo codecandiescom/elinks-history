@@ -1259,14 +1259,12 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1164
-#, fuzzy
 msgid "Searching"
-msgstr "Søg"
+msgstr "Søgning"
 
 #: src/config/options.c:1166
-#, fuzzy
 msgid "Options for searching."
-msgstr "Indstillinger til håndtering af billeder."
+msgstr "Indstillinger for søgning."
 
 #: src/config/options.c:1168
 msgid "Case sensitivity"
@@ -1280,7 +1278,7 @@ msgstr ""
 
 #: src/config/options.c:1173
 msgid "Overlapping matches"
-msgstr ""
+msgstr "Overlappende matchende tekststrenge"
 
 #: src/config/options.c:1175
 msgid ""
@@ -1291,9 +1289,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1181 src/config/options.c:1188
-#, fuzzy
 msgid "Regular expressions"
-msgstr "Indtast udtryk"
+msgstr "Regulære udtryk"
 
 #: src/config/options.c:1183
 msgid ""
@@ -1313,15 +1310,15 @@ msgstr ""
 
 #: src/config/options.c:1197
 msgid "Horizontal text margin"
-msgstr ""
+msgstr "Horisontal tekst margin"
 
 #: src/config/options.c:1199
 msgid "Horizontal text margin."
-msgstr ""
+msgstr "Horisontal tekst margin."
 
 #: src/config/options.c:1201
 msgid "Document meta refresh"
-msgstr ""
+msgstr "Dokument meta refresh"
 
 #: src/config/options.c:1203
 msgid ""
@@ -1332,7 +1329,7 @@ msgstr ""
 
 #: src/config/options.c:1207
 msgid "Scroll margin"
-msgstr ""
+msgstr "Rulle margin"
 
 #: src/config/options.c:1209
 msgid ""
@@ -1342,7 +1339,7 @@ msgstr ""
 
 #: src/config/options.c:1212
 msgid "Scroll step"
-msgstr ""
+msgstr "Rulle bevægelse"
 
 #: src/config/options.c:1214
 msgid ""
@@ -1352,11 +1349,11 @@ msgstr ""
 
 #: src/config/options.c:1217
 msgid "Tables navigation order"
-msgstr ""
+msgstr "Navigations orden i tabeller"
 
 #: src/config/options.c:1219
 msgid "Move by columns in table, instead of rows."
-msgstr ""
+msgstr "Naviger tabeller søjlevis, istedet for rækkevis"
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1225
@@ -1394,13 +1391,15 @@ msgstr ""
 
 #: src/config/options.c:1250
 msgid "Ignore cache-control info from server"
-msgstr ""
+msgstr "Ignorer cache kontrol info fra server"
 
 #: src/config/options.c:1252
 msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
 msgstr ""
+"Ignorer Cache-Control og Pragma server HTTP hoved.\n"
+"Når denne er sat, vil documentet blive gemt i cachen selv hvis 'Cache-Control: no-cache'."
 
 #: src/config/options.c:1255
 msgid "Formatted documents"
@@ -1408,7 +1407,7 @@ msgstr "Behandlede dokumenter"
 
 #: src/config/options.c:1257
 msgid "Format cache options."
-msgstr ""
+msgstr "Indstillinger for behandlede documenter"
 
 #: src/config/options.c:1259
 msgid "Number"
@@ -1440,31 +1439,31 @@ msgstr "Tegnsæt"
 
 #: src/config/options.c:1275
 msgid "Charset options."
-msgstr "Tegnsætindstillinger"
+msgstr "Tegnsætindstillinger."
 
 #: src/config/options.c:1277
 msgid "Default codepage"
-msgstr ""
+msgstr "Standard kodeside"
 
 #: src/config/options.c:1279
 msgid "Default document codepage."
-msgstr "Standard dokument kode-side (codepage)"
+msgstr "Standard dokument kode-side (codepage)."
 
 #: src/config/options.c:1281
 msgid "Ignore charset info from server"
-msgstr ""
+msgstr "Ignorer tegnsæt information fra server"
 
 #: src/config/options.c:1283
 msgid "Ignore charset info sent by server."
-msgstr ""
+msgstr "Ignorer tegnsæt information sent fra server."
 
 #: src/config/options.c:1287
 msgid "Default color settings"
-msgstr ""
+msgstr "Standard farve indstillinger"
 
 #: src/config/options.c:1289
 msgid "Default document color settings."
-msgstr ""
+msgstr "Standard document farve indstillinger"
 
 #: src/config/options.c:1292 src/config/options.c:1902
 #: src/config/options.c:1914 src/config/options.c:1934
@@ -1596,35 +1595,37 @@ msgstr "Standard farve for henvisninger."
 
 #: src/config/options.c:1304
 msgid "Visited-link color"
-msgstr ""
+msgstr "Farve for besøgte henvisninger"
 
 #: src/config/options.c:1306
 msgid "Default visited link color."
-msgstr ""
+msgstr "Standard farve for besøgte henvisninger."
 
 #: src/config/options.c:1308
 msgid "Directory color"
-msgstr ""
+msgstr "Farve for fil mapper"
 
 #: src/config/options.c:1310
 msgid ""
 "Default directory color.\n"
 "See document.browse.links.color_dirs option."
 msgstr ""
+"Standard farve for fil mapper.\n"
+"Se document.browse.links.color_dirs indstillingen."
 
 #: src/config/options.c:1313
 msgid "Allow dark colors on black background"
-msgstr ""
+msgstr "Tillad mørke farver på sort baggrund"
 
 #: src/config/options.c:1315
 msgid "Allow dark colors on black background."
-msgstr ""
+msgstr "Tillad mørke farver på sort baggrund."
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.
 #: src/config/options.c:1319
 msgid "Use document-specified colors"
-msgstr ""
+msgstr "Brug farver fra dokument"
 
 #: src/config/options.c:1321
 msgid ""
@@ -1648,13 +1649,15 @@ msgstr "Nedhentning"
 
 #: src/config/options.c:1339
 msgid "Options regarding files downloading and handling."
-msgstr ""
+msgstr "Indstillinger for fil nedhentning og håndtering."
 
 #: src/config/options.c:1344
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.default_type option instead."
 msgstr ""
+"Denne indstilling er forældet og vil blive fjernet.\n"
+"Brug venligst mime.default_type i stedet."
 
 #: src/config/options.c:1347
 msgid "Default download directory"
@@ -1662,22 +1665,24 @@ msgstr "Standard nedhentningsmappe"
 
 #: src/config/options.c:1349
 msgid "Default download directory."
-msgstr ""
+msgstr "Standard nedhentnings mappe."
 
 #: src/config/options.c:1351
 msgid "Set original time"
-msgstr ""
+msgstr "Sæt original tidsstempel"
 
 #: src/config/options.c:1353
 msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
 msgstr ""
+"Sæt tidstemplet for hver nedhentet fil to tidsstemplet gemt\n"
+"på serveren."
 
 #. Does automatic resuming make sense as an option?
 #: src/config/options.c:1357
 msgid "Prevent overwriting"
-msgstr ""
+msgstr "Modvirk overskrivning"
 
 #: src/config/options.c:1359
 msgid ""
@@ -1689,7 +1694,7 @@ msgstr ""
 
 #: src/config/options.c:1364
 msgid "Notify download completion by bell"
-msgstr "Gør opmærksom på fuldendt filoverførsel med \"bell\""
+msgstr "Gør opmærksom på fuldendt filoverførsel med lyd (\"bell\")"
 
 #: src/config/options.c:1366
 msgid ""
@@ -1714,11 +1719,11 @@ msgstr "Tegnopsætning"
 
 #: src/config/options.c:1378 src/config/options.c:2827
 msgid "Codepage used in dump output."
-msgstr ""
+msgstr "Tegnopsætning brugt for -dump"
 
 #: src/config/options.c:1380
 msgid "Width"
-msgstr ""
+msgstr "Vidde"
 
 #: src/config/options.c:1382
 msgid "Width of screen in characters when dumping a HTML document."
@@ -1730,7 +1735,7 @@ msgstr "Historik"
 
 #: src/config/options.c:1388
 msgid "History options."
-msgstr ""
+msgstr "Historik indstillinger."
 
 #: src/config/options.c:1390 src/globhist/dialogs.c:462
 msgid "Global history"
@@ -1889,7 +1894,7 @@ msgstr ""
 
 #: src/config/options.c:1487
 msgid "File type handlers"
-msgstr ""
+msgstr "Eksterne programmer for diverse fil type"
 
 #: src/config/options.c:1489
 msgid ""
@@ -1899,7 +1904,7 @@ msgstr ""
 
 #: src/config/options.c:1494
 msgid "Description of this handler."
-msgstr ""
+msgstr "Beskrivelse af dette program"
 
 #: src/config/options.c:1498
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
@@ -1907,25 +1912,23 @@ msgstr ""
 
 #: src/config/options.c:1500 src/config/options.c:1538
 msgid "Ask before opening"
-msgstr ""
+msgstr "Spørg før programmet startes"
 
 #: src/config/options.c:1502
 msgid "Ask before opening."
-msgstr ""
+msgstr "Spørg før programmet startes."
 
 #: src/config/options.c:1504
-#, fuzzy
 msgid "Block terminal"
-msgstr "~BeOS-terminal"
+msgstr "Bloker terminal"
 
 #: src/config/options.c:1506
 msgid "Block the terminal when the handler is running."
-msgstr ""
+msgstr "Bloker terminalen når et ekstern program kører."
 
 #: src/config/options.c:1508
-#, fuzzy
 msgid "Program"
-msgstr "Intet program"
+msgstr "Program"
 
 #: src/config/options.c:1510
 #, c-format
@@ -1935,13 +1938,12 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1514
-#, fuzzy
 msgid "File extension associations"
-msgstr "Filend~elser"
+msgstr "Associationer for fil endelser"
 
 #: src/config/options.c:1516
 msgid "Extension <-> MIME type association."
-msgstr ""
+msgstr "Association for fil endelse til MIME type"
 
 #: src/config/options.c:1520
 msgid ""
@@ -1954,19 +1956,19 @@ msgstr ""
 #. * Estimated due time: ?
 #: src/config/options.c:1524 src/config/options.c:1762
 msgid "Mailcap"
-msgstr ""
+msgstr "Mailcap"
 
 #: src/config/options.c:1526
 msgid "Options for mailcap support."
-msgstr ""
+msgstr "Indstillinger for mailcap"
 
 #: src/config/options.c:1530
 msgid "Enable mailcap support."
-msgstr ""
+msgstr "Aktiver mailcap"
 
 #: src/config/options.c:1532 src/config/options.c:1567
 msgid "Path"
-msgstr ""
+msgstr "Sti"
 
 #: src/config/options.c:1534
 msgid ""
@@ -1977,7 +1979,7 @@ msgstr ""
 
 #: src/config/options.c:1540
 msgid "Ask before using the handlers defined by mailcap."
-msgstr ""
+msgstr "Spørg før eksterne programmer bruges"
 
 #: src/config/options.c:1542 src/config/options.c:1782
 msgid "Type query string"
@@ -1994,7 +1996,7 @@ msgstr ""
 
 #: src/config/options.c:1550
 msgid "Prioritize entries by file"
-msgstr ""
+msgstr "Prioter indgange mht. fil rækkefølge"
 
 #: src/config/options.c:1552
 msgid ""
@@ -2129,9 +2131,8 @@ msgid "Proxy authentication password."
 msgstr "Proxy verificerings adgangskode."
 
 #: src/config/options.c:1630
-#, fuzzy
 msgid "Referer sending"
-msgstr "Slet tastaturgenvej"
+msgstr "Sending af referering"
 
 #: src/config/options.c:1632
 msgid "HTTP referer sending options."
@@ -2139,7 +2140,7 @@ msgstr ""
 
 #: src/config/options.c:1634
 msgid "Policy"
-msgstr ""
+msgstr "Politik"
 
 #: src/config/options.c:1637
 msgid ""
@@ -2254,17 +2255,16 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1711
-#, fuzzy
 msgid "Local files"
-msgstr "filer"
+msgstr "Lokale filer"
 
 #: src/config/options.c:1713
 msgid "Options specific to local browsing."
-msgstr ""
+msgstr "Indstillinger for visning af lokal file"
 
 #: src/config/options.c:1715
 msgid "Allow reading special files"
-msgstr ""
+msgstr "Tillad at læse specielle filer"
 
 #: src/config/options.c:1717
 msgid ""
@@ -2273,9 +2273,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1720
-#, fuzzy
 msgid "Try encoding extensions"
-msgstr "Ingen filendelser"
+msgstr "Forsøg kendte file endelser for indkodning"
 
 #: src/config/options.c:1722
 msgid ""
@@ -2286,7 +2285,7 @@ msgstr ""
 
 #: src/config/options.c:1726
 msgid "Show hidden files in directory listing"
-msgstr ""
+msgstr "Vis gemte filer i mappe visning"
 
 #: src/config/options.c:1728
 msgid ""
@@ -2296,9 +2295,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1733
-#, fuzzy
 msgid "User protocols"
-msgstr "Ugyldig bruger specificeret protocol URL"
+msgstr "Bruger protokoller"
 
 #: src/config/options.c:1735
 msgid ""
@@ -2371,14 +2369,12 @@ msgstr ""
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1803
-#, fuzzy
 msgid "Terminals"
 msgstr "Terminalindstillinger"
 
 #: src/config/options.c:1805
-#, fuzzy
 msgid "Terminal options."
-msgstr "Terminalindstillinger"
+msgstr "Terminalindstillinger."
 
 #: src/config/options.c:1810
 msgid "Options specific to this terminal type (according to $TERM value)."
@@ -2430,7 +2426,6 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1837
-#, fuzzy
 msgid "Block cursor"
 msgstr "Udfyld markør"
 
@@ -2442,9 +2437,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1843
-#, fuzzy
 msgid "Color mode"
-msgstr "Farver"
+msgstr "Farvetilstand"
 
 #: src/config/options.c:1845
 msgid ""
@@ -2456,9 +2450,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1851
-#, fuzzy
 msgid "Enable transparency"
-msgstr "Gennemsigtig"
+msgstr "Aktiver gennemsigtighed"
 
 #: src/config/options.c:1853
 msgid ""
@@ -2471,33 +2464,32 @@ msgstr ""
 
 #: src/config/options.c:1859
 msgid "Use underline"
-msgstr ""
+msgstr "Brug understregning"
 
 #: src/config/options.c:1861
 msgid "If we should use underline or enhance the color instead."
-msgstr ""
+msgstr "Om understregning skal bruges eller det skal markeres med farve."
 
 #: src/config/options.c:1865
 msgid "Codepage of charset used for displaying content on terminal."
-msgstr ""
+msgstr "Tegnopsætning af tegnsæt brugt til visning på terminal"
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1871
 msgid "User interface"
-msgstr ""
+msgstr "Brugergrænseflade"
 
 #: src/config/options.c:1873
-#, fuzzy
 msgid "User interface options."
-msgstr "Terminalindstillinger"
+msgstr "Indstillinger for Brugergrænseflade"
 
 #: src/config/options.c:1877
 msgid "Color settings"
-msgstr ""
+msgstr "Farve indstillinger"
 
 #: src/config/options.c:1879
 msgid "Default user interface color settings."
-msgstr ""
+msgstr "Standard farve indstillinger for brugergrænseflade."
 
 #. ==========================================================
 #. ============= BORING PART (colors) START =================
@@ -2506,21 +2498,20 @@ msgstr ""
 #. *	options even if it is not used. get_bfu_color() depends
 #. *	on it.
 #: src/config/options.c:1889
-#, fuzzy
 msgid "Color terminals"
-msgstr "~BeOS-terminal"
+msgstr "Farve terminaler"
 
 #: src/config/options.c:1891
 msgid "Color settings for color terminal."
-msgstr ""
+msgstr "Farve indstillinger for farve terminaler"
 
 #: src/config/options.c:1894 src/config/options.c:2289
 msgid "Main menu bar"
-msgstr ""
+msgstr "Hoved menubjælke"
 
 #: src/config/options.c:1896 src/config/options.c:2291
 msgid "Main menu bar colors."
-msgstr ""
+msgstr "Farver for hoved menubjælke."
 
 #: src/config/options.c:1898
 msgid "Unselected main menu bar item"
@@ -2558,9 +2549,8 @@ msgstr ""
 
 #: src/config/options.c:1930 src/config/options.c:1999
 #: src/config/options.c:2325 src/config/options.c:2394
-#, fuzzy
 msgid "Selected hotkey"
-msgstr "Slet indstilling"
+msgstr "Valgt genvejstast"
 
 #: src/config/options.c:1932 src/config/options.c:2327
 msgid "Main menu selected hotkey colors."
@@ -2571,18 +2561,16 @@ msgid "Main menu unselected hotkey default text color."
 msgstr ""
 
 #: src/config/options.c:1940 src/config/options.c:2335
-#, fuzzy
 msgid "Main menu unselected hotkey default background color."
-msgstr "Dræb baggrundsforbindelse"
+msgstr "Standard baggrundsfarve for ikke valgte genvejstaster i hovedmenu"
 
 #: src/config/options.c:1944
 msgid "Main menu selected hotkey text color."
 msgstr ""
 
 #: src/config/options.c:1948 src/config/options.c:2343
-#, fuzzy
 msgid "Main menu selected hotkey default background color."
-msgstr "Dræb baggrundsforbindelse"
+msgstr "Standard baggrundsfarve for valgte genvejstaster i hovedmenu"
 
 #: src/config/options.c:1951 src/config/options.c:2346
 msgid "Menu bar"
@@ -2601,18 +2589,16 @@ msgid "Unselected menu item colors."
 msgstr ""
 
 #: src/config/options.c:1967 src/config/options.c:2362
-#, fuzzy
 msgid "Selected menu item"
-msgstr "Vælg felt"
+msgstr "Valgt menuindgang"
 
 #: src/config/options.c:1969 src/config/options.c:2364
 msgid "Selected menu item colors."
 msgstr ""
 
 #: src/config/options.c:1979 src/config/options.c:2374
-#, fuzzy
 msgid "Marked menu item"
-msgstr "Vælg felt"
+msgstr "Markeret menuindgang"
 
 #: src/config/options.c:1981 src/config/options.c:2376
 msgid "Marked menu item colors."
@@ -2635,27 +2621,24 @@ msgid "Menu item unselected hotkey default text color."
 msgstr ""
 
 #: src/config/options.c:2009
-#, fuzzy
 msgid "Menu item unselected hotkey default background color."
-msgstr "Dræb baggrundsforbindelse"
+msgstr "Standard baggrundsfarve for ikke valgte genvejstaster i menu"
 
 #: src/config/options.c:2013
 msgid "Menu item selected hotkey default text color."
 msgstr ""
 
 #: src/config/options.c:2017
-#, fuzzy
 msgid "Menu item selected hotkey background color."
-msgstr "Dræb baggrundsforbindelse"
+msgstr "Standard baggrundsfarve for valgte genvejstaster i menu"
 
 #: src/config/options.c:2019 src/config/options.c:2414
-#, fuzzy
 msgid "Menu frame"
-msgstr "Ingen rammer"
+msgstr "Menurammer"
 
 #: src/config/options.c:2021 src/config/options.c:2416
 msgid "Menu frame colors."
-msgstr ""
+msgstr "Farver for menurammer."
 
 #: src/config/options.c:2032 src/config/options.c:2427
 msgid "Dialog"
@@ -2666,18 +2649,16 @@ msgid "Dialog colors."
 msgstr ""
 
 #: src/config/options.c:2036
-#, fuzzy
 msgid "Generic background color"
-msgstr "Dræb baggrundsforbindelse"
+msgstr "Standard baggrundsfarve"
 
 #: src/config/options.c:2038 src/config/options.c:2433
 msgid "Dialog generic background color."
 msgstr ""
 
 #: src/config/options.c:2040 src/config/options.c:2435
-#, fuzzy
 msgid "Frame"
-msgstr "Navn"
+msgstr "Ramme"
 
 #: src/config/options.c:2042 src/config/options.c:2437
 msgid "Dialog frame colors."
@@ -2693,9 +2674,8 @@ msgid "Dialog title colors."
 msgstr ""
 
 #: src/config/options.c:2064 src/config/options.c:2459
-#, fuzzy
 msgid "Text"
-msgstr "Tekstområde"
+msgstr "Tekst"
 
 #: src/config/options.c:2066 src/config/options.c:2461
 msgid "Dialog text colors."
@@ -2711,9 +2691,8 @@ msgid "Dialog checkbox colors."
 msgstr ""
 
 #: src/config/options.c:2088 src/config/options.c:2483
-#, fuzzy
 msgid "Checkbox label"
-msgstr "Afkrysningsboks"
+msgstr "Tekst for afkrysningsboks"
 
 #: src/config/options.c:2090 src/config/options.c:2485
 msgid "Dialog checkbox label colors."
@@ -2728,9 +2707,8 @@ msgid "Dialog button colors."
 msgstr ""
 
 #: src/config/options.c:2112 src/config/options.c:2507
-#, fuzzy
 msgid "Selected button"
-msgstr "Slet indstilling"
+msgstr "Valgt knap"
 
 #: src/config/options.c:2114 src/config/options.c:2509
 msgid "Dialog selected button colors."
@@ -2746,9 +2724,8 @@ msgid "Dialog text field colors."
 msgstr ""
 
 #: src/config/options.c:2136 src/config/options.c:2531
-#, fuzzy
 msgid "Text field text"
-msgstr "Tekstfelt"
+msgstr "Tekstfelt tekst"
 
 #: src/config/options.c:2138 src/config/options.c:2533
 msgid "Dialog field text colors."
@@ -2764,16 +2741,15 @@ msgstr ""
 
 #: src/config/options.c:2160 src/config/options.c:2555
 msgid "Shadow"
-msgstr ""
+msgstr "Skygge"
 
 #: src/config/options.c:2162 src/config/options.c:2557
 msgid "Dialog shadow colors (see ui.shadows option)."
 msgstr ""
 
 #: src/config/options.c:2172 src/config/options.c:2568
-#, fuzzy
 msgid "Title bar"
-msgstr "Titel"
+msgstr "Titelbjælke"
 
 #: src/config/options.c:2174 src/config/options.c:2570
 msgid "Title bar colors."

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.69 2003/12/14 14:46:37 zas Exp $ */
+/* $Id: text.c,v 1.70 2003/12/21 21:42:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,8 +244,6 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 	/* If we scrolled and something was trimmed restore it */
 	if (saved && saved_pos) *saved_pos = saved;
 }
-
-/* TODO: Some kind of scroll bar or scroll percentage */
 
 static void
 display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.156 2004/01/09 01:08:01 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.157 2004/01/09 01:10:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,7 +397,7 @@ static struct strtonum action_table[KEYACTS + 1] = {
 	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS, DACT(N_("Attempt to unambiguously auto-complete the input")) },
 	{ "back", ACT_BACK, DACT(N_("Return to the previous document in history")) },
 	{ "backspace", ACT_BACKSPACE, DACT(N_("Delete character in front of the cursor")) },
-	{ "beginning-of-buffer", ACT_BEGINNING_OF_BUFFER, DACT(N_("Go to the first line of the buffer.")) },
+	{ "beginning-of-buffer", ACT_BEGINNING_OF_BUFFER, DACT(N_("Go to the first line of the buffer")) },
 	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
 	{ "cache-manager", ACT_CACHE_MANAGER, DACT(N_("Open cache manager")) },
 	{ "cache-minimize", ACT_CACHE_MINIMIZE, DACT(N_("Free unused cache entries")) },
@@ -414,7 +414,7 @@ static struct strtonum action_table[KEYACTS + 1] = {
 	{ "download-manager", ACT_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
 	{ "edit", ACT_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
 	{ "end", ACT_END, DACT(N_("Go to the end of the page/line")) },
-	{ "end-of-buffer", ACT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer.")) },
+	{ "end-of-buffer", ACT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer")) },
 	{ "enter", ACT_ENTER, DACT(N_("Follow the current link")) },
 	{ "enter-reload", ACT_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
 	{ "expand", ACT_EXPAND, DACT(N_("Expand item")) },

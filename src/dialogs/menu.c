@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.217 2003/12/10 21:34:08 pasky Exp $ */
+/* $Id: menu.c,v 1.218 2003/12/11 10:41:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,7 +322,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	add_to_menu(&menu, N_("Go ~back"), "<-",
 		    (menu_func) menu_go_back, NULL, 0);
 
-	add_to_menu(&menu, N_("Go forward"), "->",
+	add_to_menu(&menu, N_("Go for~ward"), "->",
 		    (menu_func) menu_go_unback, NULL, 0);
 
 	add_separator_to_menu(&menu);

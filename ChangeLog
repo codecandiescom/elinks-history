@@ -1,3 +1,9 @@
+Thu Jun 13 10:25:17 2002  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/os_dep.c:
+
+	Tidy up. Coding style conformance to HACKING document was improved.  
+
 Wed Jun 12 19:32:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/german.lng, intl/italian.lng, src/intl/language.inc:

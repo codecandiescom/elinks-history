@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.58 2003/11/17 22:27:28 pasky Exp $ */
+/* $Id: form.c,v 1.59 2003/11/18 14:32:51 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,7 +304,7 @@ draw_forms(struct terminal *t, struct document_view *doc_view)
 			}
 		}
 #endif /* FORMS_MEMORY */
-			draw_form_entry(t, doc_view, l1);
+		draw_form_entry(t, doc_view, l1);
 
 	} while (l1++ < l2);
 }

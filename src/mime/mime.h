@@ -1,4 +1,4 @@
-/* $Id: mime.h,v 1.13 2004/04/24 10:59:33 jonas Exp $ */
+/* $Id: mime.h,v 1.14 2004/04/24 16:03:23 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
@@ -26,5 +26,8 @@ unsigned char *get_content_type(struct cache_entry *cached);
 /* Find program to handle mimetype. The @xwin tells about X capabilities. */
 struct mime_handler *
 get_mime_type_handler(unsigned char *content_type, int xwin);
+
+/* Checks protocols headers for a suitable filename */
+unsigned char *get_content_filename(struct uri *uri);
 
 #endif

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.192 2004/04/23 18:57:13 jonas Exp $ */
+/* $Id: uri.c,v 1.193 2004/04/24 16:03:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,8 +15,7 @@
 
 #include "elinks.h"
 
-#include "cache/cache.h"		/* Needed by add_uri_filename_to_string() */
-#include "protocol/http/header.h"	/* Needed by add_uri_filename_to_string() */
+#include "mime/mime.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "util/conv.h"
@@ -811,34 +810,18 @@ get_translated_uri(unsigned char *uristring, unsigned char *cwd,
 struct string *
 add_uri_filename_to_string(struct string *string, struct uri *uri)
 {
-	struct cache_entry *cached = find_in_cache(uri);
-	unsigned char *filename;
+	unsigned char *filename = get_content_filename(uri);
 	unsigned char *pos;
 	int lo = (uri->protocol == PROTOCOL_FILE);
 
 	assert(uri->data);
 	/* dsep() *hint* *hint* */
 
-	while (cached && cached->head) {
-		int filenamelen;
+	if (filename) {
+		add_shell_safe_to_string(string, filename, strlen(filename));
+		mem_free(filename);
 
-		pos = parse_http_header(cached->head, "Content-Disposition", NULL);
-		if (!pos) break;
-
-		filename = parse_http_header_param(pos, "filename");
-		mem_free_set(&pos, filename);
-		if (!filename) break;
-
-		/* We don't want to add any directories from the path so
-		 * make sure we only add the filename. */
-		filename = get_filename_position(filename);
-		filenamelen = strlen(filename);
-		if (filenamelen)
-			add_shell_safe_to_string(string, filename, filenamelen);
-
-		mem_free(pos);
-
-		if (filenamelen) return string;
+		return string;
 	}
 
 	for (pos = filename = uri->data; *pos && !end_of_dir(*pos); pos++)

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.46 2004/04/24 15:39:10 jonas Exp $ */
+/* $Id: mime.c,v 1.47 2004/04/24 16:03:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "modules/module.h"
 #include "protocol/http/header.h"	/* For parse_http_header() */
 #include "protocol/uri.h"
+#include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -176,6 +177,36 @@ struct mime_handler *
 get_mime_type_handler(unsigned char *content_type, int xwin)
 {
 	return get_mime_handler_backends(content_type, xwin);
+}
+
+unsigned char *
+get_content_filename(struct uri *uri)
+{
+	struct cache_entry *cached = find_in_cache(uri);
+	unsigned char *filename, *pos;
+
+	if (!cached || !cached->head)
+		return NULL;
+
+	pos = parse_http_header(cached->head, "Content-Disposition", NULL);
+	if (!pos) return NULL;
+
+	filename = parse_http_header_param(pos, "filename");
+	mem_free(pos);
+	if (!filename) return NULL;
+
+	/* We don't want to add any directories from the path so make sure we
+	 * only add the filename. */
+	pos = get_filename_position(filename);
+	if (!*pos) {
+		mem_free(filename);
+		return NULL;
+	}
+
+	if (pos > filename)
+		memmove(filename, pos, strlen(pos) + 1);
+
+	return filename;
 }
 
 /* Backends dynamic area: */

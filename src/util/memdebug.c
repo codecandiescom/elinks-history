@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.8 2002/11/23 19:36:12 zas Exp $ */
+/* $Id: memdebug.c,v 1.9 2002/11/25 12:04:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,8 @@
 
 
 #ifdef LEAK_DEBUG
+
+int alloc_try = 0;
 
 /* Eat less memory, but sacrifice speed?
  * Default is defined. */
@@ -221,11 +223,27 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 
 	if (!size) return DUMMY;
 
+again:
 	ah = malloc(SIZE_BASE2AH(size));
 	if (!ah) {
+		++alloc_try;
 		errfile = file;
 		errline = line;
-		int_error("out of memory (malloc returned NULL)\n");
+		if (alloc_try < ALLOC_MAXTRIES) {
+			fprintf(stderr, "%s:%d out of memory (malloc returned NULL) retry %d,"
+					" i wait and retry.", errfile, errline, alloc_try);
+			sleep(ALLOC_DELAY);
+			goto again;
+		} else {
+			alloc_try = 0;
+#ifdef CRASH_IF_ALLOC_MAXTRIES
+			int_error("out of memory (malloc returned NULL) after %d tries,"
+				  " i give up.", alloc_try);
+#else
+			fprintf(stderr, "%s:%d out of memory (malloc returned NULL) after %d tries,"
+					" i give up and try to continue.", errfile, errline, alloc_try);
+#endif
+		}
 		return NULL;
 	}
 
@@ -267,11 +285,27 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 	 * comment, it means YOU should help us and do the benchmarks! :)
 	 * Thanks a lot. --pasky */
 
+again:
 	ah = calloc(1, SIZE_BASE2AH(size));
 	if (!ah) {
+		++alloc_try;
 		errfile = file;
 		errline = line;
-		int_error("out of memory (calloc returned NULL)\n");
+		if (alloc_try < ALLOC_MAXTRIES) {
+			fprintf(stderr, "%s:%d out of memory (calloc returned NULL) retry %d,"
+					" i wait and retry.", errfile, errline, alloc_try);
+			sleep(ALLOC_DELAY);
+			goto again;
+		} else {
+			alloc_try = 0;
+#ifdef CRASH_IF_ALLOC_MAXTRIES
+			int_error("out of memory (calloc returned NULL) after %d tries,"
+				  " i give up.", alloc_try);
+#else
+			fprintf(stderr, "%s:%d out of memory (calloc returned NULL) after %d tries,"
+					" i give up and try to continue.", errfile, errline, alloc_try);
+#endif
+		}
 		return NULL;
 	}
 
@@ -382,11 +416,27 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	 * and change nothing, this conforms to usual realloc() behavior. */
 	if (ah->size == size) return (void *) ptr;
 
+again:
 	ah = realloc(ah, SIZE_BASE2AH(size));
 	if (!ah) {
+		++alloc_try;
 		errfile = file;
 		errline = line;
-		int_error("out of memory (realloc returned NULL)\n");
+		if (alloc_try < ALLOC_MAXTRIES) {
+			fprintf(stderr, "%s:%d out of memory (realloc returned NULL) retry %d,"
+					" i wait and retry.", errfile, errline, alloc_try);
+			sleep(ALLOC_DELAY);
+			goto again;
+		} else {
+			alloc_try = 0;
+#ifdef CRASH_IF_ALLOC_MAXTRIES
+			int_error("out of memory (realloc returned NULL) after %d tries,"
+				  " i give up.", alloc_try);
+#else
+			fprintf(stderr, "%s:%d out of memory (realloc returned NULL) after %d tries,"
+					" i give up and try to continue.", errfile, errline, alloc_try);
+#endif
+		}
 		return NULL;
 	}
 
@@ -427,7 +477,6 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 	ah->comment = malloc(len + 1);
 	if (ah->comment)
 		safe_strncpy(ah->comment, str, len + 1);
-	else internal("out of memory (alloc returned NULL)");
 }
 
 #endif /* LEAK_DEBUG */

@@ -1,9 +1,18 @@
-/* $Id: memory.h,v 1.2 2002/06/17 11:23:46 pasky Exp $ */
+/* $Id: memory.h,v 1.3 2002/11/25 12:04:56 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
 
 #define DUMMY ((void *) -1L)
+
+/* If defined, we'll crash if ALLOC_MAXTRIES is attained,
+ * if not defined, we'll try to continue. */
+/* #define CRASH_IF_ALLOC_MAXTRIES */
+/* Max. number of retry in case of memory allocation failure. */
+#define ALLOC_MAXTRIES 3
+/* Delay in seconds between each alloc try. */
+#define ALLOC_DELAY 1
+
 
 #ifdef LEAK_DEBUG
 

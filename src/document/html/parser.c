@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.185 2003/07/28 09:00:26 zas Exp $ */
+/* $Id: parser.c,v 1.186 2003/07/28 19:36:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,9 +46,9 @@
 INIT_LIST_HEAD(html_stack);
 
 static inline int
-atchr(unsigned char c)
+atchr(register unsigned char c)
 {
-	return isA(c) || (c > ' ' && c != '=' && c != '<' && c != '>');
+	return (c < 127 && (c > '>' || (c > ' ' && c != '=' && c != '<' && c != '>')));
 }
 
 /* This function eats one html element. */

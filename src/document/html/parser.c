@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.174 2003/07/22 15:01:23 zas Exp $ */
+/* $Id: parser.c,v 1.175 2003/07/24 09:42:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1036,7 +1036,7 @@ html_blockquote(unsigned char *a)
 }
 
 static void
-html_h(unsigned int h, unsigned char *a,
+html_h(int h, unsigned char *a,
        enum format_align default_align)
 {
 	par_format.align = default_align;

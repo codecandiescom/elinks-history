@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-23 17:46+0200\n"
-"PO-Revision-Date: 2003-10-23 12:21+0200\n"
+"PO-Revision-Date: 2003-10-23 23:46+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4290,14 +4290,12 @@ msgid "Toggle ~html/plain"
 msgstr "Pøepnout htm~l/plain"
 
 #: src/dialogs/menu.c:494
-#, fuzzy
 msgid "Toggle i~mages"
-msgstr "Pøepnout URL/název"
+msgstr "Pøepnout ~obrázky"
 
 #: src/dialogs/menu.c:495
-#, fuzzy
 msgid "Toggle ~link numbering"
-msgstr "Zadej èíslo linku"
+msgstr "Pøepno~ut èíslování odkazù"
 
 #: src/dialogs/menu.c:496
 msgid "Document ~info"
@@ -4305,7 +4303,7 @@ msgstr "~Informace o dokumentu"
 
 #: src/dialogs/menu.c:497
 msgid "H~eader info"
-msgstr "Informace o hlavièce"
+msgstr "In~formace o hlavièce"
 
 #: src/dialogs/menu.c:498
 msgid "Frame at ~full-screen"
@@ -4317,11 +4315,11 @@ msgstr "Dal¹í ~tab"
 
 #: src/dialogs/menu.c:501
 msgid "Pre~v tab"
-msgstr "Pøedchozí tab"
+msgstr "Pøedchozí ta~b"
 
 #: src/dialogs/menu.c:502
 msgid "~Close tab"
-msgstr "Zavøít tab"
+msgstr "Za~vøít tab"
 
 #: src/dialogs/menu.c:508
 msgid "~ELinks homepage"

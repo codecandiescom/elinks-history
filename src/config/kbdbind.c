@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.119 2003/12/21 12:33:54 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.120 2003/12/21 23:19:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -396,6 +396,7 @@ static struct strtonum action_table[] = {
 	{ "download-image", ACT_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
 	{ "download-manager", ACT_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
 	{ "edit", ACT_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
+	{ "expand", ACT_EXPAND, DACT(N_("Expand item")) },
 	{ "end", ACT_END, DACT(N_("Go to the end of the page/line")) },
 	{ "enter", ACT_ENTER, DACT(N_("Follow the current link")) },
 	{ "enter-reload", ACT_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
@@ -459,10 +460,12 @@ static struct strtonum action_table[] = {
 	{ "tab-prev", ACT_TAB_PREV,DACT( N_("Previous tab")) },
 	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
 	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, DACT(N_("Toggle rendering of tables")) },
+	{ "toggle-expand", ACT_TOGGLE_EXPAND, DACT(N_("Toggle expansion of items")) },
 	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
 	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, DACT(N_("Toggle displaying of links numbers")) },
 	{ "toggle-document-colors", ACT_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
 	{ "unback", ACT_UNBACK, DACT(N_("Go forward in the unhistory")) },
+	{ "unexpand", ACT_UNEXPAND, DACT(N_("Collapse item")) },
 	{ "up", ACT_UP, DACT(N_("Move cursor upwards")) },
 	{ "view-image", ACT_VIEW_IMAGE, DACT(N_("View the current image")) },
 	{ "zoom-frame", ACT_ZOOM_FRAME, DACT(N_("Maximize the current frame")) },
@@ -794,7 +797,12 @@ static struct default_kb default_edit_keymap[] = {
 
 static struct default_kb default_menu_keymap[] = {
 	{ ' ',		 0,		ACT_ENTER },
+	/* XXX: 2 users of ' ' but fear not, hierbox browser will behave! */
+	{ ' ',		 0,		ACT_TOGGLE_EXPAND },
 	{ '*',		 0,		ACT_MARK_ITEM },
+	{ '+',		 0,		ACT_EXPAND },
+	{ '-',		 0,		ACT_UNEXPAND },
+	{ '=',		 0,		ACT_EXPAND },
 	{ 'A',		 KBD_CTRL,	ACT_HOME },
 	{ 'B',		 KBD_CTRL,	ACT_PAGE_UP },
 	{ 'E',		 KBD_CTRL,	ACT_END },
@@ -804,6 +812,9 @@ static struct default_kb default_menu_keymap[] = {
 	{ 'P',		 KBD_CTRL,	ACT_UP },
 	{ 'V',		 KBD_ALT,	ACT_PAGE_UP },
 	{ 'V',		 KBD_CTRL,	ACT_PAGE_DOWN },
+	{ '[',		 0,		ACT_EXPAND },
+	{ ']',		 0,		ACT_UNEXPAND },
+	{ '_',		 0,		ACT_UNEXPAND },
 	{ KBD_DEL,	 0,		ACT_DELETE },
 	{ KBD_DOWN,	 0,		ACT_DOWN },
 	{ KBD_END,	 0,		ACT_END },

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.125 2003/12/21 16:44:41 pasky Exp $ */
+/* $Id: hierbox.c,v 1.126 2003/12/21 23:19:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,9 +14,9 @@
 #include "bfu/msgbox.h"
 #include "bfu/text.h"
 #include "bookmarks/bookmarks.h"
+#include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "sched/task.h"
-#include "terminal/kbd.h"
 #include "terminal/terminal.h"
 
 
@@ -144,6 +144,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			struct widget *widget = widget_data->widget;
 			struct listbox_data *box;
 			struct listbox_item *selected;
+			enum keyact action;
 
 			/* Check if listbox has something to say to this */
                         if (widget->ops->kbd
@@ -153,8 +154,9 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 
 			box = get_dlg_listbox_data(dlg_data);
 			selected = box->sel;
+			action = kbd_action(KM_MENU, ev, NULL);
 
-			if (ev->x == ' ') {
+			if (action == ACT_TOGGLE_EXPAND) {
 				if (!selected) return EVENT_PROCESSED;
 				if (selected->type != BI_FOLDER)
 					return EVENT_NOT_PROCESSED;
@@ -163,7 +165,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			}
 
 			/* Recursively unexpand all folders */
-			if (ev->x == '[' || ev->x == '-' || ev->x == '_') {
+			if (action == ACT_UNEXPAND) {
 				if (!selected) return EVENT_PROCESSED;
 
 				/* Special trick: if the folder is already
@@ -194,7 +196,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			}
 
 			/* Recursively expand all folders */
-			if (ev->x == ']' || ev->x == '+' || ev->x == '=') {
+			if (action == ACT_EXPAND) {
 				if (!selected || box->sel->type != BI_FOLDER)
 					return EVENT_PROCESSED;
 

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.81 2004/01/08 14:57:56 jonas Exp $ */
+/* $Id: options.inc,v 1.82 2004/01/08 21:07:05 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -344,7 +344,7 @@ struct option_info config_options_info[] = {
 
 
 	INIT_OPT_TREE("document", N_("Cache"),
-		"cache", 0,
+		"cache", OPT_SORT,
 		N_("Cache options.")),
 
 	INIT_OPT_BOOL("document.cache", N_("Cache information about redirects"),

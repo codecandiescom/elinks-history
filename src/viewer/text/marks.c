@@ -1,5 +1,5 @@
 /* Marks registry */
-/* $Id: marks.c,v 1.7 2004/04/01 15:59:52 jonas Exp $ */
+/* $Id: marks.c,v 1.8 2004/06/07 16:36:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "elinks.h"
 
 #include "document/view.h"
+#include "protocol/uri.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
@@ -66,18 +67,23 @@ index_from_char(unsigned char mark)
 	return mark - 'a' + 26;
 }
 
-struct view_state *
-get_mark(unsigned char mark)
+void
+goto_mark(unsigned char mark, struct view_state *vs)
 {
 	int i;
 
 	if (!is_valid_mark_char(mark))
-		return NULL;
+		return;
 
 	i = index_from_char(mark);
 	assert(is_valid_mark_index(i));
 
-	return marks[i];
+	/* TODO: Support for cross-document marks. --pasky */
+	if (!marks[i] || !compare_uri(marks[i]->uri, vs->uri, 0))
+		return;
+
+	destroy_vs(vs);
+	copy_vs(vs, marks[i]);
 }
 
 void

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-09 02:54+0100\n"
-"PO-Revision-Date: 2005-01-12 04:44+0100\n"
+"POT-Creation-Date: 2005-01-12 17:34+0100\n"
+"PO-Revision-Date: 2005-01-12 17:36+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -331,7 +331,7 @@ msgid ""
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 msgstr ""
 "Filformat for bogmærker (påvirker læsning og gemning):\n"
-"0 er ELinks' standardformat format\n"
+"0 er ELinks' standardformat\n"
 "1 er det universelle XBEL XML-bogmærkeformat (INGEN NATIONALE TEGN!)"
 
 #: src/bookmarks/bookmarks.c:61
@@ -676,11 +676,10 @@ msgid ""
 "will be disabled. Execution of viewers is allowed, but entries\n"
 "in the association table can't be added or modified."
 msgstr ""
-"Begræns ELinks så kørsel via en anonym brugerkonto er mulig.\n"
-"Læsning af lokale filer og mapper, filoverførelser og ændring\n"
-"af indstillinger er deaktiveret. Afvikling af programmer til\n"
-"ekstern visning er tilladt, men brugeren kan ikke tilføje eller\n"
-"ændre hvilke programmer, der er tilgængelige."
+"Begræns visse faciliteter i ELinks så den kan anvendes med anonyme\n"
+"brugerkonti. Ingen visning af lokale filer, ingen downloads. Brug af\n"
+"fremvisere er tilladt, men brugeren kan ikke tilføje eller ændre i\n"
+"opsætningen af hvilke fremvisere der bruges ved hvilke filtyper."
 
 #: src/config/cmdline.c:612
 msgid "Autosubmit first form"
@@ -715,10 +714,10 @@ msgid ""
 "If the path does not begin with a '/' it is assumed to be\n"
 "relative to your HOME directory."
 msgstr ""
-"Stien til den mappe som ELinks vil læse og skrive sine\n"
-"konfigurations og kørselstidstilstandsfiler i stedet for\n"
-"~/.elinks. Hvis stien ikke begynder med '/' antages den\n"
-"at være relativ til din HOME hjemmemappe."
+"Sæt opsætningskatalog til angiven sti. ELinks vil læse og skrive\n"
+"sine opsætningsfiler herfra. Hvis stien begynder med en \"/\" bliver\n"
+"den opfattet som absolut. Ellers antages den at være relativ i\n"
+"forhold til dit hjemmekatalog."
 
 #: src/config/cmdline.c:633
 msgid "Name of configuration file"
@@ -771,8 +770,7 @@ msgstr ""
 #: src/config/cmdline.c:655
 msgid "Print formatted plain-text versions of given URLs to stdout."
 msgstr ""
-"Udskriv tekstformaterede text-versioner af de givne adresser til "
-"standarduddata."
+"Udskriv tekstformaterede versioner af de givne adresser til standarduddata."
 
 #: src/config/cmdline.c:657
 msgid "Codepage to use with -dump"
@@ -801,9 +799,9 @@ msgid ""
 "read. Example usage:\n"
 "\t-eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
-"Angiv direktiv fra konfigurationsfil via kommandolinjen, som vil\n"
-"blive evalueret efter at alle konfigurationsfiler er blevet indlæst.\n"
-"Eksempel på brug:\n"
+"Angiv indstillinger fra elinks.conf på kommandolinjen, som vil\n"
+"blive evalueret efter at alle konfigurationsfiler er blevet\n"
+"indlæst. Eksempel på brug:\n"
 "\t-eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
@@ -817,9 +815,9 @@ msgid ""
 "Useful when using ELinks as an external viewer from MUAs.\n"
 "This is equivalent to -default-mime-type text/html."
 msgstr ""
-"Gør at ELinks antager at dokumenter af ukendt type er HTML.\n"
-"Brugbart når ELinks anvendes som ekstern fremviser fra MUAs.\n"
-"Svarer til -default-mime-type text/html."
+"Dette får ELinks til at tro at filer er i HTML. Anvendeligt\n"
+"når ELinks bruges som ekstern fremviser fra MUAs. Modsvarer\n"
+"kommandolinje-parameteret -default-mime-type text/html."
 
 #: src/config/cmdline.c:685
 msgid "Print usage help and exit"
@@ -863,7 +861,7 @@ msgstr ""
 
 #: src/config/cmdline.c:703
 msgid "Run as separate instance"
-msgstr "Kør som separat instans"
+msgstr "Kør som separat session"
 
 #: src/config/cmdline.c:705
 msgid ""
@@ -872,11 +870,9 @@ msgid ""
 "(bookmarks, history, etc.) are written to the disk when this\n"
 "option is used. See also -touch-files."
 msgstr ""
-"Kør ELinks som en separat instans i stedet for at forbinde til\n"
-"en eksisterende instans. Bemærk at under nomale omstændigheder\n"
-"vil ingen kørselstidstilstandsfiler (bogmærker, historik, osv.)\n"
-"blive skrevet til disken, når denne indstilling anvendes.\n"
-"Se også -touch-files"
+"Kør ELinks i en separat session og ikke i en sessionskreds. Bemærk\n"
+"at ingen sessionstilknyttede filer (bogmærker, historik osv.) bliver\n"
+"skrevet til disk når denne indstilling bruges. Se også -touch-files."
 
 #: src/config/cmdline.c:710
 msgid "Disable use of files in ~/.elinks"
@@ -902,12 +898,12 @@ msgid ""
 "Prevents printing of link number in dump output.\n"
 "Note that this really affects only -dump, nothing else."
 msgstr ""
-"Deaktiverer nummerering af links i uddata fra -dump.Bemærk at at dette kun "
-"påvirker -dump og ikke andet."
+"Deaktiverer nummerering af links i uddata fra -dump.\n"
+"Bemærk at at dette kun påvirker -dump og ikke andet."
 
 #: src/config/cmdline.c:721
 msgid "Disable printing of link references in dump output"
-msgstr "Udskriv ikke linkadresser i uddata fra -dump"
+msgstr "Undlad at udskrive linkadresser i uddata fra -dump"
 
 #: src/config/cmdline.c:723
 msgid ""
@@ -915,8 +911,8 @@ msgid ""
 "in dump output.\n"
 "Note that this really affects only -dump, nothing else."
 msgstr ""
-"Deaktiverer udskrivning af linkadresser i uddata fra -dump.Bemærk at at "
-"dette kun påvirker -dump og ikke andet."
+"Deaktiverer udskrivning af linkadresser i uddata fra -dump.\n"
+"Bemærk at at dette kun påvirker -dump og ikke andet."
 
 #: src/config/cmdline.c:727
 msgid "Control an already running ELinks"
@@ -975,21 +971,19 @@ msgid ""
 "are written to the disk when this option is used. See also\n"
 "-touch-files."
 msgstr ""
-"ID for den sessionsring som denne ELinks session skal forbinde\n"
-"til. ELinks anvender såkaldte sessionsringe, hvor alle instanser\n"
-"af ELinks er forbundet internt og deler tilstandsdata (cache,\n"
-"bogmærker, cookier osv.). Som standard forbinder alle nye ELinks\n"
-"til sessionsringen 0. Du kan ændre denne adfærd ved at anvende\n"
-"denne indstilling og dermed oprette så mange sessionsringe som\n"
-"du ønsker. Hvis der angives et nummer på en sessionsring, som\n"
-"ikke allerede eksisterer vil en ny ring blive oprettet og denne\n"
-"instans vil blive den ledende instans. Bemærk, at du ofte ikke\n"
-"ønsker at anvende denne indstilling med mindre du er en udvikler\n"
-"og vil afprøve noget, eksempelvis hvis du ønsker ELinks instanser\n"
-"der kører selvstændigt, og ikke ønsker at anvende indstillingen\n"
-"-no-connect. Bemærk også, at ingen kørselstidstilstandsfiler vil\n"
-"blive skrevet til disken når denne indstilling anvendes.\n"
-"Se også -touch-files."
+"ID på den sessionskreds som ELinks skal forbinde til. ELinks virker i\n"
+"såkaldte sessionskredse i hvilke alle ELinks-sessioner er forbundne og\n"
+"deler samme tilstand (cache, bogmærker, cookier, osv.). Som standard\n"
+"forbindes alle ELinks-sessioner til sessionskreds 0. Denne adfærd kan\n"
+"ændres med dette parameter, og der kan oprettes så mange sessionskredse\n"
+"som det ønskes. Hvis en sessionskreds med dette nummer ikke eksisterer,\n"
+"bliver den selvfølgelig oprettet og den dermed forbundne ELinks-session\n"
+"bliver herefter den primære session (betyder ikke så meget for brugeren).\n"
+"Bemærk at det normalt kun er udviklere der kan have brug for dette i\n"
+"testningsøjemed. Hvis alle ELinks-sessioner skal køres separat (og ikke\n"
+"i kredse), er det bedre at bruge kommandolinje-parameteret -no-connect.\n"
+"Bemærk i den forbindelse også at filer med oplysning om kørselstilstand\n"
+"ikke bliver skrevet til disk med -no-connect. Se også -touch-files."
 
 #: src/config/cmdline.c:761
 msgid "Print the source of given URLs to stdout"
@@ -1001,7 +995,8 @@ msgstr "Udskriv kildeteksten for givne adresser til standarduddata."
 
 #: src/config/cmdline.c:767
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
-msgstr "Rør filer i ~/.elinks ved kørsel med -no-connect/-session-ring"
+msgstr ""
+"Opret filer i ~/.elinks når Elinks startes med -no-connect/-session-ring"
 
 #: src/config/cmdline.c:769
 msgid ""
@@ -1121,8 +1116,8 @@ msgid "Cannot read the file"
 msgstr "Kan ikke læse filen"
 
 #: src/config/dialogs.c:66
-msgid "Cannot stat the file"
-msgstr "Kan ikke opnå statusinformationer for filen"
+msgid "Cannot get file status"
+msgstr "Kan ikke opnå statusinformationer for fil"
 
 #: src/config/dialogs.c:69
 msgid "Cannot access the file"
@@ -1149,7 +1144,7 @@ msgid "Cannot write the file"
 msgstr "Kan ikke skrive filen"
 
 #: src/config/dialogs.c:89
-msgid "Secure file error"
+msgid "Secure file saving error"
 msgstr "Fejl ved sikkerfilskrivning"
 
 #: src/config/dialogs.c:97
@@ -1277,7 +1272,8 @@ msgid ""
 msgstr ""
 "Tastetildeling skal skrives i følgende format: [præfiks-]tast\n"
 "Præfikser er: shift, ctrl, alt\n"
-"Tast er f.eks.: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
+"Taster er f.eks.: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,"
+"F5,..."
 
 #: src/config/dialogs.c:944 src/dialogs/info.c:136 src/globhist/dialogs.c:231
 msgid "Toggle display"
@@ -1354,7 +1350,7 @@ msgstr "Vis information om den aktuelle side"
 
 #: src/config/kbdbind.c:444
 msgid "Open download manager"
-msgstr "Åbn filoverførselshåndtering"
+msgstr "Åbn downloadhåndtering"
 
 #: src/config/kbdbind.c:445
 msgid "Enter ex-mode (command line)"
@@ -1413,8 +1409,8 @@ msgid "Go to the homepage"
 msgstr "Gå til hjemmesiden"
 
 #: src/config/kbdbind.c:459
-msgid "Show information about the current page HTTP headers"
-msgstr "Vis information om den aktuelle sides HTTP header"
+msgid "Show information about the current page protocol headers"
+msgstr "Vis information om den nuværende sides protokol-serverlinjer"
 
 #: src/config/kbdbind.c:460
 msgid "Open history manager"
@@ -1450,7 +1446,7 @@ msgstr "Hent det aktuelle billede"
 
 #: src/config/kbdbind.c:468
 msgid "Attempt to resume download of the current link"
-msgstr "Forsøg at genoptage overførelse af det aktuelle link"
+msgstr "Forsøg at genoptage download af det aktuelle link"
 
 #: src/config/kbdbind.c:469
 msgid "Pass URI of current link to external command"
@@ -1458,7 +1454,7 @@ msgstr "Videregiv den aktuelle linkadresse et til ekstern program"
 
 #: src/config/kbdbind.c:470 src/config/kbdbind.c:563 src/config/kbdbind.c:587
 msgid "Follow the current link"
-msgstr "Følg det aktuelle link"
+msgstr "Følg aktuelle link"
 
 #: src/config/kbdbind.c:471
 msgid "Follow the current link, forcing reload of the target"
@@ -1574,7 +1570,7 @@ msgstr "Åbn en kommandofortolker"
 
 #: src/config/kbdbind.c:502
 msgid "Open options manager"
-msgstr "Åbn indstillingshåndtering"
+msgstr "Åbn opsætningshåndtering"
 
 #: src/config/kbdbind.c:503
 msgid "Open a quit confirmation dialog box"
@@ -1743,11 +1739,11 @@ msgstr "Vis det aktuelle billede"
 #. internal use only
 #: src/config/kbdbind.c:552
 msgid "Attempt to auto-complete the input"
-msgstr "Forsøg automatisk at færdiggøre input"
+msgstr "Forsøg automatisk fuldførelse af indtastning"
 
 #: src/config/kbdbind.c:553
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr "Forsøg automatisk utvetydigt at færdiggøre input"
+msgstr "Forsøg entydig, automatisk fuldførelse af indtastningen"
 
 #: src/config/kbdbind.c:554
 msgid "Delete character in front of the cursor"
@@ -4631,8 +4627,8 @@ msgid "E~xit"
 msgstr "~Afslut"
 
 #: src/dialogs/menu.c:351
-msgid "~New window"
-msgstr "~Nyt vindue"
+msgid "Open ~new window"
+msgstr "Åbn i ~nyt vindue"
 
 #: src/dialogs/menu.c:370
 msgid "~OS shell"

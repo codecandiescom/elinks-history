@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.137 2004/04/05 05:06:27 jonas Exp $ */
+/* $Id: uri.c,v 1.138 2004/04/05 05:18:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -353,27 +353,29 @@ insert_in_uri(unsigned char **uri, int pos, unsigned char *seq, int seqlen)
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 
 static void
-translate_directories(unsigned char *uristring)
+translate_directories(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *src, *dest, *path;
 	int lo;
-	struct uri uri;
+	struct uri uri_struct;
 
-	if (parse_uri(&uri, uristring) != URI_ERRNO_OK
-	    || !uri.data/* || *--url_data != '/'*/)
-		return;
+	if (!uri) {
+		uri = &uri_struct;
+		if (parse_uri(uri, uristring) != URI_ERRNO_OK)
+			return;
+	}
 
 	/* This is a maybe not the right place but both join_urls() and
 	 * get_translated_uri() through translate_url() calls this function
 	 * and then it already works on and modifies an allocated copy. */
 	/* I don't think username and password should be lowercased. --jonas */
-	convert_to_lowercase(uri.protocol_str, uri.protocollen);
-	if (uri.hostlen) convert_to_lowercase(uri.host, uri.hostlen);
+	convert_to_lowercase(uri->protocol_str, uri->protocollen);
+	if (uri->hostlen) convert_to_lowercase(uri->host, uri->hostlen);
 
 	/* dsep() *hint* *hint* */
-	lo = (uri.protocol == PROTOCOL_FILE);
+	lo = (uri->protocol == PROTOCOL_FILE);
 
-	path = uri.data;
+	path = uri->data;
 	if (!dsep(*path)) path--;
 	src = path;
 	dest = path;
@@ -436,7 +438,7 @@ proceed: ;
  * which consists of just the complete path to file/directory, which the dumb
  * 'file' protocol backend can understand. No host parts etc, that is what this
  * function is supposed to chew. */
-static void
+static struct uri *
 transform_file_url(struct uri *uri, unsigned char *cwd)
 {
 	unsigned char *path = uri->data;
@@ -468,13 +470,13 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 
 		/* Insert the current working directory. */
 		insert_in_uri(&struri(uri), 7, cwd, cwdlen);
-		return;
+		return uri;
 	}
 
 #ifdef DOS_FS
 	if (upcase(path[0]) >= 'A' && upcase(path[0]) <= 'Z'
 	    && path[1] == ':' && dir_sep(path[2]))
-		return;
+		return NULL;
 #endif
 
 	for (; *path && !dir_sep(*path); path++);
@@ -483,6 +485,7 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 	 * until we will support the FTP transformation. --pasky */
 
 	memmove(uri->data, path, strlen(path) + 1);
+	return uri;
 }
 
 unsigned char *
@@ -504,7 +507,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		for (p = n; *p && *p != POST_CHAR && *p != '#'; p++);
 		*p = '\0';
 		add_to_strn(&n, rel);
-		translate_directories(n);
+		translate_directories(NULL, n);
 
 		return n;
 	} else if (rel[0] == '?') {
@@ -514,7 +517,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		for (p = n; *p && *p != POST_CHAR && *p != '?' && *p != '#'; p++);
 		*p = '\0';
 		add_to_strn(&n, rel);
-		translate_directories(n);
+		translate_directories(NULL, n);
 
 		return n;
 	} else if (rel[0] == '/' && rel[1] == '/') {
@@ -534,7 +537,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 	if (parse_uri(&uri, rel) == URI_ERRNO_OK) {
 		n = stracpy(rel);
-		if (n) translate_directories(n);
+		if (n) translate_directories(NULL, n);
 
 		return n;
 	}
@@ -547,7 +550,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		add_to_strn(&n, "/");
 
 		if (parse_uri(&uri, n) == URI_ERRNO_OK) {
-			translate_directories(n);
+			translate_directories(&uri, n);
 			return n;
 		}
 
@@ -604,7 +607,7 @@ prx:
 	if (add_slash) n[tmp] = '/';
 	strcpy(n + tmp + add_slash, rel);
 
-	translate_directories(n);
+	translate_directories(NULL, n);
 	return n;
 }
 
@@ -636,10 +639,11 @@ parse_uri:
 
 	switch (uri_errno) {
 	case URI_ERRNO_OK:
-		if (uri.protocol == PROTOCOL_FILE && cwd && *cwd)
-			transform_file_url(&uri, cwd);
+		if (uri.protocol == PROTOCOL_FILE && cwd && *cwd
+		    && transform_file_url(&uri, cwd))
+			parse_uri(&uri, struri(&uri));
 
-		translate_directories(struri(&uri));
+		translate_directories(&uri, struri(&uri));
 		return struri(&uri);
 
 	case URI_ERRNO_NO_SLASHES:

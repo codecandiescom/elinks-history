@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.17 2003/07/14 20:03:41 jonas Exp $ */
+/* $Id: uri.c,v 1.18 2003/07/20 15:30:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,7 +206,7 @@ get_uri_string(struct uri *uri, int components)
 		return stracpy(uri->protocol);
 	}
 
-#define wants(x) !(components & (x))
+#define wants(x) (components & (x))
 
 	if (wants(URI_PROTOCOL)) {
 		add_bytes_to_str(&str, &len, uri->protocol, uri->protocollen);
@@ -279,7 +279,7 @@ strip_uri_password(unsigned char *uristring)
 	if (!parse_uri(&uri, uristring))
 		return NULL;
 
-	return get_uri_string(&uri, URI_PASSWORD|URI_POST);
+	return get_uri_string(&uri, ~(URI_PASSWORD|URI_POST));
 }
 
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')

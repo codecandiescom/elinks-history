@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.103 2003/06/16 14:33:56 pasky Exp $ */
+/* $Id: renderer.c,v 1.104 2003/06/16 14:40:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,7 +256,7 @@ set_hline(struct part *part, int x, int y,
 {
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x + charslen - 1)
-	    || (spc && xpand_spaces(part, x + charslen - 1)))
+	    || (xpand_spaces(part, x + charslen - 1)))
 		return;
 
 	for (; charslen > 0; charslen--, x++, chars++) {
@@ -385,6 +385,7 @@ del_chars(struct part *part, int x, int y)
 
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
 
+/*  */
 /* TODO: optimization and verification needed there. --Zas */
 static int
 split_line(struct part *part)

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.59 2004/01/02 15:29:38 zas Exp $ */
+/* $Id: string.h,v 1.60 2004/01/02 15:35:19 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -78,8 +78,9 @@ unsigned char *safe_strncpy(unsigned char *dst, const unsigned char *src, size_t
  *
  * @n1 or @n2 may be -1, which is same as strlen(@s[12]) but possibly more
  * effective (in the future ;-). */
-/* Returns an integer less than, equal to, or greater than zero if @s1 is
- * found, respectively, to be less than, to match, or be greater than @s2. */
+/* Returns zero if the strings match or undefined non-zero value if they
+ * differ.  (The non-zero return value is _not_ same as for the standard
+ * strcmp() family.) */
 #define strlcmp(a,b,c,d) (errfile = __FILE__, errline = __LINE__, elinks_strlcmp(a,b,c,d))
 int elinks_strlcmp(const unsigned char *s1, size_t n1,
 		   const unsigned char *s2, size_t n2);

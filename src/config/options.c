@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.341 2003/10/23 08:59:52 pasky Exp $ */
+/* $Id: options.c,v 1.342 2003/10/23 09:09:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,7 +419,7 @@ copy_option(struct option *template)
 
 
 static void register_options(void);
-static inline void register_change_hooks(void);
+static struct change_hook_info change_hooks[];
 
 struct list_head *
 init_options_tree(void)
@@ -438,7 +438,7 @@ init_options(void)
 	cmdline_options = add_opt_tree_tree(&options_root, "", "",
 					    "cmdline", 0, "");
 	register_options();
-	register_change_hooks();
+	register_change_hooks(change_hooks);
 }
 
 static void
@@ -951,11 +951,8 @@ change_hook_language(struct session *ses, struct option *current, struct option 
 	return 0;
 }
 
-/* TODO: Maybe move over the mailcap/mimetypes change hooks? --jonas */
-static struct {
-	unsigned char *name;
-	int (*change_hook)(struct session *, struct option *current, struct option *changed);
-} change_hooks[] = {
+/* TODO: Move over the mailcap/mimetypes change hooks. --jonas,pasky */
+static struct change_hook_info change_hooks[] = {
 	{ "config.show_template",	change_hook_stemplate },
 	{ "connection",			change_hook_connection },
 	{ "document.browse",		change_hook_html },
@@ -969,8 +966,8 @@ static struct {
 	{ NULL,				NULL },
 };
 
-static inline void
-register_change_hooks(void)
+void
+register_change_hooks(struct change_hook_info *change_hooks)
 {
 	int i;
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.319 2004/03/22 03:23:14 jonas Exp $ */
+/* $Id: session.c,v 1.320 2004/03/22 03:47:13 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -214,14 +214,14 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	}
 
 	frame->name = stracpy(name);
-	if (!frame->name) {
+	if (!frame->name
+	    || !init_vs(&frame->vs, url, -1)) {
 		mem_free(frame);
 		mem_free(url);
 		if (pos) mem_free(pos);
 		return;
 	}
 
-	init_vs(&frame->vs, url, -1);
 	if (pos) frame->vs.goto_position = pos;
 
 	add_to_list(loc->frames, frame);
@@ -979,26 +979,15 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 	if_assert_failed { return NULL; }
 
 	foreachback (frame, loc->frames) {
+		struct uri *uri;
+
 		if (strcasecmp(frame->name, name)) continue;
 
-		if (url_len > frame->vs.url_len) {
-			struct document_view *doc_view;
-			struct frame *new_frame = frame;
+		uri = get_uri(url);
+		if (!uri) return NULL;
 
-			/* struct view_state reserves 1 byte for url, so
-			 * url_len is sufficient. */
-			new_frame = mem_realloc(frame, sizeof(struct frame) + url_len);
-			if (!new_frame) return NULL;
-
-			new_frame->prev->next = new_frame->next->prev = new_frame;
-
-			foreach (doc_view, ses->scrn_frames)
-				if (doc_view->vs == &frame->vs)
-					doc_view->vs = &new_frame->vs;
-
-			frame = new_frame;
-		}
-		memcpy(frame->vs.url, url, url_len + 1);
+		done_uri(frame->vs.uri);
+		frame->vs.uri = uri;
 		frame->vs.url_len = url_len;
 
 		return frame;

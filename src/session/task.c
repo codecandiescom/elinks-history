@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.24 2004/03/22 03:23:14 jonas Exp $ */
+/* $Id: task.c,v 1.25 2004/03/22 03:47:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,7 +225,8 @@ x:
 		vs = &frame->vs;
 		if (!loaded_in_frame) {
 			destroy_vs(vs);
-			init_vs(vs, ses->loading_url, vs->plain);
+			if (!init_vs(vs, ses->loading_url, vs->plain))
+				return NULL;
 		}
 
 		if (!loaded_in_frame) {
@@ -243,7 +244,7 @@ x:
 	} else {
 		init_list(loc->frames);
 		vs = &loc->vs;
-		init_vs(vs, ses->loading_url, vs->plain);
+		if (!init_vs(vs, ses->loading_url, vs->plain)) return NULL;
 		add_to_history(&ses->history, loc);
 
 		if (ses->goto_position) {

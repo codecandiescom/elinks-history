@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.660 2004/11/14 11:25:22 zas Exp $ */
+/* $Id: view.c,v 1.661 2004/11/14 11:40:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,16 +110,18 @@ move_down(struct session *ses, struct document_view *doc_view, int type)
 enum frame_event_status
 move_page_down(struct session *ses, struct document_view *doc_view)
 {
-	int count = ses->kbdprefix.repeat_count;
+	enum frame_event_status status;
+	int count;
 
+	count = ses->kbdprefix.repeat_count;
 	ses->kbdprefix.repeat_count = 0;
 
-	if (!count) count = 1;
+	do {
+		status = move_down(ses, doc_view, 0);
+		if (status != FRAME_EVENT_REFRESH) break;
+	} while (--count > 0);
 
-	while (count--)
-		move_down(ses, doc_view, 0);
-
-	return FRAME_EVENT_REFRESH;
+	return status;
 }
 
 /* type == 0 -> PAGE_UP
@@ -149,16 +151,18 @@ move_up(struct session *ses, struct document_view *doc_view, int type)
 enum frame_event_status
 move_page_up(struct session *ses, struct document_view *doc_view)
 {
-	int count = ses->kbdprefix.repeat_count;
+	enum frame_event_status status;
+	int count;
 
+	count = ses->kbdprefix.repeat_count;
 	ses->kbdprefix.repeat_count = 0;
 
-	if (!count) count = 1;
+	do {
+		status = move_up(ses, doc_view, 0);
+		if (status != FRAME_EVENT_REFRESH) break;
+	} while (--count > 0);
 
-	while (count--)
-		move_up(ses, doc_view, 0);
-
-	return FRAME_EVENT_REFRESH;
+	return status;
 }
 
 enum frame_event_status
@@ -173,9 +177,6 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 
-	count = int_max(ses->kbdprefix.repeat_count, 1);
-	ses->kbdprefix.repeat_count = 0;
-
 	if (doc_view->document->nlinks == 0) {
 		/* There are no links, therefore the only sensible value for
 		 * wraparound_bound is -1 (no link selected). */
@@ -186,7 +187,10 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 		wraparound = get_opt_int("document.browse.links.wraparound");
 	}
 
-	while (count--) {
+	count = ses->kbdprefix.repeat_count;
+	ses->kbdprefix.repeat_count = 0;
+
+	do {
 		int current_link = doc_view->vs->current_link;
 
 		if (current_link == wraparound_bound) {
@@ -226,7 +230,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 		    && current_link != doc_view->vs->current_link) {
 			set_textarea(doc_view, -direction);
 		}
-	}
+	} while (--count > 0);
 
 	return FRAME_EVENT_REFRESH;
 }
@@ -240,10 +244,11 @@ move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, in
 	if_assert_failed return FRAME_EVENT_OK;
 
 	ses->navigate_mode = NAVIGATE_LINKWISE;
-	count = int_max(ses->kbdprefix.repeat_count, 1);
+
+	count = ses->kbdprefix.repeat_count;
 	ses->kbdprefix.repeat_count = 0;
 
-	while (count--) {
+	do {
 		int current_link = doc_view->vs->current_link;
 
 		if (next_link_in_dir(doc_view, dir_x, dir_y))
@@ -258,7 +263,7 @@ move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, in
 		if (dir_y && current_link != doc_view->vs->current_link) {
 			set_textarea(doc_view, -dir_y);
 		}
-	}
+	} while (--count > 0);
 
 	return FRAME_EVENT_REFRESH;
 }

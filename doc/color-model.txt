@@ -37,18 +37,28 @@ user's visual deficience (ie. rule like "do not use red colors at all", "forbid
 orange on red", ...) Another color model may take in account screen environment:
 "ensure very high lightness contrast".
 
-TODO: Algorithms for determining bad color combinations.
-Zas has some ideas about that: there's no "algorithm" to determin bad color
+Algorithms for determining bad color combinations
+-------------------------------------------------
+
+Zas has some ideas about that: there's no "algorithm" to determine bad color
 combos, but many experiences, so we'll use common sense (ie. low lightness
 contrast, similar colors, white/bright yellow, and more...).
 
-TODO: Algorithms for finding the nearest good color combination.
-Well, apply constraints:
-Having a (bg, fg) couple of RGB colors, check if it verifies all the constraints
-and if not, make a new couple obtained by successive constraint satisfaction.
+Algorithms for finding the nearest good color combination
+---------------------------------------------------------
+
+This all comes down to applying what ever constraints the user desires:
+
+1. Given a back- and foreground color pair of RGB colors.
+2. Check if it satisfies all the constraints. If not make a new couple obtained
+   by successive constraint satisfaction.
+
 In some cases, one or more constraints can't be satisfied, for solving that, we
-just need notions like "hard" and "soft" constraints.
-Example:
+just need notions like "hard" / "strong" and "soft" / "weak" constraints.
+
+Example
+-------
+
 hard constraint 1 = "no red"
 hard constraint 2 = "lightness contrast > 50%"
 hard constraint 3 = "saturation < 90%"
@@ -60,12 +70,13 @@ soft constraint 3 = "no green foreground on blue background"
 Starting with (bg, fg) = (H=red L=70% S=100%; H=blue L=40% S=95%)
 hc1 is not satisfied, because fg is red, so we just need to move fg away from
 red.
-hc2 is satisfied
-hc3 is not satisfied, red and blue are fully saturated.
-sc1 is satisfied
-sc2 is not satisfied, since fg is lighter than bg, so move fg away from
-lightness, and move bg away from darkness.
-sc3 is satisfied
+
+1. hc2 is satisfied
+2. hc3 is not satisfied, red and blue are fully saturated.
+3. sc1 is satisfied
+4. sc2 is not satisfied, since fg is lighter than bg, so move fg away
+   from lightness, and move bg away from darkness.
+5. sc3 is satisfied
 
 So we have 2 constraints to satisfy, but while doing this we should not make
 other unsatisfied.
@@ -107,17 +118,23 @@ G) hc3 can be satisfied by decreasing fg and bg saturation values:
 This last couple satisfies all constraints, so we are done ;)
 
 
-TODO: How to cache the result and integrate it with the current color system.
+How to cache the result and integrate it with the current color system
+----------------------------------------------------------------------
 
 In previous example, we supposed we are using a true color palette, but most
 cases we have a limited number of usable colors.
 We need to convert (fg, bg) to the nearest available color _before_ constraints
 satisfaction and at each step of it.
-Once we found a valid transformation we cache the initial (fg, bg) and the
+When a valid transformation has been found we cache the initial (fg, bg) and the
 result, and because we can't cache all combos we need to limit cache size to a
 reasonable value and sometimes recalculate.
 
-TODO: How to make the configuration easy but still powerful.
+Maybe if the calculations will be really heavy we can save/restore the combinations
+to file (~/.elinks/colorhist ;) from session to session.
+
+How to make the configuration easy but still powerful
+-----------------------------------------------------
+
 User should be able to describe what he wants or not, so let's try to have our
 own color-constraint interpreter:
 
@@ -145,6 +162,25 @@ soft constraint 3 = "no green foreground on blue background" =>
 		    "H bg eq blue: fg ne green"
 
 Hmmm, not perfect at all, but it's a start.
+
+Maybe the option system can be made to handle it even though it might not be optimal.
+
+	[-]- Color model
+	 |    +-- Enable
+	 |    +-- Cache size
+	 |   [-]- Hard/Strong
+	 |    |   [-]- Hue constraints
+	 |    |    |    +- Red (0 or 1 whether to allow this color)
+	 |    |    |    : (the basic colors of the color wheel)
+	 |    |   [-]- Lightness constraints
+	 |    |    |    +- Minimum constrast
+	 |    |    |    +- Maximum constrast
+	 |    |   [-]- Saturation constraints
+	 |    |         +- Minimum saturation
+	 |    |         +- Maximum saturation
+	 |   [+]- Soft/Weak
+
+Rather hostile but quite usable for testing.
 
 Implementation
 --------------
@@ -207,5 +243,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 	Basic introduction to usage of HSL colors.
 
-$Id: color-model.txt,v 1.6 2003/10/07 22:34:08 jonas Exp $
+$Id: color-model.txt,v 1.7 2003/10/07 23:24:36 jonas Exp $
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.25 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: charsets.c,v 1.26 2003/05/24 08:55:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -369,35 +369,31 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 unsigned char *
 get_entity_string(unsigned char *st, int l, int encoding)
 {
-	unicode_val n;
+	unicode_val n = 0;
 
 	if (l <= 0) return NULL;
 	if (st[0] == '#') {
 		if (l == 1) return NULL;
-		if (st[1] == 'x') {
-			n = 0;
+		if ((st[1] | 32) == 'x') { /* Hexadecimal */
 			if (l == 2 || l > 6) return NULL;
 			st += 2, l -= 2;
 			do {
-				char c = upcase(*(st++));
+				unsigned char c = (*(st++) | 32);
 
 				if (c >= '0' && c <= '9')
-					n = n * 16 + c - '0';
-				else if (c >= 'A' && c <= 'F')
-					n = n * 16 + c - 'A' + 10;
+					n = (n << 4) + c - '0';
+				else if (c >= 'a' && c <= 'f')
+					n = (n << 4) + c - 'a' + 10;
 				else
 					return NULL;
 				if (n >= 0x10000)
 					return NULL;
 			} while (--l);
-		} else {
-			n = 0;
+		} else { /* Decimal */
 			if (l > 6) return NULL;
-			st++;
-		       	l--;
-
+			st++, l--;
 			do {
-				char c = *(st++);
+				unsigned char c = *(st++);
 
 				if (c >= '0' && c <= '9')
 					n = n * 10 + c - '0';
@@ -408,25 +404,24 @@ get_entity_string(unsigned char *st, int l, int encoding)
 			} while (--l);
 		}
 	} else {
-		long s = 0, e = N_ENTITIES - 1;
+		unsigned long start = 0;
+		unsigned long end = N_ENTITIES - 1;
 
-		while (s <= e) {
-			int c;
-			long m = (s + e) / 2;
+		while (start <= end) {
+			unsigned long middle = (start + end) >> 1;
+			int cmp = xxstrcmp(entities[middle].s, st, l);
 
-			c = xxstrcmp(entities[m].s, st, l);
-			if (!c) {
-				n = entities[m].c;
-				goto f;
+			if (!cmp) {
+				n = entities[middle].c;
+				break;
 			}
-			if (c > 0)
-				e = m - 1;
+			if (cmp > 0)
+				end = middle - 1;
 			else
-				s = m + 1;
+				start = middle + 1;
 		}
 
-		return NULL;
-f:;
+		if (!n || n >= 0x10000) return NULL;
 	}
 
 	return u2cp(n, encoding);

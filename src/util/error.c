@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.25 2002/06/16 20:37:42 pasky Exp $ */
+/* $Id: error.c,v 1.26 2002/06/16 20:41:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,8 +72,9 @@ struct alloc_header {
 
 /* These macros are used to convert pointers and sizes to or from real ones
  * when using alloc_header stuff. */
-#define PTR_AH2BASE(ah) (void *) ((char *)(ah) + SIZE_AH_ALIGNED)
-#define PTR_BASE2AH(ptr) (struct alloc_header *) ((char *)(ptr) - SIZE_AH_ALIGNED)
+#define PTR_AH2BASE(ah) (void *) ((char *) (ah) + SIZE_AH_ALIGNED)
+#define PTR_BASE2AH(ptr) (struct alloc_header *) \
+				((char *) (ptr) - SIZE_AH_ALIGNED)
 
 #define SIZE_BASE2AH(size) ((size) + SIZE_AH_ALIGNED)
 #define SIZE_AH2BASE(size) ((size) - SIZE_AH_ALIGNED)
@@ -85,7 +86,6 @@ static inline void
 force_dump()
 {
 	fprintf(stderr, "\n\033[1m%s\033[0m\n", "Forcing core dump");
-	fflush(stderr);
 	fprintf(stderr, "Man the Lifeboats! Women and children first!\n");
 	fflush(stderr);
 	raise(SIGSEGV);
@@ -163,7 +163,7 @@ long mem_amount = 0;
 struct list_head memory_list = { &memory_list, &memory_list };
 
 #ifdef CHECK_AH_SANITY
-int
+static int
 bad_ah_sanity(struct alloc_header *ah, unsigned char *comment)
 {
 	if (!ah) return 1;
@@ -387,6 +387,8 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 	if (ah->comment)
 		safe_strncpy(ah->comment, str, len + 1);
 }
+
+/* Remember, we undef stuff in the separate order that we define it. */
 
 #undef SIZE_BASE2AH
 #undef SIZE_AH2BASE

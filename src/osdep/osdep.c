@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.23 2002/06/20 11:05:32 pasky Exp $ */
+/* $Id: osdep.c,v 1.24 2002/07/03 22:50:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1388,6 +1388,19 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 
 	f = fork();
 	if (!f) {
+		struct terminal *term;
+
+		/* Close input in this thread; otherwise, if it will live
+		 * longer than its parent, it'll block the terminal until it'll
+		 * quit as well; this way it will hopefully just die unseen and
+		 * in background, causing no trouble. */
+		/* Particularly, when async dns resolving was in progress and
+		 * someone quitted ELinks, it could make a delay before the
+		 * terminal would be really freed and returned to shell. */
+		foreach (term, terminals)
+			if (term->fdin > 0)
+				close(term->fdin);
+
 		close(p[0]);
 		fn(ptr, p[1]);
 		write(p[1], "x", 1);

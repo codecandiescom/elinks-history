@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.48 2002/09/09 15:50:16 zas Exp $ */
+/* $Id: http.c,v 1.47 2002/09/09 15:47:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,8 +131,7 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 }
 
 
-static int
-get_http_code(unsigned char *head, int *code, int *version)
+static int get_http_code(unsigned char *head, int *code, int *version)
 {
 	/* \s* */
 	while (head[0] == ' ')
@@ -174,10 +173,9 @@ unsigned char *buggy_servers[] = {
 	NULL
 };
 
-int
-check_http_server_bugs(unsigned char *url,
-		       struct http_connection_info *info,
-		       unsigned char *head)
+int check_http_server_bugs(unsigned char *url,
+			   struct http_connection_info *info,
+			   unsigned char *head)
 {
 	unsigned char *server, **s;
 
@@ -204,8 +202,7 @@ check_http_server_bugs(unsigned char *url,
 	return 0;
 }
 
-static void
-http_end_request(struct connection *c, int state)
+static void http_end_request(struct connection *c, int state)
 {
 	setcstate(c, state);
 
@@ -231,8 +228,7 @@ http_end_request(struct connection *c, int state)
 
 void http_send_header(struct connection *);
 
-void
-http_func(struct connection *c)
+void http_func(struct connection *c)
 {
 	/* setcstate(c, S_CONN); */
 	set_timeout(c);
@@ -251,8 +247,7 @@ http_func(struct connection *c)
 	}
 }
 
-void
-proxy_func(struct connection *c)
+void proxy_func(struct connection *c)
 {
 	http_func(c);
 }
@@ -262,8 +257,7 @@ void http_get_header(struct connection *);
 #define IS_PROXY_URL(x) (upcase((x)[0]) == 'P')
 #define GET_REAL_URL(x) (IS_PROXY_URL((x)) ? get_url_data((x)) : (x))
 
-void
-http_send_header(struct connection *c)
+void http_send_header(struct connection *c)
 {
 	static unsigned char *accept_charset = NULL;
 	unsigned char *host = GET_REAL_URL(c->url);
@@ -614,8 +608,7 @@ http_send_header(struct connection *c)
 	setcstate(c, S_SENT);
 }
 
-int
-is_line_in_buffer(struct read_buffer *rb)
+int is_line_in_buffer(struct read_buffer *rb)
 {
 	int l;
 
@@ -725,8 +718,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 	return output;
 }
 
-void
-read_http_data(struct connection *conn, struct read_buffer *rb)
+void read_http_data(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
 
@@ -882,8 +874,7 @@ read_more:
 	setcstate(conn, S_TRANS);
 }
 
-int
-get_header(struct read_buffer *rb)
+int get_header(struct read_buffer *rb)
 {
 	int i;
 
@@ -903,8 +894,7 @@ get_header(struct read_buffer *rb)
 	return 0;
 }
 
-void
-http_got_header(struct connection *c, struct read_buffer *rb)
+void http_got_header(struct connection *c, struct read_buffer *rb)
 {
 	int cf;
 	int state = c->state != S_PROC ? S_GETH : S_PROC;
@@ -1148,8 +1138,7 @@ again:
 	read_http_data(c, rb);
 }
 
-void
-http_get_header(struct connection *conn)
+void http_get_header(struct connection *conn)
 {
 	struct read_buffer *rb;
 

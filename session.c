@@ -261,6 +261,7 @@ void ses_imgmap(struct session *ses)
 		internal("can't find cache entry");
 		return;
 	}
+	defrag_entry(ce);
 	fr = ce->frag.next;
 	if ((void *)fr == &ce->frag) return;
 	if (get_image_map(ce->head, fr->data, fr->data + fr->length, ses->goto_position, &menu, &ml, ses->imgmap_href_base, ses->imgmap_target_base, ses->term->spec->charset, ses->ds.assume_cp, ses->ds.hard_assume))

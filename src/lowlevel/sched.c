@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.55 2002/12/01 17:42:58 pasky Exp $ */
+/* $Id: sched.c,v 1.56 2002/12/02 14:55:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,6 +233,7 @@ setcstate(struct connection *c, int state)
 			tcount count = c->count;
 			if (!prg->valid) {
 				int tmp = prg->start;
+
 				memset(prg, 0, sizeof(struct remaining_info));
 				prg->valid = 1;
 				prg->start = tmp;
@@ -301,7 +302,7 @@ get_keepalive_socket(struct connection *c)
 	c->pf = k->pf;
 
 	del_from_list(k);
-	mem_free(k->host);
+	if (k->host) mem_free(k->host);
 	mem_free(k);
 
 	return 0;
@@ -366,7 +367,7 @@ free_connection_data(struct connection *c)
 			h->conn--;
 			if (!h->conn) {
 				del_from_list(h);
-				mem_free(h->host);
+				if (h->host) mem_free(h->host);
 				mem_free(h);
 			}
 		} else {
@@ -397,7 +398,7 @@ del_connection(struct connection *c)
 {
 	del_from_list(c);
 	send_connection_info(c);
-	mem_free(c->url);
+	if (c->url) mem_free(c->url);
 	mem_free(c);
 }
 
@@ -457,7 +458,7 @@ del_keepalive_socket(struct k_conn *kc)
 {
 	del_from_list(kc);
 	close(kc->conn);
-	mem_free(kc->host);
+	if (kc->host) mem_free(kc->host);
 	mem_free(kc);
 }
 
@@ -1202,4 +1203,3 @@ is_entry_used(struct cache_entry *e)
 
 	return 0;
 }
-

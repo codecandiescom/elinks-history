@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.36 2003/10/29 20:18:28 jonas Exp $ */
+/* $Id: parser.h,v 1.37 2003/10/29 20:30:34 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -14,17 +14,6 @@
 /* XXX: This is just terible - this interface is from 75% only for other HTML
  * files - there's lack of any well defined interface and it's all randomly
  * mixed up :/. */
-
-struct form {
-	unsigned char *action;
-	unsigned char *target;
-	int method;
-	int num;
-};
-
-#define NULL_STRUCT_FORM { NULL, NULL, 0, 0 }
-
-extern struct form form;
 
 enum form_method {
 	FM_GET,
@@ -225,4 +214,7 @@ void do_select_submenu(struct terminal *, struct menu_item *, struct session *);
 void free_tags_lookup(void);
 /* This initializes the tags cache used by fastfind. */
 void init_tags_lookup(void);
+
+void done_html_parser(void);
+
 #endif

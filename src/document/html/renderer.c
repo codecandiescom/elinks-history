@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.327 2003/10/29 19:59:43 jonas Exp $ */
+/* $Id: renderer.c,v 1.328 2003/10/29 20:30:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1572,12 +1572,9 @@ format_html(struct cache_entry *ce, struct document *document)
 	for (i = 0; i < document->height; i++)
 		document->width = int_max(document->width, document->data[i].l);
 
-	if (form.action) mem_free(form.action), form.action = NULL;
-	if (form.target) mem_free(form.target), form.target = NULL;
-
 	document->bgcolor = par_format.bgcolor;
 
-	kill_html_stack_item(html_stack.next);
+	done_html_parser();
 
 	assertm(list_empty(html_stack),
 		"html stack not empty after operation");

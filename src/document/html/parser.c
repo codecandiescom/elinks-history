@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.228 2003/10/27 03:13:51 pasky Exp $ */
+/* $Id: parser.c,v 1.229 2003/10/29 20:30:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,15 @@
 #include "viewer/text/view.h"
 
 /* TODO: This needs rewrite. Yes, no kidding. */
+
+struct form {
+	unsigned char *action;
+	unsigned char *target;
+	int method;
+	int num;
+};
+
+#define NULL_STRUCT_FORM { NULL, NULL, 0, 0 }
 
 INIT_LIST_HEAD(html_stack);
 
@@ -644,7 +653,7 @@ get_width(unsigned char *a, unsigned char *n, int trunc)
 	return r;
 }
 
-struct form form = NULL_STRUCT_FORM;
+static struct form form = NULL_STRUCT_FORM;
 
 unsigned char *last_form_tag;
 unsigned char *last_form_attr;
@@ -3651,3 +3660,12 @@ xsp:
 	add_to_string(head, "\r\n");
 	goto se;
 }
+
+void
+done_html_parser(void)
+{
+	kill_html_stack_item(html_stack.next);
+	if (form.action) mem_free(form.action), form.action = NULL;
+	if (form.target) mem_free(form.target), form.target = NULL;
+}
+

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.266 2004/04/11 17:26:00 jonas Exp $ */
+/* $Id: download.c,v 1.267 2004/04/13 18:44:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -956,9 +956,6 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 
 	if (init_string(&filename))
 		add_uri_filename_to_string(&filename, tq->uri);
-
-	/* @filename.source should be last in the getml()s ! (It terminates the
-	 * pointers list in case of allocation failure.) */
 
 	if (!handler) {
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {

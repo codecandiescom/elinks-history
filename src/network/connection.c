@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.182 2004/07/12 11:31:18 jonas Exp $ */
+/* $Id: connection.c,v 1.183 2004/07/14 00:24:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,13 +388,12 @@ void
 send_connection_info(struct connection *conn)
 {
 	enum connection_state state = conn->state;
-	struct download *download = conn->downloads.next;
+	struct download *download, *next;
 
-	while ((void *) download != &conn->downloads) {
+	foreachsafe (download, next, conn->downloads) {
 		download->cached = conn->cached;
-		download = download->next;
-		if (download->prev->end)
-			download->prev->end(download->prev, download->prev->data);
+		if (download->end)
+			download->end(download, download->data);
 		if (is_in_progress_state(state) && connection_disappeared(conn))
 			return;
 	}

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.256 2003/09/10 03:14:41 jonas Exp $ */
+/* $Id: renderer.c,v 1.257 2003/09/10 03:19:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -773,14 +773,16 @@ new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 
 	link->title = format.title ? stracpy(format.title) : NULL;
 
-	if (!last_form) {
+	if (!format.form) {
 		link->type = L_LINK;
 		link->where = last_link ? stracpy(last_link) : NULL;
 		link->target = last_target ? stracpy(last_target) : NULL;
 		link->name = memacpy(name, namelen);
 
 	} else {
-		switch (last_form->type) {
+		struct form_control *form = format.form;
+
+		switch (form->type) {
 		case FC_TEXT:
 		case FC_PASSWORD:
 		case FC_FILE:
@@ -799,9 +801,8 @@ new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 		default:
 			link->type = L_BUTTON;
 		}
-		link->form = last_form;
-		link->target = last_form->target ?
-			stracpy(last_form->target) : NULL;
+		link->form = form;
+		link->target = form->target ? stracpy(form->target) : NULL;
 	}
 
 	link->where_img = last_image ? stracpy(last_image) : NULL;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.5 2004/05/30 01:49:29 jonas Exp $ */
+/* $Id: link.c,v 1.6 2004/05/30 02:46:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "main.h"
 #include "bfu/listmenu.h"
 #include "bfu/menu.h"
+#include "bookmarks/bookmarks.h"
 #include "config/options.h"
 #include "config/kbdbind.h"
 #include "document/html/frames.h"
@@ -85,11 +86,19 @@ html_a(unsigned char *a)
 		} else {
 			mem_free_set(&format.target, stracpy(format.target_base));
 		}
-#ifdef CONFIG_GLOBHIST
-		if (get_global_history_item(format.link))
-			format.fg = format.vlink;
-		else
+
+		if (0)
+			/* Shut up compiler */ ;
+#ifdef CONFIG_BOOKMARKS
+		else if (get_bookmark(format.link)) {
+			format.fg = get_opt_color("document.colors.bookmark");
+		}
 #endif
+#ifdef CONFIG_GLOBHIST
+		else if (get_global_history_item(format.link))
+			format.fg = format.vlink;
+#endif
+		else
 			format.fg = format.clink;
 
 		mem_free_set(&format.title, get_attr_val(a, "title"));

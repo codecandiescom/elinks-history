@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.119 2004/05/25 04:48:54 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.120 2004/05/30 02:46:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "protocol/uri.h"
 #include "terminal/tab.h"
 #include "util/conv.h"
+#include "util/hash.h"
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"
@@ -33,6 +34,7 @@ INIT_LIST_HEAD(bookmarks);
 /* Set to 1, if bookmarks have changed. */
 int bookmarks_dirty = 0;
 
+static struct hash *bookmark_cache = NULL;
 
 
 
@@ -83,6 +85,10 @@ free_bookmarks(struct list_head *bookmarks_list,
 
 	free_list(*box_items);
 	free_list(*bookmarks_list);
+	if (bookmark_cache) {
+		free_hash(bookmark_cache);
+		bookmark_cache = NULL;
+	}
 }
 
 /* Does final cleanup and saving of bookmarks */
@@ -131,6 +137,8 @@ write_bookmarks(void)
 
 /* Bookmarks manipulation */
 
+#define check_bookmark_cache(url) (bookmark_cache && (url) && *(url))
+
 /* Deletes a bookmark. Returns 0 on failure (no such bm), 1 on success. */
 int
 delete_bookmark(struct bookmark *bm)
@@ -144,6 +152,13 @@ delete_bookmark(struct bookmark *bm)
 			delete_bookmark(bm2);
 			bm2 = nbm;
 		}
+	}
+
+	if (check_bookmark_cache(bm->url)) {
+		struct hash_item *item;
+
+		item = get_hash_item(bookmark_cache, bm->url, strlen(bm->url));
+		if (item) del_hash_item(bookmark_cache, item);
 	}
 
 	del_from_list(bm);
@@ -267,6 +282,14 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 			add_to_list(bookmark_browser.root.child, bm->box_item);
 	}
 
+	/* Hash creation if needed. */
+	if (!bookmark_cache)
+		bookmark_cache = init_hash(8, &strhash);
+
+	/* Create a new entry. */
+	if (check_bookmark_cache(bm->url))
+		add_hash_item(bookmark_cache, bm->url, strlen(bm->url), bm);
+
 	return bm;
 }
 
@@ -305,6 +328,18 @@ update_bookmark(struct bookmark *bm, unsigned char *title,
 	}
 
 	if (url2) {
+		if (check_bookmark_cache(bm->url)) {
+			struct hash_item *item;
+			int len = strlen(bm->url);
+
+			item = get_hash_item(bookmark_cache, bm->url, len);
+			if (item) del_hash_item(bookmark_cache, item);
+		}
+
+		if (check_bookmark_cache(url2)) {
+			add_hash_item(bookmark_cache, url2, strlen(url2), bm);
+		}
+
 		mem_free(bm->url);
 		bm->url = url2;
 	}
@@ -312,6 +347,22 @@ update_bookmark(struct bookmark *bm, unsigned char *title,
 	bookmarks_dirty = 1;
 
 	return 1;
+}
+
+/* Search bookmark cache for item matching url. */
+struct bookmark *
+get_bookmark(unsigned char *url)
+{
+	struct hash_item *item;
+
+	if (!check_bookmark_cache(url))
+		return NULL;
+
+	/* Search for cached entry. */
+
+	item = get_hash_item(bookmark_cache, url, strlen(url));
+
+	return item ? item->value : NULL;
 }
 
 void

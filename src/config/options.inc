@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.112 2004/05/30 01:49:29 jonas Exp $ */
+/* $Id: options.inc,v 1.113 2004/05/30 02:46:38 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -429,6 +429,10 @@ struct option_info config_options_info[] = {
 	INIT_OPT_COLOR("document.colors", N_("Image-link color"),
 		"image", 0, "darkolivegreen",
 		N_("Default image link color.")),
+
+	INIT_OPT_COLOR("document.colors", N_("Bookmarked-link color"),
+		"bookmark", 0, "hotpink",
+		N_("Default bookmarked link color.")),
 
 	INIT_OPT_COLOR("document.colors", N_("Directory color"),
 		"dirs", 0, "#ffff00",

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.65 2004/06/30 05:33:56 jonas Exp $ */
+/* $Id: parser.h,v 1.66 2004/06/30 16:56:41 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -165,5 +165,9 @@ int
 get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	      struct menu_item **menu, struct memory_list **ml, struct uri *uri,
 	      unsigned char *target_base, int to, int def, int hdef);
+
+/* For html/parser/forms.c,link.c,parse.c,stack.c */
+
+void ln_break(int n, void (*line_break)(void *), void *f);
 
 #endif

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.470 2004/06/30 05:33:56 jonas Exp $ */
+/* $Id: parser.c,v 1.471 2004/06/30 16:56:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,7 +156,7 @@ struct html_context html_context = {
 };
 
 
-inline void
+void
 ln_break(int n, void (*line_break)(void *), void *f)
 {
 	if (!n || html_top.invisible) return;

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.32 2004/06/30 05:33:56 jonas Exp $ */
+/* $Id: internal.h,v 1.33 2004/06/30 16:56:41 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -6,8 +6,6 @@
 #include "document/css/stylesheet.h"
 #include "document/html/parser.h"
 #include "util/lists.h"
-
-void ln_break(int n, void (*line_break)(void *), void *f);
 
 /* For parser/parse.c: */
 

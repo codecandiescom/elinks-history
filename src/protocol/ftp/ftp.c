@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.148 2004/07/03 23:20:43 zas Exp $ */
+/* $Id: ftp.c,v 1.149 2004/07/03 23:29:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1179,10 +1179,7 @@ out_of_mem:
 			ftp_info.name = "..";
 			ftp_info.namelen = 2;
 			ftp_info.flagtrycwd = 1;
-			ftp_info.sizetype = FTPPARSE_SIZE_UNKNOWN;
-			ftp_info.mtimetype = FTPPARSE_MTIME_UNKNOWN;
 			ftp_info.mtime = -1;
-			ftp_info.idtype = FTPPARSE_ID_UNKNOWN;
 
 			display_dir_entry(conn->cached, &conn->from, &conn->tries,
 					  colorize_dir, dircolor, &ftp_info);

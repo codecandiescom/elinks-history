@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.h,v 1.6 2003/11/26 22:14:31 pasky Exp $ */
+/* $Id: ftpparse.h,v 1.7 2004/07/03 23:29:49 zas Exp $ */
 
 #ifndef EL__PROTOCOL_FTP_FTPPARSE_H
 #define EL__PROTOCOL_FTP_FTPPARSE_H
@@ -36,11 +36,11 @@ struct ftpparse {
 	int permlen;
 };
 
-#define FTPPARSE_SIZE_UNKNOWN 0
+#define FTPPARSE_SIZE_UNKNOWN 0	/* Must be zero to permit memset() on struct ftpparse. */
 #define FTPPARSE_SIZE_BINARY 1	/* size is the number of octets in TYPE I */
 #define FTPPARSE_SIZE_ASCII 2	/* size is the number of octets in TYPE A */
 
-#define FTPPARSE_MTIME_UNKNOWN 0
+#define FTPPARSE_MTIME_UNKNOWN 0 /* Must be zero to permit memset() on struct ftpparse. */
 #define FTPPARSE_MTIME_LOCAL 1	/* time is correct */
 #define FTPPARSE_MTIME_REMOTEMINUTE 2	/* time zone and secs are unknown */
 #define FTPPARSE_MTIME_REMOTEDAY 3	/* time zone and time of day are unknown */
@@ -50,7 +50,7 @@ to use localtime() for LOCAL times, along with an indication that the
 time is correct in the local time zone, and gmtime() for REMOTE* times.
 */
 
-#define FTPPARSE_ID_UNKNOWN 0
+#define FTPPARSE_ID_UNKNOWN 0	/* Must be zero to permit memset() on struct ftpparse. */
 #define FTPPARSE_ID_FULL 1	/* unique identifier for files on this FTP server */
 
 extern int ftpparse(struct ftpparse *, unsigned char *, int);

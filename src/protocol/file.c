@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.111 2003/07/20 20:11:11 pasky Exp $ */
+/* $Id: file.c,v 1.112 2003/07/20 20:14:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,11 +332,13 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	data->fragmentlen = fragmentlen;
 }
 
+/* This function decides whether a file should be shown in directory listing or
+ * not. Returns according boolean value. */
 static inline int
 file_visible(unsigned char *d_name, int show_hidden_files)
 {
 	/* Always show "..", always hide ".", others like ".x" are shown if
-	 * show_hidden_files = 1 */
+	 * show_hidden_files == 1. */
 	if (entry->d_name[0] == '.') {
 		if (entry->d_name[1] == '\0')
 			return 0;

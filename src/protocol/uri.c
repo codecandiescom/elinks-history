@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.244 2004/06/12 00:50:11 jonas Exp $ */
+/* $Id: uri.c,v 1.245 2004/06/12 00:55:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -538,15 +538,19 @@ add_string_uri_to_string(struct string *string, unsigned char *uristring,
 }
 
 
-#define normalize_uri_reparse(uri, str)	normalize_uri(uri, str, 1)
-#define normalize_uri_noparse(uri)	normalize_uri(uri, struri(uri), 0)
+#define normalize_uri_reparse(str)	normalize_uri(NULL, str)
+#define normalize_uri_noparse(uri)	normalize_uri(uri, struri(uri))
 
 static unsigned char *
-normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
+normalize_uri(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *parse_string = uristring;
 	unsigned char *src, *dest, *path;
 	int need_slash = 0;
+	int parse = (uri == NULL);
+	struct uri uri_struct;
+
+	if (!uri) uri = &uri_struct;
 
 	/* We need to get the real (proxied) URI but lowercase relevant URI
 	 * parts along the way. */
@@ -706,7 +710,6 @@ join_urls(struct uri *base, unsigned char *rel)
 {
 	unsigned char *n, *path;
 	int add_slash = 0;
-	struct uri uri;
 	int tmp;
 
 	/* See RFC 1808 */
@@ -725,7 +728,7 @@ join_urls(struct uri *base, unsigned char *rel)
 
 		add_to_strn(&n, rel);
 
-		return normalize_uri_reparse(&uri, n);
+		return normalize_uri_reparse(n);
 	} else if (rel[0] == '?') {
 		int length = base->fragment
 			   ? base->fragment - struri(base) - 1
@@ -739,7 +742,7 @@ join_urls(struct uri *base, unsigned char *rel)
 
 		add_to_strn(&n, rel);
 
-		return normalize_uri_reparse(&uri, n);
+		return normalize_uri_reparse(n);
 	} else if (rel[0] == '/' && rel[1] == '/') {
 		if (!get_protocol_need_slashes(base->protocol))
 			return NULL;
@@ -818,7 +821,7 @@ join_urls(struct uri *base, unsigned char *rel)
 	if (add_slash) n[tmp] = '/';
 	strcpy(n + tmp + add_slash, rel);
 
-	return normalize_uri_reparse(&uri, n);
+	return normalize_uri_reparse(n);
 }
 
 
@@ -920,7 +923,7 @@ parse_uri:
 		/* If file:// URI is transformed we need to reparse. */
 		if (uri.protocol == PROTOCOL_FILE && cwd && *cwd
 		    && transform_file_url(&uri, cwd))
-			return normalize_uri_reparse(&uri, struri(&uri));
+			return normalize_uri_reparse(struri(&uri));
 
 		/* Translate the proxied URI too if proxy:// */
 		if (uri.protocol == PROTOCOL_PROXY) {
@@ -931,7 +934,7 @@ parse_uri:
 			struri(&uri)[pos] = 0;
 			insert_in_string(&struri(&uri), pos, data, strlen(data));
 			mem_free(data);
-			return normalize_uri_reparse(&uri, struri(&uri));
+			return normalize_uri_reparse(struri(&uri));
 		}
 
 		return normalize_uri_noparse(&uri);

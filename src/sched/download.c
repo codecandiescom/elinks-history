@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.12 2003/02/24 12:12:37 pasky Exp $ */
+/* $Id: download.c,v 1.13 2003/04/20 08:40:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -427,14 +427,14 @@ download_data(struct status *stat, struct download *down)
 	if (ce->last_modified)
 		down->remotetime = parse_http_date(ce->last_modified);
 
-	if (ce->redirect && down->redirect_cnt++ < MAX_REDIRECTS) {
+	while (ce->redirect && down->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u;
 
 		if (stat->state >= 0)
 			change_connection(&down->stat, NULL, PRI_CANCEL, 0);
 
-		u = stracpy(ce->redirect);
-		if (!u) return;
+		u = join_urls(down->url, ce->redirect);
+		if (!u) break;
 
 		if (!get_opt_int("protocol.http.bugs.broken_302_redirect")
 		    && !ce->redirect_get) {

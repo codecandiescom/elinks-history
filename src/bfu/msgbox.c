@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.27 2003/06/07 01:45:54 jonas Exp $ */
+/* $Id: msgbox.c,v 1.28 2003/06/07 01:55:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,8 +190,10 @@ msg_text(unsigned char *format, ...)
 
 	infolen = vsnprintf(NULL, 0, format, ap2);
 	info = mem_alloc(infolen + 1);
+	if (!info)
+		return NULL;
 
-	if (vsnprintf((char *)info, infolen, format, ap) != infolen) {
+	if (vsnprintf((char *)info, infolen + 1, format, ap) != infolen) {
 		mem_free(info);
 		info = NULL;
 	} else {

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.145 2004/09/28 12:17:35 jonas Exp $ */
+/* $Id: uri.h,v 1.146 2004/09/30 10:51:51 zas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -8,6 +8,7 @@
 struct string;
 
 #define POST_CHAR 1
+#define POST_CHAR_S "\001"
 
 /* The uri structure is used to store the start position and length of commonly
  * used uri fields. It is initialized by parse_uri(). It is possible that the

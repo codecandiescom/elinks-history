@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.1 2003/07/02 22:59:38 pasky Exp $ */
+/* $Id: search.c,v 1.2 2003/07/02 23:00:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,7 +224,7 @@ draw_searched(struct terminal *term, struct f_data_c *scr)
 
 
 static void
-_search_for(struct session *ses, unsigned char *str, int direction)
+search_for_do(struct session *ses, unsigned char *str, int direction)
 {
 	struct f_data_c *f;
 
@@ -252,14 +252,14 @@ void
 search_for_back(struct session *ses, unsigned char *str)
 {
 	assert(ses && str);
-	_search_for(ses, str, -1);
+	search_for_do(ses, str, -1);
 }
 
 void
 search_for(struct session *ses, unsigned char *str)
 {
 	assert(ses && str);
-	_search_for(ses, str, 1);
+	search_for_do(ses, str, 1);
 }
 
 static inline int

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.8 2002/09/11 18:37:33 zas Exp $ */
+/* $Id: string.h,v 1.9 2002/11/23 19:49:52 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -22,16 +22,19 @@ unsigned char *debug_stracpy(unsigned char *, int, unsigned char *);
 unsigned char *debug_init_str(unsigned char *, int);
 #define init_str() debug_init_str(__FILE__, __LINE__)
 
+unsigned char *debug_copy_string(unsigned char *, int, unsigned char **, unsigned char *);
+#define copy_string(d, s) debug_copy_string(__FILE__, __LINE__, d, s)
+
 #else /* LEAK_DEBUG */
 
 unsigned char *memacpy(unsigned char *, int);
 unsigned char *stracpy(unsigned char *);
 unsigned char *init_str();
+unsigned char *copy_string(unsigned char **, unsigned char *);
 
 #endif /* LEAK_DEBUG */
 
 
-unsigned char *copy_string(unsigned char **, unsigned char *);
 void add_to_strn(unsigned char **, unsigned char *);
 unsigned char *straconcat(unsigned char *, ...);
 

@@ -1,10 +1,11 @@
 /* String handling functions */
-/* $Id: string.c,v 1.9 2002/09/11 18:37:33 zas Exp $ */
+/* $Id: string.c,v 1.10 2002/11/23 19:49:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,6 +18,21 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+#ifdef DEBUG
+#define fatalfl(x) errfile = f, errline = l, int_error(x)
+#define fatal(x) internal(x)
+#define warnfl(x) fprintf(stderr, "%s:%d %s\n", f, l, x)
+#define warn(x) fprintf(stderr, "%s:%d %s\n", __FILE__, __LINE__, x)
+#else
+#define fatalfl(x) fprintf(stderr, "%s:%d %s\n", f, l, x) 
+#define fatal(x) fprintf(stderr, "%s:%d %s\n", __FILE__, __LINE__, x) 
+#define warnfl(x)
+#define warn(x)
+#endif
+
+#define _return_NULL { fatal(); return NULL; }
+#define _return { fatal(); return; }
+
 
 /* Autoallocation string constructors */
 
@@ -28,10 +44,13 @@
 inline unsigned char *
 debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 {
-	unsigned char *m = debug_mem_alloc(f, l, len + 1);
+	unsigned char *m;
 
+	if (!src) { fatalfl("memacpy src=NULL"); return NULL; }
+
+	m = debug_mem_alloc(f, l, len + 1);
 	if (!m) return NULL;
-
+		
 	memcpy(m, src, len);
 	m[len] = 0;
 
@@ -41,9 +60,25 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 inline unsigned char *
 debug_stracpy(unsigned char *f, int l, unsigned char *src)
 {
-	if (!src) return NULL;
+	if (!src) { warnfl("stracpy src=NULL"); return NULL; }
 
 	return debug_memacpy(f, l, src, (src != DUMMY) ? strlen(src) : 0);
+}
+
+unsigned char *
+debug_copy_string(unsigned char *f, int l, unsigned char **dst,
+		  unsigned char *src)
+{
+	if (!src) {
+		warnfl("copy_string src=NULL");
+		*dst = NULL;
+		return NULL;
+	} 
+
+	*dst = mem_alloc(strlen(src) + 1);
+	if (*dst) strcpy(*dst, src);
+
+	return *dst;
 }
 
 #else /* LEAK_DEBUG */
@@ -51,10 +86,13 @@ debug_stracpy(unsigned char *f, int l, unsigned char *src)
 inline unsigned char *
 memacpy(unsigned char *src, int len)
 {
-	unsigned char *m = mem_alloc(len + 1);
+	unsigned char *m;
 
+	if (!src) { fatal("memacpy src=NULL"); return NULL; }
+	
+	m = mem_alloc(len + 1);
 	if (!m) return NULL;
-
+		
 	memcpy(m, src, len);
 	m[len] = 0;
 
@@ -64,29 +102,37 @@ memacpy(unsigned char *src, int len)
 inline unsigned char *
 stracpy(unsigned char *src)
 {
-	if (!src) return NULL;
+	if (!src) { warn("stracpy src=NULL"); return NULL; }
 
 	return memacpy(src, (src != DUMMY) ? strlen(src) : 0);
 }
-#endif /* LEAK_DEBUG */
-
 
 unsigned char *
 copy_string(unsigned char **dst, unsigned char *src)
 {
-	if (!src) return NULL;
+	if (!src) {
+		warn("copy_string src=NULL");
+		*dst = NULL;
+		return NULL;
+	} 
 
 	*dst = mem_alloc(strlen(src) + 1);
 	if (*dst) strcpy(*dst, src);
-
+	
 	return *dst;
 }
+#endif /* LEAK_DEBUG */
 
 
 void
 add_to_strn(unsigned char **s, unsigned char *a)
 {
-	unsigned char *p = mem_realloc(*s, strlen(*s) + strlen(a) + 1);
+	unsigned char *p;
+	
+	if (!*s) { fatal("add_to_strn *s=NULL"); return; }
+	if (!a) { fatal("add_to_strn a=NULL"); return; }
+
+	p = mem_realloc(*s, strlen(*s) + strlen(a) + 1);
 
 	if (!p) return;
 	strcat(p, a);
@@ -114,11 +160,11 @@ straconcat(unsigned char *str, ...)
 	unsigned char *s;
 	unsigned int len;
 
-	if (!str) return NULL;
+	if (!str) { fatal("straconcat str=NULL"); return NULL; }
 
 	s = stracpy(str);
 	if (!s) return NULL;
-
+	
 	len = strlen(s) + 1;
 
 	va_start(ap, str);
@@ -148,8 +194,10 @@ inline unsigned char *
 debug_init_str(unsigned char *file, int line)
 {
 	unsigned char *p = debug_mem_alloc(file, line, ALLOC_GR);
-
-	if (p) *p = 0;
+	
+	if (!p) return NULL;
+	
+	*p = 0;
 	return p;
 }
 #else
@@ -158,7 +206,9 @@ init_str()
 {
 	unsigned char *p = mem_alloc(ALLOC_GR);
 
-	if (p) *p = 0;
+	if (!p) return NULL;
+	
+	*p = 0;
 	return p;
 }
 #endif 
@@ -166,7 +216,12 @@ init_str()
 void
 add_to_str(unsigned char **s, int *l, unsigned char *a)
 {
-	int ll = strlen(a);
+	int ll; 
+	
+	if (!*s) { fatal("add_to_str *s=NULL"); return; }
+	if (!a) { fatal("add_to_str a=NULL"); return; }
+	
+	ll = strlen(a);
 
 	if ((*l & ~(ALLOC_GR - 1)) != ((*l + ll) & ~(ALLOC_GR - 1))) {
 	   unsigned char *p = mem_realloc(*s, (*l + ll + ALLOC_GR)
@@ -183,6 +238,10 @@ add_to_str(unsigned char **s, int *l, unsigned char *a)
 void
 add_bytes_to_str(unsigned char **s, int *l, unsigned char *a, int ll)
 {
+	if (!*s) { fatal("add_bytes_to_str *s=NULL"); return; }
+	if (!a) { fatal("add_bytes_to_str a=NULL"); return; }
+
+	
 	if ((*l & ~(ALLOC_GR - 1)) != ((*l + ll) & ~(ALLOC_GR - 1))) {
 		unsigned char *p = mem_realloc(*s, (*l + ll + ALLOC_GR)
 			                      & ~(ALLOC_GR - 1));
@@ -199,11 +258,15 @@ add_bytes_to_str(unsigned char **s, int *l, unsigned char *a, int ll)
 void
 add_chr_to_str(unsigned char **s, int *l, unsigned char a)
 {
+	if (!*s) { fatal("add_chr_to_str *s=NULL"); return; }
+	if (!a) { warn("add_chr_to_str a=0"); }
+
 	if ((*l & (ALLOC_GR - 1)) == ALLOC_GR - 1) {
 		unsigned char *p = mem_realloc(*s, (*l + 1 + ALLOC_GR)
 					      & ~(ALLOC_GR - 1));
 
 		if (!p) return;
+		
 		*s = p;
 	}
 
@@ -265,6 +328,9 @@ strcasestr(unsigned char *haystack, unsigned char *needle)
 unsigned char *
 safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 {
+	if (!dst) { fatal("safe_strncpy dst=NULL"); return NULL; }
+	if (!src) { fatal("safe_strncpy src=NULL"); return NULL; }
+	
 	strncpy(dst, src, dst_size);
 	dst[dst_size - 1] = 0;
 

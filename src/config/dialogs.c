@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.58 2003/06/15 22:17:17 pasky Exp $ */
+/* $Id: dialogs.c,v 1.59 2003/06/27 19:46:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,8 +231,8 @@ layout_edit_dialog(struct dialog_data *dlg)
 	min_text_width(term, value, &min);
 	max_text_width(term, desc, &max);
 	min_text_width(term, desc, &min);
-	max_buttons_width(term, dlg->items + 1, 2, &max);
-	min_buttons_width(term, dlg->items + 1, 2, &min);
+	min_max_buttons_width(term, dlg->items + 1, 2, &min, &max);
+
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 
 	if (w > max) w = max;

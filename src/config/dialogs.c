@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.113 2003/11/09 15:05:18 pasky Exp $ */
+/* $Id: dialogs.c,v 1.114 2003/11/10 00:51:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,68 +175,12 @@ check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data
 }
 
 static void
-edit_dialog_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = dialog_max_width(term);
-	int rw = 0;
-	int y = -1;
-	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
-	struct option *option = dlg_data->dlg->udata;
-	unsigned char *name, *desc;
-
-	name = straconcat(_("Name", term), ": ", option->name, "\n",
-			  _("Type", term), ": ",
-			  _(option_types[option->type].name, term), NULL);
-	desc = straconcat(_("Description", term), ": \n",
-			  _(option->desc ? option->desc
-				  	 : (unsigned char *) "N/A", term),
-			  NULL);
-
-	if (name && desc)
-		add_to_ml(&dlg_data->ml, name, desc, NULL);
-	else {
-		if (name) mem_free(name);
-		if (desc) mem_free(desc);
-		return;
-	}
-
-	dlg_format_text_do(NULL, name, 0, &y,
-			w, &rw, dialog_text_color, AL_LEFT);
-	dlg_format_field(NULL, &dlg_data->widgets_data[0],
-			 0, &y, w, &rw, AL_NONE);
-	y++;
-	dlg_format_text_do(NULL, desc, 0, &y,
-			w, &rw, dialog_text_color, AL_LEFT);
-	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, 2, 0,
-			   &y, w, &rw, AL_CENTER);
-	w = rw;
-
-	draw_dialog(dlg_data, w, y);
-
-	y = dlg_data->y + DIALOG_TB;
-	dlg_format_text_do(term, name, dlg_data->x + DIALOG_LB,
-			&y, w, NULL, dialog_text_color, AL_LEFT);
-
-	dlg_format_field(term, &dlg_data->widgets_data[0],
-			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_NONE);
-
-	y++;
-	dlg_format_text_do(term, desc, dlg_data->x + DIALOG_LB,
-			&y, w, NULL, dialog_text_color, AL_LEFT);
-	y++;
-	dlg_format_buttons(term, &dlg_data->widgets_data[1], 2, dlg_data->x + DIALOG_LB,
-			   &y, w, NULL, AL_CENTER);
-}
-
-static void
 build_edit_dialog(struct terminal *term, struct session *ses,
 		  struct option *option)
 {
-#define EDIT_WIDGETS_COUNT 3
+#define EDIT_WIDGETS_COUNT 5
 	struct dialog *dlg;
-	unsigned char *value, *label;
+	unsigned char *value, *label, *name, *desc;
 	struct string tvalue;
 
 	if (!init_string(&tvalue)) return;
@@ -253,7 +197,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	}
 
 	dlg->title = _("Edit", term);
-	dlg->layouter = edit_dialog_layouter;
+	dlg->layouter = generic_dialog_layouter;
 	dlg->udata = option;
 	dlg->udata2 = ses;
 
@@ -261,21 +205,36 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	safe_strncpy(value, tvalue.source, MAX_STR_LEN);
 	done_string(&tvalue);
 
+	name = straconcat(_("Name", term), ": ", option->name, "\n",
+			  _("Type", term), ": ",
+			  _(option_types[option->type].name, term), NULL);
 	label = straconcat(_("Value", term), ": ", NULL);
-	if (!label) {
+	desc = straconcat(_("Description", term), ": \n",
+			  _(option->desc ? option->desc
+				  	 : (unsigned char *) "N/A", term),
+			  NULL);
+
+	if (!name || !desc || !label) {
+		if (name) mem_free(name);
+		if (desc) mem_free(desc);
+		if (label) mem_free(label);
 		mem_free(dlg);
 		return;
 	}
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
+	add_dlg_text(dlg, name, AL_LEFT, 1);
 	add_dlg_field(dlg, label, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
+	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
+
+	add_dlg_text(dlg, desc, AL_LEFT, 0);
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 
-	do_dialog(term, dlg, getml(dlg, label, NULL));
+	do_dialog(term, dlg, getml(dlg, label, name, desc, NULL));
 #undef EDIT_WIDGETS_COUNT
 }
 

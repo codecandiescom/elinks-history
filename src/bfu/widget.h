@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.36 2003/11/10 00:32:36 jonas Exp $ */
+/* $Id: widget.h,v 1.37 2003/11/10 00:51:29 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -54,6 +54,7 @@ struct widget {
 			int min;
 			int max;
 			struct input_history *history;
+			int float_label;
 		} field;
 		struct {
 			int height;

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.100 2003/11/09 15:09:27 jonas Exp $ */
+/* $Id: inpfield.c,v 1.101 2003/11/10 00:51:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,7 +95,7 @@ dlg_format_field(struct terminal *term,
 
 	/* XXX: We want the field and label on the same line if the terminal
 	 * width allows it. */
-	if (align == AL_NONE && label) {
+	if (widget_data->widget->info.field.float_label && label) {
 		int label_width = strlen(label);
 
 		/* FIXME: Is 5 chars for input field enough? --jonas */

@@ -960,17 +960,19 @@ int keep_unhistory = 0;
 
 int default_left_margin = HTML_LEFT_MARGIN;
 
-unsigned char http_proxy[MAX_STR_LEN] = "";
-unsigned char ftp_proxy[MAX_STR_LEN] = "";
-
 unsigned char fake_referer[MAX_STR_LEN] = "";
 int referer;   /* values: REFERER_NONE (default), REFERER_TRUE, REFERER_SAME_URL, REFERER_FAKE */
+
+unsigned char http_proxy[MAX_STR_LEN] = "";
+unsigned char ftp_proxy[MAX_STR_LEN] = "";
 
 unsigned char download_dir[MAX_STR_LEN] = "./";
 
 unsigned char default_anon_pass[MAX_STR_LEN] = "somebody@host.domain";
 
 unsigned char user_agent[MAX_STR_LEN] = "";
+
+int startup_goto_dialog = 1;
 
 /* These are workarounds for some CGI script bugs */
 struct http_bugs http_bugs = { 0, 1, 0, 0 };
@@ -1192,6 +1194,15 @@ struct option links_options[] = {
 		dump_cmd, NULL, NULL,
 	 	D_SOURCE, 0, NULL,
 		"Write the given HTML document in source form to stdout." },
+	 
+		/* TODO - this is implemented, but commented out for now as
+		 * it's buggy. */
+#if 0
+	{	"startup-goto-dialog", "startup_goto_dialog",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &startup_goto_dialog,
+		"Pop up goto dialog on startup when there's no homepage?" },
+#endif
 	 
 	{	"unrestartable-receive-timeout", "unrestartable_receive_timeout",
 		gen_cmd, num_rd, num_wr,

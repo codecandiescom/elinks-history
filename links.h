@@ -2104,12 +2104,14 @@ extern int allow_special_files;
 #define REFERER_FAKE 2
 #define REFERER_TRUE 3
 
+extern int referer;
+extern unsigned char fake_referer[];
 extern unsigned char http_proxy[];
 extern unsigned char ftp_proxy[];
-extern unsigned char fake_referer[];
-extern int referer;
 extern unsigned char no_proxy_for[];
 extern unsigned char download_dir[];
+
+extern int startup_goto_dialog;
 
 struct http_bugs {
 	int http10;

@@ -1408,7 +1408,21 @@ int read_session_info(int fd, struct session *ses, void *data, int len)
 			mem_free(u);
 			mem_free(uu);
 		}
-	} else if ((h = getenv("WWW_HOME")) && *h) goto_url(ses, h);
+	} else {
+		h = getenv("WWW_HOME");
+		if (!h || !*h)
+			h = WWW_HOME_URL;
+		if (!h || !*h) {
+#if 0
+			/* I can't do it here - it doesn't work everytime and
+			 * it leaks. --pasky */
+			if (startup_goto_dialog)
+				dialog_goto_url(ses, "");
+#endif
+		} else {
+			goto_url(ses, h);
+		}
+	}
 	return 0;
 }
 
@@ -1713,7 +1727,6 @@ void win_func(struct window *win, struct event *ev, int fw)
 				destroy_terminal(win->term);
 				return;
 			}
-			/*make_request(ses, 0);*/
 		case EV_RESIZE:
 			html_interpret(ses);
 			draw_formatted(ses);

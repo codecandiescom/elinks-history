@@ -8,6 +8,12 @@
 #define LEAK_DEBUG
 #define LEAK_DEBUG_LIST
 
+/* This option will take effect when WWW_HOME environment variable is NOT
+ * set - you'll go automatically to this URL. If the value is just "",
+ * you'll get either goto dialog or empty page, depending on the value of
+ * startup_goto_dialog. */
+#define WWW_HOME_URL			""
+
 #define LINKS_MANUAL_URL		"http://links.sourceforge.net/docs/manual-0.90-en/"
 
 #define LINKS_SOCK_NAME			"socket"

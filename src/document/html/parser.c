@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.381 2004/01/26 21:54:16 jonas Exp $ */
+/* $Id: parser.c,v 1.382 2004/01/27 00:49:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3641,6 +3641,8 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	last_form_tag = NULL;
 	last_form_attr = NULL;
 	last_input_tag = NULL;
+
+	mirror_css_stylesheet(&css_styles, &default_stylesheet);
 }
 
 void

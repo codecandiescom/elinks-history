@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.14 2004/01/27 00:23:46 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.15 2004/01/27 00:49:27 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -73,6 +73,11 @@ struct css_stylesheet {
 
 /* Dynamically allocates a stylesheet. */
 struct css_stylesheet *init_css_stylesheet(css_stylesheet_importer importer);
+
+/* Mirror given CSS stylesheet @css1 to an identical copy of itself (including
+ * all the selectors), @css2. */
+void mirror_css_stylesheet(struct css_stylesheet *css1,
+			   struct css_stylesheet *css2);
 
 /* Releases all the content of the stylesheet (but not the stylesheet itself). */
 void done_css_stylesheet(struct css_stylesheet *css);

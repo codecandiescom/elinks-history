@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.14 2004/01/27 00:24:59 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.15 2004/01/27 00:49:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,6 +169,54 @@ init_css_stylesheet(css_stylesheet_importer importer)
 	css->import = importer;
 	init_list(css->selectors);
 	return css;
+}
+
+void
+mirror_css_stylesheet(struct css_stylesheet *css1,struct css_stylesheet *css2)
+{
+	struct css_selector *selector;
+
+	foreach (selector, css1->selectors) {
+		clone_css_selector(css2, selector);
+	}
+}
+
+struct css_stylesheet *
+clone_css_stylesheet(struct css_stylesheet *orig)
+{
+	struct css_stylesheet *copy;
+	struct css_selector *selector;
+
+	copy = init_css_stylesheet(orig->import);
+	if (!copy)
+		return NULL;
+	mirror_css_stylesheet(orig, copy);
+	return copy;
+}
+
+void
+merge_css_stylesheets(struct css_stylesheet *css1,
+		      struct css_stylesheet *css2)
+{
+	struct css_selector *selector;
+
+	assert(css1 && css2);
+
+	/* This is 100% evil. And gonna be a huge bottleneck. Essentially
+	 * O(N^2) where we could be much smarter (ie. sort it once and then
+	 * always be O(N)). */
+
+	foreach (selector, css2->selectors) {
+		struct css_selector *origsel;
+
+		origsel = find_css_selector(css1, selector->name,
+					    strlen(selector->name));
+		if (!origsel) {
+			clone_css_selector(css1, selector);
+		} else {
+			merge_css_selectors(origsel, selector);
+		}
+	}
 }
 
 void

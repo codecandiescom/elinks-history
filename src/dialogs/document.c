@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.7 2002/06/16 23:13:15 pasky Exp $ */
+/* $Id: document.c,v 1.8 2002/06/17 07:42:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 #include "protocol/http/header.h"
 #include "protocol/url.h"
 #include "util/conv.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 /* Location info. message box. */

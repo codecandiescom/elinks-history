@@ -1,10 +1,12 @@
-/* $Id: options.h,v 1.29 2002/06/10 15:54:51 pasky Exp $ */
+/* $Id: options.h,v 1.30 2002/06/17 07:42:29 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
 
 #include "document/html/colors.h"
-#include "links.h" /* lists stuff */ /* MAX_STR_LEN, safe_strncpy() */
+#include "util/memory.h"
+#include "util/string.h"
+#include "links.h" /* lists stuff */
 
 #define option option_cygwin_workaround
 

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.1 2002/06/11 19:27:18 pasky Exp $ */
+/* $Id: encoding.c,v 1.2 2002/06/17 07:42:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "links.h"
 
 #include "util/encoding.h"
+#include "util/memory.h"
 
 
 /* TODO: When more decoders will join the game, we should probably move them

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.15 2002/06/16 23:13:17 pasky Exp $ */
+/* $Id: af_unix.c,v 1.16 2002/06/17 07:42:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
 #include "util/error.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 #ifdef DONT_USE_AF_UNIX

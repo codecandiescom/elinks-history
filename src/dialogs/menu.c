@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.29 2002/06/16 23:13:16 pasky Exp $ */
+/* $Id: menu.c,v 1.30 2002/06/17 07:42:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,7 @@
 #include "protocol/types.h"
 #include "protocol/url.h"
 #include "util/memlist.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 

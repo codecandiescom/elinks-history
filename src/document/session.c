@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.41 2002/06/16 23:13:16 pasky Exp $ */
+/* $Id: session.c,v 1.42 2002/06/17 07:42:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memlist.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 

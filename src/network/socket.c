@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.18 2002/06/09 15:38:02 pasky Exp $ */
+/* $Id: socket.c,v 1.19 2002/06/17 07:42:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,11 +33,12 @@
 
 #include "lowlevel/connect.h"
 #include "lowlevel/dns.h"
-#include "util/error.h"
-#include "ssl/connect.h"
-#include "lowlevel/select.h"
 #include "lowlevel/sched.h"
+#include "lowlevel/select.h"
 #include "protocol/url.h"
+#include "ssl/connect.h"
+#include "util/error.h"
+#include "util/memory.h"
 
 /*
 #define LOG_TRANSFER	"/tmp/log"

@@ -1,5 +1,5 @@
 /* Base64 encoder implementation */
-/* $Id: base64.c,v 1.2 2002/05/08 13:55:07 pasky Exp $ */
+/* $Id: base64.c,v 1.3 2002/06/17 07:42:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "links.h"
 
 #include "util/base64.h"
+#include "util/memory.h"
 
 unsigned char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.7 2002/06/08 11:25:05 zas Exp $ */
+/* $Id: hash.c,v 1.8 2002/06/17 07:42:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "links.h"
 
 #include "util/hash.h"
+#include "util/memory.h"
 
 
 /* We provide common infrastructure for hashing - each hash consists from one

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.31 2002/06/16 23:13:17 pasky Exp $ */
+/* $Id: sched.c,v 1.32 2002/06/17 07:42:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,9 @@
 #include "protocol/url.h"
 #include "util/base64.h"
 #include "util/error.h"
+#include "util/memory.h"
 #include "util/string.h"
+
 
 /* Types and structs */
 struct list_head queue = {&queue, &queue};

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.53 2002/06/16 23:13:16 pasky Exp $ */
+/* $Id: view.c,v 1.54 2002/06/17 07:42:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,6 +48,7 @@
 #include "protocol/url.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 

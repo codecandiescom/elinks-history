@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.2 2002/05/12 20:15:25 pasky Exp $ */ 
+/* $Id: dialogs.c,v 1.3 2002/06/17 07:42:29 pasky Exp $ */ 
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "intl/language.h"
 #include "lowlevel/terminal.h"
 #include "protocol/http/auth.h"
+#include "util/memory.h"
 
 
 void

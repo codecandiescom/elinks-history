@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.22 2002/06/16 23:13:17 pasky Exp $ */
+/* $Id: file.c,v 1.23 2002/06/17 07:42:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,7 @@
 #include "protocol/file.h"
 #include "util/encoding.h"
 #include "util/conv.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 #define FILE_DIR_COLOR   "yellow"

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.6 2002/06/01 18:46:41 pasky Exp $ */
+/* $Id: cmdline.c,v 1.7 2002/06/17 07:42:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "config/cmdline.h"
 #include "config/options.h"
 #include "config/opttypes.h"
+#include "util/memory.h"
 
 
 /* TODO: This ought to be rewritten - we want special tree for commandline

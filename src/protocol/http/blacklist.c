@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.2 2002/05/08 13:55:07 pasky Exp $ */
+/* $Id: blacklist.c,v 1.3 2002/06/17 07:42:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "links.h"
 
 #include "util/blacklist.h"
+#include "util/memory.h"
 
 
 struct blacklist_entry {

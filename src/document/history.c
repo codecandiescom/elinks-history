@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.7 2002/06/16 23:13:16 pasky Exp $ */
+/* $Id: history.c,v 1.8 2002/06/17 07:42:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "document/location.h"
 #include "document/view.h"
 #include "lowlevel/sched.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 /* The history itself is stored in struct session as field history,

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.21 2002/06/16 23:13:17 pasky Exp $ */
+/* $Id: types.c,v 1.22 2002/06/17 07:42:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "protocol/http/header.h"
 #include "protocol/types.h"
 #include "protocol/url.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 struct list_head mailto_prog = { &mailto_prog, &mailto_prog };

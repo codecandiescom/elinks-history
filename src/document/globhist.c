@@ -1,9 +1,11 @@
 /* Global history */
-/* $Id: globhist.c,v 1.15 2002/06/16 23:13:16 pasky Exp $ */
+/* $Id: globhist.c,v 1.16 2002/06/17 07:42:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include "links.h"
 
 #include <time.h>
 #include <stdio.h>
@@ -13,6 +15,7 @@
 #include "dialogs/globhist.h"
 #include "document/globhist.h"
 #include "lowlevel/home.h"
+#include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"
 

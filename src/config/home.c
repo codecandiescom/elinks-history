@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.7 2002/06/16 23:13:17 pasky Exp $ */
+/* $Id: home.c,v 1.8 2002/06/17 07:42:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include "lowlevel/home.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 

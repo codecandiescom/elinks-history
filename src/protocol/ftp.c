@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.20 2002/06/16 23:13:17 pasky Exp $ */
+/* $Id: ftp.c,v 1.21 2002/06/17 07:42:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 #include "protocol/url.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 /* Constants */

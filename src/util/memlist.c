@@ -1,5 +1,5 @@
 /* This routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.3 2002/05/08 13:55:07 pasky Exp $ */
+/* $Id: memlist.c,v 1.4 2002/06/17 07:42:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "links.h"
 
 #include "util/memlist.h"
+#include "util/memory.h"
 
 
 /*

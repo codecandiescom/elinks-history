@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.17 2002/06/16 23:38:24 pasky Exp $
+## $Id: Makefile.am,v 1.18 2002/06/17 07:42:32 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -19,6 +19,8 @@ libutil_a_SOURCES = \
  hash.h \
  memlist.c \
  memlist.h \
+ memory.c \
+ memory.h \
  secsave.c \
  secsave.h \
  string.c \

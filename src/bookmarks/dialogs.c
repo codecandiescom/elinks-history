@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.8 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: dialogs.c,v 1.9 2002/06/17 07:42:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "lowlevel/terminal.h"
 #include "intl/language.h"
 #include "util/error.h"
+#include "util/memory.h"
 
 
 /* Whether to save bookmarks after each modification of their list

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.227 2003/09/01 20:16:38 jonas Exp $ */
+/* $Id: renderer.c,v 1.228 2003/09/01 20:38:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -748,15 +748,82 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	}
 }
 
-void
-put_chars(struct part *part, unsigned char *chars, int charslen)
+static void
+put_chars_format_change(struct part *part, unsigned char *color,
+			enum screen_char_attr *attr)
 {
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
 	static enum screen_char_attr attr_cache;
 	static unsigned char color_cache;
-	enum screen_char_attr attr = 0;
 	struct color_pair colors;
+
+	if (!memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
+		*color = color_cache;
+		*attr = attr_cache;
+		return;
+	}
+
+	colors.background = format.bg;
+	colors.foreground = format.fg;
+
+	*attr = 0;
+	if (format.attr) {
+		if (format.attr & AT_UNDERLINE) {
+			*attr |= SCREEN_ATTR_UNDERLINE;
+		}
+
+		if (format.attr & AT_BOLD) {
+			*attr |= SCREEN_ATTR_BOLD;
+		}
+
+		if (format.attr & AT_ITALIC) {
+			*attr |= SCREEN_ATTR_ITALIC;
+		}
+
+		if (format.attr & AT_GRAPHICS) {
+			*attr |= SCREEN_ATTR_FRAME;
+		}
+	}
+
+	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
+	color_cache = *color = mix_attr_colors(&colors, *attr, 8, 16);
+	attr_cache = *attr;
+
+	/* FIXME:
+	 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */
+	if (d_opt->display_subs) {
+		if (format.attr & AT_SUBSCRIPT) {
+			if (!sub) {
+				sub = 1;
+				put_chars(part, "[", 1);
+			}
+		} else {
+			if (sub) {
+				put_chars(part, "]", 1);
+				sub = 0;
+			}
+		}
+	}
+
+	if (d_opt->display_sups) {
+		if (format.attr & AT_SUPERSCRIPT) {
+			if (!super) {
+				super = 1;
+				put_chars(part, "^", 1);
+			}
+		} else {
+			if (super) {
+				super = 0;
+			}
+		}
+	}
+}
+
+void
+put_chars(struct part *part, unsigned char *chars, int charslen)
+{
 	unsigned char color;
+	enum screen_char_attr attr = 0;
 	struct link *link;
 	struct point *pt;
 
@@ -782,14 +849,10 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (last_link || last_image || last_form || format.link
 	    || format.image || format.form)
 		goto process_link;
-
 no_link:
-	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning)))
-		goto format_change;
-	color = color_cache;
-	attr = attr_cache;
 
-end_format_change:
+	put_chars_format_change(part, &color, &attr);
+
 	if (part->cx == par_format.leftmargin && *chars == ' '
 	    && par_format.align != AL_NONE) {
 		chars++;
@@ -951,65 +1014,6 @@ set_link:
 		}
 	}
 	goto no_link;
-
-format_change:
-
-	colors.background = format.bg;
-	colors.foreground = format.fg;
-
-	attr = 0;
-	if (format.attr) {
-		if (format.attr & AT_UNDERLINE) {
-			attr |= SCREEN_ATTR_UNDERLINE;
-		}
-
-		if (format.attr & AT_BOLD) {
-			attr |= SCREEN_ATTR_BOLD;
-		}
-
-		if (format.attr & AT_ITALIC) {
-			attr |= SCREEN_ATTR_ITALIC;
-		}
-
-		if (format.attr & AT_GRAPHICS) {
-			attr |= SCREEN_ATTR_FRAME;
-		}
-	}
-
-	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	color_cache = color = mix_attr_colors(&colors, attr, 8, 16);
-	attr_cache = attr;
-
-	/* FIXME:
-	 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */
-	if (d_opt->display_subs) {
-		if (format.attr & AT_SUBSCRIPT) {
-			if (!sub) {
-				sub = 1;
-				put_chars(part, "[", 1);
-			}
-		} else {
-			if (sub) {
-				put_chars(part, "]", 1);
-				sub = 0;
-			}
-		}
-	}
-
-	if (d_opt->display_sups) {
-		if (format.attr & AT_SUPERSCRIPT) {
-			if (!super) {
-				super = 1;
-				put_chars(part, "^", 1);
-			}
-		} else {
-			if (super) {
-				super = 0;
-			}
-		}
-	}
-
-	goto end_format_change;
 }
 
 #undef overlap

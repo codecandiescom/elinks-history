@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.23 2003/10/04 20:24:54 kuser Exp $ */
+/* $Id: search.c,v 1.24 2003/10/04 20:33:02 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -456,6 +456,89 @@ srch_failed:
 }
 
 static void
+get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
+		   int l, struct search *s1, struct search *s2)
+{
+	unsigned char *doc;
+	unsigned char *doctmp;
+	int doclen;
+	struct point *points = NULL;
+	int xp, yp;
+	int xx, yy;
+	int xpv, ypv;
+	int len = 0;
+	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
+	register int i;
+	regex_t regex;
+	regmatch_t regmatch;
+
+	doclen = s2 - s1 + l;
+	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
+	if (!doc) goto ret;
+	
+	for (i = 0; i < doclen; i++)
+		doc[i] = s1[i].c;
+
+	doc[doclen] = 0;
+
+	/* TODO: show error message */
+	if (regcomp(&regex, *scr->search_word, REG_ICASE)) {
+		mem_free(doc);
+		goto ret;
+	}
+
+	xp = scr->xp;
+	yp = scr->yp;
+	xx = xp + scr->xw;
+	yy = yp + scr->yw;
+	xpv= xp - scr->vs->view_posx;
+	ypv= yp - scr->vs->view_pos;
+
+	doctmp = doc;
+	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, 0)) {
+		l = regmatch.rm_eo - regmatch.rm_so;
+		s1 += regmatch.rm_so;
+		doctmp += regmatch.rm_so;
+
+		for (i = 0; i < l; i++) {
+			register int j;
+			int y = s1[i].y + ypv;
+
+			if (y < yp || y >= yy)
+				continue;
+
+			for (j = 0; j < s1[i].n; j++) {
+				int sx = s1[i].x + j;
+				int x = sx + xpv;
+
+				if (x < xp || x >= xx)
+					continue;
+
+				if (!realloc_points(&points, len))
+					continue;
+
+				points[len].x = sx;
+				points[len++].y = s1[i].y;
+			}
+		}
+
+		if (matches_may_overlap) {
+			doctmp++;
+			s1++;
+		} else {
+			doctmp += int_max(l, 1);
+			s1 += int_max(l, 1);
+		}
+	}
+
+	regfree(&regex);
+	mem_free(doc);
+ret:
+	*pt = points;
+	*pl = len;
+}
+
+static void
 get_searched(struct document_view *scr, struct point **pt, int *pl)
 {
 	struct search *s1, *s2;
@@ -476,7 +559,10 @@ get_searched(struct document_view *scr, struct point **pt, int *pl)
 		return;
 	}
 
-	get_searched_plain(scr, pt, pl, l, s1, s2);
+	if (get_opt_bool("document.browse.search.regex"))
+		get_searched_regex(scr, pt, pl, l, s1, s2);
+	else
+		get_searched_plain(scr, pt, pl, l, s1, s2);
 }
 
 /* Highlighting of searched strings. */

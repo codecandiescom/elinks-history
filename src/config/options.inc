@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.100 2004/02/15 16:33:40 zas Exp $ */
+/* $Id: options.inc,v 1.101 2004/03/01 19:17:51 witekfl Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -395,7 +395,7 @@ struct option_info config_options_info[] = {
 		N_("Charset options.")),
 
 	INIT_OPT_CODEPAGE("document.codepage", N_("Default codepage"),
-		"assume", 0, "ISO-8859-1",
+		"assume", 0, "System",
 		N_("Default document codepage.")),
 
 	INIT_OPT_BOOL("document.codepage", N_("Ignore charset info from server"),
@@ -498,7 +498,7 @@ struct option_info config_options_info[] = {
 		N_("Dump output options.")),
 
 	INIT_OPT_CODEPAGE("document.dump", N_("Codepage"),
-		"codepage", 0, "us-ascii",
+		"codepage", 0, "System",
 		N_("Codepage used in dump output.")),
 
 	INIT_OPT_STRING("document.dump", N_("Header"),
@@ -896,7 +896,7 @@ struct option_info config_options_info[] = {
 		N_("If we should use underline or enhance the color instead.")),
 
 	INIT_OPT_CODEPAGE("terminal._template_", N_("Codepage"),
-		"charset", 0, "us-ascii",
+		"charset", 0, "System",
 		N_("Codepage of charset used for displaying content on terminal.")),
 
 	/* Keep options in alphabetical order. */

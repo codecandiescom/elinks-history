@@ -1,8 +1,12 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.77 2004/02/27 16:22:40 zas Exp $ */
+/* $Id: charsets.c,v 1.78 2004/03/01 19:17:51 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
+#endif
+
+#if HAVE_LANGINFO_CODESET
+#include <langinfo.h>
 #endif
 
 #include <ctype.h>
@@ -686,6 +690,14 @@ get_cp_index(unsigned char *n)
 {
 	register int i, a;
 
+	if (!strcasecmp(n, "System")) {
+#if HAVE_LANGINFO_CODESET
+		n = nl_langinfo(CODESET);
+#else
+		n = "us-ascii";
+#endif
+	}
+
 	for (i = 0; codepages[i].name; i++) {
 		for (a = 0; codepages[i].aliases[a]; a++) {
 			/* In the past, we looked for the longest substring
@@ -749,6 +761,13 @@ charsets_list_next(void)
 int
 get_cp_index(unsigned char *name)
 {
+	if (!strcasecmp(name, "System")) {
+#if HAVE_LANGINFO_CODESET
+		name = nl_langinfo(CODESET);
+#else
+		name = "us-ascii";
+#endif
+	}
 	/* We assume sizeof(void *) == sizeof(unsigned int), it may cause
 	 * issue on 64bits platforms... How can we do better ? --Zas */
 	return ((unsigned int)

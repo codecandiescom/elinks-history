@@ -4,6 +4,7 @@
 # translation of hu.po to
 # translation of hu.po to
 # translation of hu.po to
+# translation of hu.po to
 # translation of hu.po to Hungarian
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
@@ -14,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2003-10-12 22:33+0200\n"
-"PO-Revision-Date: 2003-10-09 11:49+0200\n"
+"PO-Revision-Date: 2003-10-14 21:57+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -423,8 +424,7 @@ msgstr ""
 #: src/config/dialogs.c:730
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -553,8 +553,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:393
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:394
 msgid "Go to the homepage"
@@ -1032,8 +1031,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.c:1007
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1013 src/util/version.c:86
@@ -1281,8 +1279,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.c:1138
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.c:1140
 msgid "Number links"
@@ -1324,8 +1321,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.c:1164
 msgid "Searching"
@@ -1462,8 +1458,7 @@ msgstr ""
 
 #: src/config/options.c:1250
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.c:1252
 msgid ""
@@ -2511,7 +2506,7 @@ msgstr ""
 
 #: src/config/options.c:1792
 msgid "No-proxy domains"
-msgstr ""
+msgstr "Proxy tiltása bizonyos domain-ekhez"
 
 #: src/config/options.c:1794
 msgid ""
@@ -2520,6 +2515,10 @@ msgid ""
 "domains as well. If it's blank, NO_PROXY environment variable is\n"
 "checked as well."
 msgstr ""
+"Azoknak a domain-eknek a listája vesszõvel elválasztva, amelyekhez\n"
+"a proxyt (HTTP/FTP) nem szabad használni. Opcionálisan egy port is\n"
+"megadható néhány domain esetén. Ha ez a lista üres, akkor a\n"
+"NO_PROXY környezeti változó kerül feldolgozásra."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1803
@@ -2533,10 +2532,12 @@ msgstr "Terminál beállítások."
 #: src/config/options.c:1810
 msgid "Options specific to this terminal type (according to $TERM value)."
 msgstr ""
+"Beállítások ehhez a termináltípushoz (a $TERM környezeti\n"
+"változó alapján)"
 
 #: src/config/options.c:1812
 msgid "Border type"
-msgstr ""
+msgstr "Keret típusa"
 
 #: src/config/options.c:1814
 msgid ""
@@ -2547,10 +2548,16 @@ msgid ""
 "2 is Linux, you get double frames and other goodies\n"
 "3 is KOI-8"
 msgstr ""
+"Terminál típus; a keretrajzolásnál és dialógusablak kereteknél\n"
+"számít:\n"
+"0 - egyszerû terminál, ASCII keretek\n"
+"1 - VT100, egyszerû de hordozható\n"
+"2 - Linux, dupla keretek és egyéb finomságok\n"
+"3 - KOI-8"
 
 #: src/config/options.c:1821
 msgid "Switch fonts for line drawing"
-msgstr ""
+msgstr "Keretek rajzolása külön betûtípussal"
 
 #: src/config/options.c:1823
 msgid ""
@@ -2558,16 +2565,22 @@ msgid ""
 "and lines working at the same time. Makes sense only with linux\n"
 "terminal."
 msgstr ""
+"Keretek rajzolása idejére betûtípus váltása, a helyi karakterek,\n"
+"és a keretek is mûködnek egyidõben. Csak Linux terminál esetén\n"
+"van értelme a beállításnak."
 
 #: src/config/options.c:1827
 msgid "I/O in UTF8"
-msgstr ""
+msgstr "I/O mûveletek UTF-8 szerint"
 
 #: src/config/options.c:1829
 msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
+"Az I/O mûveletek UTF8 szerinti engedélyezése, az Unicode\n"
+"terminálok számára. Megjegyzés: jelenleg csak az UTF8 egy része\n"
+"mûködik."
 
 #: src/config/options.c:1832 src/dialogs/options.c:134
 msgid "Restrict frames in cp850/852"
@@ -2578,6 +2591,8 @@ msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
 msgstr ""
+"Korlátozza a keretrajzoló karakterek használatát. Csak Linux\n"
+"terminálok és 850/852 kódlap esetén van értelme állítani."
 
 #: src/config/options.c:1837
 msgid "Block cursor"
@@ -2589,6 +2604,9 @@ msgid ""
 "This is particularly useful when we have a block cursor,\n"
 "so that inversed text is displayed correctly."
 msgstr ""
+"Rajzoló mûveletek után a kurzor áthelyezése a jobb also sarokba.\n"
+"Hasznos ha tömb kurzor van beállítva, így az inverz szöveg korrektül\n"
+"jelenik meg."
 
 #: src/config/options.c:1843
 msgid "Color mode"
@@ -2602,6 +2620,11 @@ msgid ""
 "1 is 16 color mode, uses the common ANSI colors\n"
 "2 is 256 color mode, requires that xterm256 is used\n"
 msgstr ""
+"A színes üzemmód beállítás azt határozza meg, hogy a különbözõ\n"
+"színes terminálokon hogy jelenjenek meg a színek:\n"
+"0 - monokróm üzemmód, csak 2 szín jelenik meg\n"
+"1 - 16 színû üzemmód, szabványos ANSI színekkel\n"
+"2 - 256 színû üzemmód, xterm256 szükséges hozzá\n"
 
 #: src/config/options.c:1851
 msgid "Enable transparency"
@@ -2615,18 +2638,22 @@ msgid ""
 "it will be visible in ELinks as well. Note that this option makes\n"
 "sense only when colors are enabled."
 msgstr ""
+"Ez a beállítás grafikus környezetben hasznos, olyan terminál emulátor\n"
+"alatt, amelyik háttérképet vagy áttetszõséget használ. Ha ezt bekapcsolod,\n"
+"az ELinksben is látható lesz ez a háttérkép. Akkor van értelme, ha a\n"
+"színek engedélyezve vannak."
 
 #: src/config/options.c:1859
 msgid "Use underline"
-msgstr ""
+msgstr "Aláhúzás használata"
 
 #: src/config/options.c:1861
 msgid "If we should use underline or enhance the color instead."
-msgstr ""
+msgstr "Jelenítsünk meg aláhúzást, vagy használjunk színt helyette?"
 
 #: src/config/options.c:1865
 msgid "Codepage of charset used for displaying content on terminal."
-msgstr ""
+msgstr "A karakterkészlet kódlapja amit a megjelenítéshez használjunk."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1871
@@ -2669,37 +2696,37 @@ msgstr "Menü címsorának színei."
 
 #: src/config/options.c:1898
 msgid "Unselected main menu bar item"
-msgstr " "
+msgstr " Fõmenü sorában lévõ elem"
 
 #: src/config/options.c:1900
 msgid "Unselected main menu bar item colors."
-msgstr ""
+msgstr "Fõmenü sorában lévõ elem színei."
 
 #: src/config/options.c:1910
 msgid "Selected main menu bar item"
-msgstr ""
+msgstr "Fõmenü sorában lévõ kiválasztott elem"
 
 #: src/config/options.c:1912
 msgid "Selected main menu bar item colors."
-msgstr ""
+msgstr "Fõmenü sorában lévõ kiválasztott elem színei."
 
 #: src/config/options.c:1922 src/config/options.c:1991
 #: src/config/options.c:2317 src/config/options.c:2386
 msgid "Hotkey"
-msgstr ""
+msgstr "Gyorsbillentyû"
 
 #: src/config/options.c:1924 src/config/options.c:2319
 msgid "Main menu hotkey colors."
-msgstr ""
+msgstr "Fõmenü gyorsbillentyûinek színei."
 
 #: src/config/options.c:1926 src/config/options.c:1995
 #: src/config/options.c:2321 src/config/options.c:2390
 msgid "Unselected hotkey"
-msgstr ""
+msgstr "Gyorsbillentyû"
 
 #: src/config/options.c:1928 src/config/options.c:2323
 msgid "Main menu unselected hotkey colors."
-msgstr ""
+msgstr "Fõmenü gyorsbillentyûinek színei."
 
 #: src/config/options.c:1930 src/config/options.c:1999
 #: src/config/options.c:2325 src/config/options.c:2394
@@ -2708,39 +2735,39 @@ msgstr "Kiválasztott gyorsbillentyû"
 
 #: src/config/options.c:1932 src/config/options.c:2327
 msgid "Main menu selected hotkey colors."
-msgstr ""
+msgstr "Fõmenü kiválasztott gyorsbillentyûinek színei."
 
 #: src/config/options.c:1936 src/config/options.c:2331
 msgid "Main menu unselected hotkey default text color."
-msgstr ""
+msgstr "Fõmenü gyorsbillentyûinek szövegszíne."
 
 #: src/config/options.c:1940 src/config/options.c:2335
 msgid "Main menu unselected hotkey default background color."
-msgstr ""
+msgstr "Fõmenü gyorsbillentyûinek háttérszíne."
 
 #: src/config/options.c:1944
 msgid "Main menu selected hotkey text color."
-msgstr ""
+msgstr "Fõmenü kiválasztott gyorsbillentyûinek szövegszíne."
 
 #: src/config/options.c:1948 src/config/options.c:2343
 msgid "Main menu selected hotkey default background color."
-msgstr ""
+msgstr "Fõmenü kiválasztott gyorsbillentyûinek háttérszíne."
 
 #: src/config/options.c:1951 src/config/options.c:2346
 msgid "Menu bar"
-msgstr ""
+msgstr "Menüsor"
 
 #: src/config/options.c:1953 src/config/options.c:2348
 msgid "Menu bar colors."
-msgstr ""
+msgstr "A menüsor színei."
 
 #: src/config/options.c:1955 src/config/options.c:2350
 msgid "Unselected menu item"
-msgstr ""
+msgstr "Menüpont"
 
 #: src/config/options.c:1957 src/config/options.c:2352
 msgid "Unselected menu item colors."
-msgstr ""
+msgstr "A menüpontok színei."
 
 #: src/config/options.c:1967 src/config/options.c:2362
 msgid "Selected menu item"
@@ -2748,27 +2775,27 @@ msgstr "Kiválasztott menüpont"
 
 #: src/config/options.c:1969 src/config/options.c:2364
 msgid "Selected menu item colors."
-msgstr ""
+msgstr "Kiválasztott menüpontok színei."
 
 #: src/config/options.c:1979 src/config/options.c:2374
 msgid "Marked menu item"
-msgstr "Kijelölt menüpont"
+msgstr "Kiválasztott menüpont"
 
 #: src/config/options.c:1981 src/config/options.c:2376
 msgid "Marked menu item colors."
-msgstr ""
+msgstr "Kiválasztott menüpontok színei."
 
 #: src/config/options.c:1993 src/config/options.c:2388
 msgid "Menu item hotkey colors."
-msgstr ""
+msgstr "Menüpont gyorsbillentyûinek színe."
 
 #: src/config/options.c:1997
 msgid "Menu item unselected hotkey colors."
-msgstr ""
+msgstr "Menüpont gyorsbillentyûjének színe."
 
 #: src/config/options.c:2001
 msgid "Menu item selected hotkey colors."
-msgstr ""
+msgstr "Menüpont kiválasztott gyorsbillentyûjének színe."
 
 #: src/config/options.c:2005
 msgid "Menu item unselected hotkey default text color."
@@ -2943,11 +2970,11 @@ msgstr ""
 
 #: src/config/options.c:2217 src/config/options.c:2613
 msgid "Status bar text"
-msgstr "Állapotjelzõ sor szöveg"
+msgstr "Állapotsor szöveg"
 
 #: src/config/options.c:2219 src/config/options.c:2615
 msgid "Status bar text colors."
-msgstr ""
+msgstr "Állapotsor szöveg színei."
 
 #: src/config/options.c:2230 src/config/options.c:2626
 msgid "Tabs bar"
@@ -2991,11 +3018,11 @@ msgstr ""
 
 #: src/config/options.c:2284
 msgid "Non-color terminals"
-msgstr ""
+msgstr "Nem színes terminálok"
 
 #: src/config/options.c:2286
 msgid "Color settings for non-color terminal."
-msgstr ""
+msgstr "Színbeállítások nem színes terminálok esetén."
 
 #: src/config/options.c:2293
 msgid "Unselected menu bar item"
@@ -3067,17 +3094,19 @@ msgstr ""
 
 #: src/config/options.c:2678
 msgid "Minimal height of listbox widget"
-msgstr ""
+msgstr "A listák minimális magassága"
 
 #: src/config/options.c:2680
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
+"A listák minimális magassága (mint pl. a könyvjelzõk ablakban, vagy\n"
+"a látogatott lapok listájánál)."
 
 #: src/config/options.c:2683
 msgid "Drop shadows"
-msgstr ""
+msgstr "Árnyékok"
 
 #: src/config/options.c:2685
 msgid ""
@@ -3085,6 +3114,9 @@ msgid ""
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
 "also want to eliminate the wide borders by adjusting setup.h."
 msgstr ""
+"A dialógusablakoknak legyenek árnyékai (az árnyékok egyszínûek,\n"
+"a színüket a ui.colors.*.dialog.shadow-nál tudod állítani). Ha kedved van,\n"
+"állítsd a keretek szélességét a setup.h-ban."
 
 #: src/config/options.c:2690
 msgid "Timer options"
@@ -3172,34 +3204,38 @@ msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the ui.dialog.shadows option instead."
 msgstr ""
+"Ez a beállítás elavult, nemsokára eltávolításra kerül.\n"
+"Használt a ui.dialog.shadows opciót helyette."
 
 #: src/config/options.c:2751
 msgid "Display status bar"
-msgstr ""
+msgstr "Állapotsor megjelenítése"
 
 #: src/config/options.c:2753
 msgid "Show status bar on the screen."
-msgstr ""
+msgstr "Állapotsor megjelenítése a képernyõn."
 
 #: src/config/options.c:2755
 msgid "Display title bar"
-msgstr ""
+msgstr "Címsor megjelenítése"
 
 #: src/config/options.c:2757
 msgid "Show title bar on the screen."
-msgstr ""
+msgstr "Címsor megjelenítése a képernyõn."
 
 #: src/config/options.c:2759
 msgid "Display goto dialog on startup"
-msgstr ""
+msgstr "AIndítás után dobja fel az URL beviteli ablakot"
 
 #: src/config/options.c:2761
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr ""
+"Indítás után dobja fel az URL beviteli ablakot, ha nincs honlap\n"
+"megadva."
 
 #: src/config/options.c:2764
 msgid "Set window title"
-msgstr ""
+msgstr "Ablakfejléc címének beállítása"
 
 #: src/config/options.c:2766
 msgid ""
@@ -3207,6 +3243,9 @@ msgid ""
 "in an xterm-like terminal. This way the document's title is \n"
 "shown on the window titlebar."
 msgstr ""
+"Ablakfejléc címének beállítása, ha grafikus környezetben fut a program,\n"
+"valamilyen xterm jellegû terminálban. Ebben az esetben a címsorban\n"
+"a dokumentum címe fog látszódni."
 
 #: src/config/options.c:2776
 msgid ""
@@ -3216,7 +3255,7 @@ msgstr ""
 
 #: src/config/options.c:2779
 msgid "Use secure file saving"
-msgstr ""
+msgstr "Biztonságos fájlmentés használata"
 
 #: src/config/options.c:2781
 msgid ""
@@ -3226,6 +3265,12 @@ msgid ""
 "it, if you want some config file with some exotic permissions.\n"
 "Secure file saving is automagically disabled if file is symlink."
 msgstr ""
+"Mentéskor elõször egy 'file.tmp' írása, majd siker esetén\n"
+"átnevezés 'file' névre. Megjegyzés: ez a beállítás csak konfigurációs\n"
+"állományok esetén mûködik, nem vonatkozik a letöltött állományokra.\n"
+"Amennyiben különleges engedélyekkel rendelkezõ konfigurációs\n"
+"állományokat szeretnél használni, tiltsd le. A biztonságos mentés\n"
+"autómatikusan kikapcsol, ha a cél állomány szimbólikus link."
 
 #. Keep options in alphabetical order.
 #. Commandline options
@@ -3243,11 +3288,11 @@ msgstr ""
 
 #: src/config/options.c:2800
 msgid "Autosubmit first form"
-msgstr ""
+msgstr "Az elsõ ûrlap autómatikus küldése"
 
 #: src/config/options.c:2802
 msgid "Go and submit the first form you'll stumble upon."
-msgstr ""
+msgstr "Az elsõnek megtalált ûrlap autómatikus küldése."
 
 #: src/config/options.c:2804
 msgid "Clone session with given ID"
@@ -3281,13 +3326,15 @@ msgstr ""
 
 #: src/config/options.c:2820
 msgid "Write formatted version of given URL to stdout"
-msgstr ""
+msgstr "A megadott URL formázott változatának kiírása stdout-ra"
 
 #: src/config/options.c:2822
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
 msgstr ""
+"A megadott HTML dokumentum sima szöveges változatának\n"
+"kiírása stdout-ra."
 
 #: src/config/options.c:2825
 msgid "Codepage to use with -dump"
@@ -3324,7 +3371,7 @@ msgstr ""
 
 #: src/config/options.c:2854
 msgid "Print usage help and exit"
-msgstr ""
+msgstr "Felhasználói segédlet kiirása, és kilépés"
 
 #: src/config/options.c:2856
 msgid "Print usage help and exit."
@@ -3356,7 +3403,7 @@ msgstr ""
 
 #: src/config/options.c:2870
 msgid "Run as separate instance"
-msgstr ""
+msgstr "Futás különálló módban"
 
 #: src/config/options.c:2872
 msgid ""
@@ -3365,14 +3412,17 @@ msgid ""
 "(bookmarks, history and so on) are written to the disk when\n"
 "this option is used. See also -touch-files."
 msgstr ""
+"Az ELinks-et külön futtatja, ahelyett hogy a futó böngészõk\n"
+"összekapcsolódnának. Ebben a módban nem íródik a lemezre a\n"
+"könyvjelzõ, látogatott lapok listája, stb."
 
 #: src/config/options.c:2877
 msgid "Don't use files in ~/.elinks"
-msgstr ""
+msgstr "Ne használja a fáljokat a ~/.elinks könyvtárban"
 
 #: src/config/options.c:2879
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
-msgstr ""
+msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/options.c:2881
 msgid "Connect to session ring with given ID"
@@ -3398,15 +3448,15 @@ msgstr ""
 
 #: src/config/options.c:2898
 msgid "Write the source of given URL to stdout"
-msgstr ""
+msgstr "A megadott URL forrásának stdout-ra írása"
 
 #: src/config/options.c:2900
 msgid "Write the given HTML document in source form to stdout."
-msgstr ""
+msgstr "A megadott HTML dokumentum stdout-ra írása forrás formában."
 
 #: src/config/options.c:2902
 msgid "Read document from stdin"
-msgstr ""
+msgstr "Dokumentum olvasása stdin-rõl"
 
 #: src/config/options.c:2904
 msgid ""
@@ -3675,7 +3725,7 @@ msgstr "Nincs bejegyzés."
 #: src/dialogs/info.c:175
 #, c-format
 msgid "%ld more entries."
-msgstr ""
+msgstr "%ld-vel több bejegyzés."
 
 #: src/dialogs/info.c:181
 msgid "Cache info"
@@ -3701,8 +3751,7 @@ msgstr "Kilépés"
 
 #: src/dialogs/menu.c:143
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr ""
-"Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
+msgstr "Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
 
 #: src/dialogs/menu.c:145
 msgid "Do you really want to exit ELinks?"
@@ -3991,7 +4040,7 @@ msgstr "KOI8-R keretek"
 
 #: src/dialogs/options.c:128
 msgid "No colors (mono)"
-msgstr ""
+msgstr "Nincsenek színek (mono)"
 
 #: src/dialogs/options.c:129
 msgid "16 colors"
@@ -4110,8 +4159,7 @@ msgstr ""
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 
 #: src/lowlevel/home.c:126
@@ -4829,11 +4877,11 @@ msgstr "Nincs korábbi keresés"
 
 #: src/viewer/text/search.c:856
 msgid "Search hit bottom, continuing at top."
-msgstr ""
+msgstr "A keresés elérte a lap alját, folytatódik a lap tetejétõl."
 
 #: src/viewer/text/search.c:862
 msgid "Search hit top, continuing at bottom."
-msgstr ""
+msgstr "A keresés elérte a lap tetejét, folytatódik a lap aljától."
 
 #: src/viewer/text/search.c:884
 #, c-format
@@ -4974,3 +5022,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

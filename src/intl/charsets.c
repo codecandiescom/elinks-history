@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.94 2004/08/12 08:40:30 miciah Exp $ */
+/* $Id: charsets.c,v 1.95 2004/08/12 11:28:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -368,13 +368,13 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 {
 	while (l2) {
 		if (*s1 > *s2) return 1;
-		if (!*s1 || *s1 < *s2) return -1;
+		if (*s1 < *s2) return -1;
 		s1++;
 	       	s2++;
 		l2--;
 	}
 
-	return !!*s1;
+	return *s2 ? -1 : 0;
 }
 
 /* Entity cache debugging purpose. */
@@ -398,6 +398,18 @@ hits_cmp(struct entity_cache *a, struct entity_cache *b)
 	if (a->hits == b->hits) return 0;
 	if (a->hits > b->hits) return -1;
 	else return 1;
+}
+
+static int
+compare_entities(const void *key_, const void *element_)
+{
+	struct string *key = (struct string *) key_;
+	struct entity *element = (struct entity *) element_;
+	int length = key->length;
+	unsigned char *first = key->source;
+	unsigned char *second = element->s;
+
+	return xxstrcmp(first, second, length);
 }
 
 static unsigned char *
@@ -510,26 +522,13 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 		fprintf(stderr, "%lu %016x %s\n", (unsigned long) n , n, result);
 #endif
 	} else { /* Text entity. */
-		long start = 0;
-		long end = N_ENTITIES - 1; /* can be negative. */
+		struct string key = INIT_STRING((unsigned char *) str, strlen);
+		struct entity *element = bsearch((void *) &key, entities,
+						 N_ENTITIES,
+						 sizeof(struct entity),
+						 compare_entities);
 
-		/* Dichotomic search is used there. */
-		while (start <= end) {
-			long middle = (start + end) >> 1;
-			int cmp = xxstrcmp(entities[middle].s, (unsigned char *) str, (int) strlen);
-
-			if (!cmp) {
-				/* Found. */
-				result = u2cp(entities[middle].c, encoding);
-				break;
-			}
-
-			if (cmp > 0) {
-				end = middle - 1;
-			} else {
-				start = middle + 1;
-			}
-		}
+		if (element) result = u2cp(element->c, encoding);
 	}
 
 end:

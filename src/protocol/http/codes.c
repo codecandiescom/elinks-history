@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.32 2004/07/25 10:11:49 zas Exp $ */
+/* $Id: codes.c,v 1.33 2004/08/12 11:28:14 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -76,23 +76,24 @@ static struct http_code http_code[] = {
 
 #define count(T) (sizeof(T)/sizeof(*(T)))
 
+static int
+compare_http_codes(const void *key, const void *element)
+{
+	int first = (int) key;
+	int second = ((struct http_code *) element)->num;
+
+	return first - second;
+}
+
 static unsigned char *
 http_code_to_string(int code)
 {
-	int start = 0;
-	int end = count(http_code) - 1; /* can be negative. */
+	struct http_code *element = bsearch((void *) code, http_code,
+					    count(http_code),
+					    sizeof(struct http_code),
+					    compare_http_codes);
 
-	/* Dichotomic search is used there. */
-	while (start <= end) {
-		int middle = (start + end) >> 1;
-
-		if (http_code[middle].num == code)
-			return http_code[middle].str;
-		else if (http_code[middle].num > code)
-			end = middle - 1;
-		else
-			start = middle + 1;
-	}
+	if (element) return element->str;
 
 	return NULL;
 }

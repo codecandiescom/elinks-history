@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.21 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: ftp.c,v 1.22 2002/07/03 16:32:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -648,7 +648,7 @@ quak:
 				/* FIXME: ..when downloads resuming implemented.. */
 				conn->est_length = file_len;
 			}
-nol:
+nol: ;
 		}
 	}
 

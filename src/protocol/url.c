@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.25 2002/06/23 13:17:50 pasky Exp $ */
+/* $Id: url.c,v 1.26 2002/07/03 16:32:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -579,7 +579,7 @@ repeat:
 			goto repeat;
 		}
 
-proceed:
+proceed: ;
 	} while ((*dest++ = *src++));
 }
 

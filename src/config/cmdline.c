@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.8 2002/07/02 00:53:21 pasky Exp $ */
+/* $Id: cmdline.c,v 1.9 2002/07/03 16:32:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ unknown_option:		fprintf(stderr, "Unknown option %s\n", argv[-1]);
 			return NULL;
 		}
 
-found:
+found: ;
 	}
 
 	return location ? location : (unsigned char *) "";

@@ -266,6 +266,9 @@ Petr Kulhavy <brain@artax.karlin.mff.cuni.cz>
 	HTTP referer support
 	One of Links authors; a lot of misc. features & code
 
+Pixel <pixel@mandrakesoft.com>
+	Compilation fixes
+
 Radovan Stas <radoone@skmi.science.upjs.sk>
 	Slovak translation
 
@@ -328,4 +331,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.64 2002/06/30 21:11:44 pasky Exp $
+$Id: AUTHORS,v 1.65 2002/07/03 16:32:25 pasky Exp $

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.10 2004/01/22 18:43:22 jonas Exp $ */
+/* $Id: parser.h,v 1.11 2004/01/23 23:59:35 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
@@ -16,6 +16,28 @@ struct css_scanner;
  * error. */
 void css_parse_properties(struct list_head *props, struct css_scanner *scanner);
 
+
+/* TODO: We need a memory efficient and fast way to define how properties
+ * cascade. What we are interested in is making it fast and easy to find
+ * all properties we need.
+ *
+ *	struct css_cascade {
+ *		struct css_cascade *parent;
+ *		struct list_head properties;
+ *
+ *			- Can later be turned into a table to not waste memory:
+ *			  struct css_property properties[1];
+ *	};
+ *
+ * And the selector should then only map a document element into this
+ * data structure.
+ *
+ * All the CSS applier has to do is require the css_cascade of the current
+ * element and it should nicely inherit any style from parent cascades.
+ * Question is in what direction to apply. It should be possible for the user
+ * to overwrite any document provided stylesheet using "!important" so we need
+ * to keep track in some table what properties was already applied so we only
+ * overwrite when we have to. */
 
 /* For now we only handle really ``flat'' stylesheets. No complicated
  * selectors only good clean element ones. */

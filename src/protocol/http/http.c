@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.119 2003/05/18 16:03:28 pasky Exp $ */
+/* $Id: http.c,v 1.120 2003/05/18 16:05:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,57 +265,57 @@ check_http_server_bugs(unsigned char *url,
 }
 
 static void
-http_end_request(struct connection *c, int state)
+http_end_request(struct connection *conn, int state)
 {
-	setcstate(c, state);
-	uncompress_shutdown(c);
+	setcstate(conn, state);
+	uncompress_shutdown(conn);
 
-	if (c->state == S_OK) {
-		if (c->cache) {
-			truncate_entry(c->cache, c->from, 1);
-			c->cache->incomplete = 0;
+	if (conn->state == S_OK) {
+		if (conn->cache) {
+			truncate_entry(conn->cache, conn->from, 1);
+			conn->cache->incomplete = 0;
 #ifdef HAVE_SCRIPTING
-			c->cache->done_pre_format_html_hook = 0;
+			conn->cache->done_pre_format_html_hook = 0;
 #endif
 		}
 	}
 
-	if (c->info && !((struct http_connection_info *) c->info)->close
-	    && (!c->ssl) /* We won't keep alive ssl connections */
+	if (conn->info && !((struct http_connection_info *) conn->info)->close
+	    && (!conn->ssl) /* We won't keep alive ssl connections */
 	    && (!get_opt_int("protocol.http.bugs.post_no_keepalive")
-	        || !strchr(c->url, POST_CHAR))) {
-		add_keepalive_socket(c, HTTP_KEEPALIVE_TIMEOUT);
+	        || !strchr(conn->url, POST_CHAR))) {
+		add_keepalive_socket(conn, HTTP_KEEPALIVE_TIMEOUT);
 	} else {
-		abort_connection(c);
+		abort_connection(conn);
 	}
 }
 
 static void http_send_header(struct connection *);
 
 void
-http_func(struct connection *c)
+http_func(struct connection *conn)
 {
-	/* setcstate(c, S_CONN); */
-	set_timeout(c);
+	/* setcstate(conn, S_CONN); */
+	set_timeout(conn);
 
-	if (get_keepalive_socket(c)) {
-		int p = get_port(c->url);
+	if (get_keepalive_socket(conn)) {
+		int p = get_port(conn->url);
 
 		if (p == -1) {
-			abort_conn_with_state(c, S_INTERNAL);
+			abort_conn_with_state(conn, S_INTERNAL);
 			return;
 		}
 
-		make_connection(c, p, &c->sock1, http_send_header);
+		make_connection(conn, p, &conn->sock1, http_send_header);
 	} else {
-		http_send_header(c);
+		http_send_header(conn);
 	}
 }
 
 void
-proxy_func(struct connection *c)
+proxy_func(struct connection *conn)
 {
-	http_func(c);
+	http_func(conn);
 }
 
 static void http_get_header(struct connection *);
@@ -324,10 +324,10 @@ static void http_get_header(struct connection *);
 #define GET_REAL_URL(x) (IS_PROXY_URL((x)) ? get_url_data((x)) : (x))
 
 static void
-http_send_header(struct connection *c)
+http_send_header(struct connection *conn)
 {
 	static unsigned char *accept_charset = NULL;
-	unsigned char *host = GET_REAL_URL(c->url);
+	unsigned char *host = GET_REAL_URL(conn->url);
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
 	unsigned char *post = NULL;
@@ -337,14 +337,14 @@ http_send_header(struct connection *c)
 	int l = 0;
 	unsigned char *optstr;
 
-	set_timeout(c);
+	set_timeout(conn);
 
 	info = mem_calloc(1, sizeof(struct http_connection_info));
 	if (!info) {
-		abort_conn_with_state(c, S_OUT_OF_MEM);
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
-	c->info = info;
+	conn->info = info;
 	info->sent_version.major = 1;
 	info->sent_version.minor = 1;
 
@@ -362,29 +362,29 @@ http_send_header(struct connection *c)
 
 	hdr = init_str();
 	if (!hdr) {
-		http_end_request(c, S_OUT_OF_MEM);
+		http_end_request(conn, S_OUT_OF_MEM);
 		return;
 	}
 
-	post = strchr(c->url, POST_CHAR);
+	post = strchr(conn->url, POST_CHAR);
 
 	if (trace) {
 		add_to_str(&hdr, &l, "TRACE ");
 	} else if (post) {
 		post++;
 		add_to_str(&hdr, &l, "POST ");
-		c->unrestartable = 2;
+		conn->unrestartable = 2;
 	} else {
 		add_to_str(&hdr, &l, "GET ");
 	}
 
-	if (!IS_PROXY_URL(c->url)) {
+	if (!IS_PROXY_URL(conn->url)) {
 		add_to_str(&hdr, &l, "/");
 	}
 
-	url_data = get_url_data(c->url);
+	url_data = get_url_data(conn->url);
 	if (!url_data) {
-		http_end_request(c, S_BAD_URL);
+		http_end_request(conn, S_BAD_URL);
 		return;
 	}
 
@@ -484,12 +484,12 @@ http_send_header(struct connection *c)
 			break;
 
 		case REFERER_TRUE:
-			if (c->prev_url && c->prev_url[0]) {
-				unsigned char *tmp_post = strchr(c->prev_url, POST_CHAR);
+			if (conn->prev_url && conn->prev_url[0]) {
+				unsigned char *tmp_post = strchr(conn->prev_url, POST_CHAR);
 
 				if (tmp_post) tmp_post++;
 				add_to_str(&hdr, &l, "Referer: ");
-				add_url_to_http_str(&hdr, &l, c->prev_url, tmp_post);
+				add_url_to_http_str(&hdr, &l, conn->prev_url, tmp_post);
 				add_to_str(&hdr, &l, "\r\n");
 			}
 			break;
@@ -513,11 +513,11 @@ http_send_header(struct connection *c)
 				}
 			}
 
-			if (!IS_PROXY_URL(c->url) || hdr[l - 1] != '/') {
+			if (!IS_PROXY_URL(conn->url) || hdr[l - 1] != '/') {
 				add_to_str(&hdr, &l, "/");
 			}
 
-			url_data = get_url_data(extract_proxy(c->url));
+			url_data = get_url_data(extract_proxy(conn->url));
 			if (url_data) {
 				add_url_to_http_str(&hdr, &l, url_data, post);
 			}
@@ -528,7 +528,7 @@ http_send_header(struct connection *c)
 
 	add_to_str(&hdr, &l, "Accept: */*\r\n");
 
-	/* TODO: Make this encoding.c function. */
+	/* TODO: Make this encoding.conn function. */
 #if defined(HAVE_BZLIB_H) || defined(HAVE_ZLIB_H)
 	add_to_str(&hdr, &l, "Accept-Encoding: ");
 
@@ -603,7 +603,7 @@ http_send_header(struct connection *c)
 
 	if (info->sent_version.major == 1 &&
 	    info->sent_version.minor == 1) {
-		if (!IS_PROXY_URL(c->url)) {
+		if (!IS_PROXY_URL(conn->url)) {
 			add_to_str(&hdr, &l, "Connection: ");
 		} else {
 			add_to_str(&hdr, &l, "Proxy-Connection: ");
@@ -616,27 +616,27 @@ http_send_header(struct connection *c)
 		}
 	}
 
-	cache = c->cache;
+	cache = conn->cache;
 	if (cache) {
 		if (!cache->incomplete && cache->head && cache->last_modified
-		    && c->cache_mode <= NC_IF_MOD) {
+		    && conn->cache_mode <= NC_IF_MOD) {
 			add_to_str(&hdr, &l, "If-Modified-Since: ");
 			add_to_str(&hdr, &l, cache->last_modified);
 			add_to_str(&hdr, &l, "\r\n");
 		}
 	}
 
-	if (c->cache_mode >= NC_PR_NO_CACHE) {
+	if (conn->cache_mode >= NC_PR_NO_CACHE) {
 		add_to_str(&hdr, &l, "Pragma: no-cache\r\n");
 		add_to_str(&hdr, &l, "Cache-Control: no-cache\r\n");
 	}
 
-	if (c->from || (c->prg.start > 0)) {
-		/* c->from takes precedence. c->prg.start is set only the first
-		 * time, then c->from gets updated and in case of any retries
-		 * etc we have everything interesting in c->from already. */
+	if (conn->from || (conn->prg.start > 0)) {
+		/* conn->from takes precedence. conn->prg.start is set only the first
+		 * time, then conn->from gets updated and in case of any retries
+		 * etc we have everything interesting in conn->from already. */
 		add_to_str(&hdr, &l, "Range: bytes=");
-		add_num_to_str(&hdr, &l, c->from ? c->from : c->prg.start);
+		add_num_to_str(&hdr, &l, conn->from ? conn->from : conn->prg.start);
 		add_to_str(&hdr, &l, "-\r\n");
 	}
 
@@ -695,10 +695,10 @@ http_send_header(struct connection *c)
 		}
 	}
 
-	write_to_socket(c, c->sock1, hdr, l, http_get_header);
+	write_to_socket(conn, conn->sock1, hdr, l, http_get_header);
 	mem_free(hdr);
 
-	setcstate(c, S_SENT);
+	setcstate(conn, S_SENT);
 }
 
 
@@ -1047,10 +1047,10 @@ get_header(struct read_buffer *rb)
 }
 
 static void
-http_got_header(struct connection *c, struct read_buffer *rb)
+http_got_header(struct connection *conn, struct read_buffer *rb)
 {
 	int cf;
-	int state = c->state != S_PROC ? S_GETH : S_PROC;
+	int state = conn->state != S_PROC ? S_GETH : S_PROC;
 	unsigned char *head;
 #ifdef COOKIES
 	unsigned char *cookie, *ch;
@@ -1060,24 +1060,24 @@ http_got_header(struct connection *c, struct read_buffer *rb)
 	unsigned char *d;
 	struct cache_entry *cache;
 	struct http_connection_info *info;
-	unsigned char *host = GET_REAL_URL(c->url);
+	unsigned char *host = GET_REAL_URL(conn->url);
 
-	set_timeout(c);
-	info = c->info;
+	set_timeout(conn);
+	info = conn->info;
 
 	if (rb->close == 2) {
 		unsigned char *hstr;
 
-		if (!c->tries && (hstr = get_host_name(host))) {
+		if (!conn->tries && (hstr = get_host_name(host))) {
 			if (info->bl_flags & BL_NO_CHARSET) {
 				del_blacklist_entry(hstr, BL_NO_CHARSET);
 			} else {
 				add_blacklist_entry(hstr, BL_NO_CHARSET);
-				c->tries = -1;
+				conn->tries = -1;
 			}
 			mem_free(hstr);
 		}
-		retry_conn_with_state(c, S_CANT_READ);
+		retry_conn_with_state(conn, S_CANT_READ);
 		return;
 	}
 	rb->close = 0;
@@ -1085,38 +1085,38 @@ http_got_header(struct connection *c, struct read_buffer *rb)
 again:
 	a = get_header(rb);
 	if (a == -1) {
-		abort_conn_with_state(c, S_HTTP_ERROR);
+		abort_conn_with_state(conn, S_HTTP_ERROR);
 		return;
 	}
 	if (!a) {
-		read_from_socket(c, c->sock1, rb, http_got_header);
-		setcstate(c, state);
+		read_from_socket(conn, conn->sock1, rb, http_got_header);
+		setcstate(conn, state);
 		return;
 	}
 	if (a == -2) a = 0;
 	if ((a && get_http_code(rb->data, &h, &version))
 	    || h == 101) {
-		abort_conn_with_state(c, S_HTTP_ERROR);
+		abort_conn_with_state(conn, S_HTTP_ERROR);
 		return;
 	}
 
 	head = mem_alloc(a + 1);
 	if (!head) {
-		abort_conn_with_state(c, S_OUT_OF_MEM);
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 	memcpy(head, rb->data, a);
 	head[a] = 0;
-	if (check_http_server_bugs(host, c->info, head)) {
+	if (check_http_server_bugs(host, conn->info, head)) {
 		mem_free(head);
-		retry_conn_with_state(c, S_RESTART);
+		retry_conn_with_state(conn, S_RESTART);
 		return;
 	}
 
 #ifdef COOKIES
 	ch = head;
 	while ((cookie = parse_http_header(ch, "Set-Cookie", &ch))) {
-		unsigned char *hstr = GET_REAL_URL(c->url);
+		unsigned char *hstr = GET_REAL_URL(conn->url);
 
 		set_cookie(NULL, hstr, cookie);
 		mem_free(cookie);
@@ -1131,17 +1131,17 @@ again:
 	}
 	if (h < 200) {
 		mem_free(head);
-		abort_conn_with_state(c, S_HTTP_ERROR);
+		abort_conn_with_state(conn, S_HTTP_ERROR);
 		return;
 	}
 	if (h == 304) {
 		mem_free(head);
-		http_end_request(c, S_OK);
+		http_end_request(conn, S_OK);
 		return;
 	}
-	if (get_cache_entry(c->url, &cache)) {
+	if (get_cache_entry(conn->url, &cache)) {
 		mem_free(head);
-		abort_conn_with_state(c, S_OUT_OF_MEM);
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 	if (cache->head) mem_free(cache->head);
@@ -1158,13 +1158,13 @@ again:
 		}
 	}
 
-	if (c->ssl) {
+	if (conn->ssl) {
 		if (cache->ssl_info) mem_free(cache->ssl_info);
-		cache->ssl_info = get_ssl_cipher_str(c->ssl);
+		cache->ssl_info = get_ssl_cipher_str(conn->ssl);
 	}
 
 	if (h == 204) {
-		http_end_request(c, S_OK);
+		http_end_request(conn, S_OK);
 		return;
 	}
 	if (h == 301 || h == 302 || h == 303) {
@@ -1194,7 +1194,7 @@ again:
 	}
 
 	kill_buffer_data(rb, a);
-	c->cache = cache;
+	conn->cache = cache;
 	info->close = 0;
 	info->length = -1;
 	info->recv_version = version;
@@ -1207,8 +1207,8 @@ again:
 		   || (version.major == 1 && version.minor == 0))
 		info->close = 1;
 
-	cf = c->from;
-	c->from = 0;
+	cf = conn->from;
+	conn->from = 0;
 	d = parse_http_header(cache->head, "Content-Range", NULL);
 	if (d) {
 		if (strlen(d) > 6) {
@@ -1219,35 +1219,35 @@ again:
 				errno = 0;
 			       	f = strtol(d + 6, NULL, 10);
 
-				if (!errno && f >= 0) c->from = f;
+				if (!errno && f >= 0) conn->from = f;
 			}
 		}
 		mem_free(d);
 	}
-	if (cf && !c->from && !c->unrestartable) c->unrestartable = 1;
-	if ((c->prg.start <= 0 && c->from > cf) || c->from < 0) {
-		/* We don't want this if c->prg.start because then c->from will
-		 * be probably value of c->prg.start, while cf is 0. */
-		abort_conn_with_state(c, S_HTTP_ERROR);
+	if (cf && !conn->from && !conn->unrestartable) conn->unrestartable = 1;
+	if ((conn->prg.start <= 0 && conn->from > cf) || conn->from < 0) {
+		/* We don't want this if conn->prg.start because then conn->from will
+		 * be probably value of conn->prg.start, while cf is 0. */
+		abort_conn_with_state(conn, S_HTTP_ERROR);
 		return;
 	}
 
 #if 0
 	{
 		struct status *s;
-		foreach (s, c->statuss) {
-			fprintf(stderr, "c %p status %p pri %d st %d er %d :: ce %s",
-				c, s, s->pri, s->state, s->prev_error,
+		foreach (s, conn->statuss) {
+			fprintf(stderr, "conn %p status %p pri %d st %d er %d :: ce %s",
+				conn, s, s->pri, s->state, s->prev_error,
 				s->ce ? s->ce->url : (unsigned char *) "N-U-L-L");
 		}
 	}
 #endif
 
-	if (c->prg.start >= 0) {
+	if (conn->prg.start >= 0) {
 		/* Update to the real value which we've got from Content-Range. */
-		c->prg.seek = c->from;
+		conn->prg.seek = conn->from;
 	}
-	c->prg.start = c->from;
+	conn->prg.start = conn->from;
 
 	d = parse_http_header(cache->head, "Content-Length", NULL);
 	if (d) {
@@ -1262,17 +1262,17 @@ again:
 			    (version.major > 1 ||
 			     (version.major == 1 && version.minor > 0)))
 				info->length = l;
-			c->est_length = c->from + l;
+			conn->est_length = conn->from + l;
 		}
 		mem_free(d);
 	}
 
 	d = parse_http_header(cache->head, "Accept-Ranges", NULL);
 	if (d) {
-		if (!strcasecmp(d, "none") && !c->unrestartable)
-			c->unrestartable = 1;
+		if (!strcasecmp(d, "none") && !conn->unrestartable)
+			conn->unrestartable = 1;
 		mem_free(d);
-	} else if (!c->unrestartable && !c->from) c->unrestartable = 1;
+	} else if (!conn->unrestartable && !conn->from) conn->unrestartable = 1;
 
 	d = parse_http_header(cache->head, "Transfer-Encoding", NULL);
 	if (d) {
@@ -1288,10 +1288,10 @@ again:
 	if (d) {
 		if (cache->last_modified && strcasecmp(cache->last_modified, d)) {
 			delete_entry_content(cache);
-			if (c->from) {
-				c->from = 0;
+			if (conn->from) {
+				conn->from = 0;
 				mem_free(d);
-				retry_conn_with_state(c, S_MODIFIED);
+				retry_conn_with_state(conn, S_MODIFIED);
 				return;
 			}
 		}
@@ -1307,10 +1307,10 @@ again:
 	if (d) {
 		if (cache->etag && strcasecmp(cache->etag, d)) {
 			delete_entry_content(cache);
-			if (c->from) {
-				c->from = 0;
+			if (conn->from) {
+				conn->from = 0;
 				mem_free(d);
-				retry_conn_with_state(c, S_MODIFIED);
+				retry_conn_with_state(conn, S_MODIFIED);
 				return;
 			}
 		}
@@ -1326,11 +1326,11 @@ again:
 			if (d) {
 #ifdef HAVE_ZLIB_H
 				if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
-					c->content_encoding = ENCODING_GZIP;
+					conn->content_encoding = ENCODING_GZIP;
 #endif
 #ifdef HAVE_BZLIB_H
 				if (!strcasecmp(d, "bzip2") || !strcasecmp(d, "x-bzip2"))
-					c->content_encoding = ENCODING_BZIP2;
+					conn->content_encoding = ENCODING_BZIP2;
 #endif
 				mem_free(d);
 			}
@@ -1339,9 +1339,9 @@ again:
 		}
 	}
 
-	if (c->content_encoding != ENCODING_NONE) {
+	if (conn->content_encoding != ENCODING_NONE) {
 		if (cache->encoding_info) mem_free(cache->encoding_info);
-		cache->encoding_info = stracpy(encoding_names[c->content_encoding]);
+		cache->encoding_info = stracpy(encoding_names[conn->content_encoding]);
 	}
 
 	if (info->length == -1 ||
@@ -1350,7 +1350,7 @@ again:
 	     && info->close))
 		rb->close = 1;
 
-	read_http_data(c, rb);
+	read_http_data(conn, rb);
 }
 
 static void

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.141 2003/07/02 23:21:50 pasky Exp $ */
+/* $Id: view.c,v 1.142 2003/07/02 23:38:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -618,6 +618,55 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 	return fs;
 }
 
+
+static void
+draw_textarea(struct terminal *t, struct form_state *fs,
+	      struct form_control *frm, struct link *l)
+{
+	if (!l->n) return;
+	area_cursor(frm, fs);
+	lnx = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!lnx) return;
+	ln = lnx;
+	sl = fs->vypos;
+	while (ln->st && sl) sl--, ln++;
+
+	x = l->pos[0].x + xp - vx;
+	y = l->pos[0].y + yp - vy;
+	ye = y + frm->rows;
+
+	for (; ln->st && y < ye; ln++, y++) {
+		if (y < yp || y >= yp + yw) continue;
+
+		for (i = 0; i < frm->cols; i++) {
+			int xi = x + i;
+
+			if (xi >= xp && xi < xp + xw) {
+				if (fs->value &&
+				    i >= -fs->vpos &&
+				    i + fs->vpos < ln->en - ln->st)
+					set_only_char(t, xi, y,
+						      ln->st[i + fs->vpos]);
+				else
+					set_only_char(t, xi, y, '_');
+			}
+		}
+	}
+
+	for (; y < ye; y++) {
+		if (y < yp || y >= yp + yw) continue;
+
+		for (i = 0; i < frm->cols; i++) {
+			int xi = x + i;
+
+			if (xi >= xp && xi < xp + xw)
+				set_only_char(t, xi, y, '_');
+		}
+	}
+
+	mem_free(lnx);
+}
+
 static void
 draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 {
@@ -678,48 +727,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			}
 			break;
 		case FC_TEXTAREA:
-			if (!l->n) break;
-			area_cursor(frm, fs);
-			lnx = format_text(fs->value, frm->cols, !!frm->wrap);
-			if (!lnx) break;
-			ln = lnx;
-			sl = fs->vypos;
-			while (ln->st && sl) sl--, ln++;
-
-			x = l->pos[0].x + xp - vx;
-			y = l->pos[0].y + yp - vy;
-			ye = y + frm->rows;
-
-			for (; ln->st && y < ye; ln++, y++) {
-				if (y < yp || y >= yp + yw) continue;
-
-				for (i = 0; i < frm->cols; i++) {
-					int xi = x + i;
-
-					if (xi >= xp && xi < xp + xw) {
-						if (fs->value &&
-						    i >= -fs->vpos &&
-						    i + fs->vpos < ln->en - ln->st)
-							set_only_char(t, xi, y,
-								      ln->st[i + fs->vpos]);
-						else
-							set_only_char(t, xi, y, '_');
-					}
-				}
-			}
-
-			for (; y < ye; y++) {
-				if (y < yp || y >= yp + yw) continue;
-
-				for (i = 0; i < frm->cols; i++) {
-					int xi = x + i;
-
-					if (xi >= xp && xi < xp + xw)
-						set_only_char(t, xi, y, '_');
-				}
-			}
-
-			mem_free(lnx);
+			draw_textarea(t, fs, frm, l);
 			break;
 		case FC_CHECKBOX:
 		case FC_RADIO:

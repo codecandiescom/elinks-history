@@ -1,3 +1,221 @@
+Sat Nov 15 17:07:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre10 
+
+Sat Nov 15 17:05:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced. Czech translation was updated.  
+
+Sat Nov 15 17:02:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	Reverted the ask cookie policy implementation. It comes in feature
+	freeze.  
+
+Sat Nov 15 16:55:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Add support for ask cookie policy.  
+
+Sat Nov 15 16:53:37 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser.c:
+
+	In clr_spaces(), remove an extra check: *nm is already checked as
+	the loop condition.  
+
+Sat Nov 15 16:39:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: document.c, document.h:
+
+	is_document_locked() -> is_document_used() 
+
+Sat Nov 15 16:38:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	Grammar fix: it's -> its. Who needs to take more English classes? :) 
+
+Sat Nov 15 16:37:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cache/cache.h, document/document.h:
+
+	Include util/error.h (if needed), providing the assert() used in the
+	macros.  
+
+Sat Nov 15 16:36:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	get_document_locks() -> get_document_refcount() 
+
+Sat Nov 15 16:36:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	document.locks -> document.refcount 
+
+Sat Nov 15 16:35:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cache/cache.h, document/document.h:
+
+	Try to repair @refcount/@locks in the case of underflow.  
+
+Sat Nov 15 16:31:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cache/cache.h, document/document.h:
+
+	*_sanity_check() now does something only if DEBUG.  
+
+Sat Nov 15 16:29:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.h:
+
+	Finish locks -> refcount.  
+
+Sat Nov 15 16:25:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cache/cache.c, cache/cache.h, sched/connection.c:
+
+	is_cache_entry_locked() -> is_cache_entry_used() 
+
+Sat Nov 15 16:23:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	get_cache_entry_locks() -> get_cache_entry_refcount() 
+
+Sat Nov 15 16:18:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.h:
+
+	cache_entry.locks -> cache_entry.refcount 
+
+Sat Nov 15 16:06:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.h:
+
+	Reinserted deleted blank line. Please do not remove blank lines
+	unless you are sure what are you doing ;-).  
+
+Sat Nov 15 15:47:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, sched/connection.c,
+	viewer/dump/dump.c:
+
+	Add valid field to cache_entries to avoid nasty uri hack.  
+
+Sat Nov 15 15:38:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, document/html/renderer.c,
+	sched/connection.c, sched/download.c, sched/session.c,
+	viewer/dump/dump.c:
+
+	Encapsulate uri string access.  
+
+Sat Nov 15 15:20:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Always prefer to output color names.  
+
+Sat Nov 15 15:06:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre9.CVS 
+
+Sat Nov 15 15:03:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre9 
+
+Sat Nov 15 15:03:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	No ELusive.  
+
+Sat Nov 15 15:01:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Sat Nov 15 14:53:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Always prefer to have color names. Feature will be added after pre9.  
+
+Sat Nov 15 14:48:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	unparse_uri(&conn->cache->uri) before we clear it, so that the uri
+	structure doesn't contain dangling pointers pointing to some strange
+	places.  
+
+Sat Nov 15 14:43:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Introduced unparse_uri().  
+
+Sat Nov 15 14:15:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	struct list_menu was introduced. It will help to generalize list
+	menu functions.  
+
+Sat Nov 15 14:11:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync elinks.conf.5. Contains rearrangements from moving options to
+	modules.  
+
+Sat Nov 15 14:09:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/color.c:
+
+	Make the assert() completentary to color_mode switch in
+	set_term_color().  
+
+Sat Nov 15 14:00:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	It seems testing against char 1 is useless. So related code was
+	removed. Minor simplification in clr_spaces().  
+
+Sat Nov 15 06:37:41 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Sat Nov 15 00:19:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	src/sched/session.c:1.229->1.230 introduced a very stupid bug. It
+	should be fixed now. Reported by Miciah.  
+
 Fri Nov 14 22:55:01 2003  Laurent Monin <zas@norz.org>:
 
 	* configure.in:

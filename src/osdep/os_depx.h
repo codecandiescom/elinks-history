@@ -1,4 +1,4 @@
-/* $Id: os_depx.h,v 1.9 2003/10/26 19:49:01 zas Exp $ */
+/* $Id: os_depx.h,v 1.10 2003/10/27 02:49:02 pasky Exp $ */
 
 #ifndef EL__OS_DEPX_H
 #define EL__OS_DEPX_H
@@ -30,10 +30,6 @@
 #ifndef PIPE_BUF
 #define PIPE_BUF	512 /* POSIX says that. -- Mikulas */
 #endif
-
-/*#ifdef sparc
-#define htons(x) (x)
-#endif*/
 
 /* We define own cfmakeraw() wrapper because cfmakeraw() is broken on AIX,
  * thus we fix it right away. We can also emulate cfmakeraw() if it is not

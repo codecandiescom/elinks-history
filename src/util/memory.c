@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.18 2004/09/19 11:40:47 jonas Exp $ */
+/* $Id: memory.c,v 1.19 2004/09/23 13:12:04 zas Exp $ */
 
 #define _GNU_SOURCE /* MREMAP_MAYMOVE */
 
@@ -123,6 +123,11 @@ round_size(size_t size)
 	if (!page_size || page_size == -1) page_size = 4096;
 	return (size / page_size + 1) * page_size;
 }
+
+/* Some systems may not have MAP_ANON but MAP_ANONYMOUS instead. */
+#if defined(MAP_ANONYMOUS) && !defined(MAP_ANON)
+#define MAP_ANON MAP_ANONYMOUS
+#endif
 
 void *
 mem_mmap_alloc(size_t size)

@@ -1,12 +1,13 @@
-/* $Id: document.h,v 1.37 2003/11/19 18:15:49 zas Exp $ */
+/* $Id: document.h,v 1.38 2003/12/01 14:17:29 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
 
 #include "document/options.h"
-#include "terminal/draw.h"
 #include "util/color.h"
 #include "util/lists.h"
+
+struct screen_char;
 
 
 struct tag {

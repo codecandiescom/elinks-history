@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.16 2004/01/17 15:18:27 pasky Exp $
+## $Id: Makefile.am,v 1.17 2004/04/24 00:20:10 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -11,6 +11,8 @@ include $(top_srcdir)/Makefile.base
 # automake to compile the objects :/. We DON'T use libhtml.a ANYWHERE.
 
 EXTRA_DIST = TODO
+
+SUBDIRS = parser
 
 noinst_LIBRARIES = libhtml.a
 libhtml_a_SOURCES = \

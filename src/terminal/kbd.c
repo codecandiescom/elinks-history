@@ -1,0 +1,942 @@
+/* Support for keyboard interface */
+/* $Id: kbd.c,v 1.1 2003/05/04 17:23:59 pasky Exp $ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <stdlib.h>
+#include <string.h>
+#include <termios.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+#ifdef __hpux__
+#include <limits.h>
+#define HPUX_PIPE	(len > PIPE_BUF || errno != EAGAIN)
+#else
+#define HPUX_PIPE	1
+#endif
+
+#include "elinks.h"
+
+#include "config/options.h"
+#include "lowlevel/kbd.h"
+#include "lowlevel/select.h"
+#include "lowlevel/terminal.h"
+#include "util/error.h"
+#include "util/string.h"
+#include "util/memory.h"
+
+
+#define OUT_BUF_SIZE	16384
+#define IN_BUF_SIZE	16
+
+#define USE_TWIN_MOUSE	1
+#define TW_BUTT_LEFT	1
+#define TW_BUTT_MIDDLE	2
+#define TW_BUTT_RIGHT	4
+
+struct itrm {
+	int std_in;
+	int std_out;
+	int sock_in;
+	int sock_out;
+	int ctl_in;
+	int blocked;
+	struct termios t;
+	int flags;
+	unsigned char kqueue[IN_BUF_SIZE];
+	int qlen;
+	int tm;
+	unsigned char *ev_queue;
+	int eqlen;
+	void *mouse_h;
+	unsigned char *orig_title;
+};
+
+static struct itrm *ditrm = NULL;
+
+static void free_trm(struct itrm *);
+static void in_kbd(struct itrm *);
+static void in_sock(struct itrm *);
+
+int
+is_blocked()
+{
+	return ditrm && ditrm->blocked;
+}
+
+
+void
+free_all_itrms()
+{
+	if (ditrm) free_trm(ditrm);
+}
+
+
+static void
+write_ev_queue(struct itrm *itrm)
+{
+	int l;
+	int qlen = itrm->eqlen;
+
+	if (!qlen) internal("event queue empty");
+	if (qlen > 128) qlen = 128;
+
+	l = write(itrm->sock_out, itrm->ev_queue, qlen);
+	if (l < 1) {
+		if (l == -1) free_trm(itrm);
+		return;
+	}
+
+	itrm->eqlen -= l;
+	memmove(itrm->ev_queue, itrm->ev_queue + l, itrm->eqlen);
+	if (!itrm->eqlen) {
+		set_handlers(itrm->sock_out,
+			     get_handler(itrm->sock_out, H_READ),
+			     NULL,
+			     get_handler(itrm->sock_out, H_ERROR),
+			     get_handler(itrm->sock_out, H_DATA));
+	}
+}
+
+
+static void
+queue_event(struct itrm *itrm, unsigned char *data, int len)
+{
+	int w = 0;
+
+	if (!len) return;
+
+	if (!itrm->eqlen && can_write(itrm->sock_out)) {
+		w = write(itrm->sock_out, data, len);
+		if (w <= 0 && HPUX_PIPE) {
+			/* free_trm(itrm); */
+			register_bottom_half((void (*)(void *))free_trm, itrm);
+			return;
+		}
+	}
+
+	if (w < len) {
+		int left = len - w;
+		unsigned char *c = mem_realloc(itrm->ev_queue,
+					       itrm->eqlen + left);
+
+		if (!c) {
+			free_trm(itrm);
+			return;
+		}
+
+		itrm->ev_queue = c;
+		memcpy(itrm->ev_queue + itrm->eqlen, data + w, left);
+		itrm->eqlen += left;
+		set_handlers(itrm->sock_out,
+			     get_handler(itrm->sock_out, H_READ),
+			     (void (*)(void *)) write_ev_queue,
+			     (void (*)(void *)) free_trm, itrm);
+	}
+}
+
+
+void
+kbd_ctrl_c()
+{
+	struct event ev = { EV_KBD, KBD_CTRL_C, 0, 0 };
+
+	if (ditrm)
+		queue_event(ditrm, (unsigned char *)&ev, sizeof(struct event));
+}
+
+/*
+unsigned char *init_seq = "\033[?1000h\033[?47h\0337";
+unsigned char *term_seq = "\033[2J\033[?1000l\033[?47l\0338\b \b";
+*/
+
+static unsigned char *init_seq = "\033)0\0337";
+static unsigned char *init_seq_x_mouse = "\033[?1000h";
+static unsigned char *init_seq_tw_mouse = "\033[?9h";
+static unsigned char *term_seq = "\033[2J\0338\r \b";
+static unsigned char *term_seq_x_mouse = "\033[?1000l";
+static unsigned char *term_seq_tw_mouse = "\033[?9l";
+
+/*unsigned char *term_seq = "\033[2J\033[?1000l\0338\b \b";*/
+
+static void
+send_init_sequence(int h, int flags)
+{
+	hard_write(h, init_seq, strlen(init_seq));
+
+	if (flags & USE_TWIN_MOUSE) {
+		hard_write(h, init_seq_tw_mouse, strlen(init_seq_tw_mouse));
+	} else {
+		hard_write(h, init_seq_x_mouse, strlen(init_seq_x_mouse));
+	}
+}
+
+
+static void
+send_term_sequence(int h, int flags)
+{
+	hard_write(h, term_seq, strlen(term_seq));
+
+	if (flags & USE_TWIN_MOUSE) {
+		hard_write(h, term_seq_tw_mouse, strlen(term_seq_tw_mouse));
+	} else {
+		hard_write(h, term_seq_x_mouse, strlen(term_seq_x_mouse));
+	}
+}
+
+
+void
+resize_terminal()
+{
+	struct event ev = { EV_RESIZE, 0, 0, 0 };
+	int x, y;
+
+	if (get_terminal_size(ditrm->std_out, &x, &y)) return;
+	ev.x = x;
+	ev.y = y;
+	queue_event(ditrm, (char *)&ev, sizeof(struct event));
+}
+
+
+static int
+setraw(int fd, struct termios *p)
+{
+	struct termios t;
+
+	memset(&t, 0, sizeof(struct termios));
+	if (tcgetattr(fd, &t)) return -1;
+
+	if (p) memcpy(p, &t, sizeof(struct termios));
+
+	cfmakeraw(&t);
+	t.c_lflag |= ISIG;
+#ifdef TOSTOP
+	t.c_lflag |= TOSTOP;
+#endif
+	t.c_oflag |= OPOST;
+	if (tcsetattr(fd, TCSANOW, &t)) return -1;
+
+	return 0;
+}
+
+
+void
+handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
+	   void *init_string, int init_len)
+{
+	int x, y;
+	struct itrm *itrm;
+	struct event ev = { EV_INIT, 80, 24, 0 };
+	unsigned char *ts;
+	int env;
+	int ts_len;
+
+	if (get_terminal_size(ctl_in, &x, &y)) {
+		error("ERROR: could not get terminal size");
+		return;
+	}
+
+	itrm = mem_calloc(1, sizeof(struct itrm));
+	if (!itrm) return;
+
+	ditrm = itrm;
+	itrm->std_in = std_in;
+	itrm->std_out = std_out;
+	itrm->sock_in = sock_in;
+	itrm->sock_out = sock_out;
+	itrm->ctl_in = ctl_in;
+	itrm->tm = -1;
+
+	if (ctl_in >= 0) setraw(ctl_in, &itrm->t);
+	set_handlers(std_in, (void (*)(void *)) in_kbd,
+		     NULL, (void (*)(void *)) free_trm, itrm);
+
+	if (sock_in != std_out)
+		set_handlers(sock_in, (void (*)(void *)) in_sock,
+			     NULL, (void (*)(void *)) free_trm, itrm);
+
+	ev.x = x;
+	ev.y = y;
+	handle_terminal_resize(ctl_in, resize_terminal);
+	queue_event(itrm, (char *)&ev, sizeof(struct event));
+
+	env = get_system_env();
+
+	ts = getenv("TERM");
+	if (!ts) ts = "";
+
+	if ((env & ENV_TWIN) && !strcmp(ts, "linux"))
+		itrm->flags |= USE_TWIN_MOUSE;
+
+	ts_len = strlen(ts);
+	if (ts_len >= MAX_TERM_LEN) {
+		queue_event(itrm, ts, MAX_TERM_LEN);
+	} else {
+		unsigned char *mm;
+		int ll = MAX_TERM_LEN - ts_len;
+
+		queue_event(itrm, ts, ts_len);
+
+		mm = mem_calloc(1, ll);
+		if (!mm) {
+			free_trm(itrm);
+			return;
+		}
+
+		queue_event(itrm, mm, ll);
+		mem_free(mm);
+	}
+
+	ts = get_cwd();
+	if (!ts) {
+		ts = stracpy("");
+		if (!ts) goto end;
+	}
+
+	/* FIXME: Duplicate code? --pasky */
+
+	ts_len = strlen(ts);
+	if (ts_len >= MAX_CWD_LEN) {
+		queue_event(itrm, ts, MAX_CWD_LEN);
+	} else {
+		unsigned char *mm;
+		int ll = MAX_CWD_LEN - ts_len;
+
+		queue_event(itrm, ts, ts_len);
+
+		mm = mem_calloc(1, ll);
+		if (!mm) {
+			free_trm(itrm);
+			return;
+		}
+
+		queue_event(itrm, mm, ll);
+		mem_free(mm);
+	}
+
+	mem_free(ts);
+
+end:
+	queue_event(itrm, (char *)&env, sizeof(int));
+	queue_event(itrm, (char *)&init_len, sizeof(int));
+	queue_event(itrm, (char *)init_string, init_len);
+	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, itrm);
+	if (get_opt_bool("ui.window_title")) {
+		itrm->orig_title = get_window_title();
+		set_window_title("ELinks");
+	}
+	send_init_sequence(std_out, itrm->flags);
+}
+
+
+static void
+unblock_itrm_x(void *h)
+{
+	close_handle(h);
+	if (!ditrm) return;
+	unblock_itrm(0);
+	resize_terminal();
+}
+
+
+int
+unblock_itrm(int fd)
+{
+	struct itrm *itrm = ditrm;
+
+	if (!itrm) return -1;
+#if 0
+	if (ditrm->sock_out != fd) {
+		internal("unblock_itrm: bad fd: %d", fd);
+		return -1;
+	}
+#endif
+	if (itrm->ctl_in >= 0 && setraw(itrm->ctl_in, NULL)) return -1;
+	itrm->blocked = 0;
+	send_init_sequence(itrm->std_out, itrm->flags);
+
+	set_handlers(itrm->std_in, (void (*)(void *)) in_kbd, NULL,
+		     (void (*)(void *)) free_trm, itrm);
+
+	handle_terminal_resize(itrm->ctl_in, resize_terminal);
+	unblock_stdin();
+
+	return 0;
+}
+
+
+void
+block_itrm(int fd)
+{
+	struct itrm *itrm = ditrm;
+
+	if (!itrm) return;
+#if 0
+	if (ditrm->sock_out != fd) {
+		internal("block_itrm: bad fd: %d", fd);
+		return;
+	}
+#endif
+	itrm->blocked = 1;
+	block_stdin();
+	unhandle_terminal_resize(itrm->ctl_in);
+	send_term_sequence(itrm->std_out, itrm->flags);
+	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
+	set_handlers(itrm->std_in, NULL, NULL,
+		     (void (*)(void *)) free_trm, itrm);
+}
+
+
+static void
+free_trm(struct itrm *itrm)
+{
+	if (!itrm) return;
+
+	if (get_opt_bool("ui.window_title")) {
+		set_window_title(itrm->orig_title);
+		if (itrm->orig_title) {
+			mem_free(itrm->orig_title);
+			itrm->orig_title = NULL;
+		}
+	}
+
+	unhandle_terminal_resize(itrm->ctl_in);
+	send_term_sequence(itrm->std_out,itrm->flags);
+	tcsetattr(itrm->ctl_in, TCSANOW, &itrm->t);
+
+	if (itrm->mouse_h)
+		unhandle_mouse(itrm->mouse_h);
+
+	set_handlers(itrm->std_in, NULL, NULL, NULL, NULL);
+	set_handlers(itrm->sock_in, NULL, NULL, NULL, NULL);
+	set_handlers(itrm->std_out, NULL, NULL, NULL, NULL);
+	set_handlers(itrm->sock_out, NULL, NULL, NULL, NULL);
+
+	if (itrm->tm != -1)
+		kill_timer(itrm->tm);
+
+	if (itrm == ditrm) ditrm = NULL;
+	if (itrm->ev_queue) mem_free(itrm->ev_queue);
+	mem_free(itrm);
+}
+
+
+static inline void
+resize_terminal_x(unsigned char *text)
+{
+	int x, y;
+	unsigned char *p = strchr(text, ',');
+
+	if (!p) return;
+
+	*p++ = '\0';
+	x = atoi(text);
+	y = atoi(p);
+	resize_window(x, y);
+	resize_terminal();
+}
+
+
+void
+dispatch_special(unsigned char *text)
+{
+	switch (text[0]) {
+		case TERM_FN_TITLE:
+			if (get_opt_bool("ui.window_title"))
+				set_window_title(text + 1);
+			break;
+		case TERM_FN_RESIZE:
+			resize_terminal_x(text + 1);
+			break;
+	}
+}
+
+
+#define RD(xx) { \
+	unsigned char cc; \
+	if (p < c) cc = buf[p++]; \
+	else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto fr; \
+	xx = cc; }
+
+static void
+in_sock(struct itrm *itrm)
+{
+	unsigned char *path, *delete;
+	int pl, dl;
+	char ch;
+	int fg;
+	int c, i, p;
+	unsigned char buf[OUT_BUF_SIZE];
+
+	c = read(itrm->sock_in, buf, OUT_BUF_SIZE);
+	if (c <= 0) {
+fr:
+		free_trm(itrm);
+		return;
+	}
+
+qwerty:
+	for (i = 0; i < c; i++)
+		if (!buf[i])
+			goto ex;
+
+	if (!is_blocked()) {
+		want_draw();
+		hard_write(itrm->std_out, buf, c);
+		done_draw();
+	}
+	return;
+
+ex:
+	if (!is_blocked()) {
+		want_draw();
+		hard_write(itrm->std_out, buf, i);
+		done_draw();
+	}
+
+	i++;
+	memmove(buf, buf + i, OUT_BUF_SIZE - i);
+	c -= i;
+	p = 0;
+
+	RD(fg);
+
+	/* FIXME: goto fr on error ?? */
+	path = init_str();
+	if (!path) goto fr;
+	delete = init_str();
+	if (!delete) {
+		mem_free(path);
+		goto fr;
+	}
+
+	pl = 0;
+	while (1) {
+		RD(ch);
+		if (!ch) break;
+		add_chr_to_str(&path, &pl, ch);
+	}
+
+	dl = 0;
+	while (1) {
+		RD(ch);
+		if (!ch) break;
+		add_chr_to_str(&delete, &dl, ch);
+	}
+
+	if (!*path) {
+		dispatch_special(delete);
+	} else {
+		int blockh;
+		unsigned char *param;
+		int path_len, del_len, param_len;
+
+		if (is_blocked() && fg) {
+			if (*delete) unlink(delete);
+			goto nasty_thing;
+		}
+
+		path_len = strlen(path);
+		del_len = strlen(delete);
+		param_len = path_len + del_len + 3;
+
+		param = mem_alloc(param_len);
+		if (!param) goto nasty_thing;
+
+		param[0] = fg;
+		strcpy(param + 1, path);
+		strcpy(param + 1 + path_len + 1, delete);
+
+		if (fg == 1) block_itrm(itrm->ctl_in);
+
+		blockh = start_thread((void (*)(void *, int)) exec_thread,
+				      param, param_len);
+		if (blockh == -1) {
+			if (fg == 1)
+				unblock_itrm(itrm->ctl_in);
+			mem_free(param);
+			goto nasty_thing;
+		}
+
+		mem_free(param);
+
+		if (fg == 1) {
+			set_handlers(blockh, (void (*)(void *)) unblock_itrm_x,
+				     NULL, (void (*)(void *)) unblock_itrm_x,
+				     (void *) blockh);
+			/* block_itrm(itrm->ctl_in); */
+		} else {
+			set_handlers(blockh, close_handle, NULL, close_handle,
+				     (void *) blockh);
+		}
+	}
+
+nasty_thing:
+	mem_free(path);
+	mem_free(delete);
+	memmove(buf, buf + p, OUT_BUF_SIZE - p);
+	c -= p;
+
+	goto qwerty;
+}
+
+#undef RD
+
+int process_queue(struct itrm *);
+
+
+static void
+kbd_timeout(struct itrm *itrm)
+{
+	struct event ev = {EV_KBD, KBD_ESC, 0, 0};
+
+	itrm->tm = -1;
+
+	if (can_read(itrm->std_in)) {
+		in_kbd(itrm);
+		return;
+	}
+
+	if (!itrm->qlen) {
+		internal("timeout on empty queue");
+		return;
+	}
+
+	queue_event(itrm, (char *)&ev, sizeof(struct event));
+
+	if (--itrm->qlen)
+		memmove(itrm->kqueue, itrm->kqueue+1, itrm->qlen);
+
+	while (process_queue(itrm));
+}
+
+
+static inline int
+get_esc_code(unsigned char *str, int len, unsigned char *code,
+	     int *num, int *el)
+{
+	int pos;
+
+	*num = 0;
+	*code = '\0';
+
+	for (pos = 2; pos < len; pos++) {
+		if (str[pos] < '0' || str[pos] > '9' || pos > 7) {
+			*el = pos + 1;
+			*code = str[pos];
+			return 0;
+		}
+		*num = *num * 10 + str[pos] - '0';
+	}
+	return -1;
+}
+
+
+struct key {
+	int x, y;
+};
+
+
+/* Oh, is anyone going to ever modify this? --pasky */
+/* Not me. --Zas */
+
+static struct key os2xtd[256] = {
+/* 0 */
+{0,0}, {0,0}, {' ',KBD_CTRL}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {KBD_BS,KBD_ALT}, {0,0},
+/* 16 */
+{'Q',KBD_ALT}, {'W',KBD_ALT}, {'E',KBD_ALT}, {'R',KBD_ALT}, {'T',KBD_ALT}, {'Y',KBD_ALT}, {'U',KBD_ALT}, {'I',KBD_ALT},
+/* 24 */
+{'O',KBD_ALT}, {'P',KBD_ALT}, {'[',KBD_ALT}, {']',KBD_ALT}, {KBD_ENTER,KBD_ALT}, {0,0}, {'A',KBD_ALT}, {'S',KBD_ALT},
+/* 32 */
+{'D',KBD_ALT}, {'F',KBD_ALT}, {'G',KBD_ALT}, {'H',KBD_ALT}, {'J',KBD_ALT}, {'K',KBD_ALT}, {'L',KBD_ALT}, {';',KBD_ALT},
+/* 40 */
+{'\'',KBD_ALT}, {'`',KBD_ALT}, {0,0}, {'\\',KBD_ALT}, {'Z',KBD_ALT}, {'X',KBD_ALT}, {'C',KBD_ALT}, {'V',KBD_ALT},
+/* 48 */
+{'B',KBD_ALT}, {'N',KBD_ALT}, {'M',KBD_ALT}, {',', KBD_ALT}, {'.', KBD_ALT}, {'/', KBD_ALT}, {0, 0}, {'*', KBD_ALT},
+/* 56 */
+{0,0}, {' ',KBD_ALT}, {0,0}, {KBD_F1,0}, {KBD_F2,0}, {KBD_F3,0}, {KBD_F4,0}, {KBD_F5,0},
+/* 64 */
+{KBD_F6,0}, {KBD_F7,0}, {KBD_F8,0}, {KBD_F9,0}, {KBD_F10,0}, {0,0}, {0,0}, {KBD_HOME,0},
+/* 72 */
+{KBD_UP,0}, {KBD_PAGE_UP,0}, {'-',KBD_ALT}, {KBD_LEFT,0}, {'5',0}, {KBD_RIGHT,0}, {'+',KBD_ALT}, {KBD_END,0},
+/* 80 */
+{KBD_DOWN,0}, {KBD_PAGE_DOWN,0}, {KBD_INS,0}, {KBD_DEL,0}, {0,0}, {0,0}, {0,0}, {0,0},
+/* 88 */
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {KBD_F1,KBD_CTRL}, {KBD_F2,KBD_CTRL},
+/* 96 */
+{KBD_F3,KBD_CTRL}, {KBD_F4,KBD_CTRL}, {KBD_F5,KBD_CTRL}, {KBD_F6,KBD_CTRL}, {KBD_F7,KBD_CTRL}, {KBD_F8,KBD_CTRL}, {KBD_F9,KBD_CTRL}, {KBD_F10,KBD_CTRL},
+/* 104 */
+{KBD_F1,KBD_ALT}, {KBD_F2,KBD_ALT}, {KBD_F3,KBD_ALT}, {KBD_F4,KBD_ALT}, {KBD_F5,KBD_ALT}, {KBD_F6,KBD_ALT}, {KBD_F7,KBD_ALT}, {KBD_F8,KBD_ALT},
+/* 112 */
+{KBD_F9,KBD_ALT}, {KBD_F10,KBD_ALT}, {0,0}, {KBD_LEFT,KBD_CTRL}, {KBD_RIGHT,KBD_CTRL}, {KBD_END,KBD_CTRL}, {KBD_PAGE_DOWN,KBD_CTRL}, {KBD_HOME,KBD_CTRL},
+/* 120 */
+{'1',KBD_ALT}, {'2',KBD_ALT}, {'3',KBD_ALT}, {'4',KBD_ALT}, {'5',KBD_ALT}, {'6',KBD_ALT}, {'7',KBD_ALT}, {'8',KBD_ALT},
+/* 128 */
+{'9',KBD_ALT}, {'0',KBD_ALT}, {'-',KBD_ALT}, {'=',KBD_ALT}, {KBD_PAGE_UP,KBD_CTRL}, {KBD_F11,0}, {KBD_F12,0}, {0,0},
+/* 136 */
+{0,0}, {KBD_F11,KBD_CTRL}, {KBD_F12,KBD_CTRL}, {KBD_F11,KBD_ALT}, {KBD_F12,KBD_ALT}, {KBD_UP,KBD_CTRL}, {'-',KBD_CTRL}, {'5',KBD_CTRL},
+/* 144 */
+{'+',KBD_CTRL}, {KBD_DOWN,KBD_CTRL}, {KBD_INS,KBD_CTRL}, {KBD_DEL,KBD_CTRL}, {KBD_TAB,KBD_CTRL}, {0,0}, {0,0}, {KBD_HOME,KBD_ALT},
+/* 152 */
+{KBD_UP,KBD_ALT}, {KBD_PAGE_UP,KBD_ALT}, {0,0}, {KBD_LEFT,KBD_ALT}, {0,0}, {KBD_RIGHT,KBD_ALT}, {0,0}, {KBD_END,KBD_ALT},
+/* 160 */
+{KBD_DOWN,KBD_ALT}, {KBD_PAGE_DOWN,KBD_ALT}, {KBD_INS,KBD_ALT}, {KBD_DEL,KBD_ALT}, {0,0}, {KBD_TAB,KBD_ALT}, {KBD_ENTER,KBD_ALT}, {0,0},
+/* 168 */
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
+/* 176 */
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
+/* 192 */
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
+/* 208 */
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
+/* 224 */
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
+/* 240 */
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
+/* 256 */
+};
+
+static int xterm_button = -1;
+
+/* I feeeeeel the neeeed ... to rewrite this ... --pasky */
+/* Just Do it ! --Zas */
+
+int
+process_queue(struct itrm *itrm)
+{
+	struct event ev = {EV_KBD, -1, 0, 0};
+	int el = 0;
+
+	if (!itrm->qlen) goto end;
+	if (itrm->kqueue[0] == '\033') {
+		if (itrm->qlen < 2) goto ret;
+		if (itrm->kqueue[1] == '[' || itrm->kqueue[1] == 'O') {
+			char c;
+			int v;
+
+			if (itrm->qlen < 3) goto ret;
+
+			get_esc_code(itrm->kqueue, itrm->qlen, &c, &v, &el);
+
+			if (itrm->kqueue[2] == '[') {
+				if (itrm->qlen >= 4
+				    && itrm->kqueue[3] >= 'A'
+				    && itrm->kqueue[3] <= 'L') {
+					ev.x = KBD_F1 + itrm->kqueue[3] - 'A';
+					el = 4;
+				} else {
+					goto ret;
+				}
+
+			}
+
+			else switch (c) {
+				case 0: goto ret;
+				case 'A': ev.x = KBD_UP; break;
+				case 'B': ev.x = KBD_DOWN; break;
+				case 'C': ev.x = KBD_RIGHT; break;
+				case 'D': ev.x = KBD_LEFT; break;
+				case 'F':
+				case 'e': ev.x = KBD_END; break;
+				case 'H': ev.x = KBD_HOME; break;
+				case 'I': ev.x = KBD_PAGE_UP; break;
+				case 'G': ev.x = KBD_PAGE_DOWN; break;
+
+				case 'z': switch (v) {
+					case 247: ev.x = KBD_INS; break;
+					case 214: ev.x = KBD_HOME; break;
+					case 220: ev.x = KBD_END; break;
+					case 216: ev.x = KBD_PAGE_UP; break;
+					case 222: ev.x = KBD_PAGE_DOWN; break;
+					case 249: ev.x = KBD_DEL; break;
+					} break;
+
+				case '~': switch (v) {
+					case 1: ev.x = KBD_HOME; break;
+					case 2: ev.x = KBD_INS; break;
+					case 3: ev.x = KBD_DEL; break;
+					case 4: ev.x = KBD_END; break;
+					case 5: ev.x = KBD_PAGE_UP; break;
+					case 6: ev.x = KBD_PAGE_DOWN; break;
+					case 7: ev.x = KBD_HOME; break;
+					case 8: ev.x = KBD_END; break;
+					case 17: ev.x = KBD_F6; break;
+					case 18: ev.x = KBD_F7; break;
+					case 19: ev.x = KBD_F8; break;
+					case 20: ev.x = KBD_F9; break;
+					case 21: ev.x = KBD_F10; break;
+					case 23: ev.x = KBD_F11; break;
+					case 24: ev.x = KBD_F12; break;
+					} break;
+
+				case 'R': resize_terminal(); break;
+
+				case 'M': if (itrm->qlen - el < 3) goto ret;
+					if (v == 5) {
+						if (xterm_button == -1)
+							xterm_button = 0;
+						if (itrm->qlen - el < 5)
+							goto ret;
+						ev.x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1 + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
+						if (ev.x & (1 << 13)) ev.x = 0; /* ev.x |= ~0 << 14; */
+						ev.y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1 + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
+						if (ev.y & (1 << 13)) ev.y = 0; /* ev.y |= ~0 << 14; */
+						switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
+						    case TW_BUTT_LEFT:   ev.b = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
+						    case TW_BUTT_MIDDLE: ev.b = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;
+						    case TW_BUTT_RIGHT:  ev.b = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
+						    case 0: ev.b = B_DRAG;
+						    /* default : Twin protocol error */
+						}
+						xterm_button = itrm->kqueue[el] - ' ';
+						el += 5;
+					} else {
+						/* See kbd.h about details of the mouse reporting protocol
+						 * and ev->b bitmask structure. */
+						ev.x = itrm->kqueue[el+1] - ' ' - 1;
+						ev.y = itrm->kqueue[el+2] - ' ' - 1;
+
+						/* There are rumours arising from remnants of code dating to
+						 * the ancient Mikulas' times that bit 4 indicated B_DRAG.
+						 * However, I didn't find on what terminal it should be ever
+						 * supposed to work and it conflicts with wheels. So I removed
+						 * the last remnants of the code as well. --pasky */
+
+						ev.b = (itrm->kqueue[el] & 7) | B_DOWN;
+						/* smartglasses1 - rxvt wheel: */
+						if (ev.b == 3 && xterm_button != -1) {
+							ev.b = xterm_button | B_UP;
+						}
+						/* xterm wheel: */
+						if ((itrm->kqueue[el] & 96) == 96) {
+							ev.b = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
+						}
+
+						xterm_button = -1;
+						/* XXX: Eterm/aterm uses rxvt-like reporting, but sends the
+						 * release sequence for wheel. rxvt itself sends only press
+						 * sequence. Since we can't reliably guess what we're talking
+						 * with from $TERM, we will rather support Eterm/aterm, as in
+						 * rxvt, at least each second wheel up move will work. */
+						if ((ev.b & BM_ACT) == B_DOWN)
+#if 0
+						    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
+							 && (ev.b & BM_BUTT) >= B_WHEEL_UP))
+#endif
+							xterm_button = ev.b & BM_BUTT;
+
+						el += 3;
+					}
+					ev.ev = EV_MOUSE;
+					break;
+			}
+		} else {
+			el = 2;
+			if (itrm->kqueue[1] >= ' ') {
+				ev.x = itrm->kqueue[1];
+				ev.y = KBD_ALT;
+				goto l2;
+			}
+			if (itrm->kqueue[1] == '\033') {
+				if (itrm->qlen >= 3 && (itrm->kqueue[2] == '[' || itrm->kqueue[2] == 'O')) el = 1;
+				ev.x = KBD_ESC;
+				goto l2;
+			}
+		}
+		goto l1;
+	} else if (itrm->kqueue[0] == 0) {
+		if (itrm->qlen < 2) goto ret;
+		ev.x = os2xtd[itrm->kqueue[1]].x;
+		if (!ev.x) ev.x = -1;
+		ev.y = os2xtd[itrm->kqueue[1]].y;
+		el = 2;
+		/*printf("%02x - %02x %02x\n", (int)itrm->kqueue[1], ev.x, ev.y);*/
+		goto l1;
+	}
+	el = 1;
+	ev.x = itrm->kqueue[0];
+
+l2:
+#if 0
+	if (ev.x == 1) ev.x = KBD_HOME;
+	if (ev.x == 2) ev.x = KBD_PAGE_UP;
+	if (ev.x == 4) ev.x = KBD_DEL;
+	if (ev.x == 5) ev.x = KBD_END;
+	if (ev.x == 6) ev.x = KBD_PAGE_DOWN;
+#endif
+	if (ev.x == 8) ev.x = KBD_BS;
+	if (ev.x == 9) ev.x = KBD_TAB;
+	if (ev.x == 10) ev.x = KBD_ENTER, ev.y = KBD_CTRL;
+	if (ev.x == 13) ev.x = KBD_ENTER;
+	if (ev.x == 127) ev.x = KBD_BS;
+	if (ev.x < ' ') {
+		ev.x += 'A' - 1;
+		ev.y = KBD_CTRL;
+	}
+
+l1:
+	if (itrm->qlen < el) {
+		internal("event queue underflow");
+		itrm->qlen = el;
+	}
+	if (ev.x != -1) {
+		queue_event(itrm, (char *)&ev, sizeof(struct event));
+		itrm->qlen -= el;
+		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
+	} else {
+		/*printf("%d %d\n", itrm->qlen, el); fflush(stdout);*/
+		itrm->qlen -= el;
+		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
+	}
+
+end:
+	if (itrm->qlen < IN_BUF_SIZE)
+		set_handlers(itrm->std_in, (void (*)(void *))in_kbd, NULL,
+			     (void (*)(void *))free_trm, itrm);
+	return el;
+
+ret:
+	itrm->tm = install_timer(ESC_TIMEOUT, (void (*)(void *))kbd_timeout,
+				 itrm);
+
+	return 0;
+}
+
+
+static void
+in_kbd(struct itrm *itrm)
+{
+	int r;
+
+	if (!can_read(itrm->std_in)) return;
+
+	if (itrm->tm != -1) {
+		kill_timer(itrm->tm);
+		itrm->tm = -1;
+	}
+
+	if (itrm->qlen >= IN_BUF_SIZE) {
+		set_handlers(itrm->std_in, NULL, NULL,
+			     (void (*)(void *)) free_trm, itrm);
+		while (process_queue(itrm));
+		return;
+	}
+
+	r = read(itrm->std_in, itrm->kqueue + itrm->qlen,
+		 IN_BUF_SIZE - itrm->qlen);
+	if (r <= 0) {
+		free_trm(itrm);
+		return;
+	}
+
+	itrm->qlen += r;
+	if (itrm->qlen > IN_BUF_SIZE) {
+		error("ERROR: too many bytes read");
+		itrm->qlen = IN_BUF_SIZE;
+	}
+
+	while (process_queue(itrm));
+}

@@ -178,8 +178,7 @@ dnl Check for Lua, optional even if installed.
 dnl ===================================================================
 
 dnl Do this the long way, as FreeBSD reportedly needs -L<dir> for
-dnl anything dnl other than /usr/lib, and Lua is very often in
-dnl /usr/local/lib.
+dnl anything other than /usr/lib, and Lua is very often in /usr/local/lib.
 
 AC_ARG_WITH(lua, [  --without-lua           disable Lua support],
             [if test "$withval" = no;  then disable_lua=yes; fi])

@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.2 2004/06/23 08:18:12 jonas Exp $ */
+/* $Id: draw.c,v 1.3 2004/06/23 08:41:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,47 @@ find_tag(struct document *document, unsigned char *name, int namelen)
 			return tag->y;
 
 	return -1;
+}
+
+static inline int
+check_document_fragment(struct session *ses, struct document_view *doc_view)
+{
+	unsigned char *tag = doc_view->vs->uri->fragment;
+	int taglen = doc_view->vs->uri->fragmentlen;
+	struct view_state *vs = doc_view->vs;
+	int vy = find_tag(doc_view->document, tag, taglen);
+
+	switch (vy) {
+	case -1:
+	{
+		struct cache_entry *cached = find_in_cache(doc_view->document->uri);
+
+		if (!cached || cached->incomplete)
+			break;
+
+		vs->did_fragment = 1;
+		tag = memacpy(tag, taglen);
+
+		msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+			N_("Missing fragment"), AL_CENTER,
+			msg_text(ses->tab->term, N_("The requested fragment "
+				"\"#%s\" doesn't exist."),
+				tag),
+			NULL, 1,
+			N_("OK"), NULL, B_ENTER | B_ESC);
+
+		mem_free_if(tag);
+		break;
+	}
+
+	default:
+		int_bounds(&vy, 0, doc_view->document->height - 1);
+		vs->y = vy;
+		set_link(doc_view);
+		vs->did_fragment = 1;
+	}
+
+	return vy;
 }
 
 static void
@@ -194,40 +235,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 		check_vs(doc_view);
 
 	if (!vs->did_fragment) {
-		unsigned char *tag = vs->uri->fragment;
-		int taglen = vs->uri->fragmentlen;
-
-		vy = find_tag(doc_view->document, tag, taglen);
-
-		switch (vy) {
-		case -1:
-		{
-			struct cache_entry *cached = find_in_cache(doc_view->document->uri);
-
-			if (!cached || cached->incomplete)
-				break;
-
-			vs->did_fragment = 1;
-			tag = memacpy(tag, taglen);
-
-			msg_box(term, NULL, MSGBOX_FREE_TEXT,
-				N_("Missing fragment"), AL_CENTER,
-				msg_text(term, N_("The requested fragment "
-					"\"#%s\" doesn't exist."),
-					tag),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
-
-			mem_free_if(tag);
-			break;
-		}
-
-		default:
-			int_bounds(&vy, 0, doc_view->document->height - 1);
-			vs->y = vy;
-			set_link(doc_view);
-			vs->did_fragment = 1;
-		}
+		vy = check_document_fragment(ses, doc_view);
 	}
 	vx = vs->x;
 	vy = vs->y;

@@ -1,3 +1,75 @@
+Tue Oct 21 15:36:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, viewer/text/search.c:
+
+	An option to enable/disable dialogs when search hits top or bottom
+	of the document was added. Default is 1.  
+
+Tue Oct 21 15:27:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Tidyup.  
+
+Tue Oct 21 15:24:07 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Minor fixes.  
+
+Tue Oct 21 15:22:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Translation of type field in options manager info boxes was fixed.  
+
+Tue Oct 21 15:12:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: search.c, search.h, view.c:
+
+	has_search_word(): Introduced as inlined function to simplify search
+	word testing.  
+
+Tue Oct 21 14:36:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Comment on some old code.  
+
+Tue Oct 21 14:34:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Highlight current link after search strings. Idea by Johannes
+	Zellner.  
+
+Tue Oct 21 13:26:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	assert(func) in run_connection(). Regarding bug 253.  
+
+Tue Oct 21 13:20:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Add comment about why to check part->cx.  
+
+Tue Oct 21 09:15:47 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation cleanup.  
+
+Tue Oct 21 00:29:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	put_link_number(): Readd check for part->cx == -1 that was
+	wrongfully removed by me in version 1.312 and which caused underflow
+	of part->spaces. Thanks to Zardoz once again for helping out and
+	spotting my bad patches.  
+
 Mon Oct 20 21:52:21 2003  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

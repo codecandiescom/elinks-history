@@ -1,15 +1,20 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.17 2004/11/13 13:31:54 witekfl Exp $ */
+/* $Id: stub.c,v 1.18 2004/11/17 19:04:01 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <ctype.h>
+#include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #include "elinks.h"
 

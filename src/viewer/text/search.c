@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.185 2004/02/02 15:40:48 jonas Exp $ */
+/* $Id: search.c,v 1.186 2004/02/03 10:12:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1204,8 +1204,8 @@ enum search_option {
 };
 
 static struct option_resolver resolvers[] = {
-	{ SEARCH_OPT_CASE,	"document.browse.search.regex" },
-	{ SEARCH_OPT_REGEX,	"document.browse.search.case" },
+	{ SEARCH_OPT_REGEX,	"document.browse.search.regex" },
+	{ SEARCH_OPT_CASE,	"document.browse.search.case" },
 };
 
 struct search_dlg_hop {

@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.5 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: header.c,v 1.6 2002/06/18 19:36:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ again:
 	while (WHITECHAR(*e)) e++;
 
 	start = e;
-	if (!U(*e)) while (*e && !WHITECHAR(*e)) e++;
+	if (!IS_QUOTE(*e)) while (*e && !WHITECHAR(*e)) e++;
 	else {
 		char uu = *e++;
 		start++;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.31 2002/06/17 11:23:46 pasky Exp $ */
+/* $Id: parser.c,v 1.32 2002/06/18 19:36:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ parse_element(unsigned char *e, unsigned char *eof, unsigned char **name, int *n
 	e++;
 	while (e < eof && WHITECHAR(*e)) e++;
 	if (e >= eof) return -1;
-	if (U(*e)) {
+	if (IS_QUOTE(*e)) {
 		unsigned char uu = *e;
 		u:
 		e++;
@@ -129,7 +129,7 @@ get_attr_val(unsigned char *e, unsigned char *name)
 	if (*e != '=') goto ea;
 	e++;
 	while (WHITECHAR(*e)) e++;
-	if (!U(*e)) {
+	if (!IS_QUOTE(*e)) {
 		while (!WHITECHAR(*e) && *e != '>' && *e != '<') {
 			if (!f) add_chr(a, l, *e);
 			e++;

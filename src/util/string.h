@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.3 2002/06/17 08:08:11 pasky Exp $ */
+/* $Id: string.h,v 1.4 2002/06/18 19:36:01 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -30,9 +30,7 @@ unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
 
 
 #define WHITECHAR(x) ((x) == ' ' || ((x) >= 9 && (x) <= 13))
-
-/* XXX: this macro should be renamed --Zas */
-#define U(x) ((x) == '"' || (x) == '\'')
+#define IS_QUOTE(x) ((x) == '"' || (x) == '\'')
 
 static inline int
 isA(unsigned char c)

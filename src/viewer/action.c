@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.76 2004/06/20 16:08:17 jonas Exp $ */
+/* $Id: action.c,v 1.77 2004/06/20 18:00:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,7 +150,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			auth_manager(ses);
 			break;
 
-		case ACT_MAIN_BACK:
+		case ACT_MAIN_HISTORY_MOVE_BACK:
 			go_back(ses);
 			break;
 
@@ -483,7 +483,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			toggle_wrap_text(ses, ses->doc_view, 0);
 			break;
 
-		case ACT_MAIN_UNBACK:
+		case ACT_MAIN_HISTORY_MOVE_FORWARD:
 			go_unback(ses);
 			break;
 

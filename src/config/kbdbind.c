@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.222 2004/06/20 16:08:17 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.223 2004/06/20 18:00:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,7 +440,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "add-bookmark-link", ACT_MAIN_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
 	{ "add-bookmark-tabs", ACT_MAIN_ADD_BOOKMARK_TABS, DACT(N_("Bookmark all open tabs")) },
 	{ "auth-manager", ACT_MAIN_AUTH_MANAGER, DACT(N_("Open authentication manager")) },
-	{ "back", ACT_MAIN_BACK, DACT(N_("Return to the previous document in history")) },
 	{ "bookmark-manager", ACT_MAIN_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
 	{ "cache-manager", ACT_MAIN_CACHE_MANAGER, DACT(N_("Open cache manager")) },
 	{ "cache-minimize", ACT_MAIN_CACHE_MINIMIZE, DACT(N_("Free unused cache entries")) },
@@ -466,6 +465,8 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "goto-url-home", ACT_MAIN_GOTO_URL_HOME, DACT(N_("Go to the homepage")) },
 	{ "header-info", ACT_MAIN_HEADER_INFO, DACT(N_("Show information about the current page HTTP headers")) },
 	{ "history-manager", ACT_MAIN_HISTORY_MANAGER, DACT(N_("Open history manager")) },
+	{ "history-move-back", ACT_MAIN_HISTORY_MOVE_BACK, DACT(N_("Return to the previous document in history")) },
+	{ "history-move-forward", ACT_MAIN_HISTORY_MOVE_FORWARD, DACT(N_("Go forward in history")) },
 	{ "jump-to-link", ACT_MAIN_JUMP_TO_LINK, DACT(N_("Jump to link")) },
 	{ "keybinding-manager", ACT_MAIN_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
 	{ "kill-backgrounded-connections", ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
@@ -539,7 +540,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "toggle-numbered-links", ACT_MAIN_TOGGLE_NUMBERED_LINKS, DACT(N_("Toggle displaying of links numbers")) },
 	{ "toggle-plain-compress-empty-lines", ACT_MAIN_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES, DACT(N_("Toggle plain renderer compression of empty lines")) },
 	{ "toggle-wrap-text", ACT_MAIN_TOGGLE_WRAP_TEXT, DACT(N_("Toggle wrapping of text")) },
-	{ "unback", ACT_MAIN_UNBACK, DACT(N_("Go forward in the unhistory")) },
 	{ "view-image", ACT_MAIN_VIEW_IMAGE, DACT(N_("View the current image")) },
 	{ "zoom-frame", ACT_MAIN_ZOOM_FRAME, DACT(N_("Maximize the current frame")) },
 
@@ -776,7 +776,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 'r',		 0,		ACT_MAIN_RESUME_DOWNLOAD },
 	{ 's',		 0,		ACT_MAIN_BOOKMARK_MANAGER },
 	{ 't',		 0,		ACT_MAIN_OPEN_NEW_TAB },
-	{ 'u',		 0,		ACT_MAIN_UNBACK },
+	{ 'u',		 0,		ACT_MAIN_HISTORY_MOVE_FORWARD },
 	{ 'v',		 0,		ACT_MAIN_VIEW_IMAGE },
 	{ 'w',		 0,		ACT_MAIN_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES },
 	{ 'x',		 0,		ACT_MAIN_ENTER_RELOAD },
@@ -795,7 +795,7 @@ static struct default_kb default_main_keymap[] = {
 	{ KBD_HOME,	 0,		ACT_MAIN_MOVE_DOCUMENT_START },
 	{ KBD_INS,	 0,		ACT_MAIN_SCROLL_UP },
 	{ KBD_INS,	 KBD_CTRL,	ACT_MAIN_COPY_CLIPBOARD },
-	{ KBD_LEFT,	 0,		ACT_MAIN_BACK },
+	{ KBD_LEFT,	 0,		ACT_MAIN_HISTORY_MOVE_BACK },
 	{ KBD_PAGE_DOWN, 0,		ACT_MAIN_MOVE_PAGE_DOWN },
 	{ KBD_PAGE_UP,	 0,		ACT_MAIN_MOVE_PAGE_UP },
 	{ KBD_RIGHT,	 0,		ACT_MAIN_ENTER },
@@ -911,6 +911,8 @@ static struct strtonum main_action_aliases[] = {
 	{ "page-down", ACT_MAIN_MOVE_PAGE_DOWN, "move-page-down" },
 	{ "page-up", ACT_MAIN_MOVE_PAGE_UP, "move-page-up" },
 	{ "up",	ACT_MAIN_MOVE_LINK_UP, "move-link-up" },
+	{ "back", ACT_MAIN_HISTORY_MOVE_BACK, "history-move-back" },
+	{ "unback", ACT_MAIN_HISTORY_MOVE_FORWARD, "history-move-forward" },
 
 	{ NULL, 0, NULL }
 };

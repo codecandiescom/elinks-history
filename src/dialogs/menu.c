@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.334 2004/06/17 10:02:21 zas Exp $ */
+/* $Id: menu.c,v 1.335 2004/06/20 18:00:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,8 +210,8 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	menu = new_menu(FREE_LIST);
 	if (!menu) return;
 
-	add_menu_action(&menu, N_("Go ~back"), ACT_MAIN_BACK);
-	add_menu_action(&menu, N_("Go for~ward"), ACT_MAIN_UNBACK);
+	add_menu_action(&menu, N_("Go ~back"), ACT_MAIN_HISTORY_MOVE_BACK);
+	add_menu_action(&menu, N_("Go for~ward"), ACT_MAIN_HISTORY_MOVE_FORWARD);
 
 	add_menu_separator(&menu);
 
@@ -265,8 +265,8 @@ static struct menu_item file_menu11[] = {
 	INIT_MENU_ACTION(N_("Open new ~tab"), ACT_MAIN_OPEN_NEW_TAB),
 	INIT_MENU_ACTION(N_("Open new tab in backgroun~d"), ACT_MAIN_OPEN_NEW_TAB_IN_BACKGROUND),
 	INIT_MENU_ACTION(N_("~Go to URL"), ACT_MAIN_GOTO_URL),
-	INIT_MENU_ACTION(N_("Go ~back"), ACT_MAIN_BACK),
-	INIT_MENU_ACTION(N_("Go ~forward"), ACT_MAIN_UNBACK),
+	INIT_MENU_ACTION(N_("Go ~back"), ACT_MAIN_HISTORY_MOVE_BACK),
+	INIT_MENU_ACTION(N_("Go ~forward"), ACT_MAIN_HISTORY_MOVE_FORWARD),
 	INIT_MENU_ITEM(N_("~History"), NULL, ACT_MAIN_NONE, history_menu, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("~Unhistory"), NULL, ACT_MAIN_NONE, unhistory_menu, NULL, SUBMENU),
 };

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.272 2003/11/19 18:15:50 zas Exp $ */
+/* $Id: view.c,v 1.273 2003/11/21 04:45:11 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -590,7 +590,7 @@ frm_download(struct session *ses, struct document_view *doc_view, int resume)
 			return;
 		}
 		set_referrer(ses, doc_view->document->url);
-		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
+		query_file(ses, ses->dn_url, ses, (resume ? resume_download : start_download), NULL, 1);
 	}
 }
 
@@ -1209,7 +1209,7 @@ send_download_do(struct session *ses, enum dl_type dlt)
 
 	if (ses->dn_url) {
 		set_referrer(ses, doc_view->document->url);
-		query_file(ses, ses->dn_url, start_download, NULL, 1);
+		query_file(ses, ses->dn_url, ses, start_download, NULL, 1);
 	}
 }
 
@@ -1357,7 +1357,7 @@ save_url(struct session *ses, unsigned char *url)
 	if_assert_failed return;
 
 	set_referrer(ses, doc_view->document->url);
-	query_file(ses, ses->dn_url, start_download, NULL, 1);
+	query_file(ses, ses->dn_url, ses, start_download, NULL, 1);
 }
 
 void
@@ -1397,7 +1397,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 		if_assert_failed return;
 
 		set_referrer(ses, doc_view->document->url);
-		query_file(ses, ses->dn_url, start_download, NULL, 1);
+		query_file(ses, ses->dn_url, ses, start_download, NULL, 1);
 	}
 }
 
@@ -1421,8 +1421,9 @@ save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 }
 
 static void
-save_formatted(struct session *ses, unsigned char *file)
+save_formatted(void *data, unsigned char *file)
 {
+	struct session *ses = data;
 	struct document_view *doc_view;
 
 	assert(ses && ses->tab && ses->tab->term && file);
@@ -1447,7 +1448,7 @@ menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 	assert(doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	query_file(ses, doc_view->vs->url, save_formatted, NULL, !((int) xxx));
+	query_file(ses, doc_view->vs->url, ses, save_formatted, NULL, !((int) xxx));
 }
 
 

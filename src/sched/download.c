@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.175 2003/11/17 18:39:15 jonas Exp $ */
+/* $Id: download.c,v 1.176 2003/11/21 04:45:10 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1001,19 +1001,19 @@ download_error:
 }
 
 void
-start_download(struct session *ses, unsigned char *file)
+start_download(void *ses, unsigned char *file)
 {
 	common_download(ses, file, 0);
 }
 
 void
-resume_download(struct session *ses, unsigned char *file)
+resume_download(void *ses, unsigned char *file)
 {
 	common_download(ses, file, 1);
 }
 
 
-void tp_cancel(struct session *);
+void tp_cancel(void *);
 void tp_free(struct session *);
 
 
@@ -1026,8 +1026,9 @@ struct codw_hop {
 };
 
 static void
-continue_download(struct session *ses, unsigned char *file)
+continue_download(void *data, unsigned char *file)
 {
+	struct session *ses = data;
 	struct codw_hop *codw_hop;
 
 	if (!ses->tq.url) return;
@@ -1122,8 +1123,9 @@ tp_free(struct session *ses)
 
 
 void
-tp_cancel(struct session *ses)
+tp_cancel(void *data)
 {
+	struct session *ses = data;
 	/* XXX: Should we really abort? (1 vs 0 as the last param) --pasky */
 	change_connection(&ses->tq.download, NULL, PRI_CANCEL, 1);
 	tp_free(ses);
@@ -1137,7 +1139,7 @@ tp_save(struct session *ses)
 		mem_free(ses->tq.prog);
 		ses->tq.prog = NULL;
 	}
-	query_file(ses, ses->tq.url, continue_download, tp_cancel, 1);
+	query_file(ses, ses->tq.url, ses, continue_download, tp_cancel, 1);
 }
 
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.194 2003/11/19 02:08:26 jonas Exp $ */
+/* $Id: menu.c,v 1.195 2003/11/21 04:45:10 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,9 +558,9 @@ static struct input_history file_history = {
 };
 
 void
-query_file(struct session *ses, unsigned char *url,
-	   void (*std)(struct session *, unsigned char *),
-	   void (*cancel)(struct session *), int interactive)
+query_file(struct session *ses, unsigned char *url, void *data,
+	   void (*std)(void *, unsigned char *),
+	   void (*cancel)(void *), int interactive)
 {
 	struct string def;
 
@@ -575,12 +575,12 @@ query_file(struct session *ses, unsigned char *url,
 	if (interactive) {
 		input_field(ses->tab->term, NULL, 1,
 			    N_("Download"), N_("Save to file"),
-			    N_("OK"),  N_("Cancel"), ses, &file_history,
+			    N_("OK"),  N_("Cancel"), data, &file_history,
 			    MAX_STR_LEN, def.source, 0, 0, NULL,
 			    (void (*)(void *, unsigned char *)) std,
 			    (void (*)(void *)) cancel);
 	} else {
-		std(ses, def.source);
+		std(data, def.source);
 	}
 
 	done_string(&def);

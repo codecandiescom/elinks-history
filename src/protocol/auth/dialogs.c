@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.115 2004/11/17 21:09:04 zas Exp $ */
+/* $Id: dialogs.c,v 1.116 2004/11/18 21:39:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ do_auth_dialog(struct session *ses, void *data)
 	/* When there's some username, but no password, automagically jump at
 	 * the password. */
 	if (dlg_data && a->user[0] && !a->password[0])
-		dlg_data->selected = 1;
+		select_widget_by_id(dlg_data, 1);
 }
 
 

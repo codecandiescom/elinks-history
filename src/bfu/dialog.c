@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.174 2004/11/18 00:52:42 zas Exp $ */
+/* $Id: dialog.c,v 1.175 2004/11/18 21:39:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,10 +65,24 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 
 static inline void cycle_widget_focus(struct dialog_data *dlg_data, int direction);
 
+static void
+update_all_widgets(struct dialog_data *dlg_data)
+{
+	int i;
+
+	for (i = 0; i < dlg_data->n; i++) {
+		struct widget_data *widget_data = &dlg_data->widgets_data[i];
+
+		if (i == dlg_data->selected_widget_id)
+			display_widget_focused(dlg_data, widget_data);
+		else
+			display_widget_unfocused(dlg_data, widget_data);
+		}
+}
+
 void
 redraw_dialog(struct dialog_data *dlg_data, int layout)
 {
-	int i;
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *title_color;
 
@@ -108,14 +122,7 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 		}
 	}
 
-	for (i = 0; i < dlg_data->n; i++) {
-		struct widget_data *widget_data = &dlg_data->widgets_data[i];
-
-		if (i == dlg_data->selected)
-			display_widget_focused(dlg_data, widget_data);
-		else
-			display_widget_unfocused(dlg_data, widget_data);
-		}
+	update_all_widgets(dlg_data);
 
 	redraw_from_window(dlg_data->win);
 }
@@ -123,13 +130,8 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 static void
 select_dlg_item(struct dialog_data *dlg_data, int i)
 {
-	struct widget_data *widget_data = &dlg_data->widgets_data[i];
+	struct widget_data *widget_data = select_widget_by_id(dlg_data, i);
 
-	if (dlg_data->selected != i) {
-		display_widget_unfocused(dlg_data, selected_widget(dlg_data));
-		dlg_data->selected = i;
-		display_widget_focused(dlg_data, widget_data);
-	}
 	if (widget_data->widget->ops->select)
 		widget_data->widget->ops->select(dlg_data, widget_data);
 }
@@ -175,23 +177,42 @@ init_widget(struct dialog_data *dlg_data, int i)
 	return widget_data;
 }
 
+void
+select_widget(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
+	dlg_data->selected_widget_id = widget_data - dlg_data->widgets_data;
+	display_widget_focused(dlg_data, widget_data);
+}
+
+
+struct widget_data *
+select_widget_by_id(struct dialog_data *dlg_data, int i)
+{
+	struct widget_data *widget_data = &dlg_data->widgets_data[i];
+
+	select_widget(dlg_data, widget_data);
+
+	return widget_data;
+}
+
 static inline void
 cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 {
-	int prev_selected = dlg_data->selected;
+	int prev_selected = dlg_data->selected_widget_id;
 
 	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
 
 	do {
-		dlg_data->selected += direction;
+		dlg_data->selected_widget_id += direction;
 
-		if (dlg_data->selected >= dlg_data->n)
-			dlg_data->selected = 0;
-		else if (dlg_data->selected < 0)
-			dlg_data->selected = dlg_data->n - 1;
+		if (dlg_data->selected_widget_id >= dlg_data->n)
+			dlg_data->selected_widget_id = 0;
+		else if (dlg_data->selected_widget_id < 0)
+			dlg_data->selected_widget_id = dlg_data->n - 1;
 
 	} while (!widget_is_focusable(selected_widget(dlg_data))
-		 && dlg_data->selected != prev_selected);
+		 && dlg_data->selected_widget_id != prev_selected);
 
 	display_widget_focused(dlg_data, selected_widget(dlg_data));
 	redraw_from_window(dlg_data->win);
@@ -210,7 +231,7 @@ dialog_ev_init(struct dialog_data *dlg_data)
 		/* Make sure the selected widget is focusable */
 		if (widget_data
 		    && widget_is_focusable(widget_data))
-			dlg_data->selected = i;
+			dlg_data->selected_widget_id = i;
 	}
 }
 
@@ -255,7 +276,7 @@ select_button_by_key(struct dialog_data *dlg_data)
 	unsigned char key;
 	int i;
 	struct term_event *ev = dlg_data->term_event;
-	
+
 	if (!check_kbd_label_key(ev)) return;
 
 	key = toupper(get_kbd_key(ev));
@@ -279,7 +300,7 @@ dialog_ev_kbd(struct dialog_data *dlg_data)
 	/* XXX: KEYMAP_EDIT ? --pasky */
 	enum menu_action action;
 	struct term_event *ev = dlg_data->term_event;
-	
+
 	/* First let the widget try out. */
 	if (ops->kbd && ops->kbd(dlg_data, widget_data) == EVENT_PROCESSED)
 		return;
@@ -411,7 +432,7 @@ check_dialog(struct dialog_data *dlg_data)
 
 		if (widget_data->widget->fn &&
 		    widget_data->widget->fn(dlg_data, widget_data)) {
-			dlg_data->selected = i;
+			select_widget(dlg_data, widget_data);
 			redraw_dialog(dlg_data, 0);
 			return 1;
 		}

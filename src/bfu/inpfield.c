@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.176 2004/11/18 00:52:43 zas Exp $ */
+/* $Id: inpfield.c,v 1.177 2004/11/18 21:39:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,7 +319,7 @@ mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			    (void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
 				dlg_set_history(widget_data);
-				goto display_field;
+				select_widget(dlg_data, widget_data);
 			}
 			return EVENT_PROCESSED;
 
@@ -328,7 +328,7 @@ mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			    (void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
 				dlg_set_history(widget_data);
-				goto display_field;
+				select_widget(dlg_data, widget_data);
 			}
 			return EVENT_PROCESSED;
 	}
@@ -337,11 +337,7 @@ mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 				     + ev->info.mouse.x - widget_data->box.x;
 	int_upper_bound(&widget_data->info.field.cpos, strlen(widget_data->cdata));
 
-	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
-	dlg_data->selected = widget_data - dlg_data->widgets_data;
-
-display_field:
-	display_widget_focused(dlg_data, widget_data);
+	select_widget(dlg_data, widget_data);
 	return EVENT_PROCESSED;
 }
 
@@ -351,7 +347,7 @@ kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	struct window *win = dlg_data->win;
 	struct terminal *term = win->term;
 	struct term_event *ev = dlg_data->term_event;
-	
+
 	switch (kbd_action(KEYMAP_EDIT, ev, NULL)) {
 		case ACT_EDIT_UP:
 			if (!widget_has_history(widget_data))
@@ -535,7 +531,7 @@ input_line_event_handler(struct dialog_data *dlg_data)
 	enum edit_action action;
 	struct widget_data *widget_data = dlg_data->widgets_data;
 	struct term_event *ev = dlg_data->term_event;
-	
+
 	/* Noodle time */
 	switch (ev->ev) {
 	case EVENT_KBD:

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.70 2004/11/18 08:15:30 jonas Exp $ */
+/* $Id: button.c,v 1.71 2004/11/18 21:39:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,16 +136,14 @@ mouse_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct term_event *ev = dlg_data->term_event;
-	
+
 	if (check_mouse_wheel(ev))
 		return EVENT_NOT_PROCESSED;
 
 	if (!check_mouse_position(ev, &widget_data->box))
 		return EVENT_NOT_PROCESSED;
 
-	display_widget_unfocused(dlg_data, selected_widget(dlg_data));
-	dlg_data->selected = widget_data - dlg_data->widgets_data;
-	display_widget_focused(dlg_data, widget_data);
+	select_widget(dlg_data, widget_data);
 
 	do_not_ignore_next_mouse_event(term);
 

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.65 2004/11/18 00:52:43 zas Exp $ */
+/* $Id: widget.h,v 1.66 2004/11/18 21:39:33 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -149,7 +149,6 @@ void display_widget_unfocused(struct dialog_data *, struct widget_data *);
 
 void dlg_set_history(struct widget_data *);
 
-#define selected_widget(dlg_data) (&(dlg_data)->widgets_data[(dlg_data)->selected])
 
 #define widget_has_history(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
 					 && (widget_data)->widget->info.field.history)

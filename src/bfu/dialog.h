@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.46 2004/11/18 00:52:43 zas Exp $ */
+/* $Id: dialog.h,v 1.47 2004/11/18 21:39:33 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -102,7 +102,7 @@ struct dialog_data {
 
 	struct box box;
 	int n;
-	int selected;
+	int selected_widget_id;
 	unsigned int focus_selected_widget:1;
 	struct term_event *term_event;
 
@@ -127,5 +127,10 @@ int check_dialog(struct dialog_data *);
 int update_dialog_data(struct dialog_data *, struct widget_data *);
 void generic_dialog_layouter(struct dialog_data *dlg_data);
 void refresh_dialog(struct dialog_data *, dialog_refresh_handler handler, void *data);
+
+#define selected_widget(dlg_data) (&(dlg_data)->widgets_data[(dlg_data)->selected_widget_id])
+
+void select_widget(struct dialog_data *dlg_data, struct widget_data *widget_data);
+struct widget_data *select_widget_by_id(struct dialog_data *dlg_data, int i);
 
 #endif

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.28 2003/07/25 15:58:35 jonas Exp $ */
+/* $Id: uri.h,v 1.29 2003/07/25 16:23:51 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -18,7 +18,14 @@
  * take a length parameter. */
 /* TODO We should probably add path+query members instead of data. */
 struct uri {
+	/* The start of the uri (and thus start of the protocol string). */
 	unsigned char *string;
+
+	/* The internal protocol type. Can _never_ be PROTOCOL_UNKNOWN. */
+	int protocol; /* -> enum protocol (to workaround dependency nightmare) */
+
+	/* The protocollen should only be usable if @type is either
+	 * PROTOCOL_USER or an uri string should be composed. */
 	int protocollen;
 
 	unsigned char *user;

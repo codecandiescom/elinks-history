@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.41 2003/07/25 15:58:35 jonas Exp $ */
+/* $Id: uri.c,v 1.42 2003/07/25 16:23:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,6 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 #ifdef IPV6
 	unsigned char *lbracket, *rbracket;
 #endif
-	int protocol;
 
 	assertm(uristring, "No uri to parse.");
 	memset(uri, 0, sizeof(struct uri));
@@ -48,8 +47,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	/* Get protocol */
 
-	protocol = check_protocol(uristring, prefix_end - uristring);
-	if (protocol == PROTOCOL_UNKNOWN) return 0;
+	uri->protocol = check_protocol(uristring, prefix_end - uristring);
+	if (uri->protocol == PROTOCOL_UNKNOWN) return 0;
 
 	prefix_end++; /* ':' */
 
@@ -57,10 +56,10 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	if (prefix_end[0] == '/' && prefix_end[1] == '/')
 		prefix_end += 2;
-	else if (get_protocol_need_slashes(protocol))
+	else if (get_protocol_need_slashes(uri->protocol))
 		return 0;
 
-	if (get_protocol_free_syntax(protocol)) {
+	if (get_protocol_free_syntax(uri->protocol)) {
 		uri->data = prefix_end;
 		uri->datalen = strlen(prefix_end);
 		return 1;
@@ -107,7 +106,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 #endif
 		host_end = prefix_end + strcspn(prefix_end, ":/?");
 
-	if (!*host_end && get_protocol_need_slash_after_host(protocol))
+	if (!*host_end && get_protocol_need_slash_after_host(uri->protocol))
 		return 0;
 
 #ifdef IPV6
@@ -171,11 +170,7 @@ get_uri_port(struct uri *uri)
 	}
 
 	if (port == -1) {
-		enum protocol protocol;
-
-		protocol = check_protocol(uri->string, uri->protocollen);
-		if (protocol != PROTOCOL_UNKNOWN)
-			port = get_protocol_port(protocol);
+		port = get_protocol_port(uri->protocol);
 	}
 
 	assertm(port != -1, "Invalid uri");
@@ -188,14 +183,10 @@ struct string *
 add_uri_to_string(struct string *string, struct uri *uri,
 		  enum uri_component components)
 {
-	enum protocol protocol = check_protocol(uri->string,
- 						uri->protocollen);
-
  	assert(uri->string && uri->protocollen);
 	if_assert_failed { return NULL; }
 
- 	if (protocol == PROTOCOL_UNKNOWN
- 	    || get_protocol_free_syntax(protocol)) {
+ 	if (get_protocol_free_syntax(uri->protocol)) {
  		/* Custom or unknown or free-syntax protocol;
  		 * keep the URI untouched. */
 		add_to_string(string, struri(*uri));
@@ -208,7 +199,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
  	if (wants(URI_PROTOCOL)) {
 		add_bytes_to_string(string, uri->string, uri->protocollen);
 		add_char_to_string(string, ':');
- 		if (get_protocol_need_slashes(protocol))
+ 		if (get_protocol_need_slashes(uri->protocol))
 			add_to_string(string, "//");
  	}
 
@@ -253,7 +244,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 #endif
 	}
 
-	if (get_protocol_need_slash_after_host(protocol))
+	if (get_protocol_need_slash_after_host(uri->protocol))
 		add_char_to_string(string, '/');
 
 	if (wants(URI_DATA) && uri->datalen)
@@ -297,11 +288,14 @@ static void
 translate_directories(unsigned char *uristring)
 {
 	unsigned char *src, *dest, *path;
-	int lo = !strncasecmp(uristring, "file://", 7); /* dsep() *hint* *hint* */
+	int lo;
 	struct uri uri;
 
 	if (!parse_uri(&uri, uristring) || !uri.data/* || *--url_data != '/'*/)
 		return;
+
+	/* dsep() *hint* *hint* */
+	lo = (uri.protocol == PROTOCOL_FILE);
 
 	path = uri.data;
 	if (!dsep(*path)) path--;
@@ -706,7 +700,6 @@ add_string_uri_filename_to_string(struct string *string, unsigned char *uristrin
 {
 	unsigned char *filename;
 	unsigned char *pos;
-	/* dsep() *hint* *hint* */
 	int lo;
 	struct uri uri;
 
@@ -714,7 +707,8 @@ add_string_uri_filename_to_string(struct string *string, unsigned char *uristrin
 		return NULL;
 
 	assert(uri.data);
-	lo = !strlcasecmp("file", -1, uri.string, uri.protocollen);
+	/* dsep() *hint* *hint* */
+	lo = (uri.protocol == PROTOCOL_FILE);
 
 	for (pos = filename = uri.data; *pos && !end_of_dir(*pos); pos++)
 		if (dsep(*pos))

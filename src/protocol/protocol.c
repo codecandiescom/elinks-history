@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.20 2003/07/25 15:58:35 jonas Exp $ */
+/* $Id: protocol.c,v 1.21 2003/07/25 16:23:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,11 +142,9 @@ get_protocol_need_slash_after_host(enum protocol protocol)
 protocol_handler *
 get_protocol_handler(struct uri *uri)
 {
-	enum protocol protocol = check_protocol(uri->string, uri->protocollen);
-
-	assert(uri->string && protocol != PROTOCOL_UNKNOWN);
+	assert(uri->string && uri->protocol != PROTOCOL_UNKNOWN);
 	if_assert_failed return NULL;
-	return protocol_backends[protocol]->handler;
+	return protocol_backends[uri->protocol]->handler;
 }
 
 protocol_external_handler *

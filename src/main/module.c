@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.17 2003/10/27 23:58:57 jonas Exp $ */
+/* $Id: module.c,v 1.18 2003/12/07 00:50:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "formhist/formhist.h"
 #include "globhist/globhist.h"
 #include "mime/mime.h"
+#include "protocol/rewrite/rewrite.h"
 #include "scripting/scripting.h"
 #include "ssl/ssl.h"
 
@@ -42,6 +43,9 @@ struct module *builtin_modules[] = {
 #endif
 #ifdef GLOBHIST
 	&global_history_module,
+#endif
+#ifdef URI_REWRITE
+	&uri_rewrite_module,
 #endif
 #ifdef HAVE_SCRIPTING
 	&scripting_module,

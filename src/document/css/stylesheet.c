@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.9 2004/01/26 23:22:31 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.10 2004/01/27 00:11:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,8 @@ find_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 {
 	struct css_selector *selector;
 
+	assert(css && name);
+
 	foreach (selector, css->selectors) {
 		if (!strlcasecmp(name, namelen, selector->element, -1))
 			return selector;
@@ -40,13 +42,17 @@ init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 
 	init_list(selector->properties);
 
-	selector->element = memacpy(name, namelen);
-	if (!selector->element) {
-		mem_free(selector);
-		return NULL;
+	if (name) {
+		selector->element = memacpy(name, namelen);
+		if (!selector->element) {
+			mem_free(selector);
+			return NULL;
+		}
 	}
 
-	add_to_list(css->selectors, selector);
+	if (css) {
+		add_to_list(css->selectors, selector);
+	}
 
 	return selector;
 }
@@ -54,13 +60,17 @@ init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 struct css_selector *
 get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 {
-	struct css_selector *selector;
+	struct css_selector *selector = NULL;
 
-	selector = find_css_selector(css, name, namelen);
-	if (selector) return selector;
+	if (css && name && namelen) {
+		selector = find_css_selector(css, name, namelen);
+		if (selector)
+			return selector;
+	}
 
 	selector = init_css_selector(css, name, namelen);
-	if (selector) return selector;
+	if (selector)
+		return selector;
 
 	return NULL;
 }
@@ -84,9 +94,9 @@ done_css_stylesheet(struct css_stylesheet *css)
 	while (!list_empty(css->selectors)) {
 		struct css_selector *selector = css->selectors.next;
 
-		del_from_list(selector);
+		if (selector->next) del_from_list(selector);
 		free_list(selector->properties);
-		mem_free(selector->element);
+		if (selector->element) mem_free(selector->element);
 		if (selector->id) mem_free(selector->id);
 		if (selector->class) mem_free(selector->class);
 		if (selector->pseudo) mem_free(selector->pseudo);

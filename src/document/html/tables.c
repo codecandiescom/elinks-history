@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.159 2004/04/30 13:46:24 jonas Exp $ */
+/* $Id: tables.c,v 1.160 2004/05/10 01:51:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1922,16 +1922,15 @@ again:
 	}
 
 	node = p->document->nodes.next;
-	node->height = p->y - node->y + p->cy;
+	node->box.height = p->y - node->box.y + p->cy;
 
 	display_complicated_table(t, x, p->cy, &cye);
 	display_table_frames(t, x, p->cy);
 
 	new_node = mem_alloc(sizeof(struct node));
 	if (new_node) {
-		new_node->x = node->x;
-		new_node->y = p->y + cye;
-		new_node->width = node->width;
+		set_rect(new_node->box, node->box.x, p->y + cye,
+			 node->box.width, 0);
 		add_to_list(p->document->nodes, new_node);
 	}
 

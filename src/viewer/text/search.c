@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.216 2004/04/25 17:32:44 zas Exp $ */
+/* $Id: search.c,v 1.217 2004/05/10 01:51:05 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -141,13 +141,13 @@ get_srch(struct document *document)
 
 	foreachback (node, document->nodes) {
 		register int x, y;
-		int height = int_min(node->y + node->height, document->height);
+		int height = int_min(node->box.y + node->box.height, document->height);
 
-		for (y = node->y; y < height; y++) {
-			int width = int_min(node->x + node->width,
+		for (y = node->box.y; y < height; y++) {
+			int width = int_min(node->box.x + node->box.width,
 					    document->data[y].length);
 
-			for (x = node->x;
+			for (x = node->box.x;
 			     x < width && document->data[y].chars[x].data <= ' ';
 			     x++);
 

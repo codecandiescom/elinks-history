@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.90 2004/12/19 12:32:02 jonas Exp $ */
+/* $Id: protocol.c,v 1.91 2005/01/15 21:42:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,13 +218,13 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 		}
 #endif
 		msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-			_("Error", ses->tab->term), ALIGN_CENTER,
+			N_("Error"), ALIGN_CENTER,
 			msg_text(ses->tab->term,
 				N_("This version of ELinks does not contain "
 				   "%s protocol support"),
 				protocol_backends[uri->protocol].name),
 			ses, 1,
-			_("OK", ses->tab->term), NULL, B_ENTER | B_ESC);
+			N_("OK"), NULL, B_ENTER | B_ESC);
 		return;
 	}
 

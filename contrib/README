@@ -1,0 +1,18 @@
+This directory contains unsorted stuff contributed by other people, which is
+not incorporated to main links distribution, however may be still interesting
+for someone. You will find here i.e. example configuration files or patches,
+which weren't (possibly yet) for some reason applied. Note that this stuff is
+mostly unmaintained and is not guaranteed to work, apply, compile etc. However,
+if you feel like fixing that, no problem.
+
+* links_wps.zip - David Mediavilla <davidme@idecnet.com>
+	Scripts for OS/2 to create Links icon and assign Links as viewer of
+	URLs.
+
+* color_config.diff - Peter Wang (tjaden@psynet.net)
+	Possibility for changing defaults colors and highlighting directories.
+
+* dummy-js.diff - Jan Bobrowski <jb@mohan.krakow.pl>
+	Handler for few simple javascript functions.
+
+$Id: README,v 1.1 2001/12/28 17:25:34 pasky Exp $

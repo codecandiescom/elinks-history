@@ -1,0 +1,197 @@
+diff -u -r -N links-current/Makefile.gen links/Makefile.gen
+--- links-current/Makefile.gen	Fri Jun  9 17:45:58 2000
++++ links/Makefile.gen	Thu Jun 15 17:32:35 2000
+@@ -44,6 +44,7 @@
+ cookies.o : cookies.c links.h language.h
+ default.o : default.c links.h language.h
+ dns.o : dns.c links.h language.h
++dummyjs.o : dummyjs.c links.h
+ error.o : error.c links.h language.h
+ file.o : file.c links.h language.h
+ finger.o : finger.c links.h language.h
+diff -u -r -N links-current/Makefile.in links/Makefile.in
+--- links-current/Makefile.in	Mon Jun 12 13:45:58 2000
++++ links/Makefile.in	Thu Jun 15 17:32:35 2000
+@@ -72,7 +72,7 @@
+ EXTRA_DIST = $(man_MANS) Unicode/* intl/* config2.h Makefile.gen BUGS TODO SITES
+ 
+ bin_PROGRAMS = links
+-links_SOURCES = af_unix.c beos.c bfu.c bookmarks.c cache.c charsets.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c kbd.c language.c mailto.c main.c menu.c os_dep.c sched.c select.c session.c terminal.c types.c url.c view.c win32.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc rebuild
++links_SOURCES = af_unix.c beos.c bfu.c bookmarks.c cache.c charsets.c connect.c cookies.c default.c dns.c error.c file.c finger.c ftp.c html.c html_r.c html_tbl.c http.c kbd.c language.c mailto.c dummyjs.c main.c menu.c os_dep.c sched.c select.c session.c terminal.c types.c url.c view.c win32.c links.h os_dep.h os_depx.h setup.h codepage.h language.h codepage.inc entity.inc uni_7b.inc language.inc rebuild
+ 
+ datadir = $(prefix)/@DATADIRNAME@
+ LIBS = @LIBS@
+@@ -88,7 +88,7 @@
+ LDFLAGS = @LDFLAGS@
+ links_OBJECTS =  af_unix.o beos.o bfu.o bookmarks.o cache.o charsets.o \
+ connect.o cookies.o default.o dns.o error.o file.o finger.o ftp.o \
+-html.o html_r.o html_tbl.o http.o kbd.o language.o mailto.o main.o \
++html.o html_r.o html_tbl.o http.o kbd.o language.o mailto.o dummyjs.o main.o \
+ menu.o os_dep.o sched.o select.o session.o terminal.o types.o url.o \
+ view.o win32.o
+ links_LDADD = $(LDADD)
+diff -u -r -N links-current/dummyjs.c links/dummyjs.c
+--- links-current/dummyjs.c	Thu Jan  1 01:00:00 1970
++++ links/dummyjs.c	Thu Jun 15 17:33:31 2000
+@@ -0,0 +1,136 @@
++/*
++ * It is supposed to handle 'javascript' scheme. It understands
++ * simplest expressions:
++ *
++ *	history.back();
++ *	history.reload();
++ */
++
++#include "links.h"
++typedef unsigned char uchar;
++
++static char *keywords =
++	"\6window"
++	"\7history"
++	"\4back"
++	"\6reload"
++	"\2go"
++;
++
++enum {
++	JS_WINDOW=0x200, JS_HISTORY, JS_BACK, JS_RELOAD, JS_GO,
++	JS_NAME=0x300, JS_NUMBER
++};
++
++static int get_token(uchar **ptr, uchar **start)
++{
++	uchar *p = *ptr, *s;
++	int c;
++
++	while(*p <= ' ') {
++		if(!*p) break;
++		p++;
++	}
++	if(start)
++		*start = p;
++	s = p;
++	c = *p;
++	if(!c) goto out;
++
++	p++;
++	if(!isalnum(c) && c != '_')
++		goto out;
++
++	while(isalnum(*p) || *p == '_')
++		p++;
++
++	
++	c = JS_NUMBER;
++	if(!isdigit(*s)) {
++		int l = p - s;
++		char *k;
++
++		c = JS_WINDOW;
++		for(k = keywords; *k; k += k[-1], c++)
++			if(*k++ == l && 0==memcmp(k, s, l))
++				goto out;
++		c = JS_NAME;
++	}
++out:
++	*ptr = p;
++	return c;
++}
++
++int javascript(struct session *ses, unsigned char *p)
++{
++	int c;
++
++	c = get_token(&p, 0);
++	if(!c) return 0;
++	if(c == JS_WINDOW) {
++		c = get_token(&p, 0);
++		if(c != '.')
++			return 0;
++		c = get_token(&p, 0);
++	}
++
++	if(c == JS_HISTORY) {
++		int a, n, v;
++		uchar *s;
++
++		c = get_token(&p, 0);
++		if(c != '.')
++			return 0;
++		a = get_token(&p, 0);
++		c = get_token(&p, 0);
++		if(c != '(')
++			return 0;
++		c = get_token(&p, &s);
++		n = 0;
++		if(c == '-') {
++			n = 1;
++			c = get_token(&p, &s);
++		}
++		v = 0;
++		if(c == JS_NUMBER) {
++			uchar *e;
++			v = strtol(s, (char**)&e, 0);
++			if(e != p)
++				return 0;
++			if(n) v=-v;
++			c = get_token(&p, 0);
++		} else if(n)
++			return 0;
++		if(c != ')')
++			return 0;
++		c = get_token(&p, 0);
++		if(c == ';')
++			c = get_token(&p, 0);
++		if(c)
++			return 0;
++
++		switch(a) {
++			case JS_BACK: v = -1;
++			case JS_GO:
++				if(v < -MAX_HISTORY_ITEMS) v = -MAX_HISTORY_ITEMS;
++				while(v++ < 0) go_back(ses);
++				break;
++			case JS_RELOAD: reload(ses, -1); break;
++			default: return 0;
++		}
++		return 1;
++	}
++	return 0;
++}
++
++void js_func(struct session *ses, unsigned char *url)
++{
++	unsigned char *p;
++
++	p = strchr(url, ':');
++	if(!p) p = url-1; /* just in case */
++	if(javascript(ses, ++p))
++		return;
++
++	msg_box(ses->term, NULL, "JavaScript", AL_LEFT, p, NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);
++}
+diff -u -r -N links-current/links.h links/links.h
+--- links-current/links.h	Mon Jun 12 12:39:57 2000
++++ links/links.h	Thu Jun 15 00:05:08 2000
+@@ -809,6 +809,10 @@
+ void telnet_func(struct session *, unsigned char *);
+ void tn3270_func(struct session *, unsigned char *);
+ 
++/* dummyjs.c */
++
++void js_func(struct session *, unsigned char *);
++
+ /* kbd.c */
+ 
+ #define BM_BUTT		3
+diff -u -r -N links-current/url.c links/url.c
+--- links-current/url.c	Sun Jun 11 21:02:08 2000
++++ links/url.c	Thu Jun 15 17:32:35 2000
+@@ -17,6 +17,7 @@
+ 		{"mailto", 0, NULL, mailto_func, 0, 0, 0},
+ 		{"telnet", 0, NULL, telnet_func, 0, 0, 0},
+ 		{"tn3270", 0, NULL, tn3270_func, 0, 0, 0},
++		{"javascript", 0, NULL, js_func, 0, 0, 0},
+ 		{NULL, 0, NULL}
+ };
+ 

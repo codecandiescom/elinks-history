@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.96 2003/10/29 19:30:05 jonas Exp $ */
+/* $Id: tables.c,v 1.97 2003/10/30 13:50:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,8 +73,7 @@ struct table_cell {
 	int rowspan;
 	int min_width;
 	int max_width;
-	int x_width;
-	int height;
+	int width, height;
 	int link_num;
 
 	unsigned int used:1;
@@ -1191,10 +1190,10 @@ check_table_widths(struct table *t)
 			     (k && get_vline_width(t, i + k) >= 0);
 		}
 
-		get_cell_width(c->start, c->end, t->cellpd, p, 1, &c->x_width,
+		get_cell_width(c->start, c->end, t->cellpd, p, 1, &c->width,
 			       NULL, c->link_num, NULL);
 
-		int_upper_bound(&c->x_width, p);
+		int_upper_bound(&c->width, p);
 	}
 
 	s = 1;
@@ -1214,7 +1213,7 @@ check_table_widths(struct table *t)
 				for (k = 1; k < s; k++)
 					p += (get_vline_width(t, i + k) >= 0);
 
-				dst_width(w + i, s, c->x_width - p, t->max_c + i);
+				dst_width(w + i, s, c->width - p, t->max_c + i);
 
 			} else if (c->colspan > s && c->colspan < ns) {
 				ns = c->colspan;

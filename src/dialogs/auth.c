@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.11 2002/09/07 08:44:03 zas Exp $ */
+/* $Id: auth.c,v 1.12 2002/12/07 09:37:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,17 @@ do_auth_dialog(struct session *ses)
                       + strlen(_(TEXT(T_ENTER_USERNAME), term))
                       + (a->realm ? strlen(a->realm) : 0)
                       + strlen(_(TEXT(T_AT), term)) + strlen(a->url) + 1);
-        if (!d) return;
+        if (!d) {
+		if (a->uid) {
+			mem_free(a->uid);
+			a->uid = NULL;
+		}
+		if (a->passwd) {
+			mem_free(a->passwd);
+			a->passwd = NULL;
+		}
+		return;
+	}
         memset(d, 0, sizeof(struct dialog) + 5 * sizeof(struct widget));
         d->title = TEXT(T_AUTHEN);
         d->fn = auth_layout;

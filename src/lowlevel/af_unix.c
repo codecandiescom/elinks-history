@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.34 2003/06/18 07:59:47 zas Exp $ */
+/* $Id: af_unix.c,v 1.35 2003/06/18 08:20:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,8 +170,8 @@ get_address(void)
 static void
 af_unix_connection(void *dummy)
 {
-	int l = s_unix_l;
 	int ns;
+	int l = s_unix_l;
 
 	memset(s_unix_accept, 0, l);
 	ns = accept(s_unix_fd, (struct sockaddr *) s_unix_accept, &l);

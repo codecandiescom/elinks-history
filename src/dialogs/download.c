@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.40 2004/03/31 20:29:11 jonas Exp $ */
+/* $Id: download.c,v 1.41 2004/04/01 00:13:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	if (!msg) return;
 
-	url = get_no_post_url(file_download->url, &url_len);
+	url = get_no_post_url(file_download->uri, &url_len);
 	if (!url) {
 		mem_free(msg);
 		return;
@@ -290,7 +290,7 @@ get_file_download_info(struct listbox_item *item, struct terminal *term,
 	struct file_download *file_download = item->udata;
 
 	return (listbox_info == LISTBOX_URI)
-		? stracpy(file_download->url) : NULL;
+		? stracpy(file_download->uri) : NULL;
 }
 
 static int
@@ -328,7 +328,7 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 	struct download *download = &file_download->download;
 	unsigned char *stylename;
 	struct color_pair *color;
-	unsigned char *text = file_download->url;
+	unsigned char *text = file_download->uri;
 	int length = strlen(text);
 	int trimmedlen;
 	int meter = DOWNLOAD_METER_WIDTH;

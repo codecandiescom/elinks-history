@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.223 2004/03/31 23:33:39 jonas Exp $ */
+/* $Id: download.c,v 1.224 2004/04/01 00:13:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ abort_download(struct file_download *file_download, int stop)
 	if (file_download->download.state >= 0)
 		change_connection(&file_download->download, NULL, PRI_CANCEL,
 				  stop);
-	if (file_download->url) mem_free(file_download->url);
+	if (file_download->uri) mem_free(file_download->uri);
 
 	if (file_download->handle != -1) {
 		prealloc_truncate(file_download->handle,
@@ -265,7 +265,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 
 		if (!errmsg) goto abort;
 
-		url = get_no_post_url(file_download->url, NULL);
+		url = get_no_post_url(file_download->uri, NULL);
 
 		if (!url) goto abort;
 
@@ -291,7 +291,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	}
 
 	if (file_download->notify) {
-		unsigned char *url = get_no_post_url(file_download->url, NULL);
+		unsigned char *url = get_no_post_url(file_download->uri, NULL);
 
 		/* This is apparently a little racy. Deleting the box item will
 		 * update the download browser _after_ the notification dialog
@@ -351,24 +351,24 @@ download_data(struct download *download, struct file_download *file_download)
 		if (download->state >= 0)
 			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
-		u = join_urls(file_download->url, ce->redirect);
+		u = join_urls(file_download->uri, ce->redirect);
 		if (!u) break;
 
 		if (!broken_302_redirect && !ce->redirect_get) {
-			unsigned char *postdata = post_data_start(file_download->url);
+			unsigned char *postdata = post_data_start(file_download->uri);
 
 			if (postdata) add_to_strn(&u, postdata);
 		}
 
-		mem_free(file_download->url);
+		mem_free(file_download->uri);
 
-		file_download->url = u;
+		file_download->uri = u;
 		file_download->download.state = S_WAIT_REDIR;
 
 		if (file_download->dlg_data)
 			redraw_dialog(file_download->dlg_data, 1);
 
-		load_url(file_download->url, get_cache_uri_struct(ce), &file_download->download,
+		load_url(file_download->uri, get_cache_uri_struct(ce), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 			 download->prg ? download->prg->start : 0);
 
@@ -718,8 +718,8 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download = mem_calloc(1, sizeof(struct file_download));
 	if (!file_download) goto download_error;
 
-	file_download->url = stracpy(url);
-	if (!file_download->url) goto download_error;
+	file_download->uri = stracpy(url);
+	if (!file_download->uri) goto download_error;
 
 	file_download->file = cmdw_hop->real_file;
 
@@ -741,7 +741,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	if (is_in_downloads_list(file_download))
 		file_download->box_item = add_listbox_item(&download_browser,
-							   file_download->url,
+							   file_download->uri,
 							   file_download);
 
 	display_download(cmdw_hop->ses->tab->term, file_download, cmdw_hop->ses);
@@ -751,7 +751,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 
 download_error:
 	if (file_download) {
-		if (file_download->url) mem_free(file_download->url);
+		if (file_download->uri) mem_free(file_download->uri);
 		mem_free(file_download);
 	}
 	mem_free(cmdw_hop);
@@ -841,8 +841,8 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	object_nolock(file_download); /* Debugging purpose. */
 
-	file_download->url = stracpy(codw_hop->tq->url);
-	if (!file_download->url) goto cancel;
+	file_download->uri = stracpy(codw_hop->tq->url);
+	if (!file_download->uri) goto cancel;
 
 	file_download->file = codw_hop->real_file;
 
@@ -867,7 +867,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	if (is_in_downloads_list(file_download))
 		file_download->box_item = add_listbox_item(&download_browser,
-							   file_download->url,
+							   file_download->uri,
 							   file_download);
 
 	display_download(codw_hop->tq->ses->tab->term, file_download, codw_hop->tq->ses);
@@ -880,7 +880,7 @@ cancel:
 	tp_cancel(codw_hop->tq);
 	if (codw_hop->tq->prog && codw_hop->file) mem_free(codw_hop->file);
 	if (file_download) {
-		if (file_download->url) mem_free(file_download->url);
+		if (file_download->uri) mem_free(file_download->uri);
 		mem_free(file_download);
 	}
 	mem_free(codw_hop);

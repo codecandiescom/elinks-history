@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.471 2004/06/30 16:56:41 zas Exp $ */
+/* $Id: parser.c,v 1.472 2004/07/02 22:12:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,26 +172,38 @@ void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
-	if (html_is_preformatted()) html_context.putsp = 0;
-	if (!len || html_top.invisible) return;
+	if (!len || html_top.invisible)
+		return;
+
+	if (html_is_preformatted())
+		html_context.putsp = 0;
+
 	if (html_context.putsp == 1) {
 		put_chars(f, " ", 1);
 		html_context.position++;
 		html_context.putsp = -1;
 	}
+
 	if (html_context.putsp == -1) {
 		if (isspace(start[0])) start++, len--;
 		html_context.putsp = 0;
 	}
+
 	if (!len) {
 		html_context.putsp = -1;
-		if (html_is_preformatted()) html_context.putsp = 0;
+		if (html_is_preformatted())
+			html_context.putsp = 0;
 		return;
 	}
-	if (isspace(start[len - 1])) html_context.putsp = -1;
-	if (html_is_preformatted()) html_context.putsp = 0;
+
+	if (isspace(start[len - 1]))
+		html_context.putsp = -1;
+	if (html_is_preformatted())
+		html_context.putsp = 0;
 	html_context.was_br = 0;
+
 	put_chars(f, start, len);
+
 	html_context.position += len;
 	html_context.line_breax = 0;
 	if (html_context.was_li > 0)

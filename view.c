@@ -315,8 +315,8 @@ int _area_cursor(struct form_control *form, struct form_state *fs)
 			q = y * form->cols + x;
 			break;
 		}
-		mem_free(ln);
 	}
+	mem_free(ln);
 	return q;
 }
 

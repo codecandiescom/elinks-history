@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.45 2002/11/28 11:41:55 zas Exp $ */
+/* $Id: renderer.c,v 1.46 2002/11/29 15:02:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1286,7 +1286,7 @@ uncached:
 	html_top.dontkill = 0;
 	kill_html_stack_item(&html_top);
 
-	mem_free(part->spaces);
+	if (part->spaces) mem_free(part->spaces);
 
 	if (data) {
 		struct node *n = data->nodes.next;
@@ -1498,7 +1498,7 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 
 	for (i = screen->y - 1; i >= 0; i--) {
 		if (!screen->data[i].l) {
-			mem_free(screen->data[i].d);
+			if (screen->data[i].d) mem_free(screen->data[i].d);
 			screen->y--;
 		} else break;
 	}

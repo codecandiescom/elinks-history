@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.5 2002/11/23 19:22:14 zas Exp $ */
+/* $Id: vs.c,v 1.6 2002/11/29 15:02:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,12 +37,12 @@ destroy_vs(struct view_state *vs)
 
 	if (vs->goto_position)
 		mem_free(vs->goto_position);
-	
+
 	for (i = 0; i < vs->form_info_len; i++)
 		if (vs->form_info[i].value)
 			mem_free(vs->form_info[i].value);
 
-	mem_free(vs->form_info);
+	if (vs->form_info) mem_free(vs->form_info);
 }
 
 void
@@ -53,18 +53,20 @@ copy_vs(struct view_state *dst, struct view_state *src)
 	strcpy(dst->url, src->url);
 	dst->goto_position = src->goto_position ?
 			     stracpy(src->goto_position) : NULL;
-	
-	dst->form_info = mem_alloc(src->form_info_len
-				   * sizeof(struct form_state));
-	if (dst->form_info) {
-		int i;
-		
-		memcpy(dst->form_info, src->form_info,
-		       src->form_info_len * sizeof(struct form_state));
-		for (i = 0; i < src->form_info_len; i++)
-			if (src->form_info[i].value)
-				dst->form_info[i].value =
-					stracpy(src->form_info[i].value);
+
+	if (src->form_info_len) {
+		dst->form_info = mem_alloc(src->form_info_len
+					   * sizeof(struct form_state));
+		if (dst->form_info) {
+			int i;
+
+			memcpy(dst->form_info, src->form_info,
+			       src->form_info_len * sizeof(struct form_state));
+			for (i = 0; i < src->form_info_len; i++)
+				if (src->form_info[i].value)
+					dst->form_info[i].value =
+						stracpy(src->form_info[i].value);
+		}
 	}
 
 	dst->f = NULL;

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.101 2004/01/26 22:50:48 jonas Exp $ */
+/* $Id: scanner.c,v 1.102 2004/01/26 22:59:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,16 @@ struct scan_table_info {
 	int bits;
 };
 
+struct scanner_info {
+	/* Information for how to initialize the scanner table */
+	struct scan_table_info *scan_table_info;
+
+	/* The scanner table */
+	/* Contains bitmaps for the various characters groups.
+	 * Idea sync'ed from mozilla browser. */
+	int scan_table[SCAN_TABLE_SIZE];
+};
+
 /* FIXME: We assume that sizeof(void *) == sizeof(long) here! --pasky */
 #define SCAN_TABLE_INFO(type, data1, data2, bits) \
 	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
@@ -38,8 +48,10 @@ struct scan_table_info {
 
 /* Initiate bitmaps */
 static void
-init_scan_table(int scan_table[SCAN_TABLE_SIZE], struct scan_table_info *info)
+init_scanner_info(struct scanner_info *scanner_info)
 {
+	struct scan_table_info *info = scanner_info->scan_table_info;
+	int *scan_table = scanner_info->scan_table;
 	int i;
 
 	for (i = 0; info[i].type != SCAN_END; i++) {
@@ -68,11 +80,6 @@ init_scan_table(int scan_table[SCAN_TABLE_SIZE], struct scan_table_info *info)
 }
 
 
-
-/* The scanner table */
-/* Contains bitmaps for the various CSS characters groups.
- * Idea sync'ed from mozilla browser. */
-static int css_scan_table[SCAN_TABLE_SIZE];
 
 /* Bitmap entries for the CSS character groups used in the scanner table */
 
@@ -112,7 +119,11 @@ static struct scan_table_info css_scan_table_info[] = {
 	SCAN_TABLE_END,
 };
 
-#define	check_css_table(c, bit)	(css_scan_table[(c)] & (bit))
+static struct scanner_info css_scanner_info = {
+	css_scan_table_info,
+};
+
+#define	check_css_table(c, bit)	(css_scanner_info.scan_table[(c)] & (bit))
 #define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
 #define	scan_back_css(s, bit)	while (check_css_table(*(s), bit)) (s)--;
 
@@ -552,7 +563,7 @@ init_css_scanner(struct css_scanner *scanner, unsigned char *string)
 	static int did_init_scan_table;
 
 	if (!did_init_scan_table) {
-		init_scan_table(css_scan_table, css_scan_table_info);
+		init_scanner_info(&css_scanner_info);
 		did_init_scan_table = 1;
 	}
 

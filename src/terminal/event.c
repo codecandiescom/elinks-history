@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.31 2004/04/14 22:55:10 jonas Exp $ */
+/* $Id: event.c,v 1.32 2004/04/14 22:59:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,6 +215,9 @@ test_queue:
 		break;
 
 	case EV_KBD:
+	{
+		int utf8_io = -1;
+
 		reset_timer();
 
 		if (ev->y == KBD_CTRL && upcase(ev->x) == 'L') {
@@ -226,58 +229,58 @@ test_queue:
 		} else if (ev->x == KBD_CTRL_C) {
 			((struct window *) &term->windows)->prev->handler
 				(term->windows.prev, ev, 0);
+			break;
 
-		} else {
-			int utf8_io = -1;
-
-			if (term->utf_8.len) {
-				utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
-
-				if ((ev->x & 0xC0) == 0x80
-				    && utf8_io) {
-					term->utf_8.ucs <<= 6;
-					term->utf_8.ucs |= ev->x & 0x3F;
-					if (! --term->utf_8.len) {
-						unicode_val u = term->utf_8.ucs;
-
-						if (u < term->utf_8.min)
-							u = UCS_NO_CHAR;
-						term_send_ucs(term, ev, u);
-					}
-					break;
-
-				} else {
-					term->utf_8.len = 0;
-					term_send_ucs(term, ev, UCS_NO_CHAR);
-				}
-			}
-
-			if (ev->x < 0x80 || ev->x > 0xFF
-			    || (utf8_io == -1
-				? !get_opt_bool_tree(term->spec, "utf_8_io")
-				: !utf8_io)) {
-
-				term_send_event(term, ev);
-				break;
-
-			} else if ((ev->x & 0xC0) == 0xC0
-				   && (ev->x & 0xFE) != 0xFE) {
-				register unsigned int mask, cov = 0x80;
-				int len = 0;
-
-				for (mask = 0x80; ev->x & mask; mask >>= 1) {
-					len++;
-					term->utf_8.min = cov;
-					cov = 1 << (1 + 5 * len);
-				}
-				term->utf_8.len = len - 1;
-				term->utf_8.ucs = ev->x & (mask - 1);
-				break;
-			}
-
-			term_send_ucs(term, ev, UCS_NO_CHAR);
 		}
+
+		if (term->utf_8.len) {
+			utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
+
+			if ((ev->x & 0xC0) == 0x80
+			    && utf8_io) {
+				term->utf_8.ucs <<= 6;
+				term->utf_8.ucs |= ev->x & 0x3F;
+				if (! --term->utf_8.len) {
+					unicode_val u = term->utf_8.ucs;
+
+					if (u < term->utf_8.min)
+						u = UCS_NO_CHAR;
+					term_send_ucs(term, ev, u);
+				}
+				break;
+
+			} else {
+				term->utf_8.len = 0;
+				term_send_ucs(term, ev, UCS_NO_CHAR);
+			}
+		}
+
+		if (ev->x < 0x80 || ev->x > 0xFF
+		    || (utf8_io == -1
+			? !get_opt_bool_tree(term->spec, "utf_8_io")
+			: !utf8_io)) {
+
+			term_send_event(term, ev);
+			break;
+
+		} else if ((ev->x & 0xC0) == 0xC0
+			   && (ev->x & 0xFE) != 0xFE) {
+			register unsigned int mask, cov = 0x80;
+			int len = 0;
+
+			for (mask = 0x80; ev->x & mask; mask >>= 1) {
+				len++;
+				term->utf_8.min = cov;
+				cov = 1 << (1 + 5 * len);
+			}
+			term->utf_8.len = len - 1;
+			term->utf_8.ucs = ev->x & (mask - 1);
+			break;
+		}
+
+		term_send_ucs(term, ev, UCS_NO_CHAR);
 		break;
+	}
 
 	case EV_ABORT:
 		destroy_terminal(term);

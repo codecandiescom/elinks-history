@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.204 2004/05/29 17:23:18 jonas Exp $ */
+/* $Id: uri.c,v 1.205 2004/05/29 17:42:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,13 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
+
+
+static inline int
+end_of_dir(unsigned char c)
+{
+	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
+}
 
 int
 end_with_known_tld(unsigned char *s, int slen)

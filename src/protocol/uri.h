@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.105 2004/05/29 17:12:57 jonas Exp $ */
+/* $Id: uri.h,v 1.106 2004/05/29 17:42:14 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -253,12 +253,6 @@ int get_no_post_url_length(unsigned char *url);
  * If @url_len is non-NULL, then *url_len is set to length of new string. */
 unsigned char *get_no_post_url(unsigned char *url, int *url_len);
 
-
-static inline int
-end_of_dir(unsigned char c)
-{
-	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
-}
 
 static inline int
 get_uri_hostlen(struct uri *uri, unsigned char *from)

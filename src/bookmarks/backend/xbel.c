@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.22 2003/04/28 15:33:47 zas Exp $ */
+/* $Id: xbel.c,v 1.23 2003/05/03 21:44:00 pasky Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -531,8 +531,6 @@ struct bookmarks_backend xbel_bookmarks_backend = {
 };
 
 #else
-
-#include <stdlib.h>
 
 #include "bookmarks/backend/common.h"
 

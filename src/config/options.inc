@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.178 2005/01/03 04:02:38 jonas Exp $ */
+/* $Id: options.inc,v 1.179 2005/01/03 13:39:02 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -715,7 +715,7 @@ static struct option_info config_options_info[] = {
 		"it if you are using some exotic permissions for concerned files.\n"
 		"Secure file saving is automagically disabled if file is symlink.\n"
 		"Warning: some systems (ie. OS/2, Win32) require that destination\n"
-		"file doesn't exist when rename() is called, breaking atomicity,\n"
+		"file doesn't exist when rename(3) is called, breaking atomicity,\n"
 		"and reducing reliability of this feature.")),
 
 	/* Keep options in alphabetical order. */

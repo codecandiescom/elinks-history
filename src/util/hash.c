@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.15 2003/01/20 10:19:26 pasky Exp $ */
+/* $Id: hash.c,v 1.16 2003/01/20 10:22:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,10 +102,9 @@ get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 		if (keylen != item->keylen || memcmp(key, item->key, keylen))
 			continue;
 
-		/* The Links people call it MFR... (probably it's this; it was
-		 * somewhere in the JavaScript code ;-). Basically, it can be
-		 * a nice performance enhancement, self-ordering the list by
-		 * popularity of its items. --pasky */
+		/* Watch the MFR (Move Front Rule)! Basically, it self-orders
+		 * the list by popularity of its items. Inspired from Links,
+		 * probably PerM. --pasky */
 		if (item != hash->hash[hashval].next) {
 			del_from_list(item);
 			add_to_list(hash->hash[hashval], item);

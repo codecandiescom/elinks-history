@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.29 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: core.c,v 1.30 2003/01/19 20:03:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,12 +194,15 @@ l_pipe_read(LS)
 		unsigned char buf[1024];
 		int l = fread(buf, 1, sizeof buf, fp);
 
-		if (l) {
+		if (l > 0) {
 			s = mem_realloc(s, len + l);
 			if (!s) goto error;
 			memcpy(s + len, buf, l);
 			len += l;
-		} else goto error;
+
+		} else if (l < 0) {
+			goto error;
+		}
 	}
 	pclose(fp);
 

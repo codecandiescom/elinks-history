@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.41 2003/12/27 12:36:48 pasky Exp $ */
+/* $Id: status.c,v 1.42 2003/12/27 12:47:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,9 +84,9 @@ get_stat_msg(struct download *stat, struct terminal *term,
 
 	add_to_string(&msg, separator);
 
-	if (full && stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+	if (wide && stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg,
-			      _(wide ? (newlines ? N_("Average speed")
+			      _(full ? (newlines ? N_("Average speed")
 					         : N_("average speed"))
 				     : N_("avg"),
 				term));
@@ -99,16 +99,16 @@ get_stat_msg(struct download *stat, struct terminal *term,
 	add_xnum_to_string(&msg, average_speed(stat->prg));
 	add_to_string(&msg, "/s");
 
-	if (full && stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+	if (wide && stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg, ", ");
 		add_to_string(&msg,
-			      _(wide ? N_("current speed") : N_("cur"), term));
+			      _(full ? N_("current speed") : N_("cur"), term));
 		add_char_to_string(&msg, ' '),
 		add_xnum_to_string(&msg, current_speed(stat->prg));
 		add_to_string(&msg, "/s");
 	}
 
-	if (!full) goto estimated;
+	if (!wide) goto estimated;
 
 	/* Do the following only if there is room */
 

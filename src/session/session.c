@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.77 2003/06/05 14:38:18 zas Exp $ */
+/* $Id: session.c,v 1.78 2003/06/05 15:28:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1406,7 +1406,8 @@ reload(struct session *ses, enum cache_mode cache_mode)
 }
 
 #if 0
-void ses_load_notify(struct status *stat, struct session *ses)
+void
+ses_load_notify(struct status *stat, struct session *ses)
 {
 	if (stat->state == S_TRANS || stat->state == S_OK) {
 		stat->end = (void (*)(struct status *, void *))end_load;
@@ -1516,7 +1517,8 @@ goto_url_frame(struct session *ses, unsigned char *url,
 	goto_url_w(ses, url, target, WTD_FORWARD, NC_CACHE);
 }
 
-void goto_url(struct session *ses, unsigned char *url)
+void
+goto_url(struct session *ses, unsigned char *url)
 {
 	goto_url_w(ses, url, NULL, WTD_FORWARD, NC_CACHE);
 }

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.69 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: os_dep.c,v 1.70 2003/06/05 15:28:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -832,7 +832,8 @@ set_window_title(unsigned char *title)
 }
 
 #if 0
-void set_window_title(int init, const char *url)
+void
+set_window_title(int init, const char *url)
 {
 	static char *org_switch_title;
 	static char *org_win_title;

@@ -1,4 +1,4 @@
-/* $Id: url.h,v 1.12 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: url.h,v 1.13 2003/06/05 15:28:03 zas Exp $ */
 
 #ifndef EL__PROTOCOL_URL_H
 #define EL__PROTOCOL_URL_H
@@ -8,7 +8,8 @@
 
 #define POST_CHAR 1
 
-static inline int end_of_dir(unsigned char c)
+static inline int
+end_of_dir(unsigned char c)
 {
 	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
 }

@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.4 2003/05/25 09:41:44 zas Exp $ */
+/* $Id: signals.c,v 1.5 2003/06/05 15:28:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,8 @@ handle_basic_signals(struct terminal *term)
 }
 
 #if 0
-void handle_slave_signals(struct terminal *term)
+void
+handle_slave_signals(struct terminal *term)
 {
 	install_signal_handler(SIGHUP, (void (*)(void *))sig_terminate, term, 0);
 	install_signal_handler(SIGINT, (void (*)(void *))sig_terminate, term, 0);

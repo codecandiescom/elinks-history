@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.83 2003/06/04 10:18:45 zas Exp $ */
+/* $Id: ftp.c,v 1.84 2003/06/05 15:28:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,8 @@ static struct ftp_connection_info *add_file_cmd_to_str(struct connection *);
  * Negative numbers aren't handled so -123 is taken as 123.
  * We don't take care about separators.
 */
-static int parse_psv_resp(unsigned char *data, int *n, int max_value)
+static int
+parse_psv_resp(unsigned char *data, int *n, int max_value)
 {
 	unsigned char *p = data;
 	int i = 5;

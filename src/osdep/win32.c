@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.5 2002/09/12 16:38:33 zas Exp $ */
+/* $Id: win32.c,v 1.6 2003/06/05 15:28:03 zas Exp $ */
 
 #if defined(_WIN32) || defined(__CYGWIN__)
 
@@ -59,12 +59,10 @@ input_function(int fd)
 	bSuccess = SetConsoleCursorInfo(hStdOut, &cci);
 	/* This is the main input loop. Read from the input queue and process */
 	/* the events read */
-	do
-	{
+	do {
 		/* read an input events from the input event queue */
 		bSuccess = ReadConsoleInput(hStdIn, &inputBuffer, 1, &dwInputEvents);
-		switch (inputBuffer.EventType)
-		{
+		switch (inputBuffer.EventType) {
 		case KEY_EVENT:
 			if (inputBuffer.Event.KeyEvent.bKeyDown)
 			{
@@ -78,12 +76,12 @@ input_function(int fd)
 						char *p = keymap[vkey - VK_PRIOR];
 
 						if (*p)
-							if (write (fd, p, strlen(p)) < 0)
-									bSuccess = FALSE;
+							if (write(fd, p, strlen(p)) < 0)
+								bSuccess = FALSE;
 					}
 					break;
 				}
-				if (write (fd, &c, 1) < 0)
+				if (write(fd, &c, 1) < 0)
 					bSuccess = FALSE;
 			}
 			break;
@@ -92,40 +90,44 @@ input_function(int fd)
 				inputBuffer.Event.MouseEvent.dwButtonState)
 			{
 				char	mstr[] = "\E[Mxxx";
+
 				mstr[3] = ' ' | 0;
 				mstr[4] = ' ' + 1 +
 					inputBuffer.Event.MouseEvent.dwMousePosition.X;
 				mstr[5] = ' ' + 1 +
 					inputBuffer.Event.MouseEvent.dwMousePosition.Y;
-				if (write (fd, mstr, 6) < 0)
+				if (write(fd, mstr, 6) < 0)
 					bSuccess = FALSE;
 				mstr[3] = ' ' | 3;
-				if (write (fd, mstr, 6) < 0)
+				if (write(fd, mstr, 6) < 0)
 					bSuccess = FALSE;
 			}
 			break;
 		case WINDOW_BUFFER_SIZE_EVENT:
-			write (fd, "\E[R", 3);
+			write(fd, "\E[R", 3);
 			break;
 		} /* switch */
 		/* when we receive an esc down key, drop out of do loop */
 	} while (bSuccess);
 
-	exit (0);
+	exit(0);
 }
 
 #if 0
-void handle_terminal_resize(int fd, void (*fn)())
+void
+handle_terminal_resize(int fd, void (*fn)())
 {
 		return;
 }
 
-void unhandle_terminal_resize(int fd)
+void
+unhandle_terminal_resize(int fd)
 {
 		return;
 }
 
-int get_terminal_size(int fd, int *x, int *y)
+int
+get_terminal_size(int fd, int *x, int *y)
 {
 	CONSOLE_SCREEN_BUFFER_INFO	s;
 
@@ -142,16 +144,15 @@ int get_terminal_size(int fd, int *x, int *y)
 #endif
 
 void
-terminate_osdep ()
+terminate_osdep(void)
 {
 	kill (w32_input_pid, SIGINT);
 }
 
 void
-set_proc_id (int id)
+set_proc_id(int id)
 {
 	w32_input_pid = id;
 }
 
 # endif
-

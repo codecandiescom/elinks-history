@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.29 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: af_unix.c,v 1.30 2003/06/05 15:28:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,12 +41,14 @@
 
 #ifdef DONT_USE_AF_UNIX
 
-int bind_to_af_unix()
+int
+bind_to_af_unix(void)
 {
 	return -1;
 }
 
-void af_unix_close()
+void
+af_unix_close(void)
 {
 }
 
@@ -70,7 +72,8 @@ int s_unix_fd = -1;
 
 #ifdef USE_AF_UNIX
 
-static int get_address(void)
+static int
+get_address(void)
 {
 	struct sockaddr_un *addr;
 	unsigned char *path;
@@ -123,7 +126,8 @@ unlink_unix(void)
 
 #else
 
-int get_address(void)
+int
+get_address(void)
 {
 	struct sockaddr_in *sin;
 
@@ -146,13 +150,15 @@ int get_address(void)
 	return AF_INET;
 }
 
-void unlink_unix()
+void
+unlink_unix(void)
 {
 }
 
 #endif
 
-int bind_to_af_unix()
+int
+bind_to_af_unix(void)
 {
 	int unlinked = 0;
 	int reuse_addr = 1;
@@ -238,7 +244,8 @@ again:
 	return -1;
 }
 
-void af_unix_connection(void *dummy)
+void
+af_unix_connection(void *dummy)
 {
 	int l = s_unix_l;
 	int ns;
@@ -251,7 +258,8 @@ void af_unix_connection(void *dummy)
 	set_highpri();
 }
 
-void af_unix_close()
+void
+af_unix_close(void)
 {
 	if (s_unix_fd != -1)
 		close(s_unix_fd);

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.45 2004/02/02 16:11:26 jonas Exp $ */
+/* $Id: document.h,v 1.46 2004/03/21 16:30:12 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -13,6 +13,7 @@ struct form_control;
 struct frameset_desc;
 struct module;
 struct screen_char;
+struct uri;
 
 
 /* Tags are used for ``id''s or anchors in the document referenced by the
@@ -105,7 +106,7 @@ struct document {
 	struct list_head nodes;
 	struct list_head css_imports;
 
-	unsigned char *url;
+	struct uri *uri;
 	unsigned char *title;
 
 	struct frameset_desc *frame_desc;

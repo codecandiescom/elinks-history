@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.53 2004/02/26 01:13:47 miciah Exp $ */
+/* $Id: status.c,v 1.54 2004/03/21 16:30:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -466,9 +466,9 @@ static inline void
 display_leds(struct session *ses, struct session_status *status)
 {
 	if (ses->doc_view && ses->doc_view->document
-	    && ses->doc_view->document->url) {
+	    && ses->doc_view->document->uri) {
 		struct cache_entry *cache_entry =
-			find_in_cache(ses->doc_view->document->url);
+			find_in_cache(struri(ses->doc_view->document->uri));
 
 		if (cache_entry) {
 			status->ssl_led->value = (cache_entry->ssl_info)

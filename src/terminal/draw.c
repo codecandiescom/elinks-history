@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.14 2003/07/27 22:44:51 jonas Exp $ */
+/* $Id: draw.c,v 1.15 2003/07/27 23:59:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,16 +177,20 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 
 void
 print_text(struct terminal *t, int x, int y, int l,
-		unsigned char *text, unsigned c)
+	   unsigned char *text, unsigned c)
 {
+	int end = (x + l <= t->x) ? l : t->x - x;
+	int position = x + t->x * y;
+
 	assert(text && l >= 0);
 	if_assert_failed { return; }
 	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return; }
 
-	l = (x + l <= t->x) ? l : t->x - x;
-	for (; l-- && *text; text++, x++)
-		set_char(t, x, y, *text + c);
+	for (end += position; position < end && *text; text++, position++) {
+		t->screen[position].data = get_screen_char_data((*text + c));
+		t->screen[position].attr = get_screen_char_attr((*text + c));
+	}
 }
 
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.291 2004/09/23 15:40:33 zas Exp $ */
+/* $Id: link.c,v 1.292 2004/10/17 20:03:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1012,6 +1012,7 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 				if (passed < 0)	passed = i;
 				continue;
 			}
+			ses->kbdprefix.repeat_count = 0;
 			goto_link_number_do(ses, doc_view, i);
 			return 1;
 		}

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.21 2003/09/10 00:04:58 jonas Exp $ */
+/* $Id: home.c,v 1.22 2003/09/10 00:26:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,27 @@
 
 unsigned char *elinks_home = NULL;
 int first_use = 0;
+
+static unsigned char *
+test_confdir(unsigned char *confdir, int *new)
+{
+	struct stat st;
+
+	if (stat(confdir, &st)) {
+		if (!mkdir(confdir, 0700)) {
+			return confdir;
+		}
+
+		return NULL;
+	}
+
+	if (S_ISDIR(st.st_mode)) {
+		if (new) *new = 0;
+		return confdir;
+	}
+
+	return NULL;
+}
 
 /* TODO: Check possibility to use <libgen.h> dirname. */
 static unsigned char *
@@ -106,16 +127,9 @@ get_home(int *new)
 		add_to_strn(&home_elinks, ".elinks");
 	}
 
-	if (stat(home_elinks, &st)) {
-		if (!mkdir(home_elinks, 0700))
-			goto home_creat;
-		goto first_failed;
-	}
+	if (test_confdir(home_elinks, new))
+		goto home_creat;
 
-	if (S_ISDIR(st.st_mode))
-		goto home_ok;
-
-first_failed:
 	mem_free(home_elinks);
 
 	home_elinks = stracpy(home);
@@ -126,23 +140,13 @@ first_failed:
 
 	add_to_strn(&home_elinks, "elinks");
 
-	if (stat(home_elinks, &st)) {
-		if (mkdir(home_elinks, 0700) == 0)
-			goto home_creat;
-		goto failed;
-	}
+	if (test_confdir(home_elinks, new))
+		goto home_creat;
 
-	if (S_ISDIR(st.st_mode))
-		goto home_ok;
-
-failed:
 	mem_free(home_elinks);
 	mem_free(home);
 
 	return NULL;
-
-home_ok:
-	if (new) *new = 0;
 
 home_creat:
 #if 0

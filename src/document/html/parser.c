@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.355 2004/01/18 15:46:16 zas Exp $ */
+/* $Id: parser.c,v 1.356 2004/01/18 15:59:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2257,6 +2257,47 @@ html_frame(unsigned char *a)
 	mem_free(url);
 }
 
+#define foreach_values(i) for (i = 0; i < values_count; i++)
+
+void
+distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
+{
+	register int i;
+	int divisor = 0;
+	int tmp_val;
+	int val = *val_;
+	
+	foreach_values(i) if (values[i] < 1) values[i] = 1;
+	val -= max_value;
+
+	foreach_values(i) divisor += values[i];
+	assert(divisor);
+
+	tmp_val = val;
+	foreach_values(i) {
+		int tmp;
+		
+		/* SIGH! gcc 2.7.2.* has an optimizer bug! */
+		do_not_optimize_here_gcc_2_7(&divisor);
+		tmp = values[i] * (divisor - tmp_val) / divisor;
+		val -= values[i] - tmp;
+		values[i] = tmp;
+	}
+		
+	while (val) {
+		int flag = 0;
+			
+		foreach_values(i) {
+			if (val < 0) values[i]++, val++, flag = 1;
+			if (val > 0 && values[i] > 1) values[i]--, val--, flag = 1;
+			if (!val) break;
+		}
+		if (!flag) break;
+	}
+
+	*val_ = val;
+}
+
 /* Parse rows and cols attribute values and calculate appropriated values for display.
  * It handles things like:
  * <frameset cols="140,260,160">			values in pixels
@@ -2321,81 +2362,52 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 	/* Here begins distribution between rows or cols.
 	 * Be warn, this is Mikulas's black magic ;) */
 
-#define foreach_values(i) for (i = 0; i < values_count; i++)
-	
 	val = 2 * values_count - 1;
 	foreach_values(i) if (values[i] > 0) val += values[i] - 1;
 
 	if (val >= max_value) {
-		int divisor = 0;
-		int tmp_val;
-		
-distribute:
-		foreach_values(i) if (values[i] < 1) values[i] = 1;
-		val -= max_value;
-
-		foreach_values(i) divisor += values[i];
-		assert(divisor);
-
-		tmp_val = val;
-		foreach_values(i) {
-			int tmp;
-		
-			/* SIGH! gcc 2.7.2.* has an optimizer bug! */
-			do_not_optimize_here_gcc_2_7(&divisor);
-			tmp = values[i] * (divisor - tmp_val) / divisor;
-			val -= values[i] - tmp;
-			values[i] = tmp;
-		}
-		
-		while (val) {
-			int flag = 0;
-			
-			foreach_values(i) {
-				if (val < 0) values[i]++, val++, flag = 1;
-				if (val > 0 && values[i] > 1) values[i]--, val--, flag = 1;
-				if (!val) break;
-			}
-			if (!flag) break;
-		}
+		distribute_rows_or_cols(&val, max_value, values, values_count);
 	} else {
-		int *tmp_values;
-		int divisor = 0;
 		int neg = 0;
-		int tmp_val;
-		
-		foreach_values(i) if (values[i] < 0) neg = 1;
-		if (!neg) goto distribute;
 
-		tmp_values = fmem_alloc(values_count * sizeof(int));
-		if (!tmp_values) {
-			*new_values_count = 0;
-			return;
-		}
-		memcpy(tmp_values, values, values_count * sizeof(int));
+		foreach_values(i) if (values[i] < 0) neg = 1;
+		if (!neg) {
+			distribute_rows_or_cols(&val, max_value, values, values_count);
+		} else {
+			int *tmp_values;
+			int divisor = 0;
+			int tmp_val;
+
+			tmp_values = fmem_alloc(values_count * sizeof(int));
+			if (!tmp_values) {
+				*new_values_count = 0;
+				return;
+			}
+			memcpy(tmp_values, values, values_count * sizeof(int));
 		
-		foreach_values(i) if (values[i] < 1) values[i] = 1;
-		val = max_value - val;
+			foreach_values(i) if (values[i] < 1) values[i] = 1;
+			val = max_value - val;
 	
-		foreach_values(i) if (tmp_values[i] < 0) divisor += -tmp_values[i];
-		assert(divisor);
+			foreach_values(i) if (tmp_values[i] < 0) divisor += -tmp_values[i];
+			assert(divisor);
 		
-		tmp_val = val;
-		foreach_values(i) if (tmp_values[i] < 0) {
-			int tmp = (-tmp_values[i] * tmp_val / divisor);
+			tmp_val = val;
+			foreach_values(i) if (tmp_values[i] < 0) {
+				int tmp = (-tmp_values[i] * tmp_val / divisor);
 			
-			values[i] += tmp;
-			val -= tmp;
+				values[i] += tmp;
+				val -= tmp;
+			}
+			assertm(val >= 0, "parse_frame_widths: val < 0");
+			if_assert_failed val = 0;
+		
+			foreach_values(i) if (tmp_values[i] < 0 && val) values[i]++, val--;
+		
+			assertm(val <= 0, "parse_frame_widths: val > 0");
+			if_assert_failed val = 0;
+		
+			fmem_free(tmp_values);
 		}
-		assertm(val >= 0, "parse_frame_widths: val < 0");
-		if_assert_failed val = 0;
-		
-		foreach_values(i) if (tmp_values[i] < 0 && val) values[i]++, val--;
-		
-		assertm(val <= 0, "parse_frame_widths: val > 0");
-		if_assert_failed val = 0;
-		
-		fmem_free(tmp_values);
 	}
 
 	foreach_values(i) if (!values[i]) {
@@ -2406,8 +2418,9 @@ distribute:
 		foreach_values(j) if (values[j] > maxval) maxval = values[j], maxpos = j;
 		if (maxval) values[i] = 1, values[maxpos]--;
 	}
-#undef foreach_values
 }
+
+#undef foreach_values
 
 static void
 html_frameset(unsigned char *a)

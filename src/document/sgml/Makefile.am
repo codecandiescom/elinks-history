@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2004/09/24 00:44:59 jonas Exp $
+## $Id: Makefile.am,v 1.3 2004/09/29 22:38:52 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -11,6 +11,8 @@ include $(top_srcdir)/Makefile.base
 # automake to compile the objects :/. We DON'T use libcss.a ANYWHERE.
 
 SUBDIRS = html
+
+EXTRA_DIST = README
 
 noinst_LIBRARIES = libsgml.a
 libsgml_a_SOURCES = \

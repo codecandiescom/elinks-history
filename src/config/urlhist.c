@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.12 2002/12/07 20:05:52 pasky Exp $ */
+/* $Id: urlhist.c,v 1.13 2002/12/18 16:17:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,8 @@
 
 /* FIXME: This should be in some .h file! */
 extern struct input_history goto_url_history;
+
+int history_dirty = 0;
 
 /* Load history file */
 int load_url_history()
@@ -59,8 +61,11 @@ save_url_history()
 	struct secure_save_info *ssi;
 	unsigned char *history_file;
 	int i = 0;
+	int ret;
 
-	if (get_opt_int_tree(&cmdline_options, "anonymous")) return 0;
+	if (!history_dirty
+	    || get_opt_int_tree(&cmdline_options, "anonymous"))
+		return 0;
 
 	history_file = straconcat(elinks_home, "gotohist", NULL);
 	if (!history_file) return -1;
@@ -76,5 +81,8 @@ save_url_history()
 		if (ssi->err) break;
 	}
 
-	return secure_close(ssi);
+	ret = secure_close(ssi);
+	if (!ret) history_dirty = 0;
+
+	return ret;
 }

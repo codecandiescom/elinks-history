@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.9 2002/12/08 20:30:32 pasky Exp $ */
+/* $Id: inphist.c,v 1.10 2002/12/18 16:18:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,6 +185,8 @@ add_to_input_history(struct input_history *historylist, unsigned char *url,
 	/* add new entry to history list */
 	add_to_list(historylist->items, newhistoryitem);
 	historylist->n++;
+
+	history_dirty = 1;
 
 	/* limit size of history to MAX_HISTORY_ITEMS
 	 * removing first entries if needed */

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.16 2002/06/16 15:37:48 zas Exp $ */
+/* $Id: error.c,v 1.17 2002/06/16 16:22:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,18 +35,29 @@
 #undef FILL_ON_FREE
 #define FILL_ON_FREE_VALUE 'Z'
 
+/* Check alloc_header block sanity ?
+ * Default is defined. */
+#define CHECK_AH_SANITY
+#define CHECK_AH_SANITY_MAGIC 0xD3BA110C
+
 /* Check for realloc(NULL, size) ?
  * Default is undef. */
 #undef CHECK_REALLOC_NULL
 
 #ifndef LEAK_DEBUG_LIST
 struct alloc_header {
+#ifdef CHECK_AH_SANITY
+	int magic;
+#endif
 	int size;
 };
 #else
 struct alloc_header {
 	struct alloc_header *next;
 	struct alloc_header *prev;
+#ifdef CHECK_AH_SANITY
+	int magic;
+#endif
 	int size;
 	int line;
 	unsigned char *file;
@@ -143,6 +154,24 @@ long mem_amount = 0;
 struct list_head memory_list = { &memory_list, &memory_list };
 #endif
 
+#ifdef CHECK_AH_SANITY
+int
+bad_ah_sanity(struct alloc_header *ah, unsigned char *comment)
+{
+	if (!ah) return 1;
+	if (ah->magic != CHECK_AH_SANITY_MAGIC) {
+		if (comment && *comment) fprintf(stderr, "%s ", comment);
+		fprintf(stderr, "%p:%d @ %s:%d magic:%08x != %08x @ %p",
+				(char *) ah + SIZE_AH_ALIGNED,
+				ah->size, ah->file, ah->line, ah->magic,
+				CHECK_AH_SANITY_MAGIC, ah);
+		return 1;
+	}
+
+	return 0;
+}
+#endif
+
 void
 check_memory_leaks()
 {
@@ -160,6 +189,9 @@ check_memory_leaks()
 #ifdef LEAK_DEBUG_LIST
 	fprintf(stderr, "\nList of blocks: ");
 	foreach (ah, memory_list) {
+#ifdef CHECK_AH_SANITY
+		if (bad_ah_sanity(ah, "Skipped")) continue;
+#endif
 		fprintf(stderr, "%s%p:%d @ %s:%d", comma ? ", ": "",
 			(char *) ah + SIZE_AH_ALIGNED,
 			ah->size, ah->file, ah->line);
@@ -194,6 +226,9 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 	mem_amount += size;
 
 	ah->size = size;
+#ifdef CHECK_AH_SANITY
+	ah->magic = CHECK_AH_SANITY_MAGIC;
+#endif
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
@@ -230,6 +265,9 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 	mem_amount += size;
 
 	ah->size = size;
+#ifdef CHECK_AH_SANITY
+	ah->magic = CHECK_AH_SANITY_MAGIC;
+#endif
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
@@ -255,6 +293,10 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 	}
 
 	ah = (struct alloc_header *) ((char *) ptr - SIZE_AH_ALIGNED);
+
+#ifdef CHECK_AH_SANITY
+	if (bad_ah_sanity(ah, "free()")) force_dump();
+#endif
 
 #ifdef LEAK_DEBUG_LIST
 	if (ah->comment)
@@ -295,9 +337,14 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 		return DUMMY;
 	}
 
+	ah = (struct alloc_header *) ((char *) ptr - SIZE_AH_ALIGNED);
+
+#ifdef CHECK_AH_SANITY
+	if (bad_ah_sanity(ah, "realloc()")) force_dump();
+#endif
+
 	/* We compare oldsize to new size, and if equal we just return ptr
 	 * and change nothing, this is conform to most realloc() behavior. */
-	ah = (struct alloc_header *) ((char *) ptr - SIZE_AH_ALIGNED);
 	if (ah->size == size) return (void *) ptr;
 
 	ah = realloc(ah, size + SIZE_AH_ALIGNED);
@@ -315,6 +362,9 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 #endif
 
 	ah->size = size;
+#ifdef CHECK_AH_SANITY
+	ah->magic = CHECK_AH_SANITY_MAGIC;
+#endif
 #ifdef LEAK_DEBUG_LIST
 	ah->prev->next = ah;
 	ah->next->prev = ah;
@@ -350,6 +400,9 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 #undef FILL_ON_FREE_VALUE
 
 #undef CHECK_REALLOC_NULL
+
+#undef CHECK_AH_SANITY
+#undef CHECK_AH_SANITY_MAGIC
 
 #endif
 

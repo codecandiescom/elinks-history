@@ -1,3 +1,39 @@
+Sun Jan  5 16:48:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/POTFILES.in, po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/el.po, po/es.po, po/et.po, po/fi.po, po/fr.po,
+	po/gl.po, po/hr.po, po/hu.po, po/id.po, po/is.po, po/it.po,
+	po/lt.po, po/nl.po, po/no.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
+	src/main.c, src/bookmarks/dialogs.c, src/bookmarks/dialogs.h,
+	src/config/dialogs.c, src/config/dialogs.h, src/config/options.c,
+	src/cookies/cookies.c, src/dialogs/auth.c, src/dialogs/auth.h,
+	src/dialogs/document.c, src/dialogs/document.h, src/dialogs/edit.c,
+	src/dialogs/edit.h, src/dialogs/hierbox.h, src/dialogs/info.c,
+	src/dialogs/info.h, src/dialogs/menu.c, src/dialogs/menu.h,
+	src/dialogs/options.c, src/dialogs/options.h,
+	src/dialogs/refresh.c, src/dialogs/refresh.h,
+	src/document/Makefile.am, src/document/download.c,
+	src/document/download.h, src/document/history.c,
+	src/document/history.h, src/document/location.c,
+	src/document/location.h, src/document/session.c,
+	src/document/session.h, src/document/html/parser.c,
+	src/document/html/parser.h, src/document/html/renderer.c,
+	src/document/html/renderer.h, src/globhist/dialogs.h,
+	src/lowlevel/af_unix.c, src/lowlevel/terminal.c, src/lua/core.c,
+	src/lua/core.h, src/lua/hooks.c, src/lua/hooks.h,
+	src/protocol/ftp.c, src/protocol/mailcap.c, src/protocol/url.c,
+	src/protocol/url.h, src/protocol/user.c, src/protocol/user.h,
+	src/protocol/http/auth.c, src/protocol/http/http.c,
+	src/sched/Makefile.am, src/sched/download.c, src/sched/download.h,
+	src/sched/history.c, src/sched/history.h, src/sched/location.c,
+	src/sched/location.h, src/sched/sched.c, src/sched/session.c,
+	src/sched/session.h, src/viewer/text/view.c,
+	src/viewer/text/view.h, src/viewer/text/vs.c:
+
+	src/document/download.*,location.*,history.*,session.* ->
+	src/sched/.  
+
 Sat Jan  4 22:40:10 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* po/: be.po, bg.po, ca.po, da.po, de.po, el.po, es.po, et.po,

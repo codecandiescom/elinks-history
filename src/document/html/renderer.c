@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.204 2003/08/23 06:37:53 jonas Exp $ */
+/* $Id: renderer.c,v 1.205 2003/08/23 15:06:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,8 +244,11 @@ xpand_spaces(struct part *p, int l)
 
 
 static inline void
-set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char color, unsigned char attr)
+set_hchar(struct part *part, int x, int y,
+	  unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
+	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
+
 	assert(part && part->document);
 	if_assert_failed return;
 
@@ -263,8 +266,10 @@ set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char col
 
 static inline void
 set_hchars(struct part *part, int x, int y, int xl,
-	   unsigned char data, unsigned char color, unsigned char attr)
+	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
+	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
+
 	assert(part && part->document);
 	if_assert_failed return;
 
@@ -286,18 +291,38 @@ void
 xset_hchar(struct part *part, int x, int y,
 	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
-	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
-
-	set_hchar(part, x, y, data, color, attr);
+	set_hchar(part, x, y, data, bgcolor, attr);
 }
 
 void
 xset_hchars(struct part *part, int x, int y, int xl,
 	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
+	set_hchars(part, x, y, xl, data, bgcolor, attr);
+}
+
+void
+xset_vchars(struct part *part, int x, int y, int yl,
+	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
+{
 	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
 
-	set_hchars(part, x, y, xl, data, color, attr);
+	assert(part && part->document);
+	if_assert_failed return;
+
+	if (xpand_lines(part, y + yl - 1))
+		return;
+
+	assert(part->document->data);
+	if_assert_failed return;
+
+	for (; yl; yl--, y++) {
+	    	if (xpand_line(part, y, x)) return;
+
+		POS(x, y).data = data;
+		POS(x, y).color = color;
+		POS(x, y).attr = attr;
+	}
 }
 
 static inline void
@@ -323,17 +348,6 @@ set_hline(struct part *part, int x, int y, unsigned char *chars,
 			POS(x, y).attr = attr;
 			POS(x, y).data = *chars;
 		}
-	}
-}
-
-void
-xset_vchars(struct part *part, int x, int y, int yl,
-	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
-{
-	unsigned char color = find_nearest_color(bgcolor, 8) << 3;
-
-	for (; yl; yl--, y++) {
-		set_hchar(part, x, y, data, color, attr);
 	}
 }
 

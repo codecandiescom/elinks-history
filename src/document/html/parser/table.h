@@ -1,4 +1,4 @@
-/* $Id: table.h,v 1.3 2004/06/28 20:23:16 jonas Exp $ */
+/* $Id: table.h,v 1.4 2004/06/29 01:37:41 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_TABLE_H
 #define EL__DOCUMENT_HTML_PARSER_TABLE_H
@@ -98,6 +98,9 @@ struct table {
 	int max_width;
 
 	int link_num;
+
+	struct html_start_end *bad_html;
+	int bad_html_size;
 };
 
 #define CELL(table, col, row) (&(table)->cells[(row) * (table)->real_cols + (col)])
@@ -109,7 +112,7 @@ struct html_start_end {
 struct table *
 parse_table(unsigned char *html, unsigned char *eof,
 	    unsigned char **end, color_t bgcolor,
-	    int sh, struct html_start_end **bad_html, int *bhp);
+	    int sh);
 
 void free_table(struct table *table);
 

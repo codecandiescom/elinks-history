@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.255 2004/06/28 22:51:14 pasky Exp $ */
+/* $Id: tables.c,v 1.256 2004/06/29 01:37:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1005,7 +1005,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 {
 	struct part *part = f;
 	struct table *table;
-	struct html_start_end *bad_html;
 	struct node *node, *new_node;
 	unsigned char *al;
 	struct html_element *state;
@@ -1017,7 +1016,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	int cye;
 	int x;
 	int i;
-	int bad_html_n;
 	int cpd_pass, cpd_width, cpd_last;
 	int margins;
 
@@ -1109,13 +1107,14 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		has_width = 1;
 	}
 
-	table = parse_table(html, eof, end, bgcolor, (part->document || part->box.x), &bad_html, &bad_html_n);
+	table = parse_table(html, eof, end, bgcolor, (part->document || part->box.x));
 	if (!table) {
-		mem_free_if(bad_html);
 		goto ret0;
 	}
 
-	for (i = 0; i < bad_html_n; i++) {
+	for (i = 0; i < table->bad_html_size; i++) {
+	    	struct html_start_end *bad_html = table->bad_html;
+
 		while (bad_html[i].start < bad_html[i].end && isspace(*bad_html[i].start))
 			bad_html[i].start++;
 		while (bad_html[i].start < bad_html[i].end && isspace(bad_html[i].end[-1]))
@@ -1123,8 +1122,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		if (bad_html[i].start < bad_html[i].end)
 			parse_html(bad_html[i].start, bad_html[i].end, part, NULL);
 	}
-
-	mem_free_if(bad_html);
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0);
 

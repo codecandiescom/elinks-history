@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.254 2004/07/28 12:25:00 jonas Exp $ */
+/* $Id: menu.c,v 1.255 2004/07/28 15:20:51 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -1011,12 +1011,13 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 	if (check_mouse_wheel(ev))
 		return;
 
-	if (check_mouse_action(ev, B_DOWN) && ev->y) {
-		delete_window_ev(win, NULL);
+	/* Mouse was clicked outside the mainmenu bar */
+	if (ev->y) {
+		if (check_mouse_action(ev, B_DOWN))
+			delete_window_ev(win, NULL);
+
 		return;
 	}
-
-	if (ev->y) return;
 
 	/* First check if the mouse button was pressed in the side of the
 	 * terminal and simply scroll one step in that direction else iterate

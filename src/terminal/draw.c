@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.17 2003/07/28 07:02:17 zas Exp $ */
+/* $Id: draw.c,v 1.18 2003/07/28 08:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,8 +21,8 @@ set_char(struct terminal *t, int x, int y, unsigned c)
 	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return; }
 
-	t->screen[position].data = get_screen_char_data(c);
-	t->screen[position].attr = get_screen_char_attr(c);
+	t->screen->image[position].data = get_screen_char_data(c);
+	t->screen->image[position].attr = get_screen_char_attr(c);
 	t->dirty = 1;
 }
 
@@ -32,7 +32,7 @@ get_char(struct terminal *t, int x, int y)
 	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return 0; }
 
-	return encode_screen_char(t->screen[x + t->x * y]);
+	return encode_screen_char(t->screen->image[x + t->x * y]);
 }
 
 void
@@ -43,7 +43,7 @@ set_color(struct terminal *t, int x, int y, unsigned c)
 	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return; }
 
-	t->screen[position].attr = (t->screen[position].attr & 0x80) | (get_screen_char_attr(c) & ~0x80);
+	t->screen->image[position].attr = (t->screen->image[position].attr & 0x80) | (get_screen_char_attr(c) & ~0x80);
 	t->dirty = 1;
 }
 
@@ -55,7 +55,7 @@ set_only_char(struct terminal *t, int x, int y, unsigned c)
 	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return; }
 
-	t->screen[position].data = get_screen_char_data(c);
+	t->screen->image[position].data = get_screen_char_data(c);
 	t->dirty = 1;
 }
 
@@ -79,8 +79,8 @@ set_line(struct terminal *t, int x, int y, int l, chr *line)
 	for (i = 0; i < end; i++) {
 		int position = i + offset;
 
-		t->screen[position].data = get_screen_char_data(line[i]);
-		t->screen[position].attr = get_screen_char_attr(line[i]);
+		t->screen->image[position].data = get_screen_char_data(line[i]);
+		t->screen->image[position].attr = get_screen_char_attr(line[i]);
 	}
 	t->dirty = 1;
 }
@@ -125,8 +125,8 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
 		for (; position < endx + offset; position++) {
-			t->screen[position].data = get_screen_char_data(c);
-			t->screen[position].attr = get_screen_char_attr(c);
+			t->screen->image[position].data = get_screen_char_data(c);
+			t->screen->image[position].attr = get_screen_char_attr(c);
 		}
 	}
 	t->dirty = 1;
@@ -186,8 +186,8 @@ print_text(struct terminal *t, int x, int y, int l,
 	if_assert_failed { return; }
 
 	for (end += position; position < end && *text; text++, position++) {
-		t->screen[position].data = get_screen_char_data((*text + c));
-		t->screen[position].attr = get_screen_char_attr((*text + c));
+		t->screen->image[position].data = get_screen_char_data((*text + c));
+		t->screen->image[position].attr = get_screen_char_attr((*text + c));
 	}
 	t->dirty = 1;
 }

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.31 2003/07/28 06:18:50 jonas Exp $ */
+/* $Id: screen.c,v 1.32 2003/07/28 08:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,15 +28,23 @@ void
 alloc_screen(struct terminal *term, int x, int y)
 {
 	int size = x * y * sizeof(struct screen_char);
-	struct screen_char *screen = mem_realloc(term->screen, size + size);
+	struct terminal_screen *screen = term->screen;
+	struct screen_char *image;
 
-	if (!screen) return;
+	if (!screen) {
+		screen = mem_calloc(1, sizeof(struct terminal_screen));
+		if (!screen) return;
+		term->screen = screen;
+	}
 
-	term->screen = screen;
-	term->last_screen = screen + (x * y);
+	image = mem_realloc(screen->image, size + size);
+	if (!image) return;
 
-	memset(term->screen, 0, size);
-	memset(term->last_screen, -1, size);
+	screen->image = image;
+	screen->last_image = image + (x * y);
+
+	memset(screen->image, 0, size);
+	memset(screen->last_image, -1, size);
 
 	term->x = x;
 	term->y = y;
@@ -284,15 +292,20 @@ redraw_screen(struct terminal *term)
 	int prev_y = -1;
 	int attrib = -1;
 	int mode = -1;
- 	register struct screen_char *current = term->last_screen;
- 	register struct screen_char *pos = term->screen;
- 	register struct screen_char *prev_pos = NULL;
+ 	register struct screen_char *current;
+ 	register struct screen_char *pos;
+ 	register struct screen_char *prev_pos;
 
 	if (!term->dirty
+	    || !term->screen
 	    || (term->master && is_blocked())
 	    || !init_string(&screen)) return;
 
  	fill_option_cache(opt_cache, term);
+
+	current = term->screen->last_image;
+ 	pos = term->screen->image;
+ 	prev_pos = NULL;
 
  	for (; y < term->y; y++) {
  		register int x = 0;
@@ -348,7 +361,7 @@ redraw_screen(struct terminal *term)
 	done_string(&screen);
 	if (screen.length && term->master) done_draw();
 
-	memcpy(term->last_screen, term->screen, term->x * term->y * sizeof(struct screen_char));
+	memcpy(term->screen->last_image, term->screen->image, term->x * term->y * sizeof(struct screen_char));
 	term->dirty = 0;
 }
 
@@ -367,4 +380,11 @@ void
 beep_terminal(struct terminal *term)
 {
 	hard_write(term->fdout, "\a", 1);
+}
+
+void
+done_screen(struct terminal_screen *screen)
+{
+	if (screen->image) mem_free(screen->image);
+	mem_free(screen);
 }

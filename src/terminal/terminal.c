@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.38 2003/07/28 06:18:50 jonas Exp $ */
+/* $Id: terminal.c,v 1.39 2003/07/28 08:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ destroy_terminal(struct terminal *term)
 
 	/* if (term->cwd) mem_free(term->cwd); */
 	if (term->title) mem_free(term->title);
-	if (term->screen) mem_free(term->screen);
+	if (term->screen) done_screen(term->screen);
 
 	set_handlers(term->fdin, NULL, NULL, NULL, NULL);
 	if (term->input_queue) mem_free(term->input_queue);

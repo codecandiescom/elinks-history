@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.20 2003/07/27 21:28:25 jonas Exp $ */
+/* $Id: terminal.h,v 1.21 2003/07/28 08:25:21 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -43,13 +43,9 @@ enum term_env_type {
 	ENV_WIN32 = 64,
 };
 
-/* Lives in terminal/window.h. */
+/* Lives in terminal/window.h and terminal/screen.h . */
 struct window;
-
-struct screen_char {
-	unsigned char data;
-	unsigned char attr;
-};
+struct terminal_screen;
 
 /* This is one of the axis of ELinks' user interaction. {struct terminal}
  * defines the terminal ELinks is running on --- each ELinks instance has
@@ -92,11 +88,8 @@ struct terminal {
 	 * owning this terminal. */
 	unsigned char *input_queue;
 
-	/* This is the screen's image, character by character. */
-	struct screen_char *screen;
-
-	/* The previous screen's image, used for optimizing actual drawing. */
-	struct screen_char *last_screen;
+	/* This is the screen. See terminal/screen.h */
+	struct terminal_screen *screen;
 
 	/* Indicates the master terminal, that is the terminal under
 	 * supervision of the master ELinks instance (the one doing all the

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.113 2004/12/29 15:46:28 jonas Exp $ */
+/* $Id: document.c,v 1.114 2005/01/19 14:50:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,31 +229,21 @@ document_info_dialog(struct session *ses)
 void
 cached_header_dialog(struct session *ses, struct cache_entry *cached)
 {
-	int artificial;
-	unsigned char *title;
-	unsigned char *headers;
+	int msgbox_flags = 0;
+	unsigned char *title = N_("Header info");
+	unsigned char *headers = NULL;
 	int i = 0, j = 0;
 
-	if (!cached || !cached->head) {
-no_header_info:
-		msg_box(ses->tab->term, NULL, 0,
-			N_("Header info"), ALIGN_LEFT,
-			N_("No header info."),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
-		return;
-	}
+	if (!cached || !cached->head || !*cached->head)
+		goto display_headers;
 
+#ifdef CONFIG_DEBUG
 	/* If |cached->head| starts with a newline, it has been
-	 * artificially generated, usually to give ELinks-generated
+	 * internally generated, usually to give ELinks-generated
 	 * documents (e.g., file:// directory listings) a MIME type
 	 * of text/html. */
-	artificial = (*cached->head == '\r');
-
-	if (!*cached->head) goto no_header_info;
-
-#ifndef CONFIG_DEBUG
-	if (artificial) goto no_header_info;
+	if (*cached->head == '\r')
+		title = N_("Internal header info");
 #endif
 
 	headers = mem_alloc(strlen(cached->head) + 1);
@@ -286,15 +276,21 @@ no_header_info:
 
 	/* Remove any trailing newlines. */
 	while (j && headers[--j] == '\n')
-	headers[j] = '\0';
+		headers[j] = '\0';
 
+	if (!*headers)
+		mem_free_set(&headers, NULL);
 
-	if (!*headers) goto no_header_info;
+display_headers:
 
-	title = artificial ? N_("Internal header info") : N_("Header info");
+	if (!headers) {
+		headers = N_("No header info.");
+	} else {
+		msgbox_flags = MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE;
+	}
 
 	/* Headers info message box. */
-	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
+	msg_box(ses->tab->term, NULL, msgbox_flags,
 		title, ALIGN_LEFT,
 		headers,
 		NULL, 1,

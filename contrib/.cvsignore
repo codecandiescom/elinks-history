@@ -3,3 +3,4 @@ Makefile.in
 .deps
 elinks.spec
 *.swp
+conv/w3m2links.awk

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.12 2005/02/28 20:15:02 jonas Exp $
+## $Id: Makefile.am,v 1.13 2005/03/07 09:44:33 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -22,7 +22,7 @@ EXTRA_DIST = \
  conv/conf-links2elinks.pl \
  conv/mailcap.pl \
  conv/old_to_new_bookmarks.sh \
- conv/w3m2links.gawk \
+ conv/w3m2links.awk \
  guile/internal-hooks.scm \
  guile/user-hooks.scm \
  lua/bm-to-elinks-bookmarks.lua \

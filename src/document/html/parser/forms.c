@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.9 2004/05/01 19:26:30 zas Exp $ */
+/* $Id: forms.c,v 1.10 2004/05/01 19:29:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,6 +157,25 @@ end_parse:
 	}
 }
 
+static void
+put_button(unsigned char *a)
+{
+	unsigned char *al;
+
+	put_chrs(" [&nbsp;", 8, put_chars_f, ff);
+
+	al = get_attr_val(a, "value");
+	if (al) {
+		put_chrs(al, strlen(al), put_chars_f, ff);
+		mem_free(al);
+	} else {
+		/* no value */
+		put_chrs("BUTTON", 6, put_chars_f, ff);
+	}
+
+	put_chrs("&nbsp;] ", 8, put_chars_f, ff);
+}
+
 void
 html_button(unsigned char *a)
 {
@@ -172,18 +191,7 @@ html_button(unsigned char *a)
 
 	if (!strcasecmp(al, "button")) {
 		mem_free(al);
-		put_chrs(" [&nbsp;", 8, put_chars_f, ff);
-
-		al = get_attr_val(a, "value");
-		if (al) {
-			put_chrs(al, strlen(al), put_chars_f, ff);
-			mem_free(al);
-		} else {
-			/* no value */
-			put_chrs("BUTTON", 6, put_chars_f, ff);
-		}
-
-		put_chrs("&nbsp;] ", 8, put_chars_f, ff);
+		put_button(a);
 		return;
 	}
 
@@ -241,18 +249,7 @@ html_input(unsigned char *a)
 
 	if (!strcasecmp(al, "button")) {
 		mem_free(al);
-		put_chrs(" [&nbsp;", 8, put_chars_f, ff);
-
-		al = get_attr_val(a, "value");
-		if (al) {
-			put_chrs(al, strlen(al), put_chars_f, ff);
-			mem_free(al);
-		} else {
-			/* no value */
-			put_chrs("BUTTON", 6, put_chars_f, ff);
-		}
-
-		put_chrs("&nbsp;] ", 8, put_chars_f, ff);
+		put_button(a);
 		return;
 	}
 

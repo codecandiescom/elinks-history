@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.31 2003/12/21 16:30:08 jonas Exp $ */
+/* $Id: status.c,v 1.32 2003/12/23 19:08:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,12 +199,18 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 
 	if (ses->kbdprefix.typeahead) {
 		unsigned char *uri = print_current_link(ses);
-		struct terminal *term = ses->tab->term;
+		struct string msgstr;
 
-		msg = msg_text(term, N_("Typeahead: %s [%s]"),
-			       ses->kbdprefix.typeahead, empty_string_or_(uri));
+		if (!init_string(&msgstr)) return;
+
+		string_concat(&msgstr, _("Typeahead", term), ": ",
+			      ses->kbdprefix.typeahead, NULL);
+		set_cursor(term, msgstr.length, term->height - 1, 0);
+		string_concat(&msgstr, "  [", empty_string_or_(uri), "]", NULL);
+
 		if (uri) mem_free(uri);
-		set_cursor(term, 0, term->height - 1, 1);
+		msg = msgstr.source;
+
 	} else if (stat) {
 		/* Show S_INTERRUPTED message *once* but then show links
 		 * again as usual. */

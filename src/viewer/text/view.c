@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.152 2003/07/03 01:23:00 pasky Exp $ */
+/* $Id: view.c,v 1.153 2003/07/03 02:18:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #include "elinks.h"
 
@@ -46,6 +49,7 @@
 #include "util/string.h"
 #include "viewer/dump/dump.h"
 #include "viewer/text/form.h"
+#include "viewer/text/link.h"
 #include "viewer/text/search.h"
 #include "viewer/text/textarea.h"
 #include "viewer/text/view.h"
@@ -272,7 +276,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 	}
 }
 
-static void
+void
 draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 {
 	struct view_state *vs;
@@ -427,7 +431,7 @@ page_up(struct session *ses, struct f_data_c *f, int a)
 }
 
 
-static void
+void
 down(struct session *ses, struct f_data_c *fd, int a)
 {
 	int current_link;
@@ -536,7 +540,7 @@ x_end(struct session *ses, struct f_data_c *f, int a)
 	find_link(f, -1, 0);
 }
 
-static inline void
+inline void
 decrement_fc_refcount(struct f_data *f)
 {
 	assert(f);
@@ -581,8 +585,6 @@ rep_ev(struct session *ses, struct f_data_c *fd,
 
 
 void frm_download(struct session *, struct f_data_c *, int resume);
-void send_image(struct terminal *term, void *xxx, struct session *ses);
-void send_download_image(struct terminal *term, void *xxx, struct session *ses);
 
 static int
 frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
@@ -1151,7 +1153,7 @@ x:
 	}
 }
 
-static void
+void
 send_enter(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct event ev = { EV_KBD, KBD_ENTER, 0, 0 };
@@ -1160,7 +1162,7 @@ send_enter(struct terminal *term, void *xxx, struct session *ses)
 	send_event(ses, &ev);
 }
 
-static void
+void
 send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct event ev = { EV_KBD, KBD_ENTER, KBD_CTRL, 0 };
@@ -1245,7 +1247,7 @@ send_download_image(struct terminal *term, void *xxx, struct session *ses)
 	send_download_do(term, xxx, ses, IMAGE);
 }
 
-static void
+void
 send_download(struct terminal *term, void *xxx, struct session *ses)
 {
 	assert(term && ses);

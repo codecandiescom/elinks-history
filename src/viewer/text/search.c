@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.3 2003/07/02 23:02:16 pasky Exp $ */
+/* $Id: search.c,v 1.4 2003/07/03 02:18:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/link.h"
 #include "viewer/text/search.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"

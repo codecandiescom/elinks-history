@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.2 2003/07/03 01:40:45 jonas Exp $ */
+/* $Id: link.c,v 1.3 2003/07/03 02:18:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,14 +15,19 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
+#include "protocol/url.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
+#include "terminal/kbd.h"
+#include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
+#include "viewer/text/link.h"
+#include "viewer/text/search.h"
 #include "viewer/text/textarea.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
@@ -282,7 +287,7 @@ in_viewx(struct f_data_c *f, struct link *l)
 	return 0;
 }
 
-static int
+int
 in_viewy(struct f_data_c *f, struct link *l)
 {
 	register int i;
@@ -439,7 +444,7 @@ nolink:
 }
 
 
-static unsigned char *
+unsigned char *
 get_link_url(struct session *ses, struct f_data_c *f,
 	     struct link *l)
 {
@@ -492,7 +497,7 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 }
 
 
-static int
+int
 enter(struct session *ses, struct f_data_c *fd, int a)
 {
 	struct link *link;
@@ -615,7 +620,7 @@ get_current_state(struct session *ses)
 }
 
 
-static struct link *
+struct link *
 choose_mouse_link(struct f_data_c *f, struct event *ev)
 {
 	struct link *l1, *l2, *l;
@@ -651,7 +656,7 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 
 
 /* This is backend of the backend goto_link_number_do() below ;)). */
-static void
+void
 jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 {
 	assert(ses && fd && fd->vs);
@@ -678,7 +683,7 @@ goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 		enter(ses, fd, 0);
 }
 
-static void
+void
 goto_link_number(struct session *ses, unsigned char *num)
 {
 	struct f_data_c *fd;
@@ -690,7 +695,7 @@ goto_link_number(struct session *ses, unsigned char *num)
 }
 
 /* See if this document is interested in the key user pressed. */
-static int
+int
 try_document_key(struct session *ses, struct f_data_c *fd,
 		 struct event *ev)
 {

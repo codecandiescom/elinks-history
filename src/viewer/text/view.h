@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.15 2003/07/03 01:23:00 pasky Exp $ */
+/* $Id: view.h,v 1.16 2003/07/03 02:18:54 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -34,5 +34,18 @@ void do_for_frame(struct session *, void (*)(struct session *, struct f_data_c *
 
 void set_frame(struct session *, struct f_data_c *, int);
 struct f_data_c *current_frame(struct session *);
+
+/* Bruteforce compilation fixes */
+void down(struct session *ses, struct f_data_c *fd, int a);
+inline void decrement_fc_refcount(struct f_data *f);
+void draw_doc(struct terminal *t, struct f_data_c *scr, int active);
+void send_enter(struct terminal *term, void *xxx, struct session *ses);
+void send_enter_reload(struct terminal *term, void *xxx, struct session *ses);
+void send_download(struct terminal *term, void *xxx, struct session *ses);
+void send_open_in_new_xterm(struct terminal *term,
+	void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
+	struct session *ses);
+void send_image(struct terminal *term, void *xxx, struct session *ses);
+void send_download_image(struct terminal *term, void *xxx, struct session *ses);
 
 #endif

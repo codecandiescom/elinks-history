@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.347 2003/10/30 18:12:45 jonas Exp $ */
+/* $Id: renderer.c,v 1.348 2003/10/30 18:23:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1505,6 +1505,35 @@ format_html(struct cache_entry *ce, struct document *document)
 #endif
 }
 
+static struct document *
+get_cached_document(unsigned char *uri, struct document_options *options, int id)
+{
+	struct document *document;
+
+	foreach (document, format_cache) {
+		if (strcmp(document->url, uri)
+		    || compare_opt(&document->options, options))
+			continue;
+
+		if (id != document->id_tag) {
+			if (!document->refcount) {
+				document = document->prev;
+				done_document(document->next);
+				format_cache_entries--;
+			}
+			continue;
+		}
+
+		format_cache_reactivate(document);
+
+		if (!document->refcount++) format_cache_entries--;
+
+		return document;
+	}
+
+	return NULL;
+}
+
 void
 cached_format_html(struct view_state *vs, struct document_view *document_view,
 		   struct document_options *options)
@@ -1533,25 +1562,9 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 		return;
 	}
 
-	foreach (document, format_cache) {
-		if (strcmp(document->url, vs->url)
-		    || compare_opt(&document->options, options))
-			continue;
-
-		if (cache_entry->id_tag != document->id_tag) {
-			if (!document->refcount) {
-				document = document->prev;
-				done_document(document->next);
-				format_cache_entries--;
-			}
-			continue;
-		}
-
-		format_cache_reactivate(document);
-
-		if (!document->refcount++) format_cache_entries--;
+	document = get_cached_document(vs->url, options, cache_entry->id_tag);
+	if (document) {
 		document_view->document = document;
-
 		goto sx;
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.12 2003/10/30 18:12:45 jonas Exp $ */
+/* $Id: document.h,v 1.13 2003/10/30 18:23:21 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -149,7 +149,7 @@ init_document(unsigned char *uristring, struct document_options *options);
 /* Releases the document and all it's resources. */
 void done_document(struct document *document);
 
-struct document *get_cached_document(unsigned char *uristring, struct document_options *options, int id);
+/*struct document *get_cached_document(unsigned char *uristring, struct document_options *options, int id);*/
 
 /* Release a reference to the document. */
 void release_document(struct document *document);

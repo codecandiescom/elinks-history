@@ -6,8 +6,10 @@ config.h.in
 config.log
 config.status
 configure
+install-sh
 Makefile
 Makefile.in
+missing
 stamp-h
 stamp-h.in
 depcomp

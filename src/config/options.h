@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.45 2003/04/24 08:23:38 zas Exp $ */
+/* $Id: options.h,v 1.46 2003/05/08 21:45:43 zas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -88,10 +88,10 @@ extern struct list_head root_option_box_items;
 extern struct list_head option_boxes;
 
 
-extern void init_options();
-extern void done_options();
+extern void init_options(void);
+extern void done_options(void);
 
-extern struct list_head *init_options_tree();
+extern struct list_head *init_options_tree(void);
 extern void unmark_options_tree(struct list_head *);
 
 extern void smart_config_string(unsigned char **, int *, int, struct list_head *, unsigned char *, int,

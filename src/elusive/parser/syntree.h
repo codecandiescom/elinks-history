@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.11 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: syntree.h,v 1.12 2003/05/08 21:50:07 zas Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -74,7 +74,7 @@ struct syntree_node {
 
 /* Initializes a node structure. Returns NULL upon allocation failure. */
 struct syntree_node *
-init_syntree_node();
+init_syntree_node(void);
 
 /* Releases the node structure and all its properties and leafs. */
 void

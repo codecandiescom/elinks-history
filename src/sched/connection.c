@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.16 2003/05/07 09:22:55 zas Exp $ */
+/* $Id: connection.c,v 1.17 2003/05/08 21:50:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,9 +120,9 @@ static INIT_LIST_HEAD(keepalive_connections);
 
 /* Prototypes */
 static void send_connection_info(struct connection *c);
-static void check_keepalive_connections();
+static void check_keepalive_connections(void);
 #ifdef DEBUG
-static void check_queue_bugs();
+static void check_queue_bugs(void);
 #endif
 
 
@@ -317,7 +317,7 @@ get_keepalive_socket(struct connection *c)
 }
 
 static inline void
-abort_all_keepalive_connections()
+abort_all_keepalive_connections(void)
 {
 	struct k_conn *k;
 
@@ -488,7 +488,7 @@ keepalive_timer(void *x)
 }
 
 void
-check_keepalive_connections()
+check_keepalive_connections(void)
 {
 	struct k_conn *kc;
 	ttime ct = get_time();
@@ -532,7 +532,7 @@ add_to_queue(struct connection *c)
 }
 
 static void
-sort_queue()
+sort_queue(void)
 {
 	struct connection *c;
 	int swp;

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.6 2003/05/07 09:22:55 zas Exp $ */
+/* $Id: connection.h,v 1.7 2003/05/08 21:50:08 zas Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
@@ -169,7 +169,7 @@ struct status {
 
 extern struct list_head queue;
 
-void check_queue();
+void check_queue(void);
 long connect_info(int);
 /* void send_connection_info(struct connection *c); */
 void setcstate(struct connection *, int);
@@ -189,8 +189,8 @@ int load_url(unsigned char *, unsigned char *, struct status *, int, enum cache_
 
 void change_connection(struct status *, struct status *, int, int);
 void detach_connection(struct status *, int);
-void abort_all_connections();
-void abort_background_connections();
+void abort_all_connections(void);
+void abort_background_connections(void);
 
 /* void connection_timeout(struct connection *); */
 void set_timeout(struct connection *);

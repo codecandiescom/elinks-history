@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.19 2003/05/07 22:48:09 zas Exp $ */
+/* $Id: parser.h,v 1.20 2003/05/08 21:50:07 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -200,7 +200,7 @@ int get_width(unsigned char *, unsigned char *, int);
 /* int get_color(unsigned char *, unsigned char *, struct rgb *); */
 int get_bgcolor(unsigned char *, struct rgb *);
 
-void html_stack_dup();
+void html_stack_dup(void);
 void kill_html_stack_item(struct html_element *);
 unsigned char *skip_comment(unsigned char *, unsigned char *);
 

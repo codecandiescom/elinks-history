@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.207 2003/05/08 15:39:58 zas Exp $ */
+/* $Id: options.c,v 1.208 2003/05/08 21:45:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -347,7 +347,7 @@ copy_option(struct option *template)
 }
 
 
-static void register_options();
+static void register_options(void);
 
 struct list_head *
 init_options_tree()

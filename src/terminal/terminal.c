@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.19 2003/05/08 01:30:07 pasky Exp $ */
+/* $Id: terminal.c,v 1.20 2003/05/08 21:50:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ alloc_term_screen(struct terminal *term, int x, int y)
 
 
 static void in_term(struct terminal *);
-static void check_if_no_terminal();
+static void check_if_no_terminal(void);
 
 
 void

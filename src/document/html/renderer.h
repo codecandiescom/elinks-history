@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.22 2003/05/07 14:36:33 pasky Exp $ */
+/* $Id: renderer.h,v 1.23 2003/05/08 21:50:07 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -187,8 +187,8 @@ extern int format_cache_entries;
 long formatted_info(int);
 
 void shrink_format_cache(int);
-void count_format_cache();
-void delete_unused_format_cache_entries();
+void count_format_cache(void);
+void delete_unused_format_cache_entries(void);
 void format_cache_reactivate(struct f_data *);
 
 void cached_format_html(struct view_state *, struct f_data_c *, struct document_options *);
@@ -218,7 +218,7 @@ int expand_lines(struct part *, int);
 void xset_hchar(struct part *, int, int, unsigned);
 void xset_hchars(struct part *, int, int, int, unsigned);
 
-void free_table_cache();
+void free_table_cache(void);
 
 struct part *format_html_part(unsigned char *, unsigned char *, int, int, int, struct f_data *, int, int, unsigned char *, int);
 

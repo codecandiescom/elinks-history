@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.25 2003/05/04 17:25:54 pasky Exp $ */
+/* $Id: select.c,v 1.26 2003/05/08 21:50:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ check_bottom_halves()
 static ttime last_time;
 
 static void
-check_timers()
+check_timers(void)
 {
 	ttime now = get_time();
 	ttime interval = now - last_time;
@@ -286,7 +286,7 @@ static int signal_mask[NUM_SIGNALS];
 static struct signal_handler signal_handlers[NUM_SIGNALS];
 static int critical_section = 0;
 
-static void check_for_select_race();
+static void check_for_select_race(void);
 
 /* TODO: In order to gain better portabilty, we should use signal() instead.
  * Highest care should be given to careful watching of which signals are
@@ -346,7 +346,7 @@ alarm_handler(void *x)
 }
 
 static void
-check_for_select_race()
+check_for_select_race(void)
 {
 	if (critical_section) {
 #ifdef SIGALRM
@@ -360,7 +360,7 @@ check_for_select_race()
 }
 
 static inline void
-uninstall_alarm()
+uninstall_alarm(void)
 {
 	pending_alarm = 0;
 #ifdef HAVE_ALARM
@@ -369,7 +369,7 @@ uninstall_alarm()
 }
 
 static int
-check_signals()
+check_signals(void)
 {
 	int i, r = 0;
 
@@ -404,7 +404,7 @@ set_sigcld()
 int terminate = 0;
 
 void
-select_loop(void (*init)())
+select_loop(void (*init)(void))
 {
 	memset(signal_mask, 0, sizeof signal_mask);
 	memset(signal_handlers, 0, sizeof signal_handlers);

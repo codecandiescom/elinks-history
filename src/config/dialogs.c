@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.38 2003/05/04 17:25:52 pasky Exp $ */
+/* $Id: dialogs.c,v 1.39 2003/05/08 21:44:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ write_config_error(struct terminal *term, unsigned char *config_file, int ret)
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
 static struct listbox_data *
-option_dlg_box_build()
+option_dlg_box_build(void)
 {
 	struct listbox_data *box;
 
@@ -557,7 +557,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
 static struct listbox_data *
-kbdbind_dlg_box_build()
+kbdbind_dlg_box_build(void)
 {
 	struct listbox_data *box;
 

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.34 2003/01/26 17:34:47 pasky Exp $ */
+/* $Id: socket.c,v 1.35 2003/05/08 21:50:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,7 +448,7 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 	memcpy(wb->data, data, len);
 	if (c->buffer) mem_free(c->buffer);
 	c->buffer = wb;
-	set_handlers(s, NULL, (void (*)())write_select, (void (*)())exception, c);
+	set_handlers(s, NULL, (void *)write_select, (void *)exception, c);
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
@@ -534,7 +534,7 @@ read_from_socket(struct connection *c, int s, struct read_buffer *buf,
 	if (c->buffer && buf != c->buffer)
 		mem_free(c->buffer);
 	c->buffer = buf;
-	set_handlers(s, (void (*)())read_select, NULL, (void (*)())exception, c);
+	set_handlers(s, (void *)read_select, NULL, (void *)exception, c);
 }
 
 void

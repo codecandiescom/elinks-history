@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.7 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: encoding.c,v 1.8 2003/05/08 21:50:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@ struct decoding_handlers {
 	int (*open)(struct stream_encoded *stream, int fd);
 	int (*read)(struct stream_encoded *stream, unsigned char *data, int len);
 	void (*close)(struct stream_encoded *stream);
-	unsigned char **(*listext)();
+	unsigned char **(*listext)(void);
 };
 
 
@@ -69,7 +69,7 @@ dummy_close(struct stream_encoded *stream)
 	mem_free(stream->data);
 }
 
-static unsigned char ** dummy_listext()
+static unsigned char **dummy_listext(void)
 {
 	return NULL;
 }
@@ -109,7 +109,7 @@ gzip_close(struct stream_encoded *stream)
 	gzclose((gzFile *) stream->data);
 }
 
-unsigned char **gzip_listext()
+unsigned char **gzip_listext(void)
 {
 	static unsigned char *ext[] = { ".gz", ".tgz", NULL};
 
@@ -195,7 +195,7 @@ bzip2_close(struct stream_encoded *stream)
 	mem_free(data);
 }
 
-unsigned char **bzip2_listext()
+unsigned char **bzip2_listext(void)
 {
 	static unsigned char *ext[] = { ".bz2", NULL};
 

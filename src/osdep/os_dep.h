@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.13 2003/05/06 18:25:29 zas Exp $ */
+/* $Id: os_dep.h,v 1.14 2003/05/08 21:46:59 zas Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -173,39 +173,39 @@ struct open_in_new {
 	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
 };
 
-int get_system_env();
-int is_xterm();
-int can_twterm();
+int get_system_env(void);
+int is_xterm(void);
+int can_twterm(void);
 int get_terminal_size(int, int *, int *);
-void handle_terminal_resize(int, void (*)());
+void handle_terminal_resize(int, void (*)(void));
 void unhandle_terminal_resize(int);
 void set_bin(int);
 int c_pipe(int *);
-int get_input_handle();
-int get_output_handle();
-int get_ctl_handle();
-void want_draw();
-void done_draw();
-void terminate_osdep();
+int get_input_handle(void);
+int get_output_handle(void);
+int get_ctl_handle(void);
+void want_draw(void);
+void done_draw(void);
+void terminate_osdep(void);
 void *handle_mouse(int, void (*)(void *, unsigned char *, int), void *);
 void unhandle_mouse(void *);
 int check_file_name(unsigned char *);
 int start_thread(void (*)(void *, int), void *, int);
-char *get_clipboard_text();
+char *get_clipboard_text(void);
 void set_clipboard_text(char *);
 void set_window_title(unsigned char *);
-unsigned char *get_window_title();
+unsigned char *get_window_title(void);
 int is_safe_in_shell(unsigned char);
 void check_shell_security(unsigned char **);
-void block_stdin();
-void unblock_stdin();
+void block_stdin(void);
+void unblock_stdin(void);
 int exe(char *);
 int resize_window(int, int);
 int can_resize_window(int);
 int can_open_os_shell(int);
 struct open_in_new *get_open_in_new(int);
 int can_open_in_new(struct terminal *);
-void set_highpri();
+void set_highpri(void);
 
 #ifdef USE_OPEN_PREALLOC
 int open_prealloc(char *, int, int, int);

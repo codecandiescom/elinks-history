@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.87 2003/05/08 00:28:09 pasky Exp $ */
+/* $Id: parser.c,v 1.88 2003/05/08 21:50:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1789,7 +1789,7 @@ new_menu_item(unsigned char *name, int data, int fullname)
 }
 
 static inline void
-init_menu()
+init_menu(void)
 {
 	menu_stack_size = 0;
 	menu_stack = NULL;
@@ -1811,7 +1811,7 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 }
 
 static inline struct menu_item *
-detach_menu()
+detach_menu(void)
 {
 	struct menu_item *i = NULL;
 
@@ -1821,7 +1821,7 @@ detach_menu()
 }
 
 static inline void
-destroy_menu()
+destroy_menu(void)
 {
 	if (menu_stack) free_menu(menu_stack[0]);
 	detach_menu();

@@ -1,4 +1,4 @@
-/* $Id: ssl.h,v 1.9 2002/07/08 14:52:17 pasky Exp $ */
+/* $Id: ssl.h,v 1.10 2003/05/08 21:50:08 zas Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
@@ -19,10 +19,10 @@
 #define	ssl_t	void
 #endif
 
-void init_ssl();
-void done_ssl();
+void init_ssl(void);
+void done_ssl(void);
 
-ssl_t *get_ssl();
+ssl_t *get_ssl(void);
 void free_ssl(ssl_t *);
 
 unsigned char *get_ssl_cipher_str(ssl_t *);

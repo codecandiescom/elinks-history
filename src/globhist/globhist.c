@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.26 2003/05/07 18:07:23 pasky Exp $ */
+/* $Id: globhist.c,v 1.27 2003/05/08 21:50:08 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -169,7 +169,7 @@ multiget_global_history_item(unsigned char *url, unsigned char *title, ttime tim
 #endif
 
 static void
-free_globhist_cache()
+free_globhist_cache(void)
 {
 	if (globhist_cache) {
 		struct hash_item *item;
@@ -373,7 +373,7 @@ read_global_history()
 }
 
 static void
-write_global_history()
+write_global_history(void)
 {
 	struct global_history_item *historyitem;
 	unsigned char *file_name;
@@ -416,7 +416,7 @@ write_global_history()
 }
 
 static void
-free_global_history()
+free_global_history(void)
 {
 	struct global_history_item *historyitem;
 

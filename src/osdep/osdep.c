@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.64 2003/05/08 01:20:13 pasky Exp $ */
+/* $Id: osdep.c,v 1.65 2003/05/08 21:50:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,11 +178,11 @@ prealloc_truncate(int h, int siz)
 void
 sigwinch(void *s)
 {
-	((void (*)())s)();
+	((void (*)(void))s)();
 }
 
 void
-handle_terminal_resize(int fd, void (*fn)())
+handle_terminal_resize(int fd, void (*fn)(void))
 {
 	install_signal_handler(SIGWINCH, sigwinch, fn, 0);
 }
@@ -562,7 +562,7 @@ set_window_title(unsigned char *title)
 static int x_error = 0;
 
 static int
-catch_x_error()
+catch_x_error(void)
 {
 	x_error = 1;
 	return 0;
@@ -598,7 +598,7 @@ get_window_title()
 
 	/* If WINDOWID is bad, we don't want X to abort us. */
 	x_error = 0;
-	XSetErrorHandler(catch_x_error);
+	XSetErrorHandler((int (*)(Display *, XErrorEvent *))catch_x_error);
 
 	status = XGetWMName(display, window, &text_prop);
 	/* status = XGetWMIconName(x11_display, x11_window, &text_prop); */
@@ -1717,7 +1717,7 @@ unhandle_mouse(void *data)
  * This is then complemented by system-specific modifiers in an appropriate
  * get_system_env() routine. */
 static int
-get_common_env()
+get_common_env(void)
 {
 	int env = 0;
 

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.49 2003/05/07 13:03:29 zas Exp $ */
+/* $Id: cookies.c,v 1.50 2003/05/08 21:50:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,10 +76,10 @@ static int cookies_dirty = 0;
 
 #ifdef COOKIES
 
-void load_cookies();
+void load_cookies(void);
 
 static void accept_cookie(struct cookie *);
-static void save_cookies();
+static void save_cookies(void);
 
 
 static void
@@ -658,7 +658,7 @@ inv:
 
 
 static void
-save_cookies() {
+save_cookies(void) {
 	struct cookie *c;
 	unsigned char *cookfile;
 	struct secure_save_info *ssi;

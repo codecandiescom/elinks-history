@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.7 2003/05/04 17:25:53 pasky Exp $ */
+/* $Id: menu.h,v 1.8 2003/05/08 21:50:07 zas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -12,7 +12,7 @@ void activate_bfu_technology(struct session *, int);
 void dialog_goto_url(struct session *ses, char *url);
 /* void dialog_save_url(struct session *ses); */
 
-void free_history_lists();
+void free_history_lists(void);
 
 void query_file(struct session *, unsigned char *, void (*)(struct session *, unsigned char *), void (*)(struct session *), int);
 

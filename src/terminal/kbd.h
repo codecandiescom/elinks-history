@@ -1,4 +1,4 @@
-/* $Id: kbd.h,v 1.2 2003/05/04 17:26:55 pasky Exp $ */
+/* $Id: kbd.h,v 1.3 2003/05/08 21:50:08 zas Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
@@ -124,10 +124,10 @@
 #define KBD_ALT		4
 
 void handle_trm(int, int, int, int, int, void *, int);
-void free_all_itrms();
-void resize_terminal();
+void free_all_itrms(void);
+void resize_terminal(void);
 void dispatch_special(unsigned char *);
-void kbd_ctrl_c();
-int is_blocked();
+void kbd_ctrl_c(void);
+int is_blocked(void);
 
 #endif

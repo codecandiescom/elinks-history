@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.88 2003/05/07 16:43:38 pasky Exp $ */
+/* $Id: main.c,v 1.89 2003/05/08 21:50:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,7 +291,7 @@ static int init_b = 0;
 
 
 void
-init()
+init(void)
 {
 	int uh;
 	void *info;
@@ -435,7 +435,7 @@ fatal_error:
 
 
 static void
-terminate_all_subsystems()
+terminate_all_subsystems(void)
 {
 	af_unix_close();
 	destroy_all_sessions();

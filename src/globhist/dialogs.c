@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.21 2003/05/04 17:25:53 pasky Exp $ */
+/* $Id: dialogs.c,v 1.22 2003/05/08 21:50:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ update_all_history_dialogs(void)
 
 /* Creates the box display (holds everything EXCEPT the actual rendering data) */
 static struct listbox_data *
-history_dialog_box_build()
+history_dialog_box_build(void)
 {
 	struct listbox_data *box;
 

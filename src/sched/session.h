@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.16 2003/05/08 00:57:16 pasky Exp $ */
+/* $Id: session.h,v 1.17 2003/05/08 21:50:08 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -109,7 +109,7 @@ unsigned char *decode_url(unsigned char *);
 void add_xnum_to_str(unsigned char **, int *, int);
 void add_time_to_str(unsigned char **, int *, ttime);
 
-void free_strerror_buf();
+void free_strerror_buf(void);
 unsigned char *get_err_msg(int);
 
 void print_screen_status(struct session *);
@@ -149,7 +149,7 @@ struct frame *ses_change_frame_url(struct session *, unsigned char *, unsigned c
 void map_selected(struct terminal *, struct link_def *, struct session *);
 
 /* void destroy_session(struct session *); */
-void destroy_all_sessions();
+void destroy_all_sessions(void);
 
 void free_files(struct session *);
 

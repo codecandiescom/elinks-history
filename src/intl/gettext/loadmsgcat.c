@@ -105,7 +105,7 @@ static struct expression plone;
 static struct expression germanic_plural;
 
 static void
-init_germanic_plural()
+init_germanic_plural(void)
 {
 	if (plone.val.num == 0) {
 		plvar.nargs = 0;

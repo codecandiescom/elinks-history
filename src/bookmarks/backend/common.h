@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.3 2003/05/07 12:55:40 zas Exp $ */
+/* $Id: common.h,v 1.4 2003/05/08 21:42:57 zas Exp $ */
 
 #ifndef EL__BOOKMARKS_BACKEND_COMMON_H
 #define EL__BOOKMARKS_BACKEND_COMMON_H
@@ -14,7 +14,7 @@ struct bookmarks_backend {
 	void (*write)(struct secure_save_info *, struct list_head *);
 };
 
-void bookmarks_read();
+void bookmarks_read(void);
 void bookmarks_write(struct list_head *);
 
 #endif

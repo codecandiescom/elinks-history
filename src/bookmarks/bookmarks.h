@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.18 2003/05/07 12:54:03 zas Exp $ */
+/* $Id: bookmarks.h,v 1.19 2003/05/08 21:43:14 zas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -32,11 +32,11 @@ extern struct list_head bookmark_boxes;
 extern int bookmarks_dirty;
 
 /* Read/write bookmarks functions */
-void read_bookmarks();
-void write_bookmarks();
+void read_bookmarks(void);
+void write_bookmarks(void);
 
 /* Cleanups and saves bookmarks */
-void finalize_bookmarks();
+void finalize_bookmarks(void);
 
 int delete_bookmark(struct bookmark *);
 struct bookmark *add_bookmark(struct bookmark *, int, const unsigned char *, const unsigned char *);

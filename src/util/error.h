@@ -1,16 +1,17 @@
-/* $Id: error.h,v 1.11 2003/05/07 15:11:45 pasky Exp $ */
+/* $Id: error.h,v 1.12 2003/05/08 21:50:09 zas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
 
+extern int errline;
+extern unsigned char *errfile;
+
 void list_magic_error_(unsigned char *, unsigned char *, unsigned char *, int);
 
-void force_dump();
+void force_dump(void);
 void do_not_optimize_here(void *);
 void error(unsigned char *, ...);
 
-extern int errline;
-extern unsigned char *errfile;
 void debug_msg(unsigned char *, ...);
 void int_error(unsigned char *, ...);
 

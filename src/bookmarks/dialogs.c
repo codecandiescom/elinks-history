@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.72 2003/05/04 17:25:52 pasky Exp $ */
+/* $Id: dialogs.c,v 1.73 2003/05/08 21:43:34 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -59,7 +59,7 @@ static struct listbox_ops bookmarks_listbox_ops = {
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
 static struct listbox_data *
-bookmark_dlg_box_build()
+bookmark_dlg_box_build(void)
 {
 	struct listbox_data *box;
 

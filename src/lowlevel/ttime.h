@@ -1,4 +1,4 @@
-/* $Id: ttime.h,v 1.3 2003/04/14 15:05:47 zas Exp $ */
+/* $Id: ttime.h,v 1.4 2003/05/08 21:50:08 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TTIME_H
 #define EL__LOWLEVEL_TTIME_H
@@ -26,6 +26,6 @@
  * bigger than usual time_t */
 typedef time_t ttime;
 
-ttime get_time();
+ttime get_time(void);
 
 #endif

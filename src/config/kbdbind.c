@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.62 2003/05/04 17:25:52 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.63 2003/05/08 21:44:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,10 +34,10 @@ static struct list_head keymaps[KM_MAX];
 
 static int read_action(unsigned char *);
 
-static void add_default_keybindings();
+static void add_default_keybindings(void);
 
-static void init_action_listboxes();
-static void free_action_listboxes();
+static void init_action_listboxes(void);
+static void free_action_listboxes(void);
 
 
 void
@@ -455,7 +455,7 @@ write_action(int action)
 }
 
 static void
-init_action_listboxes()
+init_action_listboxes(void)
 {
 	struct strtonum *act;
 
@@ -501,7 +501,7 @@ init_action_listboxes()
 }
 
 static void
-free_action_listboxes()
+free_action_listboxes(void)
 {
 	struct listbox_item *action;
 
@@ -781,7 +781,7 @@ static struct default_kb default_menu_keymap[] = {
 };
 
 static void
-add_default_keybindings()
+add_default_keybindings(void)
 {
 	struct default_kb *kb;
 

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.39 2003/05/04 17:25:52 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.40 2003/05/08 21:44:48 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -113,8 +113,8 @@ extern struct list_head kbdbind_box_items;
 extern struct list_head kbdbind_boxes;
 
 
-void init_keymaps();
-void free_keymaps();
+void init_keymaps(void);
+void free_keymaps(void);
 
 void add_keybinding(enum keymap km, int action, long key, long meta, int func_ref);
 void delete_keybinding(enum keymap km, long key, long meta);

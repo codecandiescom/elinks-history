@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.5 2002/08/27 03:00:08 pasky Exp $ */
+/* $Id: charsets.h,v 1.6 2003/05/08 21:50:08 zas Exp $ */
 
 #ifndef EL__CHARSETS_H
 #define EL__CHARSETS_H
@@ -26,7 +26,7 @@ int get_cp_index(unsigned char *);
 unsigned char *get_cp_name(int);
 unsigned char *get_cp_mime_name(int);
 int is_cp_special(int);
-void free_conv_table();
+void free_conv_table(void);
 unsigned char *cp2utf_8(int, int);
 unsigned char *u2cp(unicode_val, int);
 

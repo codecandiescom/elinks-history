@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.16 2003/01/13 11:18:14 zas Exp $ */
+/* $Id: urlhist.c,v 1.17 2003/05/08 21:46:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,8 @@ int history_dirty = 0;
 int history_nosave = 0;
 
 /* Load history file */
-int load_url_history()
+int
+load_url_history(void)
 {
 	FILE *fp;
 	unsigned char *history_file;
@@ -60,7 +61,7 @@ int load_url_history()
 /* Write history list to file. It returns a value different from 0 in case of
  * failure, 0 on success. */
 int
-save_url_history()
+save_url_history(void)
 {
 	struct input_history_item *historyitem;
 	struct secure_save_info *ssi;

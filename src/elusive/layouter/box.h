@@ -1,4 +1,4 @@
-/* $Id: box.h,v 1.5 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: box.h,v 1.6 2003/05/08 21:50:07 zas Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_BOX_H
 #define EL__USIVE_LAYOUTER_BOX_H
@@ -76,7 +76,7 @@ struct layout_box {
 
 /* Initializes a node structure. Returns NULL upon allocation failure. */
 struct layout_box *
-init_layout_box();
+init_layout_box(void);
 
 /* Releases the box structure and all its properties and leafs. It
  * doesn't release the corresponding syntax tree! */

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.23 2003/05/02 14:13:38 pasky Exp $ */
+/* $Id: charsets.c,v 1.24 2003/05/08 21:50:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,7 @@ struct conv_table utf_table[256];
 int utf_table_init = 1;
 
 void
-free_utf_table()
+free_utf_table(void)
 {
 	int i;
 

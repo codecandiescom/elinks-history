@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.22 2003/05/07 17:57:13 zas Exp $ */
+/* $Id: string.h,v 1.23 2003/05/08 21:50:09 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -30,7 +30,7 @@ unsigned char *debug_copy_string(unsigned char *, int, unsigned char **, unsigne
 
 unsigned char *memacpy(unsigned char *, int);
 unsigned char *stracpy(unsigned char *);
-unsigned char *init_str();
+unsigned char *init_str(void);
 unsigned char *copy_string(unsigned char **, unsigned char *);
 
 #endif /* LEAK_DEBUG */

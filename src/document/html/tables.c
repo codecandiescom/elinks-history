@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.31 2003/05/04 19:30:52 pasky Exp $ */
+/* $Id: tables.c,v 1.32 2003/05/08 21:50:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ get_c_width(unsigned char *attr, int *w, int sh)
 }
 
 static struct table *
-new_table()
+new_table(void)
 {
 	struct table *t = mem_calloc(1, sizeof(struct table));
 
@@ -1529,7 +1529,7 @@ display_table_frames(struct table *t, int x, int y)
 
 		if (t->rules != R_NONE && t->rules != R_COLS) {
 			int lx;
-			
+
 			for (lx = 0; lx < xsp; lx++) {
 				H_LINE_X(i + lx, j) = t->cellsp;
 				H_LINE_X(i + lx, j + ysp) = t->cellsp;
@@ -1538,7 +1538,7 @@ display_table_frames(struct table *t, int x, int y)
 
 		if (t->rules != R_NONE && t->rules != R_ROWS) {
 			int ly;
-			
+
 			for (ly = 0; ly < ysp; ly++) {
 				V_LINE_X(i, j + ly) = t->cellsp;
 				V_LINE_X(i + xsp, j + ly) = t->cellsp;

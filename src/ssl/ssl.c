@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.7 2002/07/05 02:00:34 pasky Exp $ */
+/* $Id: ssl.c,v 1.8 2002/07/05 02:02:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "links.h"
 
 #include "ssl/ssl.h"
+#include "util/conv.h"
 #include "util/string.h"
 
 
@@ -74,4 +75,6 @@ get_ssl_cipher_str(ssl_t *ssl) {
 	add_to_str(&str, &l, SSL_get_cipher_version(ssl));
 	add_to_str(&str, &l, " ");
 	add_to_str(&str, &l, (unsigned char *) SSL_get_cipher_name(ssl));
+
+	return str;
 }

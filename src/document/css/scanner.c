@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.84 2004/01/22 21:11:18 pasky Exp $ */
+/* $Id: scanner.c,v 1.85 2004/01/22 21:14:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,7 +88,7 @@ ident2type(unsigned char *ident, unsigned char *end,
 
 	for (; ident2type->name; ident2type++) {
 		if (ident2type->base_type == base_type
-		    && !strncasecmp(ident2type->name, ident, length))
+		    && !strlcasecmp(ident2type->name, -1, ident, length))
 			return ident2type->type;
 	}
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.289 2004/01/04 15:40:54 pasky Exp $ */
+/* $Id: session.c,v 1.290 2004/01/06 19:35:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1047,11 +1047,23 @@ get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct link *l = get_current_link(ses);
+	struct link *link = get_current_link(ses);
+	unsigned char *where, *name = NULL;
 
-	if (l) return safe_strncpy(str, l->name, str_size);
+	if (!link) return NULL;
 
-	return NULL;
+	where = link->where ? link->where : link->where_img;
+#ifdef CONFIG_GLOBHIST
+	{
+		struct global_history_item *item;
+
+		item = get_global_history_item(where);
+		if (item) name = item->title;
+	}
+#endif
+	if (!name) name = link->name ? link->name : where;
+
+	return safe_strncpy(str, name, str_size);
 }
 
 struct link *

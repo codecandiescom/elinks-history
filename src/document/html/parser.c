@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.275 2003/11/17 13:18:26 jonas Exp $ */
+/* $Id: parser.c,v 1.276 2003/11/17 14:27:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,79 +74,78 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	      unsigned char **name, int *namelen,
 	      unsigned char **attr, unsigned char **end)
 {
+#define end_of_tag(c) ((c) == '>' || (c) == '<')
+#define next_char() if (++e == eof) goto parse_error
+
 	unsigned char saved_eof_char;
 
-	if (e >= eof || *(e++) != '<') return -1;
-	if (name) *name = e;
+	assert(e && eof);
+	if (e >= eof || *e != '<') return -1;
 
 	saved_eof_char = *eof;
 	*eof = '\0';
 
-	if (*e == '/') e++;
-	if (e >= eof || !isA(*e)) goto parse_error;
+	next_char();
+	if (name) *name = e;
 
-	while (isA(*e) && e < eof) e++;
-	if (e >= eof
-	    || (!WHITECHAR(*e) && *e != '>' && *e != '<' && *e != '/'
-		&& *e != ':'))
+	if (*e == '/') next_char();
+	if (!isA(*e)) goto parse_error;
+
+	while (isA(*e)) next_char();
+
+	if (!WHITECHAR(*e) && !end_of_tag(*e) && *e != '/'
+	    && *e != ':')
 		goto parse_error;
 
 	if (name && namelen) *namelen = e - *name;
 
-	while ((WHITECHAR(*e) || *e == '/' || *e == ':') && e < eof) e++;
-	if (e >= eof) goto parse_error;
+	while ((WHITECHAR(*e) || *e == '/' || *e == ':')) next_char();
 
 	/* Skip bad attribute */
-	while (*e && !atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e) && e < eof) e++;
-	if (e >= eof) goto parse_error;
+	while (*e && !atchr(*e) && !end_of_tag(*e) && !WHITECHAR(*e)) next_char();
 
 	if (attr) *attr = e;
 
 next_attr:
-	while (WHITECHAR(*e) && e < eof) e++;
-	if (e >= eof) goto parse_error;
+	while (WHITECHAR(*e)) next_char();
 
 	/* Skip bad attribute */
-	while (*e && !atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e) && e < eof) e++;
-	if (e >= eof) goto parse_error;
-	if (*e == '>' || *e == '<') goto end;
+	while (*e && !atchr(*e) && !end_of_tag(*e) && !WHITECHAR(*e)) next_char();
 
-	while (atchr(*e) && e < eof) e++;
-	while (WHITECHAR(*e) && e < eof) e++;
-	if (e >= eof) goto parse_error;
+	if (end_of_tag(*e)) goto end;
+
+	while (atchr(*e)) next_char();
+	while (WHITECHAR(*e)) next_char();
 
 	if (*e != '=') {
-		if (*e == '>' || *e == '<') goto end;
+		if (end_of_tag(*e)) goto end;
 		goto next_attr;
 	}
 
-	e++;
+	next_char();
 
-	while (WHITECHAR(*e) && e < eof) e++;
-	if (e >= eof) goto parse_error;
+	while (WHITECHAR(*e)) next_char();
 
 	if (IS_QUOTE(*e)) {
 		unsigned char quote = *e;
 
 quoted_value:
-		e++;
-		while (*e != quote && *e && e < eof) e++;
-		if (e >= eof || *e < ' ') goto parse_error;
-		e++;
-		if (e >= eof) goto parse_error;
+		next_char();
+		while (*e != quote && *e >= ' ') next_char();
+		if (*e != quote) goto parse_error;
+		next_char();
 		if (*e == quote) goto quoted_value;
 	} else {
-		while (*e && !WHITECHAR(*e) && *e != '>' && *e != '<' && e < eof) e++;
-		if (e >= eof) goto parse_error;
+		while (*e && !WHITECHAR(*e) && !end_of_tag(*e)) next_char();
 	}
 
-	while (WHITECHAR(*e) && e < eof) e++;
-	if (e >= eof) goto parse_error;
+	while (WHITECHAR(*e)) next_char();
 
-	if (*e != '>' && *e != '<') goto next_attr;
+	if (!end_of_tag(*e)) goto next_attr;
 
 end:
 	if (end) *end = e + (*e == '>');
+
 	*eof = saved_eof_char;
 	return 0;
 

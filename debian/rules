@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# $Id: rules,v 1.5 2005/01/11 01:07:52 jonas Exp $
+# $Id: rules,v 1.6 2005/01/11 03:19:27 jonas Exp $
 # Sample debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 
@@ -57,8 +57,6 @@ install: build
 	cp debian/elinks.desktop debian/elinks/usr/share/applnk/Internet/
 # upstream CVS bug hack: remove double contrib dirs
 	rm -rf contrib/lua/lua contrib/conv/conv contrib/guile/guile || true
-# remove CVS directories
-	find debian/elinks -name CVS -exec rm -rf "{}" \; || true
 # locale.alias causes conflicts and I believe it's not necessary
 	rm -f debian/elinks/usr/share/locale/locale.alias || true
 
@@ -77,6 +75,19 @@ binary-arch: build install
 	dh_installdocs AUTHORS SITES TODO BUGS
 	dh_installdocs doc/bookmarks.txt doc/exmode.txt doc/index.txt doc/introduction.txt doc/mailcap.txt doc/marks.txt doc/mime.html doc/remote.txt doc/tabs.txt
 	dh_installexamples contrib/
+# remove CVS directories, Makefiles and other useless files (from contrib/)
+# XXX: Keep after installation of directories
+	-find debian/elinks -name CVS -exec rm -rf "{}" \;
+	-find debian/elinks -name .cvsignore -exec rm -rf "{}" \;
+	-find debian/elinks -name "js-*.patch" -exec rm -rf "{}" \;
+	-find debian/elinks -name "Makefile*" -exec rm -rf "{}" \;
+	-find debian/elinks -name "hooks.lua.in*" -exec rm -rf "{}" \;
+	-find debian/elinks -name "elinks.spec*" -exec rm -rf "{}" \;
+	-find debian/elinks -name "wipe-out-ssl*" -exec rm -rf "{}" \;
+	-find debian/elinks -name LinksOS2Icon.zip -exec rm -rf "{}" \;
+	-find debian/elinks -name links_wps.zip -exec rm -rf "{}" \;
+	-find debian/elinks -name colws.diff -exec rm -rf "{}" \;
+
 #contrib/*
 	dh_installmime
 	dh_installmenu
@@ -98,7 +109,7 @@ binary-arch: build install
 	dh_strip
 	dh_compress
 	dh_fixperms
-	# You may want to make some executables suid here.
+# You may want to make some executables suid here.
 ##	dh_suidregister
 #	dh_makeshlibs
 	dh_installdeb

@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.19 2005/04/01 16:25:22 jonas Exp $ */
+/* $Id: date.c,v 1.20 2005/04/01 16:54:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,14 +105,14 @@ parse_day(const unsigned char **date_p, unsigned char *end)
 int
 parse_time(const unsigned char **time, struct tm *tm, unsigned char *end)
 {
-	unsigned char h1, h2, m1, m2, s1, s2;
+	unsigned char h1, h2, m1, m2;
 	const unsigned char *date = *time;
 
 #define check_time(tm) \
 	((tm)->tm_hour <= 23 && (tm)->tm_min <= 59 && (tm)->tm_sec <= 59)
 
 	/* Eat HH:MM */
-	if (end && date + 5 >= end)
+	if (end && date + 5 > end)
 		return 0;
 
 	h1 = *date++; if (!isdigit(h1)) return 0;
@@ -127,10 +127,14 @@ parse_time(const unsigned char **time, struct tm *tm, unsigned char *end)
 	tm->tm_min  = (m1 - '0') * 10 + m2 - '0';
 
 	/* Eat :SS or [PA]M or nothing */
-	if (end && date + 2 >= end)
+	if (end && date + 2 >= end) {
+		*time = date;
 		return check_time(tm);
+	}
 
 	if (*date == ':') {
+		unsigned char s1, s2;
+
 		date++;
 
 		if (end && date + 2 >= end)

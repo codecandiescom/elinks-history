@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.12 2004/07/15 15:44:05 jonas Exp $ */
+/* $Id: event.h,v 1.13 2005/03/05 21:28:52 zas Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -41,7 +41,7 @@ enum evhook_status {
 };
 
 /* The event hook prototype. Abide. */
-typedef enum evhook_status (*event_hook)(va_list ap, void *data);
+typedef enum evhook_status (*event_hook_T)(va_list ap, void *data);
 
 /* This is convenience macro for hooks. Not all hooks may use all of their
  * parameters, but they usually have to fetch all of them. This silences
@@ -65,16 +65,16 @@ int register_event(unsigned char *name);
  * further recyclation. */
 int unregister_event(int event);
 
-int register_event_hook(int id, event_hook callback, int priority, void *data);
+int register_event_hook(int id, event_hook_T callback, int priority, void *data);
 
-void unregister_event_hook(int id, event_hook callback);
+void unregister_event_hook(int id, event_hook_T callback);
 
 
 /*** Interface for table driven event hooks maintainance */
 
 struct event_hook_info {
 	unsigned char *name;
-	event_hook callback;
+	event_hook_T callback;
 	void *data;
 };
 

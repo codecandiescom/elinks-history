@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.195 2004/08/03 10:31:16 jonas Exp $ */
+/* $Id: connection.c,v 1.196 2004/08/03 10:41:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -621,15 +621,6 @@ run_connection(struct connection *conn)
 
 	active_connections++;
 	conn->running = 1;
-
-#ifdef CONFIG_SSL
-	/* Check if the connection should run over an encrypted link */
-	if (get_protocol_need_ssl(conn->uri->protocol)
-	    && init_ssl_connection(&conn->socket) == S_SSL_ERROR) {
-		abort_conn_with_state(conn, S_SSL_ERROR);
-		return;
-	}
-#endif
 
 	func(conn);
 }

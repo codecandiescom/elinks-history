@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.19 2002/06/16 16:59:40 zas Exp $ */
+/* $Id: error.c,v 1.20 2002/06/16 17:06:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,8 +66,9 @@ struct alloc_header {
 };
 #endif /* LEAK_DEBUG_LIST */
 
-/* Size is set to be a multiple of 16, forcing aligment by the way. */
-#define SIZE_AH_ALIGNED ((sizeof(struct alloc_header) + 15) & ~15)
+/* Size is set to be a multiple of 8 in order to have the main ptr aligned
+ * properly (faster access). */
+#define SIZE_AH_ALIGNED ((sizeof(struct alloc_header) + 7) & ~7)
 
 /* These macros are used to convert pointers and sizes to or from real ones
  * when using alloc_header stuff. */

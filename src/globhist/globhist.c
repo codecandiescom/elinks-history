@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.39 2003/10/26 18:00:38 jonas Exp $ */
+/* $Id: globhist.c,v 1.40 2003/10/26 18:09:01 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -53,6 +53,17 @@ static int global_history_write_timer = -1;
 
 #ifdef GLOBHIST
 
+enum global_history_options {
+	GLOBHIST_TREE,
+
+	GLOBHIST_ENABLE,
+	GLOBHIST_MAX_ITEMS,
+	GLOBHIST_DISPLAY_TYPE,
+	GLOBHIST_WRITE_INTERVAL,
+
+	GLOBHIST_OPTIONS,
+};
+
 static struct option_info global_history_options[] = {
 	INIT_OPT_TREE("document.history", N_("Global history"),
 		"global", 0,
@@ -80,6 +91,12 @@ static struct option_info global_history_options[] = {
 
 	NULL_OPTION_INFO,
 };
+
+#define get_opt_globhist(which)		global_history_options[(which)].option.value
+#define get_globhist_enable()		get_opt_globhist(GLOBHIST_ENABLE).number
+#define get_globhist_max_items()	get_opt_globhist(GLOBHIST_MAX_ITEMS).number
+#define get_globhist_display_type()	get_opt_globhist(GLOBHIST_DISPLAY_TYPE).number
+#define get_globhist_write_interval()	get_opt_globhist(GLOBHIST_WRITE_INTERVAL).number
 
 struct globhist_cache_entry {
 	LIST_HEAD(struct globhist_cache_entry);
@@ -228,13 +245,13 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	unsigned char *text;
 	int max_globhist_items;
 
-	if (!get_opt_bool("document.history.global.enable"))
+	if (!get_globhist_enable())
 		return;
 
 	if (!url)
 		return;
 
-	max_globhist_items = get_opt_int("document.history.global.max_items");
+	max_globhist_items = get_globhist_max_items();
 
 	history_item = get_global_history_item(url);
 	if (history_item) delete_global_history_item(history_item);
@@ -272,7 +289,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	add_to_list(global_history.items, history_item);
 	global_history.n++;
 
-	text = get_opt_int("document.history.global.display_type")
+	text = get_globhist_display_type()
 		? history_item->title : history_item->url;
 	if (!*text) text = history_item->url;
 
@@ -366,7 +383,7 @@ read_global_history(void)
 	unsigned char *title, *url, *last_visit;
 	FILE *f;
 
-	if (!get_opt_bool("document.history.global.enable"))
+	if (!get_globhist_enable())
 		return;
 
 	if (elinks_home) {
@@ -467,7 +484,7 @@ free_global_history(void)
 static void
 global_history_write_timer_handler(void *xxx)
 {
-	int interval = get_opt_int("document.history.global.write_interval");
+	int interval = get_globhist_write_interval();
 
 	write_global_history();
 

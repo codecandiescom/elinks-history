@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.21 2004/04/25 17:32:44 zas Exp $ */
+/* $Id: parse.c,v 1.22 2004/04/26 08:49:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -617,7 +617,7 @@ main_loop:
 			html++;
 			if (!(position + (html - base_pos - 1)))
 				goto skip_w; /* ??? */
-			if (isspace(*(html - 1))) {
+			if (*(html - 1) == ' ') {	/* Do not replace with isspace() ! --Zas */
 				/* BIG performance win; not sure if it doesn't cause any bug */
 				if (html < eof && !isspace(*html)) {
 					noupdate = 1;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.243 2004/06/12 00:43:06 jonas Exp $ */
+/* $Id: uri.c,v 1.244 2004/06/12 00:50:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -704,7 +704,7 @@ static unsigned char *translate_url(unsigned char *url, unsigned char *cwd);
 unsigned char *
 join_urls(struct uri *base, unsigned char *rel)
 {
-	unsigned char *p, *n, *path;
+	unsigned char *n, *path;
 	int add_slash = 0;
 	struct uri uri;
 	int tmp;
@@ -727,13 +727,16 @@ join_urls(struct uri *base, unsigned char *rel)
 
 		return normalize_uri_reparse(&uri, n);
 	} else if (rel[0] == '?') {
-		/* FIXME: When uri->fragment have been added use
-		 * get_uri_string(base, URI_JOIN_QUERY) */
-		n = stracpy(struri(base));
+		int length = base->fragment
+			   ? base->fragment - struri(base) - 1
+			   : get_real_uri_length(base);
+
+		n = memchr(base->data, '?', base->datalen);
+		if (n) length = n - struri(base) - 1;
+
+		n = memacpy(struri(base), length);
 		if (!n) return NULL;
 
-		for (p = n; *p && *p != POST_CHAR && *p != '?' && *p != '#'; p++);
-		*p = '\0';
 		add_to_strn(&n, rel);
 
 		return normalize_uri_reparse(&uri, n);

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.92 2003/08/29 04:40:38 jonas Exp $ */
+/* $Id: menu.c,v 1.93 2003/08/29 15:41:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ static void mainmenu_func(struct window *, struct event *, int);
 static inline int
 count_items(struct menu_item *items)
 {
-	int i = 0;
+	register int i = 0;
 
 	if (items)
 		for (; items[i].text; i++);
@@ -155,10 +155,11 @@ count_menu_size(struct terminal *term, struct menu *menu)
 
 	for (my = 0; my < menu->ni; my++) {
 		int s = 4;
+		unsigned char *text = menu->items[my].text;
+		unsigned char *rtext = menu->items[my].rtext;
 
-		if (menu->items[my].text && *menu->items[my].text) {
-			unsigned char *text = menu->items[my].text;
 
+		if (text && *text) {
 			if (!menu->items[my].no_intl) text = _(text, term);
 
 			if (text[0])
@@ -167,9 +168,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				     + 1;
 		}
 
-		if (menu->items[my].rtext && *menu->items[my].rtext) {
-			unsigned char *rtext = menu->items[my].rtext;
-
+		if (rtext && *rtext) {
 			if (!menu->items[my].no_intl) rtext = _(rtext, term);
 
 			if (rtext[0])
@@ -181,8 +180,9 @@ count_menu_size(struct terminal *term, struct menu *menu)
 
 	my += 2;
 
-	if (mx > sx) mx = sx;
-	if (my > sy) my = sy;
+	int_upper_bound(&mx, sx);
+	int_upper_bound(&my, sy);
+
 	menu->xw = mx;
 	menu->yw = my;
 
@@ -200,16 +200,17 @@ scroll_menu(struct menu *menu, int d)
 {
 	int c = 0;
 	int w = menu->yw - 2;
-	int scr_i = (SCROLL_ITEMS > (w - 1) / 2) ? (w - 1) / 2 : SCROLL_ITEMS;
+	int scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
 
-	if (scr_i < 0) scr_i = 0;
-	if (w < 0) w = 0;
+	int_lower_bound(&scr_i, 0);
+	int_lower_bound(&w, 0);
 
 	menu->selected += d;
 
 	if (menu->ni) {
 		menu->selected %= menu->ni;
-		if (menu->selected < 0) menu->selected += menu->ni;
+		if (menu->selected < 0)
+			menu->selected += menu->ni;
 	}
 
 	while (1) {
@@ -219,15 +220,9 @@ scroll_menu(struct menu *menu, int d)
 			return;
 		}
 
-		if (menu->selected < 0)
-			menu->selected = 0;
-		if (menu->selected >= menu->ni)
-			menu->selected = menu->ni - 1;
+		int_lower_bound(&menu->selected, 0);
+		int_upper_bound(&menu->selected, menu->ni - 1);
 
-#if 0
-		if (menu->selected < 0) menu->selected = menu->ni - 1;
-		if (menu->selected >= menu->ni) menu->selected = 0;
-#endif
 		if (menu->ni && menu->items[menu->selected].rtext != M_BAR)
 			break;
 
@@ -249,18 +244,19 @@ display_menu(struct terminal *term, struct menu *menu)
 	struct color_pair *frame_color = get_bfu_color(term, "menu.frame");
 	struct color_pair *hotkey_color = get_bfu_color(term, "menu.hotkey.normal");
 	struct color_pair *selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
+	int mx = menu->x + 1;
+	int mxw = menu->xw - 2;
+	int my = menu->y + 1;
+	int myw = menu->yw - 2;
 
-	draw_area(term,	menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2,
-		  ' ', 0, normal_color);
-
+	draw_area(term,	mx, my, mxw, myw, ' ', 0, normal_color);
 	draw_border(term, menu->x, menu->y, menu->xw, menu->yw, frame_color, 1);
 
-	for (p = menu->view, s = menu->y + 1;
-	     p < menu->ni && p < menu->view + menu->yw - 2;
+	for (p = menu->view, s = my;
+	     p < menu->ni && p < menu->view + myw;
 	     p++, s++) {
 		struct color_pair *color = normal_color;
 		struct color_pair *hkcolor = hotkey_color;
-
 #ifdef DEBUG
 		/* Sanity check. */
 		if (!menu->items[p].text)
@@ -273,9 +269,9 @@ display_menu(struct terminal *term, struct menu *menu)
 			color = selected_color;
 			hkcolor = selected_hotkey_color;
 
-			set_cursor(term, menu->x + 1, s, 1);
+			set_cursor(term, mx, s, 1);
 			set_window_ptr(menu->win, menu->x + menu->xw, s);
-			draw_area(term, menu->x + 1, s, menu->xw - 2, 1, ' ', 0, color);
+			draw_area(term, mx, s, mxw, 1, ' ', 0, color);
 		}
 
 		if (menu->items[p].rtext == M_BAR &&
@@ -285,10 +281,10 @@ display_menu(struct terminal *term, struct menu *menu)
 			draw_border_char(term, menu->x, s,
 					 BORDER_SRTEE, frame_color);
 
-			draw_area(term, menu->x + 1, s, menu->xw - 2, 1,
+			draw_area(term, mx, s, mxw, 1,
 				  BORDER_SHLINE, SCREEN_ATTR_FRAME, frame_color);
 
-			draw_border_char(term, menu->x + menu->xw - 1, s,
+			draw_border_char(term, mx + mxw, s,
 					 BORDER_SLTEE, frame_color);
 
 		} else {
@@ -302,6 +298,7 @@ display_menu(struct terminal *term, struct menu *menu)
 				if (!menu->items[p].no_intl) text = _(text, term);
 
 				if (l) {
+					int xbase = mx + 1;
 					/* There's an hotkey so handle it. */
 					int hk = 0;
 #ifdef DEBUG
@@ -311,7 +308,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					if (l < 0) l = -l, double_hk = 1;
 #endif
 					for (x = 0;
-					     x < menu->xw - 4
+					     x < mxw - 2
 					     && (c = text[x]);
 					     x++) {
 						if (!hk && l
@@ -322,25 +319,26 @@ display_menu(struct terminal *term, struct menu *menu)
 
 						if (hk == 1) {
 #ifdef DEBUG
-							draw_char(term, menu->x + x - 1 + 2, s, c, 0,
+							draw_char(term, xbase + x - 1, s, c, 0,
 								  (double_hk ? selected_hotkey_color : hkcolor));
 #else
-							draw_char(term, menu->x + x - 1 + 2, s, c, 0, hkcolor);
+							draw_char(term, xbase + x - 1, s, c, 0, hkcolor);
 #endif
 							hk = 2;
 						} else {
-							draw_char(term, menu->x + x - (hk ? 1 : 0) + 2,
-								  s, c, 0, color);
+							draw_char(term, xbase + x - (hk ? 1 : 0), s, c, 0, color);
 						}
 					}
 
 				} else {
+					int xbase = mx + 1;
+
 					/* No hotkey, just left text. */
 					for (x = 0;
-				     	     x < menu->xw - 4
+				     	     x < mxw - 2
 				     	     && (c = text[x]);
 				     	     x++)
-						draw_char(term, menu->x + x + 2, s, c, 0, color);
+						draw_char(term, xbase + x, s, c, 0, color);
 				}
 			}
 
@@ -352,12 +350,13 @@ display_menu(struct terminal *term, struct menu *menu)
 				if (*rtext) {
 					/* There's a right text, so print it */
 					int l = strlen(rtext);
+					int xbase = menu->x + mxw - l;
 
 					for (x = l - 1;
-					     (x >= 0) && (menu->xw - 4 >= l - x)
+					     (x >= 0) && (mxw - 2 >= l - x)
 					     && (c = rtext[x]);
 				    	     x--)
-						draw_char(term, menu->x + menu->xw - 2 - l + x, s, c, 0, color);
+						draw_char(term, xbase + x, s, c, 0, color);
 				}
 			}
 		}

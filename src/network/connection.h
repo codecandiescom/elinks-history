@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.16 2003/07/03 01:26:22 jonas Exp $ */
+/* $Id: connection.h,v 1.17 2003/07/03 03:10:11 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -27,7 +27,7 @@ struct remaining_info {
 	ttime last_time;
 	ttime dis_b;
 
-	int valid;
+	unsigned int valid:1;
 	int size, loaded, last_loaded, cur_loaded;
 
 	/* This is offset where the download was resumed possibly */
@@ -71,7 +71,6 @@ struct connection {
 	tcount count;
 
 	int pf; /* 1 == PF_INET, 2 == PF_INET6 */
-	int running;
 	int state;
 	int prev_error;
 	int from;
@@ -82,9 +81,11 @@ struct connection {
 	int est_length;
 	int unrestartable;
 	int timer;
-	int detached;
 	int no_tsl;
 	int stream_pipes[2];
+
+	unsigned int running:1;
+	unsigned int detached:1;
 
 	/* Each document is downloaded with some priority. When downloading a
 	 * document, the existing connections are checked to see if a

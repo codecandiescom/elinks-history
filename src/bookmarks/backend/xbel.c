@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.3 2002/12/10 23:15:47 pasky Exp $ */
+/* $Id: xbel.c,v 1.4 2002/12/11 13:20:58 pasky Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -77,13 +77,15 @@ struct tree_node {
 static struct tree_node *root_node = NULL;
 static struct tree_node *current_node = NULL;
 
-static int readok = 0;
+static int readok = 1;
 
 static void
 read_bookmarks_xbel(FILE *f)
 {
 	unsigned char in_buffer[BUFSIZ];
 	XML_Parser p;
+
+	readok = 0;
 
 	p = XML_ParserCreate(NULL);
 	if (!p) {

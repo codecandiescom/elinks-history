@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.107 2003/12/01 14:15:31 pasky Exp $ */
+/* $Id: cookies.c,v 1.108 2003/12/05 22:58:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,7 +593,7 @@ is_path_prefix(unsigned char *d, unsigned char *s, int sl)
 #define is_expired(t) ((t) && (t) <= time(NULL))
 #define is_dead(t) (!(t) || (t) <= time(NULL))
 
-void
+struct string *
 send_cookies(struct string *header, struct uri *uri)
 {
 	int nc = 0;
@@ -602,7 +602,8 @@ send_cookies(struct string *header, struct uri *uri)
 	unsigned char *data = NULL;
 	int datalen = uri->datalen + 1;
 
-	if (!uri->host || !uri->data) return;
+	if (!uri->host || !uri->data)
+		return NULL;
 
 	foreach (cd, c_domains)
 		if (is_in_domain(cd->domain, uri->host, uri->hostlen)) {
@@ -610,7 +611,7 @@ send_cookies(struct string *header, struct uri *uri)
 			break;
 		}
 
-	if (!data) return;
+	if (!data) return NULL;
 
 	foreach (c, cookies) {
 		if (!is_in_domain(c->domain, uri->host, uri->hostlen)
@@ -655,6 +656,8 @@ send_cookies(struct string *header, struct uri *uri)
 
 	if (cookies_dirty && get_cookies_save() && get_cookies_resave())
 		save_cookies();
+
+	return nc ? header : NULL;
 }
 
 static void done_cookies(struct module *module);

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.142 2004/01/24 22:32:16 jonas Exp $ */
+/* $Id: file.c,v 1.143 2004/01/24 22:45:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -562,7 +562,7 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 	return S_OK;
 }
 
-static enum connection_state
+enum connection_state
 read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
 {
 	struct stream_encoded *stream;

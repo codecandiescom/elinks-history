@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.1 2003/05/06 17:24:40 jonas Exp $ */
+/* $Id: common.c,v 1.2 2003/06/03 23:20:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,12 +22,11 @@
 #include "mime/backend/default.h"
 #include "mime/backend/mailcap.h"
 
-/* Note that the numbering is static, that means that you have to provide at
- * least dummy NULL handlers even when no support is compiled in. */
-
 static struct mime_backend *mime_backends[] = {
 	&default_mime_backend,
+#ifdef MAILCAP
 	&mailcap_mime_backend,
+#endif
 	NULL
 };
 

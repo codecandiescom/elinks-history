@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.3 2003/05/16 23:09:26 zas Exp $ */
+/* $Id: mailcap.c,v 1.4 2003/06/03 23:20:21 jonas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -622,17 +622,6 @@ struct mime_backend mailcap_mime_backend = {
 	/* done: */		done_mailcap,
 	/* get_content_type: */	NULL,
 	/* get_mime_handler: */	get_mime_handler_mailcap,
-};
-
-#else /* !MAILCAP */
-
-#include "mime/backend/common.h"
-
-struct mime_backend mailcap_mime_backend = {
-	/* init: */		NULL,
-	/* done: */		NULL,
-	/* get_content_type: */	NULL,
-	/* get_mime_handler: */	NULL,
 };
 
 #endif /* MAILCAP */

@@ -451,7 +451,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.31 2005/02/28 15:55:13 zas Exp $ */
+	/* $Id: hacking.txt,v 1.32 2005/03/06 17:20:05 zas Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -538,6 +538,11 @@ item->pointers = mem_calloc(10, sizeof(void *));
 The preferred form eases futur changes in types, and maintain size vs type
 coherence.
 
+- Please postfix defined types with _T:
+
+typedef int (some_func_T)(void *);
+typedef long long our_long_T;
+
 
 4, Patches
 ~~~~~~~~~~
@@ -598,4 +603,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.31 2005/02/28 15:55:13 zas Exp $
+$Id: hacking.txt,v 1.32 2005/03/06 17:20:05 zas Exp $

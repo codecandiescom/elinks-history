@@ -54,6 +54,8 @@ saved in the same dir with the same name links should do someting like wget,
 which adds .1, .2 ... on the filename and does not overwrite the file that
 existed first.
 
+	Insert should toggle insert/overwrite mode.
+
 
 
 	Multiple windows in one console
@@ -74,4 +76,4 @@ existed first.
 	CSS (?)
 
 
-$Id: TODO,v 1.20 2002/04/02 19:55:44 pasky Exp $
+$Id: TODO,v 1.21 2002/04/02 21:51:08 pasky Exp $

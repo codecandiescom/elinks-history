@@ -1,3 +1,16 @@
+Sat Oct 30 02:21:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	When performing a type-ahead search on document text, do not rewind
+	just because the search wrapped.  
+
+Fri Oct 29 23:07:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Fix leak when ecmascript is disabled.  
+
 Fri Oct 29 20:07:08 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/form.c:

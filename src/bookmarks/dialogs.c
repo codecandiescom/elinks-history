@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.201 2005/03/18 23:25:42 zas Exp $ */
+/* $Id: dialogs.c,v 1.202 2005/03/19 00:33:22 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -455,14 +455,14 @@ push_move_button(struct dialog_data *dlg_data,
 /**** MANAGEMENT *****************************************************/
 
 static struct hierbox_browser_button bookmark_buttons[] = {
-	{ N_("Goto"),		push_hierbox_goto_button,	1 },
-	{ N_("Edit"),		push_edit_button,		0 },
-	{ N_("Delete"),		push_hierbox_delete_button,	0 },
-	{ N_("Add"),		push_add_button,		0 },
-	{ N_("Add separator"),  push_add_separator_button,	0 },
-	{ N_("Add folder"),	push_add_folder_button,		0 },
-	{ N_("Move"),		push_move_button,		0 },
-	{ N_("Search"),		push_search_button,		1 },
+	{ N_("~Goto"),		push_hierbox_goto_button,	1 },
+	{ N_("~Edit"),		push_edit_button,		0 },
+	{ N_("~Delete"),	push_hierbox_delete_button,	0 },
+	{ N_("~Add"),		push_add_button,		0 },
+	{ N_("Add se~parator"), push_add_separator_button,	0 },
+	{ N_("Add ~folder"),	push_add_folder_button,		0 },
+	{ N_("~Move"),		push_move_button,		0 },
+	{ N_("~Search"),	push_search_button,		1 },
 #if 0
 	/* This one is too dangerous, so just let user delete
 	 * the bookmarks file if needed. --Zas */

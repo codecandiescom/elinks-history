@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.3 2002/07/06 22:10:33 pasky Exp $ */
+/* $Id: leds.c,v 1.4 2002/07/07 11:10:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,8 @@
 static struct led leds[LEDS_COUNT];
 static unsigned char leds_backup[LEDS_COUNT];
 
-static int redraw_timer;
+static int redraw_timer = -1;
+static int drawing = 0;
 
 
 void redraw_leds(void *);
@@ -51,8 +52,9 @@ init_leds()
 		leds_backup[i] = 0; /* assure first redraw */
 	}
 
-	/* Redraw each 100ms. */
-	redraw_timer = install_timer(100, redraw_leds, NULL);
+	/* We can't setup timer here, because we may not manage to startup in
+	 * 100ms and we will get to problems when we will call draw_leds() on
+	 * uninitialized terminal. So, we will wait for draw_leds(). */
 }
 
 void
@@ -76,6 +78,10 @@ draw_leds(struct terminal *term)
 			 leds[i].value | leds[i].color);
 
 	set_char(term, term->x - 2, term->y - 1, ']' | COL(070));
+
+	/* Redraw each 100ms. */
+	if (!drawing && redraw_timer < 0)
+		redraw_timer = install_timer(100, redraw_leds, NULL);
 }
 
 /* Determine if leds redrawing if neccessary. Returns non-zero if so. */
@@ -102,12 +108,19 @@ redraw_leds(void *xxx)
 
 	redraw_timer = install_timer(100, redraw_leds, NULL);
 
-	if (!sync_leds()) return;
+	if (drawing) return;
+	drawing = 1;
+
+	if (!sync_leds()) {
+		drawing = 0;
+		return;
+	}
 
 	foreach (term, terminals) {
 		redraw_terminal(term);
 		draw_leds(term);
 	}
+	drawing = 0;
 }
 
 

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.93 2004/01/25 13:17:22 jonas Exp $ */
+/* $Id: info.c,v 1.94 2004/01/25 14:43:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,6 @@ struct keys_toggle_info {
 	int toggle;
 };
 
-#if 0
 static void
 push_toggle_keys_display_button(void *data)
 {
@@ -61,12 +60,12 @@ push_toggle_keys_display_button(void *data)
 
 	menu_keys(info->term, (void *) !info->toggle, NULL);
 }
-#endif
 
 void
 menu_keys(struct terminal *term, void *d, struct session *ses)
 {
-	enum main_action actions[] = {
+	/* We scale by main mapping because it has the most actions */
+	int actions[MAIN_ACTIONS] = {
 		ACT_MAIN_MENU,
 		ACT_MAIN_QUIT,
 		ACT_MAIN_DOWN,
@@ -104,11 +103,10 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 	info->toggle = (int) d;
 
 	if (info->toggle) {
-#if 0
-		enum action action;
+		int action;
 		enum keymap map;
 
-		for (action = 0; action < KEYACTS - 1; action++) {
+		for (action = 0; action < MAIN_ACTIONS - 1; action++) {
 			actions[action] = action + 1;
 		}
 
@@ -116,8 +114,13 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 			add_actions_to_string(&keys, actions, map, term);
 			if (map + 1 < KM_MAX)
 				add_to_string(&keys, "\n\n");
+
+			if (map == KM_MAIN) {
+				actions[EDIT_ACTIONS] = ACT_EDIT_NONE;
+			} else if (map == KM_EDIT) {
+				actions[MENU_ACTIONS] = ACT_MENU_NONE;
+			}
 		}
-#endif
 	} else {
 		add_actions_to_string(&keys, (int *) actions, KM_MAIN, term);
 	}
@@ -125,11 +128,9 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 	msg_box(term, getml(info, NULL), MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
 		N_("Keys"), AL_LEFT,
 		keys.source,
-		info, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC
-#if 0
-		, N_("Toggle display"), push_toggle_keys_display_button, B_ENTER
-#endif
+		info, 2,
+		N_("OK"), NULL, B_ENTER | B_ESC,
+		N_("Toggle display"), push_toggle_keys_display_button, B_ENTER
 		);
 }
 

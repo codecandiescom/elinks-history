@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.514 2004/06/22 10:52:44 pasky Exp $ */
+/* $Id: view.c,v 1.515 2004/06/22 10:53:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,7 +471,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 }
 
 static void
-move_link_down(struct session *ses, struct document_view *doc_view)
+move_link_next(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
 
@@ -482,7 +482,7 @@ move_link_down(struct session *ses, struct document_view *doc_view)
 }
 
 static void
-move_link_up(struct session *ses, struct document_view *doc_view)
+move_link_prev(struct session *ses, struct document_view *doc_view)
 {
 	int count = ses->kbdprefix.repeat_count;
 
@@ -850,8 +850,8 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	switch (kbd_action(KM_MAIN, ev, NULL)) {
 		case ACT_MAIN_MOVE_PAGE_DOWN: move_page_down(ses, doc_view); break;
 		case ACT_MAIN_MOVE_PAGE_UP: move_page_up(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_NEXT: move_link_down(ses, doc_view); break;
-		case ACT_MAIN_MOVE_LINK_PREV: move_link_up(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_NEXT: move_link_next(ses, doc_view); break;
+		case ACT_MAIN_MOVE_LINK_PREV: move_link_prev(ses, doc_view); break;
 		case ACT_MAIN_MOVE_DOCUMENT_START: move_document_start(ses, doc_view); break;
 		case ACT_MAIN_MOVE_DOCUMENT_END: move_document_end(ses, doc_view); break;
 

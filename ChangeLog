@@ -1,3 +1,24 @@
+Sat Jun 29 22:01:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: conf.c, opttypes.c, opttypes.h:
+
+	read now only reads the data from config file, introduced set which
+	converts it and saves to memory. Also introduced add/remove for
+	further use (lists as an options).  
+
+Sat Jun 29 21:50:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/memdebug.c:
+
+	Always show use position in dump_info().  
+
+Sat Jun 29 15:24:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/document/view.c:
+
+	Fixed option name in ACT_TOGGLE_DISPLAY_TABLES case, patch by
+	Matthew Mueller <donut@azstarnet.com>.  
+
 Sun Jun 23 18:27:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/options.c:

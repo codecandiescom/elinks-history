@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.25 2003/07/27 23:30:27 jonas Exp $ */
+/* $Id: link.c,v 1.26 2003/07/27 23:35:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,24 +183,24 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			continue;
 		}
 
-		co = get_char(t, x, y);
-
 		scr->link_bg[i].x = x;
 		scr->link_bg[i].y = y;
-		scr->link_bg[i].c = co;
+		scr->link_bg[i].c = co = get_char(t, x, y);
 
 		if (i == cursor_offset) {
-			int blockable = 0;
+			int blockable;
 
-			if (link->type != L_FIELD && link->type != L_AREA) {
-				if (((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
-					blockable = 1;
-				}
+			if (link->type != L_FIELD && link->type != L_AREA
+			    && ((co >> 8) & 0x38) != (link->sel_color & 0x38)) {
+				blockable = 1;
+			} else {
+				blockable = 0;
 			}
 
 			set_cursor(t, x, y, blockable);
 			set_window_ptr(get_current_tab(t), x, y);
 		}
+
 		set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color << 8);
 	}
 }

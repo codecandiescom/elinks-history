@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.70 2004/01/27 19:08:38 pasky Exp $ */
+/* $Id: parser.c,v 1.71 2004/01/27 23:08:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,6 +156,7 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 					break;
 				}
 			}
+			break;
 		default:
 			INTERNAL("@-rule parser called without atrule.");
 	}

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.14 2003/05/16 21:20:22 zas Exp $ */
+/* $Id: cache.h,v 1.15 2003/05/16 21:25:01 zas Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
@@ -36,7 +36,6 @@ struct cache_entry {
 #ifdef HAVE_SCRIPTING
 	int done_pre_format_html_hook;
 #endif
-	int test;
 };
 
 struct fragment {

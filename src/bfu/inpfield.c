@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.149 2004/07/15 15:35:41 jonas Exp $ */
+/* $Id: inpfield.c,v 1.150 2004/07/15 15:54:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,7 +349,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	struct window *win = dlg_data->win;
 	struct terminal *term = win->term;
 
-	switch (kbd_action(KM_EDIT, ev, NULL)) {
+	switch (kbd_action(KEYMAP_EDIT, ev, NULL)) {
 		case ACT_EDIT_UP:
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
@@ -530,7 +530,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	/* Noodle time */
 	switch (ev->ev) {
 	case EVENT_KBD:
-		action = kbd_action(KM_EDIT, ev, NULL);
+		action = kbd_action(KEYMAP_EDIT, ev, NULL);
 
 		/* Handle some basic actions such as quiting for empty buffers */
 		switch (action) {

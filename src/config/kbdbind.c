@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.245 2004/07/15 15:35:41 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.246 2004/07/15 15:54:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,8 +25,8 @@
 /* Fix namespace clash on MacOS. */
 #define table table_elinks
 
-static struct strtonum *action_table[KM_MAX];
-static struct list_head keymaps[KM_MAX];
+static struct strtonum *action_table[KEYMAP_MAX];
+static struct list_head keymaps[KEYMAP_MAX];
 
 static void add_default_keybindings(void);
 
@@ -254,9 +254,9 @@ numtodesc(struct strtonum *table, long num)
 
 
 static struct strtonum keymap_table[] = {
-	{ "main", KM_MAIN, N_("Main mapping") },
-	{ "edit", KM_EDIT, N_("Edit mapping") },
-	{ "menu", KM_MENU, N_("Menu mapping") },
+	{ "main", KEYMAP_MAIN, N_("Main mapping") },
+	{ "edit", KEYMAP_EDIT, N_("Edit mapping") },
+	{ "menu", KEYMAP_MENU, N_("Menu mapping") },
 	{ NULL, 0, NULL }
 };
 
@@ -396,7 +396,7 @@ add_actions_to_string(struct string *string, int *actions,
 {
 	int i;
 
-	assert(map >= 0 && map < KM_MAX);
+	assert(map >= 0 && map < KEYMAP_MAX);
 
 	add_format_to_string(string, "%s:\n", _(numtodesc(keymap_table, map), term));
 
@@ -599,7 +599,7 @@ static struct strtonum menu_action_table[MENU_ACTIONS + 1] = {
 	{ NULL, 0, NULL }
 };
 
-static struct strtonum *action_table[KM_MAX] = {
+static struct strtonum *action_table[KEYMAP_MAX] = {
 	main_action_table,
 	edit_action_table,
 	menu_action_table,
@@ -610,14 +610,14 @@ static struct strtonum *action_table[KM_MAX] = {
 int
 read_action(enum keymap keymap, unsigned char *action)
 {
-	assert(keymap >= 0 && keymap < KM_MAX);
+	assert(keymap >= 0 && keymap < KEYMAP_MAX);
 	return strtonum(action_table[keymap], action);
 }
 
 unsigned char *
 write_action(enum keymap keymap, int action)
 {
-	assert(keymap >= 0 && keymap < KM_MAX);
+	assert(keymap >= 0 && keymap < KEYMAP_MAX);
 	return numtostr(action_table[keymap], action);
 }
 
@@ -627,7 +627,7 @@ init_keymaps(void)
 {
 	enum keymap i;
 
-	for (i = 0; i < KM_MAX; i++)
+	for (i = 0; i < KEYMAP_MAX; i++)
 		init_list(keymaps[i]);
 
 	init_keybinding_listboxes(keymap_table, action_table);
@@ -641,7 +641,7 @@ free_keymaps(void)
 
 	done_keybinding_listboxes();
 
-	for (i = 0; i < KM_MAX; i++)
+	for (i = 0; i < KEYMAP_MAX; i++)
 		free_list(keymaps[i]);
 }
 
@@ -867,7 +867,7 @@ add_default_keybindings(void)
 	 * defaults, can we? ;)) */
 	enum keymap keymap;
 
-	for (keymap = 0; keymap < KM_MAX; keymap++) {
+	for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
 		struct default_kb *kb;
 
 		for (kb = default_keybindings[keymap]; kb->key; kb++) {
@@ -906,7 +906,7 @@ static struct strtonum main_action_aliases[] = {
 	{ NULL, 0, NULL }
 };
 
-static struct strtonum *action_aliases[KM_MAX] = {
+static struct strtonum *action_aliases[KEYMAP_MAX] = {
 	main_action_aliases,
 	NULL,
 	NULL,
@@ -917,7 +917,7 @@ get_aliased_action(enum keymap keymap, unsigned char *action)
 {
 	int alias = -1;
 
-	assert(keymap >= 0 && keymap < KM_MAX);
+	assert(keymap >= 0 && keymap < KEYMAP_MAX);
 
 	if (action_aliases[keymap])
 		alias = strtonum(action_aliases[keymap], action);
@@ -1001,7 +1001,7 @@ bind_config_string(struct string *file)
 {
 	enum keymap keymap;
 
-	for (keymap = 0; keymap < KM_MAX; keymap++) {
+	for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
 		struct keybinding *keybinding;
 
 		foreach (keybinding, keymaps[keymap]) {

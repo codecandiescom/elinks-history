@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.100 2004/07/14 17:21:23 zas Exp $ */
+/* $Id: text.c,v 1.101 2004/07/15 15:54:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,7 +326,7 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 {
 	int current = widget_data->info.text.current;
 
-	switch (kbd_action(KM_MENU, ev, NULL)) {
+	switch (kbd_action(KEYMAP_MENU, ev, NULL)) {
 		case ACT_MENU_UP:
 			current--;
 			break;

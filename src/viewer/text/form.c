@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.227 2004/07/15 15:35:42 jonas Exp $ */
+/* $Id: form.c,v 1.228 2004/07/15 15:54:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1101,7 +1101,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 	if (fc->mode == FORM_MODE_DISABLED || ev->ev != EVENT_KBD)
 		return FRAME_EVENT_IGNORED;
 
-	action = kbd_action(KM_EDIT, ev, NULL);
+	action = kbd_action(KEYMAP_EDIT, ev, NULL);
 	if (ses->insert_mode == INSERT_MODE_OFF) {
 		if (action == ACT_EDIT_ENTER) {
 			ses->insert_mode = INSERT_MODE_ON;
@@ -1412,7 +1412,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		/* Should we add info about entering insert mode or add info
 		 * about submitting the form? */
 		if (ses->insert_mode == INSERT_MODE_OFF) {
-			key = get_keystroke(ACT_EDIT_ENTER, KM_EDIT);
+			key = get_keystroke(ACT_EDIT_ENTER, KEYMAP_EDIT);
 
 			if (!key) break;
 
@@ -1435,7 +1435,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		if (!fc->action || !has_form_submit(doc_view->document, fc))
 			break;
 
-		key = get_keystroke(ACT_EDIT_ENTER, KM_EDIT);
+		key = get_keystroke(ACT_EDIT_ENTER, KEYMAP_EDIT);
 		if (!key) break;
 
 		if (fc->method == FORM_METHOD_GET)

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.191 2004/07/15 07:13:04 miciah Exp $ */
+/* $Id: dialogs.c,v 1.192 2004/07/15 15:54:20 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -536,7 +536,7 @@ static int keybinding_text_toggle;
 /* XXX: ACTION_BOX_SIZE is just a quick hack, we ought to allocate
  * the sub-arrays separately. --pasky */
 #define ACTION_BOX_SIZE 128
-static struct listbox_item *action_box_items[KM_MAX][ACTION_BOX_SIZE];
+static struct listbox_item *action_box_items[KEYMAP_MAX][ACTION_BOX_SIZE];
 
 struct listbox_item *
 get_keybinding_action_box_item(enum keymap km, int action)
@@ -552,7 +552,7 @@ struct keymap_box_item_info {
 	struct strtonum *first, *last;
 };
 
-struct keymap_box_item_info keymap_box_item_info[KM_MAX];
+struct keymap_box_item_info keymap_box_item_info[KEYMAP_MAX];
 
 void
 init_keybinding_listboxes(struct strtonum *keymaps, struct strtonum *actions[])
@@ -691,7 +691,7 @@ get_keybinding_root(struct listbox_item *item)
 		struct strtonum *action = item->udata;
 		int keymap;
 
-		for (keymap = 0; keymap < KM_MAX; keymap++) {
+		for (keymap = 0; keymap < KEYMAP_MAX; keymap++) {
 			if (keymap_box_item_info[keymap].first <= action
 			    && keymap_box_item_info[keymap].last > action)
 				return keymap_box_item_info[keymap].box_item;

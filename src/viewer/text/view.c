@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.553 2004/07/15 15:35:42 jonas Exp $ */
+/* $Id: view.c,v 1.554 2004/07/15 15:54:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -620,7 +620,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		return FRAME_EVENT_REFRESH;
 	}
 
-	switch (kbd_action(KM_MAIN, ev, NULL)) {
+	switch (kbd_action(KEYMAP_MAIN, ev, NULL)) {
 		case ACT_MAIN_MOVE_PAGE_DOWN: move_page_down(ses, doc_view); break;
 		case ACT_MAIN_MOVE_PAGE_UP: move_page_up(ses, doc_view); break;
 		case ACT_MAIN_MOVE_LINK_NEXT: move_link_next(ses, doc_view); break;
@@ -941,7 +941,7 @@ send_event(struct session *ses, struct term_event *ev)
 		if (doc_view && send_to_frame(ses, ev) != FRAME_EVENT_IGNORED)
 			return;
 
-		action = kbd_action(KM_MAIN, ev, &func_ref);
+		action = kbd_action(KEYMAP_MAIN, ev, &func_ref);
 
 		if (action == ACT_MAIN_QUIT) {
 quit:

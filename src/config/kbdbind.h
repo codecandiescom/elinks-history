@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.128 2004/07/14 14:20:57 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.129 2004/07/15 15:54:20 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -18,10 +18,10 @@ struct strtonum {
 };
 
 enum keymap {
-	KM_MAIN,
-	KM_EDIT,
-	KM_MENU,
-	KM_MAX
+	KEYMAP_MAIN,
+	KEYMAP_EDIT,
+	KEYMAP_MENU,
+	KEYMAP_MAX
 };
 
 /* Note: if you add anything here, please keep it in alphabetical order,

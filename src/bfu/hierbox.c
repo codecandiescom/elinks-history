@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.184 2004/07/15 15:35:41 jonas Exp $ */
+/* $Id: hierbox.c,v 1.185 2004/07/15 15:54:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 
 	box = get_dlg_listbox_data(dlg_data);
 	selected = box->sel;
-	action = kbd_action(KM_MENU, ev, NULL);
+	action = kbd_action(KEYMAP_MENU, ev, NULL);
 
 	if (action == ACT_MENU_SELECT) {
 		if (!selected) return EVENT_PROCESSED;

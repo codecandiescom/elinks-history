@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.48 2004/07/04 14:03:37 jonas Exp $ */
+/* $Id: exmode.c,v 1.49 2004/07/15 15:54:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,7 +46,7 @@ static int
 exmode_action_handler(struct session *ses, unsigned char *command,
 		      unsigned char *args)
 {
-	enum main_action action = read_action(KM_MAIN, command);
+	enum main_action action = read_action(KEYMAP_MAIN, command);
 
 	if (action == ACT_MAIN_NONE) return 0;
 	if (action == ACT_MAIN_QUIT) action = ACT_MAIN_REALLY_QUIT;

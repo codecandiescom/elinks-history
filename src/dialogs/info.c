@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.103 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: info.c,v 1.104 2004/07/15 15:54:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,9 +106,9 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 			actions[action] = action + 1;
 		}
 
-		for (map = 0; map < KM_MAX; map++) {
+		for (map = 0; map < KEYMAP_MAX; map++) {
 			add_actions_to_string(&keys, actions, map, term);
-			if (map + 1 < KM_MAX)
+			if (map + 1 < KEYMAP_MAX)
 				add_to_string(&keys, "\n\n");
 
 			/* Just a little reminder that the following code takes
@@ -116,14 +116,14 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 			assert(MAIN_ACTIONS > EDIT_ACTIONS);
 			assert(EDIT_ACTIONS > MENU_ACTIONS);
 
-			if (map == KM_MAIN) {
+			if (map == KEYMAP_MAIN) {
 				actions[EDIT_ACTIONS] = ACT_EDIT_NONE;
-			} else if (map == KM_EDIT) {
+			} else if (map == KEYMAP_EDIT) {
 				actions[MENU_ACTIONS] = ACT_MENU_NONE;
 			}
 		}
 	} else {
-		add_actions_to_string(&keys, (int *) actions, KM_MAIN, term);
+		add_actions_to_string(&keys, (int *) actions, KEYMAP_MAIN, term);
 	}
 
 	msg_box(term, getml(info, NULL), MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,

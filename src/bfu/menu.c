@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.240 2004/07/15 15:35:41 jonas Exp $ */
+/* $Id: menu.c,v 1.241 2004/07/15 15:54:20 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -197,7 +197,7 @@ get_menuitem_rtext_width(struct terminal *term, struct menu_item *mi)
 		struct string keystroke;
 
 		if (init_string(&keystroke)) {
-			add_keystroke_to_string(&keystroke, mi->action, KM_MAIN);
+			add_keystroke_to_string(&keystroke, mi->action, KEYMAP_MAIN);
 			rtext_width = L_RTEXT_SPACE + keystroke.length + R_RTEXT_SPACE;
 			done_string(&keystroke);
 		}
@@ -467,7 +467,7 @@ display_menu(struct terminal *term, struct menu *menu)
 				if (init_string(&keystroke)) {
 					add_keystroke_to_string(&keystroke,
 								menu->items[p].action,
-								KM_MAIN);
+								KEYMAP_MAIN);
 					draw_menu_right_text(term, keystroke.source,
 							     keystroke.length,
 							     menu->box.x, y,
@@ -706,7 +706,7 @@ static void
 menu_kbd_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
-	enum menu_action action = kbd_action(KM_MENU, ev, NULL);
+	enum menu_action action = kbd_action(KEYMAP_MENU, ev, NULL);
 	int s = 0;
 
 	switch (action) {
@@ -1021,7 +1021,7 @@ static void
 mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 {
 	struct window *win = menu->win;
-	enum menu_action action = kbd_action(KM_MENU, ev, NULL);
+	enum menu_action action = kbd_action(KEYMAP_MENU, ev, NULL);
 
 	switch (action) {
 	case ACT_MENU_ENTER:

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.50 2003/07/17 08:56:30 zas Exp $ */
+/* $Id: options.h,v 1.51 2003/07/19 23:12:38 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -11,6 +11,9 @@ struct listbox_item;
 #include "util/memory.h"
 #include "util/string.h"
 
+/* This in particular is *not* a nice occassion for putting in any funny
+ * replacement as we want our keyboards to survive debugging sessions, which
+ * frequently involve typing this substituted token all the time. --pasky */
 #define option option_cygwin_workaround
 
 

@@ -2981,7 +2981,7 @@ msgstr "Aucun téléchargement"
 
 #: src/dialogs/menu.c:372
 msgid "~Go to URL"
-msgstr "Atteindre l'~URL"
+msgstr "~Atteindre l'URL"
 
 #: src/dialogs/menu.c:373
 msgid "Go ~back"
@@ -3013,7 +3013,7 @@ msgstr "~Enregistrer sous"
 
 #: src/dialogs/menu.c:391
 msgid "Save ~URL as"
-msgstr "Enregistrer l'URL ~sous"
+msgstr "Enregistrer l'URL so~us"
 
 #: src/dialogs/menu.c:392
 msgid "Save formatted ~document"
@@ -3087,7 +3087,7 @@ msgstr "Info. ~entêtes"
 
 #: src/dialogs/menu.c:501 src/dialogs/menu.c:513
 msgid "Frame at ~full-screen"
-msgstr "~Cadre en plein écran"
+msgstr "Ca~dre en plein écran"
 
 #: src/dialogs/menu.c:518
 msgid "~About"
@@ -3119,7 +3119,7 @@ msgstr "~Modifier"
 
 #: src/dialogs/menu.c:530 src/dialogs/menu.c:538
 msgid "~Delete"
-msgstr "Supprimer"
+msgstr "~Supprimer"
 
 #: src/dialogs/menu.c:543 src/dialogs/menu.c:556
 msgid "~Language"
@@ -3136,7 +3136,7 @@ msgstr "Options du ~terminal"
 #. {N_("~Associations"), ">", MENU_FUNC do_menu, assoc_menu, 1, 0},
 #: src/dialogs/menu.c:547
 msgid "File ~extensions"
-msgstr "Extensions de ~fichiers"
+msgstr "E~xtensions de fichiers"
 
 #: src/dialogs/menu.c:549
 msgid "~Options manager"
@@ -3716,27 +3716,27 @@ msgstr "~Remettre à zéro le formulaire"
 
 #: src/viewer/text/view.c:3360
 msgid "~Submit form"
-msgstr "Envoyer le formulaire"
+msgstr "~Envoyer le formulaire"
 
 #: src/viewer/text/view.c:3363
 msgid "Submit form and rel~oad"
-msgstr "Env~oyer le formulaire et recharger"
+msgstr "Envoyer le formulaire et ~recharger"
 
 #: src/viewer/text/view.c:3367
 msgid "Submit form and open in new ~window"
-msgstr "Envoyer le formulaire et ouvrir dans une nouvelle fenêtre"
+msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
 #: src/viewer/text/view.c:3373
 msgid "Submit form and ~download"
-msgstr "Envoyer le formulaire et télécharger"
+msgstr "Envoyer le formulaire et ~télécharger"
 
 #: src/viewer/text/view.c:3380
 msgid "V~iew image"
-msgstr "Vo~ir l'image"
+msgstr "~Voir l'image"
 
 #: src/viewer/text/view.c:3383
 msgid "Download ima~ge"
-msgstr "Enregistrer l'ima~ge"
+msgstr "~Enregistrer l'image"
 
 #: src/viewer/text/view.c:3389
 msgid "No link selected"
@@ -3794,5 +3794,5 @@ msgstr "Envoi à"
 msgid "post to"
 msgstr "Transfert à"
 
-msgid "Cache redirect information"
-msgstr "Cacher les informations de redirection"
+#~ msgid "Cache redirect information"
+#~ msgstr "Cacher les informations de redirection"

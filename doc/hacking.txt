@@ -440,6 +440,8 @@ func(int a, int b)
   switch(), for()...
   Same thing apply for all iterators and tests (e.g. foreach, foreachback).
 
+- Please write sizeof(something) instead of sizeof something.
+
 - Use assert() and assertm() where applicable. It will prevent hidden bugs.
 
 - If you see code in ELinks that doesn't follow these rules, fix it or tell
@@ -449,7 +451,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.30 2005/02/28 11:25:15 zas Exp $ */
+	/* $Id: hacking.txt,v 1.31 2005/02/28 15:55:13 zas Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -596,4 +598,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.30 2005/02/28 11:25:15 zas Exp $
+$Id: hacking.txt,v 1.31 2005/02/28 15:55:13 zas Exp $

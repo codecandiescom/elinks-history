@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.316 2004/05/29 04:25:24 jonas Exp $ */
+/* $Id: menu.c,v 1.317 2004/05/29 15:36:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -663,4 +663,132 @@ add_new_win_to_menu(struct menu_item **mi, unsigned char *text, int action,
 	if (!c) return;
 	add_to_menu(mi, text, NULL, action, (menu_func) open_in_new_window,
 		    send_open_in_new_window, c - 1 ? SUBMENU : 0);
+}
+
+
+static void
+do_pass_uri_to_command(struct terminal *term, unsigned char *command,
+		       struct session *ses)
+{
+	exec_on_terminal(term, command, "", 0);
+	mem_free(command);
+}
+
+static unsigned char *
+format_command(unsigned char *format, struct uri *uri)
+{
+	struct string string;
+
+	if (!init_string(&string)) return NULL;
+
+	while (*format) {
+		int pos = 0;
+
+		while (format[pos] && format[pos] != '%') pos++;
+
+		add_bytes_to_string(&string, format, pos);
+		format += pos;
+
+		if (*format != '%') continue;
+
+		format++;
+		switch (*format) {
+			case 'c':
+			{
+				unsigned char *str = struri(uri);
+				int length = get_real_uri_length(uri);
+		
+				add_shell_safe_to_string(&string, str, length);
+				break;
+			}
+			case '%':
+				add_char_to_string(&string, '%');
+				break;
+			default:
+				add_bytes_to_string(&string, format - 1, 2);
+				break;
+		}
+		if (*format) format++;
+	}
+
+	return string.source;
+}
+
+void
+pass_uri_to_command(struct session *ses, struct document_view *doc_view, int a)
+{
+	struct list_head *tree = get_opt_tree("document.uri_passing");
+	struct menu_item *items;
+	struct link *link = get_current_link(doc_view);
+	struct option *option;
+	struct uri *uri;
+	int commands = 0;
+
+	if (!link) return;
+
+	uri = get_link_uri(ses, doc_view, link);
+	if (!uri) return;
+
+	items = new_menu(FREE_LIST | FREE_TEXT | FREE_DATA);
+	if (!items) {
+		done_uri(uri);
+		return;
+	}
+
+	foreach (option, *tree) {
+		unsigned char *text, *data;
+
+		if (!strcmp(option->name, "_template_"))
+			continue;
+
+		text = stracpy(option->name);
+		if (!text) continue;
+
+		data = format_command(option->value.string, uri);
+		if (!data) {
+			mem_free(text);
+			continue;
+		}
+
+		add_to_menu(&items, text, NULL, ACT_MAIN_NONE,
+			    (menu_func) do_pass_uri_to_command, data, 0);
+		commands++;
+	}
+
+	done_uri(uri);
+
+	if (commands > 1) {
+		do_menu(ses->tab->term, items, ses, 1);
+	} else {
+		if (commands == 1)
+			do_pass_uri_to_command(ses->tab->term, items->data, ses);
+		mem_free(items->text);
+		mem_free(items->data);
+		mem_free(items);
+	}
+}
+
+void
+add_uri_command_to_menu(struct menu_item **mi)
+{
+	struct list_head *tree = get_opt_tree("document.uri_passing");
+	struct option *option;
+	int commands = 0;
+	enum menu_item_flags flags = NO_FLAG;
+
+	foreach (option, *tree) {
+		if (!strcmp(option->name, "_template_"))
+			continue;
+
+		commands++;
+		if (commands > 1) {
+			flags = SUBMENU;
+			break;
+		}
+	}
+
+	if (commands == 0) return;
+
+	add_to_menu(mi, N_("Pass URI to e~xternal command"), NULL,
+		    ACT_MAIN_PASS_URI, NULL, NULL, flags);
 }

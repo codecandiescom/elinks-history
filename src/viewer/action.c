@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.67 2004/05/29 13:54:17 jonas Exp $ */
+/* $Id: action.c,v 1.68 2004/05/29 15:36:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,6 +326,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_OPTIONS_MANAGER:
 			options_manager(ses);
+			break;
+
+		case ACT_MAIN_PASS_URI:
+			do_frame_action(ses, pass_uri_to_command, 0);
 			break;
 
 		case ACT_MAIN_PREVIOUS_FRAME:

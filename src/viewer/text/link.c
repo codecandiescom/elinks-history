@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.182 2004/05/29 13:54:17 jonas Exp $ */
+/* $Id: link.c,v 1.183 2004/05/29 15:36:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -798,7 +798,6 @@ try_document_key(struct session *ses, struct document_view *doc_view,
 	return 0;
 }
 
-
 /* Open a contextual menu on a link, form or image element. */
 /* TODO: This should be completely configurable. */
 void
@@ -851,6 +850,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 				add_menu_action(&mi, N_("~Add link to bookmarks"),
 						ACT_MAIN_ADD_BOOKMARK_LINK);
 #endif
+				add_uri_command_to_menu(&mi);
 			}
 
 		}

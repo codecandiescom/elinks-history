@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.209 2004/05/29 04:25:24 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.210 2004/05/29 15:36:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,6 +510,7 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "options-manager", ACT_MAIN_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
 	{ "page-down", ACT_MAIN_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
 	{ "page-up", ACT_MAIN_PAGE_UP, DACT(N_("Move upwards by a page")) },
+	{ "pass-uri", ACT_MAIN_PASS_URI, DACT(N_("Pass current URI to external command")) },
 	{ "previous-frame", ACT_MAIN_PREVIOUS_FRAME, DACT(N_("Move to the previous frame")) },
 	{ "quit", ACT_MAIN_QUIT, DACT(N_("Open a quit confirmation dialog box")) },
 	{ "really-quit", ACT_MAIN_REALLY_QUIT, DACT(N_("Quit without confirmation")) },

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.110 2004/05/29 00:53:48 jonas Exp $ */
+/* $Id: options.inc,v 1.111 2004/05/29 15:36:39 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -590,6 +590,18 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.plain", N_("Compress empty lines"),
 		"compress_empty_lines", 0, 0,
 		N_("Compress successive empty lines to only one in displayed text.")),
+
+
+	INIT_OPT_TREE("document", N_("URI passing"),
+		"uri_passing", OPT_SORT | OPT_AUTOCREATE,
+		N_("Rules for passing URIs to external commands.")),
+
+	INIT_OPT_STRING("document.uri_passing", NULL,
+		"_template_", 0, "",
+		N_("A rule for passing URI to an external command.\n"
+		"The format is:\n"
+		"%c in the string means the current URL\n"
+		"%% in the string means '%'")),
 
 	/* Keep options in alphabetical order. */
 

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.111 2004/05/29 04:25:24 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.112 2004/05/29 15:36:39 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -86,6 +86,7 @@ enum main_action {
 	ACT_MAIN_OPTIONS_MANAGER,
 	ACT_MAIN_PAGE_DOWN,
 	ACT_MAIN_PAGE_UP,
+	ACT_MAIN_PASS_URI,
 	ACT_MAIN_PREVIOUS_FRAME,
 	ACT_MAIN_QUIT,
 	ACT_MAIN_REALLY_QUIT,

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.28 2002/07/08 14:54:30 pasky Exp $ */
+/* $Id: http.c,v 1.29 2002/07/09 17:32:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,9 @@
 #include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+#include <unistd.h>
+#include <fcntl.h>
 
 struct http_connection_info {
 	enum blacklist_flags bl_flags;
@@ -247,8 +250,6 @@ void http_send_header(struct connection *c)
 			*p1 = 0;
 			add_to_str(&hdr, &l, p);
 			add_to_str(&hdr, &l, "%20");
-			/* This is probably not needed, but who cares.. ;) */
-			*p1 = ' ';
 			p = p1 + 1;
 		}
 		add_to_str(&hdr, &l, p);
@@ -384,7 +385,13 @@ void http_send_header(struct connection *c)
 	}
 
 	add_to_str(&hdr, &l, "Accept: */*\r\n");
-
+	/* TODO: Make this encoding.c function. */
+#ifdef HAVE_BZLIB_H
+	add_to_str(&hdr, &l, "Accept-Encoding: bzip2\r\n");
+#endif
+#ifdef HAVE_ZLIB_H
+	add_to_str(&hdr, &l, "Accept-Encoding: gzip\r\n");
+#endif
 	if (!accept_charset) {
 		unsigned char *cs, *ac;
 		int aclen = 0;
@@ -528,22 +535,142 @@ int is_line_in_buffer(struct read_buffer *rb)
 	return 0;
 }
 
+/** @func	uncompress_data(struct connection *conn, unsigned char *data,
+		int len, int *dlen)
+ * @brief	This function uncompress data blocks (if they were compressed).
+ * @param	conn	standard structure
+ * @param	data	block of data
+ * @param	len	length of the block
+ * @param	new_len	number of uncompressed bytes (length of returned block
+			of data)
+ * @ret		unsigned char *	address of uncompressed block
+ * @remark	In this function, value of either info->chunk_remaining or
+ *		info->length is being changed (it depends on if chunked mode is
+ *		used or not).
+ */
+
+static unsigned char *
+uncompress_data(struct connection *conn, unsigned char *data, int len,
+		int *new_len)
+{
+	struct http_connection_info *info = conn->info;
+	/* Number of uncompressed bytes that could be safely get from
+	 * read_encoded().  We can't want to read too much, because if gzread
+	 * "clears" the buffer next time it will return -1. */
+	int ret;
+	int written, r, init = 0, *length_of_block;
+	/* If true, all stuff was written to pipe and only uncompression is
+	 * wanted now. */
+	int finishing = 0;
+	unsigned char *output;
+
+	length_of_block = (info->length == -2 ? &info->chunk_remaining
+					      : &info->length);
+	if (!*length_of_block) finishing = 1;
+
+	if (conn->content_encoding == ENCODING_NONE) {
+		*new_len = len;
+		if (*length_of_block > 0) *length_of_block -= len;
+		return data;
+	}
+
+	if (conn->stream_pipes[0] == -1) {
+		c_pipe(conn->stream_pipes);
+		init = 1;
+		fcntl(conn->stream_pipes[0], F_SETFL, O_NONBLOCK | fcntl(conn->stream_pipes[0], F_GETFL));
+		fcntl(conn->stream_pipes[1], F_SETFL, O_NONBLOCK | fcntl(conn->stream_pipes[1], F_GETFL));
+	}
+
+	written = write(conn->stream_pipes[1], data, len);
+	if (written > 0) {
+		ret = written;
+		data += ret;
+		len -= ret;
+		if (*length_of_block > 0) *length_of_block -= ret;
+		if (!info->length) finishing = 1;
+	} else {
+		/* We assume that this is because pipe is full. */
+		/* FIXME: We should probably handle errors as well. --pasky */
+		ret = 4096; /* capacity of the pipe */
+	}
+
+	if (init)
+		conn->stream = open_encoded(conn->stream_pipes[0],
+					    conn->content_encoding);
+	if (!conn->stream) return NULL;
+
+	if (finishing) ret = 65536;
+	*new_len = 0;
+
+	output = (unsigned char *) mem_alloc(ret);
+	if (!output) goto finish;
+
+	while ((r = read_encoded(conn->stream, output + *new_len, ret))) {
+		if (r < 0) {
+			mem_free(output);
+			output = NULL;
+			break;
+		}
+		*new_len += r;
+
+		if (!len) {
+			if (!finishing) return output;
+		} else {
+			int written = write(conn->stream_pipes[1], data, len);
+
+			if (written > 0) {
+				ret = written;
+				data += ret;
+				len -= ret;
+				if (*length_of_block > 0)
+					*length_of_block -= ret;
+				if (!info->length) {
+					finishing = 1;
+					ret = 65536;
+				}
+			} else {
+				ret = 4096;
+			}
+		}
+		output = mem_realloc(output, *new_len + ret);
+		if (!output) break;
+	}
+
+finish:
+	close_encoded(conn->stream);
+	close(conn->stream_pipes[1]);
+	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
+	return output;
+}
+
 void read_http_data(struct connection *c, struct read_buffer *rb)
 {
 	struct http_connection_info *info = c->info;
+
 	set_timeout(c);
+
 	if (rb->close == 2) {
-		setcstate(c, S_OK);
-		http_end_request(c);
-		return;
+		/* flush uncompression */
+		if (c->content_encoding && info->length == -1) {
+			info->length = 0;
+		} else {
+			setcstate(c, S_OK);
+			http_end_request(c);
+			return;
+		}
 	}
+
 	if (info->length != -2) {
+		unsigned char *data;
+		int dl;
 		int l = rb->len;
+
 		if (info->length >= 0 && info->length < l) l = info->length;
 		c->received += l;
-		if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
-		if (info->length >= 0) info->length -= l;
-		c->from += l;
+		data = uncompress_data(c, rb->data, l, &dl);
+		if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
+		if (data && data != rb->data) mem_free(data);
+		c->from += dl;
 		kill_buffer_data(rb, l);
 		if (!info->length && !rb->close) {
 			setcstate(c, S_OK);
@@ -580,17 +707,24 @@ void read_http_data(struct connection *c, struct read_buffer *rb)
 					return;
 				}
 				kill_buffer_data(rb, l);
-				if (!(info->chunk_remaining = n)) info->chunk_remaining = -2;
+				info->chunk_remaining = n;
 				goto next_chunk;
 			}
 		} else {
+			unsigned char *data;
+			int dl;
 			int l = info->chunk_remaining;
 			if (l > rb->len) l = rb->len;
 			c->received += l;
-			if (add_fragment(c->cache, c->from, rb->data, l) == 1) c->tries = 0;
-			info->chunk_remaining -= l;
-			c->from += l;
+			data = uncompress_data(c, rb->data, l, &dl);
+			if (add_fragment(c->cache, c->from, data, dl) == 1) c->tries = 0;
+			if (data && data != rb->data) mem_free(data);
+			c->from += dl;
 			kill_buffer_data(rb, l);
+			if (!l && !info->chunk_remaining) {
+				info->chunk_remaining = -2;
+				goto next_chunk;
+			}
 			if (!info->chunk_remaining && rb->len >= 1) {
 				if (rb->data[0] == 10) kill_buffer_data(rb, 1);
 				else {
@@ -823,6 +957,28 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 	if (!e->last_modified && (d = parse_http_header(e->head, "Date", NULL)))
 		e->last_modified = d;
 	if (info->length == -1 || (version < 11 && info->close)) rb->close = 1;
+	c->content_encoding = ENCODING_NONE;
+	c->stream_pipes[0] = c->stream_pipes[1] = -1;
+	d = parse_http_header(e->head, "Content-Type", NULL);
+	if (d) {
+		if (!strncmp(d, "text", 4)) {
+			mem_free(d);
+			d = parse_http_header(e->head, "Content-Encoding", NULL);
+			if (d) {
+#ifdef HAVE_ZLIB_H
+				if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
+					c->content_encoding = ENCODING_GZIP;
+#endif
+#ifdef HAVE_BZLIB_H
+				if (!strcasecmp(d, "bzip2") || !strcasecmp(d, "x-bzip2"))
+					c->content_encoding = ENCODING_BZIP2;
+#endif
+				mem_free(d);
+			}
+		} else {
+			mem_free(d);
+		}
+	}
 	read_http_data(c, rb);
 }
 

@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.13 2002/07/05 01:29:09 pasky Exp $ */
+/* $Id: sched.h,v 1.14 2002/07/09 17:32:49 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -7,6 +7,7 @@
 #include "document/cache.h"
 #include "lowlevel/ttime.h"
 #include "ssl/ssl.h"
+#include "util/encoding.h"
 #include "util/error.h"
 #include "util/lists.h"
 
@@ -75,6 +76,10 @@ struct connection {
 
 	ssl_t *ssl;
 	int no_tsl;
+
+	enum stream_encoding content_encoding;
+	struct stream_encoded *stream;
+	int stream_pipes[2];
 };
 
 #define S_WAIT		0

@@ -1678,6 +1678,38 @@ struct dialog_data {
 	struct dialog_item_data items[1];
 };
 
+
+/* Stores display information about a box. Kept in cdata. */
+struct dlg_data_item_data_box {
+	int sel;	/* Item currently selected */	
+	int box_top;	/* Index into items of the item that is on the top line of the box */
+	struct list_head items;	/* The list being displayed */
+	int list_len;	/* Number of items in the list */
+};
+
+/* Which fields to free when zapping a box_item. Bitwise or these. */
+enum box_item_free {NOTHING = 0, TEXT = 1 , DATA = 2};
+/* An item in a box */
+struct box_item {
+	struct box_item *next;
+	struct box_item *prev;
+	unsigned char *text;	/* Text to display */
+	void (*on_hilight)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *);	/* Run when this item is hilighted */
+	int (*on_selected)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *);	/* Run when the user selects on this item. Returns pointer to the box_item that should be selected after execution*/
+	void *data;	/* data */
+	enum box_item_free free_i;
+};
+
+void show_dlg_item_box(struct dialog_data *, struct dialog_item_data *); 
+
+#define BOX_HILIGHT_FUNC (void (*)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *))
+#define BOX_ON_SELECTED_FUNC (int (*)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *))
+
+/* Ops dealing with box data */
+#define get_box_from_dlg_item_data(x) ((struct dlg_data_item_data_box *)(x->cdata))
+#define get_box_list_height(x) (x->data_len)
+
+
 struct menu_item *new_menu(int);
 void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, unsigned char *, void (*)(struct terminal *, void *, void *), void *, int);
 void do_menu(struct terminal *, struct menu_item *, void *);
@@ -2078,62 +2110,20 @@ typedef int bookmark_id;
 extern bookmark_id next_bookmark_id;
 #define		BAD_BOOKMARK_ID		(bookmark_id)(-1)
 
-
-/* Stores display information about a box. Kept in cdata. */
-struct dlg_data_item_data_box {
-	int sel;	/* Item currently selected */	
-	int box_top;	/* Index into items of the item that is on the top line of the box */
-	struct list_head items;	/* The list being displayed */
-	int list_len;	/* Number of items in the list */
-};
-
-/* Which fields to free when zapping a box_item. Bitwise or these. */
-enum box_item_free {NOTHING = 0, TEXT = 1 , DATA = 2};
-/* An item in a box */
-struct box_item {
-	struct box_item *next;
-	struct box_item *prev;
-	unsigned char *text;	/* Text to display */
-	void (*on_hilight)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *);	/* Run when this item is hilighted */
-	int (*on_selected)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *);	/* Run when the user selects on this item. Returns pointer to the box_item that should be selected after execution*/
-	void *data;	/* data */
-	enum box_item_free free_i;
-};
-
-
-void show_dlg_item_box(struct dialog_data *, struct dialog_item_data *); 
-
-#define BOX_HILIGHT_FUNC (void (*)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *))
-#define BOX_ON_SELECTED_FUNC (int (*)(struct terminal *, struct dlg_data_item_data_box *, struct box_item *))
-
-/* Ops dealing with box data */
-/* */
-#define get_box_from_dlg_item_data(x) ((struct dlg_data_item_data_box *)(x->cdata))
-#define get_box_list_height(x) (x->data_len)
-
-/* V.05 bookmarks: */
-/*
-struct bookmark {
-	struct bookmark *next;
-	struct bookmark *prev;
-	bookmark_id id;	Bookmark id 
-	unsigned char *title;	 title of bookmark 
-	unsigned char *url;	 Location of bookmarked item 
-};*/
-
+/* Bookmark record structure */
 struct bookmark {
 	struct bookmark *next;
 	struct bookmark *prev;
 	bookmark_id id;	/* Bookmark id */
 	unsigned char *title;	/* title of bookmark */
 	unsigned char *url;	/* Location of bookmarked item */
-	unsigned int type; /* The type of bookmark we're dealing with. */
-	void *type_data; /* Type-dependent data. */
 	int selected; /* Whether to display this bookmark or not. */
 };
 
+/* Cleanups and saves bookmarks */
 void finalize_bookmarks();
 
+/* Read/write bookmarks functions */
 void read_bookmarks();
 void write_bookmarks();
 
@@ -2149,6 +2139,7 @@ struct bookmark *create_bookmark(const unsigned char *, const unsigned char *);
 /* Launches add dialogs */
 void launch_bm_add_link_dialog(struct terminal *,struct dialog_data *,struct session *);
 void launch_bm_add_doc_dialog(struct terminal *,struct dialog_data *,struct session *);
+
 
 /* kbdbind.c */
 

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.77 2003/07/05 17:57:14 jonas Exp $ */
+/* $Id: connection.c,v 1.78 2003/07/05 18:13:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,6 @@
 #include "util/types.h"
 
 
-/* Types and structs */
 struct keepalive_connection {
 	LIST_HEAD(struct keepalive_connection);
 
@@ -366,14 +365,14 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 	struct keepalive_connection *k;
 	struct uri *uri = &c->uri;
 	unsigned char *host = uri->user ? uri->user : uri->host;
-	int hostlen  = uri->hostlen + (uri->port ? uri->portlen : 0);
+	int hostlen  = uri->userlen + uri->hostlen + uri->portlen;
 
 	k = mem_alloc(sizeof(struct keepalive_connection) + hostlen);
 	if (!k) return NULL;
 
 	memcpy(k->host, host, hostlen);
-	k->port = get_uri_port(&c->uri);
-	k->protocol = get_protocol_handler(&c->uri);
+	k->port = get_uri_port(uri);
+	k->protocol = get_protocol_handler(uri);
 	k->pf = c->pf;
 	k->socket = c->sock1;
 	k->timeout = timeout;
@@ -388,7 +387,7 @@ get_keepalive_connection(struct connection *c)
 	struct keepalive_connection *connection;
 	struct uri *uri = &c->uri;
 	unsigned char *host = uri->user ? uri->user : uri->host;
-	int hostlen = uri->hostlen + (uri->port ? uri->portlen : 0);
+	int hostlen = uri->userlen + uri->hostlen + uri->portlen;
 	protocol_handler *handler = get_protocol_handler(uri);
 	int port = get_uri_port(uri);
 
@@ -471,7 +470,7 @@ check_keepalive_connections(void)
 
 	if (!list_empty(keepalive_connections))
 		keepalive_timeout = install_timer(KEEPALIVE_CHECK_TIME,
-				                  keepalive_timer, NULL);
+						  keepalive_timer, NULL);
 }
 
 static inline void

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.359 2004/01/18 16:24:14 zas Exp $ */
+/* $Id: parser.c,v 1.360 2004/01/18 16:26:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2267,7 +2267,7 @@ distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 	int divisor = 0;
 	int tmp_val;
 	int val = *val_;
-	
+
 	foreach_values(i) if (values[i] < 1) values[i] = 1;
 	val -= max_value;
 
@@ -2277,17 +2277,17 @@ distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 	tmp_val = val;
 	foreach_values(i) {
 		int tmp;
-		
+
 		/* SIGH! gcc 2.7.2.* has an optimizer bug! */
 		do_not_optimize_here_gcc_2_7(&divisor);
 		tmp = values[i] * (divisor - tmp_val) / divisor;
 		val -= values[i] - tmp;
 		values[i] = tmp;
 	}
-		
+
 	while (val) {
 		int flag = 0;
-			
+
 		foreach_values(i) {
 			if (val < 0) values[i]++, val++, flag = 1;
 			if (val > 0 && values[i] > 1) values[i]--, val--, flag = 1;
@@ -2313,28 +2313,28 @@ distribute_rows_or_cols_that_left(int *val_, int max_value, int *values, int val
 	tmp_values = fmem_alloc(values_count * sizeof(int));
 	if (!tmp_values) return 0;
 	memcpy(tmp_values, values, values_count * sizeof(int));
-		
+
 	foreach_values(i) if (values[i] < 1) values[i] = 1;
 	val = max_value - val;
-	
+
 	foreach_values(i) if (tmp_values[i] < 0) divisor += -tmp_values[i];
 	assert(divisor);
-		
+
 	tmp_val = val;
 	foreach_values(i) if (tmp_values[i] < 0) {
 		int tmp = (-tmp_values[i] * tmp_val / divisor);
-			
+
 		values[i] += tmp;
 		val -= tmp;
 	}
 	assertm(val >= 0, "distribute_rows_or_cols_that_left: val < 0");
 	if_assert_failed val = 0;
-		
+
 	foreach_values(i) if (tmp_values[i] < 0 && val) values[i]++, val--;
-		
+
 	assertm(val <= 0, "distribute_rows_or_cols_that_left: val > 0");
 	if_assert_failed val = 0;
-		
+
 	fmem_free(tmp_values);
 
 	*val_ = val;
@@ -2354,14 +2354,14 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 		int *tmp_values;
 		unsigned long number;
 		int val;
-		
+
 		while (isspace(*str)) str++;
 
 		/* Extract number. */
 		errno = 0;
 		number = strtoul(str, (char **)&str, 10);
 		if (errno) return 0;
-		
+
 		val = number;
 		if (*str == '%')	/* Percentage */
 			val = val * max_value / 100;
@@ -2375,20 +2375,20 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 		/* Save value. */
 		tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));
 		if (!tmp_values) return 0;
-		
+
 		values = tmp_values;
 		values[values_count++] = val;
-	
+
 		/* Check for next field if any. */
 		tmp_str = strchr(str, ',');
 		if (!tmp_str) break;	/* It was the last field. */
-		
+
 		str = tmp_str + 1;
 	}
-	
+
 	*new_values = values;
 	*new_values_count = values_count;
-	
+
 	return 1;
 }
 
@@ -2417,7 +2417,7 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
 
 	*new_values = values;
 	*new_values_count = values_count;
-	
+
 	/* Here begins distribution between rows or cols.
 	 * Be warn, this is Mikulas's black magic ;) */
 

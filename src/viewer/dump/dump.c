@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.139 2004/07/19 22:52:37 jonas Exp $ */
+/* $Id: dump.c,v 1.140 2004/07/30 10:27:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,8 +398,7 @@ fail:
 		return -1;
 	}
 
-	if (get_opt_bool("document.browse.links.numbering")
-	    && document->nlinks) {
+	if (document->nlinks) {
 		int x;
 		unsigned char *header = "\nReferences\n\n   Visible links\n";
 		int headlen = strlen(header);
@@ -413,12 +412,21 @@ fail:
 
 			if (!where) continue;
 
-			if (link->title && *link->title)
-				snprintf(buf, D_BUF, "%4d. %s\n\t%s\n",
-					 x + 1, link->title, where);
-			else
-				snprintf(buf, D_BUF, "%4d. %s\n",
-					 x + 1, where);
+			if (get_opt_bool("document.browse.links.numbering")) {
+				if (link->title && *link->title)
+					snprintf(buf, D_BUF, "%4d. %s\n\t%s\n",
+						 x + 1, link->title, where);
+				else
+					snprintf(buf, D_BUF, "%4d. %s\n",
+						 x + 1, where);
+			} else {
+				if (link->title && *link->title)
+					snprintf(buf, D_BUF, "   . %s\n\t%s\n",
+						 link->title, where);
+				else
+					snprintf(buf, D_BUF, "   . %s\n", where);
+			}
+
 			bptr = strlen(buf);
 			if (hard_write(fd, buf, bptr) != bptr)
 				goto fail;

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.152 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: listbox.c,v 1.153 2004/06/25 16:16:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -485,8 +485,7 @@ init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	     struct term_event *ev)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
-	struct listbox_data *box =
-		(struct listbox_data *) widget_data->widget->data;
+	struct listbox_data *box = get_listbox_widget_data(widget_data);
 
 	/* Try to restore the position from last time */
 	if (!list_empty(browser->root.child)) {

@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.11 2005/03/29 02:44:12 jonas Exp $ */
+/* $Id: date.c,v 1.12 2005/03/29 02:59:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,12 +66,18 @@ parse_year(const unsigned char **date_p, unsigned char *end)
 	return year;
 }
 
-/* Return 0 for January, 11 for december, -1 for failure. */
-static inline int
-parse_month(const unsigned char *buf)
+int
+parse_month(const unsigned char **buf)
 {
-	/* Check that the buffer has atleast 3 chars including NUL */
-	return buf[0] && buf[1] ? month2num(buf) : -1;
+	const unsigned char *month = *buf;
+
+	/* Check that the buffer has atleast 3 chars. */
+	if (!month[0] || !month[1] || !month[2])
+		return -1;
+
+	*buf += 3;
+
+	return month2num(month);
 }
 
 
@@ -255,10 +261,9 @@ parse_date(const unsigned char *date)
 
 		/* Eat month */
 
-		tm.tm_mon = parse_month(date);
+		tm.tm_mon = parse_month(&date);
 		if (tm.tm_mon < 0) return 0;
 
-		date += 3;
 		c = *date++;
 
 		skip_time_sep();
@@ -280,10 +285,9 @@ parse_date(const unsigned char *date)
 
 		/* Eat month */
 
-		tm.tm_mon = parse_month(date);
+		tm.tm_mon = parse_month(&date);
 		if (tm.tm_mon < 0) return 0;
 
-		date += 3;
 		c = *date++;
 
 		/* I know, we shouldn't allow '-', but who cares ;). --pasky */

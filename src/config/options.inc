@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.72 2003/12/30 21:28:20 pasky Exp $ */
+/* $Id: options.inc,v 1.73 2003/12/30 21:49:26 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -901,16 +901,16 @@ struct option_info config_options_info[] = {
 	/* The colors and mono tree should be similar but with different default
 	 * values of course so always use the macros below. */
 
-#define DO_INIT_OPT_COLORS(subtree, capt, name, bg, fg, desc)		\
+#define DO_INIT_OPT_COLORS(subtree, capt, name, fg, bg, desc)		\
 	INIT_OPT_TREE(subtree, capt, name, 0, desc),			\
 	INIT_OPT_COLOR(subtree "." name, N_("Text color"),		\
 		      "text", 0, fg, N_("Default text color.")),	\
 	INIT_OPT_COLOR(subtree "." name, N_("Background color"), 	\
 		      "background", 0, bg, N_("Default background color."))
 
-#define INIT_OPT_COLORS(subtree, capt, name, cbg, cfg, mbg, mfg, desc)	\
-	DO_INIT_OPT_COLORS("ui.colors.color" subtree, capt, name, cbg, cfg, desc), \
-	DO_INIT_OPT_COLORS("ui.colors.mono" subtree, capt, name, mbg, mfg, desc)
+#define INIT_OPT_COLORS(subtree, capt, name, cfg, cbg, mfg, mbg, desc)	\
+	DO_INIT_OPT_COLORS("ui.colors.color" subtree, capt, name, cfg, cbg, desc), \
+	DO_INIT_OPT_COLORS("ui.colors.mono" subtree, capt, name, mfg, mbg, desc)
 
 #define INIT_OPT_COLOR_TREE(subtree, capt, name, desc)			\
 	INIT_OPT_TREE("ui.colors.color" subtree, capt, name, 0, desc),	\
@@ -930,11 +930,11 @@ struct option_info config_options_info[] = {
 		N_("Main menu bar colors.")),
 
 	INIT_OPT_COLORS(".mainmenu", N_("Unselected main menu bar item"),
-		"normal", "white", "black", "white", "black",
+		"normal", "black", "white", "black", "white",
 		N_("Unselected main menu bar item colors.")),
 
 	INIT_OPT_COLORS(".mainmenu", N_("Selected main menu bar item"),
-		"selected", "black", "green", "black", "gray",
+		"selected", "green", "black", "gray", "black",
 		N_("Selected main menu bar item colors.")),
 
 	INIT_OPT_COLOR_TREE(".mainmenu", N_("Hotkey"),
@@ -942,11 +942,11 @@ struct option_info config_options_info[] = {
 		N_("Main menu hotkey colors.")),
 
 	INIT_OPT_COLORS(".mainmenu.hotkey", N_("Unselected hotkey"),
-		"normal", "white", "darkred", "white", "black",
+		"normal", "darkred", "white", "black", "white",
 		N_("Main menu unselected hotkey colors.")),
 
 	INIT_OPT_COLORS(".mainmenu.hotkey", N_("Selected hotkey"),
-		"selected", "green", "darkred", "white", "black",
+		"selected", "darkred", "green", "black", "white",
 		N_("Main menu selected hotkey colors.")),
 
 
@@ -955,15 +955,15 @@ struct option_info config_options_info[] = {
 		N_("Menu bar colors.")),
 
 	INIT_OPT_COLORS(".menu", N_("Unselected menu item"),
-		"normal", "white", "black", "white", "black",
+		"normal", "black", "white", "black", "white",
 		N_("Unselected menu item colors.")),
 
 	INIT_OPT_COLORS(".menu", N_("Selected menu item"),
-		"selected", "green", "black", "black", "gray",
+		"selected", "black", "green", "gray", "black",
 		N_("Selected menu item colors.")),
 
 	INIT_OPT_COLORS(".menu", N_("Marked menu item"),
-		"marked", "white", "red", "white", "gray",
+		"marked", "red", "white", "gray", "white",
 		N_("Marked menu item colors.")),
 
 	INIT_OPT_COLOR_TREE(".menu", N_("Hotkey"),
@@ -971,15 +971,15 @@ struct option_info config_options_info[] = {
 		N_("Menu item hotkey colors.")),
 
 	INIT_OPT_COLORS(".menu.hotkey", N_("Unselected hotkey"),
-		"normal", "white", "darkred", "black", "gray",
+		"normal", "darkred", "white", "gray", "black",
 		N_("Menu item unselected hotkey colors.")),
 
 	INIT_OPT_COLORS(".menu.hotkey", N_("Selected hotkey"),
-		"selected", "green", "darkred", "black", "gray",
+		"selected", "darkred", "green", "gray", "black",
 		N_("Menu item selected hotkey colors.")),
 
 	INIT_OPT_COLORS(".menu", N_("Menu frame"),
-		"frame", "white", "black", "white", "black",
+		"frame", "black", "white", "black", "white",
 		N_("Menu frame colors.")),
 
 

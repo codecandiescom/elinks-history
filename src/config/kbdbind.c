@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.111 2003/12/20 22:18:21 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.112 2003/12/20 22:41:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,6 +423,7 @@ static struct strtonum action_table[] = {
 	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "mark-set", ACT_MARK_SET, DACT(N_("Set a mark")) },
 	{ "mark-goto", ACT_MARK_GOTO, DACT(N_("Go at a specified mark")) },
+	{ "mark-item", ACT_MARK_ITEM, DACT(N_("Mark item")) },
 	{ "menu", ACT_MENU, DACT(N_("Activate the menu")) },
 	{ "next-frame", ACT_NEXT_FRAME, DACT(N_("Move to the next frame")) },
 	{ "open-new-tab", ACT_OPEN_NEW_TAB, DACT(N_("Open a new tab")) },
@@ -794,6 +795,8 @@ static struct default_kb default_menu_keymap[] = {
 	{ ACT_END, KBD_END, 0 },
 	{ ACT_END, 'E', KBD_CTRL },
 	{ ACT_ENTER, KBD_ENTER, 0 },
+	{ ACT_MARK_ITEM, '*', 0 },
+	{ ACT_MARK_ITEM, KBD_INS, 0 },
 	{ ACT_PAGE_DOWN, KBD_PAGE_DOWN, 0 },
 	{ ACT_PAGE_DOWN, 'F', KBD_CTRL },
 	{ ACT_PAGE_UP, KBD_PAGE_UP, 0 },

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.128 2003/12/20 22:18:21 jonas Exp $ */
+/* $Id: listbox.c,v 1.129 2003/12/20 22:41:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -605,7 +605,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_INS || ev->x == '*') {
+			if (action == ACT_MARK_ITEM) {
 				struct listbox_data *box;
 
 				box = get_listbox_widget_data(dlg_item);

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.70 2002/11/18 17:12:02 zas Exp $ */
+/* $Id: ftp.c,v 1.71 2002/11/19 13:43:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -846,7 +846,8 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 							if (lseek(down->handle,
 							    conn->from, SEEK_SET)
 							    < 0) {
-								abort_conn_with_state(conn, -errno);
+								abort_conn_with_state(
+									conn, -errno);
 								return;
 							}
 						}

@@ -1,3 +1,222 @@
+Fri Oct  3 18:31:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	``Cache'' the color type and mode so they can be used as fallback
+	when part->document is NULL. Fixes some ugly stains on google and
+	freshmeat.  
+
+Fri Oct  3 18:28:01 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Move call to gettext into test_confdir and use N_ to mark the
+	messages instead. inspired by fonseca ;-) 
+
+Fri Oct  3 17:47:43 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/: lowlevel/home.c, config/options.c:
+
+	If -confdir option or ELINKS_CONFDIR begin with a dir_sep treat them
+	as absolute paths.  
+
+Fri Oct  3 17:36:13 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/: config/options.c, lowlevel/home.c:
+
+	Add commandline option '-confdir'.  
+
+Fri Oct  3 17:12:59 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Remove no longer needed envconfdir.  
+
+Fri Oct  3 17:10:38 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Test if path is valid.  
+
+Fri Oct  3 17:06:59 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Use a 'else' and remove goto.  
+
+Fri Oct  3 17:03:32 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Add error_message to test_confdir and show it on failure.  
+	
+	Also add a missing NULL to straconcat.  
+
+Fri Oct  3 16:45:26 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Move building of the confdir into test_confdir.  
+
+Fri Oct  3 16:28:17 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Change indentation.  
+
+Fri Oct  3 16:25:41 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Move one strip_trailing_dir_sep to test_confdir.  
+
+Fri Oct  3 16:18:23 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	elinks_home should be home_elinks in this call.  
+
+Fri Oct  3 16:15:25 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Change the behaviour of ELINKS_CONFDIR, so that "/elinks" is not
+	appended and elinks will try to create the dir specified by
+	ELINKS_CONFDIR.  
+
+Fri Oct  3 15:57:37 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Change indentation.  
+
+Fri Oct  3 15:44:58 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Remove mem_free(home) calls and use 'goto end;'.  
+
+Fri Oct  3 15:32:08 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Move call elinks_dirname(path_to_exe) to initialization of home.  
+
+Fri Oct  3 15:17:13 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Add strip_trailing_dir_sep(unsigned char *path) and use it.  
+
+Fri Oct  3 13:22:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: mailcap.c, mimetypes.c:
+
+	The change hooks should never initialize the map .. we do that only
+	when needed.  
+
+Fri Oct  3 12:50:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Only initialize the mimetypes map when requested for a MIME type
+	mapping.  
+
+Fri Oct  3 12:35:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	init_mimetypes(): Split out map initialization to
+	init_mimetypes_map().  
+
+Fri Oct  3 12:26:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Only initialize the map when a user actually requests a mailcap mime
+	handler. This should reduce the startup time.  
+
+Fri Oct  3 12:05:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	init_mailcap(): Split map initialization into init_mailcap_map().  
+
+Fri Oct  3 11:53:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Use mem_calloc() when allocating the mime_handler.  
+
+Fri Oct  3 11:51:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	get_mime_handler_mailcap(): Split out the mailcap_hash lookup to
+	get_mailcap_entry().  
+
+Fri Oct  3 11:44:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	init_mailcap(): Test if mailcap is enabled each time it is called.  
+
+Fri Oct  3 11:31:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.h:
+
+	Whitespace fix.  
+
+Fri Oct  3 11:25:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Improve comments.  
+
+Thu Oct  2 23:58:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Fix cleanup.  
+
+Thu Oct  2 23:51:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Minor cleanup and macrofy color adding.  
+
+Thu Oct  2 23:36:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	add_char_color(): Introduced as a fast and specialized alternative
+	to add_format_to_string(). It could maybe even be considered for use
+	by 16 color mode.  
+
+Thu Oct  2 23:33:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Fix yet another one of my off by oners. :( 
+
+Thu Oct  2 22:51:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Expand the comment with info from discussion on #elinks.  
+
+Thu Oct  2 22:40:56 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser.c:
+
+	Added comment.  
+
+Thu Oct  2 22:25:58 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/document/html/parser.c:
+
+	Commented out LI related stuff. Fixed bug 208.  
+
 Thu Oct  2 22:08:02 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* contrib/elinks.spec.in:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.19 2002/03/30 21:17:46 pasky Exp $ */
+/* $Id: view.c,v 1.20 2002/03/30 21:23:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2755,8 +2755,8 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 					    "d", TEXT(T_HK_DOWNLOAD_LINK),
 					    MENU_FUNC send_download, NULL, 0);
 
-			add_to_menu(&mi, TEXT(T_ADD_BOOKMARK),
-				    "A", TEXT(T_HK_ADD_BOOKMARK),
+			add_to_menu(&mi, TEXT(T_ADD_BOOKMARK_LINK),
+				    "A", TEXT(T_HK_ADD_BOOKMARK_LINK),
 				    MENU_FUNC launch_bm_add_link_dialog,
 				    NULL, 0);
 

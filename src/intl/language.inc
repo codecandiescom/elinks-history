@@ -386,6 +386,8 @@ struct translation translation_english [] = {
   {T_NEED_MASTER_TERMINAL, "You can do this only on the master terminal"},
   {T_SEARCH_BOOKMARK, "Search bookmarks"},
   {T_CLEAR, "Clear"},
+  {T_ADD_BOOKMARK_LINK, "Add link to bookmarks"},
+  {T_HK_ADD_BOOKMARK_LINK, "A"},
   {0, NULL}
 };
 
@@ -775,6 +777,8 @@ struct translation translation_brazilian_portuguese [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -1164,6 +1168,8 @@ struct translation translation_bulgarian [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -1553,6 +1559,8 @@ struct translation translation_catalan [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -1942,6 +1950,8 @@ struct translation translation_czech [] = {
   {T_NEED_MASTER_TERMINAL, "Tohle mù¾e¹ jen na øídícím terminálu"},
   {T_SEARCH_BOOKMARK, "Hledej v bookmarcích"},
   {T_CLEAR, "Zresetovat"},
+  {T_ADD_BOOKMARK_LINK, "Pøidej link do bookmarkù"},
+  {T_HK_ADD_BOOKMARK_LINK, "A"},
   {0, NULL}
 };
 
@@ -2331,6 +2341,8 @@ struct translation translation_dutch [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -2720,6 +2732,8 @@ struct translation translation_estonian [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -3109,6 +3123,8 @@ struct translation translation_finnish [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -3498,6 +3514,8 @@ struct translation translation_french [] = {
   {T_NEED_MASTER_TERMINAL, "Vous ne pouvez faire ça que dans le terminal maître"},
   {T_SEARCH_BOOKMARK, "Rechercher des signets"},
   {T_CLEAR, "Effacer"},
+  {T_ADD_BOOKMARK_LINK, "Ajouter lien aux signets"},
+  {T_HK_ADD_BOOKMARK_LINK, "A"},
   {0, NULL}
 };
 
@@ -3887,6 +3905,8 @@ struct translation translation_galician [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -4276,6 +4296,8 @@ struct translation translation_german [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -4665,6 +4687,8 @@ struct translation translation_greek [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -5054,6 +5078,8 @@ struct translation translation_hungarian [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -5443,6 +5469,8 @@ struct translation translation_icelandic [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -5832,6 +5860,8 @@ struct translation translation_indonesian [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -6221,6 +6251,8 @@ struct translation translation_italian [] = {
   {T_NEED_MASTER_TERMINAL, "Questo e' possibile solo sul terminale principale"},
   {T_SEARCH_BOOKMARK, "Ricerca bookmark"},
   {T_CLEAR, "Pulisci"},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -6610,6 +6642,8 @@ struct translation translation_lithuanian [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -6999,6 +7033,8 @@ struct translation translation_polish [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -7388,6 +7424,8 @@ struct translation translation_romanian [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -7777,6 +7815,8 @@ struct translation translation_russian [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -8166,6 +8206,8 @@ struct translation translation_slovak [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -8555,6 +8597,8 @@ struct translation translation_spanish [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -8944,6 +8988,8 @@ struct translation translation_swedish [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -9333,6 +9379,8 @@ struct translation translation_turkish [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 
@@ -9722,6 +9770,8 @@ struct translation translation_ukrainian [] = {
   {T_NEED_MASTER_TERMINAL, NULL},
   {T_SEARCH_BOOKMARK, NULL},
   {T_CLEAR, NULL},
+  {T_ADD_BOOKMARK_LINK, NULL},
+  {T_HK_ADD_BOOKMARK_LINK, NULL},
   {0, NULL}
 };
 

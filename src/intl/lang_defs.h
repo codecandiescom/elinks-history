@@ -386,4 +386,6 @@
 #define T_NEED_MASTER_TERMINAL    382	
 #define T_SEARCH_BOOKMARK    383	
 #define T_CLEAR    384	
-#define T__N_TEXTS    385	
+#define T_ADD_BOOKMARK_LINK    385	
+#define T_HK_ADD_BOOKMARK_LINK    386	
+#define T__N_TEXTS    387	

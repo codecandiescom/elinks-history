@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.10 2003/09/26 20:39:16 jonas Exp $ */
+/* $Id: hooks.c,v 1.11 2003/10/01 10:21:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@ internal_module(void)
 /* The events that will trigger the functions below and what they are expected
  * to do is explained in doc/events.txt */
 
-static int
+static enum evhook_status
 script_hook_goto_url(va_list ap)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
@@ -50,7 +50,7 @@ script_hook_goto_url(va_list ap)
 	return EHS_NEXT;
 }
 
-static int
+static enum evhook_status
 script_hook_follow_url(va_list ap)
 {
 	unsigned char **url = va_arg(ap, unsigned char **);
@@ -71,7 +71,7 @@ script_hook_follow_url(va_list ap)
 	return EHS_NEXT;
 }
 
-static int
+static enum evhook_status
 script_hook_pre_format_html(va_list ap)
 {
 	unsigned char **html = va_arg(ap, unsigned char **);
@@ -99,7 +99,7 @@ script_hook_pre_format_html(va_list ap)
  *  - "PROXY:PORT" to use the specified proxy
  *  - ""           to not use any proxy
  *  - nil          to use the default proxies */
-static int
+static enum evhook_status
 script_hook_get_proxy(va_list ap)
 {
 	unsigned char **retval = va_arg(ap, unsigned char **);
@@ -116,7 +116,7 @@ script_hook_get_proxy(va_list ap)
 	return EHS_NEXT;
 }
 
-static int
+static enum evhook_status
 script_hook_quit(va_list ap)
 {
 	SCM proc = scm_c_module_lookup(internal_module(), "%quit-hook");

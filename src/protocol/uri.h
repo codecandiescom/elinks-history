@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.119 2004/06/07 23:38:54 jonas Exp $ */
+/* $Id: uri.h,v 1.120 2004/06/08 00:00:59 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -118,26 +118,26 @@ enum uri_component {
 	/* Used for public display either in dialogs or sent over the Net */
 	URI_PUBLIC		= ~(URI_PASSWORD | URI_RARE),
 
-	/* Used for getting the original URI with no internal encoding */
-	URI_ORIGINAL		= ~(URI_DEFAULT_PORT | URI_RARE),
+	/* Used for getting the original URI with no internal post encoding */
+	URI_ORIGINAL		= ~URI_RARE,
 
-	/* Used in the HTTP Auth code for ma*/
-	URI_HTTP_AUTH		= ~(URI_DEFAULT_PORT | URI_RARE),
+	/* Used for getting the URI with no #fragment */
+	URI_BASE		= URI_ORIGINAL | URI_POST,
+
+	/* Used in the HTTP Auth code */
+	URI_HTTP_AUTH		= ~URI_RARE,
 
 	/* Used for the value of HTTP "Host" header info */
 	URI_HTTP_HOST		= URI_HOST | URI_PORT,
 
 	/* Used for the host part of HTTP referrer */
-	URI_HTTP_REFERRER_HOST	= URI_PROTOCOL |URI_HOST | URI_PORT,
+	URI_HTTP_REFERRER_HOST	= URI_PROTOCOL | URI_HOST | URI_PORT,
 
 	/* Used for HTTP CONNECT method info */
 	URI_HTTP_CONNECT	= URI_HOST | URI_PORT | URI_DEFAULT_PORT,
 
 	/* Used for getting the host of a DNS query */
 	URI_DNS_HOST		= URI_HOST | URI_IDN,
-
-	/* Used for adding the proxied URI after the '/' in the proxy URI */
-	URI_PROXY		= ~URI_SPECIAL,
 
 	/* Used for comparing keepalive connection URIs */
 	URI_KEEPALIVE		= URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST | URI_PORT,

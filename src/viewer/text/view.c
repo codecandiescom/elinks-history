@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.520 2004/06/24 11:02:28 miciah Exp $ */
+/* $Id: view.c,v 1.521 2004/06/25 16:01:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,27 +180,20 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 	}
 }
 
-static void
-move_link_next(struct session *ses, struct document_view *doc_view)
-{
-	int count = ses->kbdprefix.repeat_count;
-
-	if (!count) count = 1;
-
-	while (count--)
-		move_link(ses, doc_view, 1, doc_view->document->nlinks - 1, 0);
+#define move_link_factory(postfix, exec) \
+static void \
+move_link_##postfix(struct session *ses, struct document_view *doc_view) \
+{ \
+	int count = ses->kbdprefix.repeat_count; \
+ \
+	if (!count) count = 1; \
+ \
+	while (count--) \
+		exec \
 }
 
-static void
-move_link_prev(struct session *ses, struct document_view *doc_view)
-{
-	int count = ses->kbdprefix.repeat_count;
-
-	if (!count) count = 1;
-
-	while (count--)
-		move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1);
-}
+move_link_factory(next, move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0))
+move_link_factory(prev, move_link(ses, doc_view, -1, doc_view->document->nlinks - 1, 0))
 
 /* @steps > 0 -> down */
 static void

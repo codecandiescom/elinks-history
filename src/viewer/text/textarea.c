@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.11 2003/07/23 18:20:06 pasky Exp $ */
+/* $Id: textarea.c,v 1.12 2003/07/24 09:50:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,6 +287,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		int h;
 
 		tmpdir = getenv("TMPDIR");
+		if (!tmpdir || !*tmpdir) tmpdir = getenv("TMP");
 		if (!tmpdir || !*tmpdir) tmpdir = getenv("TEMPDIR");
 		if (!tmpdir || !*tmpdir) tmpdir = getenv("TEMP");
 		if (!tmpdir || !*tmpdir) tmpdir = "/tmp";

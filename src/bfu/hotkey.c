@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.29 2004/08/03 22:54:44 zas Exp $ */
+/* $Id: hotkey.c,v 1.30 2004/08/13 20:54:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "bfu/hotkey.h"
 #include "bfu/menu.h"
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"

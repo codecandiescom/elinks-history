@@ -1,5 +1,5 @@
 /* Marks registry */
-/* $Id: marks.c,v 1.9 2004/07/04 16:29:02 jonas Exp $ */
+/* $Id: marks.c,v 1.10 2004/08/13 20:54:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "util/string.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
+#include "viewer/text/marks.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
 

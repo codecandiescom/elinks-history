@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.44 2004/07/22 08:07:46 miciah Exp $ */
+/* $Id: proxy.c,v 1.45 2004/08/13 20:54:44 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -14,6 +14,7 @@
 
 #include "config/options.h"
 #include "protocol/protocol.h"
+#include "protocol/proxy.h"
 #include "protocol/uri.h"
 #include "sched/event.h"
 #include "util/memory.h"

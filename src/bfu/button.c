@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.4 2002/07/05 20:42:13 pasky Exp $ */
+/* $Id: button.c,v 1.5 2002/07/09 15:21:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,4 +111,5 @@ display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 
 struct widget_ops button_ops = {
 	display_button,
+	NULL,
 };

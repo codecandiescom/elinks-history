@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.3 2002/07/05 00:29:57 pasky Exp $ */
+/* $Id: widget.h,v 1.4 2002/07/09 15:21:38 pasky Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -22,7 +22,7 @@ enum widget_type {
 
 struct widget_ops {
 	void (*display)(struct widget_data *, struct dialog_data *, int);
-	/* void (*event)(struct widget_data *, struct window *, struct event *, int); */
+	void (*init)(struct widget_data *, struct dialog_data *, struct event *, int);
 };
 
 struct widget {

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.5 2002/07/05 20:42:13 pasky Exp $ */
+/* $Id: dialog.c,v 1.6 2002/07/09 15:21:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,6 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 	int i;
 	struct terminal *term = win->term;
 	struct dialog_data *dlg = win->data;
-	struct widget_data *di;
 
 	dlg->win = win;
 
@@ -102,15 +101,16 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 	switch (ev->ev) {
 		case EV_INIT:
 			for (i = 0; i < dlg->n; i++) {
-				struct widget_data *di = &dlg->items[i];
+				struct widget_data *widget = &dlg->items[i];
 
-				memset(di, 0, sizeof(struct widget_data));
-				di->item = &dlg->dlg->items[i];
+				memset(widget, 0, sizeof(struct widget_data));
+				widget->item = &dlg->dlg->items[i];
 
-				di->cdata = mem_alloc(di->item->dlen);
-				if (di->cdata) {
-					memcpy(di->cdata, di->item->data,
-					       di->item->dlen);
+				widget->cdata = mem_alloc(widget->item->dlen);
+				if (widget->cdata) {
+					memcpy(widget->cdata,
+					       widget->item->data,
+					       widget->item->dlen);
 				} else {
 					continue;
 				}
@@ -126,54 +126,17 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 						&listbox_ops,
 					};
 
-					di->item->ops = w_o[di->item->type];
+					widget->item->ops =
+						w_o[widget->item->type];
 				}
 
-				if (di->item->type == D_CHECKBOX) {
-					if (di->item->gid) {
-						if (*((int *) di->cdata)
-						    == di->item->gnum)
-							di->checked = 1;
-					} else {
-						if (*((int *) di->cdata))
-							di->checked = 1;
-					}
-				}
+				init_list(widget->history);
+				widget->cur_hist = (struct input_history_item *)
+						   &widget->history;
 
-				if (di->item->type == D_BOX) {
-					/* Freed in bookmark_dialog_abort_handler() */
-					di->cdata = mem_alloc(sizeof(struct dlg_data_item_data_box));
-					if (!di->cdata)
-						continue;
-
-					((struct dlg_data_item_data_box *) di->cdata)->sel = -1;
-					((struct dlg_data_item_data_box *) di->cdata)->box_top = 0;
-					((struct dlg_data_item_data_box *) di->cdata)->list_len = -1;
-
-					init_list(((struct dlg_data_item_data_box*)di->cdata)->items);
-				}
-
-				init_list(di->history);
-				di->cur_hist = (struct input_history_item *) &di->history;
-
-				if (di->item->type == D_FIELD ||
-				    di->item->type == D_FIELD_PASS) {
-					if (di->item->history) {
-						struct input_history_item *j;
-
-						foreach(j, di->item->history->items) {
-							struct input_history_item *hi;
-
-							hi = mem_alloc(sizeof(struct input_history_item)
-								       + strlen(j->d) + 1);
-							if (!hi) continue;
-
-							strcpy(hi->d, j->d);
-							add_to_list(di->history, hi);
-						}
-					}
-					di->cpos = strlen(di->cdata);
-				}
+				if (widget->item->ops->init)
+					widget->item->ops->init(widget, dlg,
+								ev, fwd);
 			}
 			dlg->selected = 0;
 
@@ -190,6 +153,8 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 			break;
 
 		case EV_KBD:
+			{
+			struct widget_data *di;
 			di = &dlg->items[dlg->selected];
 			if (di->item->type == D_FIELD ||
 			    di->item->type == D_FIELD_PASS) {
@@ -369,6 +334,7 @@ sel:
 				break;
 			}
 			break;
+			}
 
 		case EV_ABORT:
 			/* Moved this line up so that the dlg would have access

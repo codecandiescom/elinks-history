@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.4 2002/07/05 20:42:13 pasky Exp $ */
+/* $Id: inpfield.c,v 1.5 2002/07/09 15:21:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,10 +278,34 @@ display_field_pass(struct widget_data *di, struct dialog_data *dlg, int sel)
 	display_field_do(di, dlg, sel, 1);
 }
 
+void
+init_field(struct widget_data *widget, struct dialog_data *dialog,
+	   struct event *ev, int fwd)
+{
+	if (widget->item->history) {
+		struct input_history_item *j;
+
+		foreach (j, widget->item->history->items) {
+			struct input_history_item *hi;
+
+			hi = mem_alloc(sizeof(struct input_history_item)
+					+ strlen(j->d) + 1);
+			if (!hi) continue;
+
+			strcpy(hi->d, j->d);
+			add_to_list(widget->history, hi);
+		}
+	}
+
+	widget->cpos = strlen(widget->cdata);
+}
+
 struct widget_ops field_ops = {
 	display_field,
+	init_field,
 };
 
 struct widget_ops field_pass_ops = {
 	display_field_pass,
+	init_field,
 };

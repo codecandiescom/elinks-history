@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.187 2004/12/14 18:25:18 miciah Exp $ */
+/* $Id: dialogs.c,v 1.188 2004/12/14 18:29:16 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -356,11 +356,10 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 
 			del_from_list(bm->box_item);
 			del_from_list(bm);
-			add_at_pos((!destb ? dest
-						 : (struct bookmark *) destb),
+			add_at_pos((!destb ? dest : (struct bookmark *) destb),
 				   bm);
 			add_at_pos((!desti ? dest->box_item
-						 : (struct listbox_item *) desti),
+					   : (struct listbox_item *) desti),
 				   bm->box_item);
 
 			if (destb) {
@@ -368,7 +367,11 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 			} else {
 				bm->root = dest->root;
 			}
-			bm->box_item->depth = bm->root ? bm->root->box_item->depth + 1 : 0;
+
+			bm->box_item->depth = bm->root
+						? bm->root->box_item->depth + 1
+						: 0;
+
 			if (bm->box_item->type == BI_FOLDER)
 				update_depths(bm->box_item);
 
@@ -383,7 +386,7 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 		}
 
 		if (bm->box_item->type == BI_FOLDER) {
- 			do_move_bookmark(dest, destb, desti, &bm->child, box);
+			do_move_bookmark(dest, destb, desti, &bm->child, box);
 		}
 	}
 }

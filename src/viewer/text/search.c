@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.271 2004/08/12 05:04:30 miciah Exp $ */
+/* $Id: search.c,v 1.272 2004/08/12 05:05:47 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -922,15 +922,15 @@ find_next_do(struct session *ses, struct document_view *doc_view, int direction)
 }
 
 static void
-typeahead_error(struct session *ses, unsigned char *typeahead)
+print_find_error_not_found(struct session *ses, unsigned char *title,
+			   unsigned char *message, unsigned char *search_string)
 {
 	switch (get_opt_int("document.browse.search.show_not_found")) {
 		case 2:
 			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Typeahead"), ALIGN_CENTER,
-				msg_text(ses->tab->term, N_("Could not find "
-					 "a link with the text '%s'."),
-					 typeahead),
+				title, ALIGN_CENTER,
+				msg_text(ses->tab->term, message,
+					 search_string),
 				NULL, 1,
 				N_("OK"), NULL, B_ENTER | B_ESC);
 			break;
@@ -966,22 +966,10 @@ print_find_error(struct session *ses, enum find_error find_error)
 			message = N_("No previous search");
 			break;
 		case FIND_ERROR_NOT_FOUND:
-			switch (get_opt_int("document.browse.search"
-					    ".show_not_found")) {
-				case 2:
-					message = msg_text(ses->tab->term,
-							   N_("Search string"
-							      " '%s' not found"),
-							   ses->search_word);
-					flags |= MSGBOX_FREE_TEXT;
-					break;
-
-				case 1:
-					beep_terminal(ses->tab->term);
-
-				default:
-					break;
-			}
+			print_find_error_not_found(ses, N_("Search"),
+						   N_("Search string"
+						      " '%s' not found"),
+						   ses->search_word);
 
 			break;
 
@@ -1011,6 +999,16 @@ enum typeahead_code {
 	TYPEAHEAD_ERROR,
 	TYPEAHEAD_CANCEL,
 };
+
+static void
+typeahead_error(struct session *ses, unsigned char *typeahead)
+{
+	print_find_error_not_found(ses,
+				   N_("Typeahead"),
+				   N_("Could not find a link"
+				      " with the text '%s'."),
+				   typeahead);
+}
 
 static inline unsigned char *
 get_link_typeahead_text(struct link *link)

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.244 2004/06/21 09:54:49 miciah Exp $ */
+/* $Id: link.c,v 1.245 2004/06/21 09:59:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -681,19 +681,19 @@ get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return NULL;
 
-	/* If no link in document, nothing to do. */
+	/* If there are no links in in document, there is nothing to do. */
 	if (!doc_view->document->nlinks) return NULL;
 
 	/* If the coordinates are outside document view, no need to go further. */
 	if (x < 0 || x >= doc_view->box.width) return NULL;
 	if (y < 0 || y >= doc_view->box.height) return NULL;
 
-	/* FIXME: This does'nt work. --Zas
+	/* FIXME: This doesn't work. --Zas
 	if (!is_in_box(&doc_view->box, ev->x, ev->y))
 		return NULL;
 	*/
 
-	/* Find links candidats. */
+	/* Find link candidates. */
 	l1 = doc_view->document->links + doc_view->document->nlinks;
 	l2 = doc_view->document->links;
 	height = int_min(doc_view->document->height,
@@ -709,7 +709,7 @@ get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 			l2 = doc_view->document->lines2[i];
 	}
 
-	/* Is there a link at the given coordinates ? */
+	/* Is there a link at the given coordinates? */
 	x += doc_view->vs->x;
 	y += doc_view->vs->y;
 

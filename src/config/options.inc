@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.65 2003/12/28 06:24:56 miciah Exp $ */
+/* $Id: options.inc,v 1.66 2003/12/28 06:25:40 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -724,25 +724,25 @@ struct option_info config_options_info[] = {
 		"cgi", 0,
 		N_("Local CGI specific options.")),
 
-	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
-		"policy", 0, 0,
-		N_("Whether to execute local CGI scripts.")),
-
 	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
 		"path", 0, "",
 		N_("Colon separated list of directories, where CGI scripts are stored.")),
+
+	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
+		"policy", 0, 0,
+		N_("Whether to execute local CGI scripts.")),
 #else
 	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
 		"cgi", 0,
 		N_("Local CGI specific options. (DISABLED)")),
 
-	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
-		"policy", 0, 0,
-		N_("Whether to execute local CGI scripts. (DISABLED)")),
-
 	INIT_OPT_STRING("protocol.file.cgi", N_("Path"),
 		"path", 0, "",
 		N_("Colon separated list of directories, where CGI scripts are stored. (DISABLED)")),
+
+	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
+		"policy", 0, 0,
+		N_("Whether to execute local CGI scripts. (DISABLED)")),
 #endif /* ELINKS_LOCAL_CGI */
 
 	INIT_OPT_BOOL("protocol.file", N_("Allow reading special files"),

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.163 2004/05/11 14:50:08 zas Exp $ */
+/* $Id: tables.c,v 1.164 2004/05/11 14:56:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -369,11 +369,12 @@ new_columns(struct table *t, int span, int width, int align,
 	}
 
 	while (span--) {
-		t->columns[t->columns_count].align = align;
-		t->columns[t->columns_count].valign = valign;
-		t->columns[t->columns_count].width = width;
-		t->columns[t->columns_count].group = group;
-		t->columns_count++;
+		struct table_column *column = &t->columns[t->columns_count++];
+		
+		column->align = align;
+		column->valign = valign;
+		column->width = width;
+		column->group = group;
 		group = 0;
 	}
 }

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.281 2003/11/18 16:22:54 zas Exp $ */
+/* $Id: parser.c,v 1.282 2003/11/18 17:23:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,6 +155,7 @@ end:
 /* Eat newlines when loading attribute value? */
 static int get_attr_val_eat_nl = 0;
 
+
 /* Parses html element attributes. */
 /* - e is attr pointer previously get from parse_element,
  * DON'T PASS HERE ANY OTHER VALUE!!!
@@ -187,8 +188,8 @@ next_attr:
 
 	if (found) {
 		if (!IS_QUOTE(*e)) {
-			/* FIXME: *e == '\0' case is not handled here --Zas */
 			while (!WHITECHAR(*e) && !end_of_tag(*e)) {
+				if (!*e) goto parse_error;
 				add_chr(attr, attrlen, *e);
 				e++;
 			}
@@ -205,16 +206,17 @@ parse_quoted_value:
 					add_chr(attr, attrlen, ' ');
 			}
 			e++;
-			/* FIXME: *e == '\0' case is not handled here --Zas */
 			if (*e == quote) {
 				add_chr(attr, attrlen, *e);
 				goto parse_quoted_value;
 			}
+
 		}
 
 found_endattr:
 		add_chr(attr, attrlen, '\0');
 		attrlen--;
+
 		if (memchr(attr, '&', attrlen)) {
 			unsigned char *saved_attr = attr;
 
@@ -227,8 +229,10 @@ found_endattr:
 
 	} else {
 		if (!IS_QUOTE(*e)) {
-			/* FIXME: *e == '\0' case is not handled here --Zas */
-			while (!WHITECHAR(*e) && !end_of_tag(*e)) e++;
+			while (!WHITECHAR(*e) && !end_of_tag(*e)) {
+				if (!*e) goto parse_error;
+				e++;
+			}
 		} else {
 			unsigned char quote = *e;
 

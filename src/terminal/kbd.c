@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.42 2003/12/26 23:53:25 zas Exp $ */
+/* $Id: kbd.c,v 1.43 2003/12/30 00:25:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -701,9 +701,16 @@ static struct key os2xtd[256] = {
 /* 256 */
 };
 
+/* Define it to dump queue content in a readable form,
+ * it may help to determine terminal sequences, and see what's go on. --Zas*/
+/* #define DEBUG_ITRM_QUEUE */
+
+#ifdef DEBUG_ITRM_QUEUE
+#include <ctype.h>	/* isprint() isspace() */
+#endif
+
 /* I feeeeeel the neeeed ... to rewrite this ... --pasky */
 /* Just Do it ! --Zas */
-
 int
 process_queue(struct itrm *itrm)
 {
@@ -711,6 +718,25 @@ process_queue(struct itrm *itrm)
 	int el = 0;
 
 	if (!itrm->qlen) goto end;
+
+#ifdef DEBUG_ITRM_QUEUE
+	{
+		int i;
+
+		/* Dump current queue in a readable form to stderr. */
+		for (i = 0; i < itrm->qlen; i++)
+			if (itrm->kqueue[i] == ASCII_ESC)
+				fprintf(stderr, "ESC ");
+			else if (isprint(itrm->kqueue[i]) && !isspace(itrm->kqueue[i]))
+				fprintf(stderr, "%c ", itrm->kqueue[i]);
+			else
+				fprintf(stderr, "0x%02x ", itrm->kqueue[i]);
+
+		fprintf(stderr, "\n");
+		fflush(stderr);
+	}
+#endif /* DEBUG_ITRM_QUEUE */
+
 	if (itrm->kqueue[0] == ASCII_ESC) {
 		if (itrm->qlen < 2) goto ret;
 		if (itrm->kqueue[1] == '[' || itrm->kqueue[1] == 'O') {
@@ -720,7 +746,10 @@ process_queue(struct itrm *itrm)
 			if (itrm->qlen < 3) goto ret;
 
 			get_esc_code(itrm->kqueue, itrm->qlen, &c, &v, &el);
-
+#ifdef DEBUG_ITRM_QUEUE
+			fprintf(stderr, "esc code: %c v=%d c=%c el=%d\n", itrm->kqueue[1], v, c, el);
+			fflush(stderr);
+#endif
 			if (itrm->kqueue[2] == '[') {
 				if (itrm->qlen >= 4
 				    && itrm->kqueue[3] >= 'A'
@@ -763,13 +792,39 @@ process_queue(struct itrm *itrm)
 					case 6: ev.x = KBD_PAGE_DOWN; break;
 					case 7: ev.x = KBD_HOME; break;
 					case 8: ev.x = KBD_END; break;
+
+					case 11: ev.x = KBD_F1; break;
+					case 12: ev.x = KBD_F2; break;
+					case 13: ev.x = KBD_F3; break;
+					case 14: ev.x = KBD_F4; break;
+					case 15: ev.x = KBD_F5; break;
+
 					case 17: ev.x = KBD_F6; break;
 					case 18: ev.x = KBD_F7; break;
 					case 19: ev.x = KBD_F8; break;
 					case 20: ev.x = KBD_F9; break;
 					case 21: ev.x = KBD_F10; break;
+
 					case 23: ev.x = KBD_F11; break;
 					case 24: ev.x = KBD_F12; break;
+
+					/* Give preference to F11 and F12 over shifted F1 and F2. */
+					/*
+					case 23: ev.x = KBD_F1; ev.y = KBD_SHIFT; break;
+					case 24: ev.x = KBD_F2; ev.y = KBD_SHIFT; break;
+	 				*/
+
+					case 25: ev.x = KBD_F3; ev.y = KBD_SHIFT; break;
+					case 26: ev.x = KBD_F4; ev.y = KBD_SHIFT; break;
+
+					case 28: ev.x = KBD_F5; ev.y = KBD_SHIFT; break;
+					case 29: ev.x = KBD_F6; ev.y = KBD_SHIFT; break;
+
+					case 31: ev.x = KBD_F7; ev.y = KBD_SHIFT; break;
+					case 32: ev.x = KBD_F8; ev.y = KBD_SHIFT; break;
+	 				case 33: ev.x = KBD_F9; ev.y = KBD_SHIFT; break;
+					case 34: ev.x = KBD_F10; ev.y = KBD_SHIFT; break;
+
 					} break;
 
 				case 'R': resize_terminal(); break;

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.224 2003/12/23 10:55:02 jonas Exp $ */
+/* $Id: http.c,v 1.225 2003/12/23 17:01:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,7 +384,7 @@ http_send_header(struct connection *conn)
 	} else {
 		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->ssl) {
 			struct uri https_real_uri;
-			
+
 			if (!parse_uri(&https_real_uri, conn->uri.data)) {
 				abort_conn_with_state(conn, S_BAD_URL);
 				return;
@@ -1362,24 +1362,25 @@ http_error:
 
 	d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);
 	if (d) {
-		unsigned char *path_end = memchr(uri->data, '?', uri->datalen);
-		int path_len;
+		unsigned char *extension = get_extension_from_url(struri(*uri));
 
-		if (!path_end) path_end = uri->data + uri->datalen;
-		path_len = path_end - uri->data;
+		if (extension) {
+			enum stream_encoding file_encoding;
+
+			file_encoding = guess_encoding(extension);
 
 #ifdef HAVE_ZLIB_H
-		if (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
-			if (path_len < 3
-				|| strncasecmp(path_end - 3, ".gz", 3))
+			if ((!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
+			    && file_encoding != ENCODING_GZIP)
 				conn->content_encoding = ENCODING_GZIP;
 #endif
 #ifdef HAVE_BZLIB_H
-		if (!strcasecmp(d, "bzip2") || !strcasecmp(d, "x-bzip2"))
-			if (path_len < 4
-				|| strncasecmp(path_end - 4, ".bz2", 4))
+			if ((!strcasecmp(d, "bzip2") || !strcasecmp(d, "x-bzip2"))
+			    && file_encoding != ENCODING_BZIP2)
 				conn->content_encoding = ENCODING_BZIP2;
 #endif
+			mem_free(extension);
+		}
 		mem_free(d);
 	}
 

@@ -67,6 +67,10 @@ Set time of download files on(1)/off(0). Default is off.
 Write a plain-text version of the given HTML document to stdout.
 
 .TP
+\f3-fake-referer \f2<referer>\f1
+Send always this HTTP referer. Has a mean only with \f3-http-referer \f23\f1.
+
+.TP
 \f3-format-cache-size \f2<num>\f1
 Number of formatted document pages cached.
 (default: 5)
@@ -106,6 +110,11 @@ PHP databases) on(1)/off(0). Default is off.
 \f3-http-proxy \f2<host:port>\f1
 Host and port number of the HTTP proxy, or blank.
 (default: blank)
+
+.TP
+\f3-http-referer \f2<0>/<1>/<2>/<3>\f1
+Turn sending of HTTP referer. Either never(0), true(1), same URL(2) or fake(3).
+(default: none)
 
 .TP
 \f3-language \f2<langname>\f1

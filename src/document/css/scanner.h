@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.48 2004/01/22 20:47:53 pasky Exp $ */
+/* $Id: scanner.h,v 1.49 2004/01/22 21:06:57 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -157,8 +157,8 @@ void init_css_scanner(struct css_scanner *scanner, unsigned char *string);
 #define css_scanner_has_tokens(scanner) \
 	((scanner)->tokens > 0 && (scanner)->current < (scanner)->table + (scanner)->tokens)
 
-/* Fills the scanner with tokens. Already scanned tokens that has not been
- * requested remains and are moved to the start of the scanners token table. */
+/* Fills the scanner with tokens. Already scanned tokens which have not been
+ * requested remain and are moved to the start of the scanners token table. */
 /* Returns the current token or NULL if there are none. */
 struct css_token *scan_css_tokens(struct css_scanner *scanner);
 
@@ -176,7 +176,7 @@ struct css_token *scan_css_tokens(struct css_scanner *scanner);
 #define get_css_token_(scanner)							\
 	(css_scanner_has_tokens(scanner) ? (scanner)->current : NULL)
 
-/* Do a scanning if we do not have also have access to next token */
+/* Do a scanning if we do not have also have access to next token. */
 #define get_next_css_token_(scanner)						\
 	(css_scanner_has_tokens(scanner)					\
 	 && (++(scanner)->current + 1 >= (scanner)->table + (scanner)->tokens)	\

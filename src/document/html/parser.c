@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.337 2004/01/18 00:10:04 zas Exp $ */
+/* $Id: parser.c,v 1.338 2004/01/18 00:17:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2257,156 +2257,110 @@ html_frame(unsigned char *a)
 	mem_free(url);
 }
 
-/* Parse rows and cols attribute values and calculate appropriated values for display.
- * It handles things like:
- * <frameset cols="140,260,160">			values in pixels
- * <frameset cols="1*,2*,3*"> 				values in fractions
- * <frameset cols="320,*">				wildcard
- * <frameset cols="33%,33%,33%" rows="33%,33%,33%"> 	values in percentage
- * */
-/* TODO: split it. --Zas */
 static void
-parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
-		   int **new_values, int *new_values_size)
+parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 {
-	unsigned char *tmp_str;
-	unsigned long number;
-	int val, tmp_val;
-	int *tmp_values;
-	int *values = NULL;
-	int values_size = 0;
+	unsigned char *aa;
+	unsigned long n;
+	int q, qq, d, nn;
+	int *oo;
+	int *o = NULL;
+	int ol = 0;
 	register int i;
 
-	while (1) {
-		while (isspace(*str)) str++;
-
-		/* Extract number. */
-		errno = 0;
-		number = strtoul(str, (char **)&str, 10);
-		if (errno) {
-			*new_values_size = 0;
-			return;
-		}
-
-		if (*str == '%')	/* Percentage */
-			val = number * max_value / 100;
-		else if (*str != '*')	/* Pixels */
-			val = (number + (pixels_per_char - 1) / 2) / pixels_per_char;
-		else if (!number)	/* wildcard */
-			val = -1;
-		else			/* Fraction, marked by negative value. */
-			val = -number;
-
-		/* Save values in an array. */
-		tmp_values = mem_realloc(values, (values_size + 1) * sizeof(int));
-		if (!tmp_values) {
-			*new_values_size = 0;
-			return;
-		}
-
-		values = tmp_values;
-		values[values_size++] = val;
-
-		/* Check for next field if any. */
-		tmp_str = strchr(str, ',');
-		if (!tmp_str) break;
-
-		str = tmp_str + 1;
+new_ch:
+	while (isspace(*a)) a++;
+	errno = 0;
+	n = strtoul(a, (char **)&a, 10);
+	if (errno) {
+		*olp = 0;
+		return;
 	}
 
-	*new_values = values;
-	*new_values_size = values_size;
+	q = n;
+	if (*a == '%') q = q * ww / 100;
+	else if (*a != '*') q = (q + (www - 1) / 2) / www;
+	else if (!q) q = -1;
+	else q = -q;
 
-#define foreach_value(i) for (i = 0; i < values_size; i++)
+	oo = mem_realloc(o, (ol + 1) * sizeof(int));
+	if (oo) (o = oo)[ol++] = q;
+	else {
+		*olp = 0;
+		return;
+	}
+	aa = strchr(a, ',');
+	if (aa) {
+		a = aa + 1;
+		goto new_ch;
+	}
+	*op = o;
+	*olp = ol;
+	q = 2 * ol - 1;
+	for (i = 0; i < ol; i++) if (o[i] > 0) q += o[i] - 1;
 
-	/* Here begins distribution between rows or cols.
-	 * Be warn, this is Mikulas's black magic ;) */
-
-	val = 2 * values_size - 1;
-	foreach_value(i) if (values[i] > 0) val += values[i] - 1;
-
-	if (val >= max_value) {
-		int divisor = 0;
+	if (q >= ww) {
 
 distribute:
-		foreach_value(i) if (values[i] < 1) values[i] = 1;
-		val -= max_value;
-
-		foreach_value(i) divisor += values[i];
-		assert(divisor);
-		if_assert_failed divisor = 1;
-
-		tmp_val = val;
-		foreach_value(i) {
-			int n = values[i] * (divisor - tmp_val) / divisor;
-
-			val -= values[i] - n;
+		for (i = 0; i < ol; i++) if (o[i] < 1) o[i] = 1;
+		q -= ww;
+		d = 0;
+		for (i = 0; i < ol; i++) d += o[i];
+		qq = q;
+		for (i = 0; i < ol; i++) {
+			q -= o[i] - o[i] * (d - qq) / d;
 			/* SIGH! gcc 2.7.2.* has an optimizer bug! */
-			do_not_optimize_here_gcc_2_7(&divisor);
-			values[i] = n;
+			do_not_optimize_here_gcc_2_7(&d);
+			o[i] = o[i] * (d - qq) / d;
 		}
-
-		while (val) {
-			int flag = 0;
-
-			foreach_value(i) {
-				if (val < 0) values[i]++, val++, flag = 1;
-				if (val > 0 && values[i] > 1) values[i]--, val--, flag = 1;
-				if (!val) break;
+		while (q) {
+			nn = 0;
+			for (i = 0; i < ol; i++) {
+				if (q < 0) o[i]++, q++, nn = 1;
+				if (q > 0 && o[i] > 1) o[i]--, q--, nn = 1;
+				if (!q) break;
 			}
-			if (!flag) break;
+			if (!nn) break;
 		}
-
 	} else {
-		int divisor = 0;
 		int neg = 0;
 
-		foreach_value(i) if (values[i] < 0) neg = 1;
+		for (i = 0; i < ol; i++) if (o[i] < 0) neg = 1;
 		if (!neg) goto distribute;
 
-		tmp_values = fmem_alloc(values_size * sizeof(int));
-		if (!tmp_values) {
-			*new_values_size = 0;
+		oo = mem_alloc(ol * sizeof(int));
+		if (!oo) {
+			*olp = 0;
 			return;
 		}
-		memcpy(tmp_values, values, values_size * sizeof(int));
-
-		foreach_value(i) if (values[i] < 1) values[i] = 1;
-		val = max_value - val;
-
-		foreach_value(i) if (tmp_values[i] < 0) divisor += -tmp_values[i];
-		assert(divisor);
-		if_assert_failed divisor = 1;
-
-		tmp_val = val;
-		foreach_value(i) if (tmp_values[i] < 0) {
-			int n = (-tmp_values[i] * tmp_val / divisor);
-
-			values[i] += n;
-			val -= n;
+		memcpy(oo, o, ol * sizeof(int));
+		for (i = 0; i < ol; i++) if (o[i] < 1) o[i] = 1;
+		q = ww - q;
+		d = 0;
+		for (i = 0; i < ol; i++) if (oo[i] < 0) d += -oo[i];
+		qq = q;
+		for (i = 0; i < ol; i++) if (oo[i] < 0) {
+			o[i] += (-oo[i] * qq / d);
+			q -= (-oo[i] * qq / d);
 		}
-		assertm(val >= 0, "parse_frame_widths: val < 0");
-		if_assert_failed val = 0;
-
-		foreach_value(i) if (tmp_values[i] < 0) {
-			if (val) values[i]++, val--;
+		assertm(q >= 0, "parse_frame_widths: q < 0");
+		if_assert_failed q = 0;
+		for (i = 0; i < ol; i++) if (oo[i] < 0) {
+			if (q) o[i]++, q--;
 		}
-		assertm(val <= 0, "parse_frame_widths: val > 0");
-		if_assert_failed val = 0;
-
-		fmem_free(tmp_values);
+		assertm(q <= 0, "parse_frame_widths: q > 0");
+		if_assert_failed q = 0;
+		mem_free(oo);
 	}
 
-	foreach_value(i) if (!values[i]) {
+	for (i = 0; i < ol; i++) if (!o[i]) {
 		register int j;
-		int max = 0;
-		int maxpos = 0;
+		int m = 0;
+		int mj = 0;
 
-		foreach_value(j) if (values[j] > max) max = values[j], maxpos = j;
-		if (max) values[i] = 1, values[maxpos]--;
+		for (j = 0; j < ol; j++) if (o[j] > m) m = o[j], mj = j;
+		if (m) o[i] = 1, o[mj]--;
 	}
-
-#undef foreach_value
 }
 
 static void

@@ -1,3 +1,70 @@
+Mon Sep  9 16:04:18 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/finger.c:
+
+	Minor tidyup.  
+
+Mon Sep  9 15:58:43 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file.c:
+
+	Minor tidyup.  
+
+Mon Sep  9 15:55:04 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/https.c:
+
+	Minor tidyup.  
+
+Mon Sep  9 15:50:16 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/: http.c, date.c:
+
+	Minor tidyup.  
+
+Mon Sep  9 15:47:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/http.c:
+
+	HOST_FROM_URL -> GET_REAL_URL 
+
+Mon Sep  9 15:44:06 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: osdep/os_dep.c, protocol/ftp.c:
+
+	Minor tidyup.  
+
+Mon Sep  9 14:32:55 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/options.c, document/cache.c:
+
+	Minor optimization concerning some get_opt_*() calls.  
+
+Mon Sep  9 14:26:05 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Minor optimization concerning get_opt_int_tree() calls.  
+
+Mon Sep  9 12:55:41 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, lowlevel/connect.c, lowlevel/dns.c, osdep/os_dep.c,
+	protocol/http/http.c:
+
+	Populate with set_[non]blocking_fd() functions.  
+
+Mon Sep  9 12:36:45 2002  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/: os_dep.c, os_dep.h:
+
+	set_nonblocking_fd() and set_blocking_fd() were introduced.  
+
+Mon Sep  9 12:29:12 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Tidyup and clarifications.  
+
 Sun Sep  8 20:49:59 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/globhist/globhist.c:

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.37 2003/09/25 20:13:19 zas Exp $ */
+/* $Id: dialogs.c,v 1.38 2003/09/25 20:52:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,8 +49,10 @@ update_all_history_dialogs(void)
 	struct history_dialog_list_item *item;
 
 	foreach (item, history_dialog_list) {
-		display_dlg_item(item->dlg,
-				 &(item->dlg->items[HISTORY_BOX_IND]), 1);
+		struct widget_data *widget_data =
+			&(item->dlg->items[HISTORY_BOX_IND]);
+
+		display_dlg_item(item->dlg, widget_data, 1);
 	}
 }
 
@@ -78,9 +80,9 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 {
 	struct listbox_data *box;
 	struct history_dialog_list_item *item;
+	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
 
-	box = (struct listbox_data *)
-	      dlg->dlg->items[HISTORY_BOX_IND].data;
+	box = (struct listbox_data *) widget->data;
 
 	foreach (item, history_dialog_list) {
 		if (item->dlg == dlg) {
@@ -91,7 +93,6 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 	}
 
 	del_from_list(box);
-
 	mem_free(box);
 }
 
@@ -100,11 +101,14 @@ history_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
 {
 	switch (ev->ev) {
 		case EV_KBD:
-#define DITEM (dlg->items[HISTORY_BOX_IND])
-			if (DITEM.item->ops->kbd)
-				return DITEM.item->ops->kbd(&DITEM, dlg, ev);
+		{
+			struct widget_data *widget_data = &(dlg->items[HISTORY_BOX_IND]);
+			struct widget *widget = widget_data->item;
+
+			if (widget->ops->kbd)
+				return widget->ops->kbd(widget_data, dlg, ev);
 			break;
-#undef DITEM
+		}
 		case EV_INIT:
 		case EV_RESIZE:
 		case EV_REDRAW:
@@ -203,9 +207,9 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 {
 	struct global_history_item *historyitem;
 	struct listbox_data *box;
+	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
 
-	box = (struct listbox_data *)
-	      dlg->dlg->items[HISTORY_BOX_IND].data;
+	box = (struct listbox_data *) widget->data;
 
 	/* Follow the history item */
 	if (box->sel) {
@@ -345,8 +349,9 @@ push_delete_button(struct dialog_data *dlg,
 {
 	struct listbox_data *box;
 	struct terminal *term = dlg->win->term;
+	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
 
-	box = (struct listbox_data *) dlg->dlg->items[HISTORY_BOX_IND].data;
+	box = (struct listbox_data *) widget->data;
 	listbox_delete_historyitem(term, box);
 	return 0;
 }
@@ -369,9 +374,9 @@ push_clear_button(struct dialog_data *dlg,
 {
 	struct terminal *term = dlg->win->term;
 	struct listbox_data *box;
+	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
 
-	box = (struct listbox_data *)
-	      dlg->dlg->items[HISTORY_BOX_IND].data;
+	box = (struct listbox_data *) widget->data;
 
 	msg_box(term, NULL, 0,
 		N_("Clear global history"), AL_CENTER,
@@ -399,9 +404,9 @@ push_info_button(struct dialog_data *dlg,
 	struct terminal *term = dlg->win->term;
 	struct global_history_item *historyitem;
 	struct listbox_data *box;
+	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
 
-	box = (struct listbox_data *)
-	      dlg->dlg->items[HISTORY_BOX_IND].data;
+	box = (struct listbox_data *) widget->data;
 
 	/* Show history item info */
 	if (!box->sel) return 0;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.445 2004/05/30 18:06:18 jonas Exp $ */
+/* $Id: options.c,v 1.446 2004/05/31 03:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,7 +178,6 @@ get_opt_rec(struct option *tree, unsigned char *name_)
 			return NULL;
 		}
 		mem_free_set(&option->name, stracpy(name));
-		if (option->box_item) option->box_item->text = option->name;
 
 		add_opt_rec(tree, "", option);
 
@@ -369,7 +368,6 @@ init_option_listbox_item(struct option *option)
 
 	init_list(box->child);
 	box->visible = 1;
-	box->text = option->capt ? option->capt : option->name;
 	box->udata = option;
 	box->type = (option->type == OPT_TREE) ? BI_FOLDER : BI_LEAF;
 

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.61 2004/05/31 02:33:03 jonas Exp $ */
+/* $Id: listbox.h,v 1.62 2004/05/31 03:27:06 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -115,9 +115,6 @@ struct listbox_item {
 	unsigned int translated:1; /* Should we call gettext on this text? */
 
 	void *udata;
-
-	/* Text to display (must be last) */
-	unsigned char *text;
 };
 
 extern struct widget_ops listbox_ops;

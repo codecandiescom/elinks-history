@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.52 2004/05/31 02:22:37 jonas Exp $ */
+/* $Id: dialogs.c,v 1.53 2004/05/31 03:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,9 +158,6 @@ set_cookie_name(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	if (!value || !cookie) return 1;
 	mem_free_set(&cookie->name, stracpy(value));
-
-	assert(cookie->box_item);
-	cookie->box_item->text = cookie->name;
 	return 0;
 }
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.160 2004/05/31 02:38:39 jonas Exp $ */
+/* $Id: hierbox.c,v 1.161 2004/05/31 03:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,7 +61,6 @@ add_listbox_item_at_pos(struct hierbox_browser *browser,
 	init_list(item->child);
 	item->visible = 1;
 
-	item->text = text;
 	item->udata = data;
 	item->type = type;
 	item->depth = root->depth + 1;
@@ -566,11 +565,17 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 		   struct listbox_ops *ops, enum delete_error err)
 {
 	struct string msg;
-	unsigned char *text = delete_messages[(item->type == BI_FOLDER)][err];
+	unsigned char *errmsg = delete_messages[(item->type == BI_FOLDER)][err];
+	unsigned char *text = ops->get_info(item, term, LISTBOX_TEXT);
 
-	if (!init_string(&msg)) return;
+	if (!name || !init_string(&msg)) {
+		mem_free_if(name);
+		return;
+	}
 
-	add_format_to_string(&msg, _(text, term), item->text);
+	add_format_to_string(&msg, _(errmsg, term), text);
+	mem_free(text);
+
 	if (item->type == BI_LEAF) {
 		unsigned char *info = ops->get_info(item, term, LISTBOX_ALL);
 
@@ -661,6 +666,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct listbox_context *context;
+	unsigned char *text;
 	enum delete_error delete;
 
 	if (!box->sel) return 0;
@@ -689,12 +695,18 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		return 0;
 	}
 
+	text = box->ops->get_info(context->item, term, LISTBOX_TEXT);
+	if (!text) {
+		mem_free(context);
+		return 0;
+	}
+
 	if (context->item->type == BI_FOLDER) {
 		box->ops->lock(context->item);
 		msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete folder"), AL_CENTER,
 			msg_text(term, N_("Delete the folder \"%s\" and its content?"),
-				 context->item->text),
+				 text),
 			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_listbox_context, B_ESC);
@@ -708,12 +720,13 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 			N_("Delete item"), AL_LEFT,
 			msg_text(term, N_("Delete \"%s\"?\n\n"
 				"%s"),
-				context->item->text, empty_string_or_(msg)),
+				text, empty_string_or_(msg)),
 			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_listbox_context, B_ESC);
 		mem_free_if(msg);
 	}
+	mem_free(text);
 
 	return 0;
 }

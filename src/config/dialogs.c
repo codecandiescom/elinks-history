@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.174 2004/05/31 00:58:11 jonas Exp $ */
+/* $Id: dialogs.c,v 1.175 2004/05/31 03:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,8 @@
 #include "util/object.h"
 #include "util/secsave.h"
 
+
+int keybinding_text_toggle;
 
 static void
 toggle_success_msgbox(void *dummy)
@@ -527,7 +529,17 @@ get_keybinding_info(struct listbox_item *item, struct terminal *term,
 
 	switch (listbox_info) {
 	case LISTBOX_TEXT:
-		return stracpy(item->text);
+		if (item->depth < 2) {
+			struct strtonum *strtonum = item->udata;
+
+			keymap = keybinding_text_toggle
+			       ? strtonum->str : _(strtonum->desc, term);
+			return stracpy(keymap);
+		}
+
+		if (!init_string(&info)) return NULL;
+		make_keystroke(&info, keybinding->key, keybinding->meta, 0);
+		return info.source;
 
 	case LISTBOX_URI:
 		return NULL;

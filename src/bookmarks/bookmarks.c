@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.120 2004/05/30 02:46:38 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.121 2004/05/31 03:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,6 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	init_list(bm->box_item->child);
 	bm->box_item->visible = 1;
 
-	bm->box_item->text = bm->title;
 	bm->box_item->udata = (void *) bm;
 	bm->box_item->type = (url && *url ? BI_LEAF : BI_FOLDER);
 
@@ -324,7 +323,6 @@ update_bookmark(struct bookmark *bm, unsigned char *title,
 	if (title2) {
 		mem_free(bm->title);
 		bm->title = title2;
-		bm->box_item->text = bm->title;
 	}
 
 	if (url2) {

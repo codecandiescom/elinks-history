@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.212 2004/05/31 00:51:13 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.213 2004/05/31 03:27:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,6 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 {
 	struct keybinding *kb;
 	struct listbox_item *box_item;
-	struct string keystroke;
 	int is_default;
 
 	is_default = delete_keybinding(km, key, meta) == 2;
@@ -89,19 +88,10 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		return NULL; /* Or goto. */
 	}
 
-	if (!init_string(&keystroke)) return NULL;
-
-	make_keystroke(&keystroke, key, meta, 0);
-	kb->box_item = mem_calloc(1, sizeof(struct listbox_item)
-				  + keystroke.length + 1);
+	kb->box_item = mem_calloc(1, sizeof(struct listbox_item));
 	if (!kb->box_item) {
-		done_string(&keystroke);
 		return NULL; /* Or just goto after end of this if block. */
 	}
-	kb->box_item->text = ((unsigned char *) kb->box_item
-				+ sizeof(struct listbox_item));
-	strcpy(kb->box_item->text, keystroke.source);
-	done_string(&keystroke);
 
 	box_item = action_box_items[km][action];
 	if (!box_item) {
@@ -659,7 +649,6 @@ init_action_listboxes(void)
 		keymap->type = BI_FOLDER;
 		keymap->expanded = 0; /* Maybe you would like this being 1? */
 		keymap->depth = 0;
-		keymap->text = numtodesc(keymap_table, i);
 		add_to_list_end(keybinding_browser.root.child, keymap);
 
 		for (act = action_table[i]; act->str; act++) {
@@ -682,7 +671,6 @@ init_action_listboxes(void)
 			box_item->depth = 1;
 
 			assert(act->desc);
-			box_item->text = act->desc;
 			box_item->translated = 1;
 
 			action_box_items[i][act->num] = box_item;
@@ -710,28 +698,7 @@ free_action_listboxes(void)
 void
 toggle_display_action_listboxes(void)
 {
-	struct listbox_item *keymap;
-	unsigned char *(*toggle)(struct strtonum *table, long num);
-	static int state = 1;
-
-	state = !state;
-	toggle = state ? numtodesc : numtostr;
-
-	foreach (keymap, keybinding_browser.root.child) {
-		struct strtonum *keymapinfo = keymap->udata;
-		struct strtonum *actions = action_table[keymapinfo->num];
-		struct listbox_item *action;
-
-		keymap->text = toggle(keymap_table, keymapinfo->num);
-		keymap->translated = state;
-
-		foreach (action, keymap->child) {
-			struct strtonum *actioninfo = action->udata;
-
-			action->text = toggle(actions, actioninfo->num);
-			action->translated = state;
-		}
-	}
+	keybinding_text_toggle = !keybinding_text_toggle;
 }
 
 

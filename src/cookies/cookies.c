@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.110 2003/12/06 00:02:57 pasky Exp $ */
+/* $Id: cookies.c,v 1.111 2003/12/06 02:27:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include "modules/module.h"
 #include "protocol/http/date.h"
 #include "protocol/http/header.h"
+#include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
@@ -635,7 +636,7 @@ send_cookies(struct uri *uri)
 		}
 
 		/* Not sure if this is 100% right..? --pasky */
-		if (c->secure && strncmp("https://", struri(*uri), 8))
+		if (c->secure && uri->protocol != PROTOCOL_HTTPS)
 			continue;
 
 		if (header.length) {

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.250 2003/07/22 23:09:33 jonas Exp $ */
+/* $Id: options.c,v 1.251 2003/07/22 23:21:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,9 +59,15 @@
 
 static struct option options_root = {
 	NULL_LIST_HEAD,
-	"", 0, OPT_TREE, 0, 0,
-	NULL, "",
-	NULL,
+
+	/* name: */	"",
+	/* flags: */	0,
+	/* type: */	OPT_TREE,
+	/* min, max: */	0, 0,
+	/* value: */	{ NULL },
+	/* ptr: */	NULL,
+	/* desc: */	"",
+	/* capt: */	NULL,
 };
 
 struct option *config_options;

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.55 2003/07/22 23:09:33 jonas Exp $ */
+/* $Id: options.h,v 1.56 2003/07/22 23:21:24 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -73,7 +73,27 @@ struct option {
 	enum option_flags flags;
 	enum option_type type;
 	int min, max;
+
+	union {
+		/* Keep first to makes options_root initialization possible. */
+		struct list_head *tree;
+
+		/* Used by OPT_BOOL, OPT_INT, OPT_LONG, OPT_CODEPAGE and
+		 * OPT_LANGUAGE */
+		long number;
+
+		/* The rest is basicly OPT_#{toupper(membername)} */
+
+		struct rgb *color;
+		unsigned char *(*command)(struct option *, unsigned char ***, int *);
+
+		/* Each string option get allocated MAX_STR_LEN bytes. Used by
+		 * OPT_STRING and OPT_ALIAS. */
+		unsigned char *string;
+	} value;
+
 	void *ptr;
+
 	unsigned char *desc;
 	unsigned char *capt;
 

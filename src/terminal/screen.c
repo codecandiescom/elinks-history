@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.126 2004/01/04 00:07:50 zas Exp $ */
+/* $Id: screen.c,v 1.127 2004/04/16 16:36:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -740,6 +740,6 @@ resize_screen(struct terminal *term, int width, int height)
 void
 done_screen(struct terminal_screen *screen)
 {
-	if (screen->image) mem_free(screen->image);
+	mem_free_if(screen->image);
 	mem_free(screen);
 }

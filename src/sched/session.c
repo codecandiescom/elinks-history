@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.372 2004/04/16 10:09:43 zas Exp $ */
+/* $Id: session.c,v 1.373 2004/04/16 16:35:19 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -150,7 +150,7 @@ free_files(struct session *ses)
 	foreach (ftl, ses->more_files) {
 		if (ftl->cached) object_unlock(ftl->cached);
 		if (ftl->uri) done_uri(ftl->uri);
-		if (ftl->target_frame) mem_free(ftl->target_frame);
+		mem_free_if(ftl->target_frame);
 	}
 	free_list(ses->more_files);
 }
@@ -924,9 +924,9 @@ destroy_session(struct session *ses)
 
 	if (ses->loading_uri) done_uri(ses->loading_uri);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
-	if (ses->goto_position) mem_free(ses->goto_position);
-	if (ses->imgmap_href_base) mem_free(ses->imgmap_href_base);
-	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
+	mem_free_if(ses->goto_position);
+	mem_free_if(ses->imgmap_href_base);
+	mem_free_if(ses->imgmap_target_base);
 
 	foreach (tq, ses->tq) {
 		if (tq->cached) object_unlock(tq->cached);
@@ -934,16 +934,16 @@ destroy_session(struct session *ses)
 			change_connection(&tq->download, NULL, PRI_CANCEL, 0);
 			done_uri(tq->uri);
 		}
-		if (tq->goto_position) mem_free(tq->goto_position);
-		if (tq->prog) mem_free(tq->prog);
-		if (tq->target_frame) mem_free(tq->target_frame);
+		mem_free_if(tq->goto_position);
+		mem_free_if(tq->prog);
+		mem_free_if(tq->target_frame);
 	}
 	free_list(ses->tq);
 
 	if (ses->download_uri) done_uri(ses->download_uri);
-	if (ses->search_word) mem_free(ses->search_word);
-	if (ses->last_search_word) mem_free(ses->last_search_word);
-	if (ses->status.last_title) mem_free(ses->status.last_title);
+	mem_free_if(ses->search_word);
+	mem_free_if(ses->last_search_word);
+	mem_free_if(ses->status.last_title);
 	del_from_list(ses);
 }
 

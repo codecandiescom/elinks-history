@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.75 2004/04/16 09:44:13 zas Exp $ */
+/* $Id: auth.c,v 1.76 2004/04/16 16:34:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 
 	entry->user = mem_alloc(HTTP_AUTH_USER_MAXLEN + HTTP_AUTH_PASSWORD_MAXLEN);
 	if (!entry->user) {
-		if (entry->realm) mem_free(entry->realm);
+		mem_free_if(entry->realm);
 		mem_free(entry);
 		return NULL;
 	}
@@ -155,10 +155,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		if ((!!realm ^ !!entry->realm)
 		    || (realm && entry->realm && strcmp(realm, entry->realm))) {
 			entry->valid = 0;
-			if (entry->realm) {
-				mem_free(entry->realm);
-				entry->realm = NULL;
-			}
+			mem_free_set_if(entry->realm, NULL);
 			if (realm) {
 				entry->realm = stracpy(realm);
 				if (!entry->realm) {
@@ -264,9 +261,9 @@ del_auth_entry(struct http_auth_basic *entry)
 	      entry->url, entry->realm, entry->user);
 #endif
 
-	if (entry->url) mem_free(entry->url);
-	if (entry->realm) mem_free(entry->realm);
-	if (entry->user) mem_free(entry->user);
+	mem_free_if(entry->url);
+	mem_free_if(entry->realm);
+	mem_free_if(entry->user);
 	/* if (entry->password) mem_free(entry->user); Allocated at the same
 	 * time as user field, so no need to free it. */
 

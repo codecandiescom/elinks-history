@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.73 2004/04/16 10:09:43 zas Exp $ */
+/* $Id: task.c,v 1.74 2004/04/16 16:35:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,11 +39,8 @@ free_task(struct session *ses)
 	assertm(ses->task.type, "Session has no task");
 	if_assert_failed return;
 
-	if (ses->goto_position) {
-		mem_free(ses->goto_position);
-		ses->goto_position = NULL;
-	}
-
+	mem_free_set_if(ses->goto_position, NULL);
+	
 	if (ses->loading_uri) {
 		done_uri(ses->loading_uri);
 		ses->loading_uri = NULL;
@@ -79,7 +76,7 @@ post_yes(struct task *task)
 	struct session *ses = task->ses;
 
 	abort_preloading(task->ses, 0);
-	if (task->ses->goto_position) mem_free(task->ses->goto_position);
+	mem_free_if(task->ses->goto_position);
 
 	ses->goto_position = null_or_stracpy(task->pos);
 	ses->loading.end = (void (*)(struct download *, void *)) task->fn;
@@ -131,9 +128,9 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		&& (cached = find_in_cache(uri))
 		&& !cached->incomplete)) {
 
-		if (task) mem_free(task);
+		mem_free_if(task);
 
-		if (ses->goto_position) mem_free(ses->goto_position);
+		mem_free_if(ses->goto_position);
 		ses->goto_position = pos;
 
 		ses->loading.end = (void (*)(struct download *, void *)) fn;
@@ -176,7 +173,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		task, 2,
 		N_("Yes"), post_yes, B_ENTER,
 		N_("No"), post_no, B_ESC);
-	if (m2) mem_free(m2);
+	mem_free_if(m2);
 }
 
 
@@ -188,11 +185,7 @@ ses_forward(struct session *ses, int loaded_in_frame)
 
 	if (!loaded_in_frame) {
 		free_files(ses);
-
-		if (ses->search_word) {
-			mem_free(ses->search_word);
-			ses->search_word = NULL;
-		}
+		mem_free_set_if(ses->search_word, NULL);
 	}
 
 x:
@@ -438,7 +431,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	protocol_external_handler *external_handler;
 
 	if (!uri) {
-		if (pos) mem_free(pos);
+		mem_free_if(pos);
 		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);
 		return;
 	}
@@ -457,10 +450,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		if (ses->loading_uri == uri) {
 			/* We're already loading the URL. */
 			done_uri(uri);
-
-			if (ses->goto_position)
-				mem_free(ses->goto_position);
-			ses->goto_position = pos;
+			mem_free_set_if(ses->goto_position, pos);
 
 			return;
 		}
@@ -481,7 +471,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		 PRI_MAIN, cache_mode, task,
 		 pos, end_load, 0);
 	done_uri(uri);
-	if (pos) mem_free(pos);
+	mem_free_if(pos);
 	/* abort_loading(ses); */
 }
 
@@ -561,9 +551,7 @@ void
 goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
 	    unsigned char *target)
 {
-	if (ses->imgmap_href_base) mem_free(ses->imgmap_href_base);
-	ses->imgmap_href_base = href;
-	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
-	ses->imgmap_target_base = target;
+	mem_free_set_if(ses->imgmap_href_base, href);
+	mem_free_set_if(ses->imgmap_target_base, target);
 	follow_url(ses, url, target, TASK_IMGMAP, CACHE_MODE_NORMAL, 1);
 }

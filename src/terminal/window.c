@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.13 2003/12/02 19:58:00 jonas Exp $ */
+/* $Id: window.c,v 1.14 2004/04/16 16:36:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,7 @@ add_window_at_pos(struct terminal *term,
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, term->width, term->height, 0);
 
 	if (!win) {
-		if (data) mem_free(data);
+		mem_free_if(data);
 		return;
 	}
 
@@ -88,7 +88,7 @@ delete_window(struct window *win)
 	 * handler call. */
 	del_from_list(win);
 	win->handler(win, &ev, 1);
-	if (win->data) mem_free(win->data);
+	mem_free_if(win->data);
 	redraw_terminal(win->term);
 	mem_free(win);
 }

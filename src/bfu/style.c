@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.11 2003/12/01 14:41:23 pasky Exp $ */
+/* $Id: style.c,v 1.12 2004/04/16 16:29:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 		/* Change mode by emptying the cache so mono/color colors
 		 * aren't mixed. */
 		foreach_hash_item (item, *bfu_colors, i) {
-			if (item->value) mem_free(item->value);
+			mem_free_if(item->value);
 			item = item->prev;
 			del_hash_item(bfu_colors, item->next);
 		}
@@ -106,7 +106,7 @@ done_bfu_colors(void)
 		return;
 
 	foreach_hash_item (item, *bfu_colors, i)
-		if (item->value) mem_free(item->value);
+		mem_free_if(item->value);
 
 	free_hash(bfu_colors);
 	bfu_colors = NULL;

@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.13 2004/04/02 18:15:11 jonas Exp $ */
+/* $Id: proxy.c,v 1.14 2004/04/16 16:34:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ get_proxy(struct uri *uri)
 	set_event_id(get_proxy_event_id, "get-proxy");
 	trigger_event(get_proxy_event_id, &tmp, struri(uri));
 	uri = get_proxy_worker(uri, tmp);
-	if (tmp) mem_free(tmp);
+	mem_free_if(tmp);
 	return uri;
 #else
 	return get_proxy_worker(uri, NULL);

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.19 2004/03/09 15:24:48 zas Exp $ */
+/* $Id: file.c,v 1.20 2004/04/16 16:35:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,6 +142,6 @@ file_read_line(unsigned char *line, size_t *size, FILE *file, int *lineno)
 		offset = linepos - line - 1;
 	}
 
-	if (line) mem_free(line);
+	mem_free_if(line);
 	return NULL;
 }

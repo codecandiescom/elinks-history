@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.137 2004/04/16 10:09:43 zas Exp $ */
+/* $Id: cache.c,v 1.138 2004/04/16 16:33:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,15 +449,8 @@ delete_entry_content(struct cache_entry *cached)
 	cached->length = 0;
 	cached->incomplete = 1;
 
-	if (cached->last_modified) {
-		mem_free(cached->last_modified);
-		cached->last_modified = NULL;
-	}
-
-	if (cached->etag) {
-		mem_free(cached->etag);
-		cached->etag = NULL;
-	}
+	mem_free_set_if(cached->last_modified, NULL);
+	mem_free_set_if(cached->etag, NULL);
 }
 
 void
@@ -472,12 +465,12 @@ delete_cache_entry(struct cache_entry *cached)
 	if (cached->box_item) done_listbox_item(&cache_browser, cached->box_item);
 	if (cached->uri) done_uri(cached->uri);
 	if (cached->proxy_uri) done_uri(cached->proxy_uri);
-	if (cached->head) mem_free(cached->head);
-	if (cached->last_modified) mem_free(cached->last_modified);
+	mem_free_if(cached->head);
+	mem_free_if(cached->last_modified);
 	if (cached->redirect) done_uri(cached->redirect);
-	if (cached->ssl_info) mem_free(cached->ssl_info);
-	if (cached->encoding_info) mem_free(cached->encoding_info);
-	if (cached->etag) mem_free(cached->etag);
+	mem_free_if(cached->ssl_info);
+	mem_free_if(cached->encoding_info);
+	mem_free_if(cached->etag);
 
 	mem_free(cached);
 }
@@ -511,9 +504,7 @@ redirect_cache(struct cache_entry *cached, unsigned char *location,
 		add_to_strn(&uristring, cached->uri->post - 1);
 	}
 
-	if (cached->redirect) mem_free(cached->redirect);
-
-	cached->redirect = get_uri(uristring, -1);
+	mem_free_set_if(cached->redirect, get_uri(uristring, -1));
 	cached->redirect_get = get;
 	if (incomplete >= 0) cached->incomplete = incomplete;
 

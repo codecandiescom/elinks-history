@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.399 2004/04/16 10:02:07 zas Exp $ */
+/* $Id: view.c,v 1.400 2004/04/16 16:36:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,9 +74,7 @@ detach_formatted(struct document_view *doc_view)
 	}
 	doc_view->vs = NULL;
 	if (doc_view->link_bg) free_link(doc_view);
-	if (doc_view->name) {
-		mem_free(doc_view->name), doc_view->name = NULL;
-	}
+	mem_free_set_if(doc_view->name, NULL);
 }
 
 static inline int
@@ -1028,7 +1026,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 	}
 
 	if (!url || !strncasecmp(url, "MAP@", 4)) {
-		if (url) mem_free(url);
+		mem_free_if(url);
 		return;
 	}
 

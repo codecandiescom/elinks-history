@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.34 2004/02/11 11:22:22 zas Exp $ */
+/* $Id: secsave.c,v 1.35 2004/04/16 16:35:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,9 +273,9 @@ secure_close(struct secure_save_info *ssi)
 	ret = 0;	/* Success. */
 
 free:
-	if (ssi->tmp_file_name) mem_free(ssi->tmp_file_name);
-	if (ssi->file_name) mem_free(ssi->file_name);
-	if (ssi) mem_free(ssi);
+	mem_free_if(ssi->tmp_file_name);
+	mem_free_if(ssi->file_name);
+	mem_free_if(ssi);
 
 	return ret;
 }

@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.37 2004/01/04 17:53:37 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.38 2004/04/16 16:37:17 zas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -78,7 +78,7 @@ static void
 done_mimetypes_entry(struct mimetypes_entry *entry)
 {
 	if (!entry) return;
-	if (entry->content_type) mem_free(entry->content_type);
+	mem_free_if(entry->content_type);
 	mem_free(entry);
 }
 

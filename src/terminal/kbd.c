@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.54 2004/04/09 13:33:24 jonas Exp $ */
+/* $Id: kbd.c,v 1.55 2004/04/16 16:36:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -430,7 +430,7 @@ free_trm(struct itrm *itrm)
 		kill_timer(itrm->tm);
 
 	if (itrm == ditrm) ditrm = NULL;
-	if (itrm->ev_queue) mem_free(itrm->ev_queue);
+	mem_free_if(itrm->ev_queue);
 	mem_free(itrm);
 }
 

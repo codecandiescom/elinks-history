@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.79 2004/04/03 17:40:53 jonas Exp $ */
+/* $Id: formhist.c,v 1.80 2004/04/16 16:37:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,8 +113,8 @@ static void inline
 free_submitted_value(struct submitted_value *sv)
 {
 	if (!sv) return;
-	if (sv->value) mem_free(sv->value);
-	if (sv->name) mem_free(sv->name);
+	mem_free_if(sv->value);
+	mem_free_if(sv->name);
 	mem_free(sv);
 }
 

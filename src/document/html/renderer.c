@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.423 2004/04/16 09:44:12 zas Exp $ */
+/* $Id: renderer.c,v 1.424 2004/04/16 16:32:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -908,9 +908,9 @@ init_link_state_info(unsigned char *link, unsigned char *target,
 static inline void
 done_link_state_info(void)
 {
-	if (link_state_info.link) mem_free(link_state_info.link);
-	if (link_state_info.target) mem_free(link_state_info.target);
-	if (link_state_info.image) mem_free(link_state_info.image);
+	mem_free_if(link_state_info.link);
+	mem_free_if(link_state_info.target);
+	mem_free_if(link_state_info.image);
 	memset(&link_state_info, 0, sizeof(struct link_state_info));
 }
 
@@ -1156,7 +1156,7 @@ html_form_control(struct part *part, struct form_control *fc)
 						   strlen(fc->default_value), CSM_QUERY);
 
 		if (dv) {
-			if (fc->default_value) mem_free(fc->default_value);
+			mem_free_if(fc->default_value);
 			fc->default_value = dv;
 		}
 	}
@@ -1283,8 +1283,7 @@ free_table_cache(void)
 
 		/* We do not free key here. */
 		foreach_hash_item (item, *table_cache, i)
-			if (item->value)
-				mem_free(item->value);
+			mem_free_if(item->value);
 
 		free_hash(table_cache);
 	}
@@ -1391,7 +1390,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	nobreak = 0;
 
 	done_link_state_info();
-	if (part->spaces) mem_free(part->spaces);
+	mem_free_if(part->spaces);
 
 	if (document) {
 		struct node *node = document->nodes.next;
@@ -1538,7 +1537,7 @@ render_html_document(struct cache_entry *cached, struct document *document)
 	part = format_html_part(start, end, par_format.align,
 			      par_format.leftmargin, document->options.width, document,
 			      0, 0, head.source, 1);
-	if (part) mem_free(part);
+	mem_free_if(part);
 
 	done_string(&head);
 
@@ -1546,8 +1545,7 @@ render_html_document(struct cache_entry *cached, struct document *document)
 
 	for (i = document->height - 1; i >= 0; i--) {
 		if (!document->data[i].length) {
-			if (document->data[i].chars)
-				mem_free(document->data[i].chars);
+			mem_free_if(document->data[i].chars);
 			document->height--;
 		} else break;
 	}

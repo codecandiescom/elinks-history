@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.74 2004/04/03 20:26:05 jonas Exp $ */
+/* $Id: history.c,v 1.75 2004/04/16 16:35:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,12 +91,8 @@ ses_history_move(struct session *ses)
 	/* Prepare. */
 
 	free_files(ses);
-
-	if (ses->search_word) {
-		mem_free(ses->search_word);
-		ses->search_word = NULL;
-	}
-
+	mem_free_set_if(ses->search_word, NULL);
+	
 	/* Does it make sense? */
 
 	if (!have_location(ses) || !ses->task.target_location)

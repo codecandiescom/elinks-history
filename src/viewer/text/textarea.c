@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.46 2004/04/16 10:02:07 zas Exp $ */
+/* $Id: textarea.c,v 1.47 2004/04/16 16:36:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ format_text(unsigned char *text, int width, int wrap)
 		}
 put:
 		if (!realloc_line_info(&ln, lnn)) {
-			if (ln) mem_free(ln);
+			mem_free_if(ln);
 			return NULL;
 		}
 
@@ -215,7 +215,7 @@ encode_textarea(struct submitted_value *sv)
 	/* We need to reformat text now if it has to be wrapped
 	 * hard, just before encoding it. */
 	blabla = format_text(sv->value, sv->frm->cols, sv->frm->wrap);
-	if (blabla) mem_free(blabla);
+	mem_free_if(blabla);
 
 	if (!init_string(&newtext)) return NULL;
 
@@ -365,7 +365,7 @@ close:
 	return;
 
 free_and_return:
-	if (fn) mem_free(fn), fn = NULL;
+	mem_free_set_if(fn, NULL);
 	fs = NULL;
 }
 

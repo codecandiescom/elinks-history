@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.152 2004/04/16 09:44:13 zas Exp $ */
+/* $Id: tables.c,v 1.153 2004/04/16 16:32:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,21 +239,16 @@ free_table(struct table *t)
 {
 	int i, j;
 
-	if (t->min_c) mem_free(t->min_c);
-	if (t->max_c) mem_free(t->max_c);
-	if (t->columns_width) mem_free(t->columns_width);
-	if (t->rows_height) mem_free(t->rows_height);
-	if (t->fragment_id) mem_free(t->fragment_id);
-	if (t->xcols) mem_free(t->xcols);
+	mem_free_if(t->min_c);
+	mem_free_if(t->max_c);
+	mem_free_if(t->columns_width);
+	mem_free_if(t->rows_height);
+	mem_free_if(t->fragment_id);
+	mem_free_if(t->xcols);
 
-	for (i = 0; i < t->x; i++) {
-		for (j = 0; j < t->y; j++) {
-			struct table_cell *cell = CELL(t, i, j);
-
-			if (cell->fragment_id)
-				mem_free(cell->fragment_id);
-		}
-	}
+	for (i = 0; i < t->x; i++)
+		for (j = 0; j < t->y; j++)
+			mem_free_if(CELL(t, i, j)->fragment_id);
 
 	mem_free(t->cells);
 	mem_free(t->columns);
@@ -615,7 +610,7 @@ qwe:
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
 		get_bgcolor(t_attr, &l_col);
-		if (l_fragment_id) mem_free(l_fragment_id);
+		mem_free_if(l_fragment_id);
 		l_fragment_id = get_attr_val(t_attr, "id");
 		y++;
 		x = 0;
@@ -775,7 +770,7 @@ nc:
 scan_done:
 	*end = html;
 
-	if (l_fragment_id) mem_free(l_fragment_id);
+	mem_free_if(l_fragment_id);
 
 	for (x = 0; x < t->x; x++) for (y = 0; y < t->y; y++) {
 		struct table_cell *c = CELL(t, x, y);
@@ -987,7 +982,7 @@ get_column_widths(struct table *t)
 	if (!t->max_c) {
 		t->max_c = mem_calloc(t->x, sizeof(int));
 	   	if (!t->max_c) {
-			mem_free(t->min_c), t->min_c = NULL;
+			mem_free_set_if(t->min_c, NULL);
 			return -1;
 		}
 	}
@@ -995,8 +990,8 @@ get_column_widths(struct table *t)
 	if (!t->columns_width) {
 		t->columns_width = mem_calloc(t->x, sizeof(int));
 		if (!t->columns_width) {
-			mem_free(t->min_c), t->min_c = NULL;
-			mem_free(t->max_c), t->max_c = NULL;
+			mem_free_set_if(t->min_c, NULL);
+			mem_free_set_if(t->max_c, NULL);
 			return -1;
 		}
 	}
@@ -1819,7 +1814,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	t = parse_table(html, eof, end, bgcolor, (p->document || p->x), &bad_html, &bad_html_n);
 	if (!t) {
-		if (bad_html) mem_free(bad_html);
+		mem_free_if(bad_html);
 		goto ret0;
 	}
 
@@ -1832,7 +1827,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 			parse_html(bad_html[i].start, bad_html[i].end, p, NULL);
 	}
 
-	if (bad_html) mem_free(bad_html);
+	mem_free_if(bad_html);
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, AL_LEFT, 0, 0);
 
@@ -1955,6 +1950,6 @@ ret2:
 
 ret0:
 	table_level--;
-	if (fragment_id) mem_free(fragment_id);
+	mem_free_if(fragment_id);
 	if (!table_level) free_table_cache();
 }

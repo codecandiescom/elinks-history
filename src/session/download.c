@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.270 2004/04/16 10:16:53 zas Exp $ */
+/* $Id: download.c,v 1.271 2004/04/16 16:35:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,7 +154,7 @@ abort_download(struct file_download *file_download)
 		close(file_download->handle);
 	}
 
-	if (file_download->prog) mem_free(file_download->prog);
+	mem_free_if(file_download->prog);
 	if (file_download->file) {
 		if (file_download->delete) unlink(file_download->file);
 		mem_free(file_download->file);
@@ -427,7 +427,7 @@ static void
 lun_alternate(struct lun_hop *lun_hop)
 {
 	lun_hop->callback(lun_hop->term, lun_hop->file, lun_hop->data, 0);
-	if (lun_hop->ofile) mem_free(lun_hop->ofile);
+	mem_free_if(lun_hop->ofile);
 	mem_free(lun_hop);
 }
 
@@ -435,7 +435,7 @@ static void
 lun_overwrite(struct lun_hop *lun_hop)
 {
 	lun_hop->callback(lun_hop->term, lun_hop->ofile, lun_hop->data, 0);
-	if (lun_hop->file) mem_free(lun_hop->file);
+	mem_free_if(lun_hop->file);
 	mem_free(lun_hop);
 }
 
@@ -443,7 +443,7 @@ static void
 lun_resume(struct lun_hop *lun_hop)
 {
 	lun_hop->callback(lun_hop->term, lun_hop->ofile, lun_hop->data, 1);
-	if (lun_hop->file) mem_free(lun_hop->file);
+	mem_free_if(lun_hop->file);
 	mem_free(lun_hop);
 }
 
@@ -451,8 +451,8 @@ static void
 lun_cancel(struct lun_hop *lun_hop)
 {
 	lun_hop->callback(lun_hop->term, NULL, lun_hop->data, 0);
-	if (lun_hop->ofile) mem_free(lun_hop->ofile);
-	if (lun_hop->file) mem_free(lun_hop->file);
+	mem_free_if(lun_hop->ofile);
+	mem_free_if(lun_hop->file);
 	mem_free(lun_hop);
 }
 
@@ -851,7 +851,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	return;
 
 cancel:
-	if (tq->prog && codw_hop->file) mem_free(codw_hop->file);
+	if (tq->prog) mem_free_if(codw_hop->file);
 	tp_cancel(tq);
 	mem_free(codw_hop);
 }
@@ -862,9 +862,9 @@ tp_free(struct tq *tq)
 {
 	object_unlock(tq->cached);
 	done_uri(tq->uri);
-	if (tq->goto_position) mem_free(tq->goto_position);
-	if (tq->prog) mem_free(tq->prog);
-	if (tq->target_frame) mem_free(tq->target_frame);
+	mem_free_if(tq->goto_position);
+	mem_free_if(tq->prog);
+	mem_free_if(tq->target_frame);
 	del_from_list(tq);
 	mem_free(tq);
 }
@@ -882,10 +882,7 @@ tp_cancel(void *data)
 static void
 tp_save(struct tq *tq)
 {
-	if (tq->prog) {
-		mem_free(tq->prog);
-		tq->prog = NULL;
-	}
+	mem_free_set_if(tq->prog, NULL);
 	query_file(tq->ses, tq->uri, tq, continue_download, tp_cancel, 1);
 }
 
@@ -940,11 +937,8 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 {
 	struct string filename;
 
-	if (tq->prog) {
-		mem_free(tq->prog);
-		tq->prog = NULL;
-	}
-
+	mem_free_set_if(tq->prog, NULL);
+	
 	if (handler) {
 		tq->prog = stracpy(handler->program);
 		tq->prog_flags = handler->block;
@@ -1082,12 +1076,12 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 
 do_not_follow:
 	mem_free(ctype);
-	if (handler) mem_free(handler);
+	mem_free_if(handler);
 
 	return ret;
 
 plaintext_follow:
-	if (ctype) mem_free(ctype);
+	mem_free_if(ctype);
 
 	vs = ses_forward(ses, frame);
 	if (vs) vs->plain = plaintext;

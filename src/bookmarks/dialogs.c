@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.153 2004/01/09 07:20:11 miciah Exp $ */
+/* $Id: dialogs.c,v 1.154 2004/04/16 16:30:45 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -397,16 +397,8 @@ void
 bookmark_manager(struct session *ses)
 {
 	/* Reset momorized search criterias */
-	if (bm_last_searched_name) {
-		mem_free(bm_last_searched_name);
-		bm_last_searched_name = NULL;
-	}
-
-	if (bm_last_searched_url) {
-		mem_free(bm_last_searched_url);
-		bm_last_searched_url = NULL;
-	}
-
+	mem_free_set_if(bm_last_searched_name, NULL);
+	mem_free_set_if(bm_last_searched_url, NULL);
 	hierbox_browser(&bookmark_browser, ses);
 }
 
@@ -511,12 +503,12 @@ bookmark_search_do(struct dialog *dlg)
 	box = get_dlg_listbox_data(dlg_data);
 
 	/* Memorize last searched title */
-	if (bm_last_searched_name) mem_free(bm_last_searched_name);
+	mem_free_if(bm_last_searched_name);
 	bm_last_searched_name = stracpy(search_title);
 	if (!bm_last_searched_name) return;
 
 	/* Memorize last searched url */
-	if (bm_last_searched_url) mem_free(bm_last_searched_url);
+	mem_free_if(bm_last_searched_url);
 	bm_last_searched_url = stracpy(search_url);
 	if (!bm_last_searched_url) {
 		mem_free(bm_last_searched_name);

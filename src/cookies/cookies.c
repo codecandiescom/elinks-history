@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.131 2004/04/11 17:24:14 jonas Exp $ */
+/* $Id: cookies.c,v 1.132 2004/04/16 16:31:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,11 +136,11 @@ void
 free_cookie(struct cookie *c)
 {
 	if (c->box_item) done_listbox_item(&cookie_browser, c->box_item);
-	if (c->name) mem_free(c->name);
-	if (c->value) mem_free(c->value);
-	if (c->server) mem_free(c->server);
-	if (c->path) mem_free(c->path);
-	if (c->domain) mem_free(c->domain);
+	mem_free_if(c->name);
+	mem_free_if(c->value);
+	mem_free_if(c->server);
+	mem_free_if(c->path);
+	mem_free_if(c->domain);
 	mem_free(c);
 }
 
@@ -348,7 +348,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		      "expires at %d, secure %d\n", cookie->name,
 		      cookie->value, cookie->server, server, cookie->domain,
 		      cookie->expires, cookie->secure);
-		if (server) mem_free(server);
+		mem_free_if(server);
 	}
 #endif
 

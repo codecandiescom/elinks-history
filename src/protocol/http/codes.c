@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.25 2004/04/02 21:22:00 jonas Exp $ */
+/* $Id: codes.c,v 1.26 2004/04/16 16:34:44 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -109,7 +109,7 @@ get_http_error_document(struct terminal *term, struct uri *uri, int code)
 	if (!codestr) codestr = "Unknown error";
 
 	if (!init_string(&string)) {
-		if (title) mem_free(title);
+		mem_free_if(title);
 		return NULL;
 	}
 
@@ -150,7 +150,7 @@ get_http_error_document(struct terminal *term, struct uri *uri, int code)
 		" </body>\n"
 		"</html>\n");
 
-	if (title) mem_free(title);
+	mem_free_if(title);
 
 	return string.source;
 }
@@ -173,7 +173,7 @@ show_http_error_document(struct session *ses, void *data)
 
 	if (str) {
 		if (cached) delete_entry_content(cache);
-		if (cache->head) mem_free(cache->head);
+		mem_free_if(cache->head);
 		cache->head = stracpy("\r\nContent-type: text/html\r\n");
 		add_fragment(cache, 0, str, strlen(str));
 		mem_free(str);

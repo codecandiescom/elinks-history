@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.23 2004/01/29 13:32:05 jonas Exp $ */
+/* $Id: stylesheet.c,v 1.24 2004/04/16 16:32:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,10 +162,10 @@ done_css_selector(struct css_selector *selector)
 {
 	if (selector->next) del_from_list(selector);
 	free_list(selector->properties);
-	if (selector->element) mem_free(selector->element);
-	if (selector->id) mem_free(selector->id);
-	if (selector->class) mem_free(selector->class);
-	if (selector->pseudo) mem_free(selector->pseudo);
+	mem_free_if(selector->element);
+	mem_free_if(selector->id);
+	mem_free_if(selector->class);
+	mem_free_if(selector->pseudo);
 	mem_free(selector);
 }
 

@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.15 2004/04/16 09:44:13 zas Exp $ */
+/* $Id: event.c,v 1.16 2004/04/16 16:35:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,11 +321,10 @@ done_event(void)
 	if (event_hash)	free_hash(event_hash);
 
 	for (i = 0; i < eventssize; i++) {
-		if (events[i].handlers)
-			mem_free(events[i].handlers);
+		mem_free_if(events[i].handlers);
 		mem_free(events[i].name);
 	}
 
-	if (events) mem_free(events), events = NULL;
+	mem_free_set_if(events, NULL);
 	eventssize = 0;
 }

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.79 2004/01/08 23:26:17 jonas Exp $ */
+/* $Id: mailcap.c,v 1.80 2004/04/16 16:37:17 zas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -156,8 +156,8 @@ static inline void
 done_mailcap_entry(struct mailcap_entry *entry)
 {
 	if (!entry) return;
-	if (entry->testcommand)	mem_free(entry->testcommand);
-	if (entry->description)	mem_free(entry->description);
+	mem_free_if(entry->testcommand);
+	mem_free_if(entry->description);
 	mem_free(entry);
 }
 
@@ -397,7 +397,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 	}
 
 	fclose(file);
-	if (line) mem_free(line); /* Alloced by file_read_line() */
+	mem_free_if(line); /* Alloced by file_read_line() */
 }
 
 

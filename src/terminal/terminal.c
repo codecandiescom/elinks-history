@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.62 2004/04/15 00:36:46 jonas Exp $ */
+/* $Id: terminal.c,v 1.63 2004/04/16 16:36:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,12 +126,12 @@ destroy_terminal(struct terminal *term)
 	while (!list_empty(term->windows))
 		delete_window(term->windows.next);
 
-	/* if (term->cwd) mem_free(term->cwd); */
-	if (term->title) mem_free(term->title);
+	/* mem_free_if(term->cwd); */
+	mem_free_if(term->title);
 	if (term->screen) done_screen(term->screen);
 
 	set_handlers(term->fdin, NULL, NULL, NULL, NULL);
-	if (term->input_queue) mem_free(term->input_queue);
+	mem_free_if(term->input_queue);
 
 	if (term->blocked != -1) {
 		close(term->blocked);
@@ -325,7 +325,7 @@ void
 set_terminal_title(struct terminal *term, unsigned char *title)
 {
 	if (term->title && !strcmp(title, term->title)) return;
-	if (term->title) mem_free(term->title);
+	mem_free_if(term->title);
 	term->title = stracpy(title);
 	do_terminal_function(term, TERM_FN_TITLE, title);
 }

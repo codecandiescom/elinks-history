@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.389 2004/04/16 16:26:39 kuser Exp $ */
+/* $Id: parser.c,v 1.390 2004/04/16 16:32:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,7 @@ found_endattr:
 	goto next_attr;
 
 parse_error:
-	if (attr) mem_free(attr);
+	mem_free_if(attr);
 	return NULL;
 }
 
@@ -430,13 +430,13 @@ kill_html_stack_item(struct html_element *e)
 	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
 
-	if (e->attr.link) mem_free(e->attr.link);
-	if (e->attr.target) mem_free(e->attr.target);
-	if (e->attr.image) mem_free(e->attr.image);
-	if (e->attr.title) mem_free(e->attr.title);
-	if (e->attr.href_base) mem_free(e->attr.href_base);
-	if (e->attr.target_base) mem_free(e->attr.target_base);
-	if (e->attr.select) mem_free(e->attr.select);
+	mem_free_if(e->attr.link);
+	mem_free_if(e->attr.target);
+	mem_free_if(e->attr.image);
+	mem_free_if(e->attr.title);
+	mem_free_if(e->attr.href_base);
+	mem_free_if(e->attr.target_base);
+	mem_free_if(e->attr.select);
 	del_from_list(e);
 	mem_free(e);
 #if 0
@@ -766,9 +766,9 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	has_link_lines = 1;
 	html_stack_dup(ELEMENT_KILLABLE);
 	ln_break(1, line_break_f, ff);
-	if (format.link) mem_free(format.link),	format.link = NULL;
-	if (format.target) mem_free(format.target), format.target = NULL;
-	if (format.title) mem_free(format.title), format.title = NULL;
+	mem_free_set_if(format.link, NULL);
+	mem_free_set_if(format.target, NULL);
+	mem_free_set_if(format.title, NULL);
 	format.form = NULL;
 	put_chrs(prefix, strlen(prefix), put_chars_f, ff);
 	format.link = join_urls(format.href_base, link);
@@ -861,17 +861,17 @@ html_a(unsigned char *a)
 	if (href) {
 		unsigned char *target;
 
-		if (format.link) mem_free(format.link);
+		mem_free_if(format.link);
 		format.link = join_urls(format.href_base, trim_chars(href, ' ', 0));
 
 		mem_free(href);
 
 		target = get_target(a);
 		if (target) {
-			if (format.target) mem_free(format.target);
+			mem_free_if(format.target);
 			format.target = target;
 		} else {
-			if (format.target) mem_free(format.target);
+			mem_free_if(format.target);
 			format.target = stracpy(format.target_base);
 		}
 #ifdef CONFIG_GLOBHIST
@@ -881,7 +881,7 @@ html_a(unsigned char *a)
 #endif
 			format.fg = format.clink;
 
-		if (format.title) mem_free(format.title);
+		mem_free_if(format.title);
 		format.title = get_attr_val(a, "title");
 
 		html_focusable(a);
@@ -933,7 +933,7 @@ html_img(unsigned char *a)
 
 		usemap = 1;
 		html_stack_dup(ELEMENT_KILLABLE);
-		if (format.link) mem_free(format.link);
+		mem_free_if(format.link);
 		if (format.form) format.form = NULL;
 		u = join_urls(format.href_base, al);
 		if (!u) {
@@ -952,7 +952,7 @@ html_img(unsigned char *a)
 	if (!al) al = get_attr_val(a, "title");
 
 	if (!al || !*al) {
-		if (al) mem_free(al);
+		mem_free_if(al);
 		if (!global_doc_opts->images && !format.link) return;
 
 		add_brackets = 1;
@@ -1015,12 +1015,12 @@ html_img(unsigned char *a)
 				al = stracpy("IMG");
 			}
 
-			if (src) mem_free(src);
+			mem_free_if(src);
 		}
 	}
 
-	if (format.image) mem_free(format.image), format.image = NULL;
-	if (format.title) mem_free(format.title), format.title = NULL;
+	mem_free_set_if(format.image, NULL);
+	mem_free_set_if(format.title, NULL);
 
 	if (al) {
 		int img_link_tag = get_opt_int("document.browse.images.image_link_tagging");
@@ -1073,9 +1073,9 @@ show_al:
 		/* Anything below must take care of properly handling the
 		 * show_any_as_links variable being off! */
 	}
-	if (format.image) mem_free(format.image), format.image = NULL;
-	if (format.title) mem_free(format.title), format.title = NULL;
-	if (al) mem_free(al);
+	mem_free_set_if(format.image, NULL);
+	mem_free_set_if(format.title, NULL);
+	mem_free_if(al);
 	if (usemap) kill_html_stack_item(&html_top);
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
 }
@@ -1285,7 +1285,7 @@ html_hr(unsigned char *a)
 	if (q >= 0 && q < 2) r = (unsigned char)BORDER_SHLINE;
 	html_stack_dup(ELEMENT_KILLABLE);
 	par_format.align = AL_CENTER;
-	if (format.link) mem_free(format.link), format.link = NULL;
+	mem_free_set_if(format.link, NULL);
 	format.form = NULL;
 	html_linebrk(a);
 	if (par_format.align == AL_BLOCK) par_format.align = AL_CENTER;
@@ -1340,14 +1340,14 @@ html_base(unsigned char *a)
 	unsigned char *al = get_url_val(a, "href");
 
 	if (al) {
-		if (format.href_base) mem_free(format.href_base);
+		mem_free_if(format.href_base);
 		format.href_base = join_urls(((struct html_element *)html_stack.prev)->attr.href_base, al);
 		mem_free(al);
 	}
 
 	al = get_target(a);
 	if (al) {
-		if (format.target_base) mem_free(format.target_base);
+		mem_free_if(format.target_base);
 		format.target_base = al;
 	}
 }
@@ -1571,8 +1571,8 @@ find_form_for_input(unsigned char *i)
 	unsigned char *la = NULL;
 	int namelen;
 
-	if (form.action) mem_free(form.action);
-	if (form.target) mem_free(form.target);
+	mem_free_if(form.action);
+	mem_free_if(form.target);
 	memset(&form, 0, sizeof(form));
 
 	if (!special_f(ff, SP_USED, NULL)) return;
@@ -1772,7 +1772,7 @@ xxx:
 			put_chrs("(&nbsp;)", 8, put_chars_f, ff);
 			break;
 		case FC_IMAGE:
-			if (format.image) mem_free(format.image), format.image = NULL;
+			mem_free_set_if(format.image, NULL);
 			if ((al = get_url_val(a, "src"))
 			    || (al = get_url_val(a, "dynsrc"))) {
 				format.image = join_urls(format.href_base, al);
@@ -2376,8 +2376,8 @@ html_frameset(unsigned char *a)
 
 	fp.parent = html_top.frameset;
 	if (fp.x && fp.y) html_top.frameset = special_f(ff, SP_FRAMESET, &fp);
-	if (fp.width) mem_free(fp.width);
-	if (fp.height) mem_free(fp.height);
+	mem_free_if(fp.width);
+	mem_free_if(fp.height);
 
 free_and_return:
 	mem_free(cols);
@@ -2566,13 +2566,13 @@ html_link_clear(struct hlink *link)
 {
 	assert(link);
 
-	if (link->content_type) mem_free(link->content_type);
-	if (link->media) mem_free(link->media);
-	if (link->href) mem_free(link->href);
-	if (link->hreflang) mem_free(link->hreflang);
-	if (link->title) mem_free(link->title);
-	if (link->lang) mem_free(link->lang);
-	if (link->name) mem_free(link->name);
+	mem_free_if(link->content_type);
+	mem_free_if(link->media);
+	mem_free_if(link->href);
+	mem_free_if(link->hreflang);
+	mem_free_if(link->title);
+	mem_free_if(link->lang);
+	mem_free_if(link->name);
 
 	memset(link, 0, sizeof(struct hlink));
 }
@@ -3370,20 +3370,20 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 	if (!target) target = null_or_stracpy(target_base);
 	if (!target) target = stracpy("");
 	if (!target) {
-		if (label) mem_free(label);
+		mem_free_if(label);
 		return 1;
 	}
 
 	ld = mem_alloc(sizeof(struct link_def));
 	if (!ld) {
-		if (label) mem_free(label);
+		mem_free_if(label);
 		mem_free(target);
 		return 1;
 	}
 
 	href = get_url_val(attr, "href");
 	if (!href) {
-		if (label) mem_free(label);
+		mem_free_if(label);
 		mem_free(target);
 		mem_free(ld);
 		return 1;
@@ -3393,7 +3393,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 	ld->link = join_urls(href_base, href);
 	mem_free(href);
 	if (!ld->link) {
-		if (label) mem_free(label);
+		mem_free_if(label);
 		mem_free(target);
 		mem_free(ld);
 		return 1;
@@ -3409,7 +3409,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 			mem_free(ld->link);
 			mem_free(ld->target);
 			mem_free(ld);
-			if (label) mem_free(label);
+			mem_free_if(label);
 			return 1;
 		}
 	}
@@ -3681,8 +3681,8 @@ done_html_parser(void)
 	if (global_doc_opts->css_enable)
 		done_css_stylesheet(&css_styles);
 
-	if (form.action) mem_free(form.action), form.action = NULL;
-	if (form.target) mem_free(form.target), form.target = NULL;
+	mem_free_set_if(form.action, NULL);
+	mem_free_set_if(form.target, NULL);
 
 	kill_html_stack_item(html_stack.next);
 

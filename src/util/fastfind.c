@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.50 2004/04/15 14:31:25 zas Exp $ */
+/* $Id: fastfind.c,v 1.51 2004/04/16 16:35:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -598,14 +598,13 @@ fastfind_done(struct fastfind_info *info)
 		(double) info->debug.total_key_len / info->debug.iterations);
 #endif
 
-	if (info->pointers) mem_free(info->pointers);
-	if (info->keylen_list) mem_free(info->keylen_list);
+	mem_free_if(info->pointers);
+	mem_free_if(info->keylen_list);
 	while (info->leafsets_count) {
-		if (info->leafsets[info->leafsets_count])
-			mem_free(info->leafsets[info->leafsets_count]);
+		mem_free_if(info->leafsets[info->leafsets_count]);
 		info->leafsets_count--;
 	}
-	if (info->leafsets) mem_free(info->leafsets);
+	mem_free_if(info->leafsets);
 	mem_free(info);
 }
 

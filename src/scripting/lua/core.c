@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.149 2004/04/09 03:13:21 jonas Exp $ */
+/* $Id: core.c,v 1.150 2004/04/16 16:37:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,11 +221,11 @@ l_pipe_read(LS)
 	pclose(fp);
 
 	lua_pushlstring(S, s, len);
-	if (s) mem_free(s);
+	mem_free_if(s);
 	return 1;
 
 lua_error:
-	if (s) mem_free(s);
+	mem_free_if(s);
 	lua_pushnil(S);
 	return 1;
 }
@@ -515,7 +515,7 @@ do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 		lua_settop(S, oldtop);
 	}
 
-	if (file) mem_free(file);
+	mem_free_if(file);
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.158 2004/04/16 09:44:13 zas Exp $ */
+/* $Id: link.c,v 1.159 2004/04/16 16:36:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,11 +194,7 @@ free_link(struct document_view *doc_view)
 	assert(doc_view);
 	if_assert_failed return;
 
-	if (doc_view->link_bg) {
-		mem_free(doc_view->link_bg);
-		doc_view->link_bg = NULL;
-	}
-
+	mem_free_set_if(doc_view->link_bg, NULL);
 	doc_view->link_bg_n = 0;
 }
 
@@ -631,8 +627,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 
 		if (item >= 0 && item < frm->nvalues) {
 			fs->state = item;
-			if (fs->value) mem_free(fs->value);
-			fs->value = stracpy(frm->values[item]);
+			mem_free_set_if(fs->value, stracpy(frm->values[item]));
 		}
 		fixup_select_state(frm, fs);
 	}

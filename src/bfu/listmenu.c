@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.5 2004/01/25 14:01:10 jonas Exp $ */
+/* $Id: listmenu.c,v 1.6 2004/04/16 16:29:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		/* TODO: recheck that --Zas */
 		memset(item, 0, sizeof(struct menu_item));
 
-	} else if (name) mem_free(name);
+	} else mem_free_if(name);
 
 	if (name && data == -1) {
 		int size = (menu->stack_size + 1) * sizeof(struct menu_item *);
@@ -138,7 +138,7 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 	if (!m) return; /* XXX: Who knows... need to be verified */
 
 	for (mm = m; !mi_is_end_of_menu(*mm); mm++) {
-		if (mm->text) mem_free(mm->text);
+		mem_free_if(mm->text);
 		if (mm->func == (menu_func) do_select_submenu) free_menu(mm->data);
 	}
 	mem_free(m);

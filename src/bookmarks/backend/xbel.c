@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.36 2004/02/05 00:22:31 fabio Exp $ */
+/* $Id: xbel.c,v 1.37 2004/04/16 16:30:46 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -518,16 +518,15 @@ free_node(struct tree_node *node)
 	struct attributes *attribute;
 
 	if (node->attrs) {
-		foreachback (attribute, *node->attrs) {
-			if (attribute->name)
-				mem_free(attribute->name);
-		}
+		foreachback (attribute, *node->attrs)
+			mem_free_if(attribute->name);
+		
 		free_list(*(struct list_head *)node->attrs); /* Don't free list during traversal */
 		mem_free(node->attrs);
 	}
 
-	if (node->name) mem_free(node->name);
-	if (node->text) mem_free(node->text);
+	mem_free_if(node->name);
+	mem_free_if(node->text);
 
 	mem_free(node);
 }

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.96 2004/04/11 23:06:23 jonas Exp $ */
+/* $Id: info.c,v 1.97 2004/04/16 16:32:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 	info = mem_calloc(1, sizeof(struct keys_toggle_info));
 
 	if (!info || !init_string(&keys)) {
-		if (info) mem_free(info);
+		mem_free_if(info);
 		return;
 	}
 

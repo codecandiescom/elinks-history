@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.97 2004/04/13 23:15:07 jonas Exp $ */
+/* $Id: dialogs.c,v 1.98 2004/04/16 16:37:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 #define MIME_WIDGETS_COUNT 4
 	dlg = calloc_dialog(MIME_WIDGETS_COUNT, sizeof(struct extension));
 	if (!dlg) {
-		if (fcp) mem_free(fcp);
+		mem_free_if(fcp);
 		return;
 	}
 
@@ -181,8 +181,8 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 			add_to_menu(&mi, translated.source, optptr2, ACT_MAIN_NONE,
 				    (menu_func) fn, translated2, 0);
 		} else {
-			if (optptr2) mem_free(optptr2);
-			if (translated2) mem_free(translated2);
+			mem_free_if(optptr2);
+			mem_free_if(translated2);
 			done_string(&translated);
 		}
 	}

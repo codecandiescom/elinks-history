@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.277 2004/04/16 10:02:06 zas Exp $ */
+/* $Id: http.c,v 1.278 2004/04/16 16:34:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -751,10 +751,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		if (did_read > 0) *new_len += did_read;
 	} while (!(!len && did_read != to_read));
 
-	if (did_read < 0 && output) {
-		mem_free(output);
-		output = NULL;
-	}
+	if (did_read < 0) mem_free_set_if(output, NULL);
 
 	uncompress_shutdown(conn);
 	return output;
@@ -1152,7 +1149,7 @@ again:
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
-	if (conn->cached->head) mem_free(conn->cached->head);
+	mem_free_if(conn->cached->head);
 	conn->cached->head = head;
 
 	if (!get_opt_bool("document.cache.ignore_cache_control")) {
@@ -1167,7 +1164,7 @@ again:
 
 #ifdef HAVE_SSL
 	if (conn->ssl) {
-		if (conn->cached->ssl_info) mem_free(conn->cached->ssl_info);
+		mem_free_if(conn->cached->ssl_info);
 		conn->cached->ssl_info = get_ssl_connection_cipher(conn);
 	}
 #endif
@@ -1351,7 +1348,7 @@ again:
 		enum stream_encoding file_encoding;
 
 		file_encoding = extension ? guess_encoding(extension) : ENCODING_NONE;
-		if (extension) mem_free(extension);
+		mem_free_if(extension);
 
 		/* If the content is encoded, we want to preserve the encoding
 		 * if it is implied by the extension, so that saving the URI
@@ -1370,7 +1367,7 @@ again:
 	}
 
 	if (conn->content_encoding != ENCODING_NONE) {
-		if (conn->cached->encoding_info) mem_free(conn->cached->encoding_info);
+		mem_free_if(conn->cached->encoding_info);
 		conn->cached->encoding_info = stracpy(get_encoding_name(conn->content_encoding));
 	}
 

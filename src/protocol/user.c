@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.66 2004/04/15 14:27:06 jonas Exp $ */
+/* $Id: user.c,v 1.67 2004/04/16 16:34:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ user_func(struct session *ses, struct uri *uri)
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
 
-		if (protocol) mem_free(protocol);
+		mem_free_if(protocol);
 		return;
 	}
 
@@ -179,7 +179,7 @@ user_func(struct session *ses, struct uri *uri)
 	}
 
 	prog = subst_cmd(prog, uri, subj);
-	if (subj) mem_free(subj);
+	mem_free_if(subj);
 	if (prog) {
 		exec_on_terminal(ses->tab->term, prog, "", 1);
 		mem_free(prog);

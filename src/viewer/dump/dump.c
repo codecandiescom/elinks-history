@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.123 2004/04/14 21:01:08 jonas Exp $ */
+/* $Id: dump.c,v 1.124 2004/04/16 16:36:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,7 +279,7 @@ dump_start(unsigned char *url)
 	unsigned char *wd = get_cwd();
 	struct uri *uri = get_translated_uri(url, wd, NULL);
 
-	if (wd) mem_free(wd);
+	mem_free_if(wd);
 	if (!*url) {
 		ERROR(gettext("URL expected after %s."),
 			get_opt_int_tree(cmdline_options, "source")

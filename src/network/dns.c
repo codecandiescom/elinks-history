@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.42 2004/02/19 20:43:56 pasky Exp $ */
+/* $Id: dns.c,v 1.43 2004/04/16 16:34:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,10 +223,7 @@ end_real_lookup(void *data)
 	res = 0;
 
 done:
-	if (res < 0 && query->addr && *query->addr) {
-		mem_free(*query->addr);
-		*query->addr = NULL;
-	}
+	if (res < 0 && query->addr) mem_free_set_if(*query->addr, NULL);
 
 	set_handlers(query->h, NULL, NULL, NULL, NULL);
 	close(query->h);
@@ -330,10 +327,7 @@ end_dns_lookup(struct dnsquery *q, int res)
 #endif
 
 	if (!q->fn || !q->addr) {
-		if (q->addr && *q->addr) {
-			mem_free(*q->addr);
-			*q->addr = NULL; /* This may not be so pointless. */
-		}
+		if (q->addr) mem_free_set_if(*q->addr, NULL);
 		mem_free(q);
 		return;
 	}
@@ -465,7 +459,7 @@ del_dns_cache_entry(struct dnsentry **d)
 
 	*d = (*d)->prev;
 	del_from_list(e);
-	if (e->addr) mem_free(e->addr);
+	mem_free_if(e->addr);
 	mem_free(e);
 }
 

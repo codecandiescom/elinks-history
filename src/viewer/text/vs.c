@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.33 2004/04/16 09:44:14 zas Exp $ */
+/* $Id: vs.c,v 1.34 2004/04/16 16:36:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,16 +37,12 @@ destroy_vs(struct view_state *vs)
 {
 	int i;
 
-	if (vs->uri) done_uri(vs->uri);
-
-	if (vs->goto_position)
-		mem_free(vs->goto_position);
-
 	for (i = 0; i < vs->form_info_len; i++)
-		if (vs->form_info[i].value)
-			mem_free(vs->form_info[i].value);
+		mem_free_if(vs->form_info[i].value);
 
-	if (vs->form_info) mem_free(vs->form_info);
+	if (vs->uri) done_uri(vs->uri);
+	mem_free_if(vs->goto_position);
+	mem_free_if(vs->form_info);
 }
 
 void

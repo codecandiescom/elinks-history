@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.40 2004/04/13 16:36:21 jonas Exp $ */
+/* $Id: dialogs.c,v 1.41 2004/04/16 16:31:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 	add_format_to_string(&string, "\n%s: %s", _("Secure", term),
 			     _(cookie->secure ? N_("yes") : N_("no"), term));
 
-	if (expires) mem_free(expires);
+	mem_free_if(expires);
 	return string.source;
 }
 
@@ -154,7 +154,7 @@ set_cookie_name(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	unsigned char *value = widget_data->cdata;
 
 	if (!value || !cookie) return 1;
-	if (cookie->name) mem_free(cookie->name);
+	mem_free_if(cookie->name);
 	cookie->name = stracpy(value);
 
 	assert(cookie->box_item);
@@ -169,7 +169,7 @@ set_cookie_value(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	unsigned char *value = widget_data->cdata;
 
 	if (!value || !cookie) return 1;
-	if (cookie->value) mem_free(cookie->value);
+	mem_free_if(cookie->value);
 	cookie->value = stracpy(value);
 	return 0;
 }
@@ -181,7 +181,7 @@ set_cookie_domain(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	unsigned char *value = widget_data->cdata;
 
 	if (!value || !cookie) return 1;
-	if (cookie->domain) mem_free(cookie->domain);
+	mem_free_if(cookie->domain);
 	cookie->domain = stracpy(value);
 	return 0;
 }

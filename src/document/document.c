@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.62 2004/04/04 04:44:47 jonas Exp $ */
+/* $Id: document.c,v 1.63 2004/04/16 16:32:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,8 +74,7 @@ free_frameset_desc(struct frameset_desc *frameset_desc)
 
 		if (frame_desc->subframe)
 			free_frameset_desc(frame_desc->subframe);
-		if (frame_desc->name)
-			mem_free(frame_desc->name);
+		mem_free_if(frame_desc->name);
 		if (frame_desc->uri)
 			done_uri(frame_desc->uri);
 	}
@@ -86,12 +85,12 @@ free_frameset_desc(struct frameset_desc *frameset_desc)
 void
 done_link_members(struct link *link)
 {
-	if (link->where) mem_free(link->where);
-	if (link->target) mem_free(link->target);
-	if (link->title) mem_free(link->title);
-	if (link->where_img) mem_free(link->where_img);
-	if (link->pos) mem_free(link->pos);
-	if (link->name) mem_free(link->name);
+	mem_free_if(link->where);
+	mem_free_if(link->target);
+	mem_free_if(link->title);
+	mem_free_if(link->where_img);
+	mem_free_if(link->pos);
+	mem_free_if(link->name);
 }
 
 void
@@ -114,7 +113,7 @@ done_document(struct document *document)
 		object_unlock(cached);
 
 	if (document->uri) done_uri(document->uri);
-	if (document->title) mem_free(document->title);
+	mem_free_if(document->title);
 	if (document->frame_desc) free_frameset_desc(document->frame_desc);
 	if (document->refresh) done_document_refresh(document->refresh);
 
@@ -122,20 +121,18 @@ done_document(struct document *document)
 		done_link_members(&document->links[pos]);
 	}
 
-	if (document->links) mem_free(document->links);
+	mem_free_if(document->links);
 
 	if (document->data) {
-		for (pos = 0; pos < document->height; pos++) {
-			if (document->data[pos].chars)
-				mem_free(document->data[pos].chars);
-		}
-
+		for (pos = 0; pos < document->height; pos++)
+			mem_free_if(document->data[pos].chars);
+		
 		mem_free(document->data);
 	}
 
-	if (document->lines1) mem_free(document->lines1);
-	if (document->lines2) mem_free(document->lines2);
-	if (document->options.framename) mem_free(document->options.framename);
+	mem_free_if(document->lines1);
+	mem_free_if(document->lines2);
+	mem_free_if(document->options.framename);
 
 	foreach (fc, document->forms) {
 		done_form_control(fc);
@@ -146,9 +143,9 @@ done_document(struct document *document)
 	free_list(document->nodes);
 	free_string_list(&document->css_imports);
 
-	if (document->search) mem_free(document->search);
-	if (document->slines1) mem_free(document->slines1);
-	if (document->slines2) mem_free(document->slines2);
+	mem_free_if(document->search);
+	mem_free_if(document->slines1);
+	mem_free_if(document->slines2);
 
 	/* Blast off global document option pointer if we are the `owner'
 	 * so we don't have a dangling pointer. */

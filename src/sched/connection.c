@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.164 2004/04/14 00:35:42 jonas Exp $ */
+/* $Id: connection.c,v 1.165 2004/04/16 16:35:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,18 +359,14 @@ free_connection_data(struct connection *conn)
 		kill_dns_request(&conn->dnsquery);
 	}
 	if (conn->conn_info) {
-		if (conn->conn_info->addr) mem_free(conn->conn_info->addr);
+		mem_free_if(conn->conn_info->addr);
 		mem_free(conn->conn_info);
 		conn->conn_info = NULL;
 	}
-	if (conn->buffer) {
-		mem_free(conn->buffer);
-		conn->buffer = NULL;
-	}
-	if (conn->info) {
-		mem_free(conn->info);
-		conn->info = NULL;
-	}
+	
+	mem_free_set_if(conn->buffer, NULL);
+	mem_free_set_if(conn->info, NULL);
+	
 	if (conn->timer != -1) {
 		kill_timer(conn->timer);
 		conn->timer = -1;

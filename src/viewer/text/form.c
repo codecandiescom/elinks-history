@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.86 2004/04/16 10:02:07 zas Exp $ */
+/* $Id: form.c,v 1.87 2004/04/16 16:36:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,8 +75,9 @@ fixup_select_state(struct form_control *fc, struct form_state *fs)
 
 	fs->state = 0;
 
-	if (fs->value) mem_free(fs->value);
-	fs->value = stracpy(fc->nvalues ? fc->values[0] : (unsigned char *) "");
+	mem_free_set_if(fs->value, stracpy(fc->nvalues
+					   ? fc->values[0]
+					   : (unsigned char *) ""));
 }
 
 static void
@@ -85,7 +86,7 @@ init_ctrl(struct form_control *frm, struct form_state *fs)
 	assert(frm && fs);
 	if_assert_failed return;
 
-	if (fs->value) mem_free(fs->value), fs->value = NULL;
+	mem_free_set_if(fs->value, NULL);
 
 	switch (frm->type) {
 		case FC_TEXT:
@@ -126,19 +127,19 @@ done_form_control(struct form_control *fc)
 	assert(fc);
 	if_assert_failed return;
 
-	if (fc->action) mem_free(fc->action);
-	if (fc->target) mem_free(fc->target);
-	if (fc->name) mem_free(fc->name);
-	if (fc->alt) mem_free(fc->alt);
-	if (fc->default_value) mem_free(fc->default_value);
+	mem_free_if(fc->action);
+	mem_free_if(fc->target);
+	mem_free_if(fc->name);
+	mem_free_if(fc->alt);
+	mem_free_if(fc->default_value);
 
 	for (i = 0; i < fc->nvalues; i++) {
-		if (fc->values[i]) mem_free(fc->values[i]);
-		if (fc->labels[i]) mem_free(fc->labels[i]);
+		mem_free_if(fc->values[i]);
+		mem_free_if(fc->labels[i]);
 	}
 
-	if (fc->values) mem_free(fc->values);
-	if (fc->labels) mem_free(fc->labels);
+	mem_free_if(fc->values);
+	mem_free_if(fc->labels);
 	if (fc->menu) free_menu(fc->menu);
 }
 
@@ -173,7 +174,7 @@ find_form_state(struct document_view *doc_view, struct form_control *frm)
 	    && fs->type == frm->type)
 		return fs;
 
-	if (fs->value) mem_free(fs->value);
+	mem_free_if(fs->value);
 	memset(fs, 0, sizeof(struct form_state));
 	fs->form_num = frm->form_num;
 	fs->ctrl_num = frm->ctrl_num;
@@ -302,12 +303,8 @@ draw_forms(struct terminal *t, struct document_view *doc_view)
 			value = get_form_history_value(l1->form->action,
 						       l1->form->name);
 
-			if (value) {
-				if (l1->form->default_value)
-					mem_free(l1->form->default_value);
-
-				l1->form->default_value = stracpy(value);
-			}
+			if (value)
+				mem_free_set_if(l1->form->default_value, stracpy(value));
 		}
 #endif /* CONFIG_FORMHIST */
 		draw_form_entry(t, doc_view, l1);
@@ -347,9 +344,9 @@ free_succesful_controls(struct list_head *submit)
 	if_assert_failed return;
 
 	foreach (v, *submit) {
-		if (v->name) mem_free(v->name);
-		if (v->value) mem_free(v->value);
-		if (v->file_content) mem_free(v->file_content);
+		mem_free_if(v->name);
+		mem_free_if(v->value);
+		mem_free_if(v->file_content);
 	}
 	free_list(*submit);
 }

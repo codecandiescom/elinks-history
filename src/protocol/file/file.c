@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.161 2004/04/13 18:58:16 jonas Exp $ */
+/* $Id: file.c,v 1.162 2004/04/16 16:34:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,7 +429,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct string *page)
 	}
 
 	/* We may have allocated space for entries but added none. */
-	if (entries) mem_free(entries);
+	mem_free_if(entries);
 }
 
 /* Generates a HTML page listing the content of @directory with the path
@@ -688,7 +688,7 @@ file_func(struct connection *connection)
 
 		} else {
 			/* Setup file read or directory listing for viewing. */
-			if (cached->head) mem_free(cached->head);
+			mem_free_if(cached->head);
 			cached->head = stracpy(head);
 			cached->incomplete = 0;
 

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.54 2004/04/15 17:30:06 jonas Exp $ */
+/* $Id: cmdline.c,v 1.55 2004/04/16 16:31:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 #endif
 	}
 
-	if (addrs) mem_free(addrs);
+	mem_free_if(addrs);
 
 	fflush(stdout);
 

@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.69 2004/02/07 01:39:49 zas Exp $ */
+/* $Id: interlink.c,v 1.70 2004/04/16 16:34:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,7 +186,7 @@ get_address(struct socket_info *info, enum addr_type type)
 
 free_and_error:
 	done_string(&path);
-	if (addr) mem_free(addr);
+	mem_free_if(addr);
 
 	return -1;
 }

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.70 2004/04/03 17:40:53 jonas Exp $ */
+/* $Id: globhist.c,v 1.71 2004/04/16 16:33:55 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -241,12 +241,12 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 		return 0;
 
 	/* Memorize last searched title */
-	if (gh_last_searched_title) mem_free(gh_last_searched_title);
+	mem_free_if(gh_last_searched_title);
 	gh_last_searched_title = stracpy(search_title);
 	if (!gh_last_searched_title) return 0;
 
 	/* Memorize last searched url */
-	if (gh_last_searched_url) mem_free(gh_last_searched_url);
+	mem_free_if(gh_last_searched_url);
 	gh_last_searched_url = stracpy(search_url);
 	if (!gh_last_searched_url) {
 		mem_free(gh_last_searched_title);
@@ -436,8 +436,8 @@ done_global_history(struct module *module)
 	if (elinks_home && !get_opt_int_tree(cmdline_options, "anonymous"))
 		write_global_history();
 	free_global_history();
-	if (gh_last_searched_title) mem_free(gh_last_searched_title);
-	if (gh_last_searched_url) mem_free(gh_last_searched_url);
+	mem_free_if(gh_last_searched_title);
+	mem_free_if(gh_last_searched_url);
 }
 
 struct module global_history_module = struct_module(

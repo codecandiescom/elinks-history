@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.211 2004/04/16 16:26:39 kuser Exp $ */
+/* $Id: search.c,v 1.212 2004/04/16 16:36:25 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -697,7 +697,7 @@ draw_searched(struct terminal *term, struct document_view *doc_view)
 		}
 	}
 
-	if (pt) mem_free(pt);
+	mem_free_if(pt);
 }
 
 
@@ -715,27 +715,17 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 	assert(doc_view);
 	if_assert_failed return;
 
-	if (ses->search_word) {
-		mem_free(ses->search_word);
-		ses->search_word = NULL;
-	}
-	if (ses->last_search_word) {
-		mem_free(ses->last_search_word);
-		ses->last_search_word = NULL;
-	}
-
+	mem_free_set_if(ses->search_word, NULL);
+	mem_free_set_if(ses->last_search_word, NULL);
+	
 	if (!*str) return;
 
 	/* We only set the last search word because we don.t want find_next()
 	 * to try to find next link in search before the search data has been
 	 * initialized. find_next() will set ses->search_word for us. */
 	ses->last_search_word = stracpy(str);
-	if (!ses->last_search_word) {
-		mem_free(ses->search_word);
-		ses->search_word = NULL;
-		return;
-	}
-
+	if (!ses->last_search_word) return;
+	
 	ses->search_direction = direction;
 	find_next(ses, doc_view, 1);
 }
@@ -827,7 +817,7 @@ nt:
 			mem_free(pt);
 			return 0;
 		}
-		if (pt) mem_free(pt);
+		mem_free_if(pt);
 	}
 
 	find_link(doc_view, d, 0);

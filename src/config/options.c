@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.439 2004/04/08 13:17:18 jonas Exp $ */
+/* $Id: options.c,v 1.440 2004/04/16 16:31:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ get_opt_rec(struct option *tree, unsigned char *name_)
 			mem_free(aname);
 			return NULL;
 		}
-		if (option->name) mem_free(option->name);
+		mem_free_if(option->name);
 		option->name = stracpy(name);
 		if (option->box_item) option->box_item->text = option->name;
 
@@ -468,8 +468,7 @@ delete_option_do(struct option *option, int recursive)
 
 	switch (option->type) {
 		case OPT_STRING:
-			if (option->value.string)
-				mem_free(option->value.string);
+			mem_free_if(option->value.string);
 			break;
 		case OPT_TREE:
 			if (!option->value.tree) break;
@@ -494,7 +493,7 @@ delete_option_do(struct option *option, int recursive)
 		done_listbox_item(&option_browser, option->box_item);
 
 	if (option->flags & OPT_ALLOC) {
-		if (option->name) mem_free(option->name);
+		mem_free_if(option->name);
 		mem_free(option);
 	} else if (!option->capt) {
 		/* We are probably dealing with a built-in autocreated option

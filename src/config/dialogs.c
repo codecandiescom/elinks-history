@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.164 2004/04/13 16:36:23 jonas Exp $ */
+/* $Id: dialogs.c,v 1.165 2004/04/16 16:31:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,7 @@ write_config_dialog(struct terminal *term, unsigned char *config_file,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
-	if (errmsg) mem_free(errmsg);
+	mem_free_if(errmsg);
 }
 
 
@@ -343,8 +343,8 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	}
 
 	if (!name || !desc) {
-		if (name) mem_free(name);
-		if (desc) mem_free(desc);
+		mem_free_if(name);
+		mem_free_if(desc);
 		mem_free(dlg);
 		return;
 	}

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.4 2002/04/27 13:15:51 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.5 2002/05/04 09:00:03 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -31,6 +31,7 @@ enum keyact {
 	ACT_EDIT,
 	ACT_END,
 	ACT_ENTER,
+	ACT_ENTER_RELOAD,
 	ACT_FILE_MENU,
 	ACT_FIND_NEXT,
 	ACT_FIND_NEXT_BACK,

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.7 2002/04/27 13:15:51 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.8 2002/05/04 09:00:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,6 +180,7 @@ static int parse_act(unsigned char *s)
 		"edit",
 		"end",
 		"enter",
+		"enter-reload",
 		"file-menu",
 		"find-next",
 		"find-next-back",
@@ -345,6 +346,8 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_END, 'E', KBD_CTRL },
 	{ ACT_ENTER, KBD_RIGHT, 0 },
 	{ ACT_ENTER, KBD_ENTER, 0 },
+	{ ACT_ENTER_RELOAD, KBD_RIGHT, KBD_CTRL },
+	{ ACT_ENTER_RELOAD, KBD_ENTER, KBD_CTRL },
 	{ ACT_BACK, KBD_LEFT, 0 },
 	{ ACT_UNBACK, 'u', 0 },
     	{ ACT_UNBACK, 'U', 0 },

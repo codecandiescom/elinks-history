@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.28 2002/05/04 08:42:54 pasky Exp $ */
+/* $Id: session.c,v 1.29 2002/05/04 09:00:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1091,6 +1091,8 @@ void goto_url(struct session *ses, unsigned char *url)
 {
 	goto_url_w(ses, url, NULL, WTD_FORWARD, NC_CACHE);
 }
+
+/* TODO: Should there be goto_imgmap_reload() ? */
 
 void goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href, unsigned char *target)
 {

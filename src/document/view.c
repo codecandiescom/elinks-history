@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.32 2002/05/04 08:42:55 pasky Exp $ */
+/* $Id: view.c,v 1.33 2002/05/04 09:00:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1451,35 +1451,59 @@ void set_frame(struct session *ses, struct f_data_c *f, int a)
 	goto_url(ses, f->vs->url);
 }
 
-/* This is common backend for submit_form() and enter(). */
-static int submit_form_do(unsigned char *url, struct link *link,
-			  struct session *ses) {
+/* This is common backend for submit_form_do() and enter(). */
+static int
+goto_link(unsigned char *url, struct link *link, struct session *ses,
+	  int reload)
+{
 	if (!url) return 1;
 
 	if (strlen(url) >= 4 && !casecmp(url, "MAP@", 4)) {
+		/* TODO: Test reload? */
 		goto_imgmap(ses, url + 4, stracpy(url + 4),
 			    stracpy(link->target));
 	} else {
-		goto_url_frame(ses, url, link->target);
+		if (reload) {
+			goto_url_frame_reload(ses, url, link->target);
+		} else {
+			goto_url_frame(ses, url, link->target);
+		}
 	}
 
 	mem_free(url);
 	return 2;
 }
 
-static int submit_form(struct terminal *term, void *xxx,
-		       struct session *ses) {
+
+/* This is common backend for submit_form() and submit_form_reload(). */
+static int
+submit_form_do(struct terminal *term, void *xxx, struct session *ses,
+	       int reload)
+{
 	struct f_data_c *fd = current_frame(ses);
 	struct link *link;
 
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
 
-	return submit_form_do(get_form_url(ses, fd, link->form), link, ses);
+	return goto_link(get_form_url(ses, fd, link->form), link, ses, reload);
+}
+
+static int
+submit_form(struct terminal *term, void *xxx, struct session *ses)
+{
+	return submit_form_do(term, xxx, ses, 0);
+}
+
+static int
+submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
+{
+	return submit_form_do(term, xxx, ses, 1);
 }
 
 
-static int enter(struct session *ses, struct f_data_c *fd, int a)
+static int
+enter(struct session *ses, struct f_data_c *fd, int a)
 {
 	struct link *link;
 
@@ -1490,7 +1514,7 @@ static int enter(struct session *ses, struct f_data_c *fd, int a)
 	    || ((has_form_submit(fd->f_data, link->form) || form_submit_auto)
 		&& (link->type == L_FIELD || link->type == L_AREA))) {
 
-		return submit_form_do(get_link_url(ses, fd, link), link, ses);
+		return goto_link(get_link_url(ses, fd, link), link, ses, a);
 
 	} else if (link->type == L_FIELD || link->type == L_AREA) {
 		/* We won't get here if (has_form_submit() ||
@@ -2205,6 +2229,7 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_HOME: rep_ev(ses, fd, home, 0); break;
 			case ACT_END:  rep_ev(ses, fd, x_end, 0); break;
 			case ACT_ENTER: x = enter(ses, fd, 0); break;
+			case ACT_ENTER_RELOAD: x = enter(ses, fd, 1); break;
 			case ACT_DOWNLOAD: if (!anonymous) frm_download(ses, fd); break;
 			case ACT_SEARCH: search_dlg(ses, fd, 0); break;
 			case ACT_SEARCH_BACK: search_back_dlg(ses, fd, 0); break;
@@ -2830,6 +2855,12 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 			add_to_menu(&mi, TEXT(T_SUBMIT_FORM),
 				    "", TEXT(T_HK_SUBMIT_FORM),
 				    MENU_FUNC submit_form, NULL, 0);
+
+#if 0
+			add_to_menu(&mi, TEXT(T_SUBMIT_FORM_RELOAD),
+				    "", TEXT(T_HK_SUBMIT_FORM_RELOAD),
+				    MENU_FUNC submit_form_reload, NULL, 0);
+#endif
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW),

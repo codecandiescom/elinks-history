@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.271 2005/02/28 15:35:27 zas Exp $ */
+/* $Id: form.c,v 1.272 2005/03/05 20:31:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,7 @@ fixup_select_state(struct form_control *fc, struct form_state *fs)
 					 : (unsigned char *) ""));
 }
 
-/* menu_func */
+/* menu_func_T */
 void
 selected_item(struct terminal *term, void *item_, void *ses_)
 {
@@ -1119,7 +1119,7 @@ auto_submit_form(struct session *ses)
 }
 
 
-/* menu_func */
+/* menu_func_T */
 static void
 set_file_form_state(struct terminal *term, void *filename_, void *fs_)
 {
@@ -1132,7 +1132,7 @@ set_file_form_state(struct terminal *term, void *filename_, void *fs_)
 	redraw_terminal(term);
 }
 
-/* menu_func */
+/* menu_func_T */
 static void
 file_form_menu(struct terminal *term, void *path_, void *fs_)
 {

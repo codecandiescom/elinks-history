@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.389 2005/03/03 15:31:57 zas Exp $ */
+/* $Id: menu.c,v 1.390 2005/03/05 20:31:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -669,7 +669,7 @@ send_open_new_window(struct terminal *term, const struct open_in_new *open,
 void
 open_in_new_window(struct terminal *term, void *func_, void *ses_)
 {
-	menu_func func = func_;
+	menu_func_T func = func_;
 	struct session *ses = ses_;
 	struct menu_item *mi;
 	int posibilities;
@@ -911,7 +911,7 @@ static struct menu_item empty_directory_menu[] = {
  * else the menu is launched. */
 static void
 complete_file_menu(struct terminal *term, int no_elevator, void *data,
-		   menu_func file_func, menu_func dir_func,
+		   menu_func_T file_func, menu_func_T dir_func,
 		   unsigned char *dirname, unsigned char *filename)
 {
 	struct menu_item *menu = new_menu(FREE_LIST | NO_INTL);
@@ -1011,7 +1011,7 @@ complete_file_menu(struct terminal *term, int no_elevator, void *data,
  * and splitting it in directory and file name part. */
 void
 auto_complete_file(struct terminal *term, int no_elevator, unsigned char *path,
-		   menu_func file_func, menu_func dir_func, void *data)
+		   menu_func_T file_func, menu_func_T dir_func, void *data)
 {
 	struct uri *uri;
 	unsigned char *dirname;

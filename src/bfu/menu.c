@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.289 2005/02/28 10:11:05 zas Exp $ */
+/* $Id: menu.c,v 1.290 2005/03/05 20:31:10 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -128,7 +128,7 @@ static void
 select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 {
 	/* We save these values due to delete_window() call below. */
-	menu_func func = it->func;
+	menu_func_T func = it->func;
 	void *it_data = it->data;
 	enum main_action action = it->action;
 
@@ -1178,7 +1178,7 @@ new_menu(enum menu_item_flags flags)
 
 void
 add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
-	    enum main_action action, menu_func func, void *data,
+	    enum main_action action, menu_func_T func, void *data,
 	    enum menu_item_flags flags)
 {
 	int n = count_items(*mi);

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.68 2005/01/05 14:37:44 jonas Exp $ */
+/* $Id: menu.h,v 1.69 2005/03/05 20:31:10 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -9,7 +9,7 @@
 struct terminal;
 struct window;
 
-typedef void (*menu_func)(struct terminal *, void *, void *);
+typedef void (*menu_func_T)(struct terminal *, void *, void *);
 
 /* Which fields to free when zapping a list item - bitwise. */
 enum menu_item_flags {
@@ -91,7 +91,7 @@ struct menu_item {
 	 *   will be drawn and @func will be called when selecting the item. */
 	unsigned char *rtext;		/* Right aligned guiding text */
 	enum main_action action;	/* Default item handlers */
-	menu_func func;			/* Called when selecting the item */
+	menu_func_T func;		/* Called when selecting the item */
 
 	void *data;			/* Private data passed to handler */
 	enum menu_item_flags flags;	/* What to free() and display */
@@ -155,7 +155,7 @@ struct menu {
 #endif
 
 	/* The private menu data that is passed as the 3. arg to the
-	 * menu items' menu_func handler */
+	 * menu items' menu_func_T handler */
 	void *data;
 };
 
@@ -164,7 +164,7 @@ struct menu_item *new_menu(enum menu_item_flags);
 
 void
 add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
-	    enum main_action action, menu_func func, void *data,
+	    enum main_action action, menu_func_T func, void *data,
 	    enum menu_item_flags flags);
 
 #define add_menu_separator(menu) \

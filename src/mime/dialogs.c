@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.105 2005/02/28 13:56:12 zas Exp $ */
+/* $Id: dialogs.c,v 1.106 2005/03/05 20:31:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ static struct menu_item mi_no_ext[] = {
 void
 menu_list_ext(struct terminal *term, void *fn_, void *xxx)
 {
-	menu_func fn = fn_;
+	menu_func_T fn = fn_;
 	struct list_head *opt_tree = get_opt_tree("mime.extension");
 	struct option *opt;
 	struct menu_item *mi = NULL;

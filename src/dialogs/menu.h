@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.52 2004/11/22 13:27:41 zas Exp $ */
+/* $Id: menu.h,v 1.53 2005/03/05 20:31:11 zas Exp $ */
 
 #ifndef EL__DIALOGS_MENU_H
 #define EL__DIALOGS_MENU_H
@@ -53,6 +53,6 @@ enum frame_event_status pass_uri_to_command(struct session *ses, struct document
 
 void
 auto_complete_file(struct terminal *term, int no_elevator, unsigned char *path,
-		   menu_func file_func, menu_func dir_func, void *data);
+		   menu_func_T file_func, menu_func_T dir_func, void *data);
 
 #endif

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.165 2005/03/04 17:55:36 zas Exp $ */
+/* $Id: task.c,v 1.166 2005/03/05 20:31:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -642,7 +642,7 @@ goto_uri_frame(struct session *ses, struct uri *uri,
 	follow_url(ses, uri, target, TASK_FORWARD, cache_mode, 1);
 }
 
-/* menu_func */
+/* menu_func_T */
 void
 map_selected(struct terminal *term, void *ld_, void *ses_)
 {

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.143 2004/12/18 00:27:54 pasky Exp $ */
+/* $Id: textarea.c,v 1.144 2005/03/05 20:31:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -427,7 +427,7 @@ free_and_return:
 	fs = NULL;
 }
 
-/* menu_func */
+/* menu_func_T */
 void
 menu_textarea_edit(struct terminal *term, void *xxx, void *ses_)
 {

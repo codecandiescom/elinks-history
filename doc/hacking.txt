@@ -408,7 +408,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.18 2003/11/14 15:30:09 zas Exp $ */
+	/* $Id: hacking.txt,v 1.19 2003/11/26 21:33:15 pasky Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -465,7 +465,10 @@ Instead of:
  	int b;
  	long b;
 
-It will help to reduce memory padding on some architectures.
+It will help to reduce memory padding on some architectures. Note that this
+applies only if this will not affect logical division of the structure. The
+logical composition always takes precedence over this optimization, modulo
+some very rare critical structures.
 
 
 4, Patches
@@ -527,4 +530,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.18 2003/11/14 15:30:09 zas Exp $
+$Id: hacking.txt,v 1.19 2003/11/26 21:33:15 pasky Exp $

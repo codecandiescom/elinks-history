@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.302 2003/10/18 00:57:56 jonas Exp $ */
+/* $Id: options.c,v 1.303 2003/10/18 09:14:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2814,8 +2814,8 @@ register_options(void)
 
 	add_opt_bool("ui", N_("Set window title"),
 		"window_title", 0, 1,
-		N_("Set the window title when running in a windowing environment \n"
-		"in an xterm-like terminal. This way the document's title is \n"
+		N_("Set the window title when running in a windowing environment\n"
+		"in an xterm-like terminal. This way the document's title is\n"
 		"shown on the window titlebar."));
 
 

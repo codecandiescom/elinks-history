@@ -1,10 +1,10 @@
-/* $Id: listbox.h,v 1.1 2002/07/04 19:18:17 pasky Exp $ */
+/* $Id: listbox.h,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
 
 #include "bfu/align.h"
-#include "bfu/bfu.h"
+#include "bfu/dialog.h"
 #include "lowlevel/terminal.h"
 #include "util/lists.h"
 

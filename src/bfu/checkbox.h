@@ -1,9 +1,9 @@
-/* $Id: checkbox.h,v 1.1 2002/07/04 15:45:38 pasky Exp $ */
+/* $Id: checkbox.h,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
 
-#include "bfu/bfu.h"
+#include "bfu/dialog.h"
 #include "lowlevel/terminal.h"
 
 void checkboxes_width(struct terminal *, unsigned char **, int *, void (*)(struct terminal *, unsigned char *, int *));

@@ -1,10 +1,10 @@
-/* $Id: button.h,v 1.3 2002/07/04 15:45:38 pasky Exp $ */
+/* $Id: button.h,v 1.4 2002/07/04 21:19:44 pasky Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
 
 #include "bfu/align.h"
-#include "bfu/bfu.h"
+#include "bfu/dialog.h"
 #include "lowlevel/terminal.h"
 
 /* Button flags, go into widget.gid */

@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.31 2002/07/04 19:18:17 pasky Exp $ */
+/* $Id: dialog.c,v 1.1 2002/07/04 21:19:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 
 #include "links.h"
 
-#include "bfu/bfu.h"
+#include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/inphist.h"
 #include "bfu/listbox.h"

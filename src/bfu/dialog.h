@@ -1,7 +1,7 @@
-/* $Id: bfu.h,v 1.16 2002/07/04 21:04:45 pasky Exp $ */
+/* $Id: dialog.h,v 1.1 2002/07/04 21:19:44 pasky Exp $ */
 
-#ifndef EL__BFU_BFU_H
-#define EL__BFU_BFU_H
+#ifndef EL__BFU_DIALOG_H
+#define EL__BFU_DIALOG_H
 
 #include "bfu/align.h"
 #include "bfu/widget.h"

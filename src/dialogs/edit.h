@@ -1,9 +1,9 @@
-/* $Id: edit.h,v 1.2 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: edit.h,v 1.3 2002/07/04 21:19:45 pasky Exp $ */
 
 #ifndef EL__DIALOGS_EDIT_H
 #define EL__DIALOGS_EDIT_H
 
-#include "bfu/bfu.h"
+#include "bfu/dialog.h"
 #include "document/session.h"
 #include "lowlevel/terminal.h"
 

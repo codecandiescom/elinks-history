@@ -1,10 +1,10 @@
-/* $Id: inpfield.h,v 1.1 2002/07/04 15:45:38 pasky Exp $ */
+/* $Id: inpfield.h,v 1.2 2002/07/04 21:19:44 pasky Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
 
 #include "bfu/align.h"
-#include "bfu/bfu.h"
+#include "bfu/dialog.h"
 #include "bfu/inphist.h"
 #include "lowlevel/terminal.h"
 #include "util/memlist.h"

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.6 2002/07/04 15:45:38 pasky Exp $ */ 
+/* $Id: dialogs.c,v 1.7 2002/07/04 21:19:45 pasky Exp $ */ 
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,7 @@
 
 #include "links.h"
 
-#include "bfu/bfu.h"
+#include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/inpfield.h"
 #include "bfu/text.h"

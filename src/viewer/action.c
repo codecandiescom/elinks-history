@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.57 2004/02/26 17:35:58 jonas Exp $ */
+/* $Id: action.c,v 1.58 2004/04/21 22:15:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ do_frame_action(struct session *ses, frame_action action, int magic)
 	}
 }
 
-void
+static void
 goto_url_home(struct session *ses)
 {
 	unsigned char *url = get_homepage_url();

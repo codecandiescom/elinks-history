@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.206 2003/09/25 19:50:40 zas Exp $ */
+/* $Id: view.c,v 1.207 2003/09/27 13:47:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,7 +304,7 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 		return;
 	}
 
-	if (scr->document->frame_desc) {
+	if (document_has_frames(scr->document)) {
 	 	draw_area(t, xp, yp, xw, yw, ' ', 0, &color);
 		draw_frame_lines(t, scr->document->frame_desc, xp, yp);
 		if (scr->vs && scr->vs->current_link == -1) scr->vs->current_link = 0;
@@ -365,7 +365,7 @@ draw_frames(struct session *ses)
 	assert(ses && ses->screen && ses->screen->document);
 	if_assert_failed return;
 
-	if (!ses->screen->document->frame_desc) return;
+	if (!document_has_frames(ses->screen->document)) return;
 	n = 0;
 	foreach (f, ses->scrn_frames) f->xl = f->yl = -1, n++;
 	l = &cur_loc(ses)->vs.current_link;
@@ -858,7 +858,7 @@ current_frame(struct session *ses)
 	if (!have_location(ses)) return NULL;
 	i = cur_loc(ses)->vs.current_link;
 	foreach (fd, ses->scrn_frames) {
-		if (fd->document && fd->document->frame_desc) continue;
+		if (document_has_frames(fd->document)) continue;
 		if (!i--) return fd;
 	}
 	fd = cur_loc(ses)->vs.view;
@@ -866,7 +866,7 @@ current_frame(struct session *ses)
 	assert(fd && fd->document);
 	if_assert_failed return NULL;
 
-	if (fd->document && fd->document->frame_desc) return NULL;
+	if (document_has_frames(fd->document)) return NULL;
 	return fd;
 }
 

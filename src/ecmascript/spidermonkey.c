@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.48 2004/09/26 20:13:41 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.49 2004/09/26 20:23:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -405,7 +405,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	static time_t ratelimit_start;
 	static int ratelimit_count;
 
-	p.boolean = 0; prop_type = JSPT_BOOLEAN;
+	prop_type = JSPT_UNDEF;
 	if (argc < 1) goto bye;
 
 	/* Ratelimit window opening. Recursive window.open() is very nice.
@@ -435,7 +435,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 
 	if (can_open_in_new(ses->tab->term)) {
 		open_uri_in_new_window(ses, uri, ~0 /* any env */);
-		p.boolean = 1;
+		p.boolean = 1; prop_type = JSPT_BOOLEAN;
 	} else {
 		/* When opening a new tab, we might get rerendered, losing our
 		 * context and triggerring a disaster, so postpone that. */
@@ -446,7 +446,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 			deo->uri = uri;
 			register_bottom_half((void (*)(void *)) delayed_open,
 			                     deo);
-			p.boolean = 1;
+			p.boolean = 1; prop_type = JSPT_BOOLEAN;
 		} else {
 			done_uri(deo->uri);
 		}

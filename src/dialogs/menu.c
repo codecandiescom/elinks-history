@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.160 2003/10/24 00:22:41 pasky Exp $ */
+/* $Id: menu.c,v 1.162 2003/10/24 00:28:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,7 +180,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 
 	/* Move all intermediate items to unhistory. */
 
-	while (steps > 1 && cur_loc(ses) != &ses->history.history->next) {
+	while (steps > 1 && cur_loc(ses) != &ses->history.history.next) {
 		ses->history.current = ses->history.current->prev;
 		steps--;
 	}
@@ -212,7 +212,7 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 
 	/* Move all intermediate items to history. */
 
-	while (steps > 1 && cur_loc(ses) != &ses->history.history->prev) {
+	while (steps > 1 && cur_loc(ses) != &ses->history.history.prev) {
 		ses->history.current = ses->history.current->next;
 		steps--;
 	}
@@ -244,8 +244,9 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 
 	if (!have_location(ses)) goto loop_done;
 
-	for (loc = ses->history.history->next;
-	     loc != &ses->history.history && loc != cur_loc(ses);
+	for (loc = ses->history.history.next;
+	     loc != (struct location *) &ses->history.history
+		&& loc != cur_loc(ses);
 	     loc = loc->next) {
 		unsigned char *url;
 
@@ -287,7 +288,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 	if (!have_location(ses)) goto loop_done;
 
 	for (loc = cur_loc(ses)->next;
-	     loc != &ses->history.history;
+	     loc != (struct location *) &ses->history.history;
 	     loc = loc->next) {
 		unsigned char *url;
 

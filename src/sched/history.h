@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.13 2003/10/24 00:18:24 pasky Exp $ */
+/* $Id: history.h,v 1.14 2003/10/24 00:23:46 pasky Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -37,9 +37,9 @@ del_from_history(struct ses_history *history, struct location *loc) {
 	del_from_list(loc);
 	if (history->current == loc)
 		history->current = loc->prev;
-	if (history->current == &history->history)
+	if (history->current == (struct location *) &history->history)
 		history->current = loc->next;
-	if (history->current == &history->history)
+	if (history->current == (struct location *) &history->history)
 		history->current = NULL;
 }
 

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.26 2003/11/08 01:06:32 pasky Exp $ */
+/* $Id: cache.h,v 1.27 2003/11/08 02:06:33 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -38,7 +38,7 @@ struct cache_entry {
 	unsigned int redirect_get:1;
 	unsigned int incomplete:1;
 
-	/* This is a mark for internal workings of garbage_collector(), whether
+	/* This is a mark for internal workings of garbage_collection(), whether
 	 * the cache_entry should be busted or not. You are not likely to see
 	 * an entry with this set to 1 in wild nature ;-). */
 	unsigned int gc_target:1;
@@ -64,6 +64,10 @@ void truncate_entry(struct cache_entry *, int, int);
 void free_entry_to(struct cache_entry *, int);
 void delete_entry_content(struct cache_entry *);
 void delete_cache_entry(struct cache_entry *);
-void garbage_collection(int);
+
+/* The garbage collector trigger. If @whole is zero, remove unused cache
+ * entries which are bigger than the cache size limit set by user. For @zero
+ * being one, remove all unused cache entries. */
+void garbage_collection(int whole);
 
 #endif

@@ -415,4 +415,6 @@
 #define T_OPTIONS_MANAGER    411	
 #define T_DELETE_FOLDER    412	
 #define T_DELETE_MARKED_BOOKMARKS    413	
-#define T__N_TEXTS    414	
+#define T_TYPE    414	
+#define T_DESCRIPTION    415	
+#define T__N_TEXTS    416	

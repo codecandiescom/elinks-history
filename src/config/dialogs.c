@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.1 2002/12/06 20:28:47 pasky Exp $ */
+/* $Id: dialogs.c,v 1.2 2002/12/07 17:48:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,8 +13,10 @@
 #include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/listbox.h"
+#include "bfu/msgbox.h"
 #include "config/dialogs.h"
 #include "config/options.h"
+#include "config/opttypes.h"
 #include "dialogs/hierbox.h"
 #include "document/session.h"
 #include "intl/language.h"
@@ -110,6 +112,57 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 }
 #endif
 
+static void
+done_info_button(void *vhop)
+{
+#if 0
+	struct option *option = vhop;
+
+#endif
+}
+
+static int
+push_info_button(struct dialog_data *dlg,
+		struct widget_data *some_useless_info_button)
+{
+	struct terminal *term = dlg->win->term;
+	struct option *option;
+	struct listbox_data *box;
+
+	box = (struct listbox_data *) dlg->dlg->items[OP_BOX_IND].data;
+
+	/* Show history item info */
+	if (!box->sel) return 0;
+	option = box->sel->udata;
+	if (!option) return 0;
+
+	if (option_types[option->type].write) {
+		unsigned char *value = init_str();
+		int val_len = 0;
+
+		option_types[option->type].write(option, &value, &val_len);
+
+		msg_box(term, getml(value, NULL),
+			TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
+			TEXT(T_NNAME), ": ", option->name, "\n",
+			TEXT(T_TYPE), ": ", option_types[option->type].name, "\n",
+			TEXT(T_VALUE), ": ", value, "\n",
+			TEXT(T_DESCRIPTION), ": ", option->desc, NULL,
+			option, 1,
+			TEXT(T_OK), done_info_button, B_ESC | B_ENTER);
+	} else {
+		msg_box(term, NULL,
+			TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
+			TEXT(T_NNAME), ": ", option->name, "\n",
+			TEXT(T_TYPE), ": ", option_types[option->type].name, "\n",
+			TEXT(T_DESCRIPTION), ": ", option->desc, NULL,
+			option, 1,
+			TEXT(T_OK), done_info_button, B_ESC | B_ENTER);
+	}
+
+	return 0;
+}
+
 
 /* Builds the "Options manager" dialog */
 void
@@ -131,9 +184,9 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[0].type = D_BUTTON;
 	d->items[0].gid = B_ENTER;
-	d->items[0].fn = NULL;//push_edit_button;
+	d->items[0].fn = push_info_button;
 	d->items[0].udata = ses;
-	d->items[0].text = TEXT(T_EDIT);
+	d->items[0].text = TEXT(T_INFO);
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ESC;

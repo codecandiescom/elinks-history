@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.435 2004/06/03 08:08:54 miciah Exp $ */
+/* $Id: view.c,v 1.436 2004/06/04 13:43:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,12 +77,12 @@ detach_formatted(struct document_view *doc_view)
 }
 
 static inline int
-find_tag(struct document *document, unsigned char *name)
+find_tag(struct document *document, unsigned char *name, int namelen)
 {
 	struct tag *tag;
 
 	foreach (tag, document->tags)
-		if (!strcasecmp(tag->name, name))
+		if (!strlcasecmp(tag->name, -1, name, namelen))
 			return tag->y;
 
 	return -1;
@@ -209,7 +209,10 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 	check_vs(doc_view);
 	vs = doc_view->vs;
 	if (vs->goto_position) {
-		vy = find_tag(doc_view->document, vs->goto_position);
+		unsigned char *tag = vs->goto_position;
+		int taglen = strlen(tag);
+
+		vy = find_tag(doc_view->document, tag, taglen);
 
 		switch (vy) {
 		case -1:

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.47 2004/01/25 13:17:23 jonas Exp $ */
+/* $Id: action.c,v 1.48 2004/01/25 13:20:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -478,22 +478,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			do_frame_action(ses, set_frame, 0);
 			break;
 
-		case ACT_MAIN_AUTO_COMPLETE:
-		case ACT_MAIN_AUTO_COMPLETE_UNAMBIGUOUS:
-		case ACT_MAIN_BACKSPACE:
-		case ACT_MAIN_BEGINNING_OF_BUFFER:
-		case ACT_MAIN_CANCEL:
-		case ACT_MAIN_COPY_CLIPBOARD:
-		case ACT_MAIN_CUT_CLIPBOARD:
-		case ACT_MAIN_DELETE:
 		case ACT_MAIN_DOWN:
 		case ACT_MAIN_EDIT:
 		case ACT_MAIN_END:
-		case ACT_MAIN_END_OF_BUFFER:
-		case ACT_MAIN_EXPAND:
 		case ACT_MAIN_HOME:
-		case ACT_MAIN_KILL_TO_BOL:
-		case ACT_MAIN_KILL_TO_EOL:
 		case ACT_MAIN_LEFT:
 		case ACT_MAIN_JUMP_TO_LINK:
 		case ACT_MAIN_MARK_SET:
@@ -502,15 +490,12 @@ do_action(struct session *ses, enum main_action action, int verbose)
 		case ACT_MAIN_NEXT_ITEM:
 		case ACT_MAIN_PAGE_DOWN:
 		case ACT_MAIN_PAGE_UP:
-		case ACT_MAIN_PASTE_CLIPBOARD:
 		case ACT_MAIN_RIGHT:
 		case ACT_MAIN_SCRIPTING_FUNCTION:
 		case ACT_MAIN_SCROLL_DOWN:
 		case ACT_MAIN_SCROLL_LEFT:
 		case ACT_MAIN_SCROLL_RIGHT:
 		case ACT_MAIN_SCROLL_UP:
-		case ACT_MAIN_SELECT:
-		case ACT_MAIN_UNEXPAND:
 		case ACT_MAIN_UP:
 		default:
 			if (verbose) {

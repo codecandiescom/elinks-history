@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.199 2003/08/23 04:44:58 jonas Exp $ */
+/* $Id: renderer.c,v 1.200 2003/08/23 05:43:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ static INIT_LIST_HEAD(format_cache);
 
 /* Prototypes */
 void line_break(struct part *);
-void put_chars(struct part *, unsigned char *, int, unsigned char);
+void put_chars(struct part *, unsigned char *, int);
 
 
 #ifdef ALIGN
@@ -716,24 +716,20 @@ html_tag(struct document *f, unsigned char *t, int x, int y)
 
 
 static void
-put_chars_conv(struct part *part, unsigned char *chars, int charslen,
-	       unsigned char attr)
+put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 {
 	unsigned char *buffer;
 
 	assert(part && chars);
 	if_assert_failed return;
 
-	if (format.attr & AT_UNDERLINE)
-		attr |= SCREEN_ATTR_UNDERLINE;
-
 	if (format.attr & AT_GRAPHICS) {
-		put_chars(part, chars, charslen, attr);
+		put_chars(part, chars, charslen);
 		return;
 	}
 
 	if (!charslen) {
-		put_chars(part, NULL, 0, 0);
+		put_chars(part, NULL, 0);
 		return;
 	}
 
@@ -742,14 +738,13 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen,
 
 	buffer = convert_string(convert_table, chars, charslen, CSM_DEFAULT);
 	if (buffer) {
-		put_chars(part, buffer, strlen(buffer), attr);
+		put_chars(part, buffer, strlen(buffer));
 		mem_free(buffer);
 	}
 }
 
 void
-put_chars(struct part *part, unsigned char *chars, int charslen,
-	  unsigned char attr)
+put_chars(struct part *part, unsigned char *chars, int charslen)
 {
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
 	static int bg_cache;
@@ -757,6 +752,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen,
 	int bg, fg;
 	struct link *link;
 	struct point *pt;
+	unsigned char attr = 0;
 
 	assert(part);
 	if_assert_failed return;
@@ -779,6 +775,9 @@ put_chars(struct part *part, unsigned char *chars, int charslen,
 
 	if (format.attr & AT_UNDERLINE)
 		attr |= SCREEN_ATTR_UNDERLINE;
+
+	if (format.attr & AT_GRAPHICS)
+		attr |= SCREEN_ATTR_FRAME;
 
 	if (last_link || last_image || last_form || format.link
 	    || format.image || format.form)
@@ -869,7 +868,7 @@ process_link:
 			s[slen++] = ']';
 			s[slen] = '\0';
 
-			put_chars(part, s, slen, attr);
+			put_chars(part, s, slen);
 
 			if (ff && ff->type == FC_TEXTAREA) line_break(part);
 			if (part->cx == -1) part->cx = par_format.leftmargin;
@@ -973,17 +972,20 @@ format_change:
 	fg_cache = fg;
 	bg_cache = bg;
 
+	if (format.attr & AT_GRAPHICS)
+		attr |= SCREEN_ATTR_FRAME;
+
 	/* FIXME:
 	 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */
 	if (d_opt->display_subs) {
 		if (format.attr & AT_SUBSCRIPT) {
 			if (!sub) {
 				sub = 1;
-				put_chars(part, "[", 1, 0);
+				put_chars(part, "[", 1);
 			}
 		} else {
 			if (sub) {
-				put_chars(part, "]", 1, 0);
+				put_chars(part, "]", 1);
 				sub = 0;
 			}
 		}
@@ -993,7 +995,7 @@ format_change:
 		if (format.attr & AT_SUPERSCRIPT) {
 			if (!super) {
 				super = 1;
-				put_chars(part, "^", 1, 0);
+				put_chars(part, "^", 1);
 			}
 		} else {
 			if (super) {
@@ -1166,7 +1168,7 @@ static inline void
 do_format(char *start, char *end, struct part *part, unsigned char *head)
 {
 	parse_html(start, end,
-		   (void (*)(void *, unsigned char *, int, unsigned char)) put_chars_conv,
+		   (void (*)(void *, unsigned char *, int)) put_chars_conv,
 		   (void (*)(void *)) line_break,
 		   (void (*)(void *)) html_init,
 		   (void *(*)(void *, int, ...)) html_special,

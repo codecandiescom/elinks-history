@@ -4,6 +4,8 @@
 # Jakub Bogusz <qboosh@pld-linux.org>, 2002-2003
 # Wojtek Bojdo/l <wojboj@lp.net.pl>
 # Witold Filipczyk <witekfl@pld-linux.org>, 2001 - 2003
+# Adam Go³êbiowski <adamg@pld-linux.org>, 2003
+# Miko³aj Machowski <mikmach@wp.pl>, 2003
 #
 msgid ""
 msgstr ""
@@ -159,7 +161,7 @@ msgstr "LEDy"
 
 #: src/bfu/leds.c:67
 msgid "LEDs (visual indicators) options."
-msgstr "Ustawienie dotycz±ce LEDów (wska¼ników)"
+msgstr "Ustawienia dotycz±ce LEDów (wska¼ników)"
 
 #
 #: src/bfu/leds.c:69 src/config/options.inc:1809 src/config/options.inc:1816
@@ -1669,7 +1671,7 @@ msgstr ""
 "na ¿aden odno¶nik:\n"
 "0 - nie robiæ nic\n"
 "1 - u¿yæ dzwonka\n"
-"2 - wy¶wietliæ okienko dialogowe\n"
+"2 - wy¶wietliæ okienko dialogowe"
 
 #: src/config/options.inc:244
 msgid "Use tabindex"
@@ -2256,7 +2258,7 @@ msgid ""
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
 "Je¶li ustawione nie nie honoruj nie ³ami±cych spacji (encji nbsp),\n"
-"ale pozwól zawiajaæ tekst. To mo¿e pomóc utrzymaæ szeroko¶æ dokumentów\n"
+"ale pozwól zawijaæ tekst. To mo¿e pomóc utrzymaæ szeroko¶æ dokumentów\n"
 "tak, ¿eby nie by³o potrzebne przewijanie w poziomie."
 
 #
@@ -2274,7 +2276,7 @@ msgstr "Wy¶wietlanie URI"
 
 #: src/config/options.inc:554
 msgid "Display URIs in the document as links."
-msgstr "Wy¶wietlanie URI w dokumencie jako odno¶niki."
+msgstr "Wy¶wietlanie URI w dokumencie jako odno¶ników."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:560
@@ -2616,7 +2618,7 @@ msgstr "Pozwolenie na wykonywanie skryptów CGI"
 
 #: src/config/options.inc:728
 msgid "Whether to execute local CGI scripts."
-msgstr "Czy uruchamiaæ skrypty CGI."
+msgstr "Czy uruchamiaæ lokalne skrypty CGI."
 
 #: src/config/options.inc:730 src/config/options.inc:742
 #: src/mime/backend/mailcap.c:102 src/mime/backend/mimetypes.c:59
@@ -2626,7 +2628,7 @@ msgstr "¦cie¿ka"
 #: src/config/options.inc:732
 msgid "Colon separated list of directories, where CGI scripts are stored."
 msgstr ""
-"Oddzielona dwukropkami lista katalogów, z których mo¿na wykonywaæ\n"
+"Oddzielona dwukropkami lista katalogów, w których s± umieszczone\n"
 "skrypty CGI."
 
 #: src/config/options.inc:736
@@ -3758,7 +3760,7 @@ msgid ""
 msgstr ""
 "Uruchom ELinksa jako oddzieln± instancjê zamiast do³±czaæ siê\n"
 "do istniej±cej instancji. Wiedz, ¿e ¿adne pliki stanu\n"
-"(zak³adki, historia itp.) nie s± zapisywane na dysk,\n"
+"(zak³adki, historia itp.) nie s± zapisywane na dysk, gdy\n"
 "ta opcja jest u¿ywana. Zobacz tak¿e -touch-files."
 
 #: src/config/options.inc:1990
@@ -4689,8 +4691,8 @@ msgid ""
 "\" button."
 msgstr ""
 "Brak zapisanej informacji dla tego URL-a.\n"
-"Je¶li chcesz zapisaæ has³a dla tego URL-a, w³±cz to przy pomocy\n"
-"przycisku \"Prze³±cz zapisywanie\"."
+"Aby zapisaæ has³a dla tego URL-a, nale¿y je w³±czyæ przyciskiem\n"
+"\"Prze³±cz zapisywanie\"."
 
 #: src/formhist/dialogs.c:172
 msgid "Toggle saving"
@@ -5168,7 +5170,7 @@ msgid ""
 msgstr ""
 "Zasady przepisywanie URI wprowadzonego w okienku dialogowym.\n"
 "Mo¿liwe jest zdefiniowanie zestawu przedrostków, które zostan±\n"
-"rozwiniête je¶li bêd± pasowa³y do ³añcucha znaków wprowdzonego\n"
+"rozwiniête je¶li bêd± pasowa³y do ³añcucha znaków wprowadzonego\n"
 "w okienku dialogowym. Przedrostki mog± byæ \"g³upie\", tzn.\n"
 "dzia³aj± tylko jako skróty URI lub inteligentne, takie do których\n"
 "mo¿na dodawaæ argumenty, np. s³owa kluczowe dla wyszukiwarek."
@@ -5226,7 +5228,7 @@ msgstr ""
 "Zast±pienie URI dla inteligentnych przedrostków.\n"
 "%c w ³añcuchu oznacza bie¿±cy URL\n"
 "%s w ³añcuchu oznacza ca³y argument do inteligentnego przedrostka\n"
-"%0,%1,...,%9 oznacza argunent 0, 1, ..., 9\n"
+"%0,%1,...,%9 oznacza argument 0, 1, ..., 9\n"
 "%% w ³añcuchu oznacza '%'"
 
 #. name:

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.90 2004/01/24 21:31:39 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.91 2004/01/24 23:11:29 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -162,7 +162,7 @@ void delete_keybinding(enum keymap km, long key, long meta);
 void free_keybinding(struct keybinding *);
 
 long read_key(unsigned char *);
-unsigned char *write_action(int);
+unsigned char *write_action(enum keymap, int);
 unsigned char *write_keymap(enum keymap);
 
 void toggle_display_action_listboxes(void);

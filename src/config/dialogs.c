@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.152 2004/01/24 21:09:00 pasky Exp $ */
+/* $Id: dialogs.c,v 1.153 2004/01/24 23:11:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -503,7 +503,7 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 			msg_text(new_hop->term, N_("The keystroke \"%s\" "
 			"is currently used for \"%s\".\n"
 			"Are you sure you want to replace it?"),
-			keystroke, write_action(action)),
+			keystroke, write_action(hop->keymap, action)),
 			new_hop, 2,
 			N_("Yes"), really_really_add_keybinding, B_ENTER,
 			N_("No"), NULL, B_ESC);
@@ -542,7 +542,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 	hop->keymap = (int) item->udata;
 	hop->action = (int) item->root->udata;
 
-	text = straconcat(_("Action", term), ": ", write_action(hop->action), "\n",
+	text = straconcat(_("Action", term), ": ", write_action(hop->keymap, hop->action), "\n",
 			  _("Keymap", term), ": ", write_keymap(hop->keymap), "\n",
 			  "\n", _("Keystroke should be written in the format: "
 				  "[Prefix-]Key\nPrefix: Shift, Ctrl, Alt\n"
@@ -607,7 +607,7 @@ push_kbdbind_del_button(struct dialog_data *dlg_data,
 		N_("Delete keybinding"), AL_CENTER,
 		msg_text(term, N_("Really delete the keybinding \"%s\" "
 			"(action \"%s\", keymap \"%s\")?"),
-			box->sel->text, write_action(keybinding->action),
+			box->sel->text, write_action(keybinding->keymap, keybinding->action),
 			write_keymap(keybinding->keymap)),
 		keybinding, 2,
 		N_("OK"), really_delete_keybinding, B_ENTER,

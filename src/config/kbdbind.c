@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.177 2004/01/24 22:52:55 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.178 2004/01/24 23:11:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 /* Fix namespace clash on MacOS. */
 #define table table_elinks
 
-static struct strtonum action_table[];
+static struct strtonum (*action_table)[KM_MAX];
 static struct listbox_item *action_box_items[KM_MAX][KEYACTS];
 static struct list_head keymaps[KM_MAX];
 
@@ -211,7 +211,7 @@ struct keybinding *
 kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 {
 	struct keybinding *kb;
-	enum action act = read_action(name);
+	enum action act = read_action(kmap, name);
 
 	if (act < 0) return NULL;
 
@@ -410,7 +410,7 @@ add_actions_to_string(struct string *string, enum action *actions,
 	for (i = 0; actions[i] != ACT_NONE; i++) {
 		struct keybinding *kb = kbd_act_lookup(map, actions[i]);
 		int keystrokelen = string->length;
-		unsigned char *desc = numtodesc(action_table, actions[i]);
+		unsigned char *desc = numtodesc(action_table[keymap], actions[i]);
 
 		if (!kb) continue;
 
@@ -429,9 +429,10 @@ add_actions_to_string(struct string *string, enum action *actions,
 #define DACT(x) (NULL)
 #endif
 
-/* Please keep this table in alphabetical order, and in sync with
+/* Please keep these tables in alphabetical order, and in sync with
  * the ACT_* constants in kbdbind.h.  */
-static struct strtonum action_table[KEYACTS + 1] = {
+
+static struct strtonum main_action_table[] = {
 	{ "none", ACT_NONE, DACT(N_("Do nothing")) },
 	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
 	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
@@ -550,18 +551,262 @@ static struct strtonum action_table[KEYACTS + 1] = {
 	{ NULL, 0, NULL }
 };
 
+static struct strtonum edit_action_table[] = {
+	{ "none", ACT_NONE, DACT(N_("Do nothing")) },
+	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
+	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
+	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
+	{ "add-bookmark-tabs", ACT_ADD_BOOKMARK_TABS, DACT(N_("Bookmark all open tabs")) },
+	{ "auto-complete", ACT_AUTO_COMPLETE, DACT(N_("Attempt to auto-complete the input")) },
+	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS, DACT(N_("Attempt to unambiguously auto-complete the input")) },
+	{ "back", ACT_BACK, DACT(N_("Return to the previous document in history")) },
+	{ "backspace", ACT_BACKSPACE, DACT(N_("Delete character in front of the cursor")) },
+	{ "beginning-of-buffer", ACT_BEGINNING_OF_BUFFER, DACT(N_("Go to the first line of the buffer")) },
+	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
+	{ "cache-manager", ACT_CACHE_MANAGER, DACT(N_("Open cache manager")) },
+	{ "cache-minimize", ACT_CACHE_MINIMIZE, DACT(N_("Free unused cache entries")) },
+	{ "cancel", ACT_CANCEL, DACT(N_("Cancel current state")) },
+	{ "cookie-manager", ACT_COOKIE_MANAGER, DACT(N_("Open cookie manager")) },
+	{ "cookies-load", ACT_COOKIES_LOAD, DACT(N_("Reload cookies file")) },
+	{ "copy-clipboard", ACT_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
+	{ "cut-clipboard", ACT_CUT_CLIPBOARD, DACT(N_("Delete text from clipboard")) },
+	{ "delete", ACT_DELETE, DACT(N_("Delete character under cursor")) },
+	{ "document-info", ACT_DOCUMENT_INFO, DACT(N_("Show information about the current page")) },
+	{ "down", ACT_DOWN, DACT(N_("Move cursor downwards")) },
+	{ "download", ACT_DOWNLOAD, DACT(N_("Download the current link")) },
+	{ "download-image", ACT_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
+	{ "download-manager", ACT_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
+	{ "edit", ACT_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
+	{ "end", ACT_END, DACT(N_("Go to the end of the page/line")) },
+	{ "end-of-buffer", ACT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer")) },
+	{ "enter", ACT_ENTER, DACT(N_("Follow the current link")) },
+	{ "enter-reload", ACT_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
+	{ "exmode", ACT_EXMODE, DACT(N_("Enter ex-mode (command line)")) },
+	{ "expand", ACT_EXPAND, DACT(N_("Expand item")) },
+	{ "file-menu", ACT_FILE_MENU, DACT(N_("Open the File menu")) },
+	{ "find-next", ACT_FIND_NEXT, DACT(N_("Find the next occurrence of the current search text")) },
+	{ "find-next-back", ACT_FIND_NEXT_BACK, DACT(N_("Find the previous occurrence of the current search text")) },
+	{ "forget-credentials", ACT_FORGET_CREDENTIALS, DACT(N_("Forget authentication credentials")) },
+	{ "formhist-manager", ACT_FORMHIST_MANAGER, DACT(N_("Open form history manager")) },
+	{ "goto-url", ACT_GOTO_URL, DACT(N_("Open \"Go to URL\" dialog box")) },
+	{ "goto-url-current", ACT_GOTO_URL_CURRENT, DACT(N_("Open \"Go to URL\" dialog box containing the current URL")) },
+	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK, DACT(N_("Open \"Go to URL\" dialog box containing the current link URL")) },
+	{ "goto-url-home", ACT_GOTO_URL_HOME, DACT(N_("Go to the homepage")) },
+	{ "header-info", ACT_HEADER_INFO, DACT(N_("Show information about the current page HTTP headers")) },
+	{ "history-manager", ACT_HISTORY_MANAGER, DACT(N_("Open history manager")) },
+	{ "home", ACT_HOME, DACT(N_("Go to the start of the page/line")) },
+	{ "jump-to-link", ACT_JUMP_TO_LINK, DACT(N_("Jump to link")) },
+	{ "keybinding-manager", ACT_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
+	{ "kill-backgrounded-connections", ACT_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
+	{ "kill-to-bol", ACT_KILL_TO_BOL, DACT(N_("Delete to beginning of line")) },
+	{ "kill-to-eol", ACT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
+	{ "left", ACT_LEFT,DACT( N_("Move the cursor left")) },
+	{ "link-menu", ACT_LINK_MENU, DACT(N_("Open the link context menu")) },
+#ifdef HAVE_LUA
+	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
+#else
+	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console (DISABLED)")) },
+#endif
+	{ "mark-goto", ACT_MARK_GOTO, DACT(N_("Go at a specified mark")) },
+	{ "mark-item", ACT_MARK_ITEM, DACT(N_("Mark item")) },
+	{ "mark-set", ACT_MARK_SET, DACT(N_("Set a mark")) },
+	{ "menu", ACT_MENU, DACT(N_("Activate the menu")) },
+	{ "next-frame", ACT_NEXT_FRAME, DACT(N_("Move to the next frame")) },
+	{ "next-item", ACT_NEXT_ITEM, DACT(N_("Move to the next item")) },
+	{ "open-link-in-new-tab", ACT_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
+	{ "open-link-in-new-tab-in-background", ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open the current link a new tab in background")) },
+	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, DACT(N_("Open the current link in a new window")) },
+	{ "open-new-tab", ACT_OPEN_NEW_TAB, DACT(N_("Open a new tab")) },
+	{ "open-new-tab-in-background", ACT_OPEN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open a new tab in background")) },
+	{ "open-new-window", ACT_OPEN_NEW_WINDOW, DACT(N_("Open a new window")) },
+	{ "open-os-shell", ACT_OPEN_OS_SHELL, DACT(N_("Open an OS shell")) },
+	{ "options-manager", ACT_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
+	{ "page-down", ACT_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
+	{ "page-up", ACT_PAGE_UP, DACT(N_("Move upwards by a page")) },
+	{ "paste-clipboard", ACT_PASTE_CLIPBOARD, DACT(N_("Paste text from the clipboard")) },
+	{ "previous-frame", ACT_PREVIOUS_FRAME, DACT(N_("Move to the previous frame")) },
+	{ "quit", ACT_QUIT, DACT(N_("Open a quit confirmation dialog box")) },
+	{ "really-quit", ACT_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
+	{ "redraw", ACT_REDRAW, DACT(N_("Redraw the terminal")) },
+	{ "reload", ACT_RELOAD, DACT(N_("Reload the current page")) },
+	{ "reset-form", ACT_RESET_FORM, DACT(N_("Reset form items to their initial values")) },
+	{ "resource-info", ACT_RESOURCE_INFO, DACT(N_("Show information about the currently used resources")) },
+	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
+	{ "right", ACT_RIGHT, DACT(N_("Move the cursor right")) },
+	{ "save-as", ACT_SAVE_AS, DACT(N_("Save as")) },
+	{ "save-formatted", ACT_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
+	{ "save-options", ACT_SAVE_OPTIONS, DACT(N_("Save options")), },
+	{ "save-url-as", ACT_SAVE_URL_AS, DACT(N_("Save URL as")) },
+	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
+	{ "scroll-down", ACT_SCROLL_DOWN, DACT(N_("Scroll down")) },
+	{ "scroll-left", ACT_SCROLL_LEFT, DACT(N_("Scroll left")) },
+	{ "scroll-right", ACT_SCROLL_RIGHT, DACT(N_("Scroll right")) },
+	{ "scroll-up", ACT_SCROLL_UP, DACT(N_("Scroll up")) },
+	{ "search", ACT_SEARCH, DACT(N_("Search for a text pattern")) },
+	{ "search-back", ACT_SEARCH_BACK, DACT(N_("Search backwards for a text pattern")) },
+	{ "search-typeahead", ACT_SEARCH_TYPEAHEAD, DACT(N_("Search link text by typing ahead")) },
+	{ "select", ACT_SELECT, DACT(N_("Select current highlighted item")) },
+	{ "show-term-options", ACT_SHOW_TERM_OPTIONS, DACT(N_("Show terminal options dialog")) },
+	{ "submit-form", ACT_SUBMIT_FORM, DACT(N_("Submit form")) },
+	{ "submit-form-reload", ACT_SUBMIT_FORM_RELOAD, DACT(N_("Submit form and reload")) },
+	{ "tab-close", ACT_TAB_CLOSE, DACT(N_("Close tab")) },
+	{ "tab-close-all-but-current", ACT_TAB_CLOSE_ALL_BUT_CURRENT, DACT(N_("Close all tabs but the current one")) },
+	{ "tab-menu", ACT_TAB_MENU, DACT(N_("Open the tab menu")) },
+	{ "tab-next", ACT_TAB_NEXT, DACT(N_("Next tab")) },
+	{ "tab-prev", ACT_TAB_PREV,DACT( N_("Previous tab")) },
+	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
+	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, DACT(N_("Toggle rendering of tables")) },
+	{ "toggle-document-colors", ACT_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
+	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
+	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, DACT(N_("Toggle displaying of links numbers")) },
+	{ "toggle-plain-compress-empty-lines", ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES, DACT(N_("Toggle plain renderer compression of empty lines")) },
+	{ "toggle-wrap-text", ACT_TOGGLE_WRAP_TEXT, DACT(N_("Toggle wrapping of text")) },
+	{ "unback", ACT_UNBACK, DACT(N_("Go forward in the unhistory")) },
+	{ "unexpand", ACT_UNEXPAND, DACT(N_("Collapse item")) },
+	{ "up", ACT_UP, DACT(N_("Move cursor upwards")) },
+	{ "view-image", ACT_VIEW_IMAGE, DACT(N_("View the current image")) },
+	{ "zoom-frame", ACT_ZOOM_FRAME, DACT(N_("Maximize the current frame")) },
+
+	{ NULL, 0, NULL }
+};
+
+static struct strtonum menu_action_table[] = {
+	{ "none", ACT_NONE, DACT(N_("Do nothing")) },
+	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
+	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
+	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
+	{ "add-bookmark-tabs", ACT_ADD_BOOKMARK_TABS, DACT(N_("Bookmark all open tabs")) },
+	{ "auto-complete", ACT_AUTO_COMPLETE, DACT(N_("Attempt to auto-complete the input")) },
+	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS, DACT(N_("Attempt to unambiguously auto-complete the input")) },
+	{ "back", ACT_BACK, DACT(N_("Return to the previous document in history")) },
+	{ "backspace", ACT_BACKSPACE, DACT(N_("Delete character in front of the cursor")) },
+	{ "beginning-of-buffer", ACT_BEGINNING_OF_BUFFER, DACT(N_("Go to the first line of the buffer")) },
+	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
+	{ "cache-manager", ACT_CACHE_MANAGER, DACT(N_("Open cache manager")) },
+	{ "cache-minimize", ACT_CACHE_MINIMIZE, DACT(N_("Free unused cache entries")) },
+	{ "cancel", ACT_CANCEL, DACT(N_("Cancel current state")) },
+	{ "cookie-manager", ACT_COOKIE_MANAGER, DACT(N_("Open cookie manager")) },
+	{ "cookies-load", ACT_COOKIES_LOAD, DACT(N_("Reload cookies file")) },
+	{ "copy-clipboard", ACT_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
+	{ "cut-clipboard", ACT_CUT_CLIPBOARD, DACT(N_("Delete text from clipboard")) },
+	{ "delete", ACT_DELETE, DACT(N_("Delete character under cursor")) },
+	{ "document-info", ACT_DOCUMENT_INFO, DACT(N_("Show information about the current page")) },
+	{ "down", ACT_DOWN, DACT(N_("Move cursor downwards")) },
+	{ "download", ACT_DOWNLOAD, DACT(N_("Download the current link")) },
+	{ "download-image", ACT_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
+	{ "download-manager", ACT_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
+	{ "edit", ACT_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
+	{ "end", ACT_END, DACT(N_("Go to the end of the page/line")) },
+	{ "end-of-buffer", ACT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer")) },
+	{ "enter", ACT_ENTER, DACT(N_("Follow the current link")) },
+	{ "enter-reload", ACT_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
+	{ "exmode", ACT_EXMODE, DACT(N_("Enter ex-mode (command line)")) },
+	{ "expand", ACT_EXPAND, DACT(N_("Expand item")) },
+	{ "file-menu", ACT_FILE_MENU, DACT(N_("Open the File menu")) },
+	{ "find-next", ACT_FIND_NEXT, DACT(N_("Find the next occurrence of the current search text")) },
+	{ "find-next-back", ACT_FIND_NEXT_BACK, DACT(N_("Find the previous occurrence of the current search text")) },
+	{ "forget-credentials", ACT_FORGET_CREDENTIALS, DACT(N_("Forget authentication credentials")) },
+	{ "formhist-manager", ACT_FORMHIST_MANAGER, DACT(N_("Open form history manager")) },
+	{ "goto-url", ACT_GOTO_URL, DACT(N_("Open \"Go to URL\" dialog box")) },
+	{ "goto-url-current", ACT_GOTO_URL_CURRENT, DACT(N_("Open \"Go to URL\" dialog box containing the current URL")) },
+	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK, DACT(N_("Open \"Go to URL\" dialog box containing the current link URL")) },
+	{ "goto-url-home", ACT_GOTO_URL_HOME, DACT(N_("Go to the homepage")) },
+	{ "header-info", ACT_HEADER_INFO, DACT(N_("Show information about the current page HTTP headers")) },
+	{ "history-manager", ACT_HISTORY_MANAGER, DACT(N_("Open history manager")) },
+	{ "home", ACT_HOME, DACT(N_("Go to the start of the page/line")) },
+	{ "jump-to-link", ACT_JUMP_TO_LINK, DACT(N_("Jump to link")) },
+	{ "keybinding-manager", ACT_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
+	{ "kill-backgrounded-connections", ACT_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
+	{ "kill-to-bol", ACT_KILL_TO_BOL, DACT(N_("Delete to beginning of line")) },
+	{ "kill-to-eol", ACT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
+	{ "left", ACT_LEFT,DACT( N_("Move the cursor left")) },
+	{ "link-menu", ACT_LINK_MENU, DACT(N_("Open the link context menu")) },
+#ifdef HAVE_LUA
+	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
+#else
+	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console (DISABLED)")) },
+#endif
+	{ "mark-goto", ACT_MARK_GOTO, DACT(N_("Go at a specified mark")) },
+	{ "mark-item", ACT_MARK_ITEM, DACT(N_("Mark item")) },
+	{ "mark-set", ACT_MARK_SET, DACT(N_("Set a mark")) },
+	{ "menu", ACT_MENU, DACT(N_("Activate the menu")) },
+	{ "next-frame", ACT_NEXT_FRAME, DACT(N_("Move to the next frame")) },
+	{ "next-item", ACT_NEXT_ITEM, DACT(N_("Move to the next item")) },
+	{ "open-link-in-new-tab", ACT_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
+	{ "open-link-in-new-tab-in-background", ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open the current link a new tab in background")) },
+	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, DACT(N_("Open the current link in a new window")) },
+	{ "open-new-tab", ACT_OPEN_NEW_TAB, DACT(N_("Open a new tab")) },
+	{ "open-new-tab-in-background", ACT_OPEN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open a new tab in background")) },
+	{ "open-new-window", ACT_OPEN_NEW_WINDOW, DACT(N_("Open a new window")) },
+	{ "open-os-shell", ACT_OPEN_OS_SHELL, DACT(N_("Open an OS shell")) },
+	{ "options-manager", ACT_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
+	{ "page-down", ACT_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
+	{ "page-up", ACT_PAGE_UP, DACT(N_("Move upwards by a page")) },
+	{ "paste-clipboard", ACT_PASTE_CLIPBOARD, DACT(N_("Paste text from the clipboard")) },
+	{ "previous-frame", ACT_PREVIOUS_FRAME, DACT(N_("Move to the previous frame")) },
+	{ "quit", ACT_QUIT, DACT(N_("Open a quit confirmation dialog box")) },
+	{ "really-quit", ACT_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
+	{ "redraw", ACT_REDRAW, DACT(N_("Redraw the terminal")) },
+	{ "reload", ACT_RELOAD, DACT(N_("Reload the current page")) },
+	{ "reset-form", ACT_RESET_FORM, DACT(N_("Reset form items to their initial values")) },
+	{ "resource-info", ACT_RESOURCE_INFO, DACT(N_("Show information about the currently used resources")) },
+	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
+	{ "right", ACT_RIGHT, DACT(N_("Move the cursor right")) },
+	{ "save-as", ACT_SAVE_AS, DACT(N_("Save as")) },
+	{ "save-formatted", ACT_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
+	{ "save-options", ACT_SAVE_OPTIONS, DACT(N_("Save options")), },
+	{ "save-url-as", ACT_SAVE_URL_AS, DACT(N_("Save URL as")) },
+	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
+	{ "scroll-down", ACT_SCROLL_DOWN, DACT(N_("Scroll down")) },
+	{ "scroll-left", ACT_SCROLL_LEFT, DACT(N_("Scroll left")) },
+	{ "scroll-right", ACT_SCROLL_RIGHT, DACT(N_("Scroll right")) },
+	{ "scroll-up", ACT_SCROLL_UP, DACT(N_("Scroll up")) },
+	{ "search", ACT_SEARCH, DACT(N_("Search for a text pattern")) },
+	{ "search-back", ACT_SEARCH_BACK, DACT(N_("Search backwards for a text pattern")) },
+	{ "search-typeahead", ACT_SEARCH_TYPEAHEAD, DACT(N_("Search link text by typing ahead")) },
+	{ "select", ACT_SELECT, DACT(N_("Select current highlighted item")) },
+	{ "show-term-options", ACT_SHOW_TERM_OPTIONS, DACT(N_("Show terminal options dialog")) },
+	{ "submit-form", ACT_SUBMIT_FORM, DACT(N_("Submit form")) },
+	{ "submit-form-reload", ACT_SUBMIT_FORM_RELOAD, DACT(N_("Submit form and reload")) },
+	{ "tab-close", ACT_TAB_CLOSE, DACT(N_("Close tab")) },
+	{ "tab-close-all-but-current", ACT_TAB_CLOSE_ALL_BUT_CURRENT, DACT(N_("Close all tabs but the current one")) },
+	{ "tab-menu", ACT_TAB_MENU, DACT(N_("Open the tab menu")) },
+	{ "tab-next", ACT_TAB_NEXT, DACT(N_("Next tab")) },
+	{ "tab-prev", ACT_TAB_PREV,DACT( N_("Previous tab")) },
+	{ "toggle-display-images", ACT_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
+	{ "toggle-display-tables", ACT_TOGGLE_DISPLAY_TABLES, DACT(N_("Toggle rendering of tables")) },
+	{ "toggle-document-colors", ACT_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
+	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
+	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, DACT(N_("Toggle displaying of links numbers")) },
+	{ "toggle-plain-compress-empty-lines", ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES, DACT(N_("Toggle plain renderer compression of empty lines")) },
+	{ "toggle-wrap-text", ACT_TOGGLE_WRAP_TEXT, DACT(N_("Toggle wrapping of text")) },
+	{ "unback", ACT_UNBACK, DACT(N_("Go forward in the unhistory")) },
+	{ "unexpand", ACT_UNEXPAND, DACT(N_("Collapse item")) },
+	{ "up", ACT_UP, DACT(N_("Move cursor upwards")) },
+	{ "view-image", ACT_VIEW_IMAGE, DACT(N_("View the current image")) },
+	{ "zoom-frame", ACT_ZOOM_FRAME, DACT(N_("Maximize the current frame")) },
+
+	{ NULL, 0, NULL }
+};
+
+static struct strtonum (*action_table)[KM_MAX] = {
+	main_action_table,
+	edit_action_table,
+	menu_action_table,
+};
+
 #undef DACT
 
 static int
-read_action(unsigned char *action)
+read_action(enum keymap keymap, unsigned char *action)
 {
-	return strtonum(action_table, action);
+	return strtonum(action_table[keymap], action);
 }
 
 unsigned char *
-write_action(int action)
+write_action(enum keymap keymap, int action)
 {
-	return numtostr(action_table, action);
+	return numtostr(action_table[keymap], action);
 }
 
 static void
@@ -586,7 +831,7 @@ init_action_listboxes(void)
 		keymap->text = numtodesc(keymap_table, i);
 		add_to_list_end(keybinding_browser.root.child, keymap);
 
-		for (act = action_table; act->str; act++) {
+		for (act = action_table[i]; act->str; act++) {
 			struct listbox_item *box_item;
 
 			if (act->num == ACT_SCRIPTING_FUNCTION || act->num == ACT_NONE)
@@ -647,7 +892,8 @@ toggle_display_action_listboxes(void)
 		keymap->translated = state;
 
 		foreach (action, action->child) {
-			action->text = toggle(action_table, (int) action->udata);
+			action->text = toggle(action_table[(int) keymap->udata],
+						(int) action->udata);
 			action->translated = state;
 		}
 	}
@@ -671,7 +917,7 @@ bind_scripting_func(unsigned char *ckmap, unsigned char *ckey, int func_ref)
 		err = gettext("Unrecognised keymap");
 	else if (parse_keystroke(ckey, &key, &meta) < 0)
 		err = gettext("Error parsing keystroke");
-	else if ((action = read_action(" *scripting-function*")) < 0)
+	else if ((action = read_action(kmap, " *scripting-function*")) < 0)
 		err = gettext("Unrecognised action (internal error)");
 	else
 		add_keybinding(kmap, action, key, meta, func_ref);
@@ -884,7 +1130,7 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 
 	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
 
-	action_ = read_action(action);
+	action_ = read_action(keymap_, action);
 	if (action_ < 0) return 77 / 9 - 5;
 
 	add_keybinding(keymap_, action_, key_, meta_, EVENT_NONE);
@@ -909,7 +1155,7 @@ bind_act(unsigned char *keymap, unsigned char *keystroke)
 	kb = kbd_ev_lookup(keymap_, key_, meta_, NULL);
 	if (!kb) return NULL;
 
-	action = write_action(kb->action);
+	action = write_action(keymap_, kb->action);
 	if (!action)
 		return NULL;
 
@@ -922,8 +1168,7 @@ single_bind_config_string(struct string *file, enum keymap keymap,
 			  struct keybinding *keybinding)
 {
 	unsigned char *keymap_str = write_keymap(keymap);
-	unsigned char *action_str =
-		write_action(keybinding->action);
+	unsigned char *action_str = write_action(keymap, keybinding->action);
 
 	if (!keymap_str || !action_str || action_str[0] == ' ')
 		return;

@@ -1,9 +1,8 @@
-/* $Id: menu.h,v 1.12 2003/10/04 22:21:34 pasky Exp $ */
+/* $Id: menu.h,v 1.13 2003/10/31 17:32:41 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
 
-#include "document/html/renderer.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 

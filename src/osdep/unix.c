@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.2 2003/10/27 02:44:45 pasky Exp $ */
+/* $Id: unix.c,v 1.3 2003/10/27 02:50:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,6 @@
 
 #include "elinks.h"
 
-#include "osdep/os_depx.h"
 #include "util/memory.h"
 
 

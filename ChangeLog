@@ -1,3 +1,153 @@
+Wed Mar 30 21:10:30 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/dom/renderer.c:
+
+	Use mem_free_if().  
+
+Wed Mar 30 20:57:28 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/dom/navigator.c:
+
+	Use mem_free_if().  
+
+Wed Mar 30 20:25:11 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/: config.pl, hooks.pl:
+
+	Add "email" to the sample configs.  
+
+Wed Mar 30 20:20:53 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	The "bug" prefix now goes to the bugzilla main page or a list of the
+	user's own bugs if "email" is specified in config.pl.  
+
+Wed Mar 30 15:25:09 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.c, document/document.c,
+	document/html/renderer.c, lowlevel/dns.c, terminal/screen.c,
+	util/hash.c, util/lists.h:
+
+	Introduce move_to_top_of_list() macro and use it where applicable.
+	Please review.  
+
+Wed Mar 30 13:12:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_unix_permissions(): minor cleanup.  
+
+Wed Mar 30 13:00:45 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_unix_permissions(): returns 0 instead of -1 in case of
+	parsing error.  
+
+Wed Mar 30 12:54:46 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	display_dir_entry(): improve display of permissions (support for
+	s/S/t/T).  
+
+Wed Mar 30 12:42:33 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/backend/common.c:
+
+	Simplify code a bit and add a warning about backends addition.  
+
+Wed Mar 30 10:45:07 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	clear_dialog(): after clearing dialog fields move cursor to first
+	widget, it helps with bookmark search dialog (and others).  
+
+Wed Mar 30 10:30:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Move search related code to a better place.  
+
+Wed Mar 30 10:28:13 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/: bookmarks.c, dialogs.c, dialogs.h:
+
+	Introduce free_last_searched_bookmark() and make
+	@bm_last_searched_title and @bm_last_searched_url static to
+	dialog.c.  
+
+Wed Mar 30 10:21:37 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Move code from bookmark_search_do() to new
+	memorize_last_searched_bookmark().  
+
+Wed Mar 30 10:11:32 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	@name -> @title, @foldername.  
+
+Wed Mar 30 10:09:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/: bookmarks.c, dialogs.c, dialogs.h:
+
+	Be coherent: @bm_last_searched_name -> @bm_last_searched_title.  
+
+Wed Mar 30 10:01:39 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	bookmark_search_do(): drop redundant @title and @url.  
+
+Wed Mar 30 09:59:42 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	@search_title -> @title, @search_url -> @url.  
+
+Wed Mar 30 09:55:40 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	struct bookmark_search_ctx: @ofs -> @offset.  
+
+Wed Mar 30 09:52:37 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	test_search(): assert ctx->search_title && ctx->search_url instead
+	of testing them, this case should not occur.  
+
+Wed Mar 30 09:49:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	test_search(): move @ctx->found test to else branch.  
+
+Wed Mar 30 09:48:55 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	test_search(): move @bm declaration inside else branch.  
+
+Wed Mar 30 09:47:35 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	test_search(): drop @m, use @ctx->found instead.  
+
+Wed Mar 30 09:38:46 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	bookmark_search_do(): cleanup, drop useless initializations, reorder
+	code a bit.  
+
 Tue Mar 29 15:25:19 2005  Laurent Monin <zas@norz.org>:
 
 	* src/terminal/screen.c:

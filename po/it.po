@@ -1309,7 +1309,6 @@ msgstr ""
 "di login già salvati non ne riesentono."
 
 #: src/config/options.inc:235
-#, fuzzy
 msgid ""
 "Ask if a login form should be saved to file or not.\n"
 "This option only disables the dialog, already saved login\n"
@@ -1317,7 +1316,7 @@ msgid ""
 msgstr ""
 "Chiedi se un form di login deve essere salvato o no.\n"
 "Questa opzione disabilita solo la finestra di dialogo, i form\n"
-"di login già salvati non ne riesentono."
+"di login già salvati non ne riesentono. (DISABILITATO)"
 
 #: src/config/options.inc:240
 msgid "Images"
@@ -4207,7 +4206,6 @@ msgid "Open new ~tab"
 msgstr "Apri nuova ~scheda"
 
 #: src/dialogs/menu.c:402
-#, fuzzy
 msgid "Open new t~ab in background"
 msgstr "Apri nuova scheda in ~background"
 
@@ -4260,7 +4258,6 @@ msgid "~Flush all caches"
 msgstr "Svuota tutte le cache"
 
 #: src/dialogs/menu.c:431
-#, fuzzy
 msgid "Resource i~nfo"
 msgstr "~Informazioni risorse"
 
@@ -4317,9 +4314,8 @@ msgid "Toggle ~link numbering"
 msgstr "Abilita/Disabilita co~llegamenti numerati"
 
 #: src/dialogs/menu.c:516
-#, fuzzy
 msgid "Toggle ~document colors"
-msgstr "Usa colori specificati nel documento"
+msgstr "Abilita/Disabilita colori specificati nel ~documento"
 
 #: src/dialogs/menu.c:517
 msgid "Document ~info"

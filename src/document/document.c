@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.76 2004/08/20 21:28:09 jonas Exp $ */
+/* $Id: document.c,v 1.77 2004/08/28 14:58:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,6 @@
 
 
 static INIT_LIST_HEAD(format_cache);
-static int format_cache_entries = 0;
 
 struct document *
 init_document(struct cache_entry *cached, struct document_options *options)
@@ -163,7 +162,6 @@ release_document(struct document *document)
 
 	if (document->refresh) kill_document_refresh(document->refresh);
 	object_unlock(document);
-	if (!is_object_used(document)) format_cache_entries++;
 	del_from_list(document);
 	add_to_list(format_cache, document);
 }
@@ -201,7 +199,6 @@ get_cached_document(struct cache_entry *cached, struct document_options *options
 		    || document->css_magic != get_document_css_magic(document)) {
 			if (!is_object_used(document)) {
 				done_document(document);
-				format_cache_entries--;
 			}
 			continue;
 		}
@@ -209,9 +206,6 @@ get_cached_document(struct cache_entry *cached, struct document_options *options
 		/* Reactivate */
 		del_from_list(document);
 		add_to_list(format_cache, document);
-
-		if (!is_object_used(document))
-			format_cache_entries--;
 
 		object_lock(document);
 
@@ -226,24 +220,14 @@ shrink_format_cache(int whole)
 {
 	struct document *document, *next;
 	int format_cache_size = get_opt_int("document.cache.format.size");
-
-#ifdef CONFIG_DEBUG
-	{
-		int entries = 0;
-
-		foreach (document, format_cache)
-			if (!is_object_used(document)) entries++;
-
-		assertm(entries == format_cache_entries,
-			"format_cache_entries out of sync (%d != %d)",
-			entries, format_cache_entries);
-	}
-#endif
+	int format_cache_entries = 0;
 
 	foreachsafe (document, next, format_cache) {
 		struct cache_entry *cached;
 
 		if (is_object_used(document)) continue;
+
+		format_cache_entries++;
 
 		/* Destroy obsolete renderer documents which are already
 		 * out-of-sync. */

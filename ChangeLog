@@ -1,3 +1,65 @@
+Mon Dec 13 18:48:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Try again, but this time, do not dereference the given pointer if it
+	is NULL.  
+
+Mon Dec 13 18:46:54 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Revert that.  
+
+Mon Dec 13 06:15:55 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Improve the infinite-loop check in check_incomplete_redirects to
+	catch loops that involve more than one page.  
+
+Mon Dec 13 04:49:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	Remove a stale comment in truncate_label: because the memcpy no
+	longer will copy the NUL, the line that adds the NUL terminator is
+	no longer just for 'great safety'.  
+
+Mon Dec 13 04:22:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	Do _not_ free map_url after assigning it to format.link.  This
+	should fix the crashes caused by the bad memory handling introduced
+	in revision 1.52.  
+
+Mon Dec 13 04:19:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	Free the the value returned by join_urls once it is no longer
+	needed.  
+
+Mon Dec 13 04:18:00 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	Check whether join_urls returns NULL.  
+
+Mon Dec 13 04:16:37 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	Introduce local variable joined_urls.  
+
+Mon Dec 13 04:12:01 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	html_img: Rename local variable url to map_url in the image-map
+	code.  
+
 Fri Dec 10 18:20:35 2004  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser/link.c:
@@ -95,8 +157,8 @@ Sun Dec  5 22:15:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/document/html/parser/link.c:
 
-	Use memcpy and direct assignments instead of snprintf in
-	truncate_title.  
+	Use memcpy and direct assignments instead of sprintf in
+	truncate_string.  
 
 Sun Dec  5 21:59:54 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 

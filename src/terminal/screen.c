@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.30 2003/07/28 04:42:42 jonas Exp $ */
+/* $Id: screen.c,v 1.31 2003/07/28 06:18:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,24 +21,22 @@
 #include "util/string.h"
 
 
+/* Update the size of the previous and the current screen image. The two images
+ * are allocated in one chunk. */
 /* TODO: It seems allocation failure here is fatal. We should do something! */
 void
 alloc_screen(struct terminal *term, int x, int y)
 {
-	int space = x * y * sizeof(struct screen_char);
-	struct screen_char *screen = mem_realloc(term->screen, space);
+	int size = x * y * sizeof(struct screen_char);
+	struct screen_char *screen = mem_realloc(term->screen, size + size);
 
 	if (!screen) return;
 
 	term->screen = screen;
-	memset(screen, 0, space); /* Why not use calloc()? --jonas */
+	term->last_screen = screen + (x * y);
 
-	/* Also make room for the screen snapshot. */
-	screen = mem_realloc(term->last_screen, space);
-	if (!screen) return;
-
-	term->last_screen = screen;
-	memset(screen, -1, space);
+	memset(term->screen, 0, size);
+	memset(term->last_screen, -1, size);
 
 	term->x = x;
 	term->y = y;

@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.34 2003/10/27 23:27:57 jonas Exp $ */
+/* $Id: ssl.c,v 1.35 2003/10/27 23:30:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,10 +164,6 @@ init_ssl_connection(struct connection *conn)
 	conn->ssl = SSL_new(context);
 	if (!conn->ssl) return S_SSL_ERROR;
 #elif defined(HAVE_GNUTLS)
-	/* XXX: GNUTLS_STATE is obviously a pointer by itself, but as it is
-	 * hidden for some stupid design decision, we must not rely on that,
-	 * who knows if some future implementation won't have that as a
-	 * structure itself.. --pasky */
 	ssl_t *state = mem_alloc(sizeof(GNUTLS_STATE));
 
 	if (!state) return S_SSL_ERROR;

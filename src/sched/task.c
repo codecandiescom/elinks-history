@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.131 2004/09/28 17:56:45 pasky Exp $ */
+/* $Id: task.c,v 1.132 2004/10/08 13:00:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -465,6 +465,17 @@ do_follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 	if (external_handler) {
 		external_handler(ses, uri);
 		return;
+	}
+
+	if (target && !strcmp(target, "_blank")) {
+		int mode = get_opt_int("document.browse.links.target_blank");
+
+		if (mode > 0) {
+			struct session *new_ses;
+
+			new_ses = init_session(ses, ses->tab->term, uri, (mode == 2));
+			if (new_ses) ses = new_ses;
+		}
 	}
 
 	ses->reloadlevel = cache_mode;

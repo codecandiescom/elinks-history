@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.139 2004/10/01 01:12:39 jonas Exp $ */
+/* $Id: options.inc,v 1.140 2004/10/08 13:00:07 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -283,6 +283,13 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.browse.links", N_("Number links"),
 		"numbering", 0, 0,
 		N_("Display numbers next to the links.")),
+
+	INIT_OPT_INT("document.browse.links", N_("Handling of target=_blank"),
+		"target_blank", 0, 0, 2, 0,
+		N_("Define how to handle links having target=_blank set:\n"
+		"0 means open link in current tab\n"
+		"1 means open link in new tab in foreground\n"
+		"2 means open link in new tab in background")),
 
 	/* Compatibility aliases. Added: 2004-01-07, 0.9.0.CVS. */
 	INIT_OPT_ALIAS("document.browse.links", "typeahead_wraparound",

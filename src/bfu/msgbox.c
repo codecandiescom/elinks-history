@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.35 2003/06/07 12:46:16 jonas Exp $ */
+/* $Id: msgbox.c,v 1.36 2003/06/07 12:54:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,12 +88,21 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	va_list ap;
 	int button;
 
-	/* Check if the info string is valid */
+	/* Check if the info string is valid. */
 	if (!text) return;
 
-	/* Use the align string to determine whether @text should be free()d */
+	/* Use the align string to determine whether @text should be free()d. */
 	if (align & AL_EXTD_TEXT)
 		add_one_to_ml(&ml, text);
+
+	/* Use the align string to determine whether strings should be l18n'd.
+	 * Note that this must be ather adding @text to @ml. */
+	if (align & AL_INTL) {
+		title = _(title, term);
+		text = _(text, term);
+		/* Button labels will be gettextized as will they be extracted
+		 * from @ap. */
+	}
 
 	dlg = mem_calloc(1, sizeof(struct dialog) +
 			    (buttons + 1) * sizeof(struct widget));
@@ -127,6 +136,9 @@ msg_box(struct terminal *term, struct memory_list *ml,
 			buttons--;
 			continue;
 		}
+
+		if (align & AL_INTL)
+			label = _(label, term);
 
 		dlg->items[button].type = D_BUTTON;
 		dlg->items[button].gid = flags;

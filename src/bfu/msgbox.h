@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.7 2003/06/07 12:40:40 pasky Exp $ */
+/* $Id: msgbox.h,v 1.8 2003/06/07 12:54:01 pasky Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -26,6 +26,14 @@
  *		If a special flag AL_EXTD_TEXT is bitwise or'd with the
  *		alignment information, @text is free()d upon the dialog's
  *		death. This is equivalent to adding @text to the @mem_list.
+ *
+ *		If a special flag AL_INTL is bitwise or'd with the alignment
+ *		information, @text, @title and button labels will be run
+ *		through gettext before being further processed. Note that if
+ *		you will dare to do this in conjuction with msg_text() usage,
+ *		it is going to break l18n as result of format string expansion
+ *		will be localized, not the format string itself (which would
+ *		be the right thing).
  *
  * @text	The info text of the message box. If the text requires
  *		formatting use msg_text(format, args...). This will allocate

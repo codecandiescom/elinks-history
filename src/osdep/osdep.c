@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.46 2003/05/02 21:58:25 pasky Exp $ */
+/* $Id: osdep.c,v 1.47 2003/05/03 00:04:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1787,18 +1787,18 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 		win->type = 1;
 
 		add_to_list(term->windows, win);
-                term->current_tab = get_tab_number(win);
+		term->current_tab = get_tab_number(win);
 
-                win->data = create_basic_session(win);
+		win->data = create_basic_session(win);
 
-                win->handler(win, &ev, 0);
+		win->handler(win, &ev, 0);
 
 		if(*url) {
-                        unsigned char *u = decode_url(url);
+			unsigned char *u = decode_url(url);
 
 			if (u) {
 				goto_url((struct session *)win->data, u);
-			        mem_free(u);
+				mem_free(u);
 			}
 		}
 		else {

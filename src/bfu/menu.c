@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.44 2003/05/02 23:34:12 pasky Exp $ */
+/* $Id: menu.c,v 1.45 2003/05/03 00:04:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -675,8 +675,8 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 
 	if (sel != -1) {
 		struct event ev = {EV_KBD, KBD_ENTER, 0, 0};
-                struct window *first_win = term->windows.next;
-                struct window *win = first_win->type ?
+		struct window *first_win = term->windows.next;
+		struct window *win = first_win->type ?
 				     get_tab_by_number(term,term->current_tab)
 				     : first_win;
 

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.51 2003/05/02 21:25:44 zas Exp $ */
+/* $Id: terminal.c,v 1.52 2003/05/03 00:04:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,9 +271,9 @@ add_window_at_pos(struct terminal *term,
 	win->data = data;
 	win->term = term;
 	win->xp = win->yp = 0;
-        /* Ordinary (not root) window */
-        win->type = 0;
-        add_at_pos(at, win);
+	/* Ordinary (not root) window */
+	win->type = 0;
+	add_at_pos(at, win);
 	win->handler(win, &ev, 0);
 }
 
@@ -324,7 +324,7 @@ get_parent_ptr(struct window *win, int *x, int *y)
 
 #if 0
 	if ((void*)parent == &win->term->windows)
-                parent=NULL;
+		parent=NULL;
 	else
 #endif
 	if (parent->type)
@@ -349,7 +349,7 @@ number_of_tabs(struct terminal *term)
 	foreach(win, term->windows)
 		result += win->type;
 
-        return result;
+	return result;
 }
 
 /* Number of tab */
@@ -528,8 +528,8 @@ init_term(int fdin, int fdout,
 	win->handler = root_window;
 	win->data = NULL;
 	win->term = term;
-        /* Root window */
-        win->type = 1;
+	/* Root window */
+	win->type = 1;
 
 	add_to_list(term->windows, win);
 	/*alloc_term_screen(term, 80, 25);*/
@@ -680,7 +680,7 @@ send_redraw:
 			 * window inside EV_INIT handler (it'll get second
 			 * EV_INIT here). Work out some hack, like me ;-).
 			 * --pasky */
-			 IF_ACTIVE(win,term) win->handler(win, ev, 0);
+			IF_ACTIVE(win,term) win->handler(win, ev, 0);
 		}
 		{
 			extern int startup_goto_dialog_paint;

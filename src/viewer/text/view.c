@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.36 2003/05/02 22:20:09 pasky Exp $ */
+/* $Id: view.c,v 1.37 2003/05/03 00:04:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2832,7 +2832,7 @@ send_to_frame(struct session *ses, struct event *ev)
 		r = frame_ev(ses, fd, ev);
 		if (r == 1) {
 			draw_doc(ses->term, fd, 1);
-                        print_screen_status(ses);
+			print_screen_status(ses);
 			redraw_from_window(ses->win);
 		}
 	}
@@ -2877,7 +2877,7 @@ r:
 
 ok:
 	memcpy(&evv, ev, sizeof(struct event));
-        evv.x -= fd->xp;
+	evv.x -= fd->xp;
 	evv.y -= fd->yp;
 	send_to_frame(ses, &evv);
 }
@@ -3053,14 +3053,14 @@ quit:
 				open_in_new_window(ses->term, send_open_in_new_xterm, ses);
 				goto x;
 
-	                case ACT_TAB_CLOSE:
-        	                close_tab(ses->term);
-                	        goto x;
-                	case ACT_TAB_NEXT:
-        	                switch_to_tab(ses->term, ses->term->current_tab + 1);
+			case ACT_TAB_CLOSE:
+				close_tab(ses->term);
+				goto x;
+			case ACT_TAB_NEXT:
+				switch_to_tab(ses->term, ses->term->current_tab + 1);
 				goto x;
 			case ACT_TAB_PREV:
-        	                switch_to_tab(ses->term, ses->term->current_tab - 1);
+				switch_to_tab(ses->term, ses->term->current_tab - 1);
 				goto x;
 
 			default:
@@ -3100,22 +3100,22 @@ quit:
 			m = ses->term->windows.next;
 			m->handler(m, ev, 0);
 			goto x;
-                }
+		}
 		if (ev->y == ses->term->y-2 && (ev->b & BM_ACT) == B_DOWN
 		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
 			int nb_tabs = number_of_tabs(ses->term);
-                        int tab_width = ses->term->x / nb_tabs;
-                        int tab = ev->x / tab_width;
+			int tab_width = ses->term->x / nb_tabs;
+			int tab = ev->x / tab_width;
 
-                        if (tab < 0) tab = 0;
-                        if (tab >= nb_tabs)
+			if (tab < 0) tab = 0;
+			if (tab >= nb_tabs)
 				tab = nb_tabs - 1;
 
-                        switch_to_tab(ses->term, tab);
-                        goto x;
-                }
-                do_mouse_event(ses, ev);
-        }
+			switch_to_tab(ses->term, tab);
+			goto x;
+		}
+		do_mouse_event(ses, ev);
+	}
 
 	return;
 
@@ -3736,5 +3736,5 @@ end:
 unsigned char *
 print_current_title(struct session *ses)
 {
-        return print_current_titlex(current_frame(ses), ses->term->x);
+	return print_current_titlex(current_frame(ses), ses->term->x);
 }

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.11 2003/05/02 23:59:14 zas Exp $ */
+/* $Id: session.c,v 1.12 2003/05/03 00:04:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,7 @@ print_screen_status(struct session *ses)
 	unsigned char *msg = NULL;
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
-        int show_tab_bar = get_opt_int("ui.tabs_bar.show");
+	int show_tab_bar = get_opt_int("ui.tabs_bar.show");
 
 	if (show_title_bar)
 		fill_area(term, 0, 0, term->x, 1, get_bfu_color(term, "title.title-bar"));
@@ -236,9 +236,9 @@ print_screen_status(struct session *ses)
 			if (ftl->req_sent && ftl->stat.state >= 0) {
 				stat = &ftl->stat;
 				break;
-                        }
-                }
-        }
+			}
+		}
+	}
 
 	if (stat) {
 		if (show_status_bar) {
@@ -255,13 +255,13 @@ print_screen_status(struct session *ses)
 				last_current_link = ncl;
 			}
 
-                        if (stat->state == S_OK)
+			if (stat->state == S_OK)
 				msg = print_current_link(ses);
 			if (!msg)
 				msg = get_stat_msg(stat, term);
-                        if (msg) {
-                                print_text(term, 0, term->y - 1, strlen(msg),
-                                           msg, get_bfu_color(term, "status.status-text"));
+			if (msg) {
+				print_text(term, 0, term->y - 1, strlen(msg),
+					   msg, get_bfu_color(term, "status.status-text"));
 				mem_free(msg);
 			}
 		}
@@ -317,8 +317,8 @@ print_screen_status(struct session *ses)
 				print_text(term, pos, 0, msglen,
 					   msg, get_bfu_color(term, "title.title-text"));
 				mem_free(msg);
-                        }
-                }
+			}
+		}
 
 		msg = stracpy("ELinks");
 		if (msg) {
@@ -1093,7 +1093,7 @@ create_basic_session(struct window *win)
 		init_list(ses->scrn_frames);
 		init_list(ses->more_files);
                 ses->term = win->term;
-                ses->win = win;
+		ses->win = win;
 		ses->id = session_id++;
 		ses->screen = NULL;
 		ses->wtd = WTD_NO;
@@ -1104,7 +1104,7 @@ create_basic_session(struct window *win)
 		add_to_list(sessions, ses);
 	}
 
-        return ses;
+	return ses;
 }
 
 static struct session *
@@ -1283,7 +1283,7 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 			mem_free(u);
 			mem_free(uu);
 		}
-        } else {
+	} else {
 		h = getenv("WWW_HOME");
 		if (!h || !*h)
 			h = WWW_HOME_URL;
@@ -1623,7 +1623,7 @@ win_func(struct window *win, struct event *ev, int fw)
 			break;
 		case EV_REDRAW:
 			if (!ses) break;
-                        draw_formatted(ses);
+			draw_formatted(ses);
 			print_screen_status(ses);
 			break;
 		case EV_KBD:

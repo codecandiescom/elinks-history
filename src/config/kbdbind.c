@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.60 2003/05/02 11:15:09 zas Exp $ */
+/* $Id: kbdbind.c,v 1.61 2003/05/03 00:04:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,7 +438,7 @@ static struct strtonum action_table[] = {
 	{ "up", ACT_UP, N_("Move cursor upwards") },
 	{ "view-image", ACT_VIEW_IMAGE, N_("View the current image") },
 	{ "zoom-frame", ACT_ZOOM_FRAME, N_("Maximize the current frame") },
-        { NULL, 0, NULL }
+	{ NULL, 0, NULL }
 };
 
 static int
@@ -719,10 +719,10 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_REALLY_QUIT, 'Q' },
 	{ ACT_DOCUMENT_INFO, '=' },
 	{ ACT_HEADER_INFO, '|' },
-        { ACT_TAB_CLOSE, 'c' },
-        { ACT_TAB_NEXT, '>' },
-        { ACT_TAB_PREV, '<' },
-        { ACT_TOGGLE_HTML_PLAIN, '\\' },
+	{ ACT_TAB_CLOSE, 'c' },
+	{ ACT_TAB_NEXT, '>' },
+	{ ACT_TAB_PREV, '<' },
+	{ ACT_TOGGLE_HTML_PLAIN, '\\' },
 	{ ACT_TOGGLE_NUMBERED_LINKS, '.' },
 	{ ACT_TOGGLE_DISPLAY_IMAGES, '*' },
 	{ ACT_NEXT_FRAME, KBD_TAB },

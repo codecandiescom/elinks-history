@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.20 2003/07/04 02:16:35 jonas Exp $ */
+/* $Id: cache.h,v 1.21 2003/09/07 18:11:38 zas Exp $ */
 
 #ifndef EL__DOCUMENT_CACHE_H
 #define EL__DOCUMENT_CACHE_H
@@ -16,25 +16,28 @@ enum cache_mode {
 struct cache_entry {
 	LIST_HEAD(struct cache_entry);
 
+	struct list_head frag;
+
 	unsigned char *url;
 	unsigned char *head;
 	unsigned char *redirect;
+	unsigned char *last_modified;
+	unsigned char *etag;
+	unsigned char *ssl_info;
+	unsigned char *encoding_info;
+
+	unsigned int count;
+
 	int redirect_get;
 	int length;
 	int incomplete;
 	int tgc;
-	enum cache_mode cache_mode;
-	unsigned char *last_modified;
-	unsigned char *etag;
 	int data_size;
-	struct list_head frag; /* i don't know why yet, but do not move --Zas */
-	unsigned int count;
 	int refcount;
-	unsigned char *ssl_info;
-	unsigned char *encoding_info;
 #ifdef HAVE_SCRIPTING
 	int done_pre_format_html_hook;
 #endif
+	enum cache_mode cache_mode;
 };
 
 struct fragment {

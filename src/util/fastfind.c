@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.36 2003/06/15 12:36:09 pasky Exp $ */
+/* $Id: fastfind.c,v 1.37 2003/06/15 12:38:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,7 +230,7 @@ add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 
 	assert(new_count < FF_MAX_KEYS);
 
-	/* On error, cleanup is done by fastfind_terminate(). */
+	/* On error, cleanup is done by fastfind_done(). */
 
 	pointers = mem_realloc(info->pointers, new_count * sizeof(void *));
 	if (!pointers) return 0;
@@ -399,7 +399,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 	return info;
 
 alloc_error:
-	fastfind_terminate(info);
+	fastfind_done(info);
 	return NULL;
 }
 
@@ -517,7 +517,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 }
 
 void
-fastfind_terminate(struct fastfind_info *info)
+fastfind_done(struct fastfind_info *info)
 {
 	if (!info) return;
 
@@ -698,7 +698,7 @@ main(int argc, char **argv)
 	else
 		fprintf(stderr, " Not found: '%s'\n", key);
 
-	fastfind_terminate(info);
+	fastfind_done(info);
 
 	exit(0);
 }

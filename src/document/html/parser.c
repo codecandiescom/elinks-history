@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.135 2003/06/15 11:18:14 zas Exp $ */
+/* $Id: parser.c,v 1.136 2003/06/15 12:38:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2716,7 +2716,7 @@ void
 free_tags_lookup(void)
 {
 #ifdef USE_FASTFIND
-	fastfind_terminate(ff_info_tags);
+	fastfind_done(ff_info_tags);
 #endif
 }
 

@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.20 2003/06/15 11:13:36 pasky Exp $ */
+/* $Id: colors.c,v 1.21 2003/06/15 12:38:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,7 +205,7 @@ void
 free_colors_lookup(void) /* FIXME: new name for it ;) */
 {
 #ifdef USE_FASTFIND
-	fastfind_terminate(ff_info_colors);
+	fastfind_done(ff_info_colors);
 #endif
 }
 

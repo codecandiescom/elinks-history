@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.4 2003/05/04 18:49:18 pasky Exp $ */
+/* $Id: terminal.h,v 1.5 2003/05/04 19:11:17 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -135,7 +135,6 @@ void close_tab(struct terminal *term);
 #define get_root_window(term) get_tab_by_number((term), (term)->current_tab)
 
 void add_empty_window(struct terminal *, void (*)(void *), void *);
-void redraw_screen(struct terminal *);
 void redraw_all_terminals();
 void set_char(struct terminal *, int, int, unsigned);
 unsigned get_char(struct terminal *, int, int);
@@ -187,7 +186,6 @@ enum frame_char {
 void exec_on_terminal(struct terminal *, unsigned char *, unsigned char *, int);
 void set_terminal_title(struct terminal *, unsigned char *);
 void do_terminal_function(struct terminal *, unsigned char, unsigned char *);
-void beep_terminal(struct terminal *);
 
 void term_send_event(struct terminal *, struct event *);
 

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.34 2004/03/09 17:44:18 witekfl Exp $ */
+/* $Id: dialogs.c,v 1.35 2004/03/11 04:44:23 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "dialogs/edit.h"
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
+#include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
@@ -136,6 +137,31 @@ delete_cookie(struct listbox_item *item, int last)
 		save_cookies();
 }
 
+static void
+draw_cookie(struct listbox_item *item, struct listbox_context *data,
+		int x, int y, int width)
+{
+	int depth = item->depth + 1;
+	int len;
+	unsigned char *text;
+	unsigned char *stylename = (item == data->box->sel) ? "menu.selected"
+		  : ((item->marked)	     ? "menu.marked"
+					     : "menu.normal");
+	struct color_pair *color = get_bfu_color(data->term, stylename);
+
+	if (item->type == BI_FOLDER) {
+		text = item->text;
+	} else {
+		struct cookie *cookie = item->udata;
+	
+		text = cookie ? cookie->name : (unsigned char *)"";
+	}
+	len = strlen(text);
+	int_upper_bound(&len, int_max(0, data->widget_data->w - depth * 5));
+	draw_text(data->term, data->widget_data->x + depth * 5, y,
+		text, len, 0, color);
+}
+
 static struct listbox_ops cookies_listbox_ops = {
 	lock_cookie,
 	unlock_cookie,
@@ -143,7 +169,7 @@ static struct listbox_ops cookies_listbox_ops = {
 	get_cookie_info,
 	can_delete_cookie,
 	delete_cookie,
-	NULL,
+	draw_cookie,
 };
 
 static int
@@ -193,7 +219,6 @@ set_cookie_expires(struct dialog_data *dlg_data, struct widget_data *widget_data
 	cookie->expires = atol(value);
 	return 0;
 }
-
 
 static int
 set_cookie_secure(struct dialog_data *dlg_data, struct widget_data *widget_data)
@@ -279,7 +304,6 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 #undef EDIT_WIDGETS_COUNT
 }
 
-
 static int
 push_edit_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
@@ -296,6 +320,35 @@ push_edit_button(struct dialog_data *dlg_data, struct widget_data *button)
 }
 
 static int
+push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct terminal *term = dlg_data->win->term;
+	struct cookie *new_cookie;
+
+	if (!box->sel) return 0;
+	new_cookie = mem_calloc(1, sizeof(struct cookie));
+	if (!new_cookie) return 0;
+	if (box->sel->type == BI_FOLDER) {
+		new_cookie->server = stracpy(box->sel->text);
+	}	else {
+		struct cookie *cookie = box->sel->udata;
+
+		if (cookie) new_cookie->server = stracpy(cookie->server);
+		else {
+			mem_free(new_cookie);
+			return 0;
+		}
+	}
+	new_cookie->name = stracpy("");
+	new_cookie->value = stracpy("");
+	new_cookie->domain = stracpy("");
+	accept_cookie(new_cookie);
+	build_edit_dialog(term, new_cookie);
+	return 0;
+}
+
+static int
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	save_cookies();
@@ -304,6 +357,7 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 
 static struct hierbox_browser_button cookie_buttons[] = {
 	{ N_("Info"),		push_hierbox_info_button,	1 },
+	{ N_("Add"),		push_add_button, 1 },
 	{ N_("Edit"),		push_edit_button,	1 },
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },
 	{ N_("Clear"),		push_hierbox_clear_button,	1 },

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.120 2004/03/09 15:24:47 zas Exp $ */
+/* $Id: cookies.c,v 1.121 2004/03/11 04:44:23 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,9 +131,6 @@ static struct option_info cookies_options[] = {
 #define get_cookies_paranoid_security()	get_opt_cookies(COOKIES_PARANOID_SECURITY).number
 #define get_cookies_save()		get_opt_cookies(COOKIES_SAVE).number
 #define get_cookies_resave()		get_opt_cookies(COOKIES_RESAVE).number
-
-static void accept_cookie(struct cookie *);
-
 
 void
 free_cookie(struct cookie *c)
@@ -393,7 +390,7 @@ ok:
 }
 
 
-static void
+void
 accept_cookie(struct cookie *c)
 {
 	struct c_domain *cd;

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.47 2003/10/05 11:34:03 pasky Exp $ */
+/* $Id: cache.c,v 1.48 2003/10/15 10:50:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,19 +29,20 @@ static int cache_count = 0;
 
 #ifdef DEBUG_CACHE
 
-#define dump_frag(frag) \
+#define dump_frag(frag, count) \
 do { \
-	debug("%p: offset=%d length=%d real_length=%d\n", \
-		frag, frag->offset, frag->length, frag->real_length); \
+	debug(" [%d] f=%p offset=%d length=%d real_length=%d", \
+	      count, frag, frag->offset, frag->length, frag->real_length); \
 } while (0)
 
 #define dump_frags(entry, comment) \
 do { \
 	struct fragment *frag; \
+        int count = 0;	\
  \
-	debug("url=%s, comment=%s\n", entry->url, comment); \
+	debug("url=%s, comment=%s", entry->url, comment); \
 	foreach (frag, entry->frag) \
-		dump_frag(frag); \
+		dump_frag(frag, ++count); \
 } while (0)
 
 #else
@@ -294,20 +295,22 @@ ff:;
 void
 defrag_entry(struct cache_entry *e)
 {
-	struct fragment *f, *g, *h, *n, *x;
+	struct fragment *f, *g, *h, *nf;
 	int l;
 
 	if (list_empty(e->frag)) return;
 	f = e->frag.next;
 	if (f->offset) return;
-	for (g = f->next;
-	     g != (void *)&e->frag && (g->offset <= g->prev->offset
-						  + g->prev->length);
-	     g = g->next)
-		if (g->offset < g->prev->offset + g->prev->length) {
-			internal("fragments overlay");
-			return;
-		}
+
+	for (g = f->next; g != (void *)&e->frag; g = g->next) {
+		long overlay = g->prev->offset - g->prev->length - g->offset;
+
+		if (overlay < 0) continue;
+		if (overlay == 0) break;
+
+		internal("fragments overlay");
+		return;
+	}
 
 	if (g == f->next) return;
 
@@ -315,20 +318,22 @@ defrag_entry(struct cache_entry *e)
 		l += h->length;
 
 	/* One byte is reserved for data in struct fragment. */
-	n = mem_calloc(1, sizeof(struct fragment) + l - 1);
-	if (!n) return;
-	n->length = l;
-	n->real_length = l;
+	nf = mem_calloc(1, sizeof(struct fragment) + l - 1);
+	if (!nf) return;
+	nf->length = l;
+	nf->real_length = l;
 
 	for (l = 0, h = f; h != g; h = h->next) {
-		memcpy(n->data + l, h->data, h->length);
+		struct fragment *x;
+
+		memcpy(nf->data + l, h->data, h->length);
 		l += h->length;
 		x = h;
 		h = h->prev;
 		del_from_list(x);
 		mem_free(x);
 	}
-	add_to_list(e->frag, n);
+	add_to_list(e->frag, nf);
 
 	dump_frags(e, "defrag_entry");
 }
@@ -458,8 +463,7 @@ garbage_collection(int whole)
 	int no = 0;
 	long opt_cache_memory_size = get_opt_long("document.cache.memory.size");
 	long opt_cache_gc_size = opt_cache_memory_size
-				 * MEMORY_CACHE_GC_PERCENT  / 100;
-
+				 * MEMORY_CACHE_GC_PERCENT / 100;
 
 	if (!whole && cache_size <= opt_cache_memory_size) return;
 
@@ -521,8 +525,8 @@ g:
 
 #ifdef DEBUG_CACHE
 	if (!no && cache_size > opt_cache_gc_size) {
-		internal("garbage collection doesn't work, cache size %ld",
-			 cache_size);
+		debug("garbage collection doesn't work, cache size %ld > %ld",
+		      cache_size, opt_cache_gc_size);
 	}
 #endif
 }

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.171 2003/10/24 20:56:32 pasky Exp $ */
+/* $Id: menu.c,v 1.172 2003/10/24 21:03:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,15 +171,7 @@ flush_caches(struct terminal *term, void *d, void *e)
 }
 
 static void
-go_backwards(struct terminal *term, struct location *target, struct session *ses)
-{
-	abort_loading(ses, 0);
-
-	go_history(ses, target);
-}
-
-static void
-go_unbackwards(struct terminal *term, struct location *target, struct session *ses)
+go_historywards(struct terminal *term, struct location *target, struct session *ses)
 {
 	abort_loading(ses, 0);
 
@@ -214,7 +206,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
-			add_to_menu(&mi, url, "", (menu_func) go_backwards,
+			add_to_menu(&mi, url, "", (menu_func) go_historywards,
 			    	    (void *) loc, 0, 1);
 		}
 	}
@@ -249,7 +241,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 			unsigned char *pc = strchr(url, POST_CHAR);
 			if (pc) *pc = '\0';
 
-			add_to_menu(&mi, url, "", (menu_func) go_unbackwards,
+			add_to_menu(&mi, url, "", (menu_func) go_historywards,
 			    	    (void *) loc, 0, 1);
 		}
 	}

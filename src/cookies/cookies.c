@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.180 2004/11/10 22:17:36 zas Exp $ */
+/* $Id: cookies.c,v 1.181 2004/11/10 22:19:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,7 +429,6 @@ accept_cookie(struct cookie *cookie)
 {
 	struct c_domain *cd;
 	struct listbox_item *root = cookie->server->box_item;
-	struct cookie *d, *e;
 	int domain_len;
 
 	if (root)
@@ -440,14 +439,18 @@ accept_cookie(struct cookie *cookie)
 	 * (so if you don't notice that 100ms with your 100 cookies, that's
 	 * not an argument). --pasky */
 	if (!cookies_nosave) {
-		foreach (d, cookies) {
-			if (strcasecmp(d->name, cookie->name)
-			    || strcasecmp(d->domain, cookie->domain))
+		struct cookie *c;
+		
+		foreach (c, cookies) {
+			struct cookie *tmp;
+			
+			if (strcasecmp(c->name, cookie->name)
+			    || strcasecmp(c->domain, cookie->domain))
 				continue;
-			e = d;
-			d = d->prev;
-			del_from_list(e);
-			free_cookie(e);
+			tmp = c;
+			c = c->prev;
+			del_from_list(tmp);
+			free_cookie(tmp);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.20 2002/12/03 19:31:44 zas Exp $ */
+/* $Id: dialog.c,v 1.21 2002/12/05 17:41:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,7 +349,7 @@ draw_dlg(struct dialog_data *dlg)
 	fill_area(dlg->win->term, dlg->x, dlg->y, dlg->xw, dlg->yw,
 		  get_bfu_color(dlg->win->term, "=dialog"));
 
-	if (get_opt_bool("ui.shadows")) {
+	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
 		/* (horizontal) */
 		fill_area(dlg->win->term, dlg->x + 2, dlg->y + dlg->yw,

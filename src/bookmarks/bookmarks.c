@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.128 2004/07/02 09:51:20 zas Exp $ */
+/* $Id: bookmarks.c,v 1.129 2004/07/13 22:11:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,15 +161,8 @@ bookmarks_are_dirty(void)
 int
 delete_bookmark(struct bookmark *bm)
 {
-	if (!list_empty(bm->child)) {
-		struct bookmark *bm2 = bm->child.next;
-
-		while ((struct list_head *) bm2 != &bm->child) {
-			struct bookmark *nbm = bm2->next;
-
-			delete_bookmark(bm2);
-			bm2 = nbm;
-		}
+	while (!list_empty(bm->child)) {
+		delete_bookmark(bm->child.next);
 	}
 
 	if (check_bookmark_cache(bm->url)) {

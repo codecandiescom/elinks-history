@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.45 2003/11/17 00:33:24 miciah Exp $ */
+/* $Id: frames.c,v 1.46 2003/11/17 00:37:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "elinks.h"
 
+#include "cache/cache.h"
 #include "document/document.h"
 #include "document/html/frames.h"
 #include "document/options.h"

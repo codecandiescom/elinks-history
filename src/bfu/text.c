@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.29 2003/11/06 23:38:27 jonas Exp $ */
+/* $Id: text.c,v 1.30 2003/11/07 00:35:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ dlg_format_text(struct terminal *term, unsigned char *text,
 		split = int_max(split_line(text, dlg_width, length), 1);
 		if (real_width) int_lower_bound(real_width, split);
 
-		assert(split <= dlg_width);
+		assertm(split <= dlg_width, "split [%d] dlg_width [%d]", split, dlg_width);
 
 		if (!term) continue;
 

@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.19 2003/11/06 23:38:27 jonas Exp $ */
+/* $Id: dialog.h,v 1.20 2003/11/07 00:35:23 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -45,7 +45,9 @@ dialog_max_width(struct terminal *term)
 {
 	int width = term->width * 9 / 10 - 2 * DIALOG_LB;
 
-	return (width < 1) ? term->width : width;
+	int_bounds(&width, 1, int_max(term->width - 2 * DIALOG_LB, 1));
+
+	return width;
 }
 
 struct dialog_data {

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.27 2002/08/29 09:33:34 pasky Exp $ */
+/* $Id: globhist.c,v 1.28 2002/08/29 11:48:31 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -66,8 +66,8 @@ history_dialog_box_build()
 	if (!box) return NULL;
 
 	memset(box, 0, sizeof(struct listbox_data));
-	box->items = gh_box_items;
-	foreach (item, box->items) {
+	box->items = &gh_box_items;
+	foreach (item, *box->items) {
 		item->data = box;
 	}
 

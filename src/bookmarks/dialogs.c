@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.18 2002/08/29 09:33:33 pasky Exp $ */
+/* $Id: dialogs.c,v 1.19 2002/08/29 11:48:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,8 +56,8 @@ bookmark_dlg_box_build()
 	if (!box) return NULL;
 
 	memset(box, 0, sizeof(struct listbox_data));
-	box->items = bookmark_box_items;
-	foreach (item, box->items) {
+	box->items = &bookmark_box_items;
+	foreach (item, *box->items) {
 		item->data = box;
 	}
 
@@ -376,7 +376,7 @@ push_delete_button(struct dialog_data *dlg,
 	/* FIXME There's probably a nicer way to do this */
 	term = dlg->win->term;
 
-	box = (struct listbox_data*)(dlg->dlg->items[BM_BOX_IND].data);
+	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
 
 	if (!box->sel) return 0;
 	bm = get_bookmark_by_id((bookmark_id) box->sel->udata);

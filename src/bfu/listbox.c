@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.15 2002/08/29 09:33:33 pasky Exp $ */
+/* $Id: listbox.c,v 1.16 2002/08/29 11:48:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 				item = item->root;
 			}
 
-			if (!item->root && (void *) item->next == &box->items) {
+			if (!item->root && (void *) item->next == box->items) {
 				/* Last item in the root list, quit. */
 				break;
 			}
@@ -122,7 +122,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 				item = item->root;
 			}
 
-			if (!item->root && (void *) item->prev == &box->items) {
+			if (!item->root && (void *) item->prev == box->items) {
 				/* First item in the root list, quit. */
 				break;
 			}
@@ -243,6 +243,7 @@ void
 init_listbox(struct widget_data *widget, struct dialog_data *dialog,
 	     struct event *ev)
 {
+#if 0
 	/* Freed in bookmark_dialog_abort_handler() */
 	widget->cdata = mem_alloc(sizeof(struct listbox_data));
 	if (!widget->cdata)
@@ -251,7 +252,10 @@ init_listbox(struct widget_data *widget, struct dialog_data *dialog,
 	((struct listbox_data *) widget->cdata)->sel = NULL;
 	((struct listbox_data *) widget->cdata)->top = NULL;
 
-	init_list(((struct listbox_data*) widget->cdata)->items);
+	((struct listbox_data *) widget->cdata)->items =
+		mem_alloc(sizeof(struct list_head));
+	init_list(*((struct listbox_data *) widget->cdata)->items);
+#endif
 }
 
 int

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.56 2003/12/29 11:42:59 zas Exp $ */
+/* $Id: renderer.c,v 1.57 2003/12/29 11:59:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,8 +142,10 @@ add_document_line(struct document *document, int lineno,
 		  struct conv_table *convert_table)
 {
 	struct screen_char *pos, *end;
-	int line_pos, expanded = 0;
+	int expanded;
+	register int line_pos;
 
+	/* Drop bad chars before anything else. */
 	for (line_pos = 0; line_pos < width; line_pos++) {
 		unsigned char line_char = line[line_pos];
 
@@ -160,27 +162,46 @@ add_document_line(struct document *document, int lineno,
 		return 0;
 	}
 
+	/* After conversion, line may have a different length. */
 	width = strlen(line);
 	assert(width > 0);
 
-	for (line_pos = 0; line_pos < width; line_pos++) {
-		unsigned char line_char = line[line_pos];
+	/* Now expand tabs and handle urls if needed.
+	 * Here little code redundancy to improve performance. */
+	if (document->options.plain_display_links) {
 
-		if (line_char == ASCII_TAB) {
-			int tab_width = 7 - ((line_pos + expanded) & 7);
+		expanded = 0;
+		for (line_pos = 0; line_pos < width; line_pos++) {
+			unsigned char line_char = line[line_pos];
 
-			expanded += tab_width;
+			if (line_char == ASCII_TAB) {
+				int tab_width = 7 - ((line_pos + expanded) & 7);
 
-		} else if (document->options.plain_display_links
-			   && isalpha(line_char) ) {
-			unsigned char *start = &line[line_pos];
-			int len = get_uri_length(start, width - line_pos);
-			int x = line_pos + expanded;
+				expanded += tab_width;
 
-			if (!len) continue;
+			} else if (isalpha(line_char)) {
+				unsigned char *start = &line[line_pos];
+				int len = get_uri_length(start, width - line_pos);
+				int x = line_pos + expanded;
 
-			if (check_link_word(document, start, len, x, lineno))
-				line_pos += len - 1;
+				if (!len) continue;
+
+				if (check_link_word(document, start, len, x, lineno))
+					line_pos += len - 1;
+			}
+		}
+
+	} else {
+		expanded = 0;
+		for (line_pos = 0; line_pos < width; line_pos++) {
+			unsigned char line_char = line[line_pos];
+
+			if (line_char == ASCII_TAB) {
+				int tab_width = 7 - ((line_pos + expanded) & 7);
+
+				expanded += tab_width;
+
+			}
 		}
 	}
 
@@ -192,24 +213,9 @@ add_document_line(struct document *document, int lineno,
 		return 0;
 	}
 
-/* Temporary debug stuff, i will remove it later. --Zas */
-/* #define DEBUG_NUL_CHARS */
-#ifdef DEBUG_NUL_CHARS
-#define SWAP_NULS if (line_char == '#') line_char = ' ';
-#define DISPLAY_NULS \
-	} else if (!line_char) { \
-		template->data = '#'; \
-		copy_screen_chars(pos++, template, 1);
-#else
-#define SWAP_NULS
-#define DISPLAY_NULS
-#endif
-
 	expanded = 0;
 	for (line_pos = 0, end = pos + width; pos < end; line_pos++) {
 		unsigned char line_char = line[line_pos];
-
-		SWAP_NULS
 
 		if (line_char == ASCII_TAB) {
 			int tab_width = 7 - ((line_pos + expanded) & 7);
@@ -221,16 +227,12 @@ add_document_line(struct document *document, int lineno,
 				copy_screen_chars(pos++, template, 1);
 			while (tab_width--);
 
-			DISPLAY_NULS
-
 		} else {
 			template->data = line_char;
 			copy_screen_chars(pos++, template, 1);
 		}
 
-		/* We still copy nul chars to screen, this should not occur.
-		 * This is due to bad @width calculation in certain conditions
-		 * especially when expanding tabs in binary file (but not everytime).
+		/* Detect copy of nul chars to screen, this should not occur.
 		 * --Zas */
 		assert(pos[-1].data);
 	}

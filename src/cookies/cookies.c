@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.156 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: cookies.c,v 1.157 2004/07/01 22:54:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,23 +46,22 @@
 
 #define COOKIES_FILENAME		"cookies"
 
-
-static int cookies_nosave = 0;
-
-static INIT_LIST_HEAD(cookies);
-static INIT_LIST_HEAD(cookie_queries);
-
 struct c_domain {
 	LIST_HEAD(struct c_domain);
 
 	unsigned char domain[1]; /* Must be at end of struct. */
 };
 
-static INIT_LIST_HEAD(c_domains);
+struct cookies_context {
+	struct list_head cookies;
+	struct list_head cookie_queries;
+	struct list_head c_domains;
+	struct list_head c_servers;
+	int cookies_nosave;
+	int cookies_dirty;
+};
 
-static INIT_LIST_HEAD(c_servers);
-
-static int cookies_dirty = 0;
+static struct cookies_context cookies_context;
 
 enum cookies_option {
 	COOKIES_TREE,
@@ -127,7 +126,7 @@ get_cookie_server(unsigned char *host, int hostlen)
 	struct c_server *sort_spot = NULL;
 	struct c_server *cs;
 
-	foreach (cs, c_servers) {
+	foreach (cs, cookies_context.c_servers) {
 		/* XXX: We must count with cases like "x.co" vs "x.co.uk"
 		 * below! */
 		int cslen = strlen(cs->host);
@@ -158,13 +157,13 @@ get_cookie_server(unsigned char *host, int hostlen)
 
 	if (!sort_spot) {
 		/* No sort spot found, therefore this sorts at the end. */
-		add_to_list_end(c_servers, cs);
+		add_to_list_end(cookies_context.c_servers, cs);
 		del_from_list(cs->box_item);
 		add_to_list_end(cookie_browser.root.child, cs->box_item);
 	} else {
 		/* Sort spot found, sort after it. */
 		add_at_pos(sort_spot, cs);
-		if (sort_spot != (struct c_server *) &c_servers) {
+		if (sort_spot != (struct c_server *) &cookies_context.c_servers) {
 			del_from_list(cs->box_item);
 			add_at_pos(sort_spot->box_item, cs->box_item);
 		} /* else we are already at the top anyway. */
@@ -412,7 +411,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	/* We have already check COOKIES_ACCEPT_NONE */
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_ASK) {
-		add_to_list(cookie_queries, cookie);
+		add_to_list(cookies_context.cookie_queries, cookie);
 		add_questions_entry(accept_cookie_dialog, cookie);
 		return;
 	}
@@ -434,7 +433,7 @@ accept_cookie(struct cookie *c)
 	if (root)
 		c->box_item = add_listbox_leaf(&cookie_browser, root, c);
 
-	foreach (d, cookies) {
+	foreach (d, cookies_context.cookies) {
 		if (strcasecmp(d->name, c->name)
 		    || strcasecmp(d->domain, c->domain))
 			continue;
@@ -444,10 +443,10 @@ accept_cookie(struct cookie *c)
 		free_cookie(e);
 	}
 
-	add_to_list(cookies, c);
-	cookies_dirty = 1;
+	add_to_list(cookies_context.cookies, c);
+	cookies_context.cookies_dirty = 1;
 
-	foreach (cd, c_domains)
+	foreach (cd, cookies_context.c_domains)
 		if (!strcasecmp(cd->domain, c->domain))
 			return;
 
@@ -457,7 +456,7 @@ accept_cookie(struct cookie *c)
 	if (!cd) return;
 
 	memcpy(cd->domain, c->domain, domain_len + 1);
-	add_to_list(c_domains, cd);
+	add_to_list(cookies_context.c_domains, cd);
 
 	if (get_cookies_save() && get_cookies_resave())
 		save_cookies();
@@ -546,12 +545,12 @@ accept_cookie_never(void *idp)
 static void
 accept_cookie_dialog(struct session *ses, void *data)
 {
-	struct cookie *cookie = cookie_queries.next;
+	struct cookie *cookie = cookies_context.cookie_queries.next;
 	struct string string;
 
 	assert(ses);
 
-	if (list_empty(cookie_queries)
+	if (list_empty(cookies_context.cookie_queries)
 	    || !init_string(&string))
 		return;
 
@@ -624,7 +623,7 @@ send_cookies(struct uri *uri)
 	if (!uri->host || !uri->data)
 		return NULL;
 
-	foreach (cd, c_domains)
+	foreach (cd, cookies_context.c_domains)
 		if (is_in_domain(cd->domain, uri->host, uri->hostlen)) {
 			path = get_uri_string(uri, URI_PATH);
 			break;
@@ -634,7 +633,7 @@ send_cookies(struct uri *uri)
 
 	init_string(&header);
 
-	foreach (c, cookies) {
+	foreach (c, cookies_context.cookies) {
 		if (!is_in_domain(c->domain, uri->host, uri->hostlen)
 		    || !is_path_prefix(c->path, path))
 			continue;
@@ -649,7 +648,7 @@ send_cookies(struct uri *uri)
 			del_from_list(d);
 			free_cookie(d);
 
-			cookies_dirty = 1;
+			cookies_context.cookies_dirty = 1;
 			continue;
 		}
 
@@ -671,7 +670,8 @@ send_cookies(struct uri *uri)
 
 	mem_free(path);
 
-	if (cookies_dirty && get_cookies_save() && get_cookies_resave())
+	if (cookies_context.cookies_dirty
+	    && get_cookies_save() && get_cookies_resave())
 		save_cookies();
 
 	if (!header.length)
@@ -698,9 +698,9 @@ load_cookies(void) {
 
 	/* Do it here, as we will delete whole cookies list if the file was
 	 * removed */
-	cookies_nosave = 1;
+	cookies_context.cookies_nosave = 1;
 	done_cookies(&cookies_module);
-	cookies_nosave = 0;
+	cookies_context.cookies_nosave = 0;
 
 	fp = fopen(cookfile, "r");
 	if (elinks_home) mem_free(cookfile);
@@ -731,7 +731,7 @@ load_cookies(void) {
 			expires = atol(q);
 			if (is_dead(expires)) {
 				p = NULL;
-				cookies_dirty = 1;
+				cookies_context.cookies_dirty = 1;
 			}
 		}
 
@@ -773,9 +773,9 @@ load_cookies(void) {
 
 		/* XXX: We don't want to overwrite the cookies file
 		 * periodically to our death. */
-		cookies_nosave = 1;
+		cookies_context.cookies_nosave = 1;
 		accept_cookie(cookie);
-		cookies_nosave = 0;
+		cookies_context.cookies_nosave = 0;
 	}
 
 	fclose(fp);
@@ -787,7 +787,9 @@ save_cookies(void) {
 	unsigned char *cookfile;
 	struct secure_save_info *ssi;
 
-	if (cookies_nosave || !elinks_home || !cookies_dirty
+	if (cookies_context.cookies_nosave
+	    || !cookies_context.cookies_dirty
+	    || !elinks_home
 	    || get_cmd_opt_int("anonymous"))
 		return;
 
@@ -798,7 +800,7 @@ save_cookies(void) {
 	mem_free(cookfile);
 	if (!ssi) return;
 
-	foreach (c, cookies) {
+	foreach (c, cookies_context.cookies) {
 		if (is_dead(c->expires)) continue;
 		if (secure_fprintf(ssi, "%s\t%s\t%s\t%s\t%s\t%ld\t%d\n",
 				   c->name, c->value,
@@ -809,12 +811,17 @@ save_cookies(void) {
 			break;
 	}
 
-	if (!secure_close(ssi)) cookies_dirty = 0;
+	if (!secure_close(ssi)) cookies_context.cookies_dirty = 0;
 }
 
 static void
 init_cookies(struct module *module)
 {
+	init_list(cookies_context.cookies);
+	init_list(cookies_context.cookie_queries);
+	init_list(cookies_context.c_domains);
+	init_list(cookies_context.c_servers);
+
 	if (get_cookies_save())
 		load_cookies();
 }
@@ -823,20 +830,20 @@ init_cookies(struct module *module)
 static void
 done_cookies(struct module *module)
 {
-	free_list(c_domains);
+	free_list(cookies_context.c_domains);
 
-	if (!cookies_nosave && get_cookies_save())
+	if (!cookies_context.cookies_nosave && get_cookies_save())
 		save_cookies();
 
-	while (!list_empty(cookies)) {
-		struct cookie *cookie = cookies.next;
+	while (!list_empty(cookies_context.cookies)) {
+		struct cookie *cookie = cookies_context.cookies.next;
 
 		del_from_list(cookie);
 		free_cookie(cookie);
 	}
 
-	while (!list_empty(cookie_queries)) {
-		struct cookie *cookie = cookie_queries.next;
+	while (!list_empty(cookies_context.cookie_queries)) {
+		struct cookie *cookie = cookies_context.cookie_queries.next;
 
 		del_from_list(cookie);
 		free_cookie(cookie);

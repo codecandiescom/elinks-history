@@ -1,4 +1,4 @@
-/* $Id: scripting.h,v 1.5 2003/09/23 20:30:43 jonas Exp $ */
+/* $Id: scripting.h,v 1.6 2003/10/01 10:33:12 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_SCRIPTING_H
 #define EL__SCRIPTING_SCRIPTING_H
@@ -10,6 +10,7 @@
 struct scripting_hook {
 	unsigned char *name;
 	event_hook callback;
+	void *data;
 };
 
 struct scripting_backend {

@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.10 2003/09/29 17:02:18 jonas Exp $ */
+/* $Id: event.c,v 1.11 2003/10/01 10:33:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,9 @@ struct event_handler {
 
 	/* The @priority of this handler. */
 	int priority;
+
+	/* Handler specific data. */
+	void *data;
 };
 
 struct event {
@@ -161,7 +164,7 @@ trigger_event(int id, ...)
 		enum evhook_status ret;
 
 		va_start(ap, id);
-		ret = ev_handler->callback(ap);
+		ret = ev_handler->callback(ap, ev_handler->data);
 		va_end(ap);
 
 		if (ret == EHS_LAST) return;
@@ -178,7 +181,7 @@ move_event_handler(struct event *event, int to, int from)
 }
 
 int
-register_event_hook(int id, event_hook callback, int priority)
+register_event_hook(int id, event_hook callback, int priority, void *data)
 {
 	struct event *event;
 	register int i;
@@ -214,6 +217,7 @@ register_event_hook(int id, event_hook callback, int priority)
 
 	event->handlers[i].callback = callback;
 	event->handlers[i].priority = priority;
+	event->handlers[i].data = data;
 
 	return id;
 }

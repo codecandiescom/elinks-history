@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.39 2003/09/26 19:57:37 jonas Exp $ */
+/* $Id: hooks.c,v 1.40 2003/10/01 10:33:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
  * to do is explained in doc/events.txt */
 
 static enum evhook_status
-script_hook_goto_url(va_list ap)
+script_hook_goto_url(va_list ap, void *data)
 {
 	lua_State *L = lua_state;
 	unsigned char **url = va_arg(ap, unsigned char **);
@@ -65,7 +65,7 @@ script_hook_goto_url(va_list ap)
 }
 
 static enum evhook_status
-script_hook_follow_url(va_list ap)
+script_hook_follow_url(va_list ap, void *data)
 {
 	lua_State *L = lua_state;
 	unsigned char **url = va_arg(ap, unsigned char **);
@@ -103,7 +103,7 @@ script_hook_follow_url(va_list ap)
 }
 
 static enum evhook_status
-script_hook_pre_format_html(va_list ap)
+script_hook_pre_format_html(va_list ap, void *data)
 {
 	lua_State *L = lua_state;
 	unsigned char **html = va_arg(ap, unsigned char **);
@@ -147,7 +147,7 @@ script_hook_pre_format_html(va_list ap)
  *  - ""           to not use any proxy
  *  - nil          to use the default proxies */
 static enum evhook_status
-script_hook_get_proxy(va_list ap)
+script_hook_get_proxy(va_list ap, void *data)
 {
 	lua_State *L = lua_state;
 	unsigned char **new_proxy_url = va_arg(ap, unsigned char **);
@@ -184,7 +184,7 @@ script_hook_get_proxy(va_list ap)
 }
 
 static enum evhook_status
-script_hook_quit(va_list ap)
+script_hook_quit(va_list ap, void *data)
 {
 	if (!prepare_lua(NULL)) {
 		lua_dostring(lua_state, "if quit_hook then quit_hook() end");
@@ -195,12 +195,12 @@ script_hook_quit(va_list ap)
 }
 
 struct scripting_hook lua_scripting_hooks[] = {
-	{ "goto-url", script_hook_goto_url },
-	{ "follow-url", script_hook_follow_url },
-	{ "pre-format-html", script_hook_pre_format_html },
-	{ "get-proxy", script_hook_get_proxy },
-	{ "quit", script_hook_quit },
-	{ NULL, NULL }
+	{ "goto-url", script_hook_goto_url, NULL },
+	{ "follow-url", script_hook_follow_url, NULL },
+	{ "pre-format-html", script_hook_pre_format_html, NULL },
+	{ "get-proxy", script_hook_get_proxy, NULL },
+	{ "quit", script_hook_quit, NULL },
+	{ NULL, NULL, NULL }
 };
 
 #endif

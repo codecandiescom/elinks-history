@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.337 2004/07/01 13:33:02 jonas Exp $ */
+/* $Id: tables.c,v 1.338 2004/07/01 14:26:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1187,12 +1187,15 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	indent = get_table_indent(table);
 
-	draw_table_bad_html(table, indent);
+	if (table->caption.start && table->caption.end)
+		draw_table_html(table, &table->caption, indent, part->cy);
 	draw_table_cells(table, indent, part->cy);
 	draw_table_frames(table, indent, part->cy);
 
 	part->cy += table->real_height;
 	part->cx = -1;
+
+	draw_table_bad_html(table, indent);
 
 	new_node = mem_alloc(sizeof(struct node));
 	if (new_node) {

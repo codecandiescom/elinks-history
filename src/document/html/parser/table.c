@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.17 2004/06/30 01:09:24 jonas Exp $ */
+/* $Id: table.c,v 1.18 2004/07/01 14:26:31 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -37,6 +37,9 @@
 static inline void
 add_table_bad_html_start(struct table *table, unsigned char *start)
 {
+	if (table->caption.start && !table->caption.end)
+		return;
+
 	/* Either no bad html or last one not needing @end pointer */
 	if (table->bad_html_size
 	    && !table->bad_html[table->bad_html_size - 1].end)
@@ -49,6 +52,11 @@ add_table_bad_html_start(struct table *table, unsigned char *start)
 static inline void
 add_table_bad_html_end(struct table *table, unsigned char *end)
 {
+	if (table->caption.start && !table->caption.end) {
+		table->caption.end = end;
+		return;
+	}
+
 	if (table->bad_html_size
 	    && !table->bad_html[table->bad_html_size - 1].end)
 		table->bad_html[table->bad_html_size - 1].end = end;
@@ -524,6 +532,18 @@ see:
 		add_table_bad_html_end(table, html);
 
 		goto scan_done;
+	}
+
+	if (!strlcasecmp(t_name, t_namelen, "CAPTION", 7)) {
+		add_table_bad_html_end(table, html);
+		if (!table->caption.start)
+			table->caption.start = html;
+		goto see;
+	}
+
+	if (!strlcasecmp(t_name, t_namelen, "/CAPTION", 8)) {
+		add_table_bad_html_end(table, html);
+		goto see;
 	}
 
 	if (!strlcasecmp(t_name, t_namelen, "COLGROUP", 8)) {

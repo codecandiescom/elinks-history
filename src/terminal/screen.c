@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.36 2003/07/28 09:53:54 jonas Exp $ */
+/* $Id: screen.c,v 1.37 2003/07/28 10:04:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,39 +21,7 @@
 #include "util/string.h"
 
 
-/* Update the size of the previous and the current screen image. The two images
- * are allocated in one chunk. */
-/* TODO: It seems allocation failure here is fatal. We should do something! */
-void
-alloc_screen(struct terminal *term, int x, int y)
-{
-	int size = x * y * sizeof(struct screen_char);
-	struct terminal_screen *screen = term->screen;
-	struct screen_char *image;
-
-	if (!screen) {
-		screen = mem_calloc(1, sizeof(struct terminal_screen));
-		if (!screen) return;
-		term->screen = screen;
-	}
-
-	image = mem_realloc(screen->image, size + size);
-	if (!image) return;
-
-	screen->image = image;
-	screen->last_image = image + (x * y);
-
-	memset(screen->image, 0, size);
-	memset(screen->last_image, -1, size);
-
-	term->x = x;
-	term->y = y;
-	screen->dirty = 1;
-}
-
 /* TODO: We must use termcap/terminfo if available! --pasky */
-
-#define getcompcode(c) ((int)((int)(c)<<1 | ((int)(c)&4)>>2) & 7)
 
 unsigned char frame_dumb[48] =	"   ||||++||++++++--|-+||++--|-+----++++++++     ";
 static unsigned char frame_vt100[48] =	"aaaxuuukkuxkjjjkmvwtqnttmlvwtqnvvwwmmllnnjla    ";
@@ -173,6 +141,8 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 			} else {
 				length = 6;
 			}
+
+#define getcompcode(c) ((int)((int)(c)<<1 | ((int)(c)&4)>>2) & 7)
 
 		} else if (getcompcode(attrib & 7) < getcompcode(attrib >> 3 & 7)) {
 			code[3] = ';';
@@ -383,6 +353,36 @@ void
 beep_terminal(struct terminal *term)
 {
 	hard_write(term->fdout, "\a", 1);
+}
+
+/* Update the size of the previous and the current screen image. The two images
+ * are allocated in one chunk. */
+/* TODO: It seems allocation failure here is fatal. We should do something! */
+void
+alloc_screen(struct terminal *term, int x, int y)
+{
+	int size = x * y * sizeof(struct screen_char);
+	struct terminal_screen *screen = term->screen;
+	struct screen_char *image;
+
+	if (!screen) {
+		screen = mem_calloc(1, sizeof(struct terminal_screen));
+		if (!screen) return;
+		term->screen = screen;
+	}
+
+	image = mem_realloc(screen->image, size + size);
+	if (!image) return;
+
+	screen->image = image;
+	screen->last_image = image + (x * y);
+
+	memset(screen->image, 0, size);
+	memset(screen->last_image, -1, size);
+
+	term->x = x;
+	term->y = y;
+	screen->dirty = 1;
 }
 
 void

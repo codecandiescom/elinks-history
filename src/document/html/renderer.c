@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.200 2003/08/23 05:43:49 jonas Exp $ */
+/* $Id: renderer.c,v 1.201 2003/08/23 06:15:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,11 +234,13 @@ xpand_spaces(struct part *p, int l)
 }
 
 
-#define POS(x, y) (part->document->data[part->yp + (y)].d[part->xp + (x)])
-#define LEN(y) (part->document->data[part->yp + (y)].l - part->xp < 0 ? 0 : part->document->data[part->yp + (y)].l - part->xp)
-#define SLEN(y, x) part->document->data[part->yp + (y)].l = part->xp + x;
-#define X(x) (part->xp + (x))
-#define Y(y) (part->yp + (y))
+#define X(x)		(part->xp + (x))
+#define Y(y)		(part->yp + (y))
+#define LINE(y)		part->document->data[Y(y)]
+#define POS(x, y)	LINE(y).d[X(x)]
+#define LEN(y)		int_max(LINE(y).l - part->xp, 0)
+#define SLEN(y, x)	do { LINE(y).l = X(x); } while (0)
+
 
 static inline void
 set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char color, unsigned char attr)

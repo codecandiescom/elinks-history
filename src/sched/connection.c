@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.37 2003/07/03 10:32:58 jonas Exp $ */
+/* $Id: connection.c,v 1.38 2003/07/03 10:45:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -375,6 +375,9 @@ del_connection(struct connection *c)
 	send_connection_info(c);
 	if (c->url) mem_free(c->url);
 	mem_free(c);
+#ifdef DEBUG
+	check_queue_bugs();
+#endif
 }
 
 void
@@ -414,9 +417,6 @@ free_and_close:
 
 del:
 	del_connection(c);
-#ifdef DEBUG
-	check_queue_bugs();
-#endif
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 	return;
 
@@ -608,9 +608,6 @@ retry_connection(struct connection *c)
 	if (c->unrestartable >= 2 || !max_tries || ++c->tries >= max_tries) {
 		/*send_connection_info(c);*/
 		del_connection(c);
-#ifdef DEBUG
-		check_queue_bugs();
-#endif
 		register_bottom_half((void (*)(void *))check_queue, NULL);
 	} else {
 		c->prev_error = c->state;
@@ -624,9 +621,6 @@ abort_connection(struct connection *c)
 	if (c->running) interrupt_connection(c);
 	/* send_connection_info(c); */
 	del_connection(c);
-#ifdef DEBUG
-	check_queue_bugs();
-#endif
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.72 2003/11/29 00:49:22 pasky Exp $ */
+/* $Id: uri.c,v 1.73 2003/11/29 17:45:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -475,7 +475,6 @@ transform_file_url(unsigned char **up, unsigned char *cwd)
 #endif
 
 	for (path = url; *path && !dir_sep(*path); path++);
-	if (dir_sep(*path)) path++;
 
 	/* FIXME: We will in fact assume localhost even for non-local hosts,
 	 * until we will support the FTP transformation. --pasky */

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.87 2004/09/21 20:16:01 pasky Exp $ */
+/* $Id: apply.c,v 1.88 2004/09/23 22:18:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,7 +175,6 @@ void
 css_apply(struct html_element *element, struct css_stylesheet *css,
           struct list_head *html_stack)
 {
-	INIT_LIST_HEAD(props);
 	unsigned char *code;
 	struct css_property *property;
 	struct css_selector *selector;

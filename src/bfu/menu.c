@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.239 2004/06/25 10:52:29 zas Exp $ */
+/* $Id: menu.c,v 1.240 2004/07/15 15:35:41 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -796,9 +796,9 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 	menu->win = win;
 
 	switch (ev->ev) {
-		case EV_INIT:
-		case EV_RESIZE:
-		case EV_REDRAW:
+		case EVENT_INIT:
+		case EVENT_RESIZE:
+		case EVENT_REDRAW:
 			get_parent_ptr(win, &menu->parent_x, &menu->parent_y);
 			count_menu_size(win->term, menu);
 			menu->selected--;
@@ -806,17 +806,17 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 			display_menu(win->term, menu);
 			break;
 
-		case EV_MOUSE:
+		case EVENT_MOUSE:
 #ifdef CONFIG_MOUSE
 			menu_mouse_handler(menu, ev);
 #endif /* CONFIG_MOUSE */
 			break;
 
-		case EV_KBD:
+		case EVENT_KBD:
 			menu_kbd_handler(menu, ev);
 			break;
 
-		case EV_ABORT:
+		case EVENT_ABORT:
 			if (menu->items->flags & FREE_ANY)
 				free_menu_items(menu->items);
 
@@ -846,7 +846,7 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 
 	if (sel != -1) {
 		struct term_event ev =
-			INIT_TERM_EVENT(EV_KBD, KBD_ENTER, 0, 0);
+			INIT_TERM_EVENT(EVENT_KBD, KBD_ENTER, 0, 0);
 
 		term_send_event(term, &ev);
 	}
@@ -1084,23 +1084,23 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 	menu->win = win;
 
 	switch (ev->ev) {
-		case EV_INIT:
-		case EV_RESIZE:
-		case EV_REDRAW:
+		case EVENT_INIT:
+		case EVENT_RESIZE:
+		case EVENT_REDRAW:
 			display_mainmenu(win->term, menu);
 			break;
 
-		case EV_MOUSE:
+		case EVENT_MOUSE:
 #ifdef CONFIG_MOUSE
 			mainmenu_mouse_handler(menu, ev);
 #endif /* CONFIG_MOUSE */
 			break;
 
-		case EV_KBD:
+		case EVENT_KBD:
 			mainmenu_kbd_handler(menu, ev, fwd);
 			break;
 
-		case EV_ABORT:
+		case EVENT_ABORT:
 			break;
 	}
 }

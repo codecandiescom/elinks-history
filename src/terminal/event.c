@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.67 2004/07/04 16:43:53 jonas Exp $ */
+/* $Id: event.c,v 1.68 2004/07/15 15:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,8 +60,8 @@ term_send_event(struct terminal *term, struct term_event *ev)
 	if_assert_failed return;
 
 	switch (ev->ev) {
-	case EV_INIT:
-	case EV_RESIZE:
+	case EVENT_INIT:
+	case EVENT_RESIZE:
 		if (ev->x < 0 || ev->y < 0) {
 			ERROR(_("Bad terminal size: %d, %d", term),
 			      (int) ev->x, (int) ev->y);
@@ -72,7 +72,7 @@ term_send_event(struct terminal *term, struct term_event *ev)
 		erase_screen(term);
 		/* Fall through */
 
-	case EV_REDRAW:
+	case EVENT_REDRAW:
 		/* Nasty hack to avoid assertion failures when doing -remote
 		 * stuff and the client exits right away */
 		if (!term->screen->image) break;
@@ -80,13 +80,13 @@ term_send_event(struct terminal *term, struct term_event *ev)
 		clear_terminal(term);
 		term->redrawing = 2;
 		/* Note that you do NOT want to ever go and create new
-		 * window inside EV_INIT handler (it'll get second
-		 * EV_INIT here). Perhaps the best thing you could do
+		 * window inside EVENT_INIT handler (it'll get second
+		 * EVENT_INIT here). Perhaps the best thing you could do
 		 * is registering a bottom-half handler which will open
 		 * additional windows.
 		 * --pasky */
-		if (ev->ev == EV_RESIZE) {
-			/* We want to propagate EV_RESIZE even to inactive
+		if (ev->ev == EVENT_RESIZE) {
+			/* We want to propagate EVENT_RESIZE even to inactive
 			 * tabs! Nothing wrong will get drawn (in the final
 			 * result) as the active tab is always the first one,
 			 * thus will be drawn last here. Thanks, Witek!
@@ -102,9 +102,9 @@ term_send_event(struct terminal *term, struct term_event *ev)
 		term->redrawing = 0;
 		break;
 
-	case EV_MOUSE:
-	case EV_KBD:
-	case EV_ABORT:
+	case EVENT_MOUSE:
+	case EVENT_KBD:
+	case EVENT_ABORT:
 		assert(!list_empty(term->windows));
 		if_assert_failed break;
 
@@ -167,7 +167,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 	struct terminal_interlink *interlink = term->interlink;
 
 	switch (ev->ev) {
-	case EV_INIT:
+	case EVENT_INIT:
 		if (interlink->qlen < sizeof(struct terminal_info))
 			return 0;
 
@@ -197,21 +197,21 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 			return 0;
 		}
 
-		ev->ev = EV_REDRAW;
+		ev->ev = EVENT_REDRAW;
 		/* Fall through */
-	case EV_REDRAW:
-	case EV_RESIZE:
+	case EVENT_REDRAW:
+	case EVENT_RESIZE:
 		term_send_event(term, ev);
 		break;
 
-	case EV_MOUSE:
+	case EVENT_MOUSE:
 #ifdef CONFIG_MOUSE
 		reset_timer();
 		term_send_event(term, ev);
 #endif
 		break;
 
-	case EV_KBD:
+	case EVENT_KBD:
 	{
 		int utf8_io = -1;
 
@@ -275,7 +275,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 		break;
 	}
 
-	case EV_ABORT:
+	case EVENT_ABORT:
 		destroy_terminal(term);
 		return 0;
 
@@ -283,7 +283,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 		ERROR(_("Bad event %d", term), ev->ev);
 	}
 
-	/* For EV_INIT we read a liitle more */
+	/* For EVENT_INIT we read a liitle more */
 	if (info) return sizeof(struct terminal_info) + info->length;
 	return sizeof(struct term_event);
 }

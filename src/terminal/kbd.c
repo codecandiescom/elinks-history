@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.82 2004/07/05 02:54:07 jonas Exp $ */
+/* $Id: kbd.c,v 1.83 2004/07/15 15:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,7 +156,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 void
 kbd_ctrl_c(void)
 {
-	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_CTRL_C, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_CTRL_C, 0, 0);
 
 	if (!ditrm) return;
 	queue_event(ditrm, (unsigned char *) &ev, sizeof(struct term_event));
@@ -217,7 +217,7 @@ send_done_sequence(int h, int altscreen)
 void
 resize_terminal(void)
 {
-	struct term_event ev = INIT_TERM_EVENT(EV_RESIZE, 0, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_RESIZE, 0, 0, 0);
 	int width, height;
 
 	if (get_terminal_size(ditrm->std_out, &width, &height)) return;
@@ -258,7 +258,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	int width, height;
 	int terminal_size_error = get_terminal_size(ctl_in, &width, &height);
 	struct terminal_info info = {
-		INIT_TERM_EVENT(EV_INIT, width, height, 0),
+		INIT_TERM_EVENT(EVENT_INIT, width, height, 0),
 		"",
 		"",
 		get_system_env(),
@@ -576,7 +576,7 @@ free_and_return:
 static void
 kbd_timeout(struct itrm *itrm)
 {
-	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_ESC, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_ESC, 0, 0);
 
 	itrm->timer = -1;
 
@@ -638,7 +638,7 @@ static struct key os2xtd[256] = {
 static int
 process_queue(struct itrm *itrm)
 {
-	struct term_event ev = INIT_TERM_EVENT(EV_KBD, -1, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, -1, 0, 0);
 	int el = 0;
 
 	if (!itrm->qlen) goto end;
@@ -820,7 +820,7 @@ process_queue(struct itrm *itrm)
 
 						el += 3;
 					}
-					ev.ev = EV_MOUSE;
+					ev.ev = EVENT_MOUSE;
 				}
 #endif /* CONFIG_MOUSE */
 				break;

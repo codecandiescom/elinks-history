@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.9 2003/11/22 19:19:39 jonas Exp $ */
+/* $Id: timer.c,v 1.10 2004/07/15 15:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@ int timer_duration = 0;
 static void
 count_down(void *xxx)
 {
-	struct term_event ev = INIT_TERM_EVENT(EV_KBD, -1, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, -1, 0, 0);
 	struct keybinding *kb;
 	struct terminal *terminal;
 

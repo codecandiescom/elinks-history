@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.156 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: listbox.c,v 1.157 2004/07/15 15:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -582,7 +582,7 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	switch (ev->ev) {
 		enum menu_action action;
 
-		case EV_KBD:
+		case EVENT_KBD:
 			action = kbd_action(KM_MENU, ev, NULL);
 
 			/* Moving the box */
@@ -657,11 +657,11 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			/* Selecting a button; most probably ;). */
 			break;
 
-		case EV_INIT:
-		case EV_RESIZE:
-		case EV_REDRAW:
-		case EV_MOUSE:
-		case EV_ABORT:
+		case EVENT_INIT:
+		case EVENT_RESIZE:
+		case EVENT_REDRAW:
+		case EVENT_MOUSE:
+		case EVENT_ABORT:
 			break;
 	}
 

@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.20 2004/07/03 16:28:02 jonas Exp $ */
+/* $Id: os2.c,v 1.21 2004/07/15 15:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -482,7 +482,7 @@ mouse_thread(void *p)
 	struct term_event ev;
 
 	signal(SIGPIPE, SIG_IGN);
-	ev.ev = EV_MOUSE;
+	ev.ev = EVENT_MOUSE;
 	if (MouOpen(NULL, mh)) goto ret;
 	mouse_h = *mh;
 	*mask = MOUSE_MOTION_WITH_BN1_DOWN | MOUSE_BN1_DOWN |

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.145 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: dialog.c,v 1.146 2004/07/15 15:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,25 +343,25 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 	}
 
 	switch (ev->ev) {
-		case EV_INIT:
+		case EVENT_INIT:
 			dialog_ev_init(dlg_data, ev);
 			/* fallback */
-		case EV_RESIZE:
-		case EV_REDRAW:
+		case EVENT_RESIZE:
+		case EVENT_REDRAW:
 			redraw_dialog(dlg_data, 1);
 			break;
 
-		case EV_MOUSE:
+		case EVENT_MOUSE:
 #ifdef CONFIG_MOUSE
 			dialog_ev_mouse(dlg_data, ev);
 #endif
 			break;
 
-		case EV_KBD:
+		case EVENT_KBD:
 			dialog_ev_kbd(dlg_data, ev);
 			break;
 
-		case EV_ABORT:
+		case EVENT_ABORT:
 			dialog_ev_abort(dlg_data, ev);
 			break;
 	}

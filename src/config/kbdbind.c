@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.244 2004/07/14 14:33:46 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.245 2004/07/15 15:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,7 +139,7 @@ kbd_action(enum keymap kmap, struct term_event *ev, int *func_ref)
 {
 	struct keybinding *kb;
 
-	if (ev->ev != EV_KBD) return -1;
+	if (ev->ev != EVENT_KBD) return -1;
 
 	kb = kbd_ev_lookup(kmap, ev->x, ev->y, func_ref);
 	return kb ? kb->action : -1;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.552 2004/07/15 10:42:55 jonas Exp $ */
+/* $Id: view.c,v 1.553 2004/07/15 15:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -818,11 +818,11 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		    return status;
 	}
 
-	if (ev->ev == EV_KBD) {
+	if (ev->ev == EVENT_KBD) {
 		status = frame_ev_kbd(ses, doc_view, ev);
 
 #ifdef CONFIG_MOUSE
-	} else if (ev->ev == EV_MOUSE) {
+	} else if (ev->ev == EVENT_MOUSE) {
 		status = frame_ev_mouse(ses, doc_view, ev);
 #endif /* CONFIG_MOUSE */
 
@@ -934,7 +934,7 @@ send_event(struct session *ses, struct term_event *ev)
 	if_assert_failed return;
 	doc_view = current_frame(ses);
 
-	if (ev->ev == EV_KBD) {
+	if (ev->ev == EVENT_KBD) {
 		int func_ref;
 		enum main_action action;
 
@@ -950,7 +950,7 @@ quit:
 		}
 
 		if (do_action(ses, action, 0) == action) {
-			/* Did the session disappear in some EV_ABORT handler? */
+			/* Did the session disappear in some EVENT_ABORT handler? */
 			if (action == ACT_MAIN_TAB_CLOSE
 			    || action == ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT)
 				ses = NULL;
@@ -995,7 +995,7 @@ quit:
 		}
 	}
 #ifdef CONFIG_MOUSE
-	if (ev->ev == EV_MOUSE) {
+	if (ev->ev == EVENT_MOUSE) {
 		int bars;
 		int x = 0;
 

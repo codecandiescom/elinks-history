@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.183 2004/07/15 14:03:51 jonas Exp $ */
+/* $Id: hierbox.c,v 1.184 2004/07/15 15:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,18 +288,18 @@ static int
 hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	switch (ev->ev) {
-		case EV_KBD:
+		case EVENT_KBD:
 			return hierbox_ev_kbd(dlg_data, ev);
 
-		case EV_INIT:
+		case EVENT_INIT:
 			return hierbox_ev_init(dlg_data, ev);
 
-		case EV_RESIZE:
-		case EV_REDRAW:
-		case EV_MOUSE:
+		case EVENT_RESIZE:
+		case EVENT_REDRAW:
+		case EVENT_MOUSE:
 			return EVENT_NOT_PROCESSED;
 
-		case EV_ABORT:
+		case EVENT_ABORT:
 			return hierbox_ev_abort(dlg_data, ev);
 	}
 

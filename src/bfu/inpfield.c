@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.148 2004/07/05 11:19:54 pasky Exp $ */
+/* $Id: inpfield.c,v 1.149 2004/07/15 15:35:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -529,7 +529,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 
 	/* Noodle time */
 	switch (ev->ev) {
-	case EV_KBD:
+	case EVENT_KBD:
 		action = kbd_action(KM_EDIT, ev, NULL);
 
 		/* Handle some basic actions such as quiting for empty buffers */
@@ -561,7 +561,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 		kbd_field(widget_data, dlg_data, ev);
 		break;
 
-	case EV_REDRAW:
+	case EVENT_REDRAW:
 		/* Try to catch the redraw event initiated by the history
 		 * completion and only respond if something was actually
 		 * updated. Meaning we have new data in the line buffer that

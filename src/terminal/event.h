@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.11 2004/06/14 00:53:48 jonas Exp $ */
+/* $Id: event.h,v 1.12 2004/07/15 15:35:42 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -12,12 +12,12 @@ struct terminal;
 
 
 enum term_event_type {
-	EV_INIT,
-	EV_KBD,
-	EV_MOUSE,
-	EV_REDRAW,
-	EV_RESIZE,
-	EV_ABORT,
+	EVENT_INIT,
+	EVENT_KBD,
+	EVENT_MOUSE,
+	EVENT_REDRAW,
+	EVENT_RESIZE,
+	EVENT_ABORT,
 };
 
 /* XXX: do not change order of fields. --Zas */
@@ -36,7 +36,7 @@ struct term_event {
  * add new members add them at the bottom and use magic variables to
  * distinguish them when decoding the terminal info. */
 struct terminal_info {
-	struct term_event event;		/* The EV_INIT event */
+	struct term_event event;		/* The EVENT_INIT event */
 	unsigned char name[MAX_TERM_LEN];	/* $TERM environment name */
 	unsigned char cwd[MAX_CWD_LEN];		/* Current working directory */
 	int system_env;				/* System info (X, screen) */

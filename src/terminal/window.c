@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.16 2004/06/25 09:54:45 jonas Exp $ */
+/* $Id: window.c,v 1.17 2004/07/15 15:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@ void
 redraw_from_window(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->width, term->height, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_REDRAW, term->width, term->height, 0);
 	struct window *end = (void *) &term->windows;
 
 	if (term->redrawing != 0) return;
@@ -36,7 +36,7 @@ void
 redraw_below_window(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->width, term->height, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_REDRAW, term->width, term->height, 0);
 	struct window *end = win;
 	int tr = term->redrawing;
 
@@ -56,7 +56,7 @@ add_window_at_pos(struct terminal *term,
 		  void *data, struct window *at)
 {
 	struct window *win = mem_calloc(1, sizeof(struct window));
-	struct term_event ev = INIT_TERM_EVENT(EV_INIT, term->width, term->height, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_INIT, term->width, term->height, 0);
 
 	if (!win) {
 		mem_free_if(data);
@@ -82,7 +82,7 @@ add_window(struct terminal *term,
 void
 delete_window(struct window *win)
 {
-	struct term_event ev = INIT_TERM_EVENT(EV_ABORT, 0, 0, 0);
+	struct term_event ev = INIT_TERM_EVENT(EVENT_ABORT, 0, 0, 0);
 
 	/* Updating the status when destroying tabs needs this before the win
 	 * handler call. */
@@ -145,16 +145,16 @@ empty_window_handler(struct window *win, struct term_event *ev, int fwd)
 	if (ewd->b) return;
 
 	switch (ev->ev) {
-		case EV_INIT:
-		case EV_RESIZE:
-		case EV_REDRAW:
+		case EVENT_INIT:
+		case EVENT_RESIZE:
+		case EVENT_REDRAW:
 			get_parent_ptr(win, &win->x, &win->y);
 			return;
-		case EV_ABORT:
+		case EVENT_ABORT:
 			fn(data);
 			return;
-		case EV_KBD:
-		case EV_MOUSE:
+		case EVENT_KBD:
+		case EVENT_MOUSE:
 			/* Silence compiler warnings */
 			break;
 	}

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.226 2004/07/15 15:24:06 jonas Exp $ */
+/* $Id: form.c,v 1.227 2004/07/15 15:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1098,7 +1098,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 	assertm(fc, "link has no form control");
 	if_assert_failed return FRAME_EVENT_OK;
 
-	if (fc->mode == FORM_MODE_DISABLED || ev->ev != EV_KBD)
+	if (fc->mode == FORM_MODE_DISABLED || ev->ev != EVENT_KBD)
 		return FRAME_EVENT_IGNORED;
 
 	action = kbd_action(KM_EDIT, ev, NULL);

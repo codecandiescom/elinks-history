@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.529 2004/07/15 15:20:07 jonas Exp $ */
+/* $Id: session.c,v 1.530 2004/07/15 15:35:42 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1087,15 +1087,15 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 	struct session *ses = tab->data;
 
 	switch (ev->ev) {
-		case EV_ABORT:
+		case EVENT_ABORT:
 			if (ses) destroy_session(ses);
 			if (!list_empty(sessions)) update_status();
 			break;
-		case EV_INIT:
-		case EV_RESIZE:
+		case EVENT_INIT:
+		case EVENT_RESIZE:
 			tab->resize = 1;
 			/* fall-through */
-		case EV_REDRAW:
+		case EVENT_REDRAW:
 			if (!ses || ses->tab != get_current_tab(ses->tab->term))
 				break;
 
@@ -1107,8 +1107,8 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			}
 			print_screen_status(ses);
 			break;
-		case EV_KBD:
-		case EV_MOUSE:
+		case EVENT_KBD:
+		case EVENT_MOUSE:
 			if (!ses) break;
 			/* This check is related to bug 296 */
 			assert(ses->tab == get_current_tab(ses->tab->term));

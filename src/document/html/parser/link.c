@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.18 2004/07/14 02:06:03 jonas Exp $ */
+/* $Id: link.c,v 1.19 2004/07/14 02:28:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,6 +93,68 @@ html_a(unsigned char *a)
 	set_fragment_identifier(a, "name");
 }
 
+static unsigned char *
+get_image_text(unsigned char *attr)
+{
+	unsigned char *text;
+	unsigned char *src = NULL;
+	int max_real_len;
+	int max_len;
+
+	src = null_or_stracpy(object_src);
+	if (!src) src = get_url_val(attr, "src");
+
+	/* We can display image as [foo.gif]. */
+
+	max_len = get_opt_int("document.browse.images.file_tags");
+
+#if 0
+	/* This should be maybe whole terminal width? */
+	max_real_len = par_format.width * max_len / 100;
+#else
+	/* It didn't work well and I'm too lazy to code that;
+	 * absolute values will have to be enough for now ;).
+	 * --pasky */
+	max_real_len = max_len;
+#endif
+
+	if ((!max_len || max_real_len > 0) && src) {
+		int len = strcspn(src, "?");
+		unsigned char *start;
+
+		for (start = src + len; start > src; start--)
+			if (dir_sep(*start)) {
+				start++;
+				break;
+			}
+
+		if (start > src) len = strcspn(start, "?");
+
+		if (max_len && len > max_real_len) {
+			int max_part_len = max_real_len / 2;
+
+			text = mem_alloc(max_part_len * 2 + 2);
+			if (!text) goto free_src;
+
+			/* TODO: Faster way ?? sprintf() is quite expensive. */
+			sprintf(text, "%.*s*%.*s",
+				max_part_len, start,
+				max_part_len, start + len
+					      - max_part_len);
+
+		} else {
+			text = memacpy(start, len);
+		}
+	} else {
+		text = stracpy("IMG");
+	}
+
+free_src:
+	mem_free_if(src);
+
+	return text;
+}
+
 void
 html_img(unsigned char *a)
 {
@@ -134,60 +196,7 @@ html_img(unsigned char *a)
 		} else if (ismap) {
 			al = stracpy("ISMAP");
 		} else {
-			unsigned char *src = NULL;
-			int max_real_len;
-			int max_len;
-
-			src = null_or_stracpy(object_src);
-			if (!src) src = get_url_val(a, "src");
-
-			/* We can display image as [foo.gif]. */
-
-			max_len = get_opt_int("document.browse.images.file_tags");
-
-#if 0
-			/* This should be maybe whole terminal width? */
-			max_real_len = par_format.width * max_len / 100;
-#else
-			/* It didn't work well and I'm too lazy to code that;
-			 * absolute values will have to be enough for now ;).
-			 * --pasky */
-			max_real_len = max_len;
-#endif
-
-			if ((!max_len || max_real_len > 0) && src) {
-				int len = strcspn(src, "?");
-				unsigned char *start;
-
-				for (start = src + len; start > src; start--)
-					if (dir_sep(*start)) {
-						start++;
-						break;
-					}
-
-				if (start > src) len = strcspn(start, "?");
-
-				if (max_len && len > max_real_len) {
-					int max_part_len = max_real_len / 2;
-
-					al = mem_alloc(max_part_len * 2 + 2);
-					if (!al) return;
-
-					/* TODO: Faster way ?? sprintf() is quite expensive. */
-					sprintf(al, "%.*s*%.*s",
-						max_part_len, start,
-						max_part_len, start + len
-							      - max_part_len);
-
-				} else {
-					al = memacpy(start, len);
-					if (!al) return;
-				}
-			} else {
-				al = stracpy("IMG");
-			}
-
-			mem_free_if(src);
+			al = get_image_text(a);
 		}
 	}
 

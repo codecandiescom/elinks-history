@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-23 13:37+0100\n"
-"PO-Revision-Date: 2003-12-22 21:38+0100\n"
+"PO-Revision-Date: 2003-12-23 14:42+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -366,7 +366,7 @@ msgstr "neplatný"
 
 #: src/cache/dialogs.c:106
 msgid "ID tag"
-msgstr ""
+msgstr "ID znaèka"
 
 #: src/cache/dialogs.c:110
 msgid "Header"
@@ -996,9 +996,8 @@ msgid "Open cache manager"
 msgstr "Otvori» správcu ke¹e"
 
 #: src/config/kbdbind.c:387
-#, fuzzy
 msgid "Cancel current state"
-msgstr "Nemô¾em zisti» stav socketu"
+msgstr "Zru¹i» aktuálny stav"
 
 #: src/config/kbdbind.c:388
 msgid "Open cookie manager"
@@ -1046,9 +1045,8 @@ msgstr "Zaèat editovanie"
 
 #. FIXME
 #: src/config/kbdbind.c:399
-#, fuzzy
 msgid "Expand item"
-msgstr "Roztiahnu» ståpce tabuµky"
+msgstr "Rozvinú» polo¾ku"
 
 #: src/config/kbdbind.c:400
 msgid "Go to the end of the page/line"
@@ -1148,9 +1146,8 @@ msgid "Go at a specified mark"
 msgstr "Prejs» na zadanú znaèku"
 
 #: src/config/kbdbind.c:428
-#, fuzzy
 msgid "Mark item"
-msgstr "Oznaèená polo¾ka menu"
+msgstr "Oznaèi» polo¾ku"
 
 #: src/config/kbdbind.c:429
 msgid "Activate the menu"
@@ -1161,9 +1158,8 @@ msgid "Move to the next frame"
 msgstr "Presunú» sa do ïal¹ieho rámca"
 
 #: src/config/kbdbind.c:431
-#, fuzzy
 msgid "Move to the next item"
-msgstr "Presunú» sa do ïal¹ieho rámca"
+msgstr "Presunú» sa na ïal¹iu polo¾ku"
 
 #: src/config/kbdbind.c:432
 msgid "Open a new tab"
@@ -1218,9 +1214,8 @@ msgid "Quit without confirmation"
 msgstr "Skonèi» bez reptania"
 
 #: src/config/kbdbind.c:446
-#, fuzzy
 msgid "Redraw the terminal"
-msgstr "Zmeni» veµkos» terminálu"
+msgstr "Prekresli» terminál"
 
 #: src/config/kbdbind.c:447
 msgid "Reload the current page"
@@ -1905,6 +1900,10 @@ msgid ""
 "1 means beep the terminal\n"
 "2 means pop up message box"
 msgstr ""
+"Èo robi» ak nebol nájdený ¾iadny výskyt:\n"
+"0 = nerob niè\n"
+"1 = pípni na temináli\n"
+"2 = zobraz chybovú správu"
 
 #: src/config/options.inc:245
 msgid "Use tabindex"
@@ -2099,13 +2098,16 @@ msgstr ""
 
 #: src/config/options.inc:348
 msgid "Ignore cache-control info from server"
-msgstr ""
+msgstr "Ignorova» informáciu o ke¹ovaní od servera"
 
 #: src/config/options.inc:350
 msgid ""
 "Ignore Cache-Control and Pragma server headers.\n"
 "When set, the document is cached even with 'Cache-Control: no-cache'."
 msgstr ""
+"Ignorova» hlavièky Cache-Control a Pragma, prijaté od servera.\n"
+"Ak nastavené, dokument je ke¹ovaný aj keï hlavièka obsahuje\n"
+"'Cache-Control: no-cache'."
 
 #: src/config/options.inc:353
 msgid "Formatted documents"
@@ -2121,7 +2123,7 @@ msgstr "Èíslo"
 
 #: src/config/options.inc:359
 msgid "Number of cached formatted pages."
-msgstr ""
+msgstr "Poèet nake¹ovaných formátovaných stránok."
 
 #: src/config/options.inc:361
 msgid "Memory cache"
@@ -2153,19 +2155,19 @@ msgstr "©tandardná kódová stránka dokumentu."
 
 #: src/config/options.inc:379
 msgid "Ignore charset info from server"
-msgstr ""
+msgstr "Ignorova» informáciu o kódovej stránke od servera"
 
 #: src/config/options.inc:381
 msgid "Ignore charset info sent by server."
-msgstr ""
+msgstr "Ignorova» informáciu o kódovej stránke poslanej serverom."
 
 #: src/config/options.inc:385
 msgid "Default color settings"
-msgstr ""
+msgstr "©tandardné nastavenie farieb"
 
 #: src/config/options.inc:387
 msgid "Default document color settings."
-msgstr ""
+msgstr "©tandardné nastavenie farieb dokumentu"
 
 #: src/config/options.inc:398
 msgid "Link color"
@@ -2173,7 +2175,7 @@ msgstr "Farba odkazu"
 
 #: src/config/options.inc:400
 msgid "Default link color."
-msgstr ""
+msgstr "©tandardná farba odkazu"
 
 #: src/config/options.inc:402
 msgid "Visited-link color"
@@ -2181,25 +2183,27 @@ msgstr "Farba nav¹tíveného odkazu"
 
 #: src/config/options.inc:404
 msgid "Default visited link color."
-msgstr ""
+msgstr "©tandardná farba nav¹tíveného odkazu"
 
 #: src/config/options.inc:406
 msgid "Directory color"
-msgstr ""
+msgstr "Farba adresára"
 
 #: src/config/options.inc:408
 msgid ""
 "Default directory color.\n"
 "See document.browse.links.color_dirs option."
 msgstr ""
+"©tandardná farba adresára.\n"
+"Viï. voµbu document.browse.links.color_dirs."
 
 #: src/config/options.inc:411
 msgid "Allow dark colors on black background"
-msgstr ""
+msgstr "Povoli» tmavé farby na èiernom pozadí"
 
 #: src/config/options.inc:413
 msgid "Allow dark colors on black background."
-msgstr ""
+msgstr "Povoli» tmavé farby na èiernom pozadí."
 
 #: src/config/options.inc:415
 msgid "Ensure contrast"
@@ -2207,13 +2211,13 @@ msgstr "Zabezpeèi» kontrast"
 
 #: src/config/options.inc:417
 msgid "Makes sure that the back- and foreground color is never equal."
-msgstr ""
+msgstr "Zabezpeèi» aby farby pozadia a textu neboli rovnaké."
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.
 #: src/config/options.inc:422
 msgid "Use document-specified colors"
-msgstr ""
+msgstr "Pou¾íva» farby nastavené v dokumente"
 
 #: src/config/options.inc:424
 msgid ""
@@ -2339,11 +2343,11 @@ msgstr "Udr¾ova» antihistóriu (\"doprednú históriu\")?"
 
 #: src/config/options.inc:500
 msgid "HTML rendering"
-msgstr ""
+msgstr "HTML zobrazenie"
 
 #: src/config/options.inc:502
 msgid "Options concerning the display of HTML pages."
-msgstr ""
+msgstr "Voµby týkajúce sa zobrazovania HTML stránok."
 
 #: src/config/options.inc:504
 msgid "Display frames"
@@ -2681,29 +2685,25 @@ msgstr ""
 "Pou¾itím \" \" sa neodo¹le ¾iadna User-Agent hlavièka."
 
 #: src/config/options.inc:667
-#, fuzzy
 msgid "HTTPS"
-msgstr "HTTP"
+msgstr "HTTPS"
 
 #: src/config/options.inc:669
-#, fuzzy
 msgid "HTTPS-specific options."
-msgstr "Nastavenie HTTP."
+msgstr "Nastavenie HTTPS."
 
 #: src/config/options.inc:673
-#, fuzzy
 msgid "HTTPS proxy configuration."
-msgstr "Nastavenie HTTP proxy."
+msgstr "Nastavenie HTTPS proxy."
 
 #: src/config/options.inc:677
-#, fuzzy
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
 msgstr ""
-"Hostiteµ a èíslo portu (host:port) HTTP proxy, alebo niè, ak proxy\n"
+"Hostiteµ a èíslo portu (host:port) HTTPS proxy, alebo niè, ak proxy\n"
 "nepou¾ívate. Ak je voµba nevyplnená, ELinks sa e¹te pokúsi pou¾i»\n"
-"hodnotu ulo¾enú v premennej prostredia HTTP_PROXY."
+"hodnotu ulo¾enú v premennej prostredia HTTPS_PROXY."
 
 #: src/config/options.inc:681
 msgid "FTP"
@@ -2802,6 +2802,8 @@ msgid ""
 "If set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
+"Zobrazi» skryté súbory vo výpise adresára ?\n"
+"Ak vypnuté, vo výpise adresára nebudú zobrazené súbory zaèínajúce bodkou."
 
 #: src/config/options.inc:736 src/config/options.inc:748
 msgid "Local CGI"
@@ -2861,6 +2863,8 @@ msgid ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
+"Ovládaè (externý program) pre tento protokol. Nazvite voµby v tomto\n"
+"strome podµa svojho systému (napr. unix, unix-xwin)."
 
 #: src/config/options.inc:779
 msgid ""
@@ -2874,7 +2878,7 @@ msgstr ""
 
 #: src/config/options.inc:787
 msgid "No-proxy domains"
-msgstr ""
+msgstr "Domény pou¾iteµné bez proxy"
 
 #: src/config/options.inc:789
 msgid ""
@@ -2883,6 +2887,9 @@ msgid ""
 "domains as well. If it's blank, NO_PROXY environment variable is\n"
 "checked as well."
 msgstr ""
+"Èiarkami oddelený zoznam domén, na ktorých prístup (HTTP/FTP) nebude\n"
+"pou¾itá proxy. Voliteµne mô¾e byt uvedený pre niektoré z nich aj port.\n"
+"Ak je voµba prázdna, e¹te sa zoberie do úvahy premenná NO_PROXY."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:798
@@ -2895,11 +2902,11 @@ msgstr "Nastavenie terminálu."
 
 #: src/config/options.inc:804
 msgid "Options specific to this terminal type (according to $TERM value)."
-msgstr ""
+msgstr "Voµby specifické pre tento typ terminálu (podµa hodnoty $TERM)."
 
 #: src/config/options.inc:806
 msgid "Border type"
-msgstr ""
+msgstr "Typ rámèekov"
 
 #: src/config/options.inc:808
 msgid ""
@@ -2911,6 +2918,13 @@ msgid ""
 "3 is KOI-8\n"
 "4 is FreeBSD"
 msgstr ""
+"Typ terminálu, zale¾í na òom hlavne pri kreslení rámèekov a okrajov\n"
+"dialógových okien:\n"
+"0 = \"hlúpy\" terminál, pou¾íva sa tzv. ASCII art\n"
+"1 = VT100, jednodychý ale univerzálny\n"
+"2 = Linuxový terminál, získate dvojité rámèeky a ine pekné vecièky\n"
+"3 = KOI-8\n"
+"4 = FreeBSD terminál"
 
 #: src/config/options.inc:816
 msgid "Switch fonts for line drawing"
@@ -2922,6 +2936,9 @@ msgid ""
 "and lines working at the same time. Makes sense only with linux\n"
 "terminal."
 msgstr ""
+"Prepína» fonty pri kreslení èiar. Vïaka tomu by malo zároveò fungova»\n"
+"kreslenie èiar a miestnych znakov. Má význam iba pre linuxový\n"
+"terminál."
 
 #: src/config/options.inc:822
 msgid "I/O in UTF8"
@@ -2945,6 +2962,8 @@ msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
 msgstr ""
+"Obmedzi» znaky pou¾ívané na kreslenie èiar. Má význam pou¾íva» iba\n"
+"pre linuxové terminály pou¾ívajúce kódovanie cp850 alebo cp852."
 
 #: src/config/options.inc:832
 msgid "Block cursor"
@@ -3006,7 +3025,7 @@ msgstr "Nastavenie u¾ívateµského rozhrania."
 
 #: src/config/options.inc:872
 msgid "Color settings"
-msgstr ""
+msgstr "Nastavenie farieb"
 
 #: src/config/options.inc:874
 msgid "Default user interface color settings."
@@ -3024,31 +3043,31 @@ msgstr "Farebné terminály"
 
 #: src/config/options.inc:886
 msgid "Color settings for color terminal."
-msgstr ""
+msgstr "Nastavenie farieb pre farebné terminály."
 
 #: src/config/options.inc:889 src/config/options.inc:1334
 msgid "Main menu bar"
-msgstr ""
+msgstr "Li¹ta s hlavným menu"
 
 #: src/config/options.inc:891 src/config/options.inc:1336
 msgid "Main menu bar colors."
-msgstr ""
+msgstr "Farby li¹ty s hlavným menu."
 
 #: src/config/options.inc:893
 msgid "Unselected main menu bar item"
-msgstr ""
+msgstr "Nevybratá polo¾ka hlavného menu"
 
 #: src/config/options.inc:895
 msgid "Unselected main menu bar item colors."
-msgstr ""
+msgstr "Farba nevybratej polo¾ky hlavného menu."
 
 #: src/config/options.inc:905
 msgid "Selected main menu bar item"
-msgstr ""
+msgstr "Vybratá polo¾ka hlavného menu"
 
 #: src/config/options.inc:907
 msgid "Selected main menu bar item colors."
-msgstr ""
+msgstr "Farba vybratej polo¾ky hlavného menu."
 
 #: src/config/options.inc:917 src/config/options.inc:986
 #: src/config/options.inc:1362 src/config/options.inc:1431
@@ -3095,27 +3114,27 @@ msgstr ""
 
 #: src/config/options.inc:946 src/config/options.inc:1391
 msgid "Menu bar"
-msgstr ""
+msgstr "Li¹ta s menu"
 
 #: src/config/options.inc:948 src/config/options.inc:1393
 msgid "Menu bar colors."
-msgstr ""
+msgstr "Farby li¹ty s menu."
 
 #: src/config/options.inc:950 src/config/options.inc:1395
 msgid "Unselected menu item"
-msgstr ""
+msgstr "Nevybratá polo¾ka menu"
 
 #: src/config/options.inc:952 src/config/options.inc:1397
 msgid "Unselected menu item colors."
-msgstr ""
+msgstr "Farby nevybratej polo¾ky menu."
 
 #: src/config/options.inc:962 src/config/options.inc:1407
 msgid "Selected menu item"
-msgstr "Vybraná polo¾ka menu"
+msgstr "Vybratá polo¾ka menu"
 
 #: src/config/options.inc:964 src/config/options.inc:1409
 msgid "Selected menu item colors."
-msgstr ""
+msgstr "Farby vybratej polo¾ky menu."
 
 #: src/config/options.inc:974 src/config/options.inc:1419
 msgid "Marked menu item"
@@ -3123,7 +3142,7 @@ msgstr "Oznaèená polo¾ka menu"
 
 #: src/config/options.inc:976 src/config/options.inc:1421
 msgid "Marked menu item colors."
-msgstr ""
+msgstr "Farby oznaèenej polo¾ky menu."
 
 #: src/config/options.inc:988 src/config/options.inc:1433
 msgid "Menu item hotkey colors."
@@ -3155,70 +3174,71 @@ msgstr ""
 
 #: src/config/options.inc:1014 src/config/options.inc:1459
 msgid "Menu frame"
-msgstr ""
+msgstr "Rámèek menu"
 
 #: src/config/options.inc:1016 src/config/options.inc:1461
 msgid "Menu frame colors."
-msgstr ""
+msgstr "Farby rámèeka menu."
 
 #: src/config/options.inc:1027 src/config/options.inc:1472
 msgid "Dialog"
-msgstr ""
+msgstr "Dialóg"
 
 #: src/config/options.inc:1029 src/config/options.inc:1474
 msgid "Dialog colors."
-msgstr ""
+msgstr "Farby dialógového okna."
 
 #: src/config/options.inc:1034
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.color.dialog.generic.background instead."
 msgstr ""
+"Táto voµba je odsúdena na zánik a bude èoskoro zru¹ená. Prosím\n"
+"pou¾ite rad¹ej voµbu ui.colors.color.dialog.generic.background."
 
 #: src/config/options.inc:1037 src/config/options.inc:1482
 msgid "Generic"
-msgstr ""
+msgstr "Obecné"
 
 #: src/config/options.inc:1039 src/config/options.inc:1484
 msgid "Generic dialog colors."
-msgstr ""
+msgstr "Obecná farba dialógu. "
 
 #: src/config/options.inc:1049 src/config/options.inc:1494
 msgid "Frame"
-msgstr "Rámec"
+msgstr "Rámèek"
 
 #: src/config/options.inc:1051 src/config/options.inc:1496
 msgid "Dialog frame colors."
-msgstr ""
+msgstr "Farba rámèeku dialógového okna."
 
 #: src/config/options.inc:1061 src/config/options.inc:1506
 msgid "Scrollbar"
-msgstr ""
+msgstr "Skrolovadlo"
 
 #: src/config/options.inc:1063 src/config/options.inc:1508
 msgid "Scrollbar colors."
-msgstr ""
+msgstr "Farby skrolovadla."
 
 #: src/config/options.inc:1073 src/config/options.inc:1518
 msgid "Scrollbar selected"
-msgstr ""
+msgstr "Vybrané skrolovadlo"
 
 #: src/config/options.inc:1075 src/config/options.inc:1520
 msgid "Scrollbar selected colors."
-msgstr ""
+msgstr "Farby vybranáho skrolovadla."
 
 #: src/config/options.inc:1087 src/config/options.inc:1532
 msgid "Dialog title colors."
-msgstr ""
+msgstr "Farba titulku dialógového okna."
 
 #: src/config/options.inc:1097 src/config/options.inc:1542
-#, fuzzy
 msgid "Text"
-msgstr "Textová plocha"
+msgstr "Text"
 
 #: src/config/options.inc:1099 src/config/options.inc:1544
 msgid "Dialog text colors."
-msgstr ""
+msgstr "Farby textu dialógového okna."
 
 #: src/config/options.inc:1109 src/config/options.inc:1554
 #: src/viewer/text/link.c:1090
@@ -3227,7 +3247,7 @@ msgstr "Za¹krtávací ¹tvorèek"
 
 #: src/config/options.inc:1111 src/config/options.inc:1556
 msgid "Dialog checkbox colors."
-msgstr ""
+msgstr "Farby za¹krtávacieho ¹tvorèeka."
 
 #: src/config/options.inc:1121 src/config/options.inc:1566
 msgid "Checkbox label"
@@ -3235,120 +3255,120 @@ msgstr "Popis za¹krtávacieho ¹tvorèeka"
 
 #: src/config/options.inc:1123 src/config/options.inc:1568
 msgid "Dialog checkbox label colors."
-msgstr ""
+msgstr "Farby popisu za¹krtávacieho ¹tvorèeka."
 
 #: src/config/options.inc:1133 src/config/options.inc:1578
 msgid "Button"
-msgstr ""
+msgstr "Tlaèidlo"
 
 #: src/config/options.inc:1135 src/config/options.inc:1580
 msgid "Dialog button colors."
-msgstr ""
+msgstr "Farby tlaèidla."
 
 #: src/config/options.inc:1145 src/config/options.inc:1590
 msgid "Selected button"
-msgstr ""
+msgstr "Vybraté tlaèidlo."
 
 #: src/config/options.inc:1147 src/config/options.inc:1592
 msgid "Dialog selected button colors."
-msgstr ""
+msgstr "Farby vybraté tlaèidla."
 
 #: src/config/options.inc:1157 src/config/options.inc:1602
 #: src/viewer/text/link.c:1096
 msgid "Text field"
-msgstr ""
+msgstr "Textové pole"
 
 #: src/config/options.inc:1159
 msgid "Dialog text field colors."
-msgstr ""
+msgstr "Farby textového poµa."
 
 #: src/config/options.inc:1169 src/config/options.inc:1614
 msgid "Text field text"
-msgstr ""
+msgstr "Text v textovom poli"
 
 #: src/config/options.inc:1171 src/config/options.inc:1616
 msgid "Dialog field text colors."
-msgstr ""
+msgstr "Farby textu textového poµa."
 
 #: src/config/options.inc:1181 src/config/options.inc:1626
 msgid "Meter"
-msgstr ""
+msgstr "Teplomer"
 
 #: src/config/options.inc:1183 src/config/options.inc:1628
 msgid "Dialog meter colors."
-msgstr ""
+msgstr "Farby teplomeru dialógového okna."
 
 #: src/config/options.inc:1193 src/config/options.inc:1638
 msgid "Shadow"
-msgstr ""
+msgstr "Tieò"
 
 #: src/config/options.inc:1195 src/config/options.inc:1640
 msgid "Dialog shadow colors (see ui.shadows option)."
-msgstr ""
+msgstr "Farby tieòa dialógového okna."
 
 #: src/config/options.inc:1205 src/config/options.inc:1651
 msgid "Title bar"
-msgstr "Titulok"
+msgstr "Li¹ta s titulkom"
 
 #: src/config/options.inc:1207 src/config/options.inc:1653
 msgid "Title bar colors."
-msgstr ""
+msgstr "Farby li¹ty s titulkom."
 
 #: src/config/options.inc:1209 src/config/options.inc:1655
 msgid "Generic title bar"
-msgstr ""
+msgstr "Obecná li¹ta s titulkom"
 
 #: src/config/options.inc:1211 src/config/options.inc:1657
 msgid "Generic title bar colors."
-msgstr ""
+msgstr "Farby obecnej li¹ty s titulkom."
 
 #: src/config/options.inc:1221
 msgid "Title bar text"
-msgstr ""
+msgstr "Text titulku"
 
 #: src/config/options.inc:1223 src/config/options.inc:1669
 msgid "Title bar text colors."
-msgstr ""
+msgstr "Farby textu li¹ty s titulkom."
 
 #: src/config/options.inc:1234 src/config/options.inc:1680
 msgid "Status bar"
-msgstr ""
+msgstr "Stavová li¹ta"
 
 #: src/config/options.inc:1236 src/config/options.inc:1682
 msgid "Status bar colors."
-msgstr ""
+msgstr "Farby stavovej li¹ty."
 
 #: src/config/options.inc:1238 src/config/options.inc:1684
 msgid "Generic status bar"
-msgstr ""
+msgstr "Obecná stavová li¹ta"
 
 #: src/config/options.inc:1240 src/config/options.inc:1686
 msgid "Generic status bar colors."
-msgstr ""
+msgstr "Farby obecnej stavovej li¹ty."
 
 #: src/config/options.inc:1250 src/config/options.inc:1696
 msgid "Status bar text"
-msgstr ""
+msgstr "Text stavovej li¹ty"
 
 #: src/config/options.inc:1252 src/config/options.inc:1698
 msgid "Status bar text colors."
-msgstr ""
+msgstr "Farby textu stavovej li¹ty."
 
 #: src/config/options.inc:1263 src/config/options.inc:1709
 msgid "Tabs bar"
-msgstr ""
+msgstr "Li¹ta s tabmi"
 
 #: src/config/options.inc:1265 src/config/options.inc:1711
 msgid "Tabs bar colors."
-msgstr ""
+msgstr "Farby li¹ty s tabmi."
 
 #: src/config/options.inc:1267 src/config/options.inc:1713
 msgid "Unselected tab"
-msgstr ""
+msgstr "Nevybratý tab"
 
 #: src/config/options.inc:1269 src/config/options.inc:1715
 msgid "Unselected tab colors."
-msgstr ""
+msgstr "Farby nevybratého tabu."
 
 #: src/config/options.inc:1279
 msgid "Loading tab"
@@ -3356,7 +3376,7 @@ msgstr "Nahrávam tab"
 
 #: src/config/options.inc:1281
 msgid "Tab colors for tabs that are loading in the background."
-msgstr ""
+msgstr "Farby tabu, ktorý sa práve nahráva na pozadí."
 
 #: src/config/options.inc:1291 src/config/options.inc:1725
 msgid "Selected tab"
@@ -3364,15 +3384,15 @@ msgstr "Vybratý tab"
 
 #: src/config/options.inc:1293 src/config/options.inc:1727
 msgid "Selected tab colors."
-msgstr ""
+msgstr "Farby vybratého tabu."
 
 #: src/config/options.inc:1303 src/config/options.inc:1737
 msgid "Tab separator"
-msgstr ""
+msgstr "Oddeµovaè v li¹te s tabmi"
 
 #: src/config/options.inc:1305 src/config/options.inc:1739
 msgid "Tab separator colors."
-msgstr ""
+msgstr "Farby oddeµovaèov li¹ty s tabmi."
 
 #: src/config/options.inc:1315 src/config/options.inc:1749
 msgid "Searched strings"
@@ -3380,15 +3400,15 @@ msgstr "Hµadaný re»azec"
 
 #: src/config/options.inc:1317 src/config/options.inc:1751
 msgid "Searched string highlight colors."
-msgstr ""
+msgstr "Farba zvýraznenia vyhµadaných re»azcov."
 
 #: src/config/options.inc:1329
 msgid "Non-color terminals"
-msgstr ""
+msgstr "Nefarebné terminály."
 
 #: src/config/options.inc:1331
 msgid "Color settings for non-color terminal."
-msgstr ""
+msgstr "Nastavenie farieb pre nefarebné terminály."
 
 #: src/config/options.inc:1338
 msgid "Unselected menu bar item"
@@ -3653,7 +3673,7 @@ msgstr ""
 
 #: src/config/opttypes.c:366
 msgid "String"
-msgstr ""
+msgstr "Re»azec"
 
 #: src/config/opttypes.c:366
 msgid "<str>"
@@ -3724,7 +3744,7 @@ msgstr ""
 
 #: src/cookies/cookies.c:110
 msgid "Paranoid security"
-msgstr ""
+msgstr "Paranoidná bezpeènos»"
 
 #: src/cookies/cookies.c:112
 msgid ""
@@ -3781,24 +3801,23 @@ msgstr "nie"
 
 #: src/cookies/cookies.c:564
 msgid "Accept"
-msgstr ""
+msgstr "Povoli»"
 
 #: src/cookies/cookies.c:565
 msgid "Reject"
-msgstr ""
+msgstr "Zamietnu»"
 
 #: src/cookies/dialogs.c:73 src/dialogs/document.c:116
 msgid "Server"
 msgstr "Server"
 
 #: src/cookies/dialogs.c:76
-#, fuzzy
 msgid "Domain"
-msgstr "~Dokumentácia"
+msgstr "Doména"
 
 #: src/cookies/dialogs.c:78
 msgid "Expires"
-msgstr ""
+msgstr "Expiruje"
 
 #: src/cookies/dialogs.c:80
 #, fuzzy
@@ -5434,7 +5453,7 @@ msgstr ""
 
 #: src/ssl/ssl.c:87
 msgid "Certificate File"
-msgstr ""
+msgstr "Súbor s certifikátom"
 
 #: src/ssl/ssl.c:89
 msgid ""
@@ -5453,7 +5472,7 @@ msgstr ""
 #. name:
 #: src/ssl/ssl.c:179 src/ssl/ssl.c:196
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: src/ssl/ssl.c:181
 msgid "SSL options."
@@ -5467,24 +5486,24 @@ msgstr "Nemô¾em èíta» udalos»: %d (%s)"
 #: src/terminal/event.c:111
 #, c-format
 msgid "Bad event %d"
-msgstr ""
+msgstr "Zlá udalos» %d"
 
 #: src/terminal/event.c:148
 msgid "Warning: terminal name contains illicit chars."
-msgstr ""
+msgstr "Varovanie: meno terminálu obsahuje nedovolené znaky."
 
 #: src/terminal/event.c:172
 #, c-format
 msgid "Bad terminal size: %d, %d"
-msgstr ""
+msgstr "Chybná veµkos» terminálu: %d, %d"
 
 #: src/terminal/kbd.c:280
 msgid "Could not get terminal size"
-msgstr ""
+msgstr "Namô¾em získa» veµkos» terminálu"
 
 #: src/terminal/kbd.c:944
 msgid "Too many bytes read from the itrm!"
-msgstr ""
+msgstr "Naèítal som z itrm príli¹ vela bajtov!"
 
 #: src/terminal/tab.c:188
 msgid "Do you really want to close the current tab?"
@@ -5502,7 +5521,7 @@ msgstr "Nemô¾em zapisova» na standardný výstup."
 #: src/viewer/dump/dump.c:204
 #, c-format
 msgid "URL expected after %s."
-msgstr ""
+msgstr "Po %s oèakávané URL."
 
 #: src/viewer/text/form.c:653
 msgid "Error while posting form"
@@ -5647,11 +5666,11 @@ msgstr "®iadne predchádzajúce hµadania"
 
 #: src/viewer/text/search.c:882
 msgid "Search hit bottom, continuing at top."
-msgstr ""
+msgstr "Vyhµadávanie dosiahlo koniec dokumentu, pokraèujem od zaèiatku."
 
 #: src/viewer/text/search.c:888
 msgid "Search hit top, continuing at bottom."
-msgstr ""
+msgstr "Vyhµadávanie dosiahlo zaèiatok dokumentu, pokraèujem od konca."
 
 #: src/viewer/text/search.c:909
 #, c-format
@@ -5659,14 +5678,13 @@ msgid "Search string '%s' not found"
 msgstr "Hµadaný re»azec '%s' nabol nájdený"
 
 #: src/viewer/text/search.c:1034
-#, fuzzy
 msgid "Typeahead"
-msgstr "Typ"
+msgstr "Interaktívne vyhµadávanie"
 
 #: src/viewer/text/search.c:1035
 #, c-format
 msgid "Could not find a link with the text '%s'."
-msgstr ""
+msgstr "Nena¹iel som odkaz obsahujúci text: '%s'."
 
 #: src/viewer/text/search.c:1182
 msgid "Normal search"
@@ -5674,19 +5692,19 @@ msgstr "Normálne hµadanie"
 
 #: src/viewer/text/search.c:1183
 msgid "Regexp search"
-msgstr ""
+msgstr "Regulárny výraz"
 
 #: src/viewer/text/search.c:1184
 msgid "Extended regexp search"
-msgstr ""
+msgstr "Roz¹írený regulárny výraz"
 
 #: src/viewer/text/search.c:1185
 msgid "Case sensitive"
-msgstr ""
+msgstr "Rozli¹ova» veµkos» písmen"
 
 #: src/viewer/text/search.c:1186
 msgid "Case insensitive"
-msgstr ""
+msgstr "Nerozli¹ova» veµkos» písmen"
 
 #: src/viewer/text/search.c:1202
 msgid "Search backward"

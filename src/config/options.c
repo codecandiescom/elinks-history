@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.167 2002/12/22 09:52:40 pasky Exp $ */
+/* $Id: options.c,v 1.168 2002/12/24 00:26:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -618,6 +618,8 @@ printhelp_descend(struct option *tree, unsigned char *path,
 		} else if (option->type == OPT_TREE) {
 			unsigned char *newpath;
 			unsigned char *description;
+			int l = strlen(option->desc);
+			int i;
 
 			/* Append option name to path */
 			newpath = init_str();
@@ -631,7 +633,15 @@ printhelp_descend(struct option *tree, unsigned char *path,
 			else
 				description = option->desc;
 
-			printf("%s%s: (%s)\n\n", indent, description, newpath);
+			printf("%s%s: (%s)\n", indent, description, newpath);
+			printf("%s%15s", indent, "");
+			for (i = 0; i < l; i++) {
+				putchar(option->desc[i]);
+
+				if (option->desc[i] == '\n')
+					printf("%s%15s", indent, "");
+			}
+			printf("\n\n");
 
 			add_to_strn(&newpath, ".");
 			printhelp_descend(option, newpath, level + 1, captions);

@@ -430,6 +430,9 @@ Simon Wilkinson <simon@sxw.org.uk>
 Simos Xenitellis <simos@hellug.gr>
 	Greek codepages & translation
 
+Solar Designer <solar@openwall.com>
+	Number of security fixes
+
 Stefan de Groot <stefan@nllinux.nl>
 	Dutch translation
 
@@ -494,4 +497,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.161 2004/04/07 21:45:25 pasky Exp $
+$Id: AUTHORS,v 1.162 2004/06/20 19:22:16 pasky Exp $

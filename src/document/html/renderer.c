@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.455 2004/06/23 14:54:24 zas Exp $ */
+/* $Id: renderer.c,v 1.456 2004/06/23 15:09:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,25 +81,26 @@ struct table_cache_entry {
 
 struct renderer_context {
 	int table_cache_entries;
-
+	struct hash *table_cache;
+	
 	int last_link_to_move;
 	struct tag *last_tag_to_move;
 	struct tag *last_tag_for_newline;
 
 	struct link_state_info link_state_info;
+
+	int nobreak;
+	int nosearchable;
+	int nowrap; /* Activated/deactivated by SP_NOWRAP. */
+
+	struct conv_table *convert_table;
+
+	int g_ctrl_num;
+	int empty_format;
+	int did_subscript;
 };
 
 static struct renderer_context renderer_context;
-
-static int nobreak;
-static int nosearchable;
-static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
-static struct conv_table *convert_table;
-static int g_ctrl_num;
-static int empty_format;
-static int did_subscript = 0;
-
-static struct hash *table_cache = NULL;
 
 
 /* Prototypes */
@@ -325,14 +326,14 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 
 		if (global_doc_opts->display_subs) {
 			if (format.attr & AT_SUBSCRIPT) {
-				if (!did_subscript) {
-					did_subscript = 1;
+				if (!renderer_context.did_subscript) {
+					renderer_context.did_subscript = 1;
 					put_chars(part, "[", 1);
 				}
 			} else {
-				if (did_subscript) {
+				if (renderer_context.did_subscript) {
 					put_chars(part, "]", 1);
-					did_subscript = 0;
+					renderer_context.did_subscript = 0;
 				}
 			}
 		}
@@ -353,7 +354,8 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 		}
 	}
 
-	if (!!(schar_cache.attr & SCREEN_ATTR_UNSEARCHABLE) ^ !!nosearchable) {
+	if (!!(schar_cache.attr & SCREEN_ATTR_UNSEARCHABLE)
+	    ^ !!renderer_context.nosearchable) {
 		schar_cache.attr ^= SCREEN_ATTR_UNSEARCHABLE;
 	}
 
@@ -885,7 +887,8 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	/* XXX: Perhaps doing the whole string at once could be an ugly memory
 	 * hit? Dunno, someone should measure that. --pasky */
 
-	buffer = convert_string(convert_table, chars, charslen, CSM_DEFAULT, NULL);
+	buffer = convert_string(renderer_context.convert_table, chars, charslen,
+			        CSM_DEFAULT, NULL);
 	if (buffer) {
 		if (*buffer) put_chars(part, buffer, strlen(buffer));
 		mem_free(buffer);
@@ -910,9 +913,9 @@ put_link_number(struct part *part)
 	s[slen++] = ']';
 	s[slen] = '\0';
 
-	nosearchable = 1;
+	renderer_context.nosearchable = 1;
 	put_chars(part, s, slen);
-	nosearchable = 0;
+	renderer_context.nosearchable = 0;
 
 	if (ff && ff->type == FC_TEXTAREA) line_break(part);
 
@@ -1049,7 +1052,7 @@ void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
 	enum link_state link_state;
-	int update_after_subscript = did_subscript;
+	int update_after_subscript = renderer_context.did_subscript;
 
 	assert(part);
 	if_assert_failed return;
@@ -1093,18 +1096,20 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		 * put_chars() call which results in their process_link() call
 		 * will ``update'' the @link_state. */
 		if (link_state == LINK_STATE_NEW
-		    && (is_drawing_subs_or_sups() || update_after_subscript != did_subscript)) {
+		    && (is_drawing_subs_or_sups()
+			|| update_after_subscript != renderer_context.did_subscript)) {
 			link_state = get_link_state();
 		}
 
 		process_link(part, link_state, chars, charslen);
 	}
 
-	if (nowrap && part->cx + charslen > overlap(par_format))
+	if (renderer_context.nowrap
+	    && part->cx + charslen > overlap(par_format))
 		return;
 
 	part->cx += charslen;
-	nobreak = 0;
+	renderer_context.nobreak = 0;
 
 	if (par_format.align != AL_NONE) {
 		while (part->cx > overlap(par_format)
@@ -1114,7 +1119,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 			if (!x) break;
 			if (part->document)
 				align_line(part, part->cy - 1, 0);
-			nobreak = x - 1;
+			renderer_context.nobreak = x - 1;
 		}
 	}
 
@@ -1140,8 +1145,8 @@ line_break(struct part *part)
 
 	int_lower_bound(&part->box.width, part->cx + par_format.rightmargin);
 
-	if (nobreak) {
-		nobreak = 0;
+	if (renderer_context.nobreak) {
+		renderer_context.nobreak = 0;
 		part->cx = -1;
 		part->xa = 0;
 		return;
@@ -1186,12 +1191,12 @@ html_form_control(struct part *part, struct form_control *fc)
 		return;
 	}
 
-	fc->g_ctrl_num = g_ctrl_num++;
+	fc->g_ctrl_num = renderer_context.g_ctrl_num++;
 
 	/* We don't want to recode hidden fields. */
 	if (fc->type == FC_TEXT || fc->type == FC_PASSWORD ||
 	    fc->type == FC_TEXTAREA) {
-		unsigned char *dv = convert_string(convert_table,
+		unsigned char *dv = convert_string(renderer_context.convert_table,
 						   fc->default_value,
 						   strlen(fc->default_value),
 						   CSM_QUERY, NULL);
@@ -1255,7 +1260,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 			break;
 		case SP_TABLE:
 			va_end(l);
-			return convert_table;
+			return renderer_context.convert_table;
 		case SP_USED:
 			va_end(l);
 			return (void *) !!document;
@@ -1284,7 +1289,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 		}
 			break;
 		case SP_NOWRAP:
-			nowrap = va_arg(l, int);
+			renderer_context.nowrap = va_arg(l, int);
 			va_end(l);
 			break;
 		case SP_REFRESH:
@@ -1315,18 +1320,18 @@ html_special(struct part *part, enum html_special_type c, ...)
 void
 free_table_cache(void)
 {
-	if (table_cache) {
+	if (renderer_context.table_cache) {
 		struct hash_item *item;
 		int i;
 
 		/* We do not free key here. */
-		foreach_hash_item (item, *table_cache, i)
+		foreach_hash_item (item, *renderer_context.table_cache, i)
 			mem_free_if(item->value);
 
-		free_hash(table_cache);
+		free_hash(renderer_context.table_cache);
 	}
 
-	table_cache = NULL;
+	renderer_context.table_cache = NULL;
 	renderer_context.table_cache_entries = 0;
 }
 
@@ -1342,12 +1347,12 @@ format_html_part(unsigned char *start, unsigned char *end,
 	struct tag *ltm = renderer_context.last_tag_to_move;
 	/*struct tag *ltn = last_tag_for_newline;*/
 	int lm = html_context.margin;
-	int ef = empty_format;
+	int ef = renderer_context.empty_format;
 	struct table_cache_entry *tce;
 
 	/* Hash creation if needed. */
-	if (!table_cache) {
-		table_cache = init_hash(8, &strhash);
+	if (!renderer_context.table_cache) {
+		renderer_context.table_cache = init_hash(8, &strhash);
 	} else if (!document) {
 		/* Search for cached entry. */
 		struct table_cache_entry_key key;
@@ -1365,7 +1370,8 @@ format_html_part(unsigned char *start, unsigned char *end,
 		key.xs = xs;
 		key.link_num = link_num;
 
-		item = get_hash_item(table_cache, (unsigned char *) &key,
+		item = get_hash_item(renderer_context.table_cache,
+				     (unsigned char *) &key,
 				     sizeof(struct table_cache_entry_key));
 		if (item) { /* We found it in cache, so just copy and return. */
 			part = mem_alloc(sizeof(struct part));
@@ -1402,10 +1408,10 @@ format_html_part(unsigned char *start, unsigned char *end,
 	}
 
 	html_context.margin = m;
-	empty_format = !document;
+	renderer_context.empty_format = !document;
 
 	done_link_state_info();
-	nobreak = 1;
+	renderer_context.nobreak = 1;
 
 	part = mem_calloc(1, sizeof(struct part));
 	if (!part) goto ret;
@@ -1425,7 +1431,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	int_lower_bound(&part->max_width, part->box.width);
 
-	nobreak = 0;
+	renderer_context.nobreak = 0;
 
 	done_link_state_info();
 	mem_free_if(part->spaces);
@@ -1439,11 +1445,12 @@ format_html_part(unsigned char *start, unsigned char *end,
 ret:
 	renderer_context.last_link_to_move = llm;
 	renderer_context.last_tag_to_move = ltm;
-	/*last_tag_for_newline = ltn;*/
+	/* renderer_context.last_tag_for_newline = ltn; */
 	html_context.margin = lm;
-	empty_format = ef;
+	renderer_context.empty_format = ef;
 
-	if (html_context.table_level > 1 && !document && table_cache
+	if (html_context.table_level > 1 && !document
+	    && renderer_context.table_cache
 	    && renderer_context.table_cache_entries < MAX_TABLE_CACHE_ENTRIES) {
 		/* Create a new entry. */
 		/* Clear memory to prevent bad key comparaison due to alignment
@@ -1462,7 +1469,8 @@ ret:
 		tce->key.link_num = link_num;
 		memcpy(&tce->part, part, sizeof(struct part));
 
-		if (!add_hash_item(table_cache, (unsigned char *) &tce->key,
+		if (!add_hash_item(renderer_context.table_cache,
+				   (unsigned char *) &tce->key,
 				   sizeof(struct table_cache_entry_key), tce)) {
 			mem_free(tce);
 		} else {
@@ -1491,7 +1499,7 @@ render_html_document(struct cache_entry *cached, struct document *document)
 
 	if (!init_string(&head)) return;
 
-	g_ctrl_num = 0;
+	renderer_context.g_ctrl_num = 0;
 
 	fr = cached->frag.next;
 	start = fr->data;
@@ -1504,13 +1512,15 @@ render_html_document(struct cache_entry *cached, struct document *document)
 			 (void (*)(void *)) line_break,
 			 (void *(*)(void *, enum html_special_type, ...)) html_special);
 
-	convert_table = get_convert_table(head.source, document->options.cp,
-					  document->options.assume_cp,
-					  &document->cp,
-					  &document->cp_status,
-					  document->options.hard_assume);
+	renderer_context.convert_table = get_convert_table(head.source,
+							   document->options.cp,
+							   document->options.assume_cp,
+							   &document->cp,
+							   &document->cp_status,
+							   document->options.hard_assume);
 
-	document->title = convert_string(convert_table, title.source, title.length, CSM_DEFAULT, NULL);
+	document->title = convert_string(renderer_context.convert_table, title.source,
+					 title.length, CSM_DEFAULT, NULL);
 	done_string(&title);
 
 	part = format_html_part(start, end, par_format.align,

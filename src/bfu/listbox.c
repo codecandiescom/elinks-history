@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.51 2002/12/06 22:16:40 pasky Exp $ */
+/* $Id: listbox.c,v 1.52 2002/12/06 22:35:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -565,6 +565,16 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 					box_sel_move(&dlg->items[dlg->n - 1], 1);
 				}
 				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			if (ev->x == KBD_DEL) {
+				struct listbox_data *box;
+
+				box = (struct listbox_data *) dlg->items[dlg->n - 1].item->data;
+				if (box->ops && box->ops->del)
+					box->ops->del(dlg->win->term, box);
 
 				return EVENT_PROCESSED;
 			}

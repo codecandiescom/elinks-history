@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.55 2002/12/06 19:10:11 pasky Exp $ */
+/* $Id: dialogs.c,v 1.56 2002/12/06 22:35:17 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -47,6 +47,12 @@
 unsigned char *bm_last_searched_name = NULL;
 unsigned char *bm_last_searched_url = NULL;
 
+static void listbox_delete_bookmark(struct terminal *, struct listbox_data *);
+
+struct listbox_ops bookmarks_listbox_ops = {
+	listbox_delete_bookmark,
+};
+
 /****************************************************************************
   Bookmark manager stuff.
 ****************************************************************************/
@@ -62,6 +68,7 @@ bookmark_dlg_box_build()
 	box = mem_calloc(1, sizeof(struct listbox_data));
 	if (!box) return NULL;
 
+	box->ops = &bookmarks_listbox_ops;
 	box->items = &bookmark_box_items;
 	add_to_list(bookmark_boxes, box);
 
@@ -231,7 +238,6 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
  * really_del_bookmark() */
 struct push_del_button_hop_struct {
 	struct terminal *term;
-	struct dialog *dlg;
 	struct bookmark *bm;
 };
 
@@ -306,32 +312,21 @@ cancel_del_bookmark(void *vhop)
 	hop->bm->refcount--;
 }
 
-/* Callback for the "delete" button in the bookmark manager */
-static int
-push_delete_button(struct dialog_data *dlg,
-		   struct widget_data *some_useless_delete_button)
+static void
+listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 {
-	struct bookmark *bm;
 	struct push_del_button_hop_struct *hop;
-	struct terminal *term;
-	struct listbox_data *box;
+	struct bookmark *bm;
 
-	/* FIXME There's probably a nicer way to do this */
-	term = dlg->win->term;
-
-	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
-
-	if (!box->sel) return 0;
+	if (!box->sel) return;
 	bm = (struct bookmark *) box->sel->udata;
-	if (!bm) return 0;
-
+	if (!bm) return;
 
 	/* Deleted in really_del_bookmark() */
 	hop = mem_alloc(sizeof(struct push_del_button_hop_struct));
-	if (!hop) return 0;
+	if (!hop) return;
 
 	hop->bm = bm;
-	hop->dlg = dlg->dlg;
 	hop->term = term;
 
 	bm->refcount++;
@@ -344,6 +339,19 @@ push_delete_button(struct dialog_data *dlg,
 		TEXT(T_YES), really_del_bookmark, B_ENTER,
 		TEXT(T_NO), cancel_del_bookmark, B_ESC);
 
+	return;
+}
+
+/* Callback for the "delete" button in the bookmark manager */
+static int
+push_delete_button(struct dialog_data *dlg,
+		   struct widget_data *some_useless_delete_button)
+{
+	struct listbox_data *box;
+	struct terminal *term = dlg->win->term;
+
+	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
+	listbox_delete_bookmark(term, box);
 	return 0;
 }
 

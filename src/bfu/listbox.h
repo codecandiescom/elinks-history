@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.20 2002/11/29 11:17:57 pasky Exp $ */
+/* $Id: listbox.h,v 1.21 2002/12/06 22:35:17 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -11,12 +11,19 @@
 #include "util/lists.h"
 
 
+struct listbox_data;
 struct listbox_item;
+
+struct listbox_ops {
+	void (*del)(struct terminal *, struct listbox_data *);
+};
 
 /* Stores display information about a box. Kept in cdata. */
 struct listbox_data {
 	struct listbox_data *next;
 	struct listbox_data *prev;
+
+	struct listbox_ops *ops; /* Backend-provided operations */
 
 	struct listbox_item *sel; /* Item currently selected */
 	struct listbox_item *top; /* Item which is on the top line of the box */

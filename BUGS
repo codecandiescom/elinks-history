@@ -33,9 +33,6 @@ stuck bouncing in redirects around unhappily, as we don't check for
 MAX_REDIRECTS - AFAIK not an easy AND nice way how to, as we don't have needed
 field in structure passed to end_dump().
 
-	Sometimes you can manage to get two httpauth login dialogs at once -
-then the second one will crash links when you'll close it.
-
-$Id: BUGS,v 1.10 2002/03/02 14:04:07 pasky Exp $
+$Id: BUGS,v 1.11 2002/03/04 20:18:20 pasky Exp $
 
 vim: textwidth=80

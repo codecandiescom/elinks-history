@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.10 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: cache.h,v 1.11 2002/12/08 20:17:43 pasky Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
@@ -56,6 +56,7 @@ void defrag_entry(struct cache_entry *);
 void truncate_entry(struct cache_entry *, int, int);
 void free_entry_to(struct cache_entry *, int);
 void delete_entry_content(struct cache_entry *);
+void delete_cache_entry(struct cache_entry *);
 void garbage_collection(int);
 
 #endif

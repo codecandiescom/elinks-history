@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.124 2004/04/03 02:11:07 jonas Exp $ */
+/* $Id: cache.c,v 1.125 2004/04/03 02:21:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -478,7 +478,7 @@ delete_cache_entry(struct cache_entry *ce)
 	if (ce->uri) done_uri(ce->uri);
 	if (ce->head) mem_free(ce->head);
 	if (ce->last_modified) mem_free(ce->last_modified);
-	if (ce->redirect) mem_free(ce->redirect);
+	if (ce->redirect) done_uri(ce->redirect);
 	if (ce->ssl_info) mem_free(ce->ssl_info);
 	if (ce->encoding_info) mem_free(ce->encoding_info);
 	if (ce->etag) mem_free(ce->etag);
@@ -486,12 +486,6 @@ delete_cache_entry(struct cache_entry *ce)
 	mem_free(ce);
 }
 
-
-struct uri *
-get_cache_redirect_uri(struct cache_entry *entry)
-{
-	return get_uri(entry->redirect, -1);
-}
 
 int
 redirect_cache(struct cache_entry *cache, unsigned char *location,
@@ -523,9 +517,11 @@ redirect_cache(struct cache_entry *cache, unsigned char *location,
 
 	if (cache->redirect) mem_free(cache->redirect);
 
-	cache->redirect = uristring;
+	cache->redirect = get_uri(uristring, -1);
 	cache->redirect_get = get;
 	if (incomplete >= 0) cache->incomplete = incomplete;
+
+	mem_free(uristring);
 
 	return !!cache->redirect;
 }

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.76 2004/04/03 01:35:51 jonas Exp $ */
+/* $Id: cache.h,v 1.77 2004/04/03 02:21:51 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -33,8 +33,9 @@ struct cache_entry {
 	struct list_head frag;
 
 	struct uri *uri;
+	struct uri *redirect;
+
 	unsigned char *head;
-	unsigned char *redirect;
 	unsigned char *last_modified;
 	unsigned char *etag;
 	unsigned char *ssl_info;
@@ -94,10 +95,6 @@ void truncate_entry(struct cache_entry *, int, int);
 void free_entry_to(struct cache_entry *, int);
 void delete_entry_content(struct cache_entry *);
 void delete_cache_entry(struct cache_entry *);
-
-/* Returns a reference to the redirect URI. */
-struct uri *
-get_cache_redirect_uri(struct cache_entry *cache_entry);
 
 /* Sets up the cache entry to redirect to a new location
  * @location	decides where to redirect to by resolving it relative to the

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.59 2004/04/03 01:35:51 jonas Exp $ */
+/* $Id: frames.c,v 1.60 2004/04/03 02:21:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,16 +181,12 @@ repeat:
 	if (vs->plain != -1) o->plain = vs->plain;
 
 	if (ce->redirect && frame->redirect_cnt < MAX_REDIRECTS) {
-		struct uri *uri = get_cache_redirect_uri(ce);
-
 		assertm(ce->uri == vs->uri, "Redirecting using bad base URI");
-		if (uri) {
-			frame->redirect_cnt++;
-			ses_change_frame_uri(ses, name, uri);
-			done_uri(uri);
-			o->plain = plain;
-			goto repeat;
-		}
+
+		frame->redirect_cnt++;
+		ses_change_frame_uri(ses, name, ce->redirect);
+		o->plain = plain;
+		goto repeat;
 	}
 
 	doc_view = find_fd(ses, name, depth, o->x, o->y);

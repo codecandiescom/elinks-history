@@ -1,14 +1,14 @@
-/* $Id: globhist.h,v 1.20 2004/04/03 17:40:53 jonas Exp $ */
+/* $Id: globhist.h,v 1.21 2004/07/15 00:45:07 jonas Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
 
-struct listbox_item;
-struct input_history;
-
 #include "util/lists.h"
 #include "util/object.h"
 #include "util/ttime.h"
+
+struct listbox_item;
+struct input_history;
 
 struct global_history_item {
 	LIST_HEAD(struct global_history_item);

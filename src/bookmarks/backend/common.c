@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.8 2002/12/13 12:42:09 zas Exp $ */
+/* $Id: common.c,v 1.9 2003/04/28 15:33:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ bookmarks_read()
 }
 
 void
-bookmarks_write(struct list_head *bookmarks)
+bookmarks_write(struct list_head *bookmarks_list)
 {
 	int backend = get_opt_int("bookmarks.file_format");
 	struct secure_save_info *ssi;
@@ -86,7 +86,7 @@ bookmarks_write(struct list_head *bookmarks)
 	mem_free(file_name);
 	if (!ssi) return;
 
-	bookmarks_backends[backend]->write(ssi, bookmarks);
+	bookmarks_backends[backend]->write(ssi, bookmarks_list);
 
 	if (!secure_close(ssi)) bookmarks_dirty = 0;
 }

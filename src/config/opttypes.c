@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.52 2003/04/16 21:20:27 pasky Exp $ */
+/* $Id: opttypes.c,v 1.53 2003/04/28 15:38:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ int commandline = 0;
 static unsigned char *
 gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	unsigned char *error;
+	unsigned char *err;
 	unsigned char *str;
 
 	if (!*argc) return gettext("Parameter expected");
@@ -52,9 +52,9 @@ gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 		}
 		mem_free(str);
 	}
-	error = gettext("Read error");
+	err = gettext("Read error");
 
-	return error;
+	return err;
 }
 
 /* If 0 follows, disable option and eat 0. If 1 follows, enable option and

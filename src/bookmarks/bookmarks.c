@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.68 2003/04/28 09:47:12 zas Exp $ */
+/* $Id: bookmarks.c,v 1.69 2003/04/28 15:37:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,11 +274,12 @@ write_bookmarks()
 
 /* Clears the bookmark list */
 static void
-free_bookmarks(struct list_head *bookmarks, struct list_head *box_items)
+free_bookmarks(struct list_head *bookmarks_list,
+	       struct list_head *box_items)
 {
 	struct bookmark *bm;
 
-	foreach (bm, *bookmarks) {
+	foreach (bm, *bookmarks_list) {
 		if (!list_empty(bm->child))
 			free_bookmarks(&bm->child, &bm->box_item->child);
 		mem_free(bm->title);
@@ -286,7 +287,7 @@ free_bookmarks(struct list_head *bookmarks, struct list_head *box_items)
 	}
 
 	free_list(*box_items);
-	free_list(*bookmarks);
+	free_list(*bookmarks_list);
 }
 
 /* Does final cleanup and saving of bookmarks */

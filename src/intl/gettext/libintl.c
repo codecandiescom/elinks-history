@@ -1,5 +1,5 @@
 /* Some ELinks' auxiliary routines (ELinks<->gettext support) */
-/* $Id: libintl.c,v 1.8 2003/04/17 12:28:48 zas Exp $ */
+/* $Id: libintl.c,v 1.9 2003/04/28 15:34:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ int
 iso639_to_language(unsigned char *iso639)
 {
 	unsigned char *l = stracpy(iso639);
-	unsigned char *_;
+	unsigned char *p;
 	int i, ll;
 
 	if (!l)
@@ -76,15 +76,15 @@ iso639_to_language(unsigned char *iso639)
 
 	/* The environment variable transformation. */
 
-	_ = strchr(l, '.');
-	if (_)
-		*_ = 0;
+	p = strchr(l, '.');
+	if (p)
+		*p = '\0';
 
-	_ = strchr(l, '_');
-	if (_)
-		*_ = '-';
+	p = strchr(l, '_');
+	if (p)
+		*p = '-';
 	else
-		_ = strchr(l, '-');
+		p = strchr(l, '-');
 
 	/* Exact match. */
 
@@ -97,8 +97,8 @@ iso639_to_language(unsigned char *iso639)
 
 	/* Base language match. */
 
-	if (_) {
-		*_ = 0;
+	if (p) {
+		*p = '\0';
 		for(i = 0; languages[i].name; i++) {
 			if (strcmp(languages[i].iso639, l))
 				continue;
@@ -182,7 +182,7 @@ int current_language = 0;
 void
 set_language(int language)
 {
-	unsigned char *_;
+	unsigned char *p;
 
 	if (!system_language)
 		system_language = get_system_language_index();
@@ -202,9 +202,9 @@ set_language(int language)
 		LANGUAGE = malloc(256);
 	}
 	strcpy(LANGUAGE, language_to_iso639(language));
-	_ = strchr(LANGUAGE, '-');
-	if (_)
-		*_ = '_';
+	p = strchr(LANGUAGE, '-');
+	if (p)
+		*p = '_';
 
 	/* Propagate the change to gettext. From the info manual. */
 	{

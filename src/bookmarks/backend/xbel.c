@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.21 2003/04/24 08:23:38 zas Exp $ */
+/* $Id: xbel.c,v 1.22 2003/04/28 15:33:47 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -59,10 +59,10 @@ static unsigned char * filename_bookmarks_xbel(int writing);
 static int xbeltree_to_bookmarks_list(struct tree_node *root,
 				      struct bookmark *current_parent);
 static void write_bookmarks_list(struct secure_save_info *ssi,
-				 struct list_head *bookmarks,
+				 struct list_head *bookmarks_list,
 				 int n);
 static void write_bookmarks_xbel(struct secure_save_info *ssi,
-				 struct list_head *bookmarks);
+				 struct list_head *bookmarks_list);
 
 /* Element */
 struct tree_node {
@@ -136,7 +136,8 @@ read_bookmarks_xbel(FILE *f)
 }
 
 static void
-write_bookmarks_xbel(struct secure_save_info *ssi, struct list_head *bookmarks)
+write_bookmarks_xbel(struct secure_save_info *ssi,
+		     struct list_head *bookmarks_list)
 {
 	/* We check for readok in filename_bookmarks_xbel(). */
 
@@ -149,7 +150,7 @@ write_bookmarks_xbel(struct secure_save_info *ssi, struct list_head *bookmarks)
 		"<xbel>\n\n\n");
 
 
-	write_bookmarks_list(ssi, bookmarks, 0);
+	write_bookmarks_list(ssi, bookmarks_list, 0);
 	secure_fputs(ssi, "\n</xbel>\n");
 }
 
@@ -206,12 +207,13 @@ print_xml_entities(struct secure_save_info *ssi, const unsigned char *str)
 }
 
 static void
-write_bookmarks_list(struct secure_save_info *ssi, struct list_head *bookmarks,
+write_bookmarks_list(struct secure_save_info *ssi,
+		     struct list_head *bookmarks_list,
 		     int n)
 {
 	struct bookmark *bm;
 
-	foreach(bm, *bookmarks) {
+	foreach(bm, *bookmarks_list) {
 		indentation(ssi, n + 1);
 
 		if (bm->box_item->type == BI_FOLDER) {
@@ -249,7 +251,6 @@ write_bookmarks_list(struct secure_save_info *ssi, struct list_head *bookmarks,
 static void
 on_element_open(void *data, const char *name, const char **attr)
 {
-	unsigned char *tmp;
 	struct attributes *attribute;
 	struct tree_node *node;
 
@@ -278,7 +279,7 @@ on_element_open(void *data, const char *name, const char **attr)
 	}
 
 	while (*attr) {
-		tmp = stracpy((unsigned char *) *attr);
+		unsigned char *tmp = stracpy((unsigned char *) *attr);
 
 		if (!tmp) {
 			free_node(current_node);

@@ -780,18 +780,18 @@ plural_lookup(struct loaded_l10nfile *domain, unsigned long int n,
 {
 	struct loaded_domain *domaindata =
 		(struct loaded_domain *) domain->data;
-	unsigned long int index;
+	unsigned long int indexx;
 	const unsigned char *p;
 
-	index = plural_eval(domaindata->plural, n);
-	if (index >= domaindata->nplurals)
+	indexx = plural_eval(domaindata->plural, n);
+	if (indexx >= domaindata->nplurals)
 		/* This should never happen.  It means the plural expression and the
 		   given maximum value do not match.  */
-		index = 0;
+		indexx = 0;
 
 	/* Skip INDEX strings at TRANSLATION.  */
 	p = translation;
-	while (index-- > 0) {
+	while (indexx-- > 0) {
 		p = strchr(p, '\0');
 
 		/* And skip over the NUL byte.  */

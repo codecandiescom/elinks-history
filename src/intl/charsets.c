@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.21 2002/12/07 20:05:55 pasky Exp $ */
+/* $Id: charsets.c,v 1.22 2003/04/28 15:34:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -559,24 +559,24 @@ get_cp_index(unsigned char *n)
 }
 
 unsigned char *
-get_cp_name(int index)
+get_cp_name(int indexx)
 {
-	if (index < 0) return "none";
+	if (indexx < 0) return "none";
 
-	return codepages[index].name;
+	return codepages[indexx].name;
 }
 
 unsigned char *
-get_cp_mime_name(int index)
+get_cp_mime_name(int indexx)
 {
-	if (index < 0) return "none";
-	if (!codepages[index].aliases) return NULL;
+	if (indexx < 0) return "none";
+	if (!codepages[indexx].aliases) return NULL;
 
-	return codepages[index].aliases[0];
+	return codepages[indexx].aliases[0];
 }
 
 int
-is_cp_special(int index)
+is_cp_special(int indexx)
 {
-	return codepages[index].table == table_utf_8;
+	return codepages[indexx].table == table_utf_8;
 }

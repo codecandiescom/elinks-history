@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.83 2002/08/08 18:54:45 pasky Exp $ */
+/* $Id: options.c,v 1.84 2002/08/09 12:55:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1546,6 +1546,38 @@ register_options()
 	add_opt_color("ui.colors.mono.status.status-text",
 		"background", 0, "white",
 		"Default background color.");
+
+
+
+	add_opt_tree("ui",
+		"timer", 0,
+		"Timed action after certain interval of user inactivity. Someone can\n"
+		"even find this useful, altough you may not believe that.");
+
+#ifdef USE_LEDS
+	add_opt_int("ui.timer",
+		"enable", 0, 0, 2, 0,
+		"Whether to enable the timer or not:\n"
+		"0 is don't count down anything\n"
+		"1 is count down, but don't show the timer\n"
+		"2 is count down and show the timer near LEDs\n");
+#else
+	add_opt_int("ui.timer",
+		"enable", 0, 0, 2, 0,
+		"Whether to enable the timer or not:\n"
+		"0 is don't count down anything\n"
+		"1 is count down, but don't show the timer\n"
+		"2 is count down and show the timer near LEDs (note that this feature is DISABLED)\n);"
+#endif
+
+	add_opt_int("ui.timer",
+		"duration", 0, 1, 86400, 86400,
+		"Length of the inactivity interval. One day should be enough for just\n"
+		"everyone (tm).");
+
+	add_opt_string("ui.timer",
+		"action", 0, "",
+		"Keybinding action to be triggered when timer arrives to zero.");
 
 
 

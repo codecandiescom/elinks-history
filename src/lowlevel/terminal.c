@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.21 2002/08/05 19:53:32 pasky Exp $ */
+/* $Id: terminal.c,v 1.22 2002/08/09 12:55:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "lowlevel/kbd.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
+#include "lowlevel/timer.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -441,9 +442,11 @@ struct terminal *init_term(int fdin, int fdout,
 }
 
 
-static inline void term_send_event(struct terminal *term, struct event *ev)
+void
+term_send_event(struct terminal *term, struct event *ev)
 {
-	((struct window *)&term->windows)->next->handler(term->windows.next, ev, 0);
+	((struct window *) &term->windows)->next->handler(term->windows.next,
+							  ev, 0);
 }
 
 static inline void term_send_ucs(struct terminal *term, struct event *ev, int u)
@@ -584,6 +587,7 @@ send_redraw:
 	}
 
 	if (ev->ev == EV_KBD || ev->ev == EV_MOUSE) {
+		reset_timer();
 		if (ev->ev == EV_KBD && upcase(ev->x) == 'L'
 		    && ev->y == KBD_CTRL) {
 			ev->ev = EV_REDRAW;

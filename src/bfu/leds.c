@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.9 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: leds.c,v 1.10 2002/08/09 12:55:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,7 @@
 
 #ifdef USE_LEDS
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -14,6 +15,8 @@
 
 #include "bfu/align.h"
 #include "bfu/leds.h"
+#include "config/options.h"
+#include "lowlevel/timer.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
 #include "util/error.h"
@@ -34,6 +37,7 @@
  * and hope that everyone will abide the "rules". */
 static struct led leds[LEDS_COUNT];
 static unsigned char leds_backup[LEDS_COUNT];
+static int timer_duration_backup = 0;
 
 static int redraw_timer = -1;
 static int drawing = 0;
@@ -54,6 +58,8 @@ init_leds()
 		leds_backup[i] = 0; /* assure first redraw */
 	}
 
+	timer_duration_backup = 0;
+
 	/* We can't setup timer here, because we may not manage to startup in
 	 * 100ms and we will get to problems when we will call draw_leds() on
 	 * uninitialized terminal. So, we will wait for draw_leds(). */
@@ -69,6 +75,19 @@ void
 draw_leds(struct terminal *term)
 {
 	int i;
+
+	/* This should be done elsewhere, but this is very nice place where we
+	 * could do that easily. */
+	if (get_opt_int("ui.timer.enable") == 2) {
+		char s[256]; int l;
+
+		snprintf(s, 256, "[%d]", timer_duration);
+		l = strlen(s);
+
+		for (i = l - 1; i >= 0; i--)
+			set_char(term, term->x - LEDS_COUNT - 3 - (l - i),
+				 term->y - 1, s[i] | COL(070));
+	}
 
 	/* We must shift the whole thing by one char to left, because we don't
 	 * draft the char in the right-down corner :(. */
@@ -92,6 +111,11 @@ sync_leds()
 {
 	int resync = 0;
 	int i;
+
+	if (timer_duration_backup != timer_duration) {
+		timer_duration_backup = timer_duration;
+		resync++;
+	}
 
 	for (i = 0; i < LEDS_COUNT; i++) {
 		if (leds[i].value != leds_backup[i]) {

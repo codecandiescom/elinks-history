@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.46 2002/08/08 18:01:45 pasky Exp $ */
+/* $Id: main.c,v 1.47 2002/08/09 12:55:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,6 +52,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/sysname.h"
 #include "lowlevel/terminal.h"
+#include "lowlevel/timer.h"
 #include "lua/core.h"
 #include "lua/hooks.h"
 #include "protocol/mime.h"
@@ -311,6 +312,7 @@ init()
 #ifdef USE_LEDS
 	init_leds();
 #endif
+	init_timer();
 	read_bookmarks();
 	read_global_history();
 	load_url_history();
@@ -393,6 +395,7 @@ terminate_all_subsystems()
 #ifdef USE_LEDS
 	done_leds();
 #endif
+	done_timer();
 	done_options();
 	terminate_osdep();
 }

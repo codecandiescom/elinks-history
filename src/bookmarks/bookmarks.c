@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.151 2005/01/03 00:26:59 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.152 2005/01/03 00:29:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,12 +305,16 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 
 	object_nolock(bm, "bookmark");
 
-	add_bookmark_item_to_bookmarks(bm, root, place);
-
 	/* Setup box_item */
 	/* Note that item_free is left at zero */
 	bm->box_item = mem_calloc(1, sizeof(struct listbox_item));
-	if (!bm->box_item) return NULL;
+	if (!bm->box_item) {
+		mem_free(bm->url);
+		mem_free(bm->title);
+		mem_free(bm);
+		return NULL;
+	}
+
 	if (root) {
 		bm->box_item->depth = root->box_item->depth + 1;
 	}
@@ -319,6 +323,8 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 
 	bm->box_item->udata = (void *) bm;
 	bm->box_item->type = (url && *url ? BI_LEAF : BI_FOLDER);
+
+	add_bookmark_item_to_bookmarks(bm, root, place);
 
 	if (place) {
 		if (root)

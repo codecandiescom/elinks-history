@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.175 2004/10/12 14:26:48 zas Exp $ */
+/* $Id: ftp.c,v 1.176 2004/10/13 00:09:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,11 +49,44 @@
 #include "util/string.h"
 
 
-/* TODO: move ftp options here. */
+struct option_info ftp_options[] = {
+	INIT_OPT_TREE("protocol", N_("FTP"),
+		"ftp", 0,
+		N_("FTP specific options.")),
+
+	INIT_OPT_TREE("protocol.ftp", N_("Proxy configuration"),
+		"proxy", 0,
+		N_("FTP proxy configuration.")),
+
+	INIT_OPT_STRING("protocol.ftp.proxy", N_("Host and port-number"),
+		"host", 0, "",
+		N_("Host and port-number (host:port) of the FTP proxy, or blank.\n"
+		"If it's blank, FTP_PROXY environment variable is checked as well.")),
+
+	INIT_OPT_STRING("protocol.ftp", N_("Anonymous password"),
+		"anon_passwd", 0, "some@host.domain",
+		N_("FTP anonymous password to be sent.")),
+
+	INIT_OPT_BOOL("protocol.ftp", N_("Use passive mode (IPv4)"),
+		"use_pasv", 0, 1,
+		N_("Use PASV instead of PORT (passive vs active mode, IPv4 only).")),
+#ifdef IPV6
+	INIT_OPT_BOOL("protocol.ftp", N_("Use passive mode (IPv6)"),
+		"use_epsv", 0, 0,
+		N_("Use EPSV instead of EPRT (passive vs active mode, IPv6 only).")),
+#else
+	INIT_OPT_BOOL("protocol.ftp", N_("Use passive mode (IPv6)"),
+		"use_epsv", 0, 0,
+		N_("Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
+		"Works only with IPv6 enabled, so nothing interesting for you.")),
+
+	NULL_OPTION_INFO,
+};
+#endif
 
 struct module ftp_protocol_module = struct_module(
 	/* name: */		N_("FTP"),
-	/* options: */		NULL,
+	/* options: */		ftp_options,
 	/* hooks: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.118 2003/11/08 05:51:27 miciah Exp $ */
+/* $Id: osdep.c,v 1.119 2003/12/28 06:11:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,6 +199,16 @@ is_twterm(void) /* Check if it make sense to call a twterm. */
 	return tw;
 }
 
+int
+is_gnuscreen(void)
+{
+	static int screen = -1;
+
+	if (screen == -1) screen = !!getenv("STY");
+
+	return screen;
+}
+
 
 #if defined(UNIX) || defined(WIN32)
 
@@ -250,7 +260,7 @@ void
 set_clipboard_text(unsigned char *data)
 {
 	/* GNU Screen's clipboard */
-	if (getenv("STY")) {
+	if (is_gnuscreen()) {
 		struct string str;
 
 		if (!init_string(&str)) return;
@@ -593,7 +603,7 @@ get_common_env(void)
 
 	if (is_xterm()) env |= ENV_XWIN;
 	if (is_twterm()) env |= ENV_TWIN;
-	if (getenv("STY")) env |= ENV_SCREEN;
+	if (is_gnuscreen()) env |= ENV_SCREEN;
 
 	/* ENV_CONSOLE is always set now and indicates that we are working w/ a
 	 * displaying-capable character-adressed terminal. Sounds purely

@@ -14,9 +14,6 @@ Adam Golebiowski <adamg@pld-linux.org>
 Adam Harvey <matlhdam@iinet.net.au>
 	Fixed sometimes badly posted form
 
-Arun Upadhyaya Kishan <akishan@cs.stanford.edu>
-	ftpparse.{c,h} update for gcc 2.95
-
 Alberto García <berto@gpul.org>
 	Galician translation
 
@@ -52,6 +49,9 @@ Arkadiusz Sochala <jojoro@priv2.onet.pl>
 
 Armon Red <armon@islandia.is>
 	Icelandic translation
+
+Arun Upadhyaya Kishan <akishan@cs.stanford.edu>
+	ftpparse.{c,h} update for gcc 2.95
 
 Aurimas Mikalauskas <inner@dammit.lt>
 	Lithuanian translation
@@ -518,4 +518,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.171 2004/10/01 01:12:39 jonas Exp $
+$Id: AUTHORS,v 1.172 2004/10/12 23:32:03 jonas Exp $

@@ -1,3 +1,124 @@
+Sat Dec 25 20:42:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/msgbox.c, bfu/msgbox.h, ecmascript/spidermonkey.c,
+	sched/session.c, scripting/lua/core.c:
+
+	Rename MSGBOX_INTL_TITLE_ONLY to more appropriate
+	MSGBOX_NO_TEXT_INTL, and use it instead of MSGBOX_NO_INTL to
+	simplify code.  
+
+Sat Dec 25 19:05:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/introduction.txt:
+
+	Write about navigation.  
+
+Sat Dec 25 17:51:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Space fix.  
+
+Sat Dec 25 17:28:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fix stupid error introduced in last patch.  
+
+Sat Dec 25 15:25:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	jsval_to_string() always return a string (even empty) but never
+	NULL. It simplifies things a bit more.  
+
+Sat Dec 25 15:15:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	It makes for sense for jsval_to_boolean() to return an int.  
+
+Sat Dec 25 15:11:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Modify jsval_to_string() to return an unsigned char *, and simplify
+	code a lot.  
+
+Sat Dec 25 14:51:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Let jsval_to_boolean() return a JSBool and simplify code.  
+
+Sat Dec 25 14:40:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Introduce some wrappers for jsval_to_value(): jsval_to_string(),
+	jsval_to_boolean(), jsval_to_number().  
+
+Sat Dec 25 14:29:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/introduction.txt:
+
+	Write about managers.  
+
+Sat Dec 25 14:19:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/msgbox.c, bfu/msgbox.h, ecmascript/spidermonkey.c:
+
+	Add a new flag for msg_box() to indicate i18n of title only. It
+	helps to fix an i18n issue with window_alert().  
+
+Sat Dec 25 14:00:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Add some sanity checks macros for struct jsval_property.  
+
+Sat Dec 25 13:19:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/fi.po:
+
+	I have been using ELinks from CVS and fixing up its fi.po every now
+	and then.  Here are the changes I have made so far.  Not all menu
+	items currently have hot keys (~).  That will have to be corrected
+	later.  
+	
+	Update by Kalle Olavi Niemitalo.  
+
+Fri Dec 24 23:28:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window_get_property(): tidy up.  
+
+Fri Dec 24 23:24:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	input_get_property(): test |id| before anything else, and simplify
+	code.  
+
+Fri Dec 24 23:21:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Test |id| before anything else.  
+
+Fri Dec 24 23:19:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Minor tidy up.  
+
+Fri Dec 24 23:13:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Drop goto/label |convert|.  
+
 Fri Dec 24 17:20:33 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:

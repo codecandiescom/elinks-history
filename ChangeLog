@@ -1,3 +1,132 @@
+Thu Oct 16 21:17:10 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update. Getting ahead of fonseca ;-) 
+
+Thu Oct 16 21:09:19 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update. Getting ahead of fonseca ;-) 
+
+Thu Oct 16 19:23:07 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Thu Oct 16 15:53:19 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	s/Info/Informazioni/ 
+
+Thu Oct 16 14:01:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Thu Oct 16 13:36:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Explain what the HTTP referer is and why can it be bad in
+	protocol.http.referer description.  
+
+Thu Oct 16 13:29:26 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and fr,hu,pl,it translations were updated.  
+
+Thu Oct 16 13:14:36 2003  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS:
+
+	Unixware should be written UnixWare, should prevent some SCO
+	lawsuits... ;).  
+
+Thu Oct 16 13:12:02 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/: mailcap.html, book/info/preface.xml,
+	book/intro/installation.xml, man/man5/elinks.conf.5:
+
+	Bunch of typo fixes with the help of
+	http://fgouget.free.fr/typos/typos program.  
+
+Thu Oct 16 13:08:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/leds.c, config/options.c, document/html/parser.c,
+	elusive/parser/css/TESTING, elusive/parser/css/atrule.c,
+	elusive/parser/css/parser.c, protocol/uri.h, protocol/http/codes.c,
+	protocol/http/http.c, sched/connection.c, sched/event.c,
+	util/fastfind.c:
+
+	Bunch of typo fixes with the help of
+	http://fgouget.free.fr/typos/typos program.  
+
+Thu Oct 16 11:02:28 2003  Laurent Monin <zas@norz.org>:
+
+	* po/gen_translations_stats.sh:
+
+	Little hack to make translation stats correctly sorted.  
+
+Thu Oct 16 08:35:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Use cep variable name instead of f (which is used for fragment
+	elsewhere) in find_in_cache() and get_cache_entry().  
+
+Thu Oct 16 08:31:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Use ce variable name instead of f (which is used for fragment
+	elsewhere) in garbage_collection().  
+
+Thu Oct 16 08:28:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	A macro FRAGSIZE() was added and is now used.  
+
+Thu Oct 16 08:20:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Declarations moved near variable usage.  
+
+Thu Oct 16 08:16:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Declaration moved near variable usage.  
+
+Thu Oct 16 05:01:02 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Removed test for null characters in header.  Some buggy servers eg.
+	www.gazeta.pl send them.  
+
+Thu Oct 16 02:17:45 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Wed Oct 15 22:31:51 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
 Wed Oct 15 21:40:15 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/cache.c:

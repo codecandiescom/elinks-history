@@ -976,7 +976,7 @@ struct option links_options[] = {
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &allow_special_files,
 		"Allow reading from non-regular files? (DANGEROUS - reading\n"
-		"/dev/urandom or /dev/zero can ruing your day!)" },
+		"/dev/urandom or /dev/zero can ruin your day!)" },
 	
 	{	"anonymous", NULL,
 		anonymous_cmd, NULL, NULL,

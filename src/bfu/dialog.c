@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.137 2004/05/10 12:56:13 zas Exp $ */
+/* $Id: dialog.c,v 1.138 2004/05/13 09:07:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -546,24 +546,13 @@ draw_dialog(struct dialog_data *dlg_data, int width, int height)
 		 (term->width - dlg_width) / 2, (term->height - dlg_height) / 2,
 		 dlg_width, dlg_height);
 
-	draw_area(term, dlg_data->dimensions.x, dlg_data->dimensions.y,
-		  dlg_data->dimensions.width, dlg_data->dimensions.height, ' ', 0,
-		  get_bfu_color(term, "dialog.generic"));
+	draw_box(term, &dlg_data->dimensions, ' ', 0,
+		 get_bfu_color(term, "dialog.generic"));
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
-		struct color_pair *shadow_color = get_bfu_color(term,
-								"dialog.shadow");
-
-		/* (horizontal) */
-		draw_area(term, dlg_data->dimensions.x + 2,
-			  dlg_data->dimensions.y + dlg_data->dimensions.height,
-			  dlg_data->dimensions.width - 2, 1, ' ', 0, shadow_color);
-
-		/* (vertical) */
-		draw_area(term, dlg_data->dimensions.x + dlg_data->dimensions.width,
-			  dlg_data->dimensions.y + 1, 2, dlg_data->dimensions.height,
-			  ' ', 0, shadow_color);
+		draw_shadow_box(term, &dlg_data->dimensions,
+				get_bfu_color(term, "dialog.shadow"), 2, 1);
 	}
 }
 

@@ -1,3 +1,33 @@
+Wed Sep  4 16:43:37 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Tidyup. Cleaner comments. Move file size extraction from RETR
+	response to a separate function.  
+
+Wed Sep  4 16:02:52 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	A bug introduced in last commit related to ftp directory listing was
+	fixed.  
+
+Wed Sep  4 15:43:22 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, config/opttypes.c,
+	document/html/colors.c, document/html/colors.h, protocol/file.c,
+	protocol/ftp.c:
+
+	Directories color in ftp and file mode is now configurable via
+	document.colors.dir option.  
+
+Tue Sep  3 08:05:37 2002  Laurent Monin <zas@norz.org>:
+
+	* src/intl/language.c:
+
+	RFC1766 is obsolete, it was replaced by RFC3066. A minor typo was
+	fixed.  
+
 Mon Sep  2 21:24:35 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

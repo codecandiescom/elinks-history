@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.2 2002/03/17 13:54:11 pasky Exp $ */
+/* $Id: menu.h,v 1.1 2002/03/17 14:39:12 pasky Exp $ */
 
 #ifndef EL__MENU_H
 #define EL__MENU_H

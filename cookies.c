@@ -134,21 +134,24 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 #endif
 	if (check_domain_security(server, cookie->domain)) {
 #ifdef COOKIES_DEBUG
-		debug("Dropped because domain security.");
+		debug("Domain security violated.");
 #endif
-		denided:
-#ifdef COOKIES_DEBUG
-		debug("Dropped.");
-#endif
-		free_cookie(cookie);
-		mem_free(cookie);
-		mem_free(server);
-		return 0;
+		mem_free(cookie->domain);
+		cookie->domain = stracpy(server);
 	}
 	cookie->id = cookie_id++;
 	foreach (cs, c_servers) if (!strcasecmp(cs->server, server)) {
-		if (cs->accept) goto ok;
-		else goto denided;
+		if (cs->accept) {
+			goto ok;
+		} else {
+#ifdef COOKIES_DEBUG
+			debug("Dropped.");
+#endif
+			free_cookie(cookie);
+			mem_free(cookie);
+			mem_free(server);
+			return 0;
+		}
 	}
 	if (accept_cookies != ACCEPT_ALL) {
 		free_cookie(cookie);

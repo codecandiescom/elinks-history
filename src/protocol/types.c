@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.22 2002/06/17 07:42:32 pasky Exp $ */
+/* $Id: types.c,v 1.23 2002/06/17 10:12:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,16 +31,14 @@ struct list_head assoc = { &assoc, &assoc };
 struct option *
 get_real_opt(unsigned char *base, unsigned char *id)
 {
-	unsigned char *name = mem_alloc(strlen(base) + strlen(id));
 	struct option *opt;
+	unsigned char *name = straconcat(base, ".", id, NULL);
 
-	sprintf(name, "%s.%s", base, id);
+	if (!name) return NULL;
 
-	get_opt_rec(root_options, base)->flags &=
-		~OPT_AUTOCREATE;
+	get_opt_rec(root_options, base)->flags &= ~OPT_AUTOCREATE;
 	opt = get_opt_rec(root_options, name);
-	get_opt_rec(root_options, base)->flags |=
-		OPT_AUTOCREATE;
+	get_opt_rec(root_options, base)->flags |= OPT_AUTOCREATE;
 
 	mem_free(name);
 	return opt;

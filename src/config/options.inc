@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.129 2004/07/18 00:58:45 miciah Exp $ */
+/* $Id: options.inc,v 1.130 2004/07/22 01:47:00 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -628,8 +628,9 @@ struct option_info config_options_info[] = {
 		"%c in the string means the current URL\n"
 		"%% in the string means '%'")),
 
-
 	/* Keep options in alphabetical order. */
+
+
 
 	INIT_OPT_TREE("", N_("Information files"),
 		"infofiles", OPT_SORT,

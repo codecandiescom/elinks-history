@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.55 2003/01/04 13:09:02 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.56 2003/01/04 17:07:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,6 +93,7 @@ boom:
 		kb->box_item->root = keymap;
 		init_list(kb->box_item->child);
 		kb->box_item->visible = 1;
+		kb->box_item->translated = 1;
 		kb->box_item->udata = kb;
 		kb->box_item->type = BI_LEAF;
 		kb->box_item->depth = keymap->depth + 1;
@@ -466,6 +467,7 @@ init_action_listboxes()
 		box_item->root = NULL;
 		init_list(box_item->child);
 		box_item->visible = (act->num != ACT_LUA_FUNCTION); /* XXX */
+		box_item->translated = 1;
 		box_item->udata = (void *) act->num;
 		box_item->type = BI_FOLDER;
 		box_item->expanded = 0; /* Maybe you would like this being 1? */
@@ -483,6 +485,7 @@ init_action_listboxes()
 			keymap->root = box_item;
 			init_list(keymap->child);
 			keymap->visible = 1;
+			keymap->translated = 1;
 			keymap->udata = (void *) i;
 			keymap->type = BI_FOLDER;
 			keymap->expanded = 1;

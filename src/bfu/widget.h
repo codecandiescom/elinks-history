@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.54 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: widget.h,v 1.55 2004/05/26 16:43:31 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -50,7 +50,11 @@ struct widget {
 
 	union {
 		struct {
+			/* gid is 0 for checkboxes, or a positive int for
+			 * each group of radio buttons. */
 			int gid;
+			/* gnum is 0 for checkboxes, or a positive int for
+			 * each radio button in a group. */
 			int gnum;
 		} checkbox;
 		struct {

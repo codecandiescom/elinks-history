@@ -1,3 +1,100 @@
+Mon Apr  1 22:19:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: Makefile.am, bookmarks/Makefile.am, bookmarks/bookmarks.c,
+	bookmarks/bookmarks.h, bookmarks/dialogs.c, bookmarks/dialogs.h,
+	dialogs/menu.c, document/view.c:
+	
+	Bookmarks divided to bookmarks/bookmarks.c and bookmarks/dialogs.c.
+
+Mon Apr  1 21:47:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/globhist.c, document/globhist.c,
+	document/globhist.h:
+	
+	Added last_searched_globhist_* - preparation for history searching.
+
+Mon Apr  1 21:00:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/polish.lng,
+	intl/romanian.lng, intl/russian.lng, intl/slovak.lng,
+	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
+	intl/ukrainian.lng, src/dialogs/globhist.c, src/intl/lang_defs.h,
+	src/intl/language.inc:
+	
+	Added Clear button to the global history manager. Patch by Miciah.
+
+Mon Apr  1 20:48:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/globhist.c, document/globhist.c,
+	document/globhist.h, document/session.c:
+	
+	Added Delete button to the global history manager. Patch by Miciah.
+	Also cleaned global history API a bit.
+
+Mon Apr  1 20:28:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
+	
+	Add action "history-manager" and appropriate keybinding ('H'/'h').
+
+Mon Apr  1 20:20:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/czech.lng, src/intl/language.inc:
+	
+	Add hotkey for Global history in czech translation.
+
+Mon Apr  1 20:19:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/globhist.c:
+	
+	Goto button in the global history dialog. Now the dialog is even
+	useful :). Patch by Miciah.
+
+Mon Apr  1 20:10:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/cookies.c:
+	
+	Use atol() instead of atoi() for cookie expiration time - still not
+	ideal as time_t may be even something different, but still better
+	than it used to be before, I think. Thanks to Miciah for pointing
+	out that.
+
+Mon Apr  1 19:59:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/polish.lng,
+	intl/romanian.lng, intl/russian.lng, intl/slovak.lng,
+	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
+	intl/ukrainian.lng, src/dialogs/Makefile.am,
+	src/dialogs/globhist.c, src/dialogs/globhist.h, src/dialogs/menu.c,
+	src/document/globhist.c, src/document/globhist.h,
+	src/intl/lang_defs.h, src/intl/language.inc:
+	
+	Some GUI stuff for the global history, by Miciah. Also main stuff
+	belonging to basic global history support (I forgot cvs add ;).
+
+Mon Apr  1 15:52:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/main.c, src/config/default.c, src/config/default.h,
+	src/document/Makefile.am, src/document/session.c:
+	
+	Basic global history support by Miciah.
+
+Mon Apr  1 15:26:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/french.lng, src/intl/language.inc:
+	
+	Fixed french translation, thanks, Zas.
+
 Mon Apr  1 15:25:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/terminal.c:

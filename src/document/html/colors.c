@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.8 2002/09/05 21:02:42 pasky Exp $ */
+/* $Id: colors.c,v 1.9 2002/09/10 14:30:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,8 @@ struct color_spec color_specs[] = {
 
 #define endof(T) ((T)+sizeof(T)/sizeof(*(T)))
 
-int decode_color(unsigned char *str, struct rgb *col)
+int
+decode_color(unsigned char *str, struct rgb *col)
 {
 	int ch;
 
@@ -197,7 +198,8 @@ found:
 
 /* Returns an allocated string containing name of the color or NULL if there's
  * no name for that color. */
-unsigned char * get_color_name(struct rgb *col)
+unsigned char *
+get_color_name(struct rgb *col)
 {
 	int color = col->r * 0x10000 + col->g * 0x100 + col->b;
 	struct color_spec *cs;
@@ -205,7 +207,7 @@ unsigned char * get_color_name(struct rgb *col)
 	for (cs = color_specs; cs < endof(color_specs); cs++)
 		if (cs->rgb == color)
 			return stracpy(cs->name);
-	
+
 	return NULL;
 }
 
@@ -213,7 +215,8 @@ unsigned char * get_color_name(struct rgb *col)
 
 /* Translate rgb color to string in #rrggbb format. str should be a pointer to
  * a 8 bytes memory space. */
-void color_to_string(struct rgb *color, unsigned char *str)
+void
+color_to_string(struct rgb *color, unsigned char *str)
 {
 	snprintf(str, 8, "#%02x%02x%02x", color->r, color->g, color->b);
 }
@@ -300,7 +303,6 @@ static inline int find_nearest_color(struct rgb *r, int l)
 }
 #endif
 
-/* color_distance() */
 static int
 color_distance(struct rgb *c1, struct rgb *c2)
 {
@@ -309,7 +311,6 @@ color_distance(struct rgb *c1, struct rgb *c2)
 	       2 * (c1->b - c2->b) * (c1->b - c2->b);
 }
 
-/* find_nearest_color() */
 int
 find_nearest_color(struct rgb *r, int l)
 {
@@ -355,7 +356,6 @@ find_nearest_color(struct rgb *r, int l)
 #undef RGB_HASH_SIZE
 }
 
-/* fg_color() */
 int
 fg_color(int fg, int bg)
 {

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.243 2004/06/28 11:14:20 jonas Exp $ */
+/* $Id: tables.c,v 1.244 2004/06/28 13:29:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,37 +156,33 @@ get_table_frames(struct table *table, struct table_frames *result)
 	}
 }
 
-static inline int
-get_align(unsigned char *attr, int align)
+static inline void
+get_align(unsigned char *attr, int *a)
 {
 	unsigned char *al = get_attr_val(attr, "align");
 
-	if (!al) return align;
-
-	if (!(strcasecmp(al, "left"))) align = ALIGN_LEFT;
-	else if (!(strcasecmp(al, "right"))) align = ALIGN_RIGHT;
-	else if (!(strcasecmp(al, "center"))) align = ALIGN_CENTER;
-	else if (!(strcasecmp(al, "justify"))) align = ALIGN_JUSTIFY;
-	else if (!(strcasecmp(al, "char"))) align = ALIGN_RIGHT; /* NOT IMPLEMENTED */
-	mem_free(al);
-
-	return align;
+	if (al) {
+		if (!(strcasecmp(al, "left"))) *a = ALIGN_LEFT;
+		else if (!(strcasecmp(al, "right"))) *a = ALIGN_RIGHT;
+		else if (!(strcasecmp(al, "center"))) *a = ALIGN_CENTER;
+		else if (!(strcasecmp(al, "justify"))) *a = ALIGN_JUSTIFY;
+		else if (!(strcasecmp(al, "char"))) *a = ALIGN_RIGHT; /* NOT IMPLEMENTED */
+		mem_free(al);
+	}
 }
 
-static inline int
-get_valign(unsigned char *attr, int valign)
+static inline void
+get_valign(unsigned char *attr, int *a)
 {
 	unsigned char *al = get_attr_val(attr, "valign");
 
-	if (!al) return valign;
-
-	if (!(strcasecmp(al, "top"))) valign = VALIGN_TOP;
-	else if (!(strcasecmp(al, "middle"))) valign = VALIGN_MIDDLE;
-	else if (!(strcasecmp(al, "bottom"))) valign = VALIGN_BOTTOM;
-	else if (!(strcasecmp(al, "baseline"))) valign = VALIGN_BASELINE; /* NOT IMPLEMENTED */
-	mem_free(al);
-
-	return valign;
+	if (al) {
+		if (!(strcasecmp(al, "top"))) *a = VALIGN_TOP;
+		else if (!(strcasecmp(al, "middle"))) *a = VALIGN_MIDDLE;
+		else if (!(strcasecmp(al, "bottom"))) *a = VALIGN_BOTTOM;
+		else if (!(strcasecmp(al, "baseline"))) *a = VALIGN_BASELINE; /* NOT IMPLEMENTED */
+		mem_free(al);
+	}
 }
 
 static inline void
@@ -539,9 +535,11 @@ qwe:
 			(*bad_html)[*bhp-1].end = html;
 			lbhp = NULL;
 		}
+		c_al = ALIGN_TR;
+		c_val = VALIGN_TR;
 		c_width = WIDTH_AUTO;
-		c_al = get_align(t_attr, ALIGN_TR);
-		c_val = get_valign(t_attr, VALIGN_TR);
+		get_align(t_attr, &c_al);
+		get_valign(t_attr, &c_val);
 		get_column_width(t_attr, &c_width, sh);
 		c_span = get_num(t_attr, "span");
 		if (c_span == -1) c_span = 1;
@@ -573,8 +571,10 @@ qwe:
 		if (sp == -1) sp = 1;
 
 		width = c_width;
-		val = get_valign(t_attr, c_val);
-		al = get_align(t_attr, c_al);
+		al = c_al;
+		val = c_val;
+		get_align(t_attr, &al);
+		get_valign(t_attr, &val);
 		get_column_width(t_attr, &width, sh);
 		new_columns(table, sp, width, al, val, !!c_span);
 		c_span = 0;
@@ -619,9 +619,11 @@ qwe:
 		}
 
 		if (group) group--;
+		l_al = ALIGN_LEFT;
+		l_val = VALIGN_MIDDLE;
 		last_bgcolor = bgcolor;
-		l_al = get_align(t_attr, ALIGN_LEFT);
-		l_val = get_valign(t_attr, VALIGN_MIDDLE);
+		get_align(t_attr, &l_al);
+		get_valign(t_attr, &l_val);
 		get_bgcolor(t_attr, &last_bgcolor);
 		mem_free_set(&l_fragment_id, get_attr_val(t_attr, "id"));
 		row++;
@@ -681,8 +683,8 @@ qwe:
 	cell->is_used = 1;
 	cell->start = en;
 
-	cell->align = get_align(t_attr, l_al);
-	cell->valign = get_valign(t_attr, l_val);
+	cell->align = l_al;
+	cell->valign = l_val;
 	cell->fragment_id = get_attr_val(t_attr, "id");
 	if (!cell->fragment_id && l_fragment_id) {
 		cell->fragment_id = l_fragment_id;
@@ -703,6 +705,8 @@ qwe:
 
 	cell->bgcolor = last_bgcolor;
 
+	get_align(t_attr, &cell->align);
+	get_valign(t_attr, &cell->valign);
 	get_bgcolor(t_attr, &cell->bgcolor);
 
 	colspan = get_num(t_attr, "colspan");

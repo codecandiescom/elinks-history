@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.212 2004/01/14 18:22:44 witekfl Exp $ */
+/* $Id: download.c,v 1.213 2004/01/15 04:41:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -721,12 +721,16 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	 * handler on that terminal. */
 	file_download->term = cmdw_hop->ses->tab->term;
 	file_download->remotetime = 0;
-	file_download->box_item = add_listbox_item(&download_browser,
-					file_download->url, file_download);
 
 	add_to_list(downloads, file_download);
 	load_url(url, cmdw_hop->ses->ref_url, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 		 (resume ? file_download->last_pos : 0));
+
+	if (is_in_downloads_list(file_download))
+		file_download->box_item = add_listbox_item(&download_browser,
+							   file_download->url,
+							   file_download);
+
 	display_download(cmdw_hop->ses->tab->term, file_download, cmdw_hop->ses);
 
 	mem_free(cmdw_hop);
@@ -845,11 +849,13 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	file_download->prog_flags = codw_hop->tq->prog_flags;
 
-	file_download->box_item = add_listbox_item(&download_browser,
-					file_download->url, file_download);
-
 	add_to_list(downloads, file_download);
 	change_connection(&codw_hop->tq->download, &file_download->download, PRI_DOWNLOAD, 0);
+
+	if (is_in_downloads_list(file_download))
+		file_download->box_item = add_listbox_item(&download_browser,
+							   file_download->url,
+							   file_download);
 
 	display_download(codw_hop->tq->ses->tab->term, file_download, codw_hop->tq->ses);
 	tp_free(codw_hop->tq);

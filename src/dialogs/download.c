@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.35 2004/01/07 03:18:19 jonas Exp $ */
+/* $Id: download.c,v 1.36 2004/01/15 04:41:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,15 +234,11 @@ display_download(struct terminal *term, struct file_download *down,
 		 struct session *ses)
 {
 	struct dialog *dlg;
-	struct file_download *file_download;
 
-	foreach (file_download, downloads)
-		if (file_download == down)
-			goto found;
-	return;
+	if (!is_in_downloads_list(down))
+		return;
 
 #define DOWNLOAD_WIDGETS_COUNT 4
-found:
 	dlg = calloc_dialog(DOWNLOAD_WIDGETS_COUNT, 0);
 	if (!dlg) return;
 

@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.28 2003/12/22 02:09:14 pasky Exp $ */
+/* $Id: download.h,v 1.29 2004/01/15 04:41:22 miciah Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -43,6 +43,17 @@ struct file_download {
 
 /* Stack of all running downloads */
 extern struct list_head downloads;
+
+static inline int
+is_in_downloads_list(struct file_download *file_download)
+{
+	struct file_download *down;
+
+	foreach (down, downloads)
+		if (file_download == down) return 1;
+
+	return 0;
+}
 
 
 unsigned char *subst_file(unsigned char *, unsigned char *);

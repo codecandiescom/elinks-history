@@ -1,3 +1,9 @@
+Sat Feb 21 06:29:27 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/uri.c:
+
+	Expand tilde first, then test if file exists.  
+
 Fri Feb 20 16:32:15 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/http/codes.c:

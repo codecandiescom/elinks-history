@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.91 2003/12/20 16:59:02 pasky Exp $ */
+/* $Id: dialogs.c,v 1.92 2004/02/20 14:41:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,8 +41,9 @@ auth_cancel(struct http_auth_basic *entry)
 	del_auth_entry(entry);
 }
 
+/* TODO: Take http_auth_basic from data. --jonas */
 void
-do_auth_dialog(struct session *ses)
+do_auth_dialog(struct session *ses, void *data)
 {
 	struct dialog *dlg;
 	struct dialog_data *dlg_data;

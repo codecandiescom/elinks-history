@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.234 2004/02/17 19:17:36 zas Exp $ */
+/* $Id: http.c,v 1.235 2004/02/20 14:42:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1235,7 +1235,7 @@ http_error:
 
 					entry = add_auth_entry(uri, realm);
 					if (entry && !entry->valid)
-						add_questions_entry(do_auth_dialog);
+						add_questions_entry(do_auth_dialog, entry);
 
 					mem_free(realm);
 				}

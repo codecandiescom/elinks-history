@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.304 2004/02/02 09:52:01 jonas Exp $ */
+/* $Id: session.c,v 1.305 2004/02/20 14:42:00 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -301,7 +301,8 @@ display_timer(struct session *ses)
 struct questions_entry {
 	LIST_HEAD(struct questions_entry);
 
-	void (*callback)(struct session *);
+	void (*callback)(struct session *, void *);
+	void *data;
 };
 
 INIT_LIST_HEAD(questions_queue);
@@ -310,23 +311,24 @@ INIT_LIST_HEAD(questions_queue);
 void
 check_questions_queue(struct session *ses)
 {
-	struct questions_entry *q;
-
 	while (!list_empty(questions_queue)) {
-		q = questions_queue.next;
-		q->callback(ses);
+		struct questions_entry *q = questions_queue.next;
+
+		q->callback(ses, q->data);
 		del_from_list(q);
 		mem_free(q);
 	}
 }
 
 void
-add_questions_entry(void *callback)
+add_questions_entry(void (*callback)(struct session *, void *), void *data)
 {
 	struct questions_entry *q = mem_alloc(sizeof(struct questions_entry));
 
 	if (!q) return;
+
 	q->callback = callback;
+	q->data	    = data;
 	add_to_list(questions_queue, q);
 }
 

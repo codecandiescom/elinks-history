@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.118 2004/01/03 13:12:16 jonas Exp $ */
+/* $Id: cookies.c,v 1.119 2004/02/20 14:41:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,7 +212,7 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 	return 1;
 }
 
-static void accept_cookie_dialog(struct session *ses);
+static void accept_cookie_dialog(struct session *ses, void *data);
 
 void
 set_cookie(struct uri *uri, unsigned char *str)
@@ -382,7 +382,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	/* We have already check COOKIES_ACCEPT_NONE */
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_ASK) {
 		add_to_list(cookie_queries, cookie);
-		add_questions_entry(accept_cookie_dialog);
+		add_questions_entry(accept_cookie_dialog, cookie);
 		return;
 	}
 
@@ -524,8 +524,9 @@ accept_cookie_never(void *idp)
 }
 #endif
 
+/* TODO: Store cookie in data arg. --jonas*/
 static void
-accept_cookie_dialog(struct session *ses)
+accept_cookie_dialog(struct session *ses, void *data)
 {
 	struct cookie *cookie = cookie_queries.next;
 	unsigned char *expires = NULL;

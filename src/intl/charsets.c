@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.72 2003/11/21 22:31:32 zas Exp $ */
+/* $Id: charsets.c,v 1.73 2003/11/21 22:36:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,10 +152,10 @@ u2cp_(unicode_val u, int to, int no_nbsp_hack)
 	BIN_SEARCH(unicode_7b, x, N_UNICODE_7B, u, s);
 	if (s != -1) return unicode_7b[s].s;
 
-	return "*";
+	return no_str;
 }
 
-unsigned char utf_buffer[7];
+static unsigned char utf_buffer[7];
 
 static unsigned char *
 encode_utf_8(unicode_val u)

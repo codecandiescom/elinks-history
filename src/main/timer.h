@@ -1,9 +1,12 @@
-/* $Id: timer.h,v 1.8 2005/03/05 22:14:32 zas Exp $ */
+/* $Id: timer.h,v 1.9 2005/03/10 13:47:14 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_TIMERS_H
 #define EL__LOWLEVEL_TIMERS_H
 
 #include "util/ttime.h"
+
+/* Only available internally. */
+struct timer;
 
 /* Little hack, timer_id_T is in fact a pointer to the timer, so
  * it has to be of a pointer type.
@@ -11,7 +14,7 @@
  * The fact each timer is allocated ensure us that timer id will
  * be unique.
  * That way there is no need of id field in struct timer. --Zas */
-typedef void * timer_id_T;
+typedef struct timer * timer_id_T;
 
 /* Should always be NULL or you'll have to modify install_timer()
  * and kill_timer(). --Zas */

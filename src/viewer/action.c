@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.23 2004/01/08 01:34:13 jonas Exp $ */
+/* $Id: action.c,v 1.24 2004/01/08 01:50:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,8 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 
 static void
 do_frame_action(struct session *ses,
-	       void (*func)(struct session *, struct document_view *, int))
+	       void (*func)(struct session *, struct document_view *, int),
+	       int magic)
 {
 	struct document_view *doc_view;
 
@@ -86,7 +87,7 @@ do_frame_action(struct session *ses,
 	assertm(doc_view->vs, "document view has no state");
 	if_assert_failed return;
 
-	func(ses, doc_view, 0);
+	func(ses, doc_view, magic);
 }
 
 void
@@ -197,11 +198,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_FIND_NEXT:
-			do_frame_action(ses, find_next);
+			do_frame_action(ses, find_next, 0);
 			break;
 
 		case ACT_FIND_NEXT_BACK:
-			do_frame_action(ses, find_next_back);
+			do_frame_action(ses, find_next_back, 0);
 			break;
 
 		case ACT_FORGET_CREDENTIALS:
@@ -321,7 +322,7 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_SAVE_FORMATTED:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				do_frame_action(ses, save_formatted_dlg);
+				do_frame_action(ses, save_formatted_dlg, 0);
 			break;
 
 		case ACT_SAVE_URL_AS:
@@ -335,15 +336,15 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_SEARCH:
-			do_frame_action(ses, search_dlg);
+			do_frame_action(ses, search_dlg, 0);
 			break;
 
 		case ACT_SEARCH_BACK:
-			do_frame_action(ses, search_back_dlg);
+			do_frame_action(ses, search_back_dlg, 0);
 			break;
 
 		case ACT_SEARCH_TYPEAHEAD:
-			do_frame_action(ses, search_typeahead);
+			do_frame_action(ses, search_typeahead, 0);
 			break;
 
 		case ACT_SHOW_TERM_OPTIONS:
@@ -406,11 +407,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_VIEW_IMAGE:
-			do_frame_action(ses, view_image);
+			do_frame_action(ses, view_image, 0);
 			break;
 
 		case ACT_ZOOM_FRAME:
-			do_frame_action(ses, set_frame);
+			do_frame_action(ses, set_frame, 0);
 			break;
 
 		case ACT_AUTO_COMPLETE:

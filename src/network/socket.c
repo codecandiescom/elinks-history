@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.44 2003/07/25 21:18:53 zas Exp $ */
+/* $Id: socket.c,v 1.45 2003/07/25 21:48:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -540,11 +540,10 @@ read_from_socket(struct connection *c, int s, struct read_buffer *buf,
 void
 kill_buffer_data(struct read_buffer *rb, int n)
 {
-	if (n > rb->len || n < 0) {
-		internal("called kill_buffer_data with bad value");
-		rb->len = 0;
-		return;
-	}
+	assertm(n >= 0 && n <= rb->len, "bad number of bytes: %d", n);
+	if_assert_failed { rb->len = 0;  return; }
+
+	if (!n) return; /* FIXME: We accept to kill 0 bytes... */
 	rb->len -= n;
 	memmove(rb->data, rb->data + n, rb->len);
 	rb->freespace += n;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.175 2003/01/04 20:26:16 pasky Exp $ */
+/* $Id: options.c,v 1.176 2003/01/04 20:42:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -851,6 +851,7 @@ register_options()
 		"bookmarks", 0,
 		N_("Bookmark options."));
 
+	{
 	unsigned char *bff =
 #ifdef HAVE_LIBEXPAT
 		N_("File format for bookmarks (affects both reading and saving):\n"
@@ -866,6 +867,7 @@ register_options()
 	add_opt_int("bookmarks", N_("File format"),
 		"file_format", 0, 0, 1, 0,
 		bff);
+	}
 
 
 	add_opt_tree("", N_("Configuration system"),

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.97 2004/04/16 16:32:08 zas Exp $ */
+/* $Id: info.c,v 1.98 2004/05/04 10:50:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,10 @@ resource_info(struct terminal *term)
 static unsigned char *
 get_memory_info(struct terminal *term, void *data)
 {
-	return msg_text(term, N_("%ld bytes of memory allocated."), mem_amount);
+	return msg_text(term, N_("Allocated      : %ld bytes\n"
+			         "Truly allocated: %ld bytes (x%0.2f)"),
+			mem_stats.amount, mem_stats.true_amount,
+			(double)mem_stats.true_amount / (double)mem_stats.amount);
 }
 
 void

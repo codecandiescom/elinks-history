@@ -1,4 +1,4 @@
-/* $Id: memdebug.h,v 1.3 2003/05/08 23:03:08 zas Exp $ */
+/* $Id: memdebug.h,v 1.4 2004/05/04 10:50:08 zas Exp $ */
 
 #ifndef EL__UTIL_MEMDEBUG_H
 #define EL__UTIL_MEMDEBUG_H
@@ -7,7 +7,12 @@
 
 /* TODO: Another file? */
 
-extern long mem_amount;
+struct mem_stats {
+	long true_amount;
+	long amount;
+};
+
+extern struct mem_stats mem_stats;
 
 void *debug_mem_alloc(unsigned char *, int, size_t);
 void *debug_mem_calloc(unsigned char *, int, size_t, size_t);

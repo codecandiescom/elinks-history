@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.25 2004/04/23 15:45:42 pasky Exp $ */
+/* $Id: memdebug.c,v 1.26 2004/05/04 10:50:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ struct alloc_header {
 #define SET_XFLOW_MAGIC(ah) SET_OVERFLOW_MAGIC(ah), SET_UNDERFLOW_MAGIC(ah)
 #endif
 
-long mem_amount = 0;
+struct mem_stats mem_stats;
 
 INIT_LIST_HEAD(memory_list);
 
@@ -226,13 +226,17 @@ check_memory_leaks(void)
 {
 	struct alloc_header *ah;
 
-	if (!mem_amount) {
+	if (!mem_stats.amount) {
 		/* No leaks - escape now. */
+		if (mem_stats.true_amount) /* debug memory leak ? */
+			fprintf(stderr, "\n\033[1mDebug memory leak by %ld bytes\033[0m\n",
+				mem_stats.true_amount);
+
 		return;
 	}
 
 	fprintf(stderr, "\n\033[1mMemory leak by %ld bytes\033[0m\n",
-		mem_amount);
+		mem_stats.amount);
 
 	fprintf(stderr, "List of blocks:\n");
 	foreach (ah, memory_list) {
@@ -282,11 +286,13 @@ void *
 debug_mem_alloc(unsigned char *file, int line, size_t size)
 {
 	struct alloc_header *ah;
+	size_t true_size;
 
 	if (!size) return NULL;
 
+	true_size = SIZE_BASE2AH(size);
 	do {
-		ah = malloc(SIZE_BASE2AH(size));
+		ah = malloc(true_size);
 		if (ah) break;
 	} while (patience(file, line, "malloc"));
 	if (!ah) return NULL;
@@ -295,7 +301,8 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 	memset(ah, FILL_ON_ALLOC_VALUE, SIZE_BASE2AH(size));
 #endif
 
-	mem_amount += size;
+	mem_stats.true_amount += true_size;
+	mem_stats.amount += size;
 
 	ah->size = size;
 #ifdef CHECK_AH_SANITY
@@ -320,6 +327,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 {
 	struct alloc_header *ah;
 	size_t size = eltcount * eltsize;
+	size_t true_size;
 
 	if (!size) return NULL;
 
@@ -331,6 +339,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 	 * comment, it means YOU should help us and do the benchmarks! :)
 	 * Thanks a lot. --pasky */
 
+	true_size = SIZE_BASE2AH(size);
 	do {
 		ah = calloc(1, SIZE_BASE2AH(size));
 		if (ah) break;
@@ -339,7 +348,8 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 
 	/* No, we do NOT want to fill this with FILL_ON_ALLOC_VALUE ;)). */
 
-	mem_amount += size;
+	mem_stats.true_amount += true_size;
+	mem_stats.amount += size;
 
 	ah->size = size;
 #ifdef CHECK_AH_SANITY
@@ -411,11 +421,15 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 
 	dump_short_info(ah, file, line, "free");
 
-	if (ah->comment)
+	if (ah->comment) {
+		mem_stats.true_amount -= strlen(ah->comment) + 1;
 		free(ah->comment);
+	}
+
 	del_from_list(ah);
 
-	mem_amount -= ah->size;
+	mem_stats.true_amount -= SIZE_BASE2AH(ah->size);
+	mem_stats.amount -= ah->size;
 
 #ifdef FILL_ON_FREE
 	memset(ah, FILL_ON_FREE_VALUE, SIZE_BASE2AH(ah->size));
@@ -431,6 +445,7 @@ void *
 debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 {
 	struct alloc_header *ah, *ah2;
+	size_t true_size;
 
 	if (!ptr) return debug_mem_alloc(file, line, size);
 
@@ -458,8 +473,9 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 		return (void *) ptr;
 	}
 
+	true_size = SIZE_BASE2AH(size);
 	do {
-		ah2 = realloc(ah, SIZE_BASE2AH(size));
+		ah2 = realloc(ah, true_size);
 		if (ah2) {
 			ah = ah2;
 			break;
@@ -467,7 +483,8 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	} while (patience(file, line, "realloc"));
 	if (!ah2) return NULL;
 
-	mem_amount += size - ah->size;
+	mem_stats.true_amount += true_size - SIZE_BASE2AH(ah->size);
+	mem_stats.amount += size - ah->size;
 
 #ifdef FILL_ON_REALLOC
 	if (size > ah->size)
@@ -500,12 +517,16 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 
 	ah = PTR_BASE2AH(ptr);
 
-	if (ah->comment)
+	if (ah->comment) {
+		mem_stats.true_amount -= strlen(ah->comment) + 1;
 		free(ah->comment);
+	}
 
 	ah->comment = malloc(len + 1);
-	if (ah->comment)
+	if (ah->comment) {
 		safe_strncpy(ah->comment, str, len + 1);
+		mem_stats.true_amount += len + 1;
+	}
 }
 
 #endif /* LEAK_DEBUG */

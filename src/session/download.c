@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.150 2003/11/09 22:50:56 zas Exp $ */
+/* $Id: download.c,v 1.151 2003/11/09 23:43:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -578,14 +578,11 @@ download_data_store(struct download *download, struct file_download *file_downlo
 static void
 download_data(struct download *download, struct file_download *file_download)
 {
-	struct cache_entry *ce;
+	struct cache_entry *ce = download->ce;
 	int broken_302_redirect;
 
-	if (download->state >= S_WAIT && download->state < S_TRANS)
+	if (ce && download->state >= S_WAIT && download->state < S_TRANS)
 		goto end_store;
-
-	ce = download->ce;
-	if (!ce) goto end_store;
 
 	if (ce->last_modified)
 		file_download->remotetime = parse_http_date(ce->last_modified);

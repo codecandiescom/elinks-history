@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.48 2002/12/11 22:50:14 pasky Exp $ */
+/* $Id: url.c,v 1.49 2002/12/21 19:19:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ dummyjs_func(struct session *ses, unsigned char *url)
 }
 
 
-int
+static int
 check_protocol(unsigned char *p, int l)
 {
 	int i;
@@ -94,7 +94,7 @@ check_protocol(unsigned char *p, int l)
 }
 
 
-int
+static int
 get_prot_info(unsigned char *prot, int *port,
 	      void (**func)(struct connection *),
 	      void (**nc_func)(struct session *ses, unsigned char *))
@@ -520,36 +520,6 @@ strip_url_password(unsigned char *url)
 	return str;
 }
 
-#if 0
-void translate_directories(unsigned char *url)
-{
-	unsigned char *p;
-	unsigned char *dd = get_url_data(url);
-	unsigned char *d = dd;
-	if (!d || d == url || *--d != '/') return;
-	r:
-	p = d + strcspn(d, "/;?#");
-	if (p[0] != '/') return;
-	if (p[1] == '.' && p[2] == '/') {
-		memmove(p, p + 2, strlen(p + 2) + 1);
-		d = p;
-		goto r;
-	}
-	if (p[1] == '.' && p[2] == '.' && p[3] == '/') {
-		unsigned char *e;
-		for (e = p - 1; e >= dd; e--) if (*e == '/') {
-			memmove(e, p + 3, strlen(p + 3) + 1);
-			d = e;
-			goto r;
-		}
-		memmove(dd, p + 3, strlen(p + 3) + 1);
-		d = dd;
-		goto r;
-	}
-	d = p + 1;
-	goto r;
-}
-#endif
 
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 
@@ -625,9 +595,10 @@ insert_wd(unsigned char **up, unsigned char *cwd)
 	unsigned char *url = *up;
 	int cwdlen;
 
-	if (!url || !cwd || !*cwd) return;
-	if (strncasecmp(url, "file://", 7)) return;
-	if (dir_sep(url[7])) return;
+	if (!url || !cwd || !*cwd
+	    || strncasecmp(url, "file://", 7)
+	    || dir_sep(url[7]))
+		return;
 #ifdef DOS_FS
 	if (upcase(url[7]) >= 'A' && upcase(url[7]) <= 'Z' && url[8] == ':' && dir_sep(url[9])) return;
 #endif
@@ -656,6 +627,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 	int add_slash = 0;
 
 	/* See RFC 1808 */
+	/* TODO: Support for ';' ? (see the RFC) --pasky */
 
 	if (rel[0] == '#') {
 		n = stracpy(base);
@@ -667,9 +639,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		translate_directories(n);
 
 		return n;
-	}
-
-	if (rel[0] == '?') {
+	} else if (rel[0] == '?') {
 		n = stracpy(base);
 		if (!n) return NULL;
 
@@ -679,12 +649,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		translate_directories(n);
 
 		return n;
-	}
-
-	/* TODO: Support for ';' ? (see the RFC) --pasky */
-
-	if (rel[0] == '/' && rel[1] == '/') {
-		unsigned char *n;
+	} else if (rel[0] == '/' && rel[1] == '/') {
 		unsigned char *s = strstr(base, "//");
 
 		if (!s) {
@@ -707,7 +672,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		       NULL, NULL,
 		       NULL)) {
 		n = stracpy(rel);
-		translate_directories(n);
+		if (n) translate_directories(n);
 
 		return n;
 	}
@@ -755,7 +720,7 @@ prx:
 	}
 
 	if (!dsep(rel[0])) {
-		char *path_end;
+		unsigned char *path_end;
 
 		/* The URL is relative. */
 
@@ -781,7 +746,7 @@ prx:
 	if (!n) return NULL;
 
 	memcpy(n, base, path - base);
-	if (add_slash) { n[path - base] = '/'; }
+	if (add_slash) n[path - base] = '/';
 	strcpy(n + (path - base) + add_slash, rel);
 
 	translate_directories(n);
@@ -810,8 +775,10 @@ translate_url(unsigned char *url, unsigned char *cwd)
 		       NULL, NULL,
 		       NULL)) {
 		newurl = stracpy(url);
-		insert_wd(&newurl, cwd);
-		translate_directories(newurl);
+		if (newurl) {
+			insert_wd(&newurl, cwd);
+			translate_directories(newurl);
+		}
 
 		return newurl;
 	}
@@ -857,7 +824,7 @@ proxy:
 #ifdef IPV6
 		} else if (*url == '[' && *ch == ':') {
 			/* Candidate for IPv6 address */
-			char *bracket2, *colon2;
+			unsigned char *bracket2, *colon2;
 
 			ch++;
 			bracket2 = strchr(ch, ']');
@@ -997,7 +964,7 @@ extract_position(unsigned char *url)
 unsigned char *
 extract_proxy(unsigned char *url)
 {
-	char *a;
+	unsigned char *a;
 
 	if (strlen(url) < 8 || strncasecmp(url, "proxy://", 8))
 		return url;
@@ -1104,8 +1071,8 @@ encode_url_string(unsigned char *name, unsigned char **data, int *len)
  * efficient way to do that, imho. --Zas */
 void
 decode_url_string(unsigned char *src) {
-	char *dst = src;
-	char c;
+	unsigned char *dst = src;
+	unsigned char c;
 
 	do {
 		c = *src++;
@@ -1119,7 +1086,7 @@ decode_url_string(unsigned char *src) {
 				if (x2 >= 0) {
 					x1 = (x1 << 4) + x2;
 					if (x1 != 0) { /* don't allow %00 */
-						c = (char) x1;
+						c = (unsigned char) x1;
 						src += 2;
 					}
 				}

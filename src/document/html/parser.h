@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.31 2003/09/05 13:40:32 jonas Exp $ */
+/* $Id: parser.h,v 1.32 2003/09/26 17:35:45 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -26,6 +26,8 @@ struct form {
 	int method;
 	int num;
 };
+
+#define NULL_STRUCT_FORM { NULL, NULL, 0, 0 }
 
 extern struct form form;
 

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.89 2003/09/25 21:08:17 zas Exp $ */
+/* $Id: dialogs.c,v 1.90 2003/09/26 17:35:44 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -715,6 +715,8 @@ struct bookmark_search_ctx {
 	int ofs;
 };
 
+#define NULL_BOOKMARK_SEARCH_CTX {NULL, NULL, 0, 0}
+
 static int
 test_search(struct listbox_item *item, void *data_, int *offset) {
 	struct bookmark_search_ctx *ctx = data_;
@@ -738,7 +740,7 @@ bookmark_search_do(struct dialog *d)
 {
 	unsigned char *search_title = d->items[0].data;
 	unsigned char *search_url = d->items[1].data;
-	struct bookmark_search_ctx ctx = { NULL, NULL, 0, 0 };
+	struct bookmark_search_ctx ctx = NULL_BOOKMARK_SEARCH_CTX;
 	struct widget_data *widget_data = NULL;
 	struct listbox_data *box = NULL;
 	struct dialog_data *dlg;

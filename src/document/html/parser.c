@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.202 2003/09/16 23:38:31 jonas Exp $ */
+/* $Id: parser.c,v 1.203 2003/09/26 17:35:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -639,13 +639,7 @@ get_width(unsigned char *a, unsigned char *n, int trunc)
 	return r;
 }
 
-#if 0
-int form_num;
-struct form form = { 0, NULL, 0 };
-int g_ctrl_num;
-#endif
-
-struct form form = { NULL, NULL, 0, 0 };
+struct form form = NULL_STRUCT_FORM;
 
 unsigned char *last_form_tag;
 unsigned char *last_form_attr;

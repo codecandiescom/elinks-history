@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.15 2002/11/29 20:59:53 pasky Exp $ */
+/* $Id: string.c,v 1.16 2002/11/29 21:29:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 		return NULL;
 	}
 
-	*dst = debug_mem_alloc(strlen(src) + 1);
+	*dst = debug_mem_alloc(f, l, strlen(src) + 1);
 	if (*dst) strcpy(*dst, src);
 
 	return *dst;

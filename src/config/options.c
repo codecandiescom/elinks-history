@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.171 2003/01/03 03:36:50 pasky Exp $ */
+/* $Id: options.c,v 1.172 2003/01/04 17:06:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,6 +251,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 		if (option->box_item) {
 			init_list(option->box_item->child);
 			option->box_item->visible = 1;
+			option->box_item->translated = 1;
 			option->box_item->text = option->capt ? option->capt : option->name;
 			option->box_item->box = &option_boxes;
 			option->box_item->udata = option;
@@ -328,6 +329,7 @@ copy_option(struct option *template)
 	if (option->box_item) {
 		init_list(option->box_item->child);
 		option->box_item->visible = 1;
+		option->box_item->translated = 1;
 		option->box_item->text = option->capt ? option->capt : option->name;
 		option->box_item->box = &option_boxes;
 		option->box_item->udata = option;

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.158 2004/12/25 15:15:09 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.159 2004/12/25 15:25:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,11 +212,11 @@ jsval_to_string(JSContext *ctx, jsval *vp)
 {
 	jsval val;
 
-	if (JS_ConvertValue(ctx, *vp, JSTYPE_STRING, &val) == JS_FALSE) {
-		return NULL;
+	if (JS_ConvertValue(ctx, *vp, JSTYPE_STRING, &val) == JS_TRUE) {
+		return "";
 	}
 
-	return JS_GetStringBytes(JS_ValueToString(ctx, val));
+	return empty_string_or_(JS_GetStringBytes(JS_ValueToString(ctx, val)));
 }
 
 static JSBool window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
@@ -458,7 +458,7 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 		return JS_TRUE;
 
 	string = jsval_to_string(ctx, &argv[0]);
-	if (!string || !*string)
+	if (!*string)
 		return JS_TRUE;
 
 	msg_box(vs->doc_view->session->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_INTL_TITLE_ONLY,
@@ -517,7 +517,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	}
 
 	url = jsval_to_string(ctx, &argv[0]);
-	assert(url);
+
 	/* TODO: Support for window naming and perhaps some window features? */
 
 	url = join_urls(doc_view->document->uri,
@@ -1077,7 +1077,7 @@ form_elements_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, 
 		return JS_TRUE;
 
 	string = jsval_to_string(ctx, &argv[0]);
-	if (!string || !*string)
+	if (!*string)
 		return JS_TRUE;
 
 	foreach (fc, form->items) {
@@ -1497,7 +1497,7 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 		return JS_TRUE;
 
 	string = jsval_to_string(ctx, &argv[0]);
-	if (!string || !*string)
+	if (!*string)
 		return JS_TRUE;
 
 	foreach (form, document->forms) {
@@ -2250,7 +2250,7 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 		return NULL;
 	}
 
-	return null_or_stracpy(jsval_to_string(ctx, &rval));
+	return stracpy(jsval_to_string(ctx, &rval));
 }
 
 

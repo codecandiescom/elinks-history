@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.7 2002/03/26 15:20:14 pasky Exp $ */
+/* $Id: tables.c,v 1.8 2002/03/26 15:28:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1573,42 +1573,57 @@ cont:;
 	cy = y;
 	for (j = 0; j <= t->y; j++) {
 		cx = x;
-		if ((j > 0 && j < t->y && get_hline_width(t, j) >= 0) || (j == 0 && t->border && (t->frame & F_ABOVE)) || (j == t->y && t->border && (t->frame & F_BELOW))) {
+		if ((j > 0 && j < t->y && get_hline_width(t, j) >= 0)
+		    || (j == 0 && t->border && (t->frame & F_ABOVE))
+		    || (j == t->y && t->border && (t->frame & F_BELOW))) {
+
 			for (i = 0; i < t->x; i++) {
 				int w;
+
 				if (i > 0) w = get_vline_width(t, i);
 				else w = t->border && (t->frame & F_LHS) ? t->border : -1;
+
 				if (w >= 0) {
 					draw_frame_point(cx, cy, i, j);
 					if (j < t->y) draw_frame_vline(cx, cy + 1, t->r_heights[j], i, j);
 					cx++;
 				}
+
 				w = t->w_c[i];
 				draw_frame_hline(cx, cy, w, i, j);
 				cx += w;
 			}
+
 			if (t->border && (t->frame & F_RHS)) {
 				draw_frame_point(cx, cy, i, j);
 				if (j < t->y) draw_frame_vline(cx, cy + 1, t->r_heights[j], i, j);
 				cx++;
 			}
+
 			cy++;
+
 		} else if (j < t->y) {
 			for (i = 0; i <= t->x; i++) {
-				if ((i > 0 && i < t->x && get_vline_width(t, i) >= 0) || (i == 0 && t->border && (t->frame & F_LHS)) || (i == t->x && t->border && (t->frame & F_RHS))) {
+				if ((i > 0 && i < t->x && get_vline_width(t, i) >= 0)
+				    || (i == 0 && t->border && (t->frame & F_LHS))
+				    || (i == t->x && t->border && (t->frame & F_RHS))) {
 					draw_frame_vline(cx, cy, t->r_heights[j], i, j);
 					cx++;
 				}
 				if (i < t->x) cx += t->w_c[i];
 			}
 		}
+
 		if (j < t->y) cy += t->r_heights[j];
 		/*for (cyy = cy1; cyy < cy; cyy++) expand_line(t->p, cyy, cx - 1);*/
 	}
+
 	mem_free(fh);
 	mem_free(fv);
 }
 
+
+/* format_table() */
 void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, unsigned char **end, void *f)
 {
 	struct part *p = f;
@@ -1620,39 +1635,50 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 	int cye;
 	int x;
 	int i;
-#if 0
-	int llm = last_link_to_move;
-#endif
 	struct s_e *bad_html;
 	int bad_html_n;
 	struct node *n, *nn;
+	/* int llm = last_link_to_move; */
 
 	table_level++;
 	memcpy(&bgcolor, &par_format.bgcolor, sizeof(struct rgb));
 	get_bgcolor(attr, &bgcolor);
-	if ((border = get_num(attr, "border")) == -1) border = has_attr(attr, "border");
-	if ((cellsp = get_num(attr, "cellspacing")) == -1) cellsp = 1;
-	if ((cellpd = get_num(attr, "cellpadding")) == -1) {
+
+	border = get_num(attr, "border");
+	if (border == -1) border = has_attr(attr, "border");
+
+	cellsp = get_num(attr, "cellspacing");
+	if (cellsp == -1) cellsp = 1;
+
+	cellpd = get_num(attr, "cellpadding");
+	if (cellpd == -1) {
 		vcellpd = 0;
 		cellpd = !!border;
 	} else {
-		vcellpd = cellpd >= HTML_CHAR_HEIGHT / 2 + 1;
-		cellpd = cellpd >= HTML_CHAR_WIDTH / 2 + 1;
+		vcellpd = (cellpd >= HTML_CHAR_HEIGHT / 2 + 1);
+		cellpd = (cellpd >= HTML_CHAR_WIDTH / 2 + 1);
 	}
+
 	if (!border) cellsp = 0;
 	else if (!cellsp) cellsp = 1;
+
 	if (border > 2) border = 2;
 	if (cellsp > 2) cellsp = 2;
+
 	align = par_format.align;
 	if (align == AL_NO || align == AL_BLOCK) align = AL_LEFT;
-	if ((al = get_attr_val(attr, "align"))) {
+
+	al = get_attr_val(attr, "align");
+	if (al) {
 		if (!strcasecmp(al, "left")) align = AL_LEFT;
 		if (!strcasecmp(al, "center")) align = AL_CENTER;
 		if (!strcasecmp(al, "right")) align = AL_RIGHT;
 		mem_free(al);
 	}
+
 	frame = F_BOX;
-	if ((al = get_attr_val(attr, "frame"))) {
+	al = get_attr_val(attr, "frame");
+	if (al) {
 		if (!strcasecmp(al, "void")) frame = F_VOID;
 		if (!strcasecmp(al, "above")) frame = F_ABOVE;
 		if (!strcasecmp(al, "below")) frame = F_BELOW;
@@ -1664,8 +1690,10 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 		if (!strcasecmp(al, "border")) frame = F_BOX;
 		mem_free(al);
 	}
+
 	rules = R_ALL;
-	if ((al = get_attr_val(attr, "rules"))) {
+	al = get_attr_val(attr, "rules");
+	if (al) {
 		if (!strcasecmp(al, "none")) rules = R_NONE;
 		if (!strcasecmp(al, "groups")) rules = R_GROUPS;
 		if (!strcasecmp(al, "rows")) rules = R_ROWS;
@@ -1673,22 +1701,33 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 		if (!strcasecmp(al, "all")) rules = R_ALL;
 		mem_free(al);
 	}
+
 	if (!border) frame = F_VOID;
 	wf = 0;
-	if ((width = get_width(attr, "width", p->data || p->xp)) == -1) {
+
+	width = get_width(attr, "width", (p->data || p->xp));
+	if (width == -1) {
 		width = par_format.width - par_format.leftmargin - par_format.rightmargin;
 		if (width < 0) width = 0;
 		wf = 1;
 	}
-	if (!(t = parse_table(html, eof, end, &bgcolor, p->data || p->xp, &bad_html, &bad_html_n))) {
+
+	t = parse_table(html, eof, end, &bgcolor, (p->data || p->xp), &bad_html, &bad_html_n);
+	if (!t) {
 		mem_free(bad_html);
 		goto ret0;
 	}
+
 	for (i = 0; i < bad_html_n; i++) {
-		while (bad_html[i].s < bad_html[i].e && WHITECHAR(*bad_html[i].s)) bad_html[i].s++;
-		while (bad_html[i].s < bad_html[i].e && WHITECHAR(bad_html[i].e[-1])) bad_html[i].e--;
-		if (bad_html[i].s < bad_html[i].e) parse_html(bad_html[i].s, bad_html[i].e, put_chars_f, line_break_f, init_f, special_f, p, NULL);
+		while (bad_html[i].s < bad_html[i].e && WHITECHAR(*bad_html[i].s))
+			bad_html[i].s++;
+		while (bad_html[i].s < bad_html[i].e && WHITECHAR(bad_html[i].e[-1]))
+			bad_html[i].e--;
+		if (bad_html[i].s < bad_html[i].e)
+			parse_html(bad_html[i].s, bad_html[i].e, put_chars_f, line_break_f,
+				   init_f, special_f, p, NULL);
 	}
+
 	mem_free(bad_html);
 	html_stack_dup();
 	html_top.dontkill = 1;
@@ -1702,58 +1741,86 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 	t->rules = rules;
 	t->width = width;
 	t->wf = wf;
-	again:
+
+again:
 	get_cell_widths(t);
 	if (get_column_widths(t)) goto ret2;
+
 	get_table_width(t);
 	if (!p->data && !p->xp) {
 		if (!wf && t->max_t > width) t->max_t = width;
 		if (t->max_t < t->min_t) t->max_t = t->min_t;
-		if (t->max_t + par_format.leftmargin + par_format.rightmargin > p->xmax) p->xmax = t->max_t + par_format.leftmargin + par_format.rightmargin;
-		if (t->min_t + par_format.leftmargin + par_format.rightmargin > p->x) p->x = t->min_t + par_format.leftmargin + par_format.rightmargin;
+
+		if (t->max_t + par_format.leftmargin + par_format.rightmargin > p->xmax)
+			p->xmax = t->max_t + par_format.leftmargin + par_format.rightmargin;
+
+		if (t->min_t + par_format.leftmargin + par_format.rightmargin > p->x)
+			p->x = t->min_t + par_format.leftmargin + par_format.rightmargin;
+
 		goto ret2;
 	}
+
 	if (t->min_t > width && t->cellpd) {
 		t->cellpd = 0;
 		goto again;
 	}
+
 	/* debug("%d %d %d", t->min_t, t->max_t, width); */
-	if (t->min_t >= width) distribute_widths(t, t->min_t);
-	else if (t->max_t < width && wf) distribute_widths(t, t->max_t);
-	else distribute_widths(t, width);
+	if (t->min_t >= width)
+		distribute_widths(t, t->min_t);
+	else if (t->max_t < width && wf)
+		distribute_widths(t, t->max_t);
+	else
+		distribute_widths(t, width);
+
 	if (!p->data && p->xp == 1) {
 		int ww = t->rw + par_format.leftmargin + par_format.rightmargin;
+
 		if (ww > par_format.width) ww = par_format.width;
 		if (ww < t->rw) ww = t->rw;
 		if (ww > p->x) p->x = ww;
 		p->cy += t->rh;
+
 		goto ret2;
 	}
+
 #ifdef HTML_TABLE_2ND_PASS
 	check_table_widths(t);
 #endif
+
 	x = par_format.leftmargin;
-	if (align == AL_CENTER) x = (par_format.width + par_format.leftmargin - par_format.rightmargin - t->rw) / 2;
-	if (align == AL_RIGHT) x = par_format.width - par_format.rightmargin - t->rw;
+	if (align == AL_CENTER)
+		x = (par_format.width + par_format.leftmargin
+		     - par_format.rightmargin - t->rw) / 2;
+	if (align == AL_RIGHT)
+		x = par_format.width - par_format.rightmargin - t->rw;
 	if (x + t->rw > par_format.width) x = par_format.width - t->rw;
 	if (x < 0) x = 0;
+
 	/*display_table(t, x, p->cy, &cye);*/
 	get_table_heights(t);
+
 	if (!p->data) {
-		if (t->rw + par_format.leftmargin + par_format.rightmargin > p->x) p->x = t->rw + par_format.leftmargin + par_format.rightmargin;
+		if (t->rw + par_format.leftmargin + par_format.rightmargin > p->x)
+			p->x = t->rw + par_format.leftmargin + par_format.rightmargin;
 		p->cy += t->rh;
 		goto ret2;
 	}
+
 	n = p->data->nodes.next;
 	n->yw = p->yp - n->y + p->cy;
+
 	display_complicated_table(t, x, p->cy, &cye);
 	display_table_frames(t, x, p->cy);
-	if ((nn = mem_alloc(sizeof(struct node)))) {
+
+	nn = mem_alloc(sizeof(struct node));
+	if (nn) {
 		nn->x = n->x;
 		nn->y = p->yp + cye;
 		nn->xw = n->xw;
 		add_to_list(p->data->nodes, nn);
 	}
+
 	/* sdbg(p->data); */
 #if 0
 	for (y = p->cy; y < cye; y++) {
@@ -1761,18 +1828,20 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 		align_line(p, y, 0);
 	}
 #endif
-	if (p->cy + t->rh != cye) internal("size does not match; 1:%d, 2:%d", p->cy + t->rh, cye);
+
+	if (p->cy + t->rh != cye)
+		internal("size does not match; 1:%d, 2:%d", p->cy + t->rh, cye);
+
 	p->cy = cye;
 	p->cx = -1;
 
-	ret2:
+ret2:
 	p->link_num = t->link_num;
 	if (p->cy > p->y) p->y = p->cy;
-	/*ret1:*/
 	free_table(t);
 	kill_html_stack_item(&html_top);
-	ret0:
-	/*ret:*/
+
+ret0:
 	table_level--;
 	if (!table_level) free_table_cache();
 }

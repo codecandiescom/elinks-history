@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.201 2003/12/19 11:26:54 pasky Exp $ */
+/* $Id: download.c,v 1.202 2003/12/19 11:32:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1035,21 +1035,21 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	int xwin, i;
 
 	if (!ctype)
-		goto free_ct;
+		goto plaintext_follow;
 
 	for (i = 0; known_types[i].type; i++) {
 		if (strcasecmp(ctype, known_types[i].type))
 			continue;
 
 		plaintext = known_types[i].plain;
-		goto free_ct;
+		goto plaintext_follow;
 	}
 
 	xwin = ses->tab->term->environment & ENV_XWIN;
 	handler = get_mime_type_handler(ctype, xwin);
 
 	if (!handler && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
-		goto free_ct;
+		goto plaintext_follow;
 
 	foreach (tq, ses->tq)
 		if (!strcmp(tq->url, ses->loading_url))
@@ -1083,7 +1083,7 @@ do_not_follow:
 
 	return ret;
 
-free_ct:
+plaintext_follow:
 	if (ctype) mem_free(ctype);
 
 	vs = ses_forward(ses, frame);

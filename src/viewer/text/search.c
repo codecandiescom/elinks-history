@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.204 2004/02/08 20:29:16 jonas Exp $ */
+/* $Id: search.c,v 1.205 2004/02/10 19:15:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -919,16 +919,6 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 }
 
 
-static inline unsigned char
-get_document_char(struct document *document, int x, int y)
-{
-	if (document->height > y
-	    && document->data[y].length > x)
-		return document->data[y].chars[x].data;
-	return 0;
-}
-
-
 /* Link typeahead */
 
 enum typeahead_code {
@@ -959,6 +949,7 @@ typeahead_error(struct session *ses, unsigned char *typeahead)
 	}
 }
 
+
 /* Searches the @document for a link with the given @text. takes the
  * current_link in the view, the link to start searching from @i and the
  * direction to search (1 is forward, -1 is back). */
@@ -975,27 +966,20 @@ search_link_text(struct document *document, int current_link, int i,
 
 	assert(textlen && direction);
 
-#define case_compare_chars(c1, c2) \
-	(case_sensitive ? (c1) == (c2) : tolower(c1) == tolower(c2))
+#define search_strcasecmp(t1, t2, tlen)				\
+	(case_sensitive ? memcmp(t1, t2, tlen)			\
+	 		: strncasecmp(t1, t2, tlen))
 
 	for (; i > lower_link && i < upper_link; i += direction) {
 		struct link *link = &document->links[i];
-		struct point *linkpos = link->pos;
-		int j;
+		unsigned char *match = link->name ? link->name : link->where;
 
 		if (link->type != LINK_HYPERTEXT
-		    || textlen > link->n) continue;
-
-		for (j = 0; j < textlen; j++, linkpos++) {
-			unsigned char data = get_document_char(document,
-							       linkpos->x, linkpos->y);
-
-			if (!data || !case_compare_chars(data, text[j]))
-				break;
-		}
+		    || textlen > strlen(match)) continue;
 
 		/* Did the text match? */
-		if (textlen == j) return i;
+		if (!search_strcasecmp(text, match, textlen))
+			return i;
 
 		/* Check if we are at the end of the first range */
 		if (i == (direction > 0 ? upper_link - 1: lower_link + 1)
@@ -1020,7 +1004,7 @@ search_link_text(struct document *document, int current_link, int i,
 		}
 	}
 
-#undef case_compare_chars
+#undef search_strcasecmp
 
 	return -1;
 }

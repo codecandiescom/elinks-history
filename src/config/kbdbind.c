@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.224 2004/06/20 21:02:38 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.225 2004/06/21 11:02:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -469,10 +469,10 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "link-download", ACT_MAIN_LINK_DOWNLOAD, DACT(N_("Download the current link")) },
 	{ "link-download-image", ACT_MAIN_LINK_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
 	{ "link-download-resume", ACT_MAIN_LINK_DOWNLOAD_RESUME, DACT(N_("Attempt to resume download of the current link")) },
+	{ "link-external-command", ACT_MAIN_LINK_EXTERNAL_COMMAND, DACT(N_("Pass URI of current link to external command")) },
 	{ "link-follow", ACT_MAIN_LINK_FOLLOW, DACT(N_("Follow the current link")) },
 	{ "link-follow-reload", ACT_MAIN_LINK_FOLLOW_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
 	{ "link-menu", ACT_MAIN_LINK_MENU, DACT(N_("Open the link context menu")) },
-	{ "link-external-command", ACT_MAIN_LINK_EXTERNAL_COMMAND, DACT(N_("Pass URI of current link to external command")) },
 #ifdef CONFIG_LUA
 	{ "lua-console", ACT_MAIN_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
 #else
@@ -485,8 +485,8 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "move-cursor-left", ACT_MAIN_MOVE_CURSOR_LEFT, DACT(N_("Move cursor left")) },
 	{ "move-cursor-right", ACT_MAIN_MOVE_CURSOR_RIGHT, DACT(N_("Move cursor right")) },
 	{ "move-cursor-up", ACT_MAIN_MOVE_CURSOR_UP, DACT(N_("Move cursor up")) },
-	{ "move-document-start", ACT_MAIN_MOVE_DOCUMENT_START, DACT(N_("Move to the start of the document")) },
 	{ "move-document-end", ACT_MAIN_MOVE_DOCUMENT_END, DACT(N_("Move to the end of the document")) },
+	{ "move-document-start", ACT_MAIN_MOVE_DOCUMENT_START, DACT(N_("Move to the start of the document")) },
 	{ "move-link-down", ACT_MAIN_MOVE_LINK_DOWN, DACT(N_("Move downwards one link")) },
 	{ "move-link-up", ACT_MAIN_MOVE_LINK_UP, DACT(N_("Move upwards one link")) },
 	{ "move-page-down", ACT_MAIN_MOVE_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
@@ -532,8 +532,8 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "tab-move-right", ACT_MAIN_TAB_MOVE_RIGHT, DACT(N_("Move the current tab to the right")) },
 	{ "tab-next", ACT_MAIN_TAB_NEXT, DACT(N_("Next tab")) },
 	{ "tab-prev", ACT_MAIN_TAB_PREV,DACT( N_("Previous tab")) },
-	{ "toggle-display-images", ACT_MAIN_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
 	{ "toggle-css", ACT_MAIN_TOGGLE_CSS, DACT(N_("Toggle rendering of page using CSS")) },
+	{ "toggle-display-images", ACT_MAIN_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
 	{ "toggle-display-tables", ACT_MAIN_TOGGLE_DISPLAY_TABLES, DACT(N_("Toggle rendering of tables")) },
 	{ "toggle-document-colors", ACT_MAIN_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
 	{ "toggle-html-plain", ACT_MAIN_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
@@ -567,8 +567,8 @@ static struct strtonum edit_action_table[EDIT_ACTIONS + 1] = {
 	{ "kill-to-eol", ACT_EDIT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
 	{ "left", ACT_EDIT_LEFT,DACT( N_("Move the cursor left")) },
 	{ "next-item", ACT_EDIT_NEXT_ITEM, DACT(N_("Move to the next item")) },
-	{ "previous-item", ACT_EDIT_PREVIOUS_ITEM, DACT(N_("Move to the previous item")) },
 	{ "paste-clipboard", ACT_EDIT_PASTE_CLIPBOARD, DACT(N_("Paste text from the clipboard")) },
+	{ "previous-item", ACT_EDIT_PREVIOUS_ITEM, DACT(N_("Move to the previous item")) },
 	{ "redraw", ACT_EDIT_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "right", ACT_EDIT_RIGHT, DACT(N_("Move the cursor right")) },
 	{ "up", ACT_EDIT_UP, DACT(N_("Move cursor upwards")) },
@@ -589,9 +589,9 @@ static struct strtonum menu_action_table[MENU_ACTIONS + 1] = {
 	{ "left", ACT_MENU_LEFT,DACT( N_("Move the cursor left")) },
 	{ "mark-item", ACT_MENU_MARK_ITEM, DACT(N_("Mark item")) },
 	{ "next-item", ACT_MENU_NEXT_ITEM, DACT(N_("Move to the next item")) },
-	{ "previous-item", ACT_MENU_PREVIOUS_ITEM, DACT(N_("Move to the previous item")) },
 	{ "page-down", ACT_MENU_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
 	{ "page-up", ACT_MENU_PAGE_UP, DACT(N_("Move upwards by a page")) },
+	{ "previous-item", ACT_MENU_PREVIOUS_ITEM, DACT(N_("Move to the previous item")) },
 	{ "redraw", ACT_MENU_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "right", ACT_MENU_RIGHT, DACT(N_("Move the cursor right")) },
 	{ "select", ACT_MENU_SELECT, DACT(N_("Select current highlighted item")) },

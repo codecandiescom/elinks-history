@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.40 2003/09/03 09:24:21 zas Exp $ */
+/* $Id: formhist.c,v 1.41 2003/09/03 09:27:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -263,8 +263,7 @@ remember_form(struct formhist_data *form)
 	forget_forms_with_url(form->url);
 	add_to_list(saved_forms, form);
 
-	if (!save_saved_forms()) return 0;
-	return 1;
+	return save_saved_forms();
 }
 
 unsigned char *

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.515 2004/06/14 00:18:16 jonas Exp $ */
+/* $Id: session.c,v 1.516 2004/06/14 03:46:16 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -955,8 +955,9 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		} else {
 			int backgrounded = !list_empty(term->windows);
 
+			/* End loop if initialization fails */
 			if (!init_session(base_session, term, uri, backgrounded))
-				break;
+				len = 0;
 		}
 
 		done_uri(uri);

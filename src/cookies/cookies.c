@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.125 2004/03/21 02:21:29 jonas Exp $ */
+/* $Id: cookies.c,v 1.126 2004/03/21 14:30:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,7 +297,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		}
 
 		add_char_to_string(&path, '/');
-		add_bytes_to_string(&path, uri->data, uri->datalen);
+		add_bytes_to_string(&path, uri->datastr, uri->datalen);
 
 		cookie->path = path.source;
 		for (path_end = cookie->path; *path_end; path_end++) {
@@ -604,12 +604,12 @@ send_cookies(struct uri *uri)
 	int datalen = uri->datalen + 1;
 	static struct string header;
 
-	if (string_is_empty(&uri->host) || !uri->data)
+	if (string_is_empty(&uri->host) || !uri->datastr)
 		return NULL;
 
 	foreach (cd, c_domains)
 		if (is_in_domain(cd->domain, &uri->host)) {
-			data = uri->data - 1;
+			data = uri->datastr - 1;
 			break;
 		}
 

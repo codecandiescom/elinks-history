@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.144 2004/02/10 18:45:46 witekfl Exp $ */
+/* $Id: file.c,v 1.145 2004/03/21 14:30:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -644,7 +644,7 @@ file_func(struct connection *connection)
 	 * and uri.data is just the final path to file/dir we should try to
 	 * show. */
 
-	safe_strncpy(filename, connection->uri.data, filenamelen + 1);
+	safe_strncpy(filename, connection->uri.datastr, filenamelen + 1);
 	decode_uri_string(filename);
 	filenamelen = strlen(filename);
 

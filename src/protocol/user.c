@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.56 2004/03/21 00:32:34 jonas Exp $ */
+/* $Id: user.c,v 1.57 2004/03/21 14:30:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 				break;
 
 			case 'd':
-				substr = uri->data;
+				substr = uri->datastr;
 				sublen = uri->datalen;
 				break;
 
@@ -172,9 +172,9 @@ user_func(struct session *ses, unsigned char *url)
 		return;
 	}
 
-	if (uri.data && uri.datalen) {
+	if (uri.datastr && uri.datalen) {
 		/* Some mailto specific stuff follows... */
-		subj = strchr(uri.data, '?');
+		subj = strchr(uri.datastr, '?');
 		if (subj) {
 			subj++;
 			subj = get_subject_from_query(subj);

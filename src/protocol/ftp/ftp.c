@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.122 2004/03/20 18:55:22 jonas Exp $ */
+/* $Id: ftp.c,v 1.123 2004/03/21 14:30:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,7 +554,7 @@ add_file_cmd_to_str(struct connection *conn)
 		conn->data_socket = data_sock;
 	}
 
-	data = conn->uri.data;
+	data = conn->uri.datastr;
 	if (!data) {
 		INTERNAL("conn->uri.data empty");
 		abort_conn_with_state(conn, S_INTERNAL);
@@ -1158,7 +1158,7 @@ out_of_mem:
 	}
 
 	if (c_i->dir && !conn->from) {
-		unsigned char *path = conn->uri.data;
+		unsigned char *path = conn->uri.datastr;
 		int pathlen = conn->uri.datalen;
 		struct string string;
 		int url_len = strlen(url);

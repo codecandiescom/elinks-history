@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.307 2004/03/03 17:42:20 jonas Exp $ */
+/* $Id: session.c,v 1.308 2004/03/21 14:30:25 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -414,7 +414,7 @@ doc_end_load(struct download *stat, struct session *ses)
 		unsigned char *title = ses->doc_view->document->title;
 		struct uri *uri = &stat->conn->uri;
 		unsigned char *uristring = uri->protocol == PROTOCOL_PROXY
-					 ? uri->data : struri(*uri);
+					 ? uri->datastr : struri(*uri);
 
 		add_global_history_item(uristring, title, time(NULL));
 	}

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.94 2004/03/21 13:39:54 jonas Exp $ */
+/* $Id: uri.c,v 1.95 2004/03/21 14:30:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		return 0;
 
 	if (!known || get_protocol_free_syntax(uri->protocol)) {
-		uri->data = prefix_end;
+		uri->datastr = prefix_end;
 		uri->datalen = strlen(prefix_end);
 		return 1;
 	}
@@ -204,7 +204,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (*host_end == '/') host_end++;
 
 	prefix_end = strchr(host_end, POST_CHAR);
-	uri->data = host_end;
+	uri->datastr = host_end;
 	uri->datalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
 	uri->post = prefix_end ? (prefix_end + 1) : NULL;
 
@@ -315,7 +315,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		add_char_to_string(string, '/');
 
 	if (wants(URI_DATA) && uri->datalen)
-		add_bytes_to_string(string, uri->data, uri->datalen);
+		add_bytes_to_string(string, uri->datastr, uri->datalen);
 
 	if (wants(URI_POST) && uri->post)
 		add_bytes_to_string(string, uri->post, strlen(uri->post));
@@ -360,13 +360,13 @@ translate_directories(unsigned char *uristring)
 	int lo;
 	struct uri uri;
 
-	if (!parse_uri(&uri, uristring) || !uri.data/* || *--url_data != '/'*/)
+	if (!parse_uri(&uri, uristring) || !uri.datastr /* || *--url_datastr != '/'*/)
 		return;
 
 	/* dsep() *hint* *hint* */
 	lo = (uri.protocol == PROTOCOL_FILE);
 
-	path = uri.data;
+	path = uri.datastr;
 	if (!dsep(*path)) path--;
 	src = path;
 	dest = path;
@@ -562,11 +562,11 @@ join_urls(unsigned char *base, unsigned char *rel)
 	}
 
 prx:
-	if (!parse_uri(&uri, base) || !uri.data) {
+	if (!parse_uri(&uri, base) || !uri.datastr) {
 		INTERNAL("bad base url");
 		return NULL;
 	}
-	path = uri.data;
+	path = uri.datastr;
 
 	/* Either is path blank, but we've slash char before, or path is not
 	 * blank, but doesn't start by a slash (if we'd just stay along with
@@ -829,11 +829,11 @@ add_string_uri_filename_to_string(struct string *string, unsigned char *uristrin
 	if (!parse_uri(&uri, uristring))
 		return NULL;
 
-	assert(uri.data);
+	assert(uri.datastr);
 	/* dsep() *hint* *hint* */
 	lo = (uri.protocol == PROTOCOL_FILE);
 
-	for (pos = filename = uri.data; *pos && !end_of_dir(*pos); pos++)
+	for (pos = filename = uri.datastr; *pos && !end_of_dir(*pos); pos++)
 		if (dsep(*pos))
 			filename = pos + 1;
 

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.49 2004/01/31 06:00:05 witekfl Exp $ */
+/* $Id: cgi.c,v 1.50 2004/03/21 14:30:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,7 @@ static int
 set_vars(struct connection *conn, unsigned char *script)
 {
 	unsigned char *post = conn->uri.post;
-	unsigned char *question_mark = strchr(conn->uri.data, '?');
+	unsigned char *question_mark = strchr(conn->uri.datastr, '?');
 	unsigned char *query_string = question_mark
 				    ? question_mark + 1 : (unsigned char *) "";
 	unsigned char *optstr;
@@ -294,12 +294,12 @@ execute_cgi(struct connection *conn)
 		return 1;
 	}
 
-	question_mark = memchr(conn->uri.data, '?', scriptlen);
-	post_char = memchr(conn->uri.data, POST_CHAR, scriptlen);
+	question_mark = memchr(conn->uri.datastr, '?', scriptlen);
+	post_char = memchr(conn->uri.datastr, POST_CHAR, scriptlen);
 	if (post_char) conn->uri.post = post_char + 1;
-	if (question_mark) scriptlen = question_mark - conn->uri.data;
-	else if (post_char) scriptlen = post_char - conn->uri.data;
-	script = memacpy(conn->uri.data, scriptlen);
+	if (question_mark) scriptlen = question_mark - conn->uri.datastr;
+	else if (post_char) scriptlen = post_char - conn->uri.datastr;
+	script = memacpy(conn->uri.datastr, scriptlen);
 	if (!script) {
 		state = S_OUT_OF_MEM;
 		goto end2;

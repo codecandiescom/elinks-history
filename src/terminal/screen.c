@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.92 2003/10/02 14:58:54 jonas Exp $ */
+/* $Id: screen.c,v 1.93 2003/10/02 15:02:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,6 +404,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		}								\
 	}									\
 }
+
 /* Adds the term code for positioning the cursor at @x and @y to @string.
  * The template term code is: "\033[<@y>;<@x>H" */
 static inline struct string *
@@ -432,13 +433,6 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 }
 
 
-static inline void
-add_chars16(struct string *image, struct terminal *term,
-	    struct screen_state *state, struct screen_driver *driver)
-{
-	add_chars(image, term, driver, state, add_char16);
-}
-
 /* Updating of the terminal screen is done by checking what needs to be updated
  * using the last screen. */
 void
@@ -458,7 +452,7 @@ redraw_screen(struct terminal *term)
 	switch (driver->color_mode) {
 	case COLOR_MODE_MONO:
 	case COLOR_MODE_16:
-		add_chars16(&image, term, &state, driver);
+		add_chars(&image, term, driver, &state, add_char16);
 		break;
 
 	default:

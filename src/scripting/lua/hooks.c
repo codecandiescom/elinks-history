@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.14 2003/07/24 03:11:32 pasky Exp $ */
+/* $Id: hooks.c,v 1.15 2003/07/24 03:15:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,15 +23,11 @@
  * generalization of scripting and moving everything Lua-related to lua/.
  * --pasky */
 
-/*
- * goto_url:
- *
- * This function can do one of the following:
- *  - call goto_url on the url given;
- *  - call goto_url on some other url;
- *  - do nothing.
- */
 
+/* Triggerred when user entered something into the goto URL dialog. */
+/* Returns NULL if the original @url should be followed, or dynamically
+ * allocated new URL to be followed instead ("" means that no URL should be
+ * followed at all). */
 unsigned char *
 script_hook_goto_url(struct session *ses, unsigned char *url)
 {
@@ -46,24 +42,29 @@ script_hook_goto_url(struct session *ses, unsigned char *url)
 	}
 
 	lua_pushstring(L, url);
-	if (!have_location(ses))
+	if (!have_location(ses)) {
 		lua_pushnil(L);
-	else
+	} else {
 		lua_pushstring(L, cur_loc(ses)->vs.url);
+	}
 
-	if (prepare_lua(ses))
+	if (prepare_lua(ses)) {
 		return stracpy("");
+	}
 	err = lua_call(L, 2, 1);
 	finish_lua();
-	if (err)
+	if (err) {
 		return stracpy("");
+	}
 
-	if (lua_isstring(L, -1))
+	if (lua_isstring(L, -1)) {
 		newurl = stracpy((unsigned char *) lua_tostring(L, -1));
-	else if (!lua_isnil(L, -1))
+	} else if (!lua_isnil(L, -1)) {
 		alert_lua_error("goto_url_hook must return a string or nil");
-	else
+	} else {
 		newurl = stracpy("");
+	}
+
 	lua_pop(L, 1);
 
 	return newurl;

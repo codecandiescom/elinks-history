@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.40 2003/10/22 19:24:46 jonas Exp $ */
+/* $Id: dialogs.c,v 1.41 2003/10/24 17:12:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,16 +76,16 @@ history_dialog_box_build(void)
 
 /* Cleans up after the history dialog */
 static void
-history_dialog_abort_handler(struct dialog_data *dlg)
+history_dialog_abort_handler(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box;
 	struct history_dialog_list_item *item;
-	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 
 	foreach (item, history_dialog_list) {
-		if (item->dlg == dlg) {
+		if (item->dlg == dlg_data) {
 			del_from_list(item);
 			mem_free(item);
 			break;
@@ -97,16 +97,17 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 }
 
 static int
-history_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
+history_dialog_event_handler(struct dialog_data *dlg_data,
+		             struct term_event *ev)
 {
 	switch (ev->ev) {
 		case EV_KBD:
 		{
-			struct widget_data *widget_data = &(dlg->items[HISTORY_BOX_IND]);
+			struct widget_data *widget_data = &(dlg_data->items[HISTORY_BOX_IND]);
 			struct widget *widget = widget_data->item;
 
 			if (widget->ops->kbd)
-				return widget->ops->kbd(widget_data, dlg, ev);
+				return widget->ops->kbd(widget_data, dlg_data, ev);
 			break;
 		}
 		case EV_INIT:
@@ -125,12 +126,12 @@ history_dialog_event_handler(struct dialog_data *dlg, struct term_event *ev)
 
 
 static void
-history_search_do(struct dialog *d)
+history_search_do(struct dialog *dlg)
 {
 	struct listbox_item *item = gh_box_items.next;
 	struct listbox_data *box;
 
-	if (!globhist_simple_search(d->items[1].data, d->items[0].data)) return;
+	if (!globhist_simple_search(dlg->items[1].data, dlg->items[0].data)) return;
 	if (list_empty(gh_box_items)) return;
 
 	foreach (box, *item->box) {
@@ -149,15 +150,15 @@ launch_search_dialog(struct terminal *term, struct dialog_data *parent,
 }
 
 static int
-push_search_button(struct dialog_data *dlg, struct widget_data *di)
+push_search_button(struct dialog_data *dlg_data, struct widget_data *di)
 {
-	launch_search_dialog(dlg->win->term, dlg,
-			     (struct session *) dlg->dlg->udata);
+	launch_search_dialog(dlg_data->win->term, dlg_data,
+			     (struct session *) dlg_data->dlg->udata);
 	return 0;
 }
 
 static int
-push_toggle_display_button(struct dialog_data *dlg, struct widget_data *di)
+push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	struct global_history_item *item;
 	int *display_type;
@@ -203,11 +204,11 @@ push_toggle_display_button(struct dialog_data *dlg, struct widget_data *di)
 
 
 static int
-push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
+push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
 {
 	struct global_history_item *historyitem;
 	struct listbox_data *box;
-	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 
@@ -220,7 +221,7 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 	}
 
 	/* Close the history dialog */
-	delete_window(dlg->win);
+	delete_window(dlg_data->win);
 	return 0;
 }
 
@@ -344,12 +345,12 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 
 
 static int
-push_delete_button(struct dialog_data *dlg,
+push_delete_button(struct dialog_data *dlg_data,
 		   struct widget_data *some_useless_delete_button)
 {
 	struct listbox_data *box;
-	struct terminal *term = dlg->win->term;
-	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
+	struct terminal *term = dlg_data->win->term;
+	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 	listbox_delete_historyitem(term, box);
@@ -369,12 +370,12 @@ really_clear_history(struct listbox_data *box)
 }
 
 static int
-push_clear_button(struct dialog_data *dlg,
+push_clear_button(struct dialog_data *dlg_data,
 		  struct widget_data *some_useless_clear_button)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box;
-	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 
@@ -398,13 +399,13 @@ done_info_button(void *vhop)
 }
 
 static int
-push_info_button(struct dialog_data *dlg,
+push_info_button(struct dialog_data *dlg_data,
 		  struct widget_data *some_useless_info_button)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	struct global_history_item *historyitem;
 	struct listbox_data *box;
-	struct widget *widget = &(dlg->dlg->items[HISTORY_BOX_IND]);
+	struct widget *widget = &(dlg_data->dlg->items[HISTORY_BOX_IND]);
 
 	box = (struct listbox_data *) widget->data;
 
@@ -432,10 +433,11 @@ push_info_button(struct dialog_data *dlg,
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct dialog *d;
-	struct dialog_data *dd;
+	struct dialog *dlg;
+	struct dialog_data *dlg_data;
 	struct history_dialog_list_item *item;
 	struct global_history_item *litem;
+	int n = 0;
 
 	foreach (litem, global_history.items) {
 		litem->box_item->visible = 1;
@@ -453,64 +455,74 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	/* XXX: sizeof(struct global_history_item): why? */
 
-	d = mem_calloc(1, sizeof(struct dialog)
-			  + (HISTORY_BOX_IND + 2) * sizeof(struct widget)
-			  + sizeof(struct global_history_item)
-			  + 2 * MAX_STR_LEN);
-	if (!d) return;
+	dlg = mem_calloc(1, sizeof(struct dialog)
+			    + (HISTORY_BOX_IND + 2) * sizeof(struct widget)
+			    + sizeof(struct global_history_item)
+			    + 2 * MAX_STR_LEN);
+	if (!dlg) return;
 
-	d->title = _("Global history", term);
-	d->fn = layout_hierbox_browser;
-	d->handle_event = history_dialog_event_handler;
-	d->abort = history_dialog_abort_handler;
-	d->udata = ses;
+	dlg->title = _("Global history", term);
+	dlg->fn = layout_hierbox_browser;
+	dlg->handle_event = history_dialog_event_handler;
+	dlg->abort = history_dialog_abort_handler;
+	dlg->udata = ses;
 
-	d->items[0].type = D_BUTTON;
-	d->items[0].gid = B_ENTER;
-	d->items[0].fn = push_goto_button;
-	d->items[0].udata = ses;
-	d->items[0].text = _("Goto", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_goto_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Goto", term);
+	n++;
 
-	d->items[1].type = D_BUTTON;
-	d->items[1].gid = B_ENTER;
-	d->items[1].fn = push_info_button;
-	d->items[1].text = _("Info", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_info_button;
+	dlg->items[n].text = _("Info", term);
+	n++;
 
-	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ENTER;
-	d->items[2].fn = push_delete_button;
-	d->items[2].text = _("Delete", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_delete_button;
+	dlg->items[n].text = _("Delete", term);
+	n++;
 
-	d->items[3].type = D_BUTTON;
-	d->items[3].gid = B_ENTER;
-	d->items[3].fn = push_search_button;
-	d->items[3].text = _("Search", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_search_button;
+	dlg->items[n].text = _("Search", term);
+	n++;
 
-	d->items[4].type = D_BUTTON;
-	d->items[4].gid = B_ENTER;
-	d->items[4].fn = push_toggle_display_button;
-	d->items[4].text = _("Toggle display", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_toggle_display_button;
+	dlg->items[n].text = _("Toggle display", term);
+	n++;
 
-	d->items[5].type = D_BUTTON;
-	d->items[5].gid = B_ENTER;
-	d->items[5].fn = push_clear_button;
-	d->items[5].text = _("Clear", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_clear_button;
+	dlg->items[n].text = _("Clear", term);
+	n++;
 
-	d->items[6].type = D_BUTTON;
-	d->items[6].gid = B_ESC;
-	d->items[6].fn = cancel_dialog;
-	d->items[6].text = _("Close", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].fn = cancel_dialog;
+	dlg->items[n].text = _("Close", term);
+	n++;
 
-	d->items[HISTORY_BOX_IND].type = D_BOX;
-	d->items[HISTORY_BOX_IND].gid = 12;
-	d->items[HISTORY_BOX_IND].data = (void *) history_dialog_box_build();
+	assert(n == HISTORY_BOX_IND);
+	dlg->items[n].type = D_BOX;
+	dlg->items[n].gid = 12;
+	dlg->items[n].data = (void *) history_dialog_box_build();
+	n++;
 
-	d->items[HISTORY_BOX_IND + 1].type = D_END;
-	dd = do_dialog(term, d, getml(d, NULL));
+	dlg->items[n].type = D_END;
+
+	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 
 	item = mem_alloc(sizeof(struct history_dialog_list_item));
 	if (item) {
-		item->dlg = dd;
+		item->dlg = dlg_data;
 		add_to_list(history_dialog_list, item);
 	}
 }

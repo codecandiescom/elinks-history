@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.13 2003/09/07 21:03:49 zas Exp $ */
+/* $Id: sysname.c,v 1.14 2003/09/07 21:41:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,22 +58,8 @@ get_system_name(void)
 	struct utsname name;
 
 	if (!uname(&name)) {
-		int len = 0;
-		int clen;
-
-#define APPEND(what, sep)					\
-		clen = strlen(what);				\
-		if (len + clen + 1 >= sizeof(system_name)) {	\
-			system_name[len] = '\0';		\
-			return;					\
-		}						\
-		memcpy(&system_name[len], what, clen); 		\
-		len += clen;					\
-		system_name[len++] = sep;
-
-		APPEND(name.sysname, ' ');
-		APPEND(name.release, ' ');
-		APPEND(name.machine, '\0');
+		snprintf(system_name, sizeof(system_name),
+			 "%s %s %s", name.sysname, name.release, name.machine);
 
 		return;
 	}

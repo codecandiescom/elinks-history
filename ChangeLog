@@ -1,3 +1,53 @@
+Wed Nov  3 18:03:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Clarify things related to LF+NUL termination chars, and prevent a
+	potential bug.  
+
+Wed Nov  3 17:48:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Properly close sockets in case of init_string() failure, may be
+	useless in that case but cleaner.  
+
+Wed Nov  3 17:40:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Move code from end_smb_connection() to new parse_smbclient_output().  
+
+Wed Nov  3 17:20:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Use intermediate variable of type struct uri * to shorten lines.  
+
+Wed Nov  3 17:19:21 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Reduce indentation level, tidy up.  
+
+Wed Nov  3 11:16:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	straconcat(): do not call memcpy() if there is nothing to copy.  
+
+Wed Nov  3 11:12:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Optimize straconcat() a bit using memcpy() instead of strcat().  
+
+Tue Nov  2 09:34:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	Minor tidyup, reduce indentation level.  
+
 Mon Nov  1 22:22:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/: options.h, options.inc:

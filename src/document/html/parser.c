@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.14 2002/04/02 17:40:32 pasky Exp $ */
+/* $Id: parser.c,v 1.15 2002/04/06 17:08:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -756,7 +756,9 @@ void html_hr(unsigned char *a)
 	par_format.rightmargin = margin;
 	if ((i = get_width(a, "width", 1)) == -1) i = par_format.width - 2 * margin - 4;
 	format.attr = AT_GRAPHICS;
+	special_f(ff, SP_NOWRAP, 1);
 	while (i-- > 0) put_chrs(&r, 1, put_chars_f, ff);
+	special_f(ff, SP_NOWRAP, 0);
 	ln_break(2, line_break_f, ff);
 	kill_html_stack_item(&html_top);
 }

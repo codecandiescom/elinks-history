@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.5 2002/03/19 20:40:04 pasky Exp $ */
+/* $Id: parser.h,v 1.6 2002/04/06 17:08:11 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -210,6 +210,7 @@ enum html_special_type {
 	SP_USED,
 	SP_FRAMESET,
 	SP_FRAME,
+	SP_NOWRAP,
 };
 
 struct frameset_param {

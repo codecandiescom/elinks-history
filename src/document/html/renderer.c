@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.15 2002/03/28 22:53:35 pasky Exp $ */
+/* $Id: renderer.c,v 1.16 2002/04/06 17:08:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,6 +250,8 @@ static inline int fg_color(int fg, int bg)
 #endif
 
 #define ALIGN(x) (((x)+0x7f)&~0x7f)
+
+int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
 
 
 /* realloc_lines() */
@@ -873,6 +875,9 @@ end_format_change:
 	if (part->y < part->cy + 1)
 		part->y = part->cy + 1;
 
+	if (nowrap && part->cx + l > overlap(par_format))
+		return;
+
 	set_hline(part, part->cx, part->cy, l, c, (((fg&0x08)<<3)|(bg<<3)|(fg&0x07))<<8, 1);
 	part->cx += l;
 	nobreak = 0;
@@ -1248,6 +1253,10 @@ void * html_special(struct part *part, enum html_special_type c, ...)
 			fp = va_arg(l, struct frame_param *);
 			va_end(l);
 			create_frame(fp);
+			break;
+		case SP_NOWRAP:
+			nowrap = va_arg(l, int);
+			va_end(l);
 			break;
 		default:
 			va_end(l);

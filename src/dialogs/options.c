@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.171 2005/02/03 23:36:58 adamg Exp $ */
+/* $Id: options.c,v 1.172 2005/03/01 16:30:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,25 +179,25 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	add_dlg_text(dlg, text, ALIGN_LEFT, 1);
 
 	add_dlg_text(dlg, _("Frame handling:", term), ALIGN_LEFT, 1);
-	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, values[TERM_OPT_TYPE]);
-	add_dlg_radio(dlg, _("VT 100 frames", term), 1, TERM_VT100, values[TERM_OPT_TYPE]);
-	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, values[TERM_OPT_TYPE]);
-	add_dlg_radio(dlg, _("FreeBSD frames", term), 1, TERM_FREEBSD, values[TERM_OPT_TYPE]);
-	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, values[TERM_OPT_TYPE]);
+	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, &values[TERM_OPT_TYPE].number);
+	add_dlg_radio(dlg, _("VT 100 frames", term), 1, TERM_VT100, &values[TERM_OPT_TYPE].number);
+	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, &values[TERM_OPT_TYPE].number);
+	add_dlg_radio(dlg, _("FreeBSD frames", term), 1, TERM_FREEBSD, &values[TERM_OPT_TYPE].number);
+	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, &values[TERM_OPT_TYPE].number);
 
 	add_dlg_text(dlg, _("Color mode:", term), ALIGN_LEFT, 1);
-	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, values[TERM_OPT_COLORS]);
-	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, values[TERM_OPT_COLORS]);
+	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, &values[TERM_OPT_COLORS].number);
+	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, &values[TERM_OPT_COLORS].number);
 #ifdef CONFIG_256_COLORS
-	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, values[TERM_OPT_COLORS]);
+	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, &values[TERM_OPT_COLORS].number);
 #endif
 
-	add_dlg_checkbox(dlg, _("Switch fonts for line drawing", term), values[TERM_OPT_M11_HACK]);
-	add_dlg_checkbox(dlg, _("Restrict frames in cp850/852", term), values[TERM_OPT_RESTRICT_852]);
-	add_dlg_checkbox(dlg, _("Block cursor", term), values[TERM_OPT_BLOCK_CURSOR]);
-	add_dlg_checkbox(dlg, _("Transparency", term), values[TERM_OPT_TRANSPARENCY]);
-	add_dlg_checkbox(dlg, _("Underline", term), values[TERM_OPT_UNDERLINE]);
-	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), values[TERM_OPT_UTF_8_IO]);
+	add_dlg_checkbox(dlg, _("Switch fonts for line drawing", term), &values[TERM_OPT_M11_HACK].number);
+	add_dlg_checkbox(dlg, _("Restrict frames in cp850/852", term), &values[TERM_OPT_RESTRICT_852].number);
+	add_dlg_checkbox(dlg, _("Block cursor", term), &values[TERM_OPT_BLOCK_CURSOR].number);
+	add_dlg_checkbox(dlg, _("Transparency", term), &values[TERM_OPT_TRANSPARENCY].number);
+	add_dlg_checkbox(dlg, _("Underline", term), &values[TERM_OPT_UNDERLINE].number);
+	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), &values[TERM_OPT_UTF_8_IO].number);
 
 	add_dlg_button(dlg, _("OK", term), B_ENTER, push_ok_button, NULL);
 	if (!anonymous)

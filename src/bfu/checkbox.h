@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.38 2004/11/19 19:05:40 jonas Exp $ */
+/* $Id: checkbox.h,v 1.39 2005/03/01 16:30:05 zas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -21,13 +21,13 @@ struct widget_data_info_checkbox {
 };
 
 
-void add_dlg_radio_do(struct dialog *dlg, unsigned char *text, int groupid, int groupnum, void *data);
+void add_dlg_radio_do(struct dialog *dlg, unsigned char *text, int groupid, int groupnum, int *data);
 
-#define add_dlg_radio(dlg, text_, groupid, groupnum, data_) \
-	add_dlg_radio_do(dlg, text_, groupid, groupnum, (void *) &(data_))
+#define add_dlg_radio(dlg, text, groupid, groupnum, data) \
+	add_dlg_radio_do(dlg, text, groupid, groupnum, data)
 
-#define add_dlg_checkbox(dlg, text_, data_) \
-	add_dlg_radio_do(dlg, text_, 0, 0, (void *) &(data_))
+#define add_dlg_checkbox(dlg, text, data) \
+	add_dlg_radio_do(dlg, text, 0, 0, data)
 
 extern struct widget_ops checkbox_ops;
 

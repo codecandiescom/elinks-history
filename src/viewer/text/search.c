@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.309 2005/03/01 11:08:40 zas Exp $ */
+/* $Id: search.c,v 1.310 2005/03/01 16:30:06 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1561,11 +1561,11 @@ search_dlg_do(struct terminal *term, struct memory_list *ml,
 	field = get_dialog_offset(dlg, SEARCH_WIDGETS_COUNT);
 	add_dlg_field(dlg, text, 0, 0, NULL, MAX_STR_LEN, field, history);
 
-	add_dlg_radio(dlg, _("Normal search", term), 1, 0, hop->values[SEARCH_OPT_REGEX].number);
-	add_dlg_radio(dlg, _("Regexp search", term), 1, 1, hop->values[SEARCH_OPT_REGEX].number);
-	add_dlg_radio(dlg, _("Extended regexp search", term), 1, 2, hop->values[SEARCH_OPT_REGEX].number);
-	add_dlg_radio(dlg, _("Case sensitive", term), 2, 1, hop->values[SEARCH_OPT_CASE].number);
-	add_dlg_radio(dlg, _("Case insensitive", term), 2, 0, hop->values[SEARCH_OPT_CASE].number);
+	add_dlg_radio(dlg, _("Normal search", term), 1, 0, &hop->values[SEARCH_OPT_REGEX].number);
+	add_dlg_radio(dlg, _("Regexp search", term), 1, 1, &hop->values[SEARCH_OPT_REGEX].number);
+	add_dlg_radio(dlg, _("Extended regexp search", term), 1, 2, &hop->values[SEARCH_OPT_REGEX].number);
+	add_dlg_radio(dlg, _("Case sensitive", term), 2, 1, &hop->values[SEARCH_OPT_CASE].number);
+	add_dlg_radio(dlg, _("Case insensitive", term), 2, 0, &hop->values[SEARCH_OPT_CASE].number);
 
 	add_dlg_button(dlg, _("OK", term), B_ENTER, search_dlg_ok, fn);
 	add_dlg_button(dlg, _("Cancel", term), B_ESC, search_dlg_cancel, NULL);

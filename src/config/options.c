@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.64 2002/07/02 00:53:22 pasky Exp $ */
+/* $Id: options.c,v 1.65 2002/07/03 12:42:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -831,7 +831,7 @@ register_options()
 
 	add_opt_string("protocol.http.referer",
 		"fake", 0, "",
-		"Fake referer to be sent when policy is 3.");
+		"Fake referer to be sent when policy is 2.");
 
 
 	add_opt_string("protocol.http",

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.180 2005/01/03 23:29:47 pasky Exp $ */
+/* $Id: options.inc,v 1.181 2005/01/05 19:54:29 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -344,6 +344,12 @@ static struct option_info config_options_info[] = {
 		"horizontal_step", 0, 1, 9999, 8,
 		N_("Number of columns to scroll when a key bound to scroll-left or scroll-\n"
 		"right is pressed and no prefix was given.")),
+
+	INIT_OPT_BOOL("document.browse.scrolling", N_("Extended horizontal scrolling"),
+		"horizontal_extended", 0, 1,
+		N_("Whether to allow horizontal scrolling when the document\n"
+		"does not extend off the screen. Useful for copy/paste\n"
+		"operations.")),
 
 	INIT_OPT_INT("document.browse.scrolling", N_("Margin"),
 		"margin", 0, 0, 20, 3,

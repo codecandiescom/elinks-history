@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.667 2005/01/05 11:00:06 zas Exp $ */
+/* $Id: view.c,v 1.668 2005/01/05 19:54:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -306,13 +306,21 @@ vertical_scroll(struct session *ses, struct document_view *doc_view, int steps)
 static enum frame_event_status
 horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps)
 {
-	int x;
+	int x, max;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return FRAME_EVENT_OK;
 
 	x = doc_view->vs->x + steps;
-	int_bounds(&x, 0, doc_view->document->width - 1);
+
+	if (get_opt_bool("document.browse.scrolling.horizontal_extended")) {
+		max = doc_view->document->width - 1;
+	} else {
+		max = int_max(doc_view->vs->x,
+			      doc_view->document->width - doc_view->box.width);
+	}
+
+	int_bounds(&x, 0, max);
 	if (doc_view->vs->x == x) return FRAME_EVENT_OK;
 
 	doc_view->vs->x = x;

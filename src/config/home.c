@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.43 2003/10/04 08:59:03 kuser Exp $ */
+/* $Id: home.c,v 1.44 2003/10/04 12:46:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@ strip_trailing_dir_sep(unsigned char *path)
 	for (i = strlen(path) - 1; i > 0; i--)
 		if (!dir_sep(path[i]))
 			break;
-	
+
 	path[i + 1] = 0;
 }
 
@@ -131,7 +131,6 @@ get_home(void)
 	if (home_elinks) goto end;
 
 	home_elinks = test_confdir(home, "elinks", NULL);
-	if (home_elinks) goto end;
 
 end:
 	if (home_elinks)

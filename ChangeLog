@@ -1,3 +1,202 @@
+Wed Apr  7 21:53:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced, if anyone cares.  
+
+Wed Apr  7 21:45:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Style fix.  
+
+Wed Apr  7 21:15:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Add support for translating proxied URIs so even
+	proxy://proxy.stuff/elinks.or.cz will work. And this proxy patch is
+	even reasonably well tested. ;-) 
+
+Wed Apr  7 21:05:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/core.c:
+
+	What the hell does it here?!? 
+
+Wed Apr  7 20:06:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Assert it is file:// URI that is past to transform_file_url().
+	Update comment.  
+
+Wed Apr  7 20:01:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Remove TODO/FIXME about first trying file:// since we infact do
+	that.  
+
+Wed Apr  7 19:58:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Cleanup.  
+
+Wed Apr  7 19:53:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Clearify why we default to file:// when finding protocol.  
+
+Wed Apr  7 19:44:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Add FIXME about translating proxied URIs.  
+
+Wed Apr  7 19:34:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.c, protocol/uri.h, sched/connection.c:
+
+	Add support for proxy:// URIs on the command line. Before it caused
+	an assertion failure and it is really not that much code.  
+
+Wed Apr  7 19:12:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix need slash after host checking introduced a few patches ago.  
+
+Wed Apr  7 16:15:43 2004  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS:
+
+	Kalle Olavi Niemitalo was added to AUTHORS, for its Accept-Charset
+	bug fix.  
+
+Wed Apr  7 16:11:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Bug #242524(Debian) was fixed. Accept-Charset header was incorrect
+	with protocol.http.bugs.accept_charset = 0. Thanks to Kalle Olavi
+	Niemitalo and Peter Gervai.  
+
+Wed Apr  7 15:46:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Add FIXME about handling of irc. and other common protocol specific
+	hostnames.  
+
+Wed Apr  7 15:43:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	find_uri_protocol(): Cleanup and remove unneeded gotos.  
+
+Wed Apr  7 15:40:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Move and properly indent find_uri_protocol().  
+
+Wed Apr  7 15:38:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Move protocol detection to separate find_uri_protocol() function.  
+
+Wed Apr  7 15:32:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	translate_url(): Maintain which protocol name to add using enum
+	protocol.  
+
+Wed Apr  7 15:22:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Work on the allocated URI string. All tho' the protocol name finding
+	will most certainly be run first you never know.  
+
+Wed Apr  7 15:15:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Simplify tilde_expansion by doing it on entering translate_url().  
+
+Wed Apr  7 15:06:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Cleanup.  
+
+Wed Apr  7 15:03:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix detection of protocol name for URIs like www.sunpoint.net?k=1.
+	Don't brainlesly add ending '/' but handle it using the
+	URI_ERRNO_NO_HOST_SLASH.  
+
+Wed Apr  7 14:24:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Improve host after slash handling by changing parse_uri() to assign
+	URI host members before checking if slash is missing and
+	translate_url() will now use URI host members to insert missing
+	slash at the right position. http://www.sunpoint.net?k=1 will be
+	translated to http://www.sunpoint.net/?k=1 and squid should be happy
+	as well.  
+
+Wed Apr  7 14:09:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Fix redirect info.  
+
+Wed Apr  7 13:57:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix dir normalization for URIs like http://elinks.or.cz//bla to
+	normalize to http://elinks.or.cz/bla 
+
+Wed Apr  7 13:29:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Hrmpfh. Fix normalize dir example.  
+
+Wed Apr  7 13:04:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Describe the dir nomalization loop. Simplify ending logic.  
+
+Wed Apr  7 12:50:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	A little simplification and optimization. Move end_of_dir() check
+	inside loop so we don't do it both in the loop invariant? and after
+	it.  
+
+Wed Apr  7 12:46:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Rewrite the direcory normalization loop without use of gotos. Fixes
+	bug reported by lindi- and zas.  
+
 Tue Apr  6 12:29:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.259 2003/11/29 21:58:25 pasky Exp $ */
+/* $Id: session.c,v 1.260 2003/11/29 23:01:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ struct file_to_load *request_additional_loading_file(struct session *,
 
 unsigned char *
 get_stat_msg(struct download *stat, struct terminal *term,
-	     int wide, int full, unsigned char *separater)
+	     int wide, int full, unsigned char *separator)
 {
 	struct string msg;
 
@@ -122,7 +122,7 @@ get_stat_msg(struct download *stat, struct terminal *term,
 		add_xnum_to_string(&msg, stat->prg->size);
 	}
 
-	add_to_string(&msg, separater);
+	add_to_string(&msg, separator);
 
 	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg,
@@ -148,7 +148,7 @@ get_stat_msg(struct download *stat, struct terminal *term,
 
 	/* Do the following only if there is room */
 
-	add_to_string(&msg, separater);
+	add_to_string(&msg, separator);
 
 	add_to_string(&msg, _("elapsed time", term));
 	add_char_to_string(&msg, ' ');

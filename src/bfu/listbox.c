@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.66 2003/04/29 17:17:40 zas Exp $ */
+/* $Id: listbox.c,v 1.67 2003/05/02 22:39:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,7 +224,7 @@ struct box_context {
 
 /* Takes care about listbox top moving. */
 static int
-box_sel_move_do(struct listbox_item *item, void *data_, int *off)
+box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 {
 	struct box_context *data = data_;
 
@@ -298,7 +298,7 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 /* Takes care about rendering of each listbox item. */
 static int
-display_listbox_item(struct listbox_item *item, void *data_, int *off)
+display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 {
 	struct box_context *data = data_;
 	unsigned char *text = item->text;

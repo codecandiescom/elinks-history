@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.19 2003/04/29 13:18:22 zas Exp $ */
+/* $Id: dialogs.c,v 1.20 2003/05/02 22:39:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,7 +243,7 @@ do_delete_global_history_item(struct terminal *term,
 }
 
 static int
-delete_marked(struct listbox_item *item, void *data_, int *off)
+delete_marked(struct listbox_item *item, void *data_, int *offset)
 {
 	struct delete_globhist_item_ctx *vhop = data_;
 
@@ -279,13 +279,13 @@ cancel_delete_globhist_item(void *vhop)
 }
 
 static int
-scan_for_marks(struct listbox_item *item, void *data_, int *off)
+scan_for_marks(struct listbox_item *item, void *data_, int *offset)
 {
 	if (item->marked) {
 		struct delete_globhist_item_ctx *ctx = data_;
 
 		ctx->history_item = NULL;
-		*off = 0;
+		*offset = 0;
 	}
 	return 0;
 }

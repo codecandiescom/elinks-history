@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.70 2003/04/29 13:18:22 zas Exp $ */
+/* $Id: dialogs.c,v 1.71 2003/05/02 22:39:15 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -326,7 +326,7 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 }
 
 static int
-delete_marked(struct listbox_item *item, void *data_, int *off)
+delete_marked(struct listbox_item *item, void *data_, int *offset)
 {
 	struct push_del_button_hop_struct *hop = data_;
 
@@ -367,13 +367,13 @@ cancel_del_bookmark(void *vhop)
 }
 
 static int
-scan_for_marks(struct listbox_item *item, void *data_, int *off)
+scan_for_marks(struct listbox_item *item, void *data_, int *offset)
 {
 	if (item->marked) {
 		struct push_del_button_hop_struct *hop = data_;
 
 		hop->bm = NULL;
-		*off = 0;
+		*offset = 0;
 	}
 	return 0;
 }
@@ -716,7 +716,7 @@ struct bookmark_search_ctx {
 };
 
 static int
-test_search(struct listbox_item *item, void *data_, int *off) {
+test_search(struct listbox_item *item, void *data_, int *offset) {
 	struct bookmark_search_ctx *ctx = data_;
 	struct bookmark *bm = item->udata;
 	int m = ((ctx->search_title && *ctx->search_title
@@ -728,7 +728,7 @@ test_search(struct listbox_item *item, void *data_, int *off) {
 	ctx->found = m;
 	ctx->ofs++;
 
-	if (m) *off = 0;
+	if (m) *offset = 0;
 	return 0;
 }
 

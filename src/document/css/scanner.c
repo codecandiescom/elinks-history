@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.91 2004/01/23 06:26:50 jonas Exp $ */
+/* $Id: scanner.c,v 1.92 2004/01/23 17:33:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -441,13 +441,13 @@ skip_css_tokens_(struct css_scanner *scanner, enum css_token_type skipto)
 struct scan_table_info {
 	enum { SCAN_RANGE, SCAN_STRING, SCAN_END } type;
 	union scan_table_data {
-		struct { unsigned char *source; int length; } string;
-		struct { int start, end; } range;
+		struct { unsigned char *source; long length; } string;
+		struct { long start, end; } range;
 	} data;
 	int bits;
 };
 
-/* FIXME: We assume that sizeof(void *) == sizeof(int) here! --pasky */
+/* FIXME: We assume that sizeof(void *) == sizeof(long) here! --pasky */
 #define SCAN_TABLE_INFO(type, data1, data2, bits) \
 	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
 

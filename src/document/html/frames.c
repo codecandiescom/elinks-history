@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.41 2003/11/16 13:01:22 pasky Exp $ */
+/* $Id: frames.c,v 1.42 2003/11/16 15:02:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,7 +168,7 @@ find_fd(struct session *ses, unsigned char *name,
 	return doc_view;
 }
 
-struct document_view *
+static struct document_view *
 format_frame(struct session *ses, unsigned char *name,
 	     struct document_options *o, int depth)
 {

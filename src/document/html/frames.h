@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.29 2003/10/31 22:33:50 pasky Exp $ */
+/* $Id: frames.h,v 1.30 2003/11/16 15:02:47 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -43,7 +43,6 @@ struct frame_param {
 
 struct frameset_desc *create_frameset(struct document *doc, struct frameset_param *fp);
 void create_frame(struct frame_param *fp);
-struct document_view *format_frame(struct session *ses, unsigned char *name, struct document_options *o, int depth);
 void format_frames(struct session *ses, struct frameset_desc *fsd, struct document_options *op, int depth);
 #define document_has_frames(document_) ((document_) && (document_)->frame_desc)
 

@@ -1,3 +1,45 @@
+Mon Oct  7 20:43:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/bookmarks/dialogs.c, src/intl/lang_defs.h,
+	src/intl/language.inc:
+
+	Removed T_BOOKMARK_TITLE and ghost strings array.  
+
+Mon Oct  7 20:42:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Static mania.. you gotta have an headache from global
+	push_delete_button symbol.  
+
+Mon Oct  7 20:37:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/bookmarks/dialogs.c, src/dialogs/hierbox.c,
+	src/intl/lang_defs.h, src/intl/language.inc:
+
+	Added move button to the bookmarks manager. Does nothing yet, but
+	nice start, isn't it? ;) 
+
 Sat Oct  5 09:20:05 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/view.c, globhist/dialogs.c:

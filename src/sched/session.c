@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.518 2004/06/14 17:39:54 jonas Exp $ */
+/* $Id: session.c,v 1.519 2004/06/14 18:04:34 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -130,7 +130,7 @@ done_session_info(struct session_info *info)
 	if (info->timer != -1)
 		kill_timer(info->timer);
 
-	done_uri(info->uri);
+	if (info->uri) done_uri(info->uri);
 	mem_free(info);
 }
 

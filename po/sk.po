@@ -451,9 +451,8 @@ msgid "Secure file error"
 msgstr "Chyba FTP súboru"
 
 #: src/config/conf.c:708
-#, fuzzy
 msgid "Cannot read the file"
-msgstr "Chyba pri zápise do súboru"
+msgstr "Nemô¾em èíta» súbor"
 
 #: src/config/conf.c:711
 #, fuzzy
@@ -461,19 +460,16 @@ msgid "Cannot stat the file"
 msgstr "Chyba pri zápise do súboru"
 
 #: src/config/conf.c:714
-#, fuzzy
 msgid "Cannot access the file"
-msgstr "Chyba pri zápise do súboru"
+msgstr "Nemô¾em pristupova» k súboru"
 
 #: src/config/conf.c:717
-#, fuzzy
 msgid "Cannot create temp file"
-msgstr "Chyba pri zápise do súboru"
+msgstr "Nemô¾em vytvori» doèasný súbor"
 
 #: src/config/conf.c:720
-#, fuzzy
 msgid "Cannot rename the file"
-msgstr "Chyba pri zápise do súboru"
+msgstr "Nemô¾em premenova» súbor"
 
 #: src/config/conf.c:723
 msgid "File saving disabled by option"
@@ -484,9 +480,8 @@ msgid "Out of memory"
 msgstr "Do¹la pamä»"
 
 #: src/config/conf.c:729
-#, fuzzy
 msgid "Cannot write the file"
-msgstr "Chyba pri zápise do súboru"
+msgstr "Nemô¾em zapisova» do súboru"
 
 #: src/config/dialogs.c:41
 msgid "Config error"
@@ -645,7 +640,7 @@ msgstr "Hlavné mapovanie"
 
 #: src/config/kbdbind.c:273
 msgid "Edit mapping"
-msgstr "Edituj mapovanie"
+msgstr "Editova» mapovanie"
 
 #: src/config/kbdbind.c:274
 msgid "Menu mapping"
@@ -693,11 +688,11 @@ msgstr "Otvori» správcu cookies"
 
 #: src/config/kbdbind.c:389
 msgid "Reload cookies file"
-msgstr "Znovunahranie súboru s cookies"
+msgstr "Znovu nahra» súbor s cookies"
 
 #: src/config/kbdbind.c:390
 msgid "Copy text to clipboard"
-msgstr "Okopírova» text do schránky"
+msgstr "Kopírova» text do schránky"
 
 #: src/config/kbdbind.c:391
 msgid "Delete text from clipboard"
@@ -708,209 +703,190 @@ msgid "Delete character under cursor"
 msgstr "Zmaza» znak pod kurzorom"
 
 #: src/config/kbdbind.c:393
-#, fuzzy
 msgid "Show information about the current page"
-msgstr "Stiahnu» o~brázok"
+msgstr "Zobrazi» informácie o aktuálnej stránke"
 
 #: src/config/kbdbind.c:394
 msgid "Move cursor downwards"
-msgstr ""
+msgstr "Posunú» kurzor smerom dole"
 
 #: src/config/kbdbind.c:395
-#, fuzzy
 msgid "Download the current link"
-msgstr "~Stiahnu» link"
+msgstr "Stiahnu» cieµ aktuálneho odkazu"
 
 #: src/config/kbdbind.c:396
-#, fuzzy
 msgid "Download the current image"
-msgstr "Stiahnu» o~brázok"
+msgstr "Stiahnu» aktuálny obrázok"
 
 #: src/config/kbdbind.c:397
 msgid "Begin editing"
-msgstr ""
+msgstr "Zaèat editovanie"
 
 #. FIXME
 #: src/config/kbdbind.c:398
 msgid "Go to the end of the page/line"
-msgstr ""
+msgstr "Ís» na koniec stránky/riadku"
 
 #: src/config/kbdbind.c:399
-#, fuzzy
 msgid "Follow the current link"
-msgstr "~Otvori» link"
+msgstr "Otvori» aktuálny odkaz"
 
 #: src/config/kbdbind.c:400
 msgid "Follow the current link, forcing reload of the target"
-msgstr ""
+msgstr "Otvori» aktuálny odkaz, (cieµ stiahnutý znovu)"
 
 #: src/config/kbdbind.c:401
 msgid "Open the File menu"
-msgstr ""
+msgstr "Otvori» menu Súbor"
 
 #: src/config/kbdbind.c:402
 msgid "Find the next occurrence of the current search text"
-msgstr ""
+msgstr "Nájs» ïal¹í výskyt práve hµadaného textu"
 
 #: src/config/kbdbind.c:403
 msgid "Find the previous occurrence of the current search text"
-msgstr ""
+msgstr "Nájs» predchádzajúci výskyt práve hµadaného textu"
 
 #: src/config/kbdbind.c:404
-#, fuzzy
 msgid "Forget authentication credentials"
-msgstr "HTTP Autentizácia"
+msgstr "Vymaza» z pamäti prihlasovacie informácie HTTP Autentizácie"
 
 #: src/config/kbdbind.c:405
 msgid "Open \"Go to URL\" dialog box"
-msgstr ""
+msgstr "Otvor» dialógové okno \"Choï na URL\""
 
 #: src/config/kbdbind.c:406
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr ""
+msgstr "Otvori» dialógové okno \"Choï na URL\" obsahujúce URL aktuálneho dokumentu"
 
 #: src/config/kbdbind.c:407
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
+msgstr "Otvori» dialógové okno \"Choï na URL\" obsahujúce URL aktuálneho odkazu"
 
 #: src/config/kbdbind.c:408
 msgid "Go to the homepage"
-msgstr ""
+msgstr "Ís» na domovskú stránku"
 
 #: src/config/kbdbind.c:409
 msgid "Show information about the current page HTTP headers"
-msgstr ""
+msgstr "Zobrazi» informácie o HTTP hlavièkách aktuálnej stránky"
 
 #: src/config/kbdbind.c:410
 msgid "Open history manager"
-msgstr ""
+msgstr "Otvori» správcu histórie"
 
 #: src/config/kbdbind.c:411
 msgid "Go to the start of the page/line"
-msgstr ""
+msgstr "Ís» na zaèiatok stránky alebo riadku"
 
 #: src/config/kbdbind.c:412
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Zmaza» príponu"
+msgstr "Zmaza» do zaèiatku riadku"
 
 #: src/config/kbdbind.c:413
-#, fuzzy
 msgid "Delete to end of line"
-msgstr "Zmaza» príponu"
+msgstr "Zmaza» po koniec riadku"
 
 #: src/config/kbdbind.c:414
 msgid "Open keybinding manager"
-msgstr ""
+msgstr "Otvori» správcu klávesových skratiek"
 
 #: src/config/kbdbind.c:415
-#, fuzzy
 msgid "Move the cursor left"
-msgstr "Blokova» kurzor"
+msgstr "Posunú» kurzor vµavo"
 
 #: src/config/kbdbind.c:416
 msgid "Open the link context menu"
-msgstr ""
+msgstr "Otvori» kontextové menu k odkazu"
 
 #: src/config/kbdbind.c:417
-#, fuzzy
 msgid "Jump to link"
-msgstr "Choï na link"
+msgstr "Skoè na odkaz"
 
 #: src/config/kbdbind.c:419
-#, fuzzy
 msgid "Open a Lua console"
-msgstr "Lua konzola"
+msgstr "Otvori» Lua konzolu"
 
 #: src/config/kbdbind.c:421
 msgid "Open a Lua console (DISABLED)"
-msgstr ""
+msgstr "Otvori» Lua konzolu (VYPNUTÉ)"
 
 #. internal use only
 #: src/config/kbdbind.c:424
 msgid "Activate the menu"
-msgstr ""
+msgstr "Aktivova» menu"
 
 #: src/config/kbdbind.c:425
 msgid "Move to the next frame"
-msgstr ""
+msgstr "Presunú» sa do ïal¹ieho rámca"
 
 #: src/config/kbdbind.c:426
-#, fuzzy
 msgid "Open a new tab"
-msgstr "Otvori» v ~novom okne"
+msgstr "Otvori» nový tab"
 
 #: src/config/kbdbind.c:427
-#, fuzzy
 msgid "Open a new tab in background"
-msgstr "Na pozadí"
+msgstr "Otvori» nový tab na pozadí"
 
 #: src/config/kbdbind.c:428
-#, fuzzy
 msgid "Open a new window"
-msgstr "Otvori» v ~novom okne"
+msgstr "Otvori» nové okno"
 
 #: src/config/kbdbind.c:429
-#, fuzzy
 msgid "Open the current link in a new tab"
-msgstr "Otvori» v ~novom okne"
+msgstr "Otvori» aktuálny odkaz v novom tabe"
 
 #: src/config/kbdbind.c:431
-#, fuzzy
 msgid "Open the current link a new tab in background"
-msgstr "Otvori» v ~novom okne"
+msgstr "Otvori» aktuálny odkaz v novom tabe na pozadí"
 
 #: src/config/kbdbind.c:432
-#, fuzzy
 msgid "Open the current link in a new window"
-msgstr "Otvori» v ~novom okne"
+msgstr "Otvori» aktuálny odkaz v novom okne"
 
 #: src/config/kbdbind.c:433
 msgid "Open options manager"
-msgstr ""
+msgstr "Otvori» správcu nastavení"
 
 #: src/config/kbdbind.c:434
 msgid "Move downwards by a page"
-msgstr ""
+msgstr "Posunú» sa o stranu ni¾¹ie"
 
 #: src/config/kbdbind.c:435
 msgid "Move upwards by a page"
-msgstr ""
+msgstr "Posunú» sa o stranu vy¹¹ie"
 
 #: src/config/kbdbind.c:436
 msgid "Paste text from the clipboard"
-msgstr ""
+msgstr "Vlo¾i» text zo schránky"
 
 #: src/config/kbdbind.c:437
 msgid "Move to the previous frame"
-msgstr ""
+msgstr "Presunú» sa so predchádzajúceho rámca"
 
 #: src/config/kbdbind.c:438
 msgid "Open a quit confirmation dialog box"
-msgstr ""
+msgstr "Otvori» dialóg potvrdzujúci skonèenie Elinksu"
 
 #: src/config/kbdbind.c:439
-#, fuzzy
 msgid "Quit without confirmation"
-msgstr "Èakám na potvrdenie presmerovania"
+msgstr "Skonèi» bez reptania"
 
 #: src/config/kbdbind.c:440
 msgid "Reload the current page"
-msgstr ""
+msgstr "Znovu natiahnu» súèasnú stránku"
 
 #: src/config/kbdbind.c:441
 msgid "Attempt to resume download of the current link"
-msgstr ""
+msgstr "Pokúsi» sa obnovi» s»ahovanie aktuálneho odkazu"
 
 #: src/config/kbdbind.c:442
-#, fuzzy
 msgid "Move the cursor right"
-msgstr "Blokova» kurzor"
+msgstr "Posunú» kurzor doprava"
 
 #: src/config/kbdbind.c:443
-#, fuzzy
 msgid "Save formatted document"
-msgstr "Ulo¾ sformátovaný ~dokument"
+msgstr "Ulo¾i» formátovaný dokument"
 
 #: src/config/kbdbind.c:444
 msgid "Scroll down"
@@ -939,38 +915,36 @@ msgid "Search backwards for a text pattern"
 msgstr "Hµadaj text"
 
 #: src/config/kbdbind.c:450 src/terminal/tab.c:192
-#, fuzzy
 msgid "Close tab"
-msgstr "Zavri"
+msgstr "Zavrie» tab"
 
 #: src/config/kbdbind.c:451
 msgid "Next tab"
-msgstr ""
+msgstr "Ïal¹í tab"
 
 #: src/config/kbdbind.c:452
-#, fuzzy
 msgid "Previous tab"
-msgstr "®iadne predchádzajúce hµadania"
+msgstr "Predchádzajúci tab"
 
 #: src/config/kbdbind.c:453
 msgid "Toggle displaying of links to images"
-msgstr ""
+msgstr "Prepnú» zobrazovanie odkazov na obrázky"
 
 #: src/config/kbdbind.c:454
 msgid "Toggle rendering of tables"
-msgstr ""
+msgstr "Prepnú» zobrazovanie tabuliek"
 
 #: src/config/kbdbind.c:455
 msgid "Toggle rendering page as HTML / plain text"
-msgstr ""
+msgstr "Prepnú» zobrazovanie stránky ako HTML / èistý text"
 
 #: src/config/kbdbind.c:456
 msgid "Toggle displaying of links numbers"
-msgstr ""
+msgstr "Prepnú» èíslovanie odkazov"
 
 #: src/config/kbdbind.c:457
 msgid "Toggle usage of document specific colors"
-msgstr ""
+msgstr "Prepnú» pou¾ívanie farieb nastavených v dokumente"
 
 #: src/config/kbdbind.c:458
 msgid "Go forward in the unhistory"

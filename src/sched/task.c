@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.4 2003/12/06 17:04:32 pasky Exp $ */
+/* $Id: task.c,v 1.5 2003/12/06 21:58:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,12 +11,21 @@
 
 #include "elinks.h"
 
+#include "bfu/menu.h"
+#include "bfu/msgbox.h"
+#include "bfu/style.h"
 #include "cache/cache.h"
+#include "dialogs/status.h"
 #include "document/document.h"
+#include "document/html/parser.h"
+#include "document/refresh.h"
 #include "document/view.h"
+#include "intl/gettext/libintl.h"
+#include "lowlevel/select.h"
 #include "protocol/protocol.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
+#include "sched/download.h"
 #include "sched/session.h"
 #include "sched/task.h"
 #include "viewer/text/view.h"
@@ -370,7 +379,7 @@ b:
 	       	ses->display_timer = -1;
 	}
 
-	switch (ses->task) {
+	switch (ses->task.type) {
 		case TASK_NONE:
 			break;
 		case TASK_FORWARD:

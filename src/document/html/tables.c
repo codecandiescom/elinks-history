@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.295 2004/06/29 13:09:40 jonas Exp $ */
+/* $Id: tables.c,v 1.296 2004/06/29 13:44:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

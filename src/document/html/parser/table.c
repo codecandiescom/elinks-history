@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.15 2004/06/29 07:16:29 pasky Exp $ */
+/* $Id: table.c,v 1.16 2004/06/29 13:44:22 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -55,25 +55,22 @@ add_table_bad_html_end(struct table *table, unsigned char *end)
 }
 
 
-static int
+static void
 get_bordercolor(unsigned char *a, color_t *rgb)
 {
 	unsigned char *at;
-	int r;
 
 	if (!use_document_fg_colors(global_doc_opts))
-		return -1;
+		return;
 
 	at = get_attr_val(a, "bordercolor");
 	/* Try some other MSIE-specific attributes if any. */
 	if (!at) at = get_attr_val(a, "bordercolorlight");
 	if (!at) at = get_attr_val(a, "bordercolordark");
-	if (!at) return -1;
+	if (!at) return;
 
-	r = decode_color(at, strlen(at), rgb);
+	decode_color(at, strlen(at), rgb);
 	mem_free(at);
-
-	return r;
 }
 
 static void

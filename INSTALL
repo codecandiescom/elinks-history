@@ -19,6 +19,13 @@ $ cvs -z3 update -dP
 Thus you should be able to update your tree like if you would checkout the
 latest tree from CVS.
 
+  Note that if you got the sources directly from CVS, you NEED to run
+./autogen.sh then! (It should be enough to do it once, automake should be smart
+enough to rerun itself when needed - however, if you'll have build problems, try
+to run this first.) Also, you obviously need automake and autoconf installed in
+your system. Otherwise, you have to use nightly CVS snapshot - you don't need to
+do this there.
+
 
 ##########
   If you'll want to compile elinks, first check directory contrib/, if it
@@ -76,5 +83,5 @@ want them ;) so just copy the hooks.lua to ~/.links, and edit the configuration
 part - it adds various nice functionality to elinks, like decompression of
 gzipped files or user-defined protocols.
 
-$Id: INSTALL,v 1.7 2002/03/15 22:21:57 pasky Exp $
+$Id: INSTALL,v 1.8 2002/03/17 18:52:38 pasky Exp $
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.106 2003/11/26 21:08:31 pasky Exp $ */
+/* $Id: cookies.c,v 1.107 2003/12/01 14:15:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,6 @@
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
-#include "lowlevel/ttime.h"
 #include "modules/module.h"
 #include "protocol/http/date.h"
 #include "protocol/http/header.h"
@@ -42,6 +41,7 @@
 #include "util/object.h"
 #include "util/secsave.h"
 #include "util/string.h"
+#include "util/ttime.h"
 
 #define COOKIES_FILENAME		"cookies"
 

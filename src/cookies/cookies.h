@@ -1,13 +1,13 @@
-/* $Id: cookies.h,v 1.16 2003/11/22 13:54:36 jonas Exp $ */
+/* $Id: cookies.h,v 1.17 2003/12/01 14:15:31 pasky Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
 
 #include "bfu/listbox.h"
-#include "lowlevel/ttime.h"
 #include "modules/module.h"
 #include "protocol/uri.h"
 #include "util/string.h"
+#include "util/ttime.h"
 
 enum cookies_accept {
 	COOKIES_ACCEPT_NONE,

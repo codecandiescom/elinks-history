@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.36 2003/11/11 15:31:41 zas Exp $ */
+/* $Id: select.c,v 1.37 2003/12/01 14:15:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,10 +33,10 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
-#include "lowlevel/ttime.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/ttime.h"
 
 
 #ifndef FD_SETSIZE

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.55 2003/11/18 22:59:59 pasky Exp $ */
+/* $Id: renderer.h,v 1.56 2003/12/01 14:15:32 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -8,9 +8,9 @@
 #include "document/document.h"
 #include "document/html/frames.h"
 #include "terminal/draw.h"
-#include "lowlevel/ttime.h"
 #include "util/color.h"
 #include "util/lists.h"
+#include "util/ttime.h"
 
 
 void render_html_document(struct cache_entry *ce, struct document *document);

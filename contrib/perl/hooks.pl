@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.70 2005/03/27 13:23:28 pasky Exp $
+# $Id: hooks.pl,v 1.71 2005/03/27 13:33:57 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1081,6 +1081,7 @@ These are the default actions:
 
 sub quit_hook
 {
+
 =item Collapse XBEL Folders
 
 Collapses XBEL bookmark folders. This is obsoleted by

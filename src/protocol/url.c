@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.61 2003/05/20 17:56:35 pasky Exp $ */
+/* $Id: url.c,v 1.62 2003/05/20 21:33:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,6 @@ parse_url(unsigned char *url, int *prlen,
 	unsigned char *prefix_end, *host_end;
 #ifdef IPV6
 	unsigned char *lbracket, *rbracket;
-	static unsigned char hostbuf[NI_MAXHOST];
 #endif
 	int protocol;
 
@@ -139,6 +138,12 @@ parse_url(unsigned char *url, int *prlen,
 	if (data) *data = NULL;
 	if (dalen) *dalen = 0;
 	if (post) *post = NULL;
+
+#ifdef DEBUG
+	if (!url) internal("No url to parse.");
+#endif
+
+	if (!*url) return -1; /* Empty url. */
 
 	/* Isolate prefix */
 
@@ -173,13 +178,14 @@ parse_url(unsigned char *url, int *prlen,
 #ifdef IPV6
 	/* Get brackets enclosing IPv6 address */
 	lbracket = strchr(prefix_end, '[');
-	rbracket = strchr(prefix_end, ']');
-
-	/* [address] is handled only inside of hostname part (surprisingly). */
-	if (prefix_end + strcspn(prefix_end, "/") < (rbracket ? rbracket : lbracket))
-		lbracket = rbracket = NULL;
-
-	if (lbracket > rbracket) return -1;
+	if (lbracket) {
+		rbracket = strchr(lbracket, ']');
+		/* [address] is handled only inside of hostname part (surprisingly). */
+		if (rbracket && prefix_end + strcspn(prefix_end, "/") < rbracket)
+			lbracket = rbracket = NULL;
+	} else {
+		rbracket = NULL;
+	}
 #endif
 
 	/* Possibly skip auth part */
@@ -187,22 +193,24 @@ parse_url(unsigned char *url, int *prlen,
 
 	if (prefix_end + strcspn(prefix_end, "/") > host_end
 	    && *host_end) { /* we have auth info here */
-		unsigned char *user_end = strchr(prefix_end, ':');
+		if (user || uslen || pass || palen) {
+			unsigned char *user_end = strchr(prefix_end, ':');
 
-		if (!user_end || user_end > host_end) {
-			if (user) *user = prefix_end;
-			if (uslen) *uslen = host_end - prefix_end;
-		} else {
-			if (user) *user = prefix_end;
-			if (uslen) *uslen = user_end - prefix_end;
-			if (pass) *pass = user_end + 1;
-			if (palen) *palen = host_end - user_end - 1;
+			if (!user_end || user_end > host_end) {
+				if (user) *user = prefix_end;
+				if (uslen) *uslen = host_end - prefix_end;
+			} else {
+				if (user) *user = prefix_end;
+				if (uslen) *uslen = user_end - prefix_end;
+				if (pass) *pass = user_end + 1;
+				if (palen) *palen = host_end - user_end - 1;
+			}
 		}
 		prefix_end = host_end + 1;
 	}
 
 #ifdef IPV6
-	if (lbracket && rbracket)
+	if (rbracket)
 		host_end = rbracket + strcspn(rbracket, ":/");
 	else
 #endif
@@ -210,20 +218,34 @@ parse_url(unsigned char *url, int *prlen,
 
 	if (!*host_end && protocols[protocol].need_slash_after_host) return -1;
 
+	if (host || holen) { /* Only enter if needed. */
 #ifdef IPV6
-	if (lbracket && rbracket) {
-		int addrlen = rbracket - lbracket - 1;
+		if (rbracket) {
+			unsigned char hostbuf[NI_MAXHOST];
+			int addrlen = rbracket - lbracket - 1;
 
-		/* Don't forget the trailing space! ;-) --pasky */
-		safe_strncpy(hostbuf, lbracker + 1, addrlen + 1);
+			/* Check for valid length.
+			 * addrlen >= sizeof(hostbuf) is theorically impossible
+			 * but i keep the test in case of... Safer, imho --Zas */
+			if (addrlen > 0 && addrlen < sizeof(hostbuf)) {
+				/* Ok, copy address to hostbuf. */
+				/* Don't forget the trailing space! ;-) --pasky */
+				safe_strncpy(hostbuf, lbracket + 1, addrlen + 1);
+			} else {
+				/* Invalid length or empty address,
+				 * set hostbuf to empty string. */
+				hostbuf[0] = '\0';
+				addrlen = 0;
+			}
 
-		if (host) *host = hostbuf;
-		if (holen) *holen = addrlen;
-	} else
+			if (host) *host = hostbuf;
+			if (holen) *holen = addrlen;
+		} else
 #endif
-	{
-		if (host) *host = prefix_end;
-		if (holen) *holen = host_end - prefix_end;
+		{
+			if (host) *host = prefix_end;
+			if (holen) *holen = host_end - prefix_end;
+		}
 	}
 
 	if (*host_end == ':') { /* we have port here */
@@ -244,12 +266,14 @@ parse_url(unsigned char *url, int *prlen,
 		host_end = port_end;
 	}
 
-	if (*host_end) host_end++; /* skip slash */
+	if (data || dalen || post) {
+		if (*host_end) host_end++; /* skip slash */
 
-	prefix_end = strchr(host_end, POST_CHAR);
-	if (data) *data = host_end;
-	if (dalen) *dalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
-	if (post) *post = prefix_end ? (prefix_end + 1) : NULL;
+		prefix_end = strchr(host_end, POST_CHAR);
+		if (data) *data = host_end;
+		if (dalen) *dalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
+		if (post) *post = prefix_end ? (prefix_end + 1) : NULL;
+	}
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.96 2004/06/18 08:38:02 miciah Exp $ */
+/* $Id: textarea.c,v 1.97 2004/06/18 08:40:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@ format_text(unsigned char *text, int width, int wrap)
 {
 	struct line_info *line = NULL;
 	int line_number = 0;
-	unsigned char *begin = text;
+	int begin = 0;
 	int pos = 0;
 	int skip, ps = 0;
 
@@ -58,7 +58,7 @@ format_text(unsigned char *text, int width, int wrap)
 		if (text[pos] == '\n') {
 			skip = 1;
 
-		} else if (!wrap || (text + pos) - begin < width) {
+		} else if (!wrap || pos - begin < width) {
 			pos++;
 			continue;
 
@@ -66,7 +66,7 @@ format_text(unsigned char *text, int width, int wrap)
 			int s;
 
 			skip = 0;
-			for (s = pos; s + text >= begin; s--) {
+			for (s = pos; s >= begin; s--) {
 				if (text[s] == ' ') {
 					if (wrap == 2) text[s] = '\n';
 					pos = s;
@@ -81,9 +81,9 @@ put:
 			return NULL;
 		}
 
-		line[line_number].start = begin - text;
+		line[line_number].start = begin;
 		line[line_number++].end = pos;
-		begin = text + (pos += skip);
+		begin = pos += skip;
 	}
 
 	if (ps < 2) {

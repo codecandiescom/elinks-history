@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.1 2002/08/06 23:26:31 pasky Exp $ */
+/* $Id: user.c,v 1.2 2002/08/07 00:09:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,9 +20,51 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+static unsigned char *
+subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
+	  unsigned char *port, unsigned char *subj)
+{
+	unsigned char *n = init_str();
+	int l = 0;
+
+	if (!n) return NULL;
+
+	while (*cmd) {
+		int p;
+
+		for (p = 0; cmd[p] && cmd[p] != '%'; p++);
+
+		add_bytes_to_str(&n, &l, cmd, p);
+		cmd += p;
+
+		if (*cmd == '%' && cmd[1]) {
+			cmd++;
+			switch (*cmd) {
+				case 'u':
+					add_to_str(&n, &l, url);
+					break;
+				case 'h':
+					if (host) add_to_str(&n, &l, host);
+					break;
+				case 'p':
+					if (port) add_to_str(&n, &l, port);
+					break;
+				case 's':
+					if (subj) add_to_str(&n, &l, subj);
+					break;
+			}
+			cmd++;
+		}
+	}
+
+	return n;
+}
+
 void
 prog_func(struct terminal *term, unsigned char *progid,
-	  unsigned char *param, unsigned char *name)
+	  unsigned char *url, unsigned char *host, unsigned char *port,
+	  unsigned char *subj, unsigned char *name)
 {
 	unsigned char *cmd;
 	unsigned char *prog = get_prog(term, progid);
@@ -36,7 +78,7 @@ prog_func(struct terminal *term, unsigned char *progid,
 		return;
 	}
 
-	cmd = subst_file(prog, param);
+	cmd = subst_cmd(prog, url, host, port, subj);
 	if (cmd) {
 		exec_on_terminal(term, cmd, "", 1);
 		mem_free(cmd);
@@ -47,7 +89,7 @@ prog_func(struct terminal *term, unsigned char *progid,
 void
 mailto_func(struct session *ses, unsigned char *url)
 {
-	unsigned char *user, *host, *param;
+	unsigned char *user, *host, *param, *urldata = NULL, *subj;
 	int f = 1;
 
 	user = get_user_name(url);
@@ -59,10 +101,44 @@ mailto_func(struct session *ses, unsigned char *url)
 	param = straconcat(user, "@", host, NULL);
 	if (!param) goto fail2;
 
+	subj = strchr(param, '?');
+	if (subj) {
+		*subj = 0;
+	} else {
+		urldata = get_url_data(url);
+		if (urldata) {
+			urldata = stracpy(urldata);
+			subj = strchr(urldata, '?');
+		}
+	}
+
+	if (subj) {
+		subj++;
+		if (strncmp(subj, "subject=", 8)) {
+			subj = strstr(subj, "&subject=");
+			if (subj) {
+				char *t;
+
+				subj += 9;
+				t = strchr(subj, '&');
+				if (t) *t = 0;
+			}
+		} else {
+			char *t;
+
+			subj += 8;
+			t = strchr(subj, '&');
+			if (t) *t = 0;
+		}
+	}
+
 	check_shell_security(&param);
 
 	f = 0;
-	prog_func(ses->term, "mailto", param, TEXT(T_MAIL));
+
+	prog_func(ses->term, "mailto", url, param, NULL, subj, TEXT(T_MAIL));
+
+	if (urldata) mem_free(urldata);
 
 	mem_free(param);
 
@@ -87,28 +163,19 @@ void
 tn_func(struct session *ses, unsigned char *url, unsigned char *prog,
 	unsigned char *t1, unsigned char *t2)
 {
-	unsigned char *host, *port, *param;
+	unsigned char *host, *port;
 
 	host = get_host_name(url);
 	if (!host) goto fail;
 	check_shell_security(&host);
 
 	port = get_port_str(url);
+	if (port) check_shell_security(&port);
 
-	if (port) {
-		check_shell_security(&port);
-		param = straconcat(host, " ", port, NULL);
-		mem_free(port);
-	} else {
-		param = stracpy(host);
-	}
+	prog_func(ses->term, prog, url, host, port, NULL, t1);
 
 	mem_free(host);
-
-	if (!param) goto fail;
-
-	prog_func(ses->term, prog, param, t1);
-	mem_free(param);
+	if (port) mem_free(port);
 
 	return;
 fail:

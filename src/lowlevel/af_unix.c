@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.50 2003/06/20 11:03:12 zas Exp $ */
+/* $Id: af_unix.c,v 1.51 2003/06/20 12:04:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,9 +218,11 @@ unlink_unix(struct sockaddr *s_addr)
 
 #else /* AF_INET */
 
+#include <arpa/inet.h>
+
 /* These may not be defined in netinet/in.h on some systems. */
 #ifndef INADDR_LOOPBACK
-#define INADDR_LOOPBACK         ((unsigned long int) 0x7f000001)
+#define INADDR_LOOPBACK         ((struct in_addr) 0x7f000001)
 #endif
 
 #ifndef IPPORT_USERRESERVED
@@ -234,20 +236,32 @@ get_address(struct s_addr_info *info, enum addr_type type)
 {
 	struct sockaddr_in *sin;
 	unsigned short port;
-	unsigned long int ip;
+	struct in_addr ip;
 
 	assert(info);
 
-	if (type == ADDR_LOCAL) {
-		/* Each ring is bind to ELINKS_PORT + ring number. */
-		port = ELINKS_PORT + get_opt_int_tree(&cmdline_options,
+	/* Each ring is bind to ELINKS_PORT + ring number. */
+	port = ELINKS_PORT + get_opt_int_tree(&cmdline_options,
 						      "session-ring");
-		if (port < IPPORT_USERRESERVED || port > 65535)
-			return -1; /* Just in case of... */
+	if (port < IPPORT_USERRESERVED || port > 65535)
+		return -1; /* Just in case of... */
 
-		ip = INADDR_LOOPBACK;
-	} else {
-		return -1;
+	switch (type) {
+#ifdef ELINKS_REMOTE
+		/* Testing purpose only. */
+		case ADDR_ANY_SERVER:
+			ip.s_addr = htonl(INADDR_ANY); break;
+		case ADDR_IP_CLIENT:
+			if (!inet_aton("192.168.1.1", &ip))
+				return -1;
+			break;
+		case ADDR_IP_SERVER:
+			if (!inet_aton("192.168.1.1", &ip))
+				return -1;
+			break;
+#endif
+		default:
+			ip.s_addr = htonl(INADDR_LOOPBACK);
 	}
 
 	sin = mem_calloc(1, sizeof(struct sockaddr_in));
@@ -255,7 +269,7 @@ get_address(struct s_addr_info *info, enum addr_type type)
 
 	sin->sin_family = AF_INET;
 	sin->sin_port = htons(port);
-	sin->sin_addr.s_addr = htonl(ip);
+	sin->sin_addr.s_addr = ip.s_addr;
 
 	info->addr = (struct sockaddr *) sin;
 	info->size = sizeof(struct sockaddr_in);
@@ -342,7 +356,7 @@ static int
 bind_to_af_unix(void)
 {
 	int attempts = 0;
-	int af = get_address(&s_info_listen, ADDR_LOCAL);
+	int af = get_address(&s_info_listen, ADDR_IP_SERVER);
 
 	if (af == -1) goto free_and_error;
 
@@ -405,7 +419,7 @@ static int
 connect_to_af_unix(void)
 {
 	int attempts = 0;
-	int af = get_address(&s_info_connect, ADDR_LOCAL);
+	int af = get_address(&s_info_connect, ADDR_IP_CLIENT);
 
 	if (af == -1) goto free_and_error;
 
@@ -440,7 +454,10 @@ again:
 	return s_info_connect.fd;
 
 free_and_error:
-	mem_free(s_info_connect.addr), s_info_connect.addr = NULL;
+	if (s_info_connect.addr) {
+		mem_free(s_info_connect.addr);
+		s_info_connect.addr = NULL;
+	}
 
 	return -1;
 }

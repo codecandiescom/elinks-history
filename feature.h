@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.13 2004/01/01 02:22:21 pasky Exp $ */
+/* $Id: feature.h,v 1.14 2004/01/01 02:53:00 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -101,7 +101,7 @@
 #define COOKIES
 
 
-/*** Global history
+/*** Global History
  *
  * This device records each and every page you visit (to a configurable limit).
  * You can browse through this history in the history manager (press 'h').  Do
@@ -126,7 +126,7 @@
 
 
 
-/*** URI rewriting
+/*** URI Rewriting
  *
  * The goto dialog through which new URIs can be entered is an essential part
  * of browsing in ELinks. This feature makes the dialog more powerful by making
@@ -181,7 +181,7 @@
 
 #define MAILCAP
 
-/*** Mimetypes file
+/*** Mimetypes File
  *
  * Mimetypes file can be used to specify the relation between media types and
  * file extensions.
@@ -194,7 +194,7 @@
 
 
 
-/*** 256 colors in terminals
+/*** 256 Colors in Terminals
  *
  * Define to add support for using 256 colors in terminals. Note that this
  * requires a capable terminal emulator, such as:
@@ -221,7 +221,7 @@
 /* #define USE_256_COLORS */
 
 
-/*** Backtrace printing
+/*** Backtrace Printing
  *
  * Once upon a time, a disaster happens and ELinks crashes. That is a very sad
  * event and it would be very nice to have some means how to diagnose it. In
@@ -246,7 +246,7 @@
 #endif
 
 
-/*** Disable root user
+/*** Disable Root User
  *
  * Browsers are scary monsters used for traveling around in an even more scary
  * world where people indifferently throw garbage files at you and threaten

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.139 2003/06/21 14:13:46 pasky Exp $ */
+/* $Id: parser.c,v 1.140 2003/06/21 14:19:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1058,6 +1058,12 @@ html_h(int h, unsigned char *a, enum format_align default_align)
 			/* Silence compiler warnings */
 			break;
 	}
+}
+
+static void
+html_h1(unsigned char *a)
+{
+	html_h(2, a, AL_CENTER);
 }
 
 static void
@@ -2535,7 +2541,7 @@ static struct element_info elements[] = {
 	{"FORM",	html_form,	1, 0},
 	{"FRAME",	html_frame,	1, 1},
 	{"FRAMESET",	html_frameset,	1, 0},
-	{"H1",		html_center,	2, 2},
+	{"H1",		html_h1,	2, 2},
 	{"H2",		html_h2,	2, 2},
 	{"H3",		html_h3,	2, 2},
 	{"H4",		html_h4,	2, 2},

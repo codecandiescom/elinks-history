@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.199 2003/10/30 17:01:40 pasky Exp $ */
+/* $Id: http.c,v 1.200 2003/11/04 10:04:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -562,17 +562,18 @@ http_send_header(struct connection *conn)
 		add_to_string(&header, "Accept-Language: ");
 		add_to_string(&header, optstr);
 		add_to_string(&header, "\r\n");
-	} else if (get_opt_bool("protocol.http.accept_ui_language")) {
-/* FIXME */
-#ifdef ENABLE_NLS
-			unsigned char *code;
-
-			code = language_to_iso639(current_language);
-			add_to_string(&header, "Accept-Language: ");
-			add_to_string(&header, code ? code : (unsigned char *) "");
-			add_to_string(&header, "\r\n");
-#endif
 	}
+#ifdef ENABLE_NLS
+	else if (get_opt_bool("protocol.http.accept_ui_language")) {
+		unsigned char *code = language_to_iso639(current_language);
+
+		if (code) {
+			add_to_string(&header, "Accept-Language: ");
+			add_to_string(&header, code);
+			add_to_string(&header, "\r\n");
+		}
+	}
+#endif
 
 	if (info->sent_version.major == 1 &&
 	    info->sent_version.minor == 1) {

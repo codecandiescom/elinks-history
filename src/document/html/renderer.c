@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.388 2003/11/19 18:15:49 zas Exp $ */
+/* $Id: renderer.c,v 1.389 2003/11/21 23:15:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ set_hline(struct part *part, unsigned char *chars, int charslen,
 
 		for (; charslen > 0; charslen--, x++, chars++) {
 			part->spaces[x] = (*chars == ' ');
-			schar->data = *chars;
+			schar->data = (*chars == NBSP_CHAR) ? ' ' : *chars;
 			copy_screen_chars(&POS(x, y), schar, 1);
 		}
 	} else {

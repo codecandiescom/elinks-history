@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.200 2005/03/18 23:21:01 zas Exp $ */
+/* $Id: dialogs.c,v 1.201 2005/03/18 23:25:42 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -463,8 +463,11 @@ static struct hierbox_browser_button bookmark_buttons[] = {
 	{ N_("Add folder"),	push_add_folder_button,		0 },
 	{ N_("Move"),		push_move_button,		0 },
 	{ N_("Search"),		push_search_button,		1 },
-	{ N_("Clear"),		push_hierbox_clear_button,	0 },
 #if 0
+	/* This one is too dangerous, so just let user delete
+	 * the bookmarks file if needed. --Zas */
+	{ N_("Clear"),		push_hierbox_clear_button,	0 },
+
 	/* TODO: Would this be useful? --jonas */
 	{ N_("Save"),		push_save_button		},
 #endif

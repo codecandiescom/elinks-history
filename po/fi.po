@@ -1,5 +1,10 @@
 # ELinks Finnish translation.
 # Karvinen Ilkka <ik@iki.fi>
+# Kalle Olavi Niemitalo <kon@iki.fi> 2004-07-29: muutoksia omin päin (ei vielä CVS:ssä)
+# Kalle Olavi Niemitalo <kon@iki.fi> 2004-11-01: yhdistin CVS-versiosta ja korjailin
+# Kalle Olavi Niemitalo <kon@iki.fi> 2004-12-06: yhdistin CVS-versiosta
+# Kalle Olavi Niemitalo <kon@iki.fi> 2004-12-07: täydensin
+# Kalle Olavi Niemitalo <kon@iki.fi> 2004-12-25: yhdistin CVS-versiosta ja korjasin
 #
 #, fuzzy
 msgid ""
@@ -7,8 +12,8 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-12-24 17:55+0100\n"
-"PO-Revision-Date: 2003-01-03 03:41+0100\n"
-"Last-Translator: Karvinen Ilkka <ik@iki.fi>\n"
+"PO-Revision-Date: 2004-12-25 13:28+0200\n"
+"Last-Translator: Kalle Olavi Niemitalo <kon@iki.fi>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
@@ -215,9 +220,8 @@ msgstr ""
 #: src/ecmascript/ecmascript.c:41 src/globhist/globhist.c:64
 #: src/mime/backend/mailcap.c:94 src/mime/backend/mimetypes.c:53
 #: src/ssl/ssl.c:81
-#, fuzzy
 msgid "Enable"
-msgstr "nimi"
+msgstr ""
 
 #: src/bfu/leds.c:80
 msgid ""
@@ -295,7 +299,6 @@ msgstr "Valitse URL"
 
 #. name:
 #: src/bookmarks/bookmarks.c:47 src/bookmarks/bookmarks.c:157
-#, fuzzy
 msgid "Bookmarks"
 msgstr "Kirjanmerkit"
 
@@ -305,9 +308,8 @@ msgid "Bookmark options."
 msgstr "Kirjanmerkit"
 
 #: src/bookmarks/bookmarks.c:52 src/bookmarks/bookmarks.c:58
-#, fuzzy
 msgid "File format"
-msgstr "Tiedoston lähetys"
+msgstr "Tiedostomuoto"
 
 #: src/bookmarks/bookmarks.c:54
 msgid ""
@@ -375,9 +377,8 @@ msgstr ""
 
 #. delete_marked_items_title
 #: src/bookmarks/dialogs.c:128
-#, fuzzy
 msgid "Delete marked bookmarks"
-msgstr "Valitse kenttä"
+msgstr "Poista merkityt kirjanmerkit"
 
 #. delete_marked_items
 #: src/bookmarks/dialogs.c:130
@@ -410,17 +411,18 @@ msgstr "Kirjanmerkit"
 
 #. clear_all_items_title
 #: src/bookmarks/dialogs.c:142
-#, fuzzy
 msgid "Do you really want to remove all bookmarks?"
-msgstr "Haluatko poistua Linksistä?"
+msgstr "Haluatko tosiaan poistaa kaikki kirjanmerkit?"
 
+# "Lisää kansio" kuulostaa siltä kuin kansio jo olisi olemassa
+# jossakin muualla ja se pitäisi enää lisätä kirjanmerkkeihin.
 #: src/bookmarks/dialogs.c:262 src/bookmarks/dialogs.c:449
 msgid "Add folder"
-msgstr ""
+msgstr "Luo kansio"
 
 #: src/bookmarks/dialogs.c:262
 msgid "Folder name"
-msgstr ""
+msgstr "Kansion nimi"
 
 #: src/bookmarks/dialogs.c:307 src/scripting/lua/core.c:387
 msgid "Edit bookmark"
@@ -446,7 +448,7 @@ msgstr "Poista"
 
 #: src/bookmarks/dialogs.c:448
 msgid "Move"
-msgstr ""
+msgstr "Siirrä"
 
 #: src/bookmarks/dialogs.c:450 src/config/dialogs.c:521
 #: src/config/dialogs.c:942 src/cookies/dialogs.c:421
@@ -457,7 +459,7 @@ msgstr "Lisää"
 #: src/dialogs/download.c:476 src/dialogs/edit.c:96 src/formhist/dialogs.c:215
 #: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
 msgid "Clear"
-msgstr ""
+msgstr "Tyhjennä"
 
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:524
@@ -498,11 +500,11 @@ msgstr "Valitse linkkinumero"
 #: src/cache/dialogs.c:72
 #, fuzzy
 msgid "Proxy URL"
-msgstr "Valitse URL"
+msgstr "Välipalvelimen URL"
 
 #: src/cache/dialogs.c:77
 msgid "Redirect"
-msgstr ""
+msgstr "Uudelleenohjaus"
 
 #: src/cache/dialogs.c:85 src/config/options.inc:500 src/dialogs/document.c:92
 msgid "Size"
@@ -515,7 +517,7 @@ msgstr ""
 #: src/cache/dialogs.c:89
 #, fuzzy
 msgid "Content type"
-msgstr "Sisällön tyyppi on"
+msgstr "Sisällön tyyppi"
 
 #: src/cache/dialogs.c:93 src/dialogs/document.c:137
 msgid "Last modified"
@@ -610,9 +612,8 @@ msgid "Too many parameters"
 msgstr ""
 
 #: src/config/cmdline.c:157
-#, fuzzy
 msgid "error"
-msgstr "Virhe"
+msgstr "virhe"
 
 #: src/config/cmdline.c:159 src/sched/error.c:47
 msgid "Host not found"
@@ -634,12 +635,12 @@ msgstr ""
 #: src/config/cmdline.c:380
 #, c-format
 msgid "(default: %ld)"
-msgstr ""
+msgstr "(oletus: %ld)"
 
 #: src/config/cmdline.c:387 src/config/cmdline.c:416
 #, c-format
 msgid "(default: \"%s\")"
-msgstr ""
+msgstr "(oletus: \"%s\")"
 
 #: src/config/cmdline.c:392
 #, c-format
@@ -649,7 +650,7 @@ msgstr ""
 #: src/config/cmdline.c:397 src/config/cmdline.c:406
 #, c-format
 msgid "(default: %s)"
-msgstr ""
+msgstr "(oletus: %s)"
 
 #: src/config/cmdline.c:537
 #, fuzzy
@@ -658,12 +659,12 @@ msgstr "Yhteydet"
 
 #: src/config/cmdline.c:541
 msgid "Usage: elinks [OPTION]... [URL]"
-msgstr ""
+msgstr "Käyttö: elinks [VALITSIN]... [URL]"
 
 #: src/config/cmdline.c:542
 #, fuzzy
 msgid "Options"
-msgstr "Tallenna a~setukset"
+msgstr "Asetukset"
 
 #: src/config/cmdline.c:584
 #, fuzzy
@@ -715,7 +716,7 @@ msgstr ""
 
 #: src/config/cmdline.c:628
 msgid "Name of configuration file"
-msgstr ""
+msgstr "Asetustiedoston nimi"
 
 #: src/config/cmdline.c:630
 msgid ""
@@ -790,7 +791,7 @@ msgstr ""
 #. lynx compatibility
 #: src/config/cmdline.c:667
 msgid "Assume the file is HTML"
-msgstr ""
+msgstr "Oleta tiedoston olevan HTML:ää"
 
 #: src/config/cmdline.c:669
 msgid ""
@@ -1077,9 +1078,11 @@ msgstr "Asetustiedoston kirjoitus ei onnistu"
 msgid "modified"
 msgstr "Tieto muunnettu"
 
+# Tästä oli joskus suositus jossakin tietokonelehdessä:
+# "lavenna" ja "supista" silloin kun vain tiedon esitystapa muuttuu.
 #: src/config/dialogs.c:172
 msgid "(expand by pressing space)"
-msgstr ""
+msgstr "(lavenna painamalla välilyöntiä)"
 
 #: src/config/dialogs.c:175 src/config/dialogs.c:381
 msgid "N/A"
@@ -1087,13 +1090,12 @@ msgstr ""
 
 #: src/config/dialogs.c:189 src/config/dialogs.c:210 src/config/dialogs.c:377
 msgid "Type"
-msgstr ""
+msgstr "Tyyppi"
 
 #: src/config/dialogs.c:198 src/config/dialogs.c:406 src/cookies/dialogs.c:138
 #: src/cookies/dialogs.c:350
-#, fuzzy
 msgid "Value"
-msgstr "arvo"
+msgstr "Arvo"
 
 #: src/config/dialogs.c:201
 msgid ""
@@ -1104,7 +1106,7 @@ msgstr ""
 
 #: src/config/dialogs.c:206 src/config/dialogs.c:212 src/config/dialogs.c:379
 msgid "Description"
-msgstr ""
+msgstr "Kuvaus"
 
 #: src/config/dialogs.c:338 src/protocol/protocol.c:221
 #: src/sched/session.c:237 src/viewer/text/textarea.c:363
@@ -1205,23 +1207,20 @@ msgstr "Lataa"
 
 #. internal use only
 #: src/config/kbdbind.c:432
-#, fuzzy
 msgid "Abort connection"
-msgstr "yhteydet"
+msgstr "Keskeytä yhteys"
 
 #: src/config/kbdbind.c:433
-#, fuzzy
 msgid "Add a new bookmark"
-msgstr "Lisää kirjanmerkki"
+msgstr "Lisää uusi kirjanmerkki"
 
 #: src/config/kbdbind.c:434
 msgid "Add a new bookmark using current link"
 msgstr ""
 
 #: src/config/kbdbind.c:435
-#, fuzzy
 msgid "Bookmark all open tabs"
-msgstr "Kirjanmerkit"
+msgstr "Tee kirjanmerkit kaikkiin avoimiin välilehtiin"
 
 #: src/config/kbdbind.c:436
 #, fuzzy
@@ -1253,12 +1252,11 @@ msgstr ""
 
 #: src/config/kbdbind.c:442 src/config/kbdbind.c:556
 msgid "Copy text to clipboard"
-msgstr ""
+msgstr "Kopioi teksti leikepöydälle"
 
 #: src/config/kbdbind.c:443
-#, fuzzy
 msgid "Show information about the current page"
-msgstr "Lataa kuva"
+msgstr "Näytä tietoja nykyisestä sivusta"
 
 #: src/config/kbdbind.c:444
 #, fuzzy
@@ -1296,7 +1294,7 @@ msgstr ""
 
 #: src/config/kbdbind.c:452
 msgid "Maximize the current frame"
-msgstr ""
+msgstr "Suurenna nykyinen kehys"
 
 #: src/config/kbdbind.c:453
 msgid "Move to the next frame"
@@ -1473,14 +1471,12 @@ msgid "Move upwards by a page"
 msgstr ""
 
 #: src/config/kbdbind.c:495
-#, fuzzy
 msgid "Open the current link in a new tab"
-msgstr "Avaa uuteen ikkunaan"
+msgstr "Avaa nykyinen linkki uuteen välilehteen"
 
 #: src/config/kbdbind.c:496
-#, fuzzy
 msgid "Open the current link a new tab in background"
-msgstr "Avaa uuteen ikkunaan"
+msgstr "Avaa nykyinen linkki uuteen välilehteen taustalla"
 
 #: src/config/kbdbind.c:497
 #, fuzzy
@@ -1488,19 +1484,17 @@ msgid "Open the current link in a new window"
 msgstr "Avaa uuteen ikkunaan"
 
 #: src/config/kbdbind.c:498
-#, fuzzy
 msgid "Open a new tab"
-msgstr "Avaa uuteen ikkunaan"
+msgstr "Avaa uusi välilehti"
 
 #: src/config/kbdbind.c:499
-#, fuzzy
 msgid "Open a new tab in background"
-msgstr "Taustalla"
+msgstr "Avaa uusi välilehti taustalla"
 
 #: src/config/kbdbind.c:500
 #, fuzzy
 msgid "Open a new window"
-msgstr "Avaa uuteen ikkunaan"
+msgstr "Avaa uusi ikkuna"
 
 #: src/config/kbdbind.c:501
 #, fuzzy
@@ -1516,9 +1510,8 @@ msgid "Open a quit confirmation dialog box"
 msgstr ""
 
 #: src/config/kbdbind.c:504
-#, fuzzy
 msgid "Quit without confirmation"
-msgstr "Odottaa varmistusta uudelleenosoitukselle"
+msgstr "Lopeta kysymättä varmistusta"
 
 #: src/config/kbdbind.c:505 src/config/kbdbind.c:571 src/config/kbdbind.c:595
 #, fuzzy
@@ -1615,9 +1608,8 @@ msgid "Submit form and reload"
 msgstr "Lähetä kaavake ja lataa"
 
 #: src/config/kbdbind.c:527 src/terminal/tab.c:188 src/terminal/tab.c:224
-#, fuzzy
 msgid "Close tab"
-msgstr "Sulje"
+msgstr "Sulje välilehti"
 
 #: src/config/kbdbind.c:528
 #, fuzzy
@@ -1783,23 +1775,20 @@ msgid "Move cursor upwards"
 msgstr ""
 
 #: src/config/kbdbind.c:587
-#, fuzzy
 msgid "Expand item"
-msgstr "nimi"
+msgstr "Lavenna kohta"
 
 #: src/config/kbdbind.c:590
-#, fuzzy
 msgid "Mark item"
-msgstr "Valitse kenttä"
+msgstr "Merkitse kohta"
 
 #: src/config/kbdbind.c:598
 msgid "Select current highlighted item"
 msgstr ""
 
 #: src/config/kbdbind.c:599
-#, fuzzy
 msgid "Collapse item"
-msgstr "Kulutettu aika"
+msgstr "Supista kohta"
 
 #: src/config/kbdbind.c:666
 msgid "Unrecognised keymap"
@@ -1837,9 +1826,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:31
-#, fuzzy
 msgid "Indentation"
-msgstr "SSL-kättely"
+msgstr "Sisennys"
 
 #: src/config/options.inc:33
 msgid ""
@@ -1850,7 +1838,7 @@ msgstr ""
 
 #: src/config/options.inc:37
 msgid "Saving style"
-msgstr ""
+msgstr "Tallennustapa"
 
 #: src/config/options.inc:39
 msgid ""
@@ -3316,9 +3304,8 @@ msgid "Generic dialog colors."
 msgstr "Poista taustayhteydet"
 
 #: src/config/options.inc:931
-#, fuzzy
 msgid "Frame"
-msgstr "nimi"
+msgstr "Kehys"
 
 #: src/config/options.inc:933
 msgid "Dialog frame colors."
@@ -3508,10 +3495,10 @@ msgstr "Valitse kenttä"
 msgid "Unselected tab colors."
 msgstr "Poista taustayhteydet"
 
+# vai "latautuva välilehti"?
 #: src/config/options.inc:1030
-#, fuzzy
 msgid "Loading tab"
-msgstr "lataa"
+msgstr "Lataava välilehti"
 
 #: src/config/options.inc:1032
 msgid "Tab colors for tabs that are loading in the background."
@@ -3520,7 +3507,7 @@ msgstr ""
 #: src/config/options.inc:1034
 #, fuzzy
 msgid "Selected tab"
-msgstr "Valitse kenttä"
+msgstr "Valittu välilehti"
 
 #: src/config/options.inc:1036
 #, fuzzy
@@ -3579,9 +3566,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:1070
-#, fuzzy
 msgid "Underline menu hotkeys"
-msgstr "Valitse kenttä"
+msgstr "Alleviivaa pikanäppäimet valikossa"
 
 #: src/config/options.inc:1072
 msgid ""
@@ -3863,7 +3849,7 @@ msgstr ""
 #. tree
 #: src/config/opttypes.c:373
 msgid "Folder"
-msgstr ""
+msgstr "Kansio"
 
 #. name:
 #: src/cookies/cookies.c:81 src/cookies/cookies.c:822
@@ -3888,9 +3874,8 @@ msgid ""
 msgstr ""
 
 #: src/cookies/cookies.c:93
-#, fuzzy
 msgid "Maximum age"
-msgstr "Yhdistää"
+msgstr "Enimmäisikä"
 
 #: src/cookies/cookies.c:95
 msgid ""
@@ -3932,9 +3917,8 @@ msgid ""
 msgstr ""
 
 #: src/cookies/dialogs.c:51
-#, fuzzy
 msgid "at quit time"
-msgstr "laskettu aika"
+msgstr "lopetettaessa"
 
 #: src/cookies/dialogs.c:54
 msgid "Accept cookie?"
@@ -3958,17 +3942,16 @@ msgid "yes"
 msgstr "tavua"
 
 #: src/cookies/dialogs.c:64 src/cookies/dialogs.c:150
-#, fuzzy
 msgid "no"
-msgstr "Tieto"
+msgstr "ei"
 
 #: src/cookies/dialogs.c:66
 msgid "Accept"
-msgstr ""
+msgstr "Salli"
 
 #: src/cookies/dialogs.c:67
 msgid "Reject"
-msgstr ""
+msgstr "Estä"
 
 #: src/cookies/dialogs.c:136 src/cookies/dialogs.c:341
 #: src/dialogs/document.c:113
@@ -3988,7 +3971,7 @@ msgstr ""
 
 #: src/cookies/dialogs.c:144 src/cookies/dialogs.c:352
 msgid "Expires"
-msgstr ""
+msgstr "Vanhenee"
 
 #: src/cookies/dialogs.c:149 src/cookies/dialogs.c:353
 #, fuzzy
@@ -4023,7 +4006,7 @@ msgstr ""
 #: src/cookies/dialogs.c:209
 #, fuzzy
 msgid "Delete marked cookies"
-msgstr "Valitse kenttä"
+msgstr "Poista merkityt evästeet"
 
 #. delete_marked_items
 #: src/cookies/dialogs.c:211
@@ -4058,13 +4041,12 @@ msgstr "Poista tiedostopääte"
 #. clear_all_items_title
 #: src/cookies/dialogs.c:221
 msgid "Clear all cookies"
-msgstr ""
+msgstr "Tyhjennä evästeet"
 
 #. clear_all_items_title
 #: src/cookies/dialogs.c:223
-#, fuzzy
 msgid "Do you really want to remove all cookies?"
-msgstr "Haluatko poistua Linksistä?"
+msgstr "Haluatko tosiaan poistaa kaikki evästeet?"
 
 #: src/cookies/dialogs.c:430
 #, fuzzy
@@ -4144,9 +4126,8 @@ msgstr "Keskeytä"
 
 #. This requires more work to make locking work and query the user
 #: src/dialogs/download.c:263 src/dialogs/download.c:474
-#, fuzzy
 msgid "Abort and delete file"
-msgstr "Virhe tiedostoon kirjoittaessa"
+msgstr "Keskeytä ja poista tiedosto"
 
 #. cant_delete_item
 #: src/dialogs/download.c:402
@@ -4172,9 +4153,8 @@ msgstr ""
 
 #. delete_item_title
 #: src/dialogs/download.c:418
-#, fuzzy
 msgid "Interrupt download"
-msgstr "Keskeytetty"
+msgstr "Keskeytä lataus"
 
 #. delete_item
 #: src/dialogs/download.c:420
@@ -4184,7 +4164,7 @@ msgstr ""
 #. clear_all_items_title
 #: src/dialogs/download.c:422
 msgid "Interrupt all downloads"
-msgstr ""
+msgstr "Keskeytä kaikki lataukset"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:424
@@ -4272,15 +4252,15 @@ msgstr "Kirjoita URL"
 
 #: src/dialogs/menu.c:119
 msgid "Exit ELinks"
-msgstr "Poistu Linksistä"
+msgstr "Poistu ELinksistä"
 
 #: src/dialogs/menu.c:121
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr "Haluatko poistua Linksistä (ja keskeyttää kaikki lataukset)?"
+msgstr "Haluatko poistua ELinksistä (ja keskeyttää kaikki lataukset)?"
 
 #: src/dialogs/menu.c:123
 msgid "Do you really want to exit ELinks?"
-msgstr "Haluatko poistua Linksistä?"
+msgstr "Haluatko poistua ELinksistä?"
 
 #: src/dialogs/menu.c:159
 msgid "No history"
@@ -4309,21 +4289,19 @@ msgstr "Kehys koko näytöllä"
 
 #: src/dialogs/menu.c:252 src/dialogs/menu.c:411
 msgid "Nex~t tab"
-msgstr ""
+msgstr "Seuraava välilehti"
 
 #: src/dialogs/menu.c:253 src/dialogs/menu.c:412
-#, fuzzy
 msgid "Pre~v tab"
-msgstr "Ei aikaisempaa hakua"
+msgstr "Edellinen välilehti"
 
 #: src/dialogs/menu.c:256 src/dialogs/menu.c:413
-#, fuzzy
 msgid "~Close tab"
-msgstr "Sulje"
+msgstr "Sulje välilehti"
 
 #: src/dialogs/menu.c:259
 msgid "C~lose all tabs but the current"
-msgstr ""
+msgstr "Sulje kaikki välilehdet paitsi nykyinen"
 
 #: src/dialogs/menu.c:263
 #, fuzzy
@@ -4331,14 +4309,12 @@ msgid "B~ookmark all tabs"
 msgstr "Kirjanmerkit"
 
 #: src/dialogs/menu.c:295
-#, fuzzy
 msgid "Open new ~tab"
-msgstr "Avaa uuteen ikkunaan"
+msgstr "Avaa uusi välilehti"
 
 #: src/dialogs/menu.c:296
-#, fuzzy
 msgid "Open new tab in backgroun~d"
-msgstr "Taustalla"
+msgstr "Avaa uusi välilehti taustalla"
 
 #: src/dialogs/menu.c:297
 msgid "~Go to URL"
@@ -4346,7 +4322,7 @@ msgstr "Valitse URL"
 
 #: src/dialogs/menu.c:299
 msgid "Go ~forward"
-msgstr ""
+msgstr "Palaa eteenpäin"
 
 #: src/dialogs/menu.c:300
 msgid "~History"
@@ -4358,7 +4334,6 @@ msgid "~Unhistory"
 msgstr "~Historia"
 
 #: src/dialogs/menu.c:306
-#, fuzzy
 msgid "~Save as"
 msgstr "Tallenna nimellä"
 
@@ -4418,7 +4393,7 @@ msgstr "Etsi seuraava"
 
 #: src/dialogs/menu.c:396
 msgid "Find ~previous"
-msgstr "Etsi eteen~päin"
+msgstr "Etsi edellinen"
 
 #: src/dialogs/menu.c:397
 msgid "T~ypeahead search"
@@ -4548,14 +4523,12 @@ msgid "Global ~history"
 msgstr "Ei historiaa"
 
 #: src/dialogs/menu.c:469
-#, fuzzy
 msgid "~Bookmarks"
 msgstr "Kirjanmerkit"
 
 #: src/dialogs/menu.c:471
-#, fuzzy
 msgid "~Cache"
-msgstr "Keskeytä"
+msgstr "Välimuisti"
 
 #: src/dialogs/menu.c:472
 msgid "~Downloads"
@@ -4563,12 +4536,11 @@ msgstr "Lataukset"
 
 #: src/dialogs/menu.c:474
 msgid "Coo~kies"
-msgstr ""
+msgstr "Evästeet"
 
 #: src/dialogs/menu.c:477
-#, fuzzy
 msgid "~Form history"
-msgstr "Muisti loppu"
+msgstr "Lomakehistoria"
 
 #: src/dialogs/menu.c:479
 #, fuzzy
@@ -4577,11 +4549,11 @@ msgstr "Dokumentin t~iedot"
 
 #: src/dialogs/menu.c:495
 msgid "~File"
-msgstr "Tiedosto"
+msgstr "~Tiedosto"
 
 #: src/dialogs/menu.c:496
 msgid "~View"
-msgstr "Näytä"
+msgstr "~Näytä"
 
 #: src/dialogs/menu.c:497
 msgid "~Link"
@@ -5015,9 +4987,8 @@ msgstr ""
 
 #. name:
 #: src/formhist/formhist.c:484
-#, fuzzy
 msgid "Forms History"
-msgstr "Muisti loppu"
+msgstr "Lomakehistoria"
 
 #. cant_delete_item
 #: src/globhist/dialogs.c:106
@@ -5063,7 +5034,7 @@ msgstr ""
 #: src/globhist/dialogs.c:128
 #, fuzzy
 msgid "Do you really want to remove all history entries?"
-msgstr "Haluatko poistua Linksistä?"
+msgstr "Haluatko varmasti poistaa kaikki historiatiedot?"
 
 #: src/globhist/dialogs.c:170
 msgid "Search history"
@@ -5120,11 +5091,11 @@ msgstr "Ei historiaa"
 #: src/intl/gettext/libintl.c:24
 #, fuzzy
 msgid "System"
-msgstr "nimi"
+msgstr "järjestelmän"
 
 #: src/intl/gettext/libintl.c:25
 msgid "English"
-msgstr ""
+msgstr "englanti"
 
 #: src/intl/gettext/libintl.c:27
 msgid "Belarusian"
@@ -5136,7 +5107,7 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:29
 msgid "Bulgarian"
-msgstr ""
+msgstr "bulgaria"
 
 #: src/intl/gettext/libintl.c:30
 msgid "Catalan"
@@ -5149,7 +5120,7 @@ msgstr ""
 #: src/intl/gettext/libintl.c:32
 #, fuzzy
 msgid "Czech"
-msgstr "Keskeytä"
+msgstr "tsekki"
 
 #: src/intl/gettext/libintl.c:33
 msgid "Danish"
@@ -5161,15 +5132,15 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:35
 msgid "Estonian"
-msgstr ""
+msgstr "viro"
 
 #: src/intl/gettext/libintl.c:36
 msgid "Finnish"
-msgstr ""
+msgstr "suomi"
 
 #: src/intl/gettext/libintl.c:37
 msgid "French"
-msgstr ""
+msgstr "ranska"
 
 #: src/intl/gettext/libintl.c:38
 msgid "Galician"
@@ -5177,19 +5148,19 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:39
 msgid "German"
-msgstr ""
+msgstr "saksa"
 
 #: src/intl/gettext/libintl.c:40
 msgid "Greek"
-msgstr ""
+msgstr "kreikka"
 
 #: src/intl/gettext/libintl.c:41
 msgid "Hungarian"
-msgstr ""
+msgstr "unkari"
 
 #: src/intl/gettext/libintl.c:42
 msgid "Icelandic"
-msgstr ""
+msgstr "islanti"
 
 #: src/intl/gettext/libintl.c:43
 msgid "Indonesian"
@@ -5197,7 +5168,7 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:44
 msgid "Italian"
-msgstr ""
+msgstr "italia"
 
 #: src/intl/gettext/libintl.c:45
 msgid "Lithuanian"
@@ -5205,24 +5176,24 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:46
 msgid "Norwegian"
-msgstr ""
+msgstr "norja"
 
 #: src/intl/gettext/libintl.c:47
 msgid "Polish"
-msgstr ""
+msgstr "puola"
 
 #: src/intl/gettext/libintl.c:48
 msgid "Portuguese"
-msgstr ""
+msgstr "portugali"
 
 #: src/intl/gettext/libintl.c:49
 #, fuzzy
 msgid "Romanian"
-msgstr "Dokumentin t~iedot"
+msgstr "romania"
 
 #: src/intl/gettext/libintl.c:50
 msgid "Russian"
-msgstr ""
+msgstr "venäjä"
 
 #: src/intl/gettext/libintl.c:51
 msgid "Slovak"
@@ -5230,15 +5201,15 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:52
 msgid "Spanish"
-msgstr ""
+msgstr "espanja"
 
 #: src/intl/gettext/libintl.c:53
 msgid "Swedish"
-msgstr ""
+msgstr "ruotsi"
 
 #: src/intl/gettext/libintl.c:54
 msgid "Turkish"
-msgstr ""
+msgstr "turkki"
 
 #: src/intl/gettext/libintl.c:55
 msgid "Ukrainian"
@@ -5384,7 +5355,7 @@ msgstr ""
 #: src/mime/backend/default.c:68
 #, fuzzy
 msgid "Block terminal"
-msgstr "~BeOS-terminaali"
+msgstr "Varaa pääte"
 
 #: src/mime/backend/default.c:70
 msgid "Block the terminal when the handler is running."
@@ -5393,7 +5364,7 @@ msgstr ""
 #: src/mime/backend/default.c:72
 #, fuzzy
 msgid "Program"
-msgstr "Ei ohjelmaa"
+msgstr "Ohjelma"
 
 #: src/mime/backend/default.c:74
 #, c-format
@@ -5636,7 +5607,7 @@ msgstr "Tieto"
 #: src/protocol/auth/dialogs.c:174
 #, fuzzy
 msgid "State"
-msgstr "Päiväys"
+msgstr "Tila"
 
 #: src/protocol/auth/dialogs.c:175
 #, fuzzy
@@ -5655,11 +5626,11 @@ msgstr ""
 msgid "Sorry, but auth entry \"%s\" is being used by something else."
 msgstr ""
 
+# "tunnistetiedot" viittaisi enemmänkin palvelimelle jääviin lokitietoihin.
 #. delete_marked_items_title
 #: src/protocol/auth/dialogs.c:220
-#, fuzzy
 msgid "Delete marked auth entries"
-msgstr "Valitse kenttä"
+msgstr "Poista merkityt tunnistustiedot"
 
 #. delete_marked_items
 #: src/protocol/auth/dialogs.c:222
@@ -5852,7 +5823,7 @@ msgstr ""
 #: src/protocol/http/codes.c:107
 #, c-format
 msgid "HTTP error %03d"
-msgstr ""
+msgstr "HTTP-virhe %03d"
 
 #: src/protocol/http/codes.c:130
 msgid ""
@@ -6062,9 +6033,8 @@ msgid ""
 msgstr ""
 
 #: src/protocol/nntp/codes.c:124
-#, fuzzy
 msgid "NNTP error"
-msgstr "Virhe"
+msgstr "NNTP-virhe"
 
 #: src/protocol/nntp/codes.c:126
 #, c-format
@@ -6082,7 +6052,7 @@ msgstr ""
 #. name:
 #: src/protocol/nntp/nntp.c:33 src/protocol/nntp/nntp.c:66
 msgid "NNTP"
-msgstr ""
+msgstr "NNTP"
 
 #: src/protocol/nntp/nntp.c:35
 #, fuzzy
@@ -6113,7 +6083,7 @@ msgstr ""
 #: src/protocol/protocol.c:223
 #, fuzzy, c-format
 msgid "This version of ELinks does not contain %s protocol support"
-msgstr "Tämä Linksin versio ei  SSL/TSL:ää"
+msgstr "Tässä ELinksin versiossa ei ole %s-protokollan tukea"
 
 #: src/protocol/protocol.c:251
 msgid "Protocols"
@@ -6299,7 +6269,9 @@ msgstr "Virhe ladattaessa"
 msgid ""
 "Download complete:\n"
 "%s"
-msgstr "Lataa kuva"
+msgstr ""
+"Lataus valmis:\n"
+"%s"
 
 #: src/sched/download.c:504
 #, c-format
@@ -6307,9 +6279,8 @@ msgid "'%s' is a directory."
 msgstr ""
 
 #: src/sched/download.c:540
-#, fuzzy
 msgid "File exists"
-msgstr "Ti~edostopäätteet"
+msgstr "Tiedosto on olemassa"
 
 #: src/sched/download.c:541
 #, c-format
@@ -6409,7 +6380,7 @@ msgstr "Pyyntö lähetetty"
 #: src/sched/error.c:36
 #, fuzzy
 msgid "Logging in"
-msgstr "Käyttäjän ID"
+msgstr "Kirjautuu"
 
 #: src/sched/error.c:37
 msgid "Getting headers"
@@ -6465,7 +6436,7 @@ msgstr "Töpselin tilaa ei saada"
 
 #: src/sched/error.c:55
 msgid "Only local connections are permitted"
-msgstr ""
+msgstr "Vain paikalliset yhteydet on sallittu"
 
 #: src/sched/error.c:57
 msgid ""
@@ -6547,12 +6518,12 @@ msgstr "Tämä Linksin versio ei  SSL/TSL:ää"
 
 #: src/sched/error.c:92
 msgid "JavaScript support is not enabled."
-msgstr ""
+msgstr "JavaScript-tuki ei ole käytössä."
 
 #: src/sched/error.c:95
 #, fuzzy
 msgid "Bad NNTP response"
-msgstr "Laiton FTP-vastaus"
+msgstr "Laiton NNTP-vastaus"
 
 #: src/sched/error.c:96
 msgid ""
@@ -6690,9 +6661,8 @@ msgid ""
 msgstr ""
 
 #: src/ssl/ssl.c:86
-#, fuzzy
 msgid "Certificate File"
-msgstr "laskettu aika"
+msgstr "Varmennetiedosto"
 
 #: src/ssl/ssl.c:88
 msgid ""
@@ -6746,14 +6716,12 @@ msgid "Too many bytes read from the itrm!"
 msgstr ""
 
 #: src/terminal/tab.c:189
-#, fuzzy
 msgid "Do you really want to close the current tab?"
-msgstr "Haluatko poistua Linksistä?"
+msgstr "Haluatko varmasti sulkea nykyisen välilehden?"
 
 #: src/terminal/tab.c:225
-#, fuzzy
 msgid "Do you really want to close all except the current tab?"
-msgstr "Haluatko poistua Linksistä?"
+msgstr "Haluatko varmasti sulkea kaikki paitsi nykyisen välilehden?"
 
 #: src/viewer/dump/dump.c:79
 #, fuzzy, c-format
@@ -6868,21 +6836,19 @@ msgstr "Seuraa linkkiä"
 
 #: src/viewer/text/link.c:1132
 msgid "Follow link and r~eload"
-msgstr ""
+msgstr "Seuraa linkkiä ja lataa uudestaan"
 
 #: src/viewer/text/link.c:1136
 msgid "Open in new ~window"
 msgstr "Avaa uuteen ikkunaan"
 
 #: src/viewer/text/link.c:1138
-#, fuzzy
 msgid "Open in new ~tab"
-msgstr "Avaa uuteen ikkunaan"
+msgstr "Avaa uuteen välilehteen"
 
 #: src/viewer/text/link.c:1140
-#, fuzzy
 msgid "Open in new tab in ~background"
-msgstr "Taustalla"
+msgstr "Avaa uuteen välilehteen taustalla"
 
 #: src/viewer/text/link.c:1145
 msgid "~Download link"
@@ -6890,7 +6856,7 @@ msgstr "Lataa linkki"
 
 #: src/viewer/text/link.c:1148
 msgid "~Add link to bookmarks"
-msgstr ""
+msgstr "Lisää linkki kirjanmerkkeihin"
 
 #: src/viewer/text/link.c:1160 src/viewer/text/link.c:1195
 msgid "~Reset form"

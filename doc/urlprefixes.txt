@@ -55,19 +55,22 @@ with it. These dumb prefixes can be used as kind of alternative bookmarks
 to spend lengthy seconds navigating in the bookmarks manager, you can just
 fire up the Goto URL dialog, type the shortcut and there you go.
 
+A dumb prefix can contain '%c', which will be replaced by the URI
+of the current document. This is used, for example, in the 'arc' dumb-prefix,
+which provides a shortcut to the Wayback machine at archive.org.
 
-In the 'g' case, a more advanced URI rewriting mechanism called "smart prefix"
+In the 'g' case, a slightly different URI rewriting mechanism called 'smart prefixes'
 is used. If protocol.rewrite.enable-smart is true, ELinks looks at the
 contents of protocol.rewrite.smart tree and if it finds option
 protocol.rewrite.smart.g, it will use its value as the target URI.
 
 The difference is that the smart prefixes can take arguments and reference them
-in the target URI. '%c' in the URI means the current address (that may be
-useful, e.g., for validating the current document's HTML), '%s' will get
-substituted to the whole string following the prefix (e.g., 'elinks' in the 'g'
-example above; this is by far the most frequently used expansion), while you
-can reference individual space-separated arguments by '%0' to '%9'. Finally, if
-you want to write plain % to the URI, use '%%'.
+in the target URI. As with dumb prefixes, '%c' in the URI means the current
+address. Additionally, '%s' will be substituted by the whole string following
+the prefix ('elinks' in the 'g' example above; '%s' is by far the most
+frequently used expansion), while you can reference individual space-separated
+arguments with the codes '%0' thru '%9'.  Finally, if you want a plain % to the
+resulting URI, use '%%'.
 
 Note that the prefix searched in the protocol.rewrite.smart tree is everything
 in the typed address up to the first space or colon (so 'bug:123' and 'bug 123'
@@ -94,4 +97,4 @@ goto-url hook isn't triggered when the URL is passed on the command line.
 
 
 
-$Id: urlprefixes.txt,v 1.6 2005/01/03 08:12:57 miciah Exp $
+$Id: urlprefixes.txt,v 1.7 2005/01/03 08:21:00 miciah Exp $

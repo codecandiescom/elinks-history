@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.220 2004/06/20 15:08:41 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.221 2004/06/20 15:10:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -472,7 +472,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "jump-to-link", ACT_MAIN_JUMP_TO_LINK, DACT(N_("Jump to link")) },
 	{ "keybinding-manager", ACT_MAIN_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
 	{ "kill-backgrounded-connections", ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
-	{ "left", ACT_MAIN_LEFT,DACT( N_("Move the cursor left")) },
 	{ "link-menu", ACT_MAIN_LINK_MENU, DACT(N_("Open the link context menu")) },
 #ifdef CONFIG_LUA
 	{ "lua-console", ACT_MAIN_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
@@ -507,7 +506,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "reset-form", ACT_MAIN_RESET_FORM, DACT(N_("Reset form items to their initial values")) },
 	{ "resource-info", ACT_MAIN_RESOURCE_INFO, DACT(N_("Show information about the currently used resources")) },
 	{ "resume-download", ACT_MAIN_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
-	{ "right", ACT_MAIN_RIGHT, DACT(N_("Move the cursor right")) },
 	{ "save-as", ACT_MAIN_SAVE_AS, DACT(N_("Save as")) },
 	{ "save-formatted", ACT_MAIN_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
 	{ "save-options", ACT_MAIN_SAVE_OPTIONS, DACT(N_("Save options")), },

@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.12 2003/06/07 10:20:36 pasky Exp $ */
+/* $Id: snprintf.c,v 1.13 2003/06/07 10:21:37 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -534,16 +534,6 @@ fmtint(char *buffer, size_t *currlen, size_t maxlen,
 	/* Sign */
 	if (signvalue)
 		dopr_outch(buffer, currlen, maxlen, signvalue);
-
-	/* Zeros */
-#if 0 /* Original code */
-	if (zpadlen > 0) { /* if (a) while (a) ... ?? did i miss something ? --Zas */
-		while (zpadlen > 0) {
-			dopr_outch(buffer, currlen, maxlen, '0');
-			--zpadlen;
-		}
-	}
-#endif
 
 	/* Zeros */
 	while (zpadlen > 0) {

@@ -3,3 +3,4 @@ Makefile.in
 elinks.1
 manpage.links
 manpage.refs
+*.swp

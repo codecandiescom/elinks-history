@@ -19,3 +19,4 @@ autom4te.cache
 stamp-h1
 .deps
 elinkskeys.5
+*.swp

@@ -5,3 +5,4 @@ hooks.lo
 libscriptinglua.la
 .deps
 .libs
+*.swp

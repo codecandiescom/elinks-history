@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.183 2005/03/23 15:43:42 miciah Exp $ */
+/* $Id: core.c,v 1.184 2005/03/25 04:13:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,11 +438,15 @@ xdialog_run_lua(void *data_)
 static int
 l_xdialog(LS)
 {
-	struct terminal *term = lua_ses->tab->term;
+	struct terminal *term;
 	struct dialog *dlg;
 	struct lua_xdialog_data *data;
 	int nargs, nfields, nitems;
 	int i = 0;
+
+	if (!lua_ses) return 0;
+
+	term = lua_ses->tab->term;
 
 	nargs = lua_gettop(S);
 	nfields = nargs - 1;

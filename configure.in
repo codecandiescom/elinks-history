@@ -446,8 +446,6 @@ if test "$enable_guile" = "yes"; then
 		CPPFLAGS="$CPPFLAGS $GUILE_CFLAGS"
 		AC_DEFINE(HAVE_GUILE)
 		AC_DEFINE(HAVE_SCRIPTING)
-		AC_SUBST(GUILE_LIBS)
-		AC_SUBST(GUILE_CFLAGS)
 		cat <<EOF
 ***********************************************************************
 The Guile support is incomplete and not so well integrated to ELinks

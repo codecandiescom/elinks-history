@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.28 2004/01/01 15:36:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.29 2004/01/02 17:51:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,16 +134,13 @@ static struct hierbox_browser_button cookie_buttons[] = {
 	{ N_("Save"),		push_save_button,		0 },
 };
 
-struct hierbox_browser cookie_browser = {
+struct_hierbox_browser(
+	cookie_browser,
 	N_("Cookie manager"),
 	cookie_buttons,
-	HIERBOX_BROWSER_BUTTONS_SIZE(cookie_buttons),
-
-	{ D_LIST_HEAD(cookie_browser.boxes) },
 	&cookie_box_items,
-	{ D_LIST_HEAD(cookie_browser.dialogs) },
-	&cookies_listbox_ops,
-};
+	&cookies_listbox_ops
+);
 
 void
 menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)

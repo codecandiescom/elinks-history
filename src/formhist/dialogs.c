@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.20 2003/12/31 07:53:39 miciah Exp $ */
+/* $Id: dialogs.c,v 1.21 2004/01/02 17:51:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,16 +171,13 @@ static struct hierbox_browser_button formhist_buttons[] = {
 	{ N_("Save"),		push_save_button,		0 },
 };
 
-struct hierbox_browser formhist_browser = {
+struct_hierbox_browser(
+	formhist_browser,
 	N_("Form history manager"),
 	formhist_buttons,
-	HIERBOX_BROWSER_BUTTONS_SIZE(formhist_buttons),
-
-	{ D_LIST_HEAD(formhist_browser.boxes) },
 	&formhist_data_box_items,
-	{ D_LIST_HEAD(formhist_browser.dialogs) },
-	&formhist_listbox_ops,
-};
+	&formhist_listbox_ops
+);
 
 void
 menu_formhist_manager(struct terminal *term, void *fcp, struct session *ses)

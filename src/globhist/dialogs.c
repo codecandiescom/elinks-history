@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.101 2004/01/01 14:24:08 jonas Exp $ */
+/* $Id: dialogs.c,v 1.102 2004/01/02 17:51:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,16 +192,13 @@ static struct hierbox_browser_button globhist_buttons[] = {
 #endif
 };
 
-struct hierbox_browser globhist_browser = {
+struct_hierbox_browser(
+	globhist_browser,
 	N_("Global history manager"),
 	globhist_buttons,
-	HIERBOX_BROWSER_BUTTONS_SIZE(globhist_buttons),
-
-	{ D_LIST_HEAD(globhist_browser.boxes) },
 	&gh_box_items,
-	{ D_LIST_HEAD(globhist_browser.dialogs) },
-	&gh_listbox_ops,
-};
+	&gh_listbox_ops
+);
 
 void
 menu_history_manager(struct terminal *term, void *fcp, struct session *ses)

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.30 2003/12/27 08:13:30 jonas Exp $ */
+/* $Id: download.c,v 1.31 2004/01/02 17:51:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -426,16 +426,13 @@ static struct hierbox_browser_button download_buttons[] = {
 	{ N_("Clear"),			push_hierbox_clear_button	},
 };
 
-struct hierbox_browser download_browser = {
+struct_hierbox_browser(
+	download_browser,
 	N_("Download manager"),
 	download_buttons,
-	HIERBOX_BROWSER_BUTTONS_SIZE(download_buttons),
-
-	{ D_LIST_HEAD(download_browser.boxes) },
 	&download_box_items,
-	{ D_LIST_HEAD(download_browser.dialogs) },
-	&downloads_listbox_ops,
-};
+	&downloads_listbox_ops
+);
 
 void
 menu_download_manager(struct terminal *term, void *fcp, struct session *ses)

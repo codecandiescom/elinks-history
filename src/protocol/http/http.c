@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.5 2002/03/27 22:45:19 pasky Exp $ */
+/* $Id: http.c,v 1.6 2002/04/17 22:22:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 #include <protocol/http/header.h>
 #include <protocol/http/http.h>
 #include <protocol/url.h>
+#include <util/base64.h>
 
 struct http_connection_info {
 	enum blacklist_flags bl_flags;
@@ -285,7 +286,24 @@ void http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "\r\n");
 	}
 
-	if (!strcmp(user_agent, "")) {
+	if (*proxy_user) {
+			unsigned char *proxy_data, *proxy_64;
+
+			proxy_data = mem_alloc(256);
+			strcpy(proxy_data, proxy_user);
+			strcat(proxy_data, ":");
+			strcat(proxy_data, proxy_passwd);
+			proxy_64 = base64_encode(proxy_data);
+			
+			add_to_str(&hdr, &l, "Proxy-Authorization: Basic ");
+			add_to_str(&hdr, &l, proxy_64);
+			add_to_str(&hdr, &l, "\r\n");
+
+			mem_free(proxy_64);
+			mem_free(proxy_data);
+	}
+	
+	if (!*user_agent) {
                 add_to_str(&hdr, &l,
 			   "User-Agent: ELinks (" VERSION_STRING "; ");
                 add_to_str(&hdr, &l, system_name);

@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.13 2002/04/02 17:40:32 pasky Exp $ */
+/* $Id: default.c,v 1.14 2002/04/17 22:22:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1036,6 +1036,9 @@ unsigned char default_anon_pass[MAX_STR_LEN] = "somebody@host.domain";
 
 unsigned char user_agent[MAX_STR_LEN] = "";
 
+unsigned char proxy_user[MAX_STR_LEN] = "";
+unsigned char proxy_passwd[MAX_STR_LEN] = "";
+
 int startup_goto_dialog = 1;
 
 /* These are workarounds for some CGI script bugs */
@@ -1308,6 +1311,16 @@ struct option links_options[] = {
 	 	"Run links as a separate instance - instead of connecting to\n"
 	 	"existing instance." },
 
+	{	"proxy-user", "proxy_user",
+		gen_cmd, str_rd, str_wr,
+		0, MAX_STR_LEN, proxy_user,
+		"Proxy authentication user" },
+
+	{	"proxy-passwd", "proxy_passwd",
+		gen_cmd, str_rd, str_wr,
+		0, MAX_STR_LEN, proxy_passwd,
+		"Proxy authentication passwd" },
+
 	{	"receive-timeout", "receive_timeout",
 		gen_cmd, num_rd, num_wr,
 	 	1, 1800, &receive_timeout,
@@ -1353,7 +1366,7 @@ struct option links_options[] = {
 	        "Change the User Agent. That means identification string, which\n"
 		"is sent to HTTP server, when a document is requested.\n"
 		"If empty, defaults to: ELinks (<version>; <system_id>; <term_size>)" },
-
+			
 	{	"version", NULL,
 		version_cmd, NULL, NULL,
 	 	0, 0, NULL,

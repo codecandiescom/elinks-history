@@ -262,6 +262,9 @@ Sergei Borushevsky <b_sp@usa.net>
 	Ctrl-W completion
 	SSL
 
+Sergio R. Velasquez Zeballos <svelasqu@thor.uc.edu.ve>
+	Proxy auth (Basic)
+
 Simos Xenitellis <simos@hellug.gr>
 	Greek codepages & translation
 
@@ -301,4 +304,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 <zimon@niksula.hut.fi>
 	RPM spec file in contrib/
 
-$Id: AUTHORS,v 1.51 2002/04/17 08:33:19 pasky Exp $
+$Id: AUTHORS,v 1.52 2002/04/17 22:22:19 pasky Exp $

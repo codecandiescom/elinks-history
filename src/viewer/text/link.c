@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.48 2003/09/08 15:43:34 jonas Exp $ */
+/* $Id: link.c,v 1.49 2003/09/08 17:27:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,7 +172,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	ymax = scr->yp + scr->yw;
 	xpos = scr->xp - scr->vs->view_posx;
 	ypos = scr->yp - scr->vs->view_pos;
-	set_term_color(&link_char, &link->color, COLOR_DEFAULT);
+	set_term_color(&link_char, &link->color, COLOR_LINK);
 
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x + xpos;

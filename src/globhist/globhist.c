@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.91 2004/12/17 23:58:06 miciah Exp $ */
+/* $Id: globhist.c,v 1.92 2004/12/18 00:04:02 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -152,6 +152,39 @@ multiget_global_history_item(unsigned char *url, unsigned char *title, ttime tim
 }
 #endif
 
+static global_history_item *
+init_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
+{
+	struct global_history_item *history_item;
+
+	history_item = mem_calloc(1, sizeof(struct global_history_item));
+	if (!history_item)
+		return NULL;
+
+	history_item->last_visit = vtime;
+	history_item->title = stracpy(empty_string_or_(title));
+	if (!history_item->title) {
+		mem_free(history_item);
+		return NULL;
+	}
+	sanitize_title(history_item->title);
+
+	history_item->url = stracpy(url);
+	if (!history_item->url || !sanitize_url(history_item->url)) {
+		mem_free_if(history_item->url);
+		mem_free(history_item->title);
+		mem_free(history_item);
+		return NULL;
+	}
+
+	history_item->box_item = add_listbox_leaf(&globhist_browser, NULL,
+						  history_item);
+
+	object_nolock(history_item, "globhist");
+
+	return history_item;
+}
+
 /* Add a new entry in history list, take care of duplicate, respect history
  * size limit, and update any open history dialogs. */
 void
@@ -179,30 +212,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 		delete_global_history_item(history_item);
 	}
 
-	history_item = mem_calloc(1, sizeof(struct global_history_item));
-	if (!history_item)
-		return;
-
-	history_item->last_visit = vtime;
-	history_item->title = stracpy(empty_string_or_(title));
-	if (!history_item->title) {
-		mem_free(history_item);
-		return;
-	}
-	sanitize_title(history_item->title);
-
-	history_item->url = stracpy(url);
-	if (!history_item->url || !sanitize_url(history_item->url)) {
-		mem_free_if(history_item->url);
-		mem_free(history_item->title);
-		mem_free(history_item);
-		return;
-	}
-
-	history_item->box_item = add_listbox_leaf(&globhist_browser, NULL,
-						  history_item);
-
-	object_nolock(history_item, "globhist");
+	history_item = init_global_history_item(url, title, vtime);
 
 	add_to_history_list(&global_history, history_item);
 

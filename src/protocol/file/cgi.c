@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.47 2004/01/01 15:36:18 jonas Exp $ */
+/* $Id: cgi.c,v 1.48 2004/01/03 06:53:19 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,12 +323,12 @@ execute_cgi(struct connection *conn)
 		*last_slash = storage;
 		if (res && (scriptlen < 4
 			    || strcasecmp(script + scriptlen - 4, ".cgi"))) {
-			state = S_FILE_CGI_BAD_PATH;
-			goto end1;
+			mem_free(script);
+			return 1;
 		}
 	} else {
-		state = S_FILE_CGI_BAD_PATH;
-		goto end1;
+		mem_free(script);
+		return 1;
 	}
 
 	if (c_pipe(pipe_read) || c_pipe(pipe_write)) {

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.248 2004/07/20 22:25:59 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.249 2004/07/20 22:31:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -909,7 +909,7 @@ static struct strtonum edit_action_aliases[] = {
 	{ "edit", ACT_EDIT_OPEN_EXTERNAL, "open-external" },
 
 	{ NULL, 0, NULL }
-}
+};
 
 static struct strtonum *action_aliases[KEYMAP_MAX] = {
 	main_action_aliases,

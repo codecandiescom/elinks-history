@@ -1,3 +1,352 @@
+Sun Nov 14 22:54:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	sched/session.c (1.579 -> 1.580) broke reloading completely, so
+	revert it.  
+
+Sun Nov 14 22:54:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/conv.h:
+
+	hx() now returns lowercased letters, Hx() was added, and unhx() now
+	first test for lowercased letters. It fixes issue with
+	convert_hex(), and should not break anything else.  
+
+Sun Nov 14 22:39:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/auth/digest.c:
+
+	Optimize convert_hex() and use hx() from conv.h. Please check that
+	digest upper/lower case change has no impact.  
+
+Sun Nov 14 22:19:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	digest_calc_response(): Use uri->datalen instead of
+	strlen(uri->data) which is wrong when posting.  
+
+Sun Nov 14 22:17:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	random_cnonce(): Don't care about MD5()'s return value.  
+
+Sun Nov 14 21:53:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, m4/features.m4:
+
+	Log CONFDIR, LOCALEDIR, CFLAGS and LIBS to features.log 
+
+Sun Nov 14 21:32:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/protocol/Makefile.am,
+	src/protocol/auth/Makefile.am, src/protocol/http/http.c:
+
+	Check that the GNU TLS OpenSSL compatibility library is available
+	before engaging in adding HTTP Digest support. There is no
+	libgnutls-openssl configuration helper. Also define
+	CONFIG_SSL_DIGEST variable that will be useful when we add our own
+	(optional) MD5 implementation.  
+
+Sun Nov 14 21:26:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Make EL_CHECK_OPTIONAL_LIBRARY() macro more generally useful by
+	moving command line argument declaration to new wrapper
+	EL_CONFIG_OPTIONAL_LIBRARY().  
+
+Sun Nov 14 19:57:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	Define MD5_DIGEST_LENGTH if it is not. GNU TLS doesn't.  
+
+Sun Nov 14 19:46:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Revert part of a logic change involving the checking of HTTP Digest.  
+
+Sun Nov 14 19:42:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/auth.h:
+
+	Describe the boolean members of struct auth_entry.  
+
+Sun Nov 14 19:16:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	convert_hex(): Take a unsigned char buffer with length
+	MD5_DIGEST_LENGTH + 1.  
+
+Sun Nov 14 18:57:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/auth.h:
+
+	Only the user, password and host part is supposed to be used in this
+	URI. It is mainly a convenient way to store host info so later when
+	finding auth entries it can be compared as a reference against the
+	current URI that needs to send authorization.  
+
+Sun Nov 14 18:51:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: auth/digest.c, auth/digest.h, http/http.c:
+
+	digest_calc_response(): Take the response URI as an argument. Now
+	redirecting and navigation works.  
+
+Sun Nov 14 18:48:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	random_cnonce(): Make it use MD5() so convert_hex() only works on
+	buffers with length MD5_DIGEST_LENGTH.  
+
+Sun Nov 14 18:46:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/auth.c:
+
+	Reformat comment.  
+
+Sun Nov 14 18:46:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Avoid URI mismatching in digest requests although redirects are not
+	supported.  
+
+Sun Nov 14 18:00:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	When reloading use loading_callback and set up a session task so
+	that the reloading will work even when the reloaded document
+	contains redirects. This is needed atleast when reloading HTTP auth
+	document after the user has entered credentials.  
+	
+	Is there any issues with this? Maybe ses_goto() could be used.  
+
+Sun Nov 14 16:52:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Fix HTTP auth digest compilation when CONFIG_SSL is disabled.  
+
+Sun Nov 14 15:59:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/digest.c:
+
+	s/17/MD5_DIGEST_LENGTH + 1/.  
+
+Sun Nov 14 15:49:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: auth/auth.c, auth/auth.h, auth/dialogs.c,
+	auth/digest.c, auth/digest.h, ftp/ftp.c, http/http.c:
+
+	s/http_auth_basic/auth_entry/ now that HTTP digest and FTP uses it
+	too.  
+
+Sun Nov 14 15:43:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/: auth.h, digest.c:
+
+	Standardize auth/digest.c header. Only .c files is supposed to
+	include elinks.h and if they do it before elinks .h files no .h file
+	needs to include elinks.h 
+
+Sun Nov 14 15:39:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: auth/auth.c, http/http.c:
+
+	Add closure to the move of the HTTP basic auth string to the HTTP
+	protocol. This was what I meant. It fixes also an uncheck return
+	value.  
+
+Sun Nov 14 15:37:22 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/auth/auth.h:
+
+	Fixed includes.  
+
+Sun Nov 14 15:27:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: Makefile.am, auth/Makefile.am, auth/digest.c:
+
+	Only compile and add auth/digest.o when CONFIG_SSL is enabled.  
+
+Sun Nov 14 15:20:28 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/Makefile.am:
+
+	Link with digest.o only when SSL is enabled. Not tested.  
+
+Sun Nov 14 15:18:30 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/auth/digest.c:
+
+	Ansi C fixes.  
+
+Sun Nov 14 15:16:19 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	- Include digest.h only with SSL enabled 
+
+Sun Nov 14 14:28:20 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/auth/: auth.c, auth.h:
+
+	Sorry, forgot about those.  
+
+Sun Nov 14 14:21:58 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Digest auth works for first time for my public_html, but the rest
+	needs more work.  
+
+Sun Nov 14 14:17:18 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/: Makefile.am, auth/Makefile.am, auth/digest.c,
+	auth/digest.h:
+
+	Digest auth part IV.  
+
+Sun Nov 14 13:43:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Reduce indentation of the digest extraction code.  
+
+Sun Nov 14 11:40:34 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Unify kbdprefix.repeat_count stuff and loops, later it will help.
+	Take in account the return value of move_(up|down)() in the loop.  
+
+Sun Nov 14 11:25:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	move_(up|down)() now return enum frame_event_status.  
+
+Sun Nov 14 11:21:48 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Digest part III.  
+
+Sun Nov 14 11:10:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Use a decimal-compatible prefix count limit: 99999.  
+
+Sun Nov 14 11:02:16 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/: auth/auth.c, auth/auth.h, ftp/ftp.c, http/http.c:
+
+	More preparation for digest auth.  
+
+Sun Nov 14 10:32:55 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/auth/: auth.c, auth.h:
+
+	Preparation for digest authentication.  
+
+Sun Nov 14 10:24:00 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Nov 14 09:11:44 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Sun Nov 14 03:23:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/info.c, document/document.c:
+
+	Report number of refreshing documents by using
+	formatted_info(INFO_TIMERS).  
+
+Sun Nov 14 03:14:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Resource dialog: 'Document cache: %d formatted, %d locked' is
+	shorter and hopefully more precise.  
+
+Sun Nov 14 03:10:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Climb mount bloat and plant a oneliner in the resource dialog
+	informing about terminal status, interlinked terminals and number of
+	sessions.  
+
+Sun Nov 14 02:53:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Resource info dialog: Make the allocated memory info a one liner and
+	show the truly allocated values as 'overhead' in bytes and
+	percentage.  
+
+Sun Nov 14 02:43:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	s/get_ressource_info/get_resource_info/.  
+
+Sun Nov 14 02:42:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	get_ressource_info(): Tidy up.  
+
+Sun Nov 14 02:41:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Resource info dialog: The 'Cache size' can be derived from the
+	'Memory cache' lines first entry so ditch it.  
+
+Sun Nov 14 01:14:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/: info.c, menu.c:
+
+	Merge the Resource and Memory info dialogs. Makes it easier to check
+	what happends when testing on mangle.cgi. Plus I never really saw
+	the point of having those two separated.  
+
+Sun Nov 14 01:02:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	get_ressource_info(): Use string utils instead of msg_text().  
+
+Sun Nov 14 00:15:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	do_action(): Update comments.  
+
+Sun Nov 14 00:11:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	do_action(): Alphabetize action handling in the switch. Quit the
+	default label.  
+
 Sat Nov 13 21:51:35 2004  Laurent Monin <zas@norz.org>:
 
 	* src/sched/action.c:

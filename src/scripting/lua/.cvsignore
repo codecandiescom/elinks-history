@@ -2,5 +2,6 @@ Makefile
 Makefile.in
 core.lo
 hooks.lo
+libscriptinglua.la
 .deps
 .libs

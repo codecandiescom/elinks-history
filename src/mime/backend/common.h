@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.7 2003/06/06 21:18:07 jonas Exp $ */
+/* $Id: common.h,v 1.8 2003/06/07 22:13:41 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -17,7 +17,7 @@ struct mime_backend {
 	void (*done)(void);
 
 	/* Given an @uri resolve the content type. For know it (mostly)
-	 * comes down to using the the extension to resolve. */
+	 * comes down to using the the extension. */
 	unsigned char *(*get_content_type)(unsigned char *uri);
 
 	/* Given a mime type find a associated handler. The handler can
@@ -36,13 +36,13 @@ unsigned char *get_content_type_backends(unsigned char *uri);
 struct mime_handler *
 get_mime_handler_backends(unsigned char *content_type, int have_x);
 
-/* TODO Maybe this could fit in util/file.h */
+/* TODO Temporarily put here until we move it to util/ and protocol/url.c */
+
 /* Extracts a filename from @path separated by @separator. Targeted for use
  * with the general unix PATH style strings. */
 unsigned char *
 get_next_path_filename(unsigned char **path_ptr, unsigned char separator);
 
-/* TODO Temporarily put here until mime/ will be integrated (I hope ;) */
 int get_extension_from_url(unsigned char *url, unsigned char **extension);
 
 #endif

@@ -30,13 +30,14 @@ Triggered When:
 
 Arguments:
 
- unsigned char **new_url, struct session *ses, unsigned char *url
+ unsigned char **url, struct session *ses
 
 Description:
 
- If another URL than @url should be followed it is passed by setting @new_url.
- Valid values for @new_url includes:
- - @url if the original URL should be followed.
+ If another URL than @url should be followed it is passed by setting @url.
+ If @url is changed the event propagation should be ended.
+ Valid values for @url includes:
+ - leaving @url unchanged if the original URL should be followed.
  - NULL if no URL should be followed.
  - a dynamically allocated new URL to be followed instead.
 
@@ -50,13 +51,14 @@ Triggered When:
 
 Arguments:
 
- unsigned char **new_url, struct session *ses, unsigned char *url
+ unsigned char **url, struct session *ses
 
 Description:
 
- If another URL than @url should be followed it is passed by setting @new_url.
- Valid values for @new_url includes:
- - @url if the original URL should be followed.
+ If another URL than @url should be followed it is passed by setting @url.
+ If @url is changed the event propagation should be ended.
+ Valid values for @url includes:
+ - leaving @url unchanged if the original URL should be followed.
  - NULL if no URL should be followed.
  - a dynamically allocated new URL to be followed instead.
 
@@ -115,4 +117,4 @@ Description:
  Allows a subsystem to do whatever clean up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.2 2003/09/25 14:17:53 jonas Exp $
+$Id: events.txt,v 1.3 2003/09/25 16:00:57 jonas Exp $

@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.5 2003/09/25 00:50:20 jonas Exp $ */
+/* $Id: hooks.c,v 1.6 2003/09/25 16:00:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,18 +33,15 @@ script_hook_goto_url(va_list ap)
 {
 	unsigned char **returl = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
-	unsigned char *url = va_arg(ap, unsigned char *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%goto-url-hook");
 	SCM x;
 
 	if (0 && ses);
 
-	*returl = NULL;
-
-	if (!*url)
+	if (!**returl)
 		return 0;
 
-	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
+	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*returl));
 	if (SCM_STRINGP(x)) {
 		*returl = stracpy(SCM_STRING_UCHARS(x));
 	} else {
@@ -59,9 +56,8 @@ script_hook_follow_url(va_list ap)
 {
 	unsigned char **returl = va_arg(ap, unsigned char **);
 	struct session *ses = va_arg(ap, struct session *);
-	unsigned char *url = va_arg(ap, unsigned char *);
 	SCM proc = scm_c_module_lookup(internal_module(), "%follow-url-hook");
-	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(url));
+	SCM x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*returl));
 
 	if (0 && ses);
 

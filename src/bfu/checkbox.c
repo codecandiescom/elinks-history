@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.69 2004/05/07 11:24:20 zas Exp $ */
+/* $Id: checkbox.c,v 1.70 2004/05/10 15:34:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,10 @@
 #include "terminal/terminal.h"
 
 
+#define CHECKBOX_LEN 3	/* "[X]" or "(X)" */
+#define CHECKBOX_SPACING 1	/* "[X]" + " " + "Label" */
+#define CHECKBOX_LS (CHECKBOX_LEN + CHECKBOX_SPACING)	/* "[X] " */
+
 void
 dlg_format_checkbox(struct terminal *term,
 		    struct widget_data *widget_data,
@@ -26,17 +30,15 @@ dlg_format_checkbox(struct terminal *term,
 {
 	unsigned char *text = widget_data->widget->text;
 
-	if (term) {
-		widget_data->dimensions.x = x;
-		widget_data->dimensions.y = *y;
-	}
+	set_rect(&widget_data->dimensions, x, *y, CHECKBOX_LS, 1);
 
-	if (w <= 4) return;
+	if (w <= CHECKBOX_LS) return;
 
-	if (rw) *rw -= 4;
-	dlg_format_text_do(term, text, x + 4, y, w - 4, rw,
+	if (rw) *rw -= CHECKBOX_LS;
+	dlg_format_text_do(term, text, x + CHECKBOX_LS, y, w - CHECKBOX_LS, rw,
 			get_bfu_color(term, "dialog.checkbox-label"), align);
-	if (rw) *rw += 4;
+	if (rw) *rw += CHECKBOX_LS;
+
 }
 
 static void
@@ -45,6 +47,7 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, 
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
 	unsigned char *text;
+	struct rect *pos = &widget_data->dimensions;
 
 	color = get_bfu_color(term, "dialog.checkbox");
 	if (!color) return;
@@ -55,11 +58,11 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, 
 		text = (!widget_data->widget->info.checkbox.gid) ? "[ ]" : "( )";
 	}
 
-	draw_text(term, widget_data->dimensions.x, widget_data->dimensions.y, text, 3, 0, color);
+	draw_text(term, pos->x, pos->y, text, CHECKBOX_LEN, 0, color);
 
 	if (sel) {
-		set_cursor(term, widget_data->dimensions.x + 1, widget_data->dimensions.y, 0);
-		set_window_ptr(dlg_data->win, widget_data->dimensions.x, widget_data->dimensions.y);
+		set_cursor(term, pos->x + 1, pos->y, 0);
+		set_window_ptr(dlg_data->win, pos->x, pos->y);
 	}
 }
 
@@ -81,10 +84,9 @@ mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	       struct term_event *ev)
 {
 	if (check_mouse_wheel(ev)
-	    || ev->y != widget_data->dimensions.y
-	    || ev->x < widget_data->dimensions.x
-	    || ev->x >= widget_data->dimensions.x + 3)
+	    || !is_in_rect(&widget_data->dimensions, ev->x, ev->y))
 		return EVENT_NOT_PROCESSED;
+
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = widget_data - dlg_data->widgets_data;
 	display_dlg_item(dlg_data, widget_data, 1);

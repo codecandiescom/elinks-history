@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.109 2003/11/05 09:23:19 zas Exp $ */
+/* $Id: core.c,v 1.110 2003/11/05 14:44:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -421,7 +421,6 @@ l_edit_bookmark_dialog(LS)
 {
 	struct dialog *dlg;
 	struct lua_dlg_data *data;
-	int n = 0;
 
 	if (!lua_isstring(S, 1) || !lua_isstring(S, 2)
 	    || !lua_isstring(S, 3) || !lua_isfunction(S, 4)) {
@@ -446,16 +445,14 @@ l_edit_bookmark_dialog(LS)
 	dlg->refresh = (void (*)(void *))dialog_run_lua;
 	dlg->refresh_data = data;
 
-	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->cat, NULL);
-	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->name, NULL);
-	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->url, NULL);
+	add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN, data->cat, NULL);
+	add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN, data->name, NULL);
+	add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN, data->url, NULL);
 
-	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
-	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
+	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
-	add_dlg_end(dlg, n);
-
-	assert(n == L_EDIT_BMK_WIDGETS_COUNT);
+	add_dlg_end(dlg, L_EDIT_BMK_WIDGETS_COUNT);
 
 	do_dialog(lua_ses->tab->term, dlg, getml(dlg, NULL));
 
@@ -587,17 +584,15 @@ l_xdialog(LS)
 	dlg->refresh = (void (*)(void *))xdialog_run_lua;
 	dlg->refresh_data = data;
 
-	while (i < nfields) {
-		add_dlg_field(dlg, i, 0, 0, NULL, MAX_STR_LEN,
+	while (dlg->widgets_size < nfields) {
+		add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN,
 			      data->fields[i], NULL);
 	}
 
-	add_dlg_button(dlg, i, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
-	add_dlg_button(dlg, i, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
+	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);
 
-	add_dlg_end(dlg, i);
-
-	assert(i == nitems);
+	add_dlg_end(dlg, nitems);
 
 	do_dialog(lua_ses->tab->term, dlg, getml(dlg, NULL));
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.25 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: cache.c,v 1.26 2002/12/16 22:29:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,11 +18,11 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-struct list_head cache = {&cache, &cache};
+static struct list_head cache = {&cache, &cache};
 
-long cache_size;
+static long cache_size;
 
-int cache_count = 0;
+static int cache_count = 0;
 
 
 long
@@ -426,7 +426,7 @@ delete_cache_entry(struct cache_entry *e)
 	if (e->ssl_info) mem_free(e->ssl_info);
 	if (e->encoding_info) mem_free(e->encoding_info);
 	if (e->etag) mem_free(e->etag);
-	
+
 	mem_free(e);
 }
 

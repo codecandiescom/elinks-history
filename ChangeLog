@@ -1,3 +1,304 @@
+Thu Dec 16 23:10:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	Initialize cache entries id_counter to 1 instead of 0. I need 0 for
+	special stuff.  
+
+Thu Dec 16 21:28:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Enhanced documentation.  
+
+Thu Dec 16 21:06:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/file/file.c:
+
+	Pah, fixed annoying warning about
+	get_opt_int(document.browse.links.color_dirs) instead of
+	get_opt_bool(). Like it matters.  
+
+Thu Dec 16 19:47:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/remote.txt:
+
+	Few style and grammar touches.  
+
+Thu Dec 16 19:42:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/index.txt:
+
+	Aesthetical touches.  
+
+Thu Dec 16 19:39:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: leds.c, leds.h:
+
+	Respect identifiers namespaces and use led.used__ insted of
+	led.__used.  
+
+Thu Dec 16 16:05:22 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Typo fix.  
+
+Thu Dec 16 15:56:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, util/secsave.c:
+
+	More get_opt_*() fixes.  
+
+Thu Dec 16 15:42:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/task.c, viewer/text/form.c:
+
+	More get_opt_*() fixes.  
+
+Thu Dec 16 15:34:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.c, dialogs/options.c, protocol/ftp/ftp.c:
+
+	More get_opt_*() fixes.  
+
+Thu Dec 16 15:23:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/conf.c, dialogs/status.c:
+
+	More get_opt_*() fixes.  
+
+Thu Dec 16 15:19:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	More get_opt_*() fixes.  
+
+Thu Dec 16 15:17:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Treat options as booleans.  
+
+Thu Dec 16 15:14:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Treat options as booleans.  
+
+Thu Dec 16 15:13:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, config/opttypes.c, lowlevel/dns.c:
+
+	More get_opt_*() fixes.  
+
+Thu Dec 16 15:10:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/http.c, document/options.c,
+	lowlevel/connect.c, viewer/text/view.c:
+
+	Treat options as booleans.  
+
+Thu Dec 16 15:05:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/renderer.c, intl/gettext/libintl.h:
+
+	Those options are of codepage type.  
+
+Thu Dec 16 15:03:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Get -dump and -source cmdline options as booleans.  
+
+Thu Dec 16 14:55:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.h:
+
+	Add get_opt_codepage() and get_cmd_opt_codepage().  
+
+Thu Dec 16 14:43:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/: options.c, options.h, opttypes.c, opttypes.h:
+
+	When CONFIG_DEBUG is defined, check for wrong get_opt_*() calls
+	regarding option type.  
+
+Thu Dec 16 13:52:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Oops forgot this one when updating elinks.conf(5) yesterday in my
+	release tree.  
+
+Thu Dec 16 13:51:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/remote.txt:
+
+	s/"g elinks"/g:elinks/ which pasky prefers.  
+
+Thu Dec 16 13:36:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: ecmascript.txt, hacking.txt, index.txt, marks.txt,
+	remote.txt, urlprefixes.txt:
+
+	Aspell all .txt files.  
+
+Thu Dec 16 13:11:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/lua/elinks-remote, doc/Makefile.am, doc/index.txt,
+	doc/remote.txt:
+
+	Elaborate a bit about managing remote ELinks instances with -remote.
+	Plant a note about -remote in the elinks-remote hack.  
+
+Thu Dec 16 11:44:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/: index.txt, urlprefixes.txt:
+
+	The tracts of URI rewriting.  
+
+Thu Dec 16 10:54:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/index.txt:
+
+	I guess ex-mode is advanced.  
+
+Thu Dec 16 10:54:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	A new debug_check_option_syntax() that wraps calls to
+	check_caption() and check_description().  
+
+Thu Dec 16 10:49:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/bookmarks.txt:
+
+	Slightly reordered the sample bookmarks hierarchy for marginal
+	increase in instructiveness.  
+
+Thu Dec 16 10:47:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	When CONFIG_DEBUG is defined, check for bad chars at end of option
+	description, it will warn if spaces, tabs or newlines are found.  
+
+Thu Dec 16 10:46:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/bookmarks.txt:
+
+	Hopefully completed the bookmarks documentation by details on the
+	bookmarks formats.  
+
+Thu Dec 16 10:38:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	check_caption() -> static.  
+
+Thu Dec 16 10:34:42 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Dec 16 10:31:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/: cmdline.c, options.inc:
+
+	Drop extra newline at end of option description.  
+
+Thu Dec 16 10:29:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	end_of_dir(): Drop the now obsoleted struct uri parameter.  
+
+Thu Dec 16 10:22:48 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated and some typos were fixed.  
+
+Thu Dec 16 09:58:05 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Dec 16 09:56:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix encoding of file:// URIs so that the query is not also encoded.
+	This patch has some issues raise by Miciah, mostly related to the
+	way check_file_uri() works, but it fixes support for passing query
+	URI components to local CGI scripts. Maybe it would be more
+	elegantly fixed by adding query members to struct uri.  
+
+Thu Dec 16 09:52:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix detection of end_of_dir() by allowing (again) query URI
+	components in file:// URIs. Fix the bad logic when checking and
+	initializing the fragment URI components of file:// URIs.  
+
+Thu Dec 16 09:44:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/bookmarks.c:
+
+	The native ELinks format IS NOT compatible with the Links 0.9x
+	bookmarks format.  
+
+Thu Dec 16 09:33:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/: bookmarks.txt, color-model.txt, ecmascript.txt, exmode.txt,
+	feedback.txt, marks.txt:
+
+	Some Id tags.  
+
+Thu Dec 16 09:31:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/: Makefile.am, README, index.txt:
+
+	Added grandiose introduction+table of contents index.txt file.  
+
+Thu Dec 16 08:46:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/events.txt:
+
+	Some introduction to what's up with this events thing.  
+
+Thu Dec 16 08:16:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	This sentence has bothered me in my dreams for a long time.  
+
+Thu Dec 16 01:53:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Updates to polish translation - fixing 9 fuzzies/untranslated
+	msgids. Patch by Adam Golebiowski <adamg@pld-linux.org>.  
+
+Thu Dec 16 00:15:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Survive if SM doesn't provide JSOPTION_COMPILE_N_GO. It's a popular
+	cause of compile failures and it's only informative, not strictly
+	required.  
+
+Wed Dec 15 23:11:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/: Makefile.am, exmode.txt:
+
+	More crazy raving, exmode is the topic this time.  
+
 Wed Dec 15 22:25:16 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* AUTHORS:

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-23 11:55+0200\n"
+"POT-Creation-Date: 2003-10-23 17:46+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Yevgeny Gromov <yevgeny@tut.by>\n"
 "Language-Team: Belarusian <i18n@tut.by>\n"
@@ -34,8 +34,8 @@ msgstr "У поле пав╕нен быць л╕к"
 #: src/dialogs/document.c:277 src/dialogs/document.c:289
 #: src/dialogs/edit.c:164 src/dialogs/info.c:48 src/dialogs/info.c:75
 #: src/dialogs/info.c:95 src/dialogs/info.c:122 src/dialogs/info.c:184
-#: src/dialogs/info.c:204 src/dialogs/menu.c:579 src/dialogs/menu.c:590
-#: src/dialogs/menu.c:616 src/dialogs/mime.c:251 src/dialogs/options.c:261
+#: src/dialogs/info.c:204 src/dialogs/menu.c:600 src/dialogs/menu.c:611
+#: src/dialogs/menu.c:637 src/dialogs/mime.c:251 src/dialogs/options.c:261
 #: src/dialogs/options.c:356 src/globhist/dialogs.c:246
 #: src/globhist/dialogs.c:425 src/protocol/protocol.c:60
 #: src/protocol/user.c:156 src/protocol/user.c:172 src/sched/download.c:486
@@ -48,7 +48,7 @@ msgstr "У поле пав╕нен быць л╕к"
 #: src/viewer/text/search.c:870 src/viewer/text/search.c:876
 #: src/viewer/text/search.c:898 src/viewer/text/search.c:1181
 #: src/viewer/text/search.c:1192 src/viewer/text/textarea.c:269
-#: src/viewer/text/view.c:752 src/viewer/text/view.c:1480
+#: src/viewer/text/view.c:790 src/viewer/text/view.c:1512
 msgid "OK"
 msgstr "ОК"
 
@@ -96,14 +96,14 @@ msgstr "╤мя папк╕"
 #: src/bookmarks/dialogs.c:168 src/config/dialogs.c:325
 #: src/config/dialogs.c:404 src/config/dialogs.c:475 src/config/dialogs.c:658
 #: src/config/dialogs.c:736 src/dialogs/auth.c:165 src/dialogs/edit.c:173
-#: src/dialogs/menu.c:579 src/dialogs/menu.c:590 src/dialogs/menu.c:616
+#: src/dialogs/menu.c:600 src/dialogs/menu.c:611 src/dialogs/menu.c:637
 #: src/dialogs/mime.c:255 src/dialogs/options.c:263 src/dialogs/options.c:361
 #: src/sched/download.c:776 src/sched/download.c:1259
 #: src/sched/download.c:1268 src/sched/download.c:1295
 #: src/sched/download.c:1307 src/scripting/lua/core.c:478
 #: src/scripting/lua/core.c:621 src/scripting/lua/core.c:846
 #: src/viewer/text/search.c:1181 src/viewer/text/search.c:1192
-#: src/viewer/text/view.c:752
+#: src/viewer/text/view.c:790
 msgid "Cancel"
 msgstr "Адмена"
 
@@ -807,74 +807,74 @@ msgstr "Памылка запису ╝ сокет"
 msgid "Unrecognised action (internal error)"
 msgstr ""
 
-#: src/config/options.c:600 src/config/options.c:624 src/config/opttypes.c:38
+#: src/config/options.c:638 src/config/options.c:662 src/config/opttypes.c:38
 msgid "Parameter expected"
 msgstr ""
 
-#: src/config/options.c:625
+#: src/config/options.c:663
 msgid "Too many parameters"
 msgstr ""
 
-#: src/config/options.c:630
+#: src/config/options.c:668
 #, fuzzy
 msgid "error"
 msgstr "Памылка"
 
-#: src/config/options.c:632 src/sched/error.c:45
+#: src/config/options.c:670 src/sched/error.c:45
 msgid "Host not found"
 msgstr "Сервер не знайдзены"
 
-#: src/config/options.c:646
+#: src/config/options.c:684
 #, fuzzy
 msgid "Resolver error"
 msgstr "Памылка захавання"
 
-#: src/config/options.c:668
+#: src/config/options.c:706
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
 msgstr ""
 
-#: src/config/options.c:708
+#: src/config/options.c:746
 #, fuzzy
 msgid "Template option folder"
 msgstr "Выдал╕ць параметр"
 
-#: src/config/options.c:731
+#: src/config/options.c:769
 #, c-format
 msgid "(default: %ld)"
 msgstr ""
 
-#: src/config/options.c:736 src/config/options.c:759
+#: src/config/options.c:774 src/config/options.c:797
 #, c-format
 msgid "(default: \"%s\")"
 msgstr ""
 
-#: src/config/options.c:741
+#: src/config/options.c:779
 #, c-format
 msgid "(alias for %s)"
 msgstr ""
 
-#: src/config/options.c:746
+#: src/config/options.c:784
 #, c-format
 msgid "(default: %s)"
 msgstr ""
 
-#: src/config/options.c:751
+#: src/config/options.c:789
 #, c-format
 msgid "(default: #%06x)"
 msgstr ""
 
-#: src/config/options.c:878
+#: src/config/options.c:916
 msgid "Configuration options:\n"
 msgstr ""
 
-#: src/config/options.c:881
+#: src/config/options.c:919
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
 
-#: src/config/options.c:882
+#: src/config/options.c:920
 msgid "Options:\n"
 msgstr ""
 
@@ -3856,260 +3856,270 @@ msgstr "Вы  сапра╝ды жадаеце скончыць працу з ELinks ╕ спын╕ць усе закачк╕?"
 msgid "Do you really want to exit ELinks?"
 msgstr "Вы сапра╝ды жадаеце скончыць працу з ELinks?"
 
-#: src/dialogs/menu.c:216
+#: src/dialogs/menu.c:223
 msgid "No history"
 msgstr "Г╕сторыя пустая"
 
-#: src/dialogs/menu.c:291
+#: src/dialogs/menu.c:298
 msgid "No downloads"
 msgstr "Няма закачак"
 
-#: src/dialogs/menu.c:362
+#: src/dialogs/menu.c:381
 #, fuzzy
 msgid "Open new ~tab"
 msgstr "Адкрыць у новым акне"
 
-#: src/dialogs/menu.c:363
+#: src/dialogs/menu.c:382
 #, fuzzy
 msgid "Open new tab in ~background"
 msgstr "У фоне"
 
-#: src/dialogs/menu.c:365
+#: src/dialogs/menu.c:384
 msgid "~Go to URL"
 msgstr "Перайц╕ да новага URL"
 
-#: src/dialogs/menu.c:366
+#: src/dialogs/menu.c:385
 msgid "Go ~back"
 msgstr "Перайц╕ назад"
 
-#: src/dialogs/menu.c:367
+#: src/dialogs/menu.c:386
 msgid "~Reload"
 msgstr "Аднав╕ць"
 
-#: src/dialogs/menu.c:368
+#: src/dialogs/menu.c:387
 msgid "~History"
 msgstr "Г╕сторыя"
 
-#: src/dialogs/menu.c:369
+#: src/dialogs/menu.c:388
 #, fuzzy
 msgid "Unh~istory"
 msgstr "Антыг╕сторыя"
 
-#: src/dialogs/menu.c:374
+#: src/dialogs/menu.c:393
 msgid "Global histor~y"
 msgstr "Глабальная г╕сторыя"
 
-#: src/dialogs/menu.c:377
+#: src/dialogs/menu.c:396
 msgid "Bookmark~s"
 msgstr "Закладк╕"
 
-#: src/dialogs/menu.c:383
+#: src/dialogs/menu.c:402
 msgid "Sa~ve as"
 msgstr "Захаваць як"
 
-#: src/dialogs/menu.c:384
+#: src/dialogs/menu.c:403
 msgid "Save ~URL as"
 msgstr "Захаваць URL як"
 
-#: src/dialogs/menu.c:385
+#: src/dialogs/menu.c:404
 msgid "Save formatted ~document"
 msgstr "Захаваць фармац╕раваны дакумент"
 
-#: src/dialogs/menu.c:390
+#: src/dialogs/menu.c:409
 msgid "~Kill background connections"
 msgstr "Разарваць фонавыя злучэнн╕"
 
-#: src/dialogs/menu.c:391
+#: src/dialogs/menu.c:410
 msgid "~Flush all caches"
 msgstr "Ачысц╕ць усе в╕ды кэша"
 
-#: src/dialogs/menu.c:392
+#: src/dialogs/menu.c:411
 #, fuzzy
 msgid "Resource in~fo"
 msgstr "╤нфармацыя пра рэсурсы"
 
-#: src/dialogs/menu.c:394
+#: src/dialogs/menu.c:413
 msgid "~Cache info"
 msgstr "╤нформацыя пра кэш"
 
-#: src/dialogs/menu.c:397
+#: src/dialogs/menu.c:416
 msgid "~Memory info"
 msgstr "╤нфармацыя пра памяць"
 
-#: src/dialogs/menu.c:404
+#: src/dialogs/menu.c:423
 msgid "E~xit"
 msgstr "Выхад"
 
-#: src/dialogs/menu.c:424
+#: src/dialogs/menu.c:443
 msgid "~New window"
 msgstr "Новае акно"
 
-#: src/dialogs/menu.c:446
+#: src/dialogs/menu.c:465
 msgid "~OS shell"
 msgstr "Камандны радок"
 
-#: src/dialogs/menu.c:453
+#: src/dialogs/menu.c:472
 #, fuzzy
 msgid "Resize t~erminal"
 msgstr "Змян╕ць памеры тэрм╕нала"
 
-#: src/dialogs/menu.c:469
+#: src/dialogs/menu.c:488
 msgid "~Search"
 msgstr "Пошук"
 
-#: src/dialogs/menu.c:470
+#: src/dialogs/menu.c:489
 msgid "Search ~backward"
 msgstr "Зваротны пошук"
 
-#: src/dialogs/menu.c:471
+#: src/dialogs/menu.c:490
 msgid "Find ~next"
 msgstr "Шукаць далей"
 
-#: src/dialogs/menu.c:472
+#: src/dialogs/menu.c:491
 msgid "Find ~previous"
 msgstr "Шукаць назад"
 
-#: src/dialogs/menu.c:474
+#: src/dialogs/menu.c:493
 msgid "Toggle ~html/plain"
 msgstr "Пераключыць HTML/тэкст"
 
-#: src/dialogs/menu.c:475
+#: src/dialogs/menu.c:494
+#, fuzzy
+msgid "Toggle i~mages"
+msgstr "Пераключыць HTML/тэкст"
+
+#: src/dialogs/menu.c:495
+#, fuzzy
+msgid "Toggle ~link numbering"
+msgstr "Увядз╕це нумар спасылк╕"
+
+#: src/dialogs/menu.c:496
 msgid "Document ~info"
 msgstr "╤нфармацыя пра дакумент"
 
-#: src/dialogs/menu.c:476
+#: src/dialogs/menu.c:497
 msgid "H~eader info"
 msgstr "╤нфа пра загаловак"
 
-#: src/dialogs/menu.c:477
+#: src/dialogs/menu.c:498
 msgid "Frame at ~full-screen"
 msgstr "Фрэйм на по╝ны экран"
 
-#: src/dialogs/menu.c:479
+#: src/dialogs/menu.c:500
 msgid "Nex~t tab"
 msgstr ""
 
-#: src/dialogs/menu.c:480
+#: src/dialogs/menu.c:501
 #, fuzzy
 msgid "Pre~v tab"
 msgstr "Раней пошуку не было"
 
-#: src/dialogs/menu.c:481
+#: src/dialogs/menu.c:502
 #, fuzzy
 msgid "~Close tab"
 msgstr "Закрыць"
 
-#: src/dialogs/menu.c:487
+#: src/dialogs/menu.c:508
 msgid "~ELinks homepage"
 msgstr "Старонка ELinks"
 
-#: src/dialogs/menu.c:488
+#: src/dialogs/menu.c:509
 #, fuzzy
 msgid "~Documentation"
 msgstr "╤нфармацыя пра дакумент"
 
-#: src/dialogs/menu.c:489
+#: src/dialogs/menu.c:510
 msgid "~Keys"
 msgstr "Клав╕шы"
 
-#: src/dialogs/menu.c:492
+#: src/dialogs/menu.c:513
 msgid "~Bugs information"
 msgstr ""
 
-#: src/dialogs/menu.c:493
+#: src/dialogs/menu.c:514
 #, fuzzy
 msgid "~ELinks CvsWeb"
 msgstr "Старонка ELinks"
 
-#: src/dialogs/menu.c:496
+#: src/dialogs/menu.c:517
 msgid "~Copying"
 msgstr "Правы"
 
-#: src/dialogs/menu.c:497
+#: src/dialogs/menu.c:518
 msgid "~About"
 msgstr "Пра праграму"
 
-#: src/dialogs/menu.c:503
+#: src/dialogs/menu.c:524
 msgid "~Add"
 msgstr "Дадаць"
 
-#: src/dialogs/menu.c:504
+#: src/dialogs/menu.c:525
 msgid "~Modify"
 msgstr "Змян╕ць"
 
-#: src/dialogs/menu.c:505
+#: src/dialogs/menu.c:526
 msgid "~Delete"
 msgstr "Выдал╕ць"
 
-#: src/dialogs/menu.c:517 src/dialogs/menu.c:530
+#: src/dialogs/menu.c:538 src/dialogs/menu.c:551
 msgid "~Language"
 msgstr "Мова"
 
-#: src/dialogs/menu.c:519 src/dialogs/menu.c:531
+#: src/dialogs/menu.c:540 src/dialogs/menu.c:552
 msgid "C~haracter set"
 msgstr "Кадз╕ро╝ка"
 
-#: src/dialogs/menu.c:520 src/dialogs/menu.c:532
+#: src/dialogs/menu.c:541 src/dialogs/menu.c:553
 msgid "~Terminal options"
 msgstr "Настройк╕ тэрм╕нала"
 
-#: src/dialogs/menu.c:521
+#: src/dialogs/menu.c:542
 msgid "File ~extensions"
 msgstr "Расшырэнн╕ файла╝"
 
-#: src/dialogs/menu.c:523
+#: src/dialogs/menu.c:544
 msgid "~Options manager"
 msgstr "Мэнэджэр параметра╝"
 
-#: src/dialogs/menu.c:524
+#: src/dialogs/menu.c:545
 msgid "~Keybinding manager"
 msgstr "Мэнэджэр камб╕нацый клав╕ш"
 
-#: src/dialogs/menu.c:525
+#: src/dialogs/menu.c:546
 msgid "~Save options"
 msgstr "Захаваць настройк╕"
 
-#: src/dialogs/menu.c:558
+#: src/dialogs/menu.c:579
 msgid "~File"
 msgstr "Файл"
 
-#: src/dialogs/menu.c:559
+#: src/dialogs/menu.c:580
 msgid "~View"
 msgstr "Выгляд"
 
-#: src/dialogs/menu.c:560
+#: src/dialogs/menu.c:581
 msgid "~Link"
 msgstr "Спасылк╕"
 
-#: src/dialogs/menu.c:561
+#: src/dialogs/menu.c:582
 msgid "~Downloads"
 msgstr "Закачк╕"
 
-#: src/dialogs/menu.c:562
+#: src/dialogs/menu.c:583
 msgid "~Setup"
 msgstr "Настройка"
 
-#: src/dialogs/menu.c:563
+#: src/dialogs/menu.c:584
 msgid "~Help"
 msgstr "Даведка"
 
-#: src/dialogs/menu.c:578
+#: src/dialogs/menu.c:599
 msgid "Go to URL"
 msgstr "Перайц╕ да новага URL"
 
-#: src/dialogs/menu.c:578 src/dialogs/menu.c:589
+#: src/dialogs/menu.c:599 src/dialogs/menu.c:610
 msgid "Enter URL"
 msgstr "Увядз╕це URL"
 
-#: src/dialogs/menu.c:589
+#: src/dialogs/menu.c:610
 msgid "Save URL"
 msgstr "Захаваць URL"
 
-#: src/dialogs/menu.c:615 src/sched/download.c:429 src/sched/download.c:640
+#: src/dialogs/menu.c:636 src/sched/download.c:429 src/sched/download.c:640
 msgid "Download"
 msgstr "Закачка"
 
-#: src/dialogs/menu.c:615
+#: src/dialogs/menu.c:636
 msgid "Save to file"
 msgstr "Захаваць у файл"
 
@@ -5017,19 +5027,19 @@ msgstr "Пошук тэкста"
 msgid "You can do this only on the master terminal"
 msgstr "Вы можаце зраб╕ць гэта тольк╕ на гало╝ным тэрм╕нале"
 
-#: src/viewer/text/view.c:751
+#: src/viewer/text/view.c:789
 msgid "Go to link"
 msgstr "Пайц╕ па спасылцы"
 
-#: src/viewer/text/view.c:751
+#: src/viewer/text/view.c:789
 msgid "Enter link number"
 msgstr "Увядз╕це нумар спасылк╕"
 
-#: src/viewer/text/view.c:1477
+#: src/viewer/text/view.c:1509
 msgid "Save error"
 msgstr "Памылка захавання"
 
-#: src/viewer/text/view.c:1478
+#: src/viewer/text/view.c:1510
 msgid "Error writing to file"
 msgstr "Пасылка зап╕су ╝ файл"
 

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.63 2003/06/18 00:30:25 jonas Exp $ */
+/* $Id: download.c,v 1.64 2003/06/18 11:46:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1266,7 +1266,7 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 	plaintext = 1;
 	if (!strcasecmp(ctype, "text/plain")) goto free_ct;
 
-	xwin = ses->tab->term ? ses->tab->term->environment & ENV_XWIN : 0;
+	xwin = ses->tab->term->environment & ENV_XWIN;
 	handler = get_mime_type_handler(ctype, xwin);
 
 

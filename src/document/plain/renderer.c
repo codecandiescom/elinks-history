@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.18 2003/11/14 12:45:39 jonas Exp $ */
+/* $Id: renderer.c,v 1.19 2003/11/14 13:19:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,48 +66,24 @@ realloc_line(struct document *document, int y, int x)
 	return line->d;
 }
 
-static inline int
+static inline struct link *
 add_document_link(struct document *document, unsigned char *uri, int length,
 		  int x, int y)
 {
 	struct link *link;
-	struct uri test;
 	struct point *point;
-	int keep = uri[length];
-	unsigned char *mailto;
 
-	assert(document);
-	if_assert_failed return 0;
-
-	uri[length] = 0;
-
-	if ((mailto = memchr(uri, '@', length)) && mailto - uri < length) {
-		mailto = straconcat("mailto:", uri, NULL);
-		uri[length] = keep;
-		if (!mailto) return length;
-
-	} else if (!parse_uri(&test, uri) || (!test.datalen && !test.hostlen)) {
-		uri[length] = keep;
-		return 0;
-	} else {
-		uri[length] = keep;
-	}
-
-	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1)) {
-		if (mailto) mem_free(mailto);
-		return length;
-	}
+	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1))
+		return NULL;
 
 	link = &document->links[document->nlinks];
 
-	if (!realloc_points(link, length)) {
-		if (mailto) mem_free(mailto);
-		return length;
-	}
+	if (!realloc_points(link, length))
+		return NULL;
 
 	link->n = length;
 	link->type = LINK_HYPERTEXT;
-	link->where = mailto ? mailto : memacpy(uri, length);
+	link->where = uri;
 	link->color.background = document->options.default_bg;
 	link->color.foreground = document->options.default_vlink;
 
@@ -118,7 +94,37 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 
 	document->nlinks++;
 
-	return length - 1;
+	return link;
+}
+
+static inline int
+check_link_word(struct document *document, unsigned char *uri, int length,
+		int x, int y)
+{
+	struct uri test;
+	unsigned char *where = NULL;
+	unsigned char *mailto = memchr(uri, '@', length);
+	int keep = uri[length];
+
+	assert(document);
+	if_assert_failed return 0;
+
+	uri[length] = 0;
+
+	if (mailto && mailto - uri < length) {
+		where = straconcat("mailto:", uri, NULL);
+
+	} else if (parse_uri(&test, uri) && (test.datalen || test.hostlen)) {
+		where = memacpy(uri, length);
+	}
+
+	uri[length] = keep;
+
+	if (where && !add_document_link(document, where, length, x, y)) {
+		mem_free(where);
+	}
+
+	return where ? length - 1 : 0;
 }
 
 static inline int
@@ -170,7 +176,7 @@ add_document_line(struct document *document, int lineno,
 
 			if (!len) continue;
 
-			if (add_document_link(document, start, len, x, lineno))
+			if (check_link_word(document, start, len, x, lineno))
 				line_pos += len;
 		}
 	}

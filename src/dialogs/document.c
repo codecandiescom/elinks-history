@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.43 2003/07/03 22:42:36 zas Exp $ */
+/* $Id: document.c,v 1.44 2003/07/05 10:24:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,20 @@
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
 
+void
+nowhere_box(struct terminal *term, unsigned char *title)
+{
+	assert(term);
+	if (!title || !*title)
+		title = N_("Info");
+
+	msg_box(term, NULL, 0,
+		title, AL_LEFT,
+		N_("You are nowhere!"),
+		NULL, 1,
+		N_("OK"), NULL, B_ENTER | B_ESC);
+}
+
 /* Location info. message box. */
 static void
 loc_msg(struct terminal *term, struct location *location,
@@ -46,11 +60,7 @@ loc_msg(struct terminal *term, struct location *location,
 	int strl;
 
 	if (!location) {
-		msg_box(term, NULL, 0,
-			N_("Info"), AL_LEFT,
-			N_("You are nowhere!"),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		nowhere_box(term, NULL);
 		return;
 	}
 
@@ -222,11 +232,7 @@ head_msg(struct session *ses)
 	struct cache_entry *ce;
 
 	if (!have_location(ses)) {
-		msg_box(ses->tab->term, NULL, 0,
-			N_("Header info"), AL_LEFT,
-			N_("You are nowhere!"),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		nowhere_box(ses->tab->term, N_("Header info"));
 		return;
 	}
 

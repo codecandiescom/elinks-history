@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.117 2003/07/04 00:52:32 jonas Exp $ */
+/* $Id: menu.c,v 1.118 2003/07/05 10:24:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,6 +81,7 @@ menu_for_frame(struct terminal *term,
 	       void (*f)(struct session *, struct f_data_c *, int),
 	       struct session *ses)
 {
+	if (!have_location(ses)) return;
 	do_for_frame(ses, f, 0);
 }
 

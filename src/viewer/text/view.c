@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.154 2003/07/04 01:49:03 jonas Exp $ */
+/* $Id: view.c,v 1.155 2003/07/05 10:24:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -562,7 +562,12 @@ set_frame(struct session *ses, struct f_data_c *f, int a)
 void
 toggle(struct session *ses, struct f_data_c *f, int a)
 {
-	assert(ses && f && f->vs);
+	assert(ses && f && ses->tab && ses->tab->term);
+
+	if (!f->vs) {
+		nowhere_box(ses->tab->term, NULL);
+		return;
+	}
 
 	f->vs->plain = !f->vs->plain;
 	html_interpret(ses);
@@ -1351,6 +1356,7 @@ save_url(struct session *ses, unsigned char *url)
 	unsigned char *u;
 
 	assert(ses && ses->tab && ses->tab->term && url);
+	if (!*url) return;
 	u = translate_url(url, ses->tab->term->cwd);
 
 	if (!u) {
@@ -1450,6 +1456,7 @@ menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 	struct f_data_c *fd;
 
 	assert(term && ses);
+	if (!have_location(ses)) return;
 	fd = current_frame(ses);
 	assert(fd && fd->vs);
 

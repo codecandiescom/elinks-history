@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.7 2002/12/08 21:01:20 pasky Exp $ */
+/* $Id: mime.c,v 1.8 2002/12/21 20:21:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,7 +210,7 @@ really_add_ext(void *fcp)
 void
 menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	unsigned char *translated = stracpy((unsigned char *) fcp);
+	unsigned char *translated = fcp ? stracpy((unsigned char *) fcp) : NULL;
 	struct option *opt = NULL;
 	struct extension *new;
 	unsigned char *ext;

@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.10 2003/06/08 11:54:25 pasky Exp $ */
+/* $Id: memory.h,v 1.11 2003/08/21 14:55:27 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -83,5 +83,16 @@ void *mem_realloc(void *, size_t);
 #endif /* FASTMEM */
 
 #endif /* LEAK_DEBUG */
+
+#define grmask(x, gr)	((x) & ~((gr) - 1))
+
+#define mem_gralloc(pointer, type, oldsize, newsize, gr)				\
+	if (grmask(oldsize, gr) != grmask(newsize, gr)) {				\
+		type *_tmp_ = (pointer);						\
+		_tmp_ = mem_realloc(_tmp_, grmask(newsize, gr) + (gr) * sizeof(type));	\
+		if (!_tmp_) return NULL;						\
+		(pointer) = _tmp_;							\
+	}
+
 
 #endif

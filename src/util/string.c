@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.77 2003/08/02 20:20:43 jonas Exp $ */
+/* $Id: string.c,v 1.78 2003/08/21 14:55:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,16 +286,10 @@ done_string(struct string *string)
 	string->length = 0;
 }
 
-#define mask(x)	((x) & ~(ALLOC_GR - 1))
 
 /* General useful to check if @_string_ needs reallocation to fit @_length_. */
 #define realloc_string(_string_, _newlength_)				\
-	if (mask((_string_)->length) != mask(_newlength_)) {		\
-		unsigned char *tmp = (_string_)->source;		\
-		tmp = mem_realloc(tmp, mask((_newlength_) + ALLOC_GR));	\
-		if (!tmp) return NULL;					\
-		(_string_)->source = tmp;				\
-	}
+	mem_gralloc((_string_)->source, unsigned char, (_string_)->length, _newlength_, ALLOC_GR)
 
 struct string *
 add_bytes_to_string(struct string *string, unsigned char *bytes, int length)

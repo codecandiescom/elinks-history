@@ -1,5 +1,5 @@
 -- Configuration for hooks.lua file, put in ~/.elinks/ as config.lua.
--- $Id: config.lua,v 1.7 2005/03/27 22:27:08 miciah Exp $
+-- $Id: config.lua,v 1.8 2005/03/27 22:30:05 miciah Exp $
 
 -- ** IMPORTANT **
 -- Individual functions may be disabled for security by assigning them
@@ -35,14 +35,6 @@
 
     mangle_blank_alt = nil
 
--- If you set this to non-`nil', the bookmark addon will be loaded,
--- and actions will be bound to my key bindings.  Change them at the
--- bottom of the file.
--- Note that you need to copy bm.lua (from contrib/) to ~/.elinks/ directory
--- as well.
-
-    bookmark_addon = nil
-
 -- For any other lua script to be loaded (note that you don't need to load
 -- hooks.lua here, as it's loaded even when we'll get to here actually; you
 -- don't need to load bm.lua here as well, as it gets done in hooks.lua if you
@@ -50,6 +42,11 @@
 -- line:
 
 --  dofile (elinks_home.."/script.lua")
+
+-- Bookmarks: Uncomment the following line to enable the Lua bookmarks
+-- manager
+
+--  dofile (elinks_home.."/bm.lua")
 
 -- Highlighting: Uncomment the following line if you want to see highlighted
 -- source code.  You need to have code2html installed and set text/html

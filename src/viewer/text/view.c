@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.574 2004/07/30 10:34:39 jonas Exp $ */
+/* $Id: view.c,v 1.575 2004/07/30 10:36:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -995,64 +995,64 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
  * needed. */
 static struct session *
 send_kbd_event(struct session *ses, struct document_view *doc_view,
-	        struct term_event *ev)
+	       struct term_event *ev)
 {
-		int func_ref;
-		enum main_action action;
-        
-		if (doc_view && send_to_frame(ses, ev) != FRAME_EVENT_IGNORED)
-			return NULL;
-        
-		action = kbd_action(KEYMAP_MAIN, ev, &func_ref);
-        
-		if (action == ACT_MAIN_QUIT) {
-			if (check_kbd_key(ev, KBD_CTRL_C))
+	int func_ref;
+	enum main_action action;
+
+	if (doc_view && send_to_frame(ses, ev) != FRAME_EVENT_IGNORED)
+		return NULL;
+
+	action = kbd_action(KEYMAP_MAIN, ev, &func_ref);
+
+	if (action == ACT_MAIN_QUIT) {
+		if (check_kbd_key(ev, KBD_CTRL_C))
 quit:
-				action = ACT_MAIN_REALLY_QUIT;
-		}
-        
-		if (do_action(ses, action, 0) == action) {
-			/* Did the session disappear in some EVENT_ABORT handler? */
-			if (action == ACT_MAIN_TAB_CLOSE
-			    || action == ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT)
-				return NULL;
-        
+			action = ACT_MAIN_REALLY_QUIT;
+	}
+
+	if (do_action(ses, action, 0) == action) {
+		/* Did the session disappear in some EVENT_ABORT handler? */
+		if (action == ACT_MAIN_TAB_CLOSE
+		    || action == ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT)
+			return NULL;
+
+		return ses;
+	}
+
+	if (action == ACT_MAIN_SCRIPTING_FUNCTION) {
+#ifdef CONFIG_SCRIPTING
+		trigger_event(func_ref, ses);
+#endif
+		return NULL;
+	}
+
+	if (check_kbd_key(ev, KBD_CTRL_C)) goto quit;
+	if (get_kbd_modifier(ev) & KBD_ALT) {
+		struct window *m;
+
+		get_kbd_modifier(ev) &= ~KBD_ALT;
+		activate_bfu_technology(ses, -1);
+		m = ses->tab->term->windows.next;
+		m->handler(m, ev, 0);
+		if (ses->tab->term->windows.next == m) {
+			delete_window(m);
+
+		} else if (doc_view
+			   && get_opt_int("document.browse.accesskey"
+					  ".priority") <= 0
+			   && try_document_key(ses, doc_view, ev)) {
+			/* The document ate the key! */
+			refresh_view(ses, doc_view, 0);
+
+			return NULL;
+		} else {
 			return ses;
 		}
-        
-		if (action == ACT_MAIN_SCRIPTING_FUNCTION) {
-#ifdef CONFIG_SCRIPTING
-			trigger_event(func_ref, ses);
-#endif
-			return NULL;
-		}
-        
-		if (check_kbd_key(ev, KBD_CTRL_C)) goto quit;
-		if (get_kbd_modifier(ev) & KBD_ALT) {
-			struct window *m;
-        
-			get_kbd_modifier(ev) &= ~KBD_ALT;
-			activate_bfu_technology(ses, -1);
-			m = ses->tab->term->windows.next;
-			m->handler(m, ev, 0);
-			if (ses->tab->term->windows.next == m) {
-				delete_window(m);
-        
-			} else if (doc_view
-				   && get_opt_int("document.browse.accesskey"
-						  ".priority") <= 0
-				   && try_document_key(ses, doc_view, ev)) {
-				/* The document ate the key! */
-				refresh_view(ses, doc_view, 0);
-        
-				return NULL;
-			} else {
-				return ses;
-			}
-			get_kbd_modifier(ev) |= KBD_ALT;
-		}
-        
-		return NULL;
+		get_kbd_modifier(ev) |= KBD_ALT;
+	}
+
+	return NULL;
 }
 
 void

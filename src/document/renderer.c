@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.54 2004/06/12 17:42:57 zas Exp $ */
+/* $Id: renderer.c,v 1.55 2004/06/22 15:25:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,7 @@ get_convert_table(unsigned char *head, int to_cp,
 		  int default_cp, int *from_cp,
 		  enum cp_status *cp_status, int ignore_server_cp)
 {
-	unsigned char *a, *b;
+	unsigned char *a;
 	unsigned char *part = head;
 	int from = -1;
 
@@ -249,15 +249,17 @@ get_convert_table(unsigned char *head, int to_cp,
 	if_assert_failed return NULL;
 
 	while (from == -1) {
+		unsigned char *b;
+
 		a = parse_http_header(part, "Content-Type", &part);
-		if (a) {
-			b = parse_http_header_param(a, "charset");
-			if (b) {
-				from = get_cp_index(b);
-				mem_free(b);
-			}
-			mem_free(a);
-		} else break;
+		if (!a) break;
+
+		b = parse_http_header_param(a, "charset");
+		if (b) {
+			from = get_cp_index(b);
+			mem_free(b);
+		}
+		mem_free(a);
 	}
 
 	if (from == -1) {

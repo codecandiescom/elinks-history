@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.130 2003/07/02 17:54:28 zas Exp $ */
+/* $Id: view.c,v 1.131 2003/07/02 17:55:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1070,7 +1070,7 @@ draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 	int vx, vy;
 	int y;
 
-	assert(t && scr && scr->vs);
+	assert(t && scr);
 
 	xp = scr->xp;
 	yp = scr->yp;

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.22 2003/12/05 17:53:51 pasky Exp $ */
+/* $Id: cgi.c,v 1.23 2003/12/05 18:02:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,11 +22,13 @@
 #ifdef ELINKS_LOCAL_CGI
 
 #include "config/options.h"
+#include "lowlevel/sysname.h"
 #include "mime/backend/common.h"
 #include "osdep/osdep.h"
 #include "protocol/file/cgi.h"
 #include "protocol/http/http.h"
 #include "protocol/uri.h"
+#include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/string.h"
 
@@ -110,6 +112,7 @@ set_vars(struct connection *conn, unsigned char *script)
 {
 	unsigned char *post = conn->uri.post;
 	unsigned char *question_mark = strchr(conn->uri.data, '?');
+	unsigned char *optstr;
 
 	if (post) {
 		unsigned char *postend = strchr(post, '\n');
@@ -145,6 +148,32 @@ set_vars(struct connection *conn, unsigned char *script)
 	if (setenv("REMOTE_ADDR", "127.0.0.1", 1)) return -1;
 	if (setenv("GATEWAY_INTERFACE", "CGI/1.1", 1)) return -1;
 	if (setenv("SCRIPT_NAME", script, 1)) return -1;
+
+	/* From now on, just HTTP-like headers are being set. Missing variables
+	 * due to full environment are not a problem according to the CGI/1.1
+	 * standard, so we already filled our environment with we have to have
+	 * there and we won't fail anymore if it won't work out. */
+
+	optstr = get_opt_str("protocol.http.user_agent");
+	if (*optstr && strcmp(optstr, " ")) {
+		unsigned char *ustr, ts[64] = "";
+
+		if (!list_empty(terminals)) {
+			unsigned int tslen = 0;
+			struct terminal *term = terminals.prev;
+
+			ulongcat(ts, &tslen, term->width, 3, 0);
+			ts[tslen++] = 'x';
+			ulongcat(ts, &tslen, term->height, 3, 0);
+		}
+		ustr = subst_user_agent(optstr, VERSION_STRING, system_name,
+					ts);
+
+		if (ustr) {
+			if (setenv("HTTP_USER_AGENT", ustr, 1)) return -1;
+			mem_free(ustr);
+		}
+	}
 
 	return 0;
 }

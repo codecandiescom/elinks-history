@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.130 2003/12/20 23:53:02 jonas Exp $ */
+/* $Id: listbox.c,v 1.131 2003/12/20 23:54:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -535,9 +535,6 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	return EVENT_NOT_PROCESSED;
 }
-
-#define keyboard_combo(event, special, key) \
-	((event)->y == (special) && upcase((event)->x) == (key))
 
 static int
 kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,

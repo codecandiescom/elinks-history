@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.113 2003/05/18 13:16:03 pasky Exp $ */
+/* $Id: http.c,v 1.114 2003/05/18 13:16:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,11 +190,7 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 	do {
 		--head;
 		if (*head < '0' || *head > '9') return -3; /* NaN */
-<<<<<<< http.c
-		*version.major += (*head - '0') * q;
-=======
 		version->major += (*head - '0') * q;
->>>>>>> 1.112
 		q *= 10;
 	} while (head != start);
 
@@ -210,11 +206,7 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 	do {
 		--head;
 		if (*head < '0' || *head > '9') return -5; /* NaN */
-<<<<<<< http.c
-		*version.minor += (*head - '0') * q;
-=======
 		version->minor += (*head - '0') * q;
->>>>>>> 1.112
 		q *= 10;
 	} while (head != start);
 	head = end;
@@ -1222,13 +1214,8 @@ again:
 	c->cache = e;
 	info->close = 0;
 	info->length = -1;
-<<<<<<< http.c
 	info->recv_version = version;
-=======
-	info->recv_version.major = version.major;
-	info->recv_version.minor = version.minor;
 
->>>>>>> 1.112
 	if ((d = parse_http_header(e->head, "Connection", NULL))
 	     || (d = parse_http_header(e->head, "Proxy-Connection", NULL))) {
 		if (!strcasecmp(d, "close")) info->close = 1;

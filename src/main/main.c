@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.204 2004/04/23 23:30:22 jonas Exp $ */
+/* $Id: main.c,v 1.205 2004/04/23 23:56:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,10 +164,8 @@ init(void)
 	} else if (remote_session_flags & SES_REMOTE_PING) {
 		/* If no instance was running return ping failure */
 		if (fd == -1) {
-			usrerror(G_("ping: 0, no reply"));
+			usrerror(G_("No running ELinks found."));
 			retval = RET_PING;
-		} else {
-			usrerror(G_("ping: 1, alive and well"));
 		}
 		terminate = 1;
 

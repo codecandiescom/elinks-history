@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.8 2003/06/26 21:19:31 pasky Exp $ */
+/* $Id: protocol.h,v 1.9 2003/06/26 21:34:17 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -7,18 +7,18 @@
 #include "sched/session.h"
 
 enum uri_scheme {
-	SCHEME_FILE,
-	SCHEME_FINGER,
-	SCHEME_FTP,
-	SCHEME_HTTP,
-	SCHEME_HTTPS,
-	SCHEME_JAVASCRIPT,
-	SCHEME_LUA,
-	SCHEME_PROXY,
+	PROTOCOL_FILE,
+	PROTOCOL_FINGER,
+	PROTOCOL_FTP,
+	PROTOCOL_HTTP,
+	PROTOCOL_HTTPS,
+	PROTOCOL_JAVASCRIPT,
+	PROTOCOL_LUA,
+	PROTOCOL_PROXY,
 
 	/* Keep these two last! */
-	SCHEME_UNKNOWN,
-	SCHEME_USER,
+	PROTOCOL_UNKNOWN,
+	PROTOCOL_USER,
 };
 
 typedef void (protocol_handler)(struct connection *);

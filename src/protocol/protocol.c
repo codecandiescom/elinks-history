@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.10 2003/06/26 21:19:31 pasky Exp $ */
+/* $Id: protocol.c,v 1.11 2003/06/26 21:34:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,21 +32,21 @@ static struct protocol_backend dummyjs_protocol_backend;
 static struct protocol_backend lua_protocol_backend;
 
 static struct protocol_backend *protocol_backends[] = {
-	/* SCHEME_FILE */	&file_protocol_backend,
-	/* SCHEME_FINGER */	&finger_protocol_backend,
-	/* SCHEME_FTP */	&ftp_protocol_backend,
-	/* SCHEME_HTTP */	&http_protocol_backend,
-	/* SCHEME_HTTPS */	&https_protocol_backend,
-	/* SCHEME_JAVASCRIPT */	&dummyjs_protocol_backend,
-	/* SCHEME_LUA */	&lua_protocol_backend,
-	/* SCHEME_PROXY */	&proxy_protocol_backend,
+	/* PROTOCOL_FILE */	&file_protocol_backend,
+	/* PROTOCOL_FINGER */	&finger_protocol_backend,
+	/* PROTOCOL_FTP */	&ftp_protocol_backend,
+	/* PROTOCOL_HTTP */	&http_protocol_backend,
+	/* PROTOCOL_HTTPS */	&https_protocol_backend,
+	/* PROTOCOL_JAVASCRIPT */	&dummyjs_protocol_backend,
+	/* PROTOCOL_LUA */	&lua_protocol_backend,
+	/* PROTOCOL_PROXY */	&proxy_protocol_backend,
 
 	/* Keep these two last! */
-	/* SCHEME_UNKNOWN */	NULL,
+	/* PROTOCOL_UNKNOWN */	NULL,
 
 	/* Internal protocol for mapping to protocol.user.* handlers. Placed
 	 * last because it's checked first and else should be ignored. */
-	/* SCHEME_USER */	&user_protocol_backend,
+	/* PROTOCOL_USER */	&user_protocol_backend,
 };
 
 
@@ -96,10 +96,10 @@ check_protocol(unsigned char *p, int l)
 		p[l] = ':';
 		/* XXX: We rely on the fact that custom is at the top of the
 		 * protocols table. */
-		return SCHEME_USER;
+		return PROTOCOL_USER;
 	}
 
-	for (i = 0; i < SCHEME_UNKNOWN; i++) {
+	for (i = 0; i < PROTOCOL_UNKNOWN; i++) {
 		if (strcasecmp(protocol_backends[i]->name, p))
 			continue;
 		p[l] = ':';
@@ -107,7 +107,7 @@ check_protocol(unsigned char *p, int l)
 	}
 
 	p[l] = ':';
-	return SCHEME_UNKNOWN;
+	return PROTOCOL_UNKNOWN;
 }
 
 int
@@ -116,7 +116,7 @@ get_prot_info(unsigned char *prot, int *port, protocol_handler **handler,
 {
 	enum uri_scheme scheme = check_protocol(prot, strlen(prot));
 
-	if (scheme == SCHEME_UNKNOWN)
+	if (scheme == PROTOCOL_UNKNOWN)
 		return -1;
 
 	if (port)
@@ -132,21 +132,21 @@ get_prot_info(unsigned char *prot, int *port, protocol_handler **handler,
 int
 get_protocol_free_syntax(enum uri_scheme scheme)
 {
-	assert(scheme != SCHEME_UNKNOWN);
+	assert(scheme != PROTOCOL_UNKNOWN);
 	return protocol_backends[scheme]->free_syntax;
 }
 
 int
 get_protocol_need_slashes(enum uri_scheme scheme)
 {
-	assert(scheme != SCHEME_UNKNOWN);
+	assert(scheme != PROTOCOL_UNKNOWN);
 	return protocol_backends[scheme]->need_slashes;
 }
 
 int
 get_protocol_need_slash_after_host(enum uri_scheme scheme)
 {
-	assert(scheme != SCHEME_UNKNOWN);
+	assert(scheme != PROTOCOL_UNKNOWN);
 	return protocol_backends[scheme]->need_slash_after_host;
 }
 

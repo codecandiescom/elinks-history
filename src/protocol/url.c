@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.73 2003/06/26 20:19:50 jonas Exp $ */
+/* $Id: url.c,v 1.74 2003/06/26 21:34:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ parse_url(unsigned char *url, int *prlen,
 	/* Get protocol */
 
 	scheme = check_protocol(url, prefix_end - url);
-	if (scheme == SCHEME_UNKNOWN) return -1;
+	if (scheme == PROTOCOL_UNKNOWN) return -1;
 
 	prefix_end++; /* ':' */
 
@@ -385,7 +385,7 @@ strip_url_password(unsigned char *url)
 
 	scheme = check_protocol(url, prlen);
 
-	if (scheme == SCHEME_UNKNOWN || get_protocol_free_syntax(scheme)) {
+	if (scheme == PROTOCOL_UNKNOWN || get_protocol_free_syntax(scheme)) {
 		/* Custom or unknown or free-syntax protocol;
 		 * keep the URL untouched. */
 		mem_free(str);

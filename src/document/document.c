@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.20 2003/11/04 23:06:11 pasky Exp $ */
+/* $Id: document.c,v 1.21 2003/11/04 23:10:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,7 +188,7 @@ shrink_format_cache(int whole)
 	assertm(format_cache_entries >= 0, "format_cache_entries underflow on entry");
 	if_assert_failed format_cache_entries = 0;
 
-	foreach (document, format_cache) {
+	foreachback (document, format_cache) {
 		if (document->refcount)
 			continue;
 
@@ -207,8 +207,10 @@ shrink_format_cache(int whole)
 				continue;
 		}
 
-		document = document->prev;
-		done_document(document->next);
+		/* Jump back to already processed entry (or list head), and let
+		 * the foreachback move it to the next entry to go. */
+		document = document->next;
+		done_document(document->prev);
 		format_cache_entries--;
 	}
 

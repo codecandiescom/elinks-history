@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.5 2003/11/11 12:42:16 jonas Exp $ */
+/* $Id: stub.c,v 1.6 2004/01/28 00:35:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 
 #include "util/conv.h"
 #include "util/stub.h"
+
 
 #ifndef HAVE_STRCASECMP
 inline int
@@ -174,5 +175,3 @@ elinks_mempcpy(void *dest, const void *src, size_t n)
 	return (void *) ((unsigned char *) memcpy(dest, src, n) + n);
 }
 #endif
-
-

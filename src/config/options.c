@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.343 2003/10/23 09:11:38 pasky Exp $ */
+/* $Id: options.c,v 1.344 2003/10/23 09:48:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,7 +270,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->capt = capt;
 	option->desc = desc;
 
-	if (option->type != OPT_ALIAS && tree->flags & OPT_LISTBOX) {
+	if (option->type != OPT_ALIAS && (tree->flags & OPT_LISTBOX)) {
 		option->box_item = mem_calloc(1, sizeof(struct listbox_item));
 		if (!option->box_item) {
 			delete_option(option);
@@ -287,7 +287,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	}
 
 	/* XXX: For allocated values we allocate in the add_opt_<type>() macro.
-	 * This involves OPT_TREE, OPT_STRING and OPT_ALIAS. */
+	 * This involves OPT_TREE and OPT_STRING. */
 	switch (type) {
 		case OPT_TREE:
 			if (!value) {
@@ -297,11 +297,13 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 			option->value.tree = value;
 			break;
 		case OPT_STRING:
-		case OPT_ALIAS:
 			if (!value) {
 				delete_option(option);
 				return NULL;
 			}
+			option->value.string = value;
+			break;
+		case OPT_ALIAS:
 			option->value.string = value;
 			break;
 		case OPT_BOOL:
@@ -340,7 +342,6 @@ free_option_value(struct option *option)
 {
 	switch (option->type) {
 		case OPT_STRING:
-		case OPT_ALIAS:
 			if (option->value.string)
 				mem_free(option->value.string);
 			break;

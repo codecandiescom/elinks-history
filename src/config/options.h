@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.75 2003/10/23 09:18:31 pasky Exp $ */
+/* $Id: options.h,v 1.76 2003/10/23 09:48:36 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -83,10 +83,10 @@ union option_value {
 	/* The OPT_COMMAND value */
 	unsigned char *(*command)(struct option *, unsigned char ***, int *);
 
-	/* Both the OPT_STRING and OPT_ALIAS strings are allocated.
-	 * The OPT_ALIAS string has variable size and should remain untouched!
-	 * It contains the name of the "real" / aliased option.
-	 * The OPT_STRING string has size MAX_STR_LEN bytes. */
+	/* The OPT_STRING string is allocated and has length MAX_STR_LEN.
+	 * The OPT_ALIAS string is NOT allocated, has variable length
+	 * (opt->max) and should remain untouched! It contains the full path to
+	 * the "real" / aliased option. */
 	unsigned char *string;
 };
 
@@ -218,7 +218,7 @@ do { \
 	add_opt(tree, path, capt, name, flags, OPT_COMMAND, 0, 0, cmd, DESC(desc));
 
 #define add_opt_alias_tree(tree, path, capt, name, flags, def, desc) \
-	add_opt(tree, path, capt, name, flags, OPT_ALIAS, 0, strlen(def), stracpy(def), DESC(desc))
+	add_opt(tree, path, capt, name, flags, OPT_ALIAS, 0, strlen(def), def, DESC(desc))
 
 #define add_opt_tree_tree(tree, path, capt, name, flags, desc) \
 	add_opt(tree, path, capt, name, flags, OPT_TREE, 0, 0, init_options_tree(), DESC(desc));

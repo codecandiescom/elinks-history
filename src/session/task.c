@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.68 2004/04/08 14:14:22 jonas Exp $ */
+/* $Id: task.c,v 1.69 2004/04/09 03:03:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,8 +170,8 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	}
 
 	m2 = get_uri_string(uri, ~URI_POST);
-	msg_box(ses->tab->term, getml(m2, task, task->pos,
-				 NULL), MSGBOX_FREE_TEXT,
+	msg_box(ses->tab->term,
+		getml(task, task->pos, m2, NULL), MSGBOX_FREE_TEXT,
 		N_("Warning"), AL_CENTER,
 		msg_text(ses->tab->term, m1, m2),
 		task, 2,

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.31 2003/11/08 13:03:50 zas Exp $ */
+/* $Id: cache.h,v 1.32 2003/11/08 13:11:41 zas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -51,7 +51,7 @@ struct cache_entry {
 #endif
 
 #ifdef DEBUG_CACHE_ENTRIES_LOCKS
-#define ce_lock_debug(ce, info) debug("cache entry %p lock %s url=%s", ce, info, ce->url)
+#define ce_lock_debug(ce, info) debug("cache entry %p lock %s now %d url= %s", ce, info, (ce)->locks, (ce)->url)
 #define ce_sanity_check(ce) do { assert(ce); assertm((ce)->locks >= 0, "Cache entry lock underflow."); } while (0)
 #else
 #define ce_lock_debug(ce, info)

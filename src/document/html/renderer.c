@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.509 2004/12/18 01:48:32 pasky Exp $ */
+/* $Id: renderer.c,v 1.510 2004/12/18 02:17:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -876,6 +876,7 @@ new_link(struct document *document, int link_number,
 
 	} else {
 		struct form_control *fc = format.form;
+		struct form *form;
 
 		switch (fc->type) {
 		case FC_TEXT:
@@ -901,8 +902,15 @@ new_link(struct document *document, int link_number,
 			link->type = LINK_BUTTON;
 		}
 		link->data.form_control = fc;
-		assert(fc->form);
-		link->target = null_or_stracpy(fc->form->target);
+		/* At this point, format.form might already be set but
+		 * the form_control not registered through SP_CONTROL
+		 * yet, therefore without fc->form set. It is always
+		 * after the "good" last form was already processed,
+		 * though, so we can safely just take that. */
+		form = fc->form;
+		if (!form && !list_empty(document->forms))
+			form = document->forms.next;
+		link->target = null_or_stracpy(form ? form->target : NULL);
 	}
 
 	link->color.background = format.bg;

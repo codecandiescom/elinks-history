@@ -1,3 +1,42 @@
+Sat Sep  4 12:34:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Add smart prefix 'fsd' for searching the Free Software Directory.  
+
+Sat Sep  4 11:31:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Fix potentially dangerous printf(gettext()) usage to printf(%s,
+	gettext()). They caused the gettextized string to be marked with
+	c-format.  
+
+Sat Sep  4 11:19:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, bookmarks/backend/xbel.c, config/cmdline.c,
+	intl/gettext/libintl.h, lowlevel/home.c, lowlevel/interlink.c,
+	lowlevel/select.c, mime/backend/mailcap.c, terminal/kbd.c,
+	viewer/dump/dump.c:
+
+	Revert G_() abbreviation introduction and always use gettext().
+	Apparently xgettext cannot recognize them. Hopefully some of the
+	translated messages has not been lost.  
+
+Sat Sep  4 11:08:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Temporary fix for pl.po update. Either something got lost or it
+	should be ok to remove ending \n reported by msgfmt.  
+
+Sat Sep  4 10:53:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Update of polish translations. Patch by Adam Golebiowski
+	<adamg@pld-linux.org>.  
+
 Fri Sep  3 19:45:34 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/mime/mime.c:

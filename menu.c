@@ -24,6 +24,9 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 #ifdef HAVE_LUA
 			" Lua (patch 12 wip)"
 #endif
+#ifdef IPV6
+			" IPv6"
+#endif
 	);
 #endif
 	msg_box(term, NULL, TEXT(T_ABOUT), AL_CENTER, s, NULL, 1, TEXT(T_OK), NULL, B_ENTER | B_ESC);

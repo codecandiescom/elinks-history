@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.33 2003/08/23 06:18:22 jonas Exp $ */
+/* $Id: form.c,v 1.34 2003/09/01 13:14:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,8 +216,7 @@ draw_form_entry(struct terminal *t, struct document_view *f, struct link *l)
 		case FC_TEXT:
 		case FC_PASSWORD:
 		case FC_FILE:
-			int_lower_bound(&fs->vpos, fs->state - frm->size + 1);
-			int_upper_bound(&fs->vpos, fs->state);
+			int_bounds(&fs->vpos, fs->state - frm->size + 1, fs->state);
 			if (!l->n) break;
 
 			y = l->pos[0].y + yp - vy;

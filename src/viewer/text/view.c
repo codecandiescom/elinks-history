@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.196 2003/08/29 23:28:32 jonas Exp $ */
+/* $Id: view.c,v 1.197 2003/09/01 13:13:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -529,8 +529,7 @@ hscroll(struct session *ses, struct document_view *f, int a)
 	if_assert_failed return;
 
 	f->vs->view_posx += a;
-	int_upper_bound(&f->vs->view_posx, f->document->x - 1);
-	int_lower_bound(&f->vs->view_posx, 0);
+	int_bounds(&f->vs->view_posx, 0, f->document->x - 1);
 
 	if (c_in_view(f)) return;
 	find_link(f, 1, 0);
@@ -554,7 +553,6 @@ x_end(struct session *ses, struct document_view *f, int a)
 	if_assert_failed return;
 
 	f->vs->view_posx = 0;
-	/* XXX: shouldn't this be int_upper_bound instead ? --Zas */
 	int_lower_bound(&f->vs->view_pos, f->document->y - f->document->opt.yw);
 	int_lower_bound(&f->vs->view_pos, 0);
 	find_link(f, -1, 0);
@@ -1185,8 +1183,7 @@ quit:
 		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
 			int tab = ev->x / (ses->tab->term->x / nb_tabs);
 
-			int_lower_bound(&tab, 0);
-			int_upper_bound(&tab, nb_tabs - 1);
+			int_bounds(&tab, 0, nb_tabs - 1);
 			switch_to_tab(ses->tab->term, tab, nb_tabs);
 			goto x;
 		}

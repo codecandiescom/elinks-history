@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.41 2003/08/28 16:40:43 pasky Exp $ */
+/* $Id: link.c,v 1.42 2003/09/01 13:16:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,8 +402,7 @@ set_pos_x(struct document_view *f, struct link *l)
 	}
 	if (xl == MAXINT) return;
 	/*if ((f->vs->view_posx = xm - f->xw) > xl) f->vs->view_posx = xl;*/
-	int_lower_bound(&f->vs->view_posx, xm - f->xw);
-	int_upper_bound(&f->vs->view_posx, xl);
+	int_bounds(&f->vs->view_posx, xm - f->xw, xl);
 }
 
 void
@@ -422,8 +421,7 @@ set_pos_y(struct document_view *f, struct link *l)
 		yl = int_min(yl, l->pos[i].y);
 	}
 	f->vs->view_pos = (ym + yl) / 2 - f->document->opt.yw / 2;
-	int_upper_bound(&f->vs->view_pos, f->document->y - f->document->opt.yw);
-	int_lower_bound(&f->vs->view_pos, 0);
+	int_bounds(&f->vs->view_pos, 0, f->document->y - f->document->opt.yw);
 }
 
 void

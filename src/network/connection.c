@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.13 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: connection.c,v 1.14 2003/05/06 21:48:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -693,14 +693,11 @@ try_connection(struct connection *c)
 {
 	struct h_conn *hc = is_host_on_list(c);
 
-	if (hc) {
-		if (hc->conn >= get_opt_int("connection.max_connections_to_host"))
-			return try_to_suspend_connection(c, hc->host) ? 0 : -1;
-	}
+	if (hc && hc->conn >= get_opt_int("connection.max_connections_to_host"))
+		return try_to_suspend_connection(c, hc->host) ? 0 : -1;
 
-	if (active_connections >= get_opt_int("connection.max_connections")) {
+	if (active_connections >= get_opt_int("connection.max_connections"))
 		return try_to_suspend_connection(c, NULL) ? 0 : -1;
-	}
 
 	run_connection(c);
 	return 1;
@@ -804,12 +801,12 @@ proxy_probe_no_proxy(unsigned char *url, unsigned char *no_proxy)
 {
 	unsigned char *slash = strchr(url, '/');
 
-	if (slash) *slash = 0;
+	if (slash) *slash = '\0';
 
 	while (no_proxy && *no_proxy) {
 		unsigned char *jumper = strchr(no_proxy, ',');
 
-		if (jumper) *jumper = 0;
+		if (jumper) *jumper = '\0';
 		if (strstr(url, no_proxy)) {
 			if (jumper) *jumper = ',';
 			if (slash) *slash = '/';
@@ -999,31 +996,18 @@ load_url(unsigned char *url, unsigned char *prev_url,
 	c->count = connection_count++;
 	c->url = u;
 	c->prev_url = prev_url;
-	c->running = 0;
-	c->prev_error = 0;
 
-	if (cache_mode >= NC_RELOAD || !e || e->frag.next == &e->frag
-	    || ((struct fragment *) e->frag.next)->offset) {
-		c->from = 0;
-	} else {
+	if (cache_mode < NC_RELOAD && e && e->frag.next != &e->frag
+	    && !((struct fragment *) e->frag.next)->offset)
 		c->from = ((struct fragment *) e->frag.next)->length;
-	}
 
-	memset(c->pri, 0, sizeof c->pri);
 	c->pri[pri] = 1;
 	c->cache_mode = cache_mode;
 	c->sock1 = c->sock2 = -1;
 	c->content_encoding = ENCODING_NONE;
 	c->stream_pipes[0] = c->stream_pipes[1] = -1;
-	c->dnsquery = NULL;
-	c->conn_info = NULL;
-	c->info = NULL;
-	c->buffer = NULL;
-	c->cache = NULL;
-	c->tries = 0;
 	init_list(c->statuss);
 	c->est_length = -1;
-	c->unrestartable = 0;
 	c->prg.start = start;
 	c->prg.timer = -1;
 	c->timer = -1;
@@ -1193,17 +1177,6 @@ set_timeout(struct connection *c)
 				 * 500, (void (*)(void *))connection_timeout_1, c);
 }
 
-#if 0
-/* Not used for now. */
-void
-reset_timeout(struct connection *c)
-{
-	if (c->timer != -1) {
-		kill_timer(c->timer);
-		c->timer = -1;
-	}
-}
-#endif
 
 void
 abort_all_connections()
@@ -1237,3 +1210,17 @@ abort_background_connections()
 			i++;
 	}
 }
+
+/* FIXME: trash it ? --Zas */
+#if 0
+/* Not used for now. */
+void
+reset_timeout(struct connection *c)
+{
+	if (c->timer != -1) {
+		kill_timer(c->timer);
+		c->timer = -1;
+	}
+}
+#endif
+

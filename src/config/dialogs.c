@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.84 2003/10/26 13:25:39 zas Exp $ */
+/* $Id: dialogs.c,v 1.85 2003/10/26 14:04:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,12 +145,12 @@ push_info_button(struct dialog_data *dlg_data,
 
 
 static int
-check_valid_option(struct dialog_data *dlg_data, struct widget_data *di)
+check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct option *option = dlg_data->dlg->udata;
 	struct session *ses = dlg_data->dlg->udata2;
-	unsigned char *value = di->cdata;
+	unsigned char *value = widget_data->cdata;
 	unsigned char *chinon;
 
 	commandline = 1;

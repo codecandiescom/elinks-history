@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.28 2003/10/26 13:25:39 zas Exp $ */
+/* $Id: group.c,v 1.29 2003/10/26 14:04:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,24 +20,24 @@
 
 
 static inline int
-base_group_width(struct terminal *term, struct widget_data *item)
+base_group_width(struct terminal *term, struct widget_data *widget_data)
 {
-	if (item->widget->type == D_CHECKBOX)
+	if (widget_data->widget->type == D_CHECKBOX)
 		return 4;
 
-	if (item->widget->type == D_BUTTON)
-		return strlen(item->widget->text) + 5;
+	if (widget_data->widget->type == D_BUTTON)
+		return strlen(widget_data->widget->text) + 5;
 
-	return item->widget->dlen + 1;
+	return widget_data->widget->dlen + 1;
 }
 
 /* TODO: We should join these two functions in one. --Zas */
 inline void
 max_group_width(struct terminal *term, int intl, unsigned char **texts,
-		struct widget_data *item, int n, int *w)
+		struct widget_data *widget_data, int n, int *w)
 {
 	int ww = 0;
-	int base = base_group_width(term, item);
+	int base = base_group_width(term, widget_data);
 
 	while (n--) {
 		int wx;
@@ -49,7 +49,7 @@ max_group_width(struct terminal *term, int intl, unsigned char **texts,
 		if (n) wx++;
 		ww += wx;
 		texts++;
-		item++;
+		widget_data++;
 	}
 
 	int_lower_bound(w, ww);
@@ -57,9 +57,9 @@ max_group_width(struct terminal *term, int intl, unsigned char **texts,
 
 inline void
 min_group_width(struct terminal *term, int intl, unsigned char **texts,
-		struct widget_data *item, int n, int *w)
+		struct widget_data *widget_data, int n, int *w)
 {
-	int base = base_group_width(term, item);
+	int base = base_group_width(term, widget_data);
 	int wt = 0;
 
 	while (n--) {
@@ -71,7 +71,7 @@ min_group_width(struct terminal *term, int intl, unsigned char **texts,
 
 		int_lower_bound(&wt, wx);
 		texts++;
-		item++;
+		widget_data++;
 	}
 
 	*w = wt + base;
@@ -79,11 +79,11 @@ min_group_width(struct terminal *term, int intl, unsigned char **texts,
 
 void
 dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
-		 unsigned char **texts, struct widget_data *item,
+		 unsigned char **texts, struct widget_data *widget_data,
 		 int n, int x, int *y, int w, int *rw)
 {
 	int nx = 0;
-	int base = base_group_width(t2, item);
+	int base = base_group_width(t2, widget_data);
 	struct color_pair *color = get_bfu_color(term, "dialog.text");
 
 	while (n--) {
@@ -106,24 +106,24 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 		}
 
 		if (term) {
-			int is_checkbox = (item->widget->type == D_CHECKBOX);
+			int is_checkbox = (widget_data->widget->type == D_CHECKBOX);
 			int xnx = x + nx;
 
 			draw_text(term, xnx + 4 * is_checkbox, *y,
 				  text, ((sl == -1) ? strlen(text) : sl),
 				  0, color);
-			item->x = xnx + !is_checkbox * (sl + 1);
-			item->y = *y;
-			if (item->widget->type == D_FIELD ||
-			    item->widget->type == D_FIELD_PASS)
-				item->l = item->widget->dlen;
+			widget_data->x = xnx + !is_checkbox * (sl + 1);
+			widget_data->y = *y;
+			if (widget_data->widget->type == D_FIELD ||
+			    widget_data->widget->type == D_FIELD_PASS)
+				widget_data->l = widget_data->widget->dlen;
 		}
 
 		if (rw) int_bounds(rw, nx + wx, w);
 
 		nx += wx + 1;
 		texts++;
-		item++;
+		widget_data++;
 	}
 	(*y)++;
 }

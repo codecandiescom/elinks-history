@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.38 2003/10/26 12:52:32 zas Exp $ */
+/* $Id: inphist.c,v 1.39 2003/10/26 14:04:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,13 +31,13 @@ tab_compl_n(struct terminal *term, unsigned char *item, int len,
 {
 	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->x, term->y, 0);
 	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
-	struct widget_data *di = selected_widget(dlg_data);
+	struct widget_data *widget_data = selected_widget(dlg_data);
 
-	int_upper_bound(&len, di->widget->dlen - 1);
-	memcpy(di->cdata, item, len);
-	di->cdata[len] = 0;
-	di->cpos = len;
-	di->vpos = 0;
+	int_upper_bound(&len, widget_data->widget->dlen - 1);
+	memcpy(widget_data->cdata, item, len);
+	widget_data->cdata[len] = 0;
+	widget_data->cpos = len;
+	widget_data->vpos = 0;
 	dialog_func(win, &ev, 0);
 }
 
@@ -58,14 +58,14 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 	     struct window *win)
 {
 	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
-	struct widget_data *di = selected_widget(dlg_data);
-	int cdata_len = strlen(di->cdata);
+	struct widget_data *widget_data = selected_widget(dlg_data);
+	int cdata_len = strlen(widget_data->cdata);
 	int n = 0;
 	struct input_history_item *hi;
 	struct menu_item *items = NULL;
 
 	foreach (hi, *history) {
-		if (strncmp(di->cdata, hi->d, cdata_len)) continue;
+		if (strncmp(widget_data->cdata, hi->d, cdata_len)) continue;
 
 		if (!realloc_menu_items(&items, n)) {
 			if (items) mem_free(items);
@@ -97,8 +97,8 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 			 struct window *win)
 {
 	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
-	struct widget_data *di = selected_widget(dlg_data);
-	int cdata_len = strlen(di->cdata);
+	struct widget_data *widget_data = selected_widget(dlg_data);
+	int cdata_len = strlen(widget_data->cdata);
 	int match_len = cdata_len;
 	/* Maximum number of characters in a match. Characters after this
 	 * position are varying in other matches. Zero means that no max has
@@ -109,16 +109,16 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 
 	foreach (cur, *history) {
 		unsigned char *c = cur->d - 1;
-		unsigned char *m = (match ? match : di->cdata) - 1;
+		unsigned char *m = (match ? match : widget_data->cdata) - 1;
 		int len = 0;
 
 		while (*++m && *++c && *m == *c && (++len, !max || len < max));
 		if (len < cdata_len)
 			continue;
-		if (len < match_len || (*c && m != di->cdata + len))
+		if (len < match_len || (*c && m != widget_data->cdata + len))
 			max = len;
 		match = cur->d;
-		match_len = (m == di->cdata + len && !*m) ? strlen(cur->d) : len;
+		match_len = (m == widget_data->cdata + len && !*m) ? strlen(cur->d) : len;
 	}
 
 	if (!match) return;

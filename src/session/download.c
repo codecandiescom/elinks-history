@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.118 2003/10/26 13:25:40 zas Exp $ */
+/* $Id: download.c,v 1.119 2003/10/26 14:04:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,9 +164,8 @@ do_abort_download(struct file_download *file_download)
 	abort_download(file_download, 1);
 }
 
-
 static int
-dlg_set_notify(struct dialog_data *dlg_data, struct widget_data *di)
+dlg_set_notify(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
 
@@ -176,7 +175,7 @@ dlg_set_notify(struct dialog_data *dlg_data, struct widget_data *di)
 }
 
 static int
-dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *di)
+dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	register_bottom_half((void (*)(void *)) do_abort_download,
 			     dlg_data->dlg->udata);
@@ -185,7 +184,7 @@ dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *di)
 
 
 static int
-dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *di)
+dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	register_bottom_half((void (*)(void *)) undisplay_download,
 			     dlg_data->dlg->udata);

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.60 2003/10/26 13:25:39 zas Exp $ */
+/* $Id: msgbox.c,v 1.61 2003/10/26 14:04:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,13 +64,13 @@ msg_box_fn(struct dialog_data *dlg_data)
 }
 
 static int
-msg_box_button(struct dialog_data *dlg_data, struct widget_data *di)
+msg_box_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	void (*fn)(void *) = (void (*)(void *)) di->widget->udata;
+	void (*fn)(void *) = (void (*)(void *)) widget_data->widget->udata;
 	void *data = dlg_data->dlg->udata2;
 
 	if (fn) fn(data);
-	cancel_dialog(dlg_data, di);
+	cancel_dialog(dlg_data, widget_data);
 
 	return 0;
 }

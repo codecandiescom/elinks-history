@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.101 2003/10/26 13:25:39 zas Exp $ */
+/* $Id: dialogs.c,v 1.102 2003/10/26 14:04:09 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -93,7 +93,7 @@ void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *,
 
 /* Callback for the "add" button in the bookmark manager */
 static int
-push_add_button(struct dialog_data *dlg_data, struct widget_data *di)
+push_add_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	launch_bm_add_doc_dialog(dlg_data->win->term, dlg_data,
 				 (struct session *) dlg_data->dlg->udata);
@@ -108,7 +108,7 @@ void launch_bm_search_doc_dialog(struct terminal *, struct dialog_data *,
 
 /* Callback for the "search" button in the bookmark manager */
 static int
-push_search_button(struct dialog_data *dlg_data, struct widget_data *di)
+push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	launch_bm_search_doc_dialog(dlg_data->win->term, dlg_data,
 				    (struct session *) dlg_data->dlg->udata);
@@ -161,7 +161,7 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 }
 
 static int
-push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *di)
+push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	input_field(dlg_data->win->term, NULL, 1,
 		    N_("Add folder"), N_("Folder name"),

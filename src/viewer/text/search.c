@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.68 2003/10/26 13:25:41 zas Exp $ */
+/* $Id: search.c,v 1.69 2003/10/26 14:04:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -938,27 +938,27 @@ struct search_dlg_hop {
 };
 
 static int
-search_dlg_cancel(struct dialog_data *dlg_data, struct widget_data *di)
+search_dlg_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	void (*fn)(void *) = di->widget->udata;
+	void (*fn)(void *) = widget_data->widget->udata;
 	struct search_dlg_hop *hop = dlg_data->dlg->udata2;
 	void *data = hop->data;
 
 	if (fn) fn(data);
-	cancel_dialog(dlg_data, di);
+	cancel_dialog(dlg_data, widget_data);
 
 	return 0;
 }
 
 static int
-search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *di)
+search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	void (*fn)(void *, unsigned char *) = di->widget->udata;
+	void (*fn)(void *, unsigned char *) = widget_data->widget->udata;
 	struct search_dlg_hop *hop = dlg_data->dlg->udata2;
 	void *data = hop->data;
 	unsigned char *text = dlg_data->widgets_data->cdata;
 
-	update_dialog_data(dlg_data, di);
+	update_dialog_data(dlg_data, widget_data);
 
 	/* TODO: Some generic update_opt() or so. --pasky */
 
@@ -987,7 +987,7 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *di)
 	add_to_input_history(dlg_data->dlg->widgets->history, text, 1);
 
 	if (fn) fn(data, text);
-	ok_dialog(dlg_data, di);
+	ok_dialog(dlg_data, widget_data);
 	return 0;
 }
 

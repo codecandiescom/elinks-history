@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.49 2003/10/26 13:25:40 zas Exp $ */
+/* $Id: edit.c,v 1.50 2003/10/26 14:04:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,10 +30,10 @@ static unsigned char *edit_add_msg[] = {
 
 
 static int
-my_cancel_dialog(struct dialog_data *dlg_data, struct widget_data *wd)
+my_cancel_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	((void (*)(struct dialog *)) dlg_data->dlg->widgets[4].data)(dlg_data->dlg);
-	return cancel_dialog(dlg_data, wd);
+	return cancel_dialog(dlg_data, widget_data);
 }
 
 

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.61 2003/10/26 13:25:39 zas Exp $ */
+/* $Id: inpfield.c,v 1.62 2003/10/26 14:04:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,15 +30,15 @@
 
 
 int
-check_number(struct dialog_data *dlg_data, struct widget_data *di)
+check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	unsigned char *end;
 	long l;
 
 	errno = 0;
-	l = strtol(di->cdata, (char **)&end, 10);
+	l = strtol(widget_data->cdata, (char **)&end, 10);
 
-	if (errno || !*di->cdata || *end) {
+	if (errno || !*widget_data->cdata || *end) {
 		msg_box(dlg_data->win->term, NULL, 0,
 			N_("Bad number"), AL_CENTER,
 			N_("Number expected in field"),
@@ -47,7 +47,7 @@ check_number(struct dialog_data *dlg_data, struct widget_data *di)
 		return 1;
 	}
 
-	if (l < di->widget->gid || l > di->widget->gnum) {
+	if (l < widget_data->widget->gid || l > widget_data->widget->gnum) {
 		msg_box(dlg_data->win->term, NULL, 0,
 			N_("Bad number"), AL_CENTER,
 			N_("Number out of range"),
@@ -60,11 +60,11 @@ check_number(struct dialog_data *dlg_data, struct widget_data *di)
 }
 
 int
-check_nonempty(struct dialog_data *dlg_data, struct widget_data *di)
+check_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	unsigned char *p;
 
-	for (p = di->cdata; *p; p++)
+	for (p = widget_data->cdata; *p; p++)
 		if (*p > ' ')
 			return 0;
 
@@ -79,33 +79,33 @@ check_nonempty(struct dialog_data *dlg_data, struct widget_data *di)
 
 void
 dlg_format_field(struct terminal *term, struct terminal *t2,
-		 struct widget_data *item,
+		 struct widget_data *widget_data,
 		 int x, int *y, int w, int *rw, enum format_align align)
 {
-	item->x = x;
-	item->y = *y;
-	item->l = w;
+	widget_data->x = x;
+	widget_data->y = *y;
+	widget_data->l = w;
 
 	if (rw && w > *rw) *rw = w;
 	(*y)++;
 }
 
 static int
-input_field_cancel(struct dialog_data *dlg_data, struct widget_data *di)
+input_field_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	void (*fn)(void *) = di->widget->udata;
+	void (*fn)(void *) = widget_data->widget->udata;
 	void *data = dlg_data->dlg->udata2;
 
 	if (fn) fn(data);
-	cancel_dialog(dlg_data, di);
+	cancel_dialog(dlg_data, widget_data);
 
 	return 0;
 }
 
 static int
-input_field_ok(struct dialog_data *dlg_data, struct widget_data *di)
+input_field_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	void (*fn)(void *, unsigned char *) = di->widget->udata;
+	void (*fn)(void *, unsigned char *) = widget_data->widget->udata;
 	void *data = dlg_data->dlg->udata2;
 	unsigned char *text = dlg_data->widgets_data->cdata;
 
@@ -114,7 +114,7 @@ input_field_ok(struct dialog_data *dlg_data, struct widget_data *di)
 	add_to_input_history(dlg_data->dlg->widgets->history, text, 1);
 
 	if (fn) fn(data, text);
-	ok_dialog(dlg_data, di);
+	ok_dialog(dlg_data, widget_data);
 	return 0;
 }
 
@@ -221,60 +221,60 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 
 
 static inline void
-display_field_do(struct widget_data *di, struct dialog_data *dlg_data,
+display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		 int sel, int hide)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
 
-	int_bounds(&di->vpos, di->cpos - di->l + 1, di->cpos);
-	int_lower_bound(&di->vpos, 0);
+	int_bounds(&widget_data->vpos, widget_data->cpos - widget_data->l + 1, widget_data->cpos);
+	int_lower_bound(&widget_data->vpos, 0);
 
 	color = get_bfu_color(term, "dialog.field");
 	if (color)
-		draw_area(term, di->x, di->y, di->l, 1, ' ', 0, color);
+		draw_area(term, widget_data->x, widget_data->y, widget_data->l, 1, ' ', 0, color);
 
 	color = get_bfu_color(term, "dialog.field-text");
 	if (color) {
-		int len = strlen(di->cdata + di->vpos);
-		int l = int_min(len, di->l);
+		int len = strlen(widget_data->cdata + widget_data->vpos);
+		int l = int_min(len, widget_data->l);
 
 		if (!hide) {
-			draw_text(term, di->x, di->y, di->cdata + di->vpos, l,
+			draw_text(term, widget_data->x, widget_data->y, widget_data->cdata + widget_data->vpos, l,
 				  0, color);
 		} else {
-			draw_area(term, di->x, di->y, l, 1, '*', 0, color);
+			draw_area(term, widget_data->x, widget_data->y, l, 1, '*', 0, color);
 		}
 	}
 
 	if (sel) {
-		int x = di->x + di->cpos - di->vpos;
+		int x = widget_data->x + widget_data->cpos - widget_data->vpos;
 
-		set_cursor(term, x, di->y, 0);
-		set_window_ptr(dlg_data->win, di->x, di->y);
+		set_cursor(term, x, widget_data->y, 0);
+		set_window_ptr(dlg_data->win, widget_data->x, widget_data->y);
 	}
 }
 
 static void
-display_field(struct widget_data *di, struct dialog_data *dlg_data, int sel)
+display_field(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
 {
-	display_field_do(di, dlg_data, sel, 0);
+	display_field_do(widget_data, dlg_data, sel, 0);
 }
 
 static void
-display_field_pass(struct widget_data *di, struct dialog_data *dlg_data, int sel)
+display_field_pass(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
 {
-	display_field_do(di, dlg_data, sel, 1);
+	display_field_do(widget_data, dlg_data, sel, 1);
 }
 
 static void
-init_field(struct widget_data *widget, struct dialog_data *dlg_data,
+init_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	   struct term_event *ev)
 {
-	if (widget->widget->history) {
+	if (widget_data->widget->history) {
 		struct input_history_item *item;
 
-		foreach (item, widget->widget->history->items) {
+		foreach (item, widget_data->widget->history->items) {
 			int dsize = strlen(item->d) + 1;
 			struct input_history_item *hi;
 
@@ -283,55 +283,55 @@ init_field(struct widget_data *widget, struct dialog_data *dlg_data,
 			if (!hi) continue;
 
 			memcpy(hi->d, item->d, dsize);
-			add_to_list(widget->history, hi);
+			add_to_list(widget_data->history, hi);
 		}
 	}
 
-	widget->cpos = strlen(widget->cdata);
+	widget_data->cpos = strlen(widget_data->cdata);
 }
 
 static int
-mouse_field(struct widget_data *di, struct dialog_data *dlg_data,
+mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
-	if (ev->y != di->y || ev->x < di->x
-	    || ev->x >= di->x + di->l)
+	if (ev->y != widget_data->y || ev->x < widget_data->x
+	    || ev->x >= widget_data->x + widget_data->l)
 		return EVENT_NOT_PROCESSED;
 
 	switch (ev->b & BM_BUTT) {
 		case B_WHEEL_UP:
 			if ((ev->b & BM_ACT) == B_DOWN &&
-			    (void *) di->cur_hist->prev != &di->history) {
-				di->cur_hist = di->cur_hist->prev;
-				dlg_set_history(di);
+			    (void *) widget_data->cur_hist->prev != &widget_data->history) {
+				widget_data->cur_hist = widget_data->cur_hist->prev;
+				dlg_set_history(widget_data);
 				goto dsp_f;
 			}
 			return EVENT_PROCESSED;
 
 		case B_WHEEL_DOWN:
 			if ((ev->b & BM_ACT) == B_DOWN &&
-			    (void *) di->cur_hist != &di->history) {
-				di->cur_hist = di->cur_hist->next;
-				dlg_set_history(di);
+			    (void *) widget_data->cur_hist != &widget_data->history) {
+				widget_data->cur_hist = widget_data->cur_hist->next;
+				dlg_set_history(widget_data);
 				goto dsp_f;
 			}
 			return EVENT_PROCESSED;
 	}
 
-	di->cpos = di->vpos + ev->x - di->x;
-	int_upper_bound(&di->cpos, strlen(di->cdata));
+	widget_data->cpos = widget_data->vpos + ev->x - widget_data->x;
+	int_upper_bound(&widget_data->cpos, strlen(widget_data->cdata));
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-	dlg_data->selected = di - dlg_data->widgets_data;
+	dlg_data->selected = widget_data - dlg_data->widgets_data;
 
 dsp_f:
-	display_dlg_item(dlg_data, di, 1);
+	display_dlg_item(dlg_data, widget_data, 1);
 	return EVENT_PROCESSED;
 }
 
 /* XXX: The world's best candidate for massive goto cleanup! --pasky */
 static int
-kbd_field(struct widget_data *di, struct dialog_data *dlg_data,
+kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	  struct term_event *ev)
 {
 	struct window *win = dlg_data->win;
@@ -339,79 +339,79 @@ kbd_field(struct widget_data *di, struct dialog_data *dlg_data,
 
 	switch (kbd_action(KM_EDIT, ev, NULL)) {
 		case ACT_UP:
-			if ((void *) di->cur_hist->prev != &di->history) {
-				di->cur_hist = di->cur_hist->prev;
-				dlg_set_history(di);
+			if ((void *) widget_data->cur_hist->prev != &widget_data->history) {
+				widget_data->cur_hist = widget_data->cur_hist->prev;
+				dlg_set_history(widget_data);
 				goto dsp_f;
 			}
 			break;
 
 		case ACT_DOWN:
-			if ((void *) di->cur_hist != &di->history) {
-				di->cur_hist = di->cur_hist->next;
-				dlg_set_history(di);
+			if ((void *) widget_data->cur_hist != &widget_data->history) {
+				widget_data->cur_hist = widget_data->cur_hist->next;
+				dlg_set_history(widget_data);
 				goto dsp_f;
 			}
 			break;
 
 		case ACT_RIGHT:
-			if (di->cpos < strlen(di->cdata)) di->cpos++;
+			if (widget_data->cpos < strlen(widget_data->cdata)) widget_data->cpos++;
 			goto dsp_f;
 
 		case ACT_LEFT:
-			if (di->cpos > 0) di->cpos--;
+			if (widget_data->cpos > 0) widget_data->cpos--;
 			goto dsp_f;
 
 		case ACT_HOME:
-			di->cpos = 0;
+			widget_data->cpos = 0;
 			goto dsp_f;
 
 		case ACT_END:
-			di->cpos = strlen(di->cdata);
+			widget_data->cpos = strlen(widget_data->cdata);
 			goto dsp_f;
 
 		case ACT_BACKSPACE:
-			if (di->cpos) {
-				memmove(di->cdata + di->cpos - 1,
-					di->cdata + di->cpos,
-					strlen(di->cdata) - di->cpos + 1);
-				di->cpos--;
+			if (widget_data->cpos) {
+				memmove(widget_data->cdata + widget_data->cpos - 1,
+					widget_data->cdata + widget_data->cpos,
+					strlen(widget_data->cdata) - widget_data->cpos + 1);
+				widget_data->cpos--;
 			}
 			goto dsp_f;
 
 		case ACT_DELETE:
 			{
-				int cdata_len = strlen(di->cdata);
+				int cdata_len = strlen(widget_data->cdata);
 
-				if (di->cpos >= cdata_len) goto dsp_f;
+				if (widget_data->cpos >= cdata_len) goto dsp_f;
 
-				memmove(di->cdata + di->cpos,
-					di->cdata + di->cpos + 1,
-					cdata_len - di->cpos + 1);
+				memmove(widget_data->cdata + widget_data->cpos,
+					widget_data->cdata + widget_data->cpos + 1,
+					cdata_len - widget_data->cpos + 1);
 				goto dsp_f;
 			}
 
 		case ACT_KILL_TO_BOL:
-			memmove(di->cdata,
-					di->cdata + di->cpos,
-					strlen(di->cdata + di->cpos) + 1);
-			di->cpos = 0;
+			memmove(widget_data->cdata,
+					widget_data->cdata + widget_data->cpos,
+					strlen(widget_data->cdata + widget_data->cpos) + 1);
+			widget_data->cpos = 0;
 			goto dsp_f;
 
 		case ACT_KILL_TO_EOL:
-			di->cdata[di->cpos] = 0;
+			widget_data->cdata[widget_data->cpos] = 0;
 			goto dsp_f;
 
 		case ACT_COPY_CLIPBOARD:
 			/* Copy to clipboard */
-			set_clipboard_text(di->cdata);
+			set_clipboard_text(widget_data->cdata);
 			break;	/* We don't need to redraw */
 
 		case ACT_CUT_CLIPBOARD:
 			/* Cut to clipboard */
-			set_clipboard_text(di->cdata);
-			di->cdata[0] = 0;
-			di->cpos = 0;
+			set_clipboard_text(widget_data->cdata);
+			widget_data->cdata[0] = 0;
+			widget_data->cpos = 0;
 			goto dsp_f;
 
 		case ACT_PASTE_CLIPBOARD:
@@ -421,38 +421,38 @@ kbd_field(struct widget_data *di, struct dialog_data *dlg_data,
 
 				if (!clipboard) goto dsp_f;
 
-				safe_strncpy(di->cdata, clipboard, di->widget->dlen);
-				di->cpos = strlen(di->cdata);
+				safe_strncpy(widget_data->cdata, clipboard, widget_data->widget->dlen);
+				widget_data->cpos = strlen(widget_data->cdata);
 				mem_free(clipboard);
 				goto dsp_f;
 			}
 
 		case ACT_AUTO_COMPLETE:
-			do_tab_compl(term, &di->history, win);
+			do_tab_compl(term, &widget_data->history, win);
 			goto dsp_f;
 
 		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
-			do_tab_compl_unambiguous(term, &di->history, win);
+			do_tab_compl_unambiguous(term, &widget_data->history, win);
 			goto dsp_f;
 
 		default:
 			if (ev->x >= ' ' && ev->x < 0x100 && !ev->y) {
-				int cdata_len = strlen(di->cdata);
+				int cdata_len = strlen(widget_data->cdata);
 
-				if (cdata_len >= di->widget->dlen - 1)
+				if (cdata_len >= widget_data->widget->dlen - 1)
 					goto dsp_f;
 
-				memmove(di->cdata + di->cpos + 1,
-					di->cdata + di->cpos,
-					cdata_len - di->cpos + 1);
-				di->cdata[di->cpos++] = ev->x;
+				memmove(widget_data->cdata + widget_data->cpos + 1,
+					widget_data->cdata + widget_data->cpos,
+					cdata_len - widget_data->cpos + 1);
+				widget_data->cdata[widget_data->cpos++] = ev->x;
 				goto dsp_f;
 			}
 	}
 	return EVENT_NOT_PROCESSED;
 
 dsp_f:
-	display_dlg_item(dlg_data, di, 1);
+	display_dlg_item(dlg_data, widget_data, 1);
 	redraw_from_window(dlg_data->win);
 	return EVENT_PROCESSED;
 }

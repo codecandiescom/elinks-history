@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.61 2003/10/26 13:25:40 zas Exp $ */
+/* $Id: dialogs.c,v 1.62 2003/10/26 14:04:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,22 +98,22 @@ auth_layout(struct dialog_data *dlg_data)
 }
 
 static int
-auth_ok(struct dialog_data *dlg_data, struct widget_data *di)
+auth_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct http_auth_basic *entry = dlg_data->dlg->udata2;
 
 	entry->blocked = 0;
 	entry->valid = auth_entry_has_userinfo(entry);
 	reload(dlg_data->dlg->refresh_data, -1);
-	return ok_dialog(dlg_data, di);
+	return ok_dialog(dlg_data, widget_data);
 }
 
 static int
-auth_cancel(struct dialog_data *dlg_data, struct widget_data *di)
+auth_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	((struct http_auth_basic *)dlg_data->dlg->udata2)->blocked = 0;
 	del_auth_entry(dlg_data->dlg->udata2);
-	return cancel_dialog(dlg_data, di);
+	return cancel_dialog(dlg_data, widget_data);
 }
 
 void

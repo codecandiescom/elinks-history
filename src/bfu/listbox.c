@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.97 2003/10/26 13:25:39 zas Exp $ */
+/* $Id: listbox.c,v 1.98 2003/10/26 14:04:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,21 +24,21 @@
 /* Layout for generic boxes */
 void
 dlg_format_box(struct terminal *term, struct terminal *t2,
-	       struct widget_data *item, int x, int *y, int w, int *rw,
+	       struct widget_data *widget_data, int x, int *y, int w, int *rw,
 	       enum format_align align)
 {
 	int min, optimal_h, max_y = 25;
 
-	item->x = x;
-	item->y = *y;
-	item->l = w;
+	widget_data->x = x;
+	widget_data->y = *y;
+	widget_data->l = w;
 
-	if (rw) int_bounds(rw, item->l, w);
+	if (rw) int_bounds(rw, widget_data->l, w);
 
 	/* Height bussiness follows: */
 
 	/* We ignore this one happily now. Rather be Dynamic ;p. */
-	/* (*y) += item->widget->gid; */
+	/* (*y) += widget_data->widget->gid; */
 
 	/* This is only weird heuristic, it could scale well I hope. */
 	if (term) max_y = term->y;
@@ -49,16 +49,16 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 
 	if (max_y - 8 < min) {
 		/* Big trouble: can't satisfy even the minimum :-(. */
-		item->h = max_y - 8;
+		widget_data->h = max_y - 8;
 	} else if (optimal_h < min) {
-		item->h = min;
+		widget_data->h = min;
 	} else {
-		item->h = optimal_h;
+		widget_data->h = optimal_h;
 	}
 
-	/* debug("::%d(%d)::%d::%d::", max_y, term?1:2, item->h, *y); */
+	/* debug("::%d(%d)::%d::%d::", max_y, term?1:2, widget_data->h, *y); */
 
-	(*y) += item->h;
+	(*y) += widget_data->h;
 }
 
 
@@ -456,30 +456,30 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_d
 }
 
 static void
-init_listbox(struct widget_data *widget, struct dialog_data *dlg_data,
+init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	     struct term_event *ev)
 {
 #if 0
 	/* Freed in bookmark_dialog_abort_handler() */
-	widget->cdata = mem_alloc(sizeof(struct listbox_data));
-	if (!widget->cdata)
+	widget_data->cdata = mem_alloc(sizeof(struct listbox_data));
+	if (!widget_data->cdata)
 		return;
 
-	((struct listbox_data *) widget->cdata)->sel = NULL;
-	((struct listbox_data *) widget->cdata)->top = NULL;
+	((struct listbox_data *) widget_data->cdata)->sel = NULL;
+	((struct listbox_data *) widget_data->cdata)->top = NULL;
 
-	((struct listbox_data *) widget->cdata)->items =
+	((struct listbox_data *) widget_data->cdata)->items =
 		mem_alloc(sizeof(struct list_head));
-	init_list(*((struct listbox_data *) widget->cdata)->items);
+	init_list(*((struct listbox_data *) widget_data->cdata)->items);
 #endif
 }
 
 static int
-mouse_listbox(struct widget_data *di, struct dialog_data *dlg_data,
+mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	      struct term_event *ev)
 {
 #ifdef USE_MOUSE
-	struct listbox_data *box = (struct listbox_data *) di->widget->data;
+	struct listbox_data *box = (struct listbox_data *) widget_data->widget->data;
 
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
@@ -504,10 +504,10 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 
 	if ((ev->b & BM_ACT) == B_UP) {
 		if ((ev->b & BM_BUTT) < B_WHEEL_UP &&
-		    (ev->y >= di->y && ev->y < di->y + di->h) &&
-		    (ev->x >= di->x && ev->x <= di->x + di->l)) {
+		    (ev->y >= widget_data->y && ev->y < widget_data->y + widget_data->h) &&
+		    (ev->x >= widget_data->x && ev->x <= widget_data->x + widget_data->l)) {
 			/* Clicked in the box. */
-			int offset = ev->y - di->y;
+			int offset = ev->y - widget_data->y;
 
 			box->sel_offset = offset;
 			if (offset)
@@ -518,13 +518,13 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 
 
 			if (box->sel) {
-				int xdepth =  di->x + box->sel->depth * 5;
+				int xdepth =  widget_data->x + box->sel->depth * 5;
 
 			       	if (ev->x >= xdepth && ev->x <= xdepth + 2)
 					box->sel->expanded = !box->sel->expanded;
 			}
 
-			display_dlg_item(dlg_data, di, 1);
+			display_dlg_item(dlg_data, widget_data, 1);
 			return EVENT_PROCESSED;
 		}
 	}
@@ -535,7 +535,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 }
 
 static int
-kbd_listbox(struct widget_data *di, struct dialog_data *dlg_data,
+kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
 	int n = dlg_data->n - 1;

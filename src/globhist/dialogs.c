@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.50 2003/10/26 13:25:40 zas Exp $ */
+/* $Id: dialogs.c,v 1.51 2003/10/26 14:04:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,7 +150,7 @@ launch_search_dialog(struct terminal *term, struct dialog_data *parent,
 }
 
 static int
-push_search_button(struct dialog_data *dlg_data, struct widget_data *di)
+push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	launch_search_dialog(dlg_data->win->term, dlg_data,
 			     (struct session *) dlg_data->dlg->udata);
@@ -158,7 +158,7 @@ push_search_button(struct dialog_data *dlg_data, struct widget_data *di)
 }
 
 static int
-push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *di)
+push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct global_history_item *item;
 	int *display_type;

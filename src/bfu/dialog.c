@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.50 2003/10/26 13:25:39 zas Exp $ */
+/* $Id: dialog.c,v 1.51 2003/10/26 14:04:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,30 +120,30 @@ static struct widget_ops *widget_type_to_ops[] = {
 static inline struct widget_data *
 init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 {
-	struct widget_data *widget = &dlg_data->widgets_data[i];
+	struct widget_data *widget_data = &dlg_data->widgets_data[i];
 
-	memset(widget, 0, sizeof(struct widget_data));
-	widget->widget = &dlg_data->dlg->widgets[i];
+	memset(widget_data, 0, sizeof(struct widget_data));
+	widget_data->widget = &dlg_data->dlg->widgets[i];
 
-	if (widget->widget->dlen) {
-		widget->cdata = mem_alloc(widget->widget->dlen);
-		if (widget->cdata) {
-			memcpy(widget->cdata,
-			       widget->widget->data,
-			       widget->widget->dlen);
+	if (widget_data->widget->dlen) {
+		widget_data->cdata = mem_alloc(widget_data->widget->dlen);
+		if (widget_data->cdata) {
+			memcpy(widget_data->cdata,
+			       widget_data->widget->data,
+			       widget_data->widget->dlen);
 		} else {
 			return NULL;
 		}
 	}
 
-	widget->widget->ops = widget_type_to_ops[widget->widget->type];
-	init_list(widget->history);
-	widget->cur_hist = (struct input_history_item *) &widget->history;
+	widget_data->widget->ops = widget_type_to_ops[widget_data->widget->type];
+	init_list(widget_data->history);
+	widget_data->cur_hist = (struct input_history_item *) &widget_data->history;
 
-	if (widget->widget->ops->init)
-		widget->widget->ops->init(widget, dlg_data, ev);
+	if (widget_data->widget->ops->init)
+		widget_data->widget->ops->init(widget_data, dlg_data, ev);
 
-	return widget;
+	return widget_data;
 }
 
 /* TODO: This is too long and ugly. Rewrite and split. */
@@ -185,18 +185,18 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_KBD:
 			{
-			struct widget_data *di = selected_widget(dlg_data);
+			struct widget_data *widget_data = selected_widget(dlg_data);
 
 			/* First let the widget try out. */
-			if (di->widget->ops->kbd
-			    && di->widget->ops->kbd(di, dlg_data, ev)
+			if (widget_data->widget->ops->kbd
+			    && widget_data->widget->ops->kbd(widget_data, dlg_data, ev)
 			       == EVENT_PROCESSED)
 				break;
 
 			/* Can we select? */
 			if ((ev->x == KBD_ENTER || ev->x == ' ')
-			    && di->widget->ops->select) {
-				di->widget->ops->select(di, dlg_data);
+			    && widget_data->widget->ops->select) {
+				widget_data->widget->ops->select(widget_data, dlg_data);
 				break;
 			}
 
@@ -213,8 +213,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 			/* Submit button. */
 			if (ev->x == KBD_ENTER
-			    && (di->widget->type == D_FIELD
-				|| di->widget->type == D_FIELD_PASS
+			    && (widget_data->widget->type == D_FIELD
+				|| widget_data->widget->type == D_FIELD_PASS
 				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
 				for (i = 0; i < dlg_data->n; i++)
 					if (dlg_data->dlg->widgets[i].type == D_BUTTON
@@ -272,10 +272,10 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 				dlg_data->dlg->abort(dlg_data);
 
 			for (i = 0; i < dlg_data->n; i++) {
-				struct widget_data *di = &dlg_data->widgets_data[i];
+				struct widget_data *widget_data = &dlg_data->widgets_data[i];
 
-				if (di->cdata) mem_free(di->cdata);
-				free_list(di->history);
+				if (widget_data->cdata) mem_free(widget_data->cdata);
+				free_list(widget_data->history);
 			}
 
 			freeml(dlg_data->ml);
@@ -305,14 +305,14 @@ check_dialog(struct dialog_data *dlg_data)
 }
 
 int
-cancel_dialog(struct dialog_data *dlg_data, struct widget_data *di)
+cancel_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	delete_window(dlg_data->win);
 	return 0;
 }
 
 int
-update_dialog_data(struct dialog_data *dlg_data, struct widget_data *di)
+update_dialog_data(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	int i;
 
@@ -325,21 +325,21 @@ update_dialog_data(struct dialog_data *dlg_data, struct widget_data *di)
 }
 
 int
-ok_dialog(struct dialog_data *dlg_data, struct widget_data *di)
+ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	void (*fn)(void *) = dlg_data->dlg->refresh;
 	void *data = dlg_data->dlg->refresh_data;
 
 	if (check_dialog(dlg_data)) return 1;
 
-	update_dialog_data(dlg_data, di);
+	update_dialog_data(dlg_data, widget_data);
 
 	if (fn) fn(data);
-	return cancel_dialog(dlg_data, di);
+	return cancel_dialog(dlg_data, widget_data);
 }
 
 int
-clear_dialog(struct dialog_data *dlg_data, struct widget_data *di)
+clear_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	int i;
 

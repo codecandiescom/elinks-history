@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.15 2003/10/26 12:52:32 zas Exp $ */
+/* $Id: widget.c,v 1.16 2003/10/26 14:04:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,27 +18,27 @@
 
 
 void
-display_dlg_item(struct dialog_data *dlg_data, struct widget_data *di,
+display_dlg_item(struct dialog_data *dlg_data, struct widget_data *widget_data,
 		 int selected)
 {
-	if (di->widget->ops->display)
-		di->widget->ops->display(di, dlg_data, selected);
+	if (widget_data->widget->ops->display)
+		widget_data->widget->ops->display(widget_data, dlg_data, selected);
 }
 
 void
-dlg_set_history(struct widget_data *di)
+dlg_set_history(struct widget_data *widget_data)
 {
-	assert(di->widget->dlen > 0);
+	assert(widget_data->widget->dlen > 0);
 
-	if ((void *) di->cur_hist != &di->history) {
-		unsigned char *s = di->cur_hist->d;
+	if ((void *) widget_data->cur_hist != &widget_data->history) {
+		unsigned char *s = widget_data->cur_hist->d;
 
-		di->cpos = int_min(strlen(s), di->widget->dlen - 1);
-		if (di->cpos) memcpy(di->cdata, s, di->cpos);
+		widget_data->cpos = int_min(strlen(s), widget_data->widget->dlen - 1);
+		if (widget_data->cpos) memcpy(widget_data->cdata, s, widget_data->cpos);
 	} else {
-		di->cpos = 0;
+		widget_data->cpos = 0;
 	}
 
-	di->cdata[di->cpos] = 0;
-	di->vpos = int_max(0, di->cpos - di->l);
+	widget_data->cdata[widget_data->cpos] = 0;
+	widget_data->vpos = int_max(0, widget_data->cpos - widget_data->l);
 }

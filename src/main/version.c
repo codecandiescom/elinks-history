@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.11 2003/06/10 19:23:30 pasky Exp $ */
+/* $Id: version.c,v 1.12 2003/06/20 17:30:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,6 +83,9 @@ get_dyn_full_version(struct terminal *term, int more)
 #endif
 #ifdef GLOBHIST
 		_("Global History", term), ", ",
+#endif
+#ifdef USE_LEDS
+		_("LED indicators", term), ", ",
 #endif
 #ifdef HAVE_ZLIB_H
 		"gzip" ", ",

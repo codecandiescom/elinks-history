@@ -1,3 +1,54 @@
+Mon Nov 15 15:08:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/dialogs.c:
+
+	It's always good to leave a little scenting comment close to strange
+	looking hacks.  
+
+Mon Nov 15 03:36:04 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/snprintf.c:
+
+	Answer zas' question why we cannot use mem_alloc in
+	elinks_vasprintf.  The answer: elinks_vasprintf is an alternative to
+	vasprintf, which will use malloc. If we changed elinks_vasprintf to
+	use mem_alloc, all calls to vasprintf would need to take into
+	account whether the ELinks vasprintf was used, in which case we
+	would need to mem_free the allocated memory, or whether the system
+	vasprintf was used, in which case we would need to use free.  
+
+Mon Nov 15 02:20:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/: auth.c, dialogs.c:
+
+	Readd auth entries if the user/password in the URI changes. That is
+	punching a URI into the goto dialog with different user/password the
+	auth entry will be updated. This also means that auth_ok() needs to
+	fakely redirect to a URI with no user/password in order to avoid the
+	auth dialog to keep popping up if the user/password is wrong.  
+
+Mon Nov 15 00:58:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/auth/dialogs.c:
+
+	When the auth entry is derived from URIs user/password there may not
+	be any realm. Make the auth dialog check that before accessing the
+	realm.  
+
+Mon Nov 15 00:57:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Don't compare user and password from URIs when finding auth entries.
+	It makes HTTP Basic auth work with user/password specified in the
+	URI.  
+
+Mon Nov 15 00:54:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Fix comma spacing.  
+
 Sun Nov 14 22:54:56 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/session.c:

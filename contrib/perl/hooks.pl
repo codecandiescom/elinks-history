@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.62 2005/03/27 12:11:55 pasky Exp $
+# $Id: hooks.pl,v 1.63 2005/03/27 12:14:57 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -100,13 +100,17 @@ sub loadrc($)
 }
 
 
-=head1 PREFIXES
+#Don't call the prefixes "dumb", they hate that!  Rather, "interactivity
+#challenged".  (Such politically correct names always appeared to me to be
+#so much more insulting... --pasky ;-)
 
-Don't call the prefixes "dumb", they hate that!  Rather, "interactivity
-challenged".  (Such politically correct names always appeared to me to be
-so much more insulting... --pasky ;-)
+=head1 GOTO URL REWRITES
 
-=head2 Misc. prefixes
+Here you can find summary of all the available rewrites of what you type into
+the Goto URL box. They are similar in spirit to the builtin URI rewrites, but
+more flexible and immensely more powerful.
+
+=head2 Misc. shortcuts
 
 B<bugmenot>, B<bored>, B<random>, B<bofh>, B<xyzzy>, B<jack> or B<handey>
 

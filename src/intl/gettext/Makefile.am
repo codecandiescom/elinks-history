@@ -6,9 +6,6 @@ include $(top_srcdir)/Makefile.base
 EXTRA_DIST = TODO VERSION config.charset locale.alias plural.y
 CLEANFILES = charset.alias
 
-DEFS = -DLIBDIR=\"$(libdir)\" @DEFS@
-COMPILE = $(CC) $(DEFS) -I`dirname $(CONFIG_HEADER)` $(INCLUDES) $(AM_CFLAGS) $(CFLAGS)
-
 localedir = $(datadir)/locale
 
 noinst_LIBRARIES = libgettext.a

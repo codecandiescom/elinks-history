@@ -78,6 +78,9 @@
 /* Directory containing locales */
 #undef LOCALEDIR
 
+/* Directory containing libraries */
+#undef LIBDIR
+
 /* Enable direct use of system allocation functions */
 #undef FASTMEM
 

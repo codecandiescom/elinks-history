@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.330 2004/11/05 23:02:28 zas Exp $ */
+/* $Id: download.c,v 1.331 2004/11/10 15:47:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -629,7 +629,6 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 finish:
 	cdf_hop->callback(term, h, cdf_hop->data, resume);
 	mem_free(cdf_hop);
-	return;
 }
 
 void

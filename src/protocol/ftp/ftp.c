@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.177 2004/10/13 08:28:20 zas Exp $ */
+/* $Id: ftp.c,v 1.178 2004/11/10 15:47:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1011,8 +1011,6 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 		if (conn->state != S_TRANS)
 			set_connection_state(conn, S_GETH);
 	}
-
-	return;
 }
 
 
@@ -1339,8 +1337,6 @@ out_of_mem:
 		c_i->conn_state = 2;
 		set_connection_state(conn, S_TRANS);
 	}
-
-	return;
 }
 
 static void

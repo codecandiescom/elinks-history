@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.9 2003/07/28 20:28:23 jonas Exp $ */
+/* $Id: event.c,v 1.10 2003/08/25 02:43:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ term_send_event(struct terminal *term, struct event *ev)
 {
 	struct window *win;
 
-	assert(ev && term && term->windows.next);
+	assert(ev && term && !list_empty(term->windows));
 	if_assert_failed return;
 
 	/* We need to send event to correct tab, not to the first one. --karpov */

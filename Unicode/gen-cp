@@ -11,12 +11,19 @@ echo
 for i in $codepages; do
 	echo -n $i' ' 1>&2
 	echo
+	echo "/**/"
+	echo "/*** $i ***/"
+	echo "/**/"
 	echo 'struct table_entry table_'$i' [] = {'
-	tail +3 $i.cp | sed 's/#.*$//' | grep '^0x[89a-zA-Z]' | sed 's/[ 	][ 	]*/ /g' | sed 's/[ 	]*$/},/' | sed 's/ /, /' | sed 's/^[ 	]*/	{/' | grep '.*,.*,'
+	tail +3 $i.cp | sed 's/# *\(.*\) *$/\/* \1 *\/ /' | grep '^0x[89a-zA-Z]' | sed 's/[ 	][ 	]*/ /g' | sed 's/[ 	]*$/},/' | sed 's/ /, /' | sed 's/^[ 	]*/	{/' | grep '.*,.*,'
 	echo '	{0, 0}'
 	echo '};'
 	echo
-	echo 'unsigned char *aliases_'$i' [] = {'`head -2 $i.cp | tail +2`', NULL };'
+	echo 'unsigned char *aliases_'$i' [] = {'
+	head -2 $i.cp | tail +2 | sed 's/ \+/ /g; s/ $//; s/$/,/' | tr " " "\n" \
+	| sed 's/^/£/g' | tr "£" "\t" 
+	echo '	NULL
+};'
 	n=`expr $n + 1`
 done
 echo

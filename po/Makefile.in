@@ -49,8 +49,6 @@ POFILES = @POFILES@
 GMOFILES = @GMOFILES@
 DISTFILES = Makefile.in README $(PACKAGE).pot $(POFILES) $(GMOFILES)
 
-MSGIDBUGSADDRESS = elinks-dev@linuxfromscratch.org
-
 POTFILES_REL = $(shell find $(top_srcdir)/src/ -name '*.[ch]' -o -name options.inc | sort)
 POTFILES_ABS = $(shell cd $(top_srcdir); find src/ -name '*.[ch]' -o -name options.inc | sort)
 
@@ -94,7 +92,6 @@ all-no:
 $(srcdir)/$(PACKAGE).pot: $(POTFILES_REL)
 	$(XGETTEXT) --default-domain=$(PACKAGE) \
 		    --directory=$(top_srcdir) \
-		    --msgid-bugs-address=$(MSGIDBUGSADDRESS) \
 		    --add-comments \
 		    --keyword=_ --keyword=N_ $(POTFILES_ABS) \
 	&& test ! -f $(PACKAGE).po \

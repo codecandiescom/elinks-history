@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.266 2003/09/15 16:59:25 jonas Exp $ */
+/* $Id: renderer.c,v 1.267 2003/09/15 20:14:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,6 @@ realloc_spaces(struct part *part, int length)
 #define LINE(y)		part->document->data[Y(y)]
 #define POS(x, y)	LINE(y).d[X(x)]
 #define LEN(y)		int_max(LINE(y).l - part->xp, 0)
-#define SLEN(y, x)	do { LINE(y).l = X(x); } while (0)
 
 
 /* If @bgcolor is NULL don't touch any color. */
@@ -436,7 +435,8 @@ move_chars(struct part *part, int x, int y, int nx, int ny)
 
 	if (LEN(y) - x <= 0) return;
 	copy_chars(part, nx, ny, LEN(y) - x, &POS(x, y));
-	SLEN(y, x);
+
+	LINE(y).l = X(x);
 	move_links(part, x, y, nx, ny);
 }
 
@@ -472,7 +472,7 @@ del_chars(struct part *part, int x, int y)
 	assert(part && part->document && part->document->data);
 	if_assert_failed return;
 
-	SLEN(y, x);
+	LINE(y).l = X(x);
 	move_links(part, x, y, -1, -1);
 }
 

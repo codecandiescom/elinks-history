@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.94 2004/01/25 02:35:22 jonas Exp $ */
+/* $Id: scanner.c,v 1.95 2004/01/25 03:16:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +40,7 @@ enum css_char_group {
 
 #define	check_css_table(c, bit)	(css_scan_table[(c)] & (bit))
 #define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
+#define	scan_back_css(s, bit)	while (check_css_table(*(s), bit)) (s)--;
 
 #define	is_css_ident_start(c)	check_css_table(c, CSS_CHAR_IDENT_START)
 #define	is_css_ident(c)		check_css_table(c, CSS_CHAR_IDENT)
@@ -122,6 +123,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	unsigned char *string = scanner->position;
 	unsigned char first_char = *string;
 	enum css_token_type type = CSS_TOKEN_GARBAGE;
+	int real_length = -1;
 
 	assert(first_char);
 	token->string = string++;
@@ -173,13 +175,36 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 				/* If it is not a known function just skip the
 				 * how arg stuff so we don't end up generating
 				 * a lot of useless tokens. */
-				if (type == CSS_TOKEN_FUNCTION
-				    || type == CSS_TOKEN_URL) {
+				if (type == CSS_TOKEN_FUNCTION) {
+					string = function_end;
+
+				} else if (type == CSS_TOKEN_URL) {
+					/* Extracting the URL first removes any
+					 * leading or ending whitespace and
+					 * then see if the url is given in a
+					 * string. If that is the case the
+					 * string delimiters are also trimmed.
+					 * This is not totally correct because
+					 * we should of course handle escape
+					 * sequences .. but that will have to
+					 * be fixed later.  */
+					unsigned char *from = string + 1;
+					unsigned char *to = function_end - 1;
+
+					scan_css(from, CSS_CHAR_WHITESPACE);
+					scan_back_css(to, CSS_CHAR_WHITESPACE);
+
+					if (*from == '"' || *from == '\'') from++;
+					if (*to == '"' || *to == '\'') from++;
+
+					token->string = from;
+					real_length = to - from;
+					assert(real_length >= 0);
 					string = function_end;
 				}
 
 				assert(type != CSS_TOKEN_RGB || *string == '(');
-				assert(type != CSS_TOKEN_RGB || *string == ')');
+				assert(type != CSS_TOKEN_URL || *string == ')');
 				assert(type != CSS_TOKEN_FUNCTION || *string == ')');
 			}
 
@@ -236,6 +261,9 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		unsigned char *string_end = strchr(string, first_char);
 
 		if (string_end) {
+			/* We don't want the delimiters in the token */
+			token->string++;
+			real_length = string_end - token->string;
 			string = string_end + 1;
 			type = CSS_TOKEN_STRING;
 		}
@@ -280,7 +308,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	}
 
 	token->type = type;
-	token->length = string - token->string;
+	token->length = real_length > 0 ? real_length : string - token->string;
 	scanner->position = string;
 }
 

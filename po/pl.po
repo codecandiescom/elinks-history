@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-01-03 03:41+0100\n"
-"PO-Revision-Date: 2003-01-03 03:41+0100\n"
+"PO-Revision-Date: 2003-01-04 12:06+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@poczta.onet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -255,7 +255,7 @@ msgstr "Naprawdê skasuj tê opcjê"
 
 #: src/config/dialogs.c:499
 msgid "Options manager"
-msgstr "Menad¿er opcji"
+msgstr "Menad¿er ustawieñ"
 
 #: src/config/dialogs.c:533 src/config/dialogs.c:785 src/dialogs/options.c:262
 #: src/document/download.c:977 src/document/download.c:1020
@@ -799,11 +799,11 @@ msgstr "~Rozszerzenia"
 
 #: src/dialogs/menu.c:549
 msgid "~Options manager"
-msgstr "Menad¿er opcji"
+msgstr "Menad¿er ~ustawieñ"
 
 #: src/dialogs/menu.c:550
 msgid "~Keybinding manager"
-msgstr "Menad¿er przypisañ klawiszy"
+msgstr "Menad¿er przypisañ ~klawiszy"
 
 #: src/dialogs/menu.c:551
 msgid "~Save options"

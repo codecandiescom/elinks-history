@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.185 2005/01/06 16:32:25 witekfl Exp $ */
+/* $Id: ftp.c,v 1.186 2005/01/21 11:24:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -950,7 +950,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			if (file_len > 0) {
 				/* FIXME: ..when downloads resuming
 				 * implemented.. */
-				conn->est_length = file_len; /* + conn->progress.start; */
+				conn->est_length = file_len + conn->progress.start;
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.46 2002/12/10 22:25:30 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.47 2002/12/13 23:09:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "bfu/listbox.h"
 #include "config/conf.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
@@ -23,6 +24,11 @@
 #define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 
 
+struct list_head kbdbind_box_items = { &kbdbind_box_items, &kbdbind_box_items };
+struct list_head kbdbind_boxes = { &kbdbind_boxes, &kbdbind_boxes };
+static struct listbox_item *keymap_box_items[3];
+
+
 static struct list_head keymaps[KM_MAX];
 
 static void add_default_keybindings();
@@ -30,6 +36,8 @@ static void add_default_keybindings();
 static void delete_keybinding(enum keymap, long, long);
 
 static int read_action(unsigned char *);
+static unsigned char *write_action(int);
+static unsigned char *write_keymap(enum keymap);
 
 
 static void
@@ -47,6 +55,19 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		kb->func_ref = func_ref;
 		kb->flags &= ~KBDB_WATERMARK;
 		add_to_list(keymaps[km], kb);
+
+		kb->box_item = mem_calloc(1, sizeof(struct listbox_item));
+		if (!kb->box_item || !keymap_box_items[km])
+			return; /* Or just goto after end of this if block. */
+		add_to_list(keymap_box_items[km]->child, kb->box_item);
+		kb->box_item->root = keymap_box_items[km];
+		init_list(kb->box_item->child);
+		kb->box_item->visible = 1;
+		kb->box_item->udata = kb;
+		kb->box_item->type = BI_LEAF;
+		kb->box_item->depth = keymap_box_items[km]->depth + 1;
+		kb->box_item->box = &kbdbind_boxes;
+		kb->box_item->text = write_action(action);
 	}
 }
 
@@ -59,6 +80,10 @@ delete_keybinding(enum keymap km, long key, long meta)
 		if (kb->key != key || kb->meta != meta)
 			continue;
 
+		if (kb->box_item) {
+			del_from_list(kb->box_item);
+			mem_free(kb->box_item);
+		}
 #ifdef HAVE_LUA
 		if (kb->func_ref != LUA_NOREF)
 			lua_unref(lua_state, kb->func_ref);
@@ -75,8 +100,22 @@ init_keymaps()
 {
     	enum keymap i;
 
-	for (i = 0; i < KM_MAX; i++)
+	for (i = 0; i < KM_MAX; i++) {
 		init_list(keymaps[i]);
+
+		keymap_box_items[i] = mem_calloc(1, sizeof(struct listbox_item));
+		if (!keymap_box_items[i])
+			continue;
+		add_to_list(kbdbind_box_items, keymap_box_items[i]);
+		keymap_box_items[i]->root = NULL;
+		init_list(keymap_box_items[i]->child);
+		keymap_box_items[i]->visible = 1;
+		keymap_box_items[i]->udata = NULL;
+		keymap_box_items[i]->type = BI_FOLDER;
+		keymap_box_items[i]->depth = 0;
+		keymap_box_items[i]->box = &kbdbind_boxes;
+		keymap_box_items[i]->text = write_keymap(i);
+	}
 
 	add_default_keybindings();
 }
@@ -84,10 +123,24 @@ init_keymaps()
 void
 free_keymaps()
 {
+	struct keybinding *kb;
 	enum keymap i;
 
-	for (i = 0; i < KM_MAX; i++)
+	for (i = 0; i < KM_MAX; i++) {
+		foreach (kb, keymaps[i]) {
+			if (!kb->box_item)
+				continue;
+			del_from_list(kb->box_item);
+			mem_free(kb->box_item);
+		}
+
 		free_list(keymaps[i]);
+
+		if (keymap_box_items[i]) {
+			del_from_list(keymap_box_items[i]);
+			mem_free(keymap_box_items[i]);
+		}
+	}
 }
 
 

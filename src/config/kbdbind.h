@@ -1,7 +1,10 @@
-/* $Id: kbdbind.h,v 1.28 2002/12/10 22:25:30 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.29 2002/12/13 23:09:37 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
+
+/* #include "bfu/listbox.h" */
+struct listbox_item;
 
 #include "config/options.h"
 #include "lowlevel/terminal.h"
@@ -98,7 +101,11 @@ struct keybinding {
 	long meta;
 	int func_ref;
 	int flags;
+	struct listbox_item *box_item;
 };
+
+extern struct list_head kbdbind_box_items;
+extern struct list_head kbdbind_boxes;
 
 
 void init_keymaps();

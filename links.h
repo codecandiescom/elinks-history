@@ -385,14 +385,14 @@ static inline long strtolx(unsigned char *c, unsigned char **end)
 	if (!*end) return l;
 	if (upcase(**end) == 'K') {
 		(*end)++;
-		if (l < LONG_MIN / 1024) return LONG_MIN;
-		if (l > LONG_MAX / 1024) return LONG_MAX;
+		if (l < -MAXINT / 1024) return -MAXINT;
+		if (l > MAXINT / 1024) return MAXINT;
 		return l * 1024;
 	}
 	if (upcase(**end) == 'M') {
 		(*end)++;
-		if (l < LONG_MIN / (1024 * 1024)) return LONG_MIN;
-		if (l > LONG_MAX / (1024 * 1024)) return LONG_MAX;
+		if (l < -MAXINT / (1024 * 1024)) return -MAXINT;
+		if (l > MAXINT / (1024 * 1024)) return MAXINT;
 		return l * (1024 * 1024);
 	}
 	return l;

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.23 2003/12/05 18:02:53 pasky Exp $ */
+/* $Id: cgi.c,v 1.24 2003/12/05 18:07:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,6 +173,26 @@ set_vars(struct connection *conn, unsigned char *script)
 			if (setenv("HTTP_USER_AGENT", ustr, 1)) return -1;
 			mem_free(ustr);
 		}
+	}
+
+	switch (get_opt_int("protocol.http.referer.policy")) {
+		case REFERER_NONE:
+			/* oh well */
+			break;
+
+		case REFERER_FAKE:
+			setenv("HTTP_REFERER",
+				get_opt_str("protocol.http.referer.fake"), 1);
+			break;
+
+		case REFERER_TRUE:
+			/* XXX: Encode as in add_url_to_http_string() ? --pasky */
+			setenv("HTTP_REFERER", conn->ref_url, 1);
+			break;
+
+		case REFERER_SAME_URL:
+			setenv("HTTP_REFERER", struri(conn->uri), 1);
+			break;
 	}
 
 	return 0;

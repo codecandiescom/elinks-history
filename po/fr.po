@@ -886,7 +886,8 @@ msgstr "Ordre de navigation dans les tableaux."
 
 #: src/config/options.c:1095
 msgid "Move by columns in table, instead of rows."
-msgstr "Déplacement par colonnes dans le tableaux, au lieu de par lignes."
+msgstr "Déplacement de colonne en colonne dans les tableaux,\n"
+"(au lieu du déplacement ligne par ligne)."
 
 #: src/config/options.c:1099
 msgid "Cache"
@@ -921,7 +922,7 @@ msgid ""
 "asking the server."
 msgstr ""
 "Cacher aussi les pages redirigées par le serveur (habituellement\n"
-"grâce au code HTTP 302 and un entête Location). Ceci était le\n"
+"grâce au code HTTP 302 et un entête Location). Ceci était le\n"
 "fonctionnement initial, mais il pose des problèmes pour les\n"
 "pages web comportant un système d'authentification."
 
@@ -952,7 +953,7 @@ msgstr "Nombre"
 
 #: src/config/options.c:1135
 msgid "Number of cached formatted pages."
-msgstr "Nombre de pages formattées en cache."
+msgstr "Nombre maximal de pages formattées en cache."
 
 #: src/config/options.c:1137 src/dialogs/info.c:206
 msgid "Memory cache"
@@ -989,14 +990,12 @@ msgstr "Page de caractères par défaut pour le document."
 #: src/config/options.c:1155
 msgid "Ignore charset info from server"
 msgstr ""
-"Ignorer les informations de page de caractères\n"
-"en provenance du serveur"
+"Ignorer le jeu de caractères indiqué par le serveur."
 
 #: src/config/options.c:1157
 msgid "Ignore charset info sent by server."
 msgstr ""
-"Ignorer les informations de page de caractères\n"
-"en provenance du serveur"
+"Ignorer le jeu de caractères indiqué par le serveur."
 
 #: src/config/options.c:1161
 msgid "Default color settings"
@@ -1184,8 +1183,7 @@ msgid ""
 "Document MIME-type to assume by default (when we are unable to\n"
 "guess it properly from known information about the document)."
 msgstr ""
-"Type MIME du document par défaut (quand nous ne pouvons le deviner\n"
-"grâce aux informations connues."
+"Type MIME du document par défaut (quand nous ne pouvons le deviner)."
 
 #: src/config/options.c:1216
 msgid "Default download directory"
@@ -1243,7 +1241,7 @@ msgstr "Sortie"
 
 #: src/config/options.c:1241
 msgid "Dump output options."
-msgstr "Options de sortie"
+msgstr "Options de sortie (dump)."
 
 #: src/config/options.c:1243 src/config/options.c:1625
 #: src/config/opttypes.c:467 src/dialogs/document.c:111
@@ -1252,7 +1250,7 @@ msgstr "Jeu de caractères"
 
 #: src/config/options.c:1245 src/config/options.c:2361
 msgid "Codepage used in dump output."
-msgstr "Jeu de caractères utilisé en sortie"
+msgstr "Jeu de caractères utilisé en sortie (dump)."
 
 #: src/config/options.c:1247
 msgid "Width"
@@ -1948,16 +1946,13 @@ msgid ""
 "it will be visible in ELinks as well. Note that this option makes\n"
 "sense only when colors are enabled."
 msgstr ""
-"If we should not set the background to black. This is particularly\n"
-"useful when we have a terminal (typically in some windowing\n"
-"environment) with a background image or a transparent background -\n"
-"it will be visible in ELinks as well. Note that this option makes\n"
-"sense only when colors are enabled."
+"Permet d'utiliser un fond image ou transparent au lieu d'un fond noir.\n"
+"Votre terminal doit supporter la transparence et les couleurs."
 
 #: src/config/options.c:1627
 msgid "Codepage of charset used for displaying content on terminal."
 msgstr ""
-"Jeu de caractères à utiliser pour afficher les contenus dans le terminal"
+"Jeu de caractères à utiliser pour afficher les contenus dans le terminal."
 
 #: src/config/options.c:1631
 msgid "User interface"
@@ -2013,7 +2008,7 @@ msgstr "Couleurs de l'item sélectionné de la barre de menu."
 #: src/config/options.c:1680 src/config/options.c:1721
 #: src/config/options.c:1974 src/config/options.c:2015
 msgid "Hotkey"
-msgstr "Raccourci"
+msgstr "Raccourci clavier"
 
 #: src/config/options.c:1682
 msgid "Unselected main menu bar item hotkey colors."
@@ -2303,7 +2298,7 @@ msgid ""
 "1 is count down, but don't show the timer\n"
 "2 is count down and show the timer near LEDs"
 msgstr ""
-"Activer le timer ou non:\n"
+"Activer le timer:\n"
 "0 Non\n"
 "1 Oui, mais ne pas montrer le timer\n"
 "2 Oui et montrer le timer près des LEDs"
@@ -2316,7 +2311,7 @@ msgid ""
 "2 is count down and show the timer near LEDs (note that this feature is "
 "DISABLED)"
 msgstr ""
-"Activer le timer ou non:\n"
+"Activer le timer:\n"
 "0 Non\n"
 "1 Oui, mais ne pas montrer le timer\n"
 "2 Oui et montrer le timer près des LEDs (DESACTIVE)"
@@ -2374,11 +2369,11 @@ msgstr "Afficher le dialogue 'Aller à' au démarrage"
 #: src/config/options.c:2310
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr ""
-"Afficher le dialogue 'Aller à' au démarrage si aucune homepage est définie."
+"Afficher le dialogue 'Aller à' si aucune page de démarrage n'est définie."
 
 #: src/config/options.c:2312
 msgid "Set window title"
-msgstr "Modifier le titre de la fenetre"
+msgstr "Modifier le titre de la fenêtre"
 
 #: src/config/options.c:2314
 msgid ""
@@ -2396,7 +2391,7 @@ msgstr "Option obsolète. Utilisez config.saving_style."
 
 #: src/config/options.c:2326
 msgid "Use secure file saving"
-msgstr "Utiliser la sauvegarde _fiable_ des fichiers."
+msgstr "Utiliser la sauvegarde fiable des fichiers."
 
 #: src/config/options.c:2328
 msgid ""
@@ -2428,7 +2423,7 @@ msgid ""
 msgstr ""
 "Restreindre les fonctionnalités d'ELinks.\n"
 "La navigation dans les fichiers locaux est désactivée.\n"
-"Les téléchargements ne sont plus possibles.\n"
+"Les téléchargements de fichiers ne sont plus possibles.\n"
 "L'utilisation de visualisateurs externes est possible, mais\n"
 "les associations ne peuvent être modifiées."
 
@@ -2472,7 +2467,7 @@ msgstr "Largeur de document formaté à utiliser avec -dump"
 
 #: src/config/options.c:2365
 msgid "Width of the dump output."
-msgstr "Largeur de sortie."
+msgstr "Largeur de sortie (dump)."
 
 #: src/config/options.c:2367
 msgid "Evaluate given configuration option"
@@ -2492,7 +2487,7 @@ msgstr "Afficher l'aide et sortir"
 
 #: src/config/options.c:2384
 msgid "Print usage help and exit."
-msgstr "Afficher l'aide et sortir"
+msgstr "Afficher l'aide et sortir."
 
 #: src/config/options.c:2386
 msgid "Print detailed usage help and exit"
@@ -2563,6 +2558,7 @@ msgid ""
 "are written to the disk when this option is used. See also\n"
 "-touch-files."
 msgstr ""
+"A TRADUIRE:\n"
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
 "are interconnected and share state (cache, bookmarks, cookies,\n"
@@ -2621,7 +2617,7 @@ msgstr ""
 
 #: src/config/options.c:2444
 msgid "Print version information and exit"
-msgstr "Afficher la version et quitter."
+msgstr "Afficher la version et quitter"
 
 #: src/config/options.c:2446
 msgid "Print ELinks version information and exit."
@@ -2808,7 +2804,7 @@ msgstr " IPv6"
 
 #: src/dialogs/info.c:86
 msgid " Bookmarks"
-msgstr " Bookmarks"
+msgstr " Signets"
 
 #: src/dialogs/info.c:89
 msgid " Cookies"
@@ -2816,7 +2812,7 @@ msgstr " Cookies"
 
 #: src/dialogs/info.c:92
 msgid " GlobHist"
-msgstr "Historique global"
+msgstr " Historique global"
 
 #: src/dialogs/info.c:95
 msgid " gzip"
@@ -2907,7 +2903,7 @@ msgstr "fichiers ouverts"
 
 #: src/dialogs/info.c:200
 msgid "timers"
-msgstr "timer(s)"
+msgstr "timers"
 
 #: src/dialogs/info.c:202
 msgid "connections"
@@ -2931,11 +2927,11 @@ msgstr "octets"
 
 #: src/dialogs/info.c:208
 msgid "files"
-msgstr "fichier(s)"
+msgstr "fichiers"
 
 #: src/dialogs/info.c:209 src/dialogs/info.c:213
 msgid "locked"
-msgstr "verrouillé(s)"
+msgstr "verrouillés"
 
 #: src/dialogs/info.c:210
 msgid "loading"
@@ -2947,7 +2943,7 @@ msgstr "Cache des documents formatés"
 
 #: src/dialogs/info.c:212
 msgid "documents"
-msgstr "document(s)"
+msgstr "documents"
 
 #: src/dialogs/info.c:244
 msgid "Cache info"
@@ -2987,11 +2983,11 @@ msgstr "Aucun téléchargement"
 
 #: src/dialogs/menu.c:372
 msgid "~Go to URL"
-msgstr "Atteindre l'URL"
+msgstr "Atteindre l'~URL"
 
 #: src/dialogs/menu.c:373
 msgid "Go ~back"
-msgstr "Retour"
+msgstr "Ret~our"
 
 #: src/dialogs/menu.c:374
 msgid "~History"
@@ -3007,7 +3003,7 @@ msgstr "~Recharger"
 
 #: src/dialogs/menu.c:381
 msgid "Global histor~y"
-msgstr "Hist~orique global"
+msgstr "Historique ~global"
 
 #: src/dialogs/menu.c:384
 msgid "Bookmark~s"
@@ -3019,7 +3015,7 @@ msgstr "~Enregistrer sous"
 
 #: src/dialogs/menu.c:391
 msgid "Save ~URL as"
-msgstr "Enregistrer l'~URL sous"
+msgstr "Enregistrer l'URL ~sous"
 
 #: src/dialogs/menu.c:392
 msgid "Save formatted ~document"
@@ -3027,7 +3023,7 @@ msgstr "Enregistrer le ~document formaté"
 
 #: src/dialogs/menu.c:397
 msgid "~Kill background connections"
-msgstr "Tuer les connexions en arrière-~plan"
+msgstr "Tuer les conne~xions en arrière-plan"
 
 #: src/dialogs/menu.c:398
 msgid "~Flush all caches"
@@ -3258,7 +3254,7 @@ msgstr "Transparence"
 
 #: src/dialogs/options.c:120
 msgid "UTF-8 I/O"
-msgstr "UTF-8 E/S"
+msgstr "E/S UTF-8"
 
 #: src/dialogs/options.c:194
 msgid "Terminal options"
@@ -3420,7 +3416,7 @@ msgstr "Le type du contenu est"
 
 #: src/sched/download.c:975 src/sched/download.c:984
 msgid "Do you want to save or display this file?"
-msgstr "Voulez-vous sauver ou afficher ce fichier ?"
+msgstr "Voulez-vous sauver ou voir ce fichier ?"
 
 #: src/sched/download.c:978 src/sched/download.c:986 src/sched/download.c:1021
 #: src/sched/download.c:1031
@@ -3429,7 +3425,7 @@ msgstr "Afficher"
 
 #: src/sched/download.c:1014 src/sched/download.c:1025
 msgid "What to do?"
-msgstr "Que voulez-vous faire ?"
+msgstr "Que faire ?"
 
 #: src/sched/download.c:1016 src/sched/download.c:1027
 msgid "Do you want to open file with"
@@ -3497,7 +3493,7 @@ msgstr "Erreur interne"
 
 #: src/sched/sched.c:74
 msgid "Out of memory"
-msgstr "Mémoire vive saturée"
+msgstr "Mémoire saturée"
 
 #: src/sched/sched.c:75
 msgid "Host not found"
@@ -3801,4 +3797,4 @@ msgid "post to"
 msgstr "Transfert à"
 
 msgid "Cache redirect information"
-msgstr "Informations au sujet du cache et des redirections"
+msgstr "Cacher les informations de redirection"

@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.25 2004/12/31 00:44:27 jonas Exp $ */
+/* $Id: libintl.h,v 1.26 2005/01/03 12:26:15 jonas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -25,7 +25,13 @@
  * function so make sure it is also just a noop when NLS is disabled. */
 #ifndef ENABLE_NLS
 
-#define _(msg, term)	gettext_noop(msg)
+/* In order to make it able to compile using -Werror this has to be a function
+ * so that local @term variables will not be reported as unused. */
+static inline unsigned char *
+_(unsigned char *msg, struct terminal *term)
+{
+	return gettext_noop(msg);
+}
 
 #else
 

@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.4 2003/09/22 21:49:52 jonas Exp $ */
+/* $Id: proxy.c,v 1.5 2003/10/27 15:57:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,13 +79,16 @@ get_proxy_worker(unsigned char *url, unsigned char *proxy)
 		}
 
 		if (ftp_proxy && *ftp_proxy) {
-			if (!strncasecmp(ftp_proxy, "ftp://", 6))
+			if (!strncasecmp(ftp_proxy, "ftp://", 6)
+			    || !strncasecmp(ftp_proxy, "http://", 7))
 				ftp_proxy += 6;
 
 			slash = strchr(ftp_proxy, '/');
 			if (slash) *slash = 0;
 
-			if (l >= 6 && !strncasecmp(url, "ftp://", 6)
+			if (l >= 6
+			    && (!strncasecmp(url, "ftp://", 6)
+			        || !strncasecmp(ftp_proxy, "http://", 7))
 			    && !proxy_probe_no_proxy(url + 6, no_proxy))
 				proxy = ftp_proxy;
 		}

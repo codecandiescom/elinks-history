@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.91 2003/07/09 18:31:11 pasky Exp $ */
+/* $Id: connection.c,v 1.92 2003/07/09 18:37:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -772,7 +772,12 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		struct download *assigned;
 
 		foreach (assigned, c->downloads) {
-			assert(assigned != download);
+			assertm(assigned != download, "Download assigned to '%s'", c->url);
+			if_assert_failed {
+				download->state = S_INTERNAL;
+				if (download->end) download->end(download, download->data);
+				return 0;
+			}
 			/* No recovery path should be necessary. */
 		}
 	}

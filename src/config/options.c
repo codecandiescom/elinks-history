@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.72 2002/07/11 20:22:20 pasky Exp $ */
+/* $Id: options.c,v 1.73 2002/07/11 21:28:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,7 +367,7 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 		if (1 /*option->flags & OPT_CMDLINE*/) {
 			printf("-%s ", option->name);
 
-			printf("%s", option_types[option->type].help_str);
+			printf("%s\n", option_types[option->type].help_str);
 
 			if (option->desc) {
 				int l = strlen(option->desc);

@@ -1,3 +1,46 @@
+Mon Apr  4 12:33:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	free_connection_data(): Move up active_connections decrementing so
+	assertion failures won't get triggered because conn->running is
+	already zero. Not likely with the current setup but just you wait.
+	;) 
+
+Mon Apr  4 12:30:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* debian/changelog:
+
+	I believe both /dev/stdin related debian bugs was squahed with the
+	recent introduction of better !isatty(STDIN_FILENO) handling in
+	check_stdio().  
+
+Mon Apr  4 12:28:27 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/scanner.c:
+
+	Make it possible to not use the scanner table.  
+
+Mon Apr  4 12:18:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Remove DBG() calls.  
+
+Mon Apr  4 12:16:10 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_vms_response(): Use parse_date().  
+
+Mon Apr  4 12:15:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/cookies.c, protocol/date.c, protocol/date.h,
+	sched/download.c:
+
+	Change parse_date() so it is more generally usable. However it is
+	now butt ugly as well.  
+
 Sun Apr  3 18:21:29 2005  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser.c:

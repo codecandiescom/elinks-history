@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.59 2003/07/08 12:39:31 jonas Exp $ */
+/* $Id: cookies.c,v 1.60 2003/07/08 12:56:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,6 @@
 #include "protocol/http/date.h"
 #include "protocol/http/header.h"
 #include "protocol/uri.h"
-#include "protocol/url.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
@@ -162,17 +161,16 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 int
 set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 {
-	unsigned char *server, *document, *date, *secure;
+	unsigned char *date, *secure;
 	struct cookie *cookie;
 	struct c_server *cs;
 	struct cookie_str cstr;
-	unsigned char *url = uri->protocol;
 
 	if (get_opt_int("cookies.accept_policy") == COOKIES_ACCEPT_NONE)
 		return 0;
 
 #ifdef COOKIES_DEBUG
-	debug("set_cookie -> (%s) %s", url, str);
+	debug("set_cookie -> (%s) %s", uri->protocol, str);
 #endif
 
 	cstr.str = str;
@@ -181,34 +179,21 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 	cookie = mem_alloc(sizeof(struct cookie));
 	if (!cookie) return 0;
 
-	server = get_host_name(url);
-	if (!server) {
-free_cookie:
-		mem_free(cookie);
-		return 0;
-	}
-	document = get_url_data(url);
-	if (!document) {
-free_server:
-		mem_free(server);
-		goto free_cookie;
-	}
-
 	/* Fill main fields */
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
 	if (!cookie->name) {
-free_document:
-		mem_free(document);
-		goto free_server;
+free_cookie:
+		mem_free(cookie);
+		return 0;
 	}
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
 	if (!cookie->value) {
 free_cookie_name:
 		mem_free(cookie->name);
-		goto free_document;
+		goto free_cookie;
 	}
-	cookie->server = stracpy(server);
+	cookie->server = memacpy(uri->host, uri->hostlen);
 	if (!cookie->server) {
 free_cookie_value:
 		mem_free(cookie->value);
@@ -240,6 +225,7 @@ free_cookie_value:
 	cookie->path = parse_http_header_param(str, "path");
 	if (!cookie->path) {
 		unsigned char *path_end;
+		int len = 1;
 
 		cookie->path = stracpy("/");
 		if (!cookie->path) {
@@ -247,7 +233,8 @@ free_cookie_server:
 			mem_free(cookie->server);
 			goto free_cookie_value;
 		}
-		add_to_strn(&cookie->path, document);
+
+		add_bytes_to_str(&cookie->path, &len, uri->data, uri->datalen);
 
 		for (path_end = cookie->path; *path_end; path_end++) {
 			if (end_of_dir(*path_end)) {
@@ -278,15 +265,15 @@ free_cookie_server:
 	}
 
 	cookie->domain = parse_http_header_param(str, "domain");
-	if (!cookie->domain)
-		cookie->domain = stracpy(server);
+	if (!cookie->domain) {
+		cookie->domain = memacpy(uri->host, uri->hostlen);
 		if (!cookie->domain) {
 			mem_free(cookie->path);
 			goto free_cookie_server;
 		}
+	}
 	if (cookie->domain[0] == '.')
-		memmove(cookie->domain, cookie->domain + 1,
-			strlen(cookie->domain));
+		memmove(cookie->domain, cookie->domain + 1, uri->hostlen);
 
 	secure = parse_http_header_param(str, "secure");
 	if (secure) {
@@ -297,23 +284,29 @@ free_cookie_server:
 	}
 
 #ifdef COOKIES_DEBUG
-	debug("Got cookie %s = %s from %s (%s), domain %s, expires at %d, secure %d\n",
-	      cookie->name, cookie->value, cookie->server, server, cookie->domain,
-	      cookie->expires, cookie->secure);
+	{
+		unsigned char *server = memacpy(uri->host, uri->hostlen);
+
+		debug("Got cookie %s = %s from %s (%s), domain %s, "
+		      "expires at %d, secure %d\n", cookie->name,
+		      cookie->value, cookie->server, server, cookie->domain,
+		      cookie->expires, cookie->secure);
+		if (server) mem_free(server);
+	}
 #endif
 
-	if (!check_domain_security(cookie->domain, server, strlen(server))) {
+	if (!check_domain_security(cookie->domain, uri->host, uri->hostlen)) {
 #ifdef COOKIES_DEBUG
 		debug("Domain security violated.");
 #endif
 		mem_free(cookie->domain);
-		cookie->domain = stracpy(server);
+		cookie->domain = memacpy(uri->host, uri->hostlen);
 	}
 
 	cookie->id = cookie_id++;
 
 	foreach (cs, c_servers) {
-		if (strcasecmp(cs->server, server)) continue;
+		if (strncasecmp(cs->server, uri->host, uri->hostlen)) continue;
 
 		if (cs->accept)	goto ok;
 
@@ -322,7 +315,6 @@ free_cookie_server:
 #endif
 		free_cookie(cookie);
 		mem_free(cookie);
-		mem_free(server);
 		return 0;
 	}
 
@@ -330,7 +322,6 @@ free_cookie_server:
 		/* TODO */
 		free_cookie(cookie);
 		mem_free(cookie);
-		mem_free(server);
 		return 1;
 	}
 
@@ -338,7 +329,6 @@ ok:
 	cookies_dirty = 1;
 	accept_cookie(cookie);
 
-	mem_free(server);
 	return 0;
 }
 

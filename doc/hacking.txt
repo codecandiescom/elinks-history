@@ -43,8 +43,8 @@ never pretend that it has one.
 The UI plainly needs a rewrite as it's extremely ugly ;-).  Cut'n'paste from
 some existing code and modify appropriately, if you want one :).
 
-Some common used functions (i.e. malloc() or free()) have their own clones
-inside ELinks and you should use them (i.e. mem_alloc() or mem_free()) instead.
+Some common used functions (e.g. malloc() or free()) have their own clones
+inside ELinks and you should use them (e.g. mem_alloc() or mem_free()) instead.
 
 If you want to have anything else documented here, write a description and send
 us a patch.
@@ -174,7 +174,7 @@ Quick description of what it does:
     enable a mechanism where ^C will break out of infinite loops and such, but
     that's not working so good.
 
-[4] Call the Lua function, ie. goto_url_hook
+[4] Call the Lua function, i.e. goto_url_hook
 
 [5] Disable the error trapping stuff.
 
@@ -240,7 +240,7 @@ Use blank lines frequently to separate chunks of code.  And use magic "/*" and
 Keep in mind that if there's an object and verb in the comment (and it is, in
 most cases), it is a sentence, so it has to start with a capital letter and end
 with a fullstop ;-).  If you want to share your opinion or investigations, you
-should sign yourself, i.e. /* TODO: Move this far away! --pasky */
+should sign yourself, e.g. /* TODO: Move this far away! --pasky */
 
 Comments should be written in _ENGLISH_ only.
 
@@ -425,7 +425,7 @@ func(int a, int b)
 
 - Please write if (), while (), switch (), for (), .... instead of if(), while(),
   switch(), for()...
-  Same thing apply for all iterators and tests (ie. foreach, foreachback).
+  Same thing apply for all iterators and tests (e.g. foreach, foreachback).
 
 - Use assert() and assertm() where applicable. It will prevent hidden bugs.
 
@@ -436,7 +436,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.22 2004/12/19 00:51:34 pasky Exp $ */
+	/* $Id: hacking.txt,v 1.23 2005/01/03 06:02:09 miciah Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -450,7 +450,7 @@ Coding practices:
 
 - If speed is not critical and especially if you are messing with some struct
   where size might matter, feel encouraged to use bitfields to store boolean
-  (or tristate or tetrastate ;) values (ie. unsigned int foo:1 for one-bit
+  (or tristate or tetrastate ;) values (e.g. unsigned int foo:1 for one-bit
   field). HOWEVER please ALWAYS specify signedness of all such fields. It is
   very easy to reach the top bit in these cases, and with int foo:1, foo would
   be either 0 or -1, which is probably not what you want.
@@ -527,7 +527,7 @@ please consider splitting it in appropriate bits. Appropriate could mean:
 
 - Keep movements of (bigger) code snippets separate from changes in them.
 
-Note that it makes no sense to separate patches ie. by directories. The
+Note that it makes no sense to separate patches by directories. The
 important thing is to separate big changes to smaller ones and smaller ones,
 breaking it to the "thinnest" possible level where the change is still
 sufficiently self-contained.
@@ -558,4 +558,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.22 2004/12/19 00:51:34 pasky Exp $
+$Id: hacking.txt,v 1.23 2005/01/03 06:02:09 miciah Exp $

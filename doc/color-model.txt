@@ -28,12 +28,12 @@ distinguishable to someone with a visual disorder. It is important to appreciate
 that it is the contrast of colors one against another that makes them more or
 less discernible rather than the individual colors themselves.
 
-Ie. current allow/forbid dark on black colors will be really simple and far
+I.e. current allow/forbid dark on black colors will be really simple and far
 more universal.  Zas is currently researching about rules to preserve page
 readability by eliminating bad colors combinations (like dark red on dark red,
 or even primary red / primary blue, yellow on white, green on grey, ...) One
 cool side effect, is that we can adapt a color model to take in account some
-user's visual deficiencies (ie. rule like "do not use red colors at all", "forbid
+user's visual deficiencies (e.g. rule like "do not use red colors at all", "forbid
 orange on red", ...) Another color model may take in account screen environment:
 "ensure very high lightness contrast".
 
@@ -140,7 +140,7 @@ own color-constraint interpreter:
 
 one constraint is either hard or soft, it applies to fg, bg or both, and affects
 either hue, lightness or saturation.
-hue unit is either a name (ie. red) or an angle interval (ie for red [0,30])
+hue unit is either a name (e.g. red) or an angle interval (e.g. for red [0,30])
 lightness and saturation units are a percentage 0-100%
 We'll use only integers values on the user side, because it's simpler to handle.
 
@@ -187,7 +187,7 @@ Including text attributes in the color model
 
 Hmmm, since we use colors to render text attributes, I (zas) think we need to
 integrate them in the process.
-Ie. italics are rendered by color, so let the user tells which color to use.
+E.g. italics are rendered by color, so let the user tells which color to use.
 
 (bg, fg, type) triplet can be used for that. In constraint definition, we'll
 have H, S, L and type (T) variables.
@@ -198,7 +198,7 @@ magic.
 Also note that the attribute enhancement should be fully optional.
 
 In solution we'll have (bg, fg, attributes), where bg and fg are colors.
-Attributes are the ones supported by displaying device (ie normal bold underline
+Attributes are the ones supported by displaying device (i.e. normal bold underline
 for now).
 
 So constraints will take the form of:
@@ -296,5 +296,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 
 
-$Id: color-model.txt,v 1.14 2005/01/03 05:47:31 miciah Exp $
+$Id: color-model.txt,v 1.15 2005/01/03 06:02:09 miciah Exp $
 vim: textwidth=80

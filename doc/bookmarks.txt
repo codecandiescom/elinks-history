@@ -31,7 +31,7 @@ mode. You should see a big empty space (bookmarks will slowly appear there as
 you will add them) and couple of buttons shriveling at the bottom. So, as a
 start, move with the right (or left, both will do) arrow to the button "Add
 bookmark" and fill in the input fields it offers to you. I mean, you can
-type something like "ELinks homepage" to the first field, then move down by ie.
+type something like "ELinks homepage" to the first field, then move down by e.g.
 the down arrow and fill "http://elinks.or.cz/" to the second field. Then,
 bravely press enter and watch the bookmark popping up at the top of the vast
 area reserved for bookmarks.
@@ -182,9 +182,9 @@ Actually, you may now ask "So how do I convert bookmarks between the two
 formats?".  It is quite easy.  ELinks simply follows the current value of
 bookmarks.file_format whenever loading/saving the bookmarks.
 
-So, i.e. if you normally use the native format but you want the bookmarks
+So, e.g. if you normally use the native format but you want the bookmarks
 to be saved in the XBEL format once, change bookmarks.file_format to 1,
-then cause the bookmarks to be resaved (i.e. by doing some simple change,
+then cause the bookmarks to be resaved (e.g. by doing some simple change,
 like adding a trailing space to some bookmark's title or so), then change
 the bookmarks.file_format value back to 0.
 
@@ -205,4 +205,4 @@ simplified rather sooner than later.
 
 
 
-$Id: bookmarks.txt,v 1.9 2005/01/03 05:49:18 miciah Exp $
+$Id: bookmarks.txt,v 1.10 2005/01/03 06:02:09 miciah Exp $

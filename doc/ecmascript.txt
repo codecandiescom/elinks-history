@@ -61,7 +61,7 @@ Now, edit config.mk and adjust the $PREFIX variable - you probably won't like
 the default value - ELinks will find it there, but your dynamic linker likely
 won't.
 
-Ie. for /usr/local installation:
+E.g. for /usr/local installation:
 	$ sed 's#^PREFIX = /opt/spidermonkey#PREFIX = /usr/local#' < config.mk > config.mk.t
 	$ mv -f config.mk.t config.mk
 
@@ -115,4 +115,4 @@ easy. We await your patches eagerly.
 
 
 
-$Id: ecmascript.txt,v 1.8 2005/01/03 05:47:31 miciah Exp $
+$Id: ecmascript.txt,v 1.9 2005/01/03 06:02:09 miciah Exp $

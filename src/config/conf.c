@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.104 2003/11/05 14:46:28 pasky Exp $ */
+/* $Id: conf.c,v 1.105 2003/11/11 15:48:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -525,7 +525,7 @@ smart_config_output_fn(struct string *string, struct option *option,
 				unsigned char *last_space = NULL;
 				int config_width = 80;
 				int n = depth * indentation + 2;
-				
+
 				for (; *i; i++, n++) {
 					if (*i == '\n') {
 						last_space = i;
@@ -598,6 +598,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	    || (savestyle < 2
 		&& (load_config_file(prefix, name, options, &config)
 		    || !config.length))) {
+		assert(savestyle >= 0  && savestyle <= 2);
 		switch (savestyle) {
 		case 0:
 			add_to_string(&config, conf_i18n(N_(
@@ -624,8 +625,6 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 			"## by ELinks when you save options through UI and you are out of\n"
 			"## luck with your formatting and own comments then, so beware.\n"),
 			i18n));
-			break;
-		default:
 			break;
 		}
 
@@ -699,9 +698,26 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 
 	if (term && (secsave_errno != SS_ERR_NONE || ret)) {
 		unsigned char *errmsg = NULL;
-		unsigned char *strerr;
+		unsigned char *strerr = _("Secure file error", term);
 
 		switch (secsave_errno) {
+			case SS_ERR_NONE: /* Impossible. */
+				break;
+			case SS_ERR_OPEN_READ:
+				strerr = _("Cannot read the file", term);
+	  			break;
+			case SS_ERR_STAT:
+				strerr = _("Cannot stat the file", term);
+	  			break;
+			case SS_ERR_ACCESS:
+				strerr = _("Cannot access the file", term);
+	  			break;
+			case SS_ERR_MKSTEMP:
+				strerr = _("Cannot create temp file", term);
+	  			break;
+			case SS_ERR_RENAME:
+				strerr = _("Cannot rename the file", term);
+	  			break;
 			case SS_ERR_DISABLED:
 				strerr = _("File saving disabled by option", term);
 				break;
@@ -711,8 +727,7 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 			case SS_ERR_OPEN_WRITE:
 				strerr = _("Cannot write the file", term);
 				break;
-			default:
-				strerr = _("Secure open failed", term);
+			case SS_ERR_OTHER:
 				break;
 		}
 

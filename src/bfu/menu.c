@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.110 2003/09/28 16:04:33 jonas Exp $ */
+/* $Id: menu.c,v 1.111 2003/09/28 16:10:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,17 +103,9 @@ do_menu(struct terminal *term, struct menu_item *items, void *data, int hotkeys)
 }
 
 static void
-select_menu_item(struct terminal *term, struct menu_item *it, void *data2)
+select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 {
-	void (*func)(struct terminal *, void *, void *);
-	void *data1 = it->data;
-
-	assertm(it->func, "No menu function");
-	if_assert_failed return;
-
 	if (it->rtext == M_BAR) return;
-
-	func = it->func;
 
 	if (!it->submenu) {
 		/* Don't free data! */
@@ -130,7 +122,11 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data2)
 		}
 	}
 
-	func(term, data1, data2);
+	assertm(it->func, "No menu function");
+	if_assert_failed return;
+
+
+	it->func(term, it->data, data);
 }
 
 static inline void

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.200 2004/02/05 19:43:33 jonas Exp $ */
+/* $Id: search.c,v 1.201 2004/02/05 19:47:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -904,12 +904,23 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 		c += doc_view->height;
 	} while (c < doc_view->document->height + doc_view->height);
 
-	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-		N_("Search"), AL_CENTER,
-		msg_text(ses->tab->term, N_("Search string '%s' not found"),
-			ses->search_word),
-		ses, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	switch (get_opt_int("document.browse.search.show_not_found")) {
+		case 2:
+			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+				N_("Search"), AL_CENTER,
+				msg_text(ses->tab->term,
+					 N_("Search string '%s' not found"),
+					 ses->search_word),
+				ses, 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
+			break;
+
+		case 1:
+			beep_terminal(ses->tab->term);
+
+		default:
+			break;
+	}
 }
 
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-11-10 10:24+0100\n"
-"PO-Revision-Date: 2003-11-07 16:02+0100\n"
+"PO-Revision-Date: 2003-11-10 16:13+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -461,7 +461,6 @@ msgid "Really delete the option \"%s\"?"
 msgstr "Opravdu smazat volbu \"%s\"?"
 
 #: src/config/dialogs.c:401
-#, fuzzy
 msgid "Option manager"
 msgstr "Správce nastavení"
 
@@ -4193,7 +4192,7 @@ msgstr "Nastavení terminálu"
 
 #: src/dialogs/options.c:162
 msgid "Frame handling:"
-msgstr ""
+msgstr "Obsuhla rámeèkù:"
 
 #: src/dialogs/options.c:163
 msgid "No frames"
@@ -4212,9 +4211,8 @@ msgid "KOI8-R frames"
 msgstr "Rámeèky KOI8-R"
 
 #: src/dialogs/options.c:168
-#, fuzzy
 msgid "Color mode:"
-msgstr "Barevný re¾im"
+msgstr "Barevný re¾im:"
 
 #: src/dialogs/options.c:169
 msgid "No colors (mono)"
@@ -4352,9 +4350,8 @@ msgid "Global history"
 msgstr "Globální historie"
 
 #: src/globhist/dialogs.c:441
-#, fuzzy
 msgid "Bookmark"
-msgstr "Bookmarky"
+msgstr "Bookmark"
 
 #: src/globhist/globhist.c:70
 msgid "Global history options."

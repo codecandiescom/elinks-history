@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.7 2002/03/30 20:48:47 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.8 2002/03/30 20:49:56 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -312,16 +312,6 @@ void bookmark_edit_dialog(struct terminal *, unsigned char *,
 			  struct session *, struct dialog_data *,
 			  void when_done(struct dialog *),
 			  void *, int);
-
-/* Gets the head of the bookmark list kept by the dialog (the one used for
- * display purposes */
-/* I really should use this somewhere... */
-#if 0
-static inline list_head *
-bookmark_dlg_list_get(struct dialog) {
-	return dialog->items[BM_BOX_IND].data;
-}
-#endif
 
 /* Clears the bookmark list from the bookmark_dialog */
 static inline void

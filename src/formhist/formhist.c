@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.10 2003/08/02 16:08:53 jonas Exp $ */
+/* $Id: formhist.c,v 1.11 2003/08/02 17:02:31 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -45,6 +45,15 @@ done_form_history_item(struct form_history_item *item)
 	}
 
         mem_free(item);
+}
+
+void
+done_form_history(void)
+{
+	struct form_history_item *form;
+
+	foreach(form, form_history)
+		done_form_history_item(form);
 }
 
 static int
@@ -308,15 +317,6 @@ memorize_form(struct session *ses, struct list_head *submit,
 		N_("No"), done_form_history_item, NULL);
 
 	return sb;
-}
-
-void
-done_form_history(void)
-{
-	struct form_history_item *form;
-
-	foreach(form, form_history)
-		done_form_history_item(form);
 }
 
 #endif /* FORMS_MEMORY */

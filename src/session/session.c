@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.104 2003/06/26 17:06:39 jonas Exp $ */
+/* $Id: session.c,v 1.105 2003/06/26 21:09:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1393,7 +1393,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	void (*fn)(struct session *, unsigned char *);
 	struct f_data_c *fd;
 
-	fn = get_external_protocol_function(url);
+	fn = get_protocol_external_handler(url);
 	if (fn) {
 		fn(ses, url);
 		goto end;

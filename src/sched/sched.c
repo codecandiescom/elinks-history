@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.24 2003/06/26 17:06:39 jonas Exp $ */
+/* $Id: sched.c,v 1.25 2003/06/26 21:09:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,7 +229,7 @@ static struct k_conn *
 is_host_on_keepalive_list(struct connection *c)
 {
 	unsigned char *ho;
-	void (*ph)(struct connection *) = get_protocol_handle(c->url);
+	void (*ph)(struct connection *) = get_protocol_handler(c->url);
 	int po;
 	struct k_conn *h;
 
@@ -390,7 +390,7 @@ add_keepalive_socket(struct connection *c, ttime timeout)
 	k->port = get_port(c->url);
 	if (k->port == -1) goto free_and_close;
 
-	k->protocol = get_protocol_handle(c->url);
+	k->protocol = get_protocol_handler(c->url);
 	if (!k->protocol) goto free_and_close;
 
 	k->host = get_host_and_pass(c->url, 1);
@@ -565,7 +565,7 @@ run_connection(struct connection *c)
 		return;
 	}
 
-	func = get_protocol_handle(c->url);
+	func = get_protocol_handler(c->url);
 	if (!func) {
 		setcstate(c, S_BAD_URL);
 		del_connection(c);

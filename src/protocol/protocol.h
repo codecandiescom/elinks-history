@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.6 2003/06/26 21:07:04 pasky Exp $ */
+/* $Id: protocol.h,v 1.7 2003/06/26 21:09:58 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -32,8 +32,9 @@ struct protocol_backend {
 };
 
 enum uri_scheme check_protocol(unsigned char *p, int l);
-void (*get_protocol_handle(unsigned char *))(struct connection *);
-void (*get_external_protocol_function(unsigned char *))(struct session *, unsigned char *);
+
+void (*get_protocol_handler(unsigned char *))(struct connection *);
+void (*get_protocol_external_handler(unsigned char *))(struct session *, unsigned char *);
 
 /* Accessors for protocol backends. */
 int get_protocol_free_syntax(enum uri_scheme scheme);

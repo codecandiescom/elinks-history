@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.8 2003/06/26 21:07:04 pasky Exp $ */
+/* $Id: protocol.c,v 1.9 2003/06/26 21:09:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,7 +152,7 @@ get_protocol_need_slash_after_host(enum uri_scheme scheme)
 }
 
 
-void (*get_protocol_handle(unsigned char *url))(struct connection *)
+void (*get_protocol_handler(unsigned char *url))(struct connection *)
 {
 	void (*f)(struct connection *) = NULL;
 	unsigned char *p = get_protocol_name(url);
@@ -164,7 +164,7 @@ void (*get_protocol_handle(unsigned char *url))(struct connection *)
 	return f;
 }
 
-void (*get_external_protocol_function(unsigned char *url))(struct session *, unsigned char *)
+void (*get_protocol_external_handler(unsigned char *url))(struct session *, unsigned char *)
 {
 	void (*f)(struct session *, unsigned char *) = NULL;
 	unsigned char *p = get_protocol_name(url);

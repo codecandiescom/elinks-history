@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.21 2003/07/22 15:01:42 jonas Exp $ */
+/* $Id: uri.h,v 1.22 2003/07/22 15:09:28 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -30,7 +30,10 @@ struct uri {
 	unsigned char *post;
 };
 
-/* Expects that uri->protocol contains the uri string. */
+/* Initializes the members of the uri struct, as they are encountered. If
+ * an uri component is recognized both it's length and starting point is
+ * set. It is possible that the component start is set but that the length
+ * is zero so instead of testing *uri-><component> do uri-><component>len */
 /* Returns the length of the parsed uri or 0 if some error was found. */
 int parse_uri(struct uri *uri, unsigned char *uristring);
 

@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.1 2002/12/24 23:54:55 pasky Exp $ */
+/* $Id: syntree.h,v 1.2 2002/12/25 00:18:53 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -22,6 +22,7 @@
 
 enum syntree_node_special {
 	NODE_SPEC_NONE,
+	NODE_SPEC_TEXT,
 };
 
 struct syntree_node {
@@ -38,6 +39,9 @@ struct syntree_node {
 	/* In fact, ideally we shouldn't need this ie. for HTML, since
 	 * everything relevant for us will be stored as attributes. Sure
 	 * there are some magic elements - these are described below. */
+	/* Note that name can be NULL - that's the case for the text special,
+	 * which is a terminal token - the text itself. It can be then taken
+	 * from src/srclen. */
 
 	unsigned char *name;
 	int namelen;

@@ -1,3 +1,9 @@
+Tue Jan 14 11:54:01 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Mon Jan 13 11:18:14 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: config/urlhist.c, bookmarks/backend/default.c,

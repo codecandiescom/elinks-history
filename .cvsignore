@@ -10,13 +10,9 @@ Makefile
 Makefile.in
 stamp-h
 stamp-h.in
-install-sh
-missing
-mkinstalldirs
 depcomp
 autom4te.cache
 stamp-h1
 .deps
-elinkskeys.5
 *.swp
 features.log

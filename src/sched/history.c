@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.43 2003/10/24 20:32:51 pasky Exp $ */
+/* $Id: history.c,v 1.44 2003/10/24 20:39:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,14 +59,13 @@ clean_unhistory(struct ses_history *history)
 }
 
 
-/* Common ses_(un)back() backend, doing the actions common for leaving of the
- * current location for movement in the history. */
-/* @dir: 1 == forward (unback), -1 == back */
-/* Returns < 0 upon error, 0 if we should abort the movement and 1 if we should
- * proceed fearlessly. */
-static int
-ses_leave_location(struct session *ses, int dir)
+void
+ses_history_move(struct session *ses)
 {
+	struct location *loc;
+
+	/* Prepare. */
+
 	free_files(ses);
 
 	if (ses->search_word) {
@@ -74,59 +73,23 @@ ses_leave_location(struct session *ses, int dir)
 		ses->search_word = NULL;
 	}
 
+	/* Does it make sense? */
+
 	if (!have_location(ses) || !ses->task_target_location)
-		return 0;
-
-	return 1;
-}
-
-void
-ses_back(struct session *ses)
-{
-	struct location *loc;
-
-	if (ses_leave_location(ses, -1) < 1)
 		return;
-
-	/* This is the current location. */
 
 	if (ses->task_target_location
 	    == (struct location *) &ses->history.history)
 		return;
-	ses->history.current = ses->task_target_location;
 
-	/* This was the previous location (where we came back now). */
+	/* Move. */
+
+	ses->history.current = ses->task_target_location;
 
 	loc = cur_loc(ses);
 
-	if (!strcmp(loc->vs.url, ses->loading_url)) return;
-
-	/* Remake that location. */
-    	del_from_history(&ses->history, loc);
-	destroy_location(loc);
-	ses_forward(ses);
-}
-
-void
-ses_unback(struct session *ses)
-{
-	struct location *loc;
-
-	if (ses_leave_location(ses, 1) < 1)
+	if (!strcmp(loc->vs.url, ses->loading_url))
 		return;
-
-	/* This is the current location. */
-
-	if (ses->task_target_location
-	    == (struct location *) &ses->history.history)
-		return;
-	ses->history.current = ses->task_target_location;
-
-	/* This will be the next location (where we came back now). */
-
-	loc = cur_loc(ses);
-
-	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 
 	/* Remake that location. */
     	del_from_history(&ses->history, loc);

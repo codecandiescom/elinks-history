@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.13 2003/07/04 02:16:35 jonas Exp $ */
+/* $Id: download.h,v 1.14 2003/09/12 22:22:24 zas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -17,18 +17,18 @@ struct file_download {
 	LIST_HEAD(struct file_download);
 
 	unsigned char *url;
-	struct download download;
 	unsigned char *file;
+	unsigned char *prog;
+	struct session *ses;
+	struct window *win;
+	struct window *ask;
+	ttime remotetime;
 	int last_pos;
 	int handle;
 	int redirect_cnt;
 	int notify;
-	unsigned char *prog;
 	int prog_flags;
-	ttime remotetime;
-	struct session *ses;
-	struct window *win;
-	struct window *ask;
+	struct download download;
 };
 
 /* Stack of all running downloads */

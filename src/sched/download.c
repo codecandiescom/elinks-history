@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.97 2003/09/12 22:00:20 zas Exp $ */
+/* $Id: download.c,v 1.98 2003/09/12 22:22:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,8 +558,9 @@ download_data(struct download *download, struct file_download *file_download)
 
 		set_file_download_win_handler(file_download);
 
-		load_url(file_download->url, ce->url, &file_download->download, PRI_DOWNLOAD,
-			 NC_CACHE, download->prg ? download->prg->start : 0);
+		load_url(file_download->url, ce->url, &file_download->download,
+			 PRI_DOWNLOAD, NC_CACHE,
+			 download->prg ? download->prg->start : 0);
 
 		return;
 	}
@@ -683,14 +684,12 @@ lun_cancel(struct lun_hop *lun_hop)
 
 static void
 lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
-		void (*callback)(struct terminal *, unsigned char *, void *, int),
-		void *data)
+		   void (*callback)(struct terminal *, unsigned char *, void *, int),
+		   void *data)
 {
 	struct lun_hop *lun_hop;
-	/* !overwrite means always silently overwrite, which may be admitelly
-	 * indeed a little confusing ;-) */
-	int overwrite = get_opt_int("document.download.overwrite");
 	unsigned char *file;
+	int overwrite;
 
 	ofile = expand_tilde(ofile);
 
@@ -701,7 +700,17 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	 * * allow to rename the old file
 	 * --pasky */
 
-	if (!overwrite || resume) {
+	/* Minor code duplication to prevent useless call to get_opt_int()
+	 * if possible. --Zas */
+	if (resume) {
+		callback(term, ofile, data, resume);
+		return;
+	}
+
+	/* !overwrite means always silently overwrite, which may be admitelly
+	 * indeed a little confusing ;-) */
+	overwrite = get_opt_int("document.download.overwrite");
+	if (!overwrite) {
 		/* Nothing special to do... */
 		callback(term, ofile, data, resume);
 		return;
@@ -899,7 +908,7 @@ subst_file(unsigned char *prog, unsigned char *file)
 	if (!init_string(&name)) return NULL;
 
 	while (*prog) {
-		int p;
+		register int p;
 
 		for (p = 0; prog[p] && prog[p] != '%'; p++);
 
@@ -947,8 +956,8 @@ common_download(struct session *ses, unsigned char *file, int resume)
 
 	kill_downloads_to_file(file);
 
-	create_download_file(ses->tab->term, file, &cmdw_hop->real_file, 0, resume,
-			common_download_do, cmdw_hop);
+	create_download_file(ses->tab->term, file, &cmdw_hop->real_file, 0,
+			     resume, common_download_do, cmdw_hop);
 }
 
 static void
@@ -1043,7 +1052,7 @@ continue_download(struct session *ses, unsigned char *file)
 	kill_downloads_to_file(file);
 
 	create_download_file(ses->tab->term, file, &codw_hop->real_file,
-			!!ses->tq_prog, 0, continue_download_do, codw_hop);
+			     !!ses->tq_prog, 0, continue_download_do, codw_hop);
 }
 
 static void
@@ -1161,7 +1170,7 @@ tp_display(struct session *ses)
 
 	add_to_history(ses, l);
 	cur_loc(ses)->download.end = (void (*)(struct download *, void *))
-				 doc_end_load;
+				     doc_end_load;
 	cur_loc(ses)->download.data = ses;
 
 	if (ses->tq.state >= 0)
@@ -1281,8 +1290,8 @@ int
 ses_chktype(struct session *ses, struct download **download, struct cache_entry *ce)
 {
 	struct mime_handler *handler;
-	int plaintext = 0;
 	unsigned char *ctype = get_content_type(ce->head, ce->url);
+	int plaintext = 0;
 	int xwin;
 
 	if (!ctype) goto end;
@@ -1326,7 +1335,7 @@ free_ct:
 	mem_free(ctype);
 
 end:
-	if (ses->task_target_frame && plaintext) *ses->task_target_frame = 0;
+	if (plaintext && ses->task_target_frame) *ses->task_target_frame = 0;
 	ses_forward(ses);
 	cur_loc(ses)->vs.plain = plaintext;
 	return 0;

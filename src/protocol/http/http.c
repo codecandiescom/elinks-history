@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.116 2003/05/18 15:15:39 pasky Exp $ */
+/* $Id: http.c,v 1.117 2003/05/18 15:56:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1014,10 +1014,19 @@ read_more:
 	setcstate(conn, S_TRANS);
 }
 
+/* Returns offset of the header end, zero if more data is needed, -1 when
+ * incorrect data was received, -2 if this is HTTP/0.9 and no header is to
+ * come. */
 static int
 get_header(struct read_buffer *rb)
 {
 	int i;
+
+	/* XXX: We will have to do some guess about whether an HTTP header is
+	 * coming or not, in order to support HTTP/0.9 reply correctly. This
+	 * means a little code duplcation with get_http_code(). --pasky */
+	if (rb->len > 4 && strncasecmp(rb->data, "HTTP/", 5))
+		return -2;
 
 	for (i = 0; i < rb->len; i++) {
 		unsigned char a = rb->data[i];
@@ -1033,6 +1042,7 @@ get_header(struct read_buffer *rb)
 			}
 		}
 	}
+
 	return 0;
 }
 
@@ -1098,7 +1108,8 @@ again:
 		setcstate(c, state);
 		return;
 	}
-	if (get_http_code(rb->data, &h, &version)
+	if (a == -2) a = 0;
+	if ((a && get_http_code(rb->data, &h, &version))
 	    || h == 101) {
 		abort_conn_with_state(c, S_HTTP_ERROR);
 		return;

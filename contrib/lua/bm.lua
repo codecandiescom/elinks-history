@@ -1,5 +1,5 @@
 -- Bookmark system for Links-Lua.
--- $Id: bm.lua,v 1.5 2005/03/25 18:29:33 miciah Exp $
+-- $Id: bm.lua,v 1.6 2005/03/27 22:44:05 miciah Exp $
 
 -----------------------------------------------------------------------
 --  User options
@@ -206,16 +206,16 @@ function bm_edit_bookmark ()
 	    function (cat)
 		if cat == '' then
 		    _ALERT ('Bad input')
-		elseif bm_bookmarks[%i].category ~= cat then
+		elseif bm_bookmarks[i].category ~= cat then
 		    local j = bm_find_category (cat)
 		    if not j then
-			bm_bookmarks[%i].category = cat
+			bm_bookmarks[i].category = cat
 		    else
-			local tmp = bm_bookmarks[%i]
+			local tmp = bm_bookmarks[i]
 			for i = 1, getn (tmp) do
 			    bm_do_add_bookmark (cat, tmp[i].name, tmp[i].url)
 			end
-			bm_delete_bookmark (%i)
+			bm_delete_bookmark (i)
 		    end
 		    return bm_view_bookmarks ()
 		end
@@ -230,12 +230,12 @@ function bm_edit_bookmark ()
 				if cat == '' or name == '' or url == '' then
 				    _ALERT ('Bad input')
 				else
-				    if cat ~= bm_bookmarks[%i].category then
-					bm_do_delete_bookmark (%i, %j)
+				    if cat ~= bm_bookmarks[i].category then
+					bm_do_delete_bookmark (i, j)
 					bm_do_add_bookmark (cat, name, url)
 				    else
-					%entry.name = name
-					%entry.url = url
+					entry.name = name
+					entry.url = url
 				    end
 				    return bm_view_bookmarks ()
 				end

@@ -1,6 +1,6 @@
 -- Check MD5 sums of download files automagically (it expects them in
 -- downloadedfile.txt).
--- $Id: md5check.lua,v 1.2 2003/11/24 13:30:01 zas Exp $
+-- $Id: md5check.lua,v 1.3 2005/03/27 22:44:05 miciah Exp $
 
 ----------------------------------------------------------------------
 -- Installation
@@ -37,11 +37,11 @@ function md5sum_check(download_dir)
 	    -- lua regexps don't seem to be able to do this
 	    if strlen(sum) ~= 32 then return end
 
-	    local fn = %download_dir.."/"..filename
+	    local fn = download_dir.."/"..filename
 	    if file_exists(fn) then
 		local localsum = gsub(pipe_read("md5sum "..fn),
 				      "^([a-z%d]+).*$", "%1")
-		tinsert(%results, filename.. " -- "..
+		tinsert(results, filename.. " -- "..
 			((sum == localsum) and "ok\n" or "MISMATCH!\n"))
 	    end
 	end)

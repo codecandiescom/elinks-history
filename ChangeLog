@@ -1,3 +1,159 @@
+Tue Sep 23 20:30:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/: scripting.c, scripting.h, guile/core.c,
+	guile/core.h, lua/core.c, lua/core.h:
+
+	Further backend the scripting subsystem by introducing struct
+	scripting_backend. Only handles init/done calls and hook management.  
+
+Tue Sep 23 19:25:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/Makefile.am:
+
+	libscripting.a is not a noinst_LTLIBRARIES so s/LT//. ;) 
+
+Tue Sep 23 18:44:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, scripting/scripting.c, scripting/scripting.h:
+
+	Introduce generic scripting setup and teardown functions that just
+	call the backends.  
+
+Tue Sep 23 15:03:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: Makefile.am, scripting/Makefile.am:
+
+	Deltize libscripting.a. *shudder* Sick from you, Jonas! ;-) 
+
+Tue Sep 23 14:19:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/date.c:
+
+	Attribute comment to me.  
+
+Tue Sep 23 14:17:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/core.c:
+
+	Minor tidyup.  
+
+Tue Sep 23 14:06:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/event.c, sched/event.h, scripting/scripting.h:
+
+	Event hook handler is now covered by type event_hook.  
+
+Tue Sep 23 14:03:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/event.c, sched/event.h, scripting/scripting.h,
+	scripting/lua/hooks.c:
+
+	Event hooks return {enum evhook_status}.  
+
+Tue Sep 23 13:53:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/event.h:
+
+	Tiny regrouping.  
+
+Tue Sep 23 08:40:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/scripting.c:
+
+	Fix scripting hook registration. Most events don't exist so create
+	them.  
+
+Tue Sep 23 08:30:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Make the scripting goto_url_* functions work when no scripting hooks
+	are registered.  
+
+Tue Sep 23 07:36:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/Makefile.am:
+
+	Linking failure due to libscripting introduction was fixed.  
+
+Tue Sep 23 00:47:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/: core.c, hooks.c, hooks.h:
+
+	Use generic hook registration. (define untested-and-uncompiled true) 
+
+Tue Sep 23 00:45:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/: core.c, hooks.c, hooks.h:
+
+	Use generic hook registration.  
+
+Tue Sep 23 00:45:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/: Makefile.am, scripting.c, scripting.h:
+
+	Add generic functionality for registering hooks.  
+
+Tue Sep 23 00:05:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	script_hook_pre_format_html(): Cleanup. Please test since I am not
+	that big a lua extension user.  
+
+Mon Sep 22 23:59:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	script_hook_get_proxy(): Cleanup.  
+
+Mon Sep 22 23:52:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, scripting/lua/hooks.c:
+
+	script_hook_follow_url(): Cleanup.  goto_url_w(): Always use @newurl
+	but test if non NULL.  
+
+Mon Sep 22 23:49:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	script_hook_goto_url(): More streamlining.  
+
+Mon Sep 22 23:34:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, scripting/lua/hooks.c:
+
+	Always use @newurl and test if it is non NULL in
+	goto_url_with_hook().  This greatly simplifies the lua
+	script_hook_goto_url().  
+
+Mon Sep 22 23:19:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	script_hook_quit(): Cleanup.  
+
+Mon Sep 22 23:07:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	Oops missed one t.h.i.n.g to keep the flow intact although all these
+	"" seems pretty pointless.  
+
+Mon Sep 22 23:02:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	script_hook_goto_url(): Cleanup.  
+
+Mon Sep 22 22:21:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix problem reported by David Gómez where openssl was disabled when
+	calling configure with --without-gnutls.  
+
 Mon Sep 22 22:00:46 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* AUTHORS:

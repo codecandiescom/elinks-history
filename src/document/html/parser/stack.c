@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.4 2004/04/23 23:10:40 pasky Exp $ */
+/* $Id: stack.c,v 1.5 2004/04/23 23:12:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,8 +34,8 @@ INIT_LIST_HEAD(html_stack);
 
 
 #if 0
-static void
-dump_html_stack()
+void
+dump_html_stack(void)
 {
 	struct html_element *element;
 
@@ -99,31 +99,6 @@ kill_html_stack_item(struct html_element *e)
 	}
 #endif
 }
-
-#if 0
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-/* Never called */
-void
-debug_stack(void)
-{
-	struct html_element *e;
-
-	printf("HTML stack debug: \n");
-	foreachback (e, html_stack) {
-		int i;
-
-		printf("\"");
-		for (i = 0; i < e->namelen; i++) printf("%c", e->name[i]);
-		printf("\" : %d", e->type);
-		printf("\n");
-	}
-	printf("%c", 7);
-	fflush(stdout);
-	sleep(1);
-}
-#endif
 
 void
 html_stack_dup(enum html_element_type type)

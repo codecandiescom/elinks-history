@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.406 2004/04/23 23:06:40 pasky Exp $ */
+/* $Id: parser.c,v 1.407 2004/04/23 23:12:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1160,7 +1160,7 @@ html_ul(unsigned char *a)
 {
 	unsigned char *al;
 
-	/*debug_stack();*/
+	/* dump_html_stack(); */
 	par_format.list_level++;
 	par_format.list_number = 0;
 	par_format.flags = P_STAR;
@@ -3024,7 +3024,7 @@ ng:;
 
 				was_br = 0;
 				if (ei->nopair == 1 || ei->nopair == 3) break;
-				/*debug_stack();*/
+				/* dump_html_stack(); */
 				foreach (e, html_stack) {
 					if (e->linebreak && !ei->linebreak) xxx = 1;
 					if (strlcasecmp(e->name, e->namelen, name, namelen)) {
@@ -3047,7 +3047,7 @@ ng:;
 					kill_html_stack_item(e);
 					break;
 				}
-				/*debug_stack();*/
+				/* dump_html_stack(); */
 			}
 			goto set_lt;
 		}

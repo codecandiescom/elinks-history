@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.39 2004/01/01 15:47:25 jonas Exp $ */
+/* $Id: mime.c,v 1.40 2004/03/22 01:08:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,8 +117,9 @@ check_encoding_type(unsigned char *extension)
 #endif
 
 unsigned char *
-get_content_type(unsigned char *head, unsigned char *url)
+get_content_type(unsigned char *head, struct uri *uri)
 {
+	unsigned char *url = struri(uri);
 	unsigned char *extension, *ctype;
 
 	debug_get_content_type_params(head, url);

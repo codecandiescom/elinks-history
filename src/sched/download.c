@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.218 2004/03/22 01:04:20 jonas Exp $ */
+/* $Id: download.c,v 1.219 2004/03/22 01:08:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1070,7 +1070,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	struct mime_handler *handler;
 	struct view_state *vs;
 	struct tq *tq;
-	unsigned char *ctype = get_content_type(ce->head, get_cache_uri(ce));
+	unsigned char *ctype = get_content_type(ce->head, get_cache_uri_struct(ce));
 	int plaintext = 1;
 	int ret = 0;
 	int xwin, i;

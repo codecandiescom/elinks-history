@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.126 2003/09/23 18:44:54 jonas Exp $ */
+/* $Id: main.c,v 1.127 2003/10/01 22:49:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,8 +36,8 @@
 #include "config/options.h"
 #include "config/urlhist.h"
 #include "cookies/cookies.h"
-#include "dialogs/menu.h"
 #include "dialogs/auth.h"
+#include "dialogs/menu.h"
 #include "document/cache.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
@@ -55,15 +55,15 @@
 #include "main.h"
 #include "mime/mime.h"
 #include "protocol/http/auth.h"
+#include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/error.h"
 #include "sched/event.h"
-#include "sched/connection.h"
 #include "sched/session.h"
 #include "scripting/scripting.h"
 #include "terminal/kbd.h"
-#include "terminal/terminal.h"
 #include "terminal/screen.h"
+#include "terminal/terminal.h"
 #include "util/blacklist.h"
 #include "util/color.h"
 #include "util/error.h"

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.219 2004/06/19 17:58:36 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.220 2004/06/20 15:08:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -447,7 +447,6 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "cookie-manager", ACT_MAIN_COOKIE_MANAGER, DACT(N_("Open cookie manager")) },
 	{ "cookies-load", ACT_MAIN_COOKIES_LOAD, DACT(N_("Reload cookies file")) },
 	{ "copy-clipboard", ACT_MAIN_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
-	{ "delete", ACT_MAIN_DELETE, DACT(N_("Delete character under cursor")) },
 	{ "document-info", ACT_MAIN_DOCUMENT_INFO, DACT(N_("Show information about the current page")) },
 	{ "down", ACT_MAIN_DOWN, DACT(N_("Move cursor downwards")) },
 	{ "download", ACT_MAIN_DOWNLOAD, DACT(N_("Download the current link")) },

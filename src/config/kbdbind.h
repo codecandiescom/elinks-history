@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.116 2004/06/19 17:58:36 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.117 2004/06/20 15:08:41 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -48,7 +48,6 @@ enum main_action {
 	ACT_MAIN_MOVE_CURSOR_LEFT,
 	ACT_MAIN_MOVE_CURSOR_RIGHT,
 	ACT_MAIN_MOVE_CURSOR_UP,
-	ACT_MAIN_DELETE,
 	ACT_MAIN_DOCUMENT_INFO,
 	ACT_MAIN_DOWN,
 	ACT_MAIN_DOWNLOAD,

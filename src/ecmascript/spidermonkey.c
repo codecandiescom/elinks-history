@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.11 2004/09/22 23:30:05 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.12 2004/09/23 14:05:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,9 @@
 #include "ecmascript/ecmascript.h"
 #include "ecmascript/spidermonkey.h"
 #include "protocol/uri.h"
+#include "sched/task.h"
+#include "terminal/tab.h"
+#include "terminal/terminal.h"
 #include "util/string.h"
 
 
@@ -209,6 +212,69 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 }
 
 
+static JSBool location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+static JSBool location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+
+static const JSClass location_class = {
+	"location",
+	JSCLASS_HAS_PRIVATE,
+	JS_PropertyStub, JS_PropertyStub,
+	location_get_property, location_set_property,
+	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+
+enum location_prop { JSP_LOC_HREF };
+static const JSPropertySpec location_props[] = {
+	{ "href",	JSP_LOC_HREF,	JSPROP_ENUMERATE },
+	{ NULL }
+};
+
+static JSBool
+location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	struct document_view *doc_view = JS_GetContextPrivate(ctx);
+	struct view_state *vs = &cur_loc(doc_view->session)->vs;
+
+	VALUE_TO_JSVAL_START;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_LOC_HREF: string = get_uri_string(vs->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
+	default:
+		INTERNAL("Invalid ID %d in location_get_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+
+	VALUE_TO_JSVAL_END;
+}
+
+static JSBool
+location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	struct document_view *doc_view = JS_GetContextPrivate(ctx);
+
+	JSVAL_TO_VALUE_START;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_LOC_HREF:
+	{
+		struct uri *new_uri;
+
+		JSVAL_REQUIRE(vp, STRING, string);
+		new_uri = get_hooked_uri(string, doc_view->session,
+		                         doc_view->session->tab->term->cwd);
+		if (!new_uri)
+			break;
+		goto_uri_frame(doc_view->session, new_uri, doc_view->name,
+		               CACHE_MODE_NORMAL);
+		done_uri(new_uri);
+		break;
+	}
+	}
+
+	JSVAL_TO_VALUE_END;
+}
+
+
 
 /*** The ELinks interface */
 
@@ -232,7 +298,7 @@ void *
 spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 {
 	JSContext *ctx;
-	JSObject *global_obj, *document_obj;
+	JSObject *global_obj, *document_obj, *location_obj;
 
 	assert(interpreter);
 
@@ -252,6 +318,11 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 	document_obj = JS_InitClass(ctx, global_obj, NULL,
 	                            (JSClass *) &document_class, NULL, 0,
 	                            (JSPropertySpec *) document_props, NULL,
+	                            NULL, NULL);
+
+	location_obj = JS_InitClass(ctx, global_obj, NULL,
+	                            (JSClass *) &location_class, NULL, 0,
+	                            (JSPropertySpec *) location_props, NULL,
 	                            NULL, NULL);
 
 	return ctx;

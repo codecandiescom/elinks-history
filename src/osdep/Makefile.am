@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.24 2003/10/28 00:17:48 pasky Exp $
+## $Id: Makefile.am,v 1.25 2003/10/28 00:27:29 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
-SUBDIRS = beos os2 riscos unix win32 sysinfo
+SUBDIRS = beos os2 riscos unix win32
 
 noinst_LIBRARIES = libosdep.a
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.145 2003/07/03 21:36:18 zas Exp $ */
+/* $Id: parser.c,v 1.146 2003/07/03 22:08:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -395,10 +395,7 @@ html_stack_dup(void)
 	struct html_element *e;
 	struct html_element *ep = html_stack.next;
 
-	if (!ep || (void *) ep == &html_stack) {
-	   	internal("html stack empty");
-		return;
-	}
+	assertm(ep && (void *)ep != &html_stack, "html stack empty");
 
 	e = mem_alloc(sizeof(struct html_element));
 	if (!e) return;
@@ -978,7 +975,7 @@ html_center(unsigned char *a)
 static void
 html_linebrk(unsigned char *a)
 {
-	char *al = get_attr_val(a, "align");
+	unsigned char *al = get_attr_val(a, "align");
 
 	if (al) {
 		if (!strcasecmp(al, "left")) par_format.align = AL_LEFT;
@@ -1020,7 +1017,7 @@ html_p(unsigned char *a)
 static void
 html_address(unsigned char *a)
 {
-	par_format.leftmargin += 1;
+	par_format.leftmargin++;
 	par_format.align = AL_LEFT;
 }
 
@@ -1032,24 +1029,25 @@ html_blockquote(unsigned char *a)
 }
 
 static void
-html_h(int h, unsigned char *a, enum format_align default_align)
+html_h(unsigned int h, unsigned char *a,
+       enum format_align default_align)
 {
 	par_format.align = default_align;
 	html_linebrk(a);
 	switch (par_format.align) {
 		case AL_LEFT:
-			par_format.leftmargin = (h - 2) * 2;
+			par_format.leftmargin = h << 1;
 			par_format.rightmargin = 0;
 			break;
 		case AL_RIGHT:
 			par_format.leftmargin = 0;
-			par_format.rightmargin = (h - 2) * 2;
+			par_format.rightmargin = h << 1;
 			break;
 		case AL_CENTER:
 			par_format.leftmargin = par_format.rightmargin = 0;
 			break;
 		case AL_BLOCK:
-			par_format.leftmargin = par_format.rightmargin = (h - 2) * 2;
+			par_format.leftmargin = par_format.rightmargin = h << 1;
 			break;
 		case AL_NONE:
 			/* Silence compiler warnings */
@@ -1061,37 +1059,37 @@ static void
 html_h1(unsigned char *a)
 {
 	format.attr |= AT_BOLD;
-	html_h(2, a, AL_CENTER);
+	html_h(0, a, AL_CENTER);
 }
 
 static void
 html_h2(unsigned char *a)
 {
-	html_h(2, a, AL_LEFT);
+	html_h(0, a, AL_LEFT);
 }
 
 static void
 html_h3(unsigned char *a)
 {
-	html_h(3, a, AL_LEFT);
+	html_h(1, a, AL_LEFT);
 }
 
 static void
 html_h4(unsigned char *a)
 {
-	html_h(4, a, AL_LEFT);
+	html_h(2, a, AL_LEFT);
 }
 
 static void
 html_h5(unsigned char *a)
 {
-	html_h(5, a, AL_LEFT);
+	html_h(3, a, AL_LEFT);
 }
 
 static void
 html_h6(unsigned char *a)
 {
-	html_h(6, a, AL_LEFT);
+	html_h(4, a, AL_LEFT);
 }
 
 static void
@@ -1123,11 +1121,10 @@ html_hr(unsigned char *a)
 	format.form = NULL;
 	html_linebrk(a);
 	if (par_format.align == AL_BLOCK) par_format.align = AL_CENTER;
-	par_format.leftmargin = margin;
-	par_format.rightmargin = margin;
+	par_format.leftmargin = par_format.rightmargin = margin;
 
 	i = get_width(a, "width", 1);
-	if (i == -1) i = par_format.width - 2 * margin - 4;
+	if (i == -1) i = par_format.width - (margin - 2) * 2;
 	format.attr = AT_GRAPHICS;
 	special_f(ff, SP_NOWRAP, 1);
 	while (i-- > 0) put_chrs(&r, 1, put_chars_f, ff);
@@ -1200,12 +1197,14 @@ html_ul(unsigned char *a)
 
 	al = get_attr_val(a, "type");
 	if (al) {
-		if (!strcasecmp(al, "disc") || !strcasecmp(al, "circle")) par_format.flags = P_O;
-		else if (!strcasecmp(al, "square")) par_format.flags = P_PLUS;
+		if (!strcasecmp(al, "disc") || !strcasecmp(al, "circle"))
+			par_format.flags = P_O;
+		else if (!strcasecmp(al, "square"))
+			par_format.flags = P_PLUS;
 		mem_free(al);
 	}
 	par_format.leftmargin += 2 + (par_format.list_level > 1);
-	if (par_format.leftmargin > par_format.width / 2 && !table_level)
+	if (!table_level && par_format.leftmargin > par_format.width / 2)
 		par_format.leftmargin = par_format.width / 2;
 	par_format.align = AL_LEFT;
 	html_top.dontkill = 1;
@@ -1238,7 +1237,7 @@ html_ol(unsigned char *a)
 	}
 
 	par_format.leftmargin += (par_format.list_level > 1);
-	if (par_format.leftmargin > par_format.width / 2 && !table_level)
+	if (!table_level && par_format.leftmargin > par_format.width / 2)
 		par_format.leftmargin = par_format.width / 2;
 	par_format.align = AL_LEFT;
 	html_top.dontkill = 1;
@@ -1276,7 +1275,7 @@ html_li(unsigned char *a)
 		} else if (t == P_ROMAN || t == P_roman) {
 			roman(n, par_format.list_number);
 			if (t == P_ROMAN) {
-				char *x;
+				register unsigned char *x;
 
 				for (x = n; *x; x++) *x = upcase(*x);
 			}
@@ -1328,7 +1327,7 @@ html_dd(unsigned char *a)
 	kill_until(0, "", "DL", NULL);
 
 	par_format.leftmargin = par_format.dd_margin + (table_level ? 3 : 8);
-	if (par_format.leftmargin > par_format.width / 2 && !table_level)
+	if (!table_level && par_format.leftmargin > par_format.width / 2)
 		par_format.leftmargin = par_format.width / 2;
 	par_format.align = AL_LEFT;
 }
@@ -1555,7 +1554,8 @@ xxx:
 
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
 	if (fc->type == FC_CHECKBOX && !fc->default_value) fc->default_value = stracpy("on");
-	if ((fc->size = get_num(a, "size")) == -1) fc->size = HTML_DEFAULT_INPUT_SIZE;
+	fc->size = get_num(a, "size");
+	if (fc->size == -1) fc->size = HTML_DEFAULT_INPUT_SIZE;
 	fc->size++;
 	if (fc->size > d_opt->xw) fc->size = d_opt->xw;
 	if ((fc->maxlength = get_num(a, "maxlength")) == -1) fc->maxlength = MAXINT;
@@ -1893,14 +1893,13 @@ static int
 do_html_select(unsigned char *attr, unsigned char *html,
 	       unsigned char *eof, unsigned char **end, void *f)
 {
+	struct conv_table *ct = special_f(f, SP_TABLE, NULL);
 	struct form_control *fc;
-	unsigned char *t_name, *t_attr, *en;
+	unsigned char **val, **lbls;
+	unsigned char *t_name, *t_attr, *en, *lbl;
 	int t_namelen;
-	unsigned char *lbl;
 	int lbl_l;
 	int nnmi = 0;
-	struct conv_table *ct = special_f(f, SP_TABLE, NULL);
-	unsigned char **val, **lbls;
 	int order, preselect, group;
 	int i, mw;
 
@@ -2016,7 +2015,7 @@ abort:
 	}
 
 	if (t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8)) {
-		char *la = get_attr_val(t_attr, "label");
+		unsigned char *la = get_attr_val(t_attr, "label");
 
 		if (!la) {
 			la = stracpy("");
@@ -2035,7 +2034,7 @@ end_parse:
 	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) goto abort;
 
-	lbls = mem_calloc(order, sizeof(char *));
+	lbls = mem_calloc(order, sizeof(unsigned char *));
 	if (!lbls) {
 		mem_free(fc);
 		goto abort;
@@ -2263,8 +2262,8 @@ static void
 parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 {
 	unsigned char *aa;
-	int q, qq, i, d, nn;
 	unsigned long n;
+	int q, qq, i, d, nn;
 	int *oo;
 	int *o = NULL;
 	int ol = 0;
@@ -2343,11 +2342,11 @@ distribute:
 			o[i] += (-oo[i] * qq / d);
 			q -= (-oo[i] * qq / d);
 		}
-		if (q < 0) internal("parse_frame_widths: q < 0");
+		assertm(q >= 0, "parse_frame_widths: q < 0");
 		for (i = 0; i < ol; i++) if (oo[i] < 0) {
 			if (q) o[i]++, q--;
 		}
-		if (q > 0) internal("parse_frame_widths: q > 0");
+		assertm(q <= 0, "parse_frame_widths: q > 0");
 		mem_free(oo);
 	}
 
@@ -2364,9 +2363,9 @@ distribute:
 static void
 html_frameset(unsigned char *a)
 {
-	int x, y;
 	struct frameset_param fp;
 	unsigned char *c, *d;
+	int x, y;
 
 	if (!d_opt->frames || !special_f(ff, SP_USED, NULL)) return;
 
@@ -2408,48 +2407,6 @@ free_cd:
 	mem_free(d);
 }
 
-#if 0
-void
-html_frameset(unsigned char *a)
-{
-	int w;
-	int horiz = 0;
-	struct frameset_param *fp;
-	unsigned char *c, *d;
-	if (!d_opt->frames || !special_f(ff, SP_USED, NULL)) return;
-	if (!(c = get_attr_val(a, "cols"))) {
-		horiz = 1;
-		if (!(c = get_attr_val(a, "rows"))) return;
-	}
-	if (!(fp = mem_alloc(sizeof(struct frameset_param)))) goto f;
-	fp->n = 0;
-	fp->horiz = horiz;
-	par_format.leftmargin = par_format.rightmargin = 0;
-	d = c;
-	while (1) {
-		while (WHITECHAR(*d)) d++;
-		if (!*d) break;
-		if (*d == ',') {
-			d++;
-			continue;
-		}
-		if ((w = parse_width(d, 1)) != -1) {
-			struct frameset_param *fpp;
-			if ((fpp = mem_realloc(fp, sizeof(struct frameset_param) + (fp->n + 1) * sizeof(int)))) {
-				fp = fpp;
-				fp->width[fp->n++] = w;
-			}
-		}
-		if (!(d = strchr(d, ','))) break;
-		d++;
-	}
-	fp->parent = html_top.frameset;
-	if (fp->n) html_top.frameset = special_f(ff, SP_FRAMESET, fp);
-	mem_free(fp);
-	f:
-	mem_free(c);
-}
-#endif
 
 static void
 html_link(unsigned char *a)

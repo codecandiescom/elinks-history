@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.165 2004/04/07 15:43:14 jonas Exp $ */
+/* $Id: uri.c,v 1.166 2004/04/07 15:46:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -617,6 +617,7 @@ find_uri_protocol(unsigned char *newurl)
 
 	/* Yes, it would be simpler to make test for IPv6 address first,
 	 * but it would result in confusing mix of ifdefs ;-). */
+	/* FIXME: Handle irc. and other common hostnames? --jonas */
 
 	ch = newurl + strcspn(newurl, ".:/@");
 	if (*ch == '@' || (*ch == ':' && *newurl != '[')

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.12 2003/01/20 13:38:14 pasky Exp $ */
+/* $Id: string.h,v 1.13 2003/01/20 14:56:32 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -67,17 +67,21 @@ unsigned char *straconcat(unsigned char *, ...);
 void add_to_str(unsigned char **, int *, unsigned char *);
 void add_bytes_to_str(unsigned char **, int *, unsigned char *, int);
 void add_chr_to_str(unsigned char **, int *, unsigned char);
-int xstrcmp(unsigned char *, unsigned char *);
-#ifndef HAVE_STRCASECMP
-int strcasecmp(unsigned char *, unsigned char *, int);
-#endif /* !HAVE_STRCASECMP */
-#ifndef HAVE_STRNCASECMP
-int strncasecmp(unsigned char *, unsigned char *, int);
-#endif /* !HAVE_STRNCASECMP */
 
-#ifndef HAVE_STRCASESTR
+int xstrcmp(unsigned char *, unsigned char *);
+
+/* #ifndef HAVE_STRCASECMP */
+int strcasecmp(unsigned char *, unsigned char *);
+/* #endif */
+/* #ifndef HAVE_STRNCASECMP */
+int strncasecmp(unsigned char *, unsigned char *, int);
+/* #endif */
+/* #ifndef HAVE_STRCASESTR */
 unsigned char *strcasestr(unsigned char *, unsigned char *);
-#endif
+/* #endif */
+/* #ifndef HAVE_STRDUP */
+unsigned char *strdup(unsigned char *);
+/* #endif */
 
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
 unsigned char *trim_chars(unsigned char *, unsigned char, int *);

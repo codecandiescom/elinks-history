@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.21 2003/01/20 13:38:14 pasky Exp $ */
+/* $Id: string.c,v 1.22 2003/01/20 14:56:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,12 +311,10 @@ xstrcmp(unsigned char *s1, unsigned char *s2)
 
 #ifndef HAVE_STRCASECMP
 int
-strcasecmp(unsigned char *c1, unsigned char *c2, int len)
+strcasecmp(unsigned char *c1, unsigned char *c2)
 {
-	int i;
-
 	for (; *c1 && *c2; c1++, c2++)
-		if (upcase(c1[i]) != upcase(c2[i]))
+		if (upcase(*c1) != upcase(*c2))
 			return 1;
 
 	return 0;
@@ -375,6 +373,19 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 
 	return dst;
 }
+
+#ifndef HAVE_STRDUP
+unsigned char *
+strdup(unsigned char *str)
+{
+	int str_len = strlen(str);
+	unsigned char *new = malloc(str_len + 1);
+
+	strcpy(new, str);
+	new[str_len] = 0;
+	return new;
+}
+#endif
 
 #ifndef HAVE_STRERROR
 /* Many older systems don't have this, but have the global sys_errlist array
@@ -440,7 +451,8 @@ memmove(char *dst, char *src, int n)
  * string is returned. if len != NULL, it is set to length of
  * trimmed string.
  */
-inline unsigned char *trim_chars(unsigned char *s, unsigned char c, int *len)
+inline unsigned char *
+trim_chars(unsigned char *s, unsigned char c, int *len)
 {
 	int l = strlen(s);
 

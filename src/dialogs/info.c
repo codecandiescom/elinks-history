@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.78 2003/11/17 18:00:30 pasky Exp $ */
+/* $Id: info.c,v 1.79 2003/11/28 00:17:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,6 @@
 
 #include "bfu/msgbox.h"
 #include "dialogs/info.h"
-#include "dialogs/refresh.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "cache/cache.h"
@@ -111,52 +110,43 @@ menu_copying(struct terminal *term, void *d, struct session *ses)
 }
 
 
+static unsigned char *
+get_ressource_info(struct terminal *term, void *data)
+{
+	return msg_text(term, N_("Resources: %d handles, %d timers.\n"
+		"Connections: %d connections, %d connecting, %d "
+		"transferring, %d keepalive.\n"
+		"Memory cache: %d bytes, %d files, %d locked, %d "
+		"loading.\n"
+		"Formatted document cache: %d documents, %d locked."),
+		select_info(INFO_FILES), select_info(INFO_TIMERS),
+		connect_info(INFO_FILES), connect_info(INFO_CONNECTING),
+		connect_info(INFO_TRANSFER), connect_info(INFO_KEEP),
+		cache_info(INFO_BYTES), cache_info(INFO_FILES),
+		cache_info(INFO_LOCKED), cache_info(INFO_LOADING),
+		formatted_info(INFO_FILES), formatted_info(INFO_LOCKED));
+}
+
 void
 res_inf(struct terminal *term, void *d, struct session *ses)
 {
-	struct refresh *r;
-
-	r = mem_alloc(sizeof(struct refresh));
-	if (!r)	return;
-
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Resources"), AL_LEFT,
-		msg_text(term, N_("Resources: %d handles, %d timers.\n"
-			"Connections: %d connections, %d connecting, %d "
-			"transferring, %d keepalive.\n"
-			"Memory cache: %d bytes, %d files, %d locked, %d "
-			"loading.\n"
-			"Formatted document cache: %d documents, %d locked."),
-			select_info(INFO_FILES), select_info(INFO_TIMERS),
-			connect_info(INFO_FILES), connect_info(INFO_CONNECTING),
-			connect_info(INFO_TRANSFER), connect_info(INFO_KEEP),
-			cache_info(INFO_BYTES), cache_info(INFO_FILES),
-			cache_info(INFO_LOCKED), cache_info(INFO_LOADING),
-			formatted_info(INFO_FILES), formatted_info(INFO_LOCKED)),
-		r, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
-
-	refresh_init(r, term, ses, d, res_inf);
+	refreshed_msg_box(term, 0, N_("Resources"), AL_LEFT,
+			  get_ressource_info, NULL);
 }
 
 #ifdef LEAK_DEBUG
 
+static unsigned char *
+get_memory_info(struct terminal *term, void *data)
+{
+	return msg_text(term, N_("%ld bytes of memory allocated."), mem_amount);
+}
+
 void
 memory_inf(struct terminal *term, void *d, struct session *ses)
 {
-	struct refresh *r;
-
-	r = mem_alloc(sizeof(struct refresh));
-	if (!r) return;
-
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Memory info"), AL_LEFT,
-		msg_text(term, N_("%ld bytes of memory allocated."),
-			 mem_amount),
-		r, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
-
-	refresh_init(r, term, ses, d, memory_inf);
+	refreshed_msg_box(term, 0, N_("Memory info"), AL_LEFT,
+			  get_memory_info, NULL);
 }
 
 #endif

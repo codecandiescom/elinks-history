@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.256 2003/11/05 10:56:16 zas Exp $ */
+/* $Id: view.c,v 1.257 2003/11/08 05:04:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -597,6 +597,14 @@ frm_download(struct session *ses, struct document_view *doc_view, int resume)
 }
 
 
+/* We return |x| at the end of the function. The value of x
+ * should be one of the following:
+ *
+ * value  signifies
+ * 0      the event was not handled
+ * 1      the event was handled, and the screen should be redrawn
+ * 2      the event was handled, and the screen should _not_ be redrawn
+ */
 static int
 frame_ev(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {

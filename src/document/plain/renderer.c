@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.21 2003/11/14 13:44:00 jonas Exp $ */
+/* $Id: renderer.c,v 1.22 2003/11/14 13:53:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,16 +130,24 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 	return where ? length : 0;
 }
 
+#define url_char(c) (		\
+		(c) >= ' '	\
+		&& (c) != '<'	\
+		&& (c) != '>'	\
+		&& (c) != '('	\
+		&& (c) != ')'	\
+		&& (c) != '['	\
+		&& (c) != ']'	\
+		&& (c) != '\''	\
+		&& (c) != '"')
+
 static inline int
 get_uri_length(unsigned char *line, int length)
 {
 	int uri_end = 0;
 
-	while (uri_end < length && !isspace(line[uri_end])
-	       && line[uri_end] != '"'
-	       && line[uri_end] != '('
-	       && line[uri_end] != '<'
-	       && line[uri_end] != '>')
+	while (uri_end < length
+	       && url_char(line[uri_end]))
 		uri_end++;
 
 	for (; uri_end > 0; uri_end--) {

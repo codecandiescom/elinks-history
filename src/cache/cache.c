@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.69 2003/11/08 01:41:21 pasky Exp $ */
+/* $Id: cache.c,v 1.70 2003/11/08 01:56:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -480,9 +480,9 @@ garbage_collection(int whole)
 	int obstacle_entry = 0;
 	static long old_opt_cache_size = -1;
 
+	/* Force minimal cache size test in case that user changed the option
+	 * value. */
 	if (old_opt_cache_size != opt_cache_size) {
-		/* To force minimal cache size test in case of user changed
-		 * option value. */
 		whole = 1;
 		old_opt_cache_size = opt_cache_size;
 	}
@@ -492,6 +492,12 @@ garbage_collection(int whole)
 #endif
 
 	if (!whole && cache_size <= opt_cache_size) return;
+
+
+	/* Scanning cache, pass #1:
+	 * Weed out the used cache entries from @new_cache_size, so that we
+	 * will work only with the unused entries from then on. Also ensure
+	 * that @cache_size is in sync. */
 
 	foreach (ce, cache) {
 		if (ce->refcount || is_entry_used(ce)) {
@@ -513,14 +519,24 @@ garbage_collection(int whole)
 
 	if (!whole && new_cache_size <= opt_cache_size) return;
 
+
+	/* Scanning cache, pass #2:
+	 * Mark potential targets for destruction, from the oldest to the
+	 * newest. */
+
 	foreachback (ce, cache) {
+		/* We would have shrinked enough already? */
 		if (!whole && new_cache_size <= gc_cache_size)
 			goto g;
+
+		/* Skip used cache entries. */
 		if (ce->refcount || is_entry_used(ce)) {
 			obstacle_entry = 1;
 			ce->gc_target = 0;
 			continue;
 		}
+
+		/* Mark me for destruction, sir. */
 		ce->gc_target = 1;
 		new_cache_size -= ce->data_size;
 
@@ -530,16 +546,33 @@ garbage_collection(int whole)
 		if_assert_failed { new_cache_size = 0; }
 	}
 
+	/* If we'd free the whole cache... */
 	assertm(new_cache_size == 0,
 		"cache_size (%ld) overflow: %ld",
 		cache_size, new_cache_size);
 	if_assert_failed { new_cache_size = 0; }
 
+
 g:
+	/* Now turn around and start walking in the opposite direction. */
 	ce = ce->next;
+
+	/* Something is strange when we decided all is ok before dropping any
+	 * cache entry. */
 	if ((void *) ce == &cache) return;
 
+
 	if (!whole) {
+		/* Scanning cache, pass #3:
+		 * Walk back in the cache and unmark the cache entries which
+		 * could still fit into the cache. */
+
+		/* This makes sense when the newest entry is HUGE and after it,
+		 * there's just plenty of tiny entries. By this point, all the
+		 * tiny entries would be marked for deletion even though it'd
+		 * be enough to free the huge entry. This actually fixes that
+		 * situation. */
+
 		for (entry = ce; (void *)entry != &cache; entry = entry->next) {
 			long newer_cache_size = new_cache_size + entry->data_size;
 
@@ -550,11 +583,21 @@ g:
 		}
 	}
 
+
+	/* Scanning cache, pass #4:
+	 * Destroy the marked entries. So sad, but that's life, bro'. */
+
 	for (entry = ce; (void *)entry != &cache;) {
 		entry = entry->next;
 		if (entry->prev->gc_target)
 			delete_cache_entry(entry->prev);
 	}
+
+
+	/* Make sure document.cache.memory.size points to an actual value if
+	 * the user set it too low. */
+	/* FIXME: I still believe this is totally wrong and makes no sense to
+	 * do ;-). --pasky */
 
 	if ((whole || !obstacle_entry) && cache_size > gc_cache_size) {
 		/* Given cache size is too low regarding currently used cache

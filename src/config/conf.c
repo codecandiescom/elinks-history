@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.111 2003/12/21 17:25:14 pasky Exp $ */
+/* $Id: conf.c,v 1.112 2003/12/21 17:55:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -374,7 +374,7 @@ test_end:
 
 	if (error_occured) {
 		fputc(7, stderr);
-		/* sleep(1); */
+		sleep(1);
 	}
 }
 

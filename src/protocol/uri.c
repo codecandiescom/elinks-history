@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.108 2004/04/01 03:22:45 jonas Exp $ */
+/* $Id: uri.c,v 1.109 2004/04/02 16:16:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1005,6 +1005,8 @@ get_uri_cache_entry(unsigned char *string, int length)
 	assert(string && length > 0);
 	if_assert_failed return NULL;
 
+	/* TODO: We have to lower cache the scheme and hostname part of the
+	 * URI before checking the cache and adding a new URI. */
 	item = get_hash_item(uri_cache.map, string, length);
 	if (item) return item->value;
 

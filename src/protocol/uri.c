@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.93 2004/03/21 02:22:23 jonas Exp $ */
+/* $Id: uri.c,v 1.94 2004/03/21 13:39:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,9 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/file.h"
+#include "util/hash.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 
 int
@@ -967,4 +969,97 @@ get_no_post_url(unsigned char *url, int *url_len)
 	if (url_len) *url_len = len;
 
 	return memacpy(url, len);
+}
+
+
+/* URI cache */
+
+struct uri_cache_entry {
+	struct uri uri;
+	unsigned int refcount;
+	unsigned char string[1];
+};
+
+struct uri_cache {
+	struct hash *map;
+	unsigned int refcount;
+};
+
+static struct uri_cache uri_cache;
+
+static inline struct uri_cache_entry *
+get_uri_cache_entry(unsigned char *string, int length)
+{
+	struct hash_item *item = get_hash_item(uri_cache.map, string, length);
+	struct uri_cache_entry *entry;
+
+	if (item) return item->value;
+
+	/* Setup a new entry */
+
+	entry = mem_calloc(1, sizeof(struct uri_cache_entry) + length);
+	if (!entry) return NULL;
+
+	object_nolock(entry);
+	memcpy(&entry->string, string, length);
+	string = entry->string;
+
+	if (!parse_uri(&entry->uri, string)
+	    || !add_hash_item(uri_cache.map, string, length, entry)) {
+		mem_free(entry);
+		return NULL;
+	}
+
+	return entry;
+}
+
+struct uri *
+get_uri(unsigned char *string)
+{
+	struct uri_cache_entry *entry;
+
+	if (!is_object_used(&uri_cache)) {
+		uri_cache.map = init_hash(hash_size(3), strhash);
+		if (!uri_cache.map) return NULL;
+	}
+
+	entry = get_uri_cache_entry(string, strlen(string));
+	if (!entry) {
+		if (!is_object_used(&uri_cache))
+			free_hash(uri_cache.map);
+		return NULL;
+	}
+
+	object_lock(entry);
+	object_lock(&uri_cache);
+
+	return &entry->uri;
+}
+
+void
+done_uri(struct uri *uri)
+{
+	unsigned char *string = struri(*uri);
+	int length = strlen(string);
+	struct hash_item *item;
+	struct uri_cache_entry *entry;
+
+	assert(is_object_used(&uri_cache));
+
+	item = get_hash_item(uri_cache.map, string, length);
+	entry = item ? item->value : NULL;
+
+	assertm(entry, "Releasing unknown URI [%s]", string);
+
+	object_unlock(entry);
+	object_unlock(&uri_cache);
+
+	if (!is_object_used(entry)) {
+		del_hash_item(uri_cache.map, item);
+		mem_free(entry);
+	}
+
+	/* Last URI frees the cache */
+	if (!is_object_used(&uri_cache))
+		free_hash(uri_cache.map);
 }

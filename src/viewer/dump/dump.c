@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.85 2004/02/15 12:48:52 witekfl Exp $ */
+/* $Id: dump.c,v 1.86 2004/03/21 13:39:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -255,10 +255,10 @@ dump_end(struct download *status, void *p)
 
 		if (!ce->redirect_get
 		    && ce->valid
+		    && ce->uri->post
 		    && !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
-			unsigned char *pc = ce->uri.post;
 
-			if (pc) add_to_strn(&u, pc);
+			add_to_strn(&u, ce->uri->post);
 		}
 
 		load_url(u, get_cache_uri(ce), status, PRI_MAIN, 0, -1);

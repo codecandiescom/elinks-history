@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.55 2004/12/17 23:49:11 pasky Exp $ */
+/* $Id: forms.c,v 1.56 2004/12/17 23:51:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,21 +147,30 @@ find_form_for_input(unsigned char *stop_pos)
 		while (pos < stop_pos && *pos != '<') {
 			pos++;
 		}
-
 		if (pos >= stop_pos)
 			break;
 
+		/* Start of a tag. */
+
 		if (pos + 2 < stop_pos && (pos[1] == '!' || pos[1] == '?')) {
+			/* Suspicious. */
 			pos = skip_comment(pos, stop_pos);
 			continue;
 		}
+
 		tag_start_pos = pos;
+
 		if (parse_element(tag_start_pos, stop_pos, &name, &namelen, &attr, &pos)) {
+			/* Not really a tag. */
 			pos++; /* Kill the opening bracket. */
 			continue;
 		}
-		if (strlcasecmp(name, namelen, "FORM", 4))
+		if (strlcasecmp(name, namelen, "FORM", 4)) {
+			/* A different tag. */
 			continue;
+		}
+
+		/* A <form> tag. */
 		last_form_start = tag_start_pos;
 		last_form_attr = attr;
 	}

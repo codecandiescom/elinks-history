@@ -1,5 +1,5 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.20 2005/03/18 13:30:54 zas Exp $ */
+/* $Id: default.c,v 1.21 2005/03/20 10:40:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,13 +131,14 @@ static void
 write_bookmarks_default(struct secure_save_info *ssi,
 		        struct list_head *bookmarks_list)
 {
+	int folder_state = get_opt_bool("bookmarks.folder_state");
 	struct bookmark *bm;
 
 	foreach (bm, *bookmarks_list) {
 		secure_fprintf(ssi, "%s\t%s\t%d\t", bm->title, bm->url, bm->box_item->depth);
 		if (bm->box_item->type == BI_FOLDER) {
 			secure_fputc(ssi, 'F');
-			if (bm->box_item->expanded)
+			if (folder_state && bm->box_item->expanded)
 				secure_fputc(ssi, 'E');
 		}
 		secure_fputc(ssi, '\n');

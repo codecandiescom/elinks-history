@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.50 2005/03/18 13:39:16 zas Exp $ */
+/* $Id: xbel.c,v 1.51 2005/03/20 10:40:54 jonas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -60,7 +60,7 @@ static int xbeltree_to_bookmarks_list(struct tree_node *root,
 				      struct bookmark *current_parent);
 static void write_bookmarks_list(struct secure_save_info *ssi,
 				 struct list_head *bookmarks_list,
-				 int n);
+				 int n, int folder_state);
 static void write_bookmarks_xbel(struct secure_save_info *ssi,
 				 struct list_head *bookmarks_list);
 
@@ -137,6 +137,7 @@ static void
 write_bookmarks_xbel(struct secure_save_info *ssi,
 		     struct list_head *bookmarks_list)
 {
+	int folder_state = get_opt_bool("bookmarks.folder_state");
 	/* We check for readok in filename_bookmarks_xbel(). */
 
 	secure_fputs(ssi,
@@ -148,7 +149,7 @@ write_bookmarks_xbel(struct secure_save_info *ssi,
 		"<xbel>\n\n\n");
 
 
-	write_bookmarks_list(ssi, bookmarks_list, 0);
+	write_bookmarks_list(ssi, bookmarks_list, 0, folder_state);
 	secure_fputs(ssi, "\n</xbel>\n");
 }
 
@@ -209,7 +210,7 @@ print_xml_entities(struct secure_save_info *ssi, const unsigned char *str)
 static void
 write_bookmarks_list(struct secure_save_info *ssi,
 		     struct list_head *bookmarks_list,
-		     int n)
+		     int n, int folder_state)
 {
 	struct bookmark *bm;
 
@@ -217,8 +218,11 @@ write_bookmarks_list(struct secure_save_info *ssi,
 		indentation(ssi, n + 1);
 
 		if (bm->box_item->type == BI_FOLDER) {
+			int expanded = folder_state
+				     ? bm->box_item->expanded : 0;
+
 			secure_fputs(ssi, "<folder folded=\"");
-			secure_fputs(ssi, bm->box_item->expanded ? "no" : "yes");
+			secure_fputs(ssi, expanded ? "no" : "yes");
 			secure_fputs(ssi, "\">\n");
 
 			indentation(ssi, n + 2);
@@ -227,7 +231,7 @@ write_bookmarks_list(struct secure_save_info *ssi,
 			secure_fputs(ssi, "</title>\n");
 
 			if (!list_empty(bm->child))
-				write_bookmarks_list(ssi, &bm->child, n + 2);
+				write_bookmarks_list(ssi, &bm->child, n + 2, folder_state);
 
 			indentation(ssi, n + 1);
 			secure_fputs(ssi, "</folder>\n\n");

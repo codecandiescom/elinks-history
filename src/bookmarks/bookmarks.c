@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.161 2005/03/18 13:30:53 zas Exp $ */
+/* $Id: bookmarks.c,v 1.162 2005/03/20 10:40:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,6 +63,13 @@ static struct option_info bookmark_options_info[] = {
 		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 		"  (DISABLED)")),
 #endif
+
+	INIT_OPT_BOOL("bookmarks", N_("Save folder state"),
+		"folder_state", 0, 1,
+		N_("When saving bookmarks also store whether folders are\n"
+		"expanded or not, so the look of the bookmark dialog is\n"
+		"kept across ELinks sessions. If disabled all folders will\n"
+		"appear unexpanded next time ELinks is run.")),
 
 	INIT_OPT_BOOL("ui.sessions", N_("Periodic snapshotting"),
 		"snapshot", 0, 0,

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.18 2003/10/26 13:25:39 zas Exp $ */
+/* $Id: widget.h,v 1.19 2003/10/26 15:19:32 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -46,10 +46,23 @@ struct widget {
 
 	int (*fn)(struct dialog_data *, struct widget_data *);
 
-	/* for buttons: gid - flags B_XXX
-	 * for fields:  min/max
-	 * for box:     gid is box height */
-	int gid, gnum;
+	union {
+		struct checkbox_info {
+			int gid;
+			int gnum;
+		} checkbox;
+		struct field_info {
+			int min;
+			int max;
+		} field;
+		struct box_info {
+			int height;
+		} box;
+		struct button_info {
+			int flags;
+		} button;
+	} info;
+		
 	int dlen;
 
 	enum widget_type type;

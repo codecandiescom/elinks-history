@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.11 2003/10/26 13:12:06 zas Exp $ */
+/* $Id: checkbox.h,v 1.12 2003/10/26 15:19:32 zas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -10,8 +10,8 @@
 #define add_dlg_checkbox(dlg, n, groupid, groupnum, dataz)		\
 	do {								\
 		(dlg)->widgets[n].type = D_CHECKBOX;			\
-		(dlg)->widgets[n].gid = (groupid);			\
-		(dlg)->widgets[n].gnum = (groupnum);			\
+		(dlg)->widgets[n].info.checkbox.gid = (groupid);	\
+		(dlg)->widgets[n].info.checkbox.gnum = (groupnum);	\
 		(dlg)->widgets[n].dlen = sizeof(int);			\
 		(dlg)->widgets[n].data = (unsigned char *) &(dataz);	\
 		(n)++;						\

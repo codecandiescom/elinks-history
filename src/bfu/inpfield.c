@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.62 2003/10/26 14:04:09 zas Exp $ */
+/* $Id: inpfield.c,v 1.63 2003/10/26 15:19:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@ check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 		return 1;
 	}
 
-	if (l < widget_data->widget->gid || l > widget_data->widget->gnum) {
+	if (l < widget_data->widget->info.field.min || l > widget_data->widget->info.field.max) {
 		msg_box(dlg_data->win->term, NULL, 0,
 			N_("Bad number"), AL_CENTER,
 			N_("Number out of range"),

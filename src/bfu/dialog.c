@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.51 2003/10/26 14:04:09 zas Exp $ */
+/* $Id: dialog.c,v 1.52 2003/10/26 15:19:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,7 +218,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
 				for (i = 0; i < dlg_data->n; i++)
 					if (dlg_data->dlg->widgets[i].type == D_BUTTON
-					    && dlg_data->dlg->widgets[i].gid & B_ENTER) {
+					    && dlg_data->dlg->widgets[i].info.button.flags & B_ENTER) {
 						select_dlg_item(dlg_data, i);
 						return;
 					}
@@ -228,7 +228,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			if (ev->x == KBD_ESC) {
 				for (i = 0; i < dlg_data->n; i++)
 					if (dlg_data->dlg->widgets[i].type == D_BUTTON
-					    && dlg_data->dlg->widgets[i].gid & B_ESC) {
+					    && dlg_data->dlg->widgets[i].info.button.flags & B_ESC) {
 						select_dlg_item(dlg_data, i);
 						return;
 					}

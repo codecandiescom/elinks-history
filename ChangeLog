@@ -1,3 +1,136 @@
+Fri Mar  4 21:14:26 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: timers.c, timers.h:
+
+	Since timer id is now timer address, simplify kill_timer(), it can
+	have direct access to timer to kill, so the loop is now useless.  
+
+Fri Mar  4 18:54:03 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/: timers.c, timers.h:
+
+	Little hack: drop id field of struct timer, just use timer
+	allocation address as identifier, and set TIMER_ID_UNDEF to be NULL.  
+
+Fri Mar  4 18:33:24 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/leds.c, document/refresh.c,
+	lowlevel/timer.c, lowlevel/timers.c, lowlevel/timers.h,
+	sched/connection.c, sched/session.c, terminal/kbd.c:
+
+	Pass timer_id_T * to install_timer() instead of returning the id.  
+
+Fri Mar  4 17:55:36 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/leds.c, document/refresh.c,
+	lowlevel/timer.c, lowlevel/timers.c, lowlevel/timers.h,
+	sched/connection.c, sched/session.c, sched/task.c, terminal/kbd.c:
+
+	Pass a timer_id_T pointer to kill_timer(), and always undefine it
+	after kill. It simplifies code and is safer. Performance impact
+	should not be that great.  
+
+Fri Mar  4 17:36:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/leds.c,
+	document/document.c, document/refresh.c, document/refresh.h,
+	lowlevel/timer.c, lowlevel/timers.c, lowlevel/timers.h,
+	sched/connection.c, sched/connection.h, sched/session.c,
+	sched/session.h, sched/task.c, terminal/kbd.c:
+
+	Define a type timer_id_T and TIMER_ID_UNDEF. Populate code with
+	them.  
+
+Fri Mar  4 15:08:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Remove the braces, which are unneeded without the variable
+	declarations.  
+
+Fri Mar  4 14:53:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Eliminate the local counter variables that were made unnecessary 
+	thru the usage of list_size in revision 1.202.  
+
+Fri Mar  4 14:01:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/: timers.c, timers.h:
+
+	Move struct timer declaration to .c file. It should only be used
+	internally.  
+
+Fri Mar  4 13:25:32 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/leds.c, lowlevel/timer.c, lowlevel/timer.h:
+
+	Access to |timer_duration| through new get_timer_duration(), and
+	make it static to timer.c.  
+
+Fri Mar  4 13:19:37 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/leds.c, document/refresh.c,
+	lowlevel/Makefile.am, lowlevel/select.c, lowlevel/timer.c,
+	lowlevel/timer.h, lowlevel/timers.c, lowlevel/timers.h,
+	sched/connection.c, sched/session.c, sched/task.c, terminal/kbd.c:
+
+	Move code from timer.{c,h} to new timers.{c,h} since this code has
+	nothing to do with "Internal inactivity timer", header includes were
+	updated to reflect the change.  
+
+Fri Mar  4 10:21:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, document/refresh.c, lowlevel/select.c,
+	lowlevel/select.h, lowlevel/timer.c, lowlevel/timer.h,
+	sched/connection.c, sched/session.c, sched/task.c, terminal/kbd.c:
+
+	Move all timers related code from lowlevel/select.{c,h} to
+	lowlevel/timer.{c,h} and make |timers| static. Fix headers
+	inclusions to reflect that change.  
+
+Fri Mar  4 10:08:48 2005  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Reintroduce count_timers(), needed to move all timers related code
+	to timer.{c,h} and make |timers| static to it.  
+
+Fri Mar  4 03:39:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	abort_background_connections(): Use foreachsafe().  
+
+Fri Mar  4 02:14:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Some more list_size() usage for the form hooks.  
+
+Fri Mar  4 02:05:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, dialogs/info.c, document/document.c,
+	lowlevel/select.c, sched/connection.c, util/lists.h:
+
+	Introduce list_size() as a generalized version of count_timers()
+	added in lowlevel/select.c (1.59 -> 1.60). It is declared as static
+	inline which is unusual for the list library. I hope it won't be a
+	problem. Also it should maybe use struct xlist_head.  
+
+Fri Mar  4 01:23:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/select.c:
+
+	kill_timer(): Use foreachsafe() to simplify the deletion.  
+
+Fri Mar  4 01:18:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/select.c:
+
+	Remove ending ';' from while loop introduced in 1.53 -> 1.54.  
+
 Thu Mar  3 17:18:59 2005  Laurent Monin <zas@norz.org>:
 
 	* src/lowlevel/select.c:

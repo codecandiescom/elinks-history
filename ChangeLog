@@ -1,3 +1,35 @@
+Thu Feb 17 17:35:57 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	More punctuation fixes.  
+
+Thu Feb 17 10:43:25 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Try to detect missing punctuation with --enable-debug. It might
+	produce false warnings for languages with very different
+	punctuation.  
+
+Thu Feb 17 10:16:51 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Punctuations fixes, thanks to Fonseca.  
+
+Thu Feb 17 07:20:25 2005  Adam Golebiowski <adamg@pld-linux.org>:
+
+	* po/pl.po:
+
+	Missing ending punctuation, replaced ? with . at some places.  
+
+Wed Feb 16 23:49:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	More of dem punctiation fixings.  
+
 Wed Feb 16 22:58:38 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* po/da.po:

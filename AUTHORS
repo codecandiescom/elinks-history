@@ -411,6 +411,9 @@ Witold Filipczyk <witekfl@poczta.onet.pl>
 Wojtek Bojdo/l <wojboj@lp.net.pl>
 	Updated Polish localization
 
+Yevgeny Gromov <yevgeny@tut.by>
+	Belarusian translation
+
 Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Updated Russian localization
 
@@ -418,4 +421,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.110 2003/01/01 01:01:30 pasky Exp $
+$Id: AUTHORS,v 1.111 2003/01/01 01:21:45 pasky Exp $

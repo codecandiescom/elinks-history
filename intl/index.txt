@@ -1,4 +1,5 @@
 english
+belarusian
 brazilian_portuguese
 bulgarian
 catalan

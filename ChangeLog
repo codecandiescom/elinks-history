@@ -1,3 +1,22 @@
+Mon Aug 30 03:08:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Oops, missing part of previous patch.  
+
+Mon Aug 30 03:08:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Space.  
+
+Mon Aug 30 03:06:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Don't just check special chars in the URI file name the first time
+	and fix signed -> unsigned int triggered bug in file URI parsing.  
+
 Sat Aug 28 16:23:55 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/session.c:

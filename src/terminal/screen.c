@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.149 2004/07/28 09:41:25 jonas Exp $ */
+/* $Id: screen.c,v 1.150 2004/08/03 16:13:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -420,7 +420,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		add_bytes_to_string(screen, "\033[0", 3);
 
 		if (driver->color_mode == COLOR_MODE_16) {
-			static unsigned char code[6] = ";30;40";
+			unsigned char code[6] = ";30;40";
 			unsigned char bgcolor = TERM_COLOR_BACKGROUND(ch->color);
 
 			code[2] = '0' + TERM_COLOR_FOREGROUND(ch->color);

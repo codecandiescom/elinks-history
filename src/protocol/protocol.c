@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.44 2004/05/07 17:36:19 jonas Exp $ */
+/* $Id: protocol.c,v 1.45 2004/05/07 17:40:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,13 +34,22 @@
 static void
 unknown_protocol_handler(struct session *ses, struct uri *uri)
 {
-	print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
-}
+	enum connection_state state;
 
-static void
-dummyjs_protocol_handler(struct session *ses, struct uri *uri)
-{
-	print_error_dialog(ses, S_NO_JAVASCRIPT, PRI_CANCEL);
+	switch (uri->protocol) {
+	case PROTOCOL_JAVASCRIPT:
+		state = S_NO_JAVASCRIPT;
+		break;
+#ifndef CONFIG_SSL
+	case PROTOCOL_HTTPS:
+		state = S_NO_SSL;
+		break;
+#endif
+	default:
+		state = S_UNKNOWN_PROTOCOL;
+	}
+
+	print_error_dialog(ses, state, PRI_CANCEL);
 }
 
 
@@ -51,7 +60,7 @@ static const struct protocol_backend protocol_backends[] = {
 	{ "http",	80, http_protocol_handler,	NULL,	0, 1, 1 },
 	{ "https",     443, https_protocol_handler,	NULL,	0, 1, 1 },
 	{ "smb",       139, smb_protocol_handler,	NULL,	0, 1, 1 },
-	{ "javascript",	 0, NULL,   dummyjs_protocol_handler,	0, 0, 0 },
+	{ "javascript",	 0, NULL,			NULL,	0, 0, 0 },
 	{ "proxy",    3128, proxy_protocol_handler,	NULL,	0, 1, 1 },
 
 	/* Keep these two last! */

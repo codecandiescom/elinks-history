@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.588 2004/12/13 18:46:54 miciah Exp $ */
+/* $Id: session.c,v 1.589 2004/12/13 18:48:41 miciah Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -480,6 +480,8 @@ maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 static int
 check_incomplete_redirects(struct cache_entry *cached)
 {
+	struct cache_entry *old_cached = cached;
+
 	while (cached) {
 		if (!cached->redirect) {
 			/* XXX: This is not quite true, but does that difference
@@ -492,6 +494,8 @@ check_incomplete_redirects(struct cache_entry *cached)
 			break;
 
 		cached = find_in_cache(cached->redirect);
+
+		if (cached == old_cached) break;
 	}
 
 	return 0;

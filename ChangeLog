@@ -1,3 +1,106 @@
+Thu Dec 12 22:50:29 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre25 
+
+Thu Dec 12 22:43:38 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Fixed blank type shown in edit option dialog.  
+
+Thu Dec 12 22:40:13 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/: brazilian_portuguese.lng, bulgarian.lng, catalan.lng,
+	croatian.lng, czech.lng, danish.lng, dutch.lng, english.lng,
+	estonian.lng, finnish.lng, french.lng, galician.lng, german.lng,
+	greek.lng, hungarian.lng, icelandic.lng, indonesian.lng,
+	italian.lng, lithuanian.lng, norwegian.lng, polish.lng,
+	portuguese.lng, romanian.lng, russian.lng, slovak.lng, spanish.lng,
+	swedish.lng, turkish.lng, ukrainian.lng:
+
+	Removed stale, old and unused translation pairs.  
+
+Thu Dec 12 22:38:22 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	In edit option dialog, show the first field prefixed by Name: rather
+	than Info: ;-).  
+
+Thu Dec 12 22:22:32 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/session.c:
+
+	Typo fix, thanks Fabio.  
+
+Thu Dec 12 21:39:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/spanish.lng:
+
+	Updated spanish translation, patch by David Mediavilla.  
+
+Thu Dec 12 21:33:48 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: conf.c, options.c:
+
+	Save comments even for OPT_TREE options along the way.  
+
+Thu Dec 12 17:15:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Now save options in the right order, not reverse (as before for few
+	days).  
+
+Thu Dec 12 17:08:00 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/opttypes.c:
+
+	Add always the new options at the end of their list even in
+	autocreate trees.  
+
+Thu Dec 12 17:01:55 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	...and saved into the config file.  
+
+Thu Dec 12 16:47:44 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: options.c, opttypes.c:
+
+	Introduced config.show_template, controlling whether templates
+	should be displayed in the options manager...  
+
+Thu Dec 12 16:46:49 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Fixed subtle bug when moving across invisible listbox item which is
+	trapped at the start of the children list. Ie. _template_ *hint*
+	*hint* ;-).  
+
+Thu Dec 12 15:51:55 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng:
+
+	French translation was updated.  
+
+Thu Dec 12 15:27:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Removed one ... errrhm problematic hook ;-). Thank zas.  
+
+Thu Dec 12 12:14:05 2002  Laurent Monin <zas@norz.org>:
+
+	* configure.in, acconfig.h:
+
+	An configure option was added --enable-fastmem. When enabled,
+	internal memory wrappers are not used.  
+
 Wed Dec 11 22:50:13 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.237 2004/04/02 17:30:30 jonas Exp $ */
+/* $Id: download.c,v 1.238 2004/04/02 18:15:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -709,7 +709,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download = mem_calloc(1, sizeof(struct file_download));
 	if (!file_download) goto download_error;
 
-	file_download->uri = get_uri(url);
+	file_download->uri = get_uri(url, -1);
 	if (!file_download->uri) goto download_error;
 
 	file_download->file = cmdw_hop->real_file;

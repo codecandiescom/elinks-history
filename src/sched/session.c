@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.344 2004/04/01 16:42:43 jonas Exp $ */
+/* $Id: session.c,v 1.345 2004/04/02 18:15:11 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -215,7 +215,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	}
 
 	pos = extract_fragment(url);
-	uri = get_uri(url);
+	uri = get_uri(url, -1);
 	mem_free(url);
 	if (!uri) {
 		mem_free(frame->name);
@@ -492,7 +492,7 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 	ftl = mem_calloc(1, sizeof(struct file_to_load));
 	if (!ftl) return NULL;
 
-	ftl->uri = get_uri(url);
+	ftl->uri = get_uri(url, -1);
 	if (!ftl->uri) {
 		mem_free(ftl);
 		return NULL;
@@ -984,7 +984,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 
 		if (strcasecmp(frame->name, name)) continue;
 
-		uri = get_uri(url);
+		uri = get_uri(url, -1);
 		if (!uri) return NULL;
 
 		done_uri(frame->vs.uri);

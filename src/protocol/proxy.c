@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.12 2004/04/01 18:34:13 jonas Exp $ */
+/* $Id: proxy.c,v 1.13 2004/04/02 18:15:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,7 +110,7 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		string = straconcat("proxy://", proxy, "/", struri(uri), NULL);
 		if (!string) return NULL;
 
-		uri = get_uri(string);
+		uri = get_uri(string, -1);
 		mem_free(string);
 		return uri;
 	}

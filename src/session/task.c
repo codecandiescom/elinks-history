@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.46 2004/04/02 16:53:35 jonas Exp $ */
+/* $Id: task.c,v 1.47 2004/04/02 18:15:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,7 +470,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 
 	u = translate_url(url, ses->tab->term->cwd);
 	pos = u ? extract_fragment(u) : NULL;
-	uri = u ? get_uri(u) : NULL;
+	uri = u ? get_uri(u, -1) : NULL;
 	mem_free(u);
 
 	if (!u || !uri) {

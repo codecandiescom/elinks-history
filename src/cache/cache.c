@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.117 2004/04/02 17:58:36 jonas Exp $ */
+/* $Id: cache.c,v 1.118 2004/04/02 18:15:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,7 +493,7 @@ get_cache_redirect_uri(struct cache_entry *entry, struct uri *base)
 		add_to_strn(&uristring, base->post - 1);
 	}
 
-	uri = get_uri(uristring);
+	uri = get_uri(uristring, -1);
 	mem_free(uristring);
 
 	return uri;

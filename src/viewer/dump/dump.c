@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.102 2004/04/02 16:35:41 jonas Exp $ */
+/* $Id: dump.c,v 1.103 2004/04/02 18:15:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,7 +301,7 @@ dump_start(unsigned char *url)
 	real_url = translate_url(url, wd);
 	if (wd) mem_free(wd);
 
-	uri = get_uri(real_url ? real_url : url);
+	uri = get_uri(real_url ? real_url : url, -1);
 	mem_free(real_url);
 
 	if (!uri

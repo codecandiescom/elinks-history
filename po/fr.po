@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-12-29 23:36+0100\n"
-"PO-Revision-Date: 2004-12-29 23:10+0100\n"
+"PO-Revision-Date: 2004-12-29 23:37+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -3259,7 +3259,7 @@ msgstr ""
 
 #: src/config/options.inc:748 src/dialogs/options.c:166
 msgid "Switch fonts for line drawing"
-msgstr "Echanger les jeux de caractères pour le dessin des lignes"
+msgstr "Echanger les fontes pour dessiner les lignes"
 
 #: src/config/options.inc:750
 msgid ""
@@ -3267,8 +3267,8 @@ msgid ""
 "and lines working at the same time. Makes sense only with linux\n"
 "terminal."
 msgstr ""
-"Echanger les jeux de caractères pour le dessin des lignes, seulement\n"
-"intéressant avec les terminaux de type linux."
+"Echanger les fontes de caractères pour le dessin des lignes, seulement\n"
+"intéressant avec le terminal de type linux."
 
 #: src/config/options.inc:754
 msgid "UTF-8 I/0"

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.88 2003/07/14 07:09:55 zas Exp $ */
+/* $Id: url.c,v 1.89 2003/07/14 18:43:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,9 +196,9 @@ unsigned char *
 join_urls(unsigned char *base, unsigned char *rel)
 {
 	unsigned char *p, *n, *path;
-	int l;
 	int lo = !strncasecmp(base, "file://", 7); /* dsep() *hint* *hint* */
 	int add_slash = 0;
+	struct uri uri;
 
 	/* See RFC 1808 */
 	/* TODO: Support for ';' ? (see the RFC) --pasky */
@@ -238,13 +238,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 	if (!strncasecmp("proxy://", rel, 8)) goto prx;
 
-	if (!parse_url(rel, &l,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL, NULL,
-		       NULL)) {
+	if (parse_uri(&uri, rel)) {
 		n = stracpy(rel);
 		if (n) translate_directories(n);
 
@@ -256,15 +250,8 @@ join_urls(unsigned char *base, unsigned char *rel)
 		while (n[0] && n[strlen(n) - 1] <= ' ') n[strlen(n) - 1] = 0;
 		add_to_strn(&n, "/");
 
-		if (!parse_url(n, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL, NULL,
-			       NULL)) {
+		if (parse_uri(&uri, n)) {
 			translate_directories(n);
-
 			return n;
 		}
 
@@ -272,16 +259,11 @@ join_urls(unsigned char *base, unsigned char *rel)
 	}
 
 prx:
-	if (parse_url(base, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      &path, NULL,
-		      NULL) || !path) {
+	if (!parse_uri(&uri, base) || !uri.data) {
 		internal("bad base url");
 		return NULL;
 	}
+	path = uri.data;
 
 	/* Either is path blank, but we've slash char before, or path is not
 	 * blank, but doesn't start by a slash (if we'd just stay along with

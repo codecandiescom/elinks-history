@@ -1,3 +1,13 @@
+Tue May 21 18:54:54 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, util/hash.c, util/hash.h:
+
+	Key length is now passed to add_hash_item() and get_hash_item(), and
+	key comparaisons are now byte to byte comparaison. Keys are no more
+	limited to strings.  A hash function is now passed as parameter to
+	init_hash(). Currently used hash function was renamed from mkhash()
+	to strhash().  
+
 Mon May 20 15:28:28 2002  Petr Baudis <pasky@ji.cz>:
 
 	* elinks.1, elinkskeys.5, contrib/mailcap.pl,

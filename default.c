@@ -932,6 +932,9 @@ int base_session = 0;
 int dmp = 0;
 int dump_width = 80;
 
+int cookies_save = 1;
+int cookies_resave = 1;
+
 int async_lookup = 1;
 int download_utime = 0;
 int max_connections = 10;
@@ -1025,9 +1028,20 @@ struct option links_options[] = {
 		"informations. By default, base-session is 0." },
 
 	{	"color-dirs", "color_dirs",
-	       	gen_cmd, num_rd, NULL,
+	       	gen_cmd, num_rd, num_wr,
 		0, 1, &color_dirs,
 		"Highlight directories when listing local disk content." },
+
+	{	"cookies-save", "cookies_save",
+	       	gen_cmd, num_rd, num_wr,
+		0, 1, &cookies_save,
+		"Load/save cookies from/to disk." },
+
+	{	"cookies-resave", "cookies_resave",
+	       	gen_cmd, num_rd, num_wr,
+		0, 1, &cookies_resave,
+		"Save cookies after each change in cookies list. No effect when\n"
+		"cookies-save is turned off." },
 
 	{	"default-fg", "default_fg",
 	       	gen_cmd, color_rd, NULL,

@@ -2079,6 +2079,9 @@ extern int base_session;
 extern int dmp;
 extern int dump_width;
 
+extern int cookies_save;
+extern int cookies_resave;
+
 extern int async_lookup;
 extern int download_utime;
 extern int max_connections;

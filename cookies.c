@@ -1,10 +1,8 @@
 #include "links.h"
 
-/* Whether to save cookies after each modification of their list
- * (receive/expiration). */
-#define COOKIES_RESAVE	1
-
 /* #define COOKIES_DEBUG */
+
+/* TODO: make this changeable at runtime */
 
 #define ACCEPT_NONE	0
 #define ACCEPT_ASK	1 /* TODO */
@@ -270,9 +268,9 @@ void accept_cookie(struct cookie *c)
 	if (!(cd = mem_alloc(sizeof(struct c_domain) + strlen(c->domain) + 1))) return;
 	strcpy(cd->domain, c->domain);
 	add_to_list(c_domains, cd);
-#ifdef COOKIES_RESAVE
-	save_cookies();
-#endif
+	
+	if (cookies_save && cookies_resave)
+		save_cookies();
 }
 
 void delete_cookie(struct cookie *c)
@@ -289,9 +287,9 @@ void delete_cookie(struct cookie *c)
 	del_from_list(c);
 	free_cookie(c);
 	mem_free(c);
-#ifdef COOKIES_RESAVE
-	save_cookies();
-#endif
+	
+	if (cookies_save && cookies_resave)
+		save_cookies();
 }
 
 struct cookie *find_cookie_id(void *idp)
@@ -379,9 +377,9 @@ void send_cookies(unsigned char **s, int *l, unsigned char *url)
 			del_from_list(d);
 			free_cookie(d);
 			mem_free(d);
-#ifdef COOKIES_RESAVE
-			save_cookies();
-#endif
+
+			if (cookies_save && cookies_resave)
+				save_cookies();
 			continue;
 		}
 		if (c->secure) continue;
@@ -503,7 +501,8 @@ void save_cookies() {
 
 void init_cookies()
 {
-	load_cookies();
+	if (cookies_save)
+		load_cookies();
 }
 
 void cleanup_cookies()
@@ -511,7 +510,8 @@ void cleanup_cookies()
 	free_list(c_domains);
 	
 	cquit = 1;
-	save_cookies();
+	if (cookies_save)
+		save_cookies();
 	cquit = 0;
 	
 	free_list(cookies);

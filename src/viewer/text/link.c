@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.104 2003/11/16 14:34:33 zas Exp $ */
+/* $Id: link.c,v 1.105 2003/11/17 10:47:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -869,7 +869,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
 			add_to_menu(&mi, N_("Display ~usemap"), M_SUBMENU,
-				    (menu_func) send_enter, NULL, 0 | SUBMENU);
+				    (menu_func) send_enter, NULL, SUBMENU);
 		else {
 			int c = can_open_in_new(term);
 
@@ -889,7 +889,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 				     (menu_func) open_in_new_tab, (void *) 1, 0);
 
 			add_to_menu(&mi, N_("Open in new tab in ~background"), "",
-				     (menu_func) open_in_new_tab_in_background, (void *) 1, 0);
+				    (menu_func) open_in_new_tab_in_background, (void *) 1, 0);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 				add_to_menu(&mi, N_("~Download link"), "d",

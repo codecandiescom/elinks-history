@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.26 2003/05/14 11:43:39 pasky Exp $ */
+/* $Id: conv.c,v 1.27 2003/05/14 11:47:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 
 	pos += start;
 	s[pos] = '\0';
-	if (slen) *slen += pos;
+	if (slen) *slen = pos;
 
 	while (pos > start) {
 		s[--pos] = '0' + (number % 10);

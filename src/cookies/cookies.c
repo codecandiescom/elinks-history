@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.167 2004/11/10 11:39:21 zas Exp $ */
+/* $Id: cookies.c,v 1.168 2004/11/10 12:11:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -266,9 +266,10 @@ static void accept_cookie_dialog(struct session *ses, void *data);
 void
 set_cookie(struct uri *uri, unsigned char *str)
 {
-	unsigned char *date, *secure;
+	unsigned char *secure;
 	struct cookie *cookie;
 	struct cookie_str cstr;
+	int max_age;
 
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_NONE)
 		return;
@@ -314,39 +315,39 @@ set_cookie(struct uri *uri, unsigned char *str)
 	}
 #endif
 
-	/* Get expiration date */
+	/* Set cookie expiration if needed.
+	 * Cookie expires at end of session by default,
+	 * set to 0 by calloc().
+	 *
+	 * max_age:
+	 * -1 is use cookie's expiration date if any
+	 * 0  is force expiration at the end of session,
+	 *    ignoring cookie's expiration date
+	 * 1+ is use cookie's expiration date,
+	 *    but limit age to the given number of days.
+	 */
 
-	date = parse_header_param(str, "expires");
-	if (date) {
-		cookie->expires = parse_date(date); /* Convert date to seconds. */
+	max_age = get_cookies_max_age();
+	if (max_age) {
+		unsigned char *date = parse_header_param(str, "expires");
 
-		if (cookie->expires) {
-			int max_age = get_cookies_max_age(); /* Max. age in days */
+		if (date) {
+			ttime expires = parse_date(date); /* Convert date to seconds. */
 
-			if (max_age == 0) cookie->expires = 0; /* Always expires at session end. */
-			else if (max_age > 0) {
-				ttime deadline = time(NULL) + max_age*24*3600; /* days->seconds.*/
+			mem_free(date);
 
-				if (cookie->expires > deadline) /* Over-aged cookie ? */
-					cookie->expires = deadline;
+			if (expires) {
+				if (max_age > 0) {
+					int seconds = max_age*24*3600;
+					ttime deadline = time(NULL) + seconds;
+
+					if (expires > deadline) /* Over-aged cookie ? */
+						expires = deadline;
+				}
+
+				cookie->expires = expires;
 			}
 		}
-
-#if 0
-		/* I decided not to expire such cookies (possibly ones with
-		 * date we can't parse properly), but instead just keep their
-		 * expire value at zero, thus making them expire on ELinks'
-		 * quit. --pasky */
-		if (!cookie->expires) {
-			/* We use zero for cookies which expire with
-			 * browser shutdown. */
-			cookie->expires = (ttime) 1;
-		}
-#endif
-		mem_free(date);
-
-	} else {
-		cookie->expires = (ttime) 0;
 	}
 
 	cookie->path = parse_header_param(str, "path");

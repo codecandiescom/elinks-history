@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.140 2004/04/05 05:31:17 jonas Exp $ */
+/* $Id: uri.c,v 1.141 2004/04/05 05:35:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,7 +352,7 @@ insert_in_uri(unsigned char **uri, int pos, unsigned char *seq, int seqlen)
 
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 
-static void
+static unsigned char *
 translate_directories(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *src, *dest, *path;
@@ -362,7 +362,7 @@ translate_directories(struct uri *uri, unsigned char *uristring)
 	if (!uri) {
 		uri = &uri_struct;
 		if (parse_uri(uri, uristring) != URI_ERRNO_OK)
-			return;
+			return uristring;
 	}
 
 	assert(uri->data);
@@ -388,7 +388,7 @@ repeat:
 		if (end_of_dir(src[0])) {
 			/* URL data contains no more path. */
 			memmove(dest, src, strlen(src) + 1);
-			return;
+			return uristring;
 		}
 
 		/* If the following pieces are the LAST parts of URL, we remove
@@ -433,6 +433,8 @@ repeat:
 
 proceed: ;
 	} while ((*dest++ = *src++));
+
+	return uristring;
 }
 
 /* The standard URI comes in, and if the URI is not of the 'file' scheme, the
@@ -511,9 +513,8 @@ join_urls(unsigned char *base, unsigned char *rel)
 		for (p = n; *p && *p != POST_CHAR && *p != '#'; p++);
 		*p = '\0';
 		add_to_strn(&n, rel);
-		translate_directories(NULL, n);
 
-		return n;
+		return translate_directories(NULL, n);
 	} else if (rel[0] == '?') {
 		n = stracpy(base);
 		if (!n) return NULL;
@@ -521,9 +522,8 @@ join_urls(unsigned char *base, unsigned char *rel)
 		for (p = n; *p && *p != POST_CHAR && *p != '?' && *p != '#'; p++);
 		*p = '\0';
 		add_to_strn(&n, rel);
-		translate_directories(NULL, n);
 
-		return n;
+		return translate_directories(NULL, n);
 	} else if (rel[0] == '/' && rel[1] == '/') {
 		unsigned char *s = strstr(base, "//");
 
@@ -544,8 +544,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 	switch (parse_uri(&uri, n)) {
 	case URI_ERRNO_OK:
-		translate_directories(&uri, n);
-		return n;
+		return translate_directories(&uri, n);
 
 	case URI_ERRNO_NO_HOST_SLASH:
 	{
@@ -554,10 +553,8 @@ join_urls(unsigned char *base, unsigned char *rel)
 		while (n[0] && n[len - 1] <= ' ') n[--len] = 0;
 		add_to_strn(&n, "/");
 
-		if (parse_uri(&uri, n) == URI_ERRNO_OK) {
-			translate_directories(&uri, n);
-			return n;
-		}
+		if (parse_uri(&uri, n) == URI_ERRNO_OK)
+			return translate_directories(&uri, n);
 	}
 	default:
 		mem_free(n);
@@ -613,8 +610,7 @@ prx:
 	if (add_slash) n[tmp] = '/';
 	strcpy(n + tmp + add_slash, rel);
 
-	translate_directories(NULL, n);
-	return n;
+	return translate_directories(NULL, n);
 }
 
 static unsigned char *
@@ -649,8 +645,7 @@ parse_uri:
 		    && transform_file_url(&uri, cwd))
 			parse_uri(&uri, struri(&uri));
 
-		translate_directories(&uri, struri(&uri));
-		return struri(&uri);
+		return translate_directories(&uri, struri(&uri));
 
 	case URI_ERRNO_NO_SLASHES:
 		/* Try prefix:some.url -> prefix://some.url.. */

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.81 2005/02/28 14:57:19 zas Exp $ */
+/* $Id: event.c,v 1.82 2005/03/05 21:41:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ struct terminal_interlink {
 
 	/* UTF8 input key value decoding data. */
 	struct {
-		unicode_val ucs;
+		unicode_val_T ucs;
 		int len;
 		int min;
 	} utf_8;
@@ -127,7 +127,7 @@ term_send_event(struct terminal *term, struct term_event *ev)
 }
 
 static void
-term_send_ucs(struct terminal *term, struct term_event *ev, unicode_val u)
+term_send_ucs(struct terminal *term, struct term_event *ev, unicode_val_T u)
 {
 	unsigned char *recoded;
 
@@ -267,7 +267,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 				interlink->utf_8.ucs <<= 6;
 				interlink->utf_8.ucs |= key & 0x3F;
 				if (! --interlink->utf_8.len) {
-					unicode_val u = interlink->utf_8.ucs;
+					unicode_val_T u = interlink->utf_8.ucs;
 
 					if (u < interlink->utf_8.min)
 						u = UCS_NO_CHAR;

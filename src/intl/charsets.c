@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.109 2005/02/28 13:24:03 zas Exp $ */
+/* $Id: charsets.c,v 1.110 2005/03/05 21:41:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 
 struct table_entry {
 	unsigned char c;
-	unicode_val u;
+	unicode_val_T u;
 };
 
 struct codepage_desc {
@@ -126,7 +126,7 @@ new_translation_table(struct conv_table *p)
 	}										\
 }											\
 
-static const unicode_val strange_chars[32] = {
+static const unicode_val_T strange_chars[32] = {
 0x20ac, 0x0000, 0x002a, 0x0000, 0x201e, 0x2026, 0x2020, 0x2021,
 0x005e, 0x2030, 0x0160, 0x003c, 0x0152, 0x0000, 0x0000, 0x0000,
 0x0000, 0x0060, 0x0027, 0x0022, 0x0022, 0x002a, 0x2013, 0x2014,
@@ -136,7 +136,7 @@ static const unicode_val strange_chars[32] = {
 #define SYSTEM_CHARSET_FLAG 128
 
 unsigned char *
-u2cp_(unicode_val u, int to, int no_nbsp_hack)
+u2cp_(unicode_val_T u, int to, int no_nbsp_hack)
 {
 	int j;
 	int s;
@@ -147,7 +147,7 @@ u2cp_(unicode_val u, int to, int no_nbsp_hack)
 	if (u == 0xad) return "";
 
 	if (u < 0xa0) {
-		unicode_val strange = strange_chars[u - 0x80];
+		unicode_val_T strange = strange_chars[u - 0x80];
 
 		if (!strange) return NULL;
 		return u2cp_(strange, to, no_nbsp_hack);
@@ -168,7 +168,7 @@ u2cp_(unicode_val u, int to, int no_nbsp_hack)
 static unsigned char utf_buffer[7];
 
 static unsigned char *
-encode_utf_8(unicode_val u)
+encode_utf_8(unicode_val_T u)
 {
 	memset(utf_buffer, 0, 7);
 
@@ -221,7 +221,7 @@ cp2utf_8(int from, int c)
 }
 
 static void
-add_utf_8(struct conv_table *ct, unicode_val u, unsigned char *str)
+add_utf_8(struct conv_table *ct, unicode_val_T u, unsigned char *str)
 {
 	unsigned char *p = encode_utf_8(u);
 
@@ -290,7 +290,7 @@ get_translation_table_to_utf_8(int from)
 		utf_table[i].u.str = NULL;
 
 	for (i = 0; codepages[from].table[i].c; i++) {
-		unicode_val u = codepages[from].table[i].u;
+		unicode_val_T u = codepages[from].table[i].u;
 
 		if (!utf_table[codepages[from].table[i].c].u.str)
 			utf_table[codepages[from].table[i].c].u.str =
@@ -494,7 +494,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 	if (*str == '#') { /* Numeric entity. */
 		int l = (int) strlen;
 		unsigned char *st = (unsigned char *) str;
-		unicode_val n = 0;
+		unicode_val_T n = 0;
 
 		if (l == 1) goto end; /* &#; ? */
 		st++, l--;
@@ -522,7 +522,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 				else
 					goto end; /* Bad char. */
 				/* Limit to 0xFFFFFFFF. */
-				if (n == (unicode_val) 0xFFFFFFFF)
+				if (n == (unicode_val_T) 0xFFFFFFFF)
 					goto end;
 			} while (--l);
 		}

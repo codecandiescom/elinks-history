@@ -1,14 +1,14 @@
-/* $Id: charsets.h,v 1.22 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: charsets.h,v 1.23 2005/03/05 21:41:41 zas Exp $ */
 
 #ifndef EL__INTL_CHARSETS_H
 #define EL__INTL_CHARSETS_H
 
 #include "util/types.h"
 
-typedef uint32_t unicode_val;
+typedef uint32_t unicode_val_T;
 
 /* UCS/Unicode replacement character. */
-#define UCS_NO_CHAR ((unicode_val) 0xFFFD)
+#define UCS_NO_CHAR ((unicode_val_T) 0xFFFD)
 
 /* &nbsp; replacement character. See u2cp(). */
 #define NBSP_CHAR ((unsigned char) 1)
@@ -59,7 +59,7 @@ int is_cp_special(int);
 void free_conv_table(void);
 unsigned char *cp2utf_8(int, int);
 
-unsigned char *u2cp_(unicode_val, int, int no_nbsp_hack);
+unsigned char *u2cp_(unicode_val_T, int, int no_nbsp_hack);
 #define u2cp(u, to) u2cp_(u, to, 0)
 #define u2cp_no_nbsp(u, to) u2cp_(u, to, 1)
 

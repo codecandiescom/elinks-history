@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.25 2002/11/12 21:30:02 pasky Exp $ */
+/* $Id: dump.c,v 1.26 2002/11/28 11:26:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,10 +8,10 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/types.h> /* NetBSD flavour */
 #ifdef HAVE_SYS_SIGNAL_H
 #include <sys/signal.h>
 #endif
-#include <sys/types.h>
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif

@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.11 2003/12/21 06:54:11 miciah Exp $ */
+/* $Id: core.c,v 1.12 2003/12/21 06:55:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,6 +57,7 @@ init_guile(struct module *module)
 
 	/* Load ~/.elinks/internal-hooks.scm. */
 	path = straconcat(elinks_home, "internal-hooks.scm", NULL);
+	if (!path) return;
 	scm_c_primitive_load_path(path);
 	mem_free(path);
 
@@ -72,6 +73,7 @@ init_guile(struct module *module)
 	scm_set_current_module(user_module);
 	scm_c_use_module("elinks internal"); /* XXX: better way? i want to use internal_module directly */
 	path = straconcat(elinks_home, "user-hooks.scm", NULL);
+	if (!path) return;
 	scm_c_primitive_load_path(path);
 	mem_free(path);
 }

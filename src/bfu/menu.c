@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.276 2004/09/12 04:14:53 miciah Exp $ */
+/* $Id: menu.c,v 1.277 2004/09/12 06:02:18 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -1019,7 +1019,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 	/* First check if the mouse button was pressed in the side of the
 	 * terminal and simply scroll one step in that direction else iterate
 	 * through the menu items to see if it was pressed on a label. */
-	if (ev->info.mouse.x < p) {
+	if (ev->info.mouse.x < L_MAINMENU_SPACE) {
 		scroll = -1;
 
 	} else if (ev->info.mouse.x >= win->term->width - R_MAINMENU_SPACE) {

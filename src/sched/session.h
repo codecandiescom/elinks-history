@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.99 2004/03/22 01:04:20 jonas Exp $ */
+/* $Id: session.h,v 1.100 2004/03/22 03:59:08 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -34,7 +34,7 @@ struct frame {
 	unsigned char *name;
 	int redirect_cnt;
 
-	struct view_state vs; /* Must be last. */
+	struct view_state vs;
 };
 
 /* This is the repeat count being inserted by user so far. It is stored

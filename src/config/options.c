@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.380 2003/10/25 19:22:35 pasky Exp $ */
+/* $Id: options.c,v 1.381 2003/10/25 19:24:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,14 +223,10 @@ get_opt_(
 static void
 add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 {
-	struct list_head *cat = tree->value.tree;
 	int abi = 0;
 
-	if (*path) {
-		tree = get_opt_rec(tree, path);
-		cat = tree->value.tree;
-	}
-	if (!cat) return;
+	if (*path) tree = get_opt_rec(tree, path);
+	if (!tree->value.tree) return;
 
 	if (option->box_item && option->name && !strcmp(option->name, "_template_"))
 		option->box_item->visible = get_opt_int("config.show_template");
@@ -249,6 +245,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 	}
 
 	if (tree->flags & OPT_SORT) {
+		struct list_head *cat = tree->value.tree;
 		struct option *pos;
 
 		/* The list is empty, just add it there. */
@@ -288,7 +285,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 		}
 
 	} else {
-		add_to_list_end(*cat, option);
+		add_to_list_end(tree->value.tree, option);
 		if (abi) add_to_list_end(tree->box_item->child, option->box_item);
 	}
 }

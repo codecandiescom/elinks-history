@@ -1,3 +1,114 @@
+Mon Dec  8 23:08:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	A colon can separate smartprefix from its arguments as well.  
+
+Mon Dec  8 23:00:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: Makefile.am, protocol/rewrite/Makefile.am:
+
+	librewrite.a -> liburirewrite.a 
+
+Mon Dec  8 22:58:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Removed now-redundant assignment.  
+
+Mon Dec  8 22:57:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Fixed rlimit code introduced by zas.  
+
+Mon Dec  8 22:45:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Bunch of comments, fixme, minor cleanup. Sorry but i have no time
+	for fixing it now, but this patch will give some directions.  
+
+Mon Dec  8 19:45:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Mon Dec  8 19:36:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced 
+
+Mon Dec  8 17:53:02 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Mon Dec  8 16:16:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Do not show . in smb directory list, and use a better way to close
+	all unneeded file descriptors.  
+
+Mon Dec  8 11:06:35 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Dec  8 09:23:55 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update.  
+
+Mon Dec  8 02:56:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Funky stuff .. the previous buggy '_template' actually worked.  
+
+Mon Dec  8 02:51:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	For builtin templates set the description to the one in the template
+	when adding the option.  
+
+Mon Dec  8 00:39:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: setup.h, bfu/dialog.c:
+
+	Ensure that dialogs (and especially the _template_ option edit ones
+	that contains no text to increase it) has a comfortable minimum
+	width. Set to the magic number of 42.  
+
+Mon Dec  8 00:24:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Do not add the proxy URI but the 'real' URI to globhist. Regression
+	introduced when the adding of URIs in frames fixed.  
+
+Mon Dec  8 00:22:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Validate sanity check although it should not happen.  
+
+Sun Dec  7 23:34:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Fixed hotkey.  
+
 Sun Dec  7 21:40:45 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/dialogs/download.c:

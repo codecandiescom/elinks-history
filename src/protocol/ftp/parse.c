@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.31 2005/03/30 13:12:29 zas Exp $ */
+/* $Id: parse.c,v 1.32 2005/04/01 16:56:33 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -313,26 +313,16 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 			if (!isdigit (*src))
 				break;
 
-			mtime.tm_year = parse_year((const unsigned char **) &src, pos);
-
 			/* If we have a number x, it's a year. If we have x:y,
 			 * it's hours and minutes. */
-			if (src >= pos || *src != ':')
+			if (!memchr(src, ':', pos - src)) {
+				mtime.tm_year = parse_year((const unsigned char **) &src, pos);
 				break;
+			}
 
-			src++;
-
-			/* This means these were hours!  */
-			mtime.tm_hour = mtime.tm_year;
-			mtime.tm_min  = parse_ftp_number(&src, pos, 0, 59);
-			mtime.tm_year = 0;
-
-			/* If we have x:y:z, z are seconds.  */
-			if (src >= pos || *src != ':')
-				break;
-
-			src++;
-			mtime.tm_sec  = parse_ftp_number(&src, pos, 0, 59);
+			if (!parse_time((const unsigned char **) &src, &mtime, pos)) {
+				mtime.tm_hour = mtime.tm_min = mtime.tm_sec = 0;
+			}
 			break;
 
 		case FTP_UNIX_NAME:

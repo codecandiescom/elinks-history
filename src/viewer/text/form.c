@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.254 2004/12/17 08:48:37 zas Exp $ */
+/* $Id: form.c,v 1.255 2004/12/17 08:53:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1271,7 +1271,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			 * submit the form or the posting fails. */
 			/* FIXME: We should maybe have ACT_EDIT_ENTER_RELOAD */
 			if ((has_form_submit(doc_view->document, fc)
-			      && !get_opt_int("document.browse.forms.auto_submit"))
+			      && !get_opt_bool("document.browse.forms.auto_submit"))
 			    || goto_current_link(ses, doc_view, 0)) {
 				if (ses->insert_mode == INSERT_MODE_ON)
 					ses->insert_mode = INSERT_MODE_OFF;
@@ -1515,7 +1515,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 
 		if (!fc->action
 		    || (has_form_submit(doc_view->document, fc)
-		        && !get_opt_int("document.browse.forms.auto_submit")))
+		        && !get_opt_bool("document.browse.forms.auto_submit")))
 			break;
 
 		key = get_keystroke(ACT_EDIT_ENTER, KEYMAP_EDIT);

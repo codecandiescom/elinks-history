@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: plain.c,v 1.1 2003/10/31 17:11:18 jonas Exp $ */
+/* $Id: plain.c,v 1.2 2003/10/31 19:14:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,6 +138,7 @@ render_plaintext_document(struct document *document, struct cache_entry *ce)
 	if (!source) return;
 
 	add_document_lines(document, source);
+	document->bgcolor = d_opt->default_bg;
 
 	mem_free(source);
 }

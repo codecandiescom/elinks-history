@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "POT-Creation-Date: 2003-11-27 13:23+0100\n"
-"PO-Revision-Date: 2003-11-27 07:30+0200\n"
+"PO-Revision-Date: 2003-12-01 07:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -57,25 +57,19 @@ msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" can not be deleted."
-msgstr ""
-"Przykro mi, ale element \"%s\" jest u¿ywany przez co¶ innego.\n"
-"\n"
-"%s"
+msgstr "Przykro mi, ale element \"%s\" nie mo¿e byæ usuniêty."
 
 #: src/bfu/hierbox.c:438
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
-msgstr ""
-"Przykro mi, ale element \"%s\" jest u¿ywany przez co¶ innego.\n"
-"\n"
-"%s"
+msgstr "Przykro mi, ale element \"%s\" jest u¿ywany przez co¶ innego."
 
 #: src/bfu/hierbox.c:441
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" can not be deleted."
-msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
+msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
 
 #: src/bfu/hierbox.c:442
 #, c-format
@@ -83,9 +77,8 @@ msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
 
 #: src/bfu/hierbox.c:466
-#, fuzzy
 msgid "Delete error"
-msgstr "Usuñ folder"
+msgstr "B³±d przy usuwaniu"
 
 #: src/bfu/hierbox.c:559
 msgid "Delete marked items"
@@ -165,7 +158,7 @@ msgstr "LEDy"
 
 #: src/bfu/leds.c:66
 msgid "LEDs (visual indicators) options."
-msgstr ""
+msgstr "Ustawienie dotycz±ce LEDów (wska¼ników)"
 
 #
 #. XXX: Disable global history if -anonymous is given?
@@ -180,6 +173,8 @@ msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
 msgstr ""
+"W³±czenie LEDów.\n"
+"Te wska¼niki poinformuj± ciê o ró¿nych stanach."
 
 #. name:
 #: src/bfu/leds.c:239
@@ -500,7 +495,7 @@ msgstr "Nie mo¿na zapisaæ do pliku konfiguracyjnego %s: %s"
 
 #: src/config/dialogs.c:89
 msgid "(expand by pressing space)"
-msgstr ""
+msgstr "(rozszerz przyciskaj±c spacjê)"
 
 #: src/config/dialogs.c:92 src/config/dialogs.c:244
 msgid "N/A"
@@ -825,13 +820,12 @@ msgstr "Otwórz konsolê Lua (ZABLOKOWANE)"
 
 #. internal use only
 #: src/config/kbdbind.c:423
-#, fuzzy
 msgid "Set a mark"
-msgstr "Przeszukaj zak³adki"
+msgstr "Ustaw znacznik"
 
 #: src/config/kbdbind.c:424
 msgid "Go at a specified mark"
-msgstr ""
+msgstr "Przejd¼ do podanego znacznika"
 
 #: src/config/kbdbind.c:425
 msgid "Activate the menu"
@@ -2205,7 +2199,7 @@ msgstr "Podkre¶laj odno¶niki."
 
 #: src/config/options.inc:530
 msgid "Wrap non breaking space"
-msgstr ""
+msgstr "Zawijanie nie ³ami±cych spacji"
 
 #: src/config/options.inc:532
 msgid ""
@@ -2213,6 +2207,9 @@ msgid ""
 "but allow to wrap the text. This can help keeping the width\n"
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
+"Je¶li ustawione nie nie honoruj nie ³ami±cych spacji (encji nbsp),\n"
+"ale pozwól zawiajaæ tekst. To mo¿e pomóc utrzymaæ szeroko¶æ dokumentów\n"
+"tak, ¿eby nie by³o potrzebne przewijanie w poziomie."
 
 #
 #: src/config/options.inc:537
@@ -3918,9 +3915,8 @@ msgstr ""
 "Bezpieczeñstwo: %s\n"
 
 #: src/cookies/cookies.c:559
-#, fuzzy
 msgid "at quit time"
-msgstr "Data ostatniej wizyty"
+msgstr "w momencie koñczenia dzia³ania"
 
 #: src/cookies/cookies.c:560 src/cookies/dialogs.c:83
 msgid "yes"
@@ -4087,14 +4083,12 @@ msgid "Abort"
 msgstr "Przerwij"
 
 #: src/dialogs/download.c:431
-#, fuzzy
 msgid "Stop"
-msgstr "~Ustawienia"
+msgstr "Zatrzymaj"
 
 #: src/dialogs/download.c:436
-#, fuzzy
 msgid "Download manager"
-msgstr "Pobierz ~obrazek"
+msgstr "Menad¿er pobierania"
 
 #: src/dialogs/info.c:46
 msgid "About"
@@ -4204,15 +4198,13 @@ msgid "Unh~istory"
 msgstr "His~toria powrotów"
 
 #: src/dialogs/menu.c:294
-#, fuzzy
 msgid "Global ~history"
-msgstr "Historia globalna"
+msgstr "Historia ~globalna"
 
 #
 #: src/dialogs/menu.c:297
-#, fuzzy
 msgid "~Bookmarks"
-msgstr "Zak³adki"
+msgstr "~Zak³adki"
 
 #
 #: src/dialogs/menu.c:299
@@ -4228,9 +4220,8 @@ msgid "Coo~kies"
 msgstr "Ciastecz~ka"
 
 #: src/dialogs/menu.c:305
-#, fuzzy
 msgid "~Form history"
-msgstr "Historia formularz~y"
+msgstr "Historia ~formularzy"
 
 #: src/dialogs/menu.c:312
 msgid "Sa~ve as"
@@ -4415,7 +4406,7 @@ msgstr "~Odno¶nik"
 
 #: src/dialogs/menu.c:492
 msgid "~Tools"
-msgstr ""
+msgstr "~Narzêdzia"
 
 #: src/dialogs/menu.c:493
 msgid "~Setup"
@@ -4528,16 +4519,15 @@ msgstr "Zmieñ rozmiar terminala"
 
 #: src/formhist/dialogs.c:68
 msgid "Forms are never saved for this URL."
-msgstr ""
+msgstr "Formularze dla tego URL-a nie s± zapisywane."
 
 #: src/formhist/dialogs.c:70
 msgid "Forms are saved for this URL."
-msgstr ""
+msgstr "Formularze dla tego URL-a s± zapisywane."
 
 #: src/formhist/dialogs.c:145
-#, fuzzy
 msgid "Toggle saving"
-msgstr "Prze³±cz ~obrazki"
+msgstr "Prze³±cz zapisywanie"
 
 #: src/formhist/dialogs.c:151
 msgid "Form history manager"
@@ -5687,29 +5677,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1466
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "Deleting used folder"
-#~ msgstr "Usuwanie u¿ywanego foldera"
-
-#~ msgid "Deleting used item"
-#~ msgstr "Usuwanie u¿ywanych elementów"
-
-#~ msgid "Cannot delete \"%s\""
-#~ msgstr "Nie mo¿na skasowaæ \"%s\""
-
-#
-#~ msgid "LEDs options."
-#~ msgstr "Ustawienia LEDów."
-
-#
-#~ msgid "Enable LEDs."
-#~ msgstr "W³±cz LEDy."
-
-#~ msgid "No downloads"
-#~ msgstr "Brak pobrañ"
-
-#~ msgid "Global histor~y"
-#~ msgstr "Historia glo~balna"
-
-#~ msgid "Bookmark~s"
-#~ msgstr "~Zak³adki"

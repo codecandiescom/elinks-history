@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-09 09:55+0200\n"
+"POT-Creation-Date: 2004-09-11 19:11+0200\n"
 "PO-Revision-Date: 2004-09-09 12:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/bfu/hierbox.c:348
+#: src/bfu/hierbox.c:345
 msgid "Close"
 msgstr "Zamknij"
 
 #. | MSGBOX_SCROLLABLE
-#: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/cache/dialogs.c:224
+#: src/bfu/hierbox.c:441 src/bfu/hierbox.c:452 src/cache/dialogs.c:224
 #: src/config/dialogs.c:516 src/cookies/dialogs.c:387
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
 #: src/dialogs/download.c:474 src/formhist/dialogs.c:216
@@ -32,13 +32,13 @@ msgstr "Zamknij"
 msgid "Info"
 msgstr "Informacja"
 
-#: src/bfu/hierbox.c:445
+#: src/bfu/hierbox.c:442
 msgid "Press space to expand this folder."
 msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
-#: src/bfu/hierbox.c:447 src/bfu/hierbox.c:458 src/bfu/hierbox.c:636
-#: src/bfu/hierbox.c:935 src/bfu/hierbox.c:961 src/bfu/inpfield.c:49
+#: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/bfu/hierbox.c:633
+#: src/bfu/hierbox.c:932 src/bfu/hierbox.c:958 src/bfu/inpfield.c:49
 #: src/bfu/inpfield.c:60 src/bfu/inpfield.c:80 src/bfu/msgbox.c:172
 #: src/bookmarks/dialogs.c:269 src/bookmarks/dialogs.c:669
 #: src/config/dialogs.c:63 src/config/dialogs.c:108 src/config/dialogs.c:339
@@ -62,71 +62,71 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/viewer/text/search.c:949 src/viewer/text/search.c:1010
 #: src/viewer/text/search.c:1398 src/viewer/text/search.c:1511
 #: src/viewer/text/textarea.c:363 src/viewer/text/textarea.c:372
-#: src/viewer/text/view.c:579 src/viewer/text/view.c:1170
+#: src/viewer/text/view.c:579 src/viewer/text/view.c:1178
 msgid "OK"
 msgstr "OK"
 
-#: src/bfu/hierbox.c:564
+#: src/bfu/hierbox.c:561
 #, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Przykro mi, ale element \"%s\" nie mo¿e byæ usuniêty."
 
-#: src/bfu/hierbox.c:565
+#: src/bfu/hierbox.c:562
 #, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Przykro mi, ale element \"%s\" jest u¿ywany przez co¶ innego."
 
-#: src/bfu/hierbox.c:568
+#: src/bfu/hierbox.c:565
 #, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Przykro mi, ale folder \"%s\" nie mo¿e byæ usuniêty."
 
-#: src/bfu/hierbox.c:569
+#: src/bfu/hierbox.c:566
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Przykro mi, ale folder \"%s\" jest u¿ywany przez co¶ innego."
 
-#: src/bfu/hierbox.c:633
+#: src/bfu/hierbox.c:630
 msgid "Delete error"
 msgstr "B³±d przy usuwaniu"
 
-#: src/bfu/hierbox.c:728
+#: src/bfu/hierbox.c:725
 msgid "Delete marked items"
 msgstr "Usuwanie zaznaczonych elementów"
 
-#: src/bfu/hierbox.c:729
+#: src/bfu/hierbox.c:726
 msgid "Delete marked items?"
 msgstr "Czy usun±æ zaznaczone elementy?"
 
-#: src/bfu/hierbox.c:742 src/bfu/hierbox.c:778 src/bfu/hierbox.c:799
-#: src/bfu/hierbox.c:870 src/config/dialogs.c:819 src/dialogs/menu.c:125
+#: src/bfu/hierbox.c:739 src/bfu/hierbox.c:775 src/bfu/hierbox.c:796
+#: src/bfu/hierbox.c:867 src/config/dialogs.c:819 src/dialogs/menu.c:125
 #: src/formhist/formhist.c:454 src/mime/dialogs.c:75 src/sched/task.c:184
 #: src/terminal/tab.c:194 src/terminal/tab.c:230
 msgid "Yes"
 msgstr "Tak"
 
-#: src/bfu/hierbox.c:743 src/bfu/hierbox.c:779 src/bfu/hierbox.c:800
-#: src/bfu/hierbox.c:871 src/config/dialogs.c:820 src/dialogs/menu.c:126
+#: src/bfu/hierbox.c:740 src/bfu/hierbox.c:776 src/bfu/hierbox.c:797
+#: src/bfu/hierbox.c:868 src/config/dialogs.c:820 src/dialogs/menu.c:126
 #: src/formhist/formhist.c:455 src/mime/dialogs.c:76 src/sched/task.c:185
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "No"
 msgstr "Nie"
 
 #. delete_folder_title
-#: src/bfu/hierbox.c:763 src/bookmarks/dialogs.c:138
+#: src/bfu/hierbox.c:760 src/bookmarks/dialogs.c:138
 msgid "Delete folder"
 msgstr "Usuñ folder"
 
-#: src/bfu/hierbox.c:764
+#: src/bfu/hierbox.c:761
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Czy skasowaæ folder \"%s\" i jego zawarto¶æ?"
 
-#: src/bfu/hierbox.c:781
+#: src/bfu/hierbox.c:778
 msgid "Delete item"
 msgstr "Usuwanie pozycji"
 
-#: src/bfu/hierbox.c:782
+#: src/bfu/hierbox.c:779
 #, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -137,15 +137,15 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/bfu/hierbox.c:839
+#: src/bfu/hierbox.c:836
 msgid "Clear all items"
 msgstr "Skasowanie wszystkich pozycji"
 
-#: src/bfu/hierbox.c:840
+#: src/bfu/hierbox.c:837
 msgid "Do you really want to remove all items?"
 msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
 
-#: src/bfu/hierbox.c:930 src/bfu/hierbox.c:960 src/bookmarks/dialogs.c:456
+#: src/bfu/hierbox.c:927 src/bfu/hierbox.c:957 src/bookmarks/dialogs.c:456
 #: src/cache/dialogs.c:227 src/config/dialogs.c:520 src/config/dialogs.c:934
 #: src/globhist/dialogs.c:235 src/viewer/text/search.c:982
 #: src/viewer/text/search.c:990 src/viewer/text/search.c:1007
@@ -153,12 +153,12 @@ msgstr "Czy na pewno chcesz skasowaæ wszystkie pozycje?"
 msgid "Search"
 msgstr "Szukaj"
 
-#: src/bfu/hierbox.c:932 src/viewer/text/search.c:983
+#: src/bfu/hierbox.c:929 src/viewer/text/search.c:983
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Nie znaleziono wyra¿enia '%s'"
 
-#: src/bfu/hierbox.c:960 src/config/dialogs.c:191 src/config/dialogs.c:207
+#: src/bfu/hierbox.c:957 src/config/dialogs.c:191 src/config/dialogs.c:207
 #: src/config/dialogs.c:374 src/config/dialogs.c:496 src/cookies/dialogs.c:99
 #: src/cookies/dialogs.c:311 src/dialogs/edit.c:92
 #: src/scripting/lua/core.c:396 src/scripting/lua/core.c:397
@@ -166,7 +166,7 @@ msgstr "Nie znaleziono wyra¿enia '%s'"
 msgid "Name"
 msgstr "Nazwa"
 
-#: src/bfu/hierbox.c:961 src/bookmarks/dialogs.c:269
+#: src/bfu/hierbox.c:958 src/bookmarks/dialogs.c:269
 #: src/bookmarks/dialogs.c:669 src/config/dialogs.c:410
 #: src/config/dialogs.c:497 src/config/dialogs.c:899 src/cookies/dialogs.c:323
 #: src/dialogs/edit.c:103 src/dialogs/menu.c:96 src/dialogs/menu.c:496
@@ -272,6 +272,21 @@ msgstr "Wska¼niki LED"
 #: src/bfu/menu.c:746
 msgid "Search menu/"
 msgstr "Menu wyszukiwania/"
+
+#: src/bfu/msgline.c:168 src/util/formatter.c:87
+#, fuzzy
+msgid "Is the current link bookmarked"
+msgstr "Poka¿ bie¿±cy obrazek"
+
+#: src/bfu/msgline.c:169 src/util/formatter.c:88
+#, fuzzy
+msgid "Is the current location bookmarked"
+msgstr "Zapisz bie¿±cy dokument jako tekst"
+
+#: src/bfu/msgline.c:170 src/util/formatter.c:89
+#, fuzzy
+msgid "Is the current link is the history"
+msgstr "Otwórz bie¿±cy odno¶nik w nowej karcie"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
@@ -642,8 +657,7 @@ msgstr "Ustawienia"
 
 #: src/config/cmdline.c:538
 msgid "Usage: elinks [OPTION]... [URL]"
-msgstr ""
-"U¿ycie: elinks [OPCJA]... [URL]"
+msgstr "U¿ycie: elinks [OPCJA]... [URL]"
 
 #: src/config/cmdline.c:539
 msgid "Options"
@@ -2102,6 +2116,7 @@ msgstr ""
 "zapobiega to przypadkowemu wype³nieniu pól tekstowych, np. przy przewijaniu\n"
 "tekstu. Gdy wy³±czone, w przypadku zaznaczenia pola tekstowego wci¶niêcia\n"
 "klawiszy dotycz± pola tekstowego."
+
 #
 #: src/config/options.inc:160
 msgid "Images"
@@ -4579,7 +4594,8 @@ msgstr "Przykro mi, ale domena ciasteczka \"%s\" nie mo¿e byæ usuniêta."
 #: src/cookies/dialogs.c:169
 #, c-format
 msgid "Sorry, but cookie domain \"%s\" is being used by something else."
-msgstr "Przykro mi, ale domena ciasteczka \"%s\" jest u¿ywane przez co¶ innego."
+msgstr ""
+"Przykro mi, ale domena ciasteczka \"%s\" jest u¿ywane przez co¶ innego."
 
 #. delete_marked_items_title
 #: src/cookies/dialogs.c:171
@@ -5435,8 +5451,6 @@ msgstr "Prze³±cz zapisywanie"
 msgid "Form history manager"
 msgstr "Menad¿er historii formularzy"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Poka¿ okno dialogowe historii formularzy"
@@ -5826,55 +5840,58 @@ msgid "File type handlers"
 msgstr "Programy obs³ugi typów plików"
 
 #: src/mime/backend/default.c:46
+#, fuzzy
 msgid ""
-"Handlers for certain file types. One must configure mime.type.*\n"
-"to refer to these handlers.\n"
-"\n"
-"One can define a handler and refer to it for several MIME types -- e.g.,\n"
-"one might define an 'images' handler to which mime.type.image.png,\n"
-"mime.type.image.jpeg, and so on will refer; or one might define a handler\n"
-"for a more specific type of file -- e.g., PDF files."
+"A file type handler is a set of information about how to use\n"
+"an external program to view a file. It is possible to refer to it\n"
+"for several MIME types -- e.g., you can define an 'image' handler\n"
+"to which mime.type.image.png, mime.type.image.jpeg, and so on will\n"
+"refer; or one might define a handler for a more specific type of file\n"
+"-- e.g., PDF files.\n"
+"Note you must define both a MIME handler and a MIME type association\n"
+"for it to work."
 msgstr ""
 "Uchwyty dla pewnych typów plików. Nale¿y skonfigurowaæ mime.type.*,\n"
 "aby odnosi³y siê do tych uchwytów.\n"
 "\n"
-"Mo¿na zdefiniowaæ jeden uchwyt, które bêdzie odpowiada³ za kilka typów MIME,\n"
+"Mo¿na zdefiniowaæ jeden uchwyt, które bêdzie odpowiada³ za kilka typów "
+"MIME,\n"
 "np. mo¿na zdefiniowaæ uchwyt 'images', do którego bêd± odnosi³y siê\n"
 "mime.type.image.png, mime.type.image.jpeg, itd; mo¿na zdefiniowaæ uchwyt\n"
 "dla bardziej skomplikowanych typów plików, np. PDF."
 
-#: src/mime/backend/default.c:55
+#: src/mime/backend/default.c:57
 msgid "Description of this handler."
 msgstr "Opis tego programu obs³ugi."
 
-#: src/mime/backend/default.c:59
+#: src/mime/backend/default.c:61
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
 msgstr ""
 "Specyficzny dla systemu opis programu obs³ugi (np. unix, unix-xwin, ...)."
 
-#: src/mime/backend/default.c:61 src/mime/backend/mailcap.c:104
+#: src/mime/backend/default.c:63 src/mime/backend/mailcap.c:104
 msgid "Ask before opening"
 msgstr "Zapytaj przed otwarciem"
 
-#: src/mime/backend/default.c:63
+#: src/mime/backend/default.c:65
 msgid "Ask before opening."
 msgstr "Zapytaj przed otwarciem."
 
 #
-#: src/mime/backend/default.c:65
+#: src/mime/backend/default.c:67
 msgid "Block terminal"
 msgstr "Blokowanie terminala"
 
-#: src/mime/backend/default.c:67
+#: src/mime/backend/default.c:69
 msgid "Block the terminal when the handler is running."
 msgstr "Zablokuj terminal, gdy program obs³ugi jest wykonywany."
 
 #
-#: src/mime/backend/default.c:69
+#: src/mime/backend/default.c:71
 msgid "Program"
 msgstr "Program"
 
-#: src/mime/backend/default.c:71
+#: src/mime/backend/default.c:73
 #, c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
@@ -5884,15 +5901,15 @@ msgstr ""
 "zostanie zast±piony nazw± pliku."
 
 #
-#: src/mime/backend/default.c:75
+#: src/mime/backend/default.c:77
 msgid "File extension associations"
 msgstr "Skojarzenia rozszerzeñ plików"
 
-#: src/mime/backend/default.c:77
+#: src/mime/backend/default.c:79
 msgid "Extension <-> MIME type association."
 msgstr "Rozszerzenie <-> skojarzenie typu MIME"
 
-#: src/mime/backend/default.c:81
+#: src/mime/backend/default.c:83
 msgid ""
 "MIME-type matching this file extension ('*' is used here in place\n"
 "of '.')."
@@ -5901,13 +5918,14 @@ msgstr ""
 "zamiast '.')."
 
 #. name:
-#: src/mime/backend/default.c:217
+#: src/mime/backend/default.c:219
 msgid "Option system"
 msgstr "System konfiguracyjny"
 
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"
@@ -6214,11 +6232,11 @@ msgstr ""
 "  Nie mam pojêcia co jest ¼le, przykro mi. Skontaktuj siê z administratorem\n"
 "  serwera je¶li wierzysz, ¿e do tego b³êdu nie powinno doj¶æ.\n"
 
-#: src/protocol/nntp/codes.c:124
+#: src/protocol/nntp.old/codes.c:124 src/protocol/nntp/codes.c:124
 msgid "NNTP error"
 msgstr "B³±d NNTP"
 
-#: src/protocol/nntp/codes.c:126
+#: src/protocol/nntp.old/codes.c:126 src/protocol/nntp/codes.c:126
 #, c-format
 msgid ""
 "An error occurred while fetching the document you\n"
@@ -6229,24 +6247,25 @@ msgstr ""
 "Wyst±pi³ b³±d podczas ¶ci±gania dokumentu z %s.\n"
 "Komunikat b³êdu: %s"
 
-#: src/protocol/nntp/codes.c:132
+#: src/protocol/nntp.old/codes.c:132 src/protocol/nntp/codes.c:132
 msgid "Ok"
 msgstr "Ok"
 
 #. name:
+#: src/protocol/nntp.old/nntp.c:33 src/protocol/nntp.old/nntp.c:66
 #: src/protocol/nntp/nntp.c:33 src/protocol/nntp/nntp.c:66
 msgid "NNTP"
 msgstr "NNTP"
 
-#: src/protocol/nntp/nntp.c:35
+#: src/protocol/nntp.old/nntp.c:35 src/protocol/nntp/nntp.c:35
 msgid "NNTP and news specific options."
 msgstr "Ustawienia dotycz±ce protoko³u NNTP i niusów."
 
-#: src/protocol/nntp/nntp.c:37
+#: src/protocol/nntp.old/nntp.c:37 src/protocol/nntp/nntp.c:37
 msgid "Default news server"
 msgstr "Domy¶lny serwer niusów"
 
-#: src/protocol/nntp/nntp.c:39
+#: src/protocol/nntp.old/nntp.c:39 src/protocol/nntp/nntp.c:39
 msgid ""
 "Used when resolving news: URIs. If set to the empty string\n"
 "the value of the NNTPSERVER environment variable will be used."
@@ -6254,11 +6273,11 @@ msgstr ""
 "U¿ywany przy rozwik³ywaniu URI news: . Je¶li ³añcuch jest pusty\n"
 "u¿yta bêdzie warto¶æ zmiennej ¶rodowiskowej NNTPSERVER."
 
-#: src/protocol/nntp/nntp.c:42
+#: src/protocol/nntp.old/nntp.c:42 src/protocol/nntp/nntp.c:42
 msgid "Message header entries"
 msgstr "Pozycje nag³ówków wiadomo¶ci"
 
-#: src/protocol/nntp/nntp.c:44
+#: src/protocol/nntp.old/nntp.c:44 src/protocol/nntp/nntp.c:44
 msgid ""
 "Comma separated list of which entries in the article header\n"
 "to show. E.g. 'Subject' and 'From'.\n"
@@ -7153,11 +7172,11 @@ msgstr "Przejd¼ do odno¶nika"
 msgid "Enter link number"
 msgstr "Wprowad¼ numer odno¶nika"
 
-#: src/viewer/text/view.c:1167
+#: src/viewer/text/view.c:1175
 msgid "Save error"
 msgstr "B³±d zapisu"
 
-#: src/viewer/text/view.c:1168
+#: src/viewer/text/view.c:1176
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
 

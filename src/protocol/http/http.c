@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.296 2004/07/03 10:27:55 zas Exp $ */
+/* $Id: http.c,v 1.297 2004/07/03 11:31:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -482,7 +482,7 @@ http_send_header(struct connection *conn)
 			}
 
 			if (ac.length) {
-				add_crlf_to_string(&header);
+				add_crlf_to_string(&ac);
 			}
 
 			/* Never freed until exit(), if you found a  better solution,

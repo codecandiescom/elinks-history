@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-12-29 23:37+0100\n"
-"PO-Revision-Date: 2004-12-30 02:32+0100\n"
+"PO-Revision-Date: 2004-12-30 04:55+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -1026,7 +1026,7 @@ msgstr "Konfigurationsskrivningsucces"
 #: src/config/dialogs.c:53
 #, c-format
 msgid "Options were saved successfully to config file %s."
-msgstr "Indstillinger blev skrevet til konfigurationsfilen %s."
+msgstr "Indstillinger blev problemfrit skrevet til konfigurationsfilen %s."
 
 #: src/config/dialogs.c:57
 msgid "Do not show anymore"
@@ -1563,15 +1563,15 @@ msgstr "Søg bagud efter tekststreng"
 
 #: src/config/kbdbind.c:520 src/config/kbdbind.c:521
 msgid "Search link text by typing ahead"
-msgstr ""
+msgstr "Inkrementel søgning af tekst for henvisninger"
 
 #: src/config/kbdbind.c:522
 msgid "Search document text by typing ahead"
-msgstr ""
+msgstr "Inkrementel søgning af dokumenttekst"
 
 #: src/config/kbdbind.c:523
 msgid "Search document text backwards by typing ahead"
-msgstr ""
+msgstr "Inkrementel baglæns søgning af dokumenttekst"
 
 #: src/config/kbdbind.c:524
 msgid "Show terminal options dialog"
@@ -1631,7 +1631,7 @@ msgstr "Skift mellem visning af tabeller"
 
 #: src/config/kbdbind.c:538
 msgid "Toggle usage of document specific colors"
-msgstr ""
+msgstr "Skift mellem brug af dokument definerede farver"
 
 #: src/config/kbdbind.c:539
 msgid "Toggle rendering page as HTML / plain text"
@@ -1718,7 +1718,7 @@ msgstr "Flyt til næste indgang"
 
 #: src/config/kbdbind.c:568
 msgid "Open in external editor"
-msgstr ""
+msgstr "Åbn i en ekstern tekstbehandler"
 
 #: src/config/kbdbind.c:569
 msgid "Paste text from the clipboard"
@@ -1734,7 +1734,7 @@ msgstr "Flyt markøren til højre"
 
 #: src/config/kbdbind.c:573
 msgid "Toggle regex matching (type-ahead searching)"
-msgstr ""
+msgstr "Skift mellem søgning med regulære udtryk"
 
 #: src/config/kbdbind.c:574 src/config/kbdbind.c:600
 msgid "Move cursor upwards"
@@ -1750,7 +1750,7 @@ msgstr "Marker indgang"
 
 #: src/config/kbdbind.c:598
 msgid "Select current highlighted item"
-msgstr ""
+msgstr "Udvælg det nuværende fremhævede element"
 
 #: src/config/kbdbind.c:599
 msgid "Collapse item"
@@ -1770,11 +1770,11 @@ msgstr "Ugenkendt handling (intern fejl)"
 
 #: src/config/options.inc:19
 msgid "Configuration system"
-msgstr ""
+msgstr "Konfigurationssystem"
 
 #: src/config/options.inc:21
 msgid "Configuration handling options."
-msgstr ""
+msgstr "Indstillinger for konfigurationshåndtering."
 
 #: src/config/options.inc:23
 msgid "Comments"
@@ -1788,6 +1788,11 @@ msgid ""
 "2 is only the description is written\n"
 "3 is full comments are written"
 msgstr ""
+"Mængden af kommentarer der automatisk skrives til konfigurationsfilen:\n"
+"0 er skriv ingen kommentarer\n"
+"1 er skriv kun navn og type\n"
+"2 er skriv kun beskrivelse\n"
+"3 er skriv kun beskrivelse"
 
 #: src/config/options.inc:31
 msgid "Indentation"
@@ -1799,10 +1804,13 @@ msgid ""
 "file. Zero means that no indentation is performed at all\n"
 "when saving the configuration."
 msgstr ""
+"Bredden som identeringen af konfigurationsfilen øges med\n"
+"for hver niveau. Nul betyder at der ikke skal indenteres\n"
+"når konfigurationen gemmes."
 
 #: src/config/options.inc:37
 msgid "Saving style"
-msgstr ""
+msgstr "Metode for gemning"
 
 #: src/config/options.inc:39
 msgid ""
@@ -1815,10 +1823,18 @@ msgid ""
 "     CHANGED during this ELinks session are added at the end of\n"
 "     the file"
 msgstr ""
+"Bestemmer hvad der sker når du beder ELinks om at gemme indstillinger:\n"
+"0 er kun værdier af nuværende indstillinger ændres\n"
+"1 er værdier af nuværende indstillinger ændres og manglende\n"
+"     indstillinger tilføjes i filafslutningen\n"
+"2 er konfigurationsfilen omskrives fra bunden af\n"
+"3 er værdier af nuværende indstillinger ændres og manglende\n"
+"     ændrede under den igangværende ELinks session er tilføjet\n"
+"     i filafslutningen"
 
 #: src/config/options.inc:48
 msgid "Comments localization"
-msgstr ""
+msgstr "Kommentarer lokalitetsgrad"
 
 #: src/config/options.inc:50
 msgid ""
@@ -1832,13 +1848,16 @@ msgstr ""
 
 #: src/config/options.inc:58
 msgid "Saving style warnings"
-msgstr ""
+msgstr "Advarsel for gemningsmetode"
 
 #: src/config/options.inc:60
 msgid ""
 "This is internal option used when displaying a warning about\n"
 "obsolete config.saving_style. You shouldn't touch it."
 msgstr ""
+"Dette er en intern indstilling som bruges i forbindelse med\n"
+"visning af en advarsel om forældet config.saving_style. Du\n"
+"bør ikke røre den."
 
 #: src/config/options.inc:63
 msgid "Show template"
@@ -1849,6 +1868,8 @@ msgid ""
 "Show _template_ options in autocreated trees in the options\n"
 "manager and save them to the configuration file."
 msgstr ""
+"Vis _template_ (skabelon) indstillinger under træer med automatisk\n"
+"oprettede indstillinger og gem dem i konfigurationsfilen."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:71
@@ -1861,11 +1882,11 @@ msgstr "Forbindelsesindstillinger"
 
 #: src/config/options.inc:76
 msgid "Asynchronous DNS"
-msgstr ""
+msgstr "Asynkron DNS opslag"
 
 #: src/config/options.inc:78
 msgid "Use asynchronous DNS resolver?"
-msgstr ""
+msgstr "Brug asynkron DNS opslag"
 
 #: src/config/options.inc:80
 msgid "Maximum connections"
@@ -1892,6 +1913,8 @@ msgid ""
 "Number of tries to establish a connection.\n"
 "Zero means try forever."
 msgstr ""
+"Antal forsøg for oprettelse af en forbindelse.\n"
+"Nul betyder bliv ved med at forsøge."
 
 #: src/config/options.inc:93 src/sched/error.c:52
 msgid "Receive timeout"
@@ -1903,7 +1926,7 @@ msgstr "Modtagelsestimeout (i sekunder)"
 
 #: src/config/options.inc:98 src/config/options.inc:108
 msgid "Try IPv4 when connecting"
-msgstr ""
+msgstr "Prøv IPv4 ved oprettelse af forbindelser"
 
 #: src/config/options.inc:100
 msgid ""
@@ -1915,6 +1938,13 @@ msgid ""
 "to be used on a per-connection basis by using an URL\n"
 "in the style of i.e. http4://elinks.or.cz/."
 msgstr ""
+"Angiver om tilslutning til værtsmaskine skal ske via IPv4.\n"
+"Bemærk at hvis connection.try_ipv6 også er aktiveret, tager\n"
+"den præcedens. Du bør ikke røre denne indstilling med mindre\n"
+"du ved hvad du gør. Endelig bemærk at du også kan tvinge at\n"
+"en given IP-protokol bruges til forbindelser ved at bruge en\n"
+"URL med en stil såsom http4://elinks.or.cz/."
+
 
 #: src/config/options.inc:110
 msgid ""
@@ -1924,10 +1954,14 @@ msgid ""
 "to be used on a per-connection basis by using an URL\n"
 "in the style of i.e. http4://elinks.or.cz/."
 msgstr ""
+"Angiver om tilslutning til værtsmaskine skal ske via IPv4.\n"
+"Rør ikke denne indstilling! Bemærk at du også kan tvinge at\n"
+"en given IP-protokol bruges til forbindelser ved at bruge en\n"
+"URL med en stil såsom http4://elinks.or.cz/."
 
 #: src/config/options.inc:118
 msgid "Try IPv6 when connecting"
-msgstr ""
+msgstr "Prøv IPv6 ved oprettelse af forbindelser"
 
 #: src/config/options.inc:120
 msgid ""
@@ -1936,14 +1970,18 @@ msgid ""
 "to be used on a per-connection basis by using an URL\n"
 "in the style of i.e. http6://elinks.or.cz/."
 msgstr ""
+"Angiver om tilslutning til værtsmaskine skal ske via IPv6.\n"
+"Bemærk at du også kan tvinge at en given IP-protokol bruges\n"
+"til forbindelser ved at bruge en URL med en stil såsom\n"
+"http4://elinks.or.cz/."
 
 #: src/config/options.inc:126
 msgid "Timeout for non-restartable connections"
-msgstr "Timeout for ikke-genstartbare forbindelser"
+msgstr "Ventetid for ikke-genstartbare forbindelser"
 
 #: src/config/options.inc:128
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
+msgstr "Ventetid (i sekunder) for ikke-genstartbare forbindelser."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:134
@@ -1956,25 +1994,28 @@ msgstr "Dokumentindstillinger."
 
 #: src/config/options.inc:138
 msgid "Browsing"
-msgstr ""
+msgstr "Browsing"
 
 #: src/config/options.inc:140
 msgid "Document browsing options (mainly interactivity)."
 msgstr ""
+"Indstillinger for læsning af dokumenter (hovedsagelig interaktivt)"
 
 #: src/config/options.inc:143
 msgid "Accesskeys"
-msgstr ""
+msgstr "Adgangstaster"
 
 #: src/config/options.inc:145
 msgid ""
 "Options for handling of the accesskey attribute of the active\n"
 "HTML elements."
 msgstr ""
+"Indstillinger for håndtering af attributer for adgangstaster\n"
+"for aktive HTML elementer."
 
 #: src/config/options.inc:148
 msgid "Automatic links following"
-msgstr ""
+msgstr "Automatisk forfølgelse af henvisninger"
 
 #: src/config/options.inc:150
 msgid ""
@@ -1982,18 +2023,21 @@ msgid ""
 "accesskey is pressed - this is the standard behaviour, but it's\n"
 "considered dangerous."
 msgstr ""
+"Følg automatisk henvisninger eller indsend en formular hvis\n"
+"passende adgangstaster trykkes - dette er standard adfærd men\n"
+"opfattes som farlig."
 
 #: src/config/options.inc:154
 msgid "Display access key in link info"
-msgstr ""
+msgstr "Vis adgangstast sammen med information om henvisninger"
 
 #: src/config/options.inc:156
 msgid "Display access key in link info."
-msgstr ""
+msgstr "Vis adgangstast sammen med information om henvisninger."
 
 #: src/config/options.inc:158
 msgid "Accesskey priority"
-msgstr ""
+msgstr "Prioritet for adgangstaster"
 
 #: src/config/options.inc:160
 msgid ""
@@ -2002,6 +2046,11 @@ msgid ""
 "1 is first try only frame bindings; if it fails, check accesskey\n"
 "2 is first check accesskey (this can be dangerous)"
 msgstr ""
+"Prioritet for adgangstaster angivet med 'accesskey' HTML attributten\n"
+"i forhold til konfigurerede tasteturgenveje:\n"
+"0 er prøv først alle normale genveje, dernæst tjek adgangstaster\n"
+"1 er prøv først kun genveje for rammer, dernæst tjek adgangstaster\n"
+"2 er tjek først adgangstaster (dette kan være farligt)"
 
 #: src/config/options.inc:166
 msgid "Forms"
@@ -2009,7 +2058,7 @@ msgstr "Formularer"
 
 #: src/config/options.inc:168
 msgid "Options for handling of the forms interaction."
-msgstr ""
+msgstr "Indstillinger for håndtering af interaktion med formulare"
 
 #: src/config/options.inc:170
 msgid "Submit form automatically"
@@ -2020,26 +2069,28 @@ msgid ""
 "Automagically submit a form when enter is pressed with a text\n"
 "field selected."
 msgstr ""
+"Automatisk indsend en formular når linjestart bliver trykket\n"
+"mens et tekstfelt er valgt."
 
 #: src/config/options.inc:175
 msgid "Confirm submission"
-msgstr ""
+msgstr "Bekræft indsendelse"
 
 #: src/config/options.inc:177
 msgid "Ask for confirmation when submitting a form."
-msgstr "Spørg for bekræftigelse, når en formular sendes."
+msgstr "Spørg for bekræftigelse før en formular indsendes."
 
 #: src/config/options.inc:179
 msgid "Default form input size"
-msgstr "Standard formular inputsstørrelse"
+msgstr "Standard formular inddatastørrelse"
 
 #: src/config/options.inc:181
 msgid "Default form input size if none is specified."
-msgstr ""
+msgstr "Standard formular inddatastørrelse hvis uspecificeret."
 
 #: src/config/options.inc:183
 msgid "Insert mode"
-msgstr ""
+msgstr "Indsætningstilstand"
 
 #: src/config/options.inc:185
 msgid ""
@@ -2050,6 +2101,13 @@ msgid ""
 "when it is inadvertently selected. When disabled, key presses are always\n"
 "inserted into a selected text field."
 msgstr ""
+"Denne indstilling påvirker hvordan tastetryk håndteres, når et\n"
+"tekstindtastningsfelt er valgt. Når aktiveret skal man først\n"
+"eksplicit 'taste sig ind' i et valgt indtastningfelt for at redigere\n"
+"det; dette modvirker at et indtastningsfelt 'stjæler' tastetryk,\n"
+"såsom tastetryk når der rulles ned eller op, mens indtastningsfeltet\n"
+"er uopmærksomt valgt. Når deaktiveret vil tastetryk altid blive\n"
+"indsat i valgte indtastningsfelter."
 
 #: src/config/options.inc:193
 msgid "Images"
@@ -2061,7 +2119,7 @@ msgstr "Indstillinger til håndtering af billeder."
 
 #: src/config/options.inc:197
 msgid "Display style for image tags"
-msgstr "Skift mellem visning af billeder"
+msgstr "Stil for visning af billedhenvisninger"
 
 #: src/config/options.inc:199
 msgid ""
@@ -2071,10 +2129,15 @@ msgid ""
 "2     means display alt/title attribute if possible, IMG if not\n"
 "3     means display alt/title attribute if possible, filename if not"
 msgstr ""
+"Visning af billedhenvisninger:\n"
+"0     betyder vis altid IMG\n"
+"1     betyder vis altid filnavn\n"
+"2     betyder vis alt/title attribut hvis muligt ellers IMG\n"
+"3     betyder vis alt/title attribut hvis muligt ellers filnavn"
 
 #: src/config/options.inc:205
 msgid "Maximum length for image filename"
-msgstr ""
+msgstr "Maksimal lændge for billedfilnavne"
 
 #: src/config/options.inc:207
 msgid ""
@@ -2083,10 +2146,14 @@ msgid ""
 "1-500 means display filename with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 msgstr ""
+"Maksimal længde for viste billedfilnavne:\n"
+"0     betyder vis altid det komplette filnavn\n"
+"1-500 betyder vis filenavn med den angivne maksimale længde;\n"
+"      hvis længere end angivet erstattes midten med en stjerne"
 
 #: src/config/options.inc:217
 msgid "Image links tagging"
-msgstr ""
+msgstr "Visning af billedhenvisninger"
 
 #: src/config/options.inc:219
 msgid ""
@@ -2095,26 +2162,30 @@ msgid ""
 "1 means never if alt or title are provided (old behavior)\n"
 "2 means always"
 msgstr ""
+"Angiver hvornår billedhenvisninger skal vises:\n"
+"0 betyder aldrig\n"
+"1 betyder aldrig hvis alt eller title er tilstede (gammel adfærd)\n"
+"2 betyder altid"
 
 #: src/config/options.inc:224
 msgid "Image link prefix"
-msgstr ""
+msgstr "Præfiks for billedhenvisninger"
 
 #: src/config/options.inc:226
 msgid "Prefix string to use to mark image links."
-msgstr ""
+msgstr "Præfiskstreng brugt til at markere billedhenvisninger."
 
 #: src/config/options.inc:228
 msgid "Image link suffix"
-msgstr ""
+msgstr "Suffiks for billedhenvisninger"
 
 #: src/config/options.inc:230
 msgid "Suffix string to use to mark image links."
-msgstr ""
+msgstr "Suffiskstreng brugt til at markere billedhenvisninger."
 
 #: src/config/options.inc:232
 msgid "Maximum length for image label"
-msgstr ""
+msgstr "Maksimal længde af billedmærkat"
 
 #: src/config/options.inc:234
 msgid ""
@@ -2123,6 +2194,10 @@ msgid ""
 "1-500 means display label with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 msgstr ""
+"Maksimal længde af billedmærkat (alt/title):\n"
+"0     betyder vis altid det komplette mærkat\n"
+"1-500 betyder vis mærkat med den angivne maksimale længde;\n"
+"      hvis længere end angivet erstattes midten med en stjerne"
 
 #: src/config/options.inc:239
 msgid "Display links to images w/o alt"
@@ -2133,6 +2208,8 @@ msgid ""
 "Display links to images without an alt attribute. If this option\n"
 "is off, these images are completely invisible."
 msgstr ""
+"Vis henvisninger til billeder uden alt-attribut. Hvis denne indstilling\n"
+"er deaktiveret disse billeder er fuldstændig usynlige."
 
 #: src/config/options.inc:244
 msgid "Display links to images"
@@ -2145,18 +2222,22 @@ msgid ""
 "attribute contents is shown, but as normal text, not selectable\n"
 "as a link."
 msgstr ""
+"Vis henvisninger til alle billeder i dokumentet ligegyldigt om\n"
+"de har alt attribut eller ej. Hvis denne indstilling er deaktiveret\n"
+"vil indholdet af alt attributten blive vist som normal tekst,\n"
+"i stedet for som en henvisning."
 
 #: src/config/options.inc:252
 msgid "Links"
-msgstr "Lænker"
+msgstr "Henvisninger"
 
 #: src/config/options.inc:254
 msgid "Options for handling of links to other documents."
-msgstr ""
+msgstr "Indstillinger for håndtering af henvisninger til andre dokumenter"
 
 #: src/config/options.inc:256
 msgid "Active link"
-msgstr ""
+msgstr "Aktiveret henvisning"
 
 #: src/config/options.inc:258
 msgid "Options for the active link."
@@ -2207,6 +2288,8 @@ msgid ""
 "Enable use of the active link background and text color\n"
 "settings instead of the link colors from the document."
 msgstr ""
+"Anvend indstillinger som definerer baggrunds- og tekstfarve\n"
+"for den aktiverede henvisning i stedet for farver fra dokumentet."
 
 #: src/config/options.inc:277
 msgid "Bold"
@@ -2214,7 +2297,7 @@ msgstr "Fedskrift"
 
 #: src/config/options.inc:279
 msgid "Make the active link text bold."
-msgstr ""
+msgstr "Vis teksten for den aktive henvisning med fedskrift"
 
 #: src/config/options.inc:281
 msgid "Invert colors"
@@ -2222,36 +2305,36 @@ msgstr "Inverter farver"
 
 #: src/config/options.inc:283
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
+msgstr "Inverter for- og baggrundsfarven så henvisninger fremhæves."
 
 #: src/config/options.inc:286 src/config/options.inc:786
 #: src/dialogs/options.c:170
 msgid "Underline"
-msgstr ""
+msgstr "Understregning"
 
 #: src/config/options.inc:288
 msgid "Underline the active link."
-msgstr ""
+msgstr "Understreg den aktive henvisning"
 
 #: src/config/options.inc:291
 msgid "Directory highlighting"
-msgstr ""
+msgstr "Fremhævning af mapper"
 
 #: src/config/options.inc:293
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
+msgstr "Fremhæv henvisninger til mapper ved oplistning af FTP og lokale filer"
 
 #: src/config/options.inc:295
 msgid "Number links"
-msgstr ""
+msgstr "Nummerer henvisninger"
 
 #: src/config/options.inc:297
 msgid "Display numbers next to the links."
-msgstr ""
+msgstr "Vis numre ved siden af henvisninger"
 
 #: src/config/options.inc:299
 msgid "Handling of target=_blank"
-msgstr ""
+msgstr "Håndtering af target=_blank"
 
 #: src/config/options.inc:301
 msgid ""
@@ -2260,18 +2343,22 @@ msgid ""
 "1 means open link in new tab in foreground\n"
 "2 means open link in new tab in background"
 msgstr ""
+"Definerer hvordan henvisninger med target=_blank sat håndteres:\n"
+"0 betyder åbn henvisning i nuværende faneblad\n"
+"1 betyder åbn henvisning i et nyt faneblad i forgrunden\n"
+"2 betyder åbn henvisning i et nyt faneblad i baggrunden"
 
 #: src/config/options.inc:313
 msgid "Use tabindex"
-msgstr ""
+msgstr "Anvend tabindex"
 
 #: src/config/options.inc:315
 msgid "Whether to navigate links using tabindex."
-msgstr ""
+msgstr "Angiver om henvisninger navigeres ved brug af tabindex."
 
 #: src/config/options.inc:317
 msgid "Number keys select links"
-msgstr ""
+msgstr "Taltaster udvælger henvsninger"
 
 #: src/config/options.inc:319
 msgid ""
@@ -2281,10 +2368,15 @@ msgid ""
 "1 means if document.browse.links.numbering = 1\n"
 "2 means always"
 msgstr ""
+"Angiver om taltaster udvælger henvninger i stedet for at blive benyttet\n"
+"som kommando præfikser:\n"
+"0 betyder aldrig\n"
+"1 betyder hvis document.browse.links.numbering = 1\n"
+"2 betyder altid"
 
 #: src/config/options.inc:325
 msgid "Warn about maliciously crafted URIs"
-msgstr ""
+msgstr "Advar om ondskabsfuld konstuerede URIs"
 
 #: src/config/options.inc:327
 msgid ""
@@ -2292,12 +2384,16 @@ msgid ""
 "checked and if a maliciously crafted URI is detected a\n"
 "warning dialog will ask before following the link."
 msgstr ""
+"Når henvisninger følges tjekkes brugeridentitetsdelen af\n"
+"URIen og hvis en ondskabsfuld konstrueret URI opdages\n"
+"advarselsdialogvindue vil forespørge før henvisningen\n"
+"følges."
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
 #: src/config/options.inc:333
 msgid "Wrap-around links cycling"
-msgstr ""
+msgstr "Ombryd gennemløb af henvisning"
 
 #. 0
 #: src/config/options.inc:335
@@ -2305,6 +2401,8 @@ msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
 msgstr ""
+"Når 'ned' trykkes på den sidste henvisning hoppes til det første\n"
+"og omvendt."
 
 #: src/config/options.inc:339
 msgid "Scrolling"
@@ -2323,6 +2421,8 @@ msgid ""
 "Number of columns to scroll when a key bound to scroll-left or scroll-\n"
 "right is pressed and no prefix was given."
 msgstr ""
+"Antal søljer der rulles når en tast bundet til scroll-left eller\n"
+"scroll-right trykkes og ingen præfiks er angivet."
 
 #: src/config/options.inc:348
 msgid "Margin"
@@ -2333,16 +2433,20 @@ msgid ""
 "Size of the virtual margin - when you click inside of that margin,\n"
 "document scrolls in that direction."
 msgstr ""
+"Størrelse af den virtuelle margin - når du klikker indenfor denne\n"
+"margin rulles dokumentet i den retning."
 
 #: src/config/options.inc:353
 msgid "Vertical step"
-msgstr ""
+msgstr "Vertikal skridt"
 
 #: src/config/options.inc:355
 msgid ""
 "Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 "down is pressed and no prefix was given."
 msgstr ""
+"Antal linjer der rulles når en tast bundet til scroll-up eller\n"
+"scroll-down trykkes og ingen præfiks er angivet."
 
 #: src/config/options.inc:359
 msgid "Searching"
@@ -2354,13 +2458,15 @@ msgstr "Indstillinger for søgning."
 
 #: src/config/options.inc:363
 msgid "Case sensitivity"
-msgstr ""
+msgstr "Versalfølsomhed"
 
 #: src/config/options.inc:365
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
 msgstr ""
+"Angiver om søgning skal finde træffere i dokument teksten med eller\n"
+"uden at tage højde for versalfølsomhed."
 
 #: src/config/options.inc:369
 msgid "Regular expressions"
@@ -2373,16 +2479,22 @@ msgid ""
 "1 for basic regular expression searches.\n"
 "2 for extended regular expression searches."
 msgstr ""
+"Anvend søgning med regulære udtryk:\n"
+"0 for søgning kun med klartekst\n"
+"1 for søgning med basale regulære udtryk\n"
+"2 for søgning med udvidede regulære udtryk"
 
 #: src/config/options.inc:377
 msgid "Show search hit top or bottom dialogs"
-msgstr ""
+msgstr "Vis dialogvindue hvis søgning rammer top eller bund"
 
 #: src/config/options.inc:379
 msgid ""
 "Whether to show a dialog when the search hits top or bottom of the\n"
 "document."
 msgstr ""
+"Angiver om et dialogvindue vises når en søgning rammer toppen\n"
+"eller bunden af dokumentet."
 
 #: src/config/options.inc:382
 msgid "Wraparound"
@@ -2391,6 +2503,8 @@ msgstr "Ombrydning"
 #: src/config/options.inc:384
 msgid "Wrap around when searching. Currently only used for typeahead."
 msgstr ""
+"Ombryd ved søgning. Bruges på nuværende tidspunkt kun for\n"
+"incrementel søgning."
 
 #: src/config/options.inc:386
 msgid "Show not found"
@@ -2571,6 +2685,8 @@ msgid ""
 "Default document codepage. 'System' stands for\n"
 "a codepage determined by a selected locale."
 msgstr ""
+"Standard kodeside. 'System' angiver at kodesiden vælges på baggrund\n"
+"af den valgte lokalitet."
 
 #: src/config/options.inc:501
 msgid "Ignore charset info from server"
@@ -2642,11 +2758,11 @@ msgstr "Tillad mørke farver på sort baggrund."
 
 #: src/config/options.inc:545
 msgid "Ensure contrast"
-msgstr ""
+msgstr "Sikring af kontrast"
 
 #: src/config/options.inc:547
 msgid "Makes sure that the back- and foreground color is never equal."
-msgstr ""
+msgstr "Sikrer at bag- og forgrundsfarve aldrig er ens."
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.
@@ -3405,7 +3521,7 @@ msgstr "Søgetekststrenge"
 
 #: src/config/options.inc:1031
 msgid "Searched string highlight colors."
-msgstr "Markeringsfarver for tekststrenge ved søgning"
+msgstr "Fremhævningsfarver for tekststrenge ved søgning"
 
 #. ==========================================================
 #. ============= BORING PART (colors) END ===================
@@ -3574,7 +3690,7 @@ msgstr ""
 
 #: src/config/options.inc:1137
 msgid "Show a message box when file is saved successfully"
-msgstr ""
+msgstr "Vis beskedvindue når en fil gemmes problemfrit"
 
 #: src/config/options.inc:1139
 msgid ""
@@ -6206,7 +6322,7 @@ msgid ""
 msgstr ""
 "Denne URL benytter en protokol som ikke er kendt af ELinks.\n"
 "Du kan konfigurere et eksterne program til at håndtere den\n"
-"gennem indstillingssystemet."
+"gennem konfigurationssystemet."
 
 #: src/sched/error.c:64
 msgid ""
@@ -6739,11 +6855,11 @@ msgstr "Søgning med udvidede regulære udtryk"
 
 #: src/viewer/text/search.c:1568
 msgid "Case sensitive"
-msgstr "versalfølsom"
+msgstr "Versalfølsom"
 
 #: src/viewer/text/search.c:1569
 msgid "Case insensitive"
-msgstr "versalufølsom"
+msgstr "Versalufølsom"
 
 #: src/viewer/text/search.c:1593
 msgid "Search backward"

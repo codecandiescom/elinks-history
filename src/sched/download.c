@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.59 2003/06/15 22:22:30 pasky Exp $ */
+/* $Id: download.c,v 1.60 2003/06/15 22:23:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1263,19 +1263,19 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 	struct option *mailcap = NULL;
 #endif
 	int plaintext = 0;
-	unsigned char *ct;
+	unsigned char *ctype;
 
-	ct = get_content_type(ce->head, ce->url);
-	if (!ct) goto end;
+	ctype = get_content_type(ce->head, ce->url);
+	if (!ctype) goto end;
 
-	if (!strcasecmp(ct, "text/html")) goto free_ct;
+	if (!strcasecmp(ctype, "text/html")) goto free_ct;
 	/* RFC 3236 */
-	if (!strcasecmp(ct, "application/xhtml+xml")) goto free_ct;
+	if (!strcasecmp(ctype, "application/xhtml+xml")) goto free_ct;
 
 	plaintext = 1;
-	if (!strcasecmp(ct, "text/plain")) goto free_ct;
+	if (!strcasecmp(ctype, "text/plain")) goto free_ct;
 
-	assoc = get_mime_type_handler(ses->tab->term, ct);
+	assoc = get_mime_type_handler(ses->tab->term, ctype);
 
 #ifdef MAILCAP
 	if (!assoc) {
@@ -1285,12 +1285,13 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 		 * a new option is allocated and we want to control how
 		 * it should be freed before returning.
 		 */
-		mailcap = mailcap_lookup(ct, NULL);
+		mailcap = mailcap_lookup(ctype, NULL);
 		assoc = mailcap;
 	}
 #endif
 
-	if (!assoc && strlen(ct) >= 4 && !strncasecmp(ct, "text", 4)) goto free_ct;
+	if (!assoc && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
+		goto free_ct;
 
 	if (ses->tq_url)
 		internal("Type query to %s already in progress.", ses->tq_url);
@@ -1306,11 +1307,11 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 
 	ses->tq_goto_position = ses->goto_position ? stracpy(ses->goto_position) : NULL;
 #ifdef MAILCAP
-	type_query(ses, ct, assoc, !!mailcap);
+	type_query(ses, ctype, assoc, !!mailcap);
 #else
-	type_query(ses, ct, assoc, 0);
+	type_query(ses, ctype, assoc, 0);
 #endif
-	mem_free(ct);
+	mem_free(ctype);
 #ifdef MAILCAP
 	if (mailcap) delete_option(mailcap);
 #endif
@@ -1318,7 +1319,7 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 	return 1;
 
 free_ct:
-	mem_free(ct);
+	mem_free(ctype);
 
 end:
 #ifdef MAILCAP

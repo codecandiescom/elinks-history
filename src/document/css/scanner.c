@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.34 2004/01/20 00:43:06 jonas Exp $ */
+/* $Id: scanner.c,v 1.35 2004/01/20 00:44:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		   || (first_char == '<' && !strcmp(string, "!--"))) {
 		/* SGML left and right comments */
 		token->type = CSS_TOKEN_SGML_COMMENT;
-		string += 2;
+		string += 2 + (first_char == '<');
 
 	} else if (is_css_ident(first_char)) {
 		scan_css(string, CSS_CHAR_IDENT);

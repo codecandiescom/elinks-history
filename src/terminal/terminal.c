@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.23 2003/05/23 21:22:20 zas Exp $ */
+/* $Id: terminal.c,v 1.24 2003/05/24 13:30:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,7 +324,7 @@ send_redraw:
 		clear_terminal(term);
 		erase_screen(term);
 		term->redrawing = 1;
-		foreachback(win, term->windows) {
+		foreachback (win, term->windows) {
 			/* Note that you do NOT want to ever go and create new
 			 * window inside EV_INIT handler (it'll get second
 			 * EV_INIT here). Perhaps the best thing you could do

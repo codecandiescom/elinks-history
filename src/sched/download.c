@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.104 2003/10/08 12:42:50 zas Exp $ */
+/* $Id: download.c,v 1.105 2003/10/08 12:59:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,7 +313,8 @@ download_window_function(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, x, y;
 	int t = 0;
-	unsigned char *u;
+	int url_len;
+	unsigned char *url;
 	struct string msg;
 	struct download *download = &file_download->download;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
@@ -325,20 +326,34 @@ download_window_function(struct dialog_data *dlg)
 	t = download_progress_string(term, download, &msg);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
-	int_lower_bound(&w, 1);
+	int_lower_bound(&w, 0);
 
-	u = stracpy(file_download->url);
-	if (!u) {
+	url_len = strlen(file_download->url);
+	url = memacpy(file_download->url, url_len);
+	if (!url) {
 		done_string(&msg);
 		return;
 	} else {
-		unsigned char *p = strchr(u, POST_CHAR);
+		unsigned char *p = strchr(url, POST_CHAR);
 
-		if (p) *p = '\0';
-		if (strlen(u) > w) u[w - 1] = '\0';
+		if (p) {
+			url_len = p - url;
+			url[url_len + 1] = '\0';
+		}
+
+		/* Truncate too long urls */
+		if (url_len > w) {
+			url_len = w;
+			url[url_len + 1] = '\0';
+			if (url_len > 4) {
+				url[url_len--] = '.';
+				url[url_len--] = '.';
+				url[url_len--] = '.';
+			}
+		}
 	}
 
-	text_width(term, u, &min, &max);
+	text_width(term, url, &min, &max);
 	text_width(term, msg.source, &min, &max);
 	buttons_width(term, dlg->items, dlg->n, &min, &max);
 
@@ -351,7 +366,7 @@ download_window_function(struct dialog_data *dlg)
 	int_lower_bound(&w, 1);
 
 	y = 0;
-	dlg_format_text(NULL, term, u, 0, &y, w, NULL,
+	dlg_format_text(NULL, term, url, 0, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
 	y++;
@@ -371,7 +386,7 @@ download_window_function(struct dialog_data *dlg)
 
 	y = dlg->y + DIALOG_TB + 1;
 	x = dlg->x + DIALOG_LB;
-	dlg_format_text(term, term, u, x, &y, w, NULL,
+	dlg_format_text(term, term, url, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
 	if (t && download->prg->size >= 0)
@@ -387,7 +402,7 @@ download_window_function(struct dialog_data *dlg)
 	dlg_format_buttons(term, term, dlg->items, dlg->n, x, &y, w,
 			   NULL, AL_CENTER);
 
-	mem_free(u);
+	mem_free(url);
 	done_string(&msg);
 }
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.251 2003/07/22 23:21:24 jonas Exp $ */
+/* $Id: options.c,v 1.252 2003/07/22 23:50:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 struct option *
 add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	unsigned char *name, enum option_flags flags, enum option_type type,
-	int min, int max, void *ptr, unsigned char *desc)
+	int min, int max, void *ptr, union option_value value, unsigned char *desc)
 {
 	struct option *option = mem_alloc(sizeof(struct option));
 
@@ -239,6 +239,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->min = min;
 	option->max = max;
 	option->ptr = ptr;
+	option->value = value;
 	option->capt = capt;
 	option->desc = desc;
 	option->change_hook = NULL;

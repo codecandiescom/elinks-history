@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.57 2003/11/29 01:46:26 jonas Exp $ */
+/* $Id: text.c,v 1.58 2003/11/29 02:26:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,9 +133,13 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 	widget_data->h = max_height * 7 / 10 - 3;
 	if (widget_data->h < 0) widget_data->h = max_height;
 
+	/* Always reset @current if we do not need to scroll */
+	if (widget_data->h >= widget_data->info.text.lines)
+		widget_data->info.text.current = 0;
+
 	/* Can we scroll and do we even have to? */
 	if (widget_data->widget->info.text.is_scrollable
-	    && (widget_data->w != dlg_width
+	    && (widget_data->info.text.max_width != dlg_width
 		|| widget_data->h < widget_data->info.text.lines)) {
 		unsigned char **lines;
 		int current;
@@ -173,8 +177,6 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 		/* Force dialog to be the width of the longest line */
 		if (real_width) int_lower_bound(real_width, widget_data->w);
 
-	} else {
-		widget_data->info.text.current = 0;
 	}
 
 	dlg_format_text_do(term, text,
@@ -189,6 +191,16 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 }
 
 /* TODO: Some kind of scroll bar or scroll percentage */
+
+static void
+display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
+{
+	struct window *win = dlg_data->win;
+
+	if (!sel) return;
+
+	set_cursor(win->term, widget_data->x, widget_data->y, 0);
+}
 
 static int
 kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
@@ -241,7 +253,7 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 }
 
 struct widget_ops text_ops = {
-	NULL,
+	display_text,
 	NULL,
 	NULL,
 	kbd_text,

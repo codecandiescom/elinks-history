@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.101 2003/06/16 14:12:02 pasky Exp $ */
+/* $Id: renderer.c,v 1.102 2003/06/16 14:30:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,7 +251,7 @@ xset_hchars(struct part *part, int x, int y, int xl, unsigned c)
 }
 
 static inline void
-set_hline(struct part *part, int x, int y,int xl,
+set_hline(struct part *part, int x, int y, int xl,
           unsigned char *d, unsigned c, int spc)
 {
 	if (xpand_lines(part, y)
@@ -625,31 +625,31 @@ html_tag(struct f_data *f, unsigned char *t, int x, int y)
 #define CH_BUF	256
 
 static void
-put_chars_conv(struct part *part, unsigned char *c, int l)
+put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 {
 	static char buffer[CH_BUF];
 	int bp = 0;
 	int pp = 0;
 
 	if (format.attr & AT_GRAPHICS) {
-		put_chars(part, c, l);
+		put_chars(part, chars, charslen);
 		return;
 	}
 
-	if (!l) put_chars(part, NULL, 0);
+	if (!charslen) put_chars(part, NULL, 0);
 
 	/* FIXME: Code redundancy with convert_string() in charsets.c. --Zas */
-	while (pp < l) {
+	while (pp < charslen) {
 		unsigned char *e;
 
-		if (c[pp] < 128 && c[pp] != '&') {
+		if (chars[pp] < 128 && chars[pp] != '&') {
 putc:
-			buffer[bp++] = c[pp++];
+			buffer[bp++] = chars[pp++];
 			if (bp < CH_BUF) continue;
 			goto flush;
 		}
 
-		if (c[pp] != '&') {
+		if (chars[pp] != '&') {
 			struct conv_table *t;
 			int i;
 
@@ -658,11 +658,11 @@ putc:
 			i = pp;
 
 decode:
-			if (!t[c[i]].t) {
-				e = t[c[i]].u.str;
+			if (!t[chars[i]].t) {
+				e = t[chars[i]].u.str;
 			} else {
-				t = t[c[i++]].u.tbl;
-				if (i >= l) goto putc;
+				t = t[chars[i++]].u.tbl;
+				if (i >= charslen) goto putc;
 				goto decode;
 			}
 			pp = i + 1;
@@ -671,18 +671,19 @@ decode:
 			int i = start;
 
 			if (d_opt->plain) goto putc;
-			while (i < l
-			       && ((c[i] >= 'A' && c[i] <= 'Z')
-				   || (c[i] >= 'a' && c[i] <= 'z')
-				   || (c[i] >= '0' && c[i] <= '9')
-				   || (c[i] == '#')))
+			while (i < charslen
+			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
+				   || (chars[i] >= 'a' && chars[i] <= 'z')
+				   || (chars[i] >= '0' && chars[i] <= '9')
+				   || (chars[i] == '#')))
 				i++;
 
 			/* Eat &nbsp &nbsp<foo>. --Zas ;) */
-			if (!isalnum(c[i]) && i > start) {
-				e = get_entity_string(&c[start], i - start, d_opt->cp);
+			if (!isalnum(chars[i]) && i > start) {
+				e = get_entity_string(&chars[start], i - start,
+						d_opt->cp);
 				if (!e) goto putc;
-				pp = i + (i < l);
+				pp = i + (i < charslen);
 			} else goto putc;
 		}
 
@@ -710,7 +711,7 @@ flush1:
 #undef CH_BUF
 
 void
-put_chars(struct part *part, unsigned char *c, int l)
+put_chars(struct part *part, unsigned char *chars, int charslen)
 {
 	static struct text_attrib_beginning ta_cache =
 		{-1, {0, 0, 0}, {0, 0, 0}};
@@ -722,14 +723,15 @@ put_chars(struct part *part, unsigned char *c, int l)
 	struct point *pt;
 	int tmp; /* used for temporary results. */
 
-	while (par_format.align != AL_NONE && part->cx == -1 && l && *c == ' ') {
-		c++;
-		l--;
+	while (par_format.align != AL_NONE && part->cx == -1
+	       && charslen && *chars == ' ') {
+		chars++;
+		charslen--;
 	}
 
-	if (!l) return;
+	if (!charslen) return;
 
-	if (c[0] != ' ' || (c[1] && c[1] != ' ')) {
+	if (chars[0] != ' ' || (chars[1] && chars[1] != ' ')) {
 		last_tag_for_newline = (void *)&part->data->tags;
 	}
 	if (part->cx == -1) part->cx = par_format.leftmargin;
@@ -745,42 +747,49 @@ no_l:
 	fg = fg_cache;
 
 end_format_change:
-	if (part->cx == par_format.leftmargin && *c == ' ' && par_format.align != AL_NONE) {
-		c++;
-		l--;
+	if (part->cx == par_format.leftmargin && *chars == ' '
+	    && par_format.align != AL_NONE) {
+		chars++;
+		charslen--;
 	}
 	if (part->y < part->cy + 1)
 		part->y = part->cy + 1;
 
-	if (nowrap && part->cx + l > overlap(par_format))
+	if (nowrap && part->cx + charslen > overlap(par_format))
 		return;
 
-	set_hline(part, part->cx, part->cy, l, c, (((fg&0x08)<<3)|(bg<<3)|(fg&0x07))<<8, 1);
-	part->cx += l;
+	set_hline(part, part->cx, part->cy, charslen, chars,
+		  (((fg&0x08)<<3)|(bg<<3)|(fg&0x07))<<8, 1);
+	part->cx += charslen;
 	nobreak = 0;
 
 	if (par_format.align != AL_NONE) {
-		while (part->cx > overlap(par_format) && part->cx > par_format.leftmargin) {
+		while (part->cx > overlap(par_format)
+		       && part->cx > par_format.leftmargin) {
 			int x;
 
 #if 0
 			if (part->cx > part->x) {
 				part->x = part->cx + par_format.rightmargin;
-				if (c[l - 1] == ' ') part->x--;
+				if (chars[charslen - 1] == ' ') part->x--;
 			}
 #endif
 			x = split_line(part);
 			if (!x) break;
 
-			/* if (LEN(part->cy-1) > part->x) part->x = LEN(part->cy-1); */
+#if 0
+			if (LEN(part->cy-1) > part->x)
+				part->x = LEN(part->cy-1);
+#endif
 
 			align_line(part, part->cy - 1, 0);
 			nobreak = x - 1;
 		}
 	}
 
-	part->xa += l;
-	tmp = part->xa - (c[l - 1] == ' ' && par_format.align != AL_NONE)
+	part->xa += charslen;
+	tmp = part->xa
+	      - (chars[charslen - 1] == ' ' && par_format.align != AL_NONE)
 	      + par_format.leftmargin + par_format.rightmargin;
 
 	if (tmp > part->xmax) part->xmax = tmp;
@@ -862,7 +871,7 @@ x:;
 			link->type = L_LINK;
 			link->where = last_link ? stracpy(last_link) : NULL;
 			link->target = last_target ? stracpy(last_target) : NULL;
-			link->name = memacpy(c, l);
+			link->name = memacpy(chars, charslen);
 
 		} else {
 			switch (last_form->type) {
@@ -903,10 +912,11 @@ x:;
 		link->sel_color = ((fg & 8) << 3) | (fg & 7) | (bg << 3);
 		link->n = 0;
 set_link:
-		pt = mem_realloc(link->pos, (link->n + l) * sizeof(struct point));
+		pt = mem_realloc(link->pos,
+				 (link->n + charslen) * sizeof(struct point));
 		if (pt) {
 			link->pos = pt;
-			for (i = 0; i < l; i++) {
+			for (i = 0; i < charslen; i++) {
 				pt[link->n + i].x = X(part->cx) + i;
 				pt[link->n + i].y = Y(part->cy);
 			}

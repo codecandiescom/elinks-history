@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.91 2004/03/30 00:10:43 jonas Exp $ */
+/* $Id: parser.c,v 1.92 2004/03/30 00:47:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,7 +210,12 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		/* Load up the selector */
 
 		if (token->type != CSS_TOKEN_IDENT) {
-			skip_css_tokens(scanner, ',');
+			/* FIXME: Temporary fix for this weird CSS precedence
+			 * thing. ')' has higher than ',' and it can cause
+			 * problems when skipping here. The reason is for the
+			 * function() parsing. Hmm... --jonas */
+			if (!skip_css_tokens(scanner, ','))
+				skip_scanner_token(scanner);
 			continue;
 		}
 

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.70 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: listbox.h,v 1.71 2004/07/14 12:02:20 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -92,8 +92,9 @@ struct listbox_ops {
 	/* Before calling delete() thou shall call can_delete(). */
 	int (*can_delete)(struct listbox_item *);
 
-	/* Delete the listbox item object and its data. @last is non zero when
-	 * either deleting only one item or when deleting the last item. */
+	/* Delete the listbox item object, its data and all nested listboxes.
+	 * @last is non zero when either deleting only one item or when
+	 * deleting the last item. */
 	void (*delete)(struct listbox_item *, int last);
 
 	/* If defined it means that the it will control all drawing of the

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.179 2004/07/07 03:04:41 miciah Exp $ */
+/* $Id: hierbox.c,v 1.180 2004/07/14 12:02:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,20 +652,7 @@ do_delete_item(struct listbox_item *item, struct listbox_context *info,
 		return;
 	}
 
-	if (item->type == BI_FOLDER) {
-		struct listbox_item *child = item->child.next;
-
-		while (child != (void *) &item->child) {
-			child = child->next;
-			/* Propagate the ``delete'' property down to children
-			 * since if a parent can be deleted the child should
-			 * just delete itself too. */
-			do_delete_item(child->prev, info, 0, 1);
-		}
-	}
-
-	if (list_empty(item->child))
-		ops->delete(item, last);
+	ops->delete(item, last);
 }
 
 static int

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.24 2003/11/11 23:44:30 zas Exp $ */
+/* $Id: protocol.c,v 1.25 2003/11/12 01:42:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,7 @@ get_protocol_external_handler(unsigned char *url)
 	while (*end && *end != ':') {
 		/* RFC1738:
 		 * scheme  = 1*[ lowalpha | digit | "+" | "-" | "." ] */
-		if ((*end >= 'a' || *end <= 'z') || (*end >= '0' || *end <= '9')
+		if ((*end >= 'a' && *end <= 'z') || (*end >= '0' && *end <= '9')
 		    || *end == '+' || *end == '-' || *end == '.') {
 			end++;
 		} else

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.124 2004/06/19 12:27:34 jonas Exp $ */
+/* $Id: textarea.c,v 1.125 2004/06/19 12:46:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,6 +287,37 @@ encode_textarea(struct submitted_value *sv)
 
 int textarea_editor = 0;
 
+static unsigned char *
+read_textarea_file(unsigned char *filename, int maxlength)
+{
+	unsigned char *value = NULL;
+	FILE *file = fopen(filename, "r+");
+	int filelen = -1;
+
+	if (!file) return NULL;
+
+	if (!fseek(file, 0, SEEK_END)) {
+		filelen = ftell(file);
+		if (filelen != -1 && fseek(file, 0, SEEK_SET))
+			filelen = -1;
+	}
+
+	if (filelen >= 0 && filelen <= maxlength) {
+		int bread;
+
+		value = mem_alloc(filelen + 1);
+		if (value) {
+			bread = fread(value, 1, filelen, file);
+			value[bread] = 0;
+		}
+	}
+
+	fclose(file);
+	unlink(filename);
+
+	return value;
+}
+
 void
 textarea_edit(int op, struct terminal *term_, struct form_control *fc_,
 	      struct form_state *fs_, struct document_view *doc_view_, struct link *link_)
@@ -359,36 +390,15 @@ textarea_edit(int op, struct terminal *term_, struct form_control *fc_,
 		textarea_editor = 1;
 
 	} else if (op == 1 && fs) {
-		FILE *taf = fopen(fn, "r+");
+		unsigned char *value = read_textarea_file(fn, fc_maxlength);
 
-		if (taf) {
-			int flen = -1;
+		if (value) {
+			mem_free(fs->value);
+			fs->value = value;
+			fs->state = strlen(value);
 
-			if (!fseek(taf, 0, SEEK_END)) {
-				flen = ftell(taf);
-				if (flen != -1
-				    && fseek(taf, 0, SEEK_SET))
-					flen = -1;
-			}
-
-			if (flen >= 0 && flen <= fc_maxlength) {
-				int bread;
-
-				mem_free(fs->value);
-				fs->value = mem_alloc(flen + 1);
-				if (!fs->value) goto close;
-
-				bread = fread(fs->value, 1, flen, taf);
-				fs->value[bread] = 0;
-				fs->state = bread;
-
-				if (doc_view && link)
-					draw_form_entry(term, doc_view, link);
-			}
-
-close:
-			fclose(taf);
-			unlink(fn);
+			if (doc_view && link)
+				draw_form_entry(term, doc_view, link);
 		}
 
 		textarea_editor = 0;

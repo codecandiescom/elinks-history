@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-01-04 18:14+0100\n"
-"PO-Revision-Date: 2004-01-02 21:05+0100\n"
+"PO-Revision-Date: 2004-01-08 22:51+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr "Informace"
 
 #: src/bfu/hierbox.c:445
 msgid "Press space to expand this folder."
-msgstr ""
+msgstr "Zmáèkni mezeru, jestli chce¹ tuhle slo¾ku rozbalit."
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:469 src/bfu/hierbox.c:607
@@ -457,9 +457,9 @@ msgid "(default: %s)"
 msgstr "(výchozí: %s)"
 
 #: src/config/cmdline.c:275
-#, fuzzy, c-format
+#, c-format
 msgid "(default: #%06lx)"
-msgstr "(výchozí: #%06x)"
+msgstr "(výchozí: #%06lx)"
 
 #: src/config/cmdline.c:401
 msgid "Configuration options:\n"
@@ -860,25 +860,24 @@ msgid "Cannot write the file"
 msgstr "Chyba pøi zápisu do souboru"
 
 #: src/config/dialogs.c:41
-#, fuzzy
 msgid "Write config error"
-msgstr "Chyba v konfiguraci"
+msgstr "Chyba pøi ukládání konfigurace"
 
 #: src/config/dialogs.c:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write to config file %s.\n"
 "%s"
-msgstr "Nemù¾u zapisovat do konfiguráku %s: %s"
+msgstr "Nemù¾u zapisovat do konfiguráku %s.\n%s"
 
 #: src/config/dialogs.c:53
 msgid "Write config success"
-msgstr ""
+msgstr "Povedlo se ulo¾it konfiguraci"
 
 #: src/config/dialogs.c:54
 #, c-format
 msgid "Options were saved successfully to config file %s."
-msgstr ""
+msgstr "Nastavení bylo úspì¹nì ulo¾eno do konfiguraèního souboru %s."
 
 #: src/config/dialogs.c:116
 msgid "(expand by pressing space)"
@@ -1053,9 +1052,8 @@ msgid "Delete character in front of the cursor"
 msgstr "Smazání znaku pøed kurzorem"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Go to the first line of the buffer."
-msgstr "Jít na zaèátek øádky èi stránky"
+msgstr "Jít na první øádku bufferu."
 
 #: src/config/kbdbind.c:402
 msgid "Open bookmark manager"
@@ -1123,9 +1121,8 @@ msgid "Go to the end of the page/line"
 msgstr "Jít na konec stránky èi øádky"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Go to the last line of the buffer."
-msgstr "Jít na zaèátek øádky èi stránky"
+msgstr "Jít na poslední øádku bufferu."
 
 #: src/config/kbdbind.c:419
 msgid "Follow the current link"
@@ -1153,9 +1150,8 @@ msgid "Forget authentication credentials"
 msgstr "Vymazat z pamìti pøihla¹ovací informace HTTP autentikace"
 
 #: src/config/kbdbind.c:425
-#, fuzzy
 msgid "Open form history manager"
-msgstr "Správce historie"
+msgstr "Správce formuláøové historie"
 
 #: src/config/kbdbind.c:426
 msgid "Open \"Go to URL\" dialog box"
@@ -1186,9 +1182,8 @@ msgid "Go to the start of the page/line"
 msgstr "Jít na zaèátek øádky èi stránky"
 
 #: src/config/kbdbind.c:433
-#, fuzzy
 msgid "Kill all backgrounded connections"
-msgstr "Ukonèit v¹echna ~spojení na pozadí"
+msgstr "Ukonèit v¹echna spojení na pozadí"
 
 #: src/config/kbdbind.c:434
 msgid "Delete to beginning of line"
@@ -1272,9 +1267,8 @@ msgid "Open the current link in a new window"
 msgstr "Otevøít odkaz v novém oknì"
 
 #: src/config/kbdbind.c:459
-#, fuzzy
 msgid "Open an OS shell"
-msgstr "~OS shell"
+msgstr "OS shell"
 
 #: src/config/kbdbind.c:460
 msgid "Open options manager"
@@ -1321,23 +1315,20 @@ msgid "Move the cursor right"
 msgstr "Posunout kurzot doprava"
 
 #: src/config/kbdbind.c:471
-#, fuzzy
 msgid "Save as"
-msgstr "Ulo¾ pod ~jménem"
+msgstr "Ulo¾ pod jménem"
 
 #: src/config/kbdbind.c:472
-#, fuzzy
 msgid "Save URL as"
-msgstr "Ulo¾ ~URL pod jménem"
+msgstr "Ulo¾ URL pod jménem"
 
 #: src/config/kbdbind.c:473
 msgid "Save formatted document"
 msgstr "Ulo¾it zformátovaný dokument"
 
 #: src/config/kbdbind.c:474
-#, fuzzy
 msgid "Save options"
-msgstr "Ulo¾it na~stavení"
+msgstr "Ulo¾it nastavení"
 
 #: src/config/kbdbind.c:475
 msgid "Scroll down"
@@ -1372,7 +1363,6 @@ msgid "Select current highlighted item"
 msgstr "Potvrzení aktuálnì vybrané polo¾ky"
 
 #: src/config/kbdbind.c:483
-#, fuzzy
 msgid "Show terminal options dialog"
 msgstr "Nastavení terminálu"
 
@@ -1381,14 +1371,12 @@ msgid "Close tab"
 msgstr "Zavøít tab"
 
 #: src/config/kbdbind.c:485
-#, fuzzy
 msgid "Close all tabs but the current one"
-msgstr "~Zavøít v¹echny kromì tohohle"
+msgstr "Zavøít v¹echny kromì tohohle"
 
 #: src/config/kbdbind.c:486
-#, fuzzy
 msgid "Open the tab menu"
-msgstr "Otevøít menu Soubor"
+msgstr "Otevøít kontextové menu tabu"
 
 #: src/config/kbdbind.c:487
 msgid "Next tab"
@@ -1419,9 +1407,8 @@ msgid "Toggle displaying of links numbers"
 msgstr "Pøepnout èíslování odkazù"
 
 #: src/config/kbdbind.c:494
-#, fuzzy
 msgid "Toggle plain renderer compression of empty lines"
-msgstr "Pøepnout zobrazování tabulek"
+msgstr "Pøepnout sluèování prázdných øádkù"
 
 #: src/config/kbdbind.c:495
 msgid "Go forward in the unhistory"
@@ -2058,9 +2045,8 @@ msgstr ""
 "èi pro pøesmìrování na jinou stránku."
 
 #: src/config/options.inc:309
-#, fuzzy
 msgid "Document meta refresh minimum time"
-msgstr "Automatické obnovování dokumentù"
+msgstr "Minimální prodleva pro automatické obnovování"
 
 #: src/config/options.inc:311
 msgid ""
@@ -2069,6 +2055,9 @@ msgid ""
 "unchanged. It can fix going back in history for some sites that\n"
 "use refreshing with zero values."
 msgstr ""
+"Minimální èas v milisekundách, který by mìl probìhnout pøed automatickým\n"
+"obnovením stránky. Pokud chcete v¾dy pou¾ít prodlevu nastavenou v dokumentu,\n"
+"dejte tam nulu. Ale mù¾e být problém s pohyby v historii pøes tyto stránky,"
 
 #: src/config/options.inc:316
 msgid "Scroll margin"
@@ -2540,11 +2529,11 @@ msgstr "Zobrazovat URI (internetové adresy) v dokumentu jako odkazy."
 
 #: src/config/options.inc:571
 msgid "Compress empty lines"
-msgstr ""
+msgstr "Slouèit prázdné øádky"
 
 #: src/config/options.inc:573
 msgid "Compress successive empty lines to only one in displayed text."
-msgstr ""
+msgstr "Slouèit nìkolik prázdných øádkù za sebou v jenom jeden."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:579
@@ -3460,11 +3449,10 @@ msgid "Unvisited tab"
 msgstr "Nenav¹tívený tab"
 
 #: src/config/options.inc:1090
-#, fuzzy
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
-msgstr "Barvy tabu, který se právì na pozadí nahrává."
+msgstr "Barvy tabu, který nebyl od ukonèení nahrávání nav¹tíven."
 
 #: src/config/options.inc:1093
 msgid "Unselected tab"
@@ -4072,7 +4060,7 @@ msgid "Copying"
 msgstr "Kopírování"
 
 #: src/dialogs/info.c:134
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -4088,7 +4076,7 @@ msgstr ""
 "\n"
 "\n"
 "(C) 1999 - 2002 Mikulá¹ Patoèka\n"
-"(C) 2001 - 2003 Petr Baudi¹\n"
+"(C) 2001 - 2004 Petr Baudi¹\n"
 "\n"
 "Tento program je volné programové vybavení; mù¾ete jej ¹íøit a modifikovat "
 "podle ustanovení Obecné veøejné licence GNU, vydávané Free Software "
@@ -4177,14 +4165,12 @@ msgid "~Close tab"
 msgstr "Za~vøít tab"
 
 #: src/dialogs/menu.c:348
-#, fuzzy
 msgid "C~lose all tabs but the current"
-msgstr "~Zavøít v¹echny kromì tohohle"
+msgstr "~Zavøít v¹echny taby kromì tohohle"
 
 #: src/dialogs/menu.c:352
-#, fuzzy
 msgid "B~ookmark all tabs"
-msgstr "Bookmarky"
+msgstr "~Bookmarknout v¹echny taby"
 
 #: src/dialogs/menu.c:366
 msgid "Open new ~tab"
@@ -4271,9 +4257,8 @@ msgid "Find ~previous"
 msgstr "Najít ~pøedchozí"
 
 #: src/dialogs/menu.c:473
-#, fuzzy
 msgid "T~ypeahead search"
-msgstr "Interaktivní vyhledávání"
+msgstr "Interaktivní ~vyhledávání"
 
 #: src/dialogs/menu.c:475
 msgid "Toggle ~html/plain"
@@ -4316,7 +4301,6 @@ msgid "~Bugs information"
 msgstr "Informace o ~chybách"
 
 #: src/dialogs/menu.c:497
-#, fuzzy
 msgid "ELinks C~vsWeb"
 msgstr "Cvs~Web ELinksu"
 
@@ -4569,7 +4553,7 @@ msgstr "Formuláøe jsou pro tuto URL ukládány."
 
 #: src/formhist/dialogs.c:127
 msgid "Form not saved"
-msgstr ""
+msgstr "Formuláø neulo¾en."
 
 #: src/formhist/dialogs.c:128
 msgid ""

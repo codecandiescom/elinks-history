@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.344 2003/10/23 09:48:35 jonas Exp $ */
+/* $Id: options.c,v 1.345 2003/10/23 14:47:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -431,6 +431,47 @@ init_options_tree(void)
 	return ptr;
 }
 
+/* Some default pre-autocreated options. Doh. */
+static inline void
+register_autocreated_options(void)
+{
+	/* TODO: Use table-driven initialization. --jonas */
+	get_opt_int("terminal.linux.type") = 2;
+	get_opt_bool("terminal.linux.colors") = 1;
+	get_opt_bool("terminal.linux.m11_hack") = 1;
+	get_opt_int("terminal.vt100.type") = 1;
+	get_opt_int("terminal.vt110.type") = 1;
+	get_opt_int("terminal.xterm.type") = 1;
+	get_opt_int("terminal.xterm.underline") = 1;
+	get_opt_int("terminal.xterm-color.type") = 1;
+	get_opt_bool("terminal.xterm-color.colors") = 1;
+	get_opt_int("terminal.xterm-color.underline") = 1;
+	get_opt_int("terminal.xterm-256color.type") = 1;
+	get_opt_bool("terminal.xterm-256color.colors") = 2;
+	get_opt_int("terminal.xterm-256color.underline") = 1;
+
+	strcpy(get_opt_str("mime.extension.gif"), "image/gif");
+	strcpy(get_opt_str("mime.extension.jpg"), "image/jpeg");
+	strcpy(get_opt_str("mime.extension.jpeg"), "image/jpeg");
+	strcpy(get_opt_str("mime.extension.png"), "image/png");
+	strcpy(get_opt_str("mime.extension.txt"), "text/plain");
+	strcpy(get_opt_str("mime.extension.htm"), "text/html");
+	strcpy(get_opt_str("mime.extension.html"), "text/html");
+
+	strcpy(get_opt_str("protocol.user.mailto.unix"), "mutt %h -s \"%s\"");
+	strcpy(get_opt_str("protocol.user.mailto.unix-xwin"), "mutt %h -s \"%s\"");
+	strcpy(get_opt_str("protocol.user.telnet.unix"), "telnet %h %p");
+	strcpy(get_opt_str("protocol.user.telnet.unix-xwin"), "telnet %h %p");
+	strcpy(get_opt_str("protocol.user.tn3270.unix"), "tn3270 %h %p");
+	strcpy(get_opt_str("protocol.user.tn3270.unix-xwin"), "tn3270 %h %p");
+	strcpy(get_opt_str("protocol.user.gopher.unix"), "lynx %u");
+	strcpy(get_opt_str("protocol.user.gopher.unix-xwin"), "lynx %u");
+	strcpy(get_opt_str("protocol.user.news.unix"), "lynx %u");
+	strcpy(get_opt_str("protocol.user.news.unix-xwin"), "lynx %u");
+	strcpy(get_opt_str("protocol.user.irc.unix"), "irc %u");
+	strcpy(get_opt_str("protocol.user.irc.unix-xwin"), "irc %u");
+}
+
 void
 init_options(void)
 {
@@ -439,6 +480,7 @@ init_options(void)
 	cmdline_options = add_opt_tree_tree(&options_root, "", "",
 					    "cmdline", 0, "");
 	register_options();
+	register_autocreated_options();
 	register_change_hooks(change_hooks);
 }
 
@@ -469,8 +511,6 @@ register_change_hooks(struct change_hook_info *change_hooks)
 		option->change_hook = change_hooks[i].change_hook;
 	}
 }
-
-
 
 void
 unmark_options_tree(struct list_head *tree)

@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.2 2003/05/16 22:49:12 zas Exp $ */
+/* $Id: default.c,v 1.3 2003/06/04 16:55:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 
 #define BACKEND_NAME	"optionsystem"
 
-unsigned char *
+static unsigned char *
 get_content_type_default(unsigned char *url)
 {
 	struct option *opt_tree;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.40 2002/09/08 19:12:22 pasky Exp $ */
+/* $Id: parser.c,v 1.41 2002/09/17 10:29:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -763,7 +763,7 @@ html_font(unsigned char *a)
 			if (!p) format.fontsize = s;
 			else format.fontsize += p * s;
 			if (format.fontsize < 1) format.fontsize = 1;
-			if (format.fontsize > 7) format.fontsize = 7;
+			else if (format.fontsize > 7) format.fontsize = 7;
 		}
 		mem_free(al);
 	}
@@ -935,12 +935,12 @@ html_linebrk(unsigned char *a)
 
 	if (al) {
 		if (!strcasecmp(al, "left")) par_format.align = AL_LEFT;
-		if (!strcasecmp(al, "right")) par_format.align = AL_RIGHT;
-		if (!strcasecmp(al, "center")) {
+		else if (!strcasecmp(al, "right")) par_format.align = AL_RIGHT;
+		else if (!strcasecmp(al, "center")) {
 			par_format.align = AL_CENTER;
 			if (!table_level) par_format.leftmargin = par_format.rightmargin = 0;
 		}
-		if (!strcasecmp(al, "justify")) par_format.align = AL_BLOCK;
+		else if (!strcasecmp(al, "justify")) par_format.align = AL_BLOCK;
 		mem_free(al);
 	}
 }
@@ -1140,7 +1140,7 @@ html_ul(unsigned char *a)
 	al = get_attr_val(a, "type");
 	if (al) {
 		if (!strcasecmp(al, "disc") || !strcasecmp(al, "circle")) par_format.flags = P_O;
-		if (!strcasecmp(al, "square")) par_format.flags = P_PLUS;
+		else if (!strcasecmp(al, "square")) par_format.flags = P_PLUS;
 		mem_free(al);
 	}
 	par_format.leftmargin += 2 + (par_format.list_level > 1);
@@ -1165,12 +1165,12 @@ html_ol(unsigned char *a)
 	al = get_attr_val(a, "type");
 	if (al) {
 		if (!strcmp(al, "1")) par_format.flags = P_NUMBER;
-		if (!strcmp(al, "a")) par_format.flags = P_alpha;
-		if (!strcmp(al, "A")) par_format.flags = P_ALPHA;
-		if (!strcmp(al, "r")) par_format.flags = P_roman;
-		if (!strcmp(al, "R")) par_format.flags = P_ROMAN;
-		if (!strcmp(al, "i")) par_format.flags = P_roman;
-		if (!strcmp(al, "I")) par_format.flags = P_ROMAN;
+		else if (!strcmp(al, "a")) par_format.flags = P_alpha;
+		else if (!strcmp(al, "A")) par_format.flags = P_ALPHA;
+		else if (!strcmp(al, "r")) par_format.flags = P_roman;
+		else if (!strcmp(al, "R")) par_format.flags = P_ROMAN;
+		else if (!strcmp(al, "i")) par_format.flags = P_roman;
+		else if (!strcmp(al, "I")) par_format.flags = P_ROMAN;
 		mem_free(al);
 	}
 
@@ -1573,9 +1573,8 @@ html_option(unsigned char *a)
 	find_form_for_input(a);
 	if (!format.select) return;
 
-	fc = mem_alloc(sizeof(struct form_control));
+	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) return;
-	memset(fc, 0, sizeof(struct form_control));
 
 	val = get_attr_val(a, "value");
 	if (!val) {
@@ -1671,12 +1670,11 @@ new_menu_item(unsigned char *name, int data, int fullname)
 	}
 
 	if (name && data == -1) {
-		nmenu = mem_alloc(sizeof(struct menu_item));
+		nmenu = mem_calloc(1, sizeof(struct menu_item));
 		if (!nmenu) {
 			mem_free(name);
 			return;
 		}
-		memset(nmenu, 0, sizeof(struct menu_item));
 		/*nmenu->text = "";*/
 	}
 
@@ -1949,16 +1947,14 @@ end_parse:
 	*end = en;
 	if (!order) goto abort;
 
-	fc = mem_alloc(sizeof(struct form_control));
+	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) goto abort;
-	memset(fc, 0, sizeof(struct form_control));
 
-	lbls = mem_alloc(order * sizeof(char *));
+	lbls = mem_calloc(order, sizeof(char *));
 	if (!lbls) {
 		mem_free(fc);
 		goto abort;
 	}
-	memset(lbls, 0, order * sizeof(char *));
 
 	fc->form_num = last_form_tag - startf;
 	fc->ctrl_num = attr - last_form_tag;
@@ -2764,9 +2760,8 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	ct = get_convert_table(hd, to, def, NULL, NULL, hdef);
 	mem_free(hd);
 
-	*menu = mem_alloc(sizeof(struct menu_item));
+	*menu = mem_calloc(1, sizeof(struct menu_item));
 	if (!*menu) return -1;
-	memset(*menu, 0, sizeof(struct menu_item));
 
 look_for_map:
 	while (pos < eof && *pos != '<') {

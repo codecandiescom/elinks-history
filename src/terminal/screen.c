@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.18 2003/07/25 22:58:51 jonas Exp $ */
+/* $Id: screen.c,v 1.19 2003/07/26 00:06:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,7 +206,33 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 	}
 }
 
-/* TODO An optimized add_term_escape_to_string() would be nice. --jonas */
+
+/* Adds the term code for positioning the cursor at @x and @y to @string.
+ * The template term code is: "\033[<@y>;<@x>H" */
+static struct string *
+add_cursor_move_to_string(struct string *screen, int y, int x)
+{
+	/* 28 chars for both of the @y and @x numbers should be enough. */
+	unsigned char code[32];
+	int length = 0;
+	int ret;
+
+	code[length++] = '\033';
+	code[length++] = '[';
+
+	ret = longcat(code, &length, y, 30, 0);
+	/* Make sure theres atleast room for ';' and `some' number ;) */
+	if (ret < 0 || length > 30) return NULL;
+
+	code[length++] = ';';
+
+	ret = longcat(code, &length, x, sizeof(code) - length, 0);
+	if (ret < 0 || length > 31) return NULL;
+
+	code[length++] = 'H';
+
+	return add_bytes_to_string(screen, code, length);
+}
 
 void
 redraw_screen(struct terminal *term)
@@ -284,11 +310,8 @@ redraw_screen(struct terminal *term)
 					cx++;
 				}
 			} else {
-				add_to_string(&screen, "\033[");
-				add_long_to_string(&screen, y + 1);
-				add_char_to_string(&screen, ';');
-				add_long_to_string(&screen, x + 1);
-				add_char_to_string(&screen, 'H');
+				add_cursor_move_to_string(&screen, y + 1, x + 1);
+
 				cx = x; cy = y;
 				print_char(term, &opt_cache, &screen,
 					   p, &mode, &attrib);
@@ -313,11 +336,8 @@ redraw_screen(struct terminal *term)
 	if (screen.length || term->cx != term->lcx || term->cy != term->lcy) {
 		term->lcx = term->cx;
 		term->lcy = term->cy;
-		add_to_string(&screen, "\033[");
-		add_long_to_string(&screen, term->cy + 1);
-		add_char_to_string(&screen, ';');
-		add_long_to_string(&screen, term->cx + 1);
-		add_char_to_string(&screen, 'H');
+
+		add_cursor_move_to_string(&screen, term->cy + 1, term->cx + 1);
 	}
 
 	if (screen.length && term->master) want_draw();

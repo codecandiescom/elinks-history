@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.55 2003/05/05 13:43:15 zas Exp $ */
+/* $Id: view.c,v 1.56 2003/05/05 15:40:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3065,10 +3065,10 @@ quit:
 				close_tab(ses->tab->term);
 				goto x;
 			case ACT_TAB_NEXT:
-				switch_to_tab(ses->tab->term, ses->tab->term->current_tab + 1);
+				switch_to_tab(ses->tab->term, ses->tab->term->current_tab + 1, -1);
 				goto x;
 			case ACT_TAB_PREV:
-				switch_to_tab(ses->tab->term, ses->tab->term->current_tab - 1);
+				switch_to_tab(ses->tab->term, ses->tab->term->current_tab - 1, -1);
 				goto x;
 
 			default:
@@ -3127,7 +3127,7 @@ quit:
 			if (tab >= nb_tabs)
 				tab = nb_tabs - 1;
 
-			switch_to_tab(ses->tab->term, tab);
+			switch_to_tab(ses->tab->term, tab, nb_tabs);
 			goto x;
 		}
 		do_mouse_event(ses, ev);

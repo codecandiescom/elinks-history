@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.6 2003/05/04 20:37:05 pasky Exp $ */
+/* $Id: tab.c,v 1.7 2003/05/05 15:40:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,9 +84,11 @@ get_tab_by_number(struct terminal *term, int num)
 }
 
 void
-switch_to_tab(struct terminal *term, int num)
+switch_to_tab(struct terminal *term, int num, int nbtabs)
 {
-	int num_tabs = number_of_tabs(term);
+	int num_tabs = nbtabs;
+
+	if (nbtabs <= 0) num_tabs = number_of_tabs(term);
 
 	if (num >= num_tabs) {
 		if (get_opt_bool("ui.tabs.wraparound"))
@@ -112,10 +114,11 @@ switch_to_tab(struct terminal *term, int num)
 void
 close_tab(struct terminal *term)
 {
-	if (number_of_tabs(term) < 2)
+	int num_tabs = number_of_tabs(term);
+
+	if (num_tabs < 2)
 		return;
 
 	delete_window(get_current_tab(term));
-
-	switch_to_tab(term, term->current_tab);
+	switch_to_tab(term, term->current_tab, num_tabs - 1);
 }

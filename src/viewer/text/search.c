@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.164 2004/01/28 07:32:35 jonas Exp $ */
+/* $Id: search.c,v 1.165 2004/01/28 07:35:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -979,10 +979,6 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	if (!charpos) return TYPEAHEAD_MATCHED;
 
 	switch (action) {
-		case ACT_EDIT_BACKSPACE:
-			direction = -1;
-			break;
-
 		case ACT_EDIT_UP:
 			direction = -1;
 			i--;
@@ -1008,6 +1004,8 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 
  		case ACT_EDIT_ENTER:
 			send_enter(ses->tab->term, NULL, ses);
+			/* Falling */
+		case ACT_EDIT_BACKSPACE:
 			return TYPEAHEAD_ESCAPE;
 
 		default:

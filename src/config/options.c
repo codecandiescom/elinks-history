@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.166 2002/12/21 13:23:16 jonas Exp $ */
+/* $Id: options.c,v 1.167 2002/12/22 09:52:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1145,7 +1145,14 @@ register_options()
 		"Use colors specified in document:\n"
 		"0 is use always the default settings\n"
 		"1 is use document colors if available, except background\n"
-		"2 is use document colors, including background");
+		"2 is use document colors, including background. This can\n"
+		"  look really impressive mostly, but few sites look really\n"
+		"  ugly there (unfortunately including slashdot (but try to\n"
+		"  let him serve you that 'plain' version and the world will\n"
+		"  suddenly become a much more happy place for life)). Note\n"
+		"  that obviously if the background isn't black, it will\n"
+		"  break transparency, if you have it enabled for your terminal\n"
+		"  and on your terminal.");
 
 
 

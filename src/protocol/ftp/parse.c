@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.33 2005/04/04 12:16:10 jonas Exp $ */
+/* $Id: parse.c,v 1.34 2005/04/04 12:18:46 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -508,11 +508,9 @@ parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
 	/* If the server produces garbage like
 	 * 'EA95_0PS.GZ;1      No privilege for attempted operation'
 	 * parse_date() will fail. */
-	DBG("%.*s", end - src, src);
 	info->mtime = parse_date(&src, end, 1, 0);
 	if (info->mtime == 0)
 		return NULL;
-	DBG("%.*s", end - src, src);
 
 	/* Be more tolerant from here on ... */
 

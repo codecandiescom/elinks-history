@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.84 2003/06/24 01:19:17 jonas Exp $ */
+/* $Id: file.c,v 1.85 2003/06/24 01:29:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,33 +316,23 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 
 #ifdef FS_UNIX_SOFTLINKS
 	} else if (attrib[0] == 'l') {
-		unsigned char *buf = NULL;
-		int bufsize = 0;
-		int rl = -1;
-		unsigned char *n = straconcat(path, htmlname, NULL);
-		struct stat st;
+		unsigned char *linkname = straconcat(path, htmlname, NULL);
 
-		if (!n) return;
+		/* It doesn't make sense to return here so indent! */
+		if (linkname) {
+			struct stat st;
+			unsigned char buf[MAX_STR_LEN];
+			int readlen = readlink(linkname, buf, MAX_STR_LEN);
 
-		if (!stat(n, &st) && S_ISDIR(st.st_mode))
-			add_chr_to_str(&fragment, &fragmentlen, '/');
+			if (readlen != MAX_STR_LEN) {
+				buf[readlen] = '\0';
+				lnk = straconcat(" -> ", buf, NULL);
+			}
 
-		do {
-			if (buf) mem_free(buf);
-			bufsize += ALLOC_GR;
-			buf = mem_alloc(bufsize);
-			if (!buf) break;
-			rl = readlink(n, buf, bufsize);
-		} while (rl == bufsize);
+			if (!stat(linkname, &st) && S_ISDIR(st.st_mode))
+				add_chr_to_str(&fragment, &fragmentlen, '/');
 
-		mem_free(n);
-
-		if (buf && rl != -1) {
-			buf[rl] = '\0';
-			lnk = buf;
-
-		} else if (buf) {
-			mem_free(buf);
+			mem_free(linkname);
 		}
 #endif
 	}
@@ -366,7 +356,6 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 
 	add_to_str(&fragment, &fragmentlen, "</a>");
 	if (lnk) {
-		add_to_str(&fragment, &fragmentlen, " -> ");
 		add_htmlesc_str(&fragment, &fragmentlen, lnk, strlen(lnk));
 		mem_free(lnk);
 	}

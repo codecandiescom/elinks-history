@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.338 2004/12/18 19:12:11 jonas Exp $ */
+/* $Id: download.c,v 1.339 2004/12/29 18:34:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,7 +225,7 @@ download_error_dialog(struct file_download *file_download, int saved_errno)
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Download error"), ALIGN_CENTER,
-		msg_text(term, N_("Could not create file %s: %s"),
+		msg_text(term, N_("Could not create file '%s':\n%s"),
 			 file_download->file, emsg),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);

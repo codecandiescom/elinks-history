@@ -62,25 +62,23 @@ msgid "Empty string not allowed"
 msgstr "Musisz wpisaæ jakie¶ wyra¿enie"
 
 #: src/bookmarks/backend/xbel.c:98
-#, fuzzy
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
-msgstr "read_bookmarks_xbel(): B³±d w XML_ParserCreate()%c\n"
+msgstr "read_bookmarks_xbel(): B³±d w XML_ParserCreate()"
 
 #: src/bookmarks/backend/xbel.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "read_bookmarks_xbel(): Error reading %s"
-msgstr "read_bookmarks_xbel(): B³±d podczas czytania %s%c\n"
+msgstr "read_bookmarks_xbel(): B³±d podczas czytania %s"
 
 #: src/bookmarks/backend/xbel.c:119
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
 msgstr ""
 "read_bookmarks_xbel(): B³±d sk³adni w %s w linii %d kolumnie %d:\n"
-"%s%c\n"
+"%s"
 
-#
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
 msgid "No title"
 msgstr "Bez tytu³u"
@@ -122,12 +120,14 @@ msgid "Delete bookmark"
 msgstr "Usuñ zak³adkê"
 
 #: src/bookmarks/dialogs.c:270
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
 "\n"
 "Title: \"%s\""
-msgstr "Przykro mi, ale ta zak³adka jest ju¿ u¿ywana"
+msgstr "Przykro mi, ale ta zak³adka jest ju¿ u¿ywana.\n"
+"\n"
+"Tytu³: \"%s\""
 
 #: src/bookmarks/dialogs.c:279
 #, fuzzy, c-format
@@ -136,11 +136,14 @@ msgid ""
 "\n"
 "Title: \"%s\"\n"
 "URL: \"%s\""
-msgstr "Przykro mi, ale ta zak³adka jest ju¿ u¿ywana"
+msgstr "Przykro mi, ale ta zak³adka jest ju¿ u¿ywana.\n"
+"\n"
+"Tytu³: \"%s\"\n"
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:413
 msgid "Delete marked bookmarks?"
-msgstr "Skasowaæ zaznaczone zak³adki?"
+msgstr "Czy skasowaæ zaznaczone zak³adki?"
 
 #: src/bookmarks/dialogs.c:415 src/bookmarks/dialogs.c:423
 #: src/bookmarks/dialogs.c:432 src/dialogs/menu.c:137 src/dialogs/mime.c:163
@@ -157,17 +160,18 @@ msgid "No"
 msgstr "Nie"
 
 #: src/bookmarks/dialogs.c:420
-#, fuzzy, c-format
+#, c-format
 msgid "Delete content of folder \"%s\"?"
-msgstr "Skasuj zawarto¶æ katalogu"
+msgstr "Czy skasowaæ zawarto¶æ folderu \"%s\"?"
 
 #: src/bookmarks/dialogs.c:428
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete bookmark \"%s\"?\n"
 "\n"
 "URL: \"%s\""
-msgstr "Usuñ zak³adkê"
+msgstr "Czy usun±æ zak³adkê \"%s\"?\n"
+"\n"
 
 #: src/bookmarks/dialogs.c:610
 msgid "Bookmark manager"
@@ -216,42 +220,40 @@ msgid "Search bookmarks"
 msgstr "Przeszukaj zak³adki"
 
 #: src/config/cmdline.c:57
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse option %s: %s"
-msgstr "B³±d przy zapisywaniu do gniazda"
+msgstr "B³±d czytania opcji %s: %s"
 
 #
 #: src/config/cmdline.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown option %s"
-msgstr "Ustawienia po³±czeñ."
+msgstr "Nieznana opcja %s"
 
 #: src/config/conf.c:663
 msgid "File saving disabled by option"
-msgstr ""
+msgstr "Zapis pliku zablokowany przez opcjê"
 
 #: src/config/conf.c:666 src/sched/error.c:44
 msgid "Out of memory"
 msgstr "Brak pamiêci"
 
 #: src/config/conf.c:669
-#, fuzzy
 msgid "Cannot write the file"
 msgstr "B³±d zapisu do pliku"
 
 #: src/config/conf.c:672
-#, fuzzy
 msgid "Secure open failed"
-msgstr "B³±d przy otwieraniu pliku"
+msgstr "Bezpieczne otwieranie nie powiod³o siê"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
 msgstr "B³±d konfiguracji"
 
 #: src/config/dialogs.c:40
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write to config file %s: %s"
-msgstr "Nie mo¿na zapisaæ do pliku konfiguracyjnego"
+msgstr "Nie mo¿na zapisaæ do pliku konfiguracyjnego %s: %s"
 
 #: src/config/dialogs.c:118 src/config/dialogs.c:131 src/config/dialogs.c:514
 #: src/dialogs/document.c:41 src/dialogs/document.c:186
@@ -269,6 +271,13 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"Nazwa: %s\n"
+"Typ: %s\n"
+"Warto¶æ: %s\n"
+"\n"
+"Opis:\n"
+"%s"
+
 
 #: src/config/dialogs.c:125 src/config/dialogs.c:137 src/config/dialogs.c:212
 msgid "N/A"
@@ -282,6 +291,11 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"Nazwa: %s\n"
+"Typ: %s\n"
+"Opis:\n"
+"%s"
+
 
 #: src/config/dialogs.c:188 src/protocol/protocol.c:57 src/sched/session.c:347
 #: src/viewer/text/textarea.c:269
@@ -302,15 +316,13 @@ msgid "Type"
 msgstr "Typ"
 
 #: src/config/dialogs.c:209
-#, fuzzy
 msgid "Value"
-msgstr "warto¶æ"
+msgstr "Warto¶æ"
 
 #: src/config/dialogs.c:210
 msgid "Description"
 msgstr "Opis"
 
-#
 #: src/config/dialogs.c:355
 msgid ""
 "This option cannot be edited. This means that this is some special option "
@@ -336,9 +348,9 @@ msgid "Cannot delete this option."
 msgstr "Nie mo¿na skasowaæ tej opcji."
 
 #: src/config/dialogs.c:473
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the option \"%s\"?"
-msgstr "Naprawdê skasuj tê opcjê"
+msgstr "Czy na pewno chcesz  skasowaæ opcjê \"%s\"?"
 
 #: src/config/dialogs.c:504
 msgid "Options manager"
@@ -389,16 +401,15 @@ msgid "Delete keybinding"
 msgstr "Skasuj przypisanie"
 
 #: src/config/dialogs.c:721
-#, fuzzy
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr "To nie jest przypisanie. Naci¶nij spacjê, ¿eby otrzymaæ przypisanie."
 
 #: src/config/dialogs.c:732
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr "Naprawdê skasuj przypisanie"
+msgstr "Czy na pewno skasowaæ przypisanie \"%s\" (akcja \"%s\", mapa klawiatury \"%s\"?"
 
 #: src/config/dialogs.c:764
 msgid "Keybinding manager"
@@ -410,349 +421,318 @@ msgstr "Krótki/d³ugi opis"
 
 #: src/config/kbdbind.c:260
 msgid "Main mapping"
-msgstr ""
+msgstr "G³ówna mapa klawiszy"
 
 #: src/config/kbdbind.c:261
 msgid "Edit mapping"
-msgstr ""
+msgstr "Mapa klawiszy edycji"
 
 #: src/config/kbdbind.c:262
-#, fuzzy
 msgid "Menu mapping"
-msgstr "Pasek menu"
+msgstr "Mapa klawiszy menu"
 
 #: src/config/kbdbind.c:370
-#, fuzzy
 msgid "Abort connection"
-msgstr "nawi±zanych"
+msgstr "Przerwij po³±czenie"
 
 #: src/config/kbdbind.c:371
-#, fuzzy
 msgid "Add a new bookmark"
-msgstr "Dodaj do zak³adek"
+msgstr "Dodaj now± zak³adkê"
 
 #: src/config/kbdbind.c:372
 msgid "Add a new bookmark using current link"
-msgstr ""
+msgstr "Dodaj now± zak³adkê korzystaj±c z bie¿±cego linku"
 
 #: src/config/kbdbind.c:373
 msgid "Attempt to auto-complete the input"
-msgstr ""
+msgstr "Próba automatycznego dope³nienia wprowadzanego tekstu"
 
 #: src/config/kbdbind.c:374
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr ""
+msgstr "Próba automatycznego jednoznacznego dope³nienia tekstu"
 
 #: src/config/kbdbind.c:375
 msgid "Return to the previous document in history"
-msgstr ""
+msgstr "Powrót do poprzedniego dokumentu w historii"
 
 #: src/config/kbdbind.c:376
 msgid "Delete character in front of the cursor"
-msgstr ""
+msgstr "Skasuj znak na prawo od kursora"
 
 #: src/config/kbdbind.c:377
-#, fuzzy
 msgid "Open bookmark manager"
-msgstr "Obs³uga zak³adek"
+msgstr "Otwórz menad¿era zak³adek"
 
 #: src/config/kbdbind.c:378
 msgid "Reload cookies file"
-msgstr ""
+msgstr "Prze³aduj plik ciasteczek"
 
 #: src/config/kbdbind.c:379
 msgid "Copy text to clipboard"
-msgstr ""
+msgstr "Skopiuj tekst do schowka"
 
 #: src/config/kbdbind.c:380
-#, fuzzy
 msgid "Delete text from clipboard"
-msgstr "Domy¶lny kolor tekstu."
+msgstr "Skasuj tekst w schowku"
 
 #: src/config/kbdbind.c:381
 msgid "Delete character under cursor"
-msgstr ""
+msgstr "Skasuj znak pod kursorem"
 
 #: src/config/kbdbind.c:382
-#, fuzzy
 msgid "Show informations about the current page"
-msgstr "Informacje pamiêci podrêcznej na temat przekierowañ"
+msgstr "Poka¿ informacje na temat bie¿±cej strony"
 
 #: src/config/kbdbind.c:383
 msgid "Move cursor downwards"
-msgstr ""
+msgstr "Przesuñ kursor w dó³"
 
 #: src/config/kbdbind.c:384
-#, fuzzy
 msgid "Download the current link"
-msgstr "~Pobierz"
+msgstr "Pobierz dokument wskazywany przez bie¿±cy link"
 
 #: src/config/kbdbind.c:385
-#, fuzzy
 msgid "Download the current image"
-msgstr "Pobierz ~obrazek"
+msgstr "Pobierz obrazek"
 
 #: src/config/kbdbind.c:386
 msgid "Begin editing"
-msgstr ""
+msgstr "Zacznij edycjê"
 
 #. FIXME
 #: src/config/kbdbind.c:387
 msgid "Go to the end of the page/line"
-msgstr ""
+msgstr "Przejd¼ na koniec strony/linii"
 
 #: src/config/kbdbind.c:388
-#, fuzzy
 msgid "Follow the current link"
-msgstr "Wybierz ~link"
+msgstr "Id¼ za bie¿±cym linkiem"
 
 #: src/config/kbdbind.c:389
 msgid "Follow the current link, forcing reload of the target"
-msgstr ""
+msgstr "Id¼ za bie¿±cym linkiem prze³adowuj±c dokument"
 
 #: src/config/kbdbind.c:390
 msgid "Open the File menu"
-msgstr ""
+msgstr "Otwórz menu Plik"
 
 #: src/config/kbdbind.c:391
 msgid "Find the next occurrence of the current search text"
-msgstr ""
+msgstr "Znajd¼ nastêpne wyst±pienie szukanego tekstu"
 
 #: src/config/kbdbind.c:392
 msgid "Find the previous occurrence of the current search text"
-msgstr ""
+msgstr "Znajd¼ poprzednie wyst±pienie szukanego tekstu"
 
 #
 #: src/config/kbdbind.c:393
-#, fuzzy
 msgid "Forget authentication credentials"
-msgstr "Nazwa u¿ytkownika do uwierzytelnienia wobec serwera proxy."
+msgstr "Zapomnij dane uwierzytelniaj±ce u¿ytkownika"
 
 #: src/config/kbdbind.c:394
 msgid "Open \"Go to URL\" dialog box"
-msgstr ""
+msgstr "Otwórz okienko dialogowe \"Id¼ do\"" 
 
 #: src/config/kbdbind.c:395
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr ""
+msgstr "Otwórz okienko dialogowe \"Id¼ do\" z bie¿±cym URLem"
 
 #: src/config/kbdbind.c:396
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
+msgstr "Otwórz okienko dialogowe \"Id¼ do\" z bie¿±cym linkiem"
 
 #: src/config/kbdbind.c:397
 msgid "Go to the homepage"
-msgstr ""
+msgstr "Strona domowa"
 
 #: src/config/kbdbind.c:398
-#, fuzzy
 msgid "Show informations about the current page HTTP headers"
-msgstr "Informacje pamiêci podrêcznej na temat przekierowañ"
+msgstr "Poka¿ informacje na temat pól nag³ówka HTTP bie¿±cej strony"
 
 #: src/config/kbdbind.c:399
-#, fuzzy
 msgid "Open history manager"
-msgstr "Menad¿er ustawieñ"
+msgstr "Otwórz menad¿era historii"
 
 #: src/config/kbdbind.c:400
 msgid "Go to the start of the page/line"
-msgstr ""
+msgstr "Przejd¼ do pocz±tku strony/linii"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Usuñ rozszerzenie"
+msgstr "Skasuj do pocz±tku linii"
 
 #: src/config/kbdbind.c:402
-#, fuzzy
 msgid "Delete to end of line"
-msgstr "Usuñ rozszerzenie"
+msgstr "Skasuj do koñca linii"
 
 #: src/config/kbdbind.c:403
-#, fuzzy
 msgid "Open keybinding manager"
-msgstr "Menad¿er przypisañ klawiszy"
+msgstr "Otwórz menad¿era przypisañ klawiszy"
 
 #: src/config/kbdbind.c:404
-#, fuzzy
 msgid "Move the cursor left"
-msgstr "Kursor blokowy"
+msgstr "Przesuñ kursor w lewo"
 
 #: src/config/kbdbind.c:405
 msgid "Open the link context menu"
-msgstr ""
+msgstr "Otwórz menu kontekstu hiper³±cza"
 
 #: src/config/kbdbind.c:406
-#, fuzzy
 msgid "Jump to link"
-msgstr "Przejd¼ do hiper³±cza"
+msgstr "Przejd¼ do linku"
 
 #: src/config/kbdbind.c:408
-#, fuzzy
 msgid "Open a Lua console"
-msgstr "Konsola Lua"
+msgstr "Otwórz konsolê Lua"
 
 #: src/config/kbdbind.c:410
 msgid "Open a Lua console (DISABLED)"
-msgstr ""
+msgstr "Otwórz konsolê Lua (ZABLOKOWANE)"
 
 #. internal use only
 #: src/config/kbdbind.c:413
 msgid "Activate the menu"
-msgstr ""
+msgstr "Uaktywnij menu"
 
 #: src/config/kbdbind.c:414
 msgid "Move to the next frame"
-msgstr ""
+msgstr "Przesuñ do nastêpnej ramki"
 
 #: src/config/kbdbind.c:415
-#, fuzzy
 msgid "Open a new window"
-msgstr "~Otwórz w nowym oknie"
+msgstr "Otwórz nowe okno"
 
 #: src/config/kbdbind.c:416
-#, fuzzy
 msgid "Open the current link in a new window"
-msgstr "~Otwórz w nowym oknie"
+msgstr "Otwórz bie¿±cy link w nowym oknie"
 
 #: src/config/kbdbind.c:417
-#, fuzzy
 msgid "Open options manager"
-msgstr "Menad¿er ustawieñ"
+msgstr "Otwórz menad¿er ustawieñ"
 
 #: src/config/kbdbind.c:418
 msgid "Move downwards by a page"
-msgstr ""
+msgstr "Przesuñ w dó³ o stronê"
 
 #: src/config/kbdbind.c:419
 msgid "Move upwards by a page"
-msgstr ""
+msgstr "Przesuñ w górê o stronê"
 
 #: src/config/kbdbind.c:420
 msgid "Paste text from the clipboard"
-msgstr ""
+msgstr "Wstaw tekst ze schowka"
 
 #: src/config/kbdbind.c:421
 msgid "Move to the previous frame"
-msgstr ""
+msgstr "Przesuñ do poprzedniej ramki"
 
 #: src/config/kbdbind.c:422
 msgid "Open a quit confirmation dialog box"
-msgstr ""
+msgstr "Otwórz okno dialogowe potwierdzania zakoñczenia dzia³ania"
 
 #: src/config/kbdbind.c:423
-#, fuzzy
 msgid "Quit without confirmation"
-msgstr "Oczekiwanie na potwierdzenie przekierowania"
+msgstr "Zakoñcz bez potwierdzenia"
 
 #: src/config/kbdbind.c:424
 msgid "Reload the current page"
-msgstr ""
+msgstr "Prze³aduj bie¿±c± stronê"
 
 #: src/config/kbdbind.c:425
-#, fuzzy
 msgid "Attempt to resume download of the current link"
-msgstr "Wznów pobieranie oryginalnego pliku"
+msgstr "Próba wznowienia pobierania bie¿±cego linku"
 
 #: src/config/kbdbind.c:426
-#, fuzzy
 msgid "Move the cursor right"
-msgstr "Kursor blokowy"
+msgstr "Przesuñ kursor w prawo"
 
 #: src/config/kbdbind.c:427
-#, fuzzy
 msgid "Save formatted document"
-msgstr "Zapisz sformatowany ~dokument"
+msgstr "Zapisz sformatowany dokument"
 
 #: src/config/kbdbind.c:428
-#, fuzzy
 msgid "Scroll down"
-msgstr "Margines przy przewijaniu"
+msgstr "Przewiñ w dó³"
 
 #: src/config/kbdbind.c:429
 msgid "Scroll left"
-msgstr ""
+msgstr "Przewiñ w lewo"
 
 #: src/config/kbdbind.c:430
-#, fuzzy
 msgid "Scroll right"
-msgstr "Margines przy przewijaniu"
+msgstr "Przewiñ w prawo"
 
 #: src/config/kbdbind.c:431
-#, fuzzy
 msgid "Scroll up"
-msgstr "Margines przy przewijaniu"
+msgstr "Przewiñ w górê"
 
 #: src/config/kbdbind.c:432
-#, fuzzy
 msgid "Search for a text pattern"
-msgstr "Znajd¼ tekst"
+msgstr "Szukaj tekstu"
 
 #: src/config/kbdbind.c:433
-#, fuzzy
 msgid "Search backwards for a text pattern"
-msgstr "Znajd¼ tekst"
+msgstr "Szukaj tekstu wstecz"
 
 #: src/config/kbdbind.c:434
 #, fuzzy
 msgid "Close tab"
-msgstr "Zamknij"
+msgstr "Zamknij tab"
 
 #: src/config/kbdbind.c:435
+#, fuzzy
 msgid "Next tab"
-msgstr ""
+msgstr "Nastêpny tab"
 
 #: src/config/kbdbind.c:436
 #, fuzzy
 msgid "Previous tab"
-msgstr "Niczego wcze¶niej nie szukano"
+msgstr "Poprzedni tab"
 
 #: src/config/kbdbind.c:437
 #, fuzzy
 msgid "Toggle displaying of links to images"
-msgstr "Czy wy¶wietlaæ ³±cza do obrazków?"
+msgstr "Zmieñ sposób wy¶wietlania ³±czy do obrazków"
 
 #: src/config/kbdbind.c:438
 msgid "Toggle rendering of tables"
-msgstr ""
+msgstr "Zmieñ sposób wy¶wietlania tabel"
 
 #: src/config/kbdbind.c:439
 msgid "Toggle rendering page as HTML / plain text"
-msgstr ""
+msgstr "Prze³±cz wy¶wietlanie strony jako HTML / zwyk³y tekst"
 
 #: src/config/kbdbind.c:440
 msgid "Toggle displaying of links numbers"
-msgstr ""
+msgstr "Prze³±cz sposób wy¶wietlania numerów hiper³±czy"
 
 #: src/config/kbdbind.c:441
 msgid "Go forward in the unhistory"
-msgstr ""
+msgstr "Przejd¼ naprzód w \"antyhistorii\""
 
 #: src/config/kbdbind.c:442
 msgid "Move cursor upwards"
-msgstr ""
+msgstr "Przesuñ kursor w górê"
 
 #: src/config/kbdbind.c:443
-#, fuzzy
 msgid "View the current image"
-msgstr "Poka¿ o~brazek"
+msgstr "Poka¿ bie¿±cy obrazek"
 
 #: src/config/kbdbind.c:444
 msgid "Maximize the current frame"
-msgstr ""
+msgstr "Powiêksz bie¿±c± ramkê"
 
 #: src/config/kbdbind.c:638
 msgid "Unrecognised keymap"
-msgstr ""
+msgstr "Nierozpozana mapa klawiszy"
 
 #: src/config/kbdbind.c:640
-#, fuzzy
 msgid "Error parsing keystroke"
-msgstr "B³±d przy zapisywaniu do gniazda"
+msgstr "B³±d przy odczytywaniu kombinacji klawiszy"
 
 #: src/config/kbdbind.c:642
 msgid "Unrecognised action (internal error)"
-msgstr ""
+msgstr "Nierozpoznana akcja (b³±d wewnêtrzny)"
 
 #: src/config/options.c:520 src/config/options.c:544 src/config/opttypes.c:39
 msgid "Parameter expected"
@@ -763,9 +743,8 @@ msgid "Too many parameters"
 msgstr "Zbyt wiele parametrów"
 
 #: src/config/options.c:550
-#, fuzzy
 msgid "error"
-msgstr "B³±d"
+msgstr "b³±d"
 
 #: src/config/options.c:552 src/sched/error.c:45
 msgid "Host not found"
@@ -773,9 +752,8 @@ msgstr "Nie znaleziono serwera"
 
 #
 #: src/config/options.c:566
-#, fuzzy
 msgid "Resolver error"
-msgstr "B³±d resolwera."
+msgstr "B³±d resolwera"
 
 #: src/config/options.c:588
 #, c-format
@@ -783,34 +761,33 @@ msgid "ELinks %s - Text WWW browser\n"
 msgstr "ELinks %s - Tekstowa przegl±darka WWW\n"
 
 #: src/config/options.c:630
-#, fuzzy
 msgid "Template option folder"
-msgstr "Skasuj opcjê"
+msgstr "Folder szablonów opcji"
 
 #: src/config/options.c:646
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: %d)"
-msgstr " (domy¶lnie: %d)\n"
+msgstr "    %s%s%s %s (domy¶lnie: %d)\n"
 
 #: src/config/options.c:651 src/config/options.c:676
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: \"%s\")"
-msgstr " (domy¶lnie: \"%s\")\n"
+msgstr "    %s%s%s %s (domy¶lnie: \"%s\")"
 
 #: src/config/options.c:656
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (alias for %s)"
-msgstr "(alias dla %s)\n"
+msgstr "    %s%s%s %s (alias dla %s)"
 
 #: src/config/options.c:661
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: %s)"
-msgstr " (domy¶lnie: %s)\n"
+msgstr "    %s%s%s %s (domy¶lnie: %s)"
 
 #: src/config/options.c:668
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: #%02x%02x%02x)"
-msgstr " (domy¶lnie: #%02x%02x%02x)\n"
+msgstr "    %s%s%s %s (domy¶lnie: #%02x%02x%02x)"
 
 #: src/config/options.c:782
 msgid "Configuration options:\n"
@@ -1028,11 +1005,12 @@ msgid "Connection retries"
 msgstr "Próby po³±czenia"
 
 #: src/config/options.c:984
-#, fuzzy
 msgid ""
 "Number of tries to establish a connection.\n"
 "Zero means try forever."
-msgstr "Ilo¶æ prób nawi±zania po³±czenia"
+msgstr ""
+"Ilo¶æ prób nawi±zania po³±czenia.\n"
+"Zero oznacza nie poddawaj siê."
 
 #: src/config/options.c:987 src/sched/error.c:50
 msgid "Receive timeout"
@@ -1347,13 +1325,14 @@ msgstr ""
 
 #: src/config/options.c:1138
 msgid "Scroll step"
-msgstr ""
+msgstr "Krok przy przewijaniu"
 
 #: src/config/options.c:1140
 msgid ""
 "Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 "down is pressed and no prefix was given."
-msgstr ""
+msgstr "Liczba linii, o które przewijany jest ekran, gdy wybrano klawisz\n"
+"\"przewiñ w dó³\" albo \"przewiñ w górê\""
 
 #: src/config/options.c:1143
 msgid "Tables navigation order"
@@ -1691,13 +1670,12 @@ msgid "Options regarding files downloading and handling."
 msgstr "Ustawienia dotycz±ce pobierania plików."
 
 #: src/config/options.c:1264
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.default_type option instead."
 msgstr ""
 "Ta opcja jest przedawniona i wkrótce zostanie usuniêta.\n"
-"U¿yj zamiast niej config.saving_style ."
+"U¿yj zamiast niej mime.default_type ."
 
 #
 #: src/config/options.c:1267
@@ -1835,13 +1813,15 @@ msgstr ""
 
 #: src/config/options.c:1329
 msgid "Auto-save interval"
-msgstr ""
+msgstr "Przedzia³ czasu pomiêdzy automatycznymi zapisami"
 
 #: src/config/options.c:1331
 msgid ""
 "Interval at which to write global history to disk if it\n"
 "has changed (seconds; 0 to disable)"
 msgstr ""
+"Przedzia³ czasu po którym nastêpuje zapis globalnej historii na dysk,\n"
+"je¶li nast±pi³a jaka¶ zmiana (w sekundach; 0 - wy³±cza)"
 
 #
 #: src/config/options.c:1336
@@ -1900,10 +1880,12 @@ msgid "Display superscripts (as ^thing)."
 msgstr "Pokazuj indeks górny (jako ^co¶)."
 
 #: src/config/options.c:1363
+#, fuzzy
 msgid "Rendering of html link element"
-msgstr ""
+msgstr "Renderowania elementu ³±cza html"
 
 #: src/config/options.c:1365
+#, fuzzy
 msgid ""
 "Html link rendering verbosity:\n"
 "0 nothing\n"
@@ -1913,6 +1895,13 @@ msgid ""
 "4 type in addition\n"
 "5 everything"
 msgstr ""
+"Gadatliwo¶æ renderowania linku:\n"
+"0 ¿adna\n"
+"1 tytu³\n"
+"2 dodatkowo nazwa\n"
+"3 dodatkowo hreflang\n"
+"4 dodatkowo typ\n"
+"5 wszystko"
 
 #: src/config/options.c:1374
 msgid "MIME"
@@ -2103,9 +2092,8 @@ msgstr ""
 "bêd± tak¿e sprawdzane zanim wybrany zostanie uchwyt."
 
 #: src/config/options.c:1474
-#, fuzzy
 msgid "Mimetypes files"
-msgstr "Handlery typów plików"
+msgstr "Pliki typu MIME"
 
 #: src/config/options.c:1476
 msgid ""
@@ -2113,21 +2101,21 @@ msgid ""
 "can be used to find the content type of an url by looking at the\n"
 "extension of the file name."
 msgstr ""
+"Opcje dla wsparcia dla plików MIME.  Pliki MIME mog± byæ u¿yte\n"
+"do znalezienie typu zawarto¶ci pliku URLa po sprawdzeniu \n"
+"rozszerzenia pliku"
 
 #: src/config/options.c:1482
-#, fuzzy
 msgid "Enable mime.types support."
-msgstr "W³±cz obs³ugê Mailcap."
+msgstr "W³±cz obs³ugê mime.types."
 
 #: src/config/options.c:1486
-#, fuzzy
 msgid ""
 "Mimetypes search path. Colon-separated list of files.\n"
 "Leave as \"\" to use build-in default instead."
 msgstr ""
 "¦cie¿ka poszukiwañ dla Mailcap. Oddzielona dwukropkami lista plików.\n"
-"Zostaw jako \"\" by u¿ywaæ zmiennej ¶rodowiskowej MAILCAP\n"
-"albo wkompilowanych warto¶ci domy¶lnych."
+"Zostaw jako \"\" by u¿ywaæ warto¶ci domy¶lnych."
 
 #: src/config/options.c:1491
 msgid "Protocols"
@@ -2155,13 +2143,15 @@ msgstr "Obej¶cia b³êdów HTTP po stronie serwera"
 
 #: src/config/options.c:1504
 msgid "Do not send Accept-Charset"
-msgstr ""
+msgstr "Nie wysy³aj Accept-Charset"
 
 #: src/config/options.c:1506
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 msgstr ""
+"Pole nag³ówka Accept-Charset jest d³ugie i wys³anie go mo¿e powodowaæ\n"
+"b³êdy w dzia³aniu niektórych serwerów."
 
 #: src/config/options.c:1509
 msgid "Allow blacklisting"
@@ -2176,7 +2166,6 @@ msgid "Broken 302 redirects"
 msgstr "B³êdne przekierowania 302"
 
 #: src/config/options.c:1515
-#, fuzzy
 msgid ""
 "Broken 302 redirect (violates RFC but compatible with Netscape).\n"
 "This is a problem for a lot of web discussion boards and the like.\n"
@@ -2303,7 +2292,7 @@ msgstr ""
 
 #: src/config/options.c:1574
 msgid "Activate HTTP TRACE debugging"
-msgstr ""
+msgstr "Uaktywnij debugowanie HTTP TRACE"
 
 #: src/config/options.c:1576
 msgid ""
@@ -2313,6 +2302,10 @@ msgid ""
 "request back to the client verbatim. Note that this type of request may\n"
 "not be enabled on all servers."
 msgstr ""
+"Gdy aktywne wszystkie zapytania HTTP s± wysy³ane przy u¿yciu metody\n"
+"TRACE.  Jest to przydatne przy debugowaniu Elinksa jak i skryptów\n"
+"po stronie serwera --- serwer odsy³a zapytanie to klienta.  Wiedz, ¿e\n"
+"nie wszystkie serwery to obs³uguj±."
 
 #: src/config/options.c:1582
 msgid "User-agent identification"
@@ -2413,7 +2406,6 @@ msgid "Try encoding extensions"
 msgstr "Próbuj ró¿ne rozszerzenia plików"
 
 #: src/config/options.c:1637
-#, fuzzy
 msgid ""
 "When set, if we can't open a file named 'filename', we'll try\n"
 "to open 'filename' with some encoding extension appended\n"
@@ -2425,7 +2417,7 @@ msgstr ""
 
 #: src/config/options.c:1641
 msgid "Show hidden files in directory listing"
-msgstr ""
+msgstr "Pokazuj ukryty pliki przy wy¶wietlaniu katalogów"
 
 #: src/config/options.c:1643
 msgid ""
@@ -2433,6 +2425,9 @@ msgid ""
 "If set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
+"Czy pokazywaæ ukryty pliki przy wy¶wietlaniu katalogów ?\n"
+"Je¶li ustawione na 0, pliki zaczynaj±ce siê od kropki nie bêd±\n"
+"pokzywane."
 
 #
 #: src/config/options.c:1648
@@ -2478,49 +2473,45 @@ msgid ""
 "Options for mailcap support. (Deprecated. Please use\n"
 "mime.mailcap instead)"
 msgstr ""
+"Opcje dla wsparcia mailcap. (Przestarza³e. U¿yj zamiast tego\n"
+"mime.mailcap)"
 
 #: src/config/options.c:1684
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.enable option instead."
 msgstr ""
 "Ta opcja jest przedawniona i wkrótce zostanie usuniêta.\n"
-"U¿yj zamiast niej config.saving_style ."
+"U¿yj zamiast niej mime.mailcap.enable ."
 
 #: src/config/options.c:1689
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.path option instead."
 msgstr ""
 "Ta opcja jest przedawniona i zostanie wkrótce usuniêta.\n"
-"U¿yj zamiast niej ui.dialog.shadows ."
+"U¿yj zamiast niej mime.mailcap.path ."
 
 #: src/config/options.c:1694
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.ask option instead."
 msgstr ""
 "Ta opcja jest przedawniona i zostanie wkrótce usuniêta.\n"
-"U¿yj zamiast niej ui.dialog.shadows ."
+"U¿yj zamiast niej mime.mailcap.ask ."
 
 #: src/config/options.c:1699
-#, fuzzy
 msgid "This option is deprecated and will be removed very soon.\n"
 msgstr ""
 "Ta opcja jest przedawniona i zostanie wkrótce usuniêta.\n"
-"U¿yj zamiast niej ui.dialog.shadows ."
 
 #: src/config/options.c:1703
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
 msgstr ""
 "Ta opcja jest przedawniona i zostanie wkrótce usuniêta.\n"
-"U¿yj zamiast niej ui.dialog.shadows ."
+"U¿yj zamiast niej mime.mailcap.prioritize ."
 
 #: src/config/options.c:1707
 msgid "No-proxy domains"
@@ -2713,53 +2704,51 @@ msgid "Hotkey"
 msgstr "\"Gor±cy\" klawisz"
 
 #: src/config/options.c:1824 src/config/options.c:2192
-#, fuzzy
 msgid "Main menu hotkey colors."
-msgstr "Kolory g³ównego paska menu."
+msgstr "Kolory \"gor±cych\" klawiszy g³ównego paska menu."
 
 #: src/config/options.c:1826 src/config/options.c:1883
 #: src/config/options.c:2194 src/config/options.c:2251
-#, fuzzy
 msgid "Unselected hotkey"
-msgstr "Niewybrane elementy menu"
+msgstr "Niewybrany \"gor±cy\" klawisz"
 
 #: src/config/options.c:1828 src/config/options.c:2196
 #, fuzzy
 msgid "Main menu unselected hotkey colors."
-msgstr "Kolory niewybranych elementów menu - hotkey."
+msgstr "Kolory niewybranych \"gor±cych\" klawiszy g³ównego menu"
 
 #
 #: src/config/options.c:1830 src/config/options.c:1887
 #: src/config/options.c:2198 src/config/options.c:2255
 #, fuzzy
 msgid "Selected hotkey"
-msgstr "Wybrany przycisk"
+msgstr "Wybrany \"gor±cy\" klawisz"
 
 #: src/config/options.c:1832 src/config/options.c:2200
 #, fuzzy
 msgid "Main menu selected hotkey colors."
-msgstr "Kolory niewybranych elementów menu - hotkey."
+msgstr "Kolory wybranych \"gor±cych\" klawiszy g³ównego menu."
 
 #: src/config/options.c:1836 src/config/options.c:2204
 msgid "Main menu unselected hotkey default text color."
-msgstr ""
+msgstr "Domy¶lny kolor tekstu niewybranego hotkey'a."
 
 #
 #: src/config/options.c:1840 src/config/options.c:2208
 #, fuzzy
 msgid "Main menu unselected hotkey default background color."
-msgstr "Domy¶lny kolor t³a."
+msgstr "Domy¶lny kolor t³a niewybranego hotkey'a g³ównego menu."
 
 #: src/config/options.c:1844
 #, fuzzy
 msgid "Main menu selected hotkey text color."
-msgstr "Kolory niewybranego elementu menu."
+msgstr "Kolory tekstu wybranego hotkey'a g³ównego menu."
 
 #
 #: src/config/options.c:1848 src/config/options.c:2216
 #, fuzzy
 msgid "Main menu selected hotkey default background color."
-msgstr "Domy¶lny kolor t³a."
+msgstr "Domy¶lny kolor t³a wybranego hotkey'a."
 
 #: src/config/options.c:1851 src/config/options.c:2219
 msgid "Menu bar"
@@ -2789,38 +2778,37 @@ msgstr "Kolory wybranych elementów menu."
 #: src/config/options.c:1881 src/config/options.c:2249
 #, fuzzy
 msgid "Menu item hotkey colors."
-msgstr "Kolory niewybranych elementów menu - hotkey."
+msgstr "Kolory hotkey'a menu."
 
 #: src/config/options.c:1885
 #, fuzzy
 msgid "Menu item unselected hotkey colors."
-msgstr "Kolory niewybranych elementów menu - hotkey."
+msgstr "Kolory niewybranych hotkey'ów menu."
 
 #: src/config/options.c:1889
 #, fuzzy
 msgid "Menu item selected hotkey colors."
-msgstr "Kolory niewybranych elementów menu - hotkey."
+msgstr "Kolory wybranych hotkey'ów menu."
 
 #: src/config/options.c:1893
 msgid "Menu item unselected hotkey default text color."
-msgstr ""
+msgstr "Domy¶lny kolor tekstu niewybranego hotkey'a z menu."
 
 #
 #: src/config/options.c:1897
-#, fuzzy
 msgid "Menu item unselected hotkey default background color."
-msgstr "Domy¶lny kolor t³a."
+msgstr "Domy¶lny kolor t³a niewybranego hotkey'a z menu."
 
 #: src/config/options.c:1901
 #, fuzzy
 msgid "Menu item selected hotkey default text color."
-msgstr "Kolory niewybranego elementu menu."
+msgstr "Domy¶lny Kolor tekstu wybranego hotkey'a menu."
 
 #
 #: src/config/options.c:1905
 #, fuzzy
 msgid "Menu item selected hotkey background color."
-msgstr "Domy¶lny kolor t³a."
+msgstr "Domy¶lny kolor t³a wybranego hotkey'a menu."
 
 #
 #: src/config/options.c:1907 src/config/options.c:2275
@@ -2995,45 +2983,42 @@ msgid "Status bar text colors."
 msgstr "Kolory tekstu na pasku statusu."
 
 #: src/config/options.c:2115 src/config/options.c:2483
-#, fuzzy
 msgid "Tabs bar"
-msgstr "Pasek statusu"
+msgstr "Pasek tabów"
 
 #: src/config/options.c:2117 src/config/options.c:2485
-#, fuzzy
 msgid "Tabs bar colors."
-msgstr "Kolory paska statusu."
+msgstr "Kolory paska tabów."
 
 #: src/config/options.c:2119 src/config/options.c:2487
 #, fuzzy
 msgid "Unselected tab"
-msgstr "Niewybrane elementy menu"
+msgstr "Niewybrany tab"
 
 #: src/config/options.c:2121 src/config/options.c:2489
 #, fuzzy
 msgid "Unselected tab colors."
-msgstr "Kolory niewybranego elementu menu."
+msgstr "Kolory niewybranego taba."
 
 #
 #: src/config/options.c:2131 src/config/options.c:2499
 #, fuzzy
 msgid "Selected tab"
-msgstr "Wybrany przycisk"
+msgstr "Wybrany tab"
 
 #: src/config/options.c:2133 src/config/options.c:2501
 #, fuzzy
 msgid "Selected tab colors."
-msgstr "Kolory wybranych elementów menu."
+msgstr "Kolory wybranego taba."
 
 #: src/config/options.c:2143 src/config/options.c:2511
-#, fuzzy
 msgid "Searched strings"
-msgstr "Nieprawid³owe wyra¿enie"
+msgstr "Szukane ³añcuchy"
 
 #: src/config/options.c:2145 src/config/options.c:2513
 #, fuzzy
 msgid "Searched string highlight colors."
-msgstr "Kolory wybranych elementów menu."
+msgstr "Kolory pod¶wietlenia szukanych ³añcuchów."
 
 #: src/config/options.c:2157
 msgid "Non-color terminals"
@@ -3062,39 +3047,39 @@ msgstr "Kolory paska wybranego elemtu menu."
 #: src/config/options.c:2212
 #, fuzzy
 msgid "Main menu selected hotkey default text color."
-msgstr "Kolory niewybranego elementu menu."
+msgstr "Domy¶lny kolor tekstu  wybranego hotkey'a g³ównego menu."
 
 #: src/config/options.c:2253
 #, fuzzy
 msgid "Menu unselected hotkey colors."
-msgstr "Kolory niewybranych elementów menu - hotkey."
+msgstr "Kolory niewybranych hotkey'ów"
 
 #: src/config/options.c:2257
 #, fuzzy
 msgid "Menu selected hotkey colors."
-msgstr "Kolory niewybranych elementów menu - hotkey."
+msgstr "Kolory wybranych hotkey'ów menu"
 
 #: src/config/options.c:2261
 #, fuzzy
 msgid "Menu unselected hotkey default text color."
-msgstr "Kolory niewybranego elementu menu."
+msgstr "Domy¶lny Kolor tekstu  niewybranego hotkey'a."
 
 #
 #: src/config/options.c:2265
 #, fuzzy
 msgid "Menu unselected hotkey default background color."
-msgstr "Domy¶lny kolor t³a."
+msgstr "Domy¶lny kolor t³a niewybranego hotkey'a menu."
 
 #: src/config/options.c:2269
 #, fuzzy
 msgid "Menu selected hotkey default text color."
-msgstr "Kolory niewybranego elementu menu."
+msgstr "Kolory tekstu wybranego hotkey'a menu."
 
 #
 #: src/config/options.c:2273
 #, fuzzy
 msgid "Menu selected hotkey default background color."
-msgstr "Domy¶lny kolor t³a."
+msgstr "Domy¶lny kolor t³a wybranego hotkey'a menu."
 
 #: src/config/options.c:2292
 msgid "Dialog generic background color"
@@ -3205,18 +3190,18 @@ msgstr ""
 #: src/config/options.c:2575
 #, fuzzy
 msgid "Window tabs"
-msgstr "~Okno"
+msgstr "Taby"
 
 #: src/config/options.c:2577
 #, fuzzy
 msgid "Window tabs settings."
-msgstr "Ustawienia okien dialogowych"
+msgstr "Ustawienia tabów."
 
 #
 #: src/config/options.c:2579
 #, fuzzy
 msgid "Display tabs bar"
-msgstr "Wy¶wietlanie paska statusu"
+msgstr "Wy¶wietl paskek tabów"
 
 #: src/config/options.c:2581
 msgid ""
@@ -3225,11 +3210,15 @@ msgid ""
 "1 means only if two or more tabs.\n"
 "2 means always."
 msgstr ""
+"Pokazuj pasek tabów na ekranie:\n"
+"0 - nigdy.\n"
+"1 - tylko gdy wiêcej ni¿ jeden tab.\n"
+"2 - zawsze."
 
 #: src/config/options.c:2586
 #, fuzzy
 msgid "Wrap-around tabs cycling"
-msgstr "Cykliczno¶æ hiper³±czy"
+msgstr "Cykliczno¶æ tabów"
 
 #: src/config/options.c:2588
 #, fuzzy
@@ -3237,8 +3226,7 @@ msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr ""
-"Gdy wci¶niêty jest 'dó³' na ostatnim hiper³±czu, skocz do pierwszego i vice "
-"versa."
+"Z ostatniego taba przeskakuje na pierwszego i na odwrót."
 
 #: src/config/options.c:2593 src/config/opttypes.c:459
 msgid "Language"
@@ -3298,6 +3286,9 @@ msgid ""
 "in an xterm-like terminal. This way the document's title is \n"
 "shown on the window titlebar."
 msgstr ""
+"Ustaw tytu³ okna podczas dzia³ania w ¶rodowisku okienkowym \n"
+"w terminalu jak xterm.  W ten sposób tytu³ dokumentu bêdzie widoczny\n"
+"na pasku tytu³owym okna."
 
 #: src/config/options.c:2631
 msgid ""
@@ -3411,13 +3402,15 @@ msgstr ""
 #. lynx compatibility
 #: src/config/options.c:2685
 msgid "Assume the file is HTML"
-msgstr ""
+msgstr "Przyjmij, ¿e plik jest HTML"
 
 #: src/config/options.c:2687
 msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
+"To sprawia, ¿e Elinks przyjmuje, ¿e og³±dane pliki s± w HTMLu.\n"
+"Jest to równowa¿ne z -default-mime-type text/html."
 
 #: src/config/options.c:2700
 msgid "Print usage help and exit"
@@ -3632,9 +3625,9 @@ msgid "Login"
 msgstr "Nazwa u¿ytkownika"
 
 #: src/dialogs/auth.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication required for %s at %s"
-msgstr "Potrzebne uwierzytelnienie dla "
+msgstr "Potrzebne uwierzytelnienie dla %s w %s"
 
 #: src/dialogs/auth.c:134
 msgid "HTTP Authentication"
@@ -3761,7 +3754,7 @@ msgid "Copying"
 msgstr "Kopiowanie"
 
 #: src/dialogs/info.c:83
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -3773,6 +3766,7 @@ msgid ""
 "Software Foundation; either version 2 of the License, or (at your option) "
 "any later version."
 msgstr ""
+"Elinks %s\n"
 "\n"
 "\n"
 "(C) 1999 - 2002 Mikulas Patocka\n"
@@ -3795,34 +3789,39 @@ msgid ""
 "Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
 "Formatted document cache: %d documents, %d locked."
 msgstr ""
+"Zasoby: %d uchwyt(ów), %d zegar(ów).\n"
+"Po³±czenia: %d po³±czeñ, %d nawi±zuj±cych po³±czenie, %d przesy³aj±cych,\n"
+"            %d trwa³ych.\n"
+"Pamiêæ podrêczna: %d bajtów, %d plików, %d zablokowanych, %d ³adowanych.\n"
+"Sformatowane dokunenty: %d dokumentów, %d zablokownaych." 
 
 #: src/dialogs/info.c:169
 #, fuzzy
 msgid "No entry."
-msgstr "Brak zawarto¶ci"
+msgstr "Brak pozycji."
 
 #: src/dialogs/info.c:175
 #, c-format
 msgid "%ld more entries."
-msgstr ""
+msgstr "%ld wiêcej pozycji."
 
 #: src/dialogs/info.c:181
 msgid "Cache info"
 msgstr "Informacje o pamiêci podrêcznej"
 
 #: src/dialogs/info.c:182
-#, fuzzy, c-format
+#, c-format
 msgid "Cache content: %s"
-msgstr "Zawarto¶æ pamiêci podrêcznej"
+msgstr "Zawarto¶æ pamiêci podrêcznej: %s"
 
 #: src/dialogs/info.c:200
 msgid "Memory info"
 msgstr "Informacje o pamiêci"
 
 #: src/dialogs/info.c:201
-#, fuzzy, c-format
+#, c-format
 msgid "%ld bytes of memory allocated."
-msgstr "przydzielonej pamiêci"
+msgstr "%ld bajtów przydzielonej pamiêci."
 
 #: src/dialogs/menu.c:131
 msgid "Exit ELinks"
@@ -3954,17 +3953,15 @@ msgstr "Ramka na ca³~ym ekranie"
 
 #: src/dialogs/menu.c:497
 msgid "Nex~t tab"
-msgstr ""
+msgstr "Nas~têpny tab"
 
 #: src/dialogs/menu.c:498
-#, fuzzy
 msgid "Pre~v tab"
-msgstr "Niczego wcze¶niej nie szukano"
+msgstr "~Popzedni tab"
 
 #: src/dialogs/menu.c:499
-#, fuzzy
 msgid "~Close tab"
-msgstr "Zamknij"
+msgstr "~Zamknij tab"
 
 #: src/dialogs/menu.c:516
 msgid "~ELinks homepage"
@@ -3972,9 +3969,8 @@ msgstr "Strona domowa ~Elinksa"
 
 #
 #: src/dialogs/menu.c:517
-#, fuzzy
 msgid "~Documentation"
-msgstr "Ustawienia dotycz±ce dokumentu."
+msgstr "~Dokumentacja"
 
 #: src/dialogs/menu.c:518
 msgid "~Keys"
@@ -3982,12 +3978,11 @@ msgstr "~Klawiszologia"
 
 #: src/dialogs/menu.c:521
 msgid "~Bugs information"
-msgstr ""
+msgstr "Informacje o ~b³êdach"
 
 #: src/dialogs/menu.c:522
-#, fuzzy
 msgid "~ELinks CvsWeb"
-msgstr "Elinks "
+msgstr "~Elinks CVSWeb"
 
 #: src/dialogs/menu.c:525
 msgid "~Copying"
@@ -4103,9 +4098,9 @@ msgid "Delete extension"
 msgstr "Usuñ rozszerzenie"
 
 #: src/dialogs/mime.c:161
-#, fuzzy, c-format
+#, c-format
 msgid "Delete extension %s?"
-msgstr "Usuñ rozszerzenie"
+msgstr "Czy usun±æ rozszerzenie %s?"
 
 #: src/dialogs/mime.c:234
 msgid "Extension"
@@ -4173,35 +4168,39 @@ msgid "Delete history item"
 msgstr "Usuñ pozycjê historii"
 
 #: src/globhist/dialogs.c:235
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but this history entry is already being used by something right now.\n"
 "\n"
 "Title: \"%s\"\n"
 "URL: \"%s\"\n"
-msgstr "Przykro mi, ale ta zak³adka jest ju¿ u¿ywana"
+msgstr "Przykro mi, ale ta pozycja historii jest obecnie u¿ywana.\n"
+"\n"
+"Tity³: \"%s\"\n"
+"URL: \"%s\"\n"
 
 #: src/globhist/dialogs.c:321
-#, fuzzy
 msgid "Delete marked history items?"
-msgstr "Usuñ pozycjê historii"
+msgstr "Czy usun±æ zaznaczone elementy historii?"
 
 #: src/globhist/dialogs.c:330
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete history item \"%s\"?\n"
 "\n"
 "URL: \"%s\""
 msgstr "Usuñ pozycjê historii"
+"Czy skasowaæ element historii \"%s\"?\n"
+"\n"
+"URL: \"%s\""
 
 #: src/globhist/dialogs.c:376
 msgid "Clear global history"
 msgstr "Wyczy¶æ historiê globaln±"
 
 #: src/globhist/dialogs.c:377
-#, fuzzy
 msgid "Clear global history?"
-msgstr "Wyczy¶æ historiê globaln±"
+msgstr "Czy wyczy¶ciæ historiê globaln±?"
 
 #: src/globhist/dialogs.c:413
 #, c-format
@@ -4210,11 +4209,14 @@ msgid ""
 "URL: %s\n"
 "Last visit time: %s"
 msgstr ""
+"Tytu³: %s\n"
+"URL: %s\n"
+"Ostatnio odwiedzane: %s"
 
 #: src/lowlevel/home.c:85
 #, c-format
 msgid "ELINKS_CONFDIR set to %s, but directory %s doesn't exist."
-msgstr ""
+msgstr "ELINKS_CONFDIR ustawione na %s, ale katalog %s nie istnieje."
 
 #: src/lowlevel/home.c:160
 msgid ""
@@ -4222,73 +4224,74 @@ msgid ""
 "$HOME variable set correctly and if you have write permission to your home "
 "directory."
 msgstr ""
+"Nie mo¿na znale¼æ ani stworzyæ katalogu konfiguracyjnego Elinka. Sprawd¼, "
+"czy zmienna $HOME jest ustawiona poprawnie i czy masz prawo zapisu "
+"do katalogu domowego."
 
 #: src/lowlevel/interlink.c:333
 #, c-format
 msgid "accept() failed: %d (%s)"
-msgstr ""
+msgstr "b³±d accept(): %d (%s)"
 
 #: src/lowlevel/interlink.c:372 src/lowlevel/interlink.c:431
 #, c-format
 msgid "socket() failed: %d (%s)"
-msgstr ""
+msgstr "b³±d socket: %d (%s)"
 
 #: src/lowlevel/interlink.c:381
 #, c-format
 msgid "bind() failed: %d (%s)"
-msgstr ""
+msgstr "b³±d bind(): %d (%s)"
 
 #: src/lowlevel/interlink.c:401
 #, c-format
 msgid "listen() failed: %d (%s)"
-msgstr ""
+msgstr "b³±d listen(): %d (%s)"
 
 #: src/lowlevel/interlink.c:443
 #, c-format
 msgid "connect() failed: %d (%s)"
-msgstr ""
+msgstr "b³±d connect(): %d (%s)"
 
 #: src/lowlevel/select.c:343
 #, c-format
 msgid "select() failed: %d (%s)"
-msgstr ""
+msgstr "b³±d select(): %d (%s)"
 
 #. Infinite loop prevention.
 #: src/lowlevel/select.c:346
 #, c-format
 msgid "%d select() failures."
-msgstr ""
+msgstr "%d b³êdy select."
 
 #: src/lowlevel/signals.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "Bad signal number: %d"
-msgstr "Nieprawid³owa liczba"
+msgstr "Nieprawid³owy numer sygna³u: %d"
 
 #: src/main.c:111
 msgid "Cannot create a pipe for internal communication."
-msgstr ""
+msgstr "Nie mo¿na utworzyæ potoku dla wewnêtrznej komunikacji."
 
 #: src/osdep/os_dep.c:1896
 msgid "~Tab"
-msgstr ""
+msgstr "~Tab"
 
 #: src/osdep/os_dep.c:1897
-#, fuzzy
 msgid "T~ab in background"
-msgstr "W tle"
+msgstr "T~ab w tle"
 
 #: src/osdep/os_dep.c:1898
 msgid "~Xterm"
 msgstr "Xterm"
 
 #: src/osdep/os_dep.c:1899
-#, fuzzy
 msgid "T~wterm"
-msgstr "Twterm"
+msgstr "T~wterm"
 
 #: src/osdep/os_dep.c:1900
 msgid "~Screen"
-msgstr "Screen"
+msgstr "~Screen"
 
 #: src/osdep/os_dep.c:1902 src/osdep/os_dep.c:1906
 msgid "~Window"
@@ -4319,9 +4322,9 @@ msgid "No program"
 msgstr "Nie okre¶lono programu"
 
 #: src/protocol/user.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "No program specified for protocol %s."
-msgstr "Nie okre¶lono programu do obs³ugi"
+msgstr "Nie okre¶lono programu do obs³ugi protoko³u %s."
 
 #: src/sched/download.c:227 src/sched/session.c:86
 msgid "Received"
@@ -4372,24 +4375,27 @@ msgid "Download error"
 msgstr "B³±d pobierania"
 
 #: src/sched/download.c:524
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create file %s: %s"
-msgstr "Nie mo¿na utworzyæ pliku"
+msgstr "Nie mo¿na utworzyæ pliku %s: %s"
 
 #: src/sched/download.c:558
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error downloading %s:\n"
 "\n"
 "%s"
-msgstr "Wyst±pi³ b³±d podczas pobierania"
+msgstr "Wyst±pi³ b³±d podczas pobierania %s:\n"
+"\n"
+"%s"
 
 #: src/sched/download.c:583
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Download complete:\n"
 "%s"
-msgstr "Pobieranie zakoñczone"
+msgstr "Pobieranie zakoñczone:\n"
+"%s"
 
 #
 #: src/sched/download.c:710
@@ -4397,14 +4403,19 @@ msgid "File exists"
 msgstr "Plik istnieje"
 
 #: src/sched/download.c:711
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This file already exists:\n"
 "%s\n"
 "\n"
 "The alternative filename is:\n"
 "%s"
-msgstr "Alternatywna nazwa pliku:\n"
+msgstr ""
+"Plik ju¿ istnieje:\n"
+"%s\n"
+"\n"
+"Alternatywna nazwa pliku:\n"
+"%s"
 
 #: src/sched/download.c:718
 msgid "Save under the alternative name"
@@ -4419,11 +4430,12 @@ msgid "Resume download of the original file"
 msgstr "Wznów pobieranie oryginalnego pliku"
 
 #: src/sched/download.c:804
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create file '%s':\n"
 "%s"
-msgstr "Nie mo¿na utworzyæ pliku"
+msgstr "Nie mo¿na utworzyæ pliku '%s':\n"
+"%s"
 
 #: src/sched/download.c:1183 src/sched/download.c:1194
 msgid "Unknown type"
@@ -4432,7 +4444,7 @@ msgstr "Nieznany typ"
 #: src/sched/download.c:1184
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr ""
+msgstr "Czy chcesz zapisaæ plik '%s' (typu %s) czy wy¶wietliæ go?"
 
 #: src/sched/download.c:1190 src/sched/download.c:1199
 #: src/sched/download.c:1226 src/sched/download.c:1238
@@ -4442,7 +4454,7 @@ msgstr "Wy¶wietl"
 #: src/sched/download.c:1195
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr ""
+msgstr "Czy chcesz wy¶wietliæ plik '%s' (typu %s)?"
 
 #: src/sched/download.c:1217 src/sched/download.c:1230
 msgid "What to do?"
@@ -4454,6 +4466,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
+"Czy chesz otworzyæ plik '%s' (typu %s%s%s)\n"
+"przy u¿yciu '%s', zapisaæ go, czy wy¶wietliæ?"
 
 #: src/sched/download.c:1224 src/sched/download.c:1237
 msgid "Open"
@@ -4465,6 +4479,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 msgstr ""
+"Czy chesz otworzyæ plik '%s' (typu %s%s%s)\n"
+"przy u¿yciu '%s', czy wy¶wietliæ go?"
 
 #: src/sched/error.c:29
 msgid "Waiting in queue"
@@ -4603,29 +4619,27 @@ msgid "cur"
 msgstr "akt"
 
 #: src/sched/session.c:266
-#, fuzzy
 msgid "Untitled"
-msgstr "Tytu³ hiper³±cza"
+msgstr "Bez tytu³u"
 
 #: src/sched/session.c:268
-#, fuzzy
 msgid "No document"
-msgstr "dokumentów"
+msgstr "Brak dokumentu"
 
 #: src/sched/session.c:601
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow redirect and post form data to url %s?"
-msgstr "Czy chcesz przekierowaæ i wys³aæ dane formularza do"
+msgstr "Czy chcesz i¶c za przekierowaniem i wys³aæ dane formularza do %s?"
 
 #: src/sched/session.c:604
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to post form data to url %s?"
-msgstr "Czy chcesz wys³aæ formularz do"
+msgstr "Czy chcesz wys³aæ formularz do %s?"
 
 #: src/sched/session.c:606
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to repost form data to url %s?"
-msgstr "Czy chcesz ponownie wys³aæ formularz do"
+msgstr "Czy chcesz ponownie wys³aæ formularz do %s?"
 
 #: src/sched/session.c:612 src/sched/session.c:1134 src/sched/session.c:1154
 msgid "Warning"
@@ -4636,12 +4650,13 @@ msgid "Welcome"
 msgstr "Powitanie"
 
 #: src/sched/session.c:1125
-#, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
 "Press ESC for menu. Documentation is available in Help menu."
 msgstr ""
+"Witaj w Elinksie!\n"
+"\n"
 "Wci¶nij ESC aby wywo³aæ menu. Wybierz Pomoc->Podrêcznik z menu aby zapoznaæ "
 "siê z instrukcj± u¿ytkowania programu."
 
@@ -4686,9 +4701,8 @@ msgstr ""
 "wszelkie niedogodno¶ci."
 
 #: src/sched/session.c:1630
-#, fuzzy
 msgid "Unknown event."
-msgstr "Nieznany typ"
+msgstr "Nieznane zdarzenie."
 
 #: src/scripting/lua/core.c:455
 msgid "A field"
@@ -4711,32 +4725,31 @@ msgid "Enter expression"
 msgstr "Wprowad¼ wyra¿enie"
 
 #: src/terminal/kbd.c:275
-#, fuzzy
 msgid "Could not get terminal size"
-msgstr "Nie mo¿na pobraæ pliku"
+msgstr "Nie mo¿na okre¶liæ rozmiaru terminala"
 
 #: src/terminal/kbd.c:959
 msgid "Too many bytes read from the itrm!"
-msgstr ""
+msgstr "Zbyt du¿o bajtów przeczytanych z itrm!"
 
 #: src/terminal/terminal.c:244
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read event: %d (%s)"
-msgstr "Nie mo¿na utworzyæ pliku"
+msgstr "Nie mo¿na odczytaæ zdarzenia: %d (%s)"
 
 #: src/terminal/terminal.c:263
 #, c-format
 msgid "Bad event %d"
-msgstr ""
+msgstr "B³êdne zdarzenie %d"
 
 #: src/terminal/terminal.c:300
 msgid "Warning: terminal name contains illicit chars."
-msgstr ""
+msgstr "Ostrze¿enie: nazwa terminala zawiera \"nieprzyzwoite\" znaki."
 
 #: src/terminal/terminal.c:322
 #, c-format
 msgid "Bad terminal size: %d, %d"
-msgstr ""
+msgstr "B³êdny rozmiar terminala: %d, %d"
 
 #: src/util/version.c:46
 msgid "Text WWW browser"
@@ -4744,14 +4757,12 @@ msgstr "Tekstowa przegl±darka WWW"
 
 #
 #: src/util/version.c:48
-#, fuzzy
 msgid "Features:"
-msgstr "W³a¶ciwo¶ci: "
+msgstr "W³a¶ciwo¶ci:"
 
 #: src/util/version.c:50
-#, fuzzy
 msgid "Standard"
-msgstr " Standard"
+msgstr "Standard"
 
 #: src/util/version.c:52
 msgid "Debug"
@@ -4759,50 +4770,47 @@ msgstr ""
 
 #
 #: src/util/version.c:55
-#, fuzzy
 msgid "Fastmem"
-msgstr "Ramka"
+msgstr "Fastmem"
 
 #: src/util/version.c:58
 msgid "Own Libc Routines"
-msgstr ""
+msgstr "W³asny Libc"
 
 #: src/util/version.c:61
-#, fuzzy
 msgid "No Backtrace"
-msgstr "~Wróæ"
+msgstr "Bez backtrace"
 
 #: src/util/version.c:85
-#, fuzzy
 msgid "Global History"
 msgstr "Historia globalna"
 
 #: src/util/version.c:88
 msgid "LED indicators"
-msgstr ""
+msgstr "Wska¼niki LED"
 
 #: src/viewer/dump/dump.c:75
-#, fuzzy, c-format
+#, c-format
 msgid "Can't write to stdout: %s"
-msgstr "B³±d przy zapisywaniu do gniazda"
+msgstr "B³±d przy zapisywaniu na standardowe wyj¶cie: %s"
 
 #: src/viewer/dump/dump.c:78
 msgid "Can't write to stdout."
-msgstr ""
+msgstr "Nie mo¿na zapisaæ na standardowe wyj¶cie."
 
 #: src/viewer/dump/dump.c:198
 #, c-format
 msgid "URL expected after %s."
-msgstr ""
+msgstr "Spodziewany URL po %s."
 
 #: src/viewer/text/form.c:624
 msgid "Error while posting form"
 msgstr "Wyst±pi³ b³±d podczas wysy³ania formularza"
 
 #: src/viewer/text/form.c:625
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get file %s: %s"
-msgstr "Nie mo¿na pobraæ pliku"
+msgstr "Nie mo¿na pobraæ pliku %s: %s"
 
 #: src/viewer/text/link.c:804
 msgid "Display ~usemap"
@@ -4869,9 +4877,8 @@ msgid "Usemap"
 msgstr "Mapa obrazków"
 
 #: src/viewer/text/link.c:949
-#, fuzzy
 msgid "Reset form"
-msgstr "Wy~czy¶æ formularz"
+msgstr "Wyczy¶æ formularz"
 
 #: src/viewer/text/link.c:956
 msgid "Submit form to"
@@ -4926,9 +4933,9 @@ msgid "No previous search"
 msgstr "Niczego wcze¶niej nie szukano"
 
 #: src/viewer/text/search.c:585
-#, fuzzy, c-format
+#, c-format
 msgid "Search string '%s' not found"
-msgstr "Nie znaleziono wyra¿enia"
+msgstr "Nie znaleziono wyra¿enia '%s'"
 
 #: src/viewer/text/textarea.c:270
 msgid "You can do this only on the master terminal"

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.62 2003/01/18 23:35:19 pasky Exp $ */
+/* $Id: listbox.c,v 1.63 2003/01/19 08:33:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,14 +323,15 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 			if (root) root = root->root;
 		}
 
-		if (root ? root->child.prev == child
-			 : data->box->items->prev == child)
-			continue; /* We were the last branch. */
-
 		/* XXX */
 		print_text(data->term, data->listbox_item_data->x + d * 5,
 			   data->listbox_item_data->y + data->offset,
 			   5, "     ", color);
+
+		if (root ? root->child.prev == child
+			 : data->box->items->prev == child)
+			continue; /* We were the last branch. */
+
 		set_char(data->term, data->listbox_item_data->x + d * 5 + 1,
 			 data->listbox_item_data->y + data->offset,
 			 color + FRAMES_VLINE);

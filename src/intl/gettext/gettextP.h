@@ -35,26 +35,6 @@
 
 #include "gettext.h"		/* Get nls_uint32.  */
 
-/* @@ end of prolog @@ */
-
-#ifndef PARAMS
-#if __STDC__
-#define PARAMS(args) args
-#else
-#define PARAMS(args) ()
-#endif
-#endif
-
-#ifndef internal_function
-#define internal_function
-#endif
-
-/* Tell the compiler when a conditional or integer expression is
-   almost always true or almost always false.  */
-#ifndef HAVE_BUILTIN_EXPECT
-#define __builtin_expect(expr, val) (expr)
-#endif
-
 #ifndef W
 #define W(flag, data) ((flag) ? SWAP (data) : (data))
 #endif
@@ -161,84 +141,46 @@ extern unsigned char *LANGUAGE;
    This variable is part of the external ABI of the GNU libintl.  */
 extern int _nl_msg_cat_cntr;
 
-struct loaded_l10nfile *_nl_find_domain PARAMS((const char *__dirname,
-						char *__locale,
-						const char *__domainname,
-						struct binding *
-						__domainbinding))
-	internal_function;
-void _nl_load_domain
-PARAMS((struct loaded_l10nfile * __domain,
-	struct binding * __domainbinding)) internal_function;
-void _nl_unload_domain PARAMS((struct loaded_domain * __domain))
-	internal_function;
-const char *_nl_init_domain_conv
-PARAMS((struct loaded_l10nfile * __domain_file, struct loaded_domain * __domain,
-	struct binding * __domainbinding)) internal_function;
-void _nl_free_domain_conv PARAMS((struct loaded_domain * __domain))
-	internal_function;
+struct loaded_l10nfile *_nl_find_domain(const char *__dirname,
+					char *__locale,
+					const char *__domainname,
+					struct binding *
+					__domainbinding);
+void _nl_load_domain(struct loaded_l10nfile * __domain,
+		     struct binding * __domainbinding);
+void _nl_unload_domain(struct loaded_domain * __domain);
+const char *_nl_init_domain_conv(struct loaded_l10nfile * __domain_file,
+				 struct loaded_domain * __domain,
+				 struct binding * __domainbinding);
+void _nl_free_domain_conv(struct loaded_domain * __domain);
 
-char *_nl_find_msg PARAMS((struct loaded_l10nfile * domain_file,
-			   struct binding * domainbinding,
-			   const char *msgid, size_t * lengthp))
-	internal_function;
+char *_nl_find_msg(struct loaded_l10nfile * domain_file,
+		   struct binding * domainbinding,
+		   const char *msgid, size_t * lengthp);
 
-#ifdef _LIBC
-extern char *__gettext PARAMS((const char *__msgid));
-extern char *__dgettext PARAMS((const char *__domainname, const char *__msgid));
-extern char *__dcgettext PARAMS((const char *__domainname,
-				 const char *__msgid, int __category));
-extern char *__ngettext PARAMS((const char *__msgid1, const char *__msgid2,
-				unsigned long int __n));
-extern char *__dngettext PARAMS((const char *__domainname,
-				 const char *__msgid1, const char *__msgid2,
-				 unsigned long int n));
-extern char *__dcngettext PARAMS((const char *__domainname,
-				  const char *__msgid1, const char *__msgid2,
-				  unsigned long int __n, int __category));
-extern char *__dcigettext PARAMS((const char *__domainname,
-				  const char *__msgid1, const char *__msgid2,
-				  int __plural, unsigned long int __n,
-				  int __category));
-extern char *__textdomain PARAMS((const char *__domainname));
-extern char *__bindtextdomain PARAMS((const char *__domainname,
-				      const char *__dirname));
-extern char *__bind_textdomain_codeset PARAMS((const char *__domainname,
-					       const char *__codeset));
-#else
-extern char *gettext__ PARAMS((const char *__msgid));
-extern char *dgettext__ PARAMS((const char *__domainname, const char *__msgid));
-extern char *dcgettext__ PARAMS((const char *__domainname,
-				 const char *__msgid, int __category));
-extern char *ngettext__ PARAMS((const char *__msgid1, const char *__msgid2,
-				unsigned long int __n));
-extern char *dngettext__ PARAMS((const char *__domainname,
-				 const char *__msgid1, const char *__msgid2,
-				 unsigned long int __n));
-extern char *dcngettext__ PARAMS((const char *__domainname,
-				  const char *__msgid1, const char *__msgid2,
-				  unsigned long int __n, int __category));
-extern char *dcigettext__ PARAMS((const char *__domainname,
-				  const char *__msgid1, const char *__msgid2,
-				  int __plural, unsigned long int __n,
-				  int __category));
-extern char *textdomain__ PARAMS((const char *__domainname));
-extern char *bindtextdomain__ PARAMS((const char *__domainname,
-				      const char *__dirname));
-extern char *bind_textdomain_codeset__ PARAMS((const char *__domainname,
-					       const char *__codeset));
-#endif
+extern char *gettext__(const char *__msgid);
+extern char *dgettext__(const char *__domainname, const char *__msgid);
+extern char *dcgettext__(const char *__domainname,
+			 const char *__msgid, int __category);
+extern char *ngettext__(const char *__msgid1, const char *__msgid2,
+			unsigned long int __n);
+extern char *dngettext__(const char *__domainname,
+			 const char *__msgid1, const char *__msgid2,
+			 unsigned long int __n);
+extern char *dcngettext__(const char *__domainname,
+			  const char *__msgid1, const char *__msgid2,
+			  unsigned long int __n, int __category);
+extern char *dcigettext__(const char *__domainname,
+			  const char *__msgid1, const char *__msgid2,
+			  int __plural, unsigned long int __n,
+			  int __category);
+extern char *textdomain__(const char *__domainname);
+extern char *bindtextdomain__(const char *__domainname,
+			      const char *__dirname);
+extern char *bind_textdomain_codeset__(const char *__domainname,
+				       const char *__codeset);
 
-#ifdef _LIBC
-extern void __gettext_free_exp PARAMS((struct expression * exp))
-	internal_function;
-extern int __gettextparse PARAMS((void *arg));
-#else
-extern void gettext_free_exp__ PARAMS((struct expression * exp))
-	internal_function;
-extern int gettextparse__ PARAMS((void *arg));
-#endif
-
-/* @@ begin of epilog @@ */
+extern void gettext_free_exp__(struct expression * exp);
+extern int gettextparse__(void *arg);
 
 #endif /* gettextP.h  */

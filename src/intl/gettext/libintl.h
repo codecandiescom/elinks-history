@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.9 2003/04/17 11:58:39 zas Exp $ */
+/* $Id: libintl.h,v 1.10 2003/04/17 15:03:39 zas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -25,7 +25,8 @@
 /* Wraps around gettext(), employing charset multiplexing. If you don't care
  * about charset (usually during initialization or when you don't use terminals
  * at all), use gettext() directly. */
-static inline unsigned char *_(unsigned char *msg, struct terminal *term)
+static inline unsigned char *
+_(unsigned char *msg, struct terminal *term)
 {
 	static int current_charset = -1;
 	int new_charset;

@@ -77,32 +77,8 @@ char *alloca();
 #include "../locale/localeinfo.h"
 #endif
 
-/* @@ end of prolog @@ */
+#include "util/string.h"
 
-#ifdef _LIBC
-/* Rename the non ISO C functions.  This is required by the standard
-   because some ISO C functions will require linking with this object
-   file and the name space must not be polluted.  */
-#define open   __open
-#define close  __close
-#define read   __read
-#define mmap   __mmap
-#define munmap __munmap
-#endif
-
-#ifndef HAVE_STPCPY
-static char *stpcpy PARAMS((char *dest, const char *src));
-#endif
-
-/* Names for the libintl functions are a problem.  They must not clash
-   with existing names and they should follow ANSI C.  But this source
-   code is also used in GNU C Library where the names have a __
-   prefix.  So we have to make a difference here.  */
-#ifdef _LIBC
-#define PLURAL_PARSE __gettextparse
-#else
-#define PLURAL_PARSE gettextparse__
-#endif
 
 /* For those losing systems which don't have `alloca' we have to add
    some additional code emulating it.  */
@@ -195,7 +171,7 @@ init_germanic_plural()
 
 /* Initialize the codeset dependent parts of an opened message catalog.
    Return the header entry.  */
-const char *internal_function
+const char *
 _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 		     struct loaded_domain *domain,
 		     struct binding *domainbinding)
@@ -237,12 +213,7 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 			len = strcspn(charsetstr, " \t\n");
 
 			charset = (char *) alloca(len + 1);
-#if defined _LIBC || HAVE_MEMPCPY
 			*((char *) mempcpy(charset, charsetstr, len)) = '\0';
-#else
-			memcpy(charset, charsetstr, len);
-			charset[len] = '\0';
-#endif
 
 			/* The output charset should normally be determined by the
 			   locale.  But sometimes the locale is not used or not correctly
@@ -307,7 +278,7 @@ _nl_init_domain_conv(struct loaded_l10nfile *domain_file,
 }
 
 /* Frees the codeset dependent parts of an opened message catalog.  */
-void internal_function
+void
 _nl_free_domain_conv(struct loaded_domain *domain)
 {
 	if (domain->conv_tab != NULL && domain->conv_tab != (char **) -1)
@@ -331,7 +302,7 @@ _nl_free_domain_conv(struct loaded_domain *domain)
 
 /* This is hacked for ELinks - we want to look up for the translations at the
  * correct place even if we are being ran from the source/build tree. */
-static unsigned char *internal_function
+static unsigned char *
 source_tree_filename(struct loaded_l10nfile *domain_file)
 {
 	unsigned char *language = malloc(domain_file->langdirnamelen + 1);
@@ -385,7 +356,7 @@ source_tree_filename(struct loaded_l10nfile *domain_file)
 
 /* Load the message catalogs specified by FILENAME.  If it is no valid
    message catalog do nothing.  */
-void internal_function
+void
 _nl_load_domain(struct loaded_l10nfile *domain_file,
 		struct binding *domainbinding)
 {
@@ -436,15 +407,9 @@ _nl_load_domain(struct loaded_l10nfile *domain_file,
 source_success:
 
 	/* We must know about the size of the file.  */
-	if (
-#ifdef _LIBC
-		   __builtin_expect(fstat64(fd, &st) != 0, 0)
-#else
-		   __builtin_expect(fstat(fd, &st) != 0, 0)
-#endif
-		   || __builtin_expect((size = (size_t) st.st_size) !=
-				       st.st_size, 0)
-		   || __builtin_expect(size < sizeof(struct mo_file_header), 0)) {
+	if (fstat(fd, &st) != 0
+	    || (size = (size_t) st.st_size) != st.st_size
+	    || (size < sizeof(struct mo_file_header))) {
 		/* Something went wrong.  */
 		close(fd);
 		return;
@@ -455,7 +420,7 @@ source_success:
 	data = (struct mo_file_header *) mmap(NULL, size, PROT_READ,
 					      MAP_PRIVATE, fd, 0);
 
-	if (__builtin_expect(data != (struct mo_file_header *) -1, 1)) {
+	if (data != (struct mo_file_header *) -1) {
 		/* mmap() call was successful.  */
 		close(fd);
 		use_mmap = 1;
@@ -495,8 +460,7 @@ source_success:
 
 	/* Using the magic number we can test whether it really is a message
 	   catalog file.  */
-	if (__builtin_expect
-	    (data->magic != _MAGIC && data->magic != _MAGIC_SWAPPED, 0)) {
+	if (data->magic != _MAGIC && data->magic != _MAGIC_SWAPPED) {
 		/* The magic number is wrong: not a message catalog file.  */
 #ifdef HAVE_MMAP
 		if (use_mmap)
@@ -569,6 +533,8 @@ default:
 			nplurals += 9;
 			while (*nplurals != '\0' && isspace(*nplurals))
 				++nplurals;
+
+/* TODO: move strtoul compat in string.h */
 #if defined HAVE_STRTOUL || defined _LIBC
 			n = strtoul(nplurals, &endp, 10);
 #else
@@ -586,7 +552,7 @@ default:
 			   is passed down to the parser.  */
 			plural += 7;
 			args.cp = plural;
-			if (PLURAL_PARSE(&args) != 0)
+			if (gettextparse__(&args) != 0)
 				goto no_plural;
 			domain->plural = args.res;
 		}
@@ -602,7 +568,7 @@ no_plural:
 }
 
 #ifdef _LIBC
-void internal_function
+void
 _nl_unload_domain(struct loaded_domain *domain)
 {
 	if (domain->plural != &germanic_plural)
@@ -618,21 +584,5 @@ _nl_unload_domain(struct loaded_domain *domain)
 		free((void *) domain->data);
 
 	free(domain);
-}
-#endif
-
-/* @@ begin of epilog @@ */
-
-/* We don't want libintl.a to depend on any other library.  So we
- * avoid the non-standard function stpcpy.  In GNU C Library this
- * function is available, though.  Also allow the symbol HAVE_STPCPY
- * to be defined.  */
-#ifndef HAVE_STPCPY
-static char *
-stpcpy(char *dest, const char *src)
-{
-	while ((*dest++ = *src++) != '\0')
-		/* Do nothing. */ ;
-	return dest - 1;
 }
 #endif

@@ -57,11 +57,6 @@ extern int errno;
 #include <stdlib.h>
 
 #include <string.h>
-#if !HAVE_STRCHR && !defined _LIBC
-#ifndef strchr
-#define strchr index
-#endif
-#endif
 
 #if defined HAVE_UNISTD_H || defined _LIBC
 #include <unistd.h>
@@ -80,19 +75,7 @@ extern int errno;
 #include "libgnuintl.h"
 #endif
 #include "hash-string.h"
-
-/* Thread safetyness.  */
-#ifdef _LIBC
-#include <bits/libc-lock.h>
-#else
-/* Provide dummy implementation if this is outside glibc.  */
-#define __libc_lock_define_initialized(CLASS, NAME)
-#define __libc_lock_lock(NAME)
-#define __libc_lock_unlock(NAME)
-#define __libc_rwlock_define_initialized(CLASS, NAME)
-#define __libc_rwlock_rdlock(NAME)
-#define __libc_rwlock_unlock(NAME)
-#endif
+#include "util/string.h"
 
 /* Alignment of types.  */
 #if defined __GNUC__ && __GNUC__ >= 2
@@ -102,15 +85,6 @@ extern int errno;
     ((int) &((struct { char dummy1; TYPE dummy2; } *) 0)->dummy2)
 #endif
 
-/* The internal variables in the standalone libintl.a must have different
-   names than the internal variables in GNU libc, otherwise programs
-   using libintl.a cannot be linked statically.  */
-#if !defined _LIBC
-#define _nl_default_default_domain _nl_default_default_domain__
-#define _nl_current_default_domain _nl_current_default_domain__
-#define _nl_default_dirname _nl_default_dirname__
-#define _nl_domain_bindings _nl_domain_bindings__
-#endif
 
 /* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
 #ifndef offsetof
@@ -124,9 +98,6 @@ extern int errno;
    because some ANSI C functions will require linking with this object
    file and the name space must not be polluted.  */
 #define getcwd __getcwd
-#ifndef stpcpy
-#define stpcpy __stpcpy
-#endif
 #define tfind __tfind
 #else
 #if !defined HAVE_GETCWD
@@ -135,12 +106,6 @@ char *getwd();
 #define getcwd(buf, max) getwd (buf)
 #else
 char *getcwd();
-#endif
-#ifndef HAVE_STPCPY
-static char *stpcpy PARAMS((char *dest, const char *src));
-#endif
-#ifndef HAVE_MEMPCPY
-static void *mempcpy PARAMS((void *dest, const void *src, size_t n));
 #endif
 #endif
 
@@ -243,7 +208,7 @@ static void *root;
 #endif
 
 /* Function to compare two entries in the table of known translations.  */
-static int transcmp PARAMS((const void *p1, const void *p2));
+static int transcmp(const void *p1, const void *p2);
 
 
 static int
@@ -272,13 +237,13 @@ transcmp(const void *p1, const void *p2)
 
 /* Name of the default domain used for gettext(3) prior any call to
    textdomain(3).  The default value for this is "messages".  */
-const char _nl_default_default_domain[] = "messages";
+const char _nl_default_default_domain__[] = "messages";
 
 /* Value used as the default domain for gettext(3).  */
-const char *_nl_current_default_domain = _nl_default_default_domain;
+const char *_nl_current_default_domain__ = _nl_default_default_domain__;
 
 /* Contains the default location of the message catalogs.  */
-const char _nl_default_dirname[] = LOCALEDIR;
+const char _nl_default_dirname__[] = LOCALEDIR;
 
 /* Contains application-specific LANGUAGE variation, taking precedence to the
  * $LANGUAGE environment variable.  */
@@ -286,20 +251,18 @@ unsigned char *LANGUAGE = NULL;
 
 /* List with bindings of specific domains created by bindtextdomain()
    calls.  */
-struct binding *_nl_domain_bindings;
+struct binding *_nl_domain_bindings__;
 
 /* Prototypes for local functions.  */
-static char *plural_lookup PARAMS((struct loaded_l10nfile * domain,
-				   unsigned long int n,
-				   const char *translation,
-				   size_t translation_len)) internal_function;
-static unsigned long int plural_eval PARAMS((struct expression * pexp,
-					     unsigned long int n))
-	internal_function;
-static const char *category_to_name PARAMS((int category)) internal_function;
-static const char *guess_category_value PARAMS((int category,
-						const char *categoryname))
-	internal_function;
+static char *plural_lookup(struct loaded_l10nfile * domain,
+			   unsigned long int n,
+			   const char *translation,
+			   size_t translation_len);
+static unsigned long int plural_eval(struct expression * pexp,
+				     unsigned long int n);
+static const char *category_to_name(int category);
+static const char *guess_category_value(int category,
+					const char *categoryname);
 
 /* For those loosing systems which don't have `alloca' we have to add
    some additional code emulating it.  */
@@ -346,20 +309,6 @@ static struct transmem_list *transmem_list;
 typedef unsigned char transmem_block_t;
 #endif
 
-/* Names for the libintl functions are a problem.  They must not clash
-   with existing names and they should follow ANSI C.  But this source
-   code is also used in GNU C Library where the names have a __
-   prefix.  So we have to make a difference here.  */
-#ifdef _LIBC
-#define DCIGETTEXT __dcigettext
-#else
-#define DCIGETTEXT dcigettext__
-#endif
-
-/* Lock variable to protect the global data in the gettext implementation.  */
-#ifdef _LIBC
-__libc_rwlock_define_initialized(, _nl_state_lock)
-#endif
 /* Checking whether the binaries runs SUID must be done and glibc provides
    easier methods therefore we make a difference here.  */
 #ifdef _LIBC
@@ -395,7 +344,7 @@ static int enable_secure;
    CATEGORY locale and, if PLURAL is nonzero, search over string
    depending on the plural form determined by N.  */
 char *
-DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
+dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 	   int plural, unsigned long int n, int category)
 {
 #ifndef HAVE_ALLOCA
@@ -422,13 +371,11 @@ DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
 	if (msgid1 == NULL)
 		return NULL;
 
-	__libc_rwlock_rdlock(_nl_state_lock);
-
 	/* If DOMAINNAME is NULL, we are interested in the default domain.  If
 	   CATEGORY is not LC_MESSAGES this might not make much sense but the
 	   definition left this undefined.  */
 	if (domainname == NULL)
-		domainname = _nl_current_default_domain;
+		domainname = _nl_current_default_domain__;
 
 #if defined HAVE_TSEARCH || defined _LIBC
 	msgid_len = strlen(msgid1) + 1;
@@ -452,7 +399,6 @@ DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
 		else
 			retval = (char *) (*foundp)->translation;
 
-		__libc_rwlock_unlock(_nl_state_lock);
 		return retval;
 	}
 #endif
@@ -464,7 +410,7 @@ DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
 	DETERMINE_SECURE;
 
 	/* First find matching binding.  */
-	for(binding = _nl_domain_bindings; binding != NULL;
+	for(binding = _nl_domain_bindings__; binding != NULL;
 	    binding = binding->next) {
 		int compare = strcmp(domainname, binding->domainname);
 
@@ -479,7 +425,7 @@ DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
 	}
 
 	if (binding == NULL)
-		dirname = (char *) _nl_default_dirname;
+		dirname = (char *) _nl_default_dirname__;
 	else if (IS_ABSOLUTE_PATH(binding->dirname))
 		dirname = binding->dirname;
 	else {
@@ -508,7 +454,6 @@ DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
 			/* We cannot get the current working directory.  Don't signal an
 			   error but simply return the default string.  */
 			FREE_BLOCKS(block_list);
-			__libc_rwlock_unlock(_nl_state_lock);
 			__set_errno(saved_errno);
 			return (plural == 0 ? (char *) msgid1
 				/* Use the Germanic plural rule.  */
@@ -567,7 +512,6 @@ DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
 		if (strcmp(single_locale, "C") == 0
 		    || strcmp(single_locale, "POSIX") == 0) {
 			FREE_BLOCKS(block_list);
-			__libc_rwlock_unlock(_nl_state_lock);
 			__set_errno(saved_errno);
 			return (plural == 0 ? (char *) msgid1
 				/* Use the Germanic plural rule.  */
@@ -639,9 +583,7 @@ DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
 							tsearch(newp, &root,
 								transcmp);
 						if (foundp == NULL
-						    || __builtin_expect(*foundp
-									!= newp,
-									0))
+						    || *foundp != newp)
 							/* The insert failed.  */
 							free(newp);
 					}
@@ -658,7 +600,6 @@ DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
 					retval = plural_lookup(domain, n,
 							       retval, retlen);
 
-				__libc_rwlock_unlock(_nl_state_lock);
 				return retval;
 			}
 		}
@@ -667,7 +608,7 @@ DCIGETTEXT(const char *domainname, const char *msgid1, const char *msgid2,
 }
 
 char *
-internal_function _nl_find_msg(struct loaded_l10nfile *domain_file,
+_nl_find_msg(struct loaded_l10nfile *domain_file,
 			       struct binding *domainbinding,
 			       const char *msgid, size_t *lengthp)
 {
@@ -791,7 +732,7 @@ found:
 			/* Mark that we didn't succeed allocating a table.  */
 			domain->conv_tab = (char **) -1;
 
-		if (__builtin_expect(domain->conv_tab == (char **) -1, 0))
+		if (domain->conv_tab == (char **) -1)
 			/* Nothing we can do, no more memory.  */
 			goto converted;
 
@@ -801,7 +742,6 @@ found:
 			/* We use a bit more efficient memory handling.
 			   We allocate always larger blocks which get used over
 			   time.  This is faster than many small allocations.   */
-			__libc_lock_define_initialized(static, lock)
 #define INITIAL_BLOCK_SIZE	4080
 			static unsigned char *freemem;
 			static size_t freemem_size;
@@ -813,8 +753,6 @@ found:
 #ifndef _LIBC
 			transmem_block_t *transmem_list = NULL;
 #endif
-
-			__libc_lock_lock(lock);
 
 			inbuf = (const unsigned char *) result;
 			outbuf = freemem + sizeof(size_t);
@@ -865,7 +803,6 @@ found:
 					break;
 				}
 				if (errno != E2BIG) {
-					__libc_lock_unlock(lock);
 					goto converted;
 				}
 #endif
@@ -900,10 +837,9 @@ resize_freemem:
 					newmem = (transmem_block_t *)
 						malloc(freemem_size);
 				}
-				if (__builtin_expect(newmem == NULL, 0)) {
+				if (newmem == NULL) {
 					freemem = NULL;
 					freemem_size = 0;
-					__libc_lock_unlock(lock);
 					goto converted;
 				}
 #ifdef _LIBC
@@ -933,7 +869,6 @@ resize_freemem:
 			freemem += freemem_size & (alignof(size_t) - 1);
 			freemem_size = freemem_size & ~(alignof(size_t) - 1);
 
-			__libc_lock_unlock(lock);
 		}
 
 		/* Now domain->conv_tab[act] contains the translation of all
@@ -952,7 +887,7 @@ converted:
 }
 
 /* Look up a plural variant.  */
-static char *internal_function
+static char *
 plural_lookup(struct loaded_l10nfile *domain, unsigned long int n,
 	      const char *translation, size_t translation_len)
 {
@@ -970,11 +905,8 @@ plural_lookup(struct loaded_l10nfile *domain, unsigned long int n,
 	/* Skip INDEX strings at TRANSLATION.  */
 	p = translation;
 	while (index-- > 0) {
-#ifdef _LIBC
-		p = __rawmemchr(p, '\0');
-#else
 		p = strchr(p, '\0');
-#endif
+
 		/* And skip over the NUL byte.  */
 		p++;
 
@@ -988,7 +920,7 @@ plural_lookup(struct loaded_l10nfile *domain, unsigned long int n,
 }
 
 /* Function to evaluate the plural expression and return an index value.  */
-static unsigned long int internal_function
+static unsigned long int
 plural_eval(struct expression *pexp, unsigned long int n)
 {
 	switch (pexp->nargs) {
@@ -1082,7 +1014,7 @@ default:
 }
 
 /* Return string representation of locale CATEGORY.  */
-static const char *internal_function
+static const char *
 category_to_name(int category)
 {
 	const char *retval;
@@ -1139,7 +1071,7 @@ default:
 }
 
 /* Guess value of current locale from value of the environment variables.  */
-static const char *internal_function
+static const char *
 guess_category_value(int category, const char *categoryname)
 {
 	const char *language;
@@ -1190,27 +1122,6 @@ guess_category_value(int category, const char *categoryname)
 
 /* @@ begin of epilog @@ */
 
-/* We don't want libintl.a to depend on any other library.  So we
-   avoid the non-standard function stpcpy.  In GNU C Library this
-   function is available, though.  Also allow the symbol HAVE_STPCPY
-   to be defined.  */
-#if !_LIBC && !HAVE_STPCPY
-static char *
-stpcpy(char *dest, const char *src)
-{
-	while ((*dest++ = *src++) != '\0')
-		/* Do nothing. */ ;
-	return dest - 1;
-}
-#endif
-
-#if !_LIBC && !HAVE_MEMPCPY
-static void *
-mempcpy(void *dest, const void *src, size_t n)
-{
-	return (void *) ((char *) memcpy(dest, src, n) + n);
-}
-#endif
 
 #ifdef _LIBC
 /* If we want to free all resources we have to do some work at
@@ -1220,20 +1131,20 @@ free_mem(void)
 {
 	void *old;
 
-	while (_nl_domain_bindings != NULL) {
-		struct binding *oldp = _nl_domain_bindings;
+	while (_nl_domain_bindings__ != NULL) {
+		struct binding *oldp = _nl_domain_bindings__;
 
-		_nl_domain_bindings = _nl_domain_bindings->next;
-		if (oldp->dirname != _nl_default_dirname)
+		_nl_domain_bindings__ = _nl_domain_bindings__->next;
+		if (oldp->dirname != _nl_default_dirname__)
 			/* Yes, this is a pointer comparison.  */
 			free(oldp->dirname);
 		free(oldp->codeset);
 		free(oldp);
 	}
 
-	if (_nl_current_default_domain != _nl_default_default_domain)
+	if (_nl_current_default_domain__ != _nl_default_default_domain__)
 		/* Yes, again a pointer comparison.  */
-		free((char *) _nl_current_default_domain);
+		free((char *) _nl_current_default_domain__);
 
 	/* Remove the search tree with the known translations.  */
 	__tdestroy(root, free);

@@ -30,23 +30,7 @@
 #endif
 #include "gettextP.h"
 
-#ifdef _LIBC
-/* We have to handle multi-threaded applications.  */
-#include <bits/libc-lock.h>
-#else
-/* Provide dummy implementation if this is outside glibc.  */
-#define __libc_rwlock_define(CLASS, NAME)
-#define __libc_rwlock_wrlock(NAME)
-#define __libc_rwlock_unlock(NAME)
-#endif
-
-/* The internal variables in the standalone libintl.a must have different
-   names than the internal variables in GNU libc, otherwise programs
-   using libintl.a cannot be linked statically.  */
-#if !defined _LIBC
-#define _nl_default_dirname _nl_default_dirname__
-#define _nl_domain_bindings _nl_domain_bindings__
-#endif
+#include "util/string.h"
 
 /* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
 #ifndef offsetof
@@ -56,32 +40,15 @@
 /* @@ end of prolog @@ */
 
 /* Contains the default location of the message catalogs.  */
-extern const char _nl_default_dirname[];
+extern const char _nl_default_dirname__[];
 
 /* List with bindings of specific domains.  */
-extern struct binding *_nl_domain_bindings;
+extern struct binding *_nl_domain_bindings__;
 
-/* Lock variable to protect the global data in the gettext implementation.  */
-__libc_rwlock_define(extern, _nl_state_lock)
-
-/* Names for the libintl functions are a problem.  They must not clash
-   with existing names and they should follow ANSI C.  But this source
-   code is also used in GNU C Library where the names have a __
-   prefix.  So we have to make a difference here.  */
-#ifdef _LIBC
-#define BINDTEXTDOMAIN __bindtextdomain
-#define BIND_TEXTDOMAIN_CODESET __bind_textdomain_codeset
-#ifndef strdup
-#define strdup(str) __strdup (str)
-#endif
-#else
-#define BINDTEXTDOMAIN bindtextdomain__
-#define BIND_TEXTDOMAIN_CODESET bind_textdomain_codeset__
-#endif
 /* Prototypes for local functions.  */
-static void set_binding_values PARAMS((const char *domainname,
-				       const char **dirnamep,
-				       const char **codesetp));
+static void set_binding_values(const char *domainname,
+			       const char **dirnamep,
+			       const char **codesetp);
 
 /* Specifies the directory name *DIRNAMEP and the output codeset *CODESETP
    to be used for the DOMAINNAME message catalog.
@@ -106,11 +73,9 @@ set_binding_values(const char *domainname,
 		return;
 	}
 
-	__libc_rwlock_wrlock(_nl_state_lock);
-
 	modified = 0;
 
-	for(binding = _nl_domain_bindings; binding != NULL;
+	for(binding = _nl_domain_bindings__; binding != NULL;
 	    binding = binding->next) {
 		int compare = strcmp(domainname, binding->domainname);
 
@@ -138,27 +103,17 @@ set_binding_values(const char *domainname,
 				char *result = binding->dirname;
 
 				if (strcmp(dirname, result) != 0) {
-					if (strcmp(dirname, _nl_default_dirname)
+					if (strcmp(dirname, _nl_default_dirname__)
 					    == 0)
 						result = (char *)
-							_nl_default_dirname;
+							_nl_default_dirname__;
 					else {
-#if defined _LIBC || defined HAVE_STRDUP
 						result = strdup(dirname);
-#else
-						size_t len =
-							strlen(dirname) + 1;
-						result = (char *) malloc(len);
-						if (__builtin_expect
-						    (result != NULL, 1))
-							memcpy(result, dirname,
-							       len);
-#endif
 					}
 
-					if (__builtin_expect(result != NULL, 1)) {
+					if (result != NULL) {
 						if (binding->dirname !=
-						    _nl_default_dirname)
+						    _nl_default_dirname__)
 							free(binding->dirname);
 
 						binding->dirname = result;
@@ -183,17 +138,9 @@ set_binding_values(const char *domainname,
 
 				if (result == NULL
 				    || strcmp(codeset, result) != 0) {
-#if defined _LIBC || defined HAVE_STRDUP
 					result = strdup(codeset);
-#else
-					size_t len = strlen(codeset) + 1;
 
-					result = (char *) malloc(len);
-					if (__builtin_expect(result != NULL, 1))
-						memcpy(result, codeset, len);
-#endif
-
-					if (__builtin_expect(result != NULL, 1)) {
+					if (result != NULL) {
 						if (binding->codeset != NULL)
 							free(binding->codeset);
 
@@ -209,7 +156,7 @@ set_binding_values(const char *domainname,
 		   && (codesetp == NULL || *codesetp == NULL)) {
 		/* Simply return the default values.  */
 		if (dirnamep)
-			*dirnamep = _nl_default_dirname;
+			*dirnamep = _nl_default_dirname__;
 		if (codesetp)
 			*codesetp = NULL;
 	} else {
@@ -219,7 +166,7 @@ set_binding_values(const char *domainname,
 			(struct binding *)
 			malloc(offsetof(struct binding, domainname) + len);
 
-		if (__builtin_expect(new_binding == NULL, 0))
+		if (new_binding == NULL)
 			goto failed;
 
 		memcpy(new_binding->domainname, domainname, len);
@@ -229,25 +176,16 @@ set_binding_values(const char *domainname,
 
 			if (dirname == NULL)
 				/* The default value.  */
-				dirname = _nl_default_dirname;
+				dirname = _nl_default_dirname__;
 			else {
-				if (strcmp(dirname, _nl_default_dirname) == 0)
-					dirname = _nl_default_dirname;
+				if (strcmp(dirname, _nl_default_dirname__) == 0)
+					dirname = _nl_default_dirname__;
 				else {
 					char *result;
 
-#if defined _LIBC || defined HAVE_STRDUP
 					result = strdup(dirname);
-					if (__builtin_expect(result == NULL, 0))
+					if (result == NULL)
 						goto failed_dirname;
-#else
-					size_t len = strlen(dirname) + 1;
-
-					result = (char *) malloc(len);
-					if (__builtin_expect(result == NULL, 0))
-						goto failed_dirname;
-					memcpy(result, dirname, len);
-#endif
 					dirname = result;
 				}
 			}
@@ -255,7 +193,7 @@ set_binding_values(const char *domainname,
 			new_binding->dirname = (char *) dirname;
 		} else
 			/* The default value.  */
-			new_binding->dirname = (char *) _nl_default_dirname;
+			new_binding->dirname = (char *) _nl_default_dirname__;
 
 		new_binding->codeset_cntr = 0;
 
@@ -265,18 +203,9 @@ set_binding_values(const char *domainname,
 			if (codeset != NULL) {
 				char *result;
 
-#if defined _LIBC || defined HAVE_STRDUP
 				result = strdup(codeset);
-				if (__builtin_expect(result == NULL, 0))
+				if (result == NULL)
 					goto failed_codeset;
-#else
-				size_t len = strlen(codeset) + 1;
-
-				result = (char *) malloc(len);
-				if (__builtin_expect(result == NULL, 0))
-					goto failed_codeset;
-				memcpy(result, codeset, len);
-#endif
 				codeset = result;
 				new_binding->codeset_cntr++;
 			}
@@ -286,13 +215,13 @@ set_binding_values(const char *domainname,
 			new_binding->codeset = NULL;
 
 		/* Now enqueue it.  */
-		if (_nl_domain_bindings == NULL
-		    || strcmp(domainname, _nl_domain_bindings->domainname) < 0)
+		if (_nl_domain_bindings__ == NULL
+		    || strcmp(domainname, _nl_domain_bindings__->domainname) < 0)
 		{
-			new_binding->next = _nl_domain_bindings;
-			_nl_domain_bindings = new_binding;
+			new_binding->next = _nl_domain_bindings__;
+			_nl_domain_bindings__ = new_binding;
 		} else {
-			binding = _nl_domain_bindings;
+			binding = _nl_domain_bindings__;
 			while (binding->next != NULL
 			       && strcmp(domainname,
 					 binding->next->domainname) > 0)
@@ -307,7 +236,7 @@ set_binding_values(const char *domainname,
 		/* Here we deal with memory allocation failures.  */
 		if (0) {
 failed_codeset:
-			if (new_binding->dirname != _nl_default_dirname)
+			if (new_binding->dirname != _nl_default_dirname__)
 				free(new_binding->dirname);
 failed_dirname:
 			free(new_binding);
@@ -323,13 +252,12 @@ failed:
 	if (modified)
 		++_nl_msg_cat_cntr;
 
-	__libc_rwlock_unlock(_nl_state_lock);
 }
 
 /* Specify that the DOMAINNAME message catalog will be found
    in DIRNAME rather than in the system locale data base.  */
 char *
-BINDTEXTDOMAIN(const char *domainname, const char *dirname)
+bindtextdomain__(const char *domainname, const char *dirname)
 {
 	set_binding_values(domainname, &dirname, NULL);
 	return (char *) dirname;
@@ -338,14 +266,8 @@ BINDTEXTDOMAIN(const char *domainname, const char *dirname)
 /* Specify the character encoding in which the messages from the
    DOMAINNAME message catalog will be returned.  */
 char *
-BIND_TEXTDOMAIN_CODESET(const char *domainname, const char *codeset)
+bind_textdomain_codeset__(const char *domainname, const char *codeset)
 {
 	set_binding_values(domainname, NULL, &codeset);
 	return (char *) codeset;
 }
-
-#ifdef _LIBC
-/* Aliases for function names in GNU C Library.  */
-weak_alias(__bindtextdomain, bindtextdomain);
-weak_alias(__bind_textdomain_codeset, bind_textdomain_codeset);
-#endif

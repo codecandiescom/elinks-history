@@ -36,6 +36,8 @@
 #include "libgnuintl.h"
 #endif
 
+#include "util/string.h"
+
 /* @@ end of prolog @@ */
 /* List of already loaded domains.  */
 static struct loaded_l10nfile *_nl_loaded_domains;
@@ -43,7 +45,7 @@ static struct loaded_l10nfile *_nl_loaded_domains;
 /* Return a data structure describing the message catalog described by
    the DOMAINNAME and CATEGORY parameters with respect to the currently
    established bindings.  */
-struct loaded_l10nfile *internal_function
+struct loaded_l10nfile *
 _nl_find_domain(const char *dirname, char *locale, const char *domainname,
 		struct binding *domainbinding)
 {
@@ -113,19 +115,9 @@ _nl_find_domain(const char *dirname, char *locale, const char *domainname,
 	 done.  */
 	alias_value = _nl_expand_alias(locale);
 	if (alias_value != NULL) {
-#if defined _LIBC || defined HAVE_STRDUP
 		locale = strdup(alias_value);
 		if (locale == NULL)
 			return NULL;
-#else
-		size_t len = strlen(alias_value) + 1;
-
-		locale = (char *) malloc(len);
-		if (locale == NULL)
-			return NULL;
-
-		memcpy(locale, alias_value, len);
-#endif
 	}
 
 	/* Now we determine the single parts of the locale name.  First

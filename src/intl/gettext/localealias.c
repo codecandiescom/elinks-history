@@ -50,36 +50,12 @@ char *alloca();
 #include <stdlib.h>
 
 #include <string.h>
-#if !HAVE_STRCHR && !defined _LIBC
-#ifndef strchr
-#define strchr index
-#endif
-#endif
 
 #include "gettextP.h"
 
 /* @@ end of prolog @@ */
 
-#ifdef _LIBC
-/* Rename the non ANSI C functions.  This is required by the standard
-   because some ANSI C functions will require linking with this object
-   file and the name space must not be polluted.  */
-#define strcasecmp __strcasecmp
-
-#ifndef mempcpy
-#define mempcpy __mempcpy
-#endif
-#define HAVE_MEMPCPY	1
-
-/* We need locking here since we can be called from different places.  */
-#include <bits/libc-lock.h>
-
-__libc_lock_define_initialized(static, lock);
-#endif
-
-#ifndef internal_function
-#define internal_function
-#endif
+#include "util/string.h"
 
 /* For those losing systems which don't have `alloca' we have to add
    some additional code emulating it.  */
@@ -112,11 +88,10 @@ static size_t nmap;
 static size_t maxmap;
 
 /* Prototypes for local functions.  */
-static size_t read_alias_file PARAMS((const char *fname, int fname_len))
-	internal_function;
-static int extend_alias_table PARAMS((void));
-static int alias_compare PARAMS((const struct alias_map * map1,
-				 const struct alias_map * map2));
+static size_t read_alias_file(const char *fname, int fname_len);
+static int extend_alias_table(void);
+static int alias_compare(const struct alias_map * map1,
+			 const struct alias_map * map2);
 
 const char *
 _nl_expand_alias(const char *name)
@@ -125,10 +100,6 @@ _nl_expand_alias(const char *name)
 	struct alias_map *retval;
 	const char *result = NULL;
 	size_t added;
-
-#ifdef _LIBC
-	__libc_lock_lock(lock);
-#endif
 
 	do {
 		struct alias_map item;
@@ -139,9 +110,9 @@ _nl_expand_alias(const char *name)
 			retval = (struct alias_map *) bsearch(&item, map, nmap,
 							      sizeof(struct
 								     alias_map),
-							      (int (*)PARAMS
-							       ((const void *,
-								 const void *))
+							      (int (*)
+							       (const void *,
+								const void *)
 							      ) alias_compare);
 		else
 			retval = NULL;
@@ -180,7 +151,7 @@ _nl_expand_alias(const char *name)
 	return result;
 }
 
-static size_t internal_function
+static size_t
 read_alias_file(const char *fname, int fname_len)
 {
 	FILE *fp;
@@ -189,13 +160,8 @@ read_alias_file(const char *fname, int fname_len)
 	static const char aliasfile[] = "/locale.alias";
 
 	full_fname = (char *) alloca(fname_len + sizeof aliasfile);
-#ifdef HAVE_MEMPCPY
 	mempcpy(mempcpy(full_fname, fname, fname_len),
 		aliasfile, sizeof aliasfile);
-#else
-	memcpy(full_fname, fname, fname_len);
-	memcpy(&full_fname[fname_len], aliasfile, sizeof aliasfile);
-#endif
 
 	fp = fopen(full_fname, "r");
 	freea(full_fname);
@@ -267,8 +233,7 @@ read_alias_file(const char *fname, int fname_len)
 					*cp++ = '\0';
 
 				if (nmap >= maxmap)
-					if (__builtin_expect
-					    (extend_alias_table(), 0))
+					if (extend_alias_table())
 						return added;
 
 				alias_len = strlen(alias) + 1;
@@ -289,8 +254,7 @@ read_alias_file(const char *fname, int fname_len)
 					if (new_pool == NULL)
 						return added;
 
-					if (__builtin_expect
-					    (string_space != new_pool, 0)) {
+					if (string_space != new_pool) {
 						size_t i;
 
 						for(i = 0; i < nmap; i++) {
@@ -329,7 +293,7 @@ read_alias_file(const char *fname, int fname_len)
 
 	if (added > 0)
 		qsort(map, nmap, sizeof(struct alias_map),
-		      (int (*)PARAMS((const void *, const void *)))
+		      (int (*)(const void *, const void *))
 		      alias_compare);
 
 	return added;
@@ -370,28 +334,5 @@ text_set_element(__libc_subfreeres, free_mem);
 static int
 alias_compare(const struct alias_map *map1, const struct alias_map *map2)
 {
-#if defined _LIBC || defined HAVE_STRCASECMP
 	return strcasecmp(map1->alias, map2->alias);
-#else
-	const unsigned char *p1 = (const unsigned char *) map1->alias;
-	const unsigned char *p2 = (const unsigned char *) map2->alias;
-	unsigned char c1, c2;
-
-	if (p1 == p2)
-		return 0;
-
-	do {
-		/* I know this seems to be odd but the tolower() function in
-		   some systems libc cannot handle nonalpha characters.  */
-		c1 = isupper(*p1) ? tolower(*p1) : *p1;
-		c2 = isupper(*p2) ? tolower(*p2) : *p2;
-		if (c1 == '\0')
-			break;
-		++p1;
-		++p2;
-	}
-	while (c1 == c2);
-
-	return c1 - c2;
-#endif
 }

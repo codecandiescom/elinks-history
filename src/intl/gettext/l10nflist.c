@@ -27,11 +27,6 @@
 #endif
 
 #include <string.h>
-#if !HAVE_STRCHR && !defined _LIBC
-#ifndef strchr
-#define strchr index
-#endif
-#endif
 
 #if defined _LIBC || defined HAVE_ARGZ_H
 #include <argz.h>
@@ -41,6 +36,8 @@
 #include <stdlib.h>
 
 #include "loadinfo.h"
+
+#include "util/string.h"
 
 /* On some strange systems still no definition of NULL is found.  Sigh!  */
 #ifndef NULL
@@ -53,24 +50,12 @@
 
 /* @@ end of prolog @@ */
 
-#ifdef _LIBC
-/* Rename the non ANSI C functions.  This is required by the standard
-   because some ANSI C functions will require linking with this object
-   file and the name space must not be polluted.  */
-#ifndef stpcpy
-#define stpcpy(dest, src) __stpcpy(dest, src)
-#endif
-#else
-#ifndef HAVE_STPCPY
-static char *stpcpy PARAMS((char *dest, const char *src));
-#endif
-#endif
 
 /* Define function which are usually not available.  */
 
 #if !defined _LIBC && !defined HAVE___ARGZ_COUNT
 /* Returns the number of strings in ARGZ.  */
-static size_t argz_count__ PARAMS((const char *argz, size_t len));
+static size_t argz_count__(const char *argz, size_t len);
 
 static size_t
 argz_count__(const char *argz, size_t len)
@@ -94,7 +79,7 @@ argz_count__(const char *argz, size_t len)
 #if !defined _LIBC && !defined HAVE___ARGZ_STRINGIFY
 /* Make '\0' separated arg vector ARGZ printable by converting all the '\0's
    except the last into the character SEP.  */
-static void argz_stringify__ PARAMS((char *argz, size_t len, int sep));
+static void argz_stringify__(char *argz, size_t len, int sep);
 
 static void
 argz_stringify__(char *argz, size_t len, int sep)
@@ -114,8 +99,8 @@ argz_stringify__(char *argz, size_t len, int sep)
 #endif /* !_LIBC && !HAVE___ARGZ_STRINGIFY */
 
 #if !defined _LIBC && !defined HAVE___ARGZ_NEXT
-static char *argz_next__ PARAMS((char *argz, size_t argz_len,
-				 const char *entry));
+static char *argz_next__(char *argz, size_t argz_len,
+			 const char *entry);
 
 static char *
 argz_next__(char *argz, size_t argz_len, const char *entry)
@@ -136,7 +121,7 @@ argz_next__(char *argz, size_t argz_len, const char *entry)
 #endif /* !_LIBC && !HAVE___ARGZ_NEXT */
 
 /* Return number of bits set in X.  */
-static int pop PARAMS((int x));
+static int pop(int x);
 
 static inline int
 pop(int x)
@@ -364,19 +349,3 @@ _nl_normalize_codeset(const char *codeset, size_t name_len)
 
 	return (const char *) retval;
 }
-
-/* @@ begin of epilog @@ */
-
-/* We don't want libintl.a to depend on any other library.  So we
-   avoid the non-standard function stpcpy.  In GNU C Library this
-   function is available, though.  Also allow the symbol HAVE_STPCPY
-   to be defined.  */
-#if !_LIBC && !HAVE_STPCPY
-static char *
-stpcpy(char *dest, const char *src)
-{
-	while ((*dest++ = *src++) != '\0')
-		/* Do nothing. */ ;
-	return dest - 1;
-}
-#endif

@@ -15,23 +15,13 @@
    along with this program; if not, write to the Free Software Foundation,
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 
-/* @@ end of prolog @@ */
-
-#ifndef PARAMS
-#if __STDC__
-#define PARAMS(Args) Args
-#else
-#define PARAMS(Args) ()
-#endif
-#endif
-
 /* We assume to have `unsigned long int' value with at least 32 bits.  */
 #define HASHWORDBITS 32
 
 /* Defines the so called `hashpjw' function by P.J. Weinberger
    [see Aho/Sethi/Ullman, COMPILERS: Principles, Techniques and Tools,
    1986, 1987 Bell Telephone Laboratories, Inc.]  */
-static unsigned long int hash_string PARAMS((const char *__str_param));
+static unsigned long int hash_string(const char *__str_param);
 
 static inline unsigned long int
 hash_string(const char *str_param)

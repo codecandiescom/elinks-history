@@ -32,17 +32,6 @@
 #include <stdlib.h>
 #include "gettextP.h"
 
-/* Names for the libintl functions are a problem.  They must not clash
-   with existing names and they should follow ANSI C.  But this source
-   code is also used in GNU C Library where the names have a __
-   prefix.  So we have to make a difference here.  */
-#ifdef _LIBC
-# define FREE_EXPRESSION __gettext_free_exp
-#else
-# define FREE_EXPRESSION gettext_free_exp__
-# define __gettextparse gettextparse__
-#endif
-
 #define YYLEX_PARAM	&((struct parse_args *) arg)->cp
 #define YYPARSE_PARAM	arg
 %}
@@ -57,28 +46,25 @@
 
 %{
 /* Prototypes for local functions.  */
-static struct expression *new_exp PARAMS ((int nargs, enum operator op,
-					   struct expression * const *args));
-static inline struct expression *new_exp_0 PARAMS ((enum operator op));
-static inline struct expression *new_exp_1 PARAMS ((enum operator op,
-						   struct expression *right));
-static struct expression *new_exp_2 PARAMS ((enum operator op,
-					     struct expression *left,
-					     struct expression *right));
-static inline struct expression *new_exp_3 PARAMS ((enum operator op,
-						   struct expression *bexp,
-						   struct expression *tbranch,
-						   struct expression *fbranch));
-static int yylex PARAMS ((YYSTYPE *lval, const char **pexp));
-static void yyerror PARAMS ((const char *str));
+static struct expression *new_exp(int nargs, enum operator op,
+				  struct expression * const *args);
+static inline struct expression *new_exp_0(enum operator op);
+static inline struct expression *new_exp_1(enum operator op,
+					   struct expression *right);
+static struct expression *new_exp_2(enum operator op,
+				    struct expression *left,
+				    struct expression *right);
+static inline struct expression *new_exp_3(enum operator op,
+					   struct expression *bexp,
+					   struct expression *tbranch,
+					   struct expression *fbranch);
+static int yylex(YYSTYPE *lval, const char **pexp);
+static void yyerror(const char *str);
 
 /* Allocation of expressions.  */
 
 static struct expression *
-new_exp (nargs, op, args)
-     int nargs;
-     enum operator op;
-     struct expression * const *args;
+new_exp(int nargs, enum operator op, struct expression * const *args)
 {
   int i;
   struct expression *newp;
@@ -101,22 +87,19 @@ new_exp (nargs, op, args)
 
  fail:
   for (i = nargs - 1; i >= 0; i--)
-    FREE_EXPRESSION (args[i]);
+    gettext_free_exp__ (args[i]);
 
   return NULL;
 }
 
 static inline struct expression *
-new_exp_0 (op)
-     enum operator op;
+new_exp_0(enum operator op)
 {
   return new_exp (0, op, NULL);
 }
 
 static inline struct expression *
-new_exp_1 (op, right)
-     enum operator op;
-     struct expression *right;
+new_exp_1(enum operator op, struct expression *right)
 {
   struct expression *args[1];
 
@@ -125,10 +108,7 @@ new_exp_1 (op, right)
 }
 
 static struct expression *
-new_exp_2 (op, left, right)
-     enum operator op;
-     struct expression *left;
-     struct expression *right;
+new_exp_2(enum operator op, struct expression *left, struct expression *right)
 {
   struct expression *args[2];
 
@@ -138,11 +118,8 @@ new_exp_2 (op, left, right)
 }
 
 static inline struct expression *
-new_exp_3 (op, bexp, tbranch, fbranch)
-     enum operator op;
-     struct expression *bexp;
-     struct expression *tbranch;
-     struct expression *fbranch;
+new_exp_3(enum operator op, struct expression *bexp, struct expression *tbranch,
+          struct expression *fbranch)
 {
   struct expression *args[3];
 
@@ -232,9 +209,7 @@ exp:	  exp '?' exp ':' exp
 %%
 
 void
-internal_function
-FREE_EXPRESSION (exp)
-     struct expression *exp;
+gettext_free_exp__(struct expression *exp)
 {
   if (exp == NULL)
     return;
@@ -243,13 +218,13 @@ FREE_EXPRESSION (exp)
   switch (exp->nargs)
     {
     case 3:
-      FREE_EXPRESSION (exp->val.args[2]);
+      gettext_free_exp__ (exp->val.args[2]);
       /* FALLTHROUGH */
     case 2:
-      FREE_EXPRESSION (exp->val.args[1]);
+      gettext_free_exp__ (exp->val.args[1]);
       /* FALLTHROUGH */
     case 1:
-      FREE_EXPRESSION (exp->val.args[0]);
+      gettext_free_exp__ (exp->val.args[0]);
       /* FALLTHROUGH */
     default:
       break;
@@ -260,9 +235,7 @@ FREE_EXPRESSION (exp)
 
 
 static int
-yylex (lval, pexp)
-     YYSTYPE *lval;
-     const char **pexp;
+yylex(YYSTYPE *lval, const char **pexp)
 {
   const char *exp = *pexp;
   int result;
@@ -405,8 +378,7 @@ yylex (lval, pexp)
 
 
 static void
-yyerror (str)
-     const char *str;
+yyerror(const char *str)
 {
   /* Do nothing.  We don't print error messages here.  */
 }

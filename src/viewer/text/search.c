@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.114 2003/11/15 19:53:12 kuser Exp $ */
+/* $Id: search.c,v 1.115 2003/11/15 20:05:43 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,10 +317,12 @@ is_in_range_regex(struct document *document, int y, int yy,
 	doctmp = doc;
 
 find_next:
-	while (pos < doclen && (search_start[pos].y < y-1 || search_start[pos].y > yy)) pos++;
+	while (pos < doclen && (search_start[pos].y < y-1
+				|| search_start[pos].y > yy)) pos++;
 	doctmp = &doc[pos];
 	s1 = &search_start[pos];
-	while (pos < doclen && search_start[pos].y >= y-1 && search_start[pos].y <= yy) pos++;
+	while (pos < doclen && search_start[pos].y >= y-1
+			    && search_start[pos].y <= yy) pos++;
 	save_c = doc[pos];
 	doc[pos] = 0;
 
@@ -574,10 +576,12 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	doctmp = doc;
 
 find_next:
-	while (pos < doclen && (search_start[pos].y+ypv < yp-1 || search_start[pos].y+ypv > yy)) pos++;
+	while (pos < doclen && (search_start[pos].y+ypv < yp-1
+				|| search_start[pos].y+ypv > yy)) pos++;
 	doctmp = &doc[pos];
 	s1 = &search_start[pos];
-	while (pos < doclen && search_start[pos].y+ypv >= yp-1 && search_start[pos].y+ypv <= yy) pos++;
+	while (pos < doclen && search_start[pos].y+ypv >= yp-1
+			    && search_start[pos].y+ypv <= yy) pos++;
 	save_c = doc[pos];
 	doc[pos] = 0;
 

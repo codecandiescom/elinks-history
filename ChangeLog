@@ -1,3 +1,21 @@
+Wed Oct  6 19:59:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Assign CONFIG_UNIX=no if some other OS was detected.  
+
+Wed Oct  6 13:48:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/leds.c, dialogs/status.c, terminal/terminal.h:
+
+	Fix progress bar/leds/clock/timer display issues (bug 518).  
+
+Wed Oct  6 12:10:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Just return if doc_view->vs is NULL, should fix bug 525.  
+
 Tue Oct  5 20:19:18 2004  Varga Balázs <vinnui@ent.hu>:
 
 	* po/hu.po:

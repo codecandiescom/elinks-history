@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.53 2004/01/31 00:28:37 zas Exp $ */
+/* $Id: socket.c,v 1.54 2004/01/31 00:36:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,20 +288,22 @@ dns_found(void *data, int state)
 #endif
 		int local = 0;
 
-#ifdef IPV6
-		if (addr.sin6_family == AF_INET6)
-			local = IN6_IS_ADDR_LOOPBACK(&(((struct sockaddr_in6 *)&addr)->sin6_addr));
-		else
-#endif
-			local = (ntohl(((struct sockaddr_in *)&addr)->sin_addr.s_addr) >> 24) == IN_LOOPBACKNET;
-
 		c_i->triedno++;
-		
-		/* This forbids connections to anything but local, if option is set. */
-		if (only_local && !local) continue;
-		
-		/* Count external attempts. */
-		not_local_count += !local;
+
+		if (only_local) {
+#ifdef IPV6
+			if (addr.sin6_family == AF_INET6)
+				local = IN6_IS_ADDR_LOOPBACK(&(((struct sockaddr_in6 *)&addr)->sin6_addr));
+			else
+#endif
+				local = (ntohl(((struct sockaddr_in *)&addr)->sin_addr.s_addr) >> 24) == IN_LOOPBACKNET;
+			
+			/* This forbids connections to anything but local, if option is set. */
+			if (!local) continue;
+			
+			/* Count external attempts. */
+			not_local_count += !local;
+		}
 
 #ifdef IPV6
 		sock = socket(addr.sin6_family, SOCK_STREAM, IPPROTO_TCP);

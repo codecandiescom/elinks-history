@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.177 2004/11/19 11:06:40 zas Exp $ */
+/* $Id: listbox.c,v 1.178 2004/11/19 11:07:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@ add_dlg_listbox(struct dialog *dlg, int height, void *box_data)
 {
 	struct widget *widget;
 
-	widget = &(dlg)->widgets[(dlg)->number_of_widgets++];
+	widget = &dlg->widgets[dlg->number_of_widgets++];
 	widget->type = WIDGET_LISTBOX;
 	widget->info.box.height = height;
 	widget->data = box_data;

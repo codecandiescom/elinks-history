@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.39 2002/08/08 18:54:45 pasky Exp $ */
+/* $Id: renderer.c,v 1.40 2002/09/10 14:11:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,8 +94,8 @@ int sub = 0; /* Activated/deactivated by AT_SUBSCRIPT */
 int super = 0; /* Activated/deactivated by AT_SUPERSCRIPT */
 
 
-/* realloc_lines() */
-static int realloc_lines(struct part *p, int y)
+static int
+realloc_lines(struct part *p, int y)
 {
 	int i;
 
@@ -119,9 +119,8 @@ static int realloc_lines(struct part *p, int y)
 	return 0;
 }
 
-
-/* realloc_line() */
-static int realloc_line(struct part *p, int y, int x)
+static int
+realloc_line(struct part *p, int y, int x)
 {
 	int i;
 
@@ -146,9 +145,8 @@ static int realloc_line(struct part *p, int y, int x)
 
 #undef ALIGN
 
-
-/* xpand_lines() */
-static inline int xpand_lines(struct part *p, int y)
+static inline int
+xpand_lines(struct part *p, int y)
 {
 	/*if (y >= p->y) p->y = y + 1;*/
 	if (!p->data) return 0;
@@ -158,16 +156,14 @@ static inline int xpand_lines(struct part *p, int y)
 	return 0;
 }
 
-
-/* expand_lines() */
-int expand_lines(struct part *part, int y)
+int
+expand_lines(struct part *part, int y)
 {
 	return xpand_lines(part, y);
 }
 
-
-/* xpand_line() */
-static inline int xpand_line(struct part *p, int y, int x)
+static inline int
+xpand_line(struct part *p, int y, int x)
 {
 	if (!p->data) return 0; /* !!! FIXME: p->x (?) */
 	x += p->xp;
@@ -182,16 +178,14 @@ static inline int xpand_line(struct part *p, int y, int x)
 	return 0;
 }
 
-
-/* expand_line() */
-int expand_line(struct part *part, int y, int x)
+int
+expand_line(struct part *part, int y, int x)
 {
 	return xpand_line(part, y, x);
 }
 
-
-/* realloc_spaces() */
-int realloc_spaces(struct part *p, int l)
+int
+realloc_spaces(struct part *p, int l)
 {
 	unsigned char *c;
 
@@ -205,9 +199,8 @@ int realloc_spaces(struct part *p, int l)
 	return 0;
 }
 
-
-/* xpand_spaces() */
-static inline int xpand_spaces(struct part *p, int l)
+static inline int
+xpand_spaces(struct part *p, int l)
 {
 	if (l >= p->spl) return realloc_spaces(p, l);
 	return 0;
@@ -220,41 +213,38 @@ static inline int xpand_spaces(struct part *p, int l)
 #define X(x) (part->xp + (x))
 #define Y(y) (part->yp + (y))
 
-/* set_hchar() */
-static inline void set_hchar(struct part *part, int x, int y, unsigned c)
+
+static inline void
+set_hchar(struct part *part, int x, int y, unsigned c)
 {
 	if (xpand_lines(part, y)) return;
 	if (xpand_line(part, y, x)) return;
 	POS(x, y) = c;
 }
 
-
-/* set_hchars() */
-static inline void set_hchars(struct part *part, int x, int y, int xl, unsigned c)
+static inline void
+set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
 	if (xpand_lines(part, y)) return;
 	if (xpand_line(part, y, x + xl - 1)) return;
 	for (; xl; xl--, x++) POS(x, y) = c;
 }
 
-
-/* xset_hchar() */
-void xset_hchar(struct part *part, int x, int y, unsigned c)
+void
+xset_hchar(struct part *part, int x, int y, unsigned c)
 {
 	set_hchar(part, x, y, c);
 }
 
-
-/* xset_hchars() */
-void xset_hchars(struct part *part, int x, int y, int xl, unsigned c)
+void
+xset_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
 	set_hchars(part, x, y, xl, c);
 }
 
-
-/* set_hline() */
-static inline void set_hline(struct part *part, int x, int y,int xl,
-                             unsigned char *d, unsigned c, int spc)
+static inline void
+set_hline(struct part *part, int x, int y,int xl,
+          unsigned char *d, unsigned c, int spc)
 {
 	if (xpand_lines(part, y)) return;
 	if (xpand_line(part, y, x+xl-1)) return;
@@ -266,9 +256,8 @@ static inline void set_hline(struct part *part, int x, int y,int xl,
 	}
 }
 
-
-/* move_links() */
-static inline void move_links(struct part *part, int xf, int yf, int xt, int yt)
+static inline void
+move_links(struct part *part, int xf, int yf, int xt, int yt)
 {
 	struct tag *tag;
 	int nlink;
@@ -332,9 +321,8 @@ static inline void move_links(struct part *part, int xf, int yf, int xt, int yt)
 	}
 }
 
-
-/* copy_chars() */
-static inline void copy_chars(struct part *part, int x, int y, int xl, chr *d)
+static inline void
+copy_chars(struct part *part, int x, int y, int xl, chr *d)
 {
 	if (xl <= 0) return;
 	if (xpand_lines(part, y)) return;
@@ -342,9 +330,8 @@ static inline void copy_chars(struct part *part, int x, int y, int xl, chr *d)
 	for (; xl; xl--, x++, d++) POS(x, y) = *d;
 }
 
-
-/* move_chars() */
-static inline void move_chars(struct part *part, int x, int y, int nx, int ny)
+static inline void
+move_chars(struct part *part, int x, int y, int nx, int ny)
 {
 	if (LEN(y) - x <= 0) return;
 	copy_chars(part, nx, ny, LEN(y) - x, &POS(x, y));
@@ -352,9 +339,8 @@ static inline void move_chars(struct part *part, int x, int y, int nx, int ny)
 	move_links(part, x, y, nx, ny);
 }
 
-
-/* shift_chars() */
-static inline void shift_chars(struct part *part, int y, int shift)
+static inline void
+shift_chars(struct part *part, int y, int shift)
 {
 	chr *a;
 	int len = LEN(y);
@@ -370,9 +356,8 @@ static inline void shift_chars(struct part *part, int y, int shift)
 	move_links(part, 0, y, shift, y);
 }
 
-
-/* del_chars() */
-static inline void del_chars(struct part *part, int x, int y)
+static inline void
+del_chars(struct part *part, int x, int y)
 {
 	SLEN(y, x);
 	move_links(part, x, y, -1, -1);
@@ -380,9 +365,8 @@ static inline void del_chars(struct part *part, int x, int y)
 
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
 
-
-/* split_line() */
-int split_line(struct part *part)
+int
+split_line(struct part *part)
 {
 	int i;
 
@@ -449,10 +433,10 @@ split:
 	return 1 + (part->cx == -1);
 }
 
-/* justify_line() */
 /* This function is very rare exemplary of clean and beautyful code here.
  * Please handle with care. --pasky */
-static void justify_line(struct part *part, int y)
+static void
+justify_line(struct part *part, int y)
 {
 	chr *line; /* we save original line here */
 	int len = LEN(y);
@@ -527,9 +511,8 @@ static void justify_line(struct part *part, int y)
 	mem_free(line);
 }
 
-
-/* align_line() */
-void align_line(struct part *part, int y, int last)
+void
+align_line(struct part *part, int y, int last)
 {
 	int shift;
 	int len;
@@ -556,9 +539,8 @@ void align_line(struct part *part, int y, int last)
 		shift_chars(part, y, shift);
 }
 
-
-/* new_link() */
-struct link *new_link(struct f_data *f)
+struct link *
+new_link(struct f_data *f)
 {
 	if (!f) return NULL;
 
@@ -576,9 +558,8 @@ struct link *new_link(struct f_data *f)
 	return &f->links[f->nlinks++];
 }
 
-
-/* html_tag() */
-void html_tag(struct f_data *f, unsigned char *t, int x, int y)
+void
+html_tag(struct f_data *f, unsigned char *t, int x, int y)
 {
 	struct tag *tag;
 
@@ -598,9 +579,8 @@ void html_tag(struct f_data *f, unsigned char *t, int x, int y)
 
 #define CH_BUF	256
 
-
-/* put_chars_conv() */
-void put_chars_conv(struct part *part, unsigned char *c, int l)
+void
+put_chars_conv(struct part *part, unsigned char *c, int l)
 {
 	static char buffer[CH_BUF];
 	int bp = 0;
@@ -673,9 +653,8 @@ flush1:
 
 #undef CH_BUF
 
-
-/* put_chars() */
-void put_chars(struct part *part, unsigned char *c, int l)
+void
+put_chars(struct part *part, unsigned char *c, int l)
 {
 	static struct text_attrib_beginning ta_cache =
 		{-1, {0, 0, 0}, {0, 0, 0}};
@@ -740,7 +719,7 @@ end_format_change:
 			nobreak = x - 1;
 		}
 	}
-	
+
 #define TMP	part->xa - (c[l-1] == ' ' && par_format.align != AL_NO) + par_format.leftmargin + par_format.rightmargin
 	part->xa += l;
 	if (TMP > part->xmax) part->xmax = TMP;
@@ -916,9 +895,8 @@ format_change:
 
 #undef overlap
 
-
-/* line_break() */
-void line_break(struct part *part)
+void
+line_break(struct part *part)
 {
 	struct tag *t;
 
@@ -960,16 +938,14 @@ end:
 	memset(part->spaces, 0, part->spl);
 }
 
-
-/* html_init() */
-void html_init(struct part *part)
+void
+html_init(struct part *part)
 {
 	/* !!! FIXME: background */
 }
 
-
-/* destroy_fc() */
-void destroy_fc(struct form_control *fc)
+void
+destroy_fc(struct form_control *fc)
 {
 	int i;
 
@@ -989,9 +965,8 @@ void destroy_fc(struct form_control *fc)
 	if (fc->menu) free_menu(fc->menu);
 }
 
-
-/* html_form_control() */
-void html_form_control(struct part *part, struct form_control *fc)
+void
+html_form_control(struct part *part, struct form_control *fc)
 {
 	if (!part->data) {
 #if 0
@@ -1033,11 +1008,10 @@ void html_form_control(struct part *part, struct form_control *fc)
 	add_to_list(part->data->forms, fc);
 }
 
-
-/* add_frameset_entry() */
-void add_frameset_entry(struct frameset_desc *fsd,
-			struct frameset_desc *subframe,
-			unsigned char *name, unsigned char *url)
+void
+add_frameset_entry(struct frameset_desc *fsd,
+		   struct frameset_desc *subframe,
+		   unsigned char *name, unsigned char *url)
 {
 	if (fsd->yp >= fsd->y) return;
 #define TMP fsd->f[fsd->xp + fsd->yp * fsd->x]
@@ -1052,9 +1026,8 @@ void add_frameset_entry(struct frameset_desc *fsd,
 	}
 }
 
-
-/* create_frameset() */
-struct frameset_desc *create_frameset(struct f_data *fda, struct frameset_param *fp)
+struct frameset_desc *
+create_frameset(struct f_data *fda, struct frameset_param *fp)
 {
 	int i;
 	struct frameset_desc *fd;
@@ -1086,16 +1059,14 @@ struct frameset_desc *create_frameset(struct f_data *fda, struct frameset_param 
 	return fd;
 }
 
-
-/* create_frame() */
-void create_frame(struct frame_param *fp)
+void
+create_frame(struct frame_param *fp)
 {
 	add_frameset_entry(fp->parent, NULL, fp->name, fp->url);
 }
 
-
-/* html_special() */
-void * html_special(struct part *part, enum html_special_type c, ...)
+void *
+html_special(struct part *part, enum html_special_type c, ...)
 {
 	va_list l;
 	unsigned char *t;
@@ -1142,9 +1113,8 @@ void * html_special(struct part *part, enum html_special_type c, ...)
 	return NULL;
 }
 
-
-/* do_format() */
-void do_format(char *start, char *end, struct part *part, unsigned char *head)
+void
+do_format(char *start, char *end, struct part *part, unsigned char *head)
 {
 	parse_html(start, end,
 		   (void (*)(void *, unsigned char *, int)) put_chars_conv,
@@ -1155,13 +1125,13 @@ void do_format(char *start, char *end, struct part *part, unsigned char *head)
 	/* if ((part->y -= line_breax) < 0) part->y = 0; */
 }
 
-/* free_table_cache() */
-void free_table_cache()
+void
+free_table_cache()
 {
 	if (table_cache) {
 		struct hash_item *item;
 		int i;
-		
+
 		/* We do not free key here. */
 		foreach_hash_item(item, *table_cache, i)
 			if (item->value)
@@ -1169,17 +1139,16 @@ void free_table_cache()
 
 		free_hash(table_cache);
 	}
-	
+
 	table_cache = NULL;
 	table_cache_entries = 0;
 }
 
-
-/* format_html_part() */
-struct part *format_html_part(unsigned char *start, unsigned char *end,
-			      int align, int m, int width, struct f_data *data,
-			      int xs, int ys, unsigned char *head,
-			      int link_num)
+struct part *
+format_html_part(unsigned char *start, unsigned char *end,
+		 int align, int m, int width, struct f_data *data,
+		 int xs, int ys, unsigned char *head,
+		 int link_num)
 {
 	struct part *part;
 	struct html_element *e;
@@ -1194,12 +1163,12 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 	/* Hash creation if needed. */
 	if (!table_cache)
 		table_cache = init_hash(8, &strhash);
-	
+
 	if (!data && table_cache) {
 		/* Search for cached entry. */
 		struct table_cache_entry_key key;
 		struct hash_item *item;
-		
+
 		/* Clear key to prevent potential alignment problem
 		 * when keys are compared. */
 		memset(&key, 0, sizeof(struct table_cache_entry_key));
@@ -1211,7 +1180,7 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 		key.width = width;
 		key.xs = xs;
 		key.link_num = link_num;
-		
+
 		item = get_hash_item(table_cache, (unsigned char *)&key,
 				     sizeof(struct table_cache_entry_key));
 		if (item) { /* We found it in cache, so just copy and return. */
@@ -1224,7 +1193,7 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 			return part;
 		}
 	}
-	
+
 uncached:
 
 	if (ys < 0) {
@@ -1336,7 +1305,7 @@ ret:
 		/* A goto is used here to prevent a test or code
 		 * redundancy. */
 		if (!tce) goto end;
-		
+
 		/* Clear memory to prevent bad key comparaison due to alignment
 		 * of key fields. */
 		memset(&tce->key, 0, sizeof(struct table_cache_entry_key));
@@ -1349,7 +1318,7 @@ ret:
 		tce->key.xs = xs;
 		tce->key.link_num = link_num;
 		memcpy(&tce->part, part, sizeof(struct part));
-		
+
 		if (!add_hash_item(table_cache, (unsigned char *)&tce->key,
 				   sizeof(struct table_cache_entry_key), tce)) {
 			mem_free(tce);
@@ -1365,9 +1334,8 @@ end:
 	return part;
 }
 
-
-/* push_base_format() */
-void push_base_format(unsigned char *url, struct document_options *opt)
+void
+push_base_format(unsigned char *url, struct document_options *opt)
 {
 	struct html_element *e;
 
@@ -1414,10 +1382,9 @@ void push_base_format(unsigned char *url, struct document_options *opt)
 	html_top.dontkill = 1;
 }
 
-
-/* get_convert_table() */
-struct conv_table *get_convert_table(unsigned char *head, int to,
-				     int def, int *frm, int *aa, int hard)
+struct conv_table *
+get_convert_table(unsigned char *head, int to,
+		  int def, int *frm, int *aa, int hard)
 {
 	int from = -1;
 	unsigned char *a, *b;
@@ -1462,9 +1429,8 @@ struct conv_table *get_convert_table(unsigned char *head, int to,
 	return get_translation_table(from, to);
 }
 
-
-/* format_html() */
-void format_html(struct cache_entry *ce, struct f_data *screen)
+void
+format_html(struct cache_entry *ce, struct f_data *screen)
 {
 	unsigned char *url = ce->url;
 	struct fragment *fr;
@@ -1574,9 +1540,8 @@ void format_html(struct cache_entry *ce, struct f_data *screen)
 #endif
 }
 
-
-/* shrink_format_cache() */
-void shrink_format_cache(int u)
+void
+shrink_format_cache(int u)
 {
 	struct f_data *ce;
 
@@ -1602,9 +1567,8 @@ void shrink_format_cache(int u)
 	}
 }
 
-
-/* count_format_cache() */
-void count_format_cache()
+void
+count_format_cache()
 {
 	struct f_data *ce;
 
@@ -1612,9 +1576,8 @@ void count_format_cache()
 	foreach(ce, format_cache) if (!ce->refcount) format_cache_entries++;
 }
 
-
-/* delete_unused_format_cache_entries() */
-void delete_unused_format_cache_entries()
+void
+delete_unused_format_cache_entries()
 {
 	struct f_data *ce;
 
@@ -1633,18 +1596,16 @@ void delete_unused_format_cache_entries()
 	}
 }
 
-
-/* format_cache_reactivate */
-void format_cache_reactivate(struct f_data *ce)
+void
+format_cache_reactivate(struct f_data *ce)
 {
 	del_from_list(ce);
 	add_to_list(format_cache, ce);
 }
 
-
-/* cached_format_html() */
-void cached_format_html(struct view_state *vs, struct f_data_c *screen,
-						struct document_options *opt)
+void
+cached_format_html(struct view_state *vs, struct f_data_c *screen,
+		   struct document_options *opt)
 {
 	unsigned char *n;
 	struct f_data *ce;
@@ -1668,7 +1629,7 @@ void cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	foreach(ce, format_cache) {
 		if (strcmp(ce->url, vs->url)) continue;
 		if (compare_opt(&ce->opt, opt)) continue;
-		
+
 		cee = NULL;
 		if (!find_in_cache(vs->url, &cee) || !cee || cee->count != ce->use_tag) {
 			if (!cee) internal("file %s disappeared from cache", ce->url);
@@ -1728,9 +1689,8 @@ sx:
 	screen->yp = ce->opt.yp;
 }
 
-
-/* formatted_info() */
-long formatted_info(int type)
+long
+formatted_info(int type)
 {
 	int i = 0;
 	struct f_data *ce;
@@ -1749,9 +1709,8 @@ long formatted_info(int type)
 	return 0;
 }
 
-
-/* add_frame_to_list() */
-void add_frame_to_list(struct session *ses, struct f_data_c *fd)
+void
+add_frame_to_list(struct session *ses, struct f_data_c *fd)
 {
 	struct f_data_c *f;
 
@@ -1765,10 +1724,9 @@ void add_frame_to_list(struct session *ses, struct f_data_c *fd)
 	add_at_pos((struct f_data_c *)ses->scrn_frames.prev, fd);
 }
 
-
-/* find_fd() */
-struct f_data_c *find_fd(struct session *ses, unsigned char *name,
-			 int depth, int x, int y)
+struct f_data_c *
+find_fd(struct session *ses, unsigned char *name,
+	int depth, int x, int y)
 {
 	struct f_data_c *fd;
 
@@ -1796,11 +1754,10 @@ struct f_data_c *find_fd(struct session *ses, unsigned char *name,
 	return fd;
 }
 
-
-/* format_frame() */
-struct f_data_c *format_frame(struct session *ses, unsigned char *name,
-			      unsigned char *url, struct document_options *o,
-			      int depth)
+struct f_data_c *
+format_frame(struct session *ses, unsigned char *name,
+	     unsigned char *url, struct document_options *o,
+	     int depth)
 {
 	struct cache_entry *ce;
 	struct view_state *vs;
@@ -1832,10 +1789,9 @@ repeat:
 	return fd;
 }
 
-
-/* format_frames() */
-void format_frames(struct session *ses, struct frameset_desc *fsd,
-		   struct document_options *op, int depth)
+void
+format_frames(struct session *ses, struct frameset_desc *fsd,
+	      struct document_options *op, int depth)
 {
 	int i, j, n;
 	struct document_options o;
@@ -1881,9 +1837,8 @@ void format_frames(struct session *ses, struct frameset_desc *fsd,
 #endif
 }
 
-
-/* html_interpret() */
-void html_interpret(struct session *ses)
+void
+html_interpret(struct session *ses)
 {
 	struct list_head *opt_tree = (struct list_head *) ses->term->spec->ptr;
 	struct document_options o;
@@ -1955,9 +1910,8 @@ void html_interpret(struct session *ses)
 
 #define SRCH_ALLOC_GR	0x10000
 
-
-/* add_srch_chr() */
-void add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
+void
+add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
 {
 	int n = f->nsearch;
 
@@ -1970,9 +1924,11 @@ void add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
 }
 
 #if 0
-void sdbg(struct f_data *f)
+void
+sdbg(struct f_data *f)
 {
 	struct node *n;
+
 	foreachback(n, f->nodes) {
 		int xm = n->x + n->xw, ym = n->y + n->yw;
 		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
@@ -1983,16 +1939,17 @@ void sdbg(struct f_data *f)
 #endif
 
 
-/* sort_srch() */
-void sort_srch(struct f_data *f)
+void
+sort_srch(struct f_data *f)
 {
 	int i;
 	int *min, *max;
+	int size = f->y * sizeof(struct search *);
 
-	f->slines1 = mem_alloc(f->y * sizeof(struct search *));
+	f->slines1 = mem_alloc(size);
 	if (!f->slines1) return;
 
-	f->slines2 = mem_alloc(f->y * sizeof(struct search *));
+	f->slines2 = mem_alloc(size);
 	if (!f->slines2) {
 		mem_free(f->slines1);
 		return;
@@ -2013,8 +1970,8 @@ void sort_srch(struct f_data *f)
 		return;
 	}
 
-	memset(f->slines1, 0, f->y * sizeof(struct search *));
-	memset(f->slines2, 0, f->y * sizeof(struct search *));
+	memset(f->slines1, 0, size);
+	memset(f->slines2, 0, size);
 
 	for (i = 0; i < f->y; i++) {
 		min[i] = MAXINT;
@@ -2038,10 +1995,8 @@ void sort_srch(struct f_data *f)
 	mem_free(max);
 }
 
-
-
-/* get_srch() */
-int get_srch(struct f_data *f)
+int
+get_srch(struct f_data *f)
 {
 	struct node *n;
 	int cnt = 0;
@@ -2056,6 +2011,7 @@ int get_srch(struct f_data *f)
 		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
 		fflush(stdout);
 #endif
+#define _A(cr, nn) if (!cc) add_srch_chr(f, (cr), x, y, (nn)); else cnt++;
 
 		for (y = n->y; y < ym && y < f->y; y++) {
 			int ns = 1;
@@ -2067,15 +2023,13 @@ int get_srch(struct f_data *f)
 				if (c == ' ' && ns) continue;
 
 				if (ns) {
-					if (!cc) add_srch_chr(f, c, x, y, 1);
-					else cnt++;
+					_A(c, 1);
 					ns = 0;
 					continue;
 				}
 
 				if (c != ' ') {
-					if (!cc) add_srch_chr(f, c, x, y, 1);
-					else cnt++;
+					_A(c, 1);
 				} else {
 					int xx;
 
@@ -2086,8 +2040,7 @@ int get_srch(struct f_data *f)
 					xx = x;
 
 cont:
-					if (!cc) add_srch_chr(f, ' ', x, y, xx - x);
-					else cnt++;
+					_A(' ', xx - x);
 
 					if (xx == x) break;
 					x = xx - 1;
@@ -2095,18 +2048,17 @@ cont:
 
 			}
 
-			if (!cc) add_srch_chr(f, ' ', x, y, 0);
-			else cnt++;
+			_A(' ', 0);
 		}
+#undef _A
 
 	}
 
 	return cnt;
 }
 
-
-/* get_search_data() */
-void get_search_data(struct f_data *f)
+void
+get_search_data(struct f_data *f)
 {
 	int n;
 

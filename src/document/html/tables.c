@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.198 2004/06/25 09:03:13 zas Exp $ */
+/* $Id: tables.c,v 1.199 2004/06/25 09:11:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,8 @@ struct table {
 	unsigned char *fragment_id;
 	color_t bgcolor;
 	color_t bordercolor;
-	int *min_c, *max_c;
+	int *min_cols_widths;
+        int *max_cols_widths;
 	int *cols_widths;
 	int *cols_x;
 	int *rows_heights;
@@ -236,8 +237,8 @@ free_table(struct table *table)
 {
 	int i, j;
 
-	mem_free_if(table->min_c);
-	mem_free_if(table->max_c);
+	mem_free_if(table->min_cols_widths);
+	mem_free_if(table->max_cols_widths);
 	mem_free_if(table->cols_widths);
 	mem_free_if(table->rows_heights);
 	mem_free_if(table->fragment_id);
@@ -980,15 +981,15 @@ get_column_widths(struct table *table)
 
 	if (!table->x) return -1; /* prevents calloc(0, sizeof(int)) calls */
 
-	if (!table->min_c) {
-		table->min_c = mem_calloc(table->x, sizeof(int));
-		if (!table->min_c) return -1;
+	if (!table->min_cols_widths) {
+		table->min_cols_widths = mem_calloc(table->x, sizeof(int));
+		if (!table->min_cols_widths) return -1;
 	}
 
-	if (!table->max_c) {
-		table->max_c = mem_calloc(table->x, sizeof(int));
-	   	if (!table->max_c) {
-			mem_free_set(&table->min_c, NULL);
+	if (!table->max_cols_widths) {
+		table->max_cols_widths = mem_calloc(table->x, sizeof(int));
+	   	if (!table->max_cols_widths) {
+			mem_free_set(&table->min_cols_widths, NULL);
 			return -1;
 		}
 	}
@@ -996,8 +997,8 @@ get_column_widths(struct table *table)
 	if (!table->cols_widths) {
 		table->cols_widths = mem_calloc(table->x, sizeof(int));
 		if (!table->cols_widths) {
-			mem_free_set(&table->min_c, NULL);
-			mem_free_set(&table->max_c, NULL);
+			mem_free_set(&table->min_cols_widths, NULL);
+			mem_free_set(&table->max_cols_widths, NULL);
 			return -1;
 		}
 	}
@@ -1021,18 +1022,19 @@ get_column_widths(struct table *table)
 				for (k = 1; k < colspan; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(&table->min_c[i], colspan,
+				dst_width(&table->min_cols_widths[i], colspan,
 				  	  cell->min_width - p,
-					  &table->max_c[i]);
+					  &table->max_cols_widths[i]);
 
-				dst_width(&table->max_c[i], colspan,
+				dst_width(&table->max_cols_widths[i], colspan,
 				  	  cell->max_width - p,
 					  NULL);
 
 				for (k = 0; k < colspan; k++) {
 					int tmp = i + k;
 
-					int_lower_bound(&table->max_c[tmp], table->min_c[tmp]);
+					int_lower_bound(&table->max_cols_widths[tmp],
+							table->min_cols_widths[tmp]);
 				}
 
 			} else if (cell->colspan > colspan
@@ -1057,9 +1059,9 @@ get_table_width(struct table *table)
 	for (i = 0; i < table->x; i++) {
 		int vl = (get_vline_width(table, i) >= 0);
 
-		min += vl + table->min_c[i];
-		max += vl + table->max_c[i];
-		if (table->cols_x[i] > table->max_c[i])
+		min += vl + table->min_cols_widths[i];
+		max += vl + table->max_cols_widths[i];
+		if (table->cols_x[i] > table->max_cols_widths[i])
 			max += table->cols_x[i];
 	}
 
@@ -1090,10 +1092,10 @@ distribute_widths(struct table *table, int width)
 	assertm(d >= 0, "too small width %d, required %d", width, table->min_t);
 
 	for (i = 0; i < table->x; i++)
-		int_lower_bound(&mmax_c, table->max_c[i]);
+		int_lower_bound(&mmax_c, table->max_cols_widths[i]);
 
 	tx_size = table->x * sizeof(int);
-	memcpy(table->cols_widths, table->min_c, tx_size);
+	memcpy(table->cols_widths, table->min_cols_widths, tx_size);
 	table->real_width = width;
 
 	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
@@ -1119,7 +1121,8 @@ distribute_widths(struct table *table, int width)
 				case 0:
 					if (table->cols_widths[i] < table->cols_x[i]) {
 						w[i] = 1;
-						mx[i] = int_min(table->cols_x[i], table->max_c[i])
+						mx[i] = int_min(table->cols_x[i],
+								table->max_cols_widths[i])
 							- table->cols_widths[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
@@ -1128,7 +1131,8 @@ distribute_widths(struct table *table, int width)
 				case 1:
 					if (table->cols_x[i] <= WIDTH_RELATIVE) {
 						w[i] = WIDTH_RELATIVE - table->cols_x[i];
-						mx[i] = table->max_c[i] - table->cols_widths[i];
+						mx[i] = table->max_cols_widths[i]
+							- table->cols_widths[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
@@ -1137,10 +1141,11 @@ distribute_widths(struct table *table, int width)
 						break;
 					/* Fall-through */
 				case 3:
-					if (table->cols_widths[i] < table->max_c[i]) {
-						mx[i] = table->max_c[i] - table->cols_widths[i];
+					if (table->cols_widths[i] < table->max_cols_widths[i]) {
+						mx[i] = table->max_cols_widths[i]
+							- table->cols_widths[i];
 						if (mmax_c) {
-							w[i] = 5 + table->max_c[i] * 10 / mmax_c;
+							w[i] = 5 + table->max_cols_widths[i] * 10 / mmax_c;
 						} else {
 							w[i] = 1;
 						}
@@ -1274,7 +1279,9 @@ check_table_widths(struct table *table)
 				for (k = 1; k < colspan; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(&widths[i], colspan, cell->width - p, &table->max_c[i]);
+				dst_width(&widths[i], colspan,
+					  cell->width - p,
+					  &table->max_cols_widths[i]);
 
 			} else if (cell->colspan > colspan
 				   && cell->colspan < new_colspan) {
@@ -1297,14 +1304,14 @@ check_table_widths(struct table *table)
 
 	max = -1;
 	for (i = 0; i < table->x; i++)
-		if (table->max_c[i] > max) {
-			max = table->max_c[i];
+		if (table->max_cols_widths[i] > max) {
+			max = table->max_cols_widths[i];
 			max_index = i;
 		}
 
 	if (max != -1) {
 		widths[max_index] += width - new_width;
-		if (widths[max_index] <= table->max_c[max_index]) {
+		if (widths[max_index] <= table->max_cols_widths[max_index]) {
 			mem_free(table->cols_widths);
 			table->cols_widths = widths;
 			return;

@@ -1,9 +1,9 @@
-/* $Id: sched.h,v 1.10 2003/07/02 00:16:03 jonas Exp $ */
+/* $Id: sched.h,v 1.11 2003/07/02 10:23:31 jonas Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
 
-#include "elinks.h" /* tcount */
+#include "elinks.h" /* SSL stuff */
 
 #include "document/cache.h"
 #include "lowlevel/ttime.h"
@@ -11,6 +11,7 @@
 #include "util/encoding.h"
 #include "util/error.h"
 #include "util/lists.h"
+#include "util/types.h"
 
 #define PRI_MAIN	0
 #define PRI_DOWNLOAD	0
@@ -84,6 +85,15 @@ struct connection {
 	int detached;
 	int no_tsl;
 	int stream_pipes[2];
+
+	/* Each document is downloaded with some priority. When downloading a
+	 * document, the existing connections are checked to see if a
+	 * connection to the host already exists before creating a new one.  If
+	 * it finds out that something had that idea earlier and connection for
+	 * download of the very same URL is active already, it just attaches
+	 * the struct status it got to the connection, _and_ updates its @pri
+	 * array by the priority it has thus, sum of values in all fields of
+	 * @pri is also kinda refcount of the connection. */
 	int pri[N_PRI];
 
 	enum cache_mode cache_mode;

@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.21 2003/10/25 10:26:03 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.22 2003/10/25 10:31:26 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -9,6 +9,7 @@ struct listbox_item;
 #include "util/lists.h"
 
 /* Bookmark record structure */
+
 struct bookmark {
 	LIST_HEAD(struct bookmark);
 
@@ -25,19 +26,25 @@ struct bookmark {
 	struct list_head child;
 };
 
-extern struct list_head bookmarks;
-extern struct list_head bookmark_box_items;
-extern struct list_head bookmark_boxes;
+/* Bookmark lists */
+
+extern struct list_head bookmarks; /* struct bookmark */
+extern struct list_head bookmark_box_items; /* struct listbox_item */
+extern struct list_head bookmark_boxes; /* struct listbox_data */
 
 extern int bookmarks_dirty;
 
+/* Life functions */
+
+void init_bookmarks(void);
+void done_bookmarks(void);
+
 /* Read/write bookmarks functions */
+
 void read_bookmarks(void);
 void write_bookmarks(void);
 
-/* Life functions */
-void init_bookmarks(void);
-void done_bookmarks(void);
+/* Bookmarks manipulation */
 
 int delete_bookmark(struct bookmark *);
 struct bookmark *add_bookmark(struct bookmark *, int, const unsigned char *, const unsigned char *);

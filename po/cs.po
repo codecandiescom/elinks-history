@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-04 20:39+0100\n"
-"PO-Revision-Date: 2003-10-28 03:47+0100\n"
+"PO-Revision-Date: 2003-11-05 00:17+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -2998,12 +2998,11 @@ msgstr "Barvy vybraného tabu."
 
 #: src/config/options.inc:1253 src/config/options.inc:1663
 msgid "Tab separator"
-msgstr ""
+msgstr "Oddìlovaè v li¹tì s taby"
 
 #: src/config/options.inc:1255 src/config/options.inc:1665
-#, fuzzy
 msgid "Tab separator colors."
-msgstr "Barvy li¹ty s taby."
+msgstr "Barvy oddìlovaèù li¹ty s taby."
 
 #: src/config/options.inc:1265 src/config/options.inc:1675
 msgid "Searched strings"
@@ -3896,15 +3895,25 @@ msgid ""
 "library = %li KiB\n"
 "dirty pages  = %li KiB"
 msgstr ""
+"\n"
+"\n"
+"internì naalokováno = %li KiB\n"
+"celková velikost programu = %li KiB\n"
+"zabraná rezidentní pamì» = %li KiB\n"
+"sdílené stránky = %li KiB\n"
+"text (kód) = %li KiB\n"
+"data/stack = %li KiB\n"
+"knihovny = %li KiB\n"
+"dirty stránky = %li KiB"
 
 #: src/dialogs/info.c:237
 msgid "Memory info"
-msgstr "Informace o pa~mìti"
+msgstr "Informace o pamìti"
 
 #: src/dialogs/info.c:238
-#, fuzzy, c-format
+#, c-format
 msgid "%ld bytes of memory allocated.%s"
-msgstr "%ld bytù zafláknutý pamìti"
+msgstr "%ld bytù zafláknutý pamìti.%s"
 
 #: src/dialogs/menu.c:143
 msgid "Exit ELinks"
@@ -3992,7 +4001,7 @@ msgstr "Info o ~cachi"
 
 #: src/dialogs/menu.c:354
 msgid "~Memory info"
-msgstr "Informace o pamìti"
+msgstr "Informace o pa~mìti"
 
 #: src/dialogs/menu.c:361
 msgid "E~xit"

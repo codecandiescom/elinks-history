@@ -1,4 +1,4 @@
-/* $Id: layouter.h,v 1.1 2002/12/30 17:58:37 pasky Exp $ */
+/* $Id: layouter.h,v 1.2 2002/12/30 18:15:09 pasky Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_LAYOUTER_H
 #define EL__USIVE_LAYOUTER_LAYOUTER_H
@@ -7,6 +7,7 @@
  * case). */
 
 #include "elusive/layouter/rectangle.h"
+#include "elusive/parser/parser.h"
 
 
 enum layouter_backend_type {
@@ -21,8 +22,13 @@ enum layouter_backend_type {
  * each of the states independently. */
 
 struct layouter_state {
-	enum layouter_backend_type parser;
+	enum layouter_backend_type layouter;
 	void *data;
+
+	enum parser_backend_type parser;
+	/* This is managed per-backend, since some backends might not care
+	 * about parsers at all. */
+	struct parser_state *parser_state;
 
 	struct layout_rectangle *real_root;
 	struct layout_rectangle *root;
@@ -38,7 +44,8 @@ struct layouter_backend {
 
 /* Initialize the ELusive layouting engine. Returns NULL if failed. */
 struct layouter_state *
-elusive_layouter_init(enum layouter_backend_type parser);
+elusive_layouter_init(enum layouter_backend_type layouter,
+			enum parser_backend_type parser);
 
 /* Layout the supplied snippet of source, in the context of state (thus also
  * previously parser source snippets). The str will usually end up pointing at

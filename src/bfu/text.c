@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.104 2004/07/28 15:43:51 jonas Exp $ */
+/* $Id: text.c,v 1.105 2004/07/31 06:32:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,8 +379,8 @@ mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		DIALOG_LEFT_INNER_BORDER * 2 + 1,
 		widget_data->box.height);
 
-	/* Scroll is possible by using left or right of dialog, and within
-	 * the scroller height. */
+	/* One can scroll by clicking or rolling the wheel on the scrollbar
+	 * or one or two cells to its left or its right. */
 	if (!check_mouse_position(ev, &scroller_box))
 		return EVENT_NOT_PROCESSED;
 

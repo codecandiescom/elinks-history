@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.77 2004/01/03 16:04:42 zas Exp $ */
+/* $Id: form.c,v 1.78 2004/01/08 03:28:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -683,26 +683,16 @@ do_reset_form(struct document_view *doc_view, int form_num)
 		}
 }
 
-int
-reset_form(struct terminal *term, void *xxx, struct session *ses)
+void
+reset_form(struct session *ses, struct document_view *doc_view, int a)
 {
-	struct document_view *doc_view;
 	struct link *link;
 
-	assert(term && ses);
-	if_assert_failed return 1;
-
-	doc_view = current_frame(ses);
-
-	assert(doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return 1;
-
-	if (doc_view->vs->current_link == -1) return 1;
+	if (doc_view->vs->current_link == -1) return;
 
 	link = &doc_view->document->links[doc_view->vs->current_link];
 	do_reset_form(doc_view, link->form->form_num);
-	draw_forms(term, doc_view);
-	return 0;
+	draw_forms(ses->tab->term, doc_view);
 }
 
 unsigned char *

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.147 2004/01/08 03:15:02 jonas Exp $ */
+/* $Id: link.c,v 1.148 2004/01/08 03:28:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -859,8 +859,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	if (link->form) {
 		if (link->form->type == FC_RESET) {
-			add_to_menu(&mi, N_("~Reset form"), NULL, ACT_NONE,
-				    (menu_func) send_enter, NULL, 0);
+			add_menu_action(&mi, N_("~Reset form"), ACT_RESET_FORM);
 		} else {
 			int c = can_open_in_new(term);
 
@@ -884,8 +883,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				add_menu_action(&mi, N_("Submit form and ~download"), ACT_DOWNLOAD);
 
-			add_to_menu(&mi, N_("~Reset form"), NULL, ACT_NONE,
-				    (menu_func) reset_form, NULL, 0);
+			add_menu_action(&mi, N_("~Reset form"), ACT_RESET_FORM);
 		}
 	}
 

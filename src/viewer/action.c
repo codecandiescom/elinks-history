@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.29 2004/01/08 03:15:02 jonas Exp $ */
+/* $Id: action.c,v 1.30 2004/01/08 03:28:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,7 @@
 #include "sched/event.h"
 #include "sched/session.h"
 #include "sched/task.h"
+#include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/search.h"
 #include "viewer/text/view.h"
@@ -337,6 +338,10 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_RELOAD:
 			reload(ses, CACHE_MODE_INCREMENT);
+			break;
+
+		case ACT_RESET_FORM:
+			do_frame_action(ses, reset_form, 0);
 			break;
 
 		case ACT_RESUME_DOWNLOAD:

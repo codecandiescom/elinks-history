@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.147 2004/01/06 23:59:15 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.148 2004/01/08 03:28:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -467,6 +467,7 @@ static struct strtonum action_table[] = {
 	{ "really-quit", ACT_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
 	{ "redraw", ACT_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "reload", ACT_RELOAD, DACT(N_("Reload the current page")) },
+	{ "reset-form", ACT_RESET_FORM, DACT(N_("Reset form items to their initial values")) },
 	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
 	{ "right", ACT_RIGHT, DACT(N_("Move the cursor right")) },
 	{ "save-as", ACT_SAVE_AS, DACT(N_("Save as")) },

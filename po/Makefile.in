@@ -92,7 +92,7 @@ all-no:
 $(srcdir)/$(PACKAGE).pot: $(POTFILES_REL)
 	$(XGETTEXT) --default-domain=$(PACKAGE) \
 		    --directory=$(top_srcdir) \
-		    --add-comments \
+		    --add-comments --language=C \
 		    --keyword=_ --keyword=N_ $(POTFILES_ABS) \
 	&& test ! -f $(PACKAGE).po \
 	   || ( rm -f $(srcdir)/$(PACKAGE).pot \

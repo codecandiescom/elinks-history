@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.299 2003/12/21 14:56:54 zas Exp $ */
+/* $Id: parser.c,v 1.300 2003/12/21 16:33:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -966,11 +966,6 @@ html_img(unsigned char *a)
 			goto show_al;
 		}
 
-		/* This is not 100% appropriate for <img>, but well, accepting
-		 * accesskey and tabindex near <img> is just our little
-		 * extension to the standart. After all, it makes sense. */
-		html_focusable(a);
-
 		if ((s = get_url_val(a, "src")) || (s = get_url_val(a, "dynsrc"))) {
 			format.image = join_urls(format.href_base, s);
 			mem_free(s);
@@ -990,6 +985,11 @@ html_img(unsigned char *a)
 			}
 		}
 show_al:
+		/* This is not 100% appropriate for <img>, but well, accepting
+		 * accesskey and tabindex near <img> is just our little
+		 * extension to the standart. After all, it makes sense. */
+		html_focusable(a);
+
 		put_chrs(al, strlen(al), put_chars_f, ff);
 		if (ismap) kill_html_stack_item(&html_top);
 		/* Anything below must take care of properly handling the

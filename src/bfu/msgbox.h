@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.9 2003/06/07 13:17:35 pasky Exp $ */
+/* $Id: msgbox.h,v 1.10 2003/06/07 13:42:31 pasky Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -15,9 +15,9 @@
 enum msgbox_flags {
 	/* {msg_box(.text)} is dynamically allocated */
 	MSGBOX_EXTD_TEXT = 0x1,
-	/* All the msg_box() string parameters should be run through gettext
+	/* The msg_box() string parameters should NOT be run through gettext
 	 * and translated. */
-	MSGBOX_INTL = 0x2,
+	MSGBOX_NO_INTL = 0x2,
 };
 
 /* This is _the_ dialog function used in almost all parts of the code. It is
@@ -33,16 +33,15 @@ enum msgbox_flags {
  *
  * @flags	If the MSGBOX_EXTD_TEXT flag is passed, @text is free()d upon
  *		the dialog's death. This is equivalent to adding @text to the
- *		@mem_list.
+ *		@mem_list. Also, when this parameter is passed, @text is not
+ *		automagically localized and it is up to the user to do it.
  *
- *		If the MSGBOX_INTL flag is passed, @text, @title and button
- *		labels will be run through gettext before being further
- *		processed. Note that if you will dare to do this in conjuction
- *		with msg_text() usage, it is going to break l18n as result of
- *		format string expansion will be localized, not the format
- *		string itself (which would be the right thing).
+ *		If the MSGBOX_NO_INTL flag is passed, @title, @text and button
+ *		labels will not be localized automatically inside of msg_box()
+ *		and it is up to the user to do the best job possible.
  *
- * @title	The title of the message box.
+ * @title	The title of the message box. It is automatically localized
+ * 		inside (unless MSGBOX_NO_INTL is passed).
  *
  * @align	Provides info about how @text should be aligned.
  *
@@ -53,13 +52,20 @@ enum msgbox_flags {
  *		If no formatting is needed just pass the string and don't
  *		@align |= AL_EXTD_TEXT or you will get in trouble. ;)
  *
+ *		The @text is automatically localized inside of msg_box(),
+ *		unless MSGBOX_NO_INTL or AL_EXTD_TEXT is passed. That is
+ *		because you do NOT want to localize output of msg_text(),
+ *		but rather individually the format string and parameters to
+ *		its string conversions.
+ *
  * @udata	Is a reference to any data that should be passed to
  *		the handlers associated with each button. NULL if none.
  *
  * @buttons	Denotes the number of buttons given as varadic arguments.
  *		For each button 3 arguments are extracted:
- *			o First the label text. If NULL, this button is
- *			  skipped.
+ *			o First the label text. It is automatically localized
+ *			  unless MSGBOX_NO_INTL is passed. If NULL, this button
+ *			  is skipped.
  *			o Second pointer to the handler function (taking
  *			  one (void *), which is incidentally the udata).
  *			o Third any flags.

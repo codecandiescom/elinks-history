@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.121 2004/09/21 00:03:06 pasky Exp $ */
+/* $Id: parser.c,v 1.122 2004/09/21 00:12:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,6 +297,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			pkg = mem_calloc(1, sizeof(struct selector_pkg));
 			if (!pkg) continue;
 			add_to_list(*selectors, pkg);
+			pkg->selector = selector;
 
 		} else if (reltype == CSR_SPECIFITY) {
 			/* We append under the last fragment. */
@@ -320,6 +321,12 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 				            last_chained_selector);
 			}
 
+			if (prev_element_selector) {
+				/* This is still just specificitying offspring
+				 * of the previous pkg->selector. */
+				pkg->selector = selector;
+			}
+
 			selector->relation = reltype;
 
 		} else /* CSR_PARENT || CSR_ANCESTOR */ {
@@ -338,8 +345,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 			prev_element_selector->relation = reltype;
 		}
-
-		pkg->selector = selector;
 
 
 		/* Record the selector fragment for future generations */

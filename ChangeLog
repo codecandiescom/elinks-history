@@ -1,3 +1,54 @@
+Sun Mar 10 20:42:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, html.c, html_r.c, links.h:
+	
+	tabindex support, based on patch by <ff@partyticket.net>
+
+Sun Mar 10 20:07:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+	
+	keybinding and buttonbinding
+
+Sun Mar 10 20:06:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO:
+	
+	proxy stuff
+
+Sun Mar 10 19:58:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	reformat bit
+
+Sun Mar 10 13:11:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS, default.c, links.h, session.c:
+	
+	show_(status|title)_bar - still incomplete, though, as there's
+	still a blank line even when they're turned off.. anyone wants to
+	fix it? :)
+
+Sun Mar 10 12:43:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	few random unimportant tidyups done when browsing the code bored ;)
+
+Sun Mar 10 12:37:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* session.c:
+	
+	tidyup of print_screen_status()
+
+Sat Mar  9 22:25:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c:
+	
+	fix cookies handling - thanks to zas for report,
+	<ff@partyticket.net> for hint and proposed fix
+
 Sat Mar  9 22:10:43 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, dns.c, setup.h:

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.74 2004/01/17 14:09:39 pasky Exp $ */
+/* $Id: document.c,v 1.75 2004/03/22 03:01:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,7 +250,7 @@ head_msg(struct session *ses)
 		return;
 	}
 
-	ce = find_in_cache(cur_loc(ses)->vs.url);
+	ce = get_vs_cache_entry(&cur_loc(ses)->vs);
 	if (ce && ce->head) {
 		unsigned char *headers = stracpy(ce->head);
 

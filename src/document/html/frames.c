@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.51 2004/03/20 14:39:02 jonas Exp $ */
+/* $Id: frames.c,v 1.52 2004/03/22 03:01:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,7 +175,7 @@ repeat:
 	if (!frame) return NULL;
 
 	vs = &frame->vs;
-	ce = find_in_cache(vs->url);
+	ce = get_vs_cache_entry(vs);
 	if (!ce) return NULL;
 	plain = o->plain;
 	if (vs->plain != -1) o->plain = vs->plain;

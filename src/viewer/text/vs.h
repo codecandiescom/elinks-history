@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.13 2004/03/22 02:43:48 jonas Exp $ */
+/* $Id: vs.h,v 1.14 2004/03/22 03:01:19 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -24,7 +24,8 @@ struct view_state {
 	unsigned char url[1];	/* Must be last. */
 };
 
-#define get_vs_url_copy(vs) memacpy((vs)->url, (vs)->url_len)
+#define get_vs_url_copy(vs)	memacpy((vs)->url, (vs)->url_len)
+#define get_vs_cache_entry(vs)	find_in_cache((vs)->url)
 
 void init_vs(struct view_state *, unsigned char *, int);
 void destroy_vs(struct view_state *);

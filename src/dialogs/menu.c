@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.89 2003/05/04 20:42:11 pasky Exp $ */
+/* $Id: menu.c,v 1.90 2003/05/09 18:18:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -410,9 +410,7 @@ static struct menu_item file_menu22[] = {
 	{N_("~Kill background connections"), "", MENU_FUNC menu_kill_background_connections, (void *)0, 0, 0},
 	{N_("~Flush all caches"), "", MENU_FUNC flush_caches, (void *)0, 0, 0},
 	{N_("Resource ~info"), "", MENU_FUNC res_inf, (void *)0, 0, 0},
-#if 0
-	/* This ought to be rewritten first, now it's too messy - try it with
-	 * a bit full cache. */
+#if 1 /* Always visible ? --Zas */
 	{N_("~Cache info"), "", MENU_FUNC cache_inf, (void *)0, 0, 0},
 #endif
 #ifdef LEAK_DEBUG

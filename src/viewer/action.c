@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.71 2004/06/09 21:12:32 zas Exp $ */
+/* $Id: action.c,v 1.72 2004/06/09 21:42:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,7 +95,7 @@ do_frame_action(struct session *ses, frame_action action, int magic)
 
 	/* This is hopefully only some temporary setup. --jonas */
 	if (action == find_next)
-		refresh_view(ses, doc_view);
+		refresh_view(ses, doc_view, 0);
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.120 2004/06/09 21:05:53 zas Exp $ */
+/* $Id: form.c,v 1.121 2004/06/09 21:42:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 		fixup_select_state(frm, fs);
 	}
 
-	refresh_view(ses, doc_view);
+	refresh_view(ses, doc_view, 0);
 }
 
 static void

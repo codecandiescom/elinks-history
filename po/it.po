@@ -103,9 +103,9 @@ msgid "Delete item"
 msgstr "Elimina elemento"
 
 #: src/bfu/hierbox.c:551
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot delete \"%s\""
-msgstr "Impossibile eliminare questa opzione."
+msgstr "Impossibile eliminare \"%s\""
 
 #: src/bfu/hierbox.c:560
 msgid "Delete folder"
@@ -371,9 +371,8 @@ msgid "Header"
 msgstr "Header"
 
 #: src/cache/dialogs.c:150
-#, fuzzy
 msgid "Cache manager"
-msgstr "Apre gestore cache"
+msgstr "Gestore cache"
 
 #: src/config/cmdline.c:57
 #, c-format
@@ -4064,7 +4063,6 @@ msgid "Coo~kies"
 msgstr "C~ookie"
 
 #: src/dialogs/menu.c:338
-#, fuzzy
 msgid "Form histor~y"
 msgstr "Storico Form"
 
@@ -4366,9 +4364,8 @@ msgid "Resize terminal"
 msgstr "Ridimensiona terminale"
 
 #: src/formhist/dialogs.c:129
-#, fuzzy
 msgid "Form history manager"
-msgstr "Gestore storico"
+msgstr "Gestore storico form"
 
 #. TODO: Remember multiple login for the same form.
 #. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
@@ -4435,9 +4432,8 @@ msgid "Bookmark"
 msgstr "Segnalibro"
 
 #: src/globhist/dialogs.c:194
-#, fuzzy
 msgid "Global history manager"
-msgstr "Gestione storico"
+msgstr "Gestore storico"
 
 #: src/globhist/globhist.c:70
 msgid "Global history"

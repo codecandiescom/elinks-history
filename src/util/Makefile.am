@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.40 2004/05/13 00:53:36 jonas Exp $
+## $Id: Makefile.am,v 1.41 2004/05/13 01:08:25 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -24,7 +24,7 @@ EXTRA_libutil_a_SOURCES = \
  memdebug.c \
  memdebug.h \
  scanner.c \
- scanner.h \
+ scanner.h
 
 libutil_a_LIBADD = \
  $(debugobj) \

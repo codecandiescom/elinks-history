@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.257 2004/08/14 13:29:24 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.258 2004/09/26 14:02:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -720,7 +720,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 'P',		 KBD_CTRL,	ACT_MAIN_SCROLL_UP },
 	{ 'Q',		 0,		ACT_MAIN_REALLY_QUIT },
 	{ 'R',		 KBD_CTRL,	ACT_MAIN_RELOAD },
-	{ 'T',		 0,		ACT_MAIN_OPEN_LINK_IN_NEW_TAB },
+	{ 'T',		 0,		ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND },
 	{ 'W',		 0,		ACT_MAIN_TOGGLE_WRAP_TEXT },
 	{ '[',		 0,		ACT_MAIN_SCROLL_LEFT },
 	{ '\'',		 0,		ACT_MAIN_MARK_GOTO },

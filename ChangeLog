@@ -1,3 +1,121 @@
+Tue Dec 14 19:16:14 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/parser/link.c:
+
+	Use function wrappers to eliminate that clandestine argument passing 
+	between html_embed, html_iframe, html_img, and html_object using the
+	global object_src as a drop box.  
+
+Tue Dec 14 18:48:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	Flip the conditions and swap the respective then and else
+	expressions in the same two ternary-operator expressions.  
+
+Tue Dec 14 18:45:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	Remove some superfluous parentheses from a ternary-operator
+	expression.  
+
+Tue Dec 14 18:38:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	Use the ternary operator instead of an if-else block.  
+
+Tue Dec 14 18:36:46 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	Rewrite the comment describing do_move_bookmark to be accurate.  
+
+Tue Dec 14 18:32:26 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	Move the comment describing do_move_bookmark from the caller to the
+	definition of do_move_bookmark.  
+
+Tue Dec 14 18:29:16 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	Clean up the whitespace in do_move_bookmark.  
+
+Tue Dec 14 18:25:18 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	In do_move_bookmark, assert that arguments destb and desti are
+	either both NULL or neither NULL.  
+	
+	Drop local variable blind_insert, which was assigned the boolean
+	destb && desti.  
+	
+	Check whether destb or desti is NULL where we used to check whether
+	blind_insert was 0.  
+	
+	Assign desti = destb = NULL where we used to set blind_insert = 0.  
+
+Tue Dec 14 17:35:28 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Factor the loop that performs the bookmarking out from
+	bookmark_terminal_tabs and into the new bookmark_terminal.  
+	bookmark_terminal_tabs now is a wrapper that adds the folder and 
+	gives it to bookmark_terminal.  
+
+Tue Dec 14 17:08:56 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	In delete_folder_by_name, check whether the bookmark is a folder 
+	before checking whether the title matches, as the former operation 
+	should be much faster.  
+
+Tue Dec 14 17:07:14 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Factor the folder deletion code out from bookmark_auto_save_tabs and
+	into the new delete_folder_by_name.  
+
+Tue Dec 14 17:01:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	In bookmark_terminal_tabs, use local variable ses instead of 
+	tab->data, the value of which is already assigned to ses.  
+
+Tue Dec 14 17:00:29 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Include util/lists.h.  
+
+Tue Dec 14 16:59:32 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Sort the inclusions.  
+
+Tue Dec 14 01:58:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/dialogs.c:
+
+	In do_move_bookmark, use foreachsafe instead of re-implementing it 
+	with a while loop.  
+
+Tue Dec 14 01:55:03 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Just put a hard limit on the number of successive redirects.  
+
 Mon Dec 13 18:48:41 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/sched/session.c:

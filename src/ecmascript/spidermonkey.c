@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.34 2004/09/25 00:50:57 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.35 2004/09/25 01:04:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -502,6 +502,10 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 {
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
 	struct terminal *term = interpreter->doc_view->session->tab->term;
+
+#ifdef CONFIG_LEDS
+	interpreter->doc_view->session->status.ecmascript_led->value = 'J';
+#endif
 
 	if (!get_opt_bool("ecmascript.error_reporting"))
 		return;

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.159 2004/09/25 00:50:57 pasky Exp $ */
+/* $Id: session.h,v 1.160 2004/09/25 01:04:12 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -88,6 +88,7 @@ struct session_status {
 	struct led_panel leds;
 	struct led *ssl_led;
 	struct led *insert_mode_led;
+	struct led *ecmascript_led;
 #endif
 	/* Has the tab been visited yet. */
 	unsigned int visited:1;

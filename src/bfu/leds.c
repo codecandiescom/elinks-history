@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.54 2004/06/23 20:17:53 pasky Exp $ */
+/* $Id: leds.c,v 1.55 2004/09/25 01:04:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 /* Current leds allocation:
  * 0 - SSL connection indicator
  * 1 - Insert-mode indicator
- * 2 - unused, reserved for ELinks internal use
+ * 2 - JavaScript Error indicator
  * 3 - unused, reserved for Lua
  * 4 - unused, reserved for Lua
  * 5 - unused */

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.123 2003/11/26 23:49:45 jonas Exp $ */
+/* $Id: listbox.c,v 1.124 2003/11/27 03:13:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -426,8 +426,15 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
 	struct listbox_context data;
+	/* Add one to offset to get the actual height of the selected item */
+	int moves = box->sel_offset + 1 - widget_data->h;
 
-	if (!list_empty(*box->items)) {
+	if (moves > 0) {
+		/* Move selected listbox to visible and update box->top while we're
+		 * at it. Fixes bug 58. */
+		box_sel_move(widget_data, -moves);
+
+	} else if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
 		if (!box->sel) box->sel = box->top;
 	}

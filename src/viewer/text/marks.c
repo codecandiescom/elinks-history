@@ -1,5 +1,5 @@
 /* Marks registry */
-/* $Id: marks.c,v 1.8 2004/06/07 16:36:07 jonas Exp $ */
+/* $Id: marks.c,v 1.9 2004/07/04 16:29:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@
 #define MARKS_SIZE 26 * 2
 static struct view_state *marks[MARKS_SIZE];
 
-#define is_valid_mark_char(c) (((c) >= 'A' && (c) <= 'Z') || ((c) >= 'a' && (c) <= 'z'))
+#define is_valid_mark_char(c)	isasciialpha(c)
 #define is_valid_mark_index(i)  ((i) >= 0 && (i) < MARKS_SIZE)
 
 static inline int

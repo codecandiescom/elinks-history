@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.258 2004/07/04 12:13:42 jonas Exp $ */
+/* $Id: uri.c,v 1.259 2004/07/04 16:29:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -689,8 +689,7 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 	}
 
 #ifdef DOS_FS
-	if (toupper(path[0]) >= 'A' && toupper(path[0]) <= 'Z'
-	    && path[1] == ':' && dir_sep(path[2]))
+	if (isasciialpha(path[0]) && path[1] == ':' && dir_sep(path[2]))
 		return NULL;
 #endif
 
@@ -1084,9 +1083,7 @@ static inline int
 safe_char(unsigned char c)
 {
 	/* RFC 2396, Page 8, Section 2.3 ;-) */
-	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-	       || isdigit(c)
-	       || c == '-' || c == '_' || c == '.' || c == '!' || c == '~'
+	return isident(c) || c == '.' || c == '!' || c == '~'
 	       || c == '*' || c == '\''|| c == '(' || c == ')';
 }
 

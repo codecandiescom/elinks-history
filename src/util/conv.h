@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.36 2004/07/04 12:13:42 jonas Exp $ */
+/* $Id: conv.h,v 1.37 2004/07/04 16:29:03 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -11,11 +11,9 @@ is_safe_in_shell(unsigned char c)
 {
 	/* Note: '-' is often used to indicate a command-line option and thus
 	 * is not always safe. */
-	return c == '@' || c == '+' || c == '.' || c == '/' || c == ':'
-		|| c == '_'
-		|| (c >= 'A' && c <= 'Z')
-		|| (c >= 'a' && c <= 'z')
-		|| (c >= '0' && c <= '9');
+	return isasciialnum(c)
+		|| c == '@' || c == '+' || c == '.'
+		|| c == '/' || c == ':' || c == '_';
 }
 
 

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.92 2004/07/04 12:13:42 jonas Exp $ */
+/* $Id: charsets.c,v 1.93 2004/07/04 16:29:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -628,8 +628,7 @@ convert_string(struct conv_table *convert_table,
 			int i = start;
 
 			while (i < charslen
-			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
-				   || (chars[i] >= 'a' && chars[i] <= 'z')
+			       && (isasciialpha(chars[i])
 				   || isdigit(chars[i])
 				   || (chars[i] == '#')))
 				i++;

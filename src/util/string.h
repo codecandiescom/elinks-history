@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.79 2004/07/04 13:06:05 jonas Exp $ */
+/* $Id: string.h,v 1.80 2004/07/04 16:29:03 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -106,10 +106,10 @@ int elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 
 #define isquote(x) ((x) == '"' || (x) == '\'')
 
-#define isA(c) ((c >= 'A' && c <= 'Z') \
-		|| (c >= 'a' && c <= 'z') \
-		|| (c >= '0' && c <= '9') \
-		|| c == '_' || c == '-')
+#define isasciialpha(c)	(((c) >= 'A' && (c) <= 'Z') || ((c) >= 'a' && (c) <= 'z'))
+#define isasciialnum(c)	(isasciialpha(c) || isdigit(c))
+#define isident(c)	(isasciialnum(c) || (c) == '_' || (c) == '-')
+#define isA(c)		isident(c)
 
 
 /* String debugging using magic number, it may catch some errors. */

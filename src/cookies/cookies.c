@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.55 2003/06/07 22:50:38 pasky Exp $ */
+/* $Id: cookies.c,v 1.56 2003/06/20 12:51:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,12 +23,12 @@
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "lowlevel/home.h"
-#include "terminal/terminal.h"
 #include "lowlevel/ttime.h"
 #include "protocol/http/date.h"
 #include "protocol/http/header.h"
 #include "protocol/url.h"
 #include "sched/session.h"
+#include "terminal/terminal.h"
 #include "util/conv.h"
 #ifdef COOKIES_DEBUG
 #include "util/error.h"

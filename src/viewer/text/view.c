@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.585 2004/09/12 17:55:33 miciah Exp $ */
+/* $Id: view.c,v 1.586 2004/09/12 18:01:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -950,6 +950,7 @@ static struct session *
 send_mouse_event(struct session *ses, struct document_view *doc_view,
 		 struct term_event *ev)
 {
+	struct terminal *term = ses->tab->term;
 	struct term_event_mouse *mouse = &ev->info.mouse;
 	int bars;
 
@@ -959,7 +960,7 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 		struct window *m;
 
 		activate_bfu_technology(ses, -1);
-		m = ses->tab->term->windows.next;
+		m = term->windows.next;
 		m->handler(m, ev);
 
 		return ses;
@@ -969,21 +970,21 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 	if (ses->status.show_tabs_bar) bars++;
 	if (ses->status.show_status_bar) bars++;
 
-	if (mouse->y == ses->tab->term->height - bars
+	if (mouse->y == term->height - bars
 	    && check_mouse_action(ev, B_DOWN)) {
-		int tab_num = get_tab_number_by_xpos(ses->tab->term, mouse->x);
+		int tab_num = get_tab_number_by_xpos(term, mouse->x);
 
 		if (check_mouse_button(ev, B_WHEEL_UP)) {
-			switch_to_prev_tab(ses->tab->term);
+			switch_to_prev_tab(term);
 
 		} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
-			switch_to_next_tab(ses->tab->term);
+			switch_to_next_tab(term);
 
 		} else if (tab_num != -1) {
-			switch_to_tab(ses->tab->term, tab_num, -1);
+			switch_to_tab(term, tab_num, -1);
 
 			if (check_mouse_button(ev, B_RIGHT)) {
-				struct window *tab = get_current_tab(ses->tab->term);
+				struct window *tab = get_current_tab(term);
 
 				tab_menu(tab->data, mouse->x, mouse->y, 1);
 			}

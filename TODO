@@ -12,8 +12,6 @@ block FTP data connections from servers in active mode); IPv6 FTP support
 
 	CSS support
 
-	Strip spaces from the end of the URL (?)
-
 	Support for <xmp>
 
 	Better support for vlink - we have to update already rendered document
@@ -39,8 +37,6 @@ suffix appropriate to the file type (?)
 have to; good job for wannabe ELinks developer ;)
 
 	Take info about proxies from env variables (?)
-
-	Possibility to read HTML source from stdin
 
 	Passing url to external command (possibly make alt+[0-9] to pass
 current link to external command (?)).
@@ -73,4 +69,4 @@ optionally.
 	Write some more documentation
 
 
-$Id: TODO,v 1.28 2002/08/27 13:02:16 pasky Exp $
+$Id: TODO,v 1.29 2002/08/30 22:57:50 pasky Exp $

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.164 2004/07/15 15:44:05 jonas Exp $ */
+/* $Id: core.c,v 1.165 2004/08/07 22:03:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,7 +515,7 @@ do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 		lua_settop(S, oldtop);
 	}
 
-	mem_free_if(file);
+	mem_free(file);
 }
 
 static void

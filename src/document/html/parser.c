@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.176 2003/07/24 11:23:36 miciah Exp $ */
+/* $Id: parser.c,v 1.177 2003/07/25 09:09:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2681,7 +2681,7 @@ html_link_parse(unsigned char *a, struct hlink *link)
 		link->type = LT_BOOKMARK;
 	else if (!strcasecmp(link->name, "copyright"))
 		link->type = LT_COPYRIGHT;
-	else if (!strcasecmp(link->name, "author"))
+	else if (!strcasecmp(link->name, "author") || !strcasecmp(link->name, "made"))
 		link->type = LT_AUTHOR;
 	else if (strcasestr(link->name, "icon") ||
 		 (link->content_type && strcasestr(link->content_type, "icon")))
@@ -2717,6 +2717,7 @@ html_link(unsigned char *a)
 	/* Ignore few annoying links.. */
 	if (link_display < 5 &&
 	    (link.type == LT_ICON ||
+	     link.type == LT_AUTHOR ||
 	     link.type == LT_STYLESHEET ||
 	     link.type == LT_ALTERNATE_STYLESHEET)) goto free_and_return;
 

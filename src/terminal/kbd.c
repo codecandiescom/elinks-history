@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.100 2004/07/28 15:26:07 jonas Exp $ */
+/* $Id: kbd.c,v 1.101 2004/07/28 15:43:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,8 +221,10 @@ resize_terminal(void)
 	int width, height;
 
 	if (get_terminal_size(ditrm->std_out, &width, &height)) return;
-	ev.x = width;
-	ev.y = height;
+
+	ev.info.size.width = width;
+	ev.info.size.height = height;
+
 	queue_event(ditrm, (char *) &ev, sizeof(struct term_event));
 }
 
@@ -668,8 +670,8 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		if (itrm->qlen - el < 5)
 			return -1;
 
-		ev->x = get_mouse_x_position(itrm, el);
-		ev->y = get_mouse_y_position(itrm, el);
+		ev->info.mouse.x = get_mouse_x_position(itrm, el);
+		ev->info.mouse.y = get_mouse_y_position(itrm, el);
 
 		switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
 		    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
@@ -684,8 +686,8 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		/* See terminal/mouse.h about details of the mouse reporting
 		 * protocol and {struct term_event_mouse->button} bitmask
 		 * structure. */
-		ev->x = itrm->kqueue[el+1] - ' ' - 1;
-		ev->y = itrm->kqueue[el+2] - ' ' - 1;
+		ev->info.mouse.x = itrm->kqueue[el+1] - ' ' - 1;
+		ev->info.mouse.y = itrm->kqueue[el+2] - ' ' - 1;
 
 		/* There are rumours arising from remnants of code dating to
 		 * the ancient Mikulas' times that bit 4 indicated B_DRAG.
@@ -739,7 +741,7 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 		if (itrm->qlen >= 4
 		    && itrm->kqueue[3] >= 'A'
 		    && itrm->kqueue[3] <= 'L') {
-			ev->x = KBD_F1 + itrm->kqueue[3] - 'A';
+			ev->info.keyboard.key = KBD_F1 + itrm->kqueue[3] - 'A';
 			return 4;
 		}
 
@@ -828,8 +830,8 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 
 	/* The event might have been changed to a mouse event */
 	if (ev->ev == EVENT_KBD) {
-		ev->x = key;
-		ev->y = modifier;
+		ev->info.keyboard.key = key;
+		ev->info.keyboard.modifier = modifier;
 	}
 
 	return el;
@@ -860,8 +862,8 @@ set_kbd_event(struct term_event *ev, int key, int modifier)
 		}
 	}
 
-	ev->x = key;
-	ev->y = modifier;
+	ev->info.keyboard.key = key;
+	ev->info.keyboard.modifier = modifier;
 }
 
 /* I feeeeeel the neeeed ... to rewrite this ... --pasky */
@@ -918,9 +920,12 @@ process_queue(struct itrm *itrm)
 
 	} else if (itrm->kqueue[0] == 0) {
 		if (itrm->qlen < 2) goto ret;
-		ev.x = os2xtd[itrm->kqueue[1]].x;
-		if (!ev.x) ev.x = -1;
-		ev.y = os2xtd[itrm->kqueue[1]].y;
+		ev.info.keyboard.key = os2xtd[itrm->kqueue[1]].x;
+
+		if (!ev.info.keyboard.key)
+			ev.info.keyboard.key = -1;
+
+		ev.info.keyboard.modifier = os2xtd[itrm->kqueue[1]].y;
 		el = 2;
 
 	} else {
@@ -933,7 +938,7 @@ process_queue(struct itrm *itrm)
 
 	itrm->qlen -= el;
 
-	if (ev.x != -1)
+	if (ev.info.keyboard.key != -1)
 		queue_event(itrm, (char *) &ev, sizeof(struct term_event));
 
 	if (itrm->qlen)

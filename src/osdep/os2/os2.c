@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.22 2004/07/28 13:56:14 jonas Exp $ */
+/* $Id: os2.c,v 1.23 2004/07/28 15:43:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -504,8 +504,8 @@ mouse_thread(void *p)
 #ifdef HAVE_SYS_FMUTEX_H
 		_fmutex_release(&mouse_mutex);
 #endif
-		ev.x = ms->col;
-		ev.y = ms->row;
+		ev.info.mouse.x = ms->col;
+		ev.info.mouse.y = ms->row;
 		/*DBG("status: %d %d %d", ms->col, ms->row, ms->fs);*/
 		if (ms->fs & (MOUSE_BN1_DOWN | MOUSE_BN2_DOWN | MOUSE_BN3_DOWN))
 			ev.info.mouse.button = status = B_DOWN | (ms->fs & MOUSE_BN1_DOWN ? B_LEFT : ms->fs & MOUSE_BN2_DOWN ? B_MIDDLE : B_RIGHT);

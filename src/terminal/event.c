@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.72 2004/07/28 12:24:03 jonas Exp $ */
+/* $Id: event.c,v 1.73 2004/07/28 15:43:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,16 +62,20 @@ term_send_event(struct terminal *term, struct term_event *ev)
 	switch (ev->ev) {
 	case EVENT_INIT:
 	case EVENT_RESIZE:
-		if (ev->x < 0 || ev->y < 0) {
+	{
+		int width = ev->info.size.width;
+		int height = ev->info.size.height;
+
+		if (width < 0 || height < 0) {
 			ERROR(_("Bad terminal size: %d, %d", term),
-			      (int) ev->x, (int) ev->y);
+			      width, height);
 			break;
 		}
 
-		resize_screen(term, ev->x, ev->y);
+		resize_screen(term, width, height);
 		erase_screen(term);
 		/* Fall through */
-
+	}
 	case EVENT_REDRAW:
 		/* Nasty hack to avoid assertion failures when doing -remote
 		 * stuff and the client exits right away */
@@ -129,7 +133,7 @@ term_send_ucs(struct terminal *term, struct term_event *ev, unicode_val u)
 	recoded = u2cp_no_nbsp(u, get_opt_int_tree(term->spec, "charset"));
 	if (!recoded) recoded = "*";
 	while (*recoded) {
-		ev->x = *recoded;
+		ev->info.keyboard.key = *recoded;
 		term_send_event(term, ev);
 		recoded++;
 	}

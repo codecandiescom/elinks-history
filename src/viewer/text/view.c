@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.569 2004/07/28 15:30:47 jonas Exp $ */
+/* $Id: view.c,v 1.570 2004/07/28 15:43:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -748,8 +748,8 @@ static enum frame_event_status
 frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	enum frame_event_status status = FRAME_EVENT_REFRESH;
-	int x = ev->x;
-	int y = ev->y;
+	int x = ev->info.mouse.x;
+	int y = ev->info.mouse.y;
 	struct link *link = get_link_at_coordinates(doc_view, x, y);
 
 	if (check_mouse_wheel(ev)) {
@@ -931,8 +931,8 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	if (doc_view != first) draw_formatted(ses, 0);
 
 	memcpy(&evv, ev, sizeof(struct term_event));
-	evv.x -= doc_view->box.x;
-	evv.y -= doc_view->box.y;
+	evv.info.mouse.x -= doc_view->box.x;
+	evv.info.mouse.y -= doc_view->box.y;
 	return send_to_frame(ses, &evv);
 }
 #endif /* CONFIG_MOUSE */
@@ -1005,7 +1005,7 @@ quit:
 	if (ev->ev == EVENT_MOUSE) {
 		int bars;
 
-		if (ev->y == 0
+		if (ev->info.mouse.y == 0
 		    && check_mouse_action(ev, B_DOWN)
 		    && !check_mouse_wheel(ev)) {
 			struct window *m;
@@ -1020,8 +1020,10 @@ quit:
 		if (ses->status.show_tabs_bar) bars++;
 		if (ses->status.show_status_bar) bars++;
 
-		if (ev->y == ses->tab->term->height - bars && check_mouse_action(ev, B_DOWN)) {
-			int tab = get_tab_number_by_xpos(ses->tab->term, ev->x);
+		if (ev->info.mouse.y == ses->tab->term->height - bars
+		    && check_mouse_action(ev, B_DOWN)) {
+			int xpos = ev->info.mouse.x;
+			int tab = get_tab_number_by_xpos(ses->tab->term, xpos);
 
 			if (check_mouse_button(ev, B_WHEEL_UP)) {
 				switch_to_prev_tab(ses->tab->term);
@@ -1035,7 +1037,8 @@ quit:
 				if (check_mouse_button(ev, B_RIGHT)) {
 					struct window *tab = get_current_tab(ses->tab->term);
 
-					tab_menu(tab->data, ev->x, ev->y, 1);
+					tab_menu(tab->data, ev->info.mouse.x,
+						 ev->info.mouse.y, 1);
 				}
 			}
 
@@ -1044,7 +1047,7 @@ quit:
 
 		if (!do_mouse_event(ses, ev, doc_view)
 		    && check_mouse_button(ev, B_RIGHT)) {
-			tab_menu(ses, ev->x, ev->y, 0);
+			tab_menu(ses, ev->info.mouse.x, ev->info.mouse.y, 0);
 		}
 	}
 #endif /* CONFIG_MOUSE */

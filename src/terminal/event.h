@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.18 2004/07/28 12:17:11 jonas Exp $ */
+/* $Id: event.h,v 1.19 2004/07/28 15:43:51 jonas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
@@ -23,17 +23,27 @@ enum term_event_type {
 /* XXX: do not change order of fields. --Zas */
 struct term_event {
 	enum term_event_type ev;
-	long x;
-	long y;
 
 	union {
+		/* EVENT_MOUSE */
 		struct term_event_mouse {
+			int x, y;
 			unsigned int button;
 		} mouse;
+
+		/* EVENT_KBD */
+		struct term_event_keyboard {
+			int key, modifier;
+		} keyboard;
+
+		/* EVENT_INIT, EVENT_RESIZE, EVENT_REDRAW */
+		struct term_event_size {
+			int width, height;
+		} size;
 	} info;
 };
 
-#define INIT_TERM_EVENT(type, x, y, b) { (type), (x), (y), { { (b) } } }
+#define INIT_TERM_EVENT(type, x, y, b) { (type), { { (x), (y), (b) } } }
 
 /* This holds the information used when handling the initial connection between
  * a dumb and master terminal. */
@@ -71,10 +81,10 @@ struct terminal_info {
 void term_send_event(struct terminal *, struct term_event *);
 void in_term(struct terminal *);
 
-#define get_kbd_key(event)		((event)->x)
+#define get_kbd_key(event)		((event)->info.keyboard.key)
 #define check_kbd_key(event, key)	(get_kbd_key(event) == (key))
 
-#define get_kbd_modifier(event)		((event)->y)
+#define get_kbd_modifier(event)		((event)->info.keyboard.modifier)
 #define check_kbd_modifier(event, mod)	(get_kbd_modifier(event) == (mod))
 
 #define check_kbd_textinput_key(event)	(get_kbd_key(event) >= ' ' && get_kbd_key(event) < 256 && !get_kbd_modifier(event))

@@ -1,4 +1,4 @@
-/* $Id: mouse.h,v 1.3 2004/07/28 10:19:12 jonas Exp $ */
+/* $Id: mouse.h,v 1.4 2004/07/28 15:43:51 jonas Exp $ */
 
 #ifndef EL__TERMINAL_MOUSE_H
 #define EL__TERMINAL_MOUSE_H
@@ -96,6 +96,7 @@
 #define check_mouse_button(event, value) (get_mouse_button(event) == (value))
 #define check_mouse_wheel(event)	 (get_mouse_button(event) >= B_WHEEL_UP)
 
-#define check_mouse_position(event, box) is_in_box(box, (event)->x, (event)->y)
+#define check_mouse_position(event, box) \
+	is_in_box(box, (event)->info.mouse.x, (event)->info.mouse.y)
 
 #endif

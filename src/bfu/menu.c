@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.255 2004/07/28 15:20:51 jonas Exp $ */
+/* $Id: menu.c,v 1.256 2004/07/28 15:43:51 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -581,7 +581,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 				struct menu *m1;
 
 				if (w1->handler == mainmenu_handler) {
-					if (!ev->y)
+					if (!ev->info.mouse.y)
 						delete_window_ev(win, ev);
 					break;
 				}
@@ -598,7 +598,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 		}
 
 	} else {
-		int sel = ev->y - menu->box.y - 1 + menu->first;
+		int sel = ev->info.mouse.y - menu->box.y - 1 + menu->first;
 
 		if (sel >= 0 && sel < menu->size
 		    && mi_is_selectable(menu->items[sel])) {
@@ -1012,7 +1012,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 		return;
 
 	/* Mouse was clicked outside the mainmenu bar */
-	if (ev->y) {
+	if (ev->info.mouse.y) {
 		if (check_mouse_action(ev, B_DOWN))
 			delete_window_ev(win, NULL);
 
@@ -1022,10 +1022,10 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 	/* First check if the mouse button was pressed in the side of the
 	 * terminal and simply scroll one step in that direction else iterate
 	 * through the menu items to see if it was pressed on a label. */
-	if (ev->x < p) {
+	if (ev->info.mouse.x < p) {
 		scroll = -1;
 
-	} else if (ev->x >= win->term->width - R_MAINMENU_SPACE) {
+	} else if (ev->info.mouse.x >= win->term->width - R_MAINMENU_SPACE) {
 		scroll = 1;
 
 	} else {
@@ -1046,7 +1046,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 			  + strlen(text) - !!item->hotkey_pos
 			  + R_TEXT_SPACE + R_MAINTEXT_SPACE;
 
-			if (ev->x < p) {
+			if (ev->info.mouse.x < p) {
 				scroll = (item - menu->items) - menu->selected;
 				break;
 			}

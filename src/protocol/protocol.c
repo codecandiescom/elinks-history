@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.57 2004/07/12 11:31:17 jonas Exp $ */
+/* $Id: protocol.c,v 1.58 2004/07/12 13:52:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ get_protocol(unsigned char *name, int namelen)
 }
 
 
-#define VALID_PROTOCOL(p) ((p) != PROTOCOL_INVALID)
+#define VALID_PROTOCOL(p) (0 <= (p) && (p) < PROTOCOL_BACKENDS)
 
 int
 get_protocol_port(enum protocol protocol)

@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.33 2004/07/12 11:31:17 jonas Exp $ */
+/* $Id: protocol.h,v 1.34 2004/07/12 13:52:33 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -10,7 +10,6 @@ struct session;
 struct uri;
 
 enum protocol {
-	PROTOCOL_INVALID = -1,
 	PROTOCOL_ABOUT,
 	PROTOCOL_FILE,
 	PROTOCOL_FINGER,
@@ -25,6 +24,9 @@ enum protocol {
 	PROTOCOL_UNKNOWN,
 	PROTOCOL_USER,
 	PROTOCOL_LUA,
+
+	/* For protocol backend index checking */
+	PROTOCOL_BACKENDS,
 };
 
 /* Besides the session an external handler also takes the url as an argument */

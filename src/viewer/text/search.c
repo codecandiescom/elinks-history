@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.205 2004/02/10 19:15:13 jonas Exp $ */
+/* $Id: search.c,v 1.206 2004/02/10 20:15:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -955,7 +955,7 @@ typeahead_error(struct session *ses, unsigned char *typeahead)
  * direction to search (1 is forward, -1 is back). */
 static inline int
 search_link_text(struct document *document, int current_link, int i,
-		 unsigned char *text, int direction)
+		 unsigned char *text, int direction, int *offset)
 {
 	/* The link interval in which we are currently searching */
 	/* Set up the range of links that should be search in first attempt */
@@ -964,22 +964,25 @@ search_link_text(struct document *document, int current_link, int i,
 	int case_sensitive = get_opt_bool("document.browse.search.case");
 	int textlen = strlen(text);
 
-	assert(textlen && direction);
+	assert(textlen && direction && offset);
 
-#define search_strcasecmp(t1, t2, tlen)				\
-	(case_sensitive ? memcmp(t1, t2, tlen)			\
-	 		: strncasecmp(t1, t2, tlen))
+#define match_link_text(t1, t2)					\
+	(case_sensitive ? strstr(t1, t2) : strcasestr(t1, t2))
 
 	for (; i > lower_link && i < upper_link; i += direction) {
 		struct link *link = &document->links[i];
 		unsigned char *match = link->name ? link->name : link->where;
+		unsigned char *matchpos;
 
 		if (link->type != LINK_HYPERTEXT
 		    || textlen > strlen(match)) continue;
 
 		/* Did the text match? */
-		if (!search_strcasecmp(text, match, textlen))
+		matchpos = match_link_text(match, text);
+		if (matchpos) {
+			*offset = matchpos - match;
 			return i;
+		}
 
 		/* Check if we are at the end of the first range */
 		if (i == (direction > 0 ? upper_link - 1: lower_link + 1)
@@ -1004,7 +1007,7 @@ search_link_text(struct document *document, int current_link, int i,
 		}
 	}
 
-#undef search_strcasecmp
+#undef match_link_text
 
 	return -1;
 }
@@ -1028,14 +1031,23 @@ fixup_typeahead_match(struct session *ses, struct document_view *doc_view)
 }
 
 static inline void
-draw_link_text(struct terminal *term, struct document_view *doc_view, int chars)
+draw_link_text(struct terminal *term, struct document_view *doc_view,
+	       int chars, int offset)
 {	
 	struct color_pair *color = get_bfu_color(term, "searched");
 	int xoffset = doc_view->x - doc_view->vs->x;
 	int yoffset = doc_view->y - doc_view->vs->y;
-	int link = doc_view->vs->current_link;
-	struct point *points = doc_view->document->links[link].pos;
+	int current_link = doc_view->vs->current_link;
+	struct link *link = &doc_view->document->links[current_link];
+	struct point *points;
 	register int i;
+
+	/* We need to do some sanity since the search string length
+	 * doesn't map directly to link->n. */
+	int_upper_bound(&chars, link->n);
+	int_upper_bound(&offset, link->n - chars);
+
+	points = &link->pos[offset];
 
 	for (i = 0; i < chars; i++) {
 		int x = points[i].x + xoffset;
@@ -1049,10 +1061,11 @@ draw_link_text(struct terminal *term, struct document_view *doc_view, int chars)
 
 static enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
-	     unsigned char *text, int action)
+	     unsigned char *text, int action, int *offset)
 {
 	int current = int_max(doc_view->vs->current_link, 0);
 	int direction, i = current;
+	struct document *document = doc_view->document;
 
 	switch (action) {
 		case ACT_EDIT_PREVIOUS_ITEM:
@@ -1081,14 +1094,11 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			send_enter(ses->tab->term, NULL, ses);
 			return TYPEAHEAD_ESCAPE;
 
-		case ACT_EDIT_BACKSPACE:
-			return TYPEAHEAD_MATCHED;
-
 		default:
 			direction = 1;
 	}
 
-	i = search_link_text(doc_view->document, current, i, text, direction);
+	i = search_link_text(document, current, i, text, direction, offset);
 	if (i < 0) return TYPEAHEAD_STOP;
 
 	assert(i >= 0 && i < doc_view->document->nlinks);
@@ -1138,6 +1148,7 @@ link_typeahead_handler(struct input_line *line, int action)
 	struct session *ses = line->ses;
 	unsigned char *buffer = line->buffer;
 	struct document_view *doc_view = current_frame(ses);
+	int offset = 0;
 
 	assertm(doc_view, "document not formatted");
 	if_assert_failed return INPUT_LINE_CANCEL;
@@ -1180,11 +1191,11 @@ link_typeahead_handler(struct input_line *line, int action)
 		line->data = "#";
 	}
 
-	switch (do_typeahead(ses, doc_view, buffer, action)) {
+	switch (do_typeahead(ses, doc_view, buffer, action, &offset)) {
 		case TYPEAHEAD_MATCHED:
 			fixup_typeahead_match(ses, doc_view);
 			draw_formatted(ses, 0);
-			draw_link_text(ses->tab->term, doc_view, strlen(buffer));
+			draw_link_text(ses->tab->term, doc_view, strlen(buffer), offset);
 			return INPUT_LINE_PROCEED;
 
 		case TYPEAHEAD_STOP:

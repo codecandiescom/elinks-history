@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.109 2004/01/28 00:00:07 jonas Exp $ */
+/* $Id: scanner.c,v 1.110 2004/01/28 00:04:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,7 @@ static struct scanner_info css_scanner_info = {
 /* This macro checks that if the scanners table is full the last token skipping
  * or get_next_css_token() call made it possible to get the type of the next
  * token. */
-#define check_css_scanner(scanner) \
+#define check_scanner(scanner) \
 	(scanner->tokens < SCANNER_TOKENS \
 	 || scanner->current + 1 < scanner->table + scanner->tokens)
 
@@ -211,7 +211,7 @@ static struct scanner_info css_scanner_info = {
 
 
 static inline void
-scan_css_token(struct css_scanner *scanner, struct scanner_token *token)
+scan_css_token(struct scanner *scanner, struct scanner_token *token)
 {
 	unsigned char *string = scanner->position;
 	unsigned char first_char = *string;
@@ -412,7 +412,7 @@ scan_css_token(struct css_scanner *scanner, struct scanner_token *token)
  * requested remains and are moved to the start of the scanners token table. */
 /* Returns the current token or NULL if there are none. */
 struct scanner_token *
-scan_css_tokens(struct css_scanner *scanner)
+scan_css_tokens(struct scanner *scanner)
 {
 	struct scanner_token *table = scanner->table;
 	struct scanner_token *table_end = table + scanner->tokens;
@@ -439,7 +439,7 @@ scan_css_tokens(struct css_scanner *scanner)
 	if (!scanner->position) {
 		scanner->tokens = move_to_front ? move_to_front : -1;
 		scanner->current = table;
-		assert(check_css_scanner(scanner));
+		assert(check_scanner(scanner));
 		return move_to_front ? table : NULL;
 	}
 
@@ -470,7 +470,7 @@ scan_css_tokens(struct css_scanner *scanner)
 	if (scanner->position && !*scanner->position)
 		scanner->position = NULL;
 
-	assert(check_css_scanner(scanner));
+	assert(check_scanner(scanner));
 	return table;
 }
 
@@ -479,7 +479,7 @@ scan_css_tokens(struct css_scanner *scanner)
 
 #ifdef SCANNER_DEBUG
 void
-dump_css_scanner(struct css_scanner *scanner)
+dump_scanner(struct scanner *scanner)
 {
 	unsigned char buffer[MAX_STR_LEN];
 	struct scanner_token *token = scanner->current;
@@ -489,7 +489,7 @@ dump_css_scanner(struct css_scanner *scanner)
 	int token_lookahead = 4;
 	int srclen;
 
-	if (!css_scanner_has_tokens(scanner)) return;
+	if (!scanner_has_tokens(scanner)) return;
 
 	memset(buffer, 0, MAX_STR_LEN);
 	for (; token_lookahead > 0 && token < table_end; token++, token_lookahead--) {
@@ -529,14 +529,14 @@ dump_css_scanner(struct css_scanner *scanner)
 }
 
 struct scanner_token *
-get_css_token_debug(struct css_scanner *scanner)
+get_css_token_debug(struct scanner *scanner)
 {
-	if (!css_scanner_has_tokens(scanner)) return NULL;
+	if (!scanner_has_tokens(scanner)) return NULL;
 
-	dump_css_scanner(scanner);
+	dump_scanner(scanner);
 
 	/* Make sure we do not return CSS_TOKEN_NONE tokens */
-	assert(!css_scanner_has_tokens(scanner)
+	assert(!scanner_has_tokens(scanner)
 		|| scanner->current->type != CSS_TOKEN_NONE);
 
 	return get_css_token_(scanner);
@@ -545,7 +545,7 @@ get_css_token_debug(struct css_scanner *scanner)
 #endif
 
 struct scanner_token *
-skip_scanner_tokens(struct css_scanner *scanner, int skipto, int precedence)
+skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence)
 {
 	struct scanner_token *token = get_css_token(scanner);
 
@@ -566,7 +566,7 @@ skip_scanner_tokens(struct css_scanner *scanner, int skipto, int precedence)
 /* Initializers */
 
 void
-init_css_scanner(struct css_scanner *scanner, unsigned char *string)
+init_css_scanner(struct scanner *scanner, unsigned char *string)
 {
 	static int did_init_scan_table;
 
@@ -575,7 +575,7 @@ init_css_scanner(struct css_scanner *scanner, unsigned char *string)
 		did_init_scan_table = 1;
 	}
 
-	memset(scanner, 0, sizeof(struct css_scanner));
+	memset(scanner, 0, sizeof(struct scanner));
 
 	scanner->string = string;
 	scanner->position = string;

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.57 2004/01/28 00:00:07 jonas Exp $ */
+/* $Id: scanner.h,v 1.58 2004/01/28 00:04:52 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -138,8 +138,8 @@ check_css_precedence(int type, int skipto)
  * the scanner. */
 #define SCANNER_TOKENS 10
 
-/* The {struct css_scanner} describes the current state of the CSS scanner. */
-struct css_scanner {
+/* The {struct scanner} describes the current state of the CSS scanner. */
+struct scanner {
 	/* The very start of the scanned string and the position in the string
 	 * where to scan next. If position is NULL it means that no more tokens
 	 * can be retrieved from the string. */
@@ -166,21 +166,21 @@ struct css_scanner {
 
 
 /* Initializes the scanner. */
-void init_css_scanner(struct css_scanner *scanner, unsigned char *string);
+void init_css_scanner(struct scanner *scanner, unsigned char *string);
 
-#define css_scanner_has_tokens(scanner) \
+#define scanner_has_tokens(scanner) \
 	((scanner)->tokens > 0 && (scanner)->current < (scanner)->table + (scanner)->tokens)
 
 /* Fills the scanner with tokens. Already scanned tokens which have not been
  * requested remain and are moved to the start of the scanners token table. */
 /* Returns the current token or NULL if there are none. */
-struct scanner_token *scan_css_tokens(struct css_scanner *scanner);
+struct scanner_token *scan_css_tokens(struct scanner *scanner);
 
 /* Scanner table accessors and mutators */
 
 /* Checks the type of the next token */
 #define check_next_css_token(scanner, token_type)				\
-	(css_scanner_has_tokens(scanner)					\
+	(scanner_has_tokens(scanner)					\
 	 && ((scanner)->current + 1 < (scanner)->table + (scanner)->tokens)	\
 	 && (scanner)->current[1].type == (token_type))
 
@@ -188,16 +188,16 @@ struct scanner_token *scan_css_tokens(struct css_scanner *scanner);
  * a rescan so any token pointers that has been stored in a local variable
  * might not be valid after the call. */
 static inline struct scanner_token *
-get_css_token(struct css_scanner *scanner)
+get_css_token(struct scanner *scanner)
 {
-	return css_scanner_has_tokens(scanner) ? (scanner)->current : NULL;
+	return scanner_has_tokens(scanner) ? (scanner)->current : NULL;
 }
 
 /* Do a scanning if we do not have also have access to next token. */
 static inline struct scanner_token *
-get_next_css_token(struct css_scanner *scanner)
+get_next_css_token(struct scanner *scanner)
 {
-	return (css_scanner_has_tokens(scanner)
+	return (scanner_has_tokens(scanner)
 		&& (++(scanner)->current + 1 >= (scanner)->table + (scanner)->tokens)
 		? scan_css_tokens(scanner) : get_css_token(scanner));
 }
@@ -205,7 +205,7 @@ get_next_css_token(struct css_scanner *scanner)
 /* Removes tokens from the scanner until it meets a token of the given type.
  * This token will then also be skipped. */
 struct scanner_token *
-skip_scanner_tokens(struct css_scanner *scanner, int skipto, int precedence);
+skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence);
 
 #define skip_css_tokens(scanner, type) \
 	skip_scanner_tokens(scanner, type, get_css_precedence(type))

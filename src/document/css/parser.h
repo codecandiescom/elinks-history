@@ -1,10 +1,10 @@
-/* $Id: parser.h,v 1.12 2004/01/24 02:05:46 jonas Exp $ */
+/* $Id: parser.h,v 1.13 2004/01/28 00:04:52 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
 
 #include "util/lists.h"
-struct css_scanner;
+struct scanner;
 struct css_stylesheet;
 
 /* This is interface for the value parser. It is intended to be used only
@@ -15,7 +15,7 @@ struct css_stylesheet;
  * css_property}es to the specified list. The function returns positive value
  * in case it recognized a property in the given string, or zero in case of an
  * error. */
-void css_parse_properties(struct list_head *props, struct css_scanner *scanner);
+void css_parse_properties(struct list_head *props, struct scanner *scanner);
 
 
 /* Parses the @string and adds any recognized selectors + properties to the

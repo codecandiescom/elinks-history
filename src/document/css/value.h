@@ -1,4 +1,4 @@
-/* $Id: value.h,v 1.12 2004/01/22 22:17:36 pasky Exp $ */
+/* $Id: value.h,v 1.13 2004/01/28 00:04:52 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_VALUE_H
 #define EL__DOCUMENT_CSS_VALUE_H
@@ -15,7 +15,7 @@
  * the string pointer to the byte after the value end. */
 int css_parse_value(struct css_property_info *propinfo,
 		    union css_property_value *value,
-		    struct css_scanner *scanner);
+		    struct scanner *scanner);
 
 
 /* Here come the css_property_value_parsers provided. */
@@ -23,31 +23,31 @@ int css_parse_value(struct css_property_info *propinfo,
 /* Takes no parser_data. */
 int css_parse_background_value(struct css_property_info *propinfo,
 				union css_property_value *value,
-				struct css_scanner *scanner);
+				struct scanner *scanner);
 
 /* Takes no parser_data. */
 int css_parse_color_value(struct css_property_info *propinfo,
 			  union css_property_value *value,
-			  struct css_scanner *scanner);
+			  struct scanner *scanner);
 
 /* Takes no parser_data. */
 int css_parse_text_decoration_value(struct css_property_info *propinfo,
 				union css_property_value *value,
-				struct css_scanner *scanner);
+				struct scanner *scanner);
 
 /* Takes no parser_data. */
 int css_parse_font_style_value(struct css_property_info *propinfo,
 				union css_property_value *value,
-				struct css_scanner *scanner);
+				struct scanner *scanner);
 
 /* Takes no parser_data. */
 int css_parse_font_weight_value(struct css_property_info *propinfo,
 				union css_property_value *value,
-				struct css_scanner *scanner);
+				struct scanner *scanner);
 
 /* Takes no parser_data. */
 int css_parse_text_align_value(struct css_property_info *propinfo,
 				union css_property_value *value,
-				struct css_scanner *scanner);
+				struct scanner *scanner);
 
 #endif

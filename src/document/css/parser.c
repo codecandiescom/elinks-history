@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.72 2004/01/28 00:00:07 jonas Exp $ */
+/* $Id: parser.c,v 1.73 2004/01/28 00:04:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,11 +24,11 @@
 
 
 void
-css_parse_properties(struct list_head *props, struct css_scanner *scanner)
+css_parse_properties(struct list_head *props, struct scanner *scanner)
 {
 	assert(props && scanner);
 
-	while (css_scanner_has_tokens(scanner)) {
+	while (scanner_has_tokens(scanner)) {
 		struct css_property_info *property_info = NULL;
 		struct css_property *prop;
 		struct scanner_token *token = get_css_token(scanner);
@@ -61,7 +61,7 @@ css_parse_properties(struct list_head *props, struct css_scanner *scanner)
 
 		/* Skip property name and separator and check for expression */
 		if (!skip_css_tokens(scanner, ':')) {
-			assert(!css_scanner_has_tokens(scanner));
+			assert(!scanner_has_tokens(scanner));
 			break;
 		}
 
@@ -114,7 +114,7 @@ ride_on:
  *	| '@font-face' '{' properties '}'
  */
 static void
-css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
+css_parse_atrule(struct css_stylesheet *css, struct scanner *scanner)
 {
 	struct scanner_token *token = get_css_token(scanner);
 
@@ -144,7 +144,7 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 
 		case CSS_TOKEN_AT_KEYWORD:
 			/* TODO: Unkown @-rule so either skip til ';' or next block. */
-			while (css_scanner_has_tokens(scanner)) {
+			while (scanner_has_tokens(scanner)) {
 				token = get_next_css_token(scanner);
 
 				if (token->type == ';') {
@@ -180,7 +180,7 @@ struct selector_pkg {
  * chains are not supported yet.
  */
 static struct list_head *
-css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
+css_parse_selector(struct css_stylesheet *css, struct scanner *scanner)
 {
 	unsigned char *name = NULL, *id = NULL, *class = NULL, *pseudo = NULL;
 	struct scanner_token *token = get_css_token(scanner);
@@ -300,7 +300,7 @@ syntax_error:
  *	  selector [ ',' selector ]* '{' properties '}'
  */
 static void
-css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
+css_parse_ruleset(struct css_stylesheet *css, struct scanner *scanner)
 {
 	struct selector_pkg *pkg, *fpkg;
 	struct list_head *selectors;
@@ -342,11 +342,11 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 void
 css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 {
-	struct css_scanner scanner;
+	struct scanner scanner;
 
 	init_css_scanner(&scanner, string);
 
-	while (css_scanner_has_tokens(&scanner)) {
+	while (scanner_has_tokens(&scanner)) {
 		struct scanner_token *token = get_css_token(&scanner);
 
 		assert(token);

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.45 2004/01/28 00:00:07 jonas Exp $ */
+/* $Id: value.c,v 1.46 2004/01/28 00:04:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,7 @@
 int
 css_parse_color_value(struct css_property_info *propinfo,
 		      union css_property_value *value,
-		      struct css_scanner *scanner)
+		      struct scanner *scanner)
 {
 	struct scanner_token *token = get_css_token(scanner);
 
@@ -89,7 +89,7 @@ css_parse_color_value(struct css_property_info *propinfo,
 int
 css_parse_background_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
-			   struct css_scanner *scanner)
+			   struct scanner *scanner)
 {
 	struct scanner_token *token = get_css_token(scanner);
 	int success = 0;
@@ -119,7 +119,7 @@ css_parse_background_value(struct css_property_info *propinfo,
 int
 css_parse_font_style_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
-			   struct css_scanner *scanner)
+			   struct scanner *scanner)
 {
 	struct scanner_token *token = get_css_token(scanner);
 
@@ -149,7 +149,7 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 int
 css_parse_font_weight_value(struct css_property_info *propinfo,
 			    union css_property_value *value,
-			    struct css_scanner *scanner)
+			    struct scanner *scanner)
 {
 	struct scanner_token *token = get_css_token(scanner);
 	unsigned char *nstring;
@@ -200,7 +200,7 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 int
 css_parse_text_align_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
-			   struct css_scanner *scanner)
+			   struct scanner *scanner)
 {
 	struct scanner_token *token = get_css_token(scanner);
 
@@ -232,7 +232,7 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 int
 css_parse_text_decoration_value(struct css_property_info *propinfo,
 				union css_property_value *value,
-				struct css_scanner *scanner)
+				struct scanner *scanner)
 {
 	struct scanner_token *token = get_css_token(scanner);
 
@@ -260,7 +260,7 @@ css_parse_text_decoration_value(struct css_property_info *propinfo,
 int
 css_parse_value(struct css_property_info *propinfo,
 		union css_property_value *value,
-		struct css_scanner *scanner)
+		struct scanner *scanner)
 {
 	struct scanner_token *token;
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.196 2004/01/25 15:28:15 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.197 2004/01/28 09:18:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -539,6 +539,7 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "tab-next", ACT_MAIN_TAB_NEXT, DACT(N_("Next tab")) },
 	{ "tab-prev", ACT_MAIN_TAB_PREV,DACT( N_("Previous tab")) },
 	{ "toggle-display-images", ACT_MAIN_TOGGLE_DISPLAY_IMAGES, DACT(N_("Toggle displaying of links to images")) },
+	{ "toggle-css", ACT_MAIN_TOGGLE_CSS, DACT(N_("Toggle rendering of page using CSS")) },
 	{ "toggle-display-tables", ACT_MAIN_TOGGLE_DISPLAY_TABLES, DACT(N_("Toggle rendering of tables")) },
 	{ "toggle-document-colors", ACT_MAIN_TOGGLE_DOCUMENT_COLORS, DACT(N_("Toggle usage of document specific colors")) },
 	{ "toggle-html-plain", ACT_MAIN_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
@@ -777,8 +778,8 @@ static struct default_kb default_main_keymap[] = {
 	{ 'D',		 0,		ACT_MAIN_DOWNLOAD_MANAGER },
 	{ 'E',		 0,		ACT_MAIN_GOTO_URL_CURRENT_LINK },
 	{ 'E',		 KBD_CTRL,	ACT_MAIN_END },
-	{ 'F',		 KBD_CTRL,	ACT_MAIN_PAGE_DOWN },
 	{ 'F',		 0,		ACT_MAIN_FORMHIST_MANAGER },
+	{ 'F',		 KBD_CTRL,	ACT_MAIN_PAGE_DOWN },
 	{ 'G',		 0,		ACT_MAIN_GOTO_URL_CURRENT },
 	{ 'H',		 0,		ACT_MAIN_GOTO_URL_HOME },
 	{ 'K',		 0,		ACT_MAIN_COOKIE_MANAGER },
@@ -796,6 +797,7 @@ static struct default_kb default_main_keymap[] = {
 	{ '\'',		 0,		ACT_MAIN_MARK_GOTO },
 	{ '\\',		 0,		ACT_MAIN_TOGGLE_HTML_PLAIN },
 	{ ']',		 0,		ACT_MAIN_SCROLL_RIGHT },
+	{ '_',		 0,		ACT_MAIN_TOGGLE_CSS },
 	{ 'a',		 0,		ACT_MAIN_ADD_BOOKMARK },
 	{ 'b',		 0,		ACT_MAIN_PAGE_UP },
 	{ 'c',		 0,		ACT_MAIN_TAB_CLOSE },

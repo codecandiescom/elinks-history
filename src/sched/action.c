@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.50 2004/01/26 18:52:02 jonas Exp $ */
+/* $Id: action.c,v 1.51 2004/01/28 09:18:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,6 +438,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT:
 			close_all_tabs_but_current(ses);
+			break;
+
+		case ACT_MAIN_TOGGLE_CSS:
+			toggle_document_option(ses, "document.css.enable");
 			break;
 
 		case ACT_MAIN_TOGGLE_DISPLAY_IMAGES:

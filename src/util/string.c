@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.107 2004/11/03 11:16:05 zas Exp $ */
+/* $Id: string.c,v 1.108 2004/11/03 17:19:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,10 +44,10 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 	if_assert_failed len = 0;
 
 	m = debug_mem_alloc(f, l, len + 1);
-	if (m) {
-		if (src && len) memcpy(m, src, len);
-		m[len] = 0;
-	}
+	if (!m) return NULL;
+
+	if (src && len) memcpy(m, src, len);
+	m[len] = '\0';
 
 	return m;
 }
@@ -72,10 +72,10 @@ memacpy(unsigned char *src, int len)
 	if_assert_failed { len = 0; }
 
 	m = mem_alloc(len + 1);
-	if (m) {
-		if (src && len) memcpy(m, src, len);
-		m[len] = 0;
-	}
+	if (!m) return NULL;
+
+	if (src && len) memcpy(m, src, len);
+	m[len] = 0;
 
 	return m;
 }
@@ -105,12 +105,11 @@ add_to_strn(unsigned char **dst, unsigned char *src)
 	dstlen = strlen(*dst);
 	srclen = strlen(src) + 1; /* Include the NUL char! */
 	newdst = mem_realloc(*dst, dstlen + srclen);
-	if (newdst) {
-		memcpy(newdst + dstlen, src, srclen);
-		*dst = newdst;
-	}
-}
+	if (!newdst) return;
 
+	memcpy(newdst + dstlen, src, srclen);
+	*dst = newdst;
+}
 
 unsigned char *
 insert_in_string(unsigned char **dst, int pos, unsigned char *seq, int seqlen)
@@ -126,7 +125,6 @@ insert_in_string(unsigned char **dst, int pos, unsigned char *seq, int seqlen)
 
 	return string;
 }
-
 
 unsigned char *
 straconcat(unsigned char *str, ...)
@@ -152,7 +150,7 @@ straconcat(unsigned char *str, ...)
 
 		if (!l) continue;
 
-		ns = mem_realloc(s, len + l + 1);
+		ns = mem_realloc(s, len + 1 + l);
 		if (!ns) {
 			mem_free(s);
 			va_end(ap);
@@ -169,10 +167,8 @@ straconcat(unsigned char *str, ...)
 	return s;
 }
 
-
-
 int
-xstrcmp(register unsigned char *s1, unsigned char *s2)
+xstrcmp(unsigned char *s1, unsigned char *s2)
 {
 	if (!s1) return -!!s2;
 	if (!s2) return 1;
@@ -186,7 +182,7 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 	if_assert_failed return NULL;
 
 	strncpy(dst, src, dst_size);
-	dst[dst_size - 1] = 0;
+	dst[dst_size - 1] = '\0';
 
 	return dst;
 }
@@ -224,7 +220,7 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 
 int
 elinks_strlcmp(const unsigned char *s1, size_t n1,
-		const unsigned char *s2, size_t n2)
+	       const unsigned char *s2, size_t n2)
 {
 	strlcmp_device("strlcmp", s1, n1, s2, n2, s1[p], s2[p]);
 }
@@ -260,7 +256,7 @@ init_string(struct string *string)
 #endif
 	if (!string->source) return NULL;
 
-	*string->source = 0;
+	*string->source = '\0';
 
 	set_string_magic(string);
 
@@ -293,8 +289,9 @@ add_to_string(struct string *string, unsigned char *source)
 
 	check_string_magic(string);
 
-	return (*source ? add_bytes_to_string(string, source, strlen(source))
-			: string);
+	if (!*source) return string;
+
+	return add_bytes_to_string(string, source, strlen(source));
 }
 
 inline struct string *
@@ -324,9 +321,9 @@ add_string_to_string(struct string *string, struct string *from)
 	check_string_magic(string);
 	check_string_magic(from);
 
-	return (*from->source
-		? add_bytes_to_string(string, from->source, from->length)
-		: string);
+	if (!*from->source) return NULL;
+
+	return add_bytes_to_string(string, from->source, from->length);
 }
 
 struct string *
@@ -377,15 +374,15 @@ add_xchar_to_string(struct string *string, unsigned char character, int times)
 
 	check_string_magic(string);
 
-	if (times == 0) return string;
+	if (!times) return string;
 
 	newlength = string->length + times;
 	if (!realloc_string(string, newlength))
 		return NULL;
 
 	memset(string->source + string->length, character, times);
-	string->source[newlength] = 0;
 	string->length = newlength;
+	string->source[newlength] = '\0';
 
 	return string;
 }
@@ -419,7 +416,7 @@ add_format_to_string(struct string *string, unsigned char *format, ...)
 	va_end(ap);
 
 	string->length = newlength;
-	string->source[newlength] = 0;
+	string->source[newlength] = '\0';
 
 	return string;
 }

@@ -1,12 +1,11 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.185 2004/01/15 21:30:54 zas Exp $ */
-
-#include <stdlib.h>
+/* $Id: menu.c,v 1.186 2004/01/16 18:09:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdlib.h>
 #include <string.h>
 
 #include "elinks.h"

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.123 2003/06/17 11:34:53 zas Exp $ */
+/* $Id: renderer.c,v 1.124 2003/06/17 11:52:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,8 +158,9 @@ realloc_line(struct part *p, int y, int x)
 static inline int
 xpand_lines(struct part *p, int y)
 {
-	assert(p && p->data);
+	assert(p);
 
+	if (!p->data) return 0;
 	y += p->yp;
 	if (y >= p->data->y) return realloc_lines(p, y);
 
@@ -175,7 +176,8 @@ expand_lines(struct part *part, int y)
 static inline int
 xpand_line(struct part *p, int y, int x)
 {
-	assert(p && p->data);
+	assert(p);
+	if (!p->data) return 0; /* !!! FIXME: p->x (?) */
 
 	x += p->xp;
 	y += p->yp;
@@ -286,7 +288,8 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 	int nlink;
 	int matched = 0;
 
-	assert(part && part->data);
+	assert(part);
+	if (!part->data) return;
 	xpand_lines(part, yt);
 
 	for (nlink = last_link_to_move; nlink < part->data->nlinks; nlink++) {
@@ -347,9 +350,10 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 static inline void
 copy_chars(struct part *part, int x, int y, int xl, chr *d)
 {
-	assert(xl > 0 && part && part->data);
+	assert(part && part->data);
 
-	if (xpand_lines(part, y)
+	if (xl <= 0
+	    || xpand_lines(part, y)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 

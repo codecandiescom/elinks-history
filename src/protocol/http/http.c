@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.254 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: http.c,v 1.255 2004/03/24 15:10:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1408,23 +1408,19 @@ again:
 
 	d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);
 	if (d) {
-		unsigned char *extension = get_extension_from_url(struri(*uri));
-		enum stream_encoding file_encoding;
-
-		file_encoding = extension ? guess_encoding(extension) : ENCODING_NONE;
-		if (extension) mem_free(extension);
+		enum stream_encoding encoding = guess_encoding(struri(*uri));
 
 		/* If the content is encoded, we want to preserve the encoding
 		 * if it is implied by the extension, so that saving the URI
 		 * will leave the saved file with the correct encoding. */
 #ifdef HAVE_ZLIB_H
 		if ((!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip"))
-		    && file_encoding != ENCODING_GZIP)
+		    && encoding != ENCODING_GZIP)
 			conn->content_encoding = ENCODING_GZIP;
 #endif
 #ifdef HAVE_BZLIB_H
 		if ((!strcasecmp(d, "bzip2") || !strcasecmp(d, "x-bzip2"))
-		    && file_encoding != ENCODING_BZIP2)
+		    && encoding != ENCODING_BZIP2)
 			conn->content_encoding = ENCODING_BZIP2;
 #endif
 		mem_free(d);

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.173 2004/01/09 15:20:59 zas Exp $ */
+/* $Id: menu.c,v 1.174 2004/01/09 20:48:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,14 +175,15 @@ select_menu(struct terminal *term, struct menu *menu)
 static void
 count_menu_size(struct terminal *term, struct menu *menu)
 {
-	int width = term->width;
-	int height = term->height;
-	int minwidth = MENU_BORDER_SIZE + L_TEXT_SPACE + R_RTEXT_SPACE + MENU_BORDER_SIZE;
-	int mx = minwidth;
+	int width = term->width - MENU_BORDER_SIZE * 2;
+	int height = term->height - MENU_BORDER_SIZE * 2;
+	int mx = MENU_BORDER_SIZE * 2;
 	int my;
 
 	for (my = 0; my < menu->ni; my++) {
-		int s = minwidth;
+		int s;
+		int text_width = 0;
+		int rtext_width = 0;
 
 		if (mi_has_left_text(menu->items[my])) {
 			unsigned char *text = menu->items[my].text;
@@ -191,13 +192,14 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				text = _(text, term);
 
 			if (text[0])
-				s += strlen(text)
-				     - !!menu->items[my].hotkey_pos
-				     + R_TEXT_SPACE;
+				text_width = L_TEXT_SPACE
+					     + strlen(text)
+				    	     - !!menu->items[my].hotkey_pos
+				    	     + R_TEXT_SPACE;
 		}
 
 		if (mi_is_submenu(menu->items[my])) {
-			s += L_RTEXT_SPACE + m_submenu_len;
+			rtext_width = L_RTEXT_SPACE + m_submenu_len + R_RTEXT_SPACE;
 
 		} else if (menu->items[my].action != ACT_NONE) {
 			struct string keystroke;
@@ -206,7 +208,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				add_keystroke_to_string(&keystroke,
 							menu->items[my].action,
 							KM_MAIN);
-				s += L_RTEXT_SPACE + keystroke.length;
+				rtext_width = L_RTEXT_SPACE + keystroke.length + R_RTEXT_SPACE;
 				done_string(&keystroke);
 			}
 
@@ -217,19 +219,22 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				rtext = _(rtext, term);
 
 			if (rtext[0])
-				s += L_RTEXT_SPACE + strlen(rtext);
+				rtext_width = L_RTEXT_SPACE + strlen(rtext) + R_RTEXT_SPACE;
 		}
+
+		int_upper_bound(&text_width, width);
+		int_upper_bound(&rtext_width, width - text_width);
+
+		s = text_width + rtext_width;
+		int_upper_bound(&s, width);
 
 		if (s > mx) mx = s;
 	}
 
-	my += MENU_BORDER_SIZE * 2;
-
-	int_upper_bound(&mx, width);
 	int_upper_bound(&my, height);
 
-	menu->width = mx;
-	menu->height = my;
+	menu->width = mx + MENU_BORDER_SIZE * 2;
+	menu->height = my + MENU_BORDER_SIZE * 2;
 
 	menu->x = menu->parent_x;
 	menu->y = menu->parent_y;

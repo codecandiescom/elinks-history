@@ -2,69 +2,69 @@ This is a super-simplistic CSS micro-engine.
 
 				    Phases
 
-   The CSS handling is divided into:
+The CSS handling is divided into:
 
-The scanner
+* The scanner
 
-   It takes care of composing tokens from a string containing CSS source. It
-   also takes care of eliminating either garbage code that was not recognized
-   or things like whitespace and comments. The scanner will not attempt to
-   recover from this garbage code but merely signal them to the upper layers.
+It takes care of composing tokens from a string containing CSS source. It
+also takes care of eliminating either garbage code that was not recognized
+or things like whitespace and comments. The scanner will not attempt to
+recover from this garbage code but merely signal them to the upper layers.
 
-   The scanner only works with strings but is a bit more high level than
-   scanners in the sense of flex. The string "10em" will not just generate the
-   two tokens <number>, <identifier> but rather combine them into one token.
-   This only leads to problems with tokens of the sort #<identifier> that can
-   be both a hex color or hash so should not be a problem but rather mean that
-   we will do less scanner calls.
+The scanner only works with strings but is a bit more high level than
+scanners in the sense of flex. The string "10em" will not just generate the
+two tokens <number>, <identifier> but rather combine them into one token.
+This only leads to problems with tokens of the sort #<identifier> that can
+be both a hex color or hash so should not be a problem but rather mean that
+we will do less scanner calls.
 
-   The scanner lives in scanner.*
+The scanner lives in scanner.*
 
-The parser
+* The parser
 
-   It takes a string with CSS code, composes tokens (from the scanner) into
-   some meaningful syntax and transforms it to an internal set of structures
-   describing the data (let's call it a "rawer"). It currently does no recovery
-   when something unexpected shows up but skips to next special control char.
+It takes a string with CSS code, composes tokens (from the scanner) into
+some meaningful syntax and transforms it to an internal set of structures
+describing the data (let's call it a "rawer"). It currently does no recovery
+when something unexpected shows up but skips to next special control char.
 
-   The parser lives in parser.* and value.*
+The parser lives in parser.* and value.*
 
-The applier
+* The applier
 
-   It applies style info from a syntax tree (parsed ELinks or document
-   stylesheet) or fragment of one (in the case of style="" attributes) to the
-   current element.
+It applies style info from a syntax tree (parsed ELinks or document
+stylesheet) or fragment of one (in the case of style="" attributes) to the
+current element.
 
-   The applier lives in apply.*
+The applier lives in apply.*
 
 
 			      The current state
 
-   Currently we both check the element's 'style' attribute, content of <style>
-   tags and imports from either <link> tags in the HTML header or @imports from
-   the CSS code. But we lack a proper way to handle the cascading. Now it will
-   automatically scan the current element, and if a 'style' attribute is found,
-   it is parsed and applied to the current element.  If there is no 'style'
-   attribute it will look up any styles retrieved from the document stylesheet
-   and last try styles from the default user controlled stylesheet. TODO: We
-   should always look up <style> tags and only apply those not found in any
-   'style' attribute.
+Currently we both check the element's 'style' attribute, content of <style>
+tags and imports from either <link> tags in the HTML header or @imports from
+the CSS code. But we lack a proper way to handle the cascading. Now it will
+automatically scan the current element, and if a 'style' attribute is found,
+it is parsed and applied to the current element.  If there is no 'style'
+attribute it will look up any styles retrieved from the document stylesheet
+and last try styles from the default user controlled stylesheet. TODO: We
+should always look up <style> tags and only apply those not found in any
+'style' attribute.
 
-   One big problem with the current way of doing things is inheritance, there
-   is no way we are telling the HTML engine what is going to be inherited and
-   what is not. The other problem is precedence, currently even global
-   stylesheet takes precedence over local classic-formatting attributes (we
-   just css_apply() like mad on various places to make sure the CSS attributes
-   are stuffed through HTML engine's throat). These two problems will be solved
-   when the HTML engine is converted to work with stylesheets natively (instead
-   of format + par_format).
+One big problem with the current way of doing things is inheritance, there
+is no way we are telling the HTML engine what is going to be inherited and
+what is not. The other problem is precedence, currently even global
+stylesheet takes precedence over local classic-formatting attributes (we
+just css_apply() like mad on various places to make sure the CSS attributes
+are stuffed through HTML engine's throat). These two problems will be solved
+when the HTML engine is converted to work with stylesheets natively (instead
+of format + par_format).
 
 
 			    What Is Gonna Be A FAQ
 
-Why isn't the CSS support compile-time optional?
+* Why isn't the CSS support compile-time optional?
 
-   Answer: Because I want to eliminate all trivial styling (like html_h*()) and
-   substitute it with default stylesheet information, so that this can be
-   user-configured. On the other side we might yet reconsider whether we want
-   that before 1.0. Maybe we don't.
+Answer: Because I want to eliminate all trivial styling (like html_h*()) and
+substitute it with default stylesheet information, so that this can be
+user-configured. On the other side we might yet reconsider whether we want
+that before 1.0. Maybe we don't.

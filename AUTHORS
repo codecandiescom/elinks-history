@@ -30,6 +30,7 @@ Ami Fischman <usenet@fischman.org>
 
 Andre Valente <a.valente@netcabo.pt>
 	Download completion notify
+	Portuguese and Brazilian-Portuguese translation updates
 
 Anton Voloshin <vav@isv.ru>
 	Proper encoding of form entries
@@ -350,4 +351,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.75 2002/08/29 12:58:08 pasky Exp $
+$Id: AUTHORS,v 1.76 2002/08/30 13:41:41 pasky Exp $

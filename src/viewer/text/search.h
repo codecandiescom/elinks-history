@@ -1,4 +1,4 @@
-/* $Id: search.h,v 1.12 2003/12/13 00:32:43 jonas Exp $ */
+/* $Id: search.h,v 1.13 2003/12/21 17:01:22 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
@@ -22,7 +22,7 @@ enum typeahead_code {
 
 enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
-	     unsigned char *typeahead, unsigned long typed);
+	     unsigned char *typeahead, struct term_event *event);
 
 void search_dlg(struct session *ses, struct document_view *doc_view, int a);
 void search_back_dlg(struct session *ses, struct document_view *doc_view, int a);

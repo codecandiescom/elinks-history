@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.137 2003/12/13 05:25:42 jonas Exp $ */
+/* $Id: search.c,v 1.138 2003/12/21 17:01:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,11 +23,11 @@
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
 #include "bfu/text.h"
+#include "config/kbdbind.h"
 #include "document/document.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
 #include "sched/session.h"
-#include "terminal/kbd.h"
 #include "terminal/screen.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
@@ -933,31 +933,36 @@ get_document_char(struct document *document, int x, int y)
 	return 0;
 }
 
-/* TODO: The escape/control keys should probably be configurable */
 /* XXX: This is a bit hackish for some developers taste. */
 enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
-	     unsigned char *typeahead, unsigned long typed)
+	     unsigned char *typeahead, struct term_event *event)
 {
 	int i = doc_view->vs->current_link;
 	int charpos = strlen(typeahead);
 	int last_link;
+	enum keyact action = kbd_action(KM_EDIT, event, NULL);
 
-	if (isprint(typed) && charpos < MAX_STR_LEN - 1) {
-		typeahead[charpos++] = typed;
+	switch (action) {
+		case ACT_BACKSPACE:
+			if (charpos > 0) charpos--;
+			typeahead[charpos] = 0;
 
-	} else if (typed == KBD_BS) {
-		if (charpos > 0) charpos--;
-		typeahead[charpos] = 0;
-		/* Nothing to match so stay put */
-		if (!charpos) return TYPEAHEAD_MATCHED;
-		i = 0;
+			/* Nothing to match so stay put */
+			if (!charpos) return TYPEAHEAD_MATCHED;
 
-	} else if (typed == KBD_TAB) {
-		i++;
+			i = 0;
+			break;
 
-	} else {
-		return TYPEAHEAD_ESCAPE;
+		case ACT_NEXT_ITEM:
+			i++;
+			break;
+
+		default:
+			if (!isprint(event->x) || charpos >= MAX_STR_LEN - 1)
+				return TYPEAHEAD_ESCAPE;
+
+			typeahead[charpos++] = event->x;
 	}
 
 	int_bounds(&i, 0, doc_view->document->nlinks);

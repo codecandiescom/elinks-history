@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.300 2003/12/21 16:37:41 jonas Exp $ */
+/* $Id: view.c,v 1.301 2003/12/21 17:01:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -661,7 +661,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			unsigned char *typeahead = ses->kbdprefix.typeahead;
 			enum typeahead_code code;
 
-			code = do_typeahead(ses, doc_view, typeahead, ev->x);
+			code = do_typeahead(ses, doc_view, typeahead, ev);
 			if (code == TYPEAHEAD_MATCHED) return 1;
 
 			mem_free(ses->kbdprefix.typeahead);

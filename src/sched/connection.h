@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.63 2004/04/14 00:35:42 jonas Exp $ */
+/* $Id: connection.h,v 1.64 2004/04/14 02:21:34 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -29,7 +29,7 @@ enum connection_priority {
  * errno/strerror(), see session.c and connection.c for further information. */
 /* WARNING: an errno value <= -10000 may cause some bad things... */
 
-#define is_system_error(state)		(S_OK < (state) || (state) < S_WAIT)
+#define is_system_error(state)		(S_OK < (state) && (state) < S_WAIT)
 #define is_in_result_state(state)	((state) < 0)
 #define is_in_progress_state(state)	((state) >= 0)
 #define is_in_connecting_state(state)	(S_WAIT < (state) && (state) < S_TRANS)

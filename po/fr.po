@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-02 17:24+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-12-03 01:53+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:295
 msgid "Close"
@@ -35,27 +35,27 @@ msgstr "Info"
 #: src/config/dialogs.c:509 src/dialogs/auth.c:77 src/dialogs/document.c:50
 #: src/dialogs/document.c:235 src/dialogs/document.c:305
 #: src/dialogs/document.c:317 src/dialogs/edit.c:99 src/dialogs/info.c:48
-#: src/dialogs/info.c:89 src/dialogs/info.c:109 src/dialogs/menu.c:510
+#: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:510
 #: src/dialogs/menu.c:521 src/dialogs/menu.c:552 src/dialogs/mime.c:159
 #: src/dialogs/options.c:189 src/dialogs/options.c:263
 #: src/protocol/protocol.c:61 src/protocol/user.c:158 src/protocol/user.c:174
 #: src/sched/download.c:169 src/sched/download.c:253 src/sched/download.c:279
 #: src/sched/download.c:550 src/sched/error.c:42 src/sched/session.c:122
-#: src/sched/session.c:982 src/sched/session.c:999 src/sched/session.c:1023
-#: src/sched/session.c:1281 src/scripting/lua/core.c:400
+#: src/sched/session.c:977 src/sched/session.c:994 src/sched/session.c:1018
+#: src/sched/session.c:1272 src/scripting/lua/core.c:400
 #: src/scripting/lua/core.c:481 src/scripting/lua/core.c:588
 #: src/scripting/lua/core.c:717 src/viewer/text/form.c:657
 #: src/viewer/text/search.c:856 src/viewer/text/search.c:882
 #: src/viewer/text/search.c:888 src/viewer/text/search.c:910
 #: src/viewer/text/search.c:1076 src/viewer/text/search.c:1087
 #: src/viewer/text/textarea.c:272 src/viewer/text/view.c:787
-#: src/viewer/text/view.c:1478
+#: src/viewer/text/view.c:1477
 msgid "OK"
 msgstr "OK"
 
 #: src/bfu/hierbox.c:437
-#, c-format
-msgid "Sorry, but the item \"%s\" can not be deleted."
+#, fuzzy, c-format
+msgid "Sorry, but the item \"%s\" cannot be deleted."
 msgstr "Désolé, mais l'item \"%s\" ne peut être supprimé."
 
 #: src/bfu/hierbox.c:438
@@ -64,8 +64,8 @@ msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Désolé, mais l'item \"%s\" est actuellement utilisé ailleurs."
 
 #: src/bfu/hierbox.c:441
-#, c-format
-msgid "Sorry, but the folder \"%s\" can not be deleted."
+#, fuzzy, c-format
+msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Désolé, mais le dossier \"%s\" ne peut être supprimé."
 
 #: src/bfu/hierbox.c:442
@@ -527,7 +527,7 @@ msgstr ""
 "%s"
 
 #: src/config/dialogs.c:200 src/protocol/protocol.c:58 src/sched/session.c:119
-#: src/sched/session.c:1277 src/viewer/text/textarea.c:269
+#: src/sched/session.c:1268 src/viewer/text/textarea.c:269
 msgid "Error"
 msgstr "Erreur"
 
@@ -624,7 +624,7 @@ msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 "Supprimer l'association de touches \"%s\" (action \"%s\", keymap \"%s\")?"
 
-#: src/config/dialogs.c:531 src/globhist/dialogs.c:188
+#: src/config/dialogs.c:531 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
 msgstr "Commuter affich."
 
@@ -3995,15 +3995,15 @@ msgstr "Gestionnaire de téléchargements"
 msgid "About"
 msgstr "Info"
 
-#: src/dialogs/info.c:86
+#: src/dialogs/info.c:122
 msgid "Keys"
 msgstr "Touches"
 
-#: src/dialogs/info.c:96
+#: src/dialogs/info.c:133
 msgid "Copying"
 msgstr "Licence"
 
-#: src/dialogs/info.c:97
+#: src/dialogs/info.c:134
 #, c-format
 msgid ""
 "ELinks %s\n"
@@ -4026,7 +4026,7 @@ msgstr ""
 "Software Foundation, soit selon la version 2 de la GPL, soit (à votre choix) "
 "selon toute version ultérieure."
 
-#: src/dialogs/info.c:116
+#: src/dialogs/info.c:153
 #, c-format
 msgid ""
 "Resources: %d handles, %d timers.\n"
@@ -4040,16 +4040,16 @@ msgstr ""
 "Cache mémoire: %d octets, %d fichiers, %d verrouillés, %d en chargement.\n"
 "Cache documents formatés: %d documents, %d verrouillés."
 
-#: src/dialogs/info.c:133
+#: src/dialogs/info.c:170
 msgid "Resources"
 msgstr "Ressources"
 
-#: src/dialogs/info.c:142
+#: src/dialogs/info.c:179
 #, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "%ld octets alloués en mémoire."
 
-#: src/dialogs/info.c:148
+#: src/dialogs/info.c:185
 msgid "Memory info"
 msgstr "État de la mémoire vive"
 
@@ -4465,11 +4465,11 @@ msgstr "temps écoulé"
 msgid "estimated time"
 msgstr "temps restant estimé"
 
-#: src/dialogs/status.c:256
+#: src/dialogs/status.c:275
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/dialogs/status.c:258
+#: src/dialogs/status.c:277
 msgid "No document"
 msgstr "Aucun document"
 
@@ -5222,15 +5222,15 @@ msgstr "Voulez-vous poster les données de formulaire à l'URL %s ?"
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Voulez-vous poster à nouveau les données de formulaire à l'URL %s ?"
 
-#: src/sched/session.c:404 src/sched/session.c:987 src/sched/session.c:1007
+#: src/sched/session.c:404 src/sched/session.c:982 src/sched/session.c:1002
 msgid "Warning"
 msgstr "Avertissement"
 
-#: src/sched/session.c:977
+#: src/sched/session.c:972
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: src/sched/session.c:978
+#: src/sched/session.c:973
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -5241,7 +5241,7 @@ msgstr ""
 "Pressez ESC pour accèder au menu. La documentation est accessible par le "
 "menu Aide."
 
-#: src/sched/session.c:988
+#: src/sched/session.c:983
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5260,7 +5260,7 @@ msgstr ""
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "
 "faites juste ça. Toutes nos excuses pour ce désagrément."
 
-#: src/sched/session.c:1008
+#: src/sched/session.c:1003
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5281,7 +5281,7 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/session.c:1278
+#: src/sched/session.c:1269
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."
@@ -5611,11 +5611,11 @@ msgstr "Aller au lien"
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1475
+#: src/viewer/text/view.c:1474
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1476
+#: src/viewer/text/view.c:1475
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 

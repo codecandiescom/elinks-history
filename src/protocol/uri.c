@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.289 2004/10/21 17:03:10 jonas Exp $ */
+/* $Id: uri.c,v 1.290 2004/10/21 17:36:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,7 +271,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		uri->port = host_end;
 		uri->portlen = port_end - host_end;
 
-		if (host_end == port_end)
+		if (uri->portlen == 0)
 			return URI_ERRNO_NO_PORT_COLON;
 
 		/* We only use 8 bits for portlen so better check */

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.56 2003/12/01 15:19:53 pasky Exp $ */
+/* $Id: listbox.h,v 1.57 2004/01/03 10:58:50 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -102,11 +102,12 @@ struct listbox_item {
 
 	enum { BI_LEAF, BI_FOLDER } type;
 
+	int depth;
+
 	unsigned int expanded:1; /* Only valid if this is a BI_FOLDER */
 	unsigned int visible:1; /* Is this item visible? */
 	unsigned int marked:1;
 	unsigned int translated:1; /* Should we call gettext on this text? */
-	int depth;
 
 	void *udata;
 

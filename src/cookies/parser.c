@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.1 2002/04/23 08:06:21 pasky Exp $ */
+/* $Id: parser.c,v 1.2 2002/04/23 08:31:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,10 +27,11 @@ parse_cookie_str(struct cookie_str *cstr)
 	/* /NAME *= *VALUE *;/ */
 
 	for (pos = cstr->str; *pos != ';' && *pos; pos++) {
-		if (!last_was_ws) {
-			/* The NEXT char is ending it! */
-			cstr->val_end = pos + 1;
-		}
+#if 0
+		printf("[%s :: %s] - (%s - %s - %s) %d,%d\n",
+		       cstr->str, pos, cstr->nam_end, cstr->val_start,
+		       cstr->val_end, last_was_ws, last_was_eq);
+#endif
 
 		if (*pos == '=') {
 			/* End of name reached */
@@ -40,6 +41,10 @@ parse_cookie_str(struct cookie_str *cstr)
 				 * broken sites sending '=' inside values. */
 				last_was_eq = 1;
 			}
+			if (!cstr->val_start) {
+				last_was_eq = 1;
+			}
+			last_was_ws = 0;
 
 		} else if (WHITECHAR(*pos)) {
 			if (!cstr->nam_end) {
@@ -50,6 +55,7 @@ parse_cookie_str(struct cookie_str *cstr)
 
 		} else if (last_was_eq) {
 			/* Start of value reached */
+			/* LESS priority than WHITECHAR() */
 			cstr->val_start = pos;
 			last_was_eq = 0;
 			last_was_ws = 0;
@@ -58,6 +64,11 @@ parse_cookie_str(struct cookie_str *cstr)
 			/* Non-whitespace after whitespace and not just after
 			 * '=' - error */
 			return 0;
+		}
+
+		if (!last_was_ws) {
+			/* The NEXT char is ending it! */
+			cstr->val_end = pos + 1;
 		}
 	}
 

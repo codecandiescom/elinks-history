@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.13 2002/11/29 11:20:13 pasky Exp $ */
+/* $Id: globhist.c,v 1.14 2002/11/29 22:00:45 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -127,19 +127,16 @@ delete_global_history_item(struct global_history_item *historyitem)
 struct global_history_item *
 get_global_history_item(unsigned char *url)
 {
+	struct hash_item *item;
+
 	if (!url) return NULL;
+	if (!globhist_cache) return NULL;
 
-	if (globhist_cache) {
-		/* Search for cached entry. */
-		struct hash_item *item;
+	/* Search for cached entry. */
 
-		item = get_hash_item(globhist_cache, url, strlen(url));
-		if (item) {
-			return ((struct globhist_cache_entry *)item->value)->item;
-		}
-	}
-
-	return NULL;
+	item = get_hash_item(globhist_cache, url, strlen(url));
+	if (!item) return NULL;
+	return ((struct globhist_cache_entry *) item->value)->item;
 }
 
 #if 0
@@ -408,12 +405,12 @@ free_global_history()
 {
 	struct global_history_item *historyitem;
 
+	free_globhist_cache();
+
 	foreach (historyitem, global_history.items) {
 		free_global_history_item(historyitem);
 	}
-
 	free_list(global_history.items);
-	free_globhist_cache();
 }
 
 void

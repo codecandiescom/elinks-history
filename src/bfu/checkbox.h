@@ -1,9 +1,10 @@
-/* $Id: checkbox.h,v 1.26 2003/12/01 15:19:53 pasky Exp $ */
+/* $Id: checkbox.h,v 1.27 2003/12/27 03:21:16 miciah Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
 
 #include "bfu/widget.h"
+#include "bfu/style.h"
 
 struct terminal;
 

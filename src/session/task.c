@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.17 2004/01/01 15:47:26 jonas Exp $ */
+/* $Id: task.c,v 1.18 2004/01/01 18:21:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ post_yes(struct task *task)
 	abort_preloading(task->ses, 0);
 	if (task->ses->goto_position) mem_free(task->ses->goto_position);
 
-	ses->goto_position = task->pos ? stracpy(task->pos) : NULL;
+	ses->goto_position = null_or_stracpy(task->pos);
 	ses->loading.end = (void (*)(struct download *, void *)) task->fn;
 	ses->loading.data = task->ses;
 	ses->loading_url = stracpy(task->url);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.314 2004/01/01 14:34:58 zas Exp $ */
+/* $Id: parser.c,v 1.315 2004/01/01 18:21:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1604,7 +1604,7 @@ xxx:
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;
 	fc->method = form.method;
-	fc->action = form.action ? stracpy(form.action) : NULL;
+	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(a, "name");
 
 	fc->default_value = get_attr_val(a, "value");
@@ -1673,8 +1673,8 @@ xxx:
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;
 	fc->method = form.method;
-	fc->action = form.action ? stracpy(form.action) : NULL;
-	fc->target = form.target ? stracpy(form.target) : NULL;
+	fc->action = null_or_stracpy(form.action);
+	fc->target = null_or_stracpy(form.target);
 	fc->name = get_attr_val(a, "name");
 
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
@@ -1822,9 +1822,9 @@ x:
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;
 	fc->method = form.method;
-	fc->action = form.action ? stracpy(form.action) : NULL;
+	fc->action = null_or_stracpy(form.action);
 	fc->type = FC_CHECKBOX;
-	fc->name = format.select ? stracpy(format.select) : NULL;
+	fc->name = null_or_stracpy(format.select);
 	fc->default_value = val;
 	fc->default_state = has_attr(a, "selected");
 	fc->ro = format.select_disabled;
@@ -2184,7 +2184,7 @@ end_parse:
 	fc->ctrl_num = attr - last_form_tag;
 	fc->position = attr - startf;
 	fc->method = form.method;
-	fc->action = form.action ? stracpy(form.action) : NULL;
+	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(attr, "name");
 	fc->type = FC_SELECT;
 	fc->default_state = preselect < 0 ? 0 : preselect;
@@ -2255,7 +2255,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	fc->ctrl_num = attr - last_form_tag;
 	fc->position = attr - startf;
 	fc->method = form.method;
-	fc->action = form.action ? stracpy(form.action) : NULL;
+	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(attr, "name");
 	fc->type = FC_TEXTAREA;;
 	fc->ro = has_attr(attr, "disabled") ? 2 : has_attr(attr, "readonly") ? 1 : 0;
@@ -3550,7 +3550,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 	}
 
 	target = get_target(attr);
-	if (!target) target = target_base ? stracpy(target_base) : NULL;
+	if (!target) target = null_or_stracpy(target_base);
 	if (!target) target = stracpy("");
 	if (!target) {
 		if (label) mem_free(label);
@@ -3829,7 +3829,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	format.vlink = options->default_vlink;
 
 	format.href_base = stracpy(url);
-	format.target_base = options->framename ? stracpy(options->framename) : NULL;
+	format.target_base = null_or_stracpy(options->framename);
 
 	par_format.align = AL_LEFT;
 	par_format.leftmargin = options->margin;

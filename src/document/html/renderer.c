@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.395 2003/12/30 19:37:16 jonas Exp $ */
+/* $Id: renderer.c,v 1.396 2004/01/01 18:21:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -752,13 +752,13 @@ new_link(struct document *document, int link_number,
 	link->num = link_number - 1;
 	if (document->options.use_tabindex) link->num += format.tabindex;
 	link->accesskey = format.accesskey;
-	link->title = format.title ? stracpy(format.title) : NULL;
-	link->where_img = format.image ? stracpy(format.image) : NULL;
+	link->title = null_or_stracpy(format.title);
+	link->where_img = null_or_stracpy(format.image);
 
 	if (!format.form) {
 		link->type = LINK_HYPERTEXT;
-		link->where = format.link ? stracpy(format.link) : NULL;
-		link->target = format.target ? stracpy(format.target) : NULL;
+		link->where = null_or_stracpy(format.link);
+		link->target = null_or_stracpy(format.target);
 		link->name = memacpy(name, namelen);
 
 	} else {
@@ -787,7 +787,7 @@ new_link(struct document *document, int link_number,
 			link->type = LINK_BUTTON;
 		}
 		link->form = form;
-		link->target = form->target ? stracpy(form->target) : NULL;
+		link->target = null_or_stracpy(form->target);
 	}
 
 	link->color.background = format.bg;
@@ -906,9 +906,9 @@ process_link(struct part *part, enum link_state link_state,
 
 		part->link_num++;
 
-		last_link = format.link ? stracpy(format.link) : NULL;
-		last_target = format.target ? stracpy(format.target) : NULL;
-		last_image = format.image ? stracpy(format.image) : NULL;
+		last_link = null_or_stracpy(format.link);
+		last_target = null_or_stracpy(format.target);
+		last_image = null_or_stracpy(format.image);
 		last_form = format.form;
 
 		if (!part->document) return;

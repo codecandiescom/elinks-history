@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.135 2004/01/01 14:24:10 jonas Exp $ */
+/* $Id: link.c,v 1.136 2004/01/01 18:21:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -604,8 +604,7 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 			return 1;
 		}
 
-		goto_imgmap(ses, url + 4, s,
-			   target ? stracpy(target) : NULL);
+		goto_imgmap(ses, url + 4, s, null_or_stracpy(target));
 
 	} else {
 		if (do_reload) {

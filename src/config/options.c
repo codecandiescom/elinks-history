@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.426 2003/12/31 02:57:51 miciah Exp $ */
+/* $Id: options.c,v 1.427 2004/01/01 18:21:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,7 +471,7 @@ copy_option(struct option *template)
 
 	if (!option) return NULL;
 
-	option->name = template->name ? stracpy(template->name) : NULL;
+	option->name = null_or_stracpy(template->name);
 	option->flags = (template->flags | OPT_ALLOC);
 	option->type = template->type;
 	option->min = template->min;

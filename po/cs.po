@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-12-03 01:53+0100\n"
-"PO-Revision-Date: 2003-12-04 00:17+0100\n"
+"PO-Revision-Date: 2003-12-05 17:04+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -5137,7 +5137,7 @@ msgstr "Pøihla¹uji se"
 
 #: src/sched/error.c:37
 msgid "Getting headers"
-msgstr "Stahuju hlavièku"
+msgstr "Stahuji hlavièku"
 
 #: src/sched/error.c:38
 msgid "Server is processing request"

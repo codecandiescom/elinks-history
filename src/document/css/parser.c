@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.17 2004/01/18 14:25:13 pasky Exp $ */
+/* $Id: parser.c,v 1.18 2004/01/18 15:06:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 		}
 		prop->type = property_info->type;
 		prop->value_type = property_info->value_type;
-		if (!css_parse_value(prop->value_type, &prop->value, &string)) {
+		if (!css_parse_value(property_info, &prop->value, &string)) {
 			mem_free(prop);
 			goto ride_on;
 		}

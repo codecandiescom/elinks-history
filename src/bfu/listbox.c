@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.81 2003/08/01 11:13:44 zas Exp $ */
+/* $Id: listbox.c,v 1.82 2003/08/01 14:59:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,20 +367,20 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	}
 
 	if (depth) {
-		enum frame_char str[5] =
-			{ 32, FRAMES_RTEE, FRAMES_HLINE, FRAMES_HLINE, 32 };
+		enum border_char str[5] =
+			{ 32, BORDER_SRTEE, BORDER_SHLINE, BORDER_SHLINE, 32 };
 		int i;
 
 		if (item->type == BI_LEAF) {
 			if (item->root) {
 				if (item == item->root->child.prev) {
-					str[1] = FRAMES_DLCORNER;
+					str[1] = BORDER_SDLCORNER;
 				}
 			} else {
 				if (((struct listbox_data *) item->box->next)->items->next == item) {
-					str[1] = FRAMES_ULCORNER;
+					str[1] = BORDER_SULCORNER;
 				} else if (((struct listbox_data *) item->box->next)->items->prev == item) {
-					str[1] = FRAMES_DLCORNER;
+					str[1] = BORDER_SDLCORNER;
 				}
 			}
 		} else {

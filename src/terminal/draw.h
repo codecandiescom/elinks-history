@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.16 2003/07/31 17:29:01 jonas Exp $ */
+/* $Id: draw.h,v 1.17 2003/08/01 14:59:10 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -6,12 +6,11 @@
 #include "terminal/screen.h"
 #include "terminal/terminal.h"
 
-#define ATTR_FRAME 		0x8000
 #define SCREEN_ATTR_FRAME	0x80
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */
-/* In the screen image, they have attribute ATTR_FRAME; you should drop them
+/* In the screen image, they have attribute SCREEN_ATTR_FRAME; you should drop them
  * to the image using draw_frame_char(). */
 /* TODO: When we'll support internal Unicode, this should be changed to some
  * Unicode sequences. --pasky */
@@ -35,27 +34,6 @@ enum border_char {
 	BORDER_DDRCORNER = 188,
 	BORDER_DVLINE	 = 186,
 	BORDER_DHLINE	 = 205,
-};
-
-enum frame_char {
-	/* single-lined */
-	FRAMES_ULCORNER = 218 | ATTR_FRAME,
-	FRAMES_URCORNER = 191 | ATTR_FRAME,
-	FRAMES_DLCORNER = 192 | ATTR_FRAME,
-	FRAMES_DRCORNER = 217 | ATTR_FRAME,
-	FRAMES_LTEE = 180 | ATTR_FRAME, /* => the tee points to the left => -| */
-	FRAMES_RTEE = 195 | ATTR_FRAME,
-	FRAMES_VLINE = 179 | ATTR_FRAME,
-	FRAMES_HLINE = 196 | ATTR_FRAME,
-	FRAMES_CROSS = 197 | ATTR_FRAME, /* + */
-
-	/* double-lined */ /* TODO: The TEE-chars! */
-	FRAMED_ULCORNER = 201 | ATTR_FRAME,
-	FRAMED_URCORNER = 187 | ATTR_FRAME,
-	FRAMED_DLCORNER = 200 | ATTR_FRAME,
-	FRAMED_DRCORNER = 188 | ATTR_FRAME,
-	FRAMED_VLINE = 186 | ATTR_FRAME,
-	FRAMED_HLINE = 205 | ATTR_FRAME,
 };
 
 /* 0 -> 1 <- 2 v 3 ^ */

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.44 2003/08/01 10:39:45 zas Exp $ */
+/* $Id: draw.c,v 1.45 2003/08/01 14:59:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,7 +194,7 @@ draw_frame(struct terminal *term, int x, int y, int xw, int yw,
 		BORDER_DVLINE,
 		BORDER_DHLINE,
 	};
-	enum frame_char *p = (w > 1) ? p2 : p1;
+	enum border_char *p = (w > 1) ? p2 : p1;
 	int xt = x + xw - 1;
 	int yt = y + yw - 1;
 	int y1 = y + 1;

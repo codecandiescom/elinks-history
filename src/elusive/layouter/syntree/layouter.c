@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.7 2003/01/18 00:36:13 pasky Exp $ */
+/* $Id: layouter.c,v 1.8 2003/01/18 00:41:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,8 +50,8 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 	box = spawn_box(state);
 	box->data_type = RECT_TEXT;
 	box->data = text = mem_alloc(sizeof(struct layout_box_text));
-	text->str = "[NODE] ";
-	text->len = 7;
+	text->str = "[NODE] str :: ";
+	text->len = 14;
 
 	box = spawn_box(state);
 	box->data_type = RECT_TEXT;
@@ -62,8 +62,8 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 	box = spawn_box(state);
 	box->data_type = RECT_TEXT;
 	box->data = text = mem_alloc(sizeof(struct layout_box_text));
-	text->str = " ";
-	text->len = 1;
+	text->str = " :: special :: ";
+	text->len = 15;
 
 	{
 		unsigned char numbuf[64];
@@ -84,8 +84,8 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 		box = spawn_box(state);
 		box->data_type = RECT_TEXT;
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
-		text->str = " ";
-		text->len = 1;
+		text->str = " :: property :: ";
+		text->len = 16;
 
 		box = spawn_box(state);
 		box->data_type = RECT_TEXT;
@@ -96,8 +96,8 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 		box = spawn_box(state);
 		box->data_type = RECT_TEXT;
 		box->data = text = mem_alloc(sizeof(struct layout_box_text));
-		text->str = "->\"";
-		text->len = 3;
+		text->str = " :: -> :: \"";
+		text->len = 11;
 
 		box = spawn_box(state);
 		box->data_type = RECT_TEXT;

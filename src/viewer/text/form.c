@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.69 2003/12/24 00:31:52 jonas Exp $ */
+/* $Id: form.c,v 1.70 2003/12/25 12:01:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -865,26 +865,34 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 				break;
 			case ACT_HOME:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_home(fs, frm, rep))
-						goto b;
+					if (textarea_op_home(fs, frm, rep)) {
+						x = 0;
+						break;
+					}
 				} else fs->state = 0;
 				break;
 			case ACT_UP:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_up(fs, frm, rep))
-						goto b;
+					if (textarea_op_up(fs, frm, rep)) {
+						x = 0;
+						break;
+					}
 				} else x = 0;
 				break;
 			case ACT_DOWN:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_down(fs, frm, rep))
-						goto b;
+					if (textarea_op_down(fs, frm, rep)) {
+						x = 0;
+						break;
+					}
 				} else x = 0;
 				break;
 			case ACT_END:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_end(fs, frm, rep))
-						goto b;
+					if (textarea_op_end(fs, frm, rep)) {
+						x = 0;
+						break;
+					}
 				} else fs->state = strlen(fs->value);
 				break;
 			case ACT_EDIT:
@@ -921,8 +929,10 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 			}
 			case ACT_ENTER:
 				if (frm->type == FC_TEXTAREA) {
-					if (textarea_op_enter(fs, frm, rep))
-						goto b;
+					if (textarea_op_enter(fs, frm, rep)) {
+						x = 0;
+						break;
+					}
 				} else x = 0;
 				break;
 			case ACT_BACKSPACE:
@@ -984,7 +994,8 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 
 			case ACT_REDRAW:
 				redraw_terminal_cls(ses->tab->term);
-				return 0;
+				x = 0;
+				break;
 
 			default:
 				if (!ev->y && (ev->x >= 32 && ev->x < 256)) {
@@ -999,11 +1010,10 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 							v[fs->state++] = ev->x;
 						}
 					}
-				} else {
-
-b:
-					x = 0;
+					break;
 				}
+				x = 0;
+				break;
 		}
 	} else x = 0;
 

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.97 2004/01/26 17:20:14 pasky Exp $ */
+/* $Id: scanner.c,v 1.98 2004/01/26 22:36:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,7 +523,9 @@ init_css_scan_table(void)
 		if (info[i].type == SCAN_RANGE) {
 			int index = data->range.start;
 
-			assert(index <= data->range.end);
+			assert(data->range.start > 0);
+			assert(data->range.end < SCAN_TABLE_SIZE);
+			assert(data->range.start <= data->range.end);
 
 			for (; index <= data->range.end; index++)
 				css_scan_table[index] |= info[i].bits;

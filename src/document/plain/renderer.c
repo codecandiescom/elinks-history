@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.33 2003/11/18 22:02:29 pasky Exp $ */
+/* $Id: renderer.c,v 1.34 2003/11/18 22:14:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "main.h"
 
 #include "cache/cache.h"
+#include "document/docdata.h"
 #include "document/document.h"
 #include "document/html/renderer.h" /* TODO: Move get_convert_table() */
 #include "document/plain/renderer.h"
@@ -22,13 +23,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-
-#define LINES_GRANULARITY	0x7F
-#define LINE_GRANULARITY	0x0F
-#define LINK_GRANULARITY	0x7F
-
-#define ALIGN_LINES(x, o, n) mem_align_alloc(x, o, n, sizeof(struct line), LINES_GRANULARITY)
-#define ALIGN_LINE(x, o, n) mem_align_alloc(x, o, n, sizeof(struct screen_char), LINE_GRANULARITY)
 
 #define realloc_document_links(doc, size) \
 	mem_align_alloc(&(doc)->links, (doc)->nlinks, size, sizeof(struct link), LINK_GRANULARITY)

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-06 15:25+0100\n"
-"PO-Revision-Date: 2005-01-06 16:30+0100\n"
+"PO-Revision-Date: 2005-01-06 17:22+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -439,13 +439,13 @@ msgstr "Rediger bogmærke"
 #: src/bookmarks/dialogs.c:445 src/cache/dialogs.c:220
 #: src/globhist/dialogs.c:224 src/protocol/auth/dialogs.c:253
 msgid "Goto"
-msgstr "Åbn"
+msgstr "Gå til"
 
 #: src/bookmarks/dialogs.c:446 src/config/dialogs.c:367
 #: src/config/dialogs.c:435 src/config/dialogs.c:520 src/cookies/dialogs.c:323
 #: src/cookies/dialogs.c:423
 msgid "Edit"
-msgstr "Rediger"
+msgstr "Redigér"
 
 #: src/bookmarks/dialogs.c:447 src/cache/dialogs.c:221
 #: src/config/dialogs.c:522 src/config/dialogs.c:943 src/cookies/dialogs.c:424
@@ -496,7 +496,7 @@ msgstr "Gemt session"
 
 #: src/bookmarks/dialogs.c:665
 msgid "Bookmark tabs"
-msgstr "Gem faneblade som bogmærker"
+msgstr "Tilføj faneblade som bogmærker"
 
 #: src/bookmarks/dialogs.c:665
 msgid "Enter folder name"
@@ -632,12 +632,12 @@ msgstr "Skabelon indstillingsmappe"
 #: src/config/cmdline.c:381
 #, c-format
 msgid "(default: %ld)"
-msgstr "(standardværdi: %ld)"
+msgstr "(standard: %ld)"
 
 #: src/config/cmdline.c:388 src/config/cmdline.c:417
 #, c-format
 msgid "(default: \"%s\")"
-msgstr "(standardværdi: \"%s\")"
+msgstr "(standard: \"%s\")"
 
 #: src/config/cmdline.c:393
 #, c-format
@@ -706,7 +706,7 @@ msgstr ""
 
 #: src/config/cmdline.c:624
 msgid "Name of directory with configuration file"
-msgstr "Navn på mappen med konfigurationsfilen"
+msgstr "Navn på katalog med opsætningsfil"
 
 #: src/config/cmdline.c:626
 msgid ""
@@ -722,7 +722,7 @@ msgstr ""
 
 #: src/config/cmdline.c:633
 msgid "Name of configuration file"
-msgstr "Navnet på konfigurationsfilen"
+msgstr "Navn på opsætningsfil"
 
 #: src/config/cmdline.c:635
 msgid ""
@@ -736,11 +736,11 @@ msgstr ""
 
 #: src/config/cmdline.c:639
 msgid "Print help for configuration options"
-msgstr "Udskriv hjælp for konfigurationsindstillinger"
+msgstr "Udskriv hjælp til opsætningsindstillinger"
 
 #: src/config/cmdline.c:641
 msgid "Print help for configuration options and exit."
-msgstr "Udskriv hjælp for konfigurationsindstillinger og afslut."
+msgstr "Udskriv hjælp til opsætningsindstillinger og afslut."
 
 #: src/config/cmdline.c:643
 msgid "MIME type assumed for unknown document types"
@@ -766,12 +766,14 @@ msgstr ""
 
 #: src/config/cmdline.c:653
 msgid "Print formatted versions of given URLs to stdout"
-msgstr "Udskriv optegnede versioner af de givne adresser til standarduddata"
+msgstr ""
+"Udskriv tekstformaterede versioner af de givne adresser til standarduddata"
 
 #: src/config/cmdline.c:655
 msgid "Print formatted plain-text versions of given URLs to stdout."
 msgstr ""
-"Udskriv optegnede text-versioner af de givne adresser til standarduddata."
+"Udskriv tekstformaterede text-versioner af de givne adresser til "
+"standarduddata."
 
 #: src/config/cmdline.c:657
 msgid "Codepage to use with -dump"
@@ -900,8 +902,9 @@ msgstr "Undlad at nummerere links i uddata fra -dump"
 msgid ""
 "Prevents printing of link number in dump output.\n"
 "Note that this really affects only -dump, nothing else."
-msgstr "Deaktiverer nummerering af henvisninger i uddata fra -dump."
-"Bemærk at at dette kun påvirker -dump og ikke andet."
+msgstr ""
+"Deaktiverer nummerering af links i uddata fra -dump.Bemærk at at dette kun "
+"påvirker -dump og ikke andet."
 
 #: src/config/cmdline.c:721
 msgid "Disable printing of link references in dump output"
@@ -913,8 +916,8 @@ msgid ""
 "in dump output.\n"
 "Note that this really affects only -dump, nothing else."
 msgstr ""
-"Deaktiverer udskrivning af linkadresser i uddata fra -dump."
-"Bemærk at at dette kun påvirker -dump og ikke andet."
+"Deaktiverer udskrivning af linkadresser i uddata fra -dump.Bemærk at at "
+"dette kun påvirker -dump og ikke andet."
 
 #: src/config/cmdline.c:727
 msgid "Control an already running ELinks"
@@ -1173,7 +1176,7 @@ msgstr "(udfold ved at taste mellemrum)"
 
 #: src/config/dialogs.c:175 src/config/dialogs.c:381
 msgid "N/A"
-msgstr "Ingen"
+msgstr "I/T"
 
 #: src/config/dialogs.c:189 src/config/dialogs.c:210 src/config/dialogs.c:377
 #: src/config/options.inc:739
@@ -1193,7 +1196,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Denne indstilling er blevet ændret siden du sidst gemte din konfiguration."
+"Denne værdi er ændret siden sidste gang du gemte din opsætning."
 
 #: src/config/dialogs.c:206 src/config/dialogs.c:212 src/config/dialogs.c:379
 msgid "Description"
@@ -1215,8 +1218,7 @@ msgid ""
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
 "Denne indstilling kan ikke ændres. Dette betyder det er en speciel "
-"indstilling eksempelvis en mappe - prøv at trykke \"Mellemrum\" for at åbne "
-"den."
+"indstilling eksempelvis en mappe - prøv at taste mellemrum for at åbne den. "
 
 #: src/config/dialogs.c:475 src/config/dialogs.c:497
 msgid "Add option"
@@ -1381,7 +1383,7 @@ msgstr "Åbn formularhistorikhåndtering"
 
 #: src/config/kbdbind.c:451
 msgid "Pass URI of current frame to external command"
-msgstr "Videregiv URI fra den aktuelle ramme til ekstern program"
+msgstr "Videregiv adressen fra den aktuelle ramme til ekstern program"
 
 #: src/config/kbdbind.c:452
 msgid "Maximize the current frame"
@@ -1453,7 +1455,7 @@ msgstr "Forsøg at genoptage overførelse af det aktuelle link"
 
 #: src/config/kbdbind.c:469
 msgid "Pass URI of current link to external command"
-msgstr "Videregiv URI fra den aktuelle henvisning til ekstern program"
+msgstr "Videregiv den aktuelle linkadresse et til ekstern program"
 
 #: src/config/kbdbind.c:470 src/config/kbdbind.c:563 src/config/kbdbind.c:587
 msgid "Follow the current link"
@@ -1465,7 +1467,7 @@ msgstr "Følg det aktuelle link og genindlæs siden"
 
 #: src/config/kbdbind.c:472
 msgid "Open the link context menu"
-msgstr "Åbn link kontekst-menu"
+msgstr "Åbn link-kontekst-menu"
 
 #: src/config/kbdbind.c:474
 msgid "Open a Lua console"
@@ -1605,11 +1607,11 @@ msgstr "Vis information om ressourceforbrug"
 
 #: src/config/kbdbind.c:510
 msgid "Save the current document in source form"
-msgstr "Gem det aktuelle dokument i klartekst form"
+msgstr "Gem det aktuelle dokuments kildetekst"
 
 #: src/config/kbdbind.c:511
 msgid "Save the current document in formatted form"
-msgstr "Gem det aktuelle dokument i optegnet form"
+msgstr "Gem aktuelle dokument i formateret form"
 
 #: src/config/kbdbind.c:512
 msgid "Save options"
@@ -1637,11 +1639,11 @@ msgstr "Rul op"
 
 #: src/config/kbdbind.c:518 src/config/kbdbind.c:598
 msgid "Search for a text pattern"
-msgstr "Søg efter tekststring"
+msgstr "Søg efter tekstmønster"
 
 #: src/config/kbdbind.c:519
 msgid "Search backwards for a text pattern"
-msgstr "Søg bagud efter tekststreng"
+msgstr "Søg bagud efter tekstmønster"
 
 #: src/config/kbdbind.c:520 src/config/kbdbind.c:521
 msgid "Search link text by typing ahead"
@@ -1657,15 +1659,15 @@ msgstr "Inkrementel baglæns søgning af dokumenttekst"
 
 #: src/config/kbdbind.c:524
 msgid "Show terminal options dialog"
-msgstr "Vis terminalindstillings dialogvindue"
+msgstr "Vis dialog med terminalindstillinger"
 
 #: src/config/kbdbind.c:525
 msgid "Submit form"
-msgstr "Send formular"
+msgstr "Indsend formular"
 
 #: src/config/kbdbind.c:526
 msgid "Submit form and reload"
-msgstr "Send formular og genindlæs"
+msgstr "Indsend formular og genindlæs"
 
 #: src/config/kbdbind.c:527 src/terminal/tab.c:188 src/terminal/tab.c:224
 msgid "Close tab"
@@ -1673,11 +1675,11 @@ msgstr "Luk faneblad"
 
 #: src/config/kbdbind.c:528
 msgid "Close all tabs but the current one"
-msgstr "Luk alle faneblad undtagen det aktuelle"
+msgstr "Luk alle faneblade på nær det aktuelle"
 
 #: src/config/kbdbind.c:529
 msgid "Pass URI of current tab to external command"
-msgstr "Videregiv URI fra det aktuelle faneblad til ekstern program"
+msgstr "Videregiv adressen for det aktuelle faneblad til ekstern program"
 
 #: src/config/kbdbind.c:530
 msgid "Open the tab menu"
@@ -1701,7 +1703,7 @@ msgstr "Forrige faneblad"
 
 #: src/config/kbdbind.c:535
 msgid "Open the terminal resize dialog"
-msgstr "Åbn dialogvindue til ændring af terminalstørrelse"
+msgstr "Vis dialog til ændring af terminalstørrelse"
 
 #: src/config/kbdbind.c:536
 msgid "Toggle rendering of page using CSS"
@@ -1721,7 +1723,7 @@ msgstr "Skift mellem brug af dokument definerede farver"
 
 #: src/config/kbdbind.c:540
 msgid "Toggle rendering page as HTML / plain text"
-msgstr "Skift mellem visning af side som HTML eller almindelig tekst"
+msgstr "Skift mellem visning af side som HTML eller som almindelig tekst"
 
 #: src/config/kbdbind.c:541
 msgid "Toggle displaying of links numbers"
@@ -2757,8 +2759,8 @@ msgstr ""
 "for at forespørge serveren."
 
 #: src/config/options.inc:462
-msgid "Ignore cachecontrol info from server"
-msgstr "Ignorer cache kontrol info fra server"
+msgid "Ignore cache-control info from server"
+msgstr "Ignorer kontrolinformationer om cache fra server"
 
 #: src/config/options.inc:464
 msgid ""
@@ -4844,15 +4846,15 @@ msgstr "Gem i fil"
 
 #: src/dialogs/menu.c:866
 msgid "~Pass frame URI to external command"
-msgstr "Videregiv rammens URI til ekstern kommando"
+msgstr "Videregiv rammens adresse til ekstern kommando"
 
 #: src/dialogs/menu.c:871
 msgid "Pass link URI to e~xternal command"
-msgstr "Videregiv henvisningens URI til ekstern kommando"
+msgstr "Videregiv linkadresse til ekstern kommando"
 
 #: src/dialogs/menu.c:877
 msgid "Pass tab URI to e~xternal command"
-msgstr "Videregiv fanebladets URI til ekstern kommando"
+msgstr "Videregiv fanebladets adresse til ekstern kommando"
 
 #: src/dialogs/menu.c:902
 msgid "Empty directory"
@@ -6235,7 +6237,7 @@ msgstr ""
 
 #: src/protocol/http/http.c:144
 msgid "Activate HTTP TRACE debugging"
-msgstr "Aktiver HTTP TRACE (spor) fejlsøgning"
+msgstr "Aktivér fejlsøgning med HTTP-sporing"
 
 #: src/protocol/http/http.c:146
 msgid ""
@@ -6290,23 +6292,24 @@ msgstr "HTTPS"
 
 #: src/protocol/http/http.c:170
 msgid "HTTPS-specific options."
-msgstr "Indstillinger for HTTPS"
+msgstr "HTTPS-specifikke indstillinger."
 
 #: src/protocol/http/http.c:174
 msgid "HTTPS proxy configuration."
-msgstr "Instillinger for HTTPS proxy"
+msgstr "Opsætning af HTTPS-proxy."
 
 #: src/protocol/http/http.c:178
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
 msgstr ""
-"Værtsmaskine og portnummer (host:port) for HTTPS CONNECT proxyen eller tom.\n"
-"Hvis tom anvendes i stedet miljøvariablen HTTPS_PROXY."
+"Værtsnavn og portnummer (host:port) på proxyserveren\n"
+"HTTPS CONNECT. Hvis ingen værdi angives her, vil\n"
+"miljøvariablen HTTPS_PROXY blive anvendt hvis den er sat."
 
 #: src/protocol/nntp/codes.c:124
 msgid "NNTP error"
-msgstr "NNTP-protokol fejl"
+msgstr "NNTP-fejl"
 
 #: src/protocol/nntp/codes.c:126
 #, c-format
@@ -6328,7 +6331,7 @@ msgstr "NNTP"
 
 #: src/protocol/nntp/nntp.c:35
 msgid "NNTP and news specific options."
-msgstr "NNTP- og news-protokolindstillinger"
+msgstr "NNTP- og news-specifikke indstillinger."
 
 #: src/protocol/nntp/nntp.c:37
 msgid "Default news server"
@@ -6364,15 +6367,15 @@ msgstr "Denne version af ELinks understøtter ikke protokollen %s"
 
 #: src/protocol/protocol.c:251
 msgid "Protocols"
-msgstr "Protookoller"
+msgstr "Protokoller"
 
 #: src/protocol/protocol.c:253
 msgid "Protocol specific options."
-msgstr "Protokolindstillinger"
+msgstr "Protokolspecifikke indstillinger."
 
 #: src/protocol/protocol.c:255
 msgid "No-proxy domains"
-msgstr "Domæner uden proxy"
+msgstr "Ingen-proxy-domæner"
 
 #: src/protocol/protocol.c:257
 msgid ""
@@ -6388,11 +6391,11 @@ msgstr ""
 #. name:
 #: src/protocol/protocol.c:290
 msgid "Protocol"
-msgstr "Internetprotokoller"
+msgstr "Protokol"
 
 #: src/protocol/rewrite/rewrite.c:45
 msgid "URI rewriting"
-msgstr "URI-omskrivning"
+msgstr "Adresseomskrivning"
 
 #: src/protocol/rewrite/rewrite.c:47
 msgid ""
@@ -6412,7 +6415,7 @@ msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:54
 msgid "Enable dumb prefixes"
-msgstr "Anvend simple præfikser"
+msgstr "Aktivér simple præfikser"
 
 #: src/protocol/rewrite/rewrite.c:56
 msgid ""
@@ -6428,7 +6431,7 @@ msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:61
 msgid "Enable smart prefixes"
-msgstr "Anvend smarte præfikser"
+msgstr "Aktivér smarte præfikser"
 
 #: src/protocol/rewrite/rewrite.c:63
 msgid ""
@@ -6487,7 +6490,7 @@ msgstr ""
 #. name:
 #: src/protocol/rewrite/rewrite.c:358
 msgid "URI rewrite"
-msgstr "URI-omskrivning"
+msgstr "Adresseomskrivning"
 
 #. name:
 #: src/protocol/smb/smb.c:73 src/protocol/smb/smb.c:85
@@ -6496,7 +6499,7 @@ msgstr "SMB"
 
 #: src/protocol/smb/smb.c:75
 msgid "SAMBA specific options."
-msgstr "SAMBA-indstillinger."
+msgstr "SAMBA-specifikke indstillinger."
 
 #: src/protocol/smb/smb.c:77
 msgid "Credentials"
@@ -6517,19 +6520,18 @@ msgid ""
 "handlers for the appropriate protocols. Ie.\n"
 "protocol.user.mailto.unix."
 msgstr ""
-"Brugerdefinerede protokoller. Indstillinger i denne forgrening\n"
-"konfigurerer eksterne programmer til håndtering af diverse\n"
-"protokoller. Eksempelvis protocol.user.mailto.unix for håndtering\n"
-"af mailto: protokollen."
+"Brugerdefinerede protokoller. Indstillinger i dette træ\n"
+"angiver eksterne programhåndteringer for de relevante\n"
+"protokoller. F.eks. protocol.user.mailto.unix."
 
 #: src/protocol/user.c:48
 msgid ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
-"Ekstern program til håndtering af denne protokol. Navngiv\n"
-"indstillingerne i denne forgrening efter dit system, såsom\n"
-"eksempelvis unix og unix-xwin."
+"Ekstern programhåndtering for denne protokol. Navngiv\n"
+"indstillingerne i dette træ efter dit system, f.eks.\n"
+"unix, unix-xwin ..."
 
 #: src/protocol/user.c:53
 msgid ""
@@ -6541,13 +6543,13 @@ msgid ""
 "%s in the string means subject (?subject=<this>)\n"
 "%u in the string means the whole URL"
 msgstr ""
-"Ekstern program til at håndtere denne protokol under det givne system.\n"
+"Eksternt program til aktuelle protokol og system.\n"
 "%f angviver hvilket filnavn formulardata skal inkluderes fra\n"
 "%h erstattes med værtsmaskinen (eller email addressen)\n"
-"%p erstattes med portnummeret\n"
-"%d erstattes med stien fra adressen (alt efter portnummeret)\n"
-"%s erstattes med emnestreng (?subject=<emne streng>)\n"
-"%u erstattes med hele adressen"
+"%p erstattes med portnummer\n"
+"%d erstattes med stien fra adressen (alt der står efter portnummeret)\n"
+"%s erstattes med emnestreng (dvs.: ?subject=<emne streng>)\n"
+"%u erstattes med den fulde adressen"
 
 #: src/protocol/user.c:263
 msgid "No program"
@@ -6556,7 +6558,7 @@ msgstr "Intet program"
 #: src/protocol/user.c:265
 #, c-format
 msgid "No program specified for protocol %s."
-msgstr "Intet program angivet for protokollen %s"
+msgstr "Intet program angivet for protokol %s"
 
 #: src/sched/download.c:227 src/sched/download.c:324 src/sched/download.c:503
 #: src/sched/download.c:597
@@ -6569,7 +6571,7 @@ msgid ""
 "Could not create file '%s':\n"
 "%s"
 msgstr ""
-"Kunne ikke oprette filen '%s':\n"
+"Kunne ikke oprette filen \"%s\":\n"
 "%s"
 
 #: src/sched/download.c:325
@@ -6595,11 +6597,11 @@ msgstr ""
 #: src/sched/download.c:504
 #, c-format
 msgid "'%s' is a directory."
-msgstr "'%s' er en mappe."
+msgstr "'%s' er et katalog."
 
 #: src/sched/download.c:540
 msgid "File exists"
-msgstr "Filen eksisterer"
+msgstr "Fil eksisterer"
 
 #: src/sched/download.c:541
 #, c-format
@@ -6610,19 +6612,19 @@ msgid ""
 "The alternative filename is:\n"
 "%s"
 msgstr ""
-"Denne fil eksisterer allerede:\n"
+"Denne fil findes allerede:\n"
 "%s\n"
 "\n"
-"Det foreslåede filnavn er:\n"
+"Det alternative filenavn er:\n"
 "%s"
 
 #: src/sched/download.c:548
 msgid "Save under the alternative name"
-msgstr "Gem med det alternative navn"
+msgstr "Gem under det alternative navn"
 
 #: src/sched/download.c:549
 msgid "Overwrite the original file"
-msgstr "Overskriv den originale fil"
+msgstr "Overskriv originalfilen"
 
 #: src/sched/download.c:550
 msgid "Resume download of the original file"
@@ -6635,7 +6637,7 @@ msgstr "Ukendt type"
 #: src/sched/download.c:1014
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr "Ønsker du at gemme filen '%s' (type: %s) eller vise den?"
+msgstr "Vil du gemme filen \"%s\" (type: %s) eller vise den?"
 
 #: src/sched/download.c:1020 src/sched/download.c:1030
 #: src/sched/download.c:1051 src/sched/download.c:1064
@@ -6650,11 +6652,11 @@ msgstr "Vis protokolhoved"
 #: src/sched/download.c:1026
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr "Ønsker du at vise filen '%s' (type: %s)?"
+msgstr "Vil du vise filen \"%s\" (type: %s)?"
 
 #: src/sched/download.c:1042 src/sched/download.c:1056
 msgid "What to do?"
-msgstr "Hvad skal jeg gøre?"
+msgstr "Hvad skal der ske med filen?"
 
 #: src/sched/download.c:1043
 #, c-format
@@ -6662,8 +6664,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
-"Ønsker du at åbne filen '%s' (type: %s%s%s)\n"
-"med programmet '%s', gemme den eller vise den?"
+"Vil du åbne filen \"%s\" (type: %s%s%s)\n"
+"med \"%s\", gemme den eller vise den?"
 
 #: src/sched/download.c:1049 src/sched/download.c:1063
 msgid "Open"
@@ -6675,8 +6677,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 msgstr ""
-"Ønsker du at åbne filen '%s' (type: %s%s%s)\n"
-"med programmet '%s' eller vise den?"
+"Vil du åbne filen \"%s\" (type: %s%s%s)\n"
+"med \"%s\" eller vise den?"
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"
@@ -6688,15 +6690,15 @@ msgstr "Lokaliserer vært"
 
 #: src/sched/error.c:33
 msgid "Making connection"
-msgstr "Forbinder"
+msgstr "Opretter forbindelse"
 
 #: src/sched/error.c:34
 msgid "SSL negotiation"
-msgstr "SSL forhandling"
+msgstr "SSL-forhandling"
 
 #: src/sched/error.c:35
 msgid "Request sent"
-msgstr "Forespørgsel sent"
+msgstr "Forespørgsel sendt"
 
 #: src/sched/error.c:36
 msgid "Logging in"
@@ -6826,7 +6828,7 @@ msgstr "Fejl ved FTP-indlogning"
 
 #: src/sched/error.c:81
 msgid "FTP PORT command failed"
-msgstr "FTP PORT kommando mislykkedes"
+msgstr "FTP PORT-kommando mislykkedes"
 
 #: src/sched/error.c:82
 msgid "File not found"
@@ -6927,8 +6929,7 @@ msgid ""
 msgstr ""
 "Velkommen til ELinks!\n"
 "\n"
-"Press ESC for menu. Documentation is available in Help menu.Tryk ESC for "
-"menu. Brugervejledning er tilgængelig i Hjælp-menuen"
+"Tryk ESC for menuen. Dokumentation findes i menuen Hjælp."
 
 #: src/sched/task.c:239
 #, c-format
@@ -6967,11 +6968,11 @@ msgstr "Vil du sende formulardata til adresse %s?"
 #: src/sched/task.c:260
 #, c-format
 msgid "Do you want to repost form data to URL %s?"
-msgstr "Vil du gensende formulardata til adresse %s?"
+msgstr "Vil du sende formulardata til adresse %s igen?"
 
 #: src/scripting/lua/core.c:468
 msgid "User dialog"
-msgstr "Bruger dialogvindue"
+msgstr "Brugerdialog"
 
 #: src/scripting/lua/core.c:590
 msgid "Lua Error"
@@ -6992,23 +6993,23 @@ msgstr "Programskriptning"
 
 #: src/ssl/ssl.c:72 src/ssl/ssl.c:157
 msgid "Verify certificates"
-msgstr "Verificer certifikater"
+msgstr "Verificér certifikater"
 
 #: src/ssl/ssl.c:74
 msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "needs extensive configuration of OpenSSL by the user."
 msgstr ""
-"Verificer serverens SSL certifikat. Bemærk, dette\n"
-"kræver omfattende konfigurering af OpenSSL fra brugeren."
+"Verificér værtsserverens SSL-certifikat. Bemærk at dette\n"
+"kræver omfattende opsætning af OpenSSL af brugeren."
 
 #: src/ssl/ssl.c:77
 msgid "Client Certificates"
-msgstr "Klient certifikater"
+msgstr "Klientcertifikater"
 
 #: src/ssl/ssl.c:79
 msgid "X509 client certificate options."
-msgstr "x509 klient certifikateindstillinger."
+msgstr "Indstillinger for X509-klientcertifikater."
 
 #: src/ssl/ssl.c:83
 msgid ""
@@ -7029,9 +7030,9 @@ msgid ""
 "file pointed to by the X509_CLIENT_CERT variable is used\n"
 "instead."
 msgstr ""
-"Stien til en fil indeholdende klientens certifikater og\n"
-"ukrypterede private nøgler i PEM format. Hvis deaktiveret\n"
-"vil filen angivet af miljøvariablen X509_CLIENT_CERT blive\n"
+"Placering af fil med klientcertifikat og ukrypteret\n"
+"privatnøgle i PEM-format. Hvis værdi er tom, vil den\n"
+"fil som miljøvariablen X509_CLIENT_CERT peger på blive\n"
 "brugt i stedet."
 
 #: src/ssl/ssl.c:159
@@ -7039,8 +7040,8 @@ msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "probably doesn't work properly at all with GnuTLS."
 msgstr ""
-"Verificer serverens SSL certifikat. Bemærk, dette virker\n"
-"sikkert ikke med GnuTLS."
+"Verificér værtsserverens SSL-certifikat. Bemærk at dette\n"
+"sandsynligvis ikke virker ordentligt med GnuTLS."
 
 #. name:
 #: src/ssl/ssl.c:178 src/ssl/ssl.c:195
@@ -7049,7 +7050,7 @@ msgstr "SSL"
 
 #: src/ssl/ssl.c:180
 msgid "SSL options."
-msgstr "SSL indstillinger"
+msgstr "SSL-indstillinger"
 
 #: src/terminal/event.c:71
 #, c-format
@@ -7058,7 +7059,7 @@ msgstr "Ugyldig terminalstørrelse: %d, %d"
 
 #: src/terminal/event.c:154
 msgid "Warning: terminal name contains illicit chars."
-msgstr "Advarsel: terminalens navn indeholder ulovlige tegn"
+msgstr "Advarsel: terminalnavn indeholder ugyldige tegn."
 
 #: src/terminal/event.c:226
 msgid "Failed to create session."
@@ -7076,7 +7077,7 @@ msgstr "Kunne ikke læse hændelse: %s (%s)"
 
 #: src/terminal/kbd.c:998
 msgid "Too many bytes read from the itrm!"
-msgstr "For mange byte læst fra itrm"
+msgstr "Læste for mange bytes fra itrm!"
 
 #: src/terminal/tab.c:189
 msgid "Do you really want to close the current tab?"
@@ -7089,25 +7090,25 @@ msgstr "Vil du virkelig lukke alle faneblade undtagen det aktuelle?"
 #: src/viewer/dump/dump.c:79
 #, c-format
 msgid "Can't write to stdout: %s"
-msgstr "Fejl ved skrivning til standarduddata: %s"
+msgstr "Kan ikke skrive til standarduddata: %s"
 
 #: src/viewer/dump/dump.c:82
 msgid "Can't write to stdout."
-msgstr "Fejl ved skrivning til standarduddata"
+msgstr "Kan ikke skrive til standarduddata"
 
 #: src/viewer/dump/dump.c:256
 #, c-format
 msgid "URL protocol not supported (%s)."
-msgstr "Adresse protokol understøttes ikke (%s)."
+msgstr "Adresseprotokol ikke understøttet (%s)."
 
 #: src/viewer/text/draw.c:62
 msgid "Missing fragment"
-msgstr "Manglende dokumentdel"
+msgstr "Manglende fragment"
 
 #: src/viewer/text/draw.c:63
 #, c-format
 msgid "The requested fragment \"#%s\" doesn't exist."
-msgstr "Den forespurgte dokumentdel \"#%s\" findes ikke."
+msgstr "Den forespurgte fragment \"#%s\" findes ikke."
 
 #: src/viewer/text/form.c:853
 msgid "Error while posting form"
@@ -7124,7 +7125,7 @@ msgstr "Nulstil formular"
 
 #: src/viewer/text/form.c:1429
 msgid "Harmless button"
-msgstr "Uskadelig knap"
+msgstr "Harmløs knap"
 
 #: src/viewer/text/form.c:1437
 msgid "Submit form to"
@@ -7148,7 +7149,7 @@ msgstr "Tekstområde"
 
 #: src/viewer/text/form.c:1450
 msgid "File upload"
-msgstr "Filoplæsning"
+msgstr "Fil-upload"
 
 #: src/viewer/text/form.c:1452
 msgid "Password field"
@@ -7169,22 +7170,22 @@ msgstr "skrivebeskyttet"
 #: src/viewer/text/form.c:1526
 #, c-format
 msgid "press %s to navigate"
-msgstr "tryk %s for at navigere"
+msgstr "tast %s for at navigere"
 
 #: src/viewer/text/form.c:1528
 #, c-format
 msgid "press %s to edit"
-msgstr "tryk %s for at redigere"
+msgstr "tast %s for at redigere"
 
 #: src/viewer/text/form.c:1564
 #, c-format
 msgid "press %s to submit to %s"
-msgstr "tryk %s for at indsende til %s"
+msgstr "tast %s for at indsende til %s"
 
 #: src/viewer/text/form.c:1566
 #, c-format
 msgid "press %s to post to %s"
-msgstr "tryk %s for at indsende formulardata til %s"
+msgstr "tast %s for at indsende formulardata til %s"
 
 #: src/viewer/text/link.c:1127
 msgid "Display ~usemap"

@@ -310,6 +310,7 @@ Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
 	Maintains and makes Links-0.9x official releases.
 	http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/links/
 	One of Links authors; a lot of misc. features & code
+	SMB support
 
 Muhamad Faizal <faizal@mfaizal.net>
 	Indonesian translation
@@ -461,4 +462,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.148 2003/12/03 23:23:12 pasky Exp $
+$Id: AUTHORS,v 1.149 2003/12/07 16:45:15 pasky Exp $

@@ -123,3 +123,6 @@
 
 /* Define to 1 to enable support for rewriting URIs. */
 #undef URI_REWRITE
+
+/* Define to 1 to enable support for SMB protocol (requires smbclient). */
+#undef ELINKS_SMB

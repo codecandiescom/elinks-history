@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.19 2003/12/01 14:11:30 pasky Exp $ */
+/* $Id: protocol.h,v 1.20 2003/12/07 16:45:16 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -13,6 +13,7 @@ enum protocol {
 	PROTOCOL_FTP,
 	PROTOCOL_HTTP,
 	PROTOCOL_HTTPS,
+	PROTOCOL_SMB,
 	PROTOCOL_JAVASCRIPT,
 	PROTOCOL_LUA,
 	PROTOCOL_PROXY,

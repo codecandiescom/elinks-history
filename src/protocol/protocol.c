@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.30 2003/12/01 16:05:47 jonas Exp $ */
+/* $Id: protocol.c,v 1.31 2003/12/07 16:45:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "protocol/ftp/ftp.h"
 #include "protocol/http/http.h"
 #include "protocol/http/https.h"
+#include "protocol/smb/smb.h"
 #include "protocol/user.h"
 
 static struct protocol_backend dummyjs_protocol_backend;
@@ -38,6 +39,7 @@ static struct protocol_backend *protocol_backends[] = {
 	/* PROTOCOL_FTP */	&ftp_protocol_backend,
 	/* PROTOCOL_HTTP */	&http_protocol_backend,
 	/* PROTOCOL_HTTPS */	&https_protocol_backend,
+	/* PROTOCOL_SMB */	&smb_protocol_backend,
 	/* PROTOCOL_JAVASCRIPT */	&dummyjs_protocol_backend,
 	/* PROTOCOL_LUA */	&lua_protocol_backend,
 	/* PROTOCOL_PROXY */	&proxy_protocol_backend,

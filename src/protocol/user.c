@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.4 2002/08/08 18:01:46 pasky Exp $ */
+/* $Id: user.c,v 1.5 2002/08/16 17:32:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
 		add_bytes_to_str(&n, &l, cmd, p);
 		cmd += p;
 
-		if (*cmd == '%' && cmd[1]) {
+		if (*cmd == '%') {
 			cmd++;
 			switch (*cmd) {
 				case 'u':
@@ -53,8 +53,11 @@ subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
 				case 's':
 					if (subj) add_to_str(&n, &l, subj);
 					break;
+				default:
+					add_bytes_to_str(&n, &l, cmd - 1, 2);
+					break;
 			}
-			cmd++;
+			if (*cmd) cmd++;
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.9 2002/06/22 21:20:53 pasky Exp $ */
+/* $Id: conv.c,v 1.10 2002/11/19 22:25:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ add_num_to_str(unsigned char **str, int *len, int num)
 {
 	unsigned char buf[64];
 
-	snzprint(buf, 64, num);
+	snzprint(buf, sizeof(buf), num);
 	add_to_str(str, len, buf);
 }
 
@@ -68,15 +68,15 @@ add_knum_to_str(unsigned char **str, int *len, int num)
 	unsigned char buf[13];
 
 	if (num && (num / (1024 * 1024)) * (1024 * 1024) == num) {
-		snzprint(buf, 12, num / (1024 * 1024));
+		snzprint(buf, sizeof(buf) - 1, num / (1024 * 1024));
 		strcat(buf, "M");
 
 	} else if (num && (num / 1024) * 1024 == num) {
-		snzprint(buf, 12, num / 1024);
+		snzprint(buf, sizeof(buf) - 1, num / 1024);
 		strcat(buf, "k");
 
 	} else {
-		snzprint(buf, 13, num);
+		snzprint(buf, sizeof(buf), num);
 	}
 
 	add_to_str(str, len, buf);

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.11 2003/05/04 20:13:57 pasky Exp $ */
+/* $Id: terminal.c,v 1.12 2003/05/04 20:33:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,7 +207,7 @@ term_send_event(struct terminal *term, struct event *ev)
 	/* We need to send event to correct root window, not to the first one.
 	 * --karpov */
 	/* ...if we want to send it to a root window at all. --pasky */
-	win = first_win->type == WT_ROOT ? get_root_window(term) : first_win;
+	win = first_win->type == WT_TAB ? get_root_window(term) : first_win;
 	if (!win)
 		internal("No tab to send the event to!");
 

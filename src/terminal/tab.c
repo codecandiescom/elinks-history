@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.3 2003/05/04 20:29:52 zas Exp $ */
+/* $Id: tab.c,v 1.4 2003/05/04 20:33:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@ init_tab(struct terminal *term)
 
 	win->handler = current_tab ? current_tab->handler : NULL;
 	win->term = term;
-	win->type = WT_ROOT;
+	win->type = WT_TAB;
 
 	add_to_list(term->windows, win);
 	term->current_tab = get_tab_number(win);
@@ -42,7 +42,7 @@ number_of_tabs(struct terminal *term)
 	struct window *win;
 
 	foreach (win, term->windows) {
-		result += (win->type == WT_ROOT);
+		result += (win->type == WT_TAB);
 	}
 
 	return result;
@@ -62,7 +62,7 @@ get_tab_number(struct window *window)
 			num = current;
 			break;
 		}
-		current += (win->type == WT_ROOT);
+		current += (win->type == WT_TAB);
 	}
 
 	return num;
@@ -75,7 +75,7 @@ get_tab_by_number(struct terminal *term, int num)
 	struct window *win = NULL;
 
 	foreachback (win, term->windows) {
-		if (win->type == WT_ROOT && !num)
+		if (win->type == WT_TAB && !num)
 			break;
 		num -= win->type;
 	}

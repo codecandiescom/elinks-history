@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.29 2003/10/27 02:17:52 jonas Exp $
+## $Id: Makefile.am,v 1.30 2003/11/17 18:39:15 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -30,6 +30,7 @@ libutil_a_SOURCES = \
  memlist.h \
  memory.c \
  memory.h \
+ object.h \
  profile.h \
  secsave.c \
  secsave.h \

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.105 2003/11/17 10:47:23 zas Exp $ */
+/* $Id: link.c,v 1.106 2003/11/17 18:39:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
@@ -643,7 +644,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		if (link->form->ro)
 			return 1;
 
-		document_lock(doc_view->document);
+		object_lock(doc_view->document);
 		add_empty_window(ses->tab->term,
 				 (void (*)(void *)) release_document,
 				 doc_view->document);

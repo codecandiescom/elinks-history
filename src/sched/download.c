@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.174 2003/11/17 01:48:51 miciah Exp $ */
+/* $Id: download.c,v 1.175 2003/11/17 18:39:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,6 +54,7 @@
 #include "util/file.h"
 #include "util/memlist.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 
 
@@ -1109,7 +1110,7 @@ cancel:
 void
 tp_free(struct session *ses)
 {
-	cache_entry_unlock(ses->tq.ce);
+	object_unlock(ses->tq.ce);
 	mem_free(ses->tq.url);
 	ses->tq.url = NULL;
 	if (ses->tq.goto_position) {
@@ -1326,7 +1327,7 @@ ses_chktype(struct session *ses, struct download **download, struct cache_entry 
 	change_connection(&ses->loading, *download, PRI_MAIN, 0);
 
 	ses->tq.ce = ce;
-	cache_entry_lock(ses->tq.ce);
+	object_lock(ses->tq.ce);
 
 	if (ses->tq.goto_position) mem_free(ses->tq.goto_position);
 

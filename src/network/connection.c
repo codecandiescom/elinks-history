@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.127 2003/11/16 03:19:48 jonas Exp $ */
+/* $Id: connection.c,v 1.128 2003/11/17 18:39:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "util/encoding.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 #include "util/types.h"
 
@@ -784,7 +785,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	if (cache_mode <= CACHE_MODE_NORMAL
 	    && (ce = find_in_cache(url))
 	    && !ce->incomplete) {
-		if (!is_cache_entry_used(ce) &&
+		if (!is_object_used(ce) &&
 		    ((ce->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
 		     || (ce->redirect && !get_opt_int("document.cache.cache_redirects")))) {
 			delete_cache_entry(ce);
@@ -956,7 +957,7 @@ detach_connection(struct download *download, int pos)
 		/* Pre-clean cache. */
 		shrink_format_cache(0);
 
-		if (total_pri != 1 || is_cache_entry_used(conn->cache)) {
+		if (total_pri != 1 || is_object_used(conn->cache)) {
 			/* We're too important, or someone uses our cache
 			 * entry. */
 			return;

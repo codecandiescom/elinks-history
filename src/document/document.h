@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.32 2003/11/15 16:39:21 pasky Exp $ */
+/* $Id: document.h,v 1.33 2003/11/17 18:39:15 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -118,37 +118,6 @@ struct document {
 
 	enum cp_status cp_status;
 };
-
-#if 0
-#define DEBUG_DOCUMENT_LOCKS
-#endif
-
-#ifdef DEBUG_DOCUMENT_LOCKS
-#define doc_lock_debug(doc, info) debug("document %p lock %s now %d url= %s", doc, info, (doc)->refcount, (doc)->url)
-#else
-#define doc_lock_debug(ce, info)
-#endif
-
-#ifdef DEBUG
-#include "util/error.h"
-#define doc_sanity_check(doc) \
-do { \
-	assert(doc); \
-	assertm((doc)->refcount >= 0, "Document refcount underflow."); \
-	if_assert_failed (doc)->refcount = 0; \
-} while (0)
-#else
-#define doc_sanity_check(doc)
-#endif
-
-#define get_document_refcount(doc) ((doc)->refcount)
-#define is_document_used(doc) (!!(doc)->refcount)
-#define document_lock(doc) do { doc_sanity_check(doc); (doc)->refcount++; doc_lock_debug(doc, "+1"); } while (0)
-#define document_unlock(doc) do { (doc)->refcount--; doc_lock_debug(doc, "-1"); doc_sanity_check(doc);} while (0)
-
-/* Please keep this one. It serves for debugging. --Zas */
-#define document_nolock(doc) do { doc_sanity_check(doc); doc_lock_debug(doc, "0"); } while (0)
-
 
 #define document_has_frames(document_) ((document_) && (document_)->frame_desc)
 

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.17 2003/11/17 18:37:37 pasky Exp $ */
+/* $Id: dialogs.c,v 1.18 2003/11/17 18:39:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 
 
@@ -85,7 +86,7 @@ done_info_button(void *vhop)
 {
 	struct cache_entry *ce = vhop;
 
-	cache_entry_unlock(ce);
+	object_unlock(ce);
 }
 
 static int
@@ -103,7 +104,7 @@ push_info_button(struct dialog_data *dlg_data,
 	if (!ce) return 0;
 	if (!init_string(&msg)) return 0;
 
-	cache_entry_lock(ce);
+	object_lock(ce);
 
 	add_to_string(&msg, _("URL", term));
 	add_to_string(&msg, ": ");

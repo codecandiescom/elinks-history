@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.29 2003/11/16 03:19:47 jonas Exp $ */
+/* $Id: document.c,v 1.30 2003/11/17 18:39:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"
@@ -47,8 +48,8 @@ init_document(unsigned char *uristring, struct document_options *options)
 	init_list(document->tags);
 	init_list(document->nodes);
 
-	document_nolock(document);
-	document_lock(document);
+	object_nolock(document);
+	object_lock(document);
 
 	copy_opt(&document->options, options);
 
@@ -86,14 +87,14 @@ done_document(struct document *document)
 	assert(document);
 	if_assert_failed return;
 
-	assertm(!is_document_used(document), "Attempt to free locked formatted data.");
+	assertm(!is_object_used(document), "Attempt to free locked formatted data.");
 	if_assert_failed return;
 
 	ce = find_in_cache(document->url);
 	if (!ce)
 		internal("no cache entry for document");
 	else
-		cache_entry_unlock(ce);
+		object_unlock(ce);
 
 	if (document->url) mem_free(document->url);
 	if (document->title) mem_free(document->title);
@@ -142,8 +143,8 @@ release_document(struct document *document)
 	if_assert_failed return;
 
 	if (document->refresh) kill_document_refresh(document->refresh);
-	document_unlock(document);
-	if (!is_document_used(document)) format_cache_entries++;
+	object_unlock(document);
+	if (!is_object_used(document)) format_cache_entries++;
 	del_from_list(document);
 	add_to_list(format_cache, document);
 }
@@ -162,7 +163,7 @@ get_cached_document(unsigned char *uri, struct document_options *options,
 			continue;
 
 		if (id != document->id_tag) {
-			if (!is_document_used(document)) {
+			if (!is_object_used(document)) {
 				document = document->prev;
 				done_document(document->next);
 				format_cache_entries--;
@@ -174,10 +175,10 @@ get_cached_document(unsigned char *uri, struct document_options *options,
 		del_from_list(document);
 		add_to_list(format_cache, document);
 
-		if (!is_document_used(document))
+		if (!is_object_used(document))
 			format_cache_entries--;
 
-		document_lock(document);
+		object_lock(document);
 
 		return document;
 	}
@@ -195,7 +196,7 @@ shrink_format_cache(int whole)
 	if_assert_failed format_cache_entries = 0;
 
 	foreachback (document, format_cache) {
-		if (is_document_used(document)) continue;
+		if (is_object_used(document)) continue;
 
 		if (!whole) {
 			struct cache_entry *ce;
@@ -230,7 +231,7 @@ count_format_cache(void)
 
 	format_cache_entries = 0;
 	foreach (document, format_cache)
-		if (!is_document_used(document))
+		if (!is_object_used(document))
 			format_cache_entries++;
 }
 
@@ -246,7 +247,7 @@ formatted_info(int type)
 			return i;
 		case INFO_LOCKED:
 			foreach (document, format_cache)
-				i += is_document_used(document);
+				i += is_object_used(document);
 			return i;
 	}
 

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.95 2003/11/17 17:58:57 pasky Exp $ */
+/* $Id: cache.c,v 1.96 2003/11/17 18:39:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "sched/connection.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 #include "util/types.h"
 
@@ -84,7 +85,7 @@ cache_info(int type)
 			foreach (ce, cache) i++;
 			return i;
 		case INFO_LOCKED:
-			foreach (ce, cache) i += is_cache_entry_used(ce);
+			foreach (ce, cache) i += is_object_used(ce);
 			return i;
 		case INFO_LOADING:
 			foreach (ce, cache) i += is_entry_used(ce);
@@ -140,7 +141,7 @@ get_cache_entry(unsigned char *url)
 	ce->valid = 1;
 	init_list(ce->frag);
 	ce->id_tag = id_tag_counter++;
-	cache_entry_nolock(ce); /* Debugging purpose. */
+	object_nolock(ce); /* Debugging purpose. */
 
 	add_to_list(cache, ce);
 
@@ -467,7 +468,7 @@ delete_entry_content(struct cache_entry *ce)
 void
 delete_cache_entry(struct cache_entry *ce)
 {
-	assertm(!is_cache_entry_used(ce), "deleting locked cache entry");
+	assertm(!is_object_used(ce), "deleting locked cache entry");
 	assertm(!is_entry_used(ce), "deleting loading cache entry");
 
 	delete_entry_content(ce);
@@ -533,7 +534,7 @@ garbage_collection(int whole)
 	foreach (ce, cache) {
 		old_cache_size += ce->data_size;
 
-		if (!is_cache_entry_used(ce) && !is_entry_used(ce))
+		if (!is_object_used(ce) && !is_entry_used(ce))
 			continue;
 
 		new_cache_size -= ce->data_size;
@@ -562,7 +563,7 @@ garbage_collection(int whole)
 			goto shrinked_enough;
 
 		/* Skip used cache entries. */
-		if (is_cache_entry_used(ce) || is_entry_used(ce)) {
+		if (is_object_used(ce) || is_entry_used(ce)) {
 #ifdef DEBUG_CACHE
 			obstacle_entry = 1;
 #endif

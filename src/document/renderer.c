@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.5 2003/11/16 03:19:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.6 2003/11/17 18:39:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "sched/session.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
@@ -59,12 +60,12 @@ render_document(struct view_state *vs, struct document_view *document_view,
 
 	document = get_cached_document(vs->url, options, cache_entry->id_tag);
 	if (!document) {
-		cache_entry_lock(cache_entry);
+		object_lock(cache_entry);
 		shrink_memory(0);
 
 		document = init_document(vs->url, options);
 		if (!document) {
-			cache_entry_unlock(cache_entry);
+			object_unlock(cache_entry);
 			return;
 		}
 

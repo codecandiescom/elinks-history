@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.57 2003/11/17 17:58:57 pasky Exp $ */
+/* $Id: cache.h,v 1.58 2003/11/17 18:39:14 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -66,34 +66,6 @@ struct cache_entry {
 
 extern struct list_head cache_entry_box_items; /* struct listbox_item */
 extern struct list_head cache_entry_boxes; /* struct listbox_data */
-
-
-#if 0
-#define DEBUG_CACHE_ENTRIES_LOCKS
-#endif
-
-#ifdef DEBUG_CACHE_ENTRIES_LOCKS
-#define ce_lock_debug(ce, info) debug("cache entry %p lock %s now %d url= %s", ce, info, (ce)->refcount, struri((ce)->uri))
-#else
-#define ce_lock_debug(ce, info)
-#endif
-
-#ifdef DEBUG
-#include "util/error.h"
-#define ce_sanity_check(ce) \
-do { \
-	assert(ce); \
-	assertm((ce)->refcount >= 0, "Cache entry refcount underflow."); \
-	if_assert_failed (ce)->refcount = 0; \
-} while (0)
-#else
-#define ce_sanity_check(ce)
-#endif
-
-#define get_cache_entry_refcount(ce) ((ce)->refcount)
-#define is_cache_entry_used(ce) (!!(ce)->refcount)
-#define cache_entry_lock(ce) do { ce_sanity_check(ce); (ce)->refcount++; ce_lock_debug(ce, "+1"); } while (0)
-#define cache_entry_unlock(ce) do { (ce)->refcount--; ce_lock_debug(ce, "-1"); ce_sanity_check(ce);} while (0)
 
 /* Please keep this one. It serves for debugging. --Zas */
 #define cache_entry_nolock(ce) do { ce_sanity_check(ce); ce_lock_debug(ce, "0"); } while (0)

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.122 2003/11/14 18:30:52 jonas Exp $ */
+/* $Id: connection.c,v 1.123 2003/11/15 14:48:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -963,6 +963,7 @@ detach_connection(struct download *download, int pos)
 		/* debug("detached"); */
 
 		/* We aren't valid cache entry anymore. */
+		struri(conn->cache->uri) = unparse_uri(&conn->cache->uri);
 		struri(conn->cache->uri)[0] = 0;
 		conn->detached = 1;
 	}

@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.183 2004/11/21 14:53:30 zas Exp $ */
+/* $Id: inpfield.c,v 1.184 2004/11/21 16:54:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@
 void
 add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label,
 		 int min, int max, t_widget_handler *handler,
-		 int data_len, void *data,
+		 int datalen, void *data,
 		 struct input_history *history, int float_)
 {
 		struct widget *widget;
@@ -43,7 +43,7 @@ add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label
 		widget->info.field.min = min;
 		widget->info.field.max = max;
 		widget->handler = handler;
-		widget->datalen = data_len;
+		widget->datalen = datalen;
 		widget->data = data;
 		widget->info.field.history = history;
 		widget->info.field.float_label = float_;
@@ -160,7 +160,7 @@ dlg_format_field(struct terminal *term,
 static t_handler_event_status
 input_field_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	void (*fn)(void *) = widget_data->widget->udata;
+	void (*fn)(void *) = widget_data->widget->data;
 	void *data = dlg_data->dlg->udata2;
 
 	if (fn) fn(data);
@@ -172,7 +172,7 @@ input_field_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data
 static t_handler_event_status
 input_field_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	void (*fn)(void *, unsigned char *) = widget_data->widget->udata;
+	void (*fn)(void *, unsigned char *) = widget_data->widget->data;
 	void *data = dlg_data->dlg->udata2;
 	unsigned char *text = dlg_data->widgets_data->cdata;
 

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.85 2004/11/21 13:33:17 zas Exp $ */
+/* $Id: widget.h,v 1.86 2004/11/21 16:54:30 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -36,11 +36,11 @@ struct widget {
 	struct widget_ops *ops;
 
 	unsigned char *text;
-	unsigned char *data;
-
-	void *udata;
-
+	
 	t_widget_handler *handler;
+	
+	void *data;
+	int datalen;	/* 0 = no alloc/copy to cdata. */
 
 	union {
 		struct widget_info_checkbox checkbox;
@@ -49,8 +49,6 @@ struct widget {
 		struct widget_info_button button;
 		struct widget_info_text text;
 	} info;
-
-	int datalen;
 
 	enum widget_type type;
 };

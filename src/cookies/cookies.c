@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.178 2004/11/10 21:20:44 jonas Exp $ */
+/* $Id: cookies.c,v 1.179 2004/11/10 22:10:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -638,7 +638,7 @@ struct string *
 send_cookies(struct uri *uri)
 {
 	struct c_domain *cd;
-	struct cookie *c, *d;
+	struct cookie *c;
 	unsigned char *path = NULL;
 	static struct string header;
 
@@ -661,14 +661,16 @@ send_cookies(struct uri *uri)
 			continue;
 
 		if (is_expired(c->expires)) {
+			struct cookie *tmp;
+
 #ifdef DEBUG_COOKIES
-			DBG("Cookie %s=%s (exp %d) expired.\n",
-			      c->name, c->value, c->expires);
+			DBG("Cookie %s=%s (exp %d) expired.",
+			    c->name, c->value, c->expires);
 #endif
-			d = c;
+			tmp = c;
 			c = c->prev;
-			del_from_list(d);
-			free_cookie(d);
+			del_from_list(tmp);
+			free_cookie(tmp);
 
 			cookies_dirty = 1;
 			continue;
@@ -678,9 +680,8 @@ send_cookies(struct uri *uri)
 		if (c->secure && uri->protocol != PROTOCOL_HTTPS)
 			continue;
 
-		if (header.length) {
+		if (header.length)
 			add_to_string(&header, "; ");
-		}
 
 		add_to_string(&header, c->name);
 		add_char_to_string(&header, '=');

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.186 2003/07/28 19:36:51 zas Exp $ */
+/* $Id: parser.c,v 1.187 2003/07/28 21:45:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,10 +205,11 @@ found_parse_quoted_value:
 found_endattr:
 	if (found) {
 		add_chr(attr, attrlen, 0);
-		if (strchr(attr, '&')) {
+		attrlen--;
+		if (memchr(attr, '&', attrlen)) {
 			unsigned char *saved_attr = attr;
 
-			attr = convert_string(NULL, saved_attr, strlen(saved_attr));
+			attr = convert_string(NULL, saved_attr, attrlen);
 			mem_free(saved_attr);
 		}
 

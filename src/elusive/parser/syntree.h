@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.9 2003/01/17 22:04:41 pasky Exp $ */
+/* $Id: syntree.h,v 1.10 2003/01/18 01:32:07 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -92,7 +92,17 @@ spawn_syntree_node(struct parser_state *state);
  * such property set, otherwise a pointer is returned that points to
  * dynamically allocated memory (which you have to free after doing what you
  * needed to, yes). */
+/* It also automatically looks up parent nodes if the property isn't available
+ * in the specified node. */
 unsigned char *
 get_syntree_property(struct syntree_node *node, unsigned char *name);
+
+/* Returns value string of an property with this name. NULL means there's no
+ * such property set, otherwise a pointer is returned that points to
+ * dynamically allocated memory (which you have to free after doing what you
+ * needed to, yes). */
+/* It isn't doing any additional automatical lookups. */
+unsigned char *
+get_only_syntree_property(struct syntree_node *node, unsigned char *name);
 
 #endif

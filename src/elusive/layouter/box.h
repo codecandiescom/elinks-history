@@ -1,4 +1,4 @@
-/* $Id: box.h,v 1.2 2003/01/17 22:04:41 pasky Exp $ */
+/* $Id: box.h,v 1.3 2003/01/18 01:32:06 pasky Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_BOX_H
 #define EL__USIVE_LAYOUTER_BOX_H
@@ -88,8 +88,18 @@ done_layout_box(struct layout_box *box);
  * such property set, otherwise a pointer is returned that points to
  * dynamically allocated memory (which you have to free after doing what you
  * needed to, yes). */
-/* This automatically looks up the syntax tree properties list if needed. */
+/* This automatically looks up the syntax tree properties list and then parent
+ * boxes properties lists if needed. */
 unsigned char *
 get_box_property(struct layout_box *box, unsigned char *name);
+
+/* Returns value string of an property with this name. NULL means there's no
+ * such property set, otherwise a pointer is returned that points to
+ * dynamically allocated memory (which you have to free after doing what you
+ * needed to, yes). */
+/* This doesn't automatically look up any properties other than stored in the
+ * box itself. */
+unsigned char *
+get_only_box_property(struct layout_box *box, unsigned char *name);
 
 #endif

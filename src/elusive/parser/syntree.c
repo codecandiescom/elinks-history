@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.13 2003/01/18 01:20:27 pasky Exp $ */
+/* $Id: syntree.c,v 1.14 2003/01/18 01:32:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,14 +83,23 @@ spawn_syntree_node(struct parser_state *state)
 
 
 unsigned char *
-get_syntree_property(struct syntree_node *node, unsigned char *name)
+get_only_syntree_property(struct syntree_node *node, unsigned char *name)
 {
 	struct property *property = get_property(&node->properties, name);
 
-	if (!property) {
-		return node->root ? get_syntree_property(node->root, name)
-				  : NULL;
-	}
+	if (!property)
+		return NULL;
 
 	return memacpy(property->value, property->valuelen);
+}
+
+unsigned char *
+get_syntree_property(struct syntree_node *node, unsigned char *name)
+{
+	unsigned char *value = get_only_syntree_property(node, name);
+
+	if (!value && node->root)
+		value = get_syntree_property(node->root, name);
+
+	return value;
 }

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.93 2003/10/20 15:38:32 pasky Exp $ */
+/* $Id: conf.c,v 1.94 2003/10/20 15:42:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -614,8 +614,9 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 			break;
 		}
 
+		add_to_string(&config, "##\n");
+
 		add_to_string(&config, conf_i18n(N_(
-			"##\n"
 			"## Obviously, if you don't like what ELinks is going to do with\n"
 			"## this file, you can change it by altering the config.saving_style\n"
 			"## option. Come on, aren't we friendly guys after all?\n"), i18n));
@@ -630,7 +631,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	add_to_string(&tmpstring, "\n\n\n");
 	add_to_string(&tmpstring, "#####################################\n");
-	add_to_string(&tmpstring, conf_i18n(N_("# Automatically saved options\n"), i18n));
+	add_to_string(&tmpstring, "# ");
+	add_to_string(&tmpstring, conf_i18n(N_("Automatically saved options\n"), i18n));
 	add_to_string(&tmpstring, "#\n\n");
 
 	origlen = tmpstring.length;
@@ -643,7 +645,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	add_to_string(&tmpstring, "\n\n\n");
 	add_to_string(&tmpstring, "#####################################\n");
-	add_to_string(&tmpstring, conf_i18n(N_("# Automatically saved keybindings\n"), i18n));
+	add_to_string(&tmpstring, "# ");
+	add_to_string(&tmpstring, conf_i18n(N_("Automatically saved keybindings\n"), i18n));
 	add_to_string(&tmpstring, "#\n\n");
 
 	origlen = tmpstring.length;

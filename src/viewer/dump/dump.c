@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.121 2004/04/14 20:50:54 jonas Exp $ */
+/* $Id: dump.c,v 1.122 2004/04/14 20:51:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,8 +171,7 @@ subst_url(unsigned char *str, struct string *url)
 		str++;
 		switch (*str) {
 			case 'u':
-				if (!url) break;
-				add_bytes_to_string(&string, url->source, url->length);
+				if (url) add_string_to_string(&string, url);
 				break;
 		}
 		if (*str) str++;

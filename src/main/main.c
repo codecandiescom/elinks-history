@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.74 2003/01/03 02:08:35 pasky Exp $ */
+/* $Id: main.c,v 1.75 2003/01/03 02:22:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,6 @@
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
-#include "intl/language.h"
 #include "lowlevel/af_unix.h"
 #include "lowlevel/dns.h"
 #include "lowlevel/home.h"
@@ -273,7 +272,6 @@ init()
 #endif
 
 	init_options();
-	init_trans();
 	set_sigcld();
 	get_system_name();
 	init_keymaps();
@@ -436,7 +434,6 @@ terminate_all_subsystems()
 	check_bottom_halves();
 	free_home();
 	free_strerror_buf();
-	shutdown_trans();
 #ifdef USE_LEDS
 	done_leds();
 #endif

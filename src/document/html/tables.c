@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.221 2004/06/26 19:18:48 zas Exp $ */
+/* $Id: tables.c,v 1.222 2004/06/26 19:20:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1100,7 +1100,7 @@ distribute_widths(struct table *table, int width)
 	char *u;
 	int *w, *mx;
 	int mmax_c = 0;
-	int tx_size;
+	int cols_size;
 
 	if (!table->cols) return;
 
@@ -1109,17 +1109,17 @@ distribute_widths(struct table *table, int width)
 	for (i = 0; i < table->cols; i++)
 		int_lower_bound(&mmax_c, table->max_cols_widths[i]);
 
-	tx_size = table->cols * sizeof(int);
-	memcpy(table->cols_widths, table->min_cols_widths, tx_size);
+	cols_size = table->cols * sizeof(int);
+	memcpy(table->cols_widths, table->min_cols_widths, cols_size);
 	table->real_width = width;
 
 	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
 	u = fmem_alloc(table->cols);
 
-	w = fmem_alloc(tx_size);
+	w = fmem_alloc(cols_size);
 	if (!w) goto end;
 
-	mx = fmem_alloc(tx_size);
+	mx = fmem_alloc(cols_size);
 	if (!mx) goto end1;
 
 	while (d) {
@@ -1128,8 +1128,8 @@ distribute_widths(struct table *table, int width)
 		int wq;
 		int dd;
 
-		memset(w, 0, tx_size);
-		memset(mx, 0, tx_size);
+		memset(w, 0, cols_size);
+		memset(mx, 0, cols_size);
 
 		for (i = 0; i < table->cols; i++) {
 			switch (om) {

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.106 2003/10/11 10:49:19 jonas Exp $ */
+/* $Id: download.c,v 1.107 2003/10/22 21:59:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -466,6 +466,30 @@ set_file_download_win_handler(struct file_download *file_download)
 	}
 }
 
+static void
+download_error_dialog(struct file_download *file_download, int saved_errno)
+{
+	unsigned char *msg, *emsg;
+
+	if (list_empty(sessions)) return;
+
+	msg = stracpy(file_download->file);
+	emsg = stracpy((unsigned char *) strerror(saved_errno));
+
+	if (msg && emsg) {
+		struct terminal *term = get_download_ses(file_download)->tab->term;
+
+		msg_box(term, getml(msg, emsg, NULL), MSGBOX_FREE_TEXT,
+			N_("Download error"), AL_CENTER,
+			msg_text(term, N_("Could not create file %s: %s"), msg, emsg),
+			NULL, 1,
+			N_("OK"), NULL, B_ENTER | B_ESC);
+	} else {
+		if (msg) mem_free(msg);
+		if (emsg) mem_free(emsg);
+	}
+}
+
 int
 write_cache_entry_to_file(struct cache_entry *ce, struct file_download *file_download)
 {
@@ -513,28 +537,7 @@ write_cache_entry_to_file(struct cache_entry *ce, struct file_download *file_dow
 	return 1;
 
 write_error:
-	{
-		int saved_errno = errno; /* Saved in case of ... --Zas */
-		unsigned char *msg, *emsg;
-
-		if (list_empty(sessions)) return 0;
-
-		msg = stracpy(file_download->file);
-		emsg = stracpy((unsigned char *) strerror(saved_errno));
-
-		if (msg && emsg) {
-			struct terminal *term = get_download_ses(file_download)->tab->term;
-
-			msg_box(term, getml(msg, emsg, NULL), MSGBOX_FREE_TEXT,
-				N_("Download error"), AL_CENTER,
-				msg_text(term, N_("Could not create file %s: %s"), msg, emsg),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
-		} else {
-			if (msg) mem_free(msg);
-			if (emsg) mem_free(emsg);
-		}
-	}
+	download_error_dialog(file_download, errno);
 
 	return 0;
 }
@@ -605,6 +608,7 @@ end_store:
 
 				if (tt) {
 					unsigned char *p = strchr(tt, POST_CHAR);
+
 					if (p) *p = '\0';
 
 					msg_box(term, getml(tt, NULL), MSGBOX_FREE_TEXT,
@@ -639,11 +643,13 @@ end_store:
 						N_("OK"), NULL, B_ENTER | B_ESC);
 				}
 
-				if (get_opt_int("document.download.notify_bell") + file_download->notify >= 2) {
+				if (get_opt_int("document.download.notify_bell")
+				    + file_download->notify >= 2) {
 					beep_terminal(get_download_ses(file_download)->tab->term);
 				}
 
-				if (file_download->remotetime && get_opt_int("document.download.set_original_time")) {
+				if (file_download->remotetime
+				    && get_opt_int("document.download.set_original_time")) {
 					struct utimbuf foo;
 
 					foo.actime = foo.modtime = file_download->remotetime;
@@ -712,13 +718,6 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	int overwrite;
 
 	ofile = expand_tilde(ofile);
-
-	/* TODO: If the file already exists, possibly:
-	 * * inform the user
-	 * * allow to resume the download
-	 * * allow to specify a new name
-	 * * allow to rename the old file
-	 * --pasky */
 
 	/* Minor code duplication to prevent useless call to get_opt_int()
 	 * if possible. --Zas */
@@ -897,6 +896,10 @@ get_temp_name(unsigned char *url)
 {
 	struct string name;
 	unsigned char *extension;
+	/* FIXME
+	 * We use tempnam() here, which is unsafe (race condition), for now.
+	 * This should be changed at some time, but it needs an in-depth work
+	 * of whole download code. --Zas */
 	unsigned char *nm = tempnam(NULL, "elinks");
 
 	if (!nm) return NULL;
@@ -1057,6 +1060,7 @@ continue_download(struct session *ses, unsigned char *file)
 	if (!url) return;
 
 	if (ses->tq_prog) {
+		/* FIXME: get_temp_name() calls tempnam(). --Zas */
 		file = get_temp_name(url);
 		if (!file) {
 			tp_cancel(ses);

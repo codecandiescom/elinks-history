@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.6 2002/03/16 10:30:23 pasky Exp $
+## $Id: Makefile.am,v 1.7 2002/03/16 23:05:50 pasky Exp $
 
 # codepage_sources = Unicode/gen-cp Unicode/*.cp Unicode/index.txt
 # entities_sources = Unicode/gen-ent Unicode/entities.lnx
@@ -24,6 +24,7 @@ links_SOURCES = \
  codepage.h \
  codepage.inc \
  connect.c \
+ colors.c \
  cookies.c \
  default.c \
  dns.c \

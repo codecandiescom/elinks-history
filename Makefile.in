@@ -73,7 +73,7 @@ EXTRA_DIST =   $(man_MANS) Unicode/* intl/*  BUGS TODO SITES HACKING LUA  wipe-o
 
 
 bin_PROGRAMS = links
-links_SOURCES =   af_unix.c  beos.c  bfu.c  bookmarks.c  cache.c  charsets.c  codepage.h  codepage.inc  connect.c  cookies.c  default.c  dns.c  entity.inc  error.c  file.c  finger.c  ftp.c  html.c  html_r.c  html_tbl.c  http.c  https.c  kbd.c  kbdbind.c  lang_defs.h  language.c  language.inc  links.h  lua.c  mailto.c  main.c  menu.c  os_dep.c  os_dep.h  os_depx.h  sched.c  select.c  session.c  setup.h  terminal.c  types.c  uni_7b.inc  url.c  view.c  win32.c
+links_SOURCES =   af_unix.c  beos.c  bfu.c  bookmarks.c  cache.c  charsets.c  codepage.h  codepage.inc  connect.c  colors.c  cookies.c  default.c  dns.c  entity.inc  error.c  file.c  finger.c  ftp.c  html.c  html_r.c  html_tbl.c  http.c  https.c  kbd.c  kbdbind.c  lang_defs.h  language.c  language.inc  links.h  lua.c  mailto.c  main.c  menu.c  os_dep.c  os_dep.h  os_depx.h  sched.c  select.c  session.c  setup.h  terminal.c  types.c  uni_7b.inc  url.c  view.c  win32.c
 
 
 datadir = $(prefix)/@DATADIRNAME@
@@ -89,10 +89,10 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I.
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 links_OBJECTS =  af_unix.o beos.o bfu.o bookmarks.o cache.o charsets.o \
-connect.o cookies.o default.o dns.o error.o file.o finger.o ftp.o \
-html.o html_r.o html_tbl.o http.o https.o kbd.o kbdbind.o language.o \
-lua.o mailto.o main.o menu.o os_dep.o sched.o select.o session.o \
-terminal.o types.o url.o view.o win32.o
+connect.o colors.o cookies.o default.o dns.o error.o file.o finger.o \
+ftp.o html.o html_r.o html_tbl.o http.o https.o kbd.o kbdbind.o \
+language.o lua.o mailto.o main.o menu.o os_dep.o sched.o select.o \
+session.o terminal.o types.o url.o view.o win32.o
 links_LDADD = $(LDADD)
 links_DEPENDENCIES = 
 links_LDFLAGS = 
@@ -115,13 +115,13 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 TAR = tar
 GZIP_ENV = --best
 DEP_FILES =  .deps/af_unix.P .deps/beos.P .deps/bfu.P .deps/bookmarks.P \
-.deps/cache.P .deps/charsets.P .deps/connect.P .deps/cookies.P \
-.deps/default.P .deps/dns.P .deps/error.P .deps/file.P .deps/finger.P \
-.deps/ftp.P .deps/html.P .deps/html_r.P .deps/html_tbl.P .deps/http.P \
-.deps/https.P .deps/kbd.P .deps/kbdbind.P .deps/language.P .deps/lua.P \
-.deps/mailto.P .deps/main.P .deps/menu.P .deps/os_dep.P .deps/sched.P \
-.deps/select.P .deps/session.P .deps/terminal.P .deps/types.P \
-.deps/url.P .deps/view.P .deps/win32.P
+.deps/cache.P .deps/charsets.P .deps/colors.P .deps/connect.P \
+.deps/cookies.P .deps/default.P .deps/dns.P .deps/error.P .deps/file.P \
+.deps/finger.P .deps/ftp.P .deps/html.P .deps/html_r.P .deps/html_tbl.P \
+.deps/http.P .deps/https.P .deps/kbd.P .deps/kbdbind.P .deps/language.P \
+.deps/lua.P .deps/mailto.P .deps/main.P .deps/menu.P .deps/os_dep.P \
+.deps/sched.P .deps/select.P .deps/session.P .deps/terminal.P \
+.deps/types.P .deps/url.P .deps/view.P .deps/win32.P
 SOURCES = $(links_SOURCES)
 OBJECTS = $(links_OBJECTS)
 

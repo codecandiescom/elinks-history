@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.481 2004/06/11 14:12:48 jonas Exp $ */
+/* $Id: session.c,v 1.482 2004/06/11 14:39:27 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -638,18 +638,26 @@ setup_session(struct session *ses, struct uri *uri, struct session *base)
 	}
 }
 
-static struct session *
-create_session(struct window *tab, struct session *base_session, struct uri *uri)
+struct session *
+init_session(struct session *base_session, struct terminal *term,
+	     struct uri *uri, int in_background)
 {
 	struct session *ses = mem_calloc(1, sizeof(struct session));
+	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
+	int first = list_empty(term->windows);
 
 	if (!ses) return NULL;
+
+	ses->tab = init_tab(term, in_background, ses, tabwin_func);
+	if (!ses->tab) {
+		mem_free(ses);
+		return NULL;
+	}
 
 	create_history(&ses->history);
 	init_list(ses->scrn_frames);
 	init_list(ses->more_files);
 	init_list(ses->type_queries);
-	ses->tab = tab;
 	ses->id = session_id++;
 	ses->task.type = TASK_NONE;
 	ses->display_timer = -1;
@@ -669,30 +677,9 @@ create_session(struct window *tab, struct session *base_session, struct uri *uri
 
 	add_to_list(sessions, ses);
 
-	return ses;
-}
-
-
-struct session *
-init_session(struct session *ses, struct terminal *term,
-	     struct uri *uri, int in_background)
-{
-	struct window *tab;
-	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
-	int first = list_empty(term->windows);
-
-	tab = init_tab(term, in_background, tabwin_func);
-	if (!tab) return NULL;
-
-	tab->data = ses = create_session(tab, ses, uri);
-	if (!ses) {
-		mem_free(tab);
-		return NULL;
-	}
-
 	if (first) return ses;
 
-	tab->handler(tab, &ev, 0);
+	ses->tab->handler(ses->tab, &ev, 0);
 
 	return ses;
 }

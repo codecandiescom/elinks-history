@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.473 2004/07/02 22:09:12 pasky Exp $ */
+/* $Id: renderer.c,v 1.474 2004/07/02 23:29:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,6 +96,13 @@ struct renderer_context {
 
 	int last_link_to_move;
 	struct tag *last_tag_to_move;
+	/* All tags between document->tags and this tag (inclusive) should
+	 * be aligned to the next line break, unless some real content follows
+	 * the tag. Therefore, this virtual tags list accumulates new tags as
+	 * they arrive and empties when some real content is written; if a line
+	 * break is inserted in the meanwhile, the tags follow it (ie. imagine
+	 * <a name="x"> <p>, then the "x" tag follows the line breaks inserted
+	 * by the <p> tag). */
 	struct tag *last_tag_for_newline;
 
 	struct link_state_info link_state_info;

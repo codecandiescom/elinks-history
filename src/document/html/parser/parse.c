@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.99 2004/11/08 02:57:38 jonas Exp $ */
+/* $Id: parse.c,v 1.100 2004/11/08 20:16:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1020,7 +1020,10 @@ xsp:
 			s = skip_comment(s, eof);
 			goto xse;
 		}
-		if (parse_element(s, eof, &name, &namelen, &attr, &s)) goto xsp;
+		if (parse_element(s, eof, &name, &namelen, &attr, &s)) {
+			s1 = s;
+			goto xsp;
+		}
 		clr_spaces(title->source);
 		goto ps;
 	}

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.130 2002/12/05 20:29:39 pasky Exp $ */
+/* $Id: options.c,v 1.131 2002/12/06 18:51:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2031,7 +2031,7 @@ register_options()
 	strcpy(get_opt_str("protocol.user.mailto.unix"), "mutt %h -s \"%s\"");
 	strcpy(get_opt_str("protocol.user.mailto.unix-xwin"), "mutt %h -s \"%s\"");
 	strcpy(get_opt_str("protocol.user.telnet.unix"), "telnet %h %p");
-	strcpy(get_opt_str("protocol.user.telnet.unix-xwin"), "mutt %h %p");
+	strcpy(get_opt_str("protocol.user.telnet.unix-xwin"), "telnet %h %p");
 	strcpy(get_opt_str("protocol.user.tn3270.unix"), "tn3270 %h %p");
 	strcpy(get_opt_str("protocol.user.tn3270.unix-xwin"), "tn3270 %h %p");
 	strcpy(get_opt_str("protocol.user.gopher.unix"), "lynx %u");

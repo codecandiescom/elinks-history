@@ -1,6 +1,7 @@
 TODO list for ELinks (sorted approximatelly by priority):
 
-
+	New options system user interface (URGENT).
+	
 	Show all downloads in one window, kind of "download manager"
 
 	Rewrite html parser
@@ -39,7 +40,10 @@ current link to external command (?)).
 	Insert should toggle insert/overwrite mode.
 
 	Disk cache
+	
+	Bandwidth limiter for file downloads.
 
+	Copy url to X clipboard (using X selections).
 
 These are more long-term goals:
 
@@ -59,4 +63,4 @@ optionally.
 	Write some more documentation
 
 
-$Id: TODO,v 1.31 2002/10/13 19:18:10 zas Exp $
+$Id: TODO,v 1.32 2002/11/16 19:46:26 zas Exp $

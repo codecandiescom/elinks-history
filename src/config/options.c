@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.218 2003/06/08 22:11:46 pasky Exp $ */
+/* $Id: options.c,v 1.219 2003/06/10 00:24:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2160,7 +2160,7 @@ register_options(void)
 		"hotkey", 0,
 		N_("Menu item hotkey colors."));
 
-	 add_opt_tree("ui.colors.mono.menu.hotkey", N_("Unselected hotkey"),
+	add_opt_tree("ui.colors.mono.menu.hotkey", N_("Unselected hotkey"),
 		"normal", 0,
 		N_("Menu unselected hotkey colors."));
 

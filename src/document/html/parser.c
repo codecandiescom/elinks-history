@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.124 2003/06/09 21:41:03 zas Exp $ */
+/* $Id: parser.c,v 1.125 2003/06/10 00:24:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -728,7 +728,7 @@ html_fixed(unsigned char *a)
 static inline void
 html_subscript(unsigned char *a)
 {
-     format.attr |= AT_SUBSCRIPT;
+	format.attr |= AT_SUBSCRIPT;
 }
 
 static inline void

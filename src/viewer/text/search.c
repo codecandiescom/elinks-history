@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.284 2004/08/22 15:14:33 zas Exp $ */
+/* $Id: search.c,v 1.285 2004/10/01 00:40:09 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1100,23 +1100,17 @@ search_link_text(struct document *document, int current_link, int i,
 		 * {+= direction} in mind. */
 		if (direction > 0) {
 			 if (i == upper_link - 1) {
-				if (upper_link != document->nlinks
-				    || upper_link == current_link + 1)
-					break;
-
 				upper_link = current_link + 1;
 				lower_link = -1;
 				i = lower_link;
-			}
+				wraparound = 0;
+			 }
 		} else {
 			if (i == lower_link + 1) {
-				if (lower_link != -1
-				    || lower_link == current_link - 1)
-					break;
-
 				upper_link = document->nlinks;
 				lower_link = current_link - 1;
 				i = upper_link;
+				wraparound = 0;
 			}
 		}
 	}

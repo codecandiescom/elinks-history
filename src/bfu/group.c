@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.68 2005/03/24 09:15:07 zas Exp $ */
+/* $Id: group.c,v 1.69 2005/03/24 09:21:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,22 +62,28 @@ dlg_format_group(struct terminal *term,
 		}
 
 		if (term) {
-			int is_checkbox = (widget_data->widget->type == WIDGET_CHECKBOX);
 			int xnx = x + nx;
 			int width = 1;
 
-			draw_text(term, xnx + 4 * is_checkbox, *y,
-				  text, ((sl == -1) ? strlen(text) : sl),
-				  0, color);
+			if (widget_data->widget->type == WIDGET_CHECKBOX) {
+				draw_text(term, xnx + 4, *y,
+					  text, ((sl == -1) ? strlen(text) : sl),
+					  0, color);
 
-			if (is_checkbox)
 				width = 4;
-			else if (widget_is_textfield(widget_data))
-				width = widget_data->widget->datalen;
+				set_box(&widget_data->box, xnx, *y, width, 1);
 
-			set_box(&widget_data->box,
-				xnx + !is_checkbox * (sl + 1), *y,
-				width, 1);
+			} else {
+				draw_text(term, xnx, *y,
+					  text, ((sl == -1) ? strlen(text) : sl),
+					  0, color);
+
+				if (widget_is_textfield(widget_data))
+					width = widget_data->widget->datalen;
+
+				set_box(&widget_data->box, xnx + sl + 1, *y,
+					width, 1);
+			}
 		}
 
 		if (rw) int_bounds(rw, nx + wx, w);

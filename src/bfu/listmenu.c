@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.9 2004/04/17 14:15:04 jonas Exp $ */
+/* $Id: listmenu.c,v 1.10 2004/04/17 14:17:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,24 +179,24 @@ destroy_menu(struct list_menu *menu)
 void
 menu_labels(struct menu_item *items, unsigned char *base, unsigned char **lbls)
 {
-	struct menu_item *m;
+	struct menu_item *item;
 	unsigned char *bs;
 
-	foreach_menu_item (m, items) {
-		if (m->func == (menu_func) do_select_submenu) {
+	foreach_menu_item (item, items) {
+		if (item->func == (menu_func) do_select_submenu) {
 			bs = stracpy(base);
 			if (bs) {
-				add_to_strn(&bs, m->text);
+				add_to_strn(&bs, item->text);
 				add_to_strn(&bs, " ");
-				menu_labels(m->data, bs, lbls);
+				menu_labels(item->data, bs, lbls);
 				mem_free(bs);
 			}
 		} else {
-			assert(m->func == (menu_func) selected_item);
-			bs = stracpy((m->flags & MENU_FULLNAME)
+			assert(item->func == (menu_func) selected_item);
+			bs = stracpy((item->flags & MENU_FULLNAME)
 				     ? (unsigned char *)"" : base);
-			if (bs) add_to_strn(&bs, m->text);
-			lbls[(int)m->data] = bs;
+			if (bs) add_to_strn(&bs, item->text);
+			lbls[(int)item->data] = bs;
 		}
 	}
 }

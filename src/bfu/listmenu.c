@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.27 2004/05/28 15:40:39 zas Exp $ */
+/* $Id: listmenu.c,v 1.28 2004/05/28 15:43:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,9 +194,9 @@ add_select_item(struct list_menu *menu, struct string *string,
 		unsigned char **value, int order, int dont_add)
 {
 	int pos = order - 1;
-	
+
 	assert(menu && string);
-	
+
 	if (!string->source) return;
 
 	assert(value && pos >= 0);

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.20 2003/11/14 13:27:09 jonas Exp $ */
+/* $Id: renderer.c,v 1.21 2003/11/14 13:44:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,6 +99,7 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 	return link;
 }
 
+/* Searches a word to find an email adress or an URI to add as a link. */
 static inline int
 check_link_word(struct document *document, unsigned char *uri, int length,
 		int x, int y)
@@ -164,11 +165,9 @@ add_document_line(struct document *document, int lineno,
 			int tab_width = 7 - ((line_pos + expanded) & 7);
 
 			expanded += tab_width;
-			continue;
 
 		} else if (line_char < ' ' || line_char == ASCII_ESC) {
 			line[line_pos] = ' ';
-			continue;
 
 		} else 	if (document->options.plain_display_links
 			    && isalpha(line_char) ) {

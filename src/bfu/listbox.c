@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.129 2003/12/20 22:41:05 jonas Exp $ */
+/* $Id: listbox.c,v 1.130 2003/12/20 23:53:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -555,50 +555,42 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			action = kbd_action(KM_MENU, ev, NULL);
 
 			/* Moving the box */
-			if (action == ACT_DOWN
-			    || keyboard_combo(ev, KBD_CTRL, 'N')) {
+			if (action == ACT_DOWN) {
 				box_sel_move(dlg_item, 1);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_UP
-			    || keyboard_combo(ev, KBD_CTRL, 'P')) {
+			if (action == ACT_UP) {
 				box_sel_move(dlg_item, -1);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_PAGE_DOWN
-			    || keyboard_combo(ev, KBD_CTRL, 'V')
-			    || keyboard_combo(ev, KBD_CTRL, 'F')) {
+			if (action == ACT_PAGE_DOWN) {
 				box_sel_move(dlg_item, dlg_item->h / 2);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_PAGE_UP
-			    || keyboard_combo(ev, KBD_ALT, 'V')
-			    || keyboard_combo(ev, KBD_CTRL, 'B')) {
+			if (action == ACT_PAGE_UP) {
 				box_sel_move(dlg_item, -dlg_item->h / 2);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_HOME
-			    || keyboard_combo(ev, KBD_CTRL, 'A')) {
+			if (action == ACT_HOME) {
 				box_sel_move(dlg_item, -MAXINT);
 				display_dlg_item(dlg_data, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (action == ACT_END
-			    || keyboard_combo(ev, KBD_CTRL, 'E')) {
+			if (action == ACT_END) {
 				box_sel_move(dlg_item, MAXINT);
 				display_dlg_item(dlg_data, dlg_item, 1);
 

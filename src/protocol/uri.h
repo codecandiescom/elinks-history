@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.122 2004/06/08 12:19:06 jonas Exp $ */
+/* $Id: uri.h,v 1.123 2004/06/08 13:54:52 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -212,11 +212,8 @@ struct uri *get_composed_uri(struct uri *uri, enum uri_component components);
  * extracts the fragment. It is possible to just use it to extract fragment
  * and get the resulting URI from the cache.
  * @uristring	is the URI to resolve or translate.
- * @cwd		if non NULL @uristring will be translated using this CWD.
- * @fragment	if non NULL fragment will be extracted and and allocated to the
- *		@fragment pointer. */
-struct uri *get_translated_uri(unsigned char *uristring, unsigned char *cwd,
-				unsigned char **fragment);
+ * @cwd		if non NULL @uristring will be translated using this CWD. */
+struct uri *get_translated_uri(unsigned char *uristring, unsigned char *cwd);
 
 /* Check if two URIs are equal. If @components are 0 simply compare the whole
  * URI else only compare the specific parts. */

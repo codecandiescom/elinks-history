@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.319 2004/05/30 12:42:25 jonas Exp $ */
+/* $Id: menu.c,v 1.320 2004/06/08 13:54:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ save_url(struct session *ses, unsigned char *url)
 
 	if (!*url) return;
 
-	uri = get_translated_uri(url, ses->tab->term->cwd, NULL);
+	uri = get_translated_uri(url, ses->tab->term->cwd);
 	if (!uri) {
 		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);
 		return;

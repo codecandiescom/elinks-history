@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.234 2004/06/08 13:49:09 jonas Exp $ */
+/* $Id: uri.c,v 1.235 2004/06/08 13:54:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -953,40 +953,8 @@ get_composed_uri(struct uri *uri, enum uri_component components)
 	return uri;
 }
 
-static inline unsigned char *
-extract_fragment(unsigned char *uri)
-{
-	unsigned char *fragment, *frag_start, *post_start;
-	int frag_len;
-
-	assert(uri);
-	if_assert_failed return NULL;
-
-	/* Empty string ? */
-	if (!*uri) return NULL;
-
-	/* Is there a fragment part in uri ? */
-	frag_start = strchr(uri, '#');
-	if (!frag_start) return NULL;
-
-	frag_len = get_no_post_url_length(frag_start + 1);
-
-	/* Copy fragment string (without '#') and without trailing
-	 * post data if any. */
-	fragment = memacpy(frag_start + 1, frag_len);
-
-	/* Start position of post data if any. */
-	post_start = frag_start + frag_len + 1;
-
-	/* Even though fragment wasn't allocated remove it from the @uri. */
-	memmove(frag_start, post_start, strlen(post_start) + 1);
-
-	return fragment;
-}
-
 struct uri *
-get_translated_uri(unsigned char *uristring, unsigned char *cwd,
-		   unsigned char **fragment)
+get_translated_uri(unsigned char *uristring, unsigned char *cwd)
 {
 	struct uri *uri;
 

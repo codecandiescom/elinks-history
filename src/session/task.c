@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.98 2004/06/08 13:49:10 jonas Exp $ */
+/* $Id: task.c,v 1.99 2004/06/08 13:54:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,7 +443,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
 	struct uri *referrer = NULL;
-	struct uri *uri = get_translated_uri(url, ses->tab->term->cwd, NULL);
+	struct uri *uri = get_translated_uri(url, ses->tab->term->cwd);
 	protocol_external_handler *external_handler;
 
 	if (!uri) {

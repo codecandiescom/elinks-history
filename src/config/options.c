@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.193 2003/04/19 18:35:26 zas Exp $ */
+/* $Id: options.c,v 1.194 2003/04/20 08:25:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -968,8 +968,9 @@ register_options()
 		N_("Maximum number of concurrent connections to a given host."));
 
 	add_opt_int("connection", N_("Connection retries"),
-		"retries", 0, 1, 16, 3,
-		N_("Number of tries to establish a connection."));
+		"retries", 0, 0, 16, 3,
+		N_("Number of tries to establish a connection."
+		   "Zero means try forever."));
 
 	add_opt_int("connection", N_("Receive timeout"),
 		"receive_timeout", 0, 1, 1800, 120,

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.11 2003/01/26 17:40:09 pasky Exp $ */
+/* $Id: connection.c,v 1.12 2003/04/20 08:25:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -644,9 +644,10 @@ run_connection(struct connection *c)
 void
 retry_connection(struct connection *c)
 {
+	int max_tries = get_opt_int("connection.retries");
+	
 	interrupt_connection(c);
-	if (c->unrestartable >= 2
-	    || ++c->tries >= get_opt_int("connection.retries")) {
+	if (c->unrestartable >= 2 || !max_tries || ++c->tries >= max_tries) {
 		/*send_connection_info(c);*/
 		del_connection(c);
 #ifdef DEBUG

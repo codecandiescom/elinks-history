@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.15 2003/12/01 14:00:18 pasky Exp $ */
+/* $Id: connect.h,v 1.16 2003/12/01 14:00:46 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <sys/socket.h> /* OS/2 needs this after sys/types.h */
 
-#include "sched/connection.h"
+struct connection;
 
 struct conn_info {
 	struct sockaddr_storage *addr; /* array of addresses */

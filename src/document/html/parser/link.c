@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.45 2004/12/10 17:28:47 zas Exp $ */
+/* $Id: link.c,v 1.46 2004/12/10 17:31:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,23 +208,21 @@ html_img(unsigned char *a)
 	unsigned char *al = get_attr_val(a, "usemap");
 
 	if (al) {
-		unsigned char *u;
+		unsigned char *url;
 
 		usemap = 1;
 		html_stack_dup(ELEMENT_KILLABLE);
 		mem_free_if(format.link);
 		if (format.form) format.form = NULL;
-		u = join_urls(html_context.base_href, al);
-		if (!u) {
-			mem_free(al);
-			return;
-		}
-
-		format.link = straconcat("MAP@", u, NULL);
-		format.attr |= AT_BOLD;
-		mem_free(u);
+		url = join_urls(html_context.base_href, al);
 		mem_free(al);
+		if (!url) return;
+
+		format.link = straconcat("MAP@", url, NULL);
+		format.attr |= AT_BOLD;
+		mem_free(url);
 	}
+
 	ismap = format.link && has_attr(a, "ismap") && !usemap;
 
 	/* Has image tag an attribute |alt| ? */

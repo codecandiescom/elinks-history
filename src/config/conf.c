@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.76 2003/05/13 12:27:44 zas Exp $ */
+/* $Id: conf.c,v 1.77 2003/06/04 09:49:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -492,10 +492,10 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 			add_to_str(str, len, "## ");
 			if (path) {
 				add_to_str(str, len, path);
-				add_to_str(str, len, ".");
+				add_chr_to_str(str, len, '.');
 			}
 			add_to_str(str, len, option->name);
-			add_to_str(str, len, " ");
+			add_chr_to_str(str, len, ' ');
 			add_to_str(str, len, option_types[option->type].help_str);
 			add_to_str(str, len, NEWLINE);
 			break;
@@ -533,7 +533,7 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 			add_to_str(str, len, "set ");
 			if (path) {
 				add_to_str(str, len, path);
-				add_to_str(str, len, ".");
+				add_chr_to_str(str, len, '.');
 			}
 			add_to_str(str, len, option->name);
 			add_to_str(str, len, " = ");

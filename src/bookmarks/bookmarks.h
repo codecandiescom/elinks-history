@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.23 2003/10/25 16:38:43 jonas Exp $ */
+/* $Id: bookmarks.h,v 1.24 2003/11/18 05:51:36 miciah Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -22,7 +22,7 @@ struct bookmark {
 
 	unsigned char *title;   /* title of bookmark */
 	unsigned char *url;     /* Location of bookmarked item */
-	int refcount;		/* Isn't anything else using this item now? */
+	int refcount;		/* No direct access, use provided macros for that. */
 
 	struct list_head child;
 };

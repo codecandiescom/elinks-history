@@ -1,4 +1,4 @@
-/* $Id: globhist.h,v 1.13 2003/10/26 15:10:52 jonas Exp $ */
+/* $Id: globhist.h,v 1.14 2003/11/18 05:51:37 miciah Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
@@ -18,7 +18,7 @@ struct global_history_item {
 	unsigned char *url;
 
 	ttime last_visit;
-	int refcount;
+	int refcount; /* No direct access, use provided macros for that. */
 };
 
 

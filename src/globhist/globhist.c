@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.43 2003/11/18 05:44:11 miciah Exp $ */
+/* $Id: globhist.c,v 1.44 2003/11/18 05:51:37 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -33,6 +33,7 @@
 #include "util/secsave.h"
 #include "util/string.h"
 #include "util/lists.h"
+#include "util/object.h"
 
 
 struct global_history_list global_history = {
@@ -284,7 +285,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 		mem_free(history_item);
 		return;
 	}
-	history_item->refcount = 0;
+	object_nolock(history_item);
 
 	add_to_list(global_history.items, history_item);
 	global_history.n++;

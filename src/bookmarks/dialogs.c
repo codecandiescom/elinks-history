@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.113 2003/11/09 00:19:41 jonas Exp $ */
+/* $Id: dialogs.c,v 1.114 2003/11/18 05:51:37 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -29,6 +29,7 @@
 #include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/object.h"
 
 
 /* Whether to save bookmarks after each modification of their list
@@ -186,7 +187,7 @@ bookmark_edit_done(struct dialog *dlg) {
 	struct bookmark *bm = (struct bookmark *) dlg->udata2;
 
 	update_bookmark(bm, dlg->widgets[0].data, dlg->widgets[1].data);
-	bm->refcount--;
+	object_unlock(bm);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -197,7 +198,7 @@ static void
 bookmark_edit_cancel(struct dialog *dlg) {
 	struct bookmark *bm = (struct bookmark *) dlg->udata2;
 
-	bm->refcount--;
+	object_unlock(bm);
 }
 
 /* Called when the edit button is pushed */
@@ -212,7 +213,7 @@ push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 		const unsigned char *name = bm->title;
 		const unsigned char *url = bm->url;
 
-		bm->refcount++;
+		object_lock(bm);
 		do_edit_dialog(dlg_data->win->term, 1, N_("Edit bookmark"),
 			       name, url,
 			       (struct session *) edit_btn->widget->udata, dlg_data,
@@ -239,7 +240,7 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 {
 	struct listbox_data *box;
 
-	if (bookmark->refcount > 0) {
+	if (is_object_used(bookmark)) {
 		if (bookmark->box_item->type == BI_FOLDER)
 		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("Delete bookmark"), AL_CENTER,
@@ -327,7 +328,7 @@ really_del_bookmark(void *vhop)
 	hop = (struct push_del_button_hop_struct *) vhop;
 
 	if (hop->bm) {
-		if (hop->bm->refcount) hop->bm->refcount--;
+		if (is_object_used(hop->bm)) object_unlock(hop->bm);
 		do_del_bookmark(hop->term, hop->bm);
 	} else {
 		traverse_listbox_items_list(bookmark_box_items.next, 0, 0,
@@ -344,7 +345,7 @@ cancel_del_bookmark(void *vhop)
 {	struct push_del_button_hop_struct *hop;
 
 	hop = (struct push_del_button_hop_struct *) vhop;
-	if (hop->bm) hop->bm->refcount--;
+	if (hop->bm) object_unlock(hop->bm);
 }
 
 static int
@@ -381,7 +382,7 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	traverse_listbox_items_list(box->items->next, 0, 0, scan_for_marks, hop);
 	bm = hop->bm;
 
-	if (bm) bm->refcount++;
+	if (bm) object_lock(bm);
 
 	if (!bm)
 	msg_box(term, getml(hop, NULL), 0,

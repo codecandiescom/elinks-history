@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.66 2003/11/17 17:23:06 pasky Exp $ */
+/* $Id: dialogs.c,v 1.67 2003/11/18 05:51:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "terminal/terminal.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "util/object.h"
 
 
 #ifdef GLOBHIST
@@ -196,7 +197,7 @@ static void
 do_delete_global_history_item(struct terminal *term,
 			      struct global_history_item *historyitem)
 {
-	if (historyitem->refcount > 0) {
+	if (is_object_used(historyitem)) {
 		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("Delete history item"), AL_CENTER,
 			msg_text(term, N_("Sorry, but this history entry is "
@@ -231,8 +232,8 @@ really_delete_global_history_item(void *vhop)
 	struct delete_globhist_item_ctx *ctx = vhop;
 
 	if (ctx->history_item) {
-		if (ctx->history_item->refcount)
-			ctx->history_item->refcount--;
+		if (is_object_used(ctx->history_item))
+			object_unlock(ctx->history_item);
 		do_delete_global_history_item(ctx->term, ctx->history_item);
 	} else {
 		traverse_listbox_items_list(gh_box_items.next, 0, 0,
@@ -245,7 +246,7 @@ cancel_delete_globhist_item(void *vhop)
 {
 	struct delete_globhist_item_ctx *ctx = vhop;
 
-	if (ctx->history_item) ctx->history_item->refcount--;
+	if (ctx->history_item) object_unlock(ctx->history_item);
 }
 
 static int
@@ -280,7 +281,7 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 				    scan_for_marks, ctx);
 	historyitem = ctx->history_item;
 
-	if (historyitem) historyitem->refcount++;
+	if (historyitem) object_lock(historyitem);
 
 	if (!historyitem)
 		msg_box(term, getml(ctx, NULL), 0,
@@ -321,8 +322,8 @@ static void
 really_clear_history(struct listbox_data *box)
 {
 	while (global_history.n) {
-		if (((struct global_history_item *)
-		     global_history.items.prev)->refcount > 0)
+		if (is_object_used(
+		    (struct global_history_item *) global_history.items.prev))
 			break;
 		delete_global_history_item(global_history.items.prev);
 	}
@@ -351,7 +352,7 @@ done_info_button(void *vhop)
 {
 	struct global_history_item *history_item = vhop;
 
-	history_item->refcount--;
+	object_unlock(history_item);
 }
 
 static int
@@ -366,7 +367,7 @@ push_info_button(struct dialog_data *dlg_data,
 	if (!box->sel) return 0;
 	historyitem = box->sel->udata;
 	if (!historyitem) return 0;
-	historyitem->refcount++;
+	object_lock(historyitem);
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Info"), AL_LEFT,

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.27 2003/11/18 19:57:04 pasky Exp $ */
+/* $Id: renderer.c,v 1.28 2003/11/18 20:03:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,7 +162,8 @@ get_uri_length(unsigned char *line, int length)
 
 static inline int
 add_document_line(struct document *document, int lineno,
-		  unsigned char *line, int width, struct screen_char *template)
+		  unsigned char *line, int width, struct screen_char *template,
+		  struct conv_table *convert_table)
 {
 	struct screen_char *pos, *end;
 	int line_pos, expanded = 0;
@@ -191,6 +192,9 @@ add_document_line(struct document *document, int lineno,
 		}
 	}
 
+	line = convert_string(convert_table, line, width, CSM_DEFAULT);
+	if (!line) return 0;
+
 	width += expanded;
 
 	pos = realloc_line(document, lineno, width);
@@ -214,11 +218,14 @@ add_document_line(struct document *document, int lineno,
 		}
 	}
 
+	mem_free(line);
+
 	return width;
 }
 
 static void
-add_document_lines(struct document *document, unsigned char *source)
+add_document_lines(struct document *document, unsigned char *source,
+		   struct conv_table *convert_table)
 {
 	struct screen_char template;
 	struct color_pair colors;
@@ -240,7 +247,8 @@ add_document_lines(struct document *document, unsigned char *source)
 		int width = lineend ? lineend - source: strlen(source);
 		int added;
 
-		added = add_document_line(document, lineno, source, width, &template);
+		added = add_document_line(document, lineno, source, width, &template,
+					  convert_table);
 
 		if (added) {
 			/* Add (search) nodes on a line by line basis */
@@ -266,7 +274,6 @@ void
 render_plain_document(struct cache_entry *ce, struct document *document)
 {
 	struct fragment *fr = ce->frag.next;
-	struct conv_table *convert_table;
 	struct string head;
 	unsigned char *source = NULL;
 	int length = 0;
@@ -288,13 +295,8 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 
 	done_string(&head);
 
-	source = convert_string(convert_table, source, length, CSM_DEFAULT);
-	if (!source) return;
-
 	document->title = stracpy(document->url);
-	add_document_lines(document, source);
+	add_document_lines(document, source, convert_table);
 
 	document->bgcolor = global_doc_opts->default_bg;
-
-	mem_free(source);
 }

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.54 2003/07/13 12:57:53 jonas Exp $ */
+/* $Id: auth.c,v 1.55 2003/07/14 19:51:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,6 @@
 #include "protocol/http/auth.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
-#include "protocol/url.h"
 #include "sched/session.h"
 #include "util/base64.h"
 #include "util/error.h"

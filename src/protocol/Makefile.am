@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.17 2003/07/06 00:26:21 jonas Exp $
+## $Id: Makefile.am,v 1.18 2003/07/14 19:51:32 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -21,7 +21,5 @@ libprotocol_a_SOURCES = \
  proxy.h \
  uri.c \
  uri.h \
- url.c \
- url.h \
  user.c \
  user.h

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.28 2003/07/07 22:27:17 jonas Exp $ */
+/* $Id: dump.c,v 1.29 2003/07/14 19:51:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "osdep/os_dep.h"
-#include "protocol/url.h"
+#include "protocol/uri.h"
 #include "sched/error.h"
 #include "sched/connection.h"
 #include "terminal/hardio.h"

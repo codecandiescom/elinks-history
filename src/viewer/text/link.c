@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.7 2003/07/13 13:09:06 jonas Exp $ */
+/* $Id: link.c,v 1.8 2003/07/14 19:51:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
-#include "protocol/url.h"
+#include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/kbd.h"

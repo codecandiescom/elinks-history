@@ -1,11 +1,9 @@
-/* $Id: uri.h,v 1.11 2003/07/13 13:09:06 jonas Exp $ */
+/* $Id: uri.h,v 1.12 2003/07/14 19:51:32 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
 
-#ifndef POST_CHAR
 #define POST_CHAR 1
-#endif
 
 /* This is only some temporary look while doing the uri parsing cleanup. */
 struct uri {
@@ -57,6 +55,17 @@ end_of_dir(unsigned char c)
 /* Returns a valid host URL (for http authentification) or NULL. */
 /* The @components bitmask controls what is NOT added. */
 unsigned char *get_uri_string(struct uri *uri, int components);
+
+unsigned char *join_urls(unsigned char *, unsigned char *);
+unsigned char *translate_url(unsigned char *, unsigned char *);
+unsigned char *extract_position(unsigned char *);
+unsigned char *extract_proxy(unsigned char *);
+void get_filename_from_url(unsigned char *, unsigned char **, int *);
+void get_filenamepart_from_url(unsigned char *, unsigned char **, int *);
+
+/* Returns allocated string containing the biggest possible extension.
+ * If url is 'jabadaba.1.foo.gz' the returned extension is '1.foo.gz' */
+unsigned char *get_extension_from_url(unsigned char *url);
 
 /* Returns an URI string with any password removed. ;) */
 unsigned char *strip_uri_password(unsigned char *unstripped_uri);

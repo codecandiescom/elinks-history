@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.119 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: menu.c,v 1.120 2003/07/14 19:51:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@
 #include "globhist/dialogs.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
-#include "protocol/url.h"
+#include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/history.h"

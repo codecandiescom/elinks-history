@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.21 2003/07/14 18:23:46 jonas Exp $ */
+/* $Id: mime.c,v 1.22 2003/07/14 19:51:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include "mime/backend/common.h"
 #include "mime/mime.h"
 #include "protocol/http/header.h"	/* For parse_http_header() */
-#include "protocol/url.h"
+#include "protocol/uri.h"
 #include "util/encoding.h"
 #include "util/memory.h"
 #include "util/string.h"

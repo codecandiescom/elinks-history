@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-22 10:41+0200\n"
-"PO-Revision-Date: 2003-10-16 05:00+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-10-22 14:08+0200\n"
+"PO-Revision-Date: 2003-10-22 15:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52
 msgid "Bad number"
@@ -246,6 +246,11 @@ msgid ""
 "## options through UI, however only option values will be altered\n"
 "## and all your formatting, own comments etc will be kept as-is.\n"
 msgstr ""
+"## To jest plik konfiguracyjny ELinksa. Mo¿esz edytowaæ go rêcznie,\n"
+"## je¶li sobie tego ¿yczysz; plik ten jest edytowany przez ELinksa\n"
+"## gdy zapisujesz konfiguracjê poprzez menad¿era ustawieñ, jednak\n"
+"## tylko warto¶ci opcji bêd± zmienione a formatowanie, komentarze\n"
+"## itp. pozostan± niezmienione.\n"
 
 #: src/config/conf.c:597
 msgid ""
@@ -257,6 +262,14 @@ msgid ""
 "## it is NOT counted as missing. Note that all your formatting,\n"
 "## own comments and so on will be kept as-is.\n"
 msgstr ""
+"## To jest plik konfiguracyjny ELinksa. Mo¿esz edytowaæ go rêcznie,\n"
+"## je¶li sobie tego ¿yczysz; plik ten jest edytowany przez ELinksa\n"
+"## gdy zapisujesz konfiguracjê poprzez menad¿era ustawieñ, jednak\n"
+"## tylko warto¶ci opcji bêd± zmienione i brakuj±ce opcje zostan±\n"
+"## dodane przy koñcu pliku; je¶li jaka¶ opcja nie jest zapisana w tym\n"
+"##  pliku, ale w jakim¶ pliku do³±czonym z niego to NIE jest ona\n"
+"## traktowana jako brakuj±ca. Wiedz, ¿e sposób formatowania\n"
+"## i komentarze pozostan± niezmienione.\n"
 
 #: src/config/conf.c:607
 msgid ""
@@ -265,6 +278,11 @@ msgid ""
 "## by ELinks when you save options through UI and you are out of\n"
 "## luck with your formatting and own comments then, so beware.\n"
 msgstr ""
+"## To jest plik konfiguracyjny ELinksa. Mo¿esz go edytowaæ rêcznie,\n"
+"## je¶li sobie tego ¿yczysz, ale wiedz, ¿e plik ten zostanie nadpisany\n"
+"## przez ELinksa gdy zapiszesz konfiguracjê poprzez menad¿era ustawieñ\n"
+"## Twoje formatowanie i komentarze zostan± utracone.\n"
+
 
 #: src/config/conf.c:620
 msgid ""
@@ -272,16 +290,17 @@ msgid ""
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
+"## Oczywi¶cie, je¶li nie podoba Ci siê to, co ELinks robi z tym plikiem\n"
+"## mo¿esz to zmieniæ ustawiaj±c odpowiednio zmienn± config.saving_style.\n"
+
 
 #: src/config/conf.c:635
-#, fuzzy
 msgid "Automatically saved options\n"
-msgstr "Ustawienia formatu pamiêci podrêcznej"
+msgstr "Automatycznie zapisane ustawienia\n"
 
 #: src/config/conf.c:649
-#, fuzzy
 msgid "Automatically saved keybindings\n"
-msgstr "Ustawienia formatu pamiêci podrêcznej"
+msgstr "Automatycznie zapisane przypisania klawiszy\n"
 
 #: src/config/conf.c:691
 msgid "File saving disabled by option"
@@ -336,7 +355,7 @@ msgid "N/A"
 msgstr "Brak"
 
 #: src/config/dialogs.c:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Name: %s\n"
 "Type: %s\n"
@@ -346,6 +365,7 @@ msgid ""
 msgstr ""
 "Nazwa: %s\n"
 "Typ: %s\n"
+"\n"
 "Opis:\n"
 "%s"
 
@@ -653,28 +673,24 @@ msgid "Move to the next frame"
 msgstr "Przesuñ do nastêpnej ramki"
 
 #: src/config/kbdbind.c:417
-#, fuzzy
 msgid "Open a new tab"
-msgstr "Otwórz nowe okno"
+msgstr "Otwórz nowy tab"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Open a new tab in background"
-msgstr "T~ab w tle"
+msgstr "Otwórz nowy tab w tle"
 
 #: src/config/kbdbind.c:419
 msgid "Open a new window"
 msgstr "Otwórz nowe okno"
 
 #: src/config/kbdbind.c:420
-#, fuzzy
 msgid "Open the current link in a new tab"
-msgstr "Otwórz bie¿±cy odno¶nik w nowym oknie"
+msgstr "Otwórz bie¿±cy odno¶nik w nowym tabie"
 
 #: src/config/kbdbind.c:422
-#, fuzzy
 msgid "Open the current link a new tab in background"
-msgstr "Otwórz bie¿±cy odno¶nik w nowym oknie"
+msgstr "Otwórz bie¿±cy odno¶nik w nowym tabie w tle"
 
 #: src/config/kbdbind.c:423
 msgid "Open the current link in a new window"
@@ -904,7 +920,7 @@ msgid ""
 msgstr ""
 "Format pliku zak³adek (dotyczy i odczytu, i zapisu):\n"
 "0 - domy¶lny format ELinksa (kompatybilny z Linksem 0.9x)\n"
-"1 - XBEL uniwersalny format XML(BEZ OBS£UGI ZNAKÓW NARODOWYCH!)"
+"1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!)"
 
 #: src/config/options.c:903
 msgid ""
@@ -915,7 +931,7 @@ msgid ""
 msgstr ""
 "Format pliku zak³adek (dotyczy i odczytu, i zapisu):\n"
 "0 - domy¶lny format ELinksa (kompatybilny z Linksem 0.9x)\n"
-"1 - XBEL uniwersalny format XML(BEZ OBS£UGI ZNAKÓW NARODOWYCH!) (WY£¡CZONE)"
+"1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!) (WY£¡CZONE)"
 
 #: src/config/options.c:909
 msgid "Configuration system"
@@ -983,7 +999,7 @@ msgstr ""
 
 #: src/config/options.c:938
 msgid "Comments localization"
-msgstr ""
+msgstr "Lokalizacja komentarzy"
 
 #: src/config/options.c:940
 msgid ""
@@ -994,6 +1010,12 @@ msgid ""
 "terminal where you saved the file, but it should be generally\n"
 "considered unpredictable."
 msgstr ""
+"Je¶li ustawione na 1, komentarze w pliku konfiguracyjnym bêd±\n"
+"t³umaczone na jêzyk u¿ywany przez interfejs u¿ytkownika. Je¶li\n"
+"masz ustawione ró¿ne jêzyki na ró¿nych terminalach, jêzyk u¿yty\n"
+"w pliku konfiguracyjnym MO¯E byæ taki jak na terminalu, gdzie\n"
+"zosta³a zapisana konfiguracja, aczkolwiek nie jest to do koñca\n"
+"przewidywalne."
 
 #: src/config/options.c:948
 msgid "Saving style warnings"
@@ -1073,20 +1095,20 @@ msgstr "Czy u¿ywaæ asynchronicznego resolwera DNS?"
 #
 #: src/config/options.c:993
 msgid "Maximum connections"
-msgstr "Maksymalna ilo¶æ po³±czeñ"
+msgstr "Maksymalna liczba po³±czeñ"
 
 #: src/config/options.c:995
 msgid "Maximum number of concurrent connections."
-msgstr "Maksymalna ilo¶æ równoczesnych po³±czeñ."
+msgstr "Maksymalna liczba równoczesnych po³±czeñ."
 
 #
 #: src/config/options.c:997
 msgid "Maximum connections per host"
-msgstr "Maksymalna ilo¶æ po³±czeñ z jednym hostem"
+msgstr "Maksymalna liczba po³±czeñ z jednym hostem"
 
 #: src/config/options.c:999
 msgid "Maximum number of concurrent connections to a given host."
-msgstr "Maksymalna ilo¶æ równoczesnych po³±czeñ z danym hostem."
+msgstr "Maksymalna liczba równoczesnych po³±czeñ z danym hostem."
 
 #
 #: src/config/options.c:1001
@@ -1334,7 +1356,6 @@ msgid "Image links tagging"
 msgstr "Tagowanie odno¶ników na obrazkach"
 
 #: src/config/options.c:1119
-#, fuzzy
 msgid ""
 "When to enclose image links:\n"
 "0 means never\n"
@@ -1363,18 +1384,18 @@ msgid "Suffix string to use to mark image links."
 msgstr "Przyrostek u¿ywany, ¿eby zaznaczyæ odno¶niki na obrazkach."
 
 #: src/config/options.c:1132
-#, fuzzy
 msgid "Display links to images w/o alt"
-msgstr "Czy wy¶wietlaæ odno¶niki do obrazków?"
+msgstr "Czy wy¶wietlaæ odno¶niki do obrazków bez podanego atrybutu alt?"
 
 #: src/config/options.c:1134
 msgid ""
 "Display links to images without an alt attribute. If this option\n"
 "is off, these images are completely invisible."
 msgstr ""
+"Czy wy¶wietlaæ odno¶niki do obrazków bez podanego atrybutu alt. Je¶li\n"
+"ta opcja jest wy³±czona, obrazki te bêd± niewidoczne."
 
 #: src/config/options.c:1137
-#, fuzzy
 msgid "Display links to images"
 msgstr "Czy wy¶wietlaæ odno¶niki do obrazków?"
 
@@ -1385,6 +1406,10 @@ msgid ""
 "attribute contents is shown, but as normal text, not selectable\n"
 "as a link."
 msgstr ""
+"Czy wy¶wietlaæ odno¶niki do jakichkolwiek obrazków w dokumencie\n"
+"niezale¿nie od tego czy posiadaj± atrybut alt czy nie? Je¶li ta\n"
+"opcja jest wy³±czona, pokazywana jest zawarto¶æ atrybutu alt, ale\n"
+"jako zwyk³y tekst a nie odno¶nik."
 
 #
 #: src/config/options.c:1145
@@ -1397,22 +1422,19 @@ msgstr "Ustawienia dotycz±ce odno¶ników do innych dokumentów."
 
 #: src/config/options.c:1149
 msgid "Active link"
-msgstr ""
+msgstr "Aktywny odno¶nik"
 
 #: src/config/options.c:1151
-#, fuzzy
 msgid "Options for the active link."
-msgstr "Ustawienia dotycz±ce szukania."
+msgstr "Ustawienia dotycz±ce aktywnego odno¶nika."
 
 #: src/config/options.c:1153
-#, fuzzy
 msgid "Colors"
-msgstr "Kolor"
+msgstr "Kolory"
 
 #: src/config/options.c:1155
-#, fuzzy
 msgid "Active link colors."
-msgstr "Domy¶lny kolor odno¶nika."
+msgstr "Kolory aktywnego odno¶nika."
 
 #
 #: src/config/options.c:1157 src/config/options.c:1350
@@ -1547,34 +1569,33 @@ msgstr "Domy¶lny kolor tekstu."
 
 #
 #: src/config/options.c:1165
-#, fuzzy
 msgid "Enable color"
-msgstr "W³±cz"
+msgstr "W³±cz kolor"
 
 #: src/config/options.c:1167
 msgid ""
 "Enable use of the active link background and text color\n"
 "settings instead of browse.links from the document."
 msgstr ""
+"Korzysta z ustawieñ koloru tekstu i t³a aktywnego odno¶nika\n"
+"zamiast z browse.links z dokumentu."
 
 #: src/config/options.c:1170
-#, fuzzy
 msgid "Bold"
-msgstr "Folder"
+msgstr "Pogrubienie"
 
 #: src/config/options.c:1172
 msgid "Make the active link text bold."
-msgstr ""
+msgstr "Pogrub aktywny odno¶nik."
 
 #
 #: src/config/options.c:1174
-#, fuzzy
 msgid "Invert colors"
-msgstr "Kolor tekstu"
+msgstr "Inwersja kolorów"
 
 #: src/config/options.c:1176
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
+msgstr "Odwróæ kolory tekstu i t³a tak, ¿eby wyró¿niæ odno¶nik."
 
 #: src/config/options.c:1179 src/dialogs/options.c:137
 msgid "Underline"
@@ -1582,7 +1603,7 @@ msgstr "Podkre¶lenie"
 
 #: src/config/options.c:1181
 msgid "Underline the active link."
-msgstr ""
+msgstr "Podkre¶l aktywny odno¶nik."
 
 #: src/config/options.c:1184
 msgid "Directory highlighting"
@@ -1705,15 +1726,17 @@ msgstr ""
 "2 - szukanie z u¿yciem rozszerzonych wyra¿eñ regularnych. (WY£¡CZONE)"
 
 #: src/config/options.c:1244
-#, fuzzy
 msgid "Show search hit top or bottom dialogs"
-msgstr "Przeszukiwanie osi±gnê³o pocz±tek tekstu, kontynuacja od koñca."
+msgstr ""
+"Poka¿ okienko dialogowe, gdy przeszukiwanie osi±gnê³o pocz±tek/koniec tekstu"
 
 #: src/config/options.c:1246
 msgid ""
 "Whether to show a dialog when the search hits top or bottom of the\n"
 "document."
 msgstr ""
+"Czy pokazywaæ okienko dialogowe, gdy przeszukiwanie osi±gnie pocz±tek\n"
+"albo koniec tekstu?"
 
 #: src/config/options.c:1250
 msgid "Horizontal text margin"
@@ -1946,11 +1969,11 @@ msgstr "Zezwól na ciemne kolory na czarnym tle."
 
 #: src/config/options.c:1371
 msgid "Ensure contrast"
-msgstr ""
+msgstr "Gwarancja kontrastu"
 
 #: src/config/options.c:1373
 msgid "Makes sure that the back- and foreground color is never equal."
-msgstr ""
+msgstr "Zapewnia, ¿e kolor t³a nigdy nie jest identyczny z kolorem tekstu.""
 
 #. If you change this please also change ACT_DOCUMENT_COLORS action
 #. * handling.
@@ -2131,7 +2154,7 @@ msgid ""
 "1 is page titles"
 msgstr ""
 "Co pokazywaæ w okienku dialogowym globalnej historii:\n"
-"0 - URLe\n"
+"0 - URL-e\n"
 "1 - tytu³y stron"
 
 #: src/config/options.c:1470
@@ -2186,9 +2209,8 @@ msgstr "Wy¶wietlaj tabele"
 
 #
 #: src/config/options.c:1497
-#, fuzzy
 msgid "Expand table columns"
-msgstr "W³±cz"
+msgstr "Rozszerz kolumny tabeli"
 
 #: src/config/options.c:1499
 msgid ""
@@ -2198,6 +2220,10 @@ msgid ""
 "overall layout. Only useful if you also have\n"
 "document.colors.use_document_colors set to 2. Experimental."
 msgstr ""
+"W³±cz tê opcjê, aby rozszerzyæ kolumny tabeli tak by komórki by³y\n"
+"lepiej dopasowane do koloru t³a w pionie, ale s³abiej pasowa³y do\n"
+"ogólnego layoutu. U¿yteczne tylko wtedy, gdy\n"
+"document.colors.use_document_colors jest ustawione na 2. Eksperymentalne."
 
 #
 #: src/config/options.c:1505
@@ -2219,7 +2245,7 @@ msgstr "Pokazuj indeks górny (jako ^co¶)."
 
 #: src/config/options.c:1513
 msgid "Rendering of html link element"
-msgstr "Renderowania elementu odno¶nika html"
+msgstr "Renderowanie elementu odno¶nika html"
 
 #: src/config/options.c:1515
 msgid ""
@@ -2240,14 +2266,12 @@ msgstr ""
 "5 - wszystko"
 
 #: src/config/options.c:1523
-#, fuzzy
 msgid "Underline links"
-msgstr "Podkre¶lenie"
+msgstr "Podkre¶lanie odno¶ników"
 
 #: src/config/options.c:1525
-#, fuzzy
 msgid "Underline links."
-msgstr "Podkre¶lenie"
+msgstr "Podkre¶laj odno¶niki."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1531
@@ -2353,7 +2377,7 @@ msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
 msgstr ""
-"Zewnêtrzny viewer dla tego typu plików. '%' w ³añcuchu bêdzie\n"
+"Zewnêtrzna przegl±darka dla tego typu plików. '%' w ³añcuchu\n"
 "zostanie zast±piony nazw± pliku."
 
 #
@@ -2595,6 +2619,12 @@ msgid ""
 "can unfortunately considerably affect privacy and can lead even to a\n"
 "security problem on some badly designed web pages."
 msgstr ""
+"Ustawienia dotycz±ce wysy³ania referencji HTTP. Referencja jest\n"
+"specjalnym polem nag³ówka wysy³anym w zapytaniach HTTP, zawiera\n"
+"poprzednio odwiedzan± stronê przez przegl±darkê. W ten sposób serwer\n"
+"mo¿e siê dowiedzieæ z jakiej strony odno¶nik wybra³e¶(a¶). Takie\n"
+"zachowanie mo¿e naruszaæ prywatno¶æ."
+
 
 #: src/config/options.c:1713
 msgid "Policy"
@@ -2978,7 +3008,6 @@ msgid "Color mode"
 msgstr "Tryb kolorowy"
 
 #: src/config/options.c:1924
-#, fuzzy
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -2990,7 +3019,7 @@ msgstr ""
 "s± wy¶wietlane na terminalu. Mo¿liwe do u¿ycia tryby kolorowe to:\n"
 "0 - tryb monochromatyczny\n"
 "1 - tryb 16 kolorowy, u¿ywa standardowych kolorów ANSI\n"
-"2 - tryb 256 kolorowy, potrzebuje xterm256\n"
+"2 - tryb 256 kolorowy, potrzebuje xterma z obs³ug± 256 kolorów\n"
 
 #
 #: src/config/options.c:1930
@@ -3209,22 +3238,20 @@ msgid "Dialog colors."
 msgstr "Kolory okna dialogowego."
 
 #: src/config/options.c:2118
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.color.dialog.generic.background instead."
 msgstr ""
 "Ta opcja jest przedawniona i zostanie wkrótce usuniêta.\n"
-"U¿yj zamiast niej ui.dialog.shadows ."
+"U¿yj zamiast niej ui.colors.color.dialog.generic.background."
 
 #: src/config/options.c:2121 src/config/options.c:2530
 msgid "Generic"
-msgstr ""
+msgstr "Zwyk³e"
 
 #: src/config/options.c:2123 src/config/options.c:2532
-#, fuzzy
 msgid "Generic dialog colors."
-msgstr "Kolory zwyk³ego paska tytu³owego."
+msgstr "Zwyk³e kolory okienka dialogowego."
 
 #
 #: src/config/options.c:2133 src/config/options.c:2542
@@ -3468,13 +3495,12 @@ msgid "Menu selected hotkey default background color."
 msgstr "Domy¶lny kolor t³a wybranego klawisza skrótu menu."
 
 #: src/config/options.c:2527
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.mono.dialog.generic.background instead."
 msgstr ""
 "Ta opcja jest przedawniona i zostanie wkrótce usuniêta.\n"
-"U¿yj zamiast niej ui.dialog.shadows ."
+"U¿yj zamiast niej ui.colors.mono.dialog.generic.background."
 
 #: src/config/options.c:2628
 msgid "Dialog field colors."
@@ -3550,7 +3576,6 @@ msgstr ""
 "2 - odlicza i pokazuje stoper w pobli¿u LEDów"
 
 #: src/config/options.c:2812
-#, fuzzy
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3560,7 +3585,7 @@ msgstr ""
 "W³±czyæ stoper czy nie:\n"
 "0 - nie zliczaj niczego\n"
 "1 - odlicza, ale nie pokazuje stopera\n"
-"2 - odlicza i pokazuje stoper w pobli¿u LEDów"
+"2 - odlicza i pokazuje stoper w pobli¿u LEDów (WY£¡CZONE)"
 
 #
 #: src/config/options.c:2818
@@ -3666,14 +3691,13 @@ msgid "Set window title"
 msgstr "Ustalenie tytu³u okna"
 
 #: src/config/options.c:2873
-#, fuzzy
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
 "shown on the window titlebar."
 msgstr ""
 "Ustaw tytu³ okna podczas dzia³ania w ¶rodowisku okienkowym \n"
-"w terminalu jak xterm.  W ten sposób tytu³ dokumentu bêdzie widoczny\n"
+"w terminalu jak xterm. W ten sposób tytu³ dokumentu bêdzie widoczny\n"
 "na pasku tytu³owym okna."
 
 #: src/config/options.c:2883
@@ -3745,7 +3769,7 @@ msgstr ""
 
 #: src/config/options.c:2916
 msgid "Set config dir to given string"
-msgstr "Ustaw katalog konfiguracyjny na podany ³añcuch"
+msgstr "Ustawienie katalogu konfiguracyjnego na dany ³añcuch"
 
 #: src/config/options.c:2918
 msgid ""
@@ -3754,11 +3778,10 @@ msgid ""
 "a '/' its used as an absolute path. Else it is assumed to\n"
 "be relative to your HOME dir."
 msgstr ""
-"Ustaw katalog konfiguracyjny na podan± ¶cie¿kê. ELinks bêdzie\n"
-"czyta³ i zapisywa³ pliki konfiguracyjne z tego katalogu. Je¶li\n"
-"¶cie¿ka zaczyna siê od znaku '/' to jest traktowana jako ¶cie¿ka\n"
-"absolutna. W przeciwnym wypadku przyjmuje siê j± jako wzglêdn±\n"
-"do katalogu domowego."
+"Ustawienie katalogu konfiguracyjnego na dan± ¶cie¿kê. ELinks bêdzie\n"
+"czyta³ stamt±d pliki konfiguracyjne i tam zapisywa³. Je¶li ¶cie¿ka\n"
+"zaczyna siê od '/', jest traktowana jako bezwzglêdna, w przeciwnym\n"
+"wypadku jako wzglêdna do katalogu domowego."
 
 #: src/config/options.c:2923
 msgid "MIME type to assume for documents"
@@ -3814,7 +3837,7 @@ msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
-"To sprawia, ¿e Elinks przyjmuje, ¿e og³±dane pliki s± w HTML-u.\n"
+"To sprawia, ¿e ELinks przyjmuje, ¿e ogl±dane pliki s± w HTML-u.\n"
 "Jest to równowa¿ne z -default-mime-type text/html."
 
 #: src/config/options.c:2961
@@ -3910,7 +3933,7 @@ msgstr ""
 "u¿ywaæ, dopóki nie jeste¶ developerem i chcesz zrobiæ parê testów.\n"
 "Je¶li chcesz oddzielne instancje raczej u¿yj -no-connect w linii\n"
 "komend. Wiedz, ¿e normalnie ¿adne pliki stanu nie s± zapisywane\n"
-"na dysk, gdy ta opcja jest u¿yta. Zobach tak¿e -touch-files."
+"na dysk, gdy ta opcja jest u¿yta. Zobacz tak¿e -touch-files."
 
 #: src/config/options.c:3005
 msgid "Write the source of given URL to stdout"
@@ -4199,7 +4222,7 @@ msgstr ""
 "Po³±czenia: %d po³±czeñ, %d nawi±zuj±cych po³±czenie, %d przesy³aj±cych,\n"
 "            %d trwa³ych.\n"
 "Pamiêæ podrêczna: %d bajtów, %d plików, %d zablokowanych, %d ³adowanych.\n"
-"Sformatowane dokumenty: %d dokumentów, %d zablokownaych."
+"Sformatowane dokumenty: %d dokumentów, %d zablokowanych."
 
 #: src/dialogs/info.c:169
 msgid "No entry."
@@ -4249,14 +4272,12 @@ msgid "No downloads"
 msgstr "Brak pobrañ"
 
 #: src/dialogs/menu.c:362
-#, fuzzy
 msgid "Open new ~tab"
-msgstr "~Otwórz w nowym oknie"
+msgstr "Otwórz w nowym ~tabie"
 
 #: src/dialogs/menu.c:363
-#, fuzzy
 msgid "Open new tab in ~background"
-msgstr "T~ab w tle"
+msgstr "Otwórz nowy t~ab w tle"
 
 #: src/dialogs/menu.c:365
 msgid "~Go to URL"
@@ -4275,7 +4296,6 @@ msgid "~History"
 msgstr "~Historia"
 
 #: src/dialogs/menu.c:369
-#, fuzzy
 msgid "Unh~istory"
 msgstr "His~toria powrotów"
 
@@ -4308,7 +4328,6 @@ msgid "~Flush all caches"
 msgstr "Wyczy¶æ ~ca³± pamiêæ podrêczn±"
 
 #: src/dialogs/menu.c:392
-#, fuzzy
 msgid "Resource in~fo"
 msgstr "~Informacje o zasobach"
 
@@ -4333,7 +4352,6 @@ msgid "~OS shell"
 msgstr "P~ow³oka systemowa"
 
 #: src/dialogs/menu.c:453
-#, fuzzy
 msgid "Resize t~erminal"
 msgstr "Zmieñ rozmiar ~terminala"
 
@@ -4926,7 +4944,7 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 msgstr ""
-"Czy chesz otworzyæ plik '%s' (typu %s%s%s)\n"
+"Czy chcesz otworzyæ plik '%s' (typu %s%s%s)\n"
 "przy u¿yciu '%s', czy wy¶wietliæ go?"
 
 #: src/sched/error.c:29
@@ -5280,14 +5298,12 @@ msgid "Open in new ~window"
 msgstr "~Otwórz w nowym oknie"
 
 #: src/viewer/text/link.c:894
-#, fuzzy
 msgid "Open in new ~tab"
-msgstr "~Otwórz w nowym oknie"
+msgstr "Otwórz w nowym ~tabie"
 
 #: src/viewer/text/link.c:897
-#, fuzzy
 msgid "Open in new tab in ~background"
-msgstr "T~ab w tle"
+msgstr "Otwórz w nowym t~abie w tle"
 
 #: src/viewer/text/link.c:901
 msgid "~Download link"
@@ -5453,38 +5469,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1478
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "Form memory"
-#~ msgstr "Zapamiêtywanie formularzy"
-
-#~ msgid "Display image links"
-#~ msgstr "Wy¶wietlaj odno¶niki na obrazkach"
-
-#
-#~ msgid "Generic background color"
-#~ msgstr "Kolor t³a"
-
-#~ msgid "Dialog generic background color."
-#~ msgstr "Kolor t³a okna dialogowego."
-
-#~ msgid "Dialog generic background color"
-#~ msgstr "Zwyk³y kolor t³a okna dialogowego"
-
-#~ msgid ""
-#~ "Whether to enable the timer or not:\n"
-#~ "0 is don't count down anything\n"
-#~ "1 is count down, but don't show the timer\n"
-#~ "2 is count down and show the timer near LEDs (note that this feature is "
-#~ "DISABLED)"
-#~ msgstr ""
-#~ "W³±czyæ stoper czy nie:\n"
-#~ "0 - nie zliczaj niczego\n"
-#~ "1 - odlicza, ale nie pokazuje stopera\n"
-#~ "2 - odlicza i pokazuje stoper w pobli¿u LEDów (zauwa¿, ¿e ta opcja NIE "
-#~ "JEST WKOMPILOWANA)"
-
-#~ msgid "~Tab"
-#~ msgstr "~Tab"
-
-#~ msgid "HTTP referer sending options."
-#~ msgstr "Ustawienia dotycz±ce wysy³ania pola nag³ówka Referer."

@@ -1,10 +1,11 @@
-/* $Id: protocol.h,v 1.21 2004/04/02 18:58:53 jonas Exp $ */
+/* $Id: protocol.h,v 1.22 2004/04/02 22:04:04 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
 
 struct connection;
 struct session;
+struct uri;
 
 enum protocol {
 	PROTOCOL_INVALID = -1,
@@ -27,7 +28,7 @@ enum protocol {
 
 /* Besides the session an external handler also takes the url as an argument */
 typedef void (protocol_handler)(struct connection *);
-typedef void (protocol_external_handler)(struct session *, unsigned char *);
+typedef void (protocol_external_handler)(struct session *, struct uri *);
 
 struct protocol_backend {
 	unsigned char *name;

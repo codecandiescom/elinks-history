@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.34 2004/04/02 18:58:53 jonas Exp $ */
+/* $Id: protocol.c,v 1.35 2004/04/02 22:04:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ static struct protocol_backend *protocol_backends[] = {
 
 
 static void
-dummyjs_func(struct session *ses, unsigned char *url)
+dummyjs_func(struct session *ses, struct uri *uri)
 {
 	msg_box(ses->tab->term, NULL, 0,
 		N_("Error"), AL_CENTER,

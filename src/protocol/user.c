@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.61 2004/03/31 20:31:22 jonas Exp $ */
+/* $Id: user.c,v 1.62 2004/04/02 22:04:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,23 +146,13 @@ get_subject_from_query(unsigned char *query)
 }
 
 static void
-user_func(struct session *ses, unsigned char *url)
+user_func(struct session *ses, struct uri *uri)
 {
 	unsigned char *subj, *prog;
-	struct uri uri;
 
-	if (!parse_uri(&uri, url)) {
-		msg_box(ses->tab->term, NULL, 0,
-			N_("Bad URL syntax"), AL_CENTER,
-			N_("Bad user protocol URL"),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
-		return;
-	}
-
-	prog = get_user_program(ses->tab->term, uri.protocol_str, uri.protocollen);
+	prog = get_user_program(ses->tab->term, struri(uri), uri->protocollen);
 	if (!prog || !*prog) {
-		unsigned char *protocol = memacpy(uri.protocol_str, uri.protocollen);
+		unsigned char *protocol = memacpy(struri(uri), uri->protocollen);
 
 		/* Shouldn't ever happen, but be paranoid. */
 		/* Happens when you're in X11 and you've no handler for it. */
@@ -176,9 +166,9 @@ user_func(struct session *ses, unsigned char *url)
 		return;
 	}
 
-	if (uri.data && uri.datalen) {
+	if (uri->data && uri->datalen) {
 		/* Some mailto specific stuff follows... */
-		subj = strchr(uri.data, '?');
+		subj = strchr(uri->data, '?');
 		if (subj) {
 			subj++;
 			subj = get_subject_from_query(subj);
@@ -187,7 +177,7 @@ user_func(struct session *ses, unsigned char *url)
 		subj = NULL;
 	}
 
-	prog = subst_cmd(prog, &uri, subj);
+	prog = subst_cmd(prog, uri, subj);
 	if (subj) mem_free(subj);
 	if (prog) {
 		exec_on_terminal(ses->tab->term, prog, "", 1);

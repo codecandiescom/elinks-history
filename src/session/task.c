@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.50 2004/04/02 21:55:13 jonas Exp $ */
+/* $Id: task.c,v 1.51 2004/04/02 22:04:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -334,7 +334,7 @@ do_move(struct session *ses, struct download **stat)
 
 			fn = get_protocol_external_handler(uri->protocol);
 			if (fn) {
-				fn(ses, struri(uri));
+				fn(ses, uri);
 				done_uri(uri);
 				*stat = NULL;
 				return 0;
@@ -470,12 +470,12 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		return;
 	}
 
-	if (uri>protocol != PROTOCOL_INVALID) {
+	if (uri->protocol != PROTOCOL_INVALID) {
 		protocol_external_handler *fn =
 			get_protocol_external_handler(uri->protocol);
 
 		if (fn) {
-			fn(ses, struri(uri));
+			fn(ses, uri);
 			if (pos) mem_free(pos);
 			done_uri(uri);
 			return;

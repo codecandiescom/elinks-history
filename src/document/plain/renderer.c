@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.28 2003/11/18 20:03:29 pasky Exp $ */
+/* $Id: renderer.c,v 1.29 2003/11/18 20:05:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,12 +224,11 @@ add_document_line(struct document *document, int lineno,
 }
 
 static void
-add_document_lines(struct document *document, unsigned char *source,
+add_document_lines(struct document *document, unsigned char *source, int length,
 		   struct conv_table *convert_table)
 {
 	struct screen_char template;
 	struct color_pair colors;
-	int length = strlen(source);
 	int lineno;
 
 	document->width = 0;
@@ -296,7 +295,7 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	done_string(&head);
 
 	document->title = stracpy(document->url);
-	add_document_lines(document, source, convert_table);
+	add_document_lines(document, source, length, convert_table);
 
 	document->bgcolor = global_doc_opts->default_bg;
 }

@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.h,v 1.2 2003/05/24 20:16:16 pasky Exp $ */
+/* $Id: signals.h,v 1.3 2003/05/25 09:41:44 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_SIGNALS_H
 #define EL__LOWLEVEL_SIGNALS_H
@@ -23,4 +23,4 @@ void handle_basic_signals(struct terminal *term);
 void unhandle_terminal_signals(struct terminal *term);
 int check_signals(void);
 
-#endif /* __EL_SIGNALS_H */
+#endif /* EL__LOWLEVEL_SIGNALS_H */

@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.3 2003/05/24 20:26:47 pasky Exp $ */
+/* $Id: signals.c,v 1.4 2003/05/25 09:41:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,14 +216,13 @@ unhandle_basic_signals(struct terminal *term)
 }
 
 
-
 static int signal_mask[NUM_SIGNALS];
 static struct signal_handler signal_handlers[NUM_SIGNALS];
 int critical_section = 0;
 
 static void check_for_select_race(void);
 
-/* TODO: In order to gain better portabilty, we should use signal() instead.
+/* TODO: In order to gain better portability, we should use signal() instead.
  * Highest care should be given to careful watching of which signals are
  * blocked and which aren't then, though. --pasky */
 
@@ -256,7 +255,7 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 		return;
 	}
 
-	memset(&sa, 0, sizeof sa);
+	memset(&sa, 0, sizeof(sa));
 	if (!fn)
 		sa.sa_handler = SIG_IGN;
 	else
@@ -323,8 +322,8 @@ set_sigcld(void)
 void
 clear_signal_mask_and_handlers(void)
 {
-	memset(signal_mask, 0, sizeof signal_mask);
-	memset(signal_handlers, 0, sizeof signal_handlers);
+	memset(signal_mask, 0, sizeof(signal_mask));
+	memset(signal_handlers, 0, sizeof(signal_handlers));
 }
 
 int

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.60 2003/11/18 10:54:47 pasky Exp $ */
+/* $Id: inphist.c,v 1.61 2003/11/18 10:55:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,10 +107,10 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 
 	foreach (entry, *history) {
 		unsigned char *cur = entry->data;
-		unsigned char *last = match;
+		unsigned char *matchpos = match;
 		int cur_len = 0;
 
-		for (; *cur && *cur == *last; ++cur, ++last) {
+		for (; *cur && *cur == *matchpos; ++cur, ++matchpos) {
 			++cur_len;
 
 			if (!longest_match_len)
@@ -125,7 +125,7 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 		if (cur_len < match_len)
 			longest_match_len = cur_len;
 		match = entry->data;
-		match_len = !*last ? strlen(entry->data) : cur_len;
+		match_len = !*matchpos ? strlen(entry->data) : cur_len;
 	}
 
 	if (match == widget_data->cdata) return;

@@ -1,5 +1,7 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.184 2004/01/15 17:34:27 zas Exp $ */
+/* $Id: menu.c,v 1.185 2004/01/15 21:30:54 zas Exp $ */
+
+#include <stdlib.h>
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.130 2004/06/25 10:52:30 zas Exp $ */
+/* $Id: osdep.c,v 1.131 2004/06/27 17:08:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,11 +338,14 @@ set_window_title(unsigned char *title)
 		/* We limit title length to terminal width and ignore control
 		 * chars if any. Note that in most cases window decoration
 		 * reduces printable width, so it's just a precaution. */
+		/* Note that this is the right place where to do it, since
+		 * potential alternative set_window_title() routines might
+		 * want to take different precautions. */
 		for (i = 0; title[i] && i < xsize; i++) {
-			if (title[i] >= ' ')
-				s[j++] = title[i];
-			else
-				s[j++] = ' ';
+			if (title[i] < ' ')
+				continue;
+
+			s[j++] = title[i];
 		}
 
 		/* If title is truncated, add "..." */

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.118 2004/01/08 14:56:35 zas Exp $ */
+/* $Id: conf.c,v 1.119 2004/01/08 16:07:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -680,10 +680,21 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	struct secure_save_info *ssi;
 	unsigned char *config_file;
 	unsigned char *cfg_str = create_config_string(prefix, name, options);
+	int prefixlen = strlen(prefix);
+	int prefix_has_slash, name_has_slash;
 
 	if (!cfg_str) return -1;
 
-	config_file = straconcat(prefix, "/", name, NULL);
+	name_has_slash = (name[0] && dir_sep(name[0]));
+	prefix_has_slash = (prefixlen && dir_sep(prefix[prefixlen - 1]));
+	if (name_has_slash || prefix_has_slash) {
+		if (name_has_slash && prefix_has_slash)
+			name++;
+		config_file = straconcat(prefix, name, NULL);
+	} else {
+		config_file = straconcat(prefix, "/", name, NULL);
+	}
+
 	if (!config_file) goto free_cfg_str;
 
 	ssi = secure_open(config_file, 0177);

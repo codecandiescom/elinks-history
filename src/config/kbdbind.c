@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.152 2004/01/09 00:14:28 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.153 2004/01/09 00:21:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -524,7 +524,7 @@ init_action_listboxes(void)
 {
 	struct strtonum *act;
 
-	for (act = action_table + 1; act->str; act++) {
+	for (act = action_table; act->str; act++) {
 		struct listbox_item *box_item;
 		int i;
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.274 2004/09/12 04:02:22 miciah Exp $ */
+/* $Id: menu.c,v 1.275 2004/09/12 04:09:28 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -552,11 +552,6 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 	struct window *win = menu->win;
 
 	switch (get_mouse_button(ev)) {
-		/* XXX: We return here directly because we
-		 * would just break this switch instead of the
-		 * large one. If you will add some generic
-		 * action after the former switch, replace the
-		 * return with goto here. --pasky */
 		case B_WHEEL_UP:
 			if (check_mouse_action(ev, B_DOWN)) {
 				scroll_menu(menu, -1, 1);

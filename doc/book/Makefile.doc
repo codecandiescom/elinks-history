@@ -1,17 +1,19 @@
-## $Id: Makefile.doc,v 1.3 2003/06/09 22:39:02 jonas Exp $
-
-# Assumes the variabel $(DOCBUILDDIR) is set by the includers
+## $Id: Makefile.doc,v 1.4 2003/06/10 02:12:51 jonas Exp $
 
 SUFFIXES = .xml .1 .5
+HTMLDOCTOOL = @HTMLDOCTOOL@
+MANDOCTOOL = @MANDOCTOOL@
 
-HTMLDOCTOOL	 = @HTMLDOCTOOL@
-MANDOCTOOL	 = @MANDOCTOOL@
+DOCBUILDDIR = $(top_srcdir)/doc/
 
 %.html: %.xml
+	$(mkinstalldirs) $(DOCBUILDDIR)/html
 	$(HTMLDOCTOOL) -o $(DOCBUILDDIR)/html/`basename $< .xml`.html $<
 
 %.1: %.1.xml
+	$(mkinstalldirs) $(DOCBUILDDIR)/man/man1
 	$(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man1 $<
 
 %.5: %.5.xml
+	$(mkinstalldirs) $(DOCBUILDDIR)/man/man5
 	$(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man5 $<

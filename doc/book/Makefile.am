@@ -1,8 +1,24 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.6 2003/06/09 23:23:50 jonas Exp $
+## $Id: Makefile.am,v 1.7 2003/06/10 02:12:51 jonas Exp $
 
 include $(top_srcdir)/doc/book/Makefile.doc
 
 SUBDIRS = manpages
 
-EXTRA_DIST = Makefile.doc README TODO
+EXTRA_PROGRAMS = manual
+manual_SOURCES = manual.xml
+manual_HTMLFORMAT = manual.html
+
+EXTRA_DIST = \
+ $(manual_SOURCES) \
+ Makefile.doc \
+ README \
+ TODO \
+ config/* \
+ info/* \
+ intro/* \
+ manual.xml
+
+manual-html: $(manual_HTMLFORMAT)
+
+manual: $(manual_HTMLFORMAT)

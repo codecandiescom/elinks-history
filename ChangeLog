@@ -1,8 +1,308 @@
-Fri Apr  2 22:05:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+Sat Apr  3 20:26:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/history.c:
+
+	Fix redirect comparison.  
+
+Sat Apr  3 17:42:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/object.h:
+
+	Make lock debug output more human readable.  
+
+Sat Apr  3 17:40:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	cache/cache.c, cache/cache.h, cache/dialogs.c, config/options.h,
+	cookies/cookies.c, cookies/cookies.h, document/document.c,
+	document/document.h, formhist/formhist.c, formhist/formhist.h,
+	globhist/globhist.c, globhist/globhist.h, protocol/uri.c,
+	protocol/uri.h, sched/download.c, sched/download.h, util/object.h:
+
+	Improve object refcount debugging by introducing an object struct
+	that holds the counter and if debugging is enabled also the type
+	name of the object.  
+
+Sat Apr  3 14:54:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	Indentation fixes.  
+
+Sat Apr  3 14:51:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/: cache.c, cache.h:
+
+	Maintain the proxy URI in the cache entry. It should not cost
+	anything but a reference and a little extra when deleting but cleans
+	and speeds ups things quite nicely.  
+
+Sat Apr  3 14:32:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, protocol/finger.c, protocol/file/cgi.c,
+	protocol/file/file.c, protocol/ftp/ftp.c, protocol/http/http.c,
+	protocol/smb/smb.c, sched/connection.c, sched/connection.h,
+	sched/download.c, sched/history.c, sched/session.c, sched/task.c,
+	viewer/dump/dump.c:
+
+	Rename download->ce to download->cached and connection->cache to
+	conneciton->cached.  
+
+Sat Apr  3 14:13:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, dialogs/status.c, document/document.c,
+	document/document.h, document/renderer.c, document/css/css.c,
+	document/html/frames.c, document/html/renderer.c,
+	document/html/renderer.h, document/plain/renderer.c,
+	document/plain/renderer.h, lowlevel/select.c, protocol/finger.c,
+	protocol/file/file.c, sched/connection.c, sched/download.c,
+	sched/session.c, sched/task.c, scripting/lua/core.c,
+	viewer/dump/dump.c:
+
+	Re-rename cache entry variables to cached to improve grepability.  
+
+Sat Apr  3 13:51:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	Re-rename cache entry variables to cached to improve grepability.  
+
+Sat Apr  3 13:49:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/: cache.c, cache.h:
+
+	Rename-rename cache entry variables to cached to improve
+	grepability.  
+
+Sat Apr  3 13:41:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: download.c, session.c, session.h:
+
+	Rename cache entry variables to cached to improve grepability.  
+
+Sat Apr  3 13:32:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Rename cache entry variables to cache to improve grepability.  
+
+Sat Apr  3 13:29:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: viewer/dump/dump.c, scripting/lua/core.c, sched/task.c:
+
+	Rename cache entry variables to cache to improve grepability.  
+
+Sat Apr  3 13:25:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/select.c, protocol/finger.c, sched/connection.c,
+	sched/download.c, sched/download.c:
+
+	Rename cache entry variables to cache to improve grepability.  
+
+Sat Apr  3 13:14:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: html/renderer.c, html/renderer.h, document.c,
+	html/renderer.c, plain/renderer.c, plain/renderer.h:
+
+	Rename cache entry variables to cache to improve grepability.  
+
+Sat Apr  3 13:10:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/dialogs.c, dialogs/document.c,
+	document/html/frames.c:
+
+	Rename cache entry variables to cache to improve grepability.  
+
+Sat Apr  3 13:08:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	Rename cache -> cache_entries.  
+
+Sat Apr  3 13:06:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/document.c:
+
+	Rename cache entry variables to cache to improve grepability.  
+
+Sat Apr  3 12:58:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/conf.c:
+
+	Fix assertion failure when trying to save config file an -no-home
+	was specified.  
+
+Sat Apr  3 12:33:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.h, document/html/renderer.c, sched/download.c,
+	sched/session.c, sched/task.c, viewer/dump/dump.c:
+
+	get_cache_uri_struct() is more used so rename it to get_cache_uri()
+	which is then renamed to get_cache_uri_string().  
+
+Sat Apr  3 12:20:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/: cache.c, cache.h:
+
+	redirect_cache(): Return URI being redirected to and document it.  
+
+Sat Apr  3 12:11:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	Fix assertion failure reported by Stephen Stocker.  
+
+Sat Apr  3 07:43:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	Compilation fix: return 0 instead of NULL pointer.  
+
+Sat Apr  3 03:06:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/history.c:
+
+	Whoopsy .. missing part of last patch.  
+
+Sat Apr  3 03:04:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Make ses_goto() take its own URI reference.  
+
+Sat Apr  3 02:24:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/frames.c:
+
+	Removing an assertion that is clearly useless.  
+
+Sat Apr  3 02:21:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, document/html/frames.c,
+	sched/download.c, sched/task.c, viewer/dump/dump.c:
+
+	Make cache_entry->redirect point to an URI struct. This nicely
+	cleans things up.  
+
+Sat Apr  3 02:11:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, protocol/http/http.c:
+
+	Change cache redirecting to resolve the URI being redirected to at
+	the redirection time meaning either when the HTTP Location header is
+	handled or when appending "/" to the directory path. Hopefully it is
+	clear from the patch that it is just the body of
+	get_cache_redirect_uri() that has been hacked a bit to behave.  
+
+Sat Apr  3 01:35:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, document/html/frames.c,
+	sched/download.c, sched/task.c, viewer/dump/dump.c:
+
+	Always resolve redirects relative to the cache entry. Assertions
+	added to see if this is not always the case .. well anyway next
+	patch (that will be quite a treat) will make it all more clear I
+	hope. ;-) 
+
+Sat Apr  3 01:22:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, protocol/file/file.c,
+	protocol/ftp/ftp.c, protocol/smb/smb.c:
+
+	Redo the cache redirection interface to be more generic. Now it is
+	all relative to the cache entry which makes sense because the
+	connection uri is used anyway for creating the cache entry.  
+
+Sat Apr  3 00:13:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	request_additional_file(): URI can never be invalid so remove that
+	test.  
+
+Sat Apr  3 00:10:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	request_additional_file(): Take URI arg.  
+
+Fri Apr  2 23:52:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/frames.c, sched/session.c, sched/session.h,
+	sched/task.c:
+
+	ses_change_frame_url(): Rename to ses_change_frame_url() and take
+	URI struct arg.  
+
+Fri Apr  2 23:43:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/frames.c:
+
+	format_frame(): Use the cache redirect URI facility. It should be
+	more correct.  
+
+Fri Apr  2 23:38:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/file.c:
+
+	Fix compile error from last patch and get rid of stupid @head
+	assertions.  
+
+Fri Apr  2 23:33:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/file.c:
+
+	Cleanup connection cache assignment.  
+
+Fri Apr  2 23:30:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, protocol/file/file.c,
+	protocol/ftp/ftp.c, protocol/smb/smb.c:
+
+	Unify cache redirects to directories by appending /.  
+
+Fri Apr  2 22:51:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/: uri.c, uri.h:
 
-	Remove extract_proxy().  
+	Remove unused post_data_start().  
+
+Fri Apr  2 22:48:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Remove useless post char mangling.  
+
+Fri Apr  2 22:35:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Remove unparse_uri().  
+
+Fri Apr  2 22:31:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Remove dead code that is getting really outdated.  
+
+Fri Apr  2 22:27:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Oops more forgotten find_in_cache() calls this time in led land.  
+
+Fri Apr  2 22:18:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	Oops forgotten find_in_cache() call in lua land.  
+
+Fri Apr  2 22:16:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	A little cleanup to improve readability by passing URI struct to
+	rewrite_uri().  
 
 Fri Apr  2 22:04:04 2004  Jonas Fonseca <fonseca@diku.dk>:
 

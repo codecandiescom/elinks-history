@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.168 2004/05/29 19:17:02 jonas Exp $ */
+/* $Id: file.c,v 1.169 2004/05/30 13:18:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,6 +499,7 @@ file_protocol_handler(struct connection *connection)
 	}
 
 	decode_uri_string(name.source);
+	name.length = strlen(name.source);
 
 	directory = opendir(name.source);
 	if (directory) {

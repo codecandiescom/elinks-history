@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.153 2005/01/03 00:31:27 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.154 2005/01/03 01:00:09 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,7 +314,6 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	object_nolock(bm, "bookmark");
 
 	/* Setup box_item */
-	/* Note that item_free is left at zero */
 	bm->box_item = mem_calloc(1, sizeof(struct listbox_item));
 	if (!bm->box_item) {
 		mem_free(bm->url);

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.68 2003/07/23 15:56:39 pasky Exp $ */
+/* $Id: string.c,v 1.69 2003/07/23 15:57:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
  * thus you can't simply reuse strings allocated by these in add_to_str()-style
  * functions. */
 
-#define string_assertm(f, l, x, o, m) \
+#define string_assert(f, l, x, o, m) \
 	if ((assert_failed = !(x))) { \
 		errfile = f, errline = l, \
 		elinks_internal("[" o "] assertion " #x " failed!"); \
@@ -46,7 +46,7 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 {
 	unsigned char *m;
 
-	string_assertm(f, l, len >= 0, "memacpy");
+	string_assert(f, l, len >= 0, "memacpy");
 	if_assert_failed len = 0;
 
 	m = debug_mem_alloc(f, l, len + 1);
@@ -61,7 +61,7 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 inline unsigned char *
 debug_stracpy(unsigned char *f, int l, unsigned char *src)
 {
-	string_assertm(f, l, src, "stracpy");
+	string_assert(f, l, src, "stracpy");
 	if_assert_failed return NULL;
 
 	return debug_memacpy(f, l, src, strlen(src));
@@ -71,7 +71,7 @@ unsigned char *
 debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 		  unsigned char *src)
 {
-	string_assertm(f, l, src, "copy_string");
+	string_assert(f, l, src, "copy_string");
 	if_assert_failed { *dst = NULL; return NULL; }
 
 	*dst = debug_mem_alloc(f, l, strlen(src) + 1);
@@ -245,7 +245,7 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	 * So noone should better rely on the return value actually meaning
 	 * anything quantitively. --pasky */ \
  \
-	string_assertm(errfile, errline, s1 && s2, c); \
+	string_assert(errfile, errline, s1 && s2, c); \
  \
 	/* n1,n2 is unsigned, so don't assume -1 < 0 ! >:) */ \
  \
@@ -254,7 +254,7 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	if (n1 == -1) n1 = strlen(s1); \
 	if (n2 == -1) n2 = strlen(s2); \
  \
-	string_assertm(errfile, errline, n1 >= 0 && n2 >= 0, c); \
+	string_assert(errfile, errline, n1 >= 0 && n2 >= 0, c); \
  \
 	if (n1 != n2) return n1 - n2; \
  \

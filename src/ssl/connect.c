@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.61 2004/08/01 09:07:27 jonas Exp $ */
+/* $Id: connect.c,v 1.62 2004/08/01 09:51:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,7 +311,7 @@ ssl_read(struct connection *conn, struct read_buffer *rb)
 
 		if (err == SSL_ERROR_WANT_READ ||
 		    err == SSL_ERROR_WANT_READ2) {
-			read_from_socket(conn, rb->sock, rb, rb->done);
+			read_from_socket(conn, rb->socket, rb, rb->done);
 			return -1;
 		}
 

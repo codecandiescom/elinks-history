@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.90 2004/08/01 09:18:51 jonas Exp $ */
+/* $Id: socket.c,v 1.91 2004/08/01 09:51:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -603,7 +603,7 @@ read_select(struct connection *conn)
 	/* XXX: Should we set_connection_timeout() as we do in write_select()?
 	 * --pasky */
 
-	set_handlers(rb->sock, NULL, NULL, NULL, NULL);
+	set_handlers(rb->socket->fd, NULL, NULL, NULL, NULL);
 
 	if (!rb->freespace) {
 		int size = RD_SIZE(rb->len);
@@ -625,7 +625,7 @@ read_select(struct connection *conn)
 	} else
 #endif
 	{
-		rd = safe_read(rb->sock, rb->data + rb->len, rb->freespace);
+		rd = safe_read(rb->socket->fd, rb->data + rb->len, rb->freespace);
 		if (rd <= 0) {
 			if (rb->close && !rd) {
 				rb->close = 2;
@@ -668,15 +668,18 @@ alloc_read_buffer(struct connection *conn)
 #undef RD_SIZE
 
 void
-read_from_socket(struct connection *conn, int socket, struct read_buffer *buf,
-		 void (*read_func)(struct connection *, struct read_buffer *))
+read_from_socket(struct connection *conn, struct connection_socket *socket,
+		 struct read_buffer *buffer,
+		 void (*done)(struct connection *, struct read_buffer *))
 {
-	buf->done = read_func;
-	buf->sock = socket;
-	if (conn->buffer && buf != conn->buffer)
+	buffer->done = done;
+	buffer->socket = socket;
+
+	if (conn->buffer && buffer != conn->buffer)
 		mem_free(conn->buffer);
-	conn->buffer = buf;
-	set_handlers(socket, (void *) read_select, NULL, (void *) exception, conn);
+	conn->buffer = buffer;
+
+	set_handlers(socket->fd, (void *) read_select, NULL, (void *) exception, conn);
 }
 
 void

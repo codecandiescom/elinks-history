@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.84 2004/09/21 16:49:14 pasky Exp $ */
+/* $Id: apply.c,v 1.85 2004/09/21 20:09:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,7 +190,7 @@ css_apply(struct html_element *element, struct css_stylesheet *css,
 	                &css->selectors, element, html_stack);
 
 #ifdef CSS_DEBUG
-	WDBG("Element %.*s applied.", element->namelen, element->name);
+	DBG("Element %.*s applied.", element->namelen, element->name);
 #endif
 
 	code = get_attr_val(element->options, "style");

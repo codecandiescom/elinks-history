@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.185 2004/06/24 09:07:06 zas Exp $ */
+/* $Id: tables.c,v 1.186 2004/06/24 15:05:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1049,16 +1049,15 @@ get_table_width(struct table *table)
 	struct table_frames table_frames;
 	int min = 0;
 	int max = 0;
-	register int i = 0;
+	register int i;
 
-	while (i < table->x) {
+	for (i = 0; i < table->x; i++) {
 		int vl = (get_vline_width(table, i) >= 0);
 
 		min += vl + table->min_c[i];
 		max += vl + table->max_c[i];
 		if (table->xcols[i] > table->max_c[i])
 			max += table->xcols[i];
-		i++;
 	}
 
 	get_table_frames(table, &table_frames);

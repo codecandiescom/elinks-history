@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.111 2002/12/13 23:31:59 pasky Exp $ */
+/* $Id: view.c,v 1.112 2002/12/16 23:53:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ init_formatted(struct f_data *scr)
 	init_list(scr->nodes);
 }
 
-void
+static void
 free_frameset_desc(struct frameset_desc *fd)
 {
 	int i;
@@ -85,7 +85,7 @@ free_frameset_desc(struct frameset_desc *fd)
 	mem_free(fd);
 }
 
-void
+static void
 clear_formatted(struct f_data *scr)
 {
 	int n;
@@ -171,14 +171,14 @@ detach_formatted(struct f_data_c *scr)
 	}
 }
 
-void
+static inline void
 set_link(struct f_data_c *f)
 {
 	if (c_in_view(f)) return;
 	find_link(f, 1, 0);
 }
 
-int
+static inline int
 find_tag(struct f_data *f, unsigned char *name)
 {
 	struct tag *tag;
@@ -190,7 +190,7 @@ find_tag(struct f_data *f, unsigned char *name)
 	return -1;
 }
 
-int
+static inline int
 comp_links(struct link *l1, struct link *l2)
 {
 	return l1->num - l2->num;
@@ -254,7 +254,7 @@ struct line_info {
 	unsigned char *en;
 };
 
-struct line_info *
+static struct line_info *
 format_text(unsigned char *text, int width, int wrap)
 {
 	struct line_info *ln = NULL;
@@ -270,7 +270,9 @@ format_text(unsigned char *text, int width, int wrap)
 
 put:
 			if (!(lnn & (ALLOC_GR - 1))) {
-				struct line_info *_ln = mem_realloc(ln, (lnn + ALLOC_GR) * sizeof(struct line_info));
+				struct line_info *_ln = mem_realloc(ln,
+						        (lnn + ALLOC_GR)
+							* sizeof(struct line_info));
 
 				if (!_ln) {
 					if (ln) mem_free(ln);
@@ -306,7 +308,7 @@ put:
 	return ln;
 }
 
-int
+static int
 _area_cursor(struct form_control *form, struct form_state *fs)
 {
 	struct line_info *ln;
@@ -337,7 +339,7 @@ _area_cursor(struct form_control *form, struct form_state *fs)
 	return q;
 }
 
-void
+static void
 draw_link(struct terminal *t, struct f_data_c *scr, int l)
 {
 	struct link *link = &scr->f_data->links[l];
@@ -419,7 +421,7 @@ draw_link(struct terminal *t, struct f_data_c *scr, int l)
 	}
 }
 
-void
+static inline void
 free_link(struct f_data_c *scr)
 {
 	if (scr->link_bg) {
@@ -429,7 +431,7 @@ free_link(struct f_data_c *scr)
 	scr->link_bg_n = 0;
 }
 
-void
+static void
 clear_link(struct terminal *t, struct f_data_c *scr)
 {
 	if (scr->link_bg) {
@@ -442,6 +444,7 @@ clear_link(struct terminal *t, struct f_data_c *scr)
 	}
 }
 
+static
 #ifdef __GNUCC__
 inline			/* solaris CC bug */
 #endif
@@ -451,7 +454,7 @@ srch_cmp(unsigned char c1, unsigned char c2)
 	return strncasecmp(&c1, &c2, 1);
 }
 
-int
+static int
 get_range(struct f_data *f, int y, int yw, int l,
 	  struct search **s1, struct search **s2)
 {
@@ -480,7 +483,7 @@ get_range(struct f_data *f, int y, int yw, int l,
 	return 0;
 }
 
-int
+static int
 is_in_range(struct f_data *f, int y, int yw, unsigned char *txt,
 	    int *min, int *max)
 {
@@ -574,7 +577,7 @@ ret:
 	*pl = len;
 }
 
-void
+static void
 draw_searched(struct terminal *t, struct f_data_c *scr)
 {
 	int xp = scr->xp;
@@ -598,14 +601,14 @@ draw_searched(struct terminal *t, struct f_data_c *scr)
 	if (pt) mem_free(pt);
 }
 
-void
+static inline void
 draw_current_link(struct terminal *t, struct f_data_c *scr)
 {
 	draw_link(t, scr, scr->vs->current_link);
 	draw_searched(t, scr);
 }
 
-struct link *
+static struct link *
 get_first_link(struct f_data_c *f)
 {
 	int i;
@@ -621,7 +624,7 @@ get_first_link(struct f_data_c *f)
 	return l;
 }
 
-struct link *
+static struct link *
 get_last_link(struct f_data_c *f)
 {
 	int i;
@@ -635,7 +638,7 @@ get_last_link(struct f_data_c *f)
 	return l;
 }
 
-void
+static void
 fixup_select_state(struct form_control *fc, struct form_state *fs)
 {
 	int i;
@@ -657,7 +660,7 @@ fixup_select_state(struct form_control *fc, struct form_state *fs)
 	fs->value = stracpy(fc->nvalues ? fc->values[0] : (unsigned char *) "");
 }
 
-void
+static void
 init_ctrl(struct form_control *form, struct form_state *fs)
 {
 	if (fs->value) {
@@ -728,7 +731,7 @@ find_form_state(struct f_data_c *f, struct form_control *form)
 	return fs;
 }
 
-void
+static void
 draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 {
 	int xp = f->xp;
@@ -832,7 +835,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 	}
 }
 
-void
+static void
 draw_forms(struct terminal *t, struct f_data_c *f)
 {
 	struct link *l1 = get_first_link(f);
@@ -849,7 +852,7 @@ draw_forms(struct terminal *t, struct f_data_c *f)
 	} while (l1++ < l2);
 }
 
-void
+static void
 draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 {
 	int i, j;
@@ -877,7 +880,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 	}
 }
 
-void
+static void
 draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 {
 	int y;
@@ -946,7 +949,7 @@ draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 	if (scr->search_word && *scr->search_word && (*scr->search_word)[0]) scr->xl = scr->yl = -1;
 }
 
-void
+static void
 draw_frames(struct session *ses)
 {
 	int n;
@@ -993,7 +996,7 @@ draw_formatted(struct session *ses)
 	redraw_from_window(ses->win);
 }
 
-int
+static int
 in_viewx(struct f_data_c *f, struct link *l)
 {
 	int i;
@@ -1006,7 +1009,7 @@ in_viewx(struct f_data_c *f, struct link *l)
 	return 0;
 }
 
-int
+static int
 in_viewy(struct f_data_c *f, struct link *l)
 {
 	int i;
@@ -1019,7 +1022,7 @@ in_viewy(struct f_data_c *f, struct link *l)
 	return 0;
 }
 
-int
+static inline int
 in_view(struct f_data_c *f, struct link *l)
 {
 	return in_viewy(f, l) && in_viewx(f, l);
@@ -1032,7 +1035,7 @@ c_in_view(struct f_data_c *f)
 		&& in_view(f, &f->f_data->links[f->vs->current_link]));
 }
 
-int
+static int
 next_in_view(struct f_data_c *f, int p, int d,
 	     int (*fn)(struct f_data_c *, struct link *),
 	     void (*cntr)(struct f_data_c *, struct link *))
@@ -1141,7 +1144,7 @@ nolink:
 	f->vs->current_link = -1;
 }
 
-void
+static void
 page_down(struct session *ses, struct f_data_c *f, int a)
 {
 	if (f->vs->view_pos + f->f_data->opt.yw < f->f_data->y)
@@ -1149,7 +1152,7 @@ page_down(struct session *ses, struct f_data_c *f, int a)
 	else find_link(f, -1, a);
 }
 
-void
+static void
 page_up(struct session *ses, struct f_data_c *f, int a)
 {
 	f->vs->view_pos -= f->yw;
@@ -1209,7 +1212,7 @@ up(struct session *ses, struct f_data_c *fd, int a)
 
 #define scroll scroll_dirty_workaround_for_name_clash_with_libraries_on_macos
 
-void
+static void
 scroll(struct session *ses, struct f_data_c *f, int a)
 {
 	if (f->vs->view_pos + f->f_data->opt.yw >= f->f_data->y && a > 0)
@@ -1222,7 +1225,7 @@ scroll(struct session *ses, struct f_data_c *f, int a)
 	find_link(f, a < 0 ? -1 : 1, 0);
 }
 
-void
+static void
 hscroll(struct session *ses, struct f_data_c *f, int a)
 {
 	f->vs->view_posx += a;
@@ -1234,14 +1237,14 @@ hscroll(struct session *ses, struct f_data_c *f, int a)
 	/* !!! FIXME: check right margin */
 }
 
-void
+static inline void
 home(struct session *ses, struct f_data_c *f, int a)
 {
 	f->vs->view_pos = f->vs->view_posx = 0;
 	find_link(f, 1, 0);
 }
 
-void
+static void
 x_end(struct session *ses, struct f_data_c *f, int a)
 {
 	f->vs->view_posx = 0;
@@ -1251,7 +1254,7 @@ x_end(struct session *ses, struct f_data_c *f, int a)
 	find_link(f, -1, 0);
 }
 
-int
+static int
 has_form_submit(struct f_data *f, struct form_control *form)
 {
 	struct form_control *i;
@@ -1265,7 +1268,7 @@ has_form_submit(struct f_data *f, struct form_control *form)
 	return 0;
 }
 
-void
+static inline void
 decrement_fc_refcount(struct f_data *f)
 {
 	if (!--f->refcount) format_cache_entries++;
@@ -1282,7 +1285,7 @@ struct submitted_value {
 	int position;
 };
 
-void
+static inline void
 free_succesful_controls(struct list_head *submit)
 {
 	struct submitted_value *v;
@@ -1295,7 +1298,7 @@ free_succesful_controls(struct list_head *submit)
 	free_list(*submit);
 }
 
-unsigned char *
+static inline unsigned char *
 encode_textarea(unsigned char *t)
 {
 	int len = 0;
@@ -1310,7 +1313,7 @@ encode_textarea(unsigned char *t)
 	return o;
 }
 
-void
+static void
 get_succesful_controls(struct f_data_c *f, struct form_control *fc,
 		       struct list_head *subm)
 {
@@ -1400,7 +1403,7 @@ fi_rep:
 
 }
 
-unsigned char *
+static inline unsigned char *
 strip_file_name(unsigned char *f)
 {
 	unsigned char *n;
@@ -1410,7 +1413,7 @@ strip_file_name(unsigned char *f)
 	return l + 1;
 }
 
-void
+static void
 encode_controls(struct list_head *l, unsigned char **data, int *len,
 		int cp_from, int cp_to)
 {
@@ -1454,7 +1457,7 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 
 #define BL	32
 
-void
+static void
 encode_multipart(struct session *ses, struct list_head *l,
 		 unsigned char **data, int *len,
 		 unsigned char *bound, int cp_from, int cp_to)
@@ -1667,7 +1670,7 @@ ff:
 
 #undef BL
 
-unsigned char *
+static unsigned char *
 get_link_url(struct session *ses, struct f_data_c *f,
 	     struct link *l)
 {
@@ -1811,13 +1814,13 @@ toggle(struct session *ses, struct f_data_c *f, int a)
 	draw_formatted(ses);
 }
 
-void
+static inline void
 back(struct session *ses, struct f_data_c *f, int a)
 {
 	go_back(ses);
 }
 
-void
+static inline void
 unback(struct session *ses, struct f_data_c *f, int a)
 {
 	go_unback(ses);
@@ -2000,7 +2003,7 @@ close:
 }
 
 
-int
+static int
 field_op(struct session *ses, struct f_data_c *f, struct link *l,
 	 struct event *ev, int rep)
 {
@@ -2269,7 +2272,7 @@ search_for(struct session *ses, unsigned char *str)
 	_search_for(ses, str, 1);
 }
 
-int
+static inline int
 point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 {
 #define HASH_SIZE	4096
@@ -2294,7 +2297,7 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 #undef HASH_SIZE
 }
 
-int
+static int
 find_next_link_in_search(struct f_data_c *f, int d)
 {
 	struct point *pt = NULL;
@@ -2394,7 +2397,7 @@ find_next_back(struct session *ses, struct f_data_c *f, int a)
 	ses->search_direction = - ses->search_direction;
 }
 
-void
+static inline void
 rep_ev(struct session *ses, struct f_data_c *fd,
        void (*f)(struct session *, struct f_data_c *, int),
        int a)
@@ -2404,7 +2407,7 @@ rep_ev(struct session *ses, struct f_data_c *fd,
 	while (i--) f(ses, fd, a);
 }
 
-struct link *
+static struct link *
 choose_mouse_link(struct f_data_c *f, struct event *ev)
 {
 	struct link *l1 = f->f_data->links + f->f_data->nlinks;
@@ -2512,7 +2515,7 @@ void frm_download(struct session *, struct f_data_c *, int resume);
 void send_image(struct terminal *term, void *xxx, struct session *ses);
 void send_download_image(struct terminal *term, void *xxx, struct session *ses);
 
-int
+static int
 frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 {
 	int x = 1;
@@ -2741,7 +2744,7 @@ current_frame(struct session *ses)
 	return fd;
 }
 
-int
+static int
 send_to_frame(struct session *ses, struct event *ev)
 {
 	int r;
@@ -2775,7 +2778,7 @@ do_for_frame(struct session *ses,
 	f(ses, fd, a);
 }
 
-void
+static void
 do_mouse_event(struct session *ses, struct event *ev)
 {
 	struct event evv;
@@ -3018,7 +3021,7 @@ x:
 	ses->kbdprefix.rep = 0;
 }
 
-void
+static inline void
 send_enter(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct event ev = { EV_KBD, KBD_ENTER, 0, 0 };
@@ -3026,7 +3029,7 @@ send_enter(struct terminal *term, void *xxx, struct session *ses)
 	send_event(ses, &ev);
 }
 
-void
+static inline void
 send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct event ev = { EV_KBD, KBD_ENTER, KBD_CTRL, 0 };

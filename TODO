@@ -63,7 +63,10 @@ optionally.
 
 	EcmaScript (?) (http://home.worldcom.ch/~jmlugrin/fesi/)
 
+	Then, support for proxy autoconfiguration
+(http://www.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html).
+
 	CSS (?)
 
 
-$Id: TODO,v 1.17 2002/03/30 09:10:54 pasky Exp $
+$Id: TODO,v 1.18 2002/03/30 21:31:24 pasky Exp $

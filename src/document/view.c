@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.48 2002/05/25 13:46:04 pasky Exp $ */
+/* $Id: view.c,v 1.49 2002/05/26 18:54:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1328,7 +1328,7 @@ void encode_multipart(struct session *ses, struct list_head *l, unsigned char **
 				goto error;
 			}*/
 			if (*sv->value) {
-				if (get_opt_int("anonymous")) goto error;
+				if (get_opt_int_tree(cmdline_options, "anonymous")) goto error;
 				if ((fh = open(sv->value, O_RDONLY)) == -1) goto error;
 				do {
 					if ((rd = read(fh, buffer, F_BUFLEN)) == -1) goto error;
@@ -2266,7 +2266,7 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_END:  rep_ev(ses, fd, x_end, 0); break;
 			case ACT_ENTER: x = enter(ses, fd, 0); break;
 			case ACT_ENTER_RELOAD: x = enter(ses, fd, 1); break;
-			case ACT_DOWNLOAD: if (!get_opt_int("anonymous")) frm_download(ses, fd); break;
+			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd); break;
 			case ACT_SEARCH: search_dlg(ses, fd, 0); break;
 			case ACT_SEARCH_BACK: search_back_dlg(ses, fd, 0); break;
 			case ACT_FIND_NEXT: find_next(ses, fd, 0); break;
@@ -2516,16 +2516,16 @@ void send_event(struct session *ses, struct event *ev)
 				goto x;
 			}
 			case ACT_ADD_BOOKMARK:
-				if (!get_opt_int("anonymous")) launch_bm_add_doc_dialog(ses->term, NULL, ses);
+				if (!get_opt_int_tree(cmdline_options, "anonymous")) launch_bm_add_doc_dialog(ses->term, NULL, ses);
 				goto x;
 			case ACT_BOOKMARK_MANAGER:
-				if (!get_opt_int("anonymous")) menu_bookmark_manager(ses->term, NULL, ses);
+				if (!get_opt_int_tree(cmdline_options, "anonymous")) menu_bookmark_manager(ses->term, NULL, ses);
 				goto x;
 			case ACT_HISTORY_MANAGER:
-				if (!get_opt_int("anonymous")) menu_history_manager(ses->term, NULL, ses);
+				if (!get_opt_int_tree(cmdline_options, "anonymous")) menu_history_manager(ses->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
-				if (!get_opt_int("anonymous") && get_opt_int("cookies.save")) load_cookies();
+				if (!get_opt_int_tree(cmdline_options, "anonymous") && get_opt_int("cookies.save")) load_cookies();
 				goto x;
 			case ACT_REALLY_QUIT:
 				exit_prog(ses->term, (void *)1, ses);
@@ -2862,7 +2862,7 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 					     MENU_FUNC open_in_new_window,
 					     send_open_in_new_xterm, c - 1);
 
-			if (!get_opt_int("anonymous"))
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				add_to_menu(&mi, TEXT(T_DOWNLOAD_LINK),
 					    "d", TEXT(T_HK_DOWNLOAD_LINK),
 					    MENU_FUNC send_download, NULL, 0);
@@ -2901,7 +2901,7 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 					    MENU_FUNC open_in_new_window,
 					    send_open_in_new_xterm, c - 1);
 
-			if (!get_opt_int("anonymous"))
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_DOWNLOAD),
 					    "d", TEXT(T_HK_SUBMIT_FORM_AND_DOWNLOAD),
 					    MENU_FUNC send_download, NULL, 0);
@@ -2913,7 +2913,7 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 		add_to_menu(&mi, TEXT(T_VIEW_IMAGE),
 			    "", TEXT(T_HK_VIEW_IMAGE),
 			    MENU_FUNC send_image, NULL, 0);
-		if (!get_opt_int("anonymous"))
+		if (!get_opt_int_tree(cmdline_options, "anonymous"))
 			add_to_menu(&mi, TEXT(T_DOWNLOAD_IMAGE),
 				    "", TEXT(T_HK_DOWNLOAD_IMAGE),
 				    MENU_FUNC send_download_image, NULL, 0);

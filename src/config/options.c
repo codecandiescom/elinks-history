@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.37 2002/05/26 17:56:21 pasky Exp $ */
+/* $Id: options.c,v 1.38 2002/05/26 18:54:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@
  * come... */
 
 struct list_head *root_options;
+struct list_head *cmdline_options;
 
 /**********************************************************************
  Options interface
@@ -159,6 +160,7 @@ void
 init_options()
 {
 	root_options = init_options_tree();
+	cmdline_options = init_options_tree();
 	register_options();
 }
 
@@ -172,7 +174,8 @@ free_options_tree(struct list_head *tree)
 		    option->type == OPT_INT ||
 		    option->type == OPT_LONG ||
 		    option->type == OPT_STRING ||
-		    option->type == OPT_CODEPAGE) {
+		    option->type == OPT_CODEPAGE ||
+		    option->type == OPT_ALIAS) {
 			/*debug("free %s", option->name);*/
 			mem_free(option->ptr);
 
@@ -191,6 +194,7 @@ void
 done_options()
 {
 	free_options_tree(root_options);
+	free_options_tree(cmdline_options);
 }
 
 
@@ -287,7 +291,7 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 	printf("Options:\n\n");
 
 	/* TODO: Alphabetical order! */
-	foreachback (option, *root_options) {
+	foreachback (option, *cmdline_options) {
 
 		if (1 /*option->flags & OPT_CMDLINE*/) {
 			unsigned char *cname = cmd_name(option->name);
@@ -764,50 +768,52 @@ register_options()
 
 
 
-	add_opt_bool("",
+	/* Commandline options */
+
+	/* Commandline-only options */
+
+	add_opt_bool_tree(cmdline_options, "",
 		"anonymous", 0, 0,
 		"Restrict ELinks so that it can run on an anonymous account.\n"
 		"No local file browsing, no downloads. Executing of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.");
 
-	add_opt_int("",
+	add_opt_int_tree(cmdline_options, "",
 		"base_session", 0, 0, MAXINT, 0,
-		"Run this ELinks in separate session - instances of ELinks with\n"
-		"same base_session will connect together and share runtime\n"
-		"informations. By default, base_session is 0.");
+		"Session ID of this ELinks. You don't want to change this.\n");
 
-	add_opt_bool("",
+	add_opt_bool_tree(cmdline_options, "",
 		"dump", 0, 0,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout.");
 
-	add_opt_command("",
+	add_opt_command_tree(cmdline_options, "",
 		"?", 0, printhelp_cmd,
 		NULL);
 
-	add_opt_command("",
+	add_opt_command_tree(cmdline_options, "",
 		"h", 0, printhelp_cmd,
 		NULL);
 
-	add_opt_command("",
+	add_opt_command_tree(cmdline_options, "",
 		"help", 0, printhelp_cmd,
 		"Print usage help and exit.");
 
-	add_opt_command("",
+	add_opt_command_tree(cmdline_options, "",
 		"lookup", 0, lookup_cmd,
 		"Make lookup for specified host.");
 
-	add_opt_bool("",
+	add_opt_bool_tree(cmdline_options, "",
 		"no_connect", 0, 0,
 		"Run ELinks as a separate instance - instead of connecting to\n"
 		"existing instance.");
 
-	add_opt_bool("",
+	add_opt_bool_tree(cmdline_options, "",
 		"source", 0, 0,
 		"Write the given HTML document in source form to stdout.");
 			
-	add_opt_command("",
+	add_opt_command_tree(cmdline_options, "",
 		"version", 0, version_cmd,
 		"Print ELinks version information and exit.");
 

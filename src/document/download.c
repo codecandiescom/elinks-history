@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.15 2002/05/25 21:16:00 pasky Exp $ */
+/* $Id: download.c,v 1.16 2002/05/26 18:54:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -862,7 +862,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 	if (!m1) return;
 
 	if (!a) {
-		if (!get_opt_int("anonymous")) {
+		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			msg_box(ses->term, getml(m1, NULL),
 				TEXT(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT,
 				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
@@ -893,7 +893,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 			return;
 		}
 
-		if (!get_opt_int("anonymous")) {
+		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			msg_box(ses->term, getml(m1, m2, NULL),
 				TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
 				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",

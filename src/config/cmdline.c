@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.4 2002/05/26 17:56:21 pasky Exp $ */
+/* $Id: cmdline.c,v 1.5 2002/05/26 18:54:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,5 +77,5 @@ found:
 unsigned char *
 parse_options(int argc, unsigned char *argv[])
 {
-	return _parse_options(argc, argv, root_options);
+	return _parse_options(argc, argv, cmdline_options);
 }

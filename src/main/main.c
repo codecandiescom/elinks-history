@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.32 2002/05/25 13:46:02 pasky Exp $ */
+/* $Id: main.c,v 1.33 2002/05/26 18:54:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,14 +274,15 @@ init()
 	
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
-	if (!get_opt_int("no_connect")
-	    && !get_opt_int("dump") && !get_opt_int("source")) {
+	if (!get_opt_int_tree(cmdline_options, "no_connect") &&
+	    !get_opt_int_tree(cmdline_options, "dump") &&
+	    !get_opt_int_tree(cmdline_options, "source")) {
 		uh = bind_to_af_unix();
 		if (uh != -1) {
 			close(terminal_pipe[0]);
 			close(terminal_pipe[1]);
 
-			info = create_session_info(get_opt_int("base_session"), u, &len);
+			info = create_session_info(get_opt_int_tree(cmdline_options, "base_session"), u, &len);
 			if (!info) {
 				retval = RET_FATAL;
 				terminate = 1;
@@ -325,7 +326,8 @@ init()
 		return;
 	}
 	
-	if (get_opt_int("dump") || get_opt_int("source")) {
+	if (get_opt_int_tree(cmdline_options, "dump") ||
+	    get_opt_int_tree(cmdline_options, "source")) {
 		dump_start(u);
 		if (terminate) {
 			/* XXX? */
@@ -337,7 +339,7 @@ init()
 	} else {
 		int attached;
 
-		info = create_session_info(get_opt_int("base_session"), u, &len);
+		info = create_session_info(get_opt_int_tree(cmdline_options, "base_session"), u, &len);
 		if (!info) goto fatal_error;
 		
 		attached = attach_terminal(get_input_handle(),

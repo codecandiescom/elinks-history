@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.21 2003/07/28 08:25:21 jonas Exp $ */
+/* $Id: terminal.h,v 1.22 2003/07/28 08:51:13 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -101,8 +101,6 @@ struct terminal {
 	int fdin, fdout;
 
 	int x, y;
-	int cx, cy;
-	int lcx, lcy;
 
 	/* We are sure that @screen and the physical screen are out of sync. */
 	int dirty;

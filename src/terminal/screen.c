@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.32 2003/07/28 08:25:21 jonas Exp $ */
+/* $Id: screen.c,v 1.33 2003/07/28 08:51:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -287,11 +287,12 @@ void
 redraw_screen(struct terminal *term)
 {
 	struct rs_opt_cache opt_cache;
-	struct string screen;
+	struct string image;
 	register int y = 0;
 	int prev_y = -1;
 	int attrib = -1;
 	int mode = -1;
+	struct terminal_screen *screen = term->screen;
  	register struct screen_char *current;
  	register struct screen_char *pos;
  	register struct screen_char *prev_pos;
@@ -299,12 +300,12 @@ redraw_screen(struct terminal *term)
 	if (!term->dirty
 	    || !term->screen
 	    || (term->master && is_blocked())
-	    || !init_string(&screen)) return;
+	    || !init_string(&image)) return;
 
  	fill_option_cache(opt_cache, term);
 
-	current = term->screen->last_image;
- 	pos = term->screen->image;
+	current = screen->last_image;
+ 	pos = screen->image;
  	prev_pos = NULL;
 
  	for (; y < term->y; y++) {
@@ -326,42 +327,44 @@ redraw_screen(struct terminal *term)
 			/* Move the cursor when @prev_pos is more than 10 chars
 			 * away. */
  			if (prev_y != y || prev_pos + 10 <= pos) {
- 				add_cursor_move_to_string(&screen, y + 1, x + 1);
+ 				add_cursor_move_to_string(&image, y + 1, x + 1);
  				prev_pos = pos;
 				prev_y = y;
 			}
 
 			for (; prev_pos <= pos ; prev_pos++)
-				print_char(&screen, &opt_cache, prev_pos, &mode, &attrib);
+				print_char(&image, &opt_cache, prev_pos, &mode, &attrib);
 		}
 	}
 
-	if (screen.length) {
+	if (image.length) {
 		if (opt_cache.colors)
-			add_bytes_to_string(&screen, "\033[37;40m", 8);
+			add_bytes_to_string(&image, "\033[37;40m", 8);
 
-		add_bytes_to_string(&screen, "\033[0m", 4);
+		add_bytes_to_string(&image, "\033[0m", 4);
 
 		if (opt_cache.type == TERM_LINUX && opt_cache.m11_hack)
-			add_bytes_to_string(&screen, "\033[10m", 5);
+			add_bytes_to_string(&image, "\033[10m", 5);
 
 		if (opt_cache.type == TERM_VT100)
-			add_char_to_string(&screen, '\x0f');
+			add_char_to_string(&image, '\x0f');
 	}
 
-	if (screen.length || term->cx != term->lcx || term->cy != term->lcy) {
-		term->lcx = term->cx;
-		term->lcy = term->cy;
+	if (image.length
+	    || screen->cx != screen->lcx
+	    || screen->cy != screen->lcy) {
+		screen->lcx = screen->cx;
+		screen->lcy = screen->cy;
 
-		add_cursor_move_to_string(&screen, term->cy + 1, term->cx + 1);
+		add_cursor_move_to_string(&image, screen->cy + 1, screen->cx + 1);
 	}
 
-	if (screen.length && term->master) want_draw();
-	hard_write(term->fdout, screen.source, screen.length);
-	done_string(&screen);
-	if (screen.length && term->master) done_draw();
+	if (image.length && term->master) want_draw();
+	hard_write(term->fdout, image.source, image.length);
+	done_string(&image);
+	if (image.length && term->master) done_draw();
 
-	memcpy(term->screen->last_image, term->screen->image, term->x * term->y * sizeof(struct screen_char));
+	memcpy(screen->last_image, screen->image, term->x * term->y * sizeof(struct screen_char));
 	term->dirty = 0;
 }
 

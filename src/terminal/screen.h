@@ -1,4 +1,4 @@
-/* $Id: screen.h,v 1.5 2003/07/28 08:25:21 jonas Exp $ */
+/* $Id: screen.h,v 1.6 2003/07/28 08:51:13 jonas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
@@ -23,6 +23,10 @@ struct terminal_screen {
 
 	/* The previous screen's image, used for optimizing actual drawing. */
 	struct screen_char *last_image;
+
+	/* The current and the previous cursor positions. */
+	int cx, cy;
+	int lcx, lcy;
 };
 
 void alloc_screen(struct terminal *term, int x, int y);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.50 2004/12/10 18:00:27 zas Exp $ */
+/* $Id: link.c,v 1.51 2004/12/10 18:05:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,7 +233,7 @@ html_img(unsigned char *a)
 		if (format.form) format.form = NULL;
 		url = join_urls(html_context.base_href, usemap_attr);
 		mem_free(usemap_attr);
-		if (!url) return;
+		if (!url) return; /* FIXME: kill_html_stack_item(&html_top) ? --Zas */
 
 		format.link = straconcat("MAP@", url, NULL);
 		format.attr |= AT_BOLD;
@@ -264,6 +264,7 @@ html_img(unsigned char *a)
 		 * If not, just exit now. */
 		if (!global_doc_opts->images && !format.link) {
 			mem_free_if(src);
+			/* FIXME: if (usemap) kill_html_stack_item(&html_top) ? --Zas */
 			return;
 		}
 
@@ -325,17 +326,12 @@ html_img(unsigned char *a)
 		}
 	}
 
-	/* XXX: are these needed ? --Zas */
 	mem_free_set(&format.image, NULL);
 	mem_free_set(&format.title, NULL);
-
 	mem_free_if(src);
 	mem_free_if(label);
 	if (usemap) kill_html_stack_item(&html_top);
-	/*put_chrs(" ", 1, put_chars_f, ff);*/
 }
-
-
 
 void
 put_link_line(unsigned char *prefix, unsigned char *linkname,

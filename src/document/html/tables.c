@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.338 2004/07/01 14:26:30 jonas Exp $ */
+/* $Id: tables.c,v 1.339 2004/07/01 14:38:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1125,8 +1125,18 @@ draw_table_bad_html(struct table *table, int x)
 
 	for (i = 0; i < table->bad_html_size; i++) {
 		struct html_start_end *html = &table->bad_html[i];
+		unsigned char *start = html->start;
+		unsigned char *end = html->end;
 
-		draw_table_html(table, html, x, table->part->cy);
+		while (start < end && isspace(*start))
+			start++;
+
+		while (start < end && isspace(end[-1]))
+			end--;
+
+		if (start >= end) continue;
+
+		parse_html(start, end, table->part, NULL);
 	}
 }
 

@@ -1,3 +1,50 @@
+Fri Nov 29 01:08:53 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre19 
+
+Fri Nov 29 01:08:15 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Semireverted a menu cycling patch, proven to be way too
+	uncomfortable for longer menus. Soon enough: 
+	
+	revision 1.6 date: 2002/01/23 21:30:14;  author: pasky;  state: Exp;
+	lines: +2 -0 cyclic scrolling in menus, patch by Ami Fischman
+	<usenet@fixchman.org> 
+	
+	(by the way, this is of the ancient /bfu.c beast, not
+	/src/bfu/menu.c ;].. at least I visited my elinks-0.3/ directory
+	after half a year :^) 
+
+Fri Nov 29 00:56:03 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, TODO:
+
+	Additions mainly by José Luis González González
+	<jlg80@mi.madritel.es> (will refer to him just as to Jose in further
+	commits ;).  
+
+Fri Nov 29 00:32:53 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Heavy wave of comments in uncompress_data(), hopefully saving me
+	figuring stuff out for another time in future ;-). Fixed subtle bug,
+	causing cvsweb's revision history especially and the uncompression
+	generally rarely (cvsweb everytime) break under heavily laggy
+	connections etc. Don't complain about messy and ununderstandable
+	commit messages :).  
+
+Thu Nov 28 23:43:19 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	'Improved' lua checking in order to make it work in the debian
+	world.  
+
 Thu Nov 28 22:51:11 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/error.c:

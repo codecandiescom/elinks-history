@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.142 2003/10/18 21:14:26 pasky Exp $ */
+/* $Id: menu.c,v 1.143 2003/10/18 21:16:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,9 +359,9 @@ menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 }
 
 static struct menu_item file_menu11[] = {
-	INIT_MENU_ITEM(N_("Open in new ~tab"), "", send_open_in_new_window,
+	INIT_MENU_ITEM(N_("Open in new ~tab"), "", send_open_new_window,
 						open_in_new_tab, FREE_NOTHING, 0);
-	INIT_MENU_ITEM(N_("Open in new tab in ~background"), "", send_open_in_new_window,
+	INIT_MENU_ITEM(N_("Open in new tab in ~background"), "", send_open_new_window,
 						open_in_new_tab_in_background, FREE_NOTHING, 0);
 	INIT_MENU_ITEM(N_("~Go to URL"), "g", menu_goto_url, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("Go ~back"), "<-", menu_go_back, NULL, FREE_NOTHING, 0),

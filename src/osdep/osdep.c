@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.90 2003/10/18 21:10:51 pasky Exp $ */
+/* $Id: osdep.c,v 1.91 2003/10/24 12:00:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,7 +247,7 @@ winch(void *s)
 {
 	unsigned char c;
 
-	while (can_read(winch_pipe[0]) && read(winch_pipe[0], &c, 1) == 1);
+	while (can_read(winch_pipe[0]) && safe_read(winch_pipe[0], &c, 1) == 1);
 	((void (*)())s)();
 }
 
@@ -1116,16 +1116,16 @@ input_thread(void *p)
 	while (1) {
 #if 0
 		c[0] = _read_kbd(0, 1, 1);
-		if (c[0]) if (write(h, c, 1) <= 0) break;
+		if (c[0]) if (safe_write(h, c, 1) <= 0) break;
 		else {
 			int w;
 			printf("1");fflush(stdout);
 			c[1] = _read_kbd(0, 1, 1);
 			printf("2");fflush(stdout);
-			w = write(h, c, 2);
+			w = safe_write(h, c, 2);
 			printf("3");fflush(stdout);
 			if (w <= 0) break;
-			if (w == 1) if (write(h, c+1, 1) <= 0) break;
+			if (w == 1) if (safe_write(h, c+1, 1) <= 0) break;
 			printf("4");fflush(stdout);
 		}
 #endif
@@ -1232,8 +1232,8 @@ ret:
 void
 mouse_handle(struct os2_mouse_spec *oms)
 {
-	int r = read(oms->p[0], oms->buffer + oms->bufptr,
-		     sizeof(struct term_event) - oms->bufptr);
+	int r = safe_read(oms->p[0], oms->buffer + oms->bufptr,
+		          sizeof(struct term_event) - oms->bufptr);
 
 	if (r <= 0) {
 		unhandle_mouse(oms);

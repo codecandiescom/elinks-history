@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.134 2004/06/11 21:56:03 jonas Exp $ */
+/* $Id: form.c,v 1.135 2004/06/11 21:58:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -544,14 +544,14 @@ encode_controls(struct list_head *l, struct string *data,
 
 
 
-#define BL	32
+#define BOUNDARY_LENGTH	32
 #define realloc_bound_ptrs(bptrs, bptrs_size) \
 	mem_align_alloc(bptrs, bptrs_size, bptrs_size + 1, int, 0xFF)
 
 struct boundary_info {
 	int count;
 	int *offsets;
-	unsigned char string[BL];
+	unsigned char string[BOUNDARY_LENGTH];
 };
 
 /* Add boundary to string and save the offset */
@@ -563,7 +563,7 @@ add_boundary(struct string *data, struct boundary_info *boundary)
 	if (realloc_bound_ptrs(&boundary->offsets, boundary->count))
 		boundary->offsets[boundary->count++] = data->length;
 
-	add_bytes_to_string(data, boundary->string, BL);
+	add_bytes_to_string(data, boundary->string, BOUNDARY_LENGTH);
 }
 
 static inline unsigned char *
@@ -572,7 +572,7 @@ increment_boundary_counter(struct boundary_info *boundary)
 	register int j;
 
 	/* This is just a decimal string incrementation */
-	for (j = BL - 1; j >= 0; j--) {
+	for (j = BOUNDARY_LENGTH - 1; j >= 0; j--) {
 		if (boundary->string[j]++ < '9')
 			return boundary->string;
 
@@ -598,17 +598,17 @@ check_boundary(struct string *data, struct boundary_info *boundary)
 		/* Start after the boundary string and also jump past the
 		 * "\r\nContent-Disposition: form-data; name=\"" string added
 		 * before any form data. */
-		int start_offset = boundary->offsets[i] + BL + 40;
+		int start_offset = boundary->offsets[i] + BOUNDARY_LENGTH + 40;
 
-		/* End so that there is atleast BL chars to compare. Subtract 2
-		 * char because there is no need to also compare the '--'
-		 * prefix that is part of the boundary. */
-		int end_offset = boundary->offsets[i + 1] - BL - 2;
+		/* End so that there is atleast BOUNDARY_LENGTH chars to
+		 * compare. Subtract 2 char because there is no need to also
+		 * compare the '--' prefix that is part of the boundary. */
+		int end_offset = boundary->offsets[i + 1] - BOUNDARY_LENGTH - 2;
 		unsigned char *pos = data->source + start_offset;
 		unsigned char *end = data->source + end_offset;
 
 		for (; pos <= end; pos++) {
-			if (memcmp(pos, bound, BL))
+			if (memcmp(pos, bound, BOUNDARY_LENGTH))
 				continue;
 
 			/* If incrementing causes overflow bail out. There is
@@ -626,7 +626,7 @@ check_boundary(struct string *data, struct boundary_info *boundary)
 
 	/* Now update all the boundaries with the unique boundary string */
 	for (i = 0; i < boundary->count; i++)
-		memcpy(data->source + boundary->offsets[i], bound, BL);
+		memcpy(data->source + boundary->offsets[i], bound, BOUNDARY_LENGTH);
 }
 
 /* FIXME: shouldn't we encode data at send time (in http.c) ? --Zas */
@@ -641,7 +641,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 	assert(ses && l && data && bound);
 	if_assert_failed return;
 
-	memset(bound, '0', BL);
+	memset(bound, '0', BOUNDARY_LENGTH);
 
 	foreach (sv, *l) {
 		add_boundary(data, boundary);
@@ -954,7 +954,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 		} else {
 			add_to_string(&go, "multipart/form-data; boundary=");
-			add_bytes_to_string(&go, boundary.string, BL);
+			add_bytes_to_string(&go, boundary.string, BOUNDARY_LENGTH);
 			add_char_to_string(&go, '\n');
 		}
 
@@ -976,7 +976,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	return uri;
 }
 
-#undef BL
+#undef BOUNDARY_LENGTH
 
 
 void

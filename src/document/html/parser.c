@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.61 2002/12/15 11:23:30 pasky Exp $ */
+/* $Id: parser.c,v 1.62 2002/12/21 02:56:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,15 +299,16 @@ static int
 get_color(unsigned char *a, unsigned char *c, struct rgb *rgb)
 {
 	unsigned char *at;
-	int r = -1;
+	int r;
 
-	if (d_opt->col >= 1 && d_opt->use_document_colours) {
-		at = get_attr_val(a, c);
-		if (at) {
-			r = decode_color(at, rgb);
-			mem_free(at);
-		}
-	}
+	if (!d_opt->col || d_opt->use_document_colours < 1)
+		return -1;
+
+	at = get_attr_val(a, c);
+	if (!at) return -1;
+
+	r = decode_color(at, rgb);
+	mem_free(at);
 
 	return r;
 }
@@ -315,7 +316,8 @@ get_color(unsigned char *a, unsigned char *c, struct rgb *rgb)
 int
 get_bgcolor(unsigned char *a, struct rgb *rgb)
 {
-	if (d_opt->col < 2) return -1;
+	if (!d_opt->col || d_opt->use_document_colours < 2)
+		return -1;
 	return get_color(a, "bgcolor", rgb);
 }
 
@@ -920,14 +922,18 @@ html_img(unsigned char *a)
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
 }
 
+int body_bgcolor = -1;
+
 static inline void
 html_body(unsigned char *a)
 {
 	get_color(a, "text", &format.fg);
 	get_color(a, "link", &format.clink);
 	get_color(a, "vlink", &format.vlink);
-	get_bgcolor(a, &format.bg);
 	get_bgcolor(a, &par_format.bgcolor);
+	if (get_bgcolor(a, &format.bg) >= 0) {
+		body_bgcolor = find_nearest_color(&format.bg, 8);
+	}
 }
 
 static inline void

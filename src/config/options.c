@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.164 2002/12/20 23:31:48 pasky Exp $ */
+/* $Id: options.c,v 1.165 2002/12/21 02:56:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1050,7 +1050,6 @@ register_options()
 		"text", 0, "#bfbfbf",
 		"Default text color.");
 
-	/* FIXME - this produces ugly results now */
 	add_opt_color("document.colors", "Background color",
 		"background", 0, "#000000",
 		"Default background color.");
@@ -1072,9 +1071,12 @@ register_options()
 		"allow_dark_on_black", 0, 0,
 		"Allow dark colors on black background.");
 
-	add_opt_bool("document.colors", "Use document-specified colors",
-		"use_document_colors", 0, 1,
-		"Use colors specified in document.");
+	add_opt_int("document.colors", "Use document-specified colors",
+		"use_document_colors", 0, 0, 2, 1,
+		"Use colors specified in document:\n"
+		"0 is use always the default settings\n"
+		"1 is use document colors if available, except background\n"
+		"2 is use document colors, including background");
 
 
 

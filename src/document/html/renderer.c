@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.52 2002/12/14 18:11:10 zas Exp $ */
+/* $Id: renderer.c,v 1.53 2002/12/21 02:56:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,6 +226,7 @@ set_hchar(struct part *part, int x, int y, unsigned c)
 {
 	if (xpand_lines(part, y)) return;
 	if (xpand_line(part, y, x)) return;
+	c |= part->bgcolor << 11; /* XXX: for easy table borders */
 	POS(x, y) = c;
 }
 
@@ -234,6 +235,7 @@ set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
 	if (xpand_lines(part, y)) return;
 	if (xpand_line(part, y, x + xl - 1)) return;
+	c |= part->bgcolor << 11; /* XXX: for easy table borders */
 	for (; xl; xl--, x++) POS(x, y) = c;
 }
 
@@ -1525,6 +1527,10 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 		form.target = NULL;
 	}
 
+	screen->bg = (body_bgcolor >= 0 ? body_bgcolor
+					: find_nearest_color(&par_format.bgcolor, 8))
+			<< 11;
+
 	kill_html_stack_item(html_stack.next);
 
 	if (html_stack.next != &html_stack) {
@@ -1532,7 +1538,6 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 		init_list(html_stack);
 	}
 
-	screen->bg = 007 << 8; /* !!! FIXME */
 	sort_links(screen);
 
 	if (screen->frame_desc) screen->frame = 1;

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.85 2003/11/08 12:13:05 zas Exp $ */
+/* $Id: cache.c,v 1.86 2003/11/08 12:34:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ cache_info(int type)
 			foreach (ce, cache) i++;
 			return i;
 		case INFO_LOCKED:
-			foreach (ce, cache) i += !!ce->refcount;
+			foreach (ce, cache) i += is_cache_entry_locked(ce);
 			return i;
 		case INFO_LOADING:
 			foreach (ce, cache) i += is_entry_used(ce);
@@ -449,7 +449,7 @@ delete_entry_content(struct cache_entry *ce)
 void
 delete_cache_entry(struct cache_entry *ce)
 {
-	assertm(!ce->refcount, "deleting locked cache entry");
+	assertm(!is_cache_entry_locked(ce), "deleting locked cache entry");
 	assertm(!is_entry_used(ce), "deleting loading cache entry");
 
 	delete_entry_content(ce);
@@ -516,7 +516,7 @@ garbage_collection(int whole)
 	foreach (ce, cache) {
 		old_cache_size += ce->data_size;
 
-		if (!ce->refcount && !is_entry_used(ce))
+		if (!is_cache_entry_locked(ce) && !is_entry_used(ce))
 			continue;
 
 		new_cache_size -= ce->data_size;
@@ -545,7 +545,7 @@ garbage_collection(int whole)
 			goto shrinked_enough;
 
 		/* Skip used cache entries. */
-		if (ce->refcount || is_entry_used(ce)) {
+		if (is_cache_entry_locked(ce) || is_entry_used(ce)) {
 			obstacle_entry = 1;
 			ce->gc_target = 0;
 			continue;

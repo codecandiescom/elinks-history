@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.27 2003/11/08 02:06:33 pasky Exp $ */
+/* $Id: cache.h,v 1.28 2003/11/08 12:34:15 zas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -30,7 +30,7 @@ struct cache_entry {
 
 	int length;
 	int data_size;
-	int refcount;
+	int locks;
 
 #ifdef HAVE_SCRIPTING
 	unsigned int done_pre_format_html_hook:1;
@@ -45,6 +45,12 @@ struct cache_entry {
 
 	enum cache_mode cache_mode;
 };
+
+#define get_cache_entry_locks(ce) ((ce)->locks)
+#define is_cache_entry_locked(ce) (!!(ce)->locks)
+#define cache_entry_lock_inc(ce) do { (ce)->locks++; } while (0)
+#define cache_entry_lock_dec(ce) do { (ce)->locks--; } while (0)
+#define cache_entry_unlock(ce) do { (ce)->locks = 0; } while (0)
 
 struct fragment {
 	LIST_HEAD(struct fragment);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.207 2003/11/06 09:46:00 zas Exp $ */
+/* $Id: session.c,v 1.208 2003/11/08 12:34:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,7 +437,7 @@ free_files(struct session *ses)
 
 	abort_files_load(ses, 0);
 	foreach (ftl, ses->more_files) {
-		if (ftl->ce) ftl->ce->refcount--;
+		if (ftl->ce) cache_entry_lock_dec(ftl->ce);
 		if (ftl->url) mem_free(ftl->url);
 	}
 	free_list(ses->more_files);
@@ -1061,9 +1061,9 @@ void
 file_end_load(struct download *stat, struct file_to_load *ftl)
 {
 	if (ftl->stat.ce) {
-		if (ftl->ce) ftl->ce->refcount--;
+		if (ftl->ce) cache_entry_lock_dec(ftl->ce);
 		ftl->ce = ftl->stat.ce;
-		ftl->ce->refcount++;
+		cache_entry_lock_inc(ftl->ce);
 	}
 
 	/* FIXME: We need to do content-type check here! However, we won't
@@ -1413,7 +1413,7 @@ destroy_session(struct session *ses)
 	if (ses->goto_position) mem_free(ses->goto_position);
 	if (ses->imgmap_href_base) mem_free(ses->imgmap_href_base);
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
-	if (ses->tq_ce) ses->tq_ce->refcount--;
+	if (ses->tq_ce) cache_entry_lock_dec(ses->tq_ce);
 	if (ses->tq_url) {
 		change_connection(&ses->tq, NULL, PRI_CANCEL, 0);
 		mem_free(ses->tq_url);

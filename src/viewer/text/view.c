@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.523 2004/06/25 21:03:29 jonas Exp $ */
+/* $Id: view.c,v 1.524 2004/06/26 02:11:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -629,7 +629,9 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
 			if (try_jump_to_link_number(ses, doc_view))
 				status = FRAME_EVENT_OK;
-			/* fall through */
+			else
+				status = FRAME_EVENT_IGNORED;
+			break;
 		default:
 			if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
 				/* FIXME: This probably doesn't work

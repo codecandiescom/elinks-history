@@ -1,3 +1,4 @@
+# translation of hu.po to 
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
 # Varga Balazs <vinnui@ent.hu>, 2003.
@@ -7,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2003-10-28 03:44+0100\n"
-"PO-Revision-Date: 2003-10-28 08:54+0100\n"
+"PO-Revision-Date: 2003-10-30 11:48+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -329,11 +330,11 @@ msgstr ""
 
 #: src/config/conf.c:634
 msgid "Automatically saved options\n"
-msgstr "Autómatikusan mentett beállítások\n"
+msgstr "Automatikusan mentett beállítások\n"
 
 #: src/config/conf.c:648
 msgid "Automatically saved keybindings\n"
-msgstr "Autómatikusan mentett billentyûparancsok\n"
+msgstr "Automatikusan mentett billentyûparancsok\n"
 
 #: src/config/conf.c:690
 msgid "File saving disabled by option"
@@ -552,11 +553,11 @@ msgstr "A kijelölt link hozzáadáasa a könyvjelzõkhöz"
 
 #: src/config/kbdbind.c:376
 msgid "Attempt to auto-complete the input"
-msgstr ""
+msgstr "Automatikus szövegkiegészítés"
 
 #: src/config/kbdbind.c:377
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr ""
+msgstr "Automatikus szövegkiegészítés ha egyértelmû"
 
 #: src/config/kbdbind.c:378
 msgid "Return to the previous document in history"
@@ -1111,7 +1112,7 @@ msgstr ""
 
 #: src/config/options.inc:113 src/sched/error.c:50
 msgid "Receive timeout"
-msgstr "Idötúllépés vételkor"
+msgstr "Idötúllépés adatfogadás közben"
 
 #: src/config/options.inc:115
 msgid "Receive timeout (in seconds)."
@@ -1154,7 +1155,7 @@ msgstr ""
 
 #: src/config/options.inc:139
 msgid "Automatic links following"
-msgstr "Autómatikus link követés"
+msgstr "Automatikus link követés"
 
 #: src/config/options.inc:141
 msgid ""
@@ -1162,7 +1163,7 @@ msgid ""
 "accesskey is pressed - this is the standard behaviour, but it's\n"
 "considered dangerous."
 msgstr ""
-"Autómatikusan követi a linket, vagy elküld egy adatlapot.\n"
+"Automatikusan követi a linket, vagy elküld egy adatlapot.\n"
 "Ez az alapértelmezett üzemmód, de veszélyes lehet."
 
 #: src/config/options.inc:145
@@ -1187,13 +1188,13 @@ msgstr "Az ûrlapok kezelésével kapcsolatos beállítások."
 
 #: src/config/options.inc:157
 msgid "Submit form automatically"
-msgstr "Az ûrlap autómatikus elküldése"
+msgstr "Az ûrlap automatikus elküldése"
 
 #: src/config/options.inc:159
 msgid ""
 "Automagically submit a form when enter is pressed with a text\n"
 "field selected."
-msgstr "Az ûrlap autómatikus elküldése ha szövegmezõn entert nyomunk."
+msgstr "Az ûrlap automatikus elküldése ha szövegmezõn entert nyomunk."
 
 #: src/config/options.inc:162
 msgid "Confirm submission"
@@ -1613,7 +1614,7 @@ msgid ""
 "refresh' tags). Web-page authors use these to instruct the browser\n"
 "to reload a document at a given interval or to load another page."
 msgstr ""
-"Autómatikusan kövesse a refresh (újratöltés) direktívákat ('<meta>\n"
+"Automatikusan kövesse a refresh (újratöltés) direktívákat ('<meta>\n"
 "refresh tag-ek). A weblapok készítõi ezeket használják arra hogy a\n"
 "böngészõt arra utasítsák, frissítse a lapot megadott idõközönként,\n"
 "vagy töltsön le egy másik lapot."
@@ -1659,7 +1660,7 @@ msgstr "Gyorsítótár beállítások."
 
 #: src/config/options.inc:344
 msgid "Cache information about redirects"
-msgstr ""
+msgstr "Az átirányítási információk gyorsítótárazása"
 
 #: src/config/options.inc:346
 msgid ""
@@ -1995,11 +1996,11 @@ msgstr "Alsó indexek megjelenítése (mint pl.: [szöveg])."
 
 #: src/config/options.inc:540
 msgid "Display superscripts"
-msgstr ""
+msgstr "Felsõindexek megjelenítése"
 
 #: src/config/options.inc:542
 msgid "Display superscripts (as ^thing)."
-msgstr ""
+msgstr "Felsõindexek megjelenítése (^ jelöléssel)."
 
 #: src/config/options.inc:544
 msgid "Rendering of html link element"
@@ -2166,7 +2167,7 @@ msgstr ""
 
 #: src/config/options.inc:625
 msgid "Policy"
-msgstr ""
+msgstr "Elõvigyázatosság"
 
 #: src/config/options.inc:628
 msgid ""
@@ -2528,7 +2529,7 @@ msgstr ""
 
 #: src/config/options.inc:822 src/dialogs/options.c:135
 msgid "Restrict frames in cp850/852"
-msgstr "Keretek korlátozása cp850/852 alatt."
+msgstr "Keretek korlátozása cp850/852 alatt"
 
 #: src/config/options.inc:824
 msgid ""
@@ -3246,7 +3247,7 @@ msgstr ""
 "állományok esetén mûködik, nem vonatkozik a letöltött állományokra.\n"
 "Amennyiben különleges engedélyekkel rendelkezõ konfigurációs\n"
 "állományokat szeretnél használni, tiltsd le. A biztonságos mentés\n"
-"autómatikusan kikapcsol, ha a cél állomány szimbólikus link."
+"automatikusan kikapcsol, ha a cél állomány szimbólikus link."
 
 #: src/config/options.inc:1811
 msgid "Restrict to anonymous mode"
@@ -3265,11 +3266,11 @@ msgstr ""
 
 #: src/config/options.inc:1818
 msgid "Autosubmit first form"
-msgstr "Az elsõ ûrlap autómatikus küldése"
+msgstr "Az elsõ ûrlap automatikus küldése"
 
 #: src/config/options.inc:1820
 msgid "Go and submit the first form you'll stumble upon."
-msgstr "Az elsõnek megtalált ûrlap autómatikus küldése."
+msgstr "Az elsõnek megtalált ûrlap automatikus küldése."
 
 #: src/config/options.inc:1822
 msgid "Clone session with given ID"
@@ -3690,7 +3691,7 @@ msgstr "Link címe"
 #: src/dialogs/document.c:227 src/dialogs/document.c:274
 #: src/dialogs/document.c:286
 msgid "Header info"
-msgstr "Fejléc infó"
+msgstr "Fejléc információ"
 
 #: src/dialogs/document.c:287
 msgid "No header info."
@@ -3702,7 +3703,7 @@ msgstr "Törlés"
 
 #: src/dialogs/info.c:45
 msgid "About"
-msgstr "Programról"
+msgstr "Névjegy"
 
 #: src/dialogs/info.c:56
 msgid "Keys"
@@ -3869,7 +3870,7 @@ msgstr "Összes látogatott lap"
 
 #: src/dialogs/menu.c:334
 msgid "Bookmark~s"
-msgstr "~Könyvjelzök"
+msgstr "~Könyvjelzõk"
 
 #: src/dialogs/menu.c:340
 msgid "Sa~ve as"
@@ -3981,7 +3982,7 @@ msgstr "~Elinks honlap"
 
 #: src/dialogs/menu.c:448
 msgid "~Documentation"
-msgstr "Dokumentáció"
+msgstr "~Dokumentáció"
 
 #: src/dialogs/menu.c:449
 msgid "~Keys"
@@ -4069,7 +4070,7 @@ msgstr "~Súgó"
 
 #: src/dialogs/menu.c:538
 msgid "Go to URL"
-msgstr "URL-re ugrás"
+msgstr "URL megnyitása"
 
 #: src/dialogs/menu.c:538 src/dialogs/menu.c:549
 msgid "Enter URL"
@@ -4302,7 +4303,7 @@ msgstr ""
 
 #: src/globhist/globhist.c:87
 msgid "Auto-save interval"
-msgstr "Autómatikus mentés"
+msgstr "Automatikus mentés"
 
 #: src/globhist/globhist.c:89
 msgid ""
@@ -5116,7 +5117,7 @@ msgstr "Link követése és újratöltés"
 
 #: src/viewer/text/link.c:905
 msgid "Open in new ~window"
-msgstr "Megnyitás új ablakban."
+msgstr "~Megnyitás új ablakban"
 
 #: src/viewer/text/link.c:910
 msgid "Open in new ~tab"

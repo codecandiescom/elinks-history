@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.37 2004/08/20 21:28:45 jonas Exp $ */
+/* $Id: refresh.c,v 1.38 2004/08/20 21:41:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,6 +95,14 @@ start_document_refresh(struct document_refresh *refresh, struct session *ses)
 	int minimum = get_opt_int("document.browse.minimum_refresh_time");
 	int time = int_max(1000 * refresh->seconds, minimum);
 	struct type_query *type_query;
+
+	/* FIXME: This is just a work-around for stopping more than one timer
+	 * from being started at anytime. The refresh timer should maybe belong
+	 * to the session? The multiple refresh timers is triggered by
+	 * http://ttforums.owenrudge.net/login.php when pressing 'Log in' and
+	 * waiting for it to refresh. --jonas */
+	if (refresh->timer != -1)
+		return;
 
 	/* Like bug 289 another sourceforge download thingy this time with
 	 * number 434. It should take care when refreshing to the same URI or

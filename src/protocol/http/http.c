@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.185 2003/10/04 11:37:44 pasky Exp $ */
+/* $Id: http.c,v 1.186 2003/10/08 21:10:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -598,14 +598,9 @@ http_send_header(struct connection *conn)
 		}
 	}
 
-	if (conn->cache_mode >= NC_PR_NO_CACHE) {
+	if (conn->cache_mode >= NC_RELOAD) {
 		add_to_string(&header, "Pragma: no-cache\r\n");
 		add_to_string(&header, "Cache-Control: no-cache\r\n");
-	}
-
-	if (conn->cache_mode >= NC_RELOAD) {
-		add_to_string(&header, "Pragma: reload\r\n");
-		add_to_string(&header, "Cache-Control: reload\r\n");
 	}
 
 	if (conn->from || (conn->prg.start > 0)) {

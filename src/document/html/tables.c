@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.277 2004/06/29 03:29:35 jonas Exp $ */
+/* $Id: tables.c,v 1.278 2004/06/29 03:33:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,17 +53,23 @@ static int
 get_table_margin(struct table *table)
 {
 	int ww = par_format.width - table->real_width;
-	int align = table->align;
 	int x;
 
-	if (align == ALIGN_NONE || align == ALIGN_JUSTIFY) align = ALIGN_LEFT;
-
-	if (align == ALIGN_CENTER)
+	switch (table->align) {
+	case ALIGN_CENTER:
 		x = (ww + par_format.leftmargin - par_format.rightmargin) >> 1;
-	else if (align == ALIGN_RIGHT)
+		break;
+
+	case ALIGN_RIGHT:
 		x = ww - par_format.rightmargin;
-	else
+		break;
+
+	case ALIGN_LEFT:
+	case ALIGN_NONE:
+	case ALIGN_JUSTIFY:
+	default:
 		x = par_format.leftmargin;
+	}
 
 	if (x > ww) x = ww;
 	if (x < 0) x = 0;

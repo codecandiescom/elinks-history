@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.36 2002/12/07 21:56:58 pasky Exp $ */
+/* $Id: file.c,v 1.37 2002/12/21 18:03:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,7 @@
 
 
 #ifdef FS_UNIX_RIGHTS
-void
+static inline void
 setrwx(int m, unsigned char *p)
 {
 	if(m & S_IRUSR) p[0] = 'r';
@@ -58,7 +58,7 @@ setrwx(int m, unsigned char *p)
 }
 
 
-void
+static inline void
 setst(int m, unsigned char *p)
 {
 #ifdef S_ISUID
@@ -83,7 +83,7 @@ setst(int m, unsigned char *p)
 #endif
 
 
-void
+static inline void
 stat_mode(unsigned char **p, int *l, struct stat *stp)
 {
 	unsigned char c = '?';
@@ -131,7 +131,7 @@ stat_mode(unsigned char **p, int *l, struct stat *stp)
 }
 
 
-void
+static inline void
 stat_links(unsigned char **p, int *l, struct stat *stp)
 {
 #ifdef FS_UNIX_HARDLINKS
@@ -146,19 +146,14 @@ stat_links(unsigned char **p, int *l, struct stat *stp)
 }
 
 
-int last_uid = -1;
-char last_user[64];
-
-int last_gid = -1;
-char last_group[64];
+static int last_uid = -1;
+static int last_gid = -1;
 
 
-void
+static void
 stat_user(unsigned char **p, int *l, struct stat *stp, int g)
 {
 #ifdef FS_UNIX_USERS
-	struct passwd *pwd;
-	struct group *grp;
 	int id;
 	unsigned char *pp;
 	int i;
@@ -168,25 +163,39 @@ stat_user(unsigned char **p, int *l, struct stat *stp, int g)
 		return;
 	}
 
-	id = !g ? stp->st_uid : stp->st_gid;
-	pp = !g ? last_user : last_group;
-	if (!g && id == last_uid && last_uid != -1) goto end;
-	if (g && id == last_gid && last_gid != -1) goto end;
-
 	if (!g) {
+		static unsigned char last_user[64];
+		struct passwd *pwd;
+
+		id = stp->st_uid;
+		pp = last_user;
+		if (id == last_uid && last_uid != -1)
+			goto end;
+
 		pwd = getpwuid(id);
 		if (!pwd || !pwd->pw_name)
 			sprintf(pp, "%d", id);
 		else
 			sprintf(pp, "%.8s", pwd->pw_name);
 		last_uid = id;
+
 	} else {
+		static unsigned char last_group[64];
+		struct group *grp;
+
+
+		id = stp->st_gid;
+		pp = last_group;
+		if (id == last_gid && last_gid != -1)
+			goto end;
+
 		grp = getgrgid(id);
 		if (!grp || !grp->gr_name)
 			sprintf(pp, "%d", id);
 		else
 			sprintf(pp, "%.8s", grp->gr_name);
 		last_gid = id;
+
 	}
 
 end:
@@ -197,7 +206,7 @@ end:
 }
 
 
-void
+static inline void
 stat_size(unsigned char **p, int *l, struct stat *stp)
 {
 	if (!stp) {
@@ -211,7 +220,7 @@ stat_size(unsigned char **p, int *l, struct stat *stp)
 }
 
 
-void
+static inline void
 stat_date(unsigned char **p, int *l, struct stat *stp)
 {
 	time_t current_time = time(NULL);
@@ -277,7 +286,7 @@ struct dirs {
 };
 
 
-int
+static inline int
 comp_de(struct dirs *d1, struct dirs *d2)
 {
 	if (d1->f[0] == '.' && d1->f[1] == '.' && !d1->f[2]) return -1;

@@ -13,11 +13,13 @@ elinkskeys \- ELinks WWW browser key bindings
 .SH DESCRIPTION
 Key bindings for 
 .I elinks
-should be placed in a file called \fB~/.elinks/elinks.conf\fP.
+should be placed in a file called \fB~/.elinks/elinks.conf\fP. Note that any
+information regarding their format/structure may not be up-to-date. If you will
+discover that, please feed us with a patch.
 
 Key binding statements are of the form:
 .IP
-bind \fIkeymap keystroke action\fP
+bind \fI"keymap" "keystroke" = "action"\fP
 .P
 where:
 
@@ -45,13 +47,8 @@ All words/strings may all be quoted "like so".  Backslashes are escape
 characters, even if not between quotes.  Lines beginning with a hash
 character (#) are comments.
 
-Keys can be unbound using the
-.B unbind
-statement.
-.IP
-unbind \fIkeymap keystroke\fP
-.P
-It may be of use if you accidentally type a key often.
+Keys can be unbound just by binding them to "none" action.  It may be of use if
+you accidentally type a key often.
 
 
 .SH KEYS

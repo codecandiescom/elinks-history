@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.521 2004/06/15 01:48:09 jonas Exp $ */
+/* $Id: session.c,v 1.522 2004/06/15 02:18:31 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -704,8 +704,6 @@ setup_first_session(struct session *ses, struct uri *uri)
 		open_bookmark_folder(ses, folder);
 		return 1;
 #endif
-	} else {
-		goto_url_home(ses);
 	}
 
 	/* If there's a URI to load we have to call */

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.78 2005/03/23 11:41:00 zas Exp $ */
+/* $Id: user.c,v 1.79 2005/03/26 11:56:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,6 +136,7 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj,
 		if (*cmd != '%') break;
 
 		cmd++;
+		/* TODO: Decode URI fragments before adding them. --jonas */
 		switch (*cmd) {
 			case 'u':
 			{
@@ -276,6 +277,7 @@ user_protocol_handler(struct session *ses, struct uri *uri)
 		if (query) {
 			subj = get_subject_from_query(query);
 			mem_free(query);
+			if (subj) decode_uri(subj);
 		}
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: memlist.h,v 1.4 2003/06/07 09:56:59 zas Exp $ */
+/* $Id: memlist.h,v 1.5 2003/06/07 10:03:24 pasky Exp $ */
 
 #ifndef EL__UTIL_MEMLIST_H
 #define EL__UTIL_MEMLIST_H
@@ -24,10 +24,10 @@ void add_to_ml(struct memory_list **ml, ...);
 #endif
 
 #ifdef DEBUG_MEMLIST
-void debug_add1_to_ml(unsigned char *file, int line, struct memory_list **ml, void *p);
-#define add1_to_ml(ml, p) debug_add_one_to_ml(__FILE__, __LINE__, ml, p)
+void debug_add_one_to_ml(unsigned char *file, int line, struct memory_list **ml, void *p);
+#define add_one_to_ml(ml, p) debug_add_one_to_ml(__FILE__, __LINE__, ml, p)
 #else
-void add1_to_ml(struct memory_list **ml, void *p);
+void add_one_to_ml(struct memory_list **ml, void *p);
 #endif
 
 void freeml(struct memory_list *);

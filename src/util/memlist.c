@@ -1,5 +1,5 @@
 /* These routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.11 2003/06/07 09:56:59 zas Exp $ */
+/* $Id: memlist.c,v 1.12 2003/06/07 10:03:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,16 +125,16 @@ add_to_ml(struct memory_list **ml, ...)
 
 #ifdef DEBUG_MEMLIST
 void
-debug_add1_to_ml(unsigned char *file, int line, struct memory_list **ml, void *p)
+debug_add_one_to_ml(unsigned char *file, int line, struct memory_list **ml, void *p)
 #else
 void
-add1_to_ml(struct memory_list **ml, void *p)
+add_one_to_ml(struct memory_list **ml, void *p)
 #endif
 {
 	/* None, so just return. */
 	if (!p) {
 #ifdef DEBUG_MEMLIST
-		error("%s:%d add1_to_ml(%p, NULL)", file, line, ml);
+		error("%s:%d add_one_to_ml(%p, NULL)", file, line, ml);
 #endif
 		return;
 	}

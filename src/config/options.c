@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.183 2003/01/16 14:35:13 zas Exp $ */
+/* $Id: options.c,v 1.184 2003/01/17 16:47:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1064,6 +1064,21 @@ register_options()
 		"0     means always display full target filename\n"
 		"1-500 means display target filename with this maximal length;\n"
 		"      if it is longer, the middle is substituted by an asterisk"));
+
+	add_opt_int("document.browse.images", N_("Image links tagging"),
+		"image_link_tagging", 0, 0, 2, 1,
+		N_("When to enclose image links:\n"
+		"0     means never\n"
+		"1     means never if alt or title are provided (old behavior)\n"
+		"2     means always"));
+
+	add_opt_string("document.browse.images", N_("Image link prefix"),
+		"image_link_prefix", 0, "[",
+		N_("Prefix string to use to mark image links."));
+
+	add_opt_string("document.browse.images", N_("Image link suffix"),
+		"image_link_suffix", 0, "]",
+		N_("Suffix string to use to mark image links."));
 
 	add_opt_bool("document.browse.images", N_("Display image links"),
 		"show_as_links", 0, 0,

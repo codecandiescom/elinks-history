@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.67 2003/01/05 16:48:15 pasky Exp $ */
+/* $Id: parser.c,v 1.68 2003/01/17 16:47:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -795,6 +795,7 @@ static void
 html_img(unsigned char *a)
 {
 	int ismap, usemap = 0;
+	int add_brackets = 0;
 	unsigned char *al = get_attr_val(a, "usemap");
 
 	if (al) {
@@ -819,14 +820,17 @@ html_img(unsigned char *a)
 
 	al = get_attr_val(a, "alt");
 	if (!al) al = get_attr_val(a, "title");
+
 	if (!al || !*al) {
 		if (al) mem_free(al);
 		if (!d_opt->images && !format.link) return;
 
+		add_brackets = 1;
+
 		if (usemap) {
-			al = stracpy("[USEMAP]");
+			al = stracpy("USEMAP");
 		} else if (ismap) {
-			al = stracpy("[ISMAP]");
+			al = stracpy("ISMAP");
 		} else {
 			unsigned char *src = get_url_val(a, "src");
 			int max_real_len;
@@ -861,22 +865,22 @@ html_img(unsigned char *a)
 				if (max_len && len > max_real_len) {
 					int max_part_len = max_real_len / 2;
 
-					al = mem_alloc(max_part_len * 2 + 4);
+					al = mem_alloc(max_part_len * 2 + 2);
 					if (!al) return;
 
-					sprintf(al, "[%.*s*%.*s]",
+					sprintf(al, "%.*s*%.*s",
 						max_part_len, start,
 						max_part_len, start + len
 							      - max_part_len);
 
 				} else {
-					al = mem_alloc(len + 3);
+					al = mem_alloc(len + 1);
 					if (!al) return;
 
-					sprintf(al, "[%.*s]", len, start);
+					sprintf(al, "%.*s", len, start);
 				}
 			} else {
-				al = stracpy("[IMG]");
+				al = stracpy("IMG");
 			}
 
 			if (src) mem_free(src);
@@ -887,7 +891,19 @@ html_img(unsigned char *a)
 	if (format.title) mem_free(format.title), format.title = NULL;
 
 	if (al) {
+		int img_link_tag = get_opt_int("document.browse.images.image_link_tagging");
 		unsigned char *s;
+
+		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
+			unsigned char *img_link_prefix = get_opt_str("document.browse.images.image_link_prefix");
+			unsigned char *img_link_suffix = get_opt_str("document.browse.images.image_link_suffix");
+			unsigned char *tmp = straconcat(img_link_prefix, al, img_link_suffix, NULL);
+
+			if (tmp) {
+				mem_free(al);
+				al = tmp;
+			}
+		}
 
 		/* This is not 100% appropriate for <img>, but well, accepting
 		 * accesskey and tabindex near <img> is just our little

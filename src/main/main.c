@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.87 2003/05/07 15:11:44 pasky Exp $ */
+/* $Id: main.c,v 1.88 2003/05/07 16:43:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,7 +180,7 @@ handle_basic_signals(struct terminal *term)
 	install_signal_handler(SIGCONT, (void (*)(void *))sig_cont, term, 0);
 #endif
 #ifdef BACKTRACE
-	install_signal_handler(SIGSEGV, (void (*)(void *))sig_segv, term, 0);
+	install_signal_handler(SIGSEGV, (void (*)(void *))sig_segv, term, 1);
 #endif
 }
 

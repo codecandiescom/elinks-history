@@ -1,3 +1,36 @@
+Tue Mar  1 22:04:27 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Fix hotkey clashes.  
+
+Tue Mar  1 16:59:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, inpfield.c, listbox.c, text.c,
+	widget.h:
+
+	Tidy up.  
+
+Tue Mar  1 16:30:05 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.c, bfu/checkbox.h, dialogs/options.c,
+	viewer/text/search.c:
+
+	Make obvious that add_dlg_radio() and add_dlg_checkbox() last
+	parameter is a pointer to an integer.  
+
+Tue Mar  1 16:29:31 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/widget.h:
+
+	Remove a superfluous incomplete declaration of struct widget_data.  
+
+Tue Mar  1 11:08:40 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: osdep/osdep.c, terminal/kbd.c, viewer/text/search.c:
+
+	In C, sizeof(char) == sizeof(unsigned char) == 1, so simplify code.  
+
 Mon Feb 28 20:15:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* contrib/: Makefile.am, elinks.fortune, perl/hooks.pl:

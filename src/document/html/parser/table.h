@@ -1,4 +1,4 @@
-/* $Id: table.h,v 1.9 2004/06/29 04:06:26 jonas Exp $ */
+/* $Id: table.h,v 1.10 2004/07/01 13:34:50 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_TABLE_H
 #define EL__DOCUMENT_HTML_PARSER_TABLE_H
@@ -35,6 +35,10 @@ struct part;
 #define TABLE_RULE_COLS		2
 #define TABLE_RULE_ALL		3
 #define TABLE_RULE_GROUPS	4
+
+struct html_start_end {
+	unsigned char *start, *end;
+};
 
 struct table_cell {
 	unsigned char *start;
@@ -106,10 +110,6 @@ struct table {
 };
 
 #define CELL(table, col, row) (&(table)->cells[(row) * (table)->real_cols + (col)])
-
-struct html_start_end {
-	unsigned char *start, *end;
-};
 
 struct table *
 parse_table(unsigned char *html, unsigned char *eof, unsigned char **end,

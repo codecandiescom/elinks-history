@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.22 2004/08/01 09:07:27 jonas Exp $ */
+/* $Id: socket.h,v 1.23 2004/08/01 09:14:52 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -41,7 +41,12 @@ int get_pasv_socket(struct connection *, int, unsigned char *);
 #ifdef CONFIG_IPV6
 int get_pasv6_socket(struct connection *, int, struct sockaddr_storage *);
 #endif
-void write_to_socket(struct connection *, int, unsigned char *, int, void (*)(struct connection *));
+
+/* Writes @datalen bytes from @data buffer to the passed @socket. When all data
+ * is written the @done callback will be called. */
+void write_to_socket(struct connection *conn, struct connection_socket *socket,
+		     unsigned char *data, int datalen, void (*done)(struct connection *));
+
 struct read_buffer *alloc_read_buffer(struct connection *c);
 void read_from_socket(struct connection *, int, struct read_buffer *, void (*)(struct connection *, struct read_buffer *));
 void kill_buffer_data(struct read_buffer *, int);

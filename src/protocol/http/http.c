@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.313 2004/08/01 09:01:29 jonas Exp $ */
+/* $Id: http.c,v 1.314 2004/08/01 09:14:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -635,7 +635,7 @@ http_send_header(struct connection *conn)
 #undef POST_BUFFER_SIZE
 	}
 
-	write_to_socket(conn, conn->socket.fd, header.source, header.length,
+	write_to_socket(conn, &conn->socket, header.source, header.length,
 			http_get_header);
 	done_string(&header);
 

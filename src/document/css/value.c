@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.54 2004/06/30 05:51:10 jonas Exp $ */
+/* $Id: value.c,v 1.55 2004/06/30 06:00:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,8 +268,12 @@ css_parse_white_space_value(struct css_property_info *propinfo,
 
 	if (token->type != CSS_TOKEN_IDENT) return 0;
 
+	/* FIXME: nowrap */
 	if (scanner_token_contains(token, "pre")) {
 		value->font_attribute.add |= AT_PREFORMATTED;
+
+	} else if (scanner_token_contains(token, "normal")) {
+		value->font_attribute.rem |= AT_PREFORMATTED;
 
 	} else {
 		return 0;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.137 2004/12/17 22:59:00 jonas Exp $ */
+/* $Id: renderer.c,v 1.138 2004/12/19 01:10:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -573,4 +573,3 @@ get_convert_table(unsigned char *head, int to_cp,
 
 	return get_translation_table(cp_index, to_cp);
 }
-

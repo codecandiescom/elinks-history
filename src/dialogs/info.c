@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.43 2003/05/19 14:12:30 zas Exp $ */
+/* $Id: info.c,v 1.44 2003/05/20 22:09:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@
 void
 menu_about(struct terminal *term, void *d, struct session *ses)
 {
-	unsigned char *s = get_dyn_full_version(term);
+	unsigned char *s = get_dyn_full_version(term, 1);
 
 	if (s) {
 		msg_box(term, getml(s, NULL),

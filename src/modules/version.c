@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.4 2003/05/20 10:07:25 zas Exp $ */
+/* $Id: version.c,v 1.5 2003/05/20 22:09:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,25 +32,18 @@ get_version()
 	return (unsigned char *) "ELinks " VERSION_STRING;
 }
 
+/* @more will add longer informations especially for info box. */
 unsigned char *
-get_dyn_full_version(struct terminal *term)
+get_dyn_full_version(struct terminal *term, int more)
 {
 	return straconcat(
 		get_version(),
-#ifdef DEBUG
-		" ("
-#ifdef __DATE__
-		__DATE__
+#if defined(DEBUG) && defined(__DATE__) && defined(__TIME__)
+		(unsigned char *) (more ? " (" __DATE__ " " __TIME__ ")" : ""),
 #endif
-		" "
-#ifdef __TIME__
-		__TIME__
-#endif
-		")"
-#endif
-		"\n\n",
-		_("Text WWW browser", term),
-		"\n\n",
+		(unsigned char *) (more ? "\n\n": ""),
+		more ? _("Text WWW browser", term) : (unsigned char *) "",
+		(unsigned char *) (more ? "\n\n" : "\n"),
 		_("Features:", term), " ",
 #ifndef DEBUG
 		_("Standard", term), ", ",
@@ -88,7 +81,7 @@ get_dyn_full_version(struct terminal *term)
 		"gzip" ", ",
 #endif
 #ifdef HAVE_BZLIB_H
-		" bzip2",
+		"bzip2",
 #endif
 		NULL
 	);
@@ -98,7 +91,7 @@ get_dyn_full_version(struct terminal *term)
 void
 init_static_version()
 {
-	unsigned char *s = get_dyn_full_version((struct terminal *) NULL);
+	unsigned char *s = get_dyn_full_version((struct terminal *) NULL, 0);
 
 	full_static_version[0] = '\0';
 	if (s) {

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.60 2004/04/24 00:18:54 pasky Exp $ */
+/* $Id: parser.h,v 1.61 2004/05/25 03:37:28 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -15,7 +15,7 @@ struct menu_item;
 struct session;
 struct string;
 struct terminal;
-
+struct uri;
 
 /* XXX: This is just terible - this interface is from 75% only for other HTML
  * files - there's lack of any well defined interface and it's all randomly
@@ -141,7 +141,7 @@ enum html_special_type {
 /* Interface for the renderer */
 
 void
-init_html_parser(unsigned char *url, struct document_options *options,
+init_html_parser(struct uri *uri, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title,
 		 void (*put_chars)(void *, unsigned char *, int),

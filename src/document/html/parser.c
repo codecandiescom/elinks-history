@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.423 2004/05/23 14:51:28 jonas Exp $ */
+/* $Id: parser.c,v 1.424 2004/05/25 03:37:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1252,7 +1252,7 @@ done_html_parser_state(struct html_element *element)
 }
 
 void
-init_html_parser(unsigned char *url, struct document_options *options,
+init_html_parser(struct uri *uri, struct document_options *options,
 		 unsigned char *start, unsigned char *end,
 		 struct string *head, struct string *title,
 		 void (*put_chars)(void *, unsigned char *, int),
@@ -1261,7 +1261,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 {
 	struct html_element *e;
 
-	assert(url && options);
+	assert(uri && options);
 	if_assert_failed return;
 	assertm(list_empty(html_stack), "something on html stack");
 	if_assert_failed init_list(html_stack);
@@ -1290,7 +1290,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	format.clink = options->default_link;
 	format.vlink = options->default_vlink;
 
-	format.href_base = stracpy(url);
+	format.href_base = stracpy(struri(uri));
 	format.target_base = null_or_stracpy(options->framename);
 
 	par_format.align = AL_LEFT;

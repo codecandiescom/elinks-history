@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.442 2004/05/23 17:13:34 jonas Exp $ */
+/* $Id: renderer.c,v 1.443 2004/05/25 03:37:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1452,7 +1452,6 @@ render_html_document(struct cache_entry *cached, struct document *document)
 {
 	struct fragment *fr;
 	struct part *part;
-	unsigned char *url;
 	unsigned char *start = NULL;
 	unsigned char *end = NULL;
 	struct string title;
@@ -1465,7 +1464,6 @@ render_html_document(struct cache_entry *cached, struct document *document)
 	if (!init_string(&head)) return;
 
 	g_ctrl_num = 0;
-	url = get_cache_uri_string(cached);
 
 	fr = cached->frag.next;
 	start = fr->data;
@@ -1473,7 +1471,7 @@ render_html_document(struct cache_entry *cached, struct document *document)
 
 	if (cached->head) add_to_string(&head, cached->head);
 
-	init_html_parser(url, &document->options, start, end, &head, &title,
+	init_html_parser(cached->uri, &document->options, start, end, &head, &title,
 			 (void (*)(void *, unsigned char *, int)) put_chars_conv,
 			 (void (*)(void *)) line_break,
 			 (void *(*)(void *, enum html_special_type, ...)) html_special);

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.212 2004/06/26 10:17:37 zas Exp $ */
+/* $Id: tables.c,v 1.213 2004/06/26 10:21:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -442,8 +442,10 @@ skip_table(unsigned char *html, unsigned char *eof)
 			html++;
 
 		if (html >= eof) return eof;
-		if (!strlcasecmp(name, namelen, "TABLE", 5)) level++;
-		if (!strlcasecmp(name, namelen, "/TABLE", 6)) {
+
+		if (!strlcasecmp(name, namelen, "TABLE", 5)) {
+			level++;
+		} else if (!strlcasecmp(name, namelen, "/TABLE", 6)) {
 			level--;
 			if (!level) return html;
 		}

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.13 2003/09/08 12:32:57 zas Exp $ */
+/* $Id: frames.c,v 1.14 2003/09/22 15:15:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,9 +68,12 @@ create_frameset(struct document *fda, struct frameset_param *fp)
 	if (!fp->parent && fda->frame_desc) return NULL;
 
 	size = fp->x * fp->y;
+	/* size - 1 since one struct frame_desc is already reserved
+	 * in struct frameset_desc. */
 	fd = mem_calloc(1, sizeof(struct frameset_desc)
-			   + size * sizeof(struct frame_desc));
+			   + (size - 1) * sizeof(struct frame_desc));
 	if (!fd) return NULL;
+
 	{
 		register int i;
 
@@ -79,6 +82,7 @@ create_frameset(struct document *fda, struct frameset_param *fp)
 			fd->f[i].yw = fp->yw[i / fp->x];
 		}
 	}
+
 	fd->n = size;
 	fd->x = fp->x;
 	fd->y = fp->y;

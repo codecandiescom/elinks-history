@@ -1,9 +1,8 @@
-/* $Id: select.h,v 1.12 2005/03/03 15:49:43 zas Exp $ */
+/* $Id: select.h,v 1.13 2005/03/04 10:21:12 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_SELECT_H
 #define EL__LOWLEVEL_SELECT_H
 
-#include "util/lists.h"
 #include "util/ttime.h"
 
 long select_info(int);
@@ -14,9 +13,6 @@ int register_bottom_half_do(void (*)(void *), void *);
 	register_bottom_half_do((void (*)(void *))(fn), (void *)(data))
 
 void check_bottom_halves(void);
-
-int install_timer(ttime, void (*)(void *), void *);
-void kill_timer(int);
 
 #define H_READ	0
 #define H_WRITE	1

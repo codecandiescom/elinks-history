@@ -3,7 +3,8 @@
 
 include $(top_srcdir)/Makefile.base
 
-EXTRA_DIST = TODO VERSION config.charset locale.alias plural.y ref-add.sed.in ref-del.sed.in
+EXTRA_DIST = TODO VERSION config.charset locale.alias plural.y
+CLEANFILES = charset.alias
 
 DEFS = -DLIBDIR=\"$(libdir)\" @DEFS@
 COMPILE = $(CC) $(DEFS) -I`dirname $(CONFIG_HEADER)` $(INCLUDES) $(AM_CFLAGS) $(CFLAGS)

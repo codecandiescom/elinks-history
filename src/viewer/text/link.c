@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.117 2003/12/05 21:19:12 zas Exp $ */
+/* $Id: link.c,v 1.118 2003/12/05 21:37:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,15 +434,16 @@ next_in_view(struct document_view *doc_view, int p, int d,
 
 	p1 = doc_view->document->nlinks - 1;
 	yl = doc_view->vs->y + doc_view->height;
+	int_upper_bound(&yl, doc_view->document->height);
 
-	if (yl > doc_view->document->height) yl = doc_view->document->height;
 	for (y = int_max(0, doc_view->vs->y); y < yl; y++) {
-		if (doc_view->document->lines1[y]
-		    && doc_view->document->lines1[y] - doc_view->document->links < p1)
-			p1 = doc_view->document->lines1[y] - doc_view->document->links;
-		if (doc_view->document->lines2[y]
-		    && doc_view->document->lines2[y] - doc_view->document->links > p2)
-			p2 = doc_view->document->lines2[y] - doc_view->document->links;
+		if (doc_view->document->lines1[y])
+			int_upper_bound(&p1, doc_view->document->lines1[y]
+					     - doc_view->document->links);
+
+		if (doc_view->document->lines2[y])
+			int_lower_bound(&p2, doc_view->document->lines2[y]
+					     - doc_view->document->links);
 	}
 
 	while (p >= p1 && p <= p2) {
@@ -470,13 +471,14 @@ set_pos_x(struct document_view *doc_view, struct link *link)
 	if_assert_failed return;
 
 	for (i = 0; i < link->n; i++) {
-		if (link->pos[i].y >= doc_view->vs->y
-		    && link->pos[i].y < doc_view->vs->y + doc_view->height) {
-			/* XXX: bug ?? if l->pos[i].x == xm => xm = xm + 1 --Zas*/
+		int y = link->pos[i].y + doc_view->vs->y;
+
+		if (y >= 0 && y < doc_view->height) {
 			int_lower_bound(&xm, link->pos[i].x + 1);
 			int_upper_bound(&xl, link->pos[i].x);
 		}
 	}
+
 	if (xl != MAXINT)
 		int_bounds(&doc_view->vs->x, xm - doc_view->width, xl);
 }
@@ -496,7 +498,7 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 		int_lower_bound(&ym, link->pos[i].y + 1);
 		int_upper_bound(&yl, link->pos[i].y);
 	}
-	doc_view->vs->y = (ym + yl) / 2 - doc_view->document->options.height / 2;
+	doc_view->vs->y = (ym + yl - doc_view->document->options.height) / 2;
 	int_bounds(&doc_view->vs->y, 0,
 		   doc_view->document->height - doc_view->document->options.height);
 }

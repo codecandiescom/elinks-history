@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.56 2003/11/05 00:45:30 fabio Exp $ */
+/* $Id: formhist.c,v 1.57 2003/11/05 13:39:48 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,7 +186,7 @@ save_saved_forms(void)
 	mem_free(file);
 	if (!ssi) return 0;
 
-	/* Write the list to password file */
+	/* Write the list to password file ($ELINKS_HOME/formhist) */
 
 	foreach (form, saved_forms) {
 		struct submitted_value *sv;
@@ -195,7 +195,7 @@ save_saved_forms(void)
 
 		foreach (sv, form->submit) {
 			/* Obfuscate the password. If we do
-			 * $ cat ~/.elinks/password
+			 * $ cat ~/.elinks/formhist
 			 * we don't want someone behind our back to read our
 			 * password (androids don't count). */
 			if (sv->value && *sv->value) {

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.254 2003/09/09 21:33:53 jonas Exp $ */
+/* $Id: renderer.c,v 1.255 2003/09/09 21:57:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,56 +419,58 @@ static void
 move_links(struct part *part, int xf, int yf, int xt, int yt)
 {
 	struct tag *tag;
-	int nlink;
+	int nlink = last_link_to_move;
 	int matched = 0;
 
 	assert(part && part->document);
 	if_assert_failed return;
 	xpand_lines(part, yt);
 
-	for (nlink = last_link_to_move; nlink < part->document->nlinks; nlink++) {
+	for (; nlink < part->document->nlinks; nlink++) {
 		struct link *link = &part->document->links[nlink];
 		int i;
 
 		for (i = 0; i < link->n; i++) {
-			if (link->pos[i].y == Y(yf)) {
-				matched = 1;
-				if (link->pos[i].x >= X(xf)) {
-					if (yt >= 0) {
-						link->pos[i].y = Y(yt);
-						link->pos[i].x += -xf + xt;
-					} else if (i < link->n - 1) {
-						memmove(&link->pos[i],
-							&link->pos[i + 1],
-							(link->n - i - 1) *
-							sizeof(struct point));
-						link->n--;
-						i--;
-					} else {
-						 /* assert(i < (link->n-1));
-						  * ABORT? */
-					}
-				}
+			if (link->pos[i].y != Y(yf))
+				continue;
+
+			matched = 1;
+
+			if (link->pos[i].x < X(xf))
+				continue;
+
+			if (yt >= 0) {
+				link->pos[i].y = Y(yt);
+				link->pos[i].x += -xf + xt;
+				continue;
+			} else if (i < link->n - 1) {
+				memmove(&link->pos[i],
+					&link->pos[i + 1],
+					(link->n - i - 1) *
+					sizeof(struct point));
+				link->n--;
+				i--;
 			}
 		}
 
 		if (!matched) last_link_to_move = nlink;
 	}
 
-	matched = 0;
+	/* Don't move tags when removing links. */
+	if (yt < 0) return;
 
-	if (yt >= 0) {
-		for (tag = last_tag_to_move->next;
-	   	     (void *) tag != &part->document->tags;
-		     tag = tag->next) {
-			if (tag->y == Y(yf)) {
-				matched = 1;
-				if (tag->x >= X(xf)) {
-					tag->y = Y(yt), tag->x += -xf + xt;
-				}
+	matched = 0;
+	tag = last_tag_to_move->next;
+
+	for (; (void *) tag != &part->document->tags; tag = tag->next) {
+		if (tag->y == Y(yf)) {
+			matched = 1;
+			if (tag->x >= X(xf)) {
+				tag->y = Y(yt), tag->x += -xf + xt;
 			}
-			if (!matched) last_tag_to_move = tag;
 		}
+
+		if (!matched) last_tag_to_move = tag;
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.38 2003/10/28 01:21:38 pasky Exp $ */
+/* $Id: kbd.c,v 1.39 2003/12/01 19:49:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,11 +348,6 @@ end:
 	send_init_sequence(std_out, itrm->flags);
 
 	itrm->mouse_h = handle_mouse(0, (void (*)(void *, unsigned char *, int)) queue_event, itrm);
-
-	if (get_opt_bool("ui.window_title")) {
-		itrm->orig_title = get_window_title();
-		set_window_title("ELinks");
-	}
 }
 
 
@@ -412,12 +407,10 @@ free_trm(struct itrm *itrm)
 {
 	if (!itrm) return;
 
-	if (get_opt_bool("ui.window_title")) {
+	if (itrm->orig_title) {
 		set_window_title(itrm->orig_title);
-		if (itrm->orig_title) {
-			mem_free(itrm->orig_title);
-			itrm->orig_title = NULL;
-		}
+		mem_free(itrm->orig_title);
+		itrm->orig_title = NULL;
 	}
 
 	unhandle_terminal_resize(itrm->ctl_in);
@@ -456,8 +449,7 @@ dispatch_special(unsigned char *text)
 {
 	switch (text[0]) {
 		case TERM_FN_TITLE:
-			if (get_opt_bool("ui.window_title"))
-				set_window_title(text + 1);
+			set_window_title(text + 1);
 			break;
 		case TERM_FN_RESIZE:
 			resize_terminal_x(text + 1);
@@ -536,7 +528,10 @@ ex:
 	}
 
 	if (!*path.source) {
+		if (delete.source[0] == TERM_FN_TITLE)
+	               itrm->orig_title = get_window_title();
 		dispatch_special(delete.source);
+			
 	} else {
 		int blockh;
 		unsigned char *param;

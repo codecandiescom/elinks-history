@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.22 2003/04/28 09:47:12 zas Exp $ */
+/* $Id: globhist.c,v 1.23 2003/04/29 08:03:17 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -205,7 +205,7 @@ free_globhist_cache()
 /* Add a new entry in history list, take care of duplicate, respect history
  * size limit, and update any open history dialogs. */
 void
-add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
+add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 {
 	struct global_history_item *history_item;
 	unsigned char *text;
@@ -238,7 +238,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 	if (!history_item)
 		return;
 
-	history_item->last_visit = time;
+	history_item->last_visit = vtime;
 	history_item->title = stracpy(title);
 	if (!history_item->title) {
 		mem_free(history_item);

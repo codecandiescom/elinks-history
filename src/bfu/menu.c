@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.30 2003/01/18 23:05:21 pasky Exp $ */
+/* $Id: menu.c,v 1.31 2003/04/29 07:59:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -425,17 +425,17 @@ menu_func(struct window *win, struct event *ev, int fwd)
 				      ev->x >= menu->x + menu->xw ||
 				      ev->y <  menu->y + 1 ||
 				      ev->y >= menu->y + menu->yw-1)) {
-					int s = ev->y - menu->y - 1 + menu->view;
+					int sel = ev->y - menu->y - 1 + menu->view;
 
-					if (s >= 0 && s < menu->ni &&
-					    menu->items[s].rtext != M_BAR) {
+					if (sel >= 0 && sel < menu->ni &&
+					    menu->items[sel].rtext != M_BAR) {
 
-						menu->selected = s;
+						menu->selected = sel;
 						scroll_menu(menu, 0);
 						display_menu(win->term, menu);
 
 						if ((ev->b & BM_ACT) == B_UP ||
-						    menu->items[s].in_m)
+						    menu->items[sel].in_m)
 							select_menu(win->term, menu);
 					}
 				}

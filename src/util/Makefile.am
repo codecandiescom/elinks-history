@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.14 2002/05/18 13:41:39 pasky Exp $
+## $Id: Makefile.am,v 1.15 2002/06/11 19:27:18 pasky Exp $
 
 INCLUDES = \
  -I$(srcdir)/..
@@ -10,10 +10,10 @@ libutil_a_SOURCES = \
  base64.h \
  blacklist.c \
  blacklist.h \
- compress.c \
- compress.h \
  conv.c \
  conv.h \
+ encoding.c \
+ encoding.h \
  error.c \
  error.h \
  hash.c \

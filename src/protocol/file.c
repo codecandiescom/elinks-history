@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.20 2002/05/26 18:54:24 pasky Exp $ */
+/* $Id: file.c,v 1.21 2002/06/11 19:27:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@
 #include "document/cache.h"
 #include "lowlevel/sched.h"
 #include "protocol/file.h"
-#include "util/compress.h"
+#include "util/encoding.h"
 #include "util/conv.h"
 
 #define FILE_DIR_COLOR   "yellow"
@@ -621,7 +621,7 @@ dir:
 #if 0
 			/* This didn't work so well as it should (I had to
 			 * implement end of stream handling to bzip2 anyway),
-			 * so I better disabled this. */
+			 * so I rather disabled this. */
 			if (r < stt.st_size) {
 				/* This is much safer. It should always mean
 				 * that we already read everything possible,

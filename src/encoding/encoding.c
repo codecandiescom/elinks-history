@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: compress.c,v 1.3 2002/05/11 18:05:34 pasky Exp $ */
+/* $Id: encoding.c,v 1.1 2002/06/11 19:27:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,11 @@
 
 #include "links.h"
 
-#include "util/compress.h"
+#include "util/encoding.h"
+
+
+/* TODO: When more decoders will join the game, we should probably move them
+ * to separate files, maybe even to separate directory. --pasky */
 
 
 #if 0

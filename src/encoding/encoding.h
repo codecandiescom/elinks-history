@@ -1,7 +1,7 @@
-/* $Id: compress.h,v 1.2 2002/05/09 21:16:38 pasky Exp $ */
+/* $Id: encoding.h,v 1.1 2002/06/11 19:27:18 pasky Exp $ */
 
-#ifndef EL__UTIL_COMPRESS_H
-#define EL__UTIL_COMPRESS_H
+#ifndef EL__UTIL_ENCODING_H
+#define EL__UTIL_ENCODING_H
 
 enum stream_encoding {
 	ENCODING_NONE,

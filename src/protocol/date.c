@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.14 2005/03/29 03:19:21 jonas Exp $ */
+/* $Id: date.c,v 1.15 2005/03/29 03:29:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,22 +84,17 @@ parse_month(const unsigned char **buf, unsigned char *end)
 
 /* Return day number. */
 static int
-parse_day(const unsigned char **date_p)
+parse_day(const unsigned char **date_p, unsigned char *end)
 {
 	const unsigned char *date = *date_p;
 	int day;
-	unsigned char c;
 
-	/* TODO: Use strtol() ? ;)) --pasky */
+	if ((end && date >= end) || !isdigit(*date))
+		return 32;
+	day = *date++ - '0';
 
-	c = *date;
-	if (!isdigit(c)) return 32;
-	day = c - '0';
-
-	c = *++date;
-	if (isdigit(c)) {
-		day = day * 10 + c - '0';
-		date++;
+	if ((!end || date < end) && isdigit(*date)) {
+		day = day * 10 + *date++ - '0';
 	}
 
 	*date_p = date;
@@ -258,7 +253,7 @@ parse_date(const unsigned char *date)
 		/* Eat day */
 
 		/* date++; */
-		tm.tm_mday = parse_day(&date);
+		tm.tm_mday = parse_day(&date, NULL);
 		if (tm.tm_mday > 31) return 0;
 
 		skip_time_sep(date);
@@ -295,7 +290,7 @@ parse_date(const unsigned char *date)
 
 		/* Eat day */
 
-		tm.tm_mday = parse_day(&date);
+		tm.tm_mday = parse_day(&date, NULL);
 		if (tm.tm_mday > 31) return 0;
 
 		skip_time_sep(date);

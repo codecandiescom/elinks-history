@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.154 2003/10/23 22:18:25 pasky Exp $ */
+/* $Id: menu.c,v 1.155 2003/10/23 22:49:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,7 +379,7 @@ menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 
 static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("Open new ~tab"), "t", open_in_new_tab, (void *) 0, FREE_NOTHING, 0),
-	INIT_MENU_ITEM(N_("Open new tab in ~background"), "T", open_in_new_tab_in_background,
+	INIT_MENU_ITEM(N_("Open new t~ab in background"), "T", open_in_new_tab_in_background,
 								(void *) 0, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("~Go to URL"), "g", menu_goto_url, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("Go ~back"), "<-", menu_go_back, NULL, FREE_NOTHING, 0),
@@ -408,7 +408,7 @@ static struct menu_item file_menu22[] = {
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("~Kill background connections"), "", menu_kill_background_connections, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("~Flush all caches"), "", flush_caches, NULL, FREE_NOTHING, 0),
-	INIT_MENU_ITEM(N_("Resource in~fo"), "", res_inf, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Resource i~nfo"), "", res_inf, NULL, FREE_NOTHING, 0),
 #ifdef DEBUG
 	INIT_MENU_ITEM(N_("~Cache info"), "", cache_inf, NULL, FREE_NOTHING, 0),
 #endif

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.63 2002/12/11 15:06:46 pasky Exp $ */
+/* $Id: menu.c,v 1.64 2002/12/11 15:10:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -501,9 +501,6 @@ static struct menu_item view_menu[] = {
 	{TEXT(T_DOCUMENT_INFO), "=", TEXT(T_HK_DOCUMENT_INFO), MENU_FUNC menu_doc_info, NULL, 0, 0},
 	{TEXT(T_HEADER_INFO), "|", TEXT(T_HK_HEADER_INFO), MENU_FUNC menu_header_info, NULL, 0, 0},
 	{TEXT(T_FRAME_AT_FULL_SCREEN), "f", TEXT(T_HK_FRAME_AT_FULL_SCREEN), MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
-	{"", "", M_BAR, NULL, NULL, 0, 0},
-	{TEXT(T_HTML_OPTIONS), "", TEXT(T_HK_HTML_OPTIONS), MENU_FUNC menu_html_options, (void *)0, 0, 0},
-	{TEXT(T_SAVE_HTML_OPTIONS), "", TEXT(T_HK_SAVE_HTML_OPTIONS), MENU_FUNC menu_save_html_options, (void *)0, 0, 0},
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 
@@ -516,8 +513,6 @@ static struct menu_item view_menu_anon[] = {
 	{TEXT(T_TOGGLE_HTML_PLAIN), "\\", TEXT(T_HK_TOGGLE_HTML_PLAIN), MENU_FUNC menu_toggle, NULL, 0, 0},
 	{TEXT(T_DOCUMENT_INFO), "=", TEXT(T_HK_DOCUMENT_INFO), MENU_FUNC menu_doc_info, NULL, 0, 0},
 	{TEXT(T_FRAME_AT_FULL_SCREEN), "f", TEXT(T_HK_FRAME_AT_FULL_SCREEN), MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
-	{"", "", M_BAR, NULL, NULL, 0, 0},
-	{TEXT(T_HTML_OPTIONS), "", TEXT(T_HK_HTML_OPTIONS), MENU_FUNC menu_html_options, (void *)0, 0, 0},
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 

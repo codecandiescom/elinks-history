@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.139 2004/03/20 23:35:09 jonas Exp $ */
+/* $Id: connection.c,v 1.140 2004/03/21 02:10:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,15 +141,14 @@ struct host_connection {
 };
 
 static struct host_connection *
-get_host_connection(struct connection *conn)
+get_host_connection(struct string *host)
 {
-	unsigned char *host = conn->uri.hoststr;
-	int hostlen = conn->uri.hostlen;
 	struct host_connection *host_conn;
 
-	if (!host) return NULL;
+	if (string_is_empty(host)) return NULL;
+
 	foreach (host_conn, host_connections)
-		if (!strlcmp(host_conn->host, -1, host, hostlen))
+		if (!string_strlcmp(host, host_conn->host, -1))
 			return host_conn;
 
 	return NULL;
@@ -160,13 +159,14 @@ get_host_connection(struct connection *conn)
 static int
 add_host_connection(struct connection *conn)
 {
-	struct host_connection *host_conn = get_host_connection(conn);
+	struct string *host = &conn->uri.host;
+	struct host_connection *host_conn = get_host_connection(host);
 
-	if (!host_conn && conn->uri.hoststr) {
-		host_conn = mem_calloc(1, sizeof(struct host_connection) + conn->uri.hostlen);
+	if (!host_conn && !string_is_empty(host)) {
+		host_conn = mem_calloc(1, sizeof(struct host_connection) + host->length);
 		if (!host_conn) return 0;
 
-		memcpy(host_conn->host, conn->uri.hoststr, conn->uri.hostlen);
+		string_copy(host_conn->host, host);
 		add_to_list(host_connections, host_conn);
 	}
 	if (host_conn) host_conn->connections++;
@@ -178,7 +178,7 @@ add_host_connection(struct connection *conn)
 static void
 done_host_connection(struct connection *conn)
 {
-	struct host_connection *host_conn = get_host_connection(conn);
+	struct host_connection *host_conn = get_host_connection(&conn->uri.host);
 
 	if (!host_conn) return;
 
@@ -696,7 +696,7 @@ try_to_suspend_connection(struct connection *conn, unsigned char *host)
 static inline int
 try_connection(struct connection *conn, int max_conns_to_host, int max_conns)
 {
-	struct host_connection *host_conn = get_host_connection(conn);
+	struct host_connection *host_conn = get_host_connection(&conn->uri.host);
 
 	if (host_conn && host_conn->connections >= max_conns_to_host)
 		return try_to_suspend_connection(conn, host_conn->host) ? 0 : -1;

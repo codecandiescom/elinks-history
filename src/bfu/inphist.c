@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.63 2003/11/18 22:52:42 pasky Exp $ */
+/* $Id: inphist.c,v 1.64 2003/11/18 23:49:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,6 +125,10 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 
 		if (cur_len < base_len)
 			continue;
+
+		/* By now, @cur_len oscillates between @base_len and
+		 * @longest_common_match. */
+
 		if (cur_len < match_len)
 			longest_common_match = cur_len;
 		match = entry->data;

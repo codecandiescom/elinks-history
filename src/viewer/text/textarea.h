@@ -1,4 +1,4 @@
-/* $Id: textarea.h,v 1.19 2004/06/18 09:15:58 miciah Exp $ */
+/* $Id: textarea.h,v 1.20 2004/06/18 09:33:50 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_TEXTAREA_H
 #define EL__VIEWER_TEXT_TEXTAREA_H
@@ -20,13 +20,13 @@ extern int textarea_editor;
 void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *, struct document_view *, struct link *);
 int menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses);
 
-enum frame_event_status textarea_op_home(struct form_state *fs, struct form_control *fc, int rep);
-enum frame_event_status textarea_op_up(struct form_state *fs, struct form_control *fc, int rep);
-enum frame_event_status textarea_op_down(struct form_state *fs, struct form_control *fc, int rep);
-enum frame_event_status textarea_op_end(struct form_state *fs, struct form_control *fc, int rep);
-enum frame_event_status textarea_op_bob(struct form_state *fs, struct form_control *fc, int rep);
-enum frame_event_status textarea_op_eob(struct form_state *fs, struct form_control *fc, int rep);
-enum frame_event_status textarea_op_enter(struct form_state *fs, struct form_control *fc, int rep);
+enum frame_event_status textarea_op_home(struct form_state *fs, struct form_control *fc);
+enum frame_event_status textarea_op_up(struct form_state *fs, struct form_control *fc);
+enum frame_event_status textarea_op_down(struct form_state *fs, struct form_control *fc);
+enum frame_event_status textarea_op_end(struct form_state *fs, struct form_control *fc);
+enum frame_event_status textarea_op_bob(struct form_state *fs, struct form_control *fc);
+enum frame_event_status textarea_op_eob(struct form_state *fs, struct form_control *fc);
+enum frame_event_status textarea_op_enter(struct form_state *fs, struct form_control *fc);
 
 void set_textarea(struct session *ses, struct document_view *doc_view, int direction);
 

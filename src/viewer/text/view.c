@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.485 2004/06/17 21:25:50 zas Exp $ */
+/* $Id: view.c,v 1.486 2004/06/18 09:33:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -951,7 +951,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 	link = get_current_link(doc_view);
 
 	if (link && link_is_textinput(link)) {
-	    status = field_op(ses, doc_view, link, ev, 0);
+	    status = field_op(ses, doc_view, link, ev);
 
 	    if (status != FRAME_EVENT_IGNORED)
 		    return status;

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.205 2004/06/17 23:53:50 jonas Exp $ */
+/* $Id: form.c,v 1.206 2004/06/18 09:33:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1074,7 +1074,7 @@ auto_submit_form(struct session *ses)
 
 enum frame_event_status
 field_op(struct session *ses, struct document_view *doc_view,
-	 struct link *link, struct term_event *ev, int rep)
+	 struct link *link, struct term_event *ev)
 {
 	struct form_control *fc;
 	struct form_state *fs;
@@ -1115,7 +1115,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 		case ACT_EDIT_HOME:
 			if (fc->type == FC_TEXTAREA) {
-				status = textarea_op_home(fs, fc, rep);
+				status = textarea_op_home(fs, fc);
 			} else {
 				fs->state = 0;
 			}
@@ -1124,31 +1124,31 @@ field_op(struct session *ses, struct document_view *doc_view,
 			if (fc->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
 			else
-				status = textarea_op_up(fs, fc, rep);
+				status = textarea_op_up(fs, fc);
 			break;
 		case ACT_EDIT_DOWN:
 			if (fc->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
 			else
-				status = textarea_op_down(fs, fc, rep);
+				status = textarea_op_down(fs, fc);
 			break;
 		case ACT_EDIT_END:
 			if (fc->type == FC_TEXTAREA) {
-				status = textarea_op_end(fs, fc, rep);
+				status = textarea_op_end(fs, fc);
 			} else {
 				fs->state = strlen(fs->value);
 			}
 			break;
 		case ACT_EDIT_BEGINNING_OF_BUFFER:
 			if (fc->type == FC_TEXTAREA) {
-				status = textarea_op_bob(fs, fc, rep);
+				status = textarea_op_bob(fs, fc);
 			} else {
 				fs->state = 0;
 			}
 			break;
 		case ACT_EDIT_END_OF_BUFFER:
 			if (fc->type == FC_TEXTAREA) {
-				status = textarea_op_eob(fs, fc, rep);
+				status = textarea_op_eob(fs, fc);
 			} else {
 				fs->state = strlen(fs->value);
 			}
@@ -1191,7 +1191,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			if (fc->type != FC_TEXTAREA)
 				status = FRAME_EVENT_IGNORED;
 			else
-				status = textarea_op_enter(fs, fc, rep);
+				status = textarea_op_enter(fs, fc);
 			break;
 		case ACT_EDIT_BACKSPACE:
 			if (form_field_is_readonly(fc)) {

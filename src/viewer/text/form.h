@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.34 2004/06/17 00:35:33 jonas Exp $ */
+/* $Id: form.h,v 1.35 2004/06/18 09:33:50 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -105,7 +105,7 @@ void selected_item(struct terminal *term, void *pitem, struct session *ses);
 struct form_state *find_form_state(struct document_view *doc_view, struct form_control *fc);
 int get_current_state(struct session *ses);
 
-enum frame_event_status field_op(struct session *ses, struct document_view *doc_view, struct link *link, struct term_event *ev, int rep);
+enum frame_event_status field_op(struct session *ses, struct document_view *doc_view, struct link *link, struct term_event *ev);
 
 void draw_form_entry(struct terminal *term, struct document_view *doc_view, struct link *link);
 void draw_forms(struct terminal *term, struct document_view *doc_view);

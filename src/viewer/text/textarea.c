@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.98 2004/06/18 09:10:19 miciah Exp $ */
+/* $Id: textarea.c,v 1.99 2004/06/18 09:33:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,7 +397,7 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 /* TODO: Unify the textarea field_op handlers to one trampoline function. */
 
 enum frame_event_status
-textarea_op_home(struct form_state *fs, struct form_control *fc, int rep)
+textarea_op_home(struct form_state *fs, struct form_control *fc)
 {
 	int prev_end = -1;
 	struct line_info *line;
@@ -431,7 +431,7 @@ textarea_op_home(struct form_state *fs, struct form_control *fc, int rep)
 }
 
 enum frame_event_status
-textarea_op_up(struct form_state *fs, struct form_control *fc, int rep)
+textarea_op_up(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
 	int y;
@@ -458,8 +458,8 @@ textarea_op_up(struct form_state *fs, struct form_control *fc, int rep)
 
 		fs->state -= line[y].start - line[y-1].start;
 		int_upper_bound(&fs->state, line[y-1].end);
-		if (!rep) goto free_and_return;
-		y = -1; /* repeat */
+
+		goto free_and_return;
 	}
 	mem_free(line);
 	return FRAME_EVENT_OK;
@@ -470,7 +470,7 @@ free_and_return:
 }
 
 enum frame_event_status
-textarea_op_down(struct form_state *fs, struct form_control *fc, int rep)
+textarea_op_down(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
 	int y;
@@ -497,8 +497,8 @@ textarea_op_down(struct form_state *fs, struct form_control *fc, int rep)
 
 		fs->state += line[y+1].start - line[y].start;
 		int_upper_bound(&fs->state, line[y+1].end);
-		if (!rep) goto free_and_return;
-		y = -1; /* repeat */
+
+		goto free_and_return;
 	}
 
 	mem_free(line);
@@ -510,7 +510,7 @@ free_and_return:
 }
 
 enum frame_event_status
-textarea_op_end(struct form_state *fs, struct form_control *fc, int rep)
+textarea_op_end(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
 	int y;
@@ -546,7 +546,7 @@ free_and_return:
 
 /* BEGINNING_OF_BUFFER */
 enum frame_event_status
-textarea_op_bob(struct form_state *fs, struct form_control *fc, int rep)
+textarea_op_bob(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
 	int y, state = 0;
@@ -578,7 +578,7 @@ textarea_op_bob(struct form_state *fs, struct form_control *fc, int rep)
 
 /* END_OF_BUFFER */
 enum frame_event_status
-textarea_op_eob(struct form_state *fs, struct form_control *fc, int rep)
+textarea_op_eob(struct form_state *fs, struct form_control *fc)
 {
 	struct line_info *line;
 	int y;
@@ -608,7 +608,7 @@ free_and_return:
 }
 
 enum frame_event_status
-textarea_op_enter(struct form_state *fs, struct form_control *fc, int rep)
+textarea_op_enter(struct form_state *fs, struct form_control *fc)
 {
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
@@ -647,8 +647,8 @@ set_textarea(struct session *ses, struct document_view *doc_view, int direction)
 		if (!fs || !fs->value) return;
 
 		if (direction == 1)
-			textarea_op_eob(fs, fc, 1);
+			textarea_op_eob(fs, fc);
 		else
-			textarea_op_bob(fs, fc, 1);
+			textarea_op_bob(fs, fc);
 	}
 }

@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.13 2004/06/26 14:40:38 jonas Exp $ */
+/* $Id: parser.c,v 1.14 2004/06/27 02:26:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,70 +35,60 @@ debug_cookie_parser(struct cookie_str *cstr, unsigned char *pos, int ws, int eq)
 #endif
 
 
+/* This function parses the starting name/value pair from the cookie string.
+ * The syntax is simply: <name token> [ '=' <value token> ] with possible
+ * spaces between tokens and '='. However spaces in the value token is also
+ * allowed. See bug 174 for a description why. */
+/* Defined in RFC 2965. */
 /* Return cstr on success, NULL on failure. */
 struct cookie_str *
 parse_cookie_str(struct cookie_str *cstr, unsigned char *str)
 {
-	unsigned char *pos;
-	int last_was_eq = 0;
-	int last_was_ws = 0;
-
 	memset(cstr, 0, sizeof(struct cookie_str));
 	cstr->str = str;
 
-	/* /NAME *= *VALUE *;/ */
+	/* Parse name token */
+	while (*str != ';' && *str != '=' && !isspace(*str) && *str)
+		str++;
 
-	for (pos = cstr->str; *pos != ';' && *pos; pos++) {
-		debug_cookie_parser(cstr, pos, last_was_ws, last_was_eq);
+	/* Bail out if name token is empty */
+	if (str == cstr->str) return NULL;
 
-		if (*pos == '=') {
-			/* End of name reached */
-			if (!cstr->nam_end) {
-				cstr->nam_end = pos;
-				/* This inside the if is protection against
-				 * broken sites sending '=' inside values. */
-				last_was_eq = 1;
-			}
-			if (!cstr->val_start) {
-				last_was_eq = 1;
-			}
-			last_was_ws = 0;
+	cstr->nam_end = str;
 
-		} else if (isspace(*pos)) {
-			if (!cstr->nam_end) {
-				/* Just after name - end of name reached */
-				cstr->nam_end = pos;
-			}
-			last_was_ws = 1;
+	skip_whitespace(str);
 
-		} else if (last_was_eq) {
-			/* Start of value reached */
-			/* LESS priority than isspace() */
-			cstr->val_start = pos;
-			last_was_eq = 0;
-			last_was_ws = 0;
+	switch (*str) {
+	case '\0':
+	case ';':
+		/* No value token, so just set to empty value */
+		cstr->val_start = str;
+		cstr->val_end = str;
+		return cstr;
 
-		} else if (last_was_ws) {
-			/* Non-whitespace after whitespace and not just after
-			 * '=' - error */
-			return NULL;
-		}
+	case '=':
+		/* Map 'a===b' to 'a=b' */
+		do str++; while (*str == '=');
+		break;
 
-		if (!last_was_ws) {
-			/* The NEXT char is ending it! */
-			cstr->val_end = pos + 1;
-		}
-	}
-
-	if (*pos == ';' && last_was_eq && !cstr->val_start) {
-		/* Empty value */
-		cstr->val_start = pos;
-		cstr->val_end = pos;
-	}
-
-	if (cstr->str == cstr->nam_end
-	    || !cstr->nam_end || !cstr->val_start || !cstr->val_end)
+	default:
+		/* No spaces in the name token is allowed */
 		return NULL;
+	}
+
+	skip_whitespace(str);
+
+	/* Parse value token */
+
+	/* Start with empty value, so even 'a=' will work */
+	cstr->val_start = str;
+	cstr->val_end = str;
+
+	for (; *str != ';' && *str; str++) {
+		/* Allow spaces in the value but leave out ending spaces */
+		if (!isspace(*str))
+			cstr->val_end = str + 1;
+	}
 
 	return cstr;
 }

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.10 2002/04/19 12:20:59 pasky Exp $ */
+/* $Id: osdep.c,v 1.11 2002/04/20 09:15:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -409,6 +409,9 @@ unsigned char *get_window_title()
 	if (!is_xterm())
 		return NULL;
 
+	/* FIXME: Here we hope that WINDOWID is correct. If it isn't, we're
+	 * stepping into disaster. */
+
 	winid = getenv("WINDOWID");
 	if (!winid)
 		return NULL;
@@ -417,6 +420,8 @@ unsigned char *get_window_title()
 		return NULL;
 
 	display = XOpenDisplay(NULL);
+	if (!display)
+		return NULL;
 
 	status = XGetWMName(display, window, &text_prop);
 	/* status = XGetWMIconName(x11_display, x11_window, &text_prop); */

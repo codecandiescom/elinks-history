@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-12 18:17+0100\n"
+"POT-Creation-Date: 2003-11-13 10:27+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Armon Red <armon@islandia.is>\n"
 "Language-Team: Icelandic <kde-isl@mmedia.is>\n"
@@ -2259,7 +2259,7 @@ msgstr ""
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
 #: src/config/options.inc:732 src/mime/backend/mailcap.c:94
-#: src/mime/backend/mailcap.c:686
+#: src/mime/backend/mailcap.c:679
 msgid "Mailcap"
 msgstr ""
 
@@ -2937,7 +2937,7 @@ msgstr ""
 #. XXX: Disable global history if -anonymous is given?
 #: src/config/options.inc:1717 src/config/options.inc:1724
 #: src/globhist/globhist.c:73 src/mime/backend/mailcap.c:98
-#: src/mime/backend/mimetypes.c:55
+#: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
 #, fuzzy
 msgid "Enable"
 msgstr "nafn"
@@ -4778,7 +4778,7 @@ msgstr ""
 msgid "Scripting"
 msgstr ""
 
-#: src/ssl/ssl.c:73 src/ssl/ssl.c:142
+#: src/ssl/ssl.c:73 src/ssl/ssl.c:158
 msgid "Verify certificates"
 msgstr ""
 
@@ -4788,18 +4788,46 @@ msgid ""
 "needs extensive configuration of OpenSSL by the user."
 msgstr ""
 
-#: src/ssl/ssl.c:144
+#: src/ssl/ssl.c:78
+msgid "Client Certificates"
+msgstr ""
+
+#: src/ssl/ssl.c:80
+#, fuzzy
+msgid "X509 client certificate options."
+msgstr "Stillingar skeljar"
+
+#: src/ssl/ssl.c:84
+msgid ""
+"Enable or not the sending of X509 client certificates\n"
+"to servers which request them."
+msgstr ""
+
+#: src/ssl/ssl.c:87
+#, fuzzy
+msgid "Certificate File"
+msgstr "metinn tími"
+
+#: src/ssl/ssl.c:89
+msgid ""
+"The location of a file containing the client certificate\n"
+"and unencrypted private key in PEM format. If unset, the\n"
+"file pointed to by the X509_CLIENT_CERT variable is used\n"
+"instead."
+msgstr ""
+
+#: src/ssl/ssl.c:160
 msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "probably doesn't work properly at all with GnuTLS."
 msgstr ""
 
 #. name:
-#: src/ssl/ssl.c:163 src/ssl/ssl.c:180
+#: src/ssl/ssl.c:179 src/ssl/ssl.c:196
 msgid "SSL"
 msgstr ""
 
-#: src/ssl/ssl.c:165
+#: src/ssl/ssl.c:181
 #, fuzzy
 msgid "SSL options."
 msgstr "V~ista stillingar"

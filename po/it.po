@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-12 18:17+0100\n"
+"POT-Creation-Date: 2003-11-13 10:27+0100\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -326,8 +326,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione "
-"config.saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione config."
+"saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:649
@@ -541,8 +541,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
-"\"%s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
+"s\")?"
 
 #: src/config/dialogs.c:600
 msgid "Keybinding manager"
@@ -2429,8 +2429,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
-"unix-xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
+"xwin)."
 
 #: src/config/options.inc:721
 msgid ""
@@ -2452,7 +2452,7 @@ msgstr ""
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
 #: src/config/options.inc:732 src/mime/backend/mailcap.c:94
-#: src/mime/backend/mailcap.c:686
+#: src/mime/backend/mailcap.c:679
 msgid "Mailcap"
 msgstr "Mailcap"
 
@@ -3153,7 +3153,7 @@ msgstr ""
 #. XXX: Disable global history if -anonymous is given?
 #: src/config/options.inc:1717 src/config/options.inc:1724
 #: src/globhist/globhist.c:73 src/mime/backend/mailcap.c:98
-#: src/mime/backend/mimetypes.c:55
+#: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
 msgid "Enable"
 msgstr "Abilita"
 
@@ -3561,8 +3561,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
-"...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, "
+"storico, ...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in combinazione con una di queste opzioni."
 
@@ -4478,8 +4478,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le "
-"maiuscole/minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
+"minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -4623,8 +4623,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come "
-"image/*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
+"*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #. name:
@@ -5116,9 +5116,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of "
-"config.saving_style option to 3 in order to get the \"right\" behaviour. "
-"Apologies for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of config."
+"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
+"for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5126,9 +5126,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
-"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
-"mie scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
+"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
+"scuse per qualsiasi inconveniente causato."
 
 #: src/scripting/lua/core.c:455
 msgid "User dialog"
@@ -5151,7 +5151,7 @@ msgstr "Inserisci espressione"
 msgid "Scripting"
 msgstr "Scripting"
 
-#: src/ssl/ssl.c:73 src/ssl/ssl.c:142
+#: src/ssl/ssl.c:73 src/ssl/ssl.c:158
 msgid "Verify certificates"
 msgstr "Verifica certificati"
 
@@ -5163,7 +5163,36 @@ msgstr ""
 "Verifica il certificato SSL del peer. Si noti per questo\n"
 "serve una configurazione ulteriore di OpenSSL dall'utente."
 
-#: src/ssl/ssl.c:144
+#: src/ssl/ssl.c:78
+#, fuzzy
+msgid "Client Certificates"
+msgstr "Verifica certificati"
+
+#: src/ssl/ssl.c:80
+#, fuzzy
+msgid "X509 client certificate options."
+msgstr "Opzioni interfaccia utente"
+
+#: src/ssl/ssl.c:84
+msgid ""
+"Enable or not the sending of X509 client certificates\n"
+"to servers which request them."
+msgstr ""
+
+#: src/ssl/ssl.c:87
+#, fuzzy
+msgid "Certificate File"
+msgstr "tempo stimato"
+
+#: src/ssl/ssl.c:89
+msgid ""
+"The location of a file containing the client certificate\n"
+"and unencrypted private key in PEM format. If unset, the\n"
+"file pointed to by the X509_CLIENT_CERT variable is used\n"
+"instead."
+msgstr ""
+
+#: src/ssl/ssl.c:160
 msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "probably doesn't work properly at all with GnuTLS."
@@ -5172,11 +5201,11 @@ msgstr ""
 "questo probabilmente non funziona con GnuTLS."
 
 #. name:
-#: src/ssl/ssl.c:163 src/ssl/ssl.c:180
+#: src/ssl/ssl.c:179 src/ssl/ssl.c:196
 msgid "SSL"
 msgstr "SSL"
 
-#: src/ssl/ssl.c:165
+#: src/ssl/ssl.c:181
 msgid "SSL options."
 msgstr "Opzioni SSL."
 

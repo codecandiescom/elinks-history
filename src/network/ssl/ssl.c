@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.2 2002/05/08 13:55:06 pasky Exp $ */
+/* $Id: ssl.c,v 1.3 2002/05/10 09:27:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,8 @@
 
 SSL_CTX *context = 0;
 
-SSL *getSSL(void)
+SSL *
+getSSL(void)
 {
 	if (!context) {
 		SSLeay_add_ssl_algorithms();
@@ -29,9 +30,12 @@ SSL *getSSL(void)
 		SSL_CTX_set_options(context, SSL_OP_ALL);
 		SSL_CTX_set_default_verify_paths(context);
 	}
+
 	return (SSL_new(context));
 }
-void ssl_finish(void)
+
+void
+ssl_finish(void)
 {
 	if (context) SSL_CTX_free(context);
 }

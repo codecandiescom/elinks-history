@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.30 2004/04/14 22:50:41 jonas Exp $ */
+/* $Id: event.c,v 1.31 2004/04/14 22:55:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,7 +218,7 @@ test_queue:
 		reset_timer();
 
 		if (ev->y == KBD_CTRL && upcase(ev->x) == 'L') {
-			ev->ev = EV_REDRAW;
+			ev->ev = EV_RESIZE;
 			ev->x = term->width;
 			ev->y = term->height;
 			term_send_event(term, ev);

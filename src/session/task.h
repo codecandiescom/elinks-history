@@ -1,4 +1,4 @@
-/* $Id: task.h,v 1.4 2003/12/31 02:49:38 miciah Exp $ */
+/* $Id: task.h,v 1.5 2004/04/02 16:53:35 jonas Exp $ */
 
 #ifndef EL__SCHED_TASK_H
 #define EL__SCHED_TASK_H
@@ -10,6 +10,7 @@ struct download;
 struct location;
 struct terminal;
 struct view_state;
+struct uri;
 
 /* This is for map_selected(), it is used to pass around information about
  * in-imagemap links. */
@@ -20,7 +21,7 @@ struct link_def {
 
 void abort_preloading(struct session *, int);
 
-void ses_goto(struct session *, unsigned char *, unsigned char *, struct location *,
+void ses_goto(struct session *, struct uri *, unsigned char *, struct location *,
 	      int, enum cache_mode, enum task_type, unsigned char *,
 	      void (*)(struct download *, struct session *), int);
 struct view_state *ses_forward(struct session *, int);

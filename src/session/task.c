@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.45 2004/04/02 16:50:51 jonas Exp $ */
+/* $Id: task.c,v 1.46 2004/04/02 16:53:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ post_no(struct task *task)
 }
 
 void
-ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
+ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	 struct location *target_location,
 	 int pri, enum cache_mode cache_mode, enum task_type task_type,
 	 unsigned char *pos,
@@ -112,9 +112,6 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 	struct task *task = mem_alloc(sizeof(struct task));
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
-	struct uri *uri = get_uri(url); /* XXX: Check return type */
-
-	mem_free(url);
 
 	if (ses->doc_view
 	    && ses->doc_view->document
@@ -308,10 +305,8 @@ do_move(struct session *ses, struct download **stat)
 	if (!ce) return 0;
 
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
-		unsigned char *u;
 		enum task_type task = ses->task.type;
 		struct uri *uri;
-		enum protocol protocol;
 
 		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
@@ -321,11 +316,6 @@ do_move(struct session *ses, struct download **stat)
 
 		if (uri->protocol == PROTOCOL_UNKNOWN)
 			return 0;
-
-		protocol = uri->protocol;
-		u = get_uri_string(uri, ~0);
-		done_uri(uri);
-		if (!u) goto b;
 
 		abort_loading(ses, 0);
 		if (have_location(ses))
@@ -342,10 +332,10 @@ do_move(struct session *ses, struct download **stat)
 		{
 			protocol_external_handler *fn;
 
-			fn = get_protocol_external_handler(protocol);
+			fn = get_protocol_external_handler(uri->protocol);
 			if (fn) {
-				fn(ses, u);
-				mem_free(u);
+				fn(ses, struri(uri));
+				done_uri(uri);
 				*stat = NULL;
 				return 0;
 			}
@@ -357,19 +347,19 @@ do_move(struct session *ses, struct download **stat)
 					    ? stracpy(ses->goto_position)
 					    : NULL;
 
-			ses_goto(ses, u, ses->task.target_frame, NULL,
+			ses_goto(ses, uri, ses->task.target_frame, NULL,
 				 PRI_MAIN, CACHE_MODE_NORMAL, task,
 				 gp, end_load, 1);
 			if (gp) mem_free(gp);
 			return 2;
 			}
 		case TASK_HISTORY:
-			ses_goto(ses, u, NULL, ses->task.target_location,
+			ses_goto(ses, uri, NULL, ses->task.target_location,
 				 PRI_MAIN, CACHE_MODE_NORMAL, TASK_RELOAD,
 				 NULL, end_load, 1);
 			return 2;
 		case TASK_RELOAD:
-			ses_goto(ses, u, NULL, NULL,
+			ses_goto(ses, uri, NULL, NULL,
 				 PRI_MAIN, ses->reloadlevel, TASK_RELOAD,
 				 NULL, end_load, 1);
 			return 2;
@@ -459,6 +449,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	unsigned char *pos;
 	enum protocol protocol = known_protocol(url, NULL);
 	struct uri *referrer = NULL;
+	struct uri *uri;
 
 	if (protocol == PROTOCOL_UNKNOWN) {
 		print_unknown_protocol_dialog(ses);
@@ -479,11 +470,14 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 
 	u = translate_url(url, ses->tab->term->cwd);
 	pos = u ? extract_fragment(u) : NULL;
+	uri = u ? get_uri(u) : NULL;
+	mem_free(u);
 
-	if (!u) {
+	if (!u || !uri) {
+		int state = u == NULL ? S_BAD_URL : S_OUT_OF_MEM;
 		struct download stat = { NULL_LIST_HEAD, NULL, NULL,
 					 NULL, NULL, NULL,
-					 S_BAD_URL, PRI_CANCEL, 0 };
+					 state, PRI_CANCEL, 0 };
 
 		if (pos) mem_free(pos);
 		print_error_dialog(ses, &stat);
@@ -491,9 +485,9 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	}
 
 	if (ses->task.type == task) {
-		if (!strcmp(struri(ses->loading_uri), u)) {
+		if (ses->loading_uri == uri) {
 			/* We're already loading the URL. */
-			mem_free(u);
+			done_uri(uri);
 
 			if (ses->goto_position)
 				mem_free(ses->goto_position);
@@ -514,7 +508,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 
 	set_session_referrer(ses, referrer);
 
-	ses_goto(ses, u, target, NULL,
+	ses_goto(ses, uri, target, NULL,
 		 PRI_MAIN, cache_mode, task,
 		 pos, end_load, 0);
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.278 2003/12/08 00:24:39 jonas Exp $ */
+/* $Id: session.c,v 1.279 2003/12/11 10:27:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,8 +154,6 @@ free_files(struct session *ses)
 }
 
 
-
-void file_end_load(struct download *, struct file_to_load *);
 
 
 static void request_frameset(struct session *, struct frameset_desc *);
@@ -471,6 +469,7 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 
 	return ftl;
 }
+
 #if 0
 struct file_to_load *
 request_additional_loading_file(struct session *ses, unsigned char *url,
@@ -492,6 +491,7 @@ request_additional_loading_file(struct session *ses, unsigned char *url,
 	return ftl;
 }
 #endif
+
 void
 process_file_requests(struct session *ses)
 {

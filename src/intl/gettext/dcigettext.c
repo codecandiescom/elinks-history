@@ -1158,9 +1158,15 @@ guess_category_value (category, categoryname)
   /* The highest priority value is the `LANGUAGE' environment
      variable.  But we don't use the value if the currently selected
      locale is the C locale.  This is a GNU extension.  */
+  /* XXX: This GNU extension breaks things for me and I can't see what is it
+   * good for - I think it only makes things more difficult and arcane, since
+   * it requires you to set up more variables than LANGUAGE, it's poorly
+   * documented and so on. If this breaks anything, let me know at
+   * pasky@ucw.cz, I'm really curious. If LANGUAGE exists, we just use it and
+   * do no more tests. This is an ELinks extension. --pasky  */
   language = getenv ("LANGUAGE");
-  if (language != NULL && language[0] == '\0')
-    language = NULL;
+  if (language && language[0])
+    return language;
 
   /* We have to proceed with the POSIX methods of looking to `LC_ALL',
      `LC_xxx', and `LANG'.  On some systems this can be done by the
@@ -1181,12 +1187,12 @@ guess_category_value (category, categoryname)
 	  if (retval == NULL || retval[0] == '\0')
 	    /* We use C as the default domain.  POSIX says this is
 	       implementation defined.  */
-	    return "C";
+	    retval = "C";
 	}
     }
 #endif
 
-  return language != NULL && strcmp (retval, "C") != 0 ? language : retval;
+  return retval;
 }
 
 /* @@ begin of epilog @@ */

@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.15 2004/05/15 23:40:14 zas Exp $ */
+/* $Id: charsets.h,v 1.16 2004/05/21 11:11:13 jonas Exp $ */
 
 #ifndef EL__CHARSETS_H
 #define EL__CHARSETS_H
@@ -32,17 +32,17 @@ enum convert_string_mode {
 
 struct conv_table *get_translation_table(int, int);
 
-/* The problem is that Samba (version 3.0.3), which provides libnss_wins.so.2,
- * has a function called convert_string(), which is called somewhere inside
- * _nss_wins_gethostbyname_r(). But, elinks also has a function called
- * convert_string() in src/intl/charsets.c that does something different.
- * This name clash causes the elinks hostname lookup thread to crash.
- * --Derek Poon */
-/* FIXME: Filed as bug 453. convert_string() is now a macro,
- * wrapping elinks_convert_string(), it should fix this issue. --Zas */
+/* The convert_string() name is also used by Samba (version 3.0.3), which
+ * provides libnss_wins.so.2, which is called somewhere inside
+ * _nss_wins_gethostbyname_r(). This name clash causes the elinks hostname
+ * lookup thread to crash so we need to rename the symbol. */
+/* Reported by Derek Poon and filed as bug 453 */
 #undef convert_string
-unsigned char *elinks_convert_string(struct conv_table *convert_table, unsigned char *chars, int charslen, enum convert_string_mode mode);
-#define convert_string(a,b,c,d) elinks_convert_string(a,b,c,d)
+#define convert_string convert_string_elinks
+
+unsigned char *convert_string(struct conv_table *convert_table,
+			      unsigned char *chars, int charslen,
+			      enum convert_string_mode mode);
 
 int get_cp_index(unsigned char *);
 unsigned char *get_cp_name(int);

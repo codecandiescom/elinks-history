@@ -1,3 +1,33 @@
+Tue Jan  7 23:26:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/Makefile.in.in:
+
+	Require explicit make update-po call to update the .po files
+	accordingly to the source, like original gettext did (but it won't
+	recreate .pot when making make dist, like original gettext did). See
+	Note 3 in the source for other details.  
+
+Tue Jan  7 23:20:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po, po/de.po,
+	po/el.po, po/es.po, po/et.po, po/fi.po, po/fr.po, po/gl.po,
+	po/hr.po, po/hu.po, po/id.po, po/is.po, po/it.po, po/lt.po,
+	po/nl.po, po/no.po, po/pl.po, po/pt.po, po/pt_BR.po, po/ro.po,
+	po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
+	src/config/options.c, src/sched/sched.c:
+
+	Introduced document.cache.cache_redirects, which controls whether we
+	should cache redirects received from server or not. By default we
+	won't, which changes the current behaviour. See option description
+	for details. Should fix problems with nytimes.com and other sites,
+	reported by Jiang Qian <qian2@fas.harvard.edu>.  
+
+Tue Jan  7 23:18:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/sched.h:
+
+	Exported struct list_head queue (=> compilation fix).  
+
 Tue Jan  7 19:57:29 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: document/cache.c, sched/sched.c, sched/sched.h:

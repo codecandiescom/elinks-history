@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.489 2004/06/19 15:45:03 jonas Exp $ */
+/* $Id: view.c,v 1.490 2004/06/19 17:11:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,7 +199,7 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 
 	if (active) {
 		set_cursor(term, box->x + box->width - 1, box->y + box->height - 1, 1);
-		set_window_ptr(get_current_tab(term), box->x, box->y);
+		set_window_ptr(ses->tab, box->x, box->y);
 	}
 
 	if (doc_view->document->height)

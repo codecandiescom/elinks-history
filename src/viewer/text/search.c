@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.194 2004/02/05 10:18:58 jonas Exp $ */
+/* $Id: search.c,v 1.195 2004/02/05 10:29:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1147,7 +1147,12 @@ link_typeahead_handler(struct input_line *line, int action)
 	if_assert_failed return INPUT_LINE_CANCEL;
 
 	/* If there is nothing to match with don't start searching */
-	if (!*buffer) return INPUT_LINE_PROCEED;
+	if (!*buffer) {
+		/* If something already were typed we need to redraw
+		 * in order to remove the coloring of the link text. */
+		if (line->data) draw_formatted(ses, 0);
+		return INPUT_LINE_PROCEED;
+	}
 
 	/* Hack time .. should we change mode? */
 	if (!line->data) {

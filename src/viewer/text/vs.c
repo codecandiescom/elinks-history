@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.47 2004/09/26 14:34:08 pasky Exp $ */
+/* $Id: vs.c,v 1.48 2004/09/28 19:20:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,6 +50,10 @@ destroy_vs(struct view_state *vs, int blast_ecmascript)
 	if (blast_ecmascript && vs->ecmascript)
 		ecmascript_put_interpreter(vs->ecmascript);
 #endif
+	if (vs->doc_view) {
+		vs->doc_view->vs = NULL;
+		vs->doc_view = NULL;
+	}
 }
 
 void

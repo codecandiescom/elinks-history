@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.73 2003/11/21 01:13:25 jonas Exp $ */
+/* $Id: hierbox.c,v 1.74 2003/11/21 16:15:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,14 +60,42 @@ init_browser_box(struct hierbox_browser *browser, unsigned char *text,
 	return box;
 }
 
-void
-done_browser_box(struct hierbox_browser *browser, struct listbox_item *box)
+/* Find a box to replace @item. This is done by trying first to traverse down, then
+ * up and if both traversals end up returning the box we want to replace bail
+ * out using NULL. */
+static inline struct listbox_item *
+replace_box_item(struct listbox_item *item)
 {
-	assert(box);
+	struct listbox_item *box;
+
+	box = traverse_listbox_items_list(item, 1, 1, NULL, NULL);
+	if (item != box) return box;
+
+	box = traverse_listbox_items_list(item, -1, 1, NULL, NULL);
+	return (item == box) ? NULL : box;
+}
+
+void
+done_browser_box(struct hierbox_browser *browser, struct listbox_item *box_item)
+{
+	struct listbox_data *box_data;
+
+	assert(box_item);
+
+	/* If we are removing the top or the selected box we have to figure out
+	 * a replacement. */
+
+	foreach (box_data, *box_item->box) {
+		if (box_data->sel && box_data->sel == box_item)
+			box_data->sel = replace_box_item(box_item);
+
+		if (box_data->top && box_data->top == box_item)
+			box_data->top = replace_box_item(box_item);
+	}
 
 	/* The option dialog needs this test */
-	if (box->next) del_from_list(box);
-	mem_free(box);
+	if (box_item->next) del_from_list(box_item);
+	mem_free(box_item);
 	update_hierbox_browser(browser);
 }
 

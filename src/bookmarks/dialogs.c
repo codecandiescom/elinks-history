@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.121 2003/11/21 01:13:25 jonas Exp $ */
+/* $Id: dialogs.c,v 1.122 2003/11/21 16:15:06 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -226,8 +226,6 @@ struct push_del_button_hop_struct {
 static void
 do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 {
-	struct listbox_data *box;
-
 	if (is_object_used(bookmark)) {
 		if (bookmark->box_item->type == BI_FOLDER)
 		msg_box(term, NULL, MSGBOX_FREE_TEXT,
@@ -255,40 +253,6 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 		while (!list_empty(bookmark->child)) {
 			do_del_bookmark(term, bookmark->child.next);
 		}
-	}
-
-	/* Take care about move of the selected item if we're deleting it. */
-
-	foreach (box, *bookmark->box_item->box) {
-
-	/* Please. Don't. Reindent. This. Ask. Why. --pasky */
-
-	/* Remember that we have to take the reverse direction here in
-	 * traverse(), as we have different sort order than usual. */
-
-	if (box->sel && box->sel->udata == bookmark) {
-		struct bookmark *bm = (struct bookmark *) box->sel->udata;
-
-		box->sel = traverse_listbox_items_list(bm->box_item, -1,
-				1, NULL, NULL);
-		if (bm->box_item == box->sel)
-			box->sel = traverse_listbox_items_list(bm->box_item, 1,
-					1, NULL, NULL);
-		if (bm->box_item == box->sel)
-			box->sel = NULL;
-	}
-
-	if (box->top && box->top->udata == bookmark) {
-		struct bookmark *bm = (struct bookmark *) box->top->udata;
-
-		box->top = traverse_listbox_items_list(bm->box_item, -1,
-				1, NULL, NULL);
-		if (bm->box_item == box->top)
-			box->top = traverse_listbox_items_list(bm->box_item, 1,
-					1, NULL, NULL);
-		if (bm->box_item == box->top)
-			box->top = NULL;
-	}
 	}
 
 	if (list_empty(bookmark->child))

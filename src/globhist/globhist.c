@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.50 2003/11/21 01:13:27 jonas Exp $ */
+/* $Id: globhist.c,v 1.51 2003/11/21 16:15:06 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -132,39 +132,6 @@ free_global_history_item(struct global_history_item *historyitem)
 void
 delete_global_history_item(struct global_history_item *historyitem)
 {
-	struct listbox_item *item = historyitem->box_item;
-	struct listbox_data *box;
-
-	/* If this happens inside of the box, move top/sel if needed. */
-
-	foreach (box, *item->box) {
-
-	/* Please see relevant parts of bookmarks. */
-
-	if (box) {
-		if (box->sel && item == box->sel) {
-			box->sel = traverse_listbox_items_list(item, -1,
-					1, NULL, NULL);
-			if (item == box->sel)
-				box->sel = traverse_listbox_items_list(item, 1,
-						1, NULL, NULL);
-			if (item == box->sel)
-				box->sel = NULL;
-		}
-
-		if (box->top && item == box->top) {
-			box->top = traverse_listbox_items_list(item, 1,
-					1, NULL, NULL);
-			if (item == box->top)
-				box->top = traverse_listbox_items_list(item, -1,
-						1, NULL, NULL);
-			if (item == box->top)
-				box->top = NULL;
-		}
-	}
-
-	}
-
 	free_global_history_item(historyitem);
 	del_from_list(historyitem);
 	mem_free(historyitem);

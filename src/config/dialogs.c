@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.119 2003/11/21 01:13:26 jonas Exp $ */
+/* $Id: dialogs.c,v 1.120 2003/11/21 16:15:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,29 +317,6 @@ static void
 really_delete_option(void *data)
 {
 	struct option *option = data;
-	struct listbox_data *box;
-
-	foreach (box, *option->box_item->box) {
-		if (box->sel == option->box_item) {
-			box->sel = traverse_listbox_items_list(option->box_item, -1,
-					1, NULL, NULL);
-			if (option->box_item == box->sel)
-				box->sel = traverse_listbox_items_list(option->box_item, 1,
-						1, NULL, NULL);
-			if (option->box_item == box->sel)
-				box->sel = NULL;
-		}
-
-		if (box->top == option->box_item) {
-			box->top = traverse_listbox_items_list(option->box_item, -1,
-					1, NULL, NULL);
-			if (option->box_item == box->top)
-				box->top = traverse_listbox_items_list(option->box_item, 1,
-						1, NULL, NULL);
-			if (option->box_item == box->top)
-				box->top = NULL;
-		}
-	}
 
 	delete_option(option);
 }
@@ -503,29 +480,6 @@ static void
 really_delete_keybinding(void *data)
 {
 	struct keybinding *keybinding = data;
-	struct listbox_data *box;
-
-	foreach (box, *keybinding->box_item->box) {
-		if (box->sel == keybinding->box_item) {
-			box->sel = traverse_listbox_items_list(keybinding->box_item, -1,
-					1, NULL, NULL);
-			if (keybinding->box_item == box->sel)
-				box->sel = traverse_listbox_items_list(keybinding->box_item, 1,
-						1, NULL, NULL);
-			if (keybinding->box_item == box->sel)
-				box->sel = NULL;
-		}
-
-		if (box->top == keybinding->box_item) {
-			box->top = traverse_listbox_items_list(keybinding->box_item, -1,
-					1, NULL, NULL);
-			if (keybinding->box_item == box->top)
-				box->top = traverse_listbox_items_list(keybinding->box_item, 1,
-						1, NULL, NULL);
-			if (keybinding->box_item == box->top)
-				box->top = NULL;
-		}
-	}
 
 	free_keybinding(keybinding);
 }

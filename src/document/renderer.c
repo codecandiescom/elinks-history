@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.52 2004/06/12 17:28:43 zas Exp $ */
+/* $Id: renderer.c,v 1.53 2004/06/12 17:39:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,7 +184,7 @@ comp_links(struct link *l1, struct link *l2)
 {
 	assert(l1 && l2);
 	if_assert_failed return 0;
-	return (l1->num - l2->num);
+	return (l1->number - l2->number);
 }
 
 #if 0

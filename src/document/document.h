@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.63 2004/06/12 17:28:43 zas Exp $ */
+/* $Id: document.h,v 1.64 2004/06/12 17:39:56 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -83,7 +83,7 @@ struct link {
 	struct point *points;
 	int npoints;
 	
-	int num;
+	int number;
 
 	struct color_pair color;
 };

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.35 2002/09/17 13:47:26 zas Exp $ */
+/* $Id: cookies.c,v 1.36 2002/11/25 13:44:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,14 +180,38 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	if (!cookie) return 0;
 
 	server = get_host_name(url);
+	if (!server) {
+free_cookie:		
+		mem_free(cookie);
+		return 0;
+	}
 	document = get_url_data(url);
-
+	if (!document) {
+free_server:
+		mem_free(server);
+		goto free_cookie;
+	}
+	
 	/* Fill main fields */
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
+	if (!cookie->name) {
+free_document:
+		mem_free(document);
+		goto free_server;
+	}
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
+	if (!cookie->value) {
+free_cookie_name:
+		mem_free(cookie->name);
+		goto free_document;
+	}		
 	cookie->server = stracpy(server);
-
+	if (!cookie->server) {
+		mem_free(cookie->value);
+		goto free_cookie_name;
+	}
+	
 	/* Get expiration date */
 
 	date = parse_http_header_param(str, "expires");
@@ -467,7 +491,14 @@ send_cookies(unsigned char **s, int *l, unsigned char *url)
 	struct c_domain *cd;
 	struct cookie *c, *d;
 	unsigned char *server = get_host_name(url);
-	unsigned char *data = get_url_data(url);
+	unsigned char *data;
+	
+	if (!server) return;
+	data = get_url_data(url);
+	if (!data) {
+		mem_free(server);
+		return;
+	}
 
 	if (data > url) data--;
 	foreach (cd, c_domains)

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.6 2002/11/25 13:56:46 zas Exp $ */
+/* $Id: user.c,v 1.7 2002/11/28 15:22:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,6 +111,7 @@ mailto_func(struct session *ses, unsigned char *url)
 		urldata = get_url_data(url);
 		if (urldata) {
 			urldata = stracpy(urldata);
+			if (!urldata) goto fail3;
 			subj = strchr(urldata, '?');
 		}
 	}
@@ -146,6 +147,7 @@ mailto_func(struct session *ses, unsigned char *url)
 
 	if (urldata) mem_free(urldata);
 
+fail3:
 	mem_free(param);
 
 fail2:

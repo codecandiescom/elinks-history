@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.93 2004/09/25 22:06:33 jonas Exp $ */
+/* $Id: parse.c,v 1.94 2004/09/25 23:57:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,7 +175,7 @@ next_attr:
 		} else {
 			unsigned char quote = *e;
 
-parse_quoted_value:
+/* parse_quoted_value: */
 			while (*(++e) != quote) {
 				if (*e == ASCII_CR) continue;
 				if (!*e) goto parse_error;
@@ -185,10 +185,18 @@ parse_quoted_value:
 					add_chr(attr, attrlen, ' ');
 			}
 			e++;
+			/* The following apparently handles the case of <foo
+			 * id="a""b">, however that is very rare and probably
+			 * not conforming. More frequent (and mishandling it
+			 * more fatal) is probably the typo of <foo id="a""> -
+			 * we can handle it as long as this is commented out.
+			 * --pasky */
+#if 0
 			if (*e == quote) {
 				add_chr(attr, attrlen, *e);
 				goto parse_quoted_value;
 			}
+#endif
 		}
 
 found_endattr:
@@ -219,7 +227,7 @@ found_endattr:
 				while (*(++e) != quote)
 					if (!*e) goto parse_error;
 				e++;
-			} while (*e == quote);
+			} while (/* See above. *e == quote */ 0);
 		}
 	}
 

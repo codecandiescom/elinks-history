@@ -1,3 +1,189 @@
+Sun Dec  8 22:52:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.h:
+
+	Introduced OPT_TOUCHED option_flag, not used anywhere yet.  
+
+Sun Dec  8 22:05:42 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Remove add bookmark dialog from file menu.  
+
+Sun Dec  8 21:18:56 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Fixed finding dimensions of the edit option dialog.  
+
+Sun Dec  8 21:01:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/: auth.c, document.c, edit.c, menu.c, mime.c,
+	options.c, refresh.c:
+
+	Modules interface cleanup - make everything possible static.  
+
+Sun Dec  8 20:47:33 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	Modules interface cleanup - make everything possible static.
+	Commented out currently completely dead portion of code.  
+
+Sun Dec  8 20:41:32 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: cmdline.c, conf.c, dialogs.c, options.c, opttypes.c:
+
+	Modules interface cleanup - make everything possible static.  
+
+Sun Dec  8 20:30:32 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/inpfield.c,
+	bfu/inphist.c, bfu/leds.c, bfu/listbox.c, bfu/menu.c, bfu/msgbox.c,
+	bookmarks/bookmarks.c, bookmarks/dialogs.c,
+	bookmarks/backend/common.c:
+
+	Modules interface cleanup - make everything possible static.  
+
+Sun Dec  8 20:21:16 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Now description is always separated by newline and between heading
+	and description text is now line break.  
+
+Sun Dec  8 20:17:43 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/cache.h:
+
+	Witekfl, test your patches to compile before sending them. Pasky,
+	test the stuff to compile before committing it. I know I know.  
+
+Sun Dec  8 20:14:31 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/sched.c:
+
+	Fixed buggy Pragma: No-cache handling, patch by witekfl.  
+
+Sun Dec  8 20:00:39 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Dump garbage.  
+
+Sun Dec  8 18:30:33 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/english.lng:
+
+	Oops, fixed a typo. Thanks, zas.  
+
+Sun Dec  8 18:30:06 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/dialogs.c:
+
+	Added actual checking of the value attempted to be set, show error
+	if it's bad. Also fixed some memleak, IIRC ;-).  
+
+Sun Dec  8 18:28:52 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/opttypes.c:
+
+	Don't touch option value if the option can't be set.  
+
+Sun Dec  8 18:02:17 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng:
+
+	French translation was updated.  
+
+Sun Dec  8 17:54:10 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Code cleanup.  
+
+Sun Dec  8 17:14:50 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: dialogs.c, options.c, options.h:
+
+	Fixed memory leak when changing an option. Needs more work.  
+
+Sun Dec  8 17:00:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/: memory.c, memory.h:
+
+	Memory allocation internal functions are now used by default.
+	Performance is reduced a bit, but they are fault-tolerant and will
+	issue messages on bad behavior. You can define FASTMEM to enable use
+	of native allocation functions. Code was cleanup.  
+
+Sun Dec  8 16:58:14 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: dialogs.c, opttypes.c:
+
+	Don't add quotes around the string while in commandline mode. Switch
+	into commandline mode when getting value of an option for edit
+	dialog.  
+
+Sun Dec  8 16:55:25 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/dialogs.c, src/config/opttypes.c, src/config/opttypes.h:
+
+	Edit option dialog. Lotsa known bugs, but at least something now.
+	Bugfixes suite will follow soon :^).  
+
+Sun Dec  8 13:21:30 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	parse_element() optimization (removal of useless e < eof stuff).
+	Patch by witekfl.  
+
+Sun Dec  8 12:23:27 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Added save button to the options manager.  
+
+Sun Dec  8 11:21:53 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/gen-intl:
+
+	Make intl/gen-intl working even on non-bashish /bin/shs ;-). Thanks
+	to witekfl for report.  
+
+Sat Dec  7 23:47:56 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/french.lng:
+
+	French translation update.  
+
+Sat Dec  7 23:32:23 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre24.CVS 
+
 Sat Dec  7 23:31:31 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

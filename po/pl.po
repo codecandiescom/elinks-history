@@ -6093,7 +6093,6 @@ msgid "HTTP error %03d"
 msgstr "B³±d HTTP %03d"
 
 #: src/protocol/http/codes.c:130
-#, fuzzy
 msgid ""
 "  An error occurred on the server while fetching the document you\n"
 "  requested. However, the server did not send back any explanation of what\n"
@@ -6105,10 +6104,9 @@ msgid ""
 msgstr ""
 "  Podczas pobierania dokumentu dosz³o do b³êdu po stronie serwera.\n"
 "  Serwer nie odes³a³ ¿adnego wyja¶nienia co siê sta³o. By³oby mi³o\n"
-"  gdyby¶ poinformowa³(a) o tym administratora serwera.\n"
-"  <br><br>\n"
-"  Nie mam pojêcia co jest ¼le, przykro mi. Skontaktuj siê z administratorem\n"
-"  serwera je¶li wierzysz, ¿e do tego b³êdu nie powinno doj¶æ.\n"
+"  gdyby¶ poinformowa³(a) o tym administratora serwera, gdy¿ nie jest\n"
+"  to po¿±dane zachowanie oraz czêsto wskazuje na powa¿niejszy problem\n"
+"  z oprogramowaniem serwera www.\n"
 
 #. name:
 #: src/protocol/http/http.c:58 src/protocol/http/http.c:186

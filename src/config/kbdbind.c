@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.194 2004/01/25 14:10:06 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.195 2004/01/25 14:24:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,26 +449,20 @@ add_actions_to_string(struct string *string, int *actions,
 /* Please keep these tables in alphabetical order, and in sync with
  * the ACT_* constants in kbdbind.h.  */
 
-static struct strtonum main_action_table[] = {
+static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "none", ACT_MAIN_NONE, DACT(N_("Do nothing")) },
 	{ " *scripting-function*", ACT_MAIN_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "abort-connection", ACT_MAIN_ABORT_CONNECTION, DACT(N_("Abort connection")) },
 	{ "add-bookmark", ACT_MAIN_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
 	{ "add-bookmark-link", ACT_MAIN_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
 	{ "add-bookmark-tabs", ACT_MAIN_ADD_BOOKMARK_TABS, DACT(N_("Bookmark all open tabs")) },
-	{ "auto-complete", ACT_MAIN_AUTO_COMPLETE, DACT(N_("Attempt to auto-complete the input")) },
-	{ "auto-complete-unambiguous", ACT_MAIN_AUTO_COMPLETE_UNAMBIGUOUS, DACT(N_("Attempt to unambiguously auto-complete the input")) },
 	{ "back", ACT_MAIN_BACK, DACT(N_("Return to the previous document in history")) },
-	{ "backspace", ACT_MAIN_BACKSPACE, DACT(N_("Delete character in front of the cursor")) },
-	{ "beginning-of-buffer", ACT_MAIN_BEGINNING_OF_BUFFER, DACT(N_("Go to the first line of the buffer")) },
 	{ "bookmark-manager", ACT_MAIN_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
 	{ "cache-manager", ACT_MAIN_CACHE_MANAGER, DACT(N_("Open cache manager")) },
 	{ "cache-minimize", ACT_MAIN_CACHE_MINIMIZE, DACT(N_("Free unused cache entries")) },
-	{ "cancel", ACT_MAIN_CANCEL, DACT(N_("Cancel current state")) },
 	{ "cookie-manager", ACT_MAIN_COOKIE_MANAGER, DACT(N_("Open cookie manager")) },
 	{ "cookies-load", ACT_MAIN_COOKIES_LOAD, DACT(N_("Reload cookies file")) },
 	{ "copy-clipboard", ACT_MAIN_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
-	{ "cut-clipboard", ACT_MAIN_CUT_CLIPBOARD, DACT(N_("Delete text from clipboard")) },
 	{ "delete", ACT_MAIN_DELETE, DACT(N_("Delete character under cursor")) },
 	{ "document-info", ACT_MAIN_DOCUMENT_INFO, DACT(N_("Show information about the current page")) },
 	{ "down", ACT_MAIN_DOWN, DACT(N_("Move cursor downwards")) },
@@ -477,11 +471,9 @@ static struct strtonum main_action_table[] = {
 	{ "download-manager", ACT_MAIN_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
 	{ "edit", ACT_MAIN_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
 	{ "end", ACT_MAIN_END, DACT(N_("Go to the end of the page/line")) },
-	{ "end-of-buffer", ACT_MAIN_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer")) },
 	{ "enter", ACT_MAIN_ENTER, DACT(N_("Follow the current link")) },
 	{ "enter-reload", ACT_MAIN_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
 	{ "exmode", ACT_MAIN_EXMODE, DACT(N_("Enter ex-mode (command line)")) },
-	{ "expand", ACT_MAIN_EXPAND, DACT(N_("Expand item")) },
 	{ "file-menu", ACT_MAIN_FILE_MENU, DACT(N_("Open the File menu")) },
 	{ "find-next", ACT_MAIN_FIND_NEXT, DACT(N_("Find the next occurrence of the current search text")) },
 	{ "find-next-back", ACT_MAIN_FIND_NEXT_BACK, DACT(N_("Find the previous occurrence of the current search text")) },
@@ -497,8 +489,6 @@ static struct strtonum main_action_table[] = {
 	{ "jump-to-link", ACT_MAIN_JUMP_TO_LINK, DACT(N_("Jump to link")) },
 	{ "keybinding-manager", ACT_MAIN_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
 	{ "kill-backgrounded-connections", ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
-	{ "kill-to-bol", ACT_MAIN_KILL_TO_BOL, DACT(N_("Delete to beginning of line")) },
-	{ "kill-to-eol", ACT_MAIN_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
 	{ "left", ACT_MAIN_LEFT,DACT( N_("Move the cursor left")) },
 	{ "link-menu", ACT_MAIN_LINK_MENU, DACT(N_("Open the link context menu")) },
 #ifdef HAVE_LUA
@@ -507,11 +497,9 @@ static struct strtonum main_action_table[] = {
 	{ "lua-console", ACT_MAIN_LUA_CONSOLE, DACT(N_("Open a Lua console (DISABLED)")) },
 #endif
 	{ "mark-goto", ACT_MAIN_MARK_GOTO, DACT(N_("Go at a specified mark")) },
-	{ "mark-item", ACT_MAIN_MARK_ITEM, DACT(N_("Mark item")) },
 	{ "mark-set", ACT_MAIN_MARK_SET, DACT(N_("Set a mark")) },
 	{ "menu", ACT_MAIN_MENU, DACT(N_("Activate the menu")) },
 	{ "next-frame", ACT_MAIN_NEXT_FRAME, DACT(N_("Move to the next frame")) },
-	{ "next-item", ACT_MAIN_NEXT_ITEM, DACT(N_("Move to the next item")) },
 	{ "open-link-in-new-tab", ACT_MAIN_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
 	{ "open-link-in-new-tab-in-background", ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open the current link a new tab in background")) },
 	{ "open-link-in-new-window", ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW, DACT(N_("Open the current link in a new window")) },
@@ -522,7 +510,6 @@ static struct strtonum main_action_table[] = {
 	{ "options-manager", ACT_MAIN_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
 	{ "page-down", ACT_MAIN_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
 	{ "page-up", ACT_MAIN_PAGE_UP, DACT(N_("Move upwards by a page")) },
-	{ "paste-clipboard", ACT_MAIN_PASTE_CLIPBOARD, DACT(N_("Paste text from the clipboard")) },
 	{ "previous-frame", ACT_MAIN_PREVIOUS_FRAME, DACT(N_("Move to the previous frame")) },
 	{ "quit", ACT_MAIN_QUIT, DACT(N_("Open a quit confirmation dialog box")) },
 	{ "really-quit", ACT_MAIN_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
@@ -544,7 +531,6 @@ static struct strtonum main_action_table[] = {
 	{ "search", ACT_MAIN_SEARCH, DACT(N_("Search for a text pattern")) },
 	{ "search-back", ACT_MAIN_SEARCH_BACK, DACT(N_("Search backwards for a text pattern")) },
 	{ "search-typeahead", ACT_MAIN_SEARCH_TYPEAHEAD, DACT(N_("Search link text by typing ahead")) },
-	{ "select", ACT_MAIN_SELECT, DACT(N_("Select current highlighted item")) },
 	{ "show-term-options", ACT_MAIN_SHOW_TERM_OPTIONS, DACT(N_("Show terminal options dialog")) },
 	{ "submit-form", ACT_MAIN_SUBMIT_FORM, DACT(N_("Submit form")) },
 	{ "submit-form-reload", ACT_MAIN_SUBMIT_FORM_RELOAD, DACT(N_("Submit form and reload")) },
@@ -561,7 +547,6 @@ static struct strtonum main_action_table[] = {
 	{ "toggle-plain-compress-empty-lines", ACT_MAIN_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES, DACT(N_("Toggle plain renderer compression of empty lines")) },
 	{ "toggle-wrap-text", ACT_MAIN_TOGGLE_WRAP_TEXT, DACT(N_("Toggle wrapping of text")) },
 	{ "unback", ACT_MAIN_UNBACK, DACT(N_("Go forward in the unhistory")) },
-	{ "unexpand", ACT_MAIN_UNEXPAND, DACT(N_("Collapse item")) },
 	{ "up", ACT_MAIN_UP, DACT(N_("Move cursor upwards")) },
 	{ "view-image", ACT_MAIN_VIEW_IMAGE, DACT(N_("View the current image")) },
 	{ "zoom-frame", ACT_MAIN_ZOOM_FRAME, DACT(N_("Maximize the current frame")) },

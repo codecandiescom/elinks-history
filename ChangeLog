@@ -1,3 +1,538 @@
+Sat Jan  4 22:40:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, da.po, de.po, el.po, es.po, et.po,
+	fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po, lt.po,
+	nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po, sv.po,
+	tr.po, uk.po:
+
+	Sync.  
+
+Sat Jan  4 22:40:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Partial czech translation update.  
+
+Sat Jan  4 21:59:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Documents -> Document.  
+
+Sat Jan  4 21:55:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Newline added in description of language tree options.  
+
+Sat Jan  4 21:27:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	connection.ssl.cert_verify gettextization fix.  
+
+Sat Jan  4 21:11:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	Removed dangerous fuzzy translation for the --version output.  
+
+Sat Jan  4 21:01:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Fixed listing of translated items in listbox.  
+
+Sat Jan  4 20:57:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/loadmsgcat.c:
+
+	Fixed off-by-one error causing random cores soon-after-startup. Make
+	sure the generated filename string is null-terminated. Fixed scale
+	of memory leaks.  
+
+Sat Jan  4 20:42:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Compilation fix.  
+
+Sat Jan  4 20:41:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Compilation fix by Jonas.  
+
+Sat Jan  4 20:39:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/Makefile.in.in:
+
+	Remove also *.gmo, patch by Jonas.  
+
+Sat Jan  4 20:38:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	Synced the .po files with the source. You've stuff to do,
+	translators >:). (And me too ;-) 
+
+Sat Jan  4 20:26:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Gettextized error messages and output of some option-commands (help,
+	version, host, ...).  
+
+Sat Jan  4 20:17:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/opttypes.c:
+
+	Gettextized error messages and type help strings.  
+
+Sat Jan  4 20:14:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Gettextized keybindings and error messages.  
+
+Sat Jan  4 20:06:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Gettextized option descriptions.  
+
+Sat Jan  4 17:17:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Gettextized option captions (and few first descriptions).  
+
+Sat Jan  4 17:07:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Keybinding listbox_items are translated.  
+
+Sat Jan  4 17:06:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Options listbox_items are translated.  
+
+Sat Jan  4 17:04:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/: listbox.c, listbox.h:
+
+	If listbox_item.translated, call gettext on listbox_item.text when
+	displaying it. Transformed listbox_item flags to a bit array.  
+
+Sat Jan  4 17:00:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Translate the option description (non-op for translations yet).  
+
+Sat Jan  4 16:45:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/libintl.h:
+
+	Fixed displaying of translation with non-fuzzy msgid "" (cs
+	translation right now).  
+
+Sat Jan  4 16:44:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Formatting fix.  
+
+Sat Jan  4 15:26:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/dcigettext.c:
+
+	Touched this file, aimed to help people fighting with the previous
+	absence of dependency tracking in gettext sources (their elinks
+	dumps core.. try make clean ;).  
+
+Sat Jan  4 15:21:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	Touched all files, so that they're rebuilt in the build tree.  
+
+Sat Jan  4 15:19:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/Makefile.in.in:
+
+	Build the .gmo files in the build tree, not source tree, if they
+	differ. That allows us to run ELinks from the build tree directly
+	without installation.  
+
+Sat Jan  4 15:08:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/loadmsgcat.c:
+
+	Minor cleanup of the hack.  
+
+Sat Jan  4 15:08:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/Makefile.in:
+
+	Introduced dependency tracking (ported from automake makefiles) 
+
+Sat Jan  4 14:43:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/loadmsgcat.c:
+
+	We can't use our memory/string utility functions *sniff* ;-(.  
+
+Sat Jan  4 14:20:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/: TODO, l10nflist.c, loadinfo.h, loadmsgcat.c:
+
+	Look to the ELinks path + ../po/language.gmo for the translations
+	aside of the install directory, enabling elinks to have correct
+	translations even when being ran directly from the source tree.  
+
+Sat Jan  4 13:46:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	Some view.c line number changes. Hrmpf.  
+
+Sat Jan  4 13:46:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/: TODO, VERSION, libintl.h:
+
+	Multiplex gettext() output terminal appropriately depending on the
+	output terminal.  
+
+Sat Jan  4 13:19:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Credits >:).  
+
+Sat Jan  4 13:14:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Commented out .gz automatic gunzipping. Idea by witekfl ;-).  
+
+Sat Jan  4 13:09:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/config/kbdbind.c, src/config/kbdbind.h,
+	src/viewer/text/view.c:
+
+	Introduced action toggle-numbered-links, by default bound to '.'.
+	Patch by Wiktor Grebla <greblus@poczta.onet.pl>.  
+
+Sat Jan  4 13:06:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, da.po, de.po, el.po, es.po, et.po,
+	fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po, lt.po,
+	nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po, sv.po,
+	tr.po, uk.po:
+
+	Normalized the huge strconcat() caring about the About dialog.
+	Gettextized the feature names. Gettextized user_agent and
+	saving_style startup warnings.  
+
+Sat Jan  4 13:05:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation updated.  
+
+Sat Jan  4 12:35:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/session.c:
+
+	Gettextized user_agent and saving_style startup warnings.  
+
+Sat Jan  4 12:30:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Fixed Copying dialog translation.  
+
+Sat Jan  4 12:28:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	Normalized the huge strconcat() caring about the About dialog.
+	Gettextized the feature names.  
+
+Sat Jan  4 12:20:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Explicitly said that you have to survive the circular dependency.  
+
+Sat Jan  4 11:59:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/Makefile.in.in:
+
+	Beautification.  
+
+Sat Jan  4 11:53:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: Makefile.in.in, be.po, bg.po, ca.po, cs.po, da.po, de.po,
+	el.po, es.po, et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po,
+	is.po, it.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po,
+	ru.po, sk.po, sv.po, tr.po, uk.po:
+
+	Automatically update .po files when any of the gettextized sources
+	changes. TODO: Run msgmerge only when the .pot changed.  
+
+Sat Jan  4 11:39:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/POTFILES.in, po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po,
+	po/de.po, po/el.po, po/es.po, po/et.po, po/fi.po, po/fr.po,
+	po/gl.po, po/hr.po, po/hu.po, po/id.po, po/is.po, po/it.po,
+	po/lt.po, po/nl.po, po/no.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
+	src/bookmarks/backend/xbel.c:
+
+	Gettextized some messages in bookmarks/backend/xbel.c. Based on
+	Fabio's patch.  
+
+Sat Jan  4 11:23:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/TODO:
+
+	More to do.  
+
+Sat Jan  4 11:18:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/pl.po:
+
+	Polish translation update, patch by witekfl.  
+
+Sat Jan  4 11:13:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/Makefile.in.in:
+
+	Removed unused code.  
+
+Sat Jan  4 11:06:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, el.po, fi.po, fr.po,
+	gl.po, hr.po, hu.po, id.po, is.po, it.po, lt.po, nl.po, no.po,
+	pl.po, pt.po, pt_BR.po, ro.po, sk.po, tr.po, uk.po:
+
+	Corrected Language-Team emails.  
+
+Sat Jan  4 01:07:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am, configure.in:
+
+	Generate Makefiles in existing directories ;-).  
+
+Sat Jan  4 01:06:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/: .cvsignore, Makefile.am:
+
+	Hrmpf. The suite.  
+
+Sat Jan  4 01:05:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/README:
+
+	We can't get rid of this directory completely because automake will
+	just give up. *sigh* 
+
+Sat Jan  4 01:05:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/el.po:
+
+	Another small syntax fix.  
+
+Sat Jan  4 01:03:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Don't generate Makefiles in non-existing directories ;-).  
+
+Sat Jan  4 01:02:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* m4/gettext.m4:
+
+	Removed useless stuff (we always use own gettext).  
+
+Sat Jan  4 00:58:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/.cvsignore:
+
+	*cough* 
+
+Sat Jan  4 00:58:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am, intl/Makefile.am, intl/README, intl/english.lng,
+	intl/index.txt, intl/sync_vs_source.pl, intl/sync_vs_source.sh,
+	intl/synclang, intl/synclang.awk:
+
+	Removed now obsolete intl/ directory. Bye bye the old translation
+	system - the last remnants should disappear with this commit.  
+
+Sat Jan  4 00:56:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/icelandic.lng, intl/index.txt, po/is.po:
+
+	Gettextized Icelandic translation. Uff.  
+
+Sat Jan  4 00:54:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Fixed Armon Red's email.  
+
+Sat Jan  4 00:53:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/finnish.lng, intl/index.txt, po/fi.po:
+
+	Gettextized Finnish translation.  
+
+Sat Jan  4 00:50:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/norwegian.lng, po/no.po:
+
+	Gettextized Norwegian translation.  
+
+Sat Jan  4 00:48:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/Makefile.in:
+
+	Removed fi leftover. Fixes the distclean target.  
+
+Sat Jan  4 00:48:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/lithuanian.lng, po/lt.po:
+
+	Gettextized Lithuanian translation.  
+
+Sat Jan  4 00:44:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/estonian.lng, intl/index.txt, po/et.po:
+
+	Gettextized Estonian translation.  
+
+Sat Jan  4 00:41:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/croatian.lng, intl/index.txt, po/hr.po:
+
+	Gettextized Croatian translation.  
+
+Sat Jan  4 00:38:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/galician.lng, intl/index.txt, po/gl.po:
+
+	Gettextized Galician translation.  
+
+Sat Jan  4 00:35:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/hungarian.lng, intl/index.txt, po/hu.po:
+
+	Gettextized Hungarian translation.  
+
+Sat Jan  4 00:32:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/greek.lng, intl/index.txt, po/el.po:
+
+	Gettextized Greek translation.  
+
+Sat Jan  4 00:27:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/catalan.lng, intl/index.txt, po/ca.po:
+
+	Gettextized Catalan translation.  
+
+Sat Jan  4 00:24:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/dutch.lng, intl/index.txt, po/nl.po:
+
+	Gettextized Dutch translation.  
+
+Sat Jan  4 00:21:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/russian.lng, po/ru.po:
+
+	Gettextized Russian translation.  
+
+Sat Jan  4 00:17:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/swedish.lng, po/sv.po:
+
+	Gettextized Swedish translation.  
+
+Sat Jan  4 00:14:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/bulgarian.lng, intl/index.txt, po/bg.po:
+
+	Gettextized Bulgarian translation.  
+
+Sat Jan  4 00:13:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/be.po:
+
+	"\n" inserted at copyright notice to remove msgfmt warning.  
+
+Sat Jan  4 00:08:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/gettext/Makefile.in:
+
+	Removed irrelevant commands (for gettext package). Also, libintl.h
+	is not attempted to be autocreated and is not removed by make clean
+	anymore. Should maybe fix bug reported by witekfl.  
+
+Sat Jan  4 00:02:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/uk.po:
+
+	Tried to fix error when processing uk.po. Thanks to witekfl and
+	jonas for a report.  
+
+Sat Jan  4 00:01:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/romanian.lng, po/ro.po:
+
+	Gettextized Romanian translation.  
+
+Fri Jan  3 23:55:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/turkish.lng, po/tr.po:
+
+	Gettextized Turkish translation.  
+
+Fri Jan  3 23:32:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/belarusian.lng, intl/index.txt, po/be.po:
+
+	Gettextized Belarusian translationl.  
+
+Fri Jan  3 23:22:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/ukrainian.lng, po/uk.po:
+
+	Gettextized Ukrainian translation.  
+
+Fri Jan  3 23:15:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/slovak.lng, po/sk.po:
+
+	Gettextized Slovak translation.  
+
 Fri Jan  3 22:58:03 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in, intl/index.txt, intl/spanish.lng, po/es.po:

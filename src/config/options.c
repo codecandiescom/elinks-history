@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.225 2003/06/14 22:31:35 jonas Exp $ */
+/* $Id: options.c,v 1.226 2003/06/15 02:00:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -599,8 +599,11 @@ version_cmd(struct option *o, unsigned char ***argv, int *argc)
  * The caption define wether only the captions should be printed.
  * The level means the level of indentation.
  */
+
+#define gettext_nonempty(x) (*(x) ? gettext(x) : (x))
+
 static void
-printhelp_descend(struct option *tree, unsigned char *path)
+print_full_help(struct option *tree, unsigned char *path)
 {
 	struct option *option;
 	unsigned char saved[MAX_STR_LEN];
@@ -609,51 +612,21 @@ printhelp_descend(struct option *tree, unsigned char *path)
 	*savedpos = 0;
 
 	foreach (option, *((struct list_head *) tree->ptr)) {
+		enum option_type type = option->type;
+		unsigned char *help;
+		unsigned char *capt = option->capt;
 		unsigned char *desc = (option->desc && *option->desc)
 				      ? (unsigned char *) gettext(option->desc)
 				      : (unsigned char *) "N/A";
 
 		/* Don't print autocreated options and deprecated aliases */
-		if (option->flags == OPT_AUTOCREATE ||
-		    (option->type == OPT_ALIAS && tree != &cmdline_options)) {
+		if (type == OPT_ALIAS && tree != &cmdline_options)
 			continue;
-		} else if (option->type == OPT_TREE) {
-			unsigned char *newpath;
-			unsigned char *description;
-			int l = strlen(desc);
-			int i;
 
-			/* Append option name to path */
-			newpath = init_str();
-			if (!newpath) continue;
+		if (!capt && !strncasecmp(option->name, "_template_", 10))
+			capt = (unsigned char *) N_("Template option folder");
 
-			add_to_strn(&newpath, path);
-			add_to_strn(&newpath, option->name);
-
-			if (option->capt)
-				description = *option->capt
-					      ? (unsigned char *) gettext(option->capt)
-					      : (unsigned char *) "";
-			else
-				description = desc;
-
-			printf("  %s: (%s)\n", description, newpath);
-			printf("  %8s", "");
-			for (i = 0; i < l; i++) {
-				putchar(desc[i]);
-
-				if (desc[i] == '\n')
-					printf("  %8s", "");
-			}
-			printf("\n\n");
-
-			add_to_strn(&newpath, ".");
-			printhelp_descend(option, newpath);
-			mem_free(newpath);
-			continue;
-		}
-
-		if (!option->capt) {
+		if (!capt) {
 			int len = strlen(option->name);
 			int max = MAX_STR_LEN - (savedpos - saved);
 
@@ -663,34 +636,68 @@ printhelp_descend(struct option *tree, unsigned char *path)
 			continue;
 		}
 
-		printf("  %s%s%s ", path, saved, option->name);
-		if (*option_types[option->type].help_str)
-			printf("%s", gettext(option_types[option->type].help_str));
+		help = gettext_nonempty(option_types[option->type].help_str);
 
-		if (desc) {
+		/* Print the 'title' of each option type. */
+		if (type == OPT_INT || type == OPT_BOOL || type == OPT_LONG) {
+			printf(gettext("    %s%s%s %s (default: %d)"),
+				path, saved, option->name, help,
+				*((int *) option->ptr));
+
+		} else if (type == OPT_STRING && option->ptr) {
+			printf(gettext("    %s%s%s %s (default: \"%s\")"),
+				path, saved, option->name, help,
+				(char *) option->ptr);
+
+		} else if (type == OPT_ALIAS) {
+			printf(gettext("    %s%s%s %s (alias for %s)"),
+				path, saved, option->name, help,
+				(char *) option->ptr);
+
+		} else if (type == OPT_CODEPAGE) {
+			printf(gettext("    %s%s%s %s (default: %s)"),
+				path, saved, option->name, help,
+				get_cp_name(* (int *) option->ptr));
+
+		} else if (type == OPT_COLOR) {
+			struct rgb *color = (struct rgb *) option->ptr;
+
+			printf(gettext("    %s%s%s %s (default: #%02x%02x%02x)"),
+				path, saved, option->name, help,
+				color->r, color->g, color->b);
+
+		} else if (type == OPT_COMMAND) {
+			printf("    %s%s%s", path, saved, option->name);
+
+		} else if (type == OPT_LANGUAGE) {
+			printf(gettext("    %s%s%s %s (default: \"%s\")"),
+				path, saved, option->name, help,
+				(char *) option->ptr);
+
+		} else if (type == OPT_TREE) {
+			int pathlen = strlen(path);
+			int namelen = strlen(option->name);
+
+			if (pathlen + namelen + 2 > MAX_STR_LEN) continue;
+
+			/* Append option name to path */
+			if (pathlen > 0) {
+				memcpy(saved, path, pathlen);
+				savedpos = saved + pathlen;
+			} else {
+				savedpos = saved;
+			}
+			memcpy(savedpos, option->name, namelen + 1);
+			savedpos += namelen;
+
+			capt = gettext_nonempty(capt);
+			printf("  %s: (%s)", capt, saved);
+		}
+
+		printf("\n    %8s", "");
+		{
 			int l = strlen(desc);
 			int i;
-
-			if (option->type == OPT_INT
-				|| option->type == OPT_BOOL
-				|| option->type == OPT_LONG) {
-				printf(gettext(" (default: %d)\n"), *((int *) option->ptr));
-			} else if (option->type == OPT_STRING && option->ptr) {
-				printf(gettext(" (default: \"%s\")\n"), (char *) option->ptr);
-			} else if (option->type == OPT_ALIAS) {
-				printf(gettext("(alias for %s)\n"), (char *) option->ptr);
-			} else if (option->type == OPT_CODEPAGE) {
-				printf(gettext(" (default: %s)\n"),
-					get_cp_name(* (int *) option->ptr));
-			} else if (option->type == OPT_COLOR) {
-				struct rgb *color = (struct rgb *) option->ptr;
-				printf(gettext(" (default: #%02x%02x%02x)\n"),
-					color->r, color->g, color->b);
-			} else {
-				printf("\n");
-			}
-
-			printf("    %8s", "");
 
 			for (i = 0; i < l; i++) {
 				putchar(desc[i]);
@@ -698,11 +705,16 @@ printhelp_descend(struct option *tree, unsigned char *path)
 				if (desc[i] == '\n')
 					printf("    %8s", "");
 			}
-			printf("\n\n");
-			savedpos = saved;
-			*savedpos = 0;
-			continue;
 		}
+		printf("\n\n");
+
+		if (option->type == OPT_TREE) {
+			memcpy(savedpos, ".", 2);
+			print_full_help(option, saved);
+		}
+
+		savedpos = saved;
+		*savedpos = 0;
 	}
 }
 
@@ -711,7 +723,6 @@ print_short_help()
 {
 
 #define ALIGN_WIDTH 20
-#define gettext_nonempty(x) (*(x) ? gettext(x) : (x))
 
 	struct option *option;
 	unsigned char saved[MAX_STR_LEN];
@@ -735,8 +746,8 @@ print_short_help()
 		if (!option->capt) {
 			int max = MAX_STR_LEN - (savedpos - saved);
 
-			safe_strncpy(savedpos, option->name, max);
-			safe_strncpy(savedpos + len, ", -", max - len);
+			memcpy(savedpos, option->name, len);
+			memcpy(savedpos + len, ", -", max - len + 1);
 			savedpos += len + 3;
 			continue;
 		}
@@ -754,11 +765,10 @@ print_short_help()
 		savedpos = saved;
 		*savedpos = 0;
 	}
-
 #undef ALIGN_WIDTH
-#undef gettext_nonempty
-
 }
+
+#undef gettext_nonempty
 
 static unsigned char *
 printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
@@ -768,12 +778,12 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 
 	if (!strcmp(option->name, "config-help")) {
 		printf(gettext("Configuration options:\n"));
-		printhelp_descend(&root_options, "");
+		print_full_help(&root_options, "");
 	} else {
 		printf(gettext("Usage: elinks [OPTION]... [URL]\n\n"));
 		printf(gettext("Options:\n"));
 		if (!strcmp(option->name, "long-help")) {
-			printhelp_descend(&cmdline_options, "-");
+			print_full_help(&cmdline_options, "-");
 		} else {
 			print_short_help();
 		}

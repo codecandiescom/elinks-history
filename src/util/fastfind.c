@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.18 2003/06/14 19:59:05 pasky Exp $ */
+/* $Id: fastfind.c,v 1.19 2003/06/14 20:21:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,7 +261,7 @@ init_idxtab(struct fastfind_info *info)
 
 #define ifcase(c) (info->case_sensitive ? c : upcase(c))
 
-void *
+struct fastfind_info *
 fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 	       int case_sensitive)
 {
@@ -348,7 +348,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			goto alloc_error;
 	}
 
-	return (void *) info;
+	return info;
 
 alloc_error:
 	fastfind_terminate(info);
@@ -356,10 +356,9 @@ alloc_error:
 }
 
 void
-fastfind_index_compress(void *current_elt, void *fastfind_info)
+fastfind_index_compress(void *current_elt, struct fastfind_info *info)
 {
-	struct ff_elt *current = (struct ff_elt *)current_elt;
-	struct fastfind_info *info = (struct fastfind_info *) fastfind_info;
+	struct ff_elt *current = (struct ff_elt *) current_elt;
 	int cnt = 0;
 	int pos = -1;
 	register int i = 0;
@@ -406,9 +405,8 @@ fastfind_index_compress(void *current_elt, void *fastfind_info)
 }
 
 void *
-fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
+fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 {
-	struct fastfind_info *info = (struct fastfind_info *) fastfind_info;
 	register int i = 0;
 	struct ff_elt *current;
 
@@ -474,10 +472,8 @@ fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 }
 
 void
-fastfind_terminate(void *fastfind_info)
+fastfind_terminate(struct fastfind_info *info)
 {
-	struct fastfind_info *info = (struct fastfind_info *) fastfind_info;
-
 	if (!info) return;
 
 #ifdef FASTFIND_DEBUG
@@ -631,7 +627,7 @@ main(int argc, char **argv)
 {
 	unsigned char *key = argv[1];
 	struct list *result;
-	void *info;
+	struct fastfind_info *info;
 
 	if (!key || !*key) {
 		fprintf(stderr, "Usage: fastfind keyword\n");

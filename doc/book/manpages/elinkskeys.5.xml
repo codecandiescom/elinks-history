@@ -1,7 +1,6 @@
-<!-- $Id: elinkskeys.5.xml,v 1.6 2003/06/10 20:32:48 jonas Exp $ -->
+<!-- $Id: elinkskeys.5.xml,v 1.7 2003/06/11 01:40:20 jonas Exp $ -->
 
 <!DOCTYPE refentry SYSTEM "../elinksbook.dtd">
-<?dbhtml filename="elinkskeys.5.html"?>
 
 <refentry id="elinkskeys.5">
 

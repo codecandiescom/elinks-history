@@ -1,26 +1,40 @@
-## $Id: Makefile.doc,v 1.6 2003/06/10 23:47:29 jonas Exp $
+## $Id: Makefile.doc,v 1.7 2003/06/11 01:40:20 jonas Exp $
 
 SUFFIXES = .xml .1 .5
 HTMLDOCTOOL = @HTMLDOCTOOL@
 MANDOCTOOL = @MANDOCTOOL@
 
-DOCBUILDDIR = $(top_srcdir)/doc/
+objectname = `basename $< .xml`
+docbuilddir = $(top_srcdir)/doc
+docbookdir = $(top_srcdir)/doc/book
+doctoolsdir = $(top_srcdir)/doc/book/tools
+help2docbook = $(doctoolsdir)/help2docbook
 
-%.html: %.xml
-	$(mkinstalldirs) $(DOCBUILDDIR)/html
-	test -n "$(HTMLDOCTOOL)" && $(HTMLDOCTOOL) -o $(DOCBUILDDIR)/html/`basename $< .xml` $<
+book: $(book_HTMLFORMAT)
+book-html: $(book_HTMLFORMAT)
 
-%.1: %.1.xml
-	$(mkinstalldirs) $(DOCBUILDDIR)/man/man1
-	test -n "$(MANDOCTOOL)" && $(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man1 $<
-
-%.5: %.5.xml
-	$(mkinstalldirs) $(DOCBUILDDIR)/man/man5
-	test -n "$(MANDOCTOOL)" && $(MANDOCTOOL) -o $(DOCBUILDDIR)/man/man5 $<
-
+manpages: manpages-man manpages-html
 manpages-html: $(manpages_HTMLFORMAT)
 manpages-man: $(manpages_MANFORMAT)
-manpages: manpages-man manpages-html
 
-book-html: $(book_HTMLFORMAT)
-book: $(book_HTMLFORMAT)
+init: $(docbookdir)/config/cmdoptions.xml
+
+$(docbookdir)/config/cmdoptions.xml:
+	test -n "`elinks -long-help`" && \
+	elinks -long-help | sh $(help2docbook) >  $@
+
+%.html: %.xml
+	$(mkinstalldirs) $(docbuilddir)/html
+	test -n "$(HTMLDOCTOOL)" && $(HTMLDOCTOOL) -o $(docbuilddir)/html/$(objectname) $<
+
+%.1.in: %.1.xml
+	$(mkinstalldirs) $(docbuilddir)/man/man1
+	test -n "$(MANDOCTOOL)" && $(MANDOCTOOL) -o $(docbuilddir)/man/man1 $<
+
+%.1: %.1.xml
+	$(mkinstalldirs) $(docbuilddir)/man/man1
+	test -n "$(MANDOCTOOL)" && $(MANDOCTOOL) -o $(docbuilddir)/man/man1 $<
+
+%.5: %.5.xml
+	$(mkinstalldirs) $(docbuilddir)/man/man5
+	test -n "$(MANDOCTOOL)" && $(MANDOCTOOL) -o $(docbuilddir)/man/man5 $<

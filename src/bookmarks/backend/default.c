@@ -1,5 +1,5 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.16 2004/04/23 20:44:27 pasky Exp $ */
+/* $Id: default.c,v 1.17 2004/07/14 18:08:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ read_bookmarks_default(FILE *f)
 			last_bm = add_bookmark(root, 1, title, url);
 			last_depth = depth;
 
-			while (flags && *flags) {
+			while (flags && *flags && last_bm) {
 				switch (*flags) {
 					case 'F':
 						last_bm->box_item->type = BI_FOLDER;

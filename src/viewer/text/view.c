@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.612 2004/10/10 02:56:34 miciah Exp $ */
+/* $Id: view.c,v 1.613 2004/10/10 03:47:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -701,6 +701,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	if (get_opt_int("document.browse.accesskey.priority") >= 2
 	    && try_document_key(ses, doc_view, ev)) {
 		/* The document ate the key! */
+		ses->kbdprefix.repeat_count = 0;
 		return FRAME_EVENT_REFRESH;
 	}
 

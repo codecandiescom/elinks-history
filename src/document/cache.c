@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.31 2003/06/07 23:37:36 pasky Exp $ */
+/* $Id: cache.c,v 1.32 2003/06/24 14:29:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,7 +115,7 @@ get_cache_entry(unsigned char *url, struct cache_entry **f)
 	return 0;
 }
 
-#define enlarge(e, x) e->data_size += x, cache_size += x
+#define enlarge(e, x) (e)->data_size += (x), cache_size += (x)
 
 #define CACHE_PAD(x) (((x) | 0x3fff) + 1)
 
@@ -135,15 +135,15 @@ add_fragment(struct cache_entry *e, int offset,
 
 	if (!length) return 0;
 
-	if (e->length < offset + length)
-		e->length = offset + length;
+	end_offset = offset + length;
+
+	if (e->length < end_offset)
+		e->length = end_offset;
 
 	/* XXX: This is probably some magic strange thing for HTML renderer. */
 	e->count = cache_count++;
 
 	/* Possibly insert the new data in the middle of existing fragment. */
-
-	end_offset = offset + length;
 	foreach (f, e->frag) {
 		f_end_offset = f->offset + f->length;
 
@@ -151,16 +151,15 @@ add_fragment(struct cache_entry *e, int offset,
 		if (f->offset > offset) break;
 		if (f_end_offset < offset) continue;
 
+		/* Is intersected area same? Truncate it if not, dunno
+		 * why though :). */
+		if (memcmp(f->data + offset - f->offset, data, length))
+			trunc = 1;
+
 		if (end_offset > f_end_offset) {
 			/* Overlap - we end further than original fragment. */
 
 			ret = 1; /* !!! FIXME */
-
-			/* Is intersected area same? Truncate it if not, dunno
-			 * why though :). */
-			if (memcmp(f->data + offset - f->offset, data,
-				   f_end_offset - offset))
-				trunc = 1;
 
 			if (end_offset - f->offset <= f->real_length) {
 				/* We fit here, so let's enlarge it by delta of
@@ -177,10 +176,6 @@ add_fragment(struct cache_entry *e, int offset,
 				break;
 			}
 
-		} else {
-			/* We are subset of original fragment. */
-			if (memcmp(f->data + offset - f->offset, data, length))
-				trunc = 1;
 		}
 
 		/* Copy the stuff over there. */
@@ -219,7 +214,7 @@ remove_overlaps:
 			nf = mem_realloc(f, sizeof(struct fragment)
 					    + end_offset - f->offset);
 			if (!nf) goto ff;
-			
+
 			nf->prev->next = nf;
 			nf->next->prev = nf;
 			f = nf;

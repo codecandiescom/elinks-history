@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.4 2004/04/29 13:15:31 zas Exp $ */
+/* $Id: forms.c,v 1.5 2004/04/29 13:30:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,9 +34,23 @@
 #include "document/html/internal.h"
 
 
-#define NULL_STRUCT_FORM { NULL, NULL, 0, 0 }
-struct form form = NULL_STRUCT_FORM;
+struct form {
+	unsigned char *action;
+	unsigned char *target;
+	enum form_method method;
+	int num;
+};
 
+static struct form form;
+
+
+void
+done_form(void)
+{
+	mem_free_if(form.action);
+	mem_free_if(form.target);
+	memset(&form, 0, sizeof(form));
+}
 
 void
 html_form(unsigned char *a)
@@ -105,10 +119,8 @@ find_form_for_input(unsigned char *i)
 	unsigned char *la = NULL;
 	int namelen;
 
-	mem_free_if(form.action);
-	mem_free_if(form.target);
-	memset(&form, 0, sizeof(form));
-
+	done_form();
+	
 	if (!special_f(ff, SP_USED, NULL)) return;
 
 	if (last_input_tag && i <= last_input_tag && i > last_form_tag) {

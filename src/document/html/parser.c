@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.413 2004/04/26 13:30:24 jonas Exp $ */
+/* $Id: parser.c,v 1.414 2004/04/29 13:30:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1323,8 +1323,7 @@ done_html_parser(void)
 	if (global_doc_opts->css_enable)
 		done_css_stylesheet(&css_styles);
 
-	mem_free_set(&form.action, NULL);
-	mem_free_set(&form.target, NULL);
+	done_form();
 
 	kill_html_stack_item(html_stack.next);
 

@@ -1,16 +1,9 @@
-/* $Id: forms.h,v 1.1 2004/04/24 14:39:13 pasky Exp $ */
+/* $Id: forms.h,v 1.2 2004/04/29 13:30:00 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_FORMS_H
 #define EL__DOCUMENT_HTML_PARSER_FORMS_H
 
-struct form {
-	unsigned char *action;
-	unsigned char *target;
-	int method;
-	int num;
-};
-
-extern struct form form;
+void done_form(void);
 
 void html_button(unsigned char *a);
 void html_form(unsigned char *a);

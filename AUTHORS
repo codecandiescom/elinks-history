@@ -89,6 +89,9 @@ David Mediavilla Ezquibela <davidme.forum@bigfoot.com>
 David Weinehall <tao@acc.umu.se>
 	Display radiobuttons differently than checkboxes
 
+Denis Lackovic <delacko@fly.srk.fer.hr>
+	Croatian translation
+
 Dmitry M. Klimov <dmk@gtrk.kmtn.ru>
 	KOI8-R frames
 	Russian localization
@@ -331,4 +334,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.66 2002/07/03 22:13:24 pasky Exp $
+$Id: AUTHORS,v 1.67 2002/07/03 22:18:27 pasky Exp $

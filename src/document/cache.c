@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.41 2003/09/07 11:08:56 zas Exp $ */
+/* $Id: cache.c,v 1.42 2003/09/22 15:25:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,8 +190,8 @@ add_fragment(struct cache_entry *e, int offset,
 	}
 
 	/* Make up new fragment. */
-
-	nf = mem_calloc(1, sizeof(struct fragment) + CACHE_PAD(length));
+	/* One byte is reserved for data in struct fragment. */
+	nf = mem_calloc(1, sizeof(struct fragment) + CACHE_PAD(length) - 1);
 	if (!nf) return -1;
 
 	ret = 1;
@@ -218,7 +218,8 @@ remove_overlaps:
 			 * So try to append overlapping part of that fragment
 			 * to us. */
 			nf = mem_realloc(f, sizeof(struct fragment)
-					    + end_offset - f->offset);
+					    + end_offset - f->offset
+					    - 1); /* One byte is in struct fragment. */
 			if (!nf) goto ff;
 
 			nf->prev->next = nf;
@@ -284,7 +285,8 @@ defrag_entry(struct cache_entry *e)
 	for (l = 0, h = f; h != g; h = h->next)
 		l += h->length;
 
-	n = mem_calloc(1, sizeof(struct fragment) + l);
+	/* One byte is reserved for data in struct fragment. */
+	n = mem_calloc(1, sizeof(struct fragment) + l - 1);
 	if (!n) return;
 	n->length = l;
 	n->real_length = l;
@@ -348,7 +350,8 @@ del:
 
 			if (final) {
 				g = mem_realloc(f, sizeof(struct fragment)
-						   + f->length);
+						   + f->length
+						   - 1); /* One byte is in struct fragment. */
 				if (g) {
 					g->next->prev = g;
 					g->prev->next = g;

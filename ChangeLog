@@ -1,3 +1,273 @@
+Mon Jun 16 16:43:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	When paging up/down, move by viewport_height - 1 rather than by
+	viewport_height, making the first/last line common between the two
+	states. I think this has rather big impact on ease of usability in
+	some situations.  
+
+Mon Jun 16 16:13:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Use assertm() instead of the manual checks + internal() calls.  
+
+Mon Jun 16 16:11:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h:
+
+	Introduced (unexpectably kludgy, after all :[ ) assertm() macro,
+	which can print out a user-provided message (defined by format
+	string) if the assertion fails.  
+
+Mon Jun 16 15:42:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Minor tidyup, spelling fixes.  
+
+Mon Jun 16 15:37:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Removed redundant code in split_line_at() and split_line(), I hope
+	the change is ok.  
+
+Mon Jun 16 15:36:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Described split_line() and documented its return value.  
+
+Mon Jun 16 15:22:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Remove pointless assignment.  
+
+Mon Jun 16 15:17:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Forked split_line_at() from split_line(), just containing everything
+	after the 'split:' label.  
+
+Mon Jun 16 15:15:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Removed usage of @tmp from the 'trunk' part of split_line().  
+
+Mon Jun 16 15:13:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	@i -> @x in split_line().  
+
+Mon Jun 16 15:01:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	The (i + 1) change reverted, I'm silly and zas is the god :).  
+
+Mon Jun 16 15:00:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Use explicitly either (i + 1) or (i - 1) --- this fixes few bugs
+	introduced by the simplification and also makes it a little easier
+	to see what's moving around where, I think.  
+
+Mon Jun 16 14:51:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Reduce comments noise.  
+
+Mon Jun 16 14:50:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Removed the old split_line() implementation.  
+
+Mon Jun 16 14:45:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Big code simplification in split_line().  
+
+Mon Jun 16 14:40:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Removed stale variable usage, compilation fix.  
+
+Mon Jun 16 14:33:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	set_hline() cleanup and minor parameters reordering.  
+
+Mon Jun 16 14:30:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	@c -> @chars, @l -> @charslen in put_chars(_conv)().  
+
+Mon Jun 16 14:12:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: renderer.c, renderer.h:
+
+	part.spl -> part.spaces_len 
+
+Mon Jun 16 14:08:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Grammar fix.  
+
+Mon Jun 16 14:07:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Tidyup of split_line().  
+
+Mon Jun 16 09:06:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Fix for &nbsp &nbsp<foo> is now complete.  
+
+Mon Jun 16 00:40:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Small cleanup to use more general 'buffer layout'.  
+
+Sun Jun 15 23:34:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/mime.c:
+
+	Code was simplified by using straconcat().  
+
+Sun Jun 15 23:25:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	More cleanups of type_query(). The 'What to do?' dialog is more
+	informative.  
+
+Sun Jun 15 23:18:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/backend/default.c:
+
+	Fix the fix.  
+
+Sun Jun 15 23:12:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/default.c:
+
+	Fix warning from using uninitialized variable. Hmm.  
+
+Sun Jun 15 23:07:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: mailcap.c, mailcap.h, mime.c, mime.h:
+
+	Functionality for these files are now integrated in mime/ system.  
+
+Sun Jun 15 23:05:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Finally also actually use the mime/ system. I am a happy man (or
+	what ever I am) now. :) 
+
+Sun Jun 15 23:04:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/Makefile.am:
+
+	No need for protocol/ mime files anymore.  
+
+Sun Jun 15 23:03:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Install the new init/done hooks for the mime systems.  
+
+Sun Jun 15 23:02:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/Makefile.am:
+
+	Link in the mime system.  
+
+Sun Jun 15 22:53:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/default.c:
+
+	Fix potential memleak.  
+
+Sun Jun 15 22:44:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/main.c, src/config/kbdbind.c,
+	src/dialogs/menu.c, src/sched/sched.c, src/sched/session.c,
+	src/scripting/Makefile.am, src/scripting/lua/core.c,
+	src/scripting/lua/core.h, src/scripting/lua/hooks.c,
+	src/scripting/lua/hooks.h, src/viewer/text/view.c:
+
+	src/lua/* -> src/scripting/lua/*, inspired by kuser.  
+
+Sun Jun 15 22:39:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/Makefile.am, src/scripting/Makefile.am:
+
+	Added src/scripting/Makefile.am, dummy for now.  
+
+Sun Jun 15 22:32:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/: .cvsignore, .vimrc:
+
+	More fairies.  
+
+Sun Jun 15 22:32:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/: .cvsignore, .vimrc:
+
+	Added fairies.  
+
+Sun Jun 15 22:23:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	@ct -> @ctype in ses_chktype(). Inspired by Jonas.  
+
+Sun Jun 15 22:22:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	@r -> @plaintext in ses_chktype(). Inspired by Jonas.  
+
+Sun Jun 15 22:17:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Don't assume that option.flags bitmask contains just one flag when
+	testing for OPT_AUTOCREATE --- test properly by &'ing it. Patch by
+	kuser.  
+
+Sun Jun 15 22:11:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/mailcap.c:
+
+	Don't try to fix problems using a sledge hammer. Use options at
+	mime.mailcap.*.  
+
+Sun Jun 15 22:11:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Tidyup.  
+
 Sun Jun 15 21:56:26 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/config/options.c:
@@ -608,7 +878,7 @@ Thu Jun 12 16:26:03 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Thu Jun 12 01:15:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/lua/hooks.c:
+	* src/scripting/lua/hooks.c:
 
 	Fix a login inversion in 'Use have_location() instead of hardwired
 	list_empty() call.' 
@@ -639,14 +909,15 @@ Thu Jun 12 00:02:07 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Jun 11 22:54:19 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: dialogs/document.c, document/html/renderer.c, lua/core.c,
-	viewer/text/vs.c:
+	* src/: dialogs/document.c, document/html/renderer.c,
+	scripting/lua/core.c, viewer/text/vs.c:
 
 	Removed useless including of sched/history.h.  
 
 Wed Jun 11 22:52:31 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: document/html/renderer.c, lua/core.c, viewer/text/view.h:
+	* src/: document/html/renderer.c, scripting/lua/core.c,
+	viewer/text/view.h:
 
 	Removed useless including of sched/location.h.  
 
@@ -658,7 +929,7 @@ Wed Jun 11 22:49:48 2003  Petr Baudis <pasky@ucw.cz>:
 
 Wed Jun 11 22:49:27 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lua/hooks.c:
+	* src/scripting/lua/hooks.c:
 
 	Use have_location() instead of hardwired list_empty() call.  
 
@@ -826,7 +1097,7 @@ Wed Jun 11 14:40:26 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed Jun 11 12:00:46 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	Check that memacpy did not return NULL. Miciah is a dunce.  
 
@@ -917,7 +1188,7 @@ Wed Jun 11 05:55:06 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 Wed Jun 11 05:45:03 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	l_current_url: Instead of stracpying vs->url and replacing any
 	POST_CHAR with \0, now we memacpy vs->url up to POST_CHAR, or the
@@ -1430,8 +1701,8 @@ Sun Jun  8 22:11:46 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: main.c, config/cmdline.c, config/options.c,
 	lowlevel/af_unix.c, lowlevel/select.c, lowlevel/signals.c,
-	lua/core.c, sched/session.c, terminal/kbd.c, terminal/terminal.c,
-	viewer/dump/dump.c:
+	sched/session.c, scripting/lua/core.c, terminal/kbd.c,
+	terminal/terminal.c, viewer/dump/dump.c:
 
 	Normalized error() users: the messages are now localized where it
 	makes sense, the messages text is edited for brevity, superfluous
@@ -1662,8 +1933,8 @@ Sun Jun  8 13:30:55 2003  Laurent Monin <zas@norz.org>:
 
 Sun Jun  8 13:21:39 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* src/: config/options.c, lowlevel/connect.c, lua/core.c,
-	protocol/ftp.c, sched/download.c, util/memdebug.c,
+	* src/: config/options.c, lowlevel/connect.c, protocol/ftp.c,
+	sched/download.c, scripting/lua/core.c, util/memdebug.c,
 	viewer/text/view.c:
 
 	Fixes for label name collisions with error and int_error ->
@@ -2143,7 +2414,7 @@ Sat Jun  7 15:25:37 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: bookmarks/dialogs.c, config/dialogs.c, dialogs/auth.c,
 	dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
-	globhist/dialogs.c, lua/core.c, sched/download.c:
+	globhist/dialogs.c, sched/download.c, scripting/lua/core.c:
 
 	Make user dialogs (created by do_dialog) again translated properly
 	(or at least most of them for now).  
@@ -2151,7 +2422,8 @@ Sat Jun  7 15:25:37 2003  Petr Baudis <pasky@ucw.cz>:
 Sat Jun  7 15:10:58 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: bfu/inpfield.c, bfu/inpfield.h, bookmarks/dialogs.c,
-	config/dialogs.c, dialogs/menu.c, lua/core.c, viewer/text/view.c:
+	config/dialogs.c, dialogs/menu.c, scripting/lua/core.c,
+	viewer/text/view.c:
 
 	input_field() now takes additional parameter telling whether to
 	translate the string parameters passed or not. Now the input_field()
@@ -2296,8 +2568,8 @@ Sat Jun  7 13:17:35 2003  Petr Baudis <pasky@ucw.cz>:
 	* src/: bfu/align.h, bfu/inpfield.c, bfu/msgbox.c, bfu/msgbox.h,
 	bookmarks/dialogs.c, config/dialogs.c, dialogs/document.c,
 	dialogs/info.c, dialogs/menu.c, dialogs/mime.c, globhist/dialogs.c,
-	lua/core.c, protocol/url.c, protocol/user.c, sched/download.c,
-	sched/session.c, viewer/text/view.c:
+	scripting/lua/core.c, protocol/url.c, protocol/user.c,
+	sched/download.c, sched/session.c, viewer/text/view.c:
 
 	Moved the msg_box() flags from enum format_align at bfu/align.h to
 	enum msgbox_flags in bfu/msgbox.h. msg_box() now takes additional
@@ -3571,7 +3843,7 @@ Fri May 23 21:22:20 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: main.c, main.h, lowlevel/Makefile.am, lowlevel/select.c,
 	lowlevel/select.h, lowlevel/signals.c, lowlevel/signals.h,
-	lua/core.c, osdep/os_dep.c, terminal/terminal.c:
+	osdep/os_dep.c, scripting/lua/core.c, terminal/terminal.c:
 
 	Signals related functions were moved to lowlevel/signals.{c,h}.  
 
@@ -4860,11 +5132,12 @@ Thu May  8 23:03:06 2003  Laurent Monin <zas@norz.org>:
 	dialogs/hierbox.c, dialogs/menu.h, document/html/renderer.c,
 	intl/charsets.c, intl/gettext/localcharset.c, lowlevel/af_unix.c,
 	lowlevel/connect.c, lowlevel/dns.c, lowlevel/home.c,
-	lowlevel/timer.c, lua/hooks.c, osdep/os_dep.c, protocol/url.c,
+	lowlevel/timer.c, osdep/os_dep.c, protocol/url.c,
 	protocol/http/auth.c, protocol/http/date.c, protocol/http/http.c,
-	sched/download.c, sched/sched.c, sched/session.c, ssl/connect.c,
-	util/encoding.c, util/error.c, util/memdebug.h, util/snprintf.c,
-	viewer/text/view.c, viewer/text/view.h:
+	sched/download.c, sched/sched.c, scripting/lua/hooks.c,
+	sched/session.c, ssl/connect.c, util/encoding.c, util/error.c,
+	util/memdebug.h, util/snprintf.c, viewer/text/view.c,
+	viewer/text/view.h:
 
 	Many missing declarations + static. Big patch, sorry.  
 
@@ -5179,8 +5452,8 @@ Wed May  7 17:57:13 2003  Laurent Monin <zas@norz.org>:
 
 Wed May  7 17:46:44 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: dialogs/document.c, globhist/globhist.c, lua/core.c,
-	sched/session.c:
+	* src/: dialogs/document.c, globhist/globhist.c, sched/session.c,
+	scripting/lua/core.c:
 
 	Frame title may be NULL after witekfl's fix of <title> element
 	handling.  
@@ -5882,8 +6155,8 @@ Sun May  4 20:44:46 2003  Petr Baudis <pasky@ucw.cz>:
 Sun May  4 20:42:11 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: dialogs/auth.c, dialogs/document.c, dialogs/menu.c,
-	document/html/renderer.c, lua/core.c, protocol/url.c,
-	protocol/user.c, sched/download.c, sched/session.c,
+	document/html/renderer.c, protocol/url.c, protocol/user.c,
+	scripting/lua/core.c, sched/download.c, sched/session.c,
 	sched/session.h, viewer/text/view.c:
 
 	Removed redundant term field from the struct session.  
@@ -6104,11 +6377,12 @@ Sun May  4 17:23:59 2003  Petr Baudis <pasky@ucw.cz>:
 	document/html/parser.c, document/html/renderer.h,
 	globhist/dialogs.c, globhist/dialogs.h, intl/gettext/libintl.h,
 	lowlevel/af_unix.c, lowlevel/select.c, lowlevel/timer.c,
-	lua/core.c, osdep/os_dep.c, protocol/mime.c, protocol/mime.h,
-	protocol/user.c, protocol/user.h, protocol/http/http.c,
-	sched/download.c, sched/download.h, sched/session.c,
-	sched/session.h, terminal/kbd.c, terminal/terminal.c,
-	viewer/dump/dump.c, viewer/text/view.c, viewer/text/view.h:
+	osdep/os_dep.c, scripting/lua/core.c, protocol/mime.c,
+	protocol/mime.h, protocol/user.c, protocol/user.h,
+	protocol/http/http.c, sched/download.c, sched/download.h,
+	sched/session.c, sched/session.h, terminal/kbd.c,
+	terminal/terminal.c, viewer/dump/dump.c, viewer/text/view.c,
+	viewer/text/view.h:
 
 	Moved lowlevel/(kbd|terminal).* to terminal/.  
 
@@ -6786,9 +7060,9 @@ Fri May  2 22:20:09 2003  Petr Baudis <pasky@ucw.cz>:
 Fri May  2 22:16:18 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: document/html/parser.c, document/html/parser.h,
-	document/html/renderer.c, document/html/renderer.h, lua/core.c,
-	sched/session.c, sched/session.h, viewer/text/view.c,
-	viewer/text/view.h:
+	document/html/renderer.c, document/html/renderer.h,
+	sched/session.c, scripting/lua/core.c, sched/session.h,
+	viewer/text/view.c, viewer/text/view.h:
 
 	Stupid patch i made was reversed. Sorry for the inconvenience ;) 
 
@@ -6854,9 +7128,9 @@ Fri May  2 15:41:15 2003  Laurent Monin <zas@norz.org>:
 Fri May  2 14:55:05 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: document/html/parser.c, document/html/parser.h,
-	document/html/renderer.c, document/html/renderer.h, lua/core.c,
-	sched/session.c, sched/session.h, viewer/text/view.c,
-	viewer/text/view.h:
+	document/html/renderer.c, document/html/renderer.h,
+	sched/session.c, sched/session.h, scripting/lua/core.c,
+	viewer/text/view.c, viewer/text/view.h:
 
 	Some stupid changes were reverted (frm->form and lnk->link thing).
 	Sorry ;). And struct link -> struct a_link rename happenned, just to
@@ -7216,7 +7490,7 @@ Tue Apr 29 08:25:28 2003  Laurent Monin <zas@norz.org>:
 
 Tue Apr 29 08:20:37 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	Some variables shadowing global declarations or previous local
 	variables were renamed.  
@@ -7334,7 +7608,7 @@ Sat Apr 26 08:03:18 2003  Laurent Monin <zas@norz.org>:
 
 Sat Apr 26 07:57:51 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	A list head structure initialization was fixed.  
 
@@ -7594,7 +7868,7 @@ Sat Apr 19 18:45:57 2003  Laurent Monin <zas@norz.org>:
 
 Sat Apr 19 18:39:56 2003  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/home.c, lua/core.c:
+	* src/: lowlevel/home.c, scripting/lua/core.c:
 
 	error() + gettext().  
 
@@ -7717,7 +7991,7 @@ Fri Apr 18 08:13:03 2003  Laurent Monin <zas@norz.org>:
 
 Fri Apr 18 07:44:08 2003  Laurent Monin <zas@norz.org>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	current_url() no more returns post-data. Scripts that rely on the
 	old behaviour should be rewritten to use a new API which should be
@@ -8241,7 +8515,7 @@ Sun Jan 19 20:25:21 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Sun Jan 19 20:03:23 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	Fixed tiny but fatal bug in lua causing non-working pipe_read()
 	(kinda problem, yes ;). Patch by witekfl.  
@@ -8687,15 +8961,16 @@ Sun Jan  5 16:48:10 2003  Petr Baudis <pasky@ucw.cz>:
 	src/document/session.h, src/document/html/parser.c,
 	src/document/html/parser.h, src/document/html/renderer.c,
 	src/document/html/renderer.h, src/globhist/dialogs.h,
-	src/lowlevel/af_unix.c, src/lowlevel/terminal.c, src/lua/core.c,
-	src/lua/core.h, src/lua/hooks.c, src/lua/hooks.h,
+	src/lowlevel/af_unix.c, src/lowlevel/terminal.c,
 	src/protocol/ftp.c, src/protocol/mailcap.c, src/protocol/url.c,
 	src/protocol/url.h, src/protocol/user.c, src/protocol/user.h,
 	src/protocol/http/auth.c, src/protocol/http/http.c,
 	src/sched/Makefile.am, src/sched/download.c, src/sched/download.h,
 	src/sched/history.c, src/sched/history.h, src/sched/location.c,
 	src/sched/location.h, src/sched/sched.c, src/sched/session.c,
-	src/sched/session.h, src/viewer/text/view.c,
+	src/sched/session.h, src/scripting/lua/core.c,
+	src/scripting/lua/core.h, src/scripting/lua/hooks.c,
+	src/scripting/lua/hooks.h, src/viewer/text/view.c,
 	src/viewer/text/view.h, src/viewer/text/vs.c:
 
 	src/document/download.*,location.*,history.*,session.* ->
@@ -9404,10 +9679,10 @@ Fri Jan  3 02:23:53 2003  Petr Baudis <pasky@ucw.cz>:
 	config/opttypes.c, dialogs/auth.c, dialogs/document.c,
 	dialogs/edit.c, dialogs/hierbox.c, dialogs/info.c, dialogs/menu.c,
 	dialogs/mime.c, dialogs/options.c, document/download.c,
-	document/session.c, globhist/dialogs.c, lua/core.c, osdep/os_dep.c,
-	protocol/url.c, protocol/user.c, protocol/http/auth.c,
-	protocol/http/http.c, sched/sched.c, viewer/dump/dump.c,
-	viewer/text/view.c:
+	document/session.c, globhist/dialogs.c, scripting/lua/core.c,
+	osdep/os_dep.c, protocol/url.c, protocol/user.c,
+	protocol/http/auth.c, protocol/http/http.c, sched/sched.c,
+	viewer/dump/dump.c, viewer/text/view.c:
 
 	intl/language.h -> intl/gettext/libintl.h. Now the new gettext
 	translation system should be activated.  
@@ -9500,8 +9775,9 @@ Fri Jan  3 00:38:32 2003  Petr Baudis <pasky@ucw.cz>:
 	config/opttypes.c, dialogs/auth.c, dialogs/document.c,
 	dialogs/edit.c, dialogs/info.c, dialogs/menu.c, dialogs/mime.c,
 	dialogs/options.c, document/download.c, document/session.c,
-	globhist/dialogs.c, intl/language.h, lua/core.c, osdep/os_dep.c,
-	protocol/url.c, protocol/user.c, sched/sched.c, viewer/text/view.c:
+	globhist/dialogs.c, intl/language.h, osdep/os_dep.c,
+	protocol/url.c, protocol/user.c, sched/sched.c,
+	scripting/lua/core.c, viewer/text/view.c:
 
 	Use directly strings in the source instead of macros and magic
 	translations system. We don't use gettext() yet. Right now, you will
@@ -9540,8 +9816,9 @@ Thu Jan  2 23:59:51 2003  Petr Baudis <pasky@ucw.cz>:
 	config/opttypes.c, dialogs/auth.c, dialogs/document.c,
 	dialogs/edit.c, dialogs/info.c, dialogs/menu.c, dialogs/mime.c,
 	dialogs/options.c, document/download.c, document/session.c,
-	globhist/dialogs.c, intl/language.h, lua/core.c, osdep/os_dep.c,
-	protocol/url.c, protocol/user.c, sched/sched.c, viewer/text/view.c:
+	globhist/dialogs.c, intl/language.h, osdep/os_dep.c,
+	scripting/lua/core.c, protocol/url.c, protocol/user.c,
+	sched/sched.c, viewer/text/view.c:
 
 	_() -> N_() 
 
@@ -9754,8 +10031,9 @@ Thu Jan  2 05:37:42 2003  Petr Baudis <pasky@ucw.cz>:
 	config/opttypes.c, dialogs/auth.c, dialogs/document.c,
 	dialogs/edit.c, dialogs/info.c, dialogs/menu.c, dialogs/mime.c,
 	dialogs/options.c, document/download.c, document/session.c,
-	globhist/dialogs.c, intl/language.h, lua/core.c, osdep/os_dep.c,
-	protocol/url.c, protocol/user.c, sched/sched.c, viewer/text/view.c:
+	globhist/dialogs.c, intl/language.h, osdep/os_dep.c,
+	protocol/url.c, protocol/user.c, sched/sched.c,
+	scripting/lua/core.c, viewer/text/view.c:
 
 	Second step in the gettext transition - use a _() macro instead of
 	the TEXT() macro. Patch by witekfl (no-hotkey updates by me).  
@@ -9811,12 +10089,12 @@ Wed Jan  1 20:30:33 2003  Petr Baudis <pasky@ucw.cz>:
 	document/history.c, document/location.h, document/session.c,
 	document/session.h, lowlevel/Makefile.am, lowlevel/connect.c,
 	lowlevel/connect.h, lowlevel/sched.c, lowlevel/sched.h,
-	lua/hooks.h, protocol/file.c, protocol/file.h, protocol/finger.c,
+	protocol/file.c, protocol/file.h, protocol/finger.c,
 	protocol/finger.h, protocol/ftp.c, protocol/ftp.h, protocol/url.c,
-	protocol/url.h, protocol/http/http.c, protocol/http/http.h,
-	protocol/http/https.c, protocol/http/https.h, sched/Makefile.am,
-	sched/sched.c, sched/sched.h, ssl/connect.c, ssl/connect.h,
-	viewer/dump/dump.c, viewer/dump/dump.h:
+	protocol/url.h, scripting/lua/hooks.h, protocol/http/http.c,
+	protocol/http/http.h, protocol/http/https.c, protocol/http/https.h,
+	sched/Makefile.am, sched/sched.c, sched/sched.h, ssl/connect.c,
+	ssl/connect.h, viewer/dump/dump.c, viewer/dump/dump.h:
 
 	Moved lowlevel/sched.* to sched/sched.*.  
 
@@ -9848,7 +10126,7 @@ Wed Jan  1 18:19:50 2003  Petr Baudis <pasky@ucw.cz>:
 	document/view.c, document/view.h, document/vs.c, document/vs.h,
 	document/html/parser.c, document/html/renderer.c,
 	document/html/renderer.h, elusive/renderer/text/renderer.c,
-	lowlevel/terminal.c, lua/core.c, viewer/dump/dump.c,
+	lowlevel/terminal.c, scripting/lua/core.c, viewer/dump/dump.c,
 	viewer/text/Makefile.am, viewer/text/view.c, viewer/text/view.h,
 	viewer/text/vs.c, viewer/text/vs.h:
 
@@ -11033,7 +11311,7 @@ Wed Dec 18 21:23:20 2002  Petr Baudis <pasky@ucw.cz>:
 
 Wed Dec 18 16:31:07 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	Fixed memory leak upon Lua error.  
 
@@ -12520,14 +12798,15 @@ Sat Dec  7 20:05:50 2002  Petr Baudis <pasky@ucw.cz>:
 	lowlevel/dns.c, lowlevel/home.c, lowlevel/kbd.c, lowlevel/sched.c,
 	lowlevel/sched.h, lowlevel/select.c, lowlevel/sysname.c,
 	lowlevel/terminal.c, lowlevel/timer.c, lowlevel/ttime.c,
-	lua/core.c, lua/hooks.c, osdep/os_dep.c, protocol/file.c,
-	protocol/finger.c, protocol/ftp.c, protocol/mime.c, protocol/url.c,
-	protocol/user.c, protocol/http/auth.c, protocol/http/date.c,
-	protocol/http/header.c, protocol/http/http.c,
-	protocol/http/https.c, ssl/connect.c, ssl/ssl.c, util/base64.c,
-	util/blacklist.c, util/conv.c, util/encoding.c, util/error.c,
-	util/file.c, util/hash.c, util/memdebug.c, util/memlist.c,
-	util/memory.c, util/secsave.c, util/string.c:
+	osdep/os_dep.c, scripting/lua/core.c, scripting/lua/hooks.c,
+	protocol/file.c, protocol/finger.c, protocol/ftp.c,
+	protocol/mime.c, protocol/url.c, protocol/user.c,
+	protocol/http/auth.c, protocol/http/date.c, protocol/http/header.c,
+	protocol/http/http.c, protocol/http/https.c, ssl/connect.c,
+	ssl/ssl.c, util/base64.c, util/blacklist.c, util/conv.c,
+	util/encoding.c, util/error.c, util/file.c, util/hash.c,
+	util/memdebug.c, util/memlist.c, util/memory.c, util/secsave.c,
+	util/string.c:
 
 	links.h -> elinks.h. Patch by Jonas and me.  
 
@@ -12985,7 +13264,7 @@ Thu Dec  5 11:59:41 2002  Laurent Monin <zas@norz.org>:
 
 Thu Dec  5 11:43:12 2002  Laurent Monin <zas@norz.org>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	Minor cleanup. Should make some gcc happy.  
 
@@ -13772,7 +14051,7 @@ Fri Nov 29 17:52:20 2002  Laurent Monin <zas@norz.org>:
 
 Fri Nov 29 17:51:02 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* LUA, src/lua/TODO:
+	* LUA, src/scripting/lua/TODO:
 
 	Removed /LUA, now redundant.  
 
@@ -14538,7 +14817,8 @@ Mon Nov 11 23:05:48 2002  Petr Baudis <pasky@ucw.cz>:
 
 Mon Nov  4 16:57:00 2002  Laurent Monin <zas@norz.org>:
 
-	* src/: main.c, lua/core.c, lua/core.h, protocol/http/http.c:
+	* src/: main.c, protocol/http/http.c, scripting/lua/core.c,
+	scripting/lua/core.h:
 
 	Lua memory is now free at exit (cleaner way), a comment about a
 	"needed" memleak was added.  
@@ -15665,7 +15945,7 @@ Tue Sep 17 14:36:48 2002  Laurent Monin <zas@norz.org>:
 
 Tue Sep 17 14:33:04 2002  Laurent Monin <zas@norz.org>:
 
-	* src/: lowlevel/terminal.c, lua/core.c:
+	* src/: lowlevel/terminal.c, scripting/lua/core.c:
 
 	Populate with mem_calloc().  
 
@@ -15990,7 +16270,7 @@ Thu Sep 12 16:38:33 2002  Laurent Monin <zas@norz.org>:
 
 Thu Sep 12 16:33:53 2002  Laurent Monin <zas@norz.org>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	Tidyup, minor optimizations, conformance to HACKING document.  
 
@@ -17205,8 +17485,8 @@ Wed Aug  7 03:00:13 2002  Petr Baudis <pasky@ucw.cz>:
 	src/bfu/group.c, src/bfu/inpfield.c, src/bfu/leds.c,
 	src/bfu/listbox.c, src/bfu/menu.c, src/bfu/msgbox.c,
 	src/dialogs/auth.c, src/dialogs/edit.c, src/dialogs/options.c,
-	src/document/download.c, src/document/session.c, src/lua/core.c,
-	src/protocol/types.c:
+	src/document/download.c, src/document/session.c,
+	src/protocol/types.c, src/scripting/lua/core.c:
 
 	Removed --enable-ui-colors configure parameter, config.h (now
 	useless).  
@@ -17218,8 +17498,8 @@ Wed Aug  7 02:56:58 2002  Petr Baudis <pasky@ucw.cz>:
 	bfu/listbox.c, bfu/menu.c, bfu/msgbox.c, config/options.c,
 	dialogs/auth.c, dialogs/edit.c, dialogs/options.c,
 	document/download.c, document/session.c, document/html/colors.c,
-	document/html/colors.h, document/html/renderer.c, lua/core.c,
-	protocol/types.c:
+	document/html/colors.h, document/html/renderer.c, protocol/types.c,
+	scripting/lua/core.c:
 
 	User Interface colors are now configurable.  
 
@@ -17286,7 +17566,7 @@ Tue Aug  6 22:54:17 2002  Petr Baudis <pasky@ucw.cz>:
 
 Tue Aug  6 10:10:48 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* AUTHORS, src/lua/hooks.c:
+	* AUTHORS, src/scripting/lua/hooks.c:
 
 	Fixed possible lua stack overflow during long sessions, patch by
 	Fuzzy European King <james@place.org>.  
@@ -17599,7 +17879,7 @@ Mon Jul  8 17:00:19 2002  Petr Baudis <pasky@ucw.cz>:
 
 Mon Jul  8 15:24:12 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lua/TODO:
+	* src/scripting/lua/TODO:
 
 	Oops, we have documentation for ELinks-Lua API ;). Thanks, Peter.  
 
@@ -17645,7 +17925,7 @@ Sat Jul  6 22:10:33 2002  Petr Baudis <pasky@ucw.cz>:
 
 Sat Jul  6 22:09:17 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lua/TODO:
+	* src/scripting/lua/TODO:
 
 	Add documentation of Lua interface ;).  
 
@@ -17760,7 +18040,7 @@ Fri Jul  5 20:42:13 2002  Petr Baudis <pasky@ucw.cz>:
 	bfu/colors.h, bfu/dialog.c, bfu/group.c, bfu/inpfield.c,
 	bfu/listbox.c, bfu/menu.c, bfu/msgbox.c, dialogs/auth.c,
 	dialogs/edit.c, dialogs/options.c, document/download.c,
-	document/session.c, lua/core.c, protocol/types.c:
+	document/session.c, protocol/types.c, scripting/lua/core.c:
 
 	Moved default colors settings from setup.h to bfu/colors.h.  
 
@@ -17861,8 +18141,9 @@ Fri Jul  5 12:59:30 2002  Petr Baudis <pasky@ucw.cz>:
 
 Fri Jul  5 11:16:00 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* acconfig.h, configure.in, src/lowlevel/connect.c, src/lua/core.c,
-	src/ssl/connect.c, src/ssl/ssl.c, src/ssl/ssl.h:
+	* acconfig.h, configure.in, src/lowlevel/connect.c,
+	src/scripting/lua/core.c, src/ssl/connect.c, src/ssl/ssl.c,
+	src/ssl/ssl.h:
 
 	Compilation fixes of GNUTLS support. GNUTLS is also already being
 	dected; it's only used when OpenSSL is not found, disabled, or
@@ -17964,7 +18245,7 @@ Thu Jul  4 21:19:44 2002  Petr Baudis <pasky@ucw.cz>:
 	bookmarks/dialogs.h, dialogs/auth.c, dialogs/edit.c,
 	dialogs/edit.h, dialogs/globhist.c, dialogs/options.c,
 	dialogs/refresh.c, document/download.c, document/html/parser.h,
-	lua/core.c, protocol/types.c:
+	protocol/types.c, scripting/lua/core.c:
 
 	Moved bfu/bfu.* to bfu/dialog.*.  
 
@@ -17995,7 +18276,8 @@ Thu Jul  4 15:45:37 2002  Petr Baudis <pasky@ucw.cz>:
 	bfu/inphist.c, bfu/inphist.h, bfu/msgbox.c, bfu/text.c, bfu/text.h,
 	bookmarks/dialogs.c, dialogs/auth.c, dialogs/edit.c,
 	dialogs/globhist.c, dialogs/menu.c, dialogs/options.c,
-	document/download.c, document/view.c, lua/core.c, protocol/types.c:
+	document/download.c, document/view.c, protocol/types.c,
+	scripting/lua/core.c:
 
 	Forked widget specific files (bfu/button.*, bfu/checkbox.*,
 	bfu/group.*, bfu/inpfield.*, bfu/inphist.*, bfu/text.*) from
@@ -18004,7 +18286,7 @@ Thu Jul  4 15:45:37 2002  Petr Baudis <pasky@ucw.cz>:
 Thu Jul  4 14:06:02 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: bfu/Makefile.am, bfu/bfu.c, bfu/bfu.h, bfu/msgbox.c,
-	config/urlhist.c, dialogs/menu.c, lua/core.c:
+	config/urlhist.c, dialogs/menu.c, scripting/lua/core.c:
 
 	Moved input_history stuff from bfu/bfu.* to bfu/inphist.*.  
 
@@ -18025,7 +18307,7 @@ Thu Jul  4 01:18:14 2002  Petr Baudis <pasky@ucw.cz>:
 	* src/: bfu/bfu.c, bfu/bfu.h, bfu/button.h, bfu/msgbox.c,
 	bookmarks/dialogs.c, dialogs/auth.c, dialogs/edit.c,
 	dialogs/globhist.c, dialogs/options.c, document/download.c,
-	lua/core.c, protocol/types.c:
+	protocol/types.c, scripting/lua/core.c:
 
 	dialog_item -> widget 
 
@@ -18035,8 +18317,8 @@ Thu Jul  4 01:07:12 2002  Petr Baudis <pasky@ucw.cz>:
 	bfu/msgbox.c, bfu/msgbox.h, bookmarks/dialogs.c, config/conf.c,
 	dialogs/document.c, dialogs/globhist.c, dialogs/info.c,
 	dialogs/menu.c, dialogs/options.c, document/download.c,
-	document/session.c, document/view.c, lua/core.c, protocol/mailto.c,
-	protocol/types.c:
+	document/session.c, document/view.c, scripting/lua/core.c,
+	protocol/mailto.c, protocol/types.c:
 
 	Moved msg_box() from bfu/bfu.* to bfu/msgbox.*.. forked also
 	bfu/button.h.  
@@ -18187,13 +18469,14 @@ Wed Jul  3 21:55:40 2002  Petr Baudis <pasky@ucw.cz>:
 
 Wed Jul  3 21:50:43 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: document/html/Makefile.am, lua/Makefile.am, Makefile.am:
+	* src/: document/html/Makefile.am, scripting/lua/Makefile.am,
+	Makefile.am:
 
 	Module-specific TODOs are now included in distributions.  
 
 Wed Jul  3 21:50:02 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lua/TODO:
+	* src/scripting/lua/TODO:
 
 	What would be nice in Lua scripting support area..? 
 
@@ -18262,7 +18545,7 @@ Wed Jul  3 12:03:49 2002  Petr Baudis <pasky@ucw.cz>:
 
 Wed Jul  3 12:02:03 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: config/conf.c, lua/core.c:
+	* src/: config/conf.c, scripting/lua/core.c:
 
 	Insert slash after CONFDIR.  
 
@@ -18294,7 +18577,7 @@ Tue Jul  2 22:38:05 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in, elinkskeys.5, elinkskeys.5.in,
 	contrib/lua/hooks.lua, contrib/lua/hooks.lua.in, src/config/conf.c,
-	src/lua/core.c:
+	src/scripting/lua/core.c:
 
 	We now respect sysconfdir and play with it properly ;).  
 
@@ -18931,13 +19214,13 @@ Mon Jun 17 07:42:28 2002  Petr Baudis <pasky@ucw.cz>:
 	intl/language.c, lowlevel/af_unix.c, lowlevel/connect.c,
 	lowlevel/dns.c, lowlevel/home.c, lowlevel/kbd.c, lowlevel/sched.c,
 	lowlevel/select.c, lowlevel/sysname.c, lowlevel/terminal.c,
-	lua/core.c, osdep/os_dep.c, protocol/file.c, protocol/finger.c,
-	protocol/ftp.c, protocol/mailto.c, protocol/types.c,
-	protocol/url.c, protocol/http/auth.c, protocol/http/header.c,
-	protocol/http/http.c, ssl/connect.c, util/Makefile.am,
-	util/base64.c, util/blacklist.c, util/encoding.c, util/error.c,
-	util/hash.c, util/memlist.c, util/memory.c, util/memory.h,
-	util/secsave.c, util/string.c:
+	osdep/os_dep.c, scripting/lua/core.c, protocol/file.c,
+	protocol/finger.c, protocol/ftp.c, protocol/mailto.c,
+	protocol/types.c, protocol/url.c, protocol/http/auth.c,
+	protocol/http/header.c, protocol/http/http.c, ssl/connect.c,
+	util/Makefile.am, util/base64.c, util/blacklist.c, util/encoding.c,
+	util/error.c, util/hash.c, util/memlist.c, util/memory.c,
+	util/memory.h, util/secsave.c, util/string.c:
 
 	Moved standart memory allocation functions from links.h to
 	util/memory.*.  
@@ -18950,9 +19233,9 @@ Sun Jun 16 23:38:20 2002  Petr Baudis <pasky@ucw.cz>:
 	src/config/Makefile.am, src/cookies/Makefile.am,
 	src/dialogs/Makefile.am, src/document/Makefile.am,
 	src/document/html/Makefile.am, src/intl/Makefile.am,
-	src/lowlevel/Makefile.am, src/lua/Makefile.am,
-	src/osdep/Makefile.am, src/protocol/Makefile.am,
-	src/protocol/http/Makefile.am, src/ssl/Makefile.am,
+	src/lowlevel/Makefile.am, src/osdep/Makefile.am,
+	src/protocol/Makefile.am, src/protocol/http/Makefile.am,
+	src/scripting/lua/Makefile.am, src/ssl/Makefile.am,
 	src/util/Makefile.am, test/Makefile.am:
 
 	Build system changes - now, we _finally_ don't -I. anymore; we
@@ -18973,12 +19256,12 @@ Sun Jun 16 23:13:14 2002  Petr Baudis <pasky@ucw.cz>:
 	document/html/renderer.c, document/html/tables.c, intl/charsets.c,
 	intl/language.c, lowlevel/af_unix.c, lowlevel/home.c,
 	lowlevel/kbd.c, lowlevel/sched.c, lowlevel/sysname.c,
-	lowlevel/terminal.c, lua/core.c, lua/hooks.c, osdep/os_dep.c,
-	protocol/file.c, protocol/finger.c, protocol/ftp.c,
-	protocol/mailto.c, protocol/types.c, protocol/url.c,
-	protocol/http/auth.c, protocol/http/header.c, protocol/http/http.c,
-	util/Makefile.am, util/conv.c, util/error.c, util/secsave.c,
-	util/string.c, util/string.h:
+	lowlevel/terminal.c, osdep/os_dep.c, protocol/file.c,
+	protocol/finger.c, protocol/ftp.c, protocol/mailto.c,
+	protocol/types.c, scripting/lua/core.c, scripting/lua/hooks.c,
+	protocol/url.c, protocol/http/auth.c, protocol/http/header.c,
+	protocol/http/http.c, util/Makefile.am, util/conv.c, util/error.c,
+	util/secsave.c, util/string.c, util/string.h:
 
 	Moved string manipulation functions from links.h to util/string.*.
 	Compilation fixes related to move of some conversion functions.  
@@ -19217,7 +19500,7 @@ Tue Jun 11 10:18:17 2002  Petr Baudis <pasky@ucw.cz>:
 
 Mon Jun 10 19:00:46 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/lua/core.c:
+	* src/scripting/lua/core.c:
 
 	Use sigjmp_buf instead of jmp_buf; fixes possible warning.  
 
@@ -19652,7 +19935,7 @@ Sun May 19 19:34:51 2002  Petr Baudis <pasky@ucw.cz>:
 	src/config/options.c, src/config/options.h, src/config/urlhist.c,
 	src/cookies/cookies.c, src/document/globhist.c,
 	src/lowlevel/af_unix.c, src/lowlevel/home.c, src/lowlevel/home.h,
-	src/lua/core.c, src/osdep/os_dep.c, src/util/secsave.c:
+	src/scripting/lua/core.c, src/osdep/os_dep.c, src/util/secsave.c:
 
 	Almost all remaing occurences of "links" changed to "elinks".
 	Produced binary is named "elinks" now, global config directory is
@@ -19950,7 +20233,7 @@ Fri May 17 15:56:42 2002  Petr Baudis <pasky@ucw.cz>:
 
 Fri May 17 15:43:37 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: lowlevel/sched.c, lua/hooks.c:
+	* src/: lowlevel/sched.c, scripting/lua/hooks.c:
 
 	get_proxy() was returning pointer to static buffer instead of
 	dynamic one. Patch by Peter Wang.  
@@ -20389,14 +20672,15 @@ Wed May  8 13:55:00 2002  Petr Baudis <pasky@ucw.cz>:
 	lowlevel/dns.c, lowlevel/home.c, lowlevel/kbd.c, lowlevel/sched.c,
 	lowlevel/sched.h, lowlevel/select.c, lowlevel/select.h,
 	lowlevel/sysname.c, lowlevel/terminal.c, lowlevel/terminal.h,
-	lowlevel/ttime.c, lua/core.c, lua/core.h, lua/hooks.c, lua/hooks.h,
-	osdep/os_dep.c, protocol/file.c, protocol/file.h,
+	lowlevel/ttime.c, osdep/os_dep.c, protocol/file.c, protocol/file.h,
 	protocol/finger.c, protocol/finger.h, protocol/ftp.c,
 	protocol/ftp.h, protocol/mailto.c, protocol/mailto.h,
 	protocol/types.c, protocol/types.h, protocol/url.c, protocol/url.h,
-	protocol/http/date.c, protocol/http/header.c, protocol/http/http.c,
-	protocol/http/http.h, protocol/http/https.c, protocol/http/https.h,
-	ssl/connect.c, ssl/connect.h, ssl/ssl.c, ssl/ssl.h, util/base64.c,
+	scripting/lua/core.c, scripting/lua/core.h, scripting/lua/hooks.c,
+	scripting/lua/hooks.h, protocol/http/date.c,
+	protocol/http/header.c, protocol/http/http.c, protocol/http/http.h,
+	protocol/http/https.c, protocol/http/https.h, ssl/connect.c,
+	ssl/connect.h, ssl/ssl.c, ssl/ssl.h, util/base64.c,
 	util/blacklist.c, util/conv.c, util/error.c, util/memlist.c,
 	util/secsave.c:
 
@@ -20422,9 +20706,9 @@ Tue May  7 13:19:41 2002  Petr Baudis <pasky@ucw.cz>:
 	src/config/kbdbind.c, src/dialogs/info.c, src/dialogs/menu.c,
 	src/dialogs/refresh.c, src/document/cache.h, src/document/dump.c,
 	src/document/session.c, src/document/view.c, src/lowlevel/sched.c,
-	src/lua/Makefile.am, src/lua/core.c, src/lua/core.h,
-	src/lua/hooks.c, src/lua/hooks.h, src/lua/lua.c, src/lua/lua.h,
-	src/protocol/http/http.c:
+	src/protocol/http/http.c, src/scripting/lua/Makefile.am,
+	src/scripting/lua/core.c, src/scripting/lua/core.h,
+	src/scripting/lua/hooks.c, src/scripting/lua/hooks.h:
 
 	Moved most lua pieces to src/lua/hooks.*. Moved src/lua/lua.* to
 	src/lua/core.*. Minor code cleanups. Also introduced proxy_for_hook.
@@ -20604,8 +20888,7 @@ Sat May  4 08:23:39 2002  Petr Baudis <pasky@ucw.cz>:
 Sat May  4 08:14:44 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: dialogs/document.c, document/cache.c, document/session.c,
-	document/view.c, document/html/renderer.c, lowlevel/sched.c,
-	lua/lua.c:
+	document/view.c, document/html/renderer.c, lowlevel/sched.c:
 
 	Changed return value of find_in_cache() - now it returns 0 when
 	nothing was found and 1 if something was digged from the cache. Much
@@ -20845,8 +21128,7 @@ Sun Apr 28 11:48:25 2002  Petr Baudis <pasky@ucw.cz>:
 	config/options.c, config/options.h, cookies/cookies.c,
 	document/globhist.c, document/session.c, lowlevel/Makefile.am,
 	lowlevel/af_unix.c, lowlevel/home.c, lowlevel/home.h,
-	lowlevel/sysname.c, lowlevel/sysname.h, lua/lua.c,
-	protocol/http/http.c:
+	lowlevel/sysname.c, lowlevel/sysname.h, protocol/http/http.c:
 
 	Moved home and sysname detection from config/conf.* and
 	config/options.* to lowlevel/home.* and lowlevel/sysname.*.  
@@ -20937,7 +21219,7 @@ Sat Apr 27 13:15:51 2002  Petr Baudis <pasky@ucw.cz>:
 	document/download.c, document/dump.c, document/globhist.c,
 	document/history.c, document/session.c, document/view.c,
 	document/html/parser.c, document/html/renderer.c,
-	lowlevel/af_unix.c, lowlevel/dns.c, lowlevel/sched.c, lua/lua.c,
+	lowlevel/af_unix.c, lowlevel/dns.c, lowlevel/sched.c,
 	protocol/file.c, protocol/ftp.c, protocol/types.c,
 	protocol/http/http.c, util/secsave.c:
 
@@ -21582,13 +21864,6 @@ Sun Apr  7 12:47:02 2002  Petr Baudis <pasky@ucw.cz>:
 	Breaking things at least partially working yet.. oh well ;) Now
 	we'll check for -ldl when checking for Lua as well.  
 
-Sun Apr  7 07:01:52 2002  Petr Baudis <pasky@ucw.cz>:
-
-	* src/lua/lua.c:
-
-	Include stdio.h in lua.c, thanks to José Luis González González
-	<jlg80@mi.madritel.es>.  
-
 Sat Apr  6 22:19:13 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/main.c:
@@ -22024,10 +22299,9 @@ Thu Mar 28 22:59:17 2002  Petr Baudis <pasky@ucw.cz>:
 
 Thu Mar 28 22:53:35 2002  Petr Baudis <pasky@ucw.cz>:
 
-	* src/: document/Makefile.am, document/dump.c, document/history.c,
-	document/location.c, document/location.h, document/session.h,
-	document/view.c, document/view.h, document/vs.c, document/vs.h,
-	document/html/renderer.c, document/html/renderer.h, lua/lua.c:
+	* src/document/: Makefile.am, dump.c, history.c, location.c,
+	location.h, session.h, view.c, view.h, vs.c, vs.h, html/renderer.c,
+	html/renderer.h:
 
 	Moved struct view_state to document/vs.c, thus helping repairing
 	various perverted crossdeps.  
@@ -22044,8 +22318,7 @@ Thu Mar 28 22:25:43 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: dialogs/menu.c, document/Makefile.am, document/session.c,
 	document/session.h, document/view.c, document/view.h,
-	document/html/renderer.c, lua/lua.c, document/location.c,
-	document/location.h:
+	document/html/renderer.c, document/location.c, document/location.h:
 
 	Move location stuff to document/location.c. This is pathetic :).  
 
@@ -22053,7 +22326,7 @@ Thu Mar 28 21:38:50 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: bfu/bfu.c, bfu/bfu.h, config/default.c, dialogs/menu.c,
 	document/Makefile.am, document/session.c, document/session.h,
-	document/view.c, document/html/renderer.c, lua/lua.c:
+	document/view.c, document/html/renderer.c:
 
 	Move location per-session history to document/history.c, and made
 	some appropriate encapsulation for all history stuff. Renamed struct
@@ -22236,9 +22509,8 @@ Tue Mar 26 17:37:31 2002  Petr Baudis <pasky@ucw.cz>:
 	* .vimrc, src/.vimrc, src/bfu/.vimrc, src/bookmarks/.vimrc,
 	src/config/.vimrc, src/cookies/.vimrc, src/dialogs/.vimrc,
 	src/document/.vimrc, src/document/html/.vimrc, src/intl/.vimrc,
-	src/lowlevel/.vimrc, src/lua/.vimrc, src/osdep/.vimrc,
-	src/protocol/.vimrc, src/protocol/http/.vimrc, src/ssl/.vimrc,
-	src/util/.vimrc:
+	src/lowlevel/.vimrc, src/osdep/.vimrc, src/protocol/.vimrc,
+	src/protocol/http/.vimrc, src/ssl/.vimrc, src/util/.vimrc:
 
 	all .vimrc files include elinks/.vimrc; added some more tabbing
 	settings for zas ;) 
@@ -22487,7 +22759,7 @@ Tue Mar 19 20:40:03 2002  Petr Baudis <pasky@ucw.cz>:
 	* src/: bfu/Makefile.am, bfu/align.h, bfu/bfu.c, bfu/bfu.h,
 	bookmarks/bookmarks.c, config/default.c, dialogs/info.c,
 	dialogs/menu.c, document/html/parser.c, document/html/parser.h,
-	document/html/renderer.c, document/html/tables.c, lua/lua.c,
+	document/html/renderer.c, document/html/tables.c,
 	protocol/mailto.c, protocol/types.c:
 
 	moved align enum to bfu/align.h 
@@ -22676,9 +22948,9 @@ Sun Mar 17 22:01:38 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: .vimrc, bfu/.vimrc, bookmarks/.vimrc, config/.vimrc,
 	cookies/.vimrc, dialogs/.vimrc, document/.vimrc,
-	document/html/.vimrc, intl/.vimrc, lowlevel/.vimrc, lua/.vimrc,
-	osdep/.vimrc, protocol/.vimrc, protocol/http/.vimrc,
-	protocol/http/date.c, util/.vimrc:
+	document/html/.vimrc, intl/.vimrc, lowlevel/.vimrc, osdep/.vimrc,
+	protocol/.vimrc, protocol/http/.vimrc, protocol/http/date.c,
+	util/.vimrc:
 
 	added .vimrc into each directory 
 
@@ -22696,9 +22968,8 @@ Sun Mar 17 21:41:01 2002  Petr Baudis <pasky@ucw.cz>:
 	src/bookmarks/.cvsignore, src/config/.cvsignore,
 	src/cookies/.cvsignore, src/dialogs/.cvsignore,
 	src/document/.cvsignore, src/intl/.cvsignore,
-	src/lowlevel/.cvsignore, src/lua/.cvsignore,
-	src/document/html/.cvsignore, src/osdep/.cvsignore,
-	src/protocol/.cvsignore, src/util/.cvsignore,
+	src/lowlevel/.cvsignore, src/document/html/.cvsignore,
+	src/osdep/.cvsignore, src/protocol/.cvsignore, src/util/.cvsignore,
 	src/protocol/http/.cvsignore:
 
 	added .cvsignore ignoring autogenerated stuff 
@@ -22717,9 +22988,8 @@ Sun Mar 17 18:52:38 2002  Petr Baudis <pasky@ucw.cz>:
 	src/cookies/Makefile.in, src/dialogs/Makefile.in,
 	src/document/Makefile.in, src/document/html/Makefile.in,
 	src/intl/Makefile.in, src/lowlevel/Makefile.in,
-	src/lua/Makefile.in, src/osdep/Makefile.in,
-	src/protocol/Makefile.in, src/protocol/http/Makefile.in,
-	src/util/Makefile.in:
+	src/osdep/Makefile.in, src/protocol/Makefile.in,
+	src/protocol/http/Makefile.in, src/util/Makefile.in:
 
 	Removed files generated automatically by automake/autoconf. FROM NOW
 	ON YOU NEED TO CALL ./autogen.sh AFTER CHECKOUTcvs update! Also,
@@ -22738,7 +23008,7 @@ Sun Mar 17 18:15:03 2002  Petr Baudis <pasky@ucw.cz>:
 	src/document/Makefile.am, src/document/Makefile.in,
 	src/intl/Makefile.am, src/intl/Makefile.in,
 	src/lowlevel/Makefile.am, src/lowlevel/Makefile.in,
-	src/lua/Makefile.am, src/lua/Makefile.in, src/osdep/Makefile.am,
+	src/scripting/lua/Makefile.am, src/osdep/Makefile.am,
 	src/osdep/Makefile.in, src/protocol/Makefile.am,
 	src/protocol/Makefile.in, src/util/Makefile.am,
 	src/util/Makefile.in, src/document/html/Makefile.am,
@@ -22789,12 +23059,12 @@ Sun Mar 17 17:38:33 2002  Petr Baudis <pasky@ucw.cz>:
 	src/document/Makefile.am, src/document/Makefile.in,
 	src/intl/Makefile.am, src/intl/Makefile.in,
 	src/lowlevel/Makefile.am, src/lowlevel/Makefile.in,
-	src/lua/Makefile.am, src/lua/Makefile.in,
-	src/document/html/Makefile.am, src/document/html/Makefile.in,
-	src/osdep/Makefile.am, src/osdep/Makefile.in,
-	src/protocol/Makefile.am, src/protocol/Makefile.in,
-	src/protocol/http/Makefile.am, src/protocol/http/Makefile.in,
-	src/util/Makefile.am, src/util/Makefile.in:
+	src/scripting/lua/Makefile.am, src/document/html/Makefile.am,
+	src/document/html/Makefile.in, src/osdep/Makefile.am,
+	src/osdep/Makefile.in, src/protocol/Makefile.am,
+	src/protocol/Makefile.in, src/protocol/http/Makefile.am,
+	src/protocol/http/Makefile.in, src/util/Makefile.am,
+	src/util/Makefile.in:
 
 	Move http protocol support to separate subdir protocol/http/ 
 
@@ -22808,10 +23078,9 @@ Sun Mar 17 17:27:48 2002  Petr Baudis <pasky@ucw.cz>:
 	document/html/tables.c, intl/charsets.c, intl/lang_defs.h,
 	lowlevel/af_unix.c, lowlevel/connect.c, lowlevel/dns.c,
 	lowlevel/kbd.c, lowlevel/sched.c, lowlevel/select.c,
-	lowlevel/terminal.c, lowlevel/terminal.h, lua/lua.c,
-	osdep/os_dep.c, osdep/win32.c, protocol/file.c, protocol/ftp.c,
-	protocol/http.c, protocol/mailto.c, protocol/types.c,
-	protocol/url.c, util/error.c:
+	lowlevel/terminal.c, lowlevel/terminal.h, osdep/os_dep.c,
+	osdep/win32.c, protocol/file.c, protocol/ftp.c, protocol/http.c,
+	protocol/mailto.c, protocol/types.c, protocol/url.c, util/error.c:
 
 	remove trailing spaces/tabs and spaces before semicolons; simple
 	script by Zas :) 
@@ -22828,8 +23097,8 @@ Sun Mar 17 14:58:52 2002  Petr Baudis <pasky@ucw.cz>:
 	src/document/Makefile.am, src/document/Makefile.in,
 	src/intl/Makefile.am, src/intl/Makefile.in,
 	src/lowlevel/Makefile.am, src/lowlevel/Makefile.in,
-	src/lua/Makefile.am, src/lua/Makefile.in, src/osdep/Makefile.am,
-	src/osdep/Makefile.in, src/document/html/Makefile.am,
+	src/osdep/Makefile.am, src/osdep/Makefile.in,
+	src/scripting/lua/Makefile.am, src/document/html/Makefile.am,
 	src/document/html/Makefile.in, src/protocol/Makefile.am,
 	src/protocol/Makefile.in, src/util/Makefile.am,
 	src/util/Makefile.in:
@@ -22854,9 +23123,9 @@ Sun Mar 17 14:39:11 2002  Petr Baudis <pasky@ucw.cz>:
 	src/bookmarks/Makefile.in, src/config/Makefile.in,
 	src/cookies/Makefile.in, src/dialogs/Makefile.in,
 	src/document/Makefile.in, src/intl/Makefile.in,
-	src/lowlevel/Makefile.in, src/lua/Makefile.in,
-	src/osdep/Makefile.in, src/document/html/Makefile.in,
-	src/protocol/Makefile.in, src/util/Makefile.in:
+	src/lowlevel/Makefile.in, src/osdep/Makefile.in,
+	src/document/html/Makefile.in, src/protocol/Makefile.in,
+	src/util/Makefile.in:
 
 	moved menu from bfu/ to dialogs/ 
 
@@ -22879,14 +23148,13 @@ Sun Mar 17 14:05:24 2002  Petr Baudis <pasky@ucw.cz>:
 	src/intl/codepage.h, src/intl/codepage.inc, src/intl/entity.inc,
 	src/intl/lang_defs.h, src/intl/language.c, src/intl/language.h,
 	src/intl/language.inc, src/intl/uni_7b.inc, src/lowlevel/sched.c,
-	src/lua/lua.c, src/osdep/os_dep.c, src/protocol/http.c,
-	src/protocol/mailto.c, src/protocol/types.c, Makefile.in,
-	acconfig.h, aclocal.m4, config.h.in, configure, configure.in,
-	stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
-	src/bookmarks/Makefile.in, src/config/Makefile.in,
-	src/cookies/Makefile.in, src/document/Makefile.in,
-	src/intl/Makefile.in, src/lowlevel/Makefile.in,
-	src/lua/Makefile.in, src/osdep/Makefile.in,
+	src/osdep/os_dep.c, src/protocol/http.c, src/protocol/mailto.c,
+	src/protocol/types.c, Makefile.in, acconfig.h, aclocal.m4,
+	config.h.in, configure, configure.in, stamp-h.in, src/Makefile.in,
+	src/bfu/Makefile.in, src/bookmarks/Makefile.in,
+	src/config/Makefile.in, src/cookies/Makefile.in,
+	src/document/Makefile.in, src/intl/Makefile.in,
+	src/lowlevel/Makefile.in, src/osdep/Makefile.in,
 	src/protocol/Makefile.in, src/util/Makefile.in,
 	src/document/html/Makefile.in:
 
@@ -22909,13 +23177,13 @@ Sun Mar 17 13:54:08 2002  Petr Baudis <pasky@ucw.cz>:
 	src/lowlevel/af_unix.c, src/lowlevel/connect.c,
 	src/lowlevel/connect.h, src/lowlevel/dns.c, src/lowlevel/kbd.c,
 	src/lowlevel/sched.c, src/lowlevel/sched.h, src/lowlevel/select.c,
-	src/lowlevel/terminal.c, src/lowlevel/terminal.h, src/lua/lua.c,
-	src/lua/lua.h, src/osdep/os_dep.c, src/protocol/file.c,
-	src/protocol/file.h, src/protocol/finger.c, src/protocol/finger.h,
-	src/protocol/ftp.c, src/protocol/http.c, src/protocol/http.h,
-	src/protocol/https.c, src/protocol/https.h, src/protocol/mailto.c,
-	src/protocol/mailto.h, src/protocol/types.c, src/protocol/types.h,
-	src/protocol/url.c, src/protocol/url.h, src/util/error.c:
+	src/lowlevel/terminal.c, src/lowlevel/terminal.h,
+	src/osdep/os_dep.c, src/protocol/file.c, src/protocol/file.h,
+	src/protocol/finger.c, src/protocol/finger.h, src/protocol/ftp.c,
+	src/protocol/http.c, src/protocol/http.h, src/protocol/https.c,
+	src/protocol/https.h, src/protocol/mailto.c, src/protocol/mailto.h,
+	src/protocol/types.c, src/protocol/types.h, src/protocol/url.c,
+	src/protocol/url.h, src/util/error.c:
 
 	Part III. of source layout change, stage 2. Changed #includes so
 	that we're now again compiling and working ok, already under the new
@@ -22927,15 +23195,14 @@ Sun Mar 17 12:24:22 2002  Petr Baudis <pasky@ucw.cz>:
 	configure.in, stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
 	src/bookmarks/Makefile.in, src/config/Makefile.in,
 	src/cookies/Makefile.in, src/document/Makefile.in,
-	src/lowlevel/Makefile.in, src/lua/Makefile.in,
-	src/osdep/Makefile.in, src/document/html/Makefile.in,
-	src/protocol/Makefile.in, src/util/Makefile.in, src/Makefile.am,
-	src/bfu/Makefile.am, src/bookmarks/Makefile.am,
-	src/config/Makefile.am, src/cookies/Makefile.am,
-	src/document/Makefile.am, src/document/html/Makefile.am,
-	src/lowlevel/Makefile.am, src/lua/Makefile.am,
-	src/osdep/Makefile.am, src/protocol/Makefile.am,
-	src/util/Makefile.am:
+	src/lowlevel/Makefile.in, src/osdep/Makefile.in,
+	src/document/html/Makefile.in, src/protocol/Makefile.in,
+	src/util/Makefile.in, src/Makefile.am, src/bfu/Makefile.am,
+	src/bookmarks/Makefile.am, src/config/Makefile.am,
+	src/cookies/Makefile.am, src/document/Makefile.am,
+	src/document/html/Makefile.am, src/lowlevel/Makefile.am,
+	src/scripting/lua/Makefile.am, src/osdep/Makefile.am,
+	src/protocol/Makefile.am, src/util/Makefile.am:
 
 	okay, more fun with INCLUDE ;) 
 
@@ -22944,8 +23211,8 @@ Sun Mar 17 12:04:24 2002  Petr Baudis <pasky@ucw.cz>:
 	* src/: Makefile.am, Makefile.in, bfu/Makefile.am, bfu/Makefile.in,
 	bookmarks/Makefile.am, config/Makefile.am, cookies/Makefile.am,
 	document/Makefile.am, document/html/Makefile.am,
-	lowlevel/Makefile.am, lua/Makefile.am, osdep/Makefile.am,
-	protocol/Makefile.am, util/Makefile.am:
+	lowlevel/Makefile.am, osdep/Makefile.am, protocol/Makefile.am,
+	scripting/lua/Makefile.am, util/Makefile.am:
 
 	added INCLUDE to Makefiles.am 
 
@@ -22956,15 +23223,15 @@ Sun Mar 17 11:54:41 2002  Petr Baudis <pasky@ucw.cz>:
 	src/bookmarks/Makefile.am, src/config/Makefile.am,
 	src/cookies/Makefile.am, src/document/Makefile.am,
 	src/document/html/Makefile.am, src/lowlevel/Makefile.am,
-	src/lua/Makefile.am, src/osdep/Makefile.am,
-	src/protocol/Makefile.am, src/util/Makefile.am, Makefile.in,
+	src/osdep/Makefile.am, src/protocol/Makefile.am,
+	src/scripting/lua/Makefile.am, src/util/Makefile.am, Makefile.in,
 	acconfig.h, aclocal.m4, config.h.in, configure, configure.in,
 	stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
 	src/bookmarks/Makefile.in, src/config/Makefile.in,
 	src/cookies/Makefile.in, src/document/Makefile.in,
-	src/lowlevel/Makefile.in, src/lua/Makefile.in,
-	src/osdep/Makefile.in, src/document/html/Makefile.in,
-	src/protocol/Makefile.in, src/util/Makefile.in:
+	src/lowlevel/Makefile.in, src/osdep/Makefile.in,
+	src/document/html/Makefile.in, src/protocol/Makefile.in,
+	src/util/Makefile.in:
 
 	Part III. of source layout change, stage 2. Improved autofiles, so
 	that ./autogen actually works now ;) 
@@ -23003,8 +23270,7 @@ Sun Mar 17 11:28:53 2002  Petr Baudis <pasky@ucw.cz>:
 	src/lowlevel/dns.h, src/lowlevel/kbd.c, src/lowlevel/kbd.h,
 	src/lowlevel/sched.c, src/lowlevel/sched.h, src/lowlevel/select.c,
 	src/lowlevel/select.h, src/lowlevel/terminal.c,
-	src/lowlevel/terminal.h, src/lua/Makefile.am, src/lua/lua.c,
-	src/lua/lua.h, src/osdep/Makefile.am, src/osdep/beos.c,
+	src/lowlevel/terminal.h, src/osdep/Makefile.am, src/osdep/beos.c,
 	src/osdep/os_dep.c, src/osdep/os_dep.h, src/osdep/os_depx.h,
 	src/osdep/win32.c, src/protocol/Makefile.am, src/protocol/file.c,
 	src/protocol/file.h, src/protocol/finger.c, src/protocol/finger.h,
@@ -23012,9 +23278,10 @@ Sun Mar 17 11:28:53 2002  Petr Baudis <pasky@ucw.cz>:
 	src/protocol/http.h, src/protocol/https.c, src/protocol/https.h,
 	src/protocol/mailto.c, src/protocol/mailto.h, src/protocol/types.c,
 	src/protocol/types.h, src/protocol/url.c, src/protocol/url.h,
-	src/util/Makefile.am, src/util/error.c, src/util/error.h,
-	src/config/Makefile.am, src/config/default.c, src/config/default.h,
-	src/config/kbdbind.c, src/config/kbdbind.h:
+	src/scripting/lua/Makefile.am, src/util/Makefile.am,
+	src/util/error.c, src/util/error.h, src/config/Makefile.am,
+	src/config/default.c, src/config/default.h, src/config/kbdbind.c,
+	src/config/kbdbind.h:
 
 	Part III. of source layout change, stage 1. Moving source files to 
 	subdirectories, sorted by the department they belong to. Also

@@ -1,3 +1,80 @@
+Sat Nov 30 01:21:23 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre20 
+
+Sat Nov 30 01:20:18 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/menu.c, config/options.c:
+
+	Ok, you won. Menu scrolling wraps around again.
+	ui.menu_scroll_wraparound removed. However, I made pgup/pgdn _NOT_
+	to wraparound. And you have no chance on persuading me about that.  
+
+Sat Nov 30 01:08:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	document.cache.ignore_cache_control by default.  
+
+Sat Nov 30 01:08:26 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/: dialogs.c, globhist.c:
+
+	When title is empty, display URL.  
+
+Sat Nov 30 01:03:46 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/czech.lng, src/intl/language.inc:
+
+	Czech translation update.  
+
+Sat Nov 30 01:02:42 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/options.c, src/globhist/dialogs.c,
+	src/globhist/globhist.c, src/intl/lang_defs.h,
+	src/intl/language.inc:
+
+	Introduced [ Toggle display ] button to global history dialog,
+	making it possible to switch between page titles and URLs. Aliased
+	to document.history.global.display_type.  
+
+Sat Nov 30 00:12:05 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Some performance testing utility, disabled obviously.  
+
+Fri Nov 29 23:28:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* Unicode/7bit.cp, Unicode/8859_1.cp, Unicode/8859_13.cp,
+	Unicode/8859_15.cp, Unicode/8859_16.cp, Unicode/8859_2.cp,
+	Unicode/8859_4.cp, Unicode/8859_5.cp, Unicode/8859_7.cp,
+	Unicode/8859_9.cp, Unicode/cp1125.cp, Unicode/cp1250.cp,
+	Unicode/cp1251.cp, Unicode/cp1257.cp, Unicode/mac_lat2.cp,
+	Unicode/tcvn5712.cp, src/intl/codepage.inc:
+
+	Updated the aliases of various codepages, since we have now much
+	less agressive method of their searching (and much less CPU
+	intensive). Hope it'll work in most cases now.  
+
+Fri Nov 29 23:19:27 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Oops, compilation fix.  
+
 Fri Nov 29 22:53:20 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/hash.c:

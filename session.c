@@ -99,17 +99,26 @@ unsigned char *get_stat_msg(struct status *stat, struct terminal *term)
 	return stracpy(_(get_err_msg(stat->state), term));
 }
 
+/* Print statusbar and titlebar. */
 void print_screen_status(struct session *ses)
 {
 	struct terminal *term = ses->term;
 	struct status *stat = NULL;
-	unsigned char *m;
+	unsigned char *msg = NULL;
+
+	/* TODO: Make this optionally switchable off. */
+	
 	fill_area(term, 0, 0, term->x, 1, COLOR_TITLE_BG);
 	fill_area(term, 0, term->y - 1, term->x, 1, COLOR_STATUS_BG);
-	if (ses->wtd) stat = &ses->loading;
-	else if (!list_empty(ses->history)) stat = &cur_loc(ses)->stat;
+	
+	if (ses->wtd)
+		stat = &ses->loading;
+	else if (!list_empty(ses->history))
+		stat = &cur_loc(ses)->stat;
+	
 	if (stat && stat->state == S_OK) {
 		struct file_to_load *ftl;
+		
 		foreach(ftl, ses->more_files) {
 			if (ftl->req_sent && ftl->stat.state >= 0) {
 				stat = &ftl->stat;
@@ -117,27 +126,41 @@ void print_screen_status(struct session *ses)
 			}
 		}
 	}
+	
 	if (stat) {
-		if (stat->state == S_OK) if ((m = print_current_link(ses))) goto p;
-		if ((m = get_stat_msg(stat, term))) {
-			p:
-			print_text(term, 0, term->y - 1, strlen(m), m, COLOR_STATUS);
-			mem_free(m);
+		if (stat->state == S_OK)
+			msg = print_current_link(ses);
+		if (!msg)
+			msg = get_stat_msg(stat, term);
+		if (msg) {
+			print_text(term, 0, term->y - 1, strlen(msg), msg,
+				   COLOR_STATUS);
+			mem_free(msg);
 		}
-		if ((m = print_current_title(ses))) {
-			int p = term->x - 1 - strlen(m);
-			if (p < 0) p = 0;
-			print_text(term, p, 0, strlen(m), m, COLOR_TITLE);
-			/*set_window_title(0,m);*/
-			/*set_terminal_title(term, m);*/
-			mem_free(m);
+		
+		msg = print_current_title(ses);
+		if (msg) {
+			int pos = term->x - 1 - strlen(msg);
+		
+			if (pos < 0) pos = 0;
+			print_text(term, pos, 0, strlen(msg), msg,
+				   COLOR_TITLE);
+			mem_free(msg);
 		}
-		if ((m = stracpy("Links"))) {
-			if (ses->screen && ses->screen->f_data && ses->screen->f_data->title && ses->screen->f_data->title[0]) add_to_strn(&m, " - "), add_to_strn(&m, ses->screen->f_data->title);
-			set_terminal_title(term, m);
-			mem_free(m);
+	
+		msg = stracpy("Links");
+		if (msg) {
+			if (ses->screen && ses->screen->f_data
+			    && ses->screen->f_data->title
+			    && ses->screen->f_data->title[0]) {
+				add_to_strn(&msg, " - ");
+				add_to_strn(&msg, ses->screen->f_data->title);
+			}
+			set_terminal_title(term, msg);
+			mem_free(msg);
 		}
 	}
+
 	redraw_from_window(ses->win);
 }
 

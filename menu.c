@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.24 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: menu.c,v 1.25 2002/03/16 11:49:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,37 +18,25 @@
 
 #include "links.h"
 
-#if 0
-static inline struct session *get_term_session(struct terminal *term)
-{
-	if ((void *)term->windows.prev == &term->windows) {
-		internal("terminal has no windows");
-		return NULL;
-	}
-	return ((struct window *)term->windows.prev)->data;
-}
-#endif
-
 void menu_about(struct terminal *term, void *d, struct session *ses)
 {
 	unsigned char *s = stracpy(_(TEXT(T_LINKS__LYNX_LIKE), term));
 	/* XXX this is very dodgy and displays wrong when in the middle
 	 * of a transfer */
-#if defined HAVE_SSL || defined HAVE_LUA
 	add_to_strn(&s, "\n\n");
 	add_to_strn(&s, _(TEXT(T_FEATURES), term));
 	add_to_strn(&s, ":"
+			" Default"
 #ifdef HAVE_SSL
 			" SSL"
 #endif
 #ifdef HAVE_LUA
-			" Lua (patch 12 wip)"
+			" Lua"
 #endif
 #ifdef IPV6
 			" IPv6"
 #endif
 	);
-#endif
 	msg_box(term, NULL,
 		TEXT(T_ABOUT), AL_CENTER,
 		s,

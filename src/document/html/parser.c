@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.345 2004/01/18 15:05:43 zas Exp $ */
+/* $Id: parser.c,v 1.346 2004/01/18 15:07:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2355,11 +2355,11 @@ distribute:
 
 	for (i = 0; i < values_count; i++) if (!values[i]) {
 		register int j;
-		int m = 0;
-		int mj = 0;
+		int maxval = 0;
+		int maxpos = 0;
 
-		for (j = 0; j < values_count; j++) if (values[j] > m) m = values[j], mj = j;
-		if (m) values[i] = 1, values[mj]--;
+		for (j = 0; j < values_count; j++) if (values[j] > maxval) maxval = values[j], maxpos = j;
+		if (maxval) values[i] = 1, values[maxpos]--;
 	}
 }
 

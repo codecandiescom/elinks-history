@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.441 2004/06/10 15:37:27 jonas Exp $ */
+/* $Id: session.c,v 1.442 2004/06/10 15:40:55 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -731,14 +731,16 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		str = (unsigned char *) data;
 		len -= 3 * sizeof(int);
 
-		/* TODO: unsigned char *url = decode_shell_safe_url(source); */
 		/* Extract multiple NUL terminated URIs */
 		while (len > 0) {
 			unsigned char *end = memchr(str, 0, len);
+			unsigned char *decoded;
 
 			if (!end) break;
 
-			uri = get_hooked_uri(str, current_uri, term->cwd);
+			decoded = decode_shell_safe_url(str);
+			uri = decoded ? get_hooked_uri(decoded, current_uri, term->cwd) : NULL;
+			mem_free_if(decoded);
 
 			if (uri) {
 				add_to_uri_list(&info->uri_list, uri);

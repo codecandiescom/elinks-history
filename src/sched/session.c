@@ -1,5 +1,10 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.294 2004/01/15 22:51:06 pasky Exp $ */
+/* $Id: session.c,v 1.295 2004/01/16 18:21:05 zas Exp $ */
+
+/* stpcpy */
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE 1
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -644,11 +649,15 @@ copy_session(struct session *old, struct session *new)
 }
 
 void *
-create_session_info(int cp, unsigned char *url, int *ll)
+create_session_info(int cp, struct list_head *url_list, int *ll)
 {
-	int l = strlen(url);
+	int l = 0;
+	struct url_list *url;
 	int *i;
 
+	foreach (url, *url_list) {
+		l += strlen(url->url) + 1;
+	}
 	*ll = 2 * sizeof(int) + l;
 
 	i = mem_alloc(*ll);
@@ -656,7 +665,13 @@ create_session_info(int cp, unsigned char *url, int *ll)
 
 	i[0] = cp;
 	i[1] = l;
-	if (l) memcpy(i + 2, url, l);
+	if (l) {
+		unsigned char *start = (unsigned char *)(i + 2);
+
+		foreach (url, *url_list) {
+			start = stpcpy(start, url->url) + 1;
+		}
+	}
 
 	return i;
 }
@@ -674,21 +689,38 @@ decode_session_info(const void *pdata)
 
 	info = mem_calloc(1, sizeof(struct initial_session_info));
 	if (!info) return NULL;
+	init_list(info->url_list);
 
 	info->base_session = *(data++);
 
 	url_len = *(data++);
 	if (url_len && len >= 2 * sizeof(int) + url_len) {
-		unsigned char *url = fmem_alloc(url_len + 1);
+		unsigned char *str = (unsigned char *) data;
+		int length = 0;
 
-		if (!url) return info;
+		while (url_len) {
+			unsigned char *url;
+			struct url_list *url_list;
 
-		memcpy(url, data, url_len);
-		url[url_len] = '\0';
+			length = strlen(str) + 1;
 
-		info->url = decode_shell_safe_url(url);
+			url = fmem_alloc(length);
+			if (!url) return info;
 
-		fmem_free(url);
+			memcpy(url, str, length);
+			str += length;
+			url_len -= length;
+
+			url_list = mem_alloc(sizeof(struct url_list));
+			if (!url_list) {
+				fmem_free(url);
+				return info;
+			}
+
+			url_list->url = decode_shell_safe_url(url);
+			add_to_list_end(info->url_list, url_list);
+			fmem_free(url);
+		}
 	}
 
 	return info;
@@ -697,7 +729,12 @@ decode_session_info(const void *pdata)
 static void
 free_session_info(struct initial_session_info *info)
 {
-	if (info->url) mem_free(info->url);
+	struct url_list *url;
+
+	foreach (url, info->url_list) {
+		if (url->url) mem_free(url->url);
+	}
+	free_list(info->url_list);
 	mem_free(info);
 }
 
@@ -736,8 +773,20 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		}
 	}
 
-	if (info->url) {
-		goto_url(ses, info->url);
+	if (!list_empty(info->url_list)) {
+		struct url_list *url;
+		int flag = 0;
+
+		foreach (url, info->url_list) {
+			if (!flag) {
+				/* Open first url. */
+				goto_url(ses, url->url);
+				flag = 1;
+			} else {
+				/* Open next ones. */
+				open_url_in_new_tab(ses, url->url, 1);
+			}
+		}
 
 #ifdef CONFIG_BOOKMARKS
 	} else if (!first_use

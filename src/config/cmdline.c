@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.32 2004/01/10 11:03:58 pasky Exp $ */
+/* $Id: cmdline.c,v 1.33 2004/01/16 18:21:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,13 +26,21 @@
 #include "config/opttypes.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/dns.h"
+#include "sched/session.h"
 #include "util/memory.h"
 
-
-static unsigned char *
-_parse_options(int argc, unsigned char *argv[], struct option *opt)
+static struct list_head *
+_parse_options(int argc, unsigned char *argv[], struct option *opt, int first)
 {
-	unsigned char *location = NULL;
+	struct list_head *urls = NULL;
+
+	if (first) {
+		urls = mem_alloc(sizeof(struct list_head));
+		if (urls)
+			init_list(*urls);
+		else
+			first = 0;
+	}
 
 	while (argc) {
 		argv++, argc--;
@@ -66,7 +74,9 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt)
 			mem_free(oname);
 
 			if (!option) {
-				goto unknown_option;
+unknown_option:
+				ERROR(gettext("Unknown option %s"), argv[-1]);
+				return NULL;
 			}
 
 			if (option_types[option->type].cmdline
@@ -85,23 +95,23 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt)
 				goto unknown_option;
 			}
 
-		} else if (!location) {
-			location = argv[-1];
+		} else if (first) {
+			struct url_list *url = mem_alloc(sizeof(struct url_list));
 
-		} else {
-unknown_option:
-			ERROR(gettext("Unknown option %s"), argv[-1]);
-			return NULL;
+			if (url) {
+				url->url = argv[-1];
+				add_to_list_end(*urls, url);
+			}
 		}
 	}
 
-	return empty_string_or_(location);
+	return urls;
 }
 
-unsigned char *
-parse_options(int argc, unsigned char *argv[])
+struct list_head *
+parse_options(int argc, unsigned char *argv[], int first)
 {
-	return _parse_options(argc, argv, cmdline_options);
+	return _parse_options(argc, argv, cmdline_options, first);
 }
 
 

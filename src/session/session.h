@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.90 2004/01/15 22:51:06 pasky Exp $ */
+/* $Id: session.h,v 1.91 2004/01/16 18:21:06 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -18,13 +18,17 @@ struct term_event;
 struct terminal;
 struct window;
 
+struct url_list {
+	LIST_HEAD(struct url_list);
+	unsigned char *url;
+};
 
 /* This is used to pass along the initial session parameters. */
 struct initial_session_info {
 	/* The session whose state to copy, -1 is none. */
 	int base_session;
 	/* The URL we should load immediatelly (or NULL). */
-	unsigned char *url;
+	struct list_head url_list;
 };
 
 /* This is generic frame descriptor, meaningful mainly for ses_*_frame*(). */
@@ -223,7 +227,7 @@ void print_unknown_protocol_dialog(struct session *);
 
 void process_file_requests(struct session *);
 
-void *create_session_info(int, unsigned char *, int *);
+void *create_session_info(int, struct list_head *, int *);
 struct initial_session_info *decode_session_info(const void *);
 struct session *create_basic_session(struct window *);
 

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.158 2004/01/01 10:12:01 jonas Exp $ */
+/* $Id: main.c,v 1.159 2004/01/16 18:21:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,6 +74,7 @@ void
 init(void)
 {
 	unsigned char *url = NULL;
+	struct list_head *url_list = NULL;
 
 	init_static_version();
 
@@ -105,16 +106,22 @@ init(void)
 	}
 
 	/* Parsing command line options */
-	url = parse_options(ac - 1, av + 1);
-	if (!url) {
+	url_list = parse_options(ac - 1, av + 1, 1);
+	if (!url_list) {
 		retval = RET_SYNTAX;
 		terminate = 1;
 		return;
 	}
 
-	url = stracpy(url);
-	if (!url) goto fatal_error;
+	if (!list_empty(*url_list)) {
+		struct url_list *ul = url_list->next;
 
+		url = stracpy(ul->url);
+		if (!url) goto fatal_error;
+	} else {
+		url = stracpy("");
+	}
+	
 	if (!get_opt_bool_tree(cmdline_options, "no-home")) {
 		init_home();
 	}
@@ -134,7 +141,7 @@ init(void)
 
 		info = create_session_info(get_opt_int_tree(cmdline_options,
 							    "base-session"),
-					   url, &len);
+					   url_list, &len);
 		if (!info) goto fatal_error;
 
 		handle_trm(get_input_handle(), get_output_handle(),
@@ -151,7 +158,7 @@ init(void)
 	load_config();
 	/* Parse commandline options again, in order to override any config
 	 * file options. */
-	parse_options(ac - 1, av + 1);
+	parse_options(ac - 1, av + 1, 0);
 
 	init_b = 1;
 	init_modules();
@@ -178,7 +185,7 @@ init(void)
 		int len;
 		void *info = create_session_info(get_opt_int_tree(cmdline_options,
 								  "base-session"),
-						 url, &len);
+						 url_list, &len);
 
 		if (!info) goto fatal_error;
 
@@ -195,6 +202,9 @@ fatal_error:
 
 end:
 	if (url) mem_free(url);
+
+	free_list(*url_list);
+	mem_free(url_list);
 }
 
 

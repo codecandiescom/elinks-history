@@ -1,9 +1,11 @@
-/* $Id: color.h,v 1.1 2003/08/23 16:33:22 jonas Exp $ */
+/* $Id: color.h,v 1.2 2003/08/25 02:44:56 jonas Exp $ */
 
 #ifndef EL__UTIL_COLOR_H
 #define EL__UTIL_COLOR_H
 
-typedef unsigned long color_t;
+#include "util/types.h"
+
+typedef uint32_t color_t;
 
 struct rgb {
 	unsigned char r, g, b;

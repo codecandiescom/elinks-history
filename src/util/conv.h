@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.7 2003/05/12 20:37:46 pasky Exp $ */
+/* $Id: conv.h,v 1.8 2003/05/15 21:20:29 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -27,35 +27,43 @@ void add_htmlesc_str(unsigned char **, int *, unsigned char *, int);
 /* These are fast functions to convert integers to string, or to hexadecimal string. */
 
 int elinks_ulongcat(unsigned char *s, unsigned int *slen, unsigned long number,
-		    unsigned int width, unsigned char fillchar);
+		    unsigned int width, unsigned char fillchar, unsigned int base,
+		    unsigned int upper);
+
+int elinks_longcat(unsigned char *s, unsigned int *slen, long number,
+		   unsigned int width, unsigned char fillchar, unsigned int base,
+		   unsigned int upper);
+
 /* Type casting is enforced, to shorten calls. --Zas */
+/* unsigned long to decimal string */
 #define ulongcat(s, slen, number, width, fillchar) \
 	elinks_ulongcat((unsigned char *) (s), \
 			(unsigned int *) (slen), \
 			(unsigned long) (number), \
 			(unsigned int) (width), \
-			(unsigned char) (fillchar))
+			(unsigned char) (fillchar), \
+			(unsigned int) 10, \
+			(unsigned int) 0)
 
-int elinks_longcat(unsigned char *s, unsigned int *slen, long number,
-		   unsigned int width, unsigned char fillchar);
-/* Type casting is enforced, to shorten calls. --Zas */
+/* signed long to decimal string */
 #define longcat(s, slen, number, width, fillchar) \
 	 elinks_longcat((unsigned char *) (s), \
 			(unsigned int *) (slen), \
 			(long) (number), \
 			(unsigned int) (width), \
-			(unsigned char) (fillchar))
+			(unsigned char) (fillchar), \
+			(unsigned int) 10, \
+			(unsigned int) 0)
 
-int elinks_ulonghexcat(unsigned char *s, unsigned int *slen, unsigned long number,
-		       unsigned int width, unsigned char fillchar, unsigned int upper);
-/* Type casting is enforced, to shorten calls. --Zas */
+/* unsigned long to hexadecimal string */
 #define ulonghexcat(s, slen, number, width, fillchar, upper) \
-	elinks_ulonghexcat((unsigned char *) (s), \
-			   (unsigned int *) (slen), \
-			   (unsigned long) (number), \
-			   (unsigned int) (width), \
-			   (unsigned char) (fillchar), \
-			   (unsigned int) (upper))
+	elinks_ulongcat((unsigned char *) (s), \
+			(unsigned int *) (slen), \
+			(unsigned long) (number), \
+			(unsigned int) (width), \
+			(unsigned char) (fillchar), \
+			(unsigned int) 16, \
+			(unsigned int) (upper))
 
 
 /* XXX: Compatibility only. Remove these at some time. --Zas */

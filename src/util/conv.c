@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.38 2003/05/15 12:53:59 zas Exp $ */
+/* $Id: conv.c,v 1.39 2003/05/15 21:20:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,42 +25,46 @@
  * would take more space than @width, it is truncated and only the _last_
  * digits of it are inserted to the string. If the number takes less space than
  * @width, it is padded by @fillchar from left.
+ * @base defined which base should be used (10, 16, 8, 2, ...)
+ * @upper selects either hexa uppercased chars or lowercased chars.
  *
  * A NUL char is always added at the end of the string. @s must point to a
  * sufficiently large memory space, at least *@slen + @width + 1.
  *
- * Example:
+ * Examples:
  *
- * ulongcat(s, NULL, 12345, 4, 0) : s = "2345"
+ * elinks_ulongcat(s, NULL, 12345, 4, 0, 10, 0) : s = "2345"
+ * elinks_ulongcat(s, NULL, 255, 4, '*', 16, 1) : s = "**FF"
+ * elinks_ulongcat(s, NULL, 123, 5, '0', 10, 0) : s = "00123"
  *
- * ulongcat(s, NULL, 123, 5, '0') : s = "00123"
- *
- * Note that this function exists to provide a fast and effecient, however
+ * Note that this function exists to provide a fast and efficient, however
  * still quite powerful alternative to sprintf(). It is optimized for speed and
  * is *MUCH* faster than sprintf(). If you can use it, use it ;-). But do not
  * get too enthusiastic, do not use it in cases where it would break i18n.
  */
 /* The function returns 0 if OK or width needed for the whole number to fit
  * there, if it had to be truncated. A negative value signs an error. */
-/* TODO: Align to right, left, center... --Zas */
 int inline
 elinks_ulongcat(unsigned char *s, unsigned int *slen,
-		unsigned long number, unsigned int width,
-		unsigned char fillchar)
+		   unsigned long number, unsigned int width,
+		   unsigned char fillchar, unsigned int base,
+		   unsigned int upper)
 {
+	static unsigned char unum[]= "0123456789ABCDEF";
+	static unsigned char lnum[]= "0123456789abcdef";
+	unsigned char *to_num = (unsigned char *) (upper ? &unum : &lnum);
 	unsigned int start = slen ? *slen : 0;
-	unsigned int nlen = 1; /* '0' is one char, we can't have less. */
+	register unsigned int nlen = 1; /* '0' is one char, we can't have less. */
 	unsigned int pos = start; /* starting position of the number */
 	unsigned long q = number;
 	int ret = 0;
 
-	if (width < 1 || !s) return -1;
+	if (width < 1 || !s || base < 2 || base > 16) return -1;
 
 	/* Count the length of the number in chars. */
-	/* 10 -> nlen = 2, 100 -> nlen = 3, ... */
-	while (q > 9) {
+	while (q > (base - 1)) {
 		nlen++;
-		q /= 10;
+		q /= base;
 	}
 
 	/* If max. width attained, truncate. */
@@ -74,7 +78,7 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 	/* Fill left space with fillchar. */
 	if (fillchar) {
 		/* ie. width = 4 nlen = 2 -> pad = 2 */
-		unsigned int pad = width - nlen;
+		register unsigned int pad = width - nlen;
 
 		if (pad > 0) {
 			/* Relocate the start of number. */
@@ -90,17 +94,19 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 
 	/* Now write number starting from end. */
 	while (nlen > 0) {
-		s[--nlen + pos] = '0' + (number % 10);
-		number /= 10;
+		s[--nlen + pos] = to_num[(number % base)];
+		number /= base;
 	}
 
 	return ret;
 }
 
+/* Similar to elinks_ulongcat() but for long number. */
 int inline
 elinks_longcat(unsigned char *s, unsigned int *slen,
 	       long number, unsigned int width,
-	       unsigned char fillchar)
+	       unsigned char fillchar, unsigned int base,
+	       unsigned int upper)
 {
 	unsigned char *p = s;
 
@@ -111,67 +117,7 @@ elinks_longcat(unsigned char *s, unsigned int *slen,
 		width--;
 	}
 
-	return elinks_ulongcat(p, slen, number, width, fillchar);
-}
-
-/* This function is similar to elinks_ulongcat() but convert a long to
- * hexadecimal format.
- * An additionnal parameter 'upper' permits to choose between
- * uppercased and lowercased hexa numbers. */
-int inline
-elinks_ulonghexcat(unsigned char *s, unsigned int *slen,
-		   unsigned long number, unsigned int width,
-		   unsigned char fillchar, unsigned int upper)
-{
-	static unsigned char uhex[]= "0123456789ABCDEF";
-	static unsigned char lhex[]= "0123456789abcdef";
-	unsigned char *hex = (unsigned char *) (upper ? &uhex : &lhex);
-	unsigned int start = slen ? *slen : 0;
-	unsigned int nlen = 1; /* '0' is one char, we can't have less. */
-	unsigned int pos = start; /* starting position of the number */
-	unsigned long q = number;
-	int ret = 0;
-
-	if (width < 1 || !s) return -1;
-
-	/* Count the length of the number in chars. */
-	while (q > 15) {
-		nlen++;
-		q /= 16;
-	}
-
-	/* If max. width attained, truncate. */
-	if (nlen > width) {
-		ret = nlen;
-		nlen = width;
-	}
-
-	if (slen) *slen += nlen;
-
-	/* Fill left space with fillchar. */
-	if (fillchar) {
-		/* ie. width = 4 nlen = 2 -> pad = 2 */
-		unsigned int pad = width - nlen;
-
-		if (pad > 0) {
-			/* Relocate the start of number. */
-			if (slen) *slen += pad;
-			pos += pad;
-
-			/* Pad. */
-			while (pad > 0) s[--pad + start] = fillchar;
-		}
-	}
-
-	s[pos + nlen] = '\0';
-
-	/* Now write number starting from end. */
-	while (nlen > 0) {
-		s[--nlen + pos] = hex[(number % 16)];
-		number /= 16;
-	}
-
-	return ret;
+	return elinks_ulongcat(p, slen, number, width, fillchar, base, upper);
 }
 
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.461 2004/06/23 10:26:16 zas Exp $ */
+/* $Id: parser.c,v 1.462 2004/06/23 10:28:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1288,7 +1288,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 
 	assert(uri && options);
 	if_assert_failed return;
-	
+
 	init_list(html_context.html_stack);
 
 	html_context.startf = start;

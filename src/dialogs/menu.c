@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.337 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: menu.c,v 1.338 2004/06/23 10:28:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -553,7 +553,7 @@ add_cmdline_bool_option(struct string *string, unsigned char *name)
 {
 	if (!get_cmd_opt_bool(name)) return;
 	add_to_string(string, " -");
-	add_to_string(string, name);	
+	add_to_string(string, name);
 }
 
 void

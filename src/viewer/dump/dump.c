@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.72 2003/12/22 01:12:41 pasky Exp $ */
+/* $Id: dump.c,v 1.73 2003/12/22 01:45:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,6 +122,9 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	o.color_mode = COLOR_MODE_DUMP;
 	o.plain = 0;
 	o.frames = 0;
+
+	get_opt_bool("document.browse.links.numbering") =
+		!get_opt_bool_tree(cmdline_options, "no-numbering");
 
 	init_vs(vs, get_cache_uri(ce), -1);
 

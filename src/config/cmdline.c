@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.21 2003/12/21 14:13:20 zas Exp $ */
+/* $Id: cmdline.c,v 1.22 2003/12/22 01:45:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -524,6 +524,12 @@ struct option_info cmdline_options_info[] = {
 		"Use whichever suits you more ;-). Note that reading document from\n"
 		"stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 		"know why you would use -source -stdin, though ;-)")),
+
+	INIT_OPT_BOOL("", N_("Do not number links in dump output"),
+		"no-numbering", 0, 0,
+		N_("Prevents numbering of links (and showing their list at the end of\n"
+		"the dumped document) in the -dump output; this was the default behaviour\n"
+		"until 0.5pre12. Note that this really affects only --dump, nothing else.")),
 
 	INIT_OPT_BOOL("", N_("Touch files in ~/.elinks when running with -no-connect/-session-ring"),
 		"touch-files", 0, 0,

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.199 2005/02/28 13:06:58 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.200 2005/02/28 15:57:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2210,7 +2210,7 @@ spidermonkey_eval_boolback(struct ecmascript_interpreter *interpreter,
 			  code->source, code->length, "", 0, &rval);
 	if (ret == 2) { /* onClick="history.back()" */
 		return 0;
-	};		
+	};
 	if (ret == JS_FALSE) {
 		return -1;
 	}

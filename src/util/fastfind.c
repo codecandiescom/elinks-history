@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.16 2003/06/14 17:21:59 zas Exp $ */
+/* $Id: fastfind.c,v 1.17 2003/06/14 18:58:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,7 +438,6 @@ fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 		 * matters. We do not count this test in stats as it will
 		 * disappear. It will imply code duplication. */
 		int lidx = info->idxtab[ifcase(key[i])];
-		struct ff_elt *line;
 
 		iterinc(info);
 
@@ -448,28 +447,25 @@ fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 		testinc(info);
 		if (current->c) {
 			/* It is a compressed line. */
-
 			testinc(info);
-			if (((struct ff_elt_c *)(current))->ch != lidx)
+			if (((struct ff_elt_c *) current)->ch != lidx)
 				return NULL;
-			line = current;
-
 		} else {
-			line = &current[lidx];
+			current = &current[lidx];
 		}
 
 		testinc(info);
-		if (line->e && key_len == info->keylen_list[line->p]) {
+		if (current->e && key_len == info->keylen_list[current->p]) {
 			testinc(info);
 			foundinc(info);
-			return info->pointers[line->p];
+			return info->pointers[current->p];
 		}
 
 		testinc(info);
-		if (!line->l)
+		if (!current->l)
 			return NULL;
 
-		current = (struct ff_elt *) info->lines[line->l];
+		current = (struct ff_elt *) info->lines[current->l];
 	}
 
 	return NULL;

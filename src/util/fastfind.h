@@ -1,4 +1,4 @@
-/* $Id: fastfind.h,v 1.4 2003/06/14 17:21:59 zas Exp $ */
+/* $Id: fastfind.h,v 1.5 2003/06/14 18:58:32 jonas Exp $ */
 
 #ifndef EL__UTIL_FASTFIND_H
 #define EL__UTIL_FASTFIND_H
@@ -23,7 +23,7 @@ void *fastfind_index(void (*reset)(void),
 /* @current		is the element to compress for internal use.
  *			By passing NULL the whole index is compressed.
  * @fastfind_handle	is the handle created with fastfind_index(). */
-/* Highly recommended but optionnal. */
+/* Highly recommended but optional. */
 void fastfind_index_compress(void *current /* =NULL */, void *fastfind_handle);
 
 /* The main reason of all that stuff is here. */

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.30 2003/10/26 15:47:24 zas Exp $ */
+/* $Id: group.c,v 1.31 2003/10/26 15:59:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,7 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 			widget_data->y = *y;
 			if (widget_data->widget->type == D_FIELD ||
 			    widget_data->widget->type == D_FIELD_PASS)
-				widget_data->l = widget_data->widget->datalen;
+				widget_data->w = widget_data->widget->datalen;
 		}
 
 		if (rw) int_bounds(rw, nx + wx, w);

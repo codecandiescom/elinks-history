@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.98 2003/10/26 14:04:09 zas Exp $ */
+/* $Id: listbox.c,v 1.99 2003/10/26 15:59:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,9 +31,9 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 
 	widget_data->x = x;
 	widget_data->y = *y;
-	widget_data->l = w;
+	widget_data->w = w;
 
-	if (rw) int_bounds(rw, widget_data->l, w);
+	if (rw) int_bounds(rw, widget_data->w, w);
 
 	/* Height bussiness follows: */
 
@@ -334,7 +334,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		text = _(text, data->term);
 
 	len = strlen(text);
-	int_upper_bound(&len, data->listbox_item_data->l - depth * 5);
+	int_upper_bound(&len, data->listbox_item_data->w - depth * 5);
 
 	stylename = (item == data->box->sel) ? "menu.selected"
 		  : ((item->marked)	     ? "menu.marked"
@@ -429,7 +429,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_d
 	}
 
 	draw_area(term, listbox_item_data->x, listbox_item_data->y,
-		  listbox_item_data->l, listbox_item_data->h, ' ', 0,
+		  listbox_item_data->w, listbox_item_data->h, ' ', 0,
 		  get_bfu_color(term, "menu.normal"));
 
 
@@ -505,7 +505,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	if ((ev->b & BM_ACT) == B_UP) {
 		if ((ev->b & BM_BUTT) < B_WHEEL_UP &&
 		    (ev->y >= widget_data->y && ev->y < widget_data->y + widget_data->h) &&
-		    (ev->x >= widget_data->x && ev->x <= widget_data->x + widget_data->l)) {
+		    (ev->x >= widget_data->x && ev->x <= widget_data->x + widget_data->w)) {
 			/* Clicked in the box. */
 			int offset = ev->y - widget_data->y;
 

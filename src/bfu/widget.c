@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.18 2003/10/26 15:47:25 zas Exp $ */
+/* $Id: widget.c,v 1.19 2003/10/26 15:59:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,5 +41,5 @@ dlg_set_history(struct widget_data *widget_data)
 	}
 
 	widget_data->cdata[widget_data->info.field.cpos] = 0;
-	widget_data->info.field.vpos = int_max(0, widget_data->info.field.cpos - widget_data->l);
+	widget_data->info.field.vpos = int_max(0, widget_data->info.field.cpos - widget_data->w);
 }

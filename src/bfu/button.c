@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.38 2003/10/26 14:04:09 zas Exp $ */
+/* $Id: button.c,v 1.39 2003/10/26 15:59:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,8 +88,8 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 			for (i = i1; i < i2; i++) {
 				widget_data[i].x = p;
 				widget_data[i].y = *y;
-				widget_data[i].l = strlen(widget_data[i].widget->text) + 4;
-				p += widget_data[i].l + 2;
+				widget_data[i].w = strlen(widget_data[i].widget->text) + 4;
+				p += widget_data[i].w + 2;
 			}
 		}
 

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.21 2003/10/26 15:47:25 zas Exp $ */
+/* $Id: widget.h,v 1.22 2003/10/26 15:59:12 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -77,7 +77,7 @@ struct widget_data {
 	unsigned char *cdata;
 
 	int x, y;
-	int l, h;
+	int w, h;
 	
 	union {
 		struct {

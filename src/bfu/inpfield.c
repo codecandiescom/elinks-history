@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.65 2003/10/26 15:47:24 zas Exp $ */
+/* $Id: inpfield.c,v 1.66 2003/10/26 15:59:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ dlg_format_field(struct terminal *term, struct terminal *t2,
 {
 	widget_data->x = x;
 	widget_data->y = *y;
-	widget_data->l = w;
+	widget_data->w = w;
 
 	if (rw && w > *rw) *rw = w;
 	(*y)++;
@@ -228,25 +228,25 @@ display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	struct color_pair *color;
 
 	int_bounds(&widget_data->info.field.vpos,
-		   widget_data->info.field.cpos - widget_data->l + 1,
+		   widget_data->info.field.cpos - widget_data->w + 1,
 		   widget_data->info.field.cpos);
 	int_lower_bound(&widget_data->info.field.vpos, 0);
 
 	color = get_bfu_color(term, "dialog.field");
 	if (color)
-		draw_area(term, widget_data->x, widget_data->y, widget_data->l, 1, ' ', 0, color);
+		draw_area(term, widget_data->x, widget_data->y, widget_data->w, 1, ' ', 0, color);
 
 	color = get_bfu_color(term, "dialog.field-text");
 	if (color) {
 		int len = strlen(widget_data->cdata + widget_data->info.field.vpos);
-		int l = int_min(len, widget_data->l);
+		int w = int_min(len, widget_data->w);
 
 		if (!hide) {
 			draw_text(term, widget_data->x, widget_data->y,
-				  widget_data->cdata + widget_data->info.field.vpos, l,
+				  widget_data->cdata + widget_data->info.field.vpos, w,
 				  0, color);
 		} else {
-			draw_area(term, widget_data->x, widget_data->y, l, 1, '*', 0, color);
+			draw_area(term, widget_data->x, widget_data->y, w, 1, '*', 0, color);
 		}
 	}
 
@@ -298,7 +298,7 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
 	if (ev->y != widget_data->y || ev->x < widget_data->x
-	    || ev->x >= widget_data->x + widget_data->l)
+	    || ev->x >= widget_data->x + widget_data->w)
 		return EVENT_NOT_PROCESSED;
 
 	switch (ev->b & BM_BUTT) {

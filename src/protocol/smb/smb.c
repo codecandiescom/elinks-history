@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.25 2003/12/11 12:03:30 jonas Exp $ */
+/* $Id: smb.c,v 1.26 2003/12/24 11:07:29 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -373,6 +373,8 @@ ignored:
 			line_start = line_end + 1;
 			mem_free(line);
 		}
+
+		add_to_string(&page, "</pre></body></html>");
 
 		add_fragment(conn->cache, 0, page.source, page.length);
 		conn->from += page.length;

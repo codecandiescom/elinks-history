@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.149 2003/06/17 16:10:43 pasky Exp $ */
+/* $Id: renderer.c,v 1.150 2003/06/17 16:17:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1561,11 +1561,10 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 	int hdl = 0;
 	int i;
 
-	assert(ce && screen);
 	if (!head) return;
+	assert(ce && screen);
 
 	url = ce->url;
-
 	d_opt = &screen->opt;
 	screen->use_tag = ce->count;
 	defrag_entry(ce);

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.95 2004/07/30 09:55:32 zas Exp $ */
+/* $Id: draw.c,v 1.96 2004/07/30 10:01:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -327,7 +327,6 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 {
 	assert(term && term->screen);
 	if_assert_failed return;
-	check_range(term, x, y);
 
 	if (blockable && get_opt_bool_tree(term->spec, "block_cursor")) {
 		x = term->width - 1;
@@ -335,6 +334,8 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 	}
 
 	if (term->screen->cx != x || term->screen->cy != y) {
+		check_range(term, x, y);
+
 		set_screen_dirty(term->screen, int_min(term->screen->cy, y),
 					       int_max(term->screen->cy, y));
 		term->screen->cx = x;

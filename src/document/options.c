@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.49 2004/01/25 09:33:29 jonas Exp $ */
+/* $Id: options.c,v 1.50 2004/05/04 11:45:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,9 +54,10 @@ init_document_options(struct document_options *doo)
 		doo->color_flags |= COLOR_ENSURE_CONTRAST;
 
 	/* Boolean options. */
-
+#ifdef CONFIG_CSS
 	doo->css_enable = get_opt_bool("document.css.enable");
 	doo->css_import = get_opt_bool("document.css.import");
+#endif
 
 	doo->plain_display_links = get_opt_bool("document.plain.display_links");
 	doo->plain_compress_empty_lines = get_opt_bool("document.plain.compress_empty_lines");

@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.9 2003/06/13 22:36:06 zas Exp $ */
+/* $Id: fastfind.c,v 1.10 2003/06/13 23:00:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "elinks.h"
 
 #include "util/conv.h"
+#include "util/error.h"
 #include "util/fastfind.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
@@ -68,6 +69,10 @@ struct ff_elt_c {
 };
 #endif
 
+#define FF_LINE_SIZE (1<<7)
+#define FF_MAX_KEYS (1<<12)
+#define FF_MAX_LINES ((1<<18) - 1)
+
 struct fastfind_info {
 	void **pointers;
 	int *keylen_list;
@@ -80,12 +85,12 @@ struct fastfind_info {
 	int max_key_len;
 	int count;
 	int case_sensitive;
-	int idxtab[128];
+	int idxtab[FF_LINE_SIZE];
 
 	unsigned short pointers_count;
 	unsigned short lines_count;
 
-	unsigned char uniq_chars[128];
+	unsigned char uniq_chars[FF_LINE_SIZE];
 #ifdef FASTFIND_DEBUG
 	unsigned long searches;
 	unsigned long found;
@@ -122,7 +127,8 @@ add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 	int *new_keylen_list;
 	int new_count = info->pointers_count + 1;
 
-	/* FIXME: Check limit */
+	assert(new_count < FF_MAX_KEYS);
+
 	/* On error, cleanup is done by fastfind_terminate(). */
 
 	new_pointers = mem_realloc(info->pointers, new_count * sizeof(void *));
@@ -152,6 +158,8 @@ alloc_line(struct fastfind_info *info)
 	/* FIXME: Check limit */
 	struct ff_elt **new_lines;
 	struct ff_elt *line;
+
+	assert(info->lines_count < FF_MAX_LINES);
 
 	/* info->lines[0] is never used since l=0 marks no leaf in struct ff_elt.
 	 * That's the reason of that + 2. */
@@ -192,7 +200,7 @@ init_idxtab(struct fastfind_info *info)
 {
 	int i;
 
-	for (i = 0; i < 128; i++)
+	for (i = 0; i < FF_LINE_SIZE; i++)
 		info->idxtab[i] = char2idx((unsigned char) i, info);
 }
 
@@ -234,6 +242,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 			}
 			/* FIXME: limit 128 */
 			if (!found) {
+				assert(info->uniq_chars_count < FF_LINE_SIZE);
 				info->uniq_chars[info->uniq_chars_count++] = ifcase(p->key[i]);
 			}
 		}
@@ -389,6 +398,7 @@ fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 #ifdef FASTFIND_DEBUG
 		info->tests++;
 #endif
+		/* TODO: Move this test outside loop. Here performance matters. */
 		if (info->case_sensitive)
 			lidx = info->idxtab[key[i]];
 		else
@@ -459,14 +469,21 @@ fastfind_terminate(void *fastfind_info)
 	struct fastfind_info *info = (struct fastfind_info *) fastfind_info;
 
 	if (!info) return;
+
 #ifdef FASTFIND_DEBUG
-	fprintf(stderr, "Entries     : %d\n", info->pointers_count);
-	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n", info->memory_usage, (double) info->memory_usage / info->pointers_count);
+	fprintf(stderr, "Entries     : %d/%d\n", info->pointers_count, FF_MAX_KEYS);
+	fprintf(stderr, "FFlines     : %d/%d\n", info->lines_count, FF_MAX_LINES);
+	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
+		info->memory_usage, (double) info->memory_usage / info->pointers_count);
 	fprintf(stderr, "Searches    : %lu\n", info->searches);
-	fprintf(stderr, "Found       : %lu (%0.2f%%)\n", info->found, 100 * (double) info->found / info->searches);
-	fprintf(stderr, "Iterations  : %lu (%0.2f per search)\n", info->iterations, (double) info->iterations / info->searches);
-	fprintf(stderr, "Tests       : %lu (%0.2f per search)\n", info->tests, (double) info->tests / info->searches);
-	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search)\n", info->total_key_len, (double) info->total_key_len / info->searches);
+	fprintf(stderr, "Found       : %lu (%0.2f%%)\n",
+		info->found, 100 * (double) info->found / info->searches);
+	fprintf(stderr, "Iterations  : %lu (%0.2f per search)\n",
+		info->iterations, (double) info->iterations / info->searches);
+	fprintf(stderr, "Tests       : %lu (%0.2f per search)\n",
+		info->tests, (double) info->tests / info->searches);
+	fprintf(stderr, "Total keylen: %lu bytes (%0.2f per search)\n",
+		info->total_key_len, (double) info->total_key_len / info->searches);
 #endif
 
 	if (info->pointers) mem_free(info->pointers);

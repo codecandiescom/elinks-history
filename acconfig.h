@@ -42,9 +42,6 @@
 /* Define to 1 if we should use GNUTLS */
 #undef HAVE_GNUTLS
 
-/* Define to 1 if we have sockaddr_storage */
-#undef HAVE_SA_STORAGE
-
 /* Define to 1 if we should include IPv6 support */
 #undef IPV6
 

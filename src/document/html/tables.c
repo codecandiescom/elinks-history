@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.329 2004/06/30 14:03:38 jonas Exp $ */
+/* $Id: tables.c,v 1.330 2004/06/30 21:11:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -376,14 +376,14 @@ distribute_widths(struct table *table, int width)
 	memcpy(table->cols_widths, table->min_cols_widths, cols_array_size);
 	table->real_width = width;
 
-	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
-	visited_cols = fmem_alloc(table->cols);
-
 	widths = fmem_alloc(cols_array_size);
-	if (!widths) goto end;
+	if (!widths) return;
 
 	max_widths = fmem_alloc(cols_array_size);
-	if (!max_widths) goto end1;
+	if (!max_widths) goto free_widths;
+
+	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
+	visited_cols = fmem_alloc(table->cols);
 
 	while (spare_width) {
 		int stretch_width, stretch_col;
@@ -454,7 +454,7 @@ distribute_widths(struct table *table, int width)
 					break;
 				default:
 					INTERNAL("could not expand table");
-					goto end2;
+					goto free_all;
 			}
 			total_width += widths[col];
 		}
@@ -506,14 +506,12 @@ again:
 		}
 	}
 
-end2:
+free_all:
+	if (visited_cols) fmem_free(visited_cols);
 	fmem_free(max_widths);
 
-end1:
+free_widths:
 	fmem_free(widths);
-
-end:
-	if (visited_cols) fmem_free(visited_cols);
 }
 
 

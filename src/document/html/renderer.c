@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.271 2003/09/15 20:23:05 jonas Exp $ */
+/* $Id: renderer.c,v 1.272 2003/09/15 20:47:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -785,16 +785,11 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 {
 	unsigned char *buffer;
 
-	assert(part && chars);
+	assert(part && chars && charslen);
 	if_assert_failed return;
 
 	if (format.attr & AT_GRAPHICS) {
 		put_chars(part, chars, charslen);
-		return;
-	}
-
-	if (!charslen) {
-		put_chars(part, NULL, 0);
 		return;
 	}
 

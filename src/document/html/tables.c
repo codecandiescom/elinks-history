@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.149 2004/03/28 18:29:02 zas Exp $ */
+/* $Id: tables.c,v 1.150 2004/03/28 18:37:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1045,6 +1045,7 @@ get_column_widths(struct table *t)
 static void
 get_table_width(struct table *t)
 {
+	struct table_frames table_frames;
 	int min = 0;
 	int max = 0;
 	register int i = 0;
@@ -1059,19 +1060,11 @@ get_table_width(struct table *t)
 		i++;
 	}
 
-	if (t->border) {
-		if (t->frame & TABLE_FRAME_LHS) {
-			min++;
-			max++;
-		}
-		if (t->frame & TABLE_FRAME_RHS) {
-			min++;
-			max++;
-		}
-	}
+	get_table_frames(t, &table_frames);
 
-	t->min_t = min;
-	t->max_t = max;
+	t->min_t = min + table_frames.left + table_frames.right;
+	t->max_t = max + table_frames.left + table_frames.right;
+	
 	assertm(min <= max, "min(%d) > max(%d)", min, max);
 	/* XXX: Recovery path? --pasky */
 }

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.74 2003/10/24 15:54:32 zas Exp $ */
+/* $Id: dialogs.c,v 1.75 2003/10/24 16:36:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,6 +283,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	struct dialog *dlg;
 	unsigned char *value;
 	struct string tvalue;
+	int n = 0;
 
 	if (!init_string(&tvalue)) return;
 
@@ -310,22 +311,27 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	done_string(&tvalue);
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
-	dlg->items[0].type = D_FIELD;
-	dlg->items[0].dlen = MAX_STR_LEN;
-	dlg->items[0].data = value;
-	dlg->items[0].fn = check_valid_option;
+	dlg->items[n].type = D_FIELD;
+	dlg->items[n].dlen = MAX_STR_LEN;
+	dlg->items[n].data = value;
+	dlg->items[n].fn = check_valid_option;
+	n++;
 
-	dlg->items[1].type = D_BUTTON;
-	dlg->items[1].gid = B_ENTER;
-	dlg->items[1].fn = ok_dialog;
-	dlg->items[1].text = _("OK", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = ok_dialog;
+	dlg->items[n].text = _("OK", term);
+	n++;
 
-	dlg->items[2].type = D_BUTTON;
-	dlg->items[2].gid = B_ESC;
-	dlg->items[2].text = _("Cancel", term);
-	dlg->items[2].fn = cancel_dialog;
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].text = _("Cancel", term);
+	dlg->items[n].fn = cancel_dialog;
+	n++;
 
-	dlg->items[EDIT_DIALOG_FIELDS_NB].type = D_END;
+	assert(n == EDIT_DIALOG_FIELDS_NB);
+
+	dlg->items[n].type = D_END;
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 #undef EDIT_DIALOG_FIELDS_NB
@@ -494,6 +500,7 @@ void
 menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog *dlg;
+	int n = 0;
 
 	/* Create the dialog */
 	dlg = mem_calloc(1, sizeof(struct dialog)
@@ -507,46 +514,55 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = option_dialog_abort_handler;
 	dlg->udata = ses;
 
-	dlg->items[0].type = D_BUTTON;
-	dlg->items[0].gid = B_ENTER;
-	dlg->items[0].fn = push_info_button;
-	dlg->items[0].udata = ses;
-	dlg->items[0].text = _("Info", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_info_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Info", term);
+	n++;
 
-	dlg->items[1].type = D_BUTTON;
-	dlg->items[1].gid = B_ENTER;
-	dlg->items[1].fn = push_edit_button;
-	dlg->items[1].udata = ses;
-	dlg->items[1].text = _("Edit", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_edit_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Edit", term);
+	n++;
 
-	dlg->items[2].type = D_BUTTON;
-	dlg->items[2].gid = B_ENTER;
-	dlg->items[2].fn = push_add_button;
-	dlg->items[2].udata = ses;
-	dlg->items[2].text = _("Add", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_add_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Add", term);
+	n++;
 
-	dlg->items[3].type = D_BUTTON;
-	dlg->items[3].gid = B_ENTER;
-	dlg->items[3].fn = push_del_button;
-	dlg->items[3].udata = ses;
-	dlg->items[3].text = _("Delete", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_del_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Delete", term);
+	n++;
 
-	dlg->items[4].type = D_BUTTON;
-	dlg->items[4].gid = B_ENTER;
-	dlg->items[4].fn = push_save_button;
-	dlg->items[4].udata = ses;
-	dlg->items[4].text = _("Save", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_save_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Save", term);
+	n++;
 
-	dlg->items[5].type = D_BUTTON;
-	dlg->items[5].gid = B_ESC;
-	dlg->items[5].fn = cancel_dialog;
-	dlg->items[5].text = _("Close", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].fn = cancel_dialog;
+	dlg->items[n].text = _("Close", term);
+	n++;
 
-	dlg->items[OP_BOX_IND].type = D_BOX;
-	dlg->items[OP_BOX_IND].gid = 12;
-	dlg->items[OP_BOX_IND].data = (void *) option_dlg_box_build();
+	assert(n == OP_BOX_IND);
 
-	dlg->items[OP_BOX_IND + 1].type = D_END;
+	dlg->items[n].type = D_BOX;
+	dlg->items[n].gid = 12;
+	dlg->items[n].data = (void *) option_dlg_box_build();
+	n++;
+
+	dlg->items[n].type = D_END;
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
 
@@ -756,6 +772,7 @@ void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog *dlg;
+	int n = 0;
 
 	/* Create the dialog */
 	dlg = mem_calloc(1, sizeof(struct dialog)
@@ -769,39 +786,47 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = kbdbind_dialog_abort_handler;
 	dlg->udata = ses;
 
-	dlg->items[0].type = D_BUTTON;
-	dlg->items[0].gid = B_ENTER;
-	dlg->items[0].fn = push_kbdbind_add_button;
-	dlg->items[0].udata = ses;
-	dlg->items[0].text = _("Add", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_kbdbind_add_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Add", term);
+	n++;
 
-	dlg->items[1].type = D_BUTTON;
-	dlg->items[1].gid = B_ENTER;
-	dlg->items[1].fn = push_kbdbind_del_button;
-	dlg->items[1].udata = ses;
-	dlg->items[1].text = _("Delete", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_kbdbind_del_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Delete", term);
+	n++;
 
-	dlg->items[2].type = D_BUTTON;
-	dlg->items[2].gid = B_ENTER;
-	dlg->items[2].fn = push_kbdbind_toggle_display_button;
-	dlg->items[2].udata = ses;
-	dlg->items[2].text = _("Toggle display", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_kbdbind_toggle_display_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Toggle display", term);
+	n++;
 
-	dlg->items[3].type = D_BUTTON;
-	dlg->items[3].gid = B_ENTER;
-	dlg->items[3].fn = push_kbdbind_save_button;
-	dlg->items[3].udata = ses;
-	dlg->items[3].text = _("Save", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ENTER;
+	dlg->items[n].fn = push_kbdbind_save_button;
+	dlg->items[n].udata = ses;
+	dlg->items[n].text = _("Save", term);
+	n++;
 
-	dlg->items[4].type = D_BUTTON;
-	dlg->items[4].gid = B_ESC;
-	dlg->items[4].fn = cancel_dialog;
-	dlg->items[4].text = _("Close", term);
+	dlg->items[n].type = D_BUTTON;
+	dlg->items[n].gid = B_ESC;
+	dlg->items[n].fn = cancel_dialog;
+	dlg->items[n].text = _("Close", term);
+	n++;
 
-	dlg->items[KB_BOX_IND].type = D_BOX;
-	dlg->items[KB_BOX_IND].gid = 12;
-	dlg->items[KB_BOX_IND].data = (void *) kbdbind_dlg_box_build();
+	assert(n == KB_BOX_IND);
 
-	dlg->items[KB_BOX_IND + 1].type = D_END;
+	dlg->items[n].type = D_BOX;
+	dlg->items[n].gid = 12;
+	dlg->items[n].data = (void *) kbdbind_dlg_box_build();
+	n++;
+
+	dlg->items[n].type = D_END;
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.266 2004/09/12 00:38:28 miciah Exp $ */
+/* $Id: menu.c,v 1.267 2004/09/12 03:31:36 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -427,7 +427,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
 	struct color_pair *frame_color = get_bfu_color(term, "menu.frame");
 	struct box box, nbox;
-	int p, y;
+	int p;
 
 	set_box(&box,
 		menu->box.x + MENU_BORDER_SIZE,
@@ -440,9 +440,9 @@ display_menu(struct terminal *term, struct menu *menu)
 
 	copy_box(&nbox, &box);
 
-	for (p = menu->first, y = box.y;
+	for (p = menu->first;
 	     p < menu->size && p < menu->first + box.height;
-	     p++, y++) {
+	     p++, nbox.y++) {
 		struct color_pair *color = normal_color;
 		struct menu_item *mi = &menu->items[p];
 		int selected = (p == menu->selected);
@@ -453,27 +453,26 @@ display_menu(struct terminal *term, struct menu *menu)
 			INTERNAL("Unexpected end of menu [%p:%d]", mi, p);
 #endif
 
-		nbox.y = y;
 		nbox.height = 1;
 
 		if (selected) {
 			/* This entry is selected. */
 			color = selected_color;
 
-			set_cursor(term, box.x, y, 1);
-			set_window_ptr(menu->win, menu->box.x + menu->box.width, y);
+			set_cursor(term, box.x, nbox.y, 1);
+			set_window_ptr(menu->win, menu->box.x + menu->box.width, nbox.y);
 			draw_box(term, &nbox, ' ', 0, color);
 		}
 
 		if (mi_is_horizontal_bar(mi)) {
 			/* Horizontal separator */
-			draw_border_char(term, menu->box.x, y,
+			draw_border_char(term, menu->box.x, nbox.y,
 					 BORDER_SRTEE, frame_color);
 
 			draw_box(term, &nbox, BORDER_SHLINE,
 				 SCREEN_ATTR_FRAME, frame_color);
 
-			draw_border_char(term, box.x + box.width, y,
+			draw_border_char(term, box.x + box.width, nbox.y,
 					 BORDER_SLTEE, frame_color);
 
 		} else {
@@ -489,18 +488,18 @@ display_menu(struct terminal *term, struct menu *menu)
 
 				if (l) {
 					draw_menu_left_text_hk(term, text, l,
-							       box.x, y, box.width, color,
+							       box.x, nbox.y, box.width, color,
 							       selected);
 
 				} else {
 					draw_menu_left_text(term, text, -1,
-							    box.x, y, box.width, color);
+							    box.x, nbox.y, box.width, color);
 		  		}
 			}
 
 			if (mi_is_submenu(mi)) {
 				draw_menu_right_text(term, m_submenu, m_submenu_len,
-						     menu->box.x, y, box.width, color);
+						     menu->box.x, nbox.y, box.width, color);
 			} else if (mi->action != ACT_MAIN_NONE) {
 				struct string keystroke;
 
@@ -520,7 +519,7 @@ display_menu(struct terminal *term, struct menu *menu)
 								KEYMAP_MAIN);
 					draw_menu_right_text(term, keystroke.source,
 							     keystroke.length,
-							     menu->box.x, y,
+							     menu->box.x, nbox.y,
 							     box.width, color);
 					done_string(&keystroke);
 				}
@@ -535,7 +534,7 @@ display_menu(struct terminal *term, struct menu *menu)
 					/* There's a right text, so print it */
 					draw_menu_right_text(term, rtext, -1,
 							     menu->box.x,
-							     y, box.width, color);
+							     nbox.y, box.width, color);
 				}
 			}
 		}

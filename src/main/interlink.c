@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.77 2004/07/17 22:27:10 zas Exp $ */
+/* $Id: interlink.c,v 1.78 2004/07/17 22:28:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,10 +439,6 @@ again:
 		goto free_and_error;
 	}
 
-#if 0
-	/* Is this of any use on connect socket ?? */
-	setsock_reuse_addr(s_info_connect.fd);
-#endif
 	if (connect(s_info_connect.fd, s_info_connect.addr,
 		    s_info_connect.size) < 0) {
 		if (errno != ECONNREFUSED && errno != ENOENT)

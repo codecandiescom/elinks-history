@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.91 2004/04/08 19:36:33 jonas Exp $ */
+/* $Id: uri.h,v 1.92 2004/04/09 03:05:02 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -80,6 +80,7 @@ enum uri_errno parse_uri(struct uri *uri, unsigned char *uristring);
 
 
 enum uri_component {
+	/* The "raw" URI components */
 	URI_PROTOCOL		= (1 << 0),
 	URI_USER		= (1 << 1),
 	URI_PASSWORD		= (1 << 2),
@@ -87,7 +88,7 @@ enum uri_component {
 	URI_PORT		= (1 << 4),
 	URI_DEFAULT_PORT	= (1 << 5),
 	URI_DATA		= (1 << 6),
-	URI_POST		= URI_DEFAULT_PORT | (1 << 7),
+	URI_POST		= (1 << 7),
 };
 
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.51 2003/05/08 00:40:00 pasky Exp $ */
+/* $Id: session.c,v 1.52 2003/05/08 00:57:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1319,46 +1319,72 @@ decode_url(unsigned char *url)
 	return u;
 }
 
+struct initial_session_info *
+decode_session_info(void *data, int len)
+{
+	struct initial_session_info *info;
+	int url_len;
+
+	if (len < 2 * sizeof(int)) return NULL;
+
+	info = mem_calloc(1, sizeof(struct initial_session_info));
+	if (!info) return NULL;
+
+	info->base_session = *((int *) data);
+
+	url_len = *((int *) data + 1);
+	if (url_len) {
+		unsigned char *url;
+
+		if (len < 2 * sizeof(int) + url_len) goto url_decoded;
+
+		url = mem_alloc(url_len + 1);
+		if (!url) goto url_decoded;
+
+		memcpy(url, (int *) data + 2, url_len);
+		url[url_len] = '\0';
+
+		info->url = decode_url(url);
+
+		mem_free(url);
+	}
+url_decoded:
+
+	return info;
+}
+
+static void
+free_session_info(struct initial_session_info *info)
+{
+	if (info->url) mem_free(info->url);
+	mem_free(info);
+}
+
 int startup_goto_dialog_paint = 0;
 struct session *startup_goto_dialog_ses;
 
 static int
 read_session_info(struct session *ses, void *data, int len)
 {
-	int base_session, url_len;
+	struct initial_session_info *info;
 	struct session *s;
 
-	if (len < 2 * sizeof(int)) return -1;
-
-	base_session = *((int *) data);
-	url_len = *((int *) data + 1);
+	info = decode_session_info(data, len);
+	if (!info) return -1;
 
 	/* This is the only place where s->id comes into game - we're comparing
 	 * it to possibly supplied -base-session here, and clone the session
 	 * with id of base-session (its current document association only,
 	 * rather) to the newly created session. */
 	foreach (s, sessions) {
-		if (s->id == base_session) {
+		if (s->id == info->base_session) {
 			copy_session(s, ses);
 			break;
 		}
 	}
 
-	if (url_len) {
-		unsigned char *u, *uu;
-
-		if (len < 2 * sizeof(int) + url_len) return 0;
-
-		u = mem_alloc(url_len + 1);
-		if (!u) return 0;
-
-		memcpy(u, (int *)data + 2, url_len);
-		u[url_len] = '\0';
-		uu = decode_url(u);
-		goto_url(ses, uu);
-		mem_free(u);
-		mem_free(uu);
-
+	if (info->url) {
+		goto_url(ses, info->url);
 	} else {
 		unsigned char *h = getenv("WWW_HOME");
 
@@ -1377,6 +1403,7 @@ read_session_info(struct session *ses, void *data, int len)
 		}
 	}
 
+	free_session_info(info);
 	return 0;
 }
 

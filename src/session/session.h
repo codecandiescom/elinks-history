@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.15 2003/05/07 10:35:14 zas Exp $ */
+/* $Id: session.h,v 1.16 2003/05/08 00:57:16 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -15,6 +15,14 @@ struct session;
 #include "sched/sched.h"
 #include "util/lists.h"
 #include "viewer/text/vs.h"
+
+/* This is used to pass along initial session parameters. */
+struct initial_session_info {
+	/* The session whose state to copy, -1 is none. */
+	int base_session;
+	/* The URL we should load immediatelly (or NULL). */
+	unsigned char *url;
+};
 
 /* For map_selected() */
 struct link_def {
@@ -109,8 +117,8 @@ void print_error_dialog(struct session *, struct status *, unsigned char *);
 
 void process_file_requests(struct session *);
 
-/* int read_session_info(int, struct session *, void *, int); */
 void *create_session_info(int, unsigned char *, int *);
+struct initial_session_info *decode_session_info(void *, int);
 struct session *create_basic_session(struct window *);
 
 void init_bars_status(struct session *, int *, struct document_options *);

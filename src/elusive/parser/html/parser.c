@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.16 2002/12/30 02:04:45 pasky Exp $ */
+/* $Id: parser.c,v 1.17 2002/12/30 02:21:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,8 @@ html_state_push(struct parser_state *state, enum state_code state_code)
 {
 	struct html_parser_state *pstate;
 
+	/* debug("html_state_push [%d]", state_code); */
+
 	pstate = mem_calloc(1, sizeof(struct html_parser_state));
 	if (!pstate) return NULL;
 
@@ -73,6 +75,8 @@ static struct html_parser_state *
 html_state_pop(struct parser_state *state)
 {
 	struct html_parser_state *pstate = state->data;
+
+	/* debug("html_state_pop [%d]", pstate->state); */
 
 	if (!pstate) {
 		internal("HTML state stack underflow!");
@@ -267,7 +271,7 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	unsigned char *html = *str;
 	int html_len = *len;
 
-	if (pstate->data.tag.tagname) {
+	if (pstate->data.tag.tagname || pstate->data.tag.type) {
 		/* We've parsed the whole tag and now we're at '>'. */
 
 #ifdef DEBUG
@@ -311,8 +315,6 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	if (*html == '?' || (*html == '!' && !strncmp(html + 1, "--", 2))) {
 		/* The next time we'll visit you, we will be at the end of our
 		 * way. */
-		pstate->data.tag.tagname = "";
-
 		pstate->data.tag.type = *html;
 		pstate = html_state_push(state, HPT_TAG_COMMENT);
 		pstate->data.tag.type = *html;
@@ -639,8 +641,10 @@ html_parse(struct parser_state *state, unsigned char **str, int *len)
 	struct html_parser_state *pstate = state->data;
 
 	while (*len) {
-		if (state_parsers[pstate->state](state, str, len) < 0)
+		/* debug("parsing [%d] ::%s::", pstate->state, *str); */
+		if (state_parsers[pstate->state](state, str, len) < 0) {
 			return;
+		}
 		pstate = state->data; /* update to the top of the stack */
 	}
 }

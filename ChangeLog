@@ -1,3 +1,41 @@
+Tue Mar  5 09:57:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* lua.c, types.c:
+	
+	s/strncpy/safe_strncpy/ - patch by zas
+
+Tue Mar  5 09:42:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	oops, typo compilation fix
+
+Mon Mar  4 23:31:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	ouch, fool me - fixed tiny merge error from 0.97pre4
+
+Mon Mar  4 23:29:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* os_dep.h:
+	
+	undefine UNIX on win32 (maybe it helps --mikulas - helps _what_?
+	--pasky) (by mikulas, from 0.97pre5)
+
+Mon Mar  4 23:28:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* session.c:
+	
+	fixed bad loading of imgmap (by mikulas, from 0.97pre5)
+
+Mon Mar  4 23:26:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* finger.c:
+	
+	commented out sending /W in finger request - dunno why it was
+	there, but it broke finger://mpat7421@ss1000.ms.mff.cuni.cz/ ;))
+
 Mon Mar  4 23:07:10 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:

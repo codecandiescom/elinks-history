@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.110 2003/07/06 21:25:47 pasky Exp $ */
+/* $Id: main.c,v 1.111 2003/07/07 15:04:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,9 +44,9 @@
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
-#include "lowlevel/af_unix.h"
 #include "lowlevel/dns.h"
 #include "lowlevel/home.h"
+#include "lowlevel/interlink.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "lowlevel/sysname.h"

@@ -1,18 +1,18 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.14 2003/05/23 21:22:20 zas Exp $
+## $Id: Makefile.am,v 1.15 2003/07/07 15:04:12 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = liblowlevel.a
 liblowlevel_a_SOURCES = \
- af_unix.c \
- af_unix.h \
  connect.c \
  connect.h \
  dns.c \
  dns.h \
  home.c \
  home.h \
+ interlink.c \
+ interlink.h \
  select.c \
  select.h \
  signals.h \

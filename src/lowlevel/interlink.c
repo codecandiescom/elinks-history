@@ -1,5 +1,5 @@
-/* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.59 2003/07/06 23:17:34 pasky Exp $ */
+/* Inter-instances internal communication socket interface */
+/* $Id: interlink.c,v 1.60 2003/07/07 15:04:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,8 +30,8 @@
 #include "elinks.h"
 
 #include "intl/gettext/libintl.h"
-#include "lowlevel/af_unix.h"
 #include "lowlevel/home.h"
+#include "lowlevel/interlink.h"
 #include "lowlevel/select.h"
 #include "terminal/terminal.h"
 #include "sched/session.h"

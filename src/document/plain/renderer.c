@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.53 2003/12/28 15:44:41 zas Exp $ */
+/* $Id: renderer.c,v 1.54 2003/12/29 11:28:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,6 +144,17 @@ add_document_line(struct document *document, int lineno,
 	struct screen_char *pos, *end;
 	int line_pos, expanded = 0;
 
+	line = convert_string(convert_table, line, width, CSM_DEFAULT);
+	if (!line) return 0;
+
+	if (!*line) {
+		mem_free(line);
+		return 0;
+	}
+
+	width = strlen(line);
+	assert(width > 0);
+
 	for (line_pos = 0; line_pos < width; line_pos++) {
 		unsigned char line_char = line[line_pos];
 
@@ -168,16 +179,7 @@ add_document_line(struct document *document, int lineno,
 		}
 	}
 
-	line = convert_string(convert_table, line, width, CSM_DEFAULT);
-	if (!line) return 0;
-
-	if (!*line) {
-		mem_free(line);
-		return 0;
-	}
-
-	width = strlen(line) + expanded;
-	assert(width > 0);
+	width += expanded;
 
 	pos = realloc_line(document, lineno, width);
 	if (!pos) {
